@@ -442,7 +442,7 @@
   (if (not (b 'check)) (display "avl: unit test 301 failing\n"))
 
 
-  (let loop ((i 1023))
+  (let loop ((i 255))
     (if (< i 1)
       'done
       (begin
@@ -453,7 +453,7 @@
         (set! i (- i 1))
         (loop i))))
 
-  (let loop ((i 1023))
+  (let loop ((i 255))
     (if (< i 1)
       'done
       (begin
