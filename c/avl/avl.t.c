@@ -6,34 +6,34 @@
 #include <stdio.h>
 
 
-static void printKey(void* k)
+static void printKey(const void* k)
 {
   int key = *(int*) k;
   printf("%d",key);
 }
 
-static bool comp1(void* x, void* y)
+static int comp1(const void* x, const void* y)
 {
   int u = *(int*) x;
   int v = *(int*) y;
 
-  return (u < v);
+  return (u - v);
 
 }
 
-static bool comp2(void* x, void* y)
+static int comp2(const void* x, const void* y)
 {
   int u = *(int*) x;
   int v = *(int*) y;
 
-  return (u > v);
+  return (v - u);
 
 }
 
 int main(int argc, char * argv[]){
 
 
-  void* key;  // temporary
+  const void* key;  // temporary
 
   int v4m,v2m,v0,v1,v2,v3,v4,v5,v6,v7,v8; // some values
   int k6m,k4m,k3m,k2m,k1m,k0,k1,k2,k3,k4,k5,k6,k7,k8,k10; // some keys
@@ -491,7 +491,7 @@ int main(int argc, char * argv[]){
   if(!a.check()) printf("AVL: unit test 301 failing\n");
   if(!b.check()) printf("AVL: unit test 302 failing\n");
 
-  int const N = 1023;
+  int const N = 511;
   int k[N];
   for(int i = 0; i < N; i++){
 

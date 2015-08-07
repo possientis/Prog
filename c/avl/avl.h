@@ -8,27 +8,27 @@ class AVL {
 
   private:
   // private data
-  bool (*d_comp_p)(void*,void*);  // strict comparison operator
+  int (*d_comp_p)(const void*,const void*);   // comparison operator
   AVLNode *d_top_p;               // root node of AVL
   AVL(const AVL&);                // not implemented
   AVL& operator=(const AVL&);     // not implemented
 
   public:
-  AVL(bool (*comp)(void*,void*));
+  AVL(int (*comp)(const void*,const void*));
   ~AVL();
 
   // accessors
-  void* min(void* &key) const;              // returns value pointer and min key
-  void* max(void* &key) const;              // returns value pointer and max key
-  void* find(void* key) const;              // returns value associated with key
-  void* succ(void* key, void*& succ) const; // returns successor value and key
-  void* pred(void* key, void*& pred) const; // returns predecessor value and key
+  const void* min(const void* &key) const;  // returns value pointer and min key
+  const void* max(const void* &key) const;  // returns value pointer and max key
+  const void* find(const void* key) const;  // returns value associated with key
+  const void* succ(const void* key, const void* &succ) const; // succ key by ref
+  const void* pred(const void* key, const void* &pred) const; // pred key by ref
   bool check() const;                       // returns false if sanity checks fail
-  void print(void (*func)(void *)) const;   // prints tree from key printing func
+  void print(void (*func)(const void *)) const;// prints tree from key print func
 
   // manipulators
-  void insert(void* key, void* value);    // value changed on duplicate key
-  void del(void* key);                    // has no impact unless key in tree
+  void insert(const void* key, const void* value);// val changed on duplicate key
+  void del(const void* key);                    // has no impact unless key in tree
 
 };
 

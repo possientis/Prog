@@ -14,19 +14,19 @@ class AVLNode {
 
   public:
   // constructor
-  AVLNode(void* key, void* value);
+  AVLNode(const void* key, const void* value);
   ~AVLNode();
 
   // accessors
-  void *key() const;
-  void *val() const;
+  const void *key() const;
+  const void *val() const;
   int height() const;
   AVLNode *left() const;
   AVLNode *right() const;
   AVLNode *parent() const;
 
   // manipulators
-  void set(void* value);
+  void set(const void* value);
   void setHeight(int height);
   void setLeft(AVLNode *left);
   void setRight(AVLNode *right);

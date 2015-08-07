@@ -4,8 +4,8 @@
 
 struct AVLNode_i {
 
-  void *key;
-  void *value;
+  const void *key;
+  const void *value;
   int height;
   AVLNode *left;
   AVLNode *right;
@@ -21,7 +21,7 @@ AVLNode::~AVLNode()
   d_this = nullptr;
 }
 
-AVLNode::AVLNode(void* key, void* value)
+AVLNode::AVLNode(const void* key,const void* value)
 {
 
   d_this = new AVLNode_i();
@@ -35,12 +35,12 @@ AVLNode::AVLNode(void* key, void* value)
 
 }
 
-void* AVLNode::key() const
+const void* AVLNode::key() const
 {
   return d_this->key;
 }
 
-void* AVLNode::val() const
+const void* AVLNode::val() const
 {
   return d_this->value;
 }
@@ -65,7 +65,7 @@ AVLNode* AVLNode::parent() const
   return d_this->parent;
 }
 
-void AVLNode::set(void* value)
+void AVLNode::set(const void* value)
 {
   d_this->value = value;
 }

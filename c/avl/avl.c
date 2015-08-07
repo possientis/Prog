@@ -8,10 +8,10 @@
 #endif
 
 // just to make code below more readable
-typedef bool (*Comparator)(void*,void*);
-typedef void (*PrintKeyFunc)(void*);
+typedef int (*Comparator)(const void*, const void*);
+typedef void (*PrintKeyFunc)(const void*);
 
-static int height(AVLNode *node){
+static int height(const AVLNode *node){
 
   if(node == nullptr) return -1;
 
@@ -19,7 +19,7 @@ static int height(AVLNode *node){
 
 }
 
-static int leftHeight(AVLNode *node){
+static int leftHeight(const AVLNode *node){
 
   assert(node != nullptr);  // should not be called otherwise
 
@@ -28,7 +28,7 @@ static int leftHeight(AVLNode *node){
 }
 
 
-static int rightHeight(AVLNode *node){
+static int rightHeight(const AVLNode *node){
 
   assert(node != nullptr);  // should not be called otherwise
 
@@ -37,7 +37,7 @@ static int rightHeight(AVLNode *node){
 }
 
 
-static bool isBalanced(AVLNode *node){
+static bool isBalanced(const AVLNode *node){
 
   assert(node != nullptr);  // should not be called otherwise
 
@@ -185,7 +185,8 @@ static void freeNode(AVLNode *node){
 }
 
 
-static AVLNode *insertNode(AVLNode *node,void* key,void *value,Comparator comp){
+static AVLNode *insertNode(AVLNode *node,
+    const void* key, const void *value,Comparator comp){
 
   if (node == nullptr){  // tree is empty
 
@@ -196,14 +197,14 @@ static AVLNode *insertNode(AVLNode *node,void* key,void *value,Comparator comp){
 
   }
 
-  if(comp(key,node->key())){ // key is to the left
+  if(comp(key,node->key()) < 0){ // key is to the left
     node->setLeft(insertNode(node->left(),key,value,comp)); // insert left
     node->left()->setParent(node);  // connecting to parent
     updateHeight(node); // re-calculating node height after change
     return rebalanceNode(node);
   }
 
-  if(comp(node->key(),key)){  // key is to the right
+  if(comp(node->key(),key) < 0){  // key is to the right
     node->setRight(insertNode(node->right(),key,value,comp));// right
     node->right()->setParent(node); // connecting to parent
     updateHeight(node); // re-calculating node height after change
@@ -260,11 +261,11 @@ static AVLNode *rootMaxNode(AVLNode *node){
 }
 
 
-static AVLNode *deleteNode(AVLNode *node, void* key, Comparator comp){
+static AVLNode *deleteNode(AVLNode *node, const void* key, Comparator comp){
 
   if(node == nullptr) return nullptr;   // nothing to do on empty tree
 
-  if(comp(key,node->key())){  // key is to the left
+  if(comp(key,node->key()) < 0){  // key is to the left
     AVLNode *temp = deleteNode(node->left(),key, comp);// left delete
     node->setLeft(temp);  // linking new left child
     if(temp != nullptr) temp->setParent(node); // parent link if applicable
@@ -272,7 +273,7 @@ static AVLNode *deleteNode(AVLNode *node, void* key, Comparator comp){
     return rebalanceNode(node);  // return original node after modification
   }
 
-  if(comp(node->key(),key)){  // key is to the right
+  if(comp(node->key(),key) < 0){  // key is to the right
     AVLNode *temp = deleteNode(node->right(),key,comp);//right delete
     node->setRight(temp);  // linking new right child
     if(temp != nullptr) temp->setParent(node); // parent link if applicable
@@ -329,15 +330,15 @@ static AVLNode *maxNode(AVLNode *node){
 
 
 
-static AVLNode *findNode(AVLNode *node, void* key, Comparator comp){
+static AVLNode *findNode(AVLNode *node, const void* key, Comparator comp){
 
   if(node == nullptr) return nullptr;
 
-  if(comp(key,node->key())){  // key is to the left
+  if(comp(key,node->key()) < 0){  // key is to the left
     return findNode(node->left(),key, comp);  // finding left child
   }
 
-  if(comp(node->key(),key)){  // key is to the right
+  if(comp(node->key(),key) < 0){  // key is to the right
     return findNode(node->right(),key,comp); // finding right child
   }
 
@@ -346,11 +347,11 @@ static AVLNode *findNode(AVLNode *node, void* key, Comparator comp){
 
 
 
-static AVLNode *succNode(AVLNode *node, void* key, Comparator comp){
+static AVLNode *succNode(AVLNode *node, const void* key, Comparator comp){
 
   if(node == nullptr) return nullptr; // key has no successor in tree
 
-  if(comp(key,node->key())){ // key is to the left
+  if(comp(key,node->key()) < 0){ // key is to the left
     AVLNode *temp = succNode(node->left(),key,comp);  // looking left
     if(temp == nullptr)
     { // there is no successor of key in left child
@@ -362,7 +363,7 @@ static AVLNode *succNode(AVLNode *node, void* key, Comparator comp){
     }
   }
 
-  if(comp(node->key(),key)){ // key is to the right, if successor exists ...
+  if(comp(node->key(),key) < 0){ // key is to the right, if successor exists ...
     return succNode(node->right(),key,comp); // ... it must be on the right
   }
 
@@ -371,7 +372,7 @@ static AVLNode *succNode(AVLNode *node, void* key, Comparator comp){
   {  // right child does not exist
     AVLNode *parent = node->parent();     // successor possibly parent
     if(parent == nullptr) return nullptr; // no parent then no succ
-    if(comp(key,parent->key()))
+    if(comp(key,parent->key()) < 0)
     {  // parent key greater, it is successor
       return parent;
     }
@@ -388,11 +389,11 @@ static AVLNode *succNode(AVLNode *node, void* key, Comparator comp){
 
 
 
-static AVLNode *predNode(AVLNode *node, void* key, Comparator comp){
+static AVLNode *predNode(AVLNode *node, const void* key, Comparator comp){
 
   if(node == nullptr) return nullptr; // key has no predecessor in tree
 
-  if(comp(node->key(),key)){ // key is to the right
+  if(comp(node->key(),key) < 0){ // key is to the right
     AVLNode *temp = predNode(node->right(),key,comp);  // looking right
     if(temp == nullptr)
     {  // there is no predecessor of key in right child
@@ -404,7 +405,7 @@ static AVLNode *predNode(AVLNode *node, void* key, Comparator comp){
     }
   }
 
-  if(comp(key,node->key())){ // key is to the left, if predecessor exists ..
+  if(comp(key,node->key()) < 0){ // key is to the left, if predecessor exists ..
     return predNode(node->left(),key,comp); // ... it must be on the left
   }
 
@@ -415,7 +416,7 @@ static AVLNode *predNode(AVLNode *node, void* key, Comparator comp){
     if(parent_p == nullptr){  // if no parent then no predecessor
       return nullptr;
     }
-    if(comp(parent_p->key(), key))
+    if(comp(parent_p->key(), key) < 0)
     {  // parent key smaller, it is predecessor
       return parent_p;
     }
@@ -432,7 +433,7 @@ static AVLNode *predNode(AVLNode *node, void* key, Comparator comp){
 
 
 // checks AVL invariant
-static bool checkAVLNode(AVLNode *node){
+static bool checkAVLNode(const AVLNode *node){
 
   if (node == nullptr) return true; // AVL invariant satisfied
 
@@ -444,7 +445,7 @@ static bool checkAVLNode(AVLNode *node){
 }
 
 // checks calculated heights values
-static bool checkHeightNode(AVLNode *node){
+static bool checkHeightNode(const AVLNode *node){
 
   if (node == nullptr) return true; // no stale height on empty tree
 
@@ -462,7 +463,7 @@ static bool checkHeightNode(AVLNode *node){
 
 
 // checks BST invariant
-static bool checkBSTNode(AVLNode *node, Comparator comp){
+static bool checkBSTNode(const AVLNode *node, Comparator comp){
 
   if(node == nullptr) return true;  // empty tree satisfies invariant
 
@@ -472,9 +473,9 @@ static bool checkBSTNode(AVLNode *node, Comparator comp){
 
   if(node->left() != nullptr){  // left child exists
 
-    void* key = maxNode(node->left())->key(); // maximal key in left child
+    const void* key = maxNode(node->left())->key(); // maximal key in left child
 
-    if(!comp(key,node->key())){ // left maximal key is not smaller
+    if(comp(key,node->key()) >= 0){ // left maximal key is not smaller
 
       return false; // binary search tree property is violated
 
@@ -484,9 +485,9 @@ static bool checkBSTNode(AVLNode *node, Comparator comp){
 
   if(node->right() != nullptr){ // right child exists
 
-    void* key = minNode(node->right())->key(); // minimal key in right child
+    const void* key = minNode(node->right())->key(); // minimal key in right child
 
-    if(!comp(node->key(),key)){ // right minimal key is not greater
+    if(comp(node->key(),key) >= 0){ // right minimal key is not greater
 
       return false; // binary search tree property is violated
 
@@ -500,7 +501,7 @@ static bool checkBSTNode(AVLNode *node, Comparator comp){
 
 
 // checks parent links
-static bool checkParentNode(AVLNode *node){
+static bool checkParentNode(const AVLNode *node){
 
   if(node == nullptr) return true;  // empty tree nothing to check
 
@@ -524,7 +525,7 @@ static bool checkParentNode(AVLNode *node){
 }
 
 
-static void printNode(AVLNode *node, PrintKeyFunc func){
+static void printNode(const AVLNode *node, PrintKeyFunc func){
 
   if(node == nullptr)
   {
@@ -559,21 +560,21 @@ void AVL::print(PrintKeyFunc func) const{
 }
 
 
-void AVL::insert(void* key, void* value){
+void AVL::insert(const void* key, const void* value){
 
   d_top_p = insertNode(d_top_p, key, value, d_comp_p);  // new root after insert
 
 }
 
 
-void AVL::del(void* key){
+void AVL::del(const void* key){
 
   d_top_p = deleteNode(d_top_p, key, d_comp_p); // new root node after deletion
 
 }
 
 
-void* AVL::min(void*& key) const{
+const void* AVL::min(const void* &key) const{
 
   AVLNode *temp = minNode(d_top_p);  // node with minimal key
 
@@ -586,7 +587,7 @@ void* AVL::min(void*& key) const{
 }
 
 
-void* AVL::max(void*& key) const{
+const void* AVL::max(const void* &key) const{
 
   AVLNode *temp = maxNode(d_top_p);  // node with maximal key
 
@@ -599,7 +600,7 @@ void* AVL::max(void*& key) const{
 }
 
 
-void* AVL::find(void* key) const{
+const void* AVL::find(const void* key) const{
 
   AVLNode *temp = findNode(d_top_p, key, d_comp_p);  // node with given key
 
@@ -610,8 +611,7 @@ void* AVL::find(void* key) const{
 }
 
 
-
-void* AVL::succ(void* key, void*& succ) const{
+const void* AVL::succ(const void* key, const void* &succ) const{
 
   AVLNode *temp = succNode(d_top_p, key, d_comp_p);  // node with succ key
 
@@ -624,8 +624,7 @@ void* AVL::succ(void* key, void*& succ) const{
 }
 
 
-
-void* AVL::pred(void* key, void*& pred) const{
+const void* AVL::pred(const void* key, const void* &pred) const{
 
   AVLNode *temp = predNode(d_top_p, key, d_comp_p);  // node with pred key
 
@@ -636,7 +635,6 @@ void* AVL::pred(void* key, void*& pred) const{
   return temp->val(); // returning corresponding value pointer
 
 }
-
 
 
 bool AVL::check() const{
@@ -663,6 +661,4 @@ bool AVL::check() const{
   return true;  // all tests passed successfully
 
 }
-
-
 
