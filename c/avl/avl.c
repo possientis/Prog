@@ -7,6 +7,7 @@
 #include "avlnode.h"
 #endif
 
+
 // just to make code below more readable
 typedef int (*Comparator)(const void*, const void*);
 typedef void (*PrintKeyFunc)(const void*);
