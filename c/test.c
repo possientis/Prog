@@ -9,30 +9,19 @@ int main(int argc, char * argv[])
 
   using namespace std;
 
-  const char* friends[] = {"Al", "Bob", "Carl"};
+  long e;
+  int a;
+  int b;
+  short c;
+  short d;
+  char f;
+  long g;
 
-  cout << "First pointer is " << &friends[0] << endl;
-  cout << "Second pointer is " << &friends[1] << endl;
-  cout << "Third pointer is " << &friends[2] << endl;
+  cout << "One long, two int, two short and one char" << endl;
 
-  char* p = (char*) friends;
+  cout << hex << &e << endl << &a << endl << &b << endl << &c << endl << &d << endl;
+  cout << hex << (void*) &f << endl << &g << endl;
 
-  unsigned long a = *(unsigned long*) p;
-
-  cout << hex << a << endl;
-
-  char* q = (char*) a;
-
-  printf("string is %s\n",q);
-  printf("string is %s\n",q+3);
-  printf("string is %s\n",q+7);
-
-  for(int i = 0; i < 24; i++){
-
-    //cout <<  (int) *p << endl;
-    printf("%x:", (int) *p);
-    p++;
-  }
 
   return 0;
 

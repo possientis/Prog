@@ -1,4 +1,4 @@
 #!/bin/sh
 
-g++ qsort.c -std=c++14
+g++ test.c  -std=c++14
 ./a.out
