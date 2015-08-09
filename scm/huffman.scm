@@ -8,12 +8,6 @@
 
 (define (weight-leaf x) (caddr x))
 
-(define (make-code-tree left right)
-  (list left
-        right
-        (append (symbols left) (symbols right))
-        (+ (weight left) (weight right))))
-
 (define (left-branch tree) (car tree))
 
 (define (right-branch tree) (cadr tree))
@@ -33,6 +27,13 @@
         ((eq? bit #t) (right-branch branch))
         (else (display "huffman: bad bit in choose-branch\n"))))
 
+(define (make-code-tree left right)
+  (list left
+        right
+        (append (symbols left) (symbols right))
+        (+ (weight left) (weight right))))
+
+
 (define (decode bits tree)
   (define (decode-1 bits current-branch)
     (if (null? bits)
@@ -50,14 +51,6 @@
         ((< (weight x) (weight (car set))) (cons x set))
         (else (cons (car set)
                     (adjoin-set x (cdr set))))))
-
-(define (make-leaf-set pairs)
-  (if (null? pairs)
-    '()
-    (let ((pair (car pairs)))
-      (adjoin-set (make-leaf (car pair)
-                             (cadr pair))
-                  (make-leaf-set (cdr pairs))))))
 
 
 (define sample-tree
@@ -91,5 +84,59 @@
         ((element-of-set? symbol (symbols (right-branch tree)))
          (cons #t (encode-symbol symbol (right-branch tree))))
         (else (display "huffman: unexpected symbol in encode-symbol\n"))))
+
+
+(define (make-leaf-set pairs)
+  (if (null? pairs)
+    '()
+    (let ((pair (car pairs)))
+      (adjoin-set (make-leaf (car pair)
+                             (cadr pair))
+                  (make-leaf-set (cdr pairs))))))
+
+
+(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-set pairs)))
+
+(define (successive-merge set)
+  (if (= 1 (length set))
+    set
+    (successive-merge
+      (adjoin-set
+        (make-code-tree (car set) (cadr set))
+        (cddr set)))))
+
+(define sample-pairs
+  (list
+    (list 'a 8)
+    (list 'b 3)
+    (list 'c 1)
+    (list 'd 1)
+    (list 'e 1)
+    (list 'f 1)
+    (list 'g 1)
+    (list 'h 1)))
+
+(define new-pairs
+  (list
+    (list 'A 2)
+    (list 'BOOM 1)
+    (list 'GET 2)
+    (list 'JOB 2)
+    (list 'NA 16)
+    (list 'SHA 3)
+    (list 'YIP 9)
+    (list 'WAH 1)))
+
+(define tree (generate-huffman-tree new-pairs))
+
+(define message
+  (list
+    'get 'a 'job
+    'sha 'na 'na 'na 'na 'na 'na 'na 'na
+    'get 'a 'job
+    'sha 'na 'na 'na 'na 'na 'na 'na 'na
+    'wah 'yip 'yip 'yip 'yip 'yip 'yip 'yip 'yip
+    'sha 'boom))
 
 
