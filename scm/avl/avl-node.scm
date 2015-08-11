@@ -21,7 +21,7 @@
           ((eq? m 'set-left!) set-left!)
           ((eq? m 'set-right!) set-right!)
           ((eq? m 'set-parent!) set-parent!)
-          (else (display "avl-node: uknown operation error\n"))))
+          (else (display "avl-node: unknown operation error\n"))))
   ;;
   ;; private members
   ;;

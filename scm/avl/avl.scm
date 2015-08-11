@@ -2,7 +2,7 @@
 
 (define (avl proc)  ; 'proc' strict total order between keys
   ;;
-  ;;private data
+  ;; private data
   (let ((less? proc) ; procedure allowing comparision < between keys
         (top '()))   ; top node of avl
   ;;
