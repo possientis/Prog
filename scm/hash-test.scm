@@ -1,9 +1,11 @@
 (load "hash.scm")
 
+(define (same-key? x y) (equal? x y))
+
 (define (hash-test)
   ;;
-  (define a (dictionary))
-  (define b (dictionary))
+  (define a (dictionary same-key?))
+  (define b (dictionary equal?))
   ;;
   (display "hash: starting unit test\n")
   ;;
@@ -17,3 +19,4 @@
 
 (hash-test)
 (quit)
+

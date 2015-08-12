@@ -28,7 +28,7 @@ class AVL {
 
   // manipulators
   void insert(const void* key, const void* value);// val changed on duplicate key
-    void del(const void* key);                // has no impact unless key in tree
+  void del(const void* key);                // has no impact unless key in tree
 
 };
 
