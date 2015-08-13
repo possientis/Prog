@@ -265,7 +265,65 @@
           (if (not (eq? #f x)) (display "link: unit test 147 failing\n")))
         (loop (+ n 1)))))
 
-
+  ;; iterator
+  ((a 'insert!) 1 10)
+  ((a 'insert!) 3 30)
+  ((a 'insert!) 5 50)
+  ((a 'insert!) 7 70)
+  ;;
+  (let loop ((iter (a 'iter)))
+    (if (iter 'null?)
+      'done
+      (begin
+        (let ((x ((a 'find) (iter 'key))))
+          (if (eq? #f x) (display "link: unit test 148 failing\n"))
+          (if(not(=(car x)(iter 'key)))(display "link: unit test 149 failing\n"))
+          (if(not(=(cdr x)(iter 'value)))(display"link: unit test 150 failing\n")))
+        (iter '++)
+        (loop iter))))
+  ;; new iter still working?
+  (let loop ((iter (a 'iter)))
+    (if (iter 'null?)
+      'done
+      (begin
+        (let ((x ((a 'find) (iter 'key))))
+          (if (eq? #f x) (display "link: unit test 151 failing\n"))
+          (if(not(=(car x)(iter 'key)))(display "link: unit test 152 failing\n"))
+          (if(not(=(cdr x)(iter 'value)))(display"link: unit test 153 failing\n")))
+        (iter '++)
+        (loop iter))))
+  ;;
+  ;; setting vector of 4 flags
+  (let ((v (make-vector 4)))
+    ;; initializing entries to #f
+    (let loop ((i 0))
+      (if (>= i 4)
+        'done
+        (begin
+          (vector-set! v i #f)
+          (set! i (+ 1 i))
+          (loop i))))
+    ;; looping through iterator, checking found keys
+   (let loop ((iter (a 'iter)))
+    (if (iter 'null?)
+      'done
+      (begin
+        (cond ((= 1 (iter 'key)) (vector-set! v 0 #t))
+              ((= 3 (iter 'key)) (vector-set! v 1 #t))
+              ((= 5 (iter 'key)) (vector-set! v 2 #t))
+              ((= 7 (iter 'key)) (vector-set! v 3 #t))
+              (else (display "link: unit test 154 failing\n")))
+        (iter '++)
+        (loop iter))))
+   ;; making sure all keys were part of iteration
+     (let loop ((i 0))
+      (if (>= i 4)
+        'done
+        (begin
+          (if(not(eq? #t(vector-ref v i)))
+            (display "link: unit test 155 failing\n"))
+          (set! i (+ 1 i))
+          (loop i)))))
 ;;  (a 'print)
 ;;  (newline)
 

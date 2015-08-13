@@ -1,18 +1,20 @@
-//#include<stdio.h>
+#include<stdio.h>
 //#include<string.h>
-#include<malloc.h>
+//#include<malloc.h>
 //#include<assert.h>
-#include<iostream>
+//#include<iostream>
 
-int main(int argc, char * argv[])
+static int a = 1;
+
+int main()
 {
 
+  static int a = 2;
 
-  using namespace std;
+  printf("a = %d\n", a);
 
-#ifdef PAGE_SIZE
-  cout << "yes\n";
-#endif
+//  using namespace std;
+
 
   return 0;
 

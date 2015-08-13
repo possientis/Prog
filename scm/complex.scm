@@ -43,12 +43,26 @@
                         (* (x 'imag) (y 'imag)))
                      (+ (* (x 'real) (y 'imag))
                         (* (x 'imag) (y 'real))))))
+        (complex-div
+          (lambda (x y)
+            (let ((r (/ (x 'mod) (y 'mod)))
+                  (a (- (x 'angle) (y 'angle))))
+              (complex
+                (* r (cos a))
+                (* r (sin a))))))
+       (complex-eq?
+         (lambda (x y)
+           (and
+             (< (abs (- (x 'real) (y 'real))) 0.0000000001)
+             (< (abs (- (y 'imag) (y 'imag))) 0.0000000001))))
         )
     (lambda ()
       (define (dispatch m)
         (cond ((eq? m '+) complex-add)
               ((eq? m '-) complex-sub)
               ((eq? m '*) complex-mul)
+              ((eq? m '/) complex-div)
+              ((eq? m '=) complex-eq?)
               (else (display "complex-utils: unknown operation error\n"))))
       ;;
       ;; returning interface

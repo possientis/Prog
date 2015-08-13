@@ -51,7 +51,8 @@
     (cond ((eq? m 'insert!) insert!)  ; overwrites value on duplicate key
           ((eq? m 'delete!) delete!)  ; deletes key from list if it exists
           ((eq? m 'find) search)      ; returns pair (key . value) or #f is fails
-          ((eq? m 'print) (print))      ; basic display of keys
+          ((eq? m 'iter) (iter))      ; returns an iterator interface
+          ((eq? m 'print) (print))    ; basic display of keys
           (else (display "link: unknown operation error\n"))))
   ;;
   ;; private members
@@ -64,6 +65,19 @@
   ;;
   (define (search key)
     (search-node head key same-key?))
+  ;;
+  (define (iter)
+    ;; private data of iterator initilized to start of list
+    (let ((node  head))
+      ;;
+      ;; public interface of iterator
+      (define (dispatch m)
+        (cond ((eq? m '++) (set! node (node 'next)))
+              ((eq? m 'null?) (null? node))
+              ((eq? m 'key) (node 'key))
+              ((eq? m 'value) (node 'value))
+              (else (display "link: unknown iterator operation error\n"))))
+      dispatch))
   ;;
   (define (print)
     (display "( ")

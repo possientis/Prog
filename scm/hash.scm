@@ -10,11 +10,10 @@
 
 (define dictionary
   ;;
-  ;;
   (lambda(proc)                 ; 'proc' procedure testing equality between keys
   ;;
   ;; private data
-  (let ((data (make-vector 4))  ; initial space allocation for 4 entries
+  (let ((data (make-vector 4))  ; initial allocation
         (num 0)                 ; number of entries
         (size 4)                ; allocated space
         (same-key? proc)        ; procedure determining equality between keys
@@ -30,8 +29,11 @@
   ;;
   (define (insert! key value)
     (let ((h (hash key)))
-      (if (null? (vector-ref data h)) ; no existing entry for this hash value
-        (vector-set! data h 12))))
+      (if (null? (vector-ref data h))     ; no existing entry for this hash value
+        (vector-set! data h (link proc))) ; allocating linked list to entry h
+      ;; entry with hash value h has an associated linked list
+      (((vector-ref data h) 'insert!) key value))) ; insert into linked list
+      ;))
   ;;
   ;;
   (define (delete! key)
@@ -58,8 +60,7 @@
           (let ((new (make-vector (* 2 size))))
             'done)))))
 
-
-
-
+  ;; initializing vector
+  (vector-fill! data '())
   ;; returning interface
   dispatch)))

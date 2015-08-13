@@ -14,6 +14,8 @@
     (if (and (not (= 26984 u)) (not (= 1769415228 u)))
     (display "hash: unit testing 1 failing\n")))
   ;;
+  ((a 'insert!) 1 10)
+  ;;
   ;;
   (display "hash: unit test complete\n"))
 
