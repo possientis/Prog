@@ -4,19 +4,24 @@
 //#include<assert.h>
 //#include<iostream>
 
-static int a = 1;
+int foo(const char* control, ...){
+
+  printf("%s\n",control);
+
+  return 0;
+
+}
 
 int main()
 {
 
-  static int a = 2;
-
-  printf("a = %d\n", a);
-
 //  using namespace std;
 
+  foo("hi", "hello", "here");
 
   return 0;
 
 
 }
+
+
