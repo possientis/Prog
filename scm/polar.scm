@@ -5,8 +5,8 @@
   (define data (cons modulus theta))
   ;; public interface
   (define (dispatch m)
-    (cond ((eq? m 'real) real)
-          ((eq? m 'imag) imag)
+    (cond ((eq? m 'real) (real))
+          ((eq? m 'imag) (imag))
           ((eq? m 'mod) (car data))
           ((eq? m 'angle) (cdr data))
           ((eq? m 'show)(show))
