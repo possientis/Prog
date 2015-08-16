@@ -10,7 +10,7 @@ int main()
 
 //  using namespace std;
 
-  printf("%s\n",__ASSEMBLER__);
+  printf("%s\n",MCA_bus__is_a_macro);
 
   return 0;
 
