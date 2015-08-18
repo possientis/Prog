@@ -1,16 +1,11 @@
 (load "link.scm")
+(load "hash.scm")
 
 
 (define dictionary
   ;;
-  ;; static private member
-  (let ((prehash
-        ;; hack to figure out whether running 'mit-scheme' or 'scm'
-        (let ((mit-scheme? (not (= 1 (inexact->exact 1.2)))))
-          (lambda (x)
-            (if mit-scheme?
-              (equal-hash x)          ; value based hash for mit-scheme
-              (hash x 1000000000)))))); value based hash for scm
+  ;; private static member
+  (let ((prehash ((hash-lib) 'prehash)))  ; prehash procedure from hash-lib module
   ;;
   (lambda(proc)                 ; 'proc' procedure testing equality between keys
   ;;
@@ -28,8 +23,7 @@
           ((eq? m 'find) search)      ; returns pair (key . value) or #f if fails
           ((eq? m 'debug) (debug))    ; implementation specific debug info
           ((eq? m 'check) (check))    ; some sanity checks, returns #f if fails
-          ((eq? m 'prehash) prehash)    ; exporting static function
-          (else (display "hash: unknown operation error\n"))))
+          (else (display "dictionary: unknown operation error\n"))))
   ;; private members
   ;;
   (define (insert! key value)
@@ -95,7 +89,7 @@
   ;; re-creating hash table from scratch with more allocated space to reduce load
   (define (increase!)
     (if (not mem-enabled?)          ; attempt at re-entry
-      (begin (display "hash: illegal call to increase! method\n") 'done)
+      (begin (display "dictionary: illegal call to increase! method\n") 'done)
       (if (need-increase?)          ; increase only happens if needed
         (begin
           (set! mem-enabled? #f)    ; no more calls to increase! until set to #t
@@ -117,7 +111,7 @@
   ;; re-creating hash table from scratch with less allocated space to free memory
   (define (decrease!)
     (if (not mem-enabled?)          ; attempt at re-entry
-      (begin (display "hash: illegal call to decrease! method\n") 'done)
+      (begin (display "dictionary: illegal call to decrease! method\n") 'done)
       (if (need-decrease?)          ; decrease only happens if needed
         (begin
           (set! mem-enabled? #f)    ; no calls to increase! until set to #t

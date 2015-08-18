@@ -41,10 +41,13 @@
   ;; '/ and '=
   (let ((u (((polar-utils)'/) x1 x0)))
     (let ((v (((polar-utils)'*) u x0)))
-      (if(not(((polar-utils)'=)v x1))(display"complex: unit test 13 failing\n"))
+      (if(not(((polar-utils)'=)v x1))(display"polar: unit test 13 failing\n"))
       ))
   ;; real and imag
-
+  (if (not (same? 1 (x0 'real))) (display "polar: unit test 14 failing\n"))
+  (if (not (same? 4 (x1 'real))) (display "polar: unit test 15 failing\n"))
+  (if (not (same? 1 (x0 'imag))) (display "polar: unit test 16 failing\n"))
+  (if (not (same? 3 (x1 'imag))) (display "polar: unit test 17 failing\n"))
 
   (display "polar: unit test complete\n"))
 
