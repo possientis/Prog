@@ -6,10 +6,14 @@
   (define b (link equal?))
 
   (display "link: starting unit test\n")
+  (if (not (a 'empty?)) (display "link: unit test 0.1 failing\n"))
+  (if (not (b 'empty?)) (display "link: unit test 0.2 failing\n"))
   ;; insert
   ;; first insert
   ((a 'insert!) 1 10)
   ((b 'insert!) 2 20)
+  (if (a 'empty?) (display "link: unit test 0.3 failing\n"))
+  (if (b 'empty?) (display "link: unit test 0.4 failing\n"))
   (let ((x ((a 'find) 0)))  ; should fail
     (if (not (eq? #f x)) (display "link: unit test 1 failing\n")))
   (let ((x ((a 'find) 1)))
@@ -244,6 +248,8 @@
   (let ((x ((b 'find) 8)))  ; should fail
     (if (not (eq? #f x)) (display "link: unit test 143 failing\n")))
   ;;
+  (if (not (a 'empty?)) (display "link: unit test 143.1 failing\n"))
+  (if (not (b 'empty?)) (display "link: unit test 143.2 failing\n"))
   ;; multiple inserts
   (let loop ((n 512))
     (if (< n 1)
@@ -264,7 +270,10 @@
         (let ((x ((a 'find) n)))
           (if (not (eq? #f x)) (display "link: unit test 147 failing\n")))
         (loop (+ n 1)))))
-
+  ;;
+  (if (not (a 'empty?)) (display "link: unit test 147.1 failing\n"))
+  (if (not (b 'empty?)) (display "link: unit test 147.2 failing\n"))
+  ;;
   ;; iterator
   ((a 'insert!) 1 10)
   ((a 'insert!) 3 30)

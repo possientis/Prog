@@ -1,4 +1,4 @@
-(load "hash.scm")
+(load "dict.scm")
 
 (define (same-key? x y) (equal? x y))
 
@@ -60,6 +60,7 @@
   ((a 'delete!) 2)
   ((a 'delete!) 1)
   ((a 'delete!) 4)
+  ((b 'insert!) "ghi" 300)
 
   (a 'debug)
   (b 'debug)

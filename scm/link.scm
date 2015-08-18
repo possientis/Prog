@@ -51,11 +51,15 @@
     (cond ((eq? m 'insert!) insert!)  ; overwrites value on duplicate key
           ((eq? m 'delete!) delete!)  ; deletes key from list if it exists
           ((eq? m 'find) search)      ; returns pair (key . value) or #f is fails
+          ((eq? m 'empty?) (empty?))  ; #t or #f
           ((eq? m 'iter) (iter))      ; returns an iterator interface
           ((eq? m 'print) (print))    ; basic display of keys
           (else (display "link: unknown operation error\n"))))
   ;;
   ;; private members
+  ;;
+  (define (empty?)
+    (null? head))
   ;;
   (define (insert! key value)
     (set! head (insert-node! head key value same-key?)))
