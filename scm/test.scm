@@ -1,8 +1,2 @@
-(define (proc)
-  (let loop ((i 0))
-    (if (= i 10)
-      (display "\n")
-      (begin
-        (display i)
-        (display " ")
-        (loop (+ 1 i))))))
+(define (celsius->fahrenheit temp)
+  (+ 32 (* 1.8 temp)))
