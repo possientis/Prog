@@ -10,6 +10,7 @@
           ((eq? m 'mod) (car data))
           ((eq? m 'angle) (cdr data))
           ((eq? m 'show)(show))
+          ((eq? m 'type) 'polar)
           (else (display "polar: unknown operation error\n"))))
   ;; private members
   ;;

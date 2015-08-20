@@ -1,0 +1,12 @@
+(load "complex.scm")
+(load "polar.scm")
+(load "rat.scm")
+
+(define (add x y)
+    (cond ((and (eq? (x 'type) 'complex) (eq? (y 'type) 'complex))
+           (((complex-utils) '+) x y))
+          ((and (eq? (x 'type) 'polar) (eq? (y 'type) 'polar))
+           (((polar-utils) '+) x y))
+          ((and (eq? (x 'type) 'rat) (eq? (y 'type) 'rat))
+           (((rat-utils) '+) x y))
+          (else (display "number: unknown type in add function call\n"))))

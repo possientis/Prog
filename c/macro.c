@@ -10,7 +10,7 @@ int main()
 
 //  using namespace std;
 
-  printf("%s\n",MCA_bus__is_a_macro);
+  printf("%s\n",__TIMESTAMP__);
 
   return 0;
 

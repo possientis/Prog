@@ -10,6 +10,7 @@
           ((eq? m 'mod) (modulus))
           ((eq? m 'angle)(theta))
           ((eq? m 'show) (show))
+          ((eq? m 'type) 'complex)
           (else (display "complex: unknwon operation error\n"))))
   ;; private members
   ;;

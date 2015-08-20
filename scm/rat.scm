@@ -10,6 +10,7 @@
     (cond ((eq? m 'numer) (car data))
           ((eq? m 'denom) (cdr data))
           ((eq? m 'show) (show))
+          ((eq? m 'type) 'rat)
           (else (display "rat: unknown operation error\n"))))
   ;; private members
   ;;

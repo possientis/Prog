@@ -23,16 +23,16 @@
   ;;
   ;; next
   (if (not (null? (a 'next))) (display "link-node: unit-test 8 failing\n"))
-  (if (not (null? (b 'next))) (display "link-node: unit-test 8 failing\n"))
-  (if (not (null? (c 'next))) (display "link-node: unit-test 8 failing\n"))
+  (if (not (null? (b 'next))) (display "link-node: unit-test 9 failing\n"))
+  (if (not (null? (c 'next))) (display "link-node: unit-test 10 failing\n"))
   ;;
   ;; set-next!
   ((a 'set-next!) b)
   ((b 'set-next!) c)
   ((c 'set-next!) a)
-  (if (not (eq? b (a 'next))) (display "link-node: unit-test 9 failing\n"))
-  (if (not (eq? c (b 'next))) (display "link-node: unit-test 10 failing\n"))
-  (if (not (eq? a (c 'next))) (display "link-node: unit-test 11 failing\n"))
+  (if (not (eq? b (a 'next))) (display "link-node: unit-test 11 failing\n"))
+  (if (not (eq? c (b 'next))) (display "link-node: unit-test 12 failing\n"))
+  (if (not (eq? a (c 'next))) (display "link-node: unit-test 13 failing\n"))
   ;;
   (display "link-node: unit test complete\n"))
 
