@@ -9,6 +9,7 @@ class Link {
   // private data
   int (*d_comp_p)(const void*, const void*);  // comparison operator
   LinkNode *d_head_p;                         // head of linked list
+  //
   Link(const Link&);                          // not implemented
   Link& operator=(const Link&);               // not implemented
 
@@ -23,7 +24,7 @@ class Link {
 
 
   // manipulators
-  void insert(const void* key, const void* value);// val changed on duplicate key
+  void insert(const void* key, const void* value); // val changed on duplicate key
   void del(const void* key);                       // no impact unless key in list
 
 };

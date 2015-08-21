@@ -13,6 +13,15 @@
           (and (<= (car l) (cadr l))
                (sorted? (cdr l))))))
 
+(define (flatten2 l)
+  (if (not (list? l))
+    (list l)
+    (apply append (map flatten2 l))))
+
+
+(define (translate seq delta)
+  (let ((shift (lambda (x) (+ x delta))))
+    (map shift seq)))
 
 
 
