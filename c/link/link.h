@@ -3,6 +3,7 @@
 #define INCLUDED_LINK
 
 class LinkNode;
+class LinkIter;
 
 class Link {
 
@@ -12,6 +13,9 @@ class Link {
   //
   Link(const Link&);                          // not implemented
   Link& operator=(const Link&);               // not implemented
+
+  //friends
+  friend LinkIter;
 
   public:
   Link(int (*comp)(const void*,const void*)):d_comp_p(comp), d_head_p(nullptr){};
@@ -29,6 +33,27 @@ class Link {
 
 };
 
+class LinkIter {
+
+  // private data
+  LinkNode *d_node_p;
+  //
+  LinkIter(const LinkIter&);                  // not implemented
+  LinkIter& operator=(const LinkIter&);       // not implemented
+
+  public:
+  LinkIter(const Link& link):d_node_p(link.d_head_p){};
+  ~LinkIter(){};
+
+  // manipulator
+  void operator++();                          // pre-increment
+
+  // accessors
+  operator const void*() const {return d_node_p;};
+  const void* key() const;
+  const void* val() const;
+
+};
 
 
 #endif

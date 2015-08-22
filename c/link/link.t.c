@@ -5,43 +5,42 @@
 
 #include <stdio.h>
 
+
 static void printKey(const void* k)
 {
   int key = *(int*) k;
   printf("%d",key);
-
 }
+
 
 static int comp1(const void* x, const void* y)
 {
   int u = *(int*) x;
   int v = *(int*) y;
-
   return (u - v);
-
 }
+
 
 static int comp2(const void* x, const void* y)
 {
   int u = *(int*) x;
   int v = *(int*) y;
-
   return (v - u);
-
 }
+
 
 int link_test();
 
+
 int main(int argc, char * argv[]){
-
   return link_test();
-
 }
 
 
 int link_test(){
 
   printf("Link: starting unit test\n");
+
 
   int k0 = 0;
   int k1 = 1;
@@ -56,6 +55,7 @@ int link_test(){
   int v2 = 20;
   int v3 = 30;
   int v5 = 50;
+  int v7 = 70;
   int v8 = 80;
   int v10 = 100;
   int v20 = 200;
@@ -174,42 +174,66 @@ int link_test(){
   int val[NUM_KEY];
 
   for(int i = 0; i < NUM_KEY; ++i){
-
     key[i]=i;
     val[i] = i*10;
-
     a.insert(&key[i],&val[i]);
-
     for(int j = 0; j <= i; ++j){
-
       if(a.find(&key[j]) != &val[j]) printf("Link: unit test 65 failing\n");
-
     }
-
   }
 
   // multiple delete
   for(int i = 0; i < NUM_KEY; ++i){
-
     a.del(&key[i]);
-
     for(int j = 0; j <= i; ++j){
-
       if(a.find(&key[j]) != nullptr) printf("Link: unit test 66 failing\n");
-
     }
-
     for(int j = NUM_KEY - 1; i < j; --j){
-
       if(a.find(&key[j]) != &val[j]) printf("Link: unit test 67 failing\n");
-
     }
+  }
+
+  // testing iterators
+  a.insert(&k1,&v1);
+  a.insert(&k3,&v3);
+  a.insert(&k5,&v5);
+  a.insert(&k7,&v7);
+
+  // first attempt
+  for(LinkIter it(a); it; ++it){
+
+    if(a.find(it.key()) != it.val()) printf("Link: unit test 68 failing\n");
+
+  }
+
+  // second attempt
+  for(LinkIter it(a); it; ++it){
+
+    if(a.find(it.key()) != it.val()) printf("Link: unit test 69 failing\n");
+
+  }
+
+  bool found[4] = {false,false,false,false};
+
+  for(LinkIter it(a); it; ++it){
+
+    if(it.key() == &k1) found[0] = true;
+    else if(it.key() == &k3) found[1] = true;
+    else if(it.key() == &k5) found[2] = true;
+    else if(it.key() == &k7) found[3] = true;
+    else printf("Link: unit test 70 failing\n");
+
+  }
+
+  for(int i = 0; i< 4; ++i){
+
+    if(found[i] == false) printf("Link: unit test 71 failing\n");
 
   }
 
 
-//  a.print(printKey);
-//  printf("\n");
+  //a.print(printKey);
+  //printf("\n");
 
 
   printf("Link: unit test complete\n");

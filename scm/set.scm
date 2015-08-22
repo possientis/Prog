@@ -1,3 +1,31 @@
+
+
+
+(define (delete x set)
+  (cond ((null? set) set)
+        ((= x (car set)) (cdr set))
+        (else (cons (car set) (delete x (cdr set))))))
+
+(define (permute seq)
+  (if (null? seq)
+    (list seq)
+    (apply append
+      (map
+        (lambda (x)
+          (map
+            (lambda (l)
+              (cons x l))
+            (permute (delete x seq)))) seq))))
+
+
+(define (power-set set)
+  (if (list? set)
+    (if (null? set)
+      (list '())
+      (let ((temp (power-set (cdr set))))
+        (append temp (map
+                       (lambda (x) (cons (car set) x))
+                       temp))))))
 (define (entry tree) (car tree))
 
 (define (left tree) (cadr tree))
