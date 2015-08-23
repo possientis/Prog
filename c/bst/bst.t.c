@@ -40,52 +40,52 @@ int main(int argc, char * argv[]){
   b.insert(2,&v2);
   if(!a.check()) printf("BST: unit test 1 failing\n");
   if(!b.check()) printf("BST: unit test 2 failing\n");
-  if(a.min(key) != &v2) printf("BST: unit test 3 failing\n");
+  if(a.min(&key) != &v2) printf("BST: unit test 3 failing\n");
   if(key != 2) printf("BST: unit test 4 failing\n");
-  if(a.max(key) != &v2) printf("BST: unit test 5 failing\n");
+  if(a.max(&key) != &v2) printf("BST: unit test 5 failing\n");
   if(key != 2) printf("BST: unit test 6 failing\n");
-  if(b.min(key) != &v2) printf("BST: unit test 7 failing\n");
+  if(b.min(&key) != &v2) printf("BST: unit test 7 failing\n");
   if(key != 2) printf("BST: unit test 8 failing\n");
-  if(b.max(key) != &v2) printf("BST: unit test 9 failing\n");
+  if(b.max(&key) != &v2) printf("BST: unit test 9 failing\n");
   if(key != 2) printf("BST: unit test 10 failing\n");
   // second insert
   a.insert(6,&v6);
   b.insert(6,&v6);
   if(!a.check()) printf("BST: unit test 11 failing\n");
   if(!b.check()) printf("BST: unit test 12 failing\n");
-  if(a.min(key) != &v2) printf("BST: unit test 13 failing\n");
+  if(a.min(&key) != &v2) printf("BST: unit test 13 failing\n");
   if(key != 2) printf("BST: unit test 14 failing\n");
-  if(a.max(key) != &v6) printf("BST: unit test 15 failing\n");
+  if(a.max(&key) != &v6) printf("BST: unit test 15 failing\n");
   if(key != 6) printf("BST: unit test 16 failing\n");
-  if(b.min(key) != &v6) printf("BST: unit test 17 failing\n");
+  if(b.min(&key) != &v6) printf("BST: unit test 17 failing\n");
   if(key != 6) printf("BST: unit test 18 failing\n");
-  if(b.max(key) != &v2) printf("BST: unit test 19 failing\n");
+  if(b.max(&key) != &v2) printf("BST: unit test 19 failing\n");
   if(key != 2) printf("BST: unit test 20 failing\n");
   // third insert
   a.insert(4,&v4);
   b.insert(4,&v4);
   if(!a.check()) printf("BST: unit test 21 failing\n");
   if(!b.check()) printf("BST: unit test 22 failing\n");
-  if(a.min(key) != &v2) printf("BST: unit test 23 failing\n");
+  if(a.min(&key) != &v2) printf("BST: unit test 23 failing\n");
   if(key != 2) printf("BST: unit test 24 failing\n");
-  if(a.max(key) != &v6) printf("BST: unit test 25 failing\n");
+  if(a.max(&key) != &v6) printf("BST: unit test 25 failing\n");
   if(key != 6) printf("BST: unit test 26 failing\n");
-  if(b.min(key) != &v6) printf("BST: unit test 27 failing\n");
+  if(b.min(&key) != &v6) printf("BST: unit test 27 failing\n");
   if(key != 6) printf("BST: unit test 28 failing\n");
-  if(b.max(key) != &v2) printf("BST: unit test 29 failing\n");
+  if(b.max(&key) != &v2) printf("BST: unit test 29 failing\n");
   if(key != 2) printf("BST: unit test 30 failing\n");
   // fourth insert
   a.insert(-2,&v2m);
   b.insert(-2,&v2m);
   if(!a.check()) printf("BST: unit test 31 failing\n");
   if(!b.check()) printf("BST: unit test 32 failing\n");
-  if(a.min(key) != &v2m) printf("BST: unit test 33 failing\n");
+  if(a.min(&key) != &v2m) printf("BST: unit test 33 failing\n");
   if(key != -2) printf("BST: unit test 34 failing\n");
-  if(a.max(key) != &v6) printf("BST: unit test 35 failing\n");
+  if(a.max(&key) != &v6) printf("BST: unit test 35 failing\n");
   if(key != 6) printf("BST: unit test 36 failing\n");
-  if(b.min(key) != &v6) printf("BST: unit test 37 failing\n");
+  if(b.min(&key) != &v6) printf("BST: unit test 37 failing\n");
   if(key != 6) printf("BST: unit test 38 failing\n");
-  if(b.max(key) != &v2m) printf("BST: unit test 39 failing\n");
+  if(b.max(&key) != &v2m) printf("BST: unit test 39 failing\n");
   if(key != -2) printf("BST: unit test 40 failing\n");
   // further inserts
   a.insert(-4,&v4m);
@@ -96,13 +96,13 @@ int main(int argc, char * argv[]){
   b.insert(8,&v8);
   if(!a.check()) printf("BST: unit test 41 failing\n");
   if(!b.check()) printf("BST: unit test 42 failing\n");
-  if(a.min(key) != &v4m) printf("BST: unit test 43 failing\n");
+  if(a.min(&key) != &v4m) printf("BST: unit test 43 failing\n");
   if(key != -4) printf("BST: unit test 44 failing\n");
-  if(a.max(key) != &v8) printf("BST: unit test 45 failing\n");
+  if(a.max(&key) != &v8) printf("BST: unit test 45 failing\n");
   if(key != 8) printf("BST: unit test 46 failing\n");
-  if(b.min(key) != &v8) printf("BST: unit test 47 failing\n");
+  if(b.min(&key) != &v8) printf("BST: unit test 47 failing\n");
   if(key != 8) printf("BST: unit test 48 failing\n");
-  if(b.max(key) != &v4m) printf("BST: unit test 49 failing\n");
+  if(b.max(&key) != &v4m) printf("BST: unit test 49 failing\n");
   if(key != -4) printf("BST: unit test 50 failing\n");
   // testing find
   // key 1

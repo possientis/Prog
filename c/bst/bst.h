@@ -24,8 +24,8 @@ class BST {
   ~BST();
 
   // accessors
-  const T* min(Key& key) const;     // returns value pointer and minimal key
-  const T* max(Key& key) const;     // returns value pointer and maximal key
+  const T* min(Key* key) const;     // returns value pointer and minimal key
+  const T* max(Key* key) const;     // returns value pointer and maximal key
   const T* find(Key key) const;     // returns value pointer of key, or nullptr
   const T* succ(Key key, Key* succ) const;// returns successor value and key
   const T* pred(Key key, Key* pred) const;// returns predecessor value and key
@@ -64,13 +64,16 @@ void BST<Key,T>::del(Key key){
 
 template <class Key, class T>
 
-const T* BST<Key,T>::min(Key& key) const{
+const T* BST<Key,T>::min(Key* key_p) const{
+
+
+  assert(key_p != nullptr);
 
   const BSTNode<Key,T> *temp = minNode(d_top_p);  // node with minimal key
 
   if(temp == nullptr) return nullptr; // tree is empty
 
-  key = temp->key();  // returning minimal key
+  *key_p = temp->key();  // returning minimal key
 
   return temp->val(); // returning corresponding value pointer
 
@@ -79,13 +82,15 @@ const T* BST<Key,T>::min(Key& key) const{
 
 template <class Key, class T>
 
-const T* BST<Key,T>::max(Key& key) const{
+const T* BST<Key,T>::max(Key* key_p) const{
+
+  assert(key_p != nullptr);
 
   const BSTNode<Key,T> *temp = maxNode(d_top_p);  // node with maximal key
 
   if(temp == nullptr) return nullptr; // tree is empty
 
-  key = temp->key();  // returning maximal key
+  *key_p = temp->key();  // returning maximal key
 
   return temp->val(); // returning corresponding value pointer
 
