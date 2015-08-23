@@ -77,52 +77,52 @@ int main(int argc, char * argv[]){
   b.insert(&k2,&v2);
   if(!a.check()) printf("AVL: unit test 1 failing\n");
   if(!b.check()) printf("AVL: unit test 2 failing\n");
-  if(a.min(key) != &v2) printf("AVL: unit test 3 failing\n");
+  if(a.min(&key) != &v2) printf("AVL: unit test 3 failing\n");
   if(key != &k2) printf("AVL: unit test 4 failing\n");
-  if(a.max(key) != &v2) printf("AVL: unit test 5 failing\n");
+  if(a.max(&key) != &v2) printf("AVL: unit test 5 failing\n");
   if(key != &k2) printf("AVL: unit test 6 failing\n");
-  if(b.min(key) != &v2) printf("AVL: unit test 7 failing\n");
+  if(b.min(&key) != &v2) printf("AVL: unit test 7 failing\n");
   if(key != &k2) printf("AVL: unit test 8 failing\n");
-  if(b.max(key) != &v2) printf("AVL: unit test 9 failing\n");
+  if(b.max(&key) != &v2) printf("AVL: unit test 9 failing\n");
   if(key != &k2) printf("AVL: unit test 10 failing\n");
   // second insert
   a.insert(&k6,&v6);
   b.insert(&k6,&v6);
   if(!a.check()) printf("AVL: unit test 11 failing\n");
   if(!b.check()) printf("AVL: unit test 12 failing\n");
-  if(a.min(key) != &v2) printf("AVL: unit test 13 failing\n");
+  if(a.min(&key) != &v2) printf("AVL: unit test 13 failing\n");
   if(key != &k2) printf("AVL: unit test 14 failing\n");
-  if(a.max(key) != &v6) printf("AVL: unit test 15 failing\n");
+  if(a.max(&key) != &v6) printf("AVL: unit test 15 failing\n");
   if(key != &k6) printf("AVL: unit test 16 failing\n");
-  if(b.min(key) != &v6) printf("AVL: unit test 17 failing\n");
+  if(b.min(&key) != &v6) printf("AVL: unit test 17 failing\n");
   if(key != &k6) printf("AVL: unit test 18 failing\n");
-  if(b.max(key) != &v2) printf("AVL: unit test 19 failing\n");
+  if(b.max(&key) != &v2) printf("AVL: unit test 19 failing\n");
   if(key != &k2) printf("AVL: unit test 20 failing\n");
   // third insert
   a.insert(&k4,&v4);
   b.insert(&k4,&v4);
   if(!a.check()) printf("AVL: unit test 21 failing\n");
   if(!b.check()) printf("AVL: unit test 22 failing\n");
-  if(a.min(key) != &v2) printf("AVL: unit test 23 failing\n");
+  if(a.min(&key) != &v2) printf("AVL: unit test 23 failing\n");
   if(key != &k2) printf("AVL: unit test 24 failing\n");
-  if(a.max(key) != &v6) printf("AVL: unit test 25 failing\n");
+  if(a.max(&key) != &v6) printf("AVL: unit test 25 failing\n");
   if(key != &k6) printf("AVL: unit test 26 failing\n");
-  if(b.min(key) != &v6) printf("AVL: unit test 27 failing\n");
+  if(b.min(&key) != &v6) printf("AVL: unit test 27 failing\n");
   if(key != &k6) printf("AVL: unit test 28 failing\n");
-  if(b.max(key) != &v2) printf("AVL: unit test 29 failing\n");
+  if(b.max(&key) != &v2) printf("AVL: unit test 29 failing\n");
   if(key != &k2) printf("AVL: unit test 30 failing\n");
   // fourth insert
   a.insert(&k2m,&v2m);
   b.insert(&k2m,&v2m);
   if(!a.check()) printf("AVL: unit test 31 failing\n");
   if(!b.check()) printf("AVL: unit test 32 failing\n");
-  if(a.min(key) != &v2m) printf("AVL: unit test 33 failing\n");
+  if(a.min(&key) != &v2m) printf("AVL: unit test 33 failing\n");
   if(key != &k2m) printf("AVL: unit test 34 failing\n");
-  if(a.max(key) != &v6) printf("AVL: unit test 35 failing\n");
+  if(a.max(&key) != &v6) printf("AVL: unit test 35 failing\n");
   if(key != &k6) printf("AVL: unit test 36 failing\n");
-  if(b.min(key) != &v6) printf("AVL: unit test 37 failing\n");
+  if(b.min(&key) != &v6) printf("AVL: unit test 37 failing\n");
   if(key != &k6) printf("AVL: unit test 38 failing\n");
-  if(b.max(key) != &v2m) printf("AVL: unit test 39 failing\n");
+  if(b.max(&key) != &v2m) printf("AVL: unit test 39 failing\n");
   if(key != &k2m) printf("AVL: unit test 40 failing\n");
   // further inserts
   a.insert(&k4m,&v4m);
@@ -137,13 +137,13 @@ int main(int argc, char * argv[]){
   b.insert(&k8,&v8);
   if(!a.check()) printf("AVL: unit test 41 failing\n");
   if(!b.check()) printf("AVL: unit test 42 failing\n");
-  if(a.min(key) != &v4m) printf("AVL: unit test 43 failing\n");
+  if(a.min(&key) != &v4m) printf("AVL: unit test 43 failing\n");
   if(key != &k4m) printf("AVL: unit test 44 failing\n");
-  if(a.max(key) != &v8) printf("AVL: unit test 45 failing\n");
+  if(a.max(&key) != &v8) printf("AVL: unit test 45 failing\n");
   if(key != &k8) printf("AVL: unit test 46 failing\n");
-  if(b.min(key) != &v8) printf("AVL: unit test 47 failing\n");
+  if(b.min(&key) != &v8) printf("AVL: unit test 47 failing\n");
   if(key != &k8) printf("AVL: unit test 48 failing\n");
-  if(b.max(key) != &v4m) printf("AVL: unit test 49 failing\n");
+  if(b.max(&key) != &v4m) printf("AVL: unit test 49 failing\n");
   if(key != &k4m) printf("AVL: unit test 50 failing\n");
   // testing find
   // key 1
@@ -175,147 +175,147 @@ int main(int argc, char * argv[]){
   if(!b.check()) printf("AVL: unit test 82 failing\n");
   // testing succ
   // -6
-  if(a.succ(&k6m,key) != &v4m) printf("AVL: unit test 83 failing\n");
+  if(a.succ(&k6m,&key) != &v4m) printf("AVL: unit test 83 failing\n");
   if(key != &k4m) printf("AVL: unit test 84 failing\n");
-  if(b.succ(&k6m,key) != nullptr) printf("AVL: unit test 85 failing\n");
+  if(b.succ(&k6m,&key) != nullptr) printf("AVL: unit test 85 failing\n");
   // -4
-  if(a.succ(&k4m,key) != &v2m) printf("AVL: unit test 86 failing\n");
+  if(a.succ(&k4m,&key) != &v2m) printf("AVL: unit test 86 failing\n");
   if(key != &k2m) printf("AVL: unit test 87 failing\n");
-  if(b.succ(&k4m,key) != nullptr) printf("AVL: unit test 88 failing\n");
+  if(b.succ(&k4m,&key) != nullptr) printf("AVL: unit test 88 failing\n");
   // -3
-  if(a.succ(&k3m,key) != &v2m) printf("AVL: unit test 89 failing\n");
+  if(a.succ(&k3m,&key) != &v2m) printf("AVL: unit test 89 failing\n");
   if(key != &k2m) printf("AVL: unit test 90 failing\n");
-  if(b.succ(&k3m,key) != &v4m) printf("AVL: unit test 91 failing\n");
+  if(b.succ(&k3m,&key) != &v4m) printf("AVL: unit test 91 failing\n");
   if(key != &k4m) printf("AVL: unit test 92 failing\n");
   // -2
-  if(a.succ(&k2m,key) != &v0) printf("AVL: unit test 93 failing\n");
+  if(a.succ(&k2m,&key) != &v0) printf("AVL: unit test 93 failing\n");
   if(key != &k0) printf("AVL: unit test 94 failing\n");
-  if(b.succ(&k2m,key) != &v4m) printf("AVL: unit test 95 failing\n");
+  if(b.succ(&k2m,&key) != &v4m) printf("AVL: unit test 95 failing\n");
   if(key != &k4m) printf("AVL: unit test 96 failing\n");
   // -1
-  if(a.succ(&k1m,key) != &v0) printf("AVL: unit test 97 failing\n");
+  if(a.succ(&k1m,&key) != &v0) printf("AVL: unit test 97 failing\n");
   if(key != &k0) printf("AVL: unit test 98 failing\n");
-  if(b.succ(&k1m,key) != &v2m) printf("AVL: unit test 99 failing\n");
+  if(b.succ(&k1m,&key) != &v2m) printf("AVL: unit test 99 failing\n");
   if(key != &k2m) printf("AVL: unit test 100 failing\n");
   // 0
-  if(a.succ(&k0,key) != &v2) printf("AVL: unit test 101 failing\n");
+  if(a.succ(&k0,&key) != &v2) printf("AVL: unit test 101 failing\n");
   if(key != &k2) printf("AVL: unit test 102 failing\n");
-  if(b.succ(&k0,key) != &v2m) printf("AVL: unit test 103 failing\n");
+  if(b.succ(&k0,&key) != &v2m) printf("AVL: unit test 103 failing\n");
   if(key != &k2m) printf("AVL: unit test 104 failing\n");
   // 1
-  if(a.succ(&k1,key) != &v2) printf("AVL: unit test 105 failing\n");
+  if(a.succ(&k1,&key) != &v2) printf("AVL: unit test 105 failing\n");
   if(key != &k2) printf("AVL: unit test 106 failing\n");
-  if(b.succ(&k1,key) != &v0) printf("AVL: unit test 107 failing\n");
+  if(b.succ(&k1,&key) != &v0) printf("AVL: unit test 107 failing\n");
   if(key != &k0) printf("AVL: unit test 108 failing\n");
   // 2
-  if(a.succ(&k2,key) != &v4) printf("AVL: unit test 109 failing\n");
+  if(a.succ(&k2,&key) != &v4) printf("AVL: unit test 109 failing\n");
   if(key != &k4) printf("AVL: unit test 110 failing\n");
-  if(b.succ(&k2,key) != &v0) printf("AVL: unit test 111 failing\n");
+  if(b.succ(&k2,&key) != &v0) printf("AVL: unit test 111 failing\n");
   if(key != &k0) printf("AVL: unit test 112 failing\n");
   // 3
-  if(a.succ(&k3,key) != &v4) printf("AVL: unit test 113 failing\n");
+  if(a.succ(&k3,&key) != &v4) printf("AVL: unit test 113 failing\n");
   if(key != &k4) printf("AVL: unit test 114 failing\n");
-  if(b.succ(&k3,key) != &v2) printf("AVL: unit test 115 failing\n");
+  if(b.succ(&k3,&key) != &v2) printf("AVL: unit test 115 failing\n");
   if(key != &k2) printf("AVL: unit test 116 failing\n");
   // 4
-  if(a.succ(&k4,key) != &v6) printf("AVL: unit test 117 failing\n");
+  if(a.succ(&k4,&key) != &v6) printf("AVL: unit test 117 failing\n");
   if(key != &k6) printf("AVL: unit test 118 failing\n");
-  if(b.succ(&k4,key) != &v2) printf("AVL: unit test 119 failing\n");
+  if(b.succ(&k4,&key) != &v2) printf("AVL: unit test 119 failing\n");
   if(key != &k2) printf("AVL: unit test 120 failing\n");
   // 5
-  if(a.succ(&k5,key) != &v6) printf("AVL: unit test 121 failing\n");
+  if(a.succ(&k5,&key) != &v6) printf("AVL: unit test 121 failing\n");
   if(key != &k6) printf("AVL: unit test 122 failing\n");
-  if(b.succ(&k5,key) != &v4) printf("AVL: unit test 123 failing\n");
+  if(b.succ(&k5,&key) != &v4) printf("AVL: unit test 123 failing\n");
   if(key != &k4) printf("AVL: unit test 124 failing\n");
   // 6
-  if(a.succ(&k6,key) != &v8) printf("AVL: unit test 125 failing\n");
+  if(a.succ(&k6,&key) != &v8) printf("AVL: unit test 125 failing\n");
   if(key != &k8) printf("AVL: unit test 126 failing\n");
-  if(b.succ(&k6,key) != &v4) printf("AVL: unit test 127 failing\n");
+  if(b.succ(&k6,&key) != &v4) printf("AVL: unit test 127 failing\n");
   if(key != &k4) printf("AVL: unit test 128 failing\n");
   // 7
-  if(a.succ(&k7,key) != &v8) printf("AVL: unit test 129 failing\n");
+  if(a.succ(&k7,&key) != &v8) printf("AVL: unit test 129 failing\n");
   if(key != &k8) printf("AVL: unit test 130 failing\n");
-  if(b.succ(&k7,key) != &v6) printf("AVL: unit test 131 failing\n");
+  if(b.succ(&k7,&key) != &v6) printf("AVL: unit test 131 failing\n");
   if(key != &k6) printf("AVL: unit test 132 failing\n");
   // 8
-  if(a.succ(&k8,key) != nullptr) printf("AVL: unit test 133 failing\n");
-  if(b.succ(&k8,key) != &v6) printf("AVL: unit test 134 failing\n");
+  if(a.succ(&k8,&key) != nullptr) printf("AVL: unit test 133 failing\n");
+  if(b.succ(&k8,&key) != &v6) printf("AVL: unit test 134 failing\n");
   if(key != &k6) printf("AVL: unit test 135 failing\n");
   // 10
-  if(a.succ(&k10,key) != nullptr) printf("AVL: unit test 136 failing\n");
-  if(b.succ(&k10,key) != &v8) printf("AVL: unit test 137 failing\n");
+  if(a.succ(&k10,&key) != nullptr) printf("AVL: unit test 136 failing\n");
+  if(b.succ(&k10,&key) != &v8) printf("AVL: unit test 137 failing\n");
   if(key != &k8) printf("AVL: unit test 138 failing\n");
   // testing pred
   // -6
-  if(b.pred(&k6m,key) != &v4m) printf("AVL: unit test 139 failing\n");
+  if(b.pred(&k6m,&key) != &v4m) printf("AVL: unit test 139 failing\n");
   if(key != &k4m) printf("AVL: unit test 140 failing\n");
-  if(a.pred(&k6m,key) != nullptr) printf("AVL: unit test 141 failing\n");
+  if(a.pred(&k6m,&key) != nullptr) printf("AVL: unit test 141 failing\n");
   // -4
-  if(b.pred(&k4m,key) != &v2m) printf("AVL: unit test 142 failing\n");
+  if(b.pred(&k4m,&key) != &v2m) printf("AVL: unit test 142 failing\n");
   if(key != &k2m) printf("AVL: unit test 143 failing\n");
-  if(a.pred(&k4m,key) != nullptr) printf("AVL: unit test 144 failing\n");
+  if(a.pred(&k4m,&key) != nullptr) printf("AVL: unit test 144 failing\n");
   // -3
-  if(b.pred(&k3m,key) != &v2m) printf("AVL: unit test 145 failing\n");
+  if(b.pred(&k3m,&key) != &v2m) printf("AVL: unit test 145 failing\n");
   if(key != &k2m) printf("AVL: unit test 146 failing\n");
-  if(a.pred(&k3m,key) != &v4m) printf("AVL: unit test 147 failing\n");
+  if(a.pred(&k3m,&key) != &v4m) printf("AVL: unit test 147 failing\n");
   if(key != &k4m) printf("AVL: unit test 148 failing\n");
   // -2
-  if(b.pred(&k2m,key) != &v0) printf("AVL: unit test 149 failing\n");
+  if(b.pred(&k2m,&key) != &v0) printf("AVL: unit test 149 failing\n");
   if(key != &k0) printf("AVL: unit test 150 failing\n");
-  if(a.pred(&k2m,key) != &v4m) printf("AVL: unit test 151 failing\n");
+  if(a.pred(&k2m,&key) != &v4m) printf("AVL: unit test 151 failing\n");
   if(key != &k4m) printf("AVL: unit test 152 failing\n");
   // -1
-  if(b.pred(&k1m,key) != &v0) printf("AVL: unit test 153 failing\n");
+  if(b.pred(&k1m,&key) != &v0) printf("AVL: unit test 153 failing\n");
   if(key != &k0) printf("AVL: unit test 154 failing\n");
-  if(a.pred(&k1m,key) != &v2m) printf("AVL: unit test 155 failing\n");
+  if(a.pred(&k1m,&key) != &v2m) printf("AVL: unit test 155 failing\n");
   if(key != &k2m) printf("AVL: unit test 156 failing\n");
   // 0
-  if(b.pred(&k0,key) != &v2) printf("AVL: unit test 157 failing\n");
+  if(b.pred(&k0,&key) != &v2) printf("AVL: unit test 157 failing\n");
   if(key != &k2) printf("AVL: unit test 158 failing\n");
-  if(a.pred(&k0,key) != &v2m) printf("AVL: unit test 159 failing\n");
+  if(a.pred(&k0,&key) != &v2m) printf("AVL: unit test 159 failing\n");
   if(key != &k2m) printf("AVL: unit test 160 failing\n");
   // 1
-  if(b.pred(&k1,key) != &v2) printf("AVL: unit test 161 failing\n");
+  if(b.pred(&k1,&key) != &v2) printf("AVL: unit test 161 failing\n");
   if(key != &k2) printf("AVL: unit test 162 failing\n");
-  if(a.pred(&k1,key) != &v0) printf("AVL: unit test 163 failing\n");
+  if(a.pred(&k1,&key) != &v0) printf("AVL: unit test 163 failing\n");
   if(key != &k0) printf("AVL: unit test 164 failing\n");
   // 2
-  if(b.pred(&k2,key) != &v4) printf("AVL: unit test 165 failing\n");
+  if(b.pred(&k2,&key) != &v4) printf("AVL: unit test 165 failing\n");
   if(key != &k4) printf("AVL: unit test 166 failing\n");
-  if(a.pred(&k2,key) != &v0) printf("AVL: unit test 167 failing\n");
+  if(a.pred(&k2,&key) != &v0) printf("AVL: unit test 167 failing\n");
   if(key != &k0) printf("AVL: unit test 168 failing\n");
   // 3
-  if(b.pred(&k3,key) != &v4) printf("AVL: unit test 169 failing\n");
+  if(b.pred(&k3,&key) != &v4) printf("AVL: unit test 169 failing\n");
   if(key != &k4) printf("AVL: unit test 170 failing\n");
-  if(a.pred(&k3,key) != &v2) printf("AVL: unit test 171 failing\n");
+  if(a.pred(&k3,&key) != &v2) printf("AVL: unit test 171 failing\n");
   if(key != &k2) printf("AVL: unit test 172 failing\n");
   // 4
-  if(b.pred(&k4,key) != &v6) printf("AVL: unit test 173 failing\n");
+  if(b.pred(&k4,&key) != &v6) printf("AVL: unit test 173 failing\n");
   if(key != &k6) printf("AVL: unit test 174 failing\n");
-  if(a.pred(&k4,key) != &v2) printf("AVL: unit test 175 failing\n");
+  if(a.pred(&k4,&key) != &v2) printf("AVL: unit test 175 failing\n");
   if(key != &k2) printf("AVL: unit test 176 failing\n");
   // 5
-  if(b.pred(&k5,key) != &v6) printf("AVL: unit test 177 failing\n");
+  if(b.pred(&k5,&key) != &v6) printf("AVL: unit test 177 failing\n");
   if(key != &k6) printf("AVL: unit test 178 failing\n");
-  if(a.pred(&k5,key) != &v4) printf("AVL: unit test 179 failing\n");
+  if(a.pred(&k5,&key) != &v4) printf("AVL: unit test 179 failing\n");
   if(key != &k4) printf("AVL: unit test 180 failing\n");
   // 6
-  if(b.pred(&k6,key) != &v8) printf("AVL: unit test 181 failing\n");
+  if(b.pred(&k6,&key) != &v8) printf("AVL: unit test 181 failing\n");
   if(key != &k8) printf("AVL: unit test 182 failing\n");
-  if(a.pred(&k6,key) != &v4) printf("AVL: unit test 183 failing\n");
+  if(a.pred(&k6,&key) != &v4) printf("AVL: unit test 183 failing\n");
   if(key != &k4) printf("AVL: unit test 184 failing\n");
   // 7
-  if(b.pred(&k7,key) != &v8) printf("AVL: unit test 185 failing\n");
+  if(b.pred(&k7,&key) != &v8) printf("AVL: unit test 185 failing\n");
   if(key != &k8) printf("AVL: unit test 186 failing\n");
-  if(a.pred(&k7,key) != &v6) printf("AVL: unit test 187 failing\n");
+  if(a.pred(&k7,&key) != &v6) printf("AVL: unit test 187 failing\n");
   if(key != &k6) printf("AVL: unit test 188 failing\n");
   // 8
-  if(b.pred(&k8,key) != nullptr) printf("AVL: unit test 189 failing\n");
-  if(a.pred(&k8,key) != &v6) printf("AVL: unit test 190 failing\n");
+  if(b.pred(&k8,&key) != nullptr) printf("AVL: unit test 189 failing\n");
+  if(a.pred(&k8,&key) != &v6) printf("AVL: unit test 190 failing\n");
   if(key != &k6) printf("AVL: unit test 191 failing\n");
   // 10
-  if(b.pred(&k10,key) != nullptr) printf("AVL: unit test 192 failing\n");
-  if(a.pred(&k10,key) != &v8) printf("AVL: unit test 193 failing\n");
+  if(b.pred(&k10,&key) != nullptr) printf("AVL: unit test 192 failing\n");
+  if(a.pred(&k10,&key) != &v8) printf("AVL: unit test 193 failing\n");
   if(key != &k8) printf("AVL: unit test 194 failing\n");
  // delete
   a.del(&k10);  // should have no impact

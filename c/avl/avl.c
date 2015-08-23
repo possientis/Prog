@@ -575,26 +575,30 @@ void AVL::del(const void* key){
 }
 
 
-const void* AVL::min(const void* &key) const{
+const void* AVL::min(const void* *key_p) const{
+
+  assert(key_p != nullptr);
 
   AVLNode *temp = minNode(d_top_p);  // node with minimal key
 
   if(temp == nullptr) return nullptr; // tree is empty
 
-  key = temp->key();  // returning minimal key
+  *key_p = temp->key();  // returning minimal key
 
   return temp->val(); // returning corresponding value pointer
 
 }
 
 
-const void* AVL::max(const void* &key) const{
+const void* AVL::max(const void* *key_p) const{
+
+  assert(key_p != nullptr);
 
   AVLNode *temp = maxNode(d_top_p);  // node with maximal key
 
   if(temp == nullptr) return nullptr; // tree is empty
 
-  key = temp->key();  // returning maximal key
+  *key_p = temp->key();  // returning maximal key
 
   return temp->val(); // returning corresponding value pointer
 
@@ -612,26 +616,30 @@ const void* AVL::find(const void* key) const{
 }
 
 
-const void* AVL::succ(const void* key, const void* &succ) const{
+const void* AVL::succ(const void* key, const void* *succ_p) const{
+
+  assert(succ_p != nullptr);
 
   AVLNode *temp = succNode(d_top_p, key, d_comp_p);  // node with succ key
 
   if(temp == nullptr) return nullptr;   // no successor
 
-  succ = temp->key(); // returning successor key
+  *succ_p = temp->key(); // returning successor key
 
   return temp->val(); // returning corresponding value pointer
 
 }
 
 
-const void* AVL::pred(const void* key, const void* &pred) const{
+const void* AVL::pred(const void* key, const void* *pred_p) const{
+
+  assert(pred_p != nullptr);
 
   AVLNode *temp = predNode(d_top_p, key, d_comp_p);  // node with pred key
 
   if(temp == nullptr) return nullptr;   // no predecessor
 
-  pred = temp->key(); // returning predecessor key
+  *pred_p = temp->key(); // returning predecessor key
 
   return temp->val(); // returning corresponding value pointer
 
