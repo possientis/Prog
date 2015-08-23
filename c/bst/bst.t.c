@@ -11,8 +11,8 @@ struct T{ // some user defined type for tree node values
 };
 
 
-bool comp1(int x, int y){return (x < y);} // comparison operator
-bool comp2(int x, int y){return (x > y);} // comparison operator
+int comp1(int x, int y){return (x - y);} // comparison operator
+int comp2(int x, int y){return (y - x);} // comparison operator
 
 int main(int argc, char * argv[]){
 
@@ -134,147 +134,147 @@ int main(int argc, char * argv[]){
   if(!b.check()) printf("BST: unit test 82 failing\n");
   // testing succ
   // -6
-  if(a.succ(-6,key) != &v4m) printf("BST: unit test 83 failing\n");
+  if(a.succ(-6,&key) != &v4m) printf("BST: unit test 83 failing\n");
   if(key != -4) printf("BST: unit test 84 failing\n");
-  if(b.succ(-6,key) != nullptr) printf("BST: unit test 85 failing\n");
+  if(b.succ(-6,&key) != nullptr) printf("BST: unit test 85 failing\n");
   // -4
-  if(a.succ(-4,key) != &v2m) printf("BST: unit test 86 failing\n");
+  if(a.succ(-4,&key) != &v2m) printf("BST: unit test 86 failing\n");
   if(key != -2) printf("BST: unit test 87 failing\n");
-  if(b.succ(-4,key) != nullptr) printf("BST: unit test 88 failing\n");
+  if(b.succ(-4,&key) != nullptr) printf("BST: unit test 88 failing\n");
   // -3
-  if(a.succ(-3,key) != &v2m) printf("BST: unit test 89 failing\n");
+  if(a.succ(-3,&key) != &v2m) printf("BST: unit test 89 failing\n");
   if(key != -2) printf("BST: unit test 90 failing\n");
-  if(b.succ(-3,key) != &v4m) printf("BST: unit test 91 failing\n");
+  if(b.succ(-3,&key) != &v4m) printf("BST: unit test 91 failing\n");
   if(key != -4) printf("BST: unit test 92 failing\n");
   // -2
-  if(a.succ(-2,key)->value != 0) printf("BST: unit test 93 failing\n");
+  if(a.succ(-2,&key)->value != 0) printf("BST: unit test 93 failing\n");
   if(key != 0) printf("BST: unit test 94 failing\n");
-  if(b.succ(-2,key) != &v4m) printf("BST: unit test 95 failing\n");
+  if(b.succ(-2,&key) != &v4m) printf("BST: unit test 95 failing\n");
   if(key != -4) printf("BST: unit test 96 failing\n");
   // -1
-  if(a.succ(-1,key) != &v0) printf("BST: unit test 97 failing\n");
+  if(a.succ(-1,&key) != &v0) printf("BST: unit test 97 failing\n");
   if(key != 0) printf("BST: unit test 98 failing\n");
-  if(b.succ(-1,key) != &v2m) printf("BST: unit test 99 failing\n");
+  if(b.succ(-1,&key) != &v2m) printf("BST: unit test 99 failing\n");
   if(key != -2) printf("BST: unit test 100 failing\n");
   // 0
-  if(a.succ(0,key) != &v2) printf("BST: unit test 101 failing\n");
+  if(a.succ(0,&key) != &v2) printf("BST: unit test 101 failing\n");
   if(key != 2) printf("BST: unit test 102 failing\n");
-  if(b.succ(0,key) != &v2m) printf("BST: unit test 103 failing\n");
+  if(b.succ(0,&key) != &v2m) printf("BST: unit test 103 failing\n");
   if(key != -2) printf("BST: unit test 104 failing\n");
   // 1
-  if(a.succ(1,key) != &v2) printf("BST: unit test 105 failing\n");
+  if(a.succ(1,&key) != &v2) printf("BST: unit test 105 failing\n");
   if(key != 2) printf("BST: unit test 106 failing\n");
-  if(b.succ(1,key) != &v0) printf("BST: unit test 107 failing\n");
+  if(b.succ(1,&key) != &v0) printf("BST: unit test 107 failing\n");
   if(key != 0) printf("BST: unit test 108 failing\n");
   // 2
-  if(a.succ(2,key) != &v4) printf("BST: unit test 109 failing\n");
+  if(a.succ(2,&key) != &v4) printf("BST: unit test 109 failing\n");
   if(key != 4) printf("BST: unit test 110 failing\n");
-  if(b.succ(2,key) != &v0) printf("BST: unit test 111 failing\n");
+  if(b.succ(2,&key) != &v0) printf("BST: unit test 111 failing\n");
   if(key != 0) printf("BST: unit test 112 failing\n");
   // 3
-  if(a.succ(3,key) != &v4) printf("BST: unit test 113 failing\n");
+  if(a.succ(3,&key) != &v4) printf("BST: unit test 113 failing\n");
   if(key != 4) printf("BST: unit test 114 failing\n");
-  if(b.succ(3,key) != &v2) printf("BST: unit test 115 failing\n");
+  if(b.succ(3,&key) != &v2) printf("BST: unit test 115 failing\n");
   if(key != 2) printf("BST: unit test 116 failing\n");
   // 4
-  if(a.succ(4,key) != &v6) printf("BST: unit test 117 failing\n");
+  if(a.succ(4,&key) != &v6) printf("BST: unit test 117 failing\n");
   if(key != 6) printf("BST: unit test 118 failing\n");
-  if(b.succ(4,key) != &v2) printf("BST: unit test 119 failing\n");
+  if(b.succ(4,&key) != &v2) printf("BST: unit test 119 failing\n");
   if(key != 2) printf("BST: unit test 120 failing\n");
   // 5
-  if(a.succ(5,key) != &v6) printf("BST: unit test 121 failing\n");
+  if(a.succ(5,&key) != &v6) printf("BST: unit test 121 failing\n");
   if(key != 6) printf("BST: unit test 122 failing\n");
-  if(b.succ(5,key) != &v4) printf("BST: unit test 123 failing\n");
+  if(b.succ(5,&key) != &v4) printf("BST: unit test 123 failing\n");
   if(key != 4) printf("BST: unit test 124 failing\n");
   // 6
-  if(a.succ(6,key) != &v8) printf("BST: unit test 125 failing\n");
+  if(a.succ(6,&key) != &v8) printf("BST: unit test 125 failing\n");
   if(key != 8) printf("BST: unit test 126 failing\n");
-  if(b.succ(6,key) != &v4) printf("BST: unit test 127 failing\n");
+  if(b.succ(6,&key) != &v4) printf("BST: unit test 127 failing\n");
   if(key != 4) printf("BST: unit test 128 failing\n");
   // 7
-  if(a.succ(7,key) != &v8) printf("BST: unit test 129 failing\n");
+  if(a.succ(7,&key) != &v8) printf("BST: unit test 129 failing\n");
   if(key != 8) printf("BST: unit test 130 failing\n");
-  if(b.succ(7,key) != &v6) printf("BST: unit test 131 failing\n");
+  if(b.succ(7,&key) != &v6) printf("BST: unit test 131 failing\n");
   if(key != 6) printf("BST: unit test 132 failing\n");
   // 8
-  if(a.succ(8,key) != nullptr) printf("BST: unit test 133 failing\n");
-  if(b.succ(8,key) != &v6) printf("BST: unit test 134 failing\n");
+  if(a.succ(8,&key) != nullptr) printf("BST: unit test 133 failing\n");
+  if(b.succ(8,&key) != &v6) printf("BST: unit test 134 failing\n");
   if(key != 6) printf("BST: unit test 135 failing\n");
   // 10
-  if(a.succ(10,key) != nullptr) printf("BST: unit test 136 failing\n");
-  if(b.succ(10,key) != &v8) printf("BST: unit test 137 failing\n");
+  if(a.succ(10,&key) != nullptr) printf("BST: unit test 136 failing\n");
+  if(b.succ(10,&key) != &v8) printf("BST: unit test 137 failing\n");
   if(key != 8) printf("BST: unit test 138 failing\n");
   // testing pred
   // -6
-  if(b.pred(-6,key) != &v4m) printf("BST: unit test 139 failing\n");
+  if(b.pred(-6,&key) != &v4m) printf("BST: unit test 139 failing\n");
   if(key != -4) printf("BST: unit test 140 failing\n");
-  if(a.pred(-6,key) != nullptr) printf("BST: unit test 141 failing\n");
+  if(a.pred(-6,&key) != nullptr) printf("BST: unit test 141 failing\n");
   // -4
-  if(b.pred(-4,key)->value != -20) printf("BST: unit test 142 failing\n");
+  if(b.pred(-4,&key)->value != -20) printf("BST: unit test 142 failing\n");
   if(key != -2) printf("BST: unit test 143 failing\n");
-  if(a.pred(-4,key) != nullptr) printf("BST: unit test 144 failing\n");
+  if(a.pred(-4,&key) != nullptr) printf("BST: unit test 144 failing\n");
   // -3
-  if(b.pred(-3,key) != &v2m) printf("BST: unit test 145 failing\n");
+  if(b.pred(-3,&key) != &v2m) printf("BST: unit test 145 failing\n");
   if(key != -2) printf("BST: unit test 146 failing\n");
-  if(a.pred(-3,key) != &v4m) printf("BST: unit test 147 failing\n");
+  if(a.pred(-3,&key) != &v4m) printf("BST: unit test 147 failing\n");
   if(key != -4) printf("BST: unit test 148 failing\n");
   // -2
-  if(b.pred(-2,key) != &v0) printf("BST: unit test 149 failing\n");
+  if(b.pred(-2,&key) != &v0) printf("BST: unit test 149 failing\n");
   if(key != 0) printf("BST: unit test 150 failing\n");
-  if(a.pred(-2,key) != &v4m) printf("BST: unit test 151 failing\n");
+  if(a.pred(-2,&key) != &v4m) printf("BST: unit test 151 failing\n");
   if(key != -4) printf("BST: unit test 152 failing\n");
   // -1
-  if(b.pred(-1,key) != &v0) printf("BST: unit test 153 failing\n");
+  if(b.pred(-1,&key) != &v0) printf("BST: unit test 153 failing\n");
   if(key != 0) printf("BST: unit test 154 failing\n");
-  if(a.pred(-1,key) != &v2m) printf("BST: unit test 155 failing\n");
+  if(a.pred(-1,&key) != &v2m) printf("BST: unit test 155 failing\n");
   if(key != -2) printf("BST: unit test 156 failing\n");
   // 0
-  if(b.pred(0,key) != &v2) printf("BST: unit test 157 failing\n");
+  if(b.pred(0,&key) != &v2) printf("BST: unit test 157 failing\n");
   if(key != 2) printf("BST: unit test 158 failing\n");
-  if(a.pred(0,key) != &v2m) printf("BST: unit test 159 failing\n");
+  if(a.pred(0,&key) != &v2m) printf("BST: unit test 159 failing\n");
   if(key != -2) printf("BST: unit test 160 failing\n");
   // 1
-  if(b.pred(1,key) != &v2) printf("BST: unit test 161 failing\n");
+  if(b.pred(1,&key) != &v2) printf("BST: unit test 161 failing\n");
   if(key != 2) printf("BST: unit test 162 failing\n");
-  if(a.pred(1,key) != &v0) printf("BST: unit test 163 failing\n");
+  if(a.pred(1,&key) != &v0) printf("BST: unit test 163 failing\n");
   if(key != 0) printf("BST: unit test 164 failing\n");
   // 2
-  if(b.pred(2,key) != &v4) printf("BST: unit test 165 failing\n");
+  if(b.pred(2,&key) != &v4) printf("BST: unit test 165 failing\n");
   if(key != 4) printf("BST: unit test 166 failing\n");
-  if(a.pred(2,key) != &v0) printf("BST: unit test 167 failing\n");
+  if(a.pred(2,&key) != &v0) printf("BST: unit test 167 failing\n");
   if(key != 0) printf("BST: unit test 168 failing\n");
   // 3
-  if(b.pred(3,key) != &v4) printf("BST: unit test 169 failing\n");
+  if(b.pred(3,&key) != &v4) printf("BST: unit test 169 failing\n");
   if(key != 4) printf("BST: unit test 170 failing\n");
-  if(a.pred(3,key) != &v2) printf("BST: unit test 171 failing\n");
+  if(a.pred(3,&key) != &v2) printf("BST: unit test 171 failing\n");
   if(key != 2) printf("BST: unit test 172 failing\n");
   // 4
-  if(b.pred(4,key) != &v6) printf("BST: unit test 173 failing\n");
+  if(b.pred(4,&key) != &v6) printf("BST: unit test 173 failing\n");
   if(key != 6) printf("BST: unit test 174 failing\n");
-  if(a.pred(4,key) != &v2) printf("BST: unit test 175 failing\n");
+  if(a.pred(4,&key) != &v2) printf("BST: unit test 175 failing\n");
   if(key != 2) printf("BST: unit test 176 failing\n");
   // 5
-  if(b.pred(5,key) != &v6) printf("BST: unit test 177 failing\n");
+  if(b.pred(5,&key) != &v6) printf("BST: unit test 177 failing\n");
   if(key != 6) printf("BST: unit test 178 failing\n");
-  if(a.pred(5,key) != &v4) printf("BST: unit test 179 failing\n");
+  if(a.pred(5,&key) != &v4) printf("BST: unit test 179 failing\n");
   if(key != 4) printf("BST: unit test 180 failing\n");
   // 6
-  if(b.pred(6,key) != &v8) printf("BST: unit test 181 failing\n");
+  if(b.pred(6,&key) != &v8) printf("BST: unit test 181 failing\n");
   if(key != 8) printf("BST: unit test 182 failing\n");
-  if(a.pred(6,key) != &v4) printf("BST: unit test 183 failing\n");
+  if(a.pred(6,&key) != &v4) printf("BST: unit test 183 failing\n");
   if(key != 4) printf("BST: unit test 184 failing\n");
   // 7
-  if(b.pred(7,key) != &v8) printf("BST: unit test 185 failing\n");
+  if(b.pred(7,&key) != &v8) printf("BST: unit test 185 failing\n");
   if(key != 8) printf("BST: unit test 186 failing\n");
-  if(a.pred(7,key) != &v6) printf("BST: unit test 187 failing\n");
+  if(a.pred(7,&key) != &v6) printf("BST: unit test 187 failing\n");
   if(key != 6) printf("BST: unit test 188 failing\n");
   // 8
-  if(b.pred(8,key) != nullptr) printf("BST: unit test 189 failing\n");
-  if(a.pred(8,key) != &v6) printf("BST: unit test 190 failing\n");
+  if(b.pred(8,&key) != nullptr) printf("BST: unit test 189 failing\n");
+  if(a.pred(8,&key) != &v6) printf("BST: unit test 190 failing\n");
   if(key != 6) printf("BST: unit test 191 failing\n");
   // 10
-  if(b.pred(10,key) != nullptr) printf("BST: unit test 192 failing\n");
-  if(a.pred(10,key) != &v8) printf("BST: unit test 193 failing\n");
+  if(b.pred(10,&key) != nullptr) printf("BST: unit test 192 failing\n");
+  if(a.pred(10,&key) != &v8) printf("BST: unit test 193 failing\n");
   if(key != 8) printf("BST: unit test 194 failing\n");
   // delete
   a.del(10);  // should have no impact

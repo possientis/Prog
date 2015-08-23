@@ -1,6 +1,6 @@
 avl : avl.t.o avl.o avlnode.o
 	g++ -std=c++14 -o avl avl.t.o avl.o avlnode.o
-avl.t.o : avl.t.c avl.h
+avl.t.o : avl.t.c avl.h avlnode.h
 	g++ -std=c++14 -c avl.t.c
 avl.o : avl.c avl.h avlnode.h
 	g++ -std=c++14 -c avl.c
