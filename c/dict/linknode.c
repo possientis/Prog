@@ -1,0 +1,1 @@
+/home/john/Prog/c/link/linknode.c

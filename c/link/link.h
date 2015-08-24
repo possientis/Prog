@@ -22,7 +22,7 @@ class Link {
   ~Link();
 
   // accessors
-  const void* find(const void* key);  // returns value associated with key
+  const void* find(const void* key) const;  // returns value associated with key
   bool isEmpty() const{return (d_head_p ==nullptr);};
   void print(void (*func)(const void*)) const;  // print keys from key print func
 

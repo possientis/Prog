@@ -1,0 +1,5 @@
+(define (make-acc init)
+  (let ((sum init))
+    (lambda (x)
+      (set! sum (+ sum x))
+      sum)))

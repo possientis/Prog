@@ -120,7 +120,7 @@ void Link::del(const void* key){
 }
 
 
-const void* Link::find(const void* key){
+const void* Link::find(const void* key) const{
 
   LinkNode *temp = findNode(d_head_p, key, d_comp_p); // node with given key
 

@@ -1,0 +1,6 @@
+(define (make-monitored proc)
+  (let ((count 0))
+    (lambda (m)
+      (cond ((eq? m 'count) count)
+            ((eq? m 'reset) (set! count 0))
+            (else (set! count (+ 1 count)) (proc m))))))
