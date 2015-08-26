@@ -8,11 +8,9 @@
 int main()
 {
 
-  int x;
+  size_t x;
 
-  printf("%x\n",&x);
-  printf("%lx\n",&x);
-  printf("%lx\n",0xffaaffaaffaaffaa);
+  printf("%d\n",sizeof(x));
 
   return 0;
 
