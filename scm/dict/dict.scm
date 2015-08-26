@@ -7,13 +7,12 @@
   ;; private static member
   (let ((prehash ((hash-lib) 'prehash)))  ; prehash procedure from hash-lib module
   ;;
-  (lambda(proc)                 ; 'proc' procedure testing equality between keys
+  (lambda()
   ;;
   ;; private data
   (let ((data (make-vector 4))  ; initial allocation
         (num 0)                 ; number of entries
         (size 4)                ; allocated space
-        (same-key? proc)        ; procedure determining equality between keys
         (mem-enabled? #t))      ; flag enabling memory allocation or deallocation
   ;;
   ;; public interface
@@ -29,7 +28,7 @@
   (define (insert! key value)
     (let ((h (hash key)))
       (if (null? (vector-ref data h))   ; no existing entry for thsi has value
-        (vector-set! data h (link same-key?))); allocating linked list to entry h
+        (vector-set! data h (link equal?))); allocating linked list to entry h
       (let ((link-list (vector-ref data h)))
         (if (eq? #f ((link-list 'find) key))  ; key not currently in table
           (set! num (+ 1 num)))               ; hence one more element in table

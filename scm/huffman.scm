@@ -108,14 +108,12 @@
 
 (define sample-pairs
   (list
-    (list 'a 8)
-    (list 'b 3)
-    (list 'c 1)
-    (list 'd 1)
-    (list 'e 1)
-    (list 'f 1)
-    (list 'g 1)
-    (list 'h 1)))
+    (list 'a 45)
+    (list 'd 16)
+    (list 'b 13)
+    (list 'c 12)
+    (list 'e 9)
+    (list 'f 5)))
 
 (define new-pairs
   (list
@@ -128,7 +126,7 @@
     (list 'YIP 9)
     (list 'WAH 1)))
 
-(define tree (generate-huffman-tree new-pairs))
+(define tree (generate-huffman-tree sample-pairs))
 
 (define message
   (list
