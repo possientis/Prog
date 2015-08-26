@@ -6,6 +6,7 @@ class Dictionary_i;
 class DictionaryIter;
 class Link;
 
+
 class Dictionary {
 
   //private data
@@ -18,14 +19,19 @@ class Dictionary {
   friend DictionaryIter;
 
   public:
-  Dictionary(int (*)(const void*, const void*));  // creating from comparator
+  Dictionary(
+      int  (*sameKey)(const void*, const void*),
+      long (*prehash)(const void*)
+      );
   ~Dictionary();
 
   // accessors
   const void* find(const void* key) const;    // returns value associated with key
   bool isCheckOk() const;                     // performs sanity checks
-  void debug( void (*printKey)(const void*),
-              void (*printValue)(const void*)) const;// provides debugging output
+  void debug(                                 // provides debugging out
+      void (*printKey)(const void*),
+      void (*printValue)(const void*)
+      ) const;
 
   // manipulators
   void insert(const void* key, const void* value);// val changed on duplicate key

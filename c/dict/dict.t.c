@@ -6,6 +6,13 @@
 #include <stdio.h>
 #include <string.h>
 
+
+static long prehash(const void* x){
+
+  return (long) x;
+
+}
+
 // comparison operator for integer keys
 static int comp1(const void* x, const void* y){
 
@@ -37,8 +44,8 @@ int dict_test(){
 
   printf("Dictionary: starting unit test\n");
 
-  Dictionary a(comp1);  // integer keys
-  Dictionary b(comp2);  // string keys
+  Dictionary a(comp1, prehash);  // integer keys
+  Dictionary b(comp2, prehash);;  // string keys
 
   printf("Dictionary: unit test complete\n");
 
