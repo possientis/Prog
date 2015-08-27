@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "bst-node.scm")
 
 (define (bst-node-test)

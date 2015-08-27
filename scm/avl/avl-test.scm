@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "avl.scm")
 
 (define (avl-test)

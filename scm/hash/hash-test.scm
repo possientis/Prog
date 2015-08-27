@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "hash.scm")
 
 (define (hash-test)

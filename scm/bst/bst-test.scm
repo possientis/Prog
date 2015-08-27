@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "bst.scm")
 
 (define (bst-test)

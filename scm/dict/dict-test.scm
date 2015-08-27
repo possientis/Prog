@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "dict.scm")
 
 

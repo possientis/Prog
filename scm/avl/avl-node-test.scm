@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "avl-node.scm")
 
 (define (avl-node-test)

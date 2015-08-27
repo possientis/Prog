@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "link.scm")
 
 (define (link-test)

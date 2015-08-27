@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (load "link-node.scm")
 
 (define (link-node-test)

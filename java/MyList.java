@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class Test {
+public class MyList {
 
   public static void main(String[] args) {
 
@@ -9,14 +9,14 @@ public class Test {
 
   }
 
-  public static List<int>fib(int n){
+  public static List<Integer>fib(Integer n){
 
-    List<int> seq = new ArrayList(n);
+    List<Integer> seq = new ArrayList(n);
 
     seq[0] = 1;
     seq[1] = 1;
 
-    for(int i = 2; i < n; ++i){
+    for(Integer i = 2; i < n; ++i){
       seq[i] = seq[i-2] + seq[i-1];
     }
 

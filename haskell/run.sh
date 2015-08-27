@@ -1,3 +1,3 @@
 #!/bin/sh
-ghc test.hs
-./test
+ghc fib.hs
+./fib
