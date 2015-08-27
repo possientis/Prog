@@ -25,7 +25,6 @@ struct Dictionary_i {
 
 
 
-// creating dictionary from comparison operator
 template <class K>
 Dictionary<K>::Dictionary(){
 
