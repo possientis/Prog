@@ -7,6 +7,12 @@ class DictionaryIter;
 class Link;
 
 
+// The object file dict.o does not contain the code relating
+// to every possible class K. Refer to the bottom of dict.c
+// in order to expand the range of available classes K. Then
+// recompile the file dict.c
+
+template <class K>  // keys are of type K
 class Dictionary {
 
   //private data
@@ -19,14 +25,11 @@ class Dictionary {
   friend DictionaryIter;
 
   public:
-  Dictionary(
-      int  (*sameKey)(const void*, const void*),
-      long (*prehash)(const void*)
-      );
+  Dictionary();
   ~Dictionary();
 
   // accessors
-  const void* find(const void* key) const;    // returns value associated with key
+  const void* find(const K& key) const;       // returns value associated with key
   bool isCheckOk() const;                     // performs sanity checks
   void debug(                                 // provides debugging out
       void (*printKey)(const void*),
@@ -34,8 +37,8 @@ class Dictionary {
       ) const;
 
   // manipulators
-  void insert(const void* key, const void* value);// val changed on duplicate key
-  void del(const void* key);
+  void insert(const K& key, const void* value);// val changed on duplicate key
+  void del(const K& key);
 
 };
 

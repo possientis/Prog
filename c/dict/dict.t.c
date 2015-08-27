@@ -4,33 +4,11 @@
 #endif
 
 #include <stdio.h>
-#include <string.h>
+#include <string>
 
+template <class K>
+size_t prehash(const K& key);
 
-static long prehash(const void* x){
-
-  return (long) x;
-
-}
-
-// comparison operator for integer keys
-static int comp1(const void* x, const void* y){
-
-  int u = *(int*) x;
-  int v = *(int*) y;
-  return (u - v);
-
-}
-
-// comparison operator for string keys
-static int comp2(const void* x, const void* y){
-
-  const char* u = (const char*) x;
-  const char* v = (const char*) y;
-
-  return strcmp(u,v);
-
-}
 
 int dict_test();
 
@@ -44,8 +22,9 @@ int dict_test(){
 
   printf("Dictionary: starting unit test\n");
 
-  Dictionary a(comp1, prehash);  // integer keys
-  Dictionary b(comp2, prehash);;  // string keys
+  Dictionary<int> a;  // integer keys
+  Dictionary<std::string> b;  // string keys
+
 
   printf("Dictionary: unit test complete\n");
 

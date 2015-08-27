@@ -1,24 +1,21 @@
 // dict.c
 #include "dict.h"
-#include "assert.h"
-#include "malloc.h"
-#include <stdio.h>
+#include "assert.h"   // assert()
+#include "malloc.h"   // malloc(), free()
+#include <stdio.h>    // printf()
 
+#include <functional> // std::hash<T>
 
 #ifndef INCLUDED_LINK
 #include "link.h"
 #endif
 
 // just to make code below more readable
-typedef long (*PrehashFunc)(const void*);
-typedef int (*KeyComparator)(const void*, const void*);
 typedef void (*PrintKeyFunc)(const void*);
 typedef void (*PrintValFunc)(const void*);
 
 struct Dictionary_i {
 
-  PrehashFunc prehash;    // also defines equality between keys
-  KeyComparator sameKey;
   Link** table;           // array of pointers to Link lists
   int num;                // number of entries
   int size;               // number of available entries in hash table
@@ -27,15 +24,10 @@ struct Dictionary_i {
 };
 
 
-static int hash(const void* key, int size, PrehashFunc func){
-
-  return ((int) func(key)) % size;
-}
-
-
 
 // creating dictionary from comparison operator
-Dictionary::Dictionary(KeyComparator comp, PrehashFunc func){
+template <class K>
+Dictionary<K>::Dictionary(){
 
   d_this = new(Dictionary_i);     // allocating structure for dict private data
   assert(d_this != nullptr);
@@ -53,7 +45,8 @@ Dictionary::Dictionary(KeyComparator comp, PrehashFunc func){
 
 }
 
-Dictionary::~Dictionary(){
+template<class K>
+Dictionary<K>::~Dictionary(){
 
   // looping through hash table entry, freeing corresponding linked list
   for(int i = 0; i < d_this->size; ++i){
@@ -74,10 +67,39 @@ Dictionary::~Dictionary(){
 
 }
 
-void Dictionary::insert(const void* key, const void* value){
 
-  int h = hash(key,d_this->size,d_this->prehash);
+template <class K>
+static size_t prehash(const K& key){
 
+  std::hash<K> hash;
+
+  return hash(key);
 
 }
+
+template <class K>
+static int hash(const K& key, int size){
+
+  return (int) prehash(key) % size;
+
+}
+
+template <class K>
+void Dictionary<K>::insert(const K& key, const void* value){
+
+  int h = hash(key,d_this->size);
+
+}
+
+
+
+// the following lines are to enforce compilation of code
+// for the given cases of class K. This allows keeping this
+// implementation file separate from the header file dict.h
+// If you need to use Dictionary<K> for a different class
+// K, please add the corresponding line and recompile.
+// see https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
+#include <string>     // std::string
+template class Dictionary<int>;
+template class Dictionary<std::string>;
 

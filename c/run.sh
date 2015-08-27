@@ -3,6 +3,6 @@
 #g++  test.c  -std=c++14
 #./a.out
 
-g++ test.c -std=c++14
+g++ hash.c -std=c++14
 
 ./a.out

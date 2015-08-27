@@ -8,8 +8,8 @@
 int main()
 {
 
-  char nts1[] = "Testofthe length of hashing";
-  char nts2[] = "Testofthe length of hashing";
+  char nts1[] = "Hello world";
+    char nts2[] = "Hello world";
 
   std::string str1(nts1);
   std::string str2(nts2);
