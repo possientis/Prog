@@ -64,6 +64,8 @@
 
 
 (define (encode message tree)
+  (display message)
+  (newline)
   (if (null? message)
     '()
     (append (encode-symbol (car message) tree)
@@ -96,7 +98,8 @@
 
 
 (define (generate-huffman-tree pairs)
-  (successive-merge (make-leaf-set pairs)))
+  ;; adding (car ..) to remove enclosing brackets
+  (car (successive-merge (make-leaf-set pairs))))
 
 (define (successive-merge set)
   (if (= 1 (length set))
@@ -137,4 +140,4 @@
     'wah 'yip 'yip 'yip 'yip 'yip 'yip 'yip 'yip
     'sha 'boom))
 
-
+(define m '(a b c))
