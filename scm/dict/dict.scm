@@ -27,7 +27,7 @@
   ;;
   (define (insert! key value)
     (let ((h (hash key)))
-      (if (null? (vector-ref data h))   ; no existing entry for thsi has value
+      (if (null? (vector-ref data h))   ; no existing entry for this hash value
         (vector-set! data h (link equal?))); allocating linked list to entry h
       (let ((link-list (vector-ref data h)))
         (if (eq? #f ((link-list 'find) key))  ; key not currently in table
@@ -141,7 +141,7 @@
     (display num)
     (newline)
     (newline)
-    (display "hash table entries as follows:\n")
+    (display "Hash table entries as follows:\n")
     (let loop ((i 0))
       (if (< i (vector-length data))
         (begin

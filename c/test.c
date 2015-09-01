@@ -4,20 +4,26 @@
 //#include<assert.h>
 //#include<iostream>
 
-struct NewType {
+typedef int (Func)(int x);
+typedef int (*Gunc)(int x);
 
-  int d_i1;
-  int d_i2;
-  double d_d;
 
-};
+int f(int x){
+
+  return 2*x;
+
+}
 
 int main()
 {
 
+  Func *g;
 
+  g = &f;
 
-  printf("%d\n",sizeof(struct NewType));
+  int x = (&f)(3);
+
+  printf("%d\n",x);
   return 0;
 
 

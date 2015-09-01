@@ -1,19 +1,30 @@
-add x y   = x + y
-zeroto :: Int -> [Int]
-zeroto n = [0..n]
-f :: Int -> Int -> Int
-f = \x -> \y -> x + y
-mult :: Int -> Int -> Int -> Int
-mult x y z = x*y*z
-myLength :: [a] -> Int
-myLength [] = 0
-myLength x = 1 + myLength (tail x)
-mySum :: Num a => [a] -> a
-mySum [] = 0
-mySum x = (head x) + mySum (tail x)
-second xs = head (tail xs)
-swap (x,y) = (y,x)
-pair x y = (x,y)
-double x = 2*x
-palindrome xs = reverse xs == xs
-twice f x = f (f x)
+myAbs :: Int -> Int
+myAbs n = if n >= 0 then n else -n
+
+sigNum :: Int -> Int
+sigNum n =  if n < 0 then -1 else
+            if n == 0 then 0 else 1
+
+yourAbs :: Int -> Int
+yourAbs n | n>= 0     = n
+          | otherwise = -n
+
+mySig n | n < 0       = -1
+        | n == 0      =  0
+        | otherwise   =  1
+
+(£) :: Bool -> Bool -> Bool
+True £ True = True
+_ £ _ = False
+
+myHead (a:_) = a
+myTail (_:a) = a
+
+myConst x = \_ -> x
+
+odds n = map (\x -> 2 * x + 1) [0..n-1]
+myOdds n = map f [0..n-1] where f x = 2 * x + 1
+
+($$$) :: Int -> Int -> Int
+x $$$ y = x + y
+

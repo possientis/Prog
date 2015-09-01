@@ -71,10 +71,10 @@ template <class K>
 static size_t prehash(const K& key){
 
   std::hash<K> hash;
-
   return hash(key);
 
 }
+
 
 template <class K>
 static int hash(const K& key, int size){
@@ -83,14 +83,81 @@ static int hash(const K& key, int size){
 
 }
 
+// needed to create link list
 template <class K>
-void Dictionary<K>::insert(const K& key, const void* value){
+static int equal(const void* k1, const void* k2){
 
-  int h = hash(key,d_this->size);
+  K key1 = *(K*) k1;
+  K key2 = *(K*) k2;
 
+  if(key1 == key2){ // hopefully == is meaningful for class K
+
+    return 0;
+
+  }
+  else{
+
+    return 1;
+
+  }
 }
 
 
+template <class K>
+void Dictionary<K>::insert(const K& key, const void* value){
+
+  Link* temp;
+
+  int h = hash(key,d_this->size);
+
+  if(d_this->table[h] == nullptr){  // no existing entry for this hash value
+    temp = new Link(equal<K>);
+    assert(temp != nullptr);
+    d_this->table[h] = temp;
+  }
+
+  temp = d_this->table[h];
+  assert(temp != nullptr);
+
+
+  printf("%lx\n",&key);
+  if(temp->find(&key) == nullptr){ // key not already present, need to increment
+
+    d_this->num += 1;
+  }
+  temp->insert(&key,value);       // changes value pointer on duplicate key
+
+
+}
+
+template <class K>
+void Dictionary<K>::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
+
+  printf("----------------------------------\n");
+  printf("Hash table debug:\n");
+  printf("Allocated vector size: %d\n",d_this->size);
+  printf("Number of elements: %d\n\n", d_this->num);
+  printf("Hash table entries as follows:\n");
+
+  for(int i = 0; i < d_this->size; ++i){
+
+    printf("entry %d: ",i);
+    if(d_this->table[i] == nullptr){
+      printf("null");
+    }
+    else{
+      for(LinkIter it(*(d_this->table[i])); it; ++it){
+          printf("key = ");
+          printKey(it.key());
+          printf(": value = ");
+          printValue(it.val());
+          printf("\t");
+      }
+    }
+    printf("\n");
+  }
+
+}
 
 // the following lines are to enforce compilation of code
 // for the given cases of class K. This allows keeping this
