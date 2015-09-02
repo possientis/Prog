@@ -1,0 +1,17 @@
+l = [x^2 | x <- [1..5]]
+m = [(x,y) | x <- [1..3] , y <- [4..5]]
+n = [(x,y,z) | x <- [1..3] , y <- [3..5] , z <- [6..8]]
+o = [(x,y) | x <- [1..5] , y <- [(x+1)..5]]
+myConcat :: [[a]] -> [a]
+myConcat xss = [x | xs <- xss, x <- xs]
+factors :: Int -> [Int]
+factors n = [x | x <- [1..n], n `mod` x == 0]
+prime :: Int -> Bool
+prime n = factors n == [1,n]
+primes :: Int -> [Int]
+primes n = [x | x <- [1..n], prime x]
+pairs :: [a] -> [(a,a)]
+pairs xs = zip xs (tail xs)
+sorted xs = and [x <= y | (x,y) <- pairs xs]
+pyths :: Int -> [(Int,Int,Int)]
+pyths n = [(x,y,z) | x <- [1..n], y <- [1..n], z <- [1..n], x^2 + y^2 == z^2, x <= y]

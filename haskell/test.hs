@@ -1,30 +1,38 @@
-myAbs :: Int -> Int
-myAbs n = if n >= 0 then n else -n
+factorial :: Int -> Int
+factorial n = product [1..n]
+myFact :: Int -> Int
+myFact n = product (take n [1..])
+myProduct ::Num a => [a] -> a
+myProduct [] = 1
+myProduct (x:xs) = x*myProduct(xs)
+yourFact :: Int -> Int
+yourFact 0 = 1
+yourFact n  = n * yourFact (n - 1)
+myLength :: [a] -> Int
+myLength [] = 0
+myLength (_:xs) = 1 + myLength xs
+myReverse :: [a] -> [a]
+myReverse [] = []
+myReverse (x:xs) = myReverse xs ++ [x]
+myZip :: [a] -> [b] -> [(a,b)]
+myZip [] _ = []
+myZip _ [] = []
+myZip (x:xs) (y:ys) = (x,y) : myZip xs ys
+-- This is a comment
+myDrop :: Int -> [a] -> [a] -- This is another comment
+myDrop 0 xs = xs
+myDrop n [] = []
+myDrop n (_:xs) = myDrop (n-1) xs
+(£) :: [a] -> [a] -> [a]
+[] £ ys = ys
+(x:xs) £ ys = x : (xs £ ys)
+-- qsort :: [Int] -> [Int]
+qsort [] = []
+qsort (x:xs) =
+  qsort smaller ++ [x] ++ qsort larger
+  where
+    smaller = [a | a <- xs, a <= x]
+    larger  = [b | b <- xs, x <  b]
 
-sigNum :: Int -> Int
-sigNum n =  if n < 0 then -1 else
-            if n == 0 then 0 else 1
-
-yourAbs :: Int -> Int
-yourAbs n | n>= 0     = n
-          | otherwise = -n
-
-mySig n | n < 0       = -1
-        | n == 0      =  0
-        | otherwise   =  1
-
-(£) :: Bool -> Bool -> Bool
-True £ True = True
-_ £ _ = False
-
-myHead (a:_) = a
-myTail (_:a) = a
-
-myConst x = \_ -> x
-
-odds n = map (\x -> 2 * x + 1) [0..n-1]
-myOdds n = map f [0..n-1] where f x = 2 * x + 1
-
-($$$) :: Int -> Int -> Int
-x $$$ y = x + y
-
+f :: Int -> Int
+f x = n * x where n = 2
