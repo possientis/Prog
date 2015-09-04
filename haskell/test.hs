@@ -1,38 +1,39 @@
-factorial :: Int -> Int
-factorial n = product [1..n]
-myFact :: Int -> Int
-myFact n = product (take n [1..])
-myProduct ::Num a => [a] -> a
-myProduct [] = 1
-myProduct (x:xs) = x*myProduct(xs)
-yourFact :: Int -> Int
-yourFact 0 = 1
-yourFact n  = n * yourFact (n - 1)
-myLength :: [a] -> Int
-myLength [] = 0
-myLength (_:xs) = 1 + myLength xs
-myReverse :: [a] -> [a]
-myReverse [] = []
-myReverse (x:xs) = myReverse xs ++ [x]
-myZip :: [a] -> [b] -> [(a,b)]
-myZip [] _ = []
-myZip _ [] = []
-myZip (x:xs) (y:ys) = (x,y) : myZip xs ys
--- This is a comment
-myDrop :: Int -> [a] -> [a] -- This is another comment
-myDrop 0 xs = xs
-myDrop n [] = []
-myDrop n (_:xs) = myDrop (n-1) xs
-(£) :: [a] -> [a] -> [a]
-[] £ ys = ys
-(x:xs) £ ys = x : (xs £ ys)
--- qsort :: [Int] -> [Int]
-qsort [] = []
-qsort (x:xs) =
-  qsort smaller ++ [x] ++ qsort larger
-  where
-    smaller = [a | a <- xs, a <= x]
-    larger  = [b | b <- xs, x <  b]
+twice :: (a -> a) -> (a-> a)
+twice f x = f (f x)
 
-f :: Int -> Int
-f x = n * x where n = 2
+myTwice :: (a -> a) -> (a -> a)
+myTwice f = f.f
+
+myMap :: (a -> b) -> ([a] -> [b])
+myMap f [] = []
+myMap f (x:xs) = f x : myMap f xs
+
+yourMap f xs = [f x | x <- xs]
+
+myFilter :: (a -> Bool) -> ([a] -> [a])
+myFilter p xs = [x | x <- xs, p x]
+
+yourFilter :: (a -> Bool) -> ([a] -> [a])
+yourFilter p [] = []
+yourFilter p (x:xs)
+  | p x       = x : yourFilter p xs
+  | otherwise =     yourFilter p xs
+
+myFoldr :: (a -> b -> b) -> b -> ([a] -> b)
+myFoldr op v [] = v
+myFoldr op v (x:xs) = x `op` myFoldr op v xs
+
+mySum = myFoldr (+) 0
+myProduct = myFoldr (*) 1
+myOr = myFoldr (||) False
+myAnd = myFoldr (&&) True
+myLength = myFoldr (\_ -> \y -> (1 + y)) 0
+yourLength = sum . map (\_ -> 1)
+myReverse = myFoldr (\x -> \y -> y ++ [x]) []
+myAppend xs ys = myFoldr (:) ys xs
+
+(£) :: (b -> c) -> (a -> b) -> (a -> c)
+g £ f = \x -> g (f x)
+
+
+
