@@ -1,3 +1,7 @@
+(define body
+  '(if (<= amount balance) (begin (set! balance (- balance amount)) balance) (display "insufficient funds\n")))
+
+
 (define (make-account1 balance)
   (lambda (amount)
     (if (<= amount balance)
@@ -6,12 +10,20 @@
       (display "insufficient funds\n"))))
 
 (define (make-account2 init-balance)
-  (let ((balance init-balance))
-    (lambda (amount)
-      (if (<= amount balance)
-        (begin (set! balance (- balance amount))
-               balance)
-        (display "insufficient funds\n")))))
+  ((lambda (balance)
+     (lambda (amount)
+       (if (<= amount balance)
+         (begin (set! balance (- balance amount))
+                balance)
+         (display "insufficient funds\n")))) init-balance))
+
+;(define (make-account2 init-balance)
+;  (let ((balance init-balance))
+;    (lambda (amount)
+;      (if (<= amount balance)
+;        (begin (set! balance (- balance amount))
+;               balance)
+;        (display "insufficient funds\n")))))
 
 (define (make-account3 init-balance)
   (define balance init-balance)

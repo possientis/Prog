@@ -1,39 +1,30 @@
-twice :: (a -> a) -> (a-> a)
-twice f x = f (f x)
+type Parser a = String -> [(a,String)]
 
-myTwice :: (a -> a) -> (a -> a)
-myTwice f = f.f
+item :: Parser Char
+item = \inp -> case inp of
+                [] -> []
+                (x:xs) -> [(x,xs)]
 
-myMap :: (a -> b) -> ([a] -> [b])
-myMap f [] = []
-myMap f (x:xs) = f x : myMap f xs
+failure :: Parser a
+failure = \inp -> []
 
-yourMap f xs = [f x | x <- xs]
+myReturn :: a -> Parser a
+myReturn v = \inp -> [(v,inp)]
 
-myFilter :: (a -> Bool) -> ([a] -> [a])
-myFilter p xs = [x | x <- xs, p x]
+parse :: Parser a -> String -> [(a,String)]
+parse p inp = p inp
 
-yourFilter :: (a -> Bool) -> ([a] -> [a])
-yourFilter p [] = []
-yourFilter p (x:xs)
-  | p x       = x : yourFilter p xs
-  | otherwise =     yourFilter p xs
+(+++) :: Parser a -> Parser a -> Parser a
+p +++ q = \inp -> case p inp of
+                  []  -> parse q inp
+                  [(v,out)] -> [(v,out)]
 
-myFoldr :: (a -> b -> b) -> b -> ([a] -> b)
-myFoldr op v [] = v
-myFoldr op v (x:xs) = x `op` myFoldr op v xs
+--myP :: Parser (Char,Char)
+--myP = do  x <- item
+--          z <- item
+--          y <- item
+--          return (x,y)
 
-mySum = myFoldr (+) 0
-myProduct = myFoldr (*) 1
-myOr = myFoldr (||) False
-myAnd = myFoldr (&&) True
-myLength = myFoldr (\_ -> \y -> (1 + y)) 0
-yourLength = sum . map (\_ -> 1)
-myReverse = myFoldr (\x -> \y -> y ++ [x]) []
-myAppend xs ys = myFoldr (:) ys xs
-
-(£) :: (b -> c) -> (a -> b) -> (a -> c)
-g £ f = \x -> g (f x)
 
 
 

@@ -79,7 +79,10 @@ static size_t prehash(const K& key){
 template <class K>
 static int hash(const K& key, int size){
 
-  return (int) prehash(key) % size;
+  assert(size > 0);
+  int temp = (int) (prehash(key) % size);
+  if(temp < 0) temp += size;  // do not assume output of % operator is > 0
+  assert((0 <= temp) && (temp < size));
 
 }
 
@@ -87,6 +90,7 @@ static int hash(const K& key, int size){
 template <class K>
 static int equal(const void* k1, const void* k2){
 
+  printf("equal<K> is running ...\n");
   K key1 = *(K*) k1;
   K key2 = *(K*) k2;
 
@@ -109,6 +113,8 @@ void Dictionary<K>::insert(const K& key, const void* value){
   Link* temp;
 
   int h = hash(key,d_this->size);
+  assert((0 <= h) && (h < d_this->size));   // do not take this for granted !
+
 
   if(d_this->table[h] == nullptr){  // no existing entry for this hash value
     temp = new Link(equal<K>);
@@ -120,7 +126,6 @@ void Dictionary<K>::insert(const K& key, const void* value){
   assert(temp != nullptr);
 
 
-  printf("%lx\n",&key);
   if(temp->find(&key) == nullptr){ // key not already present, need to increment
 
     d_this->num += 1;
@@ -168,4 +173,3 @@ void Dictionary<K>::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
 #include <string>     // std::string
 template class Dictionary<int>;
 template class Dictionary<std::string>;
-

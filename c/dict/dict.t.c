@@ -45,24 +45,24 @@ static int dict_test(){
   int v4 = 40;
 
   const std::string s1 = "abc";
-  const std::string s2 = "def";
+  const std::string s2 = "abc";
 
   int w1 = 100;
   int w2 = 200;
 
 
-  Dictionary<int> a;  // integer keys
+//  Dictionary<int> a;  // integer keys
   Dictionary<std::string> b;  // string keys
 
   // first insert
   //a.insert(k1,&v1);
-  printf("%lx\n",&s1);
   b.insert(s1,&w1);
+  b.insert(s2,&w2);
 
 
 
   //a.debug(printInt,printInt);
-  //b.debug(printStr,printInt);
+  b.debug(printStr,printInt);
 
   printf("Dictionary: unit test complete\n");
 

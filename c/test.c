@@ -1,29 +1,41 @@
 #include<stdio.h>
+#include<string>  //std::string
 //#include<string.h>
 //#include<malloc.h>
 //#include<assert.h>
 //#include<iostream>
 
-typedef int (Func)(int x);
-typedef int (*Gunc)(int x);
 
 
-int f(int x){
-
-  return 2*x;
-
-}
 
 int main()
 {
 
-  Func *g;
+  std::string s1 = "abc";
+  std::string s2 = "def";
+  std::string s3 = "abc";
 
-  g = &f;
+  printf("%lx\n",&s1);
+  printf("%lx\n",&s2);
+  printf("%lx\n",&s3);
+  printf("%d\n",sizeof(std::string));
 
-  int x = (&f)(3);
+  if(s1 == s2){
+    printf("s1 == s2 is true\n");
+  }
+  else
+  {
+    printf("s1 == s2 is false\n");
+  }
 
-  printf("%d\n",x);
+  if(s1 == s3){
+    printf("s1 == s3 is true\n");
+  }
+  else
+  {
+    printf("s1 == s3 is false\n");
+  }
+
   return 0;
 
 

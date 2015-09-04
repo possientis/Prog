@@ -12,6 +12,11 @@ class Link;
 // in order to expand the range of available classes K. Then
 // recompile the file dict.c
 
+// current implementation in dict.c requires:
+// bool operator==(const K& k1, const K& k2)
+// More specifically given k1, k2 of type K, the expression
+// 'k1 == k2' needs to compile and return the right value
+
 template <class K>  // keys are of type K
 class Dictionary {
 
