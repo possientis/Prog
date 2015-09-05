@@ -206,7 +206,7 @@
     (if(eq? #f x)(display"dictionary: unit test 123 failing\n"))
     (if(not(equal? "tuv"  (car x)))(display"dictionary: unit test 124 failing\n"))
     (if (not (= 700 (cdr x)))(display"dictionary: unit test 125 failing\n")))
-  ;; eigth insert (partial find checks)
+  ;; eighth insert (partial find checks)
   ((a 'insert!) 8 80)
   ((b 'insert!) "wxy" 800)
   (if (not(a 'check))(display"dictionary: unit test 126 failing\n"))

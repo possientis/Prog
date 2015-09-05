@@ -16,10 +16,12 @@ typedef void (*PrintValFunc)(const void*);
 
 struct Dictionary_i {
 
-  Link** table;           // array of pointers to Link lists
-  int num;                // number of entries
-  int size;               // number of available entries in hash table
-  bool isMemoryEnabled;   // allowing control when resizing hash table
+  Link** table;             // array of pointers to Link lists
+  int num;                  // number of entries
+  int size;                 // number of available entries in hash table
+  bool isMemoryEnabled;     // allowing control when resizing hash table
+  bool doesNeedIncrease();  // decides whether to allocate more space
+  bool doesNeedDecrease();  // decides whether to release memory
 
 };
 
@@ -34,12 +36,12 @@ Dictionary<K>::Dictionary(){
   d_this->num = 0;                // number of elements in dictionary
   d_this->size = 4;               // number of possible elements in hash table
   d_this->isMemoryEnabled = true; // resizing of hash table is allowed
+
   d_this->table = (Link**) malloc(4*sizeof(Link*));
   assert(d_this->table != nullptr);
+
   for(int i = 0; i < 4; ++i){
-
     d_this->table[i] = nullptr;   // no current entry for given hash value
-
   }
 
 }
@@ -49,12 +51,9 @@ Dictionary<K>::~Dictionary(){
 
   // looping through hash table entry, freeing corresponding linked list
   for(int i = 0; i < d_this->size; ++i){
-
     if(d_this->table[i] != nullptr){
-
       delete d_this->table[i];  // deleting Link object associated with hash i
       d_this->table[i] = nullptr;
-
     }
   }
 
@@ -90,7 +89,6 @@ static int hash(const K& key, int size){
 template <class K>
 static int equal(const void* k1, const void* k2){
 
-  printf("equal<K> is running ...\n");
   K key1 = *(K*) k1;
   K key2 = *(K*) k2;
 
@@ -117,21 +115,35 @@ void Dictionary<K>::insert(const K& key, const void* value){
 
 
   if(d_this->table[h] == nullptr){  // no existing entry for this hash value
-    temp = new Link(equal<K>);
+    temp = new Link(equal<K>);      // allocating new linked list
     assert(temp != nullptr);
     d_this->table[h] = temp;
   }
 
-  temp = d_this->table[h];
+  temp = d_this->table[h];          // pointer to list corresponding to h
   assert(temp != nullptr);
 
 
   if(temp->find(&key) == nullptr){ // key not already present, need to increment
-
-    d_this->num += 1;
+    d_this->num += 1;              // one more element in dictionary
   }
-  temp->insert(&key,value);       // changes value pointer on duplicate key
 
+  temp->insert(&key,value);       // insert key into list (new value on duplicate)
+
+}
+
+
+template <class K>
+const void* Dictionary<K>::find(const K& key) const {
+
+  int h = hash(key, d_this->size);
+  assert((0 <= h) && (h < d_this->size));   // do not take this for granted !
+
+  Link* temp = d_this->table[h];            // pointer to list associated with h
+
+  if(temp == nullptr) return nullptr;       // no entries corresponding to h
+
+  return d_this->table[h]->find(&key);      // returning value pointer from list
 
 }
 
@@ -151,18 +163,53 @@ void Dictionary<K>::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
       printf("null");
     }
     else{
-      for(LinkIter it(*(d_this->table[i])); it; ++it){
+      LinkIter it(*(d_this->table[i])); // instantiating list iterator
+      for(;it; ++it){
           printf("key = ");
           printKey(it.key());
           printf(": value = ");
           printValue(it.val());
-          printf("\t");
+          printf(",  ");
       }
     }
     printf("\n");
   }
-
+  printf("----------------------------------\n");
 }
+
+
+bool Dictionary_i::doesNeedIncrease(){
+  return (((double) num)/((double) size) > 0.5);
+}
+
+
+bool Dictionary_i::doesNeedDecrease(){
+  return ((((double) num)/((double) size) < 0.25) && (size >= 8));
+}
+
+
+template <class K>
+bool Dictionary<K>::isCheckOk() const{
+
+  if (d_this == nullptr) return false;
+  if (!d_this->isMemoryEnabled) return false;
+  if (d_this->doesNeedIncrease()) return false;
+  if (d_this->doesNeedDecrease()) return false;
+
+  int count = 0;  // counting table entries
+  for(int i = 0; i < d_this->size; ++i){
+    if(d_this->table[i] != nullptr){    // hash value i hs entries
+      LinkIter it(*(d_this->table[i])); // instantiating iterators over list
+      for(;it;++it){
+        count++;
+      }
+    }
+  }
+  if(count != d_this->num) return false;
+
+  return true;
+}
+
 
 // the following lines are to enforce compilation of code
 // for the given cases of class K. This allows keeping this
