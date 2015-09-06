@@ -291,8 +291,8 @@ static int dict_test(){
 
 
 
-  a.debug(printInt,printInt);
-  b.debug(printStr,printInt);
+  //a.debug(printInt,printInt);
+  //b.debug(printStr,printInt);
 
   printf("Dictionary: unit test complete\n");
 

@@ -1,4 +1,5 @@
-import Control.Monad
+import Control.Monad -- liftM2
+
 
 type Parser a = String -> [(a,String)]
 
@@ -45,8 +46,8 @@ myAdd mx my =
 Nothing £ _ = Nothing
 (Just x) £ f = f x
 
-myReturn :: a -> Maybe a
-myReturn x = Just x
+--myReturn :: a -> Maybe a
+--myReturn x = Just x
 
 yourAdd :: Maybe Int -> Maybe Int -> Maybe Int
 yourAdd mx my =
@@ -63,4 +64,8 @@ hisAdd mx my = do
 herAdd :: Maybe Int -> Maybe Int -> Maybe Int
 herAdd = liftM2 (+)
 
+f :: Int -> Maybe Bool
+f 0 = Nothing
+f 1 = Just True
+f 2 = Just False
 
