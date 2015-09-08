@@ -2,23 +2,14 @@
 
 #import sys
 
-def sumsq(a): return sum([x*x for x in a])
+print("this is running\n")
 
-def city_generator():
-    yield("London")
-    yield("Paris")
-    yield("Berlin")
-    yield("Rome")
-    yield("Madrid")
+def f(a):
+    return 2*a
 
-def main():
-    print('Main is now running...\n')
-    city = city_generator()
-    print(next(city))
-    print(next(city))
-    print(next(city))
-    print(next(city))
-    print(next(city))
+def f(a,b):
+    return a+b
+
 
 
 

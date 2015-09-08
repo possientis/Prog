@@ -28,9 +28,12 @@ static size_t prehash(const K& key){
 // hash function used which uses hash table size as argument
 // Simple prehash modulo size: can be improved at a later stage
 template <class K>
-static int hash(const K& key, int size){
+static int hash(const void* keyp, int size){
 
   assert(size > 0);
+
+  const K& key = *((K*) keyp);
+
   int temp = (int) (prehash(key) % size);// bad especially as size is power of 2
   if(temp < 0) temp += size;        // do not assume output of % operator is > 0
   assert((0 <= temp) && (temp < size));
@@ -56,21 +59,26 @@ static int equal(const void* k1, const void* k2){
 struct Dictionary_i {
 
   // data
-  Link** table;             // array of pointers to Link lists
-  int num;                  // number of entries
-  int size;                 // number of available entries in hash table
-  bool isMemoryEnabled;     // allowing control when resizing hash table
+  Link** table;                   // array of pointers to Link lists
+  int num;                        // number of entries
+  int size;                       // number of available entries in hash table
+  const void* *keyBuffer;         // needed as temporary storage when resizing
+  const void* *valBuffer;         // needed as temporary storage when resizing
+  int(*hash)(const void* key, int size);          // some hash<K>
+  int (*equal)(const void* key1,const void* key2);// some equal<K>
+  bool isMemoryEnabled;           // allowing control when resizing hash table
   // helper methods
-  void init();              // called from Dictionary<K> constructor
-  void destroy();           // called from Dictionary<K> destructor
-  bool doesNeedIncrease();  // decides whether to allocate more space
-  bool doesNeedDecrease();  // decides whether to release memory
-  const void* *keyBuffer;   // needed as temporary storage when resizing
-  const void* *valBuffer;   // needed as temporary storage when resizing
-  void setUpBuffers();      // allocates buffers and save dictionary data
-  void freeBuffers();       // free buffers (needed once resizing complete)
-  void increase();          // recreating hash table from scratch with more space
-  void decrease();          // recreating hash table from scratch with less space
+  void init();                    // called from Dictionary<K> constructor
+  void destroy();                 // called from Dictionary<K> destructor
+  bool doesNeedIncrease() const;  // decides whether to allocate more space
+  bool doesNeedDecrease() const;        // decides whether to release memory
+  void setUpBuffers();            // allocates buffers and save dictionary data
+  void freeBuffers();             // free buffers (needed once resizing complete)
+  const void* find( const void* key) const;
+  void insert(const void* key, const void* value);
+  void increase();                // recreating hash table with more space
+  void decrease();                // recreating hash table with less space
+  void debug(PrintKeyFunc,PrintValFunc) const;
 
 };
 
@@ -81,6 +89,8 @@ Dictionary<K>::Dictionary(){
   d_this = new(Dictionary_i);     // allocating structure for dict private data
   assert(d_this != nullptr);
   d_this->init();                 // actual work factored out
+  d_this->hash = hash<K>;         // cannot be done inside 'init'
+  d_this->equal = equal<K>;       // cannot be done inside 'init'
 }
 
 
@@ -128,27 +138,35 @@ void Dictionary_i::destroy(){
 template <class K>
 void Dictionary<K>::insert(const K& key, const void* value){
 
+  d_this->insert(&key,value);
+
+}
+
+// generic C-like 'insert' function with no dependency to the
+// class argument K, which factors out the main functionality
+void Dictionary_i::insert(const void* key, const void* value)
+{
+
   Link* temp;
 
-  int h = hash(key,d_this->size);
-  assert((0 <= h) && (h < d_this->size));   // do not take this for granted !
+  int h = hash(key,size);
+  assert((0 <= h) && (h < size)); // do not take this for granted !
 
-
-  if(d_this->table[h] == nullptr){  // no existing entry for this hash value
-    temp = new Link(equal<K>);      // allocating new linked list
+  if(table[h] == nullptr){        // no existing entry for this hash value
+    temp = new Link(equal);          // allocating new linked list
     assert(temp != nullptr);
-    d_this->table[h] = temp;
+    table[h] = temp;
   }
 
-  temp = d_this->table[h];          // pointer to list corresponding to h
+  temp = table[h];                // pointer to list corresponding to h
   assert(temp != nullptr);
 
 
-  if(temp->find(&key) == nullptr){ // key not already present, need to increment
-    d_this->num += 1;              // one more element in dictionary
+  if(temp->find(key) == nullptr){// key not already present, need to increment
+    num += 1;                    // one more element in dictionary
   }
 
-  temp->insert(&key,value);       // insert key into list (new value on duplicate)
+  temp->insert(key,value);       // insert key into list (new value on duplicate)
 
 }
 
@@ -156,14 +174,21 @@ void Dictionary<K>::insert(const K& key, const void* value){
 template <class K>
 const void* Dictionary<K>::find(const K& key) const {
 
-  int h = hash(key, d_this->size);
-  assert((0 <= h) && (h < d_this->size));   // do not take this for granted !
+  return d_this->find(&key);
 
-  Link* temp = d_this->table[h];            // pointer to list associated with h
+}
+
+
+const void* Dictionary_i::find(const void* key) const{
+
+  int h = hash(key, size);
+  assert((0 <= h) && (h < size));           // do not take this for granted !
+
+  Link* temp = table[h];                    // pointer to list associated with h
 
   if(temp == nullptr) return nullptr;       // no entries corresponding to h
 
-  return d_this->table[h]->find(&key);      // returning value pointer from list
+  return table[h]->find(key);               // returning value pointer from list
 
 }
 
@@ -171,20 +196,26 @@ const void* Dictionary<K>::find(const K& key) const {
 template <class K>
 void Dictionary<K>::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
 
+  d_this->debug(printKey,printValue);
+}
+
+
+void Dictionary_i::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
+
   printf("----------------------------------\n");
   printf("Hash table debug:\n");
-  printf("Allocated vector size: %d\n",d_this->size);
-  printf("Number of elements: %d\n\n", d_this->num);
+  printf("Allocated vector size: %d\n",size);
+  printf("Number of elements: %d\n\n", num);
   printf("Hash table entries as follows:\n");
 
-  for(int i = 0; i < d_this->size; ++i){
+  for(int i = 0; i < size; ++i){
 
     printf("entry %d: ",i);
-    if(d_this->table[i] == nullptr){
+    if(table[i] == nullptr){
       printf("null");
     }
     else{
-      LinkIter it(*(d_this->table[i])); // instantiating list iterator
+      LinkIter it(*(table[i])); // instantiating list iterator
       for(;it; ++it){
           printf("key = ");
           printKey(it.key());
@@ -199,12 +230,12 @@ void Dictionary<K>::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
 }
 
 
-bool Dictionary_i::doesNeedIncrease(){
+bool Dictionary_i::doesNeedIncrease() const {
   return (((double) num)/((double) size) > 0.5);
 }
 
 
-bool Dictionary_i::doesNeedDecrease(){
+bool Dictionary_i::doesNeedDecrease() const{
   return ((((double) num)/((double) size) < 0.25) && (size >= 8));
 }
 
