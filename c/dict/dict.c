@@ -47,8 +47,8 @@ static int hash(const void* keyp, int size){
 template <class K>
 static int equal(const void* k1, const void* k2){
 
-  K key1 = *(K*) k1;
-  K key2 = *(K*) k2;
+  const K& key1 = *((K*) k1);
+  const K& key2 = *((K*) k2);
 
   if(key1 == key2) return 0;
 
@@ -71,11 +71,13 @@ struct Dictionary_i {
   void init();                    // called from Dictionary<K> constructor
   void destroy();                 // called from Dictionary<K> destructor
   bool doesNeedIncrease() const;  // decides whether to allocate more space
-  bool doesNeedDecrease() const;        // decides whether to release memory
+  bool doesNeedDecrease() const;  // decides whether to release memory
+  bool isCheckOk() const;         // performs some sanity checks
   void setUpBuffers();            // allocates buffers and save dictionary data
   void freeBuffers();             // free buffers (needed once resizing complete)
   const void* find( const void* key) const;
   void insert(const void* key, const void* value);
+  void del(const void* key);      // delete key from dictionary
   void increase();                // recreating hash table with more space
   void decrease();                // recreating hash table with less space
   void debug(PrintKeyFunc,PrintValFunc) const;
@@ -142,8 +144,7 @@ void Dictionary<K>::insert(const K& key, const void* value){
 
 }
 
-// generic C-like 'insert' function with no dependency to the
-// class argument K, which factors out the main functionality
+
 void Dictionary_i::insert(const void* key, const void* value)
 {
 
@@ -167,6 +168,42 @@ void Dictionary_i::insert(const void* key, const void* value)
   }
 
   temp->insert(key,value);       // insert key into list (new value on duplicate)
+
+  if(isMemoryEnabled) increase();// will resize hash table if load factor too high
+
+}
+
+template <class K>
+void Dictionary<K>::del(const K& key){
+
+  d_this->del(&key);
+
+}
+
+
+void Dictionary_i::del(const void* key){
+
+  int h = hash(key,size);
+  assert((0 <= h) && (h < size)); // do not take this for granted !
+
+  Link* temp = table[h];          // pointer to list corresponding to h
+
+  if(temp != nullptr){            // nothing to do otherwise, nothing to delete
+
+    if(temp->find(key) != nullptr){
+
+      num -= 1;                   // key exists, one less element after deletion
+    }
+
+    temp->del(key);               // delete key from linked list
+
+    if(temp->isEmpty()){          // link list corresponding to h is now empty
+      delete table[h];
+      table[h] = nullptr;         // needed to ensure correctness of insert
+    }
+
+    if(isMemoryEnabled) decrease();// resize hash table if load factor too low
+  }
 
 }
 
@@ -215,8 +252,7 @@ void Dictionary_i::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
       printf("null");
     }
     else{
-      LinkIter it(*(table[i])); // instantiating list iterator
-      for(;it; ++it){
+      for(LinkIter it(*table[i]);it; ++it){
           printf("key = ");
           printKey(it.key());
           printf(": value = ");
@@ -251,7 +287,7 @@ void Dictionary_i::setUpBuffers(){
 
   for(int i = 0; i < size; ++i){
     if(table[i] != nullptr){  // entry exists for hash value 'i'
-      for(LinkIter it(*(table[i])); it; ++it){  // looping through list
+      for(LinkIter it(*table[i]); it; ++it){  // looping through list
         assert((0 <= index) && (index < num));
         keyBuffer[index] = it.key();
         valBuffer[index] = it.val();
@@ -270,27 +306,93 @@ void Dictionary_i::freeBuffers(){
 
 }
 
+void Dictionary_i::increase(){
+
+  assert(isMemoryEnabled);  // should not be called unless isMemoryEnabled true
+
+  if(doesNeedIncrease()){   // nothing happens otherwise
+
+    isMemoryEnabled = false;// no more resizing until this is complete
+    setUpBuffers();         // saving table entries in temporary buffer
+    destroy();              // de-allocating existing hash table
+    size *= 2;              // doubling size of table
+    table = (Link**) malloc(size*sizeof(Link*)); // re-allocation
+    assert(table != nullptr);
+    for(int i = 0; i < size; ++i){
+      table[i] = nullptr;   // no current entry for given hash value
+    }
+    int count = num;        // remember total number of elements saved in buffers
+    num = 0;                // no more elements in table
+
+    for(int i = 0; i < count; ++i){
+      insert(keyBuffer[i],valBuffer[i]);  // re-inserting elements from buffers
+    }
+
+    freeBuffers();          // de-allocating temporary buffers (key and value)
+    isMemoryEnabled = true; // resizing now permitted (but probably not needed)
+
+  }
+}
+
+
+void Dictionary_i::decrease(){
+
+  assert(isMemoryEnabled);  // should not be called unless isMemoryEnabled true
+
+  if(doesNeedDecrease()){   // nothing happens otherwise
+
+    isMemoryEnabled = false;// no more resizing until this is complete
+    setUpBuffers();         // saving table entries in temporary buffer
+    destroy();              // de-allocating existing hash table
+    size /= 2;              // halving size of table
+    table = (Link**) malloc(size*sizeof(Link*)); // re-allocation
+    assert(table != nullptr);
+    for(int i = 0; i < size; ++i){
+      table[i] = nullptr;   // no current entry for given hash value
+    }
+    int count = num;        // remember total number of elements saved in buffers
+    num = 0;                // no more elements in table
+
+    for(int i = 0; i < count; ++i){
+      insert(keyBuffer[i],valBuffer[i]);  // re-inserting elements from buffers
+    }
+
+    freeBuffers();          // de-allocating temporary buffers (key and value)
+    isMemoryEnabled = true; // resizing now permitted (but probably not needed)
+
+  }
+}
+
+
 template <class K>
 bool Dictionary<K>::isCheckOk() const{
 
   if (d_this == nullptr) return false;
-  if (!d_this->isMemoryEnabled) return false;
-  if (d_this->doesNeedIncrease()) return false;
-  if (d_this->doesNeedDecrease()) return false;
 
-  int count = 0;  // counting table entries
-  for(int i = 0; i < d_this->size; ++i){
-    if(d_this->table[i] != nullptr){    // hash value i hs entries
-      LinkIter it(*(d_this->table[i])); // instantiating iterators over list
-      for(;it;++it){
+  return d_this->isCheckOk();
+
+}
+
+
+bool Dictionary_i::isCheckOk() const{
+
+  if (!isMemoryEnabled) return false;
+  if (doesNeedIncrease()) return false;
+  if (doesNeedDecrease()) return false;
+
+  int count = 0;                        // counting table entries
+  for(int i = 0; i < size; ++i){
+    if(table[i] != nullptr){            // hash value i has entries
+      for(LinkIter it(*table[i]);it;++it){
         count++;
       }
     }
   }
-  if(count != d_this->num) return false;
+  if(count != num) return false;        // 'num' does not match actual number
 
   return true;
 }
+
 
 
 // the following lines are to enforce compilation of code

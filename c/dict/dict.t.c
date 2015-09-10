@@ -95,7 +95,7 @@ static int dict_test(){
   // search should succeed
   if(a.find(k1) != &v1) printf("Dictionary: unit test 5 failing\n");
   if(b.find(s1) != &w1) printf("Dictionary: unit test 6 failing\n");
-  // second insert
+ // second insert
   a.insert(k2,&v2);
   b.insert(s2,&w2);
   if(!a.isCheckOk()) printf("Dictionary: unit test 7 failing\n");
@@ -108,7 +108,7 @@ static int dict_test(){
   if(b.find(s1) != &w1) printf("Dictionary: unit test 12 failing\n");
   if(a.find(k2) != &v2) printf("Dictionary: unit test 13 failing\n");
   if(b.find(s2) != &w2) printf("Dictionary: unit test 14 failing\n");
- // third insert
+  // third insert
   a.insert(k3,&v3);
   b.insert(s3,&w3);
   if(!a.isCheckOk()) printf("Dictionary: unit test 15 failing\n");
@@ -123,7 +123,7 @@ static int dict_test(){
   if(b.find(s2) != &w2) printf("Dictionary: unit test 22 failing\n");
   if(a.find(k3) != &v3) printf("Dictionary: unit test 23 failing\n");
   if(b.find(s3) != &w3) printf("Dictionary: unit test 24 failing\n");
- // fourth insert
+  // fourth insert
   a.insert(k4,&v4);
   b.insert(s4,&w4);
   if(!a.isCheckOk()) printf("Dictionary: unit test 25 failing\n");
@@ -282,17 +282,145 @@ static int dict_test(){
   if(b.find(s8) != &w8) printf("Dictionary: unit test 146 failing\n");
   if(a.find(k9) != &v9) printf("Dictionary: unit test 147 failing\n");
   if(b.find(s9) != &w9) printf("Dictionary: unit test 148 failing\n");
-
-
-
-
-
-
+  // first delete
+  a.del(k1);
+  b.del(s1);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 149 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 150 failing\n");
+  // search should fail
+  if(a.find(k1) != nullptr) printf("Dictionary: unit test 151 failing\n");
+  if(b.find(s1) != nullptr) printf("Dictionary: unit test 152 failing\n");
+  // search should succeed
+  if(a.find(k2) != &v2) printf("Dictionary: unit test 153 failing\n");
+  if(b.find(s2) != &w2) printf("Dictionary: unit test 154 failing\n");
+  if(a.find(k3) != &v3) printf("Dictionary: unit test 155 failing\n");
+  if(b.find(s3) != &w3) printf("Dictionary: unit test 156 failing\n");
+  if(a.find(k4) != &v4) printf("Dictionary: unit test 157 failing\n");
+  if(b.find(s4) != &w4) printf("Dictionary: unit test 158 failing\n");
+  if(a.find(k5) != &v5) printf("Dictionary: unit test 159 failing\n");
+  if(b.find(s5) != &w5) printf("Dictionary: unit test 160 failing\n");
+  if(a.find(k6) != &v6) printf("Dictionary: unit test 161 failing\n");
+  if(b.find(s6) != &w6) printf("Dictionary: unit test 162 failing\n");
+  if(a.find(k7) != &v7) printf("Dictionary: unit test 163 failing\n");
+  if(b.find(s7) != &w7) printf("Dictionary: unit test 164 failing\n");
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 165 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 166 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 167 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 168 failing\n");
+  // second delete
+  a.del(k2);
+  b.del(s2);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 169 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 170 failing\n");
+  // search should fail
+  if(a.find(k2) != nullptr) printf("Dictionary: unit test 171 failing\n");
+  if(b.find(s2) != nullptr) printf("Dictionary: unit test 172 failing\n");
+  // search should succeed
+  if(a.find(k3) != &v3) printf("Dictionary: unit test 173 failing\n");
+  if(b.find(s3) != &w3) printf("Dictionary: unit test 174 failing\n");
+  if(a.find(k4) != &v4) printf("Dictionary: unit test 175 failing\n");
+  if(b.find(s4) != &w4) printf("Dictionary: unit test 176 failing\n");
+  if(a.find(k5) != &v5) printf("Dictionary: unit test 177 failing\n");
+  if(b.find(s5) != &w5) printf("Dictionary: unit test 178 failing\n");
+  if(a.find(k6) != &v6) printf("Dictionary: unit test 179 failing\n");
+  if(b.find(s6) != &w6) printf("Dictionary: unit test 180 failing\n");
+  if(a.find(k7) != &v7) printf("Dictionary: unit test 181 failing\n");
+  if(b.find(s7) != &w7) printf("Dictionary: unit test 182 failing\n");
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 183 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 184 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 185 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 186 failing\n");
+  // third delete
+  a.del(k3);
+  b.del(s3);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 187 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 188 failing\n");
+  // search should fail
+  if(a.find(k3) != nullptr) printf("Dictionary: unit test 189 failing\n");
+  if(b.find(s3) != nullptr) printf("Dictionary: unit test 190 failing\n");
+  // search should succeed
+  if(a.find(k4) != &v4) printf("Dictionary: unit test 191 failing\n");
+  if(b.find(s4) != &w4) printf("Dictionary: unit test 192 failing\n");
+  if(a.find(k5) != &v5) printf("Dictionary: unit test 193 failing\n");
+  if(b.find(s5) != &w5) printf("Dictionary: unit test 194 failing\n");
+  if(a.find(k6) != &v6) printf("Dictionary: unit test 195 failing\n");
+  if(b.find(s6) != &w6) printf("Dictionary: unit test 196 failing\n");
+  if(a.find(k7) != &v7) printf("Dictionary: unit test 197 failing\n");
+  if(b.find(s7) != &w7) printf("Dictionary: unit test 198 failing\n");
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 199 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 200 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 201 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 202 failing\n");
+  // fourth delete
+  a.del(k4);
+  b.del(s4);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 203 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 204 failing\n");
+  // search should fail
+  if(a.find(k4) != nullptr) printf("Dictionary: unit test 205 failing\n");
+  if(b.find(s4) != nullptr) printf("Dictionary: unit test 206 failing\n");
+  // search should succeed
+  if(a.find(k5) != &v5) printf("Dictionary: unit test 207 failing\n");
+  if(b.find(s5) != &w5) printf("Dictionary: unit test 208 failing\n");
+  if(a.find(k6) != &v6) printf("Dictionary: unit test 209 failing\n");
+  if(b.find(s6) != &w6) printf("Dictionary: unit test 210 failing\n");
+  if(a.find(k7) != &v7) printf("Dictionary: unit test 211 failing\n");
+  if(b.find(s7) != &w7) printf("Dictionary: unit test 212 failing\n");
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 213 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 214 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 215 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 216 failing\n");
+  // fifth delete
+  a.del(k5);
+  b.del(s5);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 217 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 218 failing\n");
+  // search should fail
+  if(a.find(k5) != nullptr) printf("Dictionary: unit test 219 failing\n");
+  if(b.find(s5) != nullptr) printf("Dictionary: unit test 220 failing\n");
+  // search should succeed
+  if(a.find(k6) != &v6) printf("Dictionary: unit test 221 failing\n");
+  if(b.find(s6) != &w6) printf("Dictionary: unit test 222 failing\n");
+  if(a.find(k7) != &v7) printf("Dictionary: unit test 223 failing\n");
+  if(b.find(s7) != &w7) printf("Dictionary: unit test 224 failing\n");
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 225 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 226 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 227 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 228 failing\n");
+  // sixth delete
+  a.del(k6);
+  b.del(s6);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 229 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 230 failing\n");
+  // search should fail
+  if(a.find(k6) != nullptr) printf("Dictionary: unit test 231 failing\n");
+  if(b.find(s6) != nullptr) printf("Dictionary: unit test 232 failing\n");
+  // search should succeed
+  if(a.find(k7) != &v7) printf("Dictionary: unit test 233 failing\n");
+  if(b.find(s7) != &w7) printf("Dictionary: unit test 234 failing\n");
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 235 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 236 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 237 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 238 failing\n");
+  // seventh delete
+  a.del(k7);
+  b.del(s7);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 239 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 240 failing\n");
+  // search should fail
+  if(a.find(k7) != nullptr) printf("Dictionary: unit test 241 failing\n");
+  if(b.find(s7) != nullptr) printf("Dictionary: unit test 242 failing\n");
+  // search should succeed
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 243 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 244 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 245 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 246 failing\n");
 
 
 
   //a.debug(printInt,printInt);
   //b.debug(printStr,printInt);
+
 
   printf("Dictionary: unit test complete\n");
 
