@@ -31,11 +31,16 @@ yourEval (Val n) = if n > 0 then
                    else
                       []
 
-decomp :: [a] -> [([a],[a])]
-decomp [] = [([],[])]
-decomp (x:xs) = [(x:u,v) | (u,v)  <- decomp xs] ++ [([],x:xs)]
+inList :: Eq a => a -> [a] -> Bool
+inList x [] = False
+inList x (y:ys) = (x == y) || (inList x ys)
 
-choices :: [a] -> [[a]]
-choices [] = [[]]
-choices (x:xs) =  [ys | ys <- choices xs]
+nchoices :: Eq a => Int -> [a] -> [[a]]
+nchoices 0 xs = [[]]
+nchoices n xs = [(x:ys) | x <- xs, ys <- nchoices (n-1) xs, not (inList x ys)]
+
+choices :: Eq a => [a] -> [[a]]
+choices xs = [ys : n <- [0..(length xs)], ys <- nchoices n xs]
+
+
 

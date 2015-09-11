@@ -81,7 +81,6 @@ struct Dictionary_i {
   void increase();                // recreating hash table with more space
   void decrease();                // recreating hash table with less space
   void debug(PrintKeyFunc,PrintValFunc) const;
-
 };
 
 

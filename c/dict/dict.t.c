@@ -415,11 +415,79 @@ static int dict_test(){
   if(b.find(s8) != &w8) printf("Dictionary: unit test 244 failing\n");
   if(a.find(k9) != &v9) printf("Dictionary: unit test 245 failing\n");
   if(b.find(s9) != &w9) printf("Dictionary: unit test 246 failing\n");
+  // redundant delete
+  a.del(k7);
+  b.del(s7);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 247 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 248 failing\n");
+  // search should fail
+  if(a.find(k7) != nullptr) printf("Dictionary: unit test 249 failing\n");
+  if(b.find(s7) != nullptr) printf("Dictionary: unit test 250 failing\n");
+  // search should succeed
+  if(a.find(k8) != &v8) printf("Dictionary: unit test 251 failing\n");
+  if(b.find(s8) != &w8) printf("Dictionary: unit test 252 failing\n");
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 253 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 254 failing\n");
+  // eighth delete
+  a.del(k8);
+  b.del(s8);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 255 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 256 failing\n");
+  // search should fail
+  if(a.find(k8) != nullptr) printf("Dictionary: unit test 257 failing\n");
+  if(b.find(s8) != nullptr) printf("Dictionary: unit test 258 failing\n");
+  // search should succeed
+  if(a.find(k9) != &v9) printf("Dictionary: unit test 259 failing\n");
+  if(b.find(s9) != &w9) printf("Dictionary: unit test 260 failing\n");
+  // ninth delete
+  a.del(k9);
+  b.del(s9);
+  if(!a.isCheckOk()) printf("Dictionary: unit test 261 failing\n");
+  if(!b.isCheckOk()) printf("Dictionary: unit test 262 failing\n");
+  // search should fail
+  if(a.find(k9) != nullptr) printf("Dictionary: unit test 263 failing\n");
+  if(b.find(s9) != nullptr) printf("Dictionary: unit test 264 failing\n");
+  // multiple inserts
+  #define MAX_NUM 1024
+  int keys[MAX_NUM];
+  int vals[MAX_NUM];
+  for(int i = 0; i < MAX_NUM; ++i){
+    keys[i] = -1;
+    vals[i] = -1;
+  }
+  for(int i = 0; i < MAX_NUM; ++i){
+    keys[i] = i;
+    vals[i] = i*10;
+    a.insert(keys[i],&vals[i]);
+    for(int j = 0; j <= i; ++j){
+      if(a.find(keys[j]) != &vals[j]){
+        printf("Dictionary: unit test 265 failing\n");
+      }
+    }
+    for(int j = i+1; j < MAX_NUM; ++j){
+      if(a.find(keys[j]) != nullptr){
+        printf("Dictionary: unit test 266 failing\n");
+      }
+    }
+  }
+  // multiple deletes
+  for(int i = 0; i < MAX_NUM; ++i){
+    a.del(keys[i]);
+    for(int j = 0; j <= i; ++j){
+      if(a.find(keys[j]) != nullptr){
+        printf("Dictionary: unit test 267 failing\n");
+      }
+    }
+    for(int j = i+1; j < MAX_NUM; ++j){
+      if(a.find(keys[j]) != &vals[j]){
+        printf("Dictionary: unit test 268 failing\n");
+      }
+    }
+  }
 
 
-
-  //a.debug(printInt,printInt);
-  //b.debug(printStr,printInt);
+//  a.debug(printInt,printInt);
+//  b.debug(printStr,printInt);
 
 
   printf("Dictionary: unit test complete\n");
