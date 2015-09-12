@@ -57,10 +57,10 @@
           ((link-list 'find) key))))) ; searching for key in linked list
   ;;
   (define (need-increase?)  ;; decides whether more space needed
-    (> (/ num size) 0.5))   ;; increase when load factor > 50%
+    (> (/ num size) 0.8))   ;; increase when load factor > 50%
   ;;
   (define (need-decrease?)  ;; decides whether to reduce space allocation
-    (and (>= size  8) (< (/ num size) 0.25)))
+    (and (>= size  8) (< (/ num size) 0.2)))
   ;;
   (define (hash key)
     (modulo (prehash key) size))

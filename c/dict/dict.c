@@ -50,9 +50,8 @@ static int equal(const void* k1, const void* k2){
   const K& key1 = *((K*) k1);
   const K& key2 = *((K*) k2);
 
-  if(key1 == key2) return 0;
+  return (key1 == key2) ? 0 : 1;
 
-  return 1;
 }
 
 
@@ -64,7 +63,7 @@ struct Dictionary_i {
   int size;                       // number of available entries in hash table
   const void* *keyBuffer;         // needed as temporary storage when resizing
   const void* *valBuffer;         // needed as temporary storage when resizing
-  int(*hash)(const void* key, int size);          // some hash<K>
+  int(*hash)(const void* key, int size);// some hash<K>, depending on K
   int (*equal)(const void* key1,const void* key2);// some equal<K>
   bool isMemoryEnabled;           // allowing control when resizing hash table
   // helper methods
@@ -74,7 +73,7 @@ struct Dictionary_i {
   bool doesNeedDecrease() const;  // decides whether to release memory
   bool isCheckOk() const;         // performs some sanity checks
   void setUpBuffers();            // allocates buffers and save dictionary data
-  void freeBuffers();             // free buffers (needed once resizing complete)
+  void freeBuffers();             // free buffers (not needed once resizing complete)
   const void* find( const void* key) const;
   void insert(const void* key, const void* value);
   void del(const void* key);      // delete key from dictionary
@@ -96,14 +95,15 @@ Dictionary<K>::Dictionary(){
 
 
 void Dictionary_i::init(){
+  const int INIT_SIZE = 4;
   num = 0;                        // number of elements in dictionary
-  size = 4;                       // number of possible elements in hash table
+  size = INIT_SIZE;                       // number of possible elements in hash table
   isMemoryEnabled = true;         // resizing of hash table is allowed
 
-  table = (Link**) malloc(4*sizeof(Link*));
+  table = (Link**) malloc(INIT_SIZE*sizeof(Link*));
   assert(table != nullptr);
 
-  for(int i = 0; i < 4; ++i){
+  for(int i = 0; i < INIT_SIZE; ++i){
     table[i] = nullptr;           // no current entry for given hash value
   }
 
@@ -147,18 +147,16 @@ void Dictionary<K>::insert(const K& key, const void* value){
 void Dictionary_i::insert(const void* key, const void* value)
 {
 
-  Link* temp;
-
   int h = hash(key,size);
   assert((0 <= h) && (h < size)); // do not take this for granted !
 
   if(table[h] == nullptr){        // no existing entry for this hash value
-    temp = new Link(equal);          // allocating new linked list
+    Link* temp = new Link(equal); // allocating new linked list
     assert(temp != nullptr);
     table[h] = temp;
   }
 
-  temp = table[h];                // pointer to list corresponding to h
+  Link* temp = table[h];                // pointer to list corresponding to h
   assert(temp != nullptr);
 
 
@@ -172,6 +170,7 @@ void Dictionary_i::insert(const void* key, const void* value)
 
 }
 
+
 template <class K>
 void Dictionary<K>::del(const K& key){
 
@@ -182,7 +181,7 @@ void Dictionary<K>::del(const K& key){
 
 void Dictionary_i::del(const void* key){
 
-  int h = hash(key,size);
+  int h = hash(key,size);         // Dictionary_i::hash
   assert((0 <= h) && (h < size)); // do not take this for granted !
 
   Link* temp = table[h];          // pointer to list corresponding to h
@@ -266,12 +265,12 @@ void Dictionary_i::debug(PrintKeyFunc printKey, PrintValFunc printValue) const{
 
 
 bool Dictionary_i::doesNeedIncrease() const {
-  return (((double) num)/((double) size) > 0.5);
+  return (((double) num)/((double) size) > 0.8);
 }
 
 
 bool Dictionary_i::doesNeedDecrease() const{
-  return ((((double) num)/((double) size) < 0.25) && (size >= 8));
+  return ((((double) num)/((double) size) < 0.2) && (size >= 8));
 }
 
 void Dictionary_i::setUpBuffers(){
