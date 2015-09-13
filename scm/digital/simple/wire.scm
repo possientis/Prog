@@ -33,10 +33,39 @@
     ;; returning public interface
     dispatch))
 
-(define (gate-not a b)
-  (define (a-action)  ; proc to be executed on signal change by wire a
-    (let ((new-value (not (a 'get-signal))))
-      (let ((change-b (lambda () ((b 'set-signal!) new-value))))
-        ((schedule 'add-item!) 1 change-b))))
-  ((a 'add-action!) a-action))
+(define (gate-not in out)
+  (define time-delay 1)
+  (define (in-action)  ; proc to be executed on signal change by wire 'in'
+    (let ((new-value (not (in 'get-signal)))
+          (time (+ time-delay (schedule 'time))))
+      (let ((change-out (lambda () ((out 'set-signal!) new-value))))
+        ((schedule 'add-item!) time change-out))))
+  ((in 'add-action!) in-action))
+
+(define (gate-or in-1 in-2 out)
+  (define time-delay 2)
+  (define (in-action) ; proc to be executed on signal change by wire in-1 or in-2
+    (let ((new-value (or (in-1 'get-signal) (in-2 'get-signal)))
+          (time (+ time-delay (schedule 'time))))
+      (let ((change-out (lambda () ((out 'set-signal!) new-value))))
+        ((schedule 'add-item!) time change-out))))
+  ((in-1 'add-action!) in-action)
+  ((in-2 'add-action!) in-action))
+
+(define (gate-and in-1 in-2 out)
+  (define time-delay 2)
+  (define (in-action) ; proc to be executed on signal change by wire in-1 or in-2
+    (let ((new-value (and (in-1 'get-signal) (in-2 'get-signal)))
+          (time (+ time-delay (schedule 'time))))
+      (let ((change-out (lambda () ((out 'set-signal!) new-value))))
+        ((schedule 'add-item!) time change-out))))
+  ((in-1 'add-action!) in-action)
+  ((in-2 'add-action!) in-action))
+
+(define (half-adder a b sum carry)
+  (let ((w1 (wire)) (w2 (wire)))
+    (gate-or a b w1)
+    (gate-and a b carry)
+    (gate-not carry w2)
+    (gate-and w1 w2 sum)))
 

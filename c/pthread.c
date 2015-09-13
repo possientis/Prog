@@ -14,6 +14,7 @@ int main (int argc, char *argv[])
   /* get the default attribute */
   pthread_attr_init(&attr);
 
+
   /* first inquire on the current scope */
   if(pthread_attr_getscope(&attr, &scope) != 0)
     fprintf(stderr, "Unable to get scheduling scope\n");
@@ -40,7 +41,7 @@ int main (int argc, char *argv[])
 }
 
 /* The thread will begin control in this function */
-void *runner(void *param)
+void* runner(void *param)
 {
 
   printf("Some thread is now running\n");

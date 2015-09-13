@@ -4,4 +4,6 @@
 (define b (wire))
 
 (gate-not a b)
+(schedule 'propagate!)
+
 

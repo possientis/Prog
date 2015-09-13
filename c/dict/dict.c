@@ -96,9 +96,9 @@ Dictionary<K>::Dictionary(){
 
 void Dictionary_i::init(){
   const int INIT_SIZE = 4;
-  num = 0;                        // number of elements in dictionary
-  size = INIT_SIZE;                       // number of possible elements in hash table
-  isMemoryEnabled = true;         // resizing of hash table is allowed
+  num = 0;                      // number of elements in dictionary
+  size = INIT_SIZE;             // number of possible elements in hash table
+  isMemoryEnabled = true;       // resizing of hash table is allowed
 
   table = (Link**) malloc(INIT_SIZE*sizeof(Link*));
   assert(table != nullptr);
@@ -147,16 +147,16 @@ void Dictionary<K>::insert(const K& key, const void* value){
 void Dictionary_i::insert(const void* key, const void* value)
 {
 
-  int h = hash(key,size);
+  int h = hash(key,size);         // Dictionary_i::hash
   assert((0 <= h) && (h < size)); // do not take this for granted !
 
   if(table[h] == nullptr){        // no existing entry for this hash value
-    Link* temp = new Link(equal); // allocating new linked list
+    Link* temp = new Link(equal); // Dictionary_i::equal
     assert(temp != nullptr);
     table[h] = temp;
   }
 
-  Link* temp = table[h];                // pointer to list corresponding to h
+  Link* temp = table[h];          // pointer to list corresponding to h
   assert(temp != nullptr);
 
 
@@ -386,9 +386,8 @@ bool Dictionary_i::isCheckOk() const{
       }
     }
   }
-  if(count != num) return false;        // 'num' does not match actual number
+  return (count != num) ? false : true; // 'num' should match actual number
 
-  return true;
 }
 
 
