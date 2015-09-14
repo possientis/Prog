@@ -1,4 +1,5 @@
 #include<pthread.h>
+#include<unistd.h>  // getpid
 #include<stdio.h>
 #define NUM_THREADS 5
 
@@ -44,6 +45,6 @@ int main (int argc, char *argv[])
 void* runner(void *param)
 {
 
-  printf("Some thread is now running\n");
+  printf("Some thread is now running with pid %d\n",getpid());
   pthread_exit(0);
 }
