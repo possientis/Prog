@@ -2,30 +2,16 @@
 
 #import sys
 
+def doubleUs(x,y):
+    return doubleMe(x) + doubleMe(y)
+
 def main():
+    print(doubleUs(4,9))
 
-    x = 5
-    y = 5
-
-    def f():
-        x = 0
-        return x
-
-    def g():
-        y = 0
-        return y
-
-    print("Starting with x = 5\n")
-
-    z = f() + x
-    t = y + g()
-
-    print("(x=0) + x evaluates to",z)
-    print("x + (x=0) evaluates to",t)
-
-
-
+def doubleMe(x):
+    return x + x
 
 if __name__ == '__main__':
     main()
+
 

@@ -11,16 +11,16 @@
 int main()
 {
 
-  int x = 5;
-  int y = 5;
+  const char * s1 = "hello";
+  const char * s2 = "hello";
 
-  int z = x + (x=0);
-  int t = (y=0) + y;
-
-  printf("starting from x = 5\n");
-  printf("x + (x=0) evaluates to: %d\n",z);
-  printf("(x=0) + x evaluates to: %d\n",t);
-
+  if((void*) s1 == (void*) s2){
+    printf("yes, equal\n");
+  }
+  else
+  {
+    printf("no, not equal\n");
+  }
 
   return 0;
 

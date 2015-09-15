@@ -2,6 +2,7 @@
 
 (define schedule (agenda))
 
+;; creates wire object, handled via returned interface
 (define (wire)
   ;; private data
   (let ((signal #f) (actions '()))
@@ -33,6 +34,21 @@
     ;; returning public interface
     dispatch))
 
+;; connects wire 'a' to a probe. 'tag' is a symbol used for notification display
+(define (probe a tag)
+  (define (a-action)  ; proc to be executed on signal change by wire 'a'
+    (let ((time (schedule 'time)) (signal (a 'get-signal)))
+      (display "time = ")
+      (display time)
+      (display ": wire ")
+      (display tag)
+      (display " is set to value = ")
+      (display signal)
+      (newline)))
+  ((a 'add-action!) a-action))
+
+
+;; connects wires 'in' and 'out' to an inverter
 (define (gate-not in out)
   (define time-delay 1)
   (define (in-action)  ; proc to be executed on signal change by wire 'in'
@@ -42,6 +58,7 @@
         ((schedule 'add-item!) time change-out))))
   ((in 'add-action!) in-action))
 
+;; connects wire 'in-1', 'in-2' and 'out' to a logical 'or' gate
 (define (gate-or in-1 in-2 out)
   (define time-delay 2)
   (define (in-action) ; proc to be executed on signal change by wire in-1 or in-2
@@ -52,6 +69,7 @@
   ((in-1 'add-action!) in-action)
   ((in-2 'add-action!) in-action))
 
+;; connects wire 'in-1', 'in-2' and out to a logical 'and' gate
 (define (gate-and in-1 in-2 out)
   (define time-delay 2)
   (define (in-action) ; proc to be executed on signal change by wire in-1 or in-2
@@ -62,10 +80,19 @@
   ((in-1 'add-action!) in-action)
   ((in-2 'add-action!) in-action))
 
+;; connects wires a,b, sum, carry to half-adder component
 (define (half-adder a b sum carry)
   (let ((w1 (wire)) (w2 (wire)))
     (gate-or a b w1)
     (gate-and a b carry)
     (gate-not carry w2)
     (gate-and w1 w2 sum)))
+
+(define (full-adder a b c-in sum c-out)
+  (let ((s (wire)) (c1 (wire)) (c2 (wire)))
+    (half-adder c-in b s c1)
+    (half-adder s a sum c2)
+    (gate-or c1 c2 c-out)))
+
+
 

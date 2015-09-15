@@ -1,0 +1,6 @@
+(define (boolean-list->integer seq)
+  (let loop ((seq seq) (acc 0))
+    (cond ((null? seq) acc)
+          ((eq? #t (car seq)) (loop (cdr seq) (+ 1 (* 2 acc))))
+          ((eq? #f (car seq)) (loop (cdr seq) (* 2 acc)))
+          (else "boolean-list->integer: unexpected list element\n"))))

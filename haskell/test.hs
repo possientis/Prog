@@ -1,39 +1,8 @@
-import Control.Monad
--- The following line seems to create a name conflict
--- data Maybe t = Just t | Nothing
+doubleUs x y = doubleMe x + doubleMe y
+doubleMe x = x + x
+doubleSmallNumber x = if x > 100
+                        then x
+                        else x + x
+conanO'Brien = "It's a-me, Conan O'Brien!"
 
-myFunc :: Int -> Maybe Int
-myFunc 0 = Nothing
-myFunc n = Just n
-
-myAdd :: Maybe Int -> Maybe Int -> Maybe Int
-myAdd mx my =
-  case mx of
-    Nothing -> Nothing
-    Just x  -> case my of
-                Nothing -> Nothing
-                Just y  -> Just (x + y)
-
--- represents the 'bind' operator (>>=)
-(£) :: Maybe a -> (a -> Maybe b) -> Maybe b
-Nothing £ _ = Nothing
-(Just x) £ f = f x
-
-myReturn :: a -> Maybe a
-myReturn x = Just x
-
-yourAdd :: Maybe Int -> Maybe Int -> Maybe Int
-yourAdd mx my =
-  mx £ (\x ->
-    my £ (\y ->
-      return (x+y)))
-
-hisAdd :: Maybe Int -> Maybe Int -> Maybe Int
-hisAdd mx my = do
-  x <- mx
-  y <- my
-  return (x + y)
-
-herAdd :: Maybe Int -> Maybe Int -> Maybe Int
-herAdd = liftM2 (+)
-
+boomBangs xs = [if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
