@@ -86,7 +86,7 @@ struct Dictionary_i {
 template <class K>
 Dictionary<K>::Dictionary(){
 
-  d_this = new(Dictionary_i);     // allocating structure for dict private data
+  d_this = new Dictionary_i;      // allocating structure for dict private data
   assert(d_this != nullptr);
   d_this->init();                 // actual work factored out
   d_this->hash = hash<K>;         // cannot be done inside 'init'

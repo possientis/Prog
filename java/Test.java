@@ -6,10 +6,16 @@ public class Test {
 
   public static void main(String[] args) throws IOException {
 
-    System.out.println("What is your name?\n");
-    int temp  = System.in.read();
-    System.out.write((char) temp);
+    int i = 0;
+
+    if(i == 0)
+    {
+      System.out.println("Hello world!");
+    }
+    else
+    {
+      System.out.println("The test did not succeed");
+    }
 
   }
-
 }

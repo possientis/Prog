@@ -3,14 +3,18 @@ import java.io.*;
 import java.util.*;
 
 public class Lexer {
+  // data
   public int line = 1;
   private char peek = ' ';
   private Hashtable<String,Word> words = new Hashtable<String,Word>();
+  // helper
   void reserve(Word t){words.put(t.lexeme,t);}
+  // Constructor
   public Lexer(){
     reserve( new Word(Tag.TRUE, "true"));
     reserve( new Word(Tag.FALSE,"false"));
   }
+  // main function
   public Token scan() throws IOException{
     for(;; peek = (char) System.in.read()){
       if(peek == ' ' || peek == '\t') continue;
