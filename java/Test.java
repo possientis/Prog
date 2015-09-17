@@ -6,7 +6,8 @@ public class Test {
 
   public static void main(String[] args) throws IOException {
 
-    int i = 0;
+    int i = /* replace this value */ 0;
+
 
     if(i == 0)
     {

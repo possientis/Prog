@@ -6,3 +6,8 @@ doubleSmallNumber x = if x > 100
 conanO'Brien = "It's a-me, Conan O'Brien!"
 
 boomBangs xs = [if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
+
+--removeNonUppercase :: [Char] -> [Char]
+removeNonUppercase xs = [c | c <- xs, c `elem` ['A'..'Z']]
+
+factorial n = product [1..n]
