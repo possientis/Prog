@@ -24,7 +24,24 @@
 class Base {
   public: // everything is public
   Base(){std::cout << "running base constructor\n";}  // never virtual
-  virtual ~Base();  // virtual, but not pure virtual and not inline
+  /*
+   * DO NOT FORGET TO DECLARE DESTRUCTOR 'virtual' or else destruction
+   * of pointers to Base objects (which are really pointers to some
+   * derived object) will not be carried out properly. Toggle the keyword
+   * 'virtual' on and off and see output of program
+   *
+   * It seems like declaring constructor to be pure virtual (= 0) makes
+   * no difference, as long as an implementation is still provided
+   *
+   * Even if not declared pure (and Lakos says it should not be), you
+   * still need to provide an implementation (inline or out-of-line).
+   * However, it is best to have implementation out-of-line so compiler
+   * knows in which translation unit to include vtable of base class.
+   * Otherwise, Base class has no implementation outside of header file
+   * and it is not clear what compiler should do when that header file
+   * is included in several translation units.
+   */
+  virtual ~Base() /* = 0 */;  // virtual, but not pure virtual and not inline
   virtual void foo()=0;   // pure virtual
 };
 
@@ -32,19 +49,23 @@ class Derived : public Base {
 
   public:
   Derived(){std::cout << "running derived constructor\n";}
-  ~Derived(){std::cout << "running derived destructor\n";}
-  void foo(){ std::cout << "running implementation of foo\n";}
+  // 'virtual' keyword in implementation class seems optional but probably
+  // has impact on futher subclasses. It increases readability anyway.
+  virtual ~Derived(){std::cout << "running derived destructor\n";}
+  virtual void foo(){ std::cout << "running implementation of foo\n";}
 };
 
 
 int main()
 {
+  std::cout << "-------- Automatic object ---------\n";
   std::cout << "\ncreating derived object...\n";
   Derived b;
 
   std::cout << "\ncalling foo method on object...\n";
   b.foo();
 
+  std::cout << "\n--------- Pointer to Derived -------\n";
   std::cout << "\nallocating new Derived* pointer\n";
   Derived* p = new Derived;
 
@@ -54,6 +75,7 @@ int main()
   std::cout << "\nde-allocating Derived* pointer\n";
   delete p;
 
+  std::cout << "\n---------- Pointer to Base ---------\n";
   std::cout << "\nallocating new Base* pointer\n";
   Base* q = new Derived;
 
@@ -63,12 +85,9 @@ int main()
   std::cout << "\nde-allocating Base* pointer\n";
   delete q;
 
-  std::cout << "\nterminating program...\n";
+  std::cout << "\n--------- Terminating ---------------\n";
 
 }
-
-
-
 
 
 

@@ -2,4 +2,3 @@
 #include "Ilinknode.h"
 
 ILinkNode::~ILinkNode(){}
-ILinkNode::ILinkNode(){}

@@ -2,11 +2,13 @@
 #ifndef INCLUDED_LINKNODE
 #define INCLUDED_LINKNODE
 
-class LinkNode {
+#include "Ilinknode.h"
+
+class LinkNode : public ILinkNode {
 
   const void *d_key_p;
   const void *d_value_p;
-  LinkNode *d_next_p;
+  ILinkNode *d_next_p;
 
   // not implemented
   LinkNode(const LinkNode&);
@@ -14,18 +16,19 @@ class LinkNode {
 
   public:
   // constructor
-  LinkNode(const void* key, const void* value): d_key_p(key), d_value_p(value),
-                                                d_next_p(nullptr){};
-  ~LinkNode(){};
+  LinkNode(const void* key, const void* value):
+    d_key_p(key), d_value_p(value), d_next_p(nullptr){};
+
+  virtual ~LinkNode(){};
 
   // accessors
-  const void *key() const {return d_key_p;};
-  const void *val() const {return d_value_p;};
-  LinkNode *next() const {return d_next_p;};
+  virtual const void *key() const {return d_key_p;};
+  virtual const void *val() const {return d_value_p;};
+  virtual ILinkNode *next() const {return d_next_p;};
 
   // manipulators
-  void set(const void* value){d_value_p = value;};
-  void setNext(LinkNode *next){d_next_p = next;};
+  virtual void set(const void* value){d_value_p = value;};
+  virtual void setNext(ILinkNode *next){d_next_p = next;};
 
 };
 

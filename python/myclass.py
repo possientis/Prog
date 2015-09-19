@@ -6,6 +6,8 @@ class X(object):
         return 23
     def __setattr__(self,name,value):
         print('set',name,value)
+    def foo(self):
+        return 0
 
 def main():
     x = X()

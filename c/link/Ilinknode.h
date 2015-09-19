@@ -4,7 +4,6 @@
 
 class ILinkNode {
   public:
-  ILinkNode();
   ~ILinkNode();
   virtual const void* key() const = 0;
   virtual const void* val() const = 0;

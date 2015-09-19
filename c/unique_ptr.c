@@ -9,6 +9,5 @@ struct test
 
 int main()
 {
-  std::cout << "size = " << sizeof(test) << std::endl;
   std::unique_ptr<test[]> myptr(new test[3]);
 }
