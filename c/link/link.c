@@ -12,7 +12,7 @@ typedef int (*Comparator)(const void*, const void*);  // == 0 on equality
 typedef void (*PrintKeyFunc)(const void*);
 
 
-static void freeNode(LinkNode *node){
+static void freeNode(ILinkNode *node){
 
   if(node != nullptr){
 
@@ -24,11 +24,12 @@ static void freeNode(LinkNode *node){
 }
 
 
-static LinkNode *insertNode(LinkNode *node,
+static ILinkNode *insertNode(ILinkNode *node,
     const void* key, const void* value, Comparator comp){
 
   if (node == nullptr){   // empty list
 
+    // hhmm.... how am I gonna fix this?
     node = new LinkNode(key,value);
     assert(node != nullptr);
     return node;
@@ -43,20 +44,20 @@ static LinkNode *insertNode(LinkNode *node,
   }
 
   // inserting from next node onwards
-  LinkNode *next = node->next();
+  ILinkNode *next = node->next();
   node->setNext(insertNode(next,key,value,comp));
   return node;
 
 }
 
 
-static LinkNode *deleteNode(LinkNode *node, const void* key, Comparator comp){
+static ILinkNode *deleteNode(ILinkNode *node, const void* key, Comparator comp){
 
   if(node == nullptr) return nullptr;   // nothing to do on empty list
 
   if(comp(key, node->key()) == 0){  // key found
 
-    LinkNode *temp = node->next();  // head of list after deletion
+    ILinkNode *temp = node->next();  // head of list after deletion
     delete node;                    // release memory for head node
     node = nullptr;                 // safety
     return temp;
@@ -64,14 +65,14 @@ static LinkNode *deleteNode(LinkNode *node, const void* key, Comparator comp){
   }
 
   // deleting from next node onwards
-  LinkNode *next = node->next();
+  ILinkNode *next = node->next();
   node->setNext(deleteNode(next,key,comp));
   return node;
 
 }
 
 
-static LinkNode *findNode(LinkNode *node, const void* key, Comparator comp){
+static ILinkNode *findNode(ILinkNode *node, const void* key, Comparator comp){
 
   if (node == nullptr) return nullptr;  // search failing
 
@@ -87,7 +88,7 @@ static LinkNode *findNode(LinkNode *node, const void* key, Comparator comp){
 }
 
 
-static void printNode(const LinkNode *node, PrintKeyFunc func){
+static void printNode(const ILinkNode *node, PrintKeyFunc func){
 
   if(node != nullptr){  // nothing printed otherwise
 
@@ -122,7 +123,7 @@ void Link::del(const void* key){
 
 const void* Link::find(const void* key) const{
 
-  LinkNode *temp = findNode(d_head_p, key, d_comp_p); // node with given key
+  ILinkNode *temp = findNode(d_head_p, key, d_comp_p); // node with given key
 
   if(temp ==nullptr)  return nullptr;   // search failed
 

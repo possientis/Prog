@@ -2,14 +2,14 @@
 #ifndef INCLUDED_LINK
 #define INCLUDED_LINK
 
-class LinkNode;
+class ILinkNode;
 class LinkIter;
 
 class Link {
 
   // private data
   int (*d_comp_p)(const void*, const void*);  // comparison operator
-  LinkNode *d_head_p;                         // head of linked list
+  ILinkNode *d_head_p;                         // head of linked list
   //
   Link(const Link&);                          // not implemented
   Link& operator=(const Link&);               // not implemented
@@ -33,10 +33,11 @@ class Link {
 
 };
 
+
 class LinkIter {
 
   // private data
-  LinkNode *d_node_p;
+  ILinkNode *d_node_p;
   //
   LinkIter(const LinkIter&);                  // not implemented
   LinkIter& operator=(const LinkIter&);       // not implemented

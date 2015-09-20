@@ -4,11 +4,14 @@
 
 class ILinkNode {
   public:
+  //
   ~ILinkNode();
+  // accessors
   virtual const void* key() const = 0;
   virtual const void* val() const = 0;
   virtual ILinkNode *next() const = 0;
-  virtual void set(const void* value) = 0;  // changes pointer to value
+  // manipulators
+  virtual void set(const void* value) = 0;  // sets new value (via pointer)
   virtual void setNext(ILinkNode *next) = 0;
 };
 

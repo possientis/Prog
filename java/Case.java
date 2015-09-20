@@ -2,7 +2,7 @@ import java.io.*;
 //import java.util.List;
 //import java.util.ArrayList;
 
-public class Test {
+public class Case {
 
   // 'final' keyword for constant
   private static final double PI = 3.14159;
@@ -12,8 +12,17 @@ public class Test {
     int x = 5;
     int y = 0;
 
-    int i = 0;
-    while(i < 5)
-      ++i;
+    switch(x){
+      case 0:
+        y = 0;
+        break;
+      case 1:
+        y = 1;
+        break;
+      default:
+        y = 5;
+        break;
+    }
+        System.out.println(y);
   }
 }

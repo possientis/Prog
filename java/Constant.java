@@ -2,18 +2,15 @@ import java.io.*;
 //import java.util.List;
 //import java.util.ArrayList;
 
-public class Test {
+public class Constant {
 
   // 'final' keyword for constant
   private static final double PI = 3.14159;
 
   public static void main(String[] args) throws IOException {
 
-    int x = 5;
-    int y = 0;
+    int i = 5;
 
-    int i = 0;
-    while(i < 5)
-      ++i;
+    System.out.println(PI);
   }
 }

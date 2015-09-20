@@ -86,6 +86,32 @@ describeList' xs = "The list is " ++ what xs
         what [x] = "a singleton list"
         what xs = "a longer list"
 
+maximum' :: (Ord a) => [a] -> a
+maximum' [] = error "maximum of empty list!"
+maximum' [x] = x
+maximum' (x:xs)
+  | x > maxTail = x
+  | otherwise   = maxTail
+  where maxTail = maximum' xs
+
+replicate' :: (Integral i, Eq i) => i -> a -> [a]
+replicate' 0 x = []
+replicate' n x = x:replicate' (n-1) x
+
+take' 0 xs = []
+take' n [] = []
+take' n (x:xs) = x:(take' (n-1) xs)
 
 
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' a [] = False
+elem' a (x:xs) = (a == x) || (elem' a xs)
+
+
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort [x] = [x]
+quicksort (x:xs) =  quicksort [y| y <-xs, y <= x]
+                 ++ [x]
+                 ++ quicksort [y| y <-xs, x < y]
 
