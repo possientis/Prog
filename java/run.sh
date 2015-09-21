@@ -1,3 +1,3 @@
 #!/bin/sh
-javac Test.java
-java Test
+javac Factorial.java
+java Factorial

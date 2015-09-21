@@ -4,7 +4,7 @@ import acm.program.*;
 import java.awt.*;  // Color
 
 
-public class Test  extends GraphicsProgram {
+public class Checkerboard  extends GraphicsProgram {
 
   /* Number of rows */
   private static final int NROWS = 8;

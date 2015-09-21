@@ -10,10 +10,16 @@ int main(int argc, char *argv[])
 
   cout << "program name:" << argv[0] << endl;
 
-  for(int i = 1; i < argc; ++i){
+  for(int i = 1; i < argc; ++i)
     projects.push_back(argv[i]);  // also have pop_back
-    cout << projects[i-1] << endl;
-  }
+
+  for(vector<string>::iterator j = projects.begin();
+      j != projects.end(); ++j)
+    cout << *j << std::endl;
+
+  // what is this?
+  for(auto &j : projects)
+    cout << j << endl;
 
   return 0;
 }

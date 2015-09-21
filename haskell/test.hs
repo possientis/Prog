@@ -115,3 +115,19 @@ quicksort (x:xs) =  quicksort [y| y <-xs, y <= x]
                  ++ [x]
                  ++ quicksort [y| y <-xs, x < y]
 
+
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _ = []
+zipWith' _ _ [] = []
+zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+
+fib :: (Integral a) => [a]
+fib = 0:1:zipWith' (+) fib (tail fib)
+
+fib' :: (Integral a) => [a]
+fib' = [fib x| x <- [0..]]
+  where fib 0 = 0
+        fib 1 = 1
+        fib n = fib (n-1) + fib (n-2)
+
+

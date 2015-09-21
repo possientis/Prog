@@ -49,4 +49,18 @@
         ((< size 0)
          (display "binary: integer->boolean-vect: ")
          (display "second argument should be non-negative\n"))
-        (else (display "to be continued...\n"))))
+        (else
+          (let ((vec (make-vector size)))
+            (vector-fill! vec #f)
+            (let loop ((num num) (i 0)) ; no accumulator, just index of bit 'i'
+              (cond ((= 0 num) vec) ; bits of vec have been duly updated
+                    ((odd? num) (vector-set! vec i #t)
+                                (loop (quotient num 2) (+ 1 i)))
+                    ((even? num)(loop (quotient num 2) (+ 1 i)))
+                    (else (display "binary: integer -> boolean-vect: ")
+                          (display "unexpected error\n"))))))))
+
+
+
+
+

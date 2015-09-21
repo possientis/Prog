@@ -1,6 +1,6 @@
 #!/bin/sh
 
 
-g++ map.c -std=c++14
+g++ vector.c -std=c++14
 
-./a.out < map.c
+./a.out qw er ty ui op

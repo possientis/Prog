@@ -1,4 +1,6 @@
 import java.io.*;
+import java.math.*;
+
 //import java.util.List;
 //import java.util.ArrayList;
 
@@ -9,11 +11,8 @@ public class Test {
 
   public static void main(String[] args) throws IOException {
 
-    int x = 5;
-    int y = 0;
+    System.out.println(Math.pow(2,10));
 
-    int i = 0;
-    while(i < 5)
-      ++i;
+
   }
 }
