@@ -2,14 +2,15 @@
 
 #import sys
 
-def doubleUs(x,y):
-    return doubleMe(x) + doubleMe(y)
+def foo():
+    def bar():
+        def baz():
+            return 1
+        return baz()
+    return bar()
 
 def main():
-    print(doubleUs(4,9))
-
-def doubleMe(x):
-    return x + x
+    print(foo())
 
 if __name__ == '__main__':
     main()

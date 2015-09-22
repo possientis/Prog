@@ -9,14 +9,23 @@ then
   exit $E_WRONG_ARGS
 fi
 
-FILENAME=$1   # no space around '='
+# retrieving filename (possibly with a .java extension)
+FILENAME=$1
 
+# removing the .java extension if applicable
+echo $FILENAME | grep '.java' > /dev/null # > /dev/null to suppress output
+if [ $? -eq 0 ]   # grep was successful, need to discard '.java' extension
+then
+  FILENAME=`echo $FILENAME | grep '.java' | cut -d. -f1`
+fi
+
+# setting up various strings
 FILENAME_CLASS=$FILENAME.class
 FILENAME_JAR=$FILENAME.jar
 FILENAME_HTML=$FILENAME.html
 FILENAME_JAVA=$FILENAME.java
 
-# cleaning previously created files, if any
+# cleaning up previously created files, if any
 rm -f $FILENAME_CLASS # -f to ignore non-existent file
 rm -f $FILENAME_JAR   # -f to ignore non-existent file
 rm -f $FILENAME_HTML  # -f to ignore non-existent file
