@@ -11,7 +11,7 @@
       (cond ((eq? m 'get-signal) signal)
             ((eq? m 'set-signal!) set-signal!)
             ((eq? m 'add-action!) add-action!)
-            (else (display "wire: unknown operation error"))))
+            (else (display "wire: unknown operation error\n"))))
     ;; private methods
     ;;
     (define (call-each procs)

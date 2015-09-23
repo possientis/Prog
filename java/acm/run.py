@@ -24,7 +24,7 @@ def main():
 
     # checking a single file name given as argument
     if(len(sys.argv) != 2):
-        sys.stderr.write('Need a single file name as argument\n')
+        sys.stderr.write('Usage:' + sys.argv[0] +' filename[.java]\n')
         sys.exit(1)
 
     # filename

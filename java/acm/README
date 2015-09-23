@@ -1,0 +1,11 @@
+The following are functionally identical scripts:
+
+run.py  -> written in python
+run.sh  -> written in shell script (sh)
+run.scm -> written in scheme (scm)
+run     -> written in C (source run.c)
+
+Just use any one of then to compile and launch any java file e.g.
+./run.sh Test.java
+or:
+./run.sh Test

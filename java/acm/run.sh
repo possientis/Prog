@@ -5,7 +5,7 @@
 E_WRONG_ARGS=85
 if [ $# -ne  1 ]
 then
-  echo "Usage: `basename $0` filename"
+  echo "Usage: ./`basename $0` filename[.java]"
   exit $E_WRONG_ARGS
 fi
 
