@@ -1,6 +1,6 @@
 #!/bin/sh
 
 
-g++ vector.c -std=c++14
+g++ foreach.c -std=c++14
 
-./a.out qw er ty ui op
+./a.out

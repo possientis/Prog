@@ -10,7 +10,6 @@ public class Test extends ConsoleProgram {
   public void run() {
 
 
-
   }
 }
 
