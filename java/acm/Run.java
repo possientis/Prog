@@ -39,6 +39,7 @@ public class Run {
     Runtime run = Runtime.getRuntime();
 
 
+    // need to figure out how to check process exit status
     /* cleaning up previously created files, if any */
     Process p1,p2,p3;
     p1 = run.exec("rm -f " + filename_class);
