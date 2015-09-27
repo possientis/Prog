@@ -96,7 +96,7 @@
     (display "Usage:")
     (display (cadr arguments)) ; ./run.scm (or whatever filename it is)
     (display " filename[.java]\n")
-    (exit 0)))
+    (exit 1)))
 
 ; retrieving filename (possibly with a .java extension)
 (define filename (caddr arguments)) ; car of cdr of cdr

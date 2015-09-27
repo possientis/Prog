@@ -4,7 +4,7 @@
 
 #include <stdlib.h> // exit
 #include <stdio.h>  // fprintf
-#include <string.h> // strstr, strlen,strcpy, strcat
+#include <string.h> // strstr, strlen, strcpy, strcat, etc.
 #include <malloc.h> // malloc, free
 #include <assert.h> // assert
 #include <unistd.h> // fork
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
   char* filename = argv[1];
   int length = strlen(filename);
 
-  /* testing whether filename contains .java extension */
+  /* removing the .java extension if applicable */
   char *ptr = strstr(filename,".java");
   if(ptr != NULL){ // .java extension is present
     filename[length-5] = '\0';
@@ -100,9 +100,10 @@ static int cleanUpFile(char* filename){
   int status; // return status of child process
 
   /* preparing to use the rm command */
-  char cmd[8]; strcpy(cmd,"/bin/rm");
-  char flag[3]; strcpy(flag,"-f");    // does not complain if file does not exist
+  char cmd[] = "/bin/rm";
+  char flag[] = "-f";   // supresses error message if file does not exist
   char* const newArg[4] = {cmd,flag,filename,NULL};
+
   /* just in case */
   assert(strcmp(newArg[0],"/bin/rm") == 0);
   assert(strcmp(newArg[1],"-f") == 0);
@@ -125,6 +126,8 @@ static int cleanUpFile(char* filename){
   }
 }
 
+
+
 /* wapper around execve to execute command 'javac -classpath acm.jar filename */
 static int compileFile(char* filename){
 
@@ -135,9 +138,9 @@ static int compileFile(char* filename){
   int status; // return status of child process
 
   /* preparing to use the javac command */
-  char cmd[15]; strcpy(cmd,"/usr/bin/javac");
-  char flag[11]; strcpy(flag,"-classpath");
-  char acm[8]; strcpy(acm,"acm.jar");
+  char cmd[] = "/usr/bin/javac";
+  char flag[] = "-classpath";
+  char acm[] = "acm.jar";
   char* const newArg[5] = {cmd,flag,acm,filename,NULL};
 
   /* just in case */
@@ -174,8 +177,8 @@ static int copyAcmAsFile(char* filename){
   int status; // return status of child process
 
   /* preparing to use the cp command */
-  char cmd[8]; strcpy(cmd,"/bin/cp");
-  char acm[8]; strcpy(acm,"acm.jar");
+  char cmd[] = "/bin/cp";
+  char acm[] = "acm.jar";
   char* const newArg[4] = {cmd,acm,filename,NULL};
 
   /* just in case */
@@ -200,6 +203,7 @@ static int copyAcmAsFile(char* filename){
   }
 }
 
+
 /* wapper around execve to execute command 'jar uf filename.jar filename.class */
 static int addToJarFile(char* filename_jar, char* filename_class){
 
@@ -210,8 +214,8 @@ static int addToJarFile(char* filename_jar, char* filename_class){
   int status; // return status of child process
 
   /* preparing to use the javac command */
-  char cmd[13]; strcpy(cmd,"/usr/bin/jar");
-  char flag[3]; strcpy(flag,"uf");
+  char cmd[] = "/usr/bin/jar";
+  char flag[] = "uf";
   char* const newArg[5] = {cmd,flag,filename_jar,filename_class,NULL};
 
   /* just in case */
@@ -242,7 +246,7 @@ static int addToJarFile(char* filename_jar, char* filename_class){
 static int launchApplet(char* filename){
 
   /* various declaration needed to call fork and execve */
-  char env[13]; strcpy(env,"DISPLAY=:0.0");
+  char env[] = "DISPLAY=:0.0";
   char*  newEnv[2] = {env,NULL};   // need DISPLAY=:0.0 for appletviewer to work
   assert(strcmp(newEnv[0],"DISPLAY=:0.0") == 0);  // do not trust anyone
   assert(newEnv[1] == NULL);  // do not trust anyone
@@ -250,7 +254,7 @@ static int launchApplet(char* filename){
   int status; // return status of child process
 
   /* preparing to use the javac command */
-  char cmd[22]; strcpy(cmd,"/usr/bin/appletviewer");
+  char cmd[] = "/usr/bin/appletviewer";
   char* const newArg[3] = {cmd,filename,NULL};
 
   /* just in case */
@@ -273,7 +277,4 @@ static int launchApplet(char* filename){
     }
   }
 }
-
-
-
 
