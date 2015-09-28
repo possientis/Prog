@@ -172,6 +172,52 @@ map' f = foldr (\x acc -> f x : acc) []
 map'' :: (a-> b) -> [a] -> [b]
 map'' f = foldl (\acc x -> acc ++ [f x]) []
 
+maxR :: (Ord a) => [a] -> a
+maxR = foldr1 (\x acc -> max x acc)
+
+maxL :: (Ord a) => [a] -> a
+maxL = foldl1 (\acc x -> max acc x)
+
+
+foldL :: (a -> b -> a) -> a -> [b] -> a
+foldL op v [] = v
+foldL op v (x:xs) = foldL op (op v x) xs
+
+foldR :: (b -> a -> a) -> a -> [b] -> a
+foldR op v [] = v
+foldR op v (x:xs) = op x (foldR op v xs)
+
+reverseR :: [a] -> [a]
+reverseR = foldR (\x acc -> acc ++ [x]) []
+
+reverseL :: [a] -> [a]
+reverseL = foldL (\acc x -> x:acc) []
+
+productL :: (Num a) => [a] -> a
+productL = foldL (*) 1
+
+productR :: (Num a) => [a] -> a
+productR = foldR (*) 1
+
+filterL :: (a -> Bool) -> [a] -> [a]
+filterL p = foldL (\acc x -> if p x then acc ++ [x] else acc) []
+
+filterR :: (a -> Bool) -> [a] -> [a]
+filterR p = foldR (\x acc -> if p x then x:acc else acc) []
+
+
+headR :: [a] -> Maybe a
+headR = foldR (\x acc -> Just x) Nothing
+
+scanL :: (a -> b -> a) -> a -> [b] -> [a]
+scanL op v [] = [v]
+scanL op v (x:xs) = [v] ++ (scanL op (op v x) xs)
+
+scanR :: (b -> a -> a) -> a -> [b] -> [a]
+scanR op v [] = [v]
+scanR op v (x:xs) = let ys = scanR op v xs in (op x (head ys)):ys
+
+
 
 
 
