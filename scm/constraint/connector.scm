@@ -21,27 +21,124 @@
   (define (get-value)
     #f)
   ;
-  (define (connect constraint)
+  (define (connect! constraint)
     'ok)
   ;
-  (define (inform-about-value)
-    'ok)
+  (define (inform-about-value constraint)
+    (constraint 'process-value!))
   ;
   (define (inform-about-no-value)
-    'ok)
+    (constraint 'forget-value!))
+
   ; returning public interface
   dispatch)
 
 ; adder object (constraint)
 (define (adder a1 a2 sum)
-  'ok)
+  ; public interface
+  (define (this m)
+    (cond ((eq? m 'process-value!) (process-value!))
+          ((eq? m 'forget-value!) (forget-value!))
+          (else (display "adder: unknown operation error\n"))))
+  ; private members
+  ;
+  (define (process-value!)
+    (cond ((and (a1 'has-value?) (a2 'has-value?))
+           ((sum 'set-value!) (+ (a1 'get-value) (a2 'get-value)) this))
+          ((and (a1 'has-value?) (sum 'has-value?))
+           ((a2 'set-value!) (- (sum 'get-value) (a1 'get-value)) this))
+          ((and (a2 'has-value?) (sum 'has-value?))
+           ((a1 'set-value!) (- (sum 'get-value) (a2 'get-value)) this))
+          (else 'done)))  ; not enough values have been set
+  ;
+  (define (forget-value!)
+    ((sum 'forget-value!) this)
+    ((a1 'forget-value!) this)
+    ((a2 'forget-value!) this)
+    (process-value!))
+  ;
+  ; connecting contraint to connectors
+  ((a1 'connect!) this)
+  ((a2 'connect!) this)
+  ((sum 'connect!) this)
+  ; returning public interface
+  this)
 
+; multiplier object (constraint)
+(define (multiplier a1 a2 prod)
+  ; public interface
+  (define (this m)
+    (cond ((eq? m 'process-value!) (process-value!))
+          ((eq? m 'forget-value!) (forget-value!))
+          (else (display "multiplier: unknown operation error\n"))))
+  ; private members
+  ;
+  (define (process-value!)  ; bug lurking: == 0 for double !!!
+    (cond ((and (a1 'has-value?) (= 0 (a1 'get-value)))
+           ((prod 'set-value!) 0 this))
+          ((and (a2 'has-value?) (= 0 (a2 'get-value)))
+           ((prod 'set-value!) 0 this))
+          ((and (a1 'has-value?) (a2 'has-value?))
+           ((prod 'set-value!) (* (a1 'get-value) (a2 'get-value)) this))
+          ((and (a1 'has-value?) (prod 'has-value?))
+           ((a2 'set-value!) (/ (prod 'get-value) (a1 'get-value)) this))
+          ((and (a2 'has-value?) (prod 'has-value?))
+           ((a1 'set-value!) (/ (prod 'get-value) (a2 'get-value)) this))
+          (else 'done)))  ; not enough values have been set
+  ;
+  (define (forget-value!)
+    ((prod 'forget-value!) this)
+    ((a1 'forget-value!) this)
+    ((a2 'forget-value!) this)
+    (process-value!))
+  ;
+  ; connecting contraint to connectors
+  ((a1 'connect!) this)
+  ((a2 'connect!) this)
+  ((prod 'connect!) this)
+  ; returning public interface
+  this)
 
-(define (multiplier a b c)
-  'ok)
-
+; constant object (constraint)
 (define (constant const a)
-  'ok)
+  ; public interface
+  (define (this m)
+    (cond ((eq? m 'process-value!) (error))
+          ((eq? m 'forget-value!) (error))
+          (else (error))))
+  ;
+  (define (error)
+    (display "constant: unknown operation error\n"))
+  ;
+  ; setting constant value
+  ((a 'set-value!) const this)
+  ; connecting constraint to connector
+  ((a 'connect!) this)
+  ; returning public interface
+  this)
 
+; probe object (constraint)
 (define (probe label a)
-  'ok)
+  ; public interface
+  (define (this m)
+    (cond ((eq? m 'process-value!) (process-value!))
+          ((eq? m 'forget-value!) (forget-value!))
+          (else (display "probe: unknown operation error\n"))))
+  ; private members
+  (define (print-probe value)
+    (newline)
+    (display "Probe: ")
+    (display label)
+    (display " = ")
+    (display value))
+  ;
+  (define (process-value!)
+    (print-probe (a 'get-value)))
+  ;
+  (define (forget-value!)
+    (print-probe "?"))
+  ;
+  ; connecting
+  ((a 'connect!) this)
+  ; returning public interface
+  this)

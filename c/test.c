@@ -1,5 +1,5 @@
 //#include<stdio.h>
-//#include<iostream>  // std::fill, std::cout, std::endl
+#include<iostream>  // std::fill, std::cout, std::endl
 //#include<vector>
 //#include<algorithm>
 //#include<iterator>  // std::ostream_iterator<T>
@@ -10,15 +10,14 @@
 //#include<malloc.h>
 //#include<assert.h>
 
-#if 0
-void foo(){}
-#endif
-
 
 int main(){
 
+  int *x = new int(3);
 
-  std::cout << (1 << 10) << std::endl;
+  std::cout << *x << std::endl;
+
+  delete(x);
 
   return 0;
 

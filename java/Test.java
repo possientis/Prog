@@ -11,9 +11,18 @@ public class Test {
   public static void main(String[] args) throws IOException {
 
 
-    System.out.println(-3 % 26);
-    System.out.println(-3 / 26);
+    FileReader file = new FileReader("Test.java");
+    BufferedReader reader = new BufferedReader(file);
 
+    while(true){
+
+      String line = reader.readLine();
+      if(line == null) break;
+      System.out.println(line);
+
+    }
+
+    reader.close();
   }
 
 
