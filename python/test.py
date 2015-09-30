@@ -2,15 +2,15 @@
 
 #import sys
 
-def foo():
-    def bar():
-        def baz():
-            return 1
-        return baz()
-    return bar()
-
 def main():
-    print(foo())
+    try
+        raise NameError
+        print("Hello world!")
+    except
+        print("The exception was caught")
+    finally
+        print("This will run whether exception occurs or not")
+
 
 if __name__ == '__main__':
     main()
