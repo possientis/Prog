@@ -11,10 +11,14 @@ public class Test {
   public static void main(String[] args) throws IOException {
 
     int[] myArr = new int[5];
-    for(int i = 0; i < 5; ++i){
-      myArr[i] = i;
-      System.out.println(myArr[i]);
-    }
+    int[][] matrix = new int[2][3];
+
+    for(int i = 0; i < 2; ++i)
+      for(int j = 0; j < 3; ++j){
+
+        matrix[i][j] = i+j;
+        System.out.println(matrix[i][j]);
+      }
 
   }
 }

@@ -11,20 +11,27 @@ public class MyArray {
   public static void main(String[] args) throws IOException {
 
     int[] myArr = new int[5];
-    for(int i = 0; i < 5; ++i){
-      myArr[i] = i;
-      System.out.println(myArr[i]);
-    }
+    int[][] matrix = new int[2][3];
+
+    ArrayList<Integer> intList = new ArrayList<Integer>();
+    intList.add(5);
 
     // ArrayList is a template
     ArrayList<String> strList = new ArrayList<String>();
 
-    //String str1 = "hello";
-    strList.add("hello");
-    strList.add("how are you?");
-    System.out.println(strList.size());
-    System.out.println(strList.get(0));
-    System.out.println(strList.get(1));
+    readList(strList);
+
+    for(int i = 0; i < strList.size(); ++i){
+
+      System.out.println(strList.get(i));
+    }
+
+  }
+
+
+  private static void readList(ArrayList<String> list){
+    // does nothing for now
+    list.add("hello");
   }
 
 }

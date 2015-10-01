@@ -13,11 +13,7 @@
 
 int main(){
 
-  int *x = new int(3);
-
-  std::cout << *x << std::endl;
-
-  delete(x);
+  int matrix[2][3];
 
   return 0;
 
