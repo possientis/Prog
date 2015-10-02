@@ -7,19 +7,23 @@ public class Fib {
 
   public static void main(String[] args) {
 
-    //System.out.println("Hello, World");
+    ArrayList<Integer> iList = fib(20);
+
+    for(int i = 0; i < iList.size(); ++i){
+      System.out.println(iList.get(i));
+    }
 
   }
 
-  public static List<Integer>fib(int n){
+  public static ArrayList<Integer>fib(int n){
 
-    List<Integer> seq = new ArrayList(n);
+    ArrayList<Integer> seq = new ArrayList<Integer>();
 
-    seq[0] = 1;
-    seq[1] = 1;
+    seq.add(0,1);
+    seq.add(1,1);
 
     for(int i = 2; i < n; ++i){
-      seq[i] = seq[i-2] + seq[i-1];
+      seq.add(i,seq.get(i-2) + seq.get(i-1));
     }
 
     return seq;

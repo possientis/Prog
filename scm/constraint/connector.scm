@@ -1,5 +1,9 @@
 ; connector object
 (define (connector)
+  ; private data
+  (let ((value #f)        ; #f when no value is set
+        (informant #f)    ; #f when no value is set (hence no informant either)
+        (constraints '())) ; initial list of constraints is empty
   ; public interface
   (define (dispatch m)
     (cond ((eq? m 'set-value!) set-value!)
@@ -9,20 +13,30 @@
           ((eq? m 'connect!) connect!)
           (else (display "connector: unknown operation error\n"))))
   ; private members
-  (define (set-value! value user)
-    'ok)
+  (define (set-value! newval user)
+    (cond ((not (has-value?))
+           (set! value newval)
+           (set! informant user)
+           (for-each-except user inform-about-value constraints))
+          ((not (= value newval))   ; bug lurking, == between doubles
+           (error "Contradiction" (list value newval)))
+          (else 'ignored)))
   ;
   (define (forget-value! user)
     'ok)
   ;
   (define (has-value?)
-    #f)
+    (not (eq? value #f))) ; has a value if (and only if) value is not #f
   ;
   (define (get-value)
-    #f)
+    value)                ; simply returns value member
   ;
-  (define (connect! constraint)
-    'ok)
+  (define (connect! new-constraint)
+    (if (eq? #f (memq new-constraint constraints)) ; new-constraint not in list
+      (set! constraints (cons new-constraint constraints)))
+    (if (has-value?)
+      (inform-about-value new-constraint))
+    'done)
   ;
   (define (inform-about-value constraint)
     (constraint 'process-value!))
@@ -31,7 +45,14 @@
     (constraint 'forget-value!))
 
   ; returning public interface
-  dispatch)
+  dispatch))
+
+(define (for-each-except exception procedure seq)
+  (let loop ((seq seq))
+    (cond ((null? seq) 'done)
+          ((eq? (car seq) exception) (loop (cdr seq)))
+          (else (procedure (car seq))
+                (loop (cdr seq))))))
 
 ; adder object (constraint)
 (define (adder a1 a2 sum)
@@ -109,11 +130,17 @@
   ;
   (define (error)
     (display "constant: unknown operation error\n"))
+
+
   ;
   ; setting constant value
   ((a 'set-value!) const this)
+
   ; connecting constraint to connector
+
+  (display "still cool?\n")
   ((a 'connect!) this)
+
   ; returning public interface
   this)
 

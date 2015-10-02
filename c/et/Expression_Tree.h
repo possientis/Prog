@@ -3,11 +3,10 @@
 
 template <typename T> class Component_Node;
 class ET_Visitor;
-class ET_Iterator;
-class const_ET_Iterator;
+template <typename T> class ET_Iterator;
+template <typename T> class const_ET_Iterator;
 
-typedef ET_Iterator iterator;
-typedef const_ET_Iterator const_iterator;
+
 
 template<typename T>
 class Expression_Tree{
@@ -21,10 +20,10 @@ class Expression_Tree{
     Expression_Tree left();
     Expression_Tree right();
     void accept(ET_Visitor &visitor){root_->accept(visitor);}
-    iterator begin(const std::string &order = "");
-    iterator end(const std::string &ordder = "");
-    const_iterator begin(const std::string &order = "") const;
-    const_iterator end(const std::string &order = "") const;
+    ET_Iterator<T> begin(const std::string &order = "");
+    ET_Iterator<T> end(const std::string &ordder = "");
+    const_ET_Iterator<T> begin(const std::string &order = "") const;
+    const_ET_Iterator<T> end(const std::string &order = "") const;
   private:
     std::shared_ptr<Component_Node<T>> root_;
 };
