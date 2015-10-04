@@ -19,11 +19,19 @@
            (set! informant user)
            (for-each-except user inform-about-value constraints))
           ((not (= value newval))   ; bug lurking, == between doubles
-           (error "Contradiction" (list value newval)))
+           (display "connector: set-value! Contradiction: ")
+           (display (list value newval))
+           (newline))
           (else 'ignored)))
   ;
   (define (forget-value! user)
-    'ok)
+    (if (eq? user informant)
+      (begin
+        (set! informant #f)
+        (set! value #f)
+        (for-each-except user inform-about-no-value constraints))
+      'ignored))
+
   ;
   (define (has-value?)
     (not (eq? value #f))) ; has a value if (and only if) value is not #f
@@ -41,7 +49,7 @@
   (define (inform-about-value constraint)
     (constraint 'process-value!))
   ;
-  (define (inform-about-no-value)
+  (define (inform-about-no-value constraint)
     (constraint 'forget-value!))
 
   ; returning public interface
@@ -131,15 +139,11 @@
   (define (error)
     (display "constant: unknown operation error\n"))
 
-
+  ; connecting constraint to connector (before setting value)
+  ((a 'connect!) this)
   ;
   ; setting constant value
   ((a 'set-value!) const this)
-
-  ; connecting constraint to connector
-
-  (display "still cool?\n")
-  ((a 'connect!) this)
 
   ; returning public interface
   this)
@@ -153,11 +157,11 @@
           (else (display "probe: unknown operation error\n"))))
   ; private members
   (define (print-probe value)
-    (newline)
     (display "Probe: ")
     (display label)
     (display " = ")
-    (display value))
+    (display value)
+    (newline))
   ;
   (define (process-value!)
     (print-probe (a 'get-value)))

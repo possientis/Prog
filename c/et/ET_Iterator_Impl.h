@@ -11,7 +11,7 @@ class ET_Iterator_Impl{
     virtual void operator++()=0;
     virtual bool operator==(const ET_Iterator_Impl &)=0;
     virtual bool operator!=(const ET_Iterator_Impl &)=0;
-    virtual ET_Iterator_Impl *clone()=0;
+    virtual ET_Iterator_Impl *clone()=0; // subclass performs a deep copy
 };
 
 template <typename T>

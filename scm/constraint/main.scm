@@ -25,6 +25,7 @@
 
 ((C 'set-value!) 25 'user)
 ((F 'set-value!) 212 'user) ; should create a contradiction
-((F 'forget-value!) 'user)
+((C 'forget-value!) 'user)
 ((F 'set-value!) 212 'user) ; no longer a contradiction
+((F 'forget-value!) 'user)
 
