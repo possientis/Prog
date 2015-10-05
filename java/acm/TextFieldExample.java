@@ -6,7 +6,7 @@ import acm.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Test extends ConsoleProgram {
+public class TextFieldExample extends ConsoleProgram {
 
   public void init() {
 
