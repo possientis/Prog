@@ -13,18 +13,15 @@
 
 int main(){
 
-  time_t start;
-  time_t end;
+  bool b1 = false;
+  bool b2 = false;
 
-  time(&start);
-  for(long i = 0; i < 1000000000; ++i){
-    // do nothing
+  if(b1){
+    if(b2)
+      std::cout << "both b1 and b2 are true\n";
   }
-
-  time(&end);
-
-  std::cout << start << std::endl;
-  std::cout << end << std::endl;
+  else
+      std::cout << "b1 is false\n";
 
   return 0;
 
