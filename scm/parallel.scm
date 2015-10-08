@@ -1,29 +1,32 @@
+(define (busy-wait)
+  (let loop ((i 1000000))
+    (if (> i 0)
+      (loop (- i 1)))))
+
+(define x 10)
+
 (define (parallel-execute p1 p2)
- (let ((ready-flag #f))
-    (define (busy-wait)
-      (if (eq? #f ready-flag) (busy-wait)))
-    (let ((pid1 (fork)))
-      (if (= 0 pid1)  ; child process
-        (begin
-          (busy-wait) ; busy-wait for signal from parent process
-          (display "running p1\n")
-          (p1))
-        (begin        ; parent process
-          (let ((pid2 (fork)))
-            (if (= 0 pid2)  ; child process
-              (begin
-                (busy-wait)
-                (display "running p2\n")
-                (p2)))
+  (let ((pid1 (fork)))
+    (if (= 0 pid1)  ; child process
+      (begin
+        (busy-wait) ; gives time to other process to get ready
+        (display "running p1\n")
+        (p1)
+        (exit 0))
+      (begin        ; parent process
+        (let ((pid2 (fork)))
+          (if (= 0 pid2)  ; child process
+            (begin
+              (busy-wait) ; gives time to other process to finish busy wait
+              (display "running p2\n")
+              (p2)
+              (exit 0))
             (begin    ; parent process
-              (set! ready-flag #t)  ; this will not be seen by children !!!
-              (let loop ((i 1000000))
-                (if (> i 0)
-                  (begin
-                    ; do nothing
-                    (loop (- i 1)))))
-              (kill pid1 1)
-              (kill pid2 1))))))))
+              (waitpid pid1 0)
+              (waitpid pid2 0)
+              (display "parent process terminating\n"))))))))
 
 (define (f) (display "I am running\n"))
+
+(parallel-execute f f)
 

@@ -22,7 +22,7 @@ int main(){
   time(&start);
 
 
-  for(long i = 0; i < 1000000000; ++i){
+  for(long i = 0; i < 10000000; ++i){
     // do nothing
   }
 
@@ -31,6 +31,8 @@ int main(){
 
   std::cout << start << std::endl;
   std::cout << end << std::endl;
+
+
 
 
   return 0;

@@ -31,4 +31,25 @@ data Person = Person {
 guy = Person "Buddy" "Finkelstein" 43 184.2 "526-2928" "Chocolate"
 
 
+data Vector a = Vector a a a deriving (Show)
+
+vplus :: (Num t) => Vector t -> Vector t -> Vector t
+vplus (Vector i j k) (Vector l m n) = (Vector (i+l) (j+m) (k+n))
+
+vectMult :: (Num t) => Vector t -> t -> Vector t
+vectMult (Vector i j k) a = Vector (i*a) (j*a) (k*a)
+
+scalarMult :: (Num t) => Vector t -> Vector t -> t
+scalarMult (Vector i j k) (Vector l m n) = i*l + j*m + k*n
+
+data Person' = Person'{
+  firstName'  :: String,
+  secondName' :: String,
+  age'        :: Int} deriving (Eq, Show, Read)
+
+data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday
+  | Sunday deriving (Eq, Ord, Show, Read, Bounded, Enum)
+
+
+
 
