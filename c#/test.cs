@@ -1,13 +1,15 @@
 using System;
 
-namespace test
+namespace ConsoleApplication1
 {
-	static class Program
-	{
-		static void Main ()
-		{
-			Console.WriteLine ("Hello World!!!!");
-		}
-	}
+  static class Program
+  {
+
+    static void Main ()
+    {
+
+      //Console.WriteLine ();
+    }
+  }
 }
 

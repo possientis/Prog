@@ -1,3 +1,3 @@
 #!/bin/sh
-mcs test.cs    # compiler
-mono test.exe   # running .net code?
+mcs  Main.cs Circle.cs    # compiler
+mono Main.exe   # running .net code?
