@@ -59,7 +59,7 @@ appletviewer $FILENAME_HTML
 rm -f $FILENAME1.class # -f to ignore non-existent file
 rm -f $FILENAME2.class # -f to ignore non-existent file
 rm -f $FILENAME_JAR   # -f to ignore non-existent file
-rm -f $FILENAME_HTML  # -f to ignore non-existent file
+#rm -f $FILENAME_HTML  # -f to ignore non-existent file
 
 exit
 

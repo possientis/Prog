@@ -5,7 +5,7 @@ import java.io.*;
 public class Constant {
 
   // 'final' keyword for constant
-  private static final double PI = 3.14159;
+  public static final double PI = 3.14159;
 
   public static void main(String[] args) throws IOException {
 

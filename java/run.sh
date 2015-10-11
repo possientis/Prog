@@ -1,3 +1,3 @@
 #!/bin/sh
 javac Test.java
-java Test
+java Test abc def

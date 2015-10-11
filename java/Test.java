@@ -8,16 +8,13 @@ import javax.swing.*;
 //import java.util.ArrayList;
 //import java.util.Random;
 
-public class MyThread {
+public class Test {
 
 
   public static void main(String[] args) throws IOException {
 
-    MyRunnable X = new MyRunnable();
+    System.out.println(Constant.PI);
 
-    Thread t = new Thread(X);
-
-    t.start();
 
   }
 }

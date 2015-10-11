@@ -32,4 +32,4 @@ text2 = " The old man left his garbage can out and now his trash is all over my 
 set1 = Set.fromList text1
 set2 = Set.fromList text2
 
-
+type IntMap = Map.Map Int
