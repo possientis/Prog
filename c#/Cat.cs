@@ -13,11 +13,18 @@ namespace ConsoleApplication1
     public bool isAlive;
 
 
-    public Cat()
+    public Cat(string name)
     {
+      Console.WriteLine("Cat constructor running..");
+      this.name = name;
       numLives = 9;
       isAlive = true;
     }
+
+    public Cat(): this("")  // calling constructor Cat(string)
+    {
+    }
+
 
     public void Die()
     {

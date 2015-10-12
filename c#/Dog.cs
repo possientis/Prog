@@ -5,32 +5,31 @@ using System.Text;
 
 namespace ConsoleApplication1
 {
-  public class Dog
+  public class Dog : Animal
   {
-    static int numLegs = 4;
-    public int age;
-    public string name;
-    public string breed;
+    private string breed;
 
-
-    public Dog()
+    public Dog(string name, int age, string breed) : base(name,age)
     {
-      age = 0;
-      name = "";
-      breed = "";
-    }
-
-    public Dog(int age, string name, string breed)
-    {
-      this.age = age;
-      this.name = name;
+      Console.WriteLine("Dog constructor running...");
       this.breed = breed;
     }
 
-    public void Bark()
+    public Dog() : base()
     {
-      Console.WriteLine(this.name + " says woof woof!");
-      Console.WriteLine("I have " + Dog.numLegs + " legs");
+      Console.WriteLine("Dog default constructor running...");
+      this.breed = "";
+    }
+
+    public override void Speak()
+    {
+      Console.WriteLine(Name + " says woof woof");
+    }
+
+    public string Breed
+    {
+      get{return breed;}
+      set{breed = value;}
     }
   }
 }

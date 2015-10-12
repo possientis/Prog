@@ -5,16 +5,28 @@ namespace ConsoleApplication1
   static class Program
   {
 
-    static void Main ()
+    static void Main (string[] args)
     {
 
 
-      // Circle c(2,0,0); in C++
-      Circle c = new Circle(1,0,0);
-      Console.WriteLine(c.Area);
-      Console.WriteLine(c.Circumference);
-      Console.WriteLine(c.GetHashCode());
-      Console.WriteLine(c.GetType());
+      Animal a = new Animal("bob", 10);
+      Animal b = new Animal();
+      Dog c = new Dog("doggy", 12, "spaniel");
+
+      b.Name = "harry";
+      b.Age = 12;
+
+      Console.WriteLine(a.Name + ":" + b.Name + ":" + c.Name);
+
+      Dog d = new Dog();
+
+      d.Breed = "shepperd";
+      d.Name = "woolfy";
+      d.Age = 5;
+
+      Animal e = new Dog("gary", 8, "abc");
+      e.Speak();
+
 
     }
   }

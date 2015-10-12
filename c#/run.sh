@@ -1,3 +1,3 @@
 #!/bin/sh
-mcs  Main.cs Circle.cs    # compiler
+mcs  Main.cs Animal.cs Dog.cs   # compiler
 mono Main.exe   # running .net code?
