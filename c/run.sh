@@ -1,5 +1,5 @@
 #!/bin/sh
 
-g++ value.c -std=c++14
+g++ super_base.c -std=c++14
 
 ./a.out
