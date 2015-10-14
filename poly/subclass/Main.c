@@ -11,8 +11,8 @@ int main(){
   b.foo();
 
   B c(4,5);
-  A* p = &c;
-  c.foo();
+  A *p = &c;
+  p->foo();
 
   return 0;
 }
