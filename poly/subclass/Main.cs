@@ -1,8 +1,7 @@
+// Main.cs
 using System;
 
-static class Program
-{
-
+static class Program{
   static void Main (string[] args)
   {
     A a = new A(1);
@@ -10,9 +9,12 @@ static class Program
     Console.WriteLine(a.a + ":" + b.a + ":" + b.b);
     a.foo();
     b.foo();
-
     A c = new B(4,5);
     c.foo();
+
+    A a1 = new A(a);  // copy ctor
+    B b1 = new B(b);  // copy ctor
+    Console.WriteLine(a1.a + ":" + b1.a + ":" + b1.b);
 
   }
 }

@@ -27,3 +27,8 @@ echo '\n'
 echo This is Python ...
 ./Main.py
 
+# running Scheme version
+echo '\n'
+echo This is Scheme ...
+./Main.scm
+

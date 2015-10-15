@@ -8,9 +8,13 @@ def main():
     print(repr(a.a)+":"+repr(b.a)+":"+repr(b.b))
     a.foo()
     b.foo()
-
     c = B(4,5)
     c.foo()
+
+    a1 = A(a)   # copy ctor
+    b1 = B(b)   # copy ctor
+    print(repr(a1.a)+":"+repr(b1.a)+":"+repr(b1.b))
+
 
 
 main()
