@@ -11,15 +11,15 @@ namespace ConsoleApplication1
     static void Main(string[] args)
     {
 
-      int[,] mult = new int[2,4];
-      int[,] mult2 = {{0,1,2,3},{5,6,7,8}};
+      int[] a = new int[5];
+      int [] b = {3,5,6,7,2};
 
-      foreach(int num in mult2)
+
+      for(int i = 0; i < 5; ++i)
       {
-        Console.WriteLine(num);
+        a[i] = i;
+        Console.WriteLine("({0},{1})",a[i],b[i]);
       }
-
-
 
     }
   }

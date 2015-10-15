@@ -1,18 +1,22 @@
 #!/usr/bin/python3
 
-#import sys
+
+class A:
+    def foo(self):
+        print("Hello world!")
+
+
 
 def main():
-    try
-        raise NameError
-        print("Hello world!")
-    except
-        print("The exception was caught")
-    finally
-        print("This will run whether exception occurs or not")
+    a = A()
+    a.foo()
+    m = a.foo
+    print(hex(id(a)))
+    print(m.__self__)
+    print(m.__func__)
 
 
-if __name__ == '__main__':
-    main()
 
 
+
+main()

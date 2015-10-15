@@ -19,6 +19,13 @@ namespace ConsoleApplication1
         Console.WriteLine(num);
       }
 
+      for(int i = 0; i < mult.GetLength(0); ++i)
+        for(int j = 0; j < mult.GetLength(1); ++j)
+        {
+          mult[i,j] = i+j;
+          Console.WriteLine(mult[i,j]);
+        }
+
 
 
     }

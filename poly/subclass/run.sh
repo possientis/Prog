@@ -22,3 +22,8 @@ mcs Main.cs A.cs B.cs
 mono Main.exe
 rm *.exe
 
+# running Python version
+echo '\n'
+echo This is Python ...
+./Main.py
+
