@@ -1,24 +1,20 @@
 #!/usr/bin/python3
 
-import sys
+class B(Exception):
+    pass
+class C(B):
+    pass
+class D(C):
+    pass
 
-def cat(filename):
+for cls in [B,C,D]:
     try:
-        f = open(filename,'rU')
-        text = f.read()
-        print(text)
-        f.close()
-    except IOError:
-        print('IO Error\n')
+        raise cls()
+    except D:
+        print("D")
+    except C:
+        print("C")
+    except B:
+        print("B")
 
-
-
-
-def main():
-    cat(sys.argv[1])
-
-
-if __name__ == '__main__':
-    print('Launching main ...\n')
-    main()
-
+print("Out of exception handling")
