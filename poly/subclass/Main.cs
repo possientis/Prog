@@ -16,6 +16,14 @@ static class Program{
     B b1 = new B(b);  // copy ctor
     Console.WriteLine(a1.a + ":" + b1.a + ":" + b1.b);
 
+    A a2 = new A(2);
+    A.swap(a1,a2);
+    Console.WriteLine(a1.a + ":" + a2.a);
+
+    B b2 = new B(4,5);
+    B.swap(b1,b2);
+    Console.WriteLine(b1.a + ":" + b1.b + ":" + b2.a + ":" + b2.b);
+
   }
 }
 

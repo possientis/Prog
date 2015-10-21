@@ -14,12 +14,12 @@ public class Test {
   public static void main(String[] args) throws IOException {
 
 
-    do{
+    Runnable myRunnable = new Runnable(){
+      public void run(){
+        System.out.println("This is running");
+      }};
 
-      System.out.println(Constant.PI);
-      break;
-    } while(false);
-
+    new Thread(myRunnable).start();
 
 
   }

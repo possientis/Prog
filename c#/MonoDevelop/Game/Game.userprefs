@@ -1,8 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Game/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Game/Game1.cs">
     <Files>
-      <File FileName="Game/Game1.cs" Line="15" Column="54" />
+      <File FileName="Game/Game1.cs" Line="68" Column="34" />
       <File FileName="Game/Program.cs" Line="8" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>

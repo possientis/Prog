@@ -12,5 +12,17 @@ class B(A):
             A.__init__(self,a)
             self.b = b
 
+    @property
+    def b(self):
+        return self.__b
+
+    @b.setter
+    def b(self,value):
+        self.__b = value
+
     def foo(self):
         print("B::foo() is running")
+
+    def swap(x,y):
+        A.swap(x,y)
+        temp = x.b; x.b = y.b; y.b = temp

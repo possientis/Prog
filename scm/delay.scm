@@ -59,6 +59,8 @@
           (set! result x)
           result)))))
 
-; need to find an example where delay vs naive-delay matters
+; can't work out example where make-promise
+; vs make-naive-promise matters.
+
 
 (exit 0)

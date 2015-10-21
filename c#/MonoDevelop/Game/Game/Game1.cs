@@ -16,10 +16,21 @@ namespace NewGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;		
-		Texture2D sprite;
-		Vector2 pos;
-		Microsoft.Xna.Framework.Audio.SoundEffect sound;
-        public Game1()
+		private static readonly int ROWS = 100;
+		private static readonly int COLS = 100;
+		bool[,] gameboard = new bool[ROWS,COLS];
+
+		Texture2D cellSprite;
+
+		public void Clear(bool[,] board){
+			for(int i = 0; i < ROWS; ++i){
+				for(int j = 0; j < COLS; ++j){
+					board[i,j] = false;
+				}
+			}
+		}
+			
+		public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";	            
@@ -47,6 +58,7 @@ namespace NewGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+			cellSprite = Content.Load<Texture2D> ("whitedot");
 
             //TODO: use this.Content to load your game content here 
         }

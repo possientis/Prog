@@ -4,10 +4,15 @@
 #include <iostream>
 
 class A{
-  public:
+
+  // needs to be private
   int a;
+
+  public:
   A(int a){this->a = a;}
   A(const A& rhs){a = rhs.a;}
+  int aGet(){return this->a;}
+  void aSet(int a){this->a = a;}
   virtual void foo(){ std::cout << "A::foo() is running\n";}
   virtual ~A(){}  // always need virtual dtor
 

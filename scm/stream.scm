@@ -1,96 +1,48 @@
-(require 'macro)  ; 'syntax-rules unbound otherise
-; see r5rs.pdf page 32
-(define-syntax delay
+; stream.scm
+; The purpose of this file is to provide an implementation of the stream
+; class as described in SICP. We want to be able to define somethings like:
+; (define ones (stream-cons 1 ones))
+; There is no way this can work if 'stream-cons' is a regular function
+; because 'ones' need to be fully evaluated before it is passed to it.
+; So stream-cons has to be a special form, not a function.
+; Hence we need to introduce a new syntactic feature
+(require 'macro)  ; 'syntax-rules unbound otherwise
+; and define a new special form 'stream-cons
+(define-syntax stream-cons
   (syntax-rules
     ()
-    ((delay expression)
-     (make-promise (lambda () expression)))))
-(define-syntax naive-delay
-  (syntax-rules
-    ()
-    ((naive-delay expression)
-     (make-naive-promise (lambda() expression)))))
-
-; implementation of force simple
-(define (force object)  ; simply calling object
-  (object))
-
-; see r5rs.pdf page 33
-(define (make-promise proc)
-  (let ((ready? #f)(result #f))
-    (lambda ()
-      (if ready?
-        result
-        (let ((x (proc)))
-          ; here is the key point from r5rs.pdf
-          ; "A promise may refer to its own value.
-          ; Forcing such a promise may cause the
-          ; promise to be forced a second time
-          ; before the value of the first force
-          ; has been computed."
-          ;
-          ; Normally, you would expect the code
-          ; simply to return 'x at this stage
-          ; (after setting ready? and result)
-          ; However, the call to proc may be recursive
-          ; and may have side effects. So if we
-          ; want make sure forcing always returns
-          ; the same value, we need to test once
-          ; more for ready?
-          (if ready?
-            result
-            (begin
-              (set! ready? #t)
-              (set! result x)
-              result)))))))
-
-; compare with naive promise
-(define (make-naive-promise proc)
-  (let ((ready? #f)(result #f))
-    (lambda()
-      (if ready?
-        result
-        (let ((x (proc)))
-          (set! ready? #t)
-          (set! result x)
-          result)))))
-
-
-
-(define ones (cons 1 (delay ones)))
+    ((stream-cons expr1 expr2)        ; expr2 should return a stream object
+     (stream expr1 (delay expr2)))))  ; returning stream object
 
 ; stream class
-(define stream  ; stream constructor
-  ;
-  ; static private member
-  (let ((stream-cons
-          (lambda (x y)
-            'ok   ; to be implemented
-            ))
-        (stream-new
-          (lambda()
-            (stream '())))) ; returns an empty stream
-
-  ;
-  (lambda args  ; (possibly empty) list of constructor arguments
+(define (stream . args) ; args = '() or args = '(expr1 (delay expr2))
     ;
+    ; private data
+    (define data #f) ; empty stream, properly initialized below
     ; public interface
     (define (this m)
       (cond ((eq? m 'car) (stream-car))
             ((eq? m 'cdr) (stream-cdr))
-            ((eq? m 'cons) stream-cons)
             ((eq? m 'null?) (stream-null?))
-            ((eq? m 'new)(stream-new))
             (else (display "stream: unknown operation error\n"))))
-    (define (stream-car)
-      #f)
-    (define (stream-cdr)
-      this)
-    (define (stream-null?)
-      #t)
     ;
+    (define (stream-car)
+      (car data))               ; no special error handling
+    ;
+    (define (stream-cdr)
+        (force (cdr data)))     ; no special error handling
+    ;
+    (define (stream-null?)
+      (eq? #f data))  ; #f rather than '() for emphasis
+    ;
+    (define (init)            ; initialization of object
+      (if (not (null? args))  ; expecting a pair (value . promise)
+        (set! data (cons (car args) (cadr args)))))
+    ;
+    ; initializing object
+    (init)
     ;returning public interface
-    this)))
+    this)
 
 
 (define (stream-ref s n)
@@ -100,7 +52,7 @@
 
 (define (stream-map proc s)
   (if (s 'null?)
-    ((stream) 'new)
+    (stream)  ; empty stream
     (((stream) 'cons) (proc (s 'car)) (stream-map proc (s 'cdr)))))
 
 (define (stream-for-each proc s)
@@ -112,15 +64,29 @@
 
 (define (stream-display s)
   (define (view x)
-    (display x)(newline))
-  (stream-for-each view s))
+    (display x)(display " "))
+  (display "( ")
+  (stream-for-each view s)
+  (display ")"))
 
-(define s (stream))
-(define f (lambda (x) (* x x)))
-(define g (lambda (x) (display "g is running\n")))
-(define t (stream-map f s))
-(stream-for-each g s)
-(stream-display s)
+(define (list->stream seq)
+  (if (null? seq)
+    (stream)
+    (stream-cons (car seq) (list->stream (cdr seq)))))
+
+(define (stream->list s)  ; will fail badly if stream is infinite
+  (if (s 'null?)
+    '()
+    (cons (s 'car) (stream->list (s 'cdr)))))
+
+(define (stream-take myStream num)
+  (cond ((= 0 num) '())
+        ((myStream 'null?) '())
+        (else (cons (myStream 'car) (stream-take (myStream 'cdr) (- num 1))))))
+
+
+
+
 
 
 
