@@ -1,3 +1,5 @@
 #!/bin/sh
-javac ThreadEx.java
-java ThreadEx abc def
+cd ../java
+javac Pascal.java
+java Pascal abc def
+cd ../scm
