@@ -1,3 +1,3 @@
 #!/bin/sh
-javac Test.java
-java Test abc def
+javac ThreadEx.java
+java ThreadEx abc def

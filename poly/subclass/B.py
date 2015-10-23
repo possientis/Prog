@@ -2,7 +2,7 @@ from A import *
 
 class B(A):
     def __init__(self,a,b = None):
-        if b == None:               # copy ctor
+        if b is None:               # copy ctor
             assert isinstance(a,B)  # sole argument must be other B object
             A.__init__(self,a)
             self.b = a.b

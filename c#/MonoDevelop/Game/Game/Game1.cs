@@ -16,9 +16,9 @@ namespace NewGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;		
-		private static readonly int ROWS = 100;
-		private static readonly int COLS = 100;
-		bool[,] gameboard = new bool[ROWS,COLS];
+		private static readonly int ROWS = 10;
+		private static readonly int COLS = 10;
+		bool[,] gameBoard = new bool[ROWS,COLS];
 
 		Texture2D cellSprite;
 
@@ -47,7 +47,7 @@ namespace NewGame
         {
             // TODO: Add your initialization logic here
             base.Initialize();
-				
+			Clear (gameBoard);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace NewGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-			cellSprite = Content.Load<Texture2D> ("whitedot");
+			cellSprite = Content.Load<Texture2D> ("/home/john/Prog/c#/MonoDevelop/Game/Game/SquareGuy.png");
 
             //TODO: use this.Content to load your game content here 
         }
@@ -87,7 +87,21 @@ namespace NewGame
         {
            	graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 		
-            //TODO: Add your drawing code here
+			spriteBatch.Begin ();
+			for(int i = 0; i < ROWS; ++i){
+				for(int j = 0; j < COLS; ++j){
+					Vector2 pos = new Vector2 ();
+					pos.X = j * cellSprite.Width;
+					pos.Y = i * cellSprite.Height;
+					if (gameBoard [i, j]) {
+						spriteBatch.Draw (cellSprite, pos, Color.Black);
+					}else {
+						spriteBatch.Draw (cellSprite, pos, Color.Red);
+					}
+				}
+			}
+
+			spriteBatch.End ();
             
             base.Draw(gameTime);
         }

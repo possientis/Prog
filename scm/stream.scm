@@ -44,7 +44,7 @@
     ;returning public interface
     this)
 
-
+; non-member interface of stream
 (define (stream-ref s n)
   (if (= n 0)
     (s 'car)
@@ -52,8 +52,16 @@
 
 (define (stream-map proc s)
   (if (s 'null?)
-    (stream)  ; empty stream
-    (((stream) 'cons) (proc (s 'car)) (stream-map proc (s 'cdr)))))
+    s           ; empty stream
+    (stream-cons (proc (s 'car)) (stream-map proc (s 'cdr)))))
+
+(define (stream-filter pred s)
+  (if (s 'null?)
+    s           ; empty stream
+    (if (pred (s 'car))
+      (stream-cons (s 'car) (stream-filter pred (s 'cdr)))
+      (stream-filter pred (s 'cdr)))))
+
 
 (define (stream-for-each proc s)
   (if (s 'null?)
@@ -71,7 +79,7 @@
 
 (define (list->stream seq)
   (if (null? seq)
-    (stream)
+    (stream)      ; instantiating empty stream
     (stream-cons (car seq) (list->stream (cdr seq)))))
 
 (define (stream->list s)  ; will fail badly if stream is infinite
@@ -79,11 +87,13 @@
     '()
     (cons (s 'car) (stream->list (s 'cdr)))))
 
-(define (stream-take myStream num)
+(define (stream-take num myStream)
   (cond ((= 0 num) '())
         ((myStream 'null?) '())
-        (else (cons (myStream 'car) (stream-take (myStream 'cdr) (- num 1))))))
+        (else (cons (myStream 'car) (stream-take (- num 1) (myStream 'cdr))))))
 
+(define (integers-from n)
+  (stream-cons n (integers-from (+ n 1))))
 
 
 

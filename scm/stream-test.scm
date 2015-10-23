@@ -12,7 +12,7 @@
     (if (not (s 'null?)) (display "stream: unit test 1.0 failing\n"))
     (if (not (equal? (stream->list s) '()))
       (display "stream: unit test 1.1 failing\n"))
-    (if (not (equal? (stream-take s 10) '()))
+    (if (not (equal? (stream-take 10 s) '()))
       (display "stream: unit test 1.2 failing\n"))
     (if (not ((list->stream '()) 'null?))
       (display "stream: unit test 1.3 failing\n")))
@@ -26,7 +26,7 @@
     (if (not (= 5 (stream-ref s 0))) (display "stream: unit test 2.3 failing\n"))
     (if (not (equal? (stream->list s) '(5)))
       (display "stream: unit test 2.4 failing\n"))
-    (if (not (equal? (stream-take s 1) '(5)))
+    (if (not (equal? (stream-take 1 s) '(5)))
       (display "stream: unit test 2.5 failing\n")))
   ; two element stream
   (let ((s (list->stream '(5 7))))
@@ -35,7 +35,7 @@
     (if (not (= 7 (stream-ref s 1))) (display "stream: unit test 3.2 failing\n"))
     (if (not (equal? (stream->list s) '(5 7)))
       (display "stream: unit test 3.3 failing\n"))
-    (if (not (equal? (stream-take s 2) '(5 7)))
+    (if (not (equal? (stream-take 2 s) '(5 7)))
       (display "stream: unit test 3.4 failing\n")))
   ; more elements
   (let ((s (list->stream '(5 7 3 2 0 1 4 8))))
@@ -50,7 +50,7 @@
     (if (not (= 8 (stream-ref s 7))) (display "stream: unit test 4.8 failing\n"))
     (if (not (equal? (stream->list s) '(5 7 3 2 0 1 4 8)))
       (display "stream: unit test 4.9 failing\n"))
-    (if (not (equal? (stream-take s 8) '(5 7 3 2 0 1 4 8)))
+    (if (not (equal? (stream-take 8 s) '(5 7 3 2 0 1 4 8)))
       (display "stream: unit test 4.10 failing\n")))
   ; some infinite streams (need recursive 'let' though, or will fail)
   (letrec ((s (stream-cons 1 s)))  ; s = (1 1 1 1 1 1 1 1 1 1 .....
@@ -63,10 +63,35 @@
     (if (not (= 1 (stream-ref s 5))) (display "stream: unit test 5.6 failing\n"))
     (if (not (= 1 (stream-ref s 6))) (display "stream: unit test 5.7 failing\n"))
     (if (not (= 1 (stream-ref s 7))) (display "stream: unit test 5.8 failing\n"))
-    (if (not (equal? (stream-take s 8) '(1 1 1 1 1 1 1 1)))
+    (if (not (equal? (stream-take 8 s) '(1 1 1 1 1 1 1 1)))
       (display "stream: unit test 5.9 failing\n"))
-    (if (not (equal? (stream-take ones 8) '(1 1 1 1 1 1 1 1)))
+    (if (not (equal? (stream-take 8 ones) '(1 1 1 1 1 1 1 1)))
       (display "stream: unit test 5.10 failing\n")))
+  ; stream-map
+  (let ((s (list->stream '(0 1 2 3 4 5))) (f (lambda (x) (* x x))))
+    (let ((t (stream-map f s)))
+      (if (not (equal? (stream->list t) '(0 1 4 9 16 25)))
+        (display "stream: unit test 6.0 failing\n"))))
+  ; stream-for-each
+  (let ((s (list->stream '(0 1 2 3 4 5)))
+        (f (let ((count 0))
+             (lambda (x)
+               (set! count (+ count x))
+               count))))
+    (stream-for-each f s) ; internal 'count' should reach 15
+    (if (not (= 15 (f 0))) (display "stream: unit test 7.0 failing\n")))
+  ; integers-from
+  (let ((s (integers-from 17)))
+    (if (not (equal? (stream-take 8 s) '(17 18 19 20 21 22 23 24)))
+      (display "stream: unit test 8.0 failing\n")))
+  ; stream-filter
+  (let ((s (integers-from 0)))
+    (let ((s1 (stream-filter odd? s)) (s2 (stream-filter even? s)))
+    (if (not (equal? (stream-take 8 s1) '(1 3 5 7 9 11 13 15)))
+      (display "stream: unit test 9.0 failing\n"))
+    (if (not (equal? (stream-take 8 s2) '(0 2 4 6 8 10 12 14)))
+      (display "stream: unit test 9.1 failing\n"))))
+
 
   ;
   (display "stream: unit test complete\n"))

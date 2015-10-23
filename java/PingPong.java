@@ -8,24 +8,24 @@ import javax.swing.*;
 //import java.util.ArrayList;
 //import java.util.Random;
 
-public class Test {
+public class PingPong {
 
 
 
 
-  public static void main(String[] args) throws IOException, InterruptedException {
+  public static void main(String[] args) {
 
 
     Runnable run1 = new Runnable(){
       public void run(){
-        for(int i = 0; i < 10; ++i){
+        for(int i = 0; i < 5; ++i){
           System.out.println("ping");
         }
       }};
 
     Runnable run2 = new Runnable(){
       public void run(){
-        for(int i = 0; i < 10; ++i){
+        for(int i = 0; i < 5; ++i){
           System.out.println("pong");
         }
       }};
@@ -37,8 +37,15 @@ public class Test {
     t1.start();
     t2.start();
 
-    t1.join();
-    t2.join();
+    try{
+
+      t1.join();
+      t2.join();
+    }
+    catch(InterruptedException e){
+      System.out.println("An exception was thrown");
+    }
+
 
     System.out.println("Done!");
 
