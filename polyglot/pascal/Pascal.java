@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-
 public class Pascal{
 
   private static List<Integer> newList(){
@@ -33,7 +32,7 @@ public class Pascal{
       return list;
     }
     else{
-      List<Integer> list = pascal(n - 1);
+      List<Integer> list = fastPascal(n - 1);
       return addList(shiftLeft(list),shiftRight(list));
     }
   }
