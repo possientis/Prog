@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # diffcult to follow Scheme or Haskell for Python
 
 from operator import add
@@ -24,5 +25,7 @@ def fastPascal(n):
     else:
         seq = fastPascal(n - 1)
         return addList(shiftLeft(seq),shiftRight(seq))
+
+print(fastPascal(20))
 
 

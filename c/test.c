@@ -16,8 +16,12 @@
 
 int main(){
 
-  string a = "hello world";
+  std::string adolf = "hello world";
   // adding line to create a conflict
+  // adding line to create a conflict
+  // adding line to create a conflict
+  // adding line to create a conflict
+
   return 0;
 
 }

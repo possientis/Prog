@@ -1,3 +1,4 @@
+#!/usr/bin/scm
 (define (pascal n)
   (if (= 1 n)
     (list 1)
@@ -21,3 +22,8 @@
     (list 1)
     (let ((seq (fast-pascal (- n 1))))
       (add-list (shift-left seq) (shift-right seq)))))
+
+(display (fast-pascal 20))
+(newline)
+
+(exit 0)

@@ -16,3 +16,5 @@ fastPascal :: Int -> [Int]
 fastPascal 1 = [1]
 fastPascal n = let seq = fastPascal (n - 1)
   in addList (shiftLeft seq) (shiftRight seq)
+
+main = putStrLn $ show (fastPascal 20)

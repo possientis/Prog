@@ -1,5 +1,3 @@
 #!/bin/sh
-cd ../java
-javac Pascal.java
-java Pascal abc def
-cd ../scm
+javac Singleton.java
+java Singleton abc def

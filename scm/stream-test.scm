@@ -67,9 +67,9 @@
       (display "stream: unit test 5.9 failing\n"))
     (if (not (equal? (stream-take 8 ones) '(1 1 1 1 1 1 1 1)))
       (display "stream: unit test 5.10 failing\n")))
-  ; stream-map
+  ; stream-map1
   (let ((s (list->stream '(0 1 2 3 4 5))) (f (lambda (x) (* x x))))
-    (let ((t (stream-map f s)))
+    (let ((t (stream-map1 f s)))
       (if (not (equal? (stream->list t) '(0 1 4 9 16 25)))
         (display "stream: unit test 6.0 failing\n"))))
   ; stream-for-each
@@ -91,7 +91,17 @@
       (display "stream: unit test 9.0 failing\n"))
     (if (not (equal? (stream-take 8 s2) '(0 2 4 6 8 10 12 14)))
       (display "stream: unit test 9.1 failing\n"))))
-
+  ; stream-map
+  ; n = 0
+  (let ((f (lambda (x) (* x x))))
+    (let ((t (stream-map f)))
+      (if (not (t 'null?)) (display "stream: unit test 10.0 failing\n"))))
+  ; n = 1
+  (let ((s (list->stream '(0 1 2 3 4 5))) (f (lambda (x) (* x x))))
+    (let ((t (stream-map f s)))
+      (if (not (equal? (stream->list t) '(0 1 4 9 16 25)))
+        (display "stream: unit test 10.1 failing\n"))))
+ 
 
   ;
   (display "stream: unit test complete\n"))

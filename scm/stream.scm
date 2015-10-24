@@ -50,11 +50,6 @@
     (s 'car)
     (stream-ref (s 'cdr) (- n 1))))
 
-(define (stream-map proc s)
-  (if (s 'null?)
-    s           ; empty stream
-    (stream-cons (proc (s 'car)) (stream-map proc (s 'cdr)))))
-
 (define (stream-filter pred s)
   (if (s 'null?)
     s           ; empty stream
@@ -82,11 +77,6 @@
     (stream)      ; instantiating empty stream
     (stream-cons (car seq) (list->stream (cdr seq)))))
 
-(define (stream->list s)  ; will fail badly if stream is infinite
-  (if (s 'null?)
-    '()
-    (cons (s 'car) (stream->list (s 'cdr)))))
-
 (define (stream-take num myStream)
   (cond ((= 0 num) '())
         ((myStream 'null?) '())
@@ -95,6 +85,38 @@
 (define (integers-from n)
   (stream-cons n (integers-from (+ n 1))))
 
+(define fibs
+  (let fibgen ((a 0) (b 1))
+    (stream-cons a (fibgen b (+ a b)))))
+
+; simple (single stream implementation)
+(define (stream-map1 proc s)
+  (if (s 'null?)
+    s           ; empty stream
+    (stream-cons (proc (s 'car)) (stream-map1 proc (s 'cdr)))))
+
+; general implementation
+; proc requires n-arguments. xs is a list of n streams
+; no sensible results unless all streams have same sizes
+(define (stream-map proc . xs)
+  (if (null? xs) (stream)  ; returns empty stream, no second argument provided
+    ; else
+    (if ((car xs) 'null?) ; All streams should have same size. Testing first.
+      (stream)            ; empty stream
+      ; else
+        (let ((heads (map (lambda (s) (s 'car)) xs))
+              (tails (map (lambda (s) (s 'cdr)) xs)))
+          (stream-cons (apply proc heads)
+                       (apply stream-map (cons proc tails)))))))
+
+(define (stream->list s)  ; will fail badly if stream is infinite
+  (if (s 'null?)
+    '()
+    (cons (s 'car) (stream->list (s 'cdr)))))
+
+
+; testing code for stream-map with empty stream and higher dim
+; define fibonacci stream with stream-map and +
 
 
 
