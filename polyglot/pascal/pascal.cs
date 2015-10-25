@@ -35,14 +35,14 @@ public class Pascal{
   public static IList<int> ShiftLeft(IList<int> list){
     IList<int> temp = NewList();
     foreach(int i in list) temp.Add(i);
-    temp.Insert(0,0);
+    temp.Add(0);  // adding 0 to the right
     return temp;
   }
 
   public static IList<int> ShiftRight(IList<int> list){
     IList<int> temp = NewList();
     foreach(int i in list) temp.Add(i);
-    temp.Add(0);
+    temp.Insert(0,0); // adding 0 to the left
     return temp;
   }
     

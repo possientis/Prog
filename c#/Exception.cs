@@ -22,6 +22,7 @@ namespace ConsoleApplication1
         Console.WriteLine("Can't divide by zero");
         Console.WriteLine(ex.GetType().Name);
         Console.WriteLine(ex.Message);
+        Console.WriteLine(ex.StackTrace);
         // throw ex;
         // throw new InvalidOperationException("Operation Failed",ex);
       }
@@ -29,11 +30,12 @@ namespace ConsoleApplication1
       {
         Console.WriteLine(ex.GetType().Name);
         Console.WriteLine(ex.Message);
+        Console.WriteLine(ex.StackTrace);
       }
-
-
-
-
+      finally
+      {
+        Console.WriteLine("Clean up code running");
+      }
     }
   }
 }

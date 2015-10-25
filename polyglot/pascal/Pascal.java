@@ -41,14 +41,14 @@ public class Pascal{
   private static List<Integer> shiftLeft(List<Integer> list){
     List<Integer> temp = newList();
     temp.addAll(list);
-    temp.add(0,0);  // adding 0 to the left
+    temp.add(0);  // adding 0 to the right
     return temp;
   }
 
   private static List<Integer> shiftRight(List<Integer> list){
     List<Integer> temp = newList();
     temp.addAll(list);
-    temp.add(0);  // adding 0 to the end (right)
+    temp.add(0,0);  // adding 0 to the left
     return temp;
   }
 
