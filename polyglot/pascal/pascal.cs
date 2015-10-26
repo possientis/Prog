@@ -60,6 +60,7 @@ public class Pascal{
   // don't have a better idea right now
   public static void show(IList<int> list){
 
+    // this will fail if list is empty
     bool start = true;
     foreach(int i in list){
       Console.Write(start ? '[': ',');

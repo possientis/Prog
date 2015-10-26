@@ -5,10 +5,11 @@
 
 class B : public A{
   int b;
+  B(const B&);  // not implemented, implementing B(const B*) below
 
   public:
   B(int a, int b) : A(a){this->b = b;}
-  B(const B& rhs) : A(rhs){b = rhs.b;}
+  B(const B* rhs) : A(rhs){assert(rhs != nullptr); b = rhs->b;} // closer to java
   int bGet(){return this->b;}
   void bSet(int b){this->b = b;}
   void foo() override {std::cout << "B::foo() is running\n";}
@@ -16,9 +17,9 @@ class B : public A{
   // no throw swap procedure
   // could be non-member, went for static instead
   // to keep peralelism with Java and C#
-  static void swap(B& x, B& y) {
+  static void swap(B* x, B* y) {
     A::swap(x,y);
-    std::swap(x.b,y.b);
+    std::swap(x->b,y->b);
   }
 
  };

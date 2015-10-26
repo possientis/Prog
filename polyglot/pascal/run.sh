@@ -48,4 +48,13 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm pascal.exe
 
+echo '\nThis is C++ ...'
+g++ -std=c++14 -o pascal pascal.c
+START=$(date +%s%N)
+./pascal
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm pascal
+
 
