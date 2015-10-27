@@ -12,43 +12,39 @@ namespace ConsoleApplication1
   {
     static void Main(string[] args)
     {
-      const int SIZE = 1000000;
 
-
+      /*
       Stopwatch stop = new Stopwatch();
       stop.Start();
-      int[] array = new int[SIZE];
-      for(int i = 0; i < SIZE; ++i){
-        array[i] = i;
+      stop.Stop();
+
+
+      stop.Restart();
+      stop.Stop();
+      Console.WriteLine(stop.Elapsed);
+      */
+
+      A a = null;
+
+      try{
+      Console.WriteLine(a.a);
+      } catch(NullReferenceException){
+        Console.WriteLine("Exception was caught");
       }
-      stop.Stop();
-      Console.WriteLine(stop.Elapsed);
-
-
-      stop.Restart();
-      List<int> list = new List<int>(SIZE);
-      for(int i = 0; i < SIZE; ++i){
-        list.Add(i);
+      finally{
+        Console.WriteLine("Cleaning up");
       }
-      stop.Stop();
-      Console.WriteLine(stop.Elapsed);
-
-
-      stop.Restart();
-      list.Insert(0,23);
-      stop.Stop();
-      Console.WriteLine(stop.Elapsed);
-
-      stop.Restart();
-      list.Add(54);
-      stop.Stop();
-      Console.WriteLine(stop.Elapsed);
 
 
     }
 
 
 
+  }
+
+  class A{
+    public int a;
+    public A(int a){this.a = a;}
   }
 
 }

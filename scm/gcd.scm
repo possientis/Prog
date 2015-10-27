@@ -1,5 +1,5 @@
 (define (extgcd n m) ; returns some (u v) such that u.n + v.m = gcd(n,m)
-  (let ((r (mod n m))
+  (let ((r (modulo n m))
         (q (quotient n m)))
     (cond ((= 0 r) (let((s (if (< m 0) -1 1)))
                      (list 1 (- s q))))

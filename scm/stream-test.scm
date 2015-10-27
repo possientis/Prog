@@ -101,8 +101,27 @@
     (let ((t (stream-map f s)))
       (if (not (equal? (stream->list t) '(0 1 4 9 16 25)))
         (display "stream: unit test 10.1 failing\n"))))
- 
+  (if (not ((stream-map (lambda (x) (* x x)) (stream)) 'null?))
+    (display "stream: unit test 10.2 failing\n"))
+  ; n = 2
+  (let ((s1 (list->stream '(0 1 2 3 4 5)))
+        (s2 (list->stream '(2 4 6 8 9 7))))
+    (let ((t (stream-map + s1 s2)))
+      (if (not (equal? (stream->list t) '(2 5 8 11 13 12)))
+        (display "stream: unit test 10.3 failing\n"))))
+  ; n = 3
+  (let ((s1 (list->stream '(0 1 2 3 4 5)))
+        (s2 (list->stream '(2 4 6 8 9 7)))
+        (s3 (list->stream '(5 1 2 3 6 1))))
+    (let ((t (stream-map + s1 s2 s3)))
+      (if (not (equal? (stream->list t) '(7 6 10 14 19 13)))
+        (display "stream: unit test 10.3 failing\n"))))
+  ; fibonacci numbers
+  (let ((seq (stream-take 10 fibs1)))
+    (if (not (equal? seq '(0 1 1 2 3 5 8 13 21 34)))
+      (display "stream: unit test 11.0 failing\n")))
 
+ 
   ;
   (display "stream: unit test complete\n"))
 

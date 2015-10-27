@@ -5,13 +5,11 @@
 #include <assert.h>
 
 // This is Java code witten in C++
-// Interesting to note that it seems a lot faster than corresponding Java
 // However the C++ code is littered with explicit 'delete' clean up calls.
 // So need to redesign it with smart pointers
 
-
 // unlike Java List<E> or C# IList<T>, C++ STL does not provide an interface
-// on which to rely in order abstract the code away from implementation specifics
+// in order to abstract the code away from implementation specifics
 // hence we are creating a protocol class for that purpose. Such protocol class
 // has a key method returning a concrete object of some iterator class which 
 // implements some iterator interface, which we shall need to define too:

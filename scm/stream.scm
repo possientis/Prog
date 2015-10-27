@@ -30,6 +30,12 @@
       (car data))               ; no special error handling
     ;
     (define (stream-cdr)
+      (display "stream-cdr running ...\n")
+      (display data)(newline)
+      (display (car data))(newline)
+      (display (cdr data))(newline)
+      (display (force (cdr data)))(newline)
+
         (force (cdr data)))     ; no special error handling
     ;
     (define (stream-null?)
@@ -85,10 +91,6 @@
 (define (integers-from n)
   (stream-cons n (integers-from (+ n 1))))
 
-(define fibs
-  (let fibgen ((a 0) (b 1))
-    (stream-cons a (fibgen b (+ a b)))))
-
 ; simple (single stream implementation)
 (define (stream-map1 proc s)
   (if (s 'null?)
@@ -118,7 +120,21 @@
 ; testing code for stream-map with empty stream and higher dim
 ; define fibonacci stream with stream-map and +
 
+(define fibs1
+  (let fibgen ((a 0) (b 1))
+    (stream-cons a (fibgen b (+ a b)))))
 
+(define fibs2 
+  (stream-cons
+    0
+    (stream-cons
+      1
+      (stream-map
+        +
+        fibs2
+        (fibs2 'cdr)))))
+
+(define s (fibs2 'cdr))
 
 
 
