@@ -12,9 +12,15 @@ namespace ConsoleApplication1
   {
     static void Main(string[] args)
     {
-      int i = 1;
-      int j=  2;
-      Console.WriteLine(i & j);
+      string s = "100.20";
+
+      //int i = int.Parse(s);
+      double i = double.Parse(s);
+      int j;
+      bool b = int.TryParse(s, out j);
+
+      Console.WriteLine(j);
+      Console.WriteLine(b);
 
     }
 

@@ -12,14 +12,6 @@ namespace ConsoleApplication1
   {
     static void Main(string[] args)
     {
-      int i = 1;
-      int j=  2;
-      Console.WriteLine(i & j);
-
-    }
-
-  }
-}
 
       /*
       Stopwatch stop = new Stopwatch();
@@ -31,4 +23,10 @@ namespace ConsoleApplication1
       stop.Stop();
       Console.WriteLine(stop.Elapsed);
       */
- 
+      int a = 23;
+      string name = "john";
+
+      Console.WriteLine("The age of {0} is {1}.", name, a);
+    }
+  }
+}

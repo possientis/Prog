@@ -30,20 +30,22 @@
       (car data))               ; no special error handling
     ;
     (define (stream-cdr)
-      (display "stream-cdr running ...\n")
-      (display data)(newline)
-      (display (car data))(newline)
-      (display (cdr data))(newline)
-      (display (force (cdr data)))(newline)
-
-        (force (cdr data)))     ; no special error handling
+      (force (cdr data)))     ; no special error handling
     ;
     (define (stream-null?)
       (eq? #f data))  ; #f rather than '() for emphasis
     ;
     (define (init)            ; initialization of object
       (if (not (null? args))  ; expecting a pair (value . promise)
+        (begin
+        (display "-------------------------\n")
+        (display "Intializing stream object\n")
+        (display "data is set to cons of:\n")
+        (display "1. ")(display (car args))(newline)
+        (display "2. ")(display (cadr args))(newline)
+        (display "-------------------------\n")
         (set! data (cons (car args) (cadr args)))))
+      )
     ;
     ; initializing object
     (init)
@@ -120,21 +122,22 @@
 ; testing code for stream-map with empty stream and higher dim
 ; define fibonacci stream with stream-map and +
 
-(define fibs1
-  (let fibgen ((a 0) (b 1))
-    (stream-cons a (fibgen b (+ a b)))))
+;(define fibs1
+;  (let fibgen ((a 0) (b 1))
+;    (stream-cons a (fibgen b (+ a b)))))
 
-(define fibs2 
-  (stream-cons
-    0
-    (stream-cons
-      1
-      (stream-map
-        +
-        fibs2
-        (fibs2 'cdr)))))
+; this currently fails
+;(define fibs2 (stream-cons 0 (stream-cons 1 (stream-map + fibs2 (fibs2 'cdr)))))
 
-(define s (fibs2 'cdr))
+
+
+;(define twos (stream-map + ones ones))
+; this currently fails
+
+(define ones (stream-cons 1 ones))
+(define test (stream 0 (delay (stream-map + ones test))))
+
+
 
 
 

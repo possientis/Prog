@@ -12,14 +12,6 @@ namespace ConsoleApplication1
   {
     static void Main(string[] args)
     {
-      int i = 1;
-      int j=  2;
-      Console.WriteLine(i & j);
-
-    }
-
-  }
-}
 
       /*
       Stopwatch stop = new Stopwatch();
@@ -31,4 +23,12 @@ namespace ConsoleApplication1
       stop.Stop();
       Console.WriteLine(stop.Elapsed);
       */
- 
+      string s = null;
+      int? i = null;
+      bool? b = null;
+      int j = i ?? 0; // '??' null-coalescent operator
+      Console.WriteLine("i = {0}", j);
+    }
+
+  }
+}
