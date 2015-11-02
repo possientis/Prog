@@ -8,7 +8,7 @@ import javax.swing.*;
 //import java.util.ArrayList;
 //import java.util.Random;
 
-public class Test {
+public class Foreach {
 
   public static void main(String[] args){
 

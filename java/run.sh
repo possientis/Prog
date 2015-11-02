@@ -1,3 +1,3 @@
 #!/bin/sh
-javac Singleton.java
-java Singleton abc def
+javac Test.java
+java Test abc def

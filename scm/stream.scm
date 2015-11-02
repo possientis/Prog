@@ -24,6 +24,7 @@
       (cond ((eq? m 'car) (stream-car))
             ((eq? m 'cdr) (stream-cdr))
             ((eq? m 'null?) (stream-null?))
+            ((eq? m 'debug) data) ; exposing private data for debugging
             (else (display "stream: unknown operation error\n"))))
     ;
     (define (stream-car)
@@ -102,14 +103,19 @@
 ; general implementation
 ; proc requires n-arguments. xs is a list of n streams
 ; no sensible results unless all streams have same sizes
+(define global-count 0)
 (define (stream-map proc . xs)
-  (if (null? xs) (stream)  ; returns empty stream, no second argument provided
+  (set! global-count (+ global-count 1))
+  (if (>= global-count 10) (exit))
+  (display "inside\n")
+  (if (null? xs) (stream) ; returns empty stream, no second argument provided
     ; else
     (if ((car xs) 'null?) ; All streams should have same size. Testing first.
       (stream)            ; empty stream
       ; else
         (let ((heads (map (lambda (s) (s 'car)) xs))
               (tails (map (lambda (s) (s 'cdr)) xs)))
+          (display "I am here\n")
           (stream-cons (apply proc heads)
                        (apply stream-map (cons proc tails)))))))
 
@@ -136,9 +142,8 @@
 
 (define ones (stream-cons 1 ones))
 (define test (stream 0 (delay (stream-map + ones test))))
-
-
-
-
-
+(define data (cdr (test 'debug)))
+(define data2 (delay (stream-map + ones test)))
+(define (proc) (stream-map + ones test))
+(stream-map + ones test)
 

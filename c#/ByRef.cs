@@ -12,15 +12,14 @@ namespace ConsoleApplication1
   {
     static void Main(string[] args)
     {
-      int[] A = new int[3];
-      foo();
-      foo(A);
-      foo(1,2,3,4,5,6); // that is the real point of 'params'
+      int i = 1;
+      foo(ref i);
+      Console.WriteLine(i);
 
     }
     
-    static void foo(params int[] i){
-      Console.WriteLine("Foo is running");
+    static void foo(ref int i){
+      i = 5;
     }
 
   }

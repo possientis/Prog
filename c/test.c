@@ -16,12 +16,8 @@
 
 int main(){
 
-  std::string adolf = "hello world";
-  // adding line to create a conflict
-  // adding line to create a conflict
-  // adding line to create a conflict
-  // adding line to create a conflict
 
+  std::cout << "here:"<< getenv("HOSTNAME") << "/here\n";
   return 0;
 
 }
