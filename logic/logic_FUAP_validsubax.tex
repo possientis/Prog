@@ -1,0 +1,235 @@
+Given a map $\sigma:V\to W$ our plan is to carry over the sequent
+$\Gamma\vdash\phi$ into another sequent
+$\sigma(\Gamma)\vdash\sigma(\phi)$. Our strategy is based around the
+study of variable substitutions in proofs. So from $\sigma:V\to W$
+we define $\sigma:\pvs\to{\bf\Pi}(W)$ as per
+definition~(\ref{logic:def:FUAP:substitution:substitution}). We know
+that some of these substitutions will not be capture-avoiding, and
+we extended the notion of {\em valid substitution} for proofs in
+definition~(\ref{logic:def:FUAP:validsubproof:validsub}) to
+formalize the idea of capture-avoidance. The hope is that a valid
+substitution will satisfy the equality
+$\val\circ\sigma(\pi)=\sigma\circ\val(\pi)$ provided the proof $\pi$
+is totally clean, as per
+definition~(\ref{logic:def:FUAP:clean:clean:proof}). From
+proposition~(\ref{logic:prop:FUAP:clean:counterpart}), we know that
+a sequent $\Gamma\vdash\phi$ always has an underlying proof $\pi$
+which is totally clean. So if $\sigma$ happens to be valid for $\pi$
+and satisfies our equality, then we see that $\sigma(\pi)$ is a
+proof of $\sigma(\phi)$. We also know from
+proposition~(\ref{logic:prop:FUAP:substitution:hypothesis}) that
+$\hyp(\sigma(\pi))=\sigma(\hyp(\pi))\subseteq\sigma(\Gamma)$ and we
+conclude that $\sigma(\pi)$ is a proof underlying the sequent
+$\sigma(\Gamma)\vdash\sigma(\phi)$. There is of course a big
+outstanding problem: in general, we have no way to tell whether a
+substitution $\sigma$ is valid for the proof underlying the sequent
+$\Gamma\vdash\phi$. The data which defines the sequent namely the
+set $\Gamma\subseteq\pv$ and the formula $\phi\in\pv$ do not tell us
+anything about the axioms being used in the proof. So we shall need
+to have another idea. In the meantime, if we assume that $\sigma$ is
+valid for $\pi$ and $\pi$ is totally clean, we want the conclusion
+of $\sigma(\pi)$ to be the image by $\sigma$ of the conclusion of
+$\pi$. Fundamentally, this cannot happen unless the axioms of $\pi$
+remain axioms of first order logic after substitution by $\sigma$.
+So let us look as the simple example $\pi=\axi\phi$ for some
+$\phi\in\pv$. Saying that $\pi$ is totally clean amounts to saying
+that the axiom invocation $\axi\phi$ is legitimate. In other words,
+the formula $\phi$ is indeed an axiom of first order logic, i.e. we
+have $\phi\in\av$ and consequently $\val(\pi)=\phi$. In order to
+have $\val(\sigma(\pi))=\sigma(\phi)$, since
+$\sigma(\pi)=\axi\sigma(\phi)$ we need $\sigma(\phi)$ to be itself
+an axiom of first order logic. This will not be the case in general,
+but having assumed that $\sigma$ is valid for $\pi$, it is valid for
+the formula $\phi$. If the substitution $\sigma$ is capture-avoiding
+and $\phi$ is an axiom of first order logic, we should hope that
+$\sigma(\phi)$ is itself an axiom. Proving this fact is the purpose
+of lemma~(\ref{logic:lemma:FUAP:substitution:axiom}) below. Note
+that the validity of $\sigma$ for $\phi$ is crucially important when
+dealing with quantification axioms and specialization axioms, as per
+definition~(\ref{logic:def:FOPL:quantification:axiom})
+and~(\ref{logic:def:FOPL:specialization:axiom}). It is not difficult
+to see that $\sigma(\phi)$ is always an axiom without the validity
+assumption, whenever $\phi$ is a simplification, Frege or
+transposition axiom. But consider the case when $\phi=\forall
+x[\,(y\in y)\to(x\in x)\,]\to[\,(y\in y)\to\forall x(x\in x)\,]$
+with $x\neq y$ and $\sigma=[y/x]$. Then $\phi$ is a quantification
+axiom while $\sigma$ is not valid for $\phi$. It is clear that
+$\sigma(\phi)=\forall y[\,(y\in y)\to(y\in y)\,]\to[\,(y\in
+y)\to\forall y(y\in y)\,]$ is not an axiom of first order logic. In
+fact, for those already familiar with model theory and the soundness
+theorem~(\ref{logic:the:FOPL:soundness:soundness}) of
+page~\pageref{logic:the:FOPL:soundness:soundness}, it is clear that
+$\sigma(\phi)$ is not provable, i.e. the sequent
+$\vdash\sigma(\phi)$ is false. Now consider $\phi=\forall y(x\in
+y)\to(x\in z)$ where $x,y,z$ are distinct. Then $\phi$ is a
+specialization axiom while $\sigma=[y/x]$ is not valid for $\phi$.
+We have $\sigma(\phi)=\forall y(y\in y)\to(y\in z)$ which is not an
+axiom of first order logic and is easily seen to be false for some
+model and assignment.
+
+\index{axiom@Image of axiom by valid sub}\index{valid@Image of axiom
+by valid sub}
+\begin{lemma}\label{logic:lemma:FUAP:substitution:axiom}
+Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Given
+$\phi\in\av$\,:
+    \[
+    (\mbox{$\sigma$ valid for $\phi$})\ \Rightarrow\
+    \sigma(\phi)\in{\bf A}(W)
+    \]
+In other words, the image of an axiom by a valid substitution is an
+axiom.
+\end{lemma}
+\begin{proof}
+Let $\phi\in\av$ and $\sigma:V\to W$ be valid for $\phi$. We need to
+show that $\sigma(\phi)$ is an axiom of first order logic. Following
+definition~(\ref{logic:def:FOPL:first:order:axiom}) we shall
+consider the five possible types of axioms separately: first we
+assume that $\phi$ is a simplification axiom. Using
+definition~(\ref{logic:def:FOPL:simplification:axiom}) we have $\phi
+= \phi_{1}\to(\phi_{2}\to\phi_{1})$ for $\phi_{1},\phi_{2}\in\pv$.
+It follows that $\sigma(\phi)=\psi_{1}\to(\psi_{2}\to\psi_{1})$
+where $\psi_{1}=\sigma(\phi_{1})$ and $\psi_{2}=\sigma(\phi_{2})$.
+So $\sigma(\phi)$ is also a simplification axiom. Next we assume
+that $\phi$ is a Frege axiom. Using
+definition~(\ref{logic:def:FOPL:frege:axiom}), $ \phi =
+    [\phi_{1}\to(\phi_{2}\to\phi_{3})]\to[(\phi_{1}\to\phi_{2})\to(\phi_{1}\to\phi_{3})]$
+for $\phi_{1},\phi_{2},\phi_{3}\in\pv$. Setting
+$\psi_{1}=\sigma(\phi_{1})$, $\psi_{2}=\sigma(\phi_{2})$ and
+$\psi_{3}=\sigma(\phi_{3})$ we have:
+    \[
+    \sigma(\phi) =
+    [\psi_{1}\to(\psi_{2}\to\psi_{3})]\to[(\psi_{1}\to\psi_{2})\to(\psi_{1}\to\psi_{3})]
+    \]
+So $\sigma(\phi)$ is also a Frege axiom. Next we assume that $\phi$
+is a transposition axiom. Using
+definition~(\ref{logic:def:FOPL:transposition:axiom}) we have $\phi
+=[(\phi_{1}\to\bot)\to\bot]\to\phi_{1}$ for some $\phi_{1}\in\pv$.
+It follows that $\sigma(\phi)
+=[(\psi_{1}\to\bot)\to\bot]\to\psi_{1}$ where
+$\psi_{1}=\sigma(\phi_{1})$ and $\sigma(\phi)$ is also a
+transposition axiom. Next we assume that $\phi$ is a quantification
+axiom. Using definition~(\ref{logic:def:FOPL:quantification:axiom})
+we have $\phi =\forall x(\phi_{1}\to\phi_{2})\to(\phi_{1} \to\forall
+x \phi_{2})$ where $\phi_{1},\phi_{2}\in\pv$ and
+$x\not\in\free(\phi_{1})$. Setting $\psi_{1}=\sigma(\phi_{1})$ and
+$\psi_{2}=\sigma(\phi_{2})$ we obtain:
+    \[
+    \sigma(\phi) =\forall y(\psi_{1}\to\psi_{2})\to(\psi_{1} \to\forall
+    y \psi_{2})
+    \]
+where $y=\sigma(x)$. However, we cannot argue that $\sigma(\phi)$ is
+a quantification axiom until we prove that
+$y\not\in\free(\psi_{1})$. So suppose to the contrary that
+$y\in\free(\psi_{1})$. From
+proposition~(\ref{logic:prop:freevar:of:substitution:inclusion}) we
+have $\free(\sigma(\phi_{1}))\subseteq\sigma(\free(\phi_{1}))$ and
+it follows that $y\in\sigma(\free(\phi_{1}))$. Hence, there exists
+$u\in\free(\phi_{1})$ such that $\sigma(x)=y=\sigma(u)$. However, we
+know that $x\not\in\free(\phi_{1})$ and consequently $u\neq x$.
+Thus, we see that $u\in\free(\phi_{1})\setminus\{x\}=\free(\forall
+x\phi_{1})$ and furthermore $\sigma(x)=\sigma(u)$. By virtue of
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}), this
+means $\sigma$ is not a valid substitution for $\forall x\phi_{1}$.
+We shall obtain our desired contradiction by showing that $\sigma$
+is in fact valid for $\forall x\phi_{1}$. Indeed, by assumption we
+know that $\sigma$ is valid for $\phi$. Using
+proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}) it follows
+that $\sigma$ is valid for $\forall x(\phi_{1}\to\phi_{2})$. Hence,
+from proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) we
+see that $\sigma$ is valid for $\phi_{1}\to\phi_{2}$ and
+furthermore, given $v\in V$ we have the implication:
+    \[
+    v\in\free(\forall x(\phi_{1}\to\phi_{2}))\ \Rightarrow\
+    \sigma(v)\neq\sigma(x)
+    \]
+Using proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}) once
+more, it follows that $\sigma$ is valid for $\phi_{1}$ and:
+    \[
+    v\in\free(\forall x\phi_{1})\ \Rightarrow\
+    \sigma(v)\neq\sigma(x)
+    \]
+this last implication being a consequence of $\free(\forall
+x\phi_{1})\subseteq\free(\forall x(\phi_{1}\to\phi_{2}))$. So we
+conclude from
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) that
+$\sigma$ is valid for $\forall x\phi_{1}$, which completes our proof
+that $\sigma(\phi)$ is indeed a quantification axiom. Note that the
+quantification axiom is the first case where we needed to use the
+assumption of validity of $\sigma$ for $\phi$. Finally, we assume
+that $\phi$ is a specialization axiom. Using
+definition~(\ref{logic:def:FOPL:specialization:axiom}) we have $\phi
+=\forall x\phi_{1}\to\phi_{1}[y/x]$ where $\phi_{1}\in V$, $x,y\in
+V$ and $[y/x]:\pv\to\pv$ refers to an essential substitution of $y$
+in place of $x$, i.e. an essential substitution associated with
+$[y/x]:V\to V$. Defining $\psi_{1}=\sigma(\phi_{1})$  and
+$\psi_{1}^{*}=\sigma\circ[y/x](\phi_{1})$\,:
+    \[
+    \sigma(\phi)=\forall z\psi_{1}\to\psi_{1}^{*}
+    \]
+where $z=\sigma(x)$. In order to show that $\sigma(\phi)$ is itself
+a specialization axiom, from
+proposition~(\ref{logic:prop:FOPL:specialization:axiom:2}) it is
+sufficient to show that $\psi_{1}^{*}\sim\psi_{1}[\sigma(y)/z]$
+where the map $[\sigma(y)/z]:{\bf P}(W)\to{\bf P}(W)$ refers to an
+essential substitution of $\sigma(y)$ in place of $z=\sigma(x)$, and
+$\sim$ is the substitution congruence on ${\bf P}(W)$. In order to
+prove such equivalence, using
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:kernel} it is
+sufficient to prove the equality between the corresponding minimal
+transforms, which goes as follows:
+    \begin{eqnarray*}
+    {\cal M}(\psi_{1}^{*})&=&{\cal
+    M}\circ\sigma\circ[y/x](\phi_{1})\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\bar{\sigma}\circ{\cal M}\circ[y/x](\phi_{1})\\
+    \mbox{$[y/x]$ essential}\ \rightarrow
+    &=&\bar{\sigma}\circ[y/x]\circ{\cal M}(\phi_{1})\\
+    \mbox{B: to be proved}\ \rightarrow
+    &=&[\sigma(y)/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\phi_{1})\\
+    \mbox{C: to be proved}\ \rightarrow
+    &=&[\sigma(y)/\sigma(x)]\circ{\cal M}\circ\sigma(\phi_{1})\\
+    &=&[\sigma(y)/z]\circ{\cal M}\circ\sigma(\phi_{1})\\
+    \mbox{$[\sigma(y)/z]$ essential}\ \rightarrow
+    &=&{\cal M}\circ[\sigma(y)/z]\circ\sigma(\phi_{1})\\
+    &=&{\cal M}(\,\psi_{1}[\sigma(y)/z]\,)\\
+    \end{eqnarray*}
+So it remains to prove points A, B and C. First we start with point
+A: using
+theorem~(\ref{logic:the:FOPL:commute:mintransform:validsub}) of
+page~\pageref{logic:the:FOPL:commute:mintransform:validsub} we
+simply need to show that $\sigma$ is valid for $[y/x](\phi_{1})$,
+which follows from our assumption that $\sigma$ is valid for
+$\phi=\forall x\phi_{1}\to[y/x](\phi_{1})$ and
+proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}). So we now
+prove point B: let $u\in\var({\cal M}(\phi_{1}))$. Using
+proposition~(\ref{logic:prop:substitution:support}) we need to show
+that
+$\bar{\sigma}\circ[y/x](u)=[\sigma(y)/\sigma(x)]\circ\bar{\sigma}(u)$.
+Since $\bar{V}$ is the disjoint union of $V$ and \N, we shall
+distinguish two cases: first we assume that $u\in\N$. Then $u\neq x$
+and $\bar{\sigma}(u)=u$. It follows that
+$\bar{\sigma}(u)\neq\sigma(x)$ and the equality is true. Next we
+assume that $u\in V$. Using
+proposition~(\ref{logic:prop:FOPL:mintransform:variables}) it
+follows that $u\in\var({\cal M}(\phi_{1}))\cap V=\free(\phi_{1})$.
+We shall distinguish two further cases: first we assume that $u=x$.
+Then $\bar{\sigma}(u)=\sigma(x)$ and the equality is true. Finally
+we assume that $u\neq x$. Then
+$u\in\free(\phi_{1})\setminus\{x\}=\free(\forall x\phi_{1})$. Having
+assumed that $\sigma$ is valid for $\phi=\forall
+x\phi_{1}\to[y/x](\phi_{1})$, in particular from
+proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}) it is valid
+for $\forall x\phi_{1}$. Hence from $u\in\free(\forall x\phi_{1})$
+and proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) we
+obtain $\bar{\sigma}(u)=\sigma(u)\neq\sigma(x)$. So we conclude the
+equality is once again true, which completes our proof of point B.
+So we now prove point C: using
+theorem~(\ref{logic:the:FOPL:commute:mintransform:validsub}) of
+page~\pageref{logic:the:FOPL:commute:mintransform:validsub} once
+more, we need to show that $\sigma$ is valid for $\phi_{1}$.
+However, we already know that $\sigma$ is valid for $\forall
+x\phi_{1}$, and the validity of $\sigma$ for $\phi_{1}$ follows from
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}). This
+completes our proof of point C.
+\end{proof}

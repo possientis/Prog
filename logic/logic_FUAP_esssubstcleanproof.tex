@@ -1,0 +1,194 @@
+It is all very nice to have constructed essential substitutions
+$\sigma:\pvs\to{\bf\Pi}(W)$ associated with $\sigma:V\to W$. So we
+have a tool substituting variables in proofs while avoiding capture.
+However, given $\pi\in\pvs$ we need to check that the conclusion and
+hypothesis of $\sigma(\pi)$ are what we expect. This is the purpose
+of the present section. With regards to the conclusion, we cannot
+hope to say much about the valuation $\val\circ\sigma(\pi)$, but we
+certainly should be able to prove that
+$\vals\circ\sigma(\pi)\sim\sigma\circ\vals(\pi)$ where $\sim$ is the
+substitution congruence on ${\bf P}(W)$. Note that the '$\sigma$'
+appearing in $\sigma\circ\vals(\pi)$ refers to the restriction of
+the essential proof substitution $\sigma:\pvs\to{\bf\Pi}(W)$  to
+$\pv$, and not to the brute force substitution $\sigma:\pv\to{\bf
+P}(W)$ of definition~(\ref{logic:def:substitution}). It would not
+make sense otherwise: we have no assumption about the validity of
+$\sigma$ for $\pi$ or the validity of $\sigma$ for $\vals(\pi)$. The
+context gives us an essential substitution
+$\sigma:\pvs\to{\bf\Pi}(W)$ which can equally act on formulas since
+$\pv\subseteq\pvs$. So it is clear from the context that the only
+sensible interpretation of $\sigma\circ\vals(\pi)$ is to regard
+$\sigma$ as essential. This is in contrast with similar results we
+previously obtained in these notes: for $\pi$ totally clean and
+$\sigma$ valid for $\pi$, we obtained
+$\val\circ\sigma(\pi)=\sigma\circ\val(\pi)$ in
+proposition~(\ref{logic:prop:FUAP:validsubtotclean:valuation:commute}).
+For $\pi$ clean and $\sigma$ valid for $\pi$ we obtained
+$\vals\circ\sigma(\pi)=\sigma\circ\vals(\pi)$ in
+proposition~(\ref{logic:prop:FUAP:strongvalsubalmostclean:valuation:commute}).
+In both cases, the right-hand-side '$\sigma$' was the naive
+substitution of definition~(\ref{logic:def:substitution}). One
+question we may ask is whether we should hope to have
+$\vals\circ\sigma(\pi)=\sigma\circ\vals(\pi)$ rather than a mere
+$\alpha$-equivalence. The answer is no. By virtue of
+proposition~(\ref{logic:prop:FUAP:esssubstprop:redefine}), an
+essential proof substitution $\sigma:\pvs\to{\bf \Pi}(W)$ can be
+redefined modulo the substitution congruence, and still qualify as
+an essential substitution associated to the same $\sigma:V\to W$. So
+if $\vals\circ\sigma(\pi)=\sigma\circ\vals(\pi)$ happened to be
+true, we could redefine $\sigma$ on \pv\ alone, without changing
+$\sigma(\pi)$.
+
+
+\index{essential@Essential image of clean
+proof}\index{clean@Essential image of clean proof}
+\begin{prop}\label{logic:prop:FUAP:esssubstcleanproof:main}
+Let $V$, $W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Let $\pi\in\pvs$ be a clean proof. Then
+$\sigma(\pi)$ is clean and:
+    \begin{equation}\label{logic:eqn:FUAP:esssubstcleanproof:main:1}
+    \vals\circ\sigma(\pi)\sim\sigma\circ\vals(\pi)
+    \end{equation}
+where $\sigma:\pv\to{\bf P}(W)$ is the restriction and $\sim$ is the
+substitution congruence.
+\end{prop}
+\begin{proof}
+Before we start, it should be noted that the map $\sigma:\pv\to{\bf
+P}(W)$ on the right-hand-side
+of~(\ref{logic:eqn:FUAP:esssubstcleanproof:main:1}) is simply the
+restriction of $\sigma:\pvs\to{\bf\Pi}(W)$ and not the substitution
+associated with $\sigma:V\to W$ as per
+definition~(\ref{logic:def:substitution}). We know from
+proposition~(\ref{logic:prop:FUAP:esssubst:proof:to:formula}) that
+$\sigma:\pv\to{\bf P}(W)$ is an essential substitution associated
+with the same $\sigma:V\to W$ as is $\sigma:\pvs\to{\bf\Pi}(W)$. We
+now assume that $\pi$ is a clean proof. First we show that
+$\sigma(\pi)$ is clean. From
+proposition~(\ref{logic:prop:FUAP:proofwithcleanMT:mintrans:clean:equivalence})
+it is sufficient to show that ${\cal M}\circ\sigma(\pi)$ is clean.
+Having assumed $\sigma:\pvs\to{\bf\Pi}(W)$ is an essential proof
+substitution, we have ${\cal
+M}\circ\sigma(\pi)=\bar{\sigma}\circ{\cal M}(\pi)$. So we need to
+show that $\bar{\sigma}\circ{\cal M}(\pi)$ is clean. However, from
+proposition~(\ref{logic:prop:FUAP:proofwithcleanMT:mintrans:clean:equivalence})
+we know that ${\cal M}(\pi)$ is clean, while from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:minextension:valid})
+the minimal extension $\bar{\sigma}:\bar{V}\to\bar{W}$ is valid for
+${\cal M}(\pi)$. It follows from
+proposition~(\ref{logic:prop:FUAP:strongvalsubalmostclean:valuation:commute})
+that $\bar{\sigma}\circ{\cal M}(\pi)$ is clean as requested. It
+remains to prove the equivalence
+$\vals\circ\sigma(\pi)\sim\sigma\circ\vals(\pi)$. Using
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:kernel} it is
+sufficient to prove the equality between minimal transforms ${\cal
+M}\circ\vals\circ\sigma(\pi)={\cal M}\circ\sigma\circ\vals(\pi)$. In
+fact, from
+proposition~(\ref{logic:prop:FOPL:esssubst:mintransform:equiv:imp:equal})
+we simply need to show the equivalence ${\cal
+M}\circ\vals\circ\sigma(\pi)\sim{\cal M}\circ\sigma\circ\vals(\pi)$
+where $\sim$ denotes the substitution congruence on ${\bf
+P}(\bar{W})$. Having established that $\sigma(\pi)$ is clean, using
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})
+we obtain the following:
+    \begin{eqnarray*}
+    {\cal M}\circ\vals\circ\sigma(\pi)&\sim&\vals\circ{\cal
+    M}\circ\sigma(\pi)\\
+    \mbox{$\sigma$ essential}\ \rightarrow
+    &=&\vals\circ\bar{\sigma}\circ{\cal M}(\pi)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:strongvalsubalmostclean:valuation:commute})}\ \rightarrow
+    &=&\bar{\sigma}\circ\vals\circ{\cal M}(\pi)\\
+    \mbox{A: to be proved}\ \rightarrow
+    &\sim&\bar{\sigma}\circ{\cal M}\circ\vals(\pi)\\
+    \mbox{$\sigma$ essential}\ \rightarrow
+    &=&{\cal M}\circ\sigma\circ\vals(\pi)\\
+    \end{eqnarray*}
+So it remains to prove the equivalence
+$\bar{\sigma}\circ\vals\circ{\cal M}(\pi)\sim\bar{\sigma}\circ{\cal
+M}\circ\vals(\pi)$. Using
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:valid}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:valid}, it is
+sufficient to show $\vals\circ{\cal M}(\pi)\sim{\cal
+M}\circ\vals(\pi)$ and furthermore that $\bar{\sigma}$ is valid for
+both formulas. The equivalence follows from $\pi$ being clean and
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute}).
+The fact that $\bar{\sigma}$ is valid for ${\cal M}\circ\vals(\pi)$
+follows from
+proposition~(\ref{logic:def:FOPL:commute:minextension:valid}). The
+fact that $\bar{\sigma}$ is valid for $\vals\circ{\cal M}(\pi)$
+follows from
+proposition~(\ref{logic:prop:FUAP:valuationmod:valid:vals}) and the
+validity of $\bar{\sigma}$ for ${\cal M}(\pi)$, which is itself a
+consequence of
+proposition~(\ref{logic:prop:FUAP:mintransformproof:minextension:valid})
+and which completes our proof.
+\end{proof}
+
+We shall now check that $\hyp(\sigma(\pi))$ is also what we expect,
+namely the image
+$\sigma(\hyp(\pi))=\{\sigma(\phi):\phi\in\hyp(\pi)\}$. Once again,
+the '$\sigma$' involved in this last expression can only be the
+essential $\sigma$, not the substitution $\sigma:\pv\to{\bf P}(W)$
+of definition~(\ref{logic:def:substitution}). Since $\sigma$ can be
+arbitrarily redefined modulo the substitution congruence, we cannot
+hope to have an exact equality
+$\hyp(\sigma(\pi))=\sigma(\hyp(\pi))$. The best we can hope for is
+that every element of $\hyp(\sigma(\pi))$ be $\alpha$-equivalent to
+an element of $\sigma(\hyp(\pi))$ and conversely. We should also
+remember that no sensible result can be obtained unless $\pi$ is a
+clean proof. For example, consider $V=\{x,y\}$ with $x\neq y$,
+$\pi=\gen x(x\in x)$ and $\sigma:\pvs\to\pvs$ an an essential
+substitution associated with the identity mapping $i:V\to V$. Since
+$\pi\sim\rho$ where $\rho=\gen y(y\in y)$, we can redefine $\sigma$
+so as to have $\sigma(\pi)=\rho$. It is clear the equality modulo
+$\hyp(\sigma(\pi))\sim\sigma(\hyp(\pi))$ is false in this case.
+
+\index{hypothesis@Hypothesis of essential
+image}\index{essential@Hypothesis of essential image}
+\begin{prop}\label{logic:prop:substitutiontheorem:hypothesis}
+Let $V$, $W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Let $\pi\in\pvs$ be a clean proof. Then we have:
+    \begin{equation}\label{logic:eqn:substitutiontheorem:hypothesis:1}
+    \hyp(\sigma(\pi))\sim\sigma(\hyp(\pi))
+    \end{equation}
+where $\sim$ is the equality modulo the substitution congruence as
+per {\em
+definition~(\ref{logic:def:FUAP:valuationmod:equality:modulo})}.
+\end{prop}
+\begin{proof}
+Before we start, it should be noted that the map $\sigma:\pv\to{\bf
+P}(W)$ on the right-hand-side
+of~(\ref{logic:eqn:substitutiontheorem:hypothesis:1}) is simply the
+restriction of $\sigma:\pvs\to{\bf\Pi}(W)$ and not the substitution
+associated with $\sigma:V\to W$ as per
+definition~(\ref{logic:def:substitution}). We know from
+proposition~(\ref{logic:prop:FUAP:esssubst:proof:to:formula}) that
+the map $\sigma:\pv\to{\bf P}(W)$ is an essential substitution
+associated with the same $\sigma:V\to W$ as is
+$\sigma:\pvs\to{\bf\Pi}(W)$. We now assume that $\pi$ is a clean
+proof. We need to show that any formula of $\hyp(\sigma(\pi))$ is
+substitution equivalent to a formula of $\sigma(\hyp(\pi))$ and
+conversely that any formula of $\sigma(\hyp(\pi))$ is substitution
+equivalent to a formula of $\hyp(\sigma(\pi))$. Using
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:kernel} it is
+therefore sufficient to prove ${\cal M}(\hyp(\sigma(\pi)))={\cal
+M}(\sigma(\hyp(\pi)))$. Using
+proposition~(\ref{logic:prop:FUAP:esssubstcleanproof:main}), the
+proof $\sigma(\pi)$ is clean and consequently from
+proposition~(\ref{logic:prop:FUAP:mintransproof:hypothesis}) we
+obtain:
+    \begin{eqnarray*}
+    {\cal M}(\hyp(\sigma(\pi)))&=&\hyp({\cal M}\circ\sigma(\pi))\\
+    \mbox{$\sigma$ essential}\ \rightarrow
+    &=&\hyp(\bar{\sigma}\circ{\cal M}(\pi))\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:substitution:hypothesis})}\ \rightarrow
+    &=&\bar{\sigma}(\,\hyp({\cal M}(\pi))\,)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:mintransproof:hypothesis}), $\pi$ clean}\ \rightarrow
+    &=&\bar{\sigma}(\,{\cal M}(\hyp(\pi))\,)\\
+    &=&\bar{\sigma}\circ{\cal M}(\hyp(\pi))\\
+    \mbox{$\sigma$ essential}\ \rightarrow
+    &=&{\cal M}\circ\sigma(\hyp(\pi))\\
+    &=&{\cal M}(\sigma(\hyp(\pi)))\\
+    \end{eqnarray*}
+\end{proof}

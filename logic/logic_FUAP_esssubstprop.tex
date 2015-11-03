@@ -1,0 +1,666 @@
+Just as we did for formulas, we shall now investigate some of the
+basic properties of essential substitutions for proofs. The
+following definition is very similar to
+definition~(\ref{logic:def:FUAP:esssubst:main}). In effect, we are
+simply defining an {\em essential substitution} as any map
+$\sigma^{*}:\pvs\to{\bf\Pi}(W)$ for which there exists a map
+$\sigma:V\to W$ such that $\sigma^{*}$ is associated to $\sigma$ as
+per definition~(\ref{logic:def:FUAP:esssubst:main}). As soon as we
+show that such $\sigma$ is unique, we shall drop the '$*$' and refer
+to $\sigma$ and $\sigma^{*}$ with the same symbol. Indeed, if we
+start with a map $\sigma:\pvs\to{\bf\Pi}(W)$, we can safely and
+unambiguously refer to the map $\sigma:V\to W$. However, one should
+be a little cautious about notations: if we start from $\sigma:V\to
+W$, then there are potentially more than one map
+$\sigma:\pvs\to{\bf\Pi}(W)$ which qualifies as an essential
+substitution associated to $\sigma$. Furthermore, the notation
+$\sigma:\pvs\to{\bf\Pi}(W)$ could also refer to the usual proof
+substitution as per
+definition~(\ref{logic:def:FUAP:substitution:substitution}). There
+will be situations when we shall want to speak about both the
+non-essential $\sigma:\pvs\to{\bf\Pi}(W)$ of
+definition~(\ref{logic:def:FUAP:substitution:substitution}), and
+some essential representative $\sigma^{*}:\pvs\to{\bf\Pi}(W)$. When
+this happens, we shall use a different symbol $\sigma^{*}$ to single
+out one of them.
+
+\index{essential@Essential substitution for proof}
+\begin{defin}\label{logic:def:FUAP:esssubstprop:essential}
+Let $V,W$ be sets. We say that a map $\sigma^{*}:\pvs\to{\bf\Pi}(W)$
+is an {\em essential proof substitution} \ifand\ there exists
+$\sigma:V\to W$ such that:
+    \[
+    {\cal M}\circ\sigma^{*}=\bar{\sigma}\circ{\cal M}
+    \]
+where $\bar{\sigma}:\bar{V}\to\bar{W}$ is the minimal extension and
+${\cal M}$ is the minimal transform.
+\end{defin}
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:uniqueness}
+Let $V$, $W$ be sets and $\sigma^{*}:\pvs\to{\bf\Pi}(W)$ be an
+essential proof substitution. Then the map $\sigma:V\to W$
+associated with $\sigma^{*}$ is unique.
+\end{prop}
+\begin{proof}
+Suppose $\sigma_{0},\sigma_{1}:V\to W$ are two maps which are
+associated with an essential proof substitution
+$\sigma^{*}:\pvs\to{\bf\Pi}(W)$. Then using
+proposition~(\ref{logic:prop:FUAP:esssubst:proof:to:formula}), the
+restriction $\sigma^{*}_{|{\bf P}(V)}:\pv\to{\bf P}(W)$ is an
+essential substitution associated with $\sigma_{0}$ and
+$\sigma_{1}$. From the uniqueness property of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:uniqueness}), we have
+$\sigma_{0}=\sigma_{1}$.
+\end{proof}
+
+An essential proof substitution $\sigma:\pvs\to{\bf\Pi}(W)$ can be
+redefined arbitrarily modulo $\alpha$-equivalence, without affecting
+it status of {\em essential substitution associated to $\sigma$}.
+The following is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:redefine}).
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:redefine}
+Let $V,W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Let $\tau:\pvs\to{\bf\Pi}(W)$ be a map such that
+$\sigma(\pi)\sim\tau(\pi)$ for all $\pi\in\pvs$ where $\sim$ is the
+substitution congruence on ${\bf\Pi}(W)$. Then $\tau$ is itself an
+essential substitution with associated map $\tau:V\to W$ identical
+to $\sigma$.
+\end{prop}
+\begin{proof}
+Since $\sigma$ is essential we have ${\cal
+M}\circ\sigma(\pi)=\bar{\sigma}\circ{\cal M}(\pi)$ for all
+$\pi\in\pvs$. Having assumed that $\sigma(\pi)\sim\tau(\pi)$ for all
+$\pi\in\pvs$, from
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} we have ${\cal
+M}\circ\sigma(\pi)={\cal M}\circ\tau(\pi)$. It follows that ${\cal
+M}\circ\tau(\pi)=\bar{\sigma}\circ{\cal M}(\pi)$ and we conclude
+that $\tau$ is itself essential with associated map $\sigma:V\to W$.
+\end{proof}
+
+The following proposition has no counterpart for formulas. We know
+from proposition~(\ref{logic:prop:FUAP:esssubst:proof:to:formula})
+that restricting an essential substitution
+$\sigma:\pvs\to{\bf\Pi}(W)$ to \pv\ leads to an essential
+substitution $\sigma_{|{\bf P}(V)}:\pv\to{\bf P}(W)$. In fact, every
+essential substitution $\sigma:\pv\to{\bf P}(W)$ is obtained that
+way. In other words, every essential substitution for formulas is
+the restriction of an essential substitution for proofs, associated
+with the same underlying map $\sigma:V\to W$. This proposition will
+prove very useful when attempting to prove the substitution
+theorem~(\ref{logic:the:FUAP:substitutiontheorem:main}) of
+page~\pageref{logic:the:FUAP:substitutiontheorem:main}. Starting
+from an essential substitution $\sigma:\pv\to{\bf P}(W)$ and a true
+sequent $\Gamma\vdash\phi$ with underlying proof $\pi\in\pvs$, we
+shall extend $\sigma$ to an essential substitution
+$\sigma:\pvs\to{\bf\Pi}(W)$ which will give us the proof
+$\sigma(\pi)$, allowing us to establish the sequent
+$\sigma(\Gamma)\vdash\sigma(\phi)$. This is true magic.
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:extension}
+Let $V,W$ be sets and $\sigma:\pv\to{\bf P}(W)$ be an essential
+substitution. Then the map $\sigma$ can be extended to an essential
+proof substitution $\sigma:\pvs\to{\bf\Pi}(W)$ associated with the
+same underlying $\sigma:V\to W$.
+\end{prop}
+\begin{proof}
+We assume that $\sigma:\pv\to{\bf P}(W)$ is an essential
+substitution associated with $\sigma:V\to W$ as per
+definition~(\ref{logic:def:FOPL:esssubstprop:essential}). We need to
+show the existence of an essential proof substitution
+$\sigma^{*}:\pvs\to{\bf\Pi}(W)$ associated with $\sigma:V\to W$ such
+that $\sigma^{*}_{|{\bf P}(V)}=\sigma$. However, from the existence
+of $\sigma:\pv\to{\bf P}(W)$ using
+theorem~(\ref{logic:the:FOPL:esssubst:existence}) of
+page~\pageref{logic:the:FOPL:esssubst:existence} it follows that
+$|W|$ is an infinite cardinal, or that it is finite with
+$|V|\leq|W|$. We can therefore apply
+theorem~(\ref{logic:the:FUAP:esssubst:existence}) of
+page~\pageref{logic:the:FUAP:esssubst:existence} from which we
+deduce the existence of an essential substitution
+$\sigma^{*}:\pvs\to{\bf\Pi}(W)$ associated with $\sigma:V\to W$.
+Using proposition~(\ref{logic:prop:FUAP:esssubst:proof:to:formula}),
+the restriction $\sigma^{*}:\pv\to{\bf P}(W)$ is an essential
+substitution associated with $\sigma:V\to W$. Hence we must have
+$\sigma(\phi)\sim\sigma^{*}(\phi)$ for all $\phi\in\pv$, where
+$\sim$ is the substitution congruence on ${\bf P}(W)$. In fact, from
+proposition~(\ref{logic:prop:FUAP:charsubsong:equivalence:formula})
+this equivalence remains true if $\sim$ is regarded as the
+substitution congruence on ${\bf\Pi}(W)$. From
+proposition~(\ref{logic:prop:FUAP:esssubstprop:redefine}) we can
+therefore redefine $\sigma^{*}$ on \pv\ by setting
+$\sigma^{*}(\phi)=\sigma(\phi)$ so as to obtain an essential proof
+substitution $\sigma^{*}:\pvs\to{\bf\Pi}(W)$ associated with
+$\sigma:V\to W$ which coincides with $\sigma$ on \pv. This completes
+our proof.
+\end{proof}
+
+Our initial idea of variable substitution for proofs is to blindly
+substitute variables and create $\sigma^{*}:\pvs\to{\bf\Pi}(W)$ as
+per definition~(\ref{logic:def:FUAP:substitution:substitution}).
+This does not work very well, unless the substitution $\sigma:V\to
+W$ is valid for the proof $\pi$. So we introduced essential
+substitutions $\sigma:\pvs\to{\bf\Pi}(W)$ to eliminate the problem
+of variable capture. We should check that the solution provided is a
+good solution, namely that $\sigma(\pi)$ and $\sigma^{*}(\pi)$ are
+in fact the same proofs modulo $\alpha$-equivalence, whenever
+$\sigma$ is valid for $\pi$. See also
+proposition~(\ref{logic:prop:FOPL:esssubstprop:validity}).
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:validity}
+Let $V,W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+substitution. Then if $\sigma$ is valid for $\pi\in\pvs$, we have
+the substitution equivalence:
+    \[
+    \sigma(\pi)\sim\sigma^{*}(\pi)
+    \]
+where $\sigma^{*}:\pvs\to{\bf\Pi}(W)$ is the associated substitution
+as per {\em
+definition~(\ref{logic:def:FUAP:substitution:substitution})}.
+\end{prop}
+\begin{proof}
+We assume that $\sigma$ is valid for $\pi$. We need to show that
+$\sigma(\pi)\sim\sigma^{*}(\pi)$, that is ${\cal
+M}\circ\sigma(\pi)={\cal M}\circ\sigma^{*}(\pi)$. However, having
+assumed $\sigma$ is valid for $\pi$, from
+theorem~(\ref{logic:the:FUAP:mintransvalidsub:commute}) of
+page~\pageref{logic:the:FUAP:mintransvalidsub:commute} we have
+${\cal M}\circ\sigma^{*}(\pi)=\bar{\sigma}\circ{\cal M}(\pi)$. Since
+$\sigma$ is an essential proof substitution we also have ${\cal
+M}\circ\sigma(\pi)=\bar{\sigma}\circ{\cal M}(\pi)$. So the result
+follows.
+\end{proof}
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:injective})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:injective}
+Let $V,W$ be sets and $\sigma:V\to W$ be an injective map. Then the
+associated map $\sigma:\pvs\to{\bf\Pi}(W)$ is essential with
+associated map $\sigma$ itself.
+\end{prop}
+\begin{proof}
+Let $\sigma:V\to W$ be an injective map. Let $\sigma:\pvs\to{\bf
+\Pi}(W)$ be the associated substitution mapping as per
+definition~(\ref{logic:def:FUAP:substitution:substitution}). The
+fact that both mappings are called '$\sigma$' is standard practice
+at this stage for us. We need to prove that
+$\sigma:\pvs\to{\bf\Pi}(W)$ is an essential substitution mapping,
+with associated map $\sigma:V\to W$. In other words, we need to
+prove that ${\cal M}\circ\sigma(\pi)=\bar{\sigma}\circ{\cal M}(\pi)$
+for all $\pi\in\pvs$. Using
+theorem~(\ref{logic:the:FUAP:mintransvalidsub:commute}) of
+page~\pageref{logic:the:FUAP:mintransvalidsub:commute} it is
+sufficient to show that $\sigma$ is valid for $\pi$ which follows
+from proposition~(\ref{logic:prop:FUAP:validsubproof:injective}) and
+the injectivity of $\sigma:V\to W$.
+\end{proof}
+
+If we consider the inclusion map $i:V\to\bar{V}$, there are two ways
+to {\em essentially} substitute variables in accordance to $i$. One
+way to is to consider the associated $i:\pvs\to\pvsb$. The other and
+possibly unexpected way is to consider the minimal transform ${\cal
+M}:\pvs\to\pvsb$. See also
+proposition~(\ref{logic:prop:FOPL:esssubstprop:mintransform}).
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:mintransform}
+Let $V$ be a set. The minimal transform ${\cal M}:\pvs\to\pvsb$ is
+an essential substitution with associated map the inclusion
+$i:V\to\bar{V}$.
+\end{prop}
+\begin{proof}
+Let $\bar{\cal M}:\pvsb\to{\bf\Pi}(\bar{\bar{V}})$ denote the
+minimal transform on \pvsb. We need to show that $\bar{\cal
+M}\circ{\cal M}(\pi)=\bar{i}\circ{\cal M}(\pi)$ for all
+$\pi\in\pvs$. However, since $i$ is injective, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:injective}) it is
+valid for $\pi$ and it follows from
+theorem~(\ref{logic:the:FUAP:mintransvalidsub:commute}) of
+page~\pageref{logic:the:FUAP:mintransvalidsub:commute} that
+$\bar{\cal M}\circ i(\pi)=\bar{i}\circ{\cal M}(\pi)$. Hence we need
+to show that $\bar{\cal M}\circ{\cal M}(\pi)=\bar{\cal M}\circ
+i(\pi)$. Using
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} we need to
+show ${\cal M}(\pi)\sim i(\pi)$ where $\sim$ is the substitution
+congruence on \pvsb, which we know is true from
+proposition~(\ref{logic:prop:FUAP:mintransfsubcong:equivalence}) and
+which completes our proof.
+\end{proof}
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:subcong})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:subcong}
+Let $V$ be a set and $\sim$ be the substitution congruence on \pvs.
+Then for all $\pi,\rho\in\pvs$ we have $\pi\sim\rho$ \ifand\
+$\rho=\sigma(\pi)$ for some essential substitution
+$\sigma:\pvs\to\pvs$ such that $\sigma(u)=u$ for all
+$u\in\free(\pi)$.
+\end{prop}
+\begin{proof}
+First we show the 'if' part: so suppose $\rho=\sigma(\pi)$ for some
+essential substitution $\sigma:\pvs\to\pvs$ such that $\sigma(u)=u$
+for all $u\in\free(\pi)$. We need to show that $\pi\sim\rho$. From
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} it is
+sufficient to prove that ${\cal M}(\pi)={\cal M}(\rho)$. Having
+assumed that $\rho=\sigma(\pi)$ we need to show that ${\cal
+M}(\pi)={\cal M}\circ\sigma(\pi)$. However, since $\sigma$ is
+essential we have ${\cal M}\circ\sigma(\pi)=\bar{\sigma}\circ{\cal
+M}(\pi)$. Hence we need to show that ${\cal
+M}(\pi)=\bar{\sigma}\circ{\cal M}(\pi)$. Using
+proposition~(\ref{logic:prop:FUAP:variable:support}) it is
+sufficient to prove that $\bar{\sigma}(u)=u$ for all $u\in\var({\cal
+M}(\pi))$. So let $u\in\var({\cal M}(\pi))$. Since
+$\bar{V}=V\uplus\N$ we shall distinguish two cases: first we assume
+that $u\in\N$. Then $\bar{\sigma}(u)=u$ is clear from
+definition~(\ref{logic:def:FOPL:commute:minextensioon:map}). Next we
+assume that $u\in V$. Then from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:freevar}) we
+obtain $u\in\free(\pi)$ and it follows that
+$\bar{\sigma}(u)=\sigma(u)=u$. We now prove the 'only if' part: so
+suppose $\pi\sim\rho$. We need to show that $\rho=\sigma(\pi)$ for
+some essential substitution $\sigma:\pvs\to\pvs$ such that
+$\sigma(u)=u$ for all $u\in\free(\pi)$. Let $i:\pvs\to\pvs$ be the
+identity mapping. From
+proposition~(\ref{logic:prop:FUAP:esssubstprop:injective}), $i$ is
+an essential substitution associated with the identity $i:V\to V$.
+Let $\sigma:\pvs\to\pvs$ be defined by $\sigma(\kappa)=i(\kappa)$
+whenever $\kappa\neq\pi$ and $\sigma(\pi)=\rho$. Having assumed that
+$\pi\sim\rho$ we have $\sigma(\kappa)\sim i(\kappa)$ for all
+$\kappa\in\pvs$. It follows from
+proposition~(\ref{logic:prop:FUAP:esssubstprop:redefine}) that
+$\sigma$ is an essential substitution whose associated map
+$\sigma:V\to V$ is the identity. In particular, we have
+$\sigma(u)=u$ for all $u\in\free(\pi)$.
+\end{proof}
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:composition})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:composition}
+Let $U$, $V$ and $W$ be sets while the maps
+$\tau:{\bf\Pi}(U)\to\pvs$ and $\sigma:\pvs\to{\bf\Pi}(W)$ are
+essential substitutions. Then $\sigma\circ\tau:{\bf\Pi}(U)\to{\bf
+\Pi}(W)$ is itself an essential proof substitution with associated
+map $\sigma\circ\tau:U\to W$.
+\end{prop}
+\begin{proof}
+We need to show that ${\cal
+M}\circ(\sigma\circ\tau)=\overline{(\sigma\circ\tau)}\circ{\cal M}$.
+However from
+definition~(\ref{logic:def:FOPL:commute:minextensioon:map}), it is
+clear that the minimal extension
+$\overline{(\sigma\circ\tau)}:\bar{U}\to\bar{W}$ is equal to the
+composition of the minimal extensions $\bar{\sigma}\circ\bar{\tau}$.
+Hence we have:
+    \begin{eqnarray*}
+    {\cal M}\circ(\sigma\circ\tau)
+    &=&\bar{\sigma}\circ{\cal
+    M}\circ\tau\\
+    &=&\bar{\sigma}\circ\bar{\tau}\circ{\cal
+    M}\\
+    &=&\overline{(\sigma\circ\tau)}\circ{\cal
+    M}\\
+    \end{eqnarray*}
+\end{proof}
+
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:free:commute})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:free:commute}
+Let $V,W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Then for all $\pi\in\pvs$ we have the equality:
+    \[
+    \free(\sigma(\pi))=\sigma(\free(\pi))
+    \]
+\end{prop}
+\begin{proof}
+Using proposition~(\ref{logic:prop:FUAP:mintransformproof:freevar})
+we obtain the following:
+    \begin{eqnarray*}
+    \free(\sigma(\pi))&=&\free(\,{\cal M}\circ\sigma(\pi)\,)\\
+    &=&\free(\,\bar{\sigma}\circ{\cal M}(\pi)\,)\\
+    \mbox{$\bar{\sigma}$ valid for ${\cal M}(\pi)$}\ \rightarrow
+    &=&\bar{\sigma}(\,\free({\cal M}(\pi))\,)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:mintransformproof:freevar})}\ \rightarrow
+    &=&\bar{\sigma}(\free(\pi))\\
+    \free(\pi)\subseteq V\ \rightarrow&=&\sigma(\free(\pi))
+    \end{eqnarray*}
+\end{proof}
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:support})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:support}
+Let $V,W$ be sets and $\sigma,\tau:\pvs\to{\bf\Pi}(W)$ be two
+essential proof substitutions. Then for all $\pi\in\pvs$ we have the
+equivalence:
+    \[
+    \sigma_{|\free(\pi)}=\tau_{|\free(\pi)}\ \ \Leftrightarrow\
+    \ \sigma(\pi)\sim\tau(\pi)
+    \]
+where $\sim$ denotes the substitution congruence on the algebra
+${\bf\Pi}(W)$.
+\end{prop}
+\begin{proof}
+From theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel},
+$\sigma(\pi)\sim\tau(\pi)$ is equivalent to the equality ${\cal
+M}\circ\sigma(\pi)={\cal M}\circ\tau(\pi)$. Having assumed $\sigma$
+and $\tau$ are essential, this is in turn equivalent to
+$\bar{\sigma}\circ{\cal M}(\pi)=\bar{\tau}\circ{\cal M}(\pi)$. Using
+proposition~(\ref{logic:prop:FUAP:variable:support}), this last
+equality is equivalent to $\bar{\sigma}(u)=\bar{\tau}(u)$ for all
+$u\in\var({\cal M}(\pi))$. Hence we need to show that this last
+statement is equivalent to $\sigma(u)=\tau(u)$ for all
+$u\in\free(\pi)$. First we show $\Rightarrow$\,: so suppose
+$\bar{\sigma}(u)=\bar{\tau}(u)$ for all $u\in\var({\cal M}(\pi))$
+and let $u\in\free(\pi)$. We need to show that $\sigma(u)=\tau(u)$.
+From proposition~(\ref{logic:prop:FUAP:mintransformproof:freevar})
+we have $\var({\cal M}(\pi))\cap V=\free(\pi)$. It follows that
+$u\in\var({\cal M}(\pi))\cap V$ and consequently we have
+$\sigma(u)=\bar{\sigma}(u)=\bar{\tau}(u)=\tau(u)$ as requested. So
+we now prove $\Leftarrow$\,: So we assume that $\sigma(u)=\tau(u)$
+for all $u\in\free(\pi)$ and consider $u\in\var({\cal M}(\pi))$. We
+need to show that $\bar{\sigma}(u)=\bar{\tau}(u)$. Since
+$\bar{V}=V\uplus\N$ we shall distinguish two cases: first we assume
+that $u\in\N$. Then $\bar{\sigma}(u)=u=\bar{\tau}(u)$. Next we
+assume that $u\in V$. Then $u\in \var({\cal M}(\pi))\cap
+V=\free(\pi)$ and $\bar{\sigma}(u)=\sigma(u)=\tau(u)=\bar{\tau}(u)$.
+\end{proof}
+
+The fact that $\alpha$-equivalence is preserved by certain maps
+$\sigma:\pvs\to{\bf\Pi}(W)$ has already been seen on a few
+occasions. We have the case of $\sigma:V\to W$ injective of
+proposition~(\ref{logic:prop:FUAP:charsubcong:injective:substitution}).
+We have the case of $\sigma:V\to W$ valid for both $\pi$ and $\rho$
+of theorem~(\ref{logic:the:FUAP:mintransfsubcong:valid}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:valid}. We now have
+the case of $\sigma:\pvs\to{\bf\Pi}(W)$ essential. The following is
+the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:equivalence})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:equivalence}
+Let $V,W$ be sets and $\sigma:\pvs\to {\bf\Pi}(W)$ be an essential
+proof substitution. Then for all proofs $\pi,\rho\in\pvs$ we have
+the implication:
+    \[
+    \pi\sim\rho\ \Rightarrow\ \sigma(\pi)\sim\sigma(\rho)
+    \]
+where~$\sim$ denotes the substitution congruence on \pvs\ and ${\bf
+\Pi}(W)$.
+\end{prop}
+\begin{proof}
+So we assume that $\pi\sim\rho$. We need to show that
+$\sigma(\pi)\sim\sigma(\rho)$. Using
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} it is
+sufficient to show that ${\cal M}\circ\sigma(\pi)={\cal
+M}\circ\sigma(\rho)$. Having assumed that $\sigma$ is essential, it
+is sufficient to show that $\bar{\sigma}\circ{\cal
+M}(\pi)=\bar{\sigma}\circ{\cal M}(\rho)$ which follows immediately
+from ${\cal M}(\pi)={\cal M}(\rho)$, itself a consequence of
+$\pi\sim\rho$.
+\end{proof}
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:rank:injective})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:rank:injective}
+Let $V,W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Let $\pi\in\pvs$ such that
+$\sigma_{|\free(\pi)}$ is an injective map. Then:
+    \[
+    \rnk(\sigma(\pi))=\rnk(\pi)
+    \]
+where $\rnk(\,\,)$ refers to the substitution rank as per {\em
+definition~(\ref{logic:def:FUAP:substrank:main})}.
+\end{prop}
+\begin{proof}
+Using proposition~(\ref{logic:prop:FUAP:substrank:minrank}) we
+obtain the following:
+    \begin{eqnarray*}
+    \rnk(\sigma(\pi))&=&\rnk({\cal M}\circ\sigma(\pi))\\
+    \mbox{$\sigma$ essential}\ \rightarrow
+    &=&\rnk(\bar{\sigma}\circ{\cal M}(\pi))\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\rnk({\cal M}(\pi))\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:substrank:minrank})}\ \rightarrow
+    &=&\rnk(\pi)
+    \end{eqnarray*}
+So it remains to show that $\rnk(\bar{\sigma}\circ{\cal
+M}(\pi))=\rnk({\cal M}(\pi))$. Using
+proposition~(\ref{logic:prop:FUAP:substrank:invariant:rank}) it is
+sufficient to show that $\bar{\sigma}$ is valid for ${\cal M}(\pi)$
+and furthermore that it is injective on $\free({\cal M}(\pi))$. We
+know that $\bar{\sigma}$ is valid for ${\cal M}(\pi)$ from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:minextension:valid}).
+We also know that $\free({\cal M}(\pi))=\free(\pi)$ from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:freevar}). So it
+remains to show that $\bar{\sigma}$ is injective on
+$\free(\pi)\subseteq V$ which is clearly the case since
+$\bar{\sigma}$ coincide with $\sigma$ on $V$ and $\sigma$ is by
+assumption injective on $\free(\pi)$.
+\end{proof}
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:rank:less})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:rank:less}
+Let $V,W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Then for all proof $\pi\in\pv$ we have the
+inequality:
+    \[
+    \rnk(\sigma(\pi))\leq\rnk(\pi)
+    \]
+where $\rnk(\,\,)$ refers to the substitution rank as per {\em
+definition~(\ref{logic:def:FUAP:substrank:main})}.
+\end{prop}
+\begin{proof}
+Using proposition~(\ref{logic:prop:FUAP:substrank:minrank}) we
+obtain the following:
+    \begin{eqnarray*}
+    \rnk(\sigma(\pi))&=&\rnk({\cal M}\circ\sigma(\pi))\\
+    \mbox{$\sigma$ essential}\ \rightarrow
+    &=&\rnk(\bar{\sigma}\circ{\cal M}(\pi))\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:substrank:substitution})}\ \rightarrow
+    &\leq&\rnk({\cal M}(\pi))\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:substrank:minrank})}\ \rightarrow
+    &=&\rnk(\pi)
+    \end{eqnarray*}
+\end{proof}
+
+Essential substitutions provide a huge benefit as they avoid
+variable capture. However, they come with a price. It is no longer
+possible to write something like
+$\sigma(\pi_{1}\pon\pi_{1})=\sigma(\pi_{1})\pon\,\sigma(\pi_{2})$
+which we could do if $\sigma$ was a naive substitution as per
+definition~(\ref{logic:def:FUAP:substitution:substitution}).
+Instead, we have to settle for the substitution equivalence
+$\sigma(\pi_{1}\pon\pi_{1})\sim\sigma(\pi_{1})\pon\,\sigma(\pi_{2})$.
+Note that we cannot even write $\sigma(\gen
+x\pi_{1})\sim\gen\sigma(x)\sigma(\pi_{1})$ in general. Indeed, if
+the $\alpha$-equivalence was always true, then $\sigma(x)$ could
+never be a free variable of $\sigma(\pi)$ where $\pi=\gen x\pi_{1}$.
+This is the whole point of essential substitutions: we want to allow
+some $u\in\free(\pi)$ to be such that $\sigma(u)=\sigma(x)$, while
+making sure $\sigma(\pi)$ is still meaningful. So we certainly want
+$\sigma(x)$ to be a free variable of $\sigma(\pi)$ on occasions.
+When this happens, the essential substitution $\sigma$ will
+automatically redefine the bound variable so to speak, and avoid
+capture. This is what most texts in mathematical logic implicitly
+assume. Essential substitutions provide the tool to do this
+formally. The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:charac})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:charac}
+Let $V,W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Let $\sim$ be the substitution congruence on
+${\bf\Pi}(W)$. Then:
+    \[
+    \forall\pi\in\pvs\ ,\ \sigma(\pi)\sim\left\{
+                    \begin{array}{lcl}
+                    \sigma(\phi)&\mbox{\ if\ }&\pi=\phi\in\pv\\
+                    \axi\sigma(\phi)&\mbox{\ if\ }&\pi=\axi\phi\\
+                    \sigma(\pi_{1})\pon\,\sigma(\pi_{2})&\mbox{\ if\ }&
+                    \pi=\pi_{1}\pon\pi_{2}\\
+                    \gen\sigma(x)\sigma(\pi_{1})
+                    &\mbox{\ if\ }&\pi=\gen x\pi_{1}\ ,\
+                    \sigma(x)\not\in\free(\sigma(\pi))\\
+                    \end{array}\right.
+    \]
+\end{prop}
+\begin{proof}
+First we assume that $\pi=\phi$ for some $\phi\in\pv$. Then
+$\sigma(\pi)=\sigma(\phi)$ and we are not saying much by claiming
+$\sigma(\pi)\sim\sigma(\phi)$ which is clear. Next we assume that
+$\pi=\axi\phi$ for some $\phi\in\pv$. We need to show that
+$\sigma(\pi)\sim\axi\sigma(\phi)$. Using
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel}, we simply
+compute the minimal transforms:
+    \begin{eqnarray*}
+    {\cal M}\circ\sigma(\pi)&=&\bar{\sigma}\circ{\cal M}(\pi)\\
+    &=&\bar{\sigma}\circ{\cal M}(\axi\phi)\\
+    &=&\bar{\sigma}(\,\axi{\cal M}(\phi)\,)\\
+    &=&\axi\,\bar{\sigma}\circ{\cal M}(\phi)\\
+    &=&\axi\,{\cal M}\circ\sigma(\phi)\\
+    &=&{\cal M}(\,\axi\sigma(\phi)\,)\\
+    \end{eqnarray*}
+So we now assume that $\pi=\pi_{1}\pon\pi_{2}$ for some
+$\pi_{1},\pi_{2}\in\pvs$. We need to show
+$\sigma(\pi)\sim\sigma(\pi_{1})\pon\,\sigma(\pi_{2})$. Once again,
+we simply compute the minimal transforms:
+    \begin{eqnarray*}
+    {\cal M}\circ\sigma(\pi)&=&\bar{\sigma}\circ{\cal M}(\pi)\\
+    &=&\bar{\sigma}\circ{\cal M}(\pi_{1}\pon\pi_{2})\\
+    &=&\bar{\sigma}(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\\
+    &=&\bar{\sigma}\circ{\cal M}(\pi_{1})\pon\,\bar{\sigma}\circ{\cal M}(\pi_{2})\\
+    &=&{\cal M}\circ\sigma(\pi_{1})\pon\,{\cal M}\circ\sigma(\pi_{2})\\
+    &=&{\cal M}(\,\sigma(\pi_{1})\pon\,\sigma(\pi_{2})\,)\\
+    \end{eqnarray*}
+So we now assume that $\pi=\gen x\pi_{1}$ and
+$\sigma(x)\not\in\free(\sigma(\pi))$. We need to show that
+$\sigma(\pi)\sim\gen\sigma(x)\sigma(\pi_{1})$. Likewise, we shall
+compute minimal transforms:
+    \begin{eqnarray*}
+    {\cal M}\circ\sigma(\pi)&=&\bar{\sigma}\circ{\cal M}(\pi)\\
+    &=&\bar{\sigma}\circ{\cal M}(\gen x\pi_{1})\\
+    \mbox{$n=\min\{k:[k/x]\mbox{ valid for }{\cal M}(\pi_{1})\}$}\
+    \rightarrow
+    &=&\bar{\sigma}(\,\gen n{\cal M}(\pi_{1})[n/x]\,)\\
+    &=&\gen \bar{\sigma}(n)\bar{\sigma}(\,{\cal
+    M}(\pi_{1})[n/x]\,)\\
+    &=&\gen n\,\bar{\sigma}\circ [n/x]\circ{\cal
+    M}(\pi_{1})\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\gen n\,[n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\pi_{1})\\
+    &=&\gen n\,[n/\sigma(x)]\circ{\cal M}\circ\sigma(\pi_{1})\\
+    &=&\gen n\,{\cal M}[\sigma(\pi_{1})][n/\sigma(x)]\\
+    \mbox{B: to be proved}\ \rightarrow
+    &=&\gen m\,{\cal M}[\sigma(\pi_{1})][m/\sigma(x)]\\
+    \mbox{$m=\min\{k:[k/\sigma(x)]\mbox{ valid for }{\cal M}[\sigma(\pi_{1})]\}$}\
+    \rightarrow
+    &=&{\cal M}(\gen\sigma(x)\sigma(\pi_{1}))\\
+    \end{eqnarray*}
+So it remains to justify point A and B. First we deal with point A:
+it is sufficient to prove the equality
+$\bar{\sigma}\circ[n/x]\circ{\cal M}(\pi_{1})=
+[n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\pi_{1})$, which follows
+from lemma~(\ref{logic:lemma:FUAP:mintransvalidsub:mpi1}) and
+$\sigma(x)\not\in\sigma(\free(\pi))$, itself a consequence of
+$\sigma(x)\not\in\free(\sigma(\pi))$ and
+proposition~(\ref{logic:prop:FUAP:esssubstprop:free:commute}). We
+now deal with point B: it is sufficient to prove the equivalence
+$\mbox{$[k/x]$ valid for ${\cal M}(\pi_{1})$}\ \Leftrightarrow\
+\mbox{$[k/\sigma(x)]$ valid for $\bar{\sigma}\circ{\cal
+M}(\pi_{1})$}$ which follows from
+lemma~(\ref{logic:lemma:FUAP:mintransvalidsub:n:equivalence}) and
+the fact that $\sigma(x)\not\in\sigma(\free(\pi))$.
+\end{proof}
+
+As we have discussed prior to
+proposition~(\ref{logic:prop:FUAP:esssubstprop:charac}) we cannot
+write the equivalence $\sigma(\pi)\sim\gen\sigma(x)\sigma(\pi_{1})$
+in general when $\pi=\gen x\pi_{1}$ and $\sigma$ is an essential
+substitution. However, we can write
+$\sigma(\pi)\sim\gen\tau(x)\tau(\pi_{1})$ whenever $\tau$ is an
+essential substitution which coincides with $\sigma$ on
+$V\setminus\{x\}$ and is such that
+$\tau(x)\not\in\free(\sigma(\pi))$. This is very useful, and even
+more so knowing that such an essential substitution $\tau$ always
+exists. The following is the counterpart of
+proposition~(\ref{logic:prop:FOPL:esssubstprop:tau})\,:
+
+\begin{prop}\label{logic:prop:FUAP:esssubstprop:tau}
+Let $V,W$ be sets and $\sigma:\pvs\to{\bf\Pi}(W)$ be an essential
+proof substitution. Let $\pi=\gen x\pi_{1}$ where $x\in V$,
+$\pi_{1}\in\pvs$. There exists an essential substitution
+$\tau:\pvs\to{\bf\Pi}(W)$ such that $\tau=\sigma$ on
+$V\setminus\{x\}$ and $\tau(x)\not\in\free(\sigma(\pi))$.
+Furthermore, for any such $\tau$ we have the substitution
+equivalence:
+    \[
+    \sigma(\pi)\sim\gen\tau(x)\tau(\pi_{1})
+    \]
+\end{prop}
+\begin{proof}
+We shall first prove the substitution equivalence. So let
+$\tau:\pvs\to{\bf\Pi}(W)$ be an essential proof substitution which
+coincide with $\sigma$ on $V\setminus\{x\}$ and such that
+$\tau(x)\not\in\free(\sigma(\pi))$. We need to show that
+$\sigma(\pi)\sim\gen\tau(x)\tau(\pi_{1})$ where $\sim$ denotes the
+substitution congruence on ${\bf\Pi}(W)$. However, since
+$\free(\pi)\subseteq V\setminus\{x\}$ we see that $\sigma$ and
+$\tau$ are essential substitutions which coincide on $\free(\pi)$.
+It follows from
+proposition~(\ref{logic:prop:FUAP:esssubstprop:support}) that
+$\sigma(\pi)\sim\tau(\pi)$. Hence it is sufficient to prove that
+$\tau(\pi)\sim\gen\tau(x)\tau(\pi_{1})$. Applying
+proposition~(\ref{logic:prop:FUAP:esssubstprop:charac}) it is
+sufficient to show that $\tau(x)\not\in\free(\tau(\pi))$. However,
+by assumption we have $\tau(x)\not\in\free(\sigma(\pi))$ and so:
+    \[
+    \tau(x)\not\in\free(\sigma(\pi))=\sigma(\free(\pi))=\tau(\free(\pi))=\free(\tau(\pi))
+    \]
+where we have used
+proposition~(\ref{logic:prop:FUAP:esssubstprop:free:commute}). It
+remains to show that such an essential substitution
+$\tau:\pvs\to{\bf\Pi}(W)$ exists. Suppose we have proved that
+$\free(\sigma(\pi))$ is a proper subset of $W$. Then there exists
+$y^{*}\in W$ such that $y^{*}\not\in\free(\sigma(\pi))$. Consider
+the map $\tau:V\to W$ defined by:
+    \[
+    \forall u\in V\ ,\ \tau(u)=\left\{
+        \begin{array}{lcl}
+        \sigma(u)&\mbox{\ if\ }&u\in V\setminus\{x\}\\
+        y^{*}&\mbox{\ if\ }&u=x
+        \end{array}
+    \right.
+    \]
+Then it is clear that $\tau$ coincides with $\sigma$ on
+$V\setminus\{x\}$ and $\tau(x)\not\in\free(\sigma(\pi))$. In order
+to show the existence of $\tau:\pvs\to{\bf\Pi}(W)$ it is sufficient
+to show the existence of an essential substitution associated with
+$\tau:V\to W$. From
+theorem~(\ref{logic:the:FUAP:esssubst:existence}) of
+page~\pageref{logic:the:FUAP:esssubst:existence} it is sufficient to
+show that $|W|$ is an infinite cardinal, or that it is finite with
+$|V|\leq|W|$. However, this follows immediately from the existence
+of the essential substitution $\sigma:\pvs\to{\bf\Pi}(W)$ and
+theorem~(\ref{logic:the:FUAP:esssubst:existence}). So it remains to
+show that $\free(\sigma(\pi))$ is a proper subset of $W$. This is
+clearly true if $|W|$ is an infinite cardinal. So we may assume that
+$|W|$ if finite, in which case we have $|V|\leq |W|$. In particular,
+$|V|$ is also a finite cardinal and since $x\not\in\free(\pi)$ we
+have $|\free(\pi)|<|V|$. Hence we have the following inequalities:
+    \[
+    |\free(\sigma(\pi))|=|\sigma(\free(\pi))|\leq|\free(\pi)|<|V|\leq|W|
+    \]
+So $\free(\sigma(\pi))$ is indeed a proper subset of $W$, as
+requested.
+\end{proof}

@@ -1,0 +1,430 @@
+The following definition introduces a concept of minimal transform
+for proofs. Comparing with the existing
+definition~(\ref{logic:def:FOPL:mintransform:transform}) of minimal
+transform for formulas, we see that our suggestion of ${\cal
+M}(\pi)$ for $\pi\in\pvs$ is as natural as it can be. However we saw
+that despite its simplicity, this definition failed to give us the
+sensible outcome $\val\circ{\cal M}(\pi)\sim{\cal M}\circ\val(\pi)$
+where $\sim$ is the substitution congruence on \pvb. Nevertheless,
+we stood our ground and decided to review our deductive system
+rather than contemplate an alternative definition of minimal
+transform for proofs. We defined a new valuation $\vals:\pvs\to\pv$
+which was flexible enough on $\alpha$-equivalence, while leading to
+an equivalent set of sequents $\Gamma\vdash\phi$ as demonstrated by
+proposition~(\ref{logic:prop:FUAP:valuationmod:equivalence}). This
+new valuation will allow us to write $\vals\circ{\cal
+M}(\pi)\sim{\cal M}\circ\vals(\pi)$ whenever $\pi$ is a clean proof,
+a fact we shall prove in
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute}).
+Needless to say that minimal transforms for proofs are likely to be
+a key notion just as they were for formulas. We shall be able to
+show the existence of {\em essential substitutions} for proofs of
+definition~(\ref{logic:def:FUAP:esssubstprop:essential}) and
+establish the substitution
+theorem~(\ref{logic:the:FUAP:substitutiontheorem:main}) of
+page~\pageref{logic:the:FUAP:substitutiontheorem:main}, allowing us
+to carry over the sequent $\Gamma\vdash\phi$ into
+$\sigma(\Gamma)\vdash\sigma(\phi)$ whenever $\sigma:\pv\to{\bf
+P}(W)$ is an essential substitution. This is a beautiful result we
+think, as it no longer contains the ugly caveats on variable capture
+which are so common in mathematical textbooks. Note that the
+following definition of minimal transform abides with a key
+principle which we have adopted throughout these notes. Since
+$\pv\subseteq\pvs$, we made sure this new definition of ${\cal
+M}(\pi)$ is compatible with the existing
+definition~(\ref{logic:def:FOPL:mintransform:transform}) whenever
+$\pi=\phi$ for some $\phi\in\pv$. Thus, when confronted with the
+notation ${\cal M}(\phi)$ we do not need to worry as to whether
+$\phi$ is regarded as a formula or as a proof. We are now ready to
+quote:
+
+\index{minimal@Minimal transform of proof}\index{m@${\cal M}(\pi)$ :
+minimal transform of $\pi$}
+\begin{defin}\label{logic:def:FUAP:mintransproof:transform}
+Let $V$ be a set with minimal extension $\bar{V}$. We call {\em
+minimal transform mapping on \pvs\ }the map ${\cal
+M}:\pvs\to{\bf\Pi}(\bar{V})$ defined by:
+\begin{equation}\label{logic:eqn:FUAP:mintransproof:transform:1}
+    \forall\pi\in\pvs\ ,\ {\cal M}(\pi)=\left\{
+                    \begin{array}{lcl}
+                    {\cal M}(\phi)&\mbox{\ if\ }&\pi=\phi\in\pv\\
+                    \axi{\cal M}(\phi)&\mbox{\ if\ }&\pi=\axi\phi\\
+                    {\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})&\mbox{\ if\ }&\pi=\pi_{1}\pon\pi_{2}\\
+                    \gen n{\cal M}(\pi_{1})[n/x]&\mbox{\ if\ }&\pi=\gen
+                    x\pi_{1}
+                    \end{array}\right.
+    \end{equation}
+where $n=\min\{k\in\N:\mbox{$[k/x]$ valid for ${\cal
+M}(\pi_{1})$}\}$.
+\end{defin}
+\begin{prop}\label{logic:prop:FUAP:mintransproof:recursion}
+The structural recursion of {\em
+definition~(\ref{logic:def:FUAP:mintransproof:transform})} is
+legitimate.
+\end{prop}
+\begin{proof}
+We need to show the existence and uniqueness of the map ${\cal
+M}:\pvs\to{\bf\Pi}(\bar{V})$ satisfying the four conditions
+of~(\ref{logic:eqn:FUAP:mintransproof:transform:1}). We shall do so
+using theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion}. So we take $X=\pvs$
+with free generator $X_{0}=\pv$ and we choose $A={\bf\Pi}(\bar{V})$.
+We define $g_{0}:X_{0}\to A$ by setting $g_{0}(\phi)={\cal
+M}(\phi)\in\pvb\subseteq A$, which takes care of the first
+condition. For every $\phi\in\pv$, we define the map
+$h(\axi\phi):A^{0}\to A$ by setting $h(\axi\phi)(0)=\axi{\cal
+M}(\phi)$ which takes care of the second condition. We also define
+$h(\pon):A^{2}\to A$ by setting
+$h(\pon)(\pi_{1},\pi_{2})=\pi_{1}\pon\pi_{2}$ which takes care of
+the third condition. Finally, for all $x\in V$ we define the map
+$h(\gen x):A^{1}\to A$ by setting $h(\gen x)(\pi_{1})=\gen
+n\pi_{1}[n/x]$, where:
+    \[
+    n=n(\gen x)(\pi_{1})=\min\{k\in\N\ :\ [k/x]\mbox{ valid for }\pi_{1}\}
+    \]
+\end{proof}
+
+As we shall see, many properties of minimal transforms apply to both
+proofs and formulas. The following property does not. By showing the
+equality $\spec({\cal M}(\pi))=\spec(\pi)$ for clean proofs, we
+shall be able to argue that minimal transforms of clean proofs are
+clean. Note that the equality fails when $\pi$ is not clean. For
+example, if $\pi=\gen x(x\in x)$ we have ${\cal M}(\pi)=\gen\,0(0\in
+0)$. Thus, we see that $\spec(\pi)=\{x\}$ while $\spec({\cal
+M}(\pi))=\{0\}$ and $\{x\}\neq\{0\}$ since $V\cap\N=\emptyset$.
+
+
+\begin{prop}\label{logic:prop:FUAP:mintransproof:variable}
+Let $V$ be a set and $\pi\in\pvs$ be a clean proof. Then:
+    \[
+    \spec({\cal M}(\pi))=\spec(\pi)
+    \]
+\end{prop}
+\begin{proof}
+For every proof $\pi\in\pvs$ we need to show the following
+implication:
+    \[
+    (\mbox{$\pi$ clean})\ \Rightarrow\ \spec({\cal M}(\pi))=\spec(\pi)
+    \]
+We shall do so with a structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then $\pi$ is always a clean
+proof, and we need to show that $\free({\cal M}(\phi))=\free(\phi)$
+which follows from
+proposition~(\ref{logic:prop:FOPL:mintransform:variables}). Next we
+assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then we have:
+    \[
+    \spec({\cal M}(\pi))=\spec(\,\axi{\cal
+    M}(\phi)\,)=\emptyset=\spec(\pi)
+    \]
+Whether or not $\pi$ is a clean proof, i.e. whether or not $\phi$ is
+an axiom modulo is irrelevant in this case. So we now assume that
+$\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}\in\pvs$ are proofs
+which satisfy our implication. We need to show the same is true of
+$\pi$. So we assume that $\pi$ is a clean proof. From
+proposition~(\ref{logic:prop:FUAP:almostclean:modus:ponens}) it
+follows in particular that both $\pi_{1}$ and $\pi_{2}$ are clean
+proofs. Consequently:
+    \begin{eqnarray*}
+    \spec({\cal M}(\pi))&=&\spec(\,{\cal M}(\pi_{1}\pon\pi_{2})\,)\\
+    &=&\spec(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:freevar:recursive:def})}\ \rightarrow
+    &=&\spec({\cal M}(\pi_{1}))\cup\spec({\cal M}(\pi_{2}))\\
+    \mbox{$\pi_{1},\pi_{2}$ clean}\ \rightarrow
+    &=&\spec(\pi_{1})\cup\spec(\pi_{2})\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:freevar:recursive:def})}\ \rightarrow
+    &=&\spec(\pi_{1}\pon\pi_{2})\\
+    &=&\spec(\pi)
+    \end{eqnarray*}
+So we now assume that $\pi=\gen x\pi_{1}$ for some $x\in V$ and
+$\pi_{1}\in\pvs$ which satisfies our implication. We need to show
+the same is true of $\pi$. So we assume that $\pi$ is a clean proof.
+From proposition~(\ref{logic:prop:FUAP:almostclean:generalization})
+it follows that $\pi_{1}$ is itself a clean proof and furthermore
+$x\not\in\spec(\pi_{1})$. Hence, we have the following equalities:
+    \begin{eqnarray*}
+    \spec({\cal M}(\pi))&=&\spec({\cal M}(\gen x\pi_{1}))\\
+    n=\min\{k:[k/x]\mbox{\ valid for\ }{\cal M}(\pi_{1})\}\
+    \rightarrow
+    &=&\spec(\,\gen n{\cal M}(\pi_{1})[n/x]\,)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:freevar:recursive:def})}\ \rightarrow
+    &=&\spec(\,{\cal M}(\pi_{1})[n/x]\,)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:validsubproof:specvar}),
+    $[n/x]$ valid for ${\cal M}(\pi_{1})$}\ \rightarrow
+    &=&[n/x](\,\spec({\cal M}(\pi_{1}))\,)\\
+    \mbox{$\pi_{1}$ clean}\ \rightarrow
+    &=&[n/x](\,\spec(\pi_{1})\,)\\
+    x\not\in\spec(\pi_{1})\ \rightarrow
+    &=&\spec(\pi_{1})\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:freevar:recursive:def})}\ \rightarrow
+    &=&\spec(\gen x\pi_{1})\\
+    &=&\spec(\pi)
+    \end{eqnarray*}
+\end{proof}
+
+We have spent a lot of time discussing the importance of the
+equivalence $\vals\circ{\cal M}(\pi)\sim{\cal M}\circ\vals(\pi)$,
+where $\sim$ is the substitution congruence on \pvb. The notion of
+minimal transform ${\cal M}(\pi)$ cannot be interesting unless we
+can say something sensible about its conclusion or conclusion
+modulo. However, we should not forget that controlling the
+hypothesis of a proof is as important as controlling its conclusion.
+So we need to make sure $\hyp({\cal M}(\pi))$ is also sensible.
+
+\begin{prop}\label{logic:prop:FUAP:mintransproof:hypothesis}
+Let $V$ be a set and $\pi\in\pvs$ be a clean proof. Then:
+    \[
+    \hyp({\cal M}(\pi))={\cal M}(\hyp(\pi))
+    \]
+\end{prop}
+\begin{proof}
+For every proof $\pi\in\pvs$ we need to show the following
+implication:
+    \[
+    (\mbox{$\pi$ clean})\ \Rightarrow\ \hyp({\cal M}(\pi))={\cal M}(\hyp(\pi))
+    \]
+We shall do so with a structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then $\pi$ is always clean in this
+case and we simply need to prove the equality which goes as follows:
+    \[
+    \hyp({\cal M}(\phi))=\{{\cal M}(\phi)\}={\cal M}(\{\phi\})={\cal M}(\hyp(\phi))
+    \]
+We now assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then we
+have:
+    \begin{eqnarray*}
+    \hyp({\cal M}(\pi))&=&\hyp({\cal M}(\axi\phi))\\
+    &=&\hyp(\,\axi{\cal M}(\phi)\,)\\
+    &=&\emptyset\\
+    &=&{\cal M}(\emptyset)\\
+    &=&{\cal M}(\hyp(\axi\phi))\\
+    &=&{\cal M}(\hyp(\pi))\\
+    \end{eqnarray*}
+So the equality is always true and so is the implication. So we now
+assume that $\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}\in\pvs$
+are proofs satisfying our implication. We need to show the same is
+true of $\pi$. So we assume that $\pi$ is clean. We need to show the
+equality is true for $\pi$. However, from
+proposition~(\ref{logic:prop:FUAP:almostclean:modus:ponens}) both
+$\pi_{1}$ and $\pi_{2}$ are clean and the equality is therefore true
+for $\pi_{1}$ and $\pi_{2}$. Hence:
+    \begin{eqnarray*}
+    \hyp({\cal M}(\pi))&=&\hyp({\cal M}(\pi_{1}\pon\pi_{2}))\\
+    &=&\hyp(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\\
+    &=&\hyp({\cal M}(\pi_{1}))\cup\hyp({\cal M}(\pi_{2}))\\
+    &=&{\cal M}(\hyp(\pi_{1}))\cup{\cal M}(\hyp(\pi_{2}))\\
+    &=&{\cal M}(\,\hyp(\pi_{1})\cup\hyp(\pi_{2})\,)\\
+    &=&{\cal M}(\hyp(\pi_{1}\pon\pi_{2}))\\
+    &=&{\cal M}(\hyp(\pi))\\
+    \end{eqnarray*}
+We now assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}\in\pvs$ is a proof satisfying our implication. We need to
+show the same is true of $\pi$. So we assume that $\pi$ is clean. We
+need to show the equality is true for $\pi$. However, from
+proposition~(\ref{logic:prop:FUAP:almostclean:generalization}) we
+see that $\pi_{1}$ is clean and $x\not\in\spec(\pi_{1})$. Hence:
+    \begin{eqnarray*}
+    \hyp({\cal M}(\pi))&=&\hyp({\cal M}(\gen x\pi_{1}))\\
+    &=&\hyp(\,\gen n{\cal M}(\pi_{1})[n/x]\,)\\
+    &=&\hyp({\cal M}(\pi_{1})[n/x])\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:substitution:hypothesis})}\ \rightarrow
+    &=&[n/x](\,\hyp({\cal M}(\pi_{1}))\,)\\
+    &=&[n/x](\,{\cal M}(\hyp(\pi_{1}))\,)\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&{\cal M}(\hyp(\pi_{1}))\\
+    &=&{\cal M}(\hyp(\gen x\pi_{1}))\\
+    &=&{\cal M}(\hyp(\pi))\\
+    \end{eqnarray*}
+So it remains to prove point A, for which is it sufficient to show
+the equality $[n/x](\psi)=\psi$ for all $\psi\in{\cal
+M}(\hyp(\pi_{1}))$. So it is sufficient to show the equality
+$[n/x]\circ{\cal M}(\phi)={\cal M}(\phi)$ for all
+$\phi\in\hyp(\pi_{1})$. So let $\phi\in\hyp(\pi_{1})$. Using
+proposition~(\ref{logic:prop:substitution:support}), we simply need
+to show that $[n/x](u)=u$ for all $u\in\var({\cal M}(\phi))$. It is
+therefore sufficient to prove that $x\not\in\var({\cal M}(\phi))$.
+So suppose to the contrary that $x\in\var({\cal M}(\phi))$. Since
+$x\in V$ we have $x\in\var({\cal M}(\phi))\cap V$ and it follows
+from proposition~(\ref{logic:prop:FOPL:mintransform:variables}) that
+$x\in\free(\phi)$ while $\phi\in\hyp(\pi_{1})$. Hence we see that
+$x\in\spec(\pi_{1})$ which is a contradiction, and completes our
+induction argument.
+\end{proof}
+
+The whole point of minimal transforms is to create logical copies of
+formulas and proofs in which free and bound variables have been
+segregated. The free variables remain in the set $V$ while the bound
+variables belong to a copy of \N\ which is disjoint from $V$. The
+following is the counterpart of
+proposition~(\ref{logic:prop:FOPL:mintransform:variables}):
+
+\begin{prop}\label{logic:prop:FUAP:mintransformproof:freevar}
+Let $V$ be a set and $\pi\in\pvs$. Then we have the equality:
+    \[
+    \free({\cal M}(\pi))=\var({\cal M}(\pi))\cap V=\free(\pi)
+    \]
+where ${\cal M}(\pi)\in{\bf\Pi}(\bar{V})$ is the minimal transform
+of $\pi\in\pvs$.
+\end{prop}
+\begin{proof}
+We shall prove this equality with a structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then the equality follows
+immediately from
+proposition~(\ref{logic:prop:FOPL:mintransform:variables}). So we
+now assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then using
+proposition~(\ref{logic:prop:FOPL:mintransform:variables}) once more
+we obtain:
+    \begin{eqnarray*}
+    \var({\cal M}(\pi))\cap V&=&\var({\cal M}(\axi\phi))\cap V\\
+    &=&\var(\axi{\cal M}(\phi))\cap V\\
+    &=&\var({\cal M}(\phi))\cap V\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:mintransform:variables})}\ \rightarrow
+    &=&\free(\phi)\\
+    &=&\free(\axi\phi)\\
+    &=&\free(\pi)\\
+    \end{eqnarray*}
+as well as:
+    \begin{eqnarray*}
+    \free({\cal M}(\pi))&=&\free({\cal M}(\axi\phi))\\
+    &=&\free(\axi{\cal M}(\phi))\\
+    &=&\free({\cal M}(\phi))\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:mintransform:variables})}\ \rightarrow
+    &=&\free(\phi)\\
+    &=&\free(\axi\phi)\\
+    &=&\free(\pi)\\
+    \end{eqnarray*}
+So we now assume that $\pi=\pi_{1}\pon\pi_{2}$ where
+$\pi_{1},\pi_{2}\in\pvs$ are proofs satisfying our equality. We need
+to show the same is true of $\pi$. On the one hand we have:
+    \begin{eqnarray*}
+    \var({\cal M}(\pi))\cap V&=&\var({\cal M}(\pi_{1}\pon\pi_{2}))\cap V\\
+    &=&\var(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\cap V\\
+    &=&(\,\var({\cal M}(\pi_{1}))\cup\var({\cal M}(\pi_{2}))\,)\cap V\\
+    &=&\var({\cal M}(\pi_{1}))\cap V\,\cup\,\var({\cal M}(\pi_{2}))\cap V\\
+    &=&\free(\pi_{1})\cup\free(\pi_{2})\\
+    &=&\free(\pi_{1}\pon\pi_{2})\\
+    &=&\free(\pi)\\
+    \end{eqnarray*}
+while on the other hand:
+    \begin{eqnarray*}
+    \free({\cal M}(\pi))&=&\free({\cal M}(\pi_{1}\pon\pi_{2}))\\
+    &=&\free(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\\
+    &=&\free({\cal M}(\pi_{1}))\cup\free({\cal M}(\pi_{2}))\\
+    &=&\free(\pi_{1})\cup\free(\pi_{2})\\
+    &=&\free(\pi_{1}\pon\pi_{2})\\
+    &=&\free(\pi)\\
+    \end{eqnarray*}
+We now assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}\in\pvs$ is a proof satisfying our equality. We need to show
+the same is true of $\pi$. On the one hand we have:
+    \begin{eqnarray*}
+    \var({\cal M}(\pi))\cap V&=&\var({\cal M}(\gen x\pi_{1}))\cap V\\
+    &=&\var(\,\gen n{\cal M}(\pi_{1})[n/x]\,)\cap V\\
+    &=&(\,\{n\}\cup\var(\,{\cal M}(\pi_{1})[n/x]\,)\,)\cap V\\
+    n\not\in V\ \rightarrow
+    &=&\var(\,{\cal M}(\pi_{1})[n/x]\,)\cap V\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:variable:substitution})}\ \rightarrow
+    &=&[n/x](\,\var({\cal M}(\pi_{1}))\,)\cap V\\
+    n\not\in V\ \rightarrow
+    &=&[n/x](\,\var({\cal M}(\pi_{1}))\setminus\{x\}\,)\cap V\\
+    u\neq x\Rightarrow[n/x](u)=u\ \rightarrow
+    &=&(\,\var({\cal M}(\pi_{1}))\setminus\{x\}\,)\cap V\\
+    &=&(\,\var({\cal M}(\pi_{1}))\cap V\,)\setminus\{x\}\\
+    &=&\free(\pi_{1})\setminus\{x\}\\
+    &=&\free(\gen x\pi_{1})\\
+    &=&\free(\pi)
+    \end{eqnarray*}
+while on the other hand:
+    \begin{eqnarray*}
+    \free({\cal M}(\pi))&=&\free({\cal M}(\gen x\pi_{1}))\\
+    n=\min\{k:[k/x]\mbox{\ valid for\ }{\cal M}(\pi_{1})\}\
+    \rightarrow&=&\free(\gen n{\cal M}(\pi_{1})[n/x])\\
+    &=&\free({\cal M}(\pi_{1})[n/x])\setminus\{n\}\\
+    \mbox{$[n/x]$ valid, prop.~(\ref{logic:prop:FUAP:validsubproof:freevar})}
+    \ \rightarrow
+    &=&[n/x](\,\free({\cal M}(\pi_{1}))\,)\setminus\{n\}\\
+    \mbox{$[n/x](x)=n$}\ \rightarrow
+    &=&[n/x](\,\free({\cal
+    M}(\pi_{1}))\setminus\{x\}\,)\setminus\{n\}\\
+    u\neq x\Rightarrow\ [n/x](u)=u\ \rightarrow
+    &=&\free({\cal M}(\pi_{1}))\setminus\{x\}\setminus\{n\}\\
+    &=&\free(\pi_{1})\setminus\{x\}\setminus\{n\}\\
+    n\not\in V\ \rightarrow
+    &=&\free(\pi_{1})\setminus\{x\}\\
+    &=&\free(\gen x\pi_{1})\\
+    &=&\free(\pi)
+    \end{eqnarray*}
+\end{proof}
+
+The following is the counterpart of
+proposition~(\ref{logic:prop:FOPL:mintransform:variables:bound})\,:
+\begin{prop}\label{logic:prop:FUAP:mintransformproof:boundvar}
+Let $V$ be a set and $\pi\in\pvs$. Then we have the equality:
+    \[
+    \bound({\cal M}(\pi))=\var({\cal M}(\pi))\cap\N
+    \]
+where ${\cal M}(\pi)\in{\bf\Pi}(\bar{V})$ is the minimal transform
+of $\pi\in\pvs$.
+\end{prop}
+\begin{proof}
+We shall prove this equality with a structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then the equality follows
+immediately from
+proposition~(\ref{logic:prop:FOPL:mintransform:variables:bound}).
+Next we assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then we
+have the following equalities:
+    \begin{eqnarray*}
+    \bound({\cal M}(\pi))&=&\bound({\cal M}(\axi\phi))\\
+    &=&\bound(\axi{\cal M}(\phi))\\
+    &=&\bound({\cal M}(\phi))\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:mintransform:variables:bound})}\ \rightarrow
+    &=&\var({\cal M}(\phi))\cap\N\\
+    &=&\var(\axi{\cal M}(\phi))\cap\N\\
+    &=&\var({\cal M}(\axi\phi))\cap\N\\
+    &=&\var({\cal M}(\pi))\cap\N\\
+    \end{eqnarray*}
+So we now assume that $\pi=\pi_{1}\pon\pi_{2}$ where
+$\pi_{1},\pi_{2}\in\pvs$ are proofs satisfying our equality. We need
+to show the same is true of $\pi$, which goes as follows:
+    \begin{eqnarray*}
+    \bound({\cal M}(\pi))&=&\bound({\cal M}(\pi_{1}\pon\pi_{2}))\\
+    &=&\bound(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\\
+    &=&\bound({\cal M}(\pi_{1}))\cup\bound({\cal M}(\pi_{2}))\\
+    &=&(\var({\cal M}(\pi_{1}))\cap\N)\cup(\var({\cal M}(\pi_{2}))\cap\N)\\
+    &=&(\,\var({\cal M}(\pi_{1}))\cup\var({\cal M}(\pi_{2}))\,)\cap\N\\
+    &=&\var(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\cap\N\\
+    &=&\var({\cal M}(\pi_{1}\pon\pi_{2}))\cap\N\\
+    &=&\var({\cal M}(\pi))\cap\N\\
+    \end{eqnarray*}
+We now assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}\in\pvs$ is a proof satisfying our equality. We need to show
+the same is true for $\pi$ which goes as follows:
+    \begin{eqnarray*}
+    \bound({\cal M}(\pi))&=&\bound({\cal M}(\gen x\pi_{1}))\\
+    &=&\bound(\,\gen n{\cal M}(\pi_{1})[n/x]\,)\\
+    &=&\{n\}\cup\bound({\cal M}(\pi_{1})[n/x])\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:boundvarproof:substitution})}\ \rightarrow
+    &=&\{n\}\cup[n/x](\,\bound({\cal M}(\pi_{1}))\,)\\
+    \mbox{$[n/x](x)=n$}\ \rightarrow
+    &=&\{n\}\cup[n/x](\,\bound({\cal M}(\pi_{1}))\setminus\{x\}\,)\\
+    u\neq x\Rightarrow\ [n/x](u)=u\ \rightarrow
+    &=&\{n\}\cup\bound({\cal M}(\pi_{1}))\setminus\{x\}\\
+    &=&\{n\}\cup(\,\var({\cal M}(\pi_{1}))\cap\N\,)\setminus\{x\}\\
+    &=&(\,\{n\}\cup\var({\cal M}(\pi_{1}))\setminus\{x\}\,)\cap\N\\
+    u\neq x\Rightarrow\ [n/x](u)=u\ \rightarrow
+    &=&(\,\{n\}\cup[n/x](\,\var({\cal M}(\pi_{1}))\setminus\{x\}\,)\,)\cap\N\\
+    \mbox{$[n/x](x)=n$}\ \rightarrow
+    &=&(\,\{n\}\cup[n/x](\,\var({\cal M}(\pi_{1}))\,)\,)\cap\N\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:variable:substitution})}\ \rightarrow
+    &=&(\,\{n\}\cup\var({\cal M}(\pi_{1})[n/x])\,)\cap\N\\
+    &=&\var(\,\gen n{\cal M}(\pi_{1})[n/x]\,)\cap\N\\
+    &=&\var({\cal M}(\gen x\pi_{1}))\cap\N\\
+    &=&\var({\cal M}(\pi))\cap\N\\
+    \end{eqnarray*}
+\end{proof}

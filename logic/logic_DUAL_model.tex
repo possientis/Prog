@@ -1,0 +1,96 @@
+We have two compelling reasons to deal with model theory: one of
+them is to establish G\"odel's completeness theorem which we need to
+do in order to validate our deductive system. Another reason is that
+model theory is the simplest way to prove that valuations $v:\pv\to
+2$ actually do exist. So the dual space \pvd\ is not empty, the
+sequent $\vdash\bot$ is false, the empty set is consistent and
+satisfiable. This is not much but it has to be done: a deductive
+system for which the sequent $\vdash\bot$ is true is pretty
+worthless. A semantic entailment $\vDash$ defined in terms of an
+empty dual space \pvd\ as per
+definition~(\ref{logic:def:FOPL:semantics:entailments}) is also
+pointless.
+
+So we shall start by defining the notion of {\em model}, also known
+as {\em structure}. Since our language \pv\ has no equality, no
+constant or function symbol, and is effectively limited to a single
+binary relation symbol '$\in$', the corresponding notion of {\em
+model} is restricted to an ordered pair $(M,r)$ where $M$ is a set
+and $r$ is a binary relation on $M$. This is obviously a significant
+restriction compared to the general setting, for which the reader
+should consult David Marker~\cite{Marker}. At this point in time,
+our aim is simply to study the free universal algebra \pv, describe
+various natural congruences on it, and see whether axiomatic set
+theory can be coded with it. The language \pv\ is similar to untyped
+$\lambda$-calculus: it is limited to the bare minimum, and we aim to
+show this minimum is enough.
+
+\index{model@Model of \pv}\index{m@$(M,r)$ : model of
+\pv}\index{r@$r$ : binary relation on model $M$}
+\begin{defin}\label{logic:def:FOPL:model:model}
+Let $V$ be a set. We call {\em model} of\, \pv\ any ordered pair
+$(M,r)$ where $M$ is a set and $r$ is a binary relation on $M$, i.e.
+a subset of $M\times M$.
+\end{defin}
+Note that $(M,r)=(\emptyset,\emptyset)$ is a model of \pv\ for any
+set $V$. Furthermore, if $(M,r)$ is a model of \pv, then it is also
+a model of ${\bf P}(W)$ for any set $W$. Whenever the context is
+clear, we shall refer to a model $(M,r)$ simply by '$M$'. Most
+textbook references will exclude the empty set as a possible model.
+We see no reason to do that, and will follow P.T.
+Johnstone~\cite{Johnstone}  and Wilfrid Hodges~\cite{Hodges} in
+allowing the empty structure. As already pointed out, there is
+nothing deep or interesting about the empty set. It is often no more
+than a limiting case which feels like an annoying glitch. It is
+however a good discipline to confront our fear of the empty set, and
+we would hate to exclude it unless we find compelling reasons to do
+so. Thus we shall accept the empty set as a model, and carefully
+describe the implications of this choice as we go along. The next
+definition introduces the notion of {\em variables assignment} which
+are simply maps $a:V\to M$ where $M$ is a model. If $M$ is the empty
+model, then such variable assignments do not exist, unless of course
+$V$ is itself empty, in which case there is a unique variables
+assignment, namely the empty map. Let us assume for now that
+$V\neq\emptyset$. In definition~(\ref{logic:def:FOPL:model:truth})
+below, we introduce the standard notion of {\em truth} of a formula
+$\phi\in\pv$ relative to a model $M$ and assignment $a:V\to M$. The
+property of being {\em true} is denoted $M\vDash\phi[a]$. It is a
+standard practice to say that a formula $\phi$ is {\em true} in the
+model $M$ which we denote $M\vDash\phi$, \ifand\ it is true relative
+to every assignment $a:V\to M$. Whenever $M$ is the empty model and
+$V\neq\emptyset$, there exists no variables assignment $a:V\to M$
+and the property $M\vDash\phi$ is vacuously true for every
+$\phi\in\pv$. This is probably why most authors wish to exclude the
+empty set as a possible structure: it is highly uncomfortable to
+claim that {\em everything is true in the empty model}. This is even
+more problematic when an author wishes to define a {\em satisfiable
+set} $\Gamma\subseteq\pv$ as a set {\em which has a model}, i.e. for
+which there exists a model $M$ such that $M\vDash\phi$ for all
+$\phi\in\Gamma$. If we allow the empty model, then every set
+$\Gamma\subseteq\pv$ is {\em satisfiable} which is a huge problem.
+However, this problem is easily resolved: we just need to be careful
+about what it means for a formula $\phi$ to {\em have a model}, or a
+subset $\Gamma\subseteq\pv$ to be {\em satisfiable}: there should
+exist a model $M$ {\em as well as } an assignment $a:V\to M$ such
+that $M\vDash\phi[a]$, or such that $M\vDash\phi[a]$ for all
+$\phi\in\Gamma$. With this in mind, it is clear the empty model is
+no longer a problem, as there is no pair $(M,a)$ with $M=\emptyset$
+which {\em satisfies} anything in the case when $V\neq\emptyset$. As
+it turns out, we defined a {\em satisfiable} subset
+$\Gamma\subseteq\pv$ in terms of valuations $v:\pv\to 2$ as per
+definition~(\ref{logic:def:FOPL:semantics:valuation:truth}). As we
+shall see, every valuation $v\in\pvd$ {\em has a model}, which is
+the essence of G\"odel's completeness theorem. Once again we should
+be clear as to what $v$ {\em having a model} means: there should
+exist a model $M$ {\em as well as} an assignment $a:V\to M$ such
+that $v=\beta(\,\cdot\,)(a)$, where $\beta$ is the model valuation
+function of $M$, as per
+definition~(\ref{logic:def:FOPL:model:valuation:function}) below.
+
+\index{variable@Variables assignment}\index{assignment@Assignment of
+variables}\index{a@$a,b:V\to M$ : var assignment}
+\begin{defin}\label{logic:def:FOPL:model:assignment}
+Let $V$ be a set and $M$ be a model of\, \pv. Any arbitrary map
+$a:V\to M$ is called an {\em assignment of variables} relative to
+the model $M$.
+\end{defin}

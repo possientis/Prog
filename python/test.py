@@ -8,13 +8,10 @@ class A:
 
 
 def main():
+    "this is a string literal"
     a = A()
     a.foo()
-    m = a.foo
-    print(hex(id(a)))
-    print(m.__self__)
-    print(m.__func__)
-
+    print(__main__)
 
 
 

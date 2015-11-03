@@ -1,0 +1,356 @@
+There are many reasons why minimal transforms are so useful. One of
+them is their ability to characterize $\alpha$-equivalence with a
+simple equality ${\cal M}(\phi)={\cal M}(\psi)$ as illustrated by
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:kernel}. Another
+reason is the fact that ${\cal M}(\phi)$ is essentially a copy of
+$\phi$ as can be seen from the equivalence ${\cal M}(\phi)\sim
+i(\phi)$ of
+proposition~(\ref{logic:prop:FOPL:mintransform:eqivalence}).
+However, this copy ${\cal M}(\phi)$ is a lot more convenient to
+handle, which leads us to our third and most fundamental reason: the
+formula ${\cal M}(\phi)$ can be acted upon by any map $\sigma:V\to
+W$ without caveats on variable capture. This is the whole point of
+minimal transforms. It can be expressed formally by saying that the
+minimal extension $\bar{\sigma}:\bar{V}\to\bar{W}$ is always valid
+for the formula ${\cal M}(\phi)$, a fact which was proved in
+proposition~(\ref{logic:def:FOPL:commute:minextension:valid}). So
+why is this important? It is crucially important as we are able to
+consider the formula $\bar{\sigma}\circ{\cal M}(\phi)$ which is
+meaningful as the substitution avoids variable capture. This formula
+is essentially what we mean by '$\sigma(\phi)$', even when $\sigma$
+is not valid for $\phi$. In fact whenever $\sigma$ is valid for
+$\phi$, from
+theorem~(\ref{logic:the:FOPL:commute:mintransform:validsub}) of
+page~\pageref{logic:the:FOPL:commute:mintransform:validsub} we have
+the equality $\bar{\sigma}\circ{\cal M}(\phi)={\cal
+M}\circ\sigma(\phi)$ which shows that our formula
+$\bar{\sigma}\circ{\cal M}(\phi)$ essentially coincides with what we
+intended to describe, namely $\sigma(\phi)$. So minimal transforms
+allow us to give meaning to $\sigma(\phi)$ despite the fact $\sigma$
+may not be capture-avoiding. Minimal transforms are the key to
+essential substitutions.
+
+We are now hoping to replicate these same ideas from formulas to
+proofs. We have extended the notion of minimal transform to proofs
+and established some of its important properties, among which is the
+substitution equivalence $\vals\circ{\cal M}(\pi)\sim{\cal
+M}\circ\vals(\pi)$ of
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})
+which is true for clean proofs. We shall now prove that the minimal
+extension $\bar{\sigma}:\bar{V}\to\bar{W}$ is always valid for the
+minimal transform ${\cal M}(\pi)$, followed by the commutation
+property $\bar{\sigma}\circ{\cal M}(\pi)={\cal M}\circ\sigma(\pi)$
+whenever $\sigma$ is valid for $\pi$. Note that these results are
+true without qualification on $\pi$ being a clean proof. They are
+purely syntactic and do not rely on the semantics
+$\vals:\pvs\to\pv$. In fact, these results are immediate replication
+of what was done for formulas. Their proofs are a case of
+'cut-and-paste' which is somewhat embarrassing and symptomatic of
+poor design. We know this should not be done, in computing or
+mathematics alike. This is what abstraction and generalization are
+meant to achieve: to avoid the duplication of code. On the positive
+side, our duplicated approach has allowed us to offer plenty of
+motivational background, making the material a lot more accessible.
+Furthermore, when we do attempt to abstract and generalize on the
+next occasion, we shall have a far greater insight of what needs to
+be done. the following proposition is the counterpart of
+proposition~(\ref{logic:def:FOPL:commute:minextension:valid})\,:
+
+\index{minimal@Minimal extension valid}
+\begin{prop}\label{logic:prop:FUAP:mintransformproof:minextension:valid}
+Let $\sigma:V\to W$ be a map. Then for all $\pi\in\pvs$ the minimal
+extension $\bar{\sigma}:\bar{V}\to\bar{W}$ is valid for the minimal
+transform ${\cal M}(\pi)$.
+\end{prop}
+\begin{proof}
+We need to check the three properties of
+proposition~(\ref{logic:prop:FUAP:validsubproof:minimalextension})
+are met in relation to $\bar{\sigma}:\bar{V}\to\bar{W}$ and ${\cal
+M}(\pi)$ with $V_{0}=\N$. First we show property $(i)$\,: we need to
+show that $\bound({\cal M}(\pi))\subseteq\N$ which follows from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:boundvar}). Next
+we show property~$(ii)$\,: we need to show that $\bar{\sigma}_{|\N}$
+is injective which is clear from
+definition~(\ref{logic:def:FOPL:commute:minextensioon:map}). We
+finally show property~$(iii)$\,: we need to show that
+$\bar{\sigma}(\N)\cap\bar{\sigma}(\var({\cal
+M}(\pi))\setminus\N)=\emptyset$. This follows from
+$\bar{\sigma}(\N)\subseteq\N$ and $\bar{\sigma}(\var({\cal
+M}(\pi))\setminus\N)\subseteq\bar{\sigma}(V)=\sigma(V)\subseteq W$,
+while $W\cap\N = \emptyset$.
+\end{proof}
+
+Our next result is
+theorem~(\ref{logic:the:FUAP:mintransvalidsub:commute}) below,
+showing the commutation property $\bar{\sigma}\circ{\cal
+M}(\pi)={\cal M}\circ\sigma(\pi)$ whenever $\sigma$ is valid for
+$\pi$. However before we deal with this theorem, we shall need to
+prove a couple of lemmas. The following is the counterpart of
+lemma~(\ref{logic:lemma:FOPL:commute:mphi1}) which was established
+for formulas:
+
+\begin{lemma}\label{logic:lemma:FUAP:mintransvalidsub:mpi1}
+Let $V,W$ be sets and $\sigma:V\to W$ be a map. Let $\pi=\gen
+x\pi_{1}$ where $\pi_{1}\in\pvs$ and $x\in V$ such that
+$\sigma(x)\not\in\sigma(\free(\pi))$. Then for all $n\in\N$ we have:
+    \[
+        \bar{\sigma}\circ [n/x]\circ{\cal
+    M}(\pi_{1})= [n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\pi_{1})
+    \]
+where $\bar{\sigma}:\bar{V}\to\bar{W}$ is the minimal extension of
+$\sigma: V\to W$.
+\end{lemma}
+\begin{proof}
+Using proposition~(\ref{logic:prop:FUAP:variable:support}), we only
+need to show that the mappings $\bar{\sigma}\circ [n/x]$ and
+$[n/\sigma(x)]\circ\bar{\sigma}$ coincide on $\var({\cal
+M}(\pi_{1}))$. So let $u\in\var({\cal M}(\pi_{1}))\subseteq\bar{V}$.
+We want:
+    \begin{equation}\label{logic:eqn:FUAP:mintransvalidsub:mpi1:1}
+    \bar{\sigma}\circ [n/x](u)=[n/\sigma(x)]\circ\bar{\sigma}(u)
+    \end{equation}
+Since $\bar{V}$ is the disjoint union of $V$ and \N, we shall
+distinguish two cases: first we assume that $u\in\N$. From
+$V\cap\N=\emptyset$ we obtain $u\neq x$ and consequently
+$\bar{\sigma}\circ[n/x](u)=\bar{\sigma}(u)=u$. From
+$W\cap\N=\emptyset$ we obtain $u\neq\sigma(x)$ and consequently
+$[n/\sigma(x)]\circ\bar{\sigma}(u)=[n/\sigma(x)](u)=u$. So
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:mpi1:1}) is indeed
+satisfied. Next we assume that $u\in V$. We shall distinguish two
+further cases: first we assume that $u=x$. Then
+$\bar{\sigma}\circ[n/x](u)=\bar{\sigma}(n)=n$ and
+$[n/\sigma(x)]\circ\bar{\sigma}(u)=[n/\sigma(x)](\sigma(x))=n$ and
+we see that equation~(\ref{logic:eqn:FUAP:mintransvalidsub:mpi1:1})
+is again satisfied. Next we assume that $u\neq x$. Then
+$\bar{\sigma}\circ[n/x](u)=\bar{\sigma}(u)=\sigma(u)$, and
+furthermore
+$[n/\sigma(x)]\circ\bar{\sigma}(u)=[n/\sigma(x)](\sigma(u))$. In
+order to establish
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:mpi1:1}), it is
+therefore sufficient to prove that $\sigma(u)\neq\sigma(x)$.
+However, since $u\in\var({\cal M}(\pi_{1}))$ and $u\in V$, it
+follows from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:freevar}) that
+$u\in\free(\pi_{1})$. Having assumed that $u\neq x$ we in fact have
+$u\in\free(\gen x\pi_{1})=\free(\pi)$. Having assumed that
+$\sigma(x)\not\in\sigma(\free(\pi))$ it follows that
+$\sigma(u)\neq\sigma(x)$ as requested.
+\end{proof}
+
+The following lemma is the counterpart of
+lemma~(\ref{logic:lemma:FOPL:commute:n:equivalence})\,:
+
+\begin{lemma}\label{logic:lemma:FUAP:mintransvalidsub:n:equivalence}
+Let $V,W$ be sets and $\sigma:V\to W$ be a map. Let $\pi=\gen
+x\pi_{1}$ where $\pi_{1}\in\pvs$ and $x\in V$ such that
+$\sigma(x)\not\in\sigma(\free(\pi))$. Then for all $k\in\N$ we have:
+    \[
+    \mbox{$[k/x]$ valid for ${\cal M}(\pi_{1})$}\ \Leftrightarrow
+    \ \mbox{$[k/\sigma(x)]$ valid for $\bar{\sigma}\circ{\cal M}(\pi_{1})$}
+    \]
+where $\bar{\sigma}:\bar{V}\to\bar{W}$ is the minimal extension of
+$\sigma: V\to W$.
+\end{lemma}
+\begin{proof}
+First we show $\Leftarrow$\,: So we assume that $[k/\sigma(x)]$ is
+valid for $\bar{\sigma}\circ{\cal M}(\pi_{1})$. We need to show that
+$[k/x]$ is valid for ${\cal M}(\pi_{1})$. However, we know from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:minextension:valid})
+that $\bar{\sigma}$ is valid for ${\cal M}(\pi_{1})$. Hence, from
+the validity of $[k/\sigma(x)]$ for $\bar{\sigma}\circ{\cal
+M}(\pi_{1})$ and
+proposition~(\ref{logic:prop:FUAP:validsubproof:composition}) we see
+that $[k/\sigma(x)]\circ\bar{\sigma}$ is valid for ${\cal
+M}(\pi_{1})$. Furthermore, having assumed
+$\sigma(x)\not\in\sigma(\free(\pi))$, we can use
+lemma~(\ref{logic:lemma:FUAP:mintransvalidsub:mpi1}) to obtain:
+    \begin{equation}\label{logic:eqn:FUAP:mintransvalidsub:n:equiv:1}
+    \bar{\sigma}\circ [k/x]\circ{\cal
+    M}(\pi_{1})= [k/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\pi_{1})
+    \end{equation}
+It follows from
+proposition~(\ref{logic:prop:FUAP:validsubproof:equal:image}) that
+$\bar{\sigma}\circ[k/x]$ is valid for ${\cal M}(\pi_{1})$, and in
+particular, using
+proposition~(\ref{logic:prop:FUAP:validsubproof:composition}) once
+more, we conclude that $[k/x]$ is valid for ${\cal M}(\pi_{1})$ as
+requested. We now show $\Rightarrow$\,: so we assume that $[k/x]$ is
+valid for ${\cal M}(\pi_{1})$. We need to show that $[k/\sigma(x)]$
+is valid for $\bar{\sigma}\circ{\cal M}(\pi_{1})$. However, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:composition}) it is
+sufficient to prove that $[k/\sigma(x)]\circ\bar{\sigma}$ is valid
+for ${\cal M}(\pi_{1})$. Using
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:n:equiv:1}) and
+proposition~(\ref{logic:prop:FUAP:validsubproof:equal:image}) once
+more, we simply need to show that $\bar{\sigma}\circ[k/x]$ is valid
+for ${\cal M}(\pi_{1})$. Having assumed that $[k/x]$ is valid for
+${\cal M}(\pi_{1})$, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:composition}) it is
+sufficient to show that $\bar{\sigma}$ is valid for $[k/x]\circ{\cal
+M}(\pi_{1})$. We shall do so with an application of
+proposition~(\ref{logic:prop:FUAP:validsubproof:minimalextension})
+to $V_{0}=\N$. First we need to check that $\bound(\,[k/x]\circ{\cal
+M}(\pi_{1})\,)\subseteq\N$. However, from
+proposition~(\ref{logic:prop:FUAP:boundvarproof:substitution}) we
+have $\bound(\,[k/x]\circ{\cal M}(\pi_{1})\,) = [k/x](\,\bound({\cal
+M}(\pi_{1}))\,)$ and from
+proposition~(\ref{logic:prop:FUAP:mintransformproof:boundvar}) we
+have $\bound({\cal M}(\pi_{1}))\subseteq\N$. So the desired
+inclusion follows. Next we need to show that $\bar{\sigma}_{|\N}$ is
+injective which is clear from
+definition~(\ref{logic:def:FOPL:commute:minextensioon:map}).
+Finally, we need to check that
+$\bar{\sigma}(\N)\cap\bar{\sigma}(\,\var([k/x]\circ{\cal
+M}(\pi_{1}))\setminus\N\,)=\emptyset$. This follows from
+$\bar{\sigma}(\N)\subseteq\N$ and
+$\bar{\sigma}(\,\var([k/x]\circ{\cal
+M}(\pi_{1}))\setminus\N\,)\subseteq\bar{\sigma}(V)=\sigma(V)\subseteq
+W$, while $W\cap\N = \emptyset$.
+\end{proof}
+
+We are now ready to prove
+theorem~(\ref{logic:the:FUAP:mintransvalidsub:commute}) which his
+the counterpart of
+theorem~(\ref{logic:the:FOPL:commute:mintransform:validsub}) of
+page~\pageref{logic:the:FOPL:commute:mintransform:validsub}. The
+equality $\bar{\sigma}\circ{\cal M}(\pi)={\cal M}\circ\sigma(\pi)$
+for $\sigma$ valid for $\pi$ will turn out to be very useful, just
+as it was for formulas. More fundamentally, this equality vindicates
+our belief that $\bar{\sigma}\circ{\cal M}(\pi)$ is {\em
+essentially} the right definition for '$\sigma(\pi)$' when $\sigma$
+is not valid for $\pi$, since the two coincide in the valid case.
+
+\index{minimal@Minimal transform commutes}
+\begin{theorem}\label{logic:the:FUAP:mintransvalidsub:commute}
+Let $V$ and $W$ be sets. Let $\sigma:V\to W$ be a map. Let
+$\pi\in\pvs$. If $\sigma$ is valid for $\pi$, then it commutes with
+minimal transforms, specifically:
+    \begin{equation}\label{logic:eqn:FUAP:mintransvalidsub:commute:1}
+    \bar{\sigma}\circ{\cal M}(\pi)={\cal M}\circ\sigma(\pi)
+    \end{equation}
+where $\bar{\sigma}:\bar{V}\to\bar{W}$ is the minimal extension of
+$\sigma: V\to W$.
+\end{theorem}
+\begin{proof}
+Before we start, it should be noted that $\sigma$ in
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:commute:1}) refers to
+the substitution mapping $\sigma:\pvs\to{\bf\Pi}(W)$ while the
+${\cal M}$ on the right-hand-side refers to the minimal transform
+mapping ${\cal M}:{\bf\Pi}(W)\to{\bf\Pi}(\bar{W})$. The other ${\cal
+M}$ which appears on the left-hand-side refers to the minimal
+transform mapping ${\cal M}:\pvs\to{\bf\Pi}(\bar{V})$, and
+$\bar{\sigma}$ is the substitution mapping $\bar{\sigma}:{\bf
+\Pi}(\bar{V})\to{\bf\Pi}(\bar{W})$. So everything makes sense. For
+all $\pi\in\pvs$, we need to show the property:
+    \[
+    (\mbox{$\sigma$ valid for $\pi$})\ \Rightarrow\
+    \bar{\sigma}\circ{\cal M}(\pi)={\cal M}\circ\sigma(\pi)
+    \]
+We shall do so by structural induction using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. We need to show the property is
+true for $\pi$. So we assume that $\sigma$ is valid for $\pi=\phi$.
+We need to show the equality $\bar{\sigma}\circ{\cal M}(\pi)={\cal
+M}\circ\sigma(\pi)$ which follows immediately from
+theorem~(\ref{logic:the:FOPL:commute:mintransform:validsub}) of
+page~\pageref{logic:the:FOPL:commute:mintransform:validsub}. Next we
+assume that $\pi=\axi\phi$ for some $\phi\in\pv$. We need to show
+that the property is true for $\pi$. So we assume that $\sigma$ is
+valid for $\pi$. Using
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:axiom})
+this means that $\sigma$ is valid for $\phi$. Hence we have:
+    \begin{eqnarray*}
+    \bar{\sigma}\circ{\cal M}(\pi)&=&\bar{\sigma}\circ{\cal
+    M}(\axi\phi)\\
+    &=&\bar{\sigma}(\axi{\cal M}(\phi))\\
+    &=&\axi\bar{\sigma}\circ{\cal M}(\phi)\\
+    \mbox{Th.~(\ref{logic:the:FOPL:commute:mintransform:validsub}), $\sigma$ valid for $\phi$}\ \rightarrow
+    &=&\axi{\cal M}\circ\sigma(\phi)\\
+    &=&{\cal M}(\axi\sigma(\phi))\\
+    &=&{\cal M}\circ\sigma(\axi\phi)\\
+    &=&{\cal M}\circ\sigma(\pi)\\
+    \end{eqnarray*}
+Next we assume that $\pi=\pi_{1}\pon\pi_{2}$ where the property is
+true for $\pi_{1},\pi_{2}\in\pvs$. We need to show the property is
+also true for $\pi$. So we assume that $\sigma$ is valid for $\pi$.
+We need to show
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:commute:1}) holds for
+$\pi$. However, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:pon}), the
+substitution $\sigma$ is valid for both $\pi_{1}$ and $\pi_{2}$.
+Having assumed the property is true for $\pi_{1}$ and $\pi_{2}$, it
+follows that
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:commute:1}) holds for
+$\pi_{1}$ and $\pi_{2}$. Hence, we have the following equalities:
+    \begin{eqnarray*}
+    \bar{\sigma}\circ{\cal M}(\pi)
+    &=&\bar{\sigma}\circ{\cal M}(\pi_{1}\pon\pi_{2})\\
+    &=&\bar{\sigma}(\,{\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})\,)\\
+    &=&\bar{\sigma}({\cal M}(\pi_{1}))\pon\,\bar{\sigma}({\cal
+    M}(\pi_{2}))\\
+    &=&{\cal M}(\sigma(\pi_{1}))\pon\,{\cal
+    M}(\sigma(\pi_{2}))\\
+    &=&{\cal M}(\,\sigma(\pi_{1})\pon\,\sigma(\pi_{2})\,)\\
+    &=&{\cal M}(\sigma(\pi_{1}\pon\pi_{2}))\\
+    &=&{\cal M}\circ\sigma(\pi)
+    \end{eqnarray*}
+Finally we assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and the
+property is true for $\pi_{1}\in\pvs$. We need to show the property
+is also true for $\pi$. So we assume that $\sigma$ is valid for
+$\pi$. We need to show
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:commute:1}) holds for
+$\pi$. However, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:gen}), the
+substitution $\sigma$ is also valid for $\pi_{1}$. Having assumed
+the property is true for $\pi_{1}$, it follows that
+equation~(\ref{logic:eqn:FUAP:mintransvalidsub:commute:1}) holds for
+$\pi_{1}$. Hence:
+    \begin{eqnarray*}
+    \bar{\sigma}\circ{\cal M}(\pi)&=&\bar{\sigma}\circ{\cal M}(\gen
+    x\pi_{1})\\
+    \mbox{$n=\min\{k:[k/x]\mbox{ valid for }{\cal M}(\pi_{1})\}$}\
+    \rightarrow
+    &=&\bar{\sigma}(\,\gen n{\cal M}(\pi_{1})[n/x]\,)\\
+    &=&\gen \bar{\sigma}(n)\bar{\sigma}(\,{\cal
+    M}(\pi_{1})[n/x]\,)\\
+    &=&\gen n\,\bar{\sigma}\circ [n/x]\circ{\cal
+    M}(\pi_{1})\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\gen n\,[n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\pi_{1})\\
+    &=&\gen n\,[n/\sigma(x)]\circ{\cal M}\circ\sigma(\pi_{1})\\
+    &=&\gen n\,{\cal M}[\sigma(\pi_{1})][n/\sigma(x)]\\
+    \mbox{B: to be proved}\ \rightarrow
+    &=&\gen m\,{\cal M}[\sigma(\pi_{1})][m/\sigma(x)]\\
+    \mbox{$m=\min\{k:[k/\sigma(x)]\mbox{ valid for }{\cal M}[\sigma(\pi_{1})]\}$}\
+    \rightarrow
+    &=&{\cal M}(\gen\sigma(x)\sigma(\pi_{1}))\\
+    &=&{\cal M}(\sigma(\gen x\pi_{1}))\\
+    &=&{\cal M}\circ\sigma(\pi)
+    \end{eqnarray*}
+So we have two more points A and B to justify. First we deal with
+point A. It is sufficient for us to prove the following equality:
+    \[
+    \bar{\sigma}\circ [n/x]\circ{\cal
+    M}(\pi_{1})= [n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\pi_{1})
+    \]
+Using lemma~(\ref{logic:lemma:FUAP:mintransvalidsub:mpi1}) it is
+sufficient to show that $\sigma(x)\not\in\sigma(\free(\pi))$. So
+suppose to the contrary that $\sigma(x)\in\sigma(\free(\pi))$. Then
+there exists $u\in\free(\pi)$ such that $\sigma(u)=\sigma(x)$. This
+contradicts
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:gen}) and
+the fact that $\sigma$ is valid for $\pi$, which completes the proof
+of point A. So we now turn to point B. We need to prove that $n=m$,
+for which it is sufficient to show the equivalence:
+    \[
+    \mbox{$[k/x]$ valid for ${\cal M}(\pi_{1})$}\ \Leftrightarrow
+    \ \mbox{$[k/\sigma(x)]$ valid for ${\cal M}[\sigma(\pi_{1})]$}
+    \]
+This follows from
+lemma~(\ref{logic:lemma:FUAP:mintransvalidsub:n:equivalence}) and
+the fact that  $\sigma(x)\not\in\sigma(\free(\pi))$, together with
+the induction hypothesis $\bar{\sigma}\circ{\cal M}(\pi_{1})={\cal
+M}\circ\sigma(\pi_{1})$.
+\end{proof}

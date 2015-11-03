@@ -1,0 +1,597 @@
+In definition~(\ref{logic:def:FOPL:valid:substitution}) we defined
+what it meant for a substitution $\sigma:V\to W$ to be valid for a
+formula $\phi\in\pv$. We needed to introduce the notion that
+$\sigma$ would not randomly distort the {\em logical structure} of
+$\phi$, a property which is commonly known as {\em avoiding
+capture}. The purpose was obvious: we wanted to {\em carry over}
+properties of $\phi\in\pv$ into corresponding properties of
+$\sigma(\phi)\in{\bf P}(W)$. For example,
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:valid}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:valid} tells us that a
+substitution equivalence $\phi\sim\psi$ is preserved by $\sigma$
+provided it is valid for both $\phi$ and $\psi$. Another example
+will be seen as the {\em substitution lemma} in the context of model
+theory, where
+proposition~(\ref{logic:prop:FOPL:model:valid:substitution}) will
+show that if $\sigma$ is valid for $\phi$, then the truth of
+$\sigma(\phi)$ in a model $M$ under an assignment $a:W\to M$ is
+equivalent to the truth of $\phi$ under the assignment
+$a\circ\sigma$. The notion of $\sigma$ being valid for $\phi$ is
+crucially important.
+
+One of the most interesting properties of formulas which we may wish
+to {\em carry over} is that of provability. If a sequent
+$\Gamma\vdash\phi$ is true, we all want to know under what
+conditions the corresponding sequent
+$\sigma(\Gamma)\vdash\sigma(\phi)$ is also true. It is very tempting
+to conjecture that provided $\sigma$ is valid for $\phi$ and is also
+valid for every hypothesis $\psi\in\Gamma$, then the result will
+hold. Of course, an obvious issue is the fact that a sequent
+$\Gamma\vdash\phi$ does not tell us anything about the axioms being
+used in a proof underlying the sequent. So we cannot hope to simply
+{\em carry over} every step of the proof with $\sigma$, as our
+assumption does not guarantee $\sigma$ is valid for every axiom
+involved in the proof. It only guarantees $\sigma$ is valid for the
+conclusion, and for every hypothesis. In fairness, this issue only
+arises because we stubbornly insist on working with actual maps
+$\sigma:V\to W$, rather than essential substitutions
+$\sigma:\pv\to{\bf P}(W)$ of
+definition~(\ref{logic:def:FOPL:esssubstprop:essential}). We know
+essential substitutions are the right concept. We somehow suspect
+our scheme to {\em carry over} proofs with the substitution
+$\sigma:\pvs\to{\bf\Pi}(W)$ of
+definition~(\ref{logic:def:FUAP:substitution:substitution}) is most
+likely a waste of time. We should {\em carry over} proofs using
+essential substitutions only. There is however one thing to
+remember: from theorem~(\ref{logic:the:FOPL:esssubst:existence}) of
+page~\pageref{logic:the:FOPL:esssubst:existence} an essential
+substitution $\sigma:\pv\to{\bf P}(W)$ can only exist if $W$ is an
+infinite set, or $V$ is a smaller set than $W$. So if we restrict
+our analysis to essential substitutions, we cannot hope to {\em
+carry over} the sequent $\Gamma\vdash\phi$ into
+$\sigma(\Gamma)\vdash\sigma(\phi)$ in the case when $W$ is a finite
+set of smaller cardinality than $V$.
+
+We are certainly interested in saying something about
+$\sigma(\Gamma)\vdash\sigma(\phi)$ in the case when $W$ is a smaller
+finite set. For example, suppose we have an embedding $j:W\to V$
+between two finite sets, and $\Delta$ is a consistent subset of
+${\bf P}(W)$. We certainly hope that $\Gamma=j(\Delta)$ is a
+consistent subset of \pv. If $\Gamma$ is not consistent, as we shall
+see from
+definition~(\ref{logic:def:FOPL:semantics:consistent:subset}) the
+sequent $\Gamma\vdash\bot$ is true. Assuming $W\neq\emptyset$ and
+$j$ has a left inverse $\sigma:V\to W$, here is a case when we want
+to {\em carry over} the sequent $\Gamma\vdash\bot$ into a smaller
+finite set $W$: we want to argue that $\sigma(\Gamma)\vdash\bot$ is
+true so as to obtain $\Delta\vdash\bot$, contradicting the
+consistency of $\Delta$. Most proofs of G\"odel completeness theorem
+involve successive embeddings where constants are continually added
+to the language, and it is usually taken for granted that
+consistency is preserved as the language is extended. This is not
+completely obvious for us. We do not have constants, but only
+variables. As the set of variables is increased, the range of
+possible proofs becomes larger and it is conceivable that a
+contradiction may appear. In general, it is not clear that a sequent
+$j(\Delta)\vdash j(\phi)$ can be transported back into the smaller
+finite set, as the variables involved in the axioms may have no
+obvious counterpart in $W$.
+
+In any case, although we strongly suspect essential substitutions
+will play an important role in allowing us to {\em carry over}
+sequents, we should not attempt to run before we can walk: when
+attempting to establish the sequent
+$\sigma(\Gamma)\vdash\sigma(\phi)$ we should start with the obvious,
+and the obvious consists in following every step of the proof
+underlying $\Gamma\vdash\phi$, and replacing all variables in line
+with the substitution $\sigma$. This is the purpose of
+definition~(\ref{logic:def:FUAP:substitution:substitution}),
+creating $\sigma(\pi)\in{\bf\Pi}(W)$ from $\pi\in\pvs$, in the hope
+that $\sigma(\pi)$ will become a proof of $\sigma(\phi)$, from the
+set of hypothesis $\sigma(\Gamma)$. Of course, this is not going to
+work in all cases. The proof $\sigma(\pi)$ is pretty worthless,
+unless we control its valuation $\val(\sigma(\pi))$, that is:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:intro:1}
+    \val\circ\sigma(\pi)=\sigma\circ\val(\pi)
+    \end{equation}
+It is clear equation~(\ref{logic:eqn:FUAP:validsub:intro:1}) will
+fail unless $\sigma:V\to W$ has the right properties in relation to
+$\pi$. For example, if $\pi=\axi\phi$ where $\phi\in\av$ is an axiom
+of first order logic, then $\sigma(\pi)=\axi\sigma(\phi)$ and if
+$\sigma(\phi)$ fails to be an axiom, then from
+definition~(\ref{logic:def:FOPL:proof:valuation}) we obtain
+$\val\circ\sigma(\pi)=\bot\to\bot$. So
+equation~(\ref{logic:eqn:FUAP:validsub:intro:1}) will fail unless
+$\sigma(\phi)$ is itself an axiom. We shall see later in
+lemma~(\ref{logic:lemma:FUAP:substitution:axiom}) that
+$\sigma(\phi)$ is indeed an axiom, provided $\sigma$ is valid for
+$\phi$. It is not difficult to design a counterexample otherwise. So
+here is a case when the condition {\em $\sigma$ is valid for $\phi$}
+is a key condition to ensure that
+equation~(\ref{logic:eqn:FUAP:validsub:intro:1}) is met by
+$\pi=\axi\phi$, at least in the case when $\pi$ is totaly clean,
+that is when $\phi$ is an axiom. In our discussion preceding
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) we explained the
+importance of $\pi$ being totally clean.
+
+In this section, we want to define what it is for $\sigma$ to be
+{\em valid for $\pi$}. Our purpose to the design the right condition
+so as to ensure equation~(\ref{logic:eqn:FUAP:validsub:intro:1})
+will hold, whenever $\pi$ is totally clean and $\sigma$ is {\em
+valid for $\pi$}. The result will be proved in
+proposition~(\ref{logic:prop:FUAP:validsub:valuation:commute}).
+
+
+
+\begin{defin}\label{logic:def:FUAP:validsub:validsub}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Then $\sigma$
+is {\em weakly valid for} $\pi\in\pvs$, \ifand\ for all
+$\pi_{1}\in\pvs$, $\phi\in\pv$, $x\in V$:
+    \begin{eqnarray*}
+    (i)&&\phi\in\hyp(\pi)\ \Rightarrow\ \mbox{$\sigma$ valid for $\phi$}\\
+    (ii)&&\phi\in\ax(\pi)\ \Rightarrow\ \mbox{$\sigma$ valid for $\phi$}\\
+    (iii)&&\gen x\pi_{1}\preceq\pi\ \Rightarrow\ [\
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \sigma(u)\neq\sigma(x)\ ]
+    \end{eqnarray*}
+\end{defin}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:subformula}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Then $\sigma$ is
+weakly valid for $\pi\in\pvs$ \ifand\ it is weakly valid for any
+sub-proof $\rho\preceq\pi$.
+\end{prop}
+\begin{proof}
+If $\sigma$ is weakly valid for any sub-proof of $\pi$, then in
+particular it is weakly valid for $\pi$. So we assume that $\sigma$
+is weakly valid for $\pi$ and consider a sub-proof $\rho\preceq\pi$.
+We need to show that $\sigma$ is also weakly valid for $\rho$. So
+suppose $\phi\in\hyp(\rho)\cup\ax(\rho)$. We need to show that
+$\sigma$ is valid for $\phi$. However, from
+proposition~(\ref{logic:prop:FUAP:hypothesis:subformula})
+and~(\ref{logic:prop:FUAP:axiomset:subformula}) we have the
+inclusions $\hyp(\rho)\subseteq\hyp(\pi)$  and
+$\ax(\rho)\subseteq\ax(\pi)$. It follows that
+$\phi\in\hyp(\pi)\cup\ax(\pi)$. Since $\sigma$ is weakly valid for
+$\pi$ we see that $\sigma$ is valid for $\phi$. We now assume that
+$\gen x\pi_{1}\preceq\rho$. We need to show that the implication
+$u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \sigma(u)\neq\sigma(x)$ is true. However, since $\rho\preceq\pi$ by transitivity we obtain
+$\gen x\pi_{1}\preceq\pi$ and since $\sigma$ is weakly valid for
+$\pi$, the implication is true.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:recursion:formula}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi$ of the
+form $\pi=\phi\in\pv$. Then $\sigma$ is weakly valid for $\pi$
+\ifand\ it is valid for~$\phi$.
+\end{prop}
+\begin{proof}
+Suppose $\sigma$ is weakly valid for $\pi=\phi$. Since
+$\phi\in\hyp(\pi)$ we see that $\sigma$ is valid for~$\phi$.
+Conversely, suppose $\sigma$ is valid for $\phi$. We need to show
+that $\sigma$ is weakly valid for $\pi$. So suppose
+$\psi\in\hyp(\pi)$. We need to show that $\sigma$ is valid for
+$\psi$. However, $\hyp(\pi)=\{\phi\}$ and consequently $\psi=\phi$.
+So $\sigma$ is indeed valid for $\psi$. Furthermore since
+$\ax(\pi)=\emptyset$, property $(ii)$ of
+definition~(\ref{logic:def:FUAP:validsub:validsub}) is vacuously
+true. So we now check property $(iii)$: note that since
+$\pi=\phi\in\pv$, from definition~(\ref{logic:def:subformula}) we
+have $\subf(\pi)=\{\pi\}$. In other words, the only sub-proof of
+$\pi$ is $\pi$ itself. Using
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} it follows that no
+sub-proof of $\pi$ can be of the form $\gen x\pi_{1}$. So $(iii)$ of
+definition~(\ref{logic:def:FUAP:validsub:validsub}) is also
+vacuously satisfied.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:recursion:axiom}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi=\axi\phi$,
+where $\phi\in\pv$. Then $\sigma$ is weakly valid for $\pi$ \ifand\
+it is valid for $\phi$.
+\end{prop}
+\begin{proof}
+Suppose $\sigma$ is weakly valid for $\pi=\axi\phi$. Since
+$\phi\in\ax(\pi)$ we see that $\sigma$ is valid for~$\phi$.
+Conversely, suppose $\sigma$ is valid for $\phi$. We need to show
+that $\sigma$ is weakly valid for~$\pi$. since
+$\hyp(\pi)=\emptyset$, property $(i)$ of
+definition~(\ref{logic:def:FUAP:validsub:validsub}) is vacuously
+true. So we now check property $(ii)$: suppose $\psi\in\ax(\pi)$. We
+need to show that $\sigma$ is valid for $\psi$. However,
+$\ax(\pi)=\{\phi\}$ and consequently $\psi=\phi$. So $\sigma$ is
+indeed valid for $\psi$. We now check property $(iii)$: from
+definition~(\ref{logic:def:subformula}) we have
+$\subf(\pi)=\subf(\axi\phi(0))=\{\axi\phi(0)\}=\{\pi\}$. In other
+words, the only sub-proof of $\pi$ is $\pi$ itself. Using
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} it follows that no
+sub-proof of $\pi$ can be of the form $\gen x\pi_{1}$. So $(iii)$ of
+definition~(\ref{logic:def:FUAP:validsub:validsub}) is vacuously
+satisfied.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:recursion:pon}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let
+$\pi=\pi_{1}\pon\pi_{2}$. Then $\sigma$ is weakly valid for $\pi$
+\ifand\ it is weakly valid for $\pi_{1}$ and $\pi_{2}$.
+\end{prop}
+\begin{proof}
+First we show the 'only if' part: so we assume that $\sigma$ is
+weakly valid for $\pi=\pi_{1}\pon\pi_{2}$. From
+proposition~(\ref{logic:prop:FUAP:validsub:subformula}) it is
+therefore weakly valid for every sub-proof of $\pi$. Since
+$\pi_{1}\preceq\pi$ and $\pi_{2}\preceq\pi$ we conclude that
+$\sigma$ is weakly valid for both $\pi_{1}$ and $\pi_{2}$. We now
+show the 'if' part: so we assume that $\sigma$ is weakly valid for
+$\pi_{1}$ and $\pi_{2}$. We need to show that $\sigma$ is weakly
+valid for $\pi=\pi_{1}\pon\pi_{2}$. So let $\phi\in\hyp(\pi)$. We
+need to show that $\sigma$ is valid for $\phi$. However
+$\hyp(\pi)=\hyp(\pi_{1})\cup\hyp(\pi_{2})$. So $\phi$ is an element
+of $\hyp(\pi_{1})$ or $\hyp(\pi_{2})$ and in both cases we see that
+$\sigma$ is valid for $\phi$. So we now assume that
+$\phi\in\ax(\pi)$. We need to show that $\sigma$ is valid for
+$\phi$. Once again, since $\ax(\pi)=\ax(\pi_{1})\cup\ax(\pi_{2})$
+the formula $\phi$ must be an element of $\ax(\pi_{1})$ or
+$\ax(\pi_{2})$. Either way, we see that $\sigma$ is valid for
+$\phi$. In order to show that $\sigma$ is weakly valid for $\pi$, it
+remains to show that $(iii)$ of
+definition~(\ref{logic:def:FUAP:validsub:validsub}) is satisfied. So
+suppose $\gen x\rho\preceq\pi$. We need to show the implication
+$u\in\spec(\rho)\setminus\{x\}\ \Rightarrow\
+\sigma(u)\neq\sigma(x)$. However, since $\pi=\pi_{1}\pon\pi_{2}$,
+from theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we have $\gen
+x\rho\neq\pi$. It follows that $\gen x\rho\in\subf(\pi_{1})$ or
+$\gen x\rho\in\subf(\pi_{2})$. In the first case, $\gen
+x\rho\preceq\pi_{1}$ and our desired implication follows from the
+weak validity of $\sigma$ for $\pi_{1}$. In the second case, $\gen
+x\rho\preceq\pi_{2}$  and we conclude from the weak validity of
+$\sigma$ for $\pi_{2}$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:recursion:gen}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi=\gen
+x\pi_{1}$. Then $\sigma$ is weakly valid for $\pi$ \ifand\ it is
+weakly valid for $\pi_{1}$ and:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:recursion:gen:1}
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \sigma(u)\neq\sigma(x)
+    \end{equation}
+\end{prop}
+\begin{proof}
+First we show the 'only if' part: so we assume that $\sigma$ is
+weakly valid for the proof $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}\in\pvs$. From
+proposition~(\ref{logic:prop:FUAP:validsub:subformula}), $\sigma$ is
+weakly valid for $\pi_{1}\preceq\pi$. So it remains to show that the
+implication~(\ref{logic:eqn:FUAP:validsub:recursion:gen:1}) holds.
+So suppose $u\in\spec(\pi_{1})\setminus\{x\}$. We need to show that
+$\sigma(u)\neq\sigma(x)$. However, this follows immediately from
+$(iii)$ of definition~(\ref{logic:def:FUAP:validsub:validsub}), the
+weak validity of $\sigma$ for $\pi$ and the fact that $\pi$ is a
+sub-proof of itself, i.e. $\gen x\pi_{1}\preceq\pi$. We now show the
+'if' part: so we assume that $\sigma$ is weakly valid for $\pi_{1}$
+and furthermore that~(\ref{logic:eqn:FUAP:validsub:recursion:gen:1})
+holds. We need to show that $\sigma$ is weakly valid for~$\pi$. So
+let $\phi\in\hyp(\pi)\cup\ax(\pi)$. We need to show that $\sigma$ is
+valid for~$\phi$. However, we have $\hyp(\pi)=\hyp(\pi_{1})$ and
+$\ax(\pi)=\ax(\pi_{1})$ and consequently
+$\phi\in\hyp(\pi_{1})\cup\ax(\pi_{1})$. Having assumed that $\sigma$
+is weakly valid for $\pi_{1}$, it follows that $\sigma$ is valid for
+$\phi$ as requested. In order to show that $\sigma$ is weakly valid
+for $\pi$, it remains to prove that $(iii)$ of
+definition~(\ref{logic:def:FUAP:validsub:validsub}) holds. So
+suppose $\gen y\rho\preceq\pi=\gen x\pi_{1}$. We need to show:
+    \[
+    u\in\spec(\rho)\setminus\{y\}\ \Rightarrow\ \sigma(u)\neq\sigma(y)
+    \]
+We shall distinguish two cases: first we assume that $\gen
+y\rho\preceq\pi_{1}$. Then our desired implication follows from the
+weak validity of $\sigma$ for $\pi_{1}$. Next we assume that $\gen
+y\rho=\pi=\gen x\pi_{1}$. From
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we obtain $y=x$ and
+$\rho=\pi_{1}$ and our desired implication is exactly our
+assumption~(\ref{logic:eqn:FUAP:validsub:recursion:gen:1}).
+\end{proof}
+
+
+\begin{prop}\label{logic:prop:FUAP:validsub:freevar}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Then for every
+proof $\pi\in\pvs$, if  the substitution $\sigma$ is weakly valid
+for $\pi$ we have:
+    \[
+    \spec(\sigma(\pi))=\sigma(\spec(\pi))
+    \]
+where $\sigma:\pvs\to{\bf\Pi}(W)$ also denotes the proof
+substitution mapping.
+\end{prop}
+\begin{proof}
+We assume that $\sigma$ is weakly valid for $\pi$. Then $\sigma$ is
+valid for every $\phi\in\hyp(\pi)$. Hence from
+proposition~(\ref{logic:prop:FOPL:valid:free:commute}),
+$\free(\sigma(\phi))=\sigma(\free(\phi))$ for all $\phi\in\hyp(\pi)$
+and:
+    \begin{eqnarray*}
+    \spec(\sigma(\pi))&=&\spec(\,\hyp(\sigma(\pi))\,)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:substitution:hypothesis})}\ \rightarrow
+    &=&\spec(\,\sigma(\hyp(\pi))\,)\\
+    &=&\cup\{\,\free(\psi)\ :\ \psi\in\sigma(\hyp(\pi))\,\}\\
+    &=&\cup\{\,\free(\sigma(\phi))\ :\ \phi\in\hyp(\pi)\,\}\\
+    \mbox{$\sigma$ valid for $\phi\in\hyp(\pi)$}\ \rightarrow
+    &=&\cup\{\,\sigma(\free(\phi))\ :\ \phi\in\hyp(\pi)\,\}\\
+    &=&\sigma(\,\cup\{\,\free(\phi)\ :\ \phi\in\hyp(\pi)\,\}\,)\\
+    &=&\sigma(\,\spec(\hyp(\pi))\,)\\
+    &=&\sigma(\spec(\pi))
+    \end{eqnarray*}
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:injective}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi\in\pvs$.
+We assume that $\sigma_{|\var(\pi)}$ is an injective map. Then
+$\sigma$ is weakly valid for $\pi$.
+\end{prop}
+\begin{proof}
+We assume that $\sigma:V\to W$ is injective on $\var(\pi)$. We need
+to show that $\sigma$ is weakly valid for $\pi$. So let
+$\phi\in\hyp(\pi)$. We need to show that $\sigma$ is valid for
+$\phi$. Using proposition~(\ref{logic:prop:FOPL:valid:injective}) it
+is sufficient to prove that $\sigma$ is injective on $\var(\phi)$.
+It is therefore sufficient to show that
+$\var(\phi)\subseteq\var(\pi)$, which follows from
+proposition~(\ref{logic:prop:FUAP:variable:subformula}) and
+$\phi\preceq\pi$, this last inequality being itself a consequence of
+proposition~(\ref{logic:prop:FUAP:hypothesis:charac}) and
+$\phi\in\hyp(\pi)$. So we now assume that $\phi\in\ax(\pi)$. We need
+to show that $\sigma$ is valid for $\phi$. Using
+proposition~(\ref{logic:prop:FOPL:valid:injective}) it is sufficient
+to prove that $\sigma$ is injective on $\var(\phi)$. It is therefore
+sufficient to show that $\var(\phi)\subseteq\var(\pi)$ or
+equivalently $\var(\axi\phi)\subseteq\var(\pi)$. This follows from
+proposition~(\ref{logic:prop:FUAP:variable:subformula}) and
+$\axi\phi\preceq\pi$, this last inequality being itself a
+consequence of proposition~(\ref{logic:prop:FUAP:axiomset:charac})
+and $\phi\in\ax(\pi)$. In order to show that $\sigma$ is weakly
+valid for $\pi$, we finally consider $\gen x\pi_{1}\preceq\pi$. It
+remains to show that the following implication holds:
+    \[
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \sigma(u)\neq\sigma(x)
+    \]
+So suppose that $u\in\spec(\pi_{1})\setminus\{x\}$. In particular we
+have $u\neq x$ and we need to show that $\sigma(u)\neq\sigma(x)$.
+Having assumed $\sigma$ is injective on $\var(\pi)$, it is
+sufficient to prove that $\{u,x\}\subseteq\var(\pi)$. From $\gen
+x\pi_{1}\preceq\pi$ and
+proposition~(\ref{logic:prop:FUAP:variable:subformula}) we obtain:
+    \[
+    x\in\var(\gen x\pi_{1})\subseteq\var(\pi)
+    \]
+So it remains to show that $u\in\var(\pi)$. Using
+propositions~(\ref{logic:prop:FUAP:freevar:subset:variable})
+and~(\ref{logic:prop:FUAP:variable:subformula})\,:
+    \[
+    u\in\spec(\pi_{1})\subseteq\var(\pi_{1})\subseteq \var(\gen x\pi_{1})\subseteq\var(\pi)
+    \]
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:singlevar}
+Let $V$ be a set and $x,y\in V$. Let $\pi\in\pvs$. Then we have:
+    \[
+    y\not\in\var(\pi)\ \Rightarrow\ (\mbox{$[y/x]$ weakly valid for
+    $\pi$})
+    \]
+\end{prop}
+\begin{proof}
+We assume that $y\not\in\var(\pi)$. We need to show that $[y/x]$ is
+weakly valid for $\pi$. Using
+proposition~(\ref{logic:prop:FUAP:validsub:injective}), it is
+sufficient to prove that $[y/x]_{|\var(\pi)}$ is an injective map.
+This follows immediately from $y\not\in\var(\pi)$ and
+proposition~(\ref{logic:prop:FOPL:singlevar:support}).
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:composition}
+Let $U$, $V$, $W$ be sets and $\tau:U\to V$ and $\sigma:V\to W$ be
+maps. Then for all $\pi\in{\bf\Pi}(U)$ we have the equivalence:
+\[
+    (\mbox{$\tau$ w-valid for $\pi$})\land(\mbox{$\sigma$ w-valid for
+    $\tau(\pi)$})\ \Leftrightarrow\ (\mbox{$\sigma\circ\tau$ w-valid for
+    $\pi$})
+\]
+where $\tau:{\bf\Pi}(U)\to{\bf\Pi}(V)$ also denotes the associated
+proof substitution mapping.
+\end{prop}
+\begin{proof}
+First we show $\Rightarrow$\,: so we assume that $\tau$ is weakly
+valid for $\pi$ and $\sigma$ is weakly valid for $\tau(\pi)$. We
+need to show that $\sigma\circ\tau$ is weakly valid for $\pi$. So we
+consider a formula $\phi\in\hyp(\pi)\cup\ax(\pi)$. We need to show
+that $\sigma\circ\tau$ is valid for $\phi$. Using
+proposition~(\ref{logic:prop:FOPL:valid:composition}), it is
+sufficient to prove that $\tau$ is valid for $\phi$ and that
+$\sigma$ is valid for $\tau(\phi)$. The fact that $\tau$ is valid
+for $\phi$ follows immediately from the weak validity of $\tau$ for
+$\pi$. So it remains to show that $\sigma$ is valid for
+$\tau(\phi)$. However, from
+proposition~(\ref{logic:prop:FUAP:substitution:hypothesis}) we have
+$\tau(\hyp(\pi))=\hyp(\tau(\pi))$ and furthermore it follows from
+proposition~(\ref{logic:prop:FUAP:axiomset:substitution}) that
+$\tau(\ax(\pi))=\ax(\tau(\pi))$. Hence we see that
+$\tau(\phi)\in\hyp(\tau(\pi))\cup\ax(\tau(\pi))$, and having assumed
+that $\sigma$ is weakly valid for $\tau(\pi)$ we conclude that
+$\sigma$ is valid for $\tau(\phi)$ as requested. We now consider
+$\gen x\pi_{1}\preceq\pi$. In order to show that $\sigma\circ\tau$
+is weakly valid for $\pi$, given $u\in U$ we need:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:composition:1}
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \sigma\circ\tau(u)\neq\sigma\circ\tau(x)
+    \end{equation}
+However, since $\tau$ is weakly valid for $\pi$, we know the
+following implication is true:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:composition:2}
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \tau(u)\neq\tau(x)
+    \end{equation}
+So we assume that $u\in\spec(\pi_{1})\setminus\{x\}$. We need to
+show that $\sigma\circ\tau(u)\neq\sigma\circ\tau(x)$. Defining
+$v=\tau(u)\in V$ and $y=\tau(x)\in V$, we need to show that
+$\sigma(v)\neq\sigma(y)$. However, from $\gen x\pi_{1}\preceq\pi$
+and proposition~(\ref{logic:prop:FUAP:substitution:subformula}) we
+obtain $\gen y\tau(\pi_{1})\preceq\tau(\pi)$. Having assumed that
+$\sigma$ is weakly valid for $\tau(\pi)$, the following implication
+holds:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:composition:3}
+    v\in\spec(\tau(\pi_{1}))\setminus\{y\}\ \Rightarrow\
+    \sigma(v)\neq\sigma(y)
+    \end{equation}
+Thus, in order to show $\sigma(v)\neq\sigma(y)$ it is sufficient to
+prove $v\in\spec(\tau(\pi_{1}))\setminus\{y\}$. We already know from
+the implication~(\ref{logic:eqn:FUAP:validsub:composition:2}) that
+$v\neq y$. So it remains to show that $v\in\spec(\tau(\pi_{1}))$.
+However we have $v=\tau(u)\in\tau(\spec(\pi_{1}))$. It is therefore
+sufficient to prove that
+$\tau(\spec(\pi_{1}))=\spec(\tau(\pi_{1}))$. Using
+proposition~(\ref{logic:prop:FUAP:validsub:freevar}) we simply need
+to show that $\tau$ is weakly valid for $\pi_{1}$ which follows from
+proposition~(\ref{logic:prop:FUAP:validsub:subformula}) and the fact
+that $\pi_{1}\preceq\gen x\pi_{1}\preceq\pi$, i.e. that $\pi_{1}$ is
+a sub-proof of $\pi$. We now show $\Leftarrow$\,: so we assume that
+$\sigma\circ\tau$ is weakly valid for $\pi$. We need to show that
+$\tau$ is weakly valid for $\pi$ and $\sigma$ is weakly valid for
+$\tau(\pi)$. First we show that $\tau$ is weakly valid for $\pi$: so
+let $\phi\in\hyp(\pi)\cup\ax(\pi)$. We need to show that $\tau$ is
+valid for $\phi$. However we know by assumption that
+$\sigma\circ\tau$ is valid for $\phi$. Using
+proposition~(\ref{logic:prop:FOPL:valid:composition}) it follows
+that $\tau$ is valid for $\phi$ as requested. We now consider $\gen
+x\pi_{1}\preceq\pi$. In order to show that $\tau$ is weakly valid
+for $\pi$ we need to show the implication
+$u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\ \tau(u)\neq\tau(x)$
+holds. So let $u\in\spec(\pi_{1})\setminus\{x\}$. We need to show
+that $\tau(u)\neq\tau(x)$. However, we know by assumption that
+$\sigma\circ\tau(u)\neq\sigma\circ\tau(x)$. So $\tau(u)\neq\tau(x)$
+must follow. We now show that $\sigma$ is weakly valid for
+$\tau(\pi)$. So let $\psi\in\hyp(\tau(\pi))\cup\ax(\tau(\pi))$. We
+need to show that $\sigma$ is valid for $\psi$. From
+proposition~(\ref{logic:prop:FUAP:substitution:hypothesis}),
+$\hyp(\tau(\pi))=\tau(\hyp(\pi))$ and from
+proposition~(\ref{logic:prop:FUAP:axiomset:substitution})
+$\ax(\tau(\pi))=\tau(\ax(\pi))$. It follows that $\psi=\tau(\phi)$
+for some $\phi\in\hyp(\pi)\cup\ax(\pi)$. Having assumed that
+$\sigma\circ\tau$ is weakly valid for $\pi$, it follows that
+$\sigma\circ\tau$ is valid for $\phi$. Using
+proposition~(\ref{logic:prop:FOPL:valid:composition}) we see that
+$\sigma$ is valid for $\tau(\phi)$. In other words, $\sigma$ is
+valid for $\psi$ as requested. We now consider $\gen
+y\rho_{1}\preceq\tau(\pi)$. In order to show that $\sigma$ is weakly
+valid for $\tau(\pi)$ we need to prove:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:composition:4}
+    v\in\spec(\rho_{1})\setminus\{y\}\ \Rightarrow\
+    \sigma(v)\neq\sigma(y)
+    \end{equation}
+However since $\gen y\rho_{1}$ is a sub-proof of $\tau(\pi)$, from
+proposition~(\ref{logic:prop:FUAP:substitution:subformula}) we have
+$\gen y\rho_{1}=\tau(\rho)$ for some $\rho\preceq\pi$. Furthermore,
+from theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} the proof
+$\rho\in{\bf\Pi}(U)$ can only be of four types, namely $\rho=\phi$
+for some $\phi\in{\bf P}(U)$ or $\rho=\axi\phi$ for some
+$\phi\in{\bf P}(U)$ or $\rho=\pi_{1}\pon\pi_{2}$ or $\rho=\gen
+x\pi_{1}$. From the equation $\gen y\rho_{1}=\tau(\rho)$ and the
+uniqueness of representation stated in
+theorem~(\ref{logic:the:unique:representation}) it is clear the only
+possibility is $\rho=\gen x\pi_{1}$ for some $x\in U$ and
+$\pi_{1}\in{\bf\Pi}(U)$. Hence, we have found $x$ and $\pi_{1}$ such
+that $\gen x\pi_{1}\preceq\pi$ and $\gen y\rho_{1}=\tau(\gen
+x\pi_{1})=\gen\tau(x)\tau(\pi_{1})$, i.e. $y=\tau(x)$ and
+$\rho_{1}=\tau(\pi_{1})$. So the
+implication~(\ref{logic:eqn:FUAP:validsub:composition:4}) can be
+stated as:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:composition:5}
+    v\in\spec(\tau(\pi_{1}))\setminus\{\tau(x)\}\ \Rightarrow\
+    \sigma(v)\neq\sigma\circ\tau(x)
+    \end{equation}
+So let $v\in\spec(\tau(\pi_{1}))\setminus\{\tau(x)\}$. We need to
+show that $\sigma(v)\neq\sigma\circ\tau(x)$. However, from
+proposition~(\ref{logic:prop:FUAP:freevar:substitution}) we have
+$\spec(\tau(\pi_{1}))\subseteq\tau(\spec(\pi_{1}))$. It follows that
+we have $v=\tau(u)$ for some $u\in\spec(\pi_{1})$. Furthermore,
+since $v\neq\tau(x)$ we have $u\neq x$ and consequently
+$u\in\spec(\pi_{1})\setminus\{x\}$. Furthermore, recall that $\gen
+x\pi_{1}\preceq\pi$. Having assumed that $\sigma\circ\tau$ is weakly
+valid for $\pi$ the following implication holds:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:composition:6}
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \sigma\circ\tau(u)\neq\sigma\circ\tau(x)
+    \end{equation}
+Hence, we conclude that $\sigma\circ\tau(u)\neq\sigma\circ\tau(x)$
+which is $\sigma(v)\neq\sigma\circ\tau(x)$ as requested.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:validsub:equal:image}
+Let $V,W$ be sets and $\sigma,\tau:V\to W$ be maps. Let $\pi\in\pvs$
+such that the equality $\sigma(\pi)=\tau(\pi)$ holds. Then we have
+the equivalence:
+    \[
+    (\mbox{$\sigma$ weakly valid for $\pi$})\ \Leftrightarrow\
+    (\mbox{$\tau$ weakly valid for $\pi$})
+    \]
+\end{prop}
+\begin{proof}
+It is sufficient to prove $\Rightarrow$\,: so we assume that
+$\sigma(\pi)=\tau(\pi)$ and that $\sigma$ is weakly valid for $\pi$.
+We need to show that $\tau$ is weakly valid for $\pi$. Using
+proposition~(\ref{logic:prop:FUAP:variable:support}) we see that
+$\sigma$ and $\tau$ coincide on $\var(\pi)$. So let
+$\phi\in\hyp(\pi)\cup\ax(\pi)$. We need to show that $\tau$ is valid
+for $\phi$. However since $\sigma$ is weakly valid for $\pi$, we
+know that $\sigma$ is itself valid for $\phi$. Using
+proposition~(\ref{logic:prop:FOPL:validsub:image}), in order to show
+that $\tau$ is also valid for $\phi$ it is sufficient to prove that
+$\sigma(\phi)=\tau(\phi)$. From
+proposition~(\ref{logic:prop:substitution:support}) it is therefore
+sufficient to show that $\sigma$ and $\tau$ coincide on
+$\var(\phi)$. Having established that $\sigma$ and $\tau$ coincide
+on $\var(\pi)$, we simply need to prove that
+$\var(\phi)\subseteq\var(\pi)$. We shall distinguish two cases:
+first we assume that $\phi\in\hyp(\pi)$. Then from
+proposition~(\ref{logic:prop:FUAP:hypothesis:charac}) we have
+$\phi\preceq\pi$ and using
+proposition~(\ref{logic:prop:FUAP:variable:subformula}) it follows
+that $\var(\phi)\subseteq\var(\pi)$ as requested. Next we assume
+that $\phi\in\ax(\pi)$. Then from
+proposition~(\ref{logic:prop:FUAP:axiomset:charac}) we see that
+$\axi\phi\preceq\pi$ and again from
+proposition~(\ref{logic:prop:FUAP:variable:subformula}) we have
+$\var(\phi)=\var(\axi\phi)\subseteq\var(\pi)$. So we now consider
+$\gen x\pi_{1}\preceq\pi$. In order to show that $\tau$ is weakly
+valid for $\pi$, for all $u\in V$ we need to show:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:equal:image:1}
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \tau(u)\neq\tau(x)
+    \end{equation}
+However, from the weak validity of $\sigma$ for $\pi$ we know the
+following is true:
+    \begin{equation}\label{logic:eqn:FUAP:validsub:equal:image:2}
+    u\in\spec(\pi_{1})\setminus\{x\}\ \Rightarrow\
+    \sigma(u)\neq\sigma(x)
+    \end{equation}
+In order to establish~(\ref{logic:eqn:FUAP:validsub:equal:image:1}),
+since $\sigma$ and $\tau$ coincide on $\var(\pi)$ it is therefore
+sufficient to prove that $\{u,x\}\subseteq\var(\pi)$. From $\gen
+x\pi_{1}\preceq\pi$ and
+proposition~(\ref{logic:prop:FUAP:variable:subformula})\,:
+    \[
+    x\in\var(\gen x\pi_{1})\subseteq\var(\pi)
+    \]
+So it remains to show that $u\in\var(\pi)$. Using
+propositions~(\ref{logic:prop:FUAP:freevar:subset:variable})
+and~(\ref{logic:prop:FUAP:variable:subformula})\,:
+    \[
+    u\in\spec(\pi_{1})\subseteq\var(\pi_{1})\subseteq \var(\gen x\pi_{1})\subseteq\var(\pi)
+    \]
+\end{proof}

@@ -1,0 +1,187 @@
+Until now we have studied one type of mapping $\sigma:\pv\to{\bf
+P}(W)$ which are the variable substitutions arising from a single
+mapping $\sigma:V\to W$, as per
+definition~(\ref{logic:def:substitution}) of
+page~\pageref{logic:def:substitution}. In this section, we wish to
+study another type of substitution $\tau:\pv\to{\bf P}(W)$ arising
+from two mappings $\tau_{0},\tau_{1}:V\to W$. The idea behind this
+new type is to allow us to move variables to different values,
+according to whether a given occurrence of the variable  is free or
+bound. For example, suppose we had $\phi=\forall x(x\in y)\to(x\in
+y)$. We want to construct a {\em dual substitution mapping}
+$\tau:\pv\to{\bf P}(W)$ such that:
+    \[
+    \tau(\phi)=\forall u^{*}(u^{*}\in v)\to(u\in v)
+    \]
+More generally given a mapping $\tau_{0}:V\to W$ such that
+$\tau_{0}(x)=u$ and $\tau_{0}(y)=v$, and another mapping
+$\tau_{1}:V\to W$ such that $\tau_{1}(x)=u^{*}$, we want to define
+$\tau:\pv\to{\bf P}(W)$ which will assign free occurrences of a
+variable according to $\tau_{0}$ and bound occurrences according to
+$\tau_{1}$.
+
+One of the main motivations for introducing dual variable
+substitutions is to define a local inverse for the substitution
+$\sigma:\pv\to{\bf P}(W)$ associated with a single map $\sigma:V\to
+W$. Suppose we had $\phi=\forall x(x\in y)\to(z\in y)$ with $x,y,z$
+distinct and $\sigma=[x/z]$. Then $\sigma(\phi)=\forall x(x\in
+y)\to(x\in y)$ and there is no way to find a mapping $\tau:W\to V$
+such that $\tau\circ\sigma(\phi)=\phi$. We need to go further.
+
+So we are given $\tau_{0},\tau_{1}:V\to W$ and looking to define
+$\tau:\pv\to{\bf P}(W)$ which assigns free and bound occurrences of
+variables as specified by $\tau_{0}$ and $\tau_{1}$ respectively.
+The issue we have is that on the one hand we need to have some form
+of recursive definition, but on the other hand a sub-formula $x\in
+y$ has no knowledge of whether $x$ and $y$ will remain free
+occurrences of a given formula. One possible solution is to always
+assume that $x$ and $y$ will remain free and define $\tau(x\in
+y)=\tau_{0}(x)\in\tau_{0}(y)$ accordingly, while substituting the
+variable $\tau_{0}(x)$ by $\tau_{1}(x)$ whenever a quantification
+$\forall x$ arises by setting:
+     \begin{equation}\label{logic:eqn:FOPL:dualsubst:intro:1}
+     \tau(\forall
+     x\phi_{1})=\forall\tau_{1}(x)\tau(\phi_{1})[\tau_{1}(x)/\tau_{0}(x)]
+    \end{equation}
+Unfortunately, this doesn't work. Suppose we have $\phi=\forall
+x(x\in y)$ with $x\neq y$. Take $\tau_{0}(x)=\tau_{0}(y)=u$ and
+$\tau_{1}(x)=u^{*}$. The formula we wish to obtain is
+$\tau(\phi)=\forall u^{*}(u^{*}\in u)$. However, if we apply
+equation~(\ref{logic:eqn:FOPL:dualsubst:intro:1}) we have:
+    \[
+    \tau(\phi)=\forall u^{*}(u\in u)[u^{*}/u]=\forall u^{*}(u^{*}\in
+    u^{*})
+    \]
+Another idea is to define $\tau$ in two steps: first we define a
+map:
+    \[
+    \tau^{*}:\pv\to[{\cal P}(V)\to{\bf P}(W)]
+    \]
+So given $\phi\in\pv$, we have a map $\tau^{*}(\phi):{\cal
+P}(V)\to{\bf P}(W)$ which assigns to every subset $U\subseteq V$ a
+formula $\tau^{*}(\phi)(U)\in{\bf P}(W)$ which represents the
+formula obtained from $\phi$ by assuming all free variables are in
+$U$. Specifically, if we define $\tau_{U}(x)=\tau_{0}(x)$ if $x\in
+U$ and $\tau_{U}(x)=\tau_{1}(x)$ if $x\not\in U$, we put:
+    \[
+    \tau^{*}(x\in y)(U) = \tau_{U}(x)\in\tau_{U}(y)
+    \]
+In the case when $\phi=\forall x\phi_{1}$, we cannot easily define
+$\tau^{*}(\phi)(U)$ in terms of $\tau^{*}(\phi_{1})(U)$ because we
+want the variable $x$ to be tagged as {\em bound} in
+$\tau^{*}(\phi_{1})$. So we need to consider the formula
+$\tau^{*}(\phi_{1})(U\setminus\{x\})$ instead, having excluded the
+variable $x$ from the set of possible free variables. Specifically
+we define:
+    \begin{equation}\label{logic:eqn:FOPL:dualsubst:intro:2}
+    \tau^{*}(\forall
+    x\phi_{1})(U)=\forall\tau_{1}(x)\tau^{*}(\phi_{1})(U\setminus\{x\})
+    \end{equation}
+Once we have defined $\tau^{*}(\phi):{\cal P}(V)\to{\bf P}(W)$ we
+can just set $\tau(\phi)=\tau^{*}(\phi)(V)$ since all free variables
+of $\phi$ are possibly in $V$. So let us go back to our example of
+$\phi=\forall x(x\in y)$ with $x\neq y$, $\tau_{0}(x)=\tau_{0}(y)=u$
+and $\tau_{1}(x)=u^{*}$. We obtain:
+    \[
+    \tau(\phi)=\tau^{*}(\phi)(V)=\forall u^{*}\tau^{*}(x\in
+    y)(V\setminus\{x\})=\forall u^{*}(u^{*}\in u)
+    \]
+This is exactly what we want. So let's hope for the best and define:
+\index{dual@Dual substitution in formula}
+\begin{defin}\label{logic:def:FOPL:dualsubst:dualsubst}
+Let $V$, $W$ be sets and $\tau_{0}, \tau_{1}:V\to W$ be maps. We
+call {\em dual variable substitution} associated with
+$(\tau_{0},\tau_{1})$ the map $\tau:\pv\to {\bf P}(W)$ defined by
+$\tau(\phi)=\tau^{*}(\phi)(V)$, where the map $\tau^{*}:\pv\to[{\cal
+P}(V)\to{\bf P}(W)]$ is defined by the following structural
+recursion, given $\phi\in\pv$ and $U\in{\cal P}(V)$:
+    \begin{equation}\label{logic:eqn:FOPL:dualsubst:dualsubst:1}
+                    \tau^{*}(\phi)(U)=\left\{
+                    \begin{array}{lcl}
+                    \tau_{U}(x)\in\tau_{U}(y)&\mbox{\ if\ }&\phi=(x\in y)\\
+                    \bot&\mbox{\ if\ }&\phi=\bot\\
+                    \tau^{*}(\phi_{1})(U)\to\tau^{*}(\phi_{2})(U)
+                    &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
+                    \forall\tau_{1}(x)\tau^{*}(\phi_{1})(U\setminus\{x\})&
+                    \mbox{\ if\ }&\phi=\forall x\phi_{1}
+                    \end{array}\right.
+    \end{equation}
+where $\tau_{U}(x)=\tau_{0}(x)$ if $x\in U$ and
+$\tau_{U}(x)=\tau_{1}(x)$ if $x\not\in U$.
+\end{defin}
+
+\begin{prop}\label{logic:prop:FOPL:dualsubst:recursion}
+The structural recursion of {\em
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})} is
+legitimate.
+\end{prop}
+\begin{proof}
+We need to prove the existence and uniqueness of
+$\tau^{*}:\pv\to[{\cal P}(V)\to{\bf P}(W)]$ satisfying
+equation~(\ref{logic:eqn:FOPL:dualsubst:dualsubst:1}). We shall do
+so using theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion}. So we take $X=\pv$,
+$X_{0}=\pvo$ and $A=[{\cal P}(V)\to{\bf P}(W)]$. We consider the map
+$g_{0}:X_{0}\to A$ defined by $g_{0}(x\in
+y)(U)=\tau_{U}(x)\in\tau_{U}(y)$. We define $h(\bot):A^{0}\to A$ by
+setting $h(\bot)(0)(U)=\bot$ and $h(\to):A^{2}\to A$ by setting
+$h(\to)(v)(U)=v(0)(U)\to v(1)(U)$. Finally, we define $h(\forall
+x):A^{1}\to A$ with:
+    \[
+    h(\forall x)(v)(U)=\forall\tau_{1}(x)v(0)(U\setminus\{x\})
+    \]
+From theorem~(\ref{logic:the:structural:recursion}) there exists a
+unique map $\tau^{*}:X\to A$ such that $\tau^{*}(\phi)=g_{0}(\phi)$
+whenever $\phi=(x\in y)$ and
+$\tau^{*}(f(\phi))=h(f)(\tau^{*}(\phi))$ for all $f=\bot,\to,\forall
+x$ and $\phi\in X^{\alpha(f)}$. So let us check that this works:
+from $\tau^{*}(\phi)=g_{0}(\phi)$ for $\phi=(x\in y)$ we obtain
+$\tau^{*}(\phi)(U)=g_{0}(x\in y)(U)=\tau_{U}(x)\in\tau_{U}(y)$ which
+is the first line of
+equation~(\ref{logic:eqn:FOPL:dualsubst:dualsubst:1}). Take $f=\bot$
+and $\phi=\bot$. We obtain the equalities:
+    \begin{eqnarray*}
+    \tau^{*}(\phi)(U)&=&\tau^{*}(\bot)(U)\\
+    \mbox{proper notation}\ \rightarrow
+    &=&\tau^{*}(\bot(0))(U)\\
+    &=&\tau^{*}(f(0))(U)\\
+    \tau^{*}:X^{0}\to A^{0}\ \rightarrow
+    &=&h(f)(\tau^{*}(0))(U)\\
+    &=&h(f)(0)(U)\\
+    &=&h(\bot)(0)(U)\\
+    &=&\bot
+    \end{eqnarray*}
+which is the second line of
+equation~(\ref{logic:eqn:FOPL:dualsubst:dualsubst:1}). Recall that
+the $\tau^{*}$ which appears in the fourth equality refers to the
+unique mapping $\tau^{*}:X^{0}\to A^{0}$. We now take $f=\to$ and
+$\phi=\phi_{1}\to\phi_{2}$ for some $\phi_{1},\phi_{2}\in\pv$. Then
+we have:
+    \begin{eqnarray*}
+    \tau^{*}(\phi)(U)&=&\tau^{*}(\phi_{1}\to\phi_{2})(U)\\
+    \phi^{*}(0)=\phi_{1},\ \phi^{*}(1)=\phi_{2}\ \rightarrow
+    &=&\tau^{*}(f(\phi^{*}))(U)\\
+    \tau^{*}:X^{2}\to A^{2}\ \rightarrow
+    &=&h(f)(\tau^{*}(\phi^{*}))(U)\\
+    &=&h(\to)(\tau^{*}(\phi^{*}))(U)\\
+    &=&\tau^{*}(\phi^{*})(0)(U)\to \tau^{*}(\phi^{*})(1)(U)\\
+    &=&\tau^{*}(\phi^{*}(0))(U)\to \tau^{*}(\phi^{*}(1))(U)\\
+    &=&\tau^{*}(\phi_{1})(U)\to \tau^{*}(\phi_{2})(U)\\
+    \end{eqnarray*}
+This is the third line of
+equation~(\ref{logic:eqn:FOPL:dualsubst:dualsubst:1}). Finally
+consider $f=\forall x$ and $\phi=\forall x\phi_{1}$:
+    \begin{eqnarray*}
+    \tau^{*}(\phi)(U)&=&\tau^{*}(\forall x\phi_{1})(U)\\
+    \phi^{*}(0)=\phi_{1}\ \rightarrow
+    &=&\tau^{*}(f(\phi^{*}))(U)\\
+    \tau^{*}:X^{1}\to A^{1}\ \rightarrow
+    &=&h(f)(\tau^{*}(\phi^{*}))(U)\\
+    &=&h(\forall x)(\tau^{*}(\phi^{*}))(U)\\
+    &=&\forall\tau_{1}(x)\tau^{*}(\phi^{*})(0)(U\setminus\{x\})\\
+    &=&\forall\tau_{1}(x)\tau^{*}(\phi^{*}(0))(U\setminus\{x\})\\
+    &=&\forall\tau_{1}(x)\tau^{*}(\phi_{1})(U\setminus\{x\})\\
+    \end{eqnarray*}
+and this is the last line of
+equation~(\ref{logic:eqn:FOPL:dualsubst:dualsubst:1}).
+\end{proof}

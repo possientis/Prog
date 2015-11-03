@@ -1,0 +1,53 @@
+\index{sv@$\sv$ : set sequents}\index{gamma@$\Gamma\vdash\Delta$ :
+sequent} \index{gamma@$\Gamma\vdash\phi$ :
+sequent}\index{gamma@$\Gamma_{1},\Gamma_{2}\vdash\Delta_{1},\Delta_{2}$
+: sequent}\index{gamma@$\Gamma,\psi\vdash\Delta,\phi$ : sequent}
+\index{gamma@$\Gamma(s)$ : left part of sequent $s$}
+\index{delta@$\Delta(s)$ : right part of sequent $s$}
+\index{s@$s,s_{1},s_{2}$ sequents, elements of $\sv$}
+
+\begin{defin}\label{logic:def:GENZ:UAsequents:sequent}
+Let $V$ be a set. We call {\em sequent} on $V$ any ordered pair
+$(\Gamma,\Delta)$ where $\Gamma,\Delta\subseteq\pv$. The set of all
+sequents on $V$ is denoted \sv.
+\end{defin}
+
+Given $\Gamma,\Delta\subseteq\pv$, the sequent $(\Gamma,\Delta)$
+will be denoted $\Gamma\vdash\Delta$ or $(\Gamma\vdash\Delta)$
+whichever is more readable. Given $\phi,\psi\in\pv$, we shall write
+$\Gamma\vdash\phi$, $\psi\vdash\Delta$ and $\psi\vdash\phi$ as a
+shortcut for $\Gamma\vdash\{\phi\}$, $\{\psi\}\vdash\Delta$ and
+$\{\psi\}\vdash\{\phi\}$ respectively. Given
+$\Gamma_{1},\Gamma_{2},\Delta_{1},\Delta_{2}$, we may write
+$\Gamma_{1},\Gamma_{2}\vdash\Delta_{1},\Delta_{2}$ as a shortcut for
+$\Gamma_{1}\cup\Gamma_{2}\vdash\Delta_{1}\cup\Delta_{2}$. The
+meaning of $\Gamma,\psi\vdash\Delta,\phi$ should also be clear. Note
+that we are introducing notational overloading for the sake of
+readability and tradition, but at the risk of some confusion. The
+statement $\Gamma\vdash\phi$ says that $\phi$ is provable from
+$\Gamma$ as per definition~(\ref{logic:def:FOPL:proof:of:formula}),
+while $\Gamma\vdash\phi$ also refers to the ordered pair
+$(\Gamma,\{\phi\})$ which is an element of \sv. Hopefully the
+context will prevent any confusion. Given $s\in\sv$, we shall also
+denote $\Gamma(s)$ and $\Delta(s)$ the left and right projections of
+$s$ respectively, so that $s=(\Gamma(s)\vdash\Delta(s))$. Among
+sequents, we shall have:
+
+\index{sequent@Initial sequent}\index{phi@$\phi\vdash\phi$ : initial
+sequent}\index{svo@$\svo$ : set of initial sequents}
+\begin{defin}\label{logic:def:GENZ:UAsequents:elementary:sequent}
+Let $V$ be a set. We call {\em initial sequent} on $V$ any sequent
+$(\phi\vdash\phi)$ with $\phi\in\pv$. The set of initial sequents on
+$V$ is denoted \svo.
+\end{defin}
+
+\index{free@Free variables of sequent}\index{free@$\free(s)$ : free
+variables of sequent}
+\begin{defin}\label{logic:def:GENZ:setofsequents:freevar}
+Let $V$ be a set. Given a sequent $s\in\sv$, we say that $x\in V$ is
+a free variable of $s$, \ifand\ it belongs to the set $\free(s)$
+defined by:
+    \[
+    \free(s)=\free(\,\Gamma(s)\cup\Delta(s)\,)
+    \]
+\end{defin}

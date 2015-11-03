@@ -1,0 +1,82 @@
+The equivalence between syntactic and semantic entailments is a
+consequence of
+theorem~(\ref{logic:the:FOPL:semantics:satis:equiv:consistent}) and
+therefore a consequence of Lindenbaum's
+lemma~(\ref{logic:lemma:FOPL:semantics:lindenbaum}). The implication
+$\Rightarrow$ of
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) below was
+stated as proposition~(\ref{logic:prop:FOPL:semantics:syn:imp:sem}).
+The other implication $\Leftarrow$ will be proved now and is often
+referred to as the {\em strong completeness property}. The
+implication $\vdash\phi\ \Leftarrow\ \vDash\phi$ is normally known
+as G\"odel's completeness theorem and referred to as the {\em weak
+completeness property}. However, it would be wrong for us to use the
+word {\em completeness} when referring to
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}). As already
+explained in the discussion preceding
+definition~(\ref{logic:def:FOPL:semantics:valuation}), our notion of
+semantic entailment is defined solely in terms of the dual space
+\pvd\ without reference to any model theory. We have many good
+reasons to do this and one of these reasons is precisely to show
+that results such as
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) below can be
+obtained independently of any model theory, opening the way for
+possible generalization to axiomatic systems which may not be
+complete. The notion of completeness expresses the idea that a proof
+system is rich enough to prove any formula which is true in every
+model. If we remove axioms or replace them by weaker axioms, there
+are fewer formulas which can be proven from our deductive system,
+which has become weaker and may no longer be complete. In terms of
+the deductive congruence which stems from the preorder
+$\vdash(\phi\to\psi)$, a weaker deductive system leads to fewer
+pairs $(\phi,\psi)$ of {\em logically equivalent} formulas, so the
+congruence is stronger, assuming it is still a congruence, depending
+on the exact nature of the deductive system. From the point of view
+of the dual space \pvd\ which is defined by the soundness property
+$\vdash\phi\ \Rightarrow\ v(\phi)=1$, a weaker deductive system
+leads to a larger dual space and therefore fewer {\em valid}
+formulas, in the sense of
+definition~(\ref{logic:def:FOPL:semantics:entailments}). So although
+we may have a weaker deductive system which is no longer complete,
+since there are fewer provable formulas {\em as well as} fewer valid
+formulas, it is conceivable that the equivalence between syntactic
+and semantic entailment still holds. This is worth investigating and
+we may do so at a later stage. This is one of the key reason for us
+to decouple semantics from model theory: we wanted to present an
+argument leading to
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) below, which
+is specific to the Hilbert deductive congruence, and yet can
+probably be made to work for other cases of congruence. For us, the
+notion of completeness expresses the idea that the Hilbert deductive
+proof system is rich enough, so its associated dual space \pvd\ is
+small enough so that {\em every valuation has a model}. Note that
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) below is
+established prior to proving $\pvd\neq\emptyset$.
+
+\index{entailment@Entailment : Syntactic v
+semantic}\index{semantic@Semantics equivalent to syntax}
+\index{syntax@Syntax equivalent to semantics}
+\begin{theorem}\label{logic:the:FOPL:semantics:syn:equiv:sem}
+Let $V$ be a set and $\Gamma\subseteq\pv$. Then for all
+$\phi\in\pv$\,:
+    \begin{equation}\label{logic:eqn:FOPL:semantics:syn:equiv:sem:1}
+    \Gamma\vdash\phi\ \Leftrightarrow\ \Gamma\vDash\phi
+    \end{equation}
+\end{theorem}
+\begin{proof}
+The implication $\Rightarrow$ follows from
+proposition~(\ref{logic:prop:FOPL:semantics:syn:imp:sem}). So we now
+prove $\Leftarrow$\,: we assume that $\Gamma\subseteq\pv$ and
+$\phi\in\pv$ are such that $\Gamma\vDash\phi$. We need to show that
+$\Gamma\vdash\phi$. Suppose this is not the case. Using
+proposition~(\ref{logic:prop:FOPL:semantics:consistent:sequent}) we
+see that $\Gamma\cup\{\phi\to\bot\}$ is consistent. Using
+theorem~(\ref{logic:the:FOPL:semantics:satis:equiv:consistent}), it
+is therefore satisfiable. So there exists $v\in\pvd$ which satisfies
+$\Gamma\cup\{\phi\to\bot\}$. It follows that $v\vDash\Gamma$ and
+$v\vDash(\phi\to\bot)$. However, from $v\vDash\Gamma$ and
+$\Gamma\vDash\phi$ we obtain $v\vDash\phi$, i.e. $v(\phi)=1$. From
+$v\vDash(\phi\to\bot)$ we obtain $1=v(\phi\to\bot)=v(\phi)\to
+v(\bot)=v(\phi)\to 0$ and consequently $v(\phi)=0$ which is our
+desired contradiction.
+\end{proof}

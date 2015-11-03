@@ -1,0 +1,275 @@
+
+Let $V$ be a set and $(M,r)$ be a model. In
+definition~(\ref{logic:def:FOPL:semantics:valuation:truth}) we
+defined the notion of {\em truth} of a formula $\phi\in\pv$ with
+respect to a valuation $v\in\pvd$. We now want to formally define
+what it means for a formula $\phi\in\pv$ to be {\em true in the
+model $M$}. So suppose $\phi=(x\in y)$ for some $x,y\in V$. We want
+to assign a truth value to the formula $\phi$ in relation to the
+model $M$. The relation $r$ on $M$ is our interpretation of '$\in$'.
+Asking whether $\phi=(x\in y)$ is {\em true in M} is asking whether
+$x$ and $y$ satisfy the relation $r$. However, $x$ and $y$ are not
+elements of $M$, and it makes little sense to ask whether $(x,y)\in
+r$. We need some interpretation of $x$ and $y$ as elements of $M$.
+So let $a:V\to M$ be a variables assignment. We now have a natural
+interpretation of $x$ and $y$ as $a(x)$ and $a(y)$. So it is
+meaningful to ask whether $a(x)$ and $a(y)$ satisfy the
+relation~$r$. Hence, although we cannot say what it is for
+$\phi=(x\in y)$ to be {\em true in} $M$, we can naturally define
+what it is for $\phi$ to be {\em true in $M$ under the
+assignment}~$a$. So let us focus on the latter: we shall say that
+$\phi=(x\in y)$ is {\em true in $M$ under the assignment $a:V\to M$}
+\ifand\ $(a(x),a(y))\in r$. We now want to extend this definition to
+every $\phi\in\pv$. In order to do so, we need to rely on some form
+of structural recursion definition and it is therefore convenient to
+think in terms of {\em truth value} $\beta(\phi)(a)$. So we want to
+define a map $\beta:\pv\to[M^{V}\to 2]$ so that for all $\phi\in\pv$
+we have a map $\beta(\phi):M^{V}\to 2$ which determines whether
+$\phi$ is {\em true in $M$ under the assignment} $a:V\to M$ by
+evaluating $\beta(\phi)$ at $a$ i.e. by considering the value
+$\beta(\phi)(a)$. If $\beta(\phi)(a)=1$ we shall say that $\phi$ is
+{\em true in $M$ under the assignment $a:V\to M$} and otherwise, if
+$\beta(\phi)(a)=0$ we shall say that $\phi$ is false. So in the case
+when $\phi=(x\in y)$ the map $\beta(\phi):M^{V}\to 2$ is defined as
+$\beta(\phi)(a)=1_{r}(a(x),a(y))$ where $1_{r}:M\times M\to 2$ is
+the characteristic function of the relation $r\subseteq M\times M$.
+At this point, a natural question arises: the truth value of the
+formula $\phi$ under a given assignment $a\in M^{V}$ is a function
+of both $\phi$ and $a$. Why are we choosing $\beta$ to be a map
+$\beta:\pv\to[M^{V}\to 2]$ i.e. with domain \pv\ and range the set
+of maps $f:M^{V}\to 2$? Why not regard $\beta$ simply as a map
+$\beta:\pv\times M^{V}\to 2$? The answer is {\em structural
+recursion}: we need to define $\beta$ by structural recursion on
+\pv, using either theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion} or
+theorem~(\ref{logic:the:structural:recursion:2}) of
+page~\pageref{logic:the:structural:recursion:2}. The object we want
+to define needs to be a function with domain \pv\ and nothing else.
+But then why not define $\beta$ as a function $\beta:M^{V}\to[\pv\to
+2]$? Given an assignment $a\in M^{V}$ the evaluation of $\beta$ at
+$a$ would yield a map $\beta(a):\pv\to 2$ with domain \pv\ and
+$\beta(a)$ could simply be defined by structural recursion. This is
+arguably more natural and simpler than considering a map
+$\beta:\pv\to[M^{V}\to 2]$. The answer is once again {\em structural
+recursion}: consider the formula $\phi=\forall x\phi_{1}$ for some
+$x\in V$ and $\phi_{1}\in\pv$. Suppose we had to define the truth
+value $\beta(a)(\phi)$ of the formula $\phi$ under $a$. We would
+need to define what it means to be {\em true} for $\forall
+x\phi_{1}$. Roughly speaking, it would mean that $\phi_{1}$ is {\em
+true under $a$} regardless of how the variable $x$ is interpreted in
+$M$. In other words, it would mean that $\beta(b)(\phi_{1})=1$
+whenever $b\in M^{V}$ is an assignment which coincides with $a$ on
+$V$, except possibly for the value $x$. So our definition of
+$\beta(a)(\phi)$ would become:
+    \[
+    \beta(a)(\phi)=\min\left\{\,\beta(b)(\phi_{1})\ :\  b=a\mbox{\ on\
+                    }V\setminus\{x\}\,\right\}
+    \]
+Unfortunately, this doesn't work. We are claiming to define
+$\beta(a):\pv\to 2$ by structural recursion, but our definition has
+dependencies to some other functions $\beta(b):\pv\to 2$. There is
+no way we can apply theorem~(\ref{logic:the:structural:recursion})
+or theorem~(\ref{logic:the:structural:recursion:2}) with this sort
+of set up. We need to regard $\beta$ as a map $\beta:\pv\to[M^{V}\to
+2]$~with:
+    \[
+    \beta(\phi)(a)=\min\left\{\,\beta(\phi_{1})(b)\ :\  b=a\mbox{\ on\
+                    }V\setminus\{x\}\,\right\}
+    \]
+In doing so, we are defining the map $\beta(\phi):M^{V}\to 2$ simply
+in terms of the various values of the map $\beta(\phi_{1}):M^{V}\to
+2$. In effect, our structural recursion is defining all the maps
+$\beta(a):\pv\to 2$ for $a\in M^{V}$ at the same time. This is done
+in a way which allows a successful application of
+theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion}. So the question is
+settled and we have put forward a formula to define $\beta(\phi)(a)$
+in the case when $\phi=\forall x\phi_{1}$. It is clear that
+$\beta(\phi)(a)$ should be defined as $0$ when $\phi=\bot$ which
+represents the {\em absurd} or {\em contradiction} and cannot be
+regarded as {\em true} under any assignment. It remains to define
+$\beta(\phi)(a)$ in the case when $\phi=\phi_{1}\to\phi_{2}$ for
+some $\phi_{1},\phi_{2}\in\pv$. In line with mathematical practice,
+the formula $\phi=\phi_{1}\to\phi_{2}$ should be regarded as {\em
+true} \ifand\ $\phi_{1}$ is {\em false} or $\phi_{2}$ is {\em true}.
+In other words, $\beta(\phi)(a)=1$ \ifand\ $\beta(\phi_{1})(a)=0$ or
+$\beta(\phi_{2})(a)=1$\,:
+    \[
+    \beta(\phi)(a)=\beta(\phi_{1})(a)\to\beta(\phi_{2})(a)
+    \]
+where $\to\,:2^2\to 2$ denotes the usual boolean operator defined by
+the table:
+    \begin{eqnarray*}
+    0\to 0&=&1\\
+    0\to 1&=&1\\
+    1\to 0&=&0\\
+    1\to 1&=&1
+    \end{eqnarray*}
+The following definition if often known as {\em Tarski's definition
+of truth}. For the sake of lighter notations, we denote the set
+$V\setminus\{x\}$ simply by $V_{x}$. We also identify the set of all
+maps $f:M^{V}\to 2$ with the power set ${\cal P}(M^{V})$. There is
+an obvious bijection between the two, as any map $f:M^{V}\to 2$ can
+be regarded as the subset $A_{f}=\{a\in M^{V}:f(a)=1\}$ and any
+subset $A\subseteq M^{V}$ can be viewed as its characteristic
+function $1_{A}:M^{V}\to 2$. With this in mind, the function
+$\beta:\pv\to [M^{V}\to 2]$ can be denoted $\beta:\pv\to{\cal
+P}(M^{V})$, and given $\phi\in\pv$ the evaluation $\beta(\phi)$ can
+be viewed as the map $\beta(\phi):M^{V}\to 2$, or equally as the set
+of all assignments $a:V\to M$ under which the formula $\phi$ is {\em
+true}. This latter point of view is the one adopted in Ferenczi and
+Sz\H ots~\cite{Ferenczi}.
+
+\index{model@Model valuation function}\index{valuation@Model
+valuation function}\index{p@${\cal P}(M^{V})$ : power set of
+$M^{V}$}\index{m@$[M^{V}\to 2]$ : maps from $M^{V}$ to
+$2$}\index{r@$1_{r}$ : characteristic function of
+$r$}\index{beta@$\beta(\phi)(a)$ : model valuation function}
+\index{v@$V_{x}$ : set $V\setminus\{x\}$}
+\begin{defin}\label{logic:def:FOPL:model:valuation:function} Let
+$V$ be a set and $(M,r)$ be a model of\, \pv. We call {\em model
+valuation function} associated with $M$ the map $\beta:\pv\to{\cal
+P}(M^{V})$ defined by the following recursion: for all $\phi\in\pv$
+and assignment $a:V\to M$:
+    \[
+                    \beta(\phi)(a)=\left\{
+                    \begin{array}{lcl}
+                    1_{r}(\,a(x),a(y)\,)&\mbox{\ if\ }&\phi=(x\in y)\\
+                    0&\mbox{\ if\ }&\phi=\bot\\
+                    \beta(\phi_{1})(a)\to\beta(\phi_{2})(a)&\mbox{\ if\ }&
+                    \phi=\phi_{1}\to\phi_{2}\\
+                    \min\left\{\,\beta(\phi_{1})(b)\ :\  b=a\mbox{\ on\
+                    }V_{x}\,\right\}
+                    &\mbox{\ if\ }&\phi=\forall x\phi_{1}\\
+                    \end{array}\right.
+    \]
+where $1_{r}$ denotes the characteristic function of $r$ on $M\times
+M$ and $V_{x}=V\setminus\{x\}$.
+\end{defin}
+\begin{prop}
+The structural recursion of {\em
+definition~(\ref{logic:def:FOPL:model:valuation:function})} is
+legitimate.
+\end{prop}
+\begin{proof}
+We need to show the existence and uniqueness of a map
+$\beta:\pv\to{\cal P}(M^{V})$ which satisfies the four equations of
+definition~(\ref{logic:def:FOPL:model:valuation:function}). More,
+precisely, after we remove the abuse of language resulting from the
+identification of ${\cal P}(M^{V})$ with the set of all maps
+$f:M^{V}\to 2$, we want $\beta:\pv\to A$ where $A=[M^{V}\to 2]$. One
+of the key decisions to make, is whether to use
+theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion} or
+theorem~(\ref{logic:the:structural:recursion:2}) of
+page~\pageref{logic:the:structural:recursion:2}: given $\phi=\forall
+x\phi_{1}$, the question is whether $\beta(\phi)$ is a function of
+$\beta(\phi_{1})$ alone, or whether it is functionally linked to
+both $\beta(\phi_{1})$ and $\phi_{1}$ itself. Looking at
+definition~(\ref{logic:def:FOPL:model:valuation:function}), it is
+clear the map $\beta(\phi):M^{V}\to 2$ is simply a function of the
+map $\beta(\phi_{1}):M^{V}\to 2$. So we shall use
+theorem~(\ref{logic:the:structural:recursion}). So we want to prove
+the existence and uniqueness of the map $\beta:\pv\to A$ satisfying
+the four equations of
+definition~(\ref{logic:def:FOPL:model:valuation:function}). First we
+need to provide a map $g_{0}:\pvo\to A$ so that the first equation
+is met. Given $x,y\in V$ we define $g_{0}(x\in y):M^{V}\to 2$ by
+setting $g_{0}(x\in y)(a)=1_{r}(a(x),a(y))$. Next we need to provide
+a map $h(\bot):A^{0}\to A$ so the second equation is met. So we
+define the map $h(\bot)(0):M^{V}\to 2$ by setting $h(\bot)(0)(a)=0$.
+Next we need to provide a map $h(\to):A^{2}\to A$ so as to meet the
+third equation. Given $f_{1},f_{2}:M^{V}\to 2$ we define
+$h(\to)(f_{1},f_{2}):M^{V}\to 2$ by setting
+$h(\to)(f_{1},f_{2})(a)=f_{1}(a)\to f_{2}(a)$. Finally, given $x\in
+V$ we need to provide a map $h(\forall x):A^{1}\to A$ so as to meet
+the fourth equation. So given $f_{1}:M^{V}\to 2$ let $h(\forall
+x)(f_{1}):M^{V}\to 2$ be defined by setting $h(\forall
+x)(f_{1})(a)=\min\{\,f_{1}(b)\ :\ b=a\mbox{\ on\ }V_{x}\,\}$. In
+other words, $h(\forall x)(f_{1})(a)$ is defined as the minimum of
+the graph of the map $f_{1}$, restricted to the set of assignments
+$b:V\to M$ which coincide with the assignment $a$ on
+$V_{x}=V\setminus\{x\}$. Let us check formally that the fourth
+equation is indeed satisfied: from
+theorem~(\ref{logic:the:structural:recursion}) there exists a unique
+map $\beta:\pv\to A$ satisfying four equations defined by our data,
+and in particular when $\phi=\forall x\phi_{1}$ we have:
+    \[
+    \beta(\phi)(a)=h(\forall x)(\beta(\phi_{1}))(a)
+    =\min\{\,\beta(\phi_{1})(b)\ :\ b=a\mbox{\ on\ }V_{x}\,\}
+    \]
+\end{proof}
+
+Having defined the model valuation function $\beta:\pv\to[M^{V}\to
+2]$ of a model $(M,r)$, we should pause a few seconds to reflect on
+the case when $M=\emptyset$. We shall distinguish two cases: first
+we assume that $V\neq\emptyset$. Then $M^{V}=\emptyset$ and
+$[M^{V}\to 2] =2^{0}=1=\{0\}$. So $\beta$ is the unique map
+$\beta:\pv\to\{0\}$. It should be noted that this map does not
+contradict the details of
+definition~(\ref{logic:def:FOPL:model:valuation:function}). Indeed,
+the set of variables assignments $M^{V}$ being empty, the map
+$\beta$ vacuously satisfies the recursion property of
+definition~(\ref{logic:def:FOPL:model:valuation:function}). We now
+consider the case when $V=\emptyset$. Then $M^{V}=0^0=1=\{0\}$ and
+$[M^{V}\to 2]=2^{1}$. It follows that $\beta$ is the map
+$\beta:\pv\to 2^{1}$ defined by the recursion property:
+    \[
+                    \beta(\phi)(0)=\left\{
+                    \begin{array}{lcl}
+                    0&\mbox{\ if\ }&\phi=\bot\\
+                    \beta(\phi_{1})(0)\to\beta(\phi_{2})(0)&\mbox{\ if\ }&
+                    \phi=\phi_{1}\to\phi_{2}\\
+                    \end{array}\right.
+    \]
+Of course, there is no need to distinguish between the sets $2^{1}$
+and $2$ and we can regard $\beta$ simply as the map $\beta:\pv\to 2$
+satisfying the recursion property:
+    \[
+                    \beta(\phi)=\left\{
+                    \begin{array}{lcl}
+                    0&\mbox{\ if\ }&\phi=\bot\\
+                    \beta(\phi_{1})\to\beta(\phi_{2})&\mbox{\ if\ }&
+                    \phi=\phi_{1}\to\phi_{2}\\
+                    \end{array}\right.
+    \]
+This case is in fact applicable whenever $V=\emptyset$, regardless
+of whether $M=\emptyset$.
+
+\index{truth@Truth under model and
+assignment}\index{m@$M\vDash\phi[a]$ : $\phi$ true under $M$ and
+$a$}
+\begin{defin}\label{logic:def:FOPL:model:truth}
+Let $V$ be a set and $M$ be a model of\, \pv. We say that a formula
+$\phi\in\pv$ is {\em true} in the model $M$ under the assignment
+$a:V\to M$, \ifand\ $\beta(\phi)(a)=1$ where $\beta$ is the model
+valuation function, and we write:
+    \[
+        M\vDash\phi[a]
+    \]
+\end{defin}
+
+In definition~(\ref{logic:def:FOPL:semantics:valuation:truth}) we
+defined the notion of {\em truth} of a formula $\phi\in\pv$ with
+respect to a valuation $v\in\pvd$ which we denoted $v\vDash\phi$. So
+definition~(\ref{logic:def:FOPL:model:truth}) introduces what
+appears to be a new notion of {\em truth}, this time relative to a
+model $M$ and assignment $a:V\to M$. In fact, as we shall see from
+theorem~(\ref{logic:the:FOPL:soundness:soundness:2}) of
+page~\pageref{logic:the:FOPL:soundness:soundness:2}, the map
+$\beta(\,.\,)(a):\pv\to 2$ is itself a valuation. So
+definition~(\ref{logic:def:FOPL:model:truth}) is in fact a
+particular case of
+definition~(\ref{logic:def:FOPL:semantics:valuation:truth}) and the
+statement $M\vDash\phi[a]$ is equivalent to
+$\beta(\,.\,)(a)\vDash\phi$. However, the notion of dual space \pvd\
+and the notation $v\vDash\phi$ are not commonly found in
+mathematical textbooks whereas $M\vDash\phi[a]$ is a well
+established standard. So it is important for us to quote
+definition~(\ref{logic:def:FOPL:model:truth}). Note that this new
+notion of {\em truth} is not only relative to a model $M$, but also
+to an assignment $a:V\to M$. We do not wish to introduce the
+notation $M\vDash\phi$ in the case when $M\vDash\phi[a]$ is true for
+all $a\in M^{V}$. If we did that, as we have already discussed the
+statement $M\vDash\phi$ would be vacuously true in the case when $M$
+is the empty model and $V\neq\emptyset$.

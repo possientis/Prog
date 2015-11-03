@@ -1,0 +1,69 @@
+Given an arbitrary set $X_{0}$, we were able to
+construct a free universal algebra of type $\alpha$ whose free generator $Y_{0}$
+is a copy of $X_{0}$, i.e. a set for which there exists a bijection $j:X_{0}\to
+Y_{0}$. Our aim is to go slightly beyond that and find a free universal algebra of
+type $\alpha$ with free generator the set $X_{0}$ itself. For this, we shall need
+a couple of set theoretic results which we include in this section and the
+following for the sake of completeness. In particular we shall need to prove that
+any set $A$ has a disjoint copy of itself, i.e. that there exist a set $B$ with
+$A\cap B=\emptyset$ and a bijection $j:A\to B$. To prove this result, we shall
+make use of Cantor's Theorem which is the focus of the present section.
+
+Given a set $A$, recall that ${\cal P}(A)$ denotes the {\em power set} of $A$,
+i.e. the set of all subsets of $A$, that is:
+    \[
+    {\cal P}(A) = \{B: B\subseteq A\}
+    \]
+Note that there is an obvious bijection $j:2^{A}\to{\cal P}(A)$, which is defined
+by $j(x)=\{a\in A:x(a)=1\}$. Cantor's Theorem asserts that ${\cal P}(A)$ has
+higher cardinality than the set $A$, i.e. that there exists no injective map
+$j:{\cal P}(A)\to A$. Most of us will be familiar with this result, and indeed
+other similar results such as the fact that $\R$ has higher cardinality than $\N$.
+Some of us may remember a version of {\em Cantor's diagonal argument}. We restrict
+our attention to the interval $]0,1[$ and consider every $x\in ]0,1[$ as a
+sequence $x = 0.11010111001\ldots$ This sequence is not unique but after some
+ironing out, we may be convinced that $]0,1[$ has the same cardinality as $2^{\N}$
+which in turn has the same cardinality as ${\cal P}(\N)$. Hence Cantor's diagonal
+argument essentially proves that ${\cal P}(\N)$ is a bigger set than $\N$, and
+$\R$ having a higher cardinality than $\N$ is essentially a particular case of
+Cantor's Theorem.
+
+There is an easy way to remember the proof of Cantor's Theorem, which is to think
+of Russell's paradox. Bertrand Russell discovered that $\{x: x\not\in x\}$ cannot
+be a set, or more precisely that the statement:
+    \[
+    \exists y\forall x [x\in y \leftrightarrow x\not\in x]
+    \]
+ leads to a contradiction. If $a=\{x:x\not\in x\}$ is a set, then $a\in a$ implies
+ that $a\not\in a$, while $a\not\in a$ implies that $a\in a$. Now suppose we have
+ a bijection $j:{\cal P}(A)\to A$ (we assume this is a bijection rather than an
+ injection to make this discussion simpler). Then every element of $A$ can be {\em
+ viewed} as a subset of $A$. It is tempting to consider the set of those elements
+ of $A$ which {\em do not belong to themselves}, but rather than considering the
+ meaning of '$\in$' literally as in $a=\{x\in A: x\not\in x\}$, we need to adjust
+ slightly with $a=j(\{x\in A: x\not\in j^{-1}(x)\})\in A$. Following Russell's
+ argument, we then ask whether $a\in A$ {\em belongs to itself}, or specifically
+ if $a\in j^{-1}(a)$. But assuming $a\in j^{-1}(a)$ leads to $a\not\in j^{-1}(a)$,
+ while assuming $a\not\in j^{-1}(a)$ leads to $a\in j^{-1}(a)$. So we have proved
+ that there cannot exist a bijection $j:{\cal P}(A)\to A$. The following lemma
+ deals with an injection rather than a bijection. We need to be slightly more
+ careful, but the idea underlying the proof is the same.
+\index{cantor@Cantor's theorem}
+\begin{lemma}[Cantor's Theorem]\label{logic:cantor:theorem} Let $A$ be an
+arbitrary set. There exists no injective map $j:{\cal P}(A)\to A$. \end{lemma}
+\begin{proof} Suppose $j:{\cal P}(A)\to A$ is an injective map and define
+$b^{*}=j(B^{*})$ where:
+    \[
+    B^{*} =\{b\in A:\ \exists B\in{\cal P}(A)\ ,\ b=j(B)\mbox{\ and\ }b\not\in
+    B\}
+    \]
+We shall complete the proof by showing that both $b^{*}\in B^{*}$ and
+$b^{*}\not\in B^{*}$ lead to a contradiction. So suppose first that $b^{*}\in
+B^{*}$. There exists $B\in{\cal P}(A)$ such that $b^{*}=j(B)$ and $b^{*}\not\in
+B$. Hence in particular we have $j(B^{*})=b^{*}=j(B)$ and since $j$ is an
+injective map, it follows that $B^{*}=B$. So we see that $b^{*}\not\in B^{*}$
+which contradicts the initial assumption of $b^{*}\in B^{*}$. We now assume that
+$b^{*}\not\in B^{*}$. Since $b^{*}=j(B^{*})$, taking $B=B^{*}$ we see that there
+exists $B\in{\cal P}(A)$ such that $b^{*}=j(B)$ and $b^{*}\not\in B$. Hence it
+follows that $b^{*}\in B^{*}$ which contradicts the initial assumption of
+$b^{*}\not\in B^{*}$. \end{proof}

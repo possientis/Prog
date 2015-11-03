@@ -1,0 +1,342 @@
+When $\phi=\forall x(x\in y)$ the variables of $\phi$ are $x$ and
+$y$ i.e. $\var(\phi)=\{x,y\}$. However, it is clear that a critical
+distinction exists between the role played by the variables $x$ and
+$y$. The situation is very similar to that of an integral $\int\!
+f(x,y)\,dx$ where $x$ is nothing but a dummy variable. A dummy
+variable can be replaced. In contrast, the variable $y$ cannot be
+replaced without affecting much of what is {\em meant} by the
+integral, or the formula $\phi$. The variable $y$ is called a {\em
+free variable} of the formula $\phi$. In this section, we formally
+define the notion of free variable and prove a few elementary
+properties which are related to it.
+
+\index{free@Free variables of formula}\index{free@$\free(\phi)$ :
+set of free variables of $\phi$}
+\begin{defin}\label{logic:def:free:variable}
+Let $V$ be a set. The map $\free:\pv\to {\cal P}(V)$ defined by the
+following structural recursion is called {\em free variable mapping
+on \pv}:
+ \begin{equation}\label{logic:eqn:free:var:recursion}
+    \forall\phi\in\pv\ ,\ \free(\phi)=\left\{
+                    \begin{array}{lcl}
+                    \{x,y\}&\mbox{\ if\ }&\phi=(x\in y)\\
+                    \emptyset&\mbox{\ if\ }&\phi=\bot\\
+                    \free(\phi_{1})\cup\free(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
+                    \free(\phi_{1})\setminus\{x\}&\mbox{\ if\ }&\phi=\forall x\phi_{1}
+                    \end{array}\right.
+    \end{equation}
+We say that $x\in V$ is a {\em free variable} of $\phi\in\pv$ \ifand\ $x\in\free(\phi)$.
+\end{defin}
+\begin{prop}\label{logic:prop:free:variable}
+The structural recursion of {\em
+definition~(\ref{logic:def:free:variable})} is legitimate.
+\end{prop}
+\begin{proof}
+We need to show the existence and uniqueness of $\free:\pv\to{\cal
+P}(V)$ satisfying equation~(\ref{logic:eqn:free:var:recursion}).
+This follows from an immediate application of
+theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion} to the free universal
+algebra \pv\ and the set $A={\cal P}(V)$, using $g_{0}:\pvo\to A$
+defined by $g_{0}(x\in y)=\{x,y\}$ for all $x,y\in V$, and the
+operators $h(f):A^{\alpha(f)}\to A$ ($f\in\alpha$) defined for all
+$V_{1},V_{2}\in A$ and $x\in V$ as:
+    \begin{eqnarray*}
+    (i)&&h(\bot)(0)=\emptyset\\
+    (ii)&&h(\to)(V_{1},V_{2})=V_{1}\cup V_{2}\\
+    (iii)&&h(\forall x)(V_{1})=V_{1}\setminus\{x\}
+    \end{eqnarray*}
+\end{proof}
+
+In proposition~(\ref{logic:prop:var:of:substitution}), given a map
+$\sigma:V\to W$ with associated substitution mapping
+$\sigma:\pv\to{\bf P}(W)$ and given a formula $\phi$, we checked
+that the variables of $\sigma(\phi)$ were simply the elements of the
+direct image of $\var(\phi)$ by $\sigma$, that is
+$\var(\sigma(\phi))=\sigma(\var(\phi))$. We now show two similar
+results for the free variables of $\sigma(\phi)$, namely
+$\free(\sigma(\phi))\subseteq\sigma(\free(\phi))$ in the general
+case and $\free(\sigma(\phi))=\sigma(\free(\phi))$ in the case when
+some restriction is imposed on the map $\sigma$, which we require to
+be injective on the domain $\var(\phi)$. If $\phi=\forall x(x\in y)$
+and $\sigma$ is not injective on $\{x,y\}$, then it is possible to
+have $\sigma(\phi)=\forall x(x\in x)$ which would clearly contradict
+$\free(\sigma(\phi))=\sigma(\free(\phi))$. However, the requirement
+that $\sigma_{|\var(\phi)}$ be injective will be shown to be
+sufficient but is not necessary. If $\phi=(x\in y)$ and
+$\sigma=[y/x]$, we have $\sigma(\phi)=(y\in y)$ and the equality
+$\free(\sigma(\phi))=\sigma(\free(\phi))$ still holds. We start with
+the general case leading to the weaker inclusion:
+\begin{prop}\label{logic:prop:freevar:of:substitution:inclusion}
+Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let
+$\phi\in\pv$\,:
+    \[
+    \free(\sigma(\phi))\subseteq\sigma(\free(\phi))
+    \]
+where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated
+substitution mapping.
+\end{prop}
+\begin{proof}
+Given $\phi\in\pv$, we need to show the inclusion
+$\free(\sigma(\phi))\subseteq\{\sigma(x):x\in\free(\phi)\}$. We
+shall do so by structural induction using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since \pvo\ is a generator
+of \pv, we first check that the property is true for $\phi\in\pvo$.
+So suppose $\phi=(x\in y)\in\pvo$ for some $x,y\in V$. Then, we
+have:
+    \begin{eqnarray*}
+    \free(\sigma(\phi))&=&\free(\sigma(x\in y))\\
+    &=&\free(\,\sigma(x)\in\sigma(y)\,)\\
+    &=&\{\sigma(x),\sigma(y)\}\\
+    &=&\{\sigma(u):u\in\{x,y\}\}\\
+    &=&\{\sigma(u):u\in\free(x\in y)\}\\
+    &=&\{\sigma(x):x\in\free(\phi)\}
+    \end{eqnarray*}
+Having proved the equality, it follows in particular that the
+inclusion $\subseteq$ is true. Next we check that the property is
+true for $\bot\in\pv$:
+    \[
+    \free(\sigma(\bot))=\free(\bot)=\emptyset\subseteq\{\sigma(x):x\in\free(\bot)\}
+    \]
+Next we check that the property is true for
+$\phi=\phi_{1}\to\phi_{2}$ if it is true for $\phi_{1},\phi_{2}$:
+    \begin{eqnarray*}
+    \free(\sigma(\phi))&=&\free(\sigma(\phi_{1}\to\phi_{2}))\\
+    &=&\free(\sigma(\phi_{1})\to\sigma(\phi_{2}))\\
+    &=&\free(\sigma(\phi_{1}))\cup\free(\sigma(\phi_{2}))\\
+    &\subseteq&\{\,\sigma(x):x\in\free(\phi_{1})\,\}\cup\{\,\sigma(x):x\in\free(\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi_{1})\cup\free(\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi_{1}\to\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi)\,\}
+    \end{eqnarray*}
+Finally we check that the property is true for $\phi=\forall
+x\phi_{1}$ if it is true for $\phi_{1}$:
+    \begin{eqnarray*}
+    \free(\sigma(\phi))&=&\free(\sigma(\forall x\phi_{1}))\\
+    &=&\free(\forall\sigma(x)\,\sigma(\phi_{1}))\\
+    &=&\free(\sigma(\phi_{1}))\setminus\{\sigma(x)\}\\
+    &\subseteq&\{\,\sigma(u):u\in\free(\phi_{1})\,\}\setminus\{\sigma(x)\}\\
+    \mbox{see below\ $\rightarrow$}&\subseteq&\{\,\sigma(u):u\in\free(\phi_{1})\setminus\{x\}\,\}\\
+    &=&\{\,\sigma(u):u\in\free(\forall x\phi_{1})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi)\,\}
+    \end{eqnarray*}
+We shall complete the proof by justifying the used inclusion:
+    \[
+    \{\,\sigma(u):u\in\free(\phi_{1})\,\}\setminus\{\sigma(x)\}
+    \subseteq\{\,\sigma(u):u\in\free(\phi_{1})\setminus\{x\}\,\}
+    \]
+So suppose $y=\sigma(u)$ for some $u\in\free(\phi_{1})$ and
+$y\neq\sigma(x)$. Then in particular $u\neq x$, and if follows that
+$y=\sigma(u)$ with $u\in\free(\phi_{1})\setminus\{x\}$.
+\end{proof}
+
+We now prove a second version of
+proposition~(\ref{logic:prop:freevar:of:substitution:inclusion})
+which requires stronger assumptions but leads to an equality rather
+than mere inclusion:
+\begin{prop}\label{logic:prop:freevar:of:substitution}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
+$\phi\in\pv$ be such that $\sigma_{|\var(\phi)}$ is an injective
+map. Then, we have:
+    \[
+    \free(\sigma(\phi))=\sigma(\free(\phi))
+    \]
+where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated substitution mapping.
+\end{prop}
+\begin{proof}
+Given $\phi\in\pv$ such that $\sigma_{|\var(\phi)}$ is injective, we
+need to show the equality
+$\free(\sigma(\phi))=\{\sigma(x):x\in\free(\phi)\}$. We shall do so
+by structural induction using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since \pvo\ is a generator
+of \pv, we first check that the property is true for $\phi\in\pvo$.
+So suppose $\phi=(x\in y)\in\pvo$ for some $x,y\in V$. Then,
+regardless of whether $\sigma(x)=\sigma(y)$ or not, we have:
+    \begin{eqnarray*}
+    \free(\sigma(\phi))&=&\free(\sigma(x\in y))\\
+    &=&\free(\,\sigma(x)\in\sigma(y)\,)\\
+    &=&\{\sigma(x),\sigma(y)\}\\
+    &=&\{\sigma(u):u\in\{x,y\}\}\\
+    &=&\{\sigma(u):u\in\free(x\in y)\}\\
+    &=&\{\sigma(x):x\in\free(\phi)\}
+    \end{eqnarray*}
+Next we check that the property is true for $\bot\in\pv$:
+    \[
+    \free(\sigma(\bot))=\free(\bot)=\emptyset=\{\sigma(x):x\in\free(\bot)\}
+    \]
+Next we check that the property is true for
+$\phi=\phi_{1}\to\phi_{2}$ if it is true for $\phi_{1},\phi_{2}$.
+Note that if $\sigma_{|\var(\phi)}$ is injective, it follows from
+$\var(\phi)=\var(\phi_{1})\cup\var(\phi_{2})$ that both
+$\sigma_{|\var(\phi_{1})}$ and $\sigma_{|\var(\phi_{2})}$ are
+injective, and consequently:
+    \begin{eqnarray*}
+    \free(\sigma(\phi))&=&\free(\sigma(\phi_{1}\to\phi_{2}))\\
+    &=&\free(\sigma(\phi_{1})\to\sigma(\phi_{2}))\\
+    &=&\free(\sigma(\phi_{1}))\cup\free(\sigma(\phi_{2}))\\
+    &=&\{\,\sigma(x):x\in\free(\phi_{1})\,\}\cup\{\,\sigma(x):x\in\free(\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi_{1})\cup\free(\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi_{1}\to\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi)\,\}
+    \end{eqnarray*}
+Finally we check that the property is true for $\phi=\forall
+x\phi_{1}$ if it is true for $\phi_{1}$. Note that if
+$\sigma_{|\var(\phi)}$ is injective, it follows from
+$\var(\phi)=\{x\}\cup\var(\phi_{1})$ that $\sigma_{|\var(\phi_{1})}$
+is also injective, and consequently:
+
+    \begin{eqnarray*}
+    \free(\sigma(\phi))&=&\free(\sigma(\forall x\phi_{1}))\\
+    &=&\free(\forall\sigma(x)\,\sigma(\phi_{1}))\\
+    &=&\free(\sigma(\phi_{1}))\setminus\{\sigma(x)\}\\
+    &=&\{\,\sigma(u):u\in\free(\phi_{1})\,\}\setminus\{\sigma(x)\}\\
+    \mbox{see below\ $\rightarrow$}&=&\{\,\sigma(u):u\in\free(\phi_{1})\setminus\{x\}\,\}\\
+    &=&\{\,\sigma(u):u\in\free(\forall x\phi_{1})\,\}\\
+    &=&\{\,\sigma(x):x\in\free(\phi)\,\}
+    \end{eqnarray*}
+We shall complete the proof by justifying the used equality:
+    \[
+    \{\,\sigma(u):u\in\free(\phi_{1})\,\}\setminus\{\sigma(x)\}
+    =\{\,\sigma(u):u\in\free(\phi_{1})\setminus\{x\}\,\}
+    \]
+First we show the inclusion $\subseteq$. Suppose $y=\sigma(u)$ for
+some $u\in\free(\phi_{1})$ and $y\neq\sigma(x)$. Then in particular
+$u\neq x$, and if follows that $y=\sigma(u)$ with
+$u\in\free(\phi_{1})\setminus\{x\}$. We now show the reverse
+inclusion $\supseteq$. Suppose $y=\sigma(u)$ for some
+$u\in\free(\phi_{1})\setminus\{x\}$. Then in particular
+$y=\sigma(u)$ for some $u\in\free(\phi_{1})$ and we need to show
+that $y\neq\sigma(x)$. Suppose to the contrary that $y=\sigma(x)$.
+Then $\sigma(u)=\sigma(x)$ with
+$u\in\free(\phi_{1})\subseteq\var(\phi_{1})\subseteq\var(\phi)$ and
+$x\in\var(\phi)$. Having assumed that $\sigma_{|\var(\phi)}$ is
+injective, we obtain $u=x$, contradicting the fact that
+$u\in\free(\phi_{1})\setminus\{x\}$.
+\end{proof}
+
+For an easy future reference, we now apply
+proposition~(\ref{logic:prop:freevar:of:substitution}) to the single
+variable substitution mapping $\sigma=[y/x]$. We require that
+$y\not\in\var(\phi)$ to guarantee the injectivity of the map
+$\sigma_{|\var(\phi)}$.
+\begin{prop}\label{logic:prop:freevar:single:subst}
+Let $V$ be a set, $\phi\in\pv$, $x,y\in V$  with $y\not\in\var(\phi)$. Then:
+    \[
+    \free(\phi[y/x])=\left\{\begin{array}{lcl}
+    \free(\phi)\setminus\{x\}\cup\{y\}&\mbox{\ if\ }&x\in\free(\phi)\\
+    \free(\phi)&\mbox{\ if\ }&x\not\in\free(\phi)
+    \end{array}
+    \right.
+    \]
+\end{prop}
+\begin{proof}
+Let $\phi\in\pv$ such that $y\not\in\var(\phi)$. Let $\sigma:V\to V$
+be the single variable substitution map $\sigma=[y/x]$ defined by
+$\sigma(x)=y$ and $\sigma(u)=u$ for $u\neq x$. From the assumption
+$y\not\in\var(\phi)$ it follows that $\sigma_{|\var(\phi)}$ is an
+injective map. Indeed, suppose $\sigma(u)=\sigma(v)$ for some
+$u,v\in\var(\phi)$. We need to show that $u=v$, which is clearly the
+case when $u\neq x$ and $v\neq x$. So suppose $u=x$ and $v\neq x$.
+From $\sigma(u)=\sigma(v)$ we obtain $y=v$ contradicting the
+assumption $y\not\in\var(\phi)$. So $u=x$ and $v\neq x$ is
+impossible and likewise $u\neq x$ and $v=x$ is an impossible case.
+Of course the case $u=x$ and $v=x$ leads to $u=v$. So we have proved
+that $u=v$ in all possible cases and $\sigma_{|\var(\phi)}$ is
+indeed an injective map. From
+proposition~(\ref{logic:prop:freevar:of:substitution}) it follows
+that $\free(\sigma(\phi))=\sigma(\free(\phi))$, i.e.
+$\free(\phi[y/x])=\sigma(\free(\phi))$. We shall complete the proof
+by showing that
+$\sigma(\free(\phi))=\free(\phi)\setminus\{x\}\,\cup\,\{y\}$ when
+$x\in\free(\phi)$, while $\sigma(\free(\phi))=\free(\phi)$ when
+$x\not\in\free(\phi)$.  First we assume that $x\not\in\free(\phi)$.
+We need to show that $\sigma(\free(\phi))=\free(\phi)$. First we
+show the inclusion $\subseteq$. So suppose $z=\sigma(u)$ for some
+$u\in\free(\phi)$. We need to show that $z\in\free(\phi)$. Since
+$u\in\free(\phi)$, it is sufficient to prove that $\sigma(u)=u$.
+Hence it is sufficient to show that $u\neq x$ which follows
+immediately from the assumption $x\not\in\free(\phi)$. This
+completes our proof of $\subseteq$. We now show the reverse
+inclusion $\supseteq$. So suppose $z\in\free(\phi)$. We need to show
+that $z=\sigma(u)$ for some $u\in\free(\phi)$. It is sufficient to
+show that $z=\sigma(z)$ or $z\neq x$ which follows from
+$z\in\free(\phi)$ and $x\not\in\free(\phi)$. This completes our
+proof in the case when $x\not\in\free(\phi)$. We now assume that
+$x\in\free(\phi)$. We need to show that
+$\sigma(\free(\phi))=\free(\phi)\setminus\{x\}\cup\{y\}$. First we
+prove the inclusion $\subseteq$. So suppose $z=\sigma(u)$ for some
+$u\in\free(\phi)$. We assume that $z\neq y$ and we need to show that
+$z\in\free(\phi)$ and $z\neq x$. First we show that $z\neq x$. So
+suppose to the contrary that $z=x$. Then $\sigma(u)=x$. If $u\neq x$
+we obtain $\sigma(u)=u\neq x$. Hence it follows that $u=x$ and
+consequently $\sigma(u)=\sigma(x)$. So $z=y$ contradicting the
+initial assumption. So we need to show that $z\in\free(\phi)$. Once
+again, since $z=\sigma(u)$ and $u\in\free(\phi)$, it is sufficient
+to prove that $\sigma(u)=u$ or $u\neq x$. So suppose to the contrary
+that $u=x$. Then $z=\sigma(u)=\sigma(x)=y$ which contradicts the
+initial assumption $z\neq y$. This completes our proof of
+$\subseteq$. We now show the reverse inclusion $\supseteq$. Having
+assumed that $x\in\free(\phi)$, we have
+$y=\sigma(x)\in\sigma(\free(\phi))$. So it remains to show that
+$\sigma(\free(\phi))\supseteq\free(\phi)\setminus\{x\}$. So suppose
+$z\in\free(\phi)$ and $z\neq x$. We need to show that $z=\sigma(u)$
+for some $u\in\free(\phi)$ for which it is clearly sufficient to
+prove that $z=\sigma(z)$ or $z\neq x$, which is true by assumption.
+\end{proof}
+
+In proposition~(\ref{logic:prop:substitution:congruence}) we showed
+that the relation $\equiv$ defined by $\phi\equiv\psi$ \ifand\
+$\sigma(\phi)\sim\sigma(\psi)$ was a congruence on \pv, given an
+arbitrary substitution $\sigma:V\to W$ and congruence $\sim$ on
+${\bf P}(W)$. The objective was to obtain an easy way to prove an
+implication of the form $\phi\sim\psi\ \Rightarrow\
+\sigma(\phi)\sim\sigma(\psi)$ where $\sim$ is another congruence on
+\pv\ for which there is a known generator $R_{0}$. We are now
+interested in an implication of the form $\phi\sim\psi\ \Rightarrow\
+\free(\phi)=\free(\psi)$. One natural step towards proving such an
+implication consists in showing that the relation $\equiv$ defined
+by $\phi\equiv\psi$ \ifand\ $\free(\phi)=\free(\psi)$, is itself a
+congruence on \pv. This is the purpose of the next proposition.
+
+
+\begin{prop}\label{logic:prop:congruence:freevar}
+Let $V$ be a set and $\equiv$ be the relation on \pv\ defined by:
+    \[
+    \phi\equiv\psi\ \Leftrightarrow\ \free(\phi)=\free(\psi)
+    \]
+for all $\phi,\psi\in\pv$. Then $\equiv$ is a congruence on \pv.
+\end{prop}
+\begin{proof}
+The relation $\equiv$ is clearly reflexive, symmetric and transitive
+on \pv. So we simply need to show that $\equiv$ is a congruent
+relation on \pv. By reflexivity, we already have $\bot\equiv\bot$.
+Suppose $\phi_{1},\phi_{2},\psi_{1}$ and $\psi_{2}\in\pv$ are such
+that $\phi_{1}\equiv\psi_{1}$ and $\phi_{2}\equiv\psi_{2}$. Define
+$\phi=\phi_{1}\to\phi_{2}$ and $\psi=\psi_{1}\to\psi_{2}$. We need
+to show that $\phi\equiv\psi$, or equivalently that
+$\free(\phi)=\free(\psi)$. This follows from the fact that
+$\free(\phi_{1})=\free(\psi_{1})$, $\free(\phi_{2})=\free(\psi_{2})$
+and:
+    \begin{eqnarray*}
+    \free(\phi)&=&\free(\phi_{1}\to\phi_{2})\\
+    &=&\free(\phi_{1})\cup\free(\phi_{2})\\
+    &=&\free(\psi_{1})\cup\free(\psi_{2})\\
+    &=&\free(\psi_{1}\to\psi_{2})\\
+    &=&\free(\psi)
+    \end{eqnarray*}
+We now suppose that $\phi_{1},\psi_{1}\in\pv$ are such that
+$\phi_{1}\equiv\psi_{1}$. Let $x\in V$ and define $\phi=\forall
+x\phi_{1}$ and $\psi=\forall x\psi_{1}$. We need to show that
+$\phi\equiv\psi$, or equivalently that $\free(\phi)=\free(\psi)$.
+This follows from the fact that $\free(\phi_{1})=\free(\psi_{1})$
+and:
+    \[
+    \free(\phi)=\free(\forall x\phi_{1})
+    =\free(\phi_{1})\setminus\{x\}
+    =\free(\psi_{1})\setminus\{x\}
+    =\free(\forall x\psi_{1})
+    =\free(\psi)
+    \]
+\end{proof}

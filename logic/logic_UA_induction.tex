@@ -1,0 +1,145 @@
+We are all familiar with the notion of {\em proof by induction over
+$\N$}. Let $\phi$ be a formula of first order logic and $u$ be a
+variable. In order to prove that $\phi[n/u]$ is true for all
+$n\in\N$, a {\em proof by induction over $\N$} consists in proving
+first that $\phi[0/u]$ is true, and then proving the implication
+$\phi[n/u]\to\phi[n+1/u]$ for all $n\in\N$. A {\em proof by
+induction over $\N$} is legitimate as the following is a theorem:
+    \begin{equation}\label{logic:eqn:induction:over:N}
+    [\,\phi[0/u]\land(\forall n\in\N\ ,\
+    \phi[n/u]\to\phi[n+1/u])\,]\to(\forall n\in\N\ ,\ \phi[n/u])
+    \end{equation}
+Hence for every formula $\phi$ of first order logic and every
+variable $u$, we have a corresponding
+theorem~(\ref{logic:eqn:induction:over:N}). This correspondence may
+be called a {\em theorem schema}, in the same way that {\bf ZFC} has
+a few {\em axiom schema}. If we denote $\texttt{Th}[\phi,u]$ the
+theorem obtained in~(\ref{logic:eqn:induction:over:N}) from the
+formula $\phi$ and the variable $u$, then the statement
+$\forall\phi\forall u\texttt{Th}[\phi,u]$ cannot be represented as a
+formula of first order logic, and is therefore not a {\em theorem}.
+It may be called a {\em meta-theorem}, which is a part of {\em
+meta-mathematics}. It is said that a meta-theorem can also become a
+theorem, but only as part of a wider formal system. There is
+something fundamentally disturbing about meta-theorems: most of us
+do not understand them. There is always a high level of discomfort
+when referring to {\em formulas of first order logic} and {\em
+variables} without having defined any of those terms. It is also
+problematic to use notations such as `$\phi[n/u]$' ($\phi$ with $n$
+in place of $u$) which is most likely not always meaningful: some
+form of restriction should probably be imposed on the variables $u$
+and $n$, unless maybe $\phi$ is viewed as an equivalence class
+rather than a string. The truth is we do not really know.
+
+At the same time, there is something fascinating and magical about
+meta-mathematics: one of our favorite meta-theorems states that
+given a property $\phi[u]$, if there exists an ordinal $\beta$ such
+that $\phi[\beta]$, then there exists a smallest ordinal with such
+property. This is powerful. This is not something we want to give
+up. And yet we hardly understand it, and it is not something we can
+prove. Suppose we had a compiler which would transform a high level
+mathematical statement into a formula of first order logic; suppose
+we had defined the notion of {\em mathematical proof} as a finite
+sequence of low level formulas satisfying certain properties. Then a
+meta-theorem would not be compiled and would not be proved. But we
+could use its {\em meta-proof} to {\em teach} our compiler to
+automatically generate the appropriate fragment of code needed to
+construct a proof of $\texttt{Th}[\phi,u]$ from the formula $\phi$.
+There is light at the end of the tunnel.
+
+In this section, we shall make little mention of the ordinals so as
+to keep as wide an audience as possible. As it turns out, every
+$n\in\N$ is an ordinal and the set $\N$ itself is an ordinal (also
+denoted $\om$), but what really matters is the fact already used
+before that every non-empty subset of $\N$ has a smallest element.
+Now suppose we want to prove
+theorem~(\ref{logic:eqn:induction:over:N}) given a formula $\phi$
+and a variable $u$: we assume the left-hand-side
+of~(\ref{logic:eqn:induction:over:N}) is true. We then consider the
+set:
+    \[
+    A=\{n\in\N:\lnot\phi[n/u]\}
+    \]
+and we need to show that $A=\emptyset$. Note that the existence of
+the set $A$ is a direct consequence of the Axiom Schema of
+Comprehension which makes the formula:
+    \[
+    \forall\N\exists A[\forall n(n\in A\leftrightarrow (n\in\N)\land(\lnot\phi[n/u]))]
+    \]
+an axiom of {\bf ZFC}. Now suppose $A\neq\emptyset$. Then $A$ is a
+non-empty subset of $\N$ which therefore has a smallest element, say
+$n\in\N$. Since $\phi[0/u]$ is true, we must have $n\neq 0$. So
+$n\geq 1$ and $n-1\in\N$. From the minimality of $n$, it follows
+that $\phi[n-1/u]$ is true. From the implication
+$\phi[n-1/u]\to\phi[n/u]$ we conclude that $\phi[n/u]$ is also true,
+contradicting the fact that $n\in A$. So we have shown that
+$A=\emptyset$, which completes the proof of
+theorem~(\ref{logic:eqn:induction:over:N}).
+
+Because our proof was somehow parameterized with the formula $\phi$,
+we could call it a {\em meta-proof}. So we have just produced a
+piece of meta-mathematics. However, this could have been avoided:
+when dealing with mathematical induction over $\N$, there is no need
+to consider a formula~$\phi$ of first order predicate logic.
+Attempting to prove that a property is true for all $n\in\N$ is not
+fundamentally different from proving that a particular subset of
+$\N$, namely the subset on which the property is true coincide with
+the whole of $\N$. So let $Y\subseteq\N$ be a subset of $\N$. In
+order to prove that $Y=\N$, it is sufficient to show that $0\in Y$
+and furthermore that $(n\in Y)\to(n+1\in Y)$ for all $n\in\N$.
+Indeed, the following is a theorem:
+    \begin{equation}\label{logic:eqn:induction:theorem}
+    \forall Y\subseteq\N\ ,\ [\,(0\in Y)\land\forall n((n\in Y)
+    \to (n+1\in Y))\,]\to (Y=\N)
+    \end{equation}
+No more meta-mathematics, no more guilt. We are back to the solid
+grounds of standard mathematical arguments. We may be wrong and
+deluded in our beliefs, but we certainly lose the awareness of it.
+The proof of theorem~(\ref{logic:eqn:induction:theorem}) is
+essentially the same but without the disturbing reference to the
+formula $\phi$: suppose the complement of $Y$ in $\N$ is a non
+empty-set. It has a smallest element $n$ which cannot be $0$. From
+$n-1\in Y$ we obtain $n\in Y$ which is a contradiction.
+
+We can now resume our study of universal algebras and deal with the
+topic of {\em proof by structural induction}. Let $X$ be a universal
+algebra of type $\alpha$ and suppose $X_{0}\subseteq X$ is a
+generator of $X$. In order to prove that a property holds for all
+$y\in X$, it is sufficient to prove that the property is true for
+all $y\in X_{0}$ and furthermore given $f\in\alpha$ and $x\in
+X^{\alpha(f)}$, that the property is also true for $f(x)$ whenever
+it is true for all $x(i)$'s with $i\in\alpha(f)$. Just like in the
+case of induction over $\N$, it would be possible to consider a
+formula $\phi$ of first order predicate logic, and indulge in
+meta-mathematics. Instead, we shall safely quote:
+\index{induction@Proof by structural induction}
+\begin{theorem}\label{logic:the:proof:induction}
+Let $X$ be a universal algebra of type $\alpha$. Let $X_{0}\subseteq
+X$ be a generator of $X$. Suppose $Y\subseteq X$ is a subset of $X$
+with the following properties:
+    \begin{eqnarray*}
+    (i)&& x\in X_{0}\ \Rightarrow\ x\in Y\\
+    (ii)&&(\forall i\in\alpha(f)\ ,\ x(i)\in Y)\ \Rightarrow\ f(x)\in Y
+    \end{eqnarray*}
+where $(ii)$ holds for all $f\in\alpha$ and $x\in X^{\alpha(f)}$.
+Then $Y=X$.
+\end{theorem}
+\begin{proof}
+We need to show that $Y=X$. From $(i)$ we see immediately that
+$X_{0}\subseteq Y$. Since $X_{0}$ is a generator of $X$, we have
+$\langle X_{0}\rangle =X$. Consequently, it is sufficient to prove
+that $Y$ is a universal sub-algebra of $X$, as this would imply that
+$\langle X_{0}\rangle\subseteq Y$, and finally $X\subseteq Y$. In
+order to show that $Y$ is a universal sub-algebra of $X$, consider
+$f\in\alpha$ and $x\in Y^{\alpha(f)}$. We need to prove that
+$f(x)\in Y$. From $(ii)$, it is sufficient to show that $x(i)\in Y$
+for all $i\in\alpha(f)$. This follows from $x\in Y^{\alpha(f)}$.
+\end{proof}
+
+Note that theorem~(\ref{logic:the:proof:induction}) does not require
+$X$ to be a free universal algebra, but simply that it should have a
+generator $X_{0}\subseteq X$. Furthermore, if $f\in\alpha$ is such
+that $\alpha(f)=0$, then $(ii)$ reduces to $f(0)\in Y$. In other
+words, in order to prove that a property holds for every element of
+a universal algebra with constants, the least we can do is check
+that every constant has the required property.

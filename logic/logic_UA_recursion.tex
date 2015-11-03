@@ -1,0 +1,463 @@
+Let $\alpha=\{(0,1),(1,2)\}$ and $X_{0}$ be a set. We know from
+theorem~(\ref{logic:the:main:existence}) of
+page~\pageref{logic:the:main:existence} that there exists a free
+universal algebra $X$ of type $\alpha$ whose free generator is
+$X_{0}$. Let us denote $\lnot:X^{1}\to X$ and $\land:X^{2}\to X$ the
+two operators on $X$. This particular choice of notations should
+invite us to view $X$ as a free universal algebra of {\em
+propositional logic}. We know from
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} that any {\em
+proposition} $\phi$ of $X$  is either an {\em atomic proposition}
+$\phi=p$ for some $p\in X_{0}$, or the {\em negation} of a
+proposition $\phi=\lnot \phi_{1}$ or the {\em conjunction} of two
+propositions $\phi=\phi_{1}\land\phi_{2}$. These three cases are
+exclusive, and these representations are unique. In effect, the free
+universal algebra $X$ is partitioned into three parts $X=X_{0}\uplus
+X_{\lnot}\uplus X_{\land}$. If $A$ is a set, then any map $g:X\to A$
+could be defined by specifying the three restrictions $g_{|X_{0}}$,
+$g_{|X_{\lnot}}$ and $g_{|X_{\land}}$ separately. We saw from
+proposition~(\ref{logic:prop:order}) that the order $\om:X\to\N$ had
+this sort of three-fold structure:
+    \begin{equation}\label{logic:eqn:order:propositional}
+    \forall\phi\in X\ ,\ \om(\phi)=\left\{
+                    \begin{array}{lcl}
+                    0&\mbox{\ if\ }&\phi=p\in X_{0}\\
+                    1+\om(\phi_{1})&\mbox{\ if\ }&\phi=\lnot\phi_{1}\\
+                    1+\max(\om(\phi_{1}),\om(\phi_{2}))&\mbox{\ if\ }&\phi=\phi_{1}\land\phi_{2}
+                    \end{array}\right.
+    \end{equation}
+However, we did not invoke
+equation~(\ref{logic:eqn:order:propositional}) as a definition of
+the order $\om:X\to\N$ as this would not guarantee the existence of
+$\om$. This is very similar to the simple recursion problem:
+defining a map $g:\N\to\N$ by setting $g(0)=1$ and
+$g(n+1)=(n+1).g(n)$ does not in itself guarantee the existence of
+$g$. We now know that $g$ exists, but we needed to justify the
+principle of {\em definition by recursion over $\N$} in the form of
+lemma~(\ref{logic:lemma:recursion:over:N}) and
+meta-theorem~(\ref{logic:meta:recursion:over:N}) of
+page~\pageref{logic:meta:recursion:over:N}.
+Equation~(\ref{logic:eqn:order:propositional}) is clearly recursive
+as it links $\om(\phi)$ on the left-hand-side to other values
+$\om(\phi_{1})$ and $\om(\phi_{2})$ assigned by the map \om\ to
+other points. It is not obvious that $\om$ exists so we had to find
+some other way to define it. And yet we may feel there is nothing
+wrong with equation~(\ref{logic:eqn:order:propositional}). From a
+computing point of view, it seems pretty obvious that any
+computation of $\om(\phi)$ would terminate. For instance taking
+$\phi=\lnot(p_{1}\land((\lnot p_{2})\land p_{3}))$,
+equation~(\ref{logic:eqn:order:propositional}) would lead to:
+    \begin{eqnarray*}
+        \om(\phi)&=&\om(\lnot(p_{1}\land((\lnot p_{2})\land p_{3})))\\
+        &=&1+\om(p_{1}\land((\lnot p_{2})\land p_{3}))\\
+        &=&2+\max(\om(p_{1}),\om((\lnot p_{2})\land p_{3}))\\
+        &=&2+\om((\lnot p_{2})\land p_{3})\\
+        &=&3+\max(\om(\lnot p_{2}),\om(p_{3}))\\
+        &=&3+\om(\lnot p_{2})\\
+        &=&4+\om(p_{2})\\
+        &=&4
+    \end{eqnarray*}
+Equation~(\ref{logic:eqn:order:propositional}) is a case of {\em
+definition by structural recursion}. There are many natural mappings
+on $X$ which could be defined in a similar way. For instance,
+suppose we needed a map $g:X\to{\cal P}(X_{0})$ returning the set of
+all atomic propositions involved in a formula $\phi\in X$. In the
+case of $\phi=\lnot(p_{1}\land((\lnot p_{2})\land p_{3}))$, we would
+have $g(\phi)=\{p_{1},p_{2},p_{3}\}$. A natural way to define the
+map $g$ is:
+    \begin{equation}\label{logic:eqn:set:propositional}
+    \forall\phi\in X\ ,\ g(\phi)=\left\{
+                    \begin{array}{lcl}
+                    \{p\}&\mbox{\ if\ }&\phi=p\in X_{0}\\
+                    g(\phi_{1})&\mbox{\ if\ }&\phi=\lnot\phi_{1}\\
+                    g(\phi_{1})\cup g(\phi_{2})&\mbox{\ if\ }&\phi=\phi_{1}\land\phi_{2}
+                    \end{array}\right.
+    \end{equation}
+As another example, suppose we had a truth table $v:X_{0}\to\{0,1\}$
+indicating whether an atomic proposition $p$ is true ($v(p)=1$) or
+false ($v(p)=0$) for all $p\in X_{0}$. We would like to define a map
+$g:X\to\{0,1\}$ indicating whether a proposition $\phi$ is true
+($g(\phi)=1$) or false ($g(\phi)=0$). Once again, it is natural to
+define the map $g$ using structural recursion:
+ \begin{equation}\label{logic:eqn:truth:propositional}
+    \forall\phi\in X\ ,\ g(\phi)=\left\{
+                    \begin{array}{lcl}
+                    v(p)&\mbox{\ if\ }&\phi=p\in X_{0}\\
+                    1-g(\phi_{1})&\mbox{\ if\ }&\phi=\lnot\phi_{1}\\
+                    g(\phi_{1}).\,g(\phi_{2})&\mbox{\ if\ }&\phi=\phi_{1}\land\phi_{2}
+                    \end{array}\right.
+    \end{equation}
+We know that equations~(\ref{logic:eqn:set:propositional})
+and~(\ref{logic:eqn:truth:propositional}) are fine: we just need to
+prove~it.
+
+So let us go back to a more general setting and consider a free
+universal algebra $X$ of type $\alpha$ with free generator
+$X_{0}\subseteq X$. Let $A$ be a set. We would like to define a map
+$g:X\to A$ by structural recursion. We know from
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} that any element of
+$X$ is either an element of $X_{0}$, or an element of the form
+$f(x)$ for some unique $f\in\alpha$ and $x\in X^{\alpha(f)}$.
+Defining $g:X\to A$ by structural recursion consists first in
+specifying $g(x)$ for all $x\in X_{0}$. So we need a map
+$g_{0}:X_{0}\to A$ with the understanding that $g(x)=g_{0}(x)$ for
+all $x\in X_{0}$. For all $f\in\alpha$ and $x\in X^{\alpha(f)}$, we
+then want to specify $g(f(x))$ as a function of all the individual
+$g(x(i))$'s for all $i\in\alpha(f)$. So we need a map
+$h(f):A^{\alpha(f)}\to A$ with the understanding that
+$g(f(x))=h(f)(g(x))$. Note that if $\alpha(f)=0$, this amounts to
+having a map $h(f):\{0\}\to A$ and requesting that
+$g(f(0))=h(f)(0)$. In other words, it amounts to specifying the
+value $h(f)(0)$ assigned by the map $g$ to the constant $f(0)$. We
+are now in a position to ask the key question: given a map
+$g_{0}:X_{0}\to A$ and given a map $h(f):A^{\alpha(f)}\to A$ for all
+$f\in\alpha$, does there exist a map $g:X\to A$ such that
+$g_{|X_{0}}=g_{0}$ and $g(f(x))=h(f)(g(x))$ for all $f\in\alpha$ and
+$x\in X^{\alpha(f)}$? This question is dealt with in the following
+theorem.
+
+To prove theorem~(\ref{logic:the:structural:recursion}), we are
+effectively resorting to the same trick as the one used to define
+the order $\om:X\to\N$ in definition~(\ref{logic:def:order}): once
+we give ourselves a map $h(f):A^{\alpha(f)}\to A$ for all
+$f\in\alpha$, we are effectively specifying a structure of universal
+algebra of type $\alpha$ on $A$, and requesting that
+$g(f(x))=h(f)(g(x))$ is simply asking that $g:X\to A$ be a morphism.
+The existence of $g$ such that $g_{|X_{0}}=g_{0}$ is guaranteed by
+the fact that $X_{0}$ is a free generator of $X$.
+\index{recursion@Structural recursion}
+\begin{theorem}\label{logic:the:structural:recursion}
+Let $X$ be a free universal algebra of type $\alpha$  with free
+generator $X_{0}\subseteq X$. Let $A$ be a set and $g_{0}:X_{0}\to
+A$ be a map. Let $h$ be a map with domain $\alpha$ such that $h(f)$
+is a map $h(f):A^{\alpha(f)}\to A$ for all $f\in\alpha$. Then, there
+exists a unique map $g:X\to A$ such that:
+    \begin{eqnarray*}
+    (i)&& x\in X_{0}\ \Rightarrow g(x)=g_{0}(x)\\
+    (ii)&& x\in X^{\alpha(f)}\ \Rightarrow g(f(x)) = h(f)(g(x))
+    \end{eqnarray*}
+where $(ii)$ holds for all $f\in\alpha$.
+\end{theorem}
+\begin{proof}
+Since $h$ is a map with domain $\alpha$ and we have
+$h(f):A^{\alpha(f)}\to A$ for all $f\in\alpha$, the ordered pair
+$(A,h)$ is in fact a universal algebra of type $\alpha$. Since
+$g_{0}:X\to A$ is a map and $X$ is a free universal algebra of type
+$\alpha$ with free generator $X_{0}$, there exists a unique morphism
+$g:X\to A$ such that $g_{|X_{0}}=g_{0}$. From this last equality, we
+see that $(i)$ is satisfied. Since $g$ is a morphism, for all
+$f\in\alpha$ and $x\in X^{\alpha(f)}$ we have:
+    \[
+    g(f(x))=g\circ f(x)=h(f)\circ g(x)=h(f)(g(x))
+    \]
+where it is understood that '$g(x)$' on the right-hand-side of this
+equation refers to the element of $A^{\alpha(f)}$ defined by
+$g(x)(i)=g(x(i))$ for all $i\in\alpha(f)$. Hence we see that $(ii)$
+is satisfied by $g:X\to A$ for all $f\in\alpha$. So we have proved
+the existence of $g:X\to A$ such that $(i)$ and $(ii)$ holds for all
+$f\in\alpha$. Suppose $g':X\to A$ is another map with such property.
+Then $g'$ is clearly a morphism with $g'_{|X_{0}}=g_{0}$ and it
+follows from the uniqueness of $g$ that $g'=g$.
+\end{proof}
+
+This was disappointingly simple. One would have expected the
+principle of {\em definition by structural recursion} to be a lot
+more complicated than that of recursion over $\N$. And it can be. We
+effectively restricted ourselves to the simple case of $g:X\to A$
+where $A$ is a set rather than a class, and $g(f(x))$ is simply a
+function of the $g(x(i))$'s. This would be similar to considering
+$g:\N\to A$ given a set $A$, and requesting that $g(n)=h\circ
+g(n-1)$ rather than $g(n)=h(g_{|n})$. Anticipating on future events,
+suppose $X$ is a free algebra of first order logic, generated by
+atomic propositions $(x\in y)$ (with $x,y$ belonging to a set of
+{\em variables} $V$),  with the constant $\bot$, the binary operator
+$\to$ and a unary quantification operator $\forall x$ for every
+variable $x\in V$. Given a set $M$ with a binary relation
+$r\subseteq M\times M$ and a map $a:V\to M$ (a {\em variables
+assignment}), a natural thing to ask is which of the formulas
+$\phi\in X$ are {\em true} with respect to the model $(M,r)$ under
+the assignment~$a:V\to M$. In other words, it is very tempting to
+define a truth function $g_{a}:X\to 2=\{0,1\}$ with the formula:
+    \[
+                    g_{a}(\phi)=\left\{
+                    \begin{array}{lcl}
+                    1_{r}(\,a(x),a(y)\,)&\mbox{\ if\ }&\phi=(x\in y)\\
+                    0&\mbox{\ if\ }&\phi=\bot\\
+                    g_{a}(\phi_{1})\to g_{a}(\phi_{2})&\mbox{\ if\ }&
+                    \phi=\phi_{1}\to\phi_{2}\\
+                    \min\left\{\,g_{b}(\phi_{1})\ :\  b=a\mbox{\ on\
+                    }V\setminus\{x\}\,\right\}
+                    &\mbox{\ if\ }&\phi=\forall x\phi_{1}\\
+                    \end{array}\right.
+    \]
+being understood that $g_{a}(\phi_{1})\to g_{a}(\phi_{2})$ is the
+usual $\lnot g_{a}(\phi_{1})\lor g_{a}(\phi_{2})$ in $\{0,1\}$. This
+definition of the concept of {\em truth} will be seen to be flawed:
+it is clear enough at this stage that
+theorem~(\ref{logic:the:structural:recursion}) will not be directly
+applicable to this case, since we are attempting to define
+$g_{a}:X\to 2$ in terms of other functions $g_{b}:X\to 2$. We will
+need to find some other way to prove the existence of $g_{a}$. Going
+back to propositional logic, another possible example is the
+following:
+\begin{equation}\label{logic:eqn:class:propositional}
+    \forall\phi\in X\ ,\ g(\phi)=\left\{
+                    \begin{array}{lcl}
+                    \{0\}&\mbox{\ if\ }&\phi=p\in X_{0}\\
+                    {\cal P}(g(\phi_{1}))&\mbox{\ if\ }&\phi=\lnot\phi_{1}\\
+                    g(\phi_{1})\times g(\phi_{2})&\mbox{\ if\ }&\phi=\phi_{1}\land\phi_{2}
+                    \end{array}\right.
+    \end{equation}
+This would constitute a case when
+theorem~(\ref{logic:the:structural:recursion}) fails to be
+applicable, as there is no obvious set $A$ for $g:X\to A$. We shall
+not provide a meta-theorem for this.
+
+We shall however now provide a stronger version of
+theorem~(\ref{logic:the:structural:recursion}) which will be
+required at a later stage of this document. For example, when
+studying the Hilbert deductive system on the free algebra of first
+order predicate logic \pv, we shall define the notion of {\em
+proofs} as elements of another free algebra \pvs, which in turn will
+lead to the following recursion:
+\[
+    \forall\pi\in\pvs\ ,\ \val(\pi)=\left\{
+                    \begin{array}{lcl}
+                    \phi&\mbox{\ if\ }&\pi=\phi\in\pv\\
+                    \phi&\mbox{\ if\ }&\pi=\axi\phi,\ \phi\in\av\\
+                    \bot\to\bot&\mbox{\ if\ }&\pi=\axi\phi,\ \phi\not\in\av\\
+                    M(\val(\pi_{1}), \val(\pi_{2})) &\mbox{\ if\ }&\pi=\pi_{1}\pon\pi_{2}\\
+                    \forall x\val(\pi_{1})&\mbox{\ if\ }&\pi=\gen
+                    x\pi_{1},\  x\not\in\spec(\pi_{1})\\
+                    \bot\to\bot&\mbox{\ if\ }&\pi=\gen
+                    x\pi_{1},\  x\in\spec(\pi_{1})\\
+                    \end{array}\right.
+\]
+when attempting to define $\val(\pi)$ as representing the conclusion
+being proved by the proof $\pi$. The details of this definition are
+not important at this stage, but we should simply notice that given
+a variable $x$ and the associated unary operator $\gen
+x:\pvs\to\pvs$, we were unable to define $\val(\gen x\pi_{1})$
+simply in terms of $\val(\pi_{1})$ as an application of
+theorem~(\ref{logic:the:structural:recursion}) would require. The
+definition of $\val(\gen x\pi_{1})$ is also based on whether
+$x\in\spec(\pi_{1})$, i.e. on whether $x$ is a free variable of the
+premises involved in the proof $\pi_{1}$. Going back to the general
+setting of an arbitrary free algebra $X$ of type $\alpha$, this is
+therefore a case when given $f\in\alpha$ and $x\in X^{\alpha(f)}$,
+$g(f(x))$ is not simply defined in terms of $g(x)$, but is also
+based on $x$ itself. So we would like to set $g(f(x))=h(f)(g(x),x)$
+rather than the more restrictive $g(f(x))=h(f)(g(x))$ of
+theorem~(\ref{logic:the:structural:recursion}).
+
+The proof of the following theorem is identical in spirit to that of
+Lemma~(\ref{logic:lemma:recursion:over:N}). The only new idea is the
+introduction of the subsets $X_{n}\subseteq X$ of
+proposition~(\ref{logic:prop:order:structure}):
+    \[
+    X_{n}=\{x\in X\ :\ \om(x)\leq n\}\ ,\ n\in\N
+    \]
+where $\om:X\to\N$ is the order mapping of
+definition~(\ref{logic:def:order}) which allows to reduce our
+problem to that of induction over \N. Once we have shown the
+existence of maps $g_{n}:X_{n}\to A$ with the right property, and
+which are extensions of one another, we prove the existence of the
+larger map $g:X\to A$ simply by collecting the appropriate ordered
+pairs in one single set $g=\cup_{n\in\N}g_{n}$. Note that it is
+probably possible to prove
+theorem~(\ref{logic:the:structural:recursion:2}) using
+lemma~(\ref{logic:lemma:recursion:over:N}) rather than duplicating
+what is essentially the same argument. \index{recursion@Structural
+recursion}
+\begin{theorem}\label{logic:the:structural:recursion:2}
+Let $X$ be a free universal algebra of type $\alpha$  with free
+generator $X_{0}\subseteq X$. Let $A$ be a set and $g_{0}:X_{0}\to
+A$ be a map. Let $h$ be a map with domain $\alpha$ such that $h(f)$
+is a map $h(f):A^{\alpha(f)}\times X^{\alpha(f)}\to A$ for all
+$f\in\alpha$. Then, there exists a unique map $g:X\to A$ such that:
+    \begin{eqnarray*}
+    (i)&& x\in X_{0}\ \Rightarrow g(x)=g_{0}(x)\\
+    (ii)&& x\in X^{\alpha(f)}\ \Rightarrow g(f(x)) = h(f)(g(x),x)
+    \end{eqnarray*}
+where $(ii)$ holds for all $f\in\alpha$.
+\end{theorem}
+\begin{proof}
+We shall first prove the uniqueness property. So suppose $g,g':X\to
+A$ are two maps satisfying $(i)$ and $(ii)$ above. We need to show
+that $g=g'$ or equivalently that $g(x)=g'(x)$ for all $x\in X$. We
+shall do so using a structural induction argument based on
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since $X_{0}$ is a
+generator of $X$, we shall first check this is the case when $x\in
+X_{0}$. This follows immediately from~$(i)$ and
+$g(x)=g_{0}(x)=g'(x)$. We proceed with our induction argument by
+considering an arbitrary $f\in\alpha$ and assuming $x\in
+X^{\alpha(f)}$ is such that $g(x(i))=g'(x(i))$ for all
+$i\in\alpha(f)$. We need to show that $g(f(x))=g'(f(x))$. Recall
+that the notation $g(x)$ in $(ii)$ above refers to the element of
+$A^{\alpha(f)}$ defined by $g(x)(i)=g(x(i))$ for all
+$i\in\alpha(f)$. In the case when $\alpha(f)=0$ we have $g(x)=0$. So
+with this in mind and a similar notational convention for $g'(x)$,
+our hypothesis leads to $g(x)=g'(x)$, and using $(ii)$ above we
+obtain:
+    \[
+    g(f(x))=h(f)(g(x),x)=h(f)(g'(x),x)=g'(f(x))
+    \]
+This completes our induction argument and the proof of uniqueness.
+We shall now prove the existence of the map $g:X\to A$. We define:
+    \[
+    X_{n}=\{x\in X\ :\ \om(x)\leq n\}\ ,\ n\in\N
+    \]
+where $\om:X\to\N$ is the order on $X$ as per
+definition~(\ref{logic:def:order}). Note that from
+proposition~(\ref{logic:prop:order}) we have $x\in X_{0}\
+\Leftrightarrow\ \om(x)=0$ so this new definition does not conflict
+with the notation $X_{0}$ used for the free generator on $X$. We now
+consider the subset $Y\subseteq\N$ of all $n\in\N$ which satisfy the
+property that there exists a unique map $g_{n}:X_{n}\to A$ such
+that:
+    \begin{eqnarray*}
+    (iii)&& x\in X_{0}\ \Rightarrow g_{n}(x)=g_{0}(x)\\
+    (iv)&& f(x)\in X_{n}\ \Rightarrow g_{n}(f(x)) = h(f)(g_{n}(x),x)
+    \end{eqnarray*}
+where $(iv)$ holds for all $f\in\alpha$ and $x\in X^{\alpha(f)}$. In
+order to prove the existence of the map $g:X\to A$, it is sufficient
+to prove that $Y=N$. We shall first prove this is the case. So
+suppose $Y=\N$. We need to show the existence of the map $g:X\to A$.
+Define $g=\cup_{n\in N}g_{n}$. Each $g_{n}$ being a map is a set of
+ordered pairs. So $g$ is also a set of ordered pairs. In fact, it is
+a functional set of ordered pairs:
+    \[
+    \forall x,y,y'\ ,\ ((x,y)\in g)\land((x,y')\in g)\ \Rightarrow\
+    (y=y')
+    \]
+Suppose this is true for the time being. Then $g$ is a map.
+Furthermore, since $g_{n}:X_{n}\to A$ and $X_{n}\subseteq X$ for all
+$n\in\N$ we have:
+    \[
+    (x,y)\in g\ \Rightarrow\ \exists n\in\N [(x,y)\in g_{n}]\ \Rightarrow\
+    (x\in X)\land(y\in A)
+    \]
+So it is clear that $\dom(g)\subseteq X$ and $\rng(g)\subseteq A$.
+In fact, since every $x\in X$ is an element of $X_{n}$ for any
+$n\geq\om(x)$, we have $\dom(g)=X$ and we conlude that $g:X\to A$.
+In order to prove the existence of $g:X\to A$ it remains to show
+that $(i)$ and $(ii)$ above are satisfied. So let $x\in X_{0}$. From
+$(x,g_{0}(x))\in g_{0}\subseteq g$ it follows immediately that
+$g(x)=g_{0}(x)$ which shows that $(i)$ is indeed true. Let
+$f\in\alpha$ and $x\in X^{\alpha(f)}$. Picking $n\in\N$ large enough
+so that $f(x)\in X_{n}$ we obtain $(f(x),g_{n}(f(x)))\in
+g_{n}\subseteq g$ from which we conclude that $g(f(x))=g_{n}(f(x))$.
+Furthermore, for all $i\in\alpha(f)$ from
+proposition~(\ref{logic:prop:order}) we have
+$\om(f(x))\geq\om(x(i))$ which shows that $x(i)\in X_{n}$ and
+consequently $(x_{i},g_{n}(x(i)))\in g_{n}\subseteq g$ i.e.
+$g(x(i))=g_{n}(x(i))$. This being true for all $i\in\alpha(f)$, we
+obtain $g(x)=g_{n}(x)$, an equality which is still true when
+$\alpha(f)=0$. Hence, using $(iv)$ above we have:
+    \[
+    g(f(x))=g_{n}(f(x))=h(f)(g_{n}(x),x)=h(f)(g(x),x)
+    \]
+which shows that $(ii)$ is indeed true. This completes the proof of
+the existence of $g:X\to A$ having admitted that $g$ is a functional
+relation. We shall now go back to this particular point and show
+that $g$ is indeed functional. So let $x,y,y'$ be sets and assume
+that $(x,y)\in g$ and $(x,y')\in g$. We need to show that $y=y'$.
+Let $n\in\N$ be the smallest integer such that $(x,y)\in g_{n}$ and
+likewise let $n'\in\N$ be the smallest integer such that $(x,y')\in
+g_{n'}$. Without loss of generality, we may assume that $n\leq n'$
+and consequently $X_{n}\subseteq X_{n'}$. Consider the restriction
+$(g_{n'})_{|X_{n}}:X_{n}\to A$. Since $g_{n'}:X_{n'}\to A$ satisfies
+$(iii)$ and $(iv)$ above for $n'$, for all $z\in X_{0}$ we have
+$(g_{n'})_{|X_{n}}(z) = g_{n'}(z)=g_{0}(z)$ and furthermore given
+$f\in\alpha$ and $z\in X^{\alpha(f)}$ such that $f(z)\in X_{n}$ we
+have:
+    \[
+    (g_{n'})_{|X_{n}}(f(z)) = g_{n'}(f(z)) =
+    h(f)(g_{n'}(z),z)=h(f)((g_{n'})_{|X_{n}}(z),z)
+    \]
+where the last equality follows from the fact that $z(i)\in X_{n}$
+for all $i\in\alpha(f)$. Hence we see that the map
+$(g_{n'})_{|X_{n}}:X_{n}\to A$ also satisfies $(iii)$ and $(iv)$
+above and from the uniqueness property of $g_{n}$ we conclude that
+$(g_{n'})_{|X_{n}}=g_{n}$. We are now in a position to prove that
+$y=y'$. From $(x,y)\in g_{n}$ we obtain $x\in X_{n}$ and
+$y=g_{n}(x)$ while from $(x,y')\in g_{n'}$ we obtain $y'=g_{n'}(x) =
+(g_{n'})_{|X_{n}}(x)$. From $(g_{n'})_{|X_{n}}=g_{n}$ we therefore
+conclude that $y=y'$. This completes our proof of the existence of
+the map $g:X\to A$ having assumed the equality $Y=\N$. We shall
+complete the proof of this theorem by showing the equality $Y=\N$ is
+indeed true. So given $n\in\N$ we need to show the existence and
+uniqueness of a map $g_{n}:X_{n}\to A$ which satisfies $(iii)$ and
+$(iv)$ above. First we prove the uniqueness. So we assume that
+$g,g':X_{n}\to A$ are two maps satisfying $(iii)$ and $(iv)$ above
+and we need to show that $g(x) = g'(x)$ for all $x\in X_{n}$. We
+shall do so by proving the implication $x\in X_{n}\ \Rightarrow\
+g(x)=g'(x)$ by structural induction on $X$, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we check that this
+is true for $x\in X_{0}$. In this case from $(iii)$ above we obtain
+immediately $g(x)=g_{0}(x)=g'(x)$. Next we consider $f\in\alpha$ and
+$x\in X^{\alpha(f)}$ such that the implication $x(i)\in X_{n}\
+\Rightarrow\ g(x(i))=g'(x(i))$ is true for all $i\in\alpha(f)$, i.e.
+$g(x)=g'(x)$, an equality which is still true in the case when
+$\alpha(f)=0$. We need to check the implication $f(x)\in X_{n}\
+\Rightarrow\ g(f(x))=g'(f(x))$,  which in fact follows immediately
+from $(iv)$ and:
+    \[
+    g(f(x))=h(f)(g(x),x)=h(f)(g'(x),x)=g'(f(x))
+    \]
+This completes our structural induction argument and $g_{n}:X_{n}\to
+A$ is indeed unique. We shall now prove the existence
+$g_{n}:X_{n}\to A$ using an induction argument on $\N$. For $n=0$,
+we already have a map $g_{0}:X_{0}\to A$ which clearly satisfies
+$(iii)$ above. It also vacuously satifies $(iv)$ as
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} shows no element of
+$X_{0}$ can be of the form $f(x)$ for $f\in\alpha$ and $x\in
+X^{\alpha(f)}$. So we assume that $g_{n}:X_{n}\to A$ exists for a
+given $n\in\N$ and we need to show the existence of
+$g_{n+1}:X_{n+1}\to A$. Recall the equality from
+proposition~(\ref{logic:prop:order:structure}):
+    \[
+    X_{n+1}=X_{n}\cup\{f(x)\ :\ f\in\alpha\ ,\
+    x\in(X_{n})^{\alpha(f)}\}
+    \]
+So we shall define $g_{n+1}:X_{n+1}\to A$ by setting
+$(g_{n+1})_{|X_{n}}=g_{n}$ and:
+     \[
+     g_{n+1}(y) = h(f)(g_{n}(x),x)
+     \]
+for all $y\in X_{n+1}\setminus X_{n}$, where $y = f(x)$ is the
+unique representation of $y$ with $f\in\alpha$ and
+$x\in(X_{n})^{\alpha(f)}$. Such representation is indeed unique, as
+follows from theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation}. We have thus defined
+a map $g_{n+1}:X_{n+1}\to A$ and it remains to check that $g_{n+1}$
+satisfies $(iii)$ and $(iv)$ above. So let $x\in X_{0}$. Since
+$g_{n}$ satisfies $(iii)$ we have
+$g_{n+1}(x)=(g_{n+1})_{|X_{n}}(x)=g_{n}(x)=g_{0}(x)$ and $g_{n+1}$
+also satisfies $(iii)$. So let $f\in\alpha$ and $x\in X^{\alpha(f)}$
+be such that $y=f(x)\in X_{n+1}$. We need to show that
+$g_{n+1}(f(x)) = h(f)(g_{n+1}(x),x)$. We shall distinguish two
+cases: first we assume that $f(x)\in X_{n}$. Then, since $(iv)$ is
+true for $g_{n}$:
+    \begin{eqnarray*}
+    g_{n+1}(f(x)) &=& (g_{n+1})_{|X_{n}}(f(x))\\
+        &=& g_{n}(f(x))\\
+        (iv)\mbox{\ true\ }g_{n}\ \rightarrow\ &=&h(f)(g_{n}(x),x)\\
+        &=&h(f)((g_{n+1})_{|X_{n}}(x),x)\\
+        &=&h(f)(g_{n+1}(x),x)
+    \end{eqnarray*}
+We now assume that $f(x)\in X_{n+1}\setminus X_{n}$. From
+$x\in(X_{n})^{\alpha(f)}$ we obtain:
+    \begin{eqnarray*}
+    g_{n+1}(f(x))&=&h(f)(g_{n}(x),x)\\
+        &=& h(f)((g_{n+1})_{|X_{n}}(x),x)\\
+        &=& h(f)(g_{n+1}(x),x)
+    \end{eqnarray*}
+So we have proved that $g_{n+1}$ satisfies $(iv)$ above as
+requested.
+\end{proof}

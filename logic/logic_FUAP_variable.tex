@@ -1,0 +1,351 @@
+It feels somewhat artificial to define the set of variables
+$\var(\pi)$ of a proof $\pi$. All variables involved are very
+different in nature and it seems very little benefit can be derived
+from aggregating them in one big set. Among these, there are the
+free or bound variables coming from the set of hypothesis
+$\hyp(\pi)$, and those coming from the set of axioms $\ax(\pi)$.
+There are also the variables involved in the use of generalization.
+These five groups of variables are not mutually exclusive, unless
+when a proof is totally clean and no specific variable of
+$\spec(\pi)$ can be used for generalization. So why define the set
+$\var(\pi)$? Experience has shown us that given a formula
+$\phi\in\pv$, the set $\var(\phi)$ was very useful in allowing us to
+strengthen a few results on substitutions. If $\sigma:V\to W$ is an
+injective map, then many things can be said about $\sigma:\pv\to{\bf
+P}(W)$ or the formula $\sigma(\phi)$. However, we usually do not
+need to know that $\sigma$ is injective to derive our conclusion. It
+is usually sufficient to assume the injectivity of the restriction
+$\sigma_{|\var(\phi)}$. This distinction is in fact crucial: given
+an injective map $\tau:V\to W$, we often need to consider a
+left-inverse of $\tau$, namely a map $\sigma:W\to V$ such that
+$\sigma\circ\tau(x)=x$ for all $x\in V$. Such a left-inverse is
+rarely injective, but the restriction $\sigma_{|\tau(V)}$ is an
+injective map. The set $\var(\phi)$ together with $\free(\phi)$ and
+$\bound(\phi)$ were also crucial notions when dealing with valid
+substitutions and minimal transforms. As we shall soon discover, the
+same sort of analysis can be carried out for proofs, leading up to
+essential substitutions and their existence in
+theorem~(\ref{logic:the:FUAP:esssubst:existence}) of
+page~\pageref{logic:the:FUAP:esssubst:existence}. So $\var(\phi)$ is
+a useful notion and so is $\var(\pi)$. \index{variable@Variables of
+proof}\index{variable@$\var(\pi)$ : set of variables of $\pi$}
+\begin{defin}\label{logic:def:FUAP:variable:variable}
+Let $V$ be a set. The map $\var:\pvs\to {\cal P}(V)$ defined by the
+following structural recursion is called {\em variable mapping on
+\pvs}:
+ \begin{equation}\label{logic:eqn:FUAP:variable:variable:1}
+    \forall\pi\in\pvs\ ,\ \var(\pi)=\left\{
+                    \begin{array}{lcl}
+                    \var(\phi)&\mbox{\ if\ }&\pi=\phi\in\pv\\
+                    \var(\phi)&\mbox{\ if\ }&\pi=\axi\phi\\
+                    \var(\pi_{1})\cup\var(\pi_{2}) &\mbox{\ if\ }&\pi=\pi_{1}\pon\pi_{2}\\
+                    \{x\}\cup\var(\pi_{1})&\mbox{\ if\ }&\pi=\gen x\pi_{1}
+                    \end{array}\right.
+    \end{equation}
+We say that $x\in V$ is a {\em variable} of $\pi\in\pvs$ \ifand\
+$x\in\var(\pi)$.
+\end{defin}
+Given a formula $\phi\in\pv$ the notation $\var(\phi)$ is
+potentially ambiguous. Since $\pv\subseteq\pvs$, it may refer to the
+usual $\var(\phi)$ of definition~(\ref{logic:def:variable}), or to
+the set $\var(\pi)$ where $\pi=\phi$ of
+definition~(\ref{logic:def:FUAP:variable:variable}). Luckily, the
+two notions coincide.
+
+\begin{prop}\label{logic:prop:FUAP:variable:recursion}
+The structural recursion of {\em
+definition~(\ref{logic:def:FUAP:variable:variable})} is legitimate.
+\end{prop}
+\begin{proof}
+We need to show the existence and uniqueness of the map
+$\var:\pvs\to{\cal P}(V)$ satisfying the four conditions of
+equation~(\ref{logic:eqn:FUAP:variable:variable:1}). This follows
+from an application of
+theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion} with $X=\pvs$,
+$X_{0}=\pv$ and $A={\cal P}(V)$ where $g_{0}:X_{0}\to A$ is defined
+as $g_{0}(\phi)=\var(\phi)$. Furthermore, given $\phi\in\pv$ we take
+$h(\axi\phi):A^{0}\to A$ defined $h(\axi\phi)(0)=\var(\phi)$. We
+take $h(\pon):A^{2}\to A$ defined by $h(\pon)(A_{0},A_{1})=A_{0}\cup
+A_{1}$ and $h(\gen x):A^{1}\to A$ defined by $h(\gen
+x)(A_{0})=\{x\}\cup A_{0}$.
+\end{proof}
+
+Many elementary properties of $\var(\pi)$ resemble those of
+$\var(\phi)$. We have not attempted to design the right level of
+abstraction to avoid what may appear as tedious repetition. The
+following is the counterpart of
+proposition~(\ref{logic:prop:var:is:finite})\,:
+
+\begin{prop}\label{logic:prop:FUAP:variable:finite}
+Let $V$ be a set and $\pi\in\pvs$. Then $\var(\pi)$ is finite.
+\end{prop}
+\begin{proof}
+This follows from a structural induction argument using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. If $\pi=\phi\in\pv$ then
+$\var(\pi)=\var(\phi)$ is finite by virtue of
+proposition~(\ref{logic:prop:var:is:finite}). If $\pi=\axi\phi$ then
+$\var(\pi)=\var(\phi)$ is also finite. If $\pi=\pi_{1}\pon\pi_{2}$
+then we have $\var(\pi)=\var(\pi_{1})\cup\var(\pi_{2})$ which is
+finite. Finally  if $\pi=\gen x\pi_{1}$ then we have
+$\var(\pi)=\{x\}\cup\var(\pi_{1})$ which is also finite if
+$\var(\pi_{1})$ is itself finite.
+\end{proof}
+
+The map $\var:\pvs\to{\cal P}(V)$ is increasing with respect to the
+standard inclusion on ${\cal P}(V)$. In other words, the variables
+of a sub-proof are also variables of the proof itself. The following
+is the counterpart of
+proposition~(\ref{logic:prop:FOBL:variable:subformula})\,:
+\index{subformula@$\pi\preceq\rho$ : $\pi$ is a sub-proof of $\rho$}
+\begin{prop}\label{logic:prop:FUAP:variable:subformula}
+Let $V$ be a set and $\rho,\pi\in\pvs$. Then we have:
+    \[
+    \rho\preceq\pi\ \Rightarrow\ \var(\rho)\subseteq\var(\pi)
+    \]
+\end{prop}
+\begin{proof}
+This is a simple application of
+proposition~(\ref{logic:prop:UA:subformula:non:decreasing}) to
+$\var:X\to A$ where $X=\pvs$ and $A={\cal P}(V)$ where the preorder
+$\leq$ on $A$ is the usual inclusion $\subseteq$. We simply need to
+check that given $\pi_{1},\pi_{2}\in\pvs$ and $x\in V$ we have the
+inclusions $\var(\pi_{1})\subseteq\var(\pi_{1}\pon\pi_{2})$,
+$\var(\pi_{2})\subseteq\var(\pi_{1}\pon\pi_{2})$ and
+$\var(\pi_{1})\subseteq\var(\gen x\pi_{1})$ which follow immediately
+from the recursive
+definition~(\ref{logic:def:FUAP:variable:variable}).
+\end{proof}
+
+Given a map $\sigma:V\to W$ and $\pi\in\pvs$, the variables of the
+proof $\sigma(\pi)$ are the images by $\sigma$ of the variables of
+$\pi$. This is the counterpart of
+proposition~(\ref{logic:prop:var:of:substitution})\,:
+
+\begin{prop}\label{logic:prop:FUAP:variable:substitution}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Then:
+    \[
+    \forall\pi\in\pvs\ ,\ \var(\sigma(\pi))=\sigma(\var(\pi))
+    \]
+where $\sigma:\pvs\to{\bf\Pi}(W)$ also denotes the associated proof
+substitution mapping.
+\end{prop}
+\begin{proof}
+Given $\pi\in\pvs$, we need to show that
+$\var(\sigma(\pi))=\sigma(\var(\pi))$. We shall do so by structural
+induction using theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then we have the equalities:
+    \begin{eqnarray*}
+    \var(\sigma(\pi))&=&\var(\sigma(\phi))\\
+    \mbox{prop.~(\ref{logic:prop:var:of:substitution})}\ \rightarrow
+    &=&\sigma(\var(\phi))\\
+    &=&\sigma(\var(\pi))\\
+    \end{eqnarray*}
+Next we assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then we
+have:
+    \begin{eqnarray*}
+    \var(\sigma(\pi))&=&\var(\sigma(\axi\phi))\\
+    &=&\var(\axi\sigma(\phi))\\
+    &=&\var(\sigma(\phi))\\
+    \mbox{prop.~(\ref{logic:prop:var:of:substitution})}\ \rightarrow
+    &=&\sigma(\var(\phi))\\
+    &=&\sigma(\var(\axi\phi))\\
+    &=&\sigma(\var(\pi))\\
+    \end{eqnarray*}
+Next we check that the property is true for $\pi=\pi_{1}\pon\pi_{2}$
+if it is true for $\pi_{1},\pi_{2}$:
+    \begin{eqnarray*}
+    \var(\sigma(\pi))&=&\var(\sigma(\pi_{1}\pon\pi_{2}))\\
+    &=&\var(\sigma(\pi_{1})\pon\,\sigma(\pi_{2}))\\
+    &=&\var(\sigma(\pi_{1}))\cup\var(\sigma(\pi_{2}))\\
+    &=&\sigma(\var(\pi_{1}))\cup\sigma(\var(\pi_{2}))\\
+    &=&\sigma(\,\var(\pi_{1})\cup\var(\pi_{2})\,)\\
+    &=&\sigma(\var(\pi_{1}\pon\pi_{2}))\\
+    &=&\sigma(\var(\pi))\\
+    \end{eqnarray*}
+Finally we check that the property is true for $\pi=\gen x\pi_{1}$
+if it is true for $\pi_{1}$:
+    \begin{eqnarray*}
+    \var(\sigma(\pi))&=&\var(\sigma(\gen x\pi_{1}))\\
+    &=&\var(\,\gen\sigma(x)\sigma(\pi_{1})\,)\\
+    &=&\{\sigma(x)\}\cup\var(\sigma(\pi_{1}))\\
+    &=&\{\sigma(x)\}\cup\sigma(\var(\pi_{1}))\\
+    &=&\sigma(\,\{x\}\cup\var(\pi_{1})\,)\\
+    &=&\sigma(\var(\gen x\pi_{1}))\\
+    &=&\sigma(\var(\pi))\\
+    \end{eqnarray*}
+\end{proof}
+
+
+In order to have the equality $\sigma(\pi)=\tau(\pi)$ is it
+sufficient that $\sigma,\tau:V\to W$ coincide on $\var(\pi)$, which
+is pretty natural. What is less obvious is the fact that the
+converse is also true. The following is the counterpart of
+proposition~(\ref{logic:prop:substitution:support})\,:
+
+\begin{prop}\label{logic:prop:FUAP:variable:support}
+Let $V$ and $W$ be sets and $\sigma,\tau:V\to W$ be two maps. Then:
+    \[
+    \sigma_{|\var(\pi)}=\tau_{|\var(\pi)}\ \ \Leftrightarrow\
+    \ \sigma(\pi)=\tau(\pi)
+    \]
+for all $\pi\in\pvs$, where $\sigma,\tau:\pvs\to{\bf\Pi}(W)$ are
+also the proof substitutions.
+\end{prop}
+\begin{proof}
+First we prove $\Rightarrow$\,: We shall do so with an induction
+argument, using theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then we have
+$\var(\pi)=\var(\phi)$ so we assume that $\sigma$ and $\tau$
+coincide on $\var(\phi)$. Using
+proposition~(\ref{logic:prop:substitution:support}) we obtain
+$\sigma(\phi)=\tau(\phi)$ which is $\sigma(\pi)=\tau(\pi)$. Next we
+assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then again we have
+$\var(\pi)=\var(\phi)$ so we assume that $\sigma$ and $\tau$
+coincide on $\var(\phi)$. Using
+proposition~(\ref{logic:prop:substitution:support}) once more we
+obtain $\sigma(\phi)=\tau(\phi)$. It follows that
+$\sigma(\pi)=\axi\sigma(\phi)=\axi\tau(\phi)=\tau(\pi)$. So we now
+assume that $\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}\in\pvs$
+satisfy our property. We need to show the same is true of $\pi$. So
+we assume that $\sigma$ and $\tau$ coincide on $\var(\pi)$. We need
+to show that $\sigma(\pi)=\tau(\pi)$. However since
+$\var(\pi)=\var(\pi_{1})\cup\var(\pi_{2})$ we see that $\sigma$ and
+$\tau$ coincide on $\var(\pi_{1})$ and $\var(\pi_{2})$, and it
+follows from our induction hypothesis that
+$\sigma(\pi_{1})=\tau(\pi_{1})$ and $\sigma(\pi_{2})=\tau(\pi_{2})$.
+Hence:
+    \begin{eqnarray*}
+    \sigma(\pi)&=&\sigma(\pi_{1}\pon\pi_{2})\\
+    &=&\sigma(\pi_{1})\pon\,\sigma(\pi_{2})\\
+    &=&\tau(\pi_{1})\pon\,\tau(\pi_{2})\\
+    &=&\tau(\pi_{1}\pon\pi_{2})\\
+    &=&\tau(\pi)
+    \end{eqnarray*}
+Finally, we assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}\in\pvs$ satisfies our property. We need to show the same is
+true of $\pi$. So we assume that $\sigma$ and $\tau$ coincide on
+$\var(\pi)$. We need to show that $\sigma(\pi)=\tau(\pi)$. However
+since $\var(\pi)=\{x\}\cup\var(\pi_{1})$ we see that $\sigma$ and
+$\tau$ coincide on $\var(\pi_{1})$, and it follows from our
+induction hypothesis that $\sigma(\pi_{1})=\tau(\pi_{1})$. Hence:
+    \begin{eqnarray*}
+    \sigma(\pi)&=&\sigma(\gen x\pi_{1})\\
+    &=&\gen\sigma(x)\sigma(\pi_{1})\\
+    &=&\gen\sigma(x)\tau(\pi_{1})\\
+    x\in\var(\pi)\ \rightarrow&=&\gen\tau(x)\tau(\pi_{1})\\
+    &=&\tau(\gen x\pi_{1})\\
+    &=&\tau(\pi)
+    \end{eqnarray*}
+We now show $\Leftarrow$\,: we shall do so with a structural
+induction argument, using theorem~(\ref{logic:the:proof:induction})
+of page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then from $\sigma(\pi)=\tau(\pi)$
+we obtain $\sigma(\phi)=\tau(\phi)$ and from
+proposition~(\ref{logic:prop:substitution:support}) it follows that
+$\sigma$ and $\tau$ coincide on $\var(\phi)=\var(\pi)$. Next we
+assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Suppose
+$\sigma(\pi)=\tau(\pi)$. Then $\axi\sigma(\phi)=\axi\tau(\phi)$ and
+consequently from
+proposition~(\ref{logic:prop:FUAP:proof:axi:injective}) we have
+$\sigma(\phi)=\tau(\phi)$. Using
+proposition~(\ref{logic:prop:substitution:support}) once more it
+follows that $\sigma$ and $\tau$ coincide on $\var(\phi)=\var(\pi)$.
+We now assume that $\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}$
+are proofs which satisfy our implication. We need to show the same
+is true of $\pi$. So we assume that $\sigma(\pi)=\tau(\pi)$. We need
+to show that $\sigma$ and $\tau$ coincide on
+$\var(\pi)=\var(\pi_{1})\cup\var(\pi_{2})$. However, from
+$\sigma(\pi)=\tau(\pi)$ we obtain
+$\sigma(\pi_{1})\pon\,\sigma(\pi_{2})=\tau(\pi_{1})\pon\,\tau(\pi_{2})$
+and consequently using
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we have
+$\sigma(\pi_{1})=\tau(\pi_{1})$ and $\sigma(\pi_{2})=\tau(\pi_{2})$.
+Having assumed that $\pi_{1}$ and $\pi_{2}$ satisfy our implication,
+it follows that $\sigma$ and $\tau$ coincide on $\var(\pi_{1})$ and
+also on $\var(\pi_{2})$. So they coincide on $\var(\pi)$ as
+requested. So we now assume that $\pi=\gen x\pi_{1}$ where $x\in V$
+and $\pi_{1}\in\pvs$ is a proof which satisfies our implication. We
+need to show the same is true of $\pi$. So we assume that
+$\sigma(\pi)=\tau(\pi)$. We need to show that $\sigma$ and $\tau$
+coincide on $\var(\pi)=\{x\}\cup\var(\pi_{1})$. However, from
+$\sigma(\pi)=\tau(\pi)$ we obtain
+$\gen\sigma(x)\sigma(\pi_{1})=\gen\tau(x)\tau(\pi_{1})$ and
+consequently using theorem~(\ref{logic:the:unique:representation})
+of page~\pageref{logic:the:unique:representation} we have
+$\sigma(\pi_{1})=\tau(\pi_{1})$ and $\sigma(x)=\tau(x)$. Having
+assumed that $\pi_{1}$ satisfies our implication, it follows that
+$\sigma$ and $\tau$ coincide on $\var(\pi_{1})$. Since
+$\sigma(x)=\tau(x)$, they also coincide on
+$\var(\pi)=\{x\}\cup\var(\pi_{1})$ as requested.
+\end{proof}
+
+Given a proof $\pi\in\pvs$, any variable which belongs to the
+conclusion $\val(\rho)$ of a sub-proof $\rho\preceq\pi$ is of course
+a variable of $\pi$. Note that the converse is not true in general,
+unless $\pi$ is totally clean: if $\pi=\axi\phi$ and
+$\phi\not\in\av$ then we have $\val(\pi)=\bot\to\bot$ and any
+sub-proof of $\pi$ is $\pi$ itself. Hence we have
+$\cup\{\,\var(\val(\rho))\ :\
+    \rho\preceq\pi\,\}=\emptyset$, while $\var(\pi)=\var(\phi)$ may not be
+empty. We shall deal with the case when $\pi$ is totally clean later
+in
+proposition~(\ref{logic:prop:FUAP:varvalmod:conclusions:sub:proof:clean}).
+
+\begin{prop}\label{logic:prop:FUAP:variable:conclusions:sub:proof}
+Let $V$ be a set and $\pi\in\pvs$. Then we have:
+    \begin{equation}\label{logic:eqn:FUAP:variable:conclusions:1}
+    \cup\{\,\var(\val(\rho))\ :\
+    \rho\preceq\pi\,\}\subseteq\var(\pi)
+    \end{equation}
+i.e. the variables of conclusions of sub-proofs of $\pi$ are
+variables of $\pi$.
+\end{prop}
+\begin{proof}
+Using proposition~(\ref{logic:prop:FUAP:variable:subformula}) we
+have $\var(\rho)\subseteq\var(\pi)$ for all $\rho\preceq\pi$. It is
+therefore sufficient prove the inclusion
+$\var(\val(\pi))\subseteq\var(\pi)$ for all $\pi\in\pvs$ which we
+shall do with a structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then the inclusion follows
+immediately from $\val(\phi)=\phi$. Next we assume that
+$\pi=\axi\phi$ for some $\phi\in\pv$. The inclusion is clear in the
+case when $\val(\pi)=\bot\to\bot$. So we may assume that
+$\val(\pi)\neq\bot\to\bot$ in which case $\phi$ must be an axiom of
+first order logic, i.e. $\phi\in\av$ and $\val(\pi)=\phi$. The
+inclusion follows from $\var(\pi)=\var(\phi)$. So we now assume that
+$\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}\in\pvs$ are proofs
+satisfying our inclusion. We need to show the same is true of $\pi$.
+This is clearly the case if $\val(\pi)=\bot\to\bot$. So we may
+assume $\val(\pi)\neq\bot\to\bot$ in which case we must have
+$\val(\pi_{2})=\val(\pi_{1})\to\val(\pi)$. Hence we see that:
+    \begin{eqnarray*}
+    \var(\val(\pi))&\subseteq&\var(\val(\pi_{1}))\cup\var(\val(\pi))\\
+    &=&\var(\,\val(\pi_{1})\to\val(\pi)\,)\\
+    &=&\var(\val(\pi_{2}))\\
+    &\subseteq&\var(\pi_{2})\\
+    &\subseteq&\var(\pi_{1})\cup\var(\pi_{2})\\
+    &=&\var(\pi_{1}\pon\pi_{2})\\
+    &=&\var(\pi)\\
+    \end{eqnarray*}
+So we now assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}\in\pvs$ satisfies our inclusion. We need to show the same
+is true of $\pi$. This is clearly the case if
+$\val(\pi)=\bot\to\bot$. So we may assume that
+$\val(\pi)\neq\bot\to\bot$ in which case we must have
+$x\not\in\spec(\pi_{1})$ and $\val(\pi)=\forall x\val(\pi_{1})$.
+Hence we see that:
+    \begin{eqnarray*}
+    \var(\val(\pi))&=&\var(\,\forall x\val(\pi_{1})\,)\\
+    &=&\{x\}\cup\var(\val(\pi_{1}))\\
+    &\subseteq&\{x\}\cup\var(\pi_{1})\\
+    &=&\var(\gen x\pi_{1})\\
+    &=&\var(\pi)\\
+    \end{eqnarray*}
+\end{proof}

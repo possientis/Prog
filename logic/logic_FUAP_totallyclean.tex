@@ -1,0 +1,551 @@
+The universal algebra of proofs \pvs\ of
+definition~(\ref{logic:def:FOPL:proof:algebra}) is not as natural as
+it looks: a universal algebra has operators which must be defined
+everywhere. However, the modus ponens operator $\pon$ should not be
+defined in most cases. It makes little sense to infer anything from
+two conclusions $\phi_{1}$ and $\phi_{2}$ using modus ponens, unless
+the conclusion $\phi_{2}$ is of the form $\phi_{2}=\phi_{1}\to\phi$
+in which case we can derive the new conclusion $\phi$. In other
+words, the proof $\pi_{1}\pon\pi_{2}$ is not a valid application of
+the modus ponens rule, unless $\val(\pi_{2})=\val(\pi_{1})\to\phi$
+for some $\phi\in\pv$. In a similar way, the proof $\gen x\pi_{1}$
+is not a valid application of the generalization rule, unless the
+condition $x\not\in\spec(\pi_{1})$ is met, i.e. the variable $x$ is
+truly general and not specific. So in some sense, it may be argued
+that the structure of universal algebra is not suited to represent a
+set of proofs. These proofs have operators which are naturally
+partial functions, while universal algebras require operators which
+are total functions. There is a prominent example for which this
+issue arises: the algebraic structure of field has an inverse
+operator which is not defined on $0$. So there is a problem: our
+solution to it is to regard proofs simply as formal expressions
+where the operators $\pon$ and $\gen x$ are defined everywhere, and
+to introduce $\val:\pvs\to\pv$ as a semantics representing the
+conclusion being proved by a given formal expression. So defying
+common sense, we assign meaning to all proofs
+$\pi=\pi_{1}\pon\pi_{2}$, $\pi=\gen x\pi_{1}$ and even
+$\pi=\axi\phi$ when $\phi$ is not an axiom of first order logic,
+while attempting to redeem ourselves by setting
+$\val(\pi)=\bot\to\bot$ whenever a proof arises from a flawed
+application of a rule of inference or flawed invocation of axiom.
+
+In this section, we introduce the notion of {\em totally clean}
+proof to emphasize the case when no such flawed inference occurs. We
+shall use the phrase '{\em totally clean}' rather than simply '{\em
+clean}' so as to reserve the latter for a weaker notion of {\em
+flawlessness} which we shall introduce in
+definition~(\ref{logic:def:FUAP:almostclean:definition}) when
+dealing with proofs modulo. In this section, we shall also establish
+proposition~(\ref{logic:prop:FUAP:clean:counterpart}) below showing
+that any true sequent $\Gamma\vdash\phi$ can always be proved in a
+{\em totally clean} way. This gives us some degree of reassurance:
+although our universal algebra of proofs \pvs\ is arguably too large
+and contains proofs which may be deemed to be flawed, every
+conclusion reached by such a flawed proof is in fact provable in the
+orthodox way. So it would be possible to reject \pvs\ and only
+consider its subset of {\em totally clean} proofs, but this would
+not change the notion of provability as introduced in
+definition~(\ref{logic:def:FOPL:proof:of:formula}). However, beyond
+our peace of mind there is another good reason to introduce the
+notion of {\em totally clean} proof: given a map $\sigma:V\to W$ and
+a proof $\pi\in\pvs$, we shall soon want to substitute the variables
+of $\pi$ as specified by the map $\sigma$, thereby defining a map
+$\sigma:\pvs\to{\bf\Pi}(W)$ which we shall do in
+definition~(\ref{logic:def:FUAP:substitution:substitution}). This
+map may give us a tool to create new proofs from old proofs,
+allowing us to show some provability statements which would
+otherwise be out of reach. For example, suppose we want to prove
+$\vdash\sigma(\phi)$ knowing that $\vdash\phi$ is true. One possible
+line of attack is to consider a proof $\pi\in\pvs$ underlying the
+sequent $\vdash\phi$ and hope that $\sigma(\pi)$ is in fact a proof
+with conclusion $\sigma(\phi)$. So we need the following equation to
+hold:
+    \begin{equation}\label{logic:eqn:FUAP:clean:clean:proof:intro:1}
+    \val\circ\sigma(\pi)=\sigma\circ\val(\pi)
+    \end{equation}
+This equation is bound to play an important role. More generally, a
+transformation $\sigma:\pvs\to{\bf\Pi}(W)$ is interesting if we
+control the conclusion of $\sigma(\pi)$ in some way, given the
+conclusion of $\pi$. Now consider the following proof:
+    \[
+    \pi=(x\in x)\pon\,((y\in y)\to(z\in z))
+    \]
+Whenever $x\neq y$, this proof is not totally clean as it contains a
+flawed application of modus ponens. However, if
+$\sigma(x)=\sigma(y)=u$ while $\sigma(z)=v$ we obtain:
+    \[
+    \sigma(\pi)=(u\in u)\pon\,((u\in u)\to(v\in v))
+    \]
+This is a totally clean proof with conclusion $v\in v$. It should be
+clear from this example that we cannot hope to prove properties such
+as~(\ref{logic:eqn:FUAP:clean:clean:proof:intro:1}) in full
+generality, and must restrict our attention to the case of totally
+clean proofs. Too many bizarre things may happen otherwise. It is
+very hard to carry out a sensible analysis of proofs which are not
+totally clean. Hence the following: \index{strength@Strength
+mapping}\index{clean@Totally clean proof}
+\begin{defin}\label{logic:def:FUAP:clean:clean:proof}
+Let $V$ be a set. The map $s:\pvs\to 2=\{0,1\}$ defined by the
+following structural recursion is called the {\em strength mapping}
+on \pvs:
+ \begin{equation}\label{logic:eqn:FUAP:clean:clean:proof:1}
+    \forall\pi\in\pvs\ ,\ s(\pi)=\left\{
+                    \begin{array}{lcl}
+                    1&\mbox{\ if\ }&\pi=\phi\in\pv\\
+                    1&\mbox{\ if\ }&\pi=\axi\phi,\ \phi\in\av\\
+                    0&\mbox{\ if\ }&\pi=\axi\phi,\ \phi\not\in\av\\
+                    s(\pi_{1})\land s(\pi_{2})\land\epsilon
+                    &\mbox{\ if\ }&\pi=\pi_{1}\pon\pi_{2}\\
+                    s(\pi_{1})\land\eta&\mbox{\ if\ }&\pi=\gen x\pi_{1}\\
+                    \end{array}\right.
+    \end{equation}
+where $\epsilon\in 2=\{0,1\}$ is defined by $\epsilon=1$ \ifand\
+ we have the equality:
+    \[
+    \val(\pi_{2})=\val(\pi_{1})\to\val(\pi)
+    \]
+and $\eta\in 2=\{0,1\}$ is defined by $\eta=1$ \ifand\
+$x\not\in\spec(\pi_{1})$. We say that a proof $\pi\in\pvs$ is {\em
+totally clean} \ifand\ it has full strength, i.e. $s(\pi)=1$.
+\end{defin}
+
+\begin{prop}
+The structural recursion of {\em
+definition~(\ref{logic:def:FUAP:clean:clean:proof})} is legitimate.
+\end{prop}
+\begin{proof}
+We need to show the existence and uniqueness of $s:\pvs\to 2$
+satisfying the five conditions of
+equation~(\ref{logic:eqn:FUAP:clean:clean:proof:1}). We shall do so
+using theorem~(\ref{logic:the:structural:recursion:2}) of
+page~\pageref{logic:the:structural:recursion:2} with $X=\pvs$,
+$X_{0}=\pv$ and $A=2$. Choosing the map $g_{0}:X_{0}\to A$ defined
+by $g_{0}(\phi)=1$ we ensure the first condition is met. Next for
+every formula $\phi\in\pv$ we define $h(\axi\phi):A^{0}\times
+X^{0}\to A$ by setting $h(\axi\phi)(0,0)=1$ if $\phi\in\av$ and
+$h(\axi\phi)(0,0)=0$ otherwise. This ensures the second and third
+conditions are met. Next we define $h(\pon):A^{2}\times X^{2}\to A$
+with the following formula:
+    \[
+        h(\pon)(\epsilon_{1},\epsilon_{2},\pi_{1},\pi_{2})=\left\{
+        \begin{array}{lcl}
+        \epsilon_{1}\land\epsilon_{2}&\mbox{\ if\ }&
+        \val(\pi_{2})=\val(\pi_{1})\to\val(\pi_{1}\pon\pi_{2})\\
+        0&\mbox{\ if\ }&\val(\pi_{2})\neq\val(\pi_{1})\to\val(\pi_{1}\pon\pi_{2})\\
+        \end{array}
+    \right.
+    \]
+This takes care of the fourth condition. Finally we define $h(\gen
+x):A^{1}\times X^{1}\to A$:
+        \[
+        h(\gen x)(\epsilon_{1},\pi_{1})=\left\{
+        \begin{array}{lcl}
+        \epsilon_{1}&\mbox{\ if\ }&
+        x\not\in\spec(\pi_{1})\\
+        0&\mbox{\ if\ }&x\in\spec(\pi_{1})\\
+        \end{array}
+    \right.
+    \]
+which ensures the fifth condition is met and completes our proof.
+\end{proof}
+
+A proof which relies on a flawed sub-proof is itself flawed. Hence a
+proof cannot be totally clean unless every one of its sub-proofs is
+totally clean.
+
+\begin{prop}\label{logic:prop:FUAP:clean:sub:proof}
+Let $V$ be a set and $s:\pvs\to 2$ be the strength mapping. Then the
+strength of a sub-proof is higher than the strength of a proof, i.e.
+    \[
+    \rho\preceq\pi\ \Rightarrow\ s(\pi)\leq
+    s(\rho)
+    \]
+A proof $\pi\in\pvs$ is totally clean \ifand\ every $\rho\preceq\pi$
+is totally clean.
+\end{prop}
+\begin{proof}
+The implication is a simple application of
+proposition~(\ref{logic:prop:UA:subformula:non:decreasing}) to
+$s:X\to A$ where $X=\pvs$ and $A=2$ where the chosen preorder on $A$
+is the usual order $\geq$ (reversed) on $\{0,1\}$. We simply need to
+check that given $\pi_{1},\pi_{2}\in\pvs$ and $x\in V$ we have the
+inequalities $s(\pi_{1})\geq s(\pi_{1}\pon\pi_{2})$, $s(\pi_{2})\geq
+s(\pi_{1}\pon\pi_{2})$ and $s(\pi_{1})\geq s(\gen x\pi_{1})$ which
+follow immediately from the recursive
+definition~(\ref{logic:def:FUAP:clean:clean:proof}). It remains to
+check that $\pi\in\pvs$ is totally clean \ifand\ every one of its
+sub-proofs is totally clean. Since $\pi$ is a sub-proof of itself,
+the 'if' part is clear. Conversely, let $\rho\preceq\pi$ be a
+sub-proof of $\pi$ where $\pi$ is totally clean. Then $s(\pi)=1$ and
+since $s(\pi)\leq s(\rho)$ we see that $s(\rho)=1$. So the proof
+$\rho$ is also totally clean.
+\end{proof}
+
+A proof arising from modus ponens is of the form
+$\pi=\pi_{1}\pon\pi_{2}$. Such a proof cannot be totally clean
+unless the use of modus ponens is legitimate, i.e. the conclusion of
+$\pi_{2}$ is of the form $\val(\pi_{2})=\val(\pi_{1})\to\val(\pi)$.
+Of course we also need both $\pi_{1}$ and $\pi_{2}$ to be totally
+clean. These conditions are in turn sufficient. The following
+proposition is useful to carry out structural induction arguments.
+
+\begin{prop}\label{logic:prop:FUAP:clean:modus:ponens}
+Let $V$ be a set and $\pi$ be a proof of the form
+$\pi=\pi_{1}\pon\pi_{2}$. Then $\pi$ is totally clean \ifand\ both
+$\pi_{1},\pi_{2}$ are totally clean and:
+    \[
+    \val(\pi_{2})=\val(\pi_{1})\to\val(\pi)
+    \]
+\end{prop}
+\begin{proof}
+First we show the 'only if' part: so we assume that
+$\pi=\pi_{1}\pon\pi_{2}$ is totally clean. Then $s(\pi)=1$ and from
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) we obtain
+$s(\pi_{1})\land s(\pi_{2})\land\epsilon=1$. It follows that
+$s(\pi_{1})=s(\pi_{2})=\epsilon=1$. So $\pi_{1}$ and $\pi_{2}$ are
+totally clean and from $\epsilon=1$ and
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) we conclude that
+$\val(\pi_{2})=\val(\pi_{1})\to\val(\pi)$. We now prove the 'if'
+part: so we assume that $\pi=\pi_{1}\pon\pi_{2}$  where $\pi_{1}$,
+$\pi_{2}$ are totally clean and
+$\val(\pi_{2})=\val(\pi_{1})\to\val(\pi)$. Then from
+definition~(\ref{logic:def:FUAP:clean:clean:proof}):
+    \[
+    s(\pi)=s(\pi_{1})\land s(\pi_{2})\land\epsilon=1\land 1\land 1
+    =1
+    \]
+It follows that $\pi$ is itself a totally clean proof, as requested.
+\end{proof}
+
+A proof arising from generalization is of the form $\pi=\gen
+x\pi_{1}$. Such a proof cannot be totally clean unless the use of
+generalization is legitimate, that is $x\not\in\spec(\pi_{1})$. We
+also need $\pi_{1}$ to be totally clean, and these conditions are in
+turn sufficient. The following proposition is also useful for
+structural induction.
+
+\begin{prop}\label{logic:prop:FUAP:clean:generalization}
+Let $V$ be a set and $\pi$ be a proof of the form $\pi=\gen
+x\pi_{1}$. Then $\pi$ is totally clean \ifand\ $\pi_{1}$ is totally
+clean and $x\not\in\spec(\pi_{1})$.
+\end{prop}
+\begin{proof}
+First we show the 'only if' part: so we assume that $\pi=\gen
+x\pi_{1}$ is totally clean. Then $s(\pi)=1$ and from
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) we obtain
+$s(\pi_{1})\land\eta=1$. It follows that $s(\pi_{1})=\eta=1$. So
+$\pi_{1}$ is totally clean and furthermore from $\eta=1$ and
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) we conclude that
+$x\not\in\spec(\pi_{1})$. We now prove the 'if' part: so we assume
+that $\pi=\gen x\pi_{1}$, where $\pi_{1}$ is totally clean and
+$x\not\in\spec(\pi_{1})$. Then from
+definition~(\ref{logic:def:FUAP:clean:clean:proof})
+$s(\pi)=s(\pi_{1})\land\eta=1\land 1=1$. So $\pi$ is itself totally
+clean.
+\end{proof}
+
+We decided to define a {\em totally clean} proof in terms of
+strength $s:\pvs\to 2$ as per
+definition~(\ref{logic:def:FUAP:clean:clean:proof}). This was not
+the only way to go about it. A {\em totally clean} proof is one
+which is not {\em flawed}. This means that every axiom invocation or
+use of modus ponens or generalization is legitimate. The following
+proposition confirms that a {\em totally clean} proof can be defined
+as one without flawed steps:
+
+\begin{prop}\label{logic:prop:FUAP:clean:characterization}
+Let $V$ be a set. Then $\pi\in\pvs$ is totally clean \ifand\ for all
+$\pi_{1},\pi_{2}\in\pvs$, $\phi\in\pv$ and $x\in V$, we have the
+following:
+    \begin{eqnarray*}
+    (i)&&\axi\phi\preceq\pi\ \Rightarrow\ \phi\in\av\\
+    (ii)&&\pi_{1}\pon\pi_{2}\preceq\pi\ \Rightarrow\
+    \val(\pi_{2})=\val(\pi_{1})\to\val(\pi_{1}\pon\pi_{2})\\
+    (iii)&&\gen x\pi_{1}\preceq\pi\ \Rightarrow\
+    x\not\in\spec(\pi_{1})
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+First we show the 'only if' part: so we assume that $\pi\in\pvs$ is
+totally clean. We need to show that $(i)$, $(ii)$ and $(iii)$ hold.
+First we show $(i)$\,: so we assume that $\rho\preceq\pi$ is a
+sub-proof of $\pi$ of the form $\rho=\axi\phi$ for some
+$\phi\in\pv$. We need to show that $\phi\in\av$, i.e. that $\phi$ is
+an axiom. Having assumed that $\pi$ is totally clean, from
+proposition~(\ref{logic:prop:FUAP:clean:sub:proof}) the proof
+$\rho=\axi\phi$ is also totally clean. So $\phi\in\av$ follows
+immediately from
+definition~(\ref{logic:def:FUAP:clean:clean:proof}). Next we show
+$(ii)$\,: so we assume that $\rho\preceq\pi$ is a sub-proof of $\pi$
+of the form $\rho=\pi_{1}\pon\pi_{2}$. We need to show that
+$\val(\pi_{2})=\val(\pi_{1})\to\val(\rho)$. Having assumed that
+$\pi$ is totally clean, from
+proposition~(\ref{logic:prop:FUAP:clean:sub:proof}) the proof $\rho$
+is also totally clean. However, $\rho$ is of the form
+$\rho=\pi_{1}\pon\pi_{2}$ and it follows from
+proposition~(\ref{logic:prop:FUAP:clean:modus:ponens}) that we have
+$\val(\pi_{2})=\val(\pi_{1})\to\val(\rho)$ as requested. We now show
+$(iii)$\,: so we assume that $\rho\preceq\pi$ is a sub-proof of
+$\pi$ of the form $\rho=\gen x\pi_{1}$. We need to show that
+$x\not\in\spec(\pi_{1})$. Having assumed that $\pi$ is totally
+clean, from proposition~(\ref{logic:prop:FUAP:clean:sub:proof}) the
+proof $\rho$ is also totally clean. However, $\rho$ is of the form
+$\rho=\gen x\pi_{1}$ and it follows from
+proposition~(\ref{logic:prop:FUAP:clean:generalization}) that
+$x\not\in\spec(\pi_{1})$ as requested. We now show this 'if' part:
+we need to prove that every $\pi\in\pvs$ satisfies the property
+$(i)+(ii)+(iii)\ \Rightarrow\ (\,\pi\mbox{\ is totally clean}\,)$.
+We shall do so with a structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. So first we assume that
+$\pi=\phi$ for some $\phi\in\pv$. From
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) we obtain
+$s(\pi)=1$. So $\pi$ is always totally clean and the property is
+satisfied. Next we assume that $\pi=\axi\phi$ where $\phi\in\pv$. We
+need to show $\pi$ satisfies our property. So we assume that $(i)$,
+$(ii)$ and $(iii)$ hold. We need to show that $\pi$ is totally
+clean. However, since $\pi$ is a sub-proof of itself we have
+$\axi\phi\preceq\pi$ and using $(i)$ we obtain $\phi\in\av$. It
+follows from definition~(\ref{logic:def:FUAP:clean:clean:proof})
+that $s(\pi)=s(\axi\phi)=1$ and we conclude that $\pi$ is totally
+clean as requested. Next we assume that $\pi=\pi_{1}\pon\pi_{2}$
+where $\pi_{1},\pi_{2}\in\pvs$ satisfy our induction property. We
+need to show the same is true of $\pi$. So we assume that $(i)$,
+$(ii)$ and $(iii)$ hold for $\pi$. We need to show that $\pi$ is
+totally clean. Using
+proposition~(\ref{logic:prop:FUAP:clean:modus:ponens}), it is
+sufficient to prove that both $\pi_{1}$ and $\pi_{2}$ are totally
+clean and furthermore that
+$\val(\pi_{2})=\val(\pi_{1})\to\val(\pi)$. This last equality is an
+immediate consequence of condition $(ii)$ and the fact that $\pi$ is
+a sub-proof of itself i.e. $\pi=\pi_{1}\pon\pi_{2}\preceq\pi$. So it
+remains to show that $\pi_{1}$ and $\pi_{2}$ are totally clean.
+Having assumed that $\pi_{1}$ and $\pi_{2}$ satisfy our induction
+property, it is therefore sufficient to prove that $(i)$, $(ii)$ and
+$(iii)$ are satisfied by $\pi_{1}$ and $\pi_{2}$. First we show that
+$(i)$ is satisfied by $\pi_{1}$\,: so we assume that
+$\rho\preceq\pi_{1}$ is a sub-proof of $\pi_{1}$ of the form
+$\rho=\axi\phi$. We need to show that $\phi\in\av$. However, having
+assumed that $(i)$ holds for $\pi=\pi_{1}\pon\pi_{2}$, it is
+sufficient to prove that $\rho\preceq\pi$ which follows immediately
+from $\rho\preceq\pi_{1}$ and $\pi_{1}\preceq\pi$. We prove
+similarly that $(i)$ holds for $\pi_{2}$. Next we show that $(ii)$
+is satisfied by $\pi_{1}$\,: so we assume that $\rho\preceq\pi_{1}$
+is a sub-proof of $\pi_{1}$ of the form $\rho=\rho_{1}\pon\rho_{2}$.
+We need to show that $\val(\rho_{2})=\val(\rho_{1})\to\val(\rho)$.
+However, having assumed that $(ii)$ holds for
+$\pi=\pi_{1}\pon\pi_{2}$, it is sufficient to prove that
+$\rho\preceq\pi$ which follows immediately from $\rho\preceq\pi_{1}$
+and $\pi_{1}\preceq\pi$. We prove similarly that $(ii)$ holds for
+$\pi_{2}$ and we now show that $(iii)$ holds for $\pi_{1}$\,: so we
+assume that $\rho\preceq\pi_{1}$ is a sub-proof of $\pi_{1}$ of the
+form $\rho=\gen x\rho_{1}$. We need to show that
+$x\not\in\spec(\rho_{1})$. However, having assumed that $(iii)$
+holds for $\pi=\pi_{1}\pon\pi_{2}$, it is sufficient to prove that
+$\rho\preceq\pi$ which again follows from $\rho\preceq\pi_{1}$ and
+$\pi_{1}\preceq\pi$. We prove similarly that $(iii)$ holds for
+$\pi_{2}$ which completes our induction argument in the case when
+$\pi=\pi_{1}\pon\pi_{2}$. So we finally assume that $\pi=\gen
+x\pi_{1}$ where $x\in V$ and $\pi_{1}\in\pvs$ satisfies our
+induction property. We need to show the same is true of $\pi$. So we
+assume that $(i)$, $(ii)$ and $(iii)$ hold for $\pi$. We need to
+show that $\pi$ is totally clean. Using
+proposition~(\ref{logic:prop:FUAP:clean:generalization}), it is
+sufficient to prove that $\pi_{1}$ is totally clean and furthermore
+that $x\not\in\spec(\pi_{1})$. This last property is an immediate
+consequence of condition $(iii)$ and the fact that $\pi$ is a
+sub-proof of itself i.e. $\pi=\gen x\pi_{1}\preceq\pi$. So it
+remains to show that $\pi_{1}$ is totally clean. Having assumed that
+$\pi_{1}$ satisfies our induction property, it is therefore
+sufficient to prove that $(i)$, $(ii)$ and $(iii)$ hold for
+$\pi_{1}$. First we show that $(i)$ is true: so we assume that
+$\rho\preceq\pi_{1}$ is a sub-proof of $\pi_{1}$ of the form
+$\rho=\axi\phi$. We need to show that $\phi\in\av$. However, having
+assumed that $(i)$ holds for $\pi=\gen x\pi_{1}$, it is sufficient
+to prove that $\rho\preceq\pi$ which follows immediately from
+$\rho\preceq\pi_{1}$ and $\pi_{1}\preceq\pi$. Next we show that
+$(ii)$ is true: so we assume that $\rho\preceq\pi_{1}$ is a
+sub-proof of $\pi_{1}$ of the form $\rho=\rho_{1}\pon\rho_{2}$. We
+need to show that $\val(\rho_{2})=\val(\rho_{1})\to\val(\rho)$.
+However, having assumed that $(ii)$ holds for $\pi=\gen x\pi_{1}$,
+it is sufficient to prove that $\rho\preceq\pi$ which follows
+immediately from $\rho\preceq\pi_{1}$ and $\pi_{1}\preceq\pi$. We
+now show that $(iii)$ is satisfied: so we assume that
+$\rho\preceq\pi_{1}$ is a sub-proof of $\pi_{1}$ of the form
+$\rho=\gen u\rho_{1}$. We need to show that
+$u\not\in\spec(\rho_{1})$. However, having assumed that $(iii)$
+holds for $\pi=\gen x\pi_{1}$, it is sufficient to prove that
+$\rho\preceq\pi$ which again follows from $\rho\preceq\pi_{1}$ and
+$\pi_{1}\preceq\pi$.
+\end{proof}
+
+As we shall see in
+proposition~(\ref{logic:prop:FUAP:clean:counterpart}) below, any
+true sequent $\Gamma\vdash\phi$ can be established with a totally
+clean proof. The key to the argument is that any flawed step
+$\rho\preceq\pi$ of a proof with conclusion $\val(\rho)=\bot\to\bot$
+can be discarded and replaced by a totally clean fragment as the
+following lemma shows:
+
+\begin{lemma}\label{logic:lemma:FUAP:clean:bot:bot}
+Let $V$ be a set. There exists a totally clean proof $\pi\in\pvs$
+with:
+    \[
+    (\,\hyp(\pi)=\emptyset\,)\land(\,\val(\pi)=\bot\to\bot\,)
+    \]
+\end{lemma}
+\begin{proof}
+Consider the formulas $\phi_{1}=((\bot\to\bot)\to\bot)\to\bot$ and
+$\phi_{2}=\phi_{1}\to(\bot\to\bot)$. Let us accept for now that both
+$\phi_{1}$ and $\phi_{2}$ are axioms and define $\pi=\axi
+\phi_{1}\pon\,\axi\phi_{2}$. It is clear that $\hyp(\pi)=\emptyset$
+and furthermore we have the equality:
+    \begin{eqnarray*}
+    \val(\pi)&=&\val(\axi\phi_{1}\pon\,\axi\phi_{2})\\
+    \mbox{def.~(\ref{logic:def:FOPL:proof:valuation})}\ \rightarrow
+    &=&M(\,\val(\axi\phi_{1}),\val(\axi\phi_{2})\,)\\
+    \phi_{1},\phi_{2}\in\av\ \rightarrow&=&M(\phi_{1},\phi_{2})\\
+    &=&M(\,\phi_{1}\,,\,\phi_{1}\to(\bot\to\bot)\,)\\
+    &=&\bot\to\bot
+    \end{eqnarray*}
+So it remains to show that $\pi$ is totally clean. However, from
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) both
+$\axi\phi_{1}$ and $\axi\phi_{2}$ are totally clean and it follows
+from proposition~(\ref{logic:prop:FUAP:clean:modus:ponens}) and:
+    \[
+    \val(\axi\phi_{2})=\val(\axi\phi_{1})\to\val(\pi)
+    \]
+that $\pi$ is also totally clean. It remains to check that both
+$\phi_{1}$ and $\phi_{2}$ are indeed axioms of first order logic.
+However, we have $\phi_{1}=((\psi_{1}\to\bot)\to\bot)\to\psi_{1}$
+where $\psi_{1}=\bot$. So $\phi_{1}$ is a transposition axiom as per
+definition~(\ref{logic:def:FOPL:transposition:axiom}). Likewise, we
+have $\phi_{2}=((\psi_{2}\to\bot)\to\bot)\to\psi_{2}$ where
+$\psi_{2}=\bot\to\bot$ and $\phi_{2}$ is an axiom.
+\end{proof}
+
+We can now prove the main result of this section: there is no loss
+of generality in assuming that a true sequent $\Gamma\vdash\phi$ has
+an underlying proof which is totally clean. This shows that defining
+our syntactic entailment solely in terms of totally clean proofs
+would have made no difference to the final notion of provability.
+However, not working on the free universal algebra of proofs \pvs\
+would have made formal developments considerably more cumbersome.
+
+
+\begin{prop}\label{logic:prop:FUAP:clean:counterpart}
+Let $V$ be a set and $\Gamma\subseteq\pv$. Let $\phi\in\pv$ be such
+that the sequent $\Gamma\vdash\phi$ is true. Then there exists a
+totally clean proof of $\phi$ from $\Gamma$.
+\end{prop}
+\begin{proof}
+In order to establish this proposition, we shall first prove it is
+sufficient to show that every proof $\pi\in\pvs$ has a 'totally
+clean counterpart', namely that:
+    \[
+    \exists\pi^{*}\in\pvs\ ,\ (\pi^{*}\mbox{ totally clean})
+    \land(\,\val(\pi^{*})=\val(\pi)\,)\land(\,\hyp(\pi^{*})\subseteq\hyp(\pi)\,)
+    \]
+In other words, for every proof $\pi\in\pvs$, there exists a totally
+clean proof $\pi^{*}$ with the same conclusion as $\pi$, and fewer
+hypothesis. So let us assume this is the case for now. We need to
+show the proposition is true. So let $\Gamma\subseteq\pv$ and
+$\phi\in\pv$ such that $\Gamma\vdash\phi$. Then there exists a proof
+$\pi$ of $\phi$ from $\Gamma$, i.e. $\pi\in\pvs$ such that
+$\val(\pi)=\phi$ and $\hyp(\pi)\subseteq\Gamma$. Taking a totally
+clean counterpart of $\pi$, we obtain a totally clean proof
+$\pi^{*}\in\pvs$ such that $\val(\pi^{*})=\val(\pi)$ and
+$\hyp(\pi^{*})\subseteq\hyp(\pi)$. It follows that $\pi^{*}$ is a
+totally clean proof of $\phi$ from $\Gamma$ as requested. So we need
+to show that every proof $\pi\in\pvs$ has a totally clean
+counterpart. We shall do so by structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then $\pi$ is totally clean and
+there is nothing else to prove. So we now assume that $\pi=\axi\phi$
+for some $\phi\in\pv$. We shall distinguish two cases: first we
+assume that $\phi\in\av$. Then $\pi$ is totally clean and we are
+done. We now assume that $\phi\not\in\av$. Then
+$\val(\pi)=\bot\to\bot$. Using
+lemma~(\ref{logic:lemma:FUAP:clean:bot:bot}) there exists a totally
+clean proof $\pi^{*}\in\pvs$ such that $\hyp(\pi^{*})=\emptyset$ and
+$\val(\pi^{*})=\bot\to\bot$. It follows that
+$\hyp(\pi^{*})\subseteq\hyp(\pi)$ and $\val(\pi^{*})=\val(\pi)$ and
+we have found a totally clean counterpart of $\pi$. Next we assume
+that $\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}\in\pvs$ are
+proofs with totally clean counterparts. We need to show that $\pi$
+also has a totally clean counterpart. So let $\pi_{1}^{*}$ and
+$\pi_{2}^{*}$ be totally clean counterparts of $\pi_{1}$ and
+$\pi_{2}$ respectively. We shall distinguish two cases. First we
+assume that:
+    \begin{equation}\label{logic:eqn:FUAP:clean:counterpart:1}
+    \val(\pi_{2}^{*})=\val(\pi_{1}^{*})\to\val(\pi_{1}^{*}\pon\pi_{2}^{*})
+    \end{equation}
+Then defining $\pi^{*}=\pi_{1}^{*}\pon\pi_{2}^{*}$, since
+$\pi_{1}^{*}$ and $\pi_{2}^{*}$ are totally clean it follows from
+proposition~(\ref{logic:prop:FUAP:clean:modus:ponens}) that
+$\pi^{*}$ is totally clean. Furthermore, we have:
+    \begin{eqnarray*}
+    \hyp(\pi^{*})&=&\hyp(\pi_{1}^{*}\pon\pi_{2}^{*})\\
+    &=&\hyp(\pi_{1}^{*})\cup\hyp(\pi_{2}^{*})\\
+    &\subseteq&
+    \hyp(\pi_{1})\cup\hyp(\pi_{2})\\
+    &=&\hyp(\pi_{1}\pon\pi_{2})\\
+    &=&\hyp(\pi)
+    \end{eqnarray*}
+and:
+    \begin{eqnarray*}
+    \val(\pi^{*})&=&\val(\pi_{1}^{*}\pon\pi_{2}^{*})\\
+    \mbox{def.~(\ref{logic:def:FOPL:proof:valuation})}\ \rightarrow
+    &=&M(\,\val(\pi_{1}^{*}),\val(\pi_{2}^{*})\,)\\
+    \val(\pi_{i}^{*})=\val(\pi_{i})\ \rightarrow
+    &=&M(\,\val(\pi_{1}),\val(\pi_{2})\,)\\
+    &=&\val(\pi_{1}\pon\pi_{2})\\
+    &=&\val(\pi)
+    \end{eqnarray*}
+So we have found a totally clean counterpart $\pi^{*}$ of $\pi$ as
+requested. Next we assume that
+equation~(\ref{logic:eqn:FUAP:clean:counterpart:1}) does not hold.
+Then $\val(\pi_{2}^{*})=\val(\pi_{1}^{*})\to\phi$ is false for all
+$\phi\in\pv$. It follows that $\val(\pi_{2})=\val(\pi_{1})\to\phi$
+is also false for all $\phi$ and consequently from
+definition~(\ref{logic:def:FOPL:proof:valuation})
+$\val(\pi)=\bot\to\bot$. Using
+lemma~(\ref{logic:lemma:FUAP:clean:bot:bot}) there exists a totally
+clean proof $\pi^{*}\in\pvs$ such that $\hyp(\pi^{*})=\emptyset$ and
+$\val(\pi^{*})=\bot\to\bot$. It follows that
+$\hyp(\pi^{*})\subseteq\hyp(\pi)$ and furthermore
+$\val(\pi^{*})=\val(\pi)$. So we have found a totally clean
+counterpart of $\pi$. Finally, we assume that $\pi=\gen x\pi_{1}$
+where $x\in V$ and $\pi_{1}\in\pvs$ is a proof which has a totally
+clean counterpart. We need to show that $\pi$ also has a totally
+clean counterpart. So let $\pi_{1}^{*}$ be a totally clean
+counterpart of $\pi_{1}$. We shall distinguish two cases: first we
+assume that $x\not\in\spec(\pi_{1})$. Since
+$\hyp(\pi_{1}^{*})\subseteq\hyp(\pi_{1})$ we have
+$\spec(\pi_{1}^{*})\subseteq\spec(\pi_{1})$ and consequently
+$x\not\in\spec(\pi_{1}^{*})$. Hence, defining $\pi^{*}=\gen
+x\pi_{1}^{*}$, since $\pi_{1}^{*}$ is totally clean it follows from
+proposition~(\ref{logic:prop:FUAP:clean:generalization}) that
+$\pi^{*}$ is itself totally clean. Furthermore we have the following
+inclusion:
+    \[
+    \hyp(\pi^{*})=\hyp(\pi_{1}^{*})\subseteq\hyp(\pi_{1})=\hyp(\pi)
+    \]
+and the equalities:
+    \begin{eqnarray*}
+    \val(\pi^{*})&=&\val(\gen x\pi_{1}^{*})\\
+    x\not\in\spec(\pi_{1}^{*})\ \rightarrow
+    &=&\forall x\val(\pi_{1}^{*})\\
+    &=&\forall x\val(\pi_{1})\\
+    x\not\in\spec(\pi_{1})\ \rightarrow
+    &=&\val(\gen x\pi_{1})\\
+    &=&\val(\pi)
+    \end{eqnarray*}
+So we have found a totally clean counterpart $\pi^{*}$ of $\pi$ as
+requested. Next we assume that $x\in\spec(\pi_{1})$. Then from
+definition~(\ref{logic:def:FOPL:proof:valuation}) we have
+$\val(\pi)=\bot\to\bot$, and using
+lemma~(\ref{logic:lemma:FUAP:clean:bot:bot}) we see once again that
+$\pi$ has a totally clean counterpart.
+\end{proof}

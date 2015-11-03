@@ -1,0 +1,442 @@
+Just like the strong substitution congruence, the substitution
+congruence was defined in terms of a generator. This makes it
+convenient to prove an equivalence $\phi\sim\psi$, but inconvenient
+when it comes to proving this equivalence does not hold. We shall
+therefore follow a similar strategy to that leading up to
+theorem~(\ref{logic:the:strong:sub:congruence:charac}) of
+page~\pageref{logic:the:strong:sub:congruence:charac}. We refer the
+reader to the discussion preceding
+definition~(\ref{logic:def:almost:strong:equivalent}). We shall
+define a new relation $\simeq$ on \pv\ and prove that $\phi\sim\psi\
+\Leftrightarrow\ \phi\simeq\psi$. The point of the relation $\simeq$
+is to give us more insight about the formulas $\phi$ and $\psi$
+whenever we have $\phi\sim\psi$. Most of the hard work consists in
+proving that $\simeq$ is a transitive relation. However, this will
+be a lot simpler than in the case of the strong substitution
+congruence. In fact comparing
+definition~(\ref{logic:def:almost:equivalent}) below to its
+counterpart definition~(\ref{logic:def:almost:strong:equivalent}),
+we see that these definitions are formally identical with a
+difference occurring solely in $(v)$. For the strong substitution
+congruence:
+    \begin{eqnarray*}
+    (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
+    \phi_{1}\sim \theta\ ,\ \psi_{1}\sim \theta[y/x]\ ,\ y\not\in\var(\theta)
+    \end{eqnarray*}
+while for the substitution congruence we have:
+    \begin{eqnarray*}
+    (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
+    \psi_{1}\sim \phi_{1}[y\!:\!x]\ ,\ y\not\in\free(\phi_{1})
+    \end{eqnarray*}
+This is the beauty of the substitution congruence. Not only does it
+work equally well for $V$ finite and $V$ infinite or so we believe,
+but it is also a lot simpler in many respects. It involves the
+injective permutation $[y\!:\!x]$ rather than the non-injective
+substitution $[y/x]$. It makes no reference to the existence of a
+third formula $\theta$ in the case of $(v)$ but directly gives us
+$\psi_{1}\sim \phi_{1}[y\!:\!x]$ instead. The proofs in the case of
+the substitution congruence are simpler than their counterparts of
+the strong substitution congruence.
+
+\begin{defin}\label{logic:def:almost:equivalent}
+Let $\sim$ be the substitution congruence on \pv\ where $V$ is a
+set. Let $\phi,\psi\in\pv$. We say that $\phi$ is {\em almost
+equivalent to $\psi$} and we write $\phi\simeq\psi$, \ifand\ one of
+the following is the case:
+    \begin{eqnarray*}
+    (i)&&\phi\in\pvo\ ,\ \psi\in\pvo\ ,\ \mbox{and}\ \phi=\psi\\
+    (ii)&&\phi=\bot\ \mbox{and}\ \psi=\bot\\
+    (iii)&&\phi=\phi_{1}\to\phi_{2}\ ,\ \psi=\psi_{1}\to\psi_{2}\ ,\
+    \phi_{1}\sim\psi_{1}\ \mbox{and}\ \phi_{2}\sim\psi_{2}\\
+    (iv)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall x\psi_{1}\ \mbox{and}\ \phi_{1}\sim\psi_{1}\\
+    (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
+    \psi_{1}\sim \phi_{1}[y\!:\!x]\ ,\ y\not\in\free(\phi_{1})
+    \end{eqnarray*}
+\end{defin}
+\begin{prop}
+$(i),(ii),(iii),(iv), (v)$ of {\em
+def.~(\ref{logic:def:almost:equivalent})} are mutually exclusive.
+\end{prop}
+\begin{proof}
+This is an immediate consequence of
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} applied to the free
+universal algebra \pv\ with free generator \pvo, where a formula
+$\phi\in\pv$ is either an element of \pvo, or the contradiction
+constant $\phi=\bot$, or an implication $\phi=\phi_{1}\to\phi_{2}$,
+or a quantification $\phi=\forall x\phi_{1}$, but cannot be equal to
+any two of those things simultaneously. Since $(v)$ can only occur
+with $x\neq y$, it also follows from
+theorem~(\ref{logic:the:unique:representation}) that $(v)$ cannot
+occur at the same time as $(iv)$.
+\end{proof}
+
+Having defined the relation $\simeq$, we now proceed to prove the
+equivalence $\phi\sim\psi\ \Leftrightarrow\ \phi\simeq\psi$. The
+strategy is the same as the one adopted for the strong substitution
+congruence. The difficult part is to show the inclusion
+$\sim\,\subseteq\,\simeq$, which we achieve by showing
+$R_{0}\subseteq\,\simeq$ together with the fact that $\simeq$ is a
+congruence.
+
+\begin{prop}\label{logic:prop:almost:contains:r0}
+Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
+a set. Then $\simeq$ contains the generator $R_{0}$ of {\em
+definition~(\ref{logic:def:sub:congruence})}.
+\end{prop}
+\begin{proof}
+Suppose $x,y\in V$ and $\phi_{1}\in\pv$ are such that $x\neq y$ and
+$y\not\in\free(\phi_{1})$. Note that this cannot happen unless $V$
+has at least two elements. We define $\phi=\forall x\phi_{1}$ and
+$\psi=\forall y\,\phi_{1}[y\!:\!x]$. We need to show that
+$\phi\simeq\psi$. We shall do so by proving that $(v)$ of
+definition~(\ref{logic:def:almost:equivalent}) is the case. Define
+$\psi_{1}=\phi_{1}[y\!:\!x]$. Then we have $\phi=\forall x\phi_{1}$,
+$\psi=\forall y\psi_{1}$, $x\neq y$ and $y\not\in\free(\phi_{1})$.
+So it remains to show that $\psi_{1}\sim\phi_{1}[y\!:\!x]$ which is
+immediate from the reflexivity of $\sim$\,.
+\end{proof}
+
+\begin{prop}\label{logic:prop:almost:reflexive}
+Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
+a set. Then $\simeq$ is a reflexive relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi\in\pv$. We need to show that $\phi\simeq\phi$. From
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we know that $\phi$
+is either an element of \pvo, or $\phi=\bot$ or
+$\phi=\phi_{1}\to\phi_{2}$ or $\phi=\forall x\phi_{1}$ for some
+$\phi_{1},\phi_{2}\in\pv$ and $x\in V$. We shall consider these four
+mutually exclusive cases separately. Suppose first that
+$\phi\in\pvo$: then from $\phi=\phi$ we obtain $\phi\simeq\phi$.
+Suppose next that $\phi=\bot$: then it is clear that
+$\phi\simeq\phi$. Suppose now that $\phi=\phi_{1}\to\phi_{2}$. Since
+the substitution congruence $\sim$ is reflexive, we have
+$\phi_{1}\sim\phi_{1}$ and $\phi_{2}\sim\phi_{2}$. It follows from
+$(iii)$ of definition~(\ref{logic:def:almost:equivalent}) that
+$\phi\simeq\phi$. Suppose finally that $\phi=\forall x\phi_{1}$.
+From $\phi_{1}\sim\phi_{1}$ and $(iv)$ of
+definition~(\ref{logic:def:almost:equivalent}) we conclude that
+$\phi\simeq\phi$. In all cases, we have proved that
+$\phi\simeq\phi$.
+\end{proof}
+\begin{prop}\label{logic:prop:almost:symmetric}
+Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
+a set. Then $\simeq$ is a symmetric relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi,\psi\in\pv$ be such that $\phi\simeq\psi$. We need to show
+that $\psi\simeq\phi$. We shall consider the five possible cases of
+definition~(\ref{logic:def:almost:equivalent}): suppose first that
+$\phi\in\pvo$, $\psi\in\pvo$ and $\phi=\psi$. Then it is clear that
+$\psi\simeq\phi$. Suppose next that $\phi=\bot$ and $\psi=\bot$.
+Then we also have $\psi\simeq\phi$. We now assume that
+$\phi=\phi_{1}\to\phi_{2}$ and $\psi=\psi_{1}\to\psi_{2}$ with
+$\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$. Since the
+substitution congruence on \pv\ is symmetric, we have
+$\psi_{1}\sim\phi_{1}$ and $\psi_{2}\sim\phi_{2}$. Hence we have
+$\psi\simeq\phi$. We now assume that $\phi=\forall x\phi_{1}$ and
+$\psi=\forall x\psi_{1}$ with $\phi_{1}\sim\psi_{1}$. Then once
+again by symmetry of the substitution congruence we have
+$\psi_{1}\sim\phi_{1}$ and consequently $\psi\simeq\phi$. We finally
+consider the last possible case of $\phi=\forall x\phi_{1}$,
+$\psi=\forall y\psi_{1}$ with $x\neq y$,
+$\psi_{1}\sim\phi_{1}[y\!:\!x]$ and $y\not\in\free(\phi_{1})$. We
+need to show that $\phi_{1}\sim\psi_{1}[x\!:\!y]$ and
+$x\not\in\free(\psi_{1})$. First we show that
+$\phi_{1}\sim\psi_{1}[x\!:\!y]$. Note that $[x\!:\!y]$ and
+$[y\!:\!x]$ are in fact the same substitutions. So we need to show
+that $\phi_{1}\sim\psi_{1}[y\!:\!x]$. Since
+$\psi_{1}\sim\phi_{1}[y\!:\!x]$ and $[y\!:\!x]:V\to V$ is injective,
+from
+proposition~(\ref{logic:prop:sub:congruence:injective:substitution})
+we obtain:
+    \[
+    \psi_{1}[y\!:\!x]\sim\phi_{1}[y\!:\!x][y\!:\!x]
+    \]
+It is therefore sufficient to show that
+$\phi_{1}\sim\phi_{1}[y\!:\!x][y\!:\!x]$ which follows from
+proposition~(\ref{logic:prop:substitution:identity}) and the fact
+that $[y\!:\!x]\circ[y\!:\!x]$ is the identity mapping. We now show
+that $x\not\in\free(\psi_{1})$. From $\psi_{1}\sim\phi_{1}[y\!:\!x]$
+and proposition~(\ref{logic:prop:sub:congruence:freevar}) we obtain
+$\free(\psi_{1})=\free(\phi_{1}[y\!:\!x])$. So we need to show that
+$x\not\in\free(\phi_{1}[y\!:\!x])$. So suppose to the contrary that
+$x\in\free(\phi_{1}[y\!:\!x])$. We shall derive a contradiction.
+Since $[y\!:\!x]$ is injective, from
+proposition~(\ref{logic:prop:freevar:of:substitution}) we have
+$\free(\phi_{1}[y\!:\!x])=[y\!:\!x](\free(\phi_{1}))$ and
+consequently there exists $u\in\free(\phi_{1})$ such that
+$x=[y\!:\!x](u)$. It follows that $u=y$ which contradicts the
+assumption $y\not\in\free(\phi_{1})$.
+\end{proof}
+
+Showing that $\simeq$ is a transitive relation is the difficult part
+of this section. The following proposition is the counterpart of
+proposition~(\ref{logic:prop:almost:strong:transitive}) of the
+strong substitution congruence. Its proof is however a lot simpler.
+
+\begin{prop}\label{logic:prop:almost:transitive}
+Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
+a set. Then $\simeq$ is a transitive relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi,\psi$ and $\chi\in\pv$ be such that $\phi\simeq\psi$ and
+$\psi\simeq\chi$. We need to show that $\phi\simeq\chi$. We shall
+consider the five possible cases of
+definition~(\ref{logic:def:almost:equivalent}) in relation to
+$\phi\simeq\psi$. Suppose first that $\phi,\psi\in\pvo$ and
+$\phi=\psi$. Then from $\psi\simeq\chi$ we obtain $\psi,\chi\in\pvo$
+and $\psi=\chi$. It follows that $\phi,\chi\in\pvo$ and $\phi=\chi$.
+Hence we see that $\phi\simeq\chi$. We now assume that
+$\phi=\psi=\bot$. Then from $\psi\simeq\chi$ we obtain
+$\psi=\chi=\bot$. It follows that $\phi=\chi=\bot$ and consequently
+$\phi\simeq\chi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$ and
+$\psi=\psi_{1}\to\psi_{2}$ with $\phi_{1}\sim\psi_{1}$ and
+$\phi_{2}\sim\psi_{2}$. From $\psi\simeq\chi$ we obtain
+$\chi=\chi_{1}\to\chi_{2}$ with $\psi_{1}\sim\chi_{1}$ and
+$\psi_{2}\sim\chi_{2}$. The substitution congruence being
+transitive, it follows that $\phi_{1}\sim\chi_{1}$ and
+$\phi_{2}\sim\chi_{2}$. Hence we see that $\phi\simeq\chi$. We now
+assume that $\phi=\forall x\phi_{1}$ and $\psi=\forall x\psi_{1}$
+with $\phi_{1}\sim\psi_{1}$, for some $x\in V$. From
+$\psi\simeq\chi$ only the cases $(iv)$ and $(v)$ of
+definition~(\ref{logic:def:almost:equivalent}) are possible. First
+we assume that $(iv)$ is the case. Then $\chi=\forall x\chi_{1}$
+with $\psi_{1}\sim\chi_{1}$. The substitution congruence being
+transitive, we obtain $\phi_{1}\sim\chi_{1}$ and consequently
+$\phi\simeq\chi$. We now assume that $(v)$ is the case. Then
+$\chi=\forall y\chi_{1}$ for some $y\in V$ with $x\neq y$,
+$\chi_{1}\sim\psi_{1}[y\!:\!x]$ and $y\not\in\free(\psi_{1})$. In
+order to prove $\phi\simeq\chi$ it is sufficient to show that
+$\chi_{1}\sim\phi_{1}[y\!:\!x]$ and $y\not\in\free(\phi_{1})$. First
+we show that $\chi_{1}\sim\phi_{1}[y\!:\!x]$. It is sufficient to
+prove that $\phi_{1}[y\!:\!x]\sim\psi_{1}[y\!:\!x]$ which follows
+from $\phi_{1}\sim\psi_{1}$, using
+proposition~(\ref{logic:prop:sub:congruence:injective:substitution})
+and the fact that $[y\!:\!x]:V\to V$ is injective. We now show that
+$y\not\in\free(\phi_{1})$. From $\phi_{1}\sim\psi_{1}$ and
+proposition~(\ref{logic:prop:sub:congruence:freevar}) we obtain
+$\free(\phi_{1})=\free(\psi_{1})$. Hence it is sufficient to show
+that $y\not\in\free(\psi_{1})$ which is true by assumption. It
+remains to consider the last possible case of
+definition~(\ref{logic:def:almost:equivalent}). So we assume that
+$\phi=\forall x\phi_{1}$ and $\psi=\forall y\psi_{1}$ with $x\neq
+y$, $\psi_{1}\sim\phi_{1}[y\!:\!x]$ and $y\not\in\free(\phi_{1})$.
+From $\psi\simeq\chi$ only the cases $(iv)$ and $(v)$ of
+definition~(\ref{logic:def:almost:equivalent}) are possible. First
+we assume that $(iv)$ is the case. Then $\chi=\forall y\chi_{1}$
+with $\psi_{1}\sim\chi_{1}$. The substitution congruence being
+transitive, we obtain $\chi_{1}\sim\phi_{1}[y\!:\!x]$ and
+consequently $\phi\simeq\chi$. We now assume that $(v)$ is the case.
+Then $\chi=\forall z\chi_{1}$ for some $z\in V$ with $y\neq z$,
+$\chi_{1}\sim\psi_{1}[z\!:\!y]$ and $z\not\in\free(\psi_{1})$. We
+shall now distinguish two cases. First we assume that $x=z$. Then
+$\phi=\forall x\phi_{1}$ and $\chi=\forall x\chi_{1}$ and in order
+to show that $\phi\simeq\chi$ it is sufficient to prove that
+$\phi_{1}\sim\chi_{1}$. From $\chi_{1}\sim\psi_{1}[z\!:\!y]$ and
+$z=x$ we obtain $\chi_{1}\sim\psi_{1}[y\!:\!x]$ and it is therefore
+sufficient to prove that $\phi_{1}\sim\psi_{1}[y\!:\!x]$. However,
+we know that $\psi_{1}\sim\phi_{1}[y\!:\!x]$ and since
+$[y\!:\!x]:V\to V$ is injective, from
+proposition~(\ref{logic:prop:sub:congruence:injective:substitution})
+we obtain $\psi_{1}[y\!:\!x]\sim\phi_{1}[y\!:\!x][y\!:\!x]$. It is
+therefore sufficient to show that
+$\phi_{1}\sim\phi_{1}[y\!:\!x][y\!:\!x]$ which follows from
+proposition~(\ref{logic:prop:substitution:identity}) and the fact
+that $[y\!:\!x]\circ[y\!:\!x]$ is the identity mapping. This
+completes our proof in the case when $x=z$. We now assume that
+$x\neq z$. So we have $x\neq y$, $y\neq z$ and $x\neq z$, with
+$\phi=\forall x\phi_{1}$, $\psi=\forall y\psi_{1}$ and $\chi=\forall
+z\chi_{1}$. Furthermore, $\psi_{1}\sim\phi_{1}[y\!:\!x]$ and
+$\chi_{1}\sim\psi_{1}[z\!:\!y]$ while we have
+$y\not\in\free(\phi_{1})$ and $z\not\in\free(\psi_{1})$, and we need
+to show that $\phi\simeq\chi$. So we need to prove that
+$\chi_{1}\sim\phi_{1}[z\!:\!x]$ and $z\not\in\free(\phi_{1})$. First
+we show that $z\not\in\free(\phi_{1})$. So suppose to the contrary
+that $z\in\free(\phi_{1})$. We shall derive a contradiction. Since
+$[y\!:\!x]$ is injective, from
+proposition~(\ref{logic:prop:freevar:of:substitution}) we have
+$\free(\phi_{1}[y\!:\!x]) = [y\!:\!x](\free(\phi_{1}))$. It follows
+that $z=[y\!:\!x](z)$ is also an element of
+$\free(\phi_{1}[y\!:\!x])$. However we have
+$\psi_{1}\sim\phi_{1}[y\!:\!x]$ and consequently from
+proposition~(\ref{logic:prop:sub:congruence:freevar}) we obtain
+$\free(\psi_{1})=\free(\phi_{1}[y\!:\!x])$. Hence we see that
+$z\in\free(\psi_{1})$ which is our desired contradiction. We shall
+now prove that $\chi_{1}\sim\phi_{1}[z\!:\!x]$. Since
+$\chi_{1}\sim\psi_{1}[z\!:\!y]$, it is sufficient to show that
+$\psi_{1}[z\!:\!y]\sim\phi_{1}[z\!:\!x]$. However we know that
+$\psi_{1}\sim\phi_{1}[y\!:\!x]$ and since $[z\!:\!y]:V\to V$ is
+injective, from
+proposition~(\ref{logic:prop:sub:congruence:injective:substitution})
+we obtain $\psi_{1}[z\!:\!y]\sim\phi_{1}[y\!:\!x][z\!:\!y]$. It is
+therefore sufficient to show that
+$\phi_{1}[y\!:\!x][z\!:\!y]\sim\phi_{1}[z\!:\!x]$. Let us accept for
+now:
+    \begin{equation}\label{logic:eqn:quant:transitive:z:x}
+    [z\!:\!x]=[y\!:\!x]\circ[z\!:\!y]\circ[y\!:\!x]
+    \end{equation}
+Then we simply need to show that
+$\phi_{1}[y\!:\!x][z\!:\!y]\sim\phi_{1}[y\!:\!x][z\!:\!y][y\!:\!x]$.
+Using proposition~(\ref{logic:prop:admissible:sub:congruence}), it
+is therefore sufficient to prove that $[y\!:\!x]$ is an admissible
+substitution for $\phi_{1}[y\!:\!x][z\!:\!y]$. Since $[y\!:\!x]:V\to
+V$ is injective, from
+proposition~(\ref{logic:prop:FOPL:valid:injective}) it is valid for
+$\phi_{1}[y\!:\!x][z\!:\!y]$. So it remains to show that
+$[y\!:\!x](u)=u$ for all $u\in\free(\phi_{1}[y\!:\!x][z\!:\!y])$. It
+is therefore sufficient to prove that neither $x$ nor $y$ are
+elements of $\free(\phi_{1}[y\!:\!x][z\!:\!y])$. However, since
+$[z\!:\!y]\circ[y\!:\!x]:V\to V$ is injective, from
+proposition~(\ref{logic:prop:freevar:of:substitution}) we have
+$\free(\phi_{1}[y\!:\!x][z\!:\!y])=[z\!:\!y]\circ[y\!:\!x](\free(\phi_{1}))$.
+So we need to show that $x$ and $y$ do not belong to
+$[z\!:\!y]\circ[y\!:\!x](\free(\phi_{1}))$. First we do this for
+$x$. Suppose $x=[z\!:\!y]\circ[y\!:\!x](u)$ for some
+$u\in\free(\phi_{1})$. By injectivity we must have $u=y$,
+contradicting the assumption $y\not\in\free(\phi_{1})$. We now deal
+with $y$. So suppose $y=[z\!:\!y]\circ[y\!:\!x](u)$ for some
+$u\in\free(\phi_{1})$. By injectivity we must have $u=z$,
+contradicting the fact that $z\not\in\free(\phi_{1})$ which we have
+already proven. It remains to prove that
+equation~(\ref{logic:eqn:quant:transitive:z:x}) holds. So let $u\in
+V$. We need:
+    \[
+    [z\!:\!x](u)=[y\!:\!x]\circ[z\!:\!y]\circ[y\!:\!x](u)
+    \]
+This is clearly the case when $u\not\in\{x,y,z\}$. The cases $u=x$,
+$u=y$ and $u=z$ are easily checked.
+\end{proof}
+
+The implication $\phi\simeq\psi\ \Rightarrow\ \phi\sim\psi$ is the
+simple one. We need to prove it now in order to show that $\simeq$
+is a congruent relation.
+
+\begin{prop}\label{logic:prop:almost:implies:sub:congruence}
+Let $\simeq$ be the almost equivalence and $\sim$ be the
+substitution congruence on \pv, where $V$ is a set. For all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\simeq\psi\ \Rightarrow\ \phi\sim\psi
+    \]
+\end{prop}
+\begin{proof}
+Let $\phi,\psi\in\pv$ such that $\phi\simeq\psi$. We need to show
+that $\phi\sim\psi$. We shall consider the five possible cases of
+definition~(\ref{logic:def:almost:equivalent}) in relation to
+$\phi\simeq\psi$. Suppose first that $\phi=\psi\in\pvo$. From the
+reflexivity of the substitution congruence, it is clear that
+$\phi\sim\psi$. Suppose next that $\phi=\psi=\bot$. Then we also
+have $\phi\sim\psi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$
+and $\psi=\psi_{1}\to\psi_{2}$ where $\phi_{1}\sim\psi_{1}$ and
+$\phi_{2}\sim\psi_{2}$. The substitution congruence being a
+congruent relation on \pv, we obtain $\phi\sim\psi$. Next we assume
+that $\phi=\forall x\phi_{1}$ and $\psi=\forall x\psi_{1}$ where
+$\phi_{1}\sim\psi_{1}$ and $x\in\ V$. Again, the substitution
+congruence being a congruent relation we obtain $\phi\sim\psi$.
+Finally we assume that $\phi=\forall x\phi_{1}$ and $\psi=\forall
+y\psi_{1}$ where $x\neq y$, $\psi_{1}\sim\phi_{1}[y\!:\!x]$ and
+$y\not\in\free(\phi_{1})$. For the last time, the substitution
+congruence being a congruent relation we obtain $\psi\sim \forall
+y\, \phi_{1}[y\!:\!x]$. Hence in order to show $\phi\sim\psi$ it is
+sufficient to show that $\forall x\phi_{1}\sim\forall
+y\,\phi_{1}[y\!:\!x]$ which follows immediately from $x\neq y$,
+$y\not\in\free(\phi_{1})$ and
+definition~(\ref{logic:def:sub:congruence}).
+\end{proof}
+
+\begin{prop}\label{logic:prop:almost:congruent}
+Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
+a set. Then $\simeq$ is a congruent relation on \pv.
+\end{prop}
+\begin{proof}
+From proposition~(\ref{logic:prop:almost:reflexive}), the almost
+equivalence $\simeq$ is reflexive and so $\bot\simeq\bot$. We now
+assume that $\phi=\phi_{1}\to\phi_{2}$ and
+$\psi=\psi_{1}\to\psi_{2}$ where $\phi_{1}\simeq\psi_{1}$ and
+$\phi_{2}\simeq\psi_{2}$. We need to show that $\phi\simeq\psi$.
+However from
+proposition~(\ref{logic:prop:almost:implies:sub:congruence}) we have
+$\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$ and it follows
+from definition~(\ref{logic:def:almost:equivalent}) that
+$\phi\simeq\psi$. We now assume that $\phi=\forall x\phi_{1}$ and
+$\psi=\forall x\psi_{1}$ where $\phi_{1}\simeq\psi_{1}$ and $x\in
+V$. We need to show that $\phi\simeq\psi$. Once again from
+proposition~(\ref{logic:prop:almost:implies:sub:congruence}) we have
+$\phi_{1}\sim\psi_{1}$ and consequently from
+definition~(\ref{logic:def:almost:equivalent}) we obtain
+$\phi\simeq\psi$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:almost:congruence}
+Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
+a set. Then $\simeq$ is a congruence on \pv.
+\end{prop}
+\begin{proof}
+We need to show that $\simeq$ is reflexive, symmetric, transitive
+and that it is a congruent relation on \pv. From
+proposition~(\ref{logic:prop:almost:reflexive}), the
+relation~$\simeq$ is reflexive. From
+proposition~(\ref{logic:prop:almost:symmetric}) it is symmetric
+while from proposition~(\ref{logic:prop:almost:transitive}) it is
+transitive. Finally from
+proposition~(\ref{logic:prop:almost:congruent}) the
+relation~$\simeq$ is a congruent relation.
+\end{proof}
+
+So we have shown that $\simeq$ is a congruence on \pv\ which
+contains the generator $R_{0}$ of the substitution congruence. The
+equality $\simeq\,=\,\sim$ follows immediately.
+
+\begin{prop}\label{logic:prop:almost:is:sub:congruence}
+Let $\simeq$ be the almost equivalence and $\sim$ be the
+substitution congruence on \pv, where $V$ is a set. For all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\simeq\psi\ \Leftrightarrow\ \phi\sim\psi
+    \]
+\end{prop}
+\begin{proof}
+From proposition~(\ref{logic:prop:almost:implies:sub:congruence}) it
+is sufficient to show the implication $\Leftarrow$ or equivalently
+the inclusion $\sim\,\subseteq\,\simeq\,$. Since $\sim$ is the
+substitution congruence on \pv, it is the smallest congruence on
+\pv\ which contains the set $R_{0}$ of
+definition~(\ref{logic:def:sub:congruence}). In order to show the
+inclusion $\sim\,\subseteq\,\simeq$ it is therefore sufficient to
+show that $\simeq$ is a congruence on \pv\ such that
+$R_{0}\subseteq\,\simeq$. The fact that it is a congruence stems
+from proposition~(\ref{logic:prop:almost:congruence}). The fact that
+$R_{0}\subseteq\,\simeq$ follows from
+proposition~(\ref{logic:prop:almost:contains:r0}).
+\end{proof}
+
+We have no need to remember the relation $\simeq$. The equality
+$\simeq\,=\,\sim$ is wrapped up in the following theorem for future
+reference. This is the counterpart of
+theorem~(\ref{logic:the:strong:sub:congruence:charac}) of
+page~\pageref{logic:the:strong:sub:congruence:charac} of the strong
+substitution congruence.
+
+\index{congruence@Charact. of sub. congruence}
+\begin{theorem}\label{logic:the:sub:congruence:charac}
+Let $\sim$ be the substitution congruence on \pv\ where $V$ is a
+set. For all $\phi,\psi\in\pv$, $\phi\sim\psi$ \ifand\ one of the
+following is the case:
+    \begin{eqnarray*}
+    (i)&&\phi\in\pvo\ ,\ \psi\in\pvo\ ,\ \mbox{and}\ \phi=\psi\\
+    (ii)&&\phi=\bot\ \mbox{and}\ \psi=\bot\\
+    (iii)&&\phi=\phi_{1}\to\phi_{2}\ ,\ \psi=\psi_{1}\to\psi_{2}\ ,\
+    \phi_{1}\sim\psi_{1}\ \mbox{and}\ \phi_{2}\sim\psi_{2}\\
+    (iv)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall x\psi_{1}\ \mbox{and}\ \phi_{1}\sim\psi_{1}\\
+    (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
+    \psi_{1}\sim \phi_{1}[y\!:\!x]\ ,\ y\not\in\free(\phi_{1})
+    \end{eqnarray*}
+\end{theorem}
+\begin{proof}
+Immediately follows from
+proposition~(\ref{logic:prop:almost:is:sub:congruence}) and
+definition~(\ref{logic:def:almost:equivalent}).
+\end{proof}

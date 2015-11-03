@@ -1,0 +1,169 @@
+The following definition allows us to replace the formalism $\forall
+x(n-1)\ldots\forall x(0)\,\phi$ with a more condensed expression
+$\forall x\phi$. In doing so, we are overloading the symbol
+$\forall$ by creating a new unary operator $\forall x:\pv\to\pv$ for
+all $x\in V^{n}$ and $n\in\N$. This operator coincides with the
+standard operator $\forall x$ when $x\in V$. Note that when $n=0$,
+the only possible element $x\in V^{n}$ is $x=0$ and the operator
+$\forall\,0:\pv\to \pv$ is simply the identity. There is obviously a
+small risk of notational confusion when seeing $\forall\, 0$
+especially in the context of minimal transforms. Overall, we do not
+think this risk is high enough to warrant the introduction of a
+different symbol for iterated quantification. Given $n\in\N$ and
+$x\in V^{n}$ we define $\forall x\phi$ in terms of the expression
+$\forall x(n-1)\ldots\forall x(0)\,\phi$. In case this is not clear,
+this is simply a notational shortcut for the more formal {\em
+definition by recursion} $\forall\, 0\phi=\phi$ and if $x\in
+V^{n+1}$, $\forall x\phi=\forall x(n)\forall x_{|n}\phi$.
+\index{iterated@Iterated quantification}\index{forall@$\forall x$,
+$x\in V^{n}$ : iterated quant.}\index{forall@$\forall\,0$ : iterated
+quantification}
+\begin{defin}\label{logic:def:iterated:quant}
+Let $V$ be a set, $n\in\N$ and $x\in V^{n}$. For all $\phi\in\pv$ we
+call {\em iterated quantification of $\phi$ by $x$} the element
+$\forall x\phi$ of \pv\ defined by:
+    \[
+    \forall x\phi=\forall x(n-1)\ldots\forall x(0)\,\phi
+    \]
+where it is understood that if $n=0$, we have
+$\forall\,0\,\phi=\phi$.
+\end{defin}
+Given any congruence relation $\sim$ on \pv, we have $\forall
+x\phi\sim\forall x\psi$ whenever $\phi\sim\psi$ and $x\in V$.
+Obviously this property should extend to iterated quantification:
+\begin{prop}\label{logic:prop:iterated:congruence}
+Let $V$ be a set, $n\in\N$ and $x\in V^{n}$. Let $\sim$ be an
+arbitrary congruent relation on \pv. Then for all $\phi,\psi\in\pv$
+we have:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \forall x\phi\sim\forall x\psi
+    \]
+\end{prop}
+\begin{proof}
+We shall prove this result by induction on $n\in\N$. First we assume
+$n=0$. Then $V^{n}=\{0\}$ and $x=0$. By convention the corresponding
+iterated quantifications are defined as $\forall 0\phi=\phi$ and
+$\forall 0\psi=\psi$. So the property is clearly true. Next we
+assume that the property is true for $n\in\N$. We need to show that
+it is true for $n+1$. So we assume that $\phi\sim\psi$ and $x\in
+V^{n+1}$. We need to show that $\forall x\phi\sim\forall x\psi$.
+However, we have $x_{|n}\in V^{n}$ and from the induction hypothesis
+we obtain $\forall x_{|n}\,\phi\sim\forall x_{|n}\,\psi$. Since
+$\sim$ is a congruent relation on \pv\ we have:
+    \[
+    \forall x\phi=\forall x(n)\forall x_{|n}\,\phi\sim\forall
+    x(n)\forall x_{|n}\,\psi=\forall x\psi
+    \]
+So we conclude that the property is true for $n+1$.
+\end{proof}
+
+We are now able to quote and prove what we set out from the
+beginning. If two iterated quantification operators are equivalent
+modulo some permutation, then the corresponding formulas are
+permutation equivalent. This all seems pretty obvious, but it has to
+be proved one way or another:
+\begin{prop}\label{logic:prop:iterated:permutation}
+Let $V$ be a set, $n\in\N$ and $x,y\in V^{n}$. Let $\sim$ denote the
+permutation congruence on \pv. Then for all $\phi\in\pv$ we have:
+    \[
+    x\sim y\ \Rightarrow\ \forall x\phi\sim\forall y\phi
+    \]
+where $x\sim y$ refers to the permutation equivalence on $V^{n}$.
+\end{prop}
+\begin{proof}
+We shall distinguish three cases. First we assume that $n=0$. Then
+$x=y=0$ and the result is clear. Next we assume that $n=1$. Then
+$x\sim y$ implies that $x=y$ and the result is also clear. We now
+assume that $n\geq 2$ and $x\sim y$. We need to show that $\forall
+x\phi\sim\forall y\phi$. From $x\sim y$ there exists a permutation
+$\sigma:n\to n$ such that $y=x\circ \sigma$. We shall distinguish
+two cases. First we assume that $\sigma$ is an elementary
+permutation, namely that there exists $i\in n-1$ such that
+$\sigma=[i:i+1]$ (of order $n$). We shall prove that $\forall
+x\phi\sim\forall y\phi$ using an induction argument on $n\geq 2$.
+First we assume that $n=2$. Then we must have $i=0$ and
+$\sigma=[0\!:\!1]$ (of order $2$). Hence from $y=x\circ \sigma$ we
+obtain:
+    \[
+    \forall y\phi=\forall y(1)\forall y(0)\,\phi=\forall x(0)\forall x(1)\,\phi
+    \]
+Comparing with $\forall x\phi=\forall x(1)\forall x(0)\phi$, it is
+clear that the ordered pair $(\forall x\phi,\forall y\phi)$ belongs
+to the generator $R_{0}$ of the permutation congruence as per
+definition~(\ref{logic:def:perm:congruence}). In particular we have
+$\forall x\phi\sim\forall y\phi$ which completes our proof in the
+case when $\sigma$ is elementary and $n=2$. We now assume that the
+property is true for $\sigma$ elementary and $n\geq 2$. We need to
+show that it is also true for $\sigma$ elementary and $n+1$. So we
+assume the existence of $i\in n$ such that $\sigma=[i:i+1]$ (of
+order $n+1$). We need to show that $\forall x\phi\sim\forall y\phi$.
+We shall distinguish two cases. First we assume that $i=n-1$ which
+is the highest possible value when $i\in n$. Then for all $j\in n-1$
+we have $j\neq i$ and $j\neq i+1$ and consequently
+$y(j)=x\circ\sigma(j)=x\circ [i:i+1](j)=x(j)$. Hence we see that
+$x_{|n-1}=y_{|n-1}$, and:
+    \[
+    \forall y\phi=\forall y(n)\,\forall y(n-1)\,\forall y_{|n-1}\,\phi =
+    \forall x(n-1)\,\forall x(n)\,
+    \forall x_{|n-1}\phi
+    \]
+while we have $\forall x\phi=\forall x(n)\,\forall x(n-1)\, \forall
+x_{|n-1}\phi$. Setting $u=x(n)$ and $v=x(n-1)$ with
+$\phi_{1}=\forall x_{|n-1}\phi$, it follows that $\forall x\phi =
+\forall u\forall v\,\phi_{1}$ and $\forall y\phi=\forall v\forall
+u\,\phi_{1}$. Hence we see that the ordered pair $(\forall
+x\phi,\forall y\phi)$ belongs to the generator $R_{0}$ of the
+permutation congruence as per
+definition~(\ref{logic:def:perm:congruence}). In particular $\forall
+x\phi\sim\forall y\phi$. We now assume that $i\in n-1$. In
+particular we have $i+1\neq n$ and $i\neq n$ and:
+    \[
+    y(n)=x\circ\sigma(n)=x\circ[i:i+1](n)=x(n)
+    \]
+It follows that $\forall y\phi=\forall y(n)\forall
+y_{|n}\,\phi=\forall x(n)\forall y_{|n}\,\phi$ while $\forall
+x\phi=\forall x(n)\forall x_{|n}\,\phi$. Hence, we see that in order
+to show that $\forall x\phi\sim\forall y\phi$, the permutation
+congruence being a congruent relation on \pv, it is sufficient to
+prove that $\forall x_{|n}\,\phi\sim\forall y_{|n}\,\phi$. This
+follows immediately from our induction hypothesis and the fact that:
+    \[
+    y_{|n}=x\circ\sigma_{|n}=x\circ [i:i+1]_{|n}=x_{|n}\circ [i:i+1]
+    \]
+where it is understood that the second occurrence of '$[i:i+1]$' in
+this equation refers to the elementary permutation of order $n$
+(rather than $n+1$) defined for $i\in n-1$. This completes our
+induction argument and we have proved that $\forall x\phi\sim\forall
+y\phi$ in the case when $y=x\circ\sigma$ with $\sigma$ elementary.
+We now assume that $\sigma:n\to n$ is an arbitrary permutation of
+order $n$ and we need to show that $\forall x\phi\sim\forall y\phi$.
+However since $n\geq 2$ it follows from
+lemma~(\ref{logic:lemma:integer:permutation}) that $\sigma$ can be
+expressed as a composition of elementary permutations of order $n$.
+In other words, there exist $k\in\N^{*}$ and elementary permutations
+$\tau_{1}, \ldots, \tau_{k}$ such that:
+    \[
+    \sigma=\tau_{k}\circ\ldots\circ\tau_{1}
+    \]
+We shall prove that $\forall x\phi\sim\forall y\phi$ by induction on
+the integer $k\in\N^{*}$. If $k=1$ then $\sigma$ is an elementary
+permutation and we have already proved that the result is true. We
+now assume that the result is true for $k\geq 1$ and we need to show
+it is also true for $k+1$. So we assume that:
+    \[
+    \sigma=\tau_{k+1}\circ\tau_{k}\circ\ldots\circ\tau_{1}
+    \]
+Defining $\sigma^{*}=\tau_{k+1}\circ\ldots\circ\tau_{2}$ we obtain
+$\sigma=\sigma^{*}\circ\tau_{1}$. It follows that:
+    \[
+    y=x\circ\sigma=x\circ\sigma^{*}\circ\tau_{1}=y^{*}\circ\tau_{1}
+    \]
+where we have put $y^{*}=x\circ\sigma^{*}$. Now since $\tau_{1}$ is
+an elementary permutation and $y=y^{*}\circ\tau_{1}$, we have
+already proved that $\forall y\phi\sim\forall y^{*}\phi$.
+Furthermore, since $y^{*}=x\circ\sigma^{*}$ and $\sigma^{*}$ is a
+composition of $k$ elementary permutations, it follows from our
+induction hypothesis that $\forall y^{*}\phi\sim\forall x\phi$. By
+transitivity of the permutation congruence, we conclude that
+$\forall x\phi\sim\forall y\phi$.
+\end{proof}

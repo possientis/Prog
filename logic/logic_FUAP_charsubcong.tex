@@ -1,0 +1,653 @@
+The purpose of this section is to provide a characterization of the
+substitution congruence on \pvs\ similar to
+theorem~(\ref{logic:the:sub:congruence:charac}) of
+page~\pageref{logic:the:sub:congruence:charac} for \pv. The result
+will be proved in theorem~(\ref{logic:the:FUAP:charsubcong:charac})
+below. This type of theorem is very useful as it confirms the
+natural belief that $\alpha$-equivalence can only occur between
+proofs which are {\em structurally identical}. So if $\equiv$ and
+$\sim$ denote the substitution congruence on \pvs\ and \pv\
+respectively, then the equivalence $\pi\equiv\rho$ can only arise
+when $\pi$ and $\rho$ are both elements of \pv\ with $\pi\sim\rho$,
+or both 'axioms' with $\pi=\axi\phi$, $\rho=\axi\psi$ and
+$\phi\sim\psi$, or both of the form $\pi=\pi_{1}\pon\pi_{2}$,
+$\rho=\rho_{1}\pon\rho_{2}$ and $\pi_{1}\equiv\rho_{1}$,
+$\pi_{2}\equiv\rho_{2}$ etc. We start by showing that equivalent
+proofs have the same free variables, which is the counterpart of
+proposition~(\ref{logic:prop:sub:congruence:freevar}).
+
+\begin{prop}\label{logic:prop:FUAP:charsubcong:freevar}
+Let $\equiv$ denote the substitution congruence on \pvs\ where $V$
+is a set. Then for all $\pi,\rho\in\pvs$ we have the implication:
+    \[
+    \pi\equiv\rho\ \Rightarrow\ \free(\pi)=\free(\rho)
+    \]
+\end{prop}
+\begin{proof}
+Let $\simeq$ be the relation on \pvs\ defined by $\pi\simeq\rho\
+\Leftrightarrow\ \free(\pi)=\free(\rho)$. We need to show that
+$\pi\equiv\rho\ \Rightarrow\ \pi\simeq\rho$ or equivalently that the
+inclusion $\equiv\,\subseteq\,\simeq$ holds. Since $\equiv$ is the
+substitution congruence on \pvs, it is the smallest congruence on
+\pvs\ which contains the sets $R_{0}$, $R_{1}$ and $R_{2}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
+In order to show the inclusion $\equiv\,\subseteq\,\simeq$ it is
+therefore sufficient to show that $\simeq$ is a congruence on \pvs\
+such that $R_{i}\subseteq\,\simeq$ for $i\in 3$. However, we already
+know from
+proposition~(\ref{logic:prop:FUAP:freevarproof:congruence}) that
+$\simeq$ is a congruence on \pvs. So it remains to show that
+$R_{i}\subseteq\,\simeq$ for $i\in 3$. First we show that
+$R_{0}\subseteq\,\simeq$\,. So let $\phi,\psi\in\pv$ such that
+$\phi\sim\psi$ where $\sim$ denotes the substitution congruence on
+\pv. We need to show that $\phi\simeq\psi$ i.e. that
+$\free(\phi)=\free(\psi)$ which follows from
+proposition~(\ref{logic:prop:sub:congruence:freevar}). We now show
+that $R_{1}\subseteq\,\simeq$\,. So let $\phi,\psi\in\pv$ such that
+$\phi\sim\psi$. We need to show that $\axi\phi\simeq\axi\psi$ which
+is $\free(\axi\phi)=\free(\axi\psi)$ or equivalently
+$\free(\phi)=\free(\psi)$. Once again, this follows from
+proposition~(\ref{logic:prop:sub:congruence:freevar}). So we now
+show that $R_{2}\subseteq\,\simeq$\,. Let $\pi_{1}\in\pvs$ and
+$x,y\in V$ such that $x\neq y$ and $y\not\in\free(\pi_{1})$. Define
+$\pi=\gen x\pi_{1}$ and $\rho=\gen y\pi_{1}[y\!:\!x]$. We need to
+show that $\pi\simeq\rho$, i.e. that $\free(\pi)=\free(\rho)$.
+However, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:injective}), the map
+$[y\!:\!x]$ is valid for $\pi_{1}$. Hence:
+    \begin{eqnarray*}
+    \free(\rho)&=&\free(\,\gen y\pi_{1}[y\!:\!x]\,)\\
+    &=&\free(\pi_{1}[y\!:\!x])\setminus\{y\}\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:validsubproof:freevar})}\ \rightarrow
+    &=&[y\!:\!x](\free(\pi_{1}))\setminus\{y\}\\
+    y\not\in\free(\pi_{1})\ \rightarrow
+    &=&[y\!:\!x](\,\free(\pi_{1})\setminus\{y\}\,)\setminus\{y\}\\
+    \mbox{$[y\!:\!x](x)=y$}\ \rightarrow
+    &=&[y\!:\!x](\,\free(\pi_{1})\setminus\{x,y\}\,)\setminus\{y\}\\
+    \mbox{$u\not\in\{x,y\}\Rightarrow[y\!:\!x](u)=u$}\ \rightarrow
+    &=&(\free(\pi_{1})\setminus\{x,y\})\setminus\{y\}\\
+    &=&\free(\pi_{1})\setminus\{x,y\}\\
+    y\not\in\free(\pi_{1})\ \rightarrow
+    &=&\free(\pi_{1})\setminus\{x\}\\
+    &=&\free(\gen x\pi_{1})\\
+    &=&\free(\pi)\\
+    \end{eqnarray*}
+\end{proof}
+
+The following proposition is the counterpart of
+proposition~(\ref{logic:prop:FOPL:freesubcong:xy:not:free})\,:
+\begin{prop}\label{logic:prop:FUAP:charsubcong:xy:not:free}
+Let $\equiv$ denote the substitution congruence on \pvs\ where $V$
+is a set. Then for all $\pi_{1}\in\pvs$ and $x,y\in V$ such that
+$x,y\not\in\free(\pi_{1})$ we have:
+    \[
+    \gen x\pi_{1}\equiv\gen y\pi_{1}
+    \]
+\end{prop}
+\begin{proof}
+From $y\not\in\free(\pi_{1})$ and
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}) we
+see that $\gen x\pi_{1}\equiv\gen y\pi_{1}[y\!:\!x]$. So we need to
+show that $\gen y\pi_{1}[y\!:\!x]\equiv\forall y\pi_{1}$. Hence it
+is sufficient to prove that $\pi_{1}[y\!:\!x]\equiv\pi_{1}$. Using
+proposition~(\ref{logic:prop:FUAP:subcong:admissible:subcong}), we
+simply need to argue that $[y\!:\!x]$ is an admissible substitution
+for $\pi_{1}$. Being injective, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:injective}) it is a
+valid substitution for $\pi_{1}$. So it remains to show that
+$[y\!:\!x](u)=u$ for all $u\in\free(\pi_{1})$ which follows
+immediately from $x,y\not\in\free(\pi_{1})$.
+\end{proof}
+
+
+An injective substitution preserves $\alpha$-equivalence. This is of
+course a temporary results which will be extended from injective to
+valid substitutions in
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:valid}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:valid}. The following
+is the counterpart of
+proposition~(\ref{logic:prop:sub:congruence:injective:substitution})\,:
+\begin{prop}\label{logic:prop:FUAP:charsubcong:injective:substitution}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be an injective map.
+Let~$\equiv$ be the substitution congruence both on \pvs\ and
+${\bf\Pi}(W)$. Then:
+    \[
+    \pi\equiv\rho\ \Rightarrow\ \sigma(\pi)\equiv\sigma(\rho)
+    \]
+for all $\pi,\rho\in\pvs$, where $\sigma:\pvs\to{\bf\Pi}(W)$ is also
+the substitution mapping.
+\end{prop}
+\begin{proof}
+Let $\simeq$ be the relation on \pvs\ defined by $\pi\simeq\rho\
+\Leftrightarrow\ \sigma(\pi)\equiv\sigma(\rho)$. We need to show
+that $\pi\equiv\rho\ \Rightarrow\ \pi\simeq\rho$ or equivalently
+that the inclusion $\equiv\,\subseteq\,\simeq$ holds. Since $\equiv$
+is the substitution congruence on \pvs, it is the smallest
+congruence on \pvs\ which contains the sets $R_{0}$, $R_{1}$ and
+$R_{2}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
+In order to show the inclusion $\equiv\,\subseteq\,\simeq$ it is
+therefore sufficient to show that $\simeq$ is a congruence on \pvs\
+such that $R_{i}\subseteq\,\simeq$ for $i\in 3$. However, we already
+know from
+proposition~(\ref{logic:prop:FUAP:substitution:congruence}) that
+$\simeq$ is a congruence on \pvs. So it remains to show that
+$R_{i}\subseteq\,\simeq$ for $i\in 3$. First we show that
+$R_{0}\subseteq\,\simeq$\,. So let $\phi,\psi\in\pv$ such that
+$\phi\sim\psi$, where $\sim$ denotes the substitution congruence on
+\pv. We need to show that $\phi\simeq\psi$ or equivalently that
+$\sigma(\phi)\equiv\sigma(\psi)$. Looking at
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}) it
+is sufficient to show that $\sigma(\phi)\sim\sigma(\psi)$ where
+$\sim$ now denotes the substitution congruence on ${\bf P}(W)$.
+However, the equivalence $\sigma(\phi)\sim\sigma(\psi)$ follows
+immediately from the injectivity of $\sigma$ and
+proposition~(\ref{logic:prop:sub:congruence:injective:substitution}).
+We now show that $R_{1}\subseteq\,\simeq$\,. So let
+$\phi,\psi\in\pv$ such that $\phi\sim\psi$. We need to show that
+$\axi\phi\simeq\axi\psi$ or equivalently
+$\sigma(\axi\phi)\equiv\sigma(\axi\psi)$ which is
+$\axi\sigma(\phi)\equiv\axi\sigma(\psi)$. Once again from
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}) it
+is sufficient to show that $\sigma(\phi)\sim\sigma(\psi)$ which
+follows from the injectivity of $\sigma$. We now show that
+$R_{2}\subseteq\,\simeq$\,. So let $\pi_{1}\in\pvs$ and $x,y\in V$
+be such that $x\neq y$ and $y\not\in\free(\pi_{1})$. Define
+$\pi=\gen x\pi_{1}$ and $\rho=\gen y\,\pi_{1}[y\!:\!x]$. We need to
+show that $\pi\simeq\rho$ or equivalently that
+$\sigma(\pi)\equiv\sigma(\rho)$. In order to do so, it is sufficient
+to show that the ordered pair $(\sigma(\pi),\sigma(\rho))$ belongs
+to the set $R_{2}'$ of the substitution congruence on ${\bf\Pi}(W)$
+as per
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
+In other words, it is sufficient to show the existence of
+$\pi_{1}'\in{\bf\Pi}(W)$ and $x',y'\in W$ with $x'\neq y'$ and
+$y'\not\in\free(\pi_{1}')$, such that $\sigma(\pi)=\gen x'\pi_{1}'$
+and $\sigma(\rho)=\gen y'\,\pi_{1}'[y'\!:\!x']$. Take
+$\pi_{1}'=\sigma(\pi_{1})\in{\bf\Pi}(W)$ together with
+$x'=\sigma(x)\in W$ and $y'=\sigma(y)\in W$. Then:
+    \[
+    \sigma(\pi)=\sigma(\gen x\pi_{1})\\
+        =\gen\sigma(x)\,\sigma(\pi_{1})\\
+        =\gen x'\pi_{1}'
+    \]
+Furthermore, from
+proposition~(\ref{logic:prop:FUAP:singlevar:composition:injective})
+we have $\sigma\circ[y\!:\!x]=[\sigma(y)\!:\!\sigma(x)]\circ\sigma$
+and so:
+    \begin{eqnarray*}
+    \sigma(\rho)&=&\sigma(\gen y\,\pi_{1}[y\!:\!x])\\
+    &=&\gen\sigma(y)\,\sigma(\pi_{1}[y\!:\!x])\\
+    &=&\gen y'\,\sigma\circ [y\!:\!x]\,(\pi_{1})\\
+    &=&\gen y'\, [\sigma(y)\!:\!\sigma(x)]\circ\sigma\,(\pi_{1})\\
+    &=&\gen y'\,[y'\!:\!x'](\pi_{1}')\\
+    &=&\gen y'\,\pi_{1}'[y'\!:\!x']
+    \end{eqnarray*}
+So it remains to show that $x'\neq y'$ and
+$y'\not\in\free(\pi_{1}')$. Since $\sigma:V\to W$ is an injective
+map, $x'\neq y'$ follows immediately from $x\neq y$. We now show
+that $y'\not\in\free(\pi_{1}')$. So suppose to the contrary that
+$y'\in\free(\pi_{1}')$. We shall arrive at a contradiction. Since
+$\pi_{1}'=\sigma(\pi_{1})$, from
+proposition~(\ref{logic:prop:FUAP:freevarproof:substitution:inclusion})
+there exists $u\in\free(\pi_{1})$ such that $y'=\sigma(u)$. However,
+$y'=\sigma(y)$ and $\sigma:V\to W$ is an injective map. Hence we see
+that $u=y$ and consequently $y\in\free(\pi_{1})$ which contradicts
+our initial assumption of $y\not\in\free(\pi_{1})$ and completes our
+proof.
+\end{proof}
+
+
+We shall now follow a familiar strategy leading up to
+theorem~(\ref{logic:the:FUAP:charsubcong:charac}) of
+page~\pageref{logic:the:FUAP:charsubcong:charac}. We shall first
+define a new relation~$\simeq$ on \pvs\ reflecting our best estimate
+of what the substitution congruence~$\equiv$ should be like. We
+shall then show that $\simeq$ is in fact a congruence which is
+indeed equal to~$\equiv$ as expected. Note that some of the
+mathematical statements of the following definition have been
+shortened in the interest of readability. So in the case of $(iii)$,
+what is meant is 'there exist $\pi_{1}$, $\pi_{2}$ and $\rho_{1}$,
+$\rho_{2}$ such that $\pi=\pi_{1}\pon\pi_{2}$,
+$\rho=\rho_{1}\pon\rho_{2}$, $\pi_{1}\equiv\rho_{1}$ and
+$\pi_{2}\equiv\rho_{2}$' etc.
+
+
+\begin{defin}\label{logic:def:FUAP:charsubcong:almost:equivalent}
+Let $\equiv$ and $\sim$ be the substitution congruence on \pvs\ and
+\pv\ respectively where $V$ is a set. Let $\pi,\rho\in\pvs$. We say
+that $\pi$ is {\em almost equivalent to $\rho$} denoted
+$\pi\simeq\rho$, \ifand\ one of the following is the case:
+    \begin{eqnarray*}
+    (i)&&\pi=\phi\ ,\ \rho=\psi\ ,\ \mbox{for some}\ \phi,\psi\in\pv\ \mbox{and}\ \phi\sim\psi\\
+    (ii)&&\pi=\axi\phi\ ,\ \rho=\axi\psi\ ,\ \mbox{for some}\ \phi,\psi\in\pv\ \mbox{and}\ \phi\sim\psi\\
+    (iii)&&\pi=\pi_{1}\pon\pi_{2}\ ,\ \rho=\rho_{1}\pon\rho_{2}\ ,\
+    \pi_{1}\equiv\rho_{1}\ \mbox{and}\ \pi_{2}\equiv\rho_{2}\\
+    (iv)&&\pi=\gen x\pi_{1}\ ,\ \rho=\gen x\rho_{1}\ \mbox{and}\ \pi_{1}\equiv\rho_{1}\\
+    (v)&&\pi=\gen x\pi_{1}\ ,\ \rho=\gen y\rho_{1}\ ,\ x\neq y\ ,\
+    \rho_{1}\equiv \pi_{1}[y\!:\!x]\ ,\ y\not\in\free(\pi_{1})
+    \end{eqnarray*}
+\end{defin}
+
+\begin{prop}
+$(i),(ii),(iii),(iv), (v)$ of {\em
+def.~(\ref{logic:def:FUAP:charsubcong:almost:equivalent})} are
+mutually exclusive.
+\end{prop}
+\begin{proof}
+This is an immediate consequence of
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} applied to the free
+universal algebra \pvs\ with free generator \pv, where a proof
+$\pi\in\pvs$ is either an element of \pv, or an element of the form
+$\pi=\axi\phi$ for some $\phi\in\pv$, or the result of a modus
+ponens application $\pi=\pi_{1}\pon\pi_{2}$, or a generalization
+$\pi=\gen x\pi_{1}$, but cannot be equal to any two of those things
+simultaneously. Since $(v)$ can only occur with $x\neq y$, it also
+follows from theorem~(\ref{logic:the:unique:representation}) that
+$(v)$ cannot occur at the same time as $(iv)$ which completes our
+proof.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:charsubcong:almost:contains:r0:r1:r2}
+Let $\simeq$ be the almost equivalence relation on \pvs\ where $V$
+is a set. Then $\simeq$ contains the sets $R_{0}$, $R_{1}$ and
+$R_{2}$ of {\em
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence})}.
+\end{prop}
+\begin{proof}
+First we show that $R_{0}\subseteq\,\simeq$\,. So let
+$\phi,\psi\in\pv$ such that $\phi\sim\psi$. We need to show that
+$\phi\simeq\psi$ which is clear from $(i)$ of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}).
+Next we show that $R_{1}\subseteq\,\simeq$\,. So let
+$\phi,\psi\in\pv$ such that $\phi\sim\psi$. We need to show that
+$\axi\phi\simeq\axi\psi$ which is clear from $(ii)$ of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}). We
+finally show $R_{3}\subseteq\,\simeq$\,. So we assume $x,y\in V$ and
+$\pi_{1}\in\pvs$ are such that $x\neq y$ and
+$y\not\in\free(\pi_{1})$. Note that this cannot happen unless $V$
+has at least two elements. We define $\pi=\gen x\pi_{1}$ and
+$\rho=\gen y\,\pi_{1}[y\!:\!x]$. We need to show that
+$\pi\simeq\rho$. We shall do so by proving that $(v)$ of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}) is
+the case. Define $\rho_{1}=\pi_{1}[y\!:\!x]$. Then we have $\pi=\gen
+x\pi_{1}$, $\rho=\gen y\rho_{1}$, $x\neq y$ and
+$y\not\in\free(\pi_{1})$. So it remains to show that
+$\rho_{1}\equiv\pi_{1}[y\!:\!x]$ which is immediate from the
+reflexivity of $\equiv$\,.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:subcong:almost:reflexive}
+The almost equivalence relation on \pvs\ is reflexive.
+\end{prop}
+\begin{proof}
+Let $\pi\in\pvs$. We need to show that $\pi\simeq\pi$. From
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we know that $\pi$ is
+either an element of \pv, or $\pi=\axi\phi$ for some $\phi\in\pv$ or
+$\pi=\pi_{1}\pon\pi_{2}$ or $\pi=\gen x\pi_{1}$ for some
+$\pi_{1},\pi_{2}\in\pv$ and $x\in V$. In every one of these cases,
+it is clear that $\pi\simeq\pi$ from the reflexivity of $\equiv$ and
+$\sim$\,.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:subcong:almost:symmetric}
+The almost equivalence relation on \pvs\ is symmetric.
+\end{prop}
+\begin{proof}
+Let $\pi,\rho\in\pvs$ be such that $\pi\simeq\rho$. We need to show
+that $\rho\simeq\pi$. We shall consider the five possible cases of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}): it
+is clear that $\rho\simeq\pi$ is true in cases $(i)-(iv)$ from the
+symmetry of $\equiv$ and $\sim$\,. So we consider the last possible
+case of $\pi=\gen x\pi_{1}$, $\rho=\gen y\rho_{1}$ with $x\neq y$,
+$\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and $y\not\in\free(\pi_{1})$. We
+need to show that $\pi_{1}\equiv\rho_{1}[x\!:\!y]$ and
+$x\not\in\free(\rho_{1})$. First we show that
+$\pi_{1}\equiv\rho_{1}[x\!:\!y]$. Note that $[x\!:\!y]$ and
+$[y\!:\!x]$ are in fact the same substitutions. So we need to show
+that $\pi_{1}\equiv\rho_{1}[y\!:\!x]$. Since
+$\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and $[y\!:\!x]:V\to V$ is
+injective, from
+proposition~(\ref{logic:prop:FUAP:charsubcong:injective:substitution})
+we obtain $\rho_{1}[y\!:\!x]\equiv\pi_{1}[y\!:\!x][y\!:\!x]$. It is
+therefore sufficient to show that
+$\pi_{1}=\pi_{1}[y\!:\!x][y\!:\!x]$ which follows from
+proposition~(\ref{logic:prop:FUAP:substitution:identity}) and the
+fact that $[y\!:\!x]\circ[y\!:\!x]$ is the identity mapping. We now
+show that $x\not\in\free(\rho_{1})$. From
+$\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and
+proposition~(\ref{logic:prop:FUAP:charsubcong:freevar}) we obtain
+$\free(\rho_{1})=\free(\pi_{1}[y\!:\!x])$. So we need to show that
+$x\not\in\free(\pi_{1}[y\!:\!x])$. So suppose to the contrary that
+$x\in\free(\pi_{1}[y\!:\!x])$. From
+proposition~(\ref{logic:prop:FUAP:freevarproof:substitution:inclusion})
+we have $\free(\pi_{1}[y\!:\!x])\subseteq[y\!:\!x](\free(\pi_{1}))$
+and consequently there exists $u\in\free(\pi_{1})$ such that
+$x=[y\!:\!x](u)$. By injectivity, It follows that $u=y$ which
+contradicts the assumption $y\not\in\free(\pi_{1})$.
+\end{proof}
+
+As is now usual, establishing transitivity is the hardest part:
+
+\begin{prop}\label{logic:prop:FUAP:subcong:almost:transitive}
+The almost equivalence relation on \pvs\ is transitive.
+\end{prop}
+\begin{proof}
+Let $\pi,\rho$ and $\kappa\in\pvs$ be such that $\pi\simeq\rho$ and
+$\rho\simeq\kappa$. We need to show that $\pi\simeq\kappa$. We shall
+consider the five possible cases of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}) in
+relation to $\pi\simeq\rho$. Suppose first that $\pi=\phi$ and
+$\rho=\psi$ for some $\phi,\psi\in\pv$ with $\phi\sim\psi$. Then
+from $\rho\simeq\kappa$ we obtain that $\kappa=\chi$ for some
+$\chi\in\pv$ and $\psi\sim\chi$. It follows that $\pi=\phi$,
+$\kappa=\chi$ with $\phi\sim\chi$. Hence we see that
+$\pi\simeq\kappa$ as requested. We now assume that $\pi=\axi\phi$
+and $\rho=\axi\psi$ for some $\phi,\psi\in\pv$ with $\phi\sim\psi$.
+Then from $\rho\simeq\kappa$ we obtain that $\kappa=\axi\chi$ for
+some $\chi\in\pv$ and $\psi\sim\chi$. It follows that
+$\pi=\axi\phi$, $\kappa=\axi\chi$ with $\phi\sim\chi$. Once again we
+see that $\pi\simeq\kappa$ as requested. We now assume that
+$\pi=\pi_{1}\pon\pi_{2}$ and $\rho=\rho_{1}\pon\rho_{2}$ with
+$\pi_{1}\equiv\rho_{1}$ and $\pi_{2}\equiv\rho_{2}$. From
+$\rho\simeq\kappa$ we obtain $\kappa=\kappa_{1}\pon\kappa_{2}$ with
+$\rho_{1}\equiv\kappa_{1}$ and $\rho_{2}\equiv\kappa_{2}$. It
+follows that $\pi_{1}\equiv\kappa_{1}$ and
+$\pi_{2}\equiv\kappa_{2}$. Hence we see that $\pi\simeq\kappa$ as
+requested. We now assume that $\pi=\gen x\pi_{1}$ and $\rho=\gen
+x\rho_{1}$ with $\pi_{1}\equiv\rho_{1}$, for some $x\in V$. From
+$\rho\simeq\kappa$ only the cases $(iv)$ and $(v)$ of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}) are
+possible. First we assume that $(iv)$ is the case. Then $\kappa=\gen
+x\kappa_{1}$ with $\rho_{1}\equiv\kappa_{1}$. Hence we obtain
+$\pi_{1}\equiv\kappa_{1}$ and consequently $\pi\simeq\kappa$ as
+requested. We now assume that $(v)$ is the case. Then $\kappa=\gen
+y\kappa_{1}$ for some $y\in V$ with $x\neq y$,
+$\kappa_{1}\equiv\rho_{1}[y\!:\!x]$ and $y\not\in\free(\rho_{1})$.
+In order to prove $\pi\simeq\kappa$ it is sufficient to show that
+$\kappa_{1}\equiv\pi_{1}[y\!:\!x]$ and $y\not\in\free(\pi_{1})$.
+First we show that $\kappa_{1}\equiv\pi_{1}[y\!:\!x]$. It is
+sufficient to prove that $\pi_{1}[y\!:\!x]\equiv\rho_{1}[y\!:\!x]$
+which follows from $\pi_{1}\equiv\rho_{1}$, using
+proposition~(\ref{logic:prop:FUAP:charsubcong:injective:substitution})
+and the fact that $[y\!:\!x]:V\to V$ is injective. We now show that
+$y\not\in\free(\pi_{1})$. From $\pi_{1}\equiv\rho_{1}$ and
+proposition~(\ref{logic:prop:FUAP:charsubcong:freevar}) we obtain
+$\free(\pi_{1})=\free(\rho_{1})$. Hence it is sufficient to show
+that $y\not\in\free(\rho_{1})$ which is true by assumption. It
+remains to consider the last possible case of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}). So
+we assume that $\pi=\gen x\pi_{1}$ and $\rho=\gen y\rho_{1}$ with
+$x\neq y$, $\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and
+$y\not\in\free(\pi_{1})$. From $\rho\simeq\kappa$ only the cases
+$(iv)$ and $(v)$ of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}) are
+possible. First we assume that $(iv)$ is the case. Then $\kappa=\gen
+y\kappa_{1}$ with $\rho_{1}\equiv\kappa_{1}$. Then, we obtain
+$\kappa_{1}\equiv\pi_{1}[y\!:\!x]$ and consequently
+$\pi\simeq\kappa$. We now assume that $(v)$ is the case. Then
+$\kappa=\gen z\kappa_{1}$ for some $z\in V$ with $y\neq z$,
+$\kappa_{1}\equiv\rho_{1}[z\!:\!y]$ and $z\not\in\free(\rho_{1})$.
+We shall now distinguish two cases. First we assume that $x=z$. Then
+$\pi=\gen x\pi_{1}$ and $\kappa=\gen x\kappa_{1}$ and in order to
+show that $\pi\simeq\kappa$ it is sufficient to prove that
+$\pi_{1}\equiv\kappa_{1}$. From $\kappa_{1}\equiv\rho_{1}[z\!:\!y]$
+and $z=x$ we obtain $\kappa_{1}\equiv\rho_{1}[y\!:\!x]$ and it is
+therefore sufficient to prove that $\pi_{1}\equiv\rho_{1}[y\!:\!x]$.
+However, we know that $\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and since
+$[y\!:\!x]:V\to V$ is injective, from
+proposition~(\ref{logic:prop:FUAP:charsubcong:injective:substitution})
+we obtain
+$\rho_{1}[y\!:\!x]\equiv\pi_{1}[y\!:\!x][y\!:\!x]=\pi_{1}$. This
+completes our proof in the case when $x=z$. We now assume that
+$x\neq z$. So we have $x\neq y$, $y\neq z$ and $x\neq z$, with
+$\pi=\gen x\pi_{1}$, $\rho=\gen y\rho_{1}$ and $\kappa=\gen
+z\kappa_{1}$. Furthermore, $\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and
+$\kappa_{1}\equiv\rho_{1}[z\!:\!y]$ while we have
+$y\not\in\free(\pi_{1})$ and $z\not\in\free(\rho_{1})$, and we need
+to show that $\pi\simeq\kappa$. So we need to prove that
+$\kappa_{1}\equiv\pi_{1}[z\!:\!x]$ and $z\not\in\free(\pi_{1})$.
+First we show that $z\not\in\free(\pi_{1})$. So suppose to the
+contrary that $z\in\free(\pi_{1})$. We shall derive a contradiction.
+Since $[y\!:\!x]$ is injective it is valid for $\pi_{1}$ and from
+proposition~(\ref{logic:prop:FUAP:validsubproof:freevar}) we have
+$\free(\pi_{1}[y\!:\!x]) = [y\!:\!x](\free(\pi_{1}))$. It follows
+that $z=[y\!:\!x](z)$ is also an element of
+$\free(\pi_{1}[y\!:\!x])$. However we have
+$\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and consequently from
+proposition~(\ref{logic:prop:FUAP:charsubcong:freevar}) we obtain
+$\free(\rho_{1})=\free(\pi_{1}[y\!:\!x])$. Hence we see that
+$z\in\free(\rho_{1})$ which is our desired contradiction. We shall
+now prove that $\kappa_{1}\equiv\pi_{1}[z\!:\!x]$. Since
+$\kappa_{1}\equiv\rho_{1}[z\!:\!y]$, it is sufficient to show that
+$\rho_{1}[z\!:\!y]\equiv\pi_{1}[z\!:\!x]$. However we know that
+$\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and since $[z\!:\!y]:V\to V$ is
+injective, from
+proposition~(\ref{logic:prop:FUAP:charsubcong:injective:substitution})
+we obtain $\rho_{1}[z\!:\!y]\equiv\pi_{1}[y\!:\!x][z\!:\!y]$. It is
+therefore sufficient to show that
+$\pi_{1}[y\!:\!x][z\!:\!y]\equiv\pi_{1}[z\!:\!x]$. Let us accept for
+now:
+    \begin{equation}\label{logic:eqn:FUAP:subcong:gen:transitive:z:x}
+    [z\!:\!x]=[y\!:\!x]\circ[z\!:\!y]\circ[y\!:\!x]
+    \end{equation}
+Then we simply need to show that
+$\pi_{1}[y\!:\!x][z\!:\!y]\equiv\pi_{1}[y\!:\!x][z\!:\!y][y\!:\!x]$.
+Using
+proposition~(\ref{logic:prop:FUAP:subcong:admissible:subcong}), it
+is therefore sufficient to prove that $[y\!:\!x]$ is an admissible
+substitution for $\pi_{1}[y\!:\!x][z\!:\!y]$. Since $[y\!:\!x]:V\to
+V$ is injective, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:injective}) it is
+valid for $\pi_{1}[y\!:\!x][z\!:\!y]$. So it remains to show that
+$[y\!:\!x](u)=u$ for all $u\in\free(\pi_{1}[y\!:\!x][z\!:\!y])$. It
+is therefore sufficient to prove that neither $x$ nor $y$ are
+elements of $\free(\pi_{1}[y\!:\!x][z\!:\!y])$. However, from
+proposition~(\ref{logic:prop:FUAP:freevarproof:substitution:inclusion})
+we have
+$\free(\pi_{1}[y\!:\!x][z\!:\!y])\subseteq[z\!:\!y]\circ[y\!:\!x](\free(\pi_{1}))$.
+So it is sufficient to show that $x$ and $y$ do not belong to
+$[z\!:\!y]\circ[y\!:\!x](\free(\pi_{1}))$. First we do this for $x$.
+Suppose $x=[z\!:\!y]\circ[y\!:\!x](u)$ for some
+$u\in\free(\pi_{1})$. By injectivity we must have $u=y$,
+contradicting the assumption $y\not\in\free(\pi_{1})$. We now deal
+with $y$. So suppose $y=[z\!:\!y]\circ[y\!:\!x](u)$ for some
+$u\in\free(\pi_{1})$. By injectivity we must have $u=z$,
+contradicting the fact that $z\not\in\free(\pi_{1})$ which we have
+already proven. It remains to prove that
+equation~(\ref{logic:eqn:FUAP:subcong:gen:transitive:z:x}) holds. So
+let $u\in V$. We need:
+    \[
+    [z\!:\!x](u)=[y\!:\!x]\circ[z\!:\!y]\circ[y\!:\!x](u)
+    \]
+This is the case when $u\not\in\{x,y,z\}$. The cases $u=x$, $u=y$
+and $u=z$ are easy.
+\end{proof}
+
+The almost equivalence is stronger than the substitution congruence:
+
+\begin{prop}\label{logic:prop:FUAP:subcong:almost:implies:sub:congruence}
+Let $\simeq$ be the almost equivalence and $\equiv$ be the
+substitution congruence on \pvs, where $V$ is a set. Then for all
+$\pi,\rho\in\pvs$ we have:
+    \[
+    \pi\simeq\rho\ \Rightarrow\ \pi\equiv\rho
+    \]
+\end{prop}
+\begin{proof}
+Let $\pi,\rho\in\pvs$ such that $\pi\simeq\rho$. We need to show
+that $\pi\equiv\rho$. We shall consider the five possible cases of
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}) in
+relation to $\pi\simeq\rho$. Suppose first that $\pi=\phi$ and
+$\rho=\psi$ for some $\phi,\psi\in\pv$ with $\phi\sim\psi$. Then the
+ordered pair $(\pi,\rho)$ belongs to the set $R_{0}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence})
+and in particular $\pi\equiv\rho$. Suppose next that $\pi=\axi\phi$
+and $\rho=\axi\psi$ for some $\phi,\psi\in\pv$ with $\phi\sim\psi$.
+Then the ordered pair $(\pi,\rho)$ belongs to the set $R_{1}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence})
+and in particular $\pi\equiv\rho$. We now assume that
+$\pi=\pi_{1}\pon\pi_{2}$ and $\rho=\rho_{1}\pon\rho_{2}$ where
+$\pi_{1}\equiv\rho_{1}$ and $\pi_{2}\equiv\rho_{2}$. The
+substitution congruence being a congruent relation on \pvs, we
+obtain $\pi\equiv\rho$. Next we assume that $\pi=\gen x\pi_{1}$ and
+$\rho=\gen x\rho_{1}$ where $\pi_{1}\equiv\rho_{1}$ and $x\in\ V$.
+Again, the substitution congruence being a congruent relation we
+obtain $\pi\equiv\rho$. Finally we assume that $\pi=\gen x\pi_{1}$
+and $\rho=\gen y\rho_{1}$ where $x\neq y$,
+$\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and $y\not\in\free(\pi_{1})$. For
+the last time, the substitution congruence being a congruent
+relation we obtain $\rho\equiv\gen y\, \pi_{1}[y\!:\!x]$. Hence in
+order to show $\pi\equiv\rho$ it is sufficient to show that $\gen
+x\pi_{1}\equiv\gen y\,\pi_{1}[y\!:\!x]$ which follows immediately
+from $x\neq y$, $y\not\in\free(\pi_{1})$ and the definition of
+$R_{2}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:subcong:almost:congruent}
+The almost equivalence relation on \pvs\ is congruent.
+\end{prop}
+\begin{proof}
+From proposition~(\ref{logic:prop:FUAP:subcong:almost:reflexive}),
+the almost equivalence $\simeq$ is reflexive and so
+$\axi\phi\simeq\axi\phi$ for all $\phi\in\pv$. We now assume that
+$\pi=\pi_{1}\pon\pi_{2}$ and $\rho=\rho_{1}\pon\rho_{2}$ where
+$\pi_{1}\simeq\rho_{1}$ and $\pi_{2}\simeq\rho_{2}$. We need to show
+that $\pi\simeq\rho$. However from
+proposition~(\ref{logic:prop:FUAP:subcong:almost:implies:sub:congruence})
+we obtain $\pi_{1}\equiv\rho_{1}$ and $\pi_{2}\equiv\rho_{2}$ and it
+follows from
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}) that
+$\pi\simeq\rho$. We now assume that $\pi=\gen x\pi_{1}$ and
+$\rho=\gen x\rho_{1}$ where $\pi_{1}\simeq\rho_{1}$ and $x\in V$. We
+need to show that $\pi\simeq\rho$. Once again from
+proposition~(\ref{logic:prop:FUAP:subcong:almost:implies:sub:congruence})
+we have $\pi_{1}\equiv\rho_{1}$ and consequently from
+definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}) we
+obtain $\pi\simeq\rho$ as requested.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:subcong:almost:congruence}
+The almost equivalence relation on \pvs\ is a congruence.
+\end{prop}
+\begin{proof}
+We need to show that $\simeq$ is reflexive, symmetric, transitive
+and that it is a congruent relation on \pvs. From
+proposition~(\ref{logic:prop:FUAP:subcong:almost:reflexive}), the
+relation~$\simeq$ is reflexive. From
+proposition~(\ref{logic:prop:FUAP:subcong:almost:symmetric}) it is
+symmetric while from
+proposition~(\ref{logic:prop:FUAP:subcong:almost:transitive}) it is
+transitive. Finally from
+proposition~(\ref{logic:prop:FUAP:subcong:almost:congruent}) the
+relation~$\simeq$ is a congruent relation.
+\end{proof}
+
+
+\begin{prop}\label{logic:prop:FUAP:subcong:almost:is:sub:congruence}
+Let $\simeq$ be the almost equivalence and $\equiv$ be the
+substitution congruence on \pvs, where $V$ is a set. For all
+$\pi,\rho\in\pvs$ we have:
+    \[
+    \pi\simeq\rho\ \Leftrightarrow\ \pi\equiv\rho
+    \]
+\end{prop}
+\begin{proof}
+From
+proposition~(\ref{logic:prop:FUAP:subcong:almost:implies:sub:congruence})
+it is sufficient to show the implication $\Leftarrow$ or
+equivalently the inclusion $\equiv\,\subseteq\,\simeq\,$. Since
+$\equiv$ is the substitution congruence on \pvs, it is the smallest
+congruence on \pvs\ which contains the sets $R_{0}$, $R_{1}$ and
+$R_{2}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
+In order to show the inclusion $\equiv\,\subseteq\,\simeq$ it is
+therefore sufficient to show that $\simeq$ is a congruence on \pvs\
+such that $R_{i}\subseteq\,\simeq$ for $i\in 3$. The fact that it is
+a congruence stems from
+proposition~(\ref{logic:prop:FUAP:subcong:almost:congruence}). The
+fact that $R_{i}\subseteq\,\simeq$ for $i\in 3$  follows from
+proposition~(\ref{logic:prop:FUAP:charsubcong:almost:contains:r0:r1:r2}),
+which completes our proof.
+\end{proof}
+
+The almost equivalence~$\simeq$ can now be forgotten. We obtain:
+
+\index{congruence@Charact. of sub. congruence}
+\begin{theorem}\label{logic:the:FUAP:charsubcong:charac}
+Let $\equiv$ be the substitution congruence on \pvs\ where $V$ is a
+set. For all $\pi,\rho\in\pvs$, $\pi\equiv\rho$ \ifand\ one of the
+following is the case:
+    \begin{eqnarray*}
+    (i)&&\pi=\phi\ ,\ \rho=\psi\ ,\ \mbox{for some}\ \phi,\psi\in\pv\ \mbox{and}\ \phi\sim\psi\\
+    (ii)&&\pi=\axi\phi\ ,\ \rho=\axi\psi\ ,\ \mbox{for some}\ \phi,\psi\in\pv\ \mbox{and}\ \phi\sim\psi\\
+    (iii)&&\pi=\pi_{1}\pon\pi_{2}\ ,\ \rho=\rho_{1}\pon\rho_{2}\ ,\
+    \pi_{1}\equiv\rho_{1}\ \mbox{and}\ \pi_{2}\equiv\rho_{2}\\
+    (iv)&&\pi=\gen x\pi_{1}\ ,\ \rho=\gen x\rho_{1}\ \mbox{and}\ \pi_{1}\equiv\rho_{1}\\
+    (v)&&\pi=\gen x\pi_{1}\ ,\ \rho=\gen y\rho_{1}\ ,\ x\neq y\ ,\
+    \rho_{1}\equiv \pi_{1}[y\!:\!x]\ ,\ y\not\in\free(\pi_{1})
+    \end{eqnarray*}
+where $\sim$ denotes the substitution congruence on \pv.
+\end{theorem}
+\begin{proof}
+Immediately follows from
+proposition~(\ref{logic:prop:FUAP:subcong:almost:is:sub:congruence})
+and definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}).
+\end{proof}
+
+We can now prove what we claimed at the beginning of this section:
+if $\sim$ and $\equiv$ denote the substitution congruence on \pv\
+and \pvs\ respectively, then $\phi\sim\psi$ is equivalent to
+$\phi\equiv\psi$. It will no longer be necessary for us to use two
+different notations for the substitution congruence, and we shall
+stick to the familiar $\sim$ going forward. When confronted with the
+equivalence $\phi\sim\psi$, we do not need to worry as to whether
+$\phi$, $\psi$ are regarded as formulas or proofs.
+
+\begin{prop}\label{logic:prop:FUAP:charsubsong:equivalence:formula}
+Let $V$ be a set and $\pi=\phi$, $\rho=\psi$ for some
+$\phi,\psi\in\pv$:
+    \[
+    \pi\equiv\rho\ \Leftrightarrow\ \phi\sim\psi
+    \]
+where $\equiv$ and $\sim$ are the substitution congruence on \pvs\
+and \pv\ respectively.
+\end{prop}
+\begin{proof}
+First we show $\Leftarrow$\,: So we assume that $\phi\sim\psi$. Then
+the ordered pair $(\pi,\rho)$ is an element of the set $R_{0}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
+In particular we have $\pi\equiv\rho$. We now prove $\Rightarrow$\,:
+so we assume that $\pi\equiv\rho$. Using
+theorem~(\ref{logic:the:FUAP:charsubcong:charac}), the only
+possibility with $\pi,\rho\in\pv$ is $(i)$, in which case
+$\phi\sim\psi$ as requested.
+\end{proof}
+
+Given $\phi,\psi\in\pv$, we already knew from
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence})
+that $\axi\phi\equiv\axi\psi$ whenever $\phi\sim\psi$. However, the
+converse was not obvious until now:
+
+\begin{prop}\label{logic:prop:FUAP:charsubsong:equivalence:axiom}
+Let $V$ be a set and $\pi=\axi\phi$, $\rho=\axi\psi$ for some
+$\phi,\psi\in\pv$:
+    \[
+    \pi\equiv\rho\ \Leftrightarrow\ \phi\sim\psi
+    \]
+where $\equiv$ and $\sim$ are the substitution congruence on \pvs\
+and \pv\ respectively.
+\end{prop}
+\begin{proof}
+First we show $\Leftarrow$\,: So we assume that $\phi\sim\psi$. Then
+the ordered pair $(\pi,\rho)$ is an element of the set $R_{1}$ of
+definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
+In particular we have $\pi\equiv\rho$. We now prove $\Rightarrow$\,:
+so we assume that $\pi\equiv\rho$. Using
+theorem~(\ref{logic:the:FUAP:charsubcong:charac}), the only
+possibility with $\pi=\axi\phi$ and $\rho=\axi\psi$ is $(ii)$, in
+which case $\phi\sim\psi$ as requested.
+\end{proof}

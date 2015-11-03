@@ -1,0 +1,348 @@
+We are now able to confront our next objective, that of establishing
+a characterization theorem for the permutation congruence, similar
+to theorem~(\ref{logic:the:sub:congruence:charac}) of
+page~\pageref{logic:the:sub:congruence:charac}. This type of theorem
+has proved very useful in the case of the substitution congruence.
+Whenever $\phi\sim\psi$ it is important to be able to say something
+about the common structure of $\phi$ and $\psi$. For example, if
+$\phi=\phi_{1}\to\phi_{2}$, we want the ability to claim that $\psi$
+is also of the form $\psi=\psi_{1}\to\psi_{2}$. An example of this
+is proposition~(\ref{logic:prop:FOPL:substrank:impl}) establishing
+the formula between substitution ranks
+$\rnk(\phi)=\max(\,|\free(\phi)|\,,\,\rnk(\phi_{1})\,,\,\rnk(\phi_{2})\,)$
+when $\phi=\phi_{1}\to\phi_{2}$. The strategy to prove our
+characterization theorem~(\ref{logic:the:perm:congruence:charac})
+below will follow very closely that of
+theorem~(\ref{logic:the:sub:congruence:charac}). We shall not try to
+be clever: we define a new binary relation on \pv\ which constitutes
+our best guess of what an appropriate characterization should look
+like. We then painstakingly prove that this new relation has all the
+desired properties: it contains the generator of the permutation
+congruence, it is reflexive, symmetric and transitive. It is a
+congruent relation, hence a congruence on \pv\ which is in fact
+equivalent to the permutation congruence.
+
+
+\begin{defin}\label{logic:def:perm:equivalent}
+Let $\sim$ be the permutation congruence on \pv\ where $V$ is a set.
+Let $\phi,\psi\in\pv$. We say that $\phi$ is {\em almost permutation
+equivalent to $\psi$} and we write $\phi\simeq\psi$, \ifand\ one of
+the following is the case:
+    \begin{eqnarray*}
+    (i)&&\phi\in\pvo\ ,\ \psi\in\pvo\ ,\ \mbox{and}\ \phi=\psi\\
+    (ii)&&\phi=\bot\ \mbox{and}\ \psi=\bot\\
+    (iii)&&\phi=\phi_{1}\to\phi_{2}\ ,\ \psi=\psi_{1}\to\psi_{2}\ ,\
+    \phi_{1}\sim\psi_{1}\ \mbox{and}\ \phi_{2}\sim\psi_{2}\\
+    (iv)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\
+    \phi_{1}\sim\psi_{1}\ ,\ x\sim y\in V^{n}\ ,\ n\geq 1
+    \end{eqnarray*}
+where it is understood that $\phi_{1}$ and $\psi_{1}$ are
+irreducible in $(iv)$, and $x\sim y$ refers to the permutation
+equivalence on $V^{n}$ as per {\em
+definition~(\ref{logic:def:permutation:equivalence:vn})}.
+\end{defin}
+\begin{prop}
+$(i),(ii),(iii),(iv)$ of {\em
+definition~(\ref{logic:def:perm:equivalent})} are mutually
+exclusive.
+\end{prop}
+\begin{proof}
+This is an immediate consequence of
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} applied to the free
+universal algebra \pv\ with free generator \pvo, where a formula
+$\phi\in\pv$ is either an element of \pvo, or the contradiction
+constant $\phi=\bot$, or an implication $\phi=\phi_{1}\to\phi_{2}$,
+or a quantification $\phi=\forall x\phi_{1}$, but cannot be equal to
+any two of those things simultaneously. Note that we are requesting
+that $n\geq 1$ in $(iv)$ of
+definition~(\ref{logic:def:perm:equivalent}), so $\phi=\forall
+x\phi_{1}$ and $\psi=\forall y\psi_{1}$ are indeed quantifications
+when $(iv)$ is the case.
+\end{proof}
+
+\begin{prop}\label{logic:prop:perm:contains:r0}
+Let $\simeq$ be the almost permutation equivalence on \pv\ where $V$
+is a set. Then $\simeq$ contains the generator $R_{0}$ of {\em
+definition~(\ref{logic:def:perm:congruence})}.
+\end{prop}
+\begin{proof}
+Let $x,y\in V$ and $\phi_{1}\in\pv$. Let $\phi=\forall x\forall
+y\phi_{1}$ and $\psi=\forall y\forall x\phi_{1}$. We need to show
+that $\phi\simeq\psi$. From
+proposition~(\ref{logic:prop:irreducible:formula}), there exist
+$n\in\N$,  $z\in V^{n}$ and $\theta_{1}$ irreducible such that
+$\phi_{1}=\forall z\theta_{1}$. Consider the map $u:(n+2)\to V$
+defined by $u_{|n}=z$, $u(n)=y$ and $u(n+1)=x$. Then we have:
+    \[
+    \phi=\forall x\forall y\phi_{1}=\forall u(n+1)\,\forall
+    u(n)\,\forall u_{|n}\,\theta_{1}
+    =\forall u(n+1)\,\forall u_{|n+1}\,\theta_{1}=\forall u\theta_{1}
+    \]
+Consider the map $v:(n+2)\to V$ defined by $v=u\circ[n:n+1]$. Then
+$v_{|n}=z$, $v(n)=x$ and $v(n+1)=y$ and it follows similarly that
+$\psi=\forall y\forall x\phi_{1}=\forall v\theta_{1}$. Hence, we
+have found $\theta_{1}$ irreducible, $u,v\in V^{n+2}$ with $u\sim v$
+such that $\phi=\forall u\theta_{1}$ and $\psi=\forall v\theta_{1}$.
+From $(iv)$ of definition~(\ref{logic:def:perm:equivalent}) we
+conclude that $\phi\simeq\psi$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:perm:reflexive}
+Let $\simeq$ be the almost permutation equivalence on \pv\ where $V$
+is a set. Then $\simeq$ is a reflexive relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi\in\pv$. We need to show that $\phi\simeq\phi$. From
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we know that $\phi$
+is either an element of \pvo, or $\phi=\bot$ or
+$\phi=\phi_{1}\to\phi_{2}$ or $\phi=\forall x\phi_{1}$ for some
+$\phi_{1},\phi_{2}\in\pv$ and $x\in V$. We shall consider these four
+mutually exclusive cases separately. Suppose first that
+$\phi\in\pvo$: then from $\phi=\phi$ we obtain $\phi\simeq\phi$.
+Suppose next that $\phi=\bot$: then it is clear that
+$\phi\simeq\phi$. Suppose now that $\phi=\phi_{1}\to\phi_{2}$. Since
+the permutation congruence $\sim$ is reflexive, we have
+$\phi_{1}\sim\phi_{1}$ and $\phi_{2}\sim\phi_{2}$. It follows from
+$(iii)$ of definition~(\ref{logic:def:perm:equivalent}) that
+$\phi\simeq\phi$. Suppose finally that $\phi=\forall x\phi_{1}$.
+From proposition~(\ref{logic:prop:irreducible:formula}), there exist
+$n\in\N$, $z\in V^{n}$ and $\theta_{1}$ irreducible such that
+$\phi_{1}=\forall z\theta_{1}$. Consider the map $u:(n+1)\to V$
+defined by $u_{|n}=z$ and $u(n)=x$. Then we have:
+    \[
+    \phi=\forall x\phi_{1}=\forall x\forall z\,\theta_{1}=\forall
+    u(n)\,\forall u_{|n}\,\theta_{1}=\forall u\theta_{1}
+    \]
+Since $\theta_{1}$ is irreducible, $\theta_{1}\sim\theta_{1}$ and
+$u\sim u$, we conclude from $(iv)$ of
+definition~(\ref{logic:def:perm:equivalent}) that $\phi\simeq\phi$.
+\end{proof}
+\begin{prop}\label{logic:prop:perm:symmetric}
+Let $\simeq$ be the almost permutation equivalence on \pv\ where $V$
+is a set. Then $\simeq$ is a symmetric relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi,\psi\in\pv$ be such that $\phi\simeq\psi$. We need to show
+that $\psi\simeq\phi$. We shall consider the four possible cases of
+definition~(\ref{logic:def:perm:equivalent}): suppose first that
+$\phi\in\pvo$, $\psi\in\pvo$ and $\phi=\psi$. Then it is clear that
+$\psi\simeq\phi$. Suppose next that $\phi=\bot$ and $\psi=\bot$.
+Then we also have $\psi\simeq\phi$. We now assume that
+$\phi=\phi_{1}\to\phi_{2}$ and $\psi=\psi_{1}\to\psi_{2}$ with
+$\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$. Since the
+permutation congruence on \pv\ is symmetric, we have
+$\psi_{1}\sim\phi_{1}$ and $\psi_{2}\sim\phi_{2}$. Hence we have
+$\psi\simeq\phi$. We now assume that $\phi=\forall x\phi_{1}$ and
+$\psi=\forall y\psi_{1}$ with $\phi_{1}\sim\psi_{1}$ and
+$\phi_{1},\psi_{1}$ irreducible, $x\sim y\in V^{n}$ and $n\geq 1$.
+Then once again by symmetry of the permutation congruence we have
+$\psi_{1}\sim\phi_{1}$ and furthermore $y\sim x$. It follows that
+$\psi\simeq\phi$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:perm:transitive}
+Let $\simeq$ be the almost permutation equivalence on \pv\ where $V$
+is a set. Then $\simeq$ is a transitive relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi,\psi$ and $\chi\in\pv$ be such that $\phi\simeq\psi$ and
+$\psi\simeq\chi$. We need to show that $\phi\simeq\chi$. We shall
+consider the four possible cases of
+definition~(\ref{logic:def:perm:equivalent}) in relation to
+$\phi\simeq\psi$. Suppose first that $\phi,\psi\in\pvo$ and
+$\phi=\psi$. Then from $\psi\simeq\chi$ we obtain $\psi,\chi\in\pvo$
+and $\psi=\chi$. It follows that $\phi,\chi\in\pvo$ and $\phi=\chi$.
+Hence we see that $\phi\simeq\chi$. We now assume that
+$\phi=\psi=\bot$. Then from $\psi\simeq\chi$ we obtain
+$\psi=\chi=\bot$. It follows that $\phi=\chi=\bot$ and consequently
+$\phi\simeq\chi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$ and
+$\psi=\psi_{1}\to\psi_{2}$ with $\phi_{1}\sim\psi_{1}$ and
+$\phi_{2}\sim\psi_{2}$. From $\psi\simeq\chi$ we obtain
+$\chi=\chi_{1}\to\chi_{2}$ with $\psi_{1}\sim\chi_{1}$ and
+$\psi_{2}\sim\chi_{2}$. The permutation congruence being transitive,
+it follows that $\phi_{1}\sim\chi_{1}$ and $\phi_{2}\sim\chi_{2}$.
+Hence we see that $\phi\simeq\chi$. We now assume that $\phi=\forall
+x\phi_{1}$ and $\psi=\forall y\psi_{1}$ with $\phi_{1}\sim\psi_{1}$,
+and $\phi_{1},\psi_{1}$ irreducible, $x\sim y\in V^{n}$ and $n\geq
+1$. Since $n\geq 1$, from $\psi\simeq\chi$ only the case $(iv)$ of
+definition~(\ref{logic:def:perm:equivalent}) is possible.
+Furthermore from proposition~(\ref{logic:prop:irreducible:formula}),
+the representation $\psi=\forall y\psi_{1}$ with $\psi_{1}$
+irreducible is unique. It follows that $\chi=\forall z\chi_{1}$ with
+$\psi_{1}\sim\chi_{1}$ irreducible and $y\sim z\in V^{n}$. The
+permutation congruence being transitive, we obtain
+$\phi_{1}\sim\chi_{1}$. Furthermore, also by transitivity we obtain
+$x\sim z$ and we conclude that $\phi\simeq\chi$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:perm:implies:perm:congruence}
+Let $\simeq$ be the almost permutation equivalence and $\sim$ be the
+permutation congruence on \pv, where $V$ is a set. For all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\simeq\psi\ \Rightarrow\ \phi\sim\psi
+    \]
+\end{prop}
+\begin{proof}
+Let $\phi,\psi\in\pv$ such that $\phi\simeq\psi$. We need to show
+that $\phi\sim\psi$. We shall consider the four possible cases of
+definition~(\ref{logic:def:perm:equivalent}) in relation to
+$\phi\simeq\psi$. Suppose first that $\phi=\psi\in\pvo$. From the
+reflexivity of the permutation congruence, it is clear that
+$\phi\sim\psi$. Suppose next that $\phi=\psi=\bot$. Then we also
+have $\phi\sim\psi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$
+and $\psi=\psi_{1}\to\psi_{2}$ where $\phi_{1}\sim\psi_{1}$ and
+$\phi_{2}\sim\psi_{2}$. The permutation congruence being a congruent
+relation on \pv, we obtain $\phi\sim\psi$. Next we assume that
+$\phi=\forall x\phi_{1}$ and $\psi=\forall y\psi_{1}$ where
+$\phi_{1}\sim\psi_{1}$ and $\phi_{1},\psi_{1}$ are irreducible,
+$x\sim y\in\ V^{n}$ and $n\geq 1$. The permutation congruence being
+a congruent relation on \pv, from
+proposition~(\ref{logic:prop:iterated:congruence}) and
+$\phi_{1}\sim\psi_{1}$ we obtain $\forall y\phi_{1}\sim\forall
+y\psi_{1}$. Hence by transitivity of the permutation congruence, it
+remains to show that $\forall x\phi_{1}\sim \forall y\phi_{1}$ which
+follows immediately from $x\sim y$ and
+proposition~(\ref{logic:prop:iterated:permutation}).
+\end{proof}
+
+\begin{prop}\label{logic:prop:perm:congruent}
+Let $\simeq$ be the almost permutation equivalence on \pv\ where $V$
+is a set. Then $\simeq$ is a congruent relation on \pv.
+\end{prop}
+\begin{proof}
+From proposition~(\ref{logic:prop:perm:reflexive}), the almost
+permutation equivalence $\simeq$ is reflexive and so
+$\bot\simeq\bot$. We now assume that $\phi=\phi_{1}\to\phi_{2}$ and
+$\psi=\psi_{1}\to\psi_{2}$ where $\phi_{1}\simeq\psi_{1}$ and
+$\phi_{2}\simeq\psi_{2}$. We need to show that $\phi\simeq\psi$.
+However from
+proposition~(\ref{logic:prop:perm:implies:perm:congruence}) we have
+$\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$ and it follows
+from definition~(\ref{logic:def:perm:equivalent}) that
+$\phi\simeq\psi$. We now assume that $\phi=\forall x\phi_{1}$ and
+$\psi=\forall x\psi_{1}$ where $\phi_{1}\simeq\psi_{1}$ and $x\in
+V$. We need to show that $\phi\simeq\psi$. Once again from
+proposition~(\ref{logic:prop:perm:implies:perm:congruence}) we have
+$\phi_{1}\sim\psi_{1}$. We shall now distinguish two cases in
+relation to $\phi_{1}\simeq\psi_{1}$. First we assume that $(i)$
+$(ii)$ or $(iii)$ of definition~(\ref{logic:def:perm:equivalent}) is
+the case. Then both $\phi_{1}$ and $\psi_{1}$ are irreducible.
+Defining $x^{*}:1\to V$ by setting $x^{*}(0)=x$ we obtain:
+    \[
+    \phi=\forall x\phi_{1}=\forall x^{*}(0)\,\phi_{1}=\forall x^{*}\phi_{1}
+    \]
+and similarly $\psi=\forall x^{*}\psi_{1}$. From $\phi_{1},\psi_{1}$
+irreducible and $\phi_{1}\sim\psi_{1}$ we conclude that
+$\phi\simeq\psi$. We now assume that $(iv)$ of
+definition~(\ref{logic:def:perm:equivalent}) is the case. Then
+$\phi_{1}=\forall u\phi_{1}^{*}$ and $\psi_{1}=\forall
+v\psi_{1}^{*}$ where $\phi_{1}^{*}\sim\psi_{1}^{*}$ and
+$\phi_{1}^{*}$, $\psi_{1}^{*}$ are irreducible, $u\sim v\in V^{n}$
+and $n\geq 1$. Defining $u^{*}:(n+1)\to V$ by setting $u^{*}_{|n}=u$
+and $u^{*}(n)=x$ we obtain:
+    \[
+    \phi=\forall x\phi_{1}=\forall x\forall u\phi_{1}^{*}=\forall
+    u^{*}(n)\forall u^{*}_{|n}\,\phi_{1}^{*}=\forall u^{*}\phi_{1}^{*}
+    \]
+and similarly $\psi=\forall v^{*}\psi_{1}^{*}$ where $v:(n+1)\to V$
+is defined by $v^{*}_{|n}=v$ and $v^{*}(n)=x$. Since $\phi_{1}^{*},
+\psi_{1}^{*}$ are irreducible and $\phi_{1}^{*}\sim\psi_{1}^{*}$, in
+order to show that $\phi\simeq\psi$ it is sufficient to prove that
+$u^{*}\sim v^{*}$. However since $u\sim v$, there exists a
+permutation $\sigma:n\to n$ of order $n$ such that $v=u\circ\sigma$.
+Defining $\sigma^{*}:(n+1)\to (n+1)$ by $\sigma^{*}_{|n}=\sigma$ and
+$\sigma^{*}(n)=n$ we obtain a permutation of order $n+1$ such that
+$v^{*}=u^{*}\circ\sigma^{*}$.
+\end{proof}
+\begin{prop}\label{logic:prop:perm:congruence}
+Let $\simeq$ be the almost permutation equivalence on \pv\ where $V$
+is a set. Then $\simeq$ is a congruence on \pv.
+\end{prop}
+\begin{proof}
+We need to show that $\simeq$ is reflexive, symmetric, transitive
+and that it is a congruent relation on \pv. From
+proposition~(\ref{logic:prop:perm:reflexive}), the relation~$\simeq$
+is reflexive. From proposition~(\ref{logic:prop:perm:symmetric}) it
+is symmetric while from
+proposition~(\ref{logic:prop:perm:transitive}) it is transitive.
+Finally from proposition~(\ref{logic:prop:perm:congruent}) the
+relation~$\simeq$ is a congruent relation.
+\end{proof}
+
+
+\begin{prop}\label{logic:prop:perm:is:perm:congruence}
+Let $\simeq$ be the almost permutation equivalence and $\sim$ be the
+permutation congruence on \pv, where $V$ is a set. For all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\simeq\psi\ \Leftrightarrow\ \phi\sim\psi
+    \]
+\end{prop}
+\begin{proof}
+From proposition~(\ref{logic:prop:perm:implies:perm:congruence}) it
+is sufficient to show the implication $\Leftarrow$ or equivalently
+the inclusion $\sim\,\subseteq\,\simeq\,$. Since $\sim$ is the
+permutation congruence on \pv, it is the smallest congruence on \pv\
+which contains the set $R_{0}$ of
+definition~(\ref{logic:def:perm:congruence}). In order to show the
+inclusion $\sim\,\subseteq\,\simeq$ it is therefore sufficient to
+show that $\simeq$ is a congruence on \pv\ such that
+$R_{0}\subseteq\,\simeq$. The fact that it is a congruence stems
+from proposition~(\ref{logic:prop:perm:congruence}). The fact that
+$R_{0}\subseteq\,\simeq$ follows from
+proposition~(\ref{logic:prop:perm:contains:r0}).
+\end{proof}
+
+Recall that {\em irreducible} formulas are defined in
+page~\pageref{logic:def:irreducible:formula}. We can now forget
+about the {\em almost permutation equivalence} and simply remember
+the following characterization of the permutation congruence on
+\pv\,:
+\index{congruence@Charact. of perm. congruence}
+\begin{theorem}\label{logic:the:perm:congruence:charac}
+Let $\sim$ be the permutation congruence on \pv\ where $V$ is a set.
+For all $\phi,\psi\in\pv$, $\phi\sim\psi$ \ifand\ one of the
+following is the case:
+    \begin{eqnarray*}
+    (i)&&\phi\in\pvo\ ,\ \psi\in\pvo\ ,\ \mbox{and}\ \phi=\psi\\
+    (ii)&&\phi=\bot\ \mbox{and}\ \psi=\bot\\
+    (iii)&&\phi=\phi_{1}\to\phi_{2}\ ,\ \psi=\psi_{1}\to\psi_{2}\ ,\
+    \phi_{1}\sim\psi_{1}\ \mbox{and}\ \phi_{2}\sim\psi_{2}\\
+    (iv)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\
+    \phi_{1}\sim\psi_{1}\ ,\ x\sim y\in V^{n}\ ,\ n\geq 1
+    \end{eqnarray*}
+where $x\sim y$ refers to the permutation equivalence on $V^{n}$ as
+per {\em definition~(\ref{logic:def:permutation:equivalence:vn})}.
+Furthermore, we may assume that $\phi_{1}$ and $\psi_{1}$ are
+irreducible in $(iv)$.
+\end{theorem}
+\begin{proof}
+First we show the implication $\Rightarrow$. So we assume that
+$\phi\sim\psi$. We need to show that $(i)$, $(ii)$, $(iii)$ or
+$(iv)$ is the case. However from
+proposition~(\ref{logic:prop:perm:is:perm:congruence}) we have
+$\phi\simeq\psi$. It follows from
+definition~(\ref{logic:def:perm:equivalent}) that $(i)$, $(ii)$,
+$(iii)$ or $(iv)$ is indeed the case with $\phi_{1}$ and $\psi_{1}$
+irreducible in the case of $(iv)$. We now show the reverse
+implication $\Leftarrow$. So we assume that $(i)$, $(ii)$, $(iii)$
+or $(iv)$  is the case. We need to show that $\phi\sim\psi$. We
+shall distinguish two cases. First we assume that $(i)$, $(ii)$ or
+$(iii)$ is the case. Then from
+definition~(\ref{logic:def:perm:equivalent}) we obtain
+$\phi\simeq\psi$ and consequently from
+proposition~(\ref{logic:prop:perm:is:perm:congruence}) we have
+$\phi\sim\psi$. We now assume that $(iv)$ is the case. Then from
+proposition~(\ref{logic:prop:iterated:congruence}) and
+$\phi_{1}\sim\psi_{1}$ we obtain $\forall x\phi_{1}\sim\forall
+x\psi_{1}$. Furthermore, from
+proposition~(\ref{logic:prop:iterated:permutation}) and $x\sim y$ we
+obtain $\forall x\psi_{1}\sim\forall y\psi_{1}$. By transitivity of
+the permutation congruence, we conclude that:
+    \[
+    \phi=\forall x\phi_{1}\sim\forall y\psi_{1}=\psi
+    \]
+\end{proof}

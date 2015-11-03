@@ -1,0 +1,107 @@
+Using
+proposition~(\ref{logic:prop:FUAP:validsubtotclean:valuation:commute}),
+we obtained
+proposition~(\ref{logic:prop:FUAP:validsubtotclean:sequent})
+allowing us to carry over sequents from $\Gamma\vdash\phi$ to
+$\sigma(\Gamma)\vdash\sigma(\phi)$ in the case when $\sigma:V\to W$
+is an injective map. There is only so much we can do with
+proposition~(\ref{logic:prop:FUAP:validsubtotclean:valuation:commute}).
+The equality $\val\circ\sigma(\pi)=\sigma\circ\val(\pi)$ cannot be
+inferred from it, unless $\sigma$ is valid for $\pi$. In general, we
+have no way to tell whether a substitution $\sigma$ is valid for a
+proof $\pi$ underlying the sequent $\Gamma\vdash\phi$. We do not
+know which axioms are being used in the proof, simply by looking at
+the sequent. We need a whole new strategy.
+
+We have dealt with this problem before. Given a map $\sigma:V\to W$
+and a formula $\phi\in\pv$, we wanted to define a formula
+$\sigma(\phi)$ which is meaningful even in the case when $\sigma$ is
+not valid for $\phi$. Our solution was to introduce the minimal
+transform ${\cal M}(\phi)$ of
+definition~(\ref{logic:def:FOPL:mintransform:transform}) and
+consider the formula $\bar{\sigma}\circ{\cal M}(\phi)$ where all the
+free variables of $\phi$ are carried over by $\sigma$ while avoiding
+capture. Likewise, given a map $\sigma:V\to W$ which may not be
+valid for the proof $\pi\in\pvs$, we want to define a proof
+$\sigma(\pi)$ which is meaningful even when $\sigma$ is not valid
+for $\pi$. By {\em meaningful}, it is understood that the key
+equality $\val\circ\sigma(\pi)=\sigma\circ\val(\pi)$ should be
+satisfied. Of course, we also need to say something about the set of
+hypothesis $\hyp(\sigma(\pi))$ but this is usually a lot easier to
+achieve. So here is the plan: we should define the minimal transform
+${\cal M}(\pi)$ which replaces all the bound variables of $\pi$ by
+elements of a copy of \N\ which is disjoint from $V$, and consider
+the proof $\bar{\sigma}\circ{\cal M}(\pi)$ in the hope that such a
+proof will have the right property, as the variable substitution
+will avoid capture. Recall that $\bar{\sigma}:\bar{V}\to\bar{W}$ is
+the minimal extension of $\sigma$ as per
+definition~(\ref{logic:def:FOPL:commute:minextensioon:map}). When
+attempting to define the minimal transform ${\cal M}(\pi)$, the
+obvious choice appears to set ${\cal M}(\pi)={\cal M}(\phi)$
+whenever $\pi=\phi$, ${\cal M}(\axi\phi)=\axi{\cal M}(\phi)$, ${\cal
+M}(\pi_{1}\pon\pi_{2})={\cal M}(\pi_{1})\pon\,{\cal M}(\pi_{2})$
+and:
+    \[
+    {\cal M}(\gen x\pi_{1})=\gen n{\cal M}(\pi_{1})[n/x]
+    \]
+where $n=\min\{k\in\N:\mbox{$[k/x]$ valid for ${\cal
+M}(\pi_{1})$}\}$. So let us look at an example:
+    \[
+    \Tree[.$\gen y$ [.$\pon$ [.$\gen x$ $\axi\phi_{1}$ ]
+    $\axi(\forall x\phi_{1}\to\phi_{1}[y/x])$ ] ]
+    \]
+where $\phi_{1}\in\av$ is any axiom of first order logic and
+$[y/x]:\pv\to\pv$ is an essential substitution of $y$ in place of
+$x$. To make our discussion simpler, let us define the map
+$\phi:V\times V\to\av$ by setting $\phi(x,y)=\bot\to(\,(x\in
+y)\to\bot\,)$ and pick $\phi_{1}=\phi(x,y)$ for some $x\neq y$. Then
+$\phi_{1}[y/x]=\phi(y,y)$. Our proof is:
+    \[
+    \Tree[.$\gen y$ [.$\pon$ [.$\gen x$ $\axi\phi(x,y)$ ]
+    $\axi(\forall x\phi(x,y)\to\phi(y,y))$ ] ]
+    \]
+which can be expressed as $\pi=\gen y[\,\gen
+x\axi\phi(x,y)\pon\,\axi(\,\forall x\phi(x,y)\to\phi(y,y)\, )\,]$.
+This is arguably less readable than the tree representation. So
+${\cal M}(\pi)$ becomes:
+    \[
+    \Tree[.$\gen\,1$ [.$\pon$ [.$\gen\,0$ $\axi\phi(0,1)$ ]
+    $\axi(\forall\,0\phi(0,1)\to\phi(1,1))$ ] ]
+    \]
+The key observation in this case is that $[0/y]$ is not valid for
+the proof:
+    \[
+    \Tree[.$\pon$ [.$\gen\,0$ $\axi\phi(0,y)$ ]
+    $\axi(\forall\,0\phi(0,y)\to\phi(y,y))$ ]
+    \]
+and consequently the variable $y$ had to be replaced by $1$ instead
+of $0$. Now it appears that the conclusion of ${\cal M}(\pi)$ is the
+formula $\val\circ{\cal M}(\pi)=\forall\,1\phi(1,1)$, while the
+conclusion of $\pi$ is the formula $\val(\pi)=\forall y\phi(y,y)$.
+It follows that ${\cal M}\circ\val(\pi)=\forall\,0\phi(0,0)$ and we
+are met with the fact that:
+    \[
+    \val\circ{\cal M}(\pi)\neq{\cal M}\circ\val(\pi)
+    \]
+This is hugely disappointing. The conclusion of ${\cal M}(\pi)$ is
+not what we want it to be. Our plan is going to fail. However, it
+should be noted that $\forall\,0\phi(0,0)$ and $\forall\,1\phi(1,1)$
+are equivalent modulo the substitution congruence $\sim$ and thus:
+    \[
+    \val\circ{\cal M}(\pi)\sim{\cal M}\circ\val(\pi)
+    \]
+It may be that this equivalence is true at all times. It may also be
+sufficient for our purpose to carry over sequents
+$\Gamma\vdash\phi$. Our tentative definition of minimal transform
+for proofs may be appropriate after all. Unfortunately, this is
+seemingly not the case: consider the proof
+$\rho=\pi\pon\,\axi(\forall y\phi(y,y)\to\phi(x,x))$. From
+$\val(\pi)=\forall y\phi(y,y)$ we obtain $\val(\rho)=\phi(x,x)$.
+Hence ${\cal M}\circ\val(\rho)=\phi(x,x)$. In contrast we have
+${\cal M}(\rho)={\cal
+M}(\pi)\pon\,\axi(\forall\,0\phi(0,0)\to\phi(x,x))$. From the
+equality $\val\circ{\cal M}(\pi)=\forall\,1\phi(1,1)$ we see that
+${\cal M}(\rho)$ is not a legitimate application of the modus ponens
+rule of inference and consequently $\val\circ{\cal
+M}(\rho)=\bot\to\bot$. Thus, the equivalence $\val\circ{\cal
+M}(\rho)\sim{\cal M}\circ\val(\rho)$ is not even satisfied.

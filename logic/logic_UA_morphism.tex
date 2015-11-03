@@ -1,0 +1,95 @@
+Recall that if $f$ and $g$ are both maps then $g\circ f$ is the set
+of ordered pairs:
+    \[
+    g\circ f=\{(x,z):\exists y, (x,y)\in f\mbox{\ and\ } (y,z)\in g\}
+    \]
+It is easy to check that $g\circ f$ is also a map, namely that
+$z=z'$ whenever both $(x,z)$ and $(x,z')$ are elements of $g\circ
+f$.
+
+Let $g:A\to B$ be a map. Then for all $x\in A$, it is a well
+established convention to denote $g(x)$ the unique element of $B$
+such that $(x,g(x))\in g$. Now if $n\in\N$, we can define a map
+$g^{n}:A^{n}\to B^{n}$ by setting:
+     \[
+     g^{n}(x_{0},\ldots,x_{n-1}) = (g(x_{0}),\ldots,g(x_{n-1}))
+     \]
+     or more rigorously:
+    \[
+    \forall x\in A^{n}\ ,\ \forall i\in n\ ,\ g^{n}(x)(i)=g(x(i))
+    \]
+Note that if $n=0$, then $g^{0}:A^{0}\to B^{0}$ is the map
+$g^{0}:\{0\}\to\{0\}$. There is only one such map, defined by
+$g^{0}(0)= 0$ or $g^{0}=\{(0,0)\}$. If $n=1$,  then $g^{1}:A^{1}\to
+B^{1}$ is the map defined by $g^{1}(\{(0,x)\})=\{(0,g(x))\}$ for all
+$x\in A$. Anyone being confused by this last statement should
+remember that $\{(0,x)\}$ is simply the map $f:\{0\}\to A$ defined
+by $f(0)=x$ which is an element of $A^{1}$ not fundamentally
+different from the constant $x\in A$. Likewise $\{(0,g(x))\}$ is
+simply the map $f:\{0\}\to B$ defined by $f(0)=g(x)$ which is an
+element of $B^{1}$ not fundamentally different from $g(x)\in B$.
+From now, whenever it is clear from the context that $x\in A^{n}$
+rather than $x\in A$, we shall write $g(x)$ rather than $g^{n}(x)$.
+\index{morphism@Morphism of universal algebra}
+\begin{defin}\label{logic:def:morphism}
+Let $X$ and $Y$ be universal algebras of type $\alpha$. We say that
+a map $g:X\to Y$ is a {\em morphism} or {\em homomorphism}, \ifand:
+    \[
+    \forall f\in\alpha\ ,\ \forall x\in X^{\alpha(f)}\ ,\
+    g\circ f(x) = f\circ g(x)
+    \]
+\end{defin}
+With stricter notations, given two universal algebras $(X,T)$ and
+$(Y,S)$ of type $\alpha$, a map $g:X\to Y$ is a morphism, \ifand:
+    \[
+     \forall f\in\alpha\ ,\ \forall x\in X^{\alpha(f)}\ ,\
+    g\circ T(f)(x) = S(f)\circ g^{\alpha(f)}(x)
+    \]
+Suppose $\alpha=\{(0,0),(1,2),(1,1)\}$ and let $X,Y$ be universal
+algebras of type $\alpha$. For example, let us assume that $X$ and
+$Y$ are groups. We have three operators\footnote{$T$ is a map with
+domain $\alpha$. The notation $T(0,0)$ is a shortcut for
+$T((0,0))$.} $T(0,0):\{0\}\to X$, $T(1,2):X^{2}\to X$ and
+$T(1,1):X^{1}\to X$. To simplify notations, for all $x,y\in X$, let
+us define $e\in X$, $x\otimes y$ and $x^{-1}$ as:\footnote{ Here is
+an example when '$(x,y)$' does not really mean $(x,y)$ in $x\otimes
+y=T(1,2)(x,y)$. Instead, $(x,y)$ is a notational shortcut for the
+element $f\in X^{2}$ defined by $f=\{(0,x),(1,y)\}$. Equivalently,
+$f$ is the map $f:2\to X$ defined by $f(0)=x$ and $f(1)=y$.
+Similarly '$x$' does not really mean $x$ in $T(2,1)(x)$, but is
+rather a notational shortcut for the element $f\in X^{1}$ defined by
+$f=\{(0,x)\}$. Equivalently, $f$ is the map $f:1\to X$ defined by
+$f(0)=x$.}
+    \[
+        e=T(0,0)(0)\ ,\  x\otimes y=T(1,2)(x,y)\ ,\ x^{-1}=T(2,1)(x)
+    \]
+Adopting similar conventions for the universal algebra $Y$, the
+first condition required for a map $g:X\to Y$ to be a morphism can
+be expressed as:
+    \[
+    g(e) = g\circ T(0,0)(0) = T(0,0)\circ g^{0}(0) = T(0,0)(0) = e
+    \]
+While the second is, for all $x,y\in X$:
+    \[
+    g(x\otimes y) = g\circ T(1,2)(x,y) = T(1,2)\circ g^{2}(x,y) = T(1,2)\circ (g(x),g(y))=g(x)\otimes g(y)
+    \]
+Finally the last condition is, for all $x\in X$:
+    \[
+    g(x^{-1}) = g\circ T(2,1)(x)= T(2,1)\circ g^{1}(x) = T(2,1)\circ g(x) = g(x)^{-1}
+    \]
+It follows that $g:X\to Y$ is a morphism, \ifand\ for all $x,y\in X$:
+    \[
+    g(e)=e\ ,\ g(x\otimes y)=g(x)\otimes g(y)\ ,\ g(x^{-1})=g(x)^{-1}
+    \]
+In particular, we see that a morphism (of universal algebra of type
+$\alpha$) is no different from {\em group morphism} whenever $X$ and
+$Y$ are groups.
+\begin{prop}
+Let $X$, $Y$ and $Z$ be universal algebras of type $\alpha$. If
+$g:X\to Y$ and $g':Y\to Z$ are morphisms, then $g'\circ g:X\to Z$ is
+also a morphism.
+\end{prop}
+\begin{proof}
+For all $f\in\alpha$ and $x\in X^{\alpha(f)}$ we have $g'\circ
+g\circ f(x)=g'\circ f\circ g(x)=f\circ\, g'\circ g(x)$.
+\end{proof}

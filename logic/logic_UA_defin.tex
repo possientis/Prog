@@ -1,0 +1,36 @@
+\index{UA@Universal algebra}\index{alpha@$\alpha\,$: a type of
+universal algebra}
+\begin{defin}\label{logic:def:universal:algebra}
+Let $\alpha$ be a type of universal algebra. A {\em Universal
+Algebra} of type $\alpha$ is an ordered pair $(X,T)$ where $X$ is a
+set and $T$ is a map with domain $\alpha$, such that for
+$f\in\alpha$ we have $T(f):X^{\alpha(f)}\to X$.
+\end{defin}
+In fact there is no need to keep writing $T(f)$ or $(X,T)$ when
+everything is clear from the context. If $X$ is a universal algebra
+of type $\alpha$, then for all $f\in\alpha$ we have the operator
+$f:X^{\alpha(f)}\to X$, also denoted '$f$'. Of course, if $X$ and
+$Y$ are two universal algebras of type $\alpha$, then
+$f:X^{\alpha(f)}\to X$ and $f:Y^{\alpha(f)}\to Y$ are different sets
+in general. One is $T(f)$ where $(X,T)$ is the first universal
+algebra referred to as '$X$', while the other is $S(f)$ where
+$(Y,S)$ is the second universal algebra referred to as '$Y$'.
+
+If $\alpha$ is the empty set, then $T$ is a map with empty domain,
+i.e. the empty set itself. So $(X,\emptyset)$ is a universal algebra
+of empty type for any set $X$, which is not very different from the
+set $X$ itself. A universal algebra of empty type is therefore a set
+with no structure. If $\alpha$ is not an empty type of universal
+algebra, then $T$ has a non-empty domain and therefore cannot be
+empty. So there is at least one operator $T(f):X^{\alpha(f)}\to X$.
+If $X$ is the empty set then we must have $\alpha(f)\geq 1$, as
+there is no map $T(f):\{0\}\to\emptyset$. In other words, there
+cannot be any constant in an empty universal algebra, as we should
+expect. Furthermore, any $T(f):X^{\alpha(f)}\to X$ is in fact the
+empty map $\emptyset:\emptyset\to\emptyset$. In summary, if $\alpha$
+is a type of universal algebra with constants (i.e. $\alpha(f)=0$
+for some $f\in\alpha$), then no universal algebra of type $\alpha$
+can be empty, while if $\alpha$ has no constant (i.e. $\alpha(f)\geq
+1$ for all $f\in\alpha$), then the only empty universal algebra of
+type $\alpha$ is $(\emptyset,T)$ where $T(f)=\emptyset$ for all
+$f\in\alpha$. So much for confronting the fear of the empty set.

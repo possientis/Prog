@@ -107,17 +107,23 @@
 (define (stream-map proc . xs)
   (set! global-count (+ global-count 1))
   (if (>= global-count 10) (exit))
-  (display "inside\n")
   (if (null? xs) (stream) ; returns empty stream, no second argument provided
     ; else
     (if ((car xs) 'null?) ; All streams should have same size. Testing first.
       (stream)            ; empty stream
       ; else
-        (let ((heads (map (lambda (s) (s 'car)) xs))
-              (tails (map (lambda (s) (s 'cdr)) xs)))
+      (begin
+        (display "debug start:\n")
+        (let ((heads (map (lambda (s) (s 'car)) xs)))
+          (display "I am here after heads\n")
+          (display "heads = ")(display heads)(newline)
+          (display "xs = (x1 x2) where\n")
+          (display "x1 = ")(if(eq? ones(car xs))(display "ones\n")(display "?\n"))
+          (display "x2 = ")(if(eq? test(cadr xs))(display "test\n")(display "?\n"))
+          (let ((tails (map (lambda (s) (s 'cdr)) xs)))
           (display "I am here\n")
           (stream-cons (apply proc heads)
-                       (apply stream-map (cons proc tails)))))))
+                       (apply stream-map (cons proc tails)))))))))
 
 (define (stream->list s)  ; will fail badly if stream is infinite
   (if (s 'null?)

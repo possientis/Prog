@@ -1,0 +1,354 @@
+Having created a sensible consequence relation $\vdash\,\subseteq
+{\cal P}(\pv)\times\pv$ we can now formally define the Hilbert
+deductive congruence on \pv. Given $\phi,\psi\in\pv$, we shall say
+that $\phi$ and $\psi$ are equivalent \ifand\ both formulas
+$\phi\to\psi$ and $\psi\to\phi$ are provable. So we naturally start
+with a study of the relation $\leq$ defined by $\phi\leq\psi\
+\Leftrightarrow\ \vdash(\phi\to\psi)$ which shall be seen to be a
+preorder: \index{preorder@Hilbert deductive preorder}
+\begin{defin}\label{logic:def:FOPL:HDC:quasiorder}
+Let $V$ be a set. We call {\em Hilbert deductive preorder} on \pv\
+the relation $\leq$ defined by $\phi\leq\psi$ \ifand\
+$\vdash(\phi\to\psi)$, for all $\phi,\psi\in\pv$.
+\end{defin}
+Recall that a preorder is a binary relation which is reflexive and
+transitive. The proof that $\leq$ is indeed a preorder follows. Note
+that by virtue the deduction
+theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction}, the statement
+$\vdash(\phi\to\psi)$ is equivalent to $\{\phi\}\vdash\psi$.
+\begin{prop}\label{logic:prop:FOPL:quasiorder}
+Let $V$ be a set. Then, the Hilbert deductive preorder $\leq$ on
+\pv\ is a reflexive and transitive relation on \pv.
+\end{prop}
+\begin{proof}
+First we show that $\leq$ is reflexive, namely that $\phi\leq\phi$
+for all $\phi\in\pv$. We have to show that $\vdash (\phi\to\phi)$,
+which follows from proposition~(\ref{logic:prop:FOPL:PimP}). Next we
+show that $\leq$ is transitive. So let $\phi,\psi,\chi\in\pv$ such
+that $\phi\leq\psi$ and $\psi\leq\chi$. We need to show that
+$\phi\leq\chi$, that is $\vdash(\phi\to\chi)$. Using the deduction
+theorem~(\ref{logic:the:FOPL:deduction}), it is sufficient to prove
+that $\{\phi\}\vdash\chi$. However, from the assumption
+$\phi\leq\psi$ we have $\vdash(\phi\to\psi)$ and consequently
+$\{\phi\}\vdash\psi$. From the assumption $\psi\leq\chi$ we obtain
+$\vdash(\psi\to\chi)$ and in particular
+$\{\phi\}\vdash(\psi\to\chi)$. Using the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) we conclude that
+$\{\phi\}\vdash\chi$ as requested.
+\end{proof}
+
+The Hilbert deductive preorder is not a congruent relation. If
+$\phi_{1}\leq\psi_{1}$ and $\phi_{2}\leq\psi_{2}$, we cannot argue
+that $\phi_{1}\to\phi_{2}\leq\psi_{1}\to\psi_{2}$. Although it would
+be easy to provide a counterexample, we shall refrain from doing so
+at this stage, as we are not able to prove anything: we do have some
+tools allowing us to establish a given sequent
+$\vdash(\phi\to\psi)$, but we are not yet equipped to refute such a
+sequent. Proving that a formula is not provable is difficult. We
+shall need some model theory to do this. For now, we shall focus on
+the positive result:
+
+\begin{prop}\label{logic:prop:FOPL:HDC:quasi:imp}
+Let $V$ be a set and $\leq$ be the Hilbert deductive preorder on
+\pv. Let $\phi_{1},\phi_{2}$ and $\psi_{1},\psi_{2}\in\pv$ such that
+$\psi_{1}\leq\phi_{1}$ and $\phi_{2}\leq\psi_{2}$. Then:
+    \[
+    \phi_{1}\to\phi_{2}\leq\psi_{1}\to\psi_{2}
+    \]
+\end{prop}
+\begin{proof}
+We assume that $\psi_{1}\leq\phi_{1}$ and $\phi_{2}\leq\psi_{2}$,
+i.e. $\vdash(\psi_{1}\to\phi_{1})$ and
+$\vdash(\phi_{2}\to\psi_{2})$. We need to show that
+$\phi_{1}\to\phi_{2}\leq\psi_{1}\to\psi_{2}$ i.e.
+$\vdash(\phi_{1}\to\phi_{2})\to(\psi_{1}\to\psi_{2})$. Using the
+deduction theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} it is sufficient to prove
+that $\{\phi_{1}\to\phi_{2}\}\vdash(\psi_{1}\to\psi_{2})$. In fact,
+using theorem~(\ref{logic:the:FOPL:deduction}) once more, it is
+sufficient to prove that $\Gamma\vdash\psi_{2}$ where
+$\Gamma=\{\,\phi_{1}\to\phi_{2}\,,\,\psi_{1}\,\}$. From the
+assumption $\vdash(\psi_{1}\to\phi_{1})$ we obtain
+$\{\psi_{1}\}\vdash\phi_{1}$ and consequently
+$\Gamma\vdash\phi_{1}$. Furthermore, it is clear that
+$\Gamma\vdash(\phi_{1}\to\phi_{2})$. Using the modus ponens property
+of proposition~(\ref{logic:prop:FOPL:modus:ponens}) we obtain
+$\Gamma\vdash\phi_{2}$. However, from the assumption
+$\vdash(\phi_{2}\to\psi_{2})$ we have in particular
+$\Gamma\vdash(\phi_{2}\to\psi_{2})$. Using the modus ponens property
+of proposition~(\ref{logic:prop:FOPL:modus:ponens}) once more we
+obtain $\Gamma\vdash\psi_{2}$ as requested.
+\end{proof}
+
+As we have just seen, the implication operator $\to$ formally
+behaves like a {\em difference} $\phi_{2}-\phi_{1}$ when it comes to
+the Hilbert deductive preorder. By contrast, the quantification
+operator $\forall x$ respects the order:
+
+\begin{prop}\label{logic:prop:FOPL:HDC:quasi:quant}
+Let $V$ be a set and $\leq$ be the Hilbert deductive preorder on
+\pv. Let $\phi_{1},\psi_{1}\in\pv$ such that $\phi_{1}\leq\psi_{1}$.
+Then for all $x\in V$ we have:
+    \[
+    \forall x\phi_{1}\leq\forall x\psi_{1}
+    \]
+\end{prop}
+\begin{proof}
+Suppose $\phi_{1}\leq\psi_{1}$ and let $x\in V$. we need to show
+that $\forall x\phi_{1}\leq\forall x\psi_{1}$ which is
+$\vdash(\forall x\phi_{1}\to\forall x\psi_{1})$. Using the deduction
+theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} it is sufficient to prove
+that $\Gamma\vdash\forall x\psi_{1}$ with $\Gamma=\{\forall
+x\phi_{1}\}$. It is clear that $\Gamma\vdash\forall x\phi_{1}$. From
+proposition~(\ref{logic:prop:FOPL:esssubstprop:injective}) the
+identity mapping $i:\pv\to\pv$ is an essential substitution
+associated with the identity $i:V\to V$. In particular, it is an
+{\em essential substitution of $y$ in place of $x$} in the case when
+$y=x$. Using the specialization property of
+proposition~(\ref{logic:prop:FOPL:specialization}) it follows that
+$\Gamma\vdash\phi_{1}$. However, the assumption
+$\phi_{1}\leq\psi_{1}$ leads to $\vdash(\phi_{1}\to\psi_{1})$ and in
+particular $\Gamma\vdash(\phi_{1}\to\psi_{1})$. Using the modus
+ponens property of proposition~(\ref{logic:prop:FOPL:modus:ponens})
+we obtain $\Gamma\vdash\psi_{1}$. Since $x\not\in\free(\Gamma)$ we
+conclude $\Gamma\vdash\forall x\psi_{1}$ from the generalization
+property of proposition~(\ref{logic:prop:FOPL:generalization}).
+\end{proof}
+
+We shall now define the Hilbert deductive congruence in terms of the
+Hilbert deductive preorder, and prove it is indeed a congruence on
+\pv. \index{congruence@Hilbert deductive
+congruence}\index{Lindenbaum@Lindenbaum-Tarski congruence}
+\begin{defin}\label{logic:def:FOPL:HDC:HDC}
+Let $V$ be a set and $\leq$ be the Hilbert deductive preorder on
+\pv. We call {\em Hilbert deductive congruence} on \pv\ the relation
+$\equiv$ defined~by:
+    \[
+    \phi\equiv\psi\ \ \Leftrightarrow\ \
+    (\phi\leq\psi)\,\land\,(\psi\leq\phi)
+    \]
+\end{defin}
+\begin{prop}\label{logic:prop:FOPL:HDC:congruence}
+The Hilbert deductive congruence on \pv\ is a congruence.
+\end{prop}
+\begin{proof}
+Let $\equiv$ denote the Hilbert deductive congruence on \pv. We need
+to prove that $\equiv$ is an equivalence relation which is also a
+congruent relation. First we show that it is indeed an equivalence
+relation. Let $\leq$ denote the Hilbert deductive preorder on \pv.
+From proposition~(\ref{logic:prop:FOPL:quasiorder}), $\leq$ is
+reflexive. So it is clear that $\equiv$ is also reflexive. It is
+also obvious that $\equiv$ is symmetric. So it remains to show that
+$\equiv$ is transitive. So suppose $\phi,\psi,\chi\in\pv$ are such
+that $\phi\equiv\psi$ and $\psi\equiv\chi$. In particular we have
+$\phi\leq\psi$ and $\psi\leq\chi$ and it follows from the
+transitivity of $\leq$ that $\phi\leq\chi$. We show similarly that
+$\chi\leq\phi$ and we conclude that $\phi\equiv\chi$. So it remains
+to show that $\equiv$ is a congruent relation on \pv. We have
+already proved that $\bot\equiv\bot$ from reflexivity. Suppose
+$\phi_{1}\equiv\psi_{1}$ and $\phi_{2}\equiv\psi_{2}$. We need to
+show that $\phi_{1}\to\phi_{2}\equiv\psi_{1}\to\psi_{2}$. First we
+show that $\phi_{1}\to\phi_{2}\leq\psi_{1}\to\psi_{2}$. This follows
+from proposition~(\ref{logic:prop:FOPL:HDC:quasi:imp}) and the fact
+that $\psi_{1}\leq\phi_{1}$ and $\phi_{2}\leq\psi_{2}$. Using
+$\phi_{1}\leq\psi_{1}$ and $\psi_{2}\leq\phi_{2}$ we prove similarly
+that $\psi_{1}\to\psi_{2}\leq\phi_{1}\to\phi_{2}$. Suppose now that
+$\phi_{1}\equiv\psi_{1}$ and $x\in V$. We need to show that $\forall
+x\phi_{1}\equiv\forall x\psi_{1}$. However, from
+$\phi_{1}\leq\psi_{1}$ and
+proposition~(\ref{logic:prop:FOPL:HDC:quasi:quant}) we obtain
+$\forall x\phi_{1}\leq\forall x\psi_{1}$. Likewise from
+$\psi_{1}\leq\phi_{1}$ we have $\forall x\psi_{1}\leq\forall
+x\phi_{1}$. The equivalence $\forall x\phi_{1}\equiv\forall
+x\psi_{1}$ follows.
+\end{proof}
+
+The Hilbert deductive congruence expresses the idea of {\em logical
+equivalence} between formulas. We are already familiar with other
+congruences which formalize the idea of {\em identical meaning}.
+Obviously we should expect formulas which have {\em identical
+meaning} to be {\em logically equivalent}. We shall now check this
+is indeed the case, starting with the substitution congruence on
+\pv\,:
+
+\begin{prop}\label{logic:prop:FOPL:HDC:substitution:v:HDC}
+Let $V$ be a set. Let $\sim$ and $\equiv$ denote the substitution
+and Hilbert deductive congruence on \pv\ respectively. Then for all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \phi\equiv\psi
+    \]
+The substitution congruence is stronger than the Hilbert deductive
+congruence.
+\end{prop}
+\begin{proof}
+We need to show the inclusion $\sim\,\subseteq\,\equiv$, for which
+it is sufficient to show $R_{0}\subseteq\,\equiv$ where $R_{0}$ is a
+generator of the substitution congruence. Using
+definition~(\ref{logic:def:sub:congruence}) it is therefore
+sufficient to prove that $\phi\equiv\psi$ where $\phi=\forall
+x\phi_{1}$ for some $x\in V$ and $\phi_{1}\in\pv$, and $\psi=\forall
+y\phi_{1}[y\!:\!x]$ with $x\neq y$ and $y\not\in\free(\phi_{1})$.
+First we show that $\phi\leq\psi$ where $\leq$ is the Hilbert
+preorder on \pv. So we need to show that $\vdash(\phi\to\psi)$.
+Using the deduction theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} it is sufficient to prove
+that $\{\phi\}\vdash\psi$, which is $\Gamma\vdash\forall
+y\phi_{1}[y\!:\!x]$ where $\Gamma=\{\forall x\phi_{1}\}$. However,
+having assumed that $y\not\in\free(\phi_{1})$, in particular we have
+$y\not\in\free(\Gamma)$. Using the generalization property of
+proposition~(\ref{logic:prop:FOPL:generalization}) it is therefore
+sufficient to prove that $\Gamma\vdash\phi_{1}[y\!:\!x]$. Let us
+accept for now that the formula $\chi=\forall
+x\phi_{1}\to\phi_{1}[y\!:\!x]$ is a specialization axiom. Then from
+proposition~(\ref{logic:prop:FOPL:axiom}) we have $\vdash\chi$ and
+using the deduction theorem once more we obtain
+$\Gamma\vdash\phi_{1}[y\!:\!x]$ as requested. So it remains to show
+that $\chi$ is indeed a specialization axiom. From
+proposition~(\ref{logic:prop:FOPL:specialization:axiom:2}) it is
+sufficient to show that $\phi_{1}[y\!:\!x]\sim\phi_{1}[y/x]$ where
+$[y/x]:\pv\to\pv$ is an essential substitution of $y$ in place of
+$x$. Since the permutation $[y\!:\!x]:V\to V$ is injective, from
+proposition~(\ref{logic:prop:FOPL:esssubstprop:injective}) its
+associated map $[y\!:\!x]:\pv\to\pv$ is also an essential
+substitution. Hence, in order to show the equivalence
+$\phi_{1}[y\!:\!x]\sim\phi_{1}[y/x]$, from
+proposition~(\ref{logic:prop:FOPL:esssubstprop:support}) it is
+sufficient to show that $[y/x]$ and $[y\!:\!x]$ coincide on
+$\free(\phi_{1})$. This is clearly the case since
+$y\not\in\free(\phi_{1})$. So we have proved that $\phi\leq\psi$ and
+it remains to show that $\psi\leq\phi$. However, define
+$\phi_{1}^{*}=\phi_{1}[y\!:\!x]$. Then it is clear that
+$\phi_{1}=\phi_{1}^{*}[x\!:\!y]$ and we need to show that $\forall
+y\phi_{1}^{*}\leq\forall x \phi_{1}^{*}[x\!:\!y]$, for which we can
+use an identical proof as previously, provided we show that
+$x\not\in\free(\phi_{1}^{*})$. So suppose to the contrary that
+$x\in\free(\phi_{1}^{*})$. Using
+proposition~(\ref{logic:prop:freevar:of:substitution}), since
+$[y\!:\!x]$ is injective we have
+$\free(\phi_{1}^{*})=[x\!:\!y](\free(\phi_{1}))$. It follows that
+there exists $u\in\free(\phi_{1})$ such that $x=[x\!:\!y](u)$. Hence
+$u=y$ which contradicts $y\not\in\free(\phi_{1})$.
+\end{proof}
+
+Two formulas which are permutation equivalent are also logically
+equivalent:
+
+\begin{prop}\label{logic:prop:FOPL:HDC:permutation:v:HDC}
+Let $V$ be a set. Let $\sim$ and $\equiv$ denote the permutation and
+Hilbert deductive congruence on \pv\ respectively. Then for all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \phi\equiv\psi
+    \]
+The permutation congruence is stronger than the Hilbert deductive
+congruence.
+\end{prop}
+\begin{proof}
+We need to show the inclusion $\sim\,\subseteq\,\equiv$, for which
+it is sufficient to show $R_{0}\subseteq\,\equiv$ where $R_{0}$ is a
+generator of the permutation congruence. Using
+definition~(\ref{logic:def:perm:congruence}) it is therefore
+sufficient to prove that $\phi\equiv\psi$ where $\phi=\forall
+x\forall y\phi_{1}$ and $\psi=\forall y\forall x\phi_{1}$ where
+$\phi_{1}\in\pv$ and $x,y\in V$. By symmetry, it is sufficient to
+show that $\phi\leq\psi$ i.e. $\vdash(\phi\to\psi)$. Using the
+deduction theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} it is therefore sufficient
+to prove that $\{\phi\}\vdash\psi$ which is $\Gamma\vdash\forall
+y\forall x\phi_{1}$ where $\Gamma=\{\forall x\forall y\phi_{1}\}$.
+It is clear that $\Gamma\vdash\forall x\forall y\phi_{1}$. Using the
+specialization property of
+proposition~(\ref{logic:prop:FOPL:specialization}) we obtain
+$\Gamma\vdash\forall y\phi_{1}$. Hence, using specialization once
+more we obtain $\Gamma\vdash\phi_{1}$. However, it is clear that
+$x\not\in\free(\Gamma)$. So we can use the generalization property
+of proposition~(\ref{logic:prop:FOPL:generalization}) to obtain
+$\Gamma\vdash\forall x\phi_{1}$. With one additional use of
+generalization, since $y\not\in\free(\Gamma)$, we conclude that
+$\Gamma\vdash\forall y\forall x\phi_{1}$ as requested.
+\end{proof}
+
+Two formulas which are absorption equivalent are also logically
+equivalent:
+
+\begin{prop}\label{logic:prop:FOPL:HDC:absorption:v:HDC}
+Let $V$ be a set. Let $\sim$ and $\equiv$ denote the absorption and
+Hilbert deductive congruence on \pv\ respectively. Then for all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \phi\equiv\psi
+    \]
+The absorption congruence is stronger than the Hilbert deductive
+congruence.
+\end{prop}
+\begin{proof}
+We need to show the inclusion $\sim\,\subseteq\,\equiv$, for which
+it is sufficient to show $R_{0}\subseteq\,\equiv$ where $R_{0}$ is a
+generator of the absorption congruence. Using
+definition~(\ref{logic:def:FOPL:abscong:absorption}) it is therefore
+sufficient to prove that $\phi_{1}\equiv\forall x\phi_{1}$ where
+$\phi_{1}\in\pv$ and $x\not\in\free(\phi_{1})$. First we show that
+$\phi_{1}\leq\forall x\phi_{1}$. We need to show that
+$\vdash(\phi_{1}\to\forall x\phi_{1})$ which is
+$\{\phi_{1}\}\vdash\forall x\phi_{1}$ after application of the
+deduction theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction}. However, since
+$x\not\in\free(\phi_{1})$, from $\{\phi_{1}\}\vdash\phi_{1}$ and the
+generalization property of
+proposition~(\ref{logic:prop:FOPL:generalization}) we obtain
+$\{\phi_{1}\}\vdash\forall x\phi_{1}$ as requested. So it remains to
+show that $\forall x\phi_{1}\leq\phi_{1}$, which is $\vdash(\forall
+x\phi_{1}\to\phi_{1})$, which follows immediately from
+proposition~(\ref{logic:prop:FOPL:axiom}) and the fact that $\forall
+x\phi_{1}\to\phi_{1}$ is a specialization axiom.
+\end{proof}
+
+Propositional equivalence is also stronger than logical equivalence:
+
+\begin{prop}\label{logic:prop:FOPL:HDC:propositional:v:HDC}
+Let $V$ be a set. Let $\sim$ and $\equiv$ denote the propositional
+and Hilbert deductive congruence on \pv\ respectively. Then for all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \phi\equiv\psi
+    \]
+The propositional congruence is stronger than the Hilbert deductive
+congruence.
+\end{prop}
+\begin{proof}
+To be determined.
+\end{proof}
+
+
+So the substitution, permutation, absorption and propositional
+congruences are all stronger than the Hilbert deductive congruence.
+The following proposition is an easy consequence of this, and can be
+added to our set of rules for sequent calculus: if a formula $\phi$
+is provable while having the same {\em meaning} as a formula $\psi$,
+then $\psi$ is also provable. In fact, if a formula $\phi$ is
+provable while being logically equivalent to a formula $\psi$, then
+$\psi$ is also provable.
+
+\begin{prop}\label{logic:prop:FOPL:HDC:sequent:stronger:congruence}
+Let $V$ be a set and $\sim$ be a congruence which is stronger than
+the Hilbert deductive congruence. Then for all $\phi,\psi\in\pv$ and
+$\Gamma\subseteq\pv$:
+    \[
+    (\Gamma\vdash\phi)\land(\phi\sim\psi)\ \Rightarrow\
+    \Gamma\vdash\psi
+    \]
+\end{prop}
+\begin{proof}
+We assume that $\Gamma\vdash\phi$ and $\phi\sim\psi$. We need to
+show that $\Gamma\vdash\psi$. However the congruence $\sim$ on $\pv$
+is stronger than the Hilbert deductive congruence $\equiv$\,. Hence
+from $\phi\sim\psi$ we obtain $\phi\equiv\psi$. It follows in
+particular that $\phi\leq\psi$, i.e. $\vdash(\phi\to\psi)$ and
+consequently we have $\Gamma\vdash(\phi\to\psi)$. From
+$\Gamma\vdash\phi$ and the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) we conclude that
+$\Gamma\vdash\psi$ as requested.
+\end{proof}

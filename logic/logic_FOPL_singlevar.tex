@@ -1,0 +1,189 @@
+In definition~(\ref{logic:def:substitution}) we introduced the
+notion of substitution mapping associated with a given map. Our
+motivation was to formalize the idea that $\forall x(x\in z)$ and
+$\forall y(y\in z)$ were identical mathematical statements when
+$z\not\in\{x,y\}$, or equivalently that replacing the variable $x$
+by the variable $y$ in $\forall x(x\in z)$ did not change the {\em
+meaning} of the formula. We are now in a position to formally define
+the {\em substitution} of a variable by another.
+\index{substitution@$[y/x]$ : $y$ in place of
+$x$}\index{substitution@Substitution of single
+variable}\index{substitution@$\phi[y/x]$ : image of $\phi$ by
+$[y/x]$}
+\begin{defin}\label{logic:def:single:var:substitution}
+Let $V$ be a set and $x,y\in V$. We call {\em substitution of $y$ in
+place of $x$}, the map $[y/x]:V\to V$ defined by:
+    \[
+    \forall u\in V\ ,\ [y/x](u)=\left\{
+    \begin{array}{lcl}
+    y&\mbox{\ if\ }&u=x\\
+    u&\mbox{\ if\ }&u\neq x
+    \end{array}
+    \right.
+    \]
+If we denote $[y/x]:\pv\to\pv$ the associated substitution mapping,
+given $\phi\in\pv$ the image $[y/x](\phi)$ is called {\em $\phi$
+with $y$ in place of $x$} and denoted $\phi[y/x]$.
+\end{defin}
+
+The {\em substitution of $y$ in place of $x$} has a fundamental
+flaw: it is not an injective map. In most introductory texts on
+mathematical logic, this is hardly a problem as the set of variables
+$V$ is always assumed to be infinite. So if we wish to argue that
+$\forall x\forall y(x\in y)$ is the same mathematical statement as
+$\forall y\forall x(y\in x)$, we can always choose a variable
+$z\not\in\{x,y\}$ and prove the equivalence as:
+    \begin{eqnarray*}
+    \forall x\forall y(x\in y)&\sim&\forall z\forall y(z\in y)\\
+    &\sim&\forall z\forall x(z\in x)\\
+    &\sim&\forall y\forall x(y\in x)
+    \end{eqnarray*}
+Unfortunately, this will not be possible in the case when
+$V=\{x,y\}$ and $x\neq y$, i.e. when $V$ has only two elements. As
+we shall see in later parts of this document, a congruence defined
+on \pv\ in terms of the substitution mapping $[y/x]$ will lead to
+the paradoxical situation of $\forall x\forall y(x\in
+y)\not\sim\forall y\forall x(y\in x)$ when $V=\{x,y\}$. To remedy
+this fact, we shall introduce the {\em permutation} mapping
+$[y\!:\!x]$ and use this as the basis of a new congruence which will
+turn out to be simpler, equivalent to the traditional notion based
+on $[y/x]$ for $V$ infinite, and working equally well for $V$ finite
+or infinite. \index{substitution@$[y:x]$ : permutation of $x$ and
+$y$}
+\begin{defin}\label{logic:def:single:var:permutation}
+Let $V$ be a set and $x,y\in V$. We call {\em permutation of $x$ and
+$y$}, the map $[y\!:\!x]:V\to V$ defined by:
+    \[
+    \forall u\in V\ ,\ [y\!:\!x](u)=\left\{
+    \begin{array}{lcl}
+    y&\mbox{\ if\ }&u=x\\
+    x&\mbox{\ if\ }&u=y\\
+    u&\mbox{\ if\ }&u\not\in\{x,y\}
+    \end{array}
+    \right.
+    \]
+If we denote $[y\!:\!x]:\pv\to\pv$ the associated substitution
+mapping, given $\phi\in\pv$ the image $[y\!:\!x](\phi)$ is denoted
+$\phi[y\!:\!x]$.
+\end{defin}
+
+An immediate consequence of this definition is:
+\begin{prop}\label{logic:prop:FUAP:singlevar:composition:injective}
+Let $V$, $W$ be sets and $\sigma:V\to W$ be an injective map. Then
+for all $x,y\in V$ we have the following equality:
+    \[
+    \sigma\circ[y\!:\!x]=[\sigma(y)\!:\!\sigma(x)]\circ\sigma
+    \]
+\end{prop}
+\begin{proof}
+Let $u\in V$. We shall distinguish three cases. First we assume
+$u\not\in\{x,y\}$. Then:
+    \[
+    \sigma\circ[y\!:\!x](u)=\sigma(u)=[\sigma(y)\!:\!\sigma(x)]\circ\sigma(u)
+    \]
+where the last equality crucially depends on
+$\sigma(u)\not\in\{\sigma(x),\sigma(y)\}$ which itself follows from
+the injectivity of $\sigma$ and $u\not\in\{x,y\}$. We now assume
+that $u=x$:
+\begin{eqnarray*}
+    \sigma\circ[y\!:\!x](u)&=&\sigma(y)\\
+    &=&[\sigma(y)\!:\!\sigma(x)]\circ\sigma(x)\\
+    &=&[\sigma(y)\!:\!\sigma(x)]\circ\sigma(u)
+    \end{eqnarray*}
+Finally, we assume that $u=y$ and obtain:
+    \begin{eqnarray*}
+    \sigma\circ[y\!:\!x](u)&=&\sigma(x)\\
+    &=&[\sigma(y)\!:\!\sigma(x)]\circ\sigma(y)\\
+    &=&[\sigma(y)\!:\!\sigma(x)]\circ\sigma(u)
+    \end{eqnarray*}
+In all cases we see that
+$\sigma\circ[y\!:\!x](u)=[\sigma(y)\!:\!\sigma(x)]\circ\sigma(u)$ as
+requested.
+\end{proof}
+
+As already noted, the permutation $[y\!:\!x]$ is injective while the
+substitution $[y/x]$ is not. However, there will be cases when the
+formulas $\phi[y/x]$ and $\phi[y\!:\!x]$ coincide, given a formula
+$\phi$. Knowing when the equality holds is important and one simple
+sufficient condition is $y\not\in\var(\phi)$, as will be seen from
+the following:
+\begin{prop}\label{logic:prop:FOPL:singlevar:support}
+Let $V$ be a set and $U\subseteq V$. Then for all $x,y\in V$ we
+have:
+    \[
+    y\not\in U\ \Rightarrow\ [y/x]_{|U}=[y\!:\!x]_{|U}
+    \]
+\end{prop}
+\begin{proof}
+We assume that $y\not\in U$. Let $u\in U$. We need to show that
+$[y/x](u)=[y\!:\!x](u)$. We shall distinguish three cases: first we
+assume that $u\not\in\{x,y\}$. Then the equality is clear. Next we
+assume that $u=x$. Then the equality is also clear. Finally we
+assume that $u=y$. In fact, this cannot occur since $y\not\in U$ and
+$u\in U$.
+\end{proof}
+\begin{prop}\label{logic:prop:permutation:is:substitution}
+Let $V$ be a set and $x,y\in V$. Let $\phi\in\pv$. Then, we have:
+    \[
+    y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x]=\phi[y\!:\!x]
+    \]
+\end{prop}
+\begin{proof}
+We assume that $y\not\in\var(\phi)$. We need to show that
+$\phi[y/x]=\phi[y\!:\!x]$. From
+proposition~(\ref{logic:prop:substitution:support}) it is sufficient
+to show that $[y/x]$ and $[y\!:\!x]$ coincide on $\var(\phi)$, which
+follows immediately from $y\not\in\var(\phi)$ and
+proposition~(\ref{logic:prop:FOPL:singlevar:support}).
+\end{proof}
+
+When replacing a variable $x$ by a variable $y$ in a formula $\phi$,
+and subsequently replacing the variable $y$ by a variable $z$, we
+would expect the outcome to be the same as replacing the variable
+$x$ by the variable $z$ directly. This is in fact the case, provided
+$y$ is not already a variable of $\phi$. Assuming $x$, $y$ and $z$
+are distinct variables, a simple counterexample is $\phi=(x\in y)$.
+\begin{prop}\label{logic:prop:single:composition}
+Let $V$ be a set and $x,y,z\in V$. Then for all $\phi\in\pv$:
+    \[
+    y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x][z/y]=\phi[z/x]
+    \]
+\end{prop}
+\begin{proof}
+Suppose $y\not\in\var(\phi)$. We need to show that
+$[z/y]\circ[y/x](\phi)=[z/x](\phi)$. From
+proposition~(\ref{logic:prop:substitution:support}) it is sufficient
+to prove that $[z/y]\circ[y/x]$ and $[z/x]$ coincide on
+$\var(\phi)$. So let $u\in\var(\phi)$. We need to show that
+$[z/y]\circ[y/x](u)=[z/x](u)$. Since $y\not\in\var(\phi)$ we have
+$u\neq y$. Suppose first that $u=x$. Then we have:
+    \[
+    [z/y]\circ[y/x](u)=[z/y](y)=z=[z/x](u)
+    \]
+Suppose now that $u\neq x$. Then $u\not\in\{x,y\}$ and furthermore:
+    \[
+    [z/y]\circ[y/x](u)=[z/y](u)=u=[z/x](u)
+    \]
+In any case, we have proved that $[z/y]\circ[y/x](u)=[z/x](u)$.
+\end{proof}
+
+When replacing a variable $x$ by a variable $y$ in a formula $\phi$,
+we would expect all occurrences of the variable $x$ to have
+disappeared in $\phi[y/x]$. In other words, we would expect the
+variable $x$ {\em not} to be a variable of the formula  $\phi[y/x]$.
+This is indeed the case when $x\neq y$, a condition which may easily
+be forgotten.
+\begin{prop}\label{logic:prop:inplaceof:notvar}
+Let $V$ be a set, $x,y\in V$ with $x\neq y$. Then for all $\phi\in\pv$:
+    \[
+    x\not\in\var(\phi[y/x])
+    \]
+\end{prop}
+\begin{proof}
+Suppose to the contrary that $x\in\var(\phi[y/x])$. From
+proposition~(\ref{logic:prop:var:of:substitution}), we have
+$\var(\phi[y/x]) = [y/x](\var(\phi))$. So there exists
+$u\in\var(\phi)$ such that $x=[y/x](u)$. If $x\neq u$ we obtain
+$[y/x](u)=u$ and consequently $x=u$. If $x=u$ we obtain $[y/x](u)=y$
+and consequently $x=y$. In both cases we obtain a contradiction.
+\end{proof}

@@ -1,0 +1,523 @@
+Our aim is to introduce the idea of {\em definition by structural
+recursion} on a free universal algebra of type $\alpha$. We shall
+deal with the subject in a later section. In this section, we shall
+concentrate on a simpler notion, that of {\em definition by
+recursion over $\N$}, also known as {\em definition by simple
+recursion}. Consider the function $g:\N\to\N$ defined by $g(0)=0$
+and:
+    \[
+    g(n+1)=(n+1).\,g(n)\ ,\ \forall n\in\N
+    \]
+The existence of the function $g$ is often taken for granted. Most
+of us needed many years as mathematical students before it finally
+occurred that the truth of the following statement was far from
+obvious:
+    \[
+    \exists g[\,(g:\N\to\N)\land(g(0)=1)\land(\forall n\in\N\ ,\ g(n+1)=(n+1).\,g(n))\,]
+    \]
+Loosely speaking, defining a map $g$ by recursion consists in first
+defining $g(0)$, and having defined $g(0)$, $g(1)$,\ldots $g(n-1)$,
+to then specify what $g(n)$ is {\em as a function of} all the
+preceding values $g(0)$, $g(1)$,\ldots, $g(n-1)$. More formally,
+suppose $A$ is a set and we wish to define a map $g:\N\to A$ by
+recursion over $\N$. We first define $g(0)\in A$, and then define
+$g(n)$ as a function of $g_{|n}$. In other words, we set
+$g(n)=h(g_{|n})$ for some function $h$. Incidentally, the function
+$h$ is called an {\em oracle function}, as it enables us to predict
+what the next value of $g$ is, given all the preceding values. Of
+course, we want everything to make sense: so $h(g_{|n})$ should
+always be meaningful, and since our objective is to obtain $g:\N\to
+A$ in which case $g_{|n}\in A^{n}$ for all $n\in\N$, we should
+probably request that the oracle function be a map
+$h:\cup_{n\in\N}A^{n}\to A$. We could imagine an oracle function
+with a wider domain and a wider range (as long as $h(g_{|n})$ is a
+well defined element of $A$), but this is not likely to add much to
+the generality of the present discussion. So we shall stick to
+$h:\cup_{n\in\N}A^{n}\to A$. One thing to note is that the
+expression $g(n)=h(g_{|n})$ is also meaningful in the case of $n=0$.
+It is therefore unnecessary to define $g(0)$ separately: just set
+$h(\emptyset)$ appropriately and request that $g(n)=h(g_{|n})$ for
+all $n\in\N$ rather than just $n\in\N^{*}$. In the above example of
+$g(n)=n!$ and $A=\N$, the oracle function
+$h:\cup_{n\in\N}\N^{n}\to\N$ should be defined by setting
+$h(\emptyset)=1$ and for all $n\in\N^{*}$ and $g:n\to\N$:
+    \[
+    h(g)=n.g(n-1)
+    \]
+Note that this definition is legitimate since
+$\N^{n}\cap\N^{n'}=\emptyset$ for $n\neq n'$.
+
+We are now faced with a crucial question, namely that of the truth
+of the following statement, given a set $A$ and an oracle function
+$h:\cup_{n\in\N}A^{n}\to A$.
+    \[
+    \exists g[\,(g:\N\to A)\land(\forall n\in\N\ ,\ g(n)=h(g_{|n})\,]
+    \]
+This will be proved in the next lemma, together with the uniqueness
+of the function $g:\N\to A$. However before we proceed, a few
+comments are in order. The proof of
+lemma~(\ref{logic:lemma:recursion:over:N}) below may appear daunting
+and tedious, as we systematically check a variety of small technical
+details. However, there is not much to it. The key to remember is
+that a {\em recursion over $\N$} is nothing but an {\em induction
+over $\N$}. Specifically, for all $n\in\N$, there must exist a map
+$g:n\to\N$ with the right property, for if there exists an $n\in\N$
+for which this is not the case, choosing $n$ to be the smallest of
+such integer, we can extend the map $g:(n-1)\to A$ using
+$g(n)=h(g_{|n})$ and obtain a map $g':n\to A$ with the right
+property, thereby reaching a contradiction. Once the induction
+argument is complete, proving the existence of a map $g:\N\to A$ is
+easily done by gathering together all the ordered pairs contained in
+the various maps $g':n\to A$ for $n\in\N$, which incidentally are
+extensions of one another.
+\index{recursion@Definition by recursion
+over \N}
+\begin{lemma}\label{logic:lemma:recursion:over:N}
+Let $A$ be a set and $h:\cup_{n\in\N}A^{n}\to A$ be a map. There
+exists a unique map $g:\N\to A$ such that $g(n)=h(g_{|n})$ for all
+$n\in\N$.
+\end{lemma}
+\begin{proof}
+First we prove the uniqueness property. Suppose $g,g':\N\to A$ are
+maps such that $g(n)=h(g_{|n})$ and $g'(n)=h(g'_{|n})$ for all
+$n\in\N$. We need to show that $g=g'$, i.e. that $g(n)=g'(n)$ for
+all $n\in\N$. One way to achieve this is to prove that
+$g_{|n}=g'_{|n}$ for all $n\in\N$, for which we shall use an
+induction argument. Since $g_{|0}=\emptyset=g'_{|0}$ the property is
+true for $n=0$. Suppose it is true for $n\in\N$. Then
+$g_{|n}=g'_{|n}$ and consequently $g(n)=h(g_{|n})=h(g'_{|n}) =
+g'(n)$. Hence:
+    \[
+    g_{|(n+1)}=g_{|n}\cup\{(n,g(n))\}=g'_{|n}\cup\{(n,g'(n))\}=g'_{|(n+1)}
+    \]
+and we see that the property is true for $n+1$. This completes the
+proof of the uniqueness property. In order to prove the existence of
+$g:\N\to A$ with $g(n)=h(g_{|n})$ for all $n\in\N$, we shall first
+restrict our attention to finite domains and prove by induction the
+existence for all $n\in\N$ of a map $g:n\to A$ such that
+$g(k)=h(g_{|k})$ for all $k\in n$. This is clearly true for $n=0$,
+since the empty set is a map $g:0\to A$ for which the condition
+$g(k)=h(g_{|k})$ for all $k\in 0$ is vacuously satisfied. So we
+assume $n\in \N$, and the existence of a map $g:n\to A$ such that
+$g(k)=h(g_{|k})$ for all $k\in n$. We need to show the existence of
+a map $g':(n+1)\to A$ such that $g'(k)=h(g'_{|k})$ for all $k\in
+n+1$. Consider the map $g':(n+1)\to A$ defined by $g'_{|n}=g$ and
+$g'(n)=h(g)$, and suppose $k\in n+1$. We need to check that
+$g'(k)=h(g'_{|k})$. If $k=n$, we need to check that
+$g'(n)=h(g'_{|n})=h(g)$ which is true by definition of $g'$. If
+$k\in n$, then:
+    \[
+    g'(k)=g'_{|n}(k)=g(k)=h(g_{|k})=h(g'_{|k})
+    \]
+This completes our induction argument and for all $n\in\N$ we have
+proved the existence of a map $g:n\to A$ such that $g(k)=h(g_{|k})$
+for all $k\in n$. In fact we claim that such a map is unique. For if
+$g':n\to A$ is another such map, an identical induction argument to
+the one already used shows that $g(k)=g'(k)$ for all $k\in n$.
+Hence, for all $n\in\N$, we have proved the existence of a {\em
+unique} map $g_{n}:n\to A$ such that $g_{n}(k)=h((g_{n})_{|k})$ for
+all $k\in n$. Note that from the uniqueness property we must have
+$(g_{n+1})_{|n}=g_{n}$ for all $n\in\N$. So every $g_{n+1}$ is an
+extension of $g_{n}$. We are now in a position to prove the
+existence of a map $g:\N\to A$ such that $g(n)=h(g_{|n})$ for all
+$n\in\N$, by considering $g=\cup_{n\in\N}g_{n}$. First we show that
+$g$ is indeed a map. It is clearly a set of ordered pairs. Suppose
+$(x,y)\in g$ and $(x,y')\in g$. We need to show that $y=y'$.
+However, there exist $n,n'\in\N$ such that $(x,y)\in g_{n}$ and
+$(x,y')\in g_{n'}$. Without loss of generality, we may assume that
+$n\leq n'$. From the above uniqueness property, we must have
+$(g_{n'})_{|n}=g_{n}$. From $(x,y)\in g_{n}$ we obtain $x\in n$ and
+consequently:
+    \[
+    y'=g_{n'}(x)=(g_{n'})_{|n}(x)=g_{n}(x)=y
+    \]
+So we have proved that $g$ is indeed a map. It is clear that
+$\dom(g)=\N$ and $\rng(g)\subseteq A$. So $g$ is a map $g:\N\to A$.
+It remains to check that $g(n)=h(g_{|n})$ for all $n\in\N$. So
+suppose $n\in\N$. Let $k\in n+1$. Since $(k,g_{n+1}(k))\in
+g_{n+1}\subseteq g$, we obtain $g_{n+1}(k)=g(k)$. It follows in
+particular that $(g_{n+1})_{|n}=g_{|n}$ and $g_{n+1}(n)=g(n)$. Since
+$g_{n+1}(k)=h((g_{n+1})_{|k})$ for all $k\in n+1$ we conclude that:
+    \[
+    g(n)=g_{n+1}(n)=h((g_{n+1})_{|n})=h(g_{|n})
+    \]
+\end{proof}
+
+There is however one thing to note: the proof of
+lemma~(\ref{logic:lemma:recursion:over:N}) tacitly makes use of the
+Axiom Schema of Replacement without any explicit mention of the
+fact. This is one other thing we usually take for granted. We have
+avoided any mention of the Axiom Schema of Replacement to keep the
+proof leaner, thereby following standard mathematical practice.
+However, considering the low level nature of the result being
+proved, we feel it is probably beneficial to say a few words about
+it, or else the whole proof could be construed as a cheat. At some
+point, we considered the set $g=\cup_{n\in\N} g_{n}$ which is really
+a notational shortcut for $g=\cup B$ where $B=\{g':\exists n\in\N\
+,\ g'=g_{n}\}$. Recall that given a set $z$, the set $\cup z$ is
+defined as:
+    \[
+    \cup z = \{x:\exists y\ ,\ (x\in y)\land(y\in z)\}
+    \]
+The existence of this set is guaranteed by the Axiom of Union. So it
+would seem that defining $g=\cup_{n\in\N}g_{n}$ is a simple
+application of the Axiom of Union and of course it is. But there is
+more to the story: we need to justify the fact that $B$ is indeed a
+set and we have not done so. If we knew that
+$G:\N\to\cup_{n\in\N}A^{n}$ defined by $G(n)=g_{n}$ was a map, then
+$B$ would simply be the range of $G$, i.e. $B=\rng(G)$. Showing that
+$B$ is a set would still require the Axiom Schema of Replacement (as
+far as we can tell), but it would not be controversial to remain
+silent about it. But why is $G$ not a map? Why can't we define
+$G:\N\to\cup_{n\in\N}A^{n}$ by setting $G(n)=g_{n}$ for all
+$n\in\N$? This is something we do all the time.
+
+Consider $n\in\N$. We proved the existence and uniqueness of a map
+$g:n\to A$ such that $g(k)=h(g_{|k})$ for all $k\in n$. We then {\em
+labeled} this unique map as '$g_{n}$'. In fact, we proved that the
+following formula of first order predicate logic:
+    \[
+    G[n,g]=(n\in\N)\land[\,(g:n\to A)\land(\forall k\in n\ ,\ g(k)=h(g_{|k}))\,]
+    \]
+is a functional class with domain $\N$. We have not formally defined
+what a {\em functional class} is and we are not able to do so at
+this stage. Informally, $G$ is a functional class as a formula of
+first order predicate logic where two free variables $n$ and $g$ (in
+that order) have been singled out, and which satisfies:
+    \[
+    \forall n\forall g\forall g'[\,G[n,g]\land G[n,g']\to (g=g')\,]
+    \]
+where $G[n,g']$ has the {\em obvious} meaning. Note that $G$ has
+other variables such as $A$ and $h$, while $\N$ is a constant. The
+functional class $G$ has a domain:
+    \[
+    \dom(G)[n]=\exists g\, G[n,g]
+    \]
+which is itself a formula of first order predicate logic with the
+free variable $n$ singled out, something which we should call a {\em
+class}. As it turns out, we have:
+    \[
+    \forall n[\, \dom(G)[n]\leftrightarrow (n\in\N)\,]
+    \]
+which allows us to say that the functional class $G$ has domain
+$\N$. In general, the domain of a functional class need not be a
+set. The functional class $G[n,g]$ also has a range, which is
+defined as the class:
+    \[
+    \rng(G)[g]=\exists n\, G[n,g]
+    \]
+The Axiom Schema of Replacement asserts that if the domain of a
+functional class is a set, then its range is also a set. More
+formally:
+    \[
+    \exists B\forall g[\,(g\in B)\leftrightarrow \rng(G)[g]\,]
+    \]
+which shows as requested, that $B=\{g':\exists n\in\N\ ,\
+g'=g_{n}\}$ is indeed a set, since '$g'=g_{n}$' is simply a
+notational shortcut for '$G[n,g']$'. So much for proving that $B$ is
+a set. We did not need to define a map $G:\N\to\cup_{n\in\N}A^{n}$
+by setting $G(n)=g_{n}$ for all $n\in\N$. We considered a functional
+class instead. But the question still stands: the practice of
+casually defining a map $G:\N\to\cup_{n\in\N}A^{n}$ by setting
+$G(n)=g_{n}$ is very common. Surely, it is a legitimate practice. To
+avoid a confusing conflict of notation let us keep '$G$' as
+referring to our functional class, and consider the map
+$G^{*}:\N\to\cup_{n\in\N}A^{n}$ defined by $G^{*}(n)=g_{n}$ for all
+$n\in\N$. What we are really saying is that $G^{*}$ is the set of
+ordered pairs defined by $G^{*}=\{(n,g_{n}): n\in\N\}$ or
+equivalently $G^{*}=\{(n,g):G[n,g]\}$. This definition is legitimate
+provided $G^{*}$ is really a set. More formally, we need to prove:
+    \begin{equation}\label{logic:eqn:functional:class:set}
+    \exists G^{*}\forall z[\,(z\in G^{*})\leftrightarrow\exists n\exists g[(z=(n,g))\land G[n,g]]\,]
+    \end{equation}
+However, $G$ is a functional class whose domain is the set $\N$,
+while its range is the set $B$. Hence, we have the implication
+$G[n,g]\to((n,g)\in\N\times B)$, and it follows
+that~(\ref{logic:eqn:functional:class:set}) can equivalently be
+expressed as:
+    \begin{equation}\label{logic:eqn:functional:class:set:2}
+     \exists G^{*}\forall z[\,(z\in G^{*})\leftrightarrow(z\in \N\times B)\land \phi[z]\,]
+    \end{equation}
+where $\phi[z]$ stands for $\exists n\exists g[(z=(n,g))\land
+G[n,g]]$. Since~(\ref{logic:eqn:functional:class:set:2}) is a direct
+consequence of the Axiom Schema of Comprehension, this completes our
+proof that $G^{*}$ is indeed a set. So much for
+lemma~(\ref{logic:lemma:recursion:over:N}).
+
+Unfortunately, we are not in a position to close  our discussion on
+the subject of {\em recursion over $\N$}. Yes we have
+lemma~(\ref{logic:lemma:recursion:over:N}), of which we gave a
+rather detailed proof, including final meta-mathematical remarks
+which hopefully were as convincing as one could have made them. The
+truth is, lemma~(\ref{logic:lemma:recursion:over:N}) is rather
+useless, as it does not do what we need: suppose we want to define
+the map $g$ with domain $\N$, by setting $g(0)=\{0\}$ and
+$g(n+1)={\cal P}(g(n))$ for all $n\in\N$. In order to apply
+lemma~(\ref{logic:lemma:recursion:over:N}) we need to produce a set
+$A$. Yet we have no idea what the set $A$ should be. So we are back
+to the very beginning of this section, asking the very same question
+as initially: does there exists a map $g$ with domain $\N$ such that
+$g(0)=\{0\}$ and $g(n+1)={\cal P}(g(n))$ for all $n\in\N$? Of course
+once we know that $g$ exists, it is possible for us to produce a set
+$A$, namely $A=\rng(g)$ or anything larger. We can define an oracle
+function $h:\cup_{n\in\N}A^{n}\to A$ by setting $h(\emptyset)=\{0\}$
+and $h(g)={\cal P}(g(n-1))$ for all $n\in\N^{*}$ and $g:n\to A$. At
+this stage, lemma~(\ref{logic:lemma:recursion:over:N}) works like a
+dream. But it is clearly too late, as we needed to know the
+existence of $g$ in the first place.
+
+One may argue that defining $g(0)=\{0\}$ and $g(n+1)={\cal P}(g(n))$
+is not terribly useful, and it may be that
+lemma~(\ref{logic:lemma:recursion:over:N}) is pretty much all we
+need in practice. But remember
+proposition~(\ref{logic:prop:construction}) in which we claim to
+have constructed a free universal algebra of type $\alpha$. We
+crucially defined the sequence $(Y_{n})_{n\in\N}$ with a recursion
+over $\N$, by setting $Y_{0}=\{(0,x):x\in X_{0}\}$,
+$Y_{n+1}=Y_{n}\cup\bar{Y}_{n}$ and:
+    \[
+    \bar{Y}_{n}=\left\{(1,(f,x)):\ f\in\alpha\ ,\ x\in Y_{n}^{\alpha(f)}\right\}\ ,\ \forall n\in\N
+    \]
+Just as in the case of $g(n+1)={\cal P}(g(n))$, it is not clear what
+set $A$ should be used in order to apply
+lemma~(\ref{logic:lemma:recursion:over:N}). We need something more
+powerful.
+
+Let us go back to the initial problem: we would like to define a map
+$g$ with domain $\N$ by first specifying $g(0)$, and having defined
+$g(0)$, $g(1)$, \ldots,  $g(n-1)$, by specifying what $g(n)$ is {\em
+as a function of} $g(0)$, $g(1)$,\ldots, $g(n-1)$. So we need an
+oracle function $h:\cup_{n\in\N}A^{n}\to A$ so as to be able to set
+$g(n)=h(g_{|n})$. Finding such an oracle function will not be an
+easy task without a set $A$. But why should $A$ be a set? The only
+reason we insisted on $A$ being a set was to keep clear of the
+flakiness of meta-mathematics. We wanted a theorem proper, namely
+lemma~(\ref{logic:lemma:recursion:over:N}), with a solid proof based
+on a standard mathematical argument. In the case of induction, it
+was possible for us to stay within the realm of standard
+mathematics. When it comes to recursion, it would seem that we have
+no choice but to step outside of it.
+
+So let us assume that $A$ is a class, namely a formula of first
+order predicate logic with a variable $x$ singled out. We could
+denote this class $A[x]$ to emphasize the fact that $A$ is viewed as
+a {\em predicate} over the variable $x$. Of course, the formula $A$
+may have many other variables, and in fact $x$ itself need not be a
+free variable of $A$. We could have $A[x]=\lnot\bot$, also denoted
+$A[x]=\top$ or indeed:
+    \[
+    A[x]=(\forall x (x\in x))\lor\lnot(\forall x(x\in x))
+    \]
+The class $A$ is simply such that $\forall x A[x]$ is a true
+statement. This class is the {\em largest} possible, since $A[x]$ is
+true for all $x$. We could call $A[x]$ the {\em category of all
+sets} also denoted {\bf Set}, but we have no need to do so. Note
+that it is possible for this class to have $x$ as a free variable,
+as in:
+    \[
+    A[x] = (y\in x)\lor\lnot(y\in x)
+    \]
+The good thing about having $A$ as a class is that it no longer
+requires us to know what it is: if we have no idea as to which class
+to pick, we can simply decide that $A$ is the class of all sets. Now
+we need an oracle function $h:\cup_{n\in\N}A^{n}\to A$. Since $A$ is
+not a set but a class, we should be looking for a functional class
+$H:\cup_{n\in\N}A^{n}\to A$, rather than a function. But we hardly
+know what this means, and a few clarifications are in order: first
+of all, given a functional class $H[x,y]$, given two classes $A[x]$
+and $B[x]$, we need to give meaning to the statement $H:B\to A$.
+Informally, this statement should indicate that $H$ is a functional
+class with domain $B$ and range {\em inside} $A$. The fact that
+$H[x,y]$ is a functional class is formally translated as:
+    \[
+    \forall x\forall y\forall y'[\,H[x,y]\land H[x,y']\to(y=y')\,]
+    \]
+The fact that $H$ has domain $B$ can be written as:
+    \[
+    \forall x[\,B[x]\leftrightarrow\exists y(H[x,y])\,]
+    \]
+and finally expressing that the range of $H$ is {\em inside} $A$ can be written as:
+    \[
+    \forall y[\,\exists x(H[x,y])\to A[y]\,]
+    \]
+So we now know what the statement $H:B\to A$ formally represents. If
+we intend to give meaning to $H:\cup_{n\in\N}A^{n}\to A$, we still
+need to spell out what the class $\cup_{n\in\N}A^{n}$ is. First we
+define the class $A^{n}[x]$ for $n\in\N$. Informally, $A^{n}[x]$
+should indicate that $x$ is a map with domain $n$ and range {\em
+inside} $A$, i.e.:
+    \[
+    A^{n}[x]=(x\mbox{\ is a map})\land(\dom(x)=n)\land\forall y[\,(y\in\rng(x)\to A[y])\,]
+    \]
+Finally, the class $\cup_{n\in\N}A^{n}$ should be defined as:
+    \[
+    \left(\cup_{n\in\N}A^{n}\right)[x]=\exists n[\,(n\in\N)\land A^{n}[x]\,]
+    \]
+So the statement $H:\cup_{n\in\N}A^{n}\to A$ is now meaningful. So
+suppose it is true. We are looking for a map $g:\N\to A$ such that
+$g(n)=H(g_{|n})$ for all $n\in\N$. Things are starting to be
+clearer. The statement $g:\N\to A$ is clearly represented by:
+    \[
+    (g\mbox{\ is a map})\land(\dom(g)=\N)\land\forall y[\,(y\in\rng(g)\to A[g])\,]
+    \]
+while the statement $g(n)=H(g_{|n})$ is an intuitive way of saying
+$H[g_{|n},g(n)]$. Furthermore, if we have $H:\cup_{n\in\N}A^{n}\to
+A$ and $g:\N\to A$, then for all $n\in A$ it is easy to check that
+$g_{|n}:n\to A$, by which we mean that $A^{n}[g_{|n}]$ is true. It
+follows that $\dom(H)[g_{|n}]$ is true, and consequently since $H$
+is functional, there exists a unique $y_{n}$ such that
+$H[g_{|n},y_{n}]$, which furthermore is such that $A[y_{n}]$ is
+true. We would like $g:\N\to A$ to be such that $g(n)$ is precisely
+that unique $y_{n}$, for all $n\in\N$. So it all makes sense.
+
+As an example, let us go back to the case when $g(n+1)={\cal
+P}(g(n))$ for all $n\in\N$ with $g(0)=\{0\}$. Because we have no
+idea what the class $A$ should be, let us pick $A$ to be the class
+of all sets. We need to find an oracle functional class
+$H:\cup_{n\in\N}A^{n}\to A$ which correctly sets up our recursion
+objective. Informally speaking, we want $H(\emptyset)=\{0\}$ and
+$H(g)={\cal P}(g(n-1))$ for all $n\in\N^{*}$ and $g:n\to A$. If we
+want to formally code up the functional class $H[g,y]$ as a formula
+of first order predicate logic, since $A^{0}[g]=(g=\emptyset)$, this
+can be done as:
+    \[
+    H[g,y]=[A^{0}[g]\land(y=\{0\})]\lor\exists n[(n\in\N^{*})
+    \land A^{n}[g]\land (y={\cal P}(g(n-1)))]
+    \]
+The fundamental question is this: does there exist a map $g$ with
+domain $\N$ such that $g(n)=H(g_{|n})$ for all $n\in\N$? This is the
+object of meta-theorem~(\ref{logic:meta:recursion:over:N}) below.
+
+Before, we proceed with the proof of
+meta-theorem~(\ref{logic:meta:recursion:over:N}), a few remarks may
+be in order: we were compelled by the nature of the problem to
+indulge in a fair amount of meta-mathematical discussions, i.e.
+discussions involving formulas of first order logic, variables,
+classes and functional classes, terms which have not been defined
+anywhere. This of course falls very short of the usually accepted
+standards of mathematical proof. It is however better than nothing
+at all. We do not have the conceptual tools to do much more at this
+stage. It is hoped that the study of universal algebras and the
+introduction of formal languages as algebraic structures will
+eventually allow us to handle meta-mathematics without the hand
+waving.   For now, we did everything we could and were as careful as
+possible in attempting to give legitimacy to the principle of
+recursion over $\N$. So we shall accept the existence of a sequence
+$(Y_{n})_{n\in\N}$ such that $Y_{n+1}=Y_{n}\cup\bar{Y}_{n}$ for all
+$n\in\N$, where:
+    \[
+    \bar{Y}_{n}=\left\{(1,(f,x)):\ f\in\alpha\ ,\ x\in Y_{n}^{\alpha(f)}\right\}\ ,\
+    \forall n\in\N
+    \]
+with the belief the existence of $(Y_{n})_{n\in\N}$ could be
+formally proven within {\bf ZFC}, if we precisely knew what that
+means. If it so happens that one of our conclusions is wrong, it is
+very likely that the error will be caught at some point, once we
+have clarified the ideas of formal languages and formal proofs.
+\index{recursion@Definition by recursion over \N}
+\begin{metath}\label{logic:meta:recursion:over:N}
+Let $A$ be a class and $H:\cup_{n\in\N}A^{n}\to A$ be a functional
+class. There exists a unique map $g:\N\to A$ such that
+$g(n)=H(g_{|n})$ for all $n\in\N$.
+\end{metath}
+\begin{proof}
+First we prove the uniqueness property. Suppose $g,g':\N\to A$ are
+maps such that $g(n)=H(g_{|n})$ and $g'(n)=H(g'_{|n})$ for all
+$n\in\N$. We need to show that $g=g'$, i.e. that $g(n)=g'(n)$ for
+all $n\in\N$. One way to achieve this is to prove that
+$g_{|n}=g'_{|n}$ for all $n\in\N$, for which we shall use an
+induction argument. Since $g_{|0}=\emptyset=g'_{|0}$ the property is
+true for $n=0$. Suppose it is true for $n\in\N$. Then
+$g_{|n}=g'_{|n}$ and consequently $g(n)=H(g_{|n})=H(g'_{|n}) =
+g'(n)$. Hence:
+    \[
+    g_{|(n+1)}=g_{|n}\cup\{(n,g(n))\}=g'_{|n}\cup\{(n,g'(n))\}=g'_{|(n+1)}
+    \]
+and we see that the property is true for $n+1$. This completes the
+proof of the uniqueness property. In order to prove the existence of
+$g:\N\to A$ with $g(n)=H(g_{|n})$ for all $n\in\N$, we shall first
+restrict our attention to finite domains and prove by induction the
+existence for all $n\in\N$ of a map $g:n\to A$ such that
+$g(k)=H(g_{|k})$ for all $k\in n$. This is clearly true for $n=0$,
+since the empty set is a map $g:0\to A$ for which the condition
+$g(k)=H(g_{|k})$ for all $k\in 0$ is vacuously satisfied. So we
+assume $n\in \N$, and the existence of a map $g:n\to A$ such that
+$g(k)=H(g_{|k})$ for all $k\in n$. We need to show the existence of
+a map $g':(n+1)\to A$ such that $g'(k)=H(g'_{|k})$ for all $k\in
+n+1$. Consider the map $g':(n+1)\to A$ defined by $g'_{|n}=g$ and
+$g'(n)=H(g)$, and suppose $k\in n+1$. We need to check that
+$g'(k)=H(g'_{|k})$. If $k=n$, we need to check that
+$g'(n)=H(g'_{|n})=H(g)$ which is true by definition of $g'$. If
+$k\in n$, then:
+    \[
+    g'(k)=g'_{|n}(k)=g(k)=H(g_{|k})=H(g'_{|k})
+    \]
+This completes our induction argument and for all $n\in\N$ we have
+proved the existence of a map $g:n\to A$ such that $g(k)=H(g_{|k})$
+for all $k\in n$. In fact we claim that such a map is unique. For if
+$g':n\to A$ is another such map, an identical induction argument to
+the one already used shows that $g(k)=g'(k)$ for all $k\in n$.
+Hence, for all $n\in\N$, we have proved the existence of a {\em
+unique} map $g:n\to A$ such that $g(k)=H(g_{|k})$ for all $k\in n$.
+It follows that:
+    \[
+    G[n,g]=(n\in\N)\land[\,(g:n\to A)\land(\forall k\in n\ ,\ g(k)=H(g_{|k}))\,]
+    \]
+is a functional class with domain $\N$. From the Axiom Schema of
+Replacement:
+    \[
+    \rng(G)=\{g:\exists n\in\N\ ,\ G[n,g]\}
+    \]
+is therefore a set. We define $g=\cup\,\rng(G)$ and we shall
+complete our proof by showing that $g:\N\to A$ is a map such that
+$g(n)=H(g_{|n})$ for all $n\in\N$. First we show that $g$ is a set
+of ordered pairs. Let $z\in g$. There exists $g'\in \rng(G)$ such
+that $z\in g'$. Since $g'\in\ rng(G)$, we have $G[n,g']$ for some
+$n\in\N$. It follows that $g':n\to A$ and in particular $g'$ is a
+set of ordered pairs. From $z\in g'$ we see that $z$ is an ordered
+pair. We then show that $g$ is functional. So we assume that
+$(x,y)\in g$ and $(x,y')\in g$. We need to show that $y=y'$. Since
+$g=\cup\,\rng(G)$, there exist $g_{1},g_{2}\in \rng(G)$ such that
+$(x,y)\in g_{1}$ and $(x,y')\in g_{2}$. Furthermore, there exist
+$n_{1},n_{2}\in\N$ such that $G[n_{1},g_{1}]$ and $G[n_{2},g_{2}]$.
+Without loss of generality we may assume that $n_{1}\leq n_{2}$.
+From $G[n_{2},g_{2}]$ it is not difficult to show that
+$G[n_{1},(g_{2})_{|n_{1}}]$ is also true. Since $G$ is functional,
+it follows that $g_{1}=(g_{2})_{|n_{1}}$. From $(x,y)\in g_{1}$ and
+$g_{1}:n_{1}\to A$ we obtain $x\in n_{1}$. Hence:
+    \[
+    y'=g_{2}(x)=(g_{2})_{|n_{1}}(x)=g_{1}(x)=y
+    \]
+We now show that $\dom(g)=\N$. First we show that $\N\subseteq
+\dom(g)$. So let $n\in\N$. We need to show that $n\in \dom(g)$.
+However, the functional class $G$ has domain $\N$. In particular,
+there exists $g'$ such that $G[n+1,g']$ is true. From $g':(n+1)\to
+A$ we see that $(n,g'(n))\in g'$. Furthermore, from $G[n+1,g']$ we
+see that $g'\in \rng(G)$. Since $g=\cup\,\rng(G)$, we conclude that
+$(n,g'(n))\in g$, and in particular $n\in \dom(g)$. We now prove
+that $\dom(g)\subseteq\N$. So let $x\in \dom(g)$. We need to show
+that $x\in\N$. However, there exists $y$ such that $(x,y)\in g$.
+Hence, there exists $g'\in \rng(G)$ such that $(x,y)\in g'$.
+Furthermore, there exists $n\in\N$ such that $G[n,g']$ is true. In
+particular, we have $g':n\to A$ and we conclude from $(x,y)\in g'$
+that $x\in n\subseteq\N$. So $x\in\N$. In order to show that
+$g:\N\to A$, it remains to check that $A[g(n)]$ is true for all
+$n\in\N$. So let $n\in\N$. We need to show that $A[g(n)]$ is true.
+However $n\in n+1$ and since $G$ has domain $\N$, there exists $g'$
+such that $G[n+1,g']$. From $g':(n+1)\to A$ we obtain $(n,g'(n))\in
+g'$. Furthermore, $A[g'(n)]$ is true. From $G[n+1,g']$ we obtain
+$g'\in \rng(G)$, and it follows that $(n,g'(n))\in g$. Hence we see
+that $g'(n)=g(n)$ and since $A[g'(n)]$ is true we conclude that
+$A[g(n)]$ is also true. So we have proved that $g:\N\to A$ is a map.
+It remains to check that $g(n)=H(g_{|n})$ for all $n\in\N$. So let
+$n\in\N$. We need to show that $g(n)=H(g_{|n})$. Consider once more
+the map $g'\in \rng(G)$ such that $G[n+1,g']$ is true. Since
+$g':(n+1)\to A$, for all $k\in n+1$ we have $(k,g'(k))\in g'$ and
+consequently $(k,g'(k))\in g$. It follows that $g'(k)=g(k)$ for all
+$k\in n+1$, and we see that $g'_{|n}=g_{|n}$ as well as
+$g'(n)=g(n)$. From $G[n+1,g']$ we also have $g'(k)=H(g'_{|k})$ for
+all $k\in n+1$. In particular, we have:
+    \[
+    g(n)=g'(n)=H(g'_{|n})=H(g_{|n})
+    \]
+\end{proof}

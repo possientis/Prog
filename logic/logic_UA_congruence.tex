@@ -1,0 +1,99 @@
+A relation is a set of ordered pairs. If $X$ is a set then a {\em
+relation on $X$} is a set of ordered pairs which is also a subset of
+$X\times X$. A map $g:A\to B$ between two sets $A$ and $B$ is a
+particular type of relation which is a subset of $A\times B$. It is
+a {\em functional relation} as it satisfies the property:
+    \[
+    \forall x\forall y\forall y'[\,((x,y)\in g)\land((x,y')\in g)\to(y=y')\,]
+    \]
+A map $g:X\to X$ is a functional relation on $X$. In this section we
+shall introduce other types of relations on $X$, which are of
+particular interest. Most of us will be familiar with {\em
+equivalent relations} on $X$. An {\em equivalence relation on $X$}
+is a relation on $X$ which is {\em reflexive}, {\em symmetric} and
+{\em transitive}. A relation $\sim$ is said to be {\em reflexive}
+\ifand\ it satisfies:
+    \[
+    \forall x[\,(x\in X)\to (x\sim x)\,]
+    \]
+Note that it is very common to write $x\sim x$ and $x\sim y$ rather
+than $(x,x)\in\sim$ or $(x,y)\in\sim$. A relation~$\sim$ on $X$ is
+said to be {\em symmetric} \ifand\ it satisfies:
+    \[
+    \forall x\forall y[\,(x\sim y)\to(y\sim x)\,]
+    \]
+Finally, a relation $\sim$ on $X$ is said to be {\em transitive} \ifand:
+    \[
+    \forall x\forall y\forall z[\, (x\sim y)\land(y\sim z)\to(x\sim z)\,]
+    \]
+We shall now introduce a new type of relation on $X$, in the case
+when $X$ is a universal algebra of type $\alpha$. Note that given
+$f\in\alpha$ and $x,y\in X^{\alpha(f)}$, we shall write $x\sim y$ as
+a notational shortcut for the statement $x(i)\sim y(i)$ for all
+$i\in\alpha(f)$. Note that if $\alpha(f)=0$ then $x\sim y$ is
+vacuously true. Beware that the symbol $\sim$ thus becomes
+overloaded. In effect, we are defining new relations $\sim$ on
+$X^{n}$ for $n\in\N$. So $0\sim 0$ may be vacuously true when
+referring to the relation on $X^{0}$, but may not be true (if $0\in
+X$) with respect to the relation on $X$.
+\index{congruent@Congruent
+relation}
+\begin{defin}\label{logic:def:congruent:relation}
+Let $X$ be a universal algebra of type $\alpha$. Let $\sim$ be a
+relation on $X$. We say that $\sim$ is a {\em congruent relation} on
+$X$, \ifand:
+    \[
+    \forall f\in\alpha\ ,\ \forall x,y\in X^{\alpha(f)}\ ,\ \ x\sim y\ \Rightarrow f(x)\sim f(y)
+    \]
+\end{defin}
+It follows that if $X$ is a universal algebra of type $\alpha$ with
+constants, and $\sim$ is a congruent relation on $X$, then $f(0)\sim
+f(0)$ for all $f\in\alpha$ such that $\alpha(f)=0$.
+\index{congruence@Congruence on universal algebra}
+\begin{defin}\label{logic:def:congruence}
+Let $X$ be a universal algebra of type $\alpha$. We call {\em
+congruence} on $X$ any equivalence relation on $X$ which is a
+congruent relation on $X$.
+\end{defin}
+
+The notion of {\em congruence} on a universal algebra is very
+important. This is particularly the case when dealing with free
+universal algebras. As already seen following
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation}, most interesting
+algebraic structures are not free (a notable exception being formal
+languages encountered in logic textbooks). A congruence $\sim$ on a
+universal algebra $X$ of type $\alpha$ will allow us to define a new
+universal algebra $[X]$ of type $\alpha$, called the {\em quotient
+universal algebra of $X$}. We shall see that quotients of free
+universal algebras are in fact everywhere. This is probably one of
+the reasons free universal algebras are key. A good example of
+congruence is the kernel of a morphism:
+\index{kernel@Kernel of morphism}
+\begin{defin}\label{logic:def:UA:congruence:kernel}
+Let $h:X\to Y$ be a homomorphism between two universal algebras $X$
+and $Y$ of type $\alpha$. We call {\em kernel} of $h$ the relation
+$\ker(h)$ on $X$:
+    \[
+    \ker(h)=\{\,(x,y)\in X\times X\ :\ h(x)=h(y)\,\}
+    \]
+\end{defin}
+\begin{prop}\label{logic:prop:UA:congruence:kernel}
+Let $h:X\to Y$ be a homomorphism between two universal algebras $X$
+and $Y$ of type $\alpha$. Then $\ker(h)$ is a congruence on $X$.
+\end{prop}
+\begin{proof}
+The relation $\ker(h)$ is clearly reflexive, symmetric and
+transitive. So it is an equivalence relation on $X$. It remains to
+show it is also a congruent relation. For an easier formalism,
+denote $\ker(h)=\,\sim$. Let $f\in\alpha$ and $x,y\in X^{\alpha(f)}$
+such that $x\sim y$. We need to show that $f(x)\sim f(y)$ which is
+$h\circ f(x)=h\circ f(y)$\,:
+    \[
+    h\circ f(x)=f\circ h(x)=f\circ h(y)=h\circ f(y)
+    \]
+The first and third equality are just expressing the fact that $h$
+is a morphism, while the second equality follows from $h(x)=h(y)$,
+itself a consequence of the fact that for all $i\in\alpha(f)$ we
+have $h(x)(i)=h(x(i))=h(y(i))=h(y)(i)$.
+\end{proof}

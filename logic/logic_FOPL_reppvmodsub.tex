@@ -1,0 +1,157 @@
+One of our goals in defining the minimal transform mapping ${\cal
+M}:\pv\to\pvb$ in
+page~\pageref{logic:def:FOPL:mintransform:transform} was to design
+an algebra \qv\ where the free and bound variables would be chosen
+from different sets. We now pursue this idea further. Given a set
+$V$, we defined the minimal extension $\bar{V}$ by adding to $V$ a
+disjoint copy of $\N$, giving us plenty of bound variables to choose
+from. Unfortunately in spite of this, the free algebra $\pvb$ is not
+very interesting to us, as it contains too many formulas, including
+those such as $\phi=\forall x(0\in x)$ which contravene our desired
+convention of keeping free variables in $V$ and bound variables in
+\N. So we need to restrict our attention to a smaller subset of
+\pvb\ and the obvious choice is to pick $\qv={\cal M}(\pv)$ i.e. to
+choose \qv\ as the range of the minimal transform mapping. From
+proposition~(\ref{logic:prop:FOPL:mintransform:variables}) and
+proposition~(\ref{logic:prop:FOPL:mintransform:variables:bound})
+this guarantees all formulas have free variables in $V$ and bound
+variables in \N. So we have the right set of formulas. However \qv\
+is not yet an algebra, as it is not a universal sub-algebra of \pvb.
+Indeed, given $x\in V$ and $\phi\in\qv$, the formula $\forall x\phi$
+is not an element of \qv. Somehow we would like \qv\ to be an
+algebra. But of which type? The free universal algebras \pv\ and
+\pvb\ do not have the same type. The algebra \pvb\ has many more
+quantification operators $\forall n$ for $n\in\N$ which \pv\ does
+not have. So what do we want for \qv? All elements of \qv\ have free
+variables in $V$. It does not add any value to quantify a formula
+with respect to a variable which is not free. So it is clear the
+unary operators $\forall n$ for $n\in\N$ should not be part of \qv,
+and \qv\ should be of the same type of universal algebra as \pv. So
+let's endow \qv\ with the appropriate structure of universal
+algebra: First we need an operator $\bot:\qv^{0}\to\qv$. Since
+$\bot={\cal M}(\bot)\in\qv$ we should keep the structure induced by
+\pvb\ and define $\bot(0)=\bot\in\qv$. Next we need a binary
+operator $\to:\qv^{2}\to\qv$. Since for all
+$\phi_{1},\phi_{2}\in\pv$, we have:
+    \[
+    {\cal M}(\phi_{1})\to{\cal M}(\phi_{2})={\cal M}(\phi_{1}\to\phi_{2})
+    \]
+we see that \qv\ is closed under the operator $\to$ of \pvb. So we
+should keep that too. Finally given $x\in V$, we need a unary
+operator $\forall {\bf x}:\qv^{1}\to\qv$. In this case the operator
+$\forall x$ of \pvb\ is not suitable for our purpose, as \qv\ is not
+closed under $\forall x$. So we need to define a new operator which
+we denote $\forall{\bf x}$ (with the letter $\bf x$ in bold) to
+avoid any possible confusion. Let us pick:
+    \begin{equation}\label{logic:eqn:FOPL:reppvmodsub:1}
+    \forall\phi\in\qv\ ,\ \forall{\bf x}\phi = \forall n\phi[n/x]
+    \end{equation}
+where $n=\min\{k\in\N:\mbox{$[k/x]$ valid for $\phi$}\}$ and the
+$\forall n$ on the right-hand-side of
+equation~(\ref{logic:eqn:FOPL:reppvmodsub:1}) is the usual
+quantification operator of \pvb. We need to check that this
+definition does indeed yield an operator $\forall {\bf
+x}:\qv^{1}\to\qv$, specifically that $\forall {\bf x}\phi\in\qv$ for
+all $\phi\in\qv$. So let $\phi\in\qv$. There exists $\phi_{1}\in\pv$
+such that $\phi={\cal M}(\phi_{1})$ and consequently we have:
+    \[
+    \forall{\bf x}\phi=\forall n\phi[n/x]=\forall n{\cal
+    M}(\phi_{1})[n/x]={\cal M}(\forall x\phi_{1})\in\qv
+    \]
+where the last equality follows from
+definition~(\ref{logic:def:FOPL:mintransform:transform}) and:
+    \[
+    n=\min\{k\in\N:\mbox{$[k/x]$ valid for ${\cal M}(\phi_{1})$}\}
+    \]
+So \qv\ is now a universal algebra of the same type as \pv\ which is
+what we set out to achieve. Note that this algebra is not free in
+general since:
+    \[
+    \forall{\bf x}\forall{\bf y}(x\in y)=\forall\,1\forall\,0\,(1\in
+    0)=\forall{\bf y}\forall{\bf x}(y\in x)
+    \]
+whenever $x$ and $y$ are two distinct elements of $V$. This
+contradicts the uniqueness principle of
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} which prevails in
+free universal algebras.
+\index{minimal@Minimal transform
+algebra}\index{q@$\qv$ : minimal transform algebra}
+\begin{defin}\label{logic:def:FOPL:reppvmodsub:qv}
+Let $V$ be a set with first order logic type $\alpha$. We call {\em
+minimal transform algebra} associated with $V$, the universal
+algebra \qv\ of type $\alpha$:
+    \[
+    \qv={\cal M}(\pv)\subseteq\pvb
+    \]
+where ${\cal M}:\pv\to\pvb$ is the minimal transform mapping, and
+the operators $\bot, \to$ are induced from \pvb\ while for all $x\in
+V$ and $\phi\in\qv$ we have:
+   \[
+   \forall{\bf x}\phi = \forall n\phi[n/x]
+   \]
+where $n=\min\{k\in\N:\mbox{$[k/x]$ valid for $\phi$}\}$.
+\end{defin}
+
+\begin{prop}\label{logic:prop:FOPL:reppvmodsub:morphism}
+Let $V$ be a set with minimal transform algebra \qv. Then, the
+minimal transform mapping ${\cal M}:\pv\to\qv$ is a surjective
+morphism.
+\end{prop}
+\begin{proof}
+The minimal transform mapping ${\cal M}:\pv\to\qv$ is clearly
+surjective by definition~(\ref{logic:def:FOPL:reppvmodsub:qv}) of
+\qv. So it remains to show it is a morphism. From
+definition~(\ref{logic:def:FOPL:mintransform:transform}) of
+page~\pageref{logic:def:FOPL:mintransform:transform} we have ${\cal
+M}(\bot)=\bot$ and for all $\phi_{1},\phi_{2}\in\pv$:
+    \[
+     {\cal M}(\phi_{1}\to\phi_{2})={\cal M}(\phi_{1})
+     \to{\cal M}(\phi_{2})
+     \]
+So it remains to show that ${\cal M}(\forall x\phi_{1})=\forall{\bf
+x}{\cal M}(\phi_{1})$ for all $x\in V$ and $\phi_{1}\in\pv$.
+However, defining $n=\min\{k\in\N:\mbox{$[k/x]$ valid for ${\cal
+M}(\phi_{1})$}\}$ we have:
+    \[
+    {\cal M}(\forall x\phi_{1})=\forall n{\cal
+    M}(\phi_{1})[n/x]=\forall{\bf x}{\cal M}(\phi_{1})
+    \]
+where the two equalities follow from
+definitions~(\ref{logic:def:FOPL:mintransform:transform})
+and~(\ref{logic:def:FOPL:reppvmodsub:qv}) respectively.
+\end{proof}
+
+So from proposition~(\ref{logic:prop:FOPL:reppvmodsub:morphism}) we
+have a morphism ${\cal M}:\pv\to\qv$ which is surjective, while from
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) we have the
+equivalence:
+     \[
+     {\cal M}(\phi)={\cal M}(\psi)\ \Leftrightarrow\ \phi\sim\psi
+     \]
+So the kernel of this morphism is exactly the substitution
+congruence on \pv.
+
+\begin{theorem}\label{logic:the:FOPL:reppvmodsub:isomorphism}
+Let $V$ be a set with minimal transform algebra \qv, and let the
+quotient universal algebra of \pv\ modulo the substitution
+congruence be denoted  $[\pv]$ as per {\em
+theorem~(\ref{logic:the:quotient})}. Let ${\cal M}^{*}:[\pv]\to\qv$
+be defined as:
+    \[
+    \forall\phi\in\pv\ ,\ {\cal M}^{*}([\phi])={\cal
+    M}(\phi)
+    \]
+where ${\cal M}$ is the minimal transform mapping. Then ${\cal
+M}^{*}$ is an isomorphism.
+\end{theorem}
+\begin{proof}
+From proposition~(\ref{logic:prop:FOPL:reppvmodsub:morphism}) ${\cal
+M}:\pv\to\qv$ is a surjective morphism and from
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}), the kernel
+$\ker({\cal M})$ coincides with the substitution congruence on \pv.
+Hence the fact that ${\cal M}^{*}:[\pv]\to\qv$ is an isomorphism
+follows immediately from the first isomorphism
+theorem~(\ref{logic:the:UA:firstiso}) of
+page~\pageref{logic:the:UA:firstiso}.
+\end{proof}

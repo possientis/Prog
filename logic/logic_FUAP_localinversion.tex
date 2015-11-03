@@ -1,0 +1,509 @@
+A substitution congruence for proofs will never be acceptable to us
+unless it has the same connection to the minimal transform which it
+has for formulas. So we need to prove the implication ${\cal
+M}(\pi)={\cal M}(\rho)\ \Rightarrow\ \pi\sim\rho$. At some point we
+shall be faced with an equality ${\cal M}(\pi_{1})[n/x]={\cal
+M}(\rho_{1})[n/x]$ from which we shall want to argue that ${\cal
+M}(\pi_{1})={\cal M}(\rho_{1})$. So we shall need to have a local
+inversion theorem for proofs just as we have
+theorem~(\ref{logic:the:FOPL:localinv:main}) of
+page~\pageref{logic:the:FOPL:localinv:main} for formulas. So the
+purpose of this section is to establish
+theorem~(\ref{logic:the:FUAP:localinversion:inversion}) of
+page~\pageref{logic:the:FUAP:localinversion:inversion} below. A
+local inversion theorem allows us to derive $\pi=\rho$ from an
+equality $\sigma(\pi)=\sigma(\rho)$ in certain conditions,
+especially in cases when the proof substitution $\sigma:\pvs\to{\bf
+\Pi}(W)$ associated with $\sigma:V\to W$ may not be an injective
+map. We are pretty sure we could find ways to achieve our purpose
+without a local inversion theorem. But the result is interesting in
+its own right. So rather than redesigning old proofs based on the
+equivalence ${\cal M}(\phi)\sim i(\phi)$ where $i:V\to\bar{V}$ is
+the inclusion mapping, we have decided to keep a local inversion
+theorem for proofs in our list of objectives. The material that
+follows is relatively technical and dry. It is simply an extension
+of the work previously done for formulas. A lot of motivational
+background can be found in the discussions preceding
+lemma~(\ref{logic:lemma:FOPL:localinv:lem}). We start with the
+notion of {\em dual substitution} $\tau:\pvs\to{\bf\Pi}(W)$
+associated with an ordered pair $(\tau_{0},\tau_{1})$ of maps
+$\tau_{0},\tau_{1}:V\to W$. The underlying idea is that the proof
+$\tau(\pi)$ should correspond to the proof $\pi$, where all free
+variables have been substituted in accordance to the map $\tau_{0}$
+and bound variables in accordance to the map $\tau_{1}$. The main
+issue here is that $\tau(\pi)$ cannot be defined directly with a
+simple recursion. A recursive formula would not be able to tell
+whether a variable will remain free in the final proof being
+considered. So the proof $\tau(\pi)$ needs to be defined in two
+stages. We start by defining a map $\tau^{\circ}:\pvs\to[{\cal
+P}(V)\to{\bf\Pi}(W)]$ so that $\tau^{\circ}(\pi)$ rather than being
+a proof, is a map $\tau^{\circ}(\pi):{\cal P}(V)\to{\bf\Pi}(W)$. If
+$U\subseteq V$ is a set of variables, then $\tau^{\circ}(\pi)(U)$ is
+the proof obtained from $\pi$, $\tau_{0}$ and $\tau_{1}$ assuming
+all variables in $U$ are free, except those being bound by the
+recursive formula. We then define $\tau(\pi)$ as
+$\tau(\pi)=\tau^{\circ}(\pi)(V)$. More explanations can be found in
+the discussion preceding
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}). The following
+definition is in fact the counterpart of
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) which defines
+a map $\tau^{*}:\pv\to[{\cal P}(V)\to{\bf P}(W)]$ for formulas which
+corresponds to our $\tau^{\circ}:\pvs\to[{\cal P}(V)\to{\bf\Pi}(W)]$
+for proofs. The key point of note in
+definition~(\ref{logic:def:FUAP:localinversion:dualsubst}) below is
+that $\tau^{\circ}(\pi)(U)$ is defined in terms of
+$\tau^{\circ}(\pi_{1})(U\setminus\{x\})$ whenever $\pi$ is of the
+form $\pi=\gen x\pi_{1}$. Loosely speaking, the recursive formula
+has now become aware that $x$ is no longer a free variable.
+
+
+\index{dual@Dual substitution in proof}
+\begin{defin}\label{logic:def:FUAP:localinversion:dualsubst}
+Let $V$, $W$ be sets and $\tau_{0}, \tau_{1}:V\to W$ be maps. We
+call {\em dual variable substitution} associated with
+$(\tau_{0},\tau_{1})$ the map $\tau:\pvs\to {\bf\Pi}(W)$ defined by
+$\tau(\pi)=\tau^{\circ}(\pi)(V)$, where the map
+$\tau^{\circ}:\pvs\to[{\cal P}(V)\to{\bf\Pi}(W)]$ is defined by the
+following structural recursion, given $\pi\in\pvs$ and $U\in{\cal
+P}(V)$:
+    \begin{equation}\label{logic:eqn:FUAP:localinversion:dualsubst:1}
+                    \tau^{\circ}(\pi)(U)=\left\{
+                    \begin{array}{lcl}
+                    \tau^{*}(\phi)(U)&\mbox{\ if\ }&\pi=\phi\in\pv\\
+                    \axi\tau^{*}(\phi)(U)&\mbox{\ if\ }&\pi=\axi\phi\\
+                    \tau^{\circ}(\pi_{1})(U)\pon\,\tau^{\circ}(\pi_{2})(U)
+                    &\mbox{\ if\ }&\pi=\pi_{1}\pon\pi_{2}\\
+                    \gen \tau_{1}(x)\tau^{\circ}(\pi_{1})(U\setminus\{x\})&\mbox{\ if\ }&\pi=\gen
+                    x\pi_{1}\\
+                    \end{array}\right.
+    \end{equation}
+where the map $\tau^{*}:\pv\to[{\cal P}(V)\to{\bf P}(W)]$ is as per
+{\em definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}
+\end{defin}
+
+\begin{prop}
+The structural recursion of {\em
+definition~(\ref{logic:def:FUAP:localinversion:dualsubst})} is
+legitimate.
+\end{prop}
+\begin{proof}
+We need to prove the existence and uniqueness of
+$\tau^{\circ}:\pvs\to[{\cal P}(V)\to{\bf\Pi}(W)]$ satisfying
+equation~(\ref{logic:eqn:FUAP:localinversion:dualsubst:1}). We shall
+do so using theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion}. So we take $X=\pvs$,
+$X_{0}=\pv$ and $A=[{\cal P}(V)\to{\bf\Pi}(W)]$. We consider the map
+$g_{0}:X_{0}\to A$ defined by $g_{0}(\phi)(U)=\tau^{*}(\phi)(U)$
+where it is understood that $\tau^{*}:\pv\to[{\cal P}(V)\to{\bf
+P}(W)]$ is as per
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}). Given
+$\phi\in\pv$ we define $h(\axi\phi):A^{0}\to A$ by setting
+$h(\axi\phi)(0)(U)=\axi\tau^{*}(\phi)(U)$ and $h(\pon):A^{2}\to A$
+by setting $h(\pon)(v)(U)=v(0)(U)\pon\,v(1)(U)$. Finally, we define
+$h(\gen x):A^{1}\to A$\,:
+    \[
+    h(\gen x)(v)(U)=\gen\tau_{1}(x)v(0)(U\setminus\{x\})
+    \]
+From theorem~(\ref{logic:the:structural:recursion}) there exists a
+unique map $\tau^{\circ}:X\to A$ with $\tau^{\circ}(\pi)=g_{0}(\pi)$
+whenever $\pi\in\pv$ and
+$\tau^{\circ}(f(\pi))=h(f)(\tau^{\circ}(\pi))$ for all
+$f=\axi\phi,\pon,\gen x$ and $\pi\in X^{\alpha(f)}$. So let us check
+that this works: from $\tau^{\circ}(\pi)=g_{0}(\pi)$ whenever
+$\pi=\phi$ for some $\phi\in\pv$ we obtain
+$\tau^{\circ}(\pi)(U)=g_{0}(\phi)(U)=\tau^{*}(\phi)(U)$ which is the
+first line of
+equation~(\ref{logic:eqn:FUAP:localinversion:dualsubst:1}). Take
+$f=\axi\phi$ for some $\phi\in\pv$ and $\pi=\axi\phi$:
+    \begin{eqnarray*}
+    \tau^{\circ}(\pi)(U)
+    &=&\tau^{\circ}(\axi\phi)(U)\\
+    \mbox{proper notation}\ \rightarrow
+    &=&\tau^{\circ}(\axi\phi(0))(U)\\
+    &=&\tau^{\circ}(f(0))(U)\\
+    \tau^{\circ}:X^{0}\to A^{0}\ \rightarrow
+    &=&h(f)(\tau^{\circ}(0))(U)\\
+    &=&h(f)(0)(U)\\
+    &=&h(\axi\phi)(0)(U)\\
+    &=&\axi\tau^{*}(\phi)(U)
+    \end{eqnarray*}
+which is the second line of
+equation~(\ref{logic:eqn:FUAP:localinversion:dualsubst:1}). Recall
+that the $\tau^{\circ}$ which appears in the fourth equality refers
+to the unique mapping $\tau^{\circ}:X^{0}\to A^{0}$. We now take
+$f=\pon$ and $\pi=\pi_{1}\pon\pi_{2}$ for some
+$\pi_{1},\pi_{2}\in\pvs$. Then we have:
+    \begin{eqnarray*}
+    \tau^{\circ}(\pi)(U)&=&\tau^{\circ}(\pi_{1}\pon\pi_{2})(U)\\
+    \pi^{*}(0)=\pi_{1},\ \pi^{*}(1)=\pi_{2}\ \rightarrow
+    &=&\tau^{\circ}(f(\pi^{*}))(U)\\
+    \tau^{\circ}:X^{2}\to A^{2}\ \rightarrow
+    &=&h(f)(\tau^{\circ}(\pi^{*}))(U)\\
+    &=&h(\pon)(\tau^{\circ}(\pi^{*}))(U)\\
+    &=&\tau^{\circ}(\pi^{*})(0)(U)\pon\,\tau^{\circ}(\pi^{*})(1)(U)\\
+    &=&\tau^{\circ}(\pi^{*}(0))(U)\pon\,\tau^{\circ}(\pi^{*}(1))(U)\\
+    &=&\tau^{\circ}(\pi_{1})(U)\pon\,\tau^{\circ}(\pi_{2})(U)\\
+    \end{eqnarray*}
+This is the third line of
+equation~(\ref{logic:eqn:FUAP:localinversion:dualsubst:1}). Finally
+consider $f=\gen x$ and $\pi=\gen x\pi_{1}$:
+    \begin{eqnarray*}
+    \tau^{\circ}(\pi)(U)
+    &=&\tau^{\circ}(\gen x\pi_{1})(U)\\
+    \pi^{*}(0)=\pi_{1}\ \rightarrow
+    &=&\tau^{\circ}(f(\pi^{*}))(U)\\
+    \tau^{\circ}:X^{1}\to A^{1}\ \rightarrow
+    &=&h(f)(\tau^{\circ}(\pi^{*}))(U)\\
+    &=&h(\gen x)(\tau^{\circ}(\pi^{*}))(U)\\
+    &=&\gen\tau_{1}(x)\tau^{\circ}(\pi^{*})(0)(U\setminus\{x\})\\
+    &=&\gen\tau_{1}(x)\tau^{\circ}(\pi^{*}(0))(U\setminus\{x\})\\
+    &=&\gen\tau_{1}(x)\tau^{\circ}(\pi_{1})(U\setminus\{x\})\\
+    \end{eqnarray*}
+and this is the last line of
+equation~(\ref{logic:eqn:FUAP:localinversion:dualsubst:1}).
+\end{proof}
+
+The following lemma is the counterpart of
+lemma~(\ref{logic:lemma:FOPL:localinv:lem}) prior to which some
+motivational discussion may be found. It is the main lemma of this
+section allowing us to prove the local inversion
+theorem~(\ref{logic:the:FUAP:localinversion:inversion}) below. The
+purpose of the theorem is to derive $\pi=\rho$ from the equality
+$\sigma(\pi)=\sigma(\rho)$ in cases when $\sigma$ behaves nicely
+enough on $\pi$ and $\rho$. Specifically, we require that $\sigma$
+be an injective map when acting on the free variables of $\pi$ and
+$\rho$, and also when acting on the bound variables of $\pi$ and
+$\rho$. We also require that $\sigma$ be valid for $\pi$ and $\rho$
+so that no confusion arises between the free and bound variables.
+The strategy to obtain the equality $\pi=\rho$ is simply to
+construct a {\em local inverse} of $\sigma$, namely a map
+$\tau:{\bf\Pi}(W)\to\pvs$ for which the equality
+$\tau\circ\sigma(\pi)=\pi$ holds in some {\em neighborhood} $\Pi$ of
+$\pi$ and $\rho$. The map $\tau:{\bf\Pi}(W)\to\pvs$ is defined as a
+{\em dual substitution} as per
+definition~(\ref{logic:def:FUAP:localinversion:dualsubst})
+associated with a pair $(\tau_{0},\tau_{1})$ which are left-inverses
+of $\sigma$ when restricted to the free and bound variables
+respectively. The main difficulty is to check the whole construction
+works, namely that the equality $\tau\circ\sigma(\pi)=\pi$ holds.
+The argument needs to be done by structural induction which is the
+purpose of this lemma leading to
+equation~(\ref{logic:eqn:FUAP:localinversion:Main:1}) below. The
+lemma is carefully designed so that the induction hypothesis carries
+through nicely at every step of the structural induction argument,
+as it should.
+
+\begin{lemma}\label{logic:lemma:FUAP:localinversion:Main}
+Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
+$V_{1}$ be subsets of $V$ and $\tau_{0},\tau_{1}:W\to V$ be maps
+such that for all $x\in V$:
+   \begin{eqnarray*}
+    (i)&&x\in V_{0}\ \Rightarrow\ \tau_{0}\circ\sigma(x)=x\\
+    (ii)&&x\in V_{1}\ \Rightarrow\ \tau_{1}\circ\sigma(x)=x
+    \end{eqnarray*}
+Let $\tau^{\circ}:{\bf\Pi}(W)\to[{\cal P}(W)\to\pvs]$ be the map
+associated with $(\tau_{0},\tau_{1})$ as per {\em
+definition~(\ref{logic:def:FUAP:localinversion:dualsubst})}. Then
+for all $U\in{\cal P}(V)$ and $\pi\in\pvs$ we have:
+    \begin{equation}\label{logic:eqn:FUAP:localinversion:Main:1}
+    \tau^{\circ}(\sigma(\pi))(W\setminus\sigma(U))=\pi
+    \end{equation}
+provided $U$ and $\pi$ satisfy the following properties:
+    \begin{eqnarray*}
+    (iii)&&(\,\free(\pi)\setminus U\subseteq V_{0}\,)
+    \land(\,\bound(\pi)\cup U\subseteq V_{1}\,)\\
+    (iv)&&(\,\mbox{$\sigma$ valid for $\pi$}\,)\land
+    (\,\sigma(U)\cap\sigma(\free(\pi)\setminus U)=\emptyset\,)\\
+    \end{eqnarray*}
+\end{lemma}
+\begin{proof}
+We assume $\sigma:V\to W$ is given together with the subsets
+$V_{0}$, $V_{1}$ and the maps $\tau_{0},\tau_{1}:W\to V$ satisfying
+$(i)$ and $(ii)$. Let $\tau^{\circ}:{\bf\Pi}(W)\to[{\cal
+P}(W)\to\pvs]$ be the map associated with the ordered pair
+$(\tau_{0},\tau_{1})$ as per
+definition~(\ref{logic:def:FUAP:localinversion:dualsubst}) of
+page~\pageref{logic:def:FUAP:localinversion:dualsubst}. Given
+$U\subseteq V$ and $\pi\in\pvs$ consider the property $q(U,\pi)$
+defined by $(iii)$ and $(iv)$. Then we need to show that for all
+$\pi\in\pvs$ we have:
+    \[
+    \forall U\subseteq V\ ,\ [\,q(U,\pi)\ \Rightarrow\
+    \tau^{\circ}(\sigma(\pi))(W\setminus\sigma(U))=\pi\,]
+    \]
+We shall do so by a structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Let $U\subseteq V$ and suppose
+$q(U,\pi)$ is true. We need to show that
+equation~(\ref{logic:eqn:FUAP:localinversion:Main:1}) holds. We
+have:
+    \begin{eqnarray*}
+    \tau^{\circ}(\sigma(\pi))(W\setminus\sigma(U))&=&\tau^{\circ}(\sigma(\phi))(W\setminus\sigma(U))\\
+    \mbox{def.~(\ref{logic:def:FUAP:localinversion:dualsubst})}\ \rightarrow
+    &=&\tau^{*}(\sigma(\phi))(W\setminus\sigma(U))\\
+    \mbox{lemma~(\ref{logic:lemma:FOPL:localinv:lem})}\ \rightarrow&=&\phi\\
+    &=&\pi
+    \end{eqnarray*}
+Next we assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then we
+have:
+    \begin{eqnarray*}
+    \tau^{\circ}(\sigma(\pi))(W\setminus\sigma(U))&=&\tau^{\circ}(\sigma(\axi\phi))(W\setminus\sigma(U))\\
+    &=&\tau^{\circ}(\axi\sigma(\phi))(W\setminus\sigma(U))\\
+    \mbox{def.~(\ref{logic:def:FUAP:localinversion:dualsubst})}\ \rightarrow
+    &=&\axi\tau^{*}(\sigma(\phi))(W\setminus\sigma(U))\\
+    \mbox{A: to be proved}\ \rightarrow&=&\axi\phi\\
+    &=&\pi
+    \end{eqnarray*}
+It remains to justify point $A$ for which we need to show
+$\tau^{*}(\sigma(\phi))(W\setminus\sigma(U))=\phi$. This follows
+once again from an application of
+lemma~(\ref{logic:lemma:FOPL:localinv:lem}), provided we can check
+the assumptions of the lemma are indeed satisfied whenever
+$q(U,\axi\phi)$ is itself satisfied. This follows from
+$\free(\axi\phi)=\free(\phi)$, $\bound(\axi\phi)=\bound(\phi)$ and
+the fact that the validity of $\sigma$ for $\axi\phi$ is equivalent
+to the validity of $\sigma$ for $\phi$, as proven from
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:axiom}).
+So we now assume that $\pi=\pi_{1}\pon\pi_{2}$ where
+$\pi_{1},\pi_{2}\in\pvs$ satisfy our desired property. We need to
+show the same is true of $\pi$. So let $U\subseteq V$ and suppose
+$q(U,\pi)$ is true. We need to show that
+equation~(\ref{logic:eqn:FUAP:localinversion:Main:1}) holds:
+    \begin{eqnarray*}
+    \tau^{\circ}(\sigma(\pi))(W\setminus\sigma(U))&=&
+    \tau^{\circ}(\sigma(\pi_{1}\pon\pi_{2}))(W\setminus\sigma(U))\\
+    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
+    &=&\tau^{\circ}(\sigma(\pi_{1}\pon\pi_{2}))(U^{*})\\
+    &=&\tau^{\circ}(\,\sigma(\pi_{1})\pon\,\sigma(\pi_{2})\,)(U^{*})\\
+    \mbox{definition~(\ref{logic:def:FUAP:localinversion:dualsubst})}\
+    \rightarrow
+    &=&\tau^{\circ}(\sigma(\pi_{1}))(U^{*})\pon\,\tau^{\circ}(\sigma(\pi_{2}))(U^{*})\\
+    \mbox{A: to be proved}\ \rightarrow&=&\pi_{1}\pon\pi_{2}\\
+    &=&\pi
+    \end{eqnarray*}
+So it remains to show that
+equation~(\ref{logic:eqn:FUAP:localinversion:Main:1}) holds for
+$\pi_{1}$ and $\pi_{2}$. However, from our induction hypothesis, our
+property is true for $\pi_{1}$ and $\pi_{2}$. Hence, it is
+sufficient to prove that $q(U,\pi_{1})$ and $q(U,\pi_{2})$ are true.
+First we show that $q(U,\pi_{1})$ is true. We need to prove that
+$(iii)$ and $(iv)$ above are true for $\pi_{1}$\,:
+    \[
+    \free(\pi_{1})\setminus U\subseteq\free(\pi)\setminus U\subseteq V_{0}
+    \]
+where the second inclusion follows from our assumption of
+$q(U,\pi)$. Furthermore:
+    \[
+    \bound(\pi_{1})\cup U\subseteq\bound(\pi)\cup U\subseteq V_{1}
+    \]
+So $(iii)$ is now established for $\pi_{1}$. Also from $q(U,\pi)$ we
+obtain:
+    \[
+    \sigma(U)\cap\sigma(\free(\pi_{1})\setminus U)\subseteq
+    \sigma(U)\cap\sigma(\free(\pi)\setminus U)=\emptyset
+    \]
+So it remains to show that $\sigma$ is valid for $\pi_{1}$, which
+follows immediately from
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:pon}) and
+the validity of $\sigma$ for $\pi=\pi_{1}\pon\pi_{2}$. This
+completes our proof of $q(U,\pi_{1})$. The proof of $q(U,\pi_{2})$
+being identical, we are now done with the case
+$\pi=\pi_{1}\pon\pi_{2}$. So we now assume that $\pi=\gen x\pi_{1}$
+where $x\in V$ and $\pi_{1}\in\pvs$ satisfy our induction
+hypothesis. We need to show the same is true for $\pi$. So let
+$U\subseteq V$ and suppose $q(U,\pi)$ is true. We need to show
+equation~(\ref{logic:eqn:FUAP:localinversion:Main:1})\,:
+    \begin{eqnarray*}
+    \tau^{\circ}(\sigma(\pi))(W\setminus\sigma(U))&=&
+    \tau^{\circ}(\sigma(\gen x\pi_{1}))(W\setminus\sigma(U))\\
+    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
+    &=&\tau^{\circ}(\sigma(\gen x\pi_{1}))(U^{*})\\
+    &=&\tau^{\circ}(\,\gen\sigma(x)\sigma(\pi_{1})\,)(U^{*})\\
+    \mbox{definition~(\ref{logic:def:FUAP:localinversion:dualsubst})}\
+    \rightarrow
+    &=&\gen \tau_{1}\circ\sigma(x)\,\tau^{\circ}(
+    \sigma(\pi_{1}))(\,U^{*}\setminus\{\sigma(x)\}\,)\\
+    \mbox{$(ii)$ and $x\in\bound(\pi)\subseteq V_{1}$}\ \rightarrow
+    &=&\gen x\,\tau^{\circ}(
+    \sigma(\pi_{1}))(\,U^{*}\setminus\{\sigma(x)\}\,)\\
+    \mbox{define $U_{1}^{*}=U^{*}\setminus\{\sigma(x)\}$}\ \rightarrow
+    &=&\gen x\,\tau^{\circ}(\sigma(\pi_{1}))(U_{1}^{*})\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\gen x\pi_{1}\\
+    &=&\pi
+    \end{eqnarray*}
+So it remains to show that
+$\tau^{\circ}(\sigma(\pi_{1}))(U_{1}^{*})=\pi_{1}$. From
+$U^{*}=W\setminus\sigma(U)$ and
+$U_{1}^{*}=U^{*}\setminus\{\sigma(x)\}$ we obtain
+$U_{1}^{*}=W\setminus\sigma(U_{1})$ where $U_{1}=U\cup\{x\}$. So it
+remains to show that
+$\tau^{\circ}(\sigma(\pi_{1}))(W\setminus\sigma(U_{1}))=\pi_{1}$, or
+equivalently that
+equation~(\ref{logic:eqn:FUAP:localinversion:Main:1}) holds for
+$U_{1}$ and $\pi_{1}$. Having assumed $\pi_{1}$ satisfies our
+induction hypothesis, it is therefore sufficient to prove that
+$q(U_{1},\pi_{1})$ is true. So we need to show that $(iii)$ and
+$(iv)$ above are true for $U_{1}$ and $\pi_{1}$, which goes as
+follows:
+    \begin{eqnarray*}
+    \free(\pi_{1})\setminus
+    U_{1}&=&\free(\pi_{1})\setminus\{x\}\setminus U\\
+    &=&\free(\pi)\setminus U\\
+    q(U,\pi)\ \rightarrow&\subseteq&V_{0}
+    \end{eqnarray*}
+Furthermore:
+    \begin{eqnarray*}
+    \bound(\pi_{1})\cup U_{1}&=&\bound(\pi_{1})\cup\{x\}\cup U\\
+    &=&\bound(\pi)\cup U\\
+    q(U,\pi)\ \rightarrow&\subseteq& V_{1}
+    \end{eqnarray*}
+and:
+    \begin{eqnarray*}
+    \sigma(U_{1})\cap\sigma(\free(\pi_{1})\setminus U_{1})
+    &=&\sigma(U_{1})\cap\sigma(\,\free(\pi_{1})\setminus\{x\}\setminus
+    U\,)\\
+    &=&\sigma(U_{1})\cap\sigma(\free(\pi)\setminus U)\\
+    &=&(\sigma(U)\cup\{\sigma(x)\})\cap\sigma(\free(\pi)\setminus
+    U)\\
+    q(U,\pi)\ \rightarrow&=&\{\sigma(x)\}\cap\sigma(\free(\pi)\setminus
+    U)\\
+    &\subseteq&\{\sigma(x)\}\cap\sigma(\free(\pi))\\
+    \mbox{A: to be proved}\ \rightarrow&=&\emptyset
+    \end{eqnarray*}
+So we need to show that $\sigma(u)\neq\sigma(x)$ whenever
+$u\in\free(\pi)$, which follows immediately from
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:gen}) and
+the validity of $\sigma$ for $\pi=\gen x\pi_{1}$, itself a
+consequence of our assumption $q(U,\pi)$. So we are almost done
+proving $q(U_{1},\pi_{1})$ and it remains to show that $\sigma$ is
+valid for $\pi_{1}$, which is another immediate consequence of
+proposition~(\ref{logic:prop:FUAP:validsubproof:recursion:gen}).
+This completes our induction argument.
+\end{proof}
+
+We are now ready to conclude with our local inversion theorem which
+is the counterpart of theorem~(\ref{logic:the:FOPL:localinv:main})
+of page~\pageref{logic:the:FOPL:localinv:main} and follows from
+lemma~(\ref{logic:lemma:FUAP:localinversion:Main}).
+
+\index{local@Local inversion for proof}
+\begin{theorem}\label{logic:the:FUAP:localinversion:inversion}
+Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
+$V_{1}$ be subsets of $V$ such that $\sigma_{|V_{0}}$ and
+$\sigma_{|V_{1}}$ are injective maps. Let $\Pi$ be the subset of
+\pvs:
+    \[
+    \Pi=\{\pi\in\pvs:(\free(\pi)\subseteq
+    V_{0})\land(\bound(\pi)\subseteq V_{1})\land(\mbox{$\sigma$
+    valid for $\pi$})\}
+    \]
+Then, there exits $\tau:{\bf\Pi}(W)\to\pvs$ such that:
+    \[
+    \forall\pi\in\Pi\ ,\ \tau\circ\sigma(\pi)=\pi
+    \]
+where $\sigma:\pvs\to{\bf\Pi}(W)$ also denotes the associated proof
+substitution mapping.
+\end{theorem}
+\begin{proof}
+Let $\sigma:V\to W$ be a map and $V_{0},V_{1}\subseteq V$ be such
+that $\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are injective maps. We
+shall distinguish two cases: first we assume that $V=\emptyset$.
+Then for all $\pi\in\pvs$ the inclusions $\free(\pi)\subseteq V_{0}$
+and $\bound(\pi)\subseteq V_{1}$ are always true. Furthermore, from
+definition~(\ref{logic:def:FUAP:validsubproof:validsub}) the
+substitution $\sigma$ is always valid for~$\pi$. Hence we have
+$\Pi=\pvs$ and we need to find $\tau:{\bf\Pi}(W)\to\pvs$ such that
+$\tau\circ\sigma(\pi)=\pi$ for all $\pi\in\pvs$. Our first step is
+to apply theorem~(\ref{logic:the:FOPL:localinv:main}) of
+page~(\pageref{logic:the:FOPL:localinv:main}) to obtain a map
+$\tau^{*}:{\bf P}(W)\to\pv$ such that
+$\tau^{*}\circ\sigma(\phi)=\phi$ for all $\phi\in\Gamma$ where
+$\Gamma=\{\phi\in\pv:(\free(\phi)\subseteq
+    V_{0})\land(\bound(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
+    valid for $\phi$})\}$. However, since $V=\emptyset$ we have
+$\Gamma=\pv$ and so $\tau^{*}\circ\sigma(\phi)=\phi$ for all
+$\phi\in\pv$. We define $\tau$ with the following recursion on
+${\bf\Pi}(W)$\,:
+    \begin{equation}\label{logic:eqn:FUAP:localinversion:inversion:1}
+                    \tau(\rho)=\left\{
+                    \begin{array}{lcl}
+                    \tau^{*}(\psi)&\mbox{\ if\ }&\rho=\psi\in{\bf P}(W)\\
+                    \axi\tau^{*}(\psi)&\mbox{\ if\ }&\rho=\axi\psi\\
+                    \tau(\rho_{1})\pon\,\tau(\rho_{2})
+                    &\mbox{\ if\ }&\rho=\rho_{1}\pon\rho_{2}\\
+                    \bot&\mbox{\ if\ }&\rho=\gen
+                    u\rho_{1}\\
+                    \end{array}\right.
+    \end{equation}
+We do not really care how $\tau(\rho)$ is defined in the case when
+$\rho=\gen u\rho_{1}$ so we are setting $\tau(\rho)=\bot$ which is
+the proof with single hypothesis $\bot$ and conclusion $\bot$. We
+shall now prove that $\tau\circ\sigma(\pi)=\pi$ using a structural
+induction argument. First we assume that $\pi=\phi$ for some
+$\phi\in\pv$. Then we have:
+    \begin{eqnarray*}
+    \tau\circ\sigma(\pi)&=&\tau\circ\sigma(\phi)\\
+    \mbox{eq.~(\ref{logic:eqn:FUAP:localinversion:inversion:1})}\ \rightarrow
+    &=&\tau^{*}\circ\sigma(\phi)\\
+    &=&\phi\\
+    &=&\pi
+    \end{eqnarray*}
+Next we assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then we
+have:
+    \begin{eqnarray*}
+    \tau\circ\sigma(\pi)&=&\tau\circ\sigma(\axi\phi)\\
+    \tau\circ\sigma(\pi)&=&\tau(\axi\sigma(\phi))\\
+    \mbox{eq.~(\ref{logic:eqn:FUAP:localinversion:inversion:1})}\ \rightarrow
+    &=&\axi\tau^{*}\circ\sigma(\phi)\\
+    &=&\axi\phi\\
+    &=&\pi
+    \end{eqnarray*}
+Next we assume that $\pi=\pi_{1}\pon\pi_{2}$ with
+$\tau\circ\sigma(\pi_{1})=\pi_{1}$ and
+$\tau\circ\sigma(\pi_{2})=\pi_{2}$. Then:
+    \begin{eqnarray*}
+    \tau\circ\sigma(\pi)&=&\tau\circ\sigma(\pi_{1}\pon\pi_{2})\\
+    &=&\tau(\,\sigma(\pi_{1})\pon\,\sigma(\pi_{2})\,)\\
+    \mbox{eq.~(\ref{logic:eqn:FUAP:localinversion:inversion:1})}\ \rightarrow
+    &=&\tau\circ\sigma(\pi_{1})\pon\,\tau\circ\sigma(\pi_{2})\\
+    &=&\pi_{1}\pon\pi_{2}\\
+    &=&\pi
+    \end{eqnarray*}
+Since $V=\emptyset$ there is nothing to check in the case when
+$\pi=\gen x\pi_{1}$. So this completes our proof when $V=\emptyset$,
+and we now assume that $V\neq\emptyset$. Let $x_{0}\in V$ and
+consider $\tau_{0}:\sigma(V_{0})\to V$ and
+$\tau_{1}:\sigma(V_{1})\to V$ to be the inverse mappings of
+$\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ respectively. Extend
+$\tau_{0}$ and $\tau_{1}$ to the whole of $W$ by setting
+$\tau_{0}(u)=x_{0}$ if $u\not\in\sigma(V_{0})$ and
+$\tau_{1}(u)=x_{0}$ if $u\not\in\sigma(V_{1})$. Then $\tau_{0},
+\tau_{1}:W\to V$ are left-inverse of $\sigma$ on $V_{0}$ and $V_{1}$
+respectively, i.e. we have:
+    \begin{eqnarray*}
+    (i)&&x\in V_{0}\ \Rightarrow\ \tau_{0}\circ\sigma(x)=x\\
+    (ii)&&x\in V_{1}\ \Rightarrow\ \tau_{1}\circ\sigma(x)=x
+    \end{eqnarray*}
+Let $\tau:{\bf\Pi}(W)\to\pvs$ be the dual variable substitution
+associated with the ordered pair $(\tau_{0},\tau_{1})$ as per
+definition~(\ref{logic:def:FUAP:localinversion:dualsubst}). We shall
+complete the proof of the theorem by showing that
+$\tau\circ\sigma(\pi)=\pi$ for all $\pi\in\Pi$ where:
+    \[
+    \Pi=\{\pi\in\pvs:(\free(\pi)\subseteq
+    V_{0})\land(\bound(\pi)\subseteq V_{1})\land(\mbox{$\sigma$
+    valid for $\pi$})\}
+    \]
+So let $\pi\in\Pi$. Then in particular $\pi$ satisfies property
+$(iii)$ and $(iv)$ of
+lemma~(\ref{logic:lemma:FUAP:localinversion:Main}) in the particular
+case when $U=\emptyset$. So applying
+lemma~(\ref{logic:lemma:FUAP:localinversion:Main}) for
+$U=\emptyset$, we see that
+$\tau^{\circ}(\sigma(\pi))(W\setminus\sigma(\emptyset))=\pi$ where
+$\tau^{\circ}:{\bf\Pi}(W)\to[{\cal P}(W)\to\pvs]$ is the map
+associated with $\tau$. Hence we conclude that
+$\tau\circ\sigma(\pi)=\tau^{\circ}(\sigma(\pi))(W)=\pi$.
+\end{proof}

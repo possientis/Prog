@@ -1,0 +1,127 @@
+We are now in a position to provide a proof of the transitivity
+property of the consequence relation $\vdash$\,: if
+$\Gamma\vdash\psi$ for all $\psi\in\Delta$ and $\Delta\vdash\phi$,
+then we must have $\Gamma\vdash\phi$. In essence, we shall use the
+deduction theorem~(\ref{logic:the:FOPL:deduction}) to argue that:
+    \[
+    \vdash(\psi_{n}\to(\psi_{n-1}\to\ldots(\psi_{1}\to\phi)
+    \]
+where $\{\psi_{1},\ldots,\psi_{n}\}\subseteq\Delta$ is the set of
+hypothesis of a proof underlying the sequent $\Delta\vdash\phi$.
+From $\Gamma\vdash\psi_{k}$ and a repeated use of modus ponens, we
+conclude that $\Gamma\vdash\phi$. Note that if $\pi$ is a proof of
+$\phi$ from $\Delta$, it would be tempting to design a new proof of
+$\phi$ from $\Gamma$ by replacing every assumption $\psi_{k}$ of the
+proof $\pi$ by a proof $\pi_{k}$ of $\psi_{k}$ from $\Gamma$. For
+those who care, this idea does not work: the proof $\pi$ may contain
+cases of generalization with respect to a variable $x$ which become
+invalidated by the presence of $x$ as a free variable in some
+$\hyp(\pi_{k})$. Despite our best efforts, we have not been able to
+design a proof along those lines.
+
+\index{transitivity@Transitivity of $\vdash$}
+\begin{prop}\label{logic:prop:FOPL:deduction:transitivity}
+Let $V$ be a set. Let $\Gamma,\Delta\subseteq\pv$ and $\phi\in\pv$.
+Then:
+    \begin{equation}\label{logic:eqn:FOPL:deduction:transitivity:1}
+    (\Gamma\vdash\psi
+    \mbox{\ for all\ }\psi\in\Delta)\land(\Delta\vdash\phi)\ \Rightarrow\
+    \Gamma\vdash\phi
+    \end{equation}
+\end{prop}
+\begin{proof}
+Without loss of generality we may assume that $\Delta$ is a finite
+set. Indeed, suppose the
+implication~(\ref{logic:eqn:FOPL:deduction:transitivity:1}) has been
+proved in this case. We shall show that it is then true in general.
+So suppose $\Gamma\vdash\psi$ for all $\psi\in\Delta$ and
+$\Delta\vdash\phi$. We need to show that $\Gamma\vdash\phi$.
+However, there exists $\Delta_{0}$ finite such that
+$\Delta_{0}\subseteq\Delta$ and $\Delta_{0}\vdash\phi$. Hence we
+have $\Gamma\vdash\psi$ for all $\psi\in\Delta_{0}$ and
+$\Delta_{0}\vdash\phi$. Having assumed the
+implication~(\ref{logic:eqn:FOPL:deduction:transitivity:1}) is true
+for $\Delta$ finite, it follows that $\Gamma\vdash\phi$ as
+requested. So we assume without loss of generality that $\Delta$ is
+a finite set. We shall show
+that~(\ref{logic:eqn:FOPL:deduction:transitivity:1}) is true for all
+$\Gamma\subseteq\pv$ and $\phi\in\pv$, using an induction argument
+on the cardinal $|\Delta|$ of the set $\Delta$. First we assume that
+$|\Delta|=0$. Let $\Gamma\subseteq\pv$ and $\phi\in\pv$. From
+$\Delta=\emptyset$ and $\Delta\vdash\phi$ we obtain $\vdash\phi$ and
+in particular $\Gamma\vdash\phi$. Hence the
+implication~(\ref{logic:eqn:FOPL:deduction:transitivity:1}) is
+necessarily true. We now assume
+that~(\ref{logic:eqn:FOPL:deduction:transitivity:1}) is true for all
+$\Gamma\subseteq\pv$ and $\phi\in\pv$ whenever $|\Delta|=n$ for some
+$n\in\N$. We need to show the same is true when $|\Delta|=n+1$. So
+let $\Gamma\subseteq\pv$ and $\phi\in\pv$. We assume that
+$\Gamma\vdash\psi$ for all $\psi\in\Delta$ and $\Delta\vdash\phi$.
+We need to show that $\Gamma\vdash\phi$. Having assumed
+$|\Delta|=n+1$, in particular $\Delta\neq\emptyset$. Let
+$\psi^{*}\in\Delta$ and define
+$\Delta^{*}=\Delta\setminus\{\psi^{*}\}$. Then $|\Delta^{*}|=n$.
+Furthermore we have $\Delta=\Delta^{*}\cup\{\psi^{*}\}$ and
+consequently $\Delta^{*}\cup\{\psi^{*}\}\vdash\phi$. Using the
+deduction theorem~(\ref{logic:the:FOPL:deduction}) we obtain
+$\Delta^{*}\vdash(\psi^{*}\to\phi)$. However, since
+$\Delta^{*}\subseteq\Delta$ we also have $\Gamma\vdash\psi$ for all
+$\psi\in\Delta^{*}$. Having assumed the
+implication~(\ref{logic:eqn:FOPL:deduction:transitivity:1}) is true
+for all $\Gamma\subseteq\pv$, $\phi\in\pv$ and $|\Delta|=n$, in
+particular it is true for $\Gamma$, $(\psi^{*}\to\phi)$ and
+$\Delta^{*}$. Hence we see that $\Gamma\vdash(\psi^{*}\to\phi)$ is
+true. Furthermore, since $\psi^{*}\in\Delta$ we have
+$\Gamma\vdash\psi^{*}$. Using the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) we conclude that
+$\Gamma\vdash\phi$.
+\end{proof}
+
+There is an interesting corollary to
+proposition~(\ref{logic:prop:FOPL:deduction:transitivity}) which
+looks like the {\em cut rule} for sequent calculus. In case this
+turns out to be useful we quote:
+
+\begin{prop}\label{logic:prop:FUAP:transitivity:cut:elimination}
+Let $V$ be a set. Let $\Gamma\subseteq\pv$ and $\phi,\psi\in\pv$.
+Then:
+    \[
+    (\,\Gamma\cup\{\psi\}\vdash\phi\,)\,\land\,(\,\Gamma\cup\{\psi\to\bot\}\vdash\phi\,)\
+    \Rightarrow\ \Gamma\vdash\phi
+    \]
+\end{prop}
+\begin{proof}
+Using the deduction theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction}, by assumption we have the
+sequents $\Gamma\vdash(\psi\to\phi)$ and
+$\Gamma\vdash((\psi\to\bot)\to\phi)$. Defining the set of formulas
+$\Delta=\{\psi\to\phi,(\psi\to\bot)\to\phi\}$ it follows that
+$\Gamma\vdash\chi$ for all $\chi\in\Delta$. In order to prove that
+$\Gamma\vdash\phi$, from the transitivity of
+proposition~(\ref{logic:prop:FOPL:deduction:transitivity}) it is
+therefore sufficient to prove that $\Delta\vdash\phi$. Using the
+transposition property of
+proposition~(\ref{logic:prop:FOPL:transposition}), we simply need to
+show that $\Delta\vdash(\phi\to\bot)\to\bot$. From the deduction
+theorem~(\ref{logic:the:FOPL:deduction}), this amounts to showing
+that $\Delta^{*}\vdash\bot$ where
+$\Delta^{*}=\Delta\cup\{\phi\to\bot\}$. Let us accept for now that
+$\Delta^{*}\vdash(\psi\to\bot)$ and
+$\Delta^{*}\vdash(\psi\to\bot)\to\bot$. Then from the modus ponens
+property of proposition~(\ref{logic:prop:FOPL:modus:ponens}) we
+obtain $\Delta^{*}\vdash\bot$ as requested. So it remains to show
+that $\Delta^{*}\vdash(\psi\to\bot)$ and
+$\Delta^{*}\vdash(\psi\to\bot)\to\bot$. First we show the sequent
+$\Delta^{*}\vdash(\psi\to\bot)$\,: from the deduction
+theorem~(\ref{logic:the:FOPL:deduction}), we need to show that
+$\Delta^{*}\cup\{\psi\}\vdash\bot$ which follows from
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) and the fact that
+$\Delta^{*}\cup\{\psi\}$ contains the three formulas $\psi$,
+$\psi\to\phi$ and $\phi\to\bot$. So we now show the sequent
+$\Delta^{*}\vdash(\psi\to\bot)\to\bot$\,: from the deduction
+theorem~(\ref{logic:the:FOPL:deduction}), we need to show that
+$\Delta^{*}\cup\{\psi\to\bot\}\vdash\bot$ which follows from
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) and the fact that
+$\Delta^{*}\cup\{\psi\to\bot\}$ contains the three formulas
+$\psi\to\bot$, $(\psi\to\bot)\to\phi$ and $\phi\to\bot$.
+\end{proof}

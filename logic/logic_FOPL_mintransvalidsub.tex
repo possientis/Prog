@@ -1,0 +1,349 @@
+In the previous section, we hinted at the difficulty of defining the
+{\em evaluation} $\phi[a]$ when $\phi=\forall y(x\in y)$ and $a=y$.
+The issue is that the substitution $[y/x]$ is not valid for the
+formula $\phi$ (when $x\neq y$), making it impossible to write:
+    \[
+    \forall a\in V\ ,\ \phi[a]=\phi[a/x]
+    \]
+We defined the minimal transform mapping ${\cal M}:\pv\to\pvb$ with
+this problem in mind. Now from
+definition~(\ref{logic:def:FOPL:mintransform:transform}), the
+minimal transform of $\phi$ is ${\cal M}(\phi)=\forall\,0\,(x\in 0)$
+and it is clear that $[a/x]$ is now valid for ${\cal M}(\phi)$ for
+all $a\in V$. So it would be sensible to define:
+    \[
+    \forall a\in V\ ,\ \phi[a]={\cal M}(\phi)[a/x]
+    \]
+Of course such a definition would lead to $\phi[a]=\forall\,0\,(a\in
+0)$ which is an element of \pvb\ and not an element of \pv. So it
+may not be what we want, but we are certainly moving forward. More
+generally suppose $\phi\in\pv$ is an arbitrary formula and
+$\sigma:V\to W$ is an arbitrary map. We would like to define the
+formula $\sigma(\phi)$ in ${\bf P}(W)$ but in a way which is
+sensible, rather than following blindly the details of
+definition~(\ref{logic:def:substitution}). The problem is that the
+substitution $\sigma$ may not be valid for the formula $\phi$. This
+doesn't mean we shouldn't be interested in $\sigma(\phi)$. In many
+cases we may only care about what happens to the free variables.
+Bound variables are not interesting. We do not mind having them
+moved around, provided the basic structure of the formula remains.
+So when $\sigma$ is valid for $\phi$, this is what happens when
+using $\sigma(\phi)$ as per
+definition~(\ref{logic:def:substitution}). However when $\sigma$ is
+not valid for $\phi$, we need to find another way to move the free
+variables of $\phi$ without making a mess of it. So consider the
+minimal transform ${\cal M}(\phi)$. There is no longer any conflicts
+between the free and he bound variables. If $\sigma:V\to W$ is an
+arbitrary map, we can move the free variables of ${\cal M}(\phi)$
+according to the substitution $\sigma$  without creating nonsense.
+To make this idea precise, we define: \index{minimal@Minimal
+extension of map}\index{sigma@$\bar{\sigma}$ : minimal extension of
+$\sigma$}
+\begin{defin}\label{logic:def:FOPL:commute:minextensioon:map}
+Let $V$ and $W$ be sets. Let $\sigma:V\to W$ be a map. We call {\em
+minimal extension} of $\sigma$ the map
+$\bar{\sigma}:\bar{V}\to\bar{W}$ defined by:
+    \[
+    \forall u\in \bar{V}\ ,\ \bar{\sigma}(u)=\left\{
+    \begin{array}{lcl}
+    \sigma(u)&\mbox{\ if\ }&u\in V\\
+    u&\mbox{\ if\ }&u\in\N
+    \end{array}
+    \right.
+    \]
+where $\bar{V}$ and $\bar{W}$ are the minimal extensions of $V$ and
+$W$ respectively.
+\end{defin}
+So the map $\bar{\sigma}:\bar{V}\to\bar{W}$ is the map moving the
+free variables of ${\cal M}(\phi)$ according to $\sigma$, without
+touching the bound variables. As expected we have:
+
+\index{minimal@Minimal extension valid}
+\begin{prop}\label{logic:def:FOPL:commute:minextension:valid}
+Let $\sigma:V\to W$ be a map. Then for all $\phi\in\pv$ the minimal
+extension $\bar{\sigma}:\bar{V}\to\bar{W}$ is valid for the minimal
+transform ${\cal M}(\phi)$.
+\end{prop}
+\begin{proof}
+We need to check the three properties of
+proposition~(\ref{logic:prop:FOPL:validsub:minimalextension}) are
+met in relation to $\bar{\sigma}:\bar{V}\to\bar{W}$ and ${\cal
+M}(\phi)$ with $V_{0}=\N$. First we show property $(i)$\,: we need
+to show that $\bound({\cal M}(\phi))\subseteq\N$ which follows from
+proposition~(\ref{logic:prop:FOPL:mintransform:variables:bound}).
+Next we show property~$(ii)$\,: we need to show that
+$\bar{\sigma}_{|\N}$ is injective which is clear from
+definition~(\ref{logic:def:FOPL:commute:minextensioon:map}). We
+finally show property~$(iii)$\,: we need to show that
+$\bar{\sigma}(\N)\cap\bar{\sigma}(\var({\cal
+M}(\phi))\setminus\N)=\emptyset$. This follows from
+$\bar{\sigma}(\N)\subseteq\N$ and $\bar{\sigma}(\var({\cal
+M}(\phi))\setminus\N)\subseteq\bar{\sigma}(V)=\sigma(V)\subseteq W$,
+while $W\cap\N = \emptyset$.
+\end{proof}
+
+So here we are. Given $\phi\in\pv$ and an arbitrary map $\sigma:V\to
+W$ we cannot safely consider $\sigma(\phi)$ unless $\sigma$ is valid
+for $\phi$. However, there is no issues in looking at
+$\bar{\sigma}\circ{\cal M}(\phi)$ instead, since $\bar{\sigma}$ is
+always valid for ${\cal M}(\phi)$. Of course $\bar{\sigma}\circ{\cal
+M}(\phi)$ is an element of ${\bf P}(\bar{W})$ and not ${\bf P}(W)$.
+It is however a lot better to have a meaningful element of ${\bf
+P}(\bar{W})$, rather than a nonsensical formula $\sigma(\phi)$ of
+${\bf P}(W)$. But what if $\sigma$ was a valid substitution for
+$\phi$? Then $\sigma(\phi)$ would be meaningful. There would not be
+much point in considering $\bar{\sigma}\circ{\cal M}(\phi)$ as a
+general scheme for substituting free variables, unless it coincided
+with $\sigma(\phi)$ in the particular case when $\sigma$ is valid
+for $\phi$. Since $\sigma(\phi)\in{\bf P}(W)$ while
+$\bar{\sigma}\circ{\cal M}(\phi)\in{\bf P}(\bar{W})$, we cannot
+expect these formulas to match. However, after we take the minimal
+transform  ${\cal M}\circ\sigma(\phi)$ we should expect it to be
+equal to $\bar{\sigma}\circ{\cal M}(\phi)$. This is indeed the case,
+and is the object
+theorem~(\ref{logic:the:FOPL:commute:mintransform:validsub}) below.
+For now, we shall establish a couple of lemmas:
+
+\begin{lemma}\label{logic:lemma:FOPL:commute:mphi1}
+Let $V,W$ be sets and $\sigma:V\to W$ be a map. Let $\phi=\forall
+x\phi_{1}$ where $\phi_{1}\in\pv$ and $x\in V$ such that
+$\sigma(x)\not\in\sigma(\free(\phi))$. Then for all $n\in\N$ we
+have:
+    \[
+        \bar{\sigma}\circ [n/x]\circ{\cal
+    M}(\phi_{1})= [n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\phi_{1})
+    \]
+where $\bar{\sigma}:\bar{V}\to\bar{W}$ is the minimal extension of
+$\sigma: V\to W$.
+\end{lemma}
+\begin{proof}
+Using proposition~(\ref{logic:prop:substitution:support}), we only
+need to show that the mappings $\bar{\sigma}\circ [n/x]$ and
+$[n/\sigma(x)]\circ\bar{\sigma}$ coincide on $\var({\cal
+M}(\phi_{1}))$. So let $u\in\var({\cal
+M}(\phi_{1}))\subseteq\bar{V}$. We want:
+    \begin{equation}\label{logic:eqn:FOPL:commute:mphi1:1}
+    \bar{\sigma}\circ [n/x](u)=[n/\sigma(x)]\circ\bar{\sigma}(u)
+    \end{equation}
+Since $\bar{V}$ is the disjoint union of $V$ and \N, we shall
+distinguish two cases: first we assume that $u\in\N$. From
+$V\cap\N=\emptyset$ we obtain $u\neq x$ and consequently
+$\bar{\sigma}\circ[n/x](u)=\bar{\sigma}(u)=u$. From
+$W\cap\N=\emptyset$ we obtain $u\neq\sigma(x)$ and consequently
+$[n/\sigma(x)]\circ\bar{\sigma}(u)=[n/\sigma(x)](u)=u$. So
+equation~(\ref{logic:eqn:FOPL:commute:mphi1:1}) is indeed satisfied.
+Next we assume that $u\in V$. We shall distinguish two further
+cases: first we assume that $u=x$. Then
+$\bar{\sigma}\circ[n/x](u)=\bar{\sigma}(n)=n$ and
+$[n/\sigma(x)]\circ\bar{\sigma}(u)=[n/\sigma(x)](\sigma(x))=n$ and
+we see that equation~(\ref{logic:eqn:FOPL:commute:mphi1:1}) is again
+satisfied. Next we assume that $u\neq x$. Then
+$\bar{\sigma}\circ[n/x](u)=\bar{\sigma}(u)=\sigma(u)$, and
+furthermore
+$[n/\sigma(x)]\circ\bar{\sigma}(u)=[n/\sigma(x)](\sigma(u))$. In
+order to establish equation~(\ref{logic:eqn:FOPL:commute:mphi1:1}),
+it is therefore sufficient to prove that $\sigma(u)\neq\sigma(x)$.
+However, since $u\in\var({\cal M}(\phi_{1}))$ and $u\in V$, it
+follows from
+proposition~(\ref{logic:prop:FOPL:mintransform:variables}) that
+$u\in\free(\phi_{1})$. Having assumed that $u\neq x$ we in fact have
+$u\in\free(\forall x\phi_{1})=\free(\phi)$. Having assumed that
+$\sigma(x)\not\in\sigma(\free(\phi))$ it follows that
+$\sigma(u)\neq\sigma(x)$ as requested.
+\end{proof}
+\begin{lemma}\label{logic:lemma:FOPL:commute:n:equivalence}
+Let $V,W$ be sets and $\sigma:V\to W$ be a map. Let $\phi=\forall
+x\phi_{1}$ where $\phi_{1}\in\pv$ and $x\in V$ such that
+$\sigma(x)\not\in\sigma(\free(\phi))$. Then for all $k\in\N$ we
+have:
+    \[
+    \mbox{$[k/x]$ valid for ${\cal M}(\phi_{1})$}\ \Leftrightarrow
+    \ \mbox{$[k/\sigma(x)]$ valid for $\bar{\sigma}\circ{\cal M}(\phi_{1})$}
+    \]
+where $\bar{\sigma}:\bar{V}\to\bar{W}$ is the minimal extension of
+$\sigma: V\to W$.
+\end{lemma}
+\begin{proof}
+First we show $\Leftarrow$\,: So we assume that $[k/\sigma(x)]$ is
+valid for $\bar{\sigma}\circ{\cal M}(\phi_{1})$. We need to show
+that $[k/x]$ is valid for ${\cal M}(\phi_{1})$. However, we know
+from proposition~(\ref{logic:def:FOPL:commute:minextension:valid})
+that $\bar{\sigma}$ is valid for ${\cal M}(\phi_{1})$. Hence, from
+the validity of $[k/\sigma(x)]$ for $\bar{\sigma}\circ{\cal
+M}(\phi_{1})$ and
+proposition~(\ref{logic:prop:FOPL:valid:composition}) we see that
+$[k/\sigma(x)]\circ\bar{\sigma}$ is valid for ${\cal M}(\phi_{1})$.
+Furthermore, having assumed $\sigma(x)\not\in\sigma(\free(\phi))$,
+we can use lemma~(\ref{logic:lemma:FOPL:commute:mphi1}) to obtain:
+    \begin{equation}\label{logic:eqn:FOPL:commute:n:equiv:1}
+    \bar{\sigma}\circ [k/x]\circ{\cal
+    M}(\phi_{1})= [k/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\phi_{1})
+    \end{equation}
+It follows from proposition~(\ref{logic:prop:FOPL:validsub:image})
+that $\bar{\sigma}\circ[k/x]$ is valid for ${\cal M}(\phi_{1})$, and
+in particular, using
+proposition~(\ref{logic:prop:FOPL:valid:composition}) once more, we
+conclude that $[k/x]$ is valid for ${\cal M}(\phi_{1})$ as
+requested. We now show $\Rightarrow$\,: so we assume that $[k/x]$ is
+valid for ${\cal M}(\phi_{1})$. We need to show that $[k/\sigma(x)]$
+is valid for $\bar{\sigma}\circ{\cal M}(\phi_{1})$. However, from
+proposition~(\ref{logic:prop:FOPL:valid:composition}) it is
+sufficient to prove that $[k/\sigma(x)]\circ\bar{\sigma}$ is valid
+for ${\cal M}(\phi_{1})$. Using
+equation~(\ref{logic:eqn:FOPL:commute:n:equiv:1}) and
+proposition~(\ref{logic:prop:FOPL:validsub:image}) once more, we
+simply need to show that $\bar{\sigma}\circ[k/x]$ is valid for
+${\cal M}(\phi_{1})$. Having assumed that $[k/x]$ is valid for
+${\cal M}(\phi_{1})$, from
+proposition~(\ref{logic:prop:FOPL:valid:composition}) it is
+sufficient to show that $\bar{\sigma}$ is valid for $[k/x]\circ{\cal
+M}(\phi_{1})$. We shall do so with an application of
+proposition~(\ref{logic:prop:FOPL:validsub:minimalextension}) to
+$V_{0}=\N$. First we need to check that $\bound(\,[k/x]\circ{\cal
+M}(\phi_{1})\,)\subseteq\N$. However, from
+proposition~(\ref{logic:prop:boundvar:of:substitution}) we have
+$\bound(\,[k/x]\circ{\cal M}(\phi_{1})\,) = [k/x](\,\bound({\cal
+M}(\phi_{1}))\,)$ and from
+proposition~(\ref{logic:prop:FOPL:mintransform:variables:bound}) we
+have $\bound({\cal M}(\phi_{1}))\subseteq\N$. So the desired
+inclusion follows. Next we need to show that $\bar{\sigma}_{|\N}$ is
+injective which is clear from
+definition~(\ref{logic:def:FOPL:commute:minextensioon:map}).
+Finally, we need to check that
+$\bar{\sigma}(\N)\cap\bar{\sigma}(\,\var([k/x]\circ{\cal
+M}(\phi_{1}))\setminus\N\,)=\emptyset$. This follows from
+$\bar{\sigma}(\N)\subseteq\N$ and
+$\bar{\sigma}(\,\var([k/x]\circ{\cal
+M}(\phi_{1}))\setminus\N\,)\subseteq\bar{\sigma}(V)=\sigma(V)\subseteq
+W$, while $W\cap\N = \emptyset$.
+\end{proof}
+
+\index{minimal@Minimal transform commutes}
+\begin{theorem}\label{logic:the:FOPL:commute:mintransform:validsub}
+Let $V$ and $W$ be sets. Let $\sigma:V\to W$ be a map. Let
+$\phi\in\pv$. If $\sigma$ is valid for $\phi$, then it commutes with
+minimal transforms, specifically:
+    \begin{equation}\label{logic:eqn:FOPL:commute:mintransform:validsub}
+    \bar{\sigma}\circ{\cal M}(\phi)={\cal M}\circ\sigma(\phi)
+    \end{equation}
+where $\bar{\sigma}:\bar{V}\to\bar{W}$ is the minimal extension of
+$\sigma: V\to W$.
+\end{theorem}
+\begin{proof}
+Before we start, it should be noted that $\sigma$ in
+equation~(\ref{logic:eqn:FOPL:commute:mintransform:validsub}) refers
+to the substitution mapping $\sigma:\pv\to{\bf P}(W)$ while the
+${\cal M}$ on the right-hand-side refers to the minimal transform
+mapping ${\cal M}:{\bf P}(W)\to{\bf P}(\bar{W})$. The other ${\cal
+M}$ which appears on the left-hand-side refers to the minimal
+transform mapping ${\cal M}:\pv\to\pvb$, and $\bar{\sigma}$ is the
+substitution mapping $\bar{\sigma}:{\bf P}(\bar{V})\to{\bf
+P}(\bar{W})$. So everything makes sense. For all $\phi\in\pv$, we
+need to show the property:
+    \[
+    (\mbox{$\sigma$ valid for $\phi$})\ \Rightarrow\
+    \bar{\sigma}\circ{\cal M}(\phi)={\cal M}\circ\sigma(\phi)
+    \]
+We shall do so by structural induction using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\phi=(x\in y)$ where $x,y\in V$. Then any $\sigma$ is valid for
+$\phi$ and we need to show
+equation~(\ref{logic:eqn:FOPL:commute:mintransform:validsub}). This
+goes as follows:
+    \begin{eqnarray*}
+    \bar{\sigma}\circ{\cal M}(\phi)
+    &=&\bar{\sigma}\circ{\cal M}(x\in y)\\
+    &=&\bar{\sigma}(x\in y)\\
+    &=&\bar{\sigma}(x)\in\bar{\sigma}(y)\\
+    &=&\sigma(x)\in\sigma(y)\\
+    &=&{\cal M}(\sigma(x)\in\sigma(y))\\
+    &=&{\cal M}(\sigma(x\in y))\\
+    &=&{\cal M}\circ\sigma(x\in y)\\
+    &=&{\cal M}\circ\sigma(\phi)
+    \end{eqnarray*}
+Next we assume that $\phi=\bot$. Then we have
+$\bar{\sigma}\circ{\cal M}(\phi)=\bot={\cal M}\circ\sigma(\phi)$ and
+the property is also true. Next we assume that
+$\phi=\phi_{1}\to\phi_{2}$ where the property is true for
+$\phi_{1},\phi_{2}\in\pv$. We need to show the property is also true
+for $\phi$. So we assume that $\sigma$ is valid for $\phi$. We need
+to show
+equation~(\ref{logic:eqn:FOPL:commute:mintransform:validsub}) holds
+for $\phi$. However, from
+proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}), the
+substitution $\sigma$ is valid for both $\phi_{1}$ and $\phi_{2}$.
+Having assumed the property is true for $\phi_{1}$ and $\phi_{2}$,
+it follows that
+equation~(\ref{logic:eqn:FOPL:commute:mintransform:validsub}) holds
+for $\phi_{1}$ and $\phi_{2}$. Hence, we have:
+    \begin{eqnarray*}
+    \bar{\sigma}\circ{\cal M}(\phi)
+    &=&\bar{\sigma}\circ{\cal M}(\phi_{1}\to\phi_{2})\\
+    &=&\bar{\sigma}({\cal M}(\phi_{1})\to{\cal M}(\phi_{2}))\\
+    &=&\bar{\sigma}({\cal M}(\phi_{1}))\to\bar{\sigma}({\cal
+    M}(\phi_{2}))\\
+    &=&{\cal M}(\sigma(\phi_{1}))\to{\cal
+    M}(\sigma(\phi_{2}))\\
+    &=&{\cal M}(\sigma(\phi_{1})\to\sigma(\phi_{2}))\\
+    &=&{\cal M}(\sigma(\phi_{1}\to\phi_{2}))\\
+    &=&{\cal M}\circ\sigma(\phi)
+    \end{eqnarray*}
+Finally we assume that $\phi=\forall x\phi_{1}$ where $x\in V$ and
+the property is true for $\phi_{1}\in\pv$. We need to show the
+property is also true for $\phi$. So we assume that $\sigma$ is
+valid for $\phi$. We need to show
+equation~(\ref{logic:eqn:FOPL:commute:mintransform:validsub}) holds
+for $\phi$. However, from
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}), the
+substitution $\sigma$ is also valid for $\phi_{1}$. Having assumed
+the property is true for $\phi_{1}$, it follows that
+equation~(\ref{logic:eqn:FOPL:commute:mintransform:validsub}) holds
+for $\phi_{1}$. Hence:
+    \begin{eqnarray*}
+    \bar{\sigma}\circ{\cal M}(\phi)&=&\bar{\sigma}\circ{\cal M}(\forall
+    x\phi_{1})\\
+    \mbox{$n=\min\{k:[k/x]\mbox{ valid for }{\cal M}(\phi_{1})\}$}\
+    \rightarrow
+    &=&\bar{\sigma}(\,\forall n{\cal M}(\phi_{1})[n/x]\,)\\
+    &=&\forall \bar{\sigma}(n)\bar{\sigma}(\,{\cal
+    M}(\phi_{1})[n/x]\,)\\
+    &=&\forall n\,\bar{\sigma}\circ [n/x]\circ{\cal
+    M}(\phi_{1})\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\forall n\,[n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\phi_{1})\\
+    &=&\forall n\,[n/\sigma(x)]\circ{\cal M}\circ\sigma(\phi_{1})\\
+    &=&\forall n\,{\cal M}[\sigma(\phi_{1})][n/\sigma(x)]\\
+    \mbox{B: to be proved}\ \rightarrow
+    &=&\forall m\,{\cal M}[\sigma(\phi_{1})][m/\sigma(x)]\\
+    \mbox{$m=\min\{k:[k/\sigma(x)]\mbox{ valid for }{\cal M}[\sigma(\phi_{1})]\}$}\
+    \rightarrow
+    &=&{\cal M}(\forall\sigma(x)\sigma(\phi_{1}))\\
+    &=&{\cal M}(\sigma(\forall x\phi_{1}))\\
+    &=&{\cal M}\circ\sigma(\phi)
+    \end{eqnarray*}
+So we have two more points A and B to justify. First we deal with
+point A. It is sufficient for us to prove the equality:
+    \[
+    \bar{\sigma}\circ [n/x]\circ{\cal
+    M}(\phi_{1})= [n/\sigma(x)]\circ\bar{\sigma}\circ{\cal M}(\phi_{1})
+    \]
+Using lemma~(\ref{logic:lemma:FOPL:commute:mphi1}) it is sufficient
+to show that $\sigma(x)\not\in\sigma(\free(\phi))$. So suppose to
+the contrary that $\sigma(x)\in\sigma(\free(\phi))$. Then there
+exists $u\in\free(\phi)$ such that $\sigma(u)=\sigma(x)$. This
+contradicts
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) and the
+fact that $\sigma$ is valid for $\phi$, which completes the proof of
+point A. So we now turn to point B. We need to prove that $n=m$, for
+which it is sufficient to show the equivalence:
+    \[
+    \mbox{$[k/x]$ valid for ${\cal M}(\phi_{1})$}\ \Leftrightarrow
+    \ \mbox{$[k/\sigma(x)]$ valid for ${\cal M}[\sigma(\phi_{1})]$}
+    \]
+This follows from
+lemma~(\ref{logic:lemma:FOPL:commute:n:equivalence}) and the fact
+that  $\sigma(x)\not\in\sigma(\free(\phi))$, together with the
+induction hypothesis $\bar{\sigma}\circ{\cal M}(\phi_{1})={\cal
+M}\circ\sigma(\phi_{1})$.
+\end{proof}

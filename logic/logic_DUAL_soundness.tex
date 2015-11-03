@@ -1,0 +1,282 @@
+In this section we prove the soundness theorem, which can be
+expressed as:
+    \[
+    \vdash\phi\ \Rightarrow\ M\vDash\phi[a]
+    \]
+In other words, any provable formula $\phi$ is true in any model $M$
+under any assignment $a:V\to M$. If $\beta:\pv\to {\cal P}(M^{V})$
+denotes the model valuation function of $M$, the soundness theorem
+becomes $\vdash\phi\ \Rightarrow\ \beta(\phi)(a)=1$. This is hugely
+important for us: we already know from
+definition~(\ref{logic:def:FOPL:model:valuation:function}) that
+$\beta(\bot)(a)=0$ and
+$\beta(\phi_{1}\to\phi_{2})(a)=\beta(\phi_{1})(a)\to\beta(\phi_{2})(a)$.
+So the map $\beta(\,\cdot\,)(a):\pv\to 2$ is a propositional
+valuation as per
+definition~(\ref{logic:def:FOPL:propcong:prop:valuation}). Knowing
+furthermore that the implication $\vdash\phi\ \Rightarrow\
+\beta(\phi)(a)=1$ holds allows us to claim that
+$\beta(\,\cdot\,)(a)$ is in fact a valuation as per
+definition~(\ref{logic:def:FOPL:semantics:valuation}). So the dual
+space \pvd\ is not empty: take any set $M$ together with a binary
+relation $r$, take any assignment $a:V\to M$ and you obtain a
+corresponding element $\beta(\,\cdot\,)(a)$ of the dual space \pvd.
+This means our relation $\vDash$ of semantic entailment as per
+definition~(\ref{logic:def:FOPL:semantics:entailments}) is not
+trivial. It also means the sequent $\vdash\bot$ is false as
+otherwise the dual space \pvd\ would clearly be empty. Our deductive
+system is therefore consistent which is an important validation. The
+soundness theorem will be quoted as
+theorem~(\ref{logic:the:FOPL:soundness:soundness}) of
+page~\pageref{logic:the:FOPL:soundness:soundness} below. We start
+with a small lemma which establishes the truth of any axiom of first
+order logic under any model and assignment:
+
+\index{truth@Truth of axioms under all models}
+\begin{lemma}\label{logic:lemma:FOPL:soundness:axioms}
+Let $V$ be a set. Let $M$ be a model of\, \pv\ and $a:V\to M$ be an
+arbitrary variables assignment. Then for all  $\phi\in\av$ we have:
+    \[
+    M\vDash\phi[a]
+    \]
+i.e. an axiom of first order logic is true under any model and
+assignment.
+\end{lemma}
+\begin{proof}
+Let $\beta:\pv\to{\cal P}(M^{V})$ be the model valuation function
+associated with the model $M$. Given an assignment $a:V\to M$, we
+need to show that $\beta(\phi)(a)=1$ for every $\phi\in\av$. We
+shall consider the five possible cases of axioms individually. First
+we assume that $\phi$ is a simplification axiom. From
+definition~(\ref{logic:def:FOPL:simplification:axiom}), there exist
+$\phi_{1},\phi_{2}\in\pv$ such that $\phi =
+\phi_{1}\to(\phi_{2}\to\phi_{1})$. We need to show that
+$\beta(\phi)(a)=1$. However, defining $v_{1}=\beta(\phi_{1})(a)$ and
+$v_{2}=\beta(\phi_{2})(a)$\,:
+    \[
+    \beta(\phi)(a)=v_{1}\to(v_{2}\to v_{1})
+    \]
+where we have used
+definition~(\ref{logic:def:FOPL:model:valuation:function}). So
+suppose $\beta(\phi)(a)=0$. Then $v_{1}=1$ while $v_{2}\to v_{1}=0$.
+From this last equality we see that $v_{2}=1$ while $v_{1}=0$, which
+is a contradiction. So $\beta(\phi)(a)=1$ is proved. We now assume
+that $\phi$ is a Frege axiom. From
+definition~(\ref{logic:def:FOPL:frege:axiom}) there exist
+$\phi_{1},\phi_{2},\phi_{3}\in\pv$ such that $\phi =
+    [\phi_{1}\to(\phi_{2}\to\phi_{3})]\to[(\phi_{1}\to\phi_{2})\to(\phi_{1}\to\phi_{3})]$.
+Defining $v_{1}=\beta(\phi_{1})(a)$, $v_{2}=\beta(\phi_{2})(a)$ and
+$v_{3}=\beta(\phi_{3})(a)$ we obtain from
+definition~(\ref{logic:def:FOPL:model:valuation:function})\,:
+    \[
+    \beta(\phi)(a) =
+    [v_{1}\to(v_{2}\to v_{3})]\to[(v_{1}\to v_{2})\to(v_{1}\to v_{3})]
+    \]
+We need to show that $\beta(\phi)(a)=1$. So suppose to the contrary
+that $\beta(\phi)(a)=0$. Then we have $v_{1}\to(v_{2}\to v_{3})=1$
+while $(v_{1}\to v_{2})\to(v_{1}\to v_{3})=0$. From this last
+equality we see that $v_{1}\to v_{2}=1$ while $v_{1}\to v_{3}=0$,
+which in turn implies that $v_{1}=1$ while $v_{3}=0$. However, from
+$v_{1}=1$ and $v_{1}\to v_{2}=1$ we obtain $v_{2}=1$. So we have
+proved that $(v_{1},v_{2},v_{3})=(1,1,0)$ and consequently:
+    \[
+    v_{1}\to(v_{2}\to v_{3})=1\to(1\to 0)=1\to 0=0
+    \]
+which is a contradiction. So we now assume that $\phi$ is a
+transposition axiom. From
+definition~(\ref{logic:def:FOPL:transposition:axiom}) we have $\phi
+=[(\phi_{1}\to\bot)\to\bot]\to\phi_{1}$ for some $\phi_{1}\in\pv$.
+Defining $v_{1}=\beta(\phi_{1})(a)$ from
+definition~(\ref{logic:def:FOPL:model:valuation:function}) we obtain
+the equality:
+    \[
+    \beta(\phi)(a)=[(v_{1}\to 0)\to 0]\to v_{1}
+    \]
+We need to show that $\beta(\phi)(a)=1$. So suppose to the contrary
+that $\beta(\phi)(a)=0$. Then $(v_{1}\to 0)\to 0=1$ while $v_{1}=0$.
+It follows that:
+    \[
+    (v_{1}\to 0)\to 0=(0\to 0)\to 0= 1\to 0 = 0
+    \]
+which is a contradiction. So we now assume that $\phi$ is a
+quantification axiom. From
+definition~(\ref{logic:def:FOPL:quantification:axiom}), there exist
+$\phi_{1},\phi_{2}\in\pv$ and $x\in V$ with
+$x\not\in\free(\phi_{1})$ and $\phi =\forall
+x(\phi_{1}\to\phi_{2})\to(\phi_{1}\to\forall x \phi_{2})$. Defining
+$v_{1}=\beta(\phi_{1})(a)$, $v_{2}=\beta(\forall x\phi_{2})(a)$ and
+$v_{3}=\beta(\forall x(\phi_{1}\to\phi_{2}))(a)$ we obtain the
+equality:
+    \[
+    \beta(\phi)(a) = v_{3}\to(v_{1}\to v_{2})
+    \]
+We need to show that $\beta(\phi)(a)=1$. So suppose to the contrary
+that $\beta(\phi)(a)=0$. Then we have $v_{3}=1$ while $v_{1}\to
+v_{2}=0$ which in turn implies that $v_{1}=1$ while $v_{2}=0$. Using
+definition~(\ref{logic:def:FOPL:model:valuation:function}) we
+therefore obtain:
+    \[
+    0=v_{2}=\beta(\forall x\phi_{2})(a)=\min\left\{\beta(\phi_{2})(b)\
+    :\ b=a\mbox{\ on\ }V_{x}\right\}
+    \]
+Hence, we see that there exists an assignment $b^{*}:V\to M$ such
+that $b^{*}=a$ on $V\setminus\{x\}$ and $\beta(\phi_{2})(b^{*})=0$.
+It follows that we have:
+    \begin{eqnarray*}
+    v_{3}&=&\beta(\forall x(\phi_{1}\to\phi_{2}))(a)\\
+    &=&\min\left\{\beta(\phi_{1}\to\phi_{2})(b)\
+    :\ b=a\mbox{\ on\ }V_{x}\right\}\\
+    &\leq&\beta(\phi_{1}\to\phi_{2})(b^{*})\\
+    &=&\beta(\phi_{1})(b^{*})\to\beta(\phi_{2})(b^{*})\\
+    &=&\beta(\phi_{1})(b^{*})\to 0\\
+    \mbox{A: to be proved}\ \rightarrow&=&\beta(\phi_{1})(a)\to 0\\
+    &=&v_{1}\to 0\\
+    &=&1\to 0\\
+    &=&0
+    \end{eqnarray*}
+which contradicts $v_{3}=1$. So it remains to show that
+$\beta(\phi_{1})(b^{*})=\beta(\phi_{1})(a)$. Using
+proposition~(\ref{logic:prop:FOPL:model:assignment:support}) it is
+sufficient to show that $b^{*}=a$ on $\free(\phi_{1})$, which
+follows from $\free(\phi_{1})\subseteq V\setminus\{x\}$, itself a
+consequence of the assumption $x\not\in\free(\phi_{1})$. So we now
+assume that $\phi$ is a specialization axiom. From
+definition~(\ref{logic:def:FOPL:specialization:axiom}) there exist
+$\phi_{1}\in\pv$ and $x,y\in V$ such that $\phi =\forall
+x\phi_{1}\to\phi_{1}[y/x]$ where $[y/x]:\pv\to\pv$ denotes an
+essential substitution of $y$ in place of $x$, i.e. an essential
+substitution associated with the map $[y/x]:V\to V$. Defining
+$v_{1}=\beta(\forall x\phi_{1})(a)$ and
+$v_{2}=\beta(\phi_{1}[y/x])(a)$ we obtain $\beta(\phi)(a)=v_{1}\to
+v_{2}$ and we need to show that $\beta(\phi)(a)=1$. So suppose to
+the contrary that $\beta(\phi)(a)=0$. Then we have $v_{1}=1$ while
+$v_{2}=0$ and consequently we obtain:
+    \begin{eqnarray*}
+    v_{1}&=&\beta(\forall x\phi_{1})(a)\\
+    &=&\min\left\{\beta(\phi_{1})(b)\ :\ b=a\mbox{\ on\
+    }V_{x}\right\}\\
+    a\circ[y/x]=a\mbox{\ on\ }V_{x}\ \rightarrow
+    &\leq&\beta(\phi_{1})(\,a\circ[y/x]\,)\\
+    \mbox{theorem~(\ref{logic:the:FOPL:model:essential:substitution}),
+    p.~\pageref{logic:the:FOPL:model:essential:substitution}}
+    \ \rightarrow&=&\beta(\,[y/x](\phi_{1})\,)(a)\\
+    &=&\beta(\phi_{1}[y/x])(a)\\
+    &=&v_{2}\\
+    &=&0
+    \end{eqnarray*}
+which contradicts the equality $v_{1}=1$ and completes our proof.
+\end{proof}
+
+The proof of the soundness theorem which follows relies on a
+structural induction argument based on our free universal algebra of
+proofs \pvs.
+
+\index{soundness@Soundness theorem}
+\begin{theorem}[Soundness]\label{logic:the:FOPL:soundness:soundness}
+Let $V$ be a set and $M$ be a model of\, \pv. Then for every
+assignment $a:V\to M$ and any formula $\phi\in\pv$ we have:
+    \[
+    \vdash\phi\ \Rightarrow\ M\vDash\phi[a]
+    \]
+In other words, a provable formula is true under any model and
+assignment.
+\end{theorem}
+\begin{proof}
+Let $\beta:\pv\to{\cal P}(M^{V})$ denote the model valuation
+function of the model $M$. Given a provable formula $\phi\in\pv$ we
+need to show that $\beta(\phi)(a)=1$ for every assignment $a:V\to
+M$. It is therefore sufficient to prove that for every proof
+$\pi\in\pvs$ and every assignment $a:V\to M$, we have the
+implication:
+    \begin{equation}\label{logic:eqn:FOPL:soundness:proof:1}
+    \hyp(\pi)=\emptyset\ \Rightarrow\ \beta(\val(\pi))(a)=1
+    \end{equation}
+Indeed, suppose this property has been established and let
+$\phi\in\pv$ be such that $\vdash\phi$. Then there exists a proof
+$\pi\in\pvs$ such that $\val(\pi)=\phi$ and $\hyp(\pi)=\emptyset$.
+Using~(\ref{logic:eqn:FOPL:soundness:proof:1}) we obtain
+$\beta(\phi)(a)=1$ for all $a:V\to M$. So we shall now prove
+that~(\ref{logic:eqn:FOPL:soundness:proof:1}) is true for every
+assignment and every proof $\pi\in\pvs$. We shall do so by
+structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then
+$\hyp(\pi)=\{\phi\}\neq\emptyset$
+and~(\ref{logic:eqn:FOPL:soundness:proof:1}) is vacuously true. Next
+we assume that $\pi=\axi\phi$ for some $\phi\in\pv$. We shall
+distinguish two cases: first we assume that $\phi\not\in\av$. Then
+$\hyp(\pi)=\emptyset$ and $\val(\pi)=\bot\to\bot$. So we need to
+show that $\beta(\bot\to\bot)(a)=1$ for every assignment, which
+follows immediately from
+definition~(\ref{logic:def:FOPL:model:valuation:function}). Next we
+assume that $\phi\in\av$. Then $\hyp(\pi)=\emptyset$ and
+$\val(\pi)=\phi$. So we need to show that $\beta(\phi)(a)=1$ for
+every assignment, which follows immediately from
+lemma~(\ref{logic:lemma:FOPL:soundness:axioms}). So we now assume
+that $\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}\in\pvs$ are
+such that~(\ref{logic:eqn:FOPL:soundness:proof:1}) is true for every
+assignment. We need to show the same is true of $\pi$. So let
+$a:V\to M$ be an assignment and suppose $\hyp(\pi)=\emptyset$. We
+need to show that $\beta(\val(\pi))(a)=1$. We shall distinguish two
+cases: first we assume that $\val(\pi_{2})$ cannot be expressed as
+$\val(\pi_{2})=\val(\pi_{1})\to\phi$ for any $\phi\in\pv$. Then we
+have $\val(\pi)=M(\val(\pi_{1}),\val(\pi_{2}))=\bot\to\bot$ where
+$M:\pv^{2}\rightarrow \pv$ is the modus ponens mapping of
+definition~(\ref{logic:def:FOPL:modus:ponens}). Hence we have:
+    \begin{eqnarray*}
+    \beta(\val(\pi))(a)&=&\beta(\bot\to\bot)(a)\\
+    &=&\beta(\bot)(a)\to\beta(\bot)(a)\\
+    &=&0\to 0\\
+    &=&1
+    \end{eqnarray*}
+So we now assume that $\val(\pi_{2})=\val(\pi_{1})\to\phi$ for some
+$\phi\in\pv$. In this case we have
+$\val(\pi)=M(\val(\pi_{1}),\val(\pi_{2}))=\phi$ and we need to show
+that $\beta(\phi)(a)=1$. However, from
+$\emptyset=\hyp(\pi)=\hyp(\pi_{1})\cup\hyp(\pi_{2})$ we see that
+both $\hyp(\pi_{1})$ and $\hyp(\pi_{2})$ are the empty set. Having
+assumed the implication~(\ref{logic:eqn:FOPL:soundness:proof:1}) is
+true for $\pi_{1}$ and $\pi_{2}$ it follows that
+$\beta(\val(\pi_{1}))(a)=1$ and furthermore:
+    \begin{eqnarray*}
+    1&=&\beta(\val(\pi_{2}))(a)\\
+    &=&\beta(\,\val(\pi_{1})\to\phi\,)(a)\\
+    &=&\beta(\val(\pi_{1}))(a)\to\beta(\phi)(a)\\
+    &=&1\to\beta(\phi)(a)\\
+    \end{eqnarray*}
+So we conclude that $\beta(\phi)(a)=1$ as requested. We now assume
+that $\pi=\gen x\pi_{1}$ where $x\in V$ and $\pi_{1}\in\pvs$ is such
+that~(\ref{logic:eqn:FOPL:soundness:proof:1}) is true for every
+assignment. We need to show the same if true of $\pi$. So let
+$a:V\to M$ be an assignment and suppose $\hyp(\pi)=\emptyset$. We
+need to show that $\beta(\val(\pi))(a)=1$. Since we have
+$\hyp(\pi_{1})=\hyp(\pi)=\emptyset$ we see that
+$x\not\in\free(\pi_{1})$. So $\val(\pi)=\forall x\phi_{1}$ with
+$\phi_{1}=\val(\pi_{1})$ and we need to show that $\beta(\forall
+x\phi_{1})(a)=1$. However from $\hyp(\pi_{1})=\emptyset$, having
+assumed the implication~(\ref{logic:eqn:FOPL:soundness:proof:1}) is
+true for $\pi_{1}$ and every assignment, we have
+$\beta(\phi_{1})(b)=1$ for every assignment $b:V\to M$. It follows
+that $\beta(\forall
+x\phi_{1})(a)=\min\{\beta(\phi_{1})(b):b=a\mbox{\ on\
+    }V_{x}\}=1$ as requested.
+\end{proof}
+\begin{theorem}\label{logic:the:FOPL:soundness:soundness:2}
+Let $V$ be a set and $M$ be a model of\, \pv\ with model valuation
+function $\beta$. For every $a:V\to M$ the map
+$\beta(\,.\,)(a):\pv\to 2$ is a valuation.
+\end{theorem}
+\begin{proof}
+Let $a:V\to M$ be an assignment and define $v_{a}:\pv\to 2$ by
+setting $v_{a}(\phi)=\beta(\phi)(a)$. We need to show that $v_{a}$
+is a valuation. The fact that $v_{a}(\bot)=0$ and
+$v_{a}(\phi_{1}\to\phi_{2})=v_{a}(\phi_{1})\to v_{a}(\phi_{2})$ for
+all $\phi_{1},\phi_{2}\in\pv$ follows immediately from
+definition~(\ref{logic:def:FOPL:model:valuation:function}).
+Furthermore, the implication $\vdash\phi\ \Rightarrow\
+v_{a}(\phi)=1$ follows from
+theorem~(\ref{logic:the:FOPL:soundness:soundness}). By virtue of
+definition~(\ref{logic:def:FOPL:semantics:valuation}), $v_{a}$ is a
+valuation.
+\end{proof}

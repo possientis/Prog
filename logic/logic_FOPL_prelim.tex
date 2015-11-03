@@ -1,0 +1,112 @@
+This work is an attempt to provide an {\em algebraization of first
+order logic with terms and without equality}. Due to personal
+ignorance, we are not in a position to say much of the history of
+this problem, or the existing literature. We shall nonetheless
+endeavor to give here an honest account of our little understanding.
+Any specialist who believes this account can be improved in any way
+is welcome to contact the author. The idea of turning first order
+logic into algebra is not new. Following wikipedia, it appears
+Alfred Tarski initially worked on the algebraization of first order
+logic without terms and with equality, which led to the emergence of
+cylindric algebras. At a later stage, Paul Halmos developed a
+version without equality, which led to polyadic algebras. There is
+also a categorical approach initially due to William Lawvere,
+leading to functorial semantics. The most recent treatment of
+algebraization of first order logic without terms seems to be the
+work of Ildik\'o Sain in~\cite{Sain}. There is also the categorical
+work of George Voutsadakis, for example in~\cite{Voutsadakis}
+following a recent trend of {\em abstract algebraic logic} which
+seems to have been initiated by W.J. Blok and D.
+Pigozzi~\cite{BlokPigozzi}. A new book~\cite{AndrekaNemeti} from
+Hajnal Andr\'eka, Istv\'an N\'emeti and Ildik\'o Sain on algebraic
+logic is about to be released. There are a few older monographs on
+cylindric algebras such as~\cite{Cylindric} and Paul
+Halmos~\cite{Halmos} on polyadic algebras. It is our understanding
+that most of the work done so far has focussed on first order logic
+{\em without terms}, an exception being the paper from Janis
+Cirulis~\cite{Cirulis}, of which we are hoping to get a copy soon.
+The algebraization of first order logic {\em with terms} seems to
+have received far less attention than its counterpart {\em without
+terms}, as it fails to fall under the scope of currently known
+techniques of abstract algebraic logic. Before we complete our
+history tour, we would like to mention the books of Donald W. Barnes
+and John M. Mack~\cite{AlgLog} and P.T. Johnstone~\cite{Johnstone}
+which are the initial motivation for the present work. For a
+mathematician not trained in formal logic, these books have
+something magical. It is hard for us to say if they succeeded in
+presenting their subject. Many of the proofs are very short and
+require a fair amount of maturity. This document is an attempt to
+follow their trail while making the material accessible to less
+sophisticated readers. We shall now explain our purpose in more
+details.
+
+Our aim is to study mathematical statements as mathematical objects
+of their own. We believe universal algebras are likely to be the
+right tool for this study. We would like to represent the set of all
+possible mathematical statements as a universal algebra of some
+type. Without knowing much of the details at this stage, we shall
+call this universal algebra {\em the universal algebra of first
+order logic}. The elements of this universal algebra will be called
+{\em formulas of first order logic}. It may appear as somewhat naive
+to refer to {\em the} universal algebra of first order logic as if
+we had some form of uniqueness property. There are after all many
+logical systems which may be classified as {\em first order}, and
+many more algebras arising from these systems. However, we are
+looking for an algebra which is minimal in some sense, and
+encompasses {\em the language of {\bf ZF}} on which most of modern
+mathematics can be built. When looking at a given mathematical
+statement, we are often casually told that it could be (at least in
+principle) coded into the language of {\bf ZF}. Oh really? We would
+love to see that. There are so many issues surrounding this
+question, it does not seem obvious at all. One cannot simply define
+predicates of ever increasing complexity and hope to blindly
+substitutes these definitions within formulas. Most mathematical
+objects are not uniquely defined as sets, but are complex structures
+which are known up to isomorphism. The list of difficulties is
+endless. And there is of course category theory. Granted category
+theory will never fit into the language of {\bf ZF}, so we shall
+need another algebra for that. But who knows? it may be that {\em
+the universal algebra of first order logic} will be applicable to
+category theory: once we can formally define a predicate of a single
+variable, we can formally define a class as a proper mathematical
+object and dwell into the wonders of meta-mathematics without the
+intuition and the hand waving.
+
+So much for finding the names. The real challenge is to determine
+the appropriate definitions. We saw in
+theorem~(\ref{logic:the:quotient:free:algebra}) of
+page~\pageref{logic:the:quotient:free:algebra}, that there was no
+loss of generality in viewing our universal algebra as a quotient of
+a free universal algebra, modulo the right congruence. One possible
+way to define the universal algebra of first order logic is
+therefore to provide specific answers to the following questions:
+First, a free generator $X_{0}$ needs to be chosen. We then need to
+agree on a specific type of universal algebra $\alpha$ in order to
+derive a free universal algebra $X$ of type $\alpha$ with free
+generator $X_{0}$. Finally, a decision needs to be made on what the
+{\em appropriate} congruence $\sim$ on $X$ should be.
+
+These we believe are the right questions. For those already familiar
+with elements of formal logic, we may outline now a possible answer.
+Having chosen a formal language with a deductive system on it, we
+can consider the relation $\sim$ defined by $\phi\sim\psi$ \ifand\
+the formulas $\phi\rightarrow\psi$ and $\psi\rightarrow\phi$ are
+both provable with respect to this deductive system. This choice of
+particular congruence gives rise to a Lindenbaum-Tarski algebra. So
+it is possible our universal algebra of first order logic is just a
+particular case of Lindenbaum-Tarski (and it would probably have
+been sensible to call it that way). However at this point of the
+document, we do not know whether the provability of
+$\phi\rightarrow\psi$ is decidable. We may have heard a few things
+about the undecidability of first order logic and suspect that
+$\vdash(\phi\rightarrow\psi)$ is in fact undecidable. If this was
+the case, a computer would not be able to tell in general whether
+the equivalence $\phi\sim\psi$ holds. This would be highly
+unsatisfactory. Whatever congruence we eventually choose, surely we
+should want it to be decidable. The universal algebra of first order
+logic is about mathematical statements, not theorems. Those
+statements which happen to have the same {\em meaning} should be
+regarded as identical, and a computer program should be able to
+establish this identity. Those mathematical statements which happen
+to be mathematically equivalent should be dealt with by proof
+theory, model theory and set theory.

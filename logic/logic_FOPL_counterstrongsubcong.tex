@@ -1,0 +1,118 @@
+A fair amount of work has been devoted to the study of the strong
+substitution congruence, culminating with its characterization in
+the form of theorem~(\ref{logic:the:strong:sub:congruence:charac}).
+Unfortunately, most of this work was done vain. As we shall now
+discover, the strong substitution congruence is not the appropriate
+notion to study. It may give us insight and will certainly help us
+in the forthcoming developments, it may be commonly referred to in
+the literature, but it is marred by a major flaw. The problem is as
+follows: when $V=\{x,y\}$ with $x\neq y$, i.e. when $V$ has only two
+elements, the formulas $\phi=\forall x\forall y (x\in y)$ and
+$\psi=\forall y\forall x(y\in x)$ are not equivalent. This is highly
+disappointing. If there is one thing we would expect of a {\em
+substitution congruence}, it is certainly to be such that $\phi$ and
+$\psi$ be equivalent. This leaves us with a painful alternative: we
+either give up on the possibility of finite sets of variables $V$,
+or we abandon the notion of strong substitution congruence and all
+the work that has gone along with it. As already hinted, we are not
+prepared to accept that nothing interesting can be said with finite
+sets $V$. There must be an appropriate notion of {\em substitution
+congruence} to be defined on \pv, and we shall therefore continue
+our search for it. But before we resume our quest, we shall first
+prove that the problem truly exists:
+
+\begin{prop}\label{logic:prop:counter:strong:1}
+Let $\sim$ be the strong substitution congruence on \pv\ where
+$V=\{x,y\}$ and $x\neq y$. Then, we have:
+    \[
+    \forall x\forall y\,(x\in y)\not\sim\forall y\forall x\,(y\in x)
+    \]
+\end{prop}
+\begin{proof}
+Define $\phi_{1}=\forall y(x\in y)$ and $\psi_{1}=\forall x(y\in
+x)$. We need to show that $\forall x\phi_{1}\not\sim\forall
+y\psi_{1}$. Suppose to the contrary that $\forall
+x\phi_{1}\sim\forall y\psi_{1}$. We shall derive a contradiction.
+Since $x\neq y$, from
+theorem~(\ref{logic:the:strong:sub:congruence:charac}) of
+page~\pageref{logic:the:strong:sub:congruence:charac} there exists
+$\theta\in\pv$ such that $\phi_{1}\sim\theta$,
+$\psi_{1}\sim\theta[y/x]$ and $y\not\in\var(\theta)$. From
+$\phi_{1}\sim\theta$ we see that $\forall y(x\in y)\sim\theta$, and
+applying theorem~(\ref{logic:the:strong:sub:congruence:charac}) once
+more, since $V=\{x,y\}$ we see that $\theta$ must be of the form
+$\theta=\forall x\theta_{1}$ or $\theta=\forall y\theta_{1}$.
+However the case $\theta=\forall y\theta_{1}$ is impossible since
+$y\not\in\var(\theta)$. Suppose now that $\theta=\forall
+x\theta_{1}$ for some $\theta_{1}\in\pv$. Then
+$x\not\in\free(\theta)=\free(\theta_{1})\setminus\{x\}$. However we
+have $\forall y(x\in y)\sim\theta$ from
+proposition~(\ref{logic:prop:strong:freevar}) we have
+$\{x\}=\free(\,\forall y(x\in y)\,)=\free(\theta)$. This is our
+desired contradiction.
+\end{proof}
+
+As we have just seen, the strong substitution congruence is
+inadequate when $V$ has two elements. In fact, it is also inadequate
+when $V$ has three elements as the following proposition shows. We
+do not intend to spend too much time proving negative results, but
+we certainly believe the strong substitution congruence on \pv\ will
+fail whenever $V$ is a finite set.
+
+\begin{prop}\label{logic:prop:counter:strong:2}
+Let $\sim$ be the strong substitution congruence on \pv\ where
+$V=\{x,y,z\}$ and $x\neq y$, $y\neq z$ and $x\neq z$. Then, we have:
+    \[
+    \forall x\forall y\forall z\,[(x\in y)\to(y\in z)]\not\sim\forall
+    y\forall z\forall x\,[(y\in z)\to(z\in x)]
+    \]
+\end{prop}
+\begin{proof}
+Define $\phi_{1}=\forall y\forall z\,[(x\in y)\to(y\in z)]$ and
+$\psi_{1}=\forall z\forall x\,[(y\in z)\to(z\in x)]$. We need to
+show that $\forall x\phi_{1}\not\sim\forall y\psi_{1}$. Suppose to
+the contrary that $\forall x\phi_{1}\sim\forall y\psi_{1}$. We shall
+derive a contradiction. Since $x\neq y$, from
+theorem~(\ref{logic:the:strong:sub:congruence:charac}) of
+page~\pageref{logic:the:strong:sub:congruence:charac} there exists
+$\theta\in\pv$ such that $\phi_{1}\sim\theta$,
+$\psi_{1}\sim\theta[y/x]$ and $y\not\in\var(\theta)$. From
+$\phi_{1}\sim\theta$ we see that $\forall y\forall z\,[(x\in
+y)\to(y\in z)]\sim\theta$, and applying
+theorem~(\ref{logic:the:strong:sub:congruence:charac}) once more,
+since $V=\{x,y,z\}$ we see that $\theta$ must be of the form
+$\theta=\forall x\,\theta_{1}$, $\theta=\forall y\,\theta_{1}$ or
+$\theta=\forall z\,\theta_{1}$. However the case $\theta=\forall
+y\,\theta_{1}$ is impossible since $y\not\in\var(\theta)$.
+Furthermore, the case $\theta=\forall x\,\theta_{1}$ is also
+impossible since this would imply that $x\not\in\free(\theta)$,
+while from $\forall y\forall z\,[(x\in y)\to(y\in z)]\sim\theta$ and
+proposition~(\ref{logic:prop:strong:freevar}):
+    \[
+    \{x\}=\free(\,\forall y\forall z\,[(x\in y)\to(y\in z)]\,)=\free(\theta)
+    \]
+It follows that $\theta=\forall z\,\theta_{1}$ for some
+$\theta_{1}\in\pv$. Hence we see that:
+    \[
+    \forall y\forall z\,[(x\in y)\to(y\in z)]\sim\forall z\,\theta_{1}
+    \]
+Applying theorem~(\ref{logic:the:strong:sub:congruence:charac}) once
+more, there exists $\eta\in\pv$ such that  we have $\forall
+z\,[(x\in y)\to(y\in z)]\sim\eta$, $\theta_{1}\sim\eta[z/y]$ and
+$z\not\in\var(\eta)$. From the strong equivalence $\forall z\,[(x\in
+y)\to(y\in z)]\sim\eta$ and yet another application of
+theorem~(\ref{logic:the:strong:sub:congruence:charac}), since
+$V=\{x,y,z\}$ we see that $\eta$ must be of the form $\eta=\forall
+x\,\eta_{1}$, $\eta=\forall y\,\eta_{1}$ or $\eta=\forall
+z\,\eta_{1}$. However, the case $\eta=\forall z\,\eta_{1}$ is
+impossible since $z\not\in\var(\eta)$. Suppose now that
+$\eta=\forall x\,\eta_{1}$. Then $x\not\in\free(\eta)$,
+contradicting the equality:
+    \[
+    \{x,y\}=\free(\,\forall z\,[(x\in y)\to(y\in z)]\,)=\free(\eta)
+    \]
+obtained from $\forall z\,[(x\in y)\to(y\in z)]\sim\eta$ and
+proposition~(\ref{logic:prop:strong:freevar}). Since
+$y\in\free(\eta)$ we conclude similarly that $\eta=\forall
+y\,\eta_{1}$ is equally impossible.
+\end{proof}

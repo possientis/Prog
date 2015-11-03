@@ -1,0 +1,55 @@
+\index{Type@Type of universal algebra}
+\begin{defin}\label{logic:def:type:universal:algebra}
+A {\em Type of Universal Algebra} is a map $\alpha$ with $\rng(\alpha)\subseteq\N$.
+\end{defin}
+
+Since the empty set is a map with empty range, it is also is a type
+of universal algebra. When $\alpha$ is an element of $\N^{n}$, it is
+a map $\alpha:n\to\N$ which can be represented as the n-uple
+$(\alpha(0),\ldots,\alpha(n-1))$. If $\alpha$ is a type of universal
+algebra, its cardinal number represents the number of operators
+defined on any universal algebra of type $\alpha$ (which can be
+finite, infinite, countable or uncountable) while for all $i\in
+\dom(\alpha)$, $\alpha(i)\in\N$ represents the {\em arity} of the
+$i$-th operator so to speak, i.e. the number of arguments it has. If
+$X$ is a universal algebra of type $\alpha$, then an {\em operator}
+of arity $\alpha(i)$ is a map $f:X^{\alpha(i)}\to X$. Hence an
+operator of arity $1$ is a map $f:X^{1}\to X$ while an operator of
+arity $2$ is a map $f:X^{2}\to X$. What may be more unusual is an
+operator or arity $0$, namely a map $f:X^{0}\to X$. Since
+$X^{0}=\{0\}$, an operator of arity $0$ is therefore a map
+$f:\{0\}\to X$, which is a set $f=\{(0,f(0))\}$ containing the
+single ordered pair $(0,f(0))$. Fundamentally, there is not much
+difference between specifying an operator of arity $0$ on $X$, and
+the constant element $f(0)$ of $X$. It is however convenient to
+allow the arity of an operator to be $0$, so we do not have to treat
+constants and operators separately.
+
+Universal algebras may have constants, like an identity element in a
+group. If $G$ is a group with identity element $e$ and product
+$\otimes$, it is possible to regard $G$ as a universal algebra with
+$3$ operators. The identity operator $f:\{0\}\to G$ is defined by
+$f(0)=e$, the product operator $f:G^{2}\to G$ by $f(x)=x(0)\otimes
+x(1)$ and the inverse operator $f:G^{1}\to G$ by $f(x)=x(0)^{-1}$.
+The type of this universal algebra could be $\alpha:3\to\N$ defined
+by $\alpha(0)=0$, $\alpha(1)=2$ and $\alpha(2)=1$, that is $\alpha
+=\{(0,0),(1,2),(2,1)\}$. Of course a group $G$ has more properties
+than a universal algebra of type $\alpha$ because the operators need
+to satisfy certain conditions. Hence a group is arguably a universal
+algebra of type $\alpha$, but the converse is not true in general.
+
+There is something slightly unsatisfactory about
+definition~(\ref{logic:def:type:universal:algebra}), namely the fact
+that the arity of the operators are ordered. After all, a group is
+also a universal algebra of type $\alpha'=\{(0,0),(1,1),(2,2)\}$ or
+even $\alpha''=\{(*,0),(+,1),(@,2)\}$ provided $*$, $+$ and $@$
+denote distinct sets.\index{alpha@$\alpha(f)\,:$ arity of the symbol
+$f\in\alpha$}
+
+Let $\alpha$ be a type of universal algebra and $f\in\alpha$. Then
+$f$ is an ordered pair $(i,\alpha(i))$ for some $i\in \dom(\alpha)$.
+From now on, we shall write $\alpha(f)$ rather than $\alpha(i)$.
+This notational convention is very convenient as we no longer need
+to refer to $\dom(\alpha)$, or $i\in \dom(\alpha)$. If $X$ is a
+universal algebra of type $\alpha$, we simply require the existence
+of an operator $T(f):X^{\alpha(f)}\to X$ for all $f\in\alpha$.

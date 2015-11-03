@@ -1,0 +1,168 @@
+\index{operator@Operator: left
+$\bot$-introduction}\index{left@$\Lbot$ : left $\bot$-introduction}
+
+\begin{defin}\label{logic:def:GENZ:operators:Lbot}
+Let $V$ be a set. We call {\em left $\bot$-introduction operator} on
+\sv, the nullary operator $\Lbot:\sv^{0}\to\sv$ defined by
+$\Lbot(0)=(\bot\vdash\emptyset)$.
+\end{defin}
+
+\index{operator@Operator: left weakening}\index{left@$\Lw(\Gamma)$ :
+left weakening}
+\begin{defin}\label{logic:def:GENZ:operators:Lw}
+Let $V$ be a set and $\Gamma\subseteq\pv$. We call {\em left
+weakening operator} on \sv\ associated with $\Gamma$, the unary
+operator $\Lw(\Gamma):\sv^{1}\to\sv$\,:
+    \[
+    \forall s\in\sv\ ,\
+    \Lw(\Gamma)(s)=(\,\Gamma\cup\Gamma(s)\vdash\Delta(s)\,)
+    \]
+The set of all left weakening operators on \sv\ is denoted
+$\Lw(V)$\,.
+\end{defin}
+
+\index{operator@Operator: right weakening}\index{right@$\Rw(\Delta)$
+: right weakening}
+\begin{defin}\label{logic:def:GENZ:operators:Rw}
+Let $V$ be a set and $\Delta\subseteq\pv$. We call {\em right
+weakening operator} on \sv\ associated with $\Delta$, the unary
+operator $\Rw(\Delta):\sv^{1}\to\sv$\,:
+    \[
+    \forall s\in\sv\ ,\
+    \Rw(\Delta)(s)=(\,\Gamma(s)\vdash\Delta(s)\cup\Delta\,)
+    \]
+The set of all right weakening operators on \sv\ is denoted
+$\Rw(V)$\,.
+\end{defin}
+
+\index{operator@Operator: left
+$\to\,$-introduction}\index{left@$\Limp(\phi_{1},\phi_{2})$ : left
+$\to\,$-introduction}
+\begin{defin}\label{logic:def:GENZ:operators:Limp}
+Let $V$ be a set and $\phi_{1},\phi_{2}\in\pv$. We call {\em left
+$\to\,$-introduction operator} on \sv\ associated with the ordered
+pair $(\phi_{1},\phi_{2})$, the binary operator
+$\Limp(\phi_{1},\phi_{2}):\sv^{2}\to\sv$ defined by the equation,
+given $s_{1},s_{2}\in\sv$\,:
+    \[
+    \Limp(\phi_{1},\phi_{2})(s_{1},s_{2})=(\,\Gamma(s_{1})\cup\Gamma(s_{2})\setminus\{\phi_{2}\}
+    \cup\{\phi_{1}\to\phi_{2}\}\vdash\Delta(s_{1})
+    \setminus\{\phi_{1}\}\cup\Delta(s_{2})\,)
+    \]
+The set of all left $\to\,$-introduction operators on \sv\ is
+denoted $\Limp(V)$\,.
+\end{defin}
+
+\index{operator@Operator: right
+$\to\,$-introduction}\index{right@$\Rimp(\phi_{1},\phi_{2})$:\,right
+$\to\,$-introduction}
+\begin{defin}\label{logic:def:GENZ:operators:Rimp}
+Let $V$ be a set and $\phi_{1},\phi_{2}\in\pv$. We call {\em right
+$\to\,$-introduction operator} on \sv\ associated with the ordered
+pair $(\phi_{1},\phi_{2})$, the unary operator
+$\Rimp(\phi_{1},\phi_{2}):\sv^{1}\to\sv$ defined by the equation,
+given $s\in\sv$\,:
+    \[
+    \Rimp(\phi_{1},\phi_{2})(s)=(\,\Gamma(s)\setminus\{\phi_{1}\}\vdash\Delta(s)
+    \setminus\{\phi_{2}\}\cup\{\phi_{1}\to\phi_{2}\}\,)
+    \]
+The set of all right $\to\,$-introduction operators on \sv\ is
+denoted $\Rimp(V)$\,.
+\end{defin}
+
+\index{operator@Operator: naive left
+$\forall$-intro.}\index{left@$\Lall_{0}(\phi,\psi)$ : naive left
+$\forall$-intro}
+\begin{defin}\label{logic:def:GENZ:operators:naive:Lforall}
+Let $V$ be a set and $\phi,\psi\in\pv$. The {\em naive left
+$\forall$-introduction operator} on \sv\ associated with the ordered
+pair $(\phi,\psi)$ is the unary operator
+$\Lall_{0}(\phi,\psi):\sv^{1}\to\sv$ defined by the equation, given
+$s\in\sv$\,:
+    \[
+    \Lall_{0}(\phi,\psi)(s)=(\,\Gamma(s)\setminus\{\psi\}\cup\{\phi\}\vdash\Delta(s)\,)
+    \]
+The set of all naive left $\forall$-introduction operators on \sv\
+is denoted $\Lall_{0}(V)$\,.
+\end{defin}
+
+
+\index{operator@Operator: naive right
+$\forall$-intro.}\index{right@$\Rall_{0}(\phi,\psi)$ : naive right
+$\forall$-intro}
+\begin{defin}\label{logic:def:GENZ:naiveoperators:naive:Rforall}
+Let $V$ be a set and $\phi,\psi\in\pv$. The {\em naive right
+$\forall$-introduction operator} on \sv\ associated with the ordered
+pair $(\phi,\psi)$ is the unary operator
+$\Rall_{0}(\phi,\psi):\sv^{1}\to\sv$ defined by the equation, given
+$s\in\sv$\,:
+    \[
+    \Rall_{0}(\phi,\psi)(s)=(\,\Gamma(s)\vdash\Delta(s)\setminus\{\psi\}\cup\{\phi\}\,)
+    \]
+The set of all naive right $\forall$-introduction operators on \sv\
+is denoted $\Rall_{0}(V)$\,.
+\end{defin}
+
+\index{sound@$\forall$-Sound}\index{forall@$\forall$-Sound}
+\begin{defin}\label{logic:def:GENZ:operators:forall:sound}
+Let $V$ be a set and $\phi,\psi\in\pv$. We say that the ordered pair
+$(\phi,\psi)$ is {\em $\forall$-sound} \ifand\ there exist
+$\phi_{1}\in\pv$, $x,y\in V$ and an essential substitution $[y/x]$
+of $y$ in place of $x$ such that $\phi=\forall x\phi_{1}$ and
+$\psi=\phi_{1}[y/x]$.
+\end{defin}
+
+\index{operator@Operator: left
+$\forall$-introduction}\index{left@$\Lall(\phi,\psi)$ : left
+$\forall$-introduction}
+\begin{defin}\label{logic:def:GENZ:operators:Lforall}
+Let $V$ be a set and $\phi,\psi\in\pv$. The {\em left
+$\forall$-introduction operator} on \sv\ associated with the ordered
+pair $(\phi,\psi)$ is the unary operator
+$\Lall(\phi,\psi):\sv^{1}\to\sv$ defined by the equation, given
+$s\in\sv$\,:
+    \[
+    \Lall(\phi,\psi)(s)=\left\{
+        \begin{array}{lcl}
+        \Lall_{0}(\phi,\psi)(s)&\mbox{\ if\ }&(\phi,\psi)\ \mbox{$\forall$-sound}\\
+        (\bot\vdash\emptyset)&\ \ \ \ &\mbox{otherwise}\\
+        \end{array}
+    \right.
+    \]
+The set of all left $\forall$-introduction operators on \sv\ is
+denoted $\Lall(V)$\,.
+\end{defin}
+
+
+\index{sound@$\forall$-Sound w.r. to
+$s\in\sv$}\index{forall@$\forall$-Sound w.r. to $s\in\sv$}
+\begin{defin}\label{logic:def:GENZ:operators:forall:sound:right}
+Let $V$ be a set, $\phi,\psi\in\pv$ and $s\in\sv$. We say that
+$(\phi,\psi)$ is {\em $\forall$-sound w.r. to $s$} \ifand\ it is
+$\forall$-sound as per {\em
+definition~(\ref{logic:def:GENZ:operators:forall:sound})} with the
+additional property that $y$ is not a free variable of the sequent
+$\Rall_{0}(\phi,\psi)(s)$.
+\end{defin}
+
+
+\index{operator@Operator: right
+$\forall$-introduction}\index{right@$\Rall(\phi,\psi)$ : right
+$\forall$-introduction}
+\begin{defin}\label{logic:def:GENZ:operators:Rforall}
+Let $V$ be a set and $\phi,\psi\in\pv$. The {\em right
+$\forall$-introduction operator} on \sv\ associated with the ordered
+pair $(\phi,\psi)$ is the unary operator
+$\Rall(\phi,\psi):\sv^{1}\to\sv$ defined by the equation, given
+$s\in\sv$\,:
+    \[
+    \Rall(\phi,\psi)(s)=\left\{
+        \begin{array}{lcl}
+        \Rall_{0}(\phi,\psi)(s)&\mbox{\ if\ }&(\phi,\psi)\ \mbox{$\forall$-sound w.r. to $s$}\\
+        (\bot\vdash\emptyset)&\ \ \ \ &\mbox{otherwise}\\
+        \end{array}
+    \right.
+    \]
+The set of all right $\forall$-introduction operators on \sv\ is
+denoted $\Rall(V)$\,.
+\end{defin}

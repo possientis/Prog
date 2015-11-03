@@ -1,0 +1,201 @@
+As explained in the previous section, we shall define the notion of
+semantic entailment in terms of valuation rather than model. In line
+with this convention, the following definition introduces the notion
+of {\em truth} and {\em satisfaction} also in terms of valuation.
+Hence we shall introduce obvious notations such as $v\vDash\phi$ and
+$v\vDash\Gamma$, which should be read as ``\,{\em $v$ satisfies
+$\phi$}\,'' and ``\,{\em $v$ satisfies $\Gamma$}\,''.
+
+\index{truth@Truth of formula}\index{satisfy@Satisfiability of
+formula $\phi$}\index{satisfy@Satisfiability of subset
+$\Gamma$}\index{v@$v\vDash\phi$ : $v$ satisfies
+$\phi$}\index{v@$v\vDash\Gamma$ : $v$ satisfies $\Gamma$}
+\begin{defin}\label{logic:def:FOPL:semantics:valuation:truth}
+Let $V$ be a set and $v:\pv\to 2$ be a valuation on \pv. We say that
+$\phi\in\pv$ is {\em true} for $v$  or that $v$ {\em satisfies}
+$\phi$ and we write:
+    \[
+    v\vDash\phi
+    \]
+\ifand\ $v(\phi)=1$. Given $\Gamma\subseteq\pv$, we say that $v$
+{\em satisfies} $\Gamma$ and we write:
+    \[
+    v\vDash\Gamma
+    \]
+\ifand\ $v\vDash\psi$ for all $\psi\in\Gamma$. We say $\Gamma$ is
+{\em satisfiable} if $v\vDash\Gamma$ for some $v$.
+\end{defin}
+
+Note that the notations $v\vDash\phi$ and $v\vDash\{\phi\}$ have
+equivalent meaning. It is also clear that if $v$ satisfies $\Delta$
+and $\Delta\supseteq\Gamma$ then $v$ also satisfies $\Gamma$.
+Finally, any valuation $v$ vacuously satisfies the empty set
+$\emptyset$. This does not mean the empty set is satisfiable, until
+we know for a fact that \pvd\ is not empty. In
+definition~(\ref{logic:def:FOPL:proof:of:formula}) we introduced a
+relation $\vdash\,\subseteq{\cal P}(\pv)\times\pv$, which is often
+referred to as the relation of {\em syntactic entailment}. We shall
+now define a similar relation $\vDash$ which is that of {\em
+semantic entailment}. Given $\Gamma\subseteq\pv$ and $\phi\in\pv$,
+the statement $\Gamma\vDash\phi$ expresses the fact that for every
+valuation $v\in\pvd$\,:
+    \[
+    v\mbox{\ satisfies\ }\Gamma\ \Rightarrow\ v\mbox{\ satisfies\
+    }\phi
+    \]
+At this stage of the discussion, we still cannot be sure that the
+dual space \pvd\ is not empty. If this was the case, then
+$\Gamma\vDash\phi$ would be vacuously true.
+
+\index{semantic@Semantic consequence}\index{entailment@Semantic
+entailment}\index{semantic@Semantic
+entailment}\index{gamma@$\Gamma\vDash\phi$ : $\Gamma$ semantically
+entails $\phi$} \index{phi@$\vDash\phi$ : $\phi$ is
+valid}\index{valid@Valid formula}
+\begin{defin}\label{logic:def:FOPL:semantics:entailments}
+Let $V$ be a set and $\Gamma\subseteq\pv$. Let $\phi\in\pv$. We say
+that $\phi$ is a semantic consequence of $\Gamma$, or that $\Gamma$
+{\em semantically entails} $\phi$ and we write:
+    \[
+    \Gamma\vDash\phi
+    \]
+\ifand\ for every valuation $v:\pv\to 2$ we have the implication:
+    \[
+    v\vDash\Gamma\ \Rightarrow\ v\vDash\phi
+    \]
+Furthermore, we say that $\phi$ is {\em valid} and we write
+$\vDash\phi$ \ifand\ $\emptyset\vDash\phi$.
+\end{defin}
+
+We defined a valid formula as any formula $\phi$ which satisfies the
+semantic entailment $\emptyset\vDash\phi$. However, a valuation
+$v:\pv\to 2$ always satisfies the empty set. Hence, a valid formula
+is simply a formula which is true for every valuation.
+
+\index{truth@Truth and validity}
+\begin{prop}\label{logic:prop:FOPL:semantics:validity:charac}
+Let $V$ be a set and $\phi\in\pv$. Then we have the equivalence:
+    \[
+    \vDash\phi\ \Leftrightarrow\ (\,\forall v\in\pvd\ ,\ v\vDash\phi\,)
+    \]
+In other words, a formula is valid \ifand\ it is true for every
+valuation.
+\end{prop}
+\begin{proof}
+First we show $\Rightarrow$\,: so we assume that $\phi$ is valid,
+i.e. $\vDash\phi$. Let $v\in\pvd$ be a valuation. We need to show
+that $v\vDash\phi$. However from $\vDash\phi$ which is
+$\emptyset\vDash\phi$, we have the implication $v\vDash\emptyset\
+\Rightarrow\ v\vDash\phi$. It is therefore sufficient to prove that
+$v\vDash\emptyset$, i.e. that $v$ satisfies the empty set
+$\emptyset$. But this last statement is equivalent to $v\vDash\psi$
+for all $\psi\in\emptyset$ which is vacuously true. So we now prove
+$\Leftarrow$\,: we assume that $v\vDash\phi$ for all $v\in\pvd$. We
+need to show that $\vDash\phi$. So let $v$ be a valuation. We need
+to show the implication $v\vDash\emptyset\ \Rightarrow\
+v\vDash\phi$. However, $v\vDash\emptyset$ is vacuously true. So we
+simply need to show that $v\vDash\phi$ which is true by assumption.
+\end{proof}
+
+The relation $\vDash\,\subseteq{\cal P}(\pv)\times\pv$ will be seen
+to coincide with $\vdash$ after we prove
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) of
+page~\pageref{logic:the:FOPL:semantics:syn:equiv:sem}. In
+particular, both relations satisfy the same properties. So rather
+than spend too much time investigating the relation $\vDash$, we
+shall focus on establishing the equality $\vDash\,=\,\vdash$.
+However, we now need to show:
+\begin{prop}\label{logic:def:FOPL:semantics:monotonicity}
+Let $V$ be a set and $\Gamma,\Delta\subseteq\pv$. Then for all
+$\phi\in\pv$\,:
+    \[
+    (\Gamma\supseteq\Delta)\land(\Delta\vDash\phi)\ \Rightarrow\
+    \Gamma\vDash\phi
+    \]
+\end{prop}
+\begin{proof}
+We assume that $\Gamma\supseteq\Delta$ and $\Delta\vDash\phi$. We
+need to show that $\Gamma\vDash\phi$. So let $v$ be a valuation
+which satisfies $\Gamma$, i.e. such that $v\vDash\Gamma$. We need to
+show that $\phi$ is true for $v$, i.e. that $v\vDash\phi$. However,
+from $v\vDash\Gamma$ we have $v\vDash\psi$ for all $\psi\in\Gamma$.
+Having assumed that $\Gamma\supseteq\Delta$, it follows that
+$v\vDash\psi$ for all $\psi\in\Delta$. Hence we see that $v$
+satisfies $\Delta$ i.e. that $v\vDash\Delta$. From
+$\Delta\vDash\phi$, we conclude that $v\vDash\phi$.
+\end{proof}
+
+We shall now establish one side of the equivalence between syntactic
+and semantic entailments. The full result will be obtained in
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) of
+page~\pageref{logic:the:FOPL:semantics:syn:equiv:sem}. The proof of
+the following proposition is similar in spirit to that of the
+transitivity of $\vdash$ in
+proposition~(\ref{logic:prop:FOPL:deduction:transitivity}) which
+relies on a induction on the cardinal $|\Gamma|$. The deduction
+theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} effectively allows us to
+focus on proving the implication $\vdash\phi\ \Rightarrow\
+\vDash\phi$ which is true from the very definition of a valuation.
+
+\begin{prop}\label{logic:prop:FOPL:semantics:syn:imp:sem}
+Let $V$ be a set and $\Gamma\subseteq\pv$. Then for all
+$\phi\in\pv$\,:
+    \begin{equation}\label{logic:eqn:FOPL:semantics:syn:imp:sem:1}
+    \Gamma\vdash\phi\ \Rightarrow\ \Gamma\vDash\phi
+    \end{equation}
+\end{prop}
+\begin{proof}
+Without loss of generality, we may assume that $\Gamma$ is a finite
+set. Indeed, suppose the proposition has been proved for $\Gamma$
+finite. We need to show it is also true in the general case. So
+suppose $\Gamma\vdash\phi$. We need to show that $\Gamma\vDash\phi$.
+However, there exists $\Gamma_{0}$ finite such that
+$\Gamma_{0}\subseteq\Gamma$ and $\Gamma_{0}\vdash\phi$. Having
+assumed the proposition is true in the finite case, we obtain
+$\Gamma_{0}\vDash\phi$ and $\Gamma\vDash\phi$ follows from
+$\Gamma_{0}\subseteq\Gamma$ and
+proposition~(\ref{logic:def:FOPL:semantics:monotonicity}). So
+without loss of generality, we assume that $\Gamma$ is a finite set.
+We shall prove the
+implication~(\ref{logic:eqn:FOPL:semantics:syn:imp:sem:1}) for all
+$\phi\in\pv$ using an induction argument on the cardinal $|\Gamma|$
+of the set $\Gamma$. So first we assume that $|\Gamma|=0$. Then
+$\Gamma=\emptyset$ and given $\phi\in\pv$ we need to prove that
+$\vdash\phi\ \Rightarrow\ \vDash\phi$. So we assume that
+$\vdash\phi$ and we need to show that $\vDash\phi$. So let
+$v\in\pvd$ be a valuation. Using
+proposition~(\ref{logic:prop:FOPL:semantics:validity:charac}) we
+need to show that $v\vDash\phi$, i.e. $v(\phi)=1$ which is true
+since $v$ is a valuation and $\vdash\phi$. So given $n\in\N$, we now
+assume that~(\ref{logic:eqn:FOPL:semantics:syn:imp:sem:1}) is true
+for all $\phi\in\pv$ whenever we have $|\Gamma|=n$. We need to show
+the same applies when $|\Gamma|=n+1$. So we assume that
+$|\Gamma|=n+1$, and given $\phi\in\pv$ we assume that
+$\Gamma\vdash\phi$. We need to show that $\Gamma\vDash\phi$. So let
+$v\in\pvd$ be a valuation satisfying $\Gamma$ i.e. such that
+$v\vDash\Gamma$. We need to show that $\phi$ is true for $v$ which
+is $v\vDash\phi$. However, from $|\Gamma|=n+1$ we see that $\Gamma$
+is not empty. So let $\psi^{*}\in\Gamma$ and define
+$\Gamma^{*}=\Gamma\setminus\{\psi^{*}\}$. Then $|\Gamma^{*}|=n$ and
+$\Gamma=\Gamma^{*}\cup\{\psi^{*}\}$. From our assumption
+$\Gamma\vdash\phi$ we obtain $\Gamma^{*}\cup\{\psi^{*}\}\vdash\phi$.
+Using the deduction theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} it follows that
+$\Gamma^{*}\vdash(\psi^{*}\to\phi)$. Having assumed
+that~(\ref{logic:eqn:FOPL:semantics:syn:imp:sem:1}) is true for all
+$\phi\in\pv$ whenever $|\Gamma|=n$, in particular it is true for
+$\psi^{*}\to\phi$ and $\Gamma^{*}$. Hence from
+$\Gamma^{*}\vdash(\psi^{*}\to\phi)$ we obtain
+$\Gamma^{*}\vDash(\psi^{*}\to\phi)$. Furthermore, from the inclusion
+$\Gamma^{*}\subseteq\Gamma$ and the assumption that $v$ satisfies
+$\Gamma$, we see that $v$ also satisfies $\Gamma^{*}$ i.e.
+$v\vDash\Gamma^{*}$. So from $\Gamma^{*}\vDash(\psi^{*}\to\phi)$ we
+see that $v\vDash(\psi^{*}\to\phi)$, which is
+$1=v(\psi^{*}\to\phi)=v(\psi^{*})\to v(\phi)$. So we see that
+$v(\psi^{*})\leq v(\phi)$. In order to show that $v\vDash\phi$ which
+is $v(\phi)=1$, it is therefore sufficient to prove that
+$v(\psi^{*})=1$. However, $\psi^{*}\in\Gamma$ and by assumption $v$
+satisfies $\Gamma$. It follows that $\psi^{*}$ is true for $v$, i.e.
+$v(\psi^{*})=1$, which completes our induction argument.
+\end{proof}
