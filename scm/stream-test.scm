@@ -67,11 +67,6 @@
       (display "stream: unit test 5.9 failing\n"))
     (if (not (equal? (stream-take 8 ones) '(1 1 1 1 1 1 1 1)))
       (display "stream: unit test 5.10 failing\n")))
-  ; stream-map1
-  (let ((s (list->stream '(0 1 2 3 4 5))) (f (lambda (x) (* x x))))
-    (let ((t (stream-map1 f s)))
-      (if (not (equal? (stream->list t) '(0 1 4 9 16 25)))
-        (display "stream: unit test 6.0 failing\n"))))
   ; stream-for-each
   (let ((s (list->stream '(0 1 2 3 4 5)))
         (f (let ((count 0))
@@ -120,10 +115,12 @@
       (if (not (equal? (stream->list t) '(7 6 10 14 19 13)))
         (display "stream: unit test 10.3 failing\n"))))
   ; fibonacci numbers
-;  (let ((seq (stream-take 10 fibs1)))
-;    (if (not (equal? seq '(0 1 1 2 3 5 8 13 21 34)))
-;      (display "stream: unit test 11.0 failing\n")))
-
+  (let ((seq (stream-take 10 fibs1)))
+    (if (not (equal? seq '(0 1 1 2 3 5 8 13 21 34)))
+      (display "stream: unit test 11.0 failing\n")))
+  (let ((seq (stream-take 10 fibs2)))
+    (if (not (equal? seq '(0 1 1 2 3 5 8 13 21 34)))
+      (display "stream: unit test 11.1 failing\n")))
  
   ;
   (display "stream: unit test complete\n"))

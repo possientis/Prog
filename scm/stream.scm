@@ -38,15 +38,7 @@
     ;
     (define (init)            ; initialization of object
       (if (not (null? args))  ; expecting a pair (value . promise)
-        (begin
-        (display "-------------------------\n")
-        (display "Intializing stream object\n")
-        (display "data is set to cons of:\n")
-        (display "1. ")(display (car args))(newline)
-        (display "2. ")(display (cadr args))(newline)
-        (display "-------------------------\n")
         (set! data (cons (car args) (cadr args)))))
-      )
     ;
     ; initializing object
     (init)
@@ -65,7 +57,6 @@
     (if (pred (s 'car))
       (stream-cons (s 'car) (stream-filter pred (s 'cdr)))
       (stream-filter pred (s 'cdr)))))
-
 
 (define (stream-for-each proc s)
   (if (s 'null?)
@@ -94,62 +85,44 @@
 (define (integers-from n)
   (stream-cons n (integers-from (+ n 1))))
 
-; simple (single stream implementation)
-(define (stream-map1 proc s)
-  (if (s 'null?)
-    s           ; empty stream
-    (stream-cons (proc (s 'car)) (stream-map1 proc (s 'cdr)))))
+(define (stream-range lo hi)
+  (if (< hi lo) (stream)
+    ; else
+    (stream-cons lo (stream-range (+ lo 1) hi))))
 
-; general implementation
 ; proc requires n-arguments. xs is a list of n streams
 ; no sensible results unless all streams have same sizes
-(define global-count 0)
 (define (stream-map proc . xs)
-  (set! global-count (+ global-count 1))
-  (if (>= global-count 10) (exit))
   (if (null? xs) (stream) ; returns empty stream, no second argument provided
     ; else
     (if ((car xs) 'null?) ; All streams should have same size. Testing first.
       (stream)            ; empty stream
       ; else
-      (begin
-        (display "debug start:\n")
-        (let ((heads (map (lambda (s) (s 'car)) xs)))
-          (display "I am here after heads\n")
-          (display "heads = ")(display heads)(newline)
-          (display "xs = (x1 x2) where\n")
-          (display "x1 = ")(if(eq? ones(car xs))(display "ones\n")(display "?\n"))
-          (display "x2 = ")(if(eq? test(cadr xs))(display "test\n")(display "?\n"))
-          (let ((tails (map (lambda (s) (s 'cdr)) xs)))
-          (display "I am here\n")
-          (stream-cons (apply proc heads)
-                       (apply stream-map (cons proc tails)))))))))
+      (let ((heads (map (lambda (s) (s 'car)) xs)))
+        (stream-cons (apply proc heads)
+                     ; do not attempt to pre-calculate part of the following 
+                     ; line with a 'let' statement to make the code more readable,
+                     ; as this would defeat the purpose of lazy evaluation 
+                     ; embedded in 'stream-cons' and introduce a nasty bug. duh!
+                     (apply stream-map 
+                            (cons proc (map (lambda (s) (s 'cdr)) xs))))))))
 
 (define (stream->list s)  ; will fail badly if stream is infinite
   (if (s 'null?)
     '()
     (cons (s 'car) (stream->list (s 'cdr)))))
 
+; a first possible definition of the fibonacci stream
+(define fibs1
+  (let fibgen ((a 0) (b 1))
+    (stream-cons a (fibgen b (+ a b)))))
 
-; testing code for stream-map with empty stream and higher dim
-; define fibonacci stream with stream-map and +
+; a second possible definition of the fibonacci stream
+(define fibs2 (stream-cons 0 (stream-cons 1 (stream-map + fibs2 (fibs2 'cdr)))))
 
-;(define fibs1
-;  (let fibgen ((a 0) (b 1))
-;    (stream-cons a (fibgen b (+ a b)))))
-
-; this currently fails
-;(define fibs2 (stream-cons 0 (stream-cons 1 (stream-map + fibs2 (fibs2 'cdr)))))
+(define (show x)
+  (display x)(newline)
+  x)
 
 
-
-;(define twos (stream-map + ones ones))
-; this currently fails
-
-(define ones (stream-cons 1 ones))
-(define test (stream 0 (delay (stream-map + ones test))))
-(define data (cdr (test 'debug)))
-(define data2 (delay (stream-map + ones test)))
-(define (proc) (stream-map + ones test))
-(stream-map + ones test)
 
