@@ -13,18 +13,9 @@ public class Test {
   public static void main(String[] args){
 
 
+    int a = 0;
+    System.out.println(a);
 
-    List<String> list = new ArrayList<String>(3);
-    list.add("abc");
-    list.add("def");
-    list.add("ghi");
-
-    for(String s: list){
-      System.out.println(s);
-    }
-
-
-    System.out.println("Done!");
 
   }
 }

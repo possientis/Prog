@@ -2,16 +2,15 @@
 
 
 class A:
-    def foo(self):
-        print("Hello world!")
+    def foo(x,y):
+        return y
 
 
 
 def main():
-    "this is a string literal"
     a = A()
-    a.foo()
-    print(__main__)
+    print(a.foo(10))
+    print(A.foo(3,20))
 
 
 
