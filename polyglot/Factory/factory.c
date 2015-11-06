@@ -35,8 +35,6 @@ struct Circle {
   // possibly some concrete data
 };
 
-
-
 struct Rectangle* getNewRectangle(){
   struct Rectangle* ptr = (struct Rectangle*) malloc(sizeof(struct Rectangle));
   ptr->base.draw = &Rectangle_draw;
@@ -61,7 +59,6 @@ struct Circle* getNewCircle(){
 struct IShape ShapeFactory_getShape(const char* shapeType){
 
   assert(shapeType != NULL);
-
   if(shapeType[0] == '\0'){ // testing for empty string
     assert(0);
   }
@@ -77,7 +74,6 @@ struct IShape ShapeFactory_getShape(const char* shapeType){
   assert(0);
 }
 
-
 struct ShapeFactory {
   struct IShape (*getShape)(const char* shapeType);
 };
@@ -88,9 +84,6 @@ struct ShapeFactory* getNewShapeFactory(){
   ptr->getShape = &ShapeFactory_getShape;
   return ptr;
 }
-
-
-
 
 int main(int arc, char* argv[]){
 
@@ -116,5 +109,4 @@ int main(int arc, char* argv[]){
   free(shapeFactory);
 
   return 0;
-
 }

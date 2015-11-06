@@ -26,6 +26,7 @@ class Circle(IShape):
 class ShapeFactory(object):
     # use getShape method to get object of type IShape
     def getShape(self, shapeType):
+
         if not shapeType:   # testing for empty string
             return None
 
@@ -38,8 +39,8 @@ class ShapeFactory(object):
 
         return None
 
-shapeFactory = ShapeFactory()
 
+shapeFactory = ShapeFactory()
 # get an object of Circle and call its draw method
 shape1 = shapeFactory.getShape("CIRCLE")
 shape1.draw()

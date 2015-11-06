@@ -14,3 +14,6 @@ python3 factory.py
 
 echo '\nThis is C ...'
 gcc factory.c; ./a.out; rm a.out
+
+echo '\nThis is Scheme ...'
+scm factory
