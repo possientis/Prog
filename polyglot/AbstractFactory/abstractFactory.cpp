@@ -33,9 +33,6 @@ class AbstractShape : public IShape {
   COLOR mColor;
 };
 
-
-
-
 class Rectangle : public AbstractShape {
   public:
   Rectangle(AbstractShape::COLOR color): AbstractShape(color){}
@@ -113,7 +110,6 @@ class FactoryProducer {
       if(factoryType.empty()){
         return nullptr;
       }
-
       if(boost::iequals(factoryType,"RED")){
         return std::shared_ptr<AbstractShapeFactory>(new RedShapeFactory());
       } else if(boost::iequals(factoryType,"GREEN")){
@@ -126,35 +122,37 @@ class FactoryProducer {
 };
 
 
+// trying to make the code look better
+typedef std::shared_ptr<AbstractShapeFactory> pShapeFactory;
+typedef std::shared_ptr<IShape> pShape;
+
 int main(int argc, char* argv[]){
-
   FactoryProducer producer;
-
   // producing set of red widgets
-  std::shared_ptr<AbstractShapeFactory> redFactory = producer.getFactory("Red");
-  std::shared_ptr<IShape> shape1 = redFactory->getShape("CIRCLE");
+  pShapeFactory redFactory = producer.getFactory("Red");
+  pShape shape1 = redFactory->getShape("CIRCLE");
+  pShape shape2 = redFactory->getShape("RECTANGLE");
+  pShape shape3 = redFactory->getShape("SQUARE");
   shape1->draw();
-  std::shared_ptr<IShape> shape2 = redFactory->getShape("RECTANGLE");
   shape2->draw();
-  std::shared_ptr<IShape> shape3 = redFactory->getShape("SQUARE");
   shape3->draw();
 
   // producing set of green widgets
-  std::shared_ptr<AbstractShapeFactory> greenFactory=producer.getFactory("Green");
-  std::shared_ptr<IShape> shape4 = greenFactory->getShape("CIRCLE");
+  pShapeFactory greenFactory=producer.getFactory("Green");
+  pShape shape4 = greenFactory->getShape("CIRCLE");
+  pShape shape5 = greenFactory->getShape("RECTANGLE");
+  pShape shape6 = greenFactory->getShape("SQUARE");
   shape4->draw();
-  std::shared_ptr<IShape> shape5 = greenFactory->getShape("RECTANGLE");
   shape5->draw();
-  std::shared_ptr<IShape> shape6 = greenFactory->getShape("SQUARE");
   shape6->draw();
 
   // producing set of red widgets
-  std::shared_ptr<AbstractShapeFactory> blueFactory = producer.getFactory("Blue");
-  std::shared_ptr<IShape> shape7 = blueFactory->getShape("CIRCLE");
+  pShapeFactory blueFactory = producer.getFactory("Blue");
+  pShape shape7 = blueFactory->getShape("CIRCLE");
+  pShape shape8 = blueFactory->getShape("RECTANGLE");
+  pShape shape9 = blueFactory->getShape("SQUARE");
   shape7->draw();
-  std::shared_ptr<IShape> shape8 = blueFactory->getShape("RECTANGLE");
   shape8->draw();
-  std::shared_ptr<IShape> shape9 = blueFactory->getShape("SQUARE");
   shape9->draw();
 
   return 0;

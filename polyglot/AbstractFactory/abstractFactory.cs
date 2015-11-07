@@ -98,39 +98,35 @@ class FactoryProducer {
   }
 }
 
-
 public class AbstractFactory {
 
   public static void Main(string[] args){
-
     FactoryProducer producer = new FactoryProducer();
-
     // producing set of red widgets
     AbstractShapeFactory redFactory = producer.GetFactory("Red");
     IShape shape1 = redFactory.GetShape("CIRCLE");
-    shape1.draw();
     IShape shape2 = redFactory.GetShape("RECTANGLE");
-    shape2.draw();
     IShape shape3 = redFactory.GetShape("SQUARE");
+    shape1.draw();
+    shape2.draw();
     shape3.draw();
 
     // producing set of green widgets
     AbstractShapeFactory greenFactory = producer.GetFactory("Green");
     IShape shape4 = greenFactory.GetShape("CIRCLE");
-    shape4.draw();
     IShape shape5 = greenFactory.GetShape("RECTANGLE");
-    shape5.draw();
     IShape shape6 = greenFactory.GetShape("SQUARE");
+    shape4.draw();
+    shape5.draw();
     shape6.draw();
 
     // producing set of blue widgets
     AbstractShapeFactory blueFactory = producer.GetFactory("Blue");
     IShape shape7 = blueFactory.GetShape("CIRCLE");
-    shape7.draw();
     IShape shape8 = blueFactory.GetShape("RECTANGLE");
-    shape8.draw();
     IShape shape9 = blueFactory.GetShape("SQUARE");
+    shape7.draw();
+    shape8.draw();
     shape9.draw();
-
  }
 }

@@ -49,36 +49,78 @@ class Circle(AbstractShape):
 # using the template method pattern here, as the actual
 # behaviour of 'getShape' will be defined via specialization
 # of virtual method getColor through subclassing
-
-class ShapeFactory(object):
-    # use getShape method to get object of type IShape
+class AbstractShapeFactory(metaclass=ABCMeta):
+    @abstractmethod
+    def getColor(self):
+        return NotImplemented
+    
     def getShape(self, shapeType):
-
         if not shapeType:   # testing for empty string
             return None
-
         if shapeType.upper() == "CIRCLE":
-            return Circle(AbstractShape.COLOR.RED)
+            return Circle(self.getColor())
         elif shapeType.upper() == "RECTANGLE":
-            return Rectangle(AbstractShape.COLOR.RED)
+            return Rectangle(self.getColor())
         elif shapeType.upper() == "SQUARE":
-            return Square(AbstractShape.COLOR.RED)
+            return Square(self.getColor())
+        return None
 
+# However the benefit of subclassing over maintaining
+# 'mColor' state in base class is not that clear in this simple case
+# It is propably beneficial when the distinction between various
+# families of widgets (IShape) goes well beyond color difference.
+class RedShapeFactory(AbstractShapeFactory):
+    def getColor(self):
+        return AbstractShape.COLOR.RED
+
+class GreenShapeFactory(AbstractShapeFactory):
+    def getColor(self):
+        return AbstractShape.COLOR.GREEN
+
+class BlueShapeFactory(AbstractShapeFactory):
+    def getColor(self):
+        return AbstractShape.COLOR.BLUE
+
+# Factory of factories. The Abstract Factory design pattern is a case
+# of Factory design pattern applied to various factory types.
+class FactoryProducer:
+    def getFactory(self,factoryType):
+        if not factoryType:     # testing for empty string
+            return None
+        if factoryType.upper() == "RED":
+            return RedShapeFactory()
+        elif factoryType.upper() == "GREEN":
+            return GreenShapeFactory()
+        elif factoryType.upper() == "BLUE":
+            return BlueShapeFactory()
         return None
 
 
-
-
-shapeFactory = ShapeFactory()
-# get an object of Circle and call its draw method
-shape1 = shapeFactory.getShape("CIRCLE")
+producer = FactoryProducer()
+# producing set of red widgets
+redFactory = producer.getFactory("Red")
+shape1 = redFactory.getShape("CIRCLE")
+shape2 = redFactory.getShape("RECTANGLE")
+shape3 = redFactory.getShape("SQUARE")
 shape1.draw()
-
-# get an object of Rectangle and call its draw method
-shape2 = shapeFactory.getShape("RECTANGLE")
 shape2.draw()
-
-# get an object of Square and call its draw method
-shape3 = shapeFactory.getShape("SQUARE")
 shape3.draw()
+
+# producing set of green widgets
+greenFactory = producer.getFactory("Green")
+shape4 = greenFactory.getShape("CIRCLE")
+shape5 = greenFactory.getShape("RECTANGLE")
+shape6 = greenFactory.getShape("SQUARE")
+shape4.draw()
+shape5.draw()
+shape6.draw()
+
+# producing set of blue widgets
+blueFactory = producer.getFactory("Blue")
+shape7 = blueFactory.getShape("CIRCLE")
+shape8 = blueFactory.getShape("RECTANGLE")
+shape9 = blueFactory.getShape("SQUARE")
+shape7.draw()
+shape8.draw()
+shape9.draw()
 

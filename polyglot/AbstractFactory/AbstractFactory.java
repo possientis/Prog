@@ -45,7 +45,6 @@ class Circle extends AbstractShape {
   }
 }
 
-
 // using the template method pattern here, as the actual
 // behaviour of 'getShape' will be defined via specialization
 // of virtual method getColor through subclassing
@@ -65,7 +64,6 @@ abstract class AbstractShapeFactory {
     return null;
   }
 }
-
 
 // However the benefit of subclassing over maintaining
 // 'mColor' state in base class is not that clear in this simple case
@@ -101,43 +99,37 @@ class FactoryProducer {
   }
 }
 
-
 public class AbstractFactory {
 
   public static void main(String[] args){
-
     FactoryProducer producer = new FactoryProducer();
-    
-
     // producing set of red widgets
     AbstractShapeFactory redFactory = producer.getFactory("Red");
     IShape shape1 = redFactory.getShape("CIRCLE");
-    shape1.draw();
     IShape shape2 = redFactory.getShape("RECTANGLE");
-    shape2.draw();
     IShape shape3 = redFactory.getShape("SQUARE");
+    shape1.draw();
+    shape2.draw();
     shape3.draw();
 
     // producing set of green widgets
     AbstractShapeFactory greenFactory = producer.getFactory("Green");
     IShape shape4 = greenFactory.getShape("CIRCLE");
-    shape4.draw();
     IShape shape5 = greenFactory.getShape("RECTANGLE");
-    shape5.draw();
     IShape shape6 = greenFactory.getShape("SQUARE");
+    shape4.draw();
+    shape5.draw();
     shape6.draw();
 
     // producing set of blue widgets
     AbstractShapeFactory blueFactory = producer.getFactory("Blue");
     IShape shape7 = blueFactory.getShape("CIRCLE");
-    shape7.draw();
     IShape shape8 = blueFactory.getShape("RECTANGLE");
-    shape8.draw();
     IShape shape9 = blueFactory.getShape("SQUARE");
+    shape7.draw();
+    shape8.draw();
     shape9.draw();
-
   }
-
 }
 
 

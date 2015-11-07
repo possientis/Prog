@@ -3,7 +3,7 @@
 # running C++ version
 echo '\n'
 echo This is C++ ...
-g++ -std=c++14 A.h B.h Main.c
+g++ -std=c++14 A.h B.h Main.cpp
 ./a.out
 rm *.h.gch
 rm a.out

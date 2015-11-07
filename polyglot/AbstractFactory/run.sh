@@ -8,3 +8,9 @@ mcs abstractFactory.cs; mono abstractFactory.exe; rm abstractFactory.exe;
 
 echo '\nThis is C++ ...'
 g++ -std=c++14 abstractFactory.cpp; ./a.out; rm a.out;
+
+echo '\nThis is Python ...'
+python3 abstractFactory.py
+
+echo '\nThis is Scheme ...'
+scm abstractFactory.scm
