@@ -14,3 +14,6 @@ python3 abstractFactory.py
 
 echo '\nThis is Scheme ...'
 scm abstractFactory.scm
+
+echo '\nThis is C ...'
+gcc abstractFactory.c; ./a.out; rm a.out

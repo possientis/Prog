@@ -1,4 +1,8 @@
 ; stream.scm
+;
+; THERE IS A PROBLEM WITH THIS IMPLEMENTATION
+; which is probably highly space inefficient (see polygot/primes)
+;
 ; The purpose of this file is to provide an implementation of the stream
 ; class as described in SICP. We want to be able to define somethings like:
 ; (define ones (stream-cons 1 ones))
@@ -119,10 +123,5 @@
 
 ; a second possible definition of the fibonacci stream
 (define fibs2 (stream-cons 0 (stream-cons 1 (stream-map + fibs2 (fibs2 'cdr)))))
-
-(define (show x)
-  (display x)(newline)
-  x)
-
 
 

@@ -16,26 +16,10 @@ namespace ConsoleApplication1
 
     static void Main(string[] args)
     {
-      StreamReader streamReader = null;
-      try
-      {
-        streamReader = new StreamReader("");
-      }
-      catch(Exception)
-      {
-        Console.WriteLine("Exception caught");
-      }
-      finally
-      {
-        Console.WriteLine("finally...");
-        if(streamReader != null) streamReader.Close();
-      }
-
-      if(streamReader != null){
-        Console.WriteLine(streamReader.ReadToEnd());
-      }
-
-   }
+      StreamReader streamReader = new StreamReader("Main.cs");
+      Console.WriteLine(streamReader.ReadToEnd());
+      streamReader.Close();
+    }
 
   }
   

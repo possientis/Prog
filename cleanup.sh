@@ -7,4 +7,7 @@ rm -f logic/logic.out
 rm -f logic/logic.toc
 rm -f logic/logic.pdf
 rm -f c/a.out
+rm -f c#/*.exe
+git status
+
 
