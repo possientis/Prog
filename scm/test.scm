@@ -1,1 +1,6 @@
-
+(let ((res '()))
+  (let ((arg1 '())(arg2 '()))
+    (set! arg1 1)
+    (set! arg2 2)
+    (set! res (+ arg1 arg2)))
+  (display res)(newline))

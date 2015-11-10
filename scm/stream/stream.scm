@@ -1,7 +1,7 @@
 ; stream.scm
 ;
 ; THERE IS A PROBLEM WITH THIS IMPLEMENTATION
-; which is probably highly space inefficient (see polygot/primes)
+; which is probably highly space inefficient (see stream-test and primes)
 ;
 ; The purpose of this file is to provide an implementation of the stream
 ; class as described in SICP. We want to be able to define somethings like:
@@ -18,7 +18,7 @@
     ((stream-cons expr1 expr2)        ; expr2 should return a stream object
      (stream expr1 (delay expr2)))))  ; returning stream object
 
-; stream class
+; stream class old and failing implementation
 (define (stream . args) ; args = '() or args = '(expr1 (delay expr2))
     ;
     ; private data
@@ -28,7 +28,6 @@
       (cond ((eq? m 'car) (stream-car))
             ((eq? m 'cdr) (stream-cdr))
             ((eq? m 'null?) (stream-null?))
-            ((eq? m 'debug) data) ; exposing private data for debugging
             (else (display "stream: unknown operation error\n"))))
     ;
     (define (stream-car)

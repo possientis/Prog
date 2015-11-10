@@ -3,9 +3,14 @@
 
 (define (stream-test)
   ;
-  ; defined with recursive let below, just checking define statement works
   (define ones (stream-cons 1 ones))
-
+  (define (sieve s)
+    (stream-cons 
+      (s 'car)
+      (sieve (stream-filter
+               (lambda (x) (not (= 0 (modulo x (s 'car)))))
+               (s 'cdr)))))
+  
   (display "stream: starting unit test\n")
   ; empty stream
   (let ((s (stream)))
@@ -121,7 +126,10 @@
   (let ((seq (stream-take 10 fibs2)))
     (if (not (equal? seq '(0 1 1 2 3 5 8 13 21 34)))
       (display "stream: unit test 11.1 failing\n")))
- 
+  ; primes
+  (let ((primes (sieve (integers-from 2))))
+    (let ((seq (stream-take 200 primes))) ; fails around 800 (stack overflow?)
+      (if (not (= 2 (car seq))) (display "stream: unit test 12 failing\n"))))
   ;
   (display "stream: unit test complete\n"))
 

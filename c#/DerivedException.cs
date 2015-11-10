@@ -7,26 +7,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-class Program
+namespace ConsoleApplication1
 {
-  public enum Gender {MALE=4,FEMALE=23,UNKNOWN=45};
 
-  static void Main(string[] args)
+  class Program
   {
-    // 'Enum' is a class... do not confuse it with keyword 'enum'
-    int[] x = (int[]) Enum.GetValues(typeof(Gender));
-    foreach(int y in x){
-      Console.WriteLine(y);
-    }
 
-    string[] names = (string []) Enum.GetNames(typeof(Gender));
-    foreach(string s in names){
-      Console.WriteLine(s);
+
+    static void Main(string[] args)
+    {
+      try{
+
+        throw new MyException();
+
+      }
+      catch(MyException e){
+        e.DisplayMessage();
+      }
     }
   }
-}
 
+  class MyException : Exception{
+    public void DisplayMessage(){
+      Console.WriteLine("Exception");
+    }
+  }
   
+}
       /*
       Stopwatch stop = new Stopwatch();
       stop.Start();
