@@ -26,9 +26,15 @@ pSingleObject SingleObject::mInstance = nullptr;
 
 int main(int argc, char* argv[]){
   // will not compile
-  // SingleObject obj;
-  pSingleObject pObj = SingleObject::getInstance();
-  pObj->showMessage();
+  // SingleObject nope;
+
+  pSingleObject object1 = SingleObject::getInstance();
+  object1->showMessage();
+
+  pSingleObject object2 = SingleObject::getInstance();
+  if(object1 == object2){ // comparison between smart pointers
+    std::cout << "The two objects are the same\n";
+  }
 
   return 0;
 }

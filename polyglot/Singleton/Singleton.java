@@ -22,8 +22,14 @@ public class Singleton {
     // will not compile
     // SingleObject nope = new SingleObject();
 
-    SingleObject object = SingleObject.getInstance();
-    object.showMessage();
+    SingleObject object1 = SingleObject.getInstance();
+    object1.showMessage();
+
+    SingleObject object2 = SingleObject.getInstance();
+    if(object1 == object2){ // '==' compares object reference in Java
+      System.out.println("The two objects are the same");
+    }
+
   }
 }
 

@@ -16,9 +16,11 @@ class SingleObject(object):
         print("The single object is alive and well")
     
 
-obj = SingleObject.getInstance()
-obj.showMessage()
+object1 = SingleObject.getInstance()
+object1.showMessage()
 
-
+object2 = SingleObject.getInstance()
+if(object1 is object2): # id(object1) == id(object2)
+    print("The two objects are the same")
         
  

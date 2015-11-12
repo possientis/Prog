@@ -1,32 +1,43 @@
 ; Singleton design pattern
 
-(define SingleObject 
+(define SingleObject
   (begin
-    ; static members
+    ; static interface
+    (define (static m)
+      (cond ((eq? m 'new) (new)) ; 'new' instead of '(new)' if 'data' involved
+            ((eq? m 'getInstance)(getInstance))
+            (else (display "SingleObject: unknown static operation error\n"))))
+    ; instance interface
+    (define (this)  ; (this data) when applicable
+      (lambda (m)
+        (cond ((eq? m 'showMessage)(showMessage)) ; (showMessage data)
+              (else (display "SingleObject: unknown instance operation error\n")))))
+    ; static data
     (define mBuilt #f)
     (define mInstance #f)
-    (define (init)
-      (if (eq? #t mBuilt) 
-        (display "SingleObject: cannot create instance\n")
-        (set! mBuilt #t)))
+    ; class members
     (define (getInstance)
-      (if (eq? #f mInstance) (set! mInstance (new)))
+      (if (eq? #f mInstance) (set! mInstance (SingleObject 'new)))
       mInstance)
+    ;
     (define (new)
-      (init)
-      this)
-     (define (interface m)
-      (cond ((eq? m 'getInstance) (getInstance))
-            ((eq? m 'showMessage) (showMessage interface))
-            ((eq? m 'new)(new))
-            (else (display "SingleObject: unknown operation error\n"))))
-    ;
-    (lambda ()
-    ; members
-    (define (showMessage self)
+      (if (eq? #t mBuilt)
+        (begin (display "SingleObject: cannot create new instance\n") #f)
+        (begin (set! mBuilt #t) (this))))
+    ; instance members
+    (define (showMessage)
       (display "The single object is alive and well\n"))
-    ;
-    interface)))
+    ; returning static interface
+    static))
 
-(define obj ((SingleObject) 'getInstance))
+; call will succeed but subsequent call to 'getInstance' will fail
+;(define obj (SingleObject 'new))
+
+(define object1 (SingleObject 'getInstance))
+(object1 'showMessage)
+
+(define object2 (SingleObject 'getInstance))
+(if (eq? object1 object2) (display "The two objects are the same\n"))
+
+(exit 0)
 

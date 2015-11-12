@@ -1,6 +1,8 @@
-(let ((res '()))
-  (let ((arg1 '())(arg2 '()))
-    (set! arg1 1)
-    (set! arg2 2)
-    (set! res (+ arg1 arg2)))
-  (display res)(newline))
+(define (Loop10 I)
+  (if (= I 10)
+    'skip
+    (begin
+      (display I)(newline)
+      (Loop10 (+ I 1)))))
+
+(Loop10 0)

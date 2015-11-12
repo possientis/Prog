@@ -22,8 +22,13 @@ public class Singleton {
     // will not compile
     //SingleObject nope = new SingleObject();
 
-    SingleObject obj = SingleObject.GetInstance();
-    obj.ShowMessage();
+    SingleObject object1 = SingleObject.GetInstance();
+    object1.ShowMessage();
+
+    SingleObject object2 = SingleObject.GetInstance();
+    if(object1 == object2){ // '==' compares object reference in C# (except string)
+      Console.WriteLine("The two objects are the same");
+    }
   }
 }
 
