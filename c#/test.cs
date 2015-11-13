@@ -2,7 +2,7 @@ using System;
 
 namespace ConsoleApplication1
 {
-  static class Program
+  class Program
   {
 
     static void Main ()
@@ -11,5 +11,11 @@ namespace ConsoleApplication1
       //Console.WriteLine ();
     }
   }
+
+
+  class A{
+
+  }
+
 }
 

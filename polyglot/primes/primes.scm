@@ -10,7 +10,7 @@
                         (s 'cdr)))))
 
 (define primes (sieve (integers-from 2))) 
-(display (stream-take 500 primes))(newline)
+(display (stream-take 1000 primes))(newline)
 
 (exit 0)
 

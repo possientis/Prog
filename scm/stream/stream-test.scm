@@ -128,7 +128,7 @@
       (display "stream: unit test 11.1 failing\n")))
   ; primes
   (let ((primes (sieve (integers-from 2))))
-    (let ((seq (stream-take 200 primes))) ; fails around 800 (stack overflow?)
+    (let ((seq (stream-take 800 primes))) ; will fail for large numbers
       (if (not (= 2 (car seq))) (display "stream: unit test 12 failing\n"))))
   ;
   (display "stream: unit test complete\n"))

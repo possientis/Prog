@@ -2,6 +2,7 @@
 ;
 ; THERE IS A PROBLEM WITH THIS IMPLEMENTATION
 ; which is probably highly space inefficient (see stream-test and primes)
+; possibly leading to stack overflow?
 ;
 ; The purpose of this file is to provide an implementation of the stream
 ; class as described in SICP. We want to be able to define somethings like:
@@ -15,11 +16,30 @@
 (define-syntax stream-cons
   (syntax-rules
     ()
-    ((stream-cons expr1 expr2)        ; expr2 should return a stream object
+    ((stream-cons expr1 expr2)    ; expr2 should return a stream object
      (stream expr1 (delay expr2)))))  ; returning stream object
 
-; stream class old and failing implementation
-(define (stream . args) ; args = '() or args = '(expr1 (delay expr2))
+; bridge
+(define (stream . args) 
+  (apply stream2 args)) ; can select various implementations here
+
+; more efficient implementation
+(define stream2
+  (begin
+  ; instance members interface
+  (define (this data)
+    (lambda (m)
+      (cond ((eq? m 'car) (car data))
+            ((eq? m 'cdr) (force (cdr data)))
+            ((eq? m 'null?) (eq? #f data))
+            (else (display "stream: unknown operation error\n")))))
+  (lambda args
+    (if (null? args)
+      (this #f)
+      (this (cons (car args) (cadr args)))))))
+
+; first implementation
+(define (stream1 . args) ; args = '() or args = '(expr1 (delay expr2))
     ;
     ; private data
     (define data #f) ; empty stream, properly initialized below

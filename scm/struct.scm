@@ -1,17 +1,12 @@
-(define object
-  (lambda data
-    (lambda () data)))
+(define (this m)
+  (cond ((eq? m 'name) "George")
+        ((eq? m 'age) 25)
+        ((eq? m 'label) 'person)
+        (else (display "struct: unknown operation error\n"))))
 
-(define (object-foo self)
-  (car (self)))
-(define (object-bar self)
-  (cadr (self)))
-
-
-(define x (object 4 5))
-(display (object-foo x))(newline)
-(display (object-bar x))(newline)
-
-
+(define that
+  (list 'person
+        (list 'name "george")
+        (list 'age 25)))
 
 
