@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (require 'macro)  ; 'syntax-rules unbound otherwise
 
 ; implementation of force simple

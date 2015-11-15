@@ -123,67 +123,43 @@ interface Packing {
 }
 
 class Wrapper : Packing {
-  public String Pack(){
-    return "Wrapper";
-  }
+  public String Pack(){return "Wrapper";}
 }
 
 class Bottle : Packing {
-  public String Pack(){
-    return "Bottle";
-  }
+  public String Pack(){return "Bottle";}
 }
 
 abstract class Burger : Item {
-  public Packing Packing(){
-    return new Wrapper();
-  }
+  public Packing Packing(){return new Wrapper();}
   public abstract string Name();
   public abstract double Price();
 }
 
 abstract class ColdDrink : Item {
-  public Packing Packing(){
-    return new Bottle();
-  }
+  public Packing Packing(){return new Bottle();}
   public abstract string Name();
   public abstract double Price();
 }
 
 class VegBurger : Burger {
-  public override double Price(){
-    return 2.5;
-  }
-  public override String Name(){
-    return "Veg Burger";
-  }
+  public override double Price(){return 2.5;}
+  public override String Name(){return "Veg Burger";}
 }
 
 class ChickenBurger : Burger {
-  public override double Price(){
-    return 5.05;
-  }
-  public override String Name(){
-    return "Chicken Burger";
-  }
+  public override double Price(){return 5.05;}
+  public override String Name(){return "Chicken Burger";}
 }
 
 class Coke : ColdDrink {
-  public override double Price(){
-    return 3.0;
-  }
-  public override String Name(){
-    return "Coke";
-  }
+  public override double Price(){return 3.0;}
+  public override String Name(){return "Coke";}
 }
 
 class Pepsi : ColdDrink {
-  public override double Price(){
-    return 3.5;
-  }
-  public override String Name(){
-    return "Pepsi";
-  }
+  public override double Price(){return 3.5;}
+  public override String Name(){return "Pepsi";}
 }
 
 // let's try everything out

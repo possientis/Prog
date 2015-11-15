@@ -1,9 +1,5 @@
 ; stream.scm
 ;
-; THERE IS A PROBLEM WITH THIS IMPLEMENTATION
-; which is probably highly space inefficient (see stream-test and primes)
-; possibly leading to stack overflow?
-;
 ; The purpose of this file is to provide an implementation of the stream
 ; class as described in SICP. We want to be able to define somethings like:
 ; (define ones (stream-cons 1 ones))
@@ -21,10 +17,10 @@
 
 ; bridge
 (define (stream . args) 
-  (apply stream2 args)) ; can select various implementations here
+  (apply stream1 args)) ; can select various implementations here
 
 ; more efficient implementation
-(define stream2
+(define stream1
   (begin
   ; instance members interface
   (define (this data)
@@ -37,36 +33,6 @@
     (if (null? args)
       (this #f)
       (this (cons (car args) (cadr args)))))))
-
-; first implementation
-(define (stream1 . args) ; args = '() or args = '(expr1 (delay expr2))
-    ;
-    ; private data
-    (define data #f) ; empty stream, properly initialized below
-    ; public interface
-    (define (this m)
-      (cond ((eq? m 'car) (stream-car))
-            ((eq? m 'cdr) (stream-cdr))
-            ((eq? m 'null?) (stream-null?))
-            (else (display "stream: unknown operation error\n"))))
-    ;
-    (define (stream-car)
-      (car data))               ; no special error handling
-    ;
-    (define (stream-cdr)
-      (force (cdr data)))     ; no special error handling
-    ;
-    (define (stream-null?)
-      (eq? #f data))  ; #f rather than '() for emphasis
-    ;
-    (define (init)            ; initialization of object
-      (if (not (null? args))  ; expecting a pair (value . promise)
-        (set! data (cons (car args) (cadr args)))))
-    ;
-    ; initializing object
-    (init)
-    ;returning public interface
-    this)
 
 ; non-member interface of stream
 (define (stream-ref s n)
@@ -134,13 +100,7 @@
   (if (s 'null?)
     '()
     (cons (s 'car) (stream->list (s 'cdr)))))
-
-; a first possible definition of the fibonacci stream
-(define fibs1
-  (let fibgen ((a 0) (b 1))
-    (stream-cons a (fibgen b (+ a b)))))
-
-; a second possible definition of the fibonacci stream
-(define fibs2 (stream-cons 0 (stream-cons 1 (stream-map + fibs2 (fibs2 'cdr)))))
-
+;
+(define (stream-scale s factor)
+  (stream-map (lambda (x) (* x factor)) s))
 

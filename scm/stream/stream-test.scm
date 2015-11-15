@@ -10,7 +10,14 @@
       (sieve (stream-filter
                (lambda (x) (not (= 0 (modulo x (s 'car)))))
                (s 'cdr)))))
-  
+  ;
+  ; a first possible definition of the fibonacci stream
+  (define fibs1
+  (let fibgen ((a 0) (b 1))
+    (stream-cons a (fibgen b (+ a b)))))
+  ; a second possible definition of the fibonacci stream
+  (define fibs2 (stream-cons 0 (stream-cons 1 (stream-map + fibs2 (fibs2 'cdr)))))
+
   (display "stream: starting unit test\n")
   ; empty stream
   (let ((s (stream)))
@@ -128,8 +135,20 @@
       (display "stream: unit test 11.1 failing\n")))
   ; primes
   (let ((primes (sieve (integers-from 2))))
-    (let ((seq (stream-take 800 primes))) ; will fail for large numbers
-      (if (not (= 2 (car seq))) (display "stream: unit test 12 failing\n"))))
+    (let ((seq (stream-take 500 primes))) ; will fail for large numbers
+      (let ((t (stream-take 10 primes)))
+        (if (not (equal? t '(2 3 5 7 11 13 17 19 23 29)))
+          (display "stream: unit test 12.0 failing\n")))))
+  ; stream-scale
+  (let ((s (list->stream '(0 1 2 3 4 5))))
+    (let ((t (stream-scale s 2)))
+      (if (not (equal? (stream->list t) '(0 2 4 6 8 10)))
+        (display "stream: unit test 13.0 failing\n"))))
+  ; double (need 'letrec' on this one)
+  (letrec ((double (stream-cons 1 (stream-scale double 2))))
+    (let ((t (stream-take 10 double)))
+      (if (not (equal? t '(1 2 4 8 16 32 64 128 256 512)))
+        (display "stream: unit test 14.0 failing\n"))))
   ;
   (display "stream: unit test complete\n"))
 

@@ -14,21 +14,25 @@ class Program
 
   static void Main(string[] args)
   {
-    A a = new A(2);
-    A b = new A(5);
-    Console.WriteLine(a.ToString());
-    Console.WriteLine(b.ToString());
-    Console.WriteLine(Convert.ToString(a)); // will use A::ToString()
-
+    Console.WriteLine(A.AreEqual(10,10));
+    Console.WriteLine(A.AreEqual("abc","abc"));
+    Console.WriteLine(B<int>.AreEqual(10,10));
+    Console.WriteLine(B<string>.AreEqual("abc","abc"));
   }
 
 }
 
 class A {
-  public A(int a){this.a = a;}
-  public int a {get;set;}
-  public override string ToString(){
-    return "A:" + (this.a).ToString();
+  public void foo(){
+    Console.WriteLine("foo is running");
+  }
+  public static bool AreEqual<T>(T val1, T val2){
+    return val1.Equals(val2);
+  }
+}
+class B<T> {
+  public static bool AreEqual(T val1, T val2){
+    return val1.Equals(val2);
   }
 }
       /*

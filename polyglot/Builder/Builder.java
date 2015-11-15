@@ -124,74 +124,50 @@ interface Packing {
 
 class Wrapper implements Packing {
   @Override
-  public String pack(){
-    return "Wrapper";
-  }
+  public String pack(){return "Wrapper";}
 }
 
 class Bottle implements Packing {
   @Override
-  public String pack(){
-    return "Bottle";
-  }
+  public String pack(){return "Bottle";}
 }
 
 abstract class Burger implements Item {
   @Override
-  public Packing packing(){
-    return new Wrapper();
-  }
+  public Packing packing(){return new Wrapper();}
 }
 
 abstract class ColdDrink implements Item {
   @Override
-  public Packing packing(){
-    return new Bottle();
-  }
+  public Packing packing(){return new Bottle();}
 }
 
 class VegBurger extends Burger {
   @Override
-  public double price(){
-    return 2.5;
-  }
+  public double price(){return 2.5;}
   @Override
-  public String name(){
-    return "Veg Burger";
-  }
+  public String name(){return "Veg Burger";}
 }
 
 class ChickenBurger extends Burger {
   @Override
-  public double price(){
-    return 5.05;
-  }
+  public double price(){return 5.05;}
   @Override
-  public String name(){
-    return "Chicken Burger";
-  }
+  public String name(){return "Chicken Burger";}
 }
 
 class Coke extends ColdDrink {
   @Override
-  public double price(){
-    return 3.0;
-  }
+  public double price(){return 3.0;}
   @Override
-  public String name(){
-    return "Coke";
-  }
+  public String name(){return "Coke";}
 }
 
 class Pepsi extends ColdDrink {
   @Override
-  public double price(){
-    return 3.5;
-  }
+  public double price(){return 3.5;}
   @Override
-  public String name(){
-    return "Pepsi";
-  }
+  public String name(){return "Pepsi";}
 }
 
 // let's try everything out
