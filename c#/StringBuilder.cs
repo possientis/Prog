@@ -14,17 +14,19 @@ class Program
 
   static void Main(string[] args)
   {
-    A a = new A();
+    // string are immutable, unlike StringBuilder
+    StringBuilder str = new StringBuilder("C#"); // System.Text
+    str.Append(" Video");
+    str.Append(" Tutorial");
+    str.Append(" for");
+    str.Append(" beginners");
 
+    Console.WriteLine(str);
 
   }
 
 }
 
-class A {
-  public A(){a = null;}
-  private A a;
-}
 
       /*
       Stopwatch stop = new Stopwatch();

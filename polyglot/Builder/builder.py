@@ -91,7 +91,7 @@ class Meal(object):
     def showItems(self):
         for item in self._items:
             print('Item : ' + item.name(), end="")
-            print(', Paking : ' + item.packing().pack(), end="")
+            print(', Packing : ' + item.packing().pack(), end="")
             print(', Price : ' + str(item.price()))
 
 # The item interface comes here
@@ -158,13 +158,6 @@ cook = DirectorCook(vegBuilder)
 # Next we let the cook prepare the meal
 cook.makeMeal()
 # Next we retrieve the object from the builder
-# Note here that we needed to declare vegBuilder specifically
-# of type 'VegetarianMealBuilder', rather than 'MealBuilder'
-# so we have access to the method 'getMeal' which is not part
-# of the 'MealBuilder' interface. Because both our concrete
-# builders in this example create objects of the same type
-# 'Meal', it is of course possible to declare getMeal as 
-# part of the MealBuilder interface. 
 vegMeal = vegBuilder.getMeal()
 # outputting result
 print('Veg Meal')

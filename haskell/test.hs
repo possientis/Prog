@@ -1,18 +1,5 @@
 import Control.Monad
 import System.Directory
 
-data Nat = Zero | Suc Nat deriving (Show)
+data Season = A Int | B Int Int | C Int Int Int
 
-(£) :: Nat -> Nat -> Nat
-x £ Zero = x
-x £ (Suc y) = Suc (x £ y)
-
-zero = Zero
-one = Suc Zero
-two = Suc one
-three = Suc two
-four = Suc three
-
-p :: Nat -> Bool
-p Zero = True
-p (Suc n) | p n = True

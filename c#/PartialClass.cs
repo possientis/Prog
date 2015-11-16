@@ -15,16 +15,22 @@ class Program
   static void Main(string[] args)
   {
     A a = new A();
-
+    a.foo();
+    a.bar();
 
   }
 
 }
 
-class A {
-  public A(){a = null;}
-  private A a;
+partial class A {
+  public void foo(){Console.WriteLine("foo running");}
 }
+
+partial class A {
+
+  public void bar(){Console.WriteLine("bar running");}
+}
+
 
       /*
       Stopwatch stop = new Stopwatch();

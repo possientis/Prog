@@ -11,3 +11,6 @@ g++ -std=c++14 builder.cpp; ./a.out; rm a.out
 
 echo '\nThis is Python ...'
 python3 builder.py
+
+echo '\nThis is Scheme ...'
+scm builder.scm
