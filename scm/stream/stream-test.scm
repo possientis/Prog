@@ -149,8 +149,36 @@
     (let ((t (stream-take 10 double)))
       (if (not (equal? t '(1 2 4 8 16 32 64 128 256 512)))
         (display "stream: unit test 14.0 failing\n"))))
+  ; stream-add
+  (let ((s1 (list->stream '(0 1 2 3 4 5)))
+        (s2 (list->stream '(2 3 6 1 0 3))))
+    (let ((t (stream-add s1 s2)))
+      (if (not (equal? (stream->list t) '(2 4 8 4 4 8)))
+        (display "stream: unit test 15.0 failing\n"))))
+  (letrec ((s (stream-cons 1 (stream-add s s))))
+    (let ((t (stream-take 10 s)))
+      (if (not (equal? t '(1 2 4 8 16 32 64 128 256 512)))
+        (display "stream: unit test 15.1 failing\n"))))
+  ; stream-add
+  (let ((s1 (list->stream '(0 1 2 3 4 5)))
+        (s2 (list->stream '(2 3 6 1 0 3))))
+    (let ((t (stream-mul s1 s2)))
+      (if (not (equal? (stream->list t) '(0 3 12 3 0 15)))
+        (display "stream: unit test 16.0 failing\n"))))
+  (letrec ((factorials (stream-cons 1 (stream-mul factorials (integers-from 1)))))
+    (let ((t (stream-take 6 factorials)))
+      (if (not (equal? t '(1 1 2 6 24 120)))
+        (display "stream: unit test 16.1 failing\n"))))
+  ; stream-partial-sums
+  (let ((s (list->stream '(2 0 4 5 2 9))))
+    (let ((t (stream-partial-sums s)))
+      (display (stream->list t))))
+;        (display "stream: unit test 17.0 failing\n"))))
+
   ;
   (display "stream: unit test complete\n"))
+
+
 
 (stream-test)
 (exit 0)

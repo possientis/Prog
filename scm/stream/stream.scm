@@ -103,3 +103,18 @@
 (define (stream-scale s factor)
   (stream-map (lambda (x) (* x factor)) s))
 
+(define (stream-add s1 s2)
+  (stream-map + s1 s2))
+
+(define (stream-mul s1 s2)
+  (stream-map * s1 s2))
+
+(define (stream-partial-sums s)
+  (letrec ((partial (stream-cons (s 'car) (stream-add partial (s 'cdr)))))
+    partial))
+
+
+
+
+
+
