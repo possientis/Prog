@@ -1,5 +1,5 @@
 // Builder Design Pattern
-#define MAX_MEAL_ITEMS 5  // ugly shortcut
+#define MAX_MEAL_ITEMS 5  // maximum number of items per meal object
 #include <assert.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -12,90 +12,47 @@
 // pattern) to build an object of some type according to some plan.
 
 // Let us define a possible 'director' class, whose purpose
-// it is to manufacture meals, together with an interface 'MealBuilder'
+// it is to manufacture meals
 
 ////////////////////////////////////////////////////////////////////////////////
-//                            MealBuilder                                     //
+//                           Packing                                          //
 ////////////////////////////////////////////////////////////////////////////////
-typedef struct MealBuilder_ MealBuilder;
 
-struct MealBuilder_{
-  void* object;                         // pointer to concrete object
-  void (*startNewMeal)(MealBuilder*);   // needs a 'this' pointer argument
-  void (*addBurger)(MealBuilder*);      // needs a 'this' pointer argument
-  void (*addDrink)(MealBuilder*);       // needs a 'this' pointer argument
-
-};
-
-
-typedef struct DirectorCook_ DirectorCook;
-struct DirectorCook_{
-  // data
-  MealBuilder* _builder;
-  // This is the main method of the director, which creates an object
-  // based on some logic and algorithm which is encapsulated in the
-  // method body, and uses the tools provided by the builder interface.
-  void (*makeMeal)(DirectorCook*);  // needs a 'this' pointer argument
-};
-
-
-// needed to initialize DirectorCook function pointer
-void DirectorCook_makeMeal(DirectorCook* pObj){
-  assert(pObj != NULL);
-  assert(pObj->_builder != NULL);
-  pObj->_builder->startNewMeal(pObj->_builder);
-  pObj->_builder->addBurger(pObj->_builder);
-  pObj->_builder->addDrink(pObj->_builder);
-}
-
-// Note that the manufacture algorithm contained in the director
-// is very general and does not tell us anything about the type of
-// the object being created, let alone its internal representation.
-
-// We can implement MealBuilder in many different ways, so as to 
-// construct objects of many possible types which do not even need
-// to be related by a common base class 'Meal'
-
-// However, at some point we need to retrieve the constructed object
-// so there must be some method 'getObject'. In general, because the
-// return type of 'getObject' may be arbitrary, the method declaration
-// cannot be part of the interface MealBuilder as this would constrain
-// the implementation to a specific type being constructed.
-
-// In this example, we shall consider two concrete implementations of
-// MealBuilder, a 'VegetarianMealBuilder' and a 'NonVegetarianMealBuilder'.
-// Both implementation will allow the construction of objects of the same
-// type, but one should remember that this need not be the case when 
-// applying the builder design pattern.
-
-// Concrete implementations of MealBuilder will hold a pointer to object
-// of type Meal (the object being constructed), and will have a getObject().
-
-////////////////////////////////////////////////////////////////////////////////
-//                           PACKING                                          //
-////////////////////////////////////////////////////////////////////////////////
 typedef struct Packing_ Packing;
 struct Packing_ {
   void* object;                             // pointer to concrete object
-  const char* (*pack)();                 
+  const char* (*pack)(/* Packing* */);      // virtual method and no 'this' pointer
+  void (*delete)(Packing*);                 // virtual delete operator
 };
 
-void Packing_init(Packing* pObj, void* object, const char* (*pack)(Packing*)){
+void Packing_init(Packing* pObj, void* object, 
+    const char* (*pack)(), void (*delete)(Packing*)){
   assert(pObj != NULL);
   pObj->object = object;
   pObj->pack = pack;
+  pObj->delete = delete;
 }
 
 void Packing_destroy(Packing* pObj){
   assert(pObj != NULL);
-  pObj->object =NULL;   // someone else will free that pointer
+  pObj->object = NULL;
   pObj->pack = NULL;
+  pObj->delete = NULL;
+}
+
+// virtual
+void Packing_delete(Packing* pObj){
+  assert(pObj != NULL);
+  void (*delete)(Packing*);
+  delete = pObj->delete;  // retrieve function pointer to delete function
+  delete(pObj);           // deletes pointer to concrete object
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//                           WRAPPER                                          //
+//                           Wrapper                                          //
 ////////////////////////////////////////////////////////////////////////////////
+
 typedef struct Wrapper_ Wrapper;
 struct Wrapper_ {
   Packing base;
@@ -105,14 +62,22 @@ const char* Wrapper_pack(){
   return "Wrapper";
 }
 
-void Wrapper_init(Wrapper* pObj){
-  assert(pObj != NULL);
-  Packing_init(&pObj->base, (void*) pObj, Wrapper_pack);
-}
-
 void Wrapper_destroy(Wrapper* pObj){
   assert(pObj != NULL);
   Packing_destroy(&pObj->base);
+}
+
+// override
+void Wrapper_delete(Packing* pObj){
+  assert(pObj != NULL);
+  Wrapper* object = (Wrapper*) pObj->object;  // pointer to concrete object
+  Wrapper_destroy(object);                    // clears memory area
+  free(object);                               // frees concrete pointer
+}
+
+void Wrapper_init(Wrapper* pObj){
+  assert(pObj != NULL);
+  Packing_init(&pObj->base, (void*) pObj, Wrapper_pack, Wrapper_delete);
 }
 
 Wrapper* Wrapper_new(){
@@ -121,16 +86,24 @@ Wrapper* Wrapper_new(){
   return pObj;
 }
 
-void Wrapper_delete(Wrapper* pObj){
-  assert(pObj != NULL);
-  Wrapper_destroy(pObj);
-  free(pObj);
+void Wrapper_test(){
+  // stack
+  printf("Creating wrapper object from the stack: ");
+  Wrapper w;
+  Wrapper_init(&w);
+  printf("pack: %s\n",w.base.pack());
+  Wrapper_destroy(&w);
+  //heap
+  printf("Creating wrapper object from the heap: ");
+  Wrapper* p = Wrapper_new();
+  printf("pack: %s\n",p->base.pack());
+  Packing_delete(&p->base); // should call Wrapper_delete
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                           Bottle                                          //
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
-//                           BOTTLE                                           //
-////////////////////////////////////////////////////////////////////////////////
 typedef struct Bottle_ Bottle;
 struct Bottle_ {
   Packing base;
@@ -140,14 +113,22 @@ const char* Bottle_pack(){
   return "Bottle";
 }
 
-void Bottle_init(Bottle* pObj){
-  assert(pObj != NULL);
-  Packing_init(&pObj->base, (void*) pObj, Bottle_pack);
-}
-
 void Bottle_destroy(Bottle* pObj){
   assert(pObj != NULL);
   Packing_destroy(&pObj->base);
+}
+
+// override
+void Bottle_delete(Packing* pObj){
+  assert(pObj != NULL);
+  Bottle* object = (Bottle*) pObj->object;
+  Bottle_destroy(object);
+  free (object);
+}
+
+void Bottle_init(Bottle* pObj){
+  assert(pObj != NULL);
+  Packing_init(&pObj->base, (void*) pObj, Bottle_pack, Bottle_delete);
 }
 
 Bottle* Bottle_new(){
@@ -156,37 +137,44 @@ Bottle* Bottle_new(){
   return pObj;
 }
 
-void Bottle_delete(Bottle* pObj){
-  assert(pObj != NULL);
-  Bottle_destroy(pObj);
-  free(pObj);
+void Bottle_test(){
+  // stack
+  printf("Creating bottle object from the stack: ");
+  Bottle w;
+  Bottle_init(&w);
+  printf("pack: %s\n",w.base.pack());
+  Bottle_destroy(&w);
+  // heap
+  printf("Creating bottle object from the heap: ");
+  Bottle* p = Bottle_new();
+  printf("pack %s\n",p->base.pack());
+  Packing_delete(&p->base);   // should call Bottle_delete(Packing*)
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                             ItemOps                                        //
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
-//                             ITEM                                           //
-////////////////////////////////////////////////////////////////////////////////
 typedef struct Item_ Item;
-typedef struct ItemOps_ ItemOps;
-struct Item_ {
-  void* object;                             // pointer to concrete object
-  ItemOps* ops;
-};
 
+typedef struct ItemOps_ ItemOps;
 struct ItemOps_ {
   int count;                                // reference count
   double (*price)();                 
   const char* (*name)();            
   Packing* (*packing)();               
+  void (*delete)(Item*);                    // virtual destructor
 };
 
 void ItemOps_init(ItemOps* pObj, double (*price)(), 
-    const char* (*name)(), Packing* (*packing)()){
+    const char* (*name)(), Packing* (*packing)(),
+    void (*delete)(Item*)){
   assert(pObj != NULL);
   pObj->count = 0;
   pObj->price = price;
   pObj->name = name;
   pObj->packing = packing;
+  pObj->delete = delete;
 }
 
 void ItemOps_destroy(ItemOps* pObj){
@@ -195,12 +183,13 @@ void ItemOps_destroy(ItemOps* pObj){
   pObj->price = NULL;
   pObj->name = NULL;
   pObj->packing = NULL;
+  pObj->delete = NULL;
 }
 
 ItemOps* ItemOps_new(double (*price)(), const char* (*name)(),
-    Packing* (*packing)()){
+    Packing* (*packing)(), void (*delete)(Item*)){
   ItemOps* pObj = (ItemOps*) malloc(sizeof(ItemOps));
-  ItemOps_init(pObj,price,name,packing);
+  ItemOps_init(pObj,price,name,packing,delete);
   return pObj;
 }
 
@@ -210,6 +199,14 @@ void ItemOps_delete(ItemOps* pObj){
   free(pObj);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                                   Item                                     //
+////////////////////////////////////////////////////////////////////////////////
+
+struct Item_ {
+  void* object;                             // pointer to concrete object
+  ItemOps* ops;
+};
 
 void Item_init(Item* pObj, void* object, ItemOps* ops){
   assert(pObj != NULL);
@@ -219,14 +216,21 @@ void Item_init(Item* pObj, void* object, ItemOps* ops){
 
 void Item_destroy(Item* pObj){
   assert(pObj != NULL);
-  pObj->object = NULL;        // someone else to free this pointer
-  pObj->ops = NULL;    // someone else to free this pointer
+  pObj->object = NULL;        
+  pObj->ops = NULL;           
 };
 
+void Item_delete(Item* pObj){
+  assert(pObj != NULL);
+  void (*delete)(Item*);
+  delete = pObj->ops->delete;
+  delete(pObj);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
-//                             BURGER                                         //
+//                               Burger                                       //
 ////////////////////////////////////////////////////////////////////////////////
+
 typedef struct Burger_ Burger;
 struct Burger_ {
   Item base;
@@ -248,12 +252,10 @@ void Burger_destroy(Burger* pObj){
   Item_destroy(&pObj->base);
 }
 
- 
-
-
 ////////////////////////////////////////////////////////////////////////////////
-//                             COLDDRINK                                      //
+//                             ColdDrink                                      //
 ////////////////////////////////////////////////////////////////////////////////
+
 typedef struct ColdDrink_ ColdDrink;
 struct ColdDrink_ {
   Item base;
@@ -277,15 +279,30 @@ void ColdDrink_destroy(ColdDrink* pObj){
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//                             VEGBURGER                                      //
+//                             VegBurger                                      //
 ////////////////////////////////////////////////////////////////////////////////
+
 typedef struct VegBurger_ VegBurger;
 struct VegBurger_ {
   Burger base;
 };
 
+ItemOps* VegBurger_opsHandle(int);                // forward declaration
+void VegBurger_destroy(VegBurger* pObj){
+  assert(pObj != NULL);
+  Burger_destroy(&pObj->base);
+  VegBurger_opsHandle(1);   // decrementing reference counter to ItemOps object
+}
+
 double VegBurger_price(){return 2.5;}
 const char* VegBurger_name(){return "Veg Burger";}
+
+void VegBurger_delete(Item* pObj){
+  assert(pObj != NULL);
+  VegBurger* object = (VegBurger*) pObj->object;
+  VegBurger_destroy(object);
+  free(object);
+}
 
 ItemOps* VegBurger_opsHandle(int freeHandle){ 
   // set freeHandle = 1 to free handle, else 0
@@ -303,7 +320,8 @@ ItemOps* VegBurger_opsHandle(int freeHandle){
   if(freeHandle == 0){      // getting handle
     if(ops == NULL){        // object not yet instantiated
       ops = (ItemOps*) malloc(sizeof(ItemOps));
-      ItemOps_init(ops,VegBurger_price,VegBurger_name,Burger_packing);
+      ItemOps_init(ops,VegBurger_price,VegBurger_name,Burger_packing,
+          VegBurger_delete);
     }
     ops->count++;           // one more handle pointing ItemOps object
     return ops;
@@ -328,34 +346,60 @@ void VegBurger_init(VegBurger* pObj){
   Burger_init(&pObj->base, (void*) pObj, ops);
 }
 
-void VegBurger_destroy(VegBurger* pObj){
-  assert(pObj != NULL);
-  Burger_destroy(&pObj->base);
-  VegBurger_opsHandle(1);   // decrementing reference counter to ItemOps object
-}
-
 VegBurger* VegBurger_new(){
   VegBurger* pObj = (VegBurger*) malloc(sizeof(VegBurger));
   VegBurger_init(pObj);
   return pObj;
 }
 
-void VegBurger_delete(VegBurger* pObj){
-  assert(pObj != NULL);
-  VegBurger_destroy(pObj);
-  free(pObj);
+void VegBurger_test(){
+
+  // stack
+  printf("Creating VegBurger object from the stack ...\n");
+  VegBurger v;
+  VegBurger_init(&v);
+  printf("name: %s\n", v.base.base.ops->name());
+  printf("price: %f\n", v.base.base.ops->price());
+  Packing* pack1 = v.base.base.ops->packing();
+  printf("packing: %s\n", pack1->pack());
+  Packing_delete(pack1);
+  VegBurger_destroy(&v);
+  // heap
+  printf("Creating VegBurger object from the heap ...\n");
+  VegBurger* p = VegBurger_new();
+  printf("name: %s\n", p->base.base.ops->name());
+  printf("price: %f\n", p->base.base.ops->price());
+  Packing* pack2 = p->base.base.ops->packing();
+  printf("packing: %s\n", pack2->pack());
+  Packing_delete(pack2);
+  Item_delete(&p->base.base);   // should call VegBurger_delete(Item*)
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                             ChickenBurger                                  //
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
-//                             CHICKENBURGER                                  //
-////////////////////////////////////////////////////////////////////////////////
 typedef struct ChickenBurger_ ChickenBurger;
 struct ChickenBurger_ {
   Burger base;
 };
+
+ItemOps* ChickenBurger_opsHandle(int);                // forward declaration
+void ChickenBurger_destroy(ChickenBurger* pObj){
+  assert(pObj != NULL);
+  Burger_destroy(&pObj->base);
+  ChickenBurger_opsHandle(1);   // decrementing reference counter to ItemOps object
+}
+
 double ChickenBurger_price(){return 5.05;}
 const char* ChickenBurger_name(){return "Chicken Burger";}
+
+void ChickenBurger_delete(Item* pObj){
+  assert(pObj != NULL);
+  ChickenBurger* object = (ChickenBurger*) pObj->object;
+  ChickenBurger_destroy(object);
+  free(object);
+}
 
 ItemOps* ChickenBurger_opsHandle(int freeHandle){ 
   // set freeHandle = 1 to free handle, else 0
@@ -373,7 +417,8 @@ ItemOps* ChickenBurger_opsHandle(int freeHandle){
   if(freeHandle == 0){      // getting handle
     if(ops == NULL){        // object not yet instantiated
       ops = (ItemOps*) malloc(sizeof(ItemOps));
-      ItemOps_init(ops,ChickenBurger_price,ChickenBurger_name,Burger_packing);
+      ItemOps_init(ops,ChickenBurger_price,ChickenBurger_name,Burger_packing,
+          ChickenBurger_delete);
     }
     ops->count++;           // one more handle pointing ItemOps object
     return ops;
@@ -398,34 +443,61 @@ void ChickenBurger_init(ChickenBurger* pObj){
   Burger_init(&pObj->base, (void*) pObj, ops);
 }
 
-void ChickenBurger_destroy(ChickenBurger* pObj){
-  assert(pObj != NULL);
-  Burger_destroy(&pObj->base);
-  ChickenBurger_opsHandle(1);   // decrementing reference counter to ItemOps object
-}
-
 ChickenBurger* ChickenBurger_new(){
   ChickenBurger* pObj = (ChickenBurger*) malloc(sizeof(ChickenBurger));
   ChickenBurger_init(pObj);
   return pObj;
 }
 
-void ChickenBurger_delete(ChickenBurger* pObj){
-  assert(pObj != NULL);
-  ChickenBurger_destroy(pObj);
-  free(pObj);
+void ChickenBurger_test(){
+
+  // stack
+  printf("Creating ChickenBurger object from the stack ...\n");
+  ChickenBurger v;
+  ChickenBurger_init(&v);
+  printf("name: %s\n", v.base.base.ops->name());
+  printf("price: %f\n", v.base.base.ops->price());
+  Packing* pack1 = v.base.base.ops->packing();
+  printf("packing: %s\n", pack1->pack());
+  Packing_delete(pack1);
+  ChickenBurger_destroy(&v);
+  // heap
+  printf("Creating ChickenBurger object from the heap ...\n");
+  ChickenBurger* p = ChickenBurger_new();
+  printf("name: %s\n", p->base.base.ops->name());
+  printf("price: %f\n", p->base.base.ops->price());
+  Packing* pack2 = p->base.base.ops->packing();
+  printf("packing: %s\n", pack2->pack());
+  Packing_delete(pack2);
+  Item_delete(&p->base.base);   // should call ChickenBurger_delete(Item*)
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//                                COKE                                        //
+//                                Coke                                        //
 ////////////////////////////////////////////////////////////////////////////////
+
 typedef struct Coke_ Coke;
 struct Coke_ {
   ColdDrink base;
 };
+
+ItemOps* Coke_opsHandle(int);                // forward declaration
+void Coke_destroy(Coke* pObj){
+  assert(pObj != NULL);
+  ColdDrink_destroy(&pObj->base);
+  Coke_opsHandle(1);   // decrementing reference counter to ItemOps object
+}
+
 double Coke_price(){return 3.0;}
 const char* Coke_name(){return "Coke";}
+
+void Coke_delete(Item* pObj){
+  assert(pObj != NULL);
+  Coke* object = (Coke*) pObj->object;
+  Coke_destroy(object);
+  free(object);
+}
 
 ItemOps* Coke_opsHandle(int freeHandle){ 
   // set freeHandle = 1 to free handle, else 0
@@ -443,7 +515,8 @@ ItemOps* Coke_opsHandle(int freeHandle){
   if(freeHandle == 0){      // getting handle
     if(ops == NULL){        // object not yet instantiated
       ops = (ItemOps*) malloc(sizeof(ItemOps));
-      ItemOps_init(ops,Coke_price,Coke_name,ColdDrink_packing);
+      ItemOps_init(ops,Coke_price,Coke_name,ColdDrink_packing,
+          Coke_delete);
     }
     ops->count++;           // one more handle pointing ItemOps object
     return ops;
@@ -468,35 +541,61 @@ void Coke_init(Coke* pObj){
   ColdDrink_init(&pObj->base, (void*) pObj, ops);
 }
 
-void Coke_destroy(Coke* pObj){
-  assert(pObj != NULL);
-  ColdDrink_destroy(&pObj->base);
-  Coke_opsHandle(1);   // decrementing reference counter to ItemOps object
-}
-
 Coke* Coke_new(){
   Coke* pObj = (Coke*) malloc(sizeof(Coke));
   Coke_init(pObj);
   return pObj;
 }
 
-void Coke_delete(Coke* pObj){
-  assert(pObj != NULL);
-  Coke_destroy(pObj);
-  free(pObj);
+void Coke_test(){
+
+  // stack
+  printf("Creating Coke object from the stack ...\n");
+  Coke v;
+  Coke_init(&v);
+  printf("name: %s\n", v.base.base.ops->name());
+  printf("price: %f\n", v.base.base.ops->price());
+  Packing* pack1 = v.base.base.ops->packing();
+  printf("packing: %s\n", pack1->pack());
+  Packing_delete(pack1);
+  Coke_destroy(&v);
+  // heap
+  printf("Creating Coke object from the heap ...\n");
+  Coke* p = Coke_new();
+  printf("name: %s\n", p->base.base.ops->name());
+  printf("price: %f\n", p->base.base.ops->price());
+  Packing* pack2 = p->base.base.ops->packing();
+  printf("packing: %s\n", pack2->pack());
+  Packing_delete(pack2);
+  Item_delete(&p->base.base);   // should call Coke_delete(Item*)
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//                                PEPSI                                       //
+//                                Pepsi                                       //
 ////////////////////////////////////////////////////////////////////////////////
+
 typedef struct Pepsi_ Pepsi;
 struct Pepsi_ {
   ColdDrink base;
 };
 
+ItemOps* Pepsi_opsHandle(int);                // forward declaration
+void Pepsi_destroy(Pepsi* pObj){
+  assert(pObj != NULL);
+  ColdDrink_destroy(&pObj->base);
+  Pepsi_opsHandle(1);   // decrementing reference counter to ItemOps object
+}
+
 double Pepsi_price(){return 3.5;}
 const char* Pepsi_name(){return "Pepsi";}
+
+void Pepsi_delete(Item* pObj){
+  assert(pObj != NULL);
+  Pepsi* object = (Pepsi*) pObj->object;
+  Pepsi_destroy(object);
+  free(object);
+}
 
 ItemOps* Pepsi_opsHandle(int freeHandle){ 
   // set freeHandle = 1 to free handle, else 0
@@ -514,7 +613,8 @@ ItemOps* Pepsi_opsHandle(int freeHandle){
   if(freeHandle == 0){      // getting handle
     if(ops == NULL){        // object not yet instantiated
       ops = (ItemOps*) malloc(sizeof(ItemOps));
-      ItemOps_init(ops,Pepsi_price,Pepsi_name,ColdDrink_packing);
+      ItemOps_init(ops,Pepsi_price,Pepsi_name,ColdDrink_packing,
+          Pepsi_delete);
     }
     ops->count++;           // one more handle pointing ItemOps object
     return ops;
@@ -539,43 +639,58 @@ void Pepsi_init(Pepsi* pObj){
   ColdDrink_init(&pObj->base, (void*) pObj, ops);
 }
 
-void Pepsi_destroy(Pepsi* pObj){
-  assert(pObj != NULL);
-  ColdDrink_destroy(&pObj->base);
-  Pepsi_opsHandle(1);   // decrementing reference counter to ItemOps object
-}
-
 Pepsi* Pepsi_new(){
   Pepsi* pObj = (Pepsi*) malloc(sizeof(Pepsi));
   Pepsi_init(pObj);
   return pObj;
 }
 
-void Pepsi_delete(Pepsi* pObj){
-  assert(pObj != NULL);
-  Pepsi_destroy(pObj);
-  free(pObj);
+void Pepsi_test(){
+
+  // stack
+  printf("Creating Pepsi object from the stack ...\n");
+  Pepsi v;
+  Pepsi_init(&v);
+  printf("name: %s\n", v.base.base.ops->name());
+  printf("price: %f\n", v.base.base.ops->price());
+  Packing* pack1 = v.base.base.ops->packing();
+  printf("packing: %s\n", pack1->pack());
+  Packing_delete(pack1);
+  Pepsi_destroy(&v);
+  // heap
+  printf("Creating Pepsi object from the heap ...\n");
+  Pepsi* p = Pepsi_new();
+  printf("name: %s\n", p->base.base.ops->name());
+  printf("price: %f\n", p->base.base.ops->price());
+  Packing* pack2 = p->base.base.ops->packing();
+  printf("packing: %s\n", pack2->pack());
+  Packing_delete(pack2);
+  Item_delete(&p->base.base);   // should call Pepsi_delete(Item*)
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                MEAL                                        //
 ////////////////////////////////////////////////////////////////////////////////
+
+// it is assumed that meal objects takes ownership of item pointers
+// which will need to be released as meal object is being destroyed.
+
 typedef struct Meal_ Meal;
 struct Meal_ {
-  int count;
-  Item* _items[MAX_MEAL_ITEMS];
+  int count;                                // current number of items
+  Item* _items[MAX_MEAL_ITEMS];             // array of item pointers
   void (*addItem)(Meal*,Item*);             // needs a 'this' pointer
   double (*getCost)(Meal*);                 // needs a 'this' pointer
   void (*showItems)(Meal*);                 // needs a 'this' pointer
 };
-
 
 void Meal_addItem(Meal* pObj,Item* item){
   assert(pObj != NULL);
   assert(item != NULL);
   if(pObj->count == MAX_MEAL_ITEMS){
     fprintf(stderr,"Meal::addItem : cannot add more items to meal\n");
+    return;
   }
   pObj->_items[pObj->count++] = item;
 }
@@ -593,11 +708,12 @@ double Meal_getCost(Meal* pObj){
 void Meal_showItems(Meal* pObj){
   assert(pObj != NULL);
   int i;
-  for(i = 0; i<pObj->count; ++i){
-    printf("Item : %s, Packing : %s, Price : %f\n",
-        pObj->_items[i]->ops->name(),
-        pObj->_items[i]->ops->packing()->pack(),
-        pObj->_items[i]->ops->price());
+  for(i = 0; i < pObj->count; ++i){
+    printf("Item : %s", pObj->_items[i]->ops->name());
+    Packing* packing = pObj->_items[i]->ops->packing();
+    printf(", Packing : %s", packing->pack()); 
+    Packing_delete(packing);
+    printf(", Price : %f\n", pObj->_items[i]->ops->price());
   } 
 }
 
@@ -607,13 +723,24 @@ void Meal_init(Meal* pObj){
   pObj->addItem = Meal_addItem;
   pObj->getCost = Meal_getCost;
   pObj->showItems = Meal_showItems;
+  int i;
+  for(i = 0; i <  MAX_MEAL_ITEMS; ++i){
+    pObj->_items[i] = NULL;
+  }
 }
 void Meal_destroy(Meal* pObj){
   assert(pObj != NULL);
+  int i;
+  for(i = 0; i < pObj->count; ++i){
+    Item_delete(pObj->_items[i]);   // freeing item pointer. Meal has ownership
+  }
   pObj->count =0;
   pObj->addItem = NULL;
   pObj->getCost = NULL;
   pObj->showItems = NULL;
+  for(i = 0; i < MAX_MEAL_ITEMS; ++i){
+    pObj->_items[i] = NULL;
+  }
 }
 
 Meal* Meal_new(){
@@ -627,6 +754,81 @@ void Meal_delete(Meal* pObj){
   Meal_destroy(pObj);
   free(pObj);
 }
+
+void Meal_test(){
+  printf("Creating Meal object from the stack ...\n");
+  // stack
+  Meal m;
+  Meal_init(&m);
+  m.addItem(&m,&VegBurger_new()->base.base);
+  m.addItem(&m,&ChickenBurger_new()->base.base);
+  m.addItem(&m,&Coke_new()->base.base);
+  m.addItem(&m,&Pepsi_new()->base.base);
+  m.showItems(&m);
+  Meal_destroy(&m);
+}
+////////////////////////////////////////////////////////////////////////////////
+//                            MealBuilder                                     //
+////////////////////////////////////////////////////////////////////////////////
+
+typedef struct MealBuilder_ MealBuilder;
+typedef struct MealBuilder_ MealBuilder;  // forward declaration needed
+struct MealBuilder_{
+  void* object;                         // pointer to concrete object
+  void (*startNewMeal)(MealBuilder*);   // needs a 'this' pointer argument
+  void (*addBurger)(MealBuilder*);      // needs a 'this' pointer argument
+  void (*addDrink)(MealBuilder*);       // needs a 'this' pointer argument
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
+//                            DirectorCook                                    //
+////////////////////////////////////////////////////////////////////////////////
+
+// This is a concrete class
+typedef struct DirectorCook_ DirectorCook;
+struct DirectorCook_{
+ // This is the main method of the director, which creates an object
+  // based on some logic and algorithm which is encapsulated in the
+  // method body, and uses the tools provided by the builder interface.
+  void (*makeMeal)(DirectorCook*);  // needs a 'this' pointer argument
+  // data
+  MealBuilder* _builder;
+};
+
+void DirectorCook_makeMeal(DirectorCook* pObj){
+  assert(pObj != NULL);
+  assert(pObj->_builder != NULL);
+  pObj->_builder->startNewMeal(pObj->_builder);
+  pObj->_builder->addBurger(pObj->_builder);
+  pObj->_builder->addDrink(pObj->_builder);
+}
+
+
+
+// Note that the manufacture algorithm contained in the director
+// is very general and does not tell us anything about the type of
+// the object being created, let alone its internal representation.
+
+// We can implement MealBuilder in many different ways, so as to 
+// construct objects of many possible types which do not even need
+// to be related by a common base class 'Meal'
+
+// However, at some point we need to retrieve the constructed object
+// so there must be some method 'getObject'. In general, because the
+// return type of 'getObject' may be arbitrary, the method declaration
+// cannot be part of the interface MealBuilder as this would constrain
+// the implementation to a specific type being constructed.
+
+// In this example, we shall consider two concrete implementations of
+// MealBuilder, a 'VegetarianMealBuilder' and a 'NonVegetarianMealBuilder'.
+// Both implementation will allow the construction of objects of the same
+// type, but one should remember that this need not be the case when 
+// applying the builder design pattern.
+
+// Concrete implementations of MealBuilder will hold a pointer to object
+// of type Meal (the object being constructed), and will have a getObject().
+
 
 typedef struct VegetarianMealBuilder_ VegetarianMealBuilder;
 struct VegetarianMealBuilder_ {
@@ -728,21 +930,31 @@ void NonVegetarianMealBuilder_Init(NonVegetarianMealBuilder* pObj){
   pObj->getMeal = NonVegetarianMealBuilder_getMeal;
 }
 
+void global_test(){
+  //Wrapper_test();
+  //Bottle_test();
+  //VegBurger_test();
+  //ChickenBurger_test();
+  //Coke_test();
+  //Pepsi_test();
+  Meal_test();
+}
+
 int main(int argc, char* argv[]){
   // creating vegetarian meal
   // First we create the appropriate concrete builder
-  VegetarianMealBuilder vegBuilder;
-  VegetarianMealBuilder_Init(&vegBuilder);
+
   // Next we create a director which will use this builder
+
+  global_test();
   
+  /*
   VegBurger* p = VegBurger_new();
   printf("%s\n",p->base.base.ops->name());
   printf("%s\n",p->base.base.ops->packing()->pack());
   printf("%f\n",p->base.base.ops->price());
   VegBurger_delete(p);
-
-
-  VegetarianMealBuilder_Destroy(&vegBuilder);
+  */
 
   return 0;
 }

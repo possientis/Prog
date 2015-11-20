@@ -110,10 +110,23 @@
   (stream-map * s1 s2))
 
 (define (stream-partial-sums s)
-  (letrec ((partial (stream-cons (s 'car) (stream-add partial (s 'cdr)))))
-    partial))
-
-
+  (if (s 'null?) (stream) ; empty stream
+    ; else
+    (let ((first (s 'car)))
+      (stream-cons first
+                   (stream-map
+                   (lambda (x) (+ x first))
+                   (stream-partial-sums (s 'cdr)))))))
+(define (stream-merge s1 s2)
+  (cond ((s1 'null?) s2)
+        ((s2 'null?) s1)
+        (else (let ((car1 (s1 'car))(car2 (s2 'car)))
+                (cond ((< car1 car2)
+                       (stream-cons car1 (stream-merge (s1 'cdr) s2)))
+                      ((< car2 car1)
+                       (stream-cons car2 (stream-merge s1 (s2 'cdr))))
+                      (else ; car1 == car2
+                        (stream-cons car1 (stream-merge (s1 'cdr) (s2 'cdr)))))))))
 
 
 

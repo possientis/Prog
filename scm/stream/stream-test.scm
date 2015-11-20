@@ -172,9 +172,26 @@
   ; stream-partial-sums
   (let ((s (list->stream '(2 0 4 5 2 9))))
     (let ((t (stream-partial-sums s)))
-      (display (stream->list t))))
-;        (display "stream: unit test 17.0 failing\n"))))
-
+      (if (not (equal? (stream->list t) '(2 2 6 11 13 22)))
+        (display "stream: unit test 17.0 failing\n"))))
+  (let ((t (stream-partial-sums ones)))
+    (if (not (equal? (stream-take 10 t) '(1 2 3 4 5 6 7 8 9 10)))
+      (display "stream: unit test 17.1 failing\n")))
+  ; steam-merge
+  (let ((s1 (list->stream '(0 3 1 4 4 2 5 1)))
+        (s2 (list->stream '(0 1 5 2 4 1 6 0))))
+    (let ((t (stream-merge s1 s2)))
+      (if (not (equal? (stream->list t) '(0 1 3 1 4 4 2 5 1 2 4 1 6 0)))
+        (display "stream: unit test 18.0 failing\n"))))
+  (letrec ((s  (stream-cons
+                 1
+                 (stream-merge 
+                   (stream-merge
+                     (stream-scale s 2)
+                     (stream-scale s 3))
+                   (stream-scale s 5)))))
+    (if (not (equal? (stream-take 15 s) '(1 2 3 4 5 6 8 9 10 12 15 16 18 20 24)))
+      (display "stream: unit test 18.1 failing\n")))
   ;
   (display "stream: unit test complete\n"))
 
