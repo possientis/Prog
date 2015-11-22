@@ -14,3 +14,6 @@ python3 builder.py
 
 echo '\nThis is Scheme ...'
 scm builder.scm
+
+echo '\nThis is C ...'
+gcc builder.c; ./a.out; rm a.out

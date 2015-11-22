@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <malloc.h>
 #include <stdio.h>
+
 // The main idea behind the builder design pattern is
 // to provide an abstract interface for a 'builder object'
 // A concrete builder object is not a factory object which returns
@@ -616,7 +617,7 @@ ItemOps* Pepsi_opsHandle(int freeHandle){
       ItemOps_init(ops,Pepsi_price,Pepsi_name,ColdDrink_packing,
           Pepsi_delete);
     }
-    ops->count++;           // one more handle pointing ItemOps object
+    ops->count++;           // one more handle pointing to ItemOps object
     return ops;
   }
   else{                     //freeing handle
@@ -670,7 +671,7 @@ void Pepsi_test(){
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//                                MEAL                                        //
+//                                Meal                                        //
 ////////////////////////////////////////////////////////////////////////////////
 
 // it is assumed that meal objects takes ownership of item pointers
@@ -756,8 +757,8 @@ void Meal_delete(Meal* pObj){
 }
 
 void Meal_test(){
-  printf("Creating Meal object from the stack ...\n");
   // stack
+  printf("Creating Meal object from the stack ...\n");
   Meal m;
   Meal_init(&m);
   m.addItem(&m,&VegBurger_new()->base.base);
@@ -765,8 +766,20 @@ void Meal_test(){
   m.addItem(&m,&Coke_new()->base.base);
   m.addItem(&m,&Pepsi_new()->base.base);
   m.showItems(&m);
+  printf("Total cost: %f\n",m.getCost(&m));
   Meal_destroy(&m);
+  // heap
+  printf("Creating Meal object from the heap ...\n");
+  Meal* p = Meal_new();
+  p->addItem(p,&VegBurger_new()->base.base);
+  p->addItem(p,&ChickenBurger_new()->base.base);
+  p->addItem(p,&Coke_new()->base.base);
+  p->addItem(p,&Pepsi_new()->base.base);
+  p->showItems(p);
+  printf("Total cost: %f\n",p->getCost(p));
+  Meal_delete(p);
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 //                            MealBuilder                                     //
 ////////////////////////////////////////////////////////////////////////////////
@@ -775,11 +788,259 @@ typedef struct MealBuilder_ MealBuilder;
 typedef struct MealBuilder_ MealBuilder;  // forward declaration needed
 struct MealBuilder_{
   void* object;                         // pointer to concrete object
-  void (*startNewMeal)(MealBuilder*);   // needs a 'this' pointer argument
-  void (*addBurger)(MealBuilder*);      // needs a 'this' pointer argument
-  void (*addDrink)(MealBuilder*);       // needs a 'this' pointer argument
+  void (*delete)(MealBuilder*);         // virtual destructor
+  void (*startNewMeal)(MealBuilder*);   
+  void (*addBurger)(MealBuilder*);      
+  void (*addDrink)(MealBuilder*);       
 
 };
+
+void MealBuilder_Init(
+    MealBuilder* pObj,                  // this
+    void* object,                       // pointer to concrete object
+    void (*delete)(MealBuilder*),       // virtual destructor
+    void (*startNewMeal)(MealBuilder*), // overriden virtual procedure
+    void (*addBurger)(MealBuilder*),    // overriden virtual procedure
+    void (*addDrink)(MealBuilder*)){    // overriden virtual procedure
+
+  assert(pObj != NULL);
+  pObj->object = object;
+  pObj->startNewMeal = startNewMeal;
+  pObj->addBurger = addBurger;
+  pObj->addDrink = addDrink;
+  pObj->delete = delete;
+}
+
+void MealBuilder_Destroy(MealBuilder* pObj){
+  assert(pObj !=NULL);
+  pObj->object = NULL;
+  pObj->startNewMeal = NULL;
+  pObj->addBurger = NULL;
+  pObj->addDrink = NULL;
+  pObj->delete = NULL;
+}
+
+void MealBuilder_delete(MealBuilder* pObj){
+  assert(pObj != NULL);
+  void (*delete)(MealBuilder*);
+  delete = pObj->delete;
+  delete(pObj);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                         VegetarianMealBuilder                              //
+////////////////////////////////////////////////////////////////////////////////
+
+typedef struct VegetarianMealBuilder_ VegetarianMealBuilder;
+struct VegetarianMealBuilder_ {
+  MealBuilder base;
+  Meal* _meal;
+  Meal* (*getMeal)(VegetarianMealBuilder*);
+};
+
+void VegetarianMealBuilder_startNewMeal(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  VegetarianMealBuilder* object = (VegetarianMealBuilder*) pObj->object;
+  if(object->_meal != NULL){    // meal object has already been created
+    Meal_delete(object->_meal); // releasing prior meal object
+  }
+  object->_meal = Meal_new();   // creating new meal object
+}
+
+void VegetarianMealBuilder_addBurger(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  VegetarianMealBuilder* object = (VegetarianMealBuilder*) pObj->object;
+  assert(object->_meal != NULL);
+  // adding vegetarian burger (meal has ownership of pointer)
+  object->_meal->addItem(object->_meal,&VegBurger_new()->base.base);
+}
+
+void VegetarianMealBuilder_addDrink(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  VegetarianMealBuilder* object = (VegetarianMealBuilder*) pObj->object;
+  assert(object->_meal != NULL);
+  // adding coke (meal has ownership of pointer)
+  object->_meal->addItem(object->_meal,&Coke_new()->base.base);
+}
+
+Meal* VegetarianMealBuilder_getMeal(VegetarianMealBuilder* pObj){
+  assert(pObj != NULL);
+  return pObj->_meal;
+}
+
+void VegetarianMealBuilder_destroy(VegetarianMealBuilder* pObj){
+  assert(pObj != NULL);
+  MealBuilder_Destroy(&pObj->base);
+  if(pObj->_meal != NULL){  // need to release meal object
+    Meal_delete(pObj->_meal); 
+    pObj->_meal = NULL;
+  }
+  pObj->getMeal = NULL;
+}
+
+void VegetarianMealBuilder_delete(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  VegetarianMealBuilder* object = (VegetarianMealBuilder*) pObj->object;
+  VegetarianMealBuilder_destroy(object);
+  free(object);
+}
+
+void VegetarianMealBuilder_init(VegetarianMealBuilder* pObj){
+  assert(pObj != NULL);
+  // initializing base object
+  MealBuilder_Init(
+      &pObj->base, 
+      (void*) pObj,
+      VegetarianMealBuilder_delete,
+      VegetarianMealBuilder_startNewMeal,
+      VegetarianMealBuilder_addBurger,
+      VegetarianMealBuilder_addDrink);  // initializing base object
+  // initializing derived object
+  pObj->_meal = NULL;
+  pObj->getMeal = VegetarianMealBuilder_getMeal;
+}
+
+VegetarianMealBuilder* VegetarianMealBuilder_new(){
+  VegetarianMealBuilder* pObj = 
+    (VegetarianMealBuilder*) malloc(sizeof(VegetarianMealBuilder));
+  VegetarianMealBuilder_init(pObj);
+  return pObj;
+}
+
+void VegetarianMealBuilder_test(){
+  // stack
+  printf("Creating VegetarianMealBuilder object from the stack ...\n");
+  VegetarianMealBuilder b;
+  VegetarianMealBuilder_init(&b);
+  b.base.startNewMeal(&b.base);
+  b.base.addBurger(&b.base);
+  b.base.addDrink(&b.base);
+  Meal* meal1 = b.getMeal(&b);  //b keeps ownership of meal pointer
+  meal1->showItems(meal1);
+  VegetarianMealBuilder_destroy(&b);
+  // heap
+  printf("Creating VegetarianMealBuilder object from the heap ...\n");
+  VegetarianMealBuilder* p = VegetarianMealBuilder_new();
+  VegetarianMealBuilder_init(p);
+  p->base.startNewMeal(&p->base);
+  p->base.addBurger(&p->base);
+  p->base.addDrink(&p->base);
+  Meal* meal2 = p->getMeal(p);  //*p keeps ownership of meal pointer
+  meal2->showItems(meal2);
+  VegetarianMealBuilder_delete(&p->base);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                       NonVegetarianMealBuilder                             //
+////////////////////////////////////////////////////////////////////////////////
+
+typedef struct NonVegetarianMealBuilder_ NonVegetarianMealBuilder;
+struct NonVegetarianMealBuilder_ {
+  MealBuilder base;
+  Meal* _meal;
+  Meal* (*getMeal)(NonVegetarianMealBuilder*);
+};
+
+void NonVegetarianMealBuilder_startNewMeal(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  NonVegetarianMealBuilder* object = (NonVegetarianMealBuilder*) pObj->object;
+  if(object->_meal != NULL){    // meal object has already been created
+    Meal_delete(object->_meal); // releasing prior meal object
+  }
+  object->_meal = Meal_new();   // creating new meal object
+}
+
+void NonVegetarianMealBuilder_addBurger(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  NonVegetarianMealBuilder* object = (NonVegetarianMealBuilder*) pObj->object;
+  assert(object->_meal != NULL);
+  // adding chicken burger (meal has ownership of pointer)
+  object->_meal->addItem(object->_meal,&ChickenBurger_new()->base.base);
+}
+
+void NonVegetarianMealBuilder_addDrink(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  NonVegetarianMealBuilder* object = (NonVegetarianMealBuilder*) pObj->object;
+  assert(object->_meal != NULL);
+  // adding pepsi (meal has ownership of pointer)
+  object->_meal->addItem(object->_meal,&Pepsi_new()->base.base);
+}
+
+Meal* NonVegetarianMealBuilder_getMeal(NonVegetarianMealBuilder* pObj){
+  assert(pObj != NULL);
+  return pObj->_meal;
+}
+
+void NonVegetarianMealBuilder_destroy(NonVegetarianMealBuilder* pObj){
+  assert(pObj != NULL);
+  MealBuilder_Destroy(&pObj->base);
+  if(pObj->_meal != NULL){  // need to release meal object
+    Meal_delete(pObj->_meal); 
+    pObj->_meal = NULL;
+  }
+  pObj->getMeal = NULL;
+}
+
+void NonVegetarianMealBuilder_delete(MealBuilder* pObj){
+  assert(pObj != NULL);
+  // retrieving concrete object
+  NonVegetarianMealBuilder* object = (NonVegetarianMealBuilder*) pObj->object;
+  NonVegetarianMealBuilder_destroy(object);
+  free(object);
+}
+
+void NonVegetarianMealBuilder_init(NonVegetarianMealBuilder* pObj){
+  assert(pObj != NULL);
+  // initializing base object
+  MealBuilder_Init(
+      &pObj->base, 
+      (void*) pObj,
+      NonVegetarianMealBuilder_delete,
+      NonVegetarianMealBuilder_startNewMeal,
+      NonVegetarianMealBuilder_addBurger,
+      NonVegetarianMealBuilder_addDrink);  // initializing base object
+  // initializing derived object
+  pObj->_meal = NULL;
+  pObj->getMeal = NonVegetarianMealBuilder_getMeal;
+}
+
+NonVegetarianMealBuilder* NonVegetarianMealBuilder_new(){
+  NonVegetarianMealBuilder* pObj = 
+    (NonVegetarianMealBuilder*) malloc(sizeof(NonVegetarianMealBuilder));
+  NonVegetarianMealBuilder_init(pObj);
+  return pObj;
+}
+
+void NonVegetarianMealBuilder_test(){
+  // stack
+  printf("Creating NonVegetarianMealBuilder object from the stack ...\n");
+  NonVegetarianMealBuilder b;
+  NonVegetarianMealBuilder_init(&b);
+  b.base.startNewMeal(&b.base);
+  b.base.addBurger(&b.base);
+  b.base.addDrink(&b.base);
+  Meal* meal1 = b.getMeal(&b);  //b keeps ownership of meal pointer
+  meal1->showItems(meal1);
+  NonVegetarianMealBuilder_destroy(&b);
+  // heap
+  printf("Creating NonVegetarianMealBuilder object from the heap ...\n");
+  NonVegetarianMealBuilder* p = NonVegetarianMealBuilder_new();
+  NonVegetarianMealBuilder_init(p);
+  p->base.startNewMeal(&p->base);
+  p->base.addBurger(&p->base);
+  p->base.addDrink(&p->base);
+  Meal* meal2 = p->getMeal(p);  //*p keeps ownership of meal pointer
+  meal2->showItems(meal2);
+  NonVegetarianMealBuilder_delete(&p->base);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //                            DirectorCook                                    //
@@ -788,12 +1049,12 @@ struct MealBuilder_{
 // This is a concrete class
 typedef struct DirectorCook_ DirectorCook;
 struct DirectorCook_{
- // This is the main method of the director, which creates an object
+  // This is the main method of the director, which creates an object
   // based on some logic and algorithm which is encapsulated in the
   // method body, and uses the tools provided by the builder interface.
-  void (*makeMeal)(DirectorCook*);  // needs a 'this' pointer argument
+  void (*makeMeal)(DirectorCook*);
   // data
-  MealBuilder* _builder;
+  MealBuilder* _builder;  // DirectorCook object has ownership of pointer
 };
 
 void DirectorCook_makeMeal(DirectorCook* pObj){
@@ -804,6 +1065,19 @@ void DirectorCook_makeMeal(DirectorCook* pObj){
   pObj->_builder->addDrink(pObj->_builder);
 }
 
+void DirectorCook_init(DirectorCook* pObj, MealBuilder* builder){
+  assert(pObj != NULL);
+  assert(builder != NULL);
+  pObj->_builder = builder;
+  pObj->makeMeal = DirectorCook_makeMeal;
+}
+
+void DirectorCook_destroy(DirectorCook* pObj){
+  assert(pObj != NULL);
+  pObj->makeMeal = NULL;
+  MealBuilder_delete(pObj->_builder);
+  pObj->_builder = NULL;
+}
 
 
 // Note that the manufacture algorithm contained in the director
@@ -830,106 +1104,6 @@ void DirectorCook_makeMeal(DirectorCook* pObj){
 // of type Meal (the object being constructed), and will have a getObject().
 
 
-typedef struct VegetarianMealBuilder_ VegetarianMealBuilder;
-struct VegetarianMealBuilder_ {
-  MealBuilder base;
-  Meal* _meal;
-  Meal* (*getMeal)(VegetarianMealBuilder*);
-};
-
-typedef struct NonVegetarianMealBuilder_ NonVegetarianMealBuilder;
-struct NonVegetarianMealBuilder_ {
-  MealBuilder base;
-  Meal* _meal;
-  Meal* (*getMeal)(NonVegetarianMealBuilder*);
-};
-
-// Initializing MealBuilder base object
-void MealBuilder_Init(
-    MealBuilder* pObj,                  // this
-    void* object,                       // pointer to concrete object
-    void (*startNewMeal)(MealBuilder*), // overriden virtual procedure
-    void (*addBurger)(MealBuilder*),    // overriden virtual procedure
-    void (*addDrink)(MealBuilder*)){    // overriden virtual procedure
-
-  assert(pObj != NULL);
-  pObj->object = object;
-  pObj->startNewMeal = startNewMeal;
-  pObj->addBurger = addBurger;
-  pObj->addDrink = addDrink;
-}
-
-void MealBuilder_Destroy(MealBuilder* pObj){
-  assert(pObj !=NULL);
-  pObj->object = NULL;
-  pObj->startNewMeal = NULL;
-  pObj->addBurger = NULL;
-  pObj->addDrink = NULL;
-}
-
-// initializing VegetarianMealBuilder object
-void VegetarianMealBuilder_startNewMeal(MealBuilder* pObj){
-}
-
-void VegetarianMealBuilder_addBurger(MealBuilder* pObj){
-}
-
-void VegetarianMealBuilder_addDrink(MealBuilder* pObj){
-}
-
-Meal* VegetarianMealBuilder_getMeal(VegetarianMealBuilder* pObj){
-  return NULL;
-}
-
-void VegetarianMealBuilder_Init(VegetarianMealBuilder* pObj){
-  assert(pObj != NULL);
-  // initializing base object
-  MealBuilder_Init(
-      &pObj->base, 
-      (void*) pObj,
-      VegetarianMealBuilder_startNewMeal,
-      VegetarianMealBuilder_addBurger,
-      VegetarianMealBuilder_addDrink);  // initializing base object
-  // initializing derived object
-  pObj->_meal = NULL;
-  pObj->getMeal = VegetarianMealBuilder_getMeal;
-}
-
-void VegetarianMealBuilder_Destroy(VegetarianMealBuilder* pObj){
-  assert(pObj != NULL);
-  MealBuilder_Destroy(&pObj->base);
-//  Meal_Delete(pObj->_meal); pObj->_meal = NULL;
-  pObj->getMeal = NULL;
-}
-
-// initializing NonVegetarianMealBuilder object
-void NonVegetarianMealBuilder_startNewMeal(MealBuilder* pObj){
-}
-
-void NonVegetarianMealBuilder_addBurger(MealBuilder* pObj){
-}
-
-void NonVegetarianMealBuilder_addDrink(MealBuilder* pObj){
-}
-
-Meal* NonVegetarianMealBuilder_getMeal(NonVegetarianMealBuilder* pObj){
-  return NULL;
-}
-
-void NonVegetarianMealBuilder_Init(NonVegetarianMealBuilder* pObj){
-  assert(pObj != NULL);
-  // initializing base object
-  MealBuilder_Init(
-      &pObj->base, 
-      (void*) pObj,
-      NonVegetarianMealBuilder_startNewMeal,
-      NonVegetarianMealBuilder_addBurger,
-      NonVegetarianMealBuilder_addDrink);  // initializing base object
-  // initializing derived object
-  pObj->_meal = NULL;
-  pObj->getMeal = NonVegetarianMealBuilder_getMeal;
-}
-
 void global_test(){
   //Wrapper_test();
   //Bottle_test();
@@ -937,25 +1111,43 @@ void global_test(){
   //ChickenBurger_test();
   //Coke_test();
   //Pepsi_test();
-  Meal_test();
+  //Meal_test();
+  // VegetarianMealBuilder_test();
+  // NonVegetarianMealBuilder_test();
 }
 
 int main(int argc, char* argv[]){
+  //global_test();
+
   // creating vegetarian meal
   // First we create the appropriate concrete builder
-
+  VegetarianMealBuilder* vegBuilder = VegetarianMealBuilder_new();
   // Next we create a director which will use this builder
-
-  global_test();
-  
-  /*
-  VegBurger* p = VegBurger_new();
-  printf("%s\n",p->base.base.ops->name());
-  printf("%s\n",p->base.base.ops->packing()->pack());
-  printf("%f\n",p->base.base.ops->price());
-  VegBurger_delete(p);
-  */
-
+  DirectorCook cook;
+  DirectorCook_init(&cook, &vegBuilder->base);
+  // Next we let the cook prepare the meal
+  cook.makeMeal(&cook);
+  // Next we retrieve the meal object from the builder
+  Meal* vegMeal = vegBuilder->getMeal(vegBuilder);
+  // outputting results
+  printf("Veg Meal\n");
+  vegMeal->showItems(vegMeal);
+  printf("Total Cost: %f\n",vegMeal->getCost(vegMeal));
+  DirectorCook_destroy(&cook);
+  // same for non-vegetarian meal
+  NonVegetarianMealBuilder* nonVegBuilder = NonVegetarianMealBuilder_new();
+  // Next we create a director which will use this builder
+  DirectorCook_init(&cook, &nonVegBuilder->base);
+  // Next we let the cook prepare the meal
+  cook.makeMeal(&cook);
+  // Next we retrieve the meal object from the builder
+  Meal* nonVegMeal = nonVegBuilder->getMeal(nonVegBuilder);
+  // outputting results
+  printf("\nNon-Veg Meal\n");
+  nonVegMeal->showItems(nonVegMeal);
+  printf("Total Cost: %f\n",nonVegMeal->getCost(nonVegMeal));
+  DirectorCook_destroy(&cook);
+ 
   return 0;
 }
 

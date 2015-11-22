@@ -128,6 +128,8 @@
                       (else ; car1 == car2
                         (stream-cons car1 (stream-merge (s1 'cdr) (s2 'cdr)))))))))
 
-
-
+(define (stream-expand num den radix)
+  (stream-cons
+    (quotient (* num radix) den)
+    (stream-expand (remainder (* num radix) den) den radix)))
 

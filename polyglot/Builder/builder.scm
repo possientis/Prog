@@ -170,7 +170,7 @@
           'done
           (begin
             (let ((that (car items))) ; Scheme case insensitive, need 'that'
-              (display "Items : ")
+              (display "Item : ")
               (display (that 'name))
               (display ", Packing : ")
               (display ((that 'packing) 'pack))
@@ -387,3 +387,4 @@
 (display (nonVegMeal 'getCost))
 (newline)
 
+(exit 0)

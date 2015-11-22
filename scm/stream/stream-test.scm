@@ -192,6 +192,14 @@
                    (stream-scale s 5)))))
     (if (not (equal? (stream-take 15 s) '(1 2 3 4 5 6 8 9 10 12 15 16 18 20 24)))
       (display "stream: unit test 18.1 failing\n")))
+  ; stream-expand
+  (let ((s (stream-expand 1 7 10))) ; 1/7 = 0.1428571428 (base 10)
+    (if (not (equal? (stream-take 10 s) '(1 4 2 8 5 7 1 4 2 8)))
+      (display "stream: unit test 19.0 failing\n")))
+  (let ((s (stream-expand 1 3 2)))  ; 1/3 = 0.0101010101 (base 2)
+    (if (not (equal? (stream-take 10 s) '(0 1 0 1 0 1 0 1 0 1)))
+      (display "stream: unit test 19.1 failing\n")))
+ 
   ;
   (display "stream: unit test complete\n"))
 
