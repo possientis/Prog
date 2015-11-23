@@ -10,53 +10,39 @@ using System.Reflection;
 using System.Windows; // ??
 using System.Runtime.InteropServices; // [Optional] attribute
 using System.Collections.ObjectModel;
+using System.Threading;
 
 class Program
 {
 
   static void Main(string[] args)
   {
-    A a1 = new A("john", 3000);
-    A a2 = new A("paul", 2000);
-    A a3 = new A("luke", 4000);
-    A a4 = new A("matt",1000);
+    Console.WriteLine("Main thread starting ...");
 
-    List<A> list = new List<A>(10); // excess capacity, see TrimExcess
-    list.Add(a1);
-    list.Add(a2);
-    list.Add(a3);
-    list.Add(a4);
-    ShowList(list);
-    // TrueForAll
-    Console.WriteLine("All have salaries less than 5000: {0}", 
-        list.TrueForAll(x => x.Salary < 5000));
-    // AsReadOnly
-    ReadOnlyCollection<A> readList = list.AsReadOnly();
-    Console.WriteLine(readList.Count);
-    // TrimExcess
-    Console.WriteLine(list.Capacity);
-    list.TrimExcess();
-    Console.WriteLine(list.Capacity);
+    Thread worker1 = new Thread(BusyWait);
+    Thread worker2 = new Thread(BusyWait);
 
+    worker1.Start();
+    worker2.Start();
+
+
+    Console.WriteLine("Main thread ending ...");
 
   }
 
-  public static void ShowList(List<A> list){
-    foreach(A a in list){
-      Console.WriteLine("Name = {0}: Salary = {1}", a.Name,a.Salary);
+  public static void DoTimeConsumingWork(){
+    Thread.Sleep(5000); // 5 sec
+
+  }
+
+  public static void BusyWait(){
+    for(int i = 0; i < 1000000; ++i){
+      Console.WriteLine("I am busy waiting");
     }
-  }
-}
 
-// class A implements IComparable<A> interface and therefore provides default sorting functionality via Sort()
-class A : IComparable<A> {
-  public A(string name, int salary){Name = name; Salary = salary;}
-  public string Name {get; set;}
-  public int Salary {get; set;}
-
-  public int CompareTo(A a){
-    return Salary.CompareTo(a.Salary);  // 'int' implements IComparable<int>
   }
+
+
 }
 
 

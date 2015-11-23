@@ -1,56 +1,91 @@
---import System.Directory
+import Control.Monad
+import System.Directory
+import Data.List
+import System.IO
 
-main :: IO ()
-main = main2
+-- done is neutral element of binary operator (>>) :: IO() -> IO () -> IO ()
+-- (>>) is associative
+done :: IO ()
+done = return ()
 
-main1 :: IO ()
-main1 = do
-  putStrLn "What is your name? (version 1)"
-  name <- getLine
-  putStrLn ("Nice to meet you, " ++ name ++ "!")
+-- a simple procedure taking no argument. type is IO ()
+proc1 = putChar 'a' >> putStr "bcd" >> putStrLn "efg" >> done
+-- attempting to redefine putStr
+proc2 :: String -> IO ()
+proc2 [] = done
+proc2 (x:xs) = putChar x >> proc2 xs
 
-main2 :: IO ()
-main2 =
-  putStrLn "What is your name? (version 2)" >>
-  getLine >>= \name ->
-  putStrLn("Nice to meet you, " ++ name ++ "!")
+-- more conceisely
+proc3 :: String -> IO()
+proc3 xs = foldr (>>) done (map putChar xs)
 
-f :: IO (Char,Char)
-f = do
-  x <- getChar
-  _ <- getChar
-  z <- getChar
-  return (x,z)
+-- even more concisely
+proc4 :: String -> IO()
+proc4 xs = ((foldr (>>) done) . (map putChar)) xs
 
-g :: IO (Char,Char)
-g = getChar >>= \x ->
-      getChar >>= \_ ->
-        getChar >>= \z ->
-          return (x,z)
+-- even more concisely
+proc5 :: String -> IO()
+proc5 = (foldr (>>) done) . (map putChar)
 
-myGetLine :: IO String
-myGetLine = do
-  x <- getChar
-  if x == '\n' then
-    return []
+-- no brackets needed
+proc6 :: String -> IO ()
+proc6 = foldr (>>) done . map putChar
+
+proc7 = getChar >>= \x -> putChar x
+
+-- redefining getLine -wowowowowow
+proc8 :: IO String
+proc8 = getChar >>= \x ->
+        if x == '\n' then 
+          return []
+        else 
+          proc8 >>= \xs ->
+          return (x:xs)
+        
+-- same code with 'do' notation
+proc8' :: IO String
+proc8' =  do {
+            x <- getChar;
+            if x == '\n' then
+              return []
+            else do {
+              xs <- getLine;
+              return (x:xs)
+            }
+           }
+-- note that (>>) is a particular case of (>>=)
+-- m >> n = m >>= \x ->  n
+(££) :: IO () -> IO () -> IO ()
+m ££ n = m >>= \x ->  n -- x can only be ()
+
+-- let us redefine putStr with (££)
+proc9 :: String -> IO ()
+proc9 = foldr (££) done . map putChar
+
+
+echo :: IO ()
+echo = getLine >>= \line ->
+  if line == "" then
+    return ()
   else
-    do
-      xs <- myGetLine
-      return (x:xs)
+    putStrLn line >>
+    echo
 
-myPutStr :: String -> IO ()
-myPutStr [] = return ()
-myPutStr (x:xs) = do
-                  putChar x
-                  myPutStr xs
-myPutStrLn :: String -> IO ()
-myPutStrLn xs = do myPutStr xs
-                   putChar '\n'
+-- same with do notation
+echo' :: IO ()
+echo' = do {
+            line <- getLine;
+            if line == "" then
+              return ()
+            else do {
+              putStrLn line;
+              echo
+            }
+            }
+-- either evaluate 'main' from ghci or compile and run program
+main :: IO ()
+main = proc7
 
-strlen :: IO ()
-strlen = do putStr "Enter a string: "
-            xs <- getLine
-            putStr "The string has "
-            putStr (show (length xs))
-            putStrLn " characters"
+
+
 
