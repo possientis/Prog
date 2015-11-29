@@ -1,7 +1,6 @@
 #include <linux/version.h>
-//#include <linux/init.h>
-//#include <linux/module.h>
-MODULE_LICENSE("Dual BSD/GPL");
+#include <linux/init.h>
+#include <linux/module.h>
 
 static int hello_init(void)
 {

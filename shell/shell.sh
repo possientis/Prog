@@ -1,5 +1,8 @@
-#!/bin/sh
-. ./common.sh
+#!/bin/bash
 
-echo $STD_MSG
-rename .bak .txt
+function foo {
+  ls -la
+  cd /
+}
+
+foo
