@@ -101,7 +101,7 @@ public class Prototype {
 
     // need a prototype manager
     PrototypeManager manager = new PrototypeManager();
-    // prototype manager registers a few prototype
+    // prototype manager registers a few prototypes
     manager.loadCache();
     // prototype manager can now be used as factory object
     Shape clonedShape1 = manager.getShape("1");

@@ -26,7 +26,7 @@ abstract class Shape : ICloneable {
 class Rectangle : Shape {
 
   public override void Draw(){
-    Console.WriteLine("Inside Rectangle::Draw() method.");
+    Console.WriteLine("Inside Rectangle::draw() method.");
   }
 
   public override object Clone(){
@@ -40,7 +40,7 @@ class Rectangle : Shape {
 class Square : Shape {
 
   public override void Draw(){
-    Console.WriteLine("Inside Square::Draw() method.");
+    Console.WriteLine("Inside Square::draw() method.");
   }
 
   public override object Clone(){
@@ -54,7 +54,7 @@ class Square : Shape {
 class Circle : Shape {
 
   public override void Draw(){
-    Console.WriteLine("Inside Circle::Draw() method.");
+    Console.WriteLine("Inside Circle::draw() method.");
   }
 
   public override object Clone(){
