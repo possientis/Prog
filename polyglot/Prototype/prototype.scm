@@ -135,4 +135,5 @@
 (define clonedShape3 ((manager 'getShape) "3"))
 (clonedShape3 'draw)
 
+(exit 0)
 
