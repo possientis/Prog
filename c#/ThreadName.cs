@@ -26,6 +26,11 @@ class Program
     Thread worker3 = new Thread(MyTask);
     Thread worker4 = new Thread(MyTask);
     Thread worker5 = new Thread(MyTask);
+    worker1.Name = "T1";
+    worker2.Name = "T2";
+    worker3.Name = "T3";
+    worker4.Name = "T4";
+    worker5.Name = "T5";
     Stopwatch stop = new Stopwatch();
     stop.Start();
     worker1.Start();
@@ -48,6 +53,10 @@ class Program
   }
 
   public static void MyTask(){
+    Console.WriteLine(
+      "Thread {0} has started ...", 
+      Thread.CurrentThread.Name
+    );
     for(int i = 0; i < 1000000; ++i){
     // ++sum;  // no synchronization, very quick but no correctness
     //  Interlocked.Increment(ref sum); // atomic ++sum; 
