@@ -51,7 +51,31 @@
 (define series-cos
   (stream-cons 1 (series-integrate (stream-scale series-sin -1))))
 
+(define (series-mul s1 s2)
+  (stream-cons 
+    (* (s1 'car) (s2 'car))               ; s1(0).s2(0)
+    (stream-add
+      (stream-scale (s2 'cdr) (s1 'car))  ; (s2(1) + x.s2(2) + ... ). s1(0)
+      (series-mul (s1 'cdr) s2))))        ; (s1(1) + x.s1(2) + ... ). s2 
 
+(define series-check  ; should be 1 + 0x + 0x^2 + ...
+  (stream-add
+    (series-mul series-sin series-sin)
+    (series-mul series-cos series-cos)))
+
+; looking for t such that s.t = 1 + 0.x + 0.x^2 + ...
+; which is (s(0) + x.(s(1) + ...)).t = 1
+; hence the recursive formula: t = s(0)^(-1).[1 - x.s'.t]
+; where s' = (s(1) + s(2)x + ...) = (s 'cdr)
+(define (series-inverse s)      ; need s(0) != 0
+  (stream-scale
+    (stream-cons 1 (stream-scale (series-mul (s 'cdr) (series-inverse s)) -1))
+    (/ 1 (s 'car))))
+
+(define s (series-inverse series-cos))
+(define t (series-mul s series-cos))
+
+    
 
 
 

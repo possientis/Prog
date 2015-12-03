@@ -7,6 +7,7 @@ rm -f logic/logic.out
 rm -f logic/logic.toc
 rm -f logic/logic.pdf
 rm -f c/a.out
+rm -f c/*.o
 rm -f c#/*.exe
 rm -f haskell/*.hi
 rm -f haskell/*.o

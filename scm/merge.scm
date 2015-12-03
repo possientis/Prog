@@ -40,7 +40,7 @@
   (let loop ((acc '()) (n n))
     (if (<= n 0) acc
       (loop (cons n acc) (- n 1)))))
-
+; 'ulimit -s unlimited' for unlimited stack 
 ; this will blow the stack with 100000
 (define (seq2 n)
   (if (<= n 0) '()

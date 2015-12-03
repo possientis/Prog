@@ -34,7 +34,7 @@
     (define (base data)
       (cdr data)) ; data expected to be the pair (ID, base)
     ; returning no argument constructor
-    (lambda () (this (cons #f (Cloneable))))))
+    (lambda () (this (cons #f (Cloneable)))))) ; ID = #f , base = (Cloneable)
 
 (define Rectangle ; constructor
   (let ((static_ #f)) ; dummy field, achives name encapsulation and readability

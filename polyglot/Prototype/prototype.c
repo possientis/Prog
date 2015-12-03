@@ -12,7 +12,10 @@
 // operations on Cloneable
 typedef struct Cloneable_ Cloneable;  // see below
 struct Cloneable_ops {
+  int alive;                  // 1 (alive) or 0 (dead)
+  int refcount;               // counting instances of base class Cloneable
   Cloneable* (*clone)(Cloneable* self);
+  void (*delete)(Cloneable* ptr);
 };
 
 // possible value of 'clone' field
@@ -25,12 +28,16 @@ Cloneable* Cloneable_ops_clone(Cloneable* self){
 void Cloneable_ops_init(struct Cloneable_ops* ptr, Cloneable* (*func)(Cloneable*)){
   assert(ptr != NULL);
   ptr->clone = func;
+  ptr->refcount = 0;
+  ptr->alive = 1;
 }
 
 // destroy
 void Cloneable_ops_destroy(struct Cloneable_ops* ptr){
   assert(ptr != NULL);
   ptr->clone = NULL;
+  ptr->refcount = 0;
+  ptr->alive = 0;
 }
 
 // new
@@ -38,7 +45,11 @@ struct Cloneable_ops* Cloneable_ops_new(Cloneable* (*func)(Cloneable*)){
   struct Cloneable_ops* ptr = (struct Cloneable_ops*) malloc(
       sizeof(struct Cloneable_ops)
   );
+  assert(ptr != NULL);
   Cloneable_ops_init(ptr, func);
+  assert(ptr->refcount == 0);
+  assert(ptr->alive == 1);
+  assert(ptr->clone == func);
   return ptr;
 }
 
@@ -49,36 +60,71 @@ void Cloneable_ops_delete(struct Cloneable_ops* ptr){
   free(ptr);
 }
 
-// there should only be one Cloneable operation instance per class
-// shared by all instances of Cloneable. This function maintains a 
-// reference count of all Cloneable instances.
-int Cloneable_ops_refcount_base(int add){
-  static int count = 0;  // reference counter     
-  count += add;
-  return count;
-}
 
-// maintains a unique pointer. reset = 1 to allocate new
-struct Cloneable_ops_pointer_base(int reset){
-}
+struct Cloneable_ops* Cloneable_ops_Cloneable_get_instance(){
+  static struct Cloneable_ops* instance = NULL;
 
-
-
-struct Cloneable_ops* Cloneable_ops_get_instance_base(){
-  static struct Cloneable_ops* instance = NULL; // unique instance for base class
-  int refcount = Cloneable_ops_refcount_base(1);// one more Cloneable
-  if(instance == NULL){     // no instance currently held
-    assert(refcount == 1);  // it had to be zero prior to increment
-    instance = Cloneable_ops_new(Cloneable_ops_clone);
+  if(instance != NULL && instance->alive == 0){
+    instance = NULL;  //instance was stale
   }
-  assert(refcount > 0);
+  if(instance == NULL){
+    instance = Cloneable_ops_new(Cloneable_ops_clone);
+    assert(instance != NULL);
+    assert(instance->refcount == 0);
+    assert(instance->alive == 1);
+    assert(instance->clone == Cloneable_ops_clone);
+  }
+
   assert(instance != NULL);
+  assert(instance->refcount >= 0);
+  assert(instance->alive == 1);
+  assert(instance->clone == Cloneable_ops_clone);
+  instance->refcount++;
   return instance;
 }
 
-void Cloneable_ops_instance_free_instance_base(){
-  int refcount = Cloneable_ops_refcount_base(-1);
-  assert(refcount >= 0);
+void Cloneable_ops_Cloneable_free_instance(struct Cloneable_ops* ptr){
+  assert(ptr != NULL);
+  assert(ptr->refcount > 0);
+  assert(ptr->alive = 1);
+  assert(ptr->clone = Cloneable_ops_clone);
+  ptr->refcount--; 
+  if(ptr->refcount == 0){
+    Cloneable_ops_destroy(ptr);
+    free(ptr);
+  }
+}
+
+typedef struct Cloneable_ Cloneable;  // see below
+struct Cloneable_ {
+  void *obj;                  // concrete object
+  struct Cloneable_ops* ops;  // concrete implementation of virtual clone
+};
+
+void Cloneable_init(Cloneable* ptr, void* obj, struct Cloneable_ops* ops){
+  assert(ptr != NULL);
+  ptr->obj = obj;
+  ptr->ops = ops;
+}
+
+void Cloneable_destroy(Cloneable* ptr){
+  assert(ptr != NULL);
+  ptr->obj = NULL;
+  ptr->ops = NULL;
+}
+
+Cloneable* Cloneable_new(){
+  Cloneable* ptr = (Cloneable*) malloc(sizeof(Cloneable));
+  assert(ptr != NULL);
+  void* obj = (void*) ptr;
+  struct Cloneable_ops* ops = Cloneable_ops_Cloneable_get_instance();
+  Cloneable_init(ptr,obj,ops);
+  return ptr;
+}
+
+void Cloneable_delete(Cloneable* ptr){
+  assert(ptr != NULL);
+
 }
 
 
@@ -93,13 +139,28 @@ void basic_test(){
   assert(ptr != NULL);
   ptr->clone(NULL);
   Cloneable_ops_delete(ptr);
+  //
+  ptr = Cloneable_ops_Cloneable_get_instance();
+  assert(ptr != NULL);
+  assert(ptr->refcount == 1);
+  ptr = Cloneable_ops_Cloneable_get_instance();
+  assert(ptr->refcount == 2);
+  ptr->clone(NULL);
+  Cloneable_ops_Cloneable_free_instance(ptr);
+  assert(ptr->refcount == 1);
+  Cloneable_ops_Cloneable_free_instance(ptr);
+  ptr = Cloneable_ops_Cloneable_get_instance();
+  assert(ptr->refcount == 1);
+  ptr = Cloneable_ops_Cloneable_get_instance();
+  assert(ptr->refcount == 2);
+  Cloneable_ops_Cloneable_free_instance(ptr);
+  Cloneable_ops_Cloneable_free_instance(ptr);
 }
 
 
 int main(int argc, char* argv[]){
 
   basic_test();
-
   return 0;
 }
 
