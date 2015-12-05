@@ -72,8 +72,11 @@
     (stream-cons 1 (stream-scale (series-mul (s 'cdr) (series-inverse s)) -1))
     (/ 1 (s 'car))))
 
-(define s (series-inverse series-cos))
-(define t (series-mul s series-cos))
+(define (series-div s1 s2)
+  (series-mul s1 (series-inverse s2)))
+
+(define series-tan
+  (series-div series-sin series-cos))
 
     
 

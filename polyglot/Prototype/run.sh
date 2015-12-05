@@ -14,3 +14,6 @@ python3 prototype.py
 
 echo '\nThis is Scheme ...'
 scm prototype.scm
+
+echo '\nThis is C ...'
+gcc prototype.c; ./a.out; rm a.out
