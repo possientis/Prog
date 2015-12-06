@@ -20,3 +20,8 @@ count :: NestedList a -> Int
 count Nil = 0
 count (x:|:xs) = 1 + count xs
 count (xs:||:ys) = count xs + count ys
+
+flatten :: NestedList a -> [a]
+flatten Nil = []
+flatten (xs :||: ys) = flatten xs ++ flatten ys
+flatten (x :|: xs ) = x:flatten xs

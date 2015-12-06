@@ -1,35 +1,33 @@
-; implementation of standard lists a difference lists
-(define diff-nil  ; returns empty list
-  (cons '() '()))
+(define diff-nil
+  (lambda (ys) ys))
 
-(define (diff-cons a b)
-  (cons (cons a (car b)) (cdr b)))
+(define (diff-null? xs)
+  (eq? '() (xs '())))
 
-(define (diff-null? a)
-  (eq? (car a) (cdr a)))
+(define (diff-cons x xs)
+  (lambda (ys) (cons x (xs ys))))
 
-(define (diff-car a)
-  (if (diff-null? a) (car '())  ; error
-    (caar a)))
+(define (diff-car xs)
+  (car (xs '())))
 
-(define (diff-cdr a)
-  (if (diff-null? a) (cdr '())  ; error
-    (cons (cdar a) (cdr a))))
+(define (diff-cdr xs)
+  (lambda (ys) 
+    (cdr (xs ys))))
 
-; converts difference list to standard list
-(define (diff->list a)
-  (if (diff-null? a) '()
-    (cons (diff-car a) (diff->list (diff-cdr a)))))
+(define (list->diff xs)
+  (if (null? xs) diff-nil
+    (diff-cons (car xs) (list->diff (cdr xs)))))
 
-; converts standard list to difference list
-(define (list->diff a)
-  (if (null? a) diff-nil
-    (diff-cons (car a) (list->diff (cdr a)))))
+(define (diff->list xs)
+  (xs '()))
 
-; append operation is constant time for difference lists
-(define (diff-append s1 s2)
-  'ok)
+(define (diff-append xs ys)
+  (lambda (zs) (xs (ys zs))))
 
-(define x (list->diff '(0 1 2 3 4 5 6 7)))
+(define s (list->diff '(0 1 2 3 4 5 6 7 8 9)))
+(define t (list->diff '(10 11 12 13 14 15)))
+(define u (diff-append s t))
+
+
 
 
