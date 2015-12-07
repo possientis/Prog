@@ -12,6 +12,7 @@ rm -f c#/*.exe
 rm -f haskell/*.hi
 rm -f haskell/*.o
 rm -f haskell/test
+rm -f asm/*.o
 git status
 
 

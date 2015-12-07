@@ -1,4 +1,7 @@
 import Data.List  -- nub
+import Data.Char
+import Parser
+
 type Name = String
 data Prop = Var Name
           | F
@@ -6,7 +9,7 @@ data Prop = Var Name
           | Not Prop
           | Prop :|: Prop
           | Prop :&: Prop
-          deriving (Eq, Ord, Show)
+          deriving (Eq, Ord)
 
 type Names = [Name]
 type Env = [(Name,Bool)]
@@ -42,5 +45,44 @@ names (x :&: y) = nub ((names x) ++ (names y))
 
 satisfiable :: Prop -> Bool
 satisfiable p = or [eval e p | e <- envs (names p)]
+
+instance Show Prop where
+  show (Var x)    = x
+  show F          = "F"
+  show T          = "T"
+  show (Not p)    = par ("~" ++ show p)
+  show (p :|: q)  = par (show p ++ "|" ++ show q)
+  show (p :&: q)  = par (show p ++ "&" ++ show q)
+
+par :: String -> String
+par s = "(" ++ s ++ ")"
+
+
+propP :: Parser Prop
+propP = varP `mplus` falseP `mplus` trueP `mplus`
+        notP `mplus` orP `mplus` andP
+
+varP :: Parser Prop
+varP = spot isLower >>= (\x -> return (Var [x]))
+
+falseP :: Parser Prop
+falseP = token 'F' >> return F
+
+trueP :: Parser Prop
+trueP = token 'T' >> return T
+
+notP :: Parser Prop
+notP = parP (token '~' >> propP >>= (\x -> return (Not x)))
+
+orP :: Parser Prop
+orP = parP (propP >>= (\p -> token '|' >>  propP >>= (\q -> return (p:|:q))))
+
+andP :: Parser Prop
+andP = parP (propP >>= (\p -> token '&' >>  propP >>= (\q -> return (p:&:q))))
+
+
+parP :: Parser Prop -> Parser Prop
+parP p = token '(' >> p >>= (\x -> token ')' >> return x)
+
 
 
