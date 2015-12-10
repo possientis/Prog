@@ -13,7 +13,7 @@
     (define (this data) ; data ignored here
       (lambda (m)  
         (cond ((eq? m 'clone) (display "Cloneable::clone is not implemented\n"))
-        (else (display "Cloneable: unknown operation error\n")))))
+              (else (display "Cloneable: unknown operation error\n")))))
     ; returning no argument constructor
     (lambda () (this 'ignored))))
 
