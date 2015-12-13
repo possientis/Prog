@@ -14,3 +14,6 @@ python3 adapter.py
 
 echo '\nThis is Scheme ...'
 scm adapter.scm
+
+echo '\nThis is C ...'
+gcc adapter.c; ./a.out; rm a.out

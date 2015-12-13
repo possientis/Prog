@@ -15,46 +15,29 @@ using System.Threading;
 class Program
 {
 
-  public static bool FindA(A x){
-    return x.a == 12;
+  delegate T OnDemand<T>();
+
+  static Nullable<int> CreateSimpleNullable(int item){
+    return new Nullable<int>(item);
+  }
+
+  static OnDemand<T> CreateSimpleOnDemand<T>(T item){
+    return () => item;
+  }
+
+  static IEnumerable<T> CreateSimpleSequence<T>(T item){
+    yield return item;
   }
 
   public static void Main(string[] args)
   {
-    List<A> list =new List<A>(){
-      new A(12),
-      new A(7),
-      new A(13)
-    };
+    Nullable<int> x = new Nullable<int>();
+    Console.WriteLine(x.HasValue);
 
-    //Func<A,int> func = (A x) => x.a;
-    //IEnumerable<int> ints = list.Select(func);
-    IEnumerable<int> ints = list.Select(x => x.a);
-    foreach(int x in ints){
-      Console.WriteLine("a = {0}", x);
-    }
-
-    //A a = list.Find(x => x.a == 12);
-    //A a = list.Find((A x) => {return x.a == 12;});
-    A a = list.Find((A x) => x.a == 12);
-    //A a = list.Find(FindA);
-    //A a = list.Find(new Predicate<A>(FindA));
-    //A a = list.Find(delegate(A x){return x.a == 12;});
-
-    if(a != null){
-      Console.WriteLine("Object found: {0}", a.a);
-    } else{
-      Console.WriteLine("Object not found ...");
-    }
 
   }
-
 }
 
-class A {
-  public int a;
-  public A(int a){this.a = a;}
-}
 
       /*
       Stopwatch stop = new Stopwatch();
