@@ -133,3 +133,32 @@
     (quotient (* num radix) den)
     (stream-expand (remainder (* num radix) den) den radix)))
 
+
+(define (stream-interleave s1 s2)
+  (if (s1 'null?) 
+    s2
+    (stream-cons (s1 'car)
+                 (stream-interleave s2 (s1 'cdr)))))
+
+(define (stream-upper-pairs s1 s2)
+  (cond ((s1 'null?) (stream))
+        ((s2 'null?) (stream))
+        (else (stream-cons
+                (list (s1 'car) (s2 'car))
+                (stream-interleave
+                  (stream-map (lambda (x) (list (s1 'car) x))
+                              (s2 'cdr))
+                  (stream-upper-pairs (s1 'cdr) (s2 'cdr)))))))
+(define (stream-pairs s1 s2)
+  (cond ((s1 'null?) (stream))
+        ((s2 'null?) (stream))
+        (else (stream-cons
+                (list (s1 'car) (s2 'car))
+                (stream-interleave
+                  (stream-interleave
+                    (stream-map (lambda (x) (list (s1 'car) x))
+                                (s2 'cdr))
+                    (stream-map (lambda (x) (list x (s2 'car)))
+                                (s1 'cdr)))
+                  (stream-pairs (s1 'cdr) (s2 'cdr)))))))
+

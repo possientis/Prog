@@ -199,7 +199,25 @@
   (let ((s (stream-expand 1 3 2)))  ; 1/3 = 0.0101010101 (base 2)
     (if (not (equal? (stream-take 10 s) '(0 1 0 1 0 1 0 1 0 1)))
       (display "stream: unit test 19.1 failing\n")))
- 
+  ; stream-interleave
+  (let ((s1 (stream-range 0 9))(s2 (stream-range 10 19)))
+    (let ((s (stream-interleave s1 s2)))
+      (if (not (equal? (stream->list s) 
+                       '(0 10 1 11 2 12 3 13 4 14 5 15 6 16 7 17 8 18 9 19)))
+        (display "stream: unit test 20.0 failing\n"))))
+  ; stream-upper-pairs
+  (let ((s1 (stream-range 0 3)) (s2 (stream-range 10 13)))
+    (let ((s (stream-upper-pairs s1 s2)))
+      (if (not (equal? 
+                 (stream->list s)
+                 '((0 10)(0 11)(1 11)(0 12)(1 12)(0 13)(2 12)(1 13)(2 13)(3 13))))
+        (display "stream: unit test 21.0 failing\n"))))
+  ; stream-pairs
+  (let ((s1 (stream-range 0 2)) (s2 (stream-range 10 12)))
+    (let ((s (stream-pairs s1 s2)))
+      (if (not (equal? (stream->list s)
+                       '((0 10)(0 11)(1 11)(1 10)(1 12)(0 12)(2 12)(2 10)(2 11))))
+        (display "stream: unit test 22.0 failing\n"))))
   ;
   (display "stream: unit test complete\n"))
 

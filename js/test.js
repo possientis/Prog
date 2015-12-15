@@ -1,13 +1,27 @@
-var x = 5;
-var y;
+print(Number.MAX_VALUE);
+print(Number.MIN_VALUE);
+var str = "Here are some escaped characters \"";
+print(str);
+print(str.substring(5,10));
 
-function foo(x,y){
-  return x + y;
+function Animal(breed){
+  this.breed = breed;
+  this.bar = function(){
+    print("Animal::bar is running");
+  }
 }
 
-var bar = function(x,y){return x + y;}
+Animal.prototype.foo = function(){
+  print("Animal::foo is running");
+}
 
-var z = bar(3,7);
+var dog = new Animal("abc");
 
-var i =0;
+dog.name = "doggy";
+
+print(dog.name);
+dog.foo();
+dog.bar();
+print(dog.breed);
+
 
