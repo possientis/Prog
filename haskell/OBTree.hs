@@ -1,3 +1,5 @@
+import Data.Sequence
+
 data OBTree k v = Leaf | Node k v (OBTree k v) (OBTree k v) deriving Show
 
 insert :: Ord k => OBTree k v -> k -> v -> (OBTree k v)
@@ -19,6 +21,8 @@ tree1 :: OBTree Int String
 tree1 = listToTree  [(1,"john"),(3,"paul"),(2,"matthew"),(5,"luc"),(0,"jesus"),
                     (-1,"edward"),(4,"george")]
 
+tree2 = insert tree1 6 "thomas"
+
 depthFirst :: (Show k, Show v)  => OBTree k v -> IO ()
 depthFirst Leaf = return ()
 depthFirst (Node k v t1 t2) = depthFirst t1 >> putStrLn (show (k,v)) >> depthFirst t2
@@ -26,6 +30,7 @@ depthFirst (Node k v t1 t2) = depthFirst t1 >> putStrLn (show (k,v)) >> depthFir
 depthFirstList :: OBTree k v -> [(k,v)]
 depthFirstList Leaf = []
 depthFirstList (Node k v t1 t2) = depthFirstList t1 ++ [(k,v)] ++ depthFirstList t2
+
 
 
 

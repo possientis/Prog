@@ -3,48 +3,53 @@
 // bridge implementation interface
 function DrawAPI(){
 };
-
-
 DrawAPI.prototype.drawCircle = function(radius, x, y){
   print("DrawAPI::drawCircle is not implemented");
 }
 
-
 // concrete bridge implementation classes implementing DrawAPI interface
 function RedCircle(){
+  DrawAPI.call(this);                     // not useful as DrawAPI has no data
 };
-this.__proto__ = RedCircle.prototype; // redundant.
-RedCircle.prototype.__proto__ = new DrawAPI();
+RedCircle.prototype =  Object.create(DrawAPI.prototype);
 RedCircle.prototype.drawCircle = function(radius, x, y){
   print("Drawing Circle[ color: red  , radius: "+radius+", x: "+x+", y: "+y+"]");
 };
 
 function GreenCircle(){
+  DrawAPI.call(this);                      // not useful as DrawAPI has no data
 };
-GreenCircle.prototype.__proto__ = new DrawAPI();
+GreenCircle.prototype =  Object.create(DrawAPI.prototype);
 GreenCircle.prototype.drawCircle = function(radius, x, y){
   print("Drawing Circle[ color: green, radius: "+radius+", x: "+x+", y: "+y+"]");
 };
-
 
 // create an abstract class Shape using the DrawAPI interface.
 function Shape(drawAPI){
   this.drawAPI = drawAPI;
 };
-
-Shape.prototype.draw = function(){  // abstraction need not follow imp API
+Shape.prototype.draw = function(){
   print("Shape::draw is not implemented");
 };
 
 // create concrete class implementing the Shape interface (abstract class)
 function Circle(x, y, radius, drawAPI){
+  Shape.call(this, drawAPI);
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+};
+Circle.prototype = Object.create(Shape.prototype);
+Circle.prototype.draw = function(){
+  this.drawAPI.drawCircle(this.radius,this.x,this.y);
 };
 
-redCircle = new RedCircle();
-redCircle.drawCircle(10,100,100);
-drawAPI = redCircle.__proto__;
-drawAPI.drawCircle(10,100,100);
+// Use Shape and DrawAPI classes to draw different colored circles
+redCircle = new Circle(100, 100, 10,new RedCircle());
+greenCircle = new Circle(100, 100, 10, new GreenCircle());
 
-function f(x){print(x == undefined);};
-print(Object.prototype.__proto__ == null);
-print(typeof(Object.prototype))
+redCircle.draw();
+greenCircle.draw();
+
+
+
