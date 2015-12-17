@@ -162,3 +162,23 @@
                                 (s1 'cdr)))
                   (stream-pairs (s1 'cdr) (s2 'cdr)))))))
 
+; the following code fails on infinite streams. The reason is
+; the lack of 'stream-cons' to block eager evaluation.
+; So stream-upper-pairs2 calls stream-interleave which forces
+; evaluation of its second argument, trigerring a new call
+; to stream-upper-pairs2, thus creating an inifinite chain
+; of mutually recursive calls between the two functions
+
+(define (stream-upper-pairs2 s1 s2)
+  (cond ((s1 'null?) (stream))
+        ((s2 'null?) (stream))
+        (else (stream-interleave
+                (stream-map (lambda (x) (list (s1 'car) x)) s2)
+                (stream-upper-pairs2 (s1 'cdr) (s2 'cdr))))))
+                  
+(define s1 (list->stream '(0 1 2 3)))
+(define s2 (list->stream '(10 11 12 13)))
+(define s (stream-upper-pairs s1 s2))
+(stream-display s)(newline)
+
+
