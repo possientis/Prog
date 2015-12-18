@@ -1,4 +1,4 @@
-module Queue (Queue, push, peek, pop, isEmpty, empty) where
+module Queue (Queue, push, peek, pop, isEmpty, empty, toList) where
 
 newtype Queue a = MkQueue ([a],[a])
 
@@ -24,8 +24,11 @@ pop :: Queue a -> Queue a
 pop (MkQueue ([],[])) = empty
 pop (MkQueue (x:fs,bs)) = clean (MkQueue (fs,bs))
 
+toList :: Queue a -> [a]
+toList (MkQueue (fs,bs)) = fs ++ reverse bs
+
 instance Show a => Show (Queue a) where
-  show (MkQueue (fs,bs)) = show (fs ++ reverse bs)
+  show q = show (toList q)
 
 
 

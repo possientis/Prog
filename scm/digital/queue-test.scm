@@ -7,7 +7,7 @@
   (define list-a '("hello" #\a 'foo))
   ;;
   (display "queue: starting unit test\n")
-  ;; checking initial stats
+  ;; checking initial state
   (if (not (a 'isempty?)) (display "queue: unit-test 1 failing\n"))
   (if (not (b 'isempty?)) (display "queue: unit-test 2 failing\n"))
   ;; adding one element to queue

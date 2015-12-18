@@ -63,7 +63,7 @@
       (lambda (m)
         (cond ((eq? m 'draw) (draw data))
               ((eq? m 'drawAPI) (_drawAPI data))
-              (else (display "Shape: unkown operation error\n")))))
+              (else (display "Shape: unknown operation error\n")))))
     (define (_drawAPI data)
       data)               ; data is simply _drawAPI
     (define (draw data)
