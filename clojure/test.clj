@@ -1,7 +1,17 @@
-(println "Hello world")
+(def f
+  (fn [x] 
+    (defn g [x] (* 2 x))
+    (* (g x) (g x))))
 
-(defn factorial [n]
-  (if (< n 1) 1
-    (* n (factorial (- n 1)))))
 
-(println (factorial 5))
+(def g 
+  (let [a 3]
+    (defn h [x] (* x x))
+    (* a a)))
+
+
+
+(println f)
+;(println a)
+(println g)
+(println h)

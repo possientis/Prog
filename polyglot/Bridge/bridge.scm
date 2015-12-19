@@ -1,6 +1,5 @@
 ; Bridge design pattern
 
-
 ; bridge implementation interface
 (define DrawAPI           ; constructor
   (let ((_static #f))     ; dummy 'let' field for name encapsulation

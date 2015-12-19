@@ -176,9 +176,31 @@
                 (stream-map (lambda (x) (list (s1 'car) x)) s2)
                 (stream-upper-pairs2 (s1 'cdr) (s2 'cdr))))))
                   
-(define s1 (list->stream '(0 1 2 3)))
-(define s2 (list->stream '(10 11 12 13)))
-(define s (stream-upper-pairs s1 s2))
-(stream-display s)(newline)
+(define (stream-upper-triples s1 s2 s3)
+  (cond ((s1 'null?) (stream))
+        ((s2 'null?) (stream))
+        ((s3 'null?) (stream))
+        (else (stream-cons
+                (list (s1 'car) (s2 'car) (s3 'car))
+                (stream-interleave
+                  (stream-map (lambda (x) (list (s1 'car) (s2 'car) x))
+                              (s3 'cdr))
+                  (stream-interleave
+                    (stream-map (lambda (x) (cons (s1 'car) x))
+                                (stream-upper-pairs (s2 'cdr) (s3 'cdr)))
+                    (stream-upper-triples (s1 'cdr) (s2 'cdr) (s3 'cdr))))))))
 
+(define (square x) (* x x))
+
+(define (pythagoras-triple? x)
+  (= (square (caddr x)) (+ (square (cadr x)) (square (car x)))))
+
+(define triples 
+  (let ((integers (integers-from 1)))
+    (stream-upper-triples integers integers integers)))
+
+(define pythagoras (stream-filter pythagoras-triple? triples)) 
+
+(display (stream-take 3 pythagoras))
+(newline)
 
