@@ -1,4 +1,4 @@
-import Data.Sequence
+import Queue
 
 data OBTree k v = Leaf | Node k v (OBTree k v) (OBTree k v) deriving Show
 
@@ -30,6 +30,17 @@ depthFirst (Node k v t1 t2) = depthFirst t1 >> putStrLn (show (k,v)) >> depthFir
 depthFirstList :: OBTree k v -> [(k,v)]
 depthFirstList Leaf = []
 depthFirstList (Node k v t1 t2) = depthFirstList t1 ++ [(k,v)] ++ depthFirstList t2
+
+breastFirst :: (Show k, Show v) => OBTree k v -> IO ()
+breastFirst tree = processQueue (push empty tree) where
+  processQueue :: (Show k, Show v) => Queue (OBTree k v) -> IO ()
+  processQueue q =  if isEmpty q then return () else let top = peek q in
+                    case top of
+                      Just Leaf -> processQueue (pop q)
+                      Just (Node k v t1 t2) -> do
+                        putStrLn (show (k,v))
+                        processQueue (push (push (pop q) t1) t2)
+
 
 
 

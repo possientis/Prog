@@ -23,4 +23,6 @@ scm bridge.scm
 echo '\nThis is Clojure ...'
 clojure bridge.clj
 
+echo '\nThis is Haskell ...'
+ghc -v0 bridge.hs; ./bridge; rm bridge bridge.o bridge.hi
 

@@ -1,3 +1,5 @@
+; Factory design pattern
+
 (define (IShape hook)
   ; interface
   (define (this m)

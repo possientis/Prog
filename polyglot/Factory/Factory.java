@@ -1,3 +1,5 @@
+// Factory design pattern
+
 interface IShape {
   void draw();
 }

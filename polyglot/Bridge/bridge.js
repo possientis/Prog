@@ -1,4 +1,4 @@
-// Bridge design patter
+// Bridge design pattern
 
 // bridge implementation interface
 function DrawAPI(){
