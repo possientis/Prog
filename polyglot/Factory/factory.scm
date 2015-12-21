@@ -41,15 +41,15 @@
 
 (define factory (ShapeFactory))
 
-; get an object of Circle and call its draw method.
+; get an object of type Circle and call its draw method.
 (define shape1 ((factory 'getShape) "CIRCLE"))
 (shape1 'draw)
 
-; get an object of Rectangle and call its draw method.
+; get an object of type Rectangle and call its draw method.
 (define shape2 ((factory 'getShape) "RECTANGLE"))
 (shape2 'draw)
 
-; get an object of Square and call its draw method.
+; get an object of type Square and call its draw method.
 (define shape3 ((factory 'getShape) "SQUARE"))
 (shape3 'draw)
 

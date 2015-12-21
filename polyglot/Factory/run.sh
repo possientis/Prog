@@ -20,5 +20,11 @@ js factory.js
 echo '\nThis is Scheme ...'
 scm factory
 
+echo '\nThis is Clojure ...'
+clojure factory.clj
+
+echo '\nThis is Haskell ...'
+ghc -v0 factory.hs; ./factory; rm factory factory.o factory.hi
+
 
 
