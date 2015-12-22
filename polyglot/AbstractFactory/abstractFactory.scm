@@ -142,7 +142,7 @@
   this)
 
 (define producer (FactoryProducer))
-; producing set ot red widgets
+; producing set of red widgets
 (define redFactory ((producer 'getFactory) "Red"))
 (define shape1 ((redFactory 'getShape) "CIRCLE"))
 (define shape2 ((redFactory 'getShape) "RECTANGLE"))
@@ -151,7 +151,7 @@
 (shape2 'draw)
 (shape3 'draw)
 
-; producing set ot green widgets
+; producing set of green widgets
 (define greenFactory ((producer 'getFactory) "Green"))
 (define shape4 ((greenFactory 'getShape) "CIRCLE"))
 (define shape5 ((greenFactory 'getShape) "RECTANGLE"))
@@ -160,7 +160,7 @@
 (shape5 'draw)
 (shape6 'draw)
 
-; producing set ot blue widgets
+; producing set of blue widgets
 (define blueFactory ((producer 'getFactory) "Blue"))
 (define shape7 ((blueFactory 'getShape) "CIRCLE"))
 (define shape8 ((blueFactory 'getShape) "RECTANGLE"))

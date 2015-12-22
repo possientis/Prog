@@ -11,11 +11,11 @@ mcs bridge.cs; mono bridge.exe; rm bridge.exe
 echo '\nThis is Java ...'
 javac Bridge.java; java Bridge; rm *.class;
 
-echo '\nThis is Python ...'
-python3 bridge.py
-
 echo '\nThis is JavaScript ...'
 js bridge.js
+
+echo '\nThis is Python ...'
+python3 bridge.py
 
 echo '\nThis is Scheme ...'
 scm bridge.scm
