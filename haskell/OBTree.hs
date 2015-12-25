@@ -52,6 +52,9 @@ breastFirst tree = processQueue (Queue.push Queue.empty tree) where
 -- does not grow, however the explicit stack does.
 -- not that Stack size does not grow beyond depth of tree O(log n)
 -- So DFS is more efficient than BFS from a space point of view
+-- WARNING: actually not so clear in what order (LeftTree, NodeValue, RightTree)
+-- things should be ordered, regardless of whether we use a stack of queue.
+-- question of all the various ways a binary tree can be processed 
 depthFirst :: (Show k, Show v) => OBTree k v -> IO ()
 depthFirst tree = processStack (Stack.push Stack.empty tree) where
   processStack :: (Show k, Show v) => Stack.Stack (OBTree k v) -> IO ()
