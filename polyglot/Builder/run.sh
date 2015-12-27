@@ -12,6 +12,9 @@ mcs builder.cs; mono builder.exe; rm builder.exe
 echo '\nThis is Java ...'
 javac Builder.java; java Builder; rm *.class
 
+echo '\nThis is JavaScript ...'
+js builder.js
+
 echo '\nThis is Python ...'
 python3 builder.py
 

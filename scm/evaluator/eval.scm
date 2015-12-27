@@ -1,19 +1,19 @@
 (define (eval exp env)
-  (cond ((self-evaluating? exp) exp)                            ; Ok
-        ((variable? exp) (lookup-variable-value exp env))       ; Ok  TBI
-        ((quoted? exp) (text-of-quotation exp))                 ; Ok  Ok
-        ((assignment? exp) (eval-assignment exp env))           ; TBI Ok
-        ((definition? exp) (eval-definition exp env))           ; TBI Ok
-        ((if? exp) (eval-if exp env))                           ; TBI Ok
-        ((lambda? exp)                                          ; TBI
-         (make-procedure (lambda-parameters exp)                ; TBI TBI
-                         (lambda-body exp)                      ; TBI
+  (cond ((self-evaluating? exp) exp)                            
+        ((variable? exp) (lookup-variable-value exp env))       ;TBI
+        ((quoted? exp) (text-of-quotation exp))                 
+        ((assignment? exp) (eval-assignment exp env))           
+        ((definition? exp) (eval-definition exp env))           
+        ((if? exp) (eval-if exp env))                           
+        ((lambda? exp)                                          
+         (make-procedure (lambda-parameters exp)                ; TBI
+                         (lambda-body exp)                      
                          env))
-        ((begin? exp) (eval-sequence (begin-actions exp) env))  ; TBI Ok  TBI 
+        ((begin? exp) (eval-sequence (begin-actions exp) env))  
         ((cond? exp) (eval (cond->if exp) env))                 ; TBI TBI
-        ((application? exp)                                     ; TBI 
-         (apply (eval (operator exp) env)                       ; Ok  TBI
-                (list-of-values (operands exp) env)))           ; Ok  TBI 
+        ((application? exp)                                     
+         (apply (eval (operator exp) env)                       
+                (list-of-values (operands exp) env)))           
         (else  (error "Unknown expression type -- EVAL" exp))))
         
 (define (apply procedure arguments)
@@ -56,24 +56,24 @@
 
 
 (define (eval-if exp env)
-  (if (true? (eval (if-predicate exp) env))                     ; TBI
-    (eval (if-consequent exp) env)                              ; TBI
-    (eval (if-alternative exp) env)))                           ; TBI
+  (if (true? (eval (if-predicate exp) env))                     
+    (eval (if-consequent exp) env)                             
+    (eval (if-alternative exp) env)))                          
 
 (define (eval-sequence seq env)
-  (cond ((last-exp? exps) (eval (first-exp exps) env))          ; TBI TBI
+  (cond ((last-exp? exps) (eval (first-exp exps) env))          
         (else (eval (first-exp exps) env)
-              (eval-sequence (rest-exps exps) env))))           ; TBI
+              (eval-sequence (rest-exps exps) env))))           
 
 (define (eval-assignment exp env)
-  (set-variable-value! (assignment-variable exp)                ; TBI TBI
-                       (eval (assignement-value exp) env)       ; TBI
+  (set-variable-value! (assignment-variable exp)                ; TBI Ok
+                       (eval (assignement-value exp) env)       ; Ok 
                        env)
   'ok)
 
 (define (eval-definition exp env)
-  (define-variable! (definition-variable exp)                   ; TBI TBI
-                    (eval (definition-value exp) env)           ; TBI
+  (define-variable! (definition-variable exp)                   ; TBI Ok 
+                    (eval (definition-value exp) env)           
                     env)
   'ok)
 
@@ -85,7 +85,7 @@
 (define (variable? exp) (symbol? exp))
 
 (define (quoted? exp)
-  (tagged-list? exp 'quote))                                    ; Ok
+  (tagged-list? exp 'quote))                                    
 
 (define (text-of-quotation exp) (cadr exp))
 (define (tagged-list? exp tag)
@@ -93,87 +93,69 @@
     (eq? (car exp) tag)
     #f))
 
-
-
-(define (true? value)
-  ; TBI 
-  #f)
-
-(define (primitive-procedure? procedure)
-  ; TBI
-  #t)
-
-(define (compound-procedure? procedure)
-  ; TBI
-  #f)
-
-(define (apply-primitive-procedure procedure arguments)
-  ; TBI
-  'ok)
-
-(define (procedure-body procedure)
-  ; TBI
-  'ok)
-
-(define (procedure-parameters procedure)
-  ; TBI
-  'ok)
-
-(define (extend-environment params arguments env)
-  ; TBI
-  'ok)
-
-(define (lookup-variable-value exp env)
-  ; TBI
-  0)
-
 (define (assignment? exp)
-  ; TBI
-  #f)
+  (tagged-list? exp 'set!))
+
+(define (assignment-variable exp) (cadr exp))
+
+(define (assignment-value exp) (caddr exp))
 
 (define (definition? exp)
-  ; TBI
-  #f)
+  (tagged-list? exp 'define))
 
-(define (if? exp)
-  ; TBI
-  #f)
+(define (definition-variable exp)
+  (if (symbol? (cadr exp))
+    (cadr exp)
+    (caadr exp)))
 
-(define (lambda? exp)
-  ; TBI
-  #f)
+(define (definition-value exp)
+  (if (symbol? (cadr exp))
+    (caddr exp)
+    (make-lambda (cdadr exp)                                   
+                 (cddr exp))))
+(define (lambda? exp) (tagged-list? exp 'lambda))
 
-(define (make-procedure params body env)
-  ; TBI
-  'ok)
+(define (lambda-parameters exp) (cadr exp))
 
-(define (lambda-parameters exp)
-  ; TBI
-  'ok)
+(define (lambda-body exp) (cddr exp))
 
-(define (lambda-body exp)
-  ; TBI
-  'ok)
+(define (make-lambda parameters body)
+  (cons 'lambda (cons parameters body)))
 
-(define (begin? exp)
-  ; TBI
-  #f)
+(define (if? exp) (tagged-list? exp 'if))
 
-(define (begin-actions exp)
-  ; TBI
-  '())
+(define (if-predicate exp) (cadr exp))
 
-(define (cond->if exp)
-  ; TBI
-  'ok)
+(define (if-consequent exp) (caddr exp))
 
-(define (operator exp)
-  ; TBI
-  'ok)
+(define (if-alternative exp) 
+  (if (not (null? (cdddr exp)))
+    (cadddr exp)
+    '#f))
 
-(define (operands exp)
-  ; TBI
-  'ok)
+(define (make-if predicate consequent alternative)
+  (list 'if predicate consequent alternative))
 
+(define (begin? exp) (tagged-list? exp 'begin)) 
 
+(define (begin-actions exp) (cdr exp))
+
+(define (last-exp? exps) (null? (cdr exps)))
+
+(define (first-exp exps) (car exps))
+
+(define (rest-exps exps) (cdr exps))
+
+(define (sequence->exp exps)
+  (cond ((null? exps) exps)
+        ((last-exp? exps) (first-exp exps))
+        (else (make-begin exps))))
+
+(define (make-begin exps) (cons 'begin exps))
+
+(define (application? exp) (pair? exp))
+
+(define (operator exp) (car exp))
+
+(define (operands exp) (cdr exp))
 

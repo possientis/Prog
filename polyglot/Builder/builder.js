@@ -83,7 +83,7 @@ VegetarianMealBuilder.prototype.addDrink = function(){
 };
 
 VegetarianMealBuilder.prototype.getMeal = function(){
-  return _meal;
+  return this._meal;
 };
 
 // Non-vegetarian meal comes with pepsi...
@@ -106,9 +106,8 @@ NonVegetarianMealBuilder.prototype.addDrink = function(){
 };
 
 NonVegetarianMealBuilder.prototype.getMeal = function(){
-  return _meal;
+  return this._meal;
 };
-
 
 // Both of the above concrete builders happen to produce objects
 // of the same type 'Meal' implemented as a list of 'Item'
@@ -139,7 +138,6 @@ Meal.prototype.showItems = function(){
   }
 };
 
-
 // The Item interface comes here
 function Item(){
 };
@@ -156,10 +154,113 @@ Item.prototype.packing = function(){
   print("Item::packing is not implemented");
 }
 
+// Item relies on the 'Packing' interface
+function Packing(){
+};
+Packing.prototype.pack = function(){
+  print("Packing::pack is not implemented");
+};
 
+function Wrapper(){
+  Packing.call(this);
+};
+Wrapper.prototype = Object.create(Packing.prototype);
+Wrapper.prototype.pack = function(){
+  return "Wrapper";
+};
 
+function Bottle(){
+  Packing.call(this);
+};
+Bottle.prototype = Object.create(Packing.prototype);
+Bottle.prototype.pack = function(){
+  return "Bottle";
+};
 
+function Burger(){
+  Item.call(this);
+}
+Burger.prototype = Object.create(Item.prototype);
+Burger.prototype.packing = function(){
+  return new Wrapper();
+}
 
+function ColdDrink(){
+  Item.call(this);
+}
+ColdDrink.prototype = Object.create(Item.prototype);
+ColdDrink.prototype.packing = function(){
+  return new Bottle();
+}
+
+function VegBurger(){
+  Burger.call(this);
+};
+VegBurger.prototype = Object.create(Burger.prototype);
+VegBurger.prototype.price = function(){
+  return 2.5;
+};
+VegBurger.prototype.name = function(){
+  return "Veg Burger";
+};
+
+function ChickenBurger(){
+  Burger.call(this);
+};
+ChickenBurger.prototype = Object.create(Burger.prototype);
+ChickenBurger.prototype.price = function(){
+  return 5.05;
+};
+ChickenBurger.prototype.name = function(){
+  return "Chicken Burger";
+};
+
+function Coke(){
+  ColdDrink.call(this);
+};
+Coke.prototype = Object.create(ColdDrink.prototype);
+Coke.prototype.price = function(){
+  return 3.0;
+};
+Coke.prototype.name = function(){
+  return "Coke";
+};
+
+function Pepsi(){
+  ColdDrink.call(this);
+};
+Pepsi.prototype = Object.create(ColdDrink.prototype);
+Pepsi.prototype.price = function(){
+  return 3.5;
+};
+Pepsi.prototype.name = function(){
+  return "Pepsi";
+};
+
+// let's try everything out
+// creating vegetarian meal
+// First we create the appropriate concrete builder
+vegBuilder = new VegetarianMealBuilder();
+// Next we create a director which will use this builder
+cook = new DirectorCook(vegBuilder);
+// Next we let the cook prepare the meal
+cook.makeMeal();
+vegMeal = vegBuilder.getMeal();
+// outputting result
+print("Veg Meal");
+vegMeal.showItems();
+print("Total Cost: " + vegMeal.getCost());
+// same for non-vegetarian meal
+nonVegBuilder = new NonVegetarianMealBuilder();
+cook = new DirectorCook(nonVegBuilder);
+cook.makeMeal();
+nonVegMeal = nonVegBuilder.getMeal();
+// outputting result
+print("\nNon-Veg Meal");
+nonVegMeal.showItems();
+print("Total Cost: " + nonVegMeal.getCost());
+ 
+ 
 
 
 
