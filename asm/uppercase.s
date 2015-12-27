@@ -17,7 +17,7 @@
   .equ SYS_EXIT, 1
 # options for open
   .equ O_RDONLY, 0
-  .equ O_CREAT_WRONLY_TRUNC 03101
+  .equ O_CREAT_WRONLY_TRUNC, 03101
 # standard file descriptors
   .equ STDIN, 0
   .equ STDOUT, 1
@@ -53,6 +53,80 @@ _start:
   subl $ST_SIZE_RESERVE, %esp
 
 open_files:
+open_fd_in:
+### OPEN INPUT FILE ###
+  movl $SYS_OPEN, %eax              # open syscall
+  movl ST_ARGV_1(%ebp), %ebx        # input file name into %ebx
+  movl $O_RDONLY, %ecx              # read-only fag in %ecx
+  movl $0666, %edx                  # permission stuff, not useful for reading
+  int  $LINUX_SYSCALL
+
+store_fd_in:
+  movl %eax, ST_FD_IN(%ebp)         # save input file descriptor
+
+open_fd_out:
+### OPEN OUTPUT FILE ###
+  movl $SYS_OPEN, %eax              # open syscall
+  movl ST_ARGV_2(%ebp), %ebx        # output file name into %ebx
+  movl $O_CREAT_WRONLY_TRUNC, %ecx  # flags for writing to file
+  movl $0666, %edx                  # permission, if file created
+  int  $LINUX_SYSCALL
+
+store_fd_out:
+  movl %eax, ST_FD_OUT(%ebp)        # save output file descriptor
+
+### BEGIN MAIN LOOP ###
+read_loop_begin:
+
+### READ A BLOCK FROM THE INPUT FILE ###
+  movl $SYS_READ, %eax              # read syscall
+  movl ST_FD_IN(%ebp), %ebx         # input file descriptor into %ebx
+  movl $BUFFER_DATA, %ecx           # the location to read into
+  movl $BUFFER_SIZE, %edx
+  int  $LINUX_SYSCALL               # size actually read into %eax
+
+
+### EXIT IF WE'VE REACHED THE END ###
+  cmpl 0, %eax                      # testing for error code (< 0 value)
+  jle end_loop                      # if %eax == 0 then end of file
+
+continue_read_loop:
+### CONVERT THE BLOCK TO UPPER CASE ###
+  pushl $BUFFER_DATA                # location of buffer
+  pushl %eax                        # size for buffer
+  call convert_to_upper
+  popl %eax                         # get the size back
+  addl $4, %esp                     # restore stack
+
+### WRITE THE BLOCK OUT TO THE OUTPUT FILE ###
+  movl %eax, %edx                   # size of buffer into %edx
+  movl $SYS_WRITE, %eax             # write syscall
+  movl ST_FD_OUT(%ebp), %ebx        # output file descriptor into %ebx
+  movl $BUFFER_DATA, %ecx           # location of buffer into %ecx
+  int  $LINUX_SYSCALL
+
+### CONTINUE THE LOOP ###
+  jmp read_loop_begin
+
+end_loop:
+### CLOSE THE FILES ###
+# NOTE: there is no need to do error checking here
+#       as error conditions do not mean anything here
+  movl $SYS_CLOSE, %eax             # close syscall
+  movl ST_FD_OUT(%ebp), %ebx       # output file descriptor into %ebx
+  int  $LINUX_SYSCALL
+
+  movl $SYS_CLOSE, %eax
+  movl ST_FD_IN(%ebp), %ebx
+  int  $LINUX_SYSCALL
+
+### EXIT ###
+  movl $SYS_EXIT, %eax
+  movl $0, %ebx                     # potentially misleading, did IO error occur?
+  int  $LINUX_SYSCALL
+
+
+
 
 
 
