@@ -125,13 +125,61 @@ end_loop:
   movl $0, %ebx                     # potentially misleading, did IO error occur?
   int  $LINUX_SYSCALL
 
+# PURPOSE:      This function actually does the conversion to upper case
+#
+# INPUT:        The first parameter is the location of the block of 
+#               memory to convert. The second parameter is the length
+#               of that buffer.
+#
+# OUTPUT:       This function overwrites the current buffer with the 
+#               upper-casified version
+#
+# VARIABLES:    %eax  - beginning of the buffer
+#               %ebx  - length of the buffer
+#               %edi  - current buffer offset
+#               %cl   - current byte being examined (first part of %ecx)
+#
+### CONSTANTS ###
+# The lower boundary of our search
+  .equ LOWERCASE_A, 'a'
+# The upper boundary of our search
+  .equ LOWERCASE_Z, 'z'
+# Conversion between upper and lower case
+  .equ UPPER_CONVERSION, 'A' - 'a'  
 
+### STACKK STUFF ###
+  .equ ST_BUFFER_LEN, 8 # length of buffer
+  .equ ST_BUFFER, 12    # actual buffer
+convert_to_upper:
+  pushl %ebp
+  movl  %esp, %ebp
 
+### SET UP VARIABLES ###
+  movl ST_BUFFER(%ebp), %eax
+  movl ST_BUFFER_LEN(%ebp), %ebx
+  movl $0, %edi
+  
+  cmpl $0, %ebx
+  je end_convert_loop         # if zero length buffer, just leave
 
+convert_loop:
+  movb (%eax,%edi,1), %cl   # get current byte
+  cmpb $LOWERCASE_A, %cl
+  jl next_byte
+  cmpb $LOWERCASE_Z, %cl
+  jg next_byte
+  addb $UPPER_CONVERSION, %cl # conversion occurs when 'a' <= %cl <= 'z'
+  movb %cl, (%eax,%edi,1)   # store it back
 
+next_byte:
+  incl %edi
+  cmpl %edi, %ebx
+  jne convert_loop
 
-
-
+end_convert_loop:
+  movl %ebp, %esp             # restore stack, but does not seem necessary here
+  popl %ebp                   # restoring old base pointer
+  ret                         # pops return address from stack
 
 
 

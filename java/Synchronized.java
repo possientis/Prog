@@ -17,6 +17,11 @@ public class Synchronized {
     System.out.println(a.getNext());
     System.out.println(a.getNext());
     System.out.println(a.getNext());
+    System.out.println(a.lockNext());
+    System.out.println(a.lockNext());
+    System.out.println(a.lockNext());
+    System.out.println(a.lockNext());
+
 
   }
 
@@ -24,7 +29,18 @@ public class Synchronized {
     return nextValue++;
   }
 
+  public int lockNext(){
+    synchronized(lock){
+      lockValue++;
+    }
+    return lockValue;
+  }
+
+
+
   private int nextValue = 0;
+  private Object lock = new Object();
+  private int lockValue = 0;
 
 }
 

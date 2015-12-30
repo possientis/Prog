@@ -14,7 +14,7 @@ import java.util.ArrayList; // ArrayList<E>
 // it is to manufacture meals
 
 class DirectorCook {
-  // A director is contructed from a builder, which specifies its toolbox
+  // A director is constructed from a builder, which specifies its toolbox
   public DirectorCook(MealBuilder builder) 
   {
     _builder = builder;

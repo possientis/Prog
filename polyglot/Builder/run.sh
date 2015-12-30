@@ -21,4 +21,6 @@ python3 builder.py
 echo '\nThis is Scheme ...'
 scm builder.scm
 
+echo '\nThis is Haskell ...'
+ghc -v0 builder.hs; ./builder; rm builder builder.o builder.hi     
 
