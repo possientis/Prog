@@ -10,7 +10,7 @@
                          (lambda-body exp)                      
                          env))
         ((begin? exp) (eval-sequence (begin-actions exp) env))  
-        ((cond? exp) (eval (cond->if exp) env))                 ; TBI TBI
+        ((cond? exp) (eval (cond->if exp) env))              
         ((application? exp)                                     
          (apply (eval (operator exp) env)                       
                 (list-of-values (operands exp) env)))           
@@ -36,10 +36,10 @@
 ; evaluation of the arguments to 'cons' in our implementation
 ; language.
 (define (list-of-values exps env)
-  (if (no-operands? exps)                                       ; TBI
+  (if (no-operands? exps)
     '()
-    (cons (eval (first-operand exps) env)                       ; TBI
-          (list-of-values (rest-operands exps) env))))          ; TBI
+    (cons (eval (first-operand exps) env)                       
+          (list-of-values (rest-operands exps) env))))      
 
 ; evaluation from left to right
 (define (list-of-values-LR exps env)
@@ -131,7 +131,7 @@
 (define (if-alternative exp) 
   (if (not (null? (cdddr exp)))
     (cadddr exp)
-    '#f))
+    '#f)) ; returning symbol '#f, which will be evaluated as #f
 
 (define (make-if predicate consequent alternative)
   (list 'if predicate consequent alternative))
@@ -158,4 +158,41 @@
 (define (operator exp) (car exp))
 
 (define (operands exp) (cdr exp))
+
+(define (no-operands? exps) (null? exps))
+
+(define (first-operand exps) (car exps))
+
+(define (rest-operands exps) (cdr exps))
+
+(define (cond? exp) (tagged-list? exp 'cond))
+
+(define (cond-clauses exp) (cdr exp))
+
+(define (cond-else-clause? clause)
+  (eq? (cond-predicate clause) 'else))
+
+(define (cond-predicate clause) (car clause))
+
+(define (cond-actions clause) (cdr clause))
+
+(define (cond->if exp)
+  (expand-clauses (cond-clauses exp)))
+
+(define (expand-clauses clauses)
+  (if (null? clauses)
+    '#f ; returning symbol '#f which will be evaluated as #f
+    (let ((first (car clauses))
+          (rest (cdr clauses)))
+      (if (cond-else-clause? first)
+        (if (null? rest)
+          (sequence->exp (cond-actions first))
+          (error "ELSE clause isn't last -- COND->IF" clauses))
+        (make-if (cond-predicate first)
+                 (sequence->exp (cond-actions first))
+                 (expand-clauses rest))))))
+
+
+
+
 

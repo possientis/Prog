@@ -87,7 +87,7 @@ read_loop_begin:
 
 
 ### EXIT IF WE'VE REACHED THE END ###
-  cmpl 0, %eax                      # testing for error code (< 0 value)
+  cmpl $0, %eax                      # testing for error code (< 0 value)
   jle end_loop                      # if %eax == 0 then end of file
 
 continue_read_loop:

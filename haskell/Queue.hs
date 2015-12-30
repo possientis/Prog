@@ -2,6 +2,7 @@ module Queue (Queue, push, peek, pop, isEmpty, empty, toList) where
 
 newtype Queue a = MkQueue ([a],[a])
 
+
 empty :: Queue a
 empty = MkQueue ([],[])
 
