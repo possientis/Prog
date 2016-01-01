@@ -13,6 +13,7 @@ rm -f haskell/*.hi
 rm -f haskell/*.o
 rm -f haskell/test
 rm -f asm/*.o
+rm -f asm/a.out
 rm -f scala/*.class
 git status
 

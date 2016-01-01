@@ -5,12 +5,15 @@
         ((assignment? exp) (eval-assignment exp env))           
         ((definition? exp) (eval-definition exp env))           
         ((if? exp) (eval-if exp env))                           
+        ((not? exp) (eval-not exp env))
         ((lambda? exp)                                          
          (make-procedure (lambda-parameters exp)                ; TBI
                          (lambda-body exp)                      
                          env))
         ((begin? exp) (eval-sequence (begin-actions exp) env))  
         ((cond? exp) (eval (cond->if exp) env))              
+        ((or? exp) (eval (or->if exp) env))
+        ((and? exp) (eval (and->if exp) env))
         ((application? exp)                                     
          (apply (eval (operator exp) env)                       
                 (list-of-values (operands exp) env)))           
@@ -59,6 +62,14 @@
   (if (true? (eval (if-predicate exp) env))                     
     (eval (if-consequent exp) env)                             
     (eval (if-alternative exp) env)))                          
+
+(define (eval-not exp env)
+  (if (true? (eval (not-predicate exp) env))
+    #f
+    #t))  ;returning value #f ot #t rather than expression '#f or '#t
+
+(define (true? value)
+  (if value #t #f))
 
 (define (eval-sequence seq env)
   (cond ((last-exp? exps) (eval (first-exp exps) env))          
@@ -123,8 +134,10 @@
   (cons 'lambda (cons parameters body)))
 
 (define (if? exp) (tagged-list? exp 'if))
+(define (not? exp) (tagged-list? exp 'not))
 
 (define (if-predicate exp) (cadr exp))
+(define (not-predicate exp) (cadr exp))
 
 (define (if-consequent exp) (caddr exp))
 
@@ -135,6 +148,9 @@
 
 (define (make-if predicate consequent alternative)
   (list 'if predicate consequent alternative))
+
+(define (make-not predicate)
+  (list 'not predicate))
 
 (define (begin? exp) (tagged-list? exp 'begin)) 
 
@@ -181,7 +197,7 @@
 
 (define (expand-clauses clauses)
   (if (null? clauses)
-    '#f ; returning symbol '#f which will be evaluated as #f
+    '#f ; returning symbol '#f which will be evaluated to #f
     (let ((first (car clauses))
           (rest (cdr clauses)))
       (if (cond-else-clause? first)
@@ -191,6 +207,35 @@
         (make-if (cond-predicate first)
                  (sequence->exp (cond-actions first))
                  (expand-clauses rest))))))
+
+(define (or? exp) (tagged-list? exp 'or))
+(define (and? exp) (tagged-list? exp 'and))
+(define (or-predicates exp) (cdr exp))
+(define (and-predicates exp) (cdr exp))
+
+(define (or->if exp)
+  (expand-or-predicates (or-predicates exp)))
+
+(define (and->if exp)
+  (expand-and-predicates (and-predicates exp)))
+
+(define (expand-or-predicates predicates)
+  (if (null? predicates)
+    '#f ; returning symbol '#f which will be evaluated to #f
+    (let ((first (car predicates))
+          (rest (cdr predicates)))
+      (if (null? rest)
+        first
+        (make-if first '#t (expand-or-predicates rest))))))
+
+(define (expand-and-predicates predicates)
+  (if (null? predicates)
+    '#t ; returning symbol '#t which will be evaluated to #t
+    (let ((first (car predicates))
+          (rest (cdr predicates)))
+      (if (null? rest)
+        first
+        (make-if (make-not first) '#f (expand-and-predicates rest))))))
 
 
 
