@@ -67,6 +67,52 @@ record3:
 
   .long 36
 
+# This is the name of the file we will write to
+file_name:
+  .ascii "test.dat\0"
+
+  .equ ST_FILE_DESCRIPTOR, -4
+  .globl _start
+_start:
+  movl %esp, %ebp                             # setting up base pointer as current stack
+  subl $4, %esp                               # alllocate space to hole file descriptor
+
+# opening file
+  movl $SYS_OPEN, %eax                        # SYS_OPEN defined in linux.s
+  movl $file_name, %ebx
+  movl $0101, %ecx                            # create if needed, open for writing
+  movl $0666, %edx                            # permissions for new file if created
+  int  $LINUX_SYSCALL                         # file descriptor returned in %eax
+
+  movl %eax, ST_FILE_DESCRIPTOR(%ebp)         # storing file descriptor away
+
+# write first record
+  pushl ST_FILE_DESCRIPTOR(%ebp)          
+  pushl $record1
+  call write_record
+  addl $8, %esp                               # restoring stack
+
+# write second record
+  pushl ST_FILE_DESCRIPTOR(%ebp)          
+  pushl $record2
+  call write_record
+  addl $8, %esp                               # restoring stack
+
+# write third record
+  pushl ST_FILE_DESCRIPTOR(%ebp)          
+  pushl $record3
+  call write_record
+  addl $8, %esp                               # restoring stack
+
+# close the file descriptor
+  movl $SYS_CLOSE, %eax
+  movl ST_FILE_DESCRIPTOR(%ebp), %ebx
+  int  $LINUX_SYSCALL
+
+# exit the program
+  movl $SYS_EXIT, %eax
+  movl $0, %ebx
+  int $LINUX_SYSCALL
 
 
 

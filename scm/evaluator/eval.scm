@@ -7,13 +7,15 @@
         ((if? exp) (eval-if exp env))                           
         ((not? exp) (eval-not exp env))
         ((lambda? exp)                                          
-         (make-procedure (lambda-parameters exp)                ; TBI
+         (make-procedure (lambda-parameters exp)               
                          (lambda-body exp)                      
                          env))
         ((begin? exp) (eval-sequence (begin-actions exp) env))  
         ((cond? exp) (eval (cond->if exp) env))              
         ((or? exp) (eval (or->if exp) env))
         ((and? exp) (eval (and->if exp) env))
+        ((let? exp) (eval (let->combination exp) env))
+        ((let*? exp) (eval (let*->nested-lets exp) env))
         ((application? exp)                                     
          (apply (eval (operator exp) env)                       
                 (list-of-values (operands exp) env)))           
@@ -236,6 +238,51 @@
       (if (null? rest)
         first
         (make-if (make-not first) '#f (expand-and-predicates rest))))))
+
+(define (let? exp)
+  (tagged-list? exp 'let))
+
+(define (let-bindings exp)
+  (cadr exp))
+
+(define (let-body exp)
+  (cddr exp))
+
+(define (let-parameters exp)
+  (map car (let-bindings exp)))
+
+(define (let-operands exp)
+  (map cadr (let-bindings exp)))
+
+(define (let->combination exp)
+  (cons (make-lambda (let-parameters exp) (let-body exp)) (let-operands exp)))
+
+(define (let*? exp)
+  (tagged-list? exp 'let*))
+
+(define (let*-bindings exp)
+  (cadr exp))
+
+(define (let*-body exp)
+  (cddr exp))
+
+(define (make-let bindings body)
+  (cons 'let (cons bindings body)))
+
+(define (let*->nested-lets exp)
+  (let ((bindings (let*-bindings exp)))
+    (let-expand bindings (let*-body exp))))
+
+(define (let-expand bindings body)
+  (if (single-binding? bindings)
+    (make-let bindings body)
+    (make-let (car bindings)
+              (let-expand (cdr bindings) body))))
+
+(define (single-binding? binding)
+  (null? (cdr binding)))
+
+(define s '(let* ((x 3) (y (+ x 2)) (z (+ x y 5))) (* x z)))
 
 
 

@@ -9,6 +9,7 @@ rm -f logic/logic.pdf
 rm -f c/a.out
 rm -f c/*.o
 rm -f c#/*.exe
+rm -f java/*.class
 rm -f haskell/*.hi
 rm -f haskell/*.o
 rm -f haskell/test
