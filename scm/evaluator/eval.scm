@@ -239,23 +239,49 @@
         first
         (make-if (make-not first) '#f (expand-and-predicates rest))))))
 
+(define (named-let? exp)
+  (and (tagged-list? exp 'let) (symbol? (cadr exp))))
+
+(define (named-let-variable exp)
+  (cadr exp))
+
 (define (let? exp)
-  (tagged-list? exp 'let))
+  (and (tagged-list? exp 'let) (not (symbol? (cadr exp)))))
 
 (define (let-bindings exp)
   (cadr exp))
 
+(define (named-let-bindings exp)
+  (caddr exp))
+
 (define (let-body exp)
   (cddr exp))
+
+(define (named-let-body exp)
+  (cdddr exp))
 
 (define (let-parameters exp)
   (map car (let-bindings exp)))
 
+(define (named-let-parameters exp)
+  (map car (named-let-bindings exp)))
+
 (define (let-operands exp)
   (map cadr (let-bindings exp)))
 
+(define (named-let-operands exp)
+  (map cadr (named-let-bindings exp)))
+
+(define (named-let-function exp)
+  (make-lambda (named-let-parameters exp) (named-let-body exp)))
+
 (define (let->combination exp)
   (cons (make-lambda (let-parameters exp) (let-body exp)) (let-operands exp)))
+
+(define (named-let->combination exp)
+  (let ((parameters (cons (named-let-variable exp) (named-let-parameters exp)))
+        (operands (cons (named-let-function exp) (named-let-operands exp))))
+    (cons (make-lambda parameters (named-let-body exp)) operands)))
 
 (define (let*? exp)
   (tagged-list? exp 'let*))
@@ -276,15 +302,27 @@
 (define (let-expand bindings body)
   (if (single-binding? bindings)
     (make-let bindings body)
-    (make-let (car bindings)
-              (let-expand (cdr bindings) body))))
+    (make-let (list (car bindings))
+              (list (let-expand (cdr bindings) body)))))
 
 (define (single-binding? binding)
   (null? (cdr binding)))
 
-(define s '(let* ((x 3) (y (+ x 2)) (z (+ x y 5))) (* x z)))
 
+(define w
+  (let loop ((x 10) (a 0))
+  (if (= x 0)
+    a
+    (loop (- x 1) (+ x a)))))
 
+(define s '(let loop ((x 10) (a 0)) (if (= x 0) a (loop (- x 1) (+ x a)))))
 
-
+; nope....
+((lambda (loop x a) 
+   (if (= x 0) 
+     a 
+     (loop (- x 1) (+ x a)))) 
+ (lambda (x a) (if (= x 0) a (loop (- x 1) (+ x a)))) 
+ 10 
+ 0)
 
