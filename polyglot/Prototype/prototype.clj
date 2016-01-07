@@ -107,9 +107,7 @@
                (= m :loadCache) (loadCache data))))
      ;
      (getShape [data]
-       (fn [shapeId]
-         (let [{shape shapeId} data]
-           shape)))
+       (fn [shapeId] (data shapeId))) ; data is hash-map
      ;
      (loadCache [data]
        (let [rect (((Rectangle) :setId) "1")

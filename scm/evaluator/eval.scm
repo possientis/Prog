@@ -309,20 +309,34 @@
   (null? (cdr binding)))
 
 
-(define w
-  (let loop ((x 10) (a 0))
-  (if (= x 0)
-    a
-    (loop (- x 1) (+ x a)))))
+;(define w
+;  (let loop ((x 10) (a 0))
+;  (if (= x 0)
+;    a
+;    (loop (- x 1) (+ x a)))))
 
-(define s '(let loop ((x 10) (a 0)) (if (= x 0) a (loop (- x 1) (+ x a)))))
+;(define s '(let loop ((x 10) (a 0)) (if (= x 0) a (loop (- x 1) (+ x a)))))
 
+;(define f (lambda (x a) (if (= x 0) a (loop (- x 1) (+ x a)))))
 ; nope....
-((lambda (loop x a) 
-   (if (= x 0) 
-     a 
-     (loop (- x 1) (+ x a)))) 
- (lambda (x a) (if (= x 0) a (loop (- x 1) (+ x a)))) 
- 10 
- 0)
+;((lambda (loop x a) 
+;   (if (= x 0) 
+;     a 
+;     (loop (- x 1) (+ x a)))) 
+; (lambda (x a) (if (= x 0) a (loop (- x 1) (+ x a)))) 
+; 10 
+; 0)
+
+;(define f (lambda (loop x a) 
+;            (if (= x 0) 
+;     a 
+;     (loop (- x 1) (+ x a))))) 
+
+;(display (letrec ((g (lambda (x a) (if (= x 0) a (g (- x 1) (+ x a))))))
+;  (f g 10 0)))(newline)
+
+(display (letrec ((f (lambda (n)
+  (if (= 0 n) 5 (f (- n 1))))))
+  (f 10)))(newline)
+
 

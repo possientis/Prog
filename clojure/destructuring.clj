@@ -98,18 +98,8 @@
 
 
 (println (conj {:e "E"} my-hashmap))
-(println (conj {:e "E"} my-hashmap))
-
-
-
-
-
-
-
-
-
-
-
+(println (assoc my-hashmap :e "E"))
+(println (my-hashmap :a))
 
 
 

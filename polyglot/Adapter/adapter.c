@@ -224,7 +224,7 @@ void AudioPlayer_play(
     MediaAdapter_destroy(&mediaAdapter);
   }
   else{
-    printf("Invalid media. %s format not supported", audioType);
+    printf("Invalid media. %s format not supported\n", audioType);
   }
 }
     
