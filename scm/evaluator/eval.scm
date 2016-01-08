@@ -15,6 +15,7 @@
         ((or? exp) (eval (or->if exp) env))
         ((and? exp) (eval (and->if exp) env))
         ((let? exp) (eval (let->combination exp) env))
+        ((named-let? exp) (eval (named-let->combination exp) env))
         ((let*? exp) (eval (let*->nested-lets exp) env))
         ((application? exp)                                     
          (apply (eval (operator exp) env)                       
@@ -278,11 +279,6 @@
 (define (let->combination exp)
   (cons (make-lambda (let-parameters exp) (let-body exp)) (let-operands exp)))
 
-(define (named-let->combination exp)
-  (let ((parameters (cons (named-let-variable exp) (named-let-parameters exp)))
-        (operands (cons (named-let-function exp) (named-let-operands exp))))
-    (cons (make-lambda parameters (named-let-body exp)) operands)))
-
 (define (let*? exp)
   (tagged-list? exp 'let*))
 
@@ -308,35 +304,16 @@
 (define (single-binding? binding)
   (null? (cdr binding)))
 
+(define (named-let-definition exp)
+  (list 'define (named-let-variable exp) (named-let-function exp)))
 
-;(define w
-;  (let loop ((x 10) (a 0))
-;  (if (= x 0)
-;    a
-;    (loop (- x 1) (+ x a)))))
+(define (named-let-function-call exp)
+  (cons (named-let-variable exp) (named-let-parameters exp)))
 
-;(define s '(let loop ((x 10) (a 0)) (if (= x 0) a (loop (- x 1) (+ x a)))))
+(define (named-let->combination exp)
+  (cons (make-lambda (named-let-parameters exp) 
+                     (list (named-let-definition exp) 
+                           (named-let-function-call exp))) 
+        (named-let-operands exp)))
 
-;(define f (lambda (x a) (if (= x 0) a (loop (- x 1) (+ x a)))))
-; nope....
-;((lambda (loop x a) 
-;   (if (= x 0) 
-;     a 
-;     (loop (- x 1) (+ x a)))) 
-; (lambda (x a) (if (= x 0) a (loop (- x 1) (+ x a)))) 
-; 10 
-; 0)
-
-;(define f (lambda (loop x a) 
-;            (if (= x 0) 
-;     a 
-;     (loop (- x 1) (+ x a))))) 
-
-;(display (letrec ((g (lambda (x a) (if (= x 0) a (g (- x 1) (+ x a))))))
-;  (f g 10 0)))(newline)
-
-(display (letrec ((f (lambda (n)
-  (if (= 0 n) 5 (f (- n 1))))))
-  (f 10)))(newline)
-
-
+(define s '(let loop ((x 10) (a 0)) (if (= x 0) a (loop (- x 1) (+ x a)))))
