@@ -41,4 +41,43 @@ fullAdder in1 in2 cin = (sum,cout) where
   sum   = xorGate cin (xorGate in1 in2)
   cout  = orGate (andGate in1 in2) (orGate (andGate cin in1) (andGate cin in2))
 
+rsLatch :: Signal -> Signal -> (Signal, Signal)
+rsLatch inR inS = (a,b) where
+  a = nandGate inS (delayGate b)
+  b = nandGate inR (delayGate a)
+
+simpleLatch :: Signal -> Signal -> Signal
+simpleLatch assertWrite input = output where
+  output = orGate (andGate input assertWrite)
+                  (andGate (delayGate output) (notGate assertWrite))
+
+simpleLatchTest = let
+  assertWrite = [0,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0]
+  input       = [0,1,0,1,0,1,0,1,0,0,1,0,0,0,1,1,0,0,0,0]
+  output      = simpleLatch assertWrite input
+  in do
+    putStrLn "Assert:"
+    putStrLn (show assertWrite)
+    putStrLn "Input:"
+    putStrLn (show input)
+    putStrLn "Output:"
+    putStrLn (show output)
+    
+
+
+rsLatchTest = let
+  inS   = [0,0,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1]
+  inR   = [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1]
+  (a,b) = rsLatch inR inS
+  in do
+    putStrLn "Input:"
+    putStrLn (show inS)
+    putStrLn (show inR)
+    putStrLn "Output:"
+    putStrLn (show a)
+    putStrLn (show b)
+
+main = simpleLatchTest
+
+
 

@@ -23,6 +23,10 @@ scm factory
 echo '\nThis is Clojure ...'
 clojure factory.clj
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Factory.scala
+scala Factory; rm *.class
+
 echo '\nThis is Haskell ...'
 ghc -v0 factory.hs; ./factory; rm factory factory.o factory.hi
 
