@@ -23,6 +23,10 @@ scm bridge.scm
 echo '\nThis is Clojure ...'
 clojure bridge.clj
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Bridge.scala
+scala Bridge; rm *.class
+
 echo '\nThis is Haskell ...'
 ghc -v0 bridge.hs; ./bridge; rm bridge bridge.o bridge.hi
 

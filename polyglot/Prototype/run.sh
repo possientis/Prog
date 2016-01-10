@@ -24,5 +24,9 @@ scm prototype.scm
 echo '\nThis is Clojure ...'
 clojure prototype.clj
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Prototype.scala
+scala Prototype; rm *.class
+
 echo '\nThis is Haskell ...'
 ghc -v0 prototype.hs; ./prototype; rm prototype prototype.o prototype.hi

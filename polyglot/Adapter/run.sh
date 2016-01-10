@@ -24,6 +24,10 @@ scm adapter.scm
 echo '\nThis is Clojure ...'
 clojure adapter.clj
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Adapter.scala
+scala Adapter; rm *.class
+
 echo '\nThis is Haskell ...'
 ghc -v0 adapter.hs; ./adapter; rm adapter adapter.o adapter.hi
 

@@ -24,6 +24,10 @@ scm builder.scm
 echo '\nThis is Clojure ...'
 clojure builder.clj
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Builder.scala
+scala Builder; rm *.class
+
 echo '\nThis is Haskell ...'
 ghc -v0 builder.hs; ./builder; rm builder builder.o builder.hi     
 

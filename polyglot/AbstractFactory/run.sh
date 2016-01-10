@@ -24,6 +24,10 @@ scm abstractFactory.scm
 echo '\nThis is Clojure ...'
 clojure abstractFactory.clj
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac AbstractFactory.scala
+scala AbstractFactory; rm *.class
+
 echo '\nThis is Haskell ...'
 ghc -v0 abstractFactory.hs; ./abstractFactory;
 rm abstractFactory abstractFactory.hi abstractFactory.o

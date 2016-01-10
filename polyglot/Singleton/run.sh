@@ -24,6 +24,10 @@ scm singleton.scm
 echo '\nThis is Clojure ...'
 clojure singleton.clj
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Singleton.scala
+scala Singleton; rm *.class
+
 echo '\nThis is Haskell ...'
 ghc -v0 singleton.hs; ./singleton; rm singleton singleton.o singleton.hi
 
