@@ -31,7 +31,7 @@ class Circle extends Shape {
 class PrototypeManager {
   var shapeMap = new HashMap[String, Shape]
   def getShape(shapeId: String): Shape = {
-    val Some(cachedShape) = shapeMap.get(shapeId)
+    val cachedShape = shapeMap(shapeId)
     return cachedShape.clone().asInstanceOf[Shape]
   }
   def loadCache() = {

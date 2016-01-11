@@ -28,11 +28,11 @@ _start:
   movl $0, %ecx                         # read only
   movl $0666, %edx                      # does it matter?
   int  $LINUX_SYSCALL
-#  movl %eax, ST_INPUT_DESCRIPTOR(%ebp)  # saving file descriptor 
+  movl %eax, ST_INPUT_DESCRIPTOR(%ebp)  # saving file descriptor 
   #### START DEBUG
-  movl %eax, %ebx
-  movl $SYS_EXIT, %eax
-  int  $LINUX_SYSCALL 
+#  movl %eax, %ebx
+#  movl $SYS_EXIT, %eax
+#  int  $LINUX_SYSCALL 
 
   #### END DEBUG
 
@@ -42,7 +42,7 @@ _start:
   # handle the error condition that the negative 
   # number represents
   cmpl $0,%eax
-  jl continue_processing
+  jge continue_processing
 
   # send error
   .section .data

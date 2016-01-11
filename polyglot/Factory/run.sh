@@ -17,6 +17,9 @@ js factory.js
 echo '\nThis is Python ...'
 python3 factory.py
 
+echo '\nThis is Ruby ...'
+ruby factory.rb
+
 echo '\nThis is Scheme ...'
 scm factory
 

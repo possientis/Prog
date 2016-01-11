@@ -77,6 +77,7 @@ rsLatchTest = let
     putStrLn (show a)
     putStrLn (show b)
 
+
 main = simpleLatchTest
 
 
