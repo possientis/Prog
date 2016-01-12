@@ -1,3 +1,7 @@
+(load "operands.scm")
+(load "if.scm")       ; make-if
+(load "begin.scm")    ; make-begin
+
 (define (cond? exp) (tagged-list? exp 'cond)) ; tagged-list? in eval.scm
 
 (define (cond->if exp) 
@@ -21,15 +25,12 @@
 (define (cond-else-clause? clause)
   (eq? (cond-predicate clause) 'else))
 
-(define (sequence->exp exps)
-  (cond ((null? exps) exps)
-        ((last-exp? exps) (first-exp exps)) ; last-exp? first-exp in apply.scm
-        (else (make-begin exps))))          ; make-begin in eval.scm
+(define (sequence->exp sequence)
+  (cond ((null? exps) sequence)
+        ((last-operand? sequence) (first-operand sequence)) 
+        (else (make-begin sequence))))          
 
 (define (cond-actions clause) (cdr clause))
-
-(define (make-if predicate consequent alternative)
-  (list 'if predicate consequent alternative))
 
 (define (cond-predicate clause) (car clause))
 

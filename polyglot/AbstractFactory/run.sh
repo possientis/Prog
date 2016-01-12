@@ -18,6 +18,9 @@ js abstractFactory.js
 echo '\nThis is Python ...'
 python3 abstractFactory.py
 
+echo '\nThis is Ruby ...'
+ruby abstractFactory.rb
+
 echo '\nThis is Scheme ...'
 scm abstractFactory.scm
 

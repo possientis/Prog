@@ -18,6 +18,9 @@ js adapter.js
 echo '\nThis is Python ...'
 python3 adapter.py
 
+echo '\nThis is Ruby ...'
+ruby adapter.rb
+
 echo '\nThis is Scheme ...'
 scm adapter.scm
 

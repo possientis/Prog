@@ -18,6 +18,9 @@ js builder.js
 echo '\nThis is Python ...'
 python3 builder.py
 
+echo '\nThis is Ruby ...'
+ruby builder.rb
+
 echo '\nThis is Scheme ...'
 scm builder.scm
 

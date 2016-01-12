@@ -17,6 +17,9 @@ js bridge.js
 echo '\nThis is Python ...'
 python3 bridge.py
 
+echo '\nThis is Ruby ...'
+ruby bridge.rb
+
 echo '\nThis is Scheme ...'
 scm bridge.scm
 

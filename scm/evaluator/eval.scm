@@ -1,3 +1,12 @@
+(load "operands.scm")
+(load "assignment.scm")
+(load "definition.scm")
+(load "if.scm")
+(load "lambda.scm")
+(load "begin.scm")
+(load "cond.scm")
+(load "apply.scm")
+
 (define (eval exp env)
   (cond ((self-evaluating? exp) exp)                            
         ((variable? exp) (lookup-variable-value exp env))       ;TBI
@@ -14,37 +23,19 @@
         ((let? exp) (eval (let->combination exp) env))
         ((named-let? exp) (eval (named-let->combination exp) env))
         ((let*? exp) (eval (let*->nested-lets exp) env))
-        ((application? exp)(apply (eval (operator exp) env)
-                                  (list-of-values (operands exp) env)))           
+        ((application? exp)(apply (eval (exp-operator exp) env)
+                                  (list-of-values (exp-operands exp) env)))        
         (else  (error "Unknown expression type -- EVAL" exp))))
-        
-(define (eval-if exp env)
-  (if (true? (eval (if-predicate exp) env))                     
-    (eval (if-consequent exp) env)                             
-    (eval (if-alternative exp) env)))                          
 
+
+(define (exp-operator exp) (car exp))
+(define (exp-operands exp) (cdr exp))
+
+       
 (define (eval-not exp env)
   (if (true? (eval (not-predicate exp) env))
     #f
     #t))  ;returning value #f ot #t rather than expression '#f or '#t
-
-(define (true? value)
-  (not (eq? #f))) 
-
-(define (false? value)
-   (eq? #f))
-
-(define (eval-assignment exp env)
-  (set-variable-value! (assignment-variable exp)                ; TBI Ok
-                       (eval (assignement-value exp) env)       ; Ok 
-                       env)
-  'ok)
-
-(define (eval-definition exp env)
-  (define-variable! (definition-variable exp)                   ; TBI Ok 
-                    (eval (definition-value exp) env)           
-                    env)
-  'ok)
 
 (define (self-evaluating? exp)
   (cond ((number? exp) #t)                                      
@@ -61,56 +52,12 @@
 (define (tagged-list? exp tag)
   (if (pair? exp) (eq? (car exp) tag) #f))
 
-(define (assignment? exp)
-  (tagged-list? exp 'set!))
-
-(define (assignment-variable exp) (cadr exp))
-
-(define (assignment-value exp) (caddr exp))
-
-(define (definition? exp)
-  (tagged-list? exp 'define))
-
-(define (definition-variable exp)
-  (if (symbol? (cadr exp))
-    (cadr exp)
-    (caadr exp)))
-
-(define (definition-value exp)
-  (if (symbol? (cadr exp))
-    (caddr exp)
-    (make-lambda (cdadr exp)                                   
-                 (cddr exp))))
-(define (lambda? exp) (tagged-list? exp 'lambda))
-
-(define (lambda-params exp) (cadr exp))
-
-(define (lambda-body exp) (cddr exp))
-
-(define (make-lambda parameters body)
-  (cons 'lambda (cons parameters body)))
-
-(define (if? exp) (tagged-list? exp 'if))
 (define (not? exp) (tagged-list? exp 'not))
 
-(define (if-predicate exp) (cadr exp))
 (define (not-predicate exp) (cadr exp))
-
-(define (if-consequent exp) (caddr exp))
-
-(define (if-alternative exp) 
-  (if (not (null? (cdddr exp)))
-    (cadddr exp)
-    '#f)) ; returning symbol '#f, which will be evaluated as #f
 
 (define (make-not predicate)
   (list 'not predicate))
-
-(define (begin? exp) (tagged-list? exp 'begin)) 
-
-(define (begin-actions exp) (cdr exp))
-
-(define (make-begin exps) (cons 'begin exps))
 
 (define (or? exp) (tagged-list? exp 'or))
 (define (and? exp) (tagged-list? exp 'and))

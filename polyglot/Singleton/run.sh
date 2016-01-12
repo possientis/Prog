@@ -18,6 +18,9 @@ js singleton.js
 echo '\nThis is Python ...'
 python3 singleton.py
 
+echo '\nThis is Ruby ...'
+ruby singleton.rb
+
 echo '\nThis is Scheme ...'
 scm singleton.scm
 

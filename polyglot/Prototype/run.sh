@@ -18,6 +18,9 @@ js prototype.js
 echo '\nThis is Python ...'
 python3 prototype.py
 
+echo '\nThis is Ruby ...'
+ruby prototype.rb
+
 echo '\nThis is Scheme ...'
 scm prototype.scm
 

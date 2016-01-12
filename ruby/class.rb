@@ -122,6 +122,7 @@ p [1,2,3,4] # p stands for print it seems
 
 p Being.ancestors
 
+# various ways to declare static methods
 class Wood
   def self.info
     "This is a Wood class" 
