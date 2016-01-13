@@ -14,6 +14,9 @@ javac Factory.java; java Factory; rm *.class
 echo '\nThis is JavaScript ...'
 js factory.js
 
+echo '\nThis is PHP ...'
+php factory.php
+
 echo '\nThis is Python ...'
 python3 factory.py
 

@@ -1,7 +1,7 @@
 # Singleton design pattern
 
 class SingleObject
-  @@instance = SingleObject.new
+  @@instance = SingleObject.new  # no infinite recursion?
 
   def self.getInstance
     return @@instance

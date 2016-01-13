@@ -15,6 +15,9 @@ javac Singleton.java; java Singleton; rm *.class
 echo '\nThis is JavaScript ...'
 js singleton.js
 
+echo '\nThis is PHP ...'
+php singleton.php
+
 echo '\nThis is Python ...'
 python3 singleton.py
 

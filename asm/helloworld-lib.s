@@ -2,8 +2,8 @@
 helloworld:
   .ascii "Hello, world!\n\0"
   .section .text
-  .globl _start
-_start:
+  .globl main #'main' rather than '_start' for linking from 'gcc' rather than 'ld'
+main:           
   pushl $helloworld
   call printf
 

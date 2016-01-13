@@ -15,6 +15,9 @@ javac AbstractFactory.java; java AbstractFactory; rm *.class
 echo '\nThis is JavaScript ...'
 js abstractFactory.js
 
+echo '\nThis is PHP ...'
+php abstractFactory.php
+
 echo '\nThis is Python ...'
 python3 abstractFactory.py
 
