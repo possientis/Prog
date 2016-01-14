@@ -14,6 +14,9 @@ javac Bridge.java; java Bridge; rm *.class;
 echo '\nThis is JavaScript ...'
 js bridge.js
 
+echo '\nThis is PHP ...'
+php bridge.php
+
 echo '\nThis is Python ...'
 python3 bridge.py
 

@@ -1,3 +1,5 @@
+(load "true-false.scm")
+
 (define (if? exp) (tagged-list? exp 'if))
 
 (define (if-predicate exp) (cadr exp))
@@ -8,15 +10,6 @@
   (if (not (null? (cdddr exp)))
     (cadddr exp)
     '#f)) ; returning expression '#f, not the value #f
-
-(define (true? value)
-  (not (eq? #f))) 
-
-(define (false? value)
-   (eq? #f))
-
-(define (make-if predicate consequent alternative)
-  (list 'if predicate consequent alternative))
 
 (define (eval-if exp env)
   (if (true? (eval (if-predicate exp) env))                     

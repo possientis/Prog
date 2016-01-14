@@ -1,5 +1,8 @@
 (define (application? exp) (pair? exp)) ; need to be tested last
 
+(define (exp-operator exp) (car exp))
+(define (exp-operands exp) (cdr exp))
+
 (define (apply procedure arguments)
   (cond ((primitive-procedure? procedure)                       ; TBI
          (apply-primitive-procedure procedure arguments))       ; TBI

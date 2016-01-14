@@ -1,6 +1,5 @@
+(load "make.scm")
 (load "operands.scm")
-(load "if.scm")       ; make-if
-(load "begin.scm")    ; make-begin
 
 (define (cond? exp) (tagged-list? exp 'cond)) ; tagged-list? in eval.scm
 

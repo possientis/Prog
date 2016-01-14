@@ -91,27 +91,106 @@ class Meal {
     $this->items = [];
   }
   // This method is crucially needed for the implementation of both builders
-  public function addItem($item){$this->items[] = item;}  
+  public function addItem($item){$this->items[] = $item;}  
   // we define a few more methods to make this example more interesting
   public function getCost(){
     $cost = 0.0;
-    foreach($item as $this->items){
+    foreach($this->items as $item){
       $cost = $cost + $item->price();
     }
     return $cost;
   }
   //
   public function showItems(){
-    foreach($item as $this->items){
+    foreach($this->items as $item){
       echo 'Item : '.$item->name().', Packing : '.$item->packing()->pack().
            ', Price : '.$item->price().PHP_EOL;
     }
   }
 }
 
+// The Item interface comes here
+interface Item {
+  public function price();
+  public function name();
+  public function packing();
+}
 
 
+// Item relises on the 'Packing' interface
+interface Packing {
+  public function pack();
+}
+
+class Wrapper implements Packing {
+  public function pack(){
+    return "Wrapper";
+  }
+}
+
+class Bottle implements Packing {
+  public function pack(){
+    return "Bottle";
+  }
+}
+
+abstract class Burger implements Item {
+  public function packing(){
+    return new Wrapper;
+  }
+}
+
+abstract class ColdDrink implements Item {
+  public function packing(){
+    return new Bottle;
+  }
+}
 
 
+class VegBurger extends Burger {
+  public function price(){ return 2.5; }
+  public function name(){ return "Veg Burger"; }
+}
+
+class ChickenBurger extends Burger {
+  public function price(){ return 5.05; }
+  public function name(){ return "Chicken Burger"; }
+}
+
+class Coke extends ColdDrink {
+  public function price(){ return 3.0; }
+  public function name(){ return "Coke"; }
+}
+
+class Pepsi extends ColdDrink {
+  public function price(){ return 3.5; }
+  public function name(){ return "Pepsi"; }
+}
+
+// let's try everything out
+
+
+// First we create the appropriate concrete builder
+$vegBuilder = new VegetarianMealBuilder;
+// Next we create a director which will use this builder
+$cook = new DirectorCook($vegBuilder);
+// Next we let the cook prepare the meal
+$cook->makeMeal();
+// Next we retrieve the object from the builder
+$vegMeal = $vegBuilder->getMeal();
+// outputting results
+echo "Veg Meal\n";
+$vegMeal->showItems();
+echo "Total Cost: ".$vegMeal->getCost()."\n";
+
+// same for non-vegetarian meal
+$nonVegBuilder = new NonVegetarianMealBuilder;
+$cook = new DirectorCook($nonVegBuilder);
+$cook->makeMeal();
+$nonVegMeal = $nonVegBuilder->getMeal();
+// outputting results
+echo "\nNon-Veg Meal\n";
+$nonVegMeal->showItems();
+echo "Total Cost: ".$nonVegMeal->getCost()."\n";
 
 ?>

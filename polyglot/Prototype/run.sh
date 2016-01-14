@@ -15,6 +15,9 @@ javac Prototype.java; java Prototype; rm *.class
 echo '\nThis is JavaScript ...'
 js prototype.js
 
+echo '\nThis is PHP ...'
+php prototype.php
+
 echo '\nThis is Python ...'
 python3 prototype.py
 

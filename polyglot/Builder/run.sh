@@ -15,6 +15,9 @@ javac Builder.java; java Builder; rm *.class
 echo '\nThis is JavaScript ...'
 js builder.js
 
+echo '\nThis is PHP ...'
+php builder.php
+
 echo '\nThis is Python ...'
 python3 builder.py
 

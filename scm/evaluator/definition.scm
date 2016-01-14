@@ -1,4 +1,5 @@
-(load "lambda.scm")   ; make-lambda
+(load "make.scm")
+
 (define (definition? exp) (tagged-list? exp 'define))
 
 (define (definition-variable exp)

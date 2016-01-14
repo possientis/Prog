@@ -15,6 +15,9 @@ javac Adapter.java; java Adapter; rm *.class
 echo '\nThis is JavaScript ...'
 js adapter.js
 
+echo '\nThis is PHP ...'
+php adapter.php
+
 echo '\nThis is Python ...'
 python3 adapter.py
 
