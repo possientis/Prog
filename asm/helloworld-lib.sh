@@ -18,8 +18,8 @@ as --32 -o helloworld-lib.o helloworld-lib.s
 #
 ld -melf_i386 -e main -dynamic-linker /lib/ld-linux.so.2 -o helloworld-lib helloworld-lib.o -lc
 #gcc -m32 helloworld-lib.o -o helloworld-lib
-./helloworld-lib
-rm helloworld-lib helloworld-lib.o
+#./helloworld-lib
+#rm helloworld-lib helloworld-lib.o
 #
 #The option -dynamic-linker /lib/ld-linux.so.2 allows our program to be linked to
 #libraries. This builds the executable so that before executing, the operating system will load the

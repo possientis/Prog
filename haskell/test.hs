@@ -6,4 +6,5 @@ import Test.QuickCheck
 import Data.Hashable
 import System.Process
 
-data MyStruct = MyStruct Int String
+list = [ (x,y) | x <- [1..10], y <- [1..x] ]
+
