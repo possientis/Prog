@@ -1,8 +1,9 @@
 (load "make.scm")
 
-(define (and? exp) (tagged-list? exp 'and))
-
 (define (and-predicates exp) (cdr exp))
+
+(define (and->if exp)
+  (expand-and-predicates (and-predicates exp)))
 
 (define (expand-and-predicates predicates)
   (if (null? predicates)
@@ -13,6 +14,5 @@
         first
         (make-if (make-not first) '#f (expand-and-predicates rest))))))
 
-(define (and->if exp)
-  (expand-and-predicates (and-predicates exp)))
+
 

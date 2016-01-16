@@ -1,8 +1,9 @@
 (load "make.scm")
 
-(define (or? exp) (tagged-list? exp 'or))
-
 (define (or-predicates exp) (cdr exp))
+
+(define (or->if exp)
+  (expand-or-predicates (or-predicates exp)))
 
 (define (expand-or-predicates predicates)
   (if (null? predicates)
@@ -13,6 +14,3 @@
         first
         (make-if first '#t (expand-or-predicates rest))))))
 
-
-(define (or->if exp)
-  (expand-or-predicates (or-predicates exp)))

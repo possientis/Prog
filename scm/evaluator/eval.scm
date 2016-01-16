@@ -1,3 +1,4 @@
+(load "exp-type.scm")
 (load "operands.scm")
 (load "quote.scm")
 (load "assignment.scm")
@@ -34,14 +35,8 @@
                                   (list-of-values (exp-operands exp) env)))        
         (else  (error "Unknown expression type -- EVAL" exp))))
        
-(define (self-evaluating? exp)
-  (cond ((number? exp) #t)                                      
-        ((string? exp) #t)                                      
-        (else #f)))
 
-(define (variable? exp) (symbol? exp))
 
-(define (tagged-list? exp tag)
-  (if (pair? exp) (eq? (car exp) tag) #f))
+
 
 

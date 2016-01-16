@@ -1,6 +1,4 @@
-(load "make.scm")
-
-(define (definition? exp) (tagged-list? exp 'define))
+(load "make.scm") ; make-lambda
 
 (define (definition-variable exp)
   (if (symbol? (cadr exp)) (cadr exp) (caadr exp)))

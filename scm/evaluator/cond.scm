@@ -1,7 +1,5 @@
-(load "make.scm")
+(load "make.scm") ; make-begin
 (load "operands.scm")
-
-(define (cond? exp) (tagged-list? exp 'cond)) ; tagged-list? in eval.scm
 
 (define (cond->if exp) 
   (expand-clauses (cond-clauses exp)))
@@ -25,7 +23,7 @@
   (eq? (cond-predicate clause) 'else))
 
 (define (sequence->exp sequence)
-  (cond ((null? exps) sequence)
+  (cond ((null? sequence) sequence)
         ((last-operand? sequence) (first-operand sequence)) 
         (else (make-begin sequence))))          
 

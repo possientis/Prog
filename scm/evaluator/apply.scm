@@ -1,5 +1,3 @@
-(define (application? exp) (pair? exp)) ; need to be tested last
-
 (define (exp-operator exp) (car exp))
 (define (exp-operands exp) (cdr exp))
 

@@ -1,7 +1,4 @@
-(load "make.scm")
-
-(define (let? exp)
-  (and (tagged-list? exp 'let) (not (symbol? (cadr exp))))) ; is not named-let
+(load "make.scm") ; make-lambda
 
 (define (let-bindings exp) (cadr exp))
 (define (let-body exp) (cddr exp))

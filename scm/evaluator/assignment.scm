@@ -1,5 +1,3 @@
-(define (assignment? exp) (tagged-list? exp 'set!))
-
 (define (assignment-variable exp) (cadr exp))
 
 (define (assignment-expresssion exp) (caddr exp))
