@@ -1,3 +1,4 @@
+(load "primitive.scm")
 (define (exp-operator exp) (car exp))
 (define (exp-operands exp) (cdr exp))
 

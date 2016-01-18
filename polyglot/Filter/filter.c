@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <malloc.h>
+#include <string.h>
 // This pattern allows to use a list of objects and perform
 // a filtering operation on that list so as to obtain a new
 // list comprised of those objects in the initial list which
@@ -14,21 +15,41 @@
 // useful either in functional languages which directly 
 // support first class functions and filter operations on lists.
 
-typedef struct PersonData_ PersonData;
-struct PersonData_ {
+//------------------------------------------------------------------------------
+//                              Class Person
+//------------------------------------------------------------------------------
+
+typedef struct PersonData_ {
   int           count;          // reference counter
   const char*   name;
   const char*   gender;
   const char*   maritalStatus;
-};
+} PersonData;
 
-typedef struct Person_ Person;
-struct Person_ {
+typedef struct Person_ {
   PersonData *data;
-};
+} Person;
 
 int Person_isNull(Person person){
   return person.data == NULL;
+}
+
+// accessor
+const char* Person_name(Person person){
+  assert(!Person_isNull(person));
+  return person.data->name;
+}
+
+// accessor
+const char* Person_gender(Person person){
+  assert(!Person_isNull(person));
+  return person.data->gender;
+}
+
+// accessor
+const char* Person_maritalStatus(Person person){
+  assert(!Person_isNull(person));
+  return person.data->maritalStatus;
 }
 
 Person Person_new(const char* name, const char* gender, const char* maritalStatus){
@@ -44,7 +65,6 @@ Person Person_new(const char* name, const char* gender, const char* maritalStatu
   data->count = 1;          // first reference to heap allocated memory
   Person person;
   person.data = data;
-  assert(!Person_isNull(person));
   return person;
 }
 
@@ -70,28 +90,66 @@ void Person_delete(Person person ){
   }
 }
 
-const char* Person_name(Person person){
-  assert(!Person_isNull(person));
-  return person.data->name;
-}
 
-const char* Person_gender(Person person){
-  assert(!Person_isNull(person));
-  return person.data->gender;
-}
-
-const char* Person_maritalStatus(Person person){
-  assert(!Person_isNull(person));
-  return person.data->maritalStatus;
-}
-
+//------------------------------------------------------------------------------
+//                              Class Predicate
+//------------------------------------------------------------------------------
 
 typedef struct Predicate_ Predicate;
-struct Predicate_ {
-};
+typedef struct PredicateData_ {
+  int count;
+  int (*test)(Predicate self, Person);
+} PredicateData;
 
-void Predicate_delete(Predicate p){
-  // TBI
+typedef struct Predicate_ {
+  PredicateData* data;
+} Predicate;
+
+int Predicate_isNull(Predicate predicate){
+  return predicate.data == NULL;
+}
+
+// accessor
+int Predicate_test(Predicate predicate, Person person){
+  assert(!Predicate_isNull(predicate));
+  assert(!Person_isNull(person));
+  return predicate.data->test(predicate, person);
+}
+
+Predicate Predicate_new(int (*test)(Predicate, Person)){
+  assert(test != NULL);
+  fprintf(stderr,"Allocating heap memory for predicate %lx\n", test);
+  PredicateData* data = (PredicateData*) malloc(sizeof(PredicateData));
+  assert(data != NULL);
+  data->count = 1;    // first reference
+  data->test = test;
+  Predicate predicate;
+  predicate.data = data;
+  return predicate;
+}
+
+
+Predicate Predicate_copy(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  predicate.data->count++;
+  fprintf(stderr, "Increasing reference count to %d of predicate %lx\n", 
+      predicate.data->count, &predicate.data->test);
+  return predicate;
+}
+
+void Predicate_delete(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  assert(predicate.data->count > 0);
+  predicate.data->count--;
+  if(predicate.data->count == 0){
+    fprintf(stderr,"Deallocating heap memory for predicate %lx\n", 
+        predicate.data->test);
+    free(predicate.data);
+  }
+  else{
+    fprintf(stderr,"Decreasing reference count to %d of predicate %lx\n",
+        predicate.data->count, &predicate.data->test);
+  }
 }
 
 Predicate Predicate_isEqual(Person person){
@@ -102,22 +160,42 @@ Predicate Predicate_isEqual(Person person){
 
 Predicate Predicate_not(Predicate p){
   // TBI
-  Predicate temp;
-  return temp;
+  return p;
 }
 
-Predicate Person_male()           {Predicate temp; return temp;} // TBI
-Predicate Person_female()         {Predicate temp; return temp;} // TBI
+Predicate Predicate_and(Predicate p1, Predicate p2){
+}
+
+int test_male(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  return strcasecmp(Person_gender(person),"MALE") == 0;
+}
+
+int test_female(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  return strcasecmp(Person_gender(person),"FEMALE") == 0;
+}
+
+
+Predicate Person_male(){  return Predicate_new(test_male); }
+Predicate Person_female(){ return Predicate_new(test_female); }
 Predicate Person_singleMale()     {Predicate temp; return temp;} // TBI
 Predicate Person_singleOrFemale() {Predicate temp; return temp;} // TBI
 
-typedef struct PersonListData_ PersonListData;
-typedef struct PersonList_ PersonList;
-struct PersonList_ {
-  PersonListData* data;
-};
+
+
+//------------------------------------------------------------------------------
+//                              Class PersonList
+//------------------------------------------------------------------------------
 
 typedef struct PersonListData_ PersonListData;
+
+typedef struct PersonList_ {
+  PersonListData* data;
+} PersonList;
+
 struct PersonListData_ {
   int               count;
   Person            person;
@@ -134,15 +212,28 @@ PersonList PersonList_null(){
   return list;
 }
 
+// accesssor
+Person PersonList_car(PersonList list){
+  assert(!PersonList_isNull(list));
+  return list.data->person;               // returns full ownership, no copy
+}
+
+// accessor
+PersonList PersonList_cdr(PersonList list){
+  assert(!PersonList_isNull(list));
+  return list.data->next;                 // returns full ownership, no copy
+}
+
+
 PersonList PersonList_new(Person person){
   assert(!Person_isNull(person));
   fprintf(stderr, "Allocating heap memory for list with name %s\n",
       Person_name(person));
   PersonListData* data = (PersonListData*) malloc(sizeof(PersonListData));
   assert(data != NULL);
-  data->count = 1;                    // first reference
+  data->count = 1;                // first reference
   data->next = PersonList_null();
-  data->person = Person_copy(person); // increasing reference count 
+  data->person = person;          // new list takes ownership of Person, no copy
   PersonList list;
   list.data = data;
   assert(!PersonList_isNull(list));
@@ -174,85 +265,97 @@ void PersonList_delete(PersonList list){
   }
 }
 
-// accesssor
-Person PersonList_car(PersonList list){
-  assert(!PersonList_isNull(list));
-  return Person_copy(list.data->person);  // increasing reference count
-}
-
-// accessor
-PersonList PersonList_cdr(PersonList list){
-  assert(!PersonList_isNull(list));
-  return PersonList_copy(list.data->next);
-}
-
 PersonList PersonList_cons(Person person, PersonList list){
-  PersonList newList = PersonList_new(person);
+  PersonList newList = PersonList_new(person);  // takes ownership of person
   assert(!PersonList_isNull(newList));
-  newList.data->next = PersonList_copy(list);
+  newList.data->next = list;                    // takes ownership of list
   return newList;
 }
 
-PersonList PersonList_people(){
-  Person robert   = Person_new("Robert","Male","Single");
-  Person john     = Person_new("John","Male","Married");
-  Person laura    = Person_new("Laura","Female","Married");
-  Person diana    = Person_new("Diana","Female","Single");
-  Person mike     = Person_new("Mike","Male","Single");
-  Person bobby    = Person_new("Bobby","Male","Single");
 
-  // careful with memory allocation/deallocation
-  PersonList list1  = PersonList_new(bobby);
-  PersonList list2  = PersonList_cons(mike,   list1);
+PersonList PersonList_people(){
+
+  Person bobby    = Person_new("Bobby","Male","Single");
+  Person mike     = Person_new("Mike","Male","Single");
+  Person diana    = Person_new("Diana","Female","Single");
+  Person laura    = Person_new("Laura","Female","Married");
+  Person john     = Person_new("John","Male","Married");
+  Person robert   = Person_new("Robert","Male","Single");
+
+
+  PersonList list1  = PersonList_new(bobby);          
+  PersonList list2  = PersonList_cons(mike,   list1); 
   PersonList list3  = PersonList_cons(diana,  list2);
   PersonList list4  = PersonList_cons(laura,  list3);
   PersonList list5  = PersonList_cons(john,   list4);
   PersonList people = PersonList_cons(robert, list5);  
 
+  // people has ownership of all previously allocated nodes and persons
+  // hence there is no need to delete bobby,..,robert,list1,..,list5
   return people;
-
 } 
 
 void PersonList_print(PersonList list){
-  // TBI
+  if(!PersonList_isNull(list)){ // nothing to print otherwise
+    Person person = PersonList_car(list);
+    printf("(%s,%s,%s)\t",Person_name(person),Person_gender(person),
+        Person_maritalStatus(person));
+    PersonList_print(PersonList_cdr(list)); // recursive call
+  }
 }
 
-PersonList PersonList_filter(PersonList people, Predicate p){
-  // TBI
-  return PersonList_copy(people);
+PersonList PersonList_filter(PersonList list, Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  if(PersonList_isNull(list)) return PersonList_null();
+  PersonList newList = PersonList_filter(PersonList_cdr(list),predicate);
+  Person person = PersonList_car(list);
+  if(Predicate_test(predicate,person)){
+    return PersonList_cons(Person_copy(person),newList);
+  }
+  else {
+    return newList;
+  }
 }
+
+//------------------------------------------------------------------------------
+//                                  Main
+//------------------------------------------------------------------------------
 
 int main(int argc, char* argv[], char* envp[]){
 
-//  Person john2                = Person_new("John","Male","Single");
+  //Person john2                = Person_new("John","Male","Single");
+  Predicate male              = Person_male();
+  Predicate female            = Person_female();
 
   PersonList people           = PersonList_people();
-  PersonList males            = PersonList_filter(people, Person_male());
-  PersonList females          = PersonList_filter(people, Person_female());
-  PersonList singleMales      = PersonList_filter(people, Person_singleMale());
-  PersonList singleOrFemales  = PersonList_filter(people, Person_singleOrFemale());
-//  Predicate  isJohn           = Predicate_isEqual(john2);
-//  Predicate  notJohn          = Predicate_not(isJohn);
-//  PersonList notJohns         = PersonList_filter(people, notJohn);
+  PersonList males            = PersonList_filter(people, male);
+  PersonList females          = PersonList_filter(people, female);
+  //PersonList singleMales      = PersonList_filter(people, Person_singleMale());
+  //PersonList singleOrFemales  = PersonList_filter(people, Person_singleOrFemale());
+  //Predicate  isJohn           = Predicate_isEqual(john2);
+  //Predicate  notJohn          = Predicate_not(isJohn);
+  //PersonList notJohns         = PersonList_filter(people, notJohn);
 
 
   printf("Everyone:\t\t");          PersonList_print(people);
-//  printf("\nNot John:\t\t");        PersonList_print(notJohns);
-  printf("\nSingle or Female:\t");  PersonList_print(singleOrFemales);
+  //printf("\nNot John:\t\t");        PersonList_print(notJohns);
+  //printf("\nSingle or Female:\t");  PersonList_print(singleOrFemales);
   printf("\nMales:\t\t\t");         PersonList_print(males);
-  printf("\nSingle Males:\t\t");    PersonList_print(singleMales);
+  //printf("\nSingle Males:\t\t");    PersonList_print(singleMales);
   printf("\nFemales:\t\t");         PersonList_print(females);
 
   // no garbage collection
-//  PersonList_delete(notJohns);
-//  Predicate_delete(notJohn);
-//  Predicate_delete(isJohn);
-  PersonList_delete(singleOrFemales);
-  PersonList_delete(singleMales);
+  //PersonList_delete(notJohns);
+  //Predicate_delete(notJohn);
+  //Predicate_delete(isJohn);
+  //PersonList_delete(singleOrFemales);
+  //PersonList_delete(singleMales);
   PersonList_delete(females);
   PersonList_delete(males);
   PersonList_delete(people);
-//  Person_delete(john2);
+  Predicate_delete(female);
+  Predicate_delete(male);
+  //Person_delete(john2);
 
   return 0;
 }

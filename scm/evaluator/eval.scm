@@ -1,5 +1,6 @@
 (load "exp-type.scm")
 (load "operands.scm")
+(load "variable.scm")
 (load "quote.scm")
 (load "assignment.scm")
 (load "definition.scm")
