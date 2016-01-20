@@ -1,6 +1,11 @@
 (define (tagged-list? exp tag) (if (pair? exp) (eq? (car exp) tag) #f))
 
-(define (self-evaluating? exp) (cond ((number? exp) #t)((string? exp) #t)(else #f)))
+(define (self-evaluating? exp) 
+  (cond ((number? exp) #t)
+        ((string? exp) #t)
+        ((eq? #t exp) #t)
+        ((eq? #f exp) #t)
+        (else #f)))
 
 (define (variable? exp) (symbol? exp))
 

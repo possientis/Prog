@@ -98,12 +98,26 @@ void Person_delete(Person person ){
 typedef struct Predicate_ Predicate;
 typedef struct PredicateData_ {
   int count;
-  int (*test)(Predicate self, Person);
+  int (*test)(Predicate self, Person);  // virtual
+  void (*delete)(Predicate self);       // virtual
 } PredicateData;
 
 typedef struct Predicate_ {
   PredicateData* data;
 } Predicate;
+
+
+
+typedef struct SimplePredicateData_ {   // inheritance
+  PredicateData base;                   // just base object, no more data
+} SimplePredicateData;
+
+typedef struct OrPredicateData_ {       // inheritance
+  PredicateData base;
+  Predicate left;
+  Predicate right;
+} OrPredicateData;
+
 
 int Predicate_isNull(Predicate predicate){
   return predicate.data == NULL;
@@ -116,13 +130,35 @@ int Predicate_test(Predicate predicate, Person person){
   return predicate.data->test(predicate, person);
 }
 
-Predicate Predicate_new(int (*test)(Predicate, Person)){
+int test_OrPredicate(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  // downcasting self.data from (PredicateData*) to (OrPredicateData*)
+  OrPredicateData* data = (OrPredicateData*) self.data;
+  assert(data != NULL);
+  Predicate leftPredicate = data->left;
+  Predicate rightPredicate = data->right;
+  assert(!Predicate_isNull(leftPredicate));
+  assert(!Predicate_isNull(rightPredicate));
+  if(Predicate_test(leftPredicate,person)){
+    return 1;
+  } else {
+    return Predicate_test(rightPredicate, person);
+  }
+
+  assert(0);  // unreachable
+}
+
+Predicate Predicate_new(
+    int (*test)(Predicate, Person), void (*delete)(Predicate)){
   assert(test != NULL);
+  assert(delete != NULL);
   fprintf(stderr,"Allocating heap memory for predicate %lx\n", test);
   PredicateData* data = (PredicateData*) malloc(sizeof(PredicateData));
   assert(data != NULL);
   data->count = 1;    // first reference
   data->test = test;
+  data->delete = delete;
   Predicate predicate;
   predicate.data = data;
   return predicate;
@@ -142,15 +178,42 @@ void Predicate_delete(Predicate predicate){
   assert(predicate.data->count > 0);
   predicate.data->count--;
   if(predicate.data->count == 0){
-    fprintf(stderr,"Deallocating heap memory for predicate %lx\n", 
-        predicate.data->test);
-    free(predicate.data);
+    void (*delete)(Predicate);
+    delete = predicate.data->delete;
+    assert(delete != NULL);
+    delete(predicate);
   }
   else{
     fprintf(stderr,"Decreasing reference count to %d of predicate %lx\n",
         predicate.data->count, &predicate.data->test);
   }
 }
+
+// override
+void SimplePredicate_delete(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  assert(predicate.data->count == 0);  // should not be called otherwise
+  SimplePredicateData* data = (SimplePredicateData*) predicate.data;
+  fprintf(stderr,"Deallocating heap memory for SimplePredicate %lx\n",
+      predicate.data->test);
+  free(data);
+}
+
+Predicate SimplePredicate_new(int (*test)(Predicate, Person)){
+  assert(test != NULL);
+  fprintf(stderr,
+      "Allocating heap memory for SimplePredicate with function  %lx\n", test);
+  SimplePredicateData* data 
+    = (SimplePredicateData*) malloc(sizeof(SimplePredicateData));
+  assert(data != NULL);
+  data->base.count = 1;
+  data->base.test = test;
+  data->base.delete = SimplePredicate_delete;
+  Predicate predicate;
+  predicate.data = (PredicateData*) data; // upcast
+  return predicate;
+}
+
 
 Predicate Predicate_isEqual(Person person){
   // TBI
@@ -179,8 +242,8 @@ int test_female(Predicate self, Person person){
 }
 
 
-Predicate Person_male(){  return Predicate_new(test_male); }
-Predicate Person_female(){ return Predicate_new(test_female); }
+Predicate Person_male(){  return SimplePredicate_new(test_male); }
+Predicate Person_female(){ return SimplePredicate_new(test_female); }
 Predicate Person_singleMale()     {Predicate temp; return temp;} // TBI
 Predicate Person_singleOrFemale() {Predicate temp; return temp;} // TBI
 
