@@ -90,6 +90,12 @@ void Person_delete(Person person ){
   }
 }
 
+// some plausible implementation of equality
+int Person_equals(Person left, Person right){
+  assert(!Person_isNull(left));
+  assert(!Person_isNull(right));
+  return strcasecmp(Person_name(left),Person_name(right)) == 0;
+}
 
 //------------------------------------------------------------------------------
 //                              Class Predicate
@@ -106,31 +112,74 @@ typedef struct Predicate_ {
   PredicateData* data;
 } Predicate;
 
-
-
 typedef struct SimplePredicateData_ {   // inheritance
   PredicateData base;                   // just base object, no more data
 } SimplePredicateData;
 
 typedef struct OrPredicateData_ {       // inheritance
-  PredicateData base;
-  Predicate left;
-  Predicate right;
+  PredicateData base;                   // base object has virtual test and delete
+  Predicate left;                       // predicate defined by two operands which
+  Predicate right;                      // are themselves predicates
 } OrPredicateData;
 
+typedef struct AndPredicateData_ {      // inheritance
+  PredicateData base;                   // same structure as OrPredicate
+  Predicate left;
+  Predicate right;
+} AndPredicateData;
 
+typedef struct NotPredicate_ {          // inheritance
+  PredicateData base;
+  Predicate predicate;                  // predicate defined by opposit predicate
+} NotPredicateData;
+
+typedef struct EqualPredicateData_ {    // inheritance
+  PredicateData base;
+  Person person;                        // predicate defined by a person object
+} EqualPredicateData;
+
+// check for null reference
 int Predicate_isNull(Predicate predicate){
   return predicate.data == NULL;
 }
 
-// accessor
+// copy for immutable objects, simply increase reference count
+Predicate Predicate_copy(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  predicate.data->count++;
+  fprintf(stderr, 
+      "Increasing reference count to %d of predicate with function %lx\n", 
+      predicate.data->count, predicate.data->test);
+  return predicate;
+}
+
+// virtual accessor
 int Predicate_test(Predicate predicate, Person person){
   assert(!Predicate_isNull(predicate));
   assert(!Person_isNull(person));
-  return predicate.data->test(predicate, person);
+  return predicate.data->test(predicate, person); // actual test in object data
 }
 
-int test_OrPredicate(Predicate self, Person person){
+// virtual destructor
+void Predicate_delete(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  assert(predicate.data->count > 0);
+  predicate.data->count--;
+  if(predicate.data->count == 0){
+    void (*delete)(Predicate);
+    delete = predicate.data->delete;              // actual delete in object data
+    assert(delete != NULL);
+    delete(predicate);
+  }
+  else{
+    fprintf(stderr,
+        "Decreasing reference count to %d of predicate with function %lx\n",
+        predicate.data->count, predicate.data->test);
+  }
+}
+
+// override
+int OrPredicate_test(Predicate self, Person person){
   assert(!Predicate_isNull(self));
   assert(!Person_isNull(person));
   // downcasting self.data from (PredicateData*) to (OrPredicateData*)
@@ -145,48 +194,71 @@ int test_OrPredicate(Predicate self, Person person){
   } else {
     return Predicate_test(rightPredicate, person);
   }
-
   assert(0);  // unreachable
 }
 
-Predicate Predicate_new(
-    int (*test)(Predicate, Person), void (*delete)(Predicate)){
-  assert(test != NULL);
-  assert(delete != NULL);
-  fprintf(stderr,"Allocating heap memory for predicate %lx\n", test);
-  PredicateData* data = (PredicateData*) malloc(sizeof(PredicateData));
+// override
+int AndPredicate_test(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  // downcasting self.data from (PredicateData*) to (OrPredicateData*)
+  AndPredicateData* data = (AndPredicateData*) self.data;
   assert(data != NULL);
-  data->count = 1;    // first reference
-  data->test = test;
-  data->delete = delete;
-  Predicate predicate;
-  predicate.data = data;
-  return predicate;
+  Predicate leftPredicate = data->left;
+  Predicate rightPredicate = data->right;
+  assert(!Predicate_isNull(leftPredicate));
+  assert(!Predicate_isNull(rightPredicate));
+  if(!Predicate_test(leftPredicate,person)){
+    return 0;
+  } else {
+    return Predicate_test(rightPredicate, person);
+  }
+  assert(0);  // unreachable
 }
 
-
-Predicate Predicate_copy(Predicate predicate){
+// override
+int NotPredicate_test(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  // downcasting self.data from (PredicateData*) to (NotPredicateData*)
+  NotPredicateData* data = (NotPredicateData*) self.data;
+  assert(data != NULL);
+  Predicate predicate = data->predicate;
   assert(!Predicate_isNull(predicate));
-  predicate.data->count++;
-  fprintf(stderr, "Increasing reference count to %d of predicate %lx\n", 
-      predicate.data->count, &predicate.data->test);
-  return predicate;
+  return !Predicate_test(predicate, person);  // opposit to 'predicate'
 }
 
-void Predicate_delete(Predicate predicate){
-  assert(!Predicate_isNull(predicate));
-  assert(predicate.data->count > 0);
-  predicate.data->count--;
-  if(predicate.data->count == 0){
-    void (*delete)(Predicate);
-    delete = predicate.data->delete;
-    assert(delete != NULL);
-    delete(predicate);
-  }
-  else{
-    fprintf(stderr,"Decreasing reference count to %d of predicate %lx\n",
-        predicate.data->count, &predicate.data->test);
-  }
+// override
+int EqualPredicate_test(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  // downcasting self.data from (PredicateData*) to (EqualPredicateData*)
+  EqualPredicateData* data = (EqualPredicateData*) self.data;
+  assert(data != NULL);
+  Person reference = data->person;  // key defining data of predicate self
+  assert(!Person_isNull(reference));
+  return Person_equals(reference, person);
+}
+
+// argument for Predicate_simple
+int male_test(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  return strcasecmp(Person_gender(person),"MALE") == 0;
+}
+
+// argument for Predicate_simple
+int female_test(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  return strcasecmp(Person_gender(person),"FEMALE") == 0;
+}
+
+// argument for Predicate_simple
+int single_test(Predicate self, Person person){
+  assert(!Predicate_isNull(self));
+  assert(!Person_isNull(person));
+  return strcasecmp(Person_maritalStatus(person),"SINGLE") == 0;
 }
 
 // override
@@ -194,12 +266,67 @@ void SimplePredicate_delete(Predicate predicate){
   assert(!Predicate_isNull(predicate));
   assert(predicate.data->count == 0);  // should not be called otherwise
   SimplePredicateData* data = (SimplePredicateData*) predicate.data;
-  fprintf(stderr,"Deallocating heap memory for SimplePredicate %lx\n",
+  fprintf(stderr,
+      "Deallocating heap memory for SimplePredicate with function %lx\n",
       predicate.data->test);
   free(data);
 }
 
-Predicate SimplePredicate_new(int (*test)(Predicate, Person)){
+// override
+void OrPredicate_delete(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  assert(predicate.data->count == 0); // should not be called otherwise
+  OrPredicateData* data = (OrPredicateData*) predicate.data;  //downcast
+  assert(data != NULL);
+  Predicate leftPredicate = data->left;
+  Predicate rightPredicate = data->right;
+  fprintf(stderr,"Deallocating heap memory for OrPredicate\n");
+  free(data);
+  Predicate_delete(leftPredicate);
+  Predicate_delete(rightPredicate);
+}
+
+// override
+void AndPredicate_delete(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  assert(predicate.data->count == 0); // should not be called otherwise
+  AndPredicateData* data = (AndPredicateData*) predicate.data;  // downcast
+  assert(data != NULL);
+  Predicate leftPredicate = data->left;
+  Predicate rightPredicate = data->right;
+  fprintf(stderr,"Deallocating heap memory for AndPredicate\n");
+  free(data);
+  Predicate_delete(leftPredicate);
+  Predicate_delete(rightPredicate);
+}
+
+// override
+void NotPredicate_delete(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  assert(predicate.data->count == 0); // should not be called otherwise
+  NotPredicateData* data = (NotPredicateData*) predicate.data;  // downcast
+  assert(data != NULL);
+  Predicate opposit = data->predicate;
+  fprintf(stderr,"Deallocating heap memory for NotPredicate\n");
+  free(data);
+  Predicate_delete(opposit);
+}
+
+// override
+void EqualPredicate_delete(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  assert(predicate.data->count == 0); // should not be called otherwise
+  EqualPredicateData* data = (EqualPredicateData*) predicate.data;  // downcast
+  assert(data != NULL);
+  Person person = data->person;
+  fprintf(stderr,"Deallocating heap memory for EqualPredicate with name %s\n",
+      Person_name(person));
+  free(data);
+  Person_delete(person);
+}
+
+// factory method
+Predicate Predicate_simple(int (*test)(Predicate, Person)){
   assert(test != NULL);
   fprintf(stderr,
       "Allocating heap memory for SimplePredicate with function  %lx\n", test);
@@ -214,40 +341,71 @@ Predicate SimplePredicate_new(int (*test)(Predicate, Person)){
   return predicate;
 }
 
+// factory method
+Predicate Predicate_or(Predicate left, Predicate right){
+  assert(!Predicate_isNull(left));
+  assert(!Predicate_isNull(right));
+  fprintf(stderr, "Allocating heap memory for OrPredicate\n");
+  OrPredicateData* data = (OrPredicateData*) malloc(sizeof(OrPredicateData));
+  assert(data != NULL);
+  data->base.count = 1;
+  data->base.test = OrPredicate_test;
+  data->base.delete = OrPredicate_delete;
+  data->left = left;
+  data->right = right;
+  Predicate predicate;
+  predicate.data = (PredicateData*) data; // upcast
+  return predicate;
+}
 
+// factory method
+Predicate Predicate_and(Predicate left, Predicate right){
+  assert(!Predicate_isNull(left));
+  assert(!Predicate_isNull(right));
+  fprintf(stderr, "Allocating heap memory for AndPredicate\n");
+  AndPredicateData* data = (AndPredicateData*) malloc(sizeof(AndPredicateData));
+  assert(data != NULL);
+  data->base.count = 1;
+  data->base.test = AndPredicate_test;
+  data->base.delete = AndPredicate_delete;
+  data->left = left;
+  data->right = right;
+  Predicate predicate;
+  predicate.data = (PredicateData*) data; // upcast
+  return predicate;
+}
+
+// factory method
+Predicate Predicate_not(Predicate predicate){
+  assert(!Predicate_isNull(predicate));
+  fprintf(stderr, "Allocating heap memory for NotPredicate\n");
+  NotPredicateData* data = (NotPredicateData*) malloc(sizeof(NotPredicateData));
+  assert(data != NULL);
+  data->base.count = 1;
+  data->base.test = NotPredicate_test;
+  data->base.delete = NotPredicate_delete;
+  data->predicate = predicate;
+  Predicate opposit;
+  opposit.data = (PredicateData*) data; // upcast
+  return opposit;
+}
+
+// factory method
 Predicate Predicate_isEqual(Person person){
-  // TBI
-  Predicate temp;
-  return temp;
-}
-
-Predicate Predicate_not(Predicate p){
-  // TBI
-  return p;
-}
-
-Predicate Predicate_and(Predicate p1, Predicate p2){
-}
-
-int test_male(Predicate self, Person person){
-  assert(!Predicate_isNull(self));
   assert(!Person_isNull(person));
-  return strcasecmp(Person_gender(person),"MALE") == 0;
+  fprintf(stderr,"Allocating heap memory for EqualPredicate with name %s\n",
+      Person_name(person));
+  EqualPredicateData* data 
+    = (EqualPredicateData*) malloc(sizeof(EqualPredicateData));
+  assert(data != NULL);
+  data->base.count = 1;
+  data->base.test = EqualPredicate_test;
+  data->base.delete = EqualPredicate_delete;
+  data->person = person;
+  Predicate predicate;
+  predicate.data = (PredicateData*) data; // upcast
+  return predicate;
 }
-
-int test_female(Predicate self, Person person){
-  assert(!Predicate_isNull(self));
-  assert(!Person_isNull(person));
-  return strcasecmp(Person_gender(person),"FEMALE") == 0;
-}
-
-
-Predicate Person_male(){  return SimplePredicate_new(test_male); }
-Predicate Person_female(){ return SimplePredicate_new(test_female); }
-Predicate Person_singleMale()     {Predicate temp; return temp;} // TBI
-Predicate Person_singleOrFemale() {Predicate temp; return temp;} // TBI
-
-
 
 //------------------------------------------------------------------------------
 //                              Class PersonList
@@ -287,7 +445,7 @@ PersonList PersonList_cdr(PersonList list){
   return list.data->next;                 // returns full ownership, no copy
 }
 
-
+// constructor
 PersonList PersonList_new(Person person){
   assert(!Person_isNull(person));
   fprintf(stderr, "Allocating heap memory for list with name %s\n",
@@ -345,7 +503,6 @@ PersonList PersonList_people(){
   Person john     = Person_new("John","Male","Married");
   Person robert   = Person_new("Robert","Male","Single");
 
-
   PersonList list1  = PersonList_new(bobby);          
   PersonList list2  = PersonList_cons(mike,   list1); 
   PersonList list3  = PersonList_cons(diana,  list2);
@@ -355,6 +512,7 @@ PersonList PersonList_people(){
 
   // people has ownership of all previously allocated nodes and persons
   // hence there is no need to delete bobby,..,robert,list1,..,list5
+
   return people;
 } 
 
@@ -369,8 +527,14 @@ void PersonList_print(PersonList list){
 
 PersonList PersonList_filter(PersonList list, Predicate predicate){
   assert(!Predicate_isNull(predicate));
+
+  // recursion base case 
   if(PersonList_isNull(list)) return PersonList_null();
+
+  // recursive call
   PersonList newList = PersonList_filter(PersonList_cdr(list),predicate);
+
+  // adding current Person is it satisfies predicate
   Person person = PersonList_car(list);
   if(Predicate_test(predicate,person)){
     return PersonList_cons(Person_copy(person),newList);
@@ -386,39 +550,45 @@ PersonList PersonList_filter(PersonList list, Predicate predicate){
 
 int main(int argc, char* argv[], char* envp[]){
 
-  //Person john2                = Person_new("John","Male","Single");
-  Predicate male              = Person_male();
-  Predicate female            = Person_female();
+  Person john2                = Person_new("John","Male","Single");
+
+  Predicate male              = Predicate_simple(male_test);
+  Predicate female            = Predicate_simple(female_test);
+  Predicate single            = Predicate_simple(single_test);
+  Predicate singleOrFemale    = Predicate_or(single, female); // takes ownership
+  // copy required for ownership, to avoid deallocating 'single' twice
+  Predicate singleMale        = Predicate_and(Predicate_copy(single), male);
+  Predicate  isJohn           = Predicate_isEqual(john2);     // takes ownership
+  Predicate  notJohn          = Predicate_not(isJohn);        // takes ownership
 
   PersonList people           = PersonList_people();
   PersonList males            = PersonList_filter(people, male);
   PersonList females          = PersonList_filter(people, female);
-  //PersonList singleMales      = PersonList_filter(people, Person_singleMale());
-  //PersonList singleOrFemales  = PersonList_filter(people, Person_singleOrFemale());
-  //Predicate  isJohn           = Predicate_isEqual(john2);
-  //Predicate  notJohn          = Predicate_not(isJohn);
-  //PersonList notJohns         = PersonList_filter(people, notJohn);
+  PersonList singleMales      = PersonList_filter(people, singleMale);
+  PersonList singleOrFemales  = PersonList_filter(people, singleOrFemale);
+  PersonList notJohns         = PersonList_filter(people, notJohn);
 
 
   printf("Everyone:\t\t");          PersonList_print(people);
-  //printf("\nNot John:\t\t");        PersonList_print(notJohns);
-  //printf("\nSingle or Female:\t");  PersonList_print(singleOrFemales);
+  printf("\nNot John:\t\t");        PersonList_print(notJohns);
+  printf("\nSingle or Female:\t");  PersonList_print(singleOrFemales);
   printf("\nMales:\t\t\t");         PersonList_print(males);
-  //printf("\nSingle Males:\t\t");    PersonList_print(singleMales);
+  printf("\nSingle Males:\t\t");    PersonList_print(singleMales);
   printf("\nFemales:\t\t");         PersonList_print(females);
+  printf("\n");
 
-  // no garbage collection
-  //PersonList_delete(notJohns);
-  //Predicate_delete(notJohn);
-  //Predicate_delete(isJohn);
-  //PersonList_delete(singleOrFemales);
-  //PersonList_delete(singleMales);
+  // no garbage collection, explicit deallocation of top objects
+  // Owned sub-objects are automatically deallocated in the process
+  PersonList_delete(notJohns);
+  PersonList_delete(singleOrFemales);
+  PersonList_delete(singleMales);
   PersonList_delete(females);
   PersonList_delete(males);
   PersonList_delete(people);
-  Predicate_delete(female);
-  Predicate_delete(male);
-  //Person_delete(john2);
+
+  Predicate_delete(notJohn);
+  Predicate_delete(singleMale);
+  Predicate_delete(singleOrFemale);
 
   return 0;
 }

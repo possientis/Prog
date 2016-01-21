@@ -121,5 +121,6 @@ public class Filter {
     System.out.print("\nMales:\t\t\t"); Person.print(males);
     System.out.print("\nSingle Males:\t\t"); Person.print(singleMales);
     System.out.print("\nFemales:\t\t"); Person.print(females);
+    System.out.print("\n");
   }
 }
