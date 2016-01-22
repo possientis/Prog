@@ -1,17 +1,20 @@
 (load "primitive.scm")
+(load "compound.scm")
+(load "operands.scm")
+
 (define (exp-operator exp) (car exp))
 (define (exp-operands exp) (cdr exp))
 
 (define (apply procedure arguments)
-  (cond ((primitive-procedure? procedure)                       ; TBI
-         (apply-primitive-procedure procedure arguments))       ; TBI
-        ((compound-procedure? procedure)                        ; TBI
+  (cond ((primitive-procedure? procedure)                       
+         (apply-primitive-procedure procedure arguments))       
+        ((compound-procedure? procedure)                        
          (eval-sequence
-           (procedure-body procedure)                           ; TBI
+           (procedure-body procedure)                           
            (extend-environment                                  ; TBI
-             (procedure-parameters procedure)                   ; TBI
+             (procedure-parameters procedure)                   
              arguments
-             (procedure-environment procedure))))               ; TBI
+             (procedure-environment procedure))))               
         (else (error "Unknown procedure type -- APPLY" procedure))))
 
 

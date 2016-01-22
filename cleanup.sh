@@ -8,6 +8,8 @@ rm -f logic/logic.toc
 rm -f logic/logic.pdf
 rm -f c/a.out
 rm -f c/*.o
+rm -f cpp/a.out
+rm -f cpp/*.o
 rm -f c#/*.exe
 rm -f java/*.class
 rm -f scala/*.class

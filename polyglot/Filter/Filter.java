@@ -107,20 +107,21 @@ class Person {
 public class Filter {
   public static void main(String[] args){
     Person john2 = new Person("John","Male","Married");
-    List<Person> people = Person.people();
-    List<Person> males = Person.filter(people,Person.male);
-    List<Person> females = Person.filter(people,Person.female);
-    List<Person> singleMales = Person.filter(people, Person.singleMale);
-    List<Person> singleOrFemales = Person.filter(people, Person.singleOrFemale);
     IPredicate<Person> notJohn = IPredicate.isEqual(john2).not();
-    List<Person> notJohns = Person.filter(people, notJohn);
+    
+    List<Person> people           = Person.people();
+    List<Person> males            = Person.filter(people,Person.male);
+    List<Person> females          = Person.filter(people,Person.female);
+    List<Person> singleMales      = Person.filter(people, Person.singleMale);
+    List<Person> singleOrFemales  = Person.filter(people, Person.singleOrFemale);
+    List<Person> notJohns         = Person.filter(people, notJohn);
 
-    System.out.print("Everyone:\t\t"); Person.print(people);
-    System.out.print("\nNot John:\t\t"); Person.print(notJohns);
-    System.out.print("\nSingle or Female:\t"); Person.print(singleOrFemales);
-    System.out.print("\nMales:\t\t\t"); Person.print(males);
-    System.out.print("\nSingle Males:\t\t"); Person.print(singleMales);
-    System.out.print("\nFemales:\t\t"); Person.print(females);
+    System.out.print("Everyone:\t\t");          Person.print(people);
+    System.out.print("\nNot John:\t\t");        Person.print(notJohns);
+    System.out.print("\nSingle or Female:\t");  Person.print(singleOrFemales);
+    System.out.print("\nMales:\t\t\t");         Person.print(males);
+    System.out.print("\nSingle Males:\t\t");    Person.print(singleMales);
+    System.out.print("\nFemales:\t\t");         Person.print(females);
     System.out.print("\n");
   }
 }
