@@ -8,7 +8,7 @@ import javax.swing.*;
 //import java.util.ArrayList;
 //import java.util.Random;
 
-public class Test {
+public class ThreadDataShare {
 
   public static void main(String[] args) throws InterruptedException{
 

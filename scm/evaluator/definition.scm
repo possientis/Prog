@@ -10,7 +10,12 @@
                  (cddr exp))))
 
 (define (eval-definition exp env)
-  (define-variable! (definition-variable exp)                   ; TBI 
+  ; DEBUG BEGIN
+  (if DEBUG (begin
+              (display "eval-definition:\t")(display "exp = ")(display exp)
+              (display "\tenv = ")(display env)(newline)))
+  ; DEBUG END
+  (define-variable! (definition-variable exp)              
                     (eval (definition-expression exp) env)           
                     env)
   'ok)

@@ -1,3 +1,4 @@
+(load "environment.scm")
 (load "exp-type.scm")
 (load "operands.scm")
 (load "variable.scm")
@@ -16,9 +17,11 @@
 (load "let-star.scm")
 (load "apply.scm")
 
+(define DEBUG #t)
+
 (define (eval exp env)
   (cond ((self-evaluating? exp) exp)                            
-        ((variable? exp) (lookup-variable-value exp env))       ;TBI
+        ((variable? exp) (lookup-variable-value exp env))
         ((quoted? exp) (text-of-quotation exp))                 
         ((assignment? exp) (eval-assignment exp env))           
         ((definition? exp) (eval-definition exp env))           
@@ -36,7 +39,7 @@
                                   (list-of-values (exp-operands exp) env)))        
         (else  (error "Unknown expression type -- EVAL" exp))))
        
-
+(define s '(begin (define x 12) x))
 
 
 

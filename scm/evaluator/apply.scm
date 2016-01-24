@@ -1,3 +1,4 @@
+(load "environment.scm")
 (load "primitive.scm")
 (load "compound.scm")
 (load "operands.scm")
@@ -11,7 +12,7 @@
         ((compound-procedure? procedure)                        
          (eval-sequence
            (procedure-body procedure)                           
-           (extend-environment                                  ; TBI
+           (extend-environment                      
              (procedure-parameters procedure)                   
              arguments
              (procedure-environment procedure))))               

@@ -1,0 +1,35 @@
+* {
+  font-family: Arial, Verdana, sans-serif;
+}
+
+h1 {  /* h1 is more specific than * => precedence*/
+  font-family: "Courier New", monospace;
+}
+
+i {
+  color: green;
+}
+
+i {
+  color: red; /* identical selector: the last has precedence */
+}
+
+b {
+  color: pink;
+}
+
+p b { /* p b is more specific than b => precedence*/
+  color: blue !important; /* violet ignored despite being last rule */
+}
+
+p b {
+  color: violet; /* p b is more specific than b, and also last rule, but ... */
+}
+
+p#intro { /* p#intro is more specific than p => precedence */
+  font-size: 100%;
+}
+
+p {
+  font-size: 75%;
+}

@@ -4,6 +4,7 @@
 (define (make-frame variables values) (cons variables values))
 (define (frame-variables frame) (car frame))
 (define (frame-values frame) (cdr frame))
+
 (define (add-binding-to-frame! var val frame)
   (set-car! frame (cons var (car frame)))
   (set-cdr! frame (cons val (cdr frame))))
@@ -26,4 +27,27 @@
       (let ((frame (first-frame env)))
         (scan (frame-variables frame) (frame-values frame)))))
   (env-loop env))
+
+(define (set-variable-value! var val env)
+  (define (env-loop env)
+    (define (scan vars val)
+      (cond ((null? vars) (env-loop (enclosing-environment env)))
+            ((eq? var (car vars)) (set-car! vals val))
+            (else (scan (cdr vars) (cdr vals)))))
+    (if (eq? env the-empty-environment)
+      (error "Unbound variable -- SET!" var)
+      (let ((frame (first-frame env)))
+        (scan (frame-variables frame) (frame-values frame)))))
+  (env-loop env))
+
+(define (define-variable! var val env)
+  (let ((frame (first-frame env)))
+    (define (scan vars vals)
+      (cond ((null? vars) (add-binding-to-frame! var val frame))
+            ((eq? var (car vars)) (set-car! vals val))
+            (else (scan (cdr vars) (cdr vals)))))
+    (scan (frame-variables frame) (frame-values frame))))
+
+
+
 

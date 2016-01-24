@@ -7,13 +7,27 @@
         ((eq? #f exp) #t)
         (else #f)))
 
-(define (variable? exp) (symbol? exp))
+(define (variable? exp) 
+  ; DEBUG BEGIN
+  (if DEBUG (begin
+              (display "variable?:\t\t")(display "exp = ")(display exp)
+              (display " : ") (display (symbol? exp))
+              (newline)))
+  ; DEBUG END
+  (symbol? exp))
 
 (define (quoted? exp) (tagged-list? exp 'quote))                                    
 
 (define (assignment? exp) (tagged-list? exp 'set!))
 
-(define (definition? exp) (tagged-list? exp 'define))
+(define (definition? exp) 
+  ; DEBUG BEGIN
+  (if DEBUG (begin
+              (display "definition?:\t\t")(display "exp = ")(display exp)
+              (display " : ") (display (tagged-list? exp 'define))
+              (newline)))
+  ; DEBUG END
+  (tagged-list? exp 'define))
 
 (define (if? exp) (tagged-list? exp 'if))
 
@@ -21,7 +35,13 @@
 
 (define (lambda? exp) (tagged-list? exp 'lambda))
 
-(define (begin? exp) (tagged-list? exp 'begin)) 
+(define (begin? exp) 
+  ; DEBUG BEGIN
+  (if DEBUG (begin
+              (display "begin?:\t\t\t")(display "exp = ")(display exp)
+              (display " : ")(display (tagged-list? exp 'begin))(newline)))
+  ; DEBUG END
+  (tagged-list? exp 'begin)) 
 
 (define (cond? exp) (tagged-list? exp 'cond))
 

@@ -193,5 +193,70 @@ move_break:                     # if we've made it here, it means that we have
                                 # the break, so long as %eax is not 0, we do not care
                                 # what it is.
 
+  cmpl $0, %eax                 # check for error conditions
+  je error
+  
+  popl %ebx                     # restore saved registers
+  popl %ecx                     
+  popl %eax
+  
+  # set this memory as unavailable since we re about to give it away
+  movl $UNAVAILABLE, HDR_AVAIL_OFFSET(%eax)
+  # set the size of the memory <---- Bug I think because %ecx is size requested
+  movl %ecx, HDR_SIZE_OFFSET(%eax) # and it may be that more memory was granted
+  addl $HEADER_SIZE, %eax       # move %eax to the actual start of usable memory
+                                # %eax now holds the return value
+  movl %ebx, current_break      # save the new break
+                                # standard function stuff
+  movl %ebp, %esp               # restoring stack pointer
+  popl %ebp                     # restoring base pointer of previous stack frame 
+  ret
+
+error:
+  movl $0, %eax                 # on error we return 0 (seems redundant here)
+  movl %ebp, %esp               # restoring stack pointer
+  popl %ebp                     # restoring base pointer of previous stack frame
+#####END OF FUNCTION#######
+
+##deallocate##
+#PURPOSE: The purpose of this function is to give back
+# a region of memory to the pool after we’re done using it.
+#
+#PARAMETERS: The only parameter is the address of the memory
+# we want to return to the memory pool.
+#
+#RETURN VALUE: 
+# There is no return value
+#
+#PROCESSING:
+# If you remember, we actually hand the program the
+# start of the memory that they can use, which is
+# 8 storage locations after the actual start of the
+# memory region. All we have to do is go back
+# 8 locations and mark that memory as available,
+# so that the allocate function knows it can use it.
+# (This seems very unsafe as a wrong argument can mess up things)
+  
+  .globl deallocate
+  .type deallocate,@function
+  # stack position of the memory region to free
+  .equ ST_MEMORY_SEG, 4
+deallocate:
+  # since the function is so simple, we don't do any of the fancy
+  # function stuff. i.e. we do not bother to save base pointer
+  # of previous stack frame (pushl %ebp). As a consequence, the
+  # function argument is now 4 bytes above the stack pointer,
+  # we we use as our base pointer (without properly setting
+  # a base pointer for the current frame [ movl %esp, %ebp] )
+  movl ST_MEMORY_SEG(%esp), %eax  # argument in %eax
+  subl $HEADER_SIZE, %eax         # get pointer to real beginning
+  # mark memory region as available
+  movl $AVAILABLE, HDR_AVAIL_OFFSET(%eax)
+  ret                             # exit (no usual function exit stuff)
+#####END OF FUNCTION#######
+
+
+
+
 
 
