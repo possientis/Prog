@@ -2,22 +2,18 @@
 #include<iostream>
 
 
-std::function<int(int)> adder(int x){
+std::function<int(int)> adder(int &x){
 
-  // replacing [x] by [&x] does not produce expected behaviour
-  return [x](int y){return x + y;};
+
+  // using [&x] here will not work unless x is passed to adder 
+  // by reference. Otherwise, [&x] will simply capture the reference
+  // of a local copy of x, which will defeat the purpose of [&x] v [x]
+  return [&x](int y){return x + y;};  // [x] or [&x]
 
 }
 
 
-
 int main(){
-
-  std::function<int(int)> add5 = adder(5);
-  auto add10 = adder(10);
-
-  std::cout << "5 + 7 = " << add5(7) << std::endl;
-  std::cout << "10 + 2 = " << add10(2) << std::endl;
 
   int x = 3;
   auto addx = adder(x);
@@ -26,8 +22,6 @@ int main(){
 
   x++;  // would expected this to matter when using [&x]
 
-  // output does change when using [&x], but does produce expected result
-  // output does not change when capture by value '[x]' despite x++
   std::cout << "6 + x = " << addx(6) << std::endl;
 
   return 0;

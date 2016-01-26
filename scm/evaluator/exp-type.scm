@@ -8,12 +8,14 @@
         (else #f)))
 
 (define (variable? exp) 
-  ; DEBUG BEGIN
+
+  ; DEBUG BEGIN;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (if DEBUG (begin
               (display "variable?:\t\t")(display "exp = ")(display exp)
               (display " : ") (display (symbol? exp))
               (newline)))
-  ; DEBUG END
+  ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   (symbol? exp))
 
 (define (quoted? exp) (tagged-list? exp 'quote))                                    
@@ -21,12 +23,14 @@
 (define (assignment? exp) (tagged-list? exp 'set!))
 
 (define (definition? exp) 
-  ; DEBUG BEGIN
+
+  ; DEBUG BEGIN;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (if DEBUG (begin
               (display "definition?:\t\t")(display "exp = ")(display exp)
               (display " : ") (display (tagged-list? exp 'define))
               (newline)))
-  ; DEBUG END
+  ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   (tagged-list? exp 'define))
 
 (define (if? exp) (tagged-list? exp 'if))
@@ -36,11 +40,13 @@
 (define (lambda? exp) (tagged-list? exp 'lambda))
 
 (define (begin? exp) 
-  ; DEBUG BEGIN
+
+  ; DEBUG BEGIN;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (if DEBUG (begin
               (display "begin?:\t\t\t")(display "exp = ")(display exp)
               (display " : ")(display (tagged-list? exp 'begin))(newline)))
-  ; DEBUG END
+  ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   (tagged-list? exp 'begin)) 
 
 (define (cond? exp) (tagged-list? exp 'cond))

@@ -18,7 +18,10 @@ rm -f haskell/*.o
 rm -f haskell/test
 rm -f asm/*.o
 rm -f asm/a.out
+rm -f asm/test.dat
 rm -f scala/*.class
+rm -f coq/*.glob
+rm -f coq/*.vo
 git status
 
 

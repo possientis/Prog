@@ -40,7 +40,4 @@
         (else  (error "Unknown expression type -- EVAL" exp))))
        
 (define s '(begin (define x 12) x))
-
-
-
-
+(define e the-empty-environment)

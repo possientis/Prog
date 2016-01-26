@@ -1,6 +1,7 @@
+; write interface-bridge allowing several implementations
 (define (enclosing-environment env) (cdr env))
 (define (first-frame env) (car env))
-(define the-empty-environment '())
+(define the-empty-environment (list (cons '() '())))
 (define (make-frame variables values) (cons variables values))
 (define (frame-variables frame) (car frame))
 (define (frame-values frame) (cdr frame))
@@ -41,6 +42,14 @@
   (env-loop env))
 
 (define (define-variable! var val env)
+
+  ; DEBUG BEGIN;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (if DEBUG (begin
+              (display "define-variable!:\t")(display "var = ")(display var)
+              (display "\tval = ")(display val)(display "\tenv = ")
+              (display env)(newline)))
+  ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   (let ((frame (first-frame env)))
     (define (scan vars vals)
       (cond ((null? vars) (add-binding-to-frame! var val frame))
