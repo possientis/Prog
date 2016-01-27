@@ -88,7 +88,7 @@ echo strtoupper("this Is QuITe unexpected\n");
 // class derivation
 class Employee extends Person {
   public function __construct($firstName, $lastName=''){
-    Person::__construct($firstName,$lastName);
+    parent::__construct($firstName,$lastName);
   }
   // testing overriding
   public function foo(){
