@@ -24,5 +24,22 @@ fib n
 -- the same issue will arise when implementing
 -- dynamic programming with a recursive algorithm
 
+-- complexity of this too high
+g 0 = 0
+g n = minimum [max x (1 + g (n - x)) | x <- [1..n]]
 
+-- complexity fine here
+h 0 = [0]
+h n  = xs ++ [minimum (zipWith max (map (+1) xs) (reverse [1..n]))] where
+  xs = h (n - 1)
+
+-- even simpler
+-- if you are allowed to play say 10 moves, then you cannot afford to test 
+-- a floor higher than 10 on the first drop (if the egg breaks you are
+-- screwed). On the second drop, you cannot afford to test higher than 19.
+-- Then 27 etc. 10 + .. + 1 = 55 so you can only cover 55 floors with 10
+-- drops. you are looking for the smallest N such that 100 <= N(N+1)/2
+-- which is 14. This works because you test 14. if it breaks you are 
+-- good, if it doesnt you test 27. If it breaks you are goo otherwise 
+-- you test 39 etc. 
 

@@ -59,6 +59,12 @@ class Person {
     }
   }
 
+  @Override
+  public String toString(){
+    return "(" + getName() + "," + getGender() + "," + getMaritalStatus() + ")";
+  }
+
+
   // some static predicates
   public static final IPredicate<Person> male = 
     t -> t.getGender().equalsIgnoreCase("MALE"); 
@@ -87,10 +93,7 @@ class Person {
   // printing list of people
   public static void print(List<Person> people){
     for(Person person : people){
-      System.out.print("(" + person.getName() 
-          + "," + person.getGender()
-          + "," + person.getMaritalStatus()
-          + ")\t");
+      System.out.print(person + "\t");
     }
   }
 

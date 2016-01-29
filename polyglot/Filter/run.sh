@@ -14,3 +14,6 @@ javac Filter.java; java Filter; rm *.class
 
 echo '\nThis is JavaScript ...'
 js filter.js
+
+echo '\nThis is PHP ...'
+php filter.php

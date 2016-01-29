@@ -1,0 +1,85 @@
+# Filter design pattern
+
+# This pattern allows to use a list of objects and perform
+# a filtering operation on that list so as to obtain a new
+# list comprised of those objects in the initial list which
+# satisfy a given predicate. Since the introduction of
+# lambda expressions within Java 8 and the introduction
+# of functional interfaces such as Predicate<T>, this 
+# pattern is not very useful in practice and amounts 
+# mainly to a coding exercise aiming at re-implementing
+# the Predicate<T> java interface. This pattern is not
+# useful either in functional languages which directly 
+# support first class functions and filter operations on lists.
+
+class Predicate(object):
+    pass
+
+class Person(object):
+    def __init__(self,name,gender,maritalStatus):
+        self._name           = name;
+        self._gender         = gender;
+        self._maritalStatus  = maritalStatus;
+
+    # like C#, Python has property idioms. Let's use them.
+    @property
+    def name(self):
+        return self._name;
+    @property
+    def gender(self):
+        return self._gender;
+    @property
+    def maritalStatus(self):
+        return self._maritalStatus;
+    # possible equality
+    def __eq__(self,other):
+        return self.name.upper() == other.name.upper()
+
+    # string representation
+    def __repr__(self):
+        return "(" + self.name + "," + self.gender + "," + self.maritalStatus + ")"
+
+    # some static predicates
+    male = None # TBI
+    female = None # TBI
+    single = None # TBI
+    singleMale = None # TBI
+    singleOrFemale = None # TBI
+    
+    # sample of known people
+    def people():
+        return [Person("Robert","Male","Single"),
+                Person("John","Male","Married"),
+                Person("Laura","Female","Married"),
+                Person("Diana","Female","Single"),
+                Person("Mike","Male","Single"),
+                Person("Bobby","Male","Single")]
+    
+    # printing list of people
+    def printList(people):
+        for person in people:
+            print(person, end = "\t")
+
+    # various way to filter in python 
+    def filterList(people,predicate):
+        return people;
+
+
+john2 = Person("John","Male","Married")
+notJohn = None
+
+people              = Person.people()
+males               = Person.filterList(people, Person.male)
+females             = Person.filterList(people, Person.female)
+singleMales         = Person.filterList(people, Person.singleMale)
+singleOrFemales     = Person.filterList(people, Person.singleOrFemale)
+notJohns            = Person.filterList(people, notJohn)
+
+print("Everyone:", end = "\t\t");          Person.printList(people);
+print("\nNot John:", end = "\t\t");        Person.printList(notJohns);
+print("\nSingle or Female:", end = "\t");  Person.printList(singleOrFemales);
+print("\nMales:", end = "\t\t\t");         Person.printList(males);
+print("\nSingle Males:", end = "\t\t");    Person.printList(singleMales);
+print("\nFemales:", end = "\t\t");         Person.printList(females);
+print("\n");
+ 
