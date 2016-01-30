@@ -17,3 +17,12 @@ js filter.js
 
 echo '\nThis is PHP ...'
 php filter.php
+
+echo '\nThis is Python ...'
+python3 filter.py
+
+echo '\nThis is Ruby ...'
+ruby filter.rb
+
+
+

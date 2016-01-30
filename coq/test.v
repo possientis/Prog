@@ -1,4 +1,4 @@
-Require Import List.
+Require Import List CpdtTactics.
 (*
 Require Import Bool Arith List CpdtTactics. 
 *)
@@ -132,11 +132,41 @@ Lemma compile_correct' : forall e p s,
   fold compile.
   unfold expDenote.
   fold expDenote.
+(*
+Check app_assoc_reverse.
+Check app_assoc.
+SearchRewrite((_++_)++_).
+*)
+  rewrite app_assoc_reverse.
+  rewrite IHe2.
+  rewrite app_assoc_reverse.
+  rewrite IHe1.
+  unfold progDenote at 1.
+  simpl.
+  fold progDenote. 
+  reflexivity.
 
+Abort.
 
+Lemma compile_correct' : forall e p s,
+  progDenote (compile e ++ p) s = progDenote p (expDenote e :: s).
 
+  induction e; crush.
+Qed.
 
+Theorem compile_correct : forall e, 
+  progDenote (compile e) nil = Some (expDenote e :: nil).
+ 
+  intros.
 
+(*
+Check app_nil_end.
+*)
+  rewrite (app_nil_end(compile e)).
+  rewrite compile_correct'.
+  unfold progDenote. (* actually this is optional, as reflexivity will check *)
+  reflexivity.
+Qed.
 
 
 
