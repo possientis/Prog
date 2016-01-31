@@ -1,10 +1,6 @@
-Require Import List CpdtTactics.
-(*
-Require Import Bool Arith List CpdtTactics. 
-*)
-(*
+Require Import Bool Arith List CpdtTactics.
 Set Implicit Arguments.
-*)
+
 (*
 Set Asymetric Patterns. (* no impact before Coq version 8.5 *)
 *) 
@@ -167,6 +163,63 @@ Check app_nil_end.
   unfold progDenote. (* actually this is optional, as reflexivity will check *)
   reflexivity.
 Qed.
+
+Inductive type : Set := Nat | Bool.
+
+Inductive tbinop : type -> type -> type -> Set :=
+| TPlus : tbinop Nat Nat Nat
+| TTimes : tbinop Nat Nat Nat
+| TEq : forall t, tbinop t t Bool
+| TLt : tbinop Nat Nat Bool.
+
+Inductive texp : type -> Set :=
+| TNConst : nat -> texp Nat
+| TBConst : bool -> texp Bool
+| TBinop : forall t1 t2 t, tbinop t1 t2 t -> texp t1 -> texp t2 -> texp t.
+
+Definition typeDenote (t : type) : Set :=
+  match t with
+    | Nat => nat
+    | Bool => bool
+  end.
+
+Definition tbinopDenote arg1 arg2 res (b : tbinop arg1 arg2 res)
+  : typeDenote arg1 -> typeDenote arg2 -> typeDenote res :=
+  match b with
+    | TPlus => plus
+    | TTimes => mult
+    | TEq Nat => beq_nat
+    | TEq Bool => eqb
+    | TLt => leb
+  end.
+
+Fixpoint texpDenote t (e : texp t) : typeDenote t :=
+  match e with
+    | TNConst n => n
+    | TBConst b => b
+    | TBinop _ _ _ b e1 e2 => (tbinopDenote b) (texpDenote e1) (texpDenote e2)
+  end.
+
+Definition texp1: texp Nat  := TNConst 42.
+Definition texp2: texp Bool := TBConst false.
+Definition texp3: texp Bool := TBConst true.
+Definition texp_2p2         := TBinop TPlus (TNConst 2) (TNConst 2).
+Definition texp_7           := TNConst 7.
+Definition texp4: texp Nat  := TBinop TTimes texp_2p2 texp_7.
+Definition texp5: texp Bool := TBinop (TEq Nat) texp_2p2 texp_7.
+Definition texp6: texp Bool := TBinop TLt texp_2p2 texp_7.
+
+
+
+(*
+Eval simpl in texpDenote texp1. 
+Eval simpl in texpDenote texp2. 
+Eval simpl in texpDenote texp3. 
+Eval simpl in texpDenote texp4. 
+Eval simpl in texpDenote texp5. 
+Eval simpl in texpDenote texp6. 
+*)
+
 
 
 
