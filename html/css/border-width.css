@@ -1,0 +1,12 @@
+p.one {
+  border-color: blue;
+  border-width: 2px;
+  border-style: solid;}
+p.two {
+  border-color: yellow;
+  border-width: thick;
+  border-style: solid;}
+p.three {
+  border-color: green;
+  border-width: 1px 4px 12px 4px;
+  border-style: solid;}

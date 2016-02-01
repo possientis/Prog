@@ -19,10 +19,14 @@
               ((eq? m 'define!)(define! data))
               ((eq? m 'set-variable-value!)(set-variable-value! data))
               ((eq? m 'extend-environment)(extend-environment data))
-              ((eq? m 'display-environment)(display-environment data))
+              ((eq? m 'display)(display-env data))
               (else (error "environment1: unknown operation error: " m)))))
     ;
     ; Implementation of public interface
+    ;
+    ; empty environment represented by the pair ('data . '())
+    ; rather than simply '() so as to make it mutable
+    (define (empty? data)(equal? (cdr data) '()))
     ;
     (define (lookup data)
       (lambda (var)
@@ -39,6 +43,7 @@
     ;
     (define (define! data)
       (lambda (var val)
+        (if (empty? data) (set-cdr! data (list (cons '() '()))))
         (let ((frame (first-frame data)))
           (define (scan vars vals)
             (cond ((null? vars) (add-binding-to-frame! var val frame))
@@ -52,17 +57,16 @@
     (define (extend-environment data)
       'TBI)
     ;
-    (define (display-environment data)
+    (define (display-env data)
       (display data)(newline))
     ;
     ; Private helper functions
     ;
-    (define (empty? data)
-      (equal? data (list (cons '() '()))))
+
     ;
-    (define (enclosing-environment data) (cdr data))
+    (define (enclosing-environment data) (cons 'data (cddr data)))
     ;
-    (define (first-frame data) (car data))
+    (define (first-frame data) (cadr data))
     ;
     (define (frame-variables frame) (car frame))
     ;
@@ -70,8 +74,8 @@
     ;
     ; returning no argument constructor
     ;
-    (lambda () (this (list (cons '() '()))))))
-    
+
+    (lambda () (this (cons 'data '())))))
 
 
 
@@ -102,6 +106,5 @@
       (let ((frame (first-frame env)))
         (scan (frame-variables frame) (frame-values frame)))))
   (env-loop env))
-
 
 

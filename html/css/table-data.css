@@ -1,0 +1,8 @@
+/* this example fails */
+td.comment {
+  background-color: pink;
+  min-width: 250px;
+  max-width: 450px;
+  text-align: left;
+  padding: 5px;
+  margin: 0px;}

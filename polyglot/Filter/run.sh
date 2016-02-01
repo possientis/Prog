@@ -24,5 +24,12 @@ python3 filter.py
 echo '\nThis is Ruby ...'
 ruby filter.rb
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Filter.scala
+scala Filter; rm *.class
+
+echo '\nThis is Haskell ...'
+ghc -v0 filter.hs; ./filter; rm filter filter.o filter.hi
+
 
 

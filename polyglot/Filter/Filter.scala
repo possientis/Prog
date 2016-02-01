@@ -12,7 +12,17 @@
 // useful either in functional languages which directly 
 // support first class functions and filter operations on lists.
 
-class Predicate[A] {
+class Predicate[A](closure: A => Boolean) {
+  def apply(a: A) = closure(a)
+  def unary_!() = new Predicate[A](a => !this(a))
+  def &(other: Predicate[A]) = 
+    new Predicate[A](a => if(!this(a)) false else other(a))
+  def |(other: Predicate[A]) = 
+    new Predicate[A](a => if(this(a)) true else other(a))
+}
+
+object Predicate {
+  def isEqual[A](targetRef: A): Predicate[A] = new Predicate(_ == targetRef)
 }
 
 class Person(val _name: String, val _gender: String, val _maritalStatus: String){
@@ -35,11 +45,11 @@ class Person(val _name: String, val _gender: String, val _maritalStatus: String)
 object Person {
 
   // some static predicates
-  val male = null
-  val female = null
-  val single = null
-  val singleMale = null
-  val singleOrFemale = null
+  val male    = new Predicate[Person](_.gender.equalsIgnoreCase("MALE"))
+  val female  = new Predicate[Person](_.gender.equalsIgnoreCase("FEMALE"))
+  val single  = new Predicate[Person](_.maritalStatus.equalsIgnoreCase("SINGLE"))
+  val singleMale      = single & male
+  val singleOrFemale  = single | female
 
   // sample of known persons
   def people: List[Person] =  {
@@ -58,17 +68,16 @@ object Person {
 
   def filterList(list:List[Person], predicate:Predicate[Person]):List[Person] = {
     if(predicate == null) return list
-    return list
+    list.filter(predicate(_))
   }
 }
-
 
 object Filter {
 
   def main(args: Array[String]){
     val john2 = new Person("John","Male","Married")
-    val notJohn: Predicate[Person] =  null
-
+    val notJohn: Predicate[Person] =  !Predicate.isEqual(john2)
+    
     val people          = Person.people
     val males           = Person.filterList(people, Person.male)
     val females         = Person.filterList(people, Person.female)
