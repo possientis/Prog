@@ -29,7 +29,8 @@ env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Filter.scala
 scala Filter; rm *.class
 
 echo '\nThis is Haskell ...'
-ghc -v0 filter.hs; ./filter; rm filter filter.o filter.hi
+ghc -v0 -XMultiParamTypeClasses -XTypeSynonymInstances -XFlexibleInstances \
+  filter.hs; ./filter; rm filter filter.o filter.hi
 
 
 
