@@ -1,0 +1,27 @@
+p.one {border-style: solid;}
+p.two {border-style: dotted;}
+p.three {border-style: dashed;}
+p.four {border-style: double;}
+p.five {border-style: groove;}
+p.six {border-style: ridge;}
+p.seven {border-style: inset;}
+p.eight {border-style: outset;}
+
+p.one {
+  border-color: #0088dd;}
+p.two {
+  border-color: #bbbbaa #111111 #ee3e80 #0088dd;}
+
+p.eight {
+  width: 250px;
+  border: 3px dotted #0088dd /* shorthand: width style color (in that order) */;}
+/* can also use:
+ * border-top-style
+ * border-left-style
+ * border-right-style
+ * border-bottom-style
+ * border-top-color
+ * border-right-color
+ * border-bottom-color
+ * border-left-color
+ */

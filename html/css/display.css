@@ -1,0 +1,16 @@
+li {
+  display: inline; /* block level element acts as an inline element */
+  margin-right: 10px;}
+li.coming-soon {
+   display: none;}
+
+/* display: block
+ * inline level element acts as a block element */
+
+  /* see also
+   * display: inline-block
+   */
+
+li.another {
+  visibility: hidden;} /* or visible */
+

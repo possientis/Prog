@@ -1,0 +1,6 @@
+p {
+  width: 200px;
+  border: 2px solid #0088dd;
+  padding: 10px;}
+p.example {
+  margin: 20px;}

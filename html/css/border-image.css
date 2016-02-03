@@ -1,0 +1,34 @@
+/* doesnt work it seems */
+p.one {
+  /*
+  -moz-border-image: url("images/th2.jpeg") 11 11 11 11 stretch;
+  -webkit-border-image: url("images/th2.jpeg") 11 11 11 11 stretch;
+  */
+   border-image: url("images/th2.jpeg") 11 11 11 11 stretch;}
+p.two {
+  /*
+  -moz-border-image: url("images/th2.jpeg") 11 11 11 11 round;
+  -webkit-border-image: url("images/th2.jpeg") 11 11 11 11 round;
+  */
+  border-image: url("images/th2.jpeg") 11 11 11 11 round;}
+
+p.one {
+  -moz-box-shadow: -5px -5px #777777;
+  -webkit-box-shadow: -5px -5px #777777;
+  box-shadow: -5px -5px #777777;}
+p.two {
+  -moz-box-shadow: 5px 5px 5px #777777;
+  -webkit-box-shadow: 5px 5px 5px #777777;
+  box-shadow: 5px 5px 5px #777777;}
+p.three {
+  -moz-box-shadow: 5px 5px 5px 5px #777777;
+  -webkit-box-shadow: 5px 5px 5px 5px #777777;
+  box-shadow: 5px 5px 5px 5px #777777;}
+p.four {
+  -moz-box-shadow: 0 0 10px #777777;
+  -webkit-box-shadow: 0 0 10px #777777;
+  box-shadow: 0 0 10px #777777;}
+p.five {
+  -moz-box-shadow: inset 0 0 10px #777777;
+  -webkit-box-shadow: inset 0 0 10px #777777;
+  box-shadow: inset 0 0 10px #777777;}

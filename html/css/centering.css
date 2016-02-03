@@ -1,0 +1,9 @@
+body {
+  text-align: center;}
+p {
+  width: 300px;
+  padding: 50px;
+  border: 20px solid #0088dd;}
+p.example {
+  margin: 10px auto 10px auto;
+  text-align: left;}

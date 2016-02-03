@@ -14,11 +14,11 @@
     ; object built from data is message passing interface
     (define (this data) ; data ignored here
       (lambda(m)
-        (cond ((eq? m 'lookup)(lookup data))
-              ((eq? m 'empty?)(empty? data))
+        (cond ((eq? m 'empty?)(empty? data))
               ((eq? m 'define!)(define! data))
-              ((eq? m 'set-variable-value!)(set-variable-value! data))
-              ((eq? m 'extend-environment)(extend-environment data))
+              ((eq? m 'lookup)(lookup data))
+              ((eq? m 'set!)(set-var! data))
+              ((eq? m 'extended)(extended data))  ; returns extended env
               ((eq? m 'display)(display-env data))
               (else (error "environment1: unknown operation error: " m)))))
     ;
@@ -27,6 +27,16 @@
     ; empty environment represented by the pair ('data . '())
     ; rather than simply '() so as to make it mutable
     (define (empty? data)(equal? (cdr data) '()))
+    ;
+    (define (define! data)
+      (lambda (var val)
+        (if (empty? data) (set-cdr! data (list (cons '() '()))))
+        (let ((frame (first-frame data)))
+          (define (scan vars vals)
+            (cond ((null? vars) (add-binding-to-frame! var val frame))
+                  ((eq? var (car vars)) (set-car! vals val))
+                  (else (scan (cdr vars) (cdr vals)))))
+          (scan (frame-variables frame) (frame-values frame)))))
     ;
     (define (lookup data)
       (lambda (var)
@@ -41,28 +51,31 @@
               (scan (frame-variables frame) (frame-values frame)))))
         (env-loop data)))
     ;
-    (define (define! data)
+    (define (set-var! data)
       (lambda (var val)
-        (if (empty? data) (set-cdr! data (list (cons '() '()))))
-        (let ((frame (first-frame data)))
+        (define (env-loop data)
           (define (scan vars vals)
-            (cond ((null? vars) (add-binding-to-frame! var val frame))
+            (cond ((null? vars) (env-loop (enclosing-environment data)))
                   ((eq? var (car vars)) (set-car! vals val))
                   (else (scan (cdr vars) (cdr vals)))))
-          (scan (frame-variables frame) (frame-values frame)))))
+          (if (empty? data)
+            (error "Unbound variable -- SET!" var)
+            (let ((frame (first-frame data)))
+              (scan (frame-variables frame) (frame-values frame)))))
+        (env-loop data)))
     ;
-    (define (set-variable-value! data)
-      'TBI)
-    ;
-    (define (extend-environment data)
-      'TBI)
+    (define (extended data)
+      (lambda (vars vals)
+        (if (= (length vars) (length vals))
+          (cons 'data (cons (make-frame vars vals) (cdr data)))
+          (if (< (length vars) (length vals))
+            (error "Too many arguments supplied" vars vals)
+            (error "Too few arguments supplied" vars vals)))))
     ;
     (define (display-env data)
       (display data)(newline))
     ;
     ; Private helper functions
-    ;
-
     ;
     (define (enclosing-environment data) (cons 'data (cddr data)))
     ;
@@ -72,39 +85,19 @@
     ;
     (define (frame-values frame) (cdr frame))
     ;
+    (define (add-binding-to-frame! var val frame)
+      (set-car! frame (cons var (car frame)))
+      (set-cdr! frame (cons val (cdr frame))))
+    ;
+    (define (make-frame vars vals) (cons vars vals))
+    ;
     ; returning no argument constructor
     ;
-
     (lambda () (this (cons 'data '())))))
 
 
 
 
-(define (make-frame variables values) (cons variables values))
 
-
-
-(define (add-binding-to-frame! var val frame)
-  (set-car! frame (cons var (car frame)))
-  (set-cdr! frame (cons val (cdr frame))))
-
-(define (extend-environment vars vals base-env)
-  (if (= (length vars) (length vals))
-    (cons (make-frame vars vals) base-env)
-    (if (< (length vars) (length vals))
-      (error "Too many arguments supplied" vars vals)
-      (error "Too few arguments supplied" vars vals))))
-
-(define (set-variable-value! var val env)
-  (define (env-loop env)
-    (define (scan vars val)
-      (cond ((null? vars) (env-loop (enclosing-environment env)))
-            ((eq? var (car vars)) (set-car! vals val))
-            (else (scan (cdr vars) (cdr vals)))))
-    (if (eq? env the-empty-environment)
-      (error "Unbound variable -- SET!" var)
-      (let ((frame (first-frame env)))
-        (scan (frame-variables frame) (frame-values frame)))))
-  (env-loop env))
 
 
