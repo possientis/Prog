@@ -139,4 +139,110 @@ Qed.
 
 Check nat_list_ind.
 
+Inductive nat_btree : Set :=
+| NLeaf : nat_btree
+| NNode : nat_btree -> nat -> nat_btree -> nat_btree.
+
+Fixpoint nsize (tr : nat_btree) : nat :=
+  match tr with
+    | NLeaf => S O
+    | NNode tr1 _ tr2 => plus (nsize tr1) (nsize tr2)
+  end.
+
+Fixpoint nsplice (tr1 tr2 : nat_btree) : nat_btree :=
+  match tr1 with
+    | NLeaf => NNode tr2 O NLeaf
+    | NNode tr1' n tr2' => NNode (nsplice tr1' tr2) n tr2'
+  end.
+
+
+Theorem plus_assoc : forall n1 n2 n3 : nat, 
+  plus (plus n1 n2) n3 = plus n1 (plus n2 n3).
+  induction n1; crush.
+Qed.
+
+Hint Rewrite n_plus_O plus_assoc.
+
+Theorem nsize_nsplice : forall tr1 tr2 : nat_btree, 
+  nsize (nsplice tr1 tr2) = plus (nsize tr2) (nsize tr1).
+(* begin thide *)
+  induction tr1; crush.
+Qed.
+
+Check nat_btree_ind.
+
+
+Inductive list (T : Set) : Set :=
+| Nil : list T
+| Cons : T -> list T -> list T.
+
+Fixpoint length T (ls : list T) : nat :=
+  match ls with
+    | Nil => O
+    | Cons _ ls' => S (length ls')
+  end.
+
+Fixpoint app T (ls1 ls2 : list T) : list T :=
+  match ls1 with
+    | Nil => ls2
+    | Cons x ls1' => Cons x (app ls1' ls2)
+  end.
+
+Theorem length_app : forall (T:Set) (ls1:list T) (ls2: list T),
+  length (app ls1 ls2) = plus (length ls1) (length ls2).
+  induction ls1; crush.
+Qed.
+
+
+Reset list.
+
+Section list.
+
+  Variable T : Set.
+
+  Inductive list : Set :=
+  | Nil : list
+  | Cons : T -> list -> list.
+
+  Fixpoint length (ls : list) : nat :=
+    match ls with
+      | Nil => O
+      | Cons _ ls' => S (length ls')
+    end.
+
+  Fixpoint app (ls1 ls2 : list) : list :=
+    match ls1 with
+      | Nil => ls2
+      | Cons x ls1' => Cons x (app ls1' ls2)
+    end.
+
+  Theorem length_app : forall ls1 ls2 : list, 
+    length (app ls1 ls2) = plus (length ls1) (length ls2).
+
+    induction ls1; crush.
+  Qed.
+
+End list.
+
+Implicit Arguments Nil [T].
+
+Print list.
+
+Check length.
+
+Check list_ind.
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
 

@@ -146,7 +146,6 @@ echo "\nSingle or Female:\t"; Person::display($singleOrFemales);
 echo "\nMales:\t\t\t";        Person::display($males);
 echo "\nSingle Males:\t\t";   Person::display($singleMales);
 echo "\nFemales:\t\t";        Person::display($females);
-echo PHP_EOL;
 
 ?>
 

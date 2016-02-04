@@ -27,6 +27,9 @@ ruby filter.rb
 echo '\nThis is Scheme ...'
 scm filter.scm
 
+echo '\nThis is Clojure ..'
+clojure filter.clj
+
 echo '\nThis is Scala ...'
 env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Filter.scala
 scala Filter; rm *.class
