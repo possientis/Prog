@@ -1,5 +1,6 @@
 // Composite Design Pattern
 import java.util.*;
+import java.util.function.*;
 
 // The composite design pattern consists in creating an abstract class
 // or interface 'Component' which allows client code to handle certain 
@@ -10,7 +11,7 @@ import java.util.*;
 //
 // There are many examples where the composite pattern is applicable
 // e.g. the DOM for html and abstract syntax trees for formal languages, 
-// inductive data types of Haskell and Coq.
+// inductive data types of Haskell and Coq, etc.
 //
 // In the SICP course at MIT, a key idea relating to properties of
 // programming languages is the existence of 'primitive objects' (Leaf)
@@ -28,43 +29,61 @@ import java.util.*;
 // ExpressionComposite := Nil | Cons Expression ExpressionComposite
 //
 
-
-
 abstract class Expression {
-  public boolean   isList(){ return false; }  // overriden by Composite only
-  public boolean   isInt() { return false; }  // overriden by Int only    
+  abstract public boolean isList();         // isComposite
   public abstract  Expression eval(Environment env);
+  public abstract  Expression apply(ExpressionComposite args);
   public abstract  String toString();
-
+  public boolean   isInt(){ return false ;} // overriden by ExpInt 
 }
 
 abstract class ExpressionLeaf extends Expression {
+  @Override
+  public boolean isList(){ return false;}
 }
 
 abstract class ExpressionComposite extends Expression {
   @Override
   public boolean isList(){ return true; }
-  public boolean isNil(){ return false; }   // overriden by Nil only
-  public abstract Expression getCar() throws Exception;
-  public abstract ExpressionComposite getCdr() throws Exception; 
-
+  public abstract boolean isNil();
+  public <R> R foldLeft(R init, BiFunction<R,Expression,R> operator){
+    R out = init;
+    ExpressionComposite next = this;
+    while(!next.isNil()){
+      Cons cell = (Cons) next;
+      out = operator.apply(out, cell.head());
+      next = cell.tail();
+    }
+    return out;
+  }
+  public <R> R foldRight(R init, BiFunction<Expression,R,R> operator){
+    if(isNil()) return init;
+    Cons cell = (Cons) this;
+    // implemantation not stack friendly. May need to be changed
+    return operator.apply(cell.head(), cell.tail().foldRight(init,operator));
+  } 
+  // This does not evaluate the expression, but rather returns
+  // the list (itself an ExpressionComposite) of values (each 
+  // value is itself an expression, albeit often of simpler type) 
+  // obtained by evaluating each expression within the list
+  public ExpressionComposite evalList(Environment env){
+    return foldRight((ExpressionComposite) new Nil(), (expression, list) ->
+        new Cons(expression.eval(env), list));
+  }
 }
 
 class Nil extends ExpressionComposite {
+  public Nil(){}
   @Override
   public boolean isNil(){ return true; }
   @Override
   public Expression eval(Environment env){ return this; } //self evaluating
   @Override
+  public Expression apply(ExpressionComposite list){
+    throw new UnsupportedOperationException("Nil is not an operator");
+  }
+  @Override
   public String toString(){ return "Nil"; }
-  @Override
-  public Expression getCar() throws Exception { 
-    throw new Exception("Nil has no car"); 
-  }
-  @Override
-  public ExpressionComposite getCdr() throws Exception { 
-    throw new Exception("Nil has no cdr"); 
-  }
 }
 
 class Cons extends ExpressionComposite {
@@ -72,55 +91,94 @@ class Cons extends ExpressionComposite {
   private ExpressionComposite cdr;
 
   public Cons(Expression car, ExpressionComposite cdr){
-    this.car = car; this.cdr = cdr;
+    this.car = car; 
+    this.cdr = cdr;
   }
+
+  public Expression head(){ return car;}
+  public ExpressionComposite tail(){ return cdr; }
+
   @Override
-  public Expression getCar(){ return car;}
-  @Override
-  public ExpressionComposite getCdr(){ return cdr; }
+  public boolean isNil(){ return false; }
   @Override
   public String toString(){
-    String out = "(" + car.toString();
-    ExpressionComposite next = cdr;
-    while(!next.isNil()){
-      try{
-        out += " " + next.getCar().toString();
-        next = next.getCdr();
-      }
-      catch(Exception e){
-        System.out.println("Unexpected exception occurred");
-      }
-    }
-    out += ")";
-    return out;
+    return foldLeft("(", (s,e) -> s + e.toString() + " ") + ")";
   }
   @Override
-  public Expression eval(Environment env){ return null; } // TBI
+  public Expression apply(ExpressionComposite args){
+    throw new UnsupportedOperationException("Lambda expression are not yet supported");
+  }
+  @Override
+  public Expression eval(Environment env){
+    ExpressionComposite vals      = evalList(env);
+    // 'this' is a Cons, 'values' should be a Cons
+    assert(!vals.isNil());        
+    Cons values = (Cons) vals;    // safe in view of assert
+    Expression operator           = values.head();
+    ExpressionComposite arguments = values.tail();
+    return operator.apply(arguments);
+  }
 }
-
-
 
 class ExpInt extends ExpressionLeaf {
   private final int value;
+  public ExpInt(Integer value){ this.value = value; }
+  public Integer toInt(){ return value; }
+
+  @Override
+  public Expression eval(Environment env) { return this ;}  // self-evaluating
+  @Override
+  public String toString(){ return String.valueOf(value);}
   @Override
   public boolean isInt(){ return true; }
-  public ExpInt(int value){ this.value = value; }
-  public Expression eval(Environment env) { return this ;}  // self-evaluating
-  public String toString(){ return String.valueOf(value);}
+  @Override
+  public Expression apply(ExpressionComposite args){
+    throw new UnsupportedOperationException("An integer is not an operator");
+  }
 }
 
-abstract class ExpOperation extends ExpressionLeaf {
-
+abstract class Primitive extends ExpressionLeaf {
 }
 
-abstract class BinaryOp extends ExpOperation {
-}
-
-class Plus extends BinaryOp {
+class Plus extends Primitive {
+  @Override
   public String toString(){ return "+"; }
+  @Override
   public Expression eval(Environment env){ return this; }
+  @Override
+  public Expression apply(ExpressionComposite args){
+    return ((Cons) args).foldLeft(new ExpInt(0), (result, expression) -> {
+      if(expression.isInt()){
+        return new ExpInt((result.toInt()) + ((ExpInt) expression).toInt());
+      }
+      else{
+        throw new IllegalArgumentException(
+          "+: argument is not a valid integer"
+        );
+      }
+    });
+  }
 }
 
+class Mult extends BinaryOp {
+  @Override
+  public String toString(){ return "*"; }
+  @Override
+  public Expression eval(Environment env){ return this; }
+  @Override
+  public Expression apply(ExpressionComposite args){
+    return ((Cons) args).foldLeft(new ExpInt(1), (result, expression) -> {
+      if(expression.isInt()){
+        return new ExpInt((result.toInt()) * ((ExpInt) expression).toInt());
+      }
+      else{
+        throw new IllegalArgumentException(
+          "*: argument is not a valid integer"
+        );
+      }
+    });
+  }
+}
 
 class Environment {
 }
@@ -128,11 +186,16 @@ class Environment {
 // test class
 public class Composite {
   public static void main(String[] args){
-    Expression exp1 = new ExpInt(11);
-    Expression exp2 = new ExpInt(23);
-    Expression exp3 = new Plus();
-    Expression exp4 = new Cons(exp3, new Cons (exp1, new Cons(exp2, new Nil())));
-    System.out.println(exp4);
-
+    Expression two = new ExpInt(2);
+    Expression seven = new ExpInt(7);
+    Expression five = new ExpInt(5);
+    Expression plus = new Plus();
+    Expression mult = new Mult();
+    // (+ 2 7 5)
+    Expression exp1 = new Cons(plus, new Cons(two, new Cons(seven, new Cons(five, new Nil()))));
+    // (* 2 (+ 2 7 5) 5)
+    Expression exp2 = new Cons(mult, new Cons(two, new Cons(exp1, new Cons(five, new Nil()))));
+    System.out.println("The evaluation of Lisp expression: " + exp2);
+    System.out.println("yields the value: " + exp2.eval(null));
   }
 }

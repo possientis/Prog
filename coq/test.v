@@ -313,14 +313,83 @@ Inductive formula : Set :=
 Definition forall_refl : formula := Forall (fun x => Eq x x).
 
 
+Fixpoint formulaDenote (f : formula) : Prop :=
+  match f with
+    | Eq n1 n2 => n1 = n2
+    | And f1 f2 => formulaDenote f1 /\ formulaDenote f2
+    | Forall f' => forall n : nat, formulaDenote (f' n)
+  end.
 
-     
+Fixpoint swapper (f : formula) : formula :=
+  match f with
+    | Eq n1 n2 => Eq n2 n1
+    | And f1 f2 => And (swapper f2) (swapper f1)
+    | Forall f' => Forall (fun n => swapper (f' n))
+  end.
+
+Theorem swapper_preserves_truth : forall f : formula, 
+  formulaDenote f -> formulaDenote (swapper f).
+  induction f; crush. 
+Qed.
 
 
+(*
+Check formula_ind.
+*)
+
+(*
+Inductive term : Set :=
+| App : term -> term -> term
+| Abs : (term -> term) -> term.
 
 
+Definition uhoh (t : term) : term :=
+  match t with
+    | Abs f => f t
+    | _ => t
+  end.
+*)
+
+Fixpoint plus_recursive (n : nat) : nat -> nat :=
+  match n with
+    | O => fun m => m
+    | S n' => fun m => S (plus_recursive n' m)
+  end.
+
+Definition plus_rec : nat -> nat -> nat :=
+  nat_rec (fun _ : nat => nat -> nat) (fun m => m) (fun _ r m => S (r m)).
 
 
+Theorem plus_equivalent : plus_recursive = plus_rec.
+  reflexivity.
+Qed.
 
+Print nat_rect.
+
+Fixpoint nat_rect' (P : nat -> Type) 
+  (HO : P O)
+  (HS : forall n, P n -> P (S n)) (n : nat) :=
+  match n return P n with
+    | O => HO
+    | S n' => HS n' (nat_rect' P HO HS n')
+  end.
+
+Section nat_ind'.
+
+Variable P : nat -> Prop.
+
+Hypothesis O_case : P O.
+
+Hypothesis S_case : forall n : nat, P n -> P (S n).
+
+Fixpoint nat_ind' (n : nat) : P n :=
+  match n with
+    | O => O_case
+    | S n' => S_case (nat_ind' n')
+  end.
+
+End nat_ind'.
+
+Print nat_ind'.
 
 

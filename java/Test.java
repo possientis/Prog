@@ -1,31 +1,13 @@
-import java.io.*;
-import java.util.*;
-import java.awt.event.*;
-import javax.swing.*;
-
-//import java.math.*;
-//import java.util.List;
-//import java.util.ArrayList;
-//import java.util.Random;
+import java.util.concurrent.*;
 
 public class Test {
 
-  public static void main(String[] args) throws InterruptedException{
+  public static void main(String[] args) {
 
-    int a = 5;
+    Runnable r = ()-> {System.out.println("Running"); throw new Exception(); };
 
-    Thread t = new Thread(){
-      public void run(){
-        System.out.println("Thread t: a = " + a);
-      }
-    };
-
-    t.join();
-
-    Thread s = new Thread(() -> {System.out.println("Thread s: a = " + a);});
-
+    Thread t = new Thread(r);
     t.start();
-    s.start();
 
   }
 }
