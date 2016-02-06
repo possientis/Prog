@@ -656,7 +656,7 @@ Inductive formula : Set :=
 
 (** Our kinds of formulas are equalities between naturals, conjunction, and universal quantification over natural numbers.  We avoid needing to include a notion of "variables" in our type, by using Coq functions to encode the syntax of quantification.  For instance, here is the encoding of [forall x : nat, x = x]:%\index{Vernacular commands!Example}% *)
 
-Example forall_refl : formula := Forall (fun x => Eq x x).
+Definition forall_refl : formula := Forall (fun x => Eq x x).
 
 (** We can write recursive functions over reflexive types quite naturally.  Here is one translating our formulas into native Coq propositions. *)
 

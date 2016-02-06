@@ -14,6 +14,7 @@ class Point(val x: Double, val y: Double, addToGrid: Boolean = false){
   }
   
   // update is a special instance method: object.update(...) is object() = ... 
+  // in fact object(x) = y <=> object.update(x,y)
   def update(msg: String) = {
     println("point (" + x + "," + y + ") is saying %s" format msg)
   }

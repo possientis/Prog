@@ -1,10 +1,10 @@
 ; required interface for environment
 ;
-; - lookup-variable-value var env     -> val
-; - set-variable-value! var val env   -> void
-; - define-variable! var val env      -> void
-; - extend-environment vars vals env  -> env
-; - display-environment               -> env
+; - lookup var      -> val
+; - set! var val    -> void
+; - define! var val -> void
+; - extended        -> env
+; - display         -> env
 ;
 
 (define (environment) (environment1)) ; choose implementation here
@@ -67,7 +67,8 @@
     (define (extended data)
       (lambda (vars vals)
         (if (= (length vars) (length vals))
-          (cons 'data (cons (make-frame vars vals) (cdr data)))
+          ; returning new environment instance, with additional frame
+          (this (cons 'data (cons (make-frame vars vals) (cdr data))))
           (if (< (length vars) (length vals))
             (error "Too many arguments supplied" vars vals)
             (error "Too few arguments supplied" vars vals)))))

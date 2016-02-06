@@ -30,7 +30,7 @@ g n = minimum [max x (1 + g (n - x)) | x <- [1..n]]
 
 -- complexity fine here
 h 0 = [0]
-h n  = xs ++ [minimum (zipWith max (map (+1) xs) (reverse [1..n]))] where
+h n  = xs ++ [minimum (zipWith max (map (+1) xs) [n,(n-1)..1])] where
   xs = h (n - 1)
 
 -- even simpler

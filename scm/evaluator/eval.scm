@@ -21,7 +21,7 @@
 
 (define (eval exp env)
   (cond ((self-evaluating? exp) exp)                            
-        ((variable? exp) (lookup-variable-value exp env))
+        ((variable? exp) ((env 'lookup) exp))
         ((quoted? exp) (text-of-quotation exp))                 
         ((assignment? exp) (eval-assignment exp env))           
         ((definition? exp) (eval-definition exp env))           
@@ -41,5 +41,5 @@
        
 (define s '(begin (define x 12) x))
 (define e (environment))
-(e 'display-environment)
+;(display (eval s e))(newline)
 

@@ -17,9 +17,8 @@
               (display "\tenv = ")(display env)(newline)))
   ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
-  (define-variable! (definition-variable exp)              
-                    (eval (definition-expression exp) env)           
-                    env)
+  ((env 'define!) (definition-variable exp)
+                  (eval (definition-expression exp) env))           
   'ok)
 
 

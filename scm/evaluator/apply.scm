@@ -12,10 +12,9 @@
         ((compound-procedure? procedure)                        
          (eval-sequence
            (procedure-body procedure)                           
-           (extend-environment                      
-             (procedure-parameters procedure)                   
-             arguments
-             (procedure-environment procedure))))               
+           (((procedure-environment procedure) 'extended)
+              (procedure-parameters procedure)                   
+              arguments)))
         (else (error "Unknown procedure type -- APPLY" procedure))))
 
 
