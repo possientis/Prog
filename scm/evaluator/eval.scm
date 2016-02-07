@@ -17,9 +17,10 @@
 (load "let-star.scm")
 (load "apply.scm")
 
-(define DEBUG #t)
+(define DEBUG #f)
 
 (define (eval exp env)
+  (if (eq? env #f) (set! env (environment)))
   (cond ((self-evaluating? exp) exp)                            
         ((variable? exp) ((env 'lookup) exp))
         ((quoted? exp) (text-of-quotation exp))                 
@@ -41,5 +42,6 @@
        
 (define s '(begin (define x 12) x))
 (define e (environment))
+(define t '('eval '(begin (define x 12) x) #f))
 ;(display (eval s e))(newline)
 

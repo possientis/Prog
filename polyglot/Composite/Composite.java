@@ -50,7 +50,8 @@ abstract class ExpressionComposite extends Expression {
     R out = init;
     ExpressionComposite next = this;
     while(!next.isNil()){
-      Cons cell = (Cons) next;
+      assert(!next.isNil());
+      Cons cell = (Cons) next;  // safe in view of assert
       out = operator.apply(out, cell.head());
       next = cell.tail();
     }
@@ -58,7 +59,8 @@ abstract class ExpressionComposite extends Expression {
   }
   public <R> R foldRight(R init, BiFunction<Expression,R,R> operator){
     if(isNil()) return init;
-    Cons cell = (Cons) this;
+    assert(!isNil());
+    Cons cell = (Cons) this;  // safe in view of assert
     // implemantation not stack friendly. May need to be changed
     return operator.apply(cell.head(), cell.tail().foldRight(init,operator));
   } 
@@ -106,7 +108,9 @@ class Cons extends ExpressionComposite {
   }
   @Override
   public Expression apply(ExpressionComposite args){
-    throw new UnsupportedOperationException("Lambda expression are not yet supported");
+    throw new UnsupportedOperationException(
+      "Lambda expression are not yet supported"
+    );
   }
   @Override
   public Expression eval(Environment env){
@@ -147,7 +151,7 @@ class Plus extends Primitive {
   public Expression eval(Environment env){ return this; }
   @Override
   public Expression apply(ExpressionComposite args){
-    return ((Cons) args).foldLeft(new ExpInt(0), (result, expression) -> {
+    return args.foldLeft(new ExpInt(0), (result, expression) -> {
       if(expression.isInt()){
         return new ExpInt((result.toInt()) + ((ExpInt) expression).toInt());
       }
@@ -160,14 +164,14 @@ class Plus extends Primitive {
   }
 }
 
-class Mult extends BinaryOp {
+class Mult extends Primitive {
   @Override
   public String toString(){ return "*"; }
   @Override
   public Expression eval(Environment env){ return this; }
   @Override
   public Expression apply(ExpressionComposite args){
-    return ((Cons) args).foldLeft(new ExpInt(1), (result, expression) -> {
+    return args.foldLeft(new ExpInt(1), (result, expression) -> {
       if(expression.isInt()){
         return new ExpInt((result.toInt()) * ((ExpInt) expression).toInt());
       }
@@ -186,16 +190,31 @@ class Environment {
 // test class
 public class Composite {
   public static void main(String[] args){
-    Expression two = new ExpInt(2);
-    Expression seven = new ExpInt(7);
-    Expression five = new ExpInt(5);
-    Expression plus = new Plus();
-    Expression mult = new Mult();
-    // (+ 2 7 5)
-    Expression exp1 = new Cons(plus, new Cons(two, new Cons(seven, new Cons(five, new Nil()))));
-    // (* 2 (+ 2 7 5) 5)
-    Expression exp2 = new Cons(mult, new Cons(two, new Cons(exp1, new Cons(five, new Nil()))));
+    Environment env   = new Environment();
+    Expression two    = new ExpInt(2);
+    Expression seven  = new ExpInt(7);
+    Expression five   = new ExpInt(5);
+    Expression plus   = new Plus();
+    Expression mult   = new Mult();
+    Expression exp1   = new Cons( // (+ 2 7 5)
+                            plus, 
+                            new Cons(
+                                two, 
+                                new Cons(
+                                    seven, 
+                                    new Cons(
+                                        five, 
+                                        new Nil()))));
+    Expression exp2   = new Cons( // (* 2 (+ 2 7 5) 5)
+                            mult, 
+                            new Cons(
+                                two, 
+                                new Cons(
+                                    exp1, 
+                                    new Cons(
+                                        five, 
+                                        new Nil()))));
     System.out.println("The evaluation of Lisp expression: " + exp2);
-    System.out.println("yields the value: " + exp2.eval(null));
+    System.out.println("yields the value: " + exp2.eval(env));
   }
 }
