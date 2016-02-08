@@ -30,10 +30,10 @@ import java.util.function.*;
 //
 
 abstract class Expression {
-  abstract public boolean isList();         // isComposite
   public abstract  Expression eval(Environment env);
   public abstract  Expression apply(ExpressionComposite args);
   public abstract  String toString();
+  public abstract  boolean isList();         // isComposite
   public boolean   isInt(){ return false ;} // overriden by ExpInt 
 }
 

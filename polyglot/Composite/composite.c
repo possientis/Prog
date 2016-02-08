@@ -55,10 +55,9 @@ typedef struct NilClass_                  NilClass;
 typedef struct EnvironmentClass_          EnvironmentClass;
 
 /******************************************************************************/
-/*                            Root class                                      */
+/*                          Expression class (root)                           */
 /******************************************************************************/
 
-// root class: level 0
 struct ExpressionClass_ {
   Expression*   (*eval)     (Expression*, Environment*);
   Expression*   (*apply)    (Expression*, ExpressionComposite*);
@@ -69,7 +68,6 @@ struct ExpressionClass_ {
   int           count;                      // reference counter
 };
 
-// root class: level 0
 struct Expression_ {
   int count;                                // reference counter
   ExpressionClass* vTable;
@@ -134,6 +132,14 @@ int Expression_isInt(Expression *self){
   return isInt(self);
 }
 
+/******************************************************************************/
+// overload for vTable initialization
+int _Expression_isInt(Expression* self){
+  return 0;
+}
+/******************************************************************************/
+
+
 // just boiler-plate, managing vTable indirection
 void Expression_delete(Expression *self){
   assert(self != NULL);
@@ -145,24 +151,212 @@ void Expression_delete(Expression *self){
   delete(self);
 }
 
+/******************************************************************************/
+/*                     ExpressionLeaf class (level 1)                         */
+/******************************************************************************/
 
-// child of root: level 1
 struct ExpressionLeafClass_ {
-  ExpressionClass baseTable;
   // no new virtual methods
 };
 
-// child of root: level 1
+struct ExpressionLeaf_ {
+  Expression base;        // inheritance
+};
+
+// just boiler-plate, passing call to base
+Expression*  ExpressionLeaf_eval(ExpressionLeaf* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  return Expression_eval((Expression*) self, env);    // upcast
+}
+
+// just boiler-plate, passing call to base
+Expression* ExpressionLeaf_apply(ExpressionLeaf* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return Expression_apply((Expression*) self, args);  // upcast
+}
+
+// just boiler-plate, passing call to base
+const char* ExpressionLeaf_toString(ExpressionLeaf* self){
+  assert(self != NULL);
+  return Expression_toString((Expression*) self);     // upcast
+}
+
+/******************************************************************************/
+// Override
+int ExpressionLeaf_isList(ExpressionLeaf* self){
+  assert(self != NULL);
+  return 0;
+}
+// overload for vTable initialization
+int _ExpressionLeaf_isList(Expression* self){
+  assert(self != NULL);
+  return ExpressionLeaf_isList((ExpressionLeaf*) self); // downcast
+}
+/******************************************************************************/
+
+// just boiler-plate, passing call to base
+int ExpressionLeaf_isInt(ExpressionLeaf* self){
+  assert(self != NULL);
+  return Expression_isInt((Expression*) self);
+}
+
+// just boiler-plate, passing call to base
+void ExpressionLeaf_delete(ExpressionLeaf* self){
+  assert(self != NULL);
+  Expression_delete((Expression*) self);
+}
+
+/******************************************************************************/
+/*                    ExpressionComposite class (level 1)                     */
+/******************************************************************************/
+
 struct ExpressionCompositeClass_ {
-  ExpressionClass baseTable;
+  // new virtual method
   int             (*isNil)  (ExpressionComposite*);
 };
 
-// child of level 1: level 2
+struct ExpressionComposite_ {
+  Expression base;                    // inheritance
+  ExpressionCompositeClass *vTable;   // additional vTable
+};
+
+// just boiler-plate, passing call to base
+Expression*  ExpressionComposite_eval(ExpressionComposite* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  return Expression_eval((Expression*) self, env);    // upcast
+}
+
+// just boiler-plate, passing call to base
+Expression* ExpressionComposite_apply(
+    ExpressionComposite* self, 
+    ExpressionComposite* args
+){
+  assert(self != NULL);
+  assert(args != NULL);
+  return Expression_apply((Expression*) self, args);  // upcast
+}
+
+// just boiler-plate, passing call to base
+const char* ExpressionComposite_toString(ExpressionComposite* self){
+  assert(self != NULL);
+  return Expression_toString((Expression*) self);     // upcast
+}
+
+/******************************************************************************/
+// Override
+int ExpressionComposite_isList(ExpressionComposite* self){
+  assert(self != NULL);
+  return 1;
+}
+// overload for vTable initialization
+int _ExpressionComposite_isList(Expression* self){
+  assert(self != NULL);
+  return ExpressionComposite_isList((ExpressionComposite*) self); // downcast
+}
+/******************************************************************************/
+
+// just boiler-plate, passing call to base
+int ExpressionComposite_isInt(ExpressionComposite* self){
+  assert(self != NULL);
+  return Expression_isInt((Expression*) self);                   // upcast
+}
+
+// just boiler-plate, passing call to base
+void ExpressionComposite_delete(ExpressionComposite* self){
+  assert(self != NULL);
+  Expression_delete((Expression*) self);                        // upcast
+}
+
+// just boiler-plate, managing vTable indirection
+int ExpressionComposite_isNil(ExpressionComposite *self){
+  assert(self != NULL);
+  ExpressionCompositeClass* vTable = self->vTable;
+  assert(vTable != NULL);
+  int (*isNil)(ExpressionComposite*);
+  isNil = vTable->isNil;
+  assert(isNil != NULL);
+  return isNil(self);
+}
+
+// This is not a virtual method
+void ExpressionComposite_foldLeft(void* init, void* operator, void* result){
+  // R* init
+  // R* (*operator)(R* arg, Expression* exp)
+  // R* result
+}
+
+// This is not a virtual method
+void ExpressionComposite_foldRight(void* init, void* operator, void* result){
+  // R* init
+  // R* (*operator)(Expression* exp, R* arg)
+  // R* result
+}
+
+// This is not a virtual method
+ExpressionComposite* ExpressionComposite_evalList(
+    ExpressionComposite* self,
+    Environment*         env
+){
+
+}
+
+
+/******************************************************************************/
+/*                    ExpressionPrimitive class (level 2)                     */
+/******************************************************************************/
+
 struct PrimitiveClass_ {
-  ExpressionLeafClass baseTable;
   // no new virtual method
 };
+
+struct Primitive_ {
+  ExpressionLeaf base;
+};
+
+// just boiler-plate, passing call to base
+Expression*  Primitive_eval(Primitive* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  return Expression_eval((Expression*) self, env);    // upcast
+}
+
+// just boiler-plate, passing call to base
+Expression* Primitive_apply(Primitive* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return Expression_apply((Expression*) self, args);  // upcast
+}
+
+// just boiler-plate, passing call to base
+const char* Primitive_toString(Primitive* self){
+  assert(self != NULL);
+  return Expression_toString((Expression*) self);     // upcast
+}
+
+// just boiler-plate, passing call to base
+int Primitive_isList(Primitive* self){
+  assert(self != NULL);
+  return Expression_isList((Expression*) self);        // upcast
+}
+
+// just boiler-plate, passing call to base
+int Primitive_isInt(Primitive* self){
+  assert(self != NULL);
+  return Expression_isInt((Expression*) self);        // upcast
+}
+
+// just boiler-plate, passing call to base
+void Primitive_delete(Primitive* self){
+  assert(self != NULL);
+  Expression_delete((Expression*) self);              // upcast
+}
+
+
+
+
 
 // child of level 1: level 2
 struct ExpIntClass_ {
@@ -187,16 +381,6 @@ struct NilClass_ {
 // child of level 1: level 2
 struct ConsClass_ {
   ExpressionCompositeClass baseTable;
-};
-
-// level 1
-struct ExpressionLeaf_ {
-  Expression base;        // inheritance
-};
-
-// level 1
-struct ExpressionComposite_ {
-  Expression base;        // inheritance
 };
 
 

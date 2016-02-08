@@ -1,6 +1,6 @@
 Require Import List.
 
-Require Import CpdtTactics.
+(*Require Import CpdtTactics.*)
 
 Set Implicit Arguments.
 
@@ -131,7 +131,6 @@ Theorem right_distributivity : forall n m p : nat,
   intros.
   rewrite IHn.
   rewrite plus_assoc_from_left.
-  rewrite plus_commutativity
 
 (*
 Theorem mult_assoc_from_left: forall n m p :nat,
