@@ -93,9 +93,96 @@ Section Propositional.
 End Propositional. (* all our proved theorems become universally quantified
 over the propositional variables that we used *)
 
-
+Print ex.
 
   
+Theorem exist1 : exists x : nat, x + 1 = 2.
+  exists 1.
+  simpl.
+  reflexivity.
+Qed.
+
+
+Theorem exist2 : forall n m : nat, (exists x : nat, n + x = m) -> n <= m.
+  intros.
+  destruct H.
+  crush.
+Qed.
+
+
+
+Inductive isZero : nat -> Prop :=
+| IsZero : isZero 0.
+
+
+Theorem isZero_zero : isZero 0.
+  constructor.
+Qed.
+
+
+
+Theorem isZero_plus : forall n m : nat, isZero m -> n + m = n.
+  destruct 1.
+  crush.
+Qed.
+
+Theorem isZero_contra : isZero 1 -> False.
+  destruct 1.
+  Undo.
+  inversion 1.
+Qed.
+
+
+Theorem isZero_contra' : isZero 1 -> 2 + 2 = 5.
+  destruct 1.
+  Abort.
+
+Check isZero_ind.
+
+
+
+Inductive even : nat -> Prop :=
+| EvenO : even O
+| EvenSS : forall n, even n -> even (S (S n)).
+
+
+
+Theorem even_0 : even 0.
+  constructor.
+Qed.
+
+
+Theorem even_4 : even 4.
+  constructor.
+  constructor.
+  constructor.
+Qed.
+
+
+
+Hint Constructors even.
+
+  
+Theorem even_4' : even 4.
+  auto.
+Qed.
+
+
+Theorem even_1_contra : even 1 -> False.
+  inversion 1.
+Qed.
+
+
+
+Theorem even_3_contra : even 3 -> False.
+  inversion 1.
+  inversion H1.
+Qed.
+
+(* we can also do inductive proofs about [even]. *)
+
+
+
 
 
   

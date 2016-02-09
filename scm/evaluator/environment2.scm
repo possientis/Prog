@@ -18,30 +18,26 @@
     ; empty environment represented by the pair ('data . '())
     ; rather than simply '() so as to make it mutable
     (define (empty? data)(equal? (cdr data) '()))
-    ;
+    ; 
     (define (define! data)
       (lambda (var val)
-        (if (empty? data) (set-cdr! data (list '()))) ; adding first frame
+        (if (empty? data) (set-cdr! data (list (frame)))) ; adding first frame
         (let ((frame (first-frame data)))
-          (define (scan pairs)
-            (cond ((null? pairs) (add-binding-to-frame! var val frame))
-                  ((eq? var (caar pairs)) (set-cdr! (car pairs) val))
-                  (else (scan (cdr pairs)))))
-          (scan frame))))
+          ((frame 'insert) var val))))
     ;
     (define (lookup data)
       (lambda (var)
-        (define (env-loop data)
-          (define (scan vars vals)
-            (cond ((null? vars) (env-loop (enclosing-environment data)))
-            ((eq? var (car vars)) (car vals))
-            (else (scan (cdr vars) (cdr vals)))))
-          (if (empty? data)
-            (error "Unbound variable" var)
-            (let ((frame (first-frame data)))
-              (scan (frame-variables frame) (frame-values frame)))))
-        (env-loop data)))
-    ;
+        (define (loop env)
+          (if (empty? env)
+            (error "Unbound variable -- LOOKUP" var)
+            (let ((frame (first-frame env)))
+              (let ((varval ((frame 'find) var)))
+                (if (eq? #f varval) ; var not in current frame
+                  (loop (enclosing-environment env))
+                  (cdr varval)))))) ; varval is pair (var . val)
+        (loop data)))
+        
+    ; contrary to define!
     (define (set-var! data)
       (lambda (var val)
         (define (env-loop data)

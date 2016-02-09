@@ -126,8 +126,8 @@ class Cons extends ExpressionComposite {
 
 class ExpInt extends ExpressionLeaf {
   private final int value;
-  public ExpInt(Integer value){ this.value = value; }
-  public Integer toInt(){ return value; }
+  public ExpInt(int value){ this.value = value; }
+  public int toInt(){ return value; }
 
   @Override
   public Expression eval(Environment env) { return this ;}  // self-evaluating

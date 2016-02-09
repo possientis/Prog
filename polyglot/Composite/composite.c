@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <malloc.h>
+#include <string.h>
 
 // The composite design pattern consists in creating an abstract class
 // or interface 'Component' which allows client code to handle certain 
@@ -41,6 +42,7 @@ typedef struct Mult_                      Mult;
 typedef struct Cons_                      Cons;
 typedef struct Nil_                       Nil;
 typedef struct Environment_               Environment;
+typedef struct String_                    String;
 
 // data structures maintaining pointers to virtual methods
 typedef struct ExpressionClass_           ExpressionClass;
@@ -53,6 +55,58 @@ typedef struct MultClass_                 MultClass;
 typedef struct ConsClass_                 ConsClass;
 typedef struct NilClass_                  NilClass;
 typedef struct EnvironmentClass_          EnvironmentClass;
+
+/******************************************************************************/
+/*                               String class                                 */
+/******************************************************************************/
+
+// attempt at creating a class of immutable strings.
+// This coding exercise forbids us to use any C++
+struct String_ {
+  int count;      // reference count
+  int length;
+  const char* buffer;
+};
+
+String* String_new(const char* from){
+  assert(from != NULL);
+  int length = strlen(from); // risky, buffer could have no trailing '\0'
+  assert(length >= 0);
+  char* buffer = (char*) malloc(sizeof(char)*(length + 1));
+  assert(buffer != NULL);
+  String* obj = (String*) malloc(sizeof(String));
+  assert(obj != NULL);
+  obj->count = 1;
+  obj->length = length;
+  obj->buffer = buffer;
+  strcpy(buffer,from);
+  return obj;
+}
+
+String* String_copy(String* self){
+  assert(self != NULL);
+  assert(self->count > 0);
+  assert(self->buffer != NULL);
+  self->count++;  // increasing reference count
+  return self;
+}
+
+void String_delete(String* self){
+  assert(self != NULL);
+  assert(self->count > 0);
+  assert(self->buffer != NULL);
+  self->count--;                 // decresing reference count
+  if(self->count == 0){
+    free((char*)self->buffer);  // casting const away for memory release
+    self->buffer = NULL;
+    self->length = 0;
+    free(self);
+  }
+}
+
+
+ 
+
 
 /******************************************************************************/
 /*                          Expression class (root)                           */
@@ -281,6 +335,7 @@ int ExpressionComposite_isNil(ExpressionComposite *self){
   return isNil(self);
 }
 
+/******************************************************************************/
 // This is not a virtual method
 void ExpressionComposite_foldLeft(void* init, void* operator, void* result){
   // R* init
@@ -302,6 +357,7 @@ ExpressionComposite* ExpressionComposite_evalList(
 ){
 
 }
+/******************************************************************************/
 
 
 /******************************************************************************/
@@ -313,7 +369,7 @@ struct PrimitiveClass_ {
 };
 
 struct Primitive_ {
-  ExpressionLeaf base;
+  ExpressionLeaf base;  // inheritance
 };
 
 // just boiler-plate, passing call to base
@@ -355,34 +411,126 @@ void Primitive_delete(Primitive* self){
 }
 
 
-
-
-
-// child of level 1: level 2
+/******************************************************************************/
+/*                            ExpInt class (level 2)                          */
+/******************************************************************************/
 struct ExpIntClass_ {
-  ExpressionLeafClass baseTable;
+  //  no new virtual function 
 };
+
+struct ExpInt_ {
+  ExpressionLeaf base;  // inheritance
+  int value;            // additional data member
+};
+
+ExpInt* ExpInt_copy(ExpInt* self){
+  assert(self != NULL);
+  Expression* base = (Expression*) self;
+  base->count++;
+  return self;
+}
+
+/******************************************************************************/
+
+// This is not a virtual method
+int ExpInt_toInt(ExpInt* self){
+  assert(self != NULL);
+  return self->value;
+}
+
+// Override
+Expression*  ExpInt_eval(ExpInt* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  ExpInt *copy = ExpInt_copy(self);
+  assert(copy != NULL);
+  return (Expression*) copy;
+}
+
+// overload for vTable initialization
+Expression* _ExpInt_eval(Expression* self, Environment* env){
+  assert(self != NULL);
+  assert(env != NULL);
+  return ExpInt_eval((ExpInt*) self, env);               // downcast
+}
+
+// Override
+Expression* ExpInt_apply(ExpInt* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  fprintf(stderr,"An integer is not an operator\n");
+  return NULL;
+}
+
+// overload for vTable initialization
+Expression* _ExpInt_apply(Expression* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return ExpInt_apply((ExpInt*) self, args);             // downcast
+}
+
+
+// Override
+// Very sketchy implementation, maintaining single buffer
+// This will not work with concurrent access. Not thread safe
+// Even with sequential access, caller of
+const char* ExpInt_toString(ExpInt* self){
+
+  assert(self != NULL);
+  // ------------------------------------------------------------TBI
+  return NULL;
+}
+
+// overload for vTable initialization
+const char* _ExpInt_toString(Expression* self){
+  assert(self != NULL);
+  return ExpInt_toString((ExpInt*) self);
+}
+
+
+// Override
+int ExpInt_isInt(ExpInt* self){
+  assert(self != NULL);
+  return 1;
+}
+
+// overload for vTable initialization
+int _ExpInt_isInt(Expression* self){
+  assert(self != NULL);
+  return ExpInt_isInt((ExpInt*) self);                 // downcast
+}
+
+/******************************************************************************/
+
+// just boiler-plate, passing call to base
+int ExpInt_isList(ExpInt* self){
+  assert(self != NULL);
+  return Expression_isList((Expression*) self);        // upcast
+}
+
+// just boiler-plate, passing call to base
+void ExpInt_delete(ExpInt* self){
+  assert(self != NULL);
+  Expression_delete((Expression*) self);              // upcast
+}
+
+
 
 // child of level 2: level 3
 struct PlusClass_ {
-  PrimitiveClass baseTable;
 };
 
 // child of level 2: level 3
 struct MultClass_ {
-  PrimitiveClass baseTable;
 };
 
 // child of level 1: level 2
 struct NilClass_ {
-  ExpressionCompositeClass baseTable;
 };
 
 // child of level 1: level 2
 struct ConsClass_ {
-  ExpressionCompositeClass baseTable;
 };
-
 
 ExpInt* ExpInt_new(int n){
   return NULL;  // TBI
@@ -405,6 +553,7 @@ Cons* Cons_new(Expression* car, ExpressionComposite* cdr){
 }
 
 int main(int argc, char* argv[], char* envp[]){
+  /*
   Expression *two   = (Expression*) ExpInt_new(2);
   Expression *seven = (Expression*) ExpInt_new(7); 
   Expression *five  = (Expression*) ExpInt_new(5); 
@@ -439,6 +588,14 @@ int main(int argc, char* argv[], char* envp[]){
 
   // Need to release memory here: TBI
 
+  */ 
+  
+  String* x = String_new("Hello World!\n");
+  printf("%s",x->buffer);
+  String* y = String_copy(x);
+  printf("%s",y->buffer);
+  String_delete(x);
+  String_delete(y);
   return 0;
 }
 

@@ -5,13 +5,16 @@
 //#include<malloc.h>
 //#include<assert.h>
 
+int *ap;
+int a[5]={41,42,43,44,45};
+int x;
 
-int main(){
-
-  puts("Hello world!\n");
-
-
+int main()
+{
+  ap = a[4];
+  x = *ap;
+  printf("%d",x);
   return 0;
-
 }
+
 

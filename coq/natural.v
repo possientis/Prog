@@ -62,7 +62,6 @@ Lemma plus_succ_inside : forall n m : nat,
   reflexivity.
 Qed.
 
-
 Theorem plus_commutativity : forall n m : nat,
   plus n m = plus m n.
 
@@ -121,6 +120,13 @@ Lemma n_mult_O : forall n:nat, mult n O = O.
   reflexivity.
 Qed.
 
+Lemma O_mult_n : forall n:nat, mult O n = O.
+  induction n.
+  simpl.
+  reflexivity.
+  simpl.
+  reflexivity.
+Qed.
 
 Theorem right_distributivity : forall n m p : nat,
   mult (plus n m) p = plus (mult n p) (mult m p).
@@ -131,16 +137,86 @@ Theorem right_distributivity : forall n m p : nat,
   intros.
   rewrite IHn.
   rewrite plus_assoc_from_left.
+  assert (plus (mult m p) p = plus p (mult m p)).
+  rewrite plus_commutativity.
+  reflexivity.
+  rewrite H.
+  rewrite plus_assoc_from_right.
+  reflexivity.
+Qed.
 
-(*
-Theorem mult_assoc_from_left: forall n m p :nat,
-  mult (mult n m) p = mult n (mult m p).
-  induction n
+Theorem left_distributivity : forall n m p : nat,
+  mult n (plus m p) = plus (mult n m) (mult n p).
+  induction n.
   intros.
   simpl.
   reflexivity.
+  intros.
   simpl.
-*)
+  rewrite IHn.
+  assert(plus (plus (mult n m) (mult n p)) (plus m p) 
+    = plus (mult n m) (plus (mult n p) (plus m p))).
+  rewrite plus_assoc_from_left.
+  reflexivity.
+  rewrite H.
+  assert(plus (mult n p) (plus m p) = plus (plus (mult n p) m) p).
+  rewrite plus_assoc_from_right.
+  reflexivity.
+  rewrite H0.
+  assert(plus (mult n p) m = plus m (mult n p)).
+  rewrite plus_commutativity.
+  reflexivity.
+  rewrite H1.
+  assert(plus (plus (mult n m) m) (plus (mult n p) p) = plus (mult n m) (plus m (plus (mult n p) p))).
+  rewrite plus_assoc_from_left.
+  reflexivity.
+  rewrite H2.
+  rewrite plus_assoc_from_left.
+  reflexivity.
+Qed. 
 
+Theorem mult_assoc_from_left: forall n m p :nat,
+  mult (mult n m) p = mult n (mult m p).
+  induction n.
+  intros.
+  simpl.
+  reflexivity.
+  intros.
+  simpl.
+  rewrite right_distributivity.
+  rewrite IHn.
+  reflexivity.
+Qed.
 
+Theorem mult_assoc_from_right: forall n m p :nat,
+  mult n (mult m p) = mult (mult n m) p.
+  induction n.
+  intros.
+  simpl.
+  reflexivity.
+  intros.
+  simpl.
+  rewrite IHn.
+  rewrite right_distributivity.
+  reflexivity.
+Qed.
+
+Theorem mult_commutativity: forall n m : nat,
+  mult n m = mult m n.
+  induction n.
+  intro.
+  simpl.
+  rewrite n_mult_O.
+  reflexivity.
+  intro.
+  simpl.
+  rewrite IHn.
+  assert(S n = plus n I).
+  rewrite n_plus_I.
+  reflexivity.
+  rewrite H.
+  rewrite left_distributivity.
+  rewrite n_mult_I.
+  reflexivity.
+Qed.
 

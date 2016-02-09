@@ -1,19 +1,7 @@
-import Control.Monad
-import System.Directory
-import Data.List
-import System.IO
-import Test.QuickCheck
-import Data.Hashable
-import System.Process
+-- not idiomatic
+myDrop n xs = if n <= 0 || null xs
+              then xs
+              else myDrop (n - 1) (tail xs)
+isOdd n = mod n 2 == 1
 
-
-
-when' :: (Monad m) => Bool -> m () -> m ()
-when'  False _ = return ()
-when' True  x = x
-
-
-main = do
-  when' True  (putStrLn "hello")
-  when' False (putStrLn "this should never appear") 
 
