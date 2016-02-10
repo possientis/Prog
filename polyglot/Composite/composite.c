@@ -56,6 +56,34 @@ typedef struct ConsClass_                 ConsClass;
 typedef struct NilClass_                  NilClass;
 typedef struct EnvironmentClass_          EnvironmentClass;
 
+// rough visual check of memory allocation vs release
+void memory_log(const char* message, const void* ptr){
+  fprintf(stderr,message,ptr); // message should have '%lx' referring to ptr
+}
+
+
+/******************************************************************************/
+/*                            Environment class                               */
+/******************************************************************************/
+
+struct Environment_ {
+  int count;
+
+};
+
+Environment* Environment_new(){
+  Environment* obj = (Environment*) malloc(sizeof(Environment));
+  assert(obj != NULL);
+  return obj;
+}
+
+void Environment_delete(Environment* self){
+  assert(self != NULL);
+  free(self);
+}
+
+
+
 /******************************************************************************/
 /*                               String class                                 */
 /******************************************************************************/
@@ -73,8 +101,10 @@ String* String_new(const char* from){
   int length = strlen(from); // risky, buffer could have no trailing '\0'
   assert(length >= 0);
   char* buffer = (char*) malloc(sizeof(char)*(length + 1));
+  memory_log("allocating string buffer %lx\n", buffer);
   assert(buffer != NULL);
   String* obj = (String*) malloc(sizeof(String));
+  memory_log("allocating string object %lx\n", obj);
   assert(obj != NULL);
   obj->count = 1;
   obj->length = length;
@@ -87,6 +117,7 @@ String* String_copy(String* self){
   assert(self != NULL);
   assert(self->count > 0);
   assert(self->buffer != NULL);
+  memory_log("making copy of string object %lx\n", self);
   self->count++;  // increasing reference count
   return self;
 }
@@ -97,17 +128,29 @@ void String_delete(String* self){
   assert(self->buffer != NULL);
   self->count--;                 // decresing reference count
   if(self->count == 0){
+    memory_log("deallocating string buffer %lx\n", self->buffer);
     free((char*)self->buffer);  // casting const away for memory release
     self->buffer = NULL;
     self->length = 0;
+    memory_log("deallocating string object %lx\n", self);
     free(self);
   }
+  else{
+    memory_log("deleting copy of string object %lx\n",self);
+  }
+
 }
 
-
+int String_test(){
+  String* x = String_new("Hello World!\n");
+  printf("%s",x->buffer);
+  String* y = String_copy(x);
+  printf("%s",y->buffer);
+  String_delete(x);
+  String_delete(y);
+  return 0;
+}
  
-
-
 /******************************************************************************/
 /*                          Expression class (root)                           */
 /******************************************************************************/
@@ -115,7 +158,7 @@ void String_delete(String* self){
 struct ExpressionClass_ {
   Expression*   (*eval)     (Expression*, Environment*);
   Expression*   (*apply)    (Expression*, ExpressionComposite*);
-  const char*   (*toString) (Expression*);
+  String*       (*toString) (Expression*);
   int           (*isList)   (Expression*);  // returns 1 if ExpressionComposite 
   int           (*isInt)    (Expression*);  // returns 1 if ExpInt
   void          (*delete)   (Expression*);  // virtual destructor
@@ -154,11 +197,11 @@ Expression* Expression_apply(Expression *self, ExpressionComposite* args){
 }
 
 // just boiler-plate, managing vTable indirection
-const char* Expression_toString(Expression *self){
+String* Expression_toString(Expression *self){
   assert(self != NULL);
   ExpressionClass* vTable = self->vTable;
   assert(vTable != NULL);
-  const char* (*toString)(Expression*);
+  String* (*toString)(Expression*);
   toString = vTable->toString;
   assert(toString != NULL);
   return toString(self);
@@ -232,7 +275,7 @@ Expression* ExpressionLeaf_apply(ExpressionLeaf* self, ExpressionComposite* args
 }
 
 // just boiler-plate, passing call to base
-const char* ExpressionLeaf_toString(ExpressionLeaf* self){
+String* ExpressionLeaf_toString(ExpressionLeaf* self){
   assert(self != NULL);
   return Expression_toString((Expression*) self);     // upcast
 }
@@ -294,7 +337,7 @@ Expression* ExpressionComposite_apply(
 }
 
 // just boiler-plate, passing call to base
-const char* ExpressionComposite_toString(ExpressionComposite* self){
+String* ExpressionComposite_toString(ExpressionComposite* self){
   assert(self != NULL);
   return Expression_toString((Expression*) self);     // upcast
 }
@@ -387,7 +430,7 @@ Expression* Primitive_apply(Primitive* self, ExpressionComposite* args){
 }
 
 // just boiler-plate, passing call to base
-const char* Primitive_toString(Primitive* self){
+String* Primitive_toString(Primitive* self){
   assert(self != NULL);
   return Expression_toString((Expression*) self);     // upcast
 }
@@ -423,19 +466,19 @@ struct ExpInt_ {
   int value;            // additional data member
 };
 
-ExpInt* ExpInt_copy(ExpInt* self){
+ExpressionClass* ExpInt_vTable_copy(ExpressionClass* self){
   assert(self != NULL);
-  Expression* base = (Expression*) self;
-  base->count++;
+  memory_log("making copy of ExpInt vTable %lx\n", self);
+  self->count++;
   return self;
 }
 
-/******************************************************************************/
-
-// This is not a virtual method
-int ExpInt_toInt(ExpInt* self){
+ExpInt* ExpInt_copy(ExpInt* self){
   assert(self != NULL);
-  return self->value;
+  memory_log("making copy of ExpInt object %lx\n",self);
+  Expression* base = (Expression*) self;
+  base->count++;
+  return self;
 }
 
 // Override
@@ -458,7 +501,7 @@ Expression* _ExpInt_eval(Expression* self, Environment* env){
 Expression* ExpInt_apply(ExpInt* self, ExpressionComposite* args){
   assert(self != NULL);
   assert(args != NULL);
-  fprintf(stderr,"An integer is not an operator\n");
+  fprintf(stderr,"ExpInt_apply: An integer is not an operator\n");
   return NULL;
 }
 
@@ -471,18 +514,16 @@ Expression* _ExpInt_apply(Expression* self, ExpressionComposite* args){
 
 
 // Override
-// Very sketchy implementation, maintaining single buffer
-// This will not work with concurrent access. Not thread safe
-// Even with sequential access, caller of
-const char* ExpInt_toString(ExpInt* self){
-
+String* ExpInt_toString(ExpInt* self){
   assert(self != NULL);
-  // ------------------------------------------------------------TBI
-  return NULL;
+  char temp[24];  // on stack, not static, so should be thread safe
+  sprintf(temp,"%d",ExpInt_toInt(self));
+  String* str = String_new(temp);
+  return str; // caller has ownership of String. not returning copy
 }
 
 // overload for vTable initialization
-const char* _ExpInt_toString(Expression* self){
+String* _ExpInt_toString(Expression* self){
   assert(self != NULL);
   return ExpInt_toString((ExpInt*) self);
 }
@@ -500,7 +541,97 @@ int _ExpInt_isInt(Expression* self){
   return ExpInt_isInt((ExpInt*) self);                 // downcast
 }
 
-/******************************************************************************/
+
+void ExpInt_vTable_delete(ExpressionClass*);          // forward
+
+// Override
+void ExpInt_delete(ExpInt* self){
+  assert(self != NULL);
+  Expression* base = (Expression*) self;  //upcast
+  assert(base->count > 0);
+  base->count--;
+  if(base->count == 0){
+    assert(base->vTable != NULL);
+    ExpInt_vTable_delete(base->vTable);
+    self->value = 0;
+    memory_log("deallocating ExpInt object %lx\n", self);
+    free(self);
+  } else{
+    memory_log("deleting copy of ExpInt %lx\n", self);
+  }
+
+
+
+}
+
+// overload for vTable initialization
+void _ExpInt_delete(Expression* self){
+  assert(self != NULL);
+  ExpInt_delete((ExpInt*) self);               // downcast
+}
+// if vTable gets deallocated by destructor, it needs to communicate that
+// fact to this function, so it can discard its dangling referrence 'instance'
+// Hence the boolean (int) argument.
+
+ExpressionClass* ExpInt_vTable_new(int killInstance){
+
+  static ExpressionClass* instance = NULL;  // only one instance for ExpInt
+  
+  if(killInstance){
+    instance = NULL;
+    return NULL;
+  }
+
+  if(instance != NULL) return ExpInt_vTable_copy(instance);
+
+  // real memory allocation
+  instance = (ExpressionClass*) malloc(sizeof(ExpressionClass));
+  assert(instance != NULL);
+  memory_log("allocating ExpInt vTable %lx\n", instance);
+  instance->count     = 1;  // first reference
+  instance->eval      = _ExpInt_eval;
+  instance->apply     = _ExpInt_apply;
+  instance->toString  = _ExpInt_toString;
+  instance->isList    = _ExpressionLeaf_isList;
+  instance->isInt     = _ExpInt_isInt;
+  instance->delete    = _ExpInt_delete;
+  return instance;
+}
+
+void ExpInt_vTable_delete(ExpressionClass* self){
+  assert(self != NULL);
+  assert(self->count >0);
+  self->count--;
+  if(self->count == 0){
+  memory_log("deallocating ExpInt vTable %lx\n", self);
+  self->eval      = NULL;
+  self->apply     = NULL;
+  self->toString  = NULL;
+  self->isList    = NULL;
+  self->isInt     = NULL;
+  self->delete    = NULL;
+  free(self);
+  ExpInt_vTable_new(1); // setting static 'instance' of singleton to NULL
+  }
+  else{
+    memory_log("deleting copy of ExpInt vTable %lx\n", self);
+  }
+}
+
+ExpInt* ExpInt_new(int value){
+  ExpInt* obj = (ExpInt*) malloc(sizeof(ExpInt));
+  assert(obj != NULL);
+  memory_log("allocating ExpInt object %lx\n",obj);
+  obj->value = value;
+  ExpressionLeaf* leaf = (ExpressionLeaf*) obj; //upcast
+  // nothing need setting up for ExpressionLeaf, going further up the chain
+  Expression* base = (Expression *) obj;        // upcast
+  base->count = 1;                              // first reference
+  base->vTable = ExpInt_vTable_new(0);          // '0' indicates normal use 
+  assert(base->vTable != NULL);
+  return obj;
+}
+
 
 // just boiler-plate, passing call to base
 int ExpInt_isList(ExpInt* self){
@@ -508,11 +639,13 @@ int ExpInt_isList(ExpInt* self){
   return Expression_isList((Expression*) self);        // upcast
 }
 
-// just boiler-plate, passing call to base
-void ExpInt_delete(ExpInt* self){
+/******************************************************************************/
+// This is not a virtual method
+int ExpInt_toInt(ExpInt* self){
   assert(self != NULL);
-  Expression_delete((Expression*) self);              // upcast
+  return self->value;
 }
+/******************************************************************************/
 
 
 
@@ -532,9 +665,6 @@ struct NilClass_ {
 struct ConsClass_ {
 };
 
-ExpInt* ExpInt_new(int n){
-  return NULL;  // TBI
-}
 
 Plus* Plus_new(){
   return NULL;  // TBI
@@ -553,6 +683,29 @@ Cons* Cons_new(Expression* car, ExpressionComposite* cdr){
 }
 
 int main(int argc, char* argv[], char* envp[]){
+
+  Environment* env = Environment_new();
+  ExpInt* exp = ExpInt_new(34);
+  // toString
+  String* str = ExpInt_toString(exp);
+  printf("exp = %s\n", str->buffer);
+  String_delete(str);
+
+  // eval
+  Expression* val = ExpInt_eval(exp,env);
+  str = Expression_toString(val); 
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  // apply
+  printf("---------------------------------------------------\n");
+  Expression* app = ExpInt_apply(exp,(ExpressionComposite*) val); // makes no sense
+  printf("---------------------------------------------------\n");
+
+
+  Expression_delete(val);
+  ExpInt_delete(exp);
+  Environment_delete(env);
+
   /*
   Expression *two   = (Expression*) ExpInt_new(2);
   Expression *seven = (Expression*) ExpInt_new(7); 
@@ -589,13 +742,10 @@ int main(int argc, char* argv[], char* envp[]){
   // Need to release memory here: TBI
 
   */ 
-  
-  String* x = String_new("Hello World!\n");
-  printf("%s",x->buffer);
-  String* y = String_copy(x);
-  printf("%s",y->buffer);
-  String_delete(x);
-  String_delete(y);
+
   return 0;
-}
+  
+  }
+
+
 

@@ -179,13 +179,56 @@ Theorem even_3_contra : even 3 -> False.
   inversion H1.
 Qed.
 
-(* we can also do inductive proofs about [even]. *)
+
+Theorem even_plus : forall n m, even n -> even m -> even (n + m).
+  induction n; crush.
+  inversion H.
+  simpl.
+  constructor.
+Restart.
+  induction 1.
+  simpl.
+  intro.
+  assumption.
+  simpl.
+  constructor.
+  apply IHeven.
+  assumption.
+Qed.
 
 
 
+Lemma even_succ : forall n, even n -> even (S n) -> False.
+  induction 1.
+  inversion 1.
+  inversion 1.
+  apply IHeven.
+  assumption.
+Qed.
+
+Lemma even_n_plus_n : forall n, even(n + n).
+  induction n.
+  simpl.
+  constructor.
+  simpl.
+  assert(n + (S n) = S(n + n)).
+  crush.
+  rewrite H.
+  constructor.
+  assumption.
+Qed.
+
+Theorem even_contra : forall n, even (S (n + n)) -> False.
+  intro.
+  assert(even(n + n)).
+  apply even_n_plus_n.
+  apply even_succ.
+  assumption.
+Qed.
+
+SearchRewrite(_ + S _).
 
 
-  
 
 
 
