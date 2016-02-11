@@ -1,4 +1,5 @@
 ; one possible implementation of environment
+(load "frame")
 
 (define environment2    ; constructor
   (let ((_static #f))   ; name encapsulation
@@ -23,7 +24,7 @@
       (lambda (var val)
         (if (empty? data) (set-cdr! data (list (frame)))) ; adding first frame
         (let ((frame (first-frame data)))
-          ((frame 'insert) var val))))
+          ((frame 'insert!) var val))))
     ;
     (define (lookup data)
       (lambda (var)
@@ -37,18 +38,17 @@
                   (cdr varval)))))) ; varval is pair (var . val)
         (loop data)))
         
-    ; contrary to define!
+    ;
     (define (set-var! data)
       (lambda (var val)
-        (define (env-loop data)
-          (define (scan vars vals)
-            (cond ((null? vars) (env-loop (enclosing-environment data)))
-                  ((eq? var (car vars)) (set-car! vals val))
-                  (else (scan (cdr vars) (cdr vals)))))
-          (if (empty? data)
+        (define (env-loop env)
+          (if (empty? env)
             (error "Unbound variable -- SET!" var)
-            (let ((frame (first-frame data)))
-              (scan (frame-variables frame) (frame-values frame)))))
+            (let ((frame (first-frame env)))
+              (let ((found ((env 'find) var)))
+                (if (eq? #f found) ; var not in current frame
+                  (env-loop (enclosing-environment env))
+                  ((env 'insert!) var val))))))
         (env-loop data)))
     ;
     (define (extended data)

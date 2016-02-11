@@ -1,3 +1,5 @@
+use "sets.sml";
+
 datatype ('object, 'arrow) Category =
   category of ('arrow -> 'object) *
               ('arrow -> 'object) *
@@ -5,4 +7,6 @@ datatype ('object, 'arrow) Category =
               ('arrow * 'arrow -> 'arrow)
 
 
-datatype 'a SetMap = setMap of ('a Set)*('a -> 'a)*('a Set) 
+(*
+ datatype 'a SetMap = setMap of ('a Set) * ('a -> 'a) * ('a Set) 
+ *)

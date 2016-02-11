@@ -56,7 +56,7 @@ typedef struct ConsClass_                 ConsClass;
 typedef struct NilClass_                  NilClass;
 typedef struct EnvironmentClass_          EnvironmentClass;
 
-// rough visual check of memory allocation vs release
+// rough visual check of memory allocation vs release to avoid leaks
 void memory_log(const char* message, const void* ptr){
   fprintf(stderr,message,ptr); // message should have '%lx' referring to ptr
 }
@@ -68,7 +68,6 @@ void memory_log(const char* message, const void* ptr){
 
 struct Environment_ {
   int count;
-
 };
 
 Environment* Environment_new(){
@@ -82,14 +81,11 @@ void Environment_delete(Environment* self){
   free(self);
 }
 
-
-
 /******************************************************************************/
 /*                               String class                                 */
 /******************************************************************************/
 
-// attempt at creating a class of immutable strings.
-// This coding exercise forbids us to use any C++
+// attempt at creating a class of immutable strings. C++ is not allowed here
 struct String_ {
   int count;      // reference count
   int length;
@@ -141,16 +137,6 @@ void String_delete(String* self){
 
 }
 
-int String_test(){
-  String* x = String_new("Hello World!\n");
-  printf("%s",x->buffer);
-  String* y = String_copy(x);
-  printf("%s",y->buffer);
-  String_delete(x);
-  String_delete(y);
-  return 0;
-}
- 
 /******************************************************************************/
 /*                          Expression class (root)                           */
 /******************************************************************************/
@@ -311,7 +297,8 @@ void ExpressionLeaf_delete(ExpressionLeaf* self){
 
 struct ExpressionCompositeClass_ {
   // new virtual method
-  int             (*isNil)  (ExpressionComposite*);
+  int (*isNil)  (ExpressionComposite*);
+  int count;
 };
 
 struct ExpressionComposite_ {
@@ -380,14 +367,16 @@ int ExpressionComposite_isNil(ExpressionComposite *self){
 
 /******************************************************************************/
 // This is not a virtual method
-void ExpressionComposite_foldLeft(void* init, void* operator, void* result){
+void ExpressionComposite_foldLeft(ExpressionComposite* self,
+    void* init, void* operator, void* result){
   // R* init
   // R* (*operator)(R* arg, Expression* exp)
   // R* result
 }
 
 // This is not a virtual method
-void ExpressionComposite_foldRight(void* init, void* operator, void* result){
+void ExpressionComposite_foldRight(ExpressionComposite* self,
+    void* init, void* operator, void* result){
   // R* init
   // R* (*operator)(Expression* exp, R* arg)
   // R* result
@@ -466,6 +455,15 @@ struct ExpInt_ {
   int value;            // additional data member
 };
 
+/******************************************************************************/
+// This is not a virtual method
+int ExpInt_toInt(ExpInt* self){
+  assert(self != NULL);
+  return self->value;
+}
+/******************************************************************************/
+
+
 ExpressionClass* ExpInt_vTable_copy(ExpressionClass* self){
   assert(self != NULL);
   memory_log("making copy of ExpInt vTable %lx\n", self);
@@ -541,6 +539,13 @@ int _ExpInt_isInt(Expression* self){
   return ExpInt_isInt((ExpInt*) self);                 // downcast
 }
 
+// just boiler-plate, passing call to base
+int ExpInt_isList(ExpInt* self){
+  assert(self != NULL);
+  return Expression_isList((Expression*) self);        // upcast
+}
+
+
 
 void ExpInt_vTable_delete(ExpressionClass*);          // forward
 
@@ -559,9 +564,6 @@ void ExpInt_delete(ExpInt* self){
   } else{
     memory_log("deleting copy of ExpInt %lx\n", self);
   }
-
-
-
 }
 
 // overload for vTable initialization
@@ -632,85 +634,620 @@ ExpInt* ExpInt_new(int value){
   return obj;
 }
 
-
-// just boiler-plate, passing call to base
-int ExpInt_isList(ExpInt* self){
-  assert(self != NULL);
-  return Expression_isList((Expression*) self);        // upcast
-}
-
 /******************************************************************************/
-// This is not a virtual method
-int ExpInt_toInt(ExpInt* self){
-  assert(self != NULL);
-  return self->value;
-}
+/*                            Plus class (level 3)                            */
 /******************************************************************************/
 
-
-
-// child of level 2: level 3
 struct PlusClass_ {
 };
 
-// child of level 2: level 3
+struct Plus_ {
+  Primitive base;
+};
+
+ExpressionClass* Plus_vTable_copy(ExpressionClass* self){
+  assert(self != NULL);
+  memory_log("making copy of Plus vTable %lx\n", self);
+  self->count++;
+  return self;
+}
+
+Plus* Plus_copy(Plus* self){
+  assert(self != NULL);
+  memory_log("making copy of Plus object %lx\n", self);
+  Expression* base = (Expression*) self;
+  base->count++;
+  return self;
+}
+
+// Override
+Expression*  Plus_eval(Plus* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  Plus *copy = Plus_copy(self);
+  assert(copy != NULL);
+  return (Expression*) copy;
+}
+
+// overload for vTable initialization
+Expression* _Plus_eval(Expression* self, Environment* env){
+  assert(self != NULL);
+  assert(env != NULL);
+  return Plus_eval((Plus*) self, env);               // downcast
+}
+
+// Override
+Expression* Plus_apply(Plus* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return NULL;  //<------------------------------------------------------------ TBI
+}
+
+// overload for vTable initialization
+Expression* _Plus_apply(Expression* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return Plus_apply((Plus*) self, args);             // downcast
+}
+
+
+// Override
+String* Plus_toString(Plus* self){
+  assert(self != NULL);
+  String* str = String_new("+");
+  return str; // caller has ownership of String. not returning copy
+}
+
+// overload for vTable initialization
+String* _Plus_toString(Expression* self){
+  assert(self != NULL);
+  return Plus_toString((Plus*) self);               // downcast
+}
+
+// just boiler-plate, passing call to base
+int Plus_isInt(Plus* self){
+  assert(self != NULL);
+  return Expression_isInt((Expression*) self);        // upcast
+}
+
+
+// just boiler-plate, passing call to base
+int Plus_isList(Plus* self){
+  assert(self != NULL);
+  return Expression_isList((Expression*) self);       // upcast
+}
+
+void Plus_vTable_delete(ExpressionClass*);            // forward
+
+// Override
+void Plus_delete(Plus* self){
+  assert(self != NULL);
+  Expression* base = (Expression*) self;              //upcast
+  assert(base->count > 0);
+  base->count--;
+  if(base->count == 0){
+    assert(base->vTable != NULL);
+    Plus_vTable_delete(base->vTable);
+    memory_log("deallocating Plus object %lx\n", self);
+    free(self);
+  } else{
+    memory_log("deleting copy of Plus object %lx\n", self);
+  }
+}
+
+// overload for vTable initialization
+void _Plus_delete(Expression* self){
+  assert(self != NULL);
+  Plus_delete((Plus*) self);                          // downcast
+}
+// if vTable gets deallocated by destructor, it needs to communicate that
+// fact to this function, so it can discard its dangling referrence 'instance'
+// Hence the boolean (int) argument.
+
+ExpressionClass* Plus_vTable_new(int killInstance){
+
+  static ExpressionClass* instance = NULL;  // only one instance for Plus
+  
+  if(killInstance){
+    instance = NULL;
+    return NULL;
+  }
+
+  if(instance != NULL) return Plus_vTable_copy(instance);
+
+  // real memory allocation
+  instance = (ExpressionClass*) malloc(sizeof(ExpressionClass));
+  assert(instance != NULL);
+  memory_log("allocating Plus vTable %lx\n", instance);
+  instance->count     = 1;  // first reference
+  instance->eval      = _Plus_eval;
+  instance->apply     = _Plus_apply;
+  instance->toString  = _Plus_toString;
+  instance->isList    = _ExpressionLeaf_isList;
+  instance->isInt     = _Expression_isInt;
+  instance->delete    = _Plus_delete;
+  return instance;
+}
+
+void Plus_vTable_delete(ExpressionClass* self){
+  assert(self != NULL);
+  assert(self->count >0);
+  self->count--;
+  if(self->count == 0){
+  memory_log("deallocating Plus vTable %lx\n", self);
+  self->eval      = NULL;
+  self->apply     = NULL;
+  self->toString  = NULL;
+  self->isList    = NULL;
+  self->isInt     = NULL;
+  self->delete    = NULL;
+  free(self);
+  Plus_vTable_new(1); // setting static 'instance' of singleton to NULL
+  }
+  else{
+    memory_log("deleting copy of Plus vTable %lx\n", self);
+  }
+}
+
+Plus* Plus_new(){
+  Plus* obj = (Plus*) malloc(sizeof(Plus));
+  assert(obj != NULL);
+  memory_log("allocating Plus object %lx\n",obj);
+  // no need to set up anything between Plus and Expression base class
+  // so jumping right up to Expression base
+  Expression* base = (Expression *) obj;        // upcast
+  base->count = 1;                              // first reference
+  base->vTable = Plus_vTable_new(0);            // '0' indicates normal use 
+  assert(base->vTable != NULL);
+  return obj;
+}
+
+/******************************************************************************/
+/*                            Mult class (level 3)                            */
+/******************************************************************************/
+
 struct MultClass_ {
 };
 
-// child of level 1: level 2
-struct NilClass_ {
+struct Mult_ {
+  Primitive base;
 };
 
-// child of level 1: level 2
-struct ConsClass_ {
-};
+ExpressionClass* Mult_vTable_copy(ExpressionClass* self){
+  assert(self != NULL);
+  memory_log("making copy of Mult vTable %lx\n", self);
+  self->count++;
+  return self;
+}
+
+Mult* Mult_copy(Mult* self){
+  assert(self != NULL);
+  memory_log("making copy of Mult object %lx\n", self);
+  Expression* base = (Expression*) self;
+  base->count++;
+  return self;
+}
+
+// Override
+Expression*  Mult_eval(Mult* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  Mult *copy = Mult_copy(self);
+  assert(copy != NULL);
+  return (Expression*) copy;
+}
+
+// overload for vTable initialization
+Expression* _Mult_eval(Expression* self, Environment* env){
+  assert(self != NULL);
+  assert(env != NULL);
+  return Mult_eval((Mult*) self, env);               // downcast
+}
+
+// Override
+Expression* Mult_apply(Mult* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return NULL;  //<------------------------------------------------------------ TBI
+}
+
+// overload for vTable initialization
+Expression* _Mult_apply(Expression* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return Mult_apply((Mult*) self, args);             // downcast
+}
 
 
-Plus* Plus_new(){
-  return NULL;  // TBI
+// Override
+String* Mult_toString(Mult* self){
+  assert(self != NULL);
+  String* str = String_new("*");
+  return str; // caller has ownership of String. not returning copy
+}
+
+// overload for vTable initialization
+String* _Mult_toString(Expression* self){
+  assert(self != NULL);
+  return Mult_toString((Mult*) self);               // downcast
+}
+
+// just boiler-plate, passing call to base
+int Mult_isInt(Mult* self){
+  assert(self != NULL);
+  return Expression_isInt((Expression*) self);        // upcast
+}
+
+
+// just boiler-plate, passing call to base
+int Mult_isList(Mult* self){
+  assert(self != NULL);
+  return Expression_isList((Expression*) self);       // upcast
+}
+
+void Mult_vTable_delete(ExpressionClass*);            // forward
+
+// Override
+void Mult_delete(Mult* self){
+  assert(self != NULL);
+  Expression* base = (Expression*) self;              //upcast
+  assert(base->count > 0);
+  base->count--;
+  if(base->count == 0){
+    assert(base->vTable != NULL);
+    Mult_vTable_delete(base->vTable);
+    memory_log("deallocating Mult object %lx\n", self);
+    free(self);
+  } else{
+    memory_log("deleting copy of Mult object %lx\n", self);
+  }
+}
+
+// overload for vTable initialization
+void _Mult_delete(Expression* self){
+  assert(self != NULL);
+  Mult_delete((Mult*) self);                          // downcast
+}
+// if vTable gets deallocated by destructor, it needs to communicate that
+// fact to this function, so it can discard its dangling referrence 'instance'
+// Hence the boolean (int) argument.
+
+ExpressionClass* Mult_vTable_new(int killInstance){
+
+  static ExpressionClass* instance = NULL;  // only one instance for Mult
+  
+  if(killInstance){
+    instance = NULL;
+    return NULL;
+  }
+
+  if(instance != NULL) return Mult_vTable_copy(instance);
+
+  // real memory allocation
+  instance = (ExpressionClass*) malloc(sizeof(ExpressionClass));
+  assert(instance != NULL);
+  memory_log("allocating Mult vTable %lx\n", instance);
+  instance->count     = 1;  // first reference
+  instance->eval      = _Mult_eval;
+  instance->apply     = _Mult_apply;
+  instance->toString  = _Mult_toString;
+  instance->isList    = _ExpressionLeaf_isList;
+  instance->isInt     = _Expression_isInt;
+  instance->delete    = _Mult_delete;
+  return instance;
+}
+
+void Mult_vTable_delete(ExpressionClass* self){
+  assert(self != NULL);
+  assert(self->count >0);
+  self->count--;
+  if(self->count == 0){
+  memory_log("deallocating Mult vTable %lx\n", self);
+  self->eval      = NULL;
+  self->apply     = NULL;
+  self->toString  = NULL;
+  self->isList    = NULL;
+  self->isInt     = NULL;
+  self->delete    = NULL;
+  free(self);
+  Mult_vTable_new(1); // setting static 'instance' of singleton to NULL
+  }
+  else{
+    memory_log("deleting copy of Mult vTable %lx\n", self);
+  }
 }
 
 Mult* Mult_new(){
-  return NULL;  // TBI
+  Mult* obj = (Mult*) malloc(sizeof(Mult));
+  assert(obj != NULL);
+  memory_log("allocating Mult object %lx\n",obj);
+  // no need to set up anything between Mult and Expression base class
+  // so jumping right up to Expression base
+  Expression* base = (Expression *) obj;        // upcast
+  base->count = 1;                              // first reference
+  base->vTable = Mult_vTable_new(0);            // '0' indicates normal use 
+  assert(base->vTable != NULL);
+  return obj;
+}
+
+
+
+/******************************************************************************/
+/*                            Nil class (level 2)                             */
+/******************************************************************************/
+
+struct NilClass_ {
+};
+
+struct Nil_ {
+  ExpressionComposite base;
+};
+
+ExpressionClass* Nil_vTable_copy(ExpressionClass* self){
+  assert(self != NULL);
+  memory_log("making copy of Nil vTable %lx\n", self);
+  self->count++;
+  return self;
+}
+
+ExpressionCompositeClass* Nil_vTable2_copy(ExpressionCompositeClass* self){
+  assert(self != NULL);
+  memory_log("making copy of Nil secondary vTable %lx\n", self);
+  self->count++;
+  return self;
+}
+
+Nil* Nil_copy(Nil* self){
+  assert(self != NULL);
+  memory_log("making copy of Nil object %lx\n", self);
+  Expression* base = (Expression*) self;
+  base->count++;
+  return self;
+}
+
+// Override
+Expression*  Nil_eval(Nil* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  Nil *copy = Nil_copy(self);
+  assert(copy != NULL);
+  return (Expression*) copy;
+}
+
+// overload for vTable initialization
+Expression* _Nil_eval(Expression* self, Environment* env){
+  assert(self != NULL);
+  assert(env != NULL);
+  return Nil_eval((Nil*) self, env);               // downcast
+}
+
+// Override
+Expression* Nil_apply(Nil* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  fprintf(stderr,"Nil_apply: Nil is not an operator\n");
+  return NULL;
+}
+
+// overload for vTable initialization
+Expression* _Nil_apply(Expression* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return Nil_apply((Nil*) self, args);             // downcast
+}
+
+
+// Override
+String* Nil_toString(Nil* self){
+  assert(self != NULL);
+  String* str = String_new("Nil");
+  return str; // caller has ownership of String. not returning copy
+}
+
+// overload for vTable initialization
+String* _Nil_toString(Expression* self){
+  assert(self != NULL);
+  return Nil_toString((Nil*) self);               // downcast
+}
+
+// just boiler-plate, passing call to base
+int Nil_isInt(Nil* self){
+  assert(self != NULL);
+  return Expression_isInt((Expression*) self);        // upcast
+}
+
+
+// just boiler-plate, passing call to base
+int Nil_isList(Nil* self){
+  assert(self != NULL);
+  return Expression_isList((Expression*) self);       // upcast
+}
+
+
+// Override
+int Nil_isNil(Nil* self){
+  assert(self != NULL);
+  return 1;
+}
+
+// overload for secondary vTable initialization
+int _Nil_isNil(ExpressionComposite* self){
+  assert(self != NULL);
+  return Nil_isNil((Nil*) self);                      // downcast
+}
+
+// just boiler-plate, passing call to base
+void Nil_foldLeft(Nil* self, void* init, void* operator, void* result){
+  assert(self != NULL);
+  assert(init != NULL);
+  assert(operator != NULL);
+  assert(result != NULL);
+  ExpressionComposite_foldLeft(
+      (ExpressionComposite*) self, 
+      init, 
+      operator, 
+      result
+  );
+}
+
+// just boiler-plate, passing call to base
+void Nil_foldRight(Nil* self, void* init, void* operator, void* result){
+  assert(self != NULL);
+  assert(init != NULL);
+  assert(operator != NULL);
+  assert(result != NULL);
+  ExpressionComposite_foldRight(
+      (ExpressionComposite*) self, 
+      init, 
+      operator, 
+      result
+  );
+}
+
+// just boiler-plate, passing call to base
+ExpressionComposite* Nil_evalList(Nil* self, Environment* env){
+  assert(self != NULL);
+  assert(env != NULL);
+  ExpressionComposite_evalList((ExpressionComposite*) self, env);
+}
+
+
+void Nil_vTable_delete(ExpressionClass*);             // forward
+void Nil_vTable2_delete(ExpressionCompositeClass*);   // forward
+
+// Override
+void Nil_delete(Nil* self){
+  assert(self != NULL);
+  Expression* base = (Expression*) self;              //upcast
+  assert(base->count > 0);
+  base->count--;
+  if(base->count == 0){
+    ExpressionComposite* comp = (ExpressionComposite*) self;
+    assert(comp->vTable != NULL);
+    Nil_vTable2_delete(comp->vTable); // vtable for ExpressionComposite
+    assert(base->vTable != NULL);
+    Nil_vTable_delete(base->vTable);  // vTable for Expression
+    memory_log("deallocating Nil object %lx\n", self);
+    free(self);
+  } else{
+    memory_log("deleting copy of Nil object %lx\n", self);
+  }
+}
+
+// overload for vTable initialization
+void _Nil_delete(Expression* self){
+  assert(self != NULL);
+  Nil_delete((Nil*) self);                          // downcast
+}
+// if vTable gets deallocated by destructor, it needs to communicate that
+// fact to this function, so it can discard its dangling referrence 'instance'
+// Hence the boolean (int) argument.
+
+ExpressionClass* Nil_vTable_new(int killInstance){
+
+  static ExpressionClass* instance = NULL;  // only one instance for Nil
+  
+  if(killInstance){
+    instance = NULL;
+    return NULL;
+  }
+
+  if(instance != NULL) return Nil_vTable_copy(instance);
+
+  // real memory allocation
+  instance = (ExpressionClass*) malloc(sizeof(ExpressionClass));
+  assert(instance != NULL);
+  memory_log("allocating Nil primary vTable %lx\n", instance);
+  instance->count     = 1;  // first reference
+  instance->eval      = _Nil_eval;
+  instance->apply     = _Nil_apply;
+  instance->toString  = _Nil_toString;
+  instance->isList    = _ExpressionComposite_isList;
+  instance->isInt     = _Expression_isInt;
+  instance->delete    = _Nil_delete;
+  return instance;
+}
+
+ExpressionCompositeClass* Nil_vTable2_new(int killInstance){
+
+  static ExpressionCompositeClass* instance = NULL;  // only one instance for Nil
+  
+  if(killInstance){
+    instance = NULL;
+    return NULL;
+  }
+
+  if(instance != NULL) return Nil_vTable2_copy(instance);
+
+  // real memory allocation
+  instance = (ExpressionCompositeClass*) malloc(sizeof(ExpressionCompositeClass));
+  assert(instance != NULL);
+  memory_log("allocating Nil secondary vTable %lx\n", instance);
+  instance->count     = 1;  // first reference
+  instance->isNil = _Nil_isNil;
+  return instance;
+}
+
+
+
+void Nil_vTable_delete(ExpressionClass* self){
+  assert(self != NULL);
+  assert(self->count >0);
+  self->count--;
+  if(self->count == 0){
+  memory_log("deallocating Nil primary vTable %lx\n", self);
+  self->eval      = NULL;
+  self->apply     = NULL;
+  self->toString  = NULL;
+  self->isList    = NULL;
+  self->isInt     = NULL;
+  self->delete    = NULL;
+  free(self);
+  Nil_vTable_new(1); // setting static 'instance' of singleton to NULL
+  }
+  else{
+    memory_log("deleting copy of Nil main vTable %lx\n", self);
+  }
+}
+
+void Nil_vTable2_delete(ExpressionCompositeClass* self){
+  assert(self != NULL);
+  assert(self->count >0);
+  self->count--;
+  if(self->count == 0){
+  memory_log("deallocating Nil secondary vTable %lx\n", self);
+  self->isNil = NULL;
+  free(self);
+  Nil_vTable2_new(1); // setting static 'instance' of singleton to NULL
+  }
+  else{
+    memory_log("deleting copy of Nil secondary vTable %lx\n", self);
+  }
 }
 
 Nil* Nil_new(){
-  return NULL;  // TBI
+  Nil* obj = (Nil*) malloc(sizeof(Nil));
+  assert(obj != NULL);
+  memory_log("allocating Nil object %lx\n",obj);
+  ExpressionComposite* comp = (ExpressionComposite*) obj; // upcast
+  comp->vTable = Nil_vTable2_new(0);            // '0' indicates normal use
+  assert(comp->vTable != NULL);
+  Expression* base = (Expression *) obj;        // upcast
+  base->count = 1;                              // first reference
+  base->vTable = Nil_vTable_new(0);            // '0' indicates normal use 
+  assert(base->vTable != NULL);
+  return obj;
 }
 
-Cons* Cons_new(Expression* car, ExpressionComposite* cdr){
-  return NULL;  // TBI
-}
+#include "composite.t.c"
 
 int main(int argc, char* argv[], char* envp[]){
 
-  Environment* env = Environment_new();
-  ExpInt* exp = ExpInt_new(34);
-  // toString
-  String* str = ExpInt_toString(exp);
-  printf("exp = %s\n", str->buffer);
-  String_delete(str);
-
-  // eval
-  Expression* val = ExpInt_eval(exp,env);
-  str = Expression_toString(val); 
-  printf("val = %s\n", str->buffer);
-  String_delete(str);
-  // apply
-  printf("---------------------------------------------------\n");
-  Expression* app = ExpInt_apply(exp,(ExpressionComposite*) val); // makes no sense
-  printf("---------------------------------------------------\n");
-
-
-  Expression_delete(val);
-  ExpInt_delete(exp);
-  Environment_delete(env);
-
-  /*
+    /*
   Expression *two   = (Expression*) ExpInt_new(2);
   Expression *seven = (Expression*) ExpInt_new(7); 
   Expression *five  = (Expression*) ExpInt_new(5); 
-  Expression *plus  = (Expression*) Plus_new();
+  Expression *plus  = (Expression*) lPlus_new();
   Expression *mult  = (Expression*) Mult_new(); 
   Expression *exp1  = (Expression*) Cons_new( // (+ 2 7 5)
                                         plus,
@@ -742,8 +1279,8 @@ int main(int argc, char* argv[], char* envp[]){
   // Need to release memory here: TBI
 
   */ 
-
-  return 0;
+    Nil_test();
+    return 0;
   
   }
 
