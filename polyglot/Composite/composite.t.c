@@ -200,4 +200,91 @@ int Nil_test(){
   return 0;
 }
 
+int Cons_test(){
+
+  Environment* env = Environment_new();
+  Cons*  cons1 = Cons_new(
+      (Expression*) ExpInt_new(45), 
+      (ExpressionComposite*) Nil_new()
+  );  // cons1 takes over owenership of newly created objects
+
+  printf("\n");
+  Cons* cons2 = Cons_new(
+      (Expression*) ExpInt_new(55),
+      (ExpressionComposite*) cons1
+  );  // cons2 takes over ownership of new Int and cons1
+
+  printf("\n");
+  Cons* cons = Cons_new(
+      (Expression*) Plus_new(),
+      (ExpressionComposite*) cons2
+  );  // cons takes over ownership of Plus and cons2
+
+  // toString
+  printf("\n");
+  /*
+  printf("toString: --------------------------------------------------------\n");
+  String* str = Cons_toString(cons);
+  printf("cons = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // eval
+  printf("\n");
+  printf("eval: ------------------------------------------------------------\n");
+  Expression* val = Cons_eval(cons, env);
+  //str = Expression_toString(val); // <--------------------------------------- TBI
+  //printf("val = %s\n", str->buffer);
+  //String_delete(str);
+  // apply
+  printf("\n");
+  /*
+  printf("apply: -----------------------------------------------------------\n");
+  Expression* app = Nil_apply(nil,(ExpressionComposite*) val);  // makes no sense
+  printf("------------------------------------------------------------------\n");
+  // <------------------------------------------------------------------------ TBI
+  // isList
+  printf("\n");
+  printf("isList -----------------------------------------------------------\n");
+  printf("isList(nil) = %d\n", Nil_isList(nil));
+  printf("------------------------------------------------------------------\n");
+  // isInt
+  printf("\n");
+  printf("isInt ------------------------------------------------------------\n");
+  printf("isInt(nil) = %d\n", Nil_isInt(nil));
+  printf("------------------------------------------------------------------\n");
+
+  // isNil
+  printf("\n");
+  printf("isNil ------------------------------------------------------------\n");
+  printf("isNil(nil) = %d\n", Nil_isNil(nil));
+  printf("------------------------------------------------------------------\n");
+ 
+  // foldLeft
+  printf("\n");
+  printf("foldLeft ---------------------------------------------------------\n");
+  printf("No unit test is currently implemented for foldLeft\n");
+  //------------------------------------------------------------------------- TBI
+  printf("------------------------------------------------------------------\n");
+
+  // foldRight
+  printf("\n");
+  printf("foldRight --------------------------------------------------------\n");
+  printf("No unit test is currently implemented for foldRight\n");
+  //------------------------------------------------------------------------- TBI
+  printf("------------------------------------------------------------------\n");
+
+  // evalList
+  printf("\n");
+  printf("evalList ---------------------------------------------------------\n");
+  printf("No unit test is currently implemented for evalList\n");
+  //------------------------------------------------------------------------- TBI
+  printf("------------------------------------------------------------------\n");
+
+  Expression_delete(val);
+  */
+  Cons_delete(cons);
+  Environment_delete(env);
+  return 0;
+}
+
 

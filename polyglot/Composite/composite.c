@@ -157,6 +157,13 @@ struct Expression_ {
   // no instance data
 };
 
+Expression* Expression_copy(Expression* self){
+  assert(self != NULL);
+  assert(self->count > 0);
+  memory_log("making copy of Expression object %lx\n", self);
+  self->count++;
+  return self;
+}
 
 // just boiler-plate, managing vTable indirection
 Expression* Expression_eval(Expression *self, Environment* env){
@@ -306,6 +313,15 @@ struct ExpressionComposite_ {
   ExpressionCompositeClass *vTable;   // additional vTable
 };
 
+ExpressionComposite* ExpressionComposite_copy(ExpressionComposite* self){
+  assert(self != NULL);
+  Expression* base = (Expression*) self;
+  assert(base->count >0);
+  memory_log("making copy of ExpressionComposite object %lx\n", self);
+  base->count++;
+  return self;
+}
+
 // just boiler-plate, passing call to base
 Expression*  ExpressionComposite_eval(ExpressionComposite* self, Environment* env){
   assert(self != NULL);
@@ -372,6 +388,7 @@ void ExpressionComposite_foldLeft(ExpressionComposite* self,
   // R* init
   // R* (*operator)(R* arg, Expression* exp)
   // R* result
+  // <--------------------------------------------------------------------- TBI
 }
 
 // This is not a virtual method
@@ -380,6 +397,7 @@ void ExpressionComposite_foldRight(ExpressionComposite* self,
   // R* init
   // R* (*operator)(Expression* exp, R* arg)
   // R* result
+  // <---------------------------------------------------------------------- TBI
 }
 
 // This is not a virtual method
@@ -387,7 +405,11 @@ ExpressionComposite* ExpressionComposite_evalList(
     ExpressionComposite* self,
     Environment*         env
 ){
-
+  //<------------------------------------------------------------------------ TBI
+  // temporary
+  assert(self != NULL);
+  assert(env != NULL);
+  return ExpressionComposite_copy(self); 
 }
 /******************************************************************************/
 
@@ -985,7 +1007,7 @@ struct Nil_ {
 
 ExpressionClass* Nil_vTable_copy(ExpressionClass* self){
   assert(self != NULL);
-  memory_log("making copy of Nil vTable %lx\n", self);
+  memory_log("making copy of Nil primary vTable %lx\n", self);
   self->count++;
   return self;
 }
@@ -1239,6 +1261,312 @@ Nil* Nil_new(){
   return obj;
 }
 
+/******************************************************************************/
+/*                           Cons class (level 2)                             */
+/******************************************************************************/
+
+struct ConsClass_ {
+};
+
+struct Cons_ {
+  ExpressionComposite base;
+  Expression* car;              // head, first ...
+  ExpressionComposite* cdr;     // tail, rest ...
+};
+
+ExpressionClass* Cons_vTable_copy(ExpressionClass* self){
+  assert(self != NULL);
+  memory_log("making copy of Cons primary vTable %lx\n", self);
+  self->count++;
+  return self;
+}
+
+ExpressionCompositeClass* Cons_vTable2_copy(ExpressionCompositeClass* self){
+  assert(self != NULL);
+  memory_log("making copy of Cons secondary vTable %lx\n", self);
+  self->count++;
+  return self;
+}
+
+Cons* Cons_copy(Cons* self){
+  assert(self != NULL);
+  memory_log("making copy of Cons object %lx\n", self);
+  Expression* base = (Expression*) self;
+  base->count++;
+  return self;
+}
+
+// This is not a virtual method
+Expression* Cons_head(Cons* self){
+  assert(self != NULL);
+  assert(self->car != NULL);
+  return Expression_copy(self->car);           // increasing reference count
+}
+
+// This is not a virtual method
+ExpressionComposite* Cons_tail(Cons* self){
+  assert(self != NULL);
+  assert(self->cdr != NULL);
+  return ExpressionComposite_copy(self->cdr); // increasing reference count
+}
+// Override
+Expression*  Cons_eval(Cons* self, Environment* env){
+  assert(self != NULL);
+  assert(env  != NULL);  
+  ExpressionComposite* vals = ExpressionComposite_evalList(
+      (ExpressionComposite*) self, env  // upcast
+  );
+  assert(!ExpressionComposite_isNil(vals));
+  Cons* values = (Cons*) vals;         // downcast, safe in view of assert
+  Expression*           operator  = Cons_head(values);
+  ExpressionComposite*  arguments = Cons_tail(values);
+  Expression*           results   = Expression_apply(operator,arguments);
+
+  ExpressionComposite_delete(vals);
+  Expression_delete(operator);
+  ExpressionComposite_delete(arguments);
+  return results; // caller has ownership of Expression. Not returning copy
+}
+
+// overload for vTable initialization
+Expression* _Cons_eval(Expression* self, Environment* env){
+  assert(self != NULL);
+  assert(env != NULL);
+  return Cons_eval((Cons*) self, env);               // downcast
+}
+
+// Override
+Expression* Cons_apply(Cons* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  fprintf(stderr,"Cons_apply: Lambda expression are not yet supported\n");
+  return NULL;
+}
+
+// overload for vTable initialization
+Expression* _Cons_apply(Expression* self, ExpressionComposite* args){
+  assert(self != NULL);
+  assert(args != NULL);
+  return Cons_apply((Cons*) self, args);             // downcast
+}
+
+
+// Override
+String* Cons_toString(Cons* self){
+  assert(self != NULL);
+  String* str = String_new("Cons_toString: not yet implemented");
+  return str; // caller has ownership of String. not returning copy
+}
+
+// overload for vTable initialization
+String* _Cons_toString(Expression* self){
+  assert(self != NULL);
+  return Cons_toString((Cons*) self);               // downcast
+}
+
+// just boiler-plate, passing call to base
+int Cons_isInt(Cons* self){
+  assert(self != NULL);
+  return Expression_isInt((Expression*) self);        // upcast
+}
+
+
+// just boiler-plate, passing call to base
+int Cons_isList(Cons* self){
+  assert(self != NULL);
+  return Expression_isList((Expression*) self);       // upcast
+}
+
+
+// Override
+int Cons_isNil(Cons* self){
+  assert(self != NULL);
+  return 0;
+}
+
+// overload for secondary vTable initialization
+int _Cons_isNil(ExpressionComposite* self){
+  assert(self != NULL);
+  return Cons_isNil((Cons*) self);                      // downcast
+}
+
+// just boiler-plate, passing call to base
+void Cons_foldLeft(Cons* self, void* init, void* operator, void* result){
+  assert(self != NULL);
+  assert(init != NULL);
+  assert(operator != NULL);
+  assert(result != NULL);
+  ExpressionComposite_foldLeft(
+      (ExpressionComposite*) self, 
+      init, 
+      operator, 
+      result
+  );
+}
+
+// just boiler-plate, passing call to base
+void Cons_foldRight(Cons* self, void* init, void* operator, void* result){
+  assert(self != NULL);
+  assert(init != NULL);
+  assert(operator != NULL);
+  assert(result != NULL);
+  ExpressionComposite_foldRight(
+      (ExpressionComposite*) self, 
+      init, 
+      operator, 
+      result
+  );
+}
+
+// just boiler-plate, passing call to base
+ExpressionComposite* Cons_evalList(Cons* self, Environment* env){
+  assert(self != NULL);
+  assert(env != NULL);
+  ExpressionComposite_evalList((ExpressionComposite*) self, env);
+}
+
+
+void Cons_vTable_delete(ExpressionClass*);             // forward
+void Cons_vTable2_delete(ExpressionCompositeClass*);   // forward
+
+// Override
+void Cons_delete(Cons* self){
+  assert(self != NULL);
+  Expression* base = (Expression*) self;              //upcast
+  assert(base->count > 0);
+  base->count--;
+  if(base->count == 0){
+    ExpressionComposite* comp = (ExpressionComposite*) self;
+    assert(comp->vTable != NULL);
+    Cons_vTable2_delete(comp->vTable); // vtable for ExpressionComposite
+    assert(base->vTable != NULL);
+    Cons_vTable_delete(base->vTable);  // vTable for Expression
+    assert(self->car != NULL);
+    Expression_delete(self->car);
+    self->car = NULL;
+    assert(self->cdr != NULL);
+    ExpressionComposite_delete(self->cdr);
+    self->cdr = NULL;
+    memory_log("deallocating Cons object %lx\n", self);
+    free(self);
+  } else{
+    memory_log("deleting copy of Cons object %lx\n", self);
+  }
+}
+
+// overload for vTable initialization
+void _Cons_delete(Expression* self){
+  assert(self != NULL);
+  Cons_delete((Cons*) self);                          // downcast
+}
+// if vTable gets deallocated by destructor, it needs to communicate that
+// fact to this function, so it can discard its dangling referrence 'instance'
+// Hence the boolean (int) argument.
+
+ExpressionClass* Cons_vTable_new(int killInstance){
+
+  static ExpressionClass* instance = NULL;  // only one instance for Cons
+  
+  if(killInstance){
+    instance = NULL;
+    return NULL;
+  }
+
+  if(instance != NULL) return Cons_vTable_copy(instance);
+
+  // real memory allocation
+  instance = (ExpressionClass*) malloc(sizeof(ExpressionClass));
+  assert(instance != NULL);
+  memory_log("allocating Cons primary vTable %lx\n", instance);
+  instance->count     = 1;  // first reference
+  instance->eval      = _Cons_eval;
+  instance->apply     = _Cons_apply;
+  instance->toString  = _Cons_toString;
+  instance->isList    = _ExpressionComposite_isList;
+  instance->isInt     = _Expression_isInt;
+  instance->delete    = _Cons_delete;
+  return instance;
+}
+
+ExpressionCompositeClass* Cons_vTable2_new(int killInstance){
+
+  static ExpressionCompositeClass* instance = NULL; // only one instance for Cons 
+  
+  if(killInstance){
+    instance = NULL;
+    return NULL;
+  }
+
+  if(instance != NULL) return Cons_vTable2_copy(instance);
+
+  // real memory allocation
+  instance = (ExpressionCompositeClass*) malloc(sizeof(ExpressionCompositeClass));
+  assert(instance != NULL);
+  memory_log("allocating Cons secondary vTable %lx\n", instance);
+  instance->count     = 1;  // first reference
+  instance->isNil = _Cons_isNil;
+  return instance;
+}
+
+
+
+void Cons_vTable_delete(ExpressionClass* self){
+  assert(self != NULL);
+  assert(self->count >0);
+  self->count--;
+  if(self->count == 0){
+  memory_log("deallocating Cons primary vTable %lx\n", self);
+  self->eval      = NULL;
+  self->apply     = NULL;
+  self->toString  = NULL;
+  self->isList    = NULL;
+  self->isInt     = NULL;
+  self->delete    = NULL;
+  free(self);
+  Cons_vTable_new(1); // setting static 'instance' of singleton to NULL
+  }
+  else{
+    memory_log("deleting copy of Cons main vTable %lx\n", self);
+  }
+}
+
+void Cons_vTable2_delete(ExpressionCompositeClass* self){
+  assert(self != NULL);
+  assert(self->count >0);
+  self->count--;
+  if(self->count == 0){
+  memory_log("deallocating Cons secondary vTable %lx\n", self);
+  self->isNil = NULL;
+  free(self);
+  Cons_vTable2_new(1); // setting static 'instance' of singleton to NULL
+  }
+  else{
+    memory_log("deleting copy of Cons secondary vTable %lx\n", self);
+  }
+}
+
+Cons* Cons_new(Expression *car, ExpressionComposite* cdr){
+  // Cons_new takes over ownership of arguments
+  assert(car != NULL);
+  assert(cdr != NULL);
+
+  Cons* obj = (Cons*) malloc(sizeof(Cons));
+  assert(obj != NULL);
+  memory_log("allocating Cons object %lx\n", obj);
+  memory_log("Cons allocation has car %lx\n", car);
+  memory_log("Cons allocation has cdr %lx\n", cdr);
+
+  ExpressionComposite* comp = (ExpressionComposite*) obj; // upcast
+  comp->vTable = Cons_vTable2_new(0);            // '0' indicates normal use
+  assert(comp->vTable != NULL);
+  Expression* base = (Expression *) obj;        // upcast
+  base->count = 1;                              // first reference
+  base->vTable = Cons_vTable_new(0);             // '0' indicates normal use 
+  assert(base->vTable != NULL);
+  obj-> car = car;  // caller loses ownership, no copy
+  obj->cdr = cdr;   // caller loses ownership, no copy
+  return obj;
+}
 #include "composite.t.c"
 
 int main(int argc, char* argv[], char* envp[]){
@@ -1279,7 +1607,7 @@ int main(int argc, char* argv[], char* envp[]){
   // Need to release memory here: TBI
 
   */ 
-    Nil_test();
+    Cons_test();
     return 0;
   
   }

@@ -1,24 +1,25 @@
-data Category object arrow = Category { source :: arrow -> object,
-                                        target :: arrow -> object,
-                                        ide     :: object-> arrow,
-                                        compose:: arrow -> arrow -> arrow}
-s :: String -> Char
-s _ = 'a'
+import Set
 
-t :: String -> Char
-t _ = 'b'
+data Category arrow = Category { source   :: arrow -> arrow,
+                                 target   :: arrow -> arrow,
+                                 compose  :: arrow -> arrow -> arrow}
 
-i :: Char -> String
-i 'a' = "String"
 
-comp :: String -> String -> String
-comp f g = f ++ g
 
-c = Category s t i comp 
+-- underlying class (set in this case) of the category 
+-- of finite sets with elements of type a
+data Arrow a = Arrow (Set a) (Set a) (a -> a)
 
-s1 = source c "wwrddff"
-t1 = target c "jhfjhfjak"
-a1 = ide c 'a'
-a2 = compose c "abc" "def"
+setSource :: Arrow a -> Arrow a
+setSource (Arrow x y f) = Arrow x x (\u -> u)
 
+setTarget :: Arrow a -> Arrow a
+setTarget (Arrow x y f) = Arrow y y (\u -> u)
+
+setCompose :: (Eq a) => Arrow a -> Arrow a -> Arrow a
+setCompose (Arrow x y f) (Arrow y' z g) = if (y == y') then 
+  Arrow x z (\u ->  g (f u)) else error "Arrows are not composable"
+
+finiteSet :: (Eq a) => Category (Arrow a)
+finiteSet = Category setSource setTarget setCompose
 

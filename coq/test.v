@@ -117,16 +117,56 @@ Theorem ones_eq : stream_eq ones ones'.
   assumption.
 Qed.
 
-(*
-
-Why did this silly looking trick help?
-
-*)
-
+Definition head A (s : stream A) : A :=
+  match s with
+    | Cons x _ => x
+  end.
 
 
+Section stream_eq_coind.
+  Variable A : Type.
+  Variable R : stream A -> stream A -> Prop.
 
 
+  Hypothesis Cons_case_hd : forall s1 s2, R s1 s2 -> head s1 = head s2.
+  Hypothesis Cons_case_tl : forall s1 s2, R s1 s2 -> R (tail s1) (tail s2).
+
+  
+  Theorem stream_eq_coind : forall s1 s2, R s1 s2 -> stream_eq s1 s2.
+    cofix.
+    destruct s1.
+    destruct s2.
+    intro.
+    generalize (Cons_case_hd H).
+    intro Heq.
+    simpl in Heq.
+    rewrite Heq.
+    constructor.
+    apply stream_eq_coind.
+    apply (Cons_case_tl H).
+  Qed.
+End stream_eq_coind.
+
+Print stream_eq_coind. 
+
+
+Theorem ones_eq'' : stream_eq ones ones'.
+  apply (stream_eq_coind (fun s1 s2 => s1 = ones /\ s2 = ones')); crush.
+Qed.
+
+
+
+Section stream_eq_loop.
+  Variable A : Type.
+  Variables s1 s2 : stream A.
+
+  Hypothesis Cons_case_hd : head s1 = head s2.
+  Hypothesis loop1 : tail s1 = s1.
+  Hypothesis loop2 : tail s2 = s2.
+  
+  Theorem stream_eq_loop : stream_eq s1 s2.
+    apply (stream_eq_coind (fun s1' s2' => s1' = s1 /\ s2' = s2)); crush.
+  Qed.
 
 
 

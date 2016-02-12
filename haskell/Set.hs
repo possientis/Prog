@@ -1,5 +1,7 @@
-listRemove item list = filter (\x -> x /= item) list
+module Set(Set, emptySet, fromList, isEmpty, singleton, union, member, remove,
+  split, subset) where
 
+listRemove item list = filter (\x -> x /= item) list
 listMerge []    list2   = list2
 listMerge list1 []      = list1
 listMerge (x:xs)(y:ys)  = x:y:listMerge xs ys
