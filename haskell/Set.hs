@@ -33,10 +33,6 @@ instance (Eq a) => Ord (Set a) where
   (>=) x y = (subset y x)
   (<)  x y = (x <= y) && (x /= y)
   (>)  x y = (y <= x) && (x /= y) 
-   
 
-int :: Int -> Set Int
-int 0 = emptySet
-int n = union (singleton (n - 1)) (int (n - 1))
 
 

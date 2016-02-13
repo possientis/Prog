@@ -1,0 +1,2 @@
+myError :: String -> a
+

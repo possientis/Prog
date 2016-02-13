@@ -134,7 +134,29 @@ void String_delete(String* self){
   else{
     memory_log("deleting copy of string object %lx\n",self);
   }
+}
 
+// takes ownership of both strings, which do not need deallocation by caller
+String *String_append(String* str1, String* str2){
+  assert(str1 != NULL);
+  assert(str2 != NULL);
+  int len1 = str1->length;
+  int len2 = str2->length;
+  int len = len1 + len2;
+  char* buffer = (char*) malloc(sizeof(char) * (len + 1));
+  assert(buffer != NULL);
+  memory_log("allocating string buffer %lx for append operation\n", buffer);
+  strcpy(buffer, str1->buffer);
+  strcat(buffer, str2->buffer);
+  String* obj = (String*) malloc(sizeof(String)); 
+  memory_log("allocating string object %lx for append operation\n", obj);
+  assert(obj != NULL);
+  obj->count = 1;
+  obj->length = len;
+  obj->buffer = buffer;
+  String_delete(str1);
+  String_delete(str2);
+  return obj; 
 }
 
 /******************************************************************************/
@@ -383,34 +405,90 @@ int ExpressionComposite_isNil(ExpressionComposite *self){
 
 /******************************************************************************/
 // This is not a virtual method
-void ExpressionComposite_foldLeft(ExpressionComposite* self,
-    void* init, void* operator, void* result){
-  // R* init
-  // R* (*operator)(R* arg, Expression* exp)
-  // R* result
-  // <--------------------------------------------------------------------- TBI
+Expression* Cons_head(Cons*);          // forward
+ExpressionComposite* Cons_tail(Cons*); // forward
+void Cons_delete(Cons*);               // forward
+
+void* ExpressionComposite_foldLeft(ExpressionComposite* self,
+    void* init, void* (*operator)(void*, void*, void* params), void* params){
+    // Let R be a type, the type interpretation of arguments is as follows:
+    // R* init
+    // R* (*operator)(R* arg, Expression* exp, void* params)
+    // foldLeft returns a pointer to R.
+    assert(init != NULL);
+    assert(operator != NULL);
+    void *out;
+    // does not take ownership of self. Caller still needs to deallocate
+    // its reference to self. Hence, we are taking copy here to increase
+    // reference count.
+    ExpressionComposite* next = ExpressionComposite_copy(self);
+    while(!ExpressionComposite_isNil(next)){
+      assert(!ExpressionComposite_isNil(next));
+      Cons* cell = (Cons*) next;        // safe in view of assert
+      // this returns a copy, which will require deallocation
+      Expression* head = Cons_head(cell);
+      out = operator(out, head, params);// key line
+      Expression_delete(head);          // deallocation of copy
+      next = Cons_tail(cell);           // also returns a copy
+      Cons_delete(cell);                // deallocation of cell (previous next)
+    }
+    ExpressionComposite_delete(next);
+    return out;
 }
 
 // This is not a virtual method
-void ExpressionComposite_foldRight(ExpressionComposite* self,
-    void* init, void* operator, void* result){
-  // R* init
-  // R* (*operator)(Expression* exp, R* arg)
-  // R* result
-  // <---------------------------------------------------------------------- TBI
+void* ExpressionComposite_foldRight(ExpressionComposite* self,
+    void* init, void* (*operator)(void*, void*, void* params), void* params){
+    // Let R be a type, the type interpretation of arguments is as follows:
+    // R* init
+    // R* (*operator)(Expression* exp, R* arg, void* params)
+    // foldRight returns a pointer to R.
+    assert(init != NULL);
+    assert(operator != NULL);
+    if(ExpressionComposite_isNil(self)) return init;
+    assert(!ExpressionComposite_isNil(self));
+    Cons* cell = (Cons*) self;                    // safe in view of assert
+    Expression* head = Cons_head(cell);           // returns a copy
+    ExpressionComposite* tail = Cons_tail(cell);  // also a copy
+    // recursive call
+    void* result = ExpressionComposite_foldRight(tail,init,operator, params);
+    result = operator(head, result, params);
+    Expression_delete(head);                      // deallocation of copy
+    ExpressionComposite_delete(tail);             // deallocation of copy
+    return result; 
 }
 
+Cons* Cons_new(Expression*, ExpressionComposite*);// forward
+void* Operator_evalList(void* exp, void* list, void* params){
+  assert(exp != NULL);
+  assert(list != NULL);
+  assert(params != NULL);
+
+  // casting argument into their expected types
+  Expression* expression         = (Expression*) exp;
+  ExpressionComposite* evaluated = (ExpressionComposite*) list;
+  Environment* env               = (Environment*) params;
+
+
+  Expression* value = Expression_eval(expression,env);
+  Cons* cons = Cons_new(value,evaluated); // cons takes ownership of value, list
+  // caller keeps ownership of exp
+  // caller takes ownership of new cons, but loses that of list
+  return cons;
+}
+
+Nil* Nil_new(); // forward
 // This is not a virtual method
 ExpressionComposite* ExpressionComposite_evalList(
     ExpressionComposite* self,
     Environment*         env
 ){
-  //<------------------------------------------------------------------------ TBI
-  // temporary
   assert(self != NULL);
   assert(env != NULL);
-  return ExpressionComposite_copy(self); 
+  Expression* nil = (Expression*) Nil_new();
+  return ExpressionComposite_foldRight(self, nil, Operator_evalList, env); 
 }
+
 /******************************************************************************/
 
 
@@ -698,11 +776,32 @@ Expression* _Plus_eval(Expression* self, Environment* env){
   return Plus_eval((Plus*) self, env);               // downcast
 }
 
+
+void* Operator_Plus_apply(void* sum, void* exp, void* params){
+  assert(sum != NULL);
+  assert(exp != NULL);
+  assert(params == NULL); // there should be no params  
+  // casting arguments into expected types
+  int* sumPtr = (int*) sum;
+  Expression* expression = (Expression*) exp;
+  if(Expression_isInt(expression)){
+    int newInt = ExpInt_toInt((ExpInt*) expression);
+    *sumPtr += newInt;
+    return sumPtr;
+  } 
+  else {
+    fprintf(stderr,"+: argument is not a valid integer\n");
+  }
+}
+
+
 // Override
 Expression* Plus_apply(Plus* self, ExpressionComposite* args){
   assert(self != NULL);
   assert(args != NULL);
-  return NULL;  //<------------------------------------------------------------ TBI
+  int sum = 0;
+  ExpressionComposite_foldLeft(args, &sum, Operator_Plus_apply, NULL);
+  return (Expression*) ExpInt_new(sum);
 }
 
 // overload for vTable initialization
@@ -866,11 +965,30 @@ Expression* _Mult_eval(Expression* self, Environment* env){
   return Mult_eval((Mult*) self, env);               // downcast
 }
 
+void* Operator_Mult_apply(void* prod, void* exp, void* params){
+  assert(prod != NULL);
+  assert(exp != NULL);
+  assert(params == NULL); // there should be no params  
+  // casting arguments into expected types
+  int* prodPtr = (int*) prod;
+  Expression* expression = (Expression*) exp;
+  if(Expression_isInt(expression)){
+    int newInt = ExpInt_toInt((ExpInt*) expression);
+    *prodPtr *= newInt;
+    return prodPtr;
+  } 
+  else {
+    fprintf(stderr,"*: argument is not a valid integer\n");
+  }
+}
+
 // Override
 Expression* Mult_apply(Mult* self, ExpressionComposite* args){
   assert(self != NULL);
   assert(args != NULL);
-  return NULL;  //<------------------------------------------------------------ TBI
+  int prod = 1;
+  ExpressionComposite_foldLeft(args, &prod, Operator_Mult_apply, NULL);
+  return (Expression*) ExpInt_new(prod);
 }
 
 // overload for vTable initialization
@@ -1099,30 +1217,36 @@ int _Nil_isNil(ExpressionComposite* self){
 }
 
 // just boiler-plate, passing call to base
-void Nil_foldLeft(Nil* self, void* init, void* operator, void* result){
+void* Nil_foldLeft(Nil* self, 
+    void* init, 
+    void* (*operator)(void*, void*, void* params),
+    void* params
+){
   assert(self != NULL);
   assert(init != NULL);
   assert(operator != NULL);
-  assert(result != NULL);
-  ExpressionComposite_foldLeft(
+  return ExpressionComposite_foldLeft(
       (ExpressionComposite*) self, 
       init, 
-      operator, 
-      result
+      operator,
+      params 
   );
 }
 
 // just boiler-plate, passing call to base
-void Nil_foldRight(Nil* self, void* init, void* operator, void* result){
+void* Nil_foldRight(Nil* self, 
+    void* init, 
+    void* operator(void*, void*, void* params),
+    void* params
+){
   assert(self != NULL);
   assert(init != NULL);
   assert(operator != NULL);
-  assert(result != NULL);
-  ExpressionComposite_foldRight(
+  return ExpressionComposite_foldRight(
       (ExpressionComposite*) self, 
       init, 
-      operator, 
-      result
+      operator,
+      params
   );
 }
 
@@ -1391,30 +1515,36 @@ int _Cons_isNil(ExpressionComposite* self){
 }
 
 // just boiler-plate, passing call to base
-void Cons_foldLeft(Cons* self, void* init, void* operator, void* result){
+void* Cons_foldLeft(Cons* self, 
+    void* init, 
+    void* (*operator)(void*, void*, void* params),
+    void* params
+){
   assert(self != NULL);
   assert(init != NULL);
   assert(operator != NULL);
-  assert(result != NULL);
   ExpressionComposite_foldLeft(
       (ExpressionComposite*) self, 
       init, 
-      operator, 
-      result
+      operator,
+     params 
   );
 }
 
 // just boiler-plate, passing call to base
-void Cons_foldRight(Cons* self, void* init, void* operator, void* result){
+void* Cons_foldRight(Cons* self, 
+    void* init, 
+    void* (*operator)(void*, void*, void* params),
+    void* params
+){
   assert(self != NULL);
   assert(init != NULL);
   assert(operator != NULL);
-  assert(result != NULL);
   ExpressionComposite_foldRight(
       (ExpressionComposite*) self, 
       init, 
-      operator, 
-      result
+      operator,
+      params 
   );
 }
 
@@ -1607,7 +1737,7 @@ int main(int argc, char* argv[], char* envp[]){
   // Need to release memory here: TBI
 
   */ 
-    Cons_test();
+    String_test();
     return 0;
   
   }

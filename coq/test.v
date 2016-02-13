@@ -168,7 +168,103 @@ Section stream_eq_loop.
     apply (stream_eq_coind (fun s1' s2' => s1' = s1 /\ s2' = s2)); crush.
   Qed.
 
+End stream_eq_loop.
 
+
+Require Import Arith.
+Print fact.
+
+
+CoFixpoint fact_slow' (n : nat) := Cons (fact n) (fact_slow' (S n)).
+Definition fact_slow := fact_slow' 1.
+
+
+CoFixpoint fact_iter' (cur acc : nat) := Cons acc (fact_iter' (S cur) (acc * cur)).
+Definition fact_iter := fact_iter' 2 1.
+
+Eval simpl in take 5 fact_slow.
+Eval simpl in take 5 fact_iter.
+
+
+Lemma fact_recur : forall n,
+  fact n * S n = fact (S n).
+  intro n.
+  induction n.
+  simpl.
+  reflexivity.
+  unfold fact.
+  ring.
+Qed.
+
+
+Lemma fact_def : forall x n,
+  fact_iter' x (fact n * S n) = fact_iter' x (fact (S n)).
+  intros. 
+  rewrite fact_recur.
+  reflexivity.
+Qed.
+
+Hint Resolve fact_def.
+
+Lemma fact_eq' : forall n, stream_eq (fact_iter' (S n) (fact n)) (fact_slow' n).
+  intro n.
+  apply(stream_eq_coind (fun s1 s2 => 
+    exists n, s1 = fact_iter' (S n) (fact n) /\ s2 = fact_slow' n)); crush; eauto.
+Qed.
+
+Theorem fact_eq : stream_eq fact_iter fact_slow.
+  apply fact_eq'.
+Qed.
+
+Section stream_eq_onequant.
+  Variables A B : Type.
+ 
+  Variables f g : A -> stream B.
+
+
+  Hypothesis Cons_case_hd : forall x, head (f x) = head (g x).
+  Hypothesis Cons_case_tl : forall x, exists y,tail (f x) = f y /\ tail (g x) = g y.
+  
+  Theorem stream_eq_onequant : forall x, stream_eq (f x) (g x).
+    intro; apply (stream_eq_coind (fun s1 s2 => 
+      exists x, s1 = f x /\ s2 = g x)); crush; eauto.
+  Qed.
+End stream_eq_onequant.
+
+
+Lemma fact_eq'' : forall n, stream_eq (fact_iter' (S n) (fact n)) (fact_slow' n).
+  apply stream_eq_onequant.
+  simpl.
+  reflexivity.
+  simpl.
+  eauto.
+Qed.
+
+
+Definition var := nat.
+
+Definition vars := var -> nat.
+
+
+Definition set (vs : vars) (v : var) (n : nat) : vars :=
+  fun v' => if beq_nat v v' then n else vs v'.
+
+Inductive exp : Set :=
+| Const : nat -> exp
+| Var : var -> exp
+| Plus : exp -> exp -> exp.
+
+Fixpoint evalExp (e : exp) (env : vars) : nat :=
+  match e with
+    | Const n => n
+    | Var v => env v
+    | Plus e1 e2 => evalExp e1 env + evalExp e2 env
+  end.
+
+Inductive cmd : Set :=
+| Assign : var -> exp -> cmd
+| Seq : cmd -> cmd -> cmd
+| While : exp -> cmd -> cmd.
 
 
 

@@ -23,21 +23,24 @@
     (define (define! data)
       (lambda (var val)
         (if (empty? data) (set-cdr! data (list (frame)))) ; adding first frame
-        (let ((frame (first-frame data)))
-          ((frame 'insert!) var val))))
+        (let ((current (first-frame data)))
+          ((current 'insert!) var val))))
     ;
     (define (lookup data)
+      (display "check1: ")(display "data = ")(display data)(newline)
       (lambda (var)
-        (define (loop env)
+        (display "check2: ")(display "var = ")(display var)(newline) 
+        (let loop ((env data))
+          (display "check3: inside loop: env = ")(display env)(newline)
           (if (empty? env)
             (error "Unbound variable -- LOOKUP" var)
-            (let ((frame (first-frame env)))
-              (let ((varval ((frame 'find) var)))
+            (let ((current (first-frame env)))
+              (display "check4: inside loop: current = ")(display current)(newline)
+              (let ((varval ((current 'find) var)))
+                (display "check+oo: this point is not reached\n")
                 (if (eq? #f varval) ; var not in current frame
                   (loop (enclosing-environment env))
-                  (cdr varval)))))) ; varval is pair (var . val)
-        (loop data)))
-        
+                  (cdr varval)))))))) ; varval is pair (var . val)
     ;
     (define (set-var! data)
       (lambda (var val)
@@ -72,12 +75,6 @@
     (define (frame-variables frame) (car frame))
     ;
     (define (frame-values frame) (cdr frame))
-    ;
-    (define (add-binding-to-frame! var val frame)
-      (set-car! frame (cons var (car frame)))
-      (set-cdr! frame (cons val (cdr frame))))
-    ;
-    (define (make-frame vars vals) (cons vars vals))
     ;
     ; returning no argument constructor
     ;

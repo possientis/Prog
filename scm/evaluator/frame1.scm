@@ -8,9 +8,9 @@
      ; object built from data is message passing interface
      (define (this data)
        (lambda (m)
-         (cond ((eq? m 'insert!) insert!)
-               ((eq? m 'delete!) delete!)
-               ((eq? m 'find)    search)  ; 'find' is primitive name, use 'search'
+         (cond ((eq? m 'insert!) (insert! data))
+               ((eq? m 'delete!) (delete! data))
+               ((eq? m 'find)    (search data))  ; 'find' is primitive name, use 'search'
                ((else (error "frame1: unknown operation error: " m))))))
      ;
      ; implementation of public interface
@@ -22,7 +22,7 @@
              (let ((keys (data-keys data)) (vals (data-values data)))
                (set-cdr! data (cons (cons key keys) (cons val vals))))
              ; else, key already present, simply overwrites value
-             (let (vals (cdr found))
+             (let ((vals (cdr found)))
                (set-car! vals val))))))
      ;
      (define (delete! data)

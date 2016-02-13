@@ -104,7 +104,7 @@ class Cons extends ExpressionComposite {
   public boolean isNil(){ return false; }
   @Override
   public String toString(){
-    return foldLeft("(", (s,e) -> s + e.toString() + " ") + ")";
+    return foldLeft("(", (s,e) -> s + e.toString() + " ") + "\b)";
   }
   @Override
   public Expression apply(ExpressionComposite args){
@@ -151,9 +151,9 @@ class Plus extends Primitive {
   public Expression eval(Environment env){ return this; }
   @Override
   public Expression apply(ExpressionComposite args){
-    return args.foldLeft(new ExpInt(0), (result, expression) -> {
+    int sum = args.foldLeft(0, (result, expression) -> {
       if(expression.isInt()){
-        return new ExpInt((result.toInt()) + ((ExpInt) expression).toInt());
+        return result + ((ExpInt) expression).toInt();
       }
       else{
         throw new IllegalArgumentException(
@@ -161,6 +161,7 @@ class Plus extends Primitive {
         );
       }
     });
+    return new ExpInt(sum);
   }
 }
 
@@ -171,9 +172,9 @@ class Mult extends Primitive {
   public Expression eval(Environment env){ return this; }
   @Override
   public Expression apply(ExpressionComposite args){
-    return args.foldLeft(new ExpInt(1), (result, expression) -> {
+    int product = args.foldLeft(1, (result, expression) -> {
       if(expression.isInt()){
-        return new ExpInt((result.toInt()) * ((ExpInt) expression).toInt());
+        return result * ((ExpInt) expression).toInt();
       }
       else{
         throw new IllegalArgumentException(
@@ -181,6 +182,7 @@ class Mult extends Primitive {
         );
       }
     });
+    return new ExpInt(product);
   }
 }
 

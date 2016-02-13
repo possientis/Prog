@@ -5,8 +5,15 @@ int String_test(){
   printf("%s",x->buffer);
   String* y = String_copy(x);
   printf("%s",y->buffer);
-  String_delete(x);
   String_delete(y);
+  String_delete(x);
+
+  String* a = String_new("abc");
+  String* b = String_new("def");
+  String* c = String_append(a,b);
+  printf("%s\n",c->buffer);
+
+  String_delete(c);
   return 0;
 }
 
@@ -222,7 +229,6 @@ int Cons_test(){
 
   // toString
   printf("\n");
-  /*
   printf("toString: --------------------------------------------------------\n");
   String* str = Cons_toString(cons);
   printf("cons = %s\n", str->buffer);
@@ -232,31 +238,33 @@ int Cons_test(){
   printf("\n");
   printf("eval: ------------------------------------------------------------\n");
   Expression* val = Cons_eval(cons, env);
+  assert(val == NULL);
   //str = Expression_toString(val); // <--------------------------------------- TBI
+  printf("Cons_eval is not implemented\n");
   //printf("val = %s\n", str->buffer);
   //String_delete(str);
   // apply
   printf("\n");
-  /*
   printf("apply: -----------------------------------------------------------\n");
-  Expression* app = Nil_apply(nil,(ExpressionComposite*) val);  // makes no sense
+  //Expression* app = Nil_apply(nil,(ExpressionComposite*) val);  // makes no sense
+  printf("Cons_apply is not implemented\n");
   printf("------------------------------------------------------------------\n");
   // <------------------------------------------------------------------------ TBI
   // isList
   printf("\n");
   printf("isList -----------------------------------------------------------\n");
-  printf("isList(nil) = %d\n", Nil_isList(nil));
+  printf("isList(cons) = %d\n", Cons_isList(cons));
   printf("------------------------------------------------------------------\n");
   // isInt
   printf("\n");
   printf("isInt ------------------------------------------------------------\n");
-  printf("isInt(nil) = %d\n", Nil_isInt(nil));
+  printf("isInt(cons) = %d\n", Cons_isInt(cons));
   printf("------------------------------------------------------------------\n");
 
   // isNil
   printf("\n");
   printf("isNil ------------------------------------------------------------\n");
-  printf("isNil(nil) = %d\n", Nil_isNil(nil));
+  printf("isNil(cons) = %d\n", Cons_isNil(cons));
   printf("------------------------------------------------------------------\n");
  
   // foldLeft
@@ -280,8 +288,7 @@ int Cons_test(){
   //------------------------------------------------------------------------- TBI
   printf("------------------------------------------------------------------\n");
 
-  Expression_delete(val);
-  */
+  // Expression_delete(val);
   Cons_delete(cons);
   Environment_delete(env);
   return 0;

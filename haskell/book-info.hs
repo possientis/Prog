@@ -1,6 +1,6 @@
 data BookInfo = Book {
 
-  indentifier :: Int, 
+  identifier :: Int, 
   title       :: String, 
   authors     :: [String] 
 
@@ -9,18 +9,19 @@ data BookInfo = Book {
 
 
 book1 = Book 0 "abce" ["john", "luc"]
-book2 = Book 1 "same" ["same", "john"]
+
+-- more readable way to call constructor
+book2 = Book {
+  identifier = 1,
+  title      = "this is the title",
+  authors    = ["first", "second"]
+}
 
 -- generic algebraic data type parameterized with type variables
 -- are these so called 'dependent types' of coq?
 data Map k v = Map [(k,v)]
 map' = Map [("a",4), ("b",7), ("c", 9)]
 search (Map xs) k = snd (head [(x,y) | (x,y) <- xs, x == k])
-
-foo (Book _ s (x:xs)) = x
-
-
-
 
 
 
