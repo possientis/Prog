@@ -417,7 +417,7 @@ void* ExpressionComposite_foldLeft(ExpressionComposite* self,
     // foldLeft returns a pointer to R.
     assert(init != NULL);
     assert(operator != NULL);
-    void *out;
+    void *out = init;
     // does not take ownership of self. Caller still needs to deallocate
     // its reference to self. Hence, we are taking copy here to increase
     // reference count.
@@ -1475,11 +1475,26 @@ Expression* _Cons_apply(Expression* self, ExpressionComposite* args){
 }
 
 
+void* Operator_Cons_toString(void* str, void* exp, void* params){
+  assert(str != NULL);
+  assert(exp != NULL);
+  assert(params == NULL); // no params
+  // casting arguments into their expected types
+  String* current = (String*) str;
+  Expression* expression = (Expression*) exp;
+  String* temp = Expression_toString(expression);
+  temp = String_append(temp, String_new(" "));
+  return String_append(current, temp);
+}
+
 // Override
+void* Cons_foldLeft(Cons*, void*,void* (*)(void*,void*,void*), void*);
 String* Cons_toString(Cons* self){
   assert(self != NULL);
-  String* str = String_new("Cons_toString: not yet implemented");
-  return str; // caller has ownership of String. not returning copy
+  String* init = String_new("(");
+  String* final = String_new("\b)");
+  String* temp = (String*) Cons_foldLeft(self,init,Operator_Cons_toString,NULL);
+  return String_append(temp,final);
 }
 
 // overload for vTable initialization
@@ -1737,7 +1752,7 @@ int main(int argc, char* argv[], char* envp[]){
   // Need to release memory here: TBI
 
   */ 
-    String_test();
+    Plus_test();
     return 0;
   
   }

@@ -55,40 +55,54 @@ int ExpInt_test(){
 int Plus_test(){
 
   Environment* env = Environment_new();
-  Plus* plus = Plus_new();
+  Expression* plus = (Expression*) Plus_new();
+  Expression* int1 = (Expression*) ExpInt_new(12);
+  Expression* int2 = (Expression*) ExpInt_new(13);
+  ExpressionComposite* nil = (ExpressionComposite*) Nil_new();
+  ExpressionComposite* cons1 = (ExpressionComposite*) Cons_new(int2,nil);
+  ExpressionComposite* cons2 = (ExpressionComposite*) Cons_new(int1, cons1);
+  Expression* exp = (Expression*) Cons_new(plus, cons2);
+
+  printf("\n");
+
   // toString
   printf("\n");
   printf("toString: --------------------------------------------------------\n");
-  String* str = Plus_toString(plus);
-  printf("plus = %s\n", str->buffer);
+  String* str = Expression_toString(exp);
+  printf("exp = %s\n", str->buffer);
   String_delete(str);
   printf("------------------------------------------------------------------\n");
   // eval
   printf("\n");
   printf("eval: ------------------------------------------------------------\n");
-  Expression* val = Plus_eval(plus,env);
+  Expression* val = Expression_eval(exp,env);
   str = Expression_toString(val);
   printf("val = %s\n", str->buffer);
   String_delete(str);
+  Expression_delete(val);
+  printf("------------------------------------------------------------------\n");
   // apply
   printf("\n");
   printf("apply: -----------------------------------------------------------\n");
-  printf("apply unit test is not currently implemented\n");
+  val = Expression_apply(plus, cons2);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
   printf("------------------------------------------------------------------\n");
   // <------------------------------------------------------------------------ TBI
   // isList
   printf("\n");
   printf("isList -----------------------------------------------------------\n");
-  printf("isList(plus) = %d\n", Plus_isList(plus));
+  printf("isList(plus) = %d\n", Expression_isList(plus));
   printf("------------------------------------------------------------------\n");
   // isInt
   printf("\n");
   printf("isInt ------------------------------------------------------------\n");
-  printf("isInt(plus) = %d\n", Plus_isInt(plus));
+  printf("isInt(plus) = %d\n", Expression_isInt(plus));
   printf("------------------------------------------------------------------\n");
 
   Expression_delete(val);
-  Plus_delete(plus);
+  Expression_delete(exp);
   Environment_delete(env);
 
 

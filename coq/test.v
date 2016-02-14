@@ -243,18 +243,18 @@ Qed.
 
 Definition var := nat.
 
-Definition vars := var -> nat.
+Definition environment := var -> nat.
 
 
-Definition set (vs : vars) (v : var) (n : nat) : vars :=
-  fun v' => if beq_nat v v' then n else vs v'.
+Definition set (env : environment) (v : var) (n : nat) : environment :=
+  fun v' => if beq_nat v v' then n else env v'.
 
 Inductive exp : Set :=
 | Const : nat -> exp
 | Var : var -> exp
 | Plus : exp -> exp -> exp.
 
-Fixpoint evalExp (e : exp) (env : vars) : nat :=
+Fixpoint evalExp (e : exp) (env : environment) : nat :=
   match e with
     | Const n => n
     | Var v => env v
@@ -265,6 +265,96 @@ Inductive cmd : Set :=
 | Assign : var -> exp -> cmd
 | Seq : cmd -> cmd -> cmd
 | While : exp -> cmd -> cmd.
+
+CoInductive evalCmd : environment -> cmd -> environment -> Prop :=
+| EvalAssign : forall env v e, evalCmd env (Assign v e) (set env v (evalExp e env))
+| EvalSeq : forall env1 env2 env3 c1 c2, evalCmd env1 c1 env2
+  -> evalCmd env2 c2 env3 -> evalCmd env1 (Seq c1 c2) env3
+| EvalWhileFalse : forall env e c, evalExp e env = 0
+  -> evalCmd env (While e c) env
+| EvalWhileTrue : forall env1 env2 env3 e c, evalExp e env1 <> 0
+  -> evalCmd env1 c env2
+  -> evalCmd env2 (While e c) env3
+  -> evalCmd env1 (While e c) env3.
+
+Section evalCmd_coind.
+  Variable R : environment -> cmd -> environment -> Prop.
+
+
+  Hypothesis AssignCase : forall env1 env2 v e, 
+    R env1 (Assign v e) env2 -> env2 = set env2 v (evalExp e env1).
+
+
+  Hypothesis SeqCase : forall env1 env3 c1 c2, 
+    R env1 (Seq c1 c2) env3 -> exists env2, R env1 c1 env2 /\ R env2 c2 env3.
+
+  Hypothesis WhileCase : forall env1 env3 e c, 
+    R env1 (While e c) env3 -> (evalExp e env1 = 0 /\ env3 = env1)
+    \/ exists env2,evalExp e env1 <> 0 /\ R env1 c env2 /\ R env2 (While e c) env3.
+
+  Theorem evalCmd_coind : forall env1 c env2, R env1 c env2 -> evalCmd env1 c env2.
+  Admitted.
+
+End evalCmd_coind.
+
+Fixpoint optExp (e : exp) : exp :=
+  match e with
+    | Plus (Const 0) e => optExp e
+    | Plus e1 e2 => Plus (optExp e1) (optExp e2)
+    | _ => e
+  end.
+
+Fixpoint optCmd (c : cmd) : cmd :=
+  match c with
+    | Assign v e => Assign v (optExp e)
+    | Seq c1 c2 => Seq (optCmd c1) (optCmd c2)
+    | While e c => While (optExp e) (optCmd c)
+  end.
+
+
+Lemma optExp_correct : forall env e, evalExp (optExp e) env = evalExp e env.
+  induction e.
+  simpl.
+  reflexivity.
+  simpl.
+  reflexivity.
+  simpl.
+  crush.
+  repeat (match goal with
+           | [ |- context[match ?E with Const _ => _ | _ => _ end] ] => destruct E
+               | [ |- context[match ?E with O => _ | S _ => _ end] ] => destruct E
+            end; crush).
+Qed.
+
+Hint Rewrite optExp_correct.
+
+Ltac finisher := match goal with
+                   | [ H : evalCmd _ _ _ |- _ ] => ((inversion H; [])
+                     || (inversion H; [|])); subst
+                 end; crush; eauto 10.
+
+Lemma optCmd_correct1 : forall vs1 c vs2, evalCmd vs1 c vs2
+  -> evalCmd vs1 (optCmd c) vs2.
+  intros; apply (evalCmd_coind (fun vs1 c' vs2 => exists c, evalCmd vs1 c vs2
+    /\ c' = optCmd c)); eauto; crush;
+    match goal with
+      | [ H : _ = optCmd ?E |- _ ] => destruct E; simpl in *; discriminate
+        || injection H; intros; subst
+    end; finisher.
+Qed.
+
+
+Lemma optCmd_correct2 : forall env1 c env2, evalCmd env1 (optCmd c) env2
+  -> evalCmd env1 c env2.
+  intros; apply (evalCmd_coind (fun vs1 c vs2 => evalCmd vs1 (optCmd c) vs2));
+    crush; finisher.
+Qed.
+
+Theorem optCmd_correct : forall env1 c env2, evalCmd env1 (optCmd c) env2
+  <-> evalCmd env1 c env2.
+  intuition; apply optCmd_correct1 || apply optCmd_correct2; assumption.
+Qed.
+
 
 
 
