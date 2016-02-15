@@ -58,7 +58,7 @@ typedef struct EnvironmentClass_          EnvironmentClass;
 
 // rough visual check of memory allocation vs release to avoid leaks
 void memory_log(const char* message, const void* ptr){
-  fprintf(stderr,message,ptr); // message should have '%lx' referring to ptr
+  // fprintf(stderr,message,ptr); // message should have '%lx' referring to ptr
 }
 
 
@@ -1334,8 +1334,6 @@ ExpressionCompositeClass* Nil_vTable2_new(int killInstance){
   return instance;
 }
 
-
-
 void Nil_vTable_delete(ExpressionClass* self){
   assert(self != NULL);
   assert(self->count >0);
@@ -1653,8 +1651,6 @@ ExpressionCompositeClass* Cons_vTable2_new(int killInstance){
   return instance;
 }
 
-
-
 void Cons_vTable_delete(ExpressionClass* self){
   assert(self != NULL);
   assert(self->count >0);
@@ -1712,16 +1708,323 @@ Cons* Cons_new(Expression *car, ExpressionComposite* cdr){
   obj->cdr = cdr;   // caller loses ownership, no copy
   return obj;
 }
-#include "composite.t.c"
+
+
+
+/******************************************************************************/
+/*                                Tests                                       */
+/******************************************************************************/
+
+// included in main file while in development
+
+int String_test(){
+  String* x = String_new("Hello World!\n");
+  printf("%s",x->buffer);
+  String* y = String_copy(x);
+  printf("%s",y->buffer);
+  String_delete(y);
+  String_delete(x);
+
+  String* a = String_new("abc");
+  String* b = String_new("def");
+  String* c = String_append(a,b);
+  printf("%s\n",c->buffer);
+
+  String_delete(c);
+  return 0;
+}
+
+int ExpInt_test(){
+
+  Environment* env = Environment_new();
+  ExpInt* exp = ExpInt_new(34);
+  // toString
+  String* str = ExpInt_toString(exp);
+  printf("exp = %s\n", str->buffer);
+  String_delete(str);
+
+  // eval
+  Expression* val = ExpInt_eval(exp,env);
+  str = Expression_toString(val); 
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+
+  // apply
+  printf("---------------------------------------------------\n");
+  Expression* app = ExpInt_apply(exp,(ExpressionComposite*) val); // makes no sense
+  printf("---------------------------------------------------\n");
+
+  // isList
+  printf("isList(exp) = %d\n", ExpInt_isList(exp));
+  // isInt
+  printf("isInt(exp) = %d\n", ExpInt_isInt(exp));
+
+
+  Expression_delete(val);
+  ExpInt_delete(exp);
+  Environment_delete(env);
+
+
+  return 0;
+}
+
+
+int Plus_test(){
+
+  Environment* env = Environment_new();
+  Expression* plus = (Expression*) Plus_new();
+  Expression* int1 = (Expression*) ExpInt_new(12);
+  Expression* int2 = (Expression*) ExpInt_new(13);
+  ExpressionComposite* nil = (ExpressionComposite*) Nil_new();
+  ExpressionComposite* cons1 = (ExpressionComposite*) Cons_new(int2,nil);
+  ExpressionComposite* cons2 = (ExpressionComposite*) Cons_new(int1, cons1);
+  Expression* exp = (Expression*) Cons_new(plus, cons2);
+
+  printf("\n");
+
+  // toString
+  printf("\n");
+  printf("toString: --------------------------------------------------------\n");
+  String* str = Expression_toString(exp);
+  printf("exp = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // eval
+  printf("\n");
+  printf("eval: ------------------------------------------------------------\n");
+  Expression* val = Expression_eval(exp,env);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  Expression_delete(val);
+  printf("------------------------------------------------------------------\n");
+  // apply
+  printf("\n");
+  printf("apply: -----------------------------------------------------------\n");
+  val = Expression_apply(plus, cons2);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // <------------------------------------------------------------------------ TBI
+  // isList
+  printf("\n");
+  printf("isList -----------------------------------------------------------\n");
+  printf("isList(plus) = %d\n", Expression_isList(plus));
+  printf("------------------------------------------------------------------\n");
+  // isInt
+  printf("\n");
+  printf("isInt ------------------------------------------------------------\n");
+  printf("isInt(plus) = %d\n", Expression_isInt(plus));
+  printf("------------------------------------------------------------------\n");
+
+  Expression_delete(val);
+  Expression_delete(exp);
+  Environment_delete(env);
+
+
+  return 0;
+}
+
+int Mult_test(){
+
+  Environment* env = Environment_new();
+  Expression* mult = (Expression*) Mult_new();
+  Expression* int1 = (Expression*) ExpInt_new(55);
+  Expression* int2 = (Expression*) ExpInt_new(10);
+  ExpressionComposite* nil = (ExpressionComposite*) Nil_new();
+  ExpressionComposite* cons1 = (ExpressionComposite*) Cons_new(int2,nil);
+  ExpressionComposite* cons2 = (ExpressionComposite*) Cons_new(int1, cons1);
+  Expression* exp = (Expression*) Cons_new(mult, cons2);
+
+  printf("\n");
+
+  // toString
+  printf("\n");
+  printf("toString: --------------------------------------------------------\n");
+  String* str = Expression_toString(exp);
+  printf("exp = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // eval
+  printf("\n");
+  printf("eval: ------------------------------------------------------------\n");
+  Expression* val = Expression_eval(exp,env);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  Expression_delete(val);
+  printf("------------------------------------------------------------------\n");
+  // apply
+  printf("\n");
+  printf("apply: -----------------------------------------------------------\n");
+  val = Expression_apply(mult, cons2);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // <------------------------------------------------------------------------ TBI
+  // isList
+  printf("\n");
+  printf("isList -----------------------------------------------------------\n");
+  printf("isList(mult) = %d\n", Expression_isList(mult));
+  printf("------------------------------------------------------------------\n");
+  // isInt
+  printf("\n");
+  printf("isInt ------------------------------------------------------------\n");
+  printf("isInt(mult) = %d\n", Expression_isInt(mult));
+  printf("------------------------------------------------------------------\n");
+
+  Expression_delete(val);
+  Expression_delete(exp);
+  Environment_delete(env);
+
+
+  return 0;
+}
+
+
+
+int Nil_test(){
+
+  Environment* env = Environment_new();
+  Nil*  nil = Nil_new();
+  // toString
+  printf("\n");
+  printf("toString: --------------------------------------------------------\n");
+  String* str = Nil_toString(nil);
+  printf("nil = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // eval
+  printf("\n");
+  printf("eval: ------------------------------------------------------------\n");
+  Expression* val = Nil_eval(nil, env);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  // apply
+  printf("\n");
+  printf("apply: -----------------------------------------------------------\n");
+  Expression* app = Nil_apply(nil,(ExpressionComposite*) val);  // makes no sense
+  printf("------------------------------------------------------------------\n");
+  // <------------------------------------------------------------------------ TBI
+  // isList
+  printf("\n");
+  printf("isList -----------------------------------------------------------\n");
+  printf("isList(nil) = %d\n", Nil_isList(nil));
+  printf("------------------------------------------------------------------\n");
+  // isInt
+  printf("\n");
+  printf("isInt ------------------------------------------------------------\n");
+  printf("isInt(nil) = %d\n", Nil_isInt(nil));
+  printf("------------------------------------------------------------------\n");
+
+  // isNil
+  printf("\n");
+  printf("isNil ------------------------------------------------------------\n");
+  printf("isNil(nil) = %d\n", Nil_isNil(nil));
+  printf("------------------------------------------------------------------\n");
+ 
+  // foldLeft
+  printf("\n");
+  printf("foldLeft ---------------------------------------------------------\n");
+  printf("No unit test is currently implemented for foldLeft\n");
+  //------------------------------------------------------------------------- TBI
+  printf("------------------------------------------------------------------\n");
+
+  // foldRight
+  printf("\n");
+  printf("foldRight --------------------------------------------------------\n");
+  printf("No unit test is currently implemented for foldRight\n");
+  //------------------------------------------------------------------------- TBI
+  printf("------------------------------------------------------------------\n");
+
+  // evalList
+  printf("\n");
+  printf("evalList ---------------------------------------------------------\n");
+  printf("No unit test is currently implemented for evalList\n");
+  //------------------------------------------------------------------------- TBI
+  printf("------------------------------------------------------------------\n");
+
+  Expression_delete(val);
+  Nil_delete(nil);
+  Environment_delete(env);
+
+  return 0;
+}
+
+int Cons_test(){
+
+  Environment* env = Environment_new();
+  Expression* mult = (Expression*) Mult_new();
+  Expression* int1 = (Expression*) ExpInt_new(55);
+  Expression* int2 = (Expression*) ExpInt_new(10);
+  ExpressionComposite* nil = (ExpressionComposite*) Nil_new();
+  ExpressionComposite* cons1 = (ExpressionComposite*) Cons_new(int2,nil);
+  ExpressionComposite* cons2 = (ExpressionComposite*) Cons_new(int1, cons1);
+  Expression* exp = (Expression*) Cons_new(mult, cons2);
+
+  printf("\n");
+
+  // toString
+  printf("\n");
+  printf("toString: --------------------------------------------------------\n");
+  String* str = Expression_toString(exp);
+  printf("exp = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // eval
+  printf("\n");
+  printf("eval: ------------------------------------------------------------\n");
+  Expression* val = Expression_eval(exp,env);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  Expression_delete(val);
+  printf("------------------------------------------------------------------\n");
+  // apply
+  printf("\n");
+  printf("apply: -----------------------------------------------------------\n");
+  val = Expression_apply(mult, cons2);
+  str = Expression_toString(val);
+  printf("val = %s\n", str->buffer);
+  String_delete(str);
+  printf("------------------------------------------------------------------\n");
+  // <------------------------------------------------------------------------ TBI
+  // isList
+  printf("\n");
+  printf("isList -----------------------------------------------------------\n");
+  printf("isList(exp) = %d\n", Expression_isList(exp));
+  printf("------------------------------------------------------------------\n");
+  // isInt
+  printf("\n");
+  printf("isInt ------------------------------------------------------------\n");
+  printf("isInt(exp) = %d\n", Expression_isInt(exp));
+  printf("------------------------------------------------------------------\n");
+
+  Expression_delete(val);
+  Expression_delete(exp);
+  Environment_delete(env);
+
+
+  return 0;
+}
+
+/******************************************************************************/
+/*                                Main                                        */
+/******************************************************************************/
 
 int main(int argc, char* argv[], char* envp[]){
 
-    /*
+  Environment* env = Environment_new();
+
   Expression *two   = (Expression*) ExpInt_new(2);
   Expression *seven = (Expression*) ExpInt_new(7); 
   Expression *five  = (Expression*) ExpInt_new(5); 
-  Expression *plus  = (Expression*) lPlus_new();
+  Expression *plus  = (Expression*) Plus_new();
   Expression *mult  = (Expression*) Mult_new(); 
+
   Expression *exp1  = (Expression*) Cons_new( // (+ 2 7 5)
                                         plus,
                  (ExpressionComposite*) Cons_new(
@@ -1735,27 +2038,27 @@ int main(int argc, char* argv[], char* envp[]){
   Expression *exp2  = (Expression*) Cons_new( // (* 2 (+ 2 7 5) 5)
                                         mult,
                  (ExpressionComposite*) Cons_new(
-                                            two,
+                                            Expression_copy(two),
                      (ExpressionComposite*) Cons_new(
                                                 exp1,
                          (ExpressionComposite*) Cons_new(
-                                                    five,
+                                                    Expression_copy(five),
                              (ExpressionComposite*) Nil_new()))));
 
-  printf("The valuation of Lisp expression: %s\n", 
-      Expression_toString(exp2)
-  );
-  printf("yields the value: %s\n", 
-      Expression_toString(Expression_eval(exp2, NULL))
-  );
+  String* str = Expression_toString(exp2);
+  printf("The evaluation of the Lisp expression: %s\n", str->buffer);
+  String_delete(str);
 
-  // Need to release memory here: TBI
+  Expression* val = Expression_eval(exp2, env);
+  str = Expression_toString(val);
+  printf("yields the value: %s\n", str->buffer);
+  String_delete(str);
 
-  */ 
-    Plus_test();
-    return 0;
+  Expression_delete(val);
+  Expression_delete(exp2);
+  Environment_delete(env);
   
-  }
-
+  return 0;
+}
 
 

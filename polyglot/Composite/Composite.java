@@ -29,6 +29,9 @@ import java.util.function.*;
 // ExpressionComposite := Nil | Cons Expression ExpressionComposite
 //
 
+class Environment {
+}
+
 abstract class Expression {
   public abstract  Expression eval(Environment env);
   public abstract  Expression apply(ExpressionComposite args);
@@ -186,9 +189,6 @@ class Mult extends Primitive {
   }
 }
 
-class Environment {
-}
-
 // test class
 public class Composite {
   public static void main(String[] args){
@@ -216,7 +216,7 @@ public class Composite {
                                     new Cons(
                                         five, 
                                         new Nil()))));
-    System.out.println("The evaluation of Lisp expression: " + exp2);
+    System.out.println("The evaluation of the Lisp expression: " + exp2);
     System.out.println("yields the value: " + exp2.eval(env));
   }
 }

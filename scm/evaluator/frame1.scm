@@ -2,6 +2,7 @@
 ;
 ; 1. insert! will overwrite value of existing key, rather than insert duplicate key
 ; 2. find returns a pair (key . value) from key, or expression #f if key not found
+; 3. delete! will remove pair (key . value) from frame
 ;
 (define frame1           ; constructor
    (let ((_static #f))
@@ -31,7 +32,7 @@
      ;
      (define (search data) ; returns pair (key . val) or #f
        (lambda (key)
-         (let ((found (find-first data)))
+         (let ((found ((find-first data) key)))
            (if (eq? #f found) ; key not already present
              #f
              ; else

@@ -10,7 +10,6 @@
               ((eq? m 'lookup)(lookup data))
               ((eq? m 'set!)(set-var! data))
               ((eq? m 'extended)(extended data))  ; returns extended env
-              ((eq? m 'display)(display-env data))
               (else (error "environment1: unknown operation error: " m)))))
     ;
     ; Implementation of public interface
@@ -63,9 +62,6 @@
           (if (< (length vars) (length vals))
             (error "Too many arguments supplied" vars vals)
             (error "Too few arguments supplied" vars vals)))))
-    ;
-    (define (display-env data)
-      (display data)(newline))
     ;
     ; Private helper functions
     ;

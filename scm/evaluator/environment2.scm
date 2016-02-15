@@ -11,7 +11,6 @@
               ((eq? m 'lookup)(lookup data))
               ((eq? m 'set!)(set-var! data))
               ((eq? m 'extended)(extended data))  ; returns extended env
-              ((eq? m 'display)(display-env data))
               (else (error "environment2: unknown operation error: " m)))))
     ;
     ; Implementation of public interface
@@ -27,33 +26,27 @@
           ((current 'insert!) var val))))
     ;
     (define (lookup data)
-      (display "check1: ")(display "data = ")(display data)(newline)
       (lambda (var)
-        (display "check2: ")(display "var = ")(display var)(newline) 
         (let loop ((env data))
-          (display "check3: inside loop: env = ")(display env)(newline)
           (if (empty? env)
             (error "Unbound variable -- LOOKUP" var)
             (let ((current (first-frame env)))
-              (display "check4: inside loop: current = ")(display current)(newline)
               (let ((varval ((current 'find) var)))
-                (display "check+oo: this point is not reached\n")
                 (if (eq? #f varval) ; var not in current frame
                   (loop (enclosing-environment env))
                   (cdr varval)))))))) ; varval is pair (var . val)
     ;
     (define (set-var! data)
       (lambda (var val)
-        (define (env-loop env)
+        (let env-loop ((env data))
           (if (empty? env)
             (error "Unbound variable -- SET!" var)
-            (let ((frame (first-frame env)))
-              (let ((found ((env 'find) var)))
+            (let ((current (first-frame env)))
+              (let ((found ((current 'find) var)))
                 (if (eq? #f found) ; var not in current frame
                   (env-loop (enclosing-environment env))
-                  ((env 'insert!) var val))))))
-        (env-loop data)))
-    ;
+                  ((current 'insert!) var val))))))))
+    ; NEED TO WRITE 'make-frame' and decide where it should sits
     (define (extended data)
       (lambda (vars vals)
         (if (= (length vars) (length vals))
@@ -63,18 +56,11 @@
             (error "Too many arguments supplied" vars vals)
             (error "Too few arguments supplied" vars vals)))))
     ;
-    (define (display-env data)
-      (display data)(newline))
-    ;
     ; Private helper functions
     ;
     (define (enclosing-environment data) (cons 'data (cddr data)))
     ;
     (define (first-frame data) (cadr data))
-    ;
-    (define (frame-variables frame) (car frame))
-    ;
-    (define (frame-values frame) (cdr frame))
     ;
     ; returning no argument constructor
     ;
