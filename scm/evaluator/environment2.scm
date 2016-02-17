@@ -46,7 +46,7 @@
                 (if (eq? #f found) ; var not in current frame
                   (env-loop (enclosing-environment env))
                   ((current 'insert!) var val))))))))
-    ; NEED TO WRITE 'make-frame' and decide where it should sits
+    ;
     (define (extended data)
       (lambda (vars vals)
         (if (= (length vars) (length vals))
@@ -62,11 +62,22 @@
     ;
     (define (first-frame data) (cadr data))
     ;
+    (define (make-frame vars vals)
+      (let ((new-frame (frame)))            ; empty-frame
+        (let loop ((vars vars) (vals vals))
+          (if (null? vars)
+            new-frame
+            ;else
+            (begin
+              ((new-frame 'insert!) (car vars) (car vals))
+              (loop (cdr vars) (cdr vals)))))))
+    ;
+    ;
     ; returning no argument constructor
     ;
     (lambda () (this (cons 'data '())))))
 
-
+; just completed delete! in frame1.scm
 
 
 

@@ -27,8 +27,18 @@
                (set-car! vals val))))))
      ;
      (define (delete! data)
-       'TBI
-       )
+       (lambda (key)
+         (let ((new-keys '()) (new-vals '()))
+           (let loop ((keys (data-keys data)) (vals (data-values data)))
+             (if (null? keys)
+               (set-cdr! data (cons new-keys new-vals)) ; changing frame data
+               ; else
+               (begin
+                 (if (not (equal? key (car keys)))
+                   (begin
+                     (set! new-keys (cons (car keys) new-keys))
+                     (set! new-vals (cons (car vals) new-vals))))
+                 (loop (cdr keys) (cdr vals))))))))
      ;
      (define (search data) ; returns pair (key . val) or #f
        (lambda (key)

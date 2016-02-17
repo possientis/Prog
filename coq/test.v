@@ -1,116 +1,94 @@
-Require Import List.
+Section Declaration.
+  Variable n : nat.
+  Hypothesis Pos_n : (gt n 0).
+  Definition one := S 0.
+  Definition two : nat := S one.
+  Definition three := S two : nat.
+  Definition double (m:nat) := plus m m.
+  Definition double' := fun m:nat => plus m m.
+  Definition add_n (m:nat) := plus m n.
 
-Require Import CpdtTactics.
+End Declaration.
 
-Set Implicit Arguments.
-Set Asymmetric Patterns.
+Section Minimal_Logic.
+  Variable A B C : Prop.
+  Definition Ax1 := (A -> (B -> C)) -> (A -> B) -> (A -> C). 
+  Goal Ax1.
+  unfold Ax1.
+  intro H.
+  intros H' HA.
+  apply H.
+  exact HA.
+  apply H'.
+  assumption.
+
+  Save trivial_lemma.
+
+  Lemma distr_impl: (A -> (B -> C)) -> ((A -> B) -> (A -> C)).
+    intros.
+    apply H; [ assumption | apply H0; assumption ].
+  Qed.
+
+  Lemma distr_impl': (A -> B -> C) -> (A -> B) -> (A -> C).
+    auto.
+  Qed.
+
+  Inspect 5.
+
+  Lemma and_commutative : A/\B -> B/\A.
+    intro H; elim H; auto.
+  Qed.
+
+  Lemma or_commutative: A\/B -> B\/A.
+    intro H; elim H.
+    intro HA.
+    clear H.
+    clear C.
+    right.
+    assumption.
+    auto.
+  Restart.
+    tauto.
+  Qed.
+
+  Lemma distr_and : (A -> B/\C) -> (A -> B) /\ (A -> C).
+    tauto.
+  Qed.
+
+  Lemma Peirce : ((A -> B) -> A) -> A.
+    try tauto.
+  Abort.
+
+  Lemma NNPeirce : ~~(((A -> B) -> A) -> A).
+    tauto.
+  Qed.
 
 
-Print pred.
-Extraction pred.
+  Require Import Classical.
+
+  Lemma Peirce : ((A -> B) -> A) -> A.
+    apply NNPP; tauto.
+  Qed.
+
+  Section club.
+
+  Variables Scottish RedSocks WearKilt Married GoOutSunday : Prop.
+  Hypothesis rule1 : ~Scottish -> RedSocks.
+  Hypothesis rule2 : WearKilt \/ ~RedSocks.
+  Hypothesis rule3 : Married -> ~GoOutSunday.
+  Hypothesis rule4 : GoOutSunday <-> Scottish.
+  Hypothesis rule5 : WearKilt -> Scottish/\Married.
+  Hypothesis rule6 : Scottish -> WearKilt.
+
+  Lemma NoMember : False.
+    tauto.
+  Qed.
+
+  End club.
 
 
-Lemma zgtz : 0 > 0 -> False.
-  crush.
-Qed.
-
-Definition pred_strong1 (n : nat) : n > 0 -> nat :=
-  match n with
-    | O => fun pf : 0 > 0 => match zgtz pf with end
-    | S n' => fun _ => n'
-  end.
-
-Theorem two_gt0 : 2 > 0.
-  crush.
-Qed.
-
-Eval compute in pred_strong1 two_gt0.
-
-Definition pred_strong1' (n : nat) : n > 0 -> nat :=
-  match n return n > 0 -> nat with
-    | O => fun pf : 0 > 0 => match zgtz pf with end
-    | S n' => fun _ => n'
-  end.
-
-Extraction pred_strong1.
-
-Print sig.
 
 
-Locate "{ _ : _ | _ }".
-
-
-Definition pred_strong2 (s : {n : nat | n > 0}) : nat :=
-  match s with
-    | exist O pf => match zgtz pf with end
-    | exist (S n') _ => n'
-  end.
-
-
-Eval compute in pred_strong2 (exist _ 2 two_gt0).
-
-Extraction pred_strong2.
-
-Definition pred_strong3 (s : {n : nat | n > 0}) : {m : nat | proj1_sig s = S m} :=
-match s return {m : nat | proj1_sig s = S m} with
-  | exist 0 pf => match zgtz pf with end
-  | exist (S n') pf => exist _ n' (eq_refl _)
-end.
-
-Eval compute in pred_strong3 (exist _ 2 two_gt0).
-
-Extraction pred_strong3.
-
-Definition pred_strong4 : forall n : nat, n > 0 -> {m : nat | n = S m}.
-  refine (fun n =>
-    match n with
-      | O => fun _ => False_rec _ _
-      | S n' => fun _ => exist _ n' _
-    end).
-  Undo.
-  refine (fun n =>
-    match n with
-      | O => fun _ => False_rec _ _
-      | S n' => fun _ => exist _ n' _
-    end); crush.
-Defined.
-
-Print pred_strong4.
-
-Eval compute in pred_strong4 two_gt0.
-
-Definition pred_strong4' : forall n : nat, n > 0 -> {m : nat | n = S m}.
-  refine (fun n =>
-    match n with
-      | O => fun _ => False_rec _ _
-      | S n' => fun _ => exist _ n' _
-    end); abstract crush.
-Defined.
-
-Print pred_strong4'.
-
-Notation "!" := (False_rec _ _).
-Notation "[ e ]" := (exist _ e _).
-
-Definition pred_strong5 : forall n : nat, n > 0 -> {m : nat | n = S m}.
-  refine (fun n =>
-    match n with
-      | O => fun _ => !
-      | S n' => fun _ => [n']
-    end); crush.
-Defined.
-
-Eval compute in pred_strong5 two_gt0.
-
-Obligation Tactic := crush.
-
-Program Definition pred_strong6 (n : nat) (_ : n > 0) : {m : nat | n = S m} :=
-  match n with
-    | O => _
-    | S n' => n'
-  end.
-
-Eval compute in pred_strong6 two_gt0.
 
 
 
