@@ -4,6 +4,7 @@
 #include <functional>
 #include <exception>
 #include <assert.h>
+#include <malloc.h>
 
 // The composite design pattern consists in creating an abstract class
 // or interface 'Component' which allows client code to handle certain 
@@ -32,131 +33,136 @@
 // ExpressionComposite := Nil | Cons Expression ExpressionComposite
 //
 
-// used for primitive reporting of memory allocations and deallocations
-void memory_log(std::string message, const void* ptr){
-  std::cerr << message << std::hex << ptr << std::endl;
-}
+class Expression;
+class ExpressionLeaf;
+class ExpressionComposite;
+class Primitive;
+class ExpInt;
+class Plus;
+class Mult;
+class Cons;
+class Nil;
 
 class Environment{};
-class Expression;
-class ExpressionComposite;
 
-class ExpressionData {
-  friend Expression;
-  mutable int count;  // reference count
-};
+/******************************************************************************/
+/*                            Expression class                                */
+/******************************************************************************/
 
 class Expression {
   public:
-    virtual ~Expression();
-    virtual const Expression& eval(Environment env)                   const = 0;
-    virtual const Expression& apply(const ExpressionComposite& args)  const = 0;
+    virtual const Expression* eval(const Environment* env)            const = 0;
+    virtual const Expression* apply(const ExpressionComposite* args)  const = 0;
     virtual std::string toString()                                    const = 0;
     virtual bool        isList()                                      const = 0;
-    virtual bool        isInt() const { return false; }
+    virtual bool        isInt() const { return false; } // ExpInt override only
+    virtual ~Expression();
+    static void* operator new(size_t);
+    static void operator delete(void*);
   protected:
-    Expression(ExpressionData* impl);   // derived class passing concrete pointer
-    const Expression& clone() const;
-  private:
-    const ExpressionData* const _impl;  // unique data member
+    int count;                  // reference count
+    Expression();
 };
 
-
-Expression::Expression(ExpressionData* impl) : _impl(impl){
-  assert(_impl != nullptr); 
-  _impl->count = 1; 
-  memory_log("allocating new object ", _impl);
+// base constructor simply sets reference count to 1.
+Expression::Expression() : count(1){}
+// base destructor does not do anything
+Expression::~Expression(){}
+// new pointer allocation displays message and checks for succesful allocation
+static void* Expression::operator new(size_t size){
+  void* ptr = malloc(size);
+  if(ptr == nullptr){ throw new std::bad_alloc(); }
+  std::cerr << "Allocating new object " << std::hex << ptr << std::endl;
+  return ptr;
 }
-
-Expression::~Expression(){
-  assert(_impl != nullptr);
-  _impl->count--; 
-  if(_impl->count == 0){
-    memory_log("deallocating object ", _impl);
-    delete _impl; 
-  } 
+// delete simply decrements reference counter, until 0 is reached and memory freed.
+static void Expression::operator delete(void* ptr){
+  assert(ptr != nullptr);
+  Expression* obj = static_cast<Expression*>(ptr);
+  assert(obj->count > 0);
+  obj->count--;
+  if(obj->count == 0){
+    std::cerr << "Deallocating object " << std::hex << ptr << std::endl;
+    free(ptr);
+  }
   else{
-    memory_log("deleting copy of object ", _impl);
+    std::cerr << "Deleting copy of object " << std::hex << ptr << std::endl;
   }
 }
 
-const Expression& Expression::clone() const {
-  memory_log("making copy of object ", _impl);
-  _impl->count++;
-  return (*this);
-}
+/******************************************************************************/
+/*                          ExpressionLeaf class                              */
+/******************************************************************************/
 
 class ExpressionLeaf : public Expression {
   public:
-    virtual ~ExpressionLeaf(){};
     bool isList() const override { return false; }
-  protected:
-    ExpressionLeaf(ExpressionData* impl): Expression(impl){}
+    virtual ~ExpressionLeaf(){};
 };
+
+/******************************************************************************/
+/*                       ExpressionComposite class                            */
+/******************************************************************************/
 
 class ExpressionComposite : public Expression {
   public:
-    virtual ~ExpressionComposite(){}
     virtual bool isNil() const = 0;
     bool isList() const override { return true; }
-    ExpressionComposite& evalList(Environment env) const;
+    const ExpressionComposite* evalList(const Environment* env) const;
     template <typename T> 
-    T& foldLeft(T& init, std::function<T&(T&,Expression&)> oper) const;
+    T* foldLeft(T* init, std::function<T*(T*,Expression*)> oper) const;
     template <typename T>
-    T& foldRight(T& init, std::function<T&(Expression&,T&)> oper) const;
-  protected:
-    ExpressionComposite(ExpressionData* impl): Expression(impl){}
+    T* foldRight(T* init, std::function<T*(Expression*,T*)> oper) const;
+    virtual ~ExpressionComposite(){}
 };
+
+template <typename T>
+T* ExpressionComposite::foldLeft(T* init, std::function<T*(T*,Expression*)> oper) 
+const {
+  return nullptr; //-------------------------------------------------------> TBI
+}
+
+template <typename T>
+T* ExpressionComposite::foldRight(T* init, std::function<T*(Expression*,T*)> oper)
+const {
+  return nullptr; //-------------------------------------------------------> TBI
+}
+
+const ExpressionComposite* ExpressionComposite::evalList(const Environment* env) 
+const {
+  return nullptr; //-------------------------------------------------------> TBI
+}
+/******************************************************************************/
+/*                                   Nil class                                */
+/******************************************************************************/
 
 class Nil : public ExpressionComposite {
   public:
-    ~Nil(){}
-    Nil();
+    Nil(){}
     bool isNil() const override { return true; }
-    const Expression& eval(Environment env) const override;
-    const Expression& apply(const ExpressionComposite& list) const override;
+    const Expression* eval(const Environment* env) const override;
+    const Expression* apply(const ExpressionComposite* list) const override;
     std::string toString() const override { return "Nil"; }
+    ~Nil(){}
 };
 
-Nil::Nil() : ExpressionComposite(new ExpressionData()){}
-
-const Expression& Nil::apply(const ExpressionComposite& list) const {
+const Expression* Nil::apply(const ExpressionComposite* list) const {
       std::cerr << "Nil is not an operator\n";
       throw new std::exception();
+      return nullptr;
 }
 
-const Expression& Nil::eval(Environment env) const {
-  return this->clone();
-}
-
-template <typename T>
-T& ExpressionComposite::foldLeft(T& init, std::function<T&(T&,Expression&)> oper) 
-const {
-  //return nullptr; //-------------------------------------------------------> TBI
-}
-
-template <typename T>
-T& ExpressionComposite::foldRight(T& init, std::function<T&(Expression&,T&)> oper)
-const {
-  //return nullptr; //-------------------------------------------------------> TBI
-}
-
-ExpressionComposite& ExpressionComposite::evalList(Environment env) const {
-  //return nullptr; //-------------------------------------------------------> TBI
+const Expression* Nil::eval(const Environment* env) const {
+  return this;  // ------------------------------------------------> TBI
 }
 
 
 int main(){
 
-  Environment env;
+  Nil* nil = new Nil();
 
-  Nil nil;
-  const Expression& val = nil.eval(env);
-  std::cout << "nil = " << nil.toString() << std::endl;
-  std::cout << "val = " << val.toString() << std::endl;
 
-  val.~Expression();
-
+  delete nil;
   return 0;
 }
 

@@ -1,3 +1,7 @@
+// Actually, this is fine. This 'this' pointer is aware that it is referring
+// to a derived object.
+
+
 // This is important when implementing the visitor pattern.
 // If you have a base method whose code involves 'this', the
 // 'this' pointer may not be aware it is pointing to a derived
@@ -7,30 +11,31 @@
 
 #include<iostream>
 
-using namespace std;
 class A;
 class B;
 
-static void visit(const A& a){cout << "This is an base object\n";}
-static void visit(const B& b){cout << "This is a derived object\n";}
-
+static void visit(A* a);
 class A {
   public:
-    long x;
+    // type signature
+    virtual void type(){ std::cout << "This is an A object\n"; }
     // not declared virtual
-    void foo(){visit(*this);}
+    void foo(){visit(this);}
     // declared virtual but no override provided
-    virtual void bar() {visit(*this);}
+    virtual void bar() {visit(this);}
     // declared virtual with formally identical override code
-    virtual void baz() {visit(*this);}
+    virtual void baz() {visit(this);}
 };
 
 class B : public A {
   public:
-    long y;
+    void type() override { std::cout << "This is a B object\n"; }
     // override has same code as base class version
-    virtual void baz() {visit(*this);}
+    virtual void baz() {visit(this);}
 };
+
+static void visit(A* a){ a->type(); }
+static void visit(B* b){ b->type();}
 
 int main()
 {
@@ -38,24 +43,24 @@ int main()
   A a;
   B b;
 
-  visit(a);
-  visit(b);
+  visit(&a);
+  visit(&b);
 
 
   A* pa = new A();
   A* pb = new B();
 
-  cout << "Calling non-virtual foo\n";
+  std::cout << "Calling non-virtual foo\n";
 
   pa->foo();
   pb->foo();
 
-  cout << "Calling virtual bar (which has no override)\n";
+  std::cout << "Calling virtual bar (which has no override)\n";
 
   pa->bar();
   pb->bar();
 
-  cout << "Calling virtual baz (which has an override)\n";
+  std::cout << "Calling virtual baz (which has an override)\n";
   pa-> baz();
   pb->baz();
 
