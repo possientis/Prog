@@ -30,3 +30,49 @@ Section Predicate_calculus.
     exists d. 
     apply H.
   Qed.
+
+  Hypothesis EM : forall A:Prop, A\/~A.
+
+  Lemma drinker : exists x:D, P x -> forall x:D, P x.
+    clear R.
+    elim(EM(exists x:D, ~P x)).
+    intro Non_drinker.
+    elim Non_drinker.
+    intro Tom.
+    intro Tom_does_not_drink.
+    exists Tom.
+    intro Tom_drinks.
+    absurd (P Tom).
+    assumption.
+    assumption.
+    intro Non_nondrinker.
+    exists d.
+    intro d_drinks.
+    intro Dick.
+    elim (EM (P Dick)).
+    intro Dick_drinks.
+    assumption.
+    intro Dick_does_not_drink.
+    absurd (exists x, ~ P x).
+    assumption.
+    exists Dick.
+    assumption.
+  Qed.
+End Predicate_calculus.
+
+Check drinker.
+
+Section Predicate_Calculus.
+  Variables P Q : nat -> Prop.
+  Variable R : nat -> nat -> Prop.
+
+  Lemma PQR : forall x y : nat, (R x x -> P x -> Q x) -> P x -> R x y -> Q x.
+    intros.
+    generalize H0.
+    cut(R x x).
+    assumption.
+  Abort.
+
+
+
+ 

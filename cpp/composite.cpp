@@ -58,7 +58,9 @@ class Expression {
     virtual bool        isInt() const { return false; } // ExpInt override only
     virtual ~Expression();
     const Expression* copy() const;
-    static void destroy(void*); // releases pointer when ref count is zero
+    static void* operator new(size_t);
+    static void operator delete(void*); // always call destructor -> no good
+    static void destroy(void*);         // delete when reference count is 0
   protected:
     mutable int count;                  // reference count
     Expression();
@@ -73,6 +75,22 @@ const Expression* Expression::copy() const {
   ++count;
   std::cerr << "Making copy of object " << std::hex << this << std::endl;
   return this;
+}
+
+static void* Expression::operator new(size_t size){
+  void* ptr = malloc(size);
+  if(ptr == nullptr){ throw new std::bad_alloc(); }
+  std::cerr << "Allocating new object " << std::hex << ptr << std::endl;
+  return ptr;
+}
+
+// overriding operator delete does not prevent the destructor of the object
+// pointed to by the pointer argument to run. Hence it cannot be used to 
+// selectively destroy objects based on a reference count.
+static void Expression::operator delete(void* ptr){
+  assert(ptr != nullptr);
+  std::cerr << "Deallocating object " << std::hex << ptr << std::endl;
+  free(ptr);
 }
 
 /******************************************************************************/
@@ -146,10 +164,26 @@ const Expression* Nil::eval(const Environment* env) const {
 
 int main(){
 
+  Nil* nil = new Nil();
+
+  const Expression* val = nil->copy();
+  std::cout << "val = " << std::hex << val << std::endl;
+
+  delete nil;
+  std::cout << "I am still alive " << std::hex << nil << std::endl;
+  delete nil;
+  std::cout << "I am dead at this point " << std::hex << nil << std::endl;
+  /*
   Environment* env = new Environment();
 
   Nil* nil = new Nil();
   const Expression* val = nil->eval(env);
+
+
+  delete val;
+ // delete nil;
+  delete env;
+ */
 
   return 0;
 }
