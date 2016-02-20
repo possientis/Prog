@@ -1,3 +1,5 @@
+; destructuring
+; pattern matching
 (def my-vector [:a :b :c :d])
 (def my-nested-vector [:a :b :c :d [:x :y :z]])
 (def my-list (list :a :b :c :d))
