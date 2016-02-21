@@ -232,7 +232,29 @@
   ; variable 'b' of env2 should be equal to #\a
   (let ((val ((env2 'lookup) 'b)))
     (if (not (equal? val #\a)) (display "environment: unit test 13.5 failing\n")))
- 
+  ;
+  ; deleting names from environments
+  ;
+  ((env1 'delete!) 'a)
+  ((env2 'delete!) 'b)
+  (if (env1 'empty?) (display "environment: unit test 14.0 failing\n")) 
+  (if (env2 'empty?) (display "environment: unit test 14.1 failing\n")) 
+  ; variable 'b' of env1 should be equal to '(1 2)
+  (let ((val ((env1 'lookup) 'b)))
+    (if (not(equal? val '(1 2))) (display "environment: unit test 14.2 failing\n")))
+  ; variable 'a' of env2 should be equal to 3.2
+  (let ((val ((env2 'lookup) 'a)))
+    (if (not (equal? val 3.2)) (display "environment: unit test 14.3 failing\n")))
+  ;
+  ; deleting last names from environments
+  ;
+  ((env1 'delete!) 'b)
+  ((env2 'delete!) 'a)
+
+  ; both environment should now be empty
+  (if (not (env1 'empty?)) (display "environment: unit test 15.0 failing\n")) 
+  (if (not (env2 'empty?)) (display "environment: unit test 15.1 failing\n")) 
+
   (display "environment: unit test complete\n"))
 
 (environment-test)

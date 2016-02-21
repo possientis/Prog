@@ -9,12 +9,16 @@
      ; object built from data is message passing interface
      (define (this data)
        (lambda (m)
-         (cond ((eq? m 'insert!) (insert! data))
+         (cond ((eq? m 'empty?)  (empty? data)) 
+               ((eq? m 'insert!) (insert! data))
                ((eq? m 'delete!) (delete! data))
                ((eq? m 'find)    (search data))  ; 'find' is primitive name, use 'search'
                ((else (error "frame1: unknown operation error: " m))))))
      ;
      ; implementation of public interface
+     ;
+     (define (empty? data)
+       (equal? (cdr data) (cons '() '())))
      ;
      (define (insert! data)
        (lambda (key val)

@@ -1,4 +1,5 @@
 ; one possible implementation of environment
+(load "frame")
 
 (define environment1    ; constructor
   (let ((_static #f))   ; name encapsulation
@@ -9,50 +10,61 @@
               ((eq? m 'define!)(define! data))
               ((eq? m 'lookup)(lookup data))
               ((eq? m 'set!)(set-var! data))
+              ((eq? m 'delete!)(delete! data))
               ((eq? m 'extended)(extended data))  ; returns extended env
-              (else (error "environment1: unknown operation error: " m)))))
+              (else (error "environment2: unknown operation error: " m)))))
     ;
     ; Implementation of public interface
     ;
     ; empty environment represented by the pair ('data . '())
     ; rather than simply '() so as to make it mutable
-    (define (empty? data)(equal? (cdr data) '()))
-    ;
+    (define (empty? data)
+      (equal? (cdr data) '()))
+    ; 
+    ; only add binding to current frame, potentially overwrites existing binding
     (define (define! data)
       (lambda (var val)
-        (if (empty? data) (set-cdr! data (list (cons '() '()))))
-        (let ((frame (first-frame data)))
-          (define (scan vars vals)
-            (cond ((null? vars) (add-binding-to-frame! var val frame))
-                  ((eq? var (car vars)) (set-car! vals val))
-                  (else (scan (cdr vars) (cdr vals)))))
-          (scan (frame-variables frame) (frame-values frame)))))
+        (if (empty? data) (set-cdr! data (list (frame)))) ; adding first frame
+        (let ((current (first-frame data)))
+          ((current 'insert!) var val))))
     ;
     (define (lookup data)
       (lambda (var)
-        (define (env-loop data)
-          (define (scan vars vals)
-            (cond ((null? vars) (env-loop (enclosing-environment data)))
-            ((eq? var (car vars)) (car vals))
-            (else (scan (cdr vars) (cdr vals)))))
-          (if (empty? data)
-            (error "Unbound variable" var)
-            (let ((frame (first-frame data)))
-              (scan (frame-variables frame) (frame-values frame)))))
-        (env-loop data)))
+        (let loop ((env data))
+          (if (empty? env)
+            (error "Unbound variable -- LOOKUP" var)
+            (let ((current (first-frame env)))
+              (let ((varval ((current 'find) var)))
+                (if (eq? #f varval) ; var not in current frame
+                  (loop (enclosing-environment env))
+                  (cdr varval)))))))) ; varval is pair (var . val)
     ;
+    ; overwrites binding in top-most frame where name is visible
     (define (set-var! data)
       (lambda (var val)
-        (define (env-loop data)
-          (define (scan vars vals)
-            (cond ((null? vars) (env-loop (enclosing-environment data)))
-                  ((eq? var (car vars)) (set-car! vals val))
-                  (else (scan (cdr vars) (cdr vals)))))
-          (if (empty? data)
+        (let env-loop ((env data))
+          (if (empty? env)
             (error "Unbound variable -- SET!" var)
-            (let ((frame (first-frame data)))
-              (scan (frame-variables frame) (frame-values frame)))))
-        (env-loop data)))
+            (let ((current (first-frame env)))
+              (let ((found ((current 'find) var)))
+                (if (eq? #f found) ; var not in current frame
+                  (env-loop (enclosing-environment env))
+                  ((current 'insert!) var val))))))))
+
+    ;
+    (define (delete! data)
+      (lambda (var)
+        (let env-loop ((env data))
+          (if (not (empty? env)) ; delete! has no impact if var not found
+            (let ((current (first-frame env)))
+              (let ((found ((current 'find) var)))
+                (if (eq? #f found)  ; var not in current frame
+                  (env-loop (enclosing-environment env))
+                  (begin  ; else
+                    ((current 'delete!) var)  ; remove binding in frame
+                    (if (current 'empty?)     ; if frame empty, clean up env
+                      (let ((new (remove-empty-frames data)))
+                        (set-cdr! data (cdr new))))))))))))
     ;
     (define (extended data)
       (lambda (vars vals)
@@ -69,22 +81,31 @@
     ;
     (define (first-frame data) (cadr data))
     ;
-    (define (frame-variables frame) (car frame))
+    (define (make-frame vars vals)
+      (let ((new-frame (frame)))            ; empty-frame
+        (let loop ((vars vars) (vals vals))
+          (if (null? vars)
+            new-frame
+            ;else
+            (begin
+              ((new-frame 'insert!) (car vars) (car vals))
+              (loop (cdr vars) (cdr vals)))))))
     ;
-    (define (frame-values frame) (cdr frame))
+    (define (remove-empty-frames data)
+      (let env-loop ((env data) (new (cons 'data '())))
+        (if (empty? env)
+          new
+          (let ((current (first-frame env)))
+            (if (not (current 'empty?))
+              (set! new (cons 'data (cons current (cdr new)))))
+            (env-loop (enclosing-environment data) new)))))
     ;
-    (define (add-binding-to-frame! var val frame)
-      (set-car! frame (cons var (car frame)))
-      (set-cdr! frame (cons val (cdr frame))))
-    ;
-    (define (make-frame vars vals) (cons vars vals))
     ;
     ; returning no argument constructor
     ;
     (lambda () (this (cons 'data '())))))
 
-
-
+; need to test that if bingin exists in two different frames, delete! only removes binding of top-most frame
 
 
 

@@ -60,15 +60,26 @@ class Expression {
     const Expression* copy() const;
     static void destroy(const Expression*);  // to be used rather than 'delete'
     static void memory_log(std::string message, const void* address);
+    static long memory_check(){ return mem_checksum; }  // == 0 if no mem leak
   protected:
     mutable int count;                  // reference count
     Expression();
+  private:
+    static long mem_checksum;           // used for rough check on memory leak
 };
+
+long Expression::mem_checksum = 0L;
 
 void Expression::memory_log(std::string message, const void* address){
   // comment out line to disable messaging
-  std::cerr << message << " " << std::hex << address << std::endl;
+  //std::cerr << message << " " << std::hex << address << std::endl;
+  long new_address = long(address);
+  // every address should be reported an even number of times for
+  // cumulative bitwise xor to remain zero. Better than no check.
+  mem_checksum ^= new_address;
+//  std::cerr << std::hex << mem_checksum << std::endl;
 }
+
 // base constructor simply sets reference count to 1.
 Expression::Expression() : count(1){
   memory_log("New object created",this);
@@ -97,6 +108,11 @@ void Expression::destroy(const Expression* exp){
   }
 }
 
+std::ostream& operator<<(std::ostream& s, const Expression* exp){
+  assert(exp != nullptr);
+  s << exp->toString();
+  return s;
+}
 /******************************************************************************/
 /*                          ExpressionLeaf class                              */
 /******************************************************************************/
@@ -123,12 +139,6 @@ class ExpressionComposite : public Expression {
     virtual ~ExpressionComposite(){}
 };
 
-
-
-const ExpressionComposite* ExpressionComposite::evalList(const Environment* env) 
-const {
-  return nullptr; //-------------------------------------------------------> TBI
-}
 /******************************************************************************/
 /*                                   Nil class                                */
 /******************************************************************************/
@@ -142,7 +152,6 @@ class Nil : public ExpressionComposite {
     std::string toString() const override { return "Nil"; }
     ~Nil(){};
 };
-
 
 const Expression* Nil::apply(const ExpressionComposite* list) const {
       std::cerr << "Nil is not an operator\n";
@@ -187,8 +196,17 @@ Cons::Cons(const Expression* car, const ExpressionComposite* cdr){
 }
 
 const Expression* Cons::eval(const Environment* env) const {
-  std::cerr << "Cons::eval is not yet implemented\n"; //-------------------> TBI
-  throw new std::exception();
+  assert(env != nullptr);
+  const ExpressionComposite* vals = evalList(env);        // dealloc below
+  assert(!vals->isNil());
+  const Cons* values = static_cast<const Cons*>(vals);    // safe in view of assert
+  const Expression* oper = values->head();                // dealloc below 
+  const ExpressionComposite* arguments = values-> tail(); // dealloc below
+  const Expression* result = oper->apply(arguments);
+  Expression::destroy(vals);
+  Expression::destroy(oper);
+  Expression::destroy(arguments);
+  return result;  // caller has ownership
 }
 
 const Expression* Cons::apply(const ExpressionComposite* args) const {
@@ -205,11 +223,17 @@ const ExpressionComposite* Cons::tail() const {
 }
 
 std::string Cons::toString() const {
-  return "Cons::toString() is not yet implemented"; //---------------------> TBI
+  std::string init = "(";
+  std::function<std::string*(std::string*, const Expression*)> oper =
+    [](std::string* str, const Expression* exp) -> std::string* {
+     (*str) = (*str) + exp->toString() + " "; 
+     return str;
+    };
+  return *foldLeft(&init,oper) + "\b)";
 }
 
 /******************************************************************************/
-/*                             foldLeft/foldRight                             */
+/*                    foldLeft/foldRight/evalList                             */
 /******************************************************************************/
 
 template <typename T> T* ExpressionComposite::foldLeft(
@@ -218,13 +242,14 @@ template <typename T> T* ExpressionComposite::foldLeft(
 ) const {
   assert(init != nullptr);
   T* out = init;
-  const ExpressionComposite* next = this->copy(); // deallocated further down
+  const ExpressionComposite* 
+    next = static_cast<const ExpressionComposite*>(this->copy()); // dealloc below
   while(!next->isNil()){
     assert(!next->isNil());
     const Cons* cell = static_cast<const Cons*>(next);  // safe in view of assert
-    const Expression* head = cell->head();
+    const Expression* head = cell->head();  // creating copy
     out = oper(out,head);
-    Expression::destroy(head);  // deallocation of copy 
+    Expression::destroy(head);              // deallocation of copy 
     next = cell->tail();
     Expression::destroy(cell);  // deallocation of cell (previous next)
   }
@@ -250,6 +275,19 @@ template <typename T> T* ExpressionComposite::foldRight(
   return result;
 }
 
+const ExpressionComposite* ExpressionComposite::evalList(const Environment* env) 
+const {
+  assert(env != nullptr);
+  const ExpressionComposite* nil = new Nil();
+  std::function<const ExpressionComposite*(
+      const Expression*, 
+      const ExpressionComposite*
+    )> oper = [env](const Expression* exp, const ExpressionComposite* list) -> 
+    const ExpressionComposite* {
+      return new Cons(exp->eval(env), list); 
+    };
+  return foldRight(nil, oper);
+}
 
 /******************************************************************************/
 /*                                  ExpInt class                              */
@@ -311,8 +349,21 @@ const Expression* Plus::eval(const Environment* env) const {
 }
 
 const Expression* Plus::apply(const ExpressionComposite* args) const{
-  std::cerr << "Plus::apply is not yet implemented\n"; // ---------------> TBI
-  throw new std::exception();
+  assert(args != nullptr);
+  int sum = 0;
+  std::function<int*(int*,const Expression*)> oper = 
+    [](int* res, const Expression* exp) -> int* {
+      if(exp->isInt()){
+        *res += static_cast<const ExpInt*>(exp)->toInt();
+        return res;
+      }
+      else {
+        std::cerr << "+: argument is not a valid integer\n";
+        throw new std::bad_typeid();
+      }
+    };
+  args->foldLeft(&sum, oper);
+  return new ExpInt(sum);
 }
 
 /******************************************************************************/
@@ -334,8 +385,21 @@ const Expression* Mult::eval(const Environment* env) const {
 }
 
 const Expression* Mult::apply(const ExpressionComposite* args) const{
-  std::cerr << "Mult::apply is not yet implemented\n"; // ---------------> TBI
-  throw new std::exception();
+  assert(args != nullptr);
+  int prod = 1;
+  std::function<int*(int*,const Expression*)> oper = 
+    [](int* res, const Expression* exp) -> int* {
+      if(exp->isInt()){
+        *res *= static_cast<const ExpInt*>(exp)->toInt();
+        return res;
+      }
+      else {
+        std::cerr << "*: argument is not a valid integer\n";
+        throw new std::bad_typeid();
+      }
+    };
+  args->foldLeft(&prod, oper);
+  return new ExpInt(prod);
 }
 
 /******************************************************************************/
@@ -544,37 +608,41 @@ void Mult_test(){
 }
 int main(){
 
-  /*
-  Environment* env  = new Environment();
-  Expression* two   = new ExpInt(2);
-  Expression* seven = new ExpInt(7);
-  Expression* five  = new ExpInt(5);
-  Expression* plus  = new Plus();
-  Expression* mult  = new Mult();
-  Expression* exp1  = new Cons( // (+ 2 7 5)
-                          plus,
-                          new Cons(
-                            two,
-                            new Cons(
-                              seven,
+const Environment* env  = new Environment();
+const Expression* two   = new ExpInt(2);
+const Expression* seven = new ExpInt(7);
+const Expression* five  = new ExpInt(5);
+const Expression* plus  = new Plus();
+const Expression* mult  = new Mult();
+const Expression* exp1  = new Cons( // (+ 2 7 5)
+                              plus,
                               new Cons(
-                                five,
-                                new Nil()))));
-  Expression* exp2  = new Cons( // (* 2 (+ 2 7 5) 5)
-                          mult,
-                          new Cons(
-                            two->copy(), // copy to avoid multiple deallocation
-                            new Cons(
-                              exp1,
+                                two,
+                                new Cons(
+                                  seven,
+                                  new Cons(
+                                    five,
+                                    new Nil()))));
+const Expression* exp2  = new Cons( // (* 2 (+ 2 7 5) 5)
+                              mult,
                               new Cons(
-                                five->copy(), // idem
-                                new Nil()))));
+                                two->copy(), // copy to avoid multiple dealloc
+                                new Cons(
+                                  exp1,
+                                  new Cons(
+                                    five->copy(), // idem
+                                    new Nil()))));
+const Expression* val = exp2->eval(env);
 
-  std::cout << "The evaluation of the List Expression: " << exp2->toString();
-  std::cout << "yields the value: " << exp2->eval(env);
+  std::cout << "The evaluation of the Lisp Expression: " << exp2 << std::endl;
+  std::cout << "yields the value: " << val << std::endl;
+  Expression::destroy(val);
   Expression::destroy(exp2);
+  if(Expression::memory_check() != 0){
+    std::cerr << "memory leak detected\n";
+    throw new std::exception(); // memory leak detected
+  }
   delete env;
-  */
   return 0;
 }
 
