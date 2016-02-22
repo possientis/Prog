@@ -32,53 +32,58 @@ import java.util.function.*;
 class Environment {
 }
 
-abstract class Expression {
-  public abstract  Expression eval(Environment env);
-  public abstract  Expression apply(ExpressionComposite args);
-  public abstract  String toString();
-  public abstract  boolean isList();         // isComposite
-  public boolean   isInt(){ return false ;} // overriden by ExpInt 
+interface  Expression {
+  public abstract Expression eval(Environment env);
+  public abstract Expression apply(ExpressionComposite args);
+  public abstract String toString();
+  public abstract boolean isList();                // isComposite
+  public default  boolean isInt(){ return false ;} // overriden by ExpInt 
 }
 
-abstract class ExpressionLeaf extends Expression {
+abstract class ExpressionLeaf implements Expression {
   @Override
   public boolean isList(){ return false;}
 }
 
-abstract class ExpressionComposite extends Expression {
+abstract class ExpressionComposite implements Expression {
   @Override
   public boolean isList(){ return true; }
   public abstract boolean isNil();
+
   public <R> R foldLeft(R init, BiFunction<R,Expression,R> operator){
     R out = init;
     ExpressionComposite next = this;
     while(!next.isNil()){
-      assert(!next.isNil());
+      assert(next instanceof Cons);
       Cons cell = (Cons) next;  // safe in view of assert
       out = operator.apply(out, cell.head());
       next = cell.tail();
     }
     return out;
   }
+
   public <R> R foldRight(R init, BiFunction<Expression,R,R> operator){
     if(isNil()) return init;
-    assert(!isNil());
+    assert(this instanceof Cons);
     Cons cell = (Cons) this;  // safe in view of assert
-    // implemantation not stack friendly. May need to be changed
+    // implementation not stack friendly. May need to be changed
     return operator.apply(cell.head(), cell.tail().foldRight(init,operator));
   } 
+ 
   // This does not evaluate the expression, but rather returns
   // the list (itself an ExpressionComposite) of values (each 
   // value is itself an expression, albeit often of simpler type) 
   // obtained by evaluating each expression within the list
   public ExpressionComposite evalList(Environment env){
+    // The upcast of 'new Nil()' to 'ExpressionComposite' may appear 
+    // surprising, but is required to ensure the appropriate signature is 
+    // inferred for the lambda expression and generic foldRight.
     return foldRight((ExpressionComposite) new Nil(), (expression, list) ->
         new Cons(expression.eval(env), list));
   }
 }
 
 class Nil extends ExpressionComposite {
-  public Nil(){}
   @Override
   public boolean isNil(){ return true; }
   @Override
@@ -92,8 +97,8 @@ class Nil extends ExpressionComposite {
 }
 
 class Cons extends ExpressionComposite {
-  private Expression car;
-  private ExpressionComposite cdr;
+  private final Expression car;           // car, head, first
+  private final ExpressionComposite cdr;  // cdr, tail, rest
 
   public Cons(Expression car, ExpressionComposite cdr){
     this.car = car; 
@@ -104,26 +109,29 @@ class Cons extends ExpressionComposite {
   public ExpressionComposite tail(){ return cdr; }
 
   @Override
-  public boolean isNil(){ return false; }
-  @Override
-  public String toString(){
-    return foldLeft("(", (s,e) -> s + e.toString() + " ") + "\b)";
+  public Expression eval(Environment env){
+    ExpressionComposite vals      = evalList(env);
+    // 'this' is a Cons, hence 'vals' should be a Cons
+    assert(vals instanceof Cons); // even better than 'assert(!isNil())'        
+    Cons values = (Cons) vals;    // safe in view of assert
+    Expression operator           = values.head();
+    ExpressionComposite arguments = values.tail();
+    return operator.apply(arguments);
   }
+
   @Override
   public Expression apply(ExpressionComposite args){
     throw new UnsupportedOperationException(
       "Lambda expression are not yet supported"
     );
   }
+
   @Override
-  public Expression eval(Environment env){
-    ExpressionComposite vals      = evalList(env);
-    // 'this' is a Cons, 'values' should be a Cons
-    assert(!vals.isNil());        
-    Cons values = (Cons) vals;    // safe in view of assert
-    Expression operator           = values.head();
-    ExpressionComposite arguments = values.tail();
-    return operator.apply(arguments);
+  public boolean isNil(){ return false; }
+
+  @Override
+  public String toString(){
+    return foldLeft("(", (s,e) -> s + e.toString() + " ") + "\b)";
   }
 }
 
@@ -148,17 +156,14 @@ abstract class Primitive extends ExpressionLeaf {
 }
 
 class Plus extends Primitive {
-  @Override
-  public String toString(){ return "+"; }
-  @Override
+ @Override
   public Expression eval(Environment env){ return this; }
   @Override
   public Expression apply(ExpressionComposite args){
     int sum = args.foldLeft(0, (result, expression) -> {
       if(expression.isInt()){
         return result + ((ExpInt) expression).toInt();
-      }
-      else{
+      } else{
         throw new IllegalArgumentException(
           "+: argument is not a valid integer"
         );
@@ -166,6 +171,9 @@ class Plus extends Primitive {
     });
     return new ExpInt(sum);
   }
+
+  @Override
+  public String toString(){ return "+"; }
 }
 
 class Mult extends Primitive {

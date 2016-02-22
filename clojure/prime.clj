@@ -1,7 +1,7 @@
 (defn prime? [x]
   (let [divisors (range 2 (inc (int (Math/sqrt x))))
-        remainders (map #(rem x %) divisors)]
-    (not (some zero? remainders))))
+        remainders (map #(rem x %) divisors)] ; shortcut for lambda expression
+    (not (some zero? remainders))))           ; (fn [y] (rem x y))
 
 (defn primes-less-than [n]
   (for [x (range 2 (inc n)) :when (prime? x)]

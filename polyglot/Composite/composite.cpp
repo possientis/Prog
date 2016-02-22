@@ -4,7 +4,6 @@
 #include <functional>
 #include <exception>
 #include <assert.h>
-#include <malloc.h>
 
 // The composite design pattern consists in creating an abstract class
 // or interface 'Component' which allows client code to handle certain 
@@ -223,13 +222,14 @@ const ExpressionComposite* Cons::tail() const {
 }
 
 std::string Cons::toString() const {
-  std::string init = "(";
+  std::string out = "(";
   std::function<std::string*(std::string*, const Expression*)> oper =
     [](std::string* str, const Expression* exp) -> std::string* {
      (*str) = (*str) + exp->toString() + " "; 
      return str;
     };
-  return *foldLeft(&init,oper) + "\b)";
+  foldLeft(&out,oper);
+  return out + "\b)";
 }
 
 /******************************************************************************/
