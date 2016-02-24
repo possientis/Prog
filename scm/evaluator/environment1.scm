@@ -19,7 +19,11 @@
     ; empty environment represented by the pair ('data . '())
     ; rather than simply '() so as to make it mutable
     (define (empty? data)
-      (equal? (cdr data) '()))
+      (let frame-loop ((env (cdr data)))
+        (if (null? env) #t              
+          (let ((current (car env)))      ; else
+            (if (not (current 'empty?)) #f                        
+              (frame-loop (cdr env))))))) ; else
     ; 
     ; only add binding to current frame, potentially overwrites existing binding
     (define (define! data)
@@ -60,11 +64,7 @@
               (let ((found ((current 'find) var)))
                 (if (eq? #f found)  ; var not in current frame
                   (env-loop (enclosing-environment env))
-                  (begin  ; else
-                    ((current 'delete!) var)  ; remove binding in frame
-                    (if (current 'empty?)     ; if frame empty, clean up env
-                      (let ((new (remove-empty-frames data)))
-                        (set-cdr! data (cdr new))))))))))))
+                  ((current 'delete!) var))))))))  ; remove binding in frame
     ;
     (define (extended data)
       (lambda (vars vals)
@@ -91,22 +91,11 @@
               ((new-frame 'insert!) (car vars) (car vals))
               (loop (cdr vars) (cdr vals)))))))
     ;
-    (define (remove-empty-frames data)
-      (let env-loop ((env data) (new (cons 'data '())))
-        (if (empty? env)
-          new
-          (let ((current (first-frame env)))
-            (if (not (current 'empty?))
-              (set! new (cons 'data (cons current (cdr new)))))
-            (env-loop (enclosing-environment data) new)))))
-    ;
-    ;
     ; returning no argument constructor
     ;
     (lambda () (this (cons 'data '())))))
 
-; need to test that if bingin exists in two different frames, delete! only removes binding of top-most frame
-
+; continue testing. Rationalize looping code 
 
 
 

@@ -1,5 +1,5 @@
 ; foldleft but not as flexible since binary
-; operator is contrained to have both arguments
+; operator is constrained to have both arguments
 ; same type
 (println (reduce * [1 2 3 4 5]))
 (println (reduce + '(1 2 3 4 5)))

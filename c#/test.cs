@@ -1,21 +1,17 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace ConsoleApplication1
+
+class Program
 {
-  class Program
+
+  static void Main ()
   {
 
-    static void Main ()
-    {
-
       //Console.WriteLine ();
-    }
   }
-
-
-  class A{
-
-  }
-
 }
+
+
 

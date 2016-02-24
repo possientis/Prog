@@ -254,6 +254,107 @@
   ; both environment should now be empty
   (if (not (env1 'empty?)) (display "environment: unit test 15.0 failing\n")) 
   (if (not (env2 'empty?)) (display "environment: unit test 15.1 failing\n")) 
+  ;
+  ; re-binding variables to env1 and env2 
+  ;
+  ((env1 'define!) 'b "abc")
+  ((env1 'define!) 'a 23)
+  ((env2 'define!) 'b "def")
+  ((env2 'define!) 'a #t)
+  ; env1 and env2 should not be empty
+  (if (env1 'empty?) (display "environment: unit test 16.0 failing\n")) 
+  (if (env2 'empty?) (display "environment: unit test 16.1 failing\n")) 
+  ; variable 'a' of env1 should be equal to 23
+  (let ((val ((env1 'lookup) 'a)))
+    (if (not (eq? val 23)) (display "environment: unit test 16.2 failing\n")))
+  ; variable 'a' of env2 should be equal to #t
+  (let ((val ((env2 'lookup) 'a)))
+    (if (not (eq? val #t)) (display "environment: unit test 16.3 failing\n")))
+  ; variable 'b' of env1 should be equal to "abc"
+  (let ((val ((env1 'lookup) 'b)))
+    (if (not (equal? val "abc")) (display "environment: unit test 16.4 failing\n")))
+  ; variable 'b' of env2 should be equal to "def"
+  (let ((val ((env2 'lookup) 'b)))
+    (if (not (equal? val "def")) (display "environment: unit test 16.5 failing\n")))
+  ; adding new frame
+  (let ((env3 ((env1 'extended) '(a b) '(3 #\a))) 
+        (env4 ((env2 'extended) '(a b) '(4 #\b))))
+    ; variable 'a' of env1 should still be equal to 23
+    (let ((val ((env1 'lookup) 'a)))
+      (if (not (eq? val 23)) (display "environment: unit test 16.6 failing\n")))
+    ; variable 'a' of env2 should still be equal to #t
+    (let ((val ((env2 'lookup) 'a)))
+      (if (not (eq? val #t)) (display "environment: unit test 16.7 failing\n")))
+    ; variable 'b' of env1 should still be equal to "abc"
+    (let ((val ((env1 'lookup) 'b)))
+      (if (not(equal? val "abc"))(display "environment: unit test 16.8 failing\n")))
+    ; variable 'b' of env2 should still be equal to "def"
+    (let ((val ((env2 'lookup) 'b)))
+      (if (not(equal? val "def"))(display "environment: unit test 16.9 failing\n")))
+    ; env3 and env4 should not be empty
+    (if (env3 'empty?) (display "environment: unit test 16.10 failing\n")) 
+    (if (env4 'empty?) (display "environment: unit test 16.11 failing\n")) 
+    ; variable 'a' of env3 should be equal to 3
+    (let ((val ((env3 'lookup) 'a)))
+      (if (not(eq? val 3))(display "environment: unit test 16.12 failing\n")))
+    ; variable 'a' of env4 should be equal to 4
+    (let ((val ((env4 'lookup) 'a)))
+      (if (not(eq? val 4))(display "environment: unit test 16.13 failing\n")))
+    ; variable 'b' of env3 should be equal to #\a
+    (let ((val ((env3 'lookup) 'b)))
+      (if(not(equal? val #\a))(display "environment: unit test 16.14 failing\n")))
+    ; variable 'b' of env4 should be equal to #\b
+    (let ((val ((env4 'lookup) 'b)))
+      (if (not(equal? val #\b))(display "environment: unit test 16.15 failing\n")))
+    ; calling delete! on extended environment
+    ((env3 'delete!) 'a)
+    ((env4 'delete!) 'a)
+    ; this should have no impact on env1 and env2
+    ; variable 'a' of env1 should still be equal to 23
+    (let ((val ((env1 'lookup) 'a)))
+      (if (not (eq? val 23)) (display "environment: unit test 16.16 failing\n")))
+    ; variable 'a' of env2 should still be equal to #t
+    (let ((val ((env2 'lookup) 'a)))
+      (if (not (eq? val #t)) (display "environment: unit test 16.17 failing\n")))
+    ; variable 'b' of env1 should still be equal to "abc"
+    (let ((val ((env1 'lookup) 'b)))
+      (if (not(equal? val "abc"))(display "environment: unit test 17.0 failing\n")))
+    ; variable 'b' of env2 should still be equal to "def"
+    (let ((val ((env2 'lookup) 'b)))
+      (if (not(equal? val "def"))(display "environment: unit test 17.1 failing\n")))
+    ; but top-most binding for 'a should be gone from env3 and env4
+    ; so previous binding for 'a should now become visible, leaving b unchanged
+    ; variable 'a' of env3 should now be equal to 23
+    (let ((val ((env3 'lookup) 'a)))
+      (if (not(eq? val 23))(display "environment: unit test 17.2 failing\n")))
+    ; variable 'a' of env4 should now be equal to #t
+    (let ((val ((env4 'lookup) 'a)))
+      (if (not(eq? val #t))(display "environment: unit test 17.3 failing\n")))
+    ; variable 'b' of env3 should be equal to #\a
+    (let ((val ((env3 'lookup) 'b)))
+      (if(not(equal? val #\a))(display "environment: unit test 17.4 failing\n")))
+    ; variable 'b' of env4 should be equal to #\b
+    (let ((val ((env4 'lookup) 'b)))
+      (if (not(equal? val #\b))(display "environment: unit test 17.5 failing\n")))
+     ; calling further delete! on extended environment
+    ((env3 'delete!) 'b)
+    ((env4 'delete!) 'b)
+    ; this should have no impact on env1 and env2
+    ; variable 'a' of env1 should still be equal to 23
+;    (let ((val ((env1 'lookup) 'a)))
+;      (if (not (eq? val 23)) (display "environment: unit test 17.6 failing\n")))
+;    ; variable 'a' of env2 should still be equal to #t
+;    (let ((val ((env2 'lookup) 'a)))
+;      (if (not (eq? val #t)) (display "environment: unit test 17.7 failing\n")))
+;    ; variable 'b' of env1 should still be equal to "abc"
+;    (let ((val ((env1 'lookup) 'b)))
+;      (if (not(equal? val "abc"))(display "environment: unit test 17.8 failing\n")))
+;    ; variable 'b' of env2 should still be equal to "def"
+;    (let ((val ((env2 'lookup) 'b)))
+;      (if (not(equal? val "def"))(display "environment: unit test 17.9 failing\n")))
+   ) 
+ 
+
 
   (display "environment: unit test complete\n"))
 

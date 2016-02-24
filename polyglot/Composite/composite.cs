@@ -121,7 +121,7 @@ class Cons : ExpressionComposite {
 
   public override bool IsNil{ get{ return false; } }
   public override string ToString(){
-    return foldLeft("(", (s,e) => s + e.ToString() + " ") + "\b)";
+    return foldLeft("(", (s,e) => s + e + " ") + "\b)";
   }
 }
 

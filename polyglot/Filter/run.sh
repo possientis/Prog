@@ -6,11 +6,15 @@ gcc filter.c; ./a.out 2>/dev/null; rm a.out   # diverting stderr (debug info)
 echo '\nThis is C++ ...'
 g++ -std=c++14 filter.cpp; ./a.out; rm a.out
 
+echo '\nThis is Java ...'
+javac Filter.java; java Filter; rm *.class
+
 echo '\nThis is C# ...'
 mcs filter.cs; mono filter.exe; rm filter.exe
 
-echo '\nThis is Java ...'
-javac Filter.java; java Filter; rm *.class
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Filter.scala
+scala Filter; rm *.class
 
 echo '\nThis is JavaScript ...'
 js filter.js
@@ -29,10 +33,6 @@ scm filter.scm
 
 echo '\nThis is Clojure ..'
 clojure filter.clj
-
-echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Filter.scala
-scala Filter; rm *.class
 
 echo '\nThis is Haskell ...'
 ghc -v0 -XMultiParamTypeClasses -XTypeSynonymInstances -XFlexibleInstances \

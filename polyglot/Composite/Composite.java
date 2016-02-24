@@ -131,7 +131,7 @@ class Cons extends ExpressionComposite {
 
   @Override
   public String toString(){
-    return foldLeft("(", (s,e) -> s + e.toString() + " ") + "\b)";
+    return foldLeft("(", (s,e) -> s + e + " ") + "\b)";
   }
 }
 
@@ -143,13 +143,14 @@ class ExpInt extends ExpressionLeaf {
   @Override
   public Expression eval(Environment env) { return this ;}  // self-evaluating
   @Override
-  public String toString(){ return String.valueOf(value);}
-  @Override
-  public boolean isInt(){ return true; }
-  @Override
   public Expression apply(ExpressionComposite args){
     throw new UnsupportedOperationException("An integer is not an operator");
   }
+  @Override
+  public String toString(){ return String.valueOf(value);}
+  @Override
+  public boolean isInt(){ return true; }
+
 }
 
 abstract class Primitive extends ExpressionLeaf {

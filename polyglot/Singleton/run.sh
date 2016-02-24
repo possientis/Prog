@@ -6,11 +6,15 @@ gcc singleton.c; ./a.out; rm a.out
 echo '\nThis is C++ ...'
 g++ -std=c++14 singleton.cpp; ./a.out; rm a.out
 
+echo '\nThis is Java ...'
+javac Singleton.java; java Singleton; rm *.class
+
 echo '\nThis is C# ...'
 mcs singleton.cs; mono singleton.exe; rm singleton.exe
 
-echo '\nThis is Java ...'
-javac Singleton.java; java Singleton; rm *.class
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Singleton.scala
+scala Singleton; rm *.class
 
 echo '\nThis is JavaScript ...'
 js singleton.js
@@ -29,10 +33,6 @@ scm singleton.scm
 
 echo '\nThis is Clojure ...'
 clojure singleton.clj
-
-echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Singleton.scala
-scala Singleton; rm *.class
 
 echo '\nThis is Haskell ...'
 ghc -v0 singleton.hs; ./singleton; rm singleton singleton.o singleton.hi
