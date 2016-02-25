@@ -29,41 +29,41 @@
     (define (define! data)
       (lambda (var val)
         (if (empty? data) (set-cdr! data (list (frame)))) ; adding first frame
-        (let ((current (first-frame data)))
+        (let ((current (cadr data)))
           ((current 'insert!) var val))))
     ;
     (define (lookup data)
       (lambda (var)
-        (let loop ((env data))
-          (if (empty? env)
+        (let frame-loop ((env (cdr data)))
+          (if (null? env)
             (error "Unbound variable -- LOOKUP" var)
-            (let ((current (first-frame env)))
+            (let ((current (car env)))
               (let ((varval ((current 'find) var)))
                 (if (eq? #f varval) ; var not in current frame
-                  (loop (enclosing-environment env))
+                  (frame-loop (cdr env))
                   (cdr varval)))))))) ; varval is pair (var . val)
     ;
     ; overwrites binding in top-most frame where name is visible
     (define (set-var! data)
       (lambda (var val)
-        (let env-loop ((env data))
-          (if (empty? env)
+        (let frame-loop ((env (cdr data)))
+          (if (null? env)
             (error "Unbound variable -- SET!" var)
-            (let ((current (first-frame env)))
+            (let ((current (car env)))
               (let ((found ((current 'find) var)))
                 (if (eq? #f found) ; var not in current frame
-                  (env-loop (enclosing-environment env))
+                  (frame-loop (cdr env))
                   ((current 'insert!) var val))))))))
 
     ;
     (define (delete! data)
       (lambda (var)
-        (let env-loop ((env data))
-          (if (not (empty? env)) ; delete! has no impact if var not found
-            (let ((current (first-frame env)))
+        (let frame-loop ((env (cdr data)))
+          (if (not (null? env)) ; delete! has no impact if var not found
+            (let ((current (car env)))
               (let ((found ((current 'find) var)))
                 (if (eq? #f found)  ; var not in current frame
-                  (env-loop (enclosing-environment env))
+                  (frame-loop (cdr env))
                   ((current 'delete!) var))))))))  ; remove binding in frame
     ;
     (define (extended data)
@@ -76,10 +76,6 @@
             (error "Too few arguments supplied" vars vals)))))
     ;
     ; Private helper functions
-    ;
-    (define (enclosing-environment data) (cons 'data (cddr data)))
-    ;
-    (define (first-frame data) (cadr data))
     ;
     (define (make-frame vars vals)
       (let ((new-frame (frame)))            ; empty-frame
@@ -95,7 +91,6 @@
     ;
     (lambda () (this (cons 'data '())))))
 
-; continue testing. Rationalize looping code 
-
+; refactor dictionary unit testing and link it to frame
 
 

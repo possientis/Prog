@@ -15,8 +15,17 @@ echo '\nThis is Scala ...'
 env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Composite.scala
 scala Composite; rm *.class
 
+echo '\nThis is JavaScript ...'
+js composite.js
+
 echo '\nThis is PHP ...'
 php composite.php
 
-echo '\nThis is JavaScript ...'
-js composite.js
+echo '\nThis is Python ...'
+python3 composite.py
+
+echo '\nThis is Ruby ...'
+ruby composite.rb
+
+
+

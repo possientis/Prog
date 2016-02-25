@@ -47,8 +47,8 @@ Expression.prototype.eval = function(env){
   throw "Expression::eval is not implemented";}
 Expression.prototype.apply = function(args){
   throw "Expression::apply is not implemented";}
-Expression.prototype.toString2 = function(){
-  throw "Expression::toString2 is not implemented";}
+Expression.prototype.toString = function(){
+  throw "Expression::toString is not implemented";}
 Expression.prototype.isList = function(){
   throw "Expression::isList is not implemented";}
 Expression.prototype.isInt = function(){
@@ -108,7 +108,7 @@ Nil.prototype           = Object.create(ExpressionComposite.prototype);
 Nil.prototype.isNil     = function(){ return true; }
 Nil.prototype.eval      = function(env){ return this; }  // self-evaluating
 Nil.prototype.apply     = function(list){ throw "Nil is not an operator"; }
-Nil.prototype.toString2  = function(){ return "Nil"; }
+Nil.prototype.toString  = function(){ return "Nil"; }
 
 /******************************************************************************/
 /*                                  class Cons                                */
@@ -131,9 +131,9 @@ Cons.prototype.eval = function(env){
 Cons.prototype.apply = function(args){
   throw "Lambda expression are not yet supported";}
 Cons.prototype.isNil = function(){ return false; }
-Cons.prototype.toString2 = function(){
+Cons.prototype.toString = function(){
   return this.foldLeft("(", function(str, exp){
-    return str + exp.toString2() + " ";}) + "\b)";
+    return str + exp + " ";}) + "\b)";
 }
      
 /******************************************************************************/
@@ -148,7 +148,7 @@ ExpInt.prototype          = Object.create(ExpressionLeaf.prototype)
 ExpInt.prototype.toInt    = function(){ return this.value; }
 ExpInt.prototype.eval     = function(env){ return this; } // self-evaluating
 ExpInt.prototype.apply    = function(args){throw "An integer is not an operator";}
-ExpInt.prototype.toString2 = function(){ return this.value.toString(); }
+ExpInt.prototype.toString = function(){ return this.value.toString(); }
 ExpInt.prototype.isInt    = function(){ return true; }
 
 
@@ -175,7 +175,7 @@ Plus.prototype.apply  = function(args){
   });
   return new ExpInt(sum);
 }
-Plus.prototype.toString2 = function(){ return "+"; }
+Plus.prototype.toString = function(){ return "+"; }
 
 /******************************************************************************/
 /*                                class Mult                                  */
@@ -194,7 +194,7 @@ Mult.prototype.apply  = function(args){
   });
   return new ExpInt(prod);
 }
-Mult.prototype.toString2 = function(){ return "*"; }
+Mult.prototype.toString = function(){ return "*"; }
 
 
 /******************************************************************************/
@@ -226,7 +226,7 @@ Mult.prototype.toString2 = function(){ return "*"; }
                           five,
                           new Nil))));
 
-print("The evaluation of the Lisp expression: " + exp2.toString2());
-print("yields the value: " + exp2.eval(env).toString2());
+print("The evaluation of the Lisp expression: " + exp2);
+print("yields the value: " + exp2.eval(env));
 
 
