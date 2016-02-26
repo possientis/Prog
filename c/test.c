@@ -5,15 +5,10 @@
 //#include<malloc.h>
 //#include<assert.h>
 
-enum color { red, blue, green };
 
-void foo(enum color c){
-  printf("checking type safety\n");
-}
-int main()
-{
-  foo(red);
-  foo(0); // bad boy
+int main(int argc, char* argv[], char* envp[]){
+
+  printf("%s\n",envp[0]);
   return 0;
 }
 

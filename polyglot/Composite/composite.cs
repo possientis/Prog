@@ -1,6 +1,6 @@
 // Composite Design Pattern
 using System;
-using System.Diagnostics;
+using System.Diagnostics;   // Debug.Assert
 
 // The composite design pattern consists in creating an abstract class
 // or interface 'Component' which allows client code to handle certain 

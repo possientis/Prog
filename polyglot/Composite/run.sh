@@ -27,5 +27,6 @@ python3 composite.py
 echo '\nThis is Ruby ...'
 ruby composite.rb
 
-
+echo '\nThis is Haskell ...'
+ghc -v0 composite.hs; ./composite; rm composite composite.hi composite.o
 

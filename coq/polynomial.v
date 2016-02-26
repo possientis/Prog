@@ -1,3 +1,4 @@
+
 Require Import ZArith.
 Open Scope Z_scope.
 
@@ -30,6 +31,9 @@ Section h_def.
 End h_def.
 Print h.
 
+(* conversion *) 
+
+
 (* without zeta conversion which reduces the let... *)
 Eval cbv beta delta [h] in (h 56 78).
 (* with zeta comversion *)
@@ -44,6 +48,27 @@ Eval cbv beta zeta delta iota [h] in (h 56 78).
 
 Eval cbv beta zeta iota delta [h] in (h 56 78). (* iota conversion does not work *)
 Eval compute in (h 56 78).
+
+Eval cbv in (h 56 78). (* looks like compute *)
+Eval cbv [h] in (h 56 78). (* only reduces h, not 56 and 78 *)
+Eval cbv delta [h] in (h 56 78). (* unfolds h *)
+Eval cbv delta in (h 56 78).     (* unfolds everything *)
+Eval cbv delta [h] in (h 56 78).
+(*Eval cbv delta zeta [h] in (h 56 78).*) (* this fails , order matters*)
+Eval cbv zeta delta [h] in (h 56 78). (* delta (unfold) then zeta (removes the let) *)
+Eval cbv beta zeta delta [h] in (h 56 78). 
+Eval cbv  beta zeta delta [h] in (h 56 78). 
+
+Definition Z_bin : Set := Z->Z->Z.
+
+Check (fun z0 z1:Z => let d:= z0 - z1 in d * d).
+Definition Zdist2 : Z_bin :=
+  fun z0 z1: Z => let d:= z0 - z1 in d * d.
+
+Check Zdist2.
+Check nat->nat.
+Check (nat->nat):Type.  (* upcast *)
+
 
 
 
