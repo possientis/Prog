@@ -29,8 +29,16 @@ import java.util.function.*;
 // ExpressionComposite := Nil | Cons Expression ExpressionComposite
 //
 
+//*****************************************************************************/
+//                            Environment class                               */
+//*****************************************************************************/
+
 class Environment {
 }
+
+//*****************************************************************************/
+//                            Expression interface                            */
+//*****************************************************************************/
 
 interface  Expression {
   public abstract Expression eval(Environment env);
@@ -40,10 +48,19 @@ interface  Expression {
   public default  boolean isInt(){ return false ;} // overriden by ExpInt 
 }
 
+//*****************************************************************************/
+//                             ExpressionLeaf class                           */
+//*****************************************************************************/
+
 abstract class ExpressionLeaf implements Expression {
   @Override
   public boolean isList(){ return false;}
 }
+
+
+//*****************************************************************************/
+//                        ExpressionComposite class                           */
+//*****************************************************************************/
 
 abstract class ExpressionComposite implements Expression {
   @Override
@@ -83,6 +100,10 @@ abstract class ExpressionComposite implements Expression {
   }
 }
 
+//*****************************************************************************/
+//                                  Nil  class                                */
+//*****************************************************************************/
+
 class Nil extends ExpressionComposite {
   @Override
   public boolean isNil(){ return true; }
@@ -95,6 +116,10 @@ class Nil extends ExpressionComposite {
   @Override
   public String toString(){ return "Nil"; }
 }
+
+//*****************************************************************************/
+//                                  Cons  class                               */
+//*****************************************************************************/
 
 class Cons extends ExpressionComposite {
   private final Expression car;           // car, head, first

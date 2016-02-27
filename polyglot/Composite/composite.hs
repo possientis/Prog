@@ -28,87 +28,197 @@
 --
 
 data Environment = Environment
-data ExpressionComposite  = Nil | Cons Expression ExpressionComposite
-data ExpressionLeaf       = ExpInt Int | Mult | Plus
-data Expression           = Leaf ExpressionLeaf | Composite ExpressionComposite
-
-expInt :: Int -> Expression
-expInt n = Leaf (ExpInt n)
-
-plus :: Expression
-plus = Leaf Plus
-
-mult :: Expression
-mult = Leaf Mult
 
 class IExpression a where
-  eval    :: a -> Environment -> Expression
-  apply   :: a -> ExpressionComposite -> Expression
+  upcast  :: a -> Expression
   isList  :: a -> Bool
   isInt   :: a -> Bool
+  isNil   :: a -> Bool
+  eval    :: a -> Environment -> Expression
+  apply   :: a -> ExpressionComposite -> Expression
+  
 
-instance IExpression Expression where
-  -- isList
-  isList (Leaf _)         = False
-  isList (Composite _)    = True
-  -- isInt
-  isInt (Leaf (ExpInt _)) = True
-  isInt _                 = False
-  -- eval
-  eval (Composite Nil) env = (Composite Nil)
-  eval (Composite list) env = apply operator arguments where
-    values = evalList list env
-    (operator, arguments) = case values of
-      Cons x y  -> (x,y)
-      otherwise -> error "Should not happen"
-  eval (Leaf (ExpInt x)) env  = Leaf (ExpInt x)  -- self-evaluating
-  eval (Leaf Plus) env        = Leaf Plus        -- self-evaluating
-  eval (Leaf Mult) env        = Leaf Mult        -- self-evaluating
-  -- apply
-  apply (Composite Nil) _     = error "Nil is not an operator"
-  apply (Composite _) _       = error "Lambda expression are not yet supported"
-  apply (Leaf (ExpInt _)) _   = error "An integer is not an operator"
-  apply (Leaf Plus) args      = Leaf (ExpInt sum) where
-    sum = foldLeft args 0 (\res -> \exp -> case exp of
-      Leaf(ExpInt x) -> res + x
-      otherwise      -> error "+: arguments is not a valid integer")
-  apply (Leaf Mult) args      = Leaf (ExpInt prod) where
-    prod = foldLeft args 1 (\res -> \exp -> case exp of
-      Leaf(ExpInt x) -> res * x
-      otherwise      -> error "*: arguments is not a valid integer")
-
+data Expression = Leaf ExpressionLeaf | List ExpressionComposite
 instance Show Expression where
-  show (Composite Nil) = "Nil"
-  show (Composite list) = foldLeft list "(" (\str -> \exp -> 
-    str ++ (show exp) ++ " ") ++ "\b)"
-  show (Leaf (ExpInt x)) = show x
-  show (Leaf Plus) = "+"
-  show (Leaf Mult) = "*"
+  show    (Leaf  x)   = show    x
+  show    (List  x)   = show    x
+instance IExpression Expression where
+  upcast  (Leaf  x)   = upcast  x
+  upcast  (List  x)   = upcast  x
+  isList  (Leaf  x)   = isList  x
+  isList  (List  x)   = isList  x
+  isInt   (Leaf  x)   = isInt   x
+  isInt   (List  x)   = isInt   x
+  isNil   (Leaf  x)   = isNil   x
+  isNil   (List  x)   = isNil   x
+  eval    (Leaf  x)   = eval    x
+  eval    (List  x)   = eval    x
+  apply   (Leaf  x)   = apply   x  
+  apply   (List  x)   = apply   x  
 
+data ExpressionComposite = Comp Nil | MkCons Cons 
+instance Show ExpressionComposite where
+  show    (Comp   x)  = show    x
+  show    (MkCons x)  = show    x
+instance IExpression ExpressionComposite where
+  upcast  (Comp   x)  = upcast  x
+  upcast  (MkCons x)  = upcast  x
+  isList  (Comp   x)  = isList  x
+  isList  (MkCons x)  = isList  x
+  isInt   (Comp   x)  = isInt   x
+  isInt   (MkCons x)  = isInt   x
+  isNil   (Comp   x)  = isNil   x
+  isNil   (MkCons x)  = isNil   x
+  eval    (Comp   x)  = eval    x
+  eval    (MkCons x)  = eval    x
+  apply   (Comp   x)  = apply   x
+  apply   (MkCons x)  = apply   x
 
-isNil :: ExpressionComposite -> Bool
-isNil (Cons _ _) = False
-isNil _          = True
+data Nil = Nil
+instance Show Nil where 
+  show      _         = "Nil"
+instance IExpression Nil where
+  upcast    _         = List (Comp Nil)
+  isList    _         = True
+  isInt     _         = False
+  isNil     _         = True
+  eval      _   _     = upcast Nil  -- self-evaluating
+  apply     _   _     = error "Nil is not an operator"
+
+data Cons = Cons Expression ExpressionComposite
+instance Show Cons where
+  show                = consShow  -- defined below
+instance IExpression Cons where
+  upcast    cons      = List (MkCons cons)
+  isList    _         = True
+  isInt     _         = False
+  isNil     _         = False
+  eval                = consEval  -- defined below
+  apply     _   _     = error "Lambda expression are not yet supported"
+
+data ExpressionLeaf = Oper Primitive | Value ExpInt
+instance Show ExpressionLeaf where
+  show    (Oper   x)  = show      x
+  show    (Value  x)  = show      x
+instance IExpression ExpressionLeaf where
+  upcast  (Oper   x)  = upcast    x
+  upcast  (Value  x)  = upcast    x
+  isList  (Oper   x)  = isList    x
+  isList  (Value  x)  = isList    x
+  isInt   (Oper   x)  = isInt     x
+  isInt   (Value  x)  = isInt     x
+  isNil   (Oper   x)  = isNil     x
+  isNil   (Value  x)  = isNil     x
+  eval    (Oper   x)  = eval      x
+  eval    (Value  x)  = eval      x
+  apply   (Oper   x)  = apply     x  
+  apply   (Value  x)  = apply     x  
+
+data ExpInt = ExpInt Int
+instance Show ExpInt where 
+  show    (ExpInt x)  = show      x
+instance IExpression ExpInt where
+  upcast    x         = Leaf (Value x)
+  isList    _         = False
+  isInt     _         = True
+  isNil     _         = error "isNil should be applied to composite expression only"
+  eval      x     _   = upcast    x -- self evaluating
+  apply     _     _   = error "An integer is not an operator"
+  
+data Primitive = MkPlus Plus | MkMult Mult
+instance Show Primitive where
+  show    (MkPlus x)    = show x
+  show    (MkMult Mult) = show Mult
+
+instance IExpression Primitive where
+  upcast  (MkPlus x)  = upcast    x
+  upcast  (MkMult x)  = upcast    x
+  isList  (MkPlus x)  = isList    x
+  isList  (MkMult x)  = isList    x
+  isInt   (MkPlus x)  = isInt     x
+  isInt   (MkMult x)  = isInt     x
+  isNil   (MkPlus x)  = isNil     x
+  isNil   (MkMult x)  = isNil     x
+  eval    (MkPlus x)  = eval      x
+  eval    (MkMult x)  = eval      x
+  apply   (MkPlus x)  = apply     x  
+  apply   (MkMult x)  = apply     x  
+
+data Plus = Plus
+instance Show Plus where 
+  show    _           = "+"
+instance IExpression Plus where
+  upcast  _           = Leaf (Oper (MkPlus Plus))
+  isList  _           = False
+  isInt   _           = False
+  isNil   _           = error "isNil should be applied to composite expression only"
+  eval    _   _       = upcast Plus -- self-evaluating
+  apply               = plusApply   -- defined below 
+
+data Mult = Mult
+instance Show Mult where 
+  show    _           = "*"
+instance IExpression Mult where
+  upcast  _           = Leaf (Oper (MkMult Mult))
+  isList  _           = False
+  isInt   _           = False
+  isNil   _           = error "isNil should be applied to composite expression only"
+  eval    _   _       = upcast Mult -- self-evaluating
+  apply               = multApply   -- defined below 
+
+consShow :: Cons -> String
+consShow cons = foldLeft (MkCons cons) "(" operator ++ "\b)"  where
+  operator = (\str -> \exp -> str ++ (show exp) ++ " ")
+
+consEval :: Cons -> Environment -> Expression
+consEval cons env = apply operator arguments where
+  values = evalList (MkCons cons) env
+  (operator, arguments) = case values of
+    MkCons (Cons x y) -> (x,y)
+    otherwise         -> error "Should not happen"
+
+plusApply :: Plus ->  ExpressionComposite -> Expression
+plusApply Plus args = upcast (ExpInt sum) where
+  sum = foldLeft args 0 (\res -> \exp -> case exp of
+    Leaf (Value (ExpInt x)) -> res + x
+    otherwise               -> error "+: arguments is not a valid integer")
+
+multApply :: Mult ->  ExpressionComposite -> Expression
+multApply Mult args = upcast (ExpInt prod) where
+  prod = foldLeft args 1 (\res -> \exp -> case exp of
+    Leaf (Value (ExpInt x)) -> res * x
+    otherwise               -> error "*: arguments is not a valid integer")
 
 foldLeft  :: ExpressionComposite -> b -> (b -> Expression -> b) -> b
 foldLeft list init oper = fold list init where
-  fold Nil acc = acc
-  fold (Cons car cdr) acc = fold cdr (oper acc car)
+  fold (Comp Nil) acc = acc
+  fold (MkCons (Cons car cdr)) acc = fold cdr (oper acc car)
+
 
 foldRight :: ExpressionComposite -> b -> (Expression -> b -> b) -> b
-foldRight Nil            init _    = init
-foldRight (Cons car cdr) init oper = oper car (foldRight cdr init oper)
+foldRight (Comp Nil) init _                 = init
+foldRight (MkCons (Cons car cdr)) init oper = oper car (foldRight cdr init oper)
+
 
 evalList  :: ExpressionComposite -> Environment -> ExpressionComposite
-evalList list env = foldRight list Nil (\exp -> \args -> Cons (eval exp env) args)
+evalList list env = foldRight list (Comp Nil) (\exp -> \args -> 
+  (MkCons (Cons (eval exp env) args)))
 
-head :: ExpressionComposite -> Expression
-head (Cons exp _) = exp
-head _ = error "head: illegal call"
+nil :: ExpressionComposite
+nil = Comp Nil
 
-tail :: ExpressionComposite -> ExpressionComposite
-tail (Cons _ cdr) = cdr
-tail _ = error "tail: illegal call" 
+cons :: Expression -> ExpressionComposite -> ExpressionComposite
+cons x y = MkCons (Cons x y)
+
+plus :: Expression
+plus = upcast Plus
+
+mult :: Expression
+mult = upcast Mult
+
+expInt :: Int -> Expression
+expInt x = upcast (ExpInt x)
+
 
 main = do 
   let
@@ -116,10 +226,12 @@ main = do
     two   = expInt 2
     seven = expInt 7
     five  = expInt 5
-    exp1  = Composite (Cons plus (Cons two (Cons seven (Cons five Nil))))
-    exp2  = Composite (Cons mult (Cons two (Cons exp1  (Cons five Nil))))
+    exp1  = upcast (cons plus (cons two (cons seven (cons five nil))))
+    exp2  = upcast (cons mult (cons two (cons exp1  (cons five nil))))
     in
     putStrLn ("The evaluation of the Lisp expression: " ++ (show exp2)) >>
     putStrLn ("yields the value: " ++ (show (eval exp2 env)))
+
+
 
 
