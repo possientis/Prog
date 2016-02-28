@@ -36,7 +36,7 @@
     ; object built from data is message passing interface
     (define (this data)
       (lambda (m)
-        (cond (#t (error "Environment: unknown operation error")))))
+        (cond (#t (error "Environment: unknown operation error" m)))))
     ; 
     ; returning no argument constructor
     ;
@@ -57,7 +57,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  (composite? data))
               ((eq? m 'int?)        (int? data))
-              (else (error "Expression: unknown operation error")))))
+              (else (error "Expression: unknown operation error" m)))))
     ;
     ; implementation of public interface
     ;
@@ -93,7 +93,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  (composite? data))
               ((eq? m 'int?)        ((base data) 'int?)) ; delegating to base
-              (else (error "ExpressionLeaf: unknown operation error")))))
+              (else (error "ExpressionLeaf: unknown operation error" m)))))
     ;
     ; implementation of public interface
     ;
@@ -129,12 +129,12 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  (composite? data))
               ((eq? m 'int?)        ((base data) 'int?)) ; delegating to base
-              ;; derived members
+              ;; new members
               ((eq? m 'nil?)        (nil? data))
               ((eq? m 'fold-left)   (foldl data))
               ((eq? m 'fold-right)  (foldr data))
               ((eq? m 'eval-list)   (eval-list data))
-              (else (error "ExpressionComposite: unknown operation error")))))
+              (else (error "ExpressionComposite: unknown operation error" m)))))
     ;
     ; implementation of public interface
     ;
@@ -186,7 +186,7 @@
               ((eq? m 'fold-left)   ((base data) 'fold-left))   ; call base
               ((eq? m 'fold-right)  ((base data) 'fold-right))  ; call base
               ((eq? m 'eval-list)   ((base data) 'eval-list))   ; call base
-              (else (error "Nil: unknown operation error")))))
+              (else (error "Nil: unknown operation error" m)))))
     ;
     ; implementation of public interface
     ;
@@ -222,44 +222,191 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  ((base data) 'composite?))  ; call base
               ((eq? m 'int?)        ((base data) 'int?))        ; call base
-              ;; derived members
+              ;; ExpressionComposite members
               ((eq? m 'nil?)        (nil? data))
               ((eq? m 'fold-left)   ((base data) 'fold-left))   ; call base
               ((eq? m 'fold-right)  ((base data) 'fold-right))  ; call base
               ((eq? m 'eval-list)   ((base data) 'eval-list))   ; call base
-              ;; derived members
+              ;; new members
               ((eq? m 'head)        (head data))
               ((eq? m 'tail)        (tail data))
-              (else (error "Comp: unknown operation error")))))
+              (else (error "Comp: unknown operation error" m)))))
     ;
     ; implementation of public interface
     ;
     (define (exp-eval data)
-      (lambda (env) 'TBI))
+      (lambda (env) (this data))) ; TBI
     ;
     (define (exp-apply data)
-      (lambda (args) (error "Nil is not an operator")))
+      (lambda (args) (error "Lambda expression are not yet supported")))
     ;
-    (define (to-string data) "Nil")
+    (define (to-string data) 'TBI)
     ;
-    (define (composite? data) #t) ; override
+    (define (composite? data) #f) ; override
     ;
-    (define (base data) data)     ; base object is only data
+    (define (base data) (car data)); data is list (base car cdr)
     ;
     (define (nil? data) #f)
     ;
+    (define (head data) (cadr data))
+    ;
+    (define (tail data) (caddr data))
+    ;
+    ; returning two arguments constructor
+    ;
+    (lambda (first rest) (this (list (ExpressionComposite) first rest))))) 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                 ExpInt class                               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define ExpInt
+  (let ((_static #f))
+    ; object built from data is message passing interface
+    (define (this data)
+      (lambda (m)
+        (cond ((eq? m 'eval)        (exp-eval data))
+              ((eq? m 'apply)       (exp-apply data))
+              ((eq? m 'to-string)   (to-string data))
+              ((eq? m 'composite?)  ((base data) 'composite?))
+              ((eq? m 'int?)        (int? data))
+              ;; new member
+              ((eq? m 'to-int)      (to-int data)) 
+              (else (error "ExpInt: unknown operation error" m)))))
+    ;
+    ; implementation of public interface
+    ;
+    (define (exp-eval data) 
+      (lambda (env) (this data)))  ;; self evaluating
+    ;
+    (define (exp-apply data)
+      (lambda (args) (error "An integer is not an operator")))
+    ;
+    (define (to-string data) (number->string (cadr data))) 
+    ;
+    ;
+    (define (base data) (car data))     ; data is list (base value)
+    ;
+    (define (to-int data) (cadr data))
+    ;
+    (define (int? data) #t)
+    ;
+    ; returning one argument constructor 
+    ;
+    (lambda (value) (this (list (ExpressionLeaf) value)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                Primitive class                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define Primitive
+  (let ((_static #f))
+    ; object built from data is message passing interface
+    (define (this data)
+      (lambda (m)
+        (cond ((eq? m 'eval)        ((base data) 'eval))
+              ((eq? m 'apply)       ((base data) 'apply))
+              ((eq? m 'to-string)   ((base data) 'to-string))
+              ((eq? m 'composite?)  ((base data) 'composite?))
+              ((eq? m 'int?)        ((base data) 'int?))
+              (else (error "Primitive: unknown operation error" m)))))
+    ;
+    ; implementation of public interface
+    ;
+    (define (base data) data)     ; base object is only data
+    ;
     ; returning no argument constructor
     ;
-    (lambda () (this (ExpressionComposite))))) ; passing a base object as data
+    (lambda () (this (ExpressionLeaf))))) ; passing a base object as data
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                 Plus class                                 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define Plus
+  (let ((_static #f))
+    ; object built from data is message passing interface
+    (define (this data)
+      (lambda (m)
+        (cond ((eq? m 'eval)        (exp-eval data))
+              ((eq? m 'apply)       (exp-apply data))
+              ((eq? m 'to-string)   (to-string data))
+              ((eq? m 'composite?)  ((base data) 'composite?))
+              ((eq? m 'int?)        ((base data) 'int?))
+              (else (error "Plus: unknown operation error" m)))))
+    ;
+    ; implementation of public interface
+    ;
+    (define (exp-eval data) 
+      (lambda (env) (this data)))  ;; self evaluating
+    ;
+    (define (exp-apply data)
+      (lambda (args) 'TBI))
+    ;
+    (define (to-string data) "+")
+    ;
+    (define (base data) data)
+    ;
+    ; returning no argument constructor 
+    ;
+    (lambda () (this (Primitive)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                 Mult class                                 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define Mult
+  (let ((_static #f))
+    ; object built from data is message passing interface
+    (define (this data)
+      (lambda (m)
+        (cond ((eq? m 'eval)        (exp-eval data))
+              ((eq? m 'apply)       (exp-apply data))
+              ((eq? m 'to-string)   (to-string data))
+              ((eq? m 'composite?)  ((base data) 'composite?))
+              ((eq? m 'int?)        ((base data) 'int?))
+              (else (error "Mult: unknown operation error" m)))))
+    ;
+    ; implementation of public interface
+    ;
+    (define (exp-eval data) 
+      (lambda (env) (this data)))  ;; self evaluating
+    ;
+    (define (exp-apply data)
+      (lambda (args) 'TBI))
+    ;
+    (define (to-string data) "*")
+    ;
+    (define (base data) data)
+    ;
+    ; returning no argument constructor 
+    ;
+    (lambda () (this (Primitive)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                 Main                                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define env  (Environment))
+(define two  (ExpInt 2))
+(define seven(ExpInt 7))
+(define five (ExpInt 5))
+(define add  (Plus))
+(define mul  (Mult))
+(define exp1 (Comp add (Comp two (Comp seven (Comp five (Nil))))));(+ 2 7 5)
+(define exp2 (Comp mul (Comp two (Comp exp1 (Comp five (Nil))))));(* 2 (+ 2 7 5) 5)
+
+(display "The evaluation of the Lisp expression: ")
+(display (exp2 'to-string))(newline)
+(display "yields the value: ")
+(display (((exp2 'eval) env) 'to-string))(newline)
 
 
 
-(define x (Nil))
 
-(display (x 'int?))(newline)
-(display (x 'composite?))(newline)
-(display (x 'nil?))(newline)
-(display (((x 'eval) #f) 'to-string))(newline)
 
 
 

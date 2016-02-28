@@ -1,7 +1,7 @@
 ; STM: software transactional memory
 
 (def total-expenditure (ref 0))
-;; The following will throw a "No transaction running"
+;; using this function will throw a "No transaction running"
 ;; IllegalStateException exception
 (defn add-amount-1 [amount]
   (ref-set total-expenditure (+ amount @total-expenditure)))

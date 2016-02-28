@@ -1,38 +1,49 @@
-module Set(Set, emptySet, fromList, isEmpty, singleton, union, member, remove,
-  split, subset) where
+module Set (ISet, Set) where
 
-listRemove item list = filter (\x -> x /= item) list
-listMerge []    list2   = list2
-listMerge list1 []      = list1
-listMerge (x:xs)(y:ys)  = x:y:listMerge xs ys
+class ISet a where
+  empty     :: a
+  singleton :: a -> a
+  union     :: a -> a -> a
+  belong    :: a -> a -> Bool
+  subset    :: a -> a -> Bool
+  -- successor
+  inc       :: a -> a
+  inc x                   = union x (singleton x)
+  -- Embedding for natural numbers
+  set       :: Int -> a
+  set 0                   = empty
+  set 1                   = singleton empty
+  set x                   = inc (set (x - 1))
 
-data Set a = Set [a] deriving Show
 
-emptySet                = Set []
-fromList list           = Set list
-isEmpty (Set xs)        = null xs
-singleton x             = Set [x]
-union (Set xs) (Set ys) = Set (listMerge xs ys) -- sets can be infinite
-member x (Set xs)       = elem x xs              -- will fail for infinite set :(
-remove x (Set xs)       = Set (listRemove x xs)
-split (Set [])          = error "split: cannot be applied to empty set"
-split (Set (x:xs))      = (x, remove x (Set xs)) 
+data Set = Empty | Singleton Set | Union Set Set
 
-subset :: (Eq a) => (Set a) -> (Set a) -> Bool
-subset x y = if isEmpty x then True else 
-  let 
-    (item, rest) = split x 
-  in
-    member item y && subset rest y
+instance Show Set where
+  show Empty            = "0"
+  show (Singleton x)    = "{"++(show x)++"}"
+  show (Union Empty y)  = show y
+  show (Union x Empty)  = show x
+  show (Union x y)      = (init (show x))++","++(drop 1 (show y))
 
-instance (Eq a) => Eq (Set a) where
+instance Eq Set where
   (==) x y = (subset x y) && (subset y x)
 
-instance (Eq a) => Ord (Set a) where
-  (<=) x y = (subset x y)
-  (>=) x y = (subset y x)
-  (<)  x y = (x <= y) && (x /= y)
-  (>)  x y = (y <= x) && (x /= y) 
+instance Ord Set where
+  (<=) x y = subset x y
+
+instance ISet Set where
+  empty                   = Empty
+  singleton x             = Singleton x
+  union x y               = Union x y
+  subset Empty _          = True
+  subset (Singleton x) y  = belong x y
+  subset (Union x y) z    = (subset x z) && (subset y z)
+  belong x Empty          = False
+  belong x (Singleton y)  = (x == y)
+  belong x (Union y z)    = (belong x y) || (belong x z)
+
+
+
 
 
 

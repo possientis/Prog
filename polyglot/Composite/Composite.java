@@ -160,6 +160,10 @@ class Cons extends ExpressionComposite {
   }
 }
 
+//*****************************************************************************/
+//                                  ExpInt class                              */
+//*****************************************************************************/
+
 class ExpInt extends ExpressionLeaf {
   private final int value;
   public ExpInt(int value){ this.value = value; }
@@ -177,6 +181,12 @@ class ExpInt extends ExpressionLeaf {
   public boolean isInt(){ return true; }
 
 }
+
+
+//*****************************************************************************/
+//                                  Primitive class                           */
+//*****************************************************************************/
+
 
 abstract class Primitive extends ExpressionLeaf {
 }
