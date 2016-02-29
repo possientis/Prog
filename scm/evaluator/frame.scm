@@ -7,5 +7,5 @@
 ;
 
 ; choose implementation here
-(load "frame2")
-(define frame frame2)
+(load "frame3")
+(define frame frame3)

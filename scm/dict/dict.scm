@@ -17,12 +17,15 @@
   ;;
   ;; public interface
   (define (dispatch m)
-    (cond ((eq? m 'insert!) insert!)  ; overwrites value on duplicate key
+    (cond ((eq? m 'empty?) (empty?))
+          ((eq? m 'insert!) insert!)  ; overwrites value on duplicate key
           ((eq? m 'delete!) delete!)  ; deletes key from dictionary if it exists
           ((eq? m 'find) search)      ; returns pair (key . value) or #f if fails
           ((eq? m 'check) (check))    ; some sanity checks, returns #f if fails
           (else (display "dictionary: unknown operation error\n"))))
   ;; private members
+  ;;
+  (define (empty?) (eq? num 0))
   ;;
   (define (insert! key value)
     (let ((h (hash key)))

@@ -1,14 +1,21 @@
 (define (dictionary-test filename symbol)
-  (display "testing dictionary class: ")(display symbol)(display " from file:")
+  (let ((name-encapsulation 'does-not-matter))
+  (display "testing dictionary class: ")(display symbol)(display " from file :")
   (display filename)(newline)
   (load filename)
   ;;
   (let ((a ((eval symbol))) ( b ((eval symbol))))
   ;;
   (display"dictionary starting unit test\n")
+  ;; dictionaries should be empty
+  (if (not (a 'empty?)) (display "dictionary: unit test 0.1 failing\n"))
+  (if (not (b 'empty?)) (display "dictionary: unit test 0.2 failing\n"))
   ;; first insert
   ((a 'insert!) 1 10)
   ((b 'insert!) "abc" 100)
+  ;; dictionaries should not be empty
+  (if (a 'empty?) (display "dictionaty: unit test 0.3 failing\n"))
+  (if (b 'empty?) (display "dictionary: unit test 0.4 failing\n"))
 ;  (if(not (a 'check))(display"dictionary: unit test 1.1 failing\n"))
 ;  (if(not (b 'check))(display"dictionary: unit test 1.2 failing\n"))
   ;; should fail
@@ -641,12 +648,12 @@
   (if(not(eq? #f ((b 'find) "zab")))(display"dictionary: unit test 413 failing\n"))
   ;;
   ;; multiple inserts
-  (let loop ((i 128))
+  (let loop ((i 256))
     (if (> i 0)
       (begin
         ((a 'insert!) i (* i 10))
 ;        (if (not (a 'check))(display"dictionary: unit test 414 failing\n"))
-        (let loop2 ((j 128))
+        (let loop2 ((j 256))
           (if (> j i)
             (begin
               (let ((x ((a 'find) j)))
@@ -658,12 +665,12 @@
               (loop2 (- j 1)))))
         (loop (- i 1)))))
   ;; multiple deletes
-  (let loop ((i 128))
+  (let loop ((i 256))
     (if (> i 0)
       (begin
         ((a 'delete!) i)
 ;        (if (not (a 'check))(display"dictionary: unit test 417 failing\n"))
-        (let loop2 ((j 128))
+        (let loop2 ((j 256))
           (if (> j i)
             (begin
               (let ((x ((a 'find) j)))
@@ -675,5 +682,5 @@
 ;  (a 'debug)
 ;  (b 'debug)
   ;;
-  (display"dictionary: unit test complete\n")))
+  (display"dictionary: unit test complete\n"))))
 

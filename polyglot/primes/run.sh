@@ -9,8 +9,21 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Haskell ...'
+ghc -v0 primes.hs;
 START=$(date +%s%N)
-ghc -v0 primes.hs; ./primes; rm primes; rm primes.o; rm primes.hi
+./primes 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
+rm primes; rm primes.o; rm primes.hi
+
+echo '\nThis is C# ...'
+mcs primes.cs
+START=$(date +%s%N)
+mono primes.exe
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm primes.exe
+
+

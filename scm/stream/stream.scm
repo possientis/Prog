@@ -15,10 +15,10 @@
     ((stream-cons expr1 expr2)    ; expr2 should return a stream object
      (stream expr1 (delay expr2)))))  ; returning stream object
 
-; bridge
+;; bridge
 (define (stream . args) 
   (apply stream1 args)) ; can select various implementations here
-
+;
 ; more efficient implementation
 (define stream1
   ; public interface
@@ -99,7 +99,7 @@
   (if (s 'null?)
     '()
     (cons (s 'car) (stream->list (s 'cdr)))))
-;
+
 (define (stream-scale s factor)
   (stream-map (lambda (x) (* x factor)) s))
 
@@ -162,45 +162,45 @@
                                 (s1 'cdr)))
                   (stream-pairs (s1 'cdr) (s2 'cdr)))))))
 
-; the following code fails on infinite streams. The reason is
-; the lack of 'stream-cons' to block eager evaluation.
-; So stream-upper-pairs2 calls stream-interleave which forces
-; evaluation of its second argument, trigerring a new call
-; to stream-upper-pairs2, thus creating an inifinite chain
-; of mutually recursive calls between the two functions
-
-(define (stream-upper-pairs2 s1 s2)
-  (cond ((s1 'null?) (stream))
-        ((s2 'null?) (stream))
-        (else (stream-interleave
-                (stream-map (lambda (x) (list (s1 'car) x)) s2)
-                (stream-upper-pairs2 (s1 'cdr) (s2 'cdr))))))
-                  
-(define (stream-upper-triples s1 s2 s3)
-  (cond ((s1 'null?) (stream))
-        ((s2 'null?) (stream))
-        ((s3 'null?) (stream))
-        (else (stream-cons
-                (list (s1 'car) (s2 'car) (s3 'car))
-                (stream-interleave
-                  (stream-map (lambda (x) (list (s1 'car) (s2 'car) x))
-                              (s3 'cdr))
-                  (stream-interleave
-                    (stream-map (lambda (x) (cons (s1 'car) x))
-                                (stream-upper-pairs (s2 'cdr) (s3 'cdr)))
-                    (stream-upper-triples (s1 'cdr) (s2 'cdr) (s3 'cdr))))))))
-
-(define (square x) (* x x))
-
-(define (pythagoras-triple? x)
-  (= (square (caddr x)) (+ (square (cadr x)) (square (car x)))))
-
-(define triples 
-  (let ((integers (integers-from 1)))
-    (stream-upper-triples integers integers integers)))
-
-(define pythagoras (stream-filter pythagoras-triple? triples)) 
-
-(display (stream-take 3 pythagoras))
-(newline)
-
+;; the following code fails on infinite streams. The reason is
+;; the lack of 'stream-cons' to block eager evaluation.
+;; So stream-upper-pairs2 calls stream-interleave which forces
+;; evaluation of its second argument, trigerring a new call
+;; to stream-upper-pairs2, thus creating an inifinite chain
+;; of mutually recursive calls between the two functions
+;
+;(define (stream-upper-pairs2 s1 s2)
+;  (cond ((s1 'null?) (stream))
+;        ((s2 'null?) (stream))
+;        (else (stream-interleave
+;                (stream-map (lambda (x) (list (s1 'car) x)) s2)
+;                (stream-upper-pairs2 (s1 'cdr) (s2 'cdr))))))
+;                  
+;(define (stream-upper-triples s1 s2 s3)
+;  (cond ((s1 'null?) (stream))
+;        ((s2 'null?) (stream))
+;        ((s3 'null?) (stream))
+;        (else (stream-cons
+;                (list (s1 'car) (s2 'car) (s3 'car))
+;                (stream-interleave
+;                  (stream-map (lambda (x) (list (s1 'car) (s2 'car) x))
+;                              (s3 'cdr))
+;                  (stream-interleave
+;                    (stream-map (lambda (x) (cons (s1 'car) x))
+;                                (stream-upper-pairs (s2 'cdr) (s3 'cdr)))
+;                    (stream-upper-triples (s1 'cdr) (s2 'cdr) (s3 'cdr))))))))
+;
+;(define (square x) (* x x))
+;
+;(define (pythagoras-triple? x)
+;  (= (square (caddr x)) (+ (square (cadr x)) (square (car x)))))
+;
+;(define triples 
+;  (let ((integers (integers-from 1)))
+;    (stream-upper-triples integers integers integers)))
+;
+;(define pythagoras (stream-filter pythagoras-triple? triples)) 
+;
+;(display (stream-take 3 pythagoras))
+;(newline)
+;
