@@ -5,7 +5,7 @@
 
 (println (map multiply [1 2 3 4 5])) ;; [10 20 30 40 50]
 
-;; the effect of lazy execution on binding form
+;; the effect of lazy execution on binding form:
 ;; when the actual result is needed (call to println)
 ;; we are outside the scope of the binding form
 

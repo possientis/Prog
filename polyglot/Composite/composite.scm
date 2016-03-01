@@ -28,6 +28,38 @@
 ;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                      A note on this Scheme implementation                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; It is very easy to emulate duck typing in Scheme. When faced with a hierarchy
+; of classes and virtual methods, we can usually get away without implementing 
+; virtual tables: each object is essentially a dictionary which contains a
+; reference to a base object. If a method call fails (the key is not in the
+; dictionary) then the call is passed on to the base object. Method overriding
+; is naturally implemented by defining a new (key value) pair in the dictionary,
+; rather than letting the base object handle the call.
+;
+; However, there are cases of polymorphism when a base method relies on virtual
+; methods, such as fold-left, fold-right and eval-list of the class 
+; ExpressionComposite below. In this case, it is impossible to implement such
+; base method solely on the basis of the base object data. Such implementation 
+; require knowledge of the concrete object data, which is where the virtual
+; table normally comes in handy.
+;
+; The following code was succesfully implemented in JavaScript where the object
+; model seems to be what we have just described (dictionaries with a __prot__ 
+; reference leading to a base object) and seemingly no virtual table under
+; the hood. Why is it working in JavaScript without any notion of virtual 
+; table? The answer lies in the availability of the 'this' pointer
+; which seems to refer to a concrete object, even when appearing in the body
+; of code belonging to a base object.
+;
+; We have tried to replicate this model here, by making a 'this' object
+; available in the object interface, and making sure 'this' referred to
+; the concrete object. So we can make it all work without virtual tables.
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            Environment class                               ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -57,6 +89,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  (composite? data))
               ((eq? m 'int?)        (int? data))
+              ((eq? m 'this)        (_this data)) 
               (else (error "Expression: unknown operation error" m)))))
     ;
     ; implementation of public interface
@@ -75,9 +108,12 @@
     ;
     (define (int? data) #f)
     ;
-    ; returning no argument constructor
+    (define (_this data) (cadr data))  ; data is list ('data this)
     ;
-    (lambda () (this 'ignored))))
+    ; returning constructor which expects handle to concrete object as argument
+    ;
+    (lambda (self) 
+      (this (list 'data self)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                          ExpressionLeaf class                              ;;
@@ -93,6 +129,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  (composite? data))
               ((eq? m 'int?)        ((base data) 'int?)) ; delegating to base
+              ((eq? m 'this)        ((base data) 'this))
               (else (error "ExpressionLeaf: unknown operation error" m)))))
     ;
     ; implementation of public interface
@@ -108,11 +145,12 @@
     ;
     (define (composite? data) #f) ; override
     ;
-    (define (base data) data)     ; base object is only data
+    (define (base data) (cadr data))  ; data is list ('data base)
     ;
-    ; returning no argument constructor
+    ; returning constructor which expects handle to concrete object as argument
     ;
-    (lambda () (this (Expression))))) ; passing a base object as data
+    ; base object (wrapped in object data) has reference to concrete object
+    (lambda (self) (this (list 'data (Expression self)))))) 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -129,6 +167,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  (composite? data))
               ((eq? m 'int?)        ((base data) 'int?)) ; delegating to base
+              ((eq? m 'this)        (_this data))
               ;; new members
               ((eq? m 'nil?)        (nil? data))
               ((eq? m 'fold-left)   (foldl data))
@@ -149,23 +188,39 @@
     ;
     (define (composite? data) #t) ; override
     ;
-    (define (base data) data)     ; base object is only data
+    (define (base data) (cadr data))  ; data is list ('data base)
+    ;
+    (define (_this data) ((base data) 'this))
     ;
     (define (nil? data)
       (error "ExpressionComposite::nil? is not implemented"))
     ;
     (define (foldl data)
-      (lambda (init operator) init))  ; TBI
+      (lambda (init operator)
+        (let loop ((out init) (next (_this data)))
+          (if (next 'nil?)
+            out
+            ; else
+            (loop (operator out (next 'head)) (next 'tail))))))
     ;
     (define (foldr data)
-      (lambda (init operator) init))  ; TBI
+      (lambda (init operator)
+        (let ((self (_this data)))  ; concrete object
+          (if (self 'nil?)
+            init
+            ; else
+            (operator (self 'head) (((self 'tail) 'fold-right) init operator))))))
     ;
     (define (eval-list data)
-      (lambda (env) (ExpressionComposite))) ; TBI
+      (lambda (env)
+       ((foldr data) (Nil) (lambda (expr _list)
+                              (Comp ((expr 'eval) env) _list)))))
+
     ;
-    ; returning no argument constructor
+    ; returning constructor which expects handle to concrete object as argument
     ;
-    (lambda () (this (Expression))))) ; passing a base object as data
+    ; base object (wrapped in object data) has reference to concrete object
+    (lambda (self) (this (list 'data (Expression self)))))) 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                Nil class                                   ;;
@@ -181,6 +236,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  ((base data) 'composite?))  ; call base
               ((eq? m 'int?)        ((base data) 'int?))        ; call base
+              ((eq? m 'this)        (_this data))
               ;; derived members
               ((eq? m 'nil?)        (nil? data))
               ((eq? m 'fold-left)   ((base data) 'fold-left))   ; call base
@@ -191,7 +247,7 @@
     ; implementation of public interface
     ;
     (define (exp-eval data)
-      (lambda (env) (this data))) ; self-evaluating 
+      (lambda (env) (_this data))) ; self-evaluating 
     ;
     (define (exp-apply data)
       (lambda (args) (error "Nil is not an operator")))
@@ -200,13 +256,19 @@
     ;
     (define (composite? data) #t) ; override
     ;
-    (define (base data) data)     ; base object is only data
+    (define (base data) (cadr data))  ; data is list ('data base)
     ;
     (define (nil? data) #t)
     ;
+    (define (_this data) ((base data) 'this))
+    ;
     ; returning no argument constructor
     ;
-    (lambda () (this (ExpressionComposite))))) ; passing a base object as data
+    (lambda () (let ((data (list 'data 'base-object)))  ; creating object data
+                 (let ((self (this data)))              ; creating object
+                   ; adding base object (holding reference to 'self') to data
+                   (set-car! (cdr data) (ExpressionComposite self))
+                   self))))) ; returning object
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                Comp class                                  ;;
@@ -222,11 +284,12 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  ((base data) 'composite?))  ; call base
               ((eq? m 'int?)        ((base data) 'int?))        ; call base
+              ((eq? m 'this)        (_this data))
               ;; ExpressionComposite members
               ((eq? m 'nil?)        (nil? data))
               ((eq? m 'fold-left)   ((base data) 'fold-left))   ; call base
               ((eq? m 'fold-right)  ((base data) 'fold-right))  ; call base
-              ((eq? m 'eval-list)   ((base data) 'eval-list))   ; call base
+              ((eq? m 'eval-list)   (eval-list data))
               ;; new members
               ((eq? m 'head)        (head data))
               ((eq? m 'tail)        (tail data))
@@ -235,26 +298,45 @@
     ; implementation of public interface
     ;
     (define (exp-eval data)
-      (lambda (env) (this data))) ; TBI
+      (lambda (env)
+        (let ((vals ((eval-list data) env)))
+          (let ((operator (vals 'head)) (args (vals 'tail)))
+            ((operator 'apply) args)))))
     ;
     (define (exp-apply data)
       (lambda (args) (error "Lambda expression are not yet supported")))
     ;
-    (define (to-string data) 'TBI)
+    (define (to-string data)
+      (string-append 
+        ((foldl data) "(" 
+         (lambda (str expr) 
+           (string-append str (expr 'to-string) " ")))
+        (list->string (list #\bs)) ")")) ; backspace , control character
     ;
     (define (composite? data) #f) ; override
     ;
-    (define (base data) (car data)); data is list (base car cdr)
+    (define (base data) (cadr data)); data is list ('data base car cdr)
     ;
     (define (nil? data) #f)
     ;
-    (define (head data) (cadr data))
+    (define (head data) (caddr data))
     ;
-    (define (tail data) (caddr data))
+    (define (tail data) (cadddr data))
+    ;
+    (define (_this data) ((base data) 'this))
+    ;
+    (define (foldl data) ((base data) 'fold-left))
+    ;
+    (define (eval-list data) ((base data) 'eval-list))
     ;
     ; returning two arguments constructor
     ;
-    (lambda (first rest) (this (list (ExpressionComposite) first rest))))) 
+    (lambda (first rest)
+      (let ((data (list 'data 'base-object first rest)))  ; creating object data
+        (let ((self (this data)))                         ; creating object
+          ;; adding base object (holding reference to 'self') to data
+          (set-car! (cdr data) (ExpressionComposite self))
+          self))))) ; returning object 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                 ExpInt class                               ;;
@@ -270,6 +352,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  ((base data) 'composite?))
               ((eq? m 'int?)        (int? data))
+              ((eq? m 'this)        (_this data))
               ;; new member
               ((eq? m 'to-int)      (to-int data)) 
               (else (error "ExpInt: unknown operation error" m)))))
@@ -277,23 +360,30 @@
     ; implementation of public interface
     ;
     (define (exp-eval data) 
-      (lambda (env) (this data)))  ;; self evaluating
+      (lambda (env) (_this data)))  ;; self evaluating
     ;
     (define (exp-apply data)
       (lambda (args) (error "An integer is not an operator")))
     ;
-    (define (to-string data) (number->string (cadr data))) 
+    (define (to-string data) (number->string (caddr data))) 
     ;
     ;
-    (define (base data) (car data))     ; data is list (base value)
+    (define (base data) (cadr data))  ; data is list ('data base value)   
     ;
-    (define (to-int data) (cadr data))
+    (define (to-int data) (caddr data))
     ;
     (define (int? data) #t)
     ;
+    (define (_this data) ((base data) 'this))
+    ;
     ; returning one argument constructor 
     ;
-    (lambda (value) (this (list (ExpressionLeaf) value)))))
+    (lambda (value)
+      (let ((data (list 'data 'base-object value))) ; creating object data
+        (let ((self (this data)))                   ; creating object
+          ;; adding base object (holding reference to 'self) to data
+          (set-car! (cdr data) (ExpressionLeaf self))
+          self))))) ; returning object
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -310,16 +400,17 @@
               ((eq? m 'to-string)   ((base data) 'to-string))
               ((eq? m 'composite?)  ((base data) 'composite?))
               ((eq? m 'int?)        ((base data) 'int?))
+              ((eq? m 'this)        ((base data) 'this))
               (else (error "Primitive: unknown operation error" m)))))
     ;
     ; implementation of public interface
     ;
-    (define (base data) data)     ; base object is only data
+    (define (base data) (cadr data))  ; data is list ('data base)  
     ;
-    ; returning no argument constructor
+    ; returning constructor which expects handle to concrete object as argument
     ;
-    (lambda () (this (ExpressionLeaf))))) ; passing a base object as data
-
+    ; base object (wrapped in object data) has reference to concrete object
+    (lambda (self) (this (list 'data (ExpressionLeaf self)))))) 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                 Plus class                                 ;;
@@ -335,23 +426,38 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  ((base data) 'composite?))
               ((eq? m 'int?)        ((base data) 'int?))
+              ((eq? m 'this)        (_this data))
               (else (error "Plus: unknown operation error" m)))))
     ;
     ; implementation of public interface
     ;
     (define (exp-eval data) 
-      (lambda (env) (this data)))  ;; self evaluating
+      (lambda (env) (_this data)))  ;; self evaluating
     ;
     (define (exp-apply data)
-      (lambda (args) 'TBI))
+      (lambda (args)
+        (let ((operator (lambda (res expr)
+                          (if (expr 'int?)
+                            (+ res (expr 'to-int))
+                            (error "+: argument is not a valid integer"
+                                   (expr 'to-string))))))
+          (ExpInt ((args 'fold-left) 0 operator)))))
     ;
     (define (to-string data) "+")
     ;
-    (define (base data) data)
+    (define (base data) (cadr data)) ; data is list ('data base)
+    ;
+    (define (_this data) ((base data) 'this))
     ;
     ; returning no argument constructor 
     ;
-    (lambda () (this (Primitive)))))
+    (lambda ()
+      (let ((data (list 'data 'base-object))) ; creating object data
+        (let ((self (this data)))             ; creating object
+          ;; adding base object (holding reference to 'self) to data
+          (set-car! (cdr data) (Primitive self))
+          self))))) ; returning object
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                 Mult class                                 ;;
@@ -367,6 +473,7 @@
               ((eq? m 'to-string)   (to-string data))
               ((eq? m 'composite?)  ((base data) 'composite?))
               ((eq? m 'int?)        ((base data) 'int?))
+              ((eq? m 'this)        (_this data))
               (else (error "Mult: unknown operation error" m)))))
     ;
     ; implementation of public interface
@@ -375,16 +482,28 @@
       (lambda (env) (this data)))  ;; self evaluating
     ;
     (define (exp-apply data)
-      (lambda (args) 'TBI))
+      (lambda (args)
+        (let ((operator (lambda (res expr)
+                          (if (expr 'int?)
+                            (* res (expr 'to-int))
+                            (error "*: argument is not a valid integer"
+                                   (expr 'to-string))))))
+          (ExpInt ((args 'fold-left) 1 operator)))))
     ;
     (define (to-string data) "*")
     ;
     (define (base data) data)
     ;
+    (define (_this data) ((base data) 'this))
+    ;
     ; returning no argument constructor 
     ;
-    (lambda () (this (Primitive)))))
-
+    (lambda ()
+      (let ((data (list 'data 'base-object))) ; creating object data
+        (let ((self (this data)))             ; creating object
+          ;; adding base object (holding reference to 'self) to data
+          (set-car! (cdr data) (Primitive self))
+          self))))) ; returning object
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                 Main                                       ;;

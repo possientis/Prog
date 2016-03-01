@@ -7,76 +7,68 @@ public delegate bool Predicate<T>(T t);
 public delegate bool ParamPredicate<T>(T t, T param);
 
 public class Cell<T> {
+  private static long timer = 0;
+  public static void ResetTimer(){
+    timer = 0;
+  }
+  public static void PrintTime(){
+    Console.WriteLine("Time = " + timer);
+  }
   private readonly T car;
   private Thunk<T> cdr;
   private Cell(T first, Cell<T> rest){
-    this.car = first;
-    this.cdr = new Thunk<T>(() => rest);
+    this.car = first; timer++;
+    this.cdr = new Thunk<T>(() => rest); timer++;
   }
   public T First {
-    get { return car; }
+    get { timer++; return car; }
   }
   public Cell<T> Rest{
-    get { return cdr(); }
+    get { timer++; return cdr(); }
   }
   
   public Cell<T> Filter(Predicate<T> p){
-    Cell<T> next = this;
+    Cell<T> next = this; timer++;
     while(!p(next.First)){
-      next = next.Rest;
+      next = next.Rest; timer++;
     }
-    Cell<T> cell = new Cell<T>(next.First, null);
-    cell.cdr = new Thunk<T>(() => next.Rest.Filter(p));
+    Cell<T> cell = new Cell<T>(next.First, null); timer++;
+    cell.cdr = new Thunk<T>(() => next.Rest.Filter(p)); timer++;
     return cell;
   }
 
   public static Cell<T> Cons(T first, Cell<T> rest){
-    Cell<T> cell =  new Cell<T>(first, rest);
-    return cell;
-  }
-  public static Cell<T> FixPoint(T elem){
-    Cell<T> cell = new Cell<T>(elem,null);
-    cell.cdr = new Thunk<T>(() => cell);
+    Cell<T> cell =  new Cell<T>(first, rest); timer++;
     return cell;
   }
 
-  public static Cell<T> FromIEnumerator(IEnumerator<T> list){
-    list.MoveNext();
-    Cell<T> cell = new Cell<T>(list.Current,null);
-    cell.cdr = new Thunk<T>(()=> FromIEnumerator(list));
-    return cell;
-  }
-
-  public static Cell<T> FromIEnumerable(IEnumerable<T> list){
-    return FromIEnumerator(list.GetEnumerator());
-  }
-
-  public static Cell<T> FromTransition(T init, Transition<T> f){
-    Cell<T> cell = new Cell<T>(init, null);
-    cell.cdr = new Thunk<T>(()=> FromTransition(f(init),f));
+ public static Cell<T> FromTransition(T init, Transition<T> f){
+    Cell<T> cell = new Cell<T>(init, null); timer++;
+    cell.cdr = new Thunk<T>(()=> FromTransition(f(init),f));timer++;
     return cell;
   }
 
   public void Display(int N){
-    int count = 0;
-    Cell<T> next = this;
-    Console.Write("[");
+    int count = 0; timer++;
+    Cell<T> next = this; timer++;
+    Console.Write("["); timer++;
     while(count < N){
-      count++;
-      Console.Write(next.First);
-      Console.Write(",");
-      next = next.Rest;
+      count++; timer++;
+      Console.Write(next.First); timer++;
+      Console.Write(","); timer++;
+      next = next.Rest;timer++;
     }
     if(count > 0){
-      Console.Write("\b");
+      Console.Write("\b"); timer++;
     }
-    Console.Write("]\n");
+    Console.Write("]\n"); timer++;
   }
 
   public static Cell<T> Sieve(Cell<T> input, ParamPredicate<T> p){
-    T x = input.First;
-    Cell<T> cell = new Cell<T>(x, null);
+    T x = input.First; timer++;
+    Cell<T> cell = new Cell<T>(x, null); timer++;
     cell.cdr = new Thunk<T>(() => Sieve(input.Rest.Filter((T n) => p(n,x)), p));
+    timer++;
     return cell;
   }
 }
@@ -84,9 +76,12 @@ public class Cell<T> {
 
 class Program {
   public static void Main(string[] args){
+    Cell<int>.ResetTimer();
+    Cell<int>.PrintTime();
     Cell<int> from2 = Cell<int>.FromTransition(2,(int n) => n+1);
     Cell<int> primes = Cell<int>.Sieve(from2, (n,x) => n % x != 0); 
     primes.Display(1000);
+    Cell<int>.PrintTime();
   }
 
 

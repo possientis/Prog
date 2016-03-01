@@ -1,4 +1,4 @@
-module Set (ISet, Set) where
+module Set (ISet, empty, set, inc, belong, singleton, Set) where
 
 class ISet a where
   empty     :: a

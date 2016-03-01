@@ -26,4 +26,13 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm primes.exe
 
+echo '\nThis is C# ...'
+mcs oldprimes.cs
+START=$(date +%s%N)
+mono oldprimes.exe
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm oldprimes.exe
+
 

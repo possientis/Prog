@@ -42,6 +42,80 @@ Section Minimal_propositional_logic.
   Qed.
 
 
+  Lemma id_P : P->P.
+  Proof.
+    intro H.
+    assumption.
+  Qed.
+
+  Lemma id_PP : (P->P)->(P->P).
+  Proof.
+    intro H.
+    intro Hp.
+    assumption.
+  Qed.
+
+  Lemma imp_perm : (P->Q->R)->(Q->P->R).
+  Proof.
+    intro H.
+    intro Hq.
+    intro Hp.
+    apply H.
+    assumption.
+    assumption.
+  Qed.
+
+  Lemma ignore_Q : (P->R)->P->Q->R.
+  Proof.
+    intro H.
+    intro Hp.
+    intro Hq.
+    apply H.
+    assumption.
+  Qed.
+
+  Lemma delta_imp : (P->P->Q)->P->Q.
+  Proof.
+    intro H.
+    intro Hp.
+    apply H.
+    assumption.
+    assumption.
+  Qed.
+
+  Lemma delta_impR : (P->Q)->(P->P->Q).
+  Proof.
+    intro H.
+    intro Hp.
+    assumption.
+  Qed.
+
+  Lemma diamond : (P->Q)->(P->R)->(Q->R->T)->P->T.
+  Proof.
+    intro Hpq.
+    intro Hpr.
+    intro H.
+    intro Hp.
+    apply H.
+    apply Hpq.
+    assumption.
+    apply Hpr.
+    assumption.
+  Qed.
+
+  Lemma weak_peirce : ((((P->Q)->P)->P)->Q)->Q.
+  Proof.
+    intro H.
+    apply H.
+    intro H'.
+    apply H'.
+    intro Hp.
+    apply H.
+    intro H''.
+    assumption.
+  Qed.
+
+
 
 
 
