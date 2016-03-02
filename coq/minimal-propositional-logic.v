@@ -115,7 +115,57 @@ Section Minimal_propositional_logic.
     assumption.
   Qed.
 
+  Definition f: (nat->bool)->(nat->bool)->(nat->bool).
+    intros f1 f2.
+    assumption.
+  Defined.
 
+  Print f.
+  Eval compute in (f (fun n => true) (fun n => false) 45).
+
+  Opaque f.
+
+  Eval compute in (f (fun n => true) (fun n => false) 45).
+
+  Lemma triple_imp_try : (((P->Q)->Q)->Q)->P->Q.
+  Proof.
+    intro H.
+    intro Hp.
+    apply H.
+    intro Hpq.
+    apply Hpq.
+    assumption.
+  Qed.
+
+  Section proof_of_triple_impl.
+    Hypothesis H : ((P->Q)->Q)->Q.
+    Hypothesis p : P.
+
+    Lemma Rem : (P->Q)->Q. 
+    Proof (fun H0:P->Q => H0 p).
+
+    Lemma triple_impl : Q.
+    Proof H Rem.
+ End proof_of_triple_impl.
+
+ Print triple_impl.
+ Print Rem.
+
+  Theorem then_example: P->Q->(P->Q->R)->R.
+  Proof.
+    intros p q H.
+    apply H; assumption.
+  Qed.
+
+  Theorem triple_impl_one_shot : (((P->Q)->Q)->Q)->P->Q.
+  Proof.
+    intros H p; apply H; intro H0; apply H0; assumption.
+  Qed.
+
+  Theorem compose_example : (P->Q->R)->(P->Q)->(P->R).
+  Proof.
+    intros H H0 p; apply H; [assumption | apply H0; assumption].
+  Qed.
 
 
 

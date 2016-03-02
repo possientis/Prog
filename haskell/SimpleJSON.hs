@@ -1,3 +1,13 @@
+module SimpleJSON (
+  JValue(..), -- (..) to export all type constructors
+  getString,
+  getInt,
+  getDouble,
+  getBool,
+  getObject,
+  getArray,
+  isNull) where
+
 data JValue = JString String
             | JNumber Double
             | JBool   Bool

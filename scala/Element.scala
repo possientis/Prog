@@ -30,6 +30,49 @@ abstract class Element {
   
   def width: Int = if (height == 0) 0 else contents(0).length
   def height: Int = contents.length
+
+  private def widen(w: Int): Element =
+    if (w <= width) this
+    else {
+      val lpad = (w - width) / 2
+      val rpad = w - (lpad + width)
+      new ArrayElement(
+        for (line <- contents)
+        yield spaces(lpad) + line + spaces(rpad)
+      )
+    }
+  // 'make' seems to trigger a deprecation warning
+  private def spaces(n: Int) = new String(Array.make(n, ' '))
+
+  def above(that: Element): Element = {
+    val this1 = this widen that.width
+    val that1 = that widen this.width
+    // concatenation of two arrays
+    new ArrayElement(this1.contents ++ that1.contents)
+  }
+
+  def display(): Unit = {
+    for(line <- contents){
+      println(line)
+    }
+  }
+
 }
+
+// if your class does not have an 'extends' clause, then
+// it implicitely derives from AnyRef which corresponds to java.lang.Object
+class ArrayElement(conts: Array[String]) extends Element {
+  def contents: Array[String] = conts
+//val contents: Array[String] = conts // possible to override a 'method' with a 'field' in scala
+                                      // no need to change the abstract superclass.
+// note that unlike java, scala forbids you to have a field and 
+// method with the same name in the same class
+}
+
+
+val a1: Element = new ArrayElement(Array("Hello"))
+val a2: Element = new ArrayElement(Array("World!!!!!"))
+val a3 = a1 above a2
+a3.display()
 
 

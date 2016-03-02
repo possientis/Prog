@@ -436,11 +436,12 @@
     ;
     (define (exp-apply data)
       (lambda (args)
-        (let ((operator (lambda (res expr)
-                          (if (expr 'int?)
-                            (+ res (expr 'to-int))
-                            (error "+: argument is not a valid integer"
-                                   (expr 'to-string))))))
+        (let ((operator 
+                (lambda (res expr)
+                  (if (expr 'int?)
+                    (+ res (expr 'to-int))
+                    (error "+: argument is not a valid integer" 
+                           (expr 'to-string))))))
           (ExpInt ((args 'fold-left) 0 operator)))))
     ;
     (define (to-string data) "+")
@@ -483,11 +484,12 @@
     ;
     (define (exp-apply data)
       (lambda (args)
-        (let ((operator (lambda (res expr)
-                          (if (expr 'int?)
-                            (* res (expr 'to-int))
-                            (error "*: argument is not a valid integer"
-                                   (expr 'to-string))))))
+        (let ((operator 
+                (lambda (res expr)
+                  (if (expr 'int?)
+                    (* res (expr 'to-int))
+                    (error "*: argument is not a valid integer"
+                           (expr 'to-string))))))
           (ExpInt ((args 'fold-left) 1 operator)))))
     ;
     (define (to-string data) "*")
