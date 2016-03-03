@@ -114,4 +114,4 @@ print("\nSingle or Female:", end = "\t");  Person.printList(singleOrFemales);
 print("\nMales:", end = "\t\t\t");         Person.printList(males);
 print("\nSingle Males:", end = "\t\t");    Person.printList(singleMales);
 print("\nFemales:", end = "\t\t");         Person.printList(females);
- 
+print("")

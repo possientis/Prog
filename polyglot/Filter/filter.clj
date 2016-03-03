@@ -1,5 +1,5 @@
 ; Filter design pattern
-
+(ns filter (:gen-class))
 ; This pattern allows to use a list of objects and perform
 ; a filtering operation on that list so as to obtain a new
 ; list comprised of those objects in the initial list which
@@ -94,7 +94,8 @@
      ;
      (print-list [plist]
        ; 'map' seems to be lazy, using 'dorun' to force evaluation
-       (dorun (map (fn [p] (print (p :to-string) "\t")) plist)))
+       (dorun (map (fn [p] (print (p :to-string) "\t")) plist))
+       (println))
      ;
      (filter-list [plist predicate]
        (if (nil? predicate) plist (filter (predicate :test) plist)))
@@ -121,6 +122,7 @@
     ;
     class-object))
 
+(defn -main []
 (def john2 (Person "John" "Male" "Married"))
 (def notJohn (((Predicate :equal?) john2) :not))
 
@@ -131,13 +133,15 @@
 (def singleOrFemales  ((Person :filter) people (Person :singleOrFemale))) 
 (def notJohns         ((Person :filter) people notJohn))
 
-(print "Everyone:\t\t")         ((Person :print) people)
-(print "\nNot John:\t\t")       ((Person :print) notJohns)
-(print "\nSingle or Female:\t") ((Person :print) singleOrFemales)
-(print "\nMales:\t\t\t")        ((Person :print) males)
-(print "\nSingle Males:\t\t")   ((Person :print) singleMales)
-(print "\nFemales:\t\t")        ((Person :print) females)
-(print "\n")
+(print "Everyone:\t\t")       ((Person :print) people)
+(print "Not John:\t\t")       ((Person :print) notJohns)
+(print "Single or Female:\t") ((Person :print) singleOrFemales)
+(print "Males:\t\t\t")        ((Person :print) males)
+(print "Single Males:\t\t")   ((Person :print) singleMales)
+(print "Females:\t\t")       `((Person :print) females))
+
+;(-main)
+
 
 
 

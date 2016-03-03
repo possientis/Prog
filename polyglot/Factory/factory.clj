@@ -1,4 +1,5 @@
 ; Factory design pattern
+(ns factory (:gen-class))
 
 (defn Shape [hook]
   (letfn 
@@ -40,6 +41,7 @@
     ;returning interface
     this))
 
+(defn -main []
 (def factory (ShapeFactory))
 
 ; get an object of type Circle and call its draw method
@@ -54,5 +56,9 @@
 
 ; get an object of type Square and call its draw method
 (def shape3 ((factory :getShape) "SQUARE"))
-(shape3 :draw)
+(shape3 :draw))
+
+;(-main)
+
+
 

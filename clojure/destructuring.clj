@@ -1,5 +1,14 @@
 ; destructuring
 ; pattern matching
+; destructuring works on any data type supporting the 
+; nth and nthnext functions.
+; If we implement the ISeq interface and create our own 
+; sequence data type, not only can we use Closjure core functions,
+; but we can also take advantage of destructuring.
+
+; do not forget to use ':or' on map destructuring 
+; do not forget to use ':keys' on map destructuring 
+
 (def my-vector [:a :b :c :d])
 (def my-nested-vector [:a :b :c :d [:x :y :z]])
 (def my-list (list :a :b :c :d))
@@ -54,6 +63,7 @@
 (def my-nested-hashmap {:a "A" :b "B" :c "C" :d "D" :q {:x "X" :y "Y" :z "Z"}})
 (def my-test {"A" 0 "B" 1 "C" 2})
 
+; destructuring on hashmap
 (let [{a :a d :d} my-hashmap]
   (println a d))
 

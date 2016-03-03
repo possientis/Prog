@@ -1,4 +1,6 @@
 ; Singleton design pattern
+(ns singleton (:gen-class))
+
 (def SingleObject   ; 
   (letfn
     ; instance interface
@@ -16,10 +18,13 @@
     ; returning static interface
     static))
 
+(defn -main []
 (def object1 (SingleObject :getInstance))
 (object1 :showMessage)
 (def object2 (SingleObject :getInstance))
-(if (= object1 object2) (println "The two objects are the same"))
+(if (= object1 object2) (println "The two objects are the same")))
+
+;(-main)
 
 
 

@@ -168,6 +168,34 @@ Section Minimal_propositional_logic.
   Qed.
 
 
+  Theorem orelse_example : (P->Q)->R->((P->Q)->R->(T->Q)->T)->T.
+  Proof.
+    intros H r H0.
+    apply H0; (assumption || intro H1).
+  Abort.
+
+  Lemma L3 : (P->Q)->(P->R)->(P->Q->R->T)->P->T.
+  Proof.
+    intros H H0 H1 p.
+    apply H1; [idtac|apply H|apply H0]; assumption. 
+  Qed.
+
+  Theorem then_fail_example : (P->Q)->(P->Q).
+  Proof.
+    intro X; apply X; fail.
+  Qed.
+
+  Theorem then_fail_example2 : ((P->P)->(Q->Q)->R)->R.
+  Proof.
+(*    intro X; apply X; fail. *)
+    Abort.
+
+  Theorem try_example : (P->Q->R->T)->(P->Q)->(P->R->T).
+  Proof.
+    intros H H' p r.
+    apply H; try assumption.
+    apply H'; assumption.
+  Qed.
 
 
       

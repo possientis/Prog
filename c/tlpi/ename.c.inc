@@ -28,4 +28,6 @@ static char *ename[] = {
 /*129 */ "EKEYREJECTED", "EOWNERDEAD", "ENOTRECOVERABLE", "ERFKILL"
 };
 
+#define MAX_ENAME 132
+
 

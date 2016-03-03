@@ -1,4 +1,6 @@
 ; Adapter design pattern
+(ns adapter
+  (:gen-class))
 
 ; This the 'target' interface, namely the interface our Adapter
 ; will need to implement, relying on the 'adaptee' interface
@@ -114,10 +116,16 @@
     (fn [] (this (MediaPlayer)))))
 
 ; We can now use the AudioPlayer to play different types of audio formats
+(defn -main []
 (def player (AudioPlayer))
 ((player :play) "mp3" "beyond the horizon.mp3")
 ((player :play) "mp4" "alone.mp4")
 ((player :play) "vlc" "far far away.vlc")
-((player :play) "avi" "mind me.avi")
+((player :play) "avi" "mind me.avi"))
+
+;(-main)
+
+
+
 
 

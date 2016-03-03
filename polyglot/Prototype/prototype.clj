@@ -4,6 +4,7 @@
 ; be beneficial to cache whatever object is created from the database
 ; and return a copy of the cached object whenever a subsequent request
 ; for object instantiation arises.
+(ns prototype (:gen-class))
 
 (def ICloneable         ; constructor
   (letfn
@@ -119,7 +120,7 @@
          (this shapeMap)))]
     ; returning constructor with single optional argument
     (fn [&[data]] (this data))))
-
+(defn -main []
 ; need a prototype manager, with a few registered prototypes
 (def manager ((PrototypeManager) :loadCache))
 ; manager can now be used as factory object
@@ -130,7 +131,9 @@
 (clonedShape2 :draw)
 
 (def clonedShape3 ((manager :getShape) "3"))
-(clonedShape3 :draw)
+(clonedShape3 :draw))
+
+;(-main)
 
 
 

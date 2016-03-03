@@ -1,5 +1,5 @@
 ; Builder Design Pattern
-
+(ns builder (:gen-class))
 ; The main idea behind the builder design pattern is
 ; to provide an abstract interface for a 'builder object'
 ; A concrete builder object is not a factory object which returns
@@ -299,6 +299,7 @@
     ; returning no argument constructor
     (fn [] (this (ColdDrink)))))
 
+(defn -main []
 ; creating vegetarian meal
 ; First we create the appropriate concrete builder
 (def vegBuilder (VegetarianMealBuilder))
@@ -326,7 +327,9 @@
 (println "\nNon-Veg Meal")
 (nonVegMeal :showItems)
 (print "Total Cost: ")
-(println (nonVegMeal :getCost))
+(println (nonVegMeal :getCost)))
+
+;(-main)
 
 
 

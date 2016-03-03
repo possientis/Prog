@@ -213,8 +213,8 @@
     ;
     (define (eval-list data)
       (lambda (env)
-       ((foldr data) (Nil) (lambda (expr _list)
-                              (Comp ((expr 'eval) env) _list)))))
+        (let ((operator (lambda (expr _list) (Comp ((expr 'eval) env) _list))))
+          ((foldr data) (Nil) operator)))) 
 
     ;
     ; returning constructor which expects handle to concrete object as argument
@@ -525,7 +525,7 @@
 (display "yields the value: ")
 (display (((exp2 'eval) env) 'to-string))(newline)
 
-
+(exit 0)
 
 
 

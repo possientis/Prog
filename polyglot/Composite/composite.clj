@@ -1,5 +1,6 @@
 ; Composite Design Pattern
-
+(ns composite 
+  (:gen-class))
 ; The composite design pattern consists in creating an abstract class
 ; or interface 'Component' which allows client code to handle certain 
 ; types of primitive objects of type 'Leaf' and various combinations
@@ -133,6 +134,8 @@
 ;;                      ExpressionComposite class                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(declare Cons Nil) ; Cons and Nil are subclasses of ExpressionComposite
+
 (def ExpressionComposite  ; constructor
   (letfn
     ; object created from data is message passing interface
@@ -171,13 +174,27 @@
        (throw (Exception. "ExpressionComposite::nil? is not implemented")))
      ;
      (fold-left [data]
-       (fn [init operator] init)) ; TBI
+       (fn [init operator]
+         (loop [out init
+                _next ((data :base) :this)]
+           (if (_next :nil?)
+             out
+             ; else
+             (recur (operator out (_next :head)) (_next :tail))))))
+                
      ;
      (fold-right [data]
-       (fn [init operator] init)) ; TBI
+       (fn [init operator]
+         (let [self ((data :base) :this)] ; concrete object
+           (if (self :nil?)
+             init
+             ; else
+             (operator (self :head) (((self :tail) :fold-right) init operator))))))
      ;
      (eval-list [data]
-       (fn [env] (ExpressionComposite nil)))]  ; TBI
+       (fn [env]
+         (let [operator (fn [exp _list] (Cons ((exp :eval) env) _list))]
+           ((fold-right data) (Nil) operator))))]
     ;
     ; returning constructor which expects handle to concrete object as argument
     ;
@@ -456,23 +473,26 @@
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                 Main                                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defn -main [] 
+(def env   (Environment))
+(def two   (ExpInt 2))
+(def seven (ExpInt 7))
+(def five  (ExpInt 5))
+(def plus  (Plus))
+(def mult  (Mult))
+(def exp1  (Cons plus (Cons two (Cons seven (Cons five (Nil))))));(+ 2 7 5)
+(def exp2  (Cons mult (Cons two (Cons exp1  (Cons five (Nil))))));(* 2 (+ 2 7 5) 5)
 
+(println "The evaluation of the Lisp expression:" (exp2 :to-string))
+(println "yields the value:" (((exp2 :eval) env) :to-string)))
 
-(def x (Nil))
-(println ((x :this) :to-string))
-(println (x :int?))
-(println (x :composite?))
-(println (x :nil?))
-(println (x :to-string))
-(println (((x :eval) false) :to-string))
+;(-main)
 
-(def y (Cons (ExpInt 42) (Nil)))
-(println ((y :head) :to-string))
-(println ((y :tail) :to-string))
-(def z (Mult))
-(println (z :to-string))
-    
+   
 
 
 

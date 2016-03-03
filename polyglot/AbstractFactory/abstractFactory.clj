@@ -1,4 +1,8 @@
 ; Abstract Factory design pattern
+(ns abstractFactory
+  (:gen-class))
+
+
 (defn Shape [hook]
   (letfn
     ; interface
@@ -110,6 +114,9 @@
     ; returning interface
     this))
 
+
+(defn -main []
+
 (def producer (FactoryProducer))
 
 ; producing set of red widgets
@@ -137,8 +144,9 @@
 (def shape9 ((blueFactory :getShape) "SQUARE"))
 (shape7 :draw)
 (shape8 :draw)
-(shape9 :draw)
+(shape9 :draw))
 
+;(-main)
 
 
 

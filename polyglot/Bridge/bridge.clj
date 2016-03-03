@@ -1,5 +1,6 @@
 ; Bridge design pattern
-
+(ns bridge
+  (:gen-class))
 ; bridge implementation interface
 (def DrawAPI      ; constructor
   (letfn 
@@ -30,7 +31,7 @@
          (print radius)
          (print ", x: ") (print x) 
          (print ", y: ") (print y) 
-         (print "]\n")))]
+         (println "]")))]
     ; returning no argument constructor
     (fn [] (this (DrawAPI)))))            ; data = base = (DrawAPI)
 
@@ -48,7 +49,7 @@
          (print radius)
          (print ", x: ") (print x) 
          (print ", y: ") (print y) 
-         (print "]\n")))]
+         (println "]")))]
     ; returning no argument constructor
     (fn [] (this (DrawAPI)))))            ; data = base = (DrawAPI)
 
@@ -85,9 +86,12 @@
 
 ; Use Shape and DrawAPI classes to draw different colored circles
 ; implementation of concrete circles selected at run time.
-(def redCircle (Circle 100 100 10 (RedCircle)))
-(def greenCircle (Circle 100 100 10 (GreenCircle)))
-(redCircle :draw)
-(greenCircle :draw)
+(defn -main []
+  (def redCircle (Circle 100 100 10 (RedCircle)))
+  (def greenCircle (Circle 100 100 10 (GreenCircle)))
+  (redCircle :draw)
+  (greenCircle :draw))
+
+;(-main)
 
 
