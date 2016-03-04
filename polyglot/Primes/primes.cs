@@ -14,61 +14,66 @@ public class Cell<T> {
   public static void PrintTime(){
     Console.WriteLine("Time = " + timer);
   }
+  public static void IncTimer(){
+    timer++;
+  }
   private readonly T car;
   private Thunk<T> cdr;
   private Cell(T first, Cell<T> rest){
-    this.car = first; timer++;
-    this.cdr = new Thunk<T>(() => rest); timer++;
+    this.car = first;
+    this.cdr = new Thunk<T>(() => rest);
   }
   public T First {
-    get { timer++; return car; }
+    get { return car; }
   }
   public Cell<T> Rest{
-    get { timer++; return cdr(); }
+    get {  return cdr(); }
   }
   
   public Cell<T> Filter(Predicate<T> p){
-    Cell<T> next = this; timer++;
+    
+    Cell<T> next = this;
     while(!p(next.First)){
-      next = next.Rest; timer++;
+      next = next.Rest;
     }
-    Cell<T> cell = new Cell<T>(next.First, null); timer++;
-    cell.cdr = new Thunk<T>(() => next.Rest.Filter(p)); timer++;
+    Cell<T> cell = new Cell<T>(next.First, null); 
+    cell.cdr = new Thunk<T>(() => next.Rest.Filter(p));
     return cell;
   }
 
   public static Cell<T> Cons(T first, Cell<T> rest){
-    Cell<T> cell =  new Cell<T>(first, rest); timer++;
+    Cell<T> cell =  new Cell<T>(first, rest);
     return cell;
   }
 
  public static Cell<T> FromTransition(T init, Transition<T> f){
-    Cell<T> cell = new Cell<T>(init, null); timer++;
-    cell.cdr = new Thunk<T>(()=> FromTransition(f(init),f));timer++;
+    Cell<T> cell = new Cell<T>(init, null); 
+    cell.cdr = new Thunk<T>(()=> FromTransition(f(init),f));
     return cell;
   }
 
   public void Display(int N){
-    int count = 0; timer++;
-    Cell<T> next = this; timer++;
-    Console.Write("["); timer++;
+    int count = 0; 
+    Cell<T> next = this; 
+    Console.Write("["); 
     while(count < N){
-      count++; timer++;
-      Console.Write(next.First); timer++;
-      Console.Write(","); timer++;
-      next = next.Rest;timer++;
+      
+      count++; 
+      Console.Write(next.First); 
+      Console.Write(","); 
+      next = next.Rest;
     }
     if(count > 0){
-      Console.Write("\b"); timer++;
+      Console.Write("\b"); 
     }
-    Console.Write("]\n"); timer++;
+    Console.Write("]\n"); 
   }
 
   public static Cell<T> Sieve(Cell<T> input, ParamPredicate<T> p){
-    T x = input.First; timer++;
-    Cell<T> cell = new Cell<T>(x, null); timer++;
+    T x = input.First;  
+    Cell<T> cell = new Cell<T>(x, null); 
     cell.cdr = new Thunk<T>(() => Sieve(input.Rest.Filter((T n) => p(n,x)), p));
-    timer++;
+    
     return cell;
   }
 }
@@ -76,14 +81,12 @@ public class Cell<T> {
 
 class Program {
   public static void Main(string[] args){
+    int numPrimes = Int32.Parse(args[0]);
     Cell<int>.ResetTimer();
     Cell<int>.PrintTime();
     Cell<int> from2 = Cell<int>.FromTransition(2,(int n) => n+1);
-    Cell<int> primes = Cell<int>.Sieve(from2, (n,x) => n % x != 0); 
-    primes.Display(1000);
+    Cell<int> primes = Cell<int>.Sieve(from2, (n,x) => n % x != 0);
+    primes.Display(numPrimes);
     Cell<int>.PrintTime();
   }
-
-
-
 }

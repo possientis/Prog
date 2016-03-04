@@ -20,14 +20,16 @@
         (let ((found (hash-find key (table data))))
           (if (eq? #f found)                  ; key not already present
             (set-car! data (+ (car data) 1))) ; increasing element count
-          (hash-insert! (table data) key value))))
+          (hash-insert! (table data) key value)
+          (resize-if-needed data))))
     ;
     (define (delete! data)
       (lambda (key)
         (let ((found (hash-find key (table data))))
           (if (not (eq? #f found))            ; key *is* present
             (set-car! data (- (car data) 1))) ; decreasing element count
-          (hash-delete! (table data) key))))
+          (hash-delete! (table data) key)
+          (resize-if-needed data))))
     ;
     (define (search data) 
       (lambda (key) (hash-find key (table data))))
@@ -40,6 +42,8 @@
     ;
     (define hash-delete! (hash-remover equal?))
     ;
+    (define hash-resize (hash-rehasher equal?))
+    ;
     ; accessors
     ;
     (define (count data) (car data))    ; number of elements in table
@@ -47,6 +51,24 @@
     (define (size data) (cadr data))    ; size of hash table
     ;
     (define (table data) (caddr data))  ; hash table object
+    ;
+    (define (table-load data) (/ (count data) (size data)))
+    ;
+    (define (need-increase? data) (> (table-load data) 0.8))
+    ;
+    (define (need-decrease? data) 
+      (and (>= (size data) 8) (< (table-load data) 0.2)))
+    ;
+    (define (resize data new-size)
+;      (display "resizing table: new size = ")(display new-size)(newline)
+      (set-car! (cddr data) (hash-resize (table data) new-size)) 
+      (set-car! (cdr data) new-size)) ; updating size
+    ;
+    (define (resize-if-needed data)
+      (if (need-increase? data)
+        (resize data (* (size data) 2))
+        (if (need-decrease? data)
+          (resize data (/ (size data) 2)))))
     ;
     ; returning no argument constructor (hash table has size 4 initially) 
     ;

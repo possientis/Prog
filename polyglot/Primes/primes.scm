@@ -1,4 +1,8 @@
+#!/usr/bin/scm
 (load "stream.scm")
+; passing command line arguments to scheme scm script
+(define arguments (program-arguments))
+(define num-primes (string->number (caddr arguments)))
 (define (sieve s)
   (stream-cons (s 'car)
                (sieve (stream-filter
@@ -8,14 +12,5 @@
 
 (define primes (sieve (integers-from 2))) 
 
-(define (prime? n)
-  (if (< n 2) #f
-    ; else
-    (let loop ((s primes))
-      (let ((p (s 'car)))
-        (cond ((> (* p p) n) #t)
-              ((= 0 (modulo n p)) #f)
-              (else (loop (s 'cdr))))))))
-
-(display (stream-take 1000 primes))(newline)
+(display (stream-take num-primes primes))(newline)
 (exit 0)

@@ -12,7 +12,8 @@
          (cond ((eq? m 'empty?)  (empty? data)) 
                ((eq? m 'insert!) (insert! data))
                ((eq? m 'delete!) (delete! data))
-               ((eq? m 'find)    (search data))  ; 'find' is primitive name, use 'search'
+               ((eq? m 'find)    (search data)); 'find' is primitive name
+               ((eq? m 'to-string) (to-string data))
                ((else (error "frame1: unknown operation error: " m))))))
      ;
      ; implementation of public interface
@@ -52,6 +53,15 @@
              ; else
              (cons (caar found) (cadr found))))))
      ;
+     (define (to-string data)
+       (let loop ((keys (data-keys data)) (vals (data-values data)) (out "{"))
+         (if (null? keys)
+           out
+           (let (new-out 
+                  (string-append 
+              ; to be continued
+
+
      ; private helper function
      ;
      (define (data-keys data)

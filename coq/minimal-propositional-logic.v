@@ -1,5 +1,5 @@
 Section Minimal_propositional_logic.
-  Variables P Q R T : Prop.
+  Variables P Q R S T : Prop.
   
   Theorem imp_trans : (P->Q)->(Q->R)->P->R.
   Proof. (* optional *)
@@ -197,5 +197,46 @@ Section Minimal_propositional_logic.
     apply H'; assumption.
   Qed.
 
+  Section section_for_cut_example.
+    Hypotheses (H : P->Q)
+               (H0 : Q->R)
+               (H1 : (P->R)->T->Q)
+               (H2 : (P->R)->T).
+    Theorem cut_example: Q.
+    Proof.
+      cut (P->R).
+      intro H3.
+      apply H1; [assumption | apply H2; assumption].
+      intro p; apply H0; apply H; assumption.
+    Qed.
 
-      
+
+    Theorem cut_example2: Q.
+    Proof.
+      apply H1.
+      intro p.
+      apply H0.
+      apply H.
+      assumption.
+      apply H2.
+      intro p.
+      apply H0.
+      apply H; assumption.
+    Qed.
+
+    Print cut_example.
+    Print cut_example2.
+  End section_for_cut_example.
+
+End Minimal_propositional_logic.
+
+Print imp_dist.
+
+Section using_imp_dist.
+  Variables (P1 P2 P3 : Prop).
+  Check (imp_dist  P1 P2 P3).
+  Check (imp_dist (P1->P2) (P2->P3) (P3->P1)).
+End using_imp_dist.
+
+
+

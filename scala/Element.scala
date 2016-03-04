@@ -1,3 +1,5 @@
+import Element.elem
+
 // abstract class
 abstract class Element {
   def contents: Array[String] // no implementation, no 'abstract' modifier
@@ -31,6 +33,28 @@ abstract class Element {
   def width: Int = if (height == 0) 0 else contents(0).length
   def height: Int = contents.length
 
+  def above(that: Element): Element = {
+    val this1 = this widen that.width
+    val that1 = that widen this.width
+    // concatenation of two arrays
+    elem(this1.contents ++ that1.contents)
+  }
+
+  def beside(that: Element): Element = {
+    val this1 = this heighten that.height
+    val that1 = that heighten this.height
+    /*
+    val contents = new Array[String](this1.contents.length)
+    for (i <- 0 until this1.contents.length)
+      contents(i) = this1.contents(i) + that1.contents(i)
+    new ArrayElement(contents)
+    */
+    elem( // look at this beauty  !
+      for ((line1, line2) <- this1.contents zip that1.contents)
+        yield line1 + line2
+    )
+  }
+
   private def widen(w: Int): Element =
     if (w <= width) this
     else {
@@ -41,27 +65,24 @@ abstract class Element {
         yield spaces(lpad) + line + spaces(rpad)
       )
     }
+  private def heighten(h: Int): Element =
+    if (h <= height) this
+    else {
+      val top = elem(' ', width, (h - height) / 2)
+      var bot = elem(' ', width, h - height - top.height)
+      top above this above bot
+    }
+
   // 'make' seems to trigger a deprecation warning
   private def spaces(n: Int) = new String(Array.make(n, ' '))
 
-  def above(that: Element): Element = {
-    val this1 = this widen that.width
-    val that1 = that widen this.width
-    // concatenation of two arrays
-    new ArrayElement(this1.contents ++ that1.contents)
-  }
-
-  def display(): Unit = {
-    for(line <- contents){
-      println(line)
-    }
-  }
+  override def toString = contents mkString "\n"
 
 }
-
+// factory object allows to make class private
 // if your class does not have an 'extends' clause, then
 // it implicitely derives from AnyRef which corresponds to java.lang.Object
-class ArrayElement(conts: Array[String]) extends Element {
+private class ArrayElement(conts: Array[String]) extends Element {
   def contents: Array[String] = conts
 //val contents: Array[String] = conts // possible to override a 'method' with a 'field' in scala
                                       // no need to change the abstract superclass.
@@ -69,10 +90,51 @@ class ArrayElement(conts: Array[String]) extends Element {
 // method with the same name in the same class
 }
 
+/*
+class LineElement(s: String) extends Element {
+  def contents = Array(s)
+  override def width = s.length
+  override def height = 1
+}
+*/
 
-val a1: Element = new ArrayElement(Array("Hello"))
-val a2: Element = new ArrayElement(Array("World!!!!!"))
+
+// factory object allows to make class private
+// constructor of derived classes passes argument to constructor of superclass
+private class LineElement(s: String) extends ArrayElement(Array(s)) {
+  override def width = s.length
+  override def height = 1
+}
+
+// factory object allows to make class private
+private class UniformElement(
+  ch: Char,
+  override val width: Int,  // implements concrete methods of base class
+  override val height: Int  // 'override' is required
+) extends Element {
+  private val line = new String(Array.make(width, ch))
+  def contents = Array.make(height, line)
+}
+
+// companion object
+object Element {
+  // overloaded factory methods
+  def elem(contents: Array[String]): Element =
+    new ArrayElement(contents)
+  def elem(chr: Char, width: Int, height: Int): Element =
+    new UniformElement(chr, width, height)
+  def elem(line: String): Element =
+    new LineElement(line)
+}
+
+
+
+val a1: Element = Element.elem(Array("Hello"))
+val a2: Element = Element.elem(Array("World!!!!!"))
 val a3 = a1 above a2
-a3.display()
+println(a3)
+
+println((Array(1,2,3) zip Array("a","b","c")).mkString(", "))
+
 
 
