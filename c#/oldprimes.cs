@@ -56,12 +56,22 @@ class Program {
     Console.Write("]\n");
   }
 
-  public static IEnumerable<int> Filter(IEnumerable<int> input, Predicate<int> p){
-    foreach(int t in input){
-      timer++;
-      if(p(t)) yield return t;
+  public static IEnumerable<int> FromEnumerator(IEnumerator<int> iter){
+    while(iter.MoveNext() != false){
+      int t = iter.Current;
+      yield return t;
     }
+  }
+  
 
+  public static IEnumerable<int> Filter(IEnumerable<int> input, Predicate<int> p){
+    IEnumerator<int> iter = input.GetEnumerator();
+    while(iter.MoveNext() != false){
+      int t = iter.Current;
+      if(p(t)){
+        yield return t;
+      }
+    }
   }
 
 

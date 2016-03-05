@@ -1,6 +1,17 @@
 #!/bin/sh
 
-NUM_PRIMES=256
+
+NUM_PRIMES=138
+
+echo '\nThis is Java ...'
+javac Primes.java
+START=$(date +%s%N)
+java Primes $NUM_PRIMES
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
+
 
 echo '\nThis is C# ...'
 mcs primes.cs
@@ -11,14 +22,15 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm primes.exe
 
-echo '\nThis is C# ...'
-mcs oldprimes.cs
+
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Primes.scala
 START=$(date +%s%N)
-mono oldprimes.exe $NUM_PRIMES
+scala Primes $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm oldprimes.exe
+rm *.class
 
 
 echo '\nThis is Scheme ...'

@@ -1,4 +1,5 @@
 import System.Environment -- getArgs
+import Data.List  -- intercalate
 
 sieve :: [Int] -> [Int]
 sieve (x:xs) = x:sieve [y | y <- xs, mod y x /= 0]
@@ -9,7 +10,10 @@ primes = sieve [2..]
 main :: IO ()
 main = do
   [arg] <- getArgs
-  putStrLn $ show (take (read arg :: Int) primes)
+  let numPrimes = read arg ::Int in
+    putStrLn $ "(" ++ 
+                intercalate " " (map show (take numPrimes primes))
+                ++ ")"
 
 
 

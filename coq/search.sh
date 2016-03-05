@@ -1,3 +1,2 @@
 #!/bin/sh
-grep $1 . -r
-grep $1 ../polyglot/ -r | grep '\.v'
+grep $1 ~/Prog/coq -r
