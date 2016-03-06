@@ -1,4 +1,5 @@
 ; basic (linear) dictionary implementation.
+(require 'object->string)
 ;
 ; 1. insert! will overwrite value of existing key, rather than insert duplicate key
 ; 2. find returns a pair (key . value) from key, or expression #f if key not found
@@ -54,14 +55,17 @@
              (cons (caar found) (cadr found))))))
      ;
      (define (to-string data)
-       (let loop ((keys (data-keys data)) (vals (data-values data)) (out "{"))
+       (let loop ((keys (data-keys data)) 
+                  (vals (data-values data)) (out "{") (start #t))
          (if (null? keys)
-           out
-           (let (new-out 
-                  (string-append 
-              ; to be continued
-
-
+           (string-append out "}")
+           (let ((new-out (string-append
+                            out
+                            (if start "" ", ")
+                            (object->string (car keys))
+                            ": "
+                            (object->string (car vals)))))
+             (loop (cdr keys) (cdr vals) new-out #f)))))
      ; private helper function
      ;
      (define (data-keys data)

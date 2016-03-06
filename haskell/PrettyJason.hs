@@ -1,32 +1,18 @@
-module PrettyJason where 
+module PrettyJason (renderJValue) where 
 
-import SimpleJSON
-import Numeric  -- showHex
-import Data.Bits -- shiftR , (.&.)
-import Data.Char -- ord
+import Numeric(showHex)
+import Data.Bits(shiftR, (.&.))
+import Data.Char(ord)
+import SimpleJSON(JValue(..))
+import Prettify(Doc, (<>), char, double, fsep, hcat, punctuate, text,
+                compact, pretty)
 
-data Doc = ToBeDefined deriving Show
-
-text :: String -> Doc
-text str    = undefined 
-
-double :: Double -> Doc
-double num  = undefined
 
 string :: String -> Doc
 string = enclose '"' '"' . hcat . map oneChar
 
 enclose :: Char -> Char -> Doc -> Doc
 enclose left right x = char left <> x <> char right
-
-(<>) :: Doc -> Doc -> Doc
-a <> b = undefined
-
-char :: Char -> Doc
-char c = undefined
-
-hcat :: [Doc] -> Doc
-hcat xs = undefined
 
 
 oneChar :: Char -> Doc
@@ -60,15 +46,6 @@ hexEscape c | d < 0x10000 = smallHex d
 series :: Char -> Char -> (a -> Doc) -> [a] -> Doc
 series open close item = enclose open close
                        . fsep . punctuate (char ',') . map item
-
-fsep :: [Doc] -> Doc
-fsep xs = undefined
-
-punctuate :: Doc -> [Doc] -> [Doc]
-punctuate p []  = []
-punctuate p [d] = [d]
-punctuate p (d:ds) = (d <> p) : punctuate p ds
-
 
 renderJValue (JArray ary)   = series '[' ']' renderJValue ary
 renderJvalue (JObject obj)  = series '{' '}' field obj

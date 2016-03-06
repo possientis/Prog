@@ -1,7 +1,18 @@
 #!/bin/sh
 
 
-NUM_PRIMES=138
+NUM_PRIMES=256
+
+echo '\nThis is C++ ...'
+g++ -std=c++14 primes.cpp; 
+START=$(date +%s%N)
+./a.out $NUM_PRIMES; 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm a.out
+
+
 
 echo '\nThis is Java ...'
 javac Primes.java

@@ -1,4 +1,5 @@
 ; basic (linear) dictionary implementation.
+(require 'object->string)
 ;
 ; 1. insert! will overwrite value of existing key, rather than insert duplicate key
 ; 2. find returns a pair (key . value) from key, or expression #f if key not found
@@ -12,8 +13,9 @@
          (cond ((eq? m 'empty?)  (empty? data)) 
                ((eq? m 'insert!) (insert! data))
                ((eq? m 'delete!) (delete! data))
-               ((eq? m 'find)    (search data))  ; 'find' is primitive name, use 'search'
-               ((else (error "frame2: unknown operation error: " m))))))
+               ((eq? m 'find)    (search data))  ; 'find' is primitive
+               ((eq? m 'to-string) (to-string data))
+               (else (error "frame2: unknown operation error: " m)))))
      ;
      ; implementation of public interface
      ;
@@ -49,6 +51,17 @@
              ; else
              (car found)))))
      ;
+     (define (to-string data)
+       (let loop ((pairs (cdr data)) (out "{") (start #t))
+         (if (null? pairs)
+           (string-append out "}")
+           (let ((new-out (string-append
+                            out
+                            (if start "" ", ")
+                            (object->string (caar pairs))
+                            ": "
+                            (object->string (cdar pairs)))))
+             (loop (cdr pairs) new-out #f)))))
      ; private helper function
      ;
      (define (find-first data)

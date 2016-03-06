@@ -53,7 +53,7 @@ class Cell<T> {
     return cell;
   }
 
-  // danger is stream is infinite, use Take
+  // danger if stream is infinite, use Take
   public override string ToString(){
     string str = "(";
     Cell<T> next = this;

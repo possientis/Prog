@@ -56,7 +56,7 @@ object Cell{
 
 object Primes {
   def main(args: Array[String]){
-    val numPrimes = Integer.parseInt(args(0));
+    val numPrimes = args(0).toInt;
     val from2 = Cell.fromTransition[Int](2, n => n+1)
     val primes = Cell.sieve[Int](from2, (n,x) => n % x != 0)
     println(primes.take(numPrimes))

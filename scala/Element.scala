@@ -127,7 +127,7 @@ object Element {
     new LineElement(line)
 }
 
-
+/*
 
 val a1: Element = Element.elem(Array("Hello"))
 val a2: Element = Element.elem(Array("World!!!!!"))
@@ -136,5 +136,5 @@ println(a3)
 
 println((Array(1,2,3) zip Array("a","b","c")).mkString(", "))
 
-
+*/
 

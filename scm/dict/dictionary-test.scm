@@ -10,12 +10,22 @@
   ;; dictionaries should be empty
   (if (not (a 'empty?)) (display "dictionary: unit test 0.1 failing\n"))
   (if (not (b 'empty?)) (display "dictionary: unit test 0.2 failing\n"))
+  (if (not (equal? "{}" (a 'to-string)))
+    (display "dictionaty: unit test 0.3 failing\n"))
+  (if (not (equal? "{}" (b 'to-string)))
+    (display "dictionaty: unit test 0.4 failing\n"))
   ;; first insert
   ((a 'insert!) 1 10)
   ((b 'insert!) "abc" 100)
+  ;; to-string (checking to-string with more than one key is 
+  ;; tricky as we have no control over the order of the key-value pairs)
+  (if (not (equal? "{1: 10}" (a 'to-string)))
+    (display "dictionaty: unit test 0.5 failing\n"))
+  (if (not (equal? "{\"abc\": 100}" (b 'to-string)))
+    (display "dictionaty: unit test 0.5 failing\n"))
   ;; dictionaries should not be empty
-  (if (a 'empty?) (display "dictionaty: unit test 0.3 failing\n"))
-  (if (b 'empty?) (display "dictionary: unit test 0.4 failing\n"))
+  (if (a 'empty?) (display "dictionaty: unit test 0.7 failing\n"))
+  (if (b 'empty?) (display "dictionary: unit test 0.8 failing\n"))
 ;  (if(not (a 'check))(display"dictionary: unit test 1.1 failing\n"))
 ;  (if(not (b 'check))(display"dictionary: unit test 1.2 failing\n"))
   ;; should fail
@@ -253,6 +263,8 @@
     (if(eq? #f x)(display"dictionary: unit test 147 failing\n"))
     (if(not(equal? "abc"  (car x)))(display"dictionary: unit test 148 failing\n"))
     (if (not (= 110 (cdr x)))(display"dictionary: unit test 149 failing\n")))
+;  (display (a 'to-string))(newline)
+;  (display (b 'to-string))(newline)
   ;; first delete
   ((a 'delete!) 1)
   ((b 'delete!) "abc")

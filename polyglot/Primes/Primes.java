@@ -27,7 +27,7 @@ class Cell<T> {
   private Thunk<T> cdr;
   private Cell(T first, Cell<T> rest){
     this.car = first;
-    this.cdr = () -> rest;  // anonymous class implementing Think<T> is created
+    this.cdr = () -> rest;  // anonymous class implementing Thunk<T> is created
   } 
 
   public T first() { return car; }
@@ -60,7 +60,7 @@ class Cell<T> {
   }
 
 
-  // danger is stream is infinite, use take
+  // danger if stream is infinite, use take
   @Override
   public String toString(){
     String str = "(";

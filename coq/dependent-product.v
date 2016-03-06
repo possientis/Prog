@@ -45,4 +45,36 @@ Check (forall A B:Set, A->B->A*B).
 Check pair.
 
 
+Check le_n.
+Check le_S.
+
+Check (le_S _ _ (le_S _ _ (le_n 36))).
+Check (prime_divisor_correct 220).
+
+Parameter iterate: forall A:Set, (A->A)->nat->A->A.
+Check iterate.
+Check (iterate nat).
+Check (iterate _ (mult 2)).
+Check (iterate _ (mult 2) 10).
+Check (iterate _ (mult 2) 10 1).
+
+Check (binary_word_concat 32).
+Check (binary_word_concat 32 32).
+
+Definition twice : forall A:Set, (A->A)->A->A :=
+  fun A f a => f (f a).
+
+Require Import ZArith.
+
+Check (twice Z).
+Check (twice Z (fun z => (z*z)%Z)).
+
+Check (twice _ S 56).
+Eval compute in (twice _ S 56).
+
+Definition func1 := (twice (nat->nat) (fun f x => f (f x)) (mult 3)).
+Check func1.
+
+Eval compute in (func1 1).
+
 

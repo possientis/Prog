@@ -1,3 +1,4 @@
+(require 'object->string)
 (load "link.scm")
 (load "hash.scm")
 
@@ -21,11 +22,15 @@
           ((eq? m 'insert!) insert!)  ; overwrites value on duplicate key
           ((eq? m 'delete!) delete!)  ; deletes key from dictionary if it exists
           ((eq? m 'find) search)      ; returns pair (key . value) or #f if fails
+          ((eq? m 'to-string) (to-string))
           ((eq? m 'check) (check))    ; some sanity checks, returns #f if fails
           (else (display "dictionary: unknown operation error\n"))))
   ;; private members
   ;;
   (define (empty?) (eq? num 0))
+  ;;
+  (define (to-string)
+    'TBI)
   ;;
   (define (insert! key value)
     (let ((h (hash key)))
