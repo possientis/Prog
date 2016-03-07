@@ -77,4 +77,65 @@ Check func1.
 
 Eval compute in (func1 1).
 
+Definition compose : forall A B C: Set, (A->B)->(B->C)->A->C :=
+  fun A B C f g x => g (f x).
+
+Print compose.
+
+Check (compose _ _ _ Zabs_nat (plus 78) 45%Z).
+
+
+Implicit Arguments compose [A B C].
+
+(*
+Set Implicit Arguments.
+*)
+
+Check (compose Zabs_nat (plus 78)).
+
+Check compose.
+Print compose.
+
+Implicit Arguments le_S [n m].
+
+Check le_S.
+Check (le_S (n := 45)).
+Print compose.
+
+Reset compose.
+Set Implicit Arguments.
+(* Arguments which can be inferred will automatically be implicit *)
+
+Definition compose (A B C: Set)(f: A->B)(g: B->C)(a: A) := g(f a).
+Print compose. (* A B C are implicit, without command 'Implicit Arguments compose [A B C]' *)
+
+Definition thrice (A: Set)(f : A->A) := compose f (compose f f).
+Print thrice.
+
+Unset Implicit Arguments.
+Print thrice.
+
+Eval cbv beta delta in thrice (thrice (thrice S)) 0.
+
+Definition short_concat : short -> short -> long :=
+  binary_word_concat 32 32.
+
+Check short_concat.
+
+Require Import Reals.
+
+Check eq.
+Check R.
+Check eq (A:=R).
+
+Check eq R.
+Print eq.
+
+
+
+
+
+
+
+
 

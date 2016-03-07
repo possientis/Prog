@@ -27,9 +27,7 @@ instance IFree Set where
 instance Show Set where
   show Empty            = "0"
   show (Singleton x)    = "{"++(show x)++"}"
-  show (Union Empty y)  = show y
-  show (Union x Empty)  = show x
-  show (Union x y)      = (init (show x))++","++(drop 1 (show y))
+  show (Union x y)      = (show x) ++ "U" ++ (show y)
 
 instance Eq Set where
   (==) x y = (subset x y) && (subset y x)
@@ -74,5 +72,17 @@ three = inc two
 four  = inc three
 five  = inc four
 
+generate :: ISet a =>  Int -> [a]
+generate 0 = [empty]
+generate n = let prior = generate (n-1) in
+  prior ++ [(singleton x) | x <- prior] ++ [(union x y) | x <- prior, y <- prior]
 
+check1 :: Int -> (Set -> Bool) -> Bool
+check1 n p = all p (generate n)
 
+check2 :: Int -> (Set->Set->Bool)->Bool
+check2 n p = and [p x y | x <- list, y <- list] where list = generate n
+
+check3 :: Int -> (Set->Set->Set->Bool)->Bool
+check3 n p = and [p x y z | x <- list, y <- list, z <- list] 
+  where list = generate n

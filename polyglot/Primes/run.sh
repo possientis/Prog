@@ -1,7 +1,6 @@
 #!/bin/sh
 
-
-NUM_PRIMES=256
+NUM_PRIMES=138
 
 echo '\nThis is C++ ...'
 g++ -std=c++14 primes.cpp; 

@@ -50,7 +50,7 @@ class Predicate {
   }
 
   // necessary boiler-plate so closure data member $test can be called as method
-  public function __call($method, $args){
+  public function __call($method, $args){ // lambda boiler plate !!
     return call_user_func_array($this->$method,$args);  // don't forget 'return'
   }
 } 

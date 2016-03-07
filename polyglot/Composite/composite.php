@@ -34,7 +34,7 @@ class Environment {
 abstract class  Expression {
   public abstract function evaluate($env);   // can't use 'eval'
   public abstract function apply($args);
-  public abstract function toString();
+  public abstract function __toString();
   public abstract function isList();
   public function isInt(){ return false; }
 
@@ -76,7 +76,7 @@ class Nil extends ExpressionComposite {
   public function evaluate($env){ return $this; } // self-evaluating
   public function apply($args){
     throw new BadFunctionCallException("Nil is not an operator");}
-  public function toString(){ return "Nil"; }
+  public function __toString(){ return "Nil"; }
 }
 
 class Cons extends ExpressionComposite {
@@ -98,9 +98,9 @@ class Cons extends ExpressionComposite {
   public function apply($args){
     throw new BadFunctionCallException("Lambda expression are not yet supported");}
   public function isNil(){ return false; }
-  public function toString(){
+  public function __toString(){
     return $this->foldLeft("(", function($str,$exp){
-      return $str.$exp->toString()." ";}).chr(8).")"; // don't forget 'return' !!
+      return $str.$exp." ";}).chr(8).")"; // don't forget 'return' !!
   }
 }
 
@@ -111,7 +111,7 @@ class ExpInt extends ExpressionLeaf {
   public function evaluate($env){ return $this; } // self-evaluating
   public function apply($args){
     throw new BadFunctionCallException("An integer is not an operator");}
-  public function toString(){ return strval($this->value); } 
+  public function __toString(){ return strval($this->value); } 
   public function isInt(){ return true; }
 }
 
@@ -130,7 +130,7 @@ class Plus extends Primitive {
     });
    return new ExpInt($sum); 
   }
-  public function toString(){ return "+"; }
+  public function __toString(){ return "+"; }
 }
 
 class Mult extends Primitive {
@@ -145,7 +145,7 @@ class Mult extends Primitive {
     });
    return new ExpInt($prod); 
   }
-  public function toString(){ return "*"; }
+  public function __toString(){ return "*"; }
 }
 
 $env    = new Environment;
@@ -173,8 +173,8 @@ $exp2   = new Cons( // (* 2 (+ 2 7 5) 5)
                           $five,
                           new Nil))));
 
-echo "The evaluation of the Lisp expression: ".$exp2->toString()."\n";
-echo "yields the value: ". $exp2->evaluate($env)->toString()."\n";
+echo "The evaluation of the Lisp expression: ".$exp2."\n";
+echo "yields the value: ". $exp2->evaluate($env)."\n";
 
 
 ?>
