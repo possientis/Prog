@@ -4,9 +4,8 @@ import Numeric(showHex)
 import Data.Bits(shiftR, (.&.))
 import Data.Char(ord)
 import SimpleJSON(JValue(..))
-import Prettify(Doc, (<>), char, double, fsep, hcat, punctuate, text,
-                compact, pretty)
-
+import Prettify(Doc, (<>), char, double, bool, fsep, hcat, punctuate,
+       text, compact, pretty, empty)
 
 string :: String -> Doc
 string = enclose '"' '"' . hcat . map oneChar
@@ -47,8 +46,18 @@ series :: Char -> Char -> (a -> Doc) -> [a] -> Doc
 series open close item = enclose open close
                        . fsep . punctuate (char ',') . map item
 
+renderJValue :: JValue -> Doc
+renderJValue (JString s)    = text s 
+renderJValue (JNumber x)    = double x
+renderJValue (JBool   b)    = bool b
+renderJValue JNull          = empty
 renderJValue (JArray ary)   = series '[' ']' renderJValue ary
-renderJvalue (JObject obj)  = series '{' '}' field obj
+renderJValue (JObject obj)  = series '{' '}' field obj
   where field (name,val)    = string name
                             <> text ": "
                             <> renderJValue val
+
+value = renderJValue (JObject [("f", JNumber 1), ("q", JBool True)])
+
+
+

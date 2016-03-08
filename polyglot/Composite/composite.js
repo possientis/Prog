@@ -33,7 +33,7 @@ function Environment(){
 // there is no assert in Javascript
 function assert(condition) {
   if (!condition) {
-    "Assertion failed";
+    throw "Assertion failed";
   }
 }
 

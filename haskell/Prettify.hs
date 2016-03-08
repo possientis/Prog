@@ -22,6 +22,9 @@ text s  = Text s
 double :: Double -> Doc
 double d = text (show d)
 
+bool :: Bool -> Doc
+bool b  = text (show b)
+
 line :: Doc
 line = Line
 
@@ -60,6 +63,36 @@ punctuate p []  = []
 punctuate p [d] = [d]
 punctuate p (d:ds) = (d <> p) : punctuate p ds
 
-compact = undefined
-pretty  = undefined
+compact :: Doc -> String
+compact x = transform [x]
+  where transform []      = ""
+        transform (d:ds)  = 
+          case d of
+            Empty         -> transform ds
+            Char c        -> c:transform ds
+            Text s        -> s ++ transform ds
+            Line          -> '\n':transform ds
+            Concat a b    -> transform (a:b:ds)
+            Union  _ b    -> transform (b:ds)
+
+
+pretty  :: Int -> Doc -> String
+pretty width x = best 0 [x]
+  where best col (d:ds) = 
+             case d of 
+                Empty       -> best col ds
+                Char c      -> c: best (col + 1) ds
+                Text s      -> s ++ best (col + length s) ds
+                Line        -> '\n' : best 0 ds
+                Concat a b  -> best col (a:b:ds)
+                Union  a b  -> nicest col (best col (a:ds))
+                                          (best col (b:ds))
+        best _ _ = "" -- catch all
+        nicest col a b | (width - least) `fits` a = a
+                       | otherwise                = b
+                       where least = min width col
+
+-- to be continued
+
+
 

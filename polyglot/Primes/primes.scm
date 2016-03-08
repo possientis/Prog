@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "stream.scm")
 ; passing command line arguments to scheme scm script
 (define arguments (program-arguments))

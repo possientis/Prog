@@ -43,9 +43,25 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
+echo '\nThis is JavaScript ...'
+START=$(date +%s%N)
+js primes.js $NUM_PRIMES
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is PHP ...'
+START=$(date +%s%N)
+php primes.php $NUM_PRIMES
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-./primes.scm $NUM_PRIMES
+scm primes.scm $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"

@@ -1,4 +1,5 @@
 (require 'hash-table)
+(require 'object->string)
 
 (define frame4
   (let ((_static #f))
@@ -9,11 +10,25 @@
               ((eq? m 'insert!)(insert! data))
               ((eq? m 'delete!)(delete! data))
               ((eq? m 'find)   (search data))
+              ((eq? m 'to-string) (to-string data))
               ((else (error "frame4: unknown operation error: " m))))))
     ;
     ; implementation of public interface
     ;
     (define (empty? data) (eq? 0 (count data)))
+    ;
+    (define (to-string data)
+      (let ((out "{") (start #t))
+        (let ((add-item 
+                (lambda (key val)
+                  (set! out (string-append
+                              out
+                              (if start (begin (set! start #f) "") ", ")
+                              (object->string key)
+                              ": "
+                              (object->string val))))))
+          (hash-for-each add-item (table data))
+          (string-append out "}"))))
     ;
     (define (insert! data)
       (lambda (key value)

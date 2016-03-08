@@ -7,6 +7,10 @@
   ; checking empty environment
   (if (not (env1 'empty?)) (display "environment: unit test 1.0 failing\n")) 
   (if (not (env2 'empty?)) (display "environment: unit test 1.1 failing\n")) 
+  (if (not (equal? "{}" (env1 'to-string)))
+    (display "environment: unit test 1.2 failing\n"))
+  (if (not (equal? "{}" (env2 'to-string)))
+    (display "environment: unit test 1.3 failing\n"))
   ;
   ; binding one variable to env1
   ;
@@ -73,6 +77,7 @@
   ; variable 'b' of env2 should be equal to #\a
   (let ((val ((env2 'lookup) 'b)))
     (if (not (equal? val #\a)) (display "environment: unit test 5.5 failing\n")))
+ 
   ;
   ; extending environment with empty frame
   ;
@@ -189,6 +194,9 @@
   ;
   (let ((env3 ((env1 'extended) '(c d) '(3 #\a))) 
         (env4 ((env2 'extended) '(c d) '(4 #\b))))
+
+;    (display (env3 'to-string))(newline)
+;    (display (env4 'to-string))(newline)
     ; env3 and env4 should not be empty
     (if (env3 'empty?) (display "environment: unit test 12.0 failing\n")) 
     (if (env4 'empty?) (display "environment: unit test 12.1 failing\n")) 

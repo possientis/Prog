@@ -132,7 +132,42 @@ Check eq R.
 Print eq.
 
 
+Section A_declared.
+  Variables (A:Set)(P Q:A->Prop)(R:A->A->Prop).
+  Theorem all_perm : (forall a b:A, R a b) -> forall a b:A, R b a.
+  Proof.
+    intro H.
+    intro a.
+    intro b.
+    apply H.
+  Qed.
+  Theorem all_imp_dist : 
+    (forall a:A, P a -> Q a) -> (forall a:A, P a)-> forall a:A, Q a.
+  Proof.
+    intros Hpq Hp a.
+    apply Hpq.
+    apply Hp.
+  Qed.
 
+  Theorem all_delta : (forall a b: A, R a b) -> forall a:A, R a a.
+  Proof.
+    intros H a.
+    apply H.
+  Qed.
+End A_declared.
+
+Check (forall n:nat, 0 < n -> nat).
+
+Check pair.
+
+Check iterate.
+Print iterate.
+
+Definition my_plus: nat->nat->nat := iterate nat S.
+Definition my_mult (n p:nat) : nat :=
+  iterate nat (my_plus n) p 0.
+Definition my_expo (x n:nat) : nat :=
+  iterate nat (my_mult x) n 1.
 
 
 

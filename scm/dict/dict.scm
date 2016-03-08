@@ -30,7 +30,20 @@
   (define (empty?) (eq? num 0))
   ;;
   (define (to-string)
-    'TBI)
+    (let ((vect (temp-vector)))
+      (let ((len (vector-length vect)))
+        (let loop ((i 0) (out "{") (start #t))
+          (if (>= i len)
+            (string-append out "}")
+            (let ((item (vector-ref vect i)))
+              (let ((new-out (string-append
+                               out
+                               (if start "" ", ")
+                               (object->string (car item))
+                               ": "
+                               (object->string (cdr item)))))
+                (loop (+ i 1) new-out #f))))))))
+        
   ;;
   (define (insert! key value)
     (let ((h (hash key)))

@@ -12,7 +12,7 @@
               ((eq? m 'set!)(set-var! data))
               ((eq? m 'delete!)(delete! data))
               ((eq? m 'extended)(extended data))  ; returns extended env
-              ((eq? m 'display) (display-env data))
+              ((eq? m 'to-string) (to-string data))
               (else (error "environment2: unknown operation error: " m)))))
     ;
     ; Implementation of public interface
@@ -25,6 +25,18 @@
           (let ((current (car env)))      ; else
             (if (not (current 'empty?)) #f                        
               (frame-loop (cdr env))))))) ; else
+    ;
+    (define (to-string data)
+      (let frame-loop ((env (cdr data)) (out "{") (i 0))
+        (if (null? env) (string-append out "}")
+          (let ((current (car env)))
+            (let ((new-out (string-append
+                             out
+                             (if (= 0 i) "frame " ", frame ")
+                             (number->string i)
+                             ": "
+                             (current 'to-string))))
+              (frame-loop (cdr env) new-out (+ i 1)))))))
     ; 
     ; only add binding to current frame, potentially overwrites existing binding
     (define (define! data)
