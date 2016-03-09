@@ -1,3 +1,5 @@
+-- amazing Haskell, but Java takes over on large input
+
 import System.Environment -- getArgs
 import Data.List  -- intercalate
 

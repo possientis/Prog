@@ -1,7 +1,8 @@
+// We did not implement memoization in the thunk. We initially forgot,
+// then realized it had no beneficial impact in the Scheme implementation
 
 // quick and dirty implementation of infinite streams
 // (which can be finite). We have not defined the empty stream.
-
 class Cell[T](head: T, tail: Cell[T]){
   private val car = head
   private var cdr = () => tail

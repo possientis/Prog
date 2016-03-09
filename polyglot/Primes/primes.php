@@ -1,6 +1,10 @@
 <?php
+
 // This PHP implementation is a failure in terms of performance
 
+// We did not implement memoization in the thunk. We initially forgot,
+// then realized it had no beneficial impact in the Scheme implementation
+//
 // quick and dirty implementation of infinite streams
 // (which can be finite). We have not defined the empty stream.
 class Cell{

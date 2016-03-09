@@ -1,3 +1,8 @@
+// A storming performance from Java which even beats Haskell on large input
+
+// We did not implement memoization in the thunk. We initially forgot,
+// then realized it had no beneficial impact in the Scheme implementation
+
 @FunctionalInterface
 interface Thunk<T> {
   public Cell<T> run();
@@ -44,13 +49,6 @@ class Cell<T> {
     return cell;
   }
 
-  // produces infinite stream from initial vallue and transition function
-  public static <T> Cell<T> fromTransition(T init, Transition<T> f){
-    Cell<T> cell = new Cell<>(init, null);
-    cell.cdr = () -> fromTransition(f.next(init),f);
-    return cell;
-  }
-
   public Cell<T> take(int N){
     assert(N > 0);
     Cell<T> cell = new Cell<>(first(), null);
@@ -71,6 +69,14 @@ class Cell<T> {
     }
   return str + "\b)";
   }
+  
+  // produces infinite stream from initial vallue and transition function
+  public static <T> Cell<T> fromTransition(T init, Transition<T> f){
+    Cell<T> cell = new Cell<>(init, null);
+    cell.cdr = () -> fromTransition(f.next(init),f);
+    return cell;
+  }
+
 
   public static <T> Cell<T> sieve(Cell<T> input, ParamPredicate<T> p){
     T x = input.first();

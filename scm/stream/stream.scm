@@ -2,6 +2,7 @@
 ; choose implementation here
 (load "stream1.scm")
 (define stream stream1)
+
 ;
 ; The purpose of this file is to provide an implementation of the stream
 ; class as described in SICP. We want to be able to define somethings like:
@@ -12,6 +13,19 @@
 ; Hence we need to introduce a new syntactic feature
 (require 'macro)  ; 'syntax-rules unbound otherwise
 ; and define a new special form 'stream-cons
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; you can overwrite default implementation of 'force' and 'delay' here
+; Here is an example without memoization of the promise in 'delay'
+
+;(define-syntax delay
+;  (syntax-rules
+;    ()
+;    ((delay expression)
+;     (lambda () expression))))
+;(define (force object) (object))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define-syntax stream-cons
   (syntax-rules
     ()

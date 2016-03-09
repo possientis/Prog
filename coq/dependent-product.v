@@ -169,8 +169,88 @@ Definition my_mult (n p:nat) : nat :=
 Definition my_expo (x n:nat) : nat :=
   iterate nat (my_mult x) n 1.
 
+(*
+Ack(0,n) = n+1
+Ack(m+1,0) = Ack(m,1)
+Ack(m+1,n+1) = Ack(m,Ack(m+1,n))
+The Ackermann function is not primitive recursive
+*)
+
+(* hmmm maybe ... *)
+Definition ackermann (n:nat) : nat->nat :=
+  iterate (nat->nat) 
+          (fun (f:nat->nat)(p:nat) => iterate nat f (S p) 1)
+          n
+          S.
+
+Set Implicit Arguments.
+Definition id : forall A:Set, A->A :=
+  (fun (A:Set) (x:A) => x).
+
+Definition diag: forall A B:Set, (A->A->B)->A->B :=
+  (fun (A B:Set) f x => f x x).
+(* a difference to be noted between the sorts Set and Prop *)
+Check (forall A:Set, A->A).   (* Type : Set is now 'predicative' *)
+Check (forall P:Prop, P->P).  (* Prop and not 'Type'. Pron is not predicative *)
+
+(* this last proposition has an easy proof *)
+Check (fun (P:Prop) (p:P) => p).
+
+Lemma indeed: forall P:Prop, P->P.
+Proof.
+  exact(fun (P:Prop) (p:P) => p). 
+Qed.
+
+Check (forall (A:Type)(P:A->A->Prop), (forall x y:A, P x y)->forall x y:A, P y x). (* Prop *)
+Theorem all_perm2 : (forall (A:Type)(P:A->A->Prop), (forall x y:A, P x y)->forall x y:A, P y x).
+Proof.
+  intros A H F x y.
+  apply F.
+Qed.
+
+Check (forall (A:Type)(P Q R S:A->Prop), (forall a:A, Q a -> R a -> S a ) ->
+  (forall a:A, P a -> Q a) -> (forall a:A, P a -> R a -> S a)). (* Prop *) 
+Theorem resolution : (forall (A:Type)(P Q R S:A->Prop), 
+  (forall a:A, Q a -> R a -> S a ) -> (forall a:A, P a -> Q a) 
+  -> (forall a:A, P a -> R a -> S a)).
+Proof.
+  intros A P Q R S H Hpq a Pa Ra.
+  apply H.
+  apply Hpq.
+  exact Pa.
+  exact Ra.
+Qed.
+
+Check False. (* Prop *)
+Check False_ind. (* forall P:Prop, False -> P *)
+Check (forall P:Prop, False-> P). (* Prop *)
+Check False_rec. (* forall P:Set , False -> P *)
+Check (forall P:Set, False -> P). (* Type *)
+Check False_rect. (* forall P:Type, False -> P *)
+Check eq. (* equality constant *)
+Print eq.
+Check eq (A:=Set).  (* Set -> Set -> Prop *)
+Check eq (A:=Prop). (* Prop -> Prop -> Prop *)
+Check eq (A:=Type). (* Type -> Type -> Type *)
+Check eq (A:=nat).  (* nat -> nat -> Prop *)
+
+Check refl_equal.
+Print refl_equal.
+Check refl_equal (A:=Set). (* forall x:Set, x = x *)
+Check refl_equal (A:=Set) nat.  (* nat = nat *)
+
+Theorem ThirtySix : 9*4 = 6*6.
+Proof.
+  exact (refl_equal 36). (* argument A:Type is implicit *)  
+Qed.
 
 
 
+
+
+
+
+
+  
 
 

@@ -4,6 +4,10 @@
 // code performance (e.g. 25% speed up for 2000 primes).
 // Unfortunately, this may destroy correctness.
 
+
+// We did not implement memoization in the thunk. We initially forgot,
+// then realized it had no beneficial impact in the Scheme implementation
+
 #include <iostream>
 #include <sstream>
 #include <functional>

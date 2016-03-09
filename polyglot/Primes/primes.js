@@ -1,5 +1,8 @@
 // A very reasonable performance from JavaScript on this one
 
+// We did not implement memoization in the thunk. We initially forgot,
+// then realized it had no beneficial impact in the Scheme implementation
+//
 // there is no assert function in javascript
 function assert(condition) {
   if (!condition) {
@@ -9,7 +12,7 @@ function assert(condition) {
 
 function Cell(head, tail){
   this.car = head;
-  this.cdr = function(){ return tail; }
+  this.cdr = function(){ return tail; }   // thunk
 }
 
 Cell.prototype.first  = function(){ return this.car; }

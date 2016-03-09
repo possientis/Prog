@@ -1,3 +1,6 @@
+// We did not implement memoization in the thunk. We initially forgot,
+// then realized it had no beneficial impact in the Scheme implementation
+
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;

@@ -59,9 +59,26 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
+echo '\nThis is Python ...'
+START=$(date +%s%N)
+python3 primes.py $NUM_PRIMES
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+
+echo '\nThis is Ruby ...'
+START=$(date +%s%N)
+ruby primes.rb $NUM_PRIMES
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-scm primes.scm $NUM_PRIMES
+scm primes.scm $NUM_PRIMES 2> /dev/null
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
