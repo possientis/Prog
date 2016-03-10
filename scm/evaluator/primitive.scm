@@ -1,21 +1,17 @@
-(define (primitive-procedure? procedure) (symbol? procedure))
+(define (primitive-procedure? proc) (tagged-list? proc 'primitive))
 
-(define (apply-primitive-procedure procedure arguments)
-  (cond ((eq? procedure '+) (add arguments))
-        ((eq? procedure '*) (mul arguments))
-        ((eq? procedure 'eval) (apply-eval arguments))
-        (else (error "Unknown primitive procedure -- APPLY" procedure))))
+(define (primitive-implementation proc) (cadr proc))
 
-(define (add arguments)
-  (if (null? arguments) 0
-    (+ (car arguments) (add (cdr arguments)))))
+(define primitive-procedures
+  (list (list 'car car)
+        (list 'cdr cdr)
+        (list 'cons cons)
+        (list 'null? null?)
+        (list '+ +)
+        (list '* *)
+        ; more to be included
+        ))
+(define (primitive-procedure-names) (map car primitive-procedures))
+(define (primitive-procedure-objects)
+  (map (lambda (proc) (list 'primitive (cadr proc))) primitive-procedures))
 
-(define (mul arguments)
-  (if (null? arguments) 1
-    (* (car arguments) (mul (cdr arguments)))))
-
-(define (apply-eval arguments)
-  (let ((exp (car arguments)) (env (cadr arguments)) (rest (cddr arguments)))
-    (if (null? rest)  ; which is expected
-      (eval exp env)
-      (error "Too many arguments in primitive procedure eval" arguments))))

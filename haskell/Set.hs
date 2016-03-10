@@ -199,7 +199,72 @@ instance ISet Set where
   -- the induction hypothesis, u == v and v == w we can conclude
   -- that u == w which completes the proof of the lemma.
   --
- -- contrary to natural belief, it seems that the inclusion
+  -- Lemma 9: the relation == on X is a congruence.
+  --
+  -- First we show it is an equivalence relation. Being defined
+  -- as x == y iff (x <= y)/\(y <= x), it is clearly symmetric.
+  -- Furthermore, it is reflexive from Lemma 3 and transitive
+  -- from Lemma 8. We now show that == is compatible with the
+  -- operators of the free algebra (X, 0, {}, U). We have 0 == 0.
+  -- We assume that x == y. We need to show that {x} == {y}. This
+  -- follows immediately from (iii) of the definition of <= 
+  -- which states that {x} <= {y} is equivalent to x == y.
+  -- We know assume that x == x' and y == y'. We need to show 
+  -- that xUy == x'Uy'. It is sufficient to prove that 
+  -- xUy <= x'Uy' follows from x <= x' and y <= y'. Using (v)
+  -- of the definition of <=, it is sufficient to prove that 
+  -- x <= x'Uy' and y <= x'Uy', and since xUy commutes modulo 
+  -- == (by Lemma 5), it is sufficient to establish the following
+  --
+  -- Lemma 10: for all x x' y:X, if x <= x' then xUy <= x'Uy 
+  -- Applying Lemma 1, given z in E(xUy) = E(x)UE(y), we need
+  -- to show the existence of z' in E(x')UE(y) such that 
+  -- z == z' If z is in E(y) we can take z'=z and we are done
+  -- since == is reflexive. If z is in E(x), from x <= x' we 
+  -- obtain the existence of z' in E(x') such that z == z'. So 
+  -- we are also done in this case.
+  --
+  --
+  -- Lemma 11: The relation <= on X is compatible with ==.
+  -- That is if x == x' and y == y' and x <= y, then we 
+  -- must have x' <= y'. This follows immediately from
+  -- the transitivity of <= (Lemma 8)
+  --
+  --
+  -- Definition: We can now define the quotient space X/==
+  -- which will shall denote X* or (X*,0, {}, U), on which
+  -- the inclusion <= is well defined (Lemma 11).
+  --
+  -- Lemma 12: for all x y:X* we have x=y iff (x<=y)/\(y<=x)
+  -- This seems pretty obvious, let us make sure we get it
+  -- formally right. For the purpose of the proof, given 
+  -- x y in X, we denote [x] and [y] the elements of X* 
+  -- representing the classes of x and y modulo == respectively.
+  -- we need to show that [x]=[y] iff ([x]<=[y])/\([y]<=[x]).
+  -- but [x]=[y] is equivalent to x == y and [x]<=[y] is (by
+  -- definition) equivalent to x <= y. So we are done.
+  --
+  -- Lemma 13: The relation <= on X* is a partial order.
+  -- Since [x]<=[y] is defined as x<=y (definition which is
+  -- legitimate by Lemma 11), we immediately see that <=
+  -- is reflexive and transitive. It remains to show that
+  -- it is also symmetric. But [x]<=[y] and [y]<=[x] imply
+  -- that x == y and consequently [x]=[y].
+  --
+  -- Just like we did for X we can define for X* the notion
+  -- of a 'set's elements':
+  --
+  -- Definition: We define the map E*: X* -> P(X*) by:
+  -- E([0])   = 0         (the empty set) 
+  -- E({[x]}) = {[x]}     (the singleton)
+  -- E([a]U[b])   = E([a])UE([b]) (the union)
+  --
+  -- Warning: beware that given x in X or X*, the notation {x}
+  -- is ambiguous (overloaded), as it may refer to the set
+  -- theoretic singleton {x} (set with unique element x) or to the 
+  -- value obtainied by applying the unary operator {} on x.
+  --
+  -- contrary to natural belief, it seems that the inclusion
   -- relation is more primitive that the 'belong' relation.
   belong x y = subset (Singleton x) y
 

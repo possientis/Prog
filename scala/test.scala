@@ -8,3 +8,5 @@ println(b)
 a = 42
 println(a)
 println(b)
+
+println(a^b)

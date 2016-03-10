@@ -210,3 +210,15 @@ with HashCaching2 {
   }
 }
 
+trait HashScrambling
+{
+  override def hashCode = {
+    val original: Int = super.hashCode
+    def rl(i: Int) = Integer.rotateLeft(original, i)
+// this line fails, not sure why
+//    original ˆ rl(8) ˆ rl(16) ˆ rl(24)
+  }
+}
+
+
+

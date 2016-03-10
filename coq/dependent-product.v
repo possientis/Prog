@@ -244,6 +244,121 @@ Proof.
   exact (refl_equal 36). (* argument A:Type is implicit *)  
 Qed.
 
+Check eq_ind.
+Check (forall (A : Type) (x : A) (P : A -> Prop),
+       P x -> forall y : A, x = y -> P y).
+
+Check eq_rec.
+Check (forall (A : Type) (x : A) (P : A -> Set),
+       P x -> forall y : A, x = y -> P y).
+
+Check eq_rect.
+Check (forall (A : Type) (x : A) (P : A -> Type),
+       P x -> forall y : A, x = y -> P y).
+
+(* defining the proof term directly with a Definition *)
+Definition eq_sym (A:Type)(x y:A)(h: x=y) : y = x :=
+  eq_ind x (fun z => z=x) (refl_equal x) y h.
+
+Check eq_sym. (* forall (A : Type) (x y : A), x = y -> y = x *)
+
+Lemma eq_sym2 : forall A:Type, forall x y : A, x = y -> y = x.
+Proof.
+  intros A x y h.
+  exact (eq_ind x (fun z => z=x) (refl_equal x) y h).
+Qed.
+
+Check eq_sym2. (* forall (A : Type) (x y : A), x = y -> y = x *)
+
+Print eq_sym.
+Check (eq_sym ThirtySix).
+
+Check (Prop->Prop). (*Type not Set *)
+Check (Prop->Prop->Prop). (* Type *)
+
+Check not.
+Print not. (* fun A : Prop => A -> False : Prop -> Prop *)
+
+Check and.
+Print and.
+
+Check or.
+
+(* this theorem can be seen as introduction rule for conjunction *)
+Check conj. (* forall A B : Prop, A -> B -> A /\ B *)
+
+Check or_introl. (* forall A B : Prop, A -> A \/ B *)
+Check or_intror. (* forall A B : Prop, B -> A \/ B *)
+Lemma easy1 : forall A B P : Prop, (A/\B -> P)->A->B->P.
+Proof.
+  intros A B P H Ha Hb.
+  apply H.
+  apply conj; assumption.
+Qed.
+
+(* this theorem can be seen as elimination rule for conjunction *)
+Check and_ind.   (* forall A B P : Prop, (A -> B -> P) -> A /\ B -> P *)
+Lemma and_eliml: forall A B : Prop, A/\B -> B.
+Proof.
+  intros A B.
+  apply and_ind.
+  intros; assumption.
+Qed.
+Lemma and_elimr: forall A B : Prop, A/\B -> A.
+Proof.
+  intros A B.
+  apply and_ind.
+  intros; assumption.
+Qed.
+
+Theorem conj3: forall P Q R: Prop, P->Q->R->P/\Q/\R.
+(*
+Proof(fun (P Q R: Prop) (p:P) (q:Q) (r:R) => (conj p (conj q r))).
+*)
+Proof(fun P Q R p q r => conj p (conj q r)).
+
+(* to restore syntax recognition *)
+Lemma vim_confused1: 0 = 0.
+Proof.
+  auto.
+Qed.
+
+Theorem disj4_3: forall P Q R S: Prop, R -> P\/Q\/R\/S.
+Proof(fun P Q R S r => (or_intror P (or_intror Q (or_introl S r)))).
+
+Lemma vim_confused2: 0 = 0.
+Proof.
+  auto.
+Qed.
+
+Check ex. (* forall A : Type, (A -> Prop) -> Prop *)
+
+Check ex_intro. (* forall (A : Type) (P : A -> Prop) (x : A), P x -> exists x, P x *)
+Check ex_ind. (*  forall (A : Type) (P : A -> Prop) (P0 : Prop),
+                  (forall x : A, P x -> P0) -> (exists x, P x) -> P0  *)
+
+Require Import List.
+
+Check nil(A:=Set).
+Check cons. (* forall A : Type, A -> list A -> list A *)
+Check app.  (* forall A : Type, list A -> list A -> list A *) (* concatenation *)
+
+Check list. (* Type -> Type *)
+Check list nat. (* Set *)
+Check list (Z->nat). (* Set *)
+Check nil(A:=nat). (* list nat *)
+Check cons (A:=Z->nat). (* (Z -> nat) -> list (Z -> nat) -> list (Z -> nat) *)
+Check Zabs_nat. (* Z->nat *)
+Check cons Zabs_nat nil. (* list (Z->nat) *)
+Check cons (cons (-273)%Z nil) nil. (* list (list Z) *)
+
+Check cons (3<=6)%Z nil. (* list Prop *)
+
+
+
+
+
+
 
 
 
@@ -252,5 +367,3 @@ Qed.
 
 
   
-
-

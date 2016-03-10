@@ -83,6 +83,17 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
+
+echo '\nThis is Clojure ...'
+clojurec primes 1> /dev/null 
+START=$(date +%s%N)
+java -Xss16m -cp .:/usr/share/java/clojure-1.6.0.jar primes $NUM_PRIMES
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
+
+
 echo '\nThis is Haskell ...'
 ghc -v0 primes.hs;
 START=$(date +%s%N)
