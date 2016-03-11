@@ -58,7 +58,7 @@ instance ISet Set where
   -- (v) x U y <= z iff (x <= z ) and (y <= z)
   subset (Union x y) z    = (subset x z) && (subset y z)
   -- 
-  -- Lemma: an inclusion relation exists and is unique
+  -- Lemma 0: an inclusion relation exists and is unique
   --
   -- Such binary relation exists and is unique. Informally, 
   -- it exists because we can define it by the structural
@@ -217,6 +217,7 @@ instance ISet Set where
   -- == (by Lemma 5), it is sufficient to establish the following
   --
   -- Lemma 10: for all x x' y:X, if x <= x' then xUy <= x'Uy 
+  -- 
   -- Applying Lemma 1, given z in E(xUy) = E(x)UE(y), we need
   -- to show the existence of z' in E(x')UE(y) such that 
   -- z == z' If z is in E(y) we can take z'=z and we are done
@@ -226,6 +227,7 @@ instance ISet Set where
   --
   --
   -- Lemma 11: The relation <= on X is compatible with ==.
+  --
   -- That is if x == x' and y == y' and x <= y, then we 
   -- must have x' <= y'. This follows immediately from
   -- the transitivity of <= (Lemma 8)
@@ -236,6 +238,7 @@ instance ISet Set where
   -- the inclusion <= is well defined (Lemma 11).
   --
   -- Lemma 12: for all x y:X* we have x=y iff (x<=y)/\(y<=x)
+  --
   -- This seems pretty obvious, let us make sure we get it
   -- formally right. For the purpose of the proof, given 
   -- x y in X, we denote [x] and [y] the elements of X* 
@@ -245,6 +248,7 @@ instance ISet Set where
   -- definition) equivalent to x <= y. So we are done.
   --
   -- Lemma 13: The relation <= on X* is a partial order.
+  --
   -- Since [x]<=[y] is defined as x<=y (definition which is
   -- legitimate by Lemma 11), we immediately see that <=
   -- is reflexive and transitive. It remains to show that
@@ -255,14 +259,94 @@ instance ISet Set where
   -- of a 'set's elements':
   --
   -- Definition: We define the map E*: X* -> P(X*) by:
-  -- E([0])   = 0         (the empty set) 
-  -- E({[x]}) = {[x]}     (the singleton)
-  -- E([a]U[b])   = E([a])UE([b]) (the union)
+  -- E*([0])   = 0         (the empty set) 
+  -- E*({[x]}) = {[x]}     (the singleton)
+  -- E*([a]U[b])   = E*([a])UE*([b]) (the union)
   --
   -- Warning: beware that given x in X or X*, the notation {x}
   -- is ambiguous (overloaded), as it may refer to the set
   -- theoretic singleton {x} (set with unique element x) or to the 
   -- value obtainied by applying the unary operator {} on x.
+  --
+  -- There is a natural relationship between E* and E:
+  --
+  -- Lemma 14: forall x:X, E*([x]) = { [y] | y:E[x] } 
+  -- 
+  -- Proof by structural induction.
+  --
+  -- In other words the elements of the class of x, are
+  -- the classes of the elements of x.
+  --
+  -- Definition: given x y:X we say that x belongs to y,
+  -- denoted x in y or x:y, if and only {x} <= y.
+  --
+  -- Lemma 15: the 'belong' (':' , 'in') relation on X
+  -- is compatible with the congruence == on X, in other
+  -- words, if x == x' and y == y' and x:y, then x':y'
+  --
+  -- Proof: we need to show that {x'} <= y', but == being
+  -- a congruence we have {x'} == {x} and the result follows
+  -- immediately by transitivity.
+  --
+  -- We can therefore extend the relation belong to the 
+  -- quotient algebra X* by defining [x]:[y] iff x:y.
+  --
+  -- We now have the interesting lemma:
+  --
+  -- Lemma 16: for all x y:X*, x:y <=> x:E*(y)
+  --
+  -- Be careful that the above 'x:y' refers to the quotient
+  -- binary relation ':' on X*, while 'x:E*(y)' refers to the
+  -- usual set theoretic 'x is an element of the set E*(y)'.
+  -- The set E*(y) is supposed to represents of the elements
+  -- of X* which are 'element' of y. So Lemma 16 should be
+  -- true, or something is wrong with the whole thing, or
+  -- with the definition of ':' or with that of E*.
+  --
+  -- Proof: in order to be totally formal, we shall keep
+  -- the notations [x] and [y] to distinguish elements of X
+  -- from their corresponding classes in X*.
+  --
+  -- We need to show that [x]:[y] <=> [x]:E*([y]). However,
+  -- [x]:[y] is defined as x:y which is itself defined 
+  -- as {x} <= y. By Lemma 1, this is equivalent to the fact
+  -- for all z in E({x}) = {x}, there should be z' in E(y)
+  -- such that z == z'. In brief, [x]:[y] is equivalent 
+  -- to the existence of z in E(y) such that x == z.
+  -- Now from lemma 14, [x]:E*([y]) is equivalent to 
+  -- [x] = [z] for some z in E(y). Hence it is also equivalent
+  -- to the existence of z in E(y) such that x == z. We done.
+  --
+  -- Lemma 17: forall x y:X*, x <= y <=> E*(x) <= E*(y)
+  -- 
+  -- (E*(x) <= E*(y) refers to the usual set theoretic inclusion)
+  -- Formally given x y:X we need to show that [x] <= [y] (which
+  -- is equivalent to x <= y) is equivalent to E*([x]) <= E*([y]).
+  -- First we prove =>. So we assume that x <= y, and we assume
+  -- that [z] in E*([x]). We need to show that [z] in E*([y]).
+  -- From Lemma 14, there is z1 in E(x) such that z == z1. 
+  -- However from Lemma 1 and x <= y, there is z2 in E(y)
+  -- such that z1 == z2. Hence by transitivity, there is z2 
+  -- in E(y) such that z == z2. This shows from Lemma 14 that
+  -- [z] in E*([y]) as requested. We now prove <=. So we assume
+  -- that the inclusion E*([x]) <= E*([y]) holds and we need to
+  -- show that x <= y. We shall use Lemma 1 so we assume that
+  -- z in E(x). We need to show the existence of z' in E(y) 
+  -- such that z == z' However from z in E(x) and Lemma 14 we obtain
+  -- [z] in E*([x]) and from the assumed inclusion it follows that
+  -- [z] in E*([y]). Using Lemma 14 once again, we see that 
+  -- z == z' for some z' in E(y), we completes the proof.
+  --
+  --
+  --Lemma 18: forall x y:X*, we have the equivalence:
+  --  x <= y  <=> forall z:X*, z:x -> z:y
+  --
+  -- In other words, on the quotient algebra X*, the binary 
+  -- relation <= truly behaves as in inclusion relation with
+  -- respect to the belong relation ':', which is what we want.
+  --
+  -- Proof: 
+  --
   --
   -- contrary to natural belief, it seems that the inclusion
   -- relation is more primitive that the 'belong' relation.

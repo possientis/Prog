@@ -9,6 +9,10 @@
  *
  * Need to use O_CREAT and O_EXCL and guarantee atomic execution
  * of checking whether file exists *and* actual creation.
+ * 
+ * Likewise if you need to write a log at the end of a file,
+ * you need to make sure the lseek and write are done 
+ * atomically, and you need to use O_APPEND for that purpose.
 
 int main(int argc, char* argv[]){
 
