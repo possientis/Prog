@@ -1,4 +1,3 @@
-(define (primitive-procedure? proc) (tagged-list? proc 'primitive))
 
 (define (primitive-implementation proc) (cadr proc))
 

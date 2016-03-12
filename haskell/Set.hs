@@ -346,7 +346,55 @@ instance ISet Set where
   -- respect to the belong relation ':', which is what we want.
   --
   -- Proof: 
+  -- By virtue of Lemma 17, x <= y is equivalent to the
+  -- inclusion E*(x) <= E*(y). However, from Lemma 16,
+  -- given z:X*, z:x is equivalent to z:E*(x). Hence 
+  -- we have to prove that the inclusion is equivalent to
+  --  forall z:X*, z:E*(x) -> z:E*(y)
+  -- which is indeed the case. 
   --
+  -- Definition: we define the map F with domain X* by
+  -- the following structural recursion:
+  --
+  --  (i)   F(0) = 0              (the empty set)
+  --  (ii)  F({x}) = {F(x)}       (the set with one element)
+  --  (iii) F(xUy) = F(x)UF(y)    (the usual set theoretic union)
+  --
+  --  Remark: we dropped the formal notation [x] in the previous
+  --  definition, so 0 here denotes the element [0] of X* etc
+  --
+  --  Remark: The formal justification of the existence of the
+  --  map F from the axioms of ZF is required. This is a slightly
+  --  more difficult case than usual as we do not have an obvious
+  --  set to work with as the range of F.
+  --
+  --  Remark: do not confuse F(x) with E*(x) eventhough the 
+  --  definitions of F and E* are very similar. Given x:X*,
+  --  E*(x) is a subset of X*. It is a set of formal expression.
+  --  F(x) is not a subset of X*. It is simply a set which is
+  --  the value of the expression x (to be exact of the class 
+  --  expressions x) in the world of sets. For example, if 
+  --  we consider the element 1 = {0} of X*. It is an equivalence
+  --  class of formal expression, and F(1) = 1 (the set theoretic
+  --  singleton {0}). We have E*(1) = {0}, the singleton containing
+  --  the element 0 of X*, the latter the equivalence class of all
+  --  formal expressions which are == to 0.
+  --  
+  --  Remark: With a bit of work, using the ZF axiom schema of
+  --  replacement, we should be about to justify the fact that
+  --  the range F(X*) is a well defined set. Hence we have a
+  --  map F: X* -> F(X*) which is clearly surjective.
+  --
+  --  Lemma 19: the map F: X* -> F(X*) is a bijection
+  --
+  --  So this is like saying that we have defined a universe of
+  --  sets F(X*), for which we have an exact representation as
+  --  and algebraic data type (except maybe that algebraic data
+  --  type corresponds to the notion of free universal algebra,
+  --  and our algebra X* is not free, as it is a quotient algebra). 
+  --
+  --  Proof: we need to show the implication for all x y:X*,
+  --    F(x) = F(y) -> x = y
   --
   -- contrary to natural belief, it seems that the inclusion
   -- relation is more primitive that the 'belong' relation.

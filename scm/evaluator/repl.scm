@@ -11,10 +11,10 @@
   (driver-loop))
 
 (define (prompt-for-input str)
-  (newline)(newline)(display str)(newline))
+  (newline)(display str))
 
 (define (announce-output str)
-  (newline)(display str)(newline))
+  (display str))
 
 (define (user-print object)
   (if (compound-procedure? object)

@@ -63,3 +63,7 @@
 
 (define (application? exp) (pair? exp)) ; need to be tested last
 
+(define (primitive-procedure? proc) (tagged-list? proc 'primitive))
+
+
+

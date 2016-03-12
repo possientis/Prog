@@ -91,12 +91,158 @@ Proof.
   intros a b c d Hac Hbd.
 (*  apply le_trans. *) (* Error: Unable to find an instance for the variable m. *)
   (* apply with *)
-  apply le_trans with (m := c*b). (* apply t with (v1 := t1)(v2 := t2)...(vk := tk)
+  apply le_trans with (m := c*b). (* apply t with (v1 := t1)(v2 := t2)...(vk := tk) *)
   apply mult_le_compat_r.
   exact Hac.
   apply mult_le_compat_l.
   exact Hbd.
 Qed.
+
+
+(* the tatic eapply *)
+Theorem le_mult_mult' : forall a b c d: nat,
+  a <= c -> b <= d -> a*b <= c*d.
+Proof.
+  intros a b c d Hac Hbd.
+  eapply le_trans.
+  eapply mult_le_compat_l.
+  eexact Hbd. (* exact Hbd will also work here *)
+  apply mult_le_compat_r.
+  exact Hac.
+Qed.
+
+
+Theorem le_0_mult_l : forall n p:nat, 0*n <= 0*p.
+Proof.
+  intros n p; apply le_n. (* comparison of terms for tactics do take reducibility into account *)
+  (* both 0*n and 0*p reduce to 0, so goal actuall 0 <= 0, which is handled by le_n *) 
+Qed.
+
+(* n*0 and p*0 are not reducible to 0 for some reason *)
+Theorem le_0_mult_r : forall n p:nat, n*0 <= p*0.
+Proof.
+  intros n p.
+  (*  apply le_n. will fail here *)
+  cut (0*n = n*0).
+  cut (0*p = p*0).
+  intros Hp Hn.
+  rewrite <- Hn.
+  rewrite <- Hp.
+  apply le_0_mult_l.
+  apply mult_comm.
+  apply mult_comm.
+Qed.
+
+Lemma lt_8_9 : 8 < 9.
+Proof.
+  apply le_n. (* delta reduction does take place to le_n does succeed *)
+Qed.
+
+(* Search command very useful *)
+
+Open Scope Z_scope. (* this will make output of Search a lot nicer *)
+Check Zle. (* Z -> Z -> Prop *)
+Search Zle.
+(*
+log_sup_le_Slog_inf: forall p : positive, log_sup p <= Z.succ (log_inf p)
+log_sup_correct1: forall p : positive, 0 <= log_sup p
+log_near_correct1: forall p : positive, 0 <= log_near p
+log_inf_le_log_sup: forall p : positive, log_inf p <= log_sup p
+log_inf_correct1: forall p : positive, 0 <= log_inf p
+inj_le: forall n m : nat, (n <= m)%nat -> Z.of_nat n <= Z.of_nat m
+Zsucc_le_reg: forall n m : Z, Z.succ m <= Z.succ n -> m <= n
+Zsucc_le_compat: forall n m : Z, m <= n -> Z.succ m <= Z.succ n
+Zplus_le_reg_r: forall n m p : Z, n + p <= m + p -> n <= m
+Zplus_le_reg_l: forall n m p : Z, p + n <= p + m -> n <= m
+Zplus_le_compat_r: forall n m p : Z, n <= m -> n + p <= m + p
+Zplus_le_compat_l: forall n m p : Z, n <= m -> p + n <= p + m
+Znot_gt_le: forall n m : Z, ~ n > m -> n <= m
+Zmult_lt_0_le_reg_r: forall n m p : Z, 0 < p -> n * p <= m * p -> n <= m
+Zmult_lt_0_le_compat_r: forall n m p : Z, 0 < p -> n <= m -> n * p <= m * p
+Zmult_le_reg_r: forall n m p : Z, p > 0 -> n * p <= m * p -> n <= m
+Zmult_le_compat_r: forall n m p : Z, n <= m -> 0 <= p -> n * p <= m * p
+Zmult_le_compat_l: forall n m p : Z, n <= m -> 0 <= p -> p * n <= p * m
+Zmult_le_compat: forall n m p q : Z, n <= p -> m <= q -> 0 <= n -> 0 <= m -> n * m <= p * q
+Zmult_le_approx: forall n m p : Z, n > 0 -> n > p -> 0 <= m * n + p -> 0 <= m
+Zmult_le_0_reg_r: forall n m : Z, n > 0 -> 0 <= m * n -> 0 <= m
+Zmult_gt_0_le_compat_r: forall n m p : Z, p > 0 -> n <= m -> n * p <= m * p
+Zmult_gt_0_le_0_compat: forall n m : Z, n > 0 -> 0 <= m -> 0 <= m * n
+Zmod_le: forall a b : Z, 0 < b -> 0 <= a -> a mod b <= a
+Zlt_succ_le: forall n m : Z, n < Z.succ m -> n <= m
+Zlt_left: forall n m : Z, n < m -> 0 <= m + -1 + - n
+Zlt_le_succ: forall n m : Z, n < m -> Z.succ n <= m
+Zlt_0_le_0_pred: forall n : Z, 0 < n -> 0 <= Z.pred n
+Zle_succ_le: forall n m : Z, Z.succ n <= m -> n <= m
+Zle_neg_pos: forall p q : positive, Z.neg p <= Z.pos q
+Zle_mult_approx: forall n m p : Z, n > 0 -> p > 0 -> 0 <= m -> 0 <= m * n + p
+Zle_minus_le_0: forall n m : Z, m <= n -> 0 <= n - m
+Zle_left_rev: forall n m : Z, 0 <= m + - n -> n <= m
+Zle_left: forall n m : Z, n <= m -> 0 <= m + - n
+Zle_bool_imp_le: forall n m : Z, (n <=? m) = true -> n <= m
+Zle_0_pos: forall p : positive, 0 <= Z.pos p
+Zle_0_nat: forall n : nat, 0 <= Z.of_nat n
+Zle_0_minus_le: forall n m : Z, 0 <= n - m -> m <= n
+Zgt_succ_le: forall n m : Z, Z.succ m > n -> n <= m
+Zgt_left: forall n m : Z, n > m -> 0 <= n + -1 + - m
+Zgt_le_succ: forall n m : Z, m > n -> Z.succ n <= m
+Zgt_0_le_0_pred: forall n : Z, n > 0 -> 0 <= Z.pred n
+log_sup_le_Slog_inf: forall p : positive, log_sup p <= Z.succ (log_inf p)
+log_sup_correct1: forall p : positive, 0 <= log_sup p
+log_near_correct1: forall p : positive, 0 <= log_near p
+log_inf_le_log_sup: forall p : positive, log_inf p <= log_sup p
+log_inf_correct1: forall p : positive, 0 <= log_inf p
+inj_le: forall n m : nat, (n <= m)%nat -> Z.of_nat n <= Z.of_nat m
+Zsucc_le_reg: forall n m : Z, Z.succ m <= Z.succ n -> m <= n
+Zsucc_le_compat: forall n m : Z, m <= n -> Z.succ m <= Z.succ n
+Zplus_le_reg_r: forall n m p : Z, n + p <= m + p -> n <= m
+Zplus_le_reg_l: forall n m p : Z, p + n <= p + m -> n <= m
+Zplus_le_compat_r: forall n m p : Z, n <= m -> n + p <= m + p
+Zplus_le_compat_l: forall n m p : Z, n <= m -> p + n <= p + m
+Znot_gt_le: forall n m : Z, ~ n > m -> n <= m
+Zmult_lt_0_le_reg_r: forall n m p : Z, 0 < p -> n * p <= m * p -> n <= m
+Zmult_lt_0_le_compat_r: forall n m p : Z, 0 < p -> n <= m -> n * p <= m * p
+Zmult_le_reg_r: forall n m p : Z, p > 0 -> n * p <= m * p -> n <= m
+Zmult_le_compat_r: forall n m p : Z, n <= m -> 0 <= p -> n * p <= m * p
+Zmult_le_compat_l: forall n m p : Z, n <= m -> 0 <= p -> p * n <= p * m
+Zmult_le_compat:
+forall n m p q : Z, n <= p -> m <= q -> 0 <= n -> 0 <= m -> n * m <= p * q
+Zmult_le_approx: forall n m p : Z, n > 0 -> n > p -> 0 <= m * n + p -> 0 <= m
+Zmult_le_0_reg_r: forall n m : Z, n > 0 -> 0 <= m * n -> 0 <= m
+Zmult_gt_0_le_compat_r: forall n m p : Z, p > 0 -> n <= m -> n * p <= m * p
+Zmult_gt_0_le_0_compat: forall n m : Z, n > 0 -> 0 <= m -> 0 <= m * n
+Zmod_le: forall a b : Z, 0 < b -> 0 <= a -> a mod b <= a
+Zlt_succ_le: forall n m : Z, n < Z.succ m -> n <= m
+Zlt_left: forall n m : Z, n < m -> 0 <= m + -1 + - n
+Zlt_le_succ: forall n m : Z, n < m -> Z.succ n <= m
+Zlt_0_le_0_pred: forall n : Z, 0 < n -> 0 <= Z.pred n
+Zle_succ_le: forall n m : Z, Z.succ n <= m -> n <= m
+Zle_neg_pos: forall p q : positive, Z.neg p <= Z.pos q
+Zle_mult_approx: forall n m p : Z, n > 0 -> p > 0 -> 0 <= m -> 0 <= m * n + p
+Zle_minus_le_0: forall n m : Z, m <= n -> 0 <= n - m
+Zle_left_rev: forall n m : Z, 0 <= m + - n -> n <= m
+Zle_left: forall n m : Z, n <= m -> 0 <= m + - n
+Zle_bool_imp_le: forall n m : Z, (n <=? m) = true -> n <= m
+Zle_0_pos: forall p : positive, 0 <= Z.pos p
+Zle_0_nat: forall n : nat, 0 <= Z.of_nat n
+Zle_0_minus_le: forall n m : Z, 0 <= n - m -> m <= n
+Zgt_succ_le: forall n m : Z, Z.succ m > n -> n <= m
+Zgt_left: forall n m : Z, n > m -> 0 <= n + -1 + - m
+Zgt_le_succ: forall n m : Z, m > n -> Z.succ n <= m
+Zgt_0_le_0_pred: forall n : Z, n > 0 -> 0 <= Z.pred n
+*)
+
+SearchPattern (_ + _ <= _)%Z. (* works without %Z as we opened Z_scope *)
+(*
+Zplus_le_compat_r: forall n m p : Z, n <= m -> n + p <= m + p
+Zplus_le_compat_l: forall n m p : Z, n <= m -> p + n <= p + m
+*)
+
+Open Scope nat_scope.
+SearchPattern (_=_+_).
+
+Open Scope Z_scope.
+SearchPattern (_<=_).
+SearchPattern (?X1 *_<= (* space here !!! *)?X1 *_).
 
 
 

@@ -391,5 +391,3 @@
 
   (display "environment: unit test complete\n"))
 
-(environment-test)
-(exit 0)
