@@ -2,6 +2,16 @@
 
 NUM_PRIMES=138
 
+echo '\nThis is C ...'
+gcc primes.c; 
+START=$(date +%s%N)
+./a.out $NUM_PRIMES 2> /dev/null 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm a.out
+
+
 echo '\nThis is C++ ...'
 g++ -std=c++14 primes.cpp; 
 START=$(date +%s%N)

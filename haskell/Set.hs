@@ -353,6 +353,10 @@ instance ISet Set where
   --  forall z:X*, z:E*(x) -> z:E*(y)
   -- which is indeed the case. 
   --
+  -- **********************************************************************
+  -- WRONG
+  -- *********************************************************************
+  --
   -- Definition: we define the map F with domain X* by
   -- the following structural recursion:
   --
@@ -360,41 +364,80 @@ instance ISet Set where
   --  (ii)  F({x}) = {F(x)}       (the set with one element)
   --  (iii) F(xUy) = F(x)UF(y)    (the usual set theoretic union)
   --
-  --  Remark: we dropped the formal notation [x] in the previous
-  --  definition, so 0 here denotes the element [0] of X* etc
+  -- Remark: we dropped the formal notation [x] in the previous
+  -- definition, so 0 here denotes the element [0] of X* etc
   --
-  --  Remark: The formal justification of the existence of the
-  --  map F from the axioms of ZF is required. This is a slightly
-  --  more difficult case than usual as we do not have an obvious
-  --  set to work with as the range of F.
+  -- Remark: The formal justification of the existence of the
+  -- map F from the axioms of ZF is required. This is a slightly
+  -- more difficult case than usual as we do not have an obvious
+  -- set to work with as the range of F.
   --
-  --  Remark: do not confuse F(x) with E*(x) eventhough the 
-  --  definitions of F and E* are very similar. Given x:X*,
-  --  E*(x) is a subset of X*. It is a set of formal expression.
-  --  F(x) is not a subset of X*. It is simply a set which is
-  --  the value of the expression x (to be exact of the class 
-  --  expressions x) in the world of sets. For example, if 
-  --  we consider the element 1 = {0} of X*. It is an equivalence
-  --  class of formal expression, and F(1) = 1 (the set theoretic
-  --  singleton {0}). We have E*(1) = {0}, the singleton containing
-  --  the element 0 of X*, the latter the equivalence class of all
-  --  formal expressions which are == to 0.
+  -- Remark: do not confuse F(x) with E*(x) eventhough the 
+  -- definitions of F and E* are very similar. Given x:X*,
+  -- E*(x) is a subset of X*. It is a set of formal expression.
+  -- F(x) is not a subset of X*. It is simply a set which is
+  -- the value of the expression x (to be exact of the class 
+  -- expressions x) in the world of sets. For example, if 
+  -- we consider the element 1 = {0} of X*. It is an equivalence
+  -- class of formal expression, and F(1) = 1 (the set theoretic
+  -- singleton {0}). We have E*(1) = {0}, the singleton containing
+  -- the element 0 of X*, the latter the equivalence class of all
+  -- formal expressions which are == to 0.
+  -- 
+  -- Remark: With a bit of work, using the ZF axiom schema of
+  -- replacement, we should be about to justify the fact that
+  -- the range F(X*) is a well defined set. Hence we have a
+  -- map F: X* -> F(X*) which is clearly surjective.
+  --
+  -- Lemma 19: the map F: X* -> F(X*) is a bijection
+  --
+  -- So this is like saying that we have defined a universe of
+  -- sets F(X*), for which we have an exact representation as
+  -- and algebraic data type (except maybe that algebraic data
+  -- type corresponds to the notion of free universal algebra,
+  -- and our algebra X* is not free, as it is a quotient algebra). 
+  --
+  -- Proof: we need to show the implication for all x y:X*,
+  --   F(x) = F(y) -> x = y
+  --
+  -- We want to carry out a proof by induction of the order of
+  -- the formula x, but we have to be careful as the notion is
+  -- ill-defined on the quotient algebra X*. So let us set:
+  --
+  -- Definition: given x in X*, we define the order of x,
+  -- denoted order*(x), with the following formula:
+  --
+  -- order*(x) = min { order(z)| z in x }
+  --
+  -- in other words, the order of the equivalence class x
+  -- is the smallest order of all formulas in that class.
+  -- Recall that The smallest element of a non-empty subset 
+  -- of integers always exits.
+  --
+  -- We shall need to extend Lemma 2 as follows
+  --
+  -- Lemma 20: forall x:X* and z:E*(x), order*(z) < order*(x)
   --  
-  --  Remark: With a bit of work, using the ZF axiom schema of
-  --  replacement, we should be about to justify the fact that
-  --  the range F(X*) is a well defined set. Hence we have a
-  --  map F: X* -> F(X*) which is clearly surjective.
+  -- Proof: Let x in X* and suppose x' == x is such that
+  -- order(x') = order*(x). Let z in E*(x). We need to show
+  -- that order*(z) < order*(x). However, from Lemma 14, 
+  -- sinse x = [x'], E*(x) = { [y] | y:E[x'] }. It follows
+  -- that z = [y] for some y in E(x'). By definition, we 
+  -- have order*(z) <= order(y), and by Lemma 2 we have
+  -- order(y) < order(x'). We conclude that order*(z)<order*(x).  
   --
-  --  Lemma 19: the map F: X* -> F(X*) is a bijection
-  --
-  --  So this is like saying that we have defined a universe of
-  --  sets F(X*), for which we have an exact representation as
-  --  and algebraic data type (except maybe that algebraic data
-  --  type corresponds to the notion of free universal algebra,
-  --  and our algebra X* is not free, as it is a quotient algebra). 
-  --
-  --  Proof: we need to show the implication for all x y:X*,
-  --    F(x) = F(y) -> x = y
+  -- We now resume the proof of Lemma 19, which we shall prove
+  -- by induction on the order of x and y. First we assume that 
+  -- the order of x and y are both equal to 1. Then there is some
+  -- x' in x with order(x') = 1. So x' = 0 and x = [0] (the class
+  -- of 0 in X*). Likewise we obtain y = [0] and consequently x=y.
+  -- In particular, the implication F(x) = F(y) -> x = y is true
+  -- if the order of x and y is less than or equal to 1. Given 
+  -- N >= 1, we now assume that the implication is true whenever
+  -- the order of x and y is <= N. We need to show that it is 
+  -- still true when the orders are <= N+1. So we assume that 
+  -- both x and y have orders less than N+1. We further assume 
+  -- that F(x) = F(y) and we need to show that x = y.
   --
   -- contrary to natural belief, it seems that the inclusion
   -- relation is more primitive that the 'belong' relation.

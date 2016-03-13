@@ -1,6 +1,6 @@
 /* technique to display system data types with printf
- * withoutt creating a system dependency
- * use %ld and exlicit cast to long
+ * without creating a system dependency
+ * use %ld and explicit cast to long
  *
  * Exception for off_t
  * use %lld and cast to (long long) */

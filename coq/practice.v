@@ -244,16 +244,76 @@ Open Scope Z_scope.
 SearchPattern (_<=_).
 SearchPattern (?X1 *_<= (* space here !!! *)?X1 *_).
 
+Open Scope nat_scope.
+
+Theorem lt_S: forall n p: nat, n < p -> n < S p.
+Proof.
+  intros n p H.
+  unfold lt. (* delta reduction *)
+  apply le_S.
+  exact H.  (* the tactic exact takes care of delta reduction possible in H *)
+Qed.
+
+Definition opaque_f: nat->nat->nat.
+  intros; assumption.
+Qed. (* opaque definition, cannot unfold later *)
+
+Lemma bad_proof_example_for_opaque: 
+  forall x y:nat, opaque_f x y = y.
+Proof.
+  intros.
+(*  unfold opaque_f. error *)
+Abort.
+
+Open Scope Z_scope.
+
+Definition Zsquare_diff (x y:Z) := x*x - y*y.
+
+Theorem unfold_example:
+  forall x y:Z, x*x = y*y -> Zsquare_diff x y * Zsquare_diff (x+y)(x*y) = 0.
+Proof.
+  intros x y H.
+  (* no point unfolding the second occurence *)
+  unfold Zsquare_diff at 1. (* partial unfold *) 
+  cut (x*x - y*y = 0).
+  intro H'.
+  rewrite -> H'.
+  trivial.
+(*Zplus_eq_compat *) (* forall n m p q : Z, n = m -> p = q -> n + p = m + q *)
+  cut (y*y + -y*y = 0).
+  intro.
+  rewrite <- H0.
+  cut (x*x + -y*y = x*x - y*y).
+  intro.
+  rewrite <- H1.
+  apply Zplus_eq_compat with (n:=x*x)(m:=y*y)(p:=-y*y)(q:=-y*y).
+  exact H.
+  trivial.
+(* Zplus_minus_eq *)
+(* forall n m p : Z, n = m + p -> p = n - m *)
+  apply Zplus_minus_eq.
+  cut (x*x + -y*y = -y*y + x*x).
+  intro.
+  rewrite -> H1.
+  cut (y*y + (- y*y + x*x) = (y*y + -y*y) + x*x).
+  intro.
+  rewrite -> H2.
+  rewrite -> H0.
+  trivial.
+  apply Zplus_assoc.
+  apply Zplus_comm.
+  cut (0 = y*y + - y*y).
+  intro. 
+  rewrite <- H0.
+  trivial.
+  ring. (* jeeez, i wished i d used this one earlier *)
+Qed.
 
 
 
 
-
-
-
-
-
-
+  (* 0 =  y * y + - y * y
+  *)
 
 
 
