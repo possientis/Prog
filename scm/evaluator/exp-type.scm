@@ -3,20 +3,11 @@
 (define (self-evaluating? exp) 
   (cond ((number? exp) #t)
         ((string? exp) #t)
-        ((eq? #t exp) #t)
-        ((eq? #f exp) #t)
+        ((char? exp)  #t)
+        ((boolean? exp) #t)
         (else #f)))
 
-(define (variable? exp) 
-
-  ; DEBUG BEGIN;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (if DEBUG (begin
-              (display "variable?:\t\t")(display "exp = ")(display exp)
-              (display " : ") (display (symbol? exp))
-              (newline)))
-  ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  (symbol? exp))
+(define (variable? exp) (symbol? exp))
 
 (define (quoted? exp) (tagged-list? exp 'quote))                                    
 

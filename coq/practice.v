@@ -309,12 +309,119 @@ Proof.
   ring. (* jeeez, i wished i d used this one earlier *)
 Qed.
 
+Section ex_falso_quodlibet.
+  Hypothesis ff: False.
+
+  Lemma ex1: 220 = 284.
+(* False_ind:  forall P : Prop, False -> P *)
+  Proof.
+    apply False_ind.
+    exact ff.
+  Qed.
+
+  Lemma ex2: 220 = 284.
+  Proof.
+    elim ff.
+  Qed.
+
+End ex_falso_quodlibet.
+
+Print ex2.
+
+Theorem absurd : forall P Q: Prop, P->~P->Q.
+Proof.
+  intros P Q p H.
+  elim H.
+  exact p.
+Qed.
+
+Print absurd.
+
+Theorem double_neg_i : forall P:Prop, P->~~P.
+Proof.
+  intro P.
+  intro Hp.
+  intro H.
+  apply H.
+  exact Hp.
+Qed.
+
+Theorem modus_ponens : forall P Q:Prop, P->(P->Q)->Q.
+Proof.
+  intros P Q Hp H.
+  apply H; exact Hp.
+Qed.
+
+Theorem double_neg_i' : forall P:Prop, P->~~P.
+Proof.
+  intro P.
+  Proof (modus_ponens (P:=P)(Q:=False)).
+
+Lemma vim_confused: 0=0.
+Proof.
+  trivial.
+Qed.
+
+Theorem contrap: forall A B:Prop, (A->B)->~B->~A.
+Proof.
+  intros A B.
+  unfold not.
+  intros Hab Hnb Ha.
+  apply Hnb. 
+  apply Hab.
+  exact Ha.
+Qed.
+
+Theorem imp_trans : forall P Q R: Prop, 
+  (P->Q)->(Q->R)->(P->R).
+Proof.
+  intros P Q R Hpq Hqr Hp.
+  apply Hqr.
+  apply Hpq.
+  exact Hp.
+Qed.
+
+Theorem contrap' : forall A B:Prop, (A->B)->~B->~A.
+Proof.
+  intros A B; unfold not.
+  apply imp_trans.
+Qed.
+
+Theorem T1: ~False.
+Proof.
+  unfold not; intro; assumption.
+Qed.
+
+Lemma  L2: forall P:Prop, P->P.
+Proof.
+  intros P p;assumption.
+Qed.
+
+Theorem T2: ~False. (* proof did not use False_ind *)
+Proof.
+  unfold not.
+  apply L2.
+Qed.
+
+
+Theorem T3: forall P:Prop, ~~~P->~P. (* cant prove ~~P->P, but this is not quite the same *)
+(* this proof does not require False_ind *)
+Proof.
+  unfold not.
+  intros P H Hp.
+  apply H.
+  intro H'.
+  apply H'.
+  exact Hp.
+Qed.
 
 
 
-  (* 0 =  y * y + - y * y
-  *)
 
+
+
+
+ 
 
 
 

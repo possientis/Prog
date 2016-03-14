@@ -353,12 +353,9 @@ instance ISet Set where
   --  forall z:X*, z:E*(x) -> z:E*(y)
   -- which is indeed the case. 
   --
-  -- **********************************************************************
-  -- WRONG
-  -- *********************************************************************
-  --
-  -- Definition: we define the map F with domain X* by
-  -- the following structural recursion:
+  -- Somehow we feel that an element of X* refers to a real set
+  -- in the world of ZF. We are tempted to define a map F with 
+  -- domain X* by the following structural recursion:
   --
   --  (i)   F(0) = 0              (the empty set)
   --  (ii)  F({x}) = {F(x)}       (the set with one element)
@@ -367,77 +364,137 @@ instance ISet Set where
   -- Remark: we dropped the formal notation [x] in the previous
   -- definition, so 0 here denotes the element [0] of X* etc
   --
+  -- but this would be a gross mistake as structural induction
+  -- definition are only legitimate for free algebras. So we shall
+  -- define F on X instead and show it is compatible with ==.
+  --
+  -- Definition: we define the map F with domain X as follows:
+  --
+  --  (i)   F(0) = 0              (the empty set)
+  --  (ii)  F({x}) = {F(x)}       (the set with one element)
+  --  (iii) F(xUy) = F(x)UF(y)    (the usual set theoretic union)
+  --
   -- Remark: The formal justification of the existence of the
   -- map F from the axioms of ZF is required. This is a slightly
   -- more difficult case than usual as we do not have an obvious
   -- set to work with as the range of F.
   --
-  -- Remark: do not confuse F(x) with E*(x) eventhough the 
-  -- definitions of F and E* are very similar. Given x:X*,
-  -- E*(x) is a subset of X*. It is a set of formal expression.
-  -- F(x) is not a subset of X*. It is simply a set which is
-  -- the value of the expression x (to be exact of the class 
-  -- expressions x) in the world of sets. For example, if 
-  -- we consider the element 1 = {0} of X*. It is an equivalence
-  -- class of formal expression, and F(1) = 1 (the set theoretic
-  -- singleton {0}). We have E*(1) = {0}, the singleton containing
-  -- the element 0 of X*, the latter the equivalence class of all
-  -- formal expressions which are == to 0.
+  -- Remark: do not confuse F(x) with E(x) eventhough the 
+  -- definitions of F and E are very similar. Given x:X,
+  -- E(x) is a subset of X. It is a set of formal expression.
+  -- F(x) is not a subset of X. It is simply a set which is
+  -- the value of the expression x in the world of sets. For 
+  -- example, if we consider the element 1 = {0} of X. It is a
+  -- formal expression, and F(1) = 1 (the set theoretic singleton 
+  -- {0}). We have E(1) = {0}, the singleton containing the element 
+  -- 0 of X.
   -- 
   -- Remark: With a bit of work, using the ZF axiom schema of
   -- replacement, we should be about to justify the fact that
-  -- the range F(X*) is a well defined set. Hence we have a
-  -- map F: X* -> F(X*) which is clearly surjective.
+  -- the range F(X) is a well defined set. Hence we have a
+  -- map F: X -> F(X). This map is compatible with ==.
   --
-  -- Lemma 19: the map F: X* -> F(X*) is a bijection
+  -- Lemma 19: forall x:X, F(x) = { F(z) | z:E(x) }
+  --
+  -- Proof: by structural induction. Since both F(0) and E(0)
+  -- are empty sets, the equality is true when x = 0. Since
+  -- F({x})={F(x)} (the singleton with unique element F(x)),
+  -- and E({x}) = {x} (the singleton with unique element x:X),
+  -- the equality is true in the case {x}. So we assume that
+  -- x = aUb where a b:X are such that the equality is true.
+  -- We need to show it is also true for x:
+  --
+  -- F(x) = F(aUb) = F(a)UF(b) = {F(z)|z:E(a)}U{F(z):z:E(b)}
+  --      = {F(z)|z:E(a)UE(b)} = {F(z)|z:E(x)} 
+  -- so we are done.
+  --
+  -- Lemma 20: The map F: X -> F(x) is compatible with ==, i.e.
+  -- for all x y:X we have have the implication:
+  --
+  --            x == y -> F(x) = F(y)
+  -- 
+  -- Proof: by induction on the order of x and y. If both the
+  -- order of x and y are 1, then x = y = 0 and the implication
+  -- is clearly true. So we assume the implication is true
+  -- whenever both the order of x and y are <= N (for N>= 1).
+  -- We need to show the implication is also true whenever
+  -- x and y have orders <= N+1. So let us assume this is the
+  -- case and furthermore that x == y. We need to show that
+  -- F(x) = F(y). First we show the inclusion F(x) <= F(y).
+  -- Given u in F(x), we need to show that u:F(y). However
+  -- by Lemma 19, u = F(z) for some z:E(x). From the assumption
+  -- x == y, in particular we have x <= y, and using Lemma 1
+  -- together with z:E(x), we see that there exists z' in E(y)
+  -- such that z == z'. From Lemma 2, order(z) < order(x) and
+  -- order(z') < order(y). It follows that both the orders of
+  -- z and z' are <= N. From our induction hypothesis together
+  -- with z == z', we obtain F(z) = F(z'). Hence we see that
+  -- u = F(z') for some z':E(y). We conclude from Lemma 19 that
+  -- u belongs to F(y) which completes the proof of F(x) <= F(y).
+  -- The proof of F(y) <= F(x) is handled identically. 
+  --
+  -- We are now able to define F on the domain X* rather than X
+  --
+  -- Definition: we can define F*:X* -> F(X) by F([x]) = F(x)
+  --
+  -- By Lemma 20, this definition is legitimate.
+  --
+  -- Lemma 21: forall x y:X*, we have:
+  --
+  --  (i)   F*(0) = 0               (the empty set)
+  --  (ii)  F*({x}) = {F*(x)}       (the set with one element)
+  --  (iii) F*(xUy) = F*(x)UF*(y)   (the usual set theoretic union)
+  --
+  -- Remark: in (i), it is understood that the LHS '0' refers to
+  -- the element [0] of X*, namely the equivalence class of 0 mod ==
+  --
+  -- Proof: F*([0]) = F(0) = 0
+  --        F*({[x]}) = F*([{x}]) = F({x}) = {F(x)} = {F*([x])}
+  --        F*([x]U[y]) = F*([xUy]) = F(xUy) = F(x)UF(y) = F*([x])UF*([y])
+  --
+  -- Lemma 22: the map F*: X* -> F*(X*)=F(X) is a bijection
   --
   -- So this is like saying that we have defined a universe of
-  -- sets F(X*), for which we have an exact representation as
+  -- sets F(X), for which we have an exact representation as
   -- and algebraic data type (except maybe that algebraic data
   -- type corresponds to the notion of free universal algebra,
   -- and our algebra X* is not free, as it is a quotient algebra). 
   --
   -- Proof: we need to show the implication for all x y:X*,
-  --   F(x) = F(y) -> x = y
+  --   F*(x) = F*(y) -> x = y
+  -- or equivalently that for all x y:X,
+  --  F(x) = F(y) -> x == y
+  -- which is the reverse implication as that of Lemma 20.
+  -- We shall prove this implication by induction of the order
+  -- of x and y in similar fashion to what was done for Lemma 20
+  -- if the order of x and y is 1, then x = y = 0 and the implication
+  -- is clearly true. So we assume the implication is true whenever
+  -- the order of x and y are both <= N. We need to show it is still
+  -- true whenever the order of x and y are both <= N+1. So we assume
+  -- the is the case and furthermore that F(x) = F(y). We need to 
+  -- show that x == y. First we show that x <= y. Using Lemma 1,
+  -- given z:E(x) we need to show the existence of z':E(y) such that
+  -- z == z'. However from Lemma 19 and z:E(x) we see that F(z):F(x).
+  -- Hence, from the assumption F(x)=F(y) we see that F(z):F(y) and
+  -- applying Lemma 19 once more, F(z)=F(z') for some z':E(y). It 
+  -- remains to show that z == z'. However from Lemma 2 we have 
+  -- order(z) < order(x) and order(z') < order(y). So both the 
+  -- order of z and z' are <= N and we have F(z)=F(z'). From our
+  -- induction hypothesis it follows that z == z' which completes
+  -- the proof of x <= y. The proof of y <= x is identical. 
   --
-  -- We want to carry out a proof by induction of the order of
-  -- the formula x, but we have to be careful as the notion is
-  -- ill-defined on the quotient algebra X*. So let us set:
+  -- In fact, given Lemma 21 and Lemma 22, F*: X* -> F(X) is an
+  -- isomorphism between the algebras (X*,0,{},U) and (F(X),0,{},U),
+  -- where 0, {}, U on F(X) are the usual set-theoretic operators
+  -- (F(X) is clearly closed for those operators) 
   --
-  -- Definition: given x in X*, we define the order of x,
-  -- denoted order*(x), with the following formula:
+  -- It is quite nice that we have an algebra of sets (F(X),0,{},U)
+  -- which is a mathematical object, which is isomorphic to another
+  -- algebra (X*,0,{},U) (another mathematical object), where the
+  -- latter has an obvious computing representation as an algebraic
+  -- data type modulo the equivalence ==.
   --
-  -- order*(x) = min { order(z)| z in x }
   --
-  -- in other words, the order of the equivalence class x
-  -- is the smallest order of all formulas in that class.
-  -- Recall that The smallest element of a non-empty subset 
-  -- of integers always exits.
-  --
-  -- We shall need to extend Lemma 2 as follows
-  --
-  -- Lemma 20: forall x:X* and z:E*(x), order*(z) < order*(x)
-  --  
-  -- Proof: Let x in X* and suppose x' == x is such that
-  -- order(x') = order*(x). Let z in E*(x). We need to show
-  -- that order*(z) < order*(x). However, from Lemma 14, 
-  -- sinse x = [x'], E*(x) = { [y] | y:E[x'] }. It follows
-  -- that z = [y] for some y in E(x'). By definition, we 
-  -- have order*(z) <= order(y), and by Lemma 2 we have
-  -- order(y) < order(x'). We conclude that order*(z)<order*(x).  
-  --
-  -- We now resume the proof of Lemma 19, which we shall prove
-  -- by induction on the order of x and y. First we assume that 
-  -- the order of x and y are both equal to 1. Then there is some
-  -- x' in x with order(x') = 1. So x' = 0 and x = [0] (the class
-  -- of 0 in X*). Likewise we obtain y = [0] and consequently x=y.
-  -- In particular, the implication F(x) = F(y) -> x = y is true
-  -- if the order of x and y is less than or equal to 1. Given 
-  -- N >= 1, we now assume that the implication is true whenever
-  -- the order of x and y is <= N. We need to show that it is 
-  -- still true when the orders are <= N+1. So we assume that 
-  -- both x and y have orders less than N+1. We further assume 
-  -- that F(x) = F(y) and we need to show that x = y.
   --
   -- contrary to natural belief, it seems that the inclusion
   -- relation is more primitive that the 'belong' relation.

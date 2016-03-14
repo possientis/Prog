@@ -5,9 +5,10 @@
 #include <string.h> // strcpy, strcat
 
 
-typedef struct Cell_    Cell;
-typedef struct Func_    Func;
-typedef struct String_  String;
+typedef struct Cell_        Cell;
+typedef struct Func_        Func;
+typedef struct Predicate_   Predicate;
+typedef struct String_      String;
 
 // message should have occurrence of '%lx' for function to work
 static int memory_log(const char* message, void* ptr){
@@ -151,7 +152,7 @@ Func* Func_new(
 
 // generic boiler-plate code for destruction, virtual deallocation
 // The caller loses ownership of self (no longer need to deallocate)
-void* Func_delete(Func* self){
+void Func_delete(Func* self){
   assert(self != NULL);
   assert(self->count > 0);
   self->count--;                // decreasing reference count;
@@ -538,8 +539,201 @@ Cell* Cell_take(Cell* self, int N){
 }
 
 /******************************************************************************/
+/*                               Predicate class                              */
+/******************************************************************************/
+
+// in the interest of performance, rather than attempting re-use of our existing
+// class Func, we introduce a new class Predicate which is more suited to 
+// representing a function object of type int->int. As we shall need dynamically
+// allocated predicates which are parameterized by an integer, this new Predicate
+// class is more complicated than a simple function pointer, and has an integer
+// data field.
+
+struct Predicate_ {
+  int   count;                            // reference counter
+  int    data;                            // data
+  int   (*code)(int data, int arg);       // code
+};
+
+
+// generic boiler-plate code for copy
+Predicate* Predicate_copy(Predicate* self){
+  assert(self != NULL);
+  memory_log("Making copy of predicate %lx\n", self);
+  self->count++;
+  return self;
+}
+
+// generic boiler-plate code for heap allocation
+Predicate* Predicate_new(
+    int data,                           
+    int (*code)(int,int)      // static data, no issue of ownership
+){
+  Predicate* ptr = (Predicate*) malloc(sizeof(Predicate));
+  assert(ptr != NULL);
+  memory_log("Allocating new predicate %lx\n", ptr);
+  ptr->count = 1;   // single ownership attributed to caller
+  ptr->data = data;
+  ptr->code = code;
+  return ptr;       // caller has sole ownership of object (no copy)
+}
+
+// generic boiler-plate code for destruction
+void Predicate_delete(Predicate* self){
+  assert(self != NULL);
+  assert(self->count > 0);
+  self->count--;                // decreasing reference count;
+  if(self->count == 0){         // memory deallocation needs to take place
+    memory_log("Deallocating predicate %lx\n", self);
+    free(self);
+  }
+  else{                         // reference count was decreased. Done.
+    memory_log("Deleting copy of predicate %lx\n", self);
+  }
+}
+
+int Predicate_call(Predicate* self, int arg){
+  assert(self != NULL);
+  return self->code(self->data, arg);
+}
+
+/******************************************************************************/
+/*                      () -> cell.rest().filter(p)                           */
+/******************************************************************************/
+
+// As part of the recursive implementation of Cell_filter, we need to represent
+// the lambda expression () -> cell.rest().filter(p). The encapsulated data
+// is a Cell object together with a predicate object.
+
+typedef struct FilterData_ FilterData;
+struct FilterData_ {
+  Cell* cell; 
+  Predicate* predicate;
+};
+
+
+// The Func object representing lambda expression requires data
+// The usual convention should apply. Caller should lose ownership
+// of the passed in Cell object and Predicate object, but gain full 
+// ownership of the returned FilterData object.
+void* Lambda_Filter_data(Cell* cell, Predicate* predicate){
+  assert(cell != NULL);
+  assert(predicate != NULL);
+  FilterData* data = (FilterData*) malloc(sizeof(FilterData));
+  assert(data != NULL);
+  memory_log("Allocating filter data %lx\n", data);
+  data->cell = cell;            // Func object takes full ownership
+  data->predicate = predicate;  // idem
+  return (void*) data;
+}
+
+Cell* Cell_filter(Cell*, Predicate*); // forward
+
+// The Func object representing lambda expression requires code
+void* Lambda_Filter_code(void* data, void* args){
+  // As indicated with the Func_call function above, Lambda_Take_code
+  // should not take ownership of its data pointer argument, whose 
+  // deallocation responsibility remains with the caller. However, 
+  // a Cell* pointer is returned and caller expects to be responsible for that.
+
+  assert(data != NULL);
+  FilterData* filter = (FilterData*) data;
+  Cell* cell = filter->cell;                  // cell is owned by data
+  assert(cell != NULL);
+  Predicate* predicate = filter->predicate;   // predicate is owned by data
+  assert(predicate != NULL);
+
+  // Cell_rest does not affect ownership of of cell, and gives us 
+  // full ownership of return object rest
+  Cell* rest = Cell_rest(cell);
+  // Cell_filter takes ownership of predicate, hence we need copy
+  // so that data also keeps ownership
+  Cell* out = Cell_filter(rest, Predicate_copy(predicate));
+  // we are still responsible for rest which should be deallocated
+  Cell_delete(rest);
+  // ownership of out is passed duly passed on to caller
+  return out;
+}
+
+// The Func object representing lambda expression requires destructor
+void Lambda_Filter_delete(Func* self){
+  assert(self != NULL);
+  assert(self->count == 0);
+  FilterData* filter = (FilterData*) self->data;  
+  assert(filter != NULL);
+  Cell* cell = filter->cell;
+  Cell_delete(cell);            // filter has duty to deallocate
+
+  Predicate* predicate = filter->predicate;
+  Predicate_delete(predicate);  // filter has duty to deallocate
+
+  memory_log("Deallocating filter data %lx\n", filter);
+  free(filter);   // Func object is responsible for its internal data
+  self->data    = NULL;
+  self->code    = NULL;
+  self->delete  = NULL;
+  memory_log("Deallocating functional %lx\n", self);
+  free(self);
+}
+
+// usual convention applies: caller loses ownership of passed in object, but
+// gains full ownership of returned object
+Func* Lambda_Filter_new(Cell* cell, Predicate* predicate){
+  return Func_new(
+      Lambda_Filter_data(cell, predicate),
+      Lambda_Filter_code,
+      Lambda_Filter_delete
+  );
+}
+
+
+// we need to spell out the exact memory allocation semantics of this method:
+// 1. Caller gets ownership of returned Cell object
+// 2. Caller keeps ownership of self object (as usual with method calls)
+// 3. Caller loses ownership of predicate object.
+Cell* Cell_filter(Cell* self, Predicate* predicate){
+  assert(self != NULL);
+  assert(predicate != NULL);
+  Cell* next = Cell_copy(self); // copy, so next requires deallocation
+  while(!Predicate_call(predicate, Cell_first(next))){
+    Cell* old = next;
+    next = Cell_rest(next);     // Cell_rest requires deallocation 
+    Cell_delete(old);           // deallocation performed
+  }
+  Cell* cell = Cell_new(Cell_first(next),NULL);
+  assert(cell != NULL);
+  // our responsibility to deallocated next is fullfilled. 
+  // our responsibility to deallocate predicate is fullfilled
+  // Both objects are owned by Func
+  Func* func = Lambda_Filter_new(next, predicate);
+  assert(func != NULL);
+  cell->cdr = func;
+  return cell;
+}
+
+
+/******************************************************************************/
 /*                                  Testing                                   */
 /******************************************************************************/
+
+int basic_transition(int);
+
+int even_code(int data, int arg){
+  return arg % 2 == 0;  // data ignored
+}
+
+int Cell_filter_test(){
+  Predicate* even = Predicate_new(0,even_code);
+  Cell* from2 = Cell_fromTransition(2,basic_transition);
+  Cell* evens = Cell_filter(from2, even);  // no longer need to dealocate even
+  Cell* evens2to10 = Cell_take(evens, 5);
+  String* str = Cell_toString(evens2to10);
+  printf("evens from 2 to 10: %s\n", str->buffer);
+  String_delete(str);
+  Cell_delete(evens2to10);
+  Cell_delete(evens);
+  Cell_delete(from2);
+}
 
 int Cell_cons_test(){
 
@@ -587,7 +781,6 @@ int Cell_cons_test(){
   return 0;
 }
 
-int basic_transition(int);
 int Cell_fromTransition_test(){
   Cell* from2 = Cell_fromTransition(2,basic_transition);
   Cell* from3 = Cell_rest(from2);
@@ -643,12 +836,8 @@ int main(int argc, char* argv[]){
   assert(argc == 2);  // a single argument expected
   int numPrimes = atoi(argv[1]);
   Cell* from2 = Cell_fromTransition(2,basic_transition);
-  Cell* x = Cell_take(from2,numPrimes);
-  String* str = Cell_toString(x);
-  printf("%s\n",str->buffer);
 
-  String_delete(str);
-  Cell_delete(x);
+
   Cell_delete(from2);
   long checkSum = memory_log(NULL,NULL);
   if(checkSum != 0){

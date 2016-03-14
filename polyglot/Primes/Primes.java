@@ -38,17 +38,6 @@ class Cell<T> {
   public T first() { return car; }
   public Cell<T> rest() { return cdr.run(); }
 
-  public Cell<T> filter(Predicate<T> p){
-    Cell<T> next = this;
-    while(!p.eval(next.first())){
-      next = next.rest();
-    }
-    final Cell<T> succeed = next;  // cannot capture non final reference in lambda
-    Cell<T> cell = new Cell<T>(succeed.first(), null);
-    cell.cdr = () -> succeed.rest().filter(p);
-    return cell;
-  }
-
   public Cell<T> take(int N){
     assert(N > 0);
     Cell<T> cell = new Cell<>(first(), null);
@@ -69,7 +58,19 @@ class Cell<T> {
     }
   return str + "\b)";
   }
-  
+
+  public Cell<T> filter(Predicate<T> p){
+    Cell<T> next = this;
+    while(!p.eval(next.first())){
+      next = next.rest();
+    }
+    final Cell<T> succeed = next;  // cannot capture non final reference in lambda
+    Cell<T> cell = new Cell<T>(succeed.first(), null);
+    cell.cdr = () -> succeed.rest().filter(p);
+    return cell;
+  }
+
+ 
   // produces infinite stream from initial vallue and transition function
   public static <T> Cell<T> fromTransition(T init, Transition<T> f){
     Cell<T> cell = new Cell<>(init, null);

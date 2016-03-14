@@ -5,6 +5,7 @@
   ;
   ;
   (display "primitive: starting unit test\n")
+
   ;
   ;
   (display "primitive: unit test complete\n"))

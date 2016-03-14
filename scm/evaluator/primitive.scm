@@ -8,6 +8,9 @@
         (list 'null? null?)
         (list '+ +)
         (list '* *)
+        (list '- -)
+        (list '/ /)
+        (list 'modulo modulo)
         ; more to be included
         ))
 (define (primitive-procedure-names) (map car primitive-procedures))
