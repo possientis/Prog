@@ -1,24 +1,39 @@
+#define NDEBUG
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
 #include <stdlib.h> // atoi
 #include <string.h> // strcpy, strcat
 
-
 typedef struct Cell_        Cell;
 typedef struct Func_        Func;
 typedef struct Predicate_   Predicate;
 typedef struct String_      String;
 
+/******************************************************************************/
+/*                               Debugging                                    */
+/******************************************************************************/
+
+#ifdef NDEBUG
+  
+# define memory_log(message,ptr) (0) 
+
+#else
+
+# define memory_log(message,ptr) (memory_log_debug((message),(ptr)))
+
+#endif
+
+
 // message should have occurrence of '%lx' for function to work
-static int memory_log(const char* message, void* ptr){
+static int memory_log_debug(const char* message, void* ptr){
   static long memory_check = 0L;
   // simply retrieving checksum
   if(message == NULL && ptr == NULL) return memory_check;
   // genuine logging action
   assert(message != NULL);
   assert(ptr != NULL);
-  fprintf(stderr, message, ptr);// expexting '%lx' in message to print address
+//  fprintf(stderr, message, ptr);// expexting '%lx' in message to print address
   memory_check ^= (long) ptr;   // bitwise exclusive or
 }
 
@@ -332,7 +347,8 @@ Cell* Cell_cons(int first, Cell* rest){
 
 // This is a method call. Caller retains ownership of self (duty to deallocate)
 // and gains full ownership of returned string object
-String* Cell_toString(Cell* self){
+String* Cell_toString2(Cell* self){
+  // old implementation with n^2 complexity
   char buffer[24];        // stack allocated buffer to hold representation of int
   assert(self != NULL);
   String* str = String_new("(");
@@ -356,7 +372,55 @@ String* Cell_toString(Cell* self){
 
   str = String_append(str, String_new(")"));
   String_delete(space);
+  
   return str;
+}
+
+String* Cell_toString(Cell* self){
+  // was hoping this version of toString with linear complexity
+  // would make an impact on performance. It does not, either 
+  // something is wrong, or because toString what matters.
+  // should be using a profiler
+  assert(self != NULL);
+  int size = 0;
+  int count = 0;
+  Cell* next = Cell_copy(self);  // we need to deallocate
+  // one linear search to estimate size of required string buffer
+  while(next != NULL){
+    count++;  // there is one more integer
+    size += snprintf(0,0,"%d",Cell_first(next));  // number of digits
+    Cell* old = next;
+    next = Cell_rest(next);
+    Cell_delete(old);
+  }
+  size += count + 2; // count-1 spaces between integers, '(', ')' and final '\0' 
+  char* buffer = (char*) malloc(size*sizeof(char));
+  assert(buffer != NULL);
+  memory_log("Allocating temp buffer %lx\n", buffer);
+  *buffer = '(';
+  char* current = buffer + 1;
+  int start = 1;     // flag to avoid placing " " before first integer
+  next = Cell_copy(self); // second loop
+  while(next != NULL){
+    if(start == 0){
+      *current++ = ' ';  // adding one space between two integers
+    } else {
+      start = 0;
+    }
+    int value = Cell_first(next);
+    int length = snprintf(0,0,"%d",value);
+    sprintf(current,"%d",value);
+    current += length;
+    Cell* old = next;
+    next = Cell_rest(next);
+    Cell_delete(old);
+  }
+  *current++ = ')';
+  *current = '\0';
+  String* out = String_new(buffer);
+  memory_log("Deallocating temp buffer %lx\n", buffer);
+  free(buffer);
+  return out;
 }
 
 
@@ -492,7 +556,7 @@ void* Lambda_Take_code(void* data, void* args){
   Cell* out = Cell_take(rest, value);
   // we are still responsible for rest which should be deallocated
   Cell_delete(rest);
-  // ownership of out is passed duly passed on to caller
+  // ownership of 'out' is duly passed on to caller
   return out;
 }
 
@@ -651,7 +715,7 @@ void* Lambda_Filter_code(void* data, void* args){
   Cell* out = Cell_filter(rest, Predicate_copy(predicate));
   // we are still responsible for rest which should be deallocated
   Cell_delete(rest);
-  // ownership of out is passed duly passed on to caller
+  // ownership of 'out' is duly passed on to caller
   return out;
 }
 
@@ -711,6 +775,128 @@ Cell* Cell_filter(Cell* self, Predicate* predicate){
   return cell;
 }
 
+/******************************************************************************/
+/*                  () -> sieve(cell.rest().filter(n->p(n,x)), p)             */
+/******************************************************************************/
+// As part of the recursive implementation of the static method Cell_sieve,
+// we need to represent the indicated lambda expression, where cell is a Cell
+// object, x is an integer and p : (int,int)->int is parameterized predicate.
+// We do not need to introduce the notion of dynamic parameterized predicates,
+// so we shall limit out work to statically allocated function pointer such as:
+
+typedef int (*ParamPredicate)(int,int);
+
+// the obvious parameterized predicate we have in mind for the purpose of prime
+// numbers generation is (x,n) -> n % x != 0, where the parameter is x. First, 
+// given an integer x, we need to represent the lambda expression n->p(x,n).
+// Luckily the Predicate class was designed specifically for this:
+
+Predicate* partialApply(ParamPredicate p, int x){
+  return Predicate_new(x,p);
+}
+
+// we can now proceed to create our sieve lambda expression as a Func object.
+// The data encapsulated by this Func object consists in a parameterized 
+// predicate, and integer x and a Cell object.
+
+typedef struct SieveData_ SieveData;
+struct SieveData_ {
+  Cell* cell; 
+  ParamPredicate predicate;
+  int value;
+};
+
+
+// The Func object representing lambda expression requires data
+// caller gains ownership of returned object, but loses that of Cell argument
+void* Lambda_Sieve_data(Cell* cell, ParamPredicate predicate, int value){
+  assert(cell != NULL);
+  assert(predicate != NULL);
+  SieveData* data = (SieveData*) malloc(sizeof(SieveData));
+  assert(data != NULL);
+  memory_log("Allocating sieve data %lx\n", data);
+  data->cell = cell;            // Func object takes full ownership
+  data->predicate = predicate;  // param predicate is statically allocated
+  data->value = value;
+  return (void*) data;
+}
+
+Cell* Cell_sieve(Cell*, ParamPredicate); // forward
+
+// The Func object representing lambda expression requires code
+void* Lambda_Sieve_code(void* data, void* args){
+  // As indicated with the Func_call function above, Lambda_Sieve_code
+  // should not take ownership of its data pointer argument, whose 
+  // deallocation responsibility remains with the caller. However, 
+  // a Cell* pointer is returned and caller expects to be responsible for that.
+
+  assert(data != NULL);
+  SieveData* sieve = (SieveData*) data;
+  Cell* cell = sieve->cell;                  // cell is owned by data
+  assert(cell != NULL);
+  ParamPredicate predicate = sieve->predicate;
+  assert(predicate != NULL);
+  int value = sieve->value;
+
+  // Cell_rest does not affect ownership of of cell, and gives us 
+  // full ownership of return object rest
+  Cell* rest = Cell_rest(cell);
+ 
+  // we own the 'pred' predicate
+  Predicate* pred = partialApply(predicate, value); 
+
+  // Cell_filter takes ownership of predicate, so we no longer need to deallocate
+  // We remain responsible for 'rest'
+  // We become responsible for 'filtered'
+  Cell* filtered = Cell_filter(rest, pred);
+
+  // Cell_sieve static method takes ownership of its Cell object argument
+  // so we no longer need to deallocate 'filtered'
+  Cell* out = Cell_sieve(filtered, predicate);
+
+  // we are still responsible for rest which should be deallocated
+  Cell_delete(rest);
+  // ownership of 'out' duly passed on to caller
+  return out;
+}
+
+// The Func object representing lambda expression requires destructor
+void Lambda_Sieve_delete(Func* self){
+  assert(self != NULL);
+  assert(self->count == 0);
+  SieveData* sieve = (SieveData*) self->data;  
+  assert(sieve != NULL);
+  Cell* cell = sieve->cell;
+  Cell_delete(cell);            // sieve has duty to deallocate
+  memory_log("Deallocating sieve data %lx\n", sieve);
+  free(sieve);   // Func object is responsible for its internal data
+  self->data    = NULL;
+  self->code    = NULL;
+  self->delete  = NULL;
+  memory_log("Deallocating functional %lx\n", self);
+  free(self);
+}
+
+// usual convention applies: caller loses ownership of passed in object, but
+// gains full ownership of returned object
+Func* Lambda_Sieve_new(Cell* cell, ParamPredicate predicate, int value){
+  return Func_new(
+      Lambda_Sieve_data(cell, predicate, value),
+      Lambda_Sieve_code,
+      Lambda_Sieve_delete
+  );
+}
+
+// This static method takes ownership of its Cell object argument
+Cell* Cell_sieve(Cell* input, ParamPredicate predicate){
+  assert(input != NULL);
+  assert(predicate != NULL);
+  int first = Cell_first(input);
+  Func* func = Lambda_Sieve_new(input,predicate,first);
+  Cell *cell = Cell_new(first, func);
+  assert(cell != NULL);
+  return cell;
+}
 
 /******************************************************************************/
 /*                                  Testing                                   */
@@ -831,14 +1017,23 @@ int Cell_take_test(){
 /******************************************************************************/
 
 int basic_transition(int n){ return n + 1; }
+int param_predicate(int x, int n){ return (n % x != 0); }
 
 int main(int argc, char* argv[]){
+
   assert(argc == 2);  // a single argument expected
   int numPrimes = atoi(argv[1]);
+
   Cell* from2 = Cell_fromTransition(2,basic_transition);
+  Cell* primes = Cell_sieve(from2, param_predicate); 
+  Cell* out = Cell_take(primes, numPrimes);
+  String* str = Cell_toString(out);
+  printf("%s\n",str->buffer);
+  
+  String_delete(str);
+  Cell_delete(out);
+  Cell_delete(primes);
 
-
-  Cell_delete(from2);
   long checkSum = memory_log(NULL,NULL);
   if(checkSum != 0){
     fprintf(stderr, "Memory leak was detected\n");

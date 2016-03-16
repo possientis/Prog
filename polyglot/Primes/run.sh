@@ -1,6 +1,6 @@
 #!/bin/sh
 
-NUM_PRIMES=138
+NUM_PRIMES=10000
 
 echo '\nThis is C ...'
 gcc primes.c; 
@@ -15,7 +15,7 @@ rm a.out
 echo '\nThis is C++ ...'
 g++ -std=c++14 primes.cpp; 
 START=$(date +%s%N)
-./a.out $NUM_PRIMES; 
+#./a.out $NUM_PRIMES; 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -36,7 +36,7 @@ rm *.class
 echo '\nThis is C# ...'
 mcs primes.cs
 START=$(date +%s%N)
-mono primes.exe $NUM_PRIMES
+#mono primes.exe $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -44,9 +44,9 @@ rm primes.exe
 
 
 echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Primes.scala
+#env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Primes.scala
 START=$(date +%s%N)
-scala Primes $NUM_PRIMES
+#scala Primes $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -55,7 +55,7 @@ rm *.class
 
 echo '\nThis is JavaScript ...'
 START=$(date +%s%N)
-js primes.js $NUM_PRIMES
+#js primes.js $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -63,7 +63,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is PHP ...'
 START=$(date +%s%N)
-php primes.php $NUM_PRIMES
+#php primes.php $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -71,7 +71,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Python ...'
 START=$(date +%s%N)
-python3 primes.py $NUM_PRIMES
+#python3 primes.py $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -80,7 +80,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Ruby ...'
 START=$(date +%s%N)
-ruby primes.rb $NUM_PRIMES
+#ruby primes.rb $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -88,7 +88,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-scm primes.scm $NUM_PRIMES 2> /dev/null
+#scm primes.scm $NUM_PRIMES 2> /dev/null
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"

@@ -279,7 +279,9 @@ instance ISet Set where
   --
   -- Definition: given x y:X we say that x belongs to y,
   -- denoted x in y or x:y, if and only {x} <= y.
-  --
+
+  belong x y = subset (Singleton x) y
+
   -- Lemma 15: the 'belong' (':' , 'in') relation on X
   -- is compatible with the congruence == on X, in other
   -- words, if x == x' and y == y' and x:y, then x':y'
@@ -494,31 +496,32 @@ instance ISet Set where
   -- latter has an obvious computing representation as an algebraic
   -- data type modulo the equivalence ==.
   --
-  --
-  --
-  -- contrary to natural belief, it seems that the inclusion
-  -- relation is more primitive that the 'belong' relation.
-  belong x y = subset (Singleton x) y
 
 
-zero  = set 0 :: Set
-one   = inc zero 
-two   = inc one
-three = inc two
-four  = inc three
-five  = inc four
+zero      = set 0 :: Set
+one       = inc zero 
+two       = inc one
+three     = inc two
+four      = inc three
+five      = inc four
+six       = inc five
+seven     = inc six
+eight     = inc seven
+nine      = inc eight
+ten       = inc nine
+eleven    = inc ten
+twelve    = inc eleven
 
-generate :: ISet a =>  Int -> [a]
-generate 0 = [empty]
-generate n = let prior = generate (n-1) in
-  prior ++ [(singleton x) | x <- prior] ++ [(union x y) | x <- prior, y <- prior]
+-- worse case computational complexity of computing (x <= y)
+complexity :: Set -> Set -> Integer
+complexity Empty _                      = 1
+complexity (Singleton _) Empty          = 1
+complexity (Singleton x) (Singleton y)  = complexity x y + complexity y x
+complexity (Singleton x) (Union y z)    = complexity (Singleton x) y + complexity (Singleton x) z
+complexity (Union x y) z                = complexity x z + complexity y z
 
-check1 :: Int -> (Set -> Bool) -> Bool
-check1 n p = all p (generate n)
 
-check2 :: Int -> (Set->Set->Bool)->Bool
-check2 n p = and [p x y | x <- list, y <- list] where list = generate n
 
-check3 :: Int -> (Set->Set->Set->Bool)->Bool
-check3 n p = and [p x y z | x <- list, y <- list, z <- list] 
-  where list = generate n
+
+
+

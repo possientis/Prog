@@ -415,15 +415,85 @@ Proof.
   exact Hp.
 Qed.
 
+Theorem T4: forall P Q R: Prop, (P->Q)->(P->~Q)->P->R.
+Proof.
+  intros P Q R H0 H1 Hp.
+  apply False_ind.
+  apply H1.
+  exact Hp.
+  apply H0; exact Hp.
+Qed.
+
+Theorem T5: (forall P Q, (P->Q)->(Q->P)) -> False.
+Proof.
+  intro H.
+  apply H with (Q:=False->False).
+  intros; assumption.
+  intro;  assumption.
+Qed.
+
+Theorem T6: (forall P Q:Prop, (P->Q)->~P->~Q)-> False.
+Proof.
+  intro H.
+  apply H with (P:=False)(Q:=False->False).
+  intros; assumption.
+  intro; assumption.
+  intro; assumption.
+Qed.
+
+Theorem conj3' : forall P Q R:Prop, P->Q->R->P/\Q/\R.
+Proof.
+  repeat split; assumption.
+Qed.
+
+Theorem disj4_3' : forall P Q R S: Prop, R->P\/Q\/R\/S.
+Proof.
+ right; right; left; assumption. 
+Qed.
+
+Theorem and_comm: forall A B:Prop, A/\B -> B/\A.
+Proof.
+  intros A B H.
+  elim H.
+  split; assumption.
+Qed.
+
+Theorem or_comm: forall A B: Prop, A\/B -> B\/A.
+Proof.
+  intros A B H.
+  elim H.
+  right.
+  exact H0.
+  left.
+  exact H0.
+Qed.
 
 
+Theorem T7: forall (A:Set)(a b c d:A), a=c \/ b=c \/ c=c \/ d=c.
+Proof.
+  intros A a b c d.
+  right; right; left.
+  reflexivity.
+Qed.
 
 
-
-
- 
-
-
-
+Theorem T8: forall A B C:Prop, A/\(B/\C)->(A/\B)/\C.
+Proof.
+  intros A B C H.
+  split.
+  split.
+  elim H.
+  intro Ha.
+  intro H'.
+  exact Ha.
+  elim H.
+  intros Ha H0.
+  elim H0.
+  intros;assumption.
+  elim H.
+  intros Ha H0.
+  elim H0.
+  intros;assumption.
+Qed.
 
 
