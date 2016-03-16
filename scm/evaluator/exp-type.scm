@@ -13,16 +13,7 @@
 
 (define (assignment? exp) (tagged-list? exp 'set!))
 
-(define (definition? exp) 
-
-  ; DEBUG BEGIN;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (if DEBUG (begin
-              (display "definition?:\t\t")(display "exp = ")(display exp)
-              (display " : ") (display (tagged-list? exp 'define))
-              (newline)))
-  ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  (tagged-list? exp 'define))
+(define (definition? exp) (tagged-list? exp 'define))
 
 (define (if? exp) (tagged-list? exp 'if))
 

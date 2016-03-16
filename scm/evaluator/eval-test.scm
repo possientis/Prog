@@ -64,6 +64,47 @@
     (if (not (equal? x '(list cons 3 "abc" #\a #t)))
       (display "eval: unit test 3.2 failing\n")))
   ;
+  ; assigment
+  ;
+  (let ((saved-value (eval 'modulo global-env)))
+    ; redefining primitive in global-env
+    (let ((x (eval '(set! modulo 'any-value) global-env)))
+      (if (not (equal? (eval 'modulo global-env) 'any-value))
+        (display "eval: unit test 4.0 failing\n"))
+    ; restoring primitive
+      ((global-env 'set!) 'modulo saved-value)
+      (let ((x (eval 'modulo global-env)))
+        (if (not (equal? (primitive-implementation x) modulo)) 
+          (display "eval: unit test 4.1 failing\n")))))
+  ;
+  ; definition
+  ;
+  (let ((x (eval '(define var1 12) global-env)))
+    (if (not (equal? (eval 'var1 global-env) 12))
+      (display "eval: unit test 5.0 failing\n")))
+  (let ((x (eval '(define var2 0.3) global-env)))
+    (if (not (equal? (eval 'var2 global-env) 0.3))
+      (display "eval: unit test 5.1 failing\n")))
+  (let ((x (eval '(define var3 "hello") global-env)))
+    (if (not (equal? (eval 'var3 global-env) "hello"))
+      (display "eval: unit test 5.2 failing\n")))
+  (let ((x (eval '(define var4 #\a) global-env)))
+    (if (not (equal? (eval 'var4 global-env) #\a))
+      (display "eval: unit test 5.3 failing\n")))
+  (let ((x (eval '(define var5 #t) global-env)))
+    (if (not (equal? (eval 'var5 global-env) #t))
+      (display "eval: unit test 5.4 failing\n")))
+  (let ((x (eval '(define var6 #f) global-env)))
+    (if (not (equal? (eval 'var6 global-env) #f))
+      (display "eval: unit test 5.5 failing\n")))
+  ((global-env 'delete!) 'var1)
+  ((global-env 'delete!) 'var2)
+  ((global-env 'delete!) 'var3)
+  ((global-env 'delete!) 'var4)
+  ((global-env 'delete!) 'var5)
+  ((global-env 'delete!) 'var6)
+ 
+
   (display "eval: unit test complete\n"))
 
 ;(environment-test)

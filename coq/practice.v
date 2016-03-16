@@ -496,4 +496,83 @@ Proof.
   intros;assumption.
 Qed.
 
+Theorem T9: forall A B C D: Prop,
+  (A->B)/\(C->D)/\A/\C->B/\D.
+Proof.
+  intros A B C D H.
+  split.
+  elim H.
+  intro Hab.
+  intro H'.
+  elim H'.
+  intro Hcd.
+  intro H''.
+  elim H''.
+  intros Ha Hc.
+  apply Hab; exact Ha.
+  elim H.
+  intros Hab H'.
+  elim H'.
+  intros Hcd H''.
+  elim H''.
+  intros Ha Hc.
+  apply Hcd; exact Hc.
+Qed.
 
+Theorem T10: forall A:Prop, ~(A/\~A).
+Proof.
+  intro A.
+  intro H.
+  elim H.
+  intros Ha Ha'.
+  apply Ha'.
+  exact Ha.
+Qed.
+
+
+Theorem T11: forall A B C:Prop, A\/(B\/C)->(A\/B)\/C.
+Proof.
+  intros A B C H.
+  elim H.
+  intro Ha.
+  left;left;exact Ha.
+  intro H'; elim H'.
+  intro Hb.
+  left;right;exact Hb.
+  intro Hc.
+  right; exact Hc.
+Qed.
+
+
+Theorem T12: forall A:Prop, ~~(A\/~A).
+Proof.
+  intro A.
+  intro H.
+  cut (~A).
+  intro Ha.
+  cut (~~A).
+  intro Ha'.
+  apply Ha'.
+  exact Ha.
+  intro.
+  apply H.
+  right.
+  exact Ha.
+  intro Ha.
+  apply H.
+  left.
+  exact Ha.
+Qed.
+
+Theorem T13: forall A B: Prop, (A\/B)/\~A->B.
+Proof.
+  intros A B H.
+  elim H.
+  intros Hab Hna.
+  elim Hab.
+  intro Ha.
+  apply False_ind.
+  apply Hna.
+  exact Ha.
+  intro Hb; exact Hb.
+Qed.

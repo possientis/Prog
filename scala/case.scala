@@ -12,6 +12,8 @@ case class BinOp(operator: String, left: Expr, right: Expr) extends Expr
 val v = Var("x")
 val op = BinOp("+", Number(1),v)
 
+
+
 // 2. All class arguments get an implicit 'val' prefix, hence become public fields. 
 
 println(v.name)       // x
