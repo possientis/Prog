@@ -15,7 +15,7 @@ class ISet a where
   set x                   = inc (set (x - 1))
 
 class IFree a where -- free structures, aka ADT
-  order :: a -> Int
+  order :: a -> Integer
 
 data Set = Empty | Singleton Set | Union Set Set
 
@@ -497,7 +497,65 @@ instance ISet Set where
   -- data type modulo the equivalence ==.
   --
 
+  -- We now need to introduce a new notion which is similar to that
+  -- of 'order' but different. We call it 'rank'
+  --
+  -- Definition: we define rnk: X -> N by induction:
+  -- rnk(0)   = 0
+  -- rnk({x}) = 1 + rnk(x)
+  -- rnk(aUb) = 1 + max(rnk(a),rnk(b))
 
+rank :: Set -> Integer
+rank Empty          = 1
+rank (Singleton x)  = 1 + rank x
+rank (Union x y)    = max (rank x) (rank y)
+
+  -- Lemma 23: for all x:X we have:
+  --
+  --  rnk(x) = max{ 1 + rnk(z) | z:E(x) }
+  --
+  -- with the convention that max(0) = 0 
+  -- Proof: by structural induction. Since E(0) = 0 and max(0) = 0
+  -- the property is true for x = 0. Since E({x}) = {x}, it is also
+  -- clearly true for {x}. We now assume that x=aUb where a b:X are
+  -- such that the equality is true. Then we have:
+  --
+  -- rnk(x) = max(rnk(a),rnk(b))
+  --        = max(max{1+rnk(z)|z:E(a)}, max{1+rnk(z)|z:E(b)})
+  --        = max{1+rnk(z)|z:E(a)UE(b)}
+  --        = max{1+rnk(z)|z:E(x)}
+  -- This completes the proof of the lemma.
+  --
+  -- The rank is an interesting notion because it is compatible with
+  -- the congruence ==, contrary to the notion of order:
+  --
+  -- Lemma 24: forall x y:X we have the implication:
+  --
+  --  x == y  -> rnk(x) = rnk(y)
+  --
+  -- Proof: We shall prove this result by induction on the rank of 
+  -- x and y. First we assume that the rank of x and y is 0. Then
+  -- the implication is clearly true. So we assume that the implication
+  -- is true whenever x and y have rank <= N for a given N>=1. We need
+  -- to show that it is still true whenever the rank of x and y are 
+  -- <= N+1. so we assume this is the case and furthermore that 
+  -- x == y. We need to show that rnk(x) = rnk(y). However let z:E(x).
+  -- Since x == y, in particular x <= y and by Lemma 1 there exists
+  -- z':E(y) such that z == z'. However by Lemma 23, we see that the
+  -- rnk(z) < rnk(x) and rnk(z') < rnk(y). It follows that both the
+  -- rank of z and z' are <= N. From z == z' and the induction hypothesis
+  -- we obtain rnk(z) = rnk(z'). Hence from Lemma 23 we have:
+  --  1 + rnk(z) = 1 + rnk('z) <= rnk(y)
+  -- This being true for all z:E(x), we conclude that rnk(x)<=rnk(y).
+  -- We prove similarly that rnk(y) <= rnk(x).
+
+  -- Thanks to Lemma 24, the notion of rank can be extended to the
+  -- quotient algebra X* with the following definition:
+  --
+  -- Definition: we define rnk* : X* -> N by setting rnk*([x]) = rnk(x).
+  --
+  --
+ 
 zero      = set 0 :: Set
 one       = inc zero 
 two       = inc one

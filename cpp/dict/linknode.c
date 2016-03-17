@@ -1,1 +1,1 @@
-/home/john/Prog/c/link/linknode.c
+../link/linknode.c
