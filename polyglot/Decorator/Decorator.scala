@@ -13,19 +13,23 @@ class PlainPizza extends Pizza {
   override def cost        = 3.0
 }
 
-trait ExtraCheese extends PlainPizza {
-  override def description = super.description + " + extra cheese"
-  override def cost        = super.cost + 0.5
+// 'abstract override' is very surprising. The keyword abstract is in fact
+// required as the call to 'super' formally looks like a call to the trait Pizza
+// However, we shall use these traits with concrete implementation of Pizza.
+
+trait ExtraCheese extends Pizza {
+  abstract override def description = super.description + " + extra cheese"
+  abstract override def cost        = super.cost + 0.5
 }
 
-trait ExtraOlives extends PlainPizza {
-  override def description = super.description + " + extra olives"
-  override def cost        = super.cost + 0.7
+trait ExtraOlives extends Pizza {
+  abstract override def description = super.description + " + extra olives"
+  abstract override def cost        = super.cost + 0.7
 }
 
-trait ExtraAnchovies extends PlainPizza {
-  override def description = super.description + " + extra anchovies"
-  override def cost        = super.cost + 0.8
+trait ExtraAnchovies extends Pizza {
+  abstract override def description = super.description + " + extra anchovies"
+  abstract override def cost        = super.cost + 0.8
 }
 
 object Decorator {

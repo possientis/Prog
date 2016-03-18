@@ -53,6 +53,12 @@
   (let ((x (eval 'modulo global-env)))
     (if (not (equal? (primitive-implementation x) modulo)) 
         (display "eval: unit test 2.8 failing\n")))
+  (let ((x (eval 'equal? global-env)))
+    (if (not (equal? (primitive-implementation x) equal?)) 
+        (display "eval: unit test 2.8 failing\n")))
+  (let ((x (eval 'eq? global-env)))
+    (if (not (equal? (primitive-implementation x) eq?)) 
+        (display "eval: unit test 2.9 failing\n")))
   ;
   ; quoted
   ;
@@ -103,6 +109,54 @@
   ((global-env 'delete!) 'var4)
   ((global-env 'delete!) 'var5)
   ((global-env 'delete!) 'var6)
+  ;
+  ; if
+  ;
+  (let ((x (eval '(if #t "yes" "no") global-env)))
+    (if (not (equal? x "yes")) (display "eval: unit test 6.0 failing\n")))
+  (let ((x (eval '(if #f "yes" "no") global-env)))
+    (if (not (equal? x "no")) (display "eval: unit test 6.1 failing\n")))
+  (let ((x (eval '(if #t "yes") global-env)))
+    (if (not (equal? x "yes")) (display "eval: unit test 6.2 failing\n")))
+  (eval '(if #f "yes") global-env)
+  (let ((x (eval '(if (equal? 3 3) (+ 2 3) (* 4 5)) global-env)))
+    (if (not (equal? x 5)) (display "eval: unit test 6.3 failing\n")))
+  (let ((x (eval '(if (equal? 3 4) (+ 2 3) (* 4 5)) global-env)))
+    (if (not (equal? x 20)) (display "eval: unit test 6.4 failing\n")))
+  ;
+  ; not
+  ;
+  (let ((x (eval '(not #t) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 7.0 failing\n")))
+  (let ((x (eval '(not #f) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 7.1 failing\n")))
+  ;
+  ; lambda
+  ;
+  (let ((x (eval '(lambda () (+ 3 5)) global-env)))
+    ((global-env 'define!) 'f x)
+    (let ((y (eval '(f) global-env)))
+      (if (not (equal? y 8)) (display "eval: unit test 8.0 failing\n")))
+    ((global-env 'delete!) 'f))
+  (let ((x (eval '(lambda (x) (* 3 x)) global-env)))
+    ((global-env 'define!) 'f x)
+    (let ((y (eval '(f 5) global-env)))
+      (if (not (equal? y 15)) (display "eval: unit test 8.1 failing\n")))
+    ((global-env 'delete!) 'f))
+  (let ((x (eval '(lambda (x y) (+ x y)) global-env)))
+    ((global-env 'define!) 'f x)
+    (let ((y (eval '(f 3 4) global-env)))
+      (if (not (equal? y 7)) (display "eval: unit test 8.2 failing\n")))
+    ((global-env 'delete!) 'f))
+  (let ((plus5 (eval '(lambda (x) (+ x y)) ((global-env 'extended)'(y)'(5)))))
+    ((global-env 'define!) 'f plus5)
+    (let ((y (eval '(f 6) global-env)))
+      (if (not (equal? y 11)) (display "eval: unit test 8.3 failing\n"))))
+  
+; need to check 'functional define syntax
+
+
+
  
 
   (display "eval: unit test complete\n"))

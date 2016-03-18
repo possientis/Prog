@@ -21,15 +21,7 @@
 
 (define (lambda? exp) (tagged-list? exp 'lambda))
 
-(define (begin? exp) 
-
-  ; DEBUG BEGIN;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (if DEBUG (begin
-              (display "begin?:\t\t\t")(display "exp = ")(display exp)
-              (display " : ")(display (tagged-list? exp 'begin))(newline)))
-  ; DEBUG END;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  (tagged-list? exp 'begin)) 
+(define (begin? exp) (tagged-list? exp 'begin)) 
 
 (define (cond? exp) (tagged-list? exp 'cond))
 

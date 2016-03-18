@@ -11,6 +11,8 @@
         (list '- -)
         (list '/ /)
         (list 'modulo modulo)
+        (list 'equal? equal?)
+        (list 'eq?    eq?)
         ; more to be included
         ))
 (define (primitive-procedure-names) (map car primitive-procedures))

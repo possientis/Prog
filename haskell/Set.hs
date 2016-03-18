@@ -89,7 +89,6 @@ instance ISet Set where
   -- (which is a subset of X). This is not quite true
   -- of course since various elements of E(x) could
   -- be equivalent with respect to ==. The breakthrough:
-  --
   -- Lemma 1: forall x,y:X we have x <= y if and only if:
   -- forall z:E(x) exists z':E(y), z == z'
   --
@@ -579,7 +578,10 @@ complexity (Singleton x) (Union y z)    = complexity (Singleton x) y + complexit
 complexity (Union x y) z                = complexity x z + complexity y z
 
 
-
+elements :: Set -> [Set]
+elements Empty         = []
+elements (Singleton x) = [x]
+elements (Union x y)   = elements x ++ elements y
 
 
 
