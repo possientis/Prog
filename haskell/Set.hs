@@ -58,6 +58,10 @@ instance ISet Set where
   -- (v) x U y <= z iff (x <= z ) and (y <= z)
   subset (Union x y) z    = (subset x z) && (subset y z)
   -- 
+  -- This will be mathematically defined below
+  belong x y = subset (Singleton x) y
+
+
   -- Lemma 0: an inclusion relation exists and is unique
   --
   -- Such binary relation exists and is unique. Informally, 
@@ -91,7 +95,12 @@ instance ISet Set where
   -- be equivalent with respect to ==. The breakthrough:
   -- Lemma 1: forall x,y:X we have x <= y if and only if:
   -- forall z:E(x) exists z':E(y), z == z'
-  --
+
+elements :: Set -> [Set]
+elements Empty         = []
+elements (Singleton x) = [x]
+elements (Union x y)   = elements x ++ elements y
+
   -- informally, this says that x is a subset of y iff
   -- every element of x is equivalent to an element of y.
   -- For once, structural induction seems to work. Proof:
@@ -279,7 +288,6 @@ instance ISet Set where
   -- Definition: given x y:X we say that x belongs to y,
   -- denoted x in y or x:y, if and only {x} <= y.
 
-  belong x y = subset (Singleton x) y
 
   -- Lemma 15: the 'belong' (':' , 'in') relation on X
   -- is compatible with the congruence == on X, in other
@@ -552,8 +560,6 @@ rank (Union x y)    = max (rank x) (rank y)
   -- quotient algebra X* with the following definition:
   --
   -- Definition: we define rnk* : X* -> N by setting rnk*([x]) = rnk(x).
-  --
-  --
  
 zero      = set 0 :: Set
 one       = inc zero 
@@ -577,11 +583,14 @@ complexity (Singleton x) (Singleton y)  = complexity x y + complexity y x
 complexity (Singleton x) (Union y z)    = complexity (Singleton x) y + complexity (Singleton x) z
 complexity (Union x y) z                = complexity x z + complexity y z
 
+rankComplexity :: Set -> Integer
+rankComplexity Empty                    = 1
+rankComplexity (Singleton x)            = 1 + rankComplexity x
+rankComplexity (Union x y)              = 1 + rankComplexity x + rankComplexity y
 
-elements :: Set -> [Set]
-elements Empty         = []
-elements (Singleton x) = [x]
-elements (Union x y)   = elements x ++ elements y
+
+
+
 
 
 
