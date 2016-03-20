@@ -85,6 +85,7 @@
   ;
   ; definition
   ;
+  ; simple variable binding
   (let ((x (eval '(define var1 12) global-env)))
     (if (not (equal? (eval 'var1 global-env) 12))
       (display "eval: unit test 5.0 failing\n")))
@@ -109,6 +110,19 @@
   ((global-env 'delete!) 'var4)
   ((global-env 'delete!) 'var5)
   ((global-env 'delete!) 'var6)
+  ; syntactic sugar for named functions
+  (let ((x (eval '(define (f) 12) global-env)))
+    (if (not (equal? (eval '(f) global-env) 12))
+      (display "eval: unit test 5.6 failing\n"))
+    ((global-env 'delete!) 'f))
+  (let ((x (eval '(define (f x) (* x x)) global-env)))
+    (if (not (equal? (eval '(f 5) global-env) 25))
+      (display "eval: unit test 5.7 failing\n"))
+    ((global-env 'delete!) 'f))
+  (let ((x (eval '(define (f x y) (+ x y)) global-env)))
+    (if (not (equal? (eval '(f 3 4) global-env) 7))
+      (display "eval: unit test 5.8 failing\n"))
+    ((global-env 'delete!) 'f))
   ;
   ; if
   ;
@@ -151,13 +165,87 @@
   (let ((plus5 (eval '(lambda (x) (+ x y)) ((global-env 'extended)'(y)'(5)))))
     ((global-env 'define!) 'f plus5)
     (let ((y (eval '(f 6) global-env)))
-      (if (not (equal? y 11)) (display "eval: unit test 8.3 failing\n"))))
-  
-; need to check 'functional define syntax
+      (if (not (equal? y 11)) (display "eval: unit test 8.3 failing\n")))
+    ((global-env 'delete!) 'f))
+  ;
+  ; begin
+  ;
+  (let ((x (eval '(begin 1 2 3 4) global-env)))
+    (if (not (equal? x 4)) (display "eval: unit test 9.0 failing\n")))
+  ;
+  ;cond
+  ;
+  (let ((x (eval '(cond (#t 0) (#f 1) (#f 2) (else 3)) global-env)))
+    (if (not (equal? x 0)) (display "eval: unit test 10.0 failing\n")))
+  (let ((x (eval '(cond (#f 0) (#t 1) (#f 2) (else 3)) global-env)))
+    (if (not (equal? x 1)) (display "eval: unit test 10.1 failing\n")))
+  (let ((x (eval '(cond (#f 0) (#f 1) (#t 2) (else 3)) global-env)))
+    (if (not (equal? x 2)) (display "eval: unit test 10.2 failing\n")))
+  (let ((x (eval '(cond (#f 0) (#f 1) (#f 2) (else 3)) global-env)))
+    (if (not (equal? x 3)) (display "eval: unit test 10.3 failing\n")))
+  (let ((x (eval '(cond (#f 0) (else 4)) global-env)))
+    (if (not (equal? x 4)) (display "eval: unit test 10.4 failing\n")))
+  (let ((x (eval '(cond (else 5)) global-env)))
+    (if (not (equal? x 5)) (display "eval: unit test 10.5 failing\n")))
+  ;
+  ; or
+  ;
+  (let ((x (eval '(or #t nonsense1 nonsense2) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 11.0 failing\n")))
+  (let ((x (eval '(or #f #t nonsense) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 11.1 failing\n")))
+  (let ((x (eval '(or #f #f #t) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 11.2 failing\n")))
+  (let ((x (eval '(or #f #f #f) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 11.3 failing\n")))
+  (let ((x (eval '(or) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 11.4 failing\n")))
+  (let ((x (eval '(or #t) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 11.5 failing\n")))
+  (let ((x (eval '(or #f) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 11.6 failing\n")))
+  ;
+  ; and
+  ;
+  (let ((x (eval '(and #f nonsense1 nonsense2) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 12.0 failing\n")))
+  (let ((x (eval '(and #t #f nonsense) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 12.1 failing\n")))
+  (let ((x (eval '(and #t #t #f) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 12.2 failing\n")))
+  (let ((x (eval '(and #t #t #t) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 12.3 failing\n")))
+  (let ((x (eval '(and) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 12.4 failing\n")))
+  (let ((x (eval '(and #t) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 12.5 failing\n")))
+  (let ((x (eval '(and #f) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 12.6 failing\n")))
+  ;
+  ; let
+  ;
+  (let ((x (eval '(let ((x 5)) (+ x 7)) global-env)))
+    (if (not (equal? x 12)) (display "eval: unit test 13.0 failing\n")))
+  (let ((x (eval '(let ((x 5) (y 3)) (+ x y)) global-env)))
+    (if (not (equal? x 8)) (display "eval: unit test 13.1 failing\n")))
+  (let ((x (eval '(let ((x 5)(y 6)) (let ((z 7)) (+ x y z))) global-env)))
+    (if (not (equal? x 18)) (display "eval: unit test 13.2 failing\n")))
+  (let ((x (eval '(let ((x 5)(y 6)) (let ((z 7) (x 10)) (+ x y z))) global-env)))
+    (if (not (equal? x 23)) (display "eval: unit test 13.3 failing\n")))
+  (let ((x (eval '(let ((x 1)) (let ((y 2)) (let ((z 3)) (+ x y z)))) global-env)))
+    (if (not (equal? x 6)) (display "eval: unit test 13.4 failing\n")))
+  ;
+  ; named-let
+  ;
+  (let (( x (eval '(let loop ((i 5) (acc 1)) 
+                     (if (equal? 1 i) acc (loop (- i 1) (* i acc)))) global-env)))
+    (if (not (equal? x 120)) (display "eval: unit 14.0 failing\n")))
+  ;
+  ;
 
 
 
- 
+
 
   (display "eval: unit test complete\n"))
 
