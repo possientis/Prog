@@ -237,15 +237,39 @@
   ;
   ; named-let
   ;
-  (let (( x (eval '(let loop ((i 5) (acc 1)) 
+  (let ((x (eval '(let loop ((i 5) (acc 1)) 
                      (if (equal? 1 i) acc (loop (- i 1) (* i acc)))) global-env)))
     (if (not (equal? x 120)) (display "eval: unit 14.0 failing\n")))
   ;
+  ; let*
   ;
-
-
-
-
+  (let ((x (eval '(let* ((x 5)(y (+ x 2))) (+ x y)) global-env)))
+    (if (not (equal? x 12)) (display "eval: unit test 15.0 failing\n")))
+  ;
+  ; application
+  ;
+  ; primitives
+  (let ((x (eval '(+) global-env)))
+    (if (not (equal? x 0)) (display "eval: unit test 16.0 failing\n")))
+  (let ((x (eval '(+ 2) global-env)))
+    (if (not (equal? x 2)) (display "eval: unit test 16.1 failing\n")))
+  (let ((x (eval '(+ 2 4) global-env)))
+    (if (not (equal? x 6)) (display "eval: unit test 16.2 failing\n")))
+  (let ((x (eval '(car '(1 2)) global-env)))
+    (if (not (equal? x 1)) (display "eval: unit test 16.3 failing\n")))
+  (let ((x (eval '(cdr '(1 2)) global-env)))
+    (if (not (equal? x (list 2))) (display "eval: unit test 16.4 failing\n")))
+  (let ((x (eval '(cons 2 '()) global-env)))
+    (if (not (equal? x (list 2))) (display "eval: unit test 16.5 failing\n")))
+  (let ((x (eval '(cons 5 (cons 2 '())) global-env)))
+    (if (not (equal? x (list 5 2))) (display "eval: unit test 16.6 failing\n")))
+  ; lambda
+  (let ((x (eval '((lambda () 45)) global-env)))
+    (if (not (equal? x 45)) (display "eval: unit test 16.7 failing\n")))
+  (let ((x (eval '((lambda (x) (+ x 7)) 5) global-env)))
+    (if (not (equal? x 12)) (display "eval: unit test 16.8 failing\n")))
+  (let ((x (eval '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) global-env)))
+    (if (not (equal? x 11)) (display "eval: unit test 16.9 failing\n")))
 
   (display "eval: unit test complete\n"))
 

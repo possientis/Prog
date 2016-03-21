@@ -510,10 +510,10 @@ elements (Union x y)   = elements x ++ elements y
   -- Definition: we define rnk: X -> N by induction:
   -- rnk(0)   = 0
   -- rnk({x}) = 1 + rnk(x)
-  -- rnk(aUb) = 1 + max(rnk(a),rnk(b))
+  -- rnk(aUb) = max(rnk(a),rnk(b))
 
 rank :: Set -> Integer
-rank Empty          = 1
+rank Empty          = 0
 rank (Singleton x)  = 1 + rank x
 rank (Union x y)    = max (rank x) (rank y)
 
@@ -533,8 +533,9 @@ rank (Union x y)    = max (rank x) (rank y)
   --        = max{1+rnk(z)|z:E(x)}
   -- This completes the proof of the lemma.
   --
-  -- The rank is an interesting notion because it is compatible with
-  -- the congruence ==, contrary to the notion of order:
+  -- The 'rank' is an interesting notion because it is compatible with
+  -- the congruence ==, contrary to the notion of 'order' (which is still
+  -- of value for various unductiove arguments) :
   --
   -- Lemma 24: forall x y:X we have the implication:
   --

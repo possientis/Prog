@@ -1,4 +1,4 @@
-
+(load "load-file.scm")
 (define (primitive-implementation proc) (cadr proc))
 
 (define primitive-procedures
@@ -13,6 +13,9 @@
         (list 'modulo modulo)
         (list 'equal? equal?)
         (list 'eq?    eq?)
+        (list 'display display)
+        (list 'newline newline)
+        (list 'load    load-file)
         ; more to be included
         ))
 (define (primitive-procedure-names) (map car primitive-procedures))

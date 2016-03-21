@@ -1,5 +1,15 @@
 #!/bin/sh
 
+echo '\nThis is C ...'
+gcc decorator.c; 
+START=$(date +%s%N)
+./a.out; 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm a.out
+
+
 echo '\nThis is C++ ...'
 g++ -std=c++14 decorator.cpp; 
 START=$(date +%s%N)
@@ -36,5 +46,12 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
+
+echo '\nThis is JavaScript ...'
+START=$(date +%s%N)
+js decorator.js
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
 
 

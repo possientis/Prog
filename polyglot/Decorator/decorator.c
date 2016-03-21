@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <malloc.h>
+#include <string.h>
 
 #define NUM_TOTAL_TYPES 6   // number of sub-types of Pizza
 typedef enum {PIZZA = 0,
@@ -25,7 +26,7 @@ long memory_log(const char* message, const void* ptr){
   if(message == NULL && ptr == NULL) return memory_check;
   assert(message != NULL);
   assert(ptr != NULL);
-  fprintf(stderr, message, ptr);
+//  fprintf(stderr, message, ptr);
   memory_check ^= (long) ptr;
   return 0L;
 }
@@ -36,7 +37,7 @@ long memory_log(const char* message, const void* ptr){
 
 struct VirtualTable_ {
   int count;    // reference count
-  const char*   (*description)(void* self);
+  void          (*description)(void* self, char* outbuf, size_t size);
   double        (*cost)(void* self);
   void          (*delete)(void* self);
 };
@@ -49,7 +50,7 @@ VirtualTable* VirtualTable_copy(VirtualTable* self){
 }
 
 VirtualTable* VirtualTable_new(
-    const char* (*description)(void*),
+    void        (*description)(void*, char*, size_t),
     double      (*cost)(void*),
     void        (*delete)(void*)){
 
@@ -89,9 +90,12 @@ void VirtualTable_delete(VirtualTable* self){
 // This should only be done when all other copies of the virtual table instance
 // have been deleted.
 
-VirtualTable* Pizza_VirtualTable_new();           // forward
-VirtualTable* PlainPizza_VirtualTable_new();      // forward
-VirtualTable* PizzaDecorator_VirtualTable_new();  // forward
+VirtualTable* Pizza_VirtualTable_new();               // forward
+VirtualTable* PlainPizza_VirtualTable_new();          // forward
+VirtualTable* PizzaDecorator_VirtualTable_new();      // forward
+VirtualTable* WithExtraCheese_VirtualTable_new();     // forward
+VirtualTable* WithExtraOlives_VirtualTable_new();     // forward
+VirtualTable* WithExtraAnchovies_VirtualTable_new();  // forward
 
 VirtualTable* VirtualTable_instance(PizzaType type, int release_flag){
   static VirtualTable* instance[NUM_TOTAL_TYPES];
@@ -120,13 +124,16 @@ VirtualTable* VirtualTable_instance(PizzaType type, int release_flag){
           assert(instance[PIZZA_DECORATOR] != NULL);
           break;
         case WITH_EXTRA_CHEESE:
-          assert(NULL);
+          instance[WITH_EXTRA_CHEESE] = WithExtraCheese_VirtualTable_new();
+          assert(instance[WITH_EXTRA_CHEESE] != NULL);
           break;
         case WITH_EXTRA_OLIVES:
-          assert(NULL);
+          instance[WITH_EXTRA_OLIVES] = WithExtraOlives_VirtualTable_new();
+          assert(instance[WITH_EXTRA_OLIVES] != NULL);
           break;
         case WITH_EXTRA_ANCHOVIES:
-          assert(NULL);
+          instance[WITH_EXTRA_ANCHOVIES] = WithExtraAnchovies_VirtualTable_new();
+          assert(instance[WITH_EXTRA_ANCHOVIES] != NULL);
           break;
         default:
           assert(NULL);
@@ -150,11 +157,11 @@ struct Pizza_ {
   VirtualTable* vtable;
 };
 
-const char* _Pizza_description(void* self){
+void _Pizza_description(void* self, char* buffer, size_t size){
   assert(self != NULL);
+  assert(buffer != NULL);
   fprintf(stderr, "Pizza::description is not implemented\n");
-  return "Pizza::description is not implemented";
-
+  strncpy(buffer, "Pizza::description is not implemented", size);
 }
 
 double _Pizza_cost(void* self){
@@ -192,8 +199,10 @@ struct PlainPizza_ {
   Pizza base;
 }; 
 
-const char* _PlainPizza_description(void* self){
-  return "Plain pizza";
+void _PlainPizza_description(void* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(buffer != NULL);
+  strncpy(buffer, "Plain pizza",size);
 }
 
 double _PlainPizza_cost(void* self){
@@ -232,12 +241,13 @@ struct PizzaDecorator_ {
   Pizza* _pizza;            // decorated pizza
 };
 
-const char* Pizza_description(Pizza*);        // forward
-const char* _PizzaDecorator_description(void* self){
+void  Pizza_description(Pizza*, char*, size_t);  // forward
+void _PizzaDecorator_description(void* self, char* buffer, size_t size){
   assert(self != NULL);
+  assert(buffer != NULL);
   PizzaDecorator* object = (PizzaDecorator*) self;
   assert(object->_pizza != NULL);
-  return Pizza_description(object->_pizza);   // polymorphic call
+  Pizza_description(object->_pizza, buffer, size);   // polymorphic call
 }
 
 double Pizza_cost(Pizza*);                    // forward
@@ -280,16 +290,48 @@ VirtualTable* PizzaDecorator_VirtualTable_new(){
 /******************************************************************************/
 /*                      WithExtraCheese virtual table                          */
 /******************************************************************************/
-const char* _WithExtraCheese_description(void* self){
-  // TBI
+
+struct WithExtraCheese_ {
+  PizzaDecorator base;
+};
+
+
+void _WithExtraCheese_description(void* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(buffer != NULL);
+  PizzaDecorator* object = (PizzaDecorator*) self;
+  assert(object->_pizza != NULL);
+  Pizza_description(object->_pizza, buffer, size);
+  size_t length = strlen(buffer);
+  size_t newsize = size - length;
+  strncat(buffer, " + extra cheese", newsize);
 }
 
 double _WithExtraCheese_cost(void* self){
-  // TBI
+  assert(self != NULL);
+  PizzaDecorator* object = (PizzaDecorator*) self;
+  assert(object->_pizza != NULL);
+  return Pizza_cost(object->_pizza) + 0.5;         // polymorphic call
 }
 
 void _WithExtraCheese_delete(void* self){
-  // TBI
+  assert(self != NULL);
+  Pizza* base = (Pizza*) self;
+  base->count--;
+  if(base->count == 0){
+    VirtualTable* vtable = base->vtable;
+    assert(vtable != NULL);
+    VirtualTable_delete(vtable);
+    PizzaDecorator* object = (PizzaDecorator*) self;
+    Pizza* pizza = object->_pizza;
+    assert(pizza != NULL);
+    Pizza_delete(pizza);                     // polymorphic call
+    memory_log("Deallocating existing with extra cheese object %lx\n", self);
+    free(self);
+  }
+  else {
+    memory_log("Deleting copy of with extra cheese object %lx\n", self);
+  }
 }
 
 VirtualTable* WithExtraCheese_VirtualTable_new(){
@@ -301,16 +343,48 @@ VirtualTable* WithExtraCheese_VirtualTable_new(){
 /******************************************************************************/
 /*                      WithExtraOlives virtual table                          */
 /******************************************************************************/
-const char* _WithExtraOlives_description(void* self){
-  // TBI
+
+struct WithExtraOlives_ {
+  PizzaDecorator base;
+};
+
+
+void _WithExtraOlives_description(void* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(buffer != NULL);
+  PizzaDecorator* object = (PizzaDecorator*) self;
+  assert(object->_pizza != NULL);
+  Pizza_description(object->_pizza, buffer, size);
+  size_t length = strlen(buffer);
+  size_t newsize = size - length;
+  strncat(buffer, " + extra olives", newsize);
 }
 
 double _WithExtraOlives_cost(void* self){
-  // TBI
+  assert(self != NULL);
+  PizzaDecorator* object = (PizzaDecorator*) self;
+  assert(object->_pizza != NULL);
+  return Pizza_cost(object->_pizza) + 0.7;         // polymorphic call
 }
 
 void _WithExtraOlives_delete(void* self){
-  // TBI
+  assert(self != NULL);
+  Pizza* base = (Pizza*) self;
+  base->count--;
+  if(base->count == 0){
+    VirtualTable* vtable = base->vtable;
+    assert(vtable != NULL);
+    VirtualTable_delete(vtable);
+    PizzaDecorator* object = (PizzaDecorator*) self;
+    Pizza* pizza = object->_pizza;
+    assert(pizza != NULL);
+    Pizza_delete(pizza);                     // polymorphic call
+    memory_log("Deallocating existing with extra olives object %lx\n", self);
+    free(self);
+  }
+  else {
+    memory_log("Deleting copy of with extra olives object %lx\n", self);
+  }
 }
 
 VirtualTable* WithExtraOlives_VirtualTable_new(){
@@ -319,19 +393,54 @@ VirtualTable* WithExtraOlives_VirtualTable_new(){
                           _WithExtraOlives_delete);
 }
 
+
+
+
 /******************************************************************************/
-/*                      WithExtraAnchovies virtual table                          */
+/*                      WithExtraAnchovies virtual table                      */
 /******************************************************************************/
-const char* _WithExtraAnchovies_description(void* self){
-  // TBI
+
+struct WithExtraAnchovies_ {
+  PizzaDecorator base;
+};
+
+
+void _WithExtraAnchovies_description(void* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(buffer != NULL);
+  PizzaDecorator* object = (PizzaDecorator*) self;
+  assert(object->_pizza != NULL);
+  Pizza_description(object->_pizza, buffer, size);
+  size_t length = strlen(buffer);
+  size_t newsize = size - length;
+  strncat(buffer, " + extra anchovies", newsize);
 }
 
 double _WithExtraAnchovies_cost(void* self){
-  // TBI
+  assert(self != NULL);
+  PizzaDecorator* object = (PizzaDecorator*) self;
+  assert(object->_pizza != NULL);
+  return Pizza_cost(object->_pizza) + 0.8;         // polymorphic call
 }
 
 void _WithExtraAnchovies_delete(void* self){
-  // TBI
+  assert(self != NULL);
+  Pizza* base = (Pizza*) self;
+  base->count--;
+  if(base->count == 0){
+    VirtualTable* vtable = base->vtable;
+    assert(vtable != NULL);
+    VirtualTable_delete(vtable);
+    PizzaDecorator* object = (PizzaDecorator*) self;
+    Pizza* pizza = object->_pizza;
+    assert(pizza != NULL);
+    Pizza_delete(pizza);                     // polymorphic call
+    memory_log("Deallocating existing with extra anchovies object %lx\n", self);
+    free(self);
+  }
+  else {
+    memory_log("Deleting copy of with extra anchovies object %lx\n", self);
+  }
 }
 
 VirtualTable* WithExtraAnchovies_VirtualTable_new(){
@@ -339,6 +448,8 @@ VirtualTable* WithExtraAnchovies_VirtualTable_new(){
                           _WithExtraAnchovies_cost, 
                           _WithExtraAnchovies_delete);
 }
+
+
 
 /******************************************************************************/
 /*                               Pizza                                        */
@@ -373,14 +484,15 @@ void Pizza_delete(Pizza* self){ // virtual
 } 
 
 // boiler-plate, managing virtual table indirection
-const char* Pizza_description(Pizza* self){
+void Pizza_description(Pizza* self, char* buffer, size_t size){
   assert(self != NULL);
+  assert(buffer != NULL);
   VirtualTable* vtable = self->vtable;
   assert(vtable != NULL);
-  const char* (*description)(void*);
+  void (*description)(void*, char*, size_t);
   description = vtable->description;
   assert(description != NULL);
-  return description(self);
+  description(self, buffer, size);
 }
 
 // boiler-plate, managing virtual table indirection
@@ -430,15 +542,16 @@ void PlainPizza_delete(PlainPizza* self){ // virtual
 }
 
 // boiler-plate, managing virtual table indirection
-const char* PlainPizza_description(PlainPizza* self){
+void PlainPizza_description(PlainPizza* self, char* buffer, size_t size){
   assert(self != NULL);
+  assert(buffer != NULL);
   Pizza* pizza = (Pizza*) self;           // upcast
   VirtualTable* vtable = pizza->vtable;
   assert(vtable != NULL);
-  const char* (*description)(void*);
+  void (*description)(void*, char*, size_t);
   description = vtable->description;
   assert(description != NULL);
-  return description(self);
+  description(self, buffer, size);
 }
 
 // boiler-plate, managing virtual table indirection
@@ -493,19 +606,215 @@ void PizzaDecorator_delete(PizzaDecorator* self){ // virtual
 }
 //
 // boiler-plate, managing virtual table indirection
-const char* PizzaDecorator_description(PizzaDecorator* self){
+void PizzaDecorator_description(PizzaDecorator* self, char* buffer, size_t size){
   assert(self != NULL);
+  assert(buffer != NULL);
   Pizza* pizza = (Pizza*) self;           // upcast
   VirtualTable* vtable = pizza->vtable;
   assert(vtable != NULL);
-  const char* (*description)(void*);
+  void (*description)(void*, char*, size_t);
   description = vtable->description;
   assert(description != NULL);
-  return description(self);
+  description(self, buffer, size);
 }
 
 // boiler-plate, managing virtual table indirection
 double PizzaDecorator_cost(PizzaDecorator* self){
+  assert(self != NULL);
+  Pizza* pizza = (Pizza*) self;
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  double (*cost)(void*);
+  cost = vtable->cost;
+  assert(cost != NULL);
+  return cost((void*) self);
+}
+
+/******************************************************************************/
+/*                                WithExtraCheese                             */
+/******************************************************************************/
+
+WithExtraCheese* WithExtraCheese_copy(WithExtraCheese* self){
+  assert(self != NULL);
+  memory_log("Making copy of with extra cheese object %lx\n", self);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  pizza->count++;
+  return self;
+}
+
+
+// WithExtraCheese object takes ownership of argument pizza object
+WithExtraCheese* WithExtraCheese_new(Pizza* pizza){
+  assert(pizza != NULL);
+  WithExtraCheese* ptr = (WithExtraCheese*) malloc(sizeof(WithExtraCheese));
+  assert(ptr != NULL);
+  memory_log("Allocating new with extra cheese object %lx\n", ptr);
+  Pizza* base = (Pizza *) ptr;                      // upcast
+  base->count = 1;
+  base->vtable = VirtualTable_instance(WITH_EXTRA_CHEESE, 0);
+  assert(base->vtable != NULL);
+  PizzaDecorator* decor = (PizzaDecorator*) ptr;    // upcast
+  decor->_pizza = pizza;
+  return ptr;
+}
+
+// boiler-plate, managing virtual table indirection
+void WithExtraCheese_delete(WithExtraCheese* self){ // virtual
+  assert(self != NULL);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  void (*delete)(void*);
+  delete = vtable->delete;
+  assert(delete != NULL);
+  delete(self); // calling virtual destructor
+}
+//
+// boiler-plate, managing virtual table indirection
+void WithExtraCheese_description(WithExtraCheese* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(buffer != NULL);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  void (*description)(void*, char*, size_t);
+  description = vtable->description;
+  assert(description != NULL);
+  description(self, buffer, size);
+}
+
+// boiler-plate, managing virtual table indirection
+double WithExtraCheese_cost(WithExtraCheese* self){
+  assert(self != NULL);
+  Pizza* pizza = (Pizza*) self;
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  double (*cost)(void*);
+  cost = vtable->cost;
+  assert(cost != NULL);
+  return cost((void*) self);
+}
+
+/******************************************************************************/
+/*                                WithExtraOlives                             */
+/******************************************************************************/
+
+WithExtraOlives* WithExtraOlives_copy(WithExtraOlives* self){
+  assert(self != NULL);
+  memory_log("Making copy of with extra olives object %lx\n", self);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  pizza->count++;
+  return self;
+}
+
+
+// WithExtraOlives object takes ownership of argument pizza object
+WithExtraOlives* WithExtraOlives_new(Pizza* pizza){
+  assert(pizza != NULL);
+  WithExtraOlives* ptr = (WithExtraOlives*) malloc(sizeof(WithExtraOlives));
+  assert(ptr != NULL);
+  memory_log("Allocating new with extra olives object %lx\n", ptr);
+  Pizza* base = (Pizza *) ptr;                      // upcast
+  base->count = 1;
+  base->vtable = VirtualTable_instance(WITH_EXTRA_OLIVES, 0);
+  assert(base->vtable != NULL);
+  PizzaDecorator* decor = (PizzaDecorator*) ptr;    // upcast
+  decor->_pizza = pizza;
+  return ptr;
+}
+
+// boiler-plate, managing virtual table indirection
+void WithExtraOlives_delete(WithExtraOlives* self){ // virtual
+  assert(self != NULL);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  void (*delete)(void*);
+  delete = vtable->delete;
+  assert(delete != NULL);
+  delete(self); // calling virtual destructor
+}
+//
+// boiler-plate, managing virtual table indirection
+void WithExtraOlives_description(WithExtraOlives* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(buffer != NULL);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  void (*description)(void*, char*, size_t);
+  description = vtable->description;
+  assert(description != NULL);
+  description(self, buffer, size);
+}
+
+// boiler-plate, managing virtual table indirection
+double WithExtraOlives_cost(WithExtraOlives* self){
+  assert(self != NULL);
+  Pizza* pizza = (Pizza*) self;
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  double (*cost)(void*);
+  cost = vtable->cost;
+  assert(cost != NULL);
+  return cost((void*) self);
+}
+
+/******************************************************************************/
+/*                                WithExtraAnchovies                             */
+/******************************************************************************/
+
+WithExtraAnchovies* WithExtraAnchovies_copy(WithExtraAnchovies* self){
+  assert(self != NULL);
+  memory_log("Making copy of with extra anchovies object %lx\n", self);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  pizza->count++;
+  return self;
+}
+
+
+// WithExtraAnchovies object takes ownership of argument pizza object
+WithExtraAnchovies* WithExtraAnchovies_new(Pizza* pizza){
+  assert(pizza != NULL);
+  WithExtraAnchovies* ptr = (WithExtraAnchovies*) malloc(sizeof(WithExtraAnchovies));
+  assert(ptr != NULL);
+  memory_log("Allocating new with extra anchovies object %lx\n", ptr);
+  Pizza* base = (Pizza *) ptr;                      // upcast
+  base->count = 1;
+  base->vtable = VirtualTable_instance(WITH_EXTRA_ANCHOVIES, 0);
+  assert(base->vtable != NULL);
+  PizzaDecorator* decor = (PizzaDecorator*) ptr;    // upcast
+  decor->_pizza = pizza;
+  return ptr;
+}
+
+// boiler-plate, managing virtual table indirection
+void WithExtraAnchovies_delete(WithExtraAnchovies* self){ // virtual
+  assert(self != NULL);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  void (*delete)(void*);
+  delete = vtable->delete;
+  assert(delete != NULL);
+  delete(self); // calling virtual destructor
+}
+//
+// boiler-plate, managing virtual table indirection
+void WithExtraAnchovies_description(WithExtraAnchovies* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(buffer != NULL);
+  Pizza* pizza = (Pizza*) self;           // upcast
+  VirtualTable* vtable = pizza->vtable;
+  assert(vtable != NULL);
+  void (*description)(void*, char*, size_t);
+  description = vtable->description;
+  assert(description != NULL);
+  description(self, buffer, size);
+}
+
+// boiler-plate, managing virtual table indirection
+double WithExtraAnchovies_cost(WithExtraAnchovies* self){
   assert(self != NULL);
   Pizza* pizza = (Pizza*) self;
   VirtualTable* vtable = pizza->vtable;
@@ -523,19 +832,50 @@ double PizzaDecorator_cost(PizzaDecorator* self){
 
 int main(){
 
-  PlainPizza* pizza = PlainPizza_new();
-  PizzaDecorator* decor = PizzaDecorator_new((Pizza*) pizza);
+  Pizza* plainPizza   = (Pizza*) PlainPizza_new();
 
-  printf("Pizza::description: %s\n", Pizza_description((Pizza*) decor));
-  printf("PizzaDecorator::description: %s\n", PizzaDecorator_description(decor));
-  printf("Pizza::cost: %f\n", Pizza_cost((Pizza*) decor));
-  printf("PizzaDecorator::cost: %f\n", PizzaDecorator_cost(decor));
+  Pizza* nicePizza    = (Pizza*) WithExtraCheese_new(
+                        (Pizza*) PlainPizza_new()); 
 
+  Pizza* superPizza   = (Pizza*) WithExtraOlives_new(
+                        (Pizza*) WithExtraCheese_new(
+                        (Pizza*) PlainPizza_new())); 
 
-  PizzaDecorator_delete(decor);
+  Pizza* ultraPizza   = (Pizza*) WithExtraAnchovies_new(
+                        (Pizza*) WithExtraOlives_new(
+                        (Pizza*) WithExtraCheese_new(
+                        (Pizza*) PlainPizza_new()))); 
 
-  VirtualTable_instance(PIZZA_DECORATOR,1);
+  char buffer[128];   //  string output
+
+  Pizza_description(plainPizza, buffer, 128);
+  printf("Plain Pizza: \tCost: %0.1f\tDescription: %s\n", 
+    Pizza_cost(plainPizza), buffer);
+
+  Pizza_description(nicePizza, buffer, 128);
+  printf("Nice Pizza: \tCost: %0.1f\tDescription: %s\n", 
+    Pizza_cost(nicePizza), buffer);
+
+  Pizza_description(superPizza, buffer, 128);
+  printf("Super Pizza: \tCost: %0.1f\tDescription: %s\n", 
+    Pizza_cost(superPizza), buffer);
+
+  Pizza_description(ultraPizza, buffer, 128);
+  printf("Ultra Pizza: \tCost: %0.1f\tDescription: %s\n", 
+    Pizza_cost(ultraPizza), buffer);
+
+  // objects deallocation
+  Pizza_delete(ultraPizza);
+  Pizza_delete(superPizza);
+  Pizza_delete(nicePizza);
+  Pizza_delete(plainPizza);
+
+  // final virtual tables deallocation
+  VirtualTable_instance(WITH_EXTRA_ANCHOVIES,1);
+  VirtualTable_instance(WITH_EXTRA_OLIVES,1);
+  VirtualTable_instance(WITH_EXTRA_CHEESE,1);
   VirtualTable_instance(PLAIN_PIZZA,1);
+
   assert(memory_log(NULL,NULL) == 0L);  // no memory leak detected
   return 0;
 }
