@@ -102,7 +102,7 @@ rm *.class
 echo '\nThis is Haskell ...'
 ghc -v0 composite.hs; 
 START=$(date +%s%N)
-./composite; 
+./composite 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"

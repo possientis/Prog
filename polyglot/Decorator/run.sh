@@ -55,3 +55,44 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
+echo '\nThis is PHP ...'
+START=$(date +%s%N)
+php decorator.php
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is Python ...'
+START=$(date +%s%N)
+python3 decorator.py
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is Ruby ...'
+START=$(date +%s%N)
+ruby decorator.rb
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is Scheme ...'
+START=$(date +%s%N)
+scm decorator.scm
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is Haskell ...'
+ghc -v0 decorator.hs; 
+START=$(date +%s%N)
+./decorator 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm decorator decorator.hi decorator.o
+

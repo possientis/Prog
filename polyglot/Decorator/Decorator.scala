@@ -48,24 +48,20 @@ object Decorator {
     val ultraPizza  
       = new PlainPizza with ExtraCheese with ExtraOlives with ExtraAnchovies
 
-    println(
-      "Plain Pizza: "   +
-      "\tCost: "        + plainPizza.cost
-    + "\tDescription: " + plainPizza.description)
+    println("Plain Pizza: "   +
+            "\tCost: "        + plainPizza.cost
+          + "\tDescription: " + plainPizza.description)
 
-    println(
-      "Nice Pizza: "   +
-      "\tCost: "        + nicePizza.cost
-    + "\tDescription: " + nicePizza.description)
+    println("Nice Pizza: "   +
+            "\tCost: "        + nicePizza.cost
+          + "\tDescription: " + nicePizza.description)
 
-    println(
-      "Super Pizza: "   +
-      "\tCost: "        + superPizza.cost
-    + "\tDescription: " + superPizza.description)
+    println("Super Pizza: "   +
+            "\tCost: "        + superPizza.cost
+          + "\tDescription: " + superPizza.description)
 
-    println(
-      "Ultra Pizza: "   +
-      "\tCost: "        + ultraPizza.cost
-    + "\tDescription: " + ultraPizza.description)
+    println("Ultra Pizza: "   +
+            "\tCost: "        + ultraPizza.cost
+          + "\tDescription: " + ultraPizza.description)
   }
 }
