@@ -94,7 +94,34 @@ Proof.
   intros R all. apply all with (x:=a). exact Pa.
 Qed.
 
+Definition myLe (n p:nat) :=
+  forall P:nat->Prop, P n -> (forall q:nat, P q -> P (S q)) -> P p.
 
+Check le_n. (* forall n : nat, n <= n *)
 
+Lemma myLe_n : forall n:nat, myLe n n.
+Proof.
+  unfold myLe. intros n P H0 H1. exact H0.
+Qed.
 
+Check le_S. (* forall n m : nat, n <= m -> n <= S m *)
 
+Lemma myLe_S : forall n m:nat, myLe n m -> myLe n (S m).
+Proof.
+  intros n m H. unfold myLe in H. apply H. unfold myLe.
+  intros P Pn Stable. apply Stable. exact Pn. intros q H0.
+  unfold myLe. intros P Pn Stable. unfold myLe in H0. apply Stable.
+  apply H0. exact Pn. exact Stable.
+Qed.
+
+Lemma myLe_le : forall n m:nat, myLe n m -> n <=  m.
+Proof.
+  intros n m H. unfold myLe in H. apply H. apply le_n.
+  intros q H0. apply le_S. exact H0.
+Qed.
+
+Check nat_ind. (* forall P : nat -> Prop,
+       P 0 -> (forall n : nat, P n -> P (S n)) -> forall n : nat, P n *)
+
+Lemma le_myLe : forall n m: nat, n <= m -> myLe n m.
+Abort.

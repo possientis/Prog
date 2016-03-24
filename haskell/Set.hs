@@ -561,6 +561,144 @@ rank (Union x y)    = max (rank x) (rank y)
   -- quotient algebra X* with the following definition:
   --
   -- Definition: we define rnk* : X* -> N by setting rnk*([x]) = rnk(x).
+  -- 
+  -- Definition: forall n:N we define X*n = {x:X* | rnk(x) <= n}.
+  --
+  -- Lemma 25: X*0  = {0}
+  --
+  -- Proof: in this lemma {0} refers to the singleton comprised of the
+  -- element 0 of X* (where 0 = [0], the equivalence class of 0:X modulo
+  -- == ). The symbol '0' is overloaded, but nothing too confusing here.
+  -- By definition, we do have rnk(0) = 0. So 0 belongs to X*0. It remains
+  -- to show the implication rnk(x) = 0 -> x = 0 (in X*). So suppose x:X*
+  -- and rnk(x) = 0. Let's denote x by [x] where x is a representative of
+  -- its class. Then rnk(x) = 0 and from Lemma 23, it follows that E(x) = 0. 
+  -- From Lemma 14 we obtain E*([x]) = 0 and finally from Lemma 17 we 
+  -- conclude that [x] = 0 as required.
+  --
+  -- Lemma 26: X*1 = {0,1} (where 1:X* is defined as 1 = {0}).
+  --
+  -- Proof: it is clear that rnk(0) <= 1 and rnk(1) <= 1. So it remains
+  -- to show the implication rnk(x) <= 1 -> x = 0 or x = 1. So we assume
+  -- that rnk(x) <= 1. If rnk(x) = 0, from Lemma 25 we already know that 
+  -- x = 0 and we are done. So we assume that rnk(x) = 1. Let us denote
+  -- x by [x], where x:X is a representative of the class of x mod ==.
+  -- Then rnk(x) = 1 and from Lemma 23, it follows that rnk(z) = 0 for
+  -- all z:E(x). Hence we see from Lemma 25 that [z] = 0. This being 
+  -- true for all z:E(x) and since E(x) in not empty (rnk(x) = 1), we
+  -- obtain from Lemma 14 that E*([x]) = {0} = E*({0}). From Lemma 17
+  -- we conlude that [x] = {0} = 1 as requested.  
+  -- 
+  -- Lemma 27: X*2 = {0,1,{1},2} (where 2:X* is defined as {0}U{1})
+  -- 
+  -- Proof: we have rnk(0) = 0 <= 2 and rnk(1) = 1 <= 2. Furthermore,
+  -- rnk({1}) = 1 + rnk(1) = 2 <= 2 and rnk(2) = max(rnk(1), rnk({1}))
+  -- so rnk(2) = 2 <= 2. So it remains to show the implication for x:X*
+  -- rnk(x) <= x = 0 or x = 1 or x = {1} or x = 2. So we assume that
+  -- rnk(x) <= 2 in which case rnk(z) <= 1 for all z:E*(x). So E*(x)
+  -- must be a subset of {0,1}. By Lemma 17, E*(x) = 0 implies x = 0,
+  -- E*(x) = {0} implies x = {0} = 1, E*(x) = {1}) implies x = {1}, and
+  -- E*(x) = {0,1} implies x = {0,1} = 2. 
+  --
+  -- By Lemma 17, we know that the map E*:X* -> P(X*) is injective. A
+  -- simple induction shows that E*(x) is a finite subset of X* for all
+  -- x:X*, so we cannot expect this map to be surjective (even forgetting
+  -- about Cantor). However, given *finite* subset A of X* we can easily
+  -- guess that E*(x) = A for some x:X*. Informally, if A = {x0,..,xk}
+  -- then x = {x0}U...U{xk}.
+  --  
+  -- Lemma 28: Let A be a finite subset of X*. exists! x:X*, E*(x) = A.
+  --
+  -- Proof. The uniquess follows from injectivity. In order to prove the
+  -- existence, we shall proceed with an induction on the cardinal |A| of
+  -- A. If |A| = 0, i.e. A = 0, then A = E*(0) and the property is true.
+  -- We assume the property is true whenever |A| = n (given n >=0). We
+  -- need to show it is also true when |A| = n + 1. so let us assume
+  -- this is the case. In particular A is not empty and we can consider
+  -- some a:A and define B = A\{a}. Then |B| = n and from the induction
+  -- hypothesis, there is x0:X* such that B = E*(x0). Define x = {a}Ux0
+  -- Then we have E*(x) = A as requested.
+  --
+  -- Lemma 29: Given n>=1, the restriction of E* to X*n defines a 
+  -- bijection between X*n and P(X*(n-1)).
+  -- 
+  -- Proof: We already know that E* is injective, and the same apply
+  -- to it restriction to X*n. Given x:X*n, we first need to justify
+  -- the fact that E*(x) is indeed a subset of X*(n-1), so that E* 
+  -- restricted to X*n does indeed define a map X*n -> P(X*(n-1)).
+  -- So let y:E*(x). We need to show that rnk(y) <= n-1. However
+  -- from Lemma 14 we know that y = [z] for some z:E(x). From Lemma 23
+  -- we have 1+rnk(z) <= rnk(x) <= n (slight abuse of notation where
+  -- x denotes a representative of the class of x...). Hence we see
+  -- that rnk(y)= rnk(z) <= n-1 as requested. It remains to show that
+  -- the map X*n -> P(X*(n-1)) is surjective. Since we have an 
+  -- injection X*n -> P(X*(n-1)), a simple induction on n shows that
+  -- X*n is a finite subset of X* for all n:N. So let A be a subset of
+  -- X*(n-1). Then in particular, A is a finite subset of X*. Applying
+  -- Lemma 28, there exists some x:X* such that E*(x) = A. From Lemma 23
+  -- and Lemma 14, we easily see that rnk(x) <= n, i.e. x:X*n. This 
+  -- shows that E*:X*n->P(X*(n-1)) is a surjective map as requested 
+  --
+  -- A consequence of Lemma 29 is that we are able to compute the cardinal
+  -- of X*n for all n>=0. Since X*0 = {0}, |X*0| = 1. We also know that
+  -- X*1 = {0,1} and |X*1| = 2 = 2^1. We also know that X*2 = {0,1,{1},2}
+  -- and |X*2| = 4 = 2^|X*1|. Then |X*3| = 2^4 = 16 and |X*4| = 2^16 etc. 
+  -- 
+  -- Definition: given n:N we define the map h(n):X*n->N with an induction
+  -- on n:N. First we define h(0):X*0->N by setting h(0)(0) = 0. Next, 
+  -- assuming n >= 1 and h(n-1) is defined, we define h(n):X*n->N by:
+  --
+  -- h(n)(x) = sum { 2^h(n-1)(z) | z:E*(x) }
+  --
+  -- Note that this sum is well defined: first, given x:X*n, the set E*(x)
+  -- is a finite set so h(n)(x) is defined in terms of a finite sum. 
+  -- Furthermore, by Lemma 29, E*(x) is a subset of X*(n-1) and consequently,
+  -- given z:E*(x), the quantity h(n-1)(z) is a well-defined natural number.
+  --
+  -- to build an intuitive sense of the h(n)'s let us compute a few values:
+  --
+  -- h(0): X*0 = {0} -> N
+  -- h(0)(0) = 0
+  --
+  -- h(1): X*1 = {0,1} -> N
+  -- h(1)(0) = sum {...| z:E*(0) } = 0 since E*(0) = 0
+  -- h(1)(1) = h(1)({0}) = sum { ... |z:{0} } = 2^h(0)(0) = 2^0 = 1
+  --
+  -- h(2): X*2 = {0,1,{1},2} -> N
+  -- h(2)(0) = sum {...| z:E*(0) } = 0 since E*(0) = 0
+  -- h(2)(1) = h(2)({0}) = 2^h(1)(0) = 2^0 = 1
+  -- h(2)({1}) = sum { ... | z:E*({1}) } = sum{ ... | z:{1} } = 2^h(1)(1) = 2^1 = 2
+  -- h(2)(2) = h(2)({0,1}) = sum{...| z:{0,1}} = 2^h1(0) + 2^h1(1) = 2^0 + 2^1 = 3
+  --
+  -- The elements of X*3 are as follows, with corresponding values of h(3)
+  --
+  -- 0            -> 0   
+  -- 1            -> 1
+  -- {1}          -> 2
+  -- 2            -> 3
+  -- {{1}}        -> 4  2^h(2)({1}) = 2^2
+  -- {0,{1}}      -> 5  2^h(2)(0) + 2^h(2)({1}) = 2^0 + 2^2
+  -- {1,{1}}      -> 6  2^h(2)(1) + 2^h(2)({1}) = 2^1 + 2^2
+  -- {0,1,{1}}    -> 7  2^h(2)(0) + 2^h(2)(1) + 2^h(2)({1}) = 2^0 + 2^1 + 2^2
+  -- {2}          -> 8  2^h(2)(2) = 2^3
+  -- {0,2}        -> 9  2^0 + 2^3
+  -- {1,2}        -> 10 2^1 + 2^3
+  -- 3            -> 11 (3:X* defined as 2U{2} '=' {0,1,2}) -> 2^0 + 2^1 + 2^3
+  -- {{1},2}      -> 12 2^2 + 2^3
+  -- {0,{1},2}    -> 13 2^0 + 2^2 + 2^3
+  -- {1,{1},2}    -> 14 2^1 + 2^2 + 2^2
+  -- {0,1,{1},2}  -> 15 2^0 + 2^1 + 2^2 + 2^3
+  --
+  --
+  --
+  --
+  --
+  --
+  --
+  --
+  --
+  --
+  --
  
 zero      = set 0 :: Set
 one       = inc zero 

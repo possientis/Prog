@@ -270,6 +270,21 @@
     (if (not (equal? x 12)) (display "eval: unit test 16.8 failing\n")))
   (let ((x (eval '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) global-env)))
     (if (not (equal? x 11)) (display "eval: unit test 16.9 failing\n")))
+  ;
+  ; load
+  ;
+  (let ((s (eval '(load "test.scm") global-env)))
+    (if (not (equal? s " test.scm loaded"))
+      (display "eval: unit test 17.0 failing\n"))
+    (let ((x (eval 'x global-env)))
+      (if (not (equal? x 5)) (display "eval: unit test 17.1 failing\n")))
+    (let ((x (eval 'y global-env)))
+      (if (not (equal? x 6)) (display "eval: unit test 17.2 failing\n")))
+    (let ((x (eval 'z global-env)))
+      (if (not (equal? x 11)) (display "eval: unit test 17.3 failing\n")))
+    )
+
+    
 
   (display "eval: unit test complete\n"))
 

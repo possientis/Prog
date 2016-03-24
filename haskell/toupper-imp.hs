@@ -1,6 +1,8 @@
 import System.IO
 import Data.Char(toUpper)
 
+-- openBinaryFile
+
 main :: IO ()
 main = do
   inh <- openFile "input.txt" ReadMode

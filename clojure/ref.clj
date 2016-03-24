@@ -71,6 +71,12 @@
 (send total-cpu-time + 700) ; fixed thread pool maintained by runtime
 (Thread/sleep 1)  ; waiting 1 ms to make sure we see change
 (println (deref total-cpu-time))
+(send-off total-cpu-time + 800) ; same as send, but different thread pool
+; the tread pool for send-off can grow in size, so suitable for actions
+; which are potentially blocking
+(Thread/sleep 1)  ; waiting 1 ms to make sure we see change
+(println (deref total-cpu-time))
 (shutdown-agents) ; needed otherwise, seperate thread lives on
+
 
 

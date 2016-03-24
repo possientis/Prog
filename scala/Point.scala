@@ -85,13 +85,13 @@ object Point {
     case Nil => Nil
     case pivot::tail =>
       val (smaller, rest) = tail.partition(_ < pivot)
-      qsort(smaller) ::: pivot :: qsort(rest)
+      qsort(smaller) ::: pivot :: qsort(rest) // ::: list concatenation, append
   }
   val qsort2: List[Int] => List[Int] = {
     case Nil => Nil
     case pivot::tail => 
       val (smaller, rest) = tail.partition(_ < pivot)
-      qsort2(smaller) ::: pivot :: qsort2(rest)
+      qsort2(smaller) ::: pivot :: qsort2(rest) // ::: list concatenation, append
   }
 }
 

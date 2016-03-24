@@ -1,4 +1,5 @@
 (load "load-file.scm")
+
 (define (primitive-implementation proc) (cadr proc))
 
 (define primitive-procedures
@@ -19,6 +20,7 @@
         ; more to be included
         ))
 (define (primitive-procedure-names) (map car primitive-procedures))
+
 (define (primitive-procedure-objects)
   (map (lambda (proc) (list 'primitive (cadr proc))) primitive-procedures))
 

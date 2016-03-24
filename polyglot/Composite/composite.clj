@@ -1,6 +1,7 @@
 ; Composite Design Pattern
-(ns composite 
-  (:gen-class))
+
+(ns composite (:gen-class))
+
 ; The composite design pattern consists in creating an abstract class
 ; or interface 'Component' which allows client code to handle certain 
 ; types of primitive objects of type 'Leaf' and various combinations
