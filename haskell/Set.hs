@@ -689,13 +689,109 @@ rank (Union x y)    = max (rank x) (rank y)
   -- {1,{1},2}    -> 14 2^1 + 2^2 + 2^2
   -- {0,1,{1},2}  -> 15 2^0 + 2^1 + 2^2 + 2^3
   --
+  -- What is interesting about the functions h(n):X*n->N is that they are extensions
+  -- of each other, i.e. h(p):X*p->N coincide with h(n) on X*n for n <= p. We can 
+  -- see this with the above numbers and:
+  --
+  -- h(0)(0) = h(1)(0) = h(2)(0) = h(3)(0) = 0
+  -- h(1)(1) = h(2)(1) = h(3)(1) = 1
+  -- h(2)({1}) = h(3)({1}) = 2
+  -- h(2)(2)   = h(3)(2)   = 3
+  --
+  -- Lemma 30: for all n p:N with n <= p, for all x:X*n, h(n)(x) <= h(p)(x)
+  --
+  -- Proof: it is sufficient to prove that for all n>=1 and x:X*n we have
+  -- h(n)(x) = h(n+1)(x). Since h(0)(0) = 0 = h(1)(0), the property is true
+  -- for n = 0. So let us assume it is true for n >= 0. We need to show it
+  -- is also true for n+1. So let x:X*(n+1). We need to show the equality
+  -- h(n+1)(x) = h(n+2)(x) which goes as follows:
+  --
+  -- h(n+2)(x)  = sum{ 2^h(n+1)(z) | z:E*(x) } 
+  --            = sum{ 2^h(n)(z)   | z:E*(x) } (IH, z:E*(x) -> z:X*n)
+  --            = h(n+1)(x)
+  --
+  -- By virtue of Lemma 30, therefore able to define a function h:X*->N as follows:
+  --
+  -- Definition: We define h:X*->N by setting h(x) = h(n)(x) for rnk(x) <= n.
+  --
+  -- Our next challenge is to prove that the function h:X*->N is actually a bijection.
+  --
+  -- Definition: for n:N we call cardinal of rank n , the number c(n) define by:
+  --
+  --    c(0) = 1, c(n+1) = 2^c(n)
+  --
+  -- These numbers are important, as they correspond to the cardinal of X*n:
+  --
+  -- Lemma 31: for all n:N, |X*n| = c(n)
+  --
+  -- Proof: Since X*0 = {0} , we have |X*0| = 1 = c(0). Furthermore, by Lemma 29,
+  -- X*(n+1) is in bijection with P(X*n). So |X*(n+1)| = 2^|X*n|. Hence we obtain
+  -- |X*n| = c(n) for all n:N by a simple induction argument.
+  --
+  -- Given n:N, the notation 2^n is ambiguous: on the one hand, it may refer to the
+  -- set of maps k:n->2. On the other hand, it may refer to the integer 2^n.
+  -- Let us assume that 2^n refers to a set of maps. Then there is an obvious bijection
+  -- between P(n) (set of subsets of n = {0,1,..,n-1}) and 2^n. If we denote the integer
+  -- 2^n by (2^n)', then there is also a bijection f:2^n -> (2^n)' defined by:
+  --
+  --    f(x) = sum { x(i)2^i | i:n }
+  --
+  -- The map x:n->2 is interpreted as a binary representation and converted into a number
+  -- which lies in the set (2^n)' = {0,1,...,(2^n)' - 1}
+  --
+  -- It follows that for all n:N, the map f:P(n)->(2^n)' defined by 
+  --
+  --  f(A) = sum { 1_A(i)2^i | i:n } = sum { 2^i | i:A }  (2^i denotes integer, not map)
+  --
+  --  is a bijection. Let us now revert to the notation 2^n as an integer.
   --
   --
+  -- Lemma 32: let X is a finite set and h:X->|X| be an arbitrary bijection between the set
+  -- X and its integer cardinal |X|. Then f: P(X) -> 2^|X| = { 0,1, ... , 2^|X|-1 }
   --
+  --  f(A) = sum { 2^h(i) | i:A }
   --
+  -- is a bijection.
   --
+  -- Proof: from our previous discussion, we have identified the bijection g:P(|X|)->2^|X|
+  -- defined by g(B) = sum { 2^i | i:B }. Now the bijection h:X->|X| induces an obvious
+  -- bijection H:P(X)->P(|X|) defined by H(A) = {h(i) | i:A} (usually denoted h(A) or h[A])
+  -- Hence we have a bijection goH : P(X)->2^|X| and it remains to show that goH = f. So
+  -- let A be a subset of X, then we have:
   --
+  -- f(A) = sum { 2^h(i) | i:A } = sum { 2^h | h:{h(i) | i:A} }
+  --                             = sum { 2^h | h:H(A) }
+  --                             = g(H(A))  
   --
+  -- Lemma 33: for all n:N, the map h(n): X*n->N is in fact a bijection h(n):X*n->|X*n|
+  -- between X*n and its integer cardinal |X*n|.
+  --
+  -- Proof: h(0): X*0->N is defined by h(0)(0) = 0, hence it is a bijection between X*0
+  -- and {0} = 1 = |X*0|. We assume that the property is true for n. We need to show it
+  -- is also true n+1. Hence we need to show that h(n+1) is a bijection between X*(n+1)
+  -- and |X*(n+1)|. However given x:X*(n+1) , by definition we have:
+  -- 
+  -- h(n+1)(x) = sum { 2^h(n)(z) | z:E*(x) }
+  --
+  -- However, from the induction hypothesis we know that h(n):X*n->|X*n| is a bijection.
+  -- We can therefore apply Lemma 32, which gives us a bijection f:P(X*n)->2^|X*n| defined
+  -- by f(A) = sum { 2^h(n)(i) | i:A }. Looking back at the defining equation for h(n+1)(x),
+  -- we see that h(n+1)(x) = f(E*(x)) for all x:X*(n+1). It follows that h(n+1) = foE*.
+  -- However, from Lemma 29, E* defines a bijection E*:X*(n+1)->P(X*n). It follows that
+  -- h(n+1) is a bijection from X*(n+1) to 2^|X*n|. Since by Lemma 29, 2^|X*n| = |X*(n+1)|,
+  -- we have proved that h(n+1): X*(n+1) -> |X*(n+1)| is a bijection as requested 
+  --
+  -- Lemma 34: The map h:X* -> N is bijective
+  --
+  -- Proof: let x y:X* such that h(x) = h(y). We need to show that x = y. Let n be the max
+  -- of rnk(x) and rnk(y), then both x and y are elements of X*n and h(n)(x) = h(x) = h(y)
+  -- = h(n)(y). Since we know from Lemma 33 that h(n) is injective, we obtain x = y which
+  -- shows that h is itself injective. It remains to show that H is surjective. So let
+  -- m:N, we need to prove the existence of x:X* such that h(x) = m. However, since |X*n|
+  -- = c(n) -> +oo as n->+oo, there is n:N such that m < |X*n|. In particular, m is an 
+  -- element of the set |X*n| = {0,1, ... , |X*n|-1 }. By Lemma 33, we know that h(n)
+  -- is a bijection from X*n to |X*n|. Hence, there exists x:X*n such that h(n)(x) = m.
+  -- In particular, we have x:X* and h(x) = m.
   --
   --
   --

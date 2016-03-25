@@ -16,3 +16,6 @@
 (println @total-expenditure)
 (add-amount-2 300)
 (println @total-expenditure)
+
+
+
