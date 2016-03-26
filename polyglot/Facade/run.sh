@@ -66,3 +66,28 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
+echo '\nThis is Ruby ...'
+START=$(date +%s%N)
+ruby facade.rb
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+echo '\nThis is Python ...'
+START=$(date +%s%N)
+python3 facade.py
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+echo '\nThis is Scheme ...'
+START=$(date +%s%N)
+scm facade.scm
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+
+
+

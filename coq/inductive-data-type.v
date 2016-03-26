@@ -1,5 +1,7 @@
 Set Implicit Arguments.
 
+
+
 Print bool. (* Inductive bool : Set :=  true : bool | false : bool *)
 
 Inductive month : Set := 
@@ -194,14 +196,96 @@ Qed.
 
 
 
+Definition month_even (leap:bool)(m:month) : bool :=
+  match (month_length leap m) with
+    | 28    => true 
+    | 29    => false
+    | 30    => true
+    | 31    => false
+    | other => false 
+  end.
+
+Definition bool_xor (b1:bool)(b2:bool) : bool :=
+  match (b1,b2) with
+  | (true, true)    => false
+  | (true, false)   => true
+  | (false, true)   => true
+  | (false, false)  => false
+  end.
+
+Definition bool_and (b1:bool)(b2:bool) : bool :=
+  match (b1,b2) with
+  | (true, true)    => true
+  | (true, false)   => false
+  | (false, true)   => false
+  | (false, false)  => false
+  end.
+
+Definition bool_or (b1:bool)(b2:bool) : bool :=
+  match (b1,b2) with
+  | (true, true)    => true
+  | (true, false)   => true
+  | (false, true)   => true
+  | (false, false)  => false
+  end.
+
+Definition bool_eq (b1:bool)(b2:bool) : bool :=
+  match (b1,b2) with
+  | (true, true)    => true
+  | (true, false)   => false
+  | (false, true)   => false
+  | (false, false)  => true
+  end.
+
+Definition bool_not (b:bool): bool :=
+  match b with
+  | true  => false
+  | false => true
+  end.
+
+Theorem xor_not_eq : forall b1 b2:bool, bool_xor b1 b2 = bool_not (bool_eq b1 b2).
+Proof.
+  intros x y. pattern x; apply bool_ind; pattern y; apply bool_ind; reflexivity.
+Qed.
 
 
+Theorem not_and_or : forall x y: bool, 
+  bool_not(bool_and x y) = bool_or (bool_not x)(bool_not y).
+Proof.
+  intros x y. elim x; elim y; reflexivity.
+Qed.
 
+Theorem not_not : forall b:bool, bool_not (bool_not b) = b.
+Proof.
+  intro x. elim x; reflexivity. 
+Qed.
 
+Theorem bool_lem : forall b:bool, bool_or b (bool_not b) = true.
+Proof.
+  intro x. elim x; reflexivity.
+Qed.
 
+Theorem eq_eq : forall x y:bool, bool_eq x y = true -> x = y.
+Proof.
+  intros x y. elim x; elim y; intro H; unfold bool_eq in H; auto.
+Qed.
 
+Theorem eq_eq_rev : forall x y:bool, x = y -> bool_eq x y = true.
+Proof.
+  intros x y H. rewrite H. elim y; reflexivity.
+Qed.
 
+Theorem not_or_and_not : forall x y:bool,
+  bool_not (bool_or x y) = bool_and (bool_not x) (bool_not y).
+Proof.
+  intros x y. elim x; elim y; reflexivity.
+Qed.
 
+Theorem distr : forall x y z: bool,
+  bool_or (bool_and x z) (bool_and y z) = bool_and (bool_or x y) z.
+Proof.
+  intros x y z. elim x; elim y; elim z; reflexivity.
+Qed.
 
 
 

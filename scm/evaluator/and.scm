@@ -14,5 +14,3 @@
         first
         (make-if (make-not first) '#f (expand-and-predicates rest))))))
 
-
-

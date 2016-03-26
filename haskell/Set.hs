@@ -1,4 +1,5 @@
 module Set (ISet, empty, set, inc, belong, singleton, union, subset, Set) where
+import qualified Data.Map as Map
 
 class ISet a where
   empty     :: a
@@ -824,6 +825,24 @@ rankComplexity (Singleton x)            = 1 + rankComplexity x
 rankComplexity (Union x y)              = 1 + rankComplexity x + rankComplexity y
 
 
+--
+
+data ESet = ESet { 
+  hash      :: Integer, 
+  list      :: Map.Map Integer ESet
+} deriving Show 
+
+eZero :: Integer -> ESet
+eZero p = inject p Empty
+
+
+-- powerMod p x y = x^y mod p
+powerMod :: Integer -> Integer -> Integer -> Integer
+powerMod _ _ _ = 0
+
+inject :: Integer -> Set -> ESet
+inject _ Empty          = ESet 0 Map.empty
+inject p (Singleton x)  = ESet 0 Map.empty     
 
 
 

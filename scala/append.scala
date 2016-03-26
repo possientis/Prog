@@ -64,7 +64,32 @@ println(l3 mkString " ")            // 3 4 6 2 9 0
 println(l3 mkString "")             // 346290
 
 
+// using a string builder
+val buf = new StringBuilder
+println(l3 addString (buf, "(", ";", ")")) // (3;4;6;2;9;0)
 
+// conversion from list to array and vice versa
+val arr = l3.toArray
+val arr2 = Array(3,4,6,2,9,0)
+println(arr2) // [I@69e1968d , ??????
+
+println(arr.toList) // List(3, 4, 6, 2, 9, 0)
+
+val arr3 = new Array[Int](10)
+println(arr3) // [I@5ceeb4a3 -- wtf
+
+List(1,2,3) copyToArray (arr2,3)
+
+println(arr2(3))  // 1
+println(arr2(4))  // 2 
+println(arr2(5))  // 3
+
+// extracting an iterator from a list
+
+val it = l3.iterator
+val it2 = arr.iterator
+println(it)   // non-empty iterator
+println(it2)  // non-empty iterator
 
 
 
