@@ -87,7 +87,23 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
+echo '\nThis is Clojure ...'
+clojurec facade 1> /dev/null 
+START=$(date +%s%N)
+java -cp .:/usr/share/java/clojure-1.6.0.jar facade
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
 
 
+echo '\nThis is Haskell ...'
+ghc -v0 facade.hs; 
+START=$(date +%s%N)
+./facade 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm facade facade.hi facade.o
 
 

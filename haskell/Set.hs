@@ -835,14 +835,44 @@ data ESet = ESet {
 eZero :: Integer -> ESet
 eZero p = inject p Empty
 
+eOne :: Integer -> ESet
+eOne p = inject p (Singleton Empty)
+
 
 -- powerMod p x y = x^y mod p
-powerMod :: Integer -> Integer -> Integer -> Integer
-powerMod _ _ _ = 0
+expMod :: Integer -> Integer -> Integer -> Integer
+expMod p x y = loop p x y 1 where
+  loop p x y prod
+    | y == 0  = mod prod p
+    | even y  = loop p (mod (x*x) p) (div y 2) prod
+    | odd  y  = loop p x (y -1) (mod (prod*x) p)
+    | otherwise = error "expMod: unexpected error"
+    
 
 inject :: Integer -> Set -> ESet
 inject _ Empty          = ESet 0 Map.empty
-inject p (Singleton x)  = ESet 0 Map.empty     
+inject p (Singleton x)  = ESet (expMod p 2 h) (Map.insert h s Map.empty)
+                                  where s = inject p x; h = hash s
+inject p (Union x y)    = ESet 0 Map.empty
+
+naive :: Set -> ESet
+naive Empty             = ESet 0 Map.empty
+naive (Singleton x)     = ESet (2^h) (Map.insert h s Map.empty) where 
+  s = naive x 
+  h = hash s
+naive (Union x y)       = ESet h s where
+  s1 = naive x
+  s2 = naive y
+  s = Map.union (list s1) (list s2)
+  h = Map.fold op 0 s where
+    op x sum = (2^(hash x)) + sum
+
+h :: Set -> Integer
+h x = hash (naive x)
+  
+  
+
+         
 
 
 

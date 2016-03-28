@@ -135,11 +135,11 @@
     ;
     (define (compile data)
       (lambda (input output)
-        ; creating scanner from InputStream
+        ; creating scanner from input-stream
         (let ((scanner-object (scanner input)))
         ; creating builder for abstract syntax tree
         (let ((builder (program-node-builder)))
-        ; creating Parser
+        ; creating parser
         (let ((parser-object (parser)))
         ; parsing using scanner and builder, hence creating AST
         ((parser-object 'parse) scanner-object builder)

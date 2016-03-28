@@ -22,7 +22,7 @@
   (if (not (equal? "{1: 10}" (a 'to-string)))
     (display "dictionaty: unit test 0.5 failing\n"))
   (if (not (equal? "{\"abc\": 100}" (b 'to-string)))
-    (display "dictionaty: unit test 0.5 failing\n"))
+    (display "dictionaty: unit test 0.6 failing\n"))
   ;; dictionaries should not be empty
   (if (a 'empty?) (display "dictionaty: unit test 0.7 failing\n"))
   (if (b 'empty?) (display "dictionary: unit test 0.8 failing\n"))

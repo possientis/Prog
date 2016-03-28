@@ -29,14 +29,14 @@
                   ((proc key (node 'key)) (cons (node 'key) (node 'value)))
                   (else (search-node (node 'next) key proc)))))
         ;;
-        (print-node
-          (lambda (node)
-            (if (null? node)
-              (display "")
-              (begin
-                (display (node 'key))
-                (display " ")
-                (print-node (node 'next))))))
+;        (print-node
+;          (lambda (node)
+;            (if (null? node)
+;              (display "")
+;              (begin
+;                (display (node 'key))
+;                (display " ")
+;                (print-node (node 'next))))))
         )
 
   ;;
@@ -53,7 +53,7 @@
           ((eq? m 'find) search)      ; returns pair (key . value) or #f is fails
           ((eq? m 'empty?) (empty?))  ; #t or #f
           ((eq? m 'iter) (iter))      ; returns an iterator interface
-          ((eq? m 'print) (print))    ; basic display of keys
+;          ((eq? m 'print) (print))    ; basic display of keys
           (else (display "link: unknown operation error\n"))))
   ;;
   ;; private members
@@ -83,10 +83,10 @@
               (else (display "link: unknown iterator operation error\n"))))
       dispatch))
   ;;
-  (define (print)
-    (display "( ")
-    (print-node head)
-    (display ")"))
+;  (define (print)
+;    (display "( ")
+;    (print-node head)
+;    (display ")"))
 
   ;;
   ;; returning interface

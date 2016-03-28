@@ -288,9 +288,64 @@ Proof.
 Qed.
 
 
+Theorem at_least_28: forall (leap:bool)(m:month), 28 <= month_length leap m. 
+Proof.
+  intros leap m. case m; simpl; auto. case leap; auto.
+Qed.
 
 
+Print at_least_28.
+(*
+fun (leap : bool) (m : month) =>
+match m as m0 return (28 <= month_length leap m0) with
+| January => le_S 28 30 (le_S 28 29 (le_S 28 28 (le_n 28)))
+| February =>
+    if leap as b return (28 <= (if b then 29 else 28))
+      then le_S 28 28 (le_n 28)
+      else le_n 28
+| March => le_S 28 30 (le_S 28 29 (le_S 28 28 (le_n 28)))
+| April => le_S 28 29 (le_S 28 28 (le_n 28))
+| May => le_S 28 30 (le_S 28 29 (le_S 28 28 (le_n 28)))
+| June => le_S 28 29 (le_S 28 28 (le_n 28))
+| July => le_S 28 30 (le_S 28 29 (le_S 28 28 (le_n 28)))
+| August => le_S 28 30 (le_S 28 29 (le_S 28 28 (le_n 28)))
+| September => le_S 28 29 (le_S 28 28 (le_n 28))
+| October => le_S 28 30 (le_S 28 29 (le_S 28 28 (le_n 28)))
+| November => le_S 28 29 (le_S 28 28 (le_n 28))
+| December => le_S 28 30 (le_S 28 29 (le_S 28 28 (le_n 28)))
+end
+*)
 
+Definition next_month (m:month) :=
+  match m with
+  | January => February | February  => March      | March     => April
+  | April   => May      | May       => June       | June      => July
+  | July    => August   | August    => September  | September => October 
+  | October => November | November  => December   | December  => January
+end.
+
+Theorem next_august_then_july : forall m:month, 
+  next_month m = August -> m = July.
+Proof.
+  intro m. case m; simpl; intro Hnext_eq; discriminate Hnext_eq || reflexivity. 
+Qed.
+
+Check I. (* I: True *)
+
+Theorem not_January_eq_February : January <> February.
+Proof. 
+  unfold not. intros H.
+  pose (g:=(fun (m:month) => match m with January => True | _ => False end)). (* can also define g from month_rec *)
+  change (g February). rewrite <- H. simpl. apply I.
+Qed.
+
+Theorem not_true_eq_false : true <> false.
+Proof. 
+  unfold not. intro H. pose (g:= fun (b:bool) => match b with false => False | true => True end).
+  change (g false). rewrite <- H. simpl. apply I.
+Qed.
+
+  
 
 
 

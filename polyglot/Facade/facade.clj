@@ -97,8 +97,7 @@
   (letfn
     ; object created from data is message passing interface
     [(this [data]
-       (let [class-dictionary { :traverse  traverse 
-                                :self :self}]  
+       (let [class-dictionary { :traverse  traverse }]  
          (fn [m]
            (let [operation  (class-dictionary m :notfound)]
              (if (= operation :notfound)
@@ -118,10 +117,103 @@
   (fn [generator] ((generator :visit) (:self data))))
 
 
-(def x (ProgramNode))
-(def y (x :self))
-(println (= x y))
+(defmulti parse :type)
+; a type for parsing tokens and building AST using builder
+(def Parser  ; constructor
+  (letfn
+    ; object created from data is message passing interface
+    [(this [data]
+       (let [class-dictionary { :parse  parse }]  
+         (fn [m]
+           (let [operation  (class-dictionary m :notfound)]
+             (if (= operation :notfound)
+               (throw 
+                 (Exception. 
+                   (format "Parser: unknown operation %s" m)))
+               (operation data))))))]
+    ;
+    ; returning no argument constructor
+    ;
+    (fn [] 
+      (println "creating new parser")
+      (this {:type ::parser})))) 
 
+(defmethod parse ::parser [data]
+  (fn [scanner builder]
+    (println "parsing input and building syntax tree")))
+
+(defmulti visit :type)
+; a type for back end code generation
+(def RISCCodeGenerator  ; constructor
+  (letfn
+    ; object created from data is message passing interface
+    [(this [data]
+       (let [class-dictionary { :visit  visit }]  
+         (fn [m]
+           (let [operation  (class-dictionary m :notfound)]
+             (if (= operation :notfound)
+               (throw 
+                 (Exception. 
+                   (format "RISCCodeGenerator: unknown operation %s" m)))
+               (operation data))))))]
+    ;
+    ; returning single argument constructor
+    ;
+    (fn [output] 
+      (println "creating target code generator")
+      (this {:type ::risc-code-generator :output output})))) 
+
+(defmethod visit ::risc-code-generator [data]
+  (fn [tree] (println "generating target code")))
+
+(defmulti compile-action :type)
+; now the Facade interface, stripping out the system complexity
+; and allowing client to simply call the 'compile' method. 
+(def CompilerClass  ; constructor
+  (letfn
+    ; object created from data is message passing interface
+    [(this [data]
+       (let [class-dictionary { :compile  compile-action }]  
+         (fn [m]
+           (let [operation  (class-dictionary m :notfound)]
+             (if (= operation :notfound)
+               (throw 
+                 (Exception. 
+                   (format "CompilerClass: unknown operation %s" m)))
+               (operation data))))))]
+    ;
+    ; returning no argument constructor
+    ;
+    (fn [] 
+      (println "gcc (Debian 4.9.2-10) 4.9.2 -- fictitious compiler")
+      (this {:type ::compiler}))))
+
+(defmethod compile-action ::compiler [data]
+  (fn [input output]
+    (let 
+      ; creating scanner from InputStream 
+      [ scanner (Scanner input)
+      ; creting builder for abstract syntax tree
+        builder (ProgramNodeBuilder)
+      ; creating parser
+        parser  (Parser)]
+      ; parsing using scanner and builder, hence creating AST
+      ((parser :parse) scanner builder)
+      (let
+        ; creating target code generator
+        [ generator (RISCCodeGenerator output)
+        ; retrieving abstract syntax tree from builder
+          parse-tree (builder :root-node)]
+        ; generating target code from AST and generator
+        ((parse-tree :traverse) generator)
+        (println "compilation complete")))))
+
+(defn -main [])
+; main
+(def input  (InputStream "source.c"))
+(def output (BytecodeStream))
+(def compiler (CompilerClass))
+((compiler :compile) input output)
 
 
 
