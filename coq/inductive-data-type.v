@@ -345,7 +345,38 @@ Proof.
   change (g false). rewrite <- H. simpl. apply I.
 Qed.
 
-  
+Theorem next_march_shorter : forall (leap:bool)(m1 m2:month), 
+  next_month m1 = March -> month_length leap m1 <= month_length leap m2.  
+Proof.
+  intros leap m1 m2 H.
+  case m1. (* we are stuck *)
+  Restart.
+  intros leap m1 m2.
+  case m1; simpl; (discriminate || (* cannot be handled by discriminate *)
+    simpl; case m2; simpl; case leap; auto).
+  Restart.
+  intros leap m1 m2 H. generalize H. (* then can proceed with 'case' *)
+  Restart.
+(* negative argument to specifiy which occurence of m1 should not be replaced in abstraction *) 
+  intros leap m1 m2 H. generalize (eq_refl m1). pattern m1 at -1. 
+  case m1; intro H0; rewrite H0 in H; simpl in H; (discriminate || (* case which cannot be handled with discriminate *) 
+    simpl; case leap; case m2; simpl; auto).  
+Qed.
+
+
+Ltac caseEq f := (* our first tactic definition *)
+  generalize (eq_refl f); pattern f at -1; case f.
+
+
+
+Theorem next_march_shorter' : forall (leap:bool)(m1 m2:month), 
+  next_month m1 = March -> month_length leap m1 <= month_length leap m2.  
+Proof.
+  intros leap m1 m2 H.
+  caseEq m1; intro H'; rewrite H' in H; simpl in H; try (discriminate H).
+  case leap; simpl; case m2; simpl; auto.
+Qed.
+
 
 
 

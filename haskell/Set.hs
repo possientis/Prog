@@ -41,7 +41,7 @@ instance ISet Set where
   singleton x             = Singleton x
   union x y               = Union x y
   -- 
-  -- Definition of <= (inclusion)
+  -- Definition 1 of <= (inclusion)
   -- 
   -- subset is the key relation on free structure Set
   -- providing a definition of subset which is self-contained
@@ -80,13 +80,13 @@ instance ISet Set where
   -- as well such as xUy == yUx (== being defined as <= and >=)
   -- 0Ux = x and xU(yUz) = (xUy)Uz, etc.
   --
-  -- Definition: we define x == y as (x <= y && y <= x)
+  -- Definition 2: we define x == y as (x <= y && y <= x)
   --
   -- We do not know anything about == at this stage. One 
   -- succesful application of structural induction is
   -- as follows. We start with a definition:
   --
-  -- Definition: We define the map E: X -> P(X) by:
+  -- Definition 3: We define the map E: X -> P(X) by:
   -- E(0) = 0 (the empty set)
   -- E({x}) = {x} (the singleton)
   -- E(aUb) = E(a)UE(b)
@@ -138,7 +138,7 @@ elements (Union x y)   = elements x ++ elements y
   -- equivalence aUb <= y <=> a <= y && b <= y which is true 
   -- from (v) of the definition of <=. This completes the proof.
   --
-  -- Definition: we define order: X -> N as follows:
+  -- Definition 4: we define order: X -> N as follows:
   -- order(0) = 1
   -- order({x}) = 1 + order(x)
   -- order(xUy) = 1 + max(order(x), order(y))
@@ -242,7 +242,7 @@ elements (Union x y)   = elements x ++ elements y
   -- the transitivity of <= (Lemma 8)
   --
   --
-  -- Definition: We can now define the quotient space X/==
+  -- Definition 5: We can now define the quotient space X/==
   -- which will shall denote X* or (X*,0, {}, U), on which
   -- the inclusion <= is well defined (Lemma 11).
   --
@@ -267,7 +267,7 @@ elements (Union x y)   = elements x ++ elements y
   -- Just like we did for X we can define for X* the notion
   -- of a 'set's elements':
   --
-  -- Definition: We define the map E*: X* -> P(X*) by:
+  -- Definition 6: We define the map E*: X* -> P(X*) by:
   -- E*([0])   = 0         (the empty set) 
   -- E*({[x]}) = {[x]}     (the singleton)
   -- E*([a]U[b])   = E*([a])UE*([b]) (the union)
@@ -286,7 +286,7 @@ elements (Union x y)   = elements x ++ elements y
   -- In other words the elements of the class of x, are
   -- the classes of the elements of x.
   --
-  -- Definition: given x y:X we say that x belongs to y,
+  -- Definition 7: given x y:X we say that x belongs to y,
   -- denoted x in y or x:y, if and only {x} <= y.
 
 
@@ -378,7 +378,7 @@ elements (Union x y)   = elements x ++ elements y
   -- definition are only legitimate for free algebras. So we shall
   -- define F on X instead and show it is compatible with ==.
   --
-  -- Definition: we define the map F with domain X as follows:
+  -- Definition 8: we define the map F with domain X as follows:
   --
   --  (i)   F(0) = 0              (the empty set)
   --  (ii)  F({x}) = {F(x)}       (the set with one element)
@@ -445,7 +445,7 @@ elements (Union x y)   = elements x ++ elements y
   --
   -- We are now able to define F on the domain X* rather than X
   --
-  -- Definition: we can define F*:X* -> F(X) by F([x]) = F(x)
+  -- Definition 9: we can define F*:X* -> F(X) by F([x]) = F(x)
   --
   -- By Lemma 20, this definition is legitimate.
   --
@@ -508,7 +508,7 @@ elements (Union x y)   = elements x ++ elements y
   -- We now need to introduce a new notion which is similar to that
   -- of 'order' but different. We call it 'rank'
   --
-  -- Definition: we define rnk: X -> N by induction:
+  -- Definition 10: we define rnk: X -> N by induction:
   -- rnk(0)   = 0
   -- rnk({x}) = 1 + rnk(x)
   -- rnk(aUb) = max(rnk(a),rnk(b))
@@ -561,9 +561,13 @@ rank (Union x y)    = max (rank x) (rank y)
   -- Thanks to Lemma 24, the notion of rank can be extended to the
   -- quotient algebra X* with the following definition:
   --
-  -- Definition: we define rnk* : X* -> N by setting rnk*([x]) = rnk(x).
+  -- Definition 11: we define rnk* : X* -> N by setting rnk*([x]) = rnk(x).
+  --
+  -- Remark: we shall often write rnk(x) rather than rnk*(x). This abuse
+  -- of notation should be manageable as the context should reveal whether
+  -- x is an element of X or of X*.
   -- 
-  -- Definition: forall n:N we define X*n = {x:X* | rnk(x) <= n}.
+  -- Definition 12: forall n:N we define X*n = {x:X* | rnk*(x) <= n}.
   --
   -- Lemma 25: X*0  = {0}
   --
@@ -645,7 +649,7 @@ rank (Union x y)    = max (rank x) (rank y)
   -- X*1 = {0,1} and |X*1| = 2 = 2^1. We also know that X*2 = {0,1,{1},2}
   -- and |X*2| = 4 = 2^|X*1|. Then |X*3| = 2^4 = 16 and |X*4| = 2^16 etc. 
   -- 
-  -- Definition: given n:N we define the map h(n):X*n->N with an induction
+  -- Definition 13: given n:N we define the map h(n):X*n->N with an induction
   -- on n:N. First we define h(0):X*0->N by setting h(0)(0) = 0. Next, 
   -- assuming n >= 1 and h(n-1) is defined, we define h(n):X*n->N by:
   --
@@ -713,11 +717,11 @@ rank (Union x y)    = max (rank x) (rank y)
   --
   -- By virtue of Lemma 30, therefore able to define a function h:X*->N as follows:
   --
-  -- Definition: We define h:X*->N by setting h(x) = h(n)(x) for rnk(x) <= n.
+  -- Definition 14: We define h*:X*->N by setting h*(x) = h(n)(x) for rnk(x) <= n.
   --
-  -- Our next challenge is to prove that the function h:X*->N is actually a bijection.
+  -- Our next challenge is to prove that the function h*:X*->N is actually a bijection.
   --
-  -- Definition: for n:N we call cardinal of rank n , the number c(n) define by:
+  -- Definition 15: for n:N we call cardinal of rank n , the number c(n) define by:
   --
   --    c(0) = 1, c(n+1) = 2^c(n)
   --
@@ -782,17 +786,17 @@ rank (Union x y)    = max (rank x) (rank y)
   -- h(n+1) is a bijection from X*(n+1) to 2^|X*n|. Since by Lemma 29, 2^|X*n| = |X*(n+1)|,
   -- we have proved that h(n+1): X*(n+1) -> |X*(n+1)| is a bijection as requested 
   --
-  -- Lemma 34: The map h:X* -> N is bijective
+  -- Lemma 34: The map h*:X* -> N is bijective
   --
-  -- Proof: let x y:X* such that h(x) = h(y). We need to show that x = y. Let n be the max
-  -- of rnk(x) and rnk(y), then both x and y are elements of X*n and h(n)(x) = h(x) = h(y)
+  -- Proof: let x y:X* such that h*(x) = h*(y). We need to show that x = y. Let n be the max
+  -- of rnk(x) and rnk(y), then both x and y are elements of X*n and h(n)(x) = h*(x) = h*(y)
   -- = h(n)(y). Since we know from Lemma 33 that h(n) is injective, we obtain x = y which
-  -- shows that h is itself injective. It remains to show that H is surjective. So let
-  -- m:N, we need to prove the existence of x:X* such that h(x) = m. However, since |X*n|
+  -- shows that h* is itself injective. It remains to show that H is surjective. So let
+  -- m:N, we need to prove the existence of x:X* such that h*(x) = m. However, since |X*n|
   -- = c(n) -> +oo as n->+oo, there is n:N such that m < |X*n|. In particular, m is an 
   -- element of the set |X*n| = {0,1, ... , |X*n|-1 }. By Lemma 33, we know that h(n)
   -- is a bijection from X*n to |X*n|. Hence, there exists x:X*n such that h(n)(x) = m.
-  -- In particular, we have x:X* and h(x) = m.
+  -- In particular, we have x:X* and h*(x) = m.
   --
   --
   --
