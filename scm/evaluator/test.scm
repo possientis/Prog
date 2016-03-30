@@ -15,6 +15,8 @@
 (load "definition.scm")
 (load "hash.scm")
 (load "link-node.scm")
+(load "link.scm")
+(load "dict.scm")
 (load "exp-type.scm")
 (load "true-false.scm")
 (load "if.scm")

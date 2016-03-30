@@ -7,5 +7,5 @@
 ;
 
 ; choose implementation here
-(load "frame3")
+(load "frame3.scm")
 (define frame frame3)

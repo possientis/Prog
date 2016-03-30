@@ -19,12 +19,21 @@ interface Set {
 // attempting to create hierarchy of sets using composite design pattern
 abstract class CSet implements Set {
   public static long count = 0;
+  abstract public boolean isZero(); 
+  abstract public boolean isSingleton();
+  abstract public boolean isUnion();
 }
 
 class CZero extends CSet {
   public CZero(){count++;}
   @Override
   public String toString(){ return "0"; }
+  @Override
+  public boolean isZero(){ return true; }
+  @Override
+  public boolean isSingleton(){ return false; }
+  @Override
+  public boolean isUnion(){ return false; }
 }
 
 class CSingleton extends CSet {
@@ -32,6 +41,12 @@ class CSingleton extends CSet {
   public CSingleton(Set element){ this.element = element; count++; }
   @Override
   public String toString(){ return "{" + element.toString() + "}"; }
+  @Override
+  public boolean isZero(){ return false; }
+  @Override
+  public boolean isSingleton(){ return true; }
+  @Override
+  public boolean isUnion(){ return false; }
 }
 
 class CUnion extends CSet {
@@ -42,11 +57,21 @@ class CUnion extends CSet {
   public String toString(){ 
     return left.toString() + "U" + right.toString();
   }
+  @Override
+  public boolean isZero(){ return false; }
+  @Override
+  public boolean isSingleton(){ return false; }
+  @Override
+  public boolean isUnion(){ return true; }
 }
 
 class SetManager {
+  public static int pairingCantor(int x, int y){
+    return (x + y + 1)*(x + y)/2 + y; // '/' is integer division
+  }
   private int nextHash = 0;
   private final HashMap<Integer,Integer> singletonMap = new HashMap<>();
+  private final HashMap<Integer,Integer> unionMap = new HashMap<>();
 
 }
 
