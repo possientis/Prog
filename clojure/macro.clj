@@ -84,6 +84,38 @@
 ;(if (not unless-cond) unless-exp)
 (println (macroexpand '(unless-1 unless-cond unless-exp)))
 
+; the backquote starts a template
+; backquote = 'syntax quote character'
+; however, you need to 'unquote' certain symbol using '~'
+(defmacro unless-3 [test then]
+  `(if (not ~test) ~then))          ; backquote (normal quote won't do)
+
+
+(defn exhibits-oddity4 [x]
+  (unless-3 (even? x)
+          (println "This is nicely odd!!!!"))) 
+
+(exhibits-oddity4 23)
+(exhibits-oddity4 10)
+
+(println (quote qwerty))
+(println 'qwerty)                   ; qwerty (normal quote)
+(println `qwerty)                   ; user/qwerty (backquote)
+
+(defmacro unless-4 [test & exprs]
+  `(if (not ~test) (do ~exprs)))    ; this won't work ... (do (item1 item2)) you want (do item1 item2)
+
+(defmacro unless-5 [test & exprs]
+  `(if (not ~test) (do ~@exprs)))   ; unquote splice reader macro '~@'
+
+(defn exhibits-oddity5 [x]
+  (unless-5 (even? x)
+            (println "This is odd!!")
+            (println "This is very odd!")
+            (println "This is very very odd!")))
+
+(exhibits-oddity5 23)               ; working fine now
+(exhibits-oddity5 10)               ; no message
 
 
 

@@ -1,4 +1,4 @@
-module Set (ISet, empty, set, inc, belong, singleton, union, subset, Set) where
+module Set (ISet, empty, set, inc, belong, singleton, union, subset, Set()) where
 import qualified Data.Map as Map
 
 class ISet a where
@@ -874,10 +874,59 @@ naive (Union x y)       = ESet h s where
 h :: Set -> Integer
 h x = hash (naive x)
   
+data HashManager = HashManager {
+  nextHash      :: Int, 
+  singletonMap  :: Map.Map Int Int, 
+  unionMap      :: Map.Map (Int,Int) Int
+}
+
+newHashManager :: HashManager
+newHashManager = HashManager 1 Map.empty Map.empty
+
+getHash :: HashManager -> Set -> (HashManager, Int) 
+getHash m Empty = (m,0) 
+getHash m (Singleton x) = 
+  let (mx, hx) = getHash m x in
+    let findx  = Map.lookup hx (singletonMap mx) in
+      case findx of
+        Just h      -> (mx, h)
+        Nothing     -> let next = nextHash mx in
+          let m' = HashManager (next+1) (Map.insert hx next (singletonMap mx)) (unionMap mx)
+            in (m', next) 
+getHash m (Union x y) =
+  let (mx, hx)  = getHash m x in
+    let (my, hy) = getHash mx y in
+      let findxy = Map.lookup (hx,hy) (unionMap my) in
+        case findxy of
+          Just h    -> (my, h)
+          Nothing   -> let next = nextHash my in
+            let m' = HashManager (next+1) (singletonMap my) (Map.insert (hx, hy) next (unionMap my))
+              in (m', next)
+      
+
+dynhash :: Set -> Int
+dynhash x = snd(getHash newHashManager x)
   
 
-         
+data Hash a = Hash (HashManager -> (a, HashManager))
 
+hashApply :: Hash a -> HashManager -> (a, HashManager)
+hashApply (Hash f) manager = f manager
+
+instance Monad Hash where
+  return x = Hash (\manager -> (x, manager))
+  m >>= k  = Hash (\manager -> 
+    let (x, manager') = hashApply m manager in 
+      hashApply (k x) manager')
+
+newHash :: Set -> Hash Int
+newHash Empty = return 0
+ 
+
+
+             
+              
+ 
 
 
 

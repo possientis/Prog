@@ -1,4 +1,4 @@
-;(require 'object->string)
+(require 'object->string)
 (load "link.scm")
 (load "hash.scm")
 

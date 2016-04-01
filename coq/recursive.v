@@ -1,4 +1,4 @@
-Set Implicit Arguments.
+Set Implicit Arguments. 
 
 
 Print nat. (* Inductive nat : Set :=  O : nat | S : nat -> nat *)
@@ -60,12 +60,9 @@ Print plus.
 Fixpoint mult3 (n:nat) :nat :=
   match n with
   | 0   => 0
-  | S p => S (S (S mult3 p))
+  | S p => S (S (S (mult3 p)))
   end.
-
-
 (*
-
 plus = 
 fix plus (n m : nat) {struct n} : nat :=
   match n with
@@ -73,6 +70,63 @@ fix plus (n m : nat) {struct n} : nat :=
     | S p => S (plus p m)
   end
 : nat -> nat -> nat
-
 *)
+
+Definition less_than_three (n:nat) : bool :=
+  match n with 
+  | 0         => true
+  | S 0       => true
+  | S (S 0)   => true 
+  | other     => false
+  end.
+
+Eval compute in (less_than_three 0).
+Eval compute in (less_than_three 1).
+Eval compute in (less_than_three 2).
+Eval compute in (less_than_three 3).
+Eval compute in (less_than_three 4).
+
+Fixpoint plus2 (n m : nat) : nat :=
+  match m with 
+    | 0   => n
+    | S p => S (plus2 n p)
+  end.
+Check plus_n_O.
+Check plus_n_Sm. (* forall n m : nat, S (n + m) = n + S m *)
+
+Theorem same_plus: forall n m : nat, plus2 n m = n + m.
+Proof.
+  intros n m. elim m. simpl. apply plus_n_O. clear m. intros m H. simpl.
+  rewrite <- plus_n_Sm. rewrite H. reflexivity.
+Qed.
+
+Fixpoint sum_f_acc (n:nat)(f: nat->nat)(acc: nat) :nat :=
+  match n with
+    | 0     => acc
+    | S p   => sum_f_acc p f (acc + (f p))
+  end.
+
+Definition sum_f (n:nat)(f:nat->nat) : nat := sum_f_acc n f 0.
+
+Eval compute in (sum_f 5 (fun n => (S n)*(S n))).
+
+
+Fixpoint iterate (A:Set)(f:A->A)(n:nat)(x:A){struct n} : A :=
+  match n with
+    | 0   => x
+    | S p => f (iterate f p x)
+  end.
+
+Fixpoint two_power (n:nat) : nat :=
+  match n with
+    | 0   => 1
+    | S p => 2 * two_power p
+  end.
+
+Eval compute in two_power 10.
+
+
+
+
+
 
