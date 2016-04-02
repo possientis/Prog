@@ -832,7 +832,7 @@ rankComplexity (Union x y)              = 1 + rankComplexity x + rankComplexity 
 --
 
 data ESet = ESet { 
-  hash      :: Integer, 
+  setHash      :: Integer, 
   list      :: Map.Map Integer ESet
 } deriving Show 
 
@@ -856,23 +856,23 @@ expMod p x y = loop p x y 1 where
 inject :: Integer -> Set -> ESet
 inject _ Empty          = ESet 0 Map.empty
 inject p (Singleton x)  = ESet (expMod p 2 h) (Map.insert h s Map.empty)
-                                  where s = inject p x; h = hash s
+                                  where s = inject p x; h = setHash s
 inject p (Union x y)    = ESet 0 Map.empty
 
 naive :: Set -> ESet
 naive Empty             = ESet 0 Map.empty
 naive (Singleton x)     = ESet (2^h) (Map.insert h s Map.empty) where 
   s = naive x 
-  h = hash s
+  h = setHash s
 naive (Union x y)       = ESet h s where
   s1 = naive x
   s2 = naive y
   s = Map.union (list s1) (list s2)
   h = Map.fold op 0 s where
-    op x sum = (2^(hash x)) + sum
+    op x sum = (2^(setHash x)) + sum
 
 h :: Set -> Integer
-h x = hash (naive x)
+h x = setHash (naive x)
   
 data HashManager = HashManager {
   nextHash      :: Int, 
@@ -891,8 +891,10 @@ getHash m (Singleton x) =
       case findx of
         Just h      -> (mx, h)
         Nothing     -> let next = nextHash mx in
-          let m' = HashManager (next+1) (Map.insert hx next (singletonMap mx)) (unionMap mx)
-            in (m', next) 
+          let m' = HashManager  (next+1) 
+                                (Map.insert hx next (singletonMap mx)) 
+                                (unionMap mx) 
+          in (m', next) 
 getHash m (Union x y) =
   let (mx, hx)  = getHash m x in
     let (my, hy) = getHash mx y in
@@ -900,16 +902,14 @@ getHash m (Union x y) =
         case findxy of
           Just h    -> (my, h)
           Nothing   -> let next = nextHash my in
-            let m' = HashManager (next+1) (singletonMap my) (Map.insert (hx, hy) next (unionMap my))
-              in (m', next)
-      
-
+            let m' = HashManager  (next+1) 
+                                  (singletonMap my) 
+                                  (Map.insert (hx, hy) next (unionMap my))
+            in (m', next)
 dynhash :: Set -> Int
 dynhash x = snd(getHash newHashManager x)
-  
 
 data Hash a = Hash (HashManager -> (a, HashManager))
-
 hashApply :: Hash a -> HashManager -> (a, HashManager)
 hashApply (Hash f) manager = f manager
 
@@ -919,9 +919,28 @@ instance Monad Hash where
     let (x, manager') = hashApply m manager in 
       hashApply (k x) manager')
 
-newHash :: Set -> Hash Int
-newHash Empty = return 0
- 
+findSingleton :: Int -> Hash (Maybe Int)  
+findSingleton h = Hash (\manager -> (Map.lookup h (singletonMap manager), manager))
+
+insertSingleton :: Int -> Hash Int
+insertSingleton h = Hash (\manager -> let next = nextHash manager in
+                    (next, HashManager  (next+1)
+                                        (Map.insert h next (singletonMap manager))
+                                        (unionMap manager)))
+
+insertUnion :: Int -> Int -> Hash Int
+insertUnion h h' = Hash (\manager -> let next = nextHash manager in
+                   (next, HashManager (next+1)
+                                      (singletonMap manager)
+                                      (Map.insert (h,h') next (unionMap manager))))
+            
+hash :: Set -> Hash Int
+hash    Empty           =  return 0
+hash   (Singleton x)    =  do hx    <- hash x
+                              findx <- findSingleton hx
+                              case findx of
+                                Just h    -> return h
+                                Nothing   -> insertSingleton hx
 
 
              
