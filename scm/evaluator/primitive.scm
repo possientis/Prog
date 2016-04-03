@@ -1,11 +1,14 @@
 (load "load-file.scm")
 (load "require.scm")
 (load "eval-primitive.scm")
+(load "apply-primitive.scm")
 (load "object-string.scm")
 
-
 (define (my-display s)
-  (display "x-")(display s)(display "-x"))
+  (display "x-")
+  (display s)
+  (display "-x")
+)
 
 (define (primitive-implementation proc) (cadr proc))
 
@@ -23,6 +26,7 @@
         (list 'set-car! set-car!)
         (list 'set-cdr! set-cdr!)
         (list 'list list)
+        (list 'map map)
         (list 'null? null?)
         (list '+ +)
         (list '* *)
@@ -43,12 +47,14 @@
         (list 'hash hash)
         (list 'require require-lib)
         (list 'eval eval-primitive)
+        (list 'apply apply-primitive)
         (list 'make-vector make-vector)
         (list 'vector-fill! vector-fill!)
         (list 'vector-length vector-length)
         (list 'vector-ref vector-ref)
         (list 'vector-set! vector-set!)
         (list 'string-append string-append)
+        (list 'length length)
         (list 'object->string object->string-primitive)
         (list 'exit (lambda(x) 'ok))
         ; more to be included

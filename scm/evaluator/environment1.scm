@@ -1,5 +1,5 @@
 ; one possible implementation of environment
-(load "frame")
+(load "frame.scm")
 
 (define environment1    ; constructor
   (let ((_static #f))   ; name encapsulation

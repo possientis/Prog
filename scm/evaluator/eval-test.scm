@@ -1,11 +1,8 @@
 (load "eval.scm")
-(load "environment-test.scm")
-(load "primitive-test.scm")
-(load "global-env-test.scm")
 
 (define (eval-test)
   ;
-  (display "eval: starting unit test\n")
+  (display "eval: starting unit test\n\n")
   ;
   ; self-evaluating
   ;
@@ -271,7 +268,7 @@
   (let ((x (eval '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) global-env)))
     (if (not (equal? x 11)) (display "eval: unit test 16.9 failing\n")))
   ;
-  ; load
+  ; load 
   ;
   (let ((s (eval '(load "test.scm") global-env)))
     (if (not (equal? s " test.scm loaded"))
@@ -283,9 +280,6 @@
     (let ((x (eval 'z global-env)))
       (if (not (equal? x 11)) (display "eval: unit test 17.3 failing\n")))
     )
-
-    
-
   (display "eval: unit test complete\n"))
 
 ;(environment-test)

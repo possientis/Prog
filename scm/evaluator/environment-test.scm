@@ -1,5 +1,4 @@
 (load "environment.scm")
-
 (define (environment-test)
   (define env1 (environment))
   (define env2 (environment))
@@ -389,5 +388,8 @@
     (if (not (env3 'empty?)) (display "environment: unit test 19.2 failing\n")) 
     (if (not (env4 'empty?)) (display "environment: unit test 19.3 failing\n"))) 
 
-  (display "environment: unit test complete\n"))
+  (display "environment: unit test complete\n\n"))
+
+(environment-test)
+(exit 0)
 

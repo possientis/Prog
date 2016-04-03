@@ -120,7 +120,6 @@ class SetManager {
   private final HashMap<Integer,Integer> singletonMap = new HashMap<>();
   private final HashMap<Integer,Integer> unionMap     = new HashMap<>();
   private final HashMap<Integer, Set> objectMap       = new HashMap<>();
-  private final HashMap<Integer,String> stringMap     = new HashMap<>();
 
   public SetManager(){ objectMap.put(0, new Zero(0)); } // empty set added to map
 

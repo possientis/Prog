@@ -660,12 +660,12 @@
   (if(not(eq? #f ((b 'find) "zab")))(display"dictionary: unit test 413 failing\n"))
   ;;
   ;; multiple inserts
-  (let loop ((i 64))
+  (let loop ((i 16))
     (if (> i 0)
       (begin
         ((a 'insert!) i (* i 10))
 ;        (if (not (a 'check))(display"dictionary: unit test 414 failing\n"))
-        (let loop2 ((j 64))
+        (let loop2 ((j 16))
           (if (> j i)
             (begin
               (let ((x ((a 'find) j)))
@@ -677,12 +677,12 @@
               (loop2 (- j 1)))))
         (loop (- i 1)))))
   ;; multiple deletes
-  (let loop ((i 64))
+  (let loop ((i 16))
     (if (> i 0)
       (begin
         ((a 'delete!) i)
 ;        (if (not (a 'check))(display"dictionary: unit test 417 failing\n"))
-        (let loop2 ((j 64))
+        (let loop2 ((j 16))
           (if (> j i)
             (begin
               (let ((x ((a 'find) j)))
