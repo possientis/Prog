@@ -82,5 +82,55 @@ Proof.
   intros n H. simpl. rewrite H. trivial.
 Qed.
 
+Check eq_ind.
+(* 
+forall (A : Type) (x : A) (P : A -> Prop),
+       P x -> forall y : A, x = y -> P y
+*)
+
+
+Lemma plus_n_0' : forall (n:nat), n = n + 0.
+Proof.
+  intro n. elim n. simpl. reflexivity.
+  clear n. intros n IH. simpl. pattern (n+0).
+  apply eq_ind with (y:=(n+0))(x:=n).
+  reflexivity. exact IH.
+Qed.
+
+Fixpoint f1 (t:Z_btree) : Z_fbtree :=
+  match t with
+    | Z_leaf            => Z_fleaf
+    | Z_bnode v t1 t2   => 
+      Z_fnode v (fun b  => 
+        match b with
+          | true  => (f1 t1)
+          | false => (f1 t2)   
+         end)
+   end.
+
+Fixpoint f2 (t:Z_fbtree) : Z_btree :=
+  match t with
+    | Z_fleaf           => Z_leaf
+    | Z_fnode v f       => Z_bnode v (f2 (f true)) (f2 (f false))
+  end.
+
+Theorem f2of1: forall (t:Z_btree), f2 (f1 t) = t.
+Proof.
+  intro t. elim t. simpl. reflexivity.
+  clear t. intro v. intro t1. intro H1. intro t2. intro H2. 
+  simpl. rewrite H1. rewrite H2. reflexivity.
+Qed.
+
+Lemma bool_func_eq: forall (A:Type) (f g: bool-> A), 
+  f true = g true -> f false = g false -> f = g.
+
+(*
+Theorem f1of2: forall (t:Z_fbtree), f1 (f2 t) = t.
+Proof.
+  intro t. elim t. simpl. reflexivity. intro z. intro f. intro IH.
+  simpl.
+                            
+*)
+
 
 

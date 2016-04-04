@@ -1,9 +1,9 @@
 #!/bin/sh
 
 echo '\nThis is C ...'
-gcc composite.c; 
+gcc composite.c 
 START=$(date +%s%N)
-./a.out; 
+./a.out 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -11,9 +11,9 @@ rm a.out
 
 
 echo '\nThis is C++ ...'
-g++ -std=c++14 composite.cpp; 
+g++ -std=c++14 composite.cpp 
 START=$(date +%s%N)
-./a.out; 
+./a.out 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -21,9 +21,9 @@ rm a.out
 
 
 echo '\nThis is Java ...'
-javac Composite.java; 
+javac Composite.java 
 START=$(date +%s%N)
-java Composite; 
+java Composite 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -31,9 +31,9 @@ rm *.class
 
 
 echo '\nThis is C# ...'
-mcs composite.cs; 
+mcs composite.cs 
 START=$(date +%s%N)
-mono composite.exe; 
+mono composite.exe 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -100,7 +100,7 @@ rm *.class
 
 
 echo '\nThis is Haskell ...'
-ghc -v0 composite.hs; 
+ghc -v0 composite.hs 
 START=$(date +%s%N)
 ./composite 
 END=$(date +%s%N)
