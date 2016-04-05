@@ -133,19 +133,21 @@ class SetManager {
   // manager needs to quickly establish whether (given the set x and its hash code)
   // the set {x} has already been created. However, the manager cannot simply query
   // the objectMap dictionary because it does not know what dynamic hash code the
-  // singleton {x} was assigned (assuming it already exists). This is why the manager
-  // maintains an additional dictionary 'singletonMap' which stores the hash code
-  // of {x} given the hash code of x. Hence by querying the dictionary singletonMap,
-  // the manager is able to establish whether {x} already exists, and if so, what its
-  // hash code is. Given the hash code of {x} it can simply query objectMap and
-  // return the appropriate object. In the case when the object {x} does not already 
-  // exist, the manager assigns the current value of 'nextHash' to the object {x}, 
-  // then creates the object using this hash value, and before it returns the object,
-  // the manager updates objectMap with the new object and singletonMap with the link 
-  // between the hash of x and that of {x}. In order to implement the factory method
-  // union(x,y), a similar scheme is adopted which requires a new dictionary unionMap.
-  // This map could have been implemented with pairs as keys, but we decided to keep
-  // using integers, and simply map pairs of ints to ints with the Cantor function.
+  // singleton {x} was assigned (assuming it already exists). This is why the 
+  // manager maintains an additional dictionary 'singletonMap' which stores the 
+  // hash code of {x} given the hash code of x. Hence by querying the dictionary 
+  // singletonMap, the manager is able to establish whether {x} already exists, 
+  // and if so, what its hash code is. Given the hash code of {x} it can simply 
+  // query objectMap and return the appropriate object. In the case when the object
+  // {x} does not already exist, the manager assigns the current value of 
+  // 'nextHash' to the object {x}, then creates the object using this hash value, 
+  // and before it returns the object, the manager updates objectMap with the new 
+  // object and singletonMap with the link between the hash of x and that of {x}. 
+  // In order to implement the factory method union(x,y), a similar scheme is 
+  // adopted which requires a new dictionary unionMap. This map could have been 
+  // implemented with pairs as keys, but we decided to keep using integers, and 
+  // simply map pairs of ints to ints with the Cantor function.
+
   private int nextHash = 1; // next hash value of whichever object is created
   private final HashMap<Integer,Integer> singletonMap = new HashMap<>();
   private final HashMap<Integer,Integer> unionMap     = new HashMap<>();

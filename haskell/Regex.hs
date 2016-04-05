@@ -1,4 +1,5 @@
 import Text.Regex.Posix
+import qualified Data.ByteString.Char8 as L
 
 bool1 = "my left foot" =~ "foo" :: Bool -- True
 bool2 = "my left foot" =~ "bar" :: Bool -- False
@@ -26,6 +27,17 @@ tuple3 = "before foodiebar after" =~ pattern :: (String,String,String,[String]) 
 tuple4 = "before foodiebar after" =~ pattern :: (Int,Int) -- (7,9) (position of first match + length) 
 tuple5 = "eleemosynary" =~ pattern :: (Int,Int) -- (-1, 0)
 
+
+bool4 = L.pack "foo" =~ "bar" :: Bool -- False
+int3  = "foo" =~ L.pack "bar" :: Int  -- 0
+tuple6 = L.pack "foo" =~ L.pack "o" :: (Int,Int)  -- (1,1)
+
+bytes1 = L.pack "good food" =~ ".ood" :: [[L.ByteString]] -- [["good"],["food"]]
+-- bytes2 = "good food" =~ ".ood" :: [[L.ByteString]] -- failing coz "good food" is a string
+str3 = "good food" =~ ".ood" :: [[String]]  -- [["good"],["food"]] , this works
+
+-- Left hand type (String or ByteString) needs to match return type
+-- Right hand type for pattern can be either String or ByteString
 
 
 

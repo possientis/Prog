@@ -1,8 +1,7 @@
+list of files which fail under evaluator
 eval.scm
 eval-test.scm
 frame4.scm
 global-env.scm
-global-env-test.scm
 repl.scm
 run.scm
-test.scm

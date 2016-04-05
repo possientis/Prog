@@ -7,7 +7,7 @@ def myAssert(predicate: () => Boolean) =
 
 myAssert(() => (5 > 3))
 
-// by-name argument , call by name
+// by-name argument , call by name (argument not evaluated when passed to method)
 def byNameAssert(predicate: => Boolean) =
   if (assertionsEnabled && !predicate)
     throw new AssertionError

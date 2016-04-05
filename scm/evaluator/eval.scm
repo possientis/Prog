@@ -1,4 +1,3 @@
-(load "environment.scm")
 (load "global-env.scm")
 (load "exp-type.scm")
 (load "operands.scm")

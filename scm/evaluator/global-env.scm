@@ -1,4 +1,6 @@
 (load "primitive.scm")
+(load "environment.scm")
+
 (define (setup-environment)
   (let ((initial-env
           (((environment) 'extended)
