@@ -176,3 +176,10 @@ Proof.
   (* this was a complete nightmare. Obviously need automattion and use ring tactic or other *)
 Qed.
 
+Require Import Arith.
+
+Lemma sum_n_n : forall (n:nat), n <= sum_n n.
+Proof.
+  intro n. elim n. simpl. apply le_n. clear n. intros n IH.
+  simpl. apply le_n_S. apply le_plus_l.
+Qed.

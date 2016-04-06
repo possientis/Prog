@@ -100,11 +100,27 @@ Lemma order_sum_singleton : forall (n:nat) (x y:set),
   order (Singleton x) + order (Singleton y) <= S n ->
   order x + order y <= n.
 Proof.
-  intros n x y. intro H. apply le_S_n. apply le_trans with 
+  intros n x y H. apply le_S_n. apply le_trans with 
   (m:= order (Singleton x) + order (Singleton y)). simpl. apply le_n_S.
   apply plus_le_compat_l. apply le_n_Sn. exact H. 
 Qed.
 
+Lemma order_sum_singleton_l : forall (n:nat) (x b:set),
+  order (Singleton x) + order b <= S n ->
+  order x + order b <= n.
+Proof.
+  intros n x b H. apply le_S_n. apply le_trans with
+  (m:= order (Singleton x) + order b). simpl. apply le_n. exact H.
+Qed.
+
+Lemma order_sum_singleton_r : forall (n:nat) (a y:set),
+  order a + order (Singleton y) <= S n ->
+  order a + order y <= n.
+Proof. 
+  intros n a y H. apply le_S_n. apply le_trans with 
+  (m:= order a + order (Singleton y)). simpl.
+  rewrite <- plus_n_Sm. reflexivity. exact H.
+Qed.
 
 Lemma subset_n_Sn : forall (n:nat) (a b:set),
   order a + order b <= n -> subset_n n a b = subset_n (S n) a b.
@@ -112,10 +128,9 @@ Proof.
   intro n. elim n. intros a b. intro H. cut (a = Empty). intro H'. 
   rewrite H'. simpl. trivial. apply order_sum_eq_0_l with (b:=b).
   cut (0 = order a + order b). intro H'. rewrite <- H'. trivial.
-  apply le_n_0_eq. exact H. clear n. intros n IH.
-  intros a b. elim a. intro H. simpl. trivial. clear a. intro x. 
-  intro DontUse. (* hhmm *)
-  elim b. intro H. simpl. trivial. intro y. intro DontUse'. intro H. 
+  apply le_n_0_eq. exact H. clear n. intros n IH a b. elim a. 
+  intro H. simpl. trivial. clear a. intros x Hx. clear Hx.
+  elim b. intro H. simpl. trivial. intros y Hy H. clear Hy. 
   cut (subset_n (S n) (Singleton x) (Singleton y) = 
   bool_and (subset_n n x y) (subset_n n y x)).
   cut (subset_n (S (S n)) (Singleton x) (Singleton y) =
@@ -124,10 +139,20 @@ Proof.
   cut (subset_n n x y = subset_n (S n) x y).
   cut (subset_n n y x = subset_n (S n) y x).
   intros H3 H4. rewrite <- H3, <- H4, H2. reflexivity.
-  apply IH. apply order_sum_singleton. rewrite plus_comm. exact H.
-  apply IH. apply order_sum_singleton. exact H. simpl. reflexivity.
-  simpl. reflexivity.
+  apply IH. 
   
-
-
+ (* 
+  apply order_sum_singleton. rewrite plus_comm. exact H.
+  apply IH. apply order_sum_singleton. exact H. simpl. reflexivity.
+  simpl. reflexivity. clear b. intros y Hy z Hz H. clear Hy Hz. 
+  cut(subset_n (S n) (Singleton x) (Union y z) =
+  bool_or (subset_n n (Singleton x) y) (subset_n n (Singleton x) z)).  
+  cut(subset_n (S (S n)) (Singleton x) (Union y z) =
+  bool_or (subset_n (S n) (Singleton x) y) (subset_n (S n) (Singleton x) z)).
+  intros H1 H2. rewrite H1.
+  cut(subset_n n (Singleton x) y = subset_n (S n) (Singleton x) y).
+  cut(subset_n n (Singleton x) z = subset_n (S n) (Singleton x) z).
+  intros H3 H4. rewrite <- H3, <- H4, H2. reflexivity.
+  apply IH.
+  *)
 

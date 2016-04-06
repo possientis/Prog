@@ -6,7 +6,7 @@
   ;;
   (let ((a ((eval symbol))) ( b ((eval symbol))))
   ;;
-  (display"dictionary starting unit test\n")
+  (display"dictionary: starting unit test\n")
   ;; dictionaries should be empty
   (if (not (a 'empty?)) (display "dictionary: unit test 0.1 failing\n"))
   (if (not (b 'empty?)) (display "dictionary: unit test 0.2 failing\n"))
