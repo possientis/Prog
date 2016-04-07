@@ -20,6 +20,25 @@ escape c  | c `elem` regexChars = '\\' : [c]
   where regexChars = "\\+()^$.{}]|"
 
 charClass :: String -> String
-charClass = undefined
+charClass (']':cs) = ']' : globToRegex' cs
+charClass (c:cs) = c : charClass cs
+charClass [] = error "unterminated character class"
 
 matchesGlob = undefined
+
+-- foo.c : here
+-- fha\kc : there
+
+str1 = "\"fha\\\\kc\""        -- string literal
+str2 = "fha\\kc"              -- string literal
+bool1 = (str1 == (show str2)) -- True
+str3 = read str1 :: String
+bool2 = (str3 == str2)        -- True, read . show = id
+str4 = show str3
+bool3 = (str4 == str1)        -- True, show . read = id 
+
+ 
+main = do
+  putStrLn "fha\\kc"
+  putStrLn (show "fha\\kc")
+  

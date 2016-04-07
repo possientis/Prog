@@ -4,11 +4,11 @@
     (define (this data)
       (lambda (m)
         (cond ((eq? m 'key) (key data))
-          ((eq? m 'next) (next data))
-          ((eq? m 'value) (value data))
-          ((eq? m 'set-next!) (set-next! data))
-          ((eq? m 'set-value!) (set-value! data))
-          (else (display "link-node: unknown operation error\n")))))
+              ((eq? m 'next) (next data))
+              ((eq? m 'value) (value data))
+              ((eq? m 'set-next!) (set-next! data))
+              ((eq? m 'set-value!) (set-value! data))
+              (else (display "link-node: unknown operation error\n")))))
     ;
     (define (key data) (cadr data))
     ;

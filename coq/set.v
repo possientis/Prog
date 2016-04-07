@@ -1,5 +1,9 @@
 Set Implicit Arguments.
 Require Import Arith.
+Require Import Arith.Max.
+
+Definition bool_and (p q:bool) := if p then q else false.
+Definition bool_or  (p q:bool) := if p then true else q.
 
 Inductive set : Set := 
   | Empty     : set
@@ -13,6 +17,7 @@ Fixpoint order (s:set) : nat :=
     | Union x y     => 1 + max (order x) (order y) 
   end.
 
+(*
 Definition successor (s:set) : set :=
   Union s (Singleton s).
 
@@ -35,9 +40,9 @@ Definition nine   := embed 9.
 Definition ten    := embed 10.
 Definition eleven := embed 11.
 Definition twelve := embed 12.  
+*)
 
-Definition bool_and (p q:bool) := if p then q else false.
-Definition bool_or  (p q:bool) := if p then true else q.
+
 
 Fixpoint subset_n (n:nat) : set -> set -> bool :=
   match n with 
@@ -55,20 +60,6 @@ Fixpoint subset_n (n:nat) : set -> set -> bool :=
         | Union x y       => bool_and (subset_n p x b) (subset_n p y b)
       end)
   end.
-
-Lemma subset_n_0_b : forall (n:nat) (b:set), subset_n n Empty b = true.
-Proof.
-  intro n. elim n. intro b. simpl. trivial. clear n. intro n.
-  intro IH. intro b. simpl. trivial.
-Qed.
-
-Lemma subset_n_sx_0 : forall (n:nat) (x:set), 
-  (1 <= n) -> subset_n n (Singleton x) Empty = false.
-Proof.
-  intro n. elim n. intros x H. simpl. cut (0 = 1). intro H'.
-  discriminate H'. apply le_n_0_eq. exact H. clear n. intro n.
-  intro IH. intro x. intro H. simpl. trivial. 
-Qed.
 
 Lemma plus_eq_0_l : forall (n m:nat), n + m = 0 -> n = 0.
 Proof.
@@ -95,16 +86,7 @@ Proof.
   exact H.
 Qed.
 
-
-Lemma order_sum_singleton : forall (n:nat) (x y:set),
-  order (Singleton x) + order (Singleton y) <= S n ->
-  order x + order y <= n.
-Proof.
-  intros n x y H. apply le_S_n. apply le_trans with 
-  (m:= order (Singleton x) + order (Singleton y)). simpl. apply le_n_S.
-  apply plus_le_compat_l. apply le_n_Sn. exact H. 
-Qed.
-
+(* This is the main proof of the order_sum_singleton lemmas *)
 Lemma order_sum_singleton_l : forall (n:nat) (x b:set),
   order (Singleton x) + order b <= S n ->
   order x + order b <= n.
@@ -113,14 +95,64 @@ Proof.
   (m:= order (Singleton x) + order b). simpl. apply le_n. exact H.
 Qed.
 
+(* simply use commutativity of addition and apply previous lemma *)
 Lemma order_sum_singleton_r : forall (n:nat) (a y:set),
   order a + order (Singleton y) <= S n ->
   order a + order y <= n.
 Proof. 
-  intros n a y H. apply le_S_n. apply le_trans with 
-  (m:= order a + order (Singleton y)). simpl.
-  rewrite <- plus_n_Sm. reflexivity. exact H.
+  intros n a y H. rewrite plus_comm. apply order_sum_singleton_l.
+  rewrite plus_comm in H. exact H.
 Qed.
+
+(* simply use commutativity of addition and apply 'left' version *)
+Lemma order_sum_singleton : forall (n:nat) (x y:set),
+  order (Singleton x) + order (Singleton y) <= S n ->
+  order x + order y <= n.
+Proof.
+  intros n x y H. apply order_sum_singleton_l. rewrite plus_comm.
+  apply order_sum_singleton_l. rewrite plus_comm. apply le_S. exact H.
+Qed.
+
+(* 'L' refers to where 'Union' stands in the sum
+** while 'l' refers to the left argument of Union *)
+Lemma order_sum_union_Ll : forall (n:nat) (x y b:set),
+  order (Union x y) + order b <= S n ->
+  order x + order b <= n.
+Proof.
+  intros n x y b H. apply le_S_n. apply le_trans with
+  (m:= order (Union x y) + order b). simpl. apply le_n_S.
+  apply plus_le_compat_r. simpl. apply le_max_l. exact H.
+Qed.
+  
+(* same proof, but use le_max_r instead of le_max_l *)
+Lemma order_sum_union_Lr : forall (n:nat) (x y b:set),
+  order (Union x y) + order b <= S n ->
+  order y + order b <= n.
+Proof.
+  intros n x y b H. apply le_S_n. apply le_trans with
+  (m:= order (Union x y) + order b). simpl. apply le_n_S.
+  apply plus_le_compat_r. simpl. apply le_max_r. exact H.
+Qed.
+
+(* consequence of 'Ll' lemma and commutativity *)
+Lemma order_sum_union_Rl : forall (n:nat) (a y z:set),
+  order a + order (Union y z) <= S n ->
+  order a + order y <= n.
+Proof.
+  intros n a y z H. rewrite plus_comm. apply order_sum_union_Ll
+  with(x:= y)(y:=z). rewrite plus_comm in H. exact H.
+Qed.
+
+(* consequence of 'Lr' lemma and commutativity *)
+Lemma order_sum_union_Rr : forall (n:nat) (a y z:set),
+  order a + order (Union y z) <= S n ->
+  order a + order z <= n.
+Proof.
+  intros n a y z H. rewrite plus_comm. apply order_sum_union_Lr
+  with(x:= y)(y:=z). rewrite plus_comm in H. exact H.
+Qed.
+
+
 
 Lemma subset_n_Sn : forall (n:nat) (a b:set),
   order a + order b <= n -> subset_n n a b = subset_n (S n) a b.
@@ -139,12 +171,10 @@ Proof.
   cut (subset_n n x y = subset_n (S n) x y).
   cut (subset_n n y x = subset_n (S n) y x).
   intros H3 H4. rewrite <- H3, <- H4, H2. reflexivity.
-  apply IH. 
-  
- (* 
-  apply order_sum_singleton. rewrite plus_comm. exact H.
-  apply IH. apply order_sum_singleton. exact H. simpl. reflexivity.
-  simpl. reflexivity. clear b. intros y Hy z Hz H. clear Hy Hz. 
+  apply IH. apply order_sum_singleton. rewrite plus_comm. exact H.
+  apply IH. apply order_sum_singleton. exact H. 
+  simpl. reflexivity. simpl. reflexivity. 
+  clear b. intros y Hy z Hz H. clear Hy Hz. 
   cut(subset_n (S n) (Singleton x) (Union y z) =
   bool_or (subset_n n (Singleton x) y) (subset_n n (Singleton x) z)).  
   cut(subset_n (S (S n)) (Singleton x) (Union y z) =
@@ -153,6 +183,7 @@ Proof.
   cut(subset_n n (Singleton x) y = subset_n (S n) (Singleton x) y).
   cut(subset_n n (Singleton x) z = subset_n (S n) (Singleton x) z).
   intros H3 H4. rewrite <- H3, <- H4, H2. reflexivity.
-  apply IH.
-  *)
+  apply IH. apply order_sum_union_Rr with (y:= y). exact H.
+  apply IH. apply order_sum_union_Rl with (z:= z). exact H.
+  simpl. reflexivity. simpl. reflexivity.
 

@@ -23,7 +23,7 @@ abstract class Simulation {
   }
 
   private def next() {
-    (agenda: @unchecked) match {
+    (agenda: @unchecked) match {  // match error exception if you call next while agenda empty
       case item :: rest =>
         agenda = rest;
         curtime = item.time
@@ -38,3 +38,88 @@ abstract class Simulation {
     while (!agenda.isEmpty) next()
   }
 }
+
+abstract class BasicCircuitSimulation extends Simulation {
+
+  def InverterDelay: Int
+  def AndGateDelay: Int
+  def OrGateDelay: Int
+  
+  class Wire {
+    private var sigVal = false
+    private var actions: List[Action] = List()
+    def getSignal = sigVal
+    def setSignal(s: Boolean) =
+      if (s != sigVal) {
+        sigVal = s
+        actions foreach (_())     // (_()) shorthand for (p => p())
+    }
+    def addAction(a: Action) = {
+      actions = a :: actions; 
+      a()                         // action is run once when added to wire
+    }
+  }
+
+  def inverter(input: Wire, output: Wire) = {
+    def invertAction() {
+      val inputSig = input.getSignal
+      afterDelay(InverterDelay) {
+        output setSignal !inputSig
+      }
+    }
+    input addAction invertAction
+  }
+
+  def andGate(a1: Wire, a2: Wire, output: Wire) = {
+    def andAction() = {
+      val a1Sig = a1.getSignal
+      val a2Sig = a2.getSignal
+      afterDelay(AndGateDelay) {
+        output setSignal (a1Sig & a2Sig)
+      }
+    }
+    a1 addAction andAction
+    a2 addAction andAction
+  }
+
+  def orGate(o1: Wire, o2: Wire, output: Wire) = {
+    def orAction() = {
+      val o1Sig = o1.getSignal
+      val o2Sig = o2.getSignal
+      afterDelay(OrGateDelay) {
+        output setSignal (o1Sig | o2Sig)
+      }
+    }
+    o1 addAction orAction
+    o2 addAction orAction
+  } 
+
+  def probe(name: String, wire: Wire) = {
+    def probeAction() {
+      println(name+" "+currentTime+" new-value = "+wire.getSignal)
+    }
+    wire addAction probeAction
+  }
+}
+
+abstract class CircuitSimulation extends BasicCircuitSimulation {
+  def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire) {}
+  def fullAdder(a: Wire, b: Wire, cin: Wire, sum: Wire, cout: Wire) {}
+}
+
+object MySimulation extends CircuitSimulation {
+  def InverterDelay = 1
+  def AndGateDelay  = 3
+  def OrGateDelay   = 5
+  def main(args:Array[String]) = {
+    val input1, input2, sum, carry = new Wire
+    probe("sum", sum)
+    probe("carry", carry)
+    //halfAdder(input1, input2, sum, carry)
+    input1 setSignal true
+    run()
+    input2 setSignal true
+    run()
+  }
+}
+
