@@ -50,7 +50,7 @@ void LinkNode_delete(LinkNode* self){
     self->value = NULL;
     if(self->next != NULL) LinkNode_delete(self->next);
     self->next  = NULL;
-    LinkNode_log("Deallocating existing LinkNode %lx\n", self);
+    LinkNode_log("Deallocating LinkNode %lx\n", self);
     free(self);
   } else {
     LinkNode_log("Deleting copy of LinkNode %lx\n", self);

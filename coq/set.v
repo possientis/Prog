@@ -10,68 +10,17 @@ Inductive set : Set :=
   | Singleton : set -> set
   | Union     : set -> set -> set.
 
+(******************************************************************************)
+(*                         order : set -> nat                                 *)
+(******************************************************************************)
+
 Fixpoint order (s:set) : nat :=
   match s with 
     | Empty         => 0
     | Singleton x   => 1 + order x
     | Union x y     => 1 + max (order x) (order y) 
   end.
-
-(*
-Definition successor (s:set) : set :=
-  Union s (Singleton s).
-
-Fixpoint embed (n:nat) : set :=
-  match n with
-    | 0   => Empty
-    | S p => successor (embed p)
-  end.
-
-Definition zero   := embed 0.
-Definition one    := embed 1.
-Definition two    := embed 2.
-Definition three  := embed 3.
-Definition four   := embed 4.
-Definition five   := embed 5.
-Definition six    := embed 6.
-Definition seven  := embed 7.
-Definition eight  := embed 8.
-Definition nine   := embed 9.
-Definition ten    := embed 10.
-Definition eleven := embed 11.
-Definition twelve := embed 12.  
-*)
-
-
-
-Fixpoint subset_n (n:nat) : set -> set -> bool :=
-  match n with 
-    | 0   => (fun _ _     => true)
-    | S p => (fun a b     =>
-      match a with
-        | Empty           => true
-        | Singleton x     => 
-          match b with
-            | Empty       => false
-            | Singleton y => bool_and (subset_n p x y) (subset_n p y x)
-            | Union y z   => bool_or  (subset_n p (Singleton x) y)
-                                      (subset_n p (Singleton x) z) 
-          end
-        | Union x y       => bool_and (subset_n p x b) (subset_n p y b)
-      end)
-  end.
-
-Lemma plus_eq_0_l : forall (n m:nat), n + m = 0 -> n = 0.
-Proof.
-  intro n. elim n. auto. clear n. intros n IH.
-  intro m. simpl. intro H. discriminate H.
-Qed.
-
-Lemma plus_eq_0_r : forall (n m:nat), n + m = 0 -> m = 0.
-Proof.
-  intros. rewrite plus_comm in H. generalize H. apply plus_eq_0_l.
-Qed.
-
+ 
 Lemma order_eq_0 : forall (a:set), order a = 0 -> a = Empty.
 Proof.
   intro a. elim a. auto. clear a. intro a. intro IH. intro H.
@@ -82,8 +31,17 @@ Qed.
 Lemma order_sum_eq_0_l : forall (a b:set),
   order a + order b = 0 -> a = Empty.
 Proof.
-  intros a b. intro H. apply order_eq_0. apply plus_eq_0_l with (m:= order b).
-  exact H.
+  intros a b H. apply order_eq_0. 
+  apply and_ind with (A:= order a = 0)(B:= order b = 0). trivial.
+  apply plus_is_O. exact H.
+Qed.
+
+(* immediate consequence of previous lemma and commutativity *)
+Lemma order_sum_eq_0_r : forall (a b:set),
+  order a + order b = 0 -> b = Empty.
+Proof.
+  intros a b H. rewrite plus_comm in H. apply order_sum_eq_0_l
+  with (b:=a). exact H.
 Qed.
 
 (* This is the main proof of the order_sum_singleton lemmas *)
@@ -152,7 +110,26 @@ Proof.
   with(x:= y)(y:=z). rewrite plus_comm in H. exact H.
 Qed.
 
+(******************************************************************************)
+(*                       subset : set -> set -> bool                          *)
+(******************************************************************************)
 
+Fixpoint subset_n (n:nat) : set -> set -> bool :=
+  match n with 
+    | 0   => (fun _ _     => true)
+    | S p => (fun a b     =>
+      match a with
+        | Empty           => true
+        | Singleton x     => 
+          match b with
+            | Empty       => false
+            | Singleton y => bool_and (subset_n p x y) (subset_n p y x)
+            | Union y z   => bool_or  (subset_n p (Singleton x) y)
+                                      (subset_n p (Singleton x) z) 
+          end
+        | Union x y       => bool_and (subset_n p x b) (subset_n p y b)
+      end)
+  end.
 
 Lemma subset_n_Sn : forall (n:nat) (a b:set),
   order a + order b <= n -> subset_n n a b = subset_n (S n) a b.
@@ -186,4 +163,88 @@ Proof.
   apply IH. apply order_sum_union_Rr with (y:= y). exact H.
   apply IH. apply order_sum_union_Rl with (z:= z). exact H.
   simpl. reflexivity. simpl. reflexivity.
+  intros x Hx. clear Hx. intros y Hy. clear Hy. intro H.
+  cut(subset_n (S (S n)) (Union x y) b = 
+  bool_and (subset_n (S n) x b) (subset_n (S n) y b)).
+  intro H'. rewrite H'.
+  cut(subset_n n x b = subset_n (S n) x b).
+  cut(subset_n n y b = subset_n (S n) y b).
+  intros H1 H2. rewrite <- H1, <- H2. simpl. reflexivity.
+  apply IH. apply order_sum_union_Lr with (x:=x). exact H.
+  apply IH. apply order_sum_union_Ll with (y:=y). exact H.
+  simpl. reflexivity.
+Qed.
+
+Definition subset (a b:set) : bool :=
+  let n := order a + order b in subset_n n a b.
+
+Lemma subset_subset_n : forall (n:nat) (a b:set),
+  order a + order b <= n ->  subset a b = subset_n n a b.
+Proof.
+  intros n a b. unfold subset. elim n. intro H. cut (a = Empty). cut (b = Empty). 
+  intros Ha Hb. rewrite Ha, Hb. simpl. reflexivity. 
+  apply order_sum_eq_0_r with (a:=a). symmetry. apply le_n_O_eq. exact H.
+  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_O_eq. exact H.
+  clear n. intros n IH H. 
+  cut((order a + order b < S n)\/(order a + order b = S n)). intro H0. elim H0.
+  intro H1. cut(order a + order b <= n). intro H2. rewrite IH. apply subset_n_Sn.
+  exact H2. exact H2. apply lt_n_Sm_le. exact H1. intro H1. rewrite H1. 
+  reflexivity. apply le_lt_or_eq. exact H.
+Qed.
+
+Lemma subset_0_all : forall (b:set), subset Empty b = true.
+Proof.
+  intro b. elim b. unfold subset. simpl. reflexivity. 
+  clear b. intros b H. clear H. unfold subset. simpl. reflexivity.
+  clear b. intros y H1 z H2. clear H1 H2. unfold subset. simpl. reflexivity. 
+Qed.
+
+Lemma subset_none_0 : forall (x:set), subset (Singleton x) Empty = false.
+Proof.
+  intro x. unfold subset. simpl. reflexivity. (* no structural induction  *)
+Qed.
+
+
+Lemma subset_singletons : forall (x y:set), 
+  subset (Singleton x) (Singleton y) = bool_and (subset x y) (subset y x). 
+Proof.
+  intros x y. unfold subset at 1. simpl.
+  cut(subset_n (order x + S (order y)) x y = subset x y).
+  cut(subset_n (order x + S (order y)) y x = subset y x).
+  intros H0 H1. rewrite H0, H1. reflexivity. symmetry. apply subset_subset_n. 
+  rewrite plus_comm. apply plus_le_compat_l. apply le_S. apply le_n.
+  symmetry. apply subset_subset_n. apply plus_le_compat_l. apply le_S. apply le_n.
+Qed.
+
+(*
+Definition successor (s:set) : set :=
+  Union s (Singleton s).
+
+Fixpoint embed (n:nat) : set :=
+  match n with
+    | 0   => Empty
+    | S p => successor (embed p)
+  end.
+
+Definition zero   := embed 0.
+Definition one    := embed 1.
+Definition two    := embed 2.
+Definition three  := embed 3.
+Definition four   := embed 4.
+Definition five   := embed 5.
+Definition six    := embed 6.
+Definition seven  := embed 7.
+Definition eight  := embed 8.
+Definition nine   := embed 9.
+Definition ten    := embed 10.
+Definition eleven := embed 11.
+Definition twelve := embed 12.  
+*)
+
+
+
+
+
+
+
 

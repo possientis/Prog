@@ -1,4 +1,4 @@
-;#!/usr/bin/scm
+#!/usr/bin/scm
 (load "bus.scm")
 
 (define (bus-test)
@@ -90,7 +90,7 @@
                 (loopY (+ j 1)))))
           (loopX (+ i 1))))))
   ;; end
-  (display "bus: unit test complete"))
+  (display "bus: unit test complete\n"))
 
 (bus-test)
-(quit)
+(exit 0)
