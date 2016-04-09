@@ -1,7 +1,9 @@
 module GlobRegex (globToRegex, matchesGlob) where
+-- fnmatch module in python
 
 import Text.Regex.Posix ((=~))
 
+-- fnmatch.translate in python
 globToRegex :: String -> String
 globToRegex cs = '^':globToRegex' cs ++ "$" -- regex is 'anchored'
 
@@ -24,7 +26,6 @@ charClass (']':cs) = ']' : globToRegex' cs
 charClass (c:cs) = c : charClass cs
 charClass [] = error "unterminated character class"
 
-matchesGlob = undefined
 
 -- foo.c : here
 -- fha\kc : there
@@ -37,8 +38,9 @@ bool2 = (str3 == str2)        -- True, read . show = id
 str4 = show str3
 bool3 = (str4 == str1)        -- True, show . read = id 
 
- 
-main = do
-  putStrLn "fha\\kc"
-  putStrLn (show "fha\\kc")
-  
+matchesGlob :: FilePath -> String -> Bool
+matchesGlob name pattern = name =~ globToRegex pattern 
+
+
+
+

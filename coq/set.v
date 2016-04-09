@@ -199,13 +199,13 @@ Proof.
   clear b. intros y H1 z H2. clear H1 H2. unfold subset. simpl. reflexivity. 
 Qed.
 
-Lemma subset_none_0 : forall (x:set), subset (Singleton x) Empty = false.
+Lemma subset_single_0 : forall (x:set), subset (Singleton x) Empty = false.
 Proof.
   intro x. unfold subset. simpl. reflexivity. (* no structural induction  *)
 Qed.
 
 
-Lemma subset_singletons : forall (x y:set), 
+Lemma subset_single_single : forall (x y:set), 
   subset (Singleton x) (Singleton y) = bool_and (subset x y) (subset y x). 
 Proof.
   intros x y. unfold subset at 1. simpl.
@@ -215,6 +215,63 @@ Proof.
   rewrite plus_comm. apply plus_le_compat_l. apply le_S. apply le_n.
   symmetry. apply subset_subset_n. apply plus_le_compat_l. apply le_S. apply le_n.
 Qed.
+
+Lemma subset_single_union : forall (x y z:set),
+  subset (Singleton x) (Union y z) = 
+  bool_or (subset (Singleton x) y) (subset (Singleton x) z).
+Proof.
+  intros x y z. unfold subset at 1. simpl. 
+  cut(subset_n (order x + S (max (order y) (order z))) (Singleton x) y 
+  = subset (Singleton x) y). 
+  cut(subset_n (order x + S (max (order y) (order z))) (Singleton x) z = 
+  subset (Singleton x) z). 
+  intros H0 H1. rewrite H0, H1. reflexivity. 
+  symmetry. apply subset_subset_n. simpl. rewrite <- plus_n_Sm. apply le_n_S. 
+  apply plus_le_compat_l. apply le_max_r.
+  symmetry. apply subset_subset_n. simpl. rewrite <- plus_n_Sm. apply le_n_S. 
+  apply plus_le_compat_l. apply le_max_l.
+Qed.
+
+Lemma subset_union_all : forall (x y b:set),
+  subset (Union x y) b = bool_and (subset x b) (subset y b).
+Proof.
+  intros x y b. unfold subset at 1. simpl.
+  cut(subset_n (max (order x) (order y) + order b) x b = subset x b).
+  cut(subset_n (max (order x) (order y) + order b) y b = subset y b).
+  intros H0 H1. rewrite H0, H1. reflexivity.
+  symmetry. apply subset_subset_n. apply plus_le_compat_r. apply le_max_r.
+  symmetry. apply subset_subset_n. apply plus_le_compat_r. apply le_max_l.
+Qed.
+
+Definition subset_prop_1 (relation: set -> set -> bool) : Prop :=
+  forall (b:set), relation Empty b = true.
+
+Definition subset_prop_2 (relation: set -> set -> bool) : Prop :=
+  forall (x:set), relation (Singleton x) Empty = false.
+
+Definition subset_prop_3 (relation: set -> set -> bool) : Prop :=
+  forall (x y:set), 
+  relation (Singleton x) (Singleton y) = bool_and (relation x y) (relation y x).
+
+Definition subset_prop_4 (relation: set -> set -> bool) : Prop :=
+  forall (x y z:set),
+  relation (Singleton x) (Union y z) = 
+  bool_or (relation (Singleton x) y) (relation (Singleton x) z).
+
+Definition subset_prop_5 (relation: set -> set -> bool) : Prop :=
+  forall (x y b:set),
+  subset (Union x y) b = bool_and (subset x b) (subset y b).
+
+(* subset is the unique relation on set satisfying properties 1-5 *)
+Lemma subset_unique : forall (relation: set-> set-> bool),
+  subset_prop_1 relation ->
+  subset_prop_2 relation ->
+  subset_prop_3 relation ->
+  subset_prop_4 relation ->
+  subset_prop_5 relation ->
+  forall (a b:set), relation a b = subset a b.
+Proof.
+  intros relation H1 H2 H3 H4 H5 a.
 
 (*
 Definition successor (s:set) : set :=

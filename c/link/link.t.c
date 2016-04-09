@@ -33,7 +33,7 @@ int Link_test(){
   // first insert
   int val1 = 10;
   int val2 = 20;
-  void* result;
+  const void* result;
   
 
   Link_insert(a,1,&val1);
@@ -614,7 +614,7 @@ int Link_test(){
     errCode = -1;
   }
 
-  //
+  // first looping
   a = Link_new();
   Link_insert(a, 1, &val1);
   Link_insert(a, 3, &val3);
@@ -625,7 +625,7 @@ int Link_test(){
   while(LinkIter_hasNext(iter)){
     LinkIter_moveNext(iter);
     int key     = LinkIter_key(iter);
-    void* value = LinkIter_value(iter);
+    const void* value = LinkIter_value(iter);
     if(!Link_find(a, key, &result)){  // search should succeed 
       fprintf(stderr, "Link: unit test 16.0 failing for key = %d\n", key);
       errCode = -1;
@@ -636,8 +636,69 @@ int Link_test(){
       }
     }
   }
- 
   LinkIter_delete(iter);
+  // trying again
+  iter = LinkIter_new(a);
+  while(LinkIter_hasNext(iter)){
+    LinkIter_moveNext(iter);
+    int key     = LinkIter_key(iter);
+    const void* value = LinkIter_value(iter);
+    if(!Link_find(a, key, &result)){  // search should succeed 
+      fprintf(stderr, "Link: unit test 17.0 failing for key = %d\n", key);
+      errCode = -1;
+    } else {
+      if(result != value){
+        fprintf(stderr, "Link: unit test 17.1 failing for key = %d\n", key);
+        errCode = -1;
+      }
+    }
+  }
+  LinkIter_delete(iter);
+  // setting vector of 4 flags
+  int flags[4] = {0,0,0,0};
+  // looping through iterator, checking found keys
+  iter = LinkIter_new(a);
+  while(LinkIter_hasNext(iter)){
+    LinkIter_moveNext(iter);
+    switch(LinkIter_key(iter)){
+      case 1:
+        if(flags[0] == 1){ // key 1 encountered more than once
+          fprintf(stderr, "Link: unit test 18.0 failing\n");
+          errCode = -1;
+        }
+        flags[0] = 1; break;
+      case 3:
+        if(flags[1] == 1){ // key 3 encountered more than once
+          fprintf(stderr, "Link: unit test 18.1 failing\n");
+          errCode = -1;
+        }
+        flags[1] = 1; break;
+      case 5:
+        if(flags[2] == 1){ // key 5 encountered more than once
+          fprintf(stderr, "Link: unit test 18.2 failing\n");
+          errCode = -1;
+        }
+        flags[2] = 1; break;
+      case 8:
+        if(flags[3] == 1){ // key 8 encountered more than once
+          fprintf(stderr, "Link: unit test 18.3 failing\n");
+          errCode = -1;
+        }
+        flags[3] = 1; break;
+      default:
+        fprintf(stderr, "Link: unit test 18.4 failing\n");
+        errCode = -1;
+       }
+  }
+  // making sure all keys were part of iteration
+  for(i = 0; i < 4; ++i){
+    if(flags[i] != 1){  // key i was never found
+      fprintf(stderr, "Link: unit test 18.5 failing for key = %d\n", i);
+      errCode = -1;
+    }
+  }
+  LinkIter_delete(iter);
+
   Link_delete(a);
   // final check for memory leaks
   if(Link_hasMemoryLeak()){

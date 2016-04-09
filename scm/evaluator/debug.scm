@@ -2,7 +2,7 @@
 (load "primitive.scm")
 (load "environment.scm")
 ;(load "apply.scm")
-(load "eval.scm")                    ; uncomment in scm
+;(load "eval.scm")                    ; uncomment in scm
 
 (display primitive-procedures)(newline)
 
@@ -19,10 +19,10 @@
 
 
 (newline)(display "map = ")(display map)(newline)
-(eval '(map car seq) global-env)      ; uncomment in scm
-;(map car seq)                         ; uncomment in interpreter
+;(eval '(map car seq) global-env)      ; uncomment in scm
+(map car seq)                         ; uncomment in interpreter
 
-; attempting to replicate interpreter error from the scm thread
-; has eval one single argument or 2 arguments? ---> key question I think
+; keep running in intepreter
+; need to implement map-primitive.scm
 
 

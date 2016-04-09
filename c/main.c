@@ -6,6 +6,10 @@
 
 int main()
 {
-  printf("Hello world!\n");
+  int x = 122;
+  printf("x/2 = %d\n", x>>1);
+  printf("x = %d\n", x);
+
   return 0;
 }
+

@@ -3,6 +3,7 @@
 (load "eval-primitive.scm")
 (load "apply-primitive.scm")
 (load "object-string.scm")
+(load "map-primitive.scm")
 
 (define (my-display s)
   (display "x-")
@@ -26,7 +27,7 @@
         (list 'set-car! set-car!)
         (list 'set-cdr! set-cdr!)
         (list 'list list)
-        (list 'map map)
+        (list 'map map-primitive)
         (list 'null? null?)
         (list '+ +)
         (list '* *)

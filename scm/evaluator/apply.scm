@@ -10,6 +10,8 @@
 (define apply-in-underlying-scheme apply)
 ; now redefining
 (define (apply procedure arguments)
+  (display "apply:\tprocedure = ")(display procedure)(newline)
+  (display "apply:\targuments = ")(display arguments)(newline)
   (cond ((primitive-procedure? procedure)                       
          (apply-primitive-procedure procedure arguments))       
         ((compound-procedure? procedure)                        
@@ -21,6 +23,9 @@
         (else (error "Unknown procedure type -- APPLY" procedure))))
 
 (define (apply-primitive-procedure proc args)
+  (display "apply-primitive-procedure:\tprocedure = ")(display proc)(newline)
+  (display "apply-primitive-procedure:\targuments = ")(display args)(newline)
+  (display "apply-primitive-procedure:\tprocedure-implementation = ")
+  (display (primitive-implementation proc))(newline)
   (apply-in-underlying-scheme (primitive-implementation proc) args)) 
-
 

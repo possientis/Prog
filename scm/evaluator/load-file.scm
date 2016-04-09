@@ -4,7 +4,7 @@
       (let ((input (read file)))
         (if (not (eof-object? input))
           (begin
-            (newline) (display "input = ")(display input)(newline)
+;            (newline) (display "input = ")(display input)(newline)
             (eval input global-env)
             (loop)))))
     (loop)

@@ -20,11 +20,11 @@ int LinkNode_hasMemoryLeak(){
 struct LinkNode_ {
   int         refcount;
   int         key;
-  void*       value;
+  const void* value;
   LinkNode*   next;
 };
 
-LinkNode* LinkNode_new(int key, void* value){
+LinkNode* LinkNode_new(int key, const void* value){
   LinkNode* ptr = (LinkNode*) malloc(sizeof(LinkNode));
   assert(ptr != NULL);
   LinkNode_log("Allocating new LinkNode %lx\n", ptr);
@@ -62,7 +62,7 @@ int LinkNode_key(LinkNode* self){
   return self->key;
 }
 
-void* LinkNode_value(LinkNode* self){
+const void* LinkNode_value(LinkNode* self){
   assert(self != NULL);
   return self->value;
 }
@@ -78,7 +78,7 @@ void LinkNode_setNext(LinkNode* self, LinkNode* next){
   self->next = next;
 }
 
-void LinkNode_setValue(LinkNode* self, void* value){
+void LinkNode_setValue(LinkNode* self, const void* value){
   assert(self != NULL);
   self->value = value;
 }

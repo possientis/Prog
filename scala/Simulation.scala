@@ -1,4 +1,3 @@
-package simulator
 
 abstract class Simulation {
 
@@ -96,30 +95,44 @@ abstract class BasicCircuitSimulation extends Simulation {
 
   def probe(name: String, wire: Wire) = {
     def probeAction() {
-      println(name+" "+currentTime+" new-value = "+wire.getSignal)
+      println(name+" at time "+currentTime+": new-value = "+wire.getSignal)
     }
     wire addAction probeAction
   }
 }
 
 abstract class CircuitSimulation extends BasicCircuitSimulation {
-  def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire) {}
-  def fullAdder(a: Wire, b: Wire, cin: Wire, sum: Wire, cout: Wire) {}
+  def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire){
+    val d, e = new Wire
+    orGate(a, b, d)
+    andGate(a, b, c)
+    inverter(c, e)
+    andGate(d, e, s)
+  }
+  def fullAdder(a: Wire, b: Wire, cin: Wire, sum: Wire, cout: Wire) {
+    val s, c1, c2 = new Wire
+    halfAdder(a, cin, s, c1)
+    halfAdder(b, s, sum, c2)
+    orGate(c1, c2, cout)
+  }
 }
 
 object MySimulation extends CircuitSimulation {
   def InverterDelay = 1
   def AndGateDelay  = 3
   def OrGateDelay   = 5
+}
+
+object Simulation {
   def main(args:Array[String]) = {
+    import MySimulation._
     val input1, input2, sum, carry = new Wire
     probe("sum", sum)
     probe("carry", carry)
-    //halfAdder(input1, input2, sum, carry)
+    halfAdder(input1, input2, sum, carry)
     input1 setSignal true
     run()
     input2 setSignal true
     run()
   }
 }
-

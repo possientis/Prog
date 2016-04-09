@@ -165,6 +165,14 @@
       (if (not (equal? y 11)) (display "eval: unit test 8.3 failing\n")))
     ((global-env 'delete!) 'f))
   ;
+  (let ((x (eval '((lambda () 45)) global-env)))
+    (if (not (equal? x 45)) (display "eval: unit test 8.4 failing\n")))
+  (let ((x (eval '((lambda (x) (+ x 7)) 5) global-env)))
+    (if (not (equal? x 12)) (display "eval: unit test 8.5 failing\n")))
+  (let ((x (eval '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) global-env)))
+    (if (not (equal? x 11)) (display "eval: unit test 8.6 failing\n")))
+  ;
+
   ; begin
   ;
   (let ((x (eval '(begin 1 2 3 4) global-env)))
@@ -260,14 +268,10 @@
     (if (not (equal? x (list 2))) (display "eval: unit test 16.5 failing\n")))
   (let ((x (eval '(cons 5 (cons 2 '())) global-env)))
     (if (not (equal? x (list 5 2))) (display "eval: unit test 16.6 failing\n")))
-  ; lambda
-  (let ((x (eval '((lambda () 45)) global-env)))
-    (if (not (equal? x 45)) (display "eval: unit test 16.7 failing\n")))
-  (let ((x (eval '((lambda (x) (+ x 7)) 5) global-env)))
-    (if (not (equal? x 12)) (display "eval: unit test 16.8 failing\n")))
-  (let ((x (eval '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) global-env)))
-    (if (not (equal? x 11)) (display "eval: unit test 16.9 failing\n")))
   ;
+  (let ((x (eval '(eval (+ 1 2)) global-env)))
+    (if (not (equal? x 3)) (display "eval:unit test 16.7 failing\n")))
+ ;
   ; load 
   ;
   (let ((s (eval '(load "test.scm") global-env)))

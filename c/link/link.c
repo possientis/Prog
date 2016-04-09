@@ -9,7 +9,7 @@ long Link_log(const char* message, const void* address){
   if((message == NULL) && (address == NULL)) return memory_checksum;
   assert(message != NULL);
   assert(address != NULL);
-  fprintf(stderr, message, address);  // include '%lx' in 'message'
+  //fprintf(stderr, message, address);  // include '%lx' in 'message'
   memory_checksum ^= (long) address;
   return 0L;
 }
@@ -60,7 +60,7 @@ void Link_delete(Link* self){
 
 
 // function has ownership of argument, caller has ownership of returned object-(0)
-static LinkNode *insert_node(LinkNode* node, int key, void* value){
+static LinkNode *insert_node(LinkNode* node, int key, const void* value){
   if(node == NULL) return LinkNode_new(key, value);
   if(key == LinkNode_key(node)){    // duplicate key
     LinkNode_setValue(node, value); // updating value of existing key
@@ -106,7 +106,7 @@ static LinkNode* delete_node(LinkNode* node, int key){
 }
 
 // return 1 if key found, 0 otherwise. Caller keeps owenership of argument
-static int search_node(LinkNode* node, int key, void** result){ 
+static int search_node(LinkNode* node, int key, const void* *result){ 
   assert(result != NULL);
   if(node == NULL) {    // search failure
     *result = NULL;     // no real need, just to make error catching easier
@@ -125,7 +125,7 @@ int Link_isEmpty(Link* self){
   return (self->head == NULL) ? 1 : 0;
 }
 
-void Link_insert(Link* self, int key, void* value){
+void Link_insert(Link* self, int key, const void* value){
   assert(self != NULL);
   self->head = insert_node(self->head, key, value);
 }
@@ -135,7 +135,7 @@ void Link_remove(Link* self, int key){
   self->head = delete_node(self->head, key);
 }
 
-int Link_find(Link* self, int key, void** result){
+int Link_find(Link* self, int key, const void* *result){
   assert(self != NULL);
   return search_node(self->head, key, result);
 }
@@ -202,7 +202,7 @@ int LinkIter_key(LinkIter* self){
 }
 
 
-void* LinkIter_value(LinkIter* self){
+const void* LinkIter_value(LinkIter* self){
   assert(self != NULL);
   assert(self->current != NULL);
   return LinkNode_value(self->current);

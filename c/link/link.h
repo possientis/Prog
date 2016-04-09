@@ -7,24 +7,23 @@ typedef struct Link_      Link;
 typedef struct LinkIter_  LinkIter;
 
 // interface for Link-ed list
-Link*     Link_new();
-Link*     Link_copy(Link* self);
-void      Link_delete(Link* self);
-void      Link_insert(Link* self, int key, void* value);
-void      Link_remove(Link* self, int key);
-int       Link_find(Link* self, int key, void** result);  // found -> 1, else 0
-int       Link_isEmpty(Link* self);
-LinkIter* Link_iter(Link* self);              // returns iterator object
-void      Link_toString(Link* self, char* buf, size_t size);
-int       Link_hasMemoryLeak(); 
+Link*       Link_new();
+Link*       Link_copy(Link* self);
+void        Link_delete(Link* self);
+void        Link_insert(Link* self, int key, const void* value);
+void        Link_remove(Link* self, int key);
+int         Link_find(Link* self, int key, const void** result); // found -> 1
+int         Link_isEmpty(Link* self);
+void        Link_toString(Link* self, char* buf, size_t size);
+int         Link_hasMemoryLeak(); 
 
 // interface for Link-ed list iterator
-LinkIter* LinkIter_new(Link* list);
-LinkIter* LinkIter_copy(LinkIter* self);
-void      LinkIter_delete(LinkIter* self);
-int       LinkIter_hasNext(LinkIter* self);
-void      LinkIter_moveNext(LinkIter* self);
-int       LinkIter_key(LinkIter* self);
-void*     LinkIter_value(LinkIter* self);
+LinkIter*   LinkIter_new(Link* list);
+LinkIter*   LinkIter_copy(LinkIter* self);
+void        LinkIter_delete(LinkIter* self);
+int         LinkIter_hasNext(LinkIter* self);
+void        LinkIter_moveNext(LinkIter* self);
+int         LinkIter_key(LinkIter* self);
+const void* LinkIter_value(LinkIter* self);
 
 #endif
