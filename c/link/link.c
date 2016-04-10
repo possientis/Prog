@@ -106,7 +106,7 @@ static LinkNode* delete_node(LinkNode* node, int key){
 }
 
 // return 1 if key found, 0 otherwise. Caller keeps owenership of argument
-static int search_node(LinkNode* node, int key, const void* *result){ 
+static int search_node(LinkNode* node, int key, const void** result){ 
   assert(result != NULL);
   if(node == NULL) {    // search failure
     *result = NULL;     // no real need, just to make error catching easier
@@ -135,7 +135,7 @@ void Link_remove(Link* self, int key){
   self->head = delete_node(self->head, key);
 }
 
-int Link_find(Link* self, int key, const void* *result){
+int Link_find(Link* self, int key, const void** result){
   assert(self != NULL);
   return search_node(self->head, key, result);
 }

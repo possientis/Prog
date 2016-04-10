@@ -1171,12 +1171,884 @@ int dictionary_test(){
       errCode = -1;
     }
   }
-  // first delete
+  // first remove
+  Dictionary_remove(a,1);
+  Dictionary_remove(b,10);
+  // should fail
+  if(Dictionary_find(a, 1, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 10, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.3 failing\n");
+    errCode = -1;
+  }
+  // should succeed
+  if(!Dictionary_find(a, 2, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.8 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val2){
+      fprintf(stderr, "Dictionary: unit test 13.9 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 20, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.10 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str2){
+      fprintf(stderr, "Dictionary: unit test 13.11 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 3, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.12 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val3){
+      fprintf(stderr, "Dictionary: unit test 13.13 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 30, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.14 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str3){
+      fprintf(stderr, "Dictionary: unit test 13.15 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 4, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.16 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val4){
+      fprintf(stderr, "Dictionary: unit test 13.17 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 40, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.18 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str4){
+      fprintf(stderr, "Dictionary: unit test 13.19 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 5, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.20 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val5){
+      fprintf(stderr, "Dictionary: unit test 13.21 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 50, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.22 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str5){
+      fprintf(stderr, "Dictionary: unit test 13.23 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 6, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.24 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val6){
+      fprintf(stderr, "Dictionary: unit test 13.25 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 60, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.26 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str6){
+      fprintf(stderr, "Dictionary: unit test 13.26 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.27 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val7){
+      fprintf(stderr, "Dictionary: unit test 13.28 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.29 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str7){
+      fprintf(stderr, "Dictionary: unit test 13.30 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 13.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 13.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 13.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 13.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 13.38 failing\n");
+      errCode = -1;
+    }
+  }
+  // second remove
+  Dictionary_remove(a,2);
+  Dictionary_remove(b,20);
+  // should fail
+  if(Dictionary_find(a, 2, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 20, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.3 failing\n");
+    errCode = -1;
+  }
+  // should succeed
+ if(!Dictionary_find(a, 3, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.12 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val3){
+      fprintf(stderr, "Dictionary: unit test 14.13 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 30, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.14 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str3){
+      fprintf(stderr, "Dictionary: unit test 14.15 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 4, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.16 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val4){
+      fprintf(stderr, "Dictionary: unit test 14.17 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 40, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.18 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str4){
+      fprintf(stderr, "Dictionary: unit test 14.19 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 5, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.20 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val5){
+      fprintf(stderr, "Dictionary: unit test 14.21 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 50, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.22 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str5){
+      fprintf(stderr, "Dictionary: unit test 14.23 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 6, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.24 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val6){
+      fprintf(stderr, "Dictionary: unit test 14.25 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 60, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.26 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str6){
+      fprintf(stderr, "Dictionary: unit test 14.26 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.27 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val7){
+      fprintf(stderr, "Dictionary: unit test 14.28 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.29 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str7){
+      fprintf(stderr, "Dictionary: unit test 14.30 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 14.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 14.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 14.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 14.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 14.38 failing\n");
+      errCode = -1;
+    }
+  }
+  // third remove
+  Dictionary_remove(a,3);
+  Dictionary_remove(b,30);
+  // should fail
+  if(Dictionary_find(a, 3, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 30, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.3 failing\n");
+    errCode = -1;
+  }
+ if(!Dictionary_find(a, 4, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.16 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val4){
+      fprintf(stderr, "Dictionary: unit test 15.17 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 40, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.18 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str4){
+      fprintf(stderr, "Dictionary: unit test 15.19 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 5, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.20 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val5){
+      fprintf(stderr, "Dictionary: unit test 15.21 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 50, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.22 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str5){
+      fprintf(stderr, "Dictionary: unit test 15.23 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 6, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.24 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val6){
+      fprintf(stderr, "Dictionary: unit test 15.25 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 60, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.26 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str6){
+      fprintf(stderr, "Dictionary: unit test 15.26 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.27 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val7){
+      fprintf(stderr, "Dictionary: unit test 15.28 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.29 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str7){
+      fprintf(stderr, "Dictionary: unit test 15.30 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 15.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 15.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 15.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 15.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 15.38 failing\n");
+      errCode = -1;
+    }
+  }
+  // fourth remove
+  Dictionary_remove(a,4);
+  Dictionary_remove(b,40);
+  // should fail
+  if(Dictionary_find(a, 4, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 40, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.3 failing\n");
+    errCode = -1;
+  }
+  if(!Dictionary_find(a, 5, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.20 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val5){
+      fprintf(stderr, "Dictionary: unit test 16.21 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 50, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.22 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str5){
+      fprintf(stderr, "Dictionary: unit test 16.23 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 6, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.24 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val6){
+      fprintf(stderr, "Dictionary: unit test 16.25 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 60, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.26 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str6){
+      fprintf(stderr, "Dictionary: unit test 16.26 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.27 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val7){
+      fprintf(stderr, "Dictionary: unit test 16.28 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.29 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str7){
+      fprintf(stderr, "Dictionary: unit test 16.30 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 16.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 16.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 16.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 16.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 16.38 failing\n");
+      errCode = -1;
+    }
+  }
+  // fifth remove
+  Dictionary_remove(a,5);
+  Dictionary_remove(b,50);
+  // should fail
+  if(Dictionary_find(a, 5, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 50, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.3 failing\n");
+    errCode = -1;
+  }
+  //should succeed
+  if(!Dictionary_find(a, 6, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.24 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val6){
+      fprintf(stderr, "Dictionary: unit test 17.25 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 60, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.26 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str6){
+      fprintf(stderr, "Dictionary: unit test 17.26 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.27 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val7){
+      fprintf(stderr, "Dictionary: unit test 17.28 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.29 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str7){
+      fprintf(stderr, "Dictionary: unit test 17.30 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 17.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 17.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 17.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 17.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 17.38 failing\n");
+      errCode = -1;
+    }
+  }
+   // sixth remove
+  Dictionary_remove(a,6);
+  Dictionary_remove(b,60);
+  // should fail
+  if(Dictionary_find(a, 6, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 60, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.3 failing\n");
+    errCode = -1;
+  }
+  //should succeed
+  if(!Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.27 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val7){
+      fprintf(stderr, "Dictionary: unit test 18.28 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.29 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str7){
+      fprintf(stderr, "Dictionary: unit test 18.30 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 18.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 18.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 18.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 18.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 18.38 failing\n");
+      errCode = -1;
+    }
+  }
+  // seventh remove
+  Dictionary_remove(a,7);
+  Dictionary_remove(b,70);
+  // should fail
+  if(Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 19.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 19.3 failing\n");
+    errCode = -1;
+  }
+  //should succeed
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 19.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 19.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 19.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 19.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 19.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 19.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 19.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 19.38 failing\n");
+      errCode = -1;
+    }
+  }
+  // seventh remove (redundant)
+  Dictionary_remove(a,7);   
+  Dictionary_remove(b,70);
+  // should fail
+  if(Dictionary_find(a, 7, &result)){
+    fprintf(stderr, "Dictionary: unit test 20.2 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 70, &result)){
+    fprintf(stderr, "Dictionary: unit test 20.3 failing\n");
+    errCode = -1;
+  }
+  //should succeed
+  if(!Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 20.31 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val8){
+      fprintf(stderr, "Dictionary: unit test 20.32 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 20.33 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str8){
+      fprintf(stderr, "Dictionary: unit test 20.34 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 20.35 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 20.36 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 20.37 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 20.38 failing\n");
+      errCode = -1;
+    }
+  }
+  // eigth remove 
+  Dictionary_remove(a,8);   
+  Dictionary_remove(b,80);
+  // should fail
+  if(Dictionary_find(a, 8, &result)){
+    fprintf(stderr, "Dictionary: unit test 21.0 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 80, &result)){
+    fprintf(stderr, "Dictionary: unit test 21.1 failing\n");
+    errCode = -1;
+  }
+  //should succeed
+ if(!Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 21.2 failing\n");
+    errCode = -1;
+  } else{
+    if(result != &val9){
+      fprintf(stderr, "Dictionary: unit test 21.3 failing\n");
+      errCode = -1;
+    }
+  }
+  if(!Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 21.4 failing\n");
+    errCode = -1;
+  } else{
+    if(result != str9){
+      fprintf(stderr, "Dictionary: unit test 21.5 failing\n");
+      errCode = -1;
+    }
+  }
+  // nineth remove 
+  Dictionary_remove(a,9);   
+  Dictionary_remove(b,90);
+  // should fail
+  if(Dictionary_find(a, 9, &result)){
+    fprintf(stderr, "Dictionary: unit test 22.0 failing\n");
+    errCode = -1;
+  }
+  if(Dictionary_find(b, 90, &result)){
+    fprintf(stderr, "Dictionary: unit test 22.1 failing\n");
+    errCode = -1;
+  }
+  //should now be empty
+  if(!Dictionary_isEmpty(a)){
+    fprintf(stderr, "Dictionary: unit test 22.2 failing\n");
+    errCode = -1;
+  }
+  if(!Dictionary_isEmpty(b)){
+    fprintf(stderr, "Dictionary: unit test 22.3 failing\n");
+    errCode = -1;
+  }
+  // multiple inserts and remove
+#define DICT_T_C_SIMUL_SIZE 1024
+  int values[DICT_T_C_SIMUL_SIZE];
+  int i, j;
+  int found;
+  for(i = 0; i < DICT_T_C_SIMUL_SIZE; ++i){
+    Dictionary_insert(a, i, &values[i]);
+    for(j = 0; j <= i; ++j){
+      int found = Dictionary_find(a, j, &result);  // should succeed for j <= i 
+      if(!found){
+        fprintf(stderr, 
+            "Dictionary: unit test 23.0 failing for (i,j) = (%d,%d)\n",i,j);
+        errCode = -1;
+      } else {
+        if(result != &values[j]){
+          fprintf(stderr, 
+            "Dictionary: unit test 23.1 failing for (i,j) = (%d,%d)\n",i,j);
+        }
+      }
+    }
+    for(j = i+1; j < DICT_T_C_SIMUL_SIZE; ++j){
+      int found = Dictionary_find(a, j, &result);  // should fail for i < j 
+      if(found){
+        fprintf(stderr, 
+          "Dictionary: unit test 23.2 failing for (i,j) = (%d,%d)\n",i,j);
+         errCode = -1;
+      }
+    }
+  }
+  for(i = 0; i < DICT_T_C_SIMUL_SIZE; ++i){
+    Dictionary_remove(a, i);
+    for(j = 0; j <= i; ++j){
+      int found = Dictionary_find(a, j, &result);  // should fail for j <= i 
+      if(found){
+        fprintf(stderr, 
+          "Dictionary: unit test 23.3 failing for (i,j) = (%d,%d)\n",i,j);
+         errCode = -1;
+      }
+    }
+    for(j = i+1; j < DICT_T_C_SIMUL_SIZE; ++j){
+      int found = Dictionary_find(a, j, &result);  // should succeed for i < j 
+      if(!found){
+        fprintf(stderr, 
+            "Dictionary: unit test 23.4 failing for (i,j) = (%d,%d)\n",i,j);
+        errCode = -1;
+      } else {
+        if(result != &values[j]){
+          fprintf(stderr, 
+            "Dictionary: unit test 23.5 failing for (i,j) = (%d,%d)\n",i,j);
+        }
+      }
+    }
+  }
 
 
 
 //  Dictionary_debug(a);
-  Dictionary_debug(b);
+//  Dictionary_debug(b);
 
   Dictionary_delete(a);
   Dictionary_delete(b);

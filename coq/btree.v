@@ -121,16 +121,37 @@ Proof.
   simpl. rewrite H1. rewrite H2. reflexivity.
 Qed.
 
-Lemma bool_func_eq: forall (A:Type) (f g: bool-> A), 
-  f true = g true -> f false = g false -> f = g.
+Inductive btree (A:Type) : Type :=
+  | leaf : btree A
+  | node : A -> btree A -> btree A -> btree A.
 
-(*
-Theorem f1of2: forall (t:Z_fbtree), f1 (f2 t) = t.
+Fixpoint translate (t:Z_btree) : btree Z :=
+  match t with
+    | Z_leaf          => leaf Z
+    | Z_bnode v t1 t2 => node v (translate t1) (translate t2)
+  end. 
+
+Fixpoint specialize (t:btree Z) : Z_btree :=
+  match t with
+    | leaf            => Z_leaf
+    | node v t1 t2    => Z_bnode v (specialize t1) (specialize t2)
+  end.
+
+Lemma translate_specialize : forall (t:btree Z),
+  translate (specialize t) = t.
 Proof.
-  intro t. elim t. simpl. reflexivity. intro z. intro f. intro IH.
-  simpl.
-                            
-*)
+  intro t. elim t. simpl. reflexivity. clear t. intros a t1 IH1 t2 IH2. simpl.
+  rewrite IH1, IH2. reflexivity.
+Qed.
+
+(* identical proof *)
+Lemma specialize_translate : forall (t:Z_btree),
+  specialize (translate t) = t.
+Proof.
+  intro t. elim t. simpl. reflexivity. clear t. intros a t1 IH1 t2 IH2. simpl.
+  rewrite IH1, IH2. reflexivity.
+Qed.
+
 
 
 

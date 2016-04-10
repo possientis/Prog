@@ -1,6 +1,7 @@
 Set Implicit Arguments.
 Require Import Arith.
 Require Import Arith.Max.
+Require Import List.
 
 Definition bool_and (p q:bool) := if p then q else false.
 Definition bool_or  (p q:bool) := if p then true else q.
@@ -260,7 +261,22 @@ Definition subset_prop_4 (relation: set -> set -> bool) : Prop :=
 
 Definition subset_prop_5 (relation: set -> set -> bool) : Prop :=
   forall (x y b:set),
-  subset (Union x y) b = bool_and (subset x b) (subset y b).
+  relation (Union x y) b = bool_and (relation x b) (relation y b).
+
+(* subset is a relation on set satisfying properties 1-5 *)
+Lemma subset_exist : 
+  subset_prop_1 subset /\
+  subset_prop_2 subset /\
+  subset_prop_3 subset /\
+  subset_prop_4 subset /\
+  subset_prop_5 subset.
+Proof.
+  split. unfold subset_prop_1. apply subset_0_all.
+  split. unfold subset_prop_2. apply subset_single_0.
+  split. unfold subset_prop_3. apply subset_single_single.
+  split. unfold subset_prop_4. apply subset_single_union.
+  unfold subset_prop_5. apply subset_union_all.
+Qed.
 
 (* subset is the unique relation on set satisfying properties 1-5 *)
 Lemma subset_unique : forall (relation: set-> set-> bool),
@@ -271,7 +287,49 @@ Lemma subset_unique : forall (relation: set-> set-> bool),
   subset_prop_5 relation ->
   forall (a b:set), relation a b = subset a b.
 Proof.
-  intros relation H1 H2 H3 H4 H5 a.
+  intros relation H1 H2 H3 H4 H5 a b. 
+  cut(forall (n:nat), order a + order b <= n -> relation a b = subset a b).
+  intro H. apply H with (n:= order a + order b). apply le_n. intro n.
+  generalize a b. clear a b. elim n. intros a b H. cut(a = Empty). intro H'.
+  rewrite H'. rewrite subset_0_all. apply H1. apply order_sum_eq_0_l with (b:=b).
+  symmetry. apply le_n_0_eq. exact H. clear n. intros n IH a. elim a. intros b H.
+  clear H. rewrite subset_0_all. apply H1. clear a. intros x H. clear H. intro b.
+  elim b. intro H. clear H. rewrite subset_single_0. apply H2. clear b. intro y.
+  intro H. clear H. intro H. rewrite subset_single_single. rewrite H3.
+  cut(relation x y = subset x y). cut(relation y x = subset y x). intros Hyx Hxy.
+  rewrite Hyx, Hxy. reflexivity. apply IH. apply order_sum_singleton.
+  rewrite plus_comm. exact H. apply IH. apply order_sum_singleton. exact H.
+  clear b. intros y H z H'. clear H H'. intro H. rewrite subset_single_union.
+  rewrite H4. cut(relation (Singleton x) y = subset (Singleton x) y).
+  cut(relation (Singleton x) z = subset (Singleton x) z). intros Hxz Hxy.
+  rewrite Hxz, Hxy. reflexivity. apply IH. apply order_sum_union_Rr with (y:=y).
+  exact H. apply IH. apply order_sum_union_Rl with (z:=z). exact H. intros x H y H'.
+  clear H H'. intro b. intro H. rewrite subset_union_all. rewrite H5. 
+  cut(relation x b = subset x b). cut(relation y b = subset y b). intros Hyb Hxb. 
+  rewrite Hyb, Hxb. reflexivity. apply IH. apply order_sum_union_Lr with (x:=x).
+  exact H. apply IH. apply order_sum_union_Ll with (y:=y). exact H.
+Qed.
+
+(******************************************************************************)
+(*                        equiv : set -> set -> bool                          *)
+(******************************************************************************)
+
+Definition equiv (a b:set) : bool := bool_and (subset a b) (subset b a).
+
+
+(******************************************************************************)
+(*                        elements : set -> list set                          *)
+(******************************************************************************)
+
+Fixpoint elements (a:set) : list set :=
+  match a with
+    | Empty         => nil
+    | Singleton x   => x::nil
+    | Union x y     => (elements x) ++ (elements y) 
+  end.
+
+
+
 
 (*
 Definition successor (s:set) : set :=

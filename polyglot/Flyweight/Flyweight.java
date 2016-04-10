@@ -21,7 +21,7 @@ import java.util.HashMap;
 // Objects (which are immutable) are supposed to be reused, not created.
 // So the constructors of the class Set (and its subclasses) should not
 // be used directly. Instead, the class should provide static factory 
-// functions for 0, {x] and xUy. However, these factory functions should 
+// functions for 0, {x} and xUy. However, these factory functions should 
 // not be simple wrappers around class constructors and should instead 
 // check whether an object has previously been created.
 //
@@ -35,13 +35,13 @@ import java.util.HashMap;
 // to objects. The handling of hash values will also be performed by SetManager.
 //
 // It is possible to consider static algorithms for hash values. However, 
-// these often do not guarantee that two objects are equal. It is nice to
-// know that a static hash function is a (mathematically) injective mapping.
-// In the case at hand, such function exist but are computationally unusable
-// due to their rapid growth. Using dynamic hashing, although not specifically
-// called for by the flyweight design pattern, provides the convenience of 
-// producing truly unique hashes, which grow very slowly (a hash counter
-// is incremented at each object creation). 
+// these often do not guarantee that two objects with equal hash are equal. 
+// It is nice to know that a static hash function is a (mathematically) 
+// injective mapping. In the case at hand, such function exist but are 
+// computationally unusable due to their rapid growth. Using dynamic hashing, 
+// although not specifically called for by the flyweight design pattern, 
+// provides the convenience of producing truly unique hashes, which grow very 
+// slowly (a hash counter is incremented at each object creation). 
 //
 // So this example illustrate a case of flyweight design pattern, as well
 // as proposing a scheme for the generation of dynamic hash values. 

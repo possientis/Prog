@@ -105,7 +105,7 @@ of application of N and D below, starting from 1 *)
 Inductive pos_ratio : Set :=
   | One : pos_ratio
   | N   : pos_ratio -> pos_ratio  (* x -> 1 + x *)
-  | D   : pos_ratio -> pos_ratio. (* x -> 1 + 1/x *)
+  | D   : pos_ratio -> pos_ratio. (* x -> 1/(1 + 1/x) *)
 
 
 Fixpoint power (z:Z)(n:nat) : Z :=
@@ -126,7 +126,15 @@ Fixpoint discrete_log (p: positive) : nat :=
 Eval compute in discrete_log 1024.
 Eval compute in discrete_log 2048.
 
+Fixpoint toPair (r :pos_ratio) : positive*positive :=
+  (match r with
+    | One         => (1,1)
+    | N x         => let p := toPair x in (snd p + fst p, snd p)
+    | D x         => let p := toPair x in (fst p, fst p + snd p)
+  end)%positive.
 
+Eval compute in toPair (N (D (N (N (N (D (D (N One)))))))).
+  
 
 
 

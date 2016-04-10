@@ -63,20 +63,18 @@ Dictionary* Dictionary_copy(Dictionary* self){
   return self;
 }
 
-// The dictionary does not have ownership of objects pointed to by pointers
-// it stores. Hence deallocation of data array simply consists in freeing pointer.
 void Dictionary_delete(Dictionary* self){
   assert(self != NULL);
   self->refcount--;
   if(self->refcount == 0){
     assert(self->data != NULL);
-    Dictionary_log("Deallocating data array %lx\n", self->data);
     int i;
     for(i = 0; i < self->size; ++i){
       if(self->data[i] != NULL){  // hash table has Link-ed list entry for hash i
         Link_delete(self->data[i]);
       } 
     }
+    Dictionary_log("Deallocating data array %lx\n", self->data);
     free(self->data);
     self->num           = 0;
     self->size          = 0;
@@ -92,6 +90,7 @@ void Dictionary_delete(Dictionary* self){
 Pair *Dictionary_tempVector(Dictionary* self){
   assert(self != NULL);
   Pair* ptr = (Pair*) malloc(self->num*sizeof(Pair));
+  assert(ptr != NULL);
   Dictionary_log("Allocating new temporary vector %lx\n", ptr);
   int index = 0;
   int i;
@@ -149,13 +148,14 @@ void Dictionary_debug(Dictionary* self){
 static int doesNeedIncrease(Dictionary* self){
   assert(self != NULL);
   // hash table should be increased if load factor above a certain threshold
-  return (((double) self->num)/((double) self->size) > 0.8) ? 1 : 0;
+  return ((double) self->num)/((double) self->size) > 0.8;
 } 
 
 static int doesNeedDecrease(Dictionary* self){
   assert(self != NULL);
   // hash table should be decreased if load factor below a certain threshold
-  return (((double) self->num)/((double) self->size) < 0.2) ? 1 : 0;
+  // however, hash table is kept at least as large as initial size
+  return (self->size > DICT_C_INITIAL_SIZE) && ((double) self->num)/((double) self->size) < 0.2;
 } 
 
 
@@ -264,8 +264,8 @@ void Dictionary_remove(Dictionary* self, int key){
   int h = hash(key, self->size);  // hash table index corresponding to key
   Link* list = self->data[h];     // Link-ed list at index h
   if(list != NULL){               // nothing to do otherwise
-    const void** result;
-    int found = Link_find(list, key, result);
+    const void* result;
+    int found = Link_find(list, key, &result);
     if(found){                    // key is currently in dictionary
       self->num--;                // hence one less element in dictionary
       Link_remove(list, key);     // actual removal from list at index h
