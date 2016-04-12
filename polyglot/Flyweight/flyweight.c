@@ -1,4 +1,5 @@
 // Flyweight Design Pattern
+#define  FLYWEIGHT_C_MAX_BUFFER_SIZE 1024
 #include "dict.h" // Dictionary
 #include <malloc.h>
 #include <assert.h>
@@ -58,6 +59,28 @@ typedef struct Union_       Union;
 typedef struct SetManager_  SetManager;
 
 /******************************************************************************/
+/*                              Memory log                                    */
+/******************************************************************************/
+
+// basic safety scheme against memory leaks
+long Set_log(const char* message, const void* address){
+  static long memory_check = 0L;
+  // Set_log(NULL,NULL) returns current memory_check
+  if((message == NULL) && (address == NULL)) return memory_check;
+  assert(message != NULL);
+  assert(address != NULL);
+  // message should contain %lx so fprintf expects third 'address' argument
+  fprintf(stderr, message, address);  // uncomment this line when needed
+  memory_check ^= (long) address;     // xor-ing address as sanity check
+//  fprintf(stderr, "checksum = %ld\n", memory_check);
+  return 0L;
+}
+
+int Set_hasMemoryLeak(){
+  return Set_log(NULL, NULL) != 0L;
+}
+
+/******************************************************************************/
 /*                           SetvTable class                                  */
 /******************************************************************************/
 
@@ -73,6 +96,145 @@ struct SetvTable_ {
   Set*  (*right)        (Set* self);
 };
 
+SetvTable* SetvTable_new(){
+  SetvTable* ptr = (SetvTable*) malloc(sizeof(SetvTable));
+  assert(ptr != NULL);
+  Set_log("Allocating vTable %lx\n", ptr);
+  ptr->refcount     = 1;
+  ptr->delete       = NULL;
+  ptr->toString     = NULL;
+  ptr->isZero       = NULL;
+  ptr->isSingleton  = NULL;
+  ptr->isUnion      = NULL;
+  ptr->element      = NULL;
+  ptr->left         = NULL;
+  ptr->right        = NULL;
+  return ptr;
+}
+   
+SetvTable* SetvTable_copy(SetvTable* self){
+  assert(self != NULL);
+  self->refcount++;
+  Set_log("Making copy of vTable %lx\n", self);
+  return self;
+}
+
+void SetvTable_delete(SetvTable* self){
+  assert(self != NULL);
+  assert(self->refcount > 0);
+  self->refcount--;
+  if(self->refcount == 0){  // dealloc
+    self->delete       = NULL;
+    self->toString     = NULL;
+    self->isZero       = NULL;
+    self->isSingleton  = NULL;
+    self->isUnion      = NULL;
+    self->element      = NULL;
+    self->left         = NULL;
+    self->right        = NULL;
+    Set_log("Deallocating vTable %lx\n", self);
+    free(self);
+  } else {
+    Set_log("Deleting copy of vTable %lx\n", self);
+  }
+}
+
+void _Zero_vTable_initialize(SetvTable*);       // forward
+//
+SetvTable* SetvTable_Zero_new(){
+  SetvTable* ptr = SetvTable_new();
+  assert(ptr != NULL);
+  _Zero_vTable_initialize(ptr);
+  return ptr;
+}
+
+void _Singleton_vTable_initialize(SetvTable*);  // forward
+//
+SetvTable* SetvTable_Singleton_new(){
+  SetvTable* ptr = SetvTable_new();
+  assert(ptr != NULL);
+  _Singleton_vTable_initialize(ptr);
+  return ptr;
+}
+
+void _Union_vTable_initialize(SetvTable*);      // forward
+//
+SetvTable* SetvTable_Union_new(){
+  SetvTable* ptr = SetvTable_new();
+  assert(ptr != NULL);
+  _Union_vTable_initialize(ptr);
+  return ptr;
+}
+
+
+// singleton design pattern. Returns instance, unless 
+// required to reset instance, in which case returns NULL.
+SetvTable* SetvTable_Zero_instance(int resetInstance){
+  static SetvTable* instance = NULL;
+  // required to reset instance
+  if(resetInstance){
+    if(instance != NULL) SetvTable_delete(instance);
+    instance = NULL;
+    return NULL;
+  }
+  // required to provide handle to instance
+  if(instance == NULL) instance = SetvTable_Zero_new();
+  return instance;
+}
+
+// singleton design pattern. Returns instance, unless 
+// required to reset instance, in which case returns NULL.
+SetvTable* SetvTable_Singleton_instance(int resetInstance){
+  static SetvTable* instance = NULL;
+  // required to reset instance
+  if(resetInstance){
+    if(instance != NULL) SetvTable_delete(instance);
+    instance = NULL;
+    return NULL;
+  }
+  // required to provide handle to instance
+  if(instance == NULL) instance = SetvTable_Singleton_new();
+  return instance;
+}
+
+// singleton design pattern. Returns instance, unless 
+// required to reset instance, in which case returns NULL.
+SetvTable* SetvTable_Union_instance(int resetInstance){
+  static SetvTable* instance = NULL;
+  // required to reset instance
+  if(resetInstance){
+    if(instance != NULL) SetvTable_delete(instance);
+    instance = NULL;
+    return NULL;
+  }
+  // required to provide handle to instance
+  if(instance == NULL) instance = SetvTable_Union_new();
+  return instance;
+}
+
+void SetvTable_test(){
+  SetvTable *t = SetvTable_new();
+  SetvTable *s = SetvTable_copy(t);
+  SetvTable_delete(s);
+  SetvTable_delete(t);
+
+  SetvTable *zero1 = SetvTable_Zero_instance(0);
+  SetvTable *zero2= SetvTable_Zero_instance(0);
+  SetvTable *zero3 = SetvTable_Zero_instance(0);
+  SetvTable_Zero_instance(1); // reset
+
+  SetvTable *single1 = SetvTable_Singleton_instance(0);
+  SetvTable *single2= SetvTable_Singleton_instance(0);
+  SetvTable *single3 = SetvTable_Singleton_instance(0);
+  SetvTable_Singleton_instance(1); // reset
+
+  SetvTable *union1 = SetvTable_Union_instance(0);
+  SetvTable *union2= SetvTable_Union_instance(0);
+  SetvTable *union3 = SetvTable_Union_instance(0);
+  SetvTable_Union_instance(1); // reset
+
+  assert(!Set_hasMemoryLeak());
+}
 
 /******************************************************************************/
 /*                                  Set class                                 */
@@ -83,15 +245,32 @@ struct Set_ {
   SetvTable*  vTable;
 };
 
+// should not be called by client code
 Set* Set_new(int hash){
-  // TBI
-}
-Set* Set_copy(Set* self){
-  // TBI
+  Set* ptr = (Set*) malloc(sizeof(Set));
+  assert(ptr != NULL);
+  Set_log("Allocating new base Set object %lx\n", ptr);
+  ptr->refcount = 1;
+  ptr->hash     = hash;
+  ptr->vTable   = NULL; // to be initialized by derived class
 }
 
+
+Set* Set_copy(Set* self){
+  assert(self != NULL);
+  Set_log("Making copy of base set object %lx\n", self);
+  self->refcount++;
+  return self;
+}
+
+// calling virtual destructor
 Set* Set_delete(Set* self){
-  // TBI
+  assert(self != NULL);
+  assert(self->refcount > 0);
+  assert(self->vTable != NULL);
+  void (*delete)(Set*);
+  delete = self->vTable->delete;
+  delete(self);
 }
 
 // not a virtual method
@@ -100,29 +279,30 @@ int Set_hashCode(Set* self){
   return self->hash;
 }
 
-// static method
-SetManager* Set_manager(){
-  // TBI
-}
 
+Set* SetManager_zero();
 // static method
 Set* Set_zero(){
-  // TBI
+  return SetManager_zero();
 }
 
+Set* SetManager_singleton(Set*);
 // static method
 Set* Set_singleton(Set* x){
-  // TBI
+  assert(x != NULL);
+  return SetManager_singleton(x);
 }
 
+Set* SetManager_union(Set*, Set*);
 // static method
 Set* Set_union(Set* x, Set* y){
-  // TBI
+  assert(x != NULL);
+  assert(y != NULL);
+  return SetManager_union(x,y);
 }
 
 // static method
 Set* Set_successor(Set* x){
-  // TBI (details of memory semantics)
   assert(x != NULL);
   return Set_union(x, Set_singleton(x));
 }
@@ -132,6 +312,19 @@ void Set_debug(){
   // TBI
 }
 
+void Set_test(){
+  // basic
+  Set* s = Set_new(123);
+  fprintf(stderr, "hash = %d\n", Set_hashCode(s));
+  Set* t = Set_copy(s);
+  fprintf(stderr, "hash = %d\n", Set_hashCode(t));
+  
+  // virtual table is NULL, cannot delete in standard way
+  Set_log("Manually deleting Set %lx\n", s);  // logging required to pass leak test
+  Set_log("Manually deleting Set %lx\n", t);  // logging required to pass leak test
+  free(t); // only once, s and t point to same memory 
+  assert(!Set_hasMemoryLeak());
+}
 
 /******************************************************************************/
 /*                                 Zero class                                 */
@@ -140,6 +333,41 @@ void Set_debug(){
 struct Zero_ {
   Set   base;
 };
+
+
+// should not be called by client code
+Zero* Zero_new(int hash){
+  Zero* ptr = (Zero*) malloc(sizeof(Zero));
+  assert(ptr != NULL);
+  Set_log("Allocating new Zero %lx\n", ptr);
+  Set* base = (Set*) ptr;
+  base->refcount = 1;
+  base->hash = hash;
+  base->vTable = SetvTable_Zero_instance(0);
+  return ptr;
+}
+
+Zero* Zero_copy(Zero* self){
+  assert(self != NULL);
+  Set *ptr = (Set*) self;   // upcast
+  ptr->refcount++;
+  Set_log("Making copy of Zero %lx\n", self);
+  return self;
+}
+
+// override
+void Zero_delete(Zero* self){
+  assert(self != NULL);
+  Set* base = (Set*) self;
+  assert(base->refcount > 0);
+  base->refcount--;
+  if(base->refcount == 0){
+    SetManager_deallocate_zero(self);
+  } else {
+    Set_log("Deleting copy of Zero %lx\n", self);
+  }
+}
+
 
 // override
 void Zero_toString(Zero* self, char* buffer, size_t size){
@@ -192,36 +420,342 @@ Set* Zero_right(Zero* self){
 }
 
 
-void Zero_delete(Zero* self){
+void Zero_test(){
+  Zero* zero = Zero_new(0);
+  Zero* copy = Zero_copy(zero);
+  assert(Zero_isZero(zero));
+  assert(!Zero_isSingleton(zero));
+  assert(!Zero_isUnion(zero));
+  Zero_delete(copy);
+  Zero_delete(zero);
+  SetManager_deallocate();
+  assert(!Set_hasMemoryLeak());
+}
+
+/******************************************************************************/
+/*                              Singleton class                               */
+/******************************************************************************/
+
+struct Singleton_ {
+  Set   base;
+  Set*  element;
+};
+
+
+// should not be called by client code
+Singleton* Singleton_new(Set* element, int hash){
+  assert(element != NULL);
+  Singleton* ptr = (Singleton*) malloc(sizeof(Singleton));
+  assert(ptr != NULL);
+  Set_log("Allocating new Singleton %lx\n", ptr);
+  ptr->element = element;
+  Set* base = (Set*) ptr;
+  base->refcount = 1;
+  base->hash = hash;
+  base->vTable = SetvTable_Singleton_instance(0);
+  return ptr;
+}
+
+Singleton* Singleton_copy(Singleton* self){
+  assert(self != NULL);
+  Set *ptr = (Set*) self;   // upcast
+  ptr->refcount++;
+  Set_log("Making copy of Singleton %lx\n", self);
+  return self;
+}
+
+// override
+void Singleton_delete(Singleton* self){
   assert(self != NULL);
   Set* base = (Set*) self;
   assert(base->refcount > 0);
   base->refcount--;
   if(base->refcount == 0){
-//    SetManager_deallocate_zero(self);
+    SetManager_deallocate_singleton(self);
+  } else {
+    Set_log("Deleting copy of Singleton %lx\n", self);
   }
 }
 
 
+// override
+void Singleton_toString(Singleton* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(self->element != NULL);
+  assert(size > 3);
+  // TBI
+}
 
-/******************************************************************************/
-/*                              Singleton class                               */
-/******************************************************************************/
+// override
+int Singleton_isZero(Singleton* self){
+  assert(self != NULL);
+  return 0;   // false
+}
+
+// override
+int Singleton_isSingleton(Singleton* self){
+  assert(self != NULL);
+  return 1;   // true
+}
+
+// override
+int Singleton_isUnion(Singleton* self){
+  assert(self != NULL);
+  return 0;   // false
+}
+
+
+// override
+Set* Singleton_element(Singleton* self){
+  assert(self != NULL);
+  assert(self->element != NULL);
+  return self->element;
+} 
+
+// override
+Set* Singleton_left(Singleton* self){
+  assert(self != NULL);
+  fprintf(stderr, "Singleton: illegal call to left method\n");
+  assert(NULL);
+  return NULL;
+}
+
+// override
+Set* Singleton_right(Singleton* self){
+  assert(self != NULL);
+  fprintf(stderr, "Singleton: illegal call to right method\n");
+  assert(NULL);
+  return NULL;
+}
+
+
+void Singleton_test(){
+  Set* zero = (Set*) Zero_new(0);
+  Singleton* single = Singleton_new(zero, 1);   // takes ownership of zero
+  Singleton* copy = Singleton_copy(single);
+  assert(!Singleton_isZero(single));
+  assert(Singleton_isSingleton(single));
+  assert(!Singleton_isUnion(single));
+  assert(Singleton_element(single) == zero);
+  Singleton_delete(copy);
+  Singleton_delete(single);
+  SetManager_deallocate();
+  assert(!Set_hasMemoryLeak());
+}
+
 
 
 /******************************************************************************/
 /*                                 Union class                                */
 /******************************************************************************/
 
+struct Union_ {
+  Set   base;
+  Set*  left;
+  Set* right;
+};
+
+
+// should not be called by client code
+Union* Union_new(Set* left, Set* right, int hash){
+  assert(left != NULL);
+  assert(right != NULL);
+  Union* ptr = (Union*) malloc(sizeof(Union));
+  assert(ptr != NULL);
+  Set_log("Allocating new Union %lx\n", ptr);
+  ptr->left = left;
+  ptr->right = right;
+  Set* base = (Set*) ptr;
+  base->refcount = 1;
+  base->hash = hash;
+  base->vTable = SetvTable_Union_instance(0);
+  return ptr;
+}
+
+Union* Union_copy(Union* self){
+  assert(self != NULL);
+  Set *ptr = (Set*) self;   // upcast
+  ptr->refcount++;
+  Set_log("Making copy of Union %lx\n", self);
+  return self;
+}
+
+// override
+void Union_delete(Union* self){
+  assert(self != NULL);
+  Set* base = (Set*) self;
+  assert(base->refcount > 0);
+  base->refcount--;
+  if(base->refcount == 0){
+    SetManager_deallocate_union(self);
+  } else {
+    Set_log("Deleting copy of Union %lx\n", self);
+  }
+}
+
+
+// override
+void Union_toString(Union* self, char* buffer, size_t size){
+  assert(self != NULL);
+  assert(self->left != NULL);
+  assert(self->right != NULL);
+  assert(size > 3);
+  // TBI
+}
+
+// override
+int Union_isZero(Union* self){
+  assert(self != NULL);
+  return 0;   // false
+}
+
+// override
+int Union_isSingleton(Union* self){
+  assert(self != NULL);
+  return 0;   // true
+}
+
+// override
+int Union_isUnion(Union* self){
+  assert(self != NULL);
+  return 1;   // false
+}
+
+
+// override
+Set* Union_element(Union* self){
+  assert(self != NULL);
+  fprintf(stderr, "Union: illegal call to element method\n");
+  assert(NULL);
+  return NULL;
+} 
+
+// override
+Set* Union_left(Union* self){
+  assert(self != NULL);
+  assert(self->left != NULL);
+  return self->left;
+}
+
+// override
+Set* Union_right(Union* self){
+  assert(self != NULL);
+  assert(self->right != NULL);
+  return self->right;
+}
+
+
+void Union_test(){
+  Zero* zero = Zero_new(0);
+  Singleton* single = Singleton_new((Set*)zero, 1);   // takes ownership of zero
+  Union* union_ = Union_new((Set*) Zero_copy(zero), (Set*)single, 2);
+  Union* copy = Union_copy(union_);
+
+  assert(!Union_isZero(union_));
+  assert(!Union_isSingleton(union_));
+  assert(Union_isUnion(union_));
+  assert(Union_left(union_) == (Set*) zero);
+  assert(Union_right(union_) == (Set*) single);
+  Union_delete(copy);
+  Union_delete(union_);
+  SetManager_deallocate();
+  assert(!Set_hasMemoryLeak());
+}
+
+
 
 /******************************************************************************/
 /*                             SetManager class                               */
 /******************************************************************************/
 
+struct SetManager_ {
+  int   refcount;
+  int   nextHash;
+  Dictionary* singletonMap;
+  Dictionary* unionMap;
+  Dictionary* objectMap;
+};
+
+
+SetManager* SetManager_new(){
+  SetManager* ptr = (SetManager*) malloc(sizeof(SetManager));
+  assert(ptr != NULL);
+  Set_log("Allocating new SetManager %lx\n", ptr);
+  ptr->refcount = 1;
+  ptr->nextHash = 1;
+  ptr->singletonMap = Dictionary_new();
+  ptr->unionMap     = Dictionary_new();
+  ptr->objectMap    = Dictionary_new();
+  return ptr;
+}
+
+
+SetManager_deallocate(){  // final clean up
+  // temporary
+  SetvTable_Zero_instance(1); // deallocating vTable
+  SetvTable_Singleton_instance(1); // deallocating vTable
+  SetvTable_Union_instance(1); // deallocating vTable
+}
+
+SetManager_deallocate_zero(Zero* obj){
+  // temporary
+  assert(obj != NULL);
+  Set* ptr = (Set*) obj; 
+  assert(ptr->refcount == 0);
+  assert(ptr->vTable != NULL);
+  assert(ptr->vTable == SetvTable_Zero_instance(0));
+  Set_log("Deallocating Zero %lx\n", obj);
+  free(obj);
+}
+
+SetManager_deallocate_singleton(Singleton* obj){
+  // temporary
+  assert(obj != NULL);
+  Set* ptr = (Set*) obj; 
+  assert(ptr->refcount == 0);
+  assert(ptr->vTable != NULL);
+  assert(ptr->vTable == SetvTable_Singleton_instance(0));
+  assert(obj->element != NULL);
+  Set_delete(obj->element);
+  Set_log("Deallocating Singleton %lx\n", obj);
+  free(obj);
+}
+
+SetManager_deallocate_union(Union* obj){
+  // temporary
+  assert(obj != NULL);
+  Set* ptr = (Set*) obj; 
+  assert(ptr->refcount == 0);
+  assert(ptr->vTable != NULL);
+  assert(ptr->vTable == SetvTable_Union_instance(0));
+  assert(obj->left != NULL);
+  assert(obj->right != NULL);
+  Set_delete(obj->left);
+  Set_delete(obj->right);
+  Set_log("Deallocating Union %lx\n", obj);
+  free(obj);
+}
+
+SetManager_instance(){
+  // TBI
+}
+
+Set* SetManager_zero(){
+  // TBI
+}
+
+Set* SetManager_singleton(Set* x){
+  // TBI
+}
+
+Set* SetManager_union(Set* x, Set* y){
+  // TBI
+}
+
 
 
 /******************************************************************************/
-/*                             vTable initializers                            */
+/*                         vTable initializers  (Zero)                        */
 /******************************************************************************/
 
 void _Zero_toString(Set* self, char* buffer, size_t size){
@@ -260,14 +794,146 @@ Set* _Zero_right(Set* self){
   return Zero_right((Zero*) self);           // downcast
 }
 
+void _Zero_delete(Set* self){
+  assert(self != NULL);
+  Zero_delete((Zero*) self);                 // downcast
+}
 
 void _Zero_vTable_initialize(SetvTable* vTable){
   assert(vTable != NULL);
-
-  
+  vTable->delete      = _Zero_delete; 
+  vTable->toString    = _Zero_toString;
+  vTable->isZero      = _Zero_isZero;
+  vTable->isSingleton = _Zero_isSingleton;
+  vTable->isUnion     = _Zero_isUnion;
+  vTable->element     = _Zero_element;
+  vTable->left        = _Zero_left;
+  vTable->right       = _Zero_right;
 }
 
+/******************************************************************************/
+/*                      vTable initializers  (Singleton)                      */
+/******************************************************************************/
+
+void _Singleton_toString(Set* self, char* buffer, size_t size){
+  assert(self != NULL);
+  Singleton_toString((Singleton*) self, buffer, size); // downcast
+}
+
+int _Singleton_isZero(Set* self){
+  assert(self != NULL);
+  return Singleton_isZero((Singleton*) self);     // downcast
+}
+
+int _Singleton_isSingleton(Set* self){
+  assert(self != NULL);
+  return Singleton_isSingleton((Singleton*) self);     // downcast
+}
+
+int _Singleton_isUnion(Set* self){
+  assert(self != NULL);
+  return Singleton_isUnion((Singleton*) self);         // downcast
+}
+
+
+Set* _Singleton_element(Set* self){
+  assert(self != NULL);
+  return Singleton_element((Singleton*) self);         // downcast
+} 
+
+Set* _Singleton_left(Set* self){
+  assert(self != NULL);
+  return Singleton_left((Singleton*) self);            // downcast
+}
+
+Set* _Singleton_right(Set* self){
+  assert(self != NULL);
+  return Singleton_right((Singleton*) self);           // downcast
+}
+
+void _Singleton_delete(Set* self){
+  assert(self != NULL);
+  Singleton_delete((Singleton*) self);                 // downcast
+}
+
+void _Singleton_vTable_initialize(SetvTable* vTable){
+  assert(vTable != NULL);
+  vTable->delete      = _Singleton_delete; 
+  vTable->toString    = _Singleton_toString;
+  vTable->isZero      = _Singleton_isZero;
+  vTable->isSingleton = _Singleton_isSingleton;
+  vTable->isUnion     = _Singleton_isUnion;
+  vTable->element     = _Singleton_element;
+  vTable->left        = _Singleton_left;
+  vTable->right       = _Singleton_right;
+}
+
+
+/******************************************************************************/
+/*                      vTable initializers  (Union)                          */
+/******************************************************************************/
+
+void _Union_toString(Set* self, char* buffer, size_t size){
+  assert(self != NULL);
+  Union_toString((Union*) self, buffer, size); // downcast
+}
+
+int _Union_isZero(Set* self){
+  assert(self != NULL);
+  return Union_isZero((Union*) self);          // downcast
+}
+
+int _Union_isSingleton(Set* self){
+  assert(self != NULL);
+  return Union_isSingleton((Union*) self);     // downcast
+}
+
+int _Union_isUnion(Set* self){
+  assert(self != NULL);
+  return Union_isUnion((Union*) self);         // downcast
+}
+
+
+Set* _Union_element(Set* self){
+  assert(self != NULL);
+  return Union_element((Union*) self);         // downcast
+} 
+
+Set* _Union_left(Set* self){
+  assert(self != NULL);
+  return Union_left((Union*) self);            // downcast
+}
+
+Set* _Union_right(Set* self){
+  assert(self != NULL);
+  return Union_right((Union*) self);           // downcast
+}
+
+void _Union_delete(Set* self){
+  assert(self != NULL);
+  Union_delete((Union*) self);                 // downcast
+}
+
+void _Union_vTable_initialize(SetvTable* vTable){
+  assert(vTable != NULL);
+  vTable->delete      = _Union_delete; 
+  vTable->toString    = _Union_toString;
+  vTable->isZero      = _Union_isZero;
+  vTable->isSingleton = _Union_isSingleton;
+  vTable->isUnion     = _Union_isUnion;
+  vTable->element     = _Union_element;
+  vTable->left        = _Union_left;
+  vTable->right       = _Union_right;
+}
+
+
 int main(){
+
+//  Set_test();
+//  SetvTable_test(); 
+  Zero_test();
+  Singleton_test();
+  Union_test();
 
   return 0;
 }

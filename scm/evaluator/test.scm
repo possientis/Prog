@@ -33,6 +33,8 @@
 (load "load-file.scm")
 (load "object-string.scm")
 (load "primitive.scm")
+(load "global-env.scm")
+(load "eval.scm")
 (load "exp-type.scm")
 (load "true-false.scm")
 (load "if.scm")

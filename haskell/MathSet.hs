@@ -94,6 +94,7 @@ instance ISet Set where
   -- (which is a subset of X). This is not quite true
   -- of course since various elements of E(x) could
   -- be equivalent with respect to ==. The breakthrough:
+  -- 
   -- Lemma 1: forall x,y:X we have x <= y if and only if:
   -- forall z:E(x) exists z':E(y), z == z'
 

@@ -11,6 +11,7 @@
   (display "-x")
 )
 
+
 (define (primitive-implementation proc) (cadr proc))
 
 (define primitive-procedures
@@ -29,6 +30,12 @@
         (list 'list list)
         (list 'map map-primitive)
         (list 'null? null?)
+        (list 'number? number?)
+        (list 'string? string?)
+        (list 'char? char?)
+        (list 'boolean? boolean?)
+        (list 'symbol? symbol?)
+        (list 'pair? pair?)
         (list '+ +)
         (list '* *)
         (list '- -)
@@ -57,6 +64,7 @@
         (list 'string-append string-append)
         (list 'length length)
         (list 'object->string object->string-primitive)
+        (list 'read read)
         (list 'exit (lambda(x) 'ok))
         ; more to be included
         ))

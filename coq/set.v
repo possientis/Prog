@@ -3,8 +3,28 @@ Require Import Arith.
 Require Import Arith.Max.
 Require Import List.
 
-Definition bool_and (p q:bool) := if p then q else false.
-Definition bool_or  (p q:bool) := if p then true else q.
+Definition bool_and (p q:bool) :=
+  match p, q with
+    | true, true    => true
+    | true, false   => false
+    | false, true   => false
+    | false, false  => false
+  end.
+
+Definition bool_or (p q:bool) :=
+  match p, q with
+    | true, true    => true
+    | true, false   => true
+    | false, true   => true
+    | false, false  => false
+  end.
+
+Lemma lemma_or_true : forall (p q:bool), 
+  bool_or p q = true -> p = true \/ q = true.
+Proof.
+  intro p. elim p; intro q; elim q; simpl; auto.
+Qed.
+
 
 Inductive set : Set := 
   | Empty     : set
@@ -327,6 +347,40 @@ Fixpoint elements (a:set) : list set :=
     | Singleton x   => x::nil
     | Union x y     => (elements x) ++ (elements y) 
   end.
+
+Lemma subset_elements : forall (a b:set), subset a b = true <-> 
+  forall (c:set), In c (elements a) -> exists (c':set), 
+    In c' (elements b) /\  equiv c c' = true.  
+Proof.
+  intro a. elim a. intros b. split. intros H c. clear H. simpl. apply False_ind.
+  intro H. clear H. apply subset_0_all. clear a. intro x. intro IH. clear IH.
+  intro b. elim b. rewrite subset_single_0. split. intro H. discriminate H. 
+  intro H. cut(exists c':set, In c' (elements Empty) /\ equiv x c' = true). 
+  intro H'. simpl in H'. cut False. apply False_ind. elim H'.
+  intro z. intro H''. elim H''. trivial. apply H. simpl. left. reflexivity.
+  clear b. intros y H. clear H. simpl. rewrite subset_single_single. split.
+  intro H. intros c H'. exists y. split. left. reflexivity. elim H'. intro H''.
+  rewrite <- H''. unfold equiv. exact H. apply False_ind. intro H.
+  cut(exists c' : set, (y = c' \/ False) /\ equiv x c' = true). intro H'.
+  elim H'. intro z. intro H''. elim H''. intros H0 H1. elim H0. intro H2.
+  rewrite <- H2 in H1. exact H1. apply False_ind. apply H. left. reflexivity.
+  clear b. intros y Hy z Hz. rewrite subset_single_union. simpl. split.
+  intros H c H'. elim H'. intro H''. rewrite <- H''. clear H''.
+  cut(subset (Singleton x) y = true \/ subset (Singleton x) z = true).
+  intro H''. elim H''. intro Hy'. 
+  cut(exists c':set, In c' (elements y) /\ equiv x c' = true). intro Hy''.
+  elim Hy''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''.
+  intro H0. clear H0. apply in_or_app. left. exact Hc''. elim Hc'. intros H0 H1. 
+  exact H1. apply Hy. exact Hy'. simpl. left. reflexivity. intro Hz'.
+  cut(exists c':set, In c' (elements z) /\ equiv x c' = true). intro Hz''.
+  elim Hz''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''. intro H0.
+  clear H0. apply in_or_app. right. exact Hc''. elim Hc'. intros H0 H1. exact H1.
+  apply Hz. exact Hz'. simpl. left. reflexivity. apply lemma_or_true. exact H.
+  apply False_ind. intro H.
+  cut(exists c' : set, In c' (elements y ++ elements z) /\ equiv x c' = true).
+  intro H'.
+
+
 
 
 

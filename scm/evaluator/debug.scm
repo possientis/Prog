@@ -20,8 +20,10 @@
 
 (newline)(display "map = ")(display map)(newline)
 ;(eval '(map car seq) global-env)      ; uncomment in scm
+
 (map car seq)                         ; uncomment in interpreter
 
+(exit 0)
 ; keep running in intepreter
 ; need to implement map-primitive.scm
 
