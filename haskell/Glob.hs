@@ -54,12 +54,16 @@ doesNameExist name = do
     else doesDirectoryExist name
 
 
+ignore :: SomeException -> IO [String]
+ignore = const (return [])
+
+
 listMatches :: FilePath -> String -> IO [String]
 listMatches dirName pat = do
   dirName' <- if null dirName
               then getCurrentDirectory
               else return dirName
-  handle (const (return [])) $ do -- failure, need to solve
+  handle ignore $ do -- had to define 'ignore' in order to spell out Exception type
     names <- getDirectoryContents dirName'
     let names' =  if isHidden pat
                   then filter isHidden names
@@ -76,4 +80,8 @@ listPlain dirName baseName = do
             then doesDirectoryExist dirName
             else doesNameExist (dirName </> baseName)
   return (if exists then [baseName] else [])
+
+
+
+
 

@@ -4,6 +4,7 @@
 
 (define (driver-loop)
   (prompt-for-input input-prompt)
+  (newline)(display ">")
   (let ((input (read)))
     (let ((output (eval input global-env)))
       (announce-output output-prompt)
@@ -14,7 +15,7 @@
   (newline)(display str))
 
 (define (announce-output str)
-  (display str))
+  (display str)(newline))
 
 (define (user-print object)
   (if (compound-procedure? object)
@@ -22,6 +23,7 @@
                    (procedure-parameters object)
                    (procedure-body object)
                    '<procedure-env>))
-    (display object)))
+    (display object))(newline))
+
 
 (driver-loop)

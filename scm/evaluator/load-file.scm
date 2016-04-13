@@ -1,5 +1,5 @@
 (define (load-file file-name)
-  (let ((file (open-file file-name open_read)))
+  (let ((file (open-file file-name "r")))
     (define (loop)
       (let ((input (read file)))
         (if (not (eof-object? input))

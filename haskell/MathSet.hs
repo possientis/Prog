@@ -140,7 +140,7 @@ elements (Union x y)   = elements x ++ elements y
   -- from (v) of the definition of <=. This completes the proof.
   --
   -- Definition 4: we define order: X -> N as follows:
-  -- order(0) = 1
+  -- order(0) = 0
   -- order({x}) = 1 + order(x)
   -- order(xUy) = 1 + max(order(x), order(y))
   --

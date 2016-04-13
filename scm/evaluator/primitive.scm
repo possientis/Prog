@@ -6,9 +6,9 @@
 (load "map-primitive.scm")
 
 (define (my-display s)
-  (display "x-")
-  (display s)
-  (display "-x")
+;  (display "x-")
+  (display "***")(display s)(display "***")
+;  (display "-x")
 )
 
 
@@ -18,7 +18,9 @@
   (list (list 'car car)
         (list 'cdr cdr)
         (list 'caar caar)
+        (list 'caadr caadr)
         (list 'cdar cdar)
+        (list 'cdadr cdadr)
         (list 'cadr cadr)
         (list 'caddr caddr)
         (list 'cadddr cadddr)
@@ -65,6 +67,9 @@
         (list 'length length)
         (list 'object->string object->string-primitive)
         (list 'read read)
+        (list 'open-file open-file)
+        (list 'eof-object? eof-object?)
+        (list 'close-port close-port)
         (list 'exit (lambda(x) 'ok))
         ; more to be included
         ))

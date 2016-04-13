@@ -1,6 +1,6 @@
 import System.FilePath (replaceExtension)
 import System.Directory (doesFileExist, renameDirectory, renameFile)
-import Glob (namesMatching) -- need to solev failure
+import Glob (namesMatching)
 
 renameWith :: (FilePath -> FilePath) -> FilePath -> IO FilePath
 renameWith f path = do

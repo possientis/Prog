@@ -286,8 +286,5 @@
     )
   (display "eval: unit test complete\n"))
 
-;(environment-test)
-;(primitive-test)
-;(global-env-test)
 (eval-test)
 (exit 0)

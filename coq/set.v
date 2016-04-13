@@ -25,6 +25,18 @@ Proof.
   intro p. elim p; intro q; elim q; simpl; auto.
 Qed.
 
+Lemma lemma_and_true_l : forall (p q:bool), 
+  bool_and p q = true -> p = true.
+Proof.
+  intro p. elim p; intro q; elim q; auto.
+Qed.
+
+Lemma lemma_and_true_r : forall (p q:bool), 
+  bool_and p q = true -> q = true.
+Proof.
+  intro p. elim p; intro q; elim q; auto.
+Qed.
+
 
 Inductive set : Set := 
   | Empty     : set
@@ -352,36 +364,85 @@ Lemma subset_elements : forall (a b:set), subset a b = true <->
   forall (c:set), In c (elements a) -> exists (c':set), 
     In c' (elements b) /\  equiv c c' = true.  
 Proof.
+  (* Main induction on a, additional induction on b for a = Singleton x *)
+  (* a = Empty *)
   intro a. elim a. intros b. split. intros H c. clear H. simpl. apply False_ind.
-  intro H. clear H. apply subset_0_all. clear a. intro x. intro IH. clear IH.
-  intro b. elim b. rewrite subset_single_0. split. intro H. discriminate H. 
+  intro H. clear H. apply subset_0_all. 
+  (* a = Singleton x *)
+  clear a. intro x. intro IH. clear IH. intro b. elim b. 
+  (* a = Singleton x, b = Empty *)
+  rewrite subset_single_0. split. intro H. discriminate H. 
   intro H. cut(exists c':set, In c' (elements Empty) /\ equiv x c' = true). 
   intro H'. simpl in H'. cut False. apply False_ind. elim H'.
-  intro z. intro H''. elim H''. trivial. apply H. simpl. left. reflexivity.
+  intros z H''. elim H''. trivial. apply H. simpl. left. reflexivity.
+  (* a = Singleton x, b = Singleton y *)
   clear b. intros y H. clear H. simpl. rewrite subset_single_single. split.
   intro H. intros c H'. exists y. split. left. reflexivity. elim H'. intro H''.
-  rewrite <- H''. unfold equiv. exact H. apply False_ind. intro H.
-  cut(exists c' : set, (y = c' \/ False) /\ equiv x c' = true). intro H'.
+  rewrite <- H''. unfold equiv. exact H.  apply False_ind.
+
+  intro H. cut(exists c' : set, (y = c' \/ False) /\ equiv x c' = true). intro H'.
   elim H'. intro z. intro H''. elim H''. intros H0 H1. elim H0. intro H2.
   rewrite <- H2 in H1. exact H1. apply False_ind. apply H. left. reflexivity.
+  (* a = Singleton x, b = Union y z *) 
   clear b. intros y Hy z Hz. rewrite subset_single_union. simpl. split.
   intros H c H'. elim H'. intro H''. rewrite <- H''. clear H''.
   cut(subset (Singleton x) y = true \/ subset (Singleton x) z = true).
-  intro H''. elim H''. intro Hy'. 
-  cut(exists c':set, In c' (elements y) /\ equiv x c' = true). intro Hy''.
+  intro H''. elim H''.
+  
+  intro Hy'. cut(exists c':set, In c' (elements y) /\ equiv x c' = true). intro Hy''.
   elim Hy''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''.
   intro H0. clear H0. apply in_or_app. left. exact Hc''. elim Hc'. intros H0 H1. 
-  exact H1. apply Hy. exact Hy'. simpl. left. reflexivity. intro Hz'.
-  cut(exists c':set, In c' (elements z) /\ equiv x c' = true). intro Hz''.
+  exact H1. apply Hy. exact Hy'. simpl. left. reflexivity. 
+  
+  intro Hz'. cut(exists c':set, In c' (elements z) /\ equiv x c' = true). intro Hz''.
   elim Hz''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''. intro H0.
   clear H0. apply in_or_app. right. exact Hc''. elim Hc'. intros H0 H1. exact H1.
-  apply Hz. exact Hz'. simpl. left. reflexivity. apply lemma_or_true. exact H.
-  apply False_ind. intro H.
+  apply Hz. exact Hz'. simpl. left. reflexivity. 
+  
+  apply lemma_or_true. exact H. apply False_ind. intro H.
   cut(exists c' : set, In c' (elements y ++ elements z) /\ equiv x c' = true).
-  intro H'.
+  intro H'. elim H'. intros c' Hc'. elim Hc'. intros Hc'' Hc'''.
+  cut(In c' (elements y) \/ In c' (elements z)). intro H0. elim H0. 
+  
+  intro H1. cut(subset (Singleton x) y = true). intro Hy'. rewrite Hy'.
+  case (subset (Singleton x) z); simpl; reflexivity. apply Hy. intros c Hc.
+  exists c'. split. exact H1. clear H1. simpl in Hc. elim Hc. intro H1.
+  rewrite <- H1. exact Hc'''. apply False_ind. 
+  
+  intro H1. cut(subset (Singleton x) z = true). intro Hz'. rewrite Hz'.
+  case (subset (Singleton x) y); simpl; reflexivity. apply Hz. intros c Hc.
+  exists c'. split. exact H1. clear H1. simpl in Hc. elim Hc. intro H1.
+  rewrite <- H1. exact Hc'''. apply False_ind. 
+  
+  apply in_app_or. exact Hc''. apply H. left. reflexivity. 
+  
+  (* a = Union x y *) 
+  clear a. intros x Hx y Hy b. split. intro H.
+  rewrite subset_union_all in H. intro a. intro H'. simpl in H'.
+  cut(In a (elements x) \/ In a (elements y)). intro Ha. elim Ha. 
 
+  intro Ha'. apply Hx. apply lemma_and_true_l with (q:= subset y b). exact H. exact Ha'. 
+  intro Ha'. apply Hy. apply lemma_and_true_r with (p:= subset x b). exact H. exact Ha'. 
 
+  apply in_app_or. exact H'. 
 
+  intro H. rewrite subset_union_all. cut(subset x b = true). cut(subset y b = true).
+  intros Hy' Hx'. rewrite Hx', Hy'. simpl. reflexivity. 
+
+  apply Hy. intros a Ha. apply H. simpl. apply in_or_app. right. exact Ha.
+  apply Hx. intros a Ha. apply H. simpl. apply in_or_app. left. exact Ha.
+Qed.
+  
+Lemma elements_order : forall (a x:set), In x (elements a) -> order x < order a.
+Proof. intro a. elim a. (* induction on a*)
+  (* a = Empty *)
+  simpl. intro x. apply False_ind. 
+  (* a = Singleton x *)
+  clear a. intro x. intro H. clear H. intro z. simpl. intro H. elim H. intro H'.
+  rewrite <- H'. unfold lt. apply le_n. apply False_ind. 
+  (* a = Union x y *)
+  clear a. intros x Hx y Hy z. simpl. intro H. 
+  cut(In z (elements x) \/ In z (elements y)). intro H'. elim H'.
 
 
 
@@ -409,10 +470,6 @@ Definition ten    := embed 10.
 Definition eleven := embed 11.
 Definition twelve := embed 12.  
 *)
-
-
-
-
 
 
 
