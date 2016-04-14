@@ -1,9 +1,10 @@
-// Flyweight Design Pattern #define  FLYWEIGHT_C_MAX_BUFFER_SIZE 1024
+// Flyweight Design Pattern 
 #include "dict.h" // Dictionary
 #include <malloc.h>
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#define FLYWEIGHT_C_MAX_BUFFER_SIZE 2048
 
 // The main idea of the flyweight design pattern is to store objects
 // in a dictionary so they can be reused, rather than new objects be
@@ -69,7 +70,7 @@ long Set_log(const char* message, const void* address){
   assert(message != NULL);
   assert(address != NULL);
   // message should contain %lx so fprintf expects third 'address' argument
-  fprintf(stderr, message, address);  // uncomment this line when needed
+  //fprintf(stderr, message, address);  // uncomment this line when needed
   memory_check ^= (long) address;     // xor-ing address as sanity check
 //  fprintf(stderr, "checksum = %ld\n", memory_check);
   return 0L;
@@ -262,7 +263,6 @@ Set* Set_copy(Set* self){
   return self;
 }
 
-void _Zero_delete(Set*);
 // virtual destructor
 void Set_delete(Set* self){
   assert(self != NULL);
@@ -378,9 +378,10 @@ Set* Set_successor(Set* x){
   return Set_union(x, Set_singleton(x));
 }
 
+void SetManager_debug();    // forward
 // static method
 void Set_debug(){
-  // TBI
+  SetManager_debug();
 }
 
 void Set_test(){
@@ -439,11 +440,10 @@ void Zero_delete(Zero* self){
   }
 }
 
-
 // override
 void Zero_toString(Zero* self, char* buffer, size_t size){
   assert(self != NULL);
-  assert(size > 2);
+  assert(size >= 2);
   strcpy(buffer, "0");
 }
 
@@ -492,6 +492,7 @@ Set* Zero_right(Zero* self){
 
 
 void Zero_test(){
+  char buffer[8];
   // basic new/copy/delete test
   Zero* zero = Zero_new(0);
   Zero* copy = Zero_copy(zero);
@@ -504,6 +505,8 @@ void Zero_test(){
   assert(Set_isZero(set));
   assert(!Set_isSingleton(set));
   assert(!Set_isUnion(set));
+  Set_toString(set,buffer,8);
+  assert(strcmp(buffer,"0") == 0);
 
   SetManager_deallocate();        // overall cleanup
   assert(!Set_hasMemoryLeak());
@@ -557,10 +560,17 @@ void Singleton_delete(Singleton* self){
 
 // override
 void Singleton_toString(Singleton* self, char* buffer, size_t size){
+  char temp[FLYWEIGHT_C_MAX_BUFFER_SIZE];
   assert(self != NULL);
   assert(self->element != NULL);
-  assert(size > 3);
-  // TBI
+  assert(size <= FLYWEIGHT_C_MAX_BUFFER_SIZE);
+  assert(size >= 4); // "{0}" requires at least 4 bytes 
+  Set_toString(self->element, temp, size - 2); // need to keep 2 bytes for {}
+  int length = strlen(temp);
+  assert(length <= size - 3); // enough space for { } and \0
+  strcpy(buffer,"{"); buffer++;
+  strcpy(buffer,temp); buffer += length;
+  strcpy(buffer,"}");
 }
 
 // override
@@ -607,15 +617,31 @@ Set* Singleton_right(Singleton* self){
 
 
 void Singleton_test(){
+  char buffer[8];
+  // basic new/copy/delete test
   Set* zero = (Set*) Zero_new(0);
-  Singleton* single = Singleton_new(zero, 1);   // takes ownership of zero
+  Singleton* single = Singleton_new(zero, 1); // does not take ownership of zero
   Singleton* copy = Singleton_copy(single);
-  assert(!Singleton_isZero(single));
-  assert(Singleton_isSingleton(single));
-  assert(!Singleton_isUnion(single));
-  assert(Singleton_element(single) == zero);
   Singleton_delete(copy);
   Singleton_delete(single);
+  Set_delete(zero);
+  SetManager_deallocate();
+  assert(!Set_hasMemoryLeak());
+  // using higher interface
+  zero = Set_zero();
+  Set* one  = Set_singleton(zero);
+  Set* one2 = Set_singleton(zero);
+  Set* one3 = Set_singleton(zero);
+  assert(!Set_isZero(one));
+  assert(Set_isSingleton(one));
+  assert(!Set_isUnion(one));
+  assert(Set_element(one) == zero);
+  assert(Set_hashCode(zero) == 0);
+  assert(Set_hashCode(one) == 1);
+  assert(one2 == one);
+  assert(one3 == one3);
+  Set_toString(one,buffer,8);
+  assert(strcmp(buffer,"{0}") == 0);
   SetManager_deallocate();
   assert(!Set_hasMemoryLeak());
 }
@@ -673,11 +699,21 @@ void Union_delete(Union* self){
 
 // override
 void Union_toString(Union* self, char* buffer, size_t size){
+  char temp[FLYWEIGHT_C_MAX_BUFFER_SIZE];
   assert(self != NULL);
   assert(self->left != NULL);
   assert(self->right != NULL);
-  assert(size > 3);
-  // TBI
+  assert(size <= FLYWEIGHT_C_MAX_BUFFER_SIZE);
+  assert(size >= 4);  // "0U0" requires size bytes 
+  Set_toString(self->left, temp, size - 2); // need to keep 4 bytes for U0
+  int length = strlen(temp);
+  assert(length < size - 2); // enough space for  U 0  and \0
+  strcpy(buffer, temp); buffer += length;
+  strcpy(buffer, "U");  buffer++;
+  Set_toString(self->right, temp, size - length - 2); //  U  and \0
+  length = strlen(temp);
+  assert(length <= size - length -2);
+  strcpy(buffer, temp); buffer +=length;
 }
 
 // override
@@ -723,23 +759,66 @@ Set* Union_right(Union* self){
 
 
 void Union_test(){
+  char buffer[32];
+  // basic new/copy/delete test
   Zero* zero = Zero_new(0);
-  Singleton* single = Singleton_new((Set*)zero, 1);   // takes ownership of zero
-  Union* union_ = Union_new((Set*) Zero_copy(zero), (Set*)single, 2);
+  // Singleton_new does not take ownership of zero: need to deallocate
+  Singleton* single = Singleton_new((Set*)zero, 1);
+  // Union_new does not take ownership of arguments: need to deallocate
+  Union* union_ = Union_new((Set*) zero, (Set*) single, 2);
   Union* copy = Union_copy(union_);
-
-  assert(!Union_isZero(union_));
-  assert(!Union_isSingleton(union_));
-  assert(Union_isUnion(union_));
-  assert(Union_left(union_) == (Set*) zero);
-  assert(Union_right(union_) == (Set*) single);
+  // SetManager_deallocate would normally deallocate SetManager and consequently
+  // all set objects stored within it. However, no set manager has been created
+  // thus far, and set objects have been created directly with 'new' (which client
+  // should not do). So we need to deallocate set objects ourself to avoid leaks.
+  // A call to SetManager_deallocate is still required to clean up virtual tables.
   Union_delete(copy);
   Union_delete(union_);
-  SetManager_deallocate();
+  Singleton_delete(single);
+  Zero_delete(zero);
+  SetManager_deallocate();      // virtual tables
+  assert(!Set_hasMemoryLeak());
+  // Testing static interface
+  Set* empty  = Set_zero();
+  Set* one    = Set_singleton(empty);
+  Set* two    = Set_union(one, Set_singleton(one));
+  Set* s_one  = Set_singleton(one);
+  Set* two_   = Set_union(one, s_one);
+  Set* empty_ = Set_zero();
+  Set* one_   = Set_singleton(empty_);
+  // objects were not replicated, but instead re-used
+  assert(empty == empty_);
+  assert(one   == one_);
+  assert(two   == two_);
+  // checking hash values
+  assert(Set_hashCode(empty)  == 0);
+  assert(Set_hashCode(one)    == 1);
+  assert(Set_hashCode(s_one)  == 2);
+  assert(Set_hashCode(two)    == 3);
+  // checking union properties
+  assert(!Set_isZero(two));
+  assert(!Set_isSingleton(two));
+  assert(Set_isUnion(two));
+  assert(Set_left(two) == one);
+  assert(Set_right(two) == s_one);
+  // checking Singleton properties
+  assert(!Set_isZero(one));
+  assert(Set_isSingleton(one));
+  assert(!Set_isUnion(one));
+  assert(Set_element(one) == empty);
+  // toString
+  Set_toString(empty,buffer,32);
+  assert(strcmp(buffer, "0") == 0);
+  Set_toString(one,buffer,32);
+  assert(strcmp(buffer, "{0}") == 0);
+  Set_toString(s_one,buffer,32);
+  assert(strcmp(buffer, "{{0}}") == 0);
+  Set_toString(two,buffer,32);
+  assert(strcmp(buffer, "({0}U{{0}})") == 0);
+  // deallocating set manager, all sets and virtual tables
+  SetManager_deallocate(); 
   assert(!Set_hasMemoryLeak());
 }
-
-
 
 /******************************************************************************/
 /*                             SetManager class                               */
@@ -813,11 +892,11 @@ void SetManager_delete(SetManager* self){
 
 SetManager* SetManager_instance(int);
 //
-SetManager_deallocate(){  // final clean up
-  SetManager_instance(1);     // deallocating set manager
-  SetvTable_Zero_instance(1); // deallocating vTable
-  SetvTable_Singleton_instance(1); // deallocating vTable
-  SetvTable_Union_instance(1); // deallocating vTable
+SetManager_deallocate(){            // final clean up
+  SetManager_instance(1);           // deallocating set manager
+  SetvTable_Zero_instance(1);       // deallocating vTable
+  SetvTable_Singleton_instance(1);  // deallocating vTable
+  SetvTable_Union_instance(1);      // deallocating vTable
 }
 
 SetManager_deallocate_zero(Zero* obj){
@@ -838,8 +917,8 @@ SetManager_deallocate_singleton(Singleton* obj){
   assert(ptr->refcount == 0);
   assert(ptr->vTable != NULL);
   assert(ptr->vTable == SetvTable_Singleton_instance(0));
-  assert(obj->element != NULL);
-  Set_delete(obj->element);
+  // singleton object does not have ownership of its element
+  // hence this code should not attempt to delete it. 
   Set_log("Deallocating Singleton %lx\n", obj);
   free(obj);
 }
@@ -851,10 +930,8 @@ SetManager_deallocate_union(Union* obj){
   assert(ptr->refcount == 0);
   assert(ptr->vTable != NULL);
   assert(ptr->vTable == SetvTable_Union_instance(0));
-  assert(obj->left != NULL);
-  assert(obj->right != NULL);
-  Set_delete(obj->left);
-  Set_delete(obj->right);
+  // union object does not have ownership of its left and right components
+  // hence this code should not attempt to delete left or right.
   Set_log("Deallocating Union %lx\n", obj);
   free(obj);
 }
@@ -893,23 +970,58 @@ Set* SetManager_singleton(Set* x){
   assert(manager != NULL);
   assert(manager->singletonMap != NULL);
   assert(manager->objectMap    != NULL);
-
   int hash = Set_hashCode(x);
-  const void* result;
-  // finding out whether singleton {x} already exists
-  int found = Dictionary_find(manager->singletonMap, hash, &result);
-  if(!found){               // singleton {x} is unknown
-    // rather than boxing hash values, we convert them to pointers
-    const void* newHashAsVoidPointer = (void*) ((long) manager->nextHash);
+  const void* result; // needed for dictionary search
+  int found = Dictionary_find(manager->singletonMap, hash, &result);// {x} exists?
+  if(!found){ // singleton {x} is unknown
+    // rather than boxing hash values, we convert them to (void*) pointers
+    const void* newHashAsPointer = (void*) ((long) manager->nextHash);
     // allocating nextHash to {x}
-    Dictionary_insert(manager->singletonMap, hash, newHashAsVoidPointer);
-    Set* object = (Set*) Singleton_new(x, manager->nextHash); // creating {x}
+    Dictionary_insert(manager->singletonMap, hash, newHashAsPointer);
+    // creating object {x} with new hash
+    Set* object = (Set*) Singleton_new(x, manager->nextHash);
     // saving {x} for future reference
     Dictionary_insert(manager->objectMap, manager->nextHash, object);
+    // required for future hash allocation
     manager->nextHash++;
     return object;
-  } else {
-    long key = (long) result; // conversion to long first, to avoid warning
+  } else { // singleton {x} is known, its hash value in 'result' (as a void*)
+    long key = (long) result; // conversion to long to avoid compiler warning
+    found = Dictionary_find(manager->objectMap, (int) key, &result);
+    assert(found);
+    assert(result != NULL);
+    return (Set*) result;
+  }
+}
+int SetManager_pairingCantor(int x, int y){
+  return (x + y + 1)*(x + y)/2 + y; // '/' is integer division
+}
+Set* SetManager_union(Set* x, Set* y){
+  assert(x != NULL);
+  assert(y != NULL);
+  SetManager* manager = SetManager_instance(0);
+  assert(manager != NULL);
+  assert(manager->unionMap != NULL);
+  assert(manager->objectMap != NULL);
+  int hx = Set_hashCode(x);
+  int hy = Set_hashCode(y);
+  int hash = SetManager_pairingCantor(hx,hy);
+  const void* result; // needed for dictionary search
+  int found = Dictionary_find(manager->unionMap, hash, &result); // xUy exists?
+  if(!found){ // union xUy is unknown
+    // rather than boxing hash values, we convert them to (void*) pointers
+    const void* newHashAsPointer = (void*) ((long) manager->nextHash);
+    // allocating new hash to xUy
+    Dictionary_insert(manager->unionMap, hash, newHashAsPointer);
+    // creating object xUy with new hash
+    Set* object = (Set*) Union_new(x, y, manager->nextHash);
+    // saving xUy for future reference
+    Dictionary_insert(manager->objectMap, manager->nextHash, object);
+    // required for future hash allocation
+    manager->nextHash++;
+    return object;
+  } else {  // union xUy is known, its hash value in 'result' (as void*)
+    long key = (long) result; // conversion to long to avoid compiler warning
     found = Dictionary_find(manager->objectMap, (int) key, &result);
     assert(found);
     assert(result != NULL);
@@ -917,8 +1029,21 @@ Set* SetManager_singleton(Set* x){
   }
 }
 
-Set* SetManager_union(Set* x, Set* y){
-  // TBI
+void SetManager_debug(){
+  char buffer[FLYWEIGHT_C_MAX_BUFFER_SIZE];
+  int i;
+  const void* result;
+  int found;
+
+  SetManager* manager = SetManager_instance(0);
+  assert(manager != NULL);
+  for(i = 0; i < manager->nextHash; ++i){  
+    found = Dictionary_find(manager->objectMap, i, &result);
+    assert(found);
+    assert(result != NULL);
+    Set_toString((Set*) result, buffer, FLYWEIGHT_C_MAX_BUFFER_SIZE);
+    printf("hash = %d: %s\n", i, buffer);
+  }
 }
 
 void SetManager_test(){
@@ -1117,15 +1242,30 @@ void _Union_vTable_initialize(SetvTable* vTable){
   vTable->right       = _Union_right;
 }
 
+void flyweight_test(){
+  Set_test();
+  SetvTable_test(); 
+  Zero_test();
+  Singleton_test();
+  Union_test();
+  SetManager_test();
+}
 
 int main(){
 
-//  Set_test();
-//  SetvTable_test(); 
-//  Zero_test();
-//  Singleton_test();
-//  Union_test();
-//  SetManager_test();
+  Set* zero   = Set_zero();
+  Set* one    = Set_successor(zero);
+  Set* two    = Set_successor(one);
+  Set* three  = Set_successor(two);
+  Set* four   = Set_successor(three);
+  Set* five   = Set_successor(four);
+
+  Set_debug();
+ 
+
+  // cleaning up set manager, sets and virtual tables
+  SetManager_deallocate();  
+  assert(!Set_hasMemoryLeak());
 
   return 0;
 }

@@ -1,8 +1,8 @@
 (ns date_operations 
 ;  (:gen-class)
   (:import (java.text SimpleDateFormat)
-           (java.util Calendar GregorianCalendar)
-           (clojure.contrib.str-utils)))
+           (java.util Calendar GregorianCalendar))
+  (:require [clojure.string :as string]))
 
 ; we did import within ns declaration
 ;(import '(java.text SimpleDateFormat))  ; comes after 'ns' declaration
@@ -43,5 +43,59 @@
   (.get d Calendar/YEAR))
 
 (println (month-from (date "2009-12-22")))
+
+
+(defn to-string [date]
+  (let [y (year-from date)
+        m (+ 1 (month-from date))
+        d (day-from date)]
+    (string/join "-" [y m d])))
+
+(println (to-string (date "2009-12-22")))
+
+(def d (date "2009-10-31"))
+
+(println (.add d Calendar/DAY_OF_MONTH 1))  ; nil
+
+(println (to-string d))
+
+(comment
+
+(defn increment-day [d]
+  (doto (.clone d) (.add Calendar/DAY_OF_MONTH 1)))
+
+
+(defn increment-month [d]
+  (doto (.clone d) (.add Calendar/MONTH 1)))
+
+
+(defn increment-year [d]
+  (doto (.clone d) (.add Calendar/YEAR 1)))
+
+(defn decrement-day [d]
+  (doto (.clone d) (.add Calendar/DAY_OF_MONTH -1)))
+
+
+(defn decrement-month [d]
+  (doto (.clone d) (.add Calendar/MONTH -1)))
+
+
+(defn decrement-year [d]
+  (doto (.clone d) (.add Calendar/YEAR -1)))
+) ; comment
+
+; refactoring
+(defn date-operator [operation field]
+  (fn [d]
+    (doto (.clone d)
+      (.add field (operation 1)))))
+
+(def increment-day (date-operator + Calendar/DAY_OF_MONTH))
+(def increment-month (date-operator + Calendar/MONTH))
+(def increment-year (date-operator + Calendar/YEAR))
+(def decrement-day (date-operator - Calendar/DAY_OF_MONTH))
+(def decrement-month (date-operator - Calendar/MONTH))
+(def decrement-year (date-operator - Calendar/YEAR))
+
 
 

@@ -234,8 +234,9 @@ debug = SM (\manager ->
           (let object = Map.lookup i (objectMap manager) in 
             case object of
               Nothing   ->  error "Set manager is failing"
-              Just set  -> (show set)) ++ "\n") 
-      [1..((nextHash manager) - 1)]
+              Just set  -> (show set)) ++ 
+              (if i == ((nextHash manager) -1) then "" else "\n")) 
+      [0..((nextHash manager) - 1)]
     ), manager))
 
 flyweight :: SM String

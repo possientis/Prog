@@ -18,7 +18,6 @@ str3 = dropTrailingPathSeparator "foo/" -- foo
 str4 = dropTrailingPathSeparator "foo" -- foo
 list1 = splitFileName "foo/bar/Quux.hs" -- ("foo/bar/","Quux.hs")
 
-
 isPattern :: String -> Bool
 isPattern = any (`elem` "[*?")  -- whether string contains chars '[', '*' or '?'
 
@@ -43,7 +42,6 @@ namesMatching pat
                         baseNames <- listDir dir baseName
                         return (map (dir </>) baseNames)
         return (concat pathNames) 
-
 
 
 doesNameExist :: FilePath -> IO Bool

@@ -1,22 +1,14 @@
-Lemma plus_n_O : forall n:nat, n = n + 0.
-  intro n.
-  elim n.
-  simpl.
-  reflexivity.
-  simpl.
-  auto.
+Lemma L1 : forall (n:nat), n + 0 = n.
+Proof.
+  intro n. elim n. simpl. reflexivity.
+  clear n. intros n IH. simpl. rewrite IH. reflexivity.
 Qed.
 
-Hint Resolve plus_n_O.
+(* same, but using induction and auto tactic *)
 
-Lemma plus_n_S : forall n m:nat, S(n + m) = n + (S m).
-  induction n; simpl; auto.
+Lemma L2 : forall (n:nat), n + 0 = n.
+Proof.
+  induction n; auto.
 Qed.
 
-Hint Resolve plus_n_S.
-
-Lemma plus_com : forall n m:nat, n + m = m + n.
-  simple induction m; simpl; auto.
-  intros m' E; rewrite <- E; auto.
-Qed.
 

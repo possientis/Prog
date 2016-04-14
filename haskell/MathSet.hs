@@ -160,8 +160,8 @@ elements (Union x y)   = elements x ++ elements y
   -- Lemma 3: the relation <= on X is reflexive
   --
   -- We proceed to prove x <= x by induction on order(x).
-  -- If order(x) = 1, then x can only be 0 and 0 <= 0 is true.
-  -- We assume the property is true for order(x) <= N >=1
+  -- If order(x) = 0, then x can only be 0 and 0 <= 0 is true.
+  -- We assume the property is true for order(x) <= N >=0
   -- We need to show it is true for order(x) <= N+1. We 
   -- may assume that order(x) = N+1. We need to show that
   -- x <= x. Using Lemma 1, it is sufficient to show that
