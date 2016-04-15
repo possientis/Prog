@@ -25,6 +25,13 @@ Proof.
   intro p. elim p; intro q; elim q; simpl; auto.
 Qed.
 
+Lemma lemma_and : forall (p q:bool),
+  p = true -> q = true -> bool_and p q = true.
+Proof.
+  intros p q Hp Hq. rewrite Hp, Hq. simpl. reflexivity.
+Qed.
+
+
 Lemma lemma_and_true_l : forall (p q:bool), 
   bool_and p q = true -> p = true.
 Proof.
@@ -389,12 +396,12 @@ Proof.
   cut(subset (Singleton x) y = true \/ subset (Singleton x) z = true).
   intro H''. elim H''.
   
-  intro Hy'. cut(exists c':set, In c' (elements y) /\ equiv x c' = true). intro Hy''.
+  intro Hy'. cut(exists c':set, In c' (elements y)/\equiv x c' = true). intro Hy''.
   elim Hy''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''.
   intro H0. clear H0. apply in_or_app. left. exact Hc''. elim Hc'. intros H0 H1. 
   exact H1. apply Hy. exact Hy'. simpl. left. reflexivity. 
   
-  intro Hz'. cut(exists c':set, In c' (elements z) /\ equiv x c' = true). intro Hz''.
+  intro Hz'. cut(exists c':set, In c' (elements z)/\equiv x c' = true). intro Hz''.
   elim Hz''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''. intro H0.
   clear H0. apply in_or_app. right. exact Hc''. elim Hc'. intros H0 H1. exact H1.
   apply Hz. exact Hz'. simpl. left. reflexivity. 
@@ -421,8 +428,10 @@ Proof.
   rewrite subset_union_all in H. intro a. intro H'. simpl in H'.
   cut(In a (elements x) \/ In a (elements y)). intro Ha. elim Ha. 
 
-  intro Ha'. apply Hx. apply lemma_and_true_l with (q:= subset y b). exact H. exact Ha'. 
-  intro Ha'. apply Hy. apply lemma_and_true_r with (p:= subset x b). exact H. exact Ha'. 
+  intro Ha'. apply Hx. apply lemma_and_true_l with (q:= subset y b). 
+  exact H. exact Ha'. 
+  intro Ha'. apply Hy. apply lemma_and_true_r with (p:= subset x b). 
+  exact H. exact Ha'. 
 
   apply in_app_or. exact H'. 
 
@@ -474,6 +483,70 @@ Proof. (* induction on the order of a *)
 Qed.
 
 
+Lemma equiv_reflexive : forall (a:set), equiv a a = true.
+Proof.
+  intro a. unfold equiv. simpl. cut(subset a a = true). intro H. rewrite H.
+  simpl. reflexivity. apply subset_reflexive.
+Qed.
+
+Lemma equiv_symmetric : forall (a b:set),
+  equiv a b = true -> equiv b a = true.
+Proof.
+  intros a b. unfold equiv. simpl. intro H. apply lemma_and.
+  apply lemma_and_true_r with (p:= subset a b). exact H.
+  apply lemma_and_true_l with (q:= subset b a). exact H.
+Qed.
+
+Lemma subset_x_xUy : forall (x y: set), subset x (Union x y) = true.
+Proof.
+  intros x y. apply subset_elements. intros z H. exists z. split. simpl.
+  apply in_or_app. left. exact H. apply equiv_reflexive.
+Qed.
+
+Lemma subset_y_xUy : forall (x y: set), subset y (Union x y) = true.
+Proof.
+  intros x y. apply subset_elements. intros z H. exists z. split. simpl.
+  apply in_or_app. right. exact H. apply equiv_reflexive.
+Qed.
+
+Lemma subset_xUy : forall (x y: set), subset (Union x y) (Union y x) = true.
+Proof.
+  intros x y. apply subset_elements. intros z H. exists z. split. simpl.
+  simpl in H. apply in_or_app. apply or_comm. apply in_app_or. exact H. 
+  apply equiv_reflexive.
+Qed.
+
+Lemma equiv_xUy : forall (x y: set), equiv (Union x y) (Union y x) = true.
+Proof.
+ intros x y. unfold equiv. simpl. apply lemma_and; apply subset_xUy.
+Qed.
+
+Lemma subset_xUyUz_l : forall (x y z:set),
+  subset (Union (Union x y) z) (Union x (Union y z)) = true.
+Proof.
+  intros x y z. apply subset_elements. simpl. intros t H. exists t. split.
+  rewrite app_assoc. exact H. apply equiv_reflexive.
+Qed.
+
+Lemma subset_xUyUz_r : forall (x y z:set),
+  subset (Union x (Union y z)) (Union (Union x y) z)= true.
+Proof.
+  intros x y z. apply subset_elements. simpl. intros t H. exists t. split.
+  rewrite app_assoc in H. exact H. apply equiv_reflexive.
+Qed.
+
+Lemma equiv_xUyUz_l : forall (x y z:set),
+  equiv (Union (Union x y) z) (Union x (Union y z)) = true.
+Proof.
+  intros x y z. unfold equiv. simpl. apply lemma_and. 
+  apply subset_xUyUz_l. apply subset_xUyUz_r.
+Qed.
+
+Lemma equiv_xUyUz_r : forall (x y z:set),
+  equiv (Union x (Union y z)) (Union (Union x y) z) = true.
+Proof.
+  intros x y z. apply equiv_symmetric. apply equiv_xUyUz_l.
+Qed.
 
 (*
 Definition successor (s:set) : set :=

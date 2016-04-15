@@ -7,7 +7,7 @@
 
 (define (my-display s)
 ;  (display "x-")
-  (display "***")(display s)(display "***")
+  (display "***")(display s)
 ;  (display "-x")
 )
 

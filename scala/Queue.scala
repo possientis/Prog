@@ -89,11 +89,44 @@ object Queue3 {
         else
           this
       def enqueue(x:T) = new QueueImpl(leading, x::trailing)
+      // there is a problem if dequeue is called repeatedly while leading.isEmpty is true
+      // as trailing would keep being reversed.
       def dequeue() = {
         val q = normalize
         (leading.head, new QueueImpl(leading.tail, trailing))
       }
     }
+}
+
+
+class Queue4[+T] private ( // +T attempting to create generic type covariant in T
+  // you need the '[this]' qualifier to compile, otherwise there is a variance error
+  private[this] var leading: List[T], // object-local, no variance error
+  private[this] var trailing: List[T]) {  // 'var' not 'val'. We allow side effect
+  // however this side effect is purely on the internal representation of object data
+  // and is not visible to client.
+
+  private def mirror() =
+    if (leading.isEmpty) {
+      while (!trailing.isEmpty) {
+        leading = trailing.head :: leading
+        trailing = trailing.tail
+      }
+    }
+
+  def dequeue() = {
+    mirror()
+    (leading.head, new Queue4(leading.tail, trailing))
+  }
+
+  // T being the type of an argument of a method, which is a contravariant position
+  // we cannot hope to make Queue4[T] covariant in T if we define enqueue(x:T) = ..
+  // However, we are here using T as type lower bound. We are defining enqueue for 
+  // any super type U of T, so all is fine. 
+  def enqueue[U >: T](x: U) = // lower bound, to create type which is covariant in T
+//  def enqueue(x:T) =  // this will not compile, T in contravariant position while
+// generic type is declared covariant in T 
+    new Queue4(leading, x :: trailing)
 }
 
 

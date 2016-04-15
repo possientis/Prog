@@ -10,6 +10,17 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm a.out
 
 
+echo '\nThis is C++ ...'
+g++ -std=c++14 flyweight.cpp
+START=$(date +%s%N)
+./a.out 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm a.out
+
+
+
 echo '\nThis is Java ...'
 javac Flyweight.java; 
 START=$(date +%s%N)

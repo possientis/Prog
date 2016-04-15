@@ -65,3 +65,13 @@ val a1 = Array("abc")
 // this cast will succeed, but you may later have runtime exception.
 val a2: Array[Any] = a1.asInstanceOf[Array[Any]]
 val a3: Array[Object] = a1.asInstanceOf[Array[Object]]  // object in scala?
+
+
+// mutability is not the only issue.
+// If a generic parameter type appears as the type of a method parameter, 
+// the containing data type may not be covariant.
+
+
+
+
+

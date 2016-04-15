@@ -1,6 +1,8 @@
 (define (map-primitive procedure seq) ; quick and dirty, one dimension
   (cond ((null? seq) '())
-        (else (cons (apply procedure (list (car seq))) 
+        (else 
+;          (display "arg = ")(display (car seq))(newline)
+          (cons (apply procedure (list (car seq))) 
                     (map-primitive procedure (cdr seq))))))
 
 
