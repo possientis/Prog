@@ -195,7 +195,7 @@ elements (Union x y)   = elements x ++ elements y
   --
   -- We shall prove the implication (x <= y)/\(y <= z) -> (x <= z)
   -- by induction on the maximum order of x, y and z. If the order
-  -- of x,y,z are all less than 1, then x = y = z = 0 and the
+  -- of x,y,z are all less than 0, then x = y = z = 0 and the
   -- property is true. So we assume that the property is true
   -- whenever the orders of x,y,z are all less than (or equal to) N.
   -- We need to show the property is true whenever the orders

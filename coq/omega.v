@@ -6,7 +6,7 @@ Open Scope Z_scope.
 Theorem omega_example1: 
   forall x y z t:Z, x<=y<=z /\ z<=t<=x -> x = t.
 Proof.
-  intros x y z t H. omega.
+  intros x y z t H. omega. (* omega is for Z, use fourier for R *)
 Qed.
 
 Definition square (z:Z) := z*z.

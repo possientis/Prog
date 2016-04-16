@@ -1,5 +1,6 @@
 // Flyweight Design Pattern
-import java.util.HashMap;
+using System;
+using System.Collections.Generic;
 
 // The main idea of the flyweight design pattern is to store objects
 // in a dictionary so they can be reused, rather than new objects be
@@ -53,72 +54,68 @@ abstract class Set {
   // Additionally to composite pattern, we include a static manager
   // whose role is threefold: (i) serve as factory object (ii) maintain
   // dictionaty of existing object and (iii) handle dynamic hash generation
-  private static final SetManager manager = new SetManager();
+  private static readonly SetManager manager = new SetManager();
   // Additionally to composite pattern, each object maintains an immutable
   // hash code whose value is determined at runtime by the manager at creation. 
-  private final int hash;
+  private readonly int hash;
   protected Set(int hash)               { this.hash = hash; }
-  @Override public int hashCode()       { return hash; }
+  public override int GetHashCode()     { return hash; }
   // The inductive type provides an interface of static factory methods 
   // which corresponds to the type constructors. However, contrary to standard
   // composite pattern, these factory methods actually delegate the work
   // of object creation of the manager
-  public static Set zero()              { return manager.zero(); }
-  public static Set singleton(Set x)    { return manager.singleton(x); }
-  public static Set union(Set x, Set y) { return manager.union(x,y); }
+  public static Set Zero()              { return manager.Zero(); }
+  public static Set Singleton(Set x)    { return manager.Singleton(x); }
+  public static Set Union(Set x, Set y) { return manager.Union(x, y); }
   // convenience function
-  public static Set successor(Set x)    { return union(x, singleton(x)); }
+  public static Set Successor(Set x)    { return Union(x, Singleton(x)); }
   // implemented by subclasses
-  public abstract String toString();
-  public abstract boolean isZero();
-  public abstract boolean isSingleton();
-  public abstract boolean isUnion();
+  public abstract override string ToString();
+  public abstract bool IsZero();
+  public abstract bool IsSingleton();
+  public abstract bool IsUnion();
   public abstract Set element();
   public abstract Set left();
   public abstract Set right();
   // debug
-  public static void debug(){ manager.debug(); }
+  public static void Debug(){ manager.Debug(); }
 }
 
-class Zero extends Set {
-  protected Zero(int hash)                { super(hash); }
-  @Override public String toString()      { return "0"; }
-  @Override public boolean isZero()       { return true; }
-  @Override public boolean isSingleton()  { return false; }
-  @Override public boolean isUnion()      { return false; }
-  @Override public Set element(){ throw new UnsupportedOperationException(); }
-  @Override public Set left()   { throw new UnsupportedOperationException(); }
-  @Override public Set right()  { throw new UnsupportedOperationException(); }
+class Zero : Set {
+  public Zero(int hash)                : base(hash){}
+  public override String ToString()    { return "0"; }
+  public override bool IsZero()        { return true; }
+  public override bool IsSingleton()   { return false; }
+  public override bool IsUnion()       { return false; }
+  public override Set element() { throw new InvalidOperationException(); }
+  public override Set left()    { throw new InvalidOperationException(); }
+  public override Set right()   { throw new InvalidOperationException(); }
 }
 
-class Singleton extends Set {
-  private final Set element; 
-  protected Singleton(Set element, int hash){ 
-    super(hash); 
-    this.element = element; }
-  @Override public String toString()      { return "{" + element + "}"; }
-  @Override public boolean isZero()       { return false; }
-  @Override public boolean isSingleton()  { return true; }
-  @Override public boolean isUnion()      { return false; }
-  @Override public Set element()          { return element; }
-  @Override public Set left()   { throw new UnsupportedOperationException(); }
-  @Override public Set right()  { throw new UnsupportedOperationException(); }
+class Singleton : Set {
+  private readonly Set _element;
+  public Singleton(Set x, int hash)     : base(hash){ this._element = x; }
+  public override String ToString()     { return "{" + _element + "}"; }
+  public override bool IsZero()         { return false; }
+  public override bool IsSingleton()    { return true; }
+  public override bool IsUnion()        { return false; }
+  public override Set element()         { return _element; }
+  public override Set left()    { throw new InvalidOperationException(); }
+  public override Set right()   { throw new InvalidOperationException(); }
 }
 
-class Union extends Set {
-  private final Set left;
-  private final Set right;
-  protected Union(Set left, Set right, int hash){ 
-    super(hash);
-    this.left = left; 
-    this.right = right; }
-  @Override public String toString()    { return left + "U" + right; }
-  @Override public boolean isZero()     { return false; }
-  @Override public boolean isSingleton(){ return false; }
-  @Override public boolean isUnion()    { return true; }
-  @Override public Set left()           { return left; }
-  @Override public Set right()          { return right; }
-  @Override public Set element(){ throw new UnsupportedOperationException(); }
+class Union : Set {
+  private readonly Set _left;
+  private readonly Set _right;
+  public Union(Set x, Set y, int hash)    : base(hash){ 
+    this._left = x; this._right = y; }
+  public override String ToString()       { return _left + "U" + _right; }
+  public override bool IsZero()           { return false; }
+  public override bool IsSingleton()      { return false; }
+  public override bool IsUnion()          { return true; }
+  public override Set left()              { return _left; }
+  public override Set right()             { return _right; }
+  public override Set element() { throw new InvalidOperationException(); }
 }
 
 class SetManager {
@@ -149,63 +146,64 @@ class SetManager {
   // simply map pairs of ints to ints with the Cantor function.
 
   private int nextHash = 1; // next hash value of whichever object is created
-  private final HashMap<Integer,Integer> singletonMap = new HashMap<>();
-  private final HashMap<Integer,Integer> unionMap     = new HashMap<>();
-  private final HashMap<Integer, Set> objectMap       = new HashMap<>();
+  private readonly Dictionary<int,int> singletonMap = new Dictionary<int,int>();
+  private readonly Dictionary<int,int> unionMap     = new Dictionary<int,int>();
+  private readonly Dictionary<int,Set> objectMap    = new Dictionary<int,Set>();
 
-  public SetManager(){ objectMap.put(0, new Zero(0)); } // empty set added to map
+  public SetManager(){ objectMap[0] = new Zero(0); }
 
+  public Set Zero()               { return objectMap[0]; }
+  public Set Singleton(Set x){
+    int hash = x.GetHashCode();
+    int mappedHash;
+    bool found = singletonMap.TryGetValue(hash, out mappedHash); // {x} exists?
+    if(!found){                             // singleton {x} is unknown
+      singletonMap[hash] = nextHash;        // nextHash allocated to {x}
+      Set set = new Singleton(x, nextHash); // creating {x}
+      objectMap[nextHash] = set;            // saving {x} for future reference
+      nextHash++;                           // for future hash allocation
+      return set;
+    } else {                                // singleton {x} is known
+      return objectMap[mappedHash];         // simply retrieve object from hash
+    }
+  }
+
+  public Set Union(Set x, Set y)  {
+    int hx = x.GetHashCode();
+    int hy = y.GetHashCode();
+    int hash = pairingCantor(hx, hy);
+    int mappedHash;
+    bool found = unionMap.TryGetValue(hash, out mappedHash);  // xUy exists?
+    if(!found){                             // union xUy is unknown
+      unionMap[hash] = nextHash;            // nextHash allocated to xUy
+      Set set = new Union(x, y, nextHash);  // creating xUy
+      objectMap[nextHash] = set;            // saving xUy for future reference
+      nextHash++;                           // for future hash allocation
+      return set;
+    } else {                                // union xUy is known
+      return objectMap[mappedHash];         // simply retrieve object from hash
+    }
+  }
+
+
+  public void Debug() {
+    for(int i = 0; i < nextHash; ++i){
+      Console.WriteLine("hash = " + i + ": " + objectMap[i]);
+    }
+  }
   public static int pairingCantor(int x, int y){
     return (x + y + 1)*(x + y)/2 + y; // '/' is integer division
-  }
-  // factory function
-  public Set zero(){ return objectMap.get(0); }
-
-  public Set singleton(Set x){
-    int hash = x.hashCode();
-    Integer mappedHash = singletonMap.get(hash);// finding out whether {x} exists
-    if(mappedHash == null){                     // singleton {x} is unknown
-      singletonMap.put(hash, nextHash);         // nextHash allocated to {x} 
-      Set object = new Singleton(x, nextHash);  // creating {x}
-      objectMap.put(nextHash, object);          // saving {x} for future reference
-      nextHash++;                               // for future hash allocation
-      return object;
-    } else {                                    // singleton {x} is known        
-      return objectMap.get(mappedHash);         // simply retrieve object from hash
-    }
-  }
-  public Set union(Set x, Set y){
-    int hx = x.hashCode();
-    int hy = y.hashCode();
-    int hash = pairingCantor(hx, hy);
-    Integer mappedHash = unionMap.get(hash);    // finding out whether xUy exists
-    if(mappedHash == null){                     // union xUy is unknown 
-      unionMap.put(hash, nextHash);             // nextHash allocated to xUy
-      Set object = new Union(x, y, nextHash);   // creating xUy
-      objectMap.put(nextHash, object);          // saving xUy for future reference
-      nextHash++;                               // for future hash allocation
-      return object;
-    } else {                                    // union xUy is known
-      return objectMap.get(mappedHash);         // simply retrieve object from hash
-    }
-  }
-
-  public void debug(){
-    for(int i = 0; i< nextHash; ++i){
-      System.out.println("hash = " + i + ": " + objectMap.get(i));
-    }
   }
 }
 
 public class Flyweight {
-  public static void main(String[] args){
-
-    Set zero  = Set.zero();
-    Set one   = Set.successor(zero);
-    Set two   = Set.successor(one);
-    Set three = Set.successor(two);
-    Set four  = Set.successor(three);
-    Set five  = Set.successor(four);
-    Set.debug();
+  public static void Main(string[] args){
+    Set zero  = Set.Zero();
+    Set one   = Set.Successor(zero);
+    Set two   = Set.Successor(one);
+    Set three = Set.Successor(two);
+    Set four  = Set.Successor(three);
+    Set.Successor(four);  // do not need to define 'five'. no compiler warning
+    Set.Debug();
   }
 }

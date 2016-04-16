@@ -30,6 +30,28 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
+
+echo '\nThis is C# ...'
+mcs flyweight.cs 
+START=$(date +%s%N)
+mono flyweight.exe 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm flyweight.exe
+
+
+
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Flyweight.scala
+START=$(date +%s%N)
+scala Flyweight
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
+
+
 echo '\nThis is Haskell ...'
 ghc -v0 flyweight.hs 
 START=$(date +%s%N)

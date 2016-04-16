@@ -1,6 +1,9 @@
-Theorem T1 : forall A:Prop, ~~(A\/~A).
+Require Import Arith. (* arith database for tactics *)
+
+Theorem example_for_intuition: 
+  forall n p q : nat, n <= p \/ n <= q -> n <= p \/ n <= S q.
 Proof.
-  intros A H. cut(~A). intro notA. cut (~A-> False). intro nnotA.
-  apply nnotA. exact notA. intro. elim H. right. exact notA.
-  intro. apply H. left. assumption.
+  intros n p q. intuition. (* auto with arith. will also work *)
 Qed.
+
+(* intuition = intuition auto with * *)

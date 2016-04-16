@@ -367,6 +367,7 @@ Fixpoint elements (a:set) : list set :=
     | Union x y     => (elements x) ++ (elements y) 
   end.
 
+
 Lemma subset_elements : forall (a b:set), subset a b = true <-> 
   forall (c:set), In c (elements a) -> exists (c':set), 
     In c' (elements b) /\  equiv c c' = true.  
@@ -548,6 +549,50 @@ Proof.
   intros x y z. apply equiv_symmetric. apply equiv_xUyUz_l.
 Qed.
 
+Lemma subset_xU0_x : forall (x:set), subset (Union x Empty) x = true.
+Proof.
+  intro x. rewrite subset_union_all. rewrite subset_reflexive.
+  rewrite subset_0_all. simpl. reflexivity.
+Qed.
+
+Lemma subset_x_xU0 : forall (x:set), subset x (Union x Empty) = true.
+Proof.
+  intro x. apply subset_x_xUy.
+Qed.
+
+Lemma equiv_xU0_x: forall (x:set), equiv (Union x Empty) x = true.
+Proof.
+  intro x. unfold equiv. rewrite subset_xU0_x. rewrite subset_x_xU0. simpl.
+  reflexivity.
+Qed.
+
+Lemma subset_transitive: forall (a b c:set),
+  subset a b = true -> subset b c = true -> subset a c = true.
+Proof. (* by induction on n = max(order a, order b, order c) *)
+  (*set up induction on n *)
+  cut(forall (n:nat)(a b c:set), order a <= n -> order b <= n -> order c <= n ->  
+    subset a b = true -> subset b c = true -> subset a c = true). intros H a b c.
+  pose (n:= max (order a) (max (order b) (order c))). apply H with (n:=n).
+  change (order a <= max (order a) (max (order b) (order c))). apply le_max_l.
+  apply le_trans with (m:= max (order b) (order c)). apply le_max_l.
+  change (max (order b) (order c) <= max (order a) (max (order b) (order c))).
+  apply le_max_r. apply le_trans with(m:=max (order b) (order c)). apply le_max_r. 
+  change (max (order b) (order c) <= max (order a) (max (order b) (order c))).
+  apply  le_max_r. intro n. elim n.
+  (* n = 0 *)
+  intros a b c Ha Hb Hc Hab Hbc. clear Hb Hc Hab Hbc. cut (a = Empty). intro H. 
+  rewrite H. apply subset_0_all. apply order_eq_0. symmetry. apply le_n_0_eq.
+  exact Ha.
+  (* n => n+1 *)
+  clear n. intros n IH. intros a b c Ha Hb Hc Hab Hbc. apply subset_elements.
+  intros x Hx. cut (exists y:set, In y (elements b) /\ equiv x y = true). 
+  intro H. elim H. intros y Hy.
+  cut (exists z:set, In z (elements c) /\ equiv y z = true). intro H'. elim H'.
+  intros z Hz. 
+
+    
+
+  
 (*
 Definition successor (s:set) : set :=
   Union s (Singleton s).
