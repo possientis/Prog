@@ -588,7 +588,43 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   intros x Hx. cut (exists y:set, In y (elements b) /\ equiv x y = true). 
   intro H. elim H. intros y Hy.
   cut (exists z:set, In z (elements c) /\ equiv y z = true). intro H'. elim H'.
-  intros z Hz. 
+  intros z Hz. exists z. split. elim Hz. auto. unfold equiv.  apply lemma_and. 
+
+  apply IH with (b:=y). 
+  apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx. 
+  exact Ha. 
+  apply le_S_n. apply le_trans with (m:=order b). apply elements_order. elim Hy.
+  auto. exact Hb.
+  apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
+  auto. exact Hc.
+
+  elim Hy. intros H0 EQxy. clear H0. unfold equiv in EQxy. apply lemma_and_true_l
+  with (q:= subset y x). exact EQxy. 
+  elim Hz. intros H0 EQyz. clear H0. unfold equiv in EQyz. apply lemma_and_true_l
+  with (q:= subset z y). exact EQyz.
+
+  apply IH with (b:=y).
+  apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
+  auto. exact Hc.
+  apply le_S_n. apply le_trans with (m:= order b). apply elements_order. elim Hy.
+  auto. exact Hb.
+  apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx.
+  exact Ha.
+
+  elim Hz. intros H0 EQyz. clear H0. unfold equiv in EQyz. apply lemma_and_true_r
+  with(p:= subset y z). exact EQyz.
+  elim Hy. intros H0 EQxy. clear H0. unfold equiv in EQxy. apply lemma_and_true_r
+  with(p:= subset x y). exact EQxy.
+
+  apply subset_elements with (a:=b). exact Hbc. elim Hy. auto.
+  apply subset_elements with (a:=a). exact Hab. exact Hx.
+Qed.
+
+  
+
+  
+  
+
 
     
 

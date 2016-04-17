@@ -52,6 +52,14 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
+echo '\nThis is Python ...'
+START=$(date +%s%N)
+python3 flyweight.py
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
 echo '\nThis is Haskell ...'
 ghc -v0 flyweight.hs 
 START=$(date +%s%N)

@@ -29,11 +29,11 @@ class DirectorCook(object):
 
 class MealBuilder(object):
     def startNewMeal(self):
-        raise NotImplemented
+        raise NotImplementedError
     def addBurger(self):
-        raise NotImplemented
+        raise NotImplementedError
     def addDrink(self):
-        raise NotImplemented
+        raise NotImplementedError
 
 # We can implement MealBuilder in many different ways, so as to 
 # construct objects of many possible types which do not even need
@@ -97,16 +97,16 @@ class Meal(object):
 # The item interface comes here
 class Item(object):
     def price(self):
-        raise NotImplemented
+        raise NotImplementedError
     def name(self):
-        raise NotImplemented
+        raise NotImplementedError
     def packing(self):
-        raise NotImplemented
+        raise NotImplementedError
 
 # Item relies on the 'Packing' interface
 class Packing(object):
     def pack(self):
-        raise NotImplemented
+        raise NotImplementedError
 
 class Wrapper(Packing):
     def pack(self):
