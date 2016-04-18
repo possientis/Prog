@@ -15,25 +15,16 @@
               (test/is (= (:amount (first filtered)) 20.0))
               (test/is (= (:amount (last filtered)) 30.0)))))
 
-(comment
 
-(println 
-  (str 
-    (macroexpand-1 
-      '(stubbing [fetch-all-expenses all-expenses]
-                 (let [filtered (fetch-expenses-greater-than "" "" "" 15.0)]
-                   (test/is (= (count filtered) 2))
-                   (test/is (= (:amount (first filtered)) 20.0))
-                   (test/is (= (:amount (last filtered)) 30.0))))))) 
-
-(binding [fetch-all-expenses (constantly all-expenses)] 
-  (let [filtered (fetch-expenses-greater-than "" "" "" 15.0)] 
-    (test/is (= (count filtered) 2)) 
-    (test/is (= (:amount (first filtered)) 20.0)) 
-    (test/is (= (:amount (last filtered)) 30.0))))
-
-) ; comment
+(test/deftest test-filter-expenses-greater-than
+  (mocking [log-call]
+            (let [filtered (expenses-greater-than all-expenses 15.0)]
+              (test/is (= (count filtered) 2))
+              (test/is (= (:amount (first filtered)) 20.0))
+              (test/is (= (:amount (last filtered)) 30.0))
+              (verify-call-times-for log-call 1)
+              (verify-first-call-args-for log-call "expenses-greater-than" 15.0)
+              (verify-nth-call-args-for 1 log-call "expenses-greater-than" 15.0))))
 
 
-
-
+(test/run-tests 'expense_finders_test)

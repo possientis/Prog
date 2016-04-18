@@ -98,11 +98,11 @@
 
 (define singleton-virtual-table
   (virtual-table
-    (lambda (data) (string-append "{" ((caddr data) 'to-string) "}"))
+    (lambda (data) (string-append "{" ((cadddr data) 'to-string) "}"))
     (lambda (data) #f)
     (lambda (data) #t)
     (lambda (data) #f)
-    (lambda (data) (caddr data))
+    (lambda (data) (cadddr data))
     (lambda (data) (error "singleton left is not implemented"))
     (lambda (data) (error "singleton right is not implemented"))))
 
@@ -110,16 +110,23 @@
   (virtual-table
     (lambda (data) 
       (string-append
-        ((caddr data) 'to-string) "U" ((cadddr data) 'to-string)))
+        ((cadddr data) 'to-string) "U" ((car (cddddr data)) 'to-string)))
     (lambda (data) #f)
     (lambda (data) #f)
     (lambda (data) #t)
     (lambda (data) (error "union: element is not implemented"))
-    (lambda (data) (caddr data))
-    (lambda (data) (cadddr data))))
+    (lambda (data) (cadddr data))
+    (lambda (data) (car (cddddr data)))))
 
 
 (define set   ; constructor
+  ; data is (list
+  ; 'data               <- car
+  ; hash                <- cadr
+  ; v-table             <- caddr
+  ; element (or left)   <- cadddr
+  ; right               <- (car (cddddr ))
+
   (let ((let-for-name-encapsulation 'anything))
     ; object created from data is message passing interface
     (define (this data)
@@ -134,13 +141,129 @@
               ((eq? m 'right)     (right data))
               (else (error "set: unknown operation: " m)))))
     ;
-    (define (hash-code data) (cadr data))
-    (define (v-table data)   (caddr data))
-    (define (to-string data) (((v-table data) 'to-string)
+    ; implementation of object instance interface
+    ;
+    (define (hash-code data)  (cadr data))
+    (define (v-table data)    (caddr data))
+    (define (to-string data)  (((v-table data) 'to-string)  data))
+    (define (is-zero? data)   (((v-table data) 'zero?)      data))
+    (define (singleton? data) (((v-table data) 'singleton?) data))
+    (define (union? data)     (((v-table data) 'union?)     data))
+    (define (element data)    (((v-table data) 'element)    data))
+    (define (left data)       (((v-table data) 'left)       data))
+    (define (right data)      (((v-table data) 'right)      data))
+    ;
+    ;
+    (define manager #f)       ; to be initialized with set-manager object
+    ;
+    ;
+    (define static-interface
+      (lambda (m)
+        (cond ((eq? m 'set-up-manager)  (set-up-manager))
+              ((eq? m 'zero)            (make-zero))
+              ((eq? m 'singleton)       (make-singleton))
+              ((eq? m 'union)           (make-union))
+              ((eq? m 'successor)       (successor))
+              ((eq? m 'debug)           (debug))
+              ; otherwise returning object instance
+              (else  (this m)))))
+    ;
+    ; implementation of static interface 
+    ;
+    (define (set-up-manager)  (set! manager (set-manager)))
+    (define (make-zero)       (manager 'zero))        ; delegating to manager
+    (define (make-singleton)  (manager 'singleton))   ; delegating to manager
+    (define (make-union)      (manager 'union))       ; delegating to manager
+    (define (debug)           (manager 'debug))       ; delegating to manager
+    ;
+    (define (successor) 
+      (lambda (x) ((set 'union) x ((set 'singleton) x))))
+    ;
+    ; returning interface
+    ;
+    static-interface))
 
 
+(define zero      ; constructor
+  ; returning single argument constructor
+  (lambda (hash)
+    (let ((data (list 'data hash zero-virtual-table)))
+      (set data))))
+
+(define singleton ; constructor
+  ; returning two arguments contructor
+  (lambda (x hash)
+    (let ((data (list 'data hash singleton-virtual-table x)))
+      (set data))))
+
+(define union     ; constructor
+  ; returning three arguments constructor
+  (lambda (x y hash)
+    (let ((data (list 'data hash union-virtual-table x y)))
+      (set data))))
 
 
+; The manager maintains various dictionaries. The main dictionary is objectMap,
+; which given a hash code, returns a previously constructed object. However,
+; The manager needs to implement the factory methods corresponding to the 
+; three constructors of the inductive type Set. Implementing the zero()
+; method is easy. The manager always assigns 0 as its hash code and creates
+; a single object which is stored once and for all in the objectMap dictionary.
+; The method zero() simply returns a reference to the existing object.
+; In order to implement singleton(x) (returning the object {x} from x), the 
+; manager needs to quickly establish whether (given the set x and its hash code)
+; the set {x} has already been created. However, the manager cannot simply query
+; the objectMap dictionary because it does not know what dynamic hash code the
+; singleton {x} was assigned (assuming it already exists). This is why the 
+; manager maintains an additional dictionary 'singletonMap' which stores the 
+; hash code of {x} given the hash code of x. Hence by querying the dictionary 
+; singletonMap, the manager is able to establish whether {x} already exists, 
+; and if so, what its hash code is. Given the hash code of {x} it can simply 
+; query objectMap and return the appropriate object. In the case when the object
+; {x} does not already exist, the manager assigns the current value of 
+; 'nextHash' to the object {x}, then creates the object using this hash value, 
+; and before it returns the object, the manager updates objectMap with the new 
+; object and singletonMap with the link between the hash of x and that of {x}. 
+; In order to implement the factory method union(x,y), a similar scheme is 
+; adopted which requires a new dictionary unionMap. This map could have been 
+; implemented with pairs as keys, but we decided to keep using integers, and 
+; simply map pairs of ints to ints with the Cantor function.
+
+
+(define set-manager   ; constructor
+  (let ((let-for-name-encapsulation 'anything))
+    ; object created from data is message passing interface
+    (define (this data)
+      (lambda (m)
+        (cond ((eq? m 'zero)      (make-zero data))
+              ((eq? m 'singleton) (make-singleton data))
+              ((eq? m 'union)     (make-union data))
+              ((eq? m 'debug)     (debug data))
+              (else (error "set-manager: unknown operation: " m)))))
+    ;
+    ; implementation of object interface
+    ;
+    (define (make-zero data) (zero 0))
+    ;
+    (define (make-singleton data)
+      'TBI)
+    ;
+    (define (make-union data)
+      'TBI)
+    ;
+    (define (debug data)
+      'TBI)
+    ;
+    ; returning no arguments constructor
+    ;
+    (lambda () (this (list 'data 1 'singletonMap 'unionMap 'objectMap)))))
+
+(set 'set-up-manager) 
+
+(define x (set 'zero))
+(display (x 'hash-code))(newline)
+(display (x 'to-string))(newline)
+(display (x 'zero?))(newline)
 
 
 

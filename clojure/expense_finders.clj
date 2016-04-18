@@ -7,12 +7,12 @@
 ; (def expense (create-struct :amount :date))
 
 
-(defn log-call [id & args]
+(defn ^:dynamic log-call [id & args]
   (println "Audit - called" id "with:" (string/join ", " args))
   ;;do logging to some audit data-store
   )
 
-(defn fetch-all-expenses [username start-date end-date]
+(defn ^:dynamic fetch-all-expenses [username start-date end-date]
   (log-call "fetch-all" username start-date end-date)
   ;find in data-store, return list of expense structs
   )
