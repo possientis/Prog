@@ -1,5 +1,5 @@
 ; Flyweight Design Pattern
-
+(load "dict.scm")
 ; The main idea of the flyweight design pattern is to store objects
 ; in a dictionary so they can be reused, rather than new objects be
 ; created. This pattern is particularly well suited to classes of 
@@ -235,36 +235,113 @@
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
-        (cond ((eq? m 'zero)      (make-zero data))
-              ((eq? m 'singleton) (make-singleton data))
-              ((eq? m 'union)     (make-union data))
+        (cond ((eq? m 'zero)      (return-zero data))
+              ((eq? m 'singleton) (return-singleton data))
+              ((eq? m 'union)     (return-union data))
               ((eq? m 'debug)     (debug data))
               (else (error "set-manager: unknown operation: " m)))))
     ;
     ; implementation of object interface
     ;
-    (define (make-zero data) (zero 0))
+    (define (return-zero data) (cdr (((object-map data) 'find) 0)))
     ;
-    (define (make-singleton data)
-      'TBI)
+    (define (return-singleton data)
+      (lambda (x)
+        (let ((next-hash     (next-hash data))
+              (singleton-map (singleton-map data))
+              (object-map    (object-map data))
+              (hash          (x 'hash-code)))
+          (let ((mapped-hash ((singleton-map 'find) hash)))
+            (if (eq? #f mapped-hash)  
+              ; singleton {x} is unknown
+              (begin
+                ; next-hash is allocated to {x}
+                ((singleton-map 'insert!) hash next-hash)
+                ; creating singleton object {x}
+                (let ((object (singleton x next-hash)))
+                  ; saving {x} for future reference
+                  ((object-map 'insert!) next-hash object)
+                  ; incrementing next-hash for future hash allocation
+                  (increment-hash data)
+                  ; returning object
+                  object))
+              ; else, singleton {x} is known, simply retrieving it from hash
+              (cdr ((object-map 'find) (cdr mapped-hash))))))))
     ;
-    (define (make-union data)
-      'TBI)
+    (define (return-union data)
+      (lambda (x y)
+        (let ((next-hash      (next-hash data))
+              (union-map      (union-map data))
+              (object-map     (object-map data))
+              (hash-x         (x 'hash-code))
+              (hash-y         (y 'hash-code)))
+          (let ((hash (pairing-cantor hash-x hash-y)))
+            (let ((mapped-hash ((union-map 'find) hash)))
+              (if (eq? #f mapped-hash)
+                ; union xUy is unknown
+                (begin
+                  ; next-hash is allocated to xUy
+                  ((union-map 'insert!) hash next-hash)
+                  ; creating union object xUy
+                  (let ((object (union x y next-hash)))
+                    ; saving xUy for future reference
+                    ((object-map 'insert!) next-hash object)
+                    ; incrementing next-hash for future hash allocation
+                    (increment-hash data)
+                    ; returning object
+                    object))
+                ; else, union xUy is known, simply retrieving it from hash
+                (cdr ((object-map 'find) (cdr mapped-hash)))))))))
     ;
     (define (debug data)
-      'TBI)
+      (let ((next-hash  (next-hash data))
+            (object-map (object-map data)))
+        (let loop ((i 0))
+          (if (< i next-hash)
+            (begin
+              (display "hash = ")(display i)(display ": ")
+              (display ((cdr ((object-map 'find) i)) 'to-string))
+              (newline)
+              (loop (+ i 1)))))))
+    ;
+    ; helper functions
+    ;
+    (define (increment-hash data) (set-car! (cdr data) (+ 1 (cadr data))))
+    (define (pairing-cantor x y)  (+ y (quotient (* (+ x y 1) (+ x y)) 2)))
+    (define (next-hash      data) (cadr data))
+    (define (singleton-map  data) (caddr data))
+    (define (union-map      data) (cadddr data))
+    (define (object-map     data) (car (cddddr data)))
     ;
     ; returning no arguments constructor
     ;
-    (lambda () (this (list 'data 1 'singletonMap 'unionMap 'objectMap)))))
+    (lambda () 
+      (let ((data (list 'data 1 (dictionary) (dictionary) (dictionary))))   
+        (((object-map data) 'insert!) 0 (zero 0)) ; zero added with 0 hash
+        (this data)))))
+
+; it is easy to miss this crucial line of code which initializes the
+; static 'manager' member of the 'set' class. it needs to be called *after*
+; the set-manager class has been properly defined. We face a similar problem
+; in python, and of course in C or C++ (but those languages have forward
+; declaration). Of course in many cases, this sort of issues goes away by
+; reordering the code. However, this may not work in cases of mutual dependency
+; between the two classes. It does make sense to define set-manager after set.
 
 (set 'set-up-manager) 
 
-(define x (set 'zero))
-(display (x 'hash-code))(newline)
-(display (x 'to-string))(newline)
-(display (x 'zero?))(newline)
 
+; main
+(define empty   (set 'zero))
+(define one     ((set 'successor) empty))
+(define two     ((set 'successor) one))
+(define three   ((set 'successor) two))
+(define four    ((set 'successor) three))
+(define five    ((set 'successor) four))
+
+(set 'debug)
+
+(exit 0)
 
 
 

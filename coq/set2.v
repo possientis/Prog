@@ -1,4 +1,5 @@
 Require Import set.
+Require Import Bool.
 
 Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
   match n with 
@@ -33,13 +34,15 @@ Proof.
   (* b = Empty *)
   simpl. split. apply False_ind. intro H. discriminate H. 
   (* b = Singleton y *)
-  clear b. intros y IH''. simpl. split. intro H. apply lemma_and.
-  apply IH. tauto. apply IH. tauto.
+  clear b. intros y IH''. simpl. split. intro H.
+  apply andb_true_iff. split. apply IH. tauto. apply IH. tauto.
+
   intro H. split. 
-  apply IH. apply lemma_and_true_l with (q:= subset_n n y x). exact H. 
-  apply IH. apply lemma_and_true_r with (p:= subset_n n x y). exact H.
+  apply IH. apply proj1 with (B:= subset_n n y x = true). 
+  apply andb_true_iff. exact H. 
+
+  apply IH. apply proj2 with (A:= subset_n n x y = true).
+  apply andb_true_iff. exact H.
   (* b = Union y z *)
   clear b. intros y IHy z IHz. simpl. split. intro H.
-
-  
 

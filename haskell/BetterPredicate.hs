@@ -62,10 +62,6 @@ getFileSize path = handle ignore $
     size <- hFileSize h
     return (Just size)
 
-myTest path _ (Just size) _ =
-  takeExtension path == ".cpp" && size < 512
-myTest path _ _ _ = False
-
 type InfoP a  = FilePath
               -> Permissions
               -> Maybe Integer
@@ -88,9 +84,59 @@ equalP' f k w x y z = f w x y z == k
 
 
 
+liftP :: (a -> b -> c) -> InfoP a -> b -> InfoP c
+liftP q f k w x y z = (f w x y z) `q` k
+
+-- Currying makes it even more important to think about order 
+-- of arguments when designing APIs
+greaterP, lesserP :: (Ord a) => InfoP a -> a -> InfoP Bool
+greaterP = liftP (>)  -- conciseness achieved thanks to careful 
+lesserP  = liftP (<)  -- choice of argument order
+
+simpleAndP :: InfoP Bool -> InfoP Bool -> InfoP Bool
+simpleAndP f g w x y z = f w x y z && g w x y z
+
+liftP2 :: (a -> b -> c) -> InfoP a -> InfoP b -> InfoP c
+liftP2 op f g w x y z = f w x y z `op` g w x y z
+
+andP  = liftP2 (&&)
+orP   = liftP2 (||)
+
+constP :: a -> InfoP a
+constP k _ _ _ _ = k 
+
+liftP' op f k = liftP2 op f (constP k)
+
+liftPath :: (FilePath -> a) -> InfoP a
+liftPath f w _ _ _ = f w 
+
+myTest path _ (Just size) _ =
+  takeExtension path == ".cpp" && size < 512
+myTest path _ _ _ = False
+
+myTest2 = (liftPath takeExtension `equalP` ".cpp") `andP`
+          (sizeP `lesserP` 512)
+-- by default, infix operators are 'infixl 9' that is 
+-- they are left associative at the highest precedence level ...
+(==?) = equalP
+(&&?) = andP
+(<?)  = lesserP 
+
+-- which means that parantheses are absolutely required here
+-- (at least those around 'sizeP < 512' )
+myTest3 = (liftPath takeExtension ==? ".cpp") &&? (sizeP <? 512)
+
+-- on ghci , check :i == , :i && and :i < so as to replicate those settings:
+infix 4 ==? -- level 4 priority
+infix 3 &&? -- now ==? will bind more strongly than &&?
+infix 4 <?  -- so we can redefine ur predicate without parentheses:
+
+myTest4 = liftPath takeExtension ==? ".cpp" &&? sizeP <? 512
 
 
-
+main = do
+  paths <- betterFind myTest4 "/home/john/Prog/"
+  putStrLn (show paths)
 
 
 

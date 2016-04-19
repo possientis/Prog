@@ -19,5 +19,14 @@ abstract class AbstractCurrency {
 //  def *(x: Double): Currency = ...
 }
 
+class Dollar extends AbstractCurrency {
+  val amount = 100L
+  type Currency = Dollar
+  def designation = "USD"
+}
+
+
+
+
 
 

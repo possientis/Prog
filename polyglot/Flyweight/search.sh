@@ -1,4 +1,4 @@
 #!/bin/sh
-grep $1 ~/Prog/python -r
-grep $1 ~/Prog/polyglot/ -r | grep '\.py'
+grep $1 ~/Prog/scm -r
+grep $1 ~/Prog/polyglot/ -r | grep '\.scm'
 

@@ -1,54 +1,15 @@
 Set Implicit Arguments.
+Require Import Bool.
 Require Import Arith.
 Require Import Arith.Max.
 Require Import List.
-
-Definition bool_and (p q:bool) :=
-  match p, q with
-    | true, true    => true
-    | true, false   => false
-    | false, true   => false
-    | false, false  => false
-  end.
-
-Definition bool_or (p q:bool) :=
-  match p, q with
-    | true, true    => true
-    | true, false   => true
-    | false, true   => true
-    | false, false  => false
-  end.
-
-Lemma lemma_or_true : forall (p q:bool), 
-  bool_or p q = true -> p = true \/ q = true.
-Proof.
-  intro p. elim p; intro q; elim q; simpl; auto.
-Qed.
-
-Lemma lemma_and : forall (p q:bool),
-  p = true -> q = true -> bool_and p q = true.
-Proof.
-  intros p q Hp Hq. rewrite Hp, Hq. simpl. reflexivity.
-Qed.
-
-
-Lemma lemma_and_true_l : forall (p q:bool), 
-  bool_and p q = true -> p = true.
-Proof.
-  intro p. elim p; intro q; elim q; auto.
-Qed.
-
-Lemma lemma_and_true_r : forall (p q:bool), 
-  bool_and p q = true -> q = true.
-Proof.
-  intro p. elim p; intro q; elim q; auto.
-Qed.
 
 
 Inductive set : Set := 
   | Empty     : set
   | Singleton : set -> set
   | Union     : set -> set -> set.
+
 
 (******************************************************************************)
 (*                         order : set -> nat                                 *)
@@ -163,11 +124,11 @@ Fixpoint subset_n (n:nat) : set -> set -> bool :=
         | Singleton x     => 
           match b with
             | Empty       => false
-            | Singleton y => bool_and (subset_n p x y) (subset_n p y x)
-            | Union y z   => bool_or  (subset_n p (Singleton x) y)
-                                      (subset_n p (Singleton x) z) 
+            | Singleton y => (subset_n p x y) && (subset_n p y x)
+            | Union y z   => (subset_n p (Singleton x) y) ||
+                             (subset_n p (Singleton x) z) 
           end
-        | Union x y       => bool_and (subset_n p x b) (subset_n p y b)
+        | Union x y       => (subset_n p x b) && (subset_n p y b)
       end)
   end.
 
@@ -181,9 +142,9 @@ Proof.
   intro H. simpl. trivial. clear a. intros x Hx. clear Hx.
   elim b. intro H. simpl. trivial. intros y Hy H. clear Hy. 
   cut (subset_n (S n) (Singleton x) (Singleton y) = 
-  bool_and (subset_n n x y) (subset_n n y x)).
+    (subset_n n x y) && (subset_n n y x)).
   cut (subset_n (S (S n)) (Singleton x) (Singleton y) =
-  bool_and (subset_n (S n) x y) (subset_n (S n) y x)).
+    (subset_n (S n) x y) && (subset_n (S n) y x)).
   intros H1 H2. rewrite H1.
   cut (subset_n n x y = subset_n (S n) x y).
   cut (subset_n n y x = subset_n (S n) y x).
@@ -193,9 +154,9 @@ Proof.
   simpl. reflexivity. simpl. reflexivity. 
   clear b. intros y Hy z Hz H. clear Hy Hz. 
   cut(subset_n (S n) (Singleton x) (Union y z) =
-  bool_or (subset_n n (Singleton x) y) (subset_n n (Singleton x) z)).  
+  (subset_n n (Singleton x) y) || (subset_n n (Singleton x) z)).  
   cut(subset_n (S (S n)) (Singleton x) (Union y z) =
-  bool_or (subset_n (S n) (Singleton x) y) (subset_n (S n) (Singleton x) z)).
+  (subset_n (S n) (Singleton x) y) || (subset_n (S n) (Singleton x) z)).
   intros H1 H2. rewrite H1.
   cut(subset_n n (Singleton x) y = subset_n (S n) (Singleton x) y).
   cut(subset_n n (Singleton x) z = subset_n (S n) (Singleton x) z).
@@ -205,7 +166,7 @@ Proof.
   simpl. reflexivity. simpl. reflexivity.
   intros x Hx. clear Hx. intros y Hy. clear Hy. intro H.
   cut(subset_n (S (S n)) (Union x y) b = 
-  bool_and (subset_n (S n) x b) (subset_n (S n) y b)).
+    (subset_n (S n) x b) && (subset_n (S n) y b)).
   intro H'. rewrite H'.
   cut(subset_n n x b = subset_n (S n) x b).
   cut(subset_n n y b = subset_n (S n) y b).
@@ -246,7 +207,7 @@ Qed.
 
 
 Lemma subset_single_single : forall (x y:set), 
-  subset (Singleton x) (Singleton y) = bool_and (subset x y) (subset y x). 
+  subset (Singleton x) (Singleton y) = (subset x y) && (subset y x). 
 Proof.
   intros x y. unfold subset at 1. simpl.
   cut(subset_n (order x + S (order y)) x y = subset x y).
@@ -258,7 +219,7 @@ Qed.
 
 Lemma subset_single_union : forall (x y z:set),
   subset (Singleton x) (Union y z) = 
-  bool_or (subset (Singleton x) y) (subset (Singleton x) z).
+  (subset (Singleton x) y) || (subset (Singleton x) z).
 Proof.
   intros x y z. unfold subset at 1. simpl. 
   cut(subset_n (order x + S (max (order y) (order z))) (Singleton x) y 
@@ -273,7 +234,7 @@ Proof.
 Qed.
 
 Lemma subset_union_all : forall (x y b:set),
-  subset (Union x y) b = bool_and (subset x b) (subset y b).
+  subset (Union x y) b = (subset x b) && (subset y b).
 Proof.
   intros x y b. unfold subset at 1. simpl.
   cut(subset_n (max (order x) (order y) + order b) x b = subset x b).
@@ -291,16 +252,16 @@ Definition subset_prop_2 (relation: set -> set -> bool) : Prop :=
 
 Definition subset_prop_3 (relation: set -> set -> bool) : Prop :=
   forall (x y:set), 
-  relation (Singleton x) (Singleton y) = bool_and (relation x y) (relation y x).
+  relation (Singleton x) (Singleton y) = (relation x y) && (relation y x).
 
 Definition subset_prop_4 (relation: set -> set -> bool) : Prop :=
   forall (x y z:set),
   relation (Singleton x) (Union y z) = 
-  bool_or (relation (Singleton x) y) (relation (Singleton x) z).
+  (relation (Singleton x) y) || (relation (Singleton x) z).
 
 Definition subset_prop_5 (relation: set -> set -> bool) : Prop :=
   forall (x y b:set),
-  relation (Union x y) b = bool_and (relation x b) (relation y b).
+  relation (Union x y) b = (relation x b) && (relation y b).
 
 (* subset is a relation on set satisfying properties 1-5 *)
 Lemma subset_exist : 
@@ -353,7 +314,7 @@ Qed.
 (*                        equiv : set -> set -> bool                          *)
 (******************************************************************************)
 
-Definition equiv (a b:set) : bool := bool_and (subset a b) (subset b a).
+Definition equiv (a b:set) : bool := (subset a b) && (subset b a).
 
 
 (******************************************************************************)
@@ -407,7 +368,7 @@ Proof.
   clear H0. apply in_or_app. right. exact Hc''. elim Hc'. intros H0 H1. exact H1.
   apply Hz. exact Hz'. simpl. left. reflexivity. 
   
-  apply lemma_or_true. exact H. apply False_ind. intro H.
+  apply orb_true_iff. exact H. apply False_ind. intro H.
   cut(exists c' : set, In c' (elements y ++ elements z) /\ equiv x c' = true).
   intro H'. elim H'. intros c' Hc'. elim Hc'. intros Hc'' Hc'''.
   cut(In c' (elements y) \/ In c' (elements z)). intro H0. elim H0. 
@@ -429,10 +390,11 @@ Proof.
   rewrite subset_union_all in H. intro a. intro H'. simpl in H'.
   cut(In a (elements x) \/ In a (elements y)). intro Ha. elim Ha. 
 
-  intro Ha'. apply Hx. apply lemma_and_true_l with (q:= subset y b). 
-  exact H. exact Ha'. 
-  intro Ha'. apply Hy. apply lemma_and_true_r with (p:= subset x b). 
-  exact H. exact Ha'. 
+  intro Ha'. apply Hx. apply proj1 with (B:= subset y b = true). 
+  apply andb_true_iff. exact H. exact Ha'. 
+
+  intro Ha'. apply Hy.  apply proj2 with (A:= subset x b = true). 
+  apply andb_true_iff. exact H. exact Ha'. 
 
   apply in_app_or. exact H'. 
 
@@ -493,9 +455,9 @@ Qed.
 Lemma equiv_symmetric : forall (a b:set),
   equiv a b = true -> equiv b a = true.
 Proof.
-  intros a b. unfold equiv. simpl. intro H. apply lemma_and.
-  apply lemma_and_true_r with (p:= subset a b). exact H.
-  apply lemma_and_true_l with (q:= subset b a). exact H.
+  intros a b. unfold equiv. simpl. intro H. apply andb_true_iff. split.
+  apply proj2 with (A:= subset a b = true). apply andb_true_iff. exact H.
+  apply proj1 with (B:= subset b a = true). apply andb_true_iff. exact H.
 Qed.
 
 Lemma subset_x_xUy : forall (x y: set), subset x (Union x y) = true.
@@ -519,7 +481,7 @@ Qed.
 
 Lemma equiv_xUy : forall (x y: set), equiv (Union x y) (Union y x) = true.
 Proof.
- intros x y. unfold equiv. simpl. apply lemma_and; apply subset_xUy.
+ intros x y. unfold equiv. simpl. apply andb_true_iff. split; apply subset_xUy.
 Qed.
 
 Lemma subset_xUyUz_l : forall (x y z:set),
@@ -539,7 +501,7 @@ Qed.
 Lemma equiv_xUyUz_l : forall (x y z:set),
   equiv (Union (Union x y) z) (Union x (Union y z)) = true.
 Proof.
-  intros x y z. unfold equiv. simpl. apply lemma_and. 
+  intros x y z. unfold equiv. simpl. apply andb_true_iff. split.
   apply subset_xUyUz_l. apply subset_xUyUz_r.
 Qed.
 
@@ -588,7 +550,8 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   intros x Hx. cut (exists y:set, In y (elements b) /\ equiv x y = true). 
   intro H. elim H. intros y Hy.
   cut (exists z:set, In z (elements c) /\ equiv y z = true). intro H'. elim H'.
-  intros z Hz. exists z. split. elim Hz. auto. unfold equiv.  apply lemma_and. 
+  intros z Hz. exists z. split. elim Hz. auto. unfold equiv. apply andb_true_iff.
+  split.
 
   apply IH with (b:=y). 
   apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx. 
@@ -597,11 +560,12 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   auto. exact Hb.
   apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
   auto. exact Hc.
+ 
+  elim Hy. intros H0 EQxy. clear H0. unfold equiv in EQxy. 
+  apply proj1 with (B:= subset y x = true). apply andb_true_iff. exact EQxy. 
 
-  elim Hy. intros H0 EQxy. clear H0. unfold equiv in EQxy. apply lemma_and_true_l
-  with (q:= subset y x). exact EQxy. 
-  elim Hz. intros H0 EQyz. clear H0. unfold equiv in EQyz. apply lemma_and_true_l
-  with (q:= subset z y). exact EQyz.
+  elim Hz. intros H0 EQyz. clear H0. unfold equiv in EQyz. 
+  apply proj1 with (B:= subset z y = true). apply andb_true_iff. exact EQyz.
 
   apply IH with (b:=y).
   apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
@@ -610,23 +574,17 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   auto. exact Hb.
   apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx.
   exact Ha.
+  
+  elim Hz. intros H0 EQyz. clear H0. unfold equiv in EQyz. 
+  apply proj2 with (A:= subset y z = true). apply andb_true_iff. exact EQyz.
 
-  elim Hz. intros H0 EQyz. clear H0. unfold equiv in EQyz. apply lemma_and_true_r
-  with(p:= subset y z). exact EQyz.
-  elim Hy. intros H0 EQxy. clear H0. unfold equiv in EQxy. apply lemma_and_true_r
-  with(p:= subset x y). exact EQxy.
-
+  elim Hy. intros H0 EQxy. clear H0. unfold equiv in EQxy. 
+  apply proj2 with (A:= subset x y = true). apply andb_true_iff. exact EQxy.
+ 
   apply subset_elements with (a:=b). exact Hbc. elim Hy. auto.
   apply subset_elements with (a:=a). exact Hab. exact Hx.
 Qed.
 
-  
-
-  
-  
-
-
-    
 
   
 (*
