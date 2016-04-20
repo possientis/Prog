@@ -1,5 +1,6 @@
 Require Import Arith. (* ring tactic *)
 
+
 Definition divides (n m:nat) := exists p:nat, p*n = m.
 
 Lemma divides_n_0 : forall n:nat, divides n 0.
@@ -23,5 +24,25 @@ Proof.
   clear k. intros k. simpl. intro H'. unfold divides. exists k.
   apply plus_reg_l with (p:=n). exact H'.
 Qed.
+
+Lemma not_divides_lt : forall n m:nat, 0 < m -> m < n -> ~divides n m.
+Proof.
+  intros n m H0 Hn H. unfold divides in H. elim H. intros p Hp. generalize H0 Hn Hp.
+  case p. simpl. clear H0. intro H0. clear Hn. intro Hn. unfold lt in H0. intro H'.
+  rewrite <- H' in H0. cut(0 = 1). intro H''. discriminate H''. apply le_n_0_eq.
+  exact H0. intro q. clear H0. intro H0. clear Hn. intro Hn. intro H'. simpl in H'.
+  cut (n <= m). intro H''. apply le_not_lt with (n:=n)(m:=m). exact H''. exact Hn.
+  rewrite <- H'. apply le_plus_l.
+Qed.
+
+Lemma not_lt_2_divides : forall n m:nat, n <> 1 -> n < 2 -> 0 < m -> ~divides n m.
+Proof.
+  intros n m H1 H2 Hm. unfold divides. intro H. elim H. intros p Hp. cut(n=0).
+  intro H'. rewrite H' in Hp. rewrite mult_0_r in Hp. unfold lt in Hm. 
+  rewrite <- Hp in Hm. cut (0 = 1). intro H''. discriminate H''. apply le_n_0_eq.
+  exact Hm. generalize H1 H2. case n. tauto. intro q. simpl. clear H1 H2.
+  intros H1 H2. apply False_ind. unfold lt in H2. apply H1. simpl.
+
+
 
 

@@ -1,6 +1,5 @@
 ; Abstract Factory design pattern
-(ns abstractFactory
-  (:gen-class))
+(ns abstractFactory (:gen-class))
 
 
 (defn Shape [hook]

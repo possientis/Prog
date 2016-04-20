@@ -208,12 +208,11 @@
         ((parse-tree :traverse) generator)
         (println "compilation complete")))))
 
-(defn -main [])
-; main
+(defn -main []
 (def input  (InputStream "source.c"))
 (def output (BytecodeStream))
 (def compiler (CompilerClass))
-((compiler :compile) input output)
+((compiler :compile) input output))
 
 
 

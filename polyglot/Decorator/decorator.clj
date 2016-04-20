@@ -183,7 +183,7 @@
 ;;                                   Main                                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn -main []) ; bizarrely, the code outside of -main does run
+(defn -main []
 
 (def plain-pizza  (PlainPizza))
 
@@ -210,7 +210,7 @@
 
 (println "Ultra Pizza:"
          "\tCost: "         (ultra-pizza :cost)
-         "\tDescription: "  (ultra-pizza :description))
+         "\tDescription: "  (ultra-pizza :description)))
 
 
 

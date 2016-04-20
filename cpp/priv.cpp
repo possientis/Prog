@@ -1,31 +1,42 @@
-/*
- * Copyright (c) 2011-2013 libbitcoin developers (see AUTHORS)
- *
- * This file is part of libbitcoin.
- *
- * libbitcoin is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License with
- * additional permissions to the one published by the Free Software
- * Foundation, either version 3 of the License, or (at your option)
- * any later version. For more information see LICENSE.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 #include <bitcoin/bitcoin.hpp>
-using namespace bc;
 
 int main()
 {
-    elliptic_curve_key ec;
-    ec.new_key_pair();
-    private_data raw_private_key = ec.private_key();
-    std::cout << std::string(raw_private_key.begin(), raw_private_key.end());
-    return 0;
+  // Private secret key.
+  bc::ec_secret secret = bc::decode_hash(
+    "038109007313a5807b2eccc082c8c3fbb988a973cacf1a7df9ce725c31b14776");
+  // Get public key.
+  bc::ec_point public_key = bc::secret_to_public_key(secret);
+  std::cout << "Public key: " << bc::encode_hex(public_key) << std::endl;
+
+  // Create Bitcoin address.
+  // Normally you can use:
+  // bc::payment_address payaddr;
+  // bc::set_public_key(payaddr, public_key);
+  // const std::string address = payaddr.encoded();
+
+  // Compute hash of public key for P2PKH address.
+  const bc::short_hash hash = bc::bitcoin_short_hash(public_key);
+
+  bc::data_chunk unencoded_address;
+  // Reserve 25 bytes
+  //
+  // [ version:1 ]
+  //
+  //[ hash:20 ]
+  //
+  //[ checksum:4 ]
+  unencoded_address.reserve(25);
+  //// Version byte, 0 is normal BTC address (P2PKH).
+  unencoded_address.push_back(0);
+  // Hash data
+  bc::extend_data(unencoded_address, hash);
+  // Checksum is computed by hashing data, and adding 4 bytes from hash.
+  bc::append_checksum(unencoded_address);
+  // Finally we must encode the result in Bitcoin's base58 encoding
+  assert(unencoded_address.size() == 25);
+  const std::string address = bc::encode_base58(unencoded_address);
+  std::cout << "Address: " << address << std::endl;
+  return 0;
 }
 

@@ -1,5 +1,12 @@
 (ns stubbing)
 
+(def ^:dynamic mock-calls)
+
+(defmacro defmocktest [test-name & body]
+  `(test/deftest ~test-name
+     (binding [mock-calls (atom {})]
+       (do ~@body))))
+
 
 (defmacro stubbing [stub-forms & body]
   (let [stub-pairs (partition 2 stub-forms)
@@ -9,7 +16,6 @@
     `(binding [~@(interleave real-fns stub-fns)]
        ~@body)))
 
-(def mock-calls (atom {}))
 
 (defn stub-fn [the-function return-value]
   (swap! mock-calls assoc the-function [])

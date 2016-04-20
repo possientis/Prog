@@ -1,5 +1,6 @@
 Require Import set.
 Require Import Bool.
+Require Import Arith.
 
 Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
   match n with 
@@ -21,7 +22,7 @@ Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
 Lemma subset_bool_prop : forall (n:nat)(a b:set),
   subset2_n n a b <-> subset_n n a b = true.
 Proof. 
-(* induction on n *)
+  (* induction on n *)
   intro n. elim n. 
   (* n = 0 *)
   intros a b. simpl. tauto.
@@ -44,5 +45,41 @@ Proof.
   apply IH. apply proj2 with (A:= subset_n n x y = true).
   apply andb_true_iff. exact H.
   (* b = Union y z *)
-  clear b. intros y IHy z IHz. simpl. split. intro H.
+  clear b. intros y IHy z IHz. simpl. split. intro H. apply orb_true_iff. elim H.
+  intro Hy'. left. apply IH. exact Hy'.
+  intro Hz'. right. apply IH. exact Hz'.
+  intro H. rewrite orb_true_iff in H. elim H.
+  intro Hy'. left. apply IH. exact Hy'.
+  intro Hz'. right. apply IH. exact Hz'.
+  (* a = Union x y *)
+  clear a. intros x Hx y Hy b. simpl. rewrite andb_true_iff.
+  rewrite IH with (a:=x)(b:=b). rewrite IH with (a:=y)(b:=b). tauto.
+Qed.
+
+Lemma subset2_n_Sn : forall (n:nat) (a b:set),
+  order a + order b <= n -> (subset2_n n a b <-> subset2_n (S n) a b).
+Proof. 
+  (* induction on n *)
+  intro n. elim n.
+  (* n = 0 *)
+  intros a b. intro H. cut(a = Empty). intro H'. rewrite H'. simpl. tauto.
+  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  (* n -> n+1 *)(* induction on a *)
+  clear n. intros n IH. intro a. elim a.
+  (* a = Empty *)
+  intro b. simpl. tauto.
+  (* a = Singleton x *)(* induction on b *)
+  clear a. intros x Hx. intro b. elim b.
+  (* b = Empty *)
+  intro H. simpl. tauto.
+  (* b = Singleton y *)
+  clear b. intros y Hy H.
+  unfold subset2_n at 1. fold subset2_n.
+  cut(subset2_n (S (S n)) (Singleton x) (Singleton y) <-> 
+     (subset2_n (S n) x y)/\(subset2_n (S n) y x)). 
+  intro H'. rewrite H'. rewrite <- IH. rewrite <- IH. tauto.
+  apply order_sum_singleton. rewrite plus_comm. exact H.
+  apply order_sum_singleton. exact H.
+  unfold subset2_n. reflexivity.
+
 

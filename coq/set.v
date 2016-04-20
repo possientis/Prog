@@ -135,12 +135,21 @@ Fixpoint subset_n (n:nat) : set -> set -> bool :=
 Lemma subset_n_Sn : forall (n:nat) (a b:set),
   order a + order b <= n -> subset_n n a b = subset_n (S n) a b.
 Proof.
-  intro n. elim n. intros a b. intro H. cut (a = Empty). intro H'. 
-  rewrite H'. simpl. trivial. apply order_sum_eq_0_l with (b:=b).
-  cut (0 = order a + order b). intro H'. rewrite <- H'. trivial.
-  apply le_n_0_eq. exact H. clear n. intros n IH a b. elim a. 
-  intro H. simpl. trivial. clear a. intros x Hx. clear Hx.
-  elim b. intro H. simpl. trivial. intros y Hy H. clear Hy. 
+  (* induction on n *)
+  intro n. elim n. 
+  (* n = 0 *)
+  intros a b. intro H. cut (a = Empty). intro H'. rewrite H'. simpl. tauto. 
+  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H. 
+  (* n -> n+1 *)
+  clear n. intros n IH a. elim a. 
+  (* a = Empty *)
+  intro b. simpl. tauto.
+  (* a = Singleton x *)
+  clear a. intros x Hx. intro b. elim b. 
+  (* b = Empty *)
+  intro H. simpl. tauto. 
+  (* b = Singleton y *)
+  intros y Hy H. clear Hy. 
   cut (subset_n (S n) (Singleton x) (Singleton y) = 
     (subset_n n x y) && (subset_n n y x)).
   cut (subset_n (S (S n)) (Singleton x) (Singleton y) =
@@ -152,7 +161,9 @@ Proof.
   apply IH. apply order_sum_singleton. rewrite plus_comm. exact H.
   apply IH. apply order_sum_singleton. exact H. 
   simpl. reflexivity. simpl. reflexivity. 
-  clear b. intros y Hy z Hz H. clear Hy Hz. 
+  (*
+  clear b. 
+  intros y Hy z Hz H. clear Hy Hz. 
   cut(subset_n (S n) (Singleton x) (Union y z) =
   (subset_n n (Singleton x) y) || (subset_n n (Singleton x) z)).  
   cut(subset_n (S (S n)) (Singleton x) (Union y z) =
@@ -164,7 +175,7 @@ Proof.
   apply IH. apply order_sum_union_Rr with (y:= y). exact H.
   apply IH. apply order_sum_union_Rl with (z:= z). exact H.
   simpl. reflexivity. simpl. reflexivity.
-  intros x Hx. clear Hx. intros y Hy. clear Hy. intro H.
+  clear a. intros x Hx y Hy b H.
   cut(subset_n (S (S n)) (Union x y) b = 
     (subset_n (S n) x b) && (subset_n (S n) y b)).
   intro H'. rewrite H'.
@@ -584,9 +595,7 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   apply subset_elements with (a:=b). exact Hbc. elim Hy. auto.
   apply subset_elements with (a:=a). exact Hab. exact Hx.
 Qed.
-
-
-  
+*)  
 (*
 Definition successor (s:set) : set :=
   Union s (Singleton s).

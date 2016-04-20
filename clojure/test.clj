@@ -1,4 +1,6 @@
-(def a-map {:a 1 :b 2 :c 3})
+(ns test (:gen-class))
 
-(println (or false))
+(defn -main []
+  (println "This is a test\n"))
 
+;(-main)
