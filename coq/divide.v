@@ -1,4 +1,9 @@
 Require Import Arith. (* ring tactic *)
+Require Import Notations.
+Require Import Datatypes.
+Require Import Logic.
+
+Open Scope nat_scope.
 
 
 Definition divides (n m:nat) := exists p:nat, p*n = m.
@@ -41,7 +46,24 @@ Proof.
   intro H'. rewrite H' in Hp. rewrite mult_0_r in Hp. unfold lt in Hm. 
   rewrite <- Hp in Hm. cut (0 = 1). intro H''. discriminate H''. apply le_n_0_eq.
   exact Hm. generalize H1 H2. case n. tauto. intro q. simpl. clear H1 H2.
-  intros H1 H2. apply False_ind. unfold lt in H2. apply H1. simpl.
+  intros H1 H2. apply False_ind. unfold lt in H2. apply H1. simpl. apply False_ind.
+  generalize H1 H2. case q. tauto. intro r. intro H3. clear H3 H2 H1 Hp H Hm n m p q.
+  intro H. cut (S r = 0). intro H'. discriminate H'. symmetry. apply le_n_0_eq.
+  apply le_S_n. apply le_S_n. exact H.
+Qed.
+
+Lemma le_plus_minus: forall n m:nat, le n m -> m = n + (m - n).
+Proof.
+  intros n m. elim m. intro H. cut (0 = n). intro H'. rewrite <- H'. simpl. 
+  reflexivity. apply le_n_0_eq. exact H. clear m. intros m IH H.
+  cut ((n < S m)\/(n = S m)). intro H'. elim H'. unfold lt. intro H''.
+  rewrite <- minus_Sn_m. rewrite <- plus_Snm_nSm. unfold plus. fold plus.
+  rewrite <- IH. reflexivity. apply le_S_n. exact H''. apply le_S_n.
+  exact H''. intro H''. rewrite <- H''. rewrite <- minus_diag_reverse. ring.
+  apply le_lt_or_eq. exact H.
+Qed.
+
+
 
 
 

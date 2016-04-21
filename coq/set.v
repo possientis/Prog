@@ -149,43 +149,33 @@ Proof.
   (* b = Empty *)
   intro H. simpl. tauto. 
   (* b = Singleton y *)
-  intros y Hy H. clear Hy. 
-  cut (subset_n (S n) (Singleton x) (Singleton y) = 
-    (subset_n n x y) && (subset_n n y x)).
+  clear b. intros y Hy H.
+  unfold subset_n at 1. fold subset_n.
   cut (subset_n (S (S n)) (Singleton x) (Singleton y) =
-    (subset_n (S n) x y) && (subset_n (S n) y x)).
-  intros H1 H2. rewrite H1.
-  cut (subset_n n x y = subset_n (S n) x y).
-  cut (subset_n n y x = subset_n (S n) y x).
-  intros H3 H4. rewrite <- H3, <- H4, H2. reflexivity.
-  apply IH. apply order_sum_singleton. rewrite plus_comm. exact H.
-  apply IH. apply order_sum_singleton. exact H. 
-  simpl. reflexivity. simpl. reflexivity. 
-  (*
-  clear b. 
-  intros y Hy z Hz H. clear Hy Hz. 
-  cut(subset_n (S n) (Singleton x) (Union y z) =
-  (subset_n n (Singleton x) y) || (subset_n n (Singleton x) z)).  
-  cut(subset_n (S (S n)) (Singleton x) (Union y z) =
-  (subset_n (S n) (Singleton x) y) || (subset_n (S n) (Singleton x) z)).
-  intros H1 H2. rewrite H1.
-  cut(subset_n n (Singleton x) y = subset_n (S n) (Singleton x) y).
-  cut(subset_n n (Singleton x) z = subset_n (S n) (Singleton x) z).
-  intros H3 H4. rewrite <- H3, <- H4, H2. reflexivity.
-  apply IH. apply order_sum_union_Rr with (y:= y). exact H.
-  apply IH. apply order_sum_union_Rl with (z:= z). exact H.
-  simpl. reflexivity. simpl. reflexivity.
-  clear a. intros x Hx y Hy b H.
-  cut(subset_n (S (S n)) (Union x y) b = 
-    (subset_n (S n) x b) && (subset_n (S n) y b)).
-  intro H'. rewrite H'.
-  cut(subset_n n x b = subset_n (S n) x b).
-  cut(subset_n n y b = subset_n (S n) y b).
-  intros H1 H2. rewrite <- H1, <- H2. simpl. reflexivity.
-  apply IH. apply order_sum_union_Lr with (x:=x). exact H.
-  apply IH. apply order_sum_union_Ll with (y:=y). exact H.
+      (subset_n (S n) x y) && (subset_n (S n) y x)).
+  intro H'. rewrite H'. rewrite <- IH , <- IH. tauto.
+  apply order_sum_singleton. rewrite plus_comm. exact H.
+  apply order_sum_singleton. exact H.
   simpl. reflexivity.
-Qed.
+  clear b. intros y Hy z Hz H.
+  unfold subset_n at 1. fold subset_n.
+  cut(subset_n (S (S n)) (Singleton x) (Union y z) =
+     (subset_n (S n) (Singleton x) y)||(subset_n (S n) (Singleton x) z)).
+  intro H'. rewrite H'. rewrite <- IH, <- IH. tauto.
+  apply order_sum_union_Rr with (y:=y). exact H.
+  apply order_sum_union_Rl with (z:=z). exact H. 
+  simpl. reflexivity.
+  (* a = Union x y *)
+  clear a. intros x Hx y Hy b H.
+  unfold subset_n at 1. fold subset_n.
+  cut(subset_n (S (S n)) (Union x y) b =
+     (subset_n (S n) x b)&&(subset_n (S n) y b)).
+  intro H'. rewrite H'. rewrite <- IH, <- IH. tauto.
+  apply order_sum_union_Lr with (x:=x). exact H.
+  apply order_sum_union_Ll with (y:=y). exact H.
+  simpl. reflexivity.
+Qed. 
+
 
 Definition subset (a b:set) : bool :=
   let n := order a + order b in subset_n n a b.
@@ -595,7 +585,7 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   apply subset_elements with (a:=b). exact Hbc. elim Hy. auto.
   apply subset_elements with (a:=a). exact Hab. exact Hx.
 Qed.
-*)  
+
 (*
 Definition successor (s:set) : set :=
   Union s (Singleton s).

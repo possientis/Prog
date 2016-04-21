@@ -77,9 +77,29 @@ Proof.
   unfold subset2_n at 1. fold subset2_n.
   cut(subset2_n (S (S n)) (Singleton x) (Singleton y) <-> 
      (subset2_n (S n) x y)/\(subset2_n (S n) y x)). 
-  intro H'. rewrite H'. rewrite <- IH. rewrite <- IH. tauto.
+  intro H'. rewrite H'. rewrite <- IH, <- IH. tauto.
   apply order_sum_singleton. rewrite plus_comm. exact H.
   apply order_sum_singleton. exact H.
-  unfold subset2_n. reflexivity.
+  simpl. reflexivity.
+  (* b = Union y z *)
+  clear b. intros y Hy z Hz H.
+  unfold subset2_n at 1. fold subset2_n.
+  cut(subset2_n (S (S n)) (Singleton x) (Union y z) <->
+     (subset2_n (S n) (Singleton x) y)\/(subset2_n (S n) (Singleton x) z)).
+  intro H'. rewrite H'. rewrite <- IH, <- IH. tauto.
+  apply order_sum_union_Rr with (y:=y). exact H.
+  apply order_sum_union_Rl with (z:=z). exact H. 
+  simpl. reflexivity.
+  (* a = Union x y *)
+  clear a. intros x Hx y Hy b H.
+  unfold subset2_n at 1. fold subset2_n.
+  cut(subset2_n (S (S n)) (Union x y) b <-> 
+     (subset2_n (S n) x b)/\(subset2_n (S n) y b)).
+  intro H'. rewrite H'. rewrite <- IH, <- IH. tauto.
+  apply order_sum_union_Lr with (x:=x). exact H.
+  apply order_sum_union_Ll with (y:=y). exact H.
+  simpl. reflexivity.
+  Qed.
+
 
 

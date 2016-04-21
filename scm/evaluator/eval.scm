@@ -20,7 +20,8 @@
 (define DEBUG #f)
 
 (define (eval exp env)
-;  (display "eval:\texp = ")(display exp)(newline)
+  (display "eval:\texp = ")(display exp)
+  (display "\tenv = ")(display (env 'to-string))(newline)
   (cond ((self-evaluating? exp) exp)                            
         ((variable? exp) ((env 'lookup) exp))
         ((quoted? exp) (text-of-quotation exp))                 

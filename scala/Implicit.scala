@@ -36,3 +36,96 @@ implicit def toShow(s: String) =
   }
 
 println("abc" show)
+
+// normally conversion function should be referenced
+// with a single identifier, nothing like foo.XToY...
+
+// There is one exception, when part of companion object
+// of source or target type
+object X {
+  implicit def XToY(x: Y) = null
+}
+
+object Y {
+  implicit def YToX(y:Y) = null
+}
+
+class Y {}
+class X {}
+
+
+// if application inherit from trait, then conversion function
+// will be accessible 'as single identifier' and implicit
+// conversion can occur
+import javax.swing._
+trait GUIFramework {
+  implicit def stringToLabel(s: String): JLabel = new JLabel(s)
+}
+
+trait WindowsFramework extends GUIFramework {
+  val WindowsLabelUI = null
+  implicit override def stringToLabel(s: String): JLabel = {
+    val label = super.stringToLabel(s)
+    label setUI WindowsLabelUI
+    label
+  }
+}
+
+// THERE ARE 3 CASES OF IMPLICIT CONVERSION
+
+// 1. Implicit conversion to an expected type
+// compiler sees an X but needs a Y, looking for implicit from X to Y.
+
+//val i:Int = 3.5  // failing, but ...
+
+implicit def double2int(x: Double) = x.toInt
+val i:Int = 3.5 // fine now
+println(i)  // 3
+
+
+// 2. Converting the receiver
+// compiler sees foo.doIt while foo does not have a 'doIt' method.
+// will look for implicit conversion to a type with a 'doIt' method
+// (it should be unique as no implicit conversion occurs when ambiguous)
+
+// This has has two major application:
+// 2.a it provides support to defining a new type
+
+class Rational(n:Int, d:Int){
+  def+(that:Rational):Rational = null
+  def+(that:Int):Rational = null
+}
+
+// so Rational + Rational and Rational + Int will work fine
+// but what about Int + Rational?
+implicit def IntToRationa(x:Int) = new Rational(x,1)
+// now Int + Rational will work too
+
+
+// 2.b it allows the simulation of 'adding new syntax'
+// with the 'RichFoo' pattern. You have a Foo class 
+// which doed not have an infix -> operator. You create
+// a RichFoo class where -> is defined and you define
+// an implicit conversion from Foo to RichFoo
+
+val m = Map(1->"one", 2->"two", 3->"three")
+
+// there is a class RichAny with a -> method
+// and there is a conversion from Any to RichAny
+
+// 3. Implicit parameters
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

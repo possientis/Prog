@@ -60,6 +60,15 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
+echo '\nThis is Ruby ...'
+START=$(date +%s%N)
+ruby flyweight.rb
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
 scm flyweight.scm

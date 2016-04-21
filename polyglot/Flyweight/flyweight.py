@@ -45,9 +45,6 @@
 # So this example illustrate a case of flyweight design pattern, as well
 # as proposing a scheme for the generation of dynamic hash values. 
 
-
-#class SetManager: pass
-
 # standard composite pattern with abstract base class, and three concrete
 # subclasses corresponding to each constructor of the inductive type Set
 class Set:
@@ -55,7 +52,7 @@ class Set:
     # whose role is threefold: (i) serve as factory object (ii) maintain
     # dictionaty of existing object and (iii) handle dynamic hash generation
     _manager = None # will be properly defined after SetManager class
-    # Additionally to composite pattern, each object maintains an immutable
+    # Additionally to composite the pattern, each object maintains an immutable
     # hash code whose value is determined at runtime by the manager at creation. 
     def __init__(self, hashCode):   self._hash = hashCode
     def __hash__(self):             return self._hash

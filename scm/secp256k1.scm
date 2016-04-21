@@ -28,7 +28,7 @@
 (define d (modulo c p))
 (if (not (= 0 d)) (error "(x,y) is not a point of secp256k1"))
 
-; checking p
+; checking p = 2^256 - 0X1000003D1
 (define q1 (^ 2 256))
 (define q2 (- q1 (^ 2 32)))
 (define q3 (- q2 (^ 2 9)))
@@ -38,4 +38,7 @@
 (define q7 (- q6 16))
 (define q (- q7 1))
 (if (not (= q p)) (error "prime humber p is unexpected"))
+
+
+
 
