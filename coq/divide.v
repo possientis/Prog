@@ -8,7 +8,7 @@ Open Scope nat_scope.
 
 Definition divides (n m:nat) := exists p:nat, p*n = m.
 
-Lemma divides_n_0 : forall n:nat, divides n 0.
+Lemma divides_0 : forall n:nat, divides n 0.
 Proof.
   intro n. unfold divides. exists 0. auto.
 Qed.
@@ -23,7 +23,7 @@ Qed.
 Lemma not_divides_plus : forall n m:nat, ~divides n m -> ~divides n (n+m).
 Proof.
   intros n m H H'. apply H. generalize H'. generalize n. clear H'. clear H. 
-  clear n. case m. intros n H. apply divides_n_0. clear m. intro m. intro n. 
+  clear n. case m. intros n H. apply divides_0. clear m. intro m. intro n. 
   intro H. unfold divides in H. elim H. intros k. case k. simpl. intro H'.
   apply False_ind. rewrite <- plus_Snm_nSm in H'. simpl in H'. discriminate H'.
   clear k. intros k. simpl. intro H'. unfold divides. exists k.
@@ -63,8 +63,15 @@ Proof.
   apply le_lt_or_eq. exact H.
 Qed.
 
-
-
+Lemma lt_lt_or_eq: forall n m:nat, n < S m -> n < m \/ n = m.
+Proof.
+  intro n. elim n. intros m H. clear H. case m. right. reflexivity.
+  clear m. intro m. left. auto with arith. clear n. intros n IH m.
+  case m. intro H. unfold lt in H. right. symmetry. apply le_n_0_eq.
+  apply le_S_n. exact H. clear m. intros m H. cut (n < m \/ n = m).
+  intro H'. elim H'. intro Hnm. left. auto with arith. intro Hnm.
+  right. auto with arith. apply IH. auto with arith.
+Qed.
 
 
 

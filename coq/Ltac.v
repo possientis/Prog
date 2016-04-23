@@ -1,4 +1,5 @@
 Require Import Arith. (* arith tactic DB *)
+Require Import divide.
 
 Ltac autoClear h := try (clear h; auto with arith; fail).
 
@@ -18,19 +19,6 @@ Theorem le_5_25: 5 <= 25.
 Proof.
   le_S_star.  
 Qed.
-
-Section primes.
-
-Definition divides (n m:nat) := exists p:nat, p*n = m.
-
-Hypotheses
-  (divides_0 : forall n:nat, divides n 0)
-  (divides_plus : forall n m:nat, divides n m -> divides n (n+m))
-  (not_divides_plus : forall n m:nat, ~divides n m -> ~divides n (n+m))
-  (not_divides_lt : forall n m:nat, 0 < m -> m < n -> ~divides n m)
-  (not_lt_2_divides: forall n m:nat, n <> 1 -> n < 2 -> 0 < m -> ~divides n m)
-  (le_plus_minus : forall n m: nat, le n m -> m = n + (m-n))
-  (lt_lt_or_eq  : forall n m:nat, n < S m -> n < m \/ n=m).
 
 Ltac check_not_divides :=
   match goal with
@@ -56,6 +44,43 @@ Qed.
 Lemma check2: ~divides 34 45.
 Proof.
   check_not_divides.
+Qed.
+
+
+Ltac contrapose H :=
+  match goal with
+    | [id:(~_) |- (~_)] => intro H; apply id
+  end.
+
+Theorem  example_contrapose :
+  forall x y:nat, x<>y -> x <= y-> ~y<=x.
+Proof.
+  intros x y H H0. contrapose H'. auto with arith.
+Qed.
+
+Ltac check_lt_not_divides :=
+  match goal with
+    | [Hlt:(lt ?X1 2%nat) |- (~divides ?X1 ?X2) ] =>
+      apply not_lt_2_divides; auto
+    | [Hlt:(lt ?X1 ?X2) |- (~divides ?X1 ?X3) ]   =>
+      elim (lt_lt_or_eq _ _ Hlt);
+      [clear Hlt; intros Hlt; check_lt_not_divides
+      | intros Heq; rewrite Heq; check_not_divides]
+  end.
+
+Definition is_prime: nat -> Prop :=
+  fun p:nat => forall n:nat, n <> 1 -> lt n p -> ~divides n p.
+
+Hint Resolve lt_0_Sn.
+
+Theorem prime37 : is_prime 37.
+Proof.
+  Time(unfold is_prime; intros; check_lt_not_divides).
+Qed.
+
+Theorem prime61 : is_prime 61.
+Proof.
+  Time(unfold is_prime; intros; check_lt_not_divides).
 Qed.
 
 

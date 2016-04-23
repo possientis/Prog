@@ -10,8 +10,8 @@
 (define apply-in-underlying-scheme apply)
 ; now redefining
 (define (apply procedure arguments)
-;  (display "apply:\tprocedure = ")(display procedure)(newline)
-;  (display "apply:\targuments = ")(display arguments)(newline)
+  (display "apply:\tprocedure = ")(display procedure)(newline)
+  (display "apply:\targuments = ")(display arguments)(newline)
   (cond ((primitive-procedure? procedure)                       
          (apply-primitive-procedure procedure arguments))       
         ((compound-procedure? procedure)                        

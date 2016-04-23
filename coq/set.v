@@ -183,15 +183,24 @@ Definition subset (a b:set) : bool :=
 Lemma subset_subset_n : forall (n:nat) (a b:set),
   order a + order b <= n ->  subset a b = subset_n n a b.
 Proof.
-  intros n a b. unfold subset. elim n. intro H. cut (a = Empty). cut (b = Empty). 
-  intros Ha Hb. rewrite Ha, Hb. simpl. reflexivity. 
-  apply order_sum_eq_0_r with (a:=a). symmetry. apply le_n_O_eq. exact H.
-  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_O_eq. exact H.
-  clear n. intros n IH H. 
+  (* induction on n *)
+  intros n. elim n.
+  (* n = 0 *)
+  intros a b H. cut (a = Empty). cut (b = Empty). intros Hb Ha. rewrite Ha, Hb.
+  unfold subset. simpl. tauto.
+  apply order_sum_eq_0_r with (a:=a). symmetry. apply le_n_0_eq. exact H.
+  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  (* n -> n+1 *)
+  clear n. intros n IH a b H.
+  (* either order a + order b < S n or = S n *)
   cut((order a + order b < S n)\/(order a + order b = S n)). intro H0. elim H0.
-  intro H1. cut(order a + order b <= n). intro H2. rewrite IH. apply subset_n_Sn.
-  exact H2. exact H2. apply lt_n_Sm_le. exact H1. intro H1. rewrite H1. 
-  reflexivity. apply le_lt_or_eq. exact H.
+  (* order a + order b < S n *)
+  intro H1. rewrite IH. apply subset_n_Sn. 
+  apply le_S_n. exact H1. apply le_S_n. exact H1. 
+  (* order a + order b = S n *)
+  intro H1. unfold subset. rewrite H1. tauto.
+  (* finally *)
+  apply le_lt_or_eq. exact H.
 Qed.
 
 Lemma subset_0_all : forall (b:set), subset Empty b = true.
@@ -210,27 +219,23 @@ Qed.
 Lemma subset_single_single : forall (x y:set), 
   subset (Singleton x) (Singleton y) = (subset x y) && (subset y x). 
 Proof.
-  intros x y. unfold subset at 1. simpl.
-  cut(subset_n (order x + S (order y)) x y = subset x y).
-  cut(subset_n (order x + S (order y)) y x = subset y x).
-  intros H0 H1. rewrite H0, H1. reflexivity. symmetry. apply subset_subset_n. 
+  intros x y. unfold subset at 1. simpl. 
+  rewrite <- subset_subset_n, <- subset_subset_n. tauto.
   rewrite plus_comm. apply plus_le_compat_l. apply le_S. apply le_n.
-  symmetry. apply subset_subset_n. apply plus_le_compat_l. apply le_S. apply le_n.
+  apply plus_le_compat_l. apply le_S. apply le_n.
 Qed.
+
+
 
 Lemma subset_single_union : forall (x y z:set),
   subset (Singleton x) (Union y z) = 
   (subset (Singleton x) y) || (subset (Singleton x) z).
 Proof.
-  intros x y z. unfold subset at 1. simpl. 
-  cut(subset_n (order x + S (max (order y) (order z))) (Singleton x) y 
-  = subset (Singleton x) y). 
-  cut(subset_n (order x + S (max (order y) (order z))) (Singleton x) z = 
-  subset (Singleton x) z). 
-  intros H0 H1. rewrite H0, H1. reflexivity. 
-  symmetry. apply subset_subset_n. simpl. rewrite <- plus_n_Sm. apply le_n_S. 
+  intros x y z. unfold subset at 1. simpl.
+  rewrite <- subset_subset_n, <- subset_subset_n. tauto. 
+  simpl. rewrite <- plus_n_Sm. apply le_n_S. 
   apply plus_le_compat_l. apply le_max_r.
-  symmetry. apply subset_subset_n. simpl. rewrite <- plus_n_Sm. apply le_n_S. 
+  simpl. rewrite <- plus_n_Sm. apply le_n_S. 
   apply plus_le_compat_l. apply le_max_l.
 Qed.
 
@@ -238,11 +243,8 @@ Lemma subset_union_all : forall (x y b:set),
   subset (Union x y) b = (subset x b) && (subset y b).
 Proof.
   intros x y b. unfold subset at 1. simpl.
-  cut(subset_n (max (order x) (order y) + order b) x b = subset x b).
-  cut(subset_n (max (order x) (order y) + order b) y b = subset y b).
-  intros H0 H1. rewrite H0, H1. reflexivity.
-  symmetry. apply subset_subset_n. apply plus_le_compat_r. apply le_max_r.
-  symmetry. apply subset_subset_n. apply plus_le_compat_r. apply le_max_l.
+  rewrite <- subset_subset_n, <- subset_subset_n. tauto.
+  apply plus_le_compat_r. apply le_max_r. apply plus_le_compat_r. apply le_max_l.
 Qed.
 
 Definition subset_prop_1 (relation: set -> set -> bool) : Prop :=
@@ -279,6 +281,7 @@ Proof.
   unfold subset_prop_5. apply subset_union_all.
 Qed.
 
+(*
 (* subset is the unique relation on set satisfying properties 1-5 *)
 Lemma subset_unique : forall (relation: set-> set-> bool),
   subset_prop_1 relation ->
@@ -585,7 +588,7 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   apply subset_elements with (a:=b). exact Hbc. elim Hy. auto.
   apply subset_elements with (a:=a). exact Hab. exact Hx.
 Qed.
-
+*)
 (*
 Definition successor (s:set) : set :=
   Union s (Singleton s).

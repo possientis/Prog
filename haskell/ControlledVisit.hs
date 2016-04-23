@@ -1,3 +1,4 @@
+module ControlledVisit(getUsefulContents, Info(..), getInfo, isDirectory) where
 import Control.Monad (forM, liftM)
 import System.FilePath ((</>))
 
@@ -13,15 +14,6 @@ data Info = Info {
 , infoModTime :: Maybe UTCTime
 } deriving (Eq, Ord, Show)
 
-
-traverse :: ([Info] -> [Info]) -> FilePath -> IO [Info]
-traverse order path = do
-  names <- getUsefulContents path  
-  contents <- mapM getInfo (path : map (path </>) names)
-  liftM concat $ forM (order contents) $ \info -> do
-    if isDirectory info && infoPath info /= path
-      then traverse order (infoPath info)
-      else return [info]
 
 getUsefulContents :: FilePath -> IO [String]
 getUsefulContents path = do
@@ -46,6 +38,36 @@ getInfo path = do
 main = do
   infos <- traverse id "/home/john/Prog/polyglot"
   putStrLn (show infos)
+
+traverse :: ([Info] -> [Info]) -> FilePath -> IO [Info]
+traverse order path = do
+  names <- getUsefulContents path  
+  contents <- mapM getInfo (path : map (path </>) names)
+  liftM concat $ forM (order contents) $ \info -> do
+    if isDirectory info && infoPath info /= path
+      then traverse order (infoPath info)
+      else return [info]
+
+traverseVerbose :: ([Info] -> [Info]) -> FilePath -> IO [Info]
+traverseVerbose order path = do
+  names <- getDirectoryContents path
+  let usefulNames = filter (`notElem` [".", ".."]) names
+  contents <- mapM getEntryName ("" : usefulNames)
+  recursiveContents <- mapM recurse (order contents)
+  return (concat recursiveContents)
+  where getEntryName name = getInfo (path </> name)
+        isDirectory info = case infoPerms info of
+          Nothing -> False
+          Just perms -> searchable perms
+        recurse info = do
+          if isDirectory info && infoPath info /= path
+          then traverseVerbose order (infoPath info)
+          else return [info]
+
+
+
+
+
 
 
   

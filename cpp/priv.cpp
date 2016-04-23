@@ -1,7 +1,8 @@
+#include <secp256k1.h>
 #include <bitcoin/bitcoin.hpp>
-
 int main()
 {
+  
   // Private secret key.
   bc::ec_secret secret = bc::decode_hash(
     "038109007313a5807b2eccc082c8c3fbb988a973cacf1a7df9ce725c31b14776");
@@ -37,6 +38,7 @@ int main()
   assert(unencoded_address.size() == 25);
   const std::string address = bc::encode_base58(unencoded_address);
   std::cout << "Address: " << address << std::endl;
+
   return 0;
 }
 

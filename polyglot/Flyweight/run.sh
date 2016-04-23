@@ -52,6 +52,23 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
+echo '\nThis is JavaScript ...'
+START=$(date +%s%N)
+js flyweight.js
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+
+echo '\nThis is PHP ...'
+START=$(date +%s%N)
+php flyweight.php
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
 echo '\nThis is Python ...'
 START=$(date +%s%N)
 python3 flyweight.py

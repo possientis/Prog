@@ -67,6 +67,7 @@ abstract class Set {
   public static function zero()       { return self::$manager->zero(); }
   public static function singleton($x){ return self::$manager->singleton($x); }
   public static function union($x,$y) { return self::$manager->union($x,$y); }
+  // convenience function
   public static function successor($x){ return Set::union($x,Set::singleton($x)); }
   public static function debug()      { return self::$manager->debug(); } 
   // implemented by subclasses
@@ -159,7 +160,8 @@ class SetManager {
   // simply map pairs of ints to ints with the Cantor function.
 
   public static function pairingCantor($x,$y){
-    return round(($x + $y + 1)*($x + $y)/2 + $y);
+    // need explicit cast to int to avoid warning from 'array_key_exists' 
+    return (int) round(($x + $y + 1)*($x + $y)/2 + $y); // cast to int
   }
   private $nextHash     = 1;
   private $singletonMap = [];
@@ -169,49 +171,54 @@ class SetManager {
   public function __construct(){ $this->objectMap[0] = new Zero(0); }
    
   public function zero()        { return $this->objectMap[0]; }
-  public function singleton($x) { return null;} // TBI
-  public function union($x,$y)  { return null;} // TBI
-  public function debug()       {}              // TBI
+
+  public function singleton($x) {
+    $hash = $x->hashCode();
+    $singletonExists = array_key_exists($hash, $this->singletonMap);
+    if($singletonExists == false){
+      $this->singletonMap[$hash] = $this->nextHash; // nextHash allocated to {x}
+      $object = new Singleton($x, $this->nextHash); // creating {x}
+      $this->objectMap[$this->nextHash] = $object;  // saving {x} for future ref
+      $this->nextHash += 1;                         // for future hash allocation
+      return $object;
+    } else {
+      $mappedHash = $this->singletonMap[$hash];
+      return $this->objectMap[$mappedHash];
+    }
+  }
+
+  public function union($x,$y)  {
+    $hx = $x->hashCode();
+    $hy = $y->hashCode();
+    $hash = SetManager::pairingCantor($hx,$hy);
+    $unionExists = array_key_exists($hash, $this->unionMap);
+    if($unionExists == false){
+      $this->unionMap[$hash] = $this->nextHash;     // nextHash allocated to xUy
+      $object = new Union($x, $y, $this->nextHash); // creating xUy
+      $this->objectMap[$this->nextHash] = $object;  // saving xUy for future ref
+      $this->nextHash += 1;
+      return $object;
+    } else {
+      $mappedHash = $this->unionMap[$hash];
+      return $this->objectMap[$mappedHash];
+    }
+  }
+
+  public function debug(){
+    for($i = 0; $i < $this->nextHash; ++$i){
+      echo "hash = {$i}: {$this->objectMap[$i]}\n";
+    }
+  }
+
 }
 
-echo "\nzero:\n";
-$x = Set::zero();
-$xx = Set::zero();
-echo $x === $xx;
-echo "\n";
-echo "{$x->hashCode()}\n";
-echo $x."\n";
-echo $x->isZero() == true;
-echo $x->isSingleton() == false;
-echo $x->isUnion() == false;
-
-echo "\nsingleton:\n";
-$y = new Singleton($x,1);
-echo $y->hashCode()."\n";
-echo $y."\n";
-echo $y->isZero() == false;
-echo $y->isSingleton() == true;
-echo $y->isUnion() == false;
-echo "\n".$y->element();
-
-
-echo "\nunion:\n";
-$z = new Union($x,$y,2);
-echo $z->hashCode()."\n";
-echo $z."\n";
-echo $z->isZero() == false;
-echo $z->isSingleton() == false;
-echo $z->isUnion() == true;
-echo "\n".$z->left();
-echo "\n".$z->right();
-
-
-$u = [0=>"a",1=>"b"];
-echo array_key_exists(0,$u) == true;
-echo array_key_exists(1,$u) == true;
-echo array_key_exists(2,$u) == false;
-
-
-
+// main
+$zero   = Set::zero();
+$one    = Set::successor($zero); 
+$two    = Set::successor($one); 
+$three  = Set::successor($two); 
+$four   = Set::successor($three); 
+$five   = Set::successor($four); 
+Set::debug();
 
 ?>

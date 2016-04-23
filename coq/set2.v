@@ -1,6 +1,7 @@
 Require Import set.
 Require Import Bool.
 Require Import Arith.
+Require Import Arith.Max.
 
 Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
   match n with 
@@ -19,7 +20,7 @@ Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
       end)
   end.
 
-Lemma subset_bool_prop : forall (n:nat)(a b:set),
+Lemma subset_n_bool_prop : forall (n:nat)(a b:set),
   subset2_n n a b <-> subset_n n a b = true.
 Proof. 
   (* induction on n *)
@@ -101,5 +102,107 @@ Proof.
   simpl. reflexivity.
   Qed.
 
+Definition subset2 (a b:set) : Prop :=
+  let n:= order a + order b in subset2_n n a b.
 
+Lemma subset_bool_prop : forall (a b:set),
+  subset2 a b <-> subset a b = true.
+Proof.
+  intros a b. unfold subset2, subset. apply subset_n_bool_prop.
+Qed.
+
+Lemma subset2_subset2_n : forall (n:nat) (a b:set),
+  order a + order b <= n -> (subset2 a b <-> subset2_n n a b).
+Proof.
+  (* induction on n *)
+  intros n. elim n.
+  (* n = 0 *)
+  intros a b H. cut (a = Empty). cut (b = Empty). intros Hb Ha. rewrite Ha, Hb.
+  unfold subset2. simpl. tauto.
+  apply order_sum_eq_0_r with (a:=a). symmetry. apply le_n_0_eq. exact H.
+  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  (* n -> n+1 *)
+  clear n. intros n IH a b H.
+  (* either order a + order b < S n or = S n *)
+  cut((order a + order b < S n)\/(order a + order b = S n)). intro H0. elim H0.
+  (* order a + order b < S n *)
+  intro H1. rewrite IH. apply subset2_n_Sn. 
+  apply le_S_n. exact H1. apply le_S_n. exact H1. 
+  (* order a + order b = S n *)
+  intro H1. unfold subset2. rewrite H1. tauto.
+  (* finally *)
+  apply le_lt_or_eq. exact H.
+Qed.
+
+Lemma subset2_0_all : forall (b:set), subset2 Empty b.
+Proof.
+  (* induction on b *)
+  intro b. elim b.
+  (* b = Empty *)
+  unfold subset2. simpl. apply I.
+  (* b = Singleton x *)
+  clear b. intros x H. unfold subset2. simpl. apply I.
+  (* b = Union x y *)
+  clear b. intros x Hx y Hy. unfold subset2. simpl. apply I.
+Qed.
+
+Lemma subset2_single_0 : forall (x:set), ~subset2 (Singleton x) Empty.
+Proof.
+  (* not structural induction necessary *)
+  intro x. unfold subset2. simpl. tauto.
+Qed.
+
+
+Lemma subset2_single_single : forall (x y:set),
+  subset2 (Singleton x) (Singleton y) <-> (subset2 x y)/\(subset2 y x).
+Proof.
+  intros x y. unfold subset2 at 1. simpl. 
+  rewrite <- subset2_subset2_n, <- subset2_subset2_n. tauto.
+  rewrite plus_comm. apply plus_le_compat_l. apply le_S. apply le_n.
+  apply plus_le_compat_l. apply le_S. apply le_n.
+Qed.
+
+Lemma subset2_single_union: forall (x y z:set),
+  subset2 (Singleton x) (Union y z) <-> 
+  (subset2 (Singleton x) y)\/(subset2 (Singleton x) z).
+Proof.
+  intros x y z. unfold subset2 at 1. simpl.
+  rewrite <- subset2_subset2_n, <- subset2_subset2_n. tauto. 
+  simpl. rewrite <- plus_n_Sm. apply le_n_S. 
+  apply plus_le_compat_l. apply le_max_r.
+  simpl. rewrite <- plus_n_Sm. apply le_n_S. 
+  apply plus_le_compat_l. apply le_max_l.
+Qed.
+
+Lemma subset2_union_all : forall (x y b:set),
+  subset2 (Union x y) b <-> (subset2 x b)/\(subset2 y b).
+Proof.
+  intros x y b. unfold subset2 at 1. simpl.
+  rewrite <- subset2_subset2_n, <- subset2_subset2_n. tauto.
+  apply plus_le_compat_r. apply le_max_r. apply plus_le_compat_r. apply le_max_l.
+Qed.
+
+Definition subset2_prop_1 (relation: set -> set -> Prop) : Prop :=
+  forall (b:set), relation Empty b.
+
+Definition subset2_prop_2 (relation: set -> set -> Prop) : Prop :=
+  forall (x:set), ~relation (Singleton x) Empty.
+
+Definition subset2_prop_3 (relation: set-> set -> Prop) : Prop :=
+  forall (x y:set),
+  relation (Singleton x) (Singleton y) <-> relation x y /\ relation y x.
+
+Definition subset2_prop_4 (relation: set -> set -> Prop) : Prop :=
+  forall (x y z:set),
+  relation (Singleton x) (Union y z) <->
+  relation (Singleton x) y \/ relation (Singleton x) z.
+
+Definition subset2_prop_5 (relation: set -> set -> Prop) : Prop :=
+  forall (x y b:set),
+  relation (Union x y) b <-> relation x b /\ relation y b.
+
+
+
+
+  
 

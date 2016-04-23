@@ -115,17 +115,57 @@ val m = Map(1->"one", 2->"two", 3->"three")
 
 // 3. Implicit parameters
 
+def printSomething(implicit x: Int) = println(x)
 
+// can be called like any other function
+printSomething(10)  // 10
 
+implicit val favouriteNumber = 4
 
+printSomething      // 4
 
+def maxList[T](nums: List[T])(implicit orderer: T=>Ordered[T]): T =
+  nums match {
+    case List()   => throw new Error("empty lists!")
+    case List(x)  => x
+    case x::rest  =>
+      val maxRest = maxList(rest)(orderer)
+      if (orderer(x) > maxRest) x
+      else maxRest
+    }
 
+println(maxList(List(1,5,10,3)))              // 10
+println(maxList(List(1.5,5.2,10.7,3.14159)))  //10.7
 
+def maxList2[T](nums: List[T])(implicit orderer: T=>Ordered[T]): T = 
+  nums match {
+    case Nil      => throw new Error("empty list!")
+    case List(x)  => x
+    case x::rest  => 
+      val maxRest = maxList2(rest)  // (orderer) is redundant
+      if(x > maxRest) x             // orderer(x) is redundant
+      else  maxRest
+  }
 
+// the name 'orderer' does not appear anywhere in the body of maxList2
+// in fact this name could be changed to anything
 
-
-
-
+// note the distinction between '<%' and '<:' we are not saying that
+// type T should be a subtype of Ordered[T]. We are saying it can be 
+// as an Ordered[T] (it is up to the user to supply a conversion)
+// the compiler will provide the identity as conversion. So if T is
+// already an Ordered[T], there is no need to worry about the need
+// to spell out a conversion
+def maxList3[T<% Ordered[T]](nums: List[T]): T = 
+  nums match {
+    case Nil      => throw new Error("empty list!")
+    case List(x)  => x
+    case x::rest  => 
+      val maxRest = maxList2(rest)  // (orderer) is redundant
+      if(x > maxRest) x             // orderer(x) is redundant
+      else  maxRest
+  }
+  
 
 
 
