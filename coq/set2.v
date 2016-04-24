@@ -201,6 +201,60 @@ Definition subset2_prop_5 (relation: set -> set -> Prop) : Prop :=
   forall (x y b:set),
   relation (Union x y) b <-> relation x b /\ relation y b.
 
+Lemma subset2_exist :
+  subset2_prop_1 subset2 /\
+  subset2_prop_2 subset2 /\
+  subset2_prop_3 subset2 /\
+  subset2_prop_4 subset2 /\
+  subset2_prop_5 subset2.
+Proof.
+  split. unfold subset2_prop_1. apply subset2_0_all.
+  split. unfold subset2_prop_2. apply subset2_single_0.
+  split. unfold subset2_prop_3. apply subset2_single_single.
+  split. unfold subset2_prop_4. apply subset2_single_union.
+  unfold subset2_prop_5. apply subset2_union_all.
+Qed.
+
+(* subset2 is the unique relation on set satisfying properties 1-5 *) 
+Lemma subset2_unique : forall (relation : set -> set -> Prop),
+  subset2_prop_1 relation ->
+  subset2_prop_2 relation ->
+  subset2_prop_3 relation ->
+  subset2_prop_4 relation ->
+  subset2_prop_5 relation ->
+  forall (a b:set), relation a b <-> subset2 a b.
+Proof.
+  intros relation H1 H2 H3 H4 H5 a b.
+  (* proof by induction on order a + order b <= n *)
+  cut(forall n:nat, order a + order b <= n -> (relation a b <-> subset2 a b)).
+  intro H. apply H with (n:= order a + order b). apply le_n.
+  intro n. generalize a b. clear a b. elim n.
+  (* order a + order b <= 0 *) 
+  intros a b H. cut (a = Empty). intro H'. rewrite H'.
+  split. intros. apply subset2_0_all. intros. apply H1.
+  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  (* true for <= n -> true for <= n+1 *)
+  (* induction on a *)  
+  clear n. intros n IH a. elim a.
+  (* a = Empty *)
+  intros b H. split. intros. apply subset2_0_all. intros. apply H1.
+  (* a = Singleton x *)(* induction on b *)
+  clear a. intros x H b. elim b.
+  (* b = Empty *)
+  intros. split. 
+  intros. apply False_ind. apply H2 with (x:=x). exact H6.
+  intros. apply False_ind. apply subset2_single_0 with (x:=x). exact H6. 
+  (* b = Singleton y *)
+  clear b. intros y H' H''. split.
+  intros. rewrite subset2_single_single. rewrite <- IH, <- IH.
+  unfold subset2_prop_3 in H3. rewrite <- H3. exact H0. rewrite plus_comm. 
+  apply order_sum_singleton. exact H''. apply order_sum_singleton. exact H''.
+  
+
+
+
+
+
 
 
 

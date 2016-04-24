@@ -73,6 +73,8 @@ Definition is_prime: nat -> Prop :=
 
 Hint Resolve lt_0_Sn.
 
+(* time consuming ..
+
 Theorem prime37 : is_prime 37.
 Proof.
   Time(unfold is_prime; intros; check_lt_not_divides).
@@ -82,10 +84,56 @@ Theorem prime61 : is_prime 61.
 Proof.
   Time(unfold is_prime; intros; check_lt_not_divides).
 Qed.
+*)
 
 
+Ltac clear_all :=
+  match goal with
+    | [id:_ |- _ ]    =>  clear id; clear_all
+    | [ |- _ ]        =>  idtac
+  end.
+
+Theorem ring_example5 :
+  forall n m:nat, n*0 + (n+1)*m = n*n*0 + m*n + m.
+Proof.
+  intros. ring.
+Qed.
+
+Theorem ring_example6 :
+  forall n m:nat, n*0 + (S n)*m = n*n*0 + m*n + m.
+Proof.
+  intros. ring.  
+Qed.
 
 
-  
+Theorem S_to_plus_one : forall n:nat, S n = n+1.
+Proof.
+  intros; rewrite plus_comm. reflexivity.
+Qed.
+
+Ltac S_to_plus_simpl :=
+  match goal with
+    | [ |- context [(S ?X1)] ]  =>
+        match X1 with
+          | 0%nat => fail 1 (* 1 refers to 'point of choice' : 0 -> | 0%nat , 1-> match X1 , 2 -> [ |- context ..]
+          using '1' here prevents ?X2 to be attempted *)
+          | ?X2   => rewrite (S_to_plus_one X2); S_to_plus_simpl
+        end
+    | [ |- _ ]                  =>  idtac
+  end.
+
+Ltac simpl_on e :=
+  let v := eval simpl in e in
+    match goal with
+      | [ |- context [e] ] =>  replace e with v; [idtac | auto]
+    end.
+
+Theorem simpl_on_example:
+  forall n:nat, exists m:nat, (1+n) + 4*(1+n) = 5*(S m).
+Proof.
+  intros n. simpl_on (1+n).
+Abort. 
+
+
 
 

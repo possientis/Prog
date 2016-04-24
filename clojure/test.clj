@@ -1,6 +1,5 @@
-(ns test (:gen-class))
+(ns test
+  (:use clj-record.boot))
 
-(defn -main []
-  (println "This is a test\n"))
 
-;(-main)
+

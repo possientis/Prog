@@ -268,6 +268,11 @@ elements (Union x y)   = elements x ++ elements y
   -- Just like we did for X we can define for X* the notion
   -- of a 'set's elements':
   --
+  -- (NO: X* is not a free algebra. Such a definition 
+  -- may not be legitimate: need to show that 
+  -- x -> { [y] | y:E[x] } is == compatible and use that
+  -- as a basis to define E*)
+  --
   -- Definition 6: We define the map E*: X* -> P(X*) by:
   -- E*([0])   = 0         (the empty set) 
   -- E*({[x]}) = {[x]}     (the singleton)

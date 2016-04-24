@@ -281,7 +281,6 @@ Proof.
   unfold subset_prop_5. apply subset_union_all.
 Qed.
 
-(*
 (* subset is the unique relation on set satisfying properties 1-5 *)
 Lemma subset_unique : forall (relation: set-> set-> bool),
   subset_prop_1 relation ->
@@ -314,6 +313,7 @@ Proof.
   exact H. apply IH. apply order_sum_union_Ll with (y:=y). exact H.
 Qed.
 
+(*
 (******************************************************************************)
 (*                        equiv : set -> set -> bool                          *)
 (******************************************************************************)
