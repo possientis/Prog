@@ -2,6 +2,7 @@ Require Import set.
 Require Import Bool.
 Require Import Arith.
 Require Import Arith.Max.
+Require Import List.
 
 Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
   match n with 
@@ -245,11 +246,105 @@ Proof.
   intros. apply False_ind. apply H2 with (x:=x). exact H6.
   intros. apply False_ind. apply subset2_single_0 with (x:=x). exact H6. 
   (* b = Singleton y *)
-  clear b. intros y H' H''. split.
-  intros. rewrite subset2_single_single. rewrite <- IH, <- IH.
-  unfold subset2_prop_3 in H3. rewrite <- H3. exact H0. rewrite plus_comm. 
-  apply order_sum_singleton. exact H''. apply order_sum_singleton. exact H''.
+  clear b. intros y H' H''. unfold subset2_prop_3 in H3. 
+  rewrite H3, subset2_single_single, IH, IH. tauto.
+  rewrite plus_comm. apply order_sum_singleton. exact H''.
+  apply order_sum_singleton. exact H''.
+  (* b = Union y z *)
+  clear b. intros y Hy z Hz H'. unfold subset2_prop_4 in H4.
+  rewrite H4, subset2_single_union, IH, IH. tauto.
+  apply order_sum_union_Rr with (y:=y). exact H'.
+  apply order_sum_union_Rl with (z:=z). exact H'.
+  (* a = Union x y *)
+  clear a. intros x Hx y Hy b H. unfold subset2_prop_5 in H5.
+  rewrite H5, subset2_union_all, IH, IH. tauto.
+  apply order_sum_union_Lr with (x:=x). exact H.
+  apply order_sum_union_Ll with (y:=y). exact H.
+Qed.
+
+(******************************************************************************)
+(*                        equiv2 : set -> set -> Prop                         *)
+(******************************************************************************)
+
+Definition equiv2 (a b:set) : Prop := (subset2 a b) /\ (subset2 b a).
+
+
+Lemma subset2_elements : forall (a b:set), subset2 a b <-> 
+  forall (c:set), In c (elements a) -> exists (c':set), 
+    In c' (elements b) /\  equiv2 c c'.  
+Proof.
+  (* Main induction on a, additional induction on b for a = Singleton x *)
+  intro a. elim a. 
+  (* a = Empty *)
+  intros b. split. intros H c. clear H. simpl. apply False_ind.
+  intros. apply subset2_0_all.
+  (* a = Singleton x *)
+  clear a. intro x. intro IH. clear IH. intro b. elim b. 
+  (* a = Singleton x, b = Empty *)
+  split. intros H. apply False_ind. apply subset2_single_0 with (x:=x). exact H.
+  intro H. cut(exists c':set, In c' (elements Empty) /\ equiv2 x c'). 
+  intro H'. simpl in H'. cut False. apply False_ind. elim H'.
+  intros z H''. tauto. apply H. simpl. left. reflexivity.
+  (* a = Singleton x, b = Singleton y *)
+  clear b. intros y H. clear H. simpl. rewrite subset2_single_single. 
+  split.
+  intro H. intros c H'. exists y. split. left. reflexivity. elim H'. intro H''.
+  rewrite <- H''. unfold equiv. exact H.  apply False_ind.
+  intro H. cut(exists c' : set, (y = c' \/ False) /\ equiv2 x c'). intro H'.
+  elim H'. intro z. intro H''. elim H''. intros H0 H1. elim H0. intro H2.
+  rewrite <- H2 in H1. exact H1. apply False_ind. apply H. left. reflexivity.
+  (* a = Singleton x, b = Union y z *) 
+  clear b. intros y Hy z Hz. rewrite subset2_single_union. simpl. split.
+  intros H c H'. elim H'. intro H''. rewrite <- H''. (* clear H''. *)
+  cut(subset2 (Singleton x) y  \/ subset2 (Singleton x) z).
+  intro H3. elim H3.
+
+  intro Hy'. cut(exists c':set, In c' (elements y)/\equiv2 x c'). intro Hy''.
+  elim Hy''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''.
+  intro H0. clear H0. apply in_or_app. left. exact Hc''. elim Hc'. intros H0 H1. 
+  exact H1. apply Hy. exact Hy'. simpl. left. reflexivity. 
   
+  intro Hz'. cut(exists c':set, In c' (elements z)/\equiv2 x c'). intro Hz''.
+  elim Hz''. intro c'. intro Hc'. exists c'. split. elim Hc'. intro Hc''. intro H0.
+  clear H0. apply in_or_app. right. exact Hc''. elim Hc'. intros H0 H1. exact H1.
+  apply Hz. exact Hz'. simpl. left. reflexivity. 
+  
+  cut(exists c' : set, In c' (elements y ++ elements z) /\ equiv2 x c').
+  intro H4. elim H4. intros c' Hc'. elim Hc'. intros Hc'' Hc'''.
+  cut(In c' (elements y) \/ In c' (elements z)). intro H0. elim H0. 
+  
+  intro H1. cut(subset2 (Singleton x) y). intro Hy'. left. exact Hy'.
+  apply Hy. intros d Hd. exists c'. split. exact H1. simpl in Hd. elim Hd.
+  intro H2. rewrite <- H2. exact Hc'''. apply False_ind. 
+
+  intro H1. cut(subset2 (Singleton x) z). intro Hz'. right. exact Hz'.
+  apply Hz. intros d Hd. exists c'. split. exact H1. simpl in Hd. elim Hd.
+  intro H2. rewrite <- H2. exact Hc'''. apply False_ind. 
+  apply in_app_or.  exact Hc''. (* apply H. left. reflexivity. 
+  
+  *)
+  (*
+  (* a = Union x y *) 
+  clear a. intros x Hx y Hy b. split. intro H.
+  rewrite subset_union_all in H. intro a. intro H'. simpl in H'.
+  cut(In a (elements x) \/ In a (elements y)). intro Ha. elim Ha. 
+
+  intro Ha'. apply Hx. apply proj1 with (B:= subset y b = true). 
+  apply andb_true_iff. exact H. exact Ha'. 
+
+  intro Ha'. apply Hy.  apply proj2 with (A:= subset x b = true). 
+  apply andb_true_iff. exact H. exact Ha'. 
+
+  apply in_app_or. exact H'. 
+
+  intro H. rewrite subset_union_all. cut(subset x b = true). cut(subset y b = true).
+  intros Hy' Hx'. rewrite Hx', Hy'. simpl. reflexivity. 
+
+  apply Hy. intros a Ha. apply H. simpl. apply in_or_app. right. exact Ha.
+  apply Hx. intros a Ha. apply H. simpl. apply in_or_app. left. exact Ha.
+Qed.
+
+*)  
 
 
 

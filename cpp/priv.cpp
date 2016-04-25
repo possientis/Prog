@@ -1,13 +1,15 @@
-#include <secp256k1.h>
 #include <bitcoin/bitcoin.hpp>
+
+using namespace libbitcoin;
+
 int main()
 {
-  
   // Private secret key.
-  bc::ec_secret secret = bc::decode_hash(
-    "038109007313a5807b2eccc082c8c3fbb988a973cacf1a7df9ce725c31b14776");
+   bc::ec_secret secret; 
+   bc::decode_hash(secret, "038109007313a5807b2eccc082c8c3fbb988a973cacf1a7df9ce725c31b14776");
+  
   // Get public key.
-  bc::ec_point public_key = bc::secret_to_public_key(secret);
+   bc::ec_point public_key = bc::secret_to_public_key(secret);
   std::cout << "Public key: " << bc::encode_hex(public_key) << std::endl;
 
   // Create Bitcoin address.

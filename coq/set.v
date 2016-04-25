@@ -290,30 +290,39 @@ Lemma subset_unique : forall (relation: set-> set-> bool),
   subset_prop_5 relation ->
   forall (a b:set), relation a b = subset a b.
 Proof.
-  intros relation H1 H2 H3 H4 H5 a b. 
-  cut(forall (n:nat), order a + order b <= n -> relation a b = subset a b).
-  intro H. apply H with (n:= order a + order b). apply le_n. intro n.
-  generalize a b. clear a b. elim n. intros a b H. cut(a = Empty). intro H'.
-  rewrite H'. rewrite subset_0_all. apply H1. apply order_sum_eq_0_l with (b:=b).
-  symmetry. apply le_n_0_eq. exact H. clear n. intros n IH a. elim a. intros b H.
-  clear H. rewrite subset_0_all. apply H1. clear a. intros x H. clear H. intro b.
-  elim b. intro H. clear H. rewrite subset_single_0. apply H2. clear b. intro y.
-  intro H. clear H. intro H. rewrite subset_single_single. rewrite H3.
-  cut(relation x y = subset x y). cut(relation y x = subset y x). intros Hyx Hxy.
-  rewrite Hyx, Hxy. reflexivity. apply IH. apply order_sum_singleton.
-  rewrite plus_comm. exact H. apply IH. apply order_sum_singleton. exact H.
-  clear b. intros y H z H'. clear H H'. intro H. rewrite subset_single_union.
-  rewrite H4. cut(relation (Singleton x) y = subset (Singleton x) y).
-  cut(relation (Singleton x) z = subset (Singleton x) z). intros Hxz Hxy.
-  rewrite Hxz, Hxy. reflexivity. apply IH. apply order_sum_union_Rr with (y:=y).
-  exact H. apply IH. apply order_sum_union_Rl with (z:=z). exact H. intros x H y H'.
-  clear H H'. intro b. intro H. rewrite subset_union_all. rewrite H5. 
-  cut(relation x b = subset x b). cut(relation y b = subset y b). intros Hyb Hxb. 
-  rewrite Hyb, Hxb. reflexivity. apply IH. apply order_sum_union_Lr with (x:=x).
-  exact H. apply IH. apply order_sum_union_Ll with (y:=y). exact H.
-Qed.
+  intros relation H1 H2 H3 H4 H5 a b.
+  (* proof by induction on order a + order b <= n *)
+  cut(forall n:nat, order a + order b <= n -> (relation a b = subset a b)).
+  intro H. apply H with (n:= order a + order b). apply le_n.
+  intro n. generalize a b. clear a b. elim n.
+  (* order a + order b <= 0 *) 
+  intros a b H. cut (a = Empty). intro H'. rewrite H'.
+  rewrite H1, subset_0_all. reflexivity.
+  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  (* true for <= n -> true for <= n+1 *)
+  (* induction on a *)  
+  clear n. intros n IH a. elim a.
+  (* a = Empty *)
+  intros b H. rewrite H1, subset_0_all. reflexivity.
+  (* a = Singleton x *)(* induction on b *)
+  clear a. intros x H b. elim b.
+  (* b = Empty *)
+  intros. rewrite H2, subset_single_0. reflexivity.
+  (*b = Singleton y *)
+  clear b. intros y H' H''. rewrite H3, subset_single_single, IH, IH. tauto.
+  rewrite plus_comm. apply order_sum_singleton. exact H''.
+  apply order_sum_singleton. exact H''.
+  (* b = Union y z *)
+  clear b. intros y Hy z Hz H'. rewrite H4, subset_single_union, IH, IH. tauto.
+  apply order_sum_union_Rr with (y:=y). exact H'.
+  apply order_sum_union_Rl with (z:=z). exact H'.
+  (* a = Union x y *)
+  clear a. intros x Hx y Hy b H. rewrite H5, subset_union_all, IH, IH. tauto.
+  apply order_sum_union_Lr with (x:=x). exact H.
+  apply order_sum_union_Ll with (y:=y). exact H.
+Qed. 
+  
 
-(*
 (******************************************************************************)
 (*                        equiv : set -> set -> bool                          *)
 (******************************************************************************)
@@ -409,6 +418,7 @@ Proof.
   apply Hx. intros a Ha. apply H. simpl. apply in_or_app. left. exact Ha.
 Qed.
   
+(*
 Lemma elements_order : forall (a x:set), In x (elements a) -> order x < order a.
 Proof. intro a. elim a. (* induction on a*)
   (* a = Empty *)
