@@ -42,7 +42,7 @@ class ProxyComponentPrice(ComponentPrice):
     @property
     def SsdPrice(self) : return self.requestFromServer("SSD")
 
-    def resquestFromServer(self, request):
+    def requestFromServer(self, request):
         return Server.getInstance().sendRequest(request)
 
 class Server :
@@ -51,6 +51,28 @@ class Server :
     def getInstance(): return Server._server
     def sendRequest(self, request):
         print("Server receiving request for " + request + " price")
+        # In our example, server uses real subject
+        component = StoredComponentPrice()  # real subject
+        print("Server responding to request for " + request + " price")
+        # emulating switch statement with dictionary
+        result = {
+            'CPU' : component.CpuPrice,
+            'RAM' : component.RamPrice,
+            'SSD' : component.SsdPrice
+            }.get(request)
+        if result == None : raise Exception()
+        return result
+
+Server._server = Server()
+
+# we can use proxy as if it was real, making client code a lot simpler
+prices = ProxyComponentPrice()
+cpu = prices.CpuPrice
+ram = prices.RamPrice
+ssd = prices.SsdPrice
+print("The CPU price is " + str(cpu))
+print("The RAM price is " + str(ram))
+print("The SSD price is " + str(ssd))
 
 
 

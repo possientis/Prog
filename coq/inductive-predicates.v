@@ -1,6 +1,7 @@
 (* Set Implicit Arguments.*)
 
 Require Import ZArith.
+Require Import List.
 
 
 Inductive plane : Set :=
@@ -46,12 +47,31 @@ Fixpoint last_fun {A:Type} (l:list A) : option A :=
     | (cons a l')   => last_fun l'
   end.
 
-(*
+Lemma last_a_l_not_nil : forall (A:Type)(a:A)(l:list A),
+  last a l -> l <> nil.
+Proof.
+  intros A a l p. generalize p. elim p. intros b H. clear H.
+  intro H. apply nil_cons with (x:=b)(l:=nil). auto.
+  intros b x l' q H0 H1. clear H0 H1 q b p l a. intro H.
+  apply nil_cons with (x:=x)(l:=l'). auto.
+Qed.
+
+Lemma not_last_a_nil: forall (A:Type)(a:A),
+  ~last a nil.
+Proof.
+  intros A a H. apply last_a_l_not_nil with (l:=nil)(a:=a).
+  exact H. reflexivity.
+Qed.
+
+
 Lemma last_coherence : forall (A:Type)(l:list A)(a:A),
   last a l <-> last_fun l = Some a.
 Proof.
-  intros A l. elim l. intro a. simpl. split.
-*)
+  intros A l a. split. intro p. generalize p. elim p.
+  intros b H0. clear H0. simpl. reflexivity.
+  intros b x m Hbm H H'.
+
+
 
 
 

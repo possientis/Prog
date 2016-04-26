@@ -381,16 +381,19 @@ Proof.
   clear H0. apply in_or_app. right. exact Hc''. elim Hc'. intros H0 H1. exact H1.
   apply Hz. exact Hz'. simpl. left. reflexivity. 
   
-  apply orb_true_iff. exact H. apply False_ind. intro H.
+  apply orb_true_iff.  exact H. apply False_ind. intro H.
+
   cut(exists c' : set, In c' (elements y ++ elements z) /\ equiv x c' = true).
   intro H'. elim H'. intros c' Hc'. elim Hc'. intros Hc'' Hc'''.
   cut(In c' (elements y) \/ In c' (elements z)). intro H0. elim H0. 
   
   intro H1. cut(subset (Singleton x) y = true). intro Hy'. rewrite Hy'.
-  case (subset (Singleton x) z); simpl; reflexivity. apply Hy. intros c Hc.
-  exists c'. split. exact H1. clear H1. simpl in Hc. elim Hc. intro H1.
-  rewrite <- H1. exact Hc'''. apply False_ind. 
-  
+  case (subset (Singleton x) z); simpl; reflexivity. 
+
+  apply Hy. intros c Hc.
+  exists c'. split. exact H1. clear H1. simpl in Hc. elim Hc. 
+  intro H1. rewrite <- H1. exact Hc'''. apply False_ind. 
+
   intro H1. cut(subset (Singleton x) z = true). intro Hz'. rewrite Hz'.
   case (subset (Singleton x) y); simpl; reflexivity. apply Hz. intros c Hc.
   exists c'. split. exact H1. clear H1. simpl in Hc. elim Hc. intro H1.
@@ -409,15 +412,13 @@ Proof.
   intro Ha'. apply Hy.  apply proj2 with (A:= subset x b = true). 
   apply andb_true_iff. exact H. exact Ha'. 
 
-  apply in_app_or. exact H'. 
-
-  intro H. rewrite subset_union_all. cut(subset x b = true). cut(subset y b = true).
-  intros Hy' Hx'. rewrite Hx', Hy'. simpl. reflexivity. 
-
-  apply Hy. intros a Ha. apply H. simpl. apply in_or_app. right. exact Ha.
-  apply Hx. intros a Ha. apply H. simpl. apply in_or_app. left. exact Ha.
-Qed.
+  apply in_app_or. exact H'. intro H. rewrite subset_union_all. 
+  apply andb_true_iff. split.
   
+  apply Hx. intros a Ha. apply H. simpl. apply in_or_app. left. exact Ha.
+  apply Hy. intros a Ha. apply H. simpl. apply in_or_app. right. exact Ha.
+Qed.
+
 (*
 Lemma elements_order : forall (a x:set), In x (elements a) -> order x < order a.
 Proof. intro a. elim a. (* induction on a*)
