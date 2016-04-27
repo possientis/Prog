@@ -1,12 +1,13 @@
 #|
 ; this code will fail
-(define x 
+(display 
   (let ((loop 
           (lambda (n)
             (if (= 0 n)
               1
               (* n (loop (- n 1)))))))
     (loop 5)))
+(newline)
 |#
 
 ; ((lambda (loop) (loop 5)) (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))),  Env = {} (i.e. just primitives)
@@ -21,14 +22,25 @@
 ; so although such evaluation is succesful, due to static scoping, the procedure object created from the evaluation contains an environment without
 ; binding for 'loop'. Hence when this procedure is applied to '5', it needs to evaluate its body in an environment without binding for 'loop'.
 
-; TODO : understand why this code is succesful
 
-(define x
-  (begin
-    (define (loop n)
-      (if (= 0 n) 1 (* n (loop (- n 1)))))
-    (loop 5)))
+(define (loop n)
+  (if (= 0 n) 1 (* n (loop (- n 1)))))
 
+(display (loop 5)) (newline)
+
+
+; (define loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1))))))
+; in the case, the symbol 'loop is immediately added to the global environment
+; as before, evaluation of (loop 5) leads to sucessful evaluation of 'loop
+; however, when evaluating the body of loop
+
+; same thing without affecting the global environment
+(display 
+    (let ((let-for-name-encapsulation 'anything))
+      (define (loop n)
+        (if (= 0 n) 1 (* n (loop (- n 1)))))
+      (loop 5)))
+(newline)
 
 
 

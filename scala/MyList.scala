@@ -1,5 +1,7 @@
 // some implementations are not tail recursive, and do not reflect
 // the exact details of scala 'List[T]' implementation (which is tail-recursive)
+// use ListBuffer (+= method to add element and then toList method, both constant time)
+// with ListBuffer you can incremental add elements as the end
 abstract class MyList[+T]{  // covariant
   def isEmpty:Boolean
   def head: T

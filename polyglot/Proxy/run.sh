@@ -29,6 +29,24 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
+echo '\nThis is JavaScript ...'
+START=$(date +%s%N)
+js proxy.js
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+
+echo '\nThis is PHP ...'
+START=$(date +%s%N)
+php proxy.php
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+
 echo '\nThis is Python ...'
 START=$(date +%s%N)
 python3 proxy.py
@@ -40,6 +58,14 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 echo '\nThis is Ruby ...'
 START=$(date +%s%N)
 ruby proxy.rb
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is Scheme ...'
+START=$(date +%s%N)
+scm proxy.scm
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"

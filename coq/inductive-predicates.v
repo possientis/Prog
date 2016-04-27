@@ -36,6 +36,7 @@ Inductive clos_trans {A:Type}(R:relation A): A -> A -> Prop :=
   | t_step : forall x y:A, R x y -> clos_trans R x y
   | t_trans: forall x y z:A, clos_trans R x y -> clos_trans R y z
               -> clos_trans R x z.
+
 Inductive last {A:Type} : A -> list A -> Prop :=
   | last1 : forall a:A, last a (cons a nil)
   | last2 : forall (a x:A)(l:list A), last a l -> last a (cons x l).
@@ -46,6 +47,7 @@ Fixpoint last_fun {A:Type} (l:list A) : option A :=
     | (cons a nil)  => Some a
     | (cons a l')   => last_fun l'
   end.
+
 
 Lemma last_a_l_not_nil : forall (A:Type)(a:A)(l:list A),
   last a l -> l <> nil.
@@ -63,13 +65,24 @@ Proof.
   exact H. reflexivity.
 Qed.
 
-
 Lemma last_coherence : forall (A:Type)(l:list A)(a:A),
   last a l <-> last_fun l = Some a.
 Proof.
+  (* -> *)
   intros A l a. split. intro p. generalize p. elim p.
   intros b H0. clear H0. simpl. reflexivity.
-  intros b x m Hbm H H'.
+  intros b x m. case m. intro H. apply False_ind.
+  apply not_last_a_nil with (a:=b). exact H.
+  intros c l' H H' H''. simpl. apply H'. exact H.
+  (* <- *)
+  elim l. simpl. intro H. discriminate H.
+  clear l. intros b l. case l. simpl. intros H H'.
+  cut(a = b). intro H''. rewrite <- H''. apply last1.
+  pose (g:= fun x =>  match x with | None    => a | Some c  => c end).
+  change (g (Some a) = g (Some b)). rewrite H'. reflexivity.
+  clear l. intros c l H H'. apply last2. apply H. rewrite <- H'.
+  simpl. reflexivity.
+Qed.
 
 
 

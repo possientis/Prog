@@ -106,20 +106,20 @@ ultraPizza  = new WithExtraAnchovies(
               new PlainPizza()))); 
 
 print(  "Plain Pizza: "   +
-        "\tCost: "        + plainPizza.getCost().toPrecision(2) // formatting
+        "\tCost: "        + plainPizza.getCost().toFixed(1) // formatting
       + "\tDescription: " + plainPizza.getDescription()); 
 
 
 print(  "Nice Pizza: "   +
-        "\tCost: "        + nicePizza.getCost().toPrecision(2)
+        "\tCost: "        + nicePizza.getCost().toFixed(1)
       + "\tDescription: " + nicePizza.getDescription()); 
 
 print(  "Super Pizza: "   +
-        "\tCost: "        + superPizza.getCost().toPrecision(2)
+        "\tCost: "        + superPizza.getCost().toFixed(1)
       + "\tDescription: " + superPizza.getDescription()); 
 
 print(  "Ultra Pizza: "   +
-        "\tCost: "        + ultraPizza.getCost().toPrecision(2)
+        "\tCost: "        + ultraPizza.getCost().toFixed(1)
       + "\tDescription: " + ultraPizza.getDescription()); 
 
 

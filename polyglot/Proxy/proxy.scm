@@ -15,7 +15,6 @@
 ; The subject is the common interface between the real object and proxy
 ; the real object is that which the proxy is meant to be substituted for
 
-; This is the subject
 (define component-price-virtual-table   ; constructor
   (let ((let-for-name-encapsulation 'anything))
     ; object created from data is message passing interface
@@ -47,14 +46,13 @@
         (ssd (lambda (data) 225.0)))
     (component-price-virtual-table cpu ram ssd)))
 
-; this virtual table expects object data to be have format
-; (list 'data virtual-table this), so (caddr data) is a reference to the object
+; data layout for object is expected to be (list 'data base-object this)
+; i.e. (caddr data) is a reference to object itself
 (define proxy-component-price-vt
-  (let ((this (lambda (data) (caddr data))))
-    (let ((cpu (lambda (data) (((this data) 'request-from-server) 'cpu)))
-          (ram (lambda (data) (((this data) 'request-from-server) 'ram)))
-          (ssd (lambda (data) (((this data) 'request-from-server) 'ssd))))
-      (component-price-virtual-table cpu ram ssd))))
+  (let ((cpu (lambda (data) (request-from-server 'cpu)))
+        (ram (lambda (data) (request-from-server 'ram)))
+        (ssd (lambda (data) (request-from-server 'ssd))))
+    (component-price-virtual-table cpu ram ssd)))
 
 ; this is the subject
 (define component-price     ; constructor
@@ -78,14 +76,74 @@
 (define stored-component-price  ; constructor
   (lambda () (component-price stored-component-price-vt)))
 
+; this is the proxy
 (define proxy-component-price   ; constructor
+  (lambda () (component-price proxy-component-price-vt)))
+
+; NOTE: we are being inconsistent with the implementations of this exercise 
+; in other languages, as we do not make 'request-from-server' an instance
+; member of the class proxy-component-price. In fact, there was no reason to 
+; make it an instance member as it has no dependency to the internals of
+; the instance, so it should have been declared static instead.
+
+(define (request-from-server request)
+  (((server 'get-instance) 'send-request) request))
+
+
+(define server              ; constructor
   (let ((let-for-name-encapsulation 'anything))
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
-        (cond ((eq? m 'request-from-server) (request-from-server-data))
-              (else ...
+        (cond ((eq? m 'send-request) (send-request data))
+              (else (error "server: unknown operation" m)))))
+    ;
+    (define (to-string request)
+      (cond ((eq? request 'cpu) "CPU")
+            ((eq? request 'ram) "RAM")
+            ((eq? request 'ssd) "SSD")))
+    ;
+    (define (send-request data)
+      (lambda (request)
+        (display "Server receiving request for ")
+        (display (to-string request))(display " price\n")
+        ; In our example, server uses real subject
+        (let ((component (stored-component-price))) ; real-subject
+          (display "Server respondiing to request for ")
+          (display (to-string request))(display " price\n")
+          (cond ((eq? request 'cpu) (component 'cpu-price))
+                ((eq? request 'ram) (component 'ram-price))
+                ((eq? request 'ssd) (component 'ssd-price))
+                (else (error "invalid server request" request))))))
+    ;
+    (define _server #f) ; to initialized
+    ;
+    (define (start-server) 
+      (set! _server (this 'data))
+      (display "Component price server running, awaiting request\n"))
+    ;
+    (define static-interface
+      (lambda arg
+        (if (null? arg)         ; no argument, simply returning server instance 
+          (this 'data)
+          (let ((m (car arg)))  ; otherwise, static call 
+            (cond ((eq? m 'get-instance) _server)
+                  ((eq? m 'start-server) (start-server))
+                  (else (error "server: invalid static member" m)))))))
+    ;
+    ; simply returning static interface
+    ;
+    static-interface))
 
 
+(server 'start-server)
+; we can use proxy as if it was real, making client code a lot simpler
+(define prices (proxy-component-price))
+(let ((cpu (prices 'cpu-price))
+      (ram (prices 'ram-price))
+      (ssd (prices 'ssd-price)))
+  (display "The CPU price is ")(display cpu)(newline)
+  (display "The RAM price is ")(display ram)(newline)
+  (display "The SSD price is ")(display ssd)(newline))
 
-
+(exit 0)

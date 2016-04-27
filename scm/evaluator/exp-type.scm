@@ -35,6 +35,8 @@
 
 (define (let*? exp) (tagged-list? exp 'let*))
 
+(define (letrec? exp) (tagged-list? exp 'letrec))
+
 (define (application? exp) (pair? exp)) ; need to be tested last
 
 (define (primitive-procedure? proc) (tagged-list? proc 'primitive))

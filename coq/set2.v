@@ -1,8 +1,14 @@
-Require Import set.
+Require Import set. (* need to compile set.v *)
 Require Import Bool.
 Require Import Arith.
 Require Import Arith.Max.
 Require Import List.
+
+(* replicating proof of set.v with 'Prop' instead of 'bool' *)
+
+(******************************************************************************)
+(*                       subset2 : set -> set -> Prop                         *)
+(******************************************************************************)
 
 Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
   match n with 
@@ -21,6 +27,7 @@ Fixpoint subset2_n (n:nat) : set -> set -> Prop :=
       end)
   end.
 
+(* making sure the two points of view are equivalent *)
 Lemma subset_n_bool_prop : forall (n:nat)(a b:set),
   subset2_n n a b <-> subset_n n a b = true.
 Proof. 
@@ -106,6 +113,7 @@ Proof.
 Definition subset2 (a b:set) : Prop :=
   let n:= order a + order b in subset2_n n a b.
 
+(* making sure the two points of view are equivalent *)
 Lemma subset_bool_prop : forall (a b:set),
   subset2 a b <-> subset a b = true.
 Proof.
@@ -345,6 +353,181 @@ Proof.
   apply Hx. intros a Ha. apply H. simpl. apply in_or_app. left. exact Ha.
   apply Hy. intros a Ha. apply H. simpl. apply in_or_app. right. exact Ha.
 Qed.
+
+
+Lemma subset2_reflexive : forall (a:set), subset2 a a.
+Proof.
+  (* induction on the order of a *)
+  cut(forall (n:nat) (a:set), order a <= n -> subset2 a a).
+  intros H a. apply H with (n:= order a). apply le_n. intro n. elim n.
+  (* order a <= 0 *)
+  intros a H. cut (a = Empty). intro H'. rewrite H'. unfold subset2. simpl.
+  reflexivity. apply order_eq_0. symmetry. apply le_n_0_eq. exact H.
+  (* order a <= S n *)
+  clear n. intros n IH a H. cut(order a < S n \/ order a = S n). intro H'. elim H'.
+  (* order a < S n *)
+  intro H''. unfold lt in H''. apply IH. apply le_S_n. exact H''.
+  (* order a = S n *)
+  intro H''. apply subset2_elements. intros x Hx. exists x. split. exact Hx.
+  unfold equiv2. cut (subset2 x x). intro Hx'. split. exact Hx'. exact Hx'.
+
+  apply IH. apply le_S_n. rewrite <- H''. apply elements_order.
+  exact Hx.
+  (* clean up *)
+  apply le_lt_or_eq. exact H.
+Qed.
+
+Lemma equiv2_reflexive: forall (a:set), equiv2 a a.
+Proof.
+  intro a. unfold equiv2. simpl. split. apply subset2_reflexive.
+  apply subset2_reflexive.
+Qed.
+
+Lemma equiv2_symmetric : forall (a b:set),
+  equiv2 a b <-> equiv2 b a.
+Proof.
+  intros a b. unfold equiv2. simpl. split. 
+  intro H. split. 
+  apply proj2 with (A:= subset2 a b). exact H.
+  apply proj1 with (B:= subset2 b a). exact H.
+  intro H. split.
+  apply proj2 with (A:= subset2 b a). exact H.
+  apply proj1 with (B:= subset2 a b). exact H.
+Qed.
+
+Lemma subset2_x_xUy : forall (x y: set), subset2 x (Union x y).
+Proof.
+  intros x y. apply subset2_elements. intros z H. exists z. split. simpl.
+  apply in_or_app. left. exact H. apply equiv2_reflexive.
+Qed.
+
+Lemma subset2_y_xUy : forall (x y: set), subset2 y (Union x y).
+Proof.
+  intros x y. apply subset2_elements. intros z H. exists z. split. simpl.
+  apply in_or_app. right. exact H. apply equiv2_reflexive.
+Qed.
+
+Lemma subset2_xUy : forall (x y: set), subset2 (Union x y) (Union y x).
+Proof.
+  intros x y. apply subset2_elements. intros z H. exists z. split. simpl.
+  simpl in H. apply in_or_app.  apply or_comm. apply in_app_or. exact H. 
+  apply equiv2_reflexive.
+Qed.
+
+Lemma subset2_xUyUz_l : forall (x y z:set),
+  subset2 (Union (Union x y) z) (Union x (Union y z)).
+Proof.
+  intros x y z. apply subset2_elements. simpl. intros t H. exists t. split.
+  rewrite app_assoc. exact H. apply equiv2_reflexive.
+Qed.
+
+Lemma subset2_xUyUz_r : forall (x y z:set),
+  subset2 (Union x (Union y z)) (Union (Union x y) z).
+Proof.
+  intros x y z. apply subset2_elements. simpl. intros t H. exists t. split.
+  rewrite app_assoc in H. exact H. apply equiv2_reflexive.
+Qed.
+
+Lemma equiv2_xUyUz_l : forall (x y z:set),
+  equiv2 (Union (Union x y) z) (Union x (Union y z)).
+Proof.
+  intros x y z. unfold equiv2. simpl. split.
+  apply subset2_xUyUz_l. apply subset2_xUyUz_r.
+Qed.
+
+Lemma equiv2_xUyUz_r : forall (x y z:set),
+  equiv2 (Union x (Union y z)) (Union (Union x y) z).
+Proof.
+  intros x y z. apply equiv2_symmetric. apply equiv2_xUyUz_l.
+Qed.
+
+Lemma subset2_xU0_x : forall (x:set), subset2 (Union x Empty) x.
+Proof.
+  intro x. rewrite subset2_union_all. split. apply subset2_reflexive.
+  apply subset2_0_all. 
+Qed.
+
+Lemma subset2_x_xU0 : forall (x:set), subset2 x (Union x Empty).
+Proof.
+  intro x. apply subset2_x_xUy.
+Qed.
+
+Lemma equiv2_xU0_x: forall (x:set), equiv2 (Union x Empty) x.
+Proof.
+  intro x. unfold equiv2. split. apply subset2_xU0_x. apply subset2_x_xU0.
+Qed.
+
+Lemma subset2_transitive: forall (a b c:set),
+  subset2 a b -> subset2 b c -> subset2 a c.
+Proof. 
+  (* by induction on n = max(order a, order b, order c) *)
+  (*set up induction on n *)
+  cut(forall (n:nat)(a b c:set), order a <= n -> order b <= n -> order c <= n ->  
+    subset2 a b -> subset2 b c -> subset2 a c). intros H a b c.
+  pose (n:= max (order a) (max (order b) (order c))). apply H with (n:=n).
+  change (order a <= max (order a) (max (order b) (order c))). apply le_max_l.
+  apply le_trans with (m:= max (order b) (order c)). apply le_max_l.
+  change (max (order b) (order c) <= max (order a) (max (order b) (order c))).
+  apply le_max_r. apply le_trans with(m:=max (order b) (order c)). apply le_max_r. 
+  change (max (order b) (order c) <= max (order a) (max (order b) (order c))).
+  apply  le_max_r. intro n. elim n.
+  (* n = 0 *)
+  intros a b c Ha Hb Hc Hab Hbc. clear Hb Hc Hab Hbc. cut (a = Empty). intro H. 
+  rewrite H. apply subset2_0_all. apply order_eq_0. symmetry. apply le_n_0_eq.
+  exact Ha.
+  (* n => n+1 *)
+  clear n. intros n IH. intros a b c Ha Hb Hc Hab Hbc. apply subset2_elements.
+  intros x Hx. cut (exists y:set, In y (elements b) /\ equiv2 x y). 
+  intro H. elim H. intros y Hy.
+  cut (exists z:set, In z (elements c) /\ equiv2 y z). intro H'. elim H'.
+  intros z Hz. exists z. split. elim Hz. auto. unfold equiv2.
+  split.
+
+  apply IH with (b:=y). 
+  apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx. 
+  exact Ha. 
+  apply le_S_n. apply le_trans with (m:=order b). apply elements_order. elim Hy.
+  auto. exact Hb.
+  apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
+  auto. exact Hc.
+ 
+  elim Hy. intros H0 EQxy. clear H0. unfold equiv2 in EQxy. 
+  apply proj1 with (B:= subset2 y x). exact EQxy. 
+
+  elim Hz. intros H0 EQyz. clear H0. unfold equiv2 in EQyz. 
+  apply proj1 with (B:= subset2 z y). exact EQyz.
+
+  apply IH with (b:=y).
+  apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
+  auto. exact Hc.
+  apply le_S_n. apply le_trans with (m:= order b). apply elements_order. elim Hy.
+  auto. exact Hb.
+  apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx.
+  exact Ha.
+  
+  elim Hz. intros H0 EQyz. clear H0. unfold equiv2 in EQyz. 
+  apply proj2 with (A:= subset2 y z). exact EQyz.
+
+  elim Hy. intros H0 EQxy. clear H0. unfold equiv2 in EQxy. 
+  apply proj2 with (A:= subset2 x y). exact EQxy.
+ 
+  apply subset2_elements with (a:=b). exact Hbc. elim Hy. auto.
+  apply subset2_elements with (a:=a). exact Hab. exact Hx.
+Qed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

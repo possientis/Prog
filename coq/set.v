@@ -419,7 +419,6 @@ Proof.
   apply Hy. intros a Ha. apply H. simpl. apply in_or_app. right. exact Ha.
 Qed.
 
-(*
 Lemma elements_order : forall (a x:set), In x (elements a) -> order x < order a.
 Proof. intro a. elim a. (* induction on a*)
   (* a = Empty *)
@@ -441,7 +440,8 @@ Proof. intro a. elim a. (* induction on a*)
 Qed.
 
 Lemma subset_reflexive : forall (a:set), subset a a = true.
-Proof. (* induction on the order of a *)
+Proof. 
+  (* induction on the order of a *)
   cut(forall (n:nat) (a:set), order a <= n -> subset a a = true).
   intros H a. apply H with (n:= order a). apply le_n. intro n. elim n.
   (* order a <= 0 *)
@@ -459,7 +459,6 @@ Proof. (* induction on the order of a *)
   (* clean up *)
   apply le_lt_or_eq. exact H.
 Qed.
-
 
 Lemma equiv_reflexive : forall (a:set), equiv a a = true.
 Proof.
@@ -599,7 +598,7 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   apply subset_elements with (a:=b). exact Hbc. elim Hy. auto.
   apply subset_elements with (a:=a). exact Hab. exact Hx.
 Qed.
-*)
+
 (*
 Definition successor (s:set) : set :=
   Union s (Singleton s).
