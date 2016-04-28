@@ -599,6 +599,49 @@ Proof. (* by induction on n = max(order a, order b, order c) *)
   apply subset_elements with (a:=a). exact Hab. exact Hx.
 Qed.
 
+
+Lemma equiv_transitive: forall (a b c:set),
+  equiv a b = true -> equiv b c = true -> equiv a c = true.
+Proof.
+  intros a b c Hab Hbc. unfold equiv. apply andb_true_iff.
+  unfold equiv in Hab. rewrite andb_true_iff in Hab.
+  unfold equiv in Hbc. rewrite andb_true_iff in Hbc.
+  elim Hab. elim Hbc. intros. 
+  split; apply subset_transitive with (b:=b); assumption.
+Qed.
+
+(* equiv is an equivalence relation, reflexive, symmetric, transitive *)
+(* but it is also compatible with the algebras operators, hence a congruence *)
+
+
+Lemma equiv_0_0: equiv Empty Empty = true.
+Proof.
+  unfold equiv. simpl. apply subset_0_all.
+Qed.
+
+Lemma equiv_xy_SxSy: forall (x y:set),
+  equiv x y = true -> equiv (Singleton x) (Singleton y) = true.
+Proof.
+  intros x y H. unfold equiv. 
+  rewrite subset_single_single. rewrite subset_single_single.
+  rewrite andb_true_iff. rewrite andb_true_iff. rewrite andb_true_iff.
+  unfold equiv in H. rewrite andb_true_iff in H. elim H.
+  intros. split; split; assumption.
+Qed.
+
+Lemma equiv_xx_yy_xUy_xUy: forall (x x' y y':set),
+  equiv x x' = true -> equiv y y' = true -> 
+  equiv (Union x y) (Union x' y') = true.
+Proof.
+  
+
+
+
+
+
+
+
+
 (*
 Definition successor (s:set) : set :=
   Union s (Singleton s).

@@ -84,7 +84,49 @@ Proof.
   simpl. reflexivity.
 Qed.
 
+(* last_with_rest a l l' expresses the fact that l = l' ++ [a] 
+** i.e. that a is the last element of l, and l' is what remains of
+** the list after removing the last element 'a'                    *)
+Inductive last_with_rest {A:Type} : A -> list A -> list A -> Prop := 
+  | last_with_rest1 : forall a:A, last_with_rest a (cons a nil) nil 
+  | last_with_rest2 : forall (a b:A)(l m:list A), 
+      last_with_rest a l m -> last_with_rest a (cons b l) (cons b m).
 
+Inductive palindrome {A:Type} : list A -> Prop :=
+  | palindrome_nil    : palindrome nil
+  | palindrome_single : forall (a:A), palindrome (cons a nil)
+  | palindrome_a      : forall (a:A)(l m:list A), 
+      last_with_rest a l m -> palindrome m -> palindrome (cons a l). 
+
+Definition pal_example1 := 1::2::3::4::5::4::3::2::1::nil.
+Definition pal_example2 := 1::2::2::1::nil.
+Definition pal_example3 := 1::2::nil. (* not a palindrome *)
+
+Lemma palindrome_example2: palindrome pal_example2.
+Proof.
+  unfold pal_example2. apply palindrome_a with (a:=1)(m:= 2::2::nil).
+  repeat apply last_with_rest2. apply last_with_rest1.
+  apply palindrome_a with (m:=nil). apply last_with_rest1. apply palindrome_nil.
+Qed.
+
+Lemma palindrome_example1: palindrome pal_example1.
+Proof.
+  unfold pal_example1.
+  apply palindrome_a with (m:= 2::3::4::5::4::3::2::nil). 
+  repeat apply last_with_rest2. apply last_with_rest1.
+  apply palindrome_a with (m:= 3::4::5::4::3::nil). 
+  repeat apply last_with_rest2. apply last_with_rest1.
+  apply palindrome_a with (m:= 4::5::4::nil). 
+  repeat apply last_with_rest2. apply last_with_rest1.
+  apply palindrome_a with (m:= 5::nil). 
+  repeat apply last_with_rest2. apply last_with_rest1.
+  apply palindrome_single.
+Qed.
+
+Lemma palindrome_example3: ~palindrome pal_example3.
+Proof.
+  unfold pal_example3. intro pal. generalize pal.
+  elim pal.
 
 
 
