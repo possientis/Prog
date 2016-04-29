@@ -629,11 +629,40 @@ Proof.
   intros. split; split; assumption.
 Qed.
 
+(* In order to prove that x == x' /\ y == y' -> xUy == x'Uy' we shall
+first establish that x <= x' -> xUy <= x'Uy for all y.  *)
+Lemma subset_xx_xUy : forall (x x' y:set),
+  subset x x' = true -> subset (Union x y) (Union x' y) = true.
+Proof.
+  intros x x' y H. apply subset_elements. intros z. intros H'. simpl in H'.
+  rewrite subset_elements in H.
+  cut (In z (elements x) \/ In z (elements y)). intro H''. elim H''.
+
+  intro Hz. cut(exists c' : set, In c' (elements x') /\ equiv z c' = true).
+  intro H0. elim H0. intros c Hc. exists c. elim Hc. intros H0c H1c.
+  split. simpl. apply in_or_app. left. exact H0c. exact H1c.
+  apply H. exact Hz.
+
+  intro Hz. exists z. split. simpl. apply in_or_app. right. exact Hz.
+  apply equiv_reflexive. 
+  
+  apply in_app_or. exact H'.
+Qed.
+  
+(* We are now in a position to prove the third compatibility condition *) 
 Lemma equiv_xx_yy_xUy_xUy: forall (x x' y y':set),
   equiv x x' = true -> equiv y y' = true -> 
   equiv (Union x y) (Union x' y') = true.
 Proof.
-  
+  intros x x' y y' Hx Hy.
+  (* we need to split assumption Hx and Hy for future use *)
+  unfold equiv in Hx. rewrite andb_true_iff in Hx. elim Hx. clear Hx.
+  unfold equiv in Hy. rewrite andb_true_iff in Hy. elim Hy. clear Hy.
+  intros H0y H1y H0x H1x.
+  (* splitting goal *)
+  unfold equiv. apply andb_true_iff. split.
+  (* need to show xUy <= x'Uy' *)
+ 
 
 
 

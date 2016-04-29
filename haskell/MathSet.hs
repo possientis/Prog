@@ -1,3 +1,4 @@
+
 module Set (ISet, empty, set, inc, belong, singleton, union, subset, Set()) where
 import qualified Data.Map as Map
 
@@ -62,7 +63,8 @@ instance ISet Set where
   -- This will be mathematically defined below
   belong x y = subset (Singleton x) y
 
-
+  -- --------------- > SEE COQ FILE set.v
+  --
   -- Lemma 0: an inclusion relation exists and is unique
   --
   -- Such binary relation exists and is unique. Informally, 

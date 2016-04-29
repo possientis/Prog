@@ -33,10 +33,17 @@ class Person(val _name: String, val _gender: String, val _maritalStatus: String)
   def maritalStatus = _maritalStatus
 
   // equals used by operator == 
+  // check list of 'equals' overriding:
+  // 1. having the right signature equals(other: Any): Boolean
+  // 2. accompanying override for hashCode: x == y => x.hashCode == y.hashCode
+  // 3. It is not defined in terms of mutable fields
+  // 4. It defines an equivalence relation
   override def equals(other: Any) = other match {
     case p: Person  => name.equalsIgnoreCase(p.name)
     case _          => false
   } 
+  // it is a sin to override 'equals' without overriding 'hashCode'
+  override def hashCode = name.toUpperCase.hashCode  
   
   override def toString() = "("+ name +","+ gender +","+ maritalStatus +")"
 }

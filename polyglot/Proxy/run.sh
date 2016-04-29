@@ -10,6 +10,15 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm a.out
 
 
+echo '\nThis is C++ ...'
+g++ -std=c++14 proxy.cpp
+START=$(date +%s%N)
+./a.out 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm a.out
+
 
 echo '\nThis is Java ...'
 javac Proxy.java 
@@ -80,6 +89,15 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
+
+echo '\nThis is Clojure ...'
+clojurec proxy 1> /dev/null 
+START=$(date +%s%N)
+java -cp .:/usr/share/java/clojure-1.6.0.jar proxy
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
 
 
 echo '\nThis is Haskell ...'

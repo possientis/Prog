@@ -49,7 +49,12 @@ class Person {
   public String getName()         { return name; }
   public String getGender()       { return gender; }
   public String getMaritalStatus(){ return maritalStatus; }
-
+ 
+  // check list of 'equals' overriding:
+  // 1. having the right signature: boolean equals(Object other)
+  // 2. accompanying override for hashCode: x == y => x.hashCode == y.hashCode
+  // 3. It is not defined in terms of mutable fields
+  // 4. It defines an equivalence relation
   @Override
   public boolean equals(Object other){  // possible equality
     if(other instanceof Person){
@@ -58,6 +63,10 @@ class Person {
       return false;
     }
   }
+  // it is a sin to override 'equals' without overriding 'hashCode'
+  @Override
+  public int hashCode(){ return name.toUpperCase().hashCode(); }
+  
 
   @Override
   public String toString(){

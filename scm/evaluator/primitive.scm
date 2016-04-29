@@ -30,6 +30,7 @@
         (list 'set-car! set-car!)
         (list 'set-cdr! set-cdr!)
         (list 'list list)
+        (list 'append append)
         (list 'map map-primitive)
         (list 'null? null?)
         (list 'number? number?)

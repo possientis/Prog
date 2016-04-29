@@ -251,6 +251,12 @@
   (let ((x (eval '(let* ((x 5)(y (+ x 2))) (+ x y)) global-env)))
     (if (not (equal? x 12)) (display "eval: unit test 15.0 failing\n")))
   ;
+  ; letrec
+  ;
+  (let ((x (eval '(letrec 
+                    ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
+                    (loop 5)) global-env)))
+    (if (not (equal? x 120)) (display "eval: unit test 15.5 failing\n")))
   ; application
   ;
   ; primitives

@@ -58,11 +58,12 @@ class Person {
   public string Gender          {get{return gender;}}
   public string MaritalStatus   {get{return maritalStatus;}}
 
-  // simply to avoid warning on overriding Equals
-  public override int GetHashCode(){
-    return Name.GetHashCode();
-  }
-
+  // check list of 'Equals' overriding:
+  // 1. having the right signature: bool Equals(object other)
+  // 2. accompanying override for GetHashCode: 
+  // x == y => x.GetHashCode == y.GetHashCode
+  // 3. It is not defined in terms of mutable fields
+  // 4. It defines an equivalence relation
   public override bool Equals(object other){  // possibly equality
     if(other is Person){
       return Name.Equals(((Person) other).Name);
@@ -70,6 +71,11 @@ class Person {
       return false;
     }
   }
+  // it is a sin to override 'Equals' without overriding 'GetHashCode'
+  public override int GetHashCode(){
+    return Name.ToUpper().GetHashCode();
+  }
+
 
   public static readonly Predicate<Person> male =
     new Predicate<Person>(

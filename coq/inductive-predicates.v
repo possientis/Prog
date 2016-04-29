@@ -123,10 +123,27 @@ Proof.
   apply palindrome_single.
 Qed.
 
+
+Theorem cons_injective : forall (A : Set)(a b : A)(l m : list A),
+      a :: l = b :: m -> l = m.
+      intros A a b l m h.
+      fold (tail (cons a l)).
+      rewrite h.
+      unfold tail.
+      reflexivity.
+      Qed.
+
+Lemma palindrome_law : forall (A:Type) (a b:A)(l m:list A),
+  palindrome l -> l = cons a m-> last b m -> a = b.
+Proof.
+  intros A a b l m H. generalize H. elim H. intros H0 H1. discriminate H1.
+  intros c H0 H1 H2.
+
+(*
 Lemma palindrome_example3: ~palindrome pal_example3.
 Proof.
   unfold pal_example3. intro pal. generalize pal.
   elim pal.
-
+*)
 
 

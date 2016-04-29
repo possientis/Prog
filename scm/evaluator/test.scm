@@ -42,6 +42,7 @@
 (load "let.scm")
 (load "let-star.scm")
 (load "named-let.scm")
+(load "let-rec.scm")
 (load "not.scm")
 (load "or.scm")
 (load "quote.scm")

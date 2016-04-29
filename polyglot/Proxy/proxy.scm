@@ -109,7 +109,7 @@
         (display (to-string request))(display " price\n")
         ; In our example, server uses real subject
         (let ((component (stored-component-price))) ; real-subject
-          (display "Server respondiing to request for ")
+          (display "Server responding to request for ")
           (display (to-string request))(display " price\n")
           (cond ((eq? request 'cpu) (component 'cpu-price))
                 ((eq? request 'ram) (component 'ram-price))

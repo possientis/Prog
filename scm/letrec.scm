@@ -1,14 +1,12 @@
-#|
 ; this code will fail
 (display 
-  (let ((loop 
+  (letrec ((loop 
           (lambda (n)
             (if (= 0 n)
               1
               (* n (loop (- n 1)))))))
     (loop 5)))
 (newline)
-|#
 
 ; ((lambda (loop) (loop 5)) (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))),  Env = {} (i.e. just primitives)
 ; proc1 = (lambda (loop) (loop 5))                          , Env = {}
@@ -22,6 +20,7 @@
 ; so although such evaluation is succesful, due to static scoping, the procedure object created from the evaluation contains an environment without
 ; binding for 'loop'. Hence when this procedure is applied to '5', it needs to evaluate its body in an environment without binding for 'loop'.
 
+#|
 
 (define (loop n)
   (if (= 0 n) 1 (* n (loop (- n 1)))))
@@ -42,7 +41,7 @@
       (loop 5)))
 (newline)
 
-
+|#
 
 
 

@@ -15,6 +15,7 @@
 (load "let.scm")
 (load "named-let.scm")
 (load "let-star.scm")
+(load "let-rec.scm")
 (load "apply.scm")
 
 (define DEBUG #f)
