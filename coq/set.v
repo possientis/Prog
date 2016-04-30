@@ -649,20 +649,49 @@ Proof.
   apply in_app_or. exact H'.
 Qed.
   
+Lemma subset_xx_yy_xUy_xUy: forall (x x' y y':set),
+  subset x x' = true -> subset y y' = true -> 
+  subset (Union x y) (Union x' y') = true.
+Proof.
+  intros x x' y y' Hx Hy.
+  (* need to show xUy <= x'Uy' *)
+  apply subset_transitive with (b:= Union x' y). 
+  (* need to show that xUy <= x'Uy *)
+  apply subset_xx_xUy. exact Hx. 
+  (* need to show that x'Uy <= x'Uy' *)
+  apply subset_transitive with (b:= Union y x').
+  (* need to show x'Uy <= yUx' *)
+  apply subset_xUy.
+  (* need to show yUx' <= x'Uy' *)
+  apply subset_transitive with (b:= Union y' x').
+  (* need to show yUx' <= y'Ux' *)
+  apply subset_xx_xUy. exact Hy. 
+  (* need to show y'Ux' <= x'Uy' *)
+  apply subset_xUy.
+Qed.
+ 
+
 (* We are now in a position to prove the third compatibility condition *) 
 Lemma equiv_xx_yy_xUy_xUy: forall (x x' y y':set),
   equiv x x' = true -> equiv y y' = true -> 
   equiv (Union x y) (Union x' y') = true.
 Proof.
   intros x x' y y' Hx Hy.
-  (* we need to split assumption Hx and Hy for future use *)
-  unfold equiv in Hx. rewrite andb_true_iff in Hx. elim Hx. clear Hx.
-  unfold equiv in Hy. rewrite andb_true_iff in Hy. elim Hy. clear Hy.
-  intros H0y H1y H0x H1x.
-  (* splitting goal *)
+  (* splitting 2 equivalence assumptions into 4 inequalities *)
+  unfold equiv in Hx. rewrite andb_true_iff in Hx. elim Hx. intros H0x H1x.
+  unfold equiv in Hy. rewrite andb_true_iff in Hy. elim Hy. intros H0y H1y.
+  clear Hx Hy.
+  (* splitting equivalence goal as two inequality goals *)
   unfold equiv. apply andb_true_iff. split.
-  (* need to show xUy <= x'Uy' *)
- 
+  (* showing xUy <= x'Uy' using previous lemma *)
+  apply subset_xx_yy_xUy_xUy. exact H0x. exact H0y.
+  (* showing x'Uy' <= xUy also using previous lemma *)
+  apply subset_xx_yy_xUy_xUy. exact H1x. exact H1y.
+Qed.
+
+(* at this point, we know that == (aka 'equiv') is a congruence on set *)
+
+
 
 
 

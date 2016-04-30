@@ -127,17 +127,39 @@ Qed.
 Theorem cons_injective : forall (A : Set)(a b : A)(l m : list A),
       a :: l = b :: m -> l = m.
       intros A a b l m h.
-      fold (tail (cons a l)).
+      fold (tail (cons a l)). (* the fold trick , very handy !! *)
       rewrite h.
       unfold tail.
       reflexivity.
       Qed.
 
+Lemma last_with_rest_last: forall (A:Type)(a:A)(l m:list A),
+  last_with_rest a l m -> last a l.
+Proof.
+  intros A a l m H. generalize H. elim H. clear H a m l.  
+  intros a H. apply last1. clear H m l a. intros a b l m.
+  intros H0 H1 H2. apply last2, H1, H0.
+Qed.
+
+Lemma last_unique: forall (A:Type)(a b:A)(l:list A),
+  last a l -> last b l -> a = b.
+Proof.
+  intros A a b l Ha. generalize b. clear b. generalize Ha. elim Ha.
+  clear Ha a l. intros a Ha. clear Ha. intros b Hb. generalize Hb.
+ 
+
+
+(*
 Lemma palindrome_law : forall (A:Type) (a b:A)(l m:list A),
   palindrome l -> l = cons a m-> last b m -> a = b.
 Proof.
-  intros A a b l m H. generalize H. elim H. intros H0 H1. discriminate H1.
-  intros c H0 H1 H2.
+  intros A a b l m H. generalize H. generalize a b m.
+  clear a b m. elim H. intros a b m H0 H1. discriminate H1.
+  intros a x b m H0 H1 H2. fold(tl (x::m)) in H2. rewrite <- H1 in H2.
+  simpl in H2. apply False_ind. apply not_last_a_nil with (a:=b).
+  exact H2. clear H l. intros a l m. intros H0 H1 IH x b l' H2 H3 H4.
+
+*)
 
 (*
 Lemma palindrome_example3: ~palindrome pal_example3.

@@ -2,20 +2,17 @@
 //#include<assert.h>
 //#include<assert.h>
 //#include<string.h>
-#include<malloc.h>
+//#include<malloc.h>
 //#include<assert.h>
 
 
+void f(int x){ printf("I am running: x = %d\n", x); }
+
+void (*g(void (*h)(int)))(int){ return h; }
+
 int main(int argc, char* argv[], char* envp[]){
 
-  int* p;
-  void* q;
-
-  p = malloc(10*sizeof(int));
-
-  q = p;
-
-  free(p);
+  g(f)(3);
 
   return 0;
 }
