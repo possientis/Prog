@@ -141,13 +141,26 @@ Proof.
   intros H0 H1 H2. apply last2, H1, H0.
 Qed.
 
+Lemma last_single: forall (A:Type)(a b:A),
+  last a (b::nil) -> a = b.
+Proof.
+  intros A a b H. cut(forall l:list A, last a l -> l = b::nil -> a = b).
+  intro H'. apply H' with (l:=b::nil). exact H. reflexivity. intros l Hal.
+  generalize Hal. elim Hal.
+
+(*
 Lemma last_unique: forall (A:Type)(a b:A)(l:list A),
   last a l -> last b l -> a = b.
 Proof.
   intros A a b l Ha. generalize b. clear b. generalize Ha. elim Ha.
   clear Ha a l. intros a Ha. clear Ha. intros b Hb. generalize Hb.
- 
-
+  cut (forall l:list A, l = a::nil -> last b l -> a = b). intro H.
+  apply H. reflexivity. intro l. clear Hb. intros Ha Hb. generalize Hb.
+  generalize Ha. elim Hb. intros c Heq H'. clear H'.
+  pose (g:= fun l => match l with | nil => c | x::l' => x end).
+  fold (g (c::nil)). rewrite Heq. simpl. reflexivity. clear Hb.
+  clear Ha. clear l. clear b. intros b x l H IH H' H''.
+*)
 
 (*
 Lemma palindrome_law : forall (A:Type) (a b:A)(l m:list A),

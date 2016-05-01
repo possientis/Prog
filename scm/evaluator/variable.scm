@@ -1,7 +1,2 @@
-(define (lookup-variable-value exp env)
-  (cond ((eq? exp '+) '+)
-        ((eq? exp '*) '*)
-        ((eq? exp 'eval) 'eval)
-        (else (error "Unbound variable -- EVAL" exp))))
-
-
+; added for analyze
+(define (analyze-variable exp) (lambda (env) ((env 'lookup) exp)))

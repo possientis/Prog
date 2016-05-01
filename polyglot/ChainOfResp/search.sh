@@ -1,4 +1,4 @@
 #!/bin/sh
-grep $1 ~/Prog/java -r
-grep $1 ~/Prog/polyglot/ -r | grep '\.java'
+grep $1 ~/Prog/ruby -r
+grep $1 ~/Prog/polyglot/ -r | grep '\.rb'
 

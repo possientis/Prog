@@ -46,6 +46,8 @@
 (load "not.scm")
 (load "or.scm")
 (load "quote.scm")
+(load "analyze.scm")
+(load "self-evaluating.scm")
 (load "variable.scm")
 
 

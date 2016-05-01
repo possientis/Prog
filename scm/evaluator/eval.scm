@@ -1,7 +1,6 @@
 (load "global-env.scm")
 (load "exp-type.scm")
 (load "operands.scm")
-(load "variable.scm")
 (load "quote.scm")
 (load "assignment.scm")
 (load "definition.scm")
@@ -17,8 +16,6 @@
 (load "let-star.scm")
 (load "let-rec.scm")
 (load "apply.scm")
-
-(define DEBUG #f)
 
 (define (eval exp env)
 ;  (newline)(display "eval:\texp = ")(display exp)(newline)(newline)

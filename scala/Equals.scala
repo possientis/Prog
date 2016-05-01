@@ -116,6 +116,84 @@ val coll3 = HashSet(p6)
 println(coll3 contains p7)  // true!!! HURRAY
 
 
+// PITFALL : defining equals in terms of mutable fields
+
+// same as before, but using 'var' instead of 'val'
+class Point4(var x: Int, var y:Int){
+
+  override def equals(other: Any): Boolean =  other match {
+    case that: Point4 => this.x == that.x && this.y == that.y
+    case _            => false 
+  }
+  override def hashCode = x*41 + y // some prime number 41 
+
+}
+
+println("\nWith proper definition, but mutable fields ...")
+
+val p9    = new Point4(2,3)
+val p10   = new Point4(2,3)
+val p11   = new Point4(1,2)
+
+println(p9 equals p10)     // true
+println(p9 equals p11)     // false
+
+
+println(p9 == p10)     // true
+println(p9 == p11)     // false
+
+val coll4 = HashSet(p9)
+println(coll4 contains p10)  // true
+
+// All good so far ...
+p9.x = 3
+println(coll4 contains p9)          // false !!!!
+println(coll4.iterator contains p9) // true !!!
+
+// you may think the issue is to have mutable objects in HashSet.
+// NO !! there is nothing wrong with mutable objects in HashSet,
+// if you leave equals (and hashCode as they are defined by default)
+// Things go wrong if you re-define those in terms of mutable fields.
+
+
+// PITFALL : equals is not an equivalence relation
+
+// Not that you should have implemented hashCode so as to fullfill the
+// fundamental axiom of hashCode: x == y -> x.hashCode = y.hashCode
+
+// If you happen to have defined hashCode so the reverse implication is
+// also true, then == cannot fail to be an equivalence relation.
+
+//type Color.Value                  // enum
+object Color extends Enumeration {  // enum
+  val red, green, blue = Value      // enum 
+}
+
+class ColoredPoint(x:Int, y:Int, val color: Color.Value) extends Point3(x,y) {
+  override def equals(other:Any) = other match {
+    case that:ColoredPoint  => this.color == that.color && super.equals(that)
+    case _                  => false
+  }
+  // Note that there is no need to redefine hashCode here. The new == is stricter
+  // so if x == y in ColoredPoint, then the equivalence hold in Point3 and
+  // consequently x.hashCode = y.hashCode 
+
+}
+println("\nIntroducing subclass ColoredPoint ...")
+val p = new Point3(1,2)
+val cp = new ColoredPoint(1,2,Color.red)  // enum
+
+// symmetry does not hold
+println(p equals cp)  // true
+println(cp equals p)  // false
+
+// wierd consequences
+println(HashSet[Point3](p) contains cp) // true
+println(HashSet[Point3](cp) contains p) // false
+
+
+
+
 
 
 

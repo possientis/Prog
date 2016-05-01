@@ -38,7 +38,7 @@ import java.util.*;
 
 // Our ATM machine only need to worry about the head of the chain of
 // services, which it maintains as an internal data member. This machine
-// has the ability to provided a set of bank notes from a desired amount
+// has the ability to provide a set of bank notes from a desired amount
 class ATMMachine {
 
   // private data member representing the head of the chain of handlers
@@ -87,7 +87,7 @@ abstract class RequestHandler {
     }
 
     // handleRequest logic is the same across all request handlers
-    // in out case. However, this logic is parameterized by denomination
+    // in our case. However, this logic is parameterized by denomination
     // This is a case of mini-template method design pattern.
     BankNote denom = this.denomination();
 
