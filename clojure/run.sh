@@ -1,2 +1,4 @@
 #!/bin/sh
-java -cp .:/usr/share/java/clojure-1.6.0.jar $1
+
+# running from a local copy of clojure
+java -cp .:./clojure.jar $1 $2 $3 $4 $5 $6

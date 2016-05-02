@@ -689,8 +689,56 @@ Proof.
   apply subset_xx_yy_xUy_xUy. exact H1x. exact H1y.
 Qed.
 
-(* at this point, we know that == (aka 'equiv') is a congruence on set *)
+(* at this point, we know that == (aka 'equiv') is a congruence on set        *)
+(* Hence we can define a quotient algebra with signature (0,{},U)             *)
+(* the inclusion relation <= (aka subset) is compatible with ==               *)
+(* hence we can define the inclusion relation <= on the quotient albegra      *)
 
+Ltac splitEquiv H:= unfold equiv in H; rewrite andb_true_iff in H; elim H; clear H.
+
+Lemma subset_compatible: forall (x x' y y':set), 
+  equiv x x'= true -> 
+  equiv y y' = true -> 
+  subset x y = true -> subset x' y' = true.
+Proof.
+  intros x x' y y' Hx Hy Hxy.
+  (* splitting assumptions *)
+  splitEquiv Hx. intros H0x H1x. splitEquiv Hy. intros H0y H1y.
+  (* repeated application of transitivity of <= *)
+  apply subset_transitive with (b:= x). exact H1x.
+  apply subset_transitive with (b:= y). exact Hxy. exact H0y.
+Qed.
+
+(******************************************************************************)
+(*                        belong : set -> set -> bool                         *)
+(******************************************************************************)
+
+Definition belong (x a:set) : bool := subset (Singleton x) a.
+
+(* this relation is itself compatible with ==  *)
+Lemma belong_compatible: forall (x x' a a':set),
+  equiv x x' = true ->
+  equiv a a' = true ->
+  belong x a = true -> belong x' a' = true.
+Proof.
+  unfold belong. intros x x' a a'. intros Hx Ha. apply subset_compatible.
+  apply equiv_xy_SxSy. exact Hx. exact Ha.
+Qed.
+
+(* As a Coq exercise, let us abstract this notion of 'compatibility' *)
+Definition compatible (r: set->set->bool) : Prop := forall x x' y y':set,
+  equiv x x' = true -> equiv y y' = true -> r x y = true -> r x' y'= true.
+
+Lemma subset_compatible': compatible subset.
+Proof.
+  unfold compatible. apply subset_compatible.
+Qed.
+
+Lemma belong_compatible': compatible belong.
+Proof.
+  unfold compatible. apply belong_compatible.
+Qed.
+(* end of Coq exercise *)
 
 
 
