@@ -1,4 +1,4 @@
-(load "make.scm") ; make-lambda
+(load "make.scm")
 
 (define (definition-variable exp)
   (if (symbol? (cadr exp)) (cadr exp) (caadr exp)))

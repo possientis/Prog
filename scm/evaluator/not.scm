@@ -5,6 +5,12 @@
 (define (eval-not exp env)
   (if (true? (eval (not-predicate exp) env)) #f #t))  
 
+; added for analyze
+(define (analyze-not exp)
+  (let ((pproc (analyze (not-predicate exp))))
+    (lambda (env)
+      (if (true? (pproc env) #f #t)))))
+
 
 
 

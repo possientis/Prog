@@ -16,6 +16,20 @@
         (else (eval (first-operand operands) env)
               (eval-sequence (rest-operands operands) env))))           
 
+; added for analyze
+(define (analyze-sequence operands)
+  (define (sequentially proc1 proc2)
+    (lambda (env) (proc1 env) (proc2 env)))
+  (define (loop first-proc rest-procs)
+    (if (null? rest-procs)
+      first-proc
+      (loop (sequentially first-proc (car rest-procs))
+            (cdr rest-procs))))
+  (let ((procs (map analyze exps)))
+    (if (null? procs) (error "Empty sequence -- ANALYSE"))
+    (loop (car procs) (cdr procs))))
+
+
 
 
 

@@ -1,5 +1,15 @@
 #!/bin/sh
 
+echo '\nThis is C++ ...'
+g++ -std=c++14 chainOfResp.cpp 
+START=$(date +%s%N)
+./a.out 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm a.out
+
+
 echo '\nThis is Java ...'
 javac ChainOfResp.java 
 START=$(date +%s%N)
@@ -53,4 +63,13 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
+
+echo '\nThis is Haskell ...'
+ghc -v0 chainOfResp.hs 
+START=$(date +%s%N)
+./chainOfResp 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm chainOfResp chainOfResp.hi chainOfResp.o
 

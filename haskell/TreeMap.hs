@@ -41,11 +41,16 @@ test2 = treeMap length tree   -- Node (Leaf 3) (Node (Leaf 1) (Leaf 4))
 -- enough to create an instance of Haskell class 'Functor', but if we
 -- want the notion to coincide with the categorical notion, we shall
 -- need to ensure that fmap f1.f2 = (fmap f1).(fmap f2)
+-- and fmap id_a = id_(f a)
+--
+--
+-- we cannot use 'Functor' for 'Either a b' or '(a,b)'
 
 instance Functor Tree where
   fmap = treeMap
 
 test3 = fmap length tree  -- Node (Leaf 3) (Node (Leaf 1) (Leaf 4))
+
 
 
 

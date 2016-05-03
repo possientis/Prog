@@ -1,7 +1,17 @@
+(load "make.scm")
+(load "operands.scm")
+
 (define (lambda-params exp) (cadr exp))
 
 (define (lambda-body exp) (cddr exp))
 
-(define (make-procedure parameters body env)
-  (list 'procedure parameters body env))
+; added for analyze
+; important gain in efficiency as we analyze the body just once
+(define (analyze-lambda exp)
+  (let ((vars (lambda-params exp))
+        (bproc (analyze-sequence (lambda-body exp))))
+    (lambda (env)
+      (make-procedure vars bproc env))))
+
+
 

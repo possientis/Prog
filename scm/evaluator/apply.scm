@@ -29,3 +29,12 @@
 ;  (display (primitive-implementation proc))(newline)
   (apply-in-underlying-scheme (primitive-implementation proc) args)) 
 
+; added for analyze
+(define (analyze-application exp)
+  (let ((fproc (analyze (exp-operator exp)))
+        (aprocs (map analyze (exp-operands exp))))
+    (lambda (env)
+      (execute-application (fproc env)
+                           (map (lambda (aproc) (aproc env)) aprocs)))))
+
+; need to understand why execute-application should differ from apply

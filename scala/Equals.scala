@@ -187,9 +187,30 @@ val cp = new ColoredPoint(1,2,Color.red)  // enum
 println(p equals cp)  // true
 println(cp equals p)  // false
 
-// wierd consequences
+// weird consequences
 println(HashSet[Point3](p) contains cp) // true
 println(HashSet[Point3](cp) contains p) // false
+
+println(p.getClass)           // class Main$$anon$1$Point3
+println(cp.getClass)          // class Main$$anon$1$ColoredPoint
+println(p.getClass.getClass)  // class java.lang.Class
+
+val p_ = new Point3(1,1){ override val y = 2 }  // anonymous class
+println(p_.getClass)          // class Main$$anon$2$$anon$1 
+
+// suppose B A are sets with B <= A.
+// suppose RA and RB are equivalence relations on A and B respectively
+// with RB <= RA  (so RA is the equality notion on the superclass A, 
+// while RB is the overriden (but stricter) equality on the subclass B).
+
+// In general, there does not exist an equivalence relation on A 
+// which coincide with RB on BxB and RA on AxA\BxB.
+//
+// Take RA = AxA (all objects are equal) and suppose such relation R exists
+// let x, z in B and y in A\B. then (x,y) and (y,z) in R so (x,z) in R
+// so (x,z) in RB for all x,z in B. so RB = BxB. 
+
+// we cannot hope to override equality on B without having to change it on A
 
 
 

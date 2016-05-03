@@ -1,4 +1,4 @@
 #!/bin/sh
-grep $1 ~/Prog/scala -r
-grep $1 ~/Prog/polyglot/ -r | grep '\.scala'
+grep $1 ~/Prog/cpp -r
+grep $1 ~/Prog/polyglot/ -r | grep '\.cpp'
 
