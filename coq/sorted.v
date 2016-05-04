@@ -64,4 +64,19 @@ Proof.
   auto with sorted_base.
   auto with sorted_base arith. (* need arith here for some reason *)
   auto with sorted_base arith. (* need arith here for some reason *)
+Qed.
+
+Lemma sorted1_inv : forall (A:Set)(R:A->A->Prop)(x:A)(l:list A),
+  sorted R (cons x l) -> sorted R l.
+Proof.
+  inversion 1; auto with sorted_base.
+Qed.
+
+
+Lemma sorted2_inv : forall (A:Set)(R:A->A->Prop)(x y: A)(l:list A),
+  sorted R (cons x (cons y l)) -> R x y.
+Proof.
+  inversion 1; auto with sorted_base.
+Qed.
+
 

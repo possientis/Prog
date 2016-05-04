@@ -1,3 +1,6 @@
+// Use -lcrypt for linker
+// gcc check_password.c err_functions.c -lcrypt
+
 // need to compile with option -lcrypt
 // this program needs to be run by a priviledged user, so requires
 // sudo or prior su etc. In order to make the program usable by

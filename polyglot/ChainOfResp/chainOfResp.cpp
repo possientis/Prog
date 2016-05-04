@@ -108,7 +108,7 @@ std::vector<BankNote> RequestHandler::handleRequest(int amount) const {
   // handleRequest logic is the same across all request handlers
   // in our case. However, this logic is parameterized by denomination
   // This is a case of mini-template method design pattern.
-  BankNote denom = this->denomination();
+  BankNote denom = denomination();
   int value = (int) denom;
   bool addSingleNote = false;   // whether handler gives away note
   std::vector<BankNote> list;   // will be returned after request completion
