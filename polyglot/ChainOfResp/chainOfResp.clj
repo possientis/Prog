@@ -1,5 +1,6 @@
 ; Chain of Responsibility Design Pattern
-(ns chainOfResp (:gen-class))
+(ns chainOfResp (:gen-class)
+  (:require [clojure.string :as string]))
 ; The Chain Of Responsibility design pattern is meant to decouple
 ; clients (which may have various requests) from request handlers
 ; which may be of different types. Rather than forcing a client
@@ -50,7 +51,7 @@
      (this [data]
        (fn [m]
          (cond (= m :getAmount) (getAmount data)
-               :else (throw (Exception. (format "unknown operation %s" m))))))]
+               :else (throw (Exception. (format "ATM:unknown operation %s" m))))))]
     ;
     ; returning no argument constructor
     ;
@@ -97,13 +98,73 @@
        (fn [m]
          (cond (= m :handleRequest) (handleRequest data)
                (= m :denomination)  (denomination data)
-               :else (throw (Exception. (format "unknown operation %s" m))))))]))
+               :else (throw (Exception. (format "RH: unknown operation %s" m))))))
+     ;
+     ; static interface
+     ;
+     (interface [& arg]
+       (if (empty? arg) 
+         (throw (Exception. "RH: argument missing"))
+         ; else, at least one argument
+         (if (empty? (rest arg))  ; single argument was passed
+           (let [[m] arg]
+             (cond (= m :getHandlingChain) (getHandlingChain) ; static call
+             :else  (throw (Exception. (format "unknown static call &s" m)))))
+           ; else, expecting two arguments, will return object instance 
+           (let [[object-type object-next] arg
+                 data {:type object-type :next object-next :this (ref nil)}
+                 object (this data)]
+             (dosync (ref-set (:this data) object))
+             object))))]
+     ;
+     ; returning interface
+     ;
+    interface))
+
+; default implementation
+(defmethod denomination ::handle-request [data] 
+  (throw (Exception. "HandleRequest::denomination is not implemented")))
+
+; delivers $50 notes
+(def Fifty  {:value 50})
+(derive ::handle-request-for-fifty ::handle-request)
+(defmethod denomination ::handle-request-for-fifty [data] Fifty)
+(defn RequestHandlerForFifty [successor]
+  (RequestHandler ::handle-request-for-fifty successor))
+
+
+; delivers $20 notes
+(def Twenty  {:value 20})
+(derive ::handle-request-for-twenty ::handle-request)
+(defmethod denomination ::handle-request-for-twenty [data] Twenty)
+(defn RequestHandlerForTwenty [successor]
+  (RequestHandler ::handle-request-for-twenty successor))
+
+
+; delivers $10 notes
+(def Ten  {:value 10})
+(derive ::handle-request-for-ten ::handle-request)
+(defmethod denomination ::handle-request-for-ten [data] Ten)
+(defn RequestHandlerForTen [successor]
+  (RequestHandler ::handle-request-for-ten successor))
+
+
+; delivers $5 notes
+(def Five  {:value 5})
+(derive ::handle-request-for-five ::handle-request)
+(defmethod denomination ::handle-request-for-five [data] Five)
+(defn RequestHandlerForFive [successor]
+  (RequestHandler ::handle-request-for-five successor))
 
 
 
 (defn -main []
-  (println (cons 2 '())))
-
+  (let [atm   (ATMMachine)
+        nlist ((atm :getAmount) 235)
+        vlist (map :value nlist)
+        slist (map str vlist)]
+    (println "The notes handed out by the ATM machine are:")
+    (println (str "[" (string/join ", " (reverse slist)) "]"))))
 
 
 

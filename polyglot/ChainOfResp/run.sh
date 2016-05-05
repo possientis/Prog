@@ -71,6 +71,16 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
+echo '\nThis is Clojure ...'
+clojurec chainOfResp 1> /dev/null 
+START=$(date +%s%N)
+java -cp .:/usr/share/java/clojure-1.6.0.jar chainOfResp
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
+
+
 echo '\nThis is Haskell ...'
 ghc -v0 chainOfResp.hs 
 START=$(date +%s%N)

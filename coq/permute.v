@@ -34,3 +34,41 @@ Proof.
   elim H. clear H. intros H0 H1.
   unfold transposition'.
   exists (l1++l3), (l4++l2), x, y. rewrite H0, H1. clear H0 H1.
+  split. rewrite <- app_assoc with (l:=l1). rewrite <- app_assoc with (l:=l3).
+  rewrite <- app_assoc with (n:=l2). reflexivity. 
+  rewrite <- app_assoc with (l:=l1). rewrite <- app_assoc with (l:=l3).
+  rewrite <- app_assoc with (n:=l2). reflexivity.
+  apply H1. exact H0.
+  intro H. unfold transposition' in H. elim H. clear H. intros l1 H.
+  elim H. clear H. intros l2 H. elim H. clear H. intros x H.
+  elim H. clear H. intros y H. elim H. clear H. intros Hl Hm.
+  rewrite Hl, Hm. apply transp_gen. apply transp_pair.
+Qed.
+
+(* This inductive predicate expresses the fact that two 
+lists are permutations of one another *)
+Inductive permutation {A:Type} : list A -> list A -> Prop :=
+  | perm_zero : forall l:list A, permutation l l
+  | perm_next : forall l l' m: list A, 
+    permutation l l' -> transposition l' m -> permutation l m. 
+
+
+Lemma permutation_reflexive : forall (A:Type) (l:list A), permutation l l.
+Proof.
+  intros A l. apply perm_zero.
+Qed.
+
+ 
+Lemma transposition_symmetric: forall (A:Type) (l m: list A),
+  transposition l m -> transposition m l.
+Proof.
+  intros A l m H. generalize H. elim H. clear l m H.
+  intros x y H. clear H. apply transp_pair. clear l m H.
+  intros l m l1 l2 H H' H0. clear H0. apply transp_gen.
+  apply H'. exact H.
+Qed.
+
+
+
+
+
