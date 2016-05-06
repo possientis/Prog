@@ -93,7 +93,7 @@ const RequestHandler* RequestHandler::getHandlingChain(){
 }
 
 // This is the main method of the class. It is often an abstract
-// method as the diffeent types of request handlers may have little
+// method as the different types of request handlers may have little
 // in common. In our case, all request handlers are similar and only
 // differ in the specific denomination of the bank note they deliver.
 // Such denominations are encoded in a virtual method.

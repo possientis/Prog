@@ -1,6 +1,6 @@
 (ns test_java_jdbc
   (:gen-class)
-  (:require [clojure.string :as j]))
+  (:require [clojure.java.jdbc :as j]))
 
 
 

@@ -1,5 +1,15 @@
 #!/bin/sh
 
+echo '\nThis is C ...'
+gcc chainOfResp.c
+START=$(date +%s%N)
+./a.out 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm a.out
+
+
 echo '\nThis is C++ ...'
 g++ -std=c++14 chainOfResp.cpp 
 START=$(date +%s%N)

@@ -68,7 +68,24 @@ Proof.
   apply H'. exact H.
 Qed.
 
+Lemma transposition_first: forall (A:Type) (l l' m:list A),
+  transposition l l' -> permutation l' m -> permutation l m.
+Proof.
+  intros A l l' m H0 H1. generalize H0. clear H0. generalize H1 l. 
+  elim H1. clear H1 l l' m. intros m. intro H. clear H. intro l.
+  intro H. apply perm_next with (l':=l). apply perm_zero. exact H.
+  clear H1 l l' m. intros l l' m H0 H1 H3 H4 k H5.
+  eapply perm_next. apply H1. exact H0. exact H5. exact H3.
+  (* dont understand why normal 'apply ... with' was failing *)
+Qed.
 
 
 
+(*
+Lemma permutation_symmetric: forall (A:Type) (l m: list A),
+  permutation l m -> permutation m l.
+Proof.
+  intros A l m H. generalize H. elim H. auto. clear H m l.  
+  intros l l' m H0 H1 H2 H3.
+*)
 
