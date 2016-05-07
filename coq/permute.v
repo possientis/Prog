@@ -79,13 +79,10 @@ Proof.
   (* dont understand why normal 'apply ... with' was failing *)
 Qed.
 
-
-
-(*
 Lemma permutation_symmetric: forall (A:Type) (l m: list A),
   permutation l m -> permutation m l.
 Proof.
   intros A l m H. generalize H. elim H. auto. clear H m l.  
-  intros l l' m H0 H1 H2 H3.
-*)
-
+  intros l l' m H0 H1 H2 H3. apply transposition_first with (l':=l').
+  apply transposition_symmetric. exact H2. apply H1. exact H0.
+Qed.

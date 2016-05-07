@@ -6,9 +6,9 @@
   (prompt-for-input input-prompt)
   (newline)(display ">")
   (let ((input (read)))
-    (let ((output (eval input global-env)))
+    (let ((output1 (eval input global-env)))
       (announce-output output-prompt)
-      (user-print output)))
+      (user-print output1)))
   (driver-loop))
 
 (define (prompt-for-input str)

@@ -1,3 +1,2 @@
-(define x 5)
-(define y 6)
-(define z (+ x y))
+;(define example 2)
+(display (defined? example))(newline)
