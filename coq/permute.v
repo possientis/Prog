@@ -86,3 +86,17 @@ Proof.
   intros l l' m H0 H1 H2 H3. apply transposition_first with (l':=l').
   apply transposition_symmetric. exact H2. apply H1. exact H0.
 Qed.
+
+Lemma permutation_transitive: forall (A:Type) (l m k: list A),
+  permutation l m -> permutation m k -> permutation l k.
+Proof.
+  intros A l m k H. generalize H k. clear k. elim H. auto.
+  clear H l m. intros l l' m H0 H1 H2 H3 k H4.
+  apply H1. exact H0. apply transposition_first with (l':=m).
+  exact H2. exact H4.
+Qed.
+
+
+
+
+

@@ -41,7 +41,16 @@
 # jar cmf META-INF/MANIFEST.MF clojure.jar clojure        # clojure.jar created
 
 
-java -cp .:./clojure.jar $1 $2 $3 $4 $5 $6
+# local customized jar (need to be properly created , see above)
+#java -cp .:./clojure.jar $1 $2 $3 $4 $5 $6
+
+# This is all very nice, but totally unnecessary. In order to add functionality to clojure,
+# there is no need to manufacture a new archive. Just create clojure/java/ with jdbc.clj 
+# from the working directory, and you can just used the standard jar with '.'
+# standard jar (via local symlink)
+
+java -cp .:/usr/share/java/clojure-1.6.0.jar $1 $2 $3 $4 $5 $6
+
 
 
 

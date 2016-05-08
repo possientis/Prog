@@ -1,5 +1,5 @@
 Require Import List.
-Require Import Datatypes.
+Require Import Arith.
 
 Parameter A:Type.
 Parameter R: A -> A -> Prop.
@@ -31,6 +31,16 @@ Fixpoint sort_n (n:nat): list A -> list A :=
       end)
   end. 
 
+(* This lemma is part of the Coq 8.5 library *)
+Lemma length_zero_iff_nil : forall (A:Type) (l:list A),
+  length l = 0 <-> l = nil.
+Proof.
+  intros A l. elim l. unfold length. split; auto. 
+  clear l. intros a l H. split. clear H. simpl. intro H.
+  discriminate H. clear H. intro H. discriminate H.
+Qed.
+
+
 Lemma sort_n_Sn : forall (n:nat) (l:list A),
   length l <= n -> sort_n n l = sort_n (S n) l.
 Proof.
@@ -38,5 +48,24 @@ Proof.
   intros n. elim n.
   (* n = 0 *)
   intros l H. cut (l = nil). intro H'. rewrite H'. simpl. reflexivity.
-  apply length_zero_iff_nil. 
+  apply length_zero_iff_nil. symmetry. apply le_n_0_eq. exact H.
+  (* n -> n+1 *)(* induction on l *)
+  clear n. intros n IH l. elim l.
+  (* l = nil *)
+  simpl. auto.
+  (* l = (x::l') *)(* induction on l' *)
+  clear l. intros x l' H. clear H. elim l'.
+  (* l' = nil *)
+  simpl. auto.
+  (* l' = (a::l'') *)
+  clear l'. intros a l'' H. clear H. intro H.
+  (*pose (l' := (a::l'')). change (length (x::l') <= S n) in H. 
+  change (sort_n (S n) (x :: l') = sort_n (S (S n)) (x :: l')). *)
+  unfold sort_n at 2. fold sort_n.
+  cut (sort_n (S n) (a::l'') = sort_n (S n) (a::l'')). intro H'.
+  unfold sort_n at 2 in H'. fold sort_n in H'. rewrite <- H'.
+
+  
+
+
 
