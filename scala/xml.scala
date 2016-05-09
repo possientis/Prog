@@ -65,8 +65,9 @@ abstract class CCTherm {
       <dateObtained>{dateObtained}</dateObtained>
       <bookPrice>{bookPrice}</bookPrice>
       <purchasePrice>{purchasePrice}</purchasePrice>
-      <condition>condition</condition>
+      <condition>{condition}</condition>
     </cctherm>
+
 }
 
 val therm = new CCTherm {
@@ -80,6 +81,7 @@ val therm = new CCTherm {
 
 println(therm)  // hot dog thermometer
 println(therm.toXML)
+
 /*
 <cctherm>
       <description>hot dog thermometer</description>
@@ -87,13 +89,48 @@ println(therm.toXML)
       <dateObtained>March 14, 2006</dateObtained>
       <bookPrice>2199</bookPrice>
       <purchasePrice>500</purchasePrice>
-      <condition>condition</condition>
+      <condition>9</condition>
     </cctherm>
 */
-
 // you escape '{' and '}' within xml text with {{ and }}.
 val x2 = <a> }}}} brace yourself! {{{{ </a>
 println(x2) // <a> }} brace yourself! {{ </a>
+
+// text
+println(<a>blah blah <tag/>blah</a>.text)   // blah blah blah
+println(<a>input ---&gt; output </a>.text)  // input ---> output
+
+// sub-element
+println(<a><b><c>hello</c></b></a> \ "b")   // <b><c>hello</c></b>
+println(<a><b><c>hello</c></b></a> \ "c")   // ""
+// sub-element (deep search)
+println(<a><b><c>hello</c></b></a> \\ "c")   // <c>hello</c>
+
+val joe = <employee name="Joe" rank="code monkey" serial="123"/>
+
+println(joe \ "@name")    // Joe
+println(joe \ "@rank")    // code monkey
+println(joe \ "@serial")  // 123
+
+def fromXML(node: xml.Node): CCTherm =
+  new CCTherm {
+    val description   =                  (node \ "description").text
+    val yearMade      = Integer.parseInt((node \ "yearMade").text)
+    val dateObtained  =                  (node \ "dateObtained").text
+    val bookPrice     = Integer.parseInt((node \ "bookPrice").text)
+    val purchasePrice = Integer.parseInt((node \ "purchasePrice").text)
+    val condition     = Integer.parseInt((node \ "condition").text)
+  }
+
+println(fromXML(therm.toXML)) // hot dog thermometer
+
+// Y
+
+
+
+
+
+
 
 
 

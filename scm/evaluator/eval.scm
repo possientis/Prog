@@ -4,6 +4,7 @@
 (load "quote.scm")
 (load "assignment.scm")
 (load "definition.scm")
+(load "defined.scm")
 (load "if.scm")
 (load "not.scm")
 (load "lambda.scm")
@@ -17,6 +18,7 @@
 (load "let-rec.scm")
 (load "apply.scm")
 
+
 (define (eval exp env)
 ;  (newline)(display "eval:\texp = ")(display exp)(newline)(newline)
 ;  (display "env = ")(display (env 'to-string))(newline)
@@ -26,6 +28,7 @@
         ((quoted? exp) (text-of-quotation exp))                 
         ((assignment? exp) (eval-assignment exp env))           
         ((definition? exp) (eval-definition exp env))           
+        ((is-defined? exp)(eval-defined? exp env))
         ((if? exp) (eval-if exp env))                           
         ((not? exp) (eval-not exp env))
         ((lambda? exp)(make-procedure(lambda-params exp)(lambda-body exp)env))

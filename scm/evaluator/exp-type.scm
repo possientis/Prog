@@ -15,6 +15,8 @@
 
 (define (definition? exp) (tagged-list? exp 'define))
 
+(define (is-defined? exp) (tagged-list? exp 'defined?))
+
 (define (if? exp) (tagged-list? exp 'if))
 
 (define (not? exp) (tagged-list? exp 'not))

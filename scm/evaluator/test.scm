@@ -13,6 +13,7 @@
 (load "operands.scm")
 (load "cond.scm")
 (load "definition.scm")
+(load "defined.scm")
 (load "hash.scm")
 (load "link-node.scm")
 (load "link.scm")

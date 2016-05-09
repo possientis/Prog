@@ -1,6 +1,8 @@
 import qualified Data.ByteString.Lazy.Char8 as L8
 import qualified Data.ByteString.Lazy as L
 import Data.Int (Int64)
+import Control.Applicative -- <$> is alias for infix `fmap`
+import Data.Char
 
 data ParseState = ParseState {
   string :: L.ByteString,
@@ -70,6 +72,39 @@ parser ==> func = Parse chained
           case runParse parser state of
             Left errMessage           -> Left errMessage
             Right (result, newState)  -> runParse (func result) newState 
+
+instance Functor Parse where
+  fmap f parser = parser ==> \result -> identity(f result)
+
+-- some explanation required here: we are attempting to check that our
+-- definition of fmap for Parse (whose purpose it is to turn 'Parse' into a Functor)
+-- does actually match categorical functor properties, in particular that
+-- id : a -> a is mapped to id : Parse a -> Parse a
+-- Note that infix operator <$> is an alias for `fmap`, so that
+-- given an arrow f : a -> b, (f <$>) : Parse a -> Parse b denotes the image
+-- of f by the functor 'Parse'
+test2 = parse parseByte (L8.pack "")          -- Left "byte offset 0: no more input"
+test3 = parse (id <$> parseByte) (L8.pack "") -- Left "byte offset 0: no more input"
+-- we cannot conclude that (id <$>) is the identity on Parse GHC.Word.Word8
+-- we cannot even conclude that they coincide on the particular parser parseByte,
+-- but at least we have succesfully checked that the two parsers (id <$> parseByte)
+-- parseByte produce the same output on the empty ByteString.
+
+test4 = L8.pack "foo"
+test5 = L.head test4 -- 102
+test6 = parse parseByte test4           -- Right 102 
+test7 = parse (id <$> parseByte) test4  -- Right 102
+-- parseByte and (id <$> parseByte) have same output on "foo" ByteString
+
+-- testing composition law for functor
+test8 = parse ((chr.fromIntegral) <$> parseByte) test4            -- Right 'f'
+test9 = parse (((chr <$>) . (fromIntegral <$>)) parseByte) test4  -- Right 'f'
+test10 = parse (chr <$> fromIntegral <$> parseByte) test4         -- Right 'f'    <$> is right associative
+
+test11 = parse ((chr.(+2).fromIntegral) <$> parseByte) test4      -- Right 'h'
+test12 = parse (chr <$> ((+2).fromIntegral) <$> parseByte) test4  -- Right 'h'
+
+
 
 
 

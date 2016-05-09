@@ -41,6 +41,7 @@ Proof.
 Qed.
 
 
+
 Lemma sort_n_Sn : forall (n:nat) (l:list A),
   length l <= n -> sort_n n l = sort_n (S n) l.
 Proof.
@@ -59,13 +60,10 @@ Proof.
   simpl. auto.
   (* l' = (a::l'') *)
   clear l'. intros a l'' H. clear H. intro H.
-  (*pose (l' := (a::l'')). change (length (x::l') <= S n) in H. 
-  change (sort_n (S n) (x :: l') = sort_n (S (S n)) (x :: l')). *)
-  unfold sort_n at 2. fold sort_n.
-  cut (sort_n (S n) (a::l'') = sort_n (S n) (a::l'')). intro H'.
-  unfold sort_n at 2 in H'. fold sort_n in H'. rewrite <- H'.
-
-  
+  pose (p:= S n). change (sort_n (S n) (x :: a :: l'') = sort_n (S p) (x :: a :: l'')).
+  unfold sort_n at 2. fold sort_n. unfold p. symmetry. rewrite <- IH, <- IH.
+  symmetry. unfold sort_n at 1. fold sort_n. reflexivity.
+  simpl.
 
 
 

@@ -1,1 +1,2 @@
-make repl.scm work with analyze 
+extend interpreter with 'defined?' keyword
+include guards
