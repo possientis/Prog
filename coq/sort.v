@@ -40,8 +40,27 @@ Proof.
   discriminate H. clear H. intro H. discriminate H.
 Qed.
 
+Lemma length_of_tl : forall (A:Type) (l: list A),
+  l <> nil -> S (length (tl l)) = length l.
+Proof.
+  intros A l. elim l. unfold not. intro H. apply False_ind. auto.
+  clear l. intros a l IH. intro H. clear H. simpl. reflexivity.
+Qed.
+
+Lemma le_length_sort_n_n : forall (n:nat)(l: list A),
+  length (sort_n n l) <= n.
+Proof.
+  intro n. elim n. auto. clear n. intros n IH l. elim l.
+  simpl. auto with arith. clear l. intros a l H. clear H.
+  elim l. simpl. auto with arith. clear l. intros b l H.
+  clear H. simpl. set (y:= hd_error (sort_n n (b :: l))).
+  case y. intro c. set (comp := R_bool a c). case comp.
+  simpl. apply le_n_S. apply IH. simpl. apply le_n_S.
+  apply IH. simpl. auto with arith.
+Qed.  
 
 
+(*
 Lemma sort_n_Sn : forall (n:nat) (l:list A),
   length l <= n -> sort_n n l = sort_n (S n) l.
 Proof.
@@ -64,6 +83,5 @@ Proof.
   unfold sort_n at 2. fold sort_n. unfold p. symmetry. rewrite <- IH, <- IH.
   symmetry. unfold sort_n at 1. fold sort_n. reflexivity.
   simpl.
-
-
+*)
 

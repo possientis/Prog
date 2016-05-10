@@ -29,32 +29,25 @@
 // bookkeeping or modes.
 
 // This is the Command interface
-interface ICommand {          // our demo class is called 'Command'
-  public void execute();
-}
+function Command(){}
+Command.prototype.execute = function(){ throw "Command::execute is abstract"; }
+
 
 // This is the Invoker class. It is akin to the remote control of an 
 // electronic device, or a menu object within an application. It allows
 // the client perform actions through a single interface, without
 // having to worry about the various part of a system. The invoker class
 // it itself very generic and is unaware if the specifics of commands.
-class RemoteControl {
-  private final ICommand _powerOn;
-  private final ICommand _powerOff;
-  private final ICommand _volumeUp;
-  private final ICommand _volumeDown;
-  public RemoteControl(ICommand on, ICommand off, ICommand up, ICommand down){
-    this._powerOn     = on;
-    this._powerOff    = off;
-    this._volumeUp    = up;
-    this._volumeDown  = down;
-  }
-
-  public void switchPowerOn() { _powerOn.execute();   }
-  public void switchPowerOff(){ _powerOff.execute();  }
-  public void raiseVolume()   { _volumeUp.execute();  }
-  public void lowerVolume()   { _volumeDown.execute();}
+function RemoteControl(on, off, up, down){
+  this._powerOn     = on;
+  this._powerOff    = off;
+  this._volumeUp    = up;
+  this._volumeDown  = down;
 }
+RemoteControl.prototype.switchPowerOn  = function(){ this._powerOn.execute();    }
+RemoteControl.prototype.switchPowerOff = function(){ this._powerOff.execute();   }
+RemoteControl.prototype.raiseVolume    = function(){ this._volumeUp.execute();   }
+RemoteControl.prototype.lowerVolume    = function(){ this._volumeDown.execute(); }
 
 // This is the receiver class. It is the class of objects which will perform
 // the various actions. There may be sereral receiver classes comprising
@@ -66,33 +59,32 @@ class RemoteControl {
 // and that of the Televion. However, this correspondance is misleading
 // as in general, the interface of the invoker object may have little in
 // common with those of the various receiver objects.
-class Television {
-  private int     _volume = 10;
-  private boolean _isOn = false;
-  public Television(){}
-  public void switchOn(){
-    if(_isOn == false){
-      _isOn = true;
-      System.out.println("Televion is now switched on");
-    }
+function Television(){
+  this._volume  = 10;
+  this._isOn    = false;
+}
+Television.prototype.switchOn = function(){
+  if(this._isOn == false){
+    this._isOn = true;  
+    print("Television is now switched on");
   }
-  public void switchOff(){
-    if(_isOn){
-      _isOn = false;
-      System.out.println("Television is now switched off");
-    }
+}
+Television.prototype.switchOff = function(){
+  if(this._isOn){
+    this._isOn = false;  
+    print("Television is now switched off");
   }
-  public void volumeUp(){
-    if(_isOn && _volume < 20){
-      _volume++;
-      System.out.println("Television volume increased to " + _volume);
-    }
+}
+Television.prototype.volumeUp = function(){
+  if(this._isOn && this._volume < 20){
+    this._volume++;
+    print("Television volume increased to " + this._volume);
   }
-  public void volumeDown(){
-    if(_isOn && _volume > 0){
-      _volume--;
-      System.out.println("Television volume decreased to " + _volume);
-    }
+}
+Television.prototype.volumeDown = function(){
+  if(this._isOn && this._volume > 0){
+    this._volume--;
+    print("Television volume decreased to " + this._volume);
   }
 }
 
@@ -103,66 +95,55 @@ class Television {
 // of indirection: client code will call an invoker object (menu, remote)
 // which will in turn execute a command, which will send a request to
 // to a receiver object, which will finally perform the requested action.
-class OnCommand implements ICommand {
-  private final Television _television;
-  public OnCommand(Television device){
-    _television = device;
-  }
-  public void execute(){
-    _television.switchOn();
-  }
-}
+function OnCommand(television){
+  Command.call(this);
+  this._television = television;
+}  
+OnCommand.prototype = Object.create(Command.prototype)
+OnCommand.prototype.execute = function(){ this._television.switchOn(); }
 
-class OffCommand implements ICommand {
-  private final Television _television;
-  public OffCommand(Television device){
-    _television = device;
-  }
-  public void execute(){
-    _television.switchOff();
-  }
-}
+function OffCommand(television){
+  Command.call(this);
+  this._television = television;
+}  
+OffCommand.prototype = Object.create(Command.prototype)
+OffCommand.prototype.execute = function(){ this._television.switchOff(); }
 
-class UpCommand implements ICommand {
-  private final Television _television;
-  public UpCommand(Television device){
-    _television = device;
-  }
-  public void execute(){
-    _television.volumeUp();
-  }
-}
+function UpCommand(television){
+  Command.call(this);
+  this._television = television;
+}  
+UpCommand.prototype = Object.create(Command.prototype)
+UpCommand.prototype.execute = function(){ this._television.volumeUp(); }
 
-class DownCommand implements ICommand {
-  private final Television _television;
-  public DownCommand(Television device){
-    _television = device;
-  }
-  public void execute(){
-    _television.volumeDown();
-  }
-}
+function DownCommand(television){
+  Command.call(this);
+  this._television = television;
+}  
+DownCommand.prototype = Object.create(Command.prototype)
+DownCommand.prototype.execute = function(){ this._television.volumeDown(); }
+
 
 // let's try it all out
-public class Command {
-  public static void main(String[] args){
-    // our application will need some reveiver object
-    Television device = new Television();
-    // our application will need an invoker object, which
-    // in turns relies on concrete command objects:
-    ICommand on   = new OnCommand(device);  // command to switch device on
-    ICommand off  = new OffCommand(device); // command to switch device off
-    ICommand up   = new UpCommand(device);  // command to turn volume up
-    ICommand down = new DownCommand(device);// command to turn volume down
-    // now we are ready to create our invoker object which
-    // we should think of as some sort of application menu.
-    RemoteControl menu = new RemoteControl(on, off, up, down);
-    // client code is now able to access the invoker object
-    menu.switchPowerOn();
-    menu.raiseVolume();
-    menu.raiseVolume();
-    menu.raiseVolume();
-    menu.lowerVolume();
-    menu.switchPowerOff();
-  }
-}
+// our application will need some reveiver object
+device = new Television();
+// our application will need an invoker object, which
+// in turns relies on concrete command objects:
+on   = new OnCommand(device);  // command to switch device on
+off  = new OffCommand(device); // command to switch device off
+up   = new UpCommand(device);  // command to turn volume up
+down = new DownCommand(device);// command to turn volume down
+// now we are ready to create our invoker object which
+// we should think of as some sort of application menu.
+menu = new RemoteControl(on, off, up, down);
+// client code is now able to access the invoker object
+menu.switchPowerOn();
+menu.raiseVolume();
+menu.raiseVolume();
+menu.raiseVolume();
+menu.lowerVolume();
+menu.switchPowerOff();
+
+
+
+

@@ -1,5 +1,5 @@
 // Command Design Pattern
-
+using System;
 // from https://en.wikipedia.org/wiki/Command_pattern 
 // In object-oriented programming, the command pattern is a behavioral 
 // design pattern in which an object is used to encapsulate all information 
@@ -30,7 +30,7 @@
 
 // This is the Command interface
 interface ICommand {          // our demo class is called 'Command'
-  public void execute();
+  void Execute();
 }
 
 // This is the Invoker class. It is akin to the remote control of an 
@@ -39,10 +39,11 @@ interface ICommand {          // our demo class is called 'Command'
 // having to worry about the various part of a system. The invoker class
 // it itself very generic and is unaware if the specifics of commands.
 class RemoteControl {
-  private final ICommand _powerOn;
-  private final ICommand _powerOff;
-  private final ICommand _volumeUp;
-  private final ICommand _volumeDown;
+  private readonly ICommand _powerOn;
+  private readonly ICommand _powerOff;
+  private readonly ICommand _volumeUp;
+  private readonly ICommand _volumeDown;
+
   public RemoteControl(ICommand on, ICommand off, ICommand up, ICommand down){
     this._powerOn     = on;
     this._powerOff    = off;
@@ -50,11 +51,13 @@ class RemoteControl {
     this._volumeDown  = down;
   }
 
-  public void switchPowerOn() { _powerOn.execute();   }
-  public void switchPowerOff(){ _powerOff.execute();  }
-  public void raiseVolume()   { _volumeUp.execute();  }
-  public void lowerVolume()   { _volumeDown.execute();}
+  public void SwitchPowerOn() { _powerOn.Execute();   }
+  public void SwitchPowerOff(){ _powerOff.Execute();  }
+  public void RaiseVolume()   { _volumeUp.Execute();  }
+  public void LowerVolume()   { _volumeDown.Execute();}
 }
+
+
 
 // This is the receiver class. It is the class of objects which will perform
 // the various actions. There may be sereral receiver classes comprising
@@ -68,30 +71,30 @@ class RemoteControl {
 // common with those of the various receiver objects.
 class Television {
   private int     _volume = 10;
-  private boolean _isOn = false;
+  private bool    _isOn = false;
   public Television(){}
-  public void switchOn(){
+  public void SwitchOn(){
     if(_isOn == false){
       _isOn = true;
-      System.out.println("Televion is now switched on");
+      Console.WriteLine("Televion is now switched on");
     }
   }
-  public void switchOff(){
+  public void SwitchOff(){
     if(_isOn){
       _isOn = false;
-      System.out.println("Television is now switched off");
+      Console.WriteLine("Television is now switched off");
     }
   }
-  public void volumeUp(){
+  public void VolumeUp(){
     if(_isOn && _volume < 20){
       _volume++;
-      System.out.println("Television volume increased to " + _volume);
+      Console.WriteLine("Television volume increased to " + _volume);
     }
   }
-  public void volumeDown(){
+  public void VolumeDown(){
     if(_isOn && _volume > 0){
       _volume--;
-      System.out.println("Television volume decreased to " + _volume);
+      Console.WriteLine("Television volume decreased to " + _volume);
     }
   }
 }
@@ -103,49 +106,49 @@ class Television {
 // of indirection: client code will call an invoker object (menu, remote)
 // which will in turn execute a command, which will send a request to
 // to a receiver object, which will finally perform the requested action.
-class OnCommand implements ICommand {
-  private final Television _television;
+class OnCommand : ICommand {
+  private readonly Television _television;
   public OnCommand(Television device){
     _television = device;
   }
-  public void execute(){
-    _television.switchOn();
+  public void Execute(){
+    _television.SwitchOn();
   }
 }
 
-class OffCommand implements ICommand {
-  private final Television _television;
+class OffCommand : ICommand {
+  private readonly Television _television;
   public OffCommand(Television device){
     _television = device;
   }
-  public void execute(){
-    _television.switchOff();
+  public void Execute(){
+    _television.SwitchOff();
   }
 }
 
-class UpCommand implements ICommand {
-  private final Television _television;
+class UpCommand : ICommand {
+  private readonly Television _television;
   public UpCommand(Television device){
     _television = device;
   }
-  public void execute(){
-    _television.volumeUp();
+  public void Execute(){
+    _television.VolumeUp();
   }
 }
 
-class DownCommand implements ICommand {
-  private final Television _television;
+class DownCommand : ICommand {
+  private readonly Television _television;
   public DownCommand(Television device){
     _television = device;
   }
-  public void execute(){
-    _television.volumeDown();
+  public void Execute(){
+    _television.VolumeDown();
   }
 }
 
 // let's try it all out
 public class Command {
-  public static void main(String[] args){
+  public static void Main(string[] args){
     // our application will need some reveiver object
     Television device = new Television();
     // our application will need an invoker object, which
@@ -158,11 +161,13 @@ public class Command {
     // we should think of as some sort of application menu.
     RemoteControl menu = new RemoteControl(on, off, up, down);
     // client code is now able to access the invoker object
-    menu.switchPowerOn();
-    menu.raiseVolume();
-    menu.raiseVolume();
-    menu.raiseVolume();
-    menu.lowerVolume();
-    menu.switchPowerOff();
+    menu.SwitchPowerOn();
+    menu.RaiseVolume();
+    menu.RaiseVolume();
+    menu.RaiseVolume();
+    menu.LowerVolume();
+    menu.SwitchPowerOff();
   }
 }
+
+

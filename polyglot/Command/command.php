@@ -1,3 +1,4 @@
+<?php
 // Command Design Pattern
 
 // from https://en.wikipedia.org/wiki/Command_pattern 
@@ -29,8 +30,8 @@
 // bookkeeping or modes.
 
 // This is the Command interface
-interface ICommand {          // our demo class is called 'Command'
-  public void execute();
+interface Command {
+  public function execute();
 }
 
 // This is the Invoker class. It is akin to the remote control of an 
@@ -39,21 +40,21 @@ interface ICommand {          // our demo class is called 'Command'
 // having to worry about the various part of a system. The invoker class
 // it itself very generic and is unaware if the specifics of commands.
 class RemoteControl {
-  private final ICommand _powerOn;
-  private final ICommand _powerOff;
-  private final ICommand _volumeUp;
-  private final ICommand _volumeDown;
-  public RemoteControl(ICommand on, ICommand off, ICommand up, ICommand down){
-    this._powerOn     = on;
-    this._powerOff    = off;
-    this._volumeUp    = up;
-    this._volumeDown  = down;
-  }
+  private $_powerOn;
+  private $_powerOff;
+  private $_volumeUp;
+  private $_volumeDown;
 
-  public void switchPowerOn() { _powerOn.execute();   }
-  public void switchPowerOff(){ _powerOff.execute();  }
-  public void raiseVolume()   { _volumeUp.execute();  }
-  public void lowerVolume()   { _volumeDown.execute();}
+  public function __construct($on, $off, $up, $down){
+    $this->_powerOn     = $on;
+    $this->_powerOff    = $off;
+    $this->_volumeUp    = $up;
+    $this->_volumeDown  = $down;
+  }
+  public function switchPowerOn()   { $this->_powerOn->execute(); }
+  public function switchPowerOff()  { $this->_powerOff->execute(); }
+  public function raiseVolume()     { $this->_volumeUp->execute(); }
+  public function lowerVolume()     { $this->_volumeDown->execute(); }
 }
 
 // This is the receiver class. It is the class of objects which will perform
@@ -67,31 +68,39 @@ class RemoteControl {
 // as in general, the interface of the invoker object may have little in
 // common with those of the various receiver objects.
 class Television {
-  private int     _volume = 10;
-  private boolean _isOn = false;
-  public Television(){}
-  public void switchOn(){
-    if(_isOn == false){
-      _isOn = true;
-      System.out.println("Televion is now switched on");
+  private $_volume;
+  private $_isOn;
+
+  public function __construct(){
+    $this->_volume  = 10;
+    $this->_isOn    = false; 
+  }
+
+  public function switchOn(){
+    if($this->_isOn == false){
+      $this->_isOn = true;
+      echo "Television is now switched on\n";
+    }
+  } 
+
+  public function switchOff(){
+    if($this->_isOn){
+      $this->_isOn = false;
+      echo "Television is now switched off\n";
     }
   }
-  public void switchOff(){
-    if(_isOn){
-      _isOn = false;
-      System.out.println("Television is now switched off");
+
+  public function volumeUp(){
+    if($this->_isOn && $this->_volume < 20){
+      $this->_volume++;
+      echo "Television volume increased to {$this->_volume}\n";
     }
   }
-  public void volumeUp(){
-    if(_isOn && _volume < 20){
-      _volume++;
-      System.out.println("Television volume increased to " + _volume);
-    }
-  }
-  public void volumeDown(){
-    if(_isOn && _volume > 0){
-      _volume--;
-      System.out.println("Television volume decreased to " + _volume);
+
+  public function volumeDown(){
+    if($this->_isOn && $this->_volume  > 0){
+      $this->_volume--;
+      echo "Television volume decreased to {$this->_volume}\n";
     }
   }
 }
@@ -103,66 +112,64 @@ class Television {
 // of indirection: client code will call an invoker object (menu, remote)
 // which will in turn execute a command, which will send a request to
 // to a receiver object, which will finally perform the requested action.
-class OnCommand implements ICommand {
-  private final Television _television;
-  public OnCommand(Television device){
-    _television = device;
+class OnCommand implements Command {
+  private $_television;
+  public function __construct($device){
+    $this->_television = $device;
   }
-  public void execute(){
-    _television.switchOn();
-  }
-}
-
-class OffCommand implements ICommand {
-  private final Television _television;
-  public OffCommand(Television device){
-    _television = device;
-  }
-  public void execute(){
-    _television.switchOff();
+  public function execute(){
+    $this->_television->switchOn();
   }
 }
 
-class UpCommand implements ICommand {
-  private final Television _television;
-  public UpCommand(Television device){
-    _television = device;
+class OffCommand implements Command {
+  private $_television;
+  public function __construct($device){
+    $this->_television = $device;
   }
-  public void execute(){
-    _television.volumeUp();
+  public function execute(){
+    $this->_television->switchOff();
   }
 }
 
-class DownCommand implements ICommand {
-  private final Television _television;
-  public DownCommand(Television device){
-    _television = device;
+class UpCommand implements Command {
+  private $_television;
+  public function __construct($device){
+    $this->_television = $device;
   }
-  public void execute(){
-    _television.volumeDown();
+  public function execute(){
+    $this->_television->volumeUp();
+  }
+}
+
+class DownCommand implements Command {
+  private $_television;
+  public function __construct($device){
+    $this->_television = $device;
+  }
+  public function execute(){
+    $this->_television->volumeDown();
   }
 }
 
 // let's try it all out
-public class Command {
-  public static void main(String[] args){
-    // our application will need some reveiver object
-    Television device = new Television();
-    // our application will need an invoker object, which
-    // in turns relies on concrete command objects:
-    ICommand on   = new OnCommand(device);  // command to switch device on
-    ICommand off  = new OffCommand(device); // command to switch device off
-    ICommand up   = new UpCommand(device);  // command to turn volume up
-    ICommand down = new DownCommand(device);// command to turn volume down
-    // now we are ready to create our invoker object which
-    // we should think of as some sort of application menu.
-    RemoteControl menu = new RemoteControl(on, off, up, down);
-    // client code is now able to access the invoker object
-    menu.switchPowerOn();
-    menu.raiseVolume();
-    menu.raiseVolume();
-    menu.raiseVolume();
-    menu.lowerVolume();
-    menu.switchPowerOff();
-  }
-}
+// our application will need some reveiver object
+$device = new Television;
+// our application will need an invoker object, which
+// in turns relies on concrete command objects:
+$on   = new OnCommand($device);  // command to switch device on
+$off  = new OffCommand($device); // command to switch device off
+$up   = new UpCommand($device);  // command to turn volume up
+$down = new DownCommand($device);// command to turn volume down
+// now we are ready to create our invoker object which
+// we should think of as some sort of application menu.
+$menu = new RemoteControl($on, $off, $up, $down);
+// client code is now able to access the invoker object
+$menu->switchPowerOn();
+$menu->raiseVolume();
+$menu->raiseVolume();
+$menu->raiseVolume();
+$menu->lowerVolume();
+$menu->switchPowerOff();
+
+?>

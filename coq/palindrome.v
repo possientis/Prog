@@ -110,7 +110,7 @@ Proof.
   rewrite last_coherence in Ha. rewrite last_coherence in Hb.
   rewrite Ha in Hb. 
   pose (g:= fun opt => match opt with | None => a | Some x => x end).
-  fold (g (Some b)). rewrite <- Hb. simpl. reflexivity.
+  fold (g (Some b)). rewrite <- Hb. simpl. reflexivity. (* fold trick *)
 Qed.
 
 Lemma palindrome_law : forall (A:Type) (a b:A)(l m:list A),
@@ -125,8 +125,8 @@ Proof.
   intros H Hb Ha. rewrite H. apply last_unique with (l:=l). 
   exact Ha. exact Hb. 
   pose (g:= fun l => match l with | nil => x | (y::l') => y end). 
-  fold(g (x::l')). rewrite <- H3. simpl. reflexivity.
-  fold (tl(a::l)). rewrite H3. simpl. exact H4.
+  fold(g (x::l')). rewrite <- H3. simpl. reflexivity.   (* fold trick *)
+  fold (tl(a::l)). rewrite H3. simpl. exact H4.         (* fold trick *)
   apply last_with_rest_last with (m:=m). apply H0.
 Qed.
 
