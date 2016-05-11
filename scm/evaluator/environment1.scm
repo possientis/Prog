@@ -9,6 +9,7 @@
         (cond ((eq? m 'empty?)(empty? data))
               ((eq? m 'define!)(define! data))
               ((eq? m 'lookup)(lookup data))
+              ((eq? m 'defined?)(is-defined data))
               ((eq? m 'set!)(set-var! data))
               ((eq? m 'delete!)(delete! data))
               ((eq? m 'extended)(extended data))  ; returns extended env
@@ -55,6 +56,17 @@
                 (if (eq? #f varval) ; var not in current frame
                   (frame-loop (cdr env))
                   (cdr varval)))))))) ; varval is pair (var . val)
+    ;
+    (define (is-defined data)
+      (lambda (var)
+        (let frame-loop ((env (cdr data)))
+          (if (null? env)
+            #f
+            (let ((current (car env)))
+              (let ((varval ((current 'find) var)))
+                (if (eq? #f varval) ; var not in current frame
+                  (frame-loop (cdr env))
+                  #t)))))))
     ;
     ; overwrites binding in top-most frame where name is visible
     (define (set-var! data)

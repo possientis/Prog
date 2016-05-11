@@ -124,13 +124,145 @@ def fromXML(node: xml.Node): CCTherm =
 
 println(fromXML(therm.toXML)) // hot dog thermometer
 
-// Y
+// using toString() to serialize xml is not safe as the resulting string
+// does not include a description of the character encoding
+val node = therm.toXML
+xml.XML.save("therm1.xml", node, "UTF-8", true, null)
+// file therm1.xml looks like this:
+/*
+<?xml version='1.0' encoding='UTF-8'?>
+<cctherm>
+      <description>hot dog thermometer</description>
+      <yearMade>1952</yearMade>
+      <dateObtained>March 14, 2006</dateObtained>
+      <bookPrice>2199</bookPrice>
+      <purchasePrice>500</purchasePrice>
+      <condition>9</condition>
+    </cctherm>
+*/
+
+val loadnode = xml.XML.loadFile("therm1.xml")
+println(loadnode)
+/*
+<cctherm>
+      <description>hot dog thermometer</description>
+      <yearMade>1952</yearMade>
+      <dateObtained>March 14, 2006</dateObtained>
+      <bookPrice>2199</bookPrice>
+      <purchasePrice>500</purchasePrice>
+      <condition>9</condition>
+    </cctherm>
+*/
+println(loadnode == node) // false
+
+// XML PATTERNS
+// an XML pattern looks just like an XML literal. The main difference
+// is that if you insert a {} escape, then the cose inside the {}
+// is not an expression but a pattern!
+
+<a>blahblah</a> match {
+  case <a>{contents}</a> => println("yes! " + contents)
+  case _                => println("no! ")
+} // yes! blahblah
+
+<a></a> match {
+  case <a>{contents}</a> => println("yes! " + contents)
+  case _                => println("no! ")
+} // no!
 
 
+<a></a> match {
+  case <a>{contents @ _*}</a>   => println("yes! " + contents)
+  case _                        => println("no! ")
+} // yes! WrappedArray()
 
+val catalog =
+  <catalog>
+    <cctherm>
+      <description>hot dog thermometer</description>
+      <yearMade>1952</yearMade>
+      <dateObtained>March 14, 2006</dateObtained>
+      <bookPrice>2199</bookPrice>
+      <purchasePrice>500</purchasePrice>
+      <condition>9</condition>
+    </cctherm>
+    <cctherm>
+      <description>Sprite Boy thermometer</description>
+      <yearMade>1964</yearMade>
+      <dateObtained>April 28, 2003</dateObtained>
+      <bookPrice>1695</bookPrice>
+      <purchasePrice>595</purchasePrice>
+      <condition>5</condition>
+    </cctherm>
+  </catalog>
 
+/* XML vs Lisp
+  (catalog
+    (cctherm
+      (description "hot dog thermometer")
+      (yearMade 1952)
+      (dateObtained "March 14, 2006")
+      (bookPrice 2199)
+      (purchasePrice 500)
+      (condition 9))
+    (cctherm
+      (description "Sprite Boy thermometer")
+      (yearMade 1964)
+      (dateObtained "April 28, 2003")
+      (bookPrice 1695)
+      (purchasePrice 595)
+      (condition 5)))
+*/
 
+// incorrect, we are processing whitespace in between elements
+catalog match {
+  case <catalog>{therms @ _*}</catalog> =>
+    for(therm <- therms)
+      println("processing: " +
+        (therm \ "description").text)
+  }
+/*
+processing: 
+processing: hot dog thermometer
+processing: 
+processing: Sprite Boy thermometer
+processing:
+*/
 
+catalog match {
+  case <catalog>{therms @ _*}</catalog> =>
+    for(therm @ <cctherm>{_*}</cctherm> <- therms)
+      println("processing: " +
+        (therm \ "description").text)
+  }
+/*
+processing: hot dog thermometer
+processing: Sprite Boy thermometer
+*/
+
+catalog match {
+  case content @ <catalog>{_*}</catalog> => println(content)
+}
+/*
+<catalog>
+    <cctherm>
+      <description>hot dog thermometer</description>
+      <yearMade>1952</yearMade>
+      <dateObtained>March 14, 2006</dateObtained>
+      <bookPrice>2199</bookPrice>
+      <purchasePrice>500</purchasePrice>
+      <condition>9</condition>
+    </cctherm>
+    <cctherm>
+      <description>Sprite Boy thermometer</description>
+      <yearMade>1964</yearMade>
+      <dateObtained>April 28, 2003</dateObtained>
+      <bookPrice>1695</bookPrice>
+      <purchasePrice>595</purchasePrice>
+      <condition>5</condition>
+    </cctherm>
+  </catalog>
+*/
 
 
 

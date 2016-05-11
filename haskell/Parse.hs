@@ -3,6 +3,7 @@ import qualified Data.ByteString.Lazy as L
 import Data.Int (Int64)
 import Control.Applicative -- <$> is alias for infix `fmap`
 import Data.Char
+import Data.Word
 
 data ParseState = ParseState {
   string :: L.ByteString,
@@ -104,10 +105,8 @@ test10 = parse (chr <$> fromIntegral <$> parseByte) test4         -- Right 'f'  
 test11 = parse ((chr.(+2).fromIntegral) <$> parseByte) test4      -- Right 'h'
 test12 = parse (chr <$> ((+2).fromIntegral) <$> parseByte) test4  -- Right 'h'
 
-
-
-
-
+w2c :: Word8 -> Char
+w2c = chr . fromIntegral
 
 
 

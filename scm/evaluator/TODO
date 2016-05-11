@@ -1,2 +1,2 @@
-extend interpreter with 'defined?' keyword
-include guards
+testing defined? in interpreter
+continue adding include guards (primitive.scm , require done)

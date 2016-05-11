@@ -1,3 +1,9 @@
+(if (not (defined? included-load-file)) 
+  (begin
+    (define included-load-file #f)  ; include guard
+    (display "loading load-file")(newline)
+
+
 (define (load-file file-name)
   (let ((file (open-file file-name "r")))
     (define (loop)
@@ -11,3 +17,5 @@
     (close-port file))
   (string-append " " file-name " loaded"))
 
+
+))  ; include guard

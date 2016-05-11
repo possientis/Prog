@@ -10,6 +10,8 @@
     (display "environment: unit test 1.2 failing\n"))
   (if (not (equal? "{}" (env2 'to-string)))
     (display "environment: unit test 1.3 failing\n"))
+  (if (not (eq? #f ((env1 'defined?) 'some-name)))
+    (display "environment: unit test 1.4 failing\n"))
   ;
   ; binding one variable to env1
   ;
@@ -21,6 +23,9 @@
   ; variable 'a' of env1 should be equal to #f
   (let ((val ((env1 'lookup) 'a)))
     (if (not (eq? val #f)) (display "environment: unit test 2.2 failing\n")))
+  ; variable 'a' should be defined
+  (if (not (eq? #t ((env1 'defined?) 'a)))
+    (display "environment: unit test 2.3 failing\n"))
   ;
   ; binding same variable to env2 
   ;
@@ -34,6 +39,11 @@
   ; variable 'a' of env2 should be equal to #t
   (let ((val ((env2 'lookup) 'a)))
     (if (not (eq? val #t)) (display "environment: unit test 3.3 failing\n")))
+  ; checking defined?
+  (if (not (eq? #t ((env1 'defined?) 'a)))
+    (display "environment: unit test 3.4 failing\n"))
+  (if (not (eq? #t ((env2 'defined?) 'a)))
+    (display "environment: unit test 3.5 failing\n"))
   ;
   ; binding another variable to env1 and env2 
   ;
@@ -54,6 +64,19 @@
   ; variable 'b' of env2 should be equal to "def"
   (let ((val ((env2 'lookup) 'b)))
     (if (not (equal? val "def")) (display "environment: unit test 4.5 failing\n")))
+  ; checking defined?
+  (if (not (eq? #t ((env1 'defined?) 'a)))
+    (display "environment: unit test 4.6 failing\n"))
+  (if (not (eq? #t ((env2 'defined?) 'a)))
+    (display "environment: unit test 4.7 failing\n"))
+  (if (not (eq? #t ((env1 'defined?) 'b)))
+    (display "environment: unit test 4.8 failing\n"))
+  (if (not (eq? #t ((env2 'defined?) 'b)))
+    (display "environment: unit test 4.9 failing\n"))
+  (if (not (eq? #f ((env1 'defined?) 'c)))  ; not defined
+    (display "environment: unit test 4.10 failing\n"))
+  (if (not (eq? #f ((env2 'defined?) 'c)))  ; not defined
+    (display "environment: unit test 4.11 failing\n"))
   ;
   ; setting variables of env1 and env2 
   ;
@@ -72,11 +95,23 @@
     (if (not (equal? val 3.2)) (display "environment: unit test 5.3 failing\n")))
   ; variable 'b' of env1 should be equal to '(1 2)
   (let ((val ((env1 'lookup) 'b)))
-    (if (not (equal? val '(1 2))) (display "environment: unit test 5.4 failing\n")))
+    (if (not (equal? val '(1 2)))(display "environment: unit test 5.4 failing\n")))
   ; variable 'b' of env2 should be equal to #\a
   (let ((val ((env2 'lookup) 'b)))
     (if (not (equal? val #\a)) (display "environment: unit test 5.5 failing\n")))
- 
+  ; checking defined?
+  (if (not (eq? #t ((env1 'defined?) 'a)))
+    (display "environment: unit test 5.6 failing\n"))
+  (if (not (eq? #t ((env2 'defined?) 'a)))
+    (display "environment: unit test 5.7 failing\n"))
+  (if (not (eq? #t ((env1 'defined?) 'b)))
+    (display "environment: unit test 5.8 failing\n"))
+  (if (not (eq? #t ((env2 'defined?) 'b)))
+    (display "environment: unit test 5.9 failing\n"))
+  (if (not (eq? #f ((env1 'defined?) 'c)))  ; not defined
+    (display "environment: unit test 5.10 failing\n"))
+  (if (not (eq? #f ((env2 'defined?) 'c)))  ; not defined
+    (display "environment: unit test 5.11 failing\n"))
   ;
   ; extending environment with empty frame
   ;
@@ -92,10 +127,23 @@
       (if (not (equal? val 3.2)) (display "environment: unit test 6.3 failing\n")))
     ; variable 'b' of env3 should be equal to '(1 2)
     (let ((val ((env3 'lookup) 'b)))
-      (if(not(equal? val '(1 2))) (display "environment: unit test 6.4 failing\n")))
+      (if(not(equal? val '(1 2)))(display "environment: unit test 6.4 failing\n")))
     ; variable 'b' of env4 should be equal to #\a
     (let ((val ((env4 'lookup) 'b)))
-      (if (not (equal? val #\a)) (display "environment: unit test 6.5 failing\n"))))
+      (if (not (equal? val #\a))(display "environment: unit test 6.5 failing\n")))
+    ; checking defined?
+    (if (not (eq? #t ((env3 'defined?) 'a)))
+      (display "environment: unit test 6.6 failing\n"))
+    (if (not (eq? #t ((env4 'defined?) 'a)))
+      (display "environment: unit test 6.7 failing\n"))
+    (if (not (eq? #t ((env3 'defined?) 'b)))
+      (display "environment: unit test 6.8 failing\n"))
+    (if (not (eq? #t ((env4 'defined?) 'b)))
+      (display "environment: unit test 6.9 failing\n"))
+    (if (not (eq? #f ((env3 'defined?) 'c)))  ; not defined
+      (display "environment: unit test 6.10 failing\n"))
+    (if (not (eq? #f ((env4 'defined?) 'c)))  ; not defined
+      (display "environment: unit test 6.11 failing\n")))
   ; this should have no impact on env1 and env2
   ; env1 and env2 should not be empty
   (if (env1 'empty?) (display "environment: unit test 7.0 failing\n")) 
@@ -108,10 +156,23 @@
     (if (not (equal? val 3.2)) (display "environment: unit test 7.3 failing\n")))
   ; variable 'b' of env1 should be equal to '(1 2)
   (let ((val ((env1 'lookup) 'b)))
-    (if (not (equal? val '(1 2))) (display "environment: unit test 7.4 failing\n")))
+    (if (not (equal? val '(1 2)))(display "environment: unit test 7.4 failing\n")))
   ; variable 'b' of env2 should be equal to #\a
   (let ((val ((env2 'lookup) 'b)))
     (if (not (equal? val #\a)) (display "environment: unit test 7.5 failing\n")))
+  ; checking defined?
+  (if (not (eq? #t ((env1 'defined?) 'a)))
+    (display "environment: unit test 7.6 failing\n"))
+  (if (not (eq? #t ((env2 'defined?) 'a)))
+    (display "environment: unit test 7.7 failing\n"))
+  (if (not (eq? #t ((env1 'defined?) 'b)))
+    (display "environment: unit test 7.8 failing\n"))
+  (if (not (eq? #t ((env2 'defined?) 'b)))
+    (display "environment: unit test 7.9 failing\n"))
+  (if (not (eq? #f ((env1 'defined?) 'c)))  ; not defined
+    (display "environment: unit test 7.10 failing\n"))
+  (if (not (eq? #f ((env2 'defined?) 'c)))  ; not defined
+    (display "environment: unit test 7.11 failing\n"))
   ;
   ; extending environment with single additional name
   ;
@@ -386,7 +447,19 @@
     (if (not (env1 'empty?)) (display "environment: unit test 19.0 failing\n")) 
     (if (not (env2 'empty?)) (display "environment: unit test 19.1 failing\n")) 
     (if (not (env3 'empty?)) (display "environment: unit test 19.2 failing\n")) 
-    (if (not (env4 'empty?)) (display "environment: unit test 19.3 failing\n"))) 
+    (if (not (env4 'empty?)) (display "environment: unit test 19.3 failing\n"))
+    (if (not (eq? #f ((env1 'defined?) 'a)))
+      (display "environment: unit test 19.4 failing\n"))
+    (if (not (eq? #f ((env2 'defined?) 'a)))
+      (display "environment: unit test 19.5 failing\n"))
+    (if (not (eq? #f ((env1 'defined?) 'b)))
+      (display "environment: unit test 19.6 failing\n"))
+    (if (not (eq? #f ((env2 'defined?) 'b)))
+      (display "environment: unit test 19.7 failing\n"))
+    (if (not (eq? #f ((env1 'defined?) 'c)))  ; not defined
+      (display "environment: unit test 19.8 failing\n"))
+    (if (not (eq? #f ((env2 'defined?) 'c)))  ; not defined
+      (display "environment: unit test 19.9 failing\n"))) 
 
   (display "environment: unit test complete\n\n"))
 
