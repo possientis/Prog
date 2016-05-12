@@ -81,4 +81,14 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
+echo '\nThis is Haskell ...'
+ghc -v0 command.hs 
+START=$(date +%s%N)
+./command 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm command command.hi command.o
+
+
 

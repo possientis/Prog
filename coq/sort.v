@@ -87,4 +87,9 @@ Proof.
   intros H0 H1. clear H1. cut (0=S(length l'')). intro H1.
   discriminate H1. apply le_n_0_eq. apply le_S_n. exact H0.
   simpl.
+  intros q. case l''. intros H1 H2. discriminate H2. 
+  intros b m. case q. intro H0. simpl in H0. 
+  cut (0 = S(length m)). intro H1. discriminate H1.
+  apply le_n_0_eq. apply le_S_n. apply le_S_n. exact H0.
+  intro r. intro H0. set (k := sort_n (S r) (b :: m)).
 

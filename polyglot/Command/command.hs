@@ -30,7 +30,7 @@
 
 -- This is the Command interface
 class Command a where
-  execute :: a -> IO()
+  execute :: a -> TV()
 
 -- This is the Invoker class. It is akin to the remote control of an 
 -- electronic device, or a menu object within an application. It allows
@@ -42,17 +42,17 @@ data RemoteControl a b c d = RemoteControl {
   powerOn :: a, powerOff :: b, volumeUp :: c, volumeDown :: d
 }
                                                
-switchPowerOn :: (Command a) => RemoteControl a b c d -> IO ()
+switchPowerOn :: (Command a) => RemoteControl a b c d -> TV ()
 switchPowerOn remote = execute (powerOn remote)
 
 
-switchPowerOff :: (Command b) => RemoteControl a b c d -> IO ()
+switchPowerOff :: (Command b) => RemoteControl a b c d -> TV ()
 switchPowerOff remote = execute (powerOff remote)
 
-raiseVolume :: (Command c) => RemoteControl a b c d -> IO ()
+raiseVolume :: (Command c) => RemoteControl a b c d -> TV ()
 raiseVolume remote = execute (volumeUp remote)
 
-lowerVolume :: (Command d) => RemoteControl a b c d -> IO ()
+lowerVolume :: (Command d) => RemoteControl a b c d -> TV ()
 lowerVolume remote = execute (volumeDown remote)
 
 -- This is the receiver class. It is the class of objects which will perform
@@ -66,56 +66,99 @@ lowerVolume remote = execute (volumeDown remote)
 -- as in general, the interface of the invoker object may have little in
 -- common with those of the various receiver objects.
 
-data Television  = Television { volume:: Int, isOn:: Bool, buffer:: String }
+data Television  = Television { volume:: Int, isOn:: Bool }
 
-data TV a = TV (Television -> (a, Television))
+newTelevision :: Television
+newTelevision = Television 10 False
 
-run :: TV a -> Television -> (a, Television)
+data TV a = TV (Television -> IO (a, Television))
+
+run :: TV a -> Television -> IO (a, Television)
 run (TV f) television = f television
 
 instance Monad TV where
-  return a = TV (\state -> (a, state))
-  k >>= f  = TV (\state -> let (x, newState) = run k state in run (f x) newState) 
+  return a = TV (\state -> return (a, state))
+  k >>= f  = TV (\state -> do   (x, newState) <- run k state 
+                                run (f x) newState) 
 
 switchOnTV :: TV () 
 switchOnTV  = TV (
   \state -> case isOn state of
-              True  -> ((), state)
-              False -> ((), Television 
-                (volume state) 
-                True
-                ((buffer state) ++ "Television is now switched on"))) 
-                                            
-
+              True  -> return ((), state)
+              False -> do putStrLn "Television is now switched on"
+                          return ((), Television (volume state) True))
 switchOffTV :: TV () 
 switchOffTV  = TV (
   \state -> case isOn state of
-              False -> ((), state)
-              True  -> ((), Television 
-                (volume state) 
-                False
-                ((buffer state) ++ "Television is now switched off")))
+              False -> return ((), state)
+              True  -> do putStrLn "Television is now switched off"
+                          return ((), Television (volume state) False))
 
 volumeUpTV :: TV () 
 volumeUpTV  = TV (
   \state -> case isOn state of
-              False -> ((), state)
-              True  -> ((), Television 
-                newVolume 
-                True 
-                ((buffer state) 
-                  ++ "Television volume increased to" ++ (show newVolume))) 
-                    where newVolume = (volume state) + 1)
-
+              False -> return ((), state)
+              True  -> do putStrLn 
+                            ("Television volume increased to "++(show newVolume))
+                          return ((), Television newVolume True)
+                            where newVolume = (volume state) + 1)
+                          
 volumeDownTV :: TV () 
 volumeDownTV  = TV (
   \state -> case isOn state of
-              False -> ((), state)
-              True  -> ((), Television 
-                newVolume 
-                True 
-                ((buffer state) 
-                  ++ "Television volume decreased to" ++ (show newVolume))) 
-                    where newVolume = (volume state) - 1)
+              False -> return ((), state)
+              True  -> do putStrLn 
+                            ("Television volume decreased to "++(show newVolume))
+                          return ((), Television newVolume True)
+                            where newVolume = (volume state) - 1)
+
+-- These are the concrete command objects. These commands have exact
+-- knowledge of receiver objects as well as which methods and argument
+-- should be used when issuing a request to receiver objects.
+-- As can be seen, the command design pattern relies on a fair amount
+-- of indirection: client code will call an invoker object (menu, remote)
+-- which will in turn execute a command, which will send a request to
+-- to a receiver object, which will finally perform the requested action.
+data OnCommand = OnCommand
+instance Command OnCommand where
+  execute OnCommand = switchOnTV 
+
+data OffCommand = OffCommand
+instance Command OffCommand where
+  execute OffCommand = switchOffTV 
+
+data UpCommand = UpCommand
+instance Command UpCommand where
+  execute UpCommand = volumeUpTV
+
+data DownCommand = DownCommand
+instance Command DownCommand where
+  execute DownCommand = volumeDownTV
+
+demo :: TV ()
+demo = do
+  let on    = OnCommand
+  let off   = OffCommand
+  let up    = UpCommand
+  let down  = DownCommand
+  let menu  = RemoteControl on off up down
+  switchPowerOn  menu
+  raiseVolume    menu
+  raiseVolume    menu
+  raiseVolume    menu
+  lowerVolume    menu
+  switchPowerOff menu
+
+
+main :: IO ()
+main = do 
+  let device = newTelevision
+  run demo device
+  return ()
+
+
+
+
+
 
 
