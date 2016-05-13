@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-global-env)) 
+  (begin
+    (define included-global-env #f)
+    (display "loading global-env")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (load "primitive.scm")
 (load "environment.scm")
 
@@ -12,4 +20,5 @@
 
 ;(display (global-env 'to-string))(newline)
 
+))  ; include guard
 

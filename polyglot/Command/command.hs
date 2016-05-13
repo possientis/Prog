@@ -71,10 +71,7 @@ data Television  = Television { volume:: Int, isOn:: Bool }
 newTelevision :: Television
 newTelevision = Television 10 False
 
-data TV a = TV (Television -> IO (a, Television))
-
-run :: TV a -> Television -> IO (a, Television)
-run (TV f) television = f television
+data TV a = TV { run :: Television -> IO (a, Television) }
 
 instance Monad TV where
   return a = TV (\state -> return (a, state))

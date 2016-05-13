@@ -1,4 +1,11 @@
-import qualified Data.ByteString.Lazy.Char8 as L8
+--  L8.pack :: [Char] -> L.ByteString
+--  L8.uncons :: L.ByteString -> Maybe (Char, L.ByteString)
+--  can work with [Char] instead of [Word8]
+import qualified Data.ByteString.Lazy.Char8 as L8 (pack, uncons)
+
+
+--  L.pack :: [Word8] -> L.ByteString
+--  L.uncons :: L.ByteString -> Maybe (Word8, L.ByteString)
 import qualified Data.ByteString.Lazy as L
 import Data.Int (Int64)
 import Control.Applicative -- <$> is alias for infix `fmap`
@@ -11,26 +18,27 @@ data ParseState = ParseState {
 } deriving Show
 
 
-simpleParse :: ParseState -> (a, ParseState)
-simpleParse = undefined
-
-
--- gives us ability to return error message
-betterParse :: ParseState -> Either String (a, ParseState)
-betterParse = undefined
-
 -- single constructor, 'newtype' more efficient than 'data'
 -- 'just a compile-time wrapper around a function with no run-time overhead'
 -- no to be exported, so we hide implementation details
-newtype Parse a = Parse {
-  runParse :: ParseState -> Either String (a, ParseState)
-}
+newtype Parse a = Parse { run :: ParseState -> Either String (a, ParseState) }
+
+instance Monad Parse where
+  return a  = Parse (\state ->  Right (a, state))
+  k >>= f   = Parse (\state ->  case run k state of
+                                  Left str            -> Left str
+                                  Right (x, newState) -> run (f x) newState) 
 
 parse :: Parse a -> L.ByteString -> Either String a
-parse parser str
-  = case runParse parser (ParseState str 0) of
-    Left  err         -> Left err
-    Right (result, _) -> Right result
+parse parser str  = case run parser (ParseState str 0) of
+                      Left  err         -> Left err
+                      Right (result, _) -> Right result
+
+
+
+----------
+
+
 
 modifyOffset :: ParseState -> Int64 -> ParseState
 modifyOffset initState newOffset 
@@ -70,9 +78,9 @@ bail err  = Parse $ \s -> Left $
 (==>) :: Parse a -> (a -> Parse b) -> Parse b
 parser ==> func = Parse chained
   where chained state = 
-          case runParse parser state of
+          case run parser state of
             Left errMessage           -> Left errMessage
-            Right (result, newState)  -> runParse (func result) newState 
+            Right (result, newState)  -> run (func result) newState 
 
 instance Functor Parse where
   fmap f parser = parser ==> \result -> identity(f result)
@@ -107,6 +115,18 @@ test12 = parse (chr <$> ((+2).fromIntegral) <$> parseByte) test4  -- Right 'h'
 
 w2c :: Word8 -> Char
 w2c = chr . fromIntegral
+
+parseChar :: Parse Char
+parseChar = w2c <$> parseByte
+
+test13 = parse parseChar (L8.pack "hello")  -- Right 'h'
+
+test14 = L8.pack "foobar"
+test15 = L8.uncons test14
+
+
+
+
 
 
 

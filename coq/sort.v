@@ -11,6 +11,82 @@ Axiom R_total:  forall x y:A, R x y \/ R y x.
 Axiom R_lem:    forall x y:A, R x y <-> R_bool x y = true.
 
 
+(* This lemma is part of the Coq 8.5 library *)
+Lemma length_zero_iff_nil : forall (A:Type) (l:list A),
+  length l = 0 <-> l = nil.
+Proof.
+  intros A l. elim l. unfold length. split; auto. 
+  clear l. intros a l H. split. clear H. simpl. intro H.
+  discriminate H. clear H. intro H. discriminate H.
+Qed.
+
+Lemma length_of_tl : forall (A:Type) (l: list A),
+  l <> nil -> S (length (tl l)) = length l.
+Proof.
+  intros A l. elim l. unfold not. intro H. apply False_ind. auto.
+  clear l. intros a l IH. intro H. clear H. simpl. reflexivity.
+Qed.
+
+Fixpoint least (l:list A) : option A :=
+  match l with
+    | nil     =>  None
+    | (x::l') =>  let y' := least l' in
+                  match y' with
+                    | None    => Some x
+                    | Some y  => match R_bool x y with
+                                  | true  =>  Some x
+                                  | false =>  Some y
+                                 end
+                  end  
+  end.
+
+Lemma least_none : forall (l:list A),
+  least l = None <-> l = nil.
+Proof.
+  intro l. split. elim l. intro H. auto. clear l. intros a l.
+  intros H H'. apply False_ind. simpl in H'. set (n:= least l) in H'.
+  generalize H'. case n. intro b. set (v:= R_bool a b). case v.
+  intro H0. discriminate H0. intro H0. discriminate H0.
+  intro H0. discriminate H0.
+  intro H. rewrite H. simpl. reflexivity.
+Qed.
+
+Lemma least_is_least: forall (l:list A) (a b: A),
+  In b l -> least l = Some a -> R a b.
+Proof. 
+
+
+
+
+
+(*
+Fixpoint sort_n (n:nat): list A -> list A :=
+  match n with
+    | 0   => (fun l =>  l)
+    | S p => (fun l =>
+      match l with
+        | nil       =>  l
+        | (x::l')   =>  let m := sort_n p l' in
+                        let y':= hd_error m  in
+                        match y' with
+                          | None    => l
+                          | Some y  => match R_bool x y with
+                                        | true  => x::m
+                                        | false => y::sort_n p (x::tl m)
+                                       end
+                        end
+      end)
+  end.   
+*)
+
+
+
+
+
+
+
+
+(*
 Fixpoint sort_n (n:nat): list A -> list A :=
   match n with
     | 0   => (fun _ => nil)
@@ -31,21 +107,6 @@ Fixpoint sort_n (n:nat): list A -> list A :=
       end)
   end. 
 
-(* This lemma is part of the Coq 8.5 library *)
-Lemma length_zero_iff_nil : forall (A:Type) (l:list A),
-  length l = 0 <-> l = nil.
-Proof.
-  intros A l. elim l. unfold length. split; auto. 
-  clear l. intros a l H. split. clear H. simpl. intro H.
-  discriminate H. clear H. intro H. discriminate H.
-Qed.
-
-Lemma length_of_tl : forall (A:Type) (l: list A),
-  l <> nil -> S (length (tl l)) = length l.
-Proof.
-  intros A l. elim l. unfold not. intro H. apply False_ind. auto.
-  clear l. intros a l IH. intro H. clear H. simpl. reflexivity.
-Qed.
 
 Lemma le_length_sort_n_n : forall (n:nat)(l: list A),
   length (sort_n n l) <= n.
@@ -92,4 +153,4 @@ Proof.
   cut (0 = S(length m)). intro H1. discriminate H1.
   apply le_n_0_eq. apply le_S_n. apply le_S_n. exact H0.
   intro r. intro H0. set (k := sort_n (S r) (b :: m)).
-
+*)

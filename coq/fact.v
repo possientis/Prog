@@ -42,6 +42,43 @@ Inductive Acc (A : Type) (R : A -> A -> Prop) (x : A) : Prop :=
     Acc_intro : (forall y : A, R y x -> Acc R y) -> Acc R x
 *)
 
+Check well_founded_ind.
+(*
+well_founded_ind
+  : forall (A : Type) (R : A -> A -> Prop),
+    well_founded R ->
+    forall P : A -> Prop,
+    (forall x : A, (forall y : A, R y x -> P y) -> P x) ->
+     forall a : A, P a
+
+*)
+
+Check Zwf_well_founded.
+(*
+Zwf_well_founded
+     : forall c : Z, well_founded (Zwf c)
+*)
+
+(*
+SearchPattern (_ < _ \/ _ = _).
+Zle_lt_or_eq: forall n m : Z, n <= m -> n < m \/ n = m
+*)
+
+
+Lemma Zle_Pfact: forall x:Z, 0 <= x -> exists y:Z, Pfact x y.
+Proof.
+  intros x0.
+  elim x0 using (well_founded_ind (Zwf_well_founded 0)).
+  clear x0.
+  intros x H H'. elim (Zle_lt_or_eq _ _ H').
+  intro Hlt. elim (H (x-1)).
+  intros  y' H0. exists (x*y'). apply Pfact1 with (n:=x)(v:=y').
+  auto with zarith. exact H0. unfold Zwf. omega. omega.
+  intro H0. exists 1. rewrite <- H0. apply Pfact0.
+Qed.
+
+
+
 
 
 

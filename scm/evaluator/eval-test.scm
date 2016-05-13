@@ -277,19 +277,33 @@
   ;
   (let ((x (eval '(eval (+ 1 2)) global-env)))
     (if (not (equal? x 3)) (display "eval:unit test 16.7 failing\n")))
- ;
+  ;
+  ; defined?
+  ;
+  (let ((x (eval '(defined? +) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 17.0 failing\n")))
+  (let ((x (eval '(defined? car) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 17.1 failing\n")))
+  (let ((x (eval '(defined? cdr) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 17.2 failing\n")))
+  (let ((x (eval '(defined? some-random-name) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 17.3 failing\n")))
+  (let ((x (eval '(defined? (this is not even a name)) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 17.4 failing\n")))
+  ;
   ; load 
   ;
   (let ((s (eval '(load "test.scm") global-env)))
     (if (not (equal? s " test.scm loaded"))
-      (display "eval: unit test 17.0 failing\n"))
+      (display "eval: unit test 18.0 failing\n"))
     (let ((x (eval 'x global-env)))
-      (if (not (equal? x 5)) (display "eval: unit test 17.1 failing\n")))
+      (if (not (equal? x 5)) (display "eval: unit test 18.1 failing\n")))
     (let ((x (eval 'y global-env)))
-      (if (not (equal? x 6)) (display "eval: unit test 17.2 failing\n")))
+      (if (not (equal? x 6)) (display "eval: unit test 18.2 failing\n")))
     (let ((x (eval 'z global-env)))
-      (if (not (equal? x 11)) (display "eval: unit test 17.3 failing\n")))
+      (if (not (equal? x 11)) (display "eval: unit test 18.3 failing\n")))
     )
+
   (display "eval: unit test complete\n"))
 
 (eval-test)

@@ -1,108 +1,76 @@
-Set Implicit Arguments.
- 
+Require Import Arith.
+Require Import ZArith.
+Require Import Bool.
 
-Definition classic := forall P:Prop, ~~P -> P.
-Definition classic_reverse := forall P:Prop,
-  P -> ~~P.
+Open Scope Z_scope.
 
-Lemma L1: classic_reverse.
-Proof.
-  unfold classic_reverse.
-  intro P.
-  unfold not at 1.
-  unfold not.
-  intro Hp.
-  intro Hnp.
-  apply Hnp.
-  exact Hp.
-Qed.
+Locate "_ * _".
 
-Definition lem := forall P:Prop, P \/ ~P.
+Print Scope Z_scope.
 
-Theorem classic_to_lem: classic -> lem.
-Proof.
-  unfold classic, lem.
-  intro classic.
-  intro P.
-  apply classic.
-  unfold not at 1.
-  intro H.
-  unfold not in H at 1.
-  cut (~P).
-  intro Hnp.
-  cut (~P->False).
-  intro H1.
-  apply H1.
-  exact Hnp.
-  intro H2.
-  apply H.
-  right. 
-  exact H2.
- 
-  unfold not.
-  intro Hp.
-  apply H.
-  left.
-  exact Hp.
-Qed. 
+Check 33. (* default scope is Z *)
+Check 33%nat. (* 33 interpreted within scope nat_scope with key 'nat' *)
+Check 0. (* : Z *)
+Check O. (* : nat *)
 
-Theorem lem_to_classic: lem -> classic.
-Proof.
-  unfold lem, classic.
-  intro lem.
-  intro P.
-  intro Hnnp.
-  unfold not at 1 in Hnnp.
-  cut (P \/ ~P).
-  intro H. 
-  elim H. 
-  intro Hp.
-  exact Hp. 
-  intro H1.
-  apply False_ind. 
-  apply Hnnp.
-  exact H1. 
-  apply lem. 
-Qed.
+Open Scope nat_scope.
+Check 33. (* : nat *)
+Check 0. (* nat *)
+Check 33%Z.
+Check (-12)%Z.
+Check (33%nat).
 
-Definition peirce := forall P Q:Prop, ((P->Q)->P)->P.
+Check true. (* : bool *)
+Check false. (* : bool *)
 
-Theorem implication_is_transitive: forall A B C:Prop, 
-  (A->B)->(B->C)->(A->C).
 
-Proof.
-  intros A B C.
-  intro Hab.
-  intro Hbc. 
-  intro Ha. 
-  apply Hbc.
-  apply Hab.
-  exact Ha. 
-Qed. 
+Check plus.
+Check Zplus.
+Check negb.
+Check ifb. 
+Check S.
+Check 0.
+Check O.
+Check S (S (S 0)).
+Check mult (mult 5 (minus 5 4)) 7.
+Check (5*(5-4)*7).
 
-Theorem equivalence_is_transitive: forall A B C:Prop,
-  (A<->B)->(B<->C)->(A<->C).
-Proof.
+Unset Printing Notations.
+Check 4.
+Check (5*(5-4)*7).
+Set Printing Notations.
+Open Scope Z_scope.
+Check (Zopp (Zmult 3 (Zmult (-5) (-8)))).
+Check ((-4)*(7-7)).
+Open Scope nat_scope.
+Check Zabs_nat.
+Check (5 + Zabs_nat (5-19)).
 
-  intros A B C. 
-  intro Hab. 
-  intro Hbc. 
-  split. 
-  apply implication_is_transitive with (B:=B).
-  elim Hab. 
-  intros H0 H1. 
-  exact H0. 
-  elim Hbc.
-  intros H2 H3.
-  exact H2.
-  apply implication_is_transitive with (B:=B).
-  elim Hbc.
-  intros H4 H5. 
-  exact H5. 
-  elim Hab.
-  intros H6 H7.
-  exact H7. 
-Qed.
+Check (fun n (z:Z) f => (n + (Zabs_nat(f z)))%nat).
+Check (fun n _ : nat => n).
+Check (fun n p:nat => n).
 
+Definition f := 
+  fun n p: nat => (let diff := n-p in
+                   let square := diff*diff in
+                   square*(square+n)%nat).
+Check f.
+Parameter max_int : Z.
+
+Open Scope Z_scope.
+Definition min_int := 1 - max_int.
+Print min_int.
+
+Definition cube1 := fun z:Z => z*z*z.
+Definition cube2 (z:Z) : Z := z*z*z.
+Definition cube3 z := z*z*z.
+Print cube1.
+Print cube2.
+Print cube3.
+
+Definition Z_thrice (f:Z->Z)(z:Z) := f (f (f z)).
+Print Z_thrice.
+Definition plus9 := Z_thrice (Z_thrice (fun z:Z => z + 1)).
+Eval compute in plus9 2.
 
 

@@ -1,2 +1,1 @@
-testing defined? in interpreter
-continue adding include guards (primitive.scm , require done)
+continue adding include guards (global-env done)

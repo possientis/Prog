@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-primitive)) 
+  (begin
+    (define included-primitive #f)
+    (display "loading primitive")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (load "load-file.scm")
 (load "require.scm")
 (load "eval-primitive.scm")
@@ -79,4 +87,4 @@
 (define (primitive-procedure-objects)
   (map (lambda (proc) (list 'primitive (cadr proc))) primitive-procedures))
 
- 
+))  ; include guard 

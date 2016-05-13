@@ -1,17 +1,4 @@
-import scala.actors.Actor
-// cant make this work
+import java.net.InetAddress
+import java.net.UnknownHostException
 
-object Actor2 {
-
-  def main(args: Array[String]){
-    println("Actor running...")
-    
-    val echoServer = actor(new Act {
-      become {
-        case msg => println("echo" + msg)
-      }
-    })
-
-
-  }
-}
+println(InetAddress.getByName("yahoo.com"))

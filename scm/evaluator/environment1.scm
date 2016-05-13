@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-environment1)) 
+  (begin
+    (define included-environment1 #f)
+    (display "loading environment1")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 ; one possible implementation of environment
 (load "frame.scm")
 
@@ -119,4 +127,4 @@
     (lambda () (this (cons 'data '())))))
 
 
-
+))  ; include guard

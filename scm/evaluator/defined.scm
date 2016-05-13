@@ -1,9 +1,11 @@
 (load "exp-type.scm")
 
+(define (defined?-variable exp) (cadr exp))
+
 (define (eval-defined? exp env)
-  (if (not (variable? exp))
-    #f
-    ((env 'defined?) exp)))
+  (let ((variable (defined?-variable exp))) 
+    (if (not (variable? variable)) #f  ((env 'defined?) variable)))) 
+
 
     
 

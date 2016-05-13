@@ -29,7 +29,7 @@
 ; bookkeeping or modes.
 
 (define command
-  (let ((let-for-name-encapsulation 'anything))
+  (let ()
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
@@ -50,7 +50,7 @@
 ; having to worry about the various part of a system. The invoker class
 ; it itself very generic and is unaware if the specifics of commands.
 (define remote-control  ; constructor
-  (let ((let-for-name-encapsulation 'anything))
+  (let ()
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
@@ -86,7 +86,7 @@
 ; common with those of the various receiver objects.
 
 (define television  ; constructor
-  (let ((let-for-name-encapsulation 'anything))
+  (let ()
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
@@ -129,6 +129,56 @@
     (lambda () (this (list 'data #f 10)))))
 
 
+; These are the concrete command objects. These commands have exact
+; knowledge of receiver objects as well as which methods and argument
+; should be used when issuing a request to receiver objects.
+; As can be seen, the command design pattern relies on a fair amount
+; of indirection: client code will call an invoker object (menu, remote)
+; which will in turn execute a command, which will send a request to
+; to a receiver object, which will finally perform the requested action.
+
+
+(define (on-command-override data)
+  (let ((device (caddr data))) (device 'switch-on)))
+(define (on-command device)
+  (command (list 'data on-command-override device)))
+
+(define (off-command-override data)
+  (let ((device (caddr data))) (device 'switch-off)))
+(define (off-command device)
+  (command (list 'data off-command-override device)))
+
+(define (up-command-override data)
+  (let ((device (caddr data))) (device 'volume-up)))
+(define (up-command device)
+  (command (list 'data up-command-override device)))
+
+(define (down-command-override data)
+  (let ((device (caddr data))) (device 'volume-down)))
+(define (down-command device)
+  (command (list 'data down-command-override device)))
+
+; let's try it all out
+; our application will need some reveiver object
+(let* ((device (television))
+      ; our application will need an invoker object, which
+      ; in turns relies on concrete command objects:
+      (on      (on-command    device)) ; command to switch device on
+      (off     (off-command   device)) ; command to switch device off
+      (up      (up-command    device)) ; command to turn volume up
+      (down    (down-command  device)) ; command to turn volume down
+      ; now we are ready to create our invoker object which
+      ; we should think of as some sort of application menu.
+      (menu    (remote-control on off up down)))
+        ; client code is now able to access the invoker object
+        (menu 'switch-power-on)
+        (menu 'raise-volume)
+        (menu 'raise-volume)
+        (menu 'raise-volume)
+        (menu 'lower-volume)
+        (menu 'switch-power-off))
+
+(exit 0)
 
 
 

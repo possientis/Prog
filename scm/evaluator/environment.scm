@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-environment)) 
+  (begin
+    (define included-environment #f)
+    (display "loading environment")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 ; required interface for environment
 ;
 ; - empty?          -> bool
@@ -14,6 +22,6 @@
 (define environment environment1)
 
 
-
+))  ; include guard
 
 
