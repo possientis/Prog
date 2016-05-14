@@ -51,10 +51,21 @@ Proof.
   intro H. rewrite H. simpl. reflexivity.
 Qed.
 
-Lemma least_is_least: forall (l:list A) (a b: A),
-  In b l -> least l = Some a -> R a b.
+Lemma least_is_least: forall (l:list A) (a: A),
+  least l = Some a <-> In a l /\ 
+  forall (b:A), In b l -> R a b. 
 Proof. 
-
+  intros l a. split. generalize a. clear a. elim l. 
+  intros. simpl in H. discriminate H. clear l.
+  intros a l IH b H. split. simpl in H. generalize H.
+  clear H. set (ll:= least l). fold ll in IH. generalize IH.
+  clear IH. case ll. intros c IH. set (b0:=R_bool a c).
+  case b0. intro H. pose (g:= (fun o => match o with | None => a | Some x => x end)).
+  fold (g (Some b)). rewrite <- H. simpl. left. reflexivity.
+  intro H. elim (IH b). intros. simpl. right. exact H0. exact H.
+  intros. pose (g:= (fun o => match o with | None => a | Some x => x end)).
+  fold (g (Some a)). rewrite H. simpl. left. reflexivity.
+  intro c.
 
 
 
