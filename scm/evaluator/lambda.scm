@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-lambda)) 
+  (begin
+    (define included-lambda #f)
+    (display "loading lambda")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm")
 (load "operands.scm")
 
@@ -13,5 +20,5 @@
     (lambda (env)
       (make-procedure vars bproc env))))
 
-
+))  ; include guard
 

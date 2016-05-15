@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-defined)) 
+  (begin
+    (define included-defined #f)
+    (display "loading defined")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "exp-type.scm")
 
 (define (defined?-variable exp) (cadr exp))
@@ -6,6 +13,7 @@
   (let ((variable (defined?-variable exp))) 
     (if (not (variable? variable)) #f  ((env 'defined?) variable)))) 
 
+))  ; include guard
 
     
 

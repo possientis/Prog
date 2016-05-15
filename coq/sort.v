@@ -40,6 +40,16 @@ Fixpoint least (l:list A) : option A :=
                   end  
   end.
 
+(* defining inductive predicate: Least a l <-> Some a = least l *)
+Inductive  Least : A -> list A -> Prop :=
+  | Least_single : forall a:A, Least a (a::nil)
+  | Least_cons1  : forall (a b:A)(l:list A),
+      Least a l -> R a b -> Least a (b::l)
+  | Least_cons2  : forall (a b:A)(l:list A),
+      Least a l -> R b a -> Least b (b::l). 
+
+
+
 Lemma least_none : forall (l:list A),
   least l = None <-> l = nil.
 Proof.
@@ -51,21 +61,24 @@ Proof.
   intro H. rewrite H. simpl. reflexivity.
 Qed.
 
-Lemma least_is_least: forall (l:list A) (a: A),
-  least l = Some a <-> In a l /\ 
-  forall (b:A), In b l -> R a b. 
+Lemma least_imp_Least: forall (a:A)(l:list A),
+  least l = Some a -> Least a l.
 Proof. 
-  intros l a. split. generalize a. clear a. elim l. 
-  intros. simpl in H. discriminate H. clear l.
-  intros a l IH b H. split. simpl in H. generalize H.
-  clear H. set (ll:= least l). fold ll in IH. generalize IH.
-  clear IH. case ll. intros c IH. set (b0:=R_bool a c).
-  case b0. intro H. pose (g:= (fun o => match o with | None => a | Some x => x end)).
-  fold (g (Some b)). rewrite <- H. simpl. left. reflexivity.
-  intro H. elim (IH b). intros. simpl. right. exact H0. exact H.
-  intros. pose (g:= (fun o => match o with | None => a | Some x => x end)).
-  fold (g (Some a)). rewrite H. simpl. left. reflexivity.
-  intro c.
+  (*induction on l *)
+  intros a l. generalize a. clear a. elim l.
+  (* l = nil *)
+  simpl. intros a H. discriminate H.
+  (* l = (a::l') *)
+  clear l. intros a l IH b H. simpl in H.
+  generalize H IH. set (ll := least l).
+  elim ll. intros c H0 H1. elim (R_total a c).
+  intro Rac. rewrite R_lem in Rac.
+  rewrite Rac in H0. 
+  pose (g:= (fun o => match o with | None => a | Some x => x end)).
+  fold (g (Some b)). rewrite <- H0. unfold g.
+  apply Least_cons2 with (a:=c). apply H1. reflexivity.
+  apply R_lem. exact Rac.
+  intro Rca.
 
 
 

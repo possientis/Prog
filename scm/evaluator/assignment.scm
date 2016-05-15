@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-assignment)) 
+  (begin
+    (define included-assignment #f)
+    (display "loading assignment")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (define (assignment-variable exp) (cadr exp))
 
 (define (assignment-expression exp) (caddr exp))
@@ -18,3 +26,4 @@
         (vproc (analyze (assignment-expresssion exp))))
     (lambda (env) (set-variable-value! var (vproc env) env))))
 
+))  ; include guard

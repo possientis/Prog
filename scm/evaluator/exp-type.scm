@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-exp-type)) 
+  (begin
+    (define included-exp-type #f)
+    (display "loading exp-type")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (define (tagged-list? exp tag) (if (pair? exp) (eq? (car exp) tag) #f))
 
 (define (self-evaluating? exp) 
@@ -44,3 +52,6 @@
 (define (primitive-procedure? proc) (tagged-list? proc 'primitive))
 
 (define (compound-procedure? procedure) (tagged-list? procedure 'procedure))
+
+
+))  ; include guard

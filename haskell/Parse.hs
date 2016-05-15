@@ -34,25 +34,47 @@ parse parser str  = case run parser (ParseState str 0) of
                       Left  err         -> Left err
                       Right (result, _) -> Right result
 
-
-
-----------
-
-
-
+----- discard ---
 modifyOffset :: ParseState -> Int64 -> ParseState
 modifyOffset initState newOffset 
   = initState { offset = newOffset } -- creates new ParseState identical to 
+-----------------
 
-before = ParseState (L8.pack "foo") 0
-after  = modifyOffset before 3
+-- 'state { offset = x }' syntactic sugar for 'ParseState (string state) x'
+modifyOffset' :: Int64 -> Parse ()
+modifyOffset' newOffset = Parse (\state -> Right ((), state { offset = newOffset })) 
 
--- identity parse does not affect ParseState and simply returns its argument
+
+getState :: Parse ParseState
+getState = Parse (\state -> Right (state, state))
+
+--- discard ------
 identity :: a -> Parse a
 identity a = Parse (\s -> Right (a,s))
+-------------------
 
--- dunno which 'import' is required for 'Word8'
---parseByte :: Parse Word8
+bail :: String -> Parse a
+bail err  = Parse (\state -> Left 
+              ("byte offset " ++ show (offset state) ++ ": " ++ err))
+
+putState :: ParseState -> Parse ()
+putState newState = Parse (\state -> Right((), newState))
+
+
+parseByte' :: Parse Word8
+parseByte' = do
+  state <- getState
+  case L.uncons (string state) of -- L.uncons :: L.ByteString -> Maybe (Word8, L.ByteString)
+    Nothing                 -> bail "no more input"
+    Just (byte, remainder)  -> do 
+      putState newState
+      return byte where
+        newState  = state { string = remainder, offset = newOffset }
+        newOffset = offset state + 1
+
+
+-------- discard ----------
+parseByte :: Parse Word8
 parseByte =
   getState ==> \initState ->
   case L.uncons (string initState) of
@@ -62,36 +84,43 @@ parseByte =
       where newState = initState {  string = remainder,
                                     offset = newOffset }
             newOffset = offset initState + 1
+----------------------------
 
-test1 = L8.uncons (L8.pack "foo") -- Just ('f',"oo")
-
-getState :: Parse ParseState
-getState = Parse (\s -> Right (s, s))
-
-putState :: ParseState -> Parse ()
-putState s = Parse (\_ -> Right((),s))
-
-bail :: String -> Parse a
-bail err  = Parse $ \s -> Left $
-            "byte offset " ++ show (offset s) ++ ": " ++ err
-
+----------- discard ------------------------------
 (==>) :: Parse a -> (a -> Parse b) -> Parse b
 parser ==> func = Parse chained
   where chained state = 
           case run parser state of
             Left errMessage           -> Left errMessage
             Right (result, newState)  -> run (func result) newState 
+---------------------------------------------------------
 
+-- This is the natural definition which turns a monad into a functor.
+-- Naively speaking, Let C denote the category of Haskell types where
+-- arrows are maps f :: a-> b. Then a monad can be view as a map
+-- m :: C0 -> C0 which satisfies certain property (monad laws).
+-- A monad is only a map mapping objects of C (the type C0). In order
+-- for a monad to become a functor, we need to define its action on the
+-- arrows f:: a -> b of the category C, which is what 'fmap' is for.
+-- fmap:: (a -> b) -> m a -> m b
+-- Now, provided m does indeed satisfies the monad laws, it can be shown
+-- the the definition below does indeed define a functor.
 instance Functor Parse where
-  fmap f parser = parser ==> \result -> identity(f result)
+  fmap f parser = parser >>= \result -> return (f result)
 
--- some explanation required here: we are attempting to check that our
--- definition of fmap for Parse (whose purpose it is to turn 'Parse' into a Functor)
--- does actually match categorical functor properties, in particular that
--- id : a -> a is mapped to id : Parse a -> Parse a
--- Note that infix operator <$> is an alias for `fmap`, so that
--- given an arrow f : a -> b, (f <$>) : Parse a -> Parse b denotes the image
--- of f by the functor 'Parse'
+--             f
+--      a ----------> b
+--      |           |
+--  ra  |           | rb
+--      |           |
+--      v           v
+--     m a ------> m b
+--          fmap f 
+--
+-- One of the monad laws ensures this diagram commutes.
+-- The other two ensures we really have a functor.
+
+
 test2 = parse parseByte (L8.pack "")          -- Left "byte offset 0: no more input"
 test3 = parse (id <$> parseByte) (L8.pack "") -- Left "byte offset 0: no more input"
 -- we cannot conclude that (id <$>) is the identity on Parse GHC.Word.Word8
@@ -123,7 +152,6 @@ test13 = parse parseChar (L8.pack "hello")  -- Right 'h'
 
 test14 = L8.pack "foobar"
 test15 = L8.uncons test14
-
 
 
 

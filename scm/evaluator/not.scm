@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-not)) 
+  (begin
+    (define included-not #f)
+    (display "loading not")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "true-false.scm")
 
 (define (not-predicate exp) (cadr exp))
@@ -11,6 +18,6 @@
     (lambda (env)
       (if (true? (pproc env) #f #t)))))
 
-
+))  ; include guard
 
 

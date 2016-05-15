@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-definition)) 
+  (begin
+    (define included-definition #f)
+    (display "loading definition")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm")
 
 (define (definition-variable exp)
@@ -20,4 +27,4 @@
         (vproc (definition-expression exp)))
     (lambda (env) ((env 'define) var (vproc env))))) 
 
-
+))  ; include guard

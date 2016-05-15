@@ -48,9 +48,31 @@ Theorem HoareWhileRule :
   P s -> exec s (WhileDo b i) s' -> 
   P s' /\ evalB s' b = Some false.
 Proof.
-  intros P b i s s' H Hp Hex. generalize H Hp. elim Hex. 
+  intros P b i s s' H.
+  cut (forall j:inst, exec s j s' -> j = WhileDo b i -> 
+    P s -> P s'/\ evalB s' b = Some false).
+  eauto. (* quite handy after a 'cut' *)
+  (* clever trick 'elim ... ; try (intros; discriminate) *)
+  intros j Hex. elim Hex; try (intros; discriminate).
+  intros s0 i0 e Hev Heq. injection Heq; intros H1 H2. (* do not forget injection *)
+  (* not very useful here but to be remembered *)
+  match goal with
+    | [id:(e = b) |- _ ]  => rewrite <- id
+  end.
+  auto.
 
-Check exec_ind.
+  intros.
+  match goal with
+    | [id:(_ = _) |- _] => injection id; intros H' H''
+  end.
+  apply H4. exact H5. apply H with (s1:=s0). exact H6.
+  rewrite <- H''. exact H0. rewrite <- H'. exact H1.
+Qed.
+
+Theorem InfiniteLoop : forall (s1 s2:state)(b:bExp), 
+  evalB s1 b = Some true -> ~ exec s1 (WhileDo b Skip) s2.
+
+
 
 
 

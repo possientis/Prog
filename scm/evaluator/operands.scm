@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-operands)) 
+  (begin
+    (define included-operands #f)
+    (display "loading operands")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (define (list-of-values operands env)
   (if (no-operands? operands) '()
     (cons (eval (first-operand operands) env)                       
@@ -29,6 +37,7 @@
     (if (null? procs) (error "Empty sequence -- ANALYSE"))
     (loop (car procs) (cdr procs))))
 
+)) ; include guard
 
 
 
