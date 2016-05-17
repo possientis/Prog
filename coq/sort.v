@@ -1,5 +1,6 @@
 Require Import List.
 Require Import Arith.
+Require Import Bool.
 
 Parameter A:Type.
 Parameter R: A -> A -> Prop.
@@ -10,6 +11,19 @@ Axiom R_trans:  forall x y z:A, R x y -> R y z -> R x z.
 Axiom R_total:  forall x y:A, R x y \/ R y x.
 Axiom R_lem:    forall x y:A, R x y <-> R_bool x y = true.
 
+Lemma not_none_is_some : forall (A:Type) (o: option A),
+  o <> None -> exists x:A, o = Some x.
+Proof.
+  intros A o. elim o. intros a H. exists a. reflexivity.
+  intro H. apply False_ind. apply H. reflexivity.
+Qed.
+
+Lemma none_or_not_none : forall (A:Type) (o:option A),
+  o = None \/ o <> None.
+Proof.
+  intros A o. elim o. intro a. right. intro H. discriminate.
+  left. reflexivity.
+Qed.
 
 (* This lemma is part of the Coq 8.5 library *)
 Lemma length_zero_iff_nil : forall (A:Type) (l:list A),
@@ -78,7 +92,59 @@ Proof.
   fold (g (Some b)). rewrite <- H0. unfold g.
   apply Least_cons2 with (a:=c). apply H1. reflexivity.
   apply R_lem. exact Rac.
-  intro Rca.
+  intro Rca. apply Least_cons1. apply H1.
+  cut ({R_bool a c = true} + { R_bool a c <> true}).
+  intros Lac. elim Lac. intro Rac. rewrite Rac in H0.
+  rewrite <- R_lem in Rac. cut (a = c). intro Eac.
+  rewrite <- Eac. exact H0. apply R_anti. exact Rac. exact Rca.
+  intro Rac. cut (R_bool a c = false). intro Rac'.
+  rewrite Rac' in H0. exact H0. apply not_true_is_false.
+  exact Rac. apply bool_dec.
+  cut ({R_bool a c = true} + { R_bool a c <> true}).
+  intros Lac. elim Lac. intro Rac. rewrite Rac in H0.
+  injection H0. intro Eab. rewrite Eab. apply R_refl.
+  intro Rac. cut (R_bool a c = false). intro Rac'.
+  rewrite Rac' in H0. injection H0. intro Ecb.
+  rewrite <- Ecb. exact Rca. apply not_true_is_false.
+  exact Rac. apply bool_dec. intro Eab. intro H'. clear H'.
+  injection Eab. clear Eab. intro Eab. rewrite <- Eab.
+  rewrite <- Eab in H. clear Eab b. fold ll in H.
+  fold ll in IH. cut (ll = None \/ ll <> None).
+  intro Hll. elim Hll. intro Nonell. cut (l=nil).
+  intro lnil. rewrite lnil. apply Least_single.
+  apply least_none. exact Nonell. intro H'.
+  cut (exists c:A, ll = Some c). intro H0.
+  elim H0. intro c. intro Hc. rewrite Hc in H.
+  cut (R a c \/ R c a). intro H1. elim H1.
+  intro Rac. apply Least_cons2 with (a:=c).
+  apply IH. exact Hc. exact Rac. intro Rca.
+  cut ({R_bool a c = true} + {R_bool a c <> true}).
+  intro H2. elim H2. intro Rac. cut (a = c).
+  intro Eac. apply Least_cons1. rewrite Eac.
+  apply IH. exact Hc. apply R_refl. apply R_anti.
+  apply R_lem. exact Rac. exact Rca. intro Rac.
+  cut (R_bool a c = false). intro Rac'.
+  rewrite Rac' in H. injection H. intro Eca.
+  apply Least_cons1. rewrite <- Eca. apply IH.
+  exact Hc. apply R_refl. apply not_true_is_false.
+  exact Rac. apply bool_dec. apply R_total.
+  apply not_none_is_some. exact H'.
+  apply none_or_not_none.
+Qed.
+
+Lemma Least_imp_least: forall (a:A)(l:list A),
+  Least a l -> least l = Some a.
+Proof. 
+  intros a l HL. generalize HL. elim HL. 
+  simpl. auto. clear a l HL. intros a b l H0 H1 H2 H3.
+  simpl. rewrite H1. cut ({R_bool b a = true} + {R_bool b a <> true}). 
+  intro H4. elim H4. intro H5. rewrite H5. cut (a = b). intro Eab.
+  rewrite <- Eab. reflexivity. apply R_anti. exact H2. apply R_lem.
+  exact H5. intro H5. cut(R_bool b a = false). intro H6. rewrite H6.
+  reflexivity. apply not_true_is_false. exact H5. apply bool_dec.
+  exact H0. clear a l HL. intros a b l H0 H1 H2 H3. simpl.
+  rewrite H1. rewrite R_lem in H2. rewrite H2. reflexivity. exact H0.
+Qed.
 
 
 
@@ -177,4 +243,6 @@ Proof.
   cut (0 = S(length m)). intro H1. discriminate H1.
   apply le_n_0_eq. apply le_S_n. apply le_S_n. exact H0.
   intro r. intro H0. set (k := sort_n (S r) (b :: m)).
+
+
 *)

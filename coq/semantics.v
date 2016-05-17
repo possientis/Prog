@@ -69,10 +69,30 @@ Proof.
   rewrite <- H''. exact H0. rewrite <- H'. exact H1.
 Qed.
 
+Lemma SkipNoChange: forall (s1 s2:state),
+  exec s1 Skip s2 -> s1 = s2.
+Proof.
+  cut (forall (s1 s2:state)(i:inst), i = Skip -> exec s1 i s2 -> s1 = s2).
+  eauto. intros s1 s2 i Hi Hex. generalize Hex Hi. clear Hi.
+  elim Hex; try (intros; discriminate). auto.
+Qed.
+  
+
 Theorem InfiniteLoop : forall (s1 s2:state)(b:bExp), 
   evalB s1 b = Some true -> ~ exec s1 (WhileDo b Skip) s2.
-
-
+Proof.
+  cut (forall (s1 s2:state)(b:bExp)(i:inst),
+    i = WhileDo b Skip -> evalB s1 b = Some true -> ~ exec s1 i s2).
+  eauto. (* eauto trick after a 'cut' which is close enough to goal *)
+  intros s1 s2 b i Hi Hb Hex. generalize Hex Hb Hi. clear Hi Hb. generalize b.
+  elim Hex; try (intros; discriminate). (* trick *)
+  intros. injection Hi. intros. rewrite H1 in H. rewrite H in Hb.
+  discriminate Hb. intros. injection Hi. intros. clear Hi b.
+  rewrite H4 in H0. rewrite H4 in H1. rewrite H4 in H2. rewrite H4 in H3.
+  rewrite <- H5 in Hb. rewrite H4 in Hex0. clear H4 H5 Hb. clear H1.
+  apply H3 with (b:=e). exact H2. cut (s0 = s). intro Hs. rewrite Hs. exact H.
+  symmetry. apply SkipNoChange. exact H0. reflexivity.
+Qed.
 
 
 
