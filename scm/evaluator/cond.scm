@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-cond)) 
+  (begin
+    (define included-cond #f)
+    (display "loading cond")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (load "make.scm") ; make-begin
 (load "operands.scm")
 
@@ -30,4 +38,6 @@
 (define (cond-actions clause) (cdr clause))
 
 (define (cond-predicate clause) (car clause))
+
+))  ; include guard
 

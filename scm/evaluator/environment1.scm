@@ -10,7 +10,7 @@
 (load "frame.scm")
 
 (define environment1    ; constructor
-  (let ((_static #f))   ; name encapsulation
+  (let ()               ; name encapsulation
     ; object built from data is message passing interface
     (define (this data) ; data ignored here
       (lambda(m)
@@ -22,7 +22,7 @@
               ((eq? m 'delete!)(delete! data))
               ((eq? m 'extended)(extended data))  ; returns extended env
               ((eq? m 'to-string) (to-string data))
-              (else (error "environment2: unknown operation error: " m)))))
+              (else (error "environment1: unknown operation error: " m)))))
     ;
     ; Implementation of public interface
     ;

@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-and)) 
+  (begin
+    (define included-and #f)
+    (display "loading and")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm")
 
 (define (and-predicates exp) (cdr exp))
@@ -14,3 +21,4 @@
         first
         (make-if (make-not first) '#f (expand-and-predicates rest))))))
 
+))  ; include guard

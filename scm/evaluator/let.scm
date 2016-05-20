@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-let)) 
+  (begin
+    (define included-let #f)
+    (display "loading let")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm") ; make-lambda
 
 (define (let-bindings exp) (cadr exp))
@@ -7,4 +14,7 @@
 
 (define (let->combination exp)
   (cons (make-lambda (let-parameters exp) (let-body exp)) (let-operands exp)))
+
+
+))  ; include guard
 

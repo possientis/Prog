@@ -1,4 +1,5 @@
 (load "eval.scm")
+(load "analyze.scm")
 
 (define (eval-test)
   ;
@@ -21,6 +22,20 @@
   (let ((x (eval #f global-env)))
     (if (not (equal? x #f)) (display "eval: unit test 1.6 failing\n")))
   ;
+  (let ((x ((analyze 3) global-env)))
+    (if (not (equal? x 3)) (display "eval: unit test 1.7 failing\n")))
+  (let ((x ((analyze 3.5) global-env)))
+    (if (not (equal? x 3.5)) (display "eval: unit test 1.8 failing\n")))
+  (let ((x ((analyze "hello") global-env)))
+    (if (not (equal? x "hello")) (display "eval: unit test 1.9 failing\n")))
+  (let ((x ((analyze "hello\n") global-env)))
+    (if (not (equal? x "hello\n")) (display "eval: unit test 1.10 failing\n")))
+  (let ((x ((analyze #\a) global-env)))
+    (if (not (equal? x #\a)) (display "eval: unit test 1.11 failing\n")))
+  (let ((x ((analyze #t) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 1.12 failing\n")))
+  (let ((x ((analyze #f) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 1.13 failing\n")))
   ; variable
   ;
   (let ((x (eval 'car global-env)))
@@ -52,10 +67,44 @@
         (display "eval: unit test 2.8 failing\n")))
   (let ((x (eval 'equal? global-env)))
     (if (not (equal? (primitive-implementation x) equal?)) 
-        (display "eval: unit test 2.8 failing\n")))
+        (display "eval: unit test 2.9 failing\n")))
   (let ((x (eval 'eq? global-env)))
     (if (not (equal? (primitive-implementation x) eq?)) 
-        (display "eval: unit test 2.9 failing\n")))
+        (display "eval: unit test 2.9.1 failing\n")))
+  ;
+  (let ((x ((analyze 'car) global-env)))
+    (if (not (equal? (primitive-implementation x) car)) 
+        (display "eval: unit test 2.10 failing\n")))
+  (let ((x ((analyze 'cdr) global-env)))
+    (if (not (equal? (primitive-implementation x) cdr)) 
+        (display "eval: unit test 2.11 failing\n")))
+  (let ((x ((analyze 'cons) global-env)))
+    (if (not (equal? (primitive-implementation x) cons)) 
+        (display "eval: unit test 2.12 failing\n")))
+  (let ((x ((analyze 'null?) global-env)))
+    (if (not (equal? (primitive-implementation x) null?)) 
+        (display "eval: unit test 2.13 failing\n")))
+  (let ((x ((analyze '+) global-env)))
+    (if (not (equal? (primitive-implementation x) +)) 
+        (display "eval: unit test 2.14 failing\n")))
+  (let ((x ((analyze '*) global-env)))
+    (if (not (equal? (primitive-implementation x) *)) 
+        (display "eval: unit test 2.15 failing\n")))
+  (let ((x ((analyze '-) global-env)))
+    (if (not (equal? (primitive-implementation x) -)) 
+        (display "eval: unit test 2.16 failing\n")))
+  (let ((x ((analyze '/) global-env)))
+    (if (not (equal? (primitive-implementation x) /)) 
+        (display "eval: unit test 2.17 failing\n")))
+  (let ((x ((analyze 'modulo) global-env)))
+    (if (not (equal? (primitive-implementation x) modulo)) 
+        (display "eval: unit test 2.18 failing\n")))
+  (let ((x ((analyze 'equal?) global-env)))
+    (if (not (equal? (primitive-implementation x) equal?)) 
+        (display "eval: unit test 2.19 failing\n")))
+  (let ((x ((analyze 'eq?) global-env)))
+    (if (not (equal? (primitive-implementation x) eq?)) 
+        (display "eval: unit test 2.20 failing\n")))
   ;
   ; quoted
   ;
@@ -66,6 +115,14 @@
   (let ((x (eval ''(list cons 3 "abc" #\a #t) global-env)))
     (if (not (equal? x '(list cons 3 "abc" #\a #t)))
       (display "eval: unit test 3.2 failing\n")))
+  ;
+  (let ((x ((analyze (quote 'hello)) global-env)))
+    (if (not (equal? x 'hello)) (display "eval: unit test 3.3 failing\n")))
+  (let ((x ((analyze ''hello) global-env)))
+    (if (not (equal? x 'hello)) (display "eval: unit test 3.4 failing\n")))
+  (let ((x ((analyze ''(list cons 3 "abc" #\a #t)) global-env)))
+    (if (not (equal? x '(list cons 3 "abc" #\a #t)))
+      (display "eval: unit test 3.5 failing\n")))
   ;
   ; assigment
   ;

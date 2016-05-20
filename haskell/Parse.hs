@@ -34,24 +34,13 @@ parse parser str  = case run parser (ParseState str 0) of
                       Left  err         -> Left err
                       Right (result, _) -> Right result
 
------ discard ---
-modifyOffset :: ParseState -> Int64 -> ParseState
-modifyOffset initState newOffset 
-  = initState { offset = newOffset } -- creates new ParseState identical to 
------------------
-
 -- 'state { offset = x }' syntactic sugar for 'ParseState (string state) x'
-modifyOffset' :: Int64 -> Parse ()
-modifyOffset' newOffset = Parse (\state -> Right ((), state { offset = newOffset })) 
+modifyOffset :: Int64 -> Parse ()
+modifyOffset newOffset = Parse (\state -> Right ((), state { offset = newOffset })) 
 
 
 getState :: Parse ParseState
 getState = Parse (\state -> Right (state, state))
-
---- discard ------
-identity :: a -> Parse a
-identity a = Parse (\s -> Right (a,s))
--------------------
 
 bail :: String -> Parse a
 bail err  = Parse (\state -> Left 
@@ -61,8 +50,8 @@ putState :: ParseState -> Parse ()
 putState newState = Parse (\state -> Right((), newState))
 
 
-parseByte' :: Parse Word8
-parseByte' = do
+parseByte :: Parse Word8
+parseByte = do
   state <- getState
   case L.uncons (string state) of -- L.uncons :: L.ByteString -> Maybe (Word8, L.ByteString)
     Nothing                 -> bail "no more input"
@@ -72,28 +61,6 @@ parseByte' = do
         newState  = state { string = remainder, offset = newOffset }
         newOffset = offset state + 1
 
-
--------- discard ----------
-parseByte :: Parse Word8
-parseByte =
-  getState ==> \initState ->
-  case L.uncons (string initState) of
-    Nothing               -> bail "no more input"
-    Just (byte,remainder) ->
-        putState newState ==> \_ -> identity byte
-      where newState = initState {  string = remainder,
-                                    offset = newOffset }
-            newOffset = offset initState + 1
-----------------------------
-
------------ discard ------------------------------
-(==>) :: Parse a -> (a -> Parse b) -> Parse b
-parser ==> func = Parse chained
-  where chained state = 
-          case run parser state of
-            Left errMessage           -> Left errMessage
-            Right (result, newState)  -> run (func result) newState 
----------------------------------------------------------
 
 -- This is the natural definition which turns a monad into a functor.
 -- Naively speaking, Let C denote the category of Haskell types where
@@ -142,19 +109,59 @@ test10 = parse (chr <$> fromIntegral <$> parseByte) test4         -- Right 'f'  
 test11 = parse ((chr.(+2).fromIntegral) <$> parseByte) test4      -- Right 'h'
 test12 = parse (chr <$> ((+2).fromIntegral) <$> parseByte) test4  -- Right 'h'
 
+
+-- One of the advantages of turning our Parse moand into a functor, is code reuse:
+-- we have define parseByte :: Parse Word8 and we have a function:
+
 w2c :: Word8 -> Char
 w2c = chr . fromIntegral
 
+-- This gives us an element parseChar :: Parse Char immediately for free:
 parseChar :: Parse Char
 parseChar = w2c <$> parseByte
 
 test13 = parse parseChar (L8.pack "hello")  -- Right 'h'
 
-test14 = L8.pack "foobar"
-test15 = L8.uncons test14
+-- we have: 
+-- getState :: Parse ParseState
+-- string   :: ParseState -> L.ByteString
+-- L.uncons :: L.ByteString ->  Maybe (Word8, L.ByteString)
+-- fst      :: (Word8, L.ByteString) -> Word8
+-- fmap fst :: Maybe (Word8, L.ByteString) -> Maybe Word8
+-- fmap fst . L.uncons . string :: ParseState -> Maybe Word8
+-- Hence:
+-- fmap (fmap fst . L.uncons . string) :: Parse ParseState -> Parse (Maybe Word8)
+-- (fmap fst . L.uncons . string) <$> getState :: Parse (Maybe Word8)
 
 
+peekByte :: Parse (Maybe Word8)
+peekByte = (fmap fst . L.uncons . string) <$> getState
 
+peekChar :: Parse (Maybe Char)
+-- You first lift w2c to the Maybe monad, fmap w2c:: Maybe Word8 -> Maybe Char
+-- and then list that to the Parse monad:
+peekChar = fmap w2c <$> peekByte
+
+
+parseWhile :: (Word8 -> Bool) -> Parse [Word8]
+{-
+parseWhile p = (fmap p <$> peekByte) >>= \mp ->
+                  if mp == Just True
+                    then parseByte >>= \b -> (b:) <$> parseWhile p
+                    else return []
+-}
+
+parseWhile p = do
+  byte <- peekByte
+  if fmap p byte == Just True 
+    then do
+      b <- parseByte
+      (b:) <$> parseWhile p
+    else return []
+
+
+test14 = parseWhile (\x -> w2c x == 'a')
+test15 = parse test14 (L8.pack "aaaaabc") -- Right [97,97,97,97,97]
 
 
 

@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-let-star)) 
+  (begin
+    (define included-let-star #f)
+    (display "loading let-star")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm") ; make-let
 
 (define (let*-bindings exp) (cadr exp))
@@ -14,3 +21,4 @@
     (make-let (list (car bindings))
               (list (let-expand (cdr bindings) body)))))
 
+))  ; include guard

@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-let-rec)) 
+  (begin
+    (define included-let-rec #f)
+    (display "loading let-rec")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm")
 (define (letrec-bindings exp) (cadr exp))
 (define (letrec-body exp) (cddr exp))
@@ -26,3 +33,4 @@
 ; expression which is being called ((lambda () ... ))
 ; ((lambda () (define x1 a1) (define x2 a2) (cond ((eq? x1 x2) 1) (else 2))))
 
+))  ; include guard

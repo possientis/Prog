@@ -63,7 +63,6 @@ Inductive  Least : A -> list A -> Prop :=
       Least a l -> R b a -> Least b (b::l). 
 
 
-
 Lemma least_none : forall (l:list A),
   least l = None <-> l = nil.
 Proof.
@@ -76,8 +75,7 @@ Proof.
 Qed.
 
 Lemma least_imp_Least: forall (a:A)(l:list A),
-  least l = Some a -> Least a l.
-Proof. 
+  least l = Some a -> Least a l.  Proof. 
   (*induction on l *)
   intros a l. generalize a. clear a. elim l.
   (* l = nil *)
@@ -145,6 +143,56 @@ Proof.
   exact H0. clear a l HL. intros a b l H0 H1 H2 H3. simpl.
   rewrite H1. rewrite R_lem in H2. rewrite H2. reflexivity. exact H0.
 Qed.
+
+
+Lemma Least_is_least: forall (a:A)(l:list A),
+  Least a l <-> least l = Some a.
+Proof.
+  intros a l. split. apply Least_imp_least. apply least_imp_Least. 
+Qed.
+
+
+(* We spent a fair amount of effort defining an inductive predicate Least
+and proving the equivalence Least a l <-> least l= Some a. This effort is
+now paying off, as proving properties of 'Least' is a lot easier than 
+dealing with 'least'. Try proving the following lemma in terms of 'least'
+directly, and this will be plainly obvious *)
+
+Lemma Least_imp_In: forall (a:A)(l:list A),
+  Least a l -> In a l.
+Proof.
+  intros a l H. generalize H. elim H.
+  simpl. auto. 
+  clear H a l. intros a b l H0 H1 H2 H3. simpl. right. apply H1. exact H0.
+  clear H a l. intros a b l H0 H1 H2 H3. simpl. auto.
+Qed.
+
+Lemma Least_imp_smaller: forall (a b:A)(l: list A),
+  Least a l -> In b l -> R a b.
+Proof.
+  intros a b l H. generalize H b. clear b. elim H.
+  clear H a l. intros a H0 b H1. 
+  simpl in H1. elim H1. intro Eab. rewrite Eab. apply R_refl. apply False_ind.
+  clear H a l. intros a b l H0 H1 H2 H3 c H4. simpl in H4. elim H4.
+  intro Ebc. rewrite <- Ebc. exact H2. apply H1. exact H0.
+  clear H a l. intros a b l H0 H1 H2 H3 c H4. simpl in H4. elim H4.
+  intro Ebc. rewrite Ebc. apply R_refl. intro H5. apply R_trans with (y:= a). 
+  exact H2. apply H1. exact H0. exact H5.
+Qed.
+
+
+Lemma smallest_imp_Least: forall (a:A)(l:list A),
+  In a l -> (forall b:A, In b l -> R a b) -> Least a l. 
+Proof.
+  intros a l H0 H1. rewrite Least_is_least. generalize H1 H0. clear H0 H1.
+  generalize a. clear a. elim l. simpl. intros. apply False_ind. exact H0.
+  clear l. intros b l IH a H0 H1. simpl.
+
+
+
+
+
+
 
 
 

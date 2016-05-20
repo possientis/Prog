@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-or)) 
+  (begin
+    (define included-or #f)
+    (display "loading or")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm")
 
 (define (or-predicates exp) (cdr exp))
@@ -13,4 +20,7 @@
       (if (null? rest)
         first
         (make-if first '#t (expand-or-predicates rest))))))
+
+
+))  ; include guard
 

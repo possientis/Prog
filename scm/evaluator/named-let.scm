@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-named-let)) 
+  (begin
+    (define included-named-let #f)
+    (display "loading named-let")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "make.scm") ; make-lambda
 
 (define (named-let-variable exp) (cadr exp))
@@ -20,5 +27,8 @@
                      (list (named-let-definition exp) 
                            (named-let-function-call exp))) 
         (named-let-operands exp)))
+
+
+))  ; include guard
 
 

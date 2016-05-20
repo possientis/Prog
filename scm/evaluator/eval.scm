@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-eval)) 
+  (begin
+    (define included-eval #f)
+    (display "loading eval")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "global-env.scm")
 (load "exp-type.scm")
 (load "operands.scm")
@@ -45,3 +52,4 @@
         (else  (error "Unknown expression type -- EVAL" exp))))
        
 
+))  ; include guard.

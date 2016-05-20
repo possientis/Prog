@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-analyze)) 
+  (begin
+    (define included-analyze #f)
+    (display "loading analyze")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "global-env.scm")
 (load "operands.scm")
 (load "self-evaluating.scm")
@@ -38,3 +45,4 @@
         (else  (error "Unknown expression type -- ANALYSE" exp))))
 
 
+))  ; include guard

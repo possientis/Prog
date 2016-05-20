@@ -40,13 +40,11 @@ Inductive exec : state -> inst -> state -> Prop :=
                       exec s1 (WhileDo e i) s2 ->
                       exec s (WhileDo e i) s2. 
 
-
 Theorem HoareWhileRule :
   forall (P:state -> Prop)(b:bExp)(i:inst)(s s':state),
   (forall (s1 s2:state), 
   P s1 -> evalB s1 b = Some true -> exec s1 i s2 -> P s2) ->
-  P s -> exec s (WhileDo b i) s' -> 
-  P s' /\ evalB s' b = Some false.
+  P s -> exec s (WhileDo b i) s' -> P s' /\ evalB s' b = Some false.
 Proof.
   intros P b i s s' H.
   cut (forall j:inst, exec s j s' -> j = WhileDo b i -> 
@@ -94,5 +92,22 @@ Proof.
   symmetry. apply SkipNoChange. exact H0. reflexivity.
 Qed.
 
+Theorem HoareSequenceRule:
+  forall (P:state -> Prop)(i1 i2:inst)(s s': state),
+  (forall (s1 s2: state), P s1 -> exec s1 i1 s2 -> P s2) ->
+  (forall (s2 s3: state), P s2 -> exec s2 i2 s3 -> P s3) ->
+  P s -> exec s (Sequence i1 i2) s' -> P s'.
+Proof.
+  intros P i1 i2 s s' H1 H2. 
+  cut (forall i:inst, 
+    P s -> i = (Sequence i1 i2) -> exec s i s' -> P s'). 
+  eauto. (* eauto trick after a cut *) 
+  intros i Hs Hi Hex. generalize Hex Hi Hs H1 H2. clear H1 H2 Hi Hs.
+  generalize i1 i2 P. clear i1 i2 P. elim Hex; try (intros; discriminate). (* trick *)
+  clear s s' i Hex. intros s1 s2 s3 i1 i2 H1 H1' H2 H2' i0 i3 P H12 H0 Hs1 I1 I2.
+  injection H0. intros E2 E1. clear H0. rewrite <- E1 in I1. rewrite <- E2 in I2.
+  clear E1 E2 H1' H2'. apply (I2 s2 s3). apply (I1 s1 s2). 
+  exact Hs1. exact H1. exact H2.
+Qed.
 
 

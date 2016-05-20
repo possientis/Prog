@@ -1,3 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-apply)) 
+  (begin
+    (define included-apply #f)
+    (display "loading apply")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 (load "environment.scm")
 (load "primitive.scm")
 (load "exp-type.scm")
@@ -56,5 +63,5 @@
            arguments)))
         (else (error "Unknown procedure type -- EXECUTE-APPLICATION" procedure))))
 
-
+))  ; include guard
 
