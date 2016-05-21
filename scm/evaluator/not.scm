@@ -16,7 +16,7 @@
 (define (analyze-not exp)
   (let ((pproc (analyze (not-predicate exp))))
     (lambda (env)
-      (if (true? (pproc env) #f #t)))))
+      (if (true? (pproc env)) #f #t))))
 
 ))  ; include guard
 

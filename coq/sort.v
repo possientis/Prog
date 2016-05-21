@@ -12,10 +12,11 @@ Axiom R_total:  forall x y:A, R x y \/ R y x.
 Axiom R_lem:    forall x y:A, R x y <-> R_bool x y = true.
 
 Lemma not_none_is_some : forall (A:Type) (o: option A),
-  o <> None -> exists x:A, o = Some x.
+  o <> None <-> exists x:A, o = Some x.
 Proof.
-  intros A o. elim o. intros a H. exists a. reflexivity.
+  intros A o. split. elim o. intros a H. exists a. reflexivity.
   intro H. apply False_ind. apply H. reflexivity.
+  intro H. elim H. intros x Hx. rewrite Hx. intros. discriminate.
 Qed.
 
 Lemma none_or_not_none : forall (A:Type) (o:option A),
@@ -24,6 +25,14 @@ Proof.
   intros A o. elim o. intro a. right. intro H. discriminate.
   left. reflexivity.
 Qed.
+
+Lemma nil_or_not_nil : forall (A:Type)(l:list A),
+  l = nil \/ l <> nil.
+Proof.
+  intros A l. elim l. left. reflexivity. clear l.
+  intros a l. intros. right. unfold not. intros. discriminate.
+Qed.
+
 
 (* This lemma is part of the Coq 8.5 library *)
 Lemma length_zero_iff_nil : forall (A:Type) (l:list A),
@@ -180,18 +189,39 @@ Proof.
   exact H2. apply H1. exact H0. exact H5.
 Qed.
 
+Lemma not_nil_exists_Least: forall (l:list A),
+  l <> nil <-> exists a:A, Least a l.
+Proof.
+  intro l. split. intro H. cut (least l = None \/ least l <> None).
+  intro H0. elim H0. intro H1. rewrite least_none in H1.
+  apply False_ind. apply H. exact H1. intro H1.
+  rewrite not_none_is_some in H1. elim H1.
+  intros x Hx. exists x. rewrite Least_is_least. exact Hx.
+  apply none_or_not_none. intro H. elim H. intros x Hx.
+  rewrite Least_is_least in Hx. intro H0. rewrite <- least_none in H0. 
+  rewrite H0 in Hx. discriminate.
+Qed.
 
 Lemma smallest_imp_Least: forall (a:A)(l:list A),
   In a l -> (forall b:A, In b l -> R a b) -> Least a l. 
 Proof.
-  intros a l H0 H1. rewrite Least_is_least. generalize H1 H0. clear H0 H1.
-  generalize a. clear a. elim l. simpl. intros. apply False_ind. exact H0.
+  intros a l. generalize a. clear a. elim l. 
+  simpl. intros a F. apply False_ind. exact F.
   clear l. intros b l IH a H0 H1. simpl.
-
-
-
-
-
+  cut (l = nil \/ l <> nil). intro H2. elim H2. clear H2. intro H2.
+  rewrite H2. simpl in H0. elim H0. intros Eba. rewrite Eba.
+  apply Least_single. rewrite H2. clear H2. intro H2. simpl in H2.
+  apply False_ind. exact H2. clear H2. intro H2.
+  rewrite not_nil_exists_Least in H2. elim H2. intros a' Ha'.
+  simpl in H0. elim H0. intro Eba. rewrite <- Eba.
+  apply Least_cons2 with (a:=a'). exact Ha'. rewrite Eba.
+  apply H1. simpl. right. apply Least_imp_In. exact Ha'.
+  intro Ha. cut (a = a'). intro Ea. rewrite Ea. apply Least_cons1.
+  exact Ha'. rewrite <- Ea. apply H1. simpl. left. reflexivity.
+  apply R_anti. apply H1. simpl. right. apply Least_imp_In.
+  exact Ha'. apply Least_imp_smaller with (l:=l). exact Ha'. exact Ha.
+  apply nil_or_not_nil.
+Qed.
 
 
 

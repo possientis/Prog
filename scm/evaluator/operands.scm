@@ -33,7 +33,7 @@
       first-proc
       (loop (sequentially first-proc (car rest-procs))
             (cdr rest-procs))))
-  (let ((procs (map analyze exps)))
+  (let ((procs (map analyze operands)))
     (if (null? procs) (error "Empty sequence -- ANALYSE"))
     (loop (car procs) (cdr procs))))
 

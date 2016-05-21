@@ -23,7 +23,7 @@
 ; the assignment expresssion can be analyzed just once
 (define (analyze-assignment exp)
   (let ((var (assignment-variable exp))
-        (vproc (analyze (assignment-expresssion exp))))
+        (vproc (analyze (assignment-expression exp))))
     (lambda (env) (set-variable-value! var (vproc env) env))))
 
 ))  ; include guard
