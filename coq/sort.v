@@ -1,3 +1,5 @@
+Require Import lib_option.
+Require Import lib_list.
 Require Import List.
 Require Import Arith.
 Require Import Bool.
@@ -10,45 +12,6 @@ Axiom R_anti:   forall x y:A, R x y -> R y x -> x = y.
 Axiom R_trans:  forall x y z:A, R x y -> R y z -> R x z.
 Axiom R_total:  forall x y:A, R x y \/ R y x.
 Axiom R_lem:    forall x y:A, R x y <-> R_bool x y = true.
-
-Lemma not_none_is_some : forall (A:Type) (o: option A),
-  o <> None <-> exists x:A, o = Some x.
-Proof.
-  intros A o. split. elim o. intros a H. exists a. reflexivity.
-  intro H. apply False_ind. apply H. reflexivity.
-  intro H. elim H. intros x Hx. rewrite Hx. intros. discriminate.
-Qed.
-
-Lemma none_or_not_none : forall (A:Type) (o:option A),
-  o = None \/ o <> None.
-Proof.
-  intros A o. elim o. intro a. right. intro H. discriminate.
-  left. reflexivity.
-Qed.
-
-Lemma nil_or_not_nil : forall (A:Type)(l:list A),
-  l = nil \/ l <> nil.
-Proof.
-  intros A l. elim l. left. reflexivity. clear l.
-  intros a l. intros. right. unfold not. intros. discriminate.
-Qed.
-
-
-(* This lemma is part of the Coq 8.5 library *)
-Lemma length_zero_iff_nil : forall (A:Type) (l:list A),
-  length l = 0 <-> l = nil.
-Proof.
-  intros A l. elim l. unfold length. split; auto. 
-  clear l. intros a l H. split. clear H. simpl. intro H.
-  discriminate H. clear H. intro H. discriminate H.
-Qed.
-
-Lemma length_of_tl : forall (A:Type) (l: list A),
-  l <> nil -> S (length (tl l)) = length l.
-Proof.
-  intros A l. elim l. unfold not. intro H. apply False_ind. auto.
-  clear l. intros a l IH. intro H. clear H. simpl. reflexivity.
-Qed.
 
 Fixpoint least (l:list A) : option A :=
   match l with
@@ -224,10 +187,6 @@ Proof.
 Qed.
 
 
-
-
-
-(*
 Fixpoint sort_n (n:nat): list A -> list A :=
   match n with
     | 0   => (fun l =>  l)
@@ -235,7 +194,7 @@ Fixpoint sort_n (n:nat): list A -> list A :=
       match l with
         | nil       =>  l
         | (x::l')   =>  let m := sort_n p l' in
-                        let y':= hd_error m  in
+                        let y':= least l'  in
                         match y' with
                           | None    => l
                           | Some y  => match R_bool x y with
@@ -245,49 +204,27 @@ Fixpoint sort_n (n:nat): list A -> list A :=
                         end
       end)
   end.   
-*)
 
-
-
-
+Lemma length_sort_n : forall (n:nat)(l:list A),
+  length (sort_n n l) = length l.
+Proof.
+  (* induction on *)
+  intro n. elim n.
+  (* n = 0 *)
+  simpl. reflexivity.
+  (* n -> n + 1 *)
+  clear n. intros n IH.
+  (* induction on l *)
+  intro l. elim l.
+  (* l = nil *)
+  simpl. reflexivity.
+  (* l = cons a l *)
+  clear l. intros a l H.
 
 
 
 
 (*
-Fixpoint sort_n (n:nat): list A -> list A :=
-  match n with
-    | 0   => (fun _ => nil)
-    | S p => (fun l =>
-      match l with
-        | nil       =>  nil
-        | (x::nil)  =>  (x::nil)
-        | (x::l')   =>  let m := sort_n p l' in
-                        let y := hd_error m  in
-                        match y with
-                          | None    => nil (* should not happen *)
-                          | Some z  => match R_bool x z with
-                                        | true  =>  (x::m)
-                                        | false =>  let m' := tl m in
-                                                    z::sort_n p (x::m') 
-                                       end
-                        end
-      end)
-  end. 
-
-
-Lemma le_length_sort_n_n : forall (n:nat)(l: list A),
-  length (sort_n n l) <= n.
-Proof.
-  intro n. elim n. auto. clear n. intros n IH l. elim l.
-  simpl. auto with arith. clear l. intros a l H. clear H.
-  elim l. simpl. auto with arith. clear l. intros b l H.
-  clear H. simpl. set (y:= hd_error (sort_n n (b :: l))).
-  case y. intro c. set (comp := R_bool a c). case comp.
-  simpl. apply le_n_S. apply IH. simpl. apply le_n_S.
-  apply IH. simpl. auto with arith.
-Qed.  
-
 
 Lemma sort_n_Sn : forall (n:nat) (l:list A),
   length l <= n -> sort_n n l = sort_n (S n) l.

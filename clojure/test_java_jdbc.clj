@@ -1,5 +1,4 @@
-; the purpose of this file is to demonstrate the use of the clojure library
-; java.jdbc which is based on java's JDBC. See file JDBCExample2.java for
+; the purpose of this file is to demonstrate the use of the clojure library ; java.jdbc which is based on java's JDBC. See file JDBCExample2.java for
 ; an example of use in java. We are now focussing on closure.
 
 ; the call to the ns macro below defines a namespace of the same name as the file
@@ -32,6 +31,10 @@
 ; test_java_jdbc
 ;
 
+; be careful with lazy evaluation, if you attempt to get results
+; after a connection is closed....
+
+
 (ns test_java_jdbc
   (:gen-class)
   (:require [clojure.java.jdbc :as j]))
@@ -46,8 +49,19 @@
   (println "test_java_jdbc is running ...")
 
     (j/with-db-connection [conn db]
-    (let [rows (j/query conn ["SELECT * FROM FRUIT"])]
-      (println (first rows)))))
+      (let [rows (j/query conn ["SELECT * FROM FRUIT WHERE NAME=?" "Apple"])]
+        (println (first rows))) ;{:cost 24, :appearance rosy, :name Apple, :id 1} 
+      (let [rows (j/query conn 
+                          ; specifies function to be applied to each row
+                          ["SELECT * FROM FRUIT WHERE ID=?" 1] {:row-fn :name})]
+        (println rows)) ; (Apple)
+      (j/insert! conn :fruit {:cost 12, :appearance "blue", :name "Pear", :id 2})
+      (j/update! conn :fruit {:appearance "green"} ["id=?" 2])
+      ;(j/delete! conn :fruit ["id=?" 2])
+      (j/execute! conn ["DELETE FROM FRUIT WHERE ID=?" 2])  ; generic sql
+      ))
+
+
 
 
 
