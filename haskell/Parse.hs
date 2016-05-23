@@ -144,24 +144,54 @@ peekChar = fmap w2c <$> peekByte
 
 
 parseWhile :: (Word8 -> Bool) -> Parse [Word8]
-{-
-parseWhile p = (fmap p <$> peekByte) >>= \mp ->
-                  if mp == Just True
-                    then parseByte >>= \b -> (b:) <$> parseWhile p
-                    else return []
--}
-
 parseWhile p = do
   byte <- peekByte
   if fmap p byte == Just True 
     then do
       b <- parseByte
-      (b:) <$> parseWhile p
+      -- parseByte :: Parse Word8 
+      -- b :: Word8
+      -- (b:) :: [Word8] -> [Word8]
+      -- fmap (b:) :: Parse [Word8] -> Parse [Word8]
+      -- parseWhile p :: Parse [Word8]
+      -- ==============================================
+      -- (b:) <$> parseWhile p :: Parse [Word8]   
+      (b:) <$> parseWhile p -- <$> is `fmap`
     else return []
 
 
 test14 = parseWhile (\x -> w2c x == 'a')
 test15 = parse test14 (L8.pack "aaaaabc") -- Right [97,97,97,97,97]
+
+-- f :: Word8 -> a
+-- p :: a -> Bool
+-- p.f :: Word8 -> Bool
+-- parseWhile (p . f) :: Parse [Word8]
+-- =====================================================
+-- fmap f :: [Word8] -> b for some type b
+-- =====================================================
+-- fmap f :: [Word8] -> [a]
+-- fmap (fmap f) :: Parse [Word8] -> Parse [a]
+-- fmap f <$> parseWhile (p . f) :: Parse [a]
+-- so the first fmap refers to the [] monad (and functor) 
+-- while the second refers to the Parse monad (and functor)
+parseWhileWith :: (Word8 -> a) -> (a -> Bool) -> Parse [a]
+parseWhileWith f p = fmap f <$> parseWhile (p . f)
+
+parseNat :: Parse Int -- try Integer
+parseNat = do 
+  digits <- parseWhileWith w2c isDigit
+  if null digits
+    then bail "no more inputs"
+    else let n = read digits
+         in if n < 0  -- test failing for overflow it seems
+              then bail "integer overflow"
+              else return n  
+
+test16 = parse parseNat (L8.pack "24545abc88")  -- 24545
+test17 = parse parseNat (L8.pack "567546715475417546154615745654654716751657")  -- Int or Integer ?
+
+
 
 
 

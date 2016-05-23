@@ -1,6 +1,6 @@
 Require Import List.
 
-Lemma nil_or_not_nil : forall (A:Type)(l:list A),
+Lemma nil_or_not_nil : forall {A:Type}(l:list A),
   l = nil \/ l <> nil.
 Proof.
   intros A l. elim l. left. reflexivity. clear l.
@@ -9,7 +9,7 @@ Qed.
 
 
 (* This lemma is part of the Coq 8.5 library *)
-Lemma length_zero_iff_nil : forall (A:Type) (l:list A),
+Lemma length_zero_iff_nil : forall {A:Type} (l:list A),
   length l = 0 <-> l = nil.
 Proof.
   intros A l. elim l. unfold length. split; auto. 
@@ -17,7 +17,7 @@ Proof.
   discriminate H. clear H. intro H. discriminate H.
 Qed.
 
-Lemma length_of_tl : forall (A:Type) (l: list A),
+Lemma length_of_tl : forall {A:Type} (l: list A),
   l <> nil -> S (length (tl l)) = length l.
 Proof.
   intros A l. elim l. unfold not. intro H. apply False_ind. auto.

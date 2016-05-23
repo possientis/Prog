@@ -62,10 +62,14 @@ Inductive recognize : Exp -> string -> Prop :=
   | recogMany   : forall (r:Exp) (s1 s2: string), 
       recognize (Many r) s1 -> recognize r s2 -> recognize (Many r) (s1 ++ s2).
 
+(* First we show that a recognized string is part of the language *)
+(* The proof flows naturally from an induction on the inductive predicate *)
 Lemma recognize_imp_in_language: forall (r:Exp)(s:string),
   recognize r s -> (exists x:Language r, semantics x = s).
 Proof.
+  (* induction on the recognize predicate *)
   intros r s H. generalize H. elim H.
+
   clear H r s. intros c H. exists (LangLit c). simpl. reflexivity.
 
   clear H r s. intros r1 r2 s1 s2 H1 H1' H2 H2' H.
@@ -89,6 +93,65 @@ Proof.
   exact H2. exact H1.
 Qed.
 
+(* Next we show that all strings of the language are recognized *)
+(* very simple coq proof with an induction on x                 *)
+Lemma recognize_language: forall (r:Exp)(x: Language r),
+  recognize r (semantics x).
+Proof.
+  (* induction on x *)
+  intros r x. elim x. 
+  (* x = LangLit c *)
+  clear r x. simpl. apply recogLit.
+  (* x = LangAnd r1 r2 x1 x2 *)
+  clear r x. intros r1 r2 x1 H1 x2 H2. simpl. 
+  apply recogAnd. exact H1. exact H2. 
+  (* x = LangOrLeft r1 r2 x1 *)
+  clear r x. intros r1 r2 x1 H1. simpl.
+  apply recogOrLeft. exact H1.
+  (* x = LangOrRight r1 r2 x2 *)
+  clear r x. intros r1 r2 x2 H2. simpl.
+  apply recogOrRight. exact H2.
+  (* x = LangEmpty r *)
+  clear r x. intros r. simpl. apply recogEmpty.
+  (* x = LangMany r x1 x2 *)
+  clear r x. intros r x1 H1 x2 H2. simpl.
+  apply recogMany. exact H1. exact H2.
+Qed.
+ 
+
+(* re-formatting previous lemma *)
+Lemma in_language_imp_recognize: forall (r:Exp)(s:string),
+  (exists x:Language r, semantics x = s) -> recognize r s. 
+Proof.
+  intros r s H. elim H. intros x Hx. clear H. rewrite <- Hx.
+  apply recognize_language.
+Qed.
+
+
+(* This efectively show the equivalence between the two approaches *)
+Lemma in_language_is_recognize: forall (r:Exp)(s:string),
+  (exists x:Language r, semantics x = s) <-> recognize r s.
+Proof.
+  intros r s. split. apply in_language_imp_recognize.
+  apply recognize_imp_in_language.
+Qed.
+
+(* At this stage, we have defined what a regular expression is as well
+as what it means for a string to be recognized by a regular expression.
+Now an obvious question arises: given a regular expression (r:Exp) and 
+a string (s:string), how do I decide whether s is recognized by r? 
+From a mathematical point of view, there exists a function 
+f : Exp -> string -> bool which returns 1 if and only if s belongs to 
+the language of r (i.e. s = semantics x for some x:Language r)
+However, we would like a program which implements such a function *)
+
+
+
+
+
+
+
+(*
 (* this definition is needed for the next lemma *)
 Definition Lang_of_Lit_Pred {r:Exp}(x:Language r) := (* major trick *)
   match r (* return Language r -> Prop *) with
@@ -165,36 +228,4 @@ Proof.
   clear r x. intros r x. destruct x; simpl; eauto.
 Qed.
 
-
-Lemma in_language_imp_recognize: forall (r:Exp)(s:string),
-  (exists x:Language r, semantics x = s) -> recognize r s. 
-Proof.
-  (* induction on r *)
-  intro r. elim r. 
-  (* Lit *)
-  clear r. intros c s H. elim H. intros x Hx. generalize (Lang_of_Lit c x).
-  intro Hx'. rewrite Hx' in Hx. simpl in Hx. rewrite <- Hx. apply recogLit.
-  (* And *)
-  clear r. intros r1 H1 r2 H2 s H. elim H. intros x Hx. clear H.
-  generalize (Lang_of_And r1 r2 x). intro H'. elim H'. intro x1. clear H'.
-  intro H'. elim H'. intro x2. clear H'. intro H'. rewrite H' in Hx.
-  simpl in Hx. set (s1:= semantics x1). set (s2:=semantics x2).
-  fold s1 in Hx. fold s2 in Hx. rewrite <- Hx. apply recogAnd.
-  apply H1. exists x1. reflexivity. apply H2. exists x2. reflexivity.
-  (* Or *)
-  clear r. intros r1 H1 r2 H2 s H. elim H. intros x Hx. clear H. 
-  generalize (Lang_of_Or r1 r2 x). intro H. elim H. 
-  clear H. intro Hleft. elim Hleft. intros x1 H. rewrite H in Hx. simpl in Hx.
-  apply recogOrLeft. apply H1. exists x1. exact Hx.
-  clear H. intro Hright. elim Hright. intros x2 H. rewrite H in Hx. simpl in Hx.
-  apply recogOrRight. apply H2. exists x2. exact Hx.
-  (* Many *)
-  clear r. intros r Hr s H. elim H. intros x Hx. clear H.
-  generalize (Lang_of_Many r x). intro H. elim H. 
-  clear H. intro H. rewrite H in Hx. simpl in Hx. rewrite <- Hx. apply recogEmpty.
-  clear H. intro H. elim H. clear H. intros x1 H. elim H. clear H. intros x2 H.
-  rewrite H in Hx. simpl in Hx. rewrite <- Hx. apply recogMany.
-
-
-
-   
+*)  

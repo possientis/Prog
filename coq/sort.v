@@ -219,8 +219,34 @@ Proof.
   (* l = nil *)
   simpl. reflexivity.
   (* l = cons a l *)
-  clear l. intros a l H.
+  clear l. intros a l H. unfold sort_n. fold sort_n.
+  generalize (none_or_not_none (least l)). intro H0. elim H0.
+  clear H0. intro H0. rewrite H0. reflexivity.
+  clear H0. intro H0. generalize (not_none_is_some (least l)). intro H1.
+  rewrite H1 in H0. clear H1. elim H0. clear H0. intros x Hx. rewrite Hx.
+  generalize (R_total a x). intro H0. elim H0.
+  clear H0. intro H0. rewrite R_lem in H0. rewrite H0. simpl.
+  rewrite IH. reflexivity.
+  clear H0. intro H0. rewrite R_lem in H0.
+  generalize (bool_dec (R_bool a x) true). intro H1. elim H1.
+  clear H1. intro H1. rewrite H1. simpl. rewrite IH. reflexivity.
+  clear H1. intro H1. apply not_true_is_false in H1. rewrite H1.
+  simpl. rewrite IH with (l:= a :: tl (sort_n n l)). simpl. 
+  rewrite length_of_tl. rewrite IH. reflexivity. unfold not.
+  clear H0 H1. intro H0. rewrite <- length_zero_iff_nil in H0.
+  rewrite IH in H0. rewrite length_zero_iff_nil in H0. 
+  rewrite <- least_none in H0. rewrite H0 in Hx. discriminate.
+Qed.
 
+Lemma sort_n_Sn : forall (n:nat)(l: list A),
+  length l <= n -> sort_n n l = sort_n (S n) l.
+Proof.
+  (* induction on n *)
+  intros n. elim n.
+  (* n = 0 *) 
+  clear n. intros l H. generalize (nil_or_not_nil l). intro H0. elim H0.
+  clear H0. intro H0. rewrite H0. simpl. reflexivity.
+  clear H0. intro H0.
 
 
 
