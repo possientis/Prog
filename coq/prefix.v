@@ -1,6 +1,13 @@
 Require Import List.
 
-Parameter A:Type.
+Section prefix.
+
+
+Variable A:Type.
+
+(*
+Implicit Types (l m: list A).
+*)
 
 (* this file is about the study of the binary relation prefix on lists *)
 (* Spefically this relation is defined and shown to be a partial order  *)
@@ -143,18 +150,124 @@ Qed.
 (* can we define a function isPrefixOf: list A -> list A -> bool *)
 (* such that isPrefixOf l m = true <-> prefix l m                *)
 
+Section prefix_bool.
+Hypothesis  A_dec: forall (x y:A), {x = y} + {x <> y}.
+
 Fixpoint isPrefixOf (l m:list A): bool :=
   match l with
     | nil     => true
     | (a::l') => match m with
                   | nil     => false
-                  | (b::m') => true (* TODO *) 
+                  | (b::m') => match A_dec a b with
+                                | left  _ => isPrefixOf l' m'
+                                | right _ => false
+                              end
+                end
+  end.
+(* Print Assumptions isPrefixOf. *)
+
+Lemma isPrefixOf_cons_same_head:
+  forall (a b:A)(l m:list A), isPrefixOf (a::l) (b::m) = true -> a = b.
+Proof.
+  intros a b l m. simpl. case (A_dec a b); intros; auto; discriminate.
+Qed.
+
+Lemma isPrefixOf_cons_isPrefixOf_tail:
+  forall (a b:A)(l m:list A), 
+    isPrefixOf (a::l) (b::m) = true -> isPrefixOf l m = true.
+Proof.
+  intros a b l m. simpl. case (A_dec a b); intros; auto; discriminate.
+Qed.
+
+Theorem prefixValidate: forall (l m:list A),
+  prefix l m <-> isPrefixOf l m = true.
+Proof.
+  intros l m. split. 
+  (* -> *)
+  intro H. generalize H. elim H.
+  clear l m H. simpl. intros. auto.
+  clear l m H. intros a l m H0 H1 H2. simpl. case (A_dec a a).
+  intro H3. clear H3. apply H1. exact H0.
+  intros. auto.
+  (* <- *)
+  generalize m. clear m. elim l.
+  intros. apply prefixNil.
+  clear l. intros a l IH m. generalize a. clear a. elim m.
+  clear m. simpl. intros. discriminate.
+  clear m. intros b m IH' a H.
+  rewrite <- (isPrefixOf_cons_same_head a b l m).
+  apply prefixCons. apply IH.
+  apply (isPrefixOf_cons_isPrefixOf_tail a b). exact H. exact H.
+Qed.
+
+End prefix_bool.
+
+Lemma nat_dec: forall (n m:nat), {n = m} + {n <> m}.
+Proof.
+  intros n. elim n.
+  clear n. intro m. elim m.
+  auto. auto.
+  clear n. intros n IH m. elim m.
+  auto. clear m. intros m H0.
+  case (IH m). clear IH. intros E. left.
+  rewrite E. reflexivity. clear IH. intro E. right.
+  unfold not. intro E'. injection E'. exact E.
+Qed.
+
+
+(* In fact, we do not need to use the bool data type in order to validate prefix *)
+Fixpoint prefix'' (l m:list A): Prop :=
+  match l with
+    | nil     => True
+    | (a::l') => match m with
+                  | nil     => False
+                  | (b::m') => (a=b)/\ (prefix'' l' m')
                 end
   end.
 
+Lemma prefixNil'': forall (l:list A), prefix'' nil l.
+Proof.
+  intros l. simpl. auto.
+Qed.
+
+Lemma prefixCons'': forall (a:A) (l m:list A),
+  prefix'' l m -> prefix'' (a::l) (a::m).
+Proof.
+  intros a l m H. simpl. auto.
+Qed.
+
+Lemma prefix_imp_prefix'' : forall (l m: list A), 
+  prefix l m -> prefix'' l m.
+Proof.
+  intros l m H. generalize H. elim H.
+  clear H l m. intros. apply prefixNil''.
+  clear H l m. intros a l m H0 H1 H2. clear H2.
+  apply prefixCons''. apply H1. exact H0.
+Qed.
 
 
+Lemma prefix''_imp_prefix: forall (l m: list A),
+  prefix'' l m -> prefix l m.
+Proof.
+  intros l. elim l.
+  clear l. intros. apply prefixNil.
+  clear l. intros a l IH. intros m. elim m.
+  clear m. simpl. apply False_ind.
+  clear m. intros b m IH' H. clear IH'. simpl in H. elim H. clear H.
+  intros H0 H1. rewrite <- H0. apply prefixCons. apply IH. exact H1.
+Qed.
+
+Theorem prefix_is_prefix'': forall (l m:list A), 
+  prefix l m <-> prefix'' l m.
+Proof.
+  intros l m. split. apply prefix_imp_prefix''. apply prefix''_imp_prefix.
+Qed.
 
 
+End prefix.
+
+(*
+Eval compute in isPrefixOf nat nat_dec (0::1::nil) (0::1::2::nil).
+*)
 
 

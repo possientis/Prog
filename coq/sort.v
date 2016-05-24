@@ -1,5 +1,7 @@
-Require Import lib_option.
-Require Import lib_list.
+(* coqtop -lv filename -I LibDirectory *)
+
+Require Import option_lib. (* personal *)
+Require Import list_lib.   (* personal *)
 Require Import List.
 Require Import Arith.
 Require Import Bool.
@@ -238,6 +240,9 @@ Proof.
   rewrite <- least_none in H0. rewrite H0 in Hx. discriminate.
 Qed.
 
+(* the trick is to control the unfolding process by defining variable n' = S n *)
+(* unfolding is needed to move forward and gain visibility. However, too much  *)
+(* unfolding makes you utterly blind                                           *) 
 Lemma sort_n_Sn : forall (n:nat)(l: list A),
   length l <= n -> sort_n n l = sort_n (S n) l.
 Proof.
@@ -246,7 +251,23 @@ Proof.
   (* n = 0 *) 
   clear n. intros l H. generalize (nil_or_not_nil l). intro H0. elim H0.
   clear H0. intro H0. rewrite H0. simpl. reflexivity.
-  clear H0. intro H0.
+  clear H0. intro H0. apply False_ind. apply le_n_0_eq in H.
+  symmetry in H. rewrite length_zero_iff_nil in H. apply H0. exact H.
+  (* n -> n + 1 *)
+  clear n. intros n IH l H. set (n':= S n) (* trick *). unfold sort_n at 1.
+  unfold n' at 1. fold sort_n. symmetry. unfold sort_n at 1. fold sort_n.
+  generalize H. clear H. elim l.
+  intros. reflexivity.
+  clear l. intros a l IH'. clear IH'.
+  intro H. set (m:= sort_n n' l). unfold m. (* trick *)
+  generalize (nil_or_not_nil l). intro Hnil. elim Hnil. clear Hnil. intro Hnil.
+  rewrite Hnil. simpl. reflexivity.
+  clear Hnil. intro Hnil. unfold n'. rewrite <- IH, <- IH. reflexivity.
+  simpl. rewrite length_of_tl. rewrite length_sort_n. simpl in H.
+  apply le_S_n. exact H. intro Hnil'. rewrite <- length_zero_iff_nil in Hnil'.
+  rewrite length_sort_n in Hnil'. rewrite length_zero_iff_nil in Hnil'.
+  apply Hnil. exact Hnil'. simpl in H. apply le_S_n. exact H.
+Qed.
 
 
 
