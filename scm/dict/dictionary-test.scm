@@ -2,7 +2,10 @@
   (let ((name-encapsulation 'does-not-matter))
   (display "testing dictionary class: ")(display symbol)(display " from file :")
   (display filename)(newline)
+  (display "check2: dictionary test running: symbol = ")(display symbol)
+  (display ":\t filename = ")(display filename)(newline)
   (load filename)
+  (display "check3: frame1.scm was loaded ...\n")
   ;;
   (let ((a ((eval symbol))) ( b ((eval symbol))))
   ;;

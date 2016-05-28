@@ -1,3 +1,5 @@
+module PNM(Greymap(..)) where 
+
 import qualified Data.ByteString.Lazy.Char8 as L8
 import qualified Data.ByteString.Lazy as L
 import Data.Char (isSpace)
@@ -6,7 +8,7 @@ import Data.Char (isSpace)
 data Greymap = Greymap {
   greyWidth   :: Int,
   greyHeight  :: Int,
-  greyMax     :: Int,
+  greyMax     :: Int, -- should be Word8
   greyData    :: L.ByteString
 } deriving Eq
 

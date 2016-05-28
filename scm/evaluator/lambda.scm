@@ -15,6 +15,11 @@
 ; added for analyze
 ; important gain in efficiency as we analyze the body just once
 (define (analyze-lambda exp)
+;(display "lambda1: exp = ")(display exp)(newline)
+;(display "lambda2: vars = ")(display (lambda-params exp))(newline)
+;(display "lambda3: body =")(display (lambda-body exp))(newline)
+;(display "lambda4: analyzed-body = ")(display(analyze-sequence (lambda-body exp)))
+;(newline)
   (let ((vars (lambda-params exp))
         (bproc (analyze-sequence (lambda-body exp))))
     (lambda (env)

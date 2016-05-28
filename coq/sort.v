@@ -270,41 +270,109 @@ Proof.
 Qed.
 
 
+(* we are now in a position to define the sort function *)
+Definition sort (l:list A) : list A := sort_n (length l) l.
+
+(* There is one thing we can immediately say about sort *)
+Lemma length_sort : forall (l:list A), length (sort l) = length l.
+Proof.
+  intros l. unfold sort. apply length_sort_n.
+Qed.
+
+(* it is one thing to define sort, it is another to demonstrate
+  the definition is interesting. So why is the sort function interesting?
+  One reason is that for all l: list A, sort l is a 'sorted' list. 
+  Another reason is that sort is in fact the only function with this 
+  property. Of course, we need to justify all this. First, we need
+  to formally define what a 'sorted' list is.
+*)
+
+(* a possible definition as an inductive predicate *)
+Inductive Sorted : list A -> Prop :=
+  | SortedNil : Sorted nil
+  | SortedCons: forall (a :A) (l:list A), 
+      Least a (a::l) -> Sorted l -> Sorted (a::l).
+
+(* a possible definition as a boolean function *)
+Fixpoint isSorted (l:list A) : bool :=
+  match l with
+    | nil     => true
+    | (a::l') => match least l' with
+                  | None    =>  true
+                  | Some b  =>  match R_bool a b with
+                                  | true   => isSorted l'
+                                  | false  => false
+                                end 
+                 end
+  end. 
+
+(******************************************************************************)
+Fixpoint qsort (l:list A) : list A :=
+  match l with
+    | nil       => nil
+    | (x::l')   => let lhs := l' in (* TODO *)
+                   let rhs := l' in (* TODO *)
+                      qsort lhs ++ (x::nil) ++ qsort rhs
+  end.
+
+(* is sort = qsort TODO *)
+(* is sort idempotent TODO *)
+(******************************************************************************)
+
+
+(* before proceeding, we need to make sure the two notions are equivalent *)
+Lemma Sorted_imp_isSorted: forall (l:list A), 
+  Sorted l -> isSorted l = true.
+Proof.
+  intros l H. generalize H. elim H.
+  clear H l. simpl. auto.
+  clear H l. intros a l H0 H1 H2 H3. simpl.
+  set (L := least l). cut (L = least l -> 
+    match L with | Some b => if R_bool a b then isSorted l else false
+                 | None => true
+    end = true). eauto. generalize H0 H1 H2 H3. clear H0 H1 H2 H3.
+  generalize a. clear a. elim L; auto. intros b a H0 H1 H2 H3 H4.
+  cut (R_bool a b = true). intro H5. rewrite H5. apply H2. exact H1.
+  rewrite <- R_lem. apply Least_imp_smaller with (l:= a::l). exact H0.
+  simpl. right. apply Least_imp_In. apply Least_is_least. symmetry. exact H4.
+Qed.
+
+Lemma isSorted_a_b_Rab: forall (a b:A)(l:list A),
+  isSorted (a::b::l) = true -> R a b.
+Proof.
+  intros a b l H. unfold isSorted in H. fold isSorted in H.
+  set (L:= least (b::l)). cut (L = least (b::l) -> R a b). eauto.
+  fold L in H. generalize H. clear H. generalize a. clear a. elim L.
+  clear L. intros L a H0 H1.
+(*
+Lemma isSorted_head_smallest: forall (a:A)(l:list A),
+  isSorted (a::l) = true -> (forall b:A, In b l -> R a b).
+Proof.
+  intros a l. generalize a. clear a. elim l.
+  clear l. intros a H0 b H1. simpl in H1. apply False_ind. exact H1.
+  clear l. intros b l IH a H0 c H1. 
+  simpl in H1. elim H1. 
+  clear H1. intro H1. rewrite <- H1.
+*)
 
 (*
-
-Lemma sort_n_Sn : forall (n:nat) (l:list A),
-  length l <= n -> sort_n n l = sort_n (S n) l.
+Lemma isSorted_imp_Sorted: forall (l:list A),
+  isSorted l = true -> Sorted l.
 Proof.
-  (* induction on n *)
-  intros n. elim n.
-  (* n = 0 *)
-  intros l H. cut (l = nil). intro H'. rewrite H'. simpl. reflexivity.
-  apply length_zero_iff_nil. symmetry. apply le_n_0_eq. exact H.
-  (* n -> n+1 *)(* induction on l *)
-  clear n. intros n IH l. elim l.
-  (* l = nil *)
-  simpl. auto.
-  (* l = (x::l') *)(* induction on l' *)
-  clear l. intros x l' H. clear H. elim l'.
-  (* l' = nil *)
-  simpl. auto.
-  (* l' = (a::l'') *)
-  clear l'. intros a l'' H. clear H. intro H. pose (p:= S n). 
-  change (sort_n (S n) (x :: a :: l'') = sort_n (S p) (x :: a :: l'')).
-  unfold sort_n at 2. fold sort_n. unfold p. symmetry. 
-  rewrite <- IH, <- IH. set (m:=sort_n n (a :: l'')). 
-  symmetry. unfold sort_n at 1. fold sort_n. reflexivity.
-  simpl. rewrite length_of_tl.  apply le_length_sort_n_n. 
-  simpl in H. generalize H. case n. simpl. unfold not.
-  intros H0 H1. clear H1. cut (0=S(length l'')). intro H1.
-  discriminate H1. apply le_n_0_eq. apply le_S_n. exact H0.
-  simpl.
-  intros q. case l''. intros H1 H2. discriminate H2. 
-  intros b m. case q. intro H0. simpl in H0. 
-  cut (0 = S(length m)). intro H1. discriminate H1.
-  apply le_n_0_eq. apply le_S_n. apply le_S_n. exact H0.
-  intro r. intro H0. set (k := sort_n (S r) (b :: m)).
-
-
+  intros l. elim l.
+  clear l. intros. apply SortedNil.
+  clear l. intros a l IH H. apply SortedCons.
+  generalize H IH. clear H IH. generalize a. clear a. elim l.
+  clear l. intros. apply Least_single.
+  clear l. intros b l H0 a H1 H2. apply smallest_imp_Least.
+  simpl. left. reflexivity.
+  intros c Hc. simpl in Hc. elim Hc. 
+  clear Hc. intros Hc. rewrite Hc. apply R_refl.
+  clear Hc. intro Hc. elim Hc.
+  clear Hc. intro Hc. rewrite <- Hc.
 *)
+
+
+
+
+

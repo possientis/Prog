@@ -50,7 +50,6 @@
 (load "analyze.scm")
 (load "self-evaluating.scm")
 (load "variable.scm")
-(load "analyze.scm")
 
 
 

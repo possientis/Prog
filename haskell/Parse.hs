@@ -12,6 +12,14 @@ import Control.Applicative -- <$> is alias for infix `fmap`
 import Data.Char
 import Data.Word
 
+data Greymap = Greymap {
+  greyWidth   :: Int,
+  greyHeight  :: Int,
+  greyMax     :: Word8,
+  greyData    :: L.ByteString
+} deriving Eq
+
+
 data ParseState = ParseState {
   string :: L.ByteString,
   offset :: Int64
@@ -190,6 +198,45 @@ parseNat = do
 
 test16 = parse parseNat (L8.pack "24545abc88")  -- 24545
 test17 = parse parseNat (L8.pack "567546715475417546154615745654654716751657")  -- Int or Integer ?
+
+skipSpaces :: Parse ()
+skipSpaces = do 
+  parseWhileWith w2c isSpace 
+  return ()
+
+assert :: Bool -> String -> Parse ()
+assert True _     = return ()
+assert False err  = bail err
+
+
+parseBytes :: Int -> Parse L.ByteString
+parseBytes n = do
+  state <- getState
+  let n' = fromIntegral n
+      (h,t) =  L.splitAt n' (string state)
+      state' = state { offset = offset state + L.length h, string = t }
+  putState state'
+  assert (L.length h == n') "end of input"
+  return h 
+
+parseRawPGM  = do
+  header <- parseWhileWith w2c notWhite
+  skipSpaces
+  assert (header == "P5") "invalid raw header"
+  width   <- parseNat
+  skipSpaces
+  height  <- parseNat
+  skipSpaces
+  maxGrey <- parseByte
+  bitmap <- parseBytes (width * height)
+  return (Greymap width height maxGrey bitmap)
+  where notWhite = (`notElem` " \r\n\t")
+
+
+
+  
+
+
 
 
 

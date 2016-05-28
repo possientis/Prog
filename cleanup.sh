@@ -16,7 +16,9 @@ rm -f c#/*.exe
 rm -f java/*.class
 rm -f scala/*.class
 rm -f clojure/*.class
-rm -f clojure/clj_record/*.class
+rm -f clojure/redis/*.class
+rm -f clojure/redis/connection/*.class
+rm -f clojure/redis/protocol/*.class
 rm -f clojure/clojure/java/*.class
 rm -f clojure/clojure/java/jdbc/*.class
 rm -f haskell/*.hi

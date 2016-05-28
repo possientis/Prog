@@ -1,3 +1,16 @@
+Understand the suble differences between:
+  - apply
+  - apply-in-underlying-scheme
+  - apply-primitive
+
+follow up on debug.scm
+
 continue unit testing of analyze
+
 change semantics of apply
+
+understand the following:
+exp = '(define f (lambda () 12))
+((analyze exp) global-env) ; creating binding through analyze
+(eval (f) global-env) ; this will fail
 

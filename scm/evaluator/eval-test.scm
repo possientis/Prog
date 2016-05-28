@@ -215,17 +215,32 @@
   ((global-env 'delete!) 'var5)
   ((global-env 'delete!) 'var6)
   ; syntactic sugar for named functions
-  (let ((x (eval '(define (f) 12) global-env)))         ; TODO
+  (let ((x (eval '(define (f) 12) global-env)))         
     (if (not (equal? (eval '(f) global-env) 12))
-      (display "eval: unit test 5.6 failing\n"))
+      (display "eval: unit test 5.15 failing\n"))
     ((global-env 'delete!) 'f))
-  (let ((x (eval '(define (f x) (* x x)) global-env)))  ; TODO
+  (let ((x (eval '(define (f x) (* x x)) global-env)))  
     (if (not (equal? (eval '(f 5) global-env) 25))
-      (display "eval: unit test 5.7 failing\n"))
+      (display "eval: unit test 5.16 failing\n"))
     ((global-env 'delete!) 'f))
-  (let ((x (eval '(define (f x y) (+ x y)) global-env))); TODO
+  (let ((x (eval '(define (f x y) (+ x y)) global-env)))
     (if (not (equal? (eval '(f 3 4) global-env) 7))
-      (display "eval: unit test 5.8 failing\n"))
+      (display "eval: unit test 5.17 failing\n"))
+    ((global-env 'delete!) 'f))
+  ;
+  (let ((x ((analyze '(define (f) 12)) global-env)))   
+    (if (not (equal? ((analyze '(f)) global-env) 12))
+      (display "eval: unit test 5.18 failing\n"))
+    ((global-env 'delete!) 'f))
+  ;
+  (let ((x ((analyze '(define (f x) (* x x))) global-env)))  
+    (if (not (equal? ((analyze '(f 5)) global-env) 25))
+      (display "eval: unit test 5.19 failing\n"))
+    ((global-env 'delete!) 'f))
+  ;
+  (let ((x ((analyze '(define (f x y) (+ x y))) global-env)))
+    (if (not (equal? ((analyze '(f 3 4)) global-env) 7))
+      (display "eval: unit test 5.20 failing\n"))
     ((global-env 'delete!) 'f))
   ;
   ; if
@@ -266,7 +281,7 @@
   (let ((x ((analyze '(not #f)) global-env)))
     (if (not (equal? x #t)) (display "eval: unit test 7.3 failing\n")))
   ;
-  ; lambda  TODO
+  ; lambda 
   ;
   (let ((x (eval '(lambda () (+ 3 5)) global-env)))
     ((global-env 'define!) 'f x)
@@ -296,7 +311,36 @@
   (let ((x (eval '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) global-env)))
     (if (not (equal? x 11)) (display "eval: unit test 8.6 failing\n")))
   ;
-
+  ;
+  ;
+  (let ((x ((analyze '(lambda () (+ 3 5))) global-env)))
+    ((global-env 'define!) 'f x)
+    (let ((y ((analyze '(f)) global-env)))
+      (if (not (equal? y 8)) (display "eval: unit test 8.7 failing\n")))
+    ((global-env 'delete!) 'f))
+  (let ((x ((analyze '(lambda (x) (* 3 x))) global-env)))
+    ((global-env 'define!) 'f x)
+    (let ((y ((analyze '(f 5)) global-env)))
+      (if (not (equal? y 15)) (display "eval: unit test 8.8 failing\n")))
+    ((global-env 'delete!) 'f))
+  (let ((x ((analyze '(lambda (x y) (+ x y))) global-env)))
+    ((global-env 'define!) 'f x)
+    (let ((y ((analyze '(f 3 4)) global-env)))
+      (if (not (equal? y 7)) (display "eval: unit test 8.9 failing\n")))
+    ((global-env 'delete!) 'f))
+  (let ((plus5 ((analyze '(lambda (x) (+ x y))) ((global-env 'extended)'(y)'(5)))))
+    ((global-env 'define!) 'f plus5)
+    (let ((y ((analyze '(f 6)) global-env)))
+      (if (not (equal? y 11)) (display "eval: unit test 8.10 failing\n")))
+    ((global-env 'delete!) 'f))
+  ;
+  (let ((x ((analyze '((lambda () 45))) global-env)))
+    (if (not (equal? x 45)) (display "eval: unit test 8.11 failing\n")))
+  (let ((x ((analyze '((lambda (x) (+ x 7)) 5)) global-env)))
+    (if (not (equal? x 12)) (display "eval: unit test 8.12 failing\n")))
+  (let ((x ((analyze '(let ((x 5)) ((lambda (u v) (+ u v)) x 6))) global-env)))
+    (if (not (equal? x 11)) (display "eval: unit test 8.6 failing\n")))
+  ;
   ; begin
   ;
   (let ((x (eval '(begin 1 2 3 4) global-env)))
@@ -397,7 +441,7 @@
   (let ((x ((analyze '(and #f)) global-env)))
     (if (not (equal? x #f)) (display "eval: unit test 12.13 failing\n")))
   ;
-  ; let TODO
+  ; let
   ;
   (let ((x (eval '(let ((x 5)) (+ x 7)) global-env)))
     (if (not (equal? x 12)) (display "eval: unit test 13.0 failing\n")))
@@ -410,23 +454,49 @@
   (let ((x (eval '(let ((x 1)) (let ((y 2)) (let ((z 3)) (+ x y z)))) global-env)))
     (if (not (equal? x 6)) (display "eval: unit test 13.4 failing\n")))
   ;
-  ; named-let TODO
+  (let ((x ((analyze '(let ((x 5)) (+ x 7))) global-env)))
+    (if (not (equal? x 12)) (display "eval: unit test 13.5 failing\n")))
+  (let ((x ((analyze '(let ((x 5) (y 3)) (+ x y))) global-env)))
+    (if (not (equal? x 8)) (display "eval: unit test 13.6 failing\n")))
+  (let ((x ((analyze '(let ((x 5)(y 6)) (let ((z 7)) (+ x y z)))) global-env)))
+    (if (not (equal? x 18)) (display "eval: unit test 13.7 failing\n")))
+  (let ((x ((analyze '(let ((x 5)(y 6)) (let ((z 7) (x 10)) (+ x y z)))) 
+            global-env)))
+    (if (not (equal? x 23)) (display "eval: unit test 13.8 failing\n")))
+  (let ((x ((analyze '(let ((x 1)) (let ((y 2)) (let ((z 3)) (+ x y z))))) 
+            global-env)))
+    (if (not (equal? x 6)) (display "eval: unit test 13.9 failing\n")))
+  ;
+  ; named-let
   ;
   (let ((x (eval '(let loop ((i 5) (acc 1)) 
                      (if (equal? 1 i) acc (loop (- i 1) (* i acc)))) global-env)))
     (if (not (equal? x 120)) (display "eval: unit 14.0 failing\n")))
   ;
-  ; let*  TODO
+  (let ((x ((analyze '(let loop ((i 5) (acc 1)) 
+                     (if (equal? 1 i) acc (loop (- i 1) (* i acc))))) global-env)))
+    (if (not (equal? x 120)) (display "eval: unit 14.1 failing\n")))
+  ;
+  ; let*
   ;
   (let ((x (eval '(let* ((x 5)(y (+ x 2))) (+ x y)) global-env)))
     (if (not (equal? x 12)) (display "eval: unit test 15.0 failing\n")))
   ;
-  ; letrec TODO
+  (let ((x ((analyze '(let* ((x 5)(y (+ x 2))) (+ x y))) global-env)))
+    (if (not (equal? x 12)) (display "eval: unit test 15.1 failing\n")))
+  ;
+  ; letrec
   ;
   (let ((x (eval '(letrec 
                     ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
                     (loop 5)) global-env)))
-    (if (not (equal? x 120)) (display "eval: unit test 15.5 failing\n")))
+    (if (not (equal? x 120)) (display "eval: unit test 15.2 failing\n")))
+  ;
+  (let ((x ((analyze '(letrec 
+                     ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
+                     (loop 5))) global-env)))
+    (if (not (equal? x 120)) (display "eval: unit test 15.3 failing\n")))
+  ;
   ; application
   ;
   ; primitives
@@ -468,7 +538,7 @@
   (let ((x ((analyze '(eval (+ 1 2))) global-env)))
     (if (not (equal? x 3)) (display "eval:unit test 16.15 failing\n")))
   ;
-  ; defined? TODO (need to add analyze code, most likely)
+  ; defined?
   ;
   (let ((x (eval '(defined? +) global-env)))
     (if (not (equal? x #t)) (display "eval: unit test 17.0 failing\n")))
@@ -481,7 +551,18 @@
   (let ((x (eval '(defined? (this is not even a name)) global-env)))
     (if (not (equal? x #f)) (display "eval: unit test 17.4 failing\n")))
   ;
-  ; load  TODO
+  (let ((x ((analyze '(defined? +)) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 17.5 failing\n")))
+  (let ((x ((analyze '(defined? car)) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 17.6 failing\n")))
+  (let ((x ((analyze '(defined? cdr)) global-env)))
+    (if (not (equal? x #t)) (display "eval: unit test 17.7 failing\n")))
+  (let ((x ((analyze '(defined? some-random-name)) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 17.8 failing\n")))
+  (let ((x ((analyze '(defined? (this is not even a name))) global-env)))
+    (if (not (equal? x #f)) (display "eval: unit test 17.9 failing\n")))
+  ;
+  ; load
   ;
   (let ((s (eval '(load "test.scm") global-env)))
     (if (not (equal? s " test.scm loaded"))
@@ -491,8 +572,19 @@
     (let ((x (eval 'y global-env)))
       (if (not (equal? x 6)) (display "eval: unit test 18.2 failing\n")))
     (let ((x (eval 'z global-env)))
-      (if (not (equal? x 11)) (display "eval: unit test 18.3 failing\n")))
-    )
+      (if (not (equal? x 11)) (display "eval: unit test 18.3 failing\n"))))
+  ; TODO
+;  (let ((s (eval '(load "test.scm") global-env)))
+;    (if (not (equal? s " test.scm loaded"))
+;      (display "eval: unit test 18.4 failing\n"))
+;    (let ((x (eval 'x global-env)))
+;      (if (not (equal? x 5)) (display "eval: unit test 18.5 failing\n")))
+;    (let ((x (eval 'y global-env)))
+;      (if (not (equal? x 6)) (display "eval: unit test 18.5 failing\n")))
+;    (let ((x (eval 'z global-env)))
+;      (if (not (equal? x 11)) (display "eval: unit test 18.7 failing\n"))))
+
+
 
   (display "eval: unit test complete\n"))
 

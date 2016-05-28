@@ -24,7 +24,15 @@
 ; the definition expression can be analyzed just once
 (define (analyze-definition exp)
   (let ((var (definition-variable exp))
-        (vproc (analyze (definition-expression exp))))
-    (lambda (env) ((env 'define!) var (vproc env))))) 
+        (proc (definition-expression exp)))
+    (let ((vproc (analyze proc)))
+;      (newline)
+;      (display "analyze-definition1: exp = ")(display exp)(newline)
+;      (display "analyze-definition2: var = ")(display var)(newline)
+;      (display "analyze-definition3: proc = ")(display proc)(newline)
+;      (display "analyze-definition4: vproc = ")(display vproc)(newline)
+      (lambda (env) ((env 'define!) var (vproc env)))))) 
 
 ))  ; include guard
+
+

@@ -30,6 +30,7 @@
         ((quoted? exp) (analyze-quoted exp))                
         ((assignment? exp) (analyze-assignment exp))          
         ((definition? exp) (analyze-definition exp))           
+        ((is-defined? exp) (analyze-defined? exp))
         ((if? exp) (analyze-if exp))                           
         ((not? exp) (analyze-not exp))
         ((lambda? exp)(analyze-lambda exp))
