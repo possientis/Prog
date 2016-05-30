@@ -343,7 +343,24 @@ Proof.
   intros a b l H. unfold isSorted in H. fold isSorted in H.
   set (L:= least (b::l)). cut (L = least (b::l) -> R a b). eauto.
   fold L in H. generalize H. clear H. generalize a. clear a. elim L.
+  clear L. intros L a H0 H1. set (b1 := R_bool a L). fold b1 in H0.
+  cut (b1 = R_bool a L -> R a b). eauto. generalize H0. clear H0.
+  case b1. intros H0 H2. clear H0. apply R_trans with (y:= L).
+  rewrite R_lem. symmetry. exact H2. apply Least_imp_smaller with (l:=b::l).
+  rewrite Least_is_least. symmetry. exact H1. simpl. left. reflexivity.
+  intros. discriminate.
+  intros a H0 H1. symmetry in H1. rewrite least_none in H1. discriminate.
+Qed.
+
+Lemma isSorted_a_b_isSorted_a: forall (a b:A)(l: list A),
+  isSorted(a::b::l) = true -> isSorted(a::l) = true.
+Proof.
+  intros a b l H. unfold isSorted in H. fold isSorted in H.
+  set (L:= least (b::l)). cut (L = least (b::l) -> isSorted (a::l) = true). eauto.
+  fold L in H. generalize H. clear H. generalize a. clear a. elim L.
   clear L. intros L a H0 H1.
+
+  
 (*
 Lemma isSorted_head_smallest: forall (a:A)(l:list A),
   isSorted (a::l) = true -> (forall b:A, In b l -> R a b).
@@ -352,9 +369,10 @@ Proof.
   clear l. intros a H0 b H1. simpl in H1. apply False_ind. exact H1.
   clear l. intros b l IH a H0 c H1. 
   simpl in H1. elim H1. 
-  clear H1. intro H1. rewrite <- H1.
+  clear H1. intro H1. rewrite <- H1. 
+  apply isSorted_a_b_Rab with (l:=l). exact H0.
+  clear H1. intro H1. apply IH.
 *)
-
 (*
 Lemma isSorted_imp_Sorted: forall (l:list A),
   isSorted l = true -> Sorted l.

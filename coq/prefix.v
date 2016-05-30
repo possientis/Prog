@@ -153,6 +153,7 @@ Qed.
 Section prefix_bool.
 Hypothesis  A_dec: forall (x y:A), {x = y} + {x <> y}.
 
+
 Fixpoint isPrefixOf (l m:list A): bool :=
   match l with
     | nil     => true
@@ -269,5 +270,4 @@ End prefix.
 (*
 Eval compute in isPrefixOf nat nat_dec (0::1::nil) (0::1::2::nil).
 *)
-
 

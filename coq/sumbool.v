@@ -3,7 +3,7 @@ Require Import List.
 Definition eq_dec (A:Type) :=
   forall x y:A, {x = y} + {x <> y}.
 
-Lemma L1 : eq_dec nat.
+Lemma nat_dec : eq_dec nat.
 Proof.
   unfold eq_dec. intros x. elim x.
   clear x. intro y. elim y.
@@ -19,19 +19,20 @@ Qed.
 
 
 
-(*
 
 (* returns the number of occurences of n in l *)
 Fixpoint count (l:list nat)(n: nat) :nat :=
   match l with
     | nil     =>  0
-    | (m::l') =>  match (eq_dec nat) n m with
+    | (m::l') =>  match nat_dec n m with
                     | left  _ => S (count l' n)
                     | right _ => count l' n
                   end
   end.
 
-*)
+
+Eval compute in (count (1::2::1::3::nil) 1).
+
 
 
                 
