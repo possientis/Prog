@@ -3,7 +3,7 @@
 
 int main(){
 
-  system("ls" " -l;" "ls");
+  system("ls -l; ls");
 
   return 0;
 }

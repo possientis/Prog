@@ -29,3 +29,8 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (a,b) where
     y <- arbitrary
     return (x,y)
 -}
+
+{-
+instance Arbitrary Char where
+  arbitrary = elements (['A'..'Z']++['a'..'z']++" ~!@#$%^&*()")
+-}

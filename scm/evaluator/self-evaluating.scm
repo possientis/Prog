@@ -5,7 +5,10 @@
     (display "loading self-evaluating")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-; added for analyze
+; eval
+(define (eval-self-evaluating exp env) exp)
+
+; analyze
 (define (analyze-self-evaluating exp) (lambda (env) exp)) 
 
 

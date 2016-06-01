@@ -7,7 +7,7 @@ data Doc  = Empty
           | Line 
           | Concat Doc Doc
           | Union Doc Doc
-            deriving (Show)
+            deriving (Show, Eq)
 
 empty :: Doc
 empty = Empty

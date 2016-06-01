@@ -5,11 +5,13 @@
     (display "loading quote")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
+; destructuring
 (define (text-of-quotation exp) (cadr exp))
 
-; added for analyze 
-; efficiency gained by extracting text of quotation only once
+; eval
+(define (eval-quoted exp env) (text-of-quotation exp))
+
+; analyze
 (define (analyze-quoted exp)
   (let ((qval (text-of-quotation exp)))
     (lambda (env) qval)))

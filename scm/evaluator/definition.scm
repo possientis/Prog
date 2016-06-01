@@ -5,8 +5,11 @@
     (display "loading definition")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "make.scm")
 
+; definition semantics differ from assignment. One important difference is
+; the syntactic construct (define (f x y) body) which has no assignment equivalent
+
+; destructuring
 (define (definition-variable exp)
   (if (symbol? (cadr exp)) (cadr exp) (caadr exp)))
 
@@ -16,22 +19,19 @@
     (make-lambda (cdadr exp)                                   
                  (cddr exp))))
 
+; eval
 (define (eval-definition exp env)
-  ((env 'define!) (definition-variable exp)
-                  (eval (definition-expression exp) env)))
+  (let ((var (definition-variable exp))
+        (rhs (definition-expression exp)))
+    (let ((val (eval rhs env)))
+      ((env 'define!) var val))))
 
-; added for analyze
-; the definition expression can be analyzed just once
+; analyze
 (define (analyze-definition exp)
   (let ((var (definition-variable exp))
-        (proc (definition-expression exp)))
-    (let ((vproc (analyze proc)))
-;      (newline)
-;      (display "analyze-definition1: exp = ")(display exp)(newline)
-;      (display "analyze-definition2: var = ")(display var)(newline)
-;      (display "analyze-definition3: proc = ")(display proc)(newline)
-;      (display "analyze-definition4: vproc = ")(display vproc)(newline)
-      (lambda (env) ((env 'define!) var (vproc env)))))) 
+        (rhs (definition-expression exp)))
+    (let ((val (analyze rhs)))
+      (lambda (env) ((env 'define!) var (val env)))))) 
 
 ))  ; include guard
 

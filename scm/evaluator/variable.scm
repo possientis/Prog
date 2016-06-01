@@ -5,7 +5,9 @@
     (display "loading variable")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-; added for analyze
+; eval
+(define (eval-variable exp env) ((env 'lookup) exp))
+;analyze
 (define (analyze-variable exp) (lambda (env) ((env 'lookup) exp)))
 
 

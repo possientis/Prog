@@ -6,11 +6,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (load "global-env.scm")
+(load "exp-type.scm")
 (load "operands.scm")
 (load "self-evaluating.scm")
 (load "variable.scm")
+(load "quote.scm")
 (load "assignment.scm")
 (load "definition.scm")
+
+(load "defined.scm")
 (load "if.scm")
 (load "not.scm")
 (load "lambda.scm")

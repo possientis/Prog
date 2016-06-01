@@ -21,6 +21,10 @@ rm -f clojure/redis/connection/*.class
 rm -f clojure/redis/protocol/*.class
 rm -f clojure/clojure/java/*.class
 rm -f clojure/clojure/java/jdbc/*.class
+rm -f clojure/hiccup/*.class
+rm -f clojure/hiccup/util/*.class
+rm -f clojure/hiccup/compiler/*.class
+rm -f clojure/compojure/*.class
 rm -f haskell/*.hi
 rm -f haskell/*.o
 rm -f haskell/test

@@ -40,17 +40,29 @@ abstract class Exp {
   public static Exp Many(Exp regex){ return new Many(regex); }
   // instance interface
   @Override public abstract String toString();
+  // Given a string, this method returns 'the' list of all prefixes of the string
+  // which belong to the language of the regular expression object.
   public abstract List<String> interpret(String input);
+  public boolean recognize(String input){ 
+    return this.interpret(input).contains(input);
+  }
 }
 
 class Lit extends Exp {
+
   private final String literal;
   protected Lit(String literal){ this.literal = literal; }
+
   @Override
-  public String toString(){ return "Lit(" + literal + ")"; }
+  public String toString(){ return literal; }
+
   @Override
   public List<String> interpret(String input){
-    return null;
+    List<String> result = new ArrayList<>();
+    if (input.startsWith(literal)){ // literal is a prefix of input
+      result.add(literal);
+    }
+    return result;
   }
 } 
 
@@ -58,11 +70,22 @@ class And extends Exp {
   private final Exp left;
   private final Exp right;
   protected And(Exp left, Exp right){ this.left = left; this.right = right; }
+
   @Override
-  public String toString(){ return "And(" + left + ", " + right + ")"; }
+  public String toString(){ return "" + left + right; }
+
   @Override
   public List<String> interpret(String input){
-    return null;
+    List<String> result = new ArrayList<>();
+    List<String> leftList = left.interpret(input);
+    for(String s1:leftList){
+      String remainder = input.substring(s1.length());
+      List<String> rightList = right.interpret(remainder);
+      for(String s2:rightList){
+        result.add(s1.concat(s2));
+      }
+    }
+    return result;
   }
 }
 
@@ -70,37 +93,72 @@ class Or extends Exp{
   private final Exp left;
   private final Exp right;
   protected Or(Exp left, Exp right){ this.left = left; this.right = right; }
+
   @Override
-  public String toString(){ return "Or(" + left + ", " + right + ")"; }
+  public String toString(){ return "(" + left + "|" + right + ")"; }
+
   @Override
   public List<String> interpret(String input){
-    return null;
+    List<String> result = left.interpret(input);
+    List<String> rightList = right.interpret(input);
+    for(String s:rightList){
+      result.add(s);
+    }
+    return result;
   }
 }
-
-
 
 class Many extends Exp {
   private final Exp regex;
   protected Many(Exp regex){ this.regex = regex; }
+
   @Override
-  public String toString(){ return "Many(" + regex + ")"; }
+  public String toString(){ return "(" + regex + ")*"; }
+
   @Override
   public List<String> interpret(String input){
-    return null;
+    List<String> result = new ArrayList<>();
+    result.add(""); // forall r:Exp, "" belongs to L(r*)
+    List<String> leftList = regex.interpret(input);
+    for(String s1:leftList){
+      if(!s1.isEmpty()){
+        String remainder = input.substring(s1.length());
+        List<String> rightList = this.interpret(remainder); // recursive call
+        for(String s2:rightList){
+          result.add(s1.concat(s2));
+        }
+      }
+    }
+
+    return result;
   }
 }
 
 
-
 public class Interpreter {
   public static void main(String[] args){
-    Exp r1 = Exp.Lit("hello");
-    Exp r2 = Exp.Lit("world");
-    Exp r3 = Exp.And(r1, r2);
-    Exp r4 = Exp.Or(r1, r3);
-    Exp r5 = Exp.Many(r4);
-    System.out.println(r5);
+    Exp a = Exp.Lit("a");
+    Exp b = Exp.Lit("b");
+    Exp c = Exp.Lit("c");
+
+    Exp aa = Exp.And(a, Exp.Many(a)); // one or more 'a'
+    Exp bb = Exp.And(b, Exp.Many(b)); // one or more 'b'
+    Exp cc = Exp.And(c, Exp.Many(c)); // one or more 'c'
+
+    Exp regex = Exp.Many(Exp.And(Exp.Or(aa,bb),cc));
+    String string = "acbbccaaacccbbbbaaaaaccccc";
+    
+    System.out.println("regex = " + regex);
+    System.out.println("string = \"" + string + "\"");
+    System.out.println("The recognized prefixes are:");
+    List<String> result = new ArrayList<>();
+    for(int i = 0; i <= string.length(); ++i){
+      String test = string.substring(0,i);
+      if(regex.recognize(test)){
+        result.add("\"" + test + "\"");
+      }
+    }
+    System.out.println(result);
   }
 }
 

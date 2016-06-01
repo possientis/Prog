@@ -1,3 +1,5 @@
+continue rewriting code so as to keep parallel between 'eval' and 'analyze'
+
 Understand the suble differences between:
   - apply
   - apply-in-underlying-scheme

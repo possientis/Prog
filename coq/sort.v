@@ -358,10 +358,30 @@ Proof.
   intros a b l H. unfold isSorted in H. fold isSorted in H.
   set (L:= least (b::l)). cut (L = least (b::l) -> isSorted (a::l) = true). eauto.
   fold L in H. generalize H. clear H. generalize a. clear a. elim L.
-  clear L. intros L a H0 H1.
+  clear L. intros L a H0 H1. set (b1 := R_bool a L). fold b1 in H0.
+  cut (b1 = R_bool a L -> isSorted (a :: l) = true). eauto. generalize H0. clear H0.
+  case b1. intros H0 H2. unfold isSorted. fold isSorted. 
+  set (L':= least l). cut (L' = least l ->  match L' with 
+    | Some b0 => if R_bool a b0 then isSorted l else false
+    | None => true
+  end = true). eauto. fold L' in H0. generalize H0. clear H0. elim L'.
+  clear L'. intros L' H0 H3.
+  set (b2 := R_bool b L'). fold b2 in H0. generalize H0. clear H0. elim b2.
+  intros H0. cut (R_bool a L' = true). intro H4. rewrite H4. exact H0.
+  rewrite <- R_lem. apply R_trans with (y:=L). 
+  rewrite R_lem. symmetry. exact H2. apply Least_imp_smaller with (l:= b::l).
+  apply Least_is_least. symmetry. exact H1. simpl. right. apply Least_imp_In.
+  apply Least_is_least. symmetry. exact H3.
+  intros. discriminate. 
+  intros. auto.
+  intros. discriminate.
+  intros a H0 H1. clear H0. 
+  symmetry in H1. rewrite least_none in H1. discriminate.
+Qed.
+
+ 
 
   
-(*
 Lemma isSorted_head_smallest: forall (a:A)(l:list A),
   isSorted (a::l) = true -> (forall b:A, In b l -> R a b).
 Proof.
@@ -372,8 +392,11 @@ Proof.
   clear H1. intro H1. rewrite <- H1. 
   apply isSorted_a_b_Rab with (l:=l). exact H0.
   clear H1. intro H1. apply IH.
-*)
-(*
+  apply isSorted_a_b_isSorted_a with (b:=b). exact H0. exact H1.
+Qed.
+
+
+
 Lemma isSorted_imp_Sorted: forall (l:list A),
   isSorted l = true -> Sorted l.
 Proof.
@@ -388,7 +411,11 @@ Proof.
   clear Hc. intros Hc. rewrite Hc. apply R_refl.
   clear Hc. intro Hc. elim Hc.
   clear Hc. intro Hc. rewrite <- Hc.
-*)
+  apply isSorted_head_smallest with (l:= b::l). exact H1.
+  simpl. left. reflexivity.
+  clear Hc. intro Hc. apply isSorted_head_smallest with (l:= b::l).
+  exact H1. simpl. right. exact Hc.
+
 
 
 

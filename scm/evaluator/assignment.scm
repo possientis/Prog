@@ -5,25 +5,22 @@
     (display "loading assignment")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
+; destructuring
 (define (assignment-variable exp) (cadr exp))
-
 (define (assignment-expression exp) (caddr exp))
 
+; eval
 (define (eval-assignment exp env)
-  (set-variable-value! 
-    (assignment-variable exp)
-    (eval (assignment-expression exp) env)  
-    env))
+  (let ((var (assignment-variable exp))
+        (rhs (assignment-expression exp)))
+    (let ((val (eval rhs env)))
+      ((env 'set!) var val))))
 
-(define (set-variable-value! var val env)
-  ((env 'set!) var val))
-
-; added for analyze
-; the assignment expresssion can be analyzed just once
+; analyze
 (define (analyze-assignment exp)
   (let ((var (assignment-variable exp))
-        (vproc (analyze (assignment-expression exp))))
-    (lambda (env) (set-variable-value! var (vproc env) env))))
+        (rhs (assignment-expression exp)))
+    (let ((val (analyze rhs)))
+      (lambda (env) ((env 'set!) var (val env))))))
 
 ))  ; include guard
