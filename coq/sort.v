@@ -119,7 +119,7 @@ Proof.
 Qed.
 
 
-Lemma Least_is_least: forall (a:A)(l:list A),
+Theorem Least_is_least: forall (a:A)(l:list A),
   Least a l <-> least l = Some a.
 Proof.
   intros a l. split. apply Least_imp_least. apply least_imp_Least. 
@@ -396,6 +396,17 @@ Proof.
 Qed.
 
 
+Lemma isSorted_tail: forall (a:A)(l:list A),
+  isSorted (a::l) = true -> isSorted l = true.
+Proof.
+  intros a l H. simpl in H. set (L := least l). fold L in H. 
+  cut (L = least l -> isSorted l = true). eauto. 
+  generalize H. clear H. elim L.
+  clear L. intros L H0 H1. set (b1 := R_bool a L). fold b1 in H0.
+  generalize H0. clear H0. elim b1. auto. intros. discriminate.
+  intros H0 H1. symmetry in H1. rewrite least_none in H1. rewrite H1.
+  simpl. reflexivity.
+Qed.
 
 Lemma isSorted_imp_Sorted: forall (l:list A),
   isSorted l = true -> Sorted l.
@@ -415,6 +426,41 @@ Proof.
   simpl. left. reflexivity.
   clear Hc. intro Hc. apply isSorted_head_smallest with (l:= b::l).
   exact H1. simpl. right. exact Hc.
+  apply IH. apply isSorted_tail with (a:=a). exact H.
+Qed.
+
+Theorem  Sorted_is_isSorted: forall (l:list A),
+  Sorted l <-> isSorted l = true.
+Proof.
+  intro l. split. apply Sorted_imp_isSorted. apply isSorted_imp_Sorted.
+Qed.
+
+Lemma sort_n_Sorted: forall (n:nat)(l:list A),
+  length l <= n -> Sorted (sort_n n l).
+Proof.
+  intros n. elim n.
+  clear n. intros l H. apply le_n_0_eq in H. symmetry in H.
+  rewrite length_zero_iff_nil in H. rewrite H. simpl. apply SortedNil.
+  clear n. intros n IH. intro l. elim l.
+  clear l. intro H. clear H. simpl. apply SortedNil.
+  clear l. intros a l H0 H1. set (L := least l).
+  cut (L = least l -> Sorted (sort_n (S n) (a :: l))). eauto. elim L.
+  clear L. intros L H2. set (b1 := R_bool a L).
+  cut (b1 = R_bool a L -> Sorted (sort_n (S n) (a :: l))). eauto. elim b1.
+  clear b1. intros H3. unfold sort_n. fold sort_n. 
+  rewrite <- H2. rewrite <- H3. apply SortedCons. apply smallest_imp_Least.
+  simpl. left. reflexivity. intros b H4. simpl in H4. elim H4.
+  clear H4. intro H4. rewrite H4. apply R_refl.
+  (* sort_n n l and l have the same elements ? *)
+
+
+
+(*
+(* now that we formally know what a sorted list is, we can state *)
+Theorem sort_l_Sorted: forall (l:list A), Sorted (sort l).
+Proof.
+*)
+
 
 
 

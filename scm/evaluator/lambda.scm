@@ -8,12 +8,17 @@
 (load "make.scm")
 (load "operands.scm")
 
+; destructuring
 (define (lambda-params exp) (cadr exp))
-
 (define (lambda-body exp) (cddr exp))
 
-; added for analyze
-; important gain in efficiency as we analyze the body just once
+; eval
+(define (eval-lambda exp env)
+  (let ((params (lambda-params exp))
+        (body (lambda-body exp)))
+    (make-procedure params body env)))
+
+; analyze
 (define (analyze-lambda exp)
 ;(display "lambda1: exp = ")(display exp)(newline)
 ;(display "lambda2: vars = ")(display (lambda-params exp))(newline)

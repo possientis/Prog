@@ -13,10 +13,10 @@
 (load "quote.scm")
 (load "assignment.scm")
 (load "definition.scm")
-
 (load "defined.scm")
 (load "if.scm")
 (load "not.scm")
+
 (load "lambda.scm")
 (load "begin.scm")
 (load "cond.scm")
@@ -41,7 +41,7 @@
         ((is-defined? exp)(eval-defined? exp env))
         ((if? exp) (eval-if exp env))                           
         ((not? exp) (eval-not exp env))
-        ((lambda? exp)(make-procedure(lambda-params exp)(lambda-body exp)env))
+        ((lambda? exp)(eval-lambda exp env))
         ((begin? exp) (eval-sequence (begin-actions exp) env))  
         ((cond? exp) (eval (cond->if exp) env))              
         ((or? exp) (eval (or->if exp) env))

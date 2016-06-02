@@ -1,6 +1,8 @@
 import Test.QuickCheck
 import Control.Monad (liftM, liftM2)
 import Prettify
+import Data.List (intersperse)
+
 
 {-
 data Doc  = Empty
@@ -61,9 +63,53 @@ prop_char c = char c == Char c
 check_char  = quickCheck prop_char
 
 
+prop_text :: String -> Bool
+prop_text s = text s == if null s then Empty else Text s
+check_text = quickCheck prop_text
+
+prop_line :: Bool
+prop_line = line == Line
+check_line = quickCheck prop_line
+
+prop_double :: Double -> Bool
+prop_double d = double d == Text (show d)
+check_double = quickCheck prop_double
+
+prop_hcat :: [Doc] -> Bool
+prop_hcat xs = hcat xs == glue xs 
+  where
+    glue [] = empty
+    glue (d:ds) = d <> glue ds
+check_hcat = quickCheck prop_hcat
+test5 = verboseCheck prop_hcat
+
+prop_punctuate :: Doc -> [Doc] -> Bool
+prop_punctuate s xs = punctuate s xs == combine (intersperse s xs)
+  where
+    combine []  = []
+    combine [x] = [x]
+    combine (x:Empty:ys) = x:combine ys
+    combine (Empty:y:ys) = y:combine ys
+    combine (x:y:ys)     = x `Concat` y : combine ys
+
+check_punctuate = quickCheck prop_punctuate
+
+{-
+-- can't find this defined anywhere
+options = TestOptions { no_of_tests     = 200
+                      , length_of_tests = 1
+                      , debug_tests     = False }
+-}
+
+
 main = do
   check_empty_id
   check_char
+  check_text
+  check_line
+  check_double
+  check_hcat
+  check_punctuate
 
 
 

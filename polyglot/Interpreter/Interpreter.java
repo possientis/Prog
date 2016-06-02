@@ -27,10 +27,6 @@ import java.util.*;
 // question being asked is whether there exist a substring s' of s which
 // belongs to the language of r. One of the first questions of interest is
 // of course whether s itself belongs to L(r).
-//
-//
-//
-//
 
 abstract class Exp {
   // static factory methods
@@ -41,7 +37,8 @@ abstract class Exp {
   // instance interface
   @Override public abstract String toString();
   // Given a string, this method returns 'the' list of all prefixes of the string
-  // which belong to the language of the regular expression object.
+  // which belong to the language of the regular expression object. Of course,
+  // such a list in only unique up to the order of its elements
   public abstract List<String> interpret(String input);
   public boolean recognize(String input){ 
     return this.interpret(input).contains(input);
@@ -82,7 +79,7 @@ class And extends Exp {
       String remainder = input.substring(s1.length());
       List<String> rightList = right.interpret(remainder);
       for(String s2:rightList){
-        result.add(s1.concat(s2));
+        result.add(s1 + s2);
       }
     }
     return result;
@@ -129,7 +126,6 @@ class Many extends Exp {
         }
       }
     }
-
     return result;
   }
 }

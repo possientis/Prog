@@ -13,10 +13,10 @@
 (load "quote.scm")
 (load "assignment.scm")
 (load "definition.scm")
-
 (load "defined.scm")
 (load "if.scm")
 (load "not.scm")
+
 (load "lambda.scm")
 (load "begin.scm")
 (load "cond.scm")

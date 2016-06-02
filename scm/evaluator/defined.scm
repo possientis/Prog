@@ -5,21 +5,26 @@
     (display "loading defined")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "exp-type.scm")
+(load "exp-type.scm") ; variable?
 
+; we are following what appears to be the scm semantics in the case when the
+; expression does not refer to a variable. Instead of throwing an error, we
+; simply return #f.
+
+; destructuring
 (define (defined?-variable exp) (cadr exp))
 
+; eval
 (define (eval-defined? exp env)
-  (let ((variable (defined?-variable exp))) 
-    (if (not (variable? variable)) #f  ((env 'defined?) variable)))) 
+  (let ((var (defined?-variable exp))) 
+    (if (not (variable? var)) #f  ((env 'defined?) var)))) 
 
-
-;; added for analyze
+; analyze
 (define (analyze-defined? exp)
-  (let ((variable (defined?-variable exp)))
-    (if (not (variable? variable))
+  (let ((var (defined?-variable exp)))
+    (if (not (variable? var)) ; test is done at 'analyze' time, not runtime
       (lambda (env) #f)
-      (lambda (env) ((env 'defined?) variable))))) 
+      (lambda (env) ((env 'defined?) var))))) 
 
 ))  ; include guard
 
