@@ -29,4 +29,21 @@
   ; ([:li iii] [:li iv] [:li v])
   (println (for [char '("iii" "iv" "v")] [:li char]))
 
+  ; the optional map argument of the html macro need not be a map literal.
+
+  (defn optional-tags [description price]
+    {:desc description :price price})
+
+  ; #<RawString <div class="product" desc="Top seller!" price="19.95">Baby T-Shirt</div>>
+  (println (h/html [:div.product (optional-tags "Top seller!" 19.95) "Baby T-Shirt"]))
+
+
+  ; (h/html [:div#topseller.product {:runa_type product} Baby T-Shirt]) .... hhhmm, no expansion?
+  (println (macroexpand '(h/html [:div#topseller.product {:runa_type "product"} "Baby T-Shirt"])))
+
+
+
+
+
+
 )

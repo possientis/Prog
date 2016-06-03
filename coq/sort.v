@@ -435,6 +435,35 @@ Proof.
   intro l. split. apply Sorted_imp_isSorted. apply isSorted_imp_Sorted.
 Qed.
 
+Lemma eq_lem: forall (a b:A),
+  a = b \/ a <> b.
+Proof.
+
+(*
+Lemma In_imp_In_sort_n: forall (n:nat)(l:list A)(x:A),
+  In x l -> In x (sort_n n l).
+Proof.
+  intros n. elim n.
+  clear n. simpl. auto.
+  clear n. intros n IH l. elim l.
+  clear l. auto.
+  clear l. intros a l H0 x H1.
+  set (L:= least l). cut(L = least l ->  In x (sort_n (S n) (a :: l))). eauto.
+  elim L. clear L. intros L H2. set (b1:= R_bool a L). 
+  cut(b1 = R_bool a L ->  In x (sort_n (S n) (a :: l))). eauto. elim b1.
+  clear b1. intro H3. simpl. rewrite <- H2. rewrite <- H3.
+  simpl in H1. elim H1. 
+  clear H1. intro H1. simpl. left. exact H1.
+  clear H1. intro H1. simpl. right. apply IH. exact H1.
+  clear b1. intro H3. simpl. rewrite <- H2. rewrite <- H3.
+  simpl in H1. elim H1.
+  clear H1. intro H1. simpl. right. apply IH. simpl. left. exact H1.
+  clear H1. intro H1.
+*)
+
+
+
+(*
 Lemma sort_n_Sorted: forall (n:nat)(l:list A),
   length l <= n -> Sorted (sort_n n l).
 Proof.
@@ -453,7 +482,7 @@ Proof.
   clear H4. intro H4. rewrite H4. apply R_refl.
   (* sort_n n l and l have the same elements ? *)
 
-
+*)
 
 (*
 (* now that we formally know what a sorted list is, we can state *)
