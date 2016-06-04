@@ -1,3 +1,7 @@
+introduce new type 'analyze-procedure', compound procedures where code has been
+analyzed, as opposed to 'eval-procedure' where code has not been analyzed.
+
+
 continue rewriting code so as to keep parallel between 'eval' and 'analyze' (lambda !!!!)
 
 Understand the suble differences between:

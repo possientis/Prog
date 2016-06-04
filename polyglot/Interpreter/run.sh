@@ -19,4 +19,13 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm interpreter.exe
 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Interpreter.scala
+START=$(date +%s%N)
+scala Interpreter 
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
+
 

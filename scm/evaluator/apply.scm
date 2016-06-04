@@ -22,7 +22,7 @@
 ;  (display "apply:\targuments = ")(display arguments)(newline)
   (cond ((primitive-procedure? procedure)                       
          (apply-primitive-procedure procedure arguments))       
-        ((compound-procedure? procedure)                        
+        ((eval-procedure? procedure)  ; compound procedure, code not analyzed 
          (eval-sequence
            (procedure-body procedure)                           
            (((procedure-environment procedure) 'extended)
@@ -36,6 +36,13 @@
 ;  (display "apply-primitive-procedure:\tprocedure-implementation = ")
 ;  (display (primitive-implementation proc))(newline)
   (apply-in-underlying-scheme (primitive-implementation proc) args)) 
+
+
+(define (eval-application exp env)
+  (apply (eval (exp-operator exp) env)
+         (list-of-values (exp-operands exp) env)))
+
+
 
 ; added for analyze
 (define (analyze-application exp)
@@ -56,7 +63,7 @@
 ;  (display "execute-application:\targuments = ")(display arguments)(newline) 
   (cond ((primitive-procedure? procedure)
          (apply-primitive-procedure procedure arguments))
-        ((compound-procedure? procedure)
+        ((eval-procedure? procedure)  ; TODO
          ((procedure-body procedure)
           (((procedure-environment procedure) 'extended)
            (procedure-parameters procedure)

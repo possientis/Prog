@@ -122,7 +122,7 @@ class Many extends Exp {
         String remainder = input.substring(s1.length());
         List<String> rightList = this.interpret(remainder); // recursive call
         for(String s2:rightList){
-          result.add(s1.concat(s2));
+          result.add(s1 + s2);
         }
       }
     }

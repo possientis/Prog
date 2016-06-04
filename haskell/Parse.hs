@@ -1,3 +1,4 @@
+module Parse() where
 --  L8.pack :: [Char] -> L.ByteString
 --  L8.uncons :: L.ByteString -> Maybe (Char, L.ByteString)
 --  can work with [Char] instead of [Word8]

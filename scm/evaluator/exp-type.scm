@@ -51,7 +51,7 @@
 
 (define (primitive-procedure? proc) (tagged-list? proc 'primitive))
 
-(define (compound-procedure? procedure) (tagged-list? procedure 'procedure))
+(define (eval-procedure? procedure) (tagged-list? procedure 'eval-procedure))
 
 
 ))  ; include guard

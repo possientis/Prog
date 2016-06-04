@@ -50,8 +50,7 @@
         ((named-let? exp) (eval (named-let->combination exp) env))
         ((let*? exp) (eval (let*->nested-lets exp) env))
         ((letrec? exp) (eval (letrec->combination exp) env))
-        ((application? exp)(apply (eval (exp-operator exp) env)
-                                  (list-of-values (exp-operands exp) env)))        
+        ((application? exp) (eval-application exp env))
         (else  (error "Unknown expression type -- EVAL" exp))))
        
 

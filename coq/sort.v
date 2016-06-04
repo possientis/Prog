@@ -15,6 +15,28 @@ Axiom R_trans:  forall x y z:A, R x y -> R y z -> R x z.
 Axiom R_total:  forall x y:A, R x y \/ R y x.
 Axiom R_lem:    forall x y:A, R x y <-> R_bool x y = true.
 
+Lemma R_or_not_R: forall x y:A, R x y \/ ~R x y.
+Proof.
+  intros x y.
+  generalize (bool_dec (R_bool x y) true). intro H. elim H.
+  clear H. intro H. left. rewrite R_lem. exact H.
+  clear H. intro H. right. rewrite R_lem. exact H.
+Qed.
+
+Lemma A_dec: forall x y: A, x = y \/ x <> y.
+Proof.
+  intros x y. generalize (R_total x y). intro H. elim H.
+  clear H. intro H. generalize (R_or_not_R y x). intro H'. elim H'.
+  clear H'. intro H'. left. apply R_anti. exact H. exact H'.
+  clear H'. intro H'. right. intro Eq. apply H'.
+  rewrite Eq. rewrite Eq in H. exact H.
+  clear H. intro H. generalize (R_or_not_R x y). intro H'. elim H'.
+  clear H'. intro H'. left. apply R_anti. exact H'. exact H.
+  clear H'. intro H'. right. intro Eq. apply H'.
+  rewrite Eq. rewrite Eq in H. exact H.
+Qed.
+
+
 Fixpoint least (l:list A) : option A :=
   match l with
     | nil     =>  None
@@ -378,9 +400,6 @@ Proof.
   intros a H0 H1. clear H0. 
   symmetry in H1. rewrite least_none in H1. discriminate.
 Qed.
-
- 
-
   
 Lemma isSorted_head_smallest: forall (a:A)(l:list A),
   isSorted (a::l) = true -> (forall b:A, In b l -> R a b).
@@ -435,11 +454,8 @@ Proof.
   intro l. split. apply Sorted_imp_isSorted. apply isSorted_imp_Sorted.
 Qed.
 
-Lemma eq_lem: forall (a b:A),
-  a = b \/ a <> b.
-Proof.
 
-(*
+
 Lemma In_imp_In_sort_n: forall (n:nat)(l:list A)(x:A),
   In x l -> In x (sort_n n l).
 Proof.
@@ -459,9 +475,10 @@ Proof.
   simpl in H1. elim H1.
   clear H1. intro H1. simpl. right. apply IH. simpl. left. exact H1.
   clear H1. intro H1.
-*)
-
-
+  generalize (A_dec x L). intro H4. elim H4.
+  clear H4. intro H4. simpl. left. symmetry. exact H4.
+  clear H4. intro H4. simpl. right. apply IH. right.
+(* it is wrong to assume that L is the head of sort_n n when n = 0 *)
 
 (*
 Lemma sort_n_Sorted: forall (n:nat)(l:list A),

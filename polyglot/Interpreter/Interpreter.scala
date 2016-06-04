@@ -28,7 +28,9 @@
 // belongs to the language of r. One of the first questions of interest is
 // of course whether s itself belongs to L(r).
 
+// This is scala: we use pattern matching rather than overrides
 sealed trait Exp {
+  
   override def toString : String =
     this match {
       case Lit(literal)     => literal
@@ -36,6 +38,7 @@ sealed trait Exp {
       case Or(left, right)  => "(" + left + "|" + right + ")"
       case Many(regex)      => "(" + regex + ")*"
     }    
+
   def interpret(input : String) : List[String] = 
     this match {
       case Lit(literal)     =>
@@ -44,11 +47,30 @@ sealed trait Exp {
         } else {
           Nil
         }
-      case And(left, right) => Nil  // TODO
-      case Or(left, right)  => Nil  // TODO
-      case Many(regex)      => Nil  // TODO
+      case And(left, right) =>  
+        var result : List[String] = Nil
+        for(s1 <- left.interpret(input)){
+          val remainder = input.substring(s1.length)
+          for(s2 <- right.interpret(remainder)){
+            result = (s1 + s2)::result
+          }
+        }
+        result
+      case Or(left, right)  => 
+        left.interpret(input) ::: right.interpret(input)
+      case Many(regex)      => 
+        var result = List("")
+        for(s1 <- regex.interpret(input)){
+          if(!s1.isEmpty){
+            val remainder = input.substring(s1.length)
+            for(s2 <- this.interpret(remainder)){  // recursive call
+              result = (s1 + s2)::result
+            }
+          }
+        }
+        result
     }
-
+  def recognize(input: String): Boolean = interpret(input).contains(input)
 }
 
 case class Lit(literal: String) extends Exp {}
@@ -61,5 +83,28 @@ case class Many(regex: Exp) extends Exp {}
 
 object Interpreter {
   def main(args: Array[String]){
+    val a = Lit("a")
+    val b = Lit("b")
+    val c = Lit("c")
+    
+    val aa = And(a, Many(a))  // one or mare 'a'
+    val bb = And(b, Many(b))  // one or mare 'b'
+    val cc = And(c, Many(c))  // one or mare 'c'
+
+    val regex = Many(And(Or(aa,bb),cc))
+    val string = "acbbccaaacccbbbbaaaaaccccc"
+
+    println("regex = " + regex);
+    println("string = \"" + string + "\"");
+    println("The recognized prefixes are:");
+    
+    var result : List[String] = Nil
+    for(i <- 0 to string.length){
+      val test = string.substring(0,i)
+      if(regex.recognize(test)){
+        result = ("\"" + test + "\"")::result
+      }
+    }
+    println(result.reverse.mkString("[",", ","]"))
   }
 }
