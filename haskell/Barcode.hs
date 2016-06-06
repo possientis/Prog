@@ -72,6 +72,30 @@ test4 = test3 ! 'e'       -- 101
 test5 = listArray ((0,0,0),(9,9,9)) [0..]
 test6 = test5 ! (4,3,7)   -- 437
 
+-- indices :: Ix i => Array i e -> [i]
+indices1 = indices test3  -- "abcdefgh"
+indices2 = indices test5  -- [(0,0,0),(0,0,1),(0,0,2), ......., (9,9,9)]
+
+
+test7 = listArray (0,5) "bar"
+test8 = test7 !2  -- 'r' , no error yet...lazy
+test9 = test7 ! 3 -- still no error, until attempting to compute test9 
+-- it is possible to use 'strict' arrays too (as opposed to 'lazy' arrays here)
+
+-- Strict left fold, similar to foldl' on lists.
+foldA :: Ix k => (a -> b -> a) -> a -> Array k b -> a
+foldA f s a = go s (indices a)
+  where go s (j:js) = let s' = f s (a ! j)
+                      in s' `seq` go s' js  -- seq forces evaluation of s'
+        go s _      = s                     -- hence avoids space blow up
+                                            -- note that 'go' is tail recursive
+-- Strict left fold using the first element of the array as its starting value
+foldA1 :: Ix k => (a -> a -> a) -> Array k a -> a
+foldA1 f a = foldA f (a ! fst (bounds a)) a
+
+
+
+
 
 
 

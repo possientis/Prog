@@ -53,5 +53,7 @@
 
 (define (eval-procedure? procedure) (tagged-list? procedure 'eval-procedure))
 
+(define (analyze-procedure? procedure) (tagged-list? procedure 'analyze-procedure))
+
 
 ))  ; include guard

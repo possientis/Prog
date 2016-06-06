@@ -14,6 +14,7 @@ rm -f cpp/a.out
 rm -f cpp/*.o
 rm -f c#/*.exe
 rm -f java/*.class
+rm -f java/bitcoinj/*.class
 rm -f scala/*.class
 rm -f clojure/*.class
 rm -f clojure/redis/*.class

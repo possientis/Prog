@@ -1,3 +1,4 @@
+Require Import Arith.
 
 Fixpoint fib1 (n:nat) : nat :=
   match n with
@@ -45,8 +46,32 @@ Theorem exercise: forall n p: nat,
   fib1 (S (S (n + p))) = fib1 (S n) * fib1 (S p) + fib1 n * fib1 p.
 Proof.
   intros n p. pattern n. apply nat_2_ind.
-  simpl. auto.
-  simpl. 
-  
+  simpl. auto. 
+  simpl. rewrite plus_0_r, plus_0_r. rewrite plus_assoc_reverse.
+  rewrite plus_comm with (n:=fib1 p). rewrite plus_assoc. reflexivity.
+  clear n. intros n H0 H1. set (a:= fib1 (S p)). set (b := fib1 p).
+  fold a in H0. fold b in H0. fold a in H1. fold b in H1.
+  cut (fib1 (S (S (S (S n) + p))) = fib1 (S (S (S n + p))) + fib1 (S (S (n + p)))). 
+  cut (fib1 (S (S (S n))) = fib1 (S (S n)) + fib1 (S n)).
+  cut (fib1 (S (S n)) = fib1 (S n) + fib1 n).
+  intros H2 H3 H4. rewrite H4. rewrite H1, H0. rewrite plus_assoc_reverse.
+  rewrite plus_assoc with (n:= fib1 (S n) * b).
+  rewrite plus_comm with (n:= fib1 (S n)* b). rewrite plus_assoc_reverse.
+  rewrite plus_assoc. 
+  rewrite <- mult_plus_distr_r with (p:=a).
+  rewrite <- mult_plus_distr_r with (p:=b).
+  rewrite <- H2, H3. reflexivity.
+  simpl. reflexivity. 
+  simpl. reflexivity.
+  rewrite plus_Snm_nSm. rewrite <- plus_n_Sm. 
+  rewrite plus_Snm_nSm. rewrite <- plus_n_Sm.
+  set (q:= S (S (n+p))). unfold fib1. fold fib1. reflexivity.
+Qed.
+
+Lemma obvious: forall n:nat,
+  fib1 (S (S n)) = fib1 (S n) + fib1 n.
+Proof.
+  intro n. unfold fib1. fold fib1. reflexivity.
+Qed.
 
 

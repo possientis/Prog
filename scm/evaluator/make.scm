@@ -16,4 +16,7 @@
 (define (make-eval-procedure parameters body env) 
   (list 'eval-procedure parameters body env))
 
+(define (make-analyze-procedure parameters body env)
+  (list 'analyze-procedure parameters body env))
+
 ))  ; include guard
