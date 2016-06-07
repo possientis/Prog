@@ -26,6 +26,7 @@ rm -f clojure/hiccup/*.class
 rm -f clojure/hiccup/util/*.class
 rm -f clojure/hiccup/compiler/*.class
 rm -f clojure/compojure/*.class
+rm -f clojure/rabbitmq/*.class
 rm -f haskell/*.hi
 rm -f haskell/*.o
 rm -f haskell/test

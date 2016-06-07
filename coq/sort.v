@@ -293,13 +293,33 @@ Qed.
 
 
 (* we are now in a position to define the sort function *)
-Definition sort (l:list A) : list A := sort_n (length l) l.
+Definition sort' (l:list A) : list A := sort_n (length l) l.
 
 (* There is one thing we can immediately say about sort *)
-Lemma length_sort : forall (l:list A), length (sort l) = length l.
+Lemma length_sort' : forall (l:list A), length (sort' l) = length l.
 Proof.
-  intros l. unfold sort. apply length_sort_n.
+  intros l. unfold sort'. apply length_sort_n.
 Qed.
+
+(* Our initial definition of sort' is convoluted and does not lend itself
+to easy proofs. It appears the following definition is a lot simpler *)
+
+(* our new definition of sort is based on insert *)
+Fixpoint insert (a:A)(l:list A) : list A :=
+  match l with
+    | nil       => (a::nil)
+    | (b::l')   => match R_bool a b with
+                    | true      => (a::l)
+                    | false     => (b::insert a l')
+                  end
+  end.
+
+Fixpoint sort (l:list A) : list A :=
+  match l with
+    | nil       => nil
+    | (a::l')   => insert a (sort l')
+  end.
+
 
 (* it is one thing to define sort, it is another to demonstrate
   the definition is interesting. So why is the sort function interesting?
@@ -455,7 +475,7 @@ Proof.
 Qed.
 
 
-
+(*
 Lemma In_imp_In_sort_n: forall (n:nat)(l:list A)(x:A),
   In x l -> In x (sort_n n l).
 Proof.
@@ -479,6 +499,8 @@ Proof.
   clear H4. intro H4. simpl. left. symmetry. exact H4.
   clear H4. intro H4. simpl. right. apply IH. right.
 (* it is wrong to assume that L is the head of sort_n n when n = 0 *)
+
+*)
 
 (*
 Lemma sort_n_Sorted: forall (n:nat)(l:list A),

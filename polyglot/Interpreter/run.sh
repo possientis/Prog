@@ -29,3 +29,11 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
+echo '\nThis is Python ...'
+START=$(date +%s%N)
+python3 interpreter.py
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
