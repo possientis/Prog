@@ -14,11 +14,6 @@
 (define (last-operand? operands) (null? (cdr operands)))
 
 
-(define (list-of-values operands env)
-  (if (no-operands? operands) '()
-    (cons (eval (first-operand operands) env)                       
-          (list-of-values (rest-operands operands) env))))      
-
 (define (eval-sequence operands env)
   (cond ((last-operand? operands) (eval (first-operand operands) env))          
         (else (eval (first-operand operands) env)

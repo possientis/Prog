@@ -17,6 +17,7 @@
 (load "if.scm")
 (load "not.scm")
 
+(load "application.scm")
 (load "lambda.scm")
 (load "begin.scm")
 (load "cond.scm")

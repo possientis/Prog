@@ -24,7 +24,7 @@
         (body (lambda-body exp)))
     (let ((bproc (analyze-sequence body)))
       (lambda (env)
-        (make-eval-procedure params bproc env))))) ; TODO
+        (make-analyze-procedure params bproc env)))))
 
 ))  ; include guard
 

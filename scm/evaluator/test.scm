@@ -28,6 +28,7 @@
 (load "environment-test.scm")
 (load "frame-test.scm")
 (load "apply.scm")
+(load "application.scm")
 (load "eval-primitive.scm")
 (Load "apply-primitive.scm")
 (load "require.scm")

@@ -93,8 +93,61 @@ foldA f s a = go s (indices a)
 foldA1 :: Ix k => (a -> a -> a) -> Array k a -> a
 foldA1 f a = foldA f (a ! fst (bounds a)) a
 
+encodeEAN13 :: String -> String
+encodeEAN13 = concat . encodeDigits . map digitToInt
+
+encodeDigits :: [Int] -> [String]
+encodeDigits s@(first:rest) = 
+  outerGuard : lefties ++ centerGuard : righties ++ [outerGuard]
+  where (left, right) = splitAt 5 rest
+        lefties = zipWith leftEncode (parityCodes ! first) left
+        righties = map rightEncode (right ++ [checkDigit s])
+
+leftEncode :: Char -> Int -> String
+leftEncode '1' = (leftOddCodes !)
+leftEncode '0' = (leftEvenCodes !)
+
+rightEncode :: Int -> String
+rightEncode = (rightCodes !)
+
+outerGuard = "101"
+centerGuard = "01010"
 
 
+type Pixel = Word8  -- alias
+type RGB = (Pixel, Pixel, Pixel)
+type Pixmap = Array (Int, Int) RGB
+
+
+parseRawPPM :: Parse Pixmap
+parseRawPPM = do
+  header <- parseWhileWith w2c (/= '\n')
+  skipSpaces
+  assert (header == "P6") "invalid raw header"
+  width <- parseNat
+  skipSpaces
+  height <- parseNat
+  skipSpaces
+  maxValue <- parseNat
+  assert (maxValue == 255) "max value out of spec"
+  parseByte
+  pxs <- parseTimes (width * height) parseRGB
+  return (listArray ((0,0),(width-1,height-1)) pxs)
+
+parseRGB :: Parse RGB
+parseRGB = do
+  r <- parseByte
+  g <- parseByte
+  b <- parseByte
+  return (r,g,b)
+
+parseTimes :: Int -> Parse a -> Parse [a]
+parseTimes 0 _ = return []
+parseTimes n p = do
+  x <- p
+  return ((x:) <$> parseTimes (n-1) p)
+  
+  
 
 
 
