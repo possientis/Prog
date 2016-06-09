@@ -63,6 +63,95 @@ Proof.
   compute. reflexivity.
 Qed.
 
+Lemma rem_even_ge_interval : forall m r:Z,
+  0 <= r < m -> m <= 2*r -> 0 <= 2*r - m < m.
+Proof.
+  intros. omega.
+Qed.
+
+Lemma rem_even_lt_interval: forall m r:Z,
+  0 <= r < m -> 2*r < m -> 0 <= 2*r < m.
+Proof.
+  intros. omega.
+Qed.
+
+
+Lemma rem_odd_ge_interval: forall m r:Z,
+  0 <= r < m -> m <= 2*r + 1 -> 0 <= 2*r + 1 - m < m.
+Proof.
+  intros. omega.
+Qed.
+
+Lemma rem_odd_lt_interval: forall m r:Z,
+  0 <= r < m -> 2*r + 1 < m -> 0 <= 2*r + 1 < m.
+Proof.
+  intros. omega.
+Qed.
+
+Ltac div_bin_tac arg1 arg2 :=
+  elim arg1;
+    [intros p; lazy beta iota delta [div_bin]; fold div_bin;
+      case (div_bin p arg2); unfold snd; intros q' r' Hrec;
+      case (Z_lt_ge_dec (2*r' + 1)(Zpos arg2)); intros H
+    | intros p; lazy beta iota delta [div_bin]; fold div_bin;
+      case (div_bin p arg2); unfold snd; intros q' r' Hrec;
+      case (Z_lt_ge_dec (2*r')(Zpos arg2)); intros H
+    | case arg2; lazy beta iota delta [div_bin]; intros].
+
+Hint Resolve rem_odd_ge_interval rem_even_ge_interval
+rem_odd_lt_interval rem_even_lt_interval rem_1_odd_interval
+rem_1_even_interval rem_1_1_interval.
+
+Theorem div_bin_rem_lt:
+  forall n m:positive, 0 <= snd (div_bin n m) < Zpos m.
+Proof.
+  intros n m. div_bin_tac n m; unfold snd; auto; omega.
+Qed.
+
+(* fails...
+SearchRewrite (Zpos (xI _)).
+*)
+
+(*
+Check Zpos_xI.
+  Pos2Z.inj_xI
+       : forall p : positive, Z.pos p~1 = 2 * Z.pos p + 1
+*)
+
+(*
+Check Zpos_xO.
+  Pos2Z.inj_xO
+       : forall p : positive, Z.pos p~0 = 2 * Z.pos p
+*)
+
+Theorem div_bin_eq:
+  forall n m:positive, Zpos n = (fst (div_bin n m))*(Zpos m) + snd (div_bin n m).
+Proof.
+  intros n m. div_bin_tac n m;
+  rewrite Zpos_xI || (try rewrite Zpos_xO);
+  try rewrite Hrec; unfold fst, snd; ring.
+Qed.
+
+Inductive div_data (n m:positive) : Set :=
+  | div_data_def : forall q r:Z, 
+    Zpos n = q*(Zpos m)+r -> 0 <= r < Zpos m -> div_data n m.
+
+
+Definition div_bin2 : forall n m:positive, div_data n m.
+  intros n m. elim n.
+  intros n' [q r H_eq H_int].
+  case (Z_lt_ge_dec (2*r + 1)(Zpos m)).
+  exists (2*q)(2*r + 1).
+  rewrite Zpos_xI; rewrite H_eq; ring.
+  auto.
+  exists (2*q+1)(2*r + 1 - (Zpos m)).
+  rewrite Zpos_xI; rewrite H_eq; ring.
+  omega.
+Abort.
+
+
+
+
 
 
 

@@ -388,6 +388,26 @@ Fixpoint qsort (l:list A) : list A :=
 (* is sort idempotent TODO *)
 (******************************************************************************)
 
+Lemma In_insert_In: forall (l:list A)(a x:A),
+  In x (insert a l) -> x = a \/ In x l.
+Proof.
+  intros l. elim l.
+  clear l. simpl. intros a x H. elim H. 
+  clear H. intro H. left. symmetry. exact H.
+  clear H. apply False_ind.
+  clear l. intros b l IH a x H. set (b1:= R_bool a b). 
+  cut (b1 = R_bool a b ->  x = a \/ In x (b :: l)). eauto. elim b1.
+  clear b1. intro H0. simpl in H. rewrite <- H0 in H. simpl in H. elim H.
+  clear H. intro H. left. symmetry. exact H.
+  clear H. intro H. elim H.
+  clear H. intro H. right. simpl. left. exact H.
+  clear H. intro H. right. simpl. right. exact H.
+  clear b1. intro H0. simpl in H. rewrite <- H0 in H. simpl in H. elim H.
+  clear H. intro H. right. simpl. left. exact H.
+  clear H. intro H. apply IH in H. elim H.
+  clear H. intro H. left. exact H.
+  clear H. intro H. right. simpl. right. exact H.
+Qed.
 
 Lemma Sorted_insert: forall (l:list A)(a:A),
   Sorted l -> Sorted (insert a l).
@@ -403,11 +423,19 @@ Proof.
   clear Hc. intro Hc. elim Hc. clear Hc. intro Hc. rewrite <- Hc.
   rewrite R_lem. symmetry. exact H1.
   clear Hc. intro Hc. apply R_trans with (y:=a). rewrite R_lem.
-  symmetry. exact H1.
-  
-  
+  symmetry. exact H1. apply isSorted_head_smallest with (l:=l).
+  rewrite <- Sorted_is_isSorted. exact H0. exact Hc. exact H0.
+  clear b1. intro H1. simpl. rewrite <- H1. apply SortedCons.
+  apply smallest_imp_Least. simpl. left. reflexivity.
+  intros c Hc. simpl in Hc. elim Hc.
+  clear Hc. intro Hc. rewrite Hc. apply R_refl.
+  clear Hc. intro Hc. apply In_insert_In in Hc. elim Hc. 
+  clear Hc. intro Hc. rewrite Hc. clear Hc. generalize (R_total a b).
+  intro H2. elim H2. auto. clear H2. intro H2. rewrite R_lem in H2.
+  rewrite H2 in H1. discriminate.
+  clear Hc. intro Hc.
 
-
+  
 
 
 

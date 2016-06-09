@@ -89,7 +89,32 @@ connectedPeers.forEach(function(peer) {
 // convenient in scripts and so on, but sometimes we want to keep 
 // the main thread free. Let's do the same thing but in an async style:
 
+var futures = [];
+connectedPeers.forEach(function(peer) {
+  var future = peer.ping();
+  futures.push(future);
+  
+  // a 'future' is sometimes called a promise. this construct says: 
+  // run the closure on the 'user thread' when the future completes. 
+  // we can get the result using future.get() which won't block 
+  // because we know it's now ready.
+  // the user thread is a thread that sits around waiting for closures 
+  // to be given to it and then runs them in sequence. so by specifying 
+  // user_thread here we know the closure cannot run in parallel. we 
+  // could ask the closure to run on other threads too, if we wanted, 
+  // e.g. the javafx ui thread if making a gui app.
+  
+  future.addListener(function() {
+    var pingTime = future.get();
+    print("Async callback ping time for " + peer + " is " + pingTime);
+  }, bcj.utils.Threading.USER_THREAD);
+});
 
+// Just wait for all the pings here by calling get again ...
+futures.forEach(function(f) { f.get(); });
+
+print("Done!");
+ 
 
 
 
