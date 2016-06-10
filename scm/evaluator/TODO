@@ -1,4 +1,6 @@
-continue understanding includes of apply.scm. organize code
+get rid of make.scm and exp-type.scm
+
+repl.scm is broken
 
 continue rewriting code so as to keep parallel between 'eval' and 'analyze' (lambda !!!!)
 

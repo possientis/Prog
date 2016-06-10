@@ -5,7 +5,7 @@
     (display "loading primitive")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
+(load "primitive-procedure.scm")
 (load "load-file.scm")
 (load "require.scm")
 (load "eval-primitive.scm")
@@ -18,9 +18,6 @@
   (display "***")(display s)
 ;  (display "-x")
 )
-
-
-(define (primitive-implementation proc) (cadr proc))
 
 (define primitive-procedures
   (list (list 'car car)
@@ -85,6 +82,7 @@
 (define (primitive-procedure-names) (map car primitive-procedures))
 
 (define (primitive-procedure-objects)
-  (map (lambda (proc) (list 'primitive (cadr proc))) primitive-procedures))
+  (map (lambda (proc) (make-primitive-procedure (cadr proc))) 
+       primitive-procedures))
 
 ))  ; include guard 

@@ -117,6 +117,7 @@ centerGuard = "01010"
 type Pixel = Word8  -- alias
 type RGB = (Pixel, Pixel, Pixel)
 type Pixmap = Array (Int, Int) RGB
+type Greymap = Array (Int, Int) Pixel
 
 
 parseRawPPM :: Parse Pixmap
@@ -141,13 +142,58 @@ parseRGB = do
   b <- parseByte
   return (r,g,b)
 
+-- parseTimes (n-1) p :: Parse [a]
+-- (x:) :: [a] -> [a]
+-- ==================================
+-- (x:) <$> :: Parse [a] -> Parse [a] 
 parseTimes :: Int -> Parse a -> Parse [a]
 parseTimes 0 _ = return []
 parseTimes n p = do
   x <- p
-  return ((x:) <$> parseTimes (n-1) p)
+  (x:) <$> (parseTimes (n-1) p)
   
+luminance :: (Pixel, Pixel, Pixel) -> Pixel
+luminance (r,g,b) = round (r' * 0.30 + g' * 0.59 + b' * 0.11)
+  where r' = fromIntegral r
+        g' = fromIntegral g
+        b' = fromIntegral b
   
+
+pixmapToGreymap :: Pixmap -> Greymap
+pixmapToGreymap = fmap luminance
+
+data Bit = Zero | One deriving (Eq, Show)
+
+threshold :: (Ix k, Integral a) => Double -> Array k a -> Array k Bit
+threshold n a = binary <$> a
+  where binary i  | i < pivot = Zero
+                  | otherwise = One
+        pivot     = round $ least + (greatest - least) * n
+        least     = fromIntegral $ choose (<) a
+        greatest  = fromIntegral $ choose (>) a
+        choose f = foldA1 $ \x y -> if f x y then x else y
+
+type Run = Int
+type RunLength a = [(Run,a)]
+
+runLength :: Eq a => [a] -> RunLength a
+runLength = map rle . group
+  where rle xs = (length xs, head xs)
+
+
+test10 = group [1,1,2,3,3,3,3]  -- [[1,1],[2],[3,3,3,3]]
+test11 = [0,0,1,1,0,0,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0]
+test12 = runLength test11       -- [(2,0),(2,1),(2,0),(2,1),(6,0),(4,1),(4,0)]
+
+runLengths :: Eq a => [a] -> [Run]
+runLengths = map fst . runLength
+
+test13 = runLengths test11 -- [2,2,2,2,6,4,4]
+
+
+
+
+
 
 
 

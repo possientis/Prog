@@ -433,7 +433,20 @@ Proof.
   clear Hc. intro Hc. rewrite Hc. clear Hc. generalize (R_total a b).
   intro H2. elim H2. auto. clear H2. intro H2. rewrite R_lem in H2.
   rewrite H2 in H1. discriminate.
-  clear Hc. intro Hc.
+  clear Hc. intro Hc. apply isSorted_head_smallest with (l:=l).
+  rewrite <- Sorted_is_isSorted. exact H0. exact Hc.
+  apply IH. rewrite Sorted_is_isSorted. apply isSorted_tail with (a:=a).
+  rewrite <- Sorted_is_isSorted. exact H0.
+Qed.
+
+(* This partially justifies our definition of sort *)
+Theorem Sorted_sort: forall (l:list A), Sorted (sort l).
+Proof.
+  intro l. elim l.
+  clear l. simpl. apply SortedNil.
+  clear l. intros a l IH. simpl. apply Sorted_insert. exact IH.
+Qed.
+
 
   
 

@@ -149,7 +149,47 @@ Definition div_bin2 : forall n m:positive, div_data n m.
   omega.
 Abort.
 
-
+Definition div_bin3 : forall n m:positive, div_data n m.
+  refine
+    ((fix div_bin3 (n:positive) : forall m:positive, div_data n m :=
+      fun m =>
+        match n return div_data n m with
+          | 1%positive  =>
+            match m return div_data 1 m with
+              | 1%positive => div_data_def 1 1 1 0 _ _
+              | xO p => div_data_def 1 (xO p) 0 1 _ _
+              | xI p => div_data_def 1 (xI p) 0 1 _ _
+            end
+          | xO p  =>
+            match div_bin3 p m with
+              | div_data_def q r H_eq H_int =>
+                  match Z_lt_ge_dec (Zmult 2 r)(Zpos m) with
+                    | left hlt =>
+                        div_data_def (xO p) m (Zmult 2 q)
+                                     (Zmult 2 r) _ _
+                    | right hge =>
+                        div_data_def (xO p) m (Zplus (Zmult 2 q) 1)
+                                     (Zminus (Zmult 2 r)(Zpos m)) _ _
+                  end
+            end
+          | xI p =>
+            match div_bin3 p m with
+              | div_data_def q r H_eq H_int =>
+                  match Z_lt_ge_dec (Zplus (Zmult 2 r) 1)(Zpos m) with
+                    | left hlt =>
+                        div_data_def (xI p) m (Zmult 2 q)
+                                     (Zplus (Zmult 2 r) 1) _ _
+                    | right hge =>
+                        div_data_def (xI p) m (Zplus (Zmult 2 q) 1)
+                        (Zminus (Zplus (Zmult 2 r) 1)(Zpos m)) _ _
+                  end
+              end
+            end));
+  clear div_bin3; try rewrite Zpos_xI; try rewrite Zpos_xO;
+  try rewrite H_eq; auto with zarith; try (ring; fail).
+  split;[auto with zarith | compute; auto].
+  split;[auto with zarith | compute; auto].
+Defined.
 
 
 

@@ -5,8 +5,7 @@
     (display "loading exp-type")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
-(define (tagged-list? exp tag) (if (pair? exp) (eq? (car exp) tag) #f))
+(load "tagged-list.scm")
 
 (define (self-evaluating? exp) 
   (cond ((number? exp) #t)
@@ -18,7 +17,6 @@
 (define (variable? exp) (symbol? exp))
 
 (define (quoted? exp) (tagged-list? exp 'quote))                                    
-
 (define (assignment? exp) (tagged-list? exp 'set!))
 
 (define (definition? exp) (tagged-list? exp 'define))
@@ -48,12 +46,5 @@
 (define (letrec? exp) (tagged-list? exp 'letrec))
 
 (define (application? exp) (pair? exp)) ; need to be tested last
-
-(define (primitive-procedure? proc) (tagged-list? proc 'primitive))
-
-(define (eval-procedure? procedure) (tagged-list? procedure 'eval-procedure))
-
-(define (analyze-procedure? procedure) (tagged-list? procedure 'analyze-procedure))
-
 
 ))  ; include guard

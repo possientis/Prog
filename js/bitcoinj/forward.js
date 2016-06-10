@@ -26,4 +26,33 @@ kit.startAsync();
 print("Waiting ...");
 kit.awaitRunning();
 
+print("Retrieving wallet object from kit");
+var wallet = kit.wallet();
+print("Retrieving current receive address");
+var myAddr = wallet.currentReceiveAddress();
+print("Current receive address is: " + myAddr);
+var uri = "bitcoin:" + myAddr
+print("Send coins to: " + myAddr); 
+print("QRcode: http://qrickit.com/api/qr?d=" + uri);
+
+print("Allowing spending of unconfirmed transactions");
+wallet.allowSpendingUnconfirmedTransactions();
+
+print("Retrieving AbstratWalletEventListener type");
+var AbstractWalletEventListener = bcj.core.AbstractWalletEventListener;
+
+print("Creating listener type");
+var Listener = Java.extend(AbstractWalletEventListener);
+
+print("Adding new event listener to wallet");
+
+
+
+
+
+
+
+
+
+
 
