@@ -5,9 +5,9 @@
 
 ; foreach construct
 (println)
-(doseq [s v] (println s))
+(doseq [s v] (println s)) ; foreach
 (println)
-(doseq [s w] (println s))
+(doseq [s w] (println s)) ; foreach
 (println)
 
 ; syntactic sugar for:

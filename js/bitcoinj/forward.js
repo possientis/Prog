@@ -38,13 +38,19 @@ print("QRcode: http://qrickit.com/api/qr?d=" + uri);
 print("Allowing spending of unconfirmed transactions");
 wallet.allowSpendingUnconfirmedTransactions();
 
-print("Retrieving AbstratWalletEventListener type");
+print("Retrieving WalletCoinsReceivedEventListener type");
 var AbstractWalletEventListener = bcj.core.AbstractWalletEventListener;
 
+
 print("Creating listener type");
-var Listener = Java.extend(AbstractWalletEventListener);
+//var Listener = Java.extend(WalletCoinsReceivedEventListener);
 
 print("Adding new event listener to wallet");
+wallet.addEventListener(new AbstractWalletEventListener() {
+  onCoinsReceived: function(wallet, tx, prevBalance, newBalance){
+    print("ok");
+  }
+});
 
 
 

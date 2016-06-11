@@ -30,7 +30,18 @@
 
 class Exp
   # static interface
-  # TODO
+  def self.Lit(literal) 
+    return Lit.new(literal) 
+  end
+  def self.And(left, right) 
+    return And.new(left, right) 
+  end
+  def self.Or(left, right) 
+    return Or.new(left, right) 
+  end
+  def self.Many(regex)
+    return Many.new(regex)
+  end
   # instance interface
   def to_s()
     raise NotImplementedError.new "Exp::to_s is not implemented"
@@ -39,7 +50,7 @@ class Exp
     raise NotImplementedError.new "Exp::interpret is not implemented"
   end
   def recognize(input)
-    return false  # TODO
+    return interpret(input).include? input 
   end
 end
 
@@ -70,20 +81,99 @@ class And < Exp
   def interpret(input)
     result = []
     leftList = @left.interpret(input)
-    leftList.each {|s1|
+    leftList.each do |s1|
       remainder = input[s1.length..-1]
       rightList = @right.interpret(remainder)
-      rightList.each { |s2|
-        result[result.length] = s1 + s2
-      }
-    }
+      rightList.each do |s2|
+        result.push s1 + s2
+      end 
+    end 
     return result
   end
 end
 
+class Or < Exp
+  def initialize(left, right)
+    @left = left 
+    @right = right 
+  end
+  def to_s()
+    return "(#{@left}|#{@right})"
+  end
+  def interpret(input)
+    return @left.interpret(input) + @right.interpret(input)
+  end
+end
+
+class Many < Exp
+  def initialize(regex)
+    @regex = regex
+  end
+  def to_s()
+    return "(#{@regex})*"
+  end
+  def interpret(input)
+    result = [""]
+    leftList = @regex.interpret(input)
+    leftList.each do |s1|
+      if !s1.empty? then  # s1 is not the empty string
+        remainder = input[s1.length..-1]  # substring
+        rightList = interpret(remainder)  # recursive call
+        rightList.each do |s2|
+          result.push s1 + s2   # java add
+        end 
+      end
+    end 
+    return result
+  end
+end
+
+   
+a = Exp.Lit("a")
+b = Exp.Lit("b")
+c = Exp.Lit("c")
+
+aa = Exp.And(a, Exp.Many(a))  # one or more 'a'
+bb = Exp.And(b, Exp.Many(b))  # one or more 'b'
+cc = Exp.And(c, Exp.Many(c))  # one or more 'c'
+
+regex = Exp.Many(Exp.And(Exp.Or(aa, bb), cc))
+string = "acbbccaaacccbbbbaaaaaccccc"
+
+puts "regex = #{regex}"
+puts "string = \"#{string}\""
+puts "The recognized prefixes are:"
+
+result = []
+(0..string.length).each do |i|
+  test = string[0...i]    # '...' -> exclude i (python semantics)
+  if regex.recognize(test) then
+    result.push "\"#{test}\""   # adding array
+  end
+end
+
+# printing result nicely
+print "["
+start = true
+result.each do |s|
+  if start then
+    start = false
+  else
+    print ", "
+  end
+  print s
+end
+print "]\n"
 
 
-x = And.new(Lit.new("a"), Lit.new("b"))
-puts x.interpret("Abcdef")
+
+
+
+
+
+
+
+
+
 
 

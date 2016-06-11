@@ -32,3 +32,5 @@
 ;(println (names 10))                   ; throws exception
 ;(println (names 10 :notfound))         ; throws exception
 
+(println :ok)
+(println (keyword 'ok))                 ; keyword

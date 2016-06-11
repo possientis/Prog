@@ -37,6 +37,14 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
+echo '\nThis is Ruby ...'
+START=$(date +%s%N)
+ruby interpreter.rb
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
 echo '\nThis is PHP ...'
 START=$(date +%s%N)
 php interpreter.php
