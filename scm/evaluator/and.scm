@@ -5,7 +5,11 @@
     (display "loading and")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "make.scm")
+(load "tagged-list.scm")
+(load "if.scm")
+
+; testing
+(define (and? exp) (tagged-list? exp 'and))
 
 (define (and-predicates exp) (cdr exp))
 

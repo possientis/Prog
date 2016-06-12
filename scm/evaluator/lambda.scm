@@ -5,8 +5,14 @@
     (display "loading lambda")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "make.scm")
+(load "tagged-list.scm")
 (load "operands.scm")
+
+; testing
+(define (lambda? exp) (tagged-list? exp 'lambda))
+
+; making
+(define (make-lambda parameters body) (cons 'lambda (cons parameters body)))
 
 ; destructuring
 (define (lambda-params exp) (cadr exp))

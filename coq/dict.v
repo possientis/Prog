@@ -17,3 +17,11 @@ Module Type DICT.
     k <>  k' -> find k (add k' v d) = find k d.
 
 End DICT.
+
+(* enriching an existing module *)
+Module Type DICT_PLUS.
+  Declare Module Dict: DICT.
+  Parameter build: list (Dict.key*Dict.data) -> Dict.dict.
+End DICT_PLUS.
+
+

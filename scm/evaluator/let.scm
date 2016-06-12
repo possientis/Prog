@@ -5,8 +5,16 @@
     (display "loading let")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "make.scm") ; make-lambda
+(load "tagged-list.scm")
+(load "lambda.scm")
 
+; testing
+(define (let? exp) (and (tagged-list? exp 'let) (not (symbol? (cadr exp))))) 
+
+; making
+(define (make-let bindings body) (cons 'let (cons bindings body)))
+
+; destructuring
 (define (let-bindings exp) (cadr exp))
 (define (let-body exp) (cddr exp))
 (define (let-parameters exp) (map car (let-bindings exp)))

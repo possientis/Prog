@@ -5,9 +5,14 @@
     (display "loading cond")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
-(load "make.scm") ; make-begin
+(load "tagged-list.scm")
+(load "begin.scm")
 (load "operands.scm")
+
+
+; testing
+(define (cond? exp) (tagged-list? exp 'cond))
+
 
 (define (cond->if exp) 
   (expand-clauses (cond-clauses exp)))

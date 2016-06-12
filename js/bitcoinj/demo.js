@@ -32,16 +32,17 @@ bcj.utils.BriefLogFormatter.init();
 
 // Let's connect to the network. This won't download the block chain.
 var PeerGroup = bcj.core.PeerGroup;
-print("Creating peer group");
+print("Creating peer group ...");
 var pg = new PeerGroup(params);
 
 var DnsDiscovery = bcj.net.discovery.DnsDiscovery;
-print("Creating discovery object");
+print("Creating discovery object ...");
 var discovery = new DnsDiscovery(params);
 
-print("Adding discovery object to peer group");
+print("Adding discovery object to peer group ...");
 pg.addPeerDiscovery(discovery);
-print("Starting peer group");
+
+print("Starting peer group ...");
 pg.start();
 
 // Wait until we have at least three peers.

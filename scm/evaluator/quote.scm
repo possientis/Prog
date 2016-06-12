@@ -5,6 +5,9 @@
     (display "loading quote")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; testing
+(define (quoted? exp) (tagged-list? exp 'quote))                                    
+
 ; destructuring
 (define (text-of-quotation exp) (cadr exp))
 

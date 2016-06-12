@@ -5,9 +5,11 @@
     (display "loading definition")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; definition semantics differ from that of assignment. One important difference is
+; the syntactic construct (define (f args) body) which has no assignment equivalent
 
-; definition semantics differ from assignment. One important difference is
-; the syntactic construct (define (f x y) body) which has no assignment equivalent
+; testing
+(define (definition? exp) (tagged-list? exp 'define))
 
 ; destructuring
 (define (definition-variable exp)

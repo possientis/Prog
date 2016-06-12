@@ -5,6 +5,9 @@
     (display "loading application")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; testing
+(define (application? exp) (pair? exp)) ; need to be tested last
+
 ; destructuring
 (define (exp-operator exp) (car exp))
 (define (exp-operands exp) (cdr exp))

@@ -5,6 +5,9 @@
     (display "loading assignment")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; testing
+(define (assignment? exp) (tagged-list? exp 'set!))
+
 ; destructuring
 (define (assignment-variable exp) (cadr exp))
 (define (assignment-expression exp) (caddr exp))

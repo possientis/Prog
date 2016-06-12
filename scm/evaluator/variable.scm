@@ -5,10 +5,13 @@
     (display "loading variable")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; testing
+(define (variable? exp) (symbol? exp))
+
 ; eval
 (define (eval-variable exp env) ((env 'lookup) exp))
+
 ;analyze
 (define (analyze-variable exp) (lambda (env) ((env 'lookup) exp)))
-
 
 ))  ; include guard

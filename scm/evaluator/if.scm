@@ -5,7 +5,15 @@
     (display "loading if")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+(load "tagged-list.scm")
 (load "true-false.scm")
+
+; testing
+(define (if? exp) (tagged-list? exp 'if))
+
+; making
+(define (make-if predicate consequent alternative) 
+  (list 'if predicate consequent alternative))
 
 ; destructuring
 (define (if-predicate exp) (cadr exp))

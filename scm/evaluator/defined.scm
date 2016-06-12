@@ -5,11 +5,15 @@
     (display "loading defined")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "exp-type.scm") ; variable?
+(load "tagged-list.scm")
+(load "variable.scm")
 
 ; we are following what appears to be the scm semantics in the case when the
 ; expression does not refer to a variable. Instead of throwing an error, we
 ; simply return #f.
+
+; testing
+(define (is-defined? exp) (tagged-list? exp 'defined?))
 
 ; destructuring
 (define (defined?-variable exp) (cadr exp))

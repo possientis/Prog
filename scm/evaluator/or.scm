@@ -5,7 +5,12 @@
     (display "loading or")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "make.scm")
+(load "tagged-list.scm")
+(load "if.scm")
+
+; testing
+(define (or? exp) (tagged-list? exp 'or))
+
 
 (define (or-predicates exp) (cdr exp))
 

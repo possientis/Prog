@@ -45,14 +45,14 @@ Qed.
 (* This inductive predicate expresses the fact that two 
 lists are Permutes of one another *)
 Inductive Permute {A:Type} : list A -> list A -> Prop :=
-  | perm_self : forall l:list A, Permute l l
+  | perm_zero : forall l:list A, Permute l l
   | perm_next : forall l l' m: list A, 
     Permute l l' -> Transpose l' m -> Permute l m. 
 
 
 Lemma Permute_refl : forall (A:Type) (l:list A), Permute l l.
 Proof.
-  intros A l. apply perm_self.
+  intros A l. apply perm_zero.
 Qed.
 
  
@@ -70,7 +70,7 @@ Lemma Transpose_first: forall (A:Type) (l l' m:list A),
 Proof.
   intros A l l' m H0 H1. generalize H0. clear H0. generalize H1 l. 
   elim H1. clear H1 l l' m. intros m. intro H. clear H. intro l.
-  intro H. apply perm_next with (l':=l). apply perm_self. exact H.
+  intro H. apply perm_next with (l':=l). apply perm_zero. exact H.
   clear H1 l l' m. intros l l' m H0 H1 H3 H4 k H5.
   eapply perm_next. apply H1. exact H0. exact H5. exact H3.
   (* dont understand why normal 'apply ... with' was failing *)
@@ -180,21 +180,5 @@ Proof.
 Qed.
 
 
-Lemma Transpose_cons: forall (A:Type)(l m:list A)(a: A),
-  Transpose l m -> Transpose (a::l) (a::m).
-Proof.
- intros A l m a H. 
- cut (a::l = (a::nil) ++ l ++ nil).
- cut (a::m = (a::nil) ++ m ++ nil).
- intros Hm Hl. rewrite Hm, Hl. apply transp_gen. exact H.
- rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
- rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
-Qed.
-  
 
-Lemma Permute_cons: forall (A:Type)(l m: list A)(a: A),
-  Permute l m -> Permute (a::l) (a::m).
-Proof.
-  intros A l m a H. generalize H. generalize a. clear a. elim H.
-  clear H l m. intros. apply perm_self.
-  clear H l m. intros l l' m H0 H1 H2 a H3.
+

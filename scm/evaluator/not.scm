@@ -5,7 +5,14 @@
     (display "loading not")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+(load "tagged-list.scm")
 (load "true-false.scm")
+
+; testing
+(define (not? exp) (tagged-list? exp 'not))
+
+; making
+(define (make-not predicate) (list 'not predicate))
 
 ; destructuring
 (define (not-predicate exp) (cadr exp))

@@ -5,8 +5,13 @@
     (display "loading named-let")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "make.scm") ; make-lambda
+(load "tagged-list.scm")
+(load "lambda.scm")
 
+; testing
+(define (named-let? exp) (and (tagged-list? exp 'let) (symbol? (cadr exp)))) 
+
+; destructuring
 (define (named-let-variable exp) (cadr exp))
 (define (named-let-bindings exp) (caddr exp))
 (define (named-let-body exp) (cdddr exp))

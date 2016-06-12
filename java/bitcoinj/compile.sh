@@ -9,6 +9,6 @@ do
 done
 
 
-java -cp "$BITCOINJ_JARS" "$@"
+javac -cp "$BITCOINJ_JARS" "$@"
 
 
