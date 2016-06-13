@@ -29,10 +29,114 @@
 // of course whether s itself belongs to L(r).
 
 function Exp(){}
+// static factory methods
+Exp.Lit   = function(literal)     { return new Lit(literal);      }
+Exp.And   = function(left, right) { return new And(left, right);  }
+Exp.Or    = function(left, right) { return new Or(left, right);   }
+Exp.Many  = function(regex)       { return new Many(regex);       }
 
-function Lit(literal){
-  Exp.call(this);
-  this.literal = literal;
+// instance interface
+Exp.prototype.toString = function(){ throw "Exp::toString is not implemented"; }
+// Given a string, this method returns 'the' list of all prefixes of the string
+// which belong to the language of the regular expression object. Of course,
+// such a list in only unique up to the order of its elements
+Exp.prototype.interpret = function(input){ 
+  throw "Exp::interpret is not implemented"; 
 }
+Exp.prototype.recognize = function(input){
+  print("check1: input = " + input);
+  return this.interpret(input).contains(input); 
+}
+
+function Lit(literal){ this.literal = literal; }
+Lit.prototype = new Exp();  // = Object.create(Exp.prototype)
+Lit.prototype.toString = function(){ return this.literal; }
+Lit.prototype.interpret = function(input){
+  if(input.startsWith(this.literal)){  // literal is a prefix of input
+    return [this.literal]; // array literal
+  } else {
+    return [];        // empty list literal
+  }
+}
+
+function And(left, right){ this.left = left; this.right = right; }
+And.prototype = new Exp();  // = Object.create(Exp.prototype) 
+And.prototype.toString = function(){ return this.left + this.right; } // concat
+And.prototype.interpret = function(input){
+  var result = []; 
+  var leftList = this.left.interpret(input);
+  var right = this.right;// 'this' in body of lambda will not work as expected
+  leftList.forEach(function(s1){
+    var remainder = input.substring(s1.length);
+    var rightList = right.interpret(remainder);
+    rightList.forEach(function(s2){
+      result.push(s1 + s2);
+    });
+  });
+  return result;
+}
+
+function Or(left, right){ this.left = left; this.right = right; }
+Or.prototype = new Exp();  // = Object.create(Exp.prototype) 
+Or.prototype.toString = function(){ 
+  return "(" + this.left + "|" + this.right + ")"; } // concat, append
+Or.prototype.interpret = function(input){
+  return  this.left.interpret(input) + this.right.interpret(input); // append
+}
+
+
+function Many(regex){ this.regex = regex; }
+Many.prototype = new Exp(); // = Object.create(Exp.prototype)
+Many.prototype.toString = function(){ return "(" + this.regex + ")*"; }
+Many.prototype.interpret = function(input){
+  print("check2: input = " + input);
+  var result = [""];  // forall r:Exp, "" belongs to L(r*)
+  var leftList = this.regex.interpret(input);
+  var interpret = this.interpret; // cannot use 'this' inside body of lambda
+  leftList.forEach(function(s1){
+    if(s1 !== ""){  // s1 is not the empty string
+      var remainder = input.substring(s1.length);
+      var rightList = interpret(remainder); // recursive call 
+      rightList.forEach(function(s2){
+        result.push(s1 + s2);
+      });
+    }
+  });
+  return result;
+}
+  
+// main
+a = Exp.Lit("a");
+b = Exp.Lit("b");
+c = Exp.Lit("c");
+
+aa = Exp.And(a, Exp.Many(a)); // one or more 'a'
+bb = Exp.And(b, Exp.Many(b)); // one or more 'b'
+cc = Exp.And(c, Exp.Many(c)); // one or more 'c'
+
+regex = Exp.Many(Exp.And(Exp.Or(aa,bb),cc));
+string = "acbbccaaacccbbbbaaaaaccccc";
+
+print("regex = " + regex);
+print("string = \"" + string + "\"");
+print("The recognized prefixes are:");
+print(regex.recognize("ac"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,7 +1,9 @@
 (* coqtop -lv filename -I LibDirectory *)
 
-Require Import option_lib. (* personal *)
-Require Import list_lib.   (* personal *)
+Require Import option_lib.  (* personal *)
+Require Import list_lib.    (* personal *)
+Require Import permute_lib. (* personal *)
+
 Require Import List.
 Require Import Arith.
 Require Import Bool.
@@ -448,7 +450,39 @@ Proof.
 Qed.
 
 
+(* the lists (insert a l) and (a::l) are permutation of one another *)
+Lemma Permute_insert: forall (l:list A)(a:A),
+  Permute (insert a l) (a::l).
+Proof.
+  intros l. elim l.  
+  clear l. intros a. simpl. apply perm_self.
+  clear l. intros b l IH a. set (b1:=R_bool a b).
+  cut (b1 = R_bool a b ->  Permute (insert a (b :: l)) (a :: b :: l)). 
+  eauto. elim b1.
+  clear b1. intro H. simpl. rewrite <- H. apply perm_self.
+  clear b1. intro H. simpl. rewrite <- H.
+  apply Permute_trans with (m:= (b::a::l)). apply Permute_cons. apply IH. 
+  apply (perm_next (b::a::l) (b::a::l) (a::b::l)). apply perm_self.
+  cut (b::a::l = nil++(b::a::nil)++l).
+  cut (a::b::l = nil++(a::b::nil)++l).
+  intros H0 H1. rewrite H0, H1. apply transp_gen. apply transp_pair.
+  rewrite app_nil_l, <- app_comm_cons, <- app_comm_cons, app_nil_l. reflexivity.
+  rewrite app_nil_l, <- app_comm_cons, <- app_comm_cons, app_nil_l. reflexivity.
+Qed.
   
+(* This also partially justifies our definition of sort *)
+Theorem Permute_sort: forall (l:list A), Permute (sort l) l.
+Proof.
+  intros l. elim l.
+  clear l. simpl. apply perm_self. 
+  clear l. intros a l IH. simpl. apply Permute_trans with (m:=(a::(sort l))).
+  apply Permute_insert. apply Permute_cons. exact IH.
+Qed.
+
+
+(* Permute l l' -> Sorted l -> Sorted l' -> l = l' ?? *)
+
+
 
 
 

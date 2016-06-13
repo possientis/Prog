@@ -2,10 +2,12 @@
 
 const fs = require('fs');
 //const highland = require('highland');
+const Bacon = require('baconjs');
 
 fs.createReadStream('log');
 
 
+/*
 // '=>' fails
 const stupidNumberStream = {
   each: (callback) => {
@@ -14,5 +16,7 @@ const stupidNumberStream = {
     setTimeout(() => callback(3), 3000);
   }
 };
+*/
+
 
 stupidNumberStream.each(print);

@@ -1,4 +1,4 @@
-DIGEST 2e5b9d6f64490e160a74278fa8339162
+DIGEST bae506e45ceec9eea3c04cd4b85fad6c
 Fpermute_lib
 R15:18 Coq.Lists.List <> <> lib
 ind 167:175 <> Transpose
@@ -108,7 +108,7 @@ R1963:1972 permute_lib <> transp_gen constr
 R1981:1991 permute_lib <> transp_pair constr
 R1981:1991 permute_lib <> transp_pair constr
 ind 2104:2110 <> Permute
-constr 2155:2163 <> perm_zero
+constr 2155:2163 <> perm_self
 constr 2200:2208 <> perm_next
 R2133:2136 Coq.Init.Datatypes <> list ind
 R2123:2126 Coq.Init.Datatypes <> list ind
@@ -132,8 +132,8 @@ R2335:2335 permute_lib <> A var
 R2339:2345 permute_lib <> Permute ind
 R2349:2349 permute_lib <> l var
 R2347:2347 permute_lib <> l var
-R2379:2387 permute_lib <> perm_zero constr
-R2379:2387 permute_lib <> perm_zero constr
+R2379:2387 permute_lib <> perm_self constr
+R2379:2387 permute_lib <> perm_self constr
 prf 2404:2416 <> Transpose_sym
 R2441:2444 Coq.Init.Datatypes <> list ind
 R2446:2446 permute_lib <> A var
@@ -161,8 +161,8 @@ R2754:2755 permute_lib <> l' var
 R2752:2752 permute_lib <> l var
 R2946:2954 permute_lib <> perm_next constr
 R2946:2954 permute_lib <> perm_next constr
-R2976:2984 permute_lib <> perm_zero constr
-R2976:2984 permute_lib <> perm_zero constr
+R2976:2984 permute_lib <> perm_self constr
+R2976:2984 permute_lib <> perm_self constr
 R3056:3064 permute_lib <> perm_next constr
 R3056:3064 permute_lib <> perm_next constr
 prf 3183:3193 <> Permute_sym
@@ -337,3 +337,95 @@ R6371:6388 permute_lib <> Permute_imp_SubSet thm
 R6371:6388 permute_lib <> Permute_imp_SubSet thm
 R6397:6407 permute_lib <> Permute_sym thm
 R6397:6407 permute_lib <> Permute_sym thm
+prf 6432:6445 <> Transpose_cons
+R6468:6471 Coq.Init.Datatypes <> list ind
+R6473:6473 permute_lib <> A var
+R6479:6479 permute_lib <> A var
+R6502:6510 permute_lib <> Transpose ind
+R6521:6522 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6520:6520 permute_lib <> a var
+R6523:6523 permute_lib <> m var
+R6514:6515 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6513:6513 permute_lib <> a var
+R6516:6516 permute_lib <> l var
+R6485:6493 permute_lib <> Transpose ind
+R6497:6497 permute_lib <> m var
+R6495:6495 permute_lib <> l var
+R6564:6566 Coq.Init.Logic <> :type_scope:x_'='_x not
+R6561:6562 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6567:6567 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6574:6578 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6569:6570 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6571:6573 Coq.Init.Datatypes <> nil constr
+R6580:6583 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6584:6586 Coq.Init.Datatypes <> nil constr
+R6564:6566 Coq.Init.Logic <> :type_scope:x_'='_x not
+R6561:6562 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6567:6567 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6574:6578 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6569:6570 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6571:6573 Coq.Init.Datatypes <> nil constr
+R6580:6583 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6584:6586 Coq.Init.Datatypes <> nil constr
+R6600:6602 Coq.Init.Logic <> :type_scope:x_'='_x not
+R6597:6598 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6603:6603 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6610:6614 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6605:6606 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6607:6609 Coq.Init.Datatypes <> nil constr
+R6616:6619 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6620:6622 Coq.Init.Datatypes <> nil constr
+R6600:6602 Coq.Init.Logic <> :type_scope:x_'='_x not
+R6597:6598 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6603:6603 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6610:6614 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6605:6606 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6607:6609 Coq.Init.Datatypes <> nil constr
+R6616:6619 Coq.Init.Datatypes <> :list_scope:x_'++'_x not
+R6620:6622 Coq.Init.Datatypes <> nil constr
+R6663:6672 permute_lib <> transp_gen constr
+R6663:6672 permute_lib <> transp_gen constr
+R6696:6708 Coq.Lists.List <> app_comm_cons thm
+R6696:6708 Coq.Lists.List <> app_comm_cons thm
+R6719:6727 Coq.Lists.List <> app_nil_l thm
+R6719:6727 Coq.Lists.List <> app_nil_l thm
+R6738:6746 Coq.Lists.List <> app_nil_r thm
+R6738:6746 Coq.Lists.List <> app_nil_r thm
+R6774:6786 Coq.Lists.List <> app_comm_cons thm
+R6774:6786 Coq.Lists.List <> app_comm_cons thm
+R6797:6805 Coq.Lists.List <> app_nil_l thm
+R6797:6805 Coq.Lists.List <> app_nil_l thm
+R6816:6824 Coq.Lists.List <> app_nil_r thm
+R6816:6824 Coq.Lists.List <> app_nil_r thm
+prf 6855:6866 <> Permute_cons
+R6890:6893 Coq.Init.Datatypes <> list ind
+R6895:6895 permute_lib <> A var
+R6901:6901 permute_lib <> A var
+R6922:6928 permute_lib <> Permute ind
+R6939:6940 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6938:6938 permute_lib <> a var
+R6941:6941 permute_lib <> m var
+R6932:6933 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R6931:6931 permute_lib <> a var
+R6934:6934 permute_lib <> l var
+R6907:6913 permute_lib <> Permute ind
+R6917:6917 permute_lib <> m var
+R6915:6915 permute_lib <> l var
+R7046:7054 permute_lib <> perm_self constr
+R7046:7054 permute_lib <> perm_self constr
+R7134:7135 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7109:7121 permute_lib <> Permute_trans thm
+R7134:7135 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7109:7121 permute_lib <> Permute_trans thm
+R7171:7179 permute_lib <> perm_next constr
+R7199:7200 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7191:7192 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7183:7184 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7171:7179 permute_lib <> perm_next constr
+R7199:7200 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7191:7192 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7183:7184 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R7212:7220 permute_lib <> perm_self constr
+R7212:7220 permute_lib <> perm_self constr
+R7231:7244 permute_lib <> Transpose_cons thm
+R7231:7244 permute_lib <> Transpose_cons thm
