@@ -15,10 +15,10 @@
 (load "defined.scm")
 (load "if.scm")
 (load "not.scm")
-
 (load "application.scm")
-(load "lambda.scm")
+
 (load "begin.scm")
+(load "lambda.scm")
 (load "cond.scm")
 (load "or.scm")
 (load "and.scm")
@@ -37,8 +37,8 @@
         ((is-defined? exp) (analyze-defined? exp))
         ((if? exp) (analyze-if exp))                           
         ((not? exp) (analyze-not exp))
+        ((begin? exp) (analyze-begin exp))
         ((lambda? exp)(analyze-lambda exp))
-        ((begin? exp) (analyze-sequence (begin-actions exp))) 
         ((cond? exp) (analyze (cond->if exp)))              
         ((or? exp) (analyze (or->if exp)))
         ((and? exp) (analyze (and->if exp)))

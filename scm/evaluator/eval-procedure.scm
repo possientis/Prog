@@ -6,13 +6,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load "tagged-list.scm")
+(load "begin.scm")
 
 ; testing
 (define (eval-procedure? procedure) (tagged-list? procedure 'eval-procedure))
 
 ; making
 (define (make-eval-procedure parameters body env) 
-  (list 'eval-procedure parameters body env))
+  (list 'eval-procedure parameters (make-begin body) env))
 
 ; destructuring
 (define (eval-procedure-parameters procedure) (cadr procedure))
@@ -25,6 +26,6 @@
         (params (eval-procedure-parameters proc))
         (init-env (eval-procedure-environment proc)))
     (let ((extended-env ((init-env 'extended) params args)))
-      (eval-sequence body extended-env))))
+      (eval body extended-env))))
 
 ))  ; include guard

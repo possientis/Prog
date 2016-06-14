@@ -44,8 +44,7 @@ Exp.prototype.interpret = function(input){
   throw "Exp::interpret is not implemented"; 
 }
 Exp.prototype.recognize = function(input){
-  print("check1: input = " + input);
-  return this.interpret(input).contains(input); 
+  return this.interpret(input).indexOf(input) != -1; 
 }
 
 function Lit(literal){ this.literal = literal; }
@@ -65,14 +64,14 @@ And.prototype.toString = function(){ return this.left + this.right; } // concat
 And.prototype.interpret = function(input){
   var result = []; 
   var leftList = this.left.interpret(input);
-  var right = this.right;// 'this' in body of lambda will not work as expected
-  leftList.forEach(function(s1){
+  for(var i = 0; i < leftList.length; ++i){ 
+    var s1 = leftList[i];
     var remainder = input.substring(s1.length);
-    var rightList = right.interpret(remainder);
+    var rightList = this.right.interpret(remainder);
     rightList.forEach(function(s2){
       result.push(s1 + s2);
     });
-  });
+  }
   return result;
 }
 
@@ -81,7 +80,8 @@ Or.prototype = new Exp();  // = Object.create(Exp.prototype)
 Or.prototype.toString = function(){ 
   return "(" + this.left + "|" + this.right + ")"; } // concat, append
 Or.prototype.interpret = function(input){
-  return  this.left.interpret(input) + this.right.interpret(input); // append
+  // concatenation of two arrays using '+' did not seem to work here
+  return  this.left.interpret(input).concat(this.right.interpret(input)); // append
 }
 
 
@@ -89,19 +89,18 @@ function Many(regex){ this.regex = regex; }
 Many.prototype = new Exp(); // = Object.create(Exp.prototype)
 Many.prototype.toString = function(){ return "(" + this.regex + ")*"; }
 Many.prototype.interpret = function(input){
-  print("check2: input = " + input);
   var result = [""];  // forall r:Exp, "" belongs to L(r*)
   var leftList = this.regex.interpret(input);
-  var interpret = this.interpret; // cannot use 'this' inside body of lambda
-  leftList.forEach(function(s1){
+  for(var i = 0; i < leftList.length; ++i){
+    var s1 = leftList[i];
     if(s1 !== ""){  // s1 is not the empty string
       var remainder = input.substring(s1.length);
-      var rightList = interpret(remainder); // recursive call 
+      var rightList = this.interpret(remainder); // recursive call 
       rightList.forEach(function(s2){
         result.push(s1 + s2);
       });
     }
-  });
+  }
   return result;
 }
   
@@ -120,10 +119,28 @@ string = "acbbccaaacccbbbbaaaaaccccc";
 print("regex = " + regex);
 print("string = \"" + string + "\"");
 print("The recognized prefixes are:");
-print(regex.recognize("ac"));
 
+var result = [];
+for(var i = 0; i <= string.length; ++i){
+  var test = string.substring(0,i);
+  if(regex.recognize(test)){
+    result.push("\"" + test + "\"");
+  }
+}
 
-
+// nice display
+var str = "[";
+var start = true;
+for(var i = 0; i < result.length; ++i){
+  if(start){
+    start = false
+  } else {
+    str += ", ";
+  }
+  str += result[i];
+}
+str+="]";
+print(str);
 
 
 

@@ -8,6 +8,9 @@
 ; definition semantics differ from that of assignment. One important difference is
 ; the syntactic construct (define (f args) body) which has no assignment equivalent
 
+(load "tagged-list.scm")
+(load "lambda.scm")
+
 ; testing
 (define (definition? exp) (tagged-list? exp 'define))
 

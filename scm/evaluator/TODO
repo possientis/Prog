@@ -1,5 +1,16 @@
+we want to get rid of operands.scm
+need to decide whether the body of an eval-procedure should be a list of 
+expresssion, or a single 'begin' expression. The latter is seemingly preferrable
+as it means dependency to 'eval-sequence' only occurs in begin.scm file.
 
-repl.scm is broken
+begin.scm
+lambda.scm
+operands.scm
+eval-procedure.scm
+analyze-procedure.scm
+
+
+
 
 continue rewriting code so as to keep parallel between 'eval' and 'analyze' (lambda !!!!)
 
@@ -10,6 +21,7 @@ Understand the suble differences between:
 
 follow up on debug.scm
 
+repl.scm is broken
 continue unit testing of analyze
 
 introduce parallel between apply and eval, in relation to eval-in-underlying-scheme

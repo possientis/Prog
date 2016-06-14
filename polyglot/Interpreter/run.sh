@@ -45,6 +45,16 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
+
+echo '\nThis is JavaScript ...'
+START=$(date +%s%N)
+js interpreter.js
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+
 echo '\nThis is PHP ...'
 START=$(date +%s%N)
 php interpreter.php

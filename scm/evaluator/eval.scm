@@ -15,10 +15,10 @@
 (load "defined.scm")
 (load "if.scm")
 (load "not.scm")
-
 (load "application.scm")
-(load "lambda.scm")
+
 (load "begin.scm")
+(load "lambda.scm")
 (load "cond.scm")
 (load "or.scm")
 (load "and.scm")
@@ -41,8 +41,8 @@
         ((is-defined? exp)(eval-defined? exp env))
         ((if? exp) (eval-if exp env))                           
         ((not? exp) (eval-not exp env))
+        ((begin? exp) (eval-begin exp env)) 
         ((lambda? exp)(eval-lambda exp env))
-        ((begin? exp) (eval-sequence (begin-actions exp) env))  
         ((cond? exp) (eval (cond->if exp) env))              
         ((or? exp) (eval (or->if exp) env))
         ((and? exp) (eval (and->if exp) env))

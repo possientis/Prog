@@ -10,7 +10,6 @@
 (define (rest-operands operands) (cdr operands))
 
 ; helper
-(define (no-operands? operands) (null? operands))
 (define (last-operand? operands) (null? (cdr operands)))
 
 
