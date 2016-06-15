@@ -48,6 +48,54 @@ LLZKey.eqdec ((7 :: nil) :: nil) ((3 + 4 :: nil) :: nil)
               {(7 :: nil) :: nil <> (3 + 4 :: nil) :: nil}
 *)
 
+(* another functor *)
+Module PairKey (K1:KEY)(K2:KEY) : KEY with Definition 
+  A := prod K1.A K2.A.
+Open Scope type_scope.
+  Definition A:= K1.A*K2.A.
+  Definition eqdec : forall a b:A, {a = b}+{a <> b}.
+    intros a b. destruct a. destruct b. elim (K1.eqdec a a1).
+      intro H1. elim (K2.eqdec a0 a2).
+        intro H2. left. rewrite H1, H2. reflexivity.
+        intro H2. clear H1. right. unfold not. intro H3. injection H3.
+          clear H3. intros H3 H4. apply H2. exact H3.
+      intro H1. right. unfold not. intro H2. injection H2.
+        intros H3 H4. apply H1. exact H4.
+  Defined.
+End PairKey.
+
+(* now applying functor *)
+Module ZZKey := PairKey ZKey ZKey.
+
+
+
+Check (ZZKey.eqdec (5, (-8))((2+3), ((-2)*4))).
+
+(*
+Check (ZZKey.eqdec (5, (-8))((2+3), ((-2)*4)))
+*)
+
+Module BoolKey.
+  Definition A:= bool.
+  Definition eqdec : forall a b:A, {a = b}+{a <> b}.
+    destruct a; destruct b; auto; right; discriminate.
+  Defined.
+End BoolKey.
+
+
+Module BoolKeys : KEY with Definition A := list bool
+                := LKey BoolKey.
+
+Check (BoolKeys.eqdec (cons true nil)
+(cons true (cons false nil))).
+(*
+BoolKeys.eqdec (true :: nil) (true :: false :: nil)
+     : {true :: nil = true :: false :: nil} +
+              {true :: nil <> true :: false :: nil}
+*)
+
+
+
 
 
 

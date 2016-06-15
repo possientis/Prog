@@ -37,5 +37,53 @@
 ; [borogoves 1] [and 1] [the 1] [mome 1] [raths 1] [outgrabe 1])
 (println (apply concat (map parse-line lines)))
 
+
+
+; {toves (1), mome (1), twas (1), mimsy (1), raths (1), outgrabe (1), were (1), 
+; did (1), borogoves (1), and (1 1 1), brillig (1), slithy (1), all (1), wabe (1), 
+; gimble (1), the (1 1 1 1), gyre (1), in (1)}
+(println "combine:")
+(def combined (combine (map parse-line lines)))
+(println combined)
+
+(defn sum [[k,v]]
+  {k (apply + v)})
+
+; you can apply 'map' to a 'map' -> get a list 
+; ({toves 1} {mome 1} {twas 1} {mimsy 1} {raths 1} {outgrabe 1} {were 1} {did 1} 
+; {borogoves 1} {and 3} {brillig 1} {slithy 1} {all 1} {wabe 1} {gimble 1} {the 4} 
+; {gyre 1} {in 1}
+(println (map sum combined))  ; sum takes key-value vector [k,v] as argument
+
+(defn reduce-parsed-lines [collected-values]
+  (apply merge (map sum collected-values)))
+
+; {toves 1, mome 1, twas 1, mimsy 1, raths 1, outgrabe 1, were 1, did 1, borogoves 1, 
+; and 3, brillig 1, slithy 1, all 1, wabe 1, gimble 1, the 4, gyre 1, in 1}
+(println (reduce-parsed-lines combined))
+
+(defn word-frequency [filename]
+  (->> (io/read-lines filename)
+       (map parse-line)
+       (combine)
+       (reduce-parsed-lines)))
+
+; {toves 1, mome 1, twas 1, mimsy 1, raths 1, outgrabe 1, were 1, did 1, borogoves 1, 
+; and 3, brillig 1, slithy 1, all 1, wabe 1, gimble 1, the 4, gyre 1, in 1}
+(println "testing word-frequency")
+(println (word-frequency "jabberwocky.txt"))
+
+
+
+
+
+
+
+
+
+
+
+
+
 (defn -main []
   :ok)
