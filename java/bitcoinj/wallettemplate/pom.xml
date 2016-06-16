@@ -9,9 +9,9 @@
         <version>0.14.1</version>
     </parent>
 
-    <artifactId>wallet</artifactId>
+    <artifactId>wallettemplate</artifactId>
 
-    <name>bitcoinj Wallet</name>
+    <name>bitcoinj Wallet Template</name>
 
     <build>
         <plugins>
