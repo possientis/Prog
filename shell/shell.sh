@@ -1,8 +1,8 @@
 #!/bin/bash
 
-function foo {
-  ls -la
-  cd /
-}
+# halt on any error
+set -e
 
-foo
+TEST=`ls`
+
+echo $TEST

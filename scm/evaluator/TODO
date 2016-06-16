@@ -1,16 +1,5 @@
-we want to get rid of operands.scm
-need to decide whether the body of an eval-procedure should be a list of 
-expresssion, or a single 'begin' expression. The latter is seemingly preferrable
-as it means dependency to 'eval-sequence' only occurs in begin.scm file.
-
-begin.scm
-lambda.scm
-operands.scm
-eval-procedure.scm
-analyze-procedure.scm
-
-
-
+Make comment about 'body' in lambda.scm (body of lambda, body of eval-proc, body of analyze-proc)
+clean up file begin.scm
 
 continue rewriting code so as to keep parallel between 'eval' and 'analyze' (lambda !!!!)
 

@@ -10,7 +10,6 @@
 (load "and.scm")
 (load "assignment.scm")
 (load "begin.scm")
-(load "operands.scm")
 (load "cond.scm")
 (load "definition.scm")
 (load "defined.scm")

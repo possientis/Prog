@@ -6,7 +6,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (load "global-env.scm")
-(load "operands.scm")
 (load "self-evaluating.scm")
 (load "variable.scm")
 (load "quote.scm")

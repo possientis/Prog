@@ -7,8 +7,6 @@
 
 (load "tagged-list.scm")
 (load "begin.scm")
-(load "operands.scm")
-
 
 ; testing
 (define (cond? exp) (tagged-list? exp 'cond))

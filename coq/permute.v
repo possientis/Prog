@@ -3,32 +3,51 @@ Require Import List.
 (* inductive predicate expressing the fact that two lists are obtained from
 each other, by the Permute of two consecutive elements  *)
 Inductive Transpose {A:Type} : list A -> list A -> Prop :=
-  | transp_pair : forall(x y:A), Transpose (x::y::nil) (y::x::nil)
-  | transp_gen  : forall (l m l1 l2 : list A), 
+  | transp_nil  :   Transpose nil nil
+  | transp_single:  forall (x:A), Transpose (x::nil) (x::nil)
+  | transp_pair :   forall(x y:A), Transpose (x::y::nil) (y::x::nil)
+  | transp_gen  :   forall (l m l1 l2 : list A), 
     Transpose l m -> Transpose (l1++l++l2) (l1++m++l2).
-
 (* one common issue with this sort of definition is that constructors of the
 inductive predicates are akin to 'axioms', and it is very easy to define the
 wrong thing, or things that are inconsistent, or incomplete etc *)
 
 (* Here is another way to go about it *)
 Definition Transpose' {A:Type} (l: list A) (m:list A) : Prop := 
-  exists (l1 l2:list A) (x y:A), 
-  l = l1++(x::y::nil)++l2 /\ m = l1++(y::x::nil)++l2.
+  (l = nil /\ m = nil) \/ (exists (x: A), l = x::nil /\ m = x::nil) \/
+  (exists (l1 l2:list A) (x y:A), 
+  l = l1++(x::y::nil)++l2 /\ m = l1++(y::x::nil)++l2).
 
+Lemma Transpose_refl': forall (A:Type)(l:list A), Transpose' l l.
+Proof.
+  intros A l. elim l.
+    clear l. unfold Transpose'. left. split; reflexivity.
+    clear l. intros a l. elim l.
+      clear l. intros H. clear H. unfold Transpose'. right. left.
+        exists a. split; reflexivity.
+      clear l. intros b l. 
+  
+(*
 (* ideally, you want to check the equivalence between the two notions *)
 Lemma Transpose_check: forall (A:Type)(l m:list A),
   Transpose l m <-> Transpose' l m.
 Proof.
-  intros A l m. split. intro H. generalize H. elim H. intros. 
-  unfold Transpose'. exists nil, nil, x, y. auto.
-  clear H l m. intros l m l1 l2 H0 H1 H2. clear H2.
-  cut (Transpose' l m). clear H0 H1. intro H.
-  unfold Transpose' in H. elim H. intro l3. clear H. intro H.
-  elim H. intro l4. clear H. intro H. 
-  elim H. intro x. clear H. intro H.
-  elim H. intro y. clear H. intro H.
-  elim H. clear H. intros H0 H1.
+  intros A l m. split. intro H. generalize H. elim H.  
+    clear H l m. intro H. clear H. unfold Transpose'. left. split; reflexivity. 
+    clear H l m.  intros x H. clear H. unfold Transpose'. right. left.
+      exists x. split; reflexivity.
+    clear H l m. intros x y H. clear H. unfold Transpose'. right. right.
+      exists nil, nil, x, y. split; reflexivity.
+    clear H l m. intros l m l1 l2 H0 H1 H2. clear H2.
+      cut (Transpose' l m). clear H0 H1. intro H. 
+      unfold Transpose' in H. elim H. 
+      clear H. intro H.
+      
+      intro l3. clear H. intro H.
+      elim H. intro l4. clear H. intro H. 
+      elim H. intro x. clear H. intro H.
+      elim H. intro y. clear H. intro H.
+      elim H. clear H. intros H0 H1.
   unfold Transpose'.
   exists (l1++l3), (l4++l2), x, y. rewrite H0, H1. clear H0 H1.
   split. rewrite <- app_assoc with (l:=l1). rewrite <- app_assoc with (l:=l3).
@@ -200,7 +219,7 @@ Proof.
   intros l' m' Hl Hm H. generalize H Hl Hm. clear Hl Hm. generalize l m a.
   clear l m a. elim H. intros x y l m a H0 H1 H2. clear H0. cut (l = m).
   intros.
-  
+*)  
 (*
 Lemma Permute_cons: forall (A:Type)(l m: list A)(a: A),
   Permute l m -> Permute (a::l) (a::m).

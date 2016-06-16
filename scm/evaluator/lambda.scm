@@ -6,7 +6,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (load "tagged-list.scm")
-(load "operands.scm")
+(load "begin.scm")
+
+; Note: a lambda expression is valid scheme code. 
+
+; When evaluating a lambda expression, we return some object 
+; (an 'eval-procedure') which is no longer scheme code, but is 
+; a valid argument to the function 'apply-eval-procedure'.
+
+; When analyzing a lambda expression, we return an object
+; (an 'analyze-procedure') which is no longer scheme code, but is
+; a valid argument to the function 'apply-analyze-procedure'.
+
 
 ; testing
 (define (lambda? exp) (tagged-list? exp 'lambda))
@@ -22,15 +33,16 @@
 (define (eval-lambda exp env)
   (let ((params (lambda-params exp))
         (body (lambda-body exp)))
-    (make-eval-procedure params body env)))
+    (let ((eval-body (make-begin body)))
+      (make-eval-procedure params eval-body env))))
 
 ; analyze
 (define (analyze-lambda exp)
   (let ((params (lambda-params exp))
         (body (lambda-body exp)))
-    (let ((bproc (analyze-sequence body)))
+    (let ((analyze-body (analyze-sequence body)))
       (lambda (env)
-        (make-analyze-procedure params bproc env)))))
+        (make-analyze-procedure params analyze-body env)))))
 
 ))  ; include guard
 
