@@ -1,5 +1,4 @@
-Require Import Relations.
-
+Require Import Relations.  
 Module Type DEC_ORDER.
   Parameter A : Set.
   Parameter le : A -> A -> Prop.
@@ -91,7 +90,44 @@ Module More_Dec_Orders (P:DEC_ORDER) :
 
   Theorem lt_not_le: forall a b:A, lt a b -> ~le b a.
   Proof.
-    intros a b H0 H1.
+    intros a b H0 H1. cut (a = b). intro Hab. rewrite Hab in H0.
+    apply (lt_irreflexive b). exact H0.
+    apply P.lt_le_weak in H0. apply le_antisym. exact H0. exact H1.
+  Qed.
+
+  Theorem le_not_lt: forall a b:A, le a b -> ~lt b a.
+  Proof. 
+    intros a b H0 H1. cut (a = b). intro Hab. rewrite Hab in H1.
+    apply (lt_irreflexive b). exact H1.
+    apply P.lt_le_weak in H1. apply le_antisym.  exact H0. exact H1.
+  Qed.
+
+  Theorem lt_trans: transitive A lt.
+  Proof.
+    unfold transitive. intros a b c Hab Hbc. generalize (P.lt_eq_lt_dec a c). 
+    intro H. elim H. clear H. intro H. elim H.
+      clear H. intro H. exact H.
+      clear H. intro H. rewrite <- H in Hbc. apply False_ind.
+        cut (a=b). intro Eq. rewrite Eq in Hab. apply 
+        (lt_irreflexive b). exact Hab. apply le_antisym.
+        apply P.lt_le_weak in Hab. exact Hab.
+        apply P.lt_le_weak in Hbc. exact Hbc.
+      clear H. intro H. apply False_ind. apply (lt_irreflexive c).
+      cut (a=c). intro Hac. rewrite Hac in H. exact H. 
+      apply le_antisym. apply (le_trans a b c).
+      apply P.lt_le_weak. exact Hab. 
+      apply P.lt_le_weak. exact Hbc.
+      apply P.lt_le_weak. exact H.
+  Qed.
+
+  Definition le_lt_dec: forall a b:A, {le a b}+{lt b a}.
+    intros a b. generalize (P.lt_eq_lt_dec a b). intro H.
+    elim H. clear H. intro H. elim H.
+      clear H. intro H. left. apply P.lt_le_weak. exact H.
+      clear H. intro H. left. rewrite H. apply le_refl.
+      clear H. intro H. right. exact H.
+  Defined.
+
 
 
 

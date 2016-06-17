@@ -14,27 +14,29 @@
 
 package wallet;
 
-//import com.google.common.util.concurrent.*;
-//import javafx.scene.input.*;
-//import org.bitcoinj.core.NetworkParameters;
-//import org.bitcoinj.kits.WalletAppKit;
-//import org.bitcoinj.params.*;
-//import org.bitcoinj.utils.BriefLogFormatter;
-//import org.bitcoinj.utils.Threading;
-//import org.bitcoinj.wallet.DeterministicSeed;
-import javafx.application.Application;
-//import javafx.application.Platform;
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.Node;
-//import javafx.scene.Scene;
-//import javafx.scene.layout.Pane;
-//import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-//import wallettemplate.controls.NotificationBarPane;
-//import wallettemplate.utils.GuiUtils;
-//import wallettemplate.utils.TextFieldValidator;
+import com.google.common.util.concurrent.*;
 
-//import javax.annotation.Nullable;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.params.*;
+import org.bitcoinj.utils.BriefLogFormatter;
+import org.bitcoinj.utils.Threading;
+import org.bitcoinj.wallet.DeterministicSeed;
+
+import javafx.scene.input.*;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import wallet.controls.NotificationBarPane;
+import wallet.utils.GuiUtils;
+import wallet.utils.TextFieldValidator;
+
+import javax.annotation.Nullable;
 //import java.io.File;
 //import java.io.IOException;
 //import java.net.URL;
@@ -256,7 +258,7 @@ public class Main extends Application {
     }
 */
     public static void main(String[] args) {
-      System.err.println("main is running...");
+      System.err.println("wallet is running...");
 //        launch(args);
     }
 }
