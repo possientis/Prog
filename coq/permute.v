@@ -1,4 +1,5 @@
 Require Import List.
+Require Import Relations.
 
 (* inductive predicate expressing the fact that two lists are obtained from
 each other, by the Permute of two consecutive elements  *)
@@ -16,16 +17,19 @@ Definition Transpose' {A:Type} (l: list A) (m:list A) : Prop :=
   l = m \/ (exists (l1 l2:list A) (x y:A), 
   l = l1++(x::y::nil)++l2 /\ m = l1++(y::x::nil)++l2).
 
-Lemma Transpose_refl': forall (A:Type)(l:list A), Transpose' l l.
+(* Transpose' is a reflexive relation on list A *)
+Lemma Transpose_refl': forall (A:Type), reflexive (list A) Transpose'.
 Proof.
-  intros A l. unfold Transpose'. left. reflexivity.
-Qed.
-  
-(* ideally, you want to check the equivalence between the two notions *)
-Lemma Transpose_check: forall (A:Type)(l m:list A),
-  Transpose l m <-> Transpose' l m.
+  intros A. unfold reflexive. intros l. unfold Transpose'. left. reflexivity.
+Qed. 
+
+(* ideally, you want to check the equivalence between Transpose and Transpose' *)
+Lemma Transpose_check: forall (A:Type), 
+  same_relation (list A) Transpose Transpose'.
 Proof.
-  intros A l m. split. intro H. generalize H. elim H.
+  intros A. unfold same_relation. split. 
+  unfold inclusion.
+  intros l m. intro H. generalize H. elim H.
     clear H l m. intros l H. clear H. apply Transpose_refl'.
     clear H l m. intros x y H. clear H. unfold Transpose'. right.
       exists nil, nil, x, y. split; reflexivity.
@@ -45,44 +49,59 @@ Proof.
             rewrite H1. set (k:= y::x::nil). 
             rewrite <- app_assoc, <- app_assoc, <- app_assoc. reflexivity.
             apply H1. exact H0.
-  intro H. unfold Transpose' in H. elim H.
+  unfold inclusion.
+  intros l m H. unfold Transpose' in H. elim H. 
     clear H. intro H. rewrite H. apply transp_refl.
-    clear H. intro H.
-  (*
-  elim H. clear H. intros l2 H. elim H. clear H. intros x H.
-  elim H. clear H. intros y H. elim H. clear H. intros Hl Hm.
-  rewrite Hl, Hm. apply transp_gen. apply transp_pair.
+    clear H. intro H. elim H. 
+      clear H. intros l1 H. elim H. 
+      clear H. intros l2 H. elim H.
+      clear H. intros x H. elim H.
+      clear H. intros y H. elim H.
+      clear H. intros Hl Hm. rewrite Hl, Hm.
+      apply transp_gen. apply transp_pair.
+Qed.
+
+Lemma test: forall (A:Type) (l: list A), Transpose' l l.
+Proof.
+  intros A l.
+(*
+(* Tranpose is a reflexive relation on list A *)
+Lemma Transpose_refl: forall (A:Type), reflexive (list A) Transpose.
+Proof.
+  intros A. unfold reflexive. intros l. apply transp_refl.
+Qed.
+
+(* Transpose is a symmetric relation on list A *)
+Lemma Transpose_sym: forall (A:Type), symmetric (list A) Transpose.
+Proof.
+  intros A. unfold symmetric. intros l m H. generalize H. elim H. 
+    clear H l m. intros. apply transp_refl.
+    clear H l m. intros. apply transp_pair.
+    clear H l m. intros l m l1 l2 H0 H1 H2. clear H2. 
+      apply transp_gen. apply H1. exact H0.
 Qed.
 
 (* This inductive predicate expresses the fact that two 
-lists are Permutes of one another *)
+lists are Permutation of one another *)
 Inductive Permute {A:Type} : list A -> list A -> Prop :=
-  | perm_self : forall l:list A, Permute l l
+  | perm_refl : forall l:list A, Permute l l
   | perm_next : forall l l' m: list A, 
     Permute l l' -> Transpose l' m -> Permute l m. 
 
 
-Lemma Permute_refl : forall (A:Type) (l:list A), Permute l l.
+(* Permute is a reflexive relation on list A *)
+Lemma Permute_refl : forall (A:Type), reflexive (list A) Permute.
 Proof.
-  intros A l. apply perm_self.
+  intros A. unfold reflexive. intros l. apply perm_refl.
 Qed.
 
  
-Lemma Transpose_sym: forall (A:Type) (l m: list A),
-  Transpose l m -> Transpose m l.
-Proof.
-  intros A l m H. generalize H. elim H. clear l m H.
-  intros x y H. clear H. apply transp_pair. clear l m H.
-  intros l m l1 l2 H H' H0. clear H0. apply transp_gen.
-  apply H'. exact H.
-Qed.
-
 Lemma Transpose_first: forall (A:Type) (l l' m:list A),
   Transpose l l' -> Permute l' m -> Permute l m.
 Proof.
   intros A l l' m H0 H1. generalize H0. clear H0. generalize H1 l. 
   elim H1. clear H1 l l' m. intros m. intro H. clear H. intro l.
-  intro H. apply perm_next with (l':=l). apply perm_self. exact H.
+  intro H. apply perm_next with (l':=l). apply perm_refl. exact H.
   clear H1 l l' m. intros l l' m H0 H1 H3 H4 k H5.
   eapply perm_next. apply H1. exact H0. exact H5. exact H3.
   (* dont understand why normal 'apply ... with' was failing *)
@@ -219,10 +238,10 @@ Lemma Permute_cons: forall (A:Type)(l m: list A)(a: A),
   Permute l m -> Permute (a::l) (a::m).
 Proof.
   intros A l m a H. generalize H. generalize a. clear a. elim H.
-  clear H l m. intros. apply perm_self.
+  clear H l m. intros. apply perm_refl.
   clear H l m. intros l l' m H0 H1 H2 a H3.
   apply Permute_trans with (m:=(a::l')). apply H1. exact H0.
-  apply (perm_next (a::l') (a::l') (a::m)). apply perm_self.
+  apply (perm_next (a::l') (a::l') (a::m)). apply perm_refl.
   apply Transpose_cons. exact H2.
 Qed.
 *)

@@ -9,7 +9,6 @@
 (load "eval-procedure.scm")
 (load "analyze-procedure.scm")
 
-; now redefining
 (define (apply proc args)
   (cond ((primitive-procedure? proc) (apply-primitive-procedure proc args))       
         ((eval-procedure? proc) (apply-eval-procedure proc args))

@@ -1,4 +1,3 @@
-Make comment about 'body' in lambda.scm (body of lambda, body of eval-proc, body of analyze-proc)
 clean up file begin.scm
 
 continue rewriting code so as to keep parallel between 'eval' and 'analyze' (lambda !!!!)
