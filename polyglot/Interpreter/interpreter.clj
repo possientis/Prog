@@ -76,16 +76,19 @@
 (defmethod to-string ::many [data] (str "(" ((:regex data) :to-string) ")*"))
 (defmethod interpret ::many [data] 
   (fn [input]
+    (cons ""  ; forall r:Exp, "" belongs to L(r*)
     (let [regex (:regex data)
           left-list ((regex :interpret) input)]
-      (for [s1 (filter #(not (= "" %)) left-list)
+      (for [s1 (filter seq left-list) 
             remainder (list (.substring input (.length s1)))
             right-list (list ((interpret data) remainder))  ; recursive call
             s2 right-list] 
-        (str s1 s2)))))
+        (str s1 s2))))))
 
 ; not virtual
-(defn recognize [data] (fn [input] :TODO))
+(defn recognize [data] 
+  (fn [input]
+    (.contains ((interpret data) input) input))) 
 
 (def Exp  ; constructor
   (letfn
@@ -122,6 +125,12 @@
     (Exp {:type ::many :regex regex})))
 
 
+(defn pretty-print [l]
+  (letfn [(core [l]
+            (cond (empty? l) ""
+                  (empty? (rest l)) (str (first l))
+                  :else (str (first l) ", " (core (rest l)))))]
+    (str "[" (core l) "]")))
 
 (defn -main []
   (def a (Lit "a"))
@@ -138,15 +147,14 @@
   (println "string =" (str "\"" input "\""))
   (println "The recognized prefixes are:")
 
-  (println((aa :interpret) "aaabcde"))
+  (def result 
+    (map #(str "\"" % "\"")
+      (filter 
+        #((regex :recognize) %) 
+        (for [i (range (+ 1 (.length input)))]
+          (.substring input 0 i)))))
 
-  (def x '("" "a" "aa" "aaa"))
-
-  (def y (filter #(not (= "" %)) x))
-  (println x)
-  (println y)
-
-  (println "exiting now ...")
+  (println (pretty-print result))
 )
 
 

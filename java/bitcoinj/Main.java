@@ -32,16 +32,22 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javax.annotation.Nullable;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+
 import wallet.controls.NotificationBarPane;
 import wallet.utils.GuiUtils;
 import wallet.utils.TextFieldValidator;
 
-import javax.annotation.Nullable;
-//import java.io.File;
-//import java.io.IOException;
-//import java.net.URL;
-
-//import static wallettemplate.utils.GuiUtils.*;
+// static import allows the use of static members of the class
+// GuiUtils without qualification with the class name.
+// An import allows the use of a class without package qualification
+// A static import allows the use of the class static members without 
+// classname qualification
+import static wallet.utils.GuiUtils.*; 
 
 public class Main extends Application {
 /*

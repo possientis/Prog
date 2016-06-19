@@ -10,6 +10,7 @@ Understand the suble differences between:
 follow up on debug.scm
 
 repl.scm is broken
+check semantics of '() vs ()
 continue unit testing of analyze
 
 introduce parallel between apply and eval, in relation to eval-in-underlying-scheme

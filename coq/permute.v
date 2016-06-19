@@ -2,12 +2,13 @@ Require Import List.
 Require Import Relations.
 
 (* inductive predicate expressing the fact that two lists are obtained from
-each other, by the Permute of two consecutive elements  *)
+each other, by the permutation of two consecutive elements  *)
 Inductive Transpose {A:Type} : list A -> list A -> Prop :=
   | transp_refl :   forall (l: list A), Transpose l l
   | transp_pair :   forall(x y:A), Transpose (x::y::nil) (y::x::nil)
   | transp_gen  :   forall (l m l1 l2 : list A), 
     Transpose l m -> Transpose (l1++l++l2) (l1++m++l2).
+
 (* one common issue with this sort of definition is that constructors of the
 inductive predicates are akin to 'axioms', and it is very easy to define the
 wrong thing, or things that are inconsistent, or incomplete etc *)
@@ -61,14 +62,19 @@ Proof.
       apply transp_gen. apply transp_pair.
 Qed.
 
-Lemma test: forall (A:Type) (l: list A), Transpose' l l.
+(* This version of the lemma can be handy for rewrites *)
+Lemma Transpose_check': forall (A:Type) (l m: list A),
+  Transpose l m <-> Transpose' l m.
 Proof.
-  intros A l.
-(*
-(* Tranpose is a reflexive relation on list A *)
+  intros A l m. split. 
+    intro H. apply Transpose_check. exact H.
+    intro H. apply Transpose_check. exact H.
+Qed.
+
+(* Transpose is a reflexive relation on list A *)
 Lemma Transpose_refl: forall (A:Type), reflexive (list A) Transpose.
 Proof.
-  intros A. unfold reflexive. intros l. apply transp_refl.
+   intros A. unfold reflexive. intros l. apply transp_refl.
 Qed.
 
 (* Transpose is a symmetric relation on list A *)
@@ -81,8 +87,20 @@ Proof.
       apply transp_gen. apply H1. exact H0.
 Qed.
 
+(* Two lists which are transpositions of one another have same length *)
+Lemma Transpose_imp_eq_length: forall (A:Type)(l m:list A),
+  Transpose l m -> length l = length m.
+Proof.
+  intros A l m H. generalize H. elim H.
+    clear H l m. intros. simpl. reflexivity. 
+    clear H l m. intros. simpl. reflexivity.
+    clear H l m. intros l m l1 l2 H0 H1 H2. clear H2.
+  rewrite app_length, app_length, app_length, app_length.
+  rewrite H1. reflexivity. exact H0.
+Qed.
+
 (* This inductive predicate expresses the fact that two 
-lists are Permutation of one another *)
+lists are permutation of one another *)
 Inductive Permute {A:Type} : list A -> list A -> Prop :=
   | perm_refl : forall l:list A, Permute l l
   | perm_next : forall l l' m: list A, 
@@ -95,7 +113,15 @@ Proof.
   intros A. unfold reflexive. intros l. apply perm_refl.
 Qed.
 
- 
+(* As defined, the Permute relation is such that if l1 is
+  a permutation of l2 and l2 is a transposition of l3, then
+  l1 is deemed a permutation of l3. In order to prove that 
+  the Permute relation is symmetric, we need to be able to 
+  argue the other way around, namely that if l1 is a 
+  transposition of l2 and l2 is a permutation of l3, then
+  l1 is also a permutation of l3. This result is obvious 
+  once we have established the symmetry of both Transpose
+  and Permute, but we are not there yet. *)
 Lemma Transpose_first: forall (A:Type) (l l' m:list A),
   Transpose l l' -> Permute l' m -> Permute l m.
 Proof.
@@ -107,34 +133,27 @@ Proof.
   (* dont understand why normal 'apply ... with' was failing *)
 Qed.
 
-Lemma Permute_sym: forall (A:Type) (l m: list A),
-  Permute l m -> Permute m l.
+(* We are now in a position to prove the symmetry of Permute *)
+Lemma Permute_sym: forall (A:Type), symmetric (list A) Permute.
 Proof.
-  intros A l m H. generalize H. elim H. auto. clear H m l.  
+  intro A. unfold symmetric.
+  intros l m H. generalize H. elim H. auto. clear H m l.
   intros l l' m H0 H1 H2 H3. apply Transpose_first with (l':=l').
   apply Transpose_sym. exact H2. apply H1. exact H0.
 Qed.
 
-Lemma Permute_trans: forall (A:Type) (l m k: list A),
-  Permute l m -> Permute m k -> Permute l k.
+(* Permute is also a transitive relation on list A *)
+Lemma Permute_trans: forall (A:Type), transitive (list A) Permute.
 Proof.
-  intros A l m k H. generalize H k. clear k. elim H. auto.
+  intros A. unfold transitive.
+  intros l m k H. generalize H k. clear k. elim H. auto.
   clear H l m. intros l l' m H0 H1 H2 H3 k H4.
   apply H1. exact H0. apply Transpose_first with (l':=m).
   exact H2. exact H4.
 Qed.
 
 
-Lemma Transpose_imp_eq_length: forall (A:Type)(l m:list A),
-  Transpose l m -> length l = length m.
-Proof.
-  intros A l m H. generalize H. elim H.
-  clear H l m. intros. simpl. reflexivity.
-  clear H l m. intros l m l1 l2 H0 H1 H2. clear H2.
-  rewrite app_length, app_length, app_length, app_length.
-  rewrite H1. reflexivity. exact H0.
-Qed.
-
+(* Two lists which are permutation of one another have same length *)
 Lemma Permute_imp_eq_length: forall (A:Type)(l m:list A),
   Permute l m -> length l = length m.
 Proof.
@@ -145,6 +164,8 @@ Proof.
   apply H1. exact H0. apply Transpose_imp_eq_length. exact H2.
 Qed.
 
+
+(*
 
 Definition SubSet {A:Type}(l m:list A) : Prop :=
   forall (x:A), In x l -> In x m.

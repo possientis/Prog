@@ -14,25 +14,25 @@
 
 package wallet.controls;
 
-// import javafx.animation.Interpolator;
-// import javafx.animation.KeyFrame;
-// import javafx.animation.KeyValue;
-// import javafx.animation.Timeline;
-// import javafx.beans.property.SimpleStringProperty;
-// import javafx.beans.value.ObservableDoubleValue;
-// import javafx.collections.FXCollections;
-// import javafx.collections.ListChangeListener;
-// import javafx.collections.ObservableList;
-// import javafx.scene.Node;
-// import javafx.scene.control.Label;
-// import javafx.scene.control.ProgressBar;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
-// import javafx.scene.layout.HBox;
-// import javafx.scene.layout.Priority;
-// import javafx.util.Duration;
-// import wallettemplate.utils.GuiUtils;
-// import wallettemplate.utils.easing.EasingMode;
-// import wallettemplate.utils.easing.ElasticInterpolator;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.util.Duration;
+import wallet.utils.GuiUtils;
+import wallet.utils.easing.EasingMode;
+import wallet.utils.easing.ElasticInterpolator;
 // import javax.annotation.Nullable;
 
 /**

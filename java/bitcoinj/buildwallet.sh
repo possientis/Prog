@@ -8,8 +8,16 @@ do
   BITCOINJ_JARS="$d:$BITCOINJ_JARS"
 done
 
+rm wallet -rf  # clean build
 
 javac -cp "$BITCOINJ_JARS" -d . \
-  Main.java NotificationBarPane.java GuiUtils.java TextFieldValidator.java
+  Main.java \
+  NotificationBarPane.java \
+  GuiUtils.java \
+  TextFieldValidator.java \
+  EasingMode.java \
+  ElasticInterpolator.java \
+  EasingInterpolator.java
+  
 
 

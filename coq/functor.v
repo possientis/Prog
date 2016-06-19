@@ -1,6 +1,6 @@
 Require Import Relations.  
 Module Type DEC_ORDER.
-  Parameter A : Set.
+  Parameter A : Type.
   Parameter le : A -> A -> Prop.
   Parameter lt : A -> A -> Prop.
 
@@ -30,7 +30,7 @@ Build_order
 
 
 Module Type MORE_DEC_ORDERS.
-  Parameter A : Set.
+  Parameter A : Type.
   Parameter le: A -> A -> Prop.
   Parameter lt: A -> A -> Prop.
 
@@ -128,6 +128,36 @@ Module More_Dec_Orders (P:DEC_ORDER) :
       clear H. intro H. right. exact H.
   Defined.
 
+  Definition le_lt_eq_dec: forall a b:A, le a b -> {lt a b}+{a = b}.
+    intros a b H. generalize (P.lt_eq_lt_dec a b). 
+    intro H0. elim H0. clear H0. intro H0. elim H0.
+      clear H0. intro H0. left. exact H0.
+      clear H0. intro H0. right. exact H0.
+      clear H0. intro H0. right. apply le_antisym. exact H.
+        apply P.lt_le_weak. exact H0.
+  Defined.
+
+End More_Dec_Orders.
+  
+Module Lexico (D1:DEC_ORDER)(D2:DEC_ORDER) <:
+              DEC_ORDER with Definition A := (D1.A*D2.A)%type.
+
+  Open Scope type_scope.
+
+  Module M1:= More_Dec_Orders D1. (* calling previously defined functor *)
+  Module M2:= More_Dec_Orders D2.
+
+  Definition A:= D1.A*D2.A.
+  Definition le (a b:A): Prop :=  (* lexicographic order *)
+    let (a1, a2) := a in
+    let (b1, b2) := b in D1.lt a1 b1 \/ a1 = b1 /\ D2.le a2 b2.
+  Definition lt (a b:A): Prop :=
+    let (a1, a2) := a in
+    let (b1, b2) := b in D1.lt a1 b1 \/ a1 = b1 /\ D2.lt a2 b2.
+  Theorem ordered: order A le. 
+  Proof.
+    
+    
 
 
 
