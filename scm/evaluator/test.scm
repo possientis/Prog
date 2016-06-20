@@ -9,6 +9,7 @@
 (load "tagged-list.scm")
 (load "and.scm")
 (load "assignment.scm")
+(load "unspecified.scm")
 (load "begin.scm")
 (load "cond.scm")
 (load "definition.scm")

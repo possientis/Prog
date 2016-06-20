@@ -1,5 +1,6 @@
-clean up file begin.scm
+review analyze-sequence of begin.scm
 
+review make-begin for corner cases '() '(exp1)
 continue rewriting code so as to keep parallel between 'eval' and 'analyze' (lambda !!!!)
 
 Understand the suble differences between:

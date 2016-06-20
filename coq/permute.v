@@ -99,6 +99,18 @@ Proof.
   rewrite H1. reflexivity. exact H0.
 Qed.
 
+Lemma Transpose_cons: forall (A:Type)(l m:list A)(a: A),
+  Transpose l m -> Transpose (a::l) (a::m).
+Proof.
+ intros A l m a H. 
+ cut (a::l = (a::nil) ++ l ++ nil).
+ cut (a::m = (a::nil) ++ m ++ nil).
+ intros Hm Hl. rewrite Hm, Hl. apply transp_gen. exact H.
+ rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
+ rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
+Qed.
+
+
 (* This inductive predicate expresses the fact that two 
 lists are permutation of one another *)
 Inductive Permute {A:Type} : list A -> list A -> Prop :=
@@ -164,8 +176,17 @@ Proof.
   apply H1. exact H0. apply Transpose_imp_eq_length. exact H2.
 Qed.
 
+Lemma Permute_cons: forall (A:Type)(l m: list A)(a: A),
+  Permute l m -> Permute (a::l) (a::m).
+Proof.
+  intros A l m a H. generalize H. generalize a. clear a. elim H.
+    clear H l m. intros. apply perm_refl.
+    clear H l m. intros l l' m H0 H1 H2 a H3.
+  apply (Permute_trans A (a::l) (a::l') (a::m)). apply H1. exact H0.
+  apply (perm_next (a::l') (a::l') (a::m)). apply perm_refl.
+  apply Transpose_cons. exact H2.
+Qed.
 
-(*
 
 Definition SubSet {A:Type}(l m:list A) : Prop :=
   forall (x:A), In x l -> In x m.
@@ -173,74 +194,66 @@ Definition SubSet {A:Type}(l m:list A) : Prop :=
 Definition EqSet {A:Type}(l m: list A) : Prop :=
   SubSet l m /\ SubSet m l.
 
-Lemma SubSet_refl: forall (A:Type)(l:list A), SubSet l l.
+Lemma SubSet_refl: forall (A:Type), reflexive (list A) SubSet.
 Proof.
-  intros A l. unfold SubSet. intros x. tauto.
+  intros A. unfold reflexive. intro l. unfold SubSet. auto.
 Qed.
 
-Lemma SubSet_trans: forall (A: Type)(l m k: list A), 
-  SubSet l m -> SubSet m k -> SubSet l k.
+Lemma SubSet_trans: forall (A: Type), transitive (list A) SubSet.
 Proof.
-  intros A l m k H0 H1. unfold SubSet. intros x H2.
+  intros A. unfold transitive.
+  intros l m k H0 H1. unfold SubSet. intros x H2.
   apply H1. apply H0. exact H2.
 Qed.
 
 
-Lemma Transpose_imp_SubSet: forall (A:Type)(l m:list A),
-  Transpose l m -> SubSet l m.
+Lemma Transpose_imp_SubSet: forall (A:Type), 
+  inclusion (list A) Transpose SubSet.
 Proof.
-  intros A l m H. generalize H. elim H.
-  clear H l m. intros x y H0. clear H0. unfold SubSet. 
-  intros z H0. simpl. simpl in H0. elim H0.
-  clear H0. intro H0. right. left. exact H0.
-  clear H0. intro H0. elim H0. clear H0. intro H0. left. exact H0.
-  apply False_ind.
-  clear H l m. intros l m l1 l2 H0 H1 H2. clear H2. unfold SubSet.
-  intros x H2. simpl. rewrite in_app_iff, in_app_iff.
-  rewrite in_app_iff, in_app_iff in H2. elim H2.
-  clear H2. intro H2. left. exact H2.
-  clear H2. intro H2. elim H2. clear H2. intro H2. right. left.
-  apply H1. exact H0. exact H2.
-  clear H2. intro H2. right. right. exact H2.
+  intros A. unfold inclusion.
+  intros l m H. generalize H. elim H.
+    clear H l m. intros. apply SubSet_refl.
+    clear H l m. intros x y H0. clear H0. unfold SubSet.
+      intros z H0. simpl. simpl in H0. elim H0.
+        clear H0. intro H0. right. left. exact H0.
+        clear H0. intro H0. elim H0. clear H0. intro H0. left. exact H0.
+          apply False_ind.
+    clear H l m. intros l m l1 l2 H0 H1 H2. clear H2. unfold SubSet.
+      intros x H2. simpl. rewrite in_app_iff, in_app_iff.
+      rewrite in_app_iff, in_app_iff in H2. elim H2.
+        clear H2. intro H2. left. exact H2.
+        clear H2. intro H2. elim H2. clear H2. intro H2. right. left.
+          apply H1. exact H0. exact H2.
+        clear H2. intro H2. right. right. exact H2.
 Qed.
 
-Lemma Transpose_imp_EqSet: forall (A:Type)(l m:list A),
-  Transpose l m -> EqSet l m.
+Lemma Transpose_imp_EqSet: forall (A:Type),
+  inclusion (list A) Transpose EqSet.
 Proof.
-  intros A l m H. unfold EqSet. split. 
+  intros A. unfold inclusion.
+  intros l m H. unfold EqSet. split. 
   apply Transpose_imp_SubSet. exact H.
   apply Transpose_imp_SubSet. apply Transpose_sym. exact H.
 Qed.
 
-Lemma Permute_imp_SubSet: forall (A:Type)(l m: list A),
-  Permute l m -> SubSet l m.
+Lemma Permute_imp_SubSet: forall (A:Type), 
+  inclusion (list A) Permute SubSet.
 Proof.
-  intros A l m H. generalize H. elim H.
-  clear H l m. intros. apply SubSet_refl.
-  clear H l m. intros l l' m H0 H1 H2 H3. clear H3.
-  apply SubSet_trans with (m:= l'). apply H1. exact H0.
-  apply Transpose_imp_SubSet. exact H2.
+  intros A. unfold inclusion.
+  intros l m H. generalize H. elim H.
+    clear H l m. intros. apply SubSet_refl.
+    clear H l m. intros l l' m H0 H1 H2 H3. clear H3.
+      apply (SubSet_trans A l l' m). apply H1. exact H0.
+      apply Transpose_imp_SubSet. exact H2.
 Qed.
 
-
-Lemma Permute_imp_EqSet: forall (A:Type)(l m: list A),
-  Permute l m -> EqSet l m.
+Lemma Permute_imp_EqSet: forall (A:Type),
+  inclusion (list A) Permute EqSet.
 Proof.
-  intros A l m H. unfold EqSet. split.
+  intros A. unfold inclusion.
+  intros l m H. unfold EqSet. split.
   apply Permute_imp_SubSet. exact H.
   apply Permute_imp_SubSet. apply Permute_sym. exact H.
-Qed.
-
-
-Lemma Transpose_cons: forall (A:Type)(l m:list A)(a: A),
-  Transpose l m -> Transpose (a::l) (a::m).
-Proof.
- intros A l m a H. 
- cut (a::l = (a::nil) ++ l ++ nil).
- cut (a::m = (a::nil) ++ m ++ nil).
- intros Hm Hl. rewrite Hm, Hl. apply transp_gen. exact H.
- rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
- rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
 Qed.
 
 Lemma Transpose_cons_reverse: forall (A:Type)(l m:list A)(a:A),
@@ -249,22 +262,15 @@ Proof.
   intros A l m a.
   cut (forall (l' m':list A), 
     l' = a::l -> m' = a::m -> Transpose l' m' -> Transpose l m). eauto.
-  intros l' m' Hl Hm H. generalize H Hl Hm. clear Hl Hm. generalize l m a.
-  clear l m a. elim H. intros x y l m a H0 H1 H2. clear H0. cut (l = m).
-  intros.
-*) 
-
-(*
-Lemma Permute_cons: forall (A:Type)(l m: list A)(a: A),
-  Permute l m -> Permute (a::l) (a::m).
-Proof.
-  intros A l m a H. generalize H. generalize a. clear a. elim H.
-  clear H l m. intros. apply perm_refl.
-  clear H l m. intros l l' m H0 H1 H2 a H3.
-  apply Permute_trans with (m:=(a::l')). apply H1. exact H0.
-  apply (perm_next (a::l') (a::l') (a::m)). apply perm_refl.
-  apply Transpose_cons. exact H2.
-Qed.
-*)
-
+  intros l' m' Hl Hm H. generalize H Hl Hm. 
+  clear Hl Hm. generalize l m a. clear l m a. elim H. 
+    clear H l' m'. intros k l m a H0 H1 H2. clear H0. 
+      rewrite H1 in H2. clear H1. injection H2. intros H0.
+      rewrite H0. apply Transpose_refl.
+    clear H l' m'. intros x y l m a H0 H1 H2. clear H0.
+      injection H1. clear H1. injection H2. clear H2.
+      intros H0 H1 H2 H3. 
+      rewrite H3 in H0. clear H3. rewrite H1 in H2. clear H1.
+      rewrite H2 in H0. clear H2. rewrite H0. apply Transpose_refl.
+    clear H l' m'.
 

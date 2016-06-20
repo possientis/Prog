@@ -6,6 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (load "tagged-list.scm")
+(load "unspecified.scm")
 
 ; testing
 (define (begin? exp) (tagged-list? exp 'begin)) 
@@ -27,19 +28,14 @@
     (analyze-sequence actions)))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; destructuring
-(define (first-operand operands) (car operands))
-(define (rest-operands operands) (cdr operands))
-
-; helper
-(define (last-operand? operands) (null? (cdr operands)))
-
-
 (define (eval-sequence operands env)
-  (cond ((last-operand? operands) (eval (first-operand operands) env))          
-        (else (eval (first-operand operands) env)
-              (eval-sequence (rest-operands operands) env))))           
+  (if (null? operands)
+    unspecified-value 
+    (let ((first (eval (car operands) env)))
+      (if (null? (cdr operands))
+        first
+        (eval-sequence (cdr operands) env)))))
+
 
 ; added for analyze
 (define (analyze-sequence operands)
