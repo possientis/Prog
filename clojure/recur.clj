@@ -6,15 +6,16 @@
   (loop [l numbers sum 0]
     (if (empty? l)
       sum
-      (recur (rest l) (+ (first l) sum)))))
+      (recur (rest l) (+ (first l) sum))))) ; fold-left
 
 (println (total1 x)) 
+
 
 ; not tail recursive, stack will soon overflow
 (defn total2 [numbers]
   (if (empty? numbers)
     0
-    (+ (first numbers) (total2 (rest numbers)))))
+    (+ (first numbers) (total2 (rest numbers))))) ; fold-right
 
 (println (total2 x))
 
@@ -24,7 +25,7 @@
   (letfn [(my-loop [l sum]
             (if (empty? l)
               sum
-              (my-loop (rest l) (+ (first l) sum))))]
+              (my-loop (rest l) (+ (first l) sum))))] ; fold-left
     (my-loop numbers 0)))
 
 
@@ -36,11 +37,21 @@
   (letfn [(my-loop [l sum]
             (if (empty? l)
               sum
-              (recur (rest l) (+ (first l) sum))))]
+              (recur (rest l) (+ (first l) sum))))] ; fold-left
     (my-loop numbers 0)))
 
 
 (println (total4 x))
+
+
+(println (conj '(1 2 3) 4))
+(println (cons 4 '(1 2 3)))
+(println \a) ; char literal
+
+
+
+
+
 
 
 

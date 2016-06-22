@@ -1,2 +1,1 @@
-recur.clj: in each case, determine whether dealing with a fold-left 
-  or a fold-right pattern.
+understand code of curried-fn page 319
