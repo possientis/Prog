@@ -3,3 +3,4 @@
 # separate makefile. Will worry about this later
 g++ -std=c++14 -o linknode linknode.t.c Ilinknode.c
 ./linknode
+rm linknode

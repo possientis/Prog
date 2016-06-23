@@ -12,10 +12,24 @@
 (define (cond? exp) (tagged-list? exp 'cond))
 
 
+; destructuring
+(define (cond-predicate clause) (car clause))
+
+(define (cond-clauses exp) (cdr exp))
+
+; eval
+(define (eval-cond exp env)
+  (eval (cond->if exp) env))
+
+; analyze 
+(define (analyze-cond exp)
+  (analyze (cond->if exp)))
+
+
+
 (define (cond->if exp) 
   (expand-clauses (cond-clauses exp)))
 
-(define (cond-clauses exp) (cdr exp))
 
 (define (expand-clauses clauses)
   (if (null? clauses)
@@ -35,7 +49,6 @@
 
 (define (cond-actions clause) (cdr clause))
 
-(define (cond-predicate clause) (car clause))
 
 ))  ; include guard
 

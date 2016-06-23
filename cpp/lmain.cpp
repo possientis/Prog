@@ -1,1 +1,0 @@
-libbitcoin/examples/main.cpp
