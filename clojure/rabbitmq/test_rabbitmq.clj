@@ -42,8 +42,6 @@
     (let [consumer (consumer-for channel queue-name)]
       (delivery-from channel consumer))))
 
-(comment
 (defn -main []
   (println "test_rabbitmq is running ...")
-)
 )

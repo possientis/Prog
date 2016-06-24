@@ -4,4 +4,7 @@ for d in `dirname $0`/*.jar
 do
     RABBIT_JARS="$d:$RABBIT_JARS"
 done
-exec java -cp "$RABBIT_JARS" "$@" # is 'exec' needed?
+
+clojurec -cp "$RABBIT_JARS" "$@"
+java -cp "$RABBIT_JARS" "$@"
+rm *.class
