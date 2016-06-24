@@ -5,6 +5,6 @@ do
     RABBIT_JARS="$d:$RABBIT_JARS"
 done
 
-clojurec -cp "$RABBIT_JARS" "$@"
+clojurec -cp "$RABBIT_JARS" "$@" 1> /dev/null
 java -cp "$RABBIT_JARS" "$@"
 rm *.class

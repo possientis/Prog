@@ -39,6 +39,7 @@
   (:gen-class)
   (:require [clojure.java.jdbc :as j]))
 
+
 (def db { :subprotocol "postgresql"
           :subname "//127.0.0.1:5432/test"
           :user "john"
@@ -47,7 +48,6 @@
 
 (defn -main [& args]
   (println "test_java_jdbc is running ...")
-
     (j/with-db-connection [conn db]
       (let [rows (j/query conn ["SELECT * FROM FRUIT WHERE NAME=?" "Apple"])]
         (println (first rows))) ;{:cost 24, :appearance rosy, :name Apple, :id 1} 
@@ -59,7 +59,8 @@
       (j/update! conn :fruit {:appearance "green"} ["id=?" 2])
       ;(j/delete! conn :fruit ["id=?" 2])
       (j/execute! conn ["DELETE FROM FRUIT WHERE ID=?" 2])  ; generic sql
-      ))
+      )
+)
 
 
 
