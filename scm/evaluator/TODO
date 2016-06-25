@@ -1,10 +1,7 @@
-continue cond.scm
-continue rewriting code so as to keep parallel between 'eval' and 'analyze' (lambda !!!!)
-
 Understand the suble differences between:
-  - apply
   - apply-in-underlying-scheme
   - apply-primitive
+  - apply-primitive-procedure
 
 follow up on debug.scm
 

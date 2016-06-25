@@ -11,7 +11,17 @@
 ; testing
 (define (and? exp) (tagged-list? exp 'and))
 
+; destructuring
 (define (and-predicates exp) (cdr exp))
+
+; eval
+(define (eval-and exp env)
+  (eval (and->if exp) env))
+
+; analyze
+(define (analyze-and exp)
+  (analyze (and->if exp)))
+
 
 (define (and->if exp)
   (expand-and-predicates (and-predicates exp)))

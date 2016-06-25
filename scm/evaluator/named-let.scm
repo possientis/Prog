@@ -27,12 +27,20 @@
 (define (named-let-function-call exp)
   (cons (named-let-variable exp) (named-let-parameters exp)))
 
+; eval
+(define (eval-named-let exp env)
+  (eval (named-let->combination exp) env))
+
+; analyze
+(define (analyze-named-let exp)
+  (analyze (named-let->combination exp)))
+
+
 (define (named-let->combination exp)
   (cons (make-lambda (named-let-parameters exp) 
                      (list (named-let-definition exp) 
                            (named-let-function-call exp))) 
         (named-let-operands exp)))
-
 
 ))  ; include guard
 

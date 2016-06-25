@@ -17,7 +17,6 @@
 (load "application.scm")
 (load "begin.scm")
 (load "lambda.scm")
-
 (load "cond.scm")
 (load "or.scm")
 (load "and.scm")
@@ -43,14 +42,13 @@
         ((begin? exp)           (eval-begin exp env)) 
         ((lambda? exp)          (eval-lambda exp env))
         ((cond? exp)            (eval-cond exp env))             
-        ((or? exp) (eval (or->if exp) env))
-        ((and? exp) (eval (and->if exp) env))
-        ((let? exp) (eval (let->combination exp) env))
-        ((named-let? exp) (eval (named-let->combination exp) env))
-        ((let*? exp) (eval (let*->nested-lets exp) env))
-        ((letrec? exp) (eval (letrec->combination exp) env))
-        ((application? exp) (eval-application exp env))
+        ((or? exp)              (eval-or exp env))
+        ((and? exp)             (eval-and exp env))
+        ((let? exp)             (eval-let exp env))
+        ((named-let? exp)       (eval-named-let exp env))
+        ((let*? exp)            (eval-let* exp env))
+        ((letrec? exp)          (eval-letrec exp env))
+        ((application? exp)     (eval-application exp env))
         (else  (error "Unknown expression type -- EVAL" exp))))
-       
 
 ))  ; include guard.

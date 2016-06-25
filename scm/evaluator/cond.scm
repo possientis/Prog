@@ -11,11 +11,16 @@
 ; testing
 (define (cond? exp) (tagged-list? exp 'cond))
 
+(define (cond-else-clause? clause)
+  (eq? (cond-predicate clause) 'else))
 
 ; destructuring
+(define (cond-clauses exp) (cdr exp))
+
 (define (cond-predicate clause) (car clause))
 
-(define (cond-clauses exp) (cdr exp))
+(define (cond-actions clause) (cdr clause))
+
 
 ; eval
 (define (eval-cond exp env)
@@ -26,14 +31,13 @@
   (analyze (cond->if exp)))
 
 
-
 (define (cond->if exp) 
   (expand-clauses (cond-clauses exp)))
 
 
 (define (expand-clauses clauses)
   (if (null? clauses)
-    '#f ; returning symbol '#f (an expresssion) which is not #f (a value)
+    #f
     (let ((first (car clauses))
           (rest (cdr clauses)))
       (if (cond-else-clause? first)
@@ -43,12 +47,6 @@
         (make-if (cond-predicate first)
                  (make-begin (cond-actions first))
                  (expand-clauses rest))))))
-
-(define (cond-else-clause? clause)
-  (eq? (cond-predicate clause) 'else))
-
-(define (cond-actions clause) (cdr clause))
-
 
 ))  ; include guard
 

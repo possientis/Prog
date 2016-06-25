@@ -3,7 +3,7 @@
   (:require redis.core))
 
 (defn -main []
-;  (println "test_redis is running ...")
+  (println "test_redis is running ...")
 
 )
 

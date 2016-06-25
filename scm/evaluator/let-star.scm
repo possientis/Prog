@@ -11,11 +11,19 @@
 ; testing
 (define (let*? exp) (tagged-list? exp 'let*))
 
+(define (single-binding? binding) (null? (cdr binding)))
+
 ; destructuring
 (define (let*-bindings exp) (cadr exp))
 (define (let*-body exp) (cddr exp))
 
-(define (single-binding? binding) (null? (cdr binding)))
+; eval
+(define (eval-let* exp env)
+  (eval (let*->nested-lets exp) env))
+
+; analyze
+(define (analyze-let* exp)
+  (analyze (let*->nested-lets exp)))
 
 (define (let*->nested-lets exp)
   (let ((bindings (let*-bindings exp)))

@@ -17,7 +17,6 @@
 (load "application.scm")
 (load "begin.scm")
 (load "lambda.scm")
-
 (load "cond.scm")
 (load "or.scm")
 (load "and.scm")
@@ -39,14 +38,13 @@
         ((begin? exp)           (analyze-begin exp))
         ((lambda? exp)          (analyze-lambda exp))
         ((cond? exp)            (analyze-cond exp))        
-        ((or? exp) (analyze (or->if exp)))
-        ((and? exp) (analyze (and->if exp)))
-        ((let? exp) (analyze (let->combination exp)))
-        ((named-let? exp) (analyze (named-let->combination exp)))
-        ((let*? exp) (analyze (let*->nested-lets exp)))
-        ((letrec? exp) (analyze (letrec->combination exp)))
-        ((application? exp) (analyze-application exp))   
+        ((or? exp)              (analyze-or exp))
+        ((and? exp)             (analyze-and exp))
+        ((let? exp)             (analyze-let exp))
+        ((named-let? exp)       (analyze-named-let exp))
+        ((let*? exp)            (analyze-let* exp))
+        ((letrec? exp)          (analyze-letrec exp))
+        ((application? exp)     (analyze-application exp))   
         (else  (error "Unknown expression type -- ANALYSE" exp))))
-
 
 ))  ; include guard

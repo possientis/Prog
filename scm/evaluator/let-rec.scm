@@ -24,6 +24,16 @@
 (define (letrec-new-body exp)
   (append (letrec-define-list exp) (letrec-body exp)))
 
+
+; eval
+(define (eval-letrec exp env)
+  (eval (letrec->combination exp) env))
+
+; analyze
+(define (analyze-letrec exp)
+  (analyze (letrec->combination exp)))
+
+
 (define (letrec->combination exp)
   (list (make-lambda '() (letrec-new-body exp))))
 
