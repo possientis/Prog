@@ -1,3 +1,4 @@
+understand dependency DAG
 Understand the suble differences between:
   - apply-in-underlying-scheme
   - apply-primitive

@@ -81,7 +81,7 @@ rpnShow exp =
       join delim l = concat (intersperse delim l)
   in join " " (toList exp)
 
-simplify :: (Num a) => Exp a -> Exp a
+simplify :: (Eq a, Num a) => Exp a -> Exp a
 simplify (BinaryArith op ia ib) = 
   let sa = simplify ia
       sb = simplify ib
