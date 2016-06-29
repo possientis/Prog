@@ -1,5 +1,6 @@
 Require Import List.
 Require Import Relations.
+Require Import list_lib.
 
 (* inductive predicate expressing the fact that two lists are obtained from
 each other, by the permutation of two consecutive elements  *)
@@ -99,6 +100,13 @@ Proof.
   rewrite H1. reflexivity. exact H0.
 Qed.
 
+Lemma Transpose_l_nil: forall (A:Type)(l:list A),
+  Transpose l nil -> l = nil.
+Proof.
+  intros A l H. apply length_zero_iff_nil. 
+  apply Transpose_imp_eq_length with (m:=nil). exact H.
+Qed.
+
 Lemma Transpose_cons: forall (A:Type)(l m:list A)(a: A),
   Transpose l m -> Transpose (a::l) (a::m).
 Proof.
@@ -108,6 +116,54 @@ Proof.
  intros Hm Hl. rewrite Hm, Hl. apply transp_gen. exact H.
  rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
  rewrite <- app_comm_cons. rewrite app_nil_l. rewrite app_nil_r. reflexivity.
+Qed.
+
+Lemma Transpose_cons_reverse: forall (A:Type)(l m:list A)(a:A),
+  Transpose (a::l) (a::m) -> Transpose l m.
+Proof.
+  intros A l m a.
+  cut (forall (l' m':list A), 
+    l' = a::l -> m' = a::m -> Transpose l' m' -> Transpose l m). eauto.
+  intros l' m' Hl Hm H. generalize H Hl Hm. 
+  clear Hl Hm. generalize l m a. clear l m a. elim H. 
+    clear H l' m'. intros k l m a H0 H1 H2. clear H0. 
+      rewrite H1 in H2. clear H1. injection H2. intros H0.
+      rewrite H0. apply Transpose_refl.
+    clear H l' m'. intros x y l m a H0 H1 H2. clear H0.
+      injection H1. clear H1. injection H2. clear H2.
+      intros H0 H1 H2 H3. 
+      rewrite H3 in H0. clear H3. rewrite H1 in H2. clear H1.
+      rewrite H2 in H0. clear H2. rewrite H0. apply Transpose_refl.
+    clear H l' m'. intros l m l1 l2 H0 H1 l' m' a H2 H3 H4.
+      generalize (destruct_list l1). intro H5. elim H5.
+        clear H5. intro H5. elim H5. clear H5. intros x H5. elim H5.
+          clear H5. intros k1 H5. rewrite H5 in H3. rewrite H5 in H4.
+          rewrite <- app_comm_cons in H3. rewrite <- app_comm_cons in H4.
+          injection H3. injection H4. clear H3 H4 H5. intros H3 H4. clear H4.
+          intros H4 H5. clear H5. rewrite <- H3, <- H4. clear H3 H4.
+          apply transp_gen. exact H0.
+        clear H5. intro H5. rewrite H5 in H3. rewrite H5 in H4.
+          rewrite app_nil_l in H3. rewrite app_nil_l in H4. clear H2 H5.
+          generalize (destruct_list l). generalize (destruct_list m).
+          intros H5 H6. elim H5.
+            clear H5. intro H5. elim H5. clear H5. intros b H5. elim H5.
+              clear H5. clear l1. intros l1 H5. rewrite H5 in H4.
+              rewrite <- app_comm_cons in H4. injection H4. clear H4.
+              intro H4. intro H7. rewrite H7 in H5. clear H7 b. elim H6.
+                clear H6. intro H6. elim H6. clear H6. intros b H6. elim H6.
+                  clear H6. intros k1 H6. rewrite H6 in H3.
+                  rewrite <- app_comm_cons in H3. injection H3. clear H3.
+                  intro H3. intro H7. rewrite H7 in H6. clear H7 b. 
+                  rewrite <- app_nil_l with (l:=k1++l2) in H3. rewrite <- H3. 
+                  rewrite <- app_nil_l with (l:=l1++l2) in H4. rewrite <- H4.
+                  apply transp_gen. apply H1 with (a:=a). exact H0. 
+                  exact H6. exact H5.
+                clear H6. intro H6. rewrite H6 in H0. apply Transpose_sym in H0.
+                  apply Transpose_l_nil in H0. rewrite H0 in H5. discriminate H5.
+            clear H5. intro H5. rewrite H5 in H0. apply Transpose_l_nil in H0.
+              rewrite H0 in H3. rewrite app_nil_l in H3.
+              rewrite H5 in H4. rewrite app_nil_l in H4. rewrite H3 in H4. 
+              injection H4. clear H4. intro H4. rewrite H4. apply Transpose_refl.
 Qed.
 
 
@@ -256,21 +312,7 @@ Proof.
   apply Permute_imp_SubSet. apply Permute_sym. exact H.
 Qed.
 
-Lemma Transpose_cons_reverse: forall (A:Type)(l m:list A)(a:A),
-  Transpose (a::l) (a::m) -> Transpose l m.
-Proof.
-  intros A l m a.
-  cut (forall (l' m':list A), 
-    l' = a::l -> m' = a::m -> Transpose l' m' -> Transpose l m). eauto.
-  intros l' m' Hl Hm H. generalize H Hl Hm. 
-  clear Hl Hm. generalize l m a. clear l m a. elim H. 
-    clear H l' m'. intros k l m a H0 H1 H2. clear H0. 
-      rewrite H1 in H2. clear H1. injection H2. intros H0.
-      rewrite H0. apply Transpose_refl.
-    clear H l' m'. intros x y l m a H0 H1 H2. clear H0.
-      injection H1. clear H1. injection H2. clear H2.
-      intros H0 H1 H2 H3. 
-      rewrite H3 in H0. clear H3. rewrite H1 in H2. clear H1.
-      rewrite H2 in H0. clear H2. rewrite H0. apply Transpose_refl.
-    clear H l' m'.
 
+Lemma Permute_cons_reverse: forall (A:Type)(l m:list A)(a:A),
+  Permute (a::l) (a::m) -> Permute l m.
+Proof.
