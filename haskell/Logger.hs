@@ -7,13 +7,21 @@ module Logger
   ) where
 
 type Log = [String]
-data Logger a = Logger a
+newtype Logger a = Logger { execLogger :: (a, Log) }
 
 runLogger :: Logger a -> (a, Log)
-runLogger = undefined
+runLogger = execLogger
 
 
 record :: String -> Logger ()
-record = undefined
+record s = Logger ((), [s])
+
+instance Monad Logger where
+  return a = Logger (a, [])
+  m >>= k = let (a, w) = execLogger m 
+                n = k a
+                (b, x) = execLogger n
+            in Logger (b, w ++ x)
+
 
 

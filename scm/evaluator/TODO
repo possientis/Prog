@@ -1,3 +1,4 @@
+understand evaluation of (g 5) where g is (lambda (x) (+ x y))
 understand dependency DAG
 Understand the suble differences between:
   - apply-in-underlying-scheme
