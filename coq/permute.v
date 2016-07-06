@@ -316,3 +316,15 @@ Qed.
 Lemma Permute_cons_reverse: forall (A:Type)(l m:list A)(a:A),
   Permute (a::l) (a::m) -> Permute l m.
 Proof.
+  intros A l m a.
+  cut (forall (l' m':list A), 
+    l' = a::l -> m' = a::m -> Permute l' m' -> Permute l m). eauto.
+  intros l' m' Hl Hm H. generalize H Hl Hm.
+  clear Hl Hm. generalize l m a. clear l m a. elim H.
+    clear H l' m'. intros l m' m a H0 H1 H2. clear H0. 
+      rewrite H2 in H1. clear H2. injection H1. clear H1. 
+      intro H0. rewrite H0. apply perm_refl.
+    clear H l' m'. intros l' k' m' H0 H1 H3 l m a H4 H5 H6.
+
+
+

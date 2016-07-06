@@ -5,9 +5,6 @@
     (display "loading begin")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "unspecified.scm")
-
 ; The evaluation or analysis of a begin expression is all about the evaluation
 ; or analysis of a sequence of expressions. As far as the returned value is 
 ; concerned, only the last expression of the sequence matters. However, this

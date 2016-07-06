@@ -1,5 +1,7 @@
 (load "eval.scm")
 (load "analyze.scm")
+(load "eval-procedure.scm")
+(load "analyze-procedure.scm")
 
 (define (eval-test)
   ;

@@ -5,9 +5,6 @@
     (display "loading cond")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "begin.scm")
-
 ; testing
 (define (cond? exp) (tagged-list? exp 'cond))
 

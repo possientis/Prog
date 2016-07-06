@@ -5,9 +5,6 @@
     (display "loading and")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "if.scm")
-
 ; testing
 (define (and? exp) (tagged-list? exp 'and))
 

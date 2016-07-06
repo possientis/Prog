@@ -5,8 +5,6 @@
     (display "loading analyze-procedure")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load "tagged-list.scm")
-
 ; testing
 (define (analyze-procedure? procedure) (tagged-list? procedure 'analyze-procedure))
 

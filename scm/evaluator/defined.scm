@@ -5,9 +5,6 @@
     (display "loading defined")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "variable.scm")
-
 ; we are following what appears to be the scm semantics in the case when the
 ; expression does not refer to a variable. Instead of throwing an error, we
 ; simply return #f.

@@ -5,8 +5,6 @@
     (display "loading assignment")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-
 ; testing
 (define (assignment? exp) (tagged-list? exp 'set!))
 

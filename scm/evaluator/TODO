@@ -1,9 +1,10 @@
-understand evaluation of (g 5) where g is (lambda (x) (+ x y))
+continue with depend.sh
 understand dependency DAG
 Understand the suble differences between:
   - apply-in-underlying-scheme
   - apply-primitive
   - apply-primitive-procedure
+Understand why apply-primitive cannot simply be defined as 'apply'
 
 follow up on debug.scm
 
