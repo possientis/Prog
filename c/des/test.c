@@ -1,27 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <malloc.h>
+#include <assert.h>
+#include <openssl/des.h> // gcc -lcrypto
 
 int main(int argc, char* argv[]){
 
-  printf("argc = %d\n", argc);
-  int i;
-  for(i = 0; i < argc; ++i){
-    printf("argv[%d] = %s\n",i, argv[i]);
-  }
 
-  
+  /* does not seem to be needed ot useful
   time_t curtime = time(NULL);
-  printf("current time is: %ld\n", (long) curtime);
-
-
   unsigned int iseed = (unsigned int) curtime;
   srand(iseed);
+  */
 
 
-  printf("RAND_MAX = %d\n", (long) RAND_MAX);
-  printf("rand = %d\n", rand());
-  printf("rand = %d\n", rand());
-  printf("rand = %d\n", rand());
+  printf("size of random key is: %d\n", sizeof(DES_cblock));
+  printf("size of long is: %d\n", sizeof(long));
+
+  DES_cblock *key = (DES_cblock *) malloc(sizeof(DES_cblock));
+  assert(key != NULL);
+  printf("key memory location is %lx\n", key);
+
+  *((long*) key) = 0L;
+
+
+  long before = *((long *) key);
+  printf("key prior to initialization: %lx\n", before);
+
+
+  DES_random_key(key);  /* generating random key */
+
+  long after = *((long*) key);
+  printf("key after initialization: %lx\n", after);
+
+
+  free(key);
 
   return 0;
 

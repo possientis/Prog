@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-frame4)) 
+  (begin
+    (define included-frame4 #f)
+    (display "loading frame4")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (require 'hash-table)
 (require 'object->string)
 
@@ -113,5 +121,4 @@
 ;((x 'delete!) 'd)
 ;(display (x 'empty?))(newline)
 
-
-
+))  ; include guard

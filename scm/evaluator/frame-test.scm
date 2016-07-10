@@ -1,4 +1,4 @@
-(display "check1: frame-test running ...\n")
+;(display "check1: frame-test running ...\n")
 (load "dictionary-test.scm")
 (dictionary-test "frame1.scm" 'frame1)(newline)
 (dictionary-test "frame2.scm" 'frame2)(newline)

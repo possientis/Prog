@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-frame1)) 
+  (begin
+    (define included-frame1 #f)
+    (display "loading frame1")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 ; basic (linear) dictionary implementation.
 (require 'object->string)
 ;
@@ -92,5 +100,6 @@
      ; linear search complexity. Obviously inefficient.
      (lambda () (this (cons 'frame (cons '() '()))))))
 
+))  ; include guard
 
 

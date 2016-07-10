@@ -5,8 +5,6 @@
     (display "loading eval-procedure")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load "tagged-list.scm")
-
 ; testing
 (define (eval-procedure? procedure) (tagged-list? procedure 'eval-procedure))
 

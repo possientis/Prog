@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-frame2)) 
+  (begin
+    (define included-frame2 #f)
+    (display "loading frame2")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 ; basic (linear) dictionary implementation.
 (require 'object->string)
 ;
@@ -83,4 +91,5 @@
      (lambda () (this (cons 'frame '())))))
 
 
+))  ; include guard
 

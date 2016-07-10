@@ -1,4 +1,4 @@
-continue with depend.sh
+continue with depend.sh (remove dependencies from eval.scm)
 understand dependency DAG
 Understand the suble differences between:
   - apply-in-underlying-scheme
@@ -23,4 +23,7 @@ understand the following:
 exp = '(define f (lambda () 12))
 ((analyze exp) global-env) ; creating binding through analyze
 (eval (f) global-env) ; this will fail
+
+
+incorporate frame4 with hash-table library
 

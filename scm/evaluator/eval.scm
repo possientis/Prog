@@ -5,28 +5,6 @@
     (display "loading eval")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "global-env.scm")
-(load "self-evaluating.scm")
-(load "variable.scm")
-(load "quote.scm")
-(load "assignment.scm")
-(load "definition.scm")
-(load "defined.scm")
-(load "if.scm")
-(load "not.scm")
-(load "application.scm")
-(load "begin.scm")
-(load "lambda.scm")
-(load "cond.scm")
-(load "or.scm")
-(load "and.scm")
-(load "let.scm")
-(load "named-let.scm")
-(load "let-star.scm")
-(load "let-rec.scm")
-(load "apply.scm")
-
-
 (define (eval exp env)
 ;  (newline)(display "eval:\texp = ")(display exp)(newline)(newline)
 ;  (display "env = ")(display (env 'to-string))(newline)
