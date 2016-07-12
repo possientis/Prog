@@ -20,6 +20,11 @@
 (load "let-star.scm")
 (load "let-rec.scm")
 (load "apply.scm")
+(load "begin.scm")
+(load "let.scm")
+(load "lambda.scm")
+(load "true-false.scm")
+(load "if.scm")
 
 (define filename (caddr (program-arguments)))
 (load-file filename)

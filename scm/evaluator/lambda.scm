@@ -5,9 +5,6 @@
     (display "loading lambda")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "begin.scm")
-
 ; Note: a lambda expression is valid scheme code. 
 
 ; When evaluating a lambda expression, we return some object 

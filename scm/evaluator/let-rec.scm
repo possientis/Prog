@@ -5,9 +5,6 @@
     (display "loading let-rec")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "lambda.scm")
-
 ; testing
 (define (letrec? exp) (tagged-list? exp 'letrec))
 

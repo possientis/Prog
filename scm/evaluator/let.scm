@@ -5,9 +5,6 @@
     (display "loading let")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "lambda.scm")
-
 ; testing
 (define (let? exp) (and (tagged-list? exp 'let) (not (symbol? (cadr exp))))) 
 

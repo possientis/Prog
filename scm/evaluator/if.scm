@@ -5,9 +5,6 @@
     (display "loading if")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "true-false.scm")
-
 ; testing
 (define (if? exp) (tagged-list? exp 'if))
 

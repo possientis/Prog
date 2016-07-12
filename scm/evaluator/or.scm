@@ -5,9 +5,6 @@
     (display "loading or")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "if.scm")
-
 ; testing
 (define (or? exp) (tagged-list? exp 'or))
 

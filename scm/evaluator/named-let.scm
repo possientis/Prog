@@ -5,9 +5,6 @@
     (display "loading named-let")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-(load "lambda.scm")
-
 ; testing
 (define (named-let? exp) (and (tagged-list? exp 'let) (symbol? (cadr exp)))) 
 

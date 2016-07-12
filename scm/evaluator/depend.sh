@@ -105,18 +105,18 @@ scm -b -f eval.scm                        > /dev/null
 
 
 echo frame1
-scm -b -f frame1.scm                       > /dev/null               
-./run.scm frame1.scm                       > /dev/null
+scm -b -f frame1.scm                      > /dev/null               
+./run.scm frame1.scm                      > /dev/null
 
 
 echo frame2
-scm -b -f frame2.scm                       > /dev/null               
-./run.scm frame2.scm                       > /dev/null
+scm -b -f frame2.scm                      > /dev/null               
+./run.scm frame2.scm                      > /dev/null
 
 
 echo frame3
-scm -b -f frame3.scm                       > /dev/null               
-./run.scm frame3.scm                       > /dev/null
+scm -b -f frame3.scm                      > /dev/null               
+./run.scm frame3.scm                      > /dev/null
 
 
 # echo frame4
@@ -124,5 +124,72 @@ scm -b -f frame3.scm                       > /dev/null
 # ./run.scm frame4.scm                       > /dev/null
 
 
+echo frame
+scm -b -f frame.scm                       > /dev/null               
+./run.scm frame.scm                       > /dev/null
 
+
+echo frame-test
+scm -b -f frame-test.scm                  > /dev/null               
+./run.scm frame-test.scm                  > /dev/null
+
+
+echo global-env
+scm -b -f global-env.scm                  > /dev/null               
+./run.scm global-env.scm                  > /dev/null
+
+
+echo if
+scm -b -f if.scm                          > /dev/null               
+./run.scm if.scm                          > /dev/null
+
+
+echo lambda
+scm -b -f lambda.scm                      > /dev/null               
+./run.scm lambda.scm                      > /dev/null
+
+
+echo let-rec
+scm -b -f let-rec.scm                     > /dev/null               
+./run.scm let-rec.scm                     > /dev/null
+
+
+echo let
+scm -b -f let.scm                         > /dev/null               
+./run.scm let.scm                         > /dev/null
+
+
+echo let-star
+scm -b -f let-star.scm                    > /dev/null               
+./run.scm let-star.scm                    > /dev/null
+
+
+echo load-file
+scm -b -f load-file.scm                   > /dev/null               
+./run.scm load-file.scm                   > /dev/null
+
+
+echo map-primitive
+scm -b -f map-primitive.scm               > /dev/null               
+./run.scm map-primitive.scm               > /dev/null
+
+
+echo named-let
+scm -b -f named-let.scm                   > /dev/null               
+./run.scm named-let.scm                   > /dev/null
+
+
+echo not
+scm -b -f not.scm                         > /dev/null               
+./run.scm not.scm                         > /dev/null
+
+
+echo object-string
+scm -b -f object-string.scm               > /dev/null               
+./run.scm object-string.scm               > /dev/null
+
+
+echo or
+scm -b -f or.scm                          > /dev/null               
+./run.scm or.scm                          > /dev/null
 

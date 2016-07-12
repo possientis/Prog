@@ -38,6 +38,7 @@ rm -f asm/test.dat
 rm -f scala/*.class
 rm -f coq/*.glob
 rm -f coq/*.vo
+rm -fr python/__pycache__
 git status
 
 

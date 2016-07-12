@@ -1,4 +1,4 @@
-continue with depend.sh (remove dependencies from eval.scm)
+continue with depend.sh
 understand dependency DAG
 Understand the suble differences between:
   - apply-in-underlying-scheme

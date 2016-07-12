@@ -5,10 +5,8 @@
     (display "loading object-string")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
 (require 'object->string)
 (define (object->string-primitive object)
   (object->string object))
-
 
 ))  ; include guard
