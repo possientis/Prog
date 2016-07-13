@@ -40,6 +40,7 @@ typedef struct Many_ Many;      // zero or more
 typedef enum { LIT=0, AND=1, OR=2, MANY=3 } ExpType;
 #define EXP_NUM_TYPES 4
 
+
 /******************************************************************************/
 /*                              Memory log                                    */
 /******************************************************************************/
@@ -52,7 +53,7 @@ long Exp_log(const char* message, const void* address){
   assert(message != NULL);
   assert(address != NULL);
   // message should contain %lx so fprintf expects third 'address' argument
-  fprintf(stderr, message, address);  // uncomment this line when needed
+//  fprintf(stderr, message, address);  // uncomment this line when needed
   memory_check ^= (long) address;     // xor-ing address as sanity check
 //  fprintf(stderr, "checksum = %ld\n", memory_check);
   return 0L;
@@ -63,6 +64,34 @@ int Exp_hasMemoryLeak(){
 }
 
 
+/******************************************************************************/
+/*                             Utilities                                      */
+/******************************************************************************/
+
+int startsWith(const char *self, const char *prefix)
+{
+      int len_self = strlen(self);
+      int len_prefix = strlen(prefix);
+      if(len_self < len_prefix){
+        return 0;
+      } else {
+        return strncmp(self, prefix, len_prefix) == 0;
+      }
+}
+
+int utils_test(){
+  assert(startsWith("abcdef",""));
+  assert(startsWith("abcdef","a"));
+  assert(startsWith("abcdef","ab"));
+  assert(startsWith("abcdef","abc"));
+  assert(startsWith("abcdef","abcd"));
+  assert(startsWith("abcdef","abcde"));
+  assert(startsWith("abcdef","abcdef"));
+  assert(!startsWith("abcdef","abcdefx"));
+  assert(!startsWith("abcdef","ax"));
+
+  return 0;
+}
 
 /******************************************************************************/
 /*                               Exp_VT                                       */
@@ -71,7 +100,7 @@ int Exp_hasMemoryLeak(){
 struct Exp_VT_ {
   int refcount;
   int (*to_string)(Exp *self, char* buffer, int size);
-  int (*interpret)(Exp *self, const char* input, char* buffer[], int size);
+  int (*interpret)(Exp *self, const char* input, const char* buffer[], int size);
   void (*delete)(Exp *self);  // virtual destructor
 };
 
@@ -84,10 +113,10 @@ Exp_VT* Exp_VT_copy(Exp_VT* self){
 }
 
 Exp_VT* Exp_VT_new(
-    int (*to_string)(Exp* self, char* buffer, int size),
-    int (*interpret)(Exp* self, const char* input, char* buffer[], int size),
-    void (*delete)(Exp *self)
-    ){
+  int (*to_string)(Exp* self, char* buffer, int size),
+  int (*interpret)(Exp* self, const char* input, const char* buffer[], int size),
+  void (*delete)(Exp *self)
+  ){
   assert(to_string != NULL);
   assert(interpret != NULL);
   assert(delete != NULL);
@@ -117,7 +146,7 @@ void Exp_VT_delete(Exp_VT* self){
 }
 
 int stub_to_string(Exp* self, char* buffer, int size){}
-int stub_interpret(Exp* self, const char* input, char* buffer[], int size){}
+int stub_interpret(Exp* self, const char* input, const char* buffer[], int size){}
 void stub_delete(Exp* self){
   assert(self != NULL);
   Exp_log("Deallocating regular expression %lx\n", self);
@@ -291,6 +320,52 @@ int Exp_to_string(Exp* self, char* buffer, int size){
   return to_string(self, buffer, size);
 }
 
+// Given an 'input' string, this method returns 'the' list of all prefixes 
+// of the string which belong to the language of the regular expression 
+// object. Of course, such a list in only unique up to the order of its elements
+//
+// Because all the strings returned by the method are prefixes of 'input', 
+// each string is characterized by its 'end pointer' in the input string, 
+// which is what the function returns via 'buffer'.
+//
+// Example:
+//
+// suppose input = "abcdef" and the returned list should be ["a", "abc", ""]
+// which is a list of prefixes of "abcdef". Then the function will set:
+//
+// buffer[0] = p0 (pointer pointing to the 'b' of "abcdef")
+// buffer[1] = p1 (pointer pointing to the 'd' of "abcdef")
+// buffer[2] = p2 (p2 = input)
+// buffer[3] = 0  (indicates termination of the list)
+//
+// The caller must make sure that 'buffer' is of large enough size
+// The 'size' argument is the size of the allocated buffer
+//
+// This implementation simply manages the indirection of virtual table
+//
+int Exp_interpret(Exp* self, const char* input, const char* buffer[], int size){
+  int (*interpret)(Exp*, const char*, const char* [], int);
+
+  if(self == NULL){
+    fprintf(stderr, "Exp::interpret: NULL object error\n");
+    return -1;
+  }
+
+  if(self->vtable == NULL){
+    fprintf(stderr, "Exp::interpret: object has no virtual table\n");
+    return -1;
+  }
+
+  interpret = self->vtable->interpret;
+  if(interpret == NULL){
+    fprintf(stderr, "Exp::interpret: method not found in virtual table\n");
+    return -1;
+  }
+
+  return interpret(self, input, buffer, size);
+}
+
+
 int Exp_test(){
   /* basic new/copy/delete */
   Exp_VT* vt = Exp_VT_default();
@@ -366,8 +441,46 @@ int _Lit_to_string(Exp* self, char* buffer, int size){
 }
 
 // used to initialize virtual table
-int _Lit_interpret(Exp* self, const char* input, char* buffer[], int size){
-  // TODO
+
+int _Lit_interpret(Exp* self, const char* input, const char* buffer[], int size){
+
+  if(self == NULL){
+    fprintf(stderr, "Lit::interpret: NULL object error\n");
+    return -1;
+  }
+
+  if(input == NULL){
+    fprintf(stderr, "Lit::interpret: NULL input error\n");
+    return -1;
+  }
+
+  if(buffer == NULL){
+    fprintf(stderr, "Lit::interpret: NULL buffer error\n");
+    return -1;
+  }
+  
+  Lit* derived = (Lit*) self; /* downcast */
+
+  if(derived->literal == NULL){
+    fprintf(stderr, "Lit::interpret: object has no literal\n");
+    return -1;
+  }
+
+  if(startsWith(input, derived->literal)){ /* literal is a prefix of input */
+    if(size <= 1){
+      fprintf(stderr, "Lit::interpret: buffer overflow error\n");
+      return -1;
+    }
+    buffer[0] = input + strlen(derived->literal);
+    buffer[1] = NULL;
+  } else {
+    if(size <= 0){
+      fprintf(stderr, "Lit::interpret: buffer overflow error\n");
+      return -1;
+    }
+    buffer[0] = NULL; /* empty list */
+  }
+    
   return 0;
 }
 
@@ -417,6 +530,9 @@ int Lit_to_string(Lit* self, char* buffer, int size){
   return Exp_to_string((Exp*) self, buffer, size); /* virtual call */
 }
 
+int Lit_interpret(Lit* self, const char* input, const char* buffer[], int size){
+  return Exp_interpret((Exp*) self, input, buffer, size); /* virtual call */
+}
 
 int Lit_test(){
   /* testing virtual table */
@@ -432,9 +548,7 @@ int Lit_test(){
   _Lit_VT_instance(1);      // deletion
   assert(!Exp_hasMemoryLeak());
 
-  /* basic new/copy/delete */
-  char buffer[4];           /* minimal buffer on purpose */
-  const char *lit = "abc";  /* enough room in buffer */
+  const char *lit = "abc";
   Lit* l1 = Lit_new(lit);
   Lit* l2 = Lit_copy(l1);
   assert(l1 == l2);
@@ -443,11 +557,30 @@ int Lit_test(){
   assert(base->refcount == 2);
   assert(base->vtable == _Lit_VT_instance(0));
 
+  // to_string
+  char buffer[4];           /* minimal buffer on purpose */
   assert(Lit_to_string(l1, buffer, 4) == 0);
   assert(strcmp(buffer,lit) == 0);
-
   assert(Exp_to_string(base, buffer, 4) == 0);
   assert(strcmp(buffer,lit) == 0);
+
+  // interpret
+  const char* buf[2];
+  const char* s = "abcdef";
+  const char* t = "not_started_by_abc";
+  assert(Lit_interpret(l1, s, buf, 2) == 0);
+  assert(buf[0] == s + 3);  /* prefix is "abc" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  assert(Exp_interpret(base, s, buf, 2) == 0);
+  assert(buf[0] == s + 3);  /* prefix is "abc" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  assert(Exp_interpret(base, s, buf, 2) == 0);
+  assert(buf[0] == s + 3);  /* prefix is "abc" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  assert(Lit_interpret(l1, t, buf, 2) == 0);
+  assert(buf[0] == NULL);  /* empty list */
+  assert(Exp_interpret(base, t, buf, 2) == 0);
+  assert(buf[0] == NULL);  /* empty list */
 
   Lit_delete(l2);
   Lit_delete(l1);
@@ -501,25 +634,75 @@ int _And_to_string(Exp* self, char* buffer, int size){
     return -1;
   }
 
-
-
-
-  /*
-  if(strlen(derived->literal) >= size){ 
-    fprintf(stderr,"Lit::to_string: buffer overflow error\n");
+  /* writing string representation of left operand onto buffer */
+  if(Exp_to_string(derived->left, buffer, size) != 0){
+    fprintf(stderr, "And::to_string: to_string failure on left operand\n");
     return -1;
   }
 
-  strcpy(buffer, derived->literal);
-  */
+  int len_left = strlen(buffer);
 
+  assert(len_left < size);
+
+  /* writing string representation of right operand onto buffer */
+  /* following that of the left operand */
+  if(Exp_to_string(derived->right, buffer + len_left, size - len_left) != 0){
+    fprintf(stderr, "And::to_string: to_string failure on right operand\n");
+    return -1;
+  }
 
   return 0;
 }
 
 // used to initialize virtual table
-int _And_interpret(Exp* self, const char* input, char* buffer[], int size){
-  // TODO
+int _And_interpret(Exp* self, const char* input, const char* buffer[], int size){
+
+  if(self == NULL){
+    fprintf(stderr, "And::interpret: NULL object error\n");
+    return -1;
+  }
+
+  if(input == NULL){
+    fprintf(stderr, "And::interpret: NULL input error\n");
+    return -1;
+  }
+
+  if(buffer == NULL){
+    fprintf(stderr, "And::interpret: NULL buffer error\n");
+    return -1;
+  }
+  
+  And* derived = (And*) self; /* downcast */
+
+  if(derived->left == NULL){
+    fprintf(stderr, "And::interpret: object has no left operand\n");
+    return -1;
+  }
+
+  if(derived->right == NULL){
+    fprintf(stderr, "And::interpret: object has no right operand\n");
+    return -1;
+  }
+
+
+
+  /*
+  if(startsWith(input, derived->literal)){
+    if(size <= 1){
+      fprintf(stderr, "Lit::interpret: buffer overflow error\n");
+      return -1;
+    }
+    buffer[0] = input + strlen(derived->literal);
+    buffer[1] = NULL;
+  } else {
+    if(size <= 0){
+      fprintf(stderr, "Lit::interpret: buffer overflow error\n");
+      return -1;
+    }
+    buffer[0] = NULL;
+  }
+  */
+ 
   return 0;
 }
 
@@ -570,6 +753,15 @@ void And_delete(And* self){
   Exp_delete(base);         // virtual call
 }
 
+
+int And_to_string(And* self, char* buffer, int size){
+  return Exp_to_string((Exp*) self, buffer, size); /* virtual call */
+}
+
+int And_interpret(And* self, const char* input, const char* buffer[], int size){
+  return Exp_interpret((Exp*) self, input, buffer, size); /* virtual call */
+}
+
 int And_test(){
   /* testing virtual table */
   Exp_VT* vt = _And_VT_instance(0); // creation
@@ -585,6 +777,7 @@ int And_test(){
   assert(!Exp_hasMemoryLeak());
  
   /* basic new/copy/delete */
+  char buffer[7];
   Exp *l1 = Exp_Lit("abc");
   Exp *l2 = Exp_Lit("def");
 
@@ -596,6 +789,13 @@ int And_test(){
   Exp* base = (Exp*) a1;
   assert(base->refcount == 2);
   assert(base->vtable == _And_VT_instance(0));
+
+  assert(And_to_string(a1,buffer,7) == 0);
+  assert(strcmp(buffer, "abcdef") == 0);
+
+  assert(Exp_to_string(base,buffer,7) == 0);
+  assert(strcmp(buffer, "abcdef") == 0);
+
   And_delete(a2);
   And_delete(a1);
   _And_VT_instance(1);  // cleanup virtual table
@@ -627,12 +827,83 @@ Or* Or_copy(Or* self){
 
 // used to initialize virtual table
 int _Or_to_string(Exp* self, char* buffer, int size){
-  // TODO
+
+  if(self == NULL){
+    fprintf(stderr, "Or::to_string: NULL object error\n");
+    return -1;
+  }
+
+  if(buffer == NULL){
+    fprintf(stderr, "Or::to_string: NULL buffer error\n");
+    return -1;
+  }
+
+  Or* derived = (Or*) self;             /* downcast */
+
+  if(derived->left == NULL){
+    fprintf(stderr, "Or::to_string: object has no left operand\n");
+    return -1;
+  }
+
+  if(derived->right == NULL){
+    fprintf(stderr, "Or::to_string: object has no right operand\n");
+    return -1;
+  }
+
+  if(size < 2){
+    fprintf(stderr, "Or::to_string: buffer overflow error\n");
+    return -1;
+  }
+
+  /* writing '(' onto buffer */
+  buffer[0] = '('; buffer++; size--;
+
+  /* writing string representation of left operand onto buffer */
+  if(Exp_to_string(derived->left, buffer, size) != 0){
+    fprintf(stderr, "Or::to_string: to_string failure on left operand\n");
+    return -1;
+  }
+
+  int len_left = strlen(buffer);
+  assert(len_left < size);
+
+  buffer += len_left; size -= len_left;
+
+  if(size < 2){
+    fprintf(stderr, "Or::to_string: buffer overflow error\n");
+    return -1;
+  }
+
+  /* writing '|' onto buffer */
+  buffer[0] = '|'; buffer++; size --;
+
+  /* writing string representation of right operand onto buffer */
+  if(Exp_to_string(derived->right, buffer , size) != 0){
+    fprintf(stderr, "Or::to_string: to_string failure on right operand\n");
+    return -1;
+  }
+
+  int len_right = strlen(buffer);
+  assert(len_right < size);
+
+  buffer += len_right; size -= len_right;
+
+  if(size < 2){
+    fprintf(stderr, "Or::to_string: buffer overflow error\n");
+    return -1;
+  }
+   
+  /* writing ')' onto buffer */
+  buffer[0] = ')'; buffer++; size --;
+
+  /* final \0 */
+  buffer[0] = 0;
+
   return 0;
 }
 
 // used to initialize virtual table
-int _Or_interpret(Exp* self, const char* input, char* buffer[], int size){
+int _Or_interpret(Exp* self, const char* input, const char* buffer[], int size){
   // TODO
   return 0;
 }
@@ -683,6 +954,13 @@ void Or_delete(Or* self){
   Exp_delete(base);         // virtual call
 }
 
+int Or_to_string(Or* self, char* buffer, int size){
+  return Exp_to_string((Exp*) self, buffer, size); /* virtual call */
+}
+
+int Or_interpret(Or* self, const char* input, const char* buffer[], int size){
+  return Exp_interpret((Exp*) self, input, buffer, size); /* virtual call */
+}
 
 int Or_test(){
   /* testing virtual table */
@@ -699,6 +977,7 @@ int Or_test(){
   assert(!Exp_hasMemoryLeak());
 
   /* basic new/copy/delete */
+  char buffer[10];
   Exp *l1 = Exp_Lit("abc");
   Exp *l2 = Exp_Lit("def");
 
@@ -710,6 +989,14 @@ int Or_test(){
   Exp* base = (Exp*) o1;
   assert(base->refcount == 2);
   assert(base->vtable == _Or_VT_instance(0));
+
+
+  assert(Or_to_string(o1, buffer, 10) == 0);
+  assert(strcmp(buffer, "(abc|def)") == 0);
+
+  assert(Exp_to_string(base, buffer, 10) == 0);
+  assert(strcmp(buffer, "(abc|def)") == 0);
+
   Or_delete(o2);
   Or_delete(o1);
   _Or_VT_instance(1);  // cleanup virtual table
@@ -737,12 +1024,58 @@ Many* Many_copy(Many* self){
 
 // used to initialize virtual table
 int _Many_to_string(Exp* self, char* buffer, int size){
-  // TODO
+
+  if(self == NULL){
+    fprintf(stderr, "Many::to_string: NULL object error\n");
+    return -1;
+  }
+
+  if(buffer == NULL){
+    fprintf(stderr, "Many::to_string: NULL buffer error\n");
+    return -1;
+  }
+
+  Many* derived = (Many*) self;             /* downcast */
+
+  if(derived->regex == NULL){
+    fprintf(stderr, "Many::to_string: object has no regex operand\n");
+    return -1;
+  }
+
+  if(size < 2){
+    fprintf(stderr, "Many::to_string: buffer overflow error\n");
+    return -1;
+  }
+
+  /* writing '(' onto buffer */
+  buffer[0] = '('; buffer++; size--;
+
+  /* writing string representation of regex operand onto buffer */
+  if(Exp_to_string(derived->regex, buffer, size) != 0){
+    fprintf(stderr, "Many::to_string: to_string failure on regex operand\n");
+    return -1;
+  }
+
+  int len_regex = strlen(buffer);
+  assert(len_regex < size);
+
+  buffer += len_regex; size -= len_regex;
+
+  if(size < 3){
+    fprintf(stderr, "Many::to_string: buffer overflow error\n");
+    return -1;
+  }
+
+  /* writing ")*" onto buffer */
+  buffer[0] = ')';
+  buffer[1] = '*';
+  buffer[2] = 0;
+
   return 0;
 }
 
 // used to initialize virtual table
-int _Many_interpret(Exp* self, const char* input, char* buffer[], int size){
+int _Many_interpret(Exp* self, const char* input, const char* buffer[], int size){
   // TODO
   return 0;
 }
@@ -789,6 +1122,14 @@ void Many_delete(Many* self){
   Exp_delete(base);         // virtual call
 }
 
+int Many_to_string(Many* self, char* buffer, int size){
+  return Exp_to_string((Exp*) self, buffer, size); /* virtual call */
+}
+
+int Many_interpret(Many* self, const char* input, const char* buffer[], int size){
+  return Exp_interpret((Exp*) self, input, buffer, size); /* virtual call */
+}
+
 int Many_test(){
   /* testing virtual table */
   Exp_VT* vt = _Many_VT_instance(0); // creation
@@ -804,6 +1145,7 @@ int Many_test(){
   assert(!Exp_hasMemoryLeak());
 
   /* basic new/copy/delete */
+  char buffer[7];
   Exp *l = Exp_Lit("abc");
 
   Many *m1 = Many_new(l);
@@ -813,6 +1155,13 @@ int Many_test(){
   Exp* base = (Exp*) m1;
   assert(base->refcount == 2);
   assert(base->vtable == _Many_VT_instance(0));
+
+  assert(Many_to_string(m1, buffer, 7) == 0);
+  assert(strcmp(buffer,"(abc)*") == 0);
+
+  assert(Exp_to_string(base, buffer, 7) == 0);
+  assert(strcmp(buffer,"(abc)*") == 0);
+
   Many_delete(m2);
   Many_delete(m1);
   _Many_VT_instance(1);  // cleanup virtual table
@@ -828,12 +1177,14 @@ int Many_test(){
 /******************************************************************************/
 int test(){
 
-  //assert(Exp_VT_test() == 0);
-  //assert(Exp_test() == 0);
+
+  assert(utils_test() == 0);
+  assert(Exp_VT_test() == 0);
+  assert(Exp_test() == 0);
   assert(Lit_test() == 0);
-  //assert(And_test() == 0);
-  //assert(Or_test() == 0);
-  //assert(Many_test() == 0);
+  assert(And_test() == 0);
+  assert(Or_test() == 0);
+  assert(Many_test() == 0);
   assert(!Exp_hasMemoryLeak());
 
   return 0;
@@ -848,9 +1199,28 @@ void virtual_tables_cleanup(){
 
 int main(){
 
+  char buffer[22];
+
   test();
 
-  //virtual_tables_cleanup(); // cleaning up virtual table
+  Exp* a = Exp_Lit("a");
+  Exp* b = Exp_Lit("b");
+  Exp* c = Exp_Lit("c");
+
+  Exp* aa = Exp_And(Exp_copy(a), Exp_Many(a));
+  Exp* bb = Exp_And(Exp_copy(b), Exp_Many(b));
+  Exp* cc = Exp_And(Exp_copy(c), Exp_Many(c));
+
+  Exp* regex = Exp_Many(Exp_And(Exp_Or(aa,bb),cc));
+  const char* str = "acbbccaaacccbbbbaaaaaccccc";
+  assert(Exp_to_string(regex, buffer, 22) == 0);
+  printf("regex = %s\n", buffer);
+  printf("string = \"%s\"\n", str);
+  printf("The recognized prefixes are:\n");
+
+
+  Exp_delete(regex);
+  virtual_tables_cleanup(); // cleaning up virtual tables
   assert(!Exp_hasMemoryLeak());
   return 0;
 }
