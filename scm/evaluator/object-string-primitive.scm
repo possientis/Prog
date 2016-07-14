@@ -1,8 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (not (defined? included-object-string)) 
+(if (not (defined? included-object-string-primitive)) 
   (begin
-    (define included-object-string #f)
-    (display "loading object-string")(newline)
+    (define included-object-string-primitive #f)
+    (display "loading object-string-primitive")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (require 'object->string)

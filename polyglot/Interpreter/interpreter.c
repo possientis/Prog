@@ -46,20 +46,20 @@ typedef enum { LIT=0, AND=1, OR=2, MANY=3 } ExpType;
 /******************************************************************************/
 
 // basic safety scheme against memory leaks
-long Exp_log(const char* message, const void* address){
+static long Exp_log(const char* message, const void* address){
   static long memory_check = 0L;
   // Exp_log(NULL,NULL) returns current memory_check
   if((message == NULL) && (address == NULL)) return memory_check;
   assert(message != NULL);
   assert(address != NULL);
   // message should contain %lx so fprintf expects third 'address' argument
-//  fprintf(stderr, message, address);  // uncomment this line when needed
+  // fprintf(stderr, message, address);  // uncomment this line when needed
   memory_check ^= (long) address;     // xor-ing address as sanity check
 //  fprintf(stderr, "checksum = %ld\n", memory_check);
   return 0L;
 }
 
-int Exp_hasMemoryLeak(){
+static int Exp_hasMemoryLeak(){
   return Exp_log(NULL, NULL) != 0L;
 }
 
@@ -68,7 +68,7 @@ int Exp_hasMemoryLeak(){
 /*                             Utilities                                      */
 /******************************************************************************/
 
-int startsWith(const char *self, const char *prefix)
+static int startsWith(const char *self, const char *prefix)
 {
       int len_self = strlen(self);
       int len_prefix = strlen(prefix);
@@ -79,7 +79,7 @@ int startsWith(const char *self, const char *prefix)
       }
 }
 
-int utils_test(){
+static int utils_test(){
   assert(startsWith("abcdef",""));
   assert(startsWith("abcdef","a"));
   assert(startsWith("abcdef","ab"));
@@ -298,6 +298,7 @@ void Exp_destroy(Exp* self){
 }
 
 
+// This implementation simply manages the indirection of virtual table
 int Exp_to_string(Exp* self, char* buffer, int size){
 
   int (*to_string)(Exp*, char*, int);
@@ -363,6 +364,29 @@ int Exp_interpret(Exp* self, const char* input, const char* buffer[], int size){
   }
 
   return interpret(self, input, buffer, size);
+}
+
+/* return 1 if 'input' belongs to language of regular expression 'self'
+ * otherwise returns 0. */
+int Exp_recognize(Exp* self, const char* input){
+  const char* buffer[256];
+  assert(self != NULL);
+  assert(input != NULL);
+  assert(Exp_interpret(self, input, buffer, 256) == 0);
+
+  const char* end = input + strlen(input);
+
+  const char* *ptr = buffer;
+
+  while(*ptr != NULL){ /* looping through list */
+
+    if (*ptr == end){ /* 'input' is part of the list */
+      return 1;
+    }
+    ptr++;
+  }
+
+  return 0; /* failed to find 'input' in the list */
 }
 
 
@@ -582,6 +606,13 @@ int Lit_test(){
   assert(Exp_interpret(base, t, buf, 2) == 0);
   assert(buf[0] == NULL);  /* empty list */
 
+  // recognize
+  assert(Exp_recognize(base, "") == 0);
+  assert(Exp_recognize(base, "a") == 0);
+  assert(Exp_recognize(base, "ab") == 0);
+  assert(Exp_recognize(base, "abc") == 1);
+  assert(Exp_recognize(base, "abcd") == 0);
+
   Lit_delete(l2);
   Lit_delete(l1);
   _Lit_VT_instance(1);  // cleanup virtual table
@@ -684,26 +715,43 @@ int _And_interpret(Exp* self, const char* input, const char* buffer[], int size)
     return -1;
   }
 
-
-
-  /*
-  if(startsWith(input, derived->literal)){
-    if(size <= 1){
-      fprintf(stderr, "Lit::interpret: buffer overflow error\n");
-      return -1;
-    }
-    buffer[0] = input + strlen(derived->literal);
-    buffer[1] = NULL;
-  } else {
-    if(size <= 0){
-      fprintf(stderr, "Lit::interpret: buffer overflow error\n");
-      return -1;
-    }
-    buffer[0] = NULL;
+  /* creating temporary buffer to hold results relating to left */
+  const char* *temp_buffer = (const char* *) malloc(size * sizeof(const char*));
+  if(temp_buffer == NULL){
+    fprintf(stderr, "And::interpret: unable to allocate heap buffer\n");
+    return -1;
   }
-  */
- 
+
+  Exp_log("And::interpret: allocating temporary buffer %lx\n", temp_buffer);
+
+  if(Exp_interpret(derived->left, input, temp_buffer, size) != 0){
+    fprintf(stderr, "And::interpret: failure to interpret left operand\n");
+    goto ErrorHandler;  // need to de-allocate temporary buffer
+  }
+
+  const char* *ptr = temp_buffer;
+  while(*ptr != NULL){ // looping through results
+    if(Exp_interpret(derived->right, *ptr, buffer, size) != 0){
+      fprintf(stderr, "And::interpret: failure to interpret right operand\n");
+      goto ErrorHandler;  // need to de-allocate temporary buffer
+    }
+    while(*buffer != NULL){
+      buffer++; size--;
+    }
+    assert(*buffer == NULL);
+    ptr++;
+  }
+
+  *buffer = NULL;
+
+  Exp_log("And::interpret: de-allocating temporary buffer %lx\n", temp_buffer);
+  free(temp_buffer);
   return 0;
+
+ErrorHandler:
+  Exp_log("And::interpret: de-allocating temporary buffer %lx\n", temp_buffer);
+  free(temp_buffer);
+  return -1;
 }
 
 // used to initialize virtual table
@@ -776,8 +824,6 @@ int And_test(){
   _And_VT_instance(1);      // deletion
   assert(!Exp_hasMemoryLeak());
  
-  /* basic new/copy/delete */
-  char buffer[7];
   Exp *l1 = Exp_Lit("abc");
   Exp *l2 = Exp_Lit("def");
 
@@ -790,11 +836,37 @@ int And_test(){
   assert(base->refcount == 2);
   assert(base->vtable == _And_VT_instance(0));
 
+  // to_string
+  char buffer[7];
   assert(And_to_string(a1,buffer,7) == 0);
   assert(strcmp(buffer, "abcdef") == 0);
-
   assert(Exp_to_string(base,buffer,7) == 0);
   assert(strcmp(buffer, "abcdef") == 0);
+ 
+  // interpret
+  const char* buf[2];
+  const char* s1 = "abcdefghi";
+  assert(And_interpret(a1, s1, buf, 2) == 0);
+  assert(buf[0] == s1 + 6);  /* prefix is "abcdef" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  assert(Exp_interpret(base, s1, buf, 2) == 0);
+  assert(buf[0] == s1 + 6);  /* prefix is "abcdef" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  const char* s2 = "abcdeghi"; /* does not start with "abcdef" */
+  assert(And_interpret(a1, s2, buf, 2) == 0);
+  assert(buf[0] == NULL);  /* empty list */
+  assert(Exp_interpret(base, s2, buf, 2) == 0);
+  assert(buf[0] == NULL);  /* empty list */
+
+  // recognize
+  assert(Exp_recognize(base,"") == 0);
+  assert(Exp_recognize(base,"a") == 0);
+  assert(Exp_recognize(base,"ab") == 0);
+  assert(Exp_recognize(base,"abc") == 0);
+  assert(Exp_recognize(base,"abcd") == 0);
+  assert(Exp_recognize(base,"abcde") == 0);
+  assert(Exp_recognize(base,"abcdef") == 1);
+  assert(Exp_recognize(base,"abcdefg") == 0);
 
   And_delete(a2);
   And_delete(a1);
@@ -904,7 +976,48 @@ int _Or_to_string(Exp* self, char* buffer, int size){
 
 // used to initialize virtual table
 int _Or_interpret(Exp* self, const char* input, const char* buffer[], int size){
-  // TODO
+
+  if(self == NULL){
+    fprintf(stderr, "Or::interpret: NULL object error\n");
+    return -1;
+  }
+
+  if(input == NULL){
+    fprintf(stderr, "Or::interpret: NULL input error\n");
+    return -1;
+  }
+
+  if(buffer == NULL){
+    fprintf(stderr, "Or::interpret: NULL buffer error\n");
+    return -1;
+  }
+  
+  Or* derived = (Or*) self; /* downcast */
+
+  if(derived->left == NULL){
+    fprintf(stderr, "Or::interpret: object has no left operand\n");
+    return -1;
+  }
+
+  if(derived->right == NULL){
+    fprintf(stderr, "Or::interpret: object has no right operand\n");
+    return -1;
+  }
+
+  if(Exp_interpret(derived->left, input, buffer, size) != 0){
+    fprintf(stderr, "Or::interpret: failure to interpret left operand\n");
+    return -1;
+  }
+
+  while(*buffer != NULL){
+    buffer++; size--;
+  }
+
+  if(Exp_interpret(derived->right, input, buffer, size) != 0){
+    fprintf(stderr, "Or::interpret: failure to interpret right operand\n");
+    return -1;
+  }
+
   return 0;
 }
 
@@ -977,7 +1090,6 @@ int Or_test(){
   assert(!Exp_hasMemoryLeak());
 
   /* basic new/copy/delete */
-  char buffer[10];
   Exp *l1 = Exp_Lit("abc");
   Exp *l2 = Exp_Lit("def");
 
@@ -990,12 +1102,43 @@ int Or_test(){
   assert(base->refcount == 2);
   assert(base->vtable == _Or_VT_instance(0));
 
-
+  // to_string
+  char buffer[10];
   assert(Or_to_string(o1, buffer, 10) == 0);
   assert(strcmp(buffer, "(abc|def)") == 0);
-
   assert(Exp_to_string(base, buffer, 10) == 0);
   assert(strcmp(buffer, "(abc|def)") == 0);
+  
+  // interpret
+  const char* buf[2];
+  const char* s1 = "abcxxx";
+  assert(Or_interpret(o1, s1, buf, 2) == 0);
+  assert(buf[0] == s1 + 3);  /* prefix is "abc" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  assert(Exp_interpret(base, s1, buf, 2) == 0);
+  assert(buf[0] == s1 + 3);  /* prefix is "abc" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  const char* s2 = "defxxx";
+  assert(Or_interpret(o1, s2, buf, 2) == 0);
+  assert(buf[0] == s2 + 3);  /* prefix is "def" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  assert(Exp_interpret(base, s2, buf, 2) == 0);
+  assert(buf[0] == s2 + 3);  /* prefix is "def" */
+  assert(buf[1] == NULL);   /* marking end of list */
+  const char* s3 = "xxxabcd";
+  assert(Or_interpret(o1, s3, buf, 2) == 0);
+  assert(buf[0] == NULL);  /* empty list */
+
+  // recognize
+  assert(Exp_recognize(base,"") == 0);
+  assert(Exp_recognize(base,"a") == 0);
+  assert(Exp_recognize(base,"ab") == 0);
+  assert(Exp_recognize(base,"abc") == 1);
+  assert(Exp_recognize(base,"abcd") == 0);
+  assert(Exp_recognize(base,"d") == 0);
+  assert(Exp_recognize(base,"de") == 0);
+  assert(Exp_recognize(base,"def") == 1);
+  assert(Exp_recognize(base,"defg") == 0);
 
   Or_delete(o2);
   Or_delete(o1);
@@ -1076,8 +1219,78 @@ int _Many_to_string(Exp* self, char* buffer, int size){
 
 // used to initialize virtual table
 int _Many_interpret(Exp* self, const char* input, const char* buffer[], int size){
-  // TODO
+
+  if(self == NULL){
+    fprintf(stderr, "Many::interpret: NULL object error\n");
+    return -1;
+  }
+
+  if(input == NULL){
+    fprintf(stderr, "Many::interpret: NULL input error\n");
+    return -1;
+  }
+
+  if(buffer == NULL){
+    fprintf(stderr, "Many::interpret: NULL buffer error\n");
+    return -1;
+  }
+  
+  Many* derived = (Many*) self; /* downcast */
+
+  if(derived->regex == NULL){
+    fprintf(stderr, "Many::interpret: object has no regex operand\n");
+    return -1;
+  }
+
+  /* Adding empty string in result set */
+  if(size < 2){
+    fprintf(stderr, "Many::interpret: buffer overflow error\n");
+    return -1;
+  }
+  buffer[0] = input;  /* prefix of input is "" */ 
+  buffer++; size--;
+
+
+  /* creating temporary buffer to hold results relating to regex */
+  const char* *temp_buffer = (const char* *) malloc(size * sizeof(const char*));
+  if(temp_buffer == NULL){
+    fprintf(stderr, "Many::interpret: unable to allocate heap buffer\n");
+    return -1;
+  }
+
+  Exp_log("Many::interpret: allocating temporary buffer %lx\n", temp_buffer);
+
+  if(Exp_interpret(derived->regex, input, temp_buffer, size) != 0){
+    fprintf(stderr, "Many::interpret: failure to interpret regex operand\n");
+    goto ErrorHandler;  // need to de-allocate temporary buffer
+  }
+
+  const char* *ptr = temp_buffer;
+  while(*ptr != NULL){ // looping through results
+    if(*ptr != input){
+      if(_Many_interpret(self, *ptr, buffer, size) != 0){  // recursive call
+        fprintf(stderr, "Many::interpret: recursive call failure\n");
+        goto ErrorHandler;  // need to de-allocate temporary buffer
+      }
+      while(*buffer != NULL){
+        buffer++; size--;
+      }
+      assert(*buffer == NULL);
+      ptr++;
+    }
+  }
+
+  *buffer = NULL;
+
+  Exp_log("Many::interpret: de-allocating temporary buffer %lx\n", temp_buffer);
+  free(temp_buffer);
   return 0;
+
+ErrorHandler:
+  Exp_log("Many::interpret: de-allocating temporary buffer %lx\n", temp_buffer);
+  free(temp_buffer);
+  return -1;
+
 }
 
 // used to initialize virtual table
@@ -1145,7 +1358,6 @@ int Many_test(){
   assert(!Exp_hasMemoryLeak());
 
   /* basic new/copy/delete */
-  char buffer[7];
   Exp *l = Exp_Lit("abc");
 
   Many *m1 = Many_new(l);
@@ -1156,11 +1368,55 @@ int Many_test(){
   assert(base->refcount == 2);
   assert(base->vtable == _Many_VT_instance(0));
 
+
+  char buffer[7];
   assert(Many_to_string(m1, buffer, 7) == 0);
   assert(strcmp(buffer,"(abc)*") == 0);
 
   assert(Exp_to_string(base, buffer, 7) == 0);
   assert(strcmp(buffer,"(abc)*") == 0);
+  
+  // interpret
+  const char* buf[5];
+  const char* s1 = "abcabcabcxxxx";
+  assert(Many_interpret(m1, s1, buf, 5) == 0);
+  assert(buf[0] == s1);       /* prefix is "" */
+  assert(buf[1] == s1 + 3);   /* prefix is "abc" */
+  assert(buf[2] == s1 + 6);   /* prefix is "abcabc" */
+  assert(buf[3] == s1 + 9);   /* prefix is "abcabcabc" */
+  assert(buf[4] == NULL);     /* end of list */
+  assert(Exp_interpret(base, s1, buf, 5) == 0);
+  assert(buf[0] == s1);       /* prefix is "" */
+  assert(buf[1] == s1 + 3);   /* prefix is "abc" */
+  assert(buf[2] == s1 + 6);   /* prefix is "abcabc" */
+  assert(buf[3] == s1 + 9);   /* prefix is "abcabcabc" */
+  assert(buf[4] == NULL);     /* end of list */
+  const char* s2 = "xabcabcabcxxxx";
+  assert(Many_interpret(m1, s2, buf, 5) == 0);
+  assert(buf[0] == s2);       /* prefix is "" */
+  assert(buf[1] == NULL);     /* end of list */
+  assert(Exp_interpret(base, s2, buf, 5) == 0);
+  assert(buf[0] == s2);       /* prefix is "" */
+  assert(buf[1] == NULL);     /* end of list */
+  const char* s3 = "";
+  assert(Many_interpret(m1, s3, buf, 5) == 0);
+  assert(buf[0] == s3);       /* prefix is "" */
+  assert(buf[1] == NULL);     /* end of list */
+  assert(Exp_interpret(base, s3, buf, 5) == 0);
+  assert(buf[0] == s3);       /* prefix is "" */
+  assert(buf[1] == NULL);     /* end of list */
+
+  // recognize
+  assert(Exp_recognize(base,"") == 1);
+  assert(Exp_recognize(base,"a") == 0);
+  assert(Exp_recognize(base,"ab") == 0);
+  assert(Exp_recognize(base,"abc") == 1);
+  assert(Exp_recognize(base,"abca") == 0);
+  assert(Exp_recognize(base,"abcab") == 0);
+  assert(Exp_recognize(base,"abcabc") == 1);
+  assert(Exp_recognize(base,"abcabca") == 0);
+  assert(Exp_recognize(base,"abcabcab") == 0);
+  assert(Exp_recognize(base,"abcabcabc") == 1);
 
   Many_delete(m2);
   Many_delete(m1);
@@ -1201,22 +1457,43 @@ int main(){
 
   char buffer[22];
 
-  test();
+//  test();
 
   Exp* a = Exp_Lit("a");
   Exp* b = Exp_Lit("b");
   Exp* c = Exp_Lit("c");
 
-  Exp* aa = Exp_And(Exp_copy(a), Exp_Many(a));
-  Exp* bb = Exp_And(Exp_copy(b), Exp_Many(b));
-  Exp* cc = Exp_And(Exp_copy(c), Exp_Many(c));
+  Exp* aa = Exp_And(Exp_copy(a), Exp_Many(a));  /* one or more 'a' */
+  Exp* bb = Exp_And(Exp_copy(b), Exp_Many(b));  /* one or more 'b' */
+  Exp* cc = Exp_And(Exp_copy(c), Exp_Many(c));  /* one or more 'c' */
 
   Exp* regex = Exp_Many(Exp_And(Exp_Or(aa,bb),cc));
   const char* str = "acbbccaaacccbbbbaaaaaccccc";
+
   assert(Exp_to_string(regex, buffer, 22) == 0);
   printf("regex = %s\n", buffer);
   printf("string = \"%s\"\n", str);
   printf("The recognized prefixes are:\n");
+
+  int start = 1;
+  printf("[");
+
+  char prefix[27];
+  int i;
+  for(i = 0; i < 26; ++i){
+    strncpy(prefix, str, i);
+    prefix[i] = 0;
+    if(Exp_recognize(regex, prefix)){
+      if(start){
+        start = 0;
+      } else {
+        printf(", ");
+      }
+      printf("\"%s\"", prefix);
+    }
+  }
+
+  printf("]\n");
 
 
   Exp_delete(regex);

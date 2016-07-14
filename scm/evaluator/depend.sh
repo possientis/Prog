@@ -164,9 +164,9 @@ scm -b -f let-star.scm                    > /dev/null
 ./run.scm let-star.scm                    > /dev/null
 
 
-echo load-file
-scm -b -f load-file.scm                   > /dev/null               
-./run.scm load-file.scm                   > /dev/null
+echo load-primitive
+scm -b -f load-primitive.scm              > /dev/null               
+./run.scm load-primitive.scm              > /dev/null
 
 
 echo map-primitive
@@ -184,12 +184,24 @@ scm -b -f not.scm                         > /dev/null
 ./run.scm not.scm                         > /dev/null
 
 
-echo object-string
-scm -b -f object-string.scm               > /dev/null               
-./run.scm object-string.scm               > /dev/null
+echo object-string-primitive
+scm -b -f object-string-primitive.scm     > /dev/null               
+./run.scm object-string-primitive.scm     > /dev/null
 
 
 echo or
 scm -b -f or.scm                          > /dev/null               
 ./run.scm or.scm                          > /dev/null
+
+
+echo primitive-procedure
+scm -b -f primitive-procedure.scm         > /dev/null               
+./run.scm primitive-procedure.scm         > /dev/null
+
+
+echo primitive
+scm -b -f primitive.scm                   > /dev/null               
+./run.scm primitive.scm                   > /dev/null
+
+
 

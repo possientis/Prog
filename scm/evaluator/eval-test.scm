@@ -1,5 +1,4 @@
 
-(load "load-file.scm")
 (load "global-env.scm")
 (load "self-evaluating.scm")
 (load "variable.scm")

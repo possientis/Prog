@@ -6,12 +6,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 
-(load "primitive-procedure.scm")
-(load "load-file.scm")
-(load "require.scm")
+(load "load-primitive.scm")
+(load "require-primitive.scm")
 (load "eval-primitive.scm")
 (load "apply-primitive.scm")
-(load "object-string.scm")
+(load "object-string-primitive.scm")
 (load "map-primitive.scm")
 
 (define (my-display s)
@@ -59,10 +58,10 @@
         (list 'eq?    eq?)
         (list 'display my-display)
         (list 'newline newline)
-        (list 'load    load-file)
+        (list 'load    load-primitive)
         (list 'inexact->exact inexact->exact)
         (list 'hash hash)
-        (list 'require require-lib)
+        (list 'require require-primitive)
         (list 'eval eval-primitive)
         (list 'apply apply-primitive)
         (list 'make-vector make-vector)

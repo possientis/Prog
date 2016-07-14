@@ -5,9 +5,6 @@
     (display "loading primitive-procedure")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load "apply-in-underlying-scheme.scm")
-(load "tagged-list.scm")
-
 ; testing
 (define (primitive-procedure? proc) (tagged-list? proc 'primitive-procedure))
 

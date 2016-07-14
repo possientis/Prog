@@ -1,5 +1,4 @@
 #!/usr/bin/scm
-(load "load-file.scm")
 (load "global-env.scm")
 (load "self-evaluating.scm")
 (load "variable.scm")
@@ -27,6 +26,6 @@
 (load "if.scm")
 
 (define filename (caddr (program-arguments)))
-(load-file filename)
+(load-primitive filename)
 (exit 0)
 

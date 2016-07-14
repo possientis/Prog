@@ -5,8 +5,8 @@
     (display "loading global-env")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
 (load "primitive.scm")
+(load "primitive-procedure.scm")
 (load "environment.scm")
 
 (define (setup-environment)
