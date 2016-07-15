@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <assert.h>
 // from the Gang of Four book:
 // "If a particular kind of problem occurs often enough, then it might be
 // worthwhile to express instances of the problem as sentences in a simple
@@ -15,10 +16,10 @@
 // Each regular expression r has an associated language L(r) (which is a set
 // of strings) defined by the recursion:
 //
-//  - r = Lit(s)        -> L(r) = {s}
-//  - r = And(r1, r2)   -> L(r) = L(r1).L(r2)     (see definition of '.')
-//  - r = Or(r1, r2)    -> L(r) = L(r1) U L(r2)
-//  - r = Many(r1)      -> L(r) = U_k L(r1)^k     (see definition of '.')
+//  - r = _Lit(s)        -> L(r) = {s}
+//  - r = _And(r1, r2)   -> L(r) = L(r1).L(r2)     (see definition of '.')
+//  - r = _Or(r1, r2)    -> L(r) = L(r1) U L(r2)
+//  - r = _Many(r1)      -> L(r) = U_k L(r1)^k     (see definition of '.')
 //
 //  where given A,B sets of strings the product A.B is defined as the set of 
 //  strings A.B = { a ++ b | a in A, b in B }, and where it is understood that
@@ -30,82 +31,266 @@
 // belongs to the language of r. One of the first questions of interest is
 // of course whether s itself belongs to L(r).
 
+
+class Test;
+class _Exp;
+
 typedef std::vector<std::string> List;
 
+/******************************************************************************/
+/*                                Exp Class                                   */
+/******************************************************************************/
+
 class Exp {
+  // friends
+    friend Test;
+  // data
+  private:
+    _Exp* _impl;
+  // constructors
+  private:
+    Exp(_Exp* impl);
+  public:
+    Exp(const Exp& rhs);
+  // destructor
+  public:
+    ~Exp();
+  // factory functions
+  public:
+    static Exp Lit(std::string literal);
+  // assignment
+  public:
+    Exp& operator=(Exp rhs);
+  //swap
+  private:
+    void swap(Exp& e1, Exp& e2);
+};
+  
+/******************************************************************************/
+/*                               _Exp Class                                   */
+/******************************************************************************/
+
+class _Exp {
+  friend Test;
+  friend Exp; 
   private:
     int refcount;
   protected:
-    Exp() : refcount(1) {}
+    _Exp() : refcount(1) {}
   public:
-    virtual ~Exp(){}
+    void operator delete(void* ptr);
+    void* operator new(size_t size);
+    virtual ~_Exp(){}
     virtual std::string to_string() const =0;
     virtual List interpret(std::string input) const =0;
     bool recognize(std::string input) const;  // TODO
-    Exp* copy(){ refcount++; return this; }
 };
 
 
+/******************************************************************************/
+/*                               _Lit Class                                   */
+/******************************************************************************/
 
-class Lit : public Exp {
-  friend Exp* makeLit(std::string);
+class _Lit : public _Exp {
+  friend Test;
+  friend Exp;
   private:
     std::string _literal;
-    Lit(std::string literal) : _literal(literal) {}
+    _Lit(std::string literal) : _literal(literal) {}
   public:
-    ~Lit();                                       // TODO
+    ~_Lit();                                      // TODO
     std::string to_string() const override;       // TODO
     List interpret(std::string) const override;   // TODO
 };
 
-class And : public Exp {
+/******************************************************************************/
+/*                              _And Class                                    */
+/******************************************************************************/
+
+class _And : public _Exp {
   private:
-    Exp* _left;
-    Exp* _right;
+    _Exp* _left;
+    _Exp* _right;
   protected:
-    And(Exp* left, And* right) : _left(left), _right(right) {}
+    _And(_Exp* left, _And* right) : _left(left), _right(right) {}
   public:
-    ~And();                                       // TODO
+    ~_And();                                      // TODO
     std::string to_string() const override;       // TODO
     List interpret(std::string) const override;   // TODO
 };
 
-class Or : public Exp {
+/******************************************************************************/
+/*                               _Or Class                                    */
+/******************************************************************************/
+
+class _Or : public _Exp {
   private:
-    Exp* _left;
-    Exp* _right;
+    _Exp* _left;
+    _Exp* _right;
   protected:
-    Or(Exp* left, Exp* right) : _left(left), _right(right) {}
+    _Or(_Exp* left, _Exp* right) : _left(left), _right(right) {}
   public:
-    ~Or();                                        // TODO
+    ~_Or();                                       // TODO
     std::string to_string() const override;       // TODO
     List interpret(std::string) const override;   // TODO
 };
 
-class Many : public Exp {
+/******************************************************************************/
+/*                             _Many Class                                    */
+/******************************************************************************/
+
+class _Many : public _Exp {
   private:
-    Exp* _regex;
+    _Exp* _regex;
   protected:
-    Many(Exp* regex) : _regex(regex) {}
+    _Many(_Exp* regex) : _regex(regex) {}
   public:
-    ~Many();                                      // TODO
+    ~_Many();                                     // TODO
     std::string to_string() const override;       // TODO
     List interpret(std::string) const override;   // TODO
 };
 
+/******************************************************************************/
+/*                               Log Class                                    */
+/******************************************************************************/
 
-Lit::~Lit(){}
-std::string Lit::to_string() const {}
-List Lit::interpret(std::string input) const {}
-Exp* makeLit(std::string literal){
-  return new Lit(literal);
+class Log {
+  public:
+    static void log(std::string message){
+      std::cerr << message;
+    }
+    static void address(void* address, std::string comment){
+      std::cerr << std::hex << address << " : " << comment;
+    }
+};
+
+
+/******************************************************************************/
+/*                            Exp Implementation                              */
+/******************************************************************************/
+
+Exp::~Exp(){
+  Log::address(this, "Destruction of Exp object starting ...\n");
+  assert(_impl != nullptr);
+  Log::address(this, "Exp object has valid _Exp pointer\n");
+  assert(_impl->refcount > 0);
+  Log::address(this, "Exp object has positive refcount\n");
+  _impl->refcount--;
+  if(_impl->refcount == 0){
+    Log::address(_impl, "Deallocation of pointer to _Exp object starting ...\n");
+    delete _impl;
+    Log::address(_impl, "Deallocation of pointer to _Exp object complete.\n");
+  } else {
+    Log::address(this, "Deleting copy of _Exp object\n");
+  }
+  Log::address(this, "Destruction of Exp object complete.\n");
+}
+
+Exp::Exp(_Exp* impl) : _impl(impl) {
+  Log::address(this, "Construction of new Exp object starting ...\n");
+  Log::address(this, "Construction of new Exp object complete.\n");
+} 
+
+Exp::Exp(const Exp& rhs) : _impl(rhs._impl){
+  Log::address(this, "Construction of Exp copy starting ...\n");
+  assert(_impl != nullptr);
+  _impl->refcount++;
+  Log::address(this, "Construction of Exp copy complete.\n");
+}
+
+void Exp::swap(Exp& e1, Exp& e2){
+  std::swap<_Exp*>(e1._impl,e2._impl);
+}
+
+Exp& Exp::operator=(Exp rhs){
+  swap(*this, rhs);
+  return *this;
+}
+
+Exp Exp::Lit(std::string literal){
+  return Exp(new _Lit(literal));
 }
 
 
+/******************************************************************************/
+/*                          _Exp Implementation                               */
+/******************************************************************************/
 
-int main(){
+void _Exp::operator delete(void* ptr){
+  Log::log("operator delete starting\n");
+  ::operator delete(ptr);
+  Log::log("operator delete exiting\n");
+}
 
+void* _Exp::operator new(size_t size){
+  Log::log("operator new starting\n");
+  return ::operator new(size);
+}
+
+/******************************************************************************/
+/*                              _Lit Implementation                           */
+/******************************************************************************/
+
+_Lit::~_Lit(){ Log::log("_Lit destructor running\n"); }
+
+std::string _Lit::to_string() const {}
+
+List _Lit::interpret(std::string input) const {}
+
+
+/******************************************************************************/
+/*                              Test Class                                    */
+/******************************************************************************/
+
+class Test{
+  public:
+    static int test_all();
+    static int test_Lit();
+};
+
+
+int Test::test_Lit(){
+  Log::log("Test::test_Lit starting ...\n");
+  Log::log("creating l1 ...\n");
+  Exp l1 = Exp::Lit("abc");
+  assert(l1._impl != nullptr);
+  assert(l1._impl->refcount == 1);
+  _Lit* derived = static_cast<_Lit*>(l1._impl);
+  assert(derived->_literal == "abc");
+  Log::log("creating l2 ...\n");
+  Exp l2 = l1;
+  assert(l1._impl == l2._impl);
+  assert(l1._impl->refcount == 2);
+  Log::log("assigning l1 to itself\n");
+  l1 = l1;
+  assert(l1._impl == l2._impl);
+  assert(l1._impl->refcount == 2);
+  Log::log("assigning l2 to l1\n");
+  l1 = l2;
+  assert(l1._impl == l2._impl);
+  assert(l1._impl->refcount == 2);
+  Log::log("creating l3 ...\n");
+  Exp l3 = Exp::Lit("def");
+  Log::log("Test::test_Lit complete\n");
   return 0;
 }
 
+int Test::test_all(){
+
+  assert(test_Lit() == 0);
+  return 0;
+}
+
+
+
+/******************************************************************************/
+/*                                 Main                                       */
+/******************************************************************************/
+
+int main(){
+
+  assert(Test::test_all() == 0);
+
+  return 0;
+}
 
