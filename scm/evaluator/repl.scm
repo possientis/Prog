@@ -5,9 +5,35 @@
     (display "loading repl")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
+(load "global-env.scm")
+(load "self-evaluating.scm")
+(load "variable.scm")
 (load "eval.scm")
 (load "analyze.scm")
+(load "eval-procedure.scm")
+(load "analyze-procedure.scm")
+(load "quote.scm")
+(load "assignment.scm")
+(load "definition.scm")
+(load "defined.scm")
+(load "not.scm")
+(load "application.scm")
+(load "cond.scm")
+(load "or.scm")
+(load "and.scm")
+(load "named-let.scm")
+(load "let-star.scm")
+(load "let-rec.scm")
+(load "apply.scm")
+(load "begin.scm")
+(load "let.scm")
+(load "lambda.scm")
+(load "true-false.scm")
+(load "if.scm")
+(load "tagged-list.scm")
+
+
+
 
 (define input-prompt ";;; M-Eval input:")
 (define output-prompt ";;; M-Eval value:")

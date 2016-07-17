@@ -5,8 +5,6 @@
     (display "loading quote")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(load "tagged-list.scm")
-
 ; testing
 (define (quoted? exp) (tagged-list? exp 'quote))                                    
 

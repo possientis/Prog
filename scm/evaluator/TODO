@@ -1,5 +1,5 @@
-continue with depend.sh
 understand dependency DAG
+revise run to as to evaluate or compile + run
 Understand the suble differences between:
   - apply-in-underlying-scheme
   - apply-primitive

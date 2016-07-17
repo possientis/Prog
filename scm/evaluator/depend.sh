@@ -204,4 +204,38 @@ scm -b -f primitive.scm                   > /dev/null
 ./run.scm primitive.scm                   > /dev/null
 
 
+echo quote
+scm -b -f quote.scm                       > /dev/null               
+./run.scm quote.scm                       > /dev/null
+
+
+echo require-primitive
+scm -b -f require-primitive.scm           > /dev/null               
+./run.scm require-primitive.scm           > /dev/null
+
+
+echo self-evaluating
+scm -b -f self-evaluating.scm             > /dev/null               
+./run.scm self-evaluating.scm             > /dev/null
+
+
+echo tagged-list
+scm -b -f tagged-list.scm                 > /dev/null               
+./run.scm tagged-list.scm                 > /dev/null
+
+
+echo true-false 
+scm -b -f true-false.scm                  > /dev/null               
+./run.scm true-false.scm                  > /dev/null
+
+
+echo unspecified 
+scm -b -f unspecified.scm                 > /dev/null               
+./run.scm unspecified.scm                 > /dev/null
+
+
+echo variable
+scm -b -f variable.scm                    > /dev/null               
+./run.scm variable.scm                    > /dev/null
+
 
