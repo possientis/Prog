@@ -47,10 +47,10 @@ class Exp {
     friend Test;
   // data
   private:
-    _Exp* _impl;
+    const _Exp* _impl;
   // constructors
   private:
-    Exp(_Exp* impl);
+    Exp(const _Exp* impl);
   public:
     Exp(const Exp& rhs);
   // destructor
@@ -59,12 +59,15 @@ class Exp {
   // factory functions
   public:
     static Exp Lit(std::string literal);
+    static Exp And(const Exp& left, const Exp& right);
+    static Exp Or(const Exp& left, const Exp& right);
+    static Exp Many(const Exp& regex);
   // assignment
   public:
     Exp& operator=(Exp rhs);
   //swap
   private:
-    void swap(Exp& e1, Exp& e2);
+    static void swap(Exp& e1, Exp& e2);
 };
   
 /******************************************************************************/
@@ -72,16 +75,26 @@ class Exp {
 /******************************************************************************/
 
 class _Exp {
-  friend Test;
-  friend Exp; 
-  private:
-    int refcount;
+  // friends
+    friend Test;
+    friend Exp; 
+  // data
+  protected:
+    mutable int refcount;
+  // constructors
   protected:
     _Exp() : refcount(1) {}
-  public:
+  private:
+    _Exp(const _Exp&);  // not implemented
+  // destructor
+  protected:
+    virtual ~_Exp(){}
+  // new & delete override
+  protected:
     void operator delete(void* ptr);
     void* operator new(size_t size);
-    virtual ~_Exp(){}
+  // API
+  public:
     virtual std::string to_string() const =0;
     virtual List interpret(std::string input) const =0;
     bool recognize(std::string input) const;  // TODO
@@ -93,13 +106,24 @@ class _Exp {
 /******************************************************************************/
 
 class _Lit : public _Exp {
-  friend Test;
-  friend Exp;
+  // friends
+    friend Test;
+    friend Exp;
+  // data
   private:
-    std::string _literal;
+    const std::string _literal;
+  // constructors
+  private:
     _Lit(std::string literal) : _literal(literal) {}
-  public:
+    _Lit(const _Lit&);            // not implemented
+  //assignment
+  private:
+    _Lit& operator=(const _Lit&); // not implemented 
+  // destructor
+  private:
     ~_Lit();                                      
+  // API
+  private:
     std::string to_string() const override;       
     List interpret(std::string) const override;  
 };
@@ -109,15 +133,27 @@ class _Lit : public _Exp {
 /******************************************************************************/
 
 class _And : public _Exp {
+  // friends
+    friend Test;
+    friend Exp;
+  // data
   private:
     _Exp* _left;
     _Exp* _right;
-  protected:
+  // constructors
+  private:
     _And(_Exp* left, _And* right) : _left(left), _right(right) {}
-  public:
-    ~_And();                                      // TODO
-    std::string to_string() const override;       // TODO
-    List interpret(std::string) const override;   // TODO
+    _And(const _And&);            // not implemented
+  // assignment
+  private:
+    _And& operator=(const _And&); // not implemented
+  // destructor
+  private:
+    ~_And();                                      
+  // API
+  private:
+    std::string to_string() const override;       
+    List interpret(std::string) const override;   
 };
 
 /******************************************************************************/
@@ -125,15 +161,27 @@ class _And : public _Exp {
 /******************************************************************************/
 
 class _Or : public _Exp {
+  // friends
+    friend Test;
+    friend Exp;
+  // data
   private:
     _Exp* _left;
     _Exp* _right;
-  protected:
+  // constructors
+  private:
     _Or(_Exp* left, _Exp* right) : _left(left), _right(right) {}
-  public:
-    ~_Or();                                       // TODO
-    std::string to_string() const override;       // TODO
-    List interpret(std::string) const override;   // TODO
+    _Or(const _Or&);            // not implemented
+  // assignment
+  private:
+    _Or& operator=(const _Or&); // not implemented
+  // destructor
+  private:
+    ~_Or();                                       
+  // API
+  private:
+    std::string to_string() const override;       
+    List interpret(std::string) const override;   
 };
 
 /******************************************************************************/
@@ -141,20 +189,34 @@ class _Or : public _Exp {
 /******************************************************************************/
 
 class _Many : public _Exp {
+  // friends
+  friend Test;
+  friend Exp;
+  // data
   private:
     _Exp* _regex;
-  protected:
+  // constructors
+  private:
     _Many(_Exp* regex) : _regex(regex) {}
-  public:
-    ~_Many();                                     // TODO
-    std::string to_string() const override;       // TODO
-    List interpret(std::string) const override;   // TODO
+    _Many(const _Many&);            // not implemented
+  // assignment
+  private:
+    _Many& operator=(const _Many&); // not implemented
+  // destructor
+  private:
+    ~_Many();                                     
+  // API
+  private:
+    std::string to_string() const override;       
+    List interpret(std::string) const override;   
 };
 
 /******************************************************************************/
 /*                               Log Class                                    */
 /******************************************************************************/
 
+// This class manages a set of previously allocated pointers, so as to ensure
+// every allocated pointers gets deallocated.
 class Log {
   private:
     // set of pointers declared with 'log_new'
@@ -196,11 +258,10 @@ Exp::~Exp(){
   _impl->refcount--;
   if(_impl->refcount == 0){
     delete _impl;
-  } else {
   }
 }
 
-Exp::Exp(_Exp* impl) : _impl(impl) {} 
+Exp::Exp(const _Exp* impl) : _impl(impl) {} 
 
 Exp::Exp(const Exp& rhs) : _impl(rhs._impl){
   assert(_impl != nullptr);
@@ -208,10 +269,10 @@ Exp::Exp(const Exp& rhs) : _impl(rhs._impl){
 }
 
 void Exp::swap(Exp& e1, Exp& e2){
-  std::swap<_Exp*>(e1._impl,e2._impl);
+  std::swap<const _Exp*>(e1._impl,e2._impl);
 }
 
-Exp& Exp::operator=(Exp rhs){
+Exp& Exp::operator=(Exp rhs){ // copy constructor invoked, argument by value
   swap(*this, rhs);
   return *this;
 }
@@ -220,17 +281,28 @@ Exp Exp::Lit(std::string literal){
   return Exp(new _Lit(literal));
 }
 
+Exp Exp::And(const Exp& left, const Exp& right){  // TODO
+}
+
+Exp Exp::Or(const Exp& left, const Exp& right){   // TODO
+}
+
+Exp Exp::Many(const Exp& regex){                  // TODO
+}
+
 
 /******************************************************************************/
 /*                          _Exp Implementation                               */
 /******************************************************************************/
 
+// operator new is overriden to ensure logging takes place
 void* _Exp::operator new(size_t size){
   void* ptr = ::operator new(size);
   Log::log_new(ptr, "Allocating new pointer to _Exp object\n");
   return ptr;
 }
 
+// operator delete is overriden to ensure logging takes place
 void _Exp::operator delete(void* ptr){
   Log::log_delete(ptr, "Deallocating pointer to _Exp object\n");
   ::operator delete(ptr);
@@ -248,41 +320,130 @@ List _Lit::interpret(std::string input) const {}  // TODO
 
 
 /******************************************************************************/
+/*                              _And Implementation                           */
+/******************************************************************************/
+
+_And::~_And(){
+  assert(_left != nullptr);
+  assert(_left->refcount > 0);
+}
+
+
+std::string _And::to_string() const {}            // TODO
+
+List _And::interpret(std::string input) const {}  // TODO
+
+
+/******************************************************************************/
+/*                              _Or Implementation                           */
+/******************************************************************************/
+
+_Or::~_Or(){}
+
+std::string _Or::to_string() const {}            // TODO
+
+List _Or::interpret(std::string input) const {}  // TODO
+
+
+
+/******************************************************************************/
+/*                              _Many Implementation                           */
+/******************************************************************************/
+
+_Many::~_Many(){}
+
+std::string _Many::to_string() const {}            // TODO
+
+List _Many::interpret(std::string input) const {}  // TODO
+
+
+/******************************************************************************/
 /*                              Test Class                                    */
 /******************************************************************************/
 
 class Test{
   public:
     static int test_all();
-    static int test_Lit();
+    static int test_Exp();
+    static int test__Lit();
 };
 
-
-int Test::test_Lit(){
-  Exp l1 = Exp::Lit("abc");
-  assert(l1._impl != nullptr);
-  assert(l1._impl->refcount == 1);
-  _Lit* derived = static_cast<_Lit*>(l1._impl);
-  assert(derived->_literal == "abc");
-  Exp l2 = l1;
-  assert(l1._impl == l2._impl);
-  assert(l1._impl->refcount == 2);
-  l1 = l1;
-  assert(l1._impl == l2._impl);
-  assert(l1._impl->refcount == 2);
-  l1 = l2;
-  assert(l1._impl == l2._impl);
-  assert(l1._impl->refcount == 2);
-  Exp l3 = Exp::Lit("def");
-  return 0;
-}
-
 int Test::test_all(){
-  assert(!Log::has_memory_leak());
-  assert(test_Lit() == 0);
-  assert(!Log::has_memory_leak());
+  assert(test_Exp() == 0);
+  assert(test__Lit() == 0);
   return 0;
 }
+
+int Test::test_Exp(){
+  // constructing from the heap
+  assert(!Log::has_memory_leak());
+  _Lit* l2 = new _Lit("def");
+  Exp* ep = new Exp(l2);
+  assert(ep != nullptr);
+  assert(ep->_impl == l2);
+  delete ep;
+  assert(!Log::has_memory_leak());
+  // constructing on the stack
+  _Lit* l1 = new _Lit("abc");
+  assert(Log::has_memory_leak());
+  assert(l1 != nullptr);
+  Exp e(l1);
+  assert(e._impl == l1);
+  // copy constructor
+  Exp f(e);
+  assert(f._impl == e._impl);
+  assert(f._impl == l1);
+  assert(l1->refcount == 2);
+  // swap
+  l2 = new _Lit("def");
+  Exp g(l2);
+  Exp::swap(f,g);
+  assert(f._impl == l2);
+  assert(g._impl == l1);
+  assert(l2->refcount == 1);
+  assert(l1->refcount == 2);
+  // assignment
+  g = f;
+  assert(f._impl == l2);
+  assert(g._impl == l2);
+  assert(l2->refcount == 2);
+  assert(l1->refcount == 1);
+  g = g;
+  assert(g._impl == l2);
+  assert(l2->refcount == 2);
+  e = g;
+  assert(g._impl == l2);
+  assert(e._impl == l2);
+  assert(l2->refcount == 3);
+  // Exp::Lit
+  Exp e1 = Exp::Lit("abc");
+  assert(e1._impl != nullptr);
+  assert(e1._impl->refcount == 1);
+  const _Lit* derived = static_cast<const _Lit*>(e1._impl);
+  assert(derived->_literal == "abc");
+
+  return 0;
+}
+
+
+int Test::test__Lit(){
+  // contructing on the stack
+  _Lit l("abc");
+  assert(l.refcount == 1);
+  assert(l._literal == "abc");
+  // constructing on the heap
+  assert(!Log::has_memory_leak());
+  _Lit* lp = new _Lit("abc");
+  assert(Log::has_memory_leak());
+  assert(lp != nullptr);
+  assert(lp->_literal == "abc");
+  assert(lp->refcount == 1);
+  delete lp;
+  assert(!Log::has_memory_leak());
+
+ return 0;
+}
+
 
 
 

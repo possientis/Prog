@@ -1,29 +1,22 @@
-understand dependency DAG
+
+deal with issue of whether eval takes 1 or 2 arguments
 revise run to as to evaluate or compile + run
+follow up on debug.scm
+continue unit testing of analyze
+introduce parallel between apply and eval, in relation to eval-in-underlying-scheme
+
 Understand the suble differences between:
   - apply-in-underlying-scheme
   - apply-primitive
   - apply-primitive-procedure
 Understand why apply-primitive cannot simply be defined as 'apply'
 
-follow up on debug.scm
 
-repl.scm is broken
-check semantics of '() vs ()
-continue unit testing of analyze
 
-introduce parallel between apply and eval, in relation to eval-in-underlying-scheme
-deal with issue of whether eval takes 1 or 2 arguments
 
-Understand rational for inluding components within components
+
 
 change semantics of apply
-
-understand the following:
-exp = '(define f (lambda () 12))
-((analyze exp) global-env) ; creating binding through analyze
-(eval (f) global-env) ; this will fail
-
-
+check semantics of '() vs ()
 incorporate frame4 with hash-table library
 
