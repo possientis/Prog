@@ -68,6 +68,14 @@ class Exp {
   //swap
   private:
     static void swap(Exp& e1, Exp& e2);
+  // API
+  public:
+    std::string to_string() const;
+  // Given a string, this method returns 'the' list of all prefixes of the string
+  // which belong to the language of the regular expression object. Of course,
+  // such a list in only unique up to the order of its elements
+    List interpret(std::string input) const;
+    bool recognize(std::string input) const;
 };
   
 /******************************************************************************/
@@ -101,7 +109,7 @@ class _Exp {
   public:
     virtual std::string to_string() const =0;
     virtual List interpret(std::string input) const =0;
-    bool recognize(std::string input) const;  // TODO
+    bool recognize(std::string input) const;
 };
 
 
@@ -292,6 +300,22 @@ Exp Exp::Many(const Exp& regex){
   return Exp(new _Many(regex._impl->clone()));
 }
 
+std::string Exp::to_string() const {
+  return _impl->to_string();
+}
+
+List Exp::interpret(std::string input) const {
+  return _impl->interpret(input);
+}
+
+bool Exp::recognize(std::string input) const {
+  return _impl->recognize(input);
+}
+
+std::ostream& operator<<(std::ostream& s, Exp exp){
+  s << exp.to_string();
+  return s;
+}
 
 /******************************************************************************/
 /*                          _Exp Implementation                               */
@@ -325,6 +349,16 @@ const _Exp* _Exp::clone() const{
   return this;
 }
 
+bool _Exp::recognize(std::string input) const {
+  List result = interpret(input);
+  for(auto it = result.cbegin(); it != result.cend(); ++it){
+    if(*it == input){ // found
+      return true;
+    }
+  }
+  return false;
+}
+  
 
 /******************************************************************************/
 /*                              _Lit Implementation                           */
@@ -359,7 +393,21 @@ std::string _And::to_string() const {
   return _left->to_string() + _right->to_string();
 }
 
-List _And::interpret(std::string input) const {}  // TODO
+List _And::interpret(std::string input) const {
+  List result;
+  assert(_left != nullptr);
+  List left = _left->interpret(input); 
+  for(auto it = left.cbegin(); it != left.cend(); ++it){
+    std::string remainder = input.substr(it->length());
+    assert(_right != nullptr);
+    List right = _right->interpret(remainder);
+    for(auto jt = right.cbegin(); jt != right.cend(); ++jt){
+      result.push_back(*it + *jt);
+    }
+  }
+  return result;
+}
+
 
 
 /******************************************************************************/
@@ -376,7 +424,16 @@ std::string _Or::to_string() const {
 }
 
 
-List _Or::interpret(std::string input) const {}  // TODO
+List _Or::interpret(std::string input) const {
+  assert(_left != nullptr);
+  List result = _left->interpret(input);
+  assert(_right != nullptr);
+  List right = _right->interpret(input);
+  for(auto it = right.cbegin(); it != right.cend(); ++it){
+    result.push_back(*it);
+  }
+  return result;
+}
 
 
 
@@ -392,7 +449,22 @@ std::string _Many::to_string() const {
   return "(" + _regex->to_string() + ")*";
 }
 
-List _Many::interpret(std::string input) const {}  // TODO
+List _Many::interpret(std::string input) const {
+  List result;
+  result.push_back(""); // forall r:Exp, "" belongs to L(r*)
+  assert(_regex != nullptr);
+  List left = _regex->interpret(input);
+  for(auto it = left.cbegin(); it != left.cend(); ++it){
+    if(!it->empty()){
+      std::string remainder = input.substr(it->length());
+      List right = interpret(remainder);  // recursive call 
+      for(auto jt = right.cbegin(); jt != right.cend(); ++jt){
+        result.push_back(*it + *jt);
+      }
+    }
+  }
+  return result;
+}
 
 
 /******************************************************************************/
@@ -504,6 +576,77 @@ int Test::test_Exp(){
   const _Many* d5 = static_cast<const _Many*>(e5._impl);
   assert(d5->_regex == e4._impl);
   assert(e4._impl->refcount == 2);
+  // to_string
+  Exp e6 = Exp::Lit("abc");
+  Exp e7 = Exp::Lit("def");
+  Exp e8 = Exp::And(e6,e7);
+  Exp e9 = Exp::Or(e6,e7);
+  Exp e10 = Exp::Many(e6);
+  assert(e6.to_string() == "abc");
+  assert(e7.to_string() == "def");
+  assert(e8.to_string() == "abcdef");
+  assert(e9.to_string() == "(abc|def)");
+  assert(e10.to_string() == "(abc)*");
+  // interpret
+  List v6 = e6.interpret("abcx");
+  List v7 = e7.interpret("defx");
+  List v8 = e8.interpret("abcdefx");
+  List v9 = e9.interpret("abcx");
+  List v9_ = e9.interpret("defx");
+  List v10 = e10.interpret("abcabcx");
+  assert(v6.size() == 1);
+  assert(v7.size() == 1);
+  assert(v8.size() == 1);
+  assert(v9.size() == 1);
+  assert(v9_.size() == 1);
+  assert(v10.size() == 3);
+  assert(v6[0] == "abc");
+  assert(v7[0] == "def");
+  assert(v8[0] == "abcdef");
+  assert(v9[0] == "abc");
+  assert(v9_[0] == "def");
+  assert(v10[0] == "");
+  assert(v10[1] == "abc");
+  assert(v10[2] == "abcabc");
+  // recognize
+  assert(e6.recognize("") == false);
+  assert(e6.recognize("a") == false);
+  assert(e6.recognize("ab") == false);
+  assert(e6.recognize("abc") == true);
+  assert(e6.recognize("abcx") == false);
+  assert(e7.recognize("") == false);
+  assert(e7.recognize("d") == false);
+  assert(e7.recognize("de") == false);
+  assert(e7.recognize("def") == true);
+  assert(e7.recognize("defx") == false);
+  assert(e8.recognize("") == false);
+  assert(e8.recognize("a") == false);
+  assert(e8.recognize("ab") == false);
+  assert(e8.recognize("abc") == false);
+  assert(e8.recognize("abcd") == false);
+  assert(e8.recognize("abcde") == false);
+  assert(e8.recognize("abcdef") == true);
+  assert(e8.recognize("abcdefx") == false);
+  assert(e9.recognize("") == false);
+  assert(e9.recognize("a") == false);
+  assert(e9.recognize("ab") == false);
+  assert(e9.recognize("abc") == true);
+  assert(e9.recognize("abcx") == false);
+  assert(e9.recognize("d") == false);
+  assert(e9.recognize("de") == false);
+  assert(e9.recognize("def") == true);
+  assert(e9.recognize("defx") == false);
+  assert(e10.recognize("") == true);
+  assert(e10.recognize("a") == false);
+  assert(e10.recognize("ab") == false);
+  assert(e10.recognize("abc") == true);
+  assert(e10.recognize("abca") == false);
+  assert(e10.recognize("abcab") == false);
+  assert(e10.recognize("abcabc") == true);
+  assert(e10.recognize("abcabca") == false);
+  assert(e10.recognize("abcabcab") == false);
+  assert(e10.recognize("abcabcabc") == true);
+  assert(e10.recognize("abcabcabca") == false);
   // As stack allocated variables go out of scope, various pointers
   // will get deallocated. Testing for memory leaks need to occur
   // on this control path, but outside this method
@@ -557,6 +700,18 @@ int Test::test__Lit(){
   assert(lp->_literal == "abc");
   assert(lp->refcount == 1);
   assert(lp->to_string() == "abc");
+  List v1 = lp->interpret("");
+  List v2 = lp->interpret("a");
+  List v3 = lp->interpret("ab");
+  List v4 = lp->interpret("abc");
+  List v5 = lp->interpret("abcx");
+  assert(v1.empty());
+  assert(v2.empty());
+  assert(v3.empty());
+  assert(v4.size() == 1);
+  assert(v5.size() == 1);
+  assert(v4[0] == "abc");
+  assert(v5[0] == "abc");
   delete lp;
   assert(!Log::has_memory_leak());
   // contructing on the stack
@@ -564,6 +719,18 @@ int Test::test__Lit(){
   assert(l.refcount == 1);
   assert(l._literal == "abc");
   assert(l.to_string() == "abc");
+  v1 = l.interpret("");
+  v2 = l.interpret("a");
+  v3 = l.interpret("ab");
+  v4 = l.interpret("abc");
+  v5 = l.interpret("abcx");
+  assert(v1.empty());
+  assert(v2.empty());
+  assert(v3.empty());
+  assert(v4.size() == 1);
+  assert(v5.size() == 1);
+  assert(v4[0] == "abc");
+  assert(v5[0] == "abc");
   assert(!Log::has_memory_leak());
  return 0;
 }
@@ -579,6 +746,24 @@ int Test::test__And(){
   assert(a->_left == l1);
   assert(a->_right == l2);
   assert(a->to_string() == "abcdef");
+  List v1 = a->interpret("");
+  List v2 = a->interpret("a");
+  List v3 = a->interpret("ab");
+  List v4 = a->interpret("abc");
+  List v5 = a->interpret("abcd");
+  List v6 = a->interpret("abcde");
+  List v7 = a->interpret("abcdef");
+  List v8 = a->interpret("abcdefx");
+  assert(v1.empty());
+  assert(v2.empty());
+  assert(v3.empty());
+  assert(v4.empty());
+  assert(v5.empty());
+  assert(v6.empty());
+  assert(v7.size() == 1);
+  assert(v8.size() == 1);
+  assert(v7[0] == "abcdef");
+  assert(v8[0] == "abcdef");
   delete a;
   assert(!Log::has_memory_leak());
   // construction from the stack
@@ -589,6 +774,24 @@ int Test::test__And(){
   assert(b._left == l1);
   assert(b._right == l2);
   assert(b.to_string() == "abcdef");
+  v1 = b.interpret("");
+  v2 = b.interpret("a");
+  v3 = b.interpret("ab");
+  v4 = b.interpret("abc");
+  v5 = b.interpret("abcd");
+  v6 = b.interpret("abcde");
+  v7 = b.interpret("abcdef");
+  v8 = b.interpret("abcdefx");
+  assert(v1.empty());
+  assert(v2.empty());
+  assert(v3.empty());
+  assert(v4.empty());
+  assert(v5.empty());
+  assert(v6.empty());
+  assert(v7.size() == 1);
+  assert(v8.size() == 1);
+  assert(v7[0] == "abcdef");
+  assert(v8[0] == "abcdef");
   // b goes out of scope, pointers l1 and l2 should get released
   // testing for memory leaks occurs outside of this method
  return 0;
@@ -605,6 +808,28 @@ int Test::test__Or(){
   assert(o->_left == l1);
   assert(o->_right == l2);
   assert(o->to_string() == "(abc|def)");
+  List v1 = o->interpret("");
+  List v2 = o->interpret("a");
+  List v3 = o->interpret("ab");
+  List v4 = o->interpret("abc");
+  List v5 = o->interpret("abcx");
+  List v6 = o->interpret("d");
+  List v7 = o->interpret("de");
+  List v8 = o->interpret("def");
+  List v9 = o->interpret("defx");
+  assert(v1.empty());
+  assert(v2.empty());
+  assert(v3.empty());
+  assert(v6.empty());
+  assert(v7.empty());
+  assert(v4.size() == 1);
+  assert(v5.size() == 1);
+  assert(v8.size() == 1);
+  assert(v9.size() == 1);
+  assert(v4[0] == "abc"); 
+  assert(v5[0] == "abc"); 
+  assert(v8[0] == "def"); 
+  assert(v9[0] == "def"); 
   delete o;
   assert(!Log::has_memory_leak());
   // construction from the stack
@@ -629,6 +854,60 @@ int Test::test__Many(){
   assert(m->refcount == 1);
   assert(m->_regex == l);
   assert(m->to_string() == "(abc)*");
+  List v1 = m->interpret("");
+  List v2 = m->interpret("a");
+  List v3 = m->interpret("ab");
+  List v4 = m->interpret("abc");
+  List v5 = m->interpret("abca");
+  List v6 = m->interpret("abcab");
+  List v7 = m->interpret("abcabc");
+  List v8 = m->interpret("abcabca");
+  List v9 = m->interpret("abcabcab");
+  List v10 = m->interpret("abcabcabc");
+  List v11 = m->interpret("abcabcabca");
+  List v12 = m->interpret("abcabcabcab");
+  assert(v1.size() == 1);
+  assert(v2.size() == 1);
+  assert(v3.size() == 1);
+  assert(v4.size() == 2);
+  assert(v5.size() == 2);
+  assert(v6.size() == 2);
+  assert(v7.size() == 3);
+  assert(v8.size() == 3);
+  assert(v9.size() == 3);
+  assert(v10.size() == 4);
+  assert(v11.size() == 4);
+  assert(v12.size() == 4);
+  assert(v1[0] == "");
+  assert(v2[0] == "");
+  assert(v3[0] == "");
+  assert(v4[0] == "");
+  assert(v5[0] == "");
+  assert(v6[0] == "");
+  assert(v7[0] == "");
+  assert(v8[0] == "");
+  assert(v9[0] == "");
+  assert(v10[0] == "");
+  assert(v11[0] == "");
+  assert(v12[0] == "");
+  assert(v4[1] == "abc");
+  assert(v5[1] == "abc");
+  assert(v6[1] == "abc");
+  assert(v7[1] == "abc");
+  assert(v8[1] == "abc");
+  assert(v9[1] == "abc");
+  assert(v10[1] == "abc");
+  assert(v11[1] == "abc");
+  assert(v12[1] == "abc");
+  assert(v7[2] == "abcabc");
+  assert(v8[2] == "abcabc");
+  assert(v9[2] == "abcabc");
+  assert(v10[2] == "abcabc");
+  assert(v11[2] == "abcabc");
+  assert(v12[2] == "abcabc");
+  assert(v10[3] == "abcabcabc");
+  assert(v11[3] == "abcabcabc");
+  assert(v12[3] == "abcabcabc");
   delete m;
   assert(!Log::has_memory_leak());
   // construction from the stack
@@ -637,6 +916,60 @@ int Test::test__Many(){
   assert(n.refcount == 1);
   assert(n._regex == l);
   assert(n.to_string() == "(abc)*");
+  v1 = n.interpret("");
+  v2 = n.interpret("a");
+  v3 = n.interpret("ab");
+  v4 = n.interpret("abc");
+  v5 = n.interpret("abca");
+  v6 = n.interpret("abcab");
+  v7 = n.interpret("abcabc");
+  v8 = n.interpret("abcabca");
+  v9 = n.interpret("abcabcab");
+  v10 = n.interpret("abcabcabc");
+  v11 = n.interpret("abcabcabca");
+  v12 = n.interpret("abcabcabcab");
+  assert(v1.size() == 1);
+  assert(v2.size() == 1);
+  assert(v3.size() == 1);
+  assert(v4.size() == 2);
+  assert(v5.size() == 2);
+  assert(v6.size() == 2);
+  assert(v7.size() == 3);
+  assert(v8.size() == 3);
+  assert(v9.size() == 3);
+  assert(v10.size() == 4);
+  assert(v11.size() == 4);
+  assert(v12.size() == 4);
+  assert(v1[0] == "");
+  assert(v2[0] == "");
+  assert(v3[0] == "");
+  assert(v4[0] == "");
+  assert(v5[0] == "");
+  assert(v6[0] == "");
+  assert(v7[0] == "");
+  assert(v8[0] == "");
+  assert(v9[0] == "");
+  assert(v10[0] == "");
+  assert(v11[0] == "");
+  assert(v12[0] == "");
+  assert(v4[1] == "abc");
+  assert(v5[1] == "abc");
+  assert(v6[1] == "abc");
+  assert(v7[1] == "abc");
+  assert(v8[1] == "abc");
+  assert(v9[1] == "abc");
+  assert(v10[1] == "abc");
+  assert(v11[1] == "abc");
+  assert(v12[1] == "abc");
+  assert(v7[2] == "abcabc");
+  assert(v8[2] == "abcabc");
+  assert(v9[2] == "abcabc");
+  assert(v10[2] == "abcabc");
+  assert(v11[2] == "abcabc");
+  assert(v12[2] == "abcabc");
+  assert(v10[3] == "abcabcabc");
+  assert(v11[3] == "abcabcabc");
+  assert(v12[3] == "abcabcabc");
   // n goes out of scope, pointers l should get released
   // testing for memory leaks occurs outside of this method
  return 0;
@@ -646,10 +979,52 @@ int Test::test__Many(){
 /*                                 Main                                       */
 /******************************************************************************/
 
+static void print(List l){
+  bool start = true;
+  std::cout << "[";
+  for(auto it = l.cbegin(); it != l.cend(); ++it){
+    if(start){
+      start = false;
+    } else {
+      std::cout << ", ";
+    }
+    std::cout << *it;
+  }
+  std::cout << "]\n";
+}
+
+static int run(){
+  Exp a = Exp::Lit("a"); 
+  Exp b = Exp::Lit("b");
+  Exp c = Exp::Lit("c");
+  
+  Exp aa = Exp::And(a, Exp::Many(a)); // one or more 'a'
+  Exp bb = Exp::And(b, Exp::Many(b)); // one or more 'b'
+  Exp cc = Exp::And(c, Exp::Many(c)); // one or more 'c'
+
+  Exp regex = Exp::Many(Exp::And(Exp::Or(aa,bb), cc));
+  std::string str = "acbbccaaacccbbbbaaaaaccccc";
+
+  std::cout << "regex = " << regex << std::endl;
+  std::cout << "string = \"" << str << "\"\n";
+  std::cout << "The recognized prefixes are:\n";
+
+  List result;
+  for(int i = 0; i <= str.length(); ++i){
+    std::string test = str.substr(0,i);
+    if(regex.recognize(test)){
+      result.push_back("\"" + test + "\"");
+    }
+  }
+
+  print(result);
+
+  return 0;
+}
+
 int main(){
-
-  assert(Test::test_all() == 0);
-
+//  assert(Test::test_all() == 0);
+  assert(run() == 0);
   assert(!Log::has_memory_leak());
   return 0;
 }

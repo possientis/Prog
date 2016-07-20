@@ -1,4 +1,4 @@
-
+introduce support for (lambda arg body)
 deal with issue of whether eval takes 1 or 2 arguments
 revise run to as to evaluate or compile + run
 follow up on debug.scm
@@ -10,9 +10,6 @@ Understand the suble differences between:
   - apply-primitive
   - apply-primitive-procedure
 Understand why apply-primitive cannot simply be defined as 'apply'
-
-
-
 
 
 

@@ -1,15 +1,14 @@
 #include <bitcoin/bitcoin.hpp>
-
-
 int main()
 {
   // Private secret key.
   bc::ec_secret secret; 
-  bc::decode_hash(secret, 
+  bc::decode_base16(secret, 
       "038109007313a5807b2eccc082c8c3fbb988a973cacf1a7df9ce725c31b14776");
+  std::cout << "secret: " << bc::encode_base16(secret) << std::endl;
   
   // Get public key.
-  bc::ec_compressed public_key = bc::secret_to_public_key(secret);
+  bc::ec_point public_key = bc::secret_to_public_key(secret);
   std::cout << "Public key: " << bc::encode_hex(public_key) << std::endl;
 /*
   // Create Bitcoin address.
@@ -41,7 +40,7 @@ int main()
   const std::string address = bc::encode_base58(unencoded_address);
   std::cout << "Address: " << address << std::endl;
   */
-  std::cout << "Exiting now ...\n";
+//  std::cout << "Exiting now ...\n";
 
   return 0;
 }
