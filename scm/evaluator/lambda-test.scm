@@ -1,0 +1,27 @@
+(load "main.scm")
+
+(define exp '(lambda arg (null? arg)))
+(display "exp = ")(display exp)(newline)
+(define f (lambda arg (null? arg)))
+(display "(f) = ")(display (f))(newline)
+(display "(f 'x) = ")(display (f 'x))(newline)
+; (eval-procedure arg (begin (null? arg)) #<CLOSURE <anon> "environment1.scm": (m)>)
+(define proc (eval exp global-env))
+(display proc)(newline)
+(define arg (eval-procedure-parameters proc))
+(display "arg = ")(display arg)(newline)
+(display "(symbol? arg) = ")(display (symbol? arg))(newline)
+(display (apply-eval-procedure proc (list)))(newline)
+(display (apply-eval-procedure proc (list 'x)))(newline)
+
+(define exp2 '(lambda (x y . z) (null? z)))
+(display "exp2 = ")(display exp2)(newline)
+(define g (lambda (x y . z) (null? z)))
+(display "(g 1 2) = ")(display (g 1 2))(newline) 
+(display "(g 1 2 3) = ")(display (g 1 2 3))(newline)
+(define proc2 (eval exp2 global-env))
+(display proc2)(newline)
+(define arg2 (eval-procedure-parameters proc2))
+(display "arg = ")(display arg2)(newline)
+
+

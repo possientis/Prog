@@ -147,6 +147,7 @@ public class Interpreter {
     System.out.println("regex = " + regex);
     System.out.println("string = \"" + string + "\"");
     System.out.println("The recognized prefixes are:");
+
     List<String> result = new ArrayList<>();
     for(int i = 0; i <= string.length(); ++i){
       String test = string.substring(0,i);

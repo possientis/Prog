@@ -101,14 +101,17 @@
     ;
     (define (extended data)
       (lambda (vars vals)
+        ;
+        (if (symbol? vars)
+          (this (cons 'data (cons (make-frame (list vars) (list vals)) (cdr data))))
+          ; else
         (if (= (length vars) (length vals))
           ; returning new environment instance, with additional frame
           (this (cons 'data (cons (make-frame vars vals) (cdr data))))
           (if (< (length vars) (length vals))
-            (error "Too many arguments supplied" vars vals)
-            (error "Too few arguments supplied" vars vals)))))
+            (error "Too many arguments supplied" vars vals))))))
     ;
-    (define (display-env data) 'TBI)
+    (define (display-env data) 'TODO)
     ;
     ; Private helper functions
     ;
