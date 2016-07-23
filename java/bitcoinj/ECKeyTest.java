@@ -3,7 +3,7 @@ import org.bitcoinj.crypto.LazyECPoint;
 import java.math.BigInteger;
 //import org.spongycastle.math.ec.ECPoint;
 
-public class Test {
+public class ECKeyTest {
   public static void main(String[] args){
 
     ECKey key;
@@ -11,7 +11,6 @@ public class Test {
     BigInteger priv2 = new BigInteger("1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD",16);
     System.out.println(priv1.equals(priv2));  // true
     key = ECKey.fromPrivate(priv1);
-
     System.out.println(key);
     
   

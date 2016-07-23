@@ -1,0 +1,48 @@
+STATIC
+creating a static library
+$ ar r libdemo.a mod1.o mod2.o mod3.o
+
+SHARED
+(without 'soname')
+creating a shared library
+gcc -c -fPIC mod1.c mod2.c mod3.c
+gcc -shared -o libdemo.so mod1.o mod2.o mod3.o
+
+SHARED
+(with 'soname')
+creating shared library with 'soname'
+gcc -shared -Wl,-soname,libbar.so -o libfoo.so mod1.o mod2.o mod3.o
+(The executable 'needs' libbar.so)
+Then set up symbolic link
+ln -s libfoo.so libbar.so
+'soname' provides one level of indirection
+
+DYNAMIC linking
+environment variable LD_LIBRARY_PATH needs to be set to run e.g.
+env LD_LIBRARY_PATH=. ./a.out
+or shared library needs to be on the search patch (e.g. /usr/lib )
+
+USEFUL COMMANDS
+
+provides list of needed shared libraries:
+ldd <executable> 
+
+provides general info:
+objdump <executable> <objectfile> <sharedlibrary> <staticlibrary>
+readelf <executable> <objectfile> <sharedlibrary> <staticlibrary>
+
+provides symbol look up: (use nm -A )
+nm <executable> <objectfile> <sharedlibrary> <staticlibrary>
+
+
+
+
+
+
+
+
+
+
+
+
+
