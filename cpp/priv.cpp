@@ -13,25 +13,60 @@ int main()
 {
   // Private secret key.
   bc::ec_secret secret; 
-  bc::decode_base16(secret, 
-      "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD");
-//      "038109007313a5807b2eccc082c8c3fbb988a973cacf1a7df9ce725c31b14776");
-  std::cout << "Secret key: " << bc::encode_base16(secret) << std::endl;
-  
-  // Get public key.
+  bc::decode_base16(
+      secret, "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD");
+ 
+/* $ ku -j KxFC1jmwwCoACiCAWZ3eXa96mBM6tb3TYzGmf6YwgdGWZgawvrtJ  # pycoin key utility
+  {
+   "BTC_address": "1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy",
+   "BTC_address_uncompressed": "1424C2F4bC9JidNjjTUZCbUxv6Sa1Mt62x",
+   "address": "1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy",
+   "address_uncompressed": "1424C2F4bC9JidNjjTUZCbUxv6Sa1Mt62x",
+   "hash160": "bbc1e42a39d05a4cc61752d6963b7f69d09bb27b",
+   "hash160_uncompressed": "211b74ca4686f81efda5641767fc84ef16dafe0b",
+   "input": "KxFC1jmwwCoACiCAWZ3eXa96mBM6tb3TYzGmf6YwgdGWZgawvrtJ",
+   "key_pair_as_sec": "03f028892bad7ed57d2fb57bf33081d5cfcf6f9ed3d3d7f159c2e2fff579dc341a",
+   "key_pair_as_sec_uncompressed": "04f028892bad7ed57d2fb57bf33081d5cfcf6f9ed3d3d7f159c2e2fff579dc341a07cf33da18bd734c600b96a72bbc4749d5141c90ec8ac328ae52ddfe2e505bdb",
+   "netcode": "BTC",
+   "network": "Bitcoin mainnet",
+   "public_pair_x": "108626704259373488493324494832963472198167093861790438979212875284973843395610",
+   "public_pair_x_hex": "f028892bad7ed57d2fb57bf33081d5cfcf6f9ed3d3d7f159c2e2fff579dc341a",
+   "public_pair_y": "3532285151429480400098290360892322426461524297929807392099748929454186978267",
+   "public_pair_y_hex": "7cf33da18bd734c600b96a72bbc4749d5141c90ec8ac328ae52ddfe2e505bdb",
+   "secret_exponent": "13840170145645816737842251482747434280357113762558403558088249138233286766301",
+   "secret_exponent_hex": "1e99423a4ed27608a15a2616a2b0e9e52ced330ac530edcc32c8ffc6a526aedd",    # <--------- HERE !
+   "wif": "KxFC1jmwwCoACiCAWZ3eXa96mBM6tb3TYzGmf6YwgdGWZgawvrtJ",
+   "wif_uncompressed": "5J3mBbAH58CpQ3Y5RNJpUKPE62SQ5tfcvU2JpbnkeyhfsYB1Jcn",
+   "y_parity": "odd"
+}
+*/
+
+// TODO : mirror pycoin output
+
+ // Get public key
   bc::ec_point public_key = bc::secret_to_public_key(secret);
-  std::cout << "Public key: " << bc::encode_hex(public_key) << std::endl;
-  
-  // Create Bitcoin address.
+  // Get Bitcoin address quick
   bc::payment_address payaddr;
   bc::set_public_key(payaddr, public_key);
+  const std::string btc_address = payaddr.encoded(); 
+
+
+
+
+//  std::cout << "Secret key: " << bc::encode_base16(secret) << std::endl;
+  
+
+  // Get public key.
+//  std::cout << "Public key: " << bc::encode_hex(public_key) << std::endl;
+  
+  // Create Bitcoin address.
   const std::string address = payaddr.encoded();
-  std::cout << "Address: " << address << std::endl;
+//  std::cout << "Address: " << address << std::endl;
 
 
   // Compute hash of public key for P2PKH address.
   const bc::short_hash hash = bc::bitcoin_short_hash(public_key);
-  std::cout << "Hash: " << bc::encode_base16(hash) << std::endl;
+//  std::cout << "Hash: " << bc::encode_base16(hash) << std::endl;
 
   // attempting to compute corresponding address 
   bc::data_chunk unencoded_address;
@@ -52,29 +87,38 @@ int main()
   // Finally we must encode the result in Bitcoin's base58 encoding
   assert(unencoded_address.size() == 25);
   const std::string address2 = bc::encode_base58(unencoded_address);
-  std::cout << "Address: " << address2 << std::endl;
+//  std::cout << "Address: " << address2 << std::endl;
 
 
-  // attempting to compute wif and wif_uncompressed
+  // attempting to compute wif-uncompressed
   bc::data_chunk unencoded_priv;
   // Reserve 37 bytes
   //[ version:1 ]
   //[ priv key: 32 ]
   //[ checksum:4 ]
-  unencoded_priv.reserve(38);
+  unencoded_priv.reserve(37);
   unencoded_priv.push_back(128);  // version
   bc::extend_data(unencoded_priv, secret);
   bc::append_checksum(unencoded_priv);
   assert(unencoded_priv.size() == 37);
   const std::string wif_uncompressed = bc::encode_base58(unencoded_priv);
-  std::cout << "WIF uncompressed: " << wif_uncompressed << std::endl;
+//  std::cout << "WIF uncompressed: " << wif_uncompressed << std::endl;
 
-  // TODO compute wif, this is wrong as it stands
-  unencoded_priv.push_back(0x01);
-  assert(unencoded_priv.size() == 38);
-  const std::string wif = bc::encode_base58(unencoded_priv);
-  std::cout << "WIF: " << wif << std::endl;
-
+  // attempting to compute wif
+  bc::data_chunk unencoded_priv2;
+  // Reserve 38 bytes
+  //[ version:1 ]
+  //[ priv key: 32 ]
+  //[ suffix: 0x01]
+  unencoded_priv2.reserve(38);
+  unencoded_priv2.push_back(128);  // version
+  bc::extend_data(unencoded_priv2, secret);
+  unencoded_priv2.push_back(0x01);
+  //[ checksum:4 ]
+  bc::append_checksum(unencoded_priv2);
+  assert(unencoded_priv2.size() == 38);
+  const std::string wif = bc::encode_base58(unencoded_priv2);
+//  std::cout << "WIF: " << wif << std::endl;
 
   return 0;
 }
