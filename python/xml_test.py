@@ -1,4 +1,4 @@
-from urllib2 import urlopen
+from urllib.request import urlopen
 from xml.sax import make_parser
 from xml.sax import ContentHandler
 

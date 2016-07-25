@@ -1,14 +1,29 @@
-#include "secp256k1.h"
 #include <stdio.h>
+#include<gmp.h>
+
 
 
 int main(){
 
-  printf("Symbol value =%d\n", SECP256K1_EC_UNCOMPRESSED);
+  mpz_t sum;
+  printf("size = %s\n", gmp_version);
 
-# ifdef SECP256K1_FLAGS_BIT_CONTEXT_COMPRESSION
-  printf("defined !!!\n");
-#endif
+  struct foo { mpz_t x, y; };
+
+  mpz_t vec[20];
+
+  mpq_t quotient;
+
+  mpf_t fp;
+
+  mp_exp_t a;
+  mp_limb_t b;
+  mp_size_t size;
+
+  mp_bitcnt_t c;
+
+  gmp_randstate_t rstate;
+
 
 
   return 0;
