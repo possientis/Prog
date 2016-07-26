@@ -46,8 +46,8 @@
   ;;
   (define (insert! key value)
     (let ((h (hash key)))
-      (if (null? (vector-ref data h))   ; no existing entry for this hash value
-        (vector-set! data h (link equal?))); allocating linked list to entry h
+      (if (null? (vector-ref data h))         ; no existing entry for this hash value
+        (vector-set! data h (link equal?)))   ; allocating linked list to entry h
       (let ((link-list (vector-ref data h)))
         (if (eq? #f ((link-list 'find) key))  ; key not currently in table
           (set! num (+ 1 num)))               ; hence one more element in table

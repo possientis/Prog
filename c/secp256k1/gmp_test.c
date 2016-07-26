@@ -1,3 +1,5 @@
+// gcc filename.c -lgmp
+
 #include <stdio.h>
 #include <assert.h>
 #include<gmp.h>
@@ -25,6 +27,7 @@ int main(){
   assert(mpz_get_str(buffer,10,p) == buffer);
   printf("p = %s\n", buffer);
   printf("p = "); mpz_out_str(stdout,10,p); printf("\n");
+  gmp_printf("p = %Zd\n", p);
 
 
 
@@ -66,15 +69,7 @@ int main(){
   assert(mpz_set_str(q,buffer,16) == 0);
   printf("q = "); mpz_out_str(stdout,10,q); printf("\n");
   */
-
   
-  gmp_randstate_t state;
-  gmp_randinit_default(state);
-
-  mpz_urandomb(q,state,256);
-  printf("random q = "); mpz_out_str(stdout,16,q); printf("\n");
-
-
   unsigned long a[20];
   mpz_import(q,32,1,sizeof(a[0]),0,0,a);
   printf("q = "); mpz_out_str(stdout,16,q); printf("\n");

@@ -60,7 +60,10 @@
           (if (null? env)
             (error "Unbound variable -- LOOKUP" var)
             (let ((current (car env)))
+;              (display "check1: var = ")(display var)(newline)
+;              (display "check2: (symbol? var) = ")(symbol? var)(newline)
               (let ((varval ((current 'find) var)))
+;                (display "checkoo\n")
                 (if (eq? #f varval) ; var not in current frame
                   (frame-loop (cdr env))
                   (cdr varval)))))))) ; varval is pair (var . val)
@@ -101,15 +104,9 @@
     ;
     (define (extended data)
       (lambda (vars vals)
-        ;
-        (if (symbol? vars)
-          (this (cons 'data (cons (make-frame (list vars) (list vals)) (cdr data))))
-          ; else
-        (if (= (length vars) (length vals))
-          ; returning new environment instance, with additional frame
-          (this (cons 'data (cons (make-frame vars vals) (cdr data))))
-          (if (< (length vars) (length vals))
-            (error "Too many arguments supplied" vars vals))))))
+        ; returning new environment instance, with additional frame
+        (let ((new-frame (make-frame vars vals)))
+          (this (cons 'data (cons new-frame (cdr data)))))))
     ;
     (define (display-env data) 'TODO)
     ;
@@ -121,9 +118,14 @@
           (if (null? vars)
             new-frame
             ;else
-            (begin
-              ((new-frame 'insert!) (car vars) (car vals))
-              (loop (cdr vars) (cdr vals)))))))
+            (if (symbol? vars)
+              (begin
+                ((new-frame 'insert!) vars vals)
+                  new-frame)
+              ;else
+              (begin
+                ((new-frame 'insert!) (car vars) (car vals))
+                (loop (cdr vars) (cdr vals))))))))
     ;
     ; returning no argument constructor
     ;

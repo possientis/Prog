@@ -1,4 +1,8 @@
-continue with lambda-test.scm
+continue with lambda-test.scm, and the code of make-frame in environment1.scm
+
+
+
+
 extend environment unit testing to account for new language features
 deal with issue of whether eval takes 1 or 2 arguments
 revise run to as to evaluate or compile + run

@@ -9,6 +9,7 @@
 // $ pkg-config --cflags libbitcoin --> -I/usr/local/include
 
 #include <bitcoin/bitcoin.hpp>
+#include <assert.h>
 int main()
 {
   // Private secret key.
@@ -43,32 +44,22 @@ int main()
 
 // TODO : mirror pycoin output
 
- // Get public key
+ // get public key
   bc::ec_point public_key = bc::secret_to_public_key(secret);
-  // Get Bitcoin address quick
+  bc::ec_point public_key_uncompressed = bc::secret_to_public_key(secret, false);
+  // get bitcoin address quickly
   bc::payment_address payaddr;
+  bc::payment_address payaddr_uncompressed;
   bc::set_public_key(payaddr, public_key);
+  bc::set_public_key(payaddr_uncompressed, public_key_uncompressed);
   const std::string btc_address = payaddr.encoded(); 
+  const std::string btc_address_uncompressed = payaddr_uncompressed.encoded();
 
-
-
-
-//  std::cout << "Secret key: " << bc::encode_base16(secret) << std::endl;
-  
-
-  // Get public key.
-//  std::cout << "Public key: " << bc::encode_hex(public_key) << std::endl;
-  
-  // Create Bitcoin address.
-  const std::string address = payaddr.encoded();
-//  std::cout << "Address: " << address << std::endl;
-
-
-  // Compute hash of public key for P2PKH address.
+  // get hash160 
   const bc::short_hash hash = bc::bitcoin_short_hash(public_key);
-//  std::cout << "Hash: " << bc::encode_base16(hash) << std::endl;
-
-  // attempting to compute corresponding address 
+  const bc::short_hash hash_uncompressed = bc::bitcoin_short_hash(public_key_uncompressed);
+ 
+  // computing corresponding address 
   bc::data_chunk unencoded_address;
   // Reserve 25 bytes
   //
@@ -78,7 +69,7 @@ int main()
   //
   //[ checksum:4 ]
   unencoded_address.reserve(25);
-  //// Version byte, 0 is normal BTC address (P2PKH).
+  // version byte, 0 is normal BTC address (P2PKH).
   unencoded_address.push_back(0);
   // Hash data
   bc::extend_data(unencoded_address, hash);
@@ -86,7 +77,41 @@ int main()
   bc::append_checksum(unencoded_address);
   // Finally we must encode the result in Bitcoin's base58 encoding
   assert(unencoded_address.size() == 25);
-  const std::string address2 = bc::encode_base58(unencoded_address);
+  const std::string address = bc::encode_base58(unencoded_address);
+  assert(btc_address == address);
+
+  // uncompressed case
+  bc::data_chunk unencoded_address_uncompressed;
+  unencoded_address_uncompressed.reserve(25);
+  unencoded_address_uncompressed.push_back(0);
+  bc::extend_data(unencoded_address_uncompressed, hash_uncompressed);
+  bc::append_checksum(unencoded_address_uncompressed);
+  assert(unencoded_address_uncompressed.size() == 25);
+  const std::string address_uncompressed = bc::encode_base58(unencoded_address_uncompressed);
+  assert(btc_address_uncompressed == address_uncompressed);
+
+
+
+
+
+  // checking
+  std::cout << "{" << std::endl;
+  std::cout << "   \"BTC_address\": \"" << btc_address << "\"," << std::endl;
+  std::cout << "   \"BTC_address_uncompressed\": \"" << btc_address_uncompressed << "\"," << std::endl;
+  std::cout << "   \"address\": \"" << btc_address << "\"," << std::endl;
+  std::cout << "   \"address_uncompressed\": \"" << btc_address_uncompressed << "\"," << std::endl;
+  std::cout << "   \"hash160\": \"" << bc::encode_hex(hash) << "\"," << std::endl;
+  std::cout << "   \"hash160_uncompressed\": \"" << bc::encode_base16(hash_uncompressed) << "\"," << std::endl;
+  std::cout << "   \"input\": \"KxFC1jmwwCoACiCAWZ3eXa96mBM6tb3TYzGmf6YwgdGWZgawvrtJ\"," << std::endl;
+  std::cout << "   \"key_pair_as_sec\": \"" << bc::encode_hex(public_key) << "\"," << std::endl;
+  std::cout << "   \"key_pair_as_sec_uncompressed\": \"" << bc::encode_hex(public_key_uncompressed) << "\"," << std::endl;
+
+
+
+//  std::cout << "Secret key: " << bc::encode_base16(secret) << std::endl;
+//  std::cout << "Public key: " << bc::encode_hex(public_key) << std::endl;
+//  std::cout << "Address: " << address << std::endl;
+//  std::cout << "Hash: " << bc::encode_base16(hash) << std::endl;
 //  std::cout << "Address: " << address2 << std::endl;
 
 
@@ -120,6 +145,7 @@ int main()
   const std::string wif = bc::encode_base58(unencoded_priv2);
 //  std::cout << "WIF: " << wif << std::endl;
 
+  std::cout << "}" << std::endl;
   return 0;
 }
 

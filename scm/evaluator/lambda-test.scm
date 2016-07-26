@@ -5,7 +5,7 @@
 (define f (lambda arg (null? arg)))
 (display "(f) = ")(display (f))(newline)
 (display "(f 'x) = ")(display (f 'x))(newline)
-; (eval-procedure arg (begin (null? arg)) #<CLOSURE <anon> "environment1.scm": (m)>)
+;(eval-procedure arg (begin (null? arg)) #<CLOSURE <anon> "environment1.scm": (m)>)
 (define proc (eval exp global-env))
 (display proc)(newline)
 (define arg (eval-procedure-parameters proc))
@@ -23,5 +23,13 @@
 (display proc2)(newline)
 (define arg2 (eval-procedure-parameters proc2))
 (display "arg = ")(display arg2)(newline)
-
+(display "(car arg) = ")(display (car arg2))(newline)
+(display "(symbol? (car arg)) = ")(display (symbol? (car arg2)))(newline)
+(display "(cadr arg) = ")(display (cadr arg2))(newline)
+(display "(symbol? (cadr arg)) = ")(display (symbol? (cadr arg2)))(newline)
+(display "(cddr arg) = ")(display (cddr arg2))(newline)
+;;fails -> (display "(length arg)") (display (length arg2))(newline)
+(display "(list? arg) = ")(display (list? arg2))(newline)
+(display (apply-eval-procedure proc2 (list 1 2)))(newline)
+(display (apply-eval-procedure proc2 (list 1 2 3)))(newline)
 

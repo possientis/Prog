@@ -12,6 +12,8 @@ rm -f c/tlpi/a.out
 rm -f c/tlpi/*.o
 rm -f cpp/a.out
 rm -f cpp/*.o
+rm -f c/secp256k1/a.out
+rm -f c/secp256k1/*.o
 rm -f c#/*.exe
 rm -f java/*.class
 rm -f java/bitcoinj/*.class

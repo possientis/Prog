@@ -10,8 +10,10 @@
           (else (display "^: unexpected argument\n")))))
 
 ; elliptic curve over Fp where:
+; 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f
 (define p 
   115792089237316195423570985008687907853269984665640564039457584007908834671663)
+
 
 ; equation 
 ; y^2 mod p = (x^3 + 7) mod p
@@ -43,6 +45,7 @@
 (define d (modulo c p))
 (if (not (= 0 d)) (error "(x,y) is not a point of secp256k1"))
 
+; 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f
 ; checking p = 2^256 - 0X1000003D1
 (define q1 (^ 2 256))
 (define q2 (- q1 (^ 2 32)))
