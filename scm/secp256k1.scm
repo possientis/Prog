@@ -61,5 +61,5 @@
 ;(printf "%x\n" y)
 ;(printf "%x\n" order)
 
-
+;(printf "%x\n" (- p order)) ; 14551231950b75fc4402da1722fc9baee
 
