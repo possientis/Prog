@@ -115,17 +115,10 @@
     (define (make-frame vars vals)
       (let ((new-frame (frame)))            ; empty-frame
         (let loop ((vars vars) (vals vals))
-          (if (null? vars)
-            new-frame
-            ;else
-            (if (symbol? vars)
-              (begin
-                ((new-frame 'insert!) vars vals)
-                  new-frame)
-              ;else
-              (begin
-                ((new-frame 'insert!) (car vars) (car vals))
-                (loop (cdr vars) (cdr vals))))))))
+          (cond ((null? vars) new-frame)
+                ((symbol? vars) ((new-frame 'insert!) vars vals) new-frame)
+                (else ((new-frame 'insert!) (car vars) (car vals))
+                      (loop (cdr vars) (cdr vals)))))))
     ;
     ; returning no argument constructor
     ;
