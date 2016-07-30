@@ -1,4 +1,4 @@
-extend environment unit testing to account for new language features
+add unit-testing for load (analyze)
 
 deal with issue of whether eval takes 1 or 2 arguments
 revise run to as to evaluate or compile + run

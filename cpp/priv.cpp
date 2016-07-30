@@ -41,7 +41,7 @@ int main()
   bc::data_chunk unencoded_address;
   // Reserve 25 bytes
   //
-  // [ version:1 ]
+  // [ version:1 ] (0x00)
   //
   //[ hash:20 ]
   //
@@ -71,11 +71,11 @@ int main()
   // attempting to compute wif-uncompressed
   bc::data_chunk unencoded_priv;
   // Reserve 37 bytes
-  //[ version:1 ]
+  //[ version:1  ] (0x80)
   //[ priv key: 32 ]
   //[ checksum:4 ]
   unencoded_priv.reserve(37);
-  unencoded_priv.push_back(128);  // version
+  unencoded_priv.push_back(0x80);  // version
   bc::extend_data(unencoded_priv, secret);
   bc::append_checksum(unencoded_priv);
   assert(unencoded_priv.size() == 37);
@@ -84,11 +84,12 @@ int main()
   // attempting to compute wif
   bc::data_chunk unencoded_priv2;
   // Reserve 38 bytes
-  //[ version:1 ]
+  //[ version: 1]   (0x80)
   //[ priv key: 32 ]
-  //[ suffix: 0x01]
+  //[ suffix: 1]    (0x01)
+  //[checksum: 4]
   unencoded_priv2.reserve(38);
-  unencoded_priv2.push_back(128);  // version
+  unencoded_priv2.push_back(0x80);  // version
   bc::extend_data(unencoded_priv2, secret);
   unencoded_priv2.push_back(0x01);
   //[ checksum:4 ]
