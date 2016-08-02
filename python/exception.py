@@ -10,11 +10,11 @@ class D(C):
 for cls in [B,C,D]:
     try:
         raise cls()
-    except D:
-        print("D")
-    except C:
-        print("C")
-    except B:
-        print("B")
+    except D as e:
+        print("D: %s" % e)
+    except C as e:
+        print("C: %s" % e)
+    except B as e:
+        print("B: %s" % e)
 
 print("Out of exception handling")

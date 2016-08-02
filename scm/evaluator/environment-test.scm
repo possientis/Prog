@@ -461,7 +461,7 @@
     (if (not (eq? #f ((env2 'defined?) 'c)))  ; not defined
       (display "environment: unit test 19.9 failing\n"))) 
 
-  (display "environment: unit test complete\n\n"))
+  (display "environment: unit test complete")(newline))
 
 (environment-test)
 (exit 0)

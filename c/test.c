@@ -1,18 +1,15 @@
 #include<stdio.h>
 //#include<assert.h>
-//#include<assert.h>
 //#include<string.h>
 //#include<malloc.h>
-//#include<assert.h>
 
-
-void f(int x){ printf("I am running: x = %d\n", x); }
-
-void (*g(void (*h)(int)))(int){ return h; }
 
 int main(int argc, char* argv[], char* envp[]){
 
-  g(f)(3);
+  printf("size1 = %d\n", sizeof(size_t)); 
+  printf("size2 = %d\n", sizeof(ssize_t));
+  printf("size3 = %d\n", sizeof(long));
+  printf("size4 = %d\n", sizeof(long long));
 
   return 0;
 }

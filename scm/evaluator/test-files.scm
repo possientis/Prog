@@ -29,7 +29,7 @@
 (load "frame1.scm")
 (load "frame2.scm")
 (load "frame3.scm")
-(load "frame-test.scm")
+;(load "frame-test.scm")
 (load "hash.scm")
 (load "link.scm")
 (load "link-node.scm")

@@ -77,6 +77,7 @@
         (list 'eof-object? eof-object?)
         (list 'close-port close-port)
         (list 'exit (lambda(x) 'ok))
+        (list 'error error)
         ; more to be included
         ))
 (define (primitive-procedure-names) (map car primitive-procedures))

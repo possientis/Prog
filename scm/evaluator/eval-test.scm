@@ -5,6 +5,7 @@
   (display "eval: starting unit test\n\n")
   ;
   ; self-evaluating
+  (display "testing self-evaluating expressions...\n")
   ;
   ; eval
   (let ((x (eval 3)))
@@ -39,6 +40,7 @@
     (if (not (equal? x #f)) (display "eval: unit test 1.13 failing\n")))
   ;
   ; variable
+  (display "testing variable expressions...\n")
   ;
   ; eval
   (let ((x (eval 'car)))
@@ -111,6 +113,7 @@
         (display "eval: unit test 2.20 failing\n")))
   ;
   ; quoted
+  (display "testing quoted expressions...\n")
   ;
   ; eval
   (let ((x (eval (quote 'hello))))
@@ -131,6 +134,7 @@
       (display "eval: unit test 3.5 failing\n")))
   ;
   ; assigment
+  (display "testing assignment expressions...\n")
   ;
   ; eval
   (let ((saved-value (eval 'modulo)))
@@ -157,6 +161,7 @@
           (display "eval: unit test 4.3 failing\n")))))
   ;
   ; definition
+  (display "testing definition exprressions...\n")
   ;
   ; eval
   ; simple variable binding
@@ -242,6 +247,7 @@
     ((global-env 'delete!) 'f))
   ;
   ; if
+  (display "testing if expressions...\n")
   ;
   ; eval
   (let ((x (eval '(if #t "yes" "no"))))
@@ -269,6 +275,7 @@
     (if (not (equal? x 20)) (display "eval: unit test 6.9 failing\n")))
   ;
   ; not
+  (display "testing not expressions...\n")
   ;
   ; eval
   (let ((x (eval '(not #t))))
@@ -283,6 +290,7 @@
     (if (not (equal? x #t)) (display "eval: unit test 7.3 failing\n")))
   ;
   ; lambda 
+  (display "testing lambda expressions...\n")
   ;
   ; eval
   (let ((x (eval '(lambda () (+ 3 5)))))
@@ -370,6 +378,7 @@
     ((global-env 'delete!) 'f))
   ;
   ; begin
+  (display "testing begin expressions...\n")
   ;
   (let ((x (eval '(begin 1 2 3 4))))
     (if (not (equal? x 4)) (display "eval: unit test 9.0 failing\n")))
@@ -408,6 +417,7 @@
     (if (not (equal? x 5)) (display "eval: unit test 10.11 failing\n")))
   ;
   ; or
+  (display "testing or expressions...\n")
   ;
   ; eval
   (let ((x (eval '(or #t nonsense1 nonsense2))))
@@ -442,6 +452,7 @@
     (if (not (equal? x #f)) (display "eval: unit test 11.13 failing\n")))
   ;
   ; and
+  (display "testing and expressions...\n")
   ;
   ; eval
   (let ((x (eval '(and #f nonsense1 nonsense2))))
@@ -476,6 +487,7 @@
     (if (not (equal? x #f)) (display "eval: unit test 12.13 failing\n")))
   ;
   ; let
+  (display "testing let expressions...\n")
   ;
   ; eval
   (let ((x (eval '(let ((x 5)) (+ x 7)))))
@@ -504,6 +516,7 @@
     (if (not (equal? x 6)) (display "eval: unit test 13.9 failing\n")))
   ;
   ; named-let
+  (display "testing named let expressions...\n")
   ;
   ; eval
   (let ((x (eval '(let loop ((i 5) (acc 1)) 
@@ -516,6 +529,7 @@
     (if (not (equal? x 120)) (display "eval: unit 14.1 failing\n")))
   ;
   ; let*
+  (display "testing let* expressions...\n")
   ;
   ; eval
   (let ((x (eval '(let* ((x 5)(y (+ x 2))) (+ x y)))))
@@ -526,6 +540,7 @@
     (if (not (equal? x 12)) (display "eval: unit test 15.1 failing\n")))
   ;
   ; letrec
+  (display "testing recursive let expressions...\n")
   ;
   ; eval
   (let ((x (eval '(letrec 
@@ -540,6 +555,7 @@
     (if (not (equal? x 120)) (display "eval: unit test 15.3 failing\n")))
   ;
   ; application
+  (display "testing application expressions...\n")
   ;
   ; eval
   (let ((x (eval '(+))))
@@ -578,6 +594,7 @@
     (if (not (equal? x 3)) (display "eval:unit test 16.15 failing\n")))
   ;
   ; defined?
+  (display "testing defined? expressions...\n")
   ;
   ; eval
   (let ((x (eval '(defined? +))))
@@ -604,6 +621,16 @@
     (if (not (equal? x #f)) (display "eval: unit test 17.9 failing\n")))
   ;
   ; load
+
+  (display "\nrunning test files in analyze mode...\n")
+  ; analyze
+  (let ((s (analyze '(load "test-files.scm"))))
+    (display "check1: s = ")(display s)(newline)
+    (let ((t (s global-env)))
+      'ok))
+
+  ;
+  (display "\nrunning test files in eval mode...\n")
   ;
   ; eval
   (let ((s (eval '(load "test-files.scm"))))
@@ -616,11 +643,6 @@
     (let ((x (eval 'z)))
       (if (not (equal? x 11)) (display "eval: unit test 18.3 failing\n"))))
 
-  ; TODO
-  ; analyze
-;  (let ((s ((analyze '(load "test-files.scm") global-env))))
-;    (if (not (equal? s " test-files.scm loaded"))
-;      (display "eval: unit-test 18.4 failing\n")))
 
 
   (display "eval: unit test complete\n"))
