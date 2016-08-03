@@ -36,13 +36,30 @@ def check_webserver(address, port, resource):
     except ValueError:
         print('Failed to split status line')
         return False
-    if status in ['200', '300']:
+    if status in ['200', '301', '302']:
         print('Success - status was %s' % status)
         return True
     else:
         print("Status was %s" % status)
         return False
 
+if __name__ == "__main__":
+    from optparse import OptionParser
+
+    parser = OptionParser()
+
+    parser.add_option("-a", "--address", dest="address", default='localhost',
+                    help="ADDRESS for webswer", metavar="ADDRESS")
+    parser.add_option("-p","--port", dest="port", type="int", default=80,
+                    help="PORT for webserver", metavar="PORT")
+    parser.add_option("-r","--resource", dest="resource", default='index.html',
+                    help="RESOURCE for webserver",metavar="RESOURCE")
+
+    (options, args) = parser.parse_args()
+    print('options: %s, args: %s' % (options,args))
+    check = check_webserver(options.address, options.port, options.resource)
+    print('check_webserver returned %s' % check)
+    sys.exit(not check)
 
 
-check_webserver('127.0.0.1', 80, '/')
+
