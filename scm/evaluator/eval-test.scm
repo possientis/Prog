@@ -622,26 +622,26 @@
   ;
   ; load
 
-  (display "\nrunning test files in analyze mode...\n")
+;  (display "\nrunning test files in analyze mode...\n")
   ; analyze
-  (let ((s (analyze '(load "test-files.scm"))))
-    (display "check1: s = ")(display s)(newline)
-    (let ((t (s global-env)))
-      'ok))
+;  (let ((s (analyze '(load "test-files.scm"))))
+;    (let ((t (s global-env)))
+;      'ok))
 
   ;
-  (display "\nrunning test files in eval mode...\n")
+  (display "\n11111running test files in eval mode...\n")
   ;
   ; eval
   (let ((s (eval '(load "test-files.scm"))))
     (if (not (equal? s " test-files.scm loaded"))
-      (display "eval: unit test 18.0 failing\n"))
-    (let ((x (eval 'x)))
-      (if (not (equal? x 5)) (display "eval: unit test 18.1 failing\n")))
-    (let ((x (eval 'y)))
-      (if (not (equal? x 6)) (display "eval: unit test 18.2 failing\n")))
-    (let ((x (eval 'z)))
-      (if (not (equal? x 11)) (display "eval: unit test 18.3 failing\n"))))
+      (display "eval: unit test 18.0 failing\n")))
+
+
+  (display "\n22222running test files in eval mode...\n")
+  ; eval
+  (let ((s (eval '(load "test-files.scm"))))
+    (if (not (equal? s " test-files.scm loaded"))
+      (display "eval: unit test 18.0 failing\n")))
 
 
 

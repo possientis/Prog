@@ -1,6 +1,5 @@
 import ecdsa
 import random
-import codecs
 
 _p = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
 _r = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
@@ -24,13 +23,30 @@ curve = curve_secp256k1
 generator = generator_secp256k1
 
 def random_secret():
-    random_char = lambda: chr(random.randint(0,255))
-    def convert_to_int(array): 
-        return int(codecs.encode("".join(array).encode('utf-8'),'hex_codec'),16)
+    # use cryptographically secure PRNG for real application
+    random_char = lambda: random.randint(0,255)         
     byte_array = [random_char() for i in range(32)]
-    return byte_array
+    byte_string = bytes(byte_array)
+    # endianness interpretation of random data does not matter
+    return int.from_bytes(byte_string, byteorder='big')
 
-string1 = "".join(random_secret()).encode('utf-8')
-string2 = codecs.encode(bytes(string1), 'hex_codec')
+def get_point_pubkey(point):
+    if point.y() & 1:
+        key = '03' + '%064x' % point.x()
+    else:
+        key = '02' + '%064x' % point.x()
+    return key
+
+secret = random_secret()
+point = secret * generator
+pubkey = get_point_pubkey(point)
+
+print('secret = %064x' % secret)
+print('pubkey = %s' % pubkey) 
+
+
+
+
+
 
 

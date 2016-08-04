@@ -60,6 +60,7 @@
         (list 'newline newline)
         (list 'load    load-primitive)
         (list 'inexact->exact inexact->exact)
+        (list 'number->string number->string)
         (list 'hash hash)
         (list 'require require-primitive)
         (list 'eval eval-primitive)
