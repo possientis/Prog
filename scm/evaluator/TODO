@@ -1,5 +1,9 @@
+issue: code for dictionary-test calls 'eval' which was meant
+to be the primitive eval of underlying scheme. Problem arises
+if 'eval' has been redefined
+
 add unit-testing for load (analyze, frame-test failing)
-the issue is not analyze. Also fails for eval when eval done *after* analyze
+
 
 
 deal with issue of whether eval takes 1 or 2 arguments

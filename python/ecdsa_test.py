@@ -35,14 +35,32 @@ def get_point_pubkey(point):
         key = '03' + '%064x' % point.x()
     else:
         key = '02' + '%064x' % point.x()
-    return key
+    return int(key, 16)
+
+def get_point_pubkey_uncomp(point):
+    key = '04' + '%064x' % point.x() + '%064x' % point.y()
+    return int(key,16)
+
+
+# example secret key from Mastering Bitcoin
+secret1 = 0x1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD  
+point1 = secret1 * generator    # main functionality
+pubkey1 = get_point_pubkey(point1)
+pubkey1_uncomp = get_point_pubkey_uncomp(point1)
+check1 = 0x03f028892bad7ed57d2fb57bf33081d5cfcf6f9ed3d3d7f159c2e2fff579dc341a
+check2 = 0x04f028892bad7ed57d2fb57bf33081d5cfcf6f9ed3d3d7f159c2e2fff579dc341a07cf33da18bd734c600b96a72bbc4749d5141c90ec8ac328ae52ddfe2e505bdb
+ 
+assert pubkey1 == check1
+assert pubkey1_uncomp == check2
+
 
 secret = random_secret()
-point = secret * generator
+point = secret * generator      # main functionality
 pubkey = get_point_pubkey(point)
+pubkey_uncomp = get_point_pubkey_uncomp(point)
 
-print('secret = %064x' % secret)
-print('pubkey = %s' % pubkey) 
+check3 = ecdsa.ellipticcurve.Point(curve, point.x(), point.y(), ec_order) 
+assert point == check3
 
 
 

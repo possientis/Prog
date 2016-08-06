@@ -1,5 +1,6 @@
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Arrays;
 import java.math.BigInteger;
 import java.lang.Math;
 import java.security.SecureRandom;
@@ -56,6 +57,27 @@ public class Test_ECKey implements Test_Interface {
     checkGetPrivKeyBytes();
     checkGetPubKey();
     checkGetPubKeyHash();
+    checkGetPubKeyPoint();
+    checkGetPublicKeyAsHex();
+    checkGetSecretBytes();
+    checkHashCode();
+    checkHasPrivKey();
+    checkIsCompressed();
+    checkIsEncrypted();
+    checkIsPubKeyCanonical();
+    checkIsPubKeyOnly();
+    checkIsWatching();
+    checkMaybeDecrypt();
+    checkPublicKeyFromPrivate();
+    checkPublicPointFromPrivate();
+  }
+
+  private String getFieldPrimeAsHex(){
+    return "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F";
+  }
+
+  private BigInteger getFieldPrime(){
+    return new BigInteger(getFieldPrimeAsHex(), 16);
   }
 
   private String getCurveOrderAsHex(){
@@ -171,12 +193,6 @@ public class Test_ECKey implements Test_Interface {
     return new BigInteger(getSecret1PubKeyHashUncompAsHex(), 16);
   }
 
-  private boolean isKeyFromSecret1(ECKey key){
-    if (key.getPrivKey() != secret1) return false;
-    // TODO possibly other validations here
-    return true;
-  }
-
 
   private NetworkParameters getMainNetwork(){
     return NetworkParameters.fromID(NetworkParameters.ID_MAINNET);
@@ -194,24 +210,9 @@ public class Test_ECKey implements Test_Interface {
     return NetworkParameters.fromID(NetworkParameters.ID_UNITTESTNET);
   }
 
-  private BigInteger getRandomSecret(){
-    byte bytes[] = new byte[32];
-    boolean isGood = false;
-    BigInteger secret = BigInteger.ZERO;
-
-    while(!isGood){
-      random.nextBytes(bytes);
-      secret = new BigInteger(1, bytes);  // unsigned
-      // we want secret to satisfy 1 < secret < curveOrder
-      if(secret.compareTo(BigInteger.ONE) > 0 && secret.compareTo(curveOrder) < 0){
-        isGood = true;
-      }
-    }
-
-    return secret;
-  }
 
   // data derived from independent sources
+  private final BigInteger fieldPrime = getFieldPrime();
   private final BigInteger curveOrder = getCurveOrder();
   private final BigInteger halfCurveOrder = curveOrder.shiftRight(1); // div 2
   private final BigInteger curveGeneratorX = getCurveGeneratorX();
@@ -246,8 +247,65 @@ public class Test_ECKey implements Test_Interface {
   private final NetworkParameters unitTestNet = getUnitTestNetwork();
   private final SecureRandom random = new SecureRandom();
 
+  private BigInteger getRandomSecret(){
+    byte bytes[] = new byte[32];
+    boolean isGood = false;
+    BigInteger secret = BigInteger.ZERO;
 
+    while(!isGood){
+      random.nextBytes(bytes);
+      secret = new BigInteger(1, bytes);  // unsigned
+      // we want secret to satisfy 1 < secret < curveOrder
+      if(secret.compareTo(BigInteger.ONE) > 0 && secret.compareTo(curveOrder) < 0){
+        isGood = true;
+      }
+    }
 
+    return secret;
+  }
+
+  private boolean isKeyFromSecret1(ECKey key){
+    if (key.getPrivKey() != secret1) return false;
+    // TODO possibly other validations here
+    return true;
+  }
+
+  private BigInteger sqrt(BigInteger n, boolean isEven){
+    // Let p be the underlying prime.
+    // This function returns the square root of n modulo p with given parity
+    // Since p = 3 mod 4, whenever n is a quadratic residue modulo p, a 
+    // square root of n is n^[(p+1)/4] mod p. This follows from Euler' criterion.
+    // Note that p = 3 mod 4 ensures that (p+1)/4 in indeed an integer.
+    BigInteger p = fieldPrime;
+    BigInteger two = BigInteger.ONE.shiftLeft(1);
+    BigInteger exp = p.add(BigInteger.ONE).shiftRight(2); // (p+1)/4
+    BigInteger arg = n.mod(p);
+    BigInteger n1 = arg.modPow(exp, p); // first square root
+    BigInteger n2 = n1.negate().mod(p); // second square root
+
+    // checking n1 and n2 are indeed square roots modulo p
+    checkEquals(n1.multiply(n1).mod(p), arg, "sqrt.1");
+    checkEquals(n2.multiply(n2).mod(p), arg, "sqrt.2");
+
+    // retrieving parity of each square root
+    boolean isEven1 = (n1.mod(two) == BigInteger.ZERO);
+    boolean isEven2 = (n2.mod(two) == BigInteger.ZERO);
+
+    // if one is even, the other should be odd
+    checkCondition((isEven1 && !isEven2) || (!isEven1 && isEven2), "sqrt.3");
+
+    return isEven ? (isEven1 ? n1 : n2) : (isEven1 ? n2 : n1);
+  }
+
+  private BigInteger YFromX(BigInteger x, boolean isEven){
+    // returns Y such that Y^2 = X^3 + 7 modulo p of given parity
+    BigInteger p = fieldPrime;
+    BigInteger seven = BigInteger.valueOf(7);
+    BigInteger square = x.multiply(x).mod(p);
+    BigInteger cube = square.multiply(x).mod(p);
+    BigInteger sum = cube.add(seven);
+    return sqrt(sum, isEven);
+  }
 
 
   // compile time checks
@@ -279,23 +337,25 @@ public class Test_ECKey implements Test_Interface {
 
   // checking static field CURVE
   public void checkCurve(){
-    // TODO checking value of field underlying prime number
     ECDomainParameters curve = ECKey.CURVE;
+    // checking field prime
+    BigInteger prime = curve.getCurve().getField().getCharacteristic();
+    checkEquals(prime, fieldPrime, "checkCurve.1");
     // getN() method returns order of elliptic curve
-    checkEquals(curve.getN(), curveOrder, "checkCurve");
+    checkEquals(curve.getN(), curveOrder, "checkCurve.2");
     // getH() method returns the 'cofactor' of elliptic curve (should be 1)
-    checkEquals(curve.getH(), BigInteger.ONE, "checkCurve");
+    checkEquals(curve.getH(), BigInteger.ONE, "checkCurve.3");
     // getG() method returns the curve generator
     ECPoint generator = curve.getG();
     BigInteger x = generator.getXCoord().toBigInteger();
     BigInteger y = generator.getYCoord().toBigInteger();
-    checkEquals(x, curveGeneratorX, "checkCurve");
-    checkEquals(y, curveGeneratorY, "checkCurve");
+    checkEquals(x, curveGeneratorX, "checkCurve.4");
+    checkEquals(y, curveGeneratorY, "checkCurve.5");
     BigInteger a = curve.getCurve().getA().toBigInteger();
     BigInteger b = curve.getCurve().getB().toBigInteger();
     // Y^2 = X^3 + 7 , so a = 0 and b = 7
-    checkEquals(a, BigInteger.ZERO, "checkCurve");
-    checkEquals(b, BigInteger.valueOf(7), "checkCurve");
+    checkEquals(a, BigInteger.ZERO, "checkCurve.6");
+    checkEquals(b, BigInteger.valueOf(7), "checkCurve.7");
   }
 
   // checking static field HALF_CURVE_ORDER
@@ -379,8 +439,8 @@ public class Test_ECKey implements Test_Interface {
 
   public void checkFromPrivateFromBigInteger(){
     ECKey key = ECKey.fromPrivate(secret1); // compressed by default  
-    checkCondition(isKeyFromSecret1(key), "checkFromPrivateFromBigInteger");
-    checkCondition(key.isCompressed(), "checkFromPrivateFromBigInteger");
+    checkCondition(isKeyFromSecret1(key), "checkFromPrivateFromBigInteger.1");
+    checkCondition(key.isCompressed(), "checkFromPrivateFromBigInteger.2");
   }
 
   public void checkFromPrivateFromBigIntegerBool(){
@@ -423,9 +483,9 @@ public class Test_ECKey implements Test_Interface {
     long time = key.getCreationTimeSeconds();  
     Date date = new Date();
     long current = date.getTime()/1000;       // getTime() in milliseconds
-    checkCondition(time <= current, "checkGetCreationTimeSeconds");
+    checkCondition(time <= current, "checkGetCreationTimeSeconds.1");
     // should not be more than one second apart
-    checkCondition(Math.abs(time - current) < 1, "checkGetCreationTimeSeconds");
+    checkCondition(Math.abs(time - current) < 1, "checkGetCreationTimeSeconds.2");
   }
 
   public void checkGetEncryptedData(){
@@ -537,5 +597,183 @@ public class Test_ECKey implements Test_Interface {
     // TODO check on random uncompressed
   }
 
+  public void checkGetPubKeyPoint(){
+    // key1 compressed
+    ECPoint point = key1.getPubKeyPoint();
+    BigInteger x = point.getXCoord().toBigInteger();
+    BigInteger y = point.getYCoord().toBigInteger();
+    checkEquals(x, secret1PubKeyX, "checkGetPubKeyPoint.1");
+    checkEquals(y, secret1PubKeyY, "checkGetPubKeyPoint.2");
+    // key1 uncompressed
+    checkEquals(point, key1Uncomp.getPubKeyPoint(), "checkGetPubKeyPoint.3");
+    // random key
+    ECKey key = new ECKey();
+    point = key.getPubKeyPoint();
+    x = point.getXCoord().toBigInteger();
+    y = point.getYCoord().toBigInteger();
+    byte[] bytes = key.getPubKey();
+    checkEquals(bytes.length, 33, "checkGetPubKeyPoint.4");
+    checkCondition(
+        bytes[0] == (byte) 0x03 || bytes[0] == (byte) 0x02,
+        "checkGetPubKeyPoint.5");
+    // creating unsigned BigInteger from byte 1 (inclusive) to byte 33 (exclusive)
+    BigInteger xx = new BigInteger(1, Arrays.copyOfRange(bytes,1,33));
+    checkEquals(x, xx, "checkGetPubKeyPoint.6");
+    boolean isEven = (bytes[0] == (byte) 0x02);
+    BigInteger yy = YFromX(x, isEven);
+    checkEquals(y, yy, "checkGetPubKeyPoint.7");
+  }
+
+  public void checkGetPublicKeyAsHex(){
+    // key1 compressed
+    String check = key1.getPublicKeyAsHex();
+    BigInteger n = new BigInteger(check, 16);
+    checkEquals(n, secret1PubKey, "checkGetPublicKeyAsHex.1");
+    // key1 uncompressed
+    check = key1Uncomp.getPublicKeyAsHex();
+    n = new BigInteger(check, 16);
+    checkEquals(n, secret1PubKeyUncomp, "checkPublicKeyAsHex.2");
+    // random compressed key
+    ECKey key = new ECKey();
+    check = key.getPublicKeyAsHex();
+    n = new BigInteger(check, 16);
+    byte[] bytes = key.getPubKey();
+    // compressed public key has 33 bytes
+    checkEquals(bytes.length, 33, "checkGetPublicKeyAsHex.3");
+    BigInteger m = new BigInteger(1, bytes);
+    checkEquals(n, m, "checkGetPublicKeyAsHex.4");
+    // random uncompressed key
+    BigInteger secret = getRandomSecret();
+    key = ECKey.fromPrivate(secret, false);
+    check = key.getPublicKeyAsHex();
+    n = new BigInteger(check, 16);
+    bytes = key.getPubKey();
+    // uncompressed public key has 65 bytes
+    checkEquals(bytes.length, 65, "checkGetPublicKeyAsHex.5");
+    m = new BigInteger(1, bytes);
+    checkEquals(n, m, "checkGetPublicKeyAsHex.6");
+  }
+
+  // same checks as those of getPrivKeyBytes
+  public void checkGetSecretBytes(){
+    // check in key1
+    byte[] check = key1.getSecretBytes();
+    checkEquals(check.length,32, "checkGetSecretBytes.1");
+    int length = secret1AsBytes.length;
+    for(int i = 0; i < length; ++i){
+      checkEquals(check[i],secret1AsBytes[i],"checkGetSecretBytes.2"); 
+    }
+    // check on random key
+    BigInteger secret = getRandomSecret();
+    ECKey key = ECKey.fromPrivate(secret);
+    check = key.getSecretBytes();
+    BigInteger n = new BigInteger(1, check); // decoding bytes back into secret
+    checkEquals(secret, n, "checkGetSecretBytes.3");
+
+  }
+
+  public void checkHashCode(){
+    // TODO
+  }
+
+  public void checkHasPrivKey(){
+    // key1
+    checkCondition(key1.hasPrivKey(), "checkHashPrivKey.1");
+    checkCondition(key1Uncomp.hasPrivKey(), "checkHashPrivKey.2");
+    // random 
+    ECKey key = new ECKey();
+    checkCondition(key.hasPrivKey(), "checkHashPrivKey.3");
+    // TODO check on encrypted key
+    // TODO check on public only key
+  }
+
+  public void checkIsCompressed(){
+    checkCondition(key1.isCompressed(), "checkIsCompressed.1");
+    checkCondition(!key1Uncomp.isCompressed(), "checkIsCompressed.2");
+    ECKey key = new ECKey();  // compressed by default
+    checkCondition(key.isCompressed(), "checkIsCompressed.3");
+    BigInteger secret = getRandomSecret();
+    key = ECKey.fromPrivate(secret, true);  // compressed
+    checkCondition(key.isCompressed(), "checkIsCompressed.4");
+    key = ECKey.fromPrivate(secret, false);  // uncompressed
+    checkCondition(!key.isCompressed(), "checkIsCompressed.5");
+  }
+
+  public void checkIsEncrypted(){
+    checkCondition(!key1.isEncrypted(), "checkIsEncrypted.1");
+    checkCondition(!key1Uncomp.isEncrypted(), "checkIsEncrypted.2");
+    ECKey key = new ECKey();  // not encrypted by default
+    checkCondition(!key.isEncrypted(), "checkIsEncrypted.3");
+    // TODO check on encrypted key
+  }
+
+  public void checkIsPubKeyCanonical(){
+    // compressed public key
+    byte[] pubkey = key1.getPubKey();
+    checkCondition(ECKey.isPubKeyCanonical(pubkey), "checkIsPubKeyCanonical.1");
+    checkEquals(pubkey[0], (byte) 0x03, "checkIsPubKeyCanonical.2");
+    // changing parity in compressed public key should maintain canonicity
+    pubkey[0] = (byte) 0x02;
+    checkCondition(ECKey.isPubKeyCanonical(pubkey), "checkIsPubKeyCanonical.3");
+    // but if first byte is not 0x03 or 0x02 then... 
+    pubkey[0] = (byte) 0x04;  // shouldn't be allowed for compressed key
+    checkCondition(!ECKey.isPubKeyCanonical(pubkey), "checkIsPubKeyCanonical.4");
+    // uncompressed
+    pubkey = key1Uncomp.getPubKey();
+    checkCondition(ECKey.isPubKeyCanonical(pubkey), "checkIsPubKeyCanonical.5");
+    checkEquals(pubkey[0], (byte) 0x04, "checkIsPubKeyCanonical.6");
+    pubkey[0] = (byte) 0x02;  // shouldn't be allowed for uncompressed key
+    checkCondition(!ECKey.isPubKeyCanonical(pubkey), "checkIsPubKeyCanonical.7");
+    pubkey[0] = (byte) 0x03;  // shouldn't be allowed for uncompressed key
+    checkCondition(!ECKey.isPubKeyCanonical(pubkey), "checkIsPubKeyCanonical.8");
+  }
+
+  public void checkIsPubKeyOnly(){
+    checkCondition(!key1.isPubKeyOnly(), "checkIsPubKeyOnly.1");
+    checkCondition(!key1Uncomp.isPubKeyOnly(), "checkIsPubKeyOnly.2");
+    // TODO check on encrypted key
+    // TODO check on public only key
+  }
+
+  public void checkIsWatching(){
+    checkCondition(!key1.isWatching(), "checkIsWatching.1");
+    checkCondition(!key1Uncomp.isWatching(), "checkIsWatching.1");
+    // TODO check on encrypted key
+    // TODO check on public only key
+  }
+
+  public void checkMaybeDecrypt(){
+    // TODO
+  }
+
+  public void checkPublicKeyFromPrivate(){
+    // compressed
+    byte[] pubkey1 = ECKey.publicKeyFromPrivate(secret1, true);
+    byte[] pubkey2 = key1.getPubKey();
+    checkEquals(pubkey1.length, 33, "checkPublicKeyFromPrivate.1");
+    checkEquals(pubkey2.length, 33, "checkPublicKeyFromPrivate.2");
+    for(int i = 0; i < 33; ++i){
+      checkEquals(pubkey1[i], pubkey2[i], "checkPublicKeyFromPrivate.3");
+    }
+    // uncompressed
+    pubkey1 = ECKey.publicKeyFromPrivate(secret1, false);
+    pubkey2 = key1Uncomp.getPubKey();
+    checkEquals(pubkey1.length, 65, "checkPublicKeyFromPrivate.4");
+    checkEquals(pubkey2.length, 65, "checkPublicKeyFromPrivate.5");
+    for(int i = 0; i < 65; ++i){
+      checkEquals(pubkey1[i], pubkey2[i], "checkPublicKeyFromPrivate.6");
+    }
+
+    // TODO check on random secret, compressed
+    // TODO check on random secret, uncompressed
+
+  }
+
+  public void checkPublicPointFromPrivate(){
+    ECPoint point1 = ECKey.publicPointFromPrivate(secret1);
+    ECPoint point2 = key1.getPubKeyPoint();
+    checkEquals(point1, point2, "checkPublicPointFromPrivate");
+    // TODO random secret
+  }
 }
 

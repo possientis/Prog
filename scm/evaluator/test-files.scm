@@ -24,7 +24,7 @@
 ;(load "frame.scm")
 (load "frame1.scm")
 (display "frame1 = ")(display frame1)(newline)
-(display "global-env = ")(display (global-env 'to-string))(newline)
+;(display "global-env = ")(display (global-env 'to-string))(newline)
 ;(load "frame2.scm")
 ;(load "frame3.scm")
 (load "frame-test.scm")

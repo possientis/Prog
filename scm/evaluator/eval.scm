@@ -5,6 +5,9 @@
     (display "loading eval")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; safeguarding the primitive procedure 'eval' before redefining it
+(load "eval-in-underlying-scheme.scm")
+
 (define (eval exp . arg)
   (let ((env (if (null? arg) global-env (car arg))))
 ;  (newline)(display "eval:\texp = ")(display exp)(newline)(newline)

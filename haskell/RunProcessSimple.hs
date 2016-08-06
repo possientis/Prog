@@ -1,4 +1,7 @@
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances, DatatypeContexts #-}
+
+-- see page 480, code fails on piping example ls /usr | grep '^l'
+-- Need to understand this code
 
 module RunProcessSimple where
 
@@ -106,9 +109,51 @@ removeCloseFDs closefds removethem =
     | fd == x = xs
     | otherwise = x : removefd xs fd
 
+{- | Type representing a pipe. A 'PipeCommand' consists of a source
+ - and destination part, both of which must be instances of 'CommandLike'. -}
 
+data (CommandLike src, CommandLike dest) =>
+  PipeCommand src dest = PipeCommand src dest
 
+{- | A convenient function for creating a 'PipeCommand'. -}
+(-|-) :: (CommandLike a, CommandLike b) => a -> b -> PipeCommand a b
+(-|-) = PipeCommand
 
+{- | Make 'PipeCommand' runnable as a command -}
+instance (CommandLike a, CommandLike b) =>
+  CommandLike (PipeCommand a b) where
+  invoke (PipeCommand src dest) closefds input =
+    do  res1 <- invoke src closefds input
+        output1 <- cmdOutput res1
+        res2 <- invoke dest closefds output1
+        return $ CommandResult (cmdOutput res2) (getEC res1 res2)
 
+{- | Given two 'CommandResult' items, evaluate the exit codes for
+ - both and then return a "combined" exit code. This will be ExitSuccess
+ - if both exited successfully. Otherwise, it will reflect the first
+ - error encountered. -}
+getEC :: CommandResult -> CommandResult -> IO ProcessStatus
+getEC src dest =
+  do  sec <- getExitStatus src
+      dec <- getExitStatus dest
+      case sec of
+        Exited ExitSuccess -> return dec
+        x -> return x
+
+{- | Execute a 'CommandLike'. -}
+runIO :: CommandLike a => a -> IO ()
+runIO cmd =
+  do -- Initialize our closefds list
+    closefds <- newMVar []
+    -- Invoke the command
+    res <- invoke cmd closefds []
+    -- Process its output
+    output <- cmdOutput res
+    putStr output
+    -- Wait for termination and get exit status
+    ec <- getExitStatus res
+    case ec of
+      Exited ExitSuccess -> return ()
+      x -> fail $ "Exited: " ++ show x
 
 

@@ -8,11 +8,11 @@
 
 (define (dictionary-test filename symbol)
   (let ((name-encapsulation 'does-not-matter))
-  (display "testing dictionary class: ")(display symbol)(display " from file :")
+  (display "testing dictionary class: ")(display symbol)(display " from file: ")
   (display filename)(newline)
   (display "check2: filename = ")(display filename)(newline)
-  (load filename)
-  (display "check3: frame1.scm was loaded ...\n")
+;  (load filename)
+;  (display "check3: frame1.scm was loaded ...\n")
   (display "check4: symbol = ")(display symbol)(newline)
   (display "(eval symbol) = ")(display (eval symbol))(newline)
   ;;
