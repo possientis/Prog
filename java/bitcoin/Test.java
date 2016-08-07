@@ -1,19 +1,22 @@
 import org.bitcoinj.core.ECKey;
-import org.bitcoinj.crypto.LazyECPoint;
 import java.math.BigInteger;
-//import org.spongycastle.math.ec.ECPoint;
+import org.spongycastle.math.ec.ECPoint;
 
 public class Test {
   public static void main(String[] args){
 
-    ECKey key;
-    BigInteger priv1 = new BigInteger("13840170145645816737842251482747434280357113762558403558088249138233286766301");
-    BigInteger priv2 = new BigInteger("1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD",16);
-    System.out.println(priv1.equals(priv2));  // true
-    key = ECKey.fromPrivate(priv1);
+    // some private key example of 'Mastering Bitcoin'
+    String s = "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD";
+    BigInteger secret = new BigInteger(s,16);
+    ECPoint point = ECKey.publicPointFromPrivate(secret);
+    point = point.normalize();
+    BigInteger x = point.getAffineXCoord().toBigInteger();
+    BigInteger y = point.getAffineYCoord().toBigInteger();
 
-    System.out.println(key);
-    
-  
+    // 3ddfa27b1a7e6944d36c02c35ade5c1d4977829e4415c5e023e1063344bfd3be
+    System.out.println(x.toString(16));
+
+    // a24d02cf6cf43609b1c00c9accd3d26478d8a14205d086ab4332347e8a5b825e
+    System.out.println(y.toString(16));
   }
 }

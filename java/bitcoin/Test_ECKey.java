@@ -9,6 +9,7 @@ import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.wallet.Protos.Wallet.EncryptionType;
 
+
 import org.spongycastle.crypto.params.ECDomainParameters;
 import org.spongycastle.math.ec.ECPoint;
 
@@ -70,6 +71,13 @@ public class Test_ECKey implements Test_Interface {
     checkMaybeDecrypt();
     checkPublicKeyFromPrivate();
     checkPublicPointFromPrivate();
+    checkRecoverFromSignature();
+    checkSetCreationTimeSeconds();
+    checkSign();
+    checkSignFromKeyParameter();
+    checkSignedMessageToKey();
+    checkSignMessage();
+    checkSignMessageFromKeyParameter();
   }
 
   private String getFieldPrimeAsHex(){
@@ -320,19 +328,14 @@ public class Test_ECKey implements Test_Interface {
     Comparator<ECKey> comp = ECKey.AGE_COMPARATOR;
 
     ECKey k1 = new ECKey();
-    // waiting a second before creating new key
-    try {
-      Thread.sleep(1000);
-    } catch (Exception e){
-      checkCondition(false, "checkAgeComparator.1");
-    }
+    ECKey k2 = new ECKey();
+    // making sure k2 is younger than k1
+    k2.setCreationTimeSeconds(10 + k2.getCreationTimeSeconds());
 
-    ECKey k2 = new ECKey(); // at least a second older
-
-    checkCondition(comp.compare(k1,k1) == 0, "checkAgeComparator.2");
-    checkCondition(comp.compare(k2,k2) == 0, "checkAgeComparator.3");
-    checkCondition(comp.compare(k1,k2) < 0, "checkAgeComparator.4");
-    checkCondition(comp.compare(k2,k1) > 0, "checkAgeComparator.5");
+    checkCondition(comp.compare(k1,k1) == 0, "checkAgeComparator.1");
+    checkCondition(comp.compare(k2,k2) == 0, "checkAgeComparator.2");
+    checkCondition(comp.compare(k1,k2) < 0, "checkAgeComparator.3");
+    checkCondition(comp.compare(k2,k1) > 0, "checkAgeComparator.4");
   }
 
   // checking static field CURVE
@@ -347,15 +350,16 @@ public class Test_ECKey implements Test_Interface {
     checkEquals(curve.getH(), BigInteger.ONE, "checkCurve.3");
     // getG() method returns the curve generator
     ECPoint generator = curve.getG();
-    BigInteger x = generator.getXCoord().toBigInteger();
-    BigInteger y = generator.getYCoord().toBigInteger();
-    checkEquals(x, curveGeneratorX, "checkCurve.4");
-    checkEquals(y, curveGeneratorY, "checkCurve.5");
+    checkCondition(generator.isNormalized(), "checkCurve.4");
+    BigInteger x = generator.getAffineXCoord().toBigInteger();
+    BigInteger y = generator.getAffineYCoord().toBigInteger();
+    checkEquals(x, curveGeneratorX, "checkCurve.5");
+    checkEquals(y, curveGeneratorY, "checkCurve.6");
     BigInteger a = curve.getCurve().getA().toBigInteger();
     BigInteger b = curve.getCurve().getB().toBigInteger();
     // Y^2 = X^3 + 7 , so a = 0 and b = 7
-    checkEquals(a, BigInteger.ZERO, "checkCurve.6");
-    checkEquals(b, BigInteger.valueOf(7), "checkCurve.7");
+    checkEquals(a, BigInteger.ZERO, "checkCurve.7");
+    checkEquals(b, BigInteger.valueOf(7), "checkCurve.8");
   }
 
   // checking static field HALF_CURVE_ORDER
@@ -600,28 +604,30 @@ public class Test_ECKey implements Test_Interface {
   public void checkGetPubKeyPoint(){
     // key1 compressed
     ECPoint point = key1.getPubKeyPoint();
-    BigInteger x = point.getXCoord().toBigInteger();
-    BigInteger y = point.getYCoord().toBigInteger();
-    checkEquals(x, secret1PubKeyX, "checkGetPubKeyPoint.1");
-    checkEquals(y, secret1PubKeyY, "checkGetPubKeyPoint.2");
+    checkCondition(point.isNormalized(), "checkGetPubKeyPoint.1");
+    BigInteger x = point.getAffineXCoord().toBigInteger();
+    BigInteger y = point.getAffineYCoord().toBigInteger();
+    checkEquals(x, secret1PubKeyX, "checkGetPubKeyPoint.2");
+    checkEquals(y, secret1PubKeyY, "checkGetPubKeyPoint.3");
     // key1 uncompressed
-    checkEquals(point, key1Uncomp.getPubKeyPoint(), "checkGetPubKeyPoint.3");
+    checkEquals(point, key1Uncomp.getPubKeyPoint(), "checkGetPubKeyPoint.4");
     // random key
     ECKey key = new ECKey();
     point = key.getPubKeyPoint();
-    x = point.getXCoord().toBigInteger();
-    y = point.getYCoord().toBigInteger();
+    checkCondition(point.isNormalized(), "checkGetPubKeyPoint.5");
+    x = point.getAffineXCoord().toBigInteger();
+    y = point.getAffineYCoord().toBigInteger();
     byte[] bytes = key.getPubKey();
-    checkEquals(bytes.length, 33, "checkGetPubKeyPoint.4");
+    checkEquals(bytes.length, 33, "checkGetPubKeyPoint.6");
     checkCondition(
         bytes[0] == (byte) 0x03 || bytes[0] == (byte) 0x02,
-        "checkGetPubKeyPoint.5");
+        "checkGetPubKeyPoint.7");
     // creating unsigned BigInteger from byte 1 (inclusive) to byte 33 (exclusive)
     BigInteger xx = new BigInteger(1, Arrays.copyOfRange(bytes,1,33));
-    checkEquals(x, xx, "checkGetPubKeyPoint.6");
+    checkEquals(x, xx, "checkGetPubKeyPoint.8");
     boolean isEven = (bytes[0] == (byte) 0x02);
     BigInteger yy = YFromX(x, isEven);
-    checkEquals(y, yy, "checkGetPubKeyPoint.7");
+    checkEquals(y, yy, "checkGetPubKeyPoint.9");
   }
 
   public void checkGetPublicKeyAsHex(){
@@ -764,16 +770,82 @@ public class Test_ECKey implements Test_Interface {
       checkEquals(pubkey1[i], pubkey2[i], "checkPublicKeyFromPrivate.6");
     }
 
-    // TODO check on random secret, compressed
-    // TODO check on random secret, uncompressed
-
+    // random key, compressed
+    BigInteger secret = getRandomSecret();
+    pubkey1 = ECKey.publicKeyFromPrivate(secret, true);
+    ECPoint point = ECKey.publicPointFromPrivate(secret); // tested elsewhere
+    point = point.normalize();  
+    BigInteger x = point.getAffineXCoord().toBigInteger();
+    BigInteger y = point.getAffineYCoord().toBigInteger();
+    BigInteger two = BigInteger.ONE.shiftLeft(1);
+    boolean isEven = (y.mod(two) == BigInteger.ZERO);
+    byte first = isEven ? (byte) 0x02 : (byte) 0x03;
+    // checking first byte of compressed public key
+    checkEquals(first, pubkey1[0], "checkPublicKeyFromPrivate.7");
+    // checking remaining bytes of compressed public key
+    BigInteger xx = new BigInteger(1, Arrays.copyOfRange(pubkey1,1,33)); 
+    checkEquals(x,xx, "checkPublicKeyFromPrivate.8");
+    
+    // random key, uncompressed
+    pubkey1 = ECKey.publicKeyFromPrivate(secret, false);
+    // checking first byte of uncompressed public key 
+    checkEquals((byte) 0x04, pubkey1[0], "checkPublicKeyFromPrivate.8");
+    // checking remaining bytes of uncompressed public key 
+    xx = new BigInteger(1, Arrays.copyOfRange(pubkey1,1,33));
+    BigInteger yy = new BigInteger(1, Arrays.copyOfRange(pubkey1,33,65));
+    checkEquals(x,xx,"checkPublicKeyFromPrivate.9");
+    checkEquals(y,yy,"checkPublicKeyFromPrivate.10");
   }
 
+  // main primitive
   public void checkPublicPointFromPrivate(){
     ECPoint point1 = ECKey.publicPointFromPrivate(secret1);
+    point1 = point1.normalize();
     ECPoint point2 = key1.getPubKeyPoint();
-    checkEquals(point1, point2, "checkPublicPointFromPrivate");
+    checkCondition(point2.isNormalized(), "checkPublicPointFromPrivate.1");
+    BigInteger x1 = point1.getAffineXCoord().toBigInteger();
+    BigInteger y1 = point1.getAffineYCoord().toBigInteger();
+    BigInteger x2 = point2.getAffineXCoord().toBigInteger();
+    BigInteger y2 = point2.getAffineYCoord().toBigInteger();
+    checkEquals(x1, x2, "checkPublicPointFromPrivate.2");
+    checkEquals(y1, y2, "checkPublicPointFromPrivate.2");
     // TODO random secret
   }
+
+  public void checkRecoverFromSignature(){
+    // TODO
+  }
+
+  public void checkSetCreationTimeSeconds(){
+    ECKey key = new ECKey();  // random, compressed
+    long time1 = key.getCreationTimeSeconds() - 1000;
+    key.setCreationTimeSeconds(time1);
+    long time2 = key.getCreationTimeSeconds();
+    checkEquals(time1, time2, "checkSetCreationTimeSeconds.1");
+  }
+
+  public void checkSign(){
+    // TODO
+  }
+
+  public void checkSignFromKeyParameter(){
+    // TODO
+  }
+
+  public void checkSignedMessageToKey(){
+    // TODO
+  }
+
+  public void checkSignMessage(){
+    // TODO
+    ECKey key = new ECKey();
+    logMessage(key.signMessage("Hello world!"));
+  }
+
+  public void checkSignMessageFromKeyParameter(){
+    // TODO
+  }
+
+
 }
 
