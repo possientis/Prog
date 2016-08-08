@@ -621,28 +621,20 @@
     (if (not (equal? x #f)) (display "eval: unit test 17.9 failing\n")))
   ;
   ; load
+  (display "testing loading files ...\n") 
 
-;  (display "\nrunning test files in analyze mode...\n")
+  ; eval
+  (let ((s (eval '(load "test-files.scm"))))
+    (if (not (equal? s " test-files.scm loaded"))
+      (display "eval: unit test 18.0 failing\n")))
+
+  (set! global-env (setup-environment)) ; clears redefinition of 'eval' and 'apply'
+
   ; analyze
-;  (let ((s (analyze '(load "test-files.scm"))))
-;    (let ((t (s global-env)))
-;      'ok))
-
-  ;
-  (display "\n11111running test files in eval mode...\n")
-  ;
-  ; eval
-  (let ((s (eval '(load "test-files.scm"))))
-    (if (not (equal? s " test-files.scm loaded"))
-      (display "eval: unit test 18.0 failing\n")))
-
-
-  (display "\n22222running test files in eval mode...\n")
-  ; eval
-  (let ((s (eval '(load "test-files.scm"))))
-    (if (not (equal? s " test-files.scm loaded"))
-      (display "eval: unit test 18.0 failing\n")))
-
+  (let ((s (analyze '(load "test-files.scm"))))
+    (let ((t (s global-env)))
+      (if (not (equal? t " test-files.scm loaded"))
+        (display "eval: unit test 18.1 failing\n"))))
 
 
   (display "eval: unit test complete\n"))

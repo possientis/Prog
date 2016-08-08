@@ -464,5 +464,4 @@
   (display "environment: unit test complete")(newline))
 
 (environment-test)
-(exit 0)
 

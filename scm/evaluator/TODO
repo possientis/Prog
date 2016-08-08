@@ -1,10 +1,5 @@
-issue: code for dictionary-test calls 'eval' which was meant
-to be the primitive eval of underlying scheme. Problem arises
-if 'eval' has been redefined
 
-add unit-testing for load (analyze, frame-test failing)
-
-
+Why are we redefining 'eval' and 'apply'?
 
 deal with issue of whether eval takes 1 or 2 arguments
 revise run to as to evaluate or compile + run
