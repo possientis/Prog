@@ -14,7 +14,10 @@ import org.spongycastle.crypto.params.ECDomainParameters;
 import org.spongycastle.math.ec.ECPoint;
 
 
+import com.google.common.primitives.UnsignedBytes;
+
 public class Test_ECKey implements Test_Interface {
+
 
   public void run(){
     logMessage("ECKey unit test running ...");
@@ -78,6 +81,18 @@ public class Test_ECKey implements Test_Interface {
     checkSignedMessageToKey();
     checkSignMessage();
     checkSignMessageFromKeyParameter();
+    checkToAddress();
+    checkToASN1();
+    checkToString();
+    checkToStringWithPrivate();
+    checkVerify();
+    checkVerifyFromPubKeySigAsBytes();
+    checkVerifyFromPubKey();
+    checkVerifyHash();
+    checkVerifyMessage();
+    checkVerifyOrThrow();
+    checkVerifyOrThrowSigAsBytes();
+
   }
 
   private String getFieldPrimeAsHex(){
@@ -201,6 +216,13 @@ public class Test_ECKey implements Test_Interface {
     return new BigInteger(getSecret1PubKeyHashUncompAsHex(), 16);
   }
 
+  private String getSecret1Address(){
+    return "1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy";
+  }
+
+  private String getSecret1AddressUncomp(){
+    return "1424C2F4bC9JidNjjTUZCbUxv6Sa1Mt62x";
+  }
 
   private NetworkParameters getMainNetwork(){
     return NetworkParameters.fromID(NetworkParameters.ID_MAINNET);
@@ -244,7 +266,11 @@ public class Test_ECKey implements Test_Interface {
   private final String secret1PubKeyYAsHex = getSecret1PubKeyYAsHex();
   private final String secret1PubKeyAsHex = getSecret1PubKeyAsHex();
   private final String secret1PubKeyUncompAsHex = getSecret1PubKeyUncompAsHex();
+  private final String secret1Address = getSecret1Address();
+  private final String secret1AddressUncomp = getSecret1AddressUncomp();
+
   private final byte[] secret1AsBytes = getSecret1AsBytes();
+
   private final ECKey key1 = ECKey.fromPrivate(secret1);
   private final ECKey key1Uncomp = ECKey.fromPrivate(secret1, false);
 
@@ -273,7 +299,7 @@ public class Test_ECKey implements Test_Interface {
   }
 
   private boolean isKeyFromSecret1(ECKey key){
-    if (key.getPrivKey() != secret1) return false;
+    if (!key.getPrivKey().equals(secret1)) return false;
     // TODO possibly other validations here
     return true;
   }
@@ -314,7 +340,33 @@ public class Test_ECKey implements Test_Interface {
     BigInteger sum = cube.add(seven);
     return sqrt(sum, isEven);
   }
+  
+  private String _toString(ECKey key){
+    StringBuilder builder = new StringBuilder("ECKey{pub HEX="); 
+    builder.append(key.getPublicKeyAsHex());
+    builder.append(", isEncrypted=");
+    builder.append(key.isEncrypted());
+    builder.append(", isPubKeyOnly=");
+    builder.append(key.isPubKeyOnly());
+    builder.append("}");
+    return builder.toString();
+  }
+  
+  private String _toStringWithPrivate(ECKey key, NetworkParameters params){
+    StringBuilder builder = new StringBuilder("ECKey{pub HEX="); 
+    builder.append(key.getPublicKeyAsHex());
+    builder.append(", priv HEX=");
+    builder.append(key.getPrivateKeyAsHex());
+    builder.append(", priv WIF=");
+    builder.append(key.getPrivateKeyAsWiF(params));
+    builder.append(", isEncrypted=");
+    builder.append(key.isEncrypted());
+    builder.append(", isPubKeyOnly=");
+    builder.append(key.isPubKeyOnly());
+    builder.append("}");
 
+    return builder.toString();
+  }
 
   // compile time checks
   public void checkNestedClasses(){
@@ -365,32 +417,59 @@ public class Test_ECKey implements Test_Interface {
   // checking static field HALF_CURVE_ORDER
   public void checkHalfCurveOrder(){
     BigInteger half = ECKey.HALF_CURVE_ORDER;
-    checkEquals(half, halfCurveOrder, "checkHalfCurveOrder");
+    checkEquals(half, halfCurveOrder, "checkHalfCurveOrder.1");
   }
 
   // checking static fiels FAKE_SIGNATURES
   public void checkFakeSignatures(){
     boolean flag = ECKey.FAKE_SIGNATURES;
-    checkEquals(flag, false, "checkFakeSignatures");
+    checkEquals(flag, false, "checkFakeSignatures.1");
   }
 
   // checking static field PUBKEY_COMPARATOR
   public void checkPubKeyComparator(){
-    Comparator<ECKey> comp = ECKey.PUBKEY_COMPARATOR;
+    Comparator<ECKey> comp1 = ECKey.PUBKEY_COMPARATOR;
+    Comparator<byte[]> comp2 = UnsignedBytes.lexicographicalComparator();
+    ECKey key1 = new ECKey();
+    ECKey key2 = new ECKey();
+    checkEquals(
+        comp1.compare(key1,key2),
+        comp2.compare(key1.getPubKey(), key2.getPubKey()),
+        "checkPubKeyComparator.1"
+    );
   }
 
   public void checkConstructorDefault(){
     ECKey key = new ECKey();  // generate new keypair
-    checkNotNull(key, "checkConstructorDefault");
+    checkNotNull(key, "checkConstructorDefault.1");
+    checkCondition(!key.isEncrypted(), "checkConstructorDefault.2");
+    checkCondition(key.hasPrivKey(), "checkConstructorDefault.3");
+    checkCondition(key.isCompressed(), "checkConstructorDefault.4");
+    checkCondition(!key.isPubKeyOnly(), "checkConstructorDefault.5");
+    checkCondition(!key.isWatching(), "checkConstructorDefault.6");
+
   }
 
   public void checkConstructorFromSecureRandom(){
     ECKey key = new ECKey(random);
-    checkNotNull(key, "checkConstructorFromSecureRandom");
+    checkNotNull(key, "checkConstructorFromSecureRandom.1");
+    checkCondition(!key.isEncrypted(), "checkConstructorFromSecureRandom.2");
+    checkCondition(key.hasPrivKey(), "checkConstructorFromSecureRandom.3");
+    checkCondition(key.isCompressed(), "checkConstructorFromSecureRandom.4");
+    checkCondition(!key.isPubKeyOnly(), "checkConstructorFromSecureRandom.5");
+    checkCondition(!key.isWatching(), "checkConstructorFromSecureRandom.6");
   }
 
   public void checkCompressPoint(){
-    // TODO
+    // per point compressed property will be removed soon
+    ECKey key = new ECKey();
+    ECPoint point1 = key.getPubKeyPoint();
+    BigInteger x = point1.getAffineXCoord().toBigInteger();
+    BigInteger y = point1.getAffineYCoord().toBigInteger();
+    ECPoint point2 = ECKey.CURVE.getCurve().createPoint(x,y);
+    checkCondition(point1.equals(point2), "checkCompressPoint.1");
+    ECPoint point3 = ECKey.compressPoint(point2);
+    checkEquals(point2, point3, "checkCompressPoint.2");
   }
 
   public void checkCompressPointLazy(){
@@ -398,7 +477,11 @@ public class Test_ECKey implements Test_Interface {
   }
 
   public void checkDecompress(){
-    // TODO
+    ECKey key1 = new ECKey();
+    checkCondition(key1.isCompressed(),"checkDecompress.1");
+    ECKey key2 = key1.decompress();
+    checkCondition(!key2.isCompressed(),"checkDecompress.2");
+    checkEquals(key1.getPrivKey(), key2.getPrivKey(), "checkDecompress.3");
   }
   
   public void checkDecompressPoint(){
@@ -838,14 +921,107 @@ public class Test_ECKey implements Test_Interface {
 
   public void checkSignMessage(){
     // TODO
-    ECKey key = new ECKey();
-    logMessage(key.signMessage("Hello world!"));
   }
 
   public void checkSignMessageFromKeyParameter(){
     // TODO
   }
 
+  public void checkToAddress(){
+    // key1 compressed
+    String check = key1.toAddress(mainNet).toString();
+    checkEquals(check, secret1Address, "checkToAddress.1");
+
+    // key1 uncompressed
+    check = key1Uncomp.toAddress(mainNet).toString();
+    checkEquals(check, secret1AddressUncomp, "checkToAddress.2");
+
+    // TODO random key compressed/uncompressed various networks
+
+  }
+
+  public void checkToASN1(){
+    // key1
+    byte[] bytes = key1.toASN1();
+    ECKey key = ECKey.fromASN1(bytes);
+    checkCondition(isKeyFromSecret1(key), "checkToASN1.1");
+    // TODO properly check ASN1 encoding on random key
+  }
+
+  public void checkToString(){
+    // key1 compressed
+    checkEquals(key1.toString(), _toString(key1), "checkToString.1");
+    // key1 uncompressed
+    checkEquals(key1Uncomp.toString(), _toString(key1Uncomp), "checkToString.2");
+
+    // random key compressed
+    ECKey key = new ECKey();
+    key.setCreationTimeSeconds(0);  // suppress display of creation time
+    checkEquals(key.toString(), _toString(key), "checkToString.3");
+    // random key uncompressed
+    BigInteger secret = getRandomSecret();
+    key = ECKey.fromPrivate(secret, false);
+    checkEquals(key.toString(), _toString(key), "checkToString.4");
+
+    // TODO could add time creation time
+    // TODO check encrypted key
+    // TODO check PubKeyOnly
+  }
+
+  public void checkToStringWithPrivate(){
+    // key compressed, main network
+    checkEquals(
+        key1.toStringWithPrivate(mainNet), 
+        _toStringWithPrivate(key1,mainNet),
+        "checkToStringWithPrivate.1"
+    );
+
+    // key compressed, RegTest network
+    checkEquals(
+        key1.toStringWithPrivate(regTestNet), 
+        _toStringWithPrivate(key1,regTestNet),
+        "checkToStringWithPrivate.2"
+    );
+    // random key compressed
+    ECKey key = new ECKey();
+    key.setCreationTimeSeconds(0);  // suppress display of creation time
+    checkEquals(
+        key.toStringWithPrivate(mainNet), 
+        _toStringWithPrivate(key,mainNet), 
+        "checkToStringWithPrivate.3"
+    );
+
+    // TODO see toString
+ 
+  }
+
+  public void checkVerify(){
+    // TODO
+  }
+
+  public void checkVerifyFromPubKeySigAsBytes(){
+    // TODO
+  }
+
+  public void checkVerifyFromPubKey(){
+    // TODO
+  }
+
+  public void checkVerifyHash(){
+    // TODO
+  }
+
+  public void checkVerifyMessage(){
+    // TODO
+  }
+
+  public void checkVerifyOrThrow(){
+    // TODO
+  }
+
+  public void checkVerifyOrThrowSigAsBytes(){
+    // TODO
+  }
 
 }
 

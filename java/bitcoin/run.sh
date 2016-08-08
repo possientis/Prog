@@ -8,7 +8,7 @@ do
   BITCOINJ_JARS="$d:$BITCOINJ_JARS"
 done
 
-
-java -cp "$BITCOINJ_JARS" "$@"
+# we need java to pick up libsecp256k1.so on current directory
+env LD_LIBRARY_PATH=. java -cp "$BITCOINJ_JARS" "$@"
 
 

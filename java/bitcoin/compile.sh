@@ -9,6 +9,6 @@ do
 done
 
 
-javac -cp "$BITCOINJ_JARS" "$@"
+javac -Xlint:deprecation -cp "$BITCOINJ_JARS" "$@"
 
 
