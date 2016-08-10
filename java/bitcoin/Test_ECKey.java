@@ -4,17 +4,24 @@ import java.util.Arrays;
 import java.math.BigInteger;
 import java.lang.Math;
 import java.security.SecureRandom;
+import javax.xml.bind.DatatypeConverter;
 
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.wallet.Protos.Wallet.EncryptionType;
+import org.bitcoinj.crypto.LazyECPoint;
+import org.bitcoinj.crypto.KeyCrypter;
+import org.bitcoinj.crypto.KeyCrypterScrypt;
 
 
 import org.spongycastle.crypto.params.ECDomainParameters;
+import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.math.ec.ECPoint;
 
-
 import com.google.common.primitives.UnsignedBytes;
+
 
 public class Test_ECKey implements Test_Interface {
 
@@ -38,7 +45,7 @@ public class Test_ECKey implements Test_Interface {
     checkDecryptFromKeyCrypter();
     checkEncrypt();
     checkEncryptionIsReversible();
-    checkEquals();
+    checkECKeyEquals();
     checkFormatKeyWithAddress();
     checkFromASN1();
     checkFromEncrypted();
@@ -368,6 +375,27 @@ public class Test_ECKey implements Test_Interface {
     return builder.toString();
   }
 
+  private String _formatKey(ECKey key, boolean priv, NetworkParameters params){
+    StringBuilder builder = new StringBuilder("  addr:");
+    builder.append(key.toAddress(params));
+    builder.append("  hash160:");
+    String hash = DatatypeConverter.
+                  printHexBinary(key.getPubKeyHash()).
+                  toLowerCase();
+    builder.append(hash);
+    builder.append("  creationTimeSeconds:");
+    builder.append(Long.valueOf(key.getCreationTimeSeconds()).toString());
+
+    if(priv){
+      builder.append("\n  ");
+      builder.append(key.toStringWithPrivate(params));
+    }
+
+    builder.append('\n');
+
+    return builder.toString();
+  }
+
   // compile time checks
   public void checkNestedClasses(){
     ECKey.ECDSASignature sig;
@@ -467,16 +495,24 @@ public class Test_ECKey implements Test_Interface {
     BigInteger x = point1.getAffineXCoord().toBigInteger();
     BigInteger y = point1.getAffineYCoord().toBigInteger();
     ECPoint point2 = ECKey.CURVE.getCurve().createPoint(x,y);
-    checkCondition(point1.equals(point2), "checkCompressPoint.1");
     ECPoint point3 = ECKey.compressPoint(point2);
-    checkEquals(point2, point3, "checkCompressPoint.2");
+    checkEquals(point2, point3, "checkCompressPoint.1");
   }
 
   public void checkCompressPointLazy(){
-    // TODO
+    // per point compressed property will be removed soon
+    ECKey key = new ECKey();
+    ECPoint point1 = key.getPubKeyPoint();
+    BigInteger x = point1.getAffineXCoord().toBigInteger();
+    BigInteger y = point1.getAffineYCoord().toBigInteger();
+    ECPoint point2 = ECKey.CURVE.getCurve().createPoint(x,y);
+    LazyECPoint lazy1 = new LazyECPoint(point2);
+    LazyECPoint lazy2 = ECKey.compressPoint(lazy1);
+    checkCondition(lazy1.equals(lazy2), "checkCompressPointLazy.1");
   }
 
   public void checkDecompress(){
+    // per point compressed property will be removed soon
     ECKey key1 = new ECKey();
     checkCondition(key1.isCompressed(),"checkDecompress.1");
     ECKey key2 = key1.decompress();
@@ -485,39 +521,116 @@ public class Test_ECKey implements Test_Interface {
   }
   
   public void checkDecompressPoint(){
-    // TODO
+    // per point compressed property will be removed soon
+    ECKey key = new ECKey();
+    ECPoint point1 = key.getPubKeyPoint();
+    BigInteger x = point1.getAffineXCoord().toBigInteger();
+    BigInteger y = point1.getAffineYCoord().toBigInteger();
+    ECPoint point2 = ECKey.CURVE.getCurve().createPoint(x,y);
+    ECPoint point3 = ECKey.decompressPoint(point2);
+    checkEquals(point2, point3, "checkDecompressPoint.1");
   }
 
   public void checkDecompressPointLazy(){
-    // TODO
+    // per point compressed property will be removed soon
+    ECKey key = new ECKey();
+    ECPoint point1 = key.getPubKeyPoint();
+    BigInteger x = point1.getAffineXCoord().toBigInteger();
+    BigInteger y = point1.getAffineYCoord().toBigInteger();
+    ECPoint point2 = ECKey.CURVE.getCurve().createPoint(x,y);
+    LazyECPoint lazy1 = new LazyECPoint(point2);
+    LazyECPoint lazy2 = ECKey.decompressPoint(lazy1);
+    checkCondition(lazy1.equals(lazy2), "checkDecompressPointLazy.1");
   }
 
   public void checkDecrypt(){
-    // TODO
+    KeyCrypter crypter1 = new KeyCrypterScrypt();
+    KeyParameter aesKey1 = crypter1.deriveKey("some random passphrase");
+    ECKey key1 = new ECKey();
+    ECKey key2 = key1.encrypt(crypter1, aesKey1); 
+    // so we have an encrypted key2
+    KeyCrypter crypter2 = key2.getKeyCrypter();
+    KeyParameter aesKey2 = crypter2.deriveKey("some random passphrase"); 
+    ECKey key3 = key2.decrypt(aesKey2);
+    checkEquals(key1.getPrivKey(), key3.getPrivKey(), "checkDecrypt.1");
   }
 
   public void checkDecryptFromKeyCrypter(){
-    // TODO
+    KeyCrypter crypter1 = new KeyCrypterScrypt();
+    KeyParameter aesKey1 = crypter1.deriveKey("some random passphrase");
+    ECKey key1 = new ECKey();
+    ECKey key2 = key1.encrypt(crypter1, aesKey1); 
+    // so we have an encrypted key2
+    KeyCrypter crypter2 = key2.getKeyCrypter();
+    KeyParameter aesKey2 = crypter2.deriveKey("some random passphrase"); 
+    ECKey key3 = key2.decrypt(crypter2, aesKey2);
+    checkEquals(
+        key1.getPrivKey(), 
+        key3.getPrivKey(), 
+        "checkDecryptFromKeyCrypter.1"
+    );
   }
 
   public void checkEncrypt(){
-    // TODO
+    KeyCrypter crypter = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    ECKey key1 = new ECKey();
+    ECKey key2 = key1.encrypt(crypter, aesKey); 
+    checkCondition(key2.isEncrypted(),"checkEncrypt.1");
+    checkCondition(key2.isPubKeyOnly(),"checkEncrypt.2");
+    checkCondition(!key2.isWatching(),"checkEncrypt.3");
+    BigInteger n1 = new BigInteger(1, key1.getPubKey()); 
+    BigInteger n2 = new BigInteger(1, key2.getPubKey()); 
+    // unencrypted and encrypted key should have the same public key
+    checkEquals(n1, n2, "checkEncrypt.4");
   }
 
   public void checkEncryptionIsReversible(){
-    // TODO
+    KeyCrypter crypter = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    ECKey key1 = new ECKey();
+    ECKey key2 = key1.encrypt(crypter, aesKey); 
+    checkCondition(
+        ECKey.encryptionIsReversible(key1, key2, crypter, aesKey),
+        "checkEncryptionIsReversible.1"
+    );
+    /* this create warning in the log, dunno how to suppress it
+    KeyParameter aesWrongKey = crypter.deriveKey("This passphrase is wrong");
+    checkCondition(
+        !ECKey.encryptionIsReversible(key1, key2, crypter, aesWrongKey),
+        "checkEncryptionIsReversible.2"
+    );
+    */
   }
 
-  public void checkEquals(){
-    // TODO
+  public void checkECKeyEquals(){
+    ECKey key1 = new ECKey();
+    ECKey key2 = new ECKey();
+    checkCondition(key1.equals(key1),"checkECKeyEquals.1");
+    checkCondition(key2.equals(key2),"checkECKeyEquals.2");
+    checkCondition(!key1.equals(key2),"checkECKeyEquals.3");
+    checkCondition(!key2.equals(key1),"checkECKeyEquals.3");
   }
 
   public void checkFormatKeyWithAddress(){
-    // TODO
+    ECKey key = new ECKey();
+    StringBuilder builder = new StringBuilder();
+    key.formatKeyWithAddress(false, builder, mainNet);
+    String s1 = builder.toString();
+    String s2 = _formatKey(key, false, mainNet);
+    checkEquals(s1,s2, "checkFormatKeyWithAddress.1");
+    builder = new StringBuilder();
+    key.formatKeyWithAddress(true, builder, mainNet);
+    s1 = builder.toString();
+    s2 = _formatKey(key, true, mainNet);
+    checkEquals(s1,s2, "checkFormatKeyWithAddress.2");
   }
 
   public void checkFromASN1(){
-    // TODO
+    ECKey key = new ECKey();  
+    byte[] asn1 = key.toASN1();
+    String s = DatatypeConverter.printHexBinary(asn1).toLowerCase();
+    logMessage(s);
   }
 
   public void checkFromEncrypted(){

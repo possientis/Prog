@@ -30,9 +30,9 @@ scm -b -f apply-primitive.scm             > /dev/null
 ./run.scm apply-primitive.scm             > /dev/null
 
 
-echo apply
-scm -b -f apply.scm                       > /dev/null               
-./run.scm apply.scm                       > /dev/null
+echo new-apply
+scm -b -f new-apply.scm                   > /dev/null               
+./run.scm new-apply.scm                   > /dev/null
 
 
 echo assignment
@@ -99,9 +99,9 @@ scm -b -f eval-procedure.scm              > /dev/null
 ./run.scm eval-procedure.scm              > /dev/null
 
 
-echo eval
-scm -b -f eval.scm                        > /dev/null               
-./run.scm eval.scm                        > /dev/null
+echo new-eval
+scm -b -f new-eval.scm                    > /dev/null               
+./run.scm new-eval.scm                    > /dev/null
 
 
 echo frame1

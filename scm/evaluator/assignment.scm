@@ -16,7 +16,7 @@
 (define (eval-assignment exp env)
   (let ((var (assignment-variable exp))
         (rhs (assignment-expression exp)))
-    (let ((val (eval rhs env)))
+    (let ((val (new-eval rhs env)))
       ((env 'set!) var val))))
 
 ; analyze

@@ -9,7 +9,7 @@
 (define (map-primitive procedure seq) ; quick and dirty, one dimension, temporary
   (cond ((null? seq) '())
         (else 
-          (cons (apply procedure (list (car seq))) 
+          (cons (new-apply procedure (list (car seq))) 
                     (map-primitive procedure (cdr seq))))))
 
 

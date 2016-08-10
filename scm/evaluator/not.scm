@@ -16,7 +16,7 @@
 
 ; eval
 (define (eval-not exp env)
-  (let ((pred (eval (not-predicate exp) env)))
+  (let ((pred (new-eval (not-predicate exp) env)))
     (if (true? pred) #f #t)))  
 
 ; analyze

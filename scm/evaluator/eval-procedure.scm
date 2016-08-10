@@ -23,6 +23,6 @@
         (params (eval-procedure-parameters proc))
         (init-env (eval-procedure-environment proc)))
     (let ((extended-env ((init-env 'extended) params args)))
-      (eval body extended-env))))
+      (new-eval body extended-env))))
 
 ))  ; include guard

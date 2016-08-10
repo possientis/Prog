@@ -16,9 +16,9 @@
 (define (eval-application exp env)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
-    (let ((proc (eval operator env))
-          (args (map (lambda (x) (eval x env)) operands)))
-      (apply proc args))))
+    (let ((proc (new-eval operator env))
+          (args (map (lambda (x) (new-eval x env)) operands)))
+      (new-apply proc args))))
 
 ; analyze
 (define (analyze-application exp)
@@ -27,6 +27,6 @@
     (let ((proc (analyze operator))
           (args (map analyze operands)))
       (lambda (env)
-        (apply (proc env) (map (lambda (x) (x env)) args))))))
+        (new-apply (proc env) (map (lambda (x) (x env)) args))))))
 
 ))  ; include guard

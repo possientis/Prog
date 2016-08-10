@@ -14,7 +14,7 @@
 
 ; eval
 (define (eval-or exp env)
-  (eval (or->if exp) env))
+  (new-eval (or->if exp) env))
 
 ; analyze
 (define (analyze-or exp)

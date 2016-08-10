@@ -25,7 +25,7 @@
 (define (eval-definition exp env)
   (let ((var (definition-variable exp))
         (rhs (definition-expression exp)))
-    (let ((val (eval rhs env)))
+    (let ((val (new-eval rhs env)))
       ((env 'define!) var val))))
 
 ; analyze

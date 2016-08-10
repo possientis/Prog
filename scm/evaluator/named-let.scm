@@ -26,7 +26,7 @@
 
 ; eval
 (define (eval-named-let exp env)
-  (eval (named-let->combination exp) env))
+  (new-eval (named-let->combination exp) env))
 
 ; analyze
 (define (analyze-named-let exp)

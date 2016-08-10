@@ -16,7 +16,7 @@
 
 ; eval
 (define (eval-let* exp env)
-  (eval (let*->nested-lets exp) env))
+  (new-eval (let*->nested-lets exp) env))
 
 ; analyze
 (define (analyze-let* exp)

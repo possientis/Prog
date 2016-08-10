@@ -21,7 +21,7 @@
 
 ; eval
 (define (eval-cond exp env)
-  (eval (cond->if exp) env))
+  (new-eval (cond->if exp) env))
 
 ; analyze 
 (define (analyze-cond exp)

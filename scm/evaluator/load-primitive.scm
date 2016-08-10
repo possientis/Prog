@@ -12,7 +12,7 @@
       (let ((input (read file)))
         (if (not (eof-object? input))
           (begin
-            (eval input global-env)
+            (new-eval input global-env)
             (loop)))))
     (loop)
     (close-port file))

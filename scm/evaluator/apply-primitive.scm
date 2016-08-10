@@ -7,7 +7,7 @@
 
 
 (define (apply-primitive procedure arguments)
-  (apply procedure arguments))
+  (new-apply procedure arguments))
 
 
 ))  ; include guard

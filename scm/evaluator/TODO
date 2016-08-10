@@ -1,5 +1,6 @@
-
-Why are we redefining 'eval' and 'apply'?
+apply-in-underlying scheme?
+eval-primitive.scm?
+apply-primitive.scm?
 
 deal with issue of whether eval takes 1 or 2 arguments
 revise run to as to evaluate or compile + run

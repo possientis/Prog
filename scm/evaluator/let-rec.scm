@@ -24,7 +24,7 @@
 
 ; eval
 (define (eval-letrec exp env)
-  (eval (letrec->combination exp) env))
+  (new-eval (letrec->combination exp) env))
 
 ; analyze
 (define (analyze-letrec exp)

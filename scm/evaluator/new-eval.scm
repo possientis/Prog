@@ -1,14 +1,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (not (defined? included-eval)) 
+(if (not (defined? included-new-eval)) 
   (begin
-    (define included-eval #f)
-    (display "loading eval")(newline)
+    (define included-new-eval #f)
+    (display "loading new-eval")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-; safeguarding the primitive procedure 'eval' before redefining it
-(load "eval-in-underlying-scheme.scm")
-
-(define (eval exp . arg)
+(define (new-eval exp . arg)
   (let ((env (if (null? arg) global-env (car arg))))
 ;  (newline)(display "eval:\texp = ")(display exp)(newline)(newline)
 ;  (display "env = ")(display (env 'to-string))(newline)

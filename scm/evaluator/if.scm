@@ -20,10 +20,10 @@
 
 ; eval
 (define (eval-if exp env)
-  (let ((pred (eval (if-predicate exp) env)))
+  (let ((pred (new-eval (if-predicate exp) env)))
     (if (true? pred)
-      (eval (if-consequent exp) env)
-      (eval (if-alternative exp) env))))
+      (new-eval (if-consequent exp) env)
+      (new-eval (if-alternative exp) env))))
 
 ; analyze
 (define (analyze-if exp)

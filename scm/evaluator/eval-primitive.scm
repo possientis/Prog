@@ -6,6 +6,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (eval-primitive expr)
-  (eval expr global-env))
+  (new-eval expr))
 
 ))  ; include guard

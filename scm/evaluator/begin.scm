@@ -35,7 +35,7 @@
 (define (eval-sequence operands env)
   (if (null? operands)
     unspecified-value 
-    (let ((first (eval (car operands) env)))  ; side effects now
+    (let ((first (new-eval (car operands) env)))  ; side effects now
       (if (null? (cdr operands))
         first
         (eval-sequence (cdr operands) env))))); don't re-evaluate first

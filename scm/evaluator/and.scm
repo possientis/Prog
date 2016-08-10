@@ -13,7 +13,7 @@
 
 ; eval
 (define (eval-and exp env)
-  (eval (and->if exp) env))
+  (new-eval (and->if exp) env))
 
 ; analyze
 (define (analyze-and exp)
