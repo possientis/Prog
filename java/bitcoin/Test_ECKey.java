@@ -14,6 +14,7 @@ import org.bitcoinj.wallet.Protos.Wallet.EncryptionType;
 import org.bitcoinj.crypto.LazyECPoint;
 import org.bitcoinj.crypto.KeyCrypter;
 import org.bitcoinj.crypto.KeyCrypterScrypt;
+import org.bitcoinj.crypto.EncryptedData;
 
 
 import org.spongycastle.crypto.params.ECDomainParameters;
@@ -64,6 +65,7 @@ public class Test_ECKey implements Test_Interface {
     checkGetKeyCrypter();
     checkGetPrivateKeyAsHex();
     checkGetPrivateKeyAsWiF();
+    checkGetPrivateKeyEncoded();
     checkGetPrivKey();
     checkGetPrivKeyBytes();
     checkGetPubKey();
@@ -307,7 +309,6 @@ public class Test_ECKey implements Test_Interface {
 
   private boolean isKeyFromSecret1(ECKey key){
     if (!key.getPrivKey().equals(secret1)) return false;
-    // TODO possibly other validations here
     return true;
   }
 
@@ -627,14 +628,26 @@ public class Test_ECKey implements Test_Interface {
   }
 
   public void checkFromASN1(){
-    ECKey key = new ECKey();  
-    byte[] asn1 = key.toASN1();
-    String s = DatatypeConverter.printHexBinary(asn1).toLowerCase();
-    logMessage(s);
+    ECKey k1 = new ECKey();  
+    byte[] asn1 = k1.toASN1();
+    ECKey k2 = ECKey.fromASN1(asn1);
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n2 = k2.getPrivKey();
+    checkEquals(n1, n2, "checkFromASN1.1");
   }
 
   public void checkFromEncrypted(){
-    // TODO
+    ECKey k1 = new ECKey();
+    KeyCrypter crypter = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    ECKey k2 = k1.encrypt(crypter, aesKey);
+    EncryptedData data = k2.getEncryptedData();
+    byte[] pubkey = k2.getPubKey();
+    ECKey k3 = ECKey.fromEncrypted(data, crypter, pubkey);
+    ECKey k4 = k3.decrypt(aesKey);
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n4 = k4.getPrivKey();
+    checkEquals(n1, n4, "checkFromEncrypted.1");
   }
 
   public void checkFromPrivateFromBigInteger(){
@@ -655,28 +668,105 @@ public class Test_ECKey implements Test_Interface {
   }
 
   public void checkFromPrivateFromBytes(){
-    // TODO
+    ECKey k1 = new ECKey();
+    byte[] priv = k1.getPrivKeyBytes();
+    ECKey k2 = ECKey.fromPrivate(priv);
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n2 = k2.getPrivKey();
+    checkEquals(n1, n2, "checkFromPrivateFromBytes.1");
   }
 
   public void checkFromPrivateFromBytesBool(){
-    // TODO
+    // compressed
+    ECKey k1 = new ECKey();
+    byte[] priv = k1.getPrivKeyBytes();
+    ECKey k2 = ECKey.fromPrivate(priv, true);
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n2 = k2.getPrivKey();
+    checkEquals(n1, n2, "checkFromPrivateFromBytes.1");
+    checkCondition(k2.isCompressed(),"checkFromPrivateBytes.2");
+    // uncompressed
+    ECKey k3 = ECKey.fromPrivate(priv, false);
+    BigInteger n3 = k3.getPrivKey();
+    checkEquals(n1, n3, "checkFromPrivateFromBytes.3");
+    checkCondition(!k3.isCompressed(),"checkFromPrivateBytes.4");
   }
 
   public void checkFromPrivateAndPrecalculatedPublic(){
-    // TODO
+    ECKey k1 = new ECKey();
+    BigInteger n1 = k1.getPrivKey();
+    ECPoint p1 = k1.getPubKeyPoint();
+    ECKey k2 = ECKey.fromPrivateAndPrecalculatedPublic(n1,p1);
+    BigInteger n2 = k2.getPrivKey();
+    checkEquals(n1, n2, "checkFromPrivateAndPrecalculatedPublic.1");
+    ECPoint p2 = k2.getPubKeyPoint();
+    checkEquals(p1, p2, "checkFromPrivateAndPrecalculatedPublic.2");
+    checkCondition(
+        k2.isCompressed(), 
+        "checkFromPrivateAndPrecalculatedPublic.3"
+    );
+ 
   }
 
   public void checkFromPrivateAndPrecalculatedPublicFromBytes(){
-    // TODO
-  }
-
-  public void checkFromPublicOnly(){
-    // TODO
+    // compressed
+    ECKey k1 = new ECKey();
+    byte[] priv1 = k1.getPrivKeyBytes();
+    byte[] pub1 = k1.getPubKey();
+    ECKey k2 = ECKey.fromPrivateAndPrecalculatedPublic(priv1,pub1);
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n2 = k2.getPrivKey();
+    checkEquals(n1, n2, "checkFromPrivateAndPrecalculatedPublicFromBytes.1");
+    ECPoint p1 = k1.getPubKeyPoint();
+    ECPoint p2 = k2.getPubKeyPoint();
+    checkEquals(p1, p2, "checkFromPrivateAndPrecalculatedPublicFromBytes.2");
+    checkCondition(
+        k2.isCompressed(), 
+        "checkFromPrivateAndPrecalculatedPublicFromBytes.3"
+    );
+    // uncompressed
+    ECKey k3 = k1.decompress();
+    byte[] priv3 = priv1;
+    byte[] pub3 = k3.getPubKey();
+    ECKey k4 = ECKey.fromPrivateAndPrecalculatedPublic(priv3,pub3);
+    BigInteger n3 = k3.getPrivKey();
+    BigInteger n4 = k4.getPrivKey();
+    checkEquals(n3, n4, "checkFromPrivateAndPrecalculatedPublicFromBytes.4");
+    ECPoint p3 = k3.getPubKeyPoint();
+    ECPoint p4 = k4.getPubKeyPoint();
+    checkEquals(p3, p4, "checkFromPrivateAndPrecalculatedPublicFromBytes.5");
+    checkCondition(
+        !k4.isCompressed(), 
+        "checkFromPrivateAndPrecalculatedPublicFromBytes.6"
+    );
   }
 
   public void checkFromPublicOnlyFromBytes(){
-    // TODO
+    ECKey k1 = new ECKey();
+    byte[] pubkey = k1.getPubKey();
+    ECKey k2 = ECKey.fromPublicOnly(pubkey);
+    ECPoint p1 = k1.getPubKeyPoint();
+    ECPoint p2 = k2.getPubKeyPoint();
+    checkEquals(p1, p2, "checkFromPublicOnlyFromBytes.1");
+    checkCondition(!k2.hasPrivKey(),"checkFromPublicOnlyFromBytes.2");
+    checkCondition(!k2.isEncrypted(),"checkFromPublicOnlyFromBytes.3");
+    checkCondition(k2.isPubKeyOnly(),"checkFromPublicOnlyFromBytes.4");
+    checkCondition(k2.isWatching(),"checkFromPublicOnlyFromBytes.5");
   }
+
+  public void checkFromPublicOnly(){
+    ECKey k1 = new ECKey();
+    ECPoint p1 = k1.getPubKeyPoint();
+    ECKey k2 = ECKey.fromPublicOnly(p1);
+    ECPoint p2 = k2.getPubKeyPoint();
+    checkEquals(p1, p2, "checkFromPublicOnly.1");
+    checkCondition(!k2.hasPrivKey(),"checkFromPublicOnly.2");
+    checkCondition(!k2.isEncrypted(),"checkFromPublicOnly.3");
+    checkCondition(k2.isPubKeyOnly(),"checkFromPublicOnly.4");
+    checkCondition(k2.isWatching(),"checkFromPublicOnly.5");
+  }
+
+
 
   public void checkGetCreationTimeSeconds(){
     ECKey key = new ECKey();
@@ -689,45 +779,75 @@ public class Test_ECKey implements Test_Interface {
   }
 
   public void checkGetEncryptedData(){
-    // TODO
+    ECKey k1 = new ECKey();
+    KeyCrypter crypter = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    ECKey k2 = k1.encrypt(crypter, aesKey);
+    EncryptedData data = k2.getEncryptedData();
+    byte[] pubkey = k2.getPubKey();
+    ECKey k3 = ECKey.fromEncrypted(data, crypter, pubkey);
+    ECKey k4 = k3.decrypt(aesKey);
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n4 = k4.getPrivKey();
+    checkEquals(n1, n4, "checkGetEncryptedData.1");
   }
 
   public void checkGetEncryptedPrivateKey(){
-    // TODO
+    ECKey k1 = new ECKey();
+    KeyCrypter crypter = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    ECKey k2 = k1.encrypt(crypter, aesKey);
+    EncryptedData data = k2.getEncryptedPrivateKey();
+    byte[] pubkey = k2.getPubKey();
+    ECKey k3 = ECKey.fromEncrypted(data, crypter, pubkey);
+    ECKey k4 = k3.decrypt(aesKey);
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n4 = k4.getPrivKey();
+    checkEquals(n1, n4, "checkGetEncryptedPrivateKey.1");
   }
 
   public void checkGetEncryptionType(){
+    ECKey k1 = new ECKey ();
     checkCondition(
-        key1.getEncryptionType() == EncryptionType.UNENCRYPTED, 
-        "checkGetEncryptionType"
+        k1.getEncryptionType() == EncryptionType.UNENCRYPTED, 
+        "checkGetEncryptionType.11"
     );
-
-    // TODO more validation
+    KeyCrypter crypter = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    ECKey k2 = k1.encrypt(crypter, aesKey);
+    checkCondition(
+        k2.getEncryptionType() == EncryptionType.ENCRYPTED_SCRYPT_AES,
+        "checkGetEncryptionType.2"
+    );
   }
 
   public void checkGetKeyCrypter(){
-    // TODO
+    ECKey k1 = new ECKey ();
+    KeyCrypter crypt1 = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypt1.deriveKey("some random passphrase");
+    ECKey k2 = k1.encrypt(crypt1, aesKey);
+    KeyCrypter crypt2 = k2.getKeyCrypter();
+    checkEquals(crypt1, crypt2, "checkGetKeyCrypter.1");
   }
 
 
   public void checkGetPrivateKeyAsHex(){
+    // key1
     checkEquals(
         secret1AsHex.toLowerCase(), 
         key1.getPrivateKeyAsHex().toLowerCase(), 
         "checkGetPrivateKeyAsHex.1"
     );
-
-    ECKey key = new ECKey(); // random, test cannot be replicated
-    String check = key.getPrivKey().toString(16);
-    // Comparing check with key.getPrivateKeyAsHex() may fail because
-    // of leading 0' which will not appear in output of toString.
-    // Converting these strings to numbers should allow us to compare
-    BigInteger n1 = new BigInteger(check,16);
-    BigInteger n2 = new BigInteger(key.getPrivateKeyAsHex(),16);
-    checkEquals(n1, n2, "checkGetPrivateKeyAsHex.2");
+    // random key
+    ECKey key = new ECKey();
+    byte[] priv = key.getPrivKeyBytes();
+    String hex1 = DatatypeConverter.printHexBinary(priv).toLowerCase();
+    String hex2 = key.getPrivateKeyAsHex();
+    checkEquals(hex1, hex2, "checkGetPrivateKeyAsHex.2");
   }
 
   public void checkGetPrivateKeyAsWiF(){
+    // key1
     String checkMain = key1.getPrivateKeyAsWiF(mainNet);
     checkEquals(checkMain, secret1AsWiF, "checkGetPrivateKeyAsWiF.1");
 
@@ -741,7 +861,29 @@ public class Test_ECKey implements Test_Interface {
     String checkUnitTest = key1.getPrivateKeyAsWiF(unitTestNet);
     checkEquals(checkUnitTest, secret1AsWiFTest, "checkGetPrivateKeyAsWiF.4");
 
-    // TODO additional validation on random key
+    // random key
+    ECKey key = new ECKey();
+
+    String wif1 = key.getPrivateKeyAsWiF(mainNet);
+    String wif2 = key.getPrivateKeyEncoded(mainNet).toString();
+    checkEquals(wif1, wif2, "checkGetPrivateKeyAsWiF.5");
+
+    String wif3 = key.getPrivateKeyAsWiF(regTestNet);
+    String wif4 = key.getPrivateKeyEncoded(regTestNet).toString();
+    checkEquals(wif3, wif4, "checkGetPrivateKeyAsWiF.6");
+
+    String wif5 = key.getPrivateKeyAsWiF(testNetNet);
+    String wif6 = key.getPrivateKeyEncoded(testNetNet).toString();
+    checkEquals(wif5, wif6, "checkGetPrivateKeyAsWiF.7");
+
+    String wif7 = key.getPrivateKeyAsWiF(unitTestNet);
+    String wif8 = key.getPrivateKeyEncoded(unitTestNet).toString();
+    checkEquals(wif5, wif6, "checkGetPrivateKeyAsWiF.8");
+    
+  }
+
+  public void checkGetPrivateKeyEncoded(){
+    // TODO do not forget to check toString method
   }
 
   public void checkGetPrivKey(){

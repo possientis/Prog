@@ -14,7 +14,7 @@ main = do
 connect :: IO Connection
 connect = do
   conn <- connectPostgreSQL "host=localhost dbname=test user=john password=john"
-  putStrLn "Connected to PostgreSQL server succesfully."
+  putStrLn "connected to PostgreSQL server"
   return conn
 
 
@@ -28,7 +28,7 @@ createTable conn = do
               " SALARY  REAL                    )" 
   run conn sql []
   commit conn
-  putStrLn "Created table 'COMPANY'"
+  putStrLn "created table 'COMPANY'"
   return ()
   
 deleteTable :: Connection -> IO ()
@@ -36,7 +36,7 @@ deleteTable conn = do
   let sql = "DROP TABLE COMPANY"
   run conn sql []
   commit conn
-  putStrLn "Delete table 'COMPANY'"
+  putStrLn "deleted table 'COMPANY'"
   return ()
 
 insert :: Connection -> IO ()
@@ -55,10 +55,17 @@ insert conn = do
 
   let sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "
             ++ "VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 );"
-  run conn sql []
+
+  let sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "
+            ++ "VALUES (?,?,?,?,?);"
+  run conn sql [toSql (5::Int), 
+                toSql "Mark", 
+                toSql (43::Int), 
+                toSql "New York", 
+                toSql (32000::Double)]
 
   commit conn
-  putStrLn "Data was inserted into the table 'COMPANY'"
+  putStrLn "inserted data into table 'COMPANY'"
   return ()
 
 
