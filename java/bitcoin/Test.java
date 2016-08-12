@@ -1,22 +1,31 @@
-import org.bitcoinj.core.ECKey;
 import java.math.BigInteger;
-import org.spongycastle.math.ec.ECPoint;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.DumpedPrivateKey;
 
 public class Test {
   public static void main(String[] args){
 
-    // some private key example of 'Mastering Bitcoin'
-    String s = "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD";
-    BigInteger secret = new BigInteger(s,16);
-    ECPoint point = ECKey.publicPointFromPrivate(secret);
-    point = point.normalize();
-    BigInteger x = point.getAffineXCoord().toBigInteger();
-    BigInteger y = point.getAffineYCoord().toBigInteger();
+    NetworkParameters nw = NetworkParameters.fromID(NetworkParameters.ID_MAINNET); 
+    ECKey k1 = new ECKey();
+    DumpedPrivateKey d1 = k1.getPrivateKeyEncoded(nw);
 
-    // 3ddfa27b1a7e6944d36c02c35ade5c1d4977829e4415c5e023e1063344bfd3be
-    System.out.println(x.toString(16));
+    // hoping to recover key k1
+    ECKey k2 = d1.getKey();
 
-    // a24d02cf6cf43609b1c00c9accd3d26478d8a14205d086ab4332347e8a5b825e
-    System.out.println(y.toString(16));
+    // retrieving both private keys to check they are equal
+    BigInteger n1 = k1.getPrivKey();
+    BigInteger n2 = k2.getPrivKey();
+
+    // In fact the two private keys are not equal, there seems to be a 'version'
+    // byte '0x01' trailing at the end of k2's private key
+
+
+    // 7f3e51f2a039bf242a3be5741cbf4ac56f26533215286621e4cc5202c79a0a3
+    System.out.println(n1.toString(16));
+
+    // 7f3e51f2a039bf242a3be5741cbf4ac56f26533215286621e4cc5202c79a0a301
+    System.out.println(n2.toString(16));
+
   }
 }

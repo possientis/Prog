@@ -28,8 +28,4 @@ public interface Test_Interface {
       System.exit(1);
     }
   }
-
-
-
-
 }
