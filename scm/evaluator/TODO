@@ -1,19 +1,13 @@
-apply-in-underlying scheme?
-eval-primitive.scm?
-apply-primitive.scm?
+Why do we define 'primitives' for those rather than use actual (native) primitive
+map-primitive?
+object-string-primitive?
+require-primitive?
+load-primitive?
 
-deal with issue of whether eval takes 1 or 2 arguments
+
 revise run to as to evaluate or compile + run
+
 follow up on debug.scm
-continue unit testing of analyze
-introduce parallel between apply and eval, in relation to eval-in-underlying-scheme
-
-Understand the suble differences between:
-  - apply-in-underlying-scheme
-  - apply-primitive
-  - apply-primitive-procedure
-Understand why apply-primitive cannot simply be defined as 'apply'
-
 
 
 change semantics of apply

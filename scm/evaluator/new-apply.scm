@@ -5,9 +5,6 @@
     (display "loading new-apply")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-; safeguarding the primitive procedure 'apply' before redefining it
-(load "apply-in-underlying-scheme.scm")
-
 (define (new-apply proc args)
   (cond ((primitive-procedure? proc)  (apply-primitive-procedure proc args))
         ((eval-procedure? proc)       (apply-eval-procedure proc args))

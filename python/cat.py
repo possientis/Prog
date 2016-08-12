@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import sys
 
 def cat(filename):

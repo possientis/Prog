@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 
 class Mapping:
     def __init__(self,iterable):

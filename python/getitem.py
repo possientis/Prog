@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 
 class X(object):
     def __getitem__(self,i):

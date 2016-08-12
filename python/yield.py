@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-
-#import sys
 
 def sumsq(a): return sum([x*x for x in a])
 

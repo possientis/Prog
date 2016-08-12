@@ -5,11 +5,10 @@
     (display "loading primitive")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
+(load "new-eval.scm")
+(load "new-apply.scm")
 (load "load-primitive.scm")
 (load "require-primitive.scm")
-(load "eval-primitive.scm")
-(load "apply-primitive.scm")
 (load "object-string-primitive.scm")
 (load "map-primitive.scm")
 
@@ -63,8 +62,8 @@
         (list 'number->string number->string)
         (list 'hash hash)
         (list 'require require-primitive)
-        (list 'eval eval-primitive)
-        (list 'apply apply-primitive)
+        (list 'eval new-eval)
+        (list 'apply new-apply)
         (list 'make-vector make-vector)
         (list 'vector-fill! vector-fill!)
         (list 'vector-length vector-length)

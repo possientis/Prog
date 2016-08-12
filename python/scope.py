@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+
 spam = "initial global spam"
 def scope_test():
     def do_local():

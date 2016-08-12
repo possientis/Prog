@@ -20,16 +20,6 @@ scm -b -f application.scm                 > /dev/null
 ./run.scm application.scm                 > /dev/null
 
 
-echo apply-in-underlying-scheme
-scm -b -f apply-in-underlying-scheme.scm  > /dev/null               
-./run.scm apply-in-underlying-scheme.scm  > /dev/null
-
-
-echo apply-primitive
-scm -b -f apply-primitive.scm             > /dev/null               
-./run.scm apply-primitive.scm             > /dev/null
-
-
 echo new-apply
 scm -b -f new-apply.scm                   > /dev/null               
 ./run.scm new-apply.scm                   > /dev/null
@@ -87,11 +77,6 @@ scm -b -f environment.scm                 > /dev/null
 echo environment-test
 scm -b -f environment-test.scm            > /dev/null               
 ./run.scm environment-test.scm            > /dev/null
-
-
-echo eval-primitive
-scm -b -f eval-primitive.scm              > /dev/null               
-./run.scm eval-primitive.scm              > /dev/null
 
 
 echo eval-procedure

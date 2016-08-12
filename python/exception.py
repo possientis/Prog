@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 class B(Exception):
     pass
 class C(B):

@@ -17,7 +17,7 @@
 
 ; applying
 (define (apply-primitive-procedure proc args)
-  (apply-in-underlying-scheme (primitive-procedure-object proc) args)) 
+  (apply (primitive-procedure-object proc) args)) 
 
 ))  ; include guard
 
