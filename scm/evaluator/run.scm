@@ -4,7 +4,7 @@
 
 (define filename (caddr (program-arguments)))
 
-(load-primitive filename)
+(new-load filename)
 
 (exit 0)
 

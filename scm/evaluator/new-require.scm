@@ -1,11 +1,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (not (defined? included-require-primitive)) 
+(if (not (defined? included-new-require)) 
   (begin
-    (define included-require-primitive #f)
-    (display "loading require-primitive")(newline)
+    (define included-new-require #f)
+    (display "loading new-require")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-(define (require-primitive lib-name)
+(define (new-require lib-name)
   'ok) ; just a stub)
 
 ))  ; include guard

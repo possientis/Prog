@@ -1,9 +1,4 @@
-Why do we define 'primitives' for those rather than use actual (native) primitive
-map-primitive?
-object-string-primitive?
-require-primitive?
-load-primitive?
-
+primitive.scm: understand why we ve had to implement 'new' primitives
 
 revise run to as to evaluate or compile + run
 

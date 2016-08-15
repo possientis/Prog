@@ -1,11 +1,18 @@
+-- check out the HDBC API reference
+
 import Database.HDBC
 import Database.HDBC.PostgreSQL
 
-main = do
+main = handleSqlError $ do
   conn <- connect
+
   createTable conn
   insertInTable conn
   readFromTable conn
+  reportOnTables conn
+  reportOnClient conn
+  reportOnServer conn
+  reportOnTransactionSupport conn
   deleteTable conn
   disconnect conn
   putStrLn "Disconnected from PostgreSQL server."
@@ -82,16 +89,35 @@ insertInTable conn = do
 readFromTable :: Connection -> IO () 
 readFromTable conn = do
   let sql = "SELECT * FROM COMPANY;"
-  putStrLn "reading data from table 'COMPANT'" 
+  putStrLn "reading data from table 'COMPANT'\n" 
   -- quickQuery :: IConnection conn => conn -> String -> [SqlValue] -> IO [[SqlValue]]
-  -- alternatively, use 'prepare' then 'execute' then call 'fetchAllRows' on Statement obj
-  -- or 'fetchAllRowsAL' or 'fetchRow' (one row at a time)
+  -- alternatively, use prepare then execute then call fetchAllRows' on Statement obj
+  -- or fetchAllRowsAL' or fetchRow' (one row at a time)
+  -- For lazy reading, use fetchAllRows (without apostrophe) etc
+  -- Careful with lazy reading, you cannot close DB connection after you are done
   result <- quickQuery conn sql []
   let out = foldr (\x -> \y -> (show x) ++ "\n" ++ y) [] result 
   putStrLn out
   return ()
 
- 
+reportOnTables :: Connection -> IO ()
+reportOnTables conn = do
+  tables <- getTables conn
+  putStrLn $ "Database has the following tables: " ++ show tables
+
+reportOnClient :: Connection -> IO ()
+reportOnClient conn = do
+  let client = proxiedClientName conn
+  putStrLn $ "Proxied client name is " ++ client
+
+reportOnServer :: Connection -> IO ()
+reportOnServer conn = do
+  let version = dbServerVer conn
+  putStrLn $ "Server version is " ++ version
 
 
-
+reportOnTransactionSupport :: Connection -> IO ()
+reportOnTransactionSupport conn = do
+  if dbTransactionSupport conn
+    then putStrLn "DB has transaction support"
+    else putStrLn "DB does not have transaction support"

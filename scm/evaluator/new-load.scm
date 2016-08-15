@@ -1,12 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (not (defined? included-load-primitive)) 
+(if (not (defined? included-new-load)) 
   (begin
-    (define included-load-primitive #f)  ; include guard
-    (display "loading load-primitive")(newline)
+    (define included-new-load #f)  ; include guard
+    (display "loading new-load")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define (load-primitive file-name)
+(define (new-load file-name)
   (let ((file (open-file file-name "r")))
     (define (loop)
       (let ((input (read file)))

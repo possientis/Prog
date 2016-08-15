@@ -1,12 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (not (defined? included-object-string-primitive)) 
+(if (not (defined? included-new-object-to-string)) 
   (begin
-    (define included-object-string-primitive #f)
-    (display "loading object-string-primitive")(newline)
+    (define included-new-object-to-string #f)
+    (display "loading new-object-to-string")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (require 'object->string)
-(define (object->string-primitive object)
+(define (new-object->string object)
   (object->string object))
 
 ))  ; include guard
