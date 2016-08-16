@@ -5,6 +5,38 @@
     (display "loading primitive")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; This file contains the list of primitive procedures which are defined in the
+; global environment used by the interpreter. Most of these primitive procedures
+; are directly defined in terms of a native scheme primitive, our 'car' body is 
+; simply the native 'car', or 'cdr' the native 'cdr' etc.
+
+; It may appear puzzling at first that not all primitives are defined with
+; reference to a native scheme primitive. There are several reasons for this:
+
+; Some primitives require arguments which are data structures specific to our
+; implementation. For example the 'map' primitive requires a function object
+; as argument and the native scheme function will not understand our own data
+; representation. The 'object->string' primitive is another example. 
+
+; Some primitives return values which are data structures specific to our 
+; implementation. For example, the 'eval' primitive may return a function
+; object after evaluating a lambda expression. 
+
+; Some primitives have side-effects (i.e. they create changes to the global
+; environment) and the interpreter's global environment is not the same as the 
+; native scheme global environment. For example the 'eval' primitive may have 
+; side effects due to 'set!', 'set-car!' and 'set-cdr!' or 'load' etc. Likewise, 
+; the 'apply' primitive may have side-effects if executing a function with side 
+; effects. The 'load' primitive executes code which is also likely to have side 
+; effects. The 'require' primitive introduces new names in the global environment. 
+
+; the 'display' primitive is an exception on this list as it did not need to
+; be re-defined. We did so in order to distinguish native scheme's output from
+; the interpreter's output. Hence we can see when native scheme is running,
+; when interpreted code is running, or when code is interpreted by an interpreter
+; whose code is itself interpreted...
+
+
 (load "new-eval.scm")
 (load "new-apply.scm")
 (load "new-load.scm")

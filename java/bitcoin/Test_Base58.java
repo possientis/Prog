@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.Sha256Hash;
 
 public class Test_Base58 implements Test_Interface {
 
@@ -25,6 +26,7 @@ public class Test_Base58 implements Test_Interface {
     // O and I are out  -> 24 characters
     // l is out         -> 25 characters
     // Total 9 + 24 + 25 = 58 characters
+    // The order is important as it determines the value of each digit
     return "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
   }
 
@@ -89,12 +91,63 @@ public class Test_Base58 implements Test_Interface {
     return result;
   }
 
-  private byte[] _decode(String input){
+  private byte[] stringToBytes(String input){
     // not really important, could be single byte with value 0
     if(input.isEmpty()){
       return new byte[0];
     }
-    return stringToBigInteger(input).toByteArray();
+    byte[] bytes = stringToBigInteger(input).toByteArray();
+
+    // the method toByteArray returns a 2-complement representation of 
+    // a BigInteger. This means that it may add a leading 0x00 byte in 
+    // order to indicate that the BigInteger being encoded is positive
+    // So we test for this occurence and remove the leading null byte
+    byte[] result = null;
+
+    if(bytes[0] == (byte) 0x00 && bytes.length > 1){
+      result = new byte[bytes.length - 1];
+      System.arraycopy(bytes, 1, result, 0, bytes.length - 1);
+    } else {
+      result = bytes;
+    }
+
+    return result;
+  }
+
+
+  private byte[] bytesToBase58(byte[] input){
+
+    if(input.length == 0) return new byte[0];
+    BigInteger _58 = BigInteger.valueOf(58);
+
+    BigInteger N = new BigInteger(1, input);
+    byte[] temp = new byte[2 * input.length];       // upper bound on size
+    int index = temp.length;
+    do {
+      BigInteger[] res = N.divideAndRemainder(_58); // N = 58*res[0] + res[1]
+      temp[--index] = (byte) res[1].intValue();     // temp[--index] = N % 58
+      N = res[0];                                   // N = N div 58
+    } while (N != BigInteger.ZERO);
+
+    int size = temp.length - index;
+    byte [] result = new byte[size];
+    System.arraycopy(temp, index, result, 0, size);
+
+    return result;
+  }
+
+  private String base58ToString(byte[] input){
+    StringBuilder builder = new StringBuilder(input.length);
+    for(int i = 0; i < input.length; ++i){
+      checkCondition(0 <= input[i], "base58ToString.1");
+      checkCondition(input[i] < 58, "base58ToString.2");
+      builder.append(alphabetAsString.charAt(input[i]));
+    }
+    return builder.toString();
+  }
+
+  private String bytesToString(byte[] input){
+    return base58ToString(bytesToBase58(input));
   }
 
   private String getRandomBase58String(int numDigits){
@@ -151,14 +204,14 @@ public class Test_Base58 implements Test_Interface {
     char[] alphabet = alphabetAsString.toCharArray();
     // empty string
     byte[] check1 = Base58.decode("");
-    byte[] check2 = _decode("");  // validating the validator
+    byte[] check2 = stringToBytes("");  // validating the validator
     checkCondition(check1.length == 0, "checkDecode.1");
     checkCondition(check2.length == 0, "checkDecode.2");
     // single digit number
     for(int i = 0; i < 58; ++i){
       String test = String.valueOf(alphabet[i]);
       check1 = Base58.decode(test);
-      check2 = _decode(test);
+      check2 = stringToBytes(test);
       checkCondition(check1.length == 1, "checkDecode.3");
       checkCondition(check2.length == 1, "checkDecode.4");
       checkEquals(check1[0], (byte) i, "checkDecode.5");
@@ -169,7 +222,7 @@ public class Test_Base58 implements Test_Interface {
       for(int j = 0; j < 58; ++j){
         String test = String.valueOf(alphabet[i]) + String.valueOf(alphabet[j]);
         check1 = Base58.decode(test);
-        check2 = _decode(test);
+        check2 = stringToBytes(test);
         BigInteger n1 = new BigInteger(1, check1);
         BigInteger n2 = new BigInteger(1, check2);
         checkEquals(n1, BigInteger.valueOf(i*58 + j), "checkDecode.7");
@@ -178,30 +231,60 @@ public class Test_Base58 implements Test_Interface {
     }
 
     // random number
-    String test = getRandomBase58String(52);  // 52 digits, similar to WiF
-    check1 = Base58.decode(test);
-    check2 = _decode(test);
-    BigInteger n1 = new BigInteger(1, check1);
-    BigInteger n2 = new BigInteger(1, check2);
-    checkEquals(n1, n2, "checkDecode.9");
-    // our validation code may return 0x00 as leading byte
-    checkCondition(check2.length <= check1.length + 1, "checkDecode.10");
-    checkCondition(check1.length <= check2.length, "checkDecode.10");
-    if(check2.length > check1.length){
-      checkCondition(check2[0] == (byte) 0x00, "checkDecode.11");
+    for(int i = 0; i < 1000; ++i){
+      String test = getRandomBase58String(52);  // 52 digits, similar to WiF
+      check1 = Base58.decode(test);
+      check2 = stringToBytes(test);
+      BigInteger n1 = new BigInteger(1, check1);
+      BigInteger n2 = new BigInteger(1, check2);
+      checkEquals(n1, n2, "checkDecode.9");
     }
   }
 
   public void checkDecodeChecked(){
-    // TODO
+    for(int i = 0; i < 1000; ++i){
+      // random private key
+      byte[] priv = new byte[32];
+      random.nextBytes(priv);
+      // we do not need version byte or additional 0x01 byte for compressed key
+      // here, as we are only testing that decodeChecked recovers the checked data
+      byte[] checksum = Sha256Hash.hashTwice(priv,0,32);
+      byte[] checked = new byte[36];
+      // setting checked data
+      System.arraycopy(priv, 0, checked, 0, 32);
+      System.arraycopy(checksum, 0, checked, 32, 4);
+      String checkedAsString = Base58.encode(checked);
+      // hoping to recover initial data after calling function
+      byte [] test = Base58.decodeChecked(checkedAsString);
+      checkCondition(test.length == 32, "checkDecodeChecked.1");
+      checkCondition(Arrays.equals(priv, test), "checkDecodeChecked.2");
+    }
   }
 
   public void checkDecodeToBigInteger(){
-    // TODO
+    // random number
+    for(int i = 0; i < 1000; ++i){
+      String test = getRandomBase58String(52);
+      BigInteger n1 = Base58.decodeToBigInteger(test);
+      BigInteger n2 = stringToBigInteger(test);
+      checkEquals(n1, n2, "checkDecodeToBigInteger.1");
+    }
   }
 
   public void checkEncode(){
-    // TODO
+    for(int i = 0; i < 1000; ++i){
+      String test = getRandomBase58String(52);
+      byte[] bytes = Base58.decode(test);
+      String s1 = Base58.encode(bytes);
+      String s2 = bytesToString(bytes);
+      // s1 s2 and test could differ by a leading '1' digit (which is zero)
+      // So rather than testing equality on strings, we shall compare numbers
+      BigInteger n = Base58.decodeToBigInteger(test);
+      BigInteger n1 = Base58.decodeToBigInteger(s1);
+      BigInteger n2 = Base58.decodeToBigInteger(s2);
+      checkEquals(n, n1, "checkEncode.1");
+      checkEquals(n, n2, "checkEncode.2");
+    }
   }
 
 }
