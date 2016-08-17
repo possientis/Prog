@@ -189,7 +189,9 @@ public class Test_DumpedPrivateKey implements Test_Interface {
     BigInteger n = k1.getPrivKey();
     checkEquals(n, k2.getPrivKey(), "checkGetKey.1");
 
-    logMessage("-----> DumpedPrivateKey::getKey() has issues, see code ...");
+    if(!n.equals(keyMain1.getPrivKey())){
+      logMessage("-> DumpedPrivateKey::getKey() has issues, see testing code ...");
+    }
     /*
     // This test fails: keyMain1.getPrivKey() wrongly has a 0x01 suffix byte
     logMessage(n.toString(16));
@@ -200,6 +202,9 @@ public class Test_DumpedPrivateKey implements Test_Interface {
     // test is succesful when dealing with uncompressed key
     checkEquals(n, keyMain2.getPrivKey(), "checkGetKey.3");
 
+    if(!n.equals(keyTest1.getPrivKey())){
+      logMessage("-> DumpedPrivateKey::getKey() has issues, see testing code ...");
+    }
     /*
     // This test fails: keyTest1.getPrivKey() wrongly has a 0x01 suffix byte
     logMessage(n.toString(16));
@@ -219,6 +224,7 @@ public class Test_DumpedPrivateKey implements Test_Interface {
     String wifTest1 = k1.getPrivateKeyAsWiF(testNet);
     String wifTest2 = k2.getPrivateKeyAsWiF(testNet);
 
+    // redundant network argument set to null
     dpkMain1 = DumpedPrivateKey.fromBase58(null, wifMain1);
     dpkMain2 = DumpedPrivateKey.fromBase58(null, wifMain2);
     dpkTest1 = DumpedPrivateKey.fromBase58(null, wifTest1);
@@ -233,10 +239,61 @@ public class Test_DumpedPrivateKey implements Test_Interface {
     checkEquals(n, keyMain2.getPrivKey(), "checkGetKey.7");
     checkEquals(n, keyTest1.getPrivKey(), "checkGetKey.8");
     checkEquals(n, keyTest2.getPrivKey(), "checkGetKey.9");
- 
+
+
+    // redundant network argument specified
+    dpkMain1 = DumpedPrivateKey.fromBase58(mainNet, wifMain1);
+    dpkMain2 = DumpedPrivateKey.fromBase58(mainNet, wifMain2);
+    dpkTest1 = DumpedPrivateKey.fromBase58(testNet, wifTest1);
+    dpkTest2 = DumpedPrivateKey.fromBase58(testNet, wifTest2);
+
+    keyMain1 = dpkMain1.getKey();
+    keyMain2 = dpkMain2.getKey();
+    keyTest1 = dpkTest1.getKey();
+    keyTest2 = dpkTest2.getKey();
+
+    checkEquals(n, keyMain1.getPrivKey(), "checkGetKey.6");
+    checkEquals(n, keyMain2.getPrivKey(), "checkGetKey.7");
+    checkEquals(n, keyTest1.getPrivKey(), "checkGetKey.8");
+    checkEquals(n, keyTest2.getPrivKey(), "checkGetKey.9");
+
   }
 
   public void checkHashCode(){
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.decompress();
+    DumpedPrivateKey dpkMain1 = k1.getPrivateKeyEncoded(mainNet);
+    DumpedPrivateKey dpkMain2 = k2.getPrivateKeyEncoded(mainNet);
+    DumpedPrivateKey dpkTest1 = k1.getPrivateKeyEncoded(testNet);
+    DumpedPrivateKey dpkTest2 = k2.getPrivateKeyEncoded(testNet);
+
+    int hashMain1 = dpkMain1.hashCode();
+    int hashMain2 = dpkMain2.hashCode();
+    int hashTest1 = dpkTest1.hashCode();
+    int hashTest2 = dpkTest2.hashCode();
+
+    // compressed key vs uncompressed key
+    checkCondition(hashMain1 != hashMain2, "checkHashCode.1");
+    checkCondition(hashTest1 != hashTest2, "checkHashCode.2");
+    // main net vs test net
+    checkCondition(hashMain1 != hashTest1, "checkHashCode.3");
+    checkCondition(hashMain2 != hashTest2, "checkHashCode.4");
+
+    String wifMain1 = k1.getPrivateKeyAsWiF(mainNet);
+    String wifMain2 = k2.getPrivateKeyAsWiF(mainNet);
+    String wifTest1 = k1.getPrivateKeyAsWiF(testNet);
+    String wifTest2 = k2.getPrivateKeyAsWiF(testNet);
+
+    DumpedPrivateKey newMain1 = DumpedPrivateKey.fromBase58(null, wifMain1);
+    DumpedPrivateKey newMain2 = DumpedPrivateKey.fromBase58(null, wifMain2);
+    DumpedPrivateKey newTest1 = DumpedPrivateKey.fromBase58(null, wifTest1);
+    DumpedPrivateKey newTest2 = DumpedPrivateKey.fromBase58(null, wifTest2);
+
+//    checkEquals(hashMain1, newMain1.hashCode(), "checkHashCode.5");
+    checkEquals(hashMain2, newMain2.hashCode(), "checkHashCode.6");
+//    checkEquals(hashTest1, newTest1.hashCode(), "checkHashCode.7");
+    checkEquals(hashTest2, newTest2.hashCode(), "checkHashCode.8");
+
   }
 
 }
