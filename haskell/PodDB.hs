@@ -26,15 +26,15 @@ prepDB dbh =
   do  tables <- getTables dbh
       when (not ("podcasts" `elem` tables)) $
         do  run dbh "CREATE TABLE podcasts (\
-                    \castid SERIAL INTEGER NOT NULL PRIMARY KEY,\
+                    \castid  SERIAL UNIQUE,\
                     \castURL TEXT NOT NULL UNIQUE);" []
             return ()
       when (not ("episodes" `elem` tables)) $
         do  run dbh "CREATE TABLE episodes (\
-                    \epid SERIAL INTEGER NOT NULL PRIMARY KEY,\
-                    \epcastid INTEGER NOT NULL,\
+                    \epid  SERIAL UNIQUE,\
+                    \epcastid INT NOT NULL,\
                     \epurl TEXT NOT NULL,\
-                    \epdone INTEGER NOT NULL,\
+                    \epdone INT NOT NULL,\
                     \UNIQUE(epcastid, epurl),\
                     \UNIQUE(epcastid, epid));" []
             return ()
@@ -148,6 +148,20 @@ getPodcastEpisodes dbh pc =
             epCast = pc
           }
 
+-- maybe needed to test prepDB code 
+deleteTables :: IConnection conn => conn -> IO ()
+deleteTables conn = do
+  let sql = "DROP TABLE PODCASTS"
+  run conn sql []
+  let sql = "DROP TABLE EPISODES"
+  run conn sql []
+  commit conn
+  return ()
 
+test :: IO ()
+test = do 
+  dbh <- connect
+  deleteTables dbh
+  return ()
 
 

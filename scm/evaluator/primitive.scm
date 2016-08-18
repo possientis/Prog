@@ -100,6 +100,7 @@
         (list 'length length)
         (list 'object->string new-object->string)
         (list 'read read)
+        (list 'reverse reverse)
         (list 'open-file open-file)
         (list 'eof-object? eof-object?)
         (list 'close-port close-port)

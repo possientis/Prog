@@ -10,6 +10,7 @@
 (load "defined.scm")
 (load "definition.scm")
 (load "eval-procedure.scm")
+(load "file-to-code.scm")
 (load "if.scm")
 (load "lambda.scm")
 (load "let-rec.scm")

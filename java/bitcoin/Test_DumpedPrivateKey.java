@@ -189,9 +189,8 @@ public class Test_DumpedPrivateKey implements Test_Interface {
     BigInteger n = k1.getPrivKey();
     checkEquals(n, k2.getPrivKey(), "checkGetKey.1");
 
-    if(!n.equals(keyMain1.getPrivKey())){
-      logMessage("-> DumpedPrivateKey::getKey() has issues, see testing code ...");
-    }
+    logMessage("-> DumpedPrivateKey::getKey see unit testing code ...");
+
     /*
     // This test fails: keyMain1.getPrivKey() wrongly has a 0x01 suffix byte
     logMessage(n.toString(16));
@@ -199,21 +198,17 @@ public class Test_DumpedPrivateKey implements Test_Interface {
     checkEquals(n, keyMain1.getPrivKey(), "checkGetKey.2");
     */
 
-    // test is succesful when dealing with uncompressed key
-    checkEquals(n, keyMain2.getPrivKey(), "checkGetKey.3");
-
-    if(!n.equals(keyTest1.getPrivKey())){
-      logMessage("-> DumpedPrivateKey::getKey() has issues, see testing code ...");
-    }
     /*
     // This test fails: keyTest1.getPrivKey() wrongly has a 0x01 suffix byte
     logMessage(n.toString(16));
     logMessage(keyTest1.getPrivKey().toString(16));
-    checkEquals(n, keyTest1.getPrivKey(), "checkGetKey.4");
+    checkEquals(n, keyTest1.getPrivKey(), "checkGetKey.3");
     */
 
-    // test is succesful when dealing with uncompressed key
-    checkEquals(n, keyTest2.getPrivKey(), "checkGetKey.5");
+    // tests are succesful when dealing with uncompressed key
+    checkEquals(n, keyTest2.getPrivKey(), "checkGetKey.4");
+    checkEquals(n, keyMain2.getPrivKey(), "checkGetKey.5");
+
 
 
     // things are a lot smoothier when dealing with DumpedPrivateKey

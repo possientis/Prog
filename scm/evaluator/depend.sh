@@ -64,6 +64,10 @@ echo eval-procedure
 scm -b -f eval-procedure.scm              > /dev/null               
 ./run.scm eval-procedure.scm              > /dev/null
 
+echo file-to-code
+scm -b -f file-to-code.scm                > /dev/null               
+./run.scm file-to-code.scm                > /dev/null
+
 echo frame1
 scm -b -f frame1.scm                      > /dev/null               
 ./run.scm frame1.scm                      > /dev/null

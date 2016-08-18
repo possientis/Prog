@@ -21,6 +21,7 @@ import org.bitcoinj.crypto.EncryptedData;
 import org.spongycastle.crypto.params.ECDomainParameters;
 import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.math.ec.ECPoint;
+import org.spongycastle.crypto.digests.RIPEMD160Digest;
 
 import com.google.common.primitives.UnsignedBytes;
 
@@ -386,6 +387,13 @@ public class Test_ECKey implements Test_Interface {
     BigInteger sum = cube.add(seven);
     return sqrt(sum, isEven);
   }
+
+  private boolean _isEven(BigInteger y){
+    BigInteger p = fieldPrime;
+    BigInteger two = BigInteger.ONE.shiftLeft(1);
+    BigInteger arg = y.mod(p);
+    return (arg.mod(two) == BigInteger.ZERO);
+  }
   
   private String _toString(ECKey key){
     StringBuilder builder = new StringBuilder("ECKey{pub HEX="); 
@@ -433,6 +441,18 @@ public class Test_ECKey implements Test_Interface {
     builder.append('\n');
 
     return builder.toString();
+  }
+
+
+  private byte[] _ripemd160(byte[] input){
+    // we are not supposed to call this on inputs other
+    // than 32 bytes long. Hence this restriction for safety
+    checkEquals(32, input.length, "_ripemd160.1");
+    byte[] out = new byte[20];
+    RIPEMD160Digest digest = new RIPEMD160Digest();
+    digest.update(input, 0, input.length);  
+    digest.doFinal(out, 0);
+    return out;
   }
 
   // compile time checks
@@ -947,15 +967,52 @@ public class Test_ECKey implements Test_Interface {
 
   public void checkGetPrivateKeyEncoded(){
     ECKey k1 = new ECKey();
-    DumpedPrivateKey d1 = k1.getPrivateKeyEncoded(mainNet);
-    ECKey k2 = d1.getKey();
-    BigInteger n1 = k1.getPrivKey();
-    BigInteger n2 = k2.getPrivKey();
-    /* This test is failing
-    checkEquals(n1, n2, "checkGetPrivateKeyEncoded.1");
-    */
-   
-    // TODO more checks here on DumpedPrivateKey object 
+    ECKey k2 = k1.decompress();
+
+
+    // commong secret
+    BigInteger secret = k1.getPrivKey();
+    checkEquals(secret, k2.getPrivKey(), "checkGetPrivateKeyEncoded.1");
+
+    // public keys
+    byte[] pubkey1 = k1.getPubKey();
+    byte[] pubkey2 = k2.getPubKey();
+
+    // creating DumpedPrivateKey from k1 and k2
+    DumpedPrivateKey dpkMain1 = k1.getPrivateKeyEncoded(mainNet); 
+    DumpedPrivateKey dpkMain2 = k2.getPrivateKeyEncoded(mainNet); 
+    DumpedPrivateKey dpkTest1 = k1.getPrivateKeyEncoded(regTestNet); 
+    DumpedPrivateKey dpkTest2 = k2.getPrivateKeyEncoded(regTestNet); 
+
+    // retrieving ECKey's from DumpedPrivateKey's
+    ECKey keyMain1 = dpkMain1.getKey();
+    ECKey keyMain2 = dpkMain2.getKey();
+    ECKey keyTest1 = dpkTest1.getKey();
+    ECKey keyTest2 = dpkTest2.getKey();
+
+    // checking private keys
+    logMessage("-> ECKey::getPrivateKeyEncoded see unit testing code ... ");
+//    checkEquals(secret, keyMain1.getPrivKey(), "checkGetPrivateKeyEncoded.2");
+    checkEquals(secret, keyMain2.getPrivKey(), "checkGetPrivateKeyEncoded.3");
+//    checkEquals(secret, keyTest1.getPrivKey(), "checkGetPrivateKeyEncoded.4");
+    checkEquals(secret, keyTest2.getPrivKey(), "checkGetPrivateKeyEncoded.5");
+
+    // checking compression status
+    checkCondition(keyMain1.isCompressed(), "checkGetPrivateKeyEncoded.6");
+    checkCondition(!keyMain2.isCompressed(), "checkGetPrivateKeyEncoded.7");
+    checkCondition(keyTest1.isCompressed(), "checkGetPrivateKeyEncoded.8");
+    checkCondition(!keyTest2.isCompressed(), "checkGetPrivateKeyEncoded.9");
+
+    // checking public keys
+    boolean chkMain1 = Arrays.equals(pubkey1, keyMain1.getPubKey());
+    boolean chkMain2 = Arrays.equals(pubkey2, keyMain2.getPubKey());
+    boolean chkTest1 = Arrays.equals(pubkey1, keyTest1.getPubKey());
+    boolean chkTest2 = Arrays.equals(pubkey2, keyTest2.getPubKey());
+
+//    checkCondition(chkMain1, "checkGetPrivateKeyEncoded.10");
+    checkCondition(chkMain2, "checkGetPrivateKeyEncoded.11");
+//    checkCondition(chkTest1, "checkGetPrivateKeyEncoded.12");
+    checkCondition(chkTest2, "checkGetPrivateKeyEncoded.13");
   }
 
 
@@ -994,9 +1051,45 @@ public class Test_ECKey implements Test_Interface {
     n = new BigInteger(1, check);
     checkEquals(n, secret1PubKeyUncomp, "checkGetPubKey.2");
 
-    // TODO need compressed key with even parity
-    // TODO check on random compressed key
-    // TODO check on random uncompressed key
+    // random key
+    for(int i = 0; i < 256; ++i){
+      ECKey k1 = new ECKey();
+      ECKey k2 = k1.decompress();
+
+      byte[] pubkey1 = k1.getPubKey();
+      byte[] pubkey2 = k2.getPubKey();
+
+      ECPoint point1 = k1.getPubKeyPoint();
+      ECPoint point2 = k2.getPubKeyPoint();
+      checkEquals(point1, point2, "checkGetPubKey.3");
+
+      byte[] byteX = point1.getAffineXCoord().getEncoded();
+      byte[] byteY = point1.getAffineYCoord().getEncoded();
+
+      boolean isEven = _isEven(new BigInteger(1, byteY)); 
+
+      byte[] pubkey4 = new byte[65]; // uncompressed
+
+      // setting up compressed public key
+      byte[] pubkey3 = new byte[33]; // compressed
+      pubkey3[0] = isEven ? (byte) 0x02 : (byte) 0x03;
+      System.arraycopy(byteX, 0, pubkey3, 1, 32);
+
+      // setting up uncompressed key
+      pubkey4[0] = (byte) 0x04;
+      System.arraycopy(byteX, 0, pubkey4, 1, 32);
+      System.arraycopy(byteY, 0, pubkey4, 33, 32);
+
+      // checking public keys
+      checkCondition(Arrays.equals(pubkey1, pubkey3), "checkPubKey.4");
+      checkCondition(Arrays.equals(pubkey2, pubkey4), "checkPubKey.5");
+
+      // we can actually perform a validation of Y given X
+      BigInteger x = new BigInteger(1, byteX);
+      BigInteger y = new BigInteger(1, byteY);
+      BigInteger z = YFromX(x, isEven);
+      checkEquals(y, z, "checkPubKey.6");
+    }
   }
 
   public void checkGetPubKeyHash(){
@@ -1008,8 +1101,21 @@ public class Test_ECKey implements Test_Interface {
     check = key1Uncomp.getPubKeyHash();
     n = new BigInteger(1, check);
     checkEquals(n, secret1PubKeyHashUncomp, "checkGetPubKeyHash.2");
-    // TODO check on random compressed
-    // TODO check on random uncompressed
+    // random key
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.decompress();
+
+    byte[] hash1 = k1.getPubKeyHash();
+    byte[] hash2 = k2.getPubKeyHash();
+
+    byte[] sha1 = Sha256Hash.hash(k1.getPubKey());
+    byte[] sha2 = Sha256Hash.hash(k2.getPubKey());
+
+    byte[] hash3 = _ripemd160(sha1);
+    byte[] hash4 = _ripemd160(sha2);
+
+    checkCondition(Arrays.equals(hash1, hash3), "checkGetPubKeyHash.1");
+    checkCondition(Arrays.equals(hash2, hash4), "checkGetPubKeyHash.2");
   }
 
   public void checkGetPubKeyPoint(){
@@ -1039,6 +1145,7 @@ public class Test_ECKey implements Test_Interface {
     boolean isEven = (bytes[0] == (byte) 0x02);
     BigInteger yy = YFromX(x, isEven);
     checkEquals(y, yy, "checkGetPubKeyPoint.9");
+    // TODO actually validate ECPoint from secret, not using getPubKey.
   }
 
   public void checkGetPublicKeyAsHex(){
