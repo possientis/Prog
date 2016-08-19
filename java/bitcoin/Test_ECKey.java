@@ -21,6 +21,7 @@ import org.bitcoinj.crypto.EncryptedData;
 import org.spongycastle.crypto.params.ECDomainParameters;
 import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.math.ec.ECPoint;
+import org.spongycastle.math.ec.ECCurve;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
 
 import com.google.common.primitives.UnsignedBytes;
@@ -454,6 +455,37 @@ public class Test_ECKey implements Test_Interface {
     digest.doFinal(out, 0);
     return out;
   }
+
+
+  private ECPoint _twice(ECPoint point){
+
+    ECCurve curve = point.getCurve();
+
+    // should not use this function outside of secp256k1 scope
+    String name = "org.spongycastle.math.ec.custom.sec.SecP256K1Curve"; 
+    checkCondition(curve.getClass().getName() == name, "_twice.1");
+
+    // point should be normalized
+    checkCondition(point.isNormalized(), "_twice.2");
+     
+    // case 1: point is infinity
+    if (point.isInfinity()) return curve.getInfinity(); 
+    
+    BigInteger x = point.getAffineXCoord().toBigInteger();
+    BigInteger y = point.getAffineXCoord().toBigInteger();
+    BigInteger p = fieldPrime;
+
+    // expeciting 0 <= x < p and 0 <= y < p
+    checkCondition(BigInteger.ZERO.compareTo(p) == -1, "_twice.3");
+
+    // case 2: 2y = 0 (which is equivalent to y = 0 in Fp, p odd prime)
+
+
+
+    return null;
+
+  }
+
 
   // compile time checks
   public void checkNestedClasses(){
@@ -1145,7 +1177,11 @@ public class Test_ECKey implements Test_Interface {
     boolean isEven = (bytes[0] == (byte) 0x02);
     BigInteger yy = YFromX(x, isEven);
     checkEquals(y, yy, "checkGetPubKeyPoint.9");
+
     // TODO actually validate ECPoint from secret, not using getPubKey.
+
+    ECCurve curve = point.getCurve();
+    ECPoint  twice = _twice(point);
   }
 
   public void checkGetPublicKeyAsHex(){
