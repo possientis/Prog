@@ -2,7 +2,8 @@
 
 (define (unit-test)
   ;
-  (display "unit-test: starting test\n\n")
+  (newline)
+  (display "unit-test: starting test\n")
   ;
   ; self-evaluating
   (display "testing self-evaluating expressions...\n")
@@ -635,7 +636,6 @@
     (let ((t (s global-env)))
       (if (not (equal? t " test-files.scm loaded"))
         (display "unit-test: test 18.1 failing\n"))))
-
 
   (display "unit-test: test complete\n"))
 

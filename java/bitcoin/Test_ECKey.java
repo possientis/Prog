@@ -330,7 +330,7 @@ public class Test_ECKey implements Test_Interface {
   private final NetworkParameters unitTestNet = getUnitTestNetwork();
   private final SecureRandom random = new SecureRandom();
 
-  private BigInteger getRandomSecret(){
+  private BigInteger _getRandomSecret(){
     byte bytes[] = new byte[32];
     boolean isGood = false;
     BigInteger secret = BigInteger.ZERO;
@@ -347,12 +347,12 @@ public class Test_ECKey implements Test_Interface {
     return secret;
   }
 
-  private boolean isKeyFromSecret1(ECKey key){
+  private boolean _isKeyFromSecret1(ECKey key){
     if (!key.getPrivKey().equals(secret1)) return false;
     return true;
   }
 
-  private BigInteger sqrt(BigInteger n, boolean isEven){
+  private BigInteger _sqrt(BigInteger n, boolean isEven){
     // Let p be the underlying prime.
     // This function returns the square root of n modulo p with given parity
     // Since p = 3 mod 4, whenever n is a quadratic residue modulo p, a 
@@ -366,27 +366,27 @@ public class Test_ECKey implements Test_Interface {
     BigInteger n2 = n1.negate().mod(p); // second square root
 
     // checking n1 and n2 are indeed square roots modulo p
-    checkEquals(n1.multiply(n1).mod(p), arg, "sqrt.1");
-    checkEquals(n2.multiply(n2).mod(p), arg, "sqrt.2");
+    checkEquals(n1.multiply(n1).mod(p), arg, "_sqrt.1");
+    checkEquals(n2.multiply(n2).mod(p), arg, "_sqrt.2");
 
     // retrieving parity of each square root
     boolean isEven1 = (n1.mod(two) == BigInteger.ZERO);
     boolean isEven2 = (n2.mod(two) == BigInteger.ZERO);
 
     // if one is even, the other should be odd
-    checkCondition((isEven1 && !isEven2) || (!isEven1 && isEven2), "sqrt.3");
+    checkCondition((isEven1 && !isEven2) || (!isEven1 && isEven2), "_sqrt.3");
 
     return isEven ? (isEven1 ? n1 : n2) : (isEven1 ? n2 : n1);
   }
 
-  private BigInteger YFromX(BigInteger x, boolean isEven){
+  private BigInteger _YFromX(BigInteger x, boolean isEven){
     // returns Y such that Y^2 = X^3 + 7 modulo p of given parity
     BigInteger p = fieldPrime;
     BigInteger seven = BigInteger.valueOf(7);
     BigInteger square = x.multiply(x).mod(p);
     BigInteger cube = square.multiply(x).mod(p);
     BigInteger sum = cube.add(seven);
-    return sqrt(sum, isEven);
+    return _sqrt(sum, isEven);
   }
 
   private boolean _isEven(BigInteger y){
@@ -457,6 +457,9 @@ public class Test_ECKey implements Test_Interface {
   }
 
 
+  // returns the sum point + point with respect to the
+  // secp256k1 elliptic curve addition. This is implemented
+  // in order to validate the getPubKeyPoint method 
   private ECPoint _twice(ECPoint point){
 
     ECCurve curve = point.getCurve();
@@ -472,19 +475,158 @@ public class Test_ECKey implements Test_Interface {
     if (point.isInfinity()) return curve.getInfinity(); 
     
     BigInteger x = point.getAffineXCoord().toBigInteger();
-    BigInteger y = point.getAffineXCoord().toBigInteger();
+    BigInteger y = point.getAffineYCoord().toBigInteger();
     BigInteger p = fieldPrime;
 
     // expeciting 0 <= x < p and 0 <= y < p
-    checkCondition(BigInteger.ZERO.compareTo(p) == -1, "_twice.3");
+    checkCondition(BigInteger.ZERO.compareTo(x) <= 0, "_twice.3");
+    checkCondition(x.compareTo(p) < 0, "_twice.4");
+    checkCondition(BigInteger.ZERO.compareTo(y) <= 0, "_twice.5");
+    checkCondition(y.compareTo(p) < 0, "_twice.6");
 
     // case 2: 2y = 0 (which is equivalent to y = 0 in Fp, p odd prime)
+    // The point is of the form (x,0), and the tangent to the EC curve
+    // at that point is vertical, so (x,0) + (x,0) is the infinity point
+    if(y == BigInteger.ZERO) return curve.getInfinity();
+
+    // case 3: 2y <> 0
+    // (x,y) + (x,y) = (X,-Y) where 
+    // X = lambda^2 - 2x
+    // Y = lambda.X + nu
+    // nu = y - lambda.x
+    // lambda = (3.x^2 + a)/(2y) with a = 0 for secp256k1.
+
+    // lambda
+    BigInteger square_x = x.multiply(x).mod(p); 
+    BigInteger twice_square_x = square_x.shiftLeft(1).mod(p);
+    BigInteger three_square_x = twice_square_x.add(square_x).mod(p); 
+    BigInteger twice_y = y.shiftLeft(1).mod(p);
+    BigInteger one_over_twice_y = twice_y.modInverse(p);
+    BigInteger lambda = three_square_x.multiply(one_over_twice_y).mod(p);
+    
+    // nu
+    BigInteger lambda_x = lambda.multiply(x).mod(p);
+    BigInteger nu = y.subtract(lambda_x).mod(p);
+
+    // X
+    BigInteger lambda_square = lambda.multiply(lambda).mod(p);
+    BigInteger twice_x = x.shiftLeft(1).mod(p);
+    BigInteger X = lambda_square.subtract(twice_x).mod(p);
+
+    // Y
+    BigInteger lambda_X = lambda.multiply(X).mod(p);
+    BigInteger Y = lambda_X.add(nu).mod(p);
 
 
-
-    return null;
-
+    // returning point
+    return curve.createPoint(X, Y.negate().mod(p));
   }
+
+  // returns the sum p1 + p2 with respect to the secp256k1 
+  // elliptic curve addition. This is implemented
+  // in order to validate the getPubKeyPoint method 
+  private ECPoint _add(ECPoint p1, ECPoint p2){
+    ECCurve curve = p1.getCurve();
+
+    // both point should be with respect to the same elliptiic curve
+    checkEquals(curve, p2.getCurve(), "_add.1");
+
+    // should not use this function outside of secp256k1 scope
+    String name = "org.spongycastle.math.ec.custom.sec.SecP256K1Curve"; 
+    checkCondition(curve.getClass().getName() == name, "_add.2");
+
+    // point should be normalized
+    checkCondition(p1.isNormalized(), "_add.3");
+    checkCondition(p2.isNormalized(), "_add.4");
+
+    // case 1: p1 and p2 are equal
+    if(p1.equals(p2)) return _twice(p1);
+
+    // case 2: p1 and p2 are diferent points
+    // case 2.a: p1 is infinity
+    if(p1.isInfinity()){
+      // returning copy of p2
+      BigInteger x = p2.getAffineXCoord().toBigInteger();
+      BigInteger y = p2.getAffineYCoord().toBigInteger();
+      return curve.createPoint(x,y);
+    }
+
+   // case 2.b: p2 is infinity
+   if(p2.isInfinity()){
+      // returning copy of p1
+      BigInteger x = p1.getAffineXCoord().toBigInteger();
+      BigInteger y = p1.getAffineYCoord().toBigInteger();
+      return curve.createPoint(x,y);
+    }
+
+
+   // None of p1 and p2 are infinity at this stage
+   // so p1 = (x1,y1) and p2=(x2,y2)
+
+   BigInteger p = fieldPrime;
+   BigInteger x1 = p1.getAffineXCoord().toBigInteger().mod(p);
+   BigInteger y1 = p1.getAffineYCoord().toBigInteger().mod(p);
+   BigInteger x2 = p2.getAffineXCoord().toBigInteger().mod(p);
+   BigInteger y2 = p2.getAffineYCoord().toBigInteger().mod(p);
+
+   // case 2.c: x1 = x2, the line going through p1 and p2 is vertical
+   // p1 + p2 is therefore the infinity point
+   if(x1.equals(x2)) return curve.getInfinity(); 
+
+
+   // case 2.d: x1 <> x2
+   // p1 + p2 is (X, -Y) where:
+   // X = lambda^2 - x1 -x2
+   // Y = lambda.X + nu
+   // nu = y1 - lambda.x1
+   // lambda = (y2 - y1)/(x2 - x1)
+
+
+   // lambda
+   BigInteger diff_y = y2.subtract(y1).mod(p);
+   BigInteger diff_x = x2.subtract(x1).mod(p);
+   BigInteger one_over_diff_x = diff_x.modInverse(p);
+   BigInteger lambda = diff_y.multiply(one_over_diff_x).mod(p);
+
+   // nu
+   BigInteger lambda_x1 = lambda.multiply(x1).mod(p);
+   BigInteger nu = y1.subtract(lambda_x1).mod(p);
+
+   // X
+   BigInteger lambda_square = lambda.multiply(lambda).mod(p);
+   BigInteger sum_x1_x2 = x1.add(x2).mod(p); 
+   BigInteger X = lambda_square.subtract(sum_x1_x2).mod(p);
+
+   // Y
+   BigInteger lambda_X = lambda.multiply(X).mod(p);
+   BigInteger Y = lambda_X.add(nu).mod(p);
+
+   
+    // returning point
+    return curve.createPoint(X, Y.negate().mod(p)); 
+  }
+
+  // function implemented for the purpose of validating getPubKeyPoint
+  private ECPoint _getPubKeyPoint(ECKey key){
+    BigInteger secret = key.getPrivKey();
+    ECCurve curve = ECKey.CURVE.getCurve();
+    // generator of the secp256k1 elliptic curve group
+    ECPoint g = curve.createPoint(curveGeneratorX, curveGeneratorY);
+
+    // Setting up result
+    ECPoint result = curve.getInfinity(); // the identity of the EC group
+    ECPoint G = g;  // successively equal to g, 2g, 4g, 8g, ...,  (2^256)g
+    for(int i = 0; i < 256; ++i){
+      if(secret.testBit(0)){
+        result = _add(result, G);
+      }
+      G = _twice(G);
+      secret = secret.shiftRight(1);
+    }
+
+    return result;
+  }
+
 
 
   // compile time checks
@@ -742,18 +884,18 @@ public class Test_ECKey implements Test_Interface {
 
   public void checkFromPrivateFromBigInteger(){
     ECKey key = ECKey.fromPrivate(secret1); // compressed by default  
-    checkCondition(isKeyFromSecret1(key), "checkFromPrivateFromBigInteger.1");
+    checkCondition(_isKeyFromSecret1(key), "checkFromPrivateFromBigInteger.1");
     checkCondition(key.isCompressed(), "checkFromPrivateFromBigInteger.2");
   }
 
   public void checkFromPrivateFromBigIntegerBool(){
     // compressed
     ECKey key = ECKey.fromPrivate(secret1, true); // compressed = true 
-    checkCondition(isKeyFromSecret1(key), "checkFromPrivateFromBigIntegerBool.1");
+    checkCondition(_isKeyFromSecret1(key), "checkFromPrivateFromBigIntegerBool.1");
     checkCondition(key.isCompressed(), "checkFromPrivateFromBigIntegerBool.2");
     // uncompressed
     key = ECKey.fromPrivate(secret1, false);      // compressed = false
-    checkCondition(isKeyFromSecret1(key), "checkFromPrivateFromBigIntegerBool.3");
+    checkCondition(_isKeyFromSecret1(key), "checkFromPrivateFromBigIntegerBool.3");
     checkCondition(!key.isCompressed(), "checkFromPrivateFromBigIntegerBool.4");
   }
 
@@ -1050,7 +1192,7 @@ public class Test_ECKey implements Test_Interface {
 
   public void checkGetPrivKey(){
     checkEquals(key1.getPrivKey(), secret1, "checkGetPrivKey.1");
-    BigInteger secret = getRandomSecret();
+    BigInteger secret = _getRandomSecret();
     ECKey key = ECKey.fromPrivate(secret);
     checkEquals(key.getPrivKey(), secret, "checkGetPrivKey.2");
   }
@@ -1066,7 +1208,7 @@ public class Test_ECKey implements Test_Interface {
     }
 
     // check on random key
-    BigInteger secret = getRandomSecret();
+    BigInteger secret = _getRandomSecret();
     ECKey key = ECKey.fromPrivate(secret);
     check = key.getPrivKeyBytes();
     BigInteger n = new BigInteger(1, check); // decoding bytes back into secret
@@ -1119,7 +1261,7 @@ public class Test_ECKey implements Test_Interface {
       // we can actually perform a validation of Y given X
       BigInteger x = new BigInteger(1, byteX);
       BigInteger y = new BigInteger(1, byteY);
-      BigInteger z = YFromX(x, isEven);
+      BigInteger z = _YFromX(x, isEven);
       checkEquals(y, z, "checkPubKey.6");
     }
   }
@@ -1161,27 +1303,13 @@ public class Test_ECKey implements Test_Interface {
     // key1 uncompressed
     checkEquals(point, key1Uncomp.getPubKeyPoint(), "checkGetPubKeyPoint.4");
     // random key
-    ECKey key = new ECKey();
-    point = key.getPubKeyPoint();
-    checkCondition(point.isNormalized(), "checkGetPubKeyPoint.5");
-    x = point.getAffineXCoord().toBigInteger();
-    y = point.getAffineYCoord().toBigInteger();
-    byte[] bytes = key.getPubKey();
-    checkEquals(bytes.length, 33, "checkGetPubKeyPoint.6");
-    checkCondition(
-        bytes[0] == (byte) 0x03 || bytes[0] == (byte) 0x02,
-        "checkGetPubKeyPoint.7");
-    // creating unsigned BigInteger from byte 1 (inclusive) to byte 33 (exclusive)
-    BigInteger xx = new BigInteger(1, Arrays.copyOfRange(bytes,1,33));
-    checkEquals(x, xx, "checkGetPubKeyPoint.8");
-    boolean isEven = (bytes[0] == (byte) 0x02);
-    BigInteger yy = YFromX(x, isEven);
-    checkEquals(y, yy, "checkGetPubKeyPoint.9");
-
-    // TODO actually validate ECPoint from secret, not using getPubKey.
-
-    ECCurve curve = point.getCurve();
-    ECPoint  twice = _twice(point);
+    for(int i = 0; i < 32; ++i){  // testing 32 times, code is slow
+      ECKey key = new ECKey();
+      point = key.getPubKeyPoint();
+      checkCondition(point.isNormalized(), "checkGetPubKeyPoint.5");
+      ECPoint check = _getPubKeyPoint(key);
+      checkEquals(check, point, "checkGetPubKeyPoint.6");
+    }
   }
 
   public void checkGetPublicKeyAsHex(){
@@ -1203,7 +1331,7 @@ public class Test_ECKey implements Test_Interface {
     BigInteger m = new BigInteger(1, bytes);
     checkEquals(n, m, "checkGetPublicKeyAsHex.4");
     // random uncompressed key
-    BigInteger secret = getRandomSecret();
+    BigInteger secret = _getRandomSecret();
     key = ECKey.fromPrivate(secret, false);
     check = key.getPublicKeyAsHex();
     n = new BigInteger(check, 16);
@@ -1224,7 +1352,7 @@ public class Test_ECKey implements Test_Interface {
       checkEquals(check[i],secret1AsBytes[i],"checkGetSecretBytes.2"); 
     }
     // check on random key
-    BigInteger secret = getRandomSecret();
+    BigInteger secret = _getRandomSecret();
     ECKey key = ECKey.fromPrivate(secret);
     check = key.getSecretBytes();
     BigInteger n = new BigInteger(1, check); // decoding bytes back into secret
@@ -1252,7 +1380,7 @@ public class Test_ECKey implements Test_Interface {
     checkCondition(!key1Uncomp.isCompressed(), "checkIsCompressed.2");
     ECKey key = new ECKey();  // compressed by default
     checkCondition(key.isCompressed(), "checkIsCompressed.3");
-    BigInteger secret = getRandomSecret();
+    BigInteger secret = _getRandomSecret();
     key = ECKey.fromPrivate(secret, true);  // compressed
     checkCondition(key.isCompressed(), "checkIsCompressed.4");
     key = ECKey.fromPrivate(secret, false);  // uncompressed
@@ -1325,7 +1453,7 @@ public class Test_ECKey implements Test_Interface {
     }
 
     // random key, compressed
-    BigInteger secret = getRandomSecret();
+    BigInteger secret = _getRandomSecret();
     pubkey1 = ECKey.publicKeyFromPrivate(secret, true);
     ECPoint point = ECKey.publicPointFromPrivate(secret); // tested elsewhere
     point = point.normalize();  
@@ -1415,7 +1543,7 @@ public class Test_ECKey implements Test_Interface {
     // key1
     byte[] bytes = key1.toASN1();
     ECKey key = ECKey.fromASN1(bytes);
-    checkCondition(isKeyFromSecret1(key), "checkToASN1.1");
+    checkCondition(_isKeyFromSecret1(key), "checkToASN1.1");
     // TODO properly check ASN1 encoding on random key
   }
 
@@ -1430,7 +1558,7 @@ public class Test_ECKey implements Test_Interface {
     key.setCreationTimeSeconds(0);  // suppress display of creation time
     checkEquals(key.toString(), _toString(key), "checkToString.3");
     // random key uncompressed
-    BigInteger secret = getRandomSecret();
+    BigInteger secret = _getRandomSecret();
     key = ECKey.fromPrivate(secret, false);
     checkEquals(key.toString(), _toString(key), "checkToString.4");
 

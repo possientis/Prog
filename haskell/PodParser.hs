@@ -4,6 +4,7 @@ module PodParser where
 
 import PodTypes
 import Text.XML.HaXml
+import Text.XML.HaXml.Combinators
 import Text.XML.HaXml.Parse
 import Text.XML.HaXml.Html.Generate(showattr)
 import Data.Char
@@ -44,37 +45,37 @@ parse content name =
  - Note that HaXml defines CFilter as:
  - > type CFilter = Content -> [Content]
  - -}
-channel :: CFilter
+channel :: CFilter String
 channel = tag "rss" /> tag "channel"
 
-getTitle :: Content -> String
+getTitle :: Content String -> String
 getTitle doc =
   contentToStringDefault "Untitled Podcast"
     (channel /> tag "title" /> txt $ doc)
 
-getEnclosures :: Content -> [PodItem]
+getEnclosures :: Content String -> [PodItem]
 getEnclosures doc =
   concatMap procPodItem $ getPodItems doc
-  where procPodItem :: Content -> [PodItem]
+  where procPodItem :: Content String -> [PodItem]
         procPodItem item = concatMap (procEnclosure title) enclosure
           where title = contentToStringDefault "Untitled Episode"
                           (keep /> tag "title" /> txt $ item)
                 enclosure = (keep /> tag "enclosure") item
 
-        getPodItems :: CFilter
+        getPodItems :: CFilter String
         getPodItems = channel /> tag "item"
 
-        procEnclosure :: String -> Content -> [PodItem]
+        procEnclosure :: String -> Content String -> [PodItem]
         procEnclosure title enclosure =
           map makePodItem (showattr "url" enclosure)
-          where makePodItem :: Content -> PodItem
+          where makePodItem :: Content String -> PodItem
                 makePodItem x = PodItem {itemtitle = title,
                                   enclosureurl = contentToString [x]}
 
 
 {- | Convert [Content] to a printable String, with a default if the
 passed-in [Content] is [], signifying a lack of a match. -}
-contentToStringDefault :: String -> [Content] -> String
+contentToStringDefault :: String -> [Content String] -> String
 contentToStringDefault msg [] = msg
 contentToStringDefault _ x = contentToString x
 
@@ -86,13 +87,13 @@ contentToStringDefault _ x = contentToString x
  - whatever Content we have is wrapped in an Element, then use txt to
  - pull the insides back out. -}
 
-contentToString :: [Content] -> String
+contentToString :: [Content String] -> String
 contentToString =
   concatMap procContent
   where procContent x =
           verbatim $ keep /> txt $ CElem (unesc (fakeElem x))
 
-        fakeElem :: Content -> Element
+        fakeElem :: Content String-> Element
         fakeElem x = Elem "fake" [] [x]
 
         unesc :: Element -> Element

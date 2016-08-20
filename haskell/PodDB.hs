@@ -1,4 +1,5 @@
 -- SQL maybe be specific to SQlite, not working for PostgreSQL as it stands
+module PodDB where
 import Database.HDBC
 import Database.HDBC.PostgreSQL
 import PodTypes
@@ -157,11 +158,11 @@ deleteTables conn = do
   run conn sql []
   commit conn
   return ()
-
+{-
 test :: IO ()
 test = do 
   dbh <- connect
   deleteTables dbh
   return ()
-
+-}
 

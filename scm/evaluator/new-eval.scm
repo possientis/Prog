@@ -4,12 +4,13 @@
     (define included-new-eval #f)
     (display "loading new-eval")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-
 (define (new-eval exp . arg)
   (let ((env (if (null? arg) global-env (car arg))))
-;  (newline)(display "eval:\texp = ")(display exp)(newline)(newline)
-;  (display "env = ")(display (env 'to-string))(newline)
-;  (newline)(newline)(display "type ()+<Enter>")(read)(newline)(newline)
+    (let ((analyzed (analyze exp)))
+      (analyzed env))))
+
+(define (new-eval2 exp . arg)
+  (let ((env (if (null? arg) global-env (car arg))))
     (cond ((self-evaluating? exp) (eval-self-evaluating exp env))                 
           ((variable? exp)        (eval-variable exp env))
           ((quoted? exp)          (eval-quoted exp env))                 
