@@ -627,6 +627,14 @@ public class Test_ECKey implements Test_Interface {
     return result;
   }
 
+  private ECKey _getNewEncryptedKey(String passphrase){
+    KeyCrypter crypter = new KeyCrypterScrypt();
+    KeyParameter aesKey = crypter.deriveKey(passphrase);
+    ECKey k1 = new ECKey(); // unencrypted
+    ECKey k2 = k1.encrypt(crypter, aesKey);
+    return k2;
+  }
+
 
 
   // compile time checks
@@ -691,11 +699,11 @@ public class Test_ECKey implements Test_Interface {
   public void checkPubKeyComparator(){
     Comparator<ECKey> comp1 = ECKey.PUBKEY_COMPARATOR;
     Comparator<byte[]> comp2 = UnsignedBytes.lexicographicalComparator();
-    ECKey key1 = new ECKey();
-    ECKey key2 = new ECKey();
+    ECKey k1 = new ECKey();
+    ECKey k2 = new ECKey();
     checkEquals(
-        comp1.compare(key1,key2),
-        comp2.compare(key1.getPubKey(), key2.getPubKey()),
+        comp1.compare(k1,k2),
+        comp2.compare(k1.getPubKey(), k2.getPubKey()),
         "checkPubKeyComparator.1"
     );
   }
@@ -746,11 +754,11 @@ public class Test_ECKey implements Test_Interface {
 
   public void checkDecompress(){
     // per point compressed property will be removed soon
-    ECKey key1 = new ECKey();
-    checkCondition(key1.isCompressed(),"checkDecompress.1");
-    ECKey key2 = key1.decompress();
-    checkCondition(!key2.isCompressed(),"checkDecompress.2");
-    checkEquals(key1.getPrivKey(), key2.getPrivKey(), "checkDecompress.3");
+    ECKey k1 = new ECKey();
+    checkCondition(k1.isCompressed(),"checkDecompress.1");
+    ECKey k2 = k1.decompress();
+    checkCondition(!k2.isCompressed(),"checkDecompress.2");
+    checkEquals(k1.getPrivKey(), k2.getPrivKey(), "checkDecompress.3");
   }
   
   public void checkDecompressPoint(){
@@ -776,73 +784,81 @@ public class Test_ECKey implements Test_Interface {
     checkCondition(lazy1.equals(lazy2), "checkDecompressPointLazy.1");
   }
 
+
   public void checkDecrypt(){
     KeyCrypter crypter1 = new KeyCrypterScrypt();
-    KeyParameter aesKey1 = crypter1.deriveKey("some random passphrase");
-    ECKey key1 = new ECKey();
-    ECKey key2 = key1.encrypt(crypter1, aesKey1); 
-    // so we have an encrypted key2
-    KeyCrypter crypter2 = key2.getKeyCrypter();
-    KeyParameter aesKey2 = crypter2.deriveKey("some random passphrase"); 
-    ECKey key3 = key2.decrypt(aesKey2);
-    checkEquals(key1.getPrivKey(), key3.getPrivKey(), "checkDecrypt.1");
+    KeyParameter aesKey1 = crypter1.deriveKey("some arbitrary passphrase");
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.encrypt(crypter1, aesKey1); 
+    // so we have an encrypted k2
+    KeyCrypter crypter2 = k2.getKeyCrypter();
+    KeyParameter aesKey2 = crypter2.deriveKey("some arbitrary passphrase"); 
+    ECKey k3 = k2.decrypt(aesKey2);
+    checkEquals(k1.getPrivKey(), k3.getPrivKey(), "checkDecrypt.1");
   }
 
   public void checkDecryptFromKeyCrypter(){
     KeyCrypter crypter1 = new KeyCrypterScrypt();
-    KeyParameter aesKey1 = crypter1.deriveKey("some random passphrase");
-    ECKey key1 = new ECKey();
-    ECKey key2 = key1.encrypt(crypter1, aesKey1); 
-    // so we have an encrypted key2
-    KeyCrypter crypter2 = key2.getKeyCrypter();
-    KeyParameter aesKey2 = crypter2.deriveKey("some random passphrase"); 
-    ECKey key3 = key2.decrypt(crypter2, aesKey2);
+    KeyParameter aesKey1 = crypter1.deriveKey("some arbitrary passphrase");
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.encrypt(crypter1, aesKey1); 
+    // so we have an encrypted k2
+    KeyCrypter crypter2 = k2.getKeyCrypter();
+    KeyParameter aesKey2 = crypter2.deriveKey("some arbitrary passphrase"); 
+    ECKey k3 = k2.decrypt(crypter2, aesKey2);
     checkEquals(
-        key1.getPrivKey(), 
-        key3.getPrivKey(), 
+        k1.getPrivKey(), 
+        k3.getPrivKey(), 
         "checkDecryptFromKeyCrypter.1"
     );
   }
 
   public void checkEncrypt(){
     KeyCrypter crypter = new KeyCrypterScrypt();
-    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
-    ECKey key1 = new ECKey();
-    ECKey key2 = key1.encrypt(crypter, aesKey); 
-    checkCondition(key2.isEncrypted(),"checkEncrypt.1");
-    checkCondition(key2.isPubKeyOnly(),"checkEncrypt.2");
-    checkCondition(!key2.isWatching(),"checkEncrypt.3");
-    BigInteger n1 = new BigInteger(1, key1.getPubKey()); 
-    BigInteger n2 = new BigInteger(1, key2.getPubKey()); 
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.encrypt(crypter, aesKey); 
+    checkCondition(k2.isEncrypted(),"checkEncrypt.1");
+    checkCondition(k2.isPubKeyOnly(),"checkEncrypt.2");
+    checkCondition(!k2.isWatching(),"checkEncrypt.3");
+    BigInteger n1 = new BigInteger(1, k1.getPubKey()); 
+    BigInteger n2 = new BigInteger(1, k2.getPubKey()); 
     // unencrypted and encrypted key should have the same public key
     checkEquals(n1, n2, "checkEncrypt.4");
   }
 
   public void checkEncryptionIsReversible(){
     KeyCrypter crypter = new KeyCrypterScrypt();
-    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
-    ECKey key1 = new ECKey();
-    ECKey key2 = key1.encrypt(crypter, aesKey); 
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.encrypt(crypter, aesKey); 
     checkCondition(
-        ECKey.encryptionIsReversible(key1, key2, crypter, aesKey),
+        ECKey.encryptionIsReversible(k1, k2, crypter, aesKey),
         "checkEncryptionIsReversible.1"
     );
     /* this create warning in the log, dunno how to suppress it
     KeyParameter aesWrongKey = crypter.deriveKey("This passphrase is wrong");
     checkCondition(
-        !ECKey.encryptionIsReversible(key1, key2, crypter, aesWrongKey),
+        !ECKey.encryptionIsReversible(k1, k2, crypter, aesWrongKey),
         "checkEncryptionIsReversible.2"
     );
     */
   }
 
   public void checkECKeyEquals(){
-    ECKey key1 = new ECKey();
-    ECKey key2 = new ECKey();
-    checkCondition(key1.equals(key1),"checkECKeyEquals.1");
-    checkCondition(key2.equals(key2),"checkECKeyEquals.2");
-    checkCondition(!key1.equals(key2),"checkECKeyEquals.3");
-    checkCondition(!key2.equals(key1),"checkECKeyEquals.3");
+    // equals and hashCode are inconsistent
+    logMessage("-> ECKey::equals see unit testing code ...");
+    ECKey k1 = new ECKey();
+    ECKey k2 = ECKey.fromPrivate(k1.getPrivKey());
+    checkCondition(!k1.equals(k2), "checkHashCode.1");
+    checkEquals(k1.hashCode(), k2.hashCode(), "checkHashCode.2");
+ 
+    // naive testing in the meantime
+    k2 = new ECKey();
+    checkCondition(k1.equals(k1),"checkECKeyEquals.1");
+    checkCondition(k2.equals(k2),"checkECKeyEquals.2");
+    checkCondition(!k1.equals(k2),"checkECKeyEquals.3");
+    checkCondition(!k2.equals(k1),"checkECKeyEquals.3");
   }
 
   public void checkFormatKeyWithAddress(){
@@ -871,7 +887,7 @@ public class Test_ECKey implements Test_Interface {
   public void checkFromEncrypted(){
     ECKey k1 = new ECKey();
     KeyCrypter crypter = new KeyCrypterScrypt();
-    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
     ECKey k2 = k1.encrypt(crypter, aesKey);
     EncryptedData data = k2.getEncryptedData();
     byte[] pubkey = k2.getPubKey();
@@ -1013,7 +1029,7 @@ public class Test_ECKey implements Test_Interface {
   public void checkGetEncryptedData(){
     ECKey k1 = new ECKey();
     KeyCrypter crypter = new KeyCrypterScrypt();
-    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
     ECKey k2 = k1.encrypt(crypter, aesKey);
     EncryptedData data = k2.getEncryptedData();
     byte[] pubkey = k2.getPubKey();
@@ -1027,7 +1043,7 @@ public class Test_ECKey implements Test_Interface {
   public void checkGetEncryptedPrivateKey(){
     ECKey k1 = new ECKey();
     KeyCrypter crypter = new KeyCrypterScrypt();
-    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
     ECKey k2 = k1.encrypt(crypter, aesKey);
     EncryptedData data = k2.getEncryptedPrivateKey();
     byte[] pubkey = k2.getPubKey();
@@ -1045,7 +1061,7 @@ public class Test_ECKey implements Test_Interface {
         "checkGetEncryptionType.11"
     );
     KeyCrypter crypter = new KeyCrypterScrypt();
-    KeyParameter aesKey = crypter.deriveKey("some random passphrase");
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
     ECKey k2 = k1.encrypt(crypter, aesKey);
     checkCondition(
         k2.getEncryptionType() == EncryptionType.ENCRYPTED_SCRYPT_AES,
@@ -1056,7 +1072,7 @@ public class Test_ECKey implements Test_Interface {
   public void checkGetKeyCrypter(){
     ECKey k1 = new ECKey ();
     KeyCrypter crypt1 = new KeyCrypterScrypt();
-    KeyParameter aesKey = crypt1.deriveKey("some random passphrase");
+    KeyParameter aesKey = crypt1.deriveKey("some arbitrary passphrase");
     ECKey k2 = k1.encrypt(crypt1, aesKey);
     KeyCrypter crypt2 = k2.getKeyCrypter();
     checkEquals(crypt1, crypt2, "checkGetKeyCrypter.1");
@@ -1361,18 +1377,30 @@ public class Test_ECKey implements Test_Interface {
   }
 
   public void checkHashCode(){
-    // TODO
+    // equals and hashCode are inconsistent
+    // not much point validating one or the other until this is fixed
+
+    logMessage("-> ECKey::hashCode see unit testing code ...");
+    ECKey k1 = new ECKey();
+    ECKey k2 = ECKey.fromPrivate(k1.getPrivKey());
+    checkCondition(!k1.equals(k2), "checkHashCode.1");
+    checkEquals(k1.hashCode(), k2.hashCode(), "checkHashCode.2");
   }
 
   public void checkHasPrivKey(){
     // key1
     checkCondition(key1.hasPrivKey(), "checkHashPrivKey.1");
     checkCondition(key1Uncomp.hasPrivKey(), "checkHashPrivKey.2");
-    // random 
+    // random, with private key, unencrypted
     ECKey key = new ECKey();
     checkCondition(key.hasPrivKey(), "checkHashPrivKey.3");
-    // TODO check on encrypted key
-    // TODO check on public only key
+    // random, with private key, encrypted
+    key = _getNewEncryptedKey("some arbitary passphrase");
+    checkCondition(!key.hasPrivKey(), "checkHashPrivKey.4");
+    // randon, without private key
+    byte[] pubKey = key.getPubKey();
+    ECKey pubOnly = ECKey.fromPublicOnly(pubKey);
+    checkCondition(!pubOnly.hasPrivKey(), "checkHashPrivKey.5");
   }
 
   public void checkIsCompressed(){
@@ -1390,9 +1418,12 @@ public class Test_ECKey implements Test_Interface {
   public void checkIsEncrypted(){
     checkCondition(!key1.isEncrypted(), "checkIsEncrypted.1");
     checkCondition(!key1Uncomp.isEncrypted(), "checkIsEncrypted.2");
+    // random, unencrypted
     ECKey key = new ECKey();  // not encrypted by default
     checkCondition(!key.isEncrypted(), "checkIsEncrypted.3");
-    // TODO check on encrypted key
+    // random, encrypted
+    key = _getNewEncryptedKey("some arbitrary passphrase");
+    checkCondition(key.isEncrypted(), "checkIsEncrypted.4");
   }
 
   public void checkIsPubKeyCanonical(){
@@ -1419,19 +1450,45 @@ public class Test_ECKey implements Test_Interface {
   public void checkIsPubKeyOnly(){
     checkCondition(!key1.isPubKeyOnly(), "checkIsPubKeyOnly.1");
     checkCondition(!key1Uncomp.isPubKeyOnly(), "checkIsPubKeyOnly.2");
-    // TODO check on encrypted key
-    // TODO check on public only key
+    // random, unencrypted
+    ECKey key = new ECKey();
+    checkCondition(!key.isPubKeyOnly(), "checkIsPubKeyOnly.3");
+    // random, encryted
+    key = _getNewEncryptedKey("some arbitrary passphrase");
+    checkCondition(key.isPubKeyOnly(), "checkIsPubKeyOnly.4");
+    // random, public only
+    key = ECKey.fromPublicOnly(key.getPubKey());
+    checkCondition(key.isPubKeyOnly(), "checkIsPubKeyOnly.5");
   }
 
   public void checkIsWatching(){
     checkCondition(!key1.isWatching(), "checkIsWatching.1");
-    checkCondition(!key1Uncomp.isWatching(), "checkIsWatching.1");
-    // TODO check on encrypted key
-    // TODO check on public only key
+    checkCondition(!key1Uncomp.isWatching(), "checkIsWatching.2");
+    // random, unencrypted
+    ECKey key = new ECKey();
+    checkCondition(!key.isWatching(), "checkIsWatching.3");
+    // random, encryted
+    key = _getNewEncryptedKey("some arbitrary passphrase");
+    checkCondition(!key.isWatching(), "checkIsWatching.4");
+    // random, public only
+    key = ECKey.fromPublicOnly(key.getPubKey());
+    checkCondition(key.isWatching(), "checkIsPubKeyOnly.5");
   }
 
   public void checkMaybeDecrypt(){
-    // TODO
+    // same code as checkDecrypt.
+    KeyCrypter crypter1 = new KeyCrypterScrypt();
+    KeyParameter aesKey1 = crypter1.deriveKey("some arbitrary passphrase");
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.encrypt(crypter1, aesKey1); 
+    // so we have an encrypted k2
+    KeyCrypter crypter2 = k2.getKeyCrypter();
+    KeyParameter aesKey2 = crypter2.deriveKey("some arbitrary passphrase"); 
+    ECKey k3 = k2.maybeDecrypt(aesKey2);
+    checkEquals(k1.getPrivKey(), k3.getPrivKey(), "checkMaybeDecrypt.1");
+    // will not throw on unencrypted key
+    k3 = k1.maybeDecrypt(null);
+    checkEquals(k1.getPrivKey(), k3.getPrivKey(), "checkMaybeDecrypt.2");
   }
 
   public void checkPublicKeyFromPrivate(){
@@ -1490,8 +1547,13 @@ public class Test_ECKey implements Test_Interface {
     BigInteger x2 = point2.getAffineXCoord().toBigInteger();
     BigInteger y2 = point2.getAffineYCoord().toBigInteger();
     checkEquals(x1, x2, "checkPublicPointFromPrivate.2");
-    checkEquals(y1, y2, "checkPublicPointFromPrivate.2");
-    // TODO random secret
+    checkEquals(y1, y2, "checkPublicPointFromPrivate.3");
+    // random secret
+    ECKey key = new ECKey();
+    BigInteger secret = key.getPrivKey();
+    ECPoint p1 = ECKey.publicPointFromPrivate(secret);
+    ECPoint p2 = _getPubKeyPoint(key);
+    checkEquals(p1, p2, "checkPublicPointFromPrivate.4");
   }
 
   public void checkRecoverFromSignature(){
