@@ -1,6 +1,6 @@
 import org.bitcoinj.core.ECKey;
 
-public class Test {
+public class Test3 {
 
   public static void main(String[] args){
 

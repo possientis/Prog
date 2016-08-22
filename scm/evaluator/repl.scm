@@ -8,7 +8,7 @@
   (prompt-for-input input-prompt)
   (newline)(display ">")
   (let ((input (read)))
-    (let ((output ((analyze input) global-env)))
+    (let ((output (new-eval input global-env)))
       (announce-output output-prompt)
       (user-print output)))
   (driver-loop))
@@ -23,5 +23,4 @@
   (display "eval:         ") (display object)(newline))
 
 (driver-loop)
-
 

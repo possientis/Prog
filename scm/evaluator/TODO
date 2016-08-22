@@ -1,11 +1,3 @@
-continue with eval vs analyze
-
-revise run to as to evaluate or compile + run
-
-
-follow up on debug.scm
-
-
 change semantics of apply
 check semantics of '() vs ()
 incorporate frame4 with hash-table library

@@ -18,7 +18,7 @@ rm -f c/secp256k1/a.out
 rm -f c/secp256k1/*.o
 rm -f c#/*.exe
 rm -f java/*.class
-rm -f java/bitcoinj/*.class
+rm -f java/bitcoin/*.class
 rm -f scala/*.class
 rm -f clojure/*.class
 rm -f clojure/clojure/java/jdbc/*.class
