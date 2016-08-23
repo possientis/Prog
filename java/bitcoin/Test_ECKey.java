@@ -681,6 +681,17 @@ public class Test_ECKey implements Test_Interface {
     // Y^2 = X^3 + 7 , so a = 0 and b = 7
     checkEquals(a, BigInteger.ZERO, "checkCurve.7");
     checkEquals(b, BigInteger.valueOf(7), "checkCurve.8");
+
+    // checking order of elliptic group and underlying field prime
+    checkCondition(prime.isProbablePrime(128), "checkCurve.9");
+    checkCondition(curveOrder.isProbablePrime(128), "checkCurve.10");
+    ECPoint check = ECKey.publicPointFromPrivate(curveOrder);
+    // (curveOrder) x G = infinity. This shows that the order of the 
+    // point G divides curveOrder. However, curveOrder is prime, and
+    // G is not infinity (its order is not 1). It follows that the
+    // order of G is curveOrder. This does not actually prove that
+    // curveOrder is indeed the order of the group. 
+    checkCondition(check.isInfinity(), "checkCurve.11");
   }
 
   // checking static field HALF_CURVE_ORDER

@@ -29,11 +29,11 @@ public class Test_AbstractBitcoinNetParams implements Test_Interface {
     checkIsDifficultyTransitionPoint();
   }
 
-    private final AbstractBitcoinNetParams _params1 = MainNetParams.get();
-    private final AbstractBitcoinNetParams _params2 = TestNet2Params.get();
-    private final AbstractBitcoinNetParams _params3 = RegTestParams.get();
-    private final AbstractBitcoinNetParams _params4 = TestNet3Params.get();
-    private final AbstractBitcoinNetParams _params5 = UnitTestParams.get();
+  private final AbstractBitcoinNetParams _params1 = MainNetParams.get();
+  private final AbstractBitcoinNetParams _params2 = TestNet2Params.get();
+  private final AbstractBitcoinNetParams _params3 = RegTestParams.get();
+  private final AbstractBitcoinNetParams _params4 = TestNet3Params.get();
+  private final AbstractBitcoinNetParams _params5 = UnitTestParams.get();
  
 
   public void checkBITCOIN_SCHEME(){
