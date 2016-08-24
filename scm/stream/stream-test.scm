@@ -221,7 +221,5 @@
   ;
   (display "stream: unit test complete\n"))
 
-
-
 (stream-test)
 (exit 0)

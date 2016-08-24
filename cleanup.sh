@@ -20,6 +20,7 @@ rm -f c#/*.exe
 rm -f java/*.class
 rm -f java/bitcoin/*.class
 rm -f scala/*.class
+rm -f scala/bitcoin/*.class
 rm -f clojure/*.class
 rm -f clojure/clojure/java/jdbc/*.class
 rm -f clojure/rabbitmq/*.class

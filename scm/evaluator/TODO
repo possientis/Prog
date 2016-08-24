@@ -1,3 +1,7 @@
+
+define primitives from language itself
+implement macros
+lazy evaluation of arguments (with or without memoization)
 change semantics of apply
 check semantics of '() vs ()
 incorporate frame4 with hash-table library

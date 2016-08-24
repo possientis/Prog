@@ -4,12 +4,14 @@
     (define included-new-eval #f)
     (display "loading new-eval")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-(define (new-eval exp . arg)
+
+; this will speed up the code, but reasoning more difficult
+(define (new-eval2 exp . arg)
   (let ((env (if (null? arg) global-env (car arg))))
     (let ((analyzed (analyze exp)))
       (analyzed env))))
 
-(define (new-eval2 exp . arg)
+(define (new-eval exp . arg)
   (let ((env (if (null? arg) global-env (car arg))))
     (cond ((self-evaluating? exp) (eval-self-evaluating exp env))                 
           ((variable? exp)        (eval-variable exp env))
