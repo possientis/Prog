@@ -1,12 +1,20 @@
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
+import java.net.URI;
+import java.math.BigInteger;
 
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.Block;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.MessageSerializer;
+import org.bitcoinj.core.BitcoinSerializer;
+import org.bitcoinj.net.discovery.HttpDiscovery;
 
+import org.bitcoinj.params.AbstractBitcoinNetParams;
 // NetworkParameters being abstract, cannot be instantiated
 // We shall validate the public interface on concrete instance of
-// the following (indirect, via AbstractBitcoinNetParams) subclasses.
+// the following (indirect, via AbstractBitcoinNetParams) subclasses.;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet2Params;
 import org.bitcoinj.params.RegTestParams; // derives from TestNet2Params
@@ -169,6 +177,47 @@ public class Test_NetworkParameters implements Test_Interface {
     0xb5a4b052, 0x21f062d1, 0x72ab89b2, 0x74a45318,
     0x8312e6bc, 0xb916965f, 0x8aa7c858, 0xfe7effad,
   };
+  private final String[] mainDnsSeeds = {
+    "seed.bitcoin.sipa.be",        // Pieter Wuille
+    "dnsseed.bluematt.me",         // Matt Corallo
+    "dnsseed.bitcoin.dashjr.org",  // Luke Dashjr
+    "seed.bitcoinstats.com",       // Chris Decker
+    "seed.bitnodes.io",            // Addy Yeow
+  };
+  private final String[] testDnsSeeds = new String[] {
+    "testnet-seed.bitcoin.schildbach.de", // Andreas Schildbach
+    "testnet-seed.bitcoin.petertodd.org"  // Peter Todd
+  };
+
+  private String  _getGenesisBlockHashMain(){
+    return "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
+  }
+
+  private String _getGenesisBlockHashTest2(){
+    return "00000007199508e34a9ff81e6ec0c477a4cccff2a4767a8eee39c11db367b008";
+  }
+
+  private String _getGenesisBlockHashReg(){
+    return "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206";
+  }
+
+  private String _getGenesisBlockHashTest3(){
+    return "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943";
+  }
+
+  private String _getAndreasSchildbachPubKey(){
+    return "0238746c59d46d5408bf8b1d0af5740fe1a6e1703fcb56b2953f0b965c740d256f";
+  }
+
+
+  private HttpDiscovery.Details[] _getHttpSeeds() {
+    byte[] pub = DatatypeConverter.parseHexBinary(_getAndreasSchildbachPubKey());
+    ECKey key = ECKey.fromPublicOnly(pub);
+    URI uri = URI.create("http://httpseed.bitcoin.schildbach.de/peers");
+    return new HttpDiscovery.Details[] {
+      new HttpDiscovery.Details(key, uri)
+    };
+  }
 
   public void checkBIP16_ENFORCE_TIME(){
     int check = NetworkParameters.BIP16_ENFORCE_TIME;
@@ -433,14 +482,198 @@ public class Test_NetworkParameters implements Test_Interface {
     checkCondition(Arrays.equals(main, check5), "checkGetAlertSigningKey.5");
   }
 
-  public void checkGetBip32HeaderPriv(){ /* TODO */ }
-  public void checkGetBip32HeaderPub(){ /* TODO */ }
+  public void checkGetBip32HeaderPriv(){
+    int check;
+    // MaiNetParams
+    check = _params1.getBip32HeaderPriv();
+    // TODO understand why this number is said to yield 'xprv' in base58 
+    checkEquals(check,0x0488ADE4, "checkGetBip32HeaderPriv.1");
+    // TestNet2Params
+    check = _params2.getBip32HeaderPriv();
+    checkEquals(check,0x04358394, "checkGetBip32HeaderPriv.2");
+    // RegTestParams
+    check = _params3.getBip32HeaderPriv();
+    checkEquals(check,0x04358394, "checkGetBip32HeaderPriv.3");
+    // TestNet3Params
+    check = _params4.getBip32HeaderPriv();
+    checkEquals(check,0x04358394, "checkGetBip32HeaderPriv.4");
+    // UnitTestParams
+    check = _params5.getBip32HeaderPriv();
+    checkEquals(check,0x04358394, "checkGetBip32HeaderPriv.5");
+  } 
+
+  public void checkGetBip32HeaderPub(){
+    int check;
+    // MaiNetParams
+    check = _params1.getBip32HeaderPub();
+    // TODO understand why this number is said to yield 'xprv' in base58 
+    checkEquals(check,0x0488B21E, "checkGetBip32HeaderPub.1");
+    // TestNet2Params
+    check = _params2.getBip32HeaderPub();
+    checkEquals(check,0x043587CF, "checkGetBip32HeaderPub.2");
+    // RegTestParams
+    check = _params3.getBip32HeaderPub();
+    checkEquals(check,0x043587CF, "checkGetBip32HeaderPub.3");
+    // TestNet3Params
+    check = _params4.getBip32HeaderPub();
+    checkEquals(check,0x043587CF, "checkGetBip32HeaderPub.4");
+    // UnitTestParams
+    check = _params5.getBip32HeaderPub();
+    checkEquals(check,0x043587CF, "checkGetBip32HeaderPub.5");
+  } 
+
   public void checkGetBlockVerificationFlags(){ /* TODO */ }
-  public void checkGetDefaultSerializer(){ /* TODO */ }
-  public void checkGetDnsSeeds(){ /* TODO */ }
-  public void checkGetDumpedPrivateKeyHeader(){ /* TODO */ }
-  public void checkGetGenesisBlock(){ /* TODO */ }
-  public void checkGetHttpSeeds(){ /* TODO */ }
+
+  public void checkGetDefaultSerializer(){
+    MessageSerializer check;
+    BitcoinSerializer bcheck;
+    String className = "org.bitcoinj.core.BitcoinSerializer";
+    String scheck;
+
+    // This could be replaced by a loop, as nothing is specific to the
+    // concrete NetworkParameters subclass. A loop makes diagnostic more
+    // difficult in case of failure.
+
+    // MainNetParams
+    check = _params1.getDefaultSerializer();
+    checkNotNull(check, "checkDefaultSerializer.1");
+    scheck = check.getClass().getName();
+    checkEquals(scheck, className, "checkDefaultSerializer.2");
+    bcheck = (BitcoinSerializer) check;
+    checkEquals(_params1, bcheck.getParameters(), "checkDefaultSerializer.3");
+    // TestNet2Params
+    check = _params2.getDefaultSerializer();
+    checkNotNull(check, "checkDefaultSerializer.4");
+    scheck = check.getClass().getName();
+    checkEquals(scheck, className, "checkDefaultSerializer.5");
+    bcheck = (BitcoinSerializer) check;
+    checkEquals(_params2, bcheck.getParameters(), "checkDefaultSerializer.6");
+    // RegTestParams
+    check = _params3.getDefaultSerializer();
+    checkNotNull(check, "checkDefaultSerializer.7");
+    scheck = check.getClass().getName();
+    checkEquals(scheck, className, "checkDefaultSerializer.8");
+    bcheck = (BitcoinSerializer) check;
+    checkEquals(_params3, bcheck.getParameters(), "checkDefaultSerializer.9");
+    // TestNet3Params
+    check = _params4.getDefaultSerializer();
+    checkNotNull(check, "checkDefaultSerializer.10");
+    scheck = check.getClass().getName();
+    checkEquals(scheck, className, "checkDefaultSerializer.11");
+    bcheck = (BitcoinSerializer) check;
+    checkEquals(_params4, bcheck.getParameters(), "checkDefaultSerializer.12");
+    // UnitTestParams
+    check = _params5.getDefaultSerializer();
+    checkNotNull(check, "checkDefaultSerializer.13");
+    scheck = check.getClass().getName();
+    checkEquals(scheck, className, "checkDefaultSerializer.14");
+    bcheck = (BitcoinSerializer) check;
+    checkEquals(_params5, bcheck.getParameters(), "checkDefaultSerializer.15");
+  }
+
+  public void checkGetDnsSeeds(){
+    String[] check;
+    // MainNetParams
+    check = _params1.getDnsSeeds();
+    checkCondition(Arrays.equals(check, mainDnsSeeds), "checkGetDnsSeeds.1");
+    // TestNet2Params
+    check = _params2.getDnsSeeds();
+    checkCondition(check == null, "checkGetDnsSeeds.2");
+    // RegTestParams
+    check = _params3.getDnsSeeds();
+    checkCondition(check == null, "checkGetDnsSeeds.3");
+    // TestNet3Params
+    check = _params4.getDnsSeeds();
+    checkCondition(Arrays.equals(check, testDnsSeeds), "checkGetDnsSeeds.4");
+    // UnitTestParams
+    check = _params5.getDnsSeeds();
+    checkCondition(check == null, "checkGetDnsSeeds.5");
+  }
+  public void checkGetDumpedPrivateKeyHeader(){
+    int check;
+    // MainNetParams;
+    check = _params1.getDumpedPrivateKeyHeader();
+    checkEquals(check, 128, "checkDumpedPrivateKeyHeader.1");
+    // TestNet2Params;
+    check = _params2.getDumpedPrivateKeyHeader();
+    checkEquals(check, 239, "checkDumpedPrivateKeyHeader.2");
+    // RegTestParams;
+    check = _params3.getDumpedPrivateKeyHeader();
+    checkEquals(check, 239, "checkDumpedPrivateKeyHeader.3");
+    // TestNet3Params;
+    check = _params4.getDumpedPrivateKeyHeader();
+    checkEquals(check, 239, "checkDumpedPrivateKeyHeader.4");
+    // UnitTestParams;
+    check = _params5.getDumpedPrivateKeyHeader();
+    checkEquals(check, 239, "checkDumpedPrivateKeyHeader.5");
+  }
+
+  public void checkGetGenesisBlock(){
+    Block check;
+    String s1;
+    String s2;
+    
+    //MainNetParams
+    check = _params1.getGenesisBlock();
+    s1 = check.getHashAsString();
+    s2 = _getGenesisBlockHashMain();
+    checkEquals(s1, s2, "checkGetGenesisBlock.1");
+    //TestNet2Params
+    check = _params2.getGenesisBlock();
+    s1 = check.getHashAsString();
+    s2 = _getGenesisBlockHashTest2();
+    checkEquals(s1, s2, "checkGetGenesisBlock.2");
+    //RegTestParams
+    check = _params3.getGenesisBlock();
+    s1 = check.getHashAsString();
+    s2 = _getGenesisBlockHashReg();
+    checkEquals(s1, s2, "checkGetGenesisBlock.3");
+    //TestNet3Params
+    check = _params4.getGenesisBlock();
+    s1 = check.getHashAsString();
+    s2 = _getGenesisBlockHashTest3();
+    checkEquals(s1, s2, "checkGetGenesisBlock.4");
+    //UnitTestParams
+    check = _params5.getGenesisBlock(); // hash may vary
+    long diff1 = Block.EASIEST_DIFFICULTY_TARGET;
+    long diff2 = check.getDifficultyTarget();
+  }
+
+  public void checkGetHttpSeeds(){
+    HttpDiscovery.Details[] check;
+    HttpDiscovery.Details[] check2 = _getHttpSeeds();
+    ECKey k1;
+    ECKey k2;
+    URI u1;
+    URI u2;
+    String s1;
+    String s2;
+
+    // MainNetParams
+    check = _params1.getHttpSeeds();
+    checkEquals(check.length, 1, "checkGetHttpSeeds.1");
+    k1 = check[0].pubkey;
+    k2 = check2[0].pubkey;
+    u1 = check[0].uri;
+    u2 = check2[0].uri;
+    s1 = k1.getPublicKeyAsHex();
+    s2 = k2.getPublicKeyAsHex();
+    checkEquals(s1, s2, "checkGetHttpSeeds.2");
+    checkEquals(u1, u2, "checkGetHttpSeeds.3");
+    // TestNet2Params
+    check = _params2.getHttpSeeds();
+    checkEquals(check.length, 0, "checkGetHttpSeeds.4");
+    // RegTestParams
+    check = _params3.getHttpSeeds();
+    checkEquals(check.length, 0, "checkGetHttpSeeds.5");
+    // TestNet3Params
+    check = _params4.getHttpSeeds();
+    checkEquals(check.length, 0, "checkGetHttpSeeds.6");
+    // UnitTestParams
+    check = _params5.getHttpSeeds();
+    checkEquals(check.length, 0, "checkGetHttpSeeds.7");
+  }
+
   public void checkGetId(){
     String check1 = _params1.getId();
     String check2 = _params2.getId();
@@ -453,12 +686,98 @@ public class Test_NetworkParameters implements Test_Interface {
     checkEquals(check4, NetworkParameters.ID_TESTNET, "checkGetId.4");
     checkEquals(check5, NetworkParameters.ID_UNITTESTNET, "checkGetId.5");
   }
-  public void checkGetInterval(){ /* TODO */ }
-  public void checkGetMajorityEnforceBlockUpgrade(){ /* TODO */ }
-  public void checkGetMajorityRejectBlockOutdated(){ /* TODO */ }
-  public void checkGetMajorityWindow(){ /* TODO */ }
-  public void checkGetMaxMoney(){ /* TODO */ }
-  public void checkGetMaxTarget(){ /* TODO */ }
+
+  public void checkGetInterval(){
+    int check1 = _params1.getInterval();
+    int check2 = _params2.getInterval();
+    int check3 = _params3.getInterval();
+    int check4 = _params4.getInterval();
+    int check5 = _params5.getInterval();
+
+    // MainNetParams
+    checkEquals(check1, NetworkParameters.INTERVAL, "checkGetInterval.1");
+    checkEquals(check2, NetworkParameters.INTERVAL, "checkGetInterval.2");
+    checkEquals(check3, 10000, "checkGetInterval.3"); // RegTestParams
+    checkEquals(check4, NetworkParameters.INTERVAL, "checkGetInterval.4");
+    checkEquals(check5, 10, "checkGetInterval.5");    // UnitTestParams
+  }
+
+  public void checkGetMajorityEnforceBlockUpgrade(){
+    int main = MainNetParams.MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
+    int test = TestNet2Params.TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
+
+    int check1 = _params1.getMajorityEnforceBlockUpgrade();
+    int check2 = _params2.getMajorityEnforceBlockUpgrade();
+    int check3 = _params3.getMajorityEnforceBlockUpgrade();
+    int check4 = _params4.getMajorityEnforceBlockUpgrade();
+    int check5 = _params5.getMajorityEnforceBlockUpgrade();
+
+    checkEquals(check1, main, "checkGetMajorityEnforceBlockUpgrade.1");
+    checkEquals(check2, test, "checkGetMajorityEnforceBlockUpgrade.2");
+    checkEquals(check3, main, "checkGetMajorityEnforceBlockUpgrade.3");
+    checkEquals(check4, test, "checkGetMajorityEnforceBlockUpgrade.4");
+    checkEquals(check5, 3, "checkGetMajorityEnforceBlockUpgrade.5");
+  }
+
+  public void checkGetMajorityRejectBlockOutdated(){
+    int main = MainNetParams.MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED;
+    int test = TestNet2Params.TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED;
+
+    int check1 = _params1.getMajorityRejectBlockOutdated();
+    int check2 = _params2.getMajorityRejectBlockOutdated();
+    int check3 = _params3.getMajorityRejectBlockOutdated();
+    int check4 = _params4.getMajorityRejectBlockOutdated();
+    int check5 = _params5.getMajorityRejectBlockOutdated();
+
+    checkEquals(check1, main, "checkGetMajorityRejectBlockOutdated.1");
+    checkEquals(check2, test, "checkGetMajorityRejectBlockOutdated.2");
+    checkEquals(check3, main, "checkGetMajorityRejectBlockOutdated.3");
+    checkEquals(check4, test, "checkGetMajorityRejectBlockOutdated.4");
+    checkEquals(check5, 4, "checkGetMajorityRejectBlockOutdated.5");
+  }
+
+  public void checkGetMajorityWindow(){
+    int main = MainNetParams.MAINNET_MAJORITY_WINDOW;
+    int test = TestNet2Params.TESTNET_MAJORITY_WINDOW;
+
+    int check1 = _params1.getMajorityWindow();
+    int check2 = _params2.getMajorityWindow();
+    int check3 = _params3.getMajorityWindow();
+    int check4 = _params4.getMajorityWindow();
+    int check5 = _params5.getMajorityWindow();
+
+    checkEquals(check1, main, "checkGetMajorityWindow.1");
+    checkEquals(check2, test, "checkGetMajorityWindow.2");
+    checkEquals(check3, main, "checkGetMajorityWindow.3");
+    checkEquals(check4, test, "checkGetMajorityWindow.4");
+    checkEquals(check5, 7, "checkGetMajorityWindow.5");
+  }
+
+  public void checkGetMaxMoney(){
+    Coin check = AbstractBitcoinNetParams.MAX_MONEY;
+    Coin check1 = _params1.getMaxMoney();
+    Coin check2 = _params2.getMaxMoney();
+    Coin check3 = _params3.getMaxMoney();
+    Coin check4 = _params4.getMaxMoney();
+    Coin check5 = _params5.getMaxMoney();
+    checkEquals(check, check1, "checkGetMaxMoney.1");
+    checkEquals(check, check2, "checkGetMaxMoney.2");
+    checkEquals(check, check3, "checkGetMaxMoney.3");
+    checkEquals(check, check4, "checkGetMaxMoney.4");
+    checkEquals(check, check5, "checkGetMaxMoney.5");
+  }
+
+  public void checkGetMaxTarget(){
+
+    BigInteger check = BigInteger.valueOf(0x1d00ffffL);
+    BigInteger check1 = _params1.getMaxTarget();
+    BigInteger check2 = _params2.getMaxTarget();
+    BigInteger check3 = _params3.getMaxTarget();
+    BigInteger check4 = _params4.getMaxTarget();
+    BigInteger check5 = _params5.getMaxTarget();
+    logMessage(check1.toString());
+  }
+
   public void checkGetMinNonDustOutput(){ /* TODO */ }
   public void checkGetMonetaryFormat(){ /* TODO */ }
   public void checkGetP2SHHeader(){
