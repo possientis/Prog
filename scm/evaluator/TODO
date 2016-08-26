@@ -1,3 +1,6 @@
+define a new type 'Thunk'
+define lazy-eval : Exp -> Thunk
+define actual-value : Thunk -> Val
 
 define primitives from language itself
 implement macros

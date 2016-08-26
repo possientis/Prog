@@ -1,4 +1,14 @@
-import Control.Exception
+{-# LANGUAGE DeriveDataTypeable #-}
 
--- handle :: Exception e => (e -> IO a) -> IO a -> IO a
---
+import Control.Exception
+import Data.Typeable
+
+data MyException = ThisException | ThatException
+  deriving (Show, Typeable)
+
+instance Exception MyException
+
+this = SomeException ThisException
+that = SomeException ThatException 
+
+testThis = fromException this

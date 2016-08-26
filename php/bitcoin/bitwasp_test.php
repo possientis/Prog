@@ -1,5 +1,7 @@
 <?php
 // failing to install bitwasp
+require 'vendor/autoload.php';
+
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Address;
 use BitWasp\Bitcoin\Key\PrivateKeyFactory;

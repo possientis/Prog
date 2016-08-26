@@ -1,15 +1,23 @@
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.net.URI;
 import java.math.BigInteger;
+import java.security.SecureRandom;
+
 
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.MessageSerializer;
 import org.bitcoinj.core.BitcoinSerializer;
 import org.bitcoinj.net.discovery.HttpDiscovery;
+import org.bitcoinj.core.Utils;
+import org.bitcoinj.core.Transaction;
+import org.bitcoinj.utils.MonetaryFormat;
 
 import org.bitcoinj.params.AbstractBitcoinNetParams;
 // NetworkParameters being abstract, cannot be instantiated
@@ -84,18 +92,19 @@ public class Test_NetworkParameters implements Test_Interface {
     checkPassesCheckpoint();
   }
 
-  private final NetworkParameters _params1 = MainNetParams.get();
-  private final NetworkParameters _params2 = TestNet2Params.get();
-  private final NetworkParameters _params3 = RegTestParams.get();
-  private final NetworkParameters _params4 = TestNet3Params.get();
-  private final NetworkParameters _params5 = UnitTestParams.get();
-  private final String _satoshiKey = "04" /* uncompressed public key */
+  private static final SecureRandom _random = new SecureRandom();
+  private static final NetworkParameters _params1 = MainNetParams.get();
+  private static final NetworkParameters _params2 = TestNet2Params.get();
+  private static final NetworkParameters _params3 = RegTestParams.get();
+  private static final NetworkParameters _params4 = TestNet3Params.get();
+  private static final NetworkParameters _params5 = UnitTestParams.get();
+  private static final String _satoshiKey = "04" /* uncompressed public key */
     + "fc9702847840aaf195de8442ebecedf5b095cdbb9bc716bda9110971b28a49e0"
     + "ead8564ff0db22209e0374782c093bb899692d524e9d6a6956e7c5ecbcd68284";
-  private final String _testNetKey = "04" /* uncompressed public key */
+  private static final String _testNetKey = "04" /* uncompressed public key */
     + "302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2"
     + "c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a";
-  private final int[] _mainAddrSeeds = {
+  private static final int[] _mainAddrSeeds = {
     0x1ddb1032, 0x6242ce40, 0x52d6a445, 0x2dd7a445, 
     0x8a53cd47, 0x73263750, 0xda23c257, 0xecd4ed57,
     0x0a40ec59, 0x75dce160, 0x7df76791, 0x89370bad, 
@@ -177,46 +186,81 @@ public class Test_NetworkParameters implements Test_Interface {
     0xb5a4b052, 0x21f062d1, 0x72ab89b2, 0x74a45318,
     0x8312e6bc, 0xb916965f, 0x8aa7c858, 0xfe7effad,
   };
-  private final String[] mainDnsSeeds = {
+  private static final String[] mainDnsSeeds = {
     "seed.bitcoin.sipa.be",        // Pieter Wuille
     "dnsseed.bluematt.me",         // Matt Corallo
     "dnsseed.bitcoin.dashjr.org",  // Luke Dashjr
     "seed.bitcoinstats.com",       // Chris Decker
     "seed.bitnodes.io",            // Addy Yeow
   };
-  private final String[] testDnsSeeds = new String[] {
+  private static final String[] testDnsSeeds = new String[] {
     "testnet-seed.bitcoin.schildbach.de", // Andreas Schildbach
     "testnet-seed.bitcoin.petertodd.org"  // Peter Todd
   };
 
-  private String  _getGenesisBlockHashMain(){
+
+  private static String  _getGenesisBlockHashMain(){
     return "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
   }
 
-  private String _getGenesisBlockHashTest2(){
+  private static String _getGenesisBlockHashTest2(){
     return "00000007199508e34a9ff81e6ec0c477a4cccff2a4767a8eee39c11db367b008";
   }
 
-  private String _getGenesisBlockHashReg(){
+  private static String _getGenesisBlockHashReg(){
     return "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206";
   }
 
-  private String _getGenesisBlockHashTest3(){
+  private static String _getGenesisBlockHashTest3(){
     return "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943";
   }
 
-  private String _getAndreasSchildbachPubKey(){
+  private static String _getAndreasSchildbachPubKey(){
     return "0238746c59d46d5408bf8b1d0af5740fe1a6e1703fcb56b2953f0b965c740d256f";
   }
 
 
-  private HttpDiscovery.Details[] _getHttpSeeds() {
+  private static final HttpDiscovery.Details[] _getHttpSeeds() {
     byte[] pub = DatatypeConverter.parseHexBinary(_getAndreasSchildbachPubKey());
     ECKey key = ECKey.fromPublicOnly(pub);
     URI uri = URI.create("http://httpseed.bitcoin.schildbach.de/peers");
     return new HttpDiscovery.Details[] {
       new HttpDiscovery.Details(key, uri)
     };
+  }
+
+  private static final Map<Integer, Sha256Hash> _checkpoints = new HashMap<>();
+  private static String _getHash_91722(){
+    return "00000000000271a2dc26e7667f8419f2e15416dc6955e5a6c6cdf3f2574dd08e";
+  }
+  private static String _getHash_91812(){
+    return "00000000000af0aed4792b1acee3d966af36cf5def14935db8de83d6f9306f2f";
+  }
+
+  private static String _getHash_91842(){
+    return "00000000000a4d0a398161ffc163c503763b1f4360639393e0e4c8e300e0caec";
+  }
+
+  private static String _getHash_91880(){
+    return "00000000000743f190a18c5577a3c2d2a1f610ae9601ac046a38084ccb7cd721";
+  }
+
+  private static String _getHash_200000(){
+    return "000000000000034a7dedef4a161fa058a2d67a173a90155f3a2fe6fc132e0ebf";
+  }
+
+  private static byte[] _getRandomBytes(int n){
+    byte[] bytes = new byte[n];
+    _random.nextBytes(bytes);
+    return bytes;
+  }
+
+  static {
+    _checkpoints.put(91722 , Sha256Hash.wrap(_getHash_91722()));
+    _checkpoints.put(91812 , Sha256Hash.wrap(_getHash_91812()));
+    _checkpoints.put(91842 , Sha256Hash.wrap(_getHash_91842()));
+    _checkpoints.put(91880 , Sha256Hash.wrap(_getHash_91880()));
+    _checkpoints.put(200000, Sha256Hash.wrap(_getHash_200000()));
   }
 
   public void checkBIP16_ENFORCE_TIME(){
@@ -506,7 +550,7 @@ public class Test_NetworkParameters implements Test_Interface {
     int check;
     // MaiNetParams
     check = _params1.getBip32HeaderPub();
-    // TODO understand why this number is said to yield 'xprv' in base58 
+    // TODO understand why this number is said to yield 'xpub' in base58 
     checkEquals(check,0x0488B21E, "checkGetBip32HeaderPub.1");
     // TestNet2Params
     check = _params2.getBip32HeaderPub();
@@ -769,17 +813,70 @@ public class Test_NetworkParameters implements Test_Interface {
 
   public void checkGetMaxTarget(){
 
-    BigInteger check = BigInteger.valueOf(0x1d00ffffL);
-    BigInteger check1 = _params1.getMaxTarget();
-    BigInteger check2 = _params2.getMaxTarget();
-    BigInteger check3 = _params3.getMaxTarget();
-    BigInteger check4 = _params4.getMaxTarget();
-    BigInteger check5 = _params5.getMaxTarget();
-    logMessage(check1.toString());
+    // Easiest allowable proof of work
+    BigInteger check1;
+    BigInteger check2;
+  
+    // MainNetParams (28 bytes)
+    // ffff0000000000000000000000000000000000000000000000000000
+    check1 = Utils.decodeCompactBits(0x1d00ffffL);
+    check2 = _params1.getMaxTarget();
+    checkEquals(check1, check2, "checkGetMaxTarget.1");
+
+    // TestNet2Params (28 bytes)
+    // fffff0000000000000000000000000000000000000000000000000000
+    check1 = Utils.decodeCompactBits(0x1d0fffffL);
+    check2 = _params2.getMaxTarget();
+    checkEquals(check1, check2, "checkGetMaxTarget.2");
+
+    // RegTestParams (33 bytes)
+    // 7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    check1 = new BigInteger(
+      "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",16);
+    check2 = _params3.getMaxTarget();
+    checkEquals(check1, check2, "checkGetMaxTarget.3");
+
+    // TestNet3Params (28 bytes)
+    // ffff0000000000000000000000000000000000000000000000000000
+    check1 = Utils.decodeCompactBits(0x1d00ffffL);
+    check2 = _params4.getMaxTarget();
+    checkEquals(check1, check2, "checkGetMaxTarget.4");
+
+
+    // UnitTestParams (33 bytes)
+    // "00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    check1 = new BigInteger(
+        "00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",16);
+    check2 = _params5.getMaxTarget();
+    checkEquals(check1, check2, "checkGetMaxTarget.5");
   }
 
-  public void checkGetMinNonDustOutput(){ /* TODO */ }
-  public void checkGetMonetaryFormat(){ /* TODO */ }
+  public void checkGetMinNonDustOutput(){
+    // pasted from AbstractBitcoinNetParams
+    Coin check = Transaction.MIN_NONDUST_OUTPUT;
+    checkEquals(check, _params1.getMinNonDustOutput(), "checkMinNonDustOutput.1");
+    checkEquals(check, _params2.getMinNonDustOutput(), "checkMinNonDustOutput.2");
+    checkEquals(check, _params3.getMinNonDustOutput(), "checkMinNonDustOutput.3");
+    checkEquals(check, _params4.getMinNonDustOutput(), "checkMinNonDustOutput.4");
+    checkEquals(check, _params5.getMinNonDustOutput(), "checkMinNonDustOutput.5");
+    // should be caught by Transaction validation. 2730 satoshis for some reason
+    checkEquals(check.toString(), "2730", "checkMinNonDustOutput.6");
+  }
+
+  public void checkGetMonetaryFormat(){
+    // pasted from AbstractBitcoinNetParams
+    MonetaryFormat format1 = _params1.getMonetaryFormat();
+    MonetaryFormat format2 = _params2.getMonetaryFormat();
+    MonetaryFormat format3 = _params3.getMonetaryFormat();
+    MonetaryFormat format4 = _params4.getMonetaryFormat();
+    MonetaryFormat format5 = _params5.getMonetaryFormat();
+    checkNotNull(format1, "checkMonetaryFormat.1");
+    checkNotNull(format2, "checkMonetaryFormat.2");
+    checkNotNull(format3, "checkMonetaryFormat.3");
+    checkNotNull(format4, "checkMonetaryFormat.4");
+    checkNotNull(format5, "checkMonetaryFormat.5");
+  }
+
   public void checkGetP2SHHeader(){
     int check;
     // MainNetParams
@@ -799,19 +896,320 @@ public class Test_NetworkParameters implements Test_Interface {
     checkEquals(check, 196, "checkP2SHHeader.5");
   }
  
-  public void checkGetPacketMagic(){ /* TODO */ }
-  public void checkGetPaymentProtocolId(){ /* TODO */ }
-  public void checkGetPort(){ /* TODO */ }
-  public void checkGetProtocolVersionNum(){ /* TODO */ }
+  public void checkGetPacketMagic(){
+    // indicates message origin network and is used to seek 
+    // to the next message when stream state is unknown
+    long check;
+
+    // MainNetParams
+    check = _params1.getPacketMagic();
+    checkEquals(check, 0xf9beb4d9L, "checkGetPacketMagic.1");
+
+    // TestNet2Params
+    check = _params2.getPacketMagic();
+    checkEquals(check, 0xfabfb5daL, "checkGetPacketMagic.2");
+
+    // RegTestParams
+    check = _params3.getPacketMagic();
+    checkEquals(check, 0xfabfb5daL, "checkGetPacketMagic.3");
+    
+    // TestNet3Params
+    check = _params4.getPacketMagic();
+    checkEquals(check, 0x0b110907L, "checkGetPacketMagic.4");
+
+    // UnitTestParams
+    check = _params5.getPacketMagic();
+    checkEquals(check, 0x0b110907L, "checkGetPacketMagic.5");
+  }
+  public void checkGetPaymentProtocolId(){
+    String check;
+
+    // MainNetParams
+    check = _params1.getPaymentProtocolId();
+    checkEquals(check, "main", "checkPaymentProtocolId.1");
+
+    // TestNet2Params
+    check = _params2.getPaymentProtocolId();
+    checkCondition(check == null, "checkPaymentProtocolId.2");
+
+    // RegTestParams
+    check = _params3.getPaymentProtocolId();
+    checkEquals(check, "regtest", "checkPaymentProtocolId.3");
+
+    // TestNet3Params
+    check = _params4.getPaymentProtocolId();
+    checkEquals(check, "test", "checkPaymentProtocolId.4");
+
+    // UnitTestParams
+    check = _params5.getPaymentProtocolId();
+    checkEquals(check, "unittest", "checkPaymentProtocolId.5");
+  }
+
+  public void checkGetPort(){
+    int check;
+
+    // MainNetParams
+    check = _params1.getPort();
+    checkEquals(check, 8333, "checkGetPort.1");
+
+    // TestNet2Params
+    check = _params2.getPort();
+    checkEquals(check, 18333, "checkGetPort.2");
+
+    // RegTestParams
+    check = _params3.getPort();
+    checkEquals(check, 18444, "checkGetPort.3");
+
+    // TestNet3Params
+    check = _params4.getPort();
+    checkEquals(check, 18333, "checkGetPort.4");
+
+    
+    // UnitTestParams
+    check = _params5.getPort();
+    checkEquals(check, 18333, "checkGetPort.5");
+  }
+     
+  public void checkGetProtocolVersionNum(){
+    // pasted from AsbtractBitcoinNetParams
+    NetworkParameters.ProtocolVersion[] 
+      versions = new NetworkParameters.ProtocolVersion[4];
+
+    versions[0] = NetworkParameters.ProtocolVersion.BLOOM_FILTER;
+    versions[1] = NetworkParameters.ProtocolVersion.CURRENT;
+    versions[2] = NetworkParameters.ProtocolVersion.MINIMUM;
+    versions[3] = NetworkParameters.ProtocolVersion.PONG;
+
+    for(int i = 0; i < 4; ++i){
+      int check = versions[i].getBitcoinProtocolVersion();
+      int i1 = _params1.getProtocolVersionNum(versions[i]);
+      int i2 = _params2.getProtocolVersionNum(versions[i]);
+      int i3 = _params3.getProtocolVersionNum(versions[i]);
+      int i4 = _params4.getProtocolVersionNum(versions[i]);
+      int i5 = _params5.getProtocolVersionNum(versions[i]);
+      checkEquals(check, i1, "checkGetProtocolVersionNum.1");
+      checkEquals(check, i2, "checkGetProtocolVersionNum.2");
+      checkEquals(check, i3, "checkGetProtocolVersionNum.3");
+      checkEquals(check, i4, "checkGetProtocolVersionNum.4");
+      checkEquals(check, i5, "checkGetProtocolVersionNum.5");
+    }
+
+    // should be validated by NetworkParameters.ProtocolVersion
+    int bloom = versions[0].getBitcoinProtocolVersion();
+    int current = versions[1].getBitcoinProtocolVersion();
+    int minimum = versions[2].getBitcoinProtocolVersion();
+    int pong = versions[3].getBitcoinProtocolVersion();
+
+    // TODO get independent validation for these numbers
+    checkEquals(70000, bloom, "checkGetProtocolVersionNum.6");
+    checkEquals(70001, current, "checkGetProtocolVersionNum.7");
+    checkEquals(70000, minimum, "checkGetProtocolVersionNum.8");
+  }
+
   public void checkGetSerializer(){ /* TODO */ }
-  public void checkGetSpendableCoinbaseDepth(){ /* TODO */ }
-  public void checkGetSubsidyDecreaseBlockCount(){ /* TODO */ }
-  public void checkGetTargetTimespan(){ /* TODO */ }
+
+  public void checkGetSpendableCoinbaseDepth(){
+    // The depth of blocks required for a coinbase transaction to be spendable
+    int check;
+
+    // MainNetParams
+    check = _params1.getSpendableCoinbaseDepth();
+    checkEquals(check, 100, "checkGetSpendableCoinbaseDepth.1");
+
+    // TestNet2Params
+    check = _params2.getSpendableCoinbaseDepth();
+    checkEquals(check, 100, "checkGetSpendableCoinbaseDepth.2");
+    
+    // RegTestParams
+    check = _params3.getSpendableCoinbaseDepth();
+    checkEquals(check, 100, "checkGetSpendableCoinbaseDepth.3");
+
+
+    // TestNet3Params
+    check = _params4.getSpendableCoinbaseDepth();
+    checkEquals(check, 100, "checkGetSpendableCoinbaseDepth.4");
+
+    // UnitTestParams
+    check = _params5.getSpendableCoinbaseDepth();
+    checkEquals(check, 5, "checkGetSpendableCoinbaseDepth.5");
+
+  }
+
+  public void checkGetSubsidyDecreaseBlockCount(){
+    int check;
+
+    // MainNetParams
+    check = _params1.getSubsidyDecreaseBlockCount();
+    checkEquals(check, 210000, "checkGetSubsidyDecreaseBlockCount.1");
+
+    // TestNet2Params
+    check = _params2.getSubsidyDecreaseBlockCount();
+    checkEquals(check, 210000, "checkGetSubsidyDecreaseBlockCount.2");
+    
+    // RegTestParams
+    check = _params3.getSubsidyDecreaseBlockCount();
+    checkEquals(check, 150, "checkGetSubsidyDecreaseBlockCount.3");
+
+
+    // TestNet3Params
+    check = _params4.getSubsidyDecreaseBlockCount();
+    checkEquals(check, 210000, "checkGetSubsidyDecreaseBlockCount.4");
+
+    // UnitTestParams
+    check = _params5.getSubsidyDecreaseBlockCount();
+    checkEquals(check, 100, "checkGetSubsidyDecreaseBlockCount.5");
+  }
+
+  public void checkGetTargetTimespan(){
+    // how much time in seconds is supposed to pass between "interval" blocks
+    // about 2 weeks or 1209600 seconds
+    int check;
+
+    // MainNetParams
+    check = _params1.getTargetTimespan();
+    checkEquals(check, 1209600, "checkGetTargetTimespan.1");
+
+    // TestNet2Params
+    check = _params2.getTargetTimespan();
+    checkEquals(check, 1209600, "checkGetTargetTimespan.2");
+    
+    // RegTestParams
+    check = _params3.getTargetTimespan();
+    checkEquals(check, 1209600, "checkGetTargetTimespan.3");
+
+
+    // TestNet3Params
+    check = _params4.getTargetTimespan();
+    checkEquals(check, 1209600, "checkGetTargetTimespan.4");
+
+    // UnitTestParams
+    check = _params5.getTargetTimespan();
+    checkEquals(check, 200000000, "checkGetTargetTimespan.5");
+  }
+
   public void checkGetTransactionVerificationFlags(){ /* TODO */ }
-  public void checkGetUriScheme(){ /* TODO */ }
-  public void checkHashCode(){ /* TODO */ }
-  public void checkHasMaxMoney(){ /* TODO */ }
-  public void checkIsCheckpoint(){ /* TODO */ }
-  public void checkPassesCheckpoint(){ /* TODO */ }
+
+  public void checkGetUriScheme(){
+    String check;
+
+    // MainNetParams
+    check = _params1.getUriScheme();
+    checkEquals(check, "bitcoin", "checkGetUriScheme.1");
+    
+    // TestNet2Params
+    check = _params2.getUriScheme();
+    checkEquals(check, "bitcoin", "checkGetUriScheme.2");
+    
+    // RegTestParams
+    check = _params3.getUriScheme();
+    checkEquals(check, "bitcoin", "checkGetUriScheme.3");
+
+    // TestNet3Params
+    check = _params4.getUriScheme();
+    checkEquals(check, "bitcoin", "checkGetUriScheme.4");
+ 
+    // UnitTestParams
+    check = _params5.getUriScheme();
+    checkEquals(check, "bitcoin", "checkGetUriScheme.5");
+  }
+
+  public void checkHashCode(){
+
+    int hash1 = _params1.hashCode();
+    int hash2 = _params2.hashCode();
+    int hash3 = _params3.hashCode();
+    int hash4 = _params4.hashCode();
+    int hash5 = _params5.hashCode();
+
+    // the overrides of 'equals' and 'hashCode' are inconsistent. Equality
+    // takes class into account (as it should) while hash is only based on 
+    // id. However, instances of TestNet2Params and TestNet3Params happen
+    // to have the same ids, hence the same hash while being different.
+    
+    logMessage("-> NetworkParameters::hashCode see unit testing code ...");
+    checkEquals(hash2, hash4, "checkHashCode.1");
+    checkEquals(_params2.getId(), _params4.getId(), "checkHashCode.2");
+
+  }
+
+  public void checkHasMaxMoney(){
+
+    boolean check1 = _params1.hasMaxMoney();
+    boolean check2 = _params2.hasMaxMoney();
+    boolean check3 = _params3.hasMaxMoney();
+    boolean check4 = _params4.hasMaxMoney();
+    boolean check5 = _params5.hasMaxMoney();
+
+    checkEquals(check1, true, "checkHashMaxMoney.1");
+    checkEquals(check2, true, "checkHashMaxMoney.2");
+    checkEquals(check3, true, "checkHashMaxMoney.3");
+    checkEquals(check4, true, "checkHashMaxMoney.4");
+    checkEquals(check5, true, "checkHashMaxMoney.5");
+
+  }
+  public void checkIsCheckpoint(){
+    // returns true of the given height has a recorded checkpoint
+    for(int i = 0; i < 1000000; ++i){
+      boolean check;
+
+      // MainNetParams
+      Sha256Hash hash = _checkpoints.get(i);
+      check = _params1.isCheckpoint(i);
+      checkEquals(check, hash != null, "checkIsCheckpoint.1");
+
+      // TestNet2Params
+      check = _params2.isCheckpoint(i);
+      checkEquals(check, false, "checkIsCheckpoint.2");
+
+      // RegTestParams
+      check = _params3.isCheckpoint(i);
+      checkEquals(check, false, "checkIsCheckpoint.3");
+      
+      // TestNet3Params
+      check = _params4.isCheckpoint(i);
+      checkEquals(check, false, "checkIsCheckpoint.4");
+
+      // UnitTestParams
+      check = _params5.isCheckpoint(i);
+      checkEquals(check, false, "checkIsCheckpoint.5");
+    }
+    
+  }
+
+  public void checkPassesCheckpoint(){
+
+    byte[] bytes = _getRandomBytes(32);
+    Sha256Hash hash = Sha256Hash.wrap(bytes);
+
+    for(int i = 0; i < 10000000; ++i){
+      boolean check;
+
+      // MainNetParams
+      if(_params1.isCheckpoint(i)){
+        Sha256Hash test = _checkpoints.get(i);
+        check = _params1.passesCheckpoint(i, test);
+        checkEquals(check, true, "checkPassesCheckpoint.0");
+      } else {
+        check = _params1.passesCheckpoint(i, hash);
+        checkEquals(check, true, "checkPassesCheckpoint.1");
+      }
+
+      // TestNet2Params
+      check = _params2.passesCheckpoint(i, hash);
+      checkEquals(check, true, "checkPassesCheckpoint.2");
+
+      // RegTestParams
+      check = _params3.passesCheckpoint(i, hash);
+      checkEquals(check, true, "checkPassesCheckpoint.3");
+
+      // TestNet3Params
+      check = _params4.passesCheckpoint(i, hash);
+      checkEquals(check, true, "checkPassesCheckpoint.4");
+
+      // UnitTestParams
+      check = _params5.passesCheckpoint(i, hash);
+      checkEquals(check, true, "checkPassesCheckpoint.5");
+    }
+  }
 
 }

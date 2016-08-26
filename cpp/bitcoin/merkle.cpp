@@ -39,7 +39,7 @@ bc::hash_digest create_merkle(bc::hash_list& merkle)
         // DEBUG output -------------------------------------
         std::cout << "Current merkle hash list:" << std::endl;
         for (const auto& hash: merkle)
-            std::cout << "  " << bc::encode_base16(hash) << std::endl;
+            std::cout << "  " << bc::encode_hash(hash) << std::endl;
         std::cout << std::endl;
         // --------------------------------------------------
     }
@@ -49,17 +49,23 @@ bc::hash_digest create_merkle(bc::hash_list& merkle)
 
 int main()
 {
+    // These are the 4 transactions of block 100000 with hash
+    // 000000000003ba27aa200b1cecaad478d2b00432346c3f1f3986da1afd33e506
+    // expected merkle root is
+    // f3e94742aca4b5ef85488dc37c06c3282295ffec960994b2c0d5ac2a25a95766
     // Replace these hashes with ones from a block to produce the same merkle root.
     bc::hash_list tx_hashes{{
         bc::hash_literal(
-            "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"),/*
+            "8c14f0db3df150123e6f3dbbf30f8b955a8249b62ac1d1ff16284aefa3d06d87"),
         bc::hash_literal(
-            "0000000000000000000000000000000000000000000000000000000000000011"),
+            "fff2525b8931402dd09222c50775608f75787bd2b87e56995a7bdd30f79702c4"),
         bc::hash_literal(
-            "0000000000000000000000000000000000000000000000000000000000000022"), */
+            "6359f0868171b1d194cbee1af2f16ea598ae8fad666d9b012c8ed2b79a236ec4"),
+        bc::hash_literal(
+            "e9a66845e05d5abc0ad04ec80f774a7e585c6e8db975962d069a522137b80c1d"),
     }};
     const bc::hash_digest merkle_root = create_merkle(tx_hashes);
-    std::cout << "Result: " << bc::encode_base16(merkle_root) << std::endl;
+    std::cout << "Result: " << bc::encode_hash(merkle_root) << std::endl;
     return 0;
 }
 
