@@ -3,8 +3,8 @@ import java.util.Date;
 import java.util.Arrays;
 import java.math.BigInteger;
 import java.lang.Math;
-import java.security.SecureRandom;
 import javax.xml.bind.DatatypeConverter;
+import java.security.SecureRandom;
 
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
@@ -27,8 +27,7 @@ import org.spongycastle.crypto.digests.RIPEMD160Digest;
 import com.google.common.primitives.UnsignedBytes;
 
 
-public class Test_ECKey implements Test_Interface {
-
+public class Test_ECKey extends Test_Abstract {
 
   public void run(){
     logMessage("ECKey unit test running ...");
@@ -328,15 +327,14 @@ public class Test_ECKey implements Test_Interface {
   private final NetworkParameters regTestNet = getRegTestNetwork();
   private final NetworkParameters testNetNet = getTestNetNetwork();
   private final NetworkParameters unitTestNet = getUnitTestNetwork();
-  private final SecureRandom random = new SecureRandom();
 
   private BigInteger _getRandomSecret(){
-    byte bytes[] = new byte[32];
+    byte[] bytes;
     boolean isGood = false;
     BigInteger secret = BigInteger.ZERO;
 
     while(!isGood){
-      random.nextBytes(bytes);
+      bytes = getRandomBytes(32);
       secret = new BigInteger(1, bytes);  // unsigned
       // we want secret to satisfy 1 < secret < curveOrder
       if(secret.compareTo(BigInteger.ONE) > 0 && secret.compareTo(curveOrder) < 0){
@@ -731,6 +729,7 @@ public class Test_ECKey implements Test_Interface {
   }
 
   public void checkConstructorFromSecureRandom(){
+    SecureRandom random = new SecureRandom();
     ECKey key = new ECKey(random);
     checkNotNull(key, "checkConstructorFromSecureRandom.1");
     checkCondition(!key.isEncrypted(), "checkConstructorFromSecureRandom.2");

@@ -8,7 +8,7 @@ import org.bitcoinj.core.AddressFormatException;
 
 
 
-public class Test_DumpedPrivateKey implements Test_Interface {
+public class Test_DumpedPrivateKey extends Test_Abstract {
 
   public void run(){
     logMessage("DumpedPrivateKey unit test running ...");

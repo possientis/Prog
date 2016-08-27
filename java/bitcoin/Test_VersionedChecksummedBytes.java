@@ -4,7 +4,7 @@ import org.bitcoinj.core.VersionedChecksummedBytes;
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.Sha256Hash;
 
-public class Test_VersionedChecksummedBytes implements Test_Interface {
+public class Test_VersionedChecksummedBytes extends Test_Abstract {
 
   public void run(){
     logMessage("VersionedChecksummedBytes unit test running ...");

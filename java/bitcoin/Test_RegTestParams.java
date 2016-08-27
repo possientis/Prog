@@ -1,7 +1,7 @@
 import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.core.Block;
 
-public class Test_RegTestParams implements Test_Interface {
+public class Test_RegTestParams extends Test_Abstract {
   public void run(){
     logMessage("RegTestParams unit test running ...");
     checkRegTestParams();

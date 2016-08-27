@@ -2,7 +2,6 @@ import java.util.Arrays;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.security.MessageDigest;
 import javax.xml.bind.DatatypeConverter;
 
@@ -10,7 +9,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.bitcoinj.core.Sha256Hash;
 import com.google.common.primitives.Ints;
 
-public class Test_Sha256Hash implements Test_Interface {
+public class Test_Sha256Hash extends Test_Abstract {
 
   public void run(){
     logMessage("Sha256Hash unit test running ...");
@@ -37,24 +36,16 @@ public class Test_Sha256Hash implements Test_Interface {
     checkWrapReversed();
   }
 
-  private final SecureRandom random = new SecureRandom();
   private final String emptyHashAsString = getEmptyHashAsString();
   private final String helloWorldHashAsString = getHelloWorldHashAsString();
   private final byte[] helloWorldAsBytes = getHelloWorldAsBytes(); 
-  private byte[] getRandomBytes(){
-    byte[] result = new byte[32];
-    random.nextBytes(result);
-    return result;
-  }
 
   private byte[] getRandomContent(){
-    byte[] content = new byte[8192];
-    random.nextBytes(content);
-    return content;
+    return getRandomBytes(8192);
   }
 
   private Sha256Hash getRandomHash(){
-    return Sha256Hash.wrap(getRandomBytes());
+    return Sha256Hash.wrap(getRandomBytes(32));
   }
 
   private byte[] reverse(byte[] input){
@@ -104,8 +95,8 @@ public class Test_Sha256Hash implements Test_Interface {
     // comparision equivalent to comparing BigInteger where 
     // Sha256Hash raw bytes are interpreted as little endian
     for(int test = 0; test < 256; ++test){
-      byte[] bytes1 = getRandomBytes();
-      byte[] bytes2 = getRandomBytes();
+      byte[] bytes1 = getRandomBytes(32);
+      byte[] bytes2 = getRandomBytes(32);
 
       BigInteger n1 = new BigInteger(1, reverse(bytes1));
       BigInteger n2 = new BigInteger(1, reverse(bytes2));
@@ -134,7 +125,7 @@ public class Test_Sha256Hash implements Test_Interface {
   }
 
   public void checkGetBytes(){
-    byte[] bytes = getRandomBytes();
+    byte[] bytes = getRandomBytes(32);
     Sha256Hash hash = Sha256Hash.wrap(bytes);
     byte[] check = hash.getBytes();
     checkCondition(Arrays.equals(bytes, check), "checkGetBytes.1");
@@ -142,7 +133,7 @@ public class Test_Sha256Hash implements Test_Interface {
 
 
   public void checkGetReversedBytes(){
-    byte[] bytes = getRandomBytes();
+    byte[] bytes = getRandomBytes(32);
     Sha256Hash hash = Sha256Hash.wrap(bytes);
     byte[] check1 = hash.getReversedBytes();
     byte[] check2 = reverse(bytes);
@@ -283,7 +274,7 @@ public class Test_Sha256Hash implements Test_Interface {
   public void checkOfFromFile(){
 
     // creating some random filename
-    byte[] bytes = getRandomBytes();
+    byte[] bytes = getRandomBytes(32);
     String filename = "checkOfFromFile_" + (new BigInteger(1,bytes)).toString(16);
     File file = new File(filename);
     file.deleteOnExit();
@@ -341,12 +332,12 @@ public class Test_Sha256Hash implements Test_Interface {
   }
 
   public void checkWrap(){
-    byte[] bytes = getRandomBytes();
+    byte[] bytes = getRandomBytes(32);
     Sha256Hash hash = Sha256Hash.wrap(bytes);
     checkCondition(Arrays.equals(bytes, hash.getBytes()), "checkWrap.1");
   }
   public void checkWrapFromString(){
-    byte[] bytes = getRandomBytes();
+    byte[] bytes = getRandomBytes(32);
     String s = DatatypeConverter.printHexBinary(bytes).toLowerCase();
     Sha256Hash hash1 = Sha256Hash.wrap(s);  // s needs to be lower case
     Sha256Hash hash2 = Sha256Hash.wrap(bytes);
@@ -354,7 +345,7 @@ public class Test_Sha256Hash implements Test_Interface {
   }
 
   public void checkWrapReversed(){
-    byte[] bytes = getRandomBytes();
+    byte[] bytes = getRandomBytes(32);
     Sha256Hash hash1 = Sha256Hash.wrapReversed(bytes);
     Sha256Hash hash2 = Sha256Hash.wrap(reverse(bytes));
     checkEquals(hash1, hash2, "checkWrapReversed.1");

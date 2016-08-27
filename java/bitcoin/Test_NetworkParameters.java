@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.URI;
 import java.math.BigInteger;
-import java.security.SecureRandom;
 
 
 import org.bitcoinj.core.NetworkParameters;
@@ -31,7 +30,7 @@ import org.bitcoinj.params.UnitTestParams;
 
 
 
-public class Test_NetworkParameters implements Test_Interface {
+public class Test_NetworkParameters extends Test_Abstract {
   public void run(){
     logMessage("NetworkParameters unit test running ...");
     checkBIP16_ENFORCE_TIME();
@@ -92,7 +91,6 @@ public class Test_NetworkParameters implements Test_Interface {
     checkPassesCheckpoint();
   }
 
-  private static final SecureRandom _random = new SecureRandom();
   private static final NetworkParameters _params1 = MainNetParams.get();
   private static final NetworkParameters _params2 = TestNet2Params.get();
   private static final NetworkParameters _params3 = RegTestParams.get();
@@ -247,12 +245,6 @@ public class Test_NetworkParameters implements Test_Interface {
 
   private static String _getHash_200000(){
     return "000000000000034a7dedef4a161fa058a2d67a173a90155f3a2fe6fc132e0ebf";
-  }
-
-  private static byte[] _getRandomBytes(int n){
-    byte[] bytes = new byte[n];
-    _random.nextBytes(bytes);
-    return bytes;
   }
 
   static {
@@ -1178,7 +1170,7 @@ public class Test_NetworkParameters implements Test_Interface {
 
   public void checkPassesCheckpoint(){
 
-    byte[] bytes = _getRandomBytes(32);
+    byte[] bytes = getRandomBytes(32);
     Sha256Hash hash = Sha256Hash.wrap(bytes);
 
     for(int i = 0; i < 10000000; ++i){

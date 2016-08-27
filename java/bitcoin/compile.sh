@@ -8,7 +8,6 @@ do
   BITCOINJ_JARS="$d:$BITCOINJ_JARS"
 done
 
-
 javac -Xlint:deprecation -cp "$BITCOINJ_JARS" "$@"
 
 

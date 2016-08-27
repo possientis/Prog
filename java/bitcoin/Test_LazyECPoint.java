@@ -1,4 +1,4 @@
-public class Test_LazyECPoint implements Test_Interface {
+public class Test_LazyECPoint extends Test_Abstract {
 
   public void run(){
     logMessage("LazyECPoint unit test running ...");

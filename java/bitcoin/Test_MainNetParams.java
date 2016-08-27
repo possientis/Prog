@@ -1,6 +1,6 @@
 import org.bitcoinj.params.MainNetParams;
 
-public class Test_MainNetParams implements Test_Interface {
+public class Test_MainNetParams extends Test_Abstract {
   public void run(){
     logMessage("MainNetParams unit test running ...");
     checkMAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE();

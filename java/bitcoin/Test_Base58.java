@@ -2,13 +2,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Arrays;
 import java.math.BigInteger;
-import java.security.SecureRandom;
 
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
-public class Test_Base58 implements Test_Interface {
+public class Test_Base58 extends Test_Abstract {
 
   public void run(){
     logMessage("Base58 unit test running ...");
@@ -152,12 +151,12 @@ public class Test_Base58 implements Test_Interface {
 
   private String getRandomBase58String(int numDigits){
 
-    byte[] single = new byte[1];
+    byte[] single;
 
     checkCondition(numDigits > 0, "getRandomBase58String.1");
     StringBuilder builder = new StringBuilder(numDigits);  
     for(int i = 0; i < numDigits; ++i){
-      random.nextBytes(single);  
+      single = getRandomBytes(1);
       int x = (int) single[0] % 58;
       if(x < 0){ x = x + 58; }
       checkCondition(0 <= x, "getRandomBase58String.2");
@@ -171,7 +170,6 @@ public class Test_Base58 implements Test_Interface {
 
   private final String alphabetAsString = getAlphabetAsString();
   private final int[] digitValues = getDigitValues();
-  private final SecureRandom random = new SecureRandom();
 
 
   public void checkAlphabet(){
@@ -244,8 +242,7 @@ public class Test_Base58 implements Test_Interface {
   public void checkDecodeChecked(){
     for(int i = 0; i < 1000; ++i){
       // random private key
-      byte[] priv = new byte[32];
-      random.nextBytes(priv);
+      byte[] priv = getRandomBytes(32);
       // we do not need version byte or additional 0x01 byte for compressed key
       // here, as we are only testing that decodeChecked recovers the checked data
       byte[] checksum = Sha256Hash.hashTwice(priv,0,32);

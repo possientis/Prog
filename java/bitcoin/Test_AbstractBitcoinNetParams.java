@@ -14,7 +14,7 @@ import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.params.UnitTestParams;
 
 
-public class Test_AbstractBitcoinNetParams implements Test_Interface {
+public class Test_AbstractBitcoinNetParams extends Test_Abstract {
   public void run(){
     logMessage("AbstractBitcoinNetParams unit test running ...");
     checkBITCOIN_SCHEME();
