@@ -620,7 +620,17 @@
     (if (not (equal? x #f)) (display "unit-test: test 17.8 failing\n")))
   (let ((x ((analyze '(defined? (this is not even a name))) global-env)))
     (if (not (equal? x #f)) (display "unit-test: test 17.9 failing\n")))
-  ;
+
+  ; thunk
+  (display "testing thunk ...\n")
+
+  (let ((t1 (thunk '(+ 1 1) global-env)))
+    (if (not (equal? (t1 'value) 2)) (display "unit-test: test 19.1 failing\n"))
+    (if (not (equal? (t1 'value) 2)) (display "unit-test: test 19.2 failing\n"))
+    (if (not (equal? (t1 'value) 2)) (display "unit-test: test 19.3 failing\n"))
+    (if (not (equal? (t1 'value) 2)) (display "unit-test: test 19.4 failing\n"))
+  )
+ 
   ; load
   (display "testing loading files ...\n") 
 

@@ -391,10 +391,124 @@ public class Test_Address extends Test_Abstract {
   }
 
   public void checkFromP2SHScript(){/* TODO */}
-  public void checkGetHash160(){/* TODO */}
-  public void checkGetParameters(){/* TODO */}
-  public void checkGetParametersFromAddress(){/* TODO */}
-  public void checkIsP2SHAddress(){/* TODO */}
+
+  public void checkGetHash160(){
+    byte [] hash = getRandomBytes(20);
+    Address address;
+    byte[] check;
+
+    // MainNetParams
+    address = new Address(_params1, _version1, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.1a");
+
+    address = new Address(_params1, _P2SHversion1, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.1b");
+
+    // TestNet2Params
+    address = new Address(_params2, _version2, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.2a");
+
+    address = new Address(_params2, _P2SHversion2, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.2b");
+
+    // RegTestParams
+    address = new Address(_params3, _version3, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.3a");
+
+    address = new Address(_params3, _P2SHversion3, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.3b");
+
+    // TestNet3Params
+    address = new Address(_params4, _version4, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.4a");
+
+    address = new Address(_params4, _P2SHversion4, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.4b");
+
+    // UnitTestParams
+    address = new Address(_params5, _version5, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.5a");
+
+    address = new Address(_params5, _P2SHversion5, hash);
+    check = address.getHash160();
+    checkCondition(Arrays.equals(check, hash), "checkGetHash160.5b");
+  }
+
+  public void checkGetParameters(){
+
+    Address[] addresses = _getRandomAddress();
+
+    checkEquals(_params1, addresses[1].getParameters(), "checkGetParameters.1");
+    checkEquals(_params2, addresses[2].getParameters(), "checkGetParameters.2");
+    checkEquals(_params3, addresses[3].getParameters(), "checkGetParameters.3");
+    checkEquals(_params4, addresses[4].getParameters(), "checkGetParameters.4");
+    checkEquals(_params5, addresses[5].getParameters(), "checkGetParameters.5");
+
+    addresses = _getRandomP2SHAddress();
+
+    checkEquals(_params1, addresses[1].getParameters(), "checkGetParameters.1");
+    checkEquals(_params2, addresses[2].getParameters(), "checkGetParameters.2");
+    checkEquals(_params3, addresses[3].getParameters(), "checkGetParameters.3");
+    checkEquals(_params4, addresses[4].getParameters(), "checkGetParameters.4");
+    checkEquals(_params5, addresses[5].getParameters(), "checkGetParameters.5");
+  }
+
+
+  public void checkGetParametersFromAddress(){
+
+    logMessage("-> Address::getParametersFromAddress see unit test code ...");
+
+    // the version byte of an address is the same on the 4 test networks
+    // Hence there is no way this function can know which underlying 
+    // network an address was produced from. If the version byte corresponds
+    // to a test network, then the class TestNet3Params is the selected
+    // class. 
+
+    NetworkParameters check;
+    Address[] addresses = _getRandomAddress();
+
+    check = Address.getParametersFromAddress(addresses[1].toString());
+    checkEquals(check, _params1, "checkGetParametersFromAddress.1");
+    
+    check = Address.getParametersFromAddress(addresses[2].toString());
+//  checkEquals(check, _params2, "checkGetParametersFromAddress.2");
+    
+    check = Address.getParametersFromAddress(addresses[3].toString());
+//  checkEquals(check, _params3, "checkGetParametersFromAddress.3");
+
+    check = Address.getParametersFromAddress(addresses[4].toString());
+    checkEquals(check, _params4, "checkGetParametersFromAddress.4");
+
+    check = Address.getParametersFromAddress(addresses[5].toString());
+//  checkEquals(check, _params5, "checkGetParametersFromAddress.5");
+
+    addresses = _getRandomP2SHAddress();
+
+    check = Address.getParametersFromAddress(addresses[1].toString());
+    checkEquals(check, _params1, "checkGetParametersFromAddress.1");
+
+    check = Address.getParametersFromAddress(addresses[4].toString());
+    checkEquals(check, _params4, "checkGetParametersFromAddress.4");
+  }
+
+  public void checkIsP2SHAddress(){
+    Address[] P2PKH = _getRandomAddress();
+    Address[] P2SH = _getRandomP2SHAddress();
+
+    for(int i = 1; i <= 5; ++i){
+      checkEquals(false, P2PKH[i].isP2SHAddress(), "checkIsP2SHAddress.1");
+      checkEquals(true, P2SH[i].isP2SHAddress(), "checkIsP2SHAddress.2");
+    }
+  }
 
 }
 

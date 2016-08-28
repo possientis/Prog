@@ -21,6 +21,7 @@
 (load "or.scm")
 (load "quote.scm")
 (load "self-evaluating.scm")
+(load "thunk.scm")
 (load "tagged-list.scm")
 (load "true-false.scm")
 (load "variable.scm")

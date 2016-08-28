@@ -177,6 +177,10 @@ echo tagged-list
 scm -b -f tagged-list.scm                 > /dev/null               
 ./run.scm tagged-list.scm                 > /dev/null
 
+echo thunk
+scm -b -f thunk.scm                       > /dev/null               
+./run.scm thunk.scm                       > /dev/null
+
 echo true-false 
 scm -b -f true-false.scm                  > /dev/null               
 ./run.scm true-false.scm                  > /dev/null

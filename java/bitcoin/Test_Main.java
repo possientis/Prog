@@ -11,7 +11,7 @@ public class Test_Main {
     test = new Test_LazyECPoint(); test.run();                // TODO
     test = new Test_ECPoint(); test.run();                    // TODO
     test = new Test_ECFieldElement(); test.run();             // TODO
-    test = new Test_Address(); test.run();                    // TODO
+    test = new Test_Address(); test.run();
     test = new Test_NetworkParameters(); test.run();          
     test = new Test_AbstractBitcoinNetParams(); test.run();   
     test = new Test_MainNetParams(); test.run();              

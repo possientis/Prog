@@ -1,4 +1,3 @@
-define a new type 'Thunk'
 define lazy-eval : Exp -> Thunk
 define actual-value : Thunk -> Val
 
