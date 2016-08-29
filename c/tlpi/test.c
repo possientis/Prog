@@ -1,14 +1,9 @@
-#include <pwd.h>
 #include <stdio.h>
+#include "svshm_xfr.h"
 
 int main() {
 
-  struct passwd *pwd;
-
-  while ((pwd = getpwent()) != NULL)
-    printf("%-20s %5ld\n", pwd->pw_name, (long) pwd->pw_uid);
-
-  endpwent();
+  printf("size = %d\n", sizeof(struct shmseg));
 
   return 0;
 }

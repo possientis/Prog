@@ -1,16 +1,23 @@
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.lang.Math;
 import javax.xml.bind.DatatypeConverter;
 import java.security.SecureRandom;
+
+import org.bitcoin.Secp256k1Context;
+import org.bitcoin.NativeSecp256k1;
+import org.bitcoin.NativeSecp256k1Util;
 
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.DumpedPrivateKey;
+import org.bitcoinj.core.Address;
 import org.bitcoinj.wallet.Protos.Wallet.EncryptionType;
 import org.bitcoinj.crypto.LazyECPoint;
 import org.bitcoinj.crypto.KeyCrypter;
@@ -23,6 +30,18 @@ import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
+import org.spongycastle.crypto.digests.SHA256Digest;
+import org.spongycastle.crypto.signers.HMacDSAKCalculator;
+import org.spongycastle.crypto.signers.ECDSASigner;
+import org.spongycastle.crypto.params.ECPrivateKeyParameters;
+import org.spongycastle.crypto.ec.CustomNamedCurves;
+import org.spongycastle.asn1.DERSequenceGenerator;
+import org.spongycastle.asn1.ASN1Integer;
+import org.spongycastle.asn1.DEROctetString;
+import org.spongycastle.asn1.x9.X9ECParameters;
+import org.spongycastle.asn1.ASN1Primitive;
+import org.spongycastle.asn1.DERTaggedObject;
+import org.spongycastle.asn1.DERBitString;
 
 import com.google.common.primitives.UnsignedBytes;
 
@@ -287,13 +306,15 @@ public class Test_ECKey extends Test_Abstract {
   private  NetworkParameters getUnitTestNetwork(){
     return NetworkParameters.fromID(NetworkParameters.ID_UNITTESTNET);
   }
-  // data derived from independent sources
+
   private final BigInteger fieldPrime = getFieldPrime();
   private final BigInteger curveOrder = getCurveOrder();
   private final BigInteger halfCurveOrder = curveOrder.shiftRight(1); // div 2
   private final BigInteger curveGeneratorX = getCurveGeneratorX();
   private final BigInteger curveGeneratorY = getCurveGeneratorY();
   private final String curveOrderAsHex = getCurveOrderAsHex();
+  private final X9ECParameters curX9 = CustomNamedCurves.getByName("secp256k1"); 
+  private final ASN1Primitive curASN1 = curX9.toASN1Primitive();
 
 
   // key from Mastering Bitcoin
@@ -631,6 +652,41 @@ public class Test_ECKey extends Test_Abstract {
     ECKey k1 = new ECKey(); // unencrypted
     ECKey k2 = k1.encrypt(crypter, aesKey);
     return k2;
+  }
+
+  private ECKey.ECDSASignature _signNative(Sha256Hash input, byte[] priv){
+
+    // being ultra careful before calling native C
+    checkCondition(Secp256k1Context.isEnabled(), "_signNative.1");
+    checkNotNull(input, "_signNative.2");
+    checkNotNull(priv, "_signNative.3");
+    checkEquals(priv.length, 32, "_signNative.4");
+
+    try {
+      byte[] signature = NativeSecp256k1.sign(input.getBytes(), priv);
+      return ECKey.ECDSASignature.decodeFromDER(signature);
+    } catch (NativeSecp256k1Util.AssertFailException e){
+      checkCondition(false, "_signNative.5");
+      return null;
+    }
+  }
+
+  private ECKey.ECDSASignature _signSpongy(Sha256Hash input, byte[] priv){
+
+    SHA256Digest digest = new SHA256Digest();
+    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
+    ECDSASigner signer = new ECDSASigner(calculator);
+
+    BigInteger secret = new BigInteger(1, priv);
+    ECPrivateKeyParameters key = new ECPrivateKeyParameters(secret, ECKey.CURVE);
+
+    signer.init(true, key);
+    BigInteger[] components = signer.generateSignature(input.getBytes());
+
+    BigInteger r = components[0];
+    BigInteger s = components[1];
+
+    return new ECKey.ECDSASignature(r,s).toCanonicalised();
   }
 
 
@@ -1567,7 +1623,43 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   public void checkRecoverFromSignature(){
-    // TODO
+
+    Sha256Hash hash = Sha256Hash.wrap(getRandomBytes(32));
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.decompress();
+    byte[] priv = k1.getPrivKeyBytes(); // same for k2
+
+    ECKey.ECDSASignature sig  = _signNative(hash, priv);
+    ECKey.ECDSASignature check  = _signSpongy(hash, priv);
+    checkEquals(check, sig, "checkRecoveryFromSignature.1");
+
+    // recovering compressed public key
+    ECKey temp = null;
+    byte[] pub = k1.getPubKey();
+    boolean found = false;
+    for(int i = 0; i < 4; ++i){
+      temp = ECKey.recoverFromSignature(i, sig, hash, true);
+      if(temp != null){
+        if(Arrays.equals(temp.getPubKey(), pub)){
+          found = true;
+        }
+      }
+    }
+    checkCondition(found, "checkRecoveryFromSignature.2");
+
+    // recovering uncompressed public key
+    temp = null;
+    pub = k2.getPubKey();
+    found = false;
+    for(int i = 0; i < 4; ++i){
+      temp = ECKey.recoverFromSignature(i, sig, hash, false);
+      if(temp != null){
+        if(Arrays.equals(temp.getPubKey(), pub)){
+          found = true;
+        }
+      }
+    }
+    checkCondition(found, "checkRecoveryFromSignature.3");
   }
 
   public void checkSetCreationTimeSeconds(){
@@ -1579,11 +1671,28 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   public void checkSign(){
-    // TODO
+    Sha256Hash hash = Sha256Hash.wrap(getRandomBytes(32));
+    ECKey key = new ECKey();
+    byte[] priv = key.getPrivKeyBytes();
+    ECKey.ECDSASignature sig = key.sign(hash);
+    ECKey.ECDSASignature check1 = _signNative(hash, priv);
+    ECKey.ECDSASignature check2 = _signSpongy(hash, priv);
+
+    checkEquals(check1, sig, "checkSign.1");
+    checkEquals(check2, sig, "checkSign.2");
   }
 
   public void checkSignFromKeyParameter(){
-    // TODO
+    Sha256Hash hash = Sha256Hash.wrap(getRandomBytes(32));
+    ECKey k1 = _getNewEncryptedKey("some arbitrary passphrase");
+    KeyCrypter crypter = k1.getKeyCrypter();
+    KeyParameter aes = crypter.deriveKey("some arbitrary passphrase");
+    ECKey.ECDSASignature sig = k1.sign(hash, aes);
+
+    ECKey k2 = k1.decrypt(aes);
+    ECKey.ECDSASignature check = k2.sign(hash);
+
+    checkEquals(check, sig, "checkSignFromKeyParameter.1");
   }
 
   public void checkSignedMessageToKey(){
@@ -1600,15 +1709,42 @@ public class Test_ECKey extends Test_Abstract {
 
   public void checkToAddress(){
     // key1 compressed
-    String check = key1.toAddress(mainNet).toString();
-    checkEquals(check, secret1Address, "checkToAddress.1");
+    String scheck = key1.toAddress(mainNet).toString();
+    checkEquals(scheck, secret1Address, "checkToAddress.1");
 
     // key1 uncompressed
-    check = key1Uncomp.toAddress(mainNet).toString();
-    checkEquals(check, secret1AddressUncomp, "checkToAddress.2");
+    scheck = key1Uncomp.toAddress(mainNet).toString();
+    checkEquals(scheck, secret1AddressUncomp, "checkToAddress.2");
 
-    // TODO random key compressed/uncompressed various networks
+    // random key
+    ECKey k1 = new ECKey(); // compressed
+    ECKey k2 = k1.decompress();
 
+    Address check;
+
+    // MainNetParams
+    check = new Address(mainNet, k1.getPubKeyHash());
+    checkEquals(check, k1.toAddress(mainNet), "checkToAddress.3");
+    check = new Address(mainNet, k2.getPubKeyHash());
+    checkEquals(check, k2.toAddress(mainNet), "checkToAddress.4");
+
+    // RegTestParams
+    check = new Address(regTestNet, k1.getPubKeyHash());
+    checkEquals(check, k1.toAddress(regTestNet), "checkToAddress.5");
+    check = new Address(regTestNet, k2.getPubKeyHash());
+    checkEquals(check, k2.toAddress(regTestNet), "checkToAddress.6");
+
+    // TestNet3Params
+    check = new Address(testNetNet, k1.getPubKeyHash());
+    checkEquals(check, k1.toAddress(testNetNet), "checkToAddress.7");
+    check = new Address(testNetNet, k2.getPubKeyHash());
+    checkEquals(check, k2.toAddress(testNetNet), "checkToAddress.8");
+
+    // UnitTestParams
+    check = new Address(unitTestNet, k1.getPubKeyHash());
+    checkEquals(check, k1.toAddress(unitTestNet), "checkToAddress.9");
+    check = new Address(unitTestNet, k2.getPubKeyHash());
+    checkEquals(check, k2.toAddress(unitTestNet), "checkToAddress.10");
   }
 
   public void checkToASN1(){
@@ -1616,8 +1752,60 @@ public class Test_ECKey extends Test_Abstract {
     byte[] bytes = key1.toASN1();
     ECKey key = ECKey.fromASN1(bytes);
     checkCondition(_isKeyFromSecret1(key), "checkToASN1.1");
-    // TODO properly check ASN1 encoding on random key
+
+
+    // random key
+    ECKey check;
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.decompress();
+
+    // first we check consistency with fromASN1 method
+    byte[] bytes1 = k1.toASN1();
+    check = ECKey.fromASN1(bytes1);
+    checkEquals(check.getPrivKey(), k1.getPrivKey(), "checkToASN1.2");
+    checkCondition(check.isCompressed(), "checkToASN1.3");
+
+    byte[] bytes2 = k2.toASN1();
+    check = ECKey.fromASN1(bytes2);
+    checkEquals(check.getPrivKey(), k2.getPrivKey(), "checkToASN1.4");
+    checkCondition(!check.isCompressed(), "checkToASN1.5");
+
+    // We now check details of ASN1 encoding
+    // replicating source code, but can't really tell if correct
+    ByteArrayOutputStream baos = new ByteArrayOutputStream(400);
+    // ASN1_SEQUENCE(EC_PRIVATEKEY) = {
+    //   ASN1_SIMPLE(EC_PRIVATEKEY, version, LONG),
+    //   ASN1_SIMPLE(EC_PRIVATEKEY, privateKey, ASN1_OCTET_STRING),
+    //   ASN1_EXP_OPT(EC_PRIVATEKEY, parameters, ECPKPARAMETERS, 0),
+    //   ASN1_EXP_OPT(EC_PRIVATEKEY, publicKey, ASN1_BIT_STRING, 1)
+    // } ASN1_SEQUENCE_END(EC_PRIVATEKEY)
+    // compressed
+    try {
+      DERSequenceGenerator seq = new DERSequenceGenerator(baos);
+      seq.addObject(new ASN1Integer(1));  // version
+      seq.addObject(new DEROctetString(k1.getPrivKeyBytes()));
+      seq.addObject(new DERTaggedObject(0, curASN1)); 
+      seq.addObject(new DERTaggedObject(1, new DERBitString(k1.getPubKey())));
+      seq.close();
+    } catch(IOException e){
+      checkCondition(false, "checkToASN1.6");
+    }
+    checkCondition(Arrays.equals(bytes1, baos.toByteArray()), "checkToASN1.7");
+    // uncompressed
+    baos = new ByteArrayOutputStream(400);
+    try {
+      DERSequenceGenerator seq = new DERSequenceGenerator(baos);
+      seq.addObject(new ASN1Integer(1));  // version
+      seq.addObject(new DEROctetString(k2.getPrivKeyBytes()));
+      seq.addObject(new DERTaggedObject(0, curASN1)); 
+      seq.addObject(new DERTaggedObject(1, new DERBitString(k2.getPubKey())));
+      seq.close();
+    } catch(IOException e){
+      checkCondition(false, "checkToASN1.8");
+    }
+    checkCondition(Arrays.equals(bytes2, baos.toByteArray()), "checkToASN1.9");
   }
+
 
   public void checkToString(){
     // key1 compressed
@@ -1634,9 +1822,6 @@ public class Test_ECKey extends Test_Abstract {
     key = ECKey.fromPrivate(secret, false);
     checkEquals(key.toString(), _toString(key), "checkToString.4");
 
-    // TODO could add time creation time
-    // TODO check encrypted key
-    // TODO check PubKeyOnly
   }
 
   public void checkToStringWithPrivate(){
@@ -1661,9 +1846,6 @@ public class Test_ECKey extends Test_Abstract {
         _toStringWithPrivate(key,mainNet), 
         "checkToStringWithPrivate.3"
     );
-
-    // TODO see toString
- 
   }
 
   public void checkVerify(){
