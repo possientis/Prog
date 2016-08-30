@@ -19,4 +19,7 @@
   (let ((qval (text-of-quotation exp)))
     (lambda (env) qval)))
 
+; lazy
+(define (lazy-eval-quoted exp env) (thunk exp 'dummy-env))
+
 ))  ; include guard

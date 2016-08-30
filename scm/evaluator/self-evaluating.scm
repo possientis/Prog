@@ -3,7 +3,7 @@
   (begin
     (define included-self-evaluating #f)
     (display "loading self-evaluating")(newline)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
 
 ; testing
 (define (self-evaluating? exp) 
@@ -11,6 +11,9 @@
         ((string? exp) #t)
         ((char? exp)  #t)
         ((boolean? exp) #t)
+        ((primitive-procedure? exp) #t)
+        ((eval-procedure? exp) #t)
+        ((analyze-procedure? exp))
         (else #f)))
 
 ; eval
@@ -18,6 +21,10 @@
 
 ; analyze
 (define (analyze-self-evaluating exp) (lambda (env) exp)) 
+
+; lazy  
+; creates an 'evaluated' thunk which has no embedded environment
+(define (lazy-eval-self-evaluating exp env) (thunk exp '()))
 
 
 ))  ; include guard

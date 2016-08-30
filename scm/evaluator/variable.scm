@@ -11,7 +11,10 @@
 ; eval
 (define (eval-variable exp env) ((env 'lookup) exp))
 
-;analyze
+; analyze
 (define (analyze-variable exp) (lambda (env) ((env 'lookup) exp)))
+
+; lazy
+(define (lazy-eval-variable exp env) (thunk exp env))
 
 ))  ; include guard

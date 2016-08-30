@@ -26,4 +26,12 @@
     (let ((val (analyze rhs)))
       (lambda (env) ((env 'set!) var (val env))))))
 
+; lazy
+(define (lazy-eval-assignment exp env) (thunk env exp))
+
+; note: the side-effect actually occurs when the thunk is forced
+; because our implementation uses memoization in the forcing of
+; thunks, repeated forcing only creates the side effect once.
+; This can lead to surprising semantics. 
+
 ))  ; include guard
