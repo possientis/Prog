@@ -27,7 +27,7 @@
       (lambda (env) ((env 'set!) var (val env))))))
 
 ; lazy
-(define (lazy-eval-assignment exp env) (thunk env exp))
+(define (lazy-eval-assignment exp env) (thunk exp env))
 
 ; note: the side-effect actually occurs when the thunk is forced
 ; because our implementation uses memoization in the forcing of

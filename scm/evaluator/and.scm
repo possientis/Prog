@@ -19,6 +19,9 @@
 (define (analyze-and exp)
   (analyze (and->if exp)))
 
+; lazy
+(define (lazy-eval exp env)
+  (lazy-eval (and->if exp) env))
 
 (define (and->if exp)
   (expand-and-predicates (and-predicates exp)))

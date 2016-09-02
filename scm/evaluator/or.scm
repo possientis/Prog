@@ -20,6 +20,10 @@
 (define (analyze-or exp)
   (analyze (or->if exp)))
 
+; lazy
+(define (lazy-eval-or exp env)
+  (lazy-eval (or->if exp) env))
+
 
 (define (or->if exp)
   (expand-or-predicates (or-predicates exp)))

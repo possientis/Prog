@@ -35,6 +35,9 @@
     (let ((val (analyze rhs)))
       (lambda (env) ((env 'define!) var (val env)))))) 
 
+; lazy
+(define (lazy-eval-definition exp env) (thunk exp env)) 
+
 ))  ; include guard
 
 

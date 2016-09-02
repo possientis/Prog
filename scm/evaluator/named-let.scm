@@ -32,6 +32,9 @@
 (define (analyze-named-let exp)
   (analyze (named-let->combination exp)))
 
+; lazy
+(define (lazy-eval-named-let exp env)
+  (lazy-eval (named-let->combination exp) env))
 
 (define (named-let->combination exp)
   (cons (make-lambda (named-let-parameters exp) 

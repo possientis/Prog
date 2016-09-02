@@ -30,6 +30,10 @@
 (define (analyze-letrec exp)
   (analyze (letrec->combination exp)))
 
+; lazy
+(define (lazy-eval-letrec exp env)
+  (lazy-eval (letrec->combination exp) env))
+
 
 (define (letrec->combination exp)
   (list (make-lambda '() (letrec-new-body exp))))

@@ -25,6 +25,9 @@
     (lambda (env)
       (if (true? (pred env)) #f #t))))
 
+; lazy
+(define (lazy-eval-not exp env) (thunk exp env))
+
 ))  ; include guard
 
 

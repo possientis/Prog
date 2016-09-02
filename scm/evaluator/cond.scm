@@ -27,6 +27,10 @@
 (define (analyze-cond exp)
   (analyze (cond->if exp)))
 
+; lazy
+(define (lazy-eval-cond exp env)
+  (lazy-eval (cond-if exp) env))
+
 
 (define (cond->if exp) 
   (expand-clauses (cond-clauses exp)))

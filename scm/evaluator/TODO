@@ -1,4 +1,4 @@
-define lazy-eval : Exp -> Thunk
+define lazy-eval : Exp -> Thunk (application)
 define actual-value : Thunk -> Val
 
 define primitives from language itself

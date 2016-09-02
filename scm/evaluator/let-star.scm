@@ -22,6 +22,10 @@
 (define (analyze-let* exp)
   (analyze (let*->nested-lets exp)))
 
+; lazy
+(define (lazy-eval-let* exp env)
+  (lazy-eval (let*->nested-lets exp) env))
+
 (define (let*->nested-lets exp)
   (let ((bindings (let*-bindings exp)))
     (let-expand bindings (let*-body exp))))

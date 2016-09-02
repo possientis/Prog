@@ -33,4 +33,15 @@
     (lambda (env)
       (if (true? (pred env)) (conseq env) (alter env)))))
 
+; lazy
+(define (lazy-eval-if exp env) 
+  (let ((pred ((lazy-eval (if-predicate exp) env) 'value)))
+    (if (true? pred)
+      (lazy-eval (if-consequent exp) env)
+      (lazy-eval (if-alternative exp) env))))
+
+; note: memoization is likely to be a problem here
+
+
+
 ))  ; include guard

@@ -25,6 +25,10 @@
 (define (analyze-let exp)
   (analyze (let->combination exp)))
 
+; lazy
+(define (lazy-eval-let exp env)
+  (lazy-eval (let->combination exp) env))
+
 
 (define (let->combination exp)
   (cons (make-lambda (let-parameters exp) (let-body exp)) (let-operands exp)))

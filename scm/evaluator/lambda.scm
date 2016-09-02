@@ -52,5 +52,9 @@
       (lambda (env)
         (make-analyze-procedure params analyze-body env)))))
 
+; lazy
+(define (lazy-eval-lambda exp env) (thunk (eval-lambda exp env) '()))
+
+
 ))  ; include guard
 
