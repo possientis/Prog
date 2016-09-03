@@ -1,0 +1,3 @@
+setup.py was created manually
+the egg was created by running:
+$ python3 setup.py bdist_egg

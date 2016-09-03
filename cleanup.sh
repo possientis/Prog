@@ -19,6 +19,7 @@ rm -f c/secp256k1/*.o
 rm -f c#/*.exe
 rm -f java/*.class
 rm -f java/bitcoin/*.class
+rm -f java/universe/*.class
 rm -f scala/*.class
 rm -f scala/bitcoin/*.class
 rm -f clojure/*.class
