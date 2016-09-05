@@ -29,4 +29,12 @@
       (lambda (env)
         (new-apply (proc env) (map (lambda (x) (x env)) args))))))
 
+; lazy
+(define (lazy-eval-application exp env)
+  (let ((operator (exp-operator exp))
+        (operands (exp-operands exp)))
+    (let ((proc (lazy-eval operator env))
+          (args (map (lambda (x) (lazy-eval x env)) operands)))
+      (lazy-apply proc args))))
+
 ))  ; include guard

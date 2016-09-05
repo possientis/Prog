@@ -105,6 +105,14 @@ echo lambda
 scm -b -f lambda.scm                      > /dev/null               
 ./run.scm lambda.scm                      > /dev/null
 
+echo lazy-apply
+scm -b -f lazy-apply.scm                  > /dev/null               
+./run.scm lazy-apply.scm                  > /dev/null
+
+echo lazy-eval
+scm -b -f lazy-eval.scm                   > /dev/null               
+./run.scm lazy-eval.scm                   > /dev/null
+
 echo let-rec
 scm -b -f let-rec.scm                     > /dev/null               
 ./run.scm let-rec.scm                     > /dev/null

@@ -366,7 +366,56 @@ public class Test_Base64Encoder extends Test_Abstract
     checkCondition(Arrays.equals(check3, init3), "checkDecodeFromByte.8");
   }
 
-  public void checkDecodeFromString(){ /* TODO */ }
+  public void checkDecodeFromString(){
+    byte[] data1 = getRandomBytes(300);
+    byte[] data2 = getRandomBytes(301); 
+    byte[] data3 = getRandomBytes(302);
+
+    Base64Encoder encoder = new Base64Encoder();
+
+    ByteArrayOutputStream baos1 = new ByteArrayOutputStream(500); // enough space
+    ByteArrayOutputStream baos2 = new ByteArrayOutputStream(500); // enough space
+    ByteArrayOutputStream baos3 = new ByteArrayOutputStream(500); // enough space
+
+    try 
+    {
+      encoder.encode(data1, 0, 300, baos1);
+      encoder.encode(data2, 0, 301, baos2);
+      encoder.encode(data3, 0, 302, baos3);
+    }
+    catch(IOException e)
+    {
+      checkCondition(false, "checkDecodeFromString.1");
+    }
+
+    String s1 = baos1.toString();
+    String s2 = baos2.toString();
+    String s3 = baos3.toString();
+
+
+    ByteArrayOutputStream baos4 = new ByteArrayOutputStream(300); // enough space
+    ByteArrayOutputStream baos5 = new ByteArrayOutputStream(301); // enough space
+    ByteArrayOutputStream baos6 = new ByteArrayOutputStream(302); // enough space
+
+    try
+    {
+      encoder.decode(s1, baos4);
+      encoder.decode(s2, baos5);
+      encoder.decode(s3, baos6);
+    }
+    catch(IOException e)
+    {
+      checkCondition(false, "checkDecodeFromString.2");
+    }
+
+    byte[] check1 = baos4.toByteArray();
+    byte[] check2 = baos5.toByteArray();
+    byte[] check3 = baos6.toByteArray();
+
+    checkCondition(Arrays.equals(check1, data1), "checkDecodeFromString.3");
+    checkCondition(Arrays.equals(check2, data2), "checkDecodeFromString.4");
+    checkCondition(Arrays.equals(check3, data3), "checkDecodeFromString.5");
+  }
 
   public void checkEncode(){
     byte[] data1 = getRandomBytes(300);
