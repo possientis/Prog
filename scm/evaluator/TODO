@@ -1,5 +1,8 @@
-define lazy-eval : Exp -> Thunk (define lazy-apply-xxxx)
-define actual-value : Thunk -> Val
+play with lazy-repl
+need to deal with environments allowing thunks as values
+somehow feel we need to be able to test whether an object is a thunk
+
+
 
 define primitives from language itself
 implement macros

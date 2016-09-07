@@ -17,12 +17,26 @@
 (define (eval-procedure-body procedure) (caddr procedure))
 (define (eval-procedure-environment procedure) (cadddr procedure))
 
-; applying
+; apply
 (define (apply-eval-procedure proc args)
   (let ((body (eval-procedure-body proc))
         (params (eval-procedure-parameters proc))
         (init-env (eval-procedure-environment proc)))
     (let ((extended-env ((init-env 'extended) params args)))
       (new-eval body extended-env))))
+
+; lazy
+; proc is not expected to be a thunk so we do not force it
+; args is expected to be a list of thunks. However contrary 
+; to the case of primitive procedure, we do not force them 
+; either. Instead, we pass them directly as values to construct
+; an extended environment, from which we return a new thunk.
+(define (lazy-apply-eval-procedure proc args)
+  (let ((body (eval-procedure-body proc))
+        (params (eval-procedure-parameters proc))
+        (init-env (eval-procedure-environment proc)))
+    (let ((extended-env ((init-env 'extended) params args)))
+      (lazy-eval body extended-env))))
+
 
 ))  ; include guard
