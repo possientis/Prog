@@ -3,8 +3,9 @@ public class Test_Main {
 
     Test_Abstract test; 
 
-    /*
     test = new Test_ECKey(); test.run();                      // TODO
+    test = new Test_ECDSASignature(); test.run();             // TODO
+    /*
     test = new Test_VersionedChecksummedBytes(); test.run();
     test = new Test_DumpedPrivateKey(); test.run();
     test = new Test_Base58(); test.run();
@@ -23,7 +24,6 @@ public class Test_Main {
     test = new Test_Base64Encoder(); test.run();
     test = new Test_Base64(); test.run();
     */
-    test = new Test_ECDSASignature(); test.run();             // TODO
   }
 }
 

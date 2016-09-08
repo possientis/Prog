@@ -2,8 +2,9 @@ import java.math.BigInteger;
 
 import org.bitcoinj.core.ECKey;
 
-public class Test_ECDSASignature extends Test_Abstract {
+public class Test_ECDSASignature extends Test_ECKey {
 
+  @Override
   public void run(){
     logMessage("ECKey.ECDSASignature unit test running ...");
     checkFieldR();

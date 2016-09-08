@@ -125,49 +125,49 @@ public class Test_ECKey extends Test_Abstract {
 
   }
 
-  private String getFieldPrimeAsHex(){
+  private static String _getFieldPrimeAsHex(){
     return "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F";
   }
 
-  private BigInteger getFieldPrime(){
-    return new BigInteger(getFieldPrimeAsHex(), 16);
+  private static BigInteger _getFieldPrime(){
+    return new BigInteger(_getFieldPrimeAsHex(), 16);
   }
 
-  private String getCurveOrderAsHex(){
+  private static String _getCurveOrderAsHex(){
     return "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141"; 
   }
 
-  private BigInteger getCurveOrder(){
-    return new BigInteger(getCurveOrderAsHex(), 16);
+  private static BigInteger _getCurveOrder(){
+    return new BigInteger(_getCurveOrderAsHex(), 16);
   }
 
-  private String getCurveGeneratorXAsHex(){
+  private static String _getCurveGeneratorXAsHex(){
     return "79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798"; 
   }
 
-  private BigInteger getCurveGeneratorX(){
-    return new BigInteger(getCurveGeneratorXAsHex(), 16);
+  private static BigInteger _getCurveGeneratorX(){
+    return new BigInteger(_getCurveGeneratorXAsHex(), 16);
   }
 
-  private String getCurveGeneratorYAsHex(){
+  private static String _getCurveGeneratorYAsHex(){
     return "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8";
   }
 
   // used to initialize private field
-  private BigInteger getCurveGeneratorY(){
-    return new BigInteger(getCurveGeneratorYAsHex(), 16);
+  private static BigInteger _getCurveGeneratorY(){
+    return new BigInteger(_getCurveGeneratorYAsHex(), 16);
   }
 
   // private key example from 'Mastering bitcoin'
-  private String getSecret1AsHex(){
+  private static String _getSecret1AsHex(){
     return "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD";
   }
     
-  private BigInteger getSecret1(){
-    return new BigInteger(getSecret1AsHex(), 16);
+  private static BigInteger _getSecret1(){
+    return new BigInteger(_getSecret1AsHex(), 16);
   }
 
-  private String getSecret1AsWiF(){
+  private static String _getSecret1AsWiF(){
     // 0x80 | private key | 0x01 | checksum
     // This is main net so version byte is 0x80 = 128
     // This is a compressed key of single byte suffix 0x01 added
@@ -178,7 +178,7 @@ public class Test_ECKey extends Test_Abstract {
     //      KxFC1jmwwCoACiCAWZ3eXa96mBM6tb3TYzGmf6YwgdGWZgawvrtJ
   }
 
-  private String getSecret1AsWiFUncomp(){
+  private static String _getSecret1AsWiFUncomp(){
     // 0x80 | private key | checksum
     // This is main net so version byte is 0x80 = 128
     // This is an uncompressed key so no single 0x01 suffix byte
@@ -190,7 +190,7 @@ public class Test_ECKey extends Test_Abstract {
   }
 
 
-  private String getSecret1AsWiFTest(){
+  private static String _getSecret1AsWiFTest(){
     // 0xEF | private key | 0x01 | checksum
     // This is a test network so version byte is 0xEF = 239
     // This is a compressed key so single byte suffix 0x01 added
@@ -201,7 +201,7 @@ public class Test_ECKey extends Test_Abstract {
     //      cNcBUemoNGVRN9fRtxrmtteAPQeWZ399d2REmX1TBjvWpRfNMy91
   }
 
-  private String getSecret1AsWiFTestUncomp(){
+  private static String _getSecret1AsWiFTestUncomp(){
     // 0xEF | private key | checksum
     // This is a test network so version byte is 0xEF = 239
     // This is an uncompressed key so no single 0x01 suffix byte
@@ -213,7 +213,7 @@ public class Test_ECKey extends Test_Abstract {
   }
 
 
-  private byte[] getSecret1AsBytes(){
+  private static byte[] _getSecret1AsBytes(){
     /*
     return "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD";
     */
@@ -229,136 +229,166 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   // obtained from independent source
-  private String getSecret1PubKeyXAsHex(){
+  private static String _getSecret1PubKeyXAsHex(){
     return "F028892BAD7ED57D2FB57BF33081D5CFCF6F9ED3D3D7F159C2E2FFF579DC341A";
   }
 
-  private BigInteger getSecret1PubKeyX(){
-    return new BigInteger(getSecret1PubKeyXAsHex(), 16);
+  private static BigInteger _getSecret1PubKeyX(){
+    return new BigInteger(_getSecret1PubKeyXAsHex(), 16);
   }
 
 
   // obtained from independent source
-  private String getSecret1PubKeyYAsHex(){
+  private static String _getSecret1PubKeyYAsHex(){
     // leading zero matters here, as we append strings together
     return "07CF33DA18BD734C600B96A72BBC4749D5141C90EC8AC328AE52DDFE2E505BDB";
   }
 
 
-  private BigInteger getSecret1PubKeyY(){
-    return new BigInteger(getSecret1PubKeyYAsHex(), 16);
+  private static BigInteger _getSecret1PubKeyY(){
+    return new BigInteger(_getSecret1PubKeyYAsHex(), 16);
   }
 
-  private String getSecret1PubKeyAsHex(){
-    return "03" + getSecret1PubKeyXAsHex();
+  private static String _getSecret1PubKeyAsHex(){
+    return "03" + _getSecret1PubKeyXAsHex();
   }
 
-  private BigInteger getSecret1PubKey(){
-    return new BigInteger(getSecret1PubKeyAsHex(), 16);
+  private static BigInteger _getSecret1PubKey(){
+    return new BigInteger(_getSecret1PubKeyAsHex(), 16);
   }
 
-  private String getSecret1PubKeyUncompAsHex(){
-    return "04" + getSecret1PubKeyXAsHex() + getSecret1PubKeyYAsHex();
+  private static String _getSecret1PubKeyUncompAsHex(){
+    return "04" + _getSecret1PubKeyXAsHex() + _getSecret1PubKeyYAsHex();
   }
 
 
-  private BigInteger getSecret1PubKeyUncomp(){
-    return new BigInteger(getSecret1PubKeyUncompAsHex(), 16);
+  private static BigInteger _getSecret1PubKeyUncomp(){
+    return new BigInteger(_getSecret1PubKeyUncompAsHex(), 16);
   }
 
-  private String getSecret1PubKeyHashAsHex(){
+  private static String _getSecret1PubKeyHashAsHex(){
     return "BBC1E42A39D05A4CC61752D6963B7F69D09BB27B";
   }
 
-  private BigInteger getSecret1PubKeyHash(){
-    return new BigInteger(getSecret1PubKeyHashAsHex(), 16);
+  private static BigInteger _getSecret1PubKeyHash(){
+    return new BigInteger(_getSecret1PubKeyHashAsHex(), 16);
   }
 
 
-  private String getSecret1PubKeyHashUncompAsHex(){
+  private static String _getSecret1PubKeyHashUncompAsHex(){
     return "211B74CA4686F81EFDA5641767FC84EF16DAFE0B";
   }
 
-  private BigInteger getSecret1PubKeyHashUncomp(){
-    return new BigInteger(getSecret1PubKeyHashUncompAsHex(), 16);
+  private static BigInteger _getSecret1PubKeyHashUncomp(){
+    return new BigInteger(_getSecret1PubKeyHashUncompAsHex(), 16);
   }
 
-  private String getSecret1Address(){
+  private static String _getSecret1Address(){
     return "1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy";
   }
 
-  private String getSecret1AddressUncomp(){
+  private static String _getSecret1AddressUncomp(){
     return "1424C2F4bC9JidNjjTUZCbUxv6Sa1Mt62x";
   }
 
-  private  NetworkParameters getMainNetwork(){
+  private static NetworkParameters _getMainNetwork(){
     return NetworkParameters.fromID(NetworkParameters.ID_MAINNET);
   }
 
-  private  NetworkParameters getRegTestNetwork(){
+  private static NetworkParameters _getRegTestNetwork(){
     return NetworkParameters.fromID(NetworkParameters.ID_REGTEST);
   }
 
-  private  NetworkParameters getTestNetNetwork(){
+  private static NetworkParameters _getTestNetNetwork(){
     return NetworkParameters.fromID(NetworkParameters.ID_TESTNET);
   }
 
-  private  NetworkParameters getUnitTestNetwork(){
+  private static NetworkParameters _getUnitTestNetwork(){
     return NetworkParameters.fromID(NetworkParameters.ID_UNITTESTNET);
   }
 
-  private final BigInteger fieldPrime = getFieldPrime();
-  private final BigInteger curveOrder = getCurveOrder();
-  private final BigInteger halfCurveOrder = curveOrder.shiftRight(1); // div 2
-  private final BigInteger curveGeneratorX = getCurveGeneratorX();
-  private final BigInteger curveGeneratorY = getCurveGeneratorY();
-  private final String curveOrderAsHex = getCurveOrderAsHex();
-  private final X9ECParameters curX9 = CustomNamedCurves.getByName("secp256k1"); 
-  private final ASN1Primitive curASN1 = curX9.toASN1Primitive();
-
+  private static final BigInteger 
+    fieldPrime = _getFieldPrime();
+  private static final BigInteger 
+    _curveOrder = _getCurveOrder();
+  private static final BigInteger 
+    halfCurveOrder = _curveOrder.shiftRight(1);
+  private static final BigInteger 
+    curveGeneratorX = _getCurveGeneratorX();
+  private static final BigInteger 
+    curveGeneratorY = _getCurveGeneratorY();
+  private static final String 
+    _curveOrderAsHex = _getCurveOrderAsHex();
+  private static final X9ECParameters 
+    curX9 = CustomNamedCurves.getByName("secp256k1"); 
+  private static final ASN1Primitive 
+    curASN1 = curX9.toASN1Primitive();
 
   // key from Mastering Bitcoin
-  private final BigInteger secret1 = getSecret1();
-  private final BigInteger secret1PubKeyX = getSecret1PubKeyX();
-  private final BigInteger secret1PubKeyY = getSecret1PubKeyY();
-  private final BigInteger secret1PubKey = getSecret1PubKey();
-  private final BigInteger secret1PubKeyUncomp = getSecret1PubKeyUncomp();
-  private final BigInteger secret1PubKeyHash = getSecret1PubKeyHash();
-  private final BigInteger secret1PubKeyHashUncomp = getSecret1PubKeyHashUncomp();
+  private static final BigInteger 
+    secret1 = _getSecret1();
+  private static final BigInteger 
+    secret1PubKeyX = _getSecret1PubKeyX();
+  private static final BigInteger 
+    secret1PubKeyY = _getSecret1PubKeyY();
+  private static final BigInteger 
+    secret1PubKey = _getSecret1PubKey();
+  private static final BigInteger 
+    secret1PubKeyUncomp = _getSecret1PubKeyUncomp();
+  private static final BigInteger 
+    secret1PubKeyHash = _getSecret1PubKeyHash();
+  private static final BigInteger 
+    secret1PubKeyHashUncomp = _getSecret1PubKeyHashUncomp();
   
-  private final String secret1AsHex = getSecret1AsHex();
-  private final String secret1AsWiF = getSecret1AsWiF();
-  private final String secret1AsWiFUncomp = getSecret1AsWiFUncomp();
-  private final String secret1AsWiFTest = getSecret1AsWiFTest();
-  private final String secret1AsWiFTestUncomp = getSecret1AsWiFTestUncomp();
-  private final String secret1PubKeyXAsHex = getSecret1PubKeyXAsHex();
-  private final String secret1PubKeyYAsHex = getSecret1PubKeyYAsHex();
-  private final String secret1PubKeyAsHex = getSecret1PubKeyAsHex();
-  private final String secret1PubKeyUncompAsHex = getSecret1PubKeyUncompAsHex();
-  private final String secret1Address = getSecret1Address();
-  private final String secret1AddressUncomp = getSecret1AddressUncomp();
+  private static final String 
+    secret1AsHex = _getSecret1AsHex();
+  private static final String 
+    secret1AsWiF = _getSecret1AsWiF();
+  private static final String 
+    secret1AsWiFUncomp = _getSecret1AsWiFUncomp();
+  private static final String 
+    secret1AsWiFTest = _getSecret1AsWiFTest();
+  private static final String 
+    secret1AsWiFTestUncomp = _getSecret1AsWiFTestUncomp();
+  private static final String 
+    secret1PubKeyXAsHex = _getSecret1PubKeyXAsHex();
+  private static final String 
+    secret1PubKeyYAsHex = _getSecret1PubKeyYAsHex();
+  private static final String 
+    secret1PubKeyAsHex = _getSecret1PubKeyAsHex();
+  private static final String 
+    secret1PubKeyUncompAsHex = _getSecret1PubKeyUncompAsHex();
+  private static final String 
+    secret1Address = _getSecret1Address();
+  private static final String 
+    secret1AddressUncomp = _getSecret1AddressUncomp();
 
-  private final byte[] secret1AsBytes = getSecret1AsBytes();
+  private static final byte[] 
+    secret1AsBytes = _getSecret1AsBytes();
 
-  private final ECKey key1 = ECKey.fromPrivate(secret1);
-  private final ECKey key1Uncomp = ECKey.fromPrivate(secret1, false);
+  private static final ECKey 
+    key1 = ECKey.fromPrivate(secret1);
+  private static final ECKey 
+    key1Uncomp = ECKey.fromPrivate(secret1, false);
 
   // other data
-  private final NetworkParameters mainNet = getMainNetwork();
-  private final NetworkParameters regTestNet = getRegTestNetwork();
-  private final NetworkParameters testNetNet = getTestNetNetwork();
-  private final NetworkParameters unitTestNet = getUnitTestNetwork();
+  private static final NetworkParameters mainNet = _getMainNetwork();
+  private static final NetworkParameters regTestNet = _getRegTestNetwork();
+  private static final NetworkParameters testNetNet = _getTestNetNetwork();
+  private static final NetworkParameters unitTestNet = _getUnitTestNetwork();
 
-  private BigInteger _getRandomSecret(){
+  private static BigInteger _getRandomSecret(){
     byte[] bytes;
     boolean isGood = false;
     BigInteger secret = BigInteger.ZERO;
 
-    while(!isGood){
+    while(!isGood)
+    {
       bytes = getRandomBytes(32);
       secret = new BigInteger(1, bytes);  // unsigned
-      // we want secret to satisfy 1 < secret < curveOrder
-      if(secret.compareTo(BigInteger.ONE) > 0 && secret.compareTo(curveOrder) < 0){
+      // we want secret to satisfy 1 < secret < _curveOrder
+      if(secret.compareTo(BigInteger.ONE)>0 && secret.compareTo(_curveOrder)<0)
+      {
         isGood = true;
       }
     }
@@ -366,12 +396,12 @@ public class Test_ECKey extends Test_Abstract {
     return secret;
   }
 
-  private boolean _isKeyFromSecret1(ECKey key){
+  private static boolean _isKeyFromSecret1(ECKey key){
     if (!key.getPrivKey().equals(secret1)) return false;
     return true;
   }
 
-  private BigInteger _sqrt(BigInteger n, boolean isEven){
+  private static BigInteger _sqrt(BigInteger n, boolean isEven){
     // Let p be the underlying prime.
     // This function returns the square root of n modulo p with given parity
     // Since p = 3 mod 4, whenever n is a quadratic residue modulo p, a 
@@ -398,7 +428,7 @@ public class Test_ECKey extends Test_Abstract {
     return isEven ? (isEven1 ? n1 : n2) : (isEven1 ? n2 : n1);
   }
 
-  private BigInteger _YFromX(BigInteger x, boolean isEven){
+  private static BigInteger _YFromX(BigInteger x, boolean isEven){
     // returns Y such that Y^2 = X^3 + 7 modulo p of given parity
     BigInteger p = fieldPrime;
     BigInteger seven = BigInteger.valueOf(7);
@@ -408,14 +438,14 @@ public class Test_ECKey extends Test_Abstract {
     return _sqrt(sum, isEven);
   }
 
-  private boolean _isEven(BigInteger y){
+  private static boolean _isEven(BigInteger y){
     BigInteger p = fieldPrime;
     BigInteger two = BigInteger.ONE.shiftLeft(1);
     BigInteger arg = y.mod(p);
     return (arg.mod(two) == BigInteger.ZERO);
   }
   
-  private String _toString(ECKey key){
+  private static String _toString(ECKey key){
     StringBuilder builder = new StringBuilder("ECKey{pub HEX="); 
     builder.append(key.getPublicKeyAsHex());
     builder.append(", isEncrypted=");
@@ -426,7 +456,10 @@ public class Test_ECKey extends Test_Abstract {
     return builder.toString();
   }
   
-  private String _toStringWithPrivate(ECKey key, NetworkParameters params){
+  private static String _toStringWithPrivate(
+      ECKey key, 
+      NetworkParameters params)
+  {
     StringBuilder builder = new StringBuilder("ECKey{pub HEX="); 
     builder.append(key.getPublicKeyAsHex());
     builder.append(", priv HEX=");
@@ -442,7 +475,11 @@ public class Test_ECKey extends Test_Abstract {
     return builder.toString();
   }
 
-  private String _formatKey(ECKey key, boolean priv, NetworkParameters params){
+  private static String _formatKey(
+      ECKey key, 
+      boolean priv, 
+      NetworkParameters params)
+  {
     StringBuilder builder = new StringBuilder("  addr:");
     builder.append(key.toAddress(params));
     builder.append("  hash160:");
@@ -464,7 +501,7 @@ public class Test_ECKey extends Test_Abstract {
   }
 
 
-  private byte[] _ripemd160(byte[] input){
+  private static byte[] _ripemd160(byte[] input){
     // we are not supposed to call this on inputs other
     // than 32 bytes long. Hence this restriction for safety
     checkEquals(32, input.length, "_ripemd160.1");
@@ -479,7 +516,7 @@ public class Test_ECKey extends Test_Abstract {
   // returns the sum point + point with respect to the
   // secp256k1 elliptic curve addition. This is implemented
   // in order to validate the getPubKeyPoint method 
-  private ECPoint _twice(ECPoint point){
+  private static ECPoint _twice(ECPoint point){
 
     ECCurve curve = point.getCurve();
 
@@ -544,7 +581,7 @@ public class Test_ECKey extends Test_Abstract {
   // returns the sum p1 + p2 with respect to the secp256k1 
   // elliptic curve addition. This is implemented
   // in order to validate the getPubKeyPoint method 
-  private ECPoint _add(ECPoint p1, ECPoint p2){
+  private static ECPoint _add(ECPoint p1, ECPoint p2){
     ECCurve curve = p1.getCurve();
 
     // both point should be with respect to the same elliptiic curve
@@ -626,7 +663,7 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   // function implemented for the purpose of validating getPubKeyPoint
-  private ECPoint _getPubKeyPoint(ECKey key){
+  private static ECPoint _getPubKeyPoint(ECKey key){
     BigInteger secret = key.getPrivKey();
     ECCurve curve = ECKey.CURVE.getCurve();
     // generator of the secp256k1 elliptic curve group
@@ -646,7 +683,7 @@ public class Test_ECKey extends Test_Abstract {
     return result;
   }
 
-  private ECKey _getNewEncryptedKey(String passphrase){
+  private static ECKey _getNewEncryptedKey(String passphrase){
     KeyCrypter crypter = new KeyCrypterScrypt();
     KeyParameter aesKey = crypter.deriveKey(passphrase);
     ECKey k1 = new ECKey(); // unencrypted
@@ -654,7 +691,10 @@ public class Test_ECKey extends Test_Abstract {
     return k2;
   }
 
-  private ECKey.ECDSASignature _signNative(Sha256Hash input, byte[] priv){
+  private static ECKey.ECDSASignature _signNative(
+      Sha256Hash input, 
+      byte[] priv)
+  {
 
     // being ultra careful before calling native C
     checkCondition(Secp256k1Context.isEnabled(), "_signNative.1");
@@ -671,7 +711,10 @@ public class Test_ECKey extends Test_Abstract {
     }
   }
 
-  private ECKey.ECDSASignature _signSpongy(Sha256Hash input, byte[] priv){
+  private static ECKey.ECDSASignature _signSpongy(
+      Sha256Hash input, 
+      byte[] priv)
+  {
 
     SHA256Digest digest = new SHA256Digest();
     HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
@@ -720,7 +763,7 @@ public class Test_ECKey extends Test_Abstract {
     BigInteger prime = curve.getCurve().getField().getCharacteristic();
     checkEquals(prime, fieldPrime, "checkCurve.1");
     // getN() method returns order of elliptic curve
-    checkEquals(curve.getN(), curveOrder, "checkCurve.2");
+    checkEquals(curve.getN(), _curveOrder, "checkCurve.2");
     // getH() method returns the 'cofactor' of elliptic curve (should be 1)
     checkEquals(curve.getH(), BigInteger.ONE, "checkCurve.3");
     // getG() method returns the curve generator
@@ -738,13 +781,13 @@ public class Test_ECKey extends Test_Abstract {
 
     // checking order of elliptic group and underlying field prime
     checkCondition(prime.isProbablePrime(128), "checkCurve.9");
-    checkCondition(curveOrder.isProbablePrime(128), "checkCurve.10");
-    ECPoint check = ECKey.publicPointFromPrivate(curveOrder);
-    // (curveOrder) x G = infinity. This shows that the order of the 
-    // point G divides curveOrder. However, curveOrder is prime, and
+    checkCondition(_curveOrder.isProbablePrime(128), "checkCurve.10");
+    ECPoint check = ECKey.publicPointFromPrivate(_curveOrder);
+    // (_curveOrder) x G = infinity. This shows that the order of the 
+    // point G divides _curveOrder. However, _curveOrder is prime, and
     // G is not infinity (its order is not 1). It follows that the
-    // order of G is curveOrder. This does not actually prove that
-    // curveOrder is indeed the order of the group. 
+    // order of G is _curveOrder. This does not actually prove that
+    // _curveOrder is indeed the order of the group. 
     checkCondition(check.isInfinity(), "checkCurve.11");
   }
 
