@@ -5,7 +5,7 @@
     (display "loading new-eval")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-; this will speed up the code, but reasoning more difficult
+; this will speed up the code, but reasoning on semantics more difficult
 (define (new-eval2 exp . arg)
   (let ((env (if (null? arg) global-env (car arg))))
     (let ((analyzed (analyze exp)))

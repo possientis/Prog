@@ -1,6 +1,6 @@
-play with lazy-repl
 need to deal with environments allowing thunks as values
 somehow feel we need to be able to test whether an object is a thunk
+check out dynamic-wind and call-with-current-continuation page 128 of scm manual
 
 
 

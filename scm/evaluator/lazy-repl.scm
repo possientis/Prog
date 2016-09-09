@@ -1,17 +1,16 @@
 (load "main.scm")
 
 
-(define input-prompt ";;; M-Eval input:")
-(define output-prompt ";;; M-Eval value:")
+(define input-prompt ";;; Lazy-Eval input:")
+(define output-prompt ";;; Lazy-Eval value:")
 
 (define (driver-loop)
   (prompt-for-input input-prompt)
   (newline)(display ">")
   (let ((input (read)))
-    (display "check1: \n")
     (let ((output (lazy-eval input global-env)))
       (announce-output output-prompt)
-      (user-print output)))
+      (user-print (output 'value))))
   (driver-loop))
 
 (define (prompt-for-input str)

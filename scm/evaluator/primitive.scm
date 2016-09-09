@@ -38,7 +38,9 @@
 
 
 (load "new-eval.scm")
+(load "lazy-eval.scm")
 (load "new-apply.scm")
+(Load "lazy-apply.scm")
 (load "new-load.scm")
 (load "new-require.scm")
 (load "new-object-to-string.scm")

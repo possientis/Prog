@@ -20,7 +20,7 @@
   (analyze (and->if exp)))
 
 ; lazy
-(define (lazy-eval exp env)
+(define (lazy-eval-and exp env)
   (lazy-eval (and->if exp) env))
 
 (define (and->if exp)
