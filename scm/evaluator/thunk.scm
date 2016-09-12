@@ -12,6 +12,7 @@
     (define (this data)
       (lambda (m)
         (cond ((eq? m 'value) (value data))
+              ((eq? m 'thunk?) #t)
               (else (error "thunk: unknown operation error" m)))))
     ;
     (define (expression data) (cadr data))

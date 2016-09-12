@@ -732,6 +732,31 @@ public class Test_ECKey extends Test_Abstract {
     return new ECKey.ECDSASignature(r,s).toCanonicalised();
   }
 
+  private static ECKey.ECDSASignature _signCheck(
+      Sha256Hash input,
+      byte[] priv)
+  {
+    SHA256Digest digest = new SHA256Digest();
+    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
+
+    checkCondition(priv.length == 32, "_signCheck.1");
+    BigInteger secret = new BigInteger(1, priv);
+    BigInteger order = _curveOrder;
+    byte[] message = input.getBytes();
+    calculator.init(order, secret, message);
+
+    BigInteger k = calculator.nextK();
+    checkCondition(!k.equals(BigInteger.ZERO), "_signCheck.2");
+    checkCondition(k.compareTo(order) == -1, "_signCheck.3");
+
+   
+
+
+
+    return null;
+  }
+
+
 
 
   // compile time checks
@@ -1720,6 +1745,7 @@ public class Test_ECKey extends Test_Abstract {
     ECKey.ECDSASignature sig = key.sign(hash);
     ECKey.ECDSASignature check1 = _signNative(hash, priv);
     ECKey.ECDSASignature check2 = _signSpongy(hash, priv);
+    ECKey.ECDSASignature check3 = _signCheck(hash, priv);
 
     checkEquals(check1, sig, "checkSign.1");
     checkEquals(check2, sig, "checkSign.2");
