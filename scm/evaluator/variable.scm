@@ -15,6 +15,10 @@
 (define (analyze-variable exp) (lambda (env) ((env 'lookup) exp)))
 
 ; lazy
-(define (lazy-eval-variable exp env) (thunk exp env))
+(define (lazy-eval-variable exp env)
+  (let ((possible-thunk ((env 'lookup) exp)))
+    (if (thunk? possible-thunk)
+      possible-thunk
+      (thunk possible-thunk '())))) ; creating evaluated thunk from value
 
 ))  ; include guard

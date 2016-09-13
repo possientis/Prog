@@ -5,14 +5,16 @@
     (display "loading thunk")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; testing
+(define (thunk? obj) (tagged-list? obj 'thunk))
 
+; making
 (define thunk   ; constructor
   (let ()
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
         (cond ((eq? m 'value) (value data))
-              ((eq? m 'thunk?) #t)
               (else (error "thunk: unknown operation error" m)))))
     ;
     (define (expression data) (cadr data))
@@ -34,7 +36,13 @@
     ;
     ; returning two argument constructor
     ;
-    (lambda (expr env) (this (list 'data expr env)))))
+    (lambda (expr env) (list 'thunk (this (list 'data expr env))))))
+
+; forcing
+(define (force-thunk obj)
+  (if (thunk? obj) ((cadr obj) 'value) (error "force-thunk: object not a thunk")))
+
+
 
 ))  ; include guard
 

@@ -24,7 +24,7 @@
 ; args is expected to be a list of thunk which we need to force.
 ; the procedure returns an evaluated thunk, one for which environment is '().
 (define (lazy-apply-primitive-procedure proc args)
-  (let ((forced-args (map (lambda (thunk) (thunk 'value)) args)))
+  (let ((forced-args (map force-thunk args)))
     (thunk (apply (primitive-procedure-object proc) forced-args) '())))
 
 ))  ; include guard

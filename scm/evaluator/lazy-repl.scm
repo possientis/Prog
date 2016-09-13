@@ -10,7 +10,7 @@
   (let ((input (read)))
     (let ((output (lazy-eval input global-env)))
       (announce-output output-prompt)
-      (user-print (output 'value))))
+      (user-print (force-thunk output))))
   (driver-loop))
 
 (define (prompt-for-input str)

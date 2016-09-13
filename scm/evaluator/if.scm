@@ -35,7 +35,7 @@
 
 ; lazy
 (define (lazy-eval-if exp env) 
-  (let ((pred ((lazy-eval (if-predicate exp) env) 'value)))
+  (let ((pred (force-thunk (lazy-eval (if-predicate exp) env))))
     (if (true? pred)
       (lazy-eval (if-consequent exp) env)
       (lazy-eval (if-alternative exp) env))))

@@ -1,6 +1,15 @@
-need to deal with environments allowing thunks as values
-somehow feel we need to be able to test whether an object is a thunk
-check out dynamic-wind and call-with-current-continuation page 128 of scm manual
+analyze: review code and understand why no pick up in perf
+
+lazy-repl:
+(define (error) (display "This is an error\n"))
+understand why:
+> (error) 
+fails
+
+(define (try a b) (if (= 0 a) 1 b))
+compare lazy and strict eval of
+> (try 0 (error))
+
 
 
 
