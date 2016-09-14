@@ -736,24 +736,51 @@ public class Test_ECKey extends Test_Abstract {
       Sha256Hash input,
       byte[] priv)
   {
+    
+    BigInteger order = _curveOrder;
+    BigInteger secret = new BigInteger(1, priv).mod(order);
+    // 0 < secret < order (if r == 0 should get next key k)
+    checkCondition(secret.compareTo(BigInteger.ZERO) == 1, "_signCheck.1");
+    checkCondition(secret.compareTo(order) == -1, "_signCheck.2");
+
+    byte[] message = input.getBytes();
+
+
+    // First obtain deterministic pseudo random secret k
     SHA256Digest digest = new SHA256Digest();
     HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
-
-    checkCondition(priv.length == 32, "_signCheck.1");
-    BigInteger secret = new BigInteger(1, priv);
-    BigInteger order = _curveOrder;
-    byte[] message = input.getBytes();
+    checkCondition(priv.length == 32, "_signCheck.3");
     calculator.init(order, secret, message);
-
     BigInteger k = calculator.nextK();
-    checkCondition(!k.equals(BigInteger.ZERO), "_signCheck.2");
-    checkCondition(k.compareTo(order) == -1, "_signCheck.3");
+    // 0 < k < order
+    checkCondition(k.compareTo(BigInteger.ZERO) == 1, "_signCheck.4");
+    checkCondition(k.compareTo(order) == -1, "_signCheck.5");
 
-   
+    // get associated ECPoint
+    ECPoint point = ECKey.publicPointFromPrivate(k).normalize();
+    BigInteger k_X = point.getAffineXCoord().toBigInteger();
 
+    // signature = (r,s) where r = k_X mod order 
+    BigInteger r = k_X.mod(order);
 
+    // 0 < r < order (if r == 0 should get next key k)
+    checkCondition(r.compareTo(BigInteger.ZERO) == 1, "_signCheck.6");
+    checkCondition(r.compareTo(order) == -1, "_signCheck.6");
 
-    return null;
+    // s = k^(-1).[rho(message) + r.secret]
+    // rho(message) is hash(message) mod order
+    BigInteger rho = input.toBigInteger().mod(order);
+    // 0 < rho < order
+    checkCondition(rho.compareTo(BigInteger.ZERO) == 1, "_signCheck.7");
+    checkCondition(rho.compareTo(order) == -1, "_signCheck.8");
+
+    BigInteger s = r;                   // r
+    s = s.multiply(secret).mod(order);  // r.secret
+    s = s.add(rho).mod(order);          // rho(message) + r.secret
+    s = s.multiply(k.modInverse(order)).mod(order);
+
+    return new ECKey.ECDSASignature(r,s).toCanonicalised();
+
   }
 
 
@@ -1749,6 +1776,8 @@ public class Test_ECKey extends Test_Abstract {
 
     checkEquals(check1, sig, "checkSign.1");
     checkEquals(check2, sig, "checkSign.2");
+    checkEquals(check3, sig, "checkSign.3");
+
   }
 
   public void checkSignFromKeyParameter(){
@@ -1765,7 +1794,11 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   public void checkSignedMessageToKey(){
-    // TODO
+    ECKey k1 = new ECKey();
+    String message = "This is some arbitrary message";
+    Sha256Hash hash = Sha256Hash.of(message.getBytes());
+    ECKey.ECDSASignature sig = k1.sign(hash);
+
   }
 
   public void checkSignMessage(){
