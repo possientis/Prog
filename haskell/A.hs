@@ -1,5 +1,6 @@
 import System.Environment
 import Text.Printf
+import Data.List(foldl')
 
 -- ghc A.hs -rtsopts 
 -- so as to allow RTS options
@@ -41,12 +42,31 @@ import Text.Printf
 --
 main = do
   [d] <- map read `fmap` getArgs
-  printf "%f\n" (mean [1..d])
+  printf "%f\n" (mean'' [1..d])
 
 
 
 mean :: [Double] -> Double
 mean xs = sum xs / fromIntegral (length xs)
+
+
+-- This is even slower and requires more heap allocation
+-- foldl is too lazy. Using foldl' hardly helps (it is only 'outermost' strict)
+mean' :: [Double] -> Double
+mean' xs = sum / fromIntegral total where
+  (total, sum) = foldl' op (0,0) xs
+  op (n,s) x = (n + 1, s + x)
+
+-- huge improvement in terms of 'total memory in use' and time spent in GC
+mean'' :: [Double] -> Double
+mean'' xs = sum / fromIntegral total where
+  (total, sum) = foldl' op (0,0) xs
+  op (n,s) x = n `seq` s `seq` (n + 1, s + x)
+
+
+
+
+
 
 
 

@@ -9,3 +9,6 @@ mean xs = {-# SCC "mean" #-} sum xs /fromIntegral (length xs)
 
 main = do 
   print $ mean [1..1e7]
+
+-- unable to install profiling libraries so as to compile with:
+-- ghc SCC.hs -rtsopts -prof -auto-all -caf-all -fforce-recomp

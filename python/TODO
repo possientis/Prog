@@ -1,0 +1,3 @@
+understand flow of synchronize.py
+directories dir1 and dir2 have not yet been created
+so Exception is most likely thrown, yet no message is displayed

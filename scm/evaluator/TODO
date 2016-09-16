@@ -1,3 +1,4 @@
+setting up eval modes which determines how certain primitives are defined
 analyze: review code and understand why no pick up in perf
 
 lazy-repl:

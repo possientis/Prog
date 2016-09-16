@@ -732,55 +732,137 @@ public class Test_ECKey extends Test_Abstract {
     return new ECKey.ECDSASignature(r,s).toCanonicalised();
   }
 
+  private static BigInteger _getDeterministicKey(
+      BigInteger secret,
+      byte[] message,
+      int index)
+  {
+    // ECDSA Signature scheme requires the generation of a random private key
+    // However, using the same random private key twice to sign two different
+    // messages exposes the signer's private key with potentially disastrous
+    // consequences for someone re-using the same bitcoin address. To avoid 
+    // this risk, a pseudo-random private key is generated from the signer's 
+    // private key and message. An index argument exists to allow the retrieval
+    // of various elements of the pseudo-random sequence. In practice, calling
+    // the function with index = 0 should be enough, but it is possible to use
+    // index = 1, 2 , .. in the unlikely event that a fresh key is required.
+    
+    checkCondition(index >= 0, "_getDeterministicKey.1");
+
+    BigInteger q = ECKey.CURVE.getN();  // secp256k1 curve order
+
+    SHA256Digest digest = new SHA256Digest();
+
+    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
+
+    calculator.init(q, secret, message);
+
+    int count = 0;
+
+    BigInteger k = null;
+
+    while(count <= index)
+    {
+      k = calculator.nextK(); 
+
+      ++count;
+    }
+
+    // returned k should be integer modulo q. Checking just in case
+
+    checkCondition(k.compareTo(BigInteger.ZERO) >= 0, "_getDeterministicKey.2");
+
+    checkCondition(k.compareTo(q) < 0, "_getDeterministicKey.3");
+
+    return k;
+  }
+
+  private static BigInteger _getProjection(ECPoint point)
+  {
+    // when using the DSA or ECDSA signature scheme, we typically have 
+    // an underlying cyclic group G and some mapping proj: G -> Fq which 
+    // projects the group elements to the prime field Fq modulo the order 
+    // of the group. This projection mapping is required when computing 
+    // a signature (r,s), as r = proj(kG') where k is some random or pseudo
+    // -random non-zero element of Fq, and G' is the chosen generator of 
+    // the cyclic group. In the case of DSA, the group is a cyclic subgroup 
+    // (of prime order q) of Zp* for some prime p (so q divides p - 1), 
+    // and proj: G -> Fq simply sends [x]p (class modulo p) to [x]q (class 
+    // modulo q), where the representative x of [x]p is chosen in [0,p-1]. 
+    // In the case of ECDSA, the group is an elliptic curve and a point 
+    // ([x]p,[y]p) is sent to [x]q.
+
+    if(point.isInfinity()) return BigInteger.ZERO;  // projection always defined
+
+    BigInteger p = fieldPrime;
+
+    BigInteger q = ECKey.CURVE.getN();  // seckp256k1 curve order
+
+    BigInteger x = point.getAffineXCoord().toBigInteger();
+
+    // asserting that 0 <= x < p
+ 
+    checkCondition(BigInteger.ZERO.compareTo(x) <= 0, "_getProjection.1");
+
+    checkCondition(x.compareTo(p) == -1, "_getProjection.2");
+    
+    return x.mod(q);
+  }
+
+
   private static ECKey.ECDSASignature _signCheck(
-      Sha256Hash input,
-      byte[] priv)
+      Sha256Hash  input, 
+      byte[]      priv)
   {
     
-    BigInteger order = _curveOrder;
-    BigInteger secret = new BigInteger(1, priv).mod(order);
-    // 0 < secret < order (if r == 0 should get next key k)
-    checkCondition(secret.compareTo(BigInteger.ZERO) == 1, "_signCheck.1");
-    checkCondition(secret.compareTo(order) == -1, "_signCheck.2");
+    BigInteger q = ECKey.CURVE.getN();  // order of secp256k1
 
-    byte[] message = input.getBytes();
+    BigInteger secret = new BigInteger(1, priv).mod(q); // signer's private key
+
+    byte[] message = input.getBytes();  // message as bytes
+
+    boolean newKeyNeeded = true;        // will loop until false
+
+    int index = 0;                      // index in pseudo-radom sequence
+
+    BigInteger r = null;                // returning (r,s)
+
+    BigInteger s = null;                // returning (r,s)
 
 
-    // First obtain deterministic pseudo random secret k
-    SHA256Digest digest = new SHA256Digest();
-    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
-    checkCondition(priv.length == 32, "_signCheck.3");
-    calculator.init(order, secret, message);
-    BigInteger k = calculator.nextK();
-    // 0 < k < order
-    checkCondition(k.compareTo(BigInteger.ZERO) == 1, "_signCheck.4");
-    checkCondition(k.compareTo(order) == -1, "_signCheck.5");
+    while(newKeyNeeded)
+    {
 
-    // get associated ECPoint
-    ECPoint point = ECKey.publicPointFromPrivate(k).normalize();
-    BigInteger k_X = point.getAffineXCoord().toBigInteger();
+      // First obtain deterministic pseudo random secret k
+      BigInteger k = _getDeterministicKey(secret, message, index++);
 
-    // signature = (r,s) where r = k_X mod order 
-    BigInteger r = k_X.mod(order);
+      if(k.equals(BigInteger.ZERO)) continue; // start all over
 
-    // 0 < r < order (if r == 0 should get next key k)
-    checkCondition(r.compareTo(BigInteger.ZERO) == 1, "_signCheck.6");
-    checkCondition(r.compareTo(order) == -1, "_signCheck.6");
+      // get associated ECPoint
+      ECPoint point = ECKey.publicPointFromPrivate(k).normalize();
 
-    // s = k^(-1).[rho(message) + r.secret]
-    // rho(message) is hash(message) mod order
-    BigInteger rho = input.toBigInteger().mod(order);
-    // 0 < rho < order
-    checkCondition(rho.compareTo(BigInteger.ZERO) == 1, "_signCheck.7");
-    checkCondition(rho.compareTo(order) == -1, "_signCheck.8");
+      // signature = (r,s)
+      r = _getProjection(point);
 
-    BigInteger s = r;                   // r
-    s = s.multiply(secret).mod(order);  // r.secret
-    s = s.add(rho).mod(order);          // rho(message) + r.secret
-    s = s.multiply(k.modInverse(order)).mod(order);
+      if(r.equals(BigInteger.ZERO)) continue; // start all over
+
+      // TODO
+      // s = k^(-1).[proj(message) + r.secret]
+      // rho(message) is hash(message) mod q
+      BigInteger rho = input.toBigInteger().mod(q);
+      // 0 < rho < order
+      checkCondition(rho.compareTo(BigInteger.ZERO) == 1, "_signCheck.7");
+      checkCondition(rho.compareTo(q) == -1, "_signCheck.8");
+
+      s = r;                          // r
+      s = s.multiply(secret).mod(q);  // r.secret
+      s = s.add(rho).mod(q);          // rho(message) + r.secret
+      s = s.multiply(k.modInverse(q)).mod(q);
+
+      newKeyNeeded = false;
+    }
 
     return new ECKey.ECDSASignature(r,s).toCanonicalised();
-
   }
 
 

@@ -60,6 +60,10 @@ echo environment-test
 scm -b -f environment-test.scm            > /dev/null               
 ./run.scm environment-test.scm            > /dev/null
 
+echo eval-mode
+scm -b -f eval-mode.scm                   > /dev/null               
+./run.scm eval-mode.scm                   > /dev/null
+
 echo eval-procedure
 scm -b -f eval-procedure.scm              > /dev/null               
 ./run.scm eval-procedure.scm              > /dev/null

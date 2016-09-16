@@ -1,0 +1,30 @@
+# how to make POSIX message queues listable and removable using ls and rm
+
+$ sudo mount -t mqueue none <target>
+
+# you can check 
+$ cat /proc/mounts | grep mqueue
+
+# create a new queue (need to compile pmsg_create.c)
+$ ./pmsg_create -c /newq
+
+
+$ ls <target>
+
+
+$ ./pmsg_create -c /mq    # another queue
+$ ./pmsg_send /mq abcdefg # write 7 bytes to queue
+$ cat <target>/mq
+# QSIZE:7          NOTIFY:0     SIGNO:0     NOTIFY_PID:0
+#
+
+$ ./pmsg_notify_sig /mq &
+# 26666 PID
+$ cat <target>/mq
+# QSIZE:7          NOTIFY:0     SIGNO:10    NOTIFY_PID:26666
+
+
+$ ./pmsg_notify_thread /mq &
+$ cat <target>/mq
+# QSIZE:7          NOTIFY:2     SIGNO:0     NOTIFY_PID:27008 
+
