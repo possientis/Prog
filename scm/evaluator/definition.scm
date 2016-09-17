@@ -21,11 +21,11 @@
     (make-lambda (cdadr exp)                                   
                  (cddr exp))))
 
-; eval
-(define (eval-definition exp env)
+; strict eval
+(define (strict-eval-definition exp env)
   (let ((var (definition-variable exp))
         (rhs (definition-expression exp)))
-    (let ((val (new-eval rhs env)))
+    (let ((val (strict-eval rhs env)))
       ((env 'define!) var val))))
 
 ; analyze
@@ -35,7 +35,7 @@
     (let ((val (analyze rhs)))
       (lambda (env) ((env 'define!) var (val env)))))) 
 
-; lazy
+; lazy eval
 (define (lazy-eval-definition exp env) (thunk exp env)) 
 
 ))  ; include guard

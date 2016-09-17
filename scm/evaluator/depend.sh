@@ -185,6 +185,10 @@ echo self-evaluating
 scm -b -f self-evaluating.scm             > /dev/null               
 ./run.scm self-evaluating.scm             > /dev/null
 
+echo strict-eval
+scm -b -f strict-eval.scm                 > /dev/null               
+./run.scm strict-eval.scm                 > /dev/null
+
 echo tagged-list
 scm -b -f tagged-list.scm                 > /dev/null               
 ./run.scm tagged-list.scm                 > /dev/null

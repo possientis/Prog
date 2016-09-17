@@ -734,7 +734,7 @@ public class Test_ECKey extends Test_Abstract {
 
   private static BigInteger _getDeterministicKey(
       BigInteger secret,
-      byte[] message,
+      Sha256Hash message,
       int index)
   {
     // ECDSA Signature scheme requires the generation of a random private key
@@ -755,7 +755,7 @@ public class Test_ECKey extends Test_Abstract {
 
     HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
 
-    calculator.init(q, secret, message);
+    calculator.init(q, secret, message.getBytes());
 
     int count = 0;
 
@@ -809,17 +809,27 @@ public class Test_ECKey extends Test_Abstract {
     return x.mod(q);
   }
 
+  private static BigInteger _getProjection(Sha256Hash hash)
+  {
+    // just like in the case of an ECPoint, a message hash needs to 
+    // be projected onto the prime field Fq (where q is the curve order)
+    // in order to produce a signature. The projection mapping
+    // proj : Hash -> Fq is simply a reduction modulo q
+    
+    BigInteger q = ECKey.CURVE.getN();
+
+    return hash.toBigInteger().mod(q);
+  }
+
 
   private static ECKey.ECDSASignature _signCheck(
-      Sha256Hash  input, 
+      Sha256Hash  message, 
       byte[]      priv)
   {
     
     BigInteger q = ECKey.CURVE.getN();  // order of secp256k1
 
-    BigInteger secret = new BigInteger(1, priv).mod(q); // signer's private key
-
-    byte[] message = input.getBytes();  // message as bytes
+    BigInteger x = new BigInteger(1, priv).mod(q); // signer's private key
 
     boolean newKeyNeeded = true;        // will loop until false
 
@@ -834,7 +844,7 @@ public class Test_ECKey extends Test_Abstract {
     {
 
       // First obtain deterministic pseudo random secret k
-      BigInteger k = _getDeterministicKey(secret, message, index++);
+      BigInteger k = _getDeterministicKey(x, message, index++);
 
       if(k.equals(BigInteger.ZERO)) continue; // start all over
 
@@ -846,25 +856,81 @@ public class Test_ECKey extends Test_Abstract {
 
       if(r.equals(BigInteger.ZERO)) continue; // start all over
 
-      // TODO
-      // s = k^(-1).[proj(message) + r.secret]
-      // rho(message) is hash(message) mod q
-      BigInteger rho = input.toBigInteger().mod(q);
-      // 0 < rho < order
-      checkCondition(rho.compareTo(BigInteger.ZERO) == 1, "_signCheck.7");
-      checkCondition(rho.compareTo(q) == -1, "_signCheck.8");
+      // message hash needs to be projected onto prime field Fq 
+      BigInteger e = _getProjection(message);
 
-      s = r;                          // r
-      s = s.multiply(secret).mod(q);  // r.secret
-      s = s.add(rho).mod(q);          // rho(message) + r.secret
-      s = s.multiply(k.modInverse(q)).mod(q);
+      // signature = (r,s) where s = k^(-1)(e + rx)
+      // This latter expression is an algebraic expression in the field Fq 
+
+      s = r.multiply(x).mod(q);               // s = rx
+      s = e.add(s).mod(q);                    // s = e + rx
+      s = k.modInverse(q).multiply(s).mod(q); // s = k^(-1)(e + rx)
+
+      if(s.equals(BigInteger.ZERO)) continue; // start all over
 
       newKeyNeeded = false;
+
     }
 
     return new ECKey.ECDSASignature(r,s).toCanonicalised();
   }
 
+  private static ECKey _recoverFromSignature(
+  // Attempting to replicate the functionality of ECKey's method.
+      int                   recoveryId, 
+      ECKey.ECDSASignature  signature,
+      Sha256Hash            message,
+      boolean               compressed)
+  {
+    // Returns the public key associated with an ECDSA signature
+    // given the message. A compressed argument is needed to decide
+    // whether the returned key should be in compressed format
+    //
+    // Strictly speaking an ECDSA signature does not allow the recovery
+    // of the underlying public key, as there are potentially 4 public 
+    // keys (sometimes only 2) which are possible candidates. Hence,
+    // an additional argument 'recoveryId' of 2 bits information is
+    // needed to decide which of the potential 4 candidates should be
+    // returned. More explanation follows now: 
+    //
+    // Recall that an ECDSA signature is an ordered pair (r,s) of non-zero
+    // elements of the prime field Fq, where q is the order of secp256k1.
+    // Given the message hash and its projection e on Fq, a signature (r,s)
+    // is valid with respect to the public key X if and only if the ECPoint
+    // (s^(-1)e)G + (s^(-1)r)X when projected onto Fq yields r itself, i.e.
+    //
+    // proj[ (s^(-1)e)G + (s^(-1)r)X ] == r
+    //
+    // where G is the generator of the elliptic curve secp256k1. For each
+    // ECPoint Y satisfying the equation proj[Y] == r, we can therefore
+    // derive a public key X for which the signature (r, s) is valid, given e.
+    //
+    // X = (r^(-1)s)Y - (r^(-1)e)G
+    // 
+    // Note that distinct values of Y lead to distinct values of X, so there
+    // are as many validating keys as there are solutions to the equation
+    // proj[Y] == r. Now in order to solve this equation, we can first note
+    // that any potential solution Y can be written as Y = (a,b) where a , b
+    // are integers (modulo p), so we may assume that 0 <= a < p and 0 <= b < p,
+    // where p is the prime characteritic of the field Fp underlying the curve.
+    // With these notations, we have proj[Y] = a mod q and the equation can
+    // therefore be equivalently expressed as a mod q == r. Since q < p, r 
+    // also satisfies the inequalities 0 <= r < p and an obvious solution
+    // is a = r, which yields two points Y = (a,b) (one for each parity of b).
+    // However, if r happens to be small enough so that r + q < p, then 
+    // a = r + q will also be a solution of a mod q == r, yielding a further 
+    // two points Y = (a, b). We are now in a position to interpret the 2 bits 
+    // argument recoverId: the highest order bit determines whether we are
+    // returning a public key corresponding to a = r (bit = 0), or a = r + q
+    // (bit = 1), being understood that in the latter case a public key can
+    // only be returned if r + q < p (the function should return null otherwise).
+    // The lowest order bit determines the parity of b (even = 0, odd = 1). 
+
+
+
+
+    return null;
+  }
 
 
 

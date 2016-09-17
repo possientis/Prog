@@ -37,8 +37,9 @@
 ; whose code is itself interpreted...
 
 
-(load "new-eval.scm")
+(load "strict-eval.scm")
 (load "lazy-eval.scm")
+(load "new-eval.scm")
 (load "new-apply.scm")
 (Load "lazy-apply.scm")
 (load "new-load.scm")

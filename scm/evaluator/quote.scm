@@ -11,15 +11,15 @@
 ; destructuring
 (define (text-of-quotation exp) (cadr exp))
 
-; eval
-(define (eval-quoted exp env) (text-of-quotation exp))
+; strict eval
+(define (strict-eval-quoted exp env) (text-of-quotation exp))
 
 ; analyze
 (define (analyze-quoted exp)
   (let ((qval (text-of-quotation exp)))
     (lambda (env) qval)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-quoted exp env) (thunk exp 'dummy-env))
 
 ))  ; include guard

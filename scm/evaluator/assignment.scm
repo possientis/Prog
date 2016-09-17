@@ -12,11 +12,11 @@
 (define (assignment-variable exp) (cadr exp))
 (define (assignment-expression exp) (caddr exp))
 
-; eval
-(define (eval-assignment exp env)
+; strict eval
+(define (strict-eval-assignment exp env)
   (let ((var (assignment-variable exp))
         (rhs (assignment-expression exp)))
-    (let ((val (new-eval rhs env)))
+    (let ((val (strict-eval rhs env)))
       ((env 'set!) var val))))
 
 ; analyze
@@ -26,7 +26,7 @@
     (let ((val (analyze rhs)))
       (lambda (env) ((env 'set!) var (val env))))))
 
-; lazy
+; lazy eval
 (define (lazy-eval-assignment exp env) (thunk exp env))
 
 ; note: the side-effect actually occurs when the thunk is forced

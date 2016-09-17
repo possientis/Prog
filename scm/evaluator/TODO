@@ -1,4 +1,6 @@
+continue with strict-eval.scm
 setting up eval modes which determines how certain primitives are defined
+understand possible dissymetry of include between "analyze.scm" and "strict/lazy-eval.scm"
 analyze: review code and understand why no pick up in perf
 
 lazy-repl:

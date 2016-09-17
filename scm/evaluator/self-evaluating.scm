@@ -16,13 +16,13 @@
         ((analyze-procedure? exp))
         (else #f)))
 
-; eval
-(define (eval-self-evaluating exp env) exp)
+; strict eval
+(define (strict-eval-self-evaluating exp env) exp)
 
 ; analyze
 (define (analyze-self-evaluating exp) (lambda (env) exp)) 
 
-; lazy  
+; lazy eval  
 ; creates an 'evaluated' thunk which has no embedded environment
 (define (lazy-eval-self-evaluating exp env) (thunk exp '()))
 
