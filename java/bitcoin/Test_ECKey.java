@@ -925,11 +925,50 @@ public class Test_ECKey extends Test_Abstract {
     // (bit = 1), being understood that in the latter case a public key can
     // only be returned if r + q < p (the function should return null otherwise).
     // The lowest order bit determines the parity of b (even = 0, odd = 1). 
+    
+    BigInteger p = ECKey.CURVE.getCurve().getField().getCharacteristic(); 
+    BigInteger q = ECKey.CURVE.getN();
+    BigInteger zero = BigInteger.ZERO;
+
+    checkCondition(0 <= recoveryId, "_recoverFromSignature.1");
+    checkCondition(4 >  recoveryId, "_recoverFromSignature.2");
+
+    boolean parity  = (recoveryId & 1) == 1;  // true for odd parity
+    boolean addQ    = (recoveryId & 2) == 2;  // r + q if true
+
+    BigInteger r = signature.r;
+    BigInteger s = signature.s;
+
+    checkCondition(zero.compareTo(r) < 0, "_recoverFromSignature.3"); // 0 < r
+    checkCondition(r.compareTo(q)    < 0, "_recoverFromSignature.4"); // r < q
+    checkCondition(zero.compareTo(s) < 0, "_recoverFromSignature.5"); // 0 < s
+    checkCondition(s.compareTo(q)    < 0, "_recoverFromSignature.6"); // s < q
 
 
+    // Y = (a,b) is our ECPoint, solution of the equation proj[Y] = r
+    BigInteger a = addQ ? r.add(q) : r;
 
+    // We know that r < q < p. However, it is possible that r + q >= p
+    if(a.compareTo(p) >= 0) return null;
 
-    return null;
+    BigInteger b = _YFromX(a, !parity); // isEven argument is !parity
+
+    ECPoint Y = ECKey.CURVE.getCurve().createPoint(a,b);
+
+    // Need to compute ECPoint X = (r^(-1)s)Y - (r^(-1)e)G
+    // see sumOfTwoMultiples of ECAlgorithms for an efficient implementation
+    BigInteger e = _getProjection(message);
+    BigInteger rInv = r.modInverse(q);
+    BigInteger u = rInv.multiply(s).mod(q);
+    BigInteger v = rInv.multiply(e).negate().mod(q);
+
+    ECPoint U = Y.multiply(u);
+    ECPoint V = ECKey.CURVE.getG().multiply(v);
+    ECPoint X = U.add(V);
+
+    byte[] pub = X.getEncoded(compressed);
+
+    return ECKey.fromPublicOnly(pub);
   }
 
 
@@ -1874,7 +1913,7 @@ public class Test_ECKey extends Test_Abstract {
 
     ECKey.ECDSASignature sig  = _signNative(hash, priv);
     ECKey.ECDSASignature check  = _signSpongy(hash, priv);
-    checkEquals(check, sig, "checkRecoveryFromSignature.1");
+    checkEquals(check, sig, "checkRecoverFromSignature.1");
 
     // recovering compressed public key
     ECKey temp = null;
@@ -1888,7 +1927,7 @@ public class Test_ECKey extends Test_Abstract {
         }
       }
     }
-    checkCondition(found, "checkRecoveryFromSignature.2");
+    checkCondition(found, "checkRecoverFromSignature.2");
 
     // recovering uncompressed public key
     temp = null;
@@ -1902,7 +1941,22 @@ public class Test_ECKey extends Test_Abstract {
         }
       }
     }
-    checkCondition(found, "checkRecoveryFromSignature.3");
+    checkCondition(found, "checkRecoverFromSignature.3");
+
+    // finer checks 
+    ECKey check1;
+    ECKey check2;
+    for(int i = 0; i < 4; ++i){
+      check1 = ECKey.recoverFromSignature(i, sig, hash, true);
+      check2 =      _recoverFromSignature(i, sig, hash, true);
+      checkEquals(check1, check2, "checkRecoverFromSignature.4");
+    }
+
+    for(int i = 0; i < 4; ++i){
+      check1 = ECKey.recoverFromSignature(i, sig, hash, false);
+      check2 =      _recoverFromSignature(i, sig, hash, false);
+      checkEquals(check1, check2, "checkRecoverFromSignature.5");
+    }
   }
 
   public void checkSetCreationTimeSeconds(){

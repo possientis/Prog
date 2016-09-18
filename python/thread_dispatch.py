@@ -1,3 +1,6 @@
+# see process_dispatch.py for an implementation based on processes
+# rather than threads.
+
 # some insight: always use threads with queue so you don't need 
 # to worry about synchronization as the Queue class is thread safe.
 

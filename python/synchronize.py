@@ -17,8 +17,6 @@ class EventLoopDelaySpawn(object):
         self.verbose = verbose
         self.dir1 = dir1
         self.dir2 = dir2
-        if self.verbose:
-            print("EventLoopDelaySpawn object created")
 
     def poller(self):
         """Creates poll interval"""
@@ -30,7 +28,9 @@ class EventLoopDelaySpawn(object):
     def action(self):
         if self.verbose:
             print("waiting %s seconds to run Action" % self.wait)
-        ret = call("rsync -av --delete %s %s" % (self.dir1, self.dir2), shell=True)
+        
+        # need to check rsynch man page, the forward slash '/' seems important here
+        ret = call("rsync -av --delete %s/ %s" % (self.dir1, self.dir2), shell=True)
 
     def eventHandler(self):
         #if two directories contain same file names
@@ -46,14 +46,13 @@ class EventLoopDelaySpawn(object):
 
     def run(self):
         """Runs an event loop with a delayed action method"""
-        print("Event Loop Delay Spawn object is running")
         try:
             while True:
                 self.eventHandler()
                 self.poller()
 
-        except Exception(err):
-            print("Error: %s" % err)
+        except Exception as e:
+            print("Error: %s" % e)
 
         finally:
             sys.exit(0)

@@ -16,12 +16,26 @@ public abstract class Test_Abstract implements Runnable {
     System.err.println(message);
   }
 
-  protected static void checkEquals(Object left, Object right, String msg){
-    if(!left.equals(right)){
-      logMessage(msg + ": checkEquals failure");
-      logMessage("left = " + left);
-      logMessage("right = " + right);
-      System.exit(1);
+  protected static void checkEquals(Object left, Object right, String msg)
+  {
+    if(left != null)
+    {
+      if(!left.equals(right))
+      {
+        logMessage(msg + ": checkEquals failure");
+        logMessage("left = " + left);
+        logMessage("right = " + right);
+        System.exit(1);
+      }
+    }
+    else
+    {
+      if(right != null)
+      {
+        logMessage(msg + ": checkEquals failure");
+        logMessage("left is null, but right is not");
+        System.exit(1);
+      }
     }
   }
 
