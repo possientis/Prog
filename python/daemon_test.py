@@ -1,3 +1,5 @@
+# edit file /etc/supervisor/supervisor.conf
+
 import time
 
 print("Daemon runs for 3 seconds, then dies")

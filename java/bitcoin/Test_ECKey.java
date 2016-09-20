@@ -7,11 +7,13 @@ import java.math.BigInteger;
 import java.lang.Math;
 import javax.xml.bind.DatatypeConverter;
 import java.security.SecureRandom;
+import java.nio.charset.Charset;
 
 import org.bitcoin.Secp256k1Context;
 import org.bitcoin.NativeSecp256k1;
 import org.bitcoin.NativeSecp256k1Util;
 
+import org.bitcoinj.core.Utils;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
@@ -25,6 +27,7 @@ import org.bitcoinj.crypto.KeyCrypterScrypt;
 import org.bitcoinj.crypto.EncryptedData;
 
 
+import org.spongycastle.util.encoders.Base64;
 import org.spongycastle.crypto.params.ECDomainParameters;
 import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.math.ec.ECPoint;
@@ -969,6 +972,116 @@ public class Test_ECKey extends Test_Abstract {
     byte[] pub = X.getEncoded(compressed);
 
     return ECKey.fromPublicOnly(pub);
+  }
+
+  private static String _signBase64(ECKey key, Sha256Hash message)
+  {
+    // returns the signature of message by key as a Base64 encoded string
+    // This Base64 encoded string is simply the Base64 encoding of 65 bytes
+    // which are a header byte together with the 64 bytes of the pair (r,s).
+    // The header byte allows the recovery of the public key (including 
+    // its compression status) by providing the 2 bits information on key
+    // recovery (see _recoverFromSignature) as well as its compression status:
+    //
+    // header byte:
+    //
+    // 0x1B -> first key with even y, uncompressed
+    // 0x1C -> first key with odd y, uncompressed
+    // 0x1D -> second key with even y, uncompressed
+    // 0x1E -> second key with odd y, uncompressed
+    //
+    // 0x1F -> first key with even y, compressed
+    // 0x20 -> first key with odd y, compressed
+    // 0x21 -> second key with even y, compressed
+    // 0x22 -> second key with odd y, compressed
+
+    BigInteger q = ECKey.CURVE.getN();
+
+
+    ECPoint X = key.getPubKeyPoint();
+
+    ECKey.ECDSASignature signature =  key.sign(message);
+
+    ECPoint G = ECKey.CURVE.getG();
+
+    BigInteger e = _getProjection(message);
+    BigInteger r = signature.r;
+    BigInteger s = signature.s;
+
+    // The ECPoint Y = (s^(-1)e)G + (s^(-1)r)X satisfies proj[Y] = r
+    // Computing Y will allow us to compute the header byte
+
+    BigInteger sInv = s.modInverse(q);
+    BigInteger u = sInv.multiply(e).mod(q);
+    BigInteger v = sInv.multiply(r).mod(q);
+    ECPoint U = G.multiply(u);
+    ECPoint V = X.multiply(v);
+    ECPoint Y = U.add(V).normalize(); // more efficient implementation exist
+
+    checkEquals(_getProjection(Y), r, "_signBase64.1");
+
+    // Note that if k is the pseudo-random secret underlying the signature,
+    // while it is correct to claim that Y = kG, it is incorrect to assume
+    // that k can simply be determined from the message and private key using
+    // _getDeterministicKey. This is not so much because k may correspond to
+    // a non-zero index value (the probability that a pseudo-random k leads
+    // to k = 0 or r = 0 or s = 0 is negligeable, so in practice we only
+    // ever need to call _getDeterministicKey with index = 0). It is rather 
+    // due to fact that our signature is always canonical (i.e s <= q/2 mod q), 
+    // i.e. we return (r,-s) instead of (r,s) if the latter happens to be
+    // non canonical. Changing (r,s) with (r,-s) amounts to changing k with -k.
+    // So it is true to write Y = kG provided we remember that k is either
+    // _getDeterministicKey for index = 0 or its opposit modulo q. 
+
+    BigInteger k = _getDeterministicKey(key.getPrivKey(), message, 0);
+    ECPoint Y1 = G.multiply(k);
+    ECPoint Y2 = G.multiply(k.negate().mod(q));
+
+    checkCondition(Y.equals(Y1) || Y.equals(Y2), "_signBase64.2");
+
+    BigInteger a = Y.getAffineXCoord().toBigInteger();
+    BigInteger b = Y.getAffineYCoord().toBigInteger();
+
+    checkCondition(a.equals(r) || a.equals(r.add(q)), "_signBase64.3");
+
+    // Computing header byte
+    
+    boolean compressed = key.isCompressed();
+
+    boolean even = _isEven(b);  
+
+    boolean first = a.equals(r);
+
+    int header = 27;  // 0x1B
+
+    if(compressed) header += 4;
+
+    if(!even) header += 1;
+
+    if(!first) header += 2;
+
+    // Setting up signature bytes prior to Base64 string encoding
+
+    byte[] sigBytes = new byte[65];
+
+    sigBytes[0] = (byte) header;
+
+    byte[] rBytes = Utils.bigIntegerToBytes(r, 32);
+    byte[] sBytes = Utils.bigIntegerToBytes(s, 32);
+
+    checkEquals(rBytes.length, 32, "_signBase64.4");
+    checkEquals(sBytes.length, 32, "_signBase64.5");
+    
+    System.arraycopy(rBytes, 0, sigBytes, 1, 32);
+    System.arraycopy(sBytes, 0, sigBytes, 33, 32);
+
+    // final Base64 encoding
+    byte[] encoded = Base64.encode(sigBytes);
+
+    String sig = new String(encoded, Charset.forName("UTF-8"));
+
+    return sig;
+    // TODO check this
   }
 
 
@@ -2000,6 +2113,9 @@ public class Test_ECKey extends Test_Abstract {
     String message = "This is some arbitrary message";
     Sha256Hash hash = Sha256Hash.of(message.getBytes());
     ECKey.ECDSASignature sig = k1.sign(hash);
+    // TODO
+
+    String check = _signBase64(k1, hash); // temporary
 
   }
 

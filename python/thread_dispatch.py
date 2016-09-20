@@ -9,8 +9,8 @@ from queue import Queue
 import time
 import random
 
-num_threads = 3
-num_jobs = 10
+num_threads = 10
+num_jobs = 100
 queue = Queue()
 
 def threadFunc(i, q):
@@ -36,11 +36,16 @@ def setJobs():
     for i in range(num_jobs):
         queue.put("job n. %s" % (i+1))
 
+def synchronize(q):
+    q.join()
+
 print("Main thread starting")
-print("Launching workers")
-setWorkers()
 print("Setting up jobs")
 setJobs()
+print("Launching workers")
+setWorkers()
 print("Main thread waiting")
-queue.join()
+synchronize(queue)
 print("Main thread complete")
+
+
