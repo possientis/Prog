@@ -21,29 +21,29 @@
 ; destructuring
 (define (begin-actions exp) (cdr exp))
 
-; eval
-(define (eval-begin exp env)
+; strict eval
+(define (strict-eval-begin exp env)
   (let ((actions (begin-actions exp)))
-    (eval-sequence actions env)))
+    (strict-eval-sequence actions env)))
 
 ; analyze
 (define (analyze-begin exp)
   (let ((actions (begin-actions exp)))
     (analyze-sequence actions)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-begin exp env)
   (let ((actions (begin-actions exp)))
     (lazy-eval-sequence actions env)))
 
 ; eval
-(define (eval-sequence operands env)
+(define (strict-eval-sequence operands env)
   (if (null? operands)
     unspecified-value 
-    (let ((first (new-eval (car operands) env)))  ; side effects now
+    (let ((first (strict-eval (car operands) env)))  ; side effects now
       (if (null? (cdr operands))
         first
-        (eval-sequence (cdr operands) env))))); don't re-evaluate first
+        (strict-eval-sequence (cdr operands) env))))); don't re-evaluate first
 
 ; analyze
 (define (analyze-sequence operands)

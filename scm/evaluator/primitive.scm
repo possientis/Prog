@@ -36,7 +36,7 @@
 ; when interpreted code is running, or when code is interpreted by an interpreter
 ; whose code is itself interpreted...
 
-
+(load "eval-mode.scm")
 (load "strict-eval.scm")
 (load "lazy-eval.scm")
 (load "new-eval.scm")

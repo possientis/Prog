@@ -24,15 +24,15 @@
 (define (named-let-function-call exp)
   (cons (named-let-variable exp) (named-let-parameters exp)))
 
-; eval
-(define (eval-named-let exp env)
-  (new-eval (named-let->combination exp) env))
+; strict eval
+(define (strict-eval-named-let exp env)
+  (strict-eval (named-let->combination exp) env))
 
 ; analyze
 (define (analyze-named-let exp)
   (analyze (named-let->combination exp)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-named-let exp env)
   (lazy-eval (named-let->combination exp) env))
 

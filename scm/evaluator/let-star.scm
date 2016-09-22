@@ -14,15 +14,15 @@
 (define (let*-bindings exp) (cadr exp))
 (define (let*-body exp) (cddr exp))
 
-; eval
-(define (eval-let* exp env)
-  (new-eval (let*->nested-lets exp) env))
+; strict eval
+(define (strict-eval-let* exp env)
+  (strict-eval (let*->nested-lets exp) env))
 
 ; analyze
 (define (analyze-let* exp)
   (analyze (let*->nested-lets exp)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-let* exp env)
   (lazy-eval (let*->nested-lets exp) env))
 

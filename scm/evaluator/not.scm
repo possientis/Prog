@@ -14,9 +14,9 @@
 ; destructuring
 (define (not-predicate exp) (cadr exp))
 
-; eval
-(define (eval-not exp env)
-  (let ((pred (new-eval (not-predicate exp) env)))
+; strict eval
+(define (strict-eval-not exp env)
+  (let ((pred (strict-eval (not-predicate exp) env)))
     (if (true? pred) #f #t)))  
 
 ; analyze
@@ -25,7 +25,7 @@
     (lambda (env)
       (if (true? (pred env)) #f #t))))
 
-; lazy
+; lazy eval
 (define (lazy-eval-not exp env) (thunk exp env))
 
 ))  ; include guard

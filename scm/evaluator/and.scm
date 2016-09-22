@@ -11,15 +11,15 @@
 ; destructuring
 (define (and-predicates exp) (cdr exp))
 
-; eval
-(define (eval-and exp env)
-  (new-eval (and->if exp) env))
+; strict eval
+(define (strict-eval-and exp env)
+  (strict-eval (and->if exp) env))
 
 ; analyze
 (define (analyze-and exp)
   (analyze (and->if exp)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-and exp env)
   (lazy-eval (and->if exp) env))
 

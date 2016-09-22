@@ -18,12 +18,12 @@
 (define (if-alternative exp) 
   (if (not (null? (cdddr exp))) (cadddr exp) #f))
 
-; eval
-(define (eval-if exp env)
-  (let ((pred (new-eval (if-predicate exp) env)))
+; strict eval
+(define (strict-eval-if exp env)
+  (let ((pred (strict-eval (if-predicate exp) env)))
     (if (true? pred)
-      (new-eval (if-consequent exp) env)
-      (new-eval (if-alternative exp) env))))
+      (strict-eval (if-consequent exp) env)
+      (strict-eval (if-alternative exp) env))))
 
 ; analyze
 (define (analyze-if exp)
@@ -33,7 +33,7 @@
     (lambda (env)
       (if (true? (pred env)) (conseq env) (alter env)))))
 
-; lazy
+; lazy eval
 (define (lazy-eval-if exp env) 
   (let ((pred (force-thunk (lazy-eval (if-predicate exp) env))))
     (if (true? pred)

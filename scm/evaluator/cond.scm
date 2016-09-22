@@ -19,15 +19,15 @@
 (define (cond-actions clause) (cdr clause))
 
 
-; eval
-(define (eval-cond exp env)
-  (new-eval (cond->if exp) env))
+; strict eval
+(define (strict-eval-cond exp env)
+  (strict-eval (cond->if exp) env))
 
 ; analyze 
 (define (analyze-cond exp)
   (analyze (cond->if exp)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-cond exp env)
   (lazy-eval (cond-if exp) env))
 

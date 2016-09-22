@@ -10,7 +10,7 @@
     (cond ((primitive-procedure? proc)  (lazy-apply-primitive-procedure proc args))
           ((eval-procedure? proc)       (lazy-apply-eval-procedure proc args))
           ((analyze-procedure? proc)    (lazy-apply-analyze-procedure proc args))
-          (else (error "Unknown procedure type -- APPLY" proc)))))
+          (else (error "Unknown procedure type -- LAZY-APPLY" proc)))))
 
 ))  ; include guard
 

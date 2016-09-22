@@ -12,12 +12,12 @@
 (define (exp-operator exp) (car exp))
 (define (exp-operands exp) (cdr exp))
 
-; eval
-(define (eval-application exp env)
+; strict eval
+(define (strict-eval-application exp env)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
-    (let ((proc (new-eval operator env))
-          (args (map (lambda (x) (new-eval x env)) operands)))
+    (let ((proc (strict-eval operator env))
+          (args (map (lambda (x) (strict-eval x env)) operands)))
       (new-apply proc args))))
 
 ; analyze

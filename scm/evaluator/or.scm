@@ -12,15 +12,15 @@
 ; destructuring
 (define (or-predicates exp) (cdr exp))
 
-; eval
-(define (eval-or exp env)
-  (new-eval (or->if exp) env))
+; strict eval
+(define (strict-eval-or exp env)
+  (strict-eval (or->if exp) env))
 
 ; analyze
 (define (analyze-or exp)
   (analyze (or->if exp)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-or exp env)
   (lazy-eval (or->if exp) env))
 

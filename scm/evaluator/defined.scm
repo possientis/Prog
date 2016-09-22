@@ -15,8 +15,8 @@
 ; destructuring
 (define (defined?-variable exp) (cadr exp))
 
-; eval
-(define (eval-defined? exp env)
+; strict eval
+(define (strict-eval-defined? exp env)
   (let ((var (defined?-variable exp))) 
     (if (not (variable? var)) #f  ((env 'defined?) var)))) 
 
@@ -27,7 +27,7 @@
       (lambda (env) #f)
       (lambda (env) ((env 'defined?) var))))) 
 
-; lazy
+; lazy eval
 (define (lazy-eval-defined? exp env) (thunk exp env))
 
 ))  ; include guard

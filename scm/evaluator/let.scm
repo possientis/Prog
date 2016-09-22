@@ -17,15 +17,15 @@
 (define (let-parameters exp) (map car (let-bindings exp)))
 (define (let-operands exp) (map cadr (let-bindings exp)))
 
-; eval
-(define (eval-let exp env)
-  (new-eval (let->combination exp) env))
+; strict eval
+(define (strict-eval-let exp env)
+  (strict-eval (let->combination exp) env))
 
 ; analyze
 (define (analyze-let exp)
   (analyze (let->combination exp)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-let exp env)
   (lazy-eval (let->combination exp) env))
 

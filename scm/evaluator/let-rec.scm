@@ -22,15 +22,15 @@
   (append (letrec-define-list exp) (letrec-body exp)))
 
 
-; eval
-(define (eval-letrec exp env)
-  (new-eval (letrec->combination exp) env))
+; strict eval
+(define (strict-eval-letrec exp env)
+  (strict-eval (letrec->combination exp) env))
 
 ; analyze
 (define (analyze-letrec exp)
   (analyze (letrec->combination exp)))
 
-; lazy
+; lazy eval
 (define (lazy-eval-letrec exp env)
   (lazy-eval (letrec->combination exp) env))
 

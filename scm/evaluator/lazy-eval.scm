@@ -25,6 +25,6 @@
           ((let*? exp)            (lazy-eval-let* exp env))
           ((letrec? exp)          (lazy-eval-letrec exp env))
           ((application? exp)     (lazy-eval-application exp env))
-          (else  (error "Unknown expression type -- EVAL" exp)))))
+          (else  (error "Unknown expression type -- LAZY-EVAL" exp)))))
 
 ))  ; include guard.

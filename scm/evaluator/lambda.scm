@@ -37,8 +37,8 @@
 (define (lambda-params exp) (cadr exp))
 (define (lambda-body exp) (cddr exp))
 
-; eval
-(define (eval-lambda exp env)
+; strict eval
+(define (strict-eval-lambda exp env)
   (let ((params (lambda-params exp))
         (body (lambda-body exp)))
     (let ((eval-body (make-begin body)))
@@ -52,9 +52,12 @@
       (lambda (env)
         (make-analyze-procedure params analyze-body env)))))
 
-; lazy
-(define (lazy-eval-lambda exp env) (thunk (eval-lambda exp env) '()))
-
+; lazy eval (do we need to create new type of procedure?)
+(define (lazy-eval-lambda exp env)
+  (let ((params (lambda-params exp))
+        (body (lambda-body exp)))
+    (let ((eval-body (make-begin body)))
+      (make-eval-procedure params eval-body env))))
 
 ))  ; include guard
 

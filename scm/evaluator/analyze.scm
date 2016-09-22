@@ -6,6 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (analyze exp)
+;  (newline)(display "analyze running ...")(newline)
   (cond ((self-evaluating? exp) (analyze-self-evaluating exp))                
         ((variable? exp)        (analyze-variable exp))
         ((quoted? exp)          (analyze-quoted exp))                
