@@ -1,5 +1,28 @@
 (load "main.scm")
 
+(define (assert-equal left right message)
+  (if (not (equal? left right)) 
+    (error "unit-test failure: "
+           (string-append message 
+                          ": value = " (object->string left)
+                          ": expected = " (object->string right)))))
+
+(define (test-expression exp value message)
+  (let ((print (lambda (msg) (string-append message msg)))
+        (mode (get-eval-mode))) ; save eval mode to be restored
+    (assert-equal (strict-eval exp) value (print ": strict-eval")) 
+    (assert-equal (force-thunk (lazy-eval exp)) value (print ": lazy-eval")) 
+    (assert-equal ((analyze exp) global-env) value (print ": analyze"))
+    (set-eval-mode 'strict)
+    (assert-equal (new-eval exp) value (print ": new-eval (strict)"))
+    (set-eval-mode 'lazy)
+    (assert-equal (force-thunk (new-eval exp)) value (print ": new-eval (lazy)"))
+    (set-eval-mode 'analyze)
+    (assert-equal (new-eval exp) value (print ": new-eval (analyze)"))
+    (set-eval-mode mode)))  ; restoring eval mode
+
+
+
 (define (unit-test)
   ;
   (newline)
@@ -7,38 +30,15 @@
   ;
   ; self-evaluating
   (display "testing self-evaluating expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval 3)))
-    (if (not (equal? x 3)) (display "unit-test: test 1.0 failing\n")))
-  (let ((x (new-eval 3.5)))
-    (if (not (equal? x 3.5)) (display "unit-test: test 1.1 failing\n")))
-  (let ((x (new-eval "hello")))
-    (if (not (equal? x "hello")) (display "unit-test: test 1.2 failing\n")))
-  (let ((x (new-eval "hello\n")))
-    (if (not (equal? x "hello\n")) (display "unit-test: test 1.3 failing\n")))
-  (let ((x (new-eval #\a)))
-    (if (not (equal? x #\a)) (display "unit-test: test 1.4 failing\n")))
-  (let ((x (new-eval #t)))
-    (if (not (equal? x #t)) (display "unit-test: test 1.5 failing\n")))
-  (let ((x (new-eval #f)))
-    (if (not (equal? x #f)) (display "unit-test: test 1.6 failing\n")))
+  (test-expression '3 3 "self-evaluating")
+  (test-expression '3.5 3.5 "self-evaluating")
+  (test-expression '"hello" "hello" "self-evaluating")
+  (test-expression '"hello\n" "hello\n" "self-evaluating")
+  (test-expression '#\a #\a "self-evaluating")
+  (test-expression '#t #t "self-evaluating")
+  (test-expression '#f #f "self-evaluating")
 
-  ; analyse
-  (let ((x ((analyze 3) global-env)))
-    (if (not (equal? x 3)) (display "unit-test: test 1.7 failing\n")))
-  (let ((x ((analyze 3.5) global-env)))
-    (if (not (equal? x 3.5)) (display "unit-test: test 1.8 failing\n")))
-  (let ((x ((analyze "hello") global-env)))
-    (if (not (equal? x "hello")) (display "unit-test: test 1.9 failing\n")))
-  (let ((x ((analyze "hello\n") global-env)))
-    (if (not (equal? x "hello\n")) (display "unit-test: test 1.10 failing\n")))
-  (let ((x ((analyze #\a) global-env)))
-    (if (not (equal? x #\a)) (display "unit-test: test 1.11 failing\n")))
-  (let ((x ((analyze #t) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 1.12 failing\n")))
-  (let ((x ((analyze #f) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 1.13 failing\n")))
+
   ;
   ; variable
   (display "testing variable expressions...\n")

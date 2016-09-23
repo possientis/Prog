@@ -1,9 +1,6 @@
-public class Number
-{  
-  private static final NumberFactory factory = new NumberFactory2();
-  private final NumberImpl value;
-  public Number(NumberImpl value) { this.value = value; }
-
-  public static final Number ONE = factory.getOne();
-
+public abstract class Number {
+  public abstract Number add(Number rhs);
+  public abstract Number mul(Number rhs);
+  public abstract boolean isError();
+  public abstract String toString();
 }
