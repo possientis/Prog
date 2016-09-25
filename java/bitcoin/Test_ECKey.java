@@ -125,7 +125,8 @@ public class Test_ECKey extends Test_Abstract {
     checkVerifyMessage();
     checkVerifyOrThrow();
     checkVerifyOrThrowSigAsBytes();
-
+    _benchTwoBitsInfo();
+    _benchTwoBitsInfoNaive();
   }
 
   private static String _getFieldPrimeAsHex(){
@@ -686,12 +687,21 @@ public class Test_ECKey extends Test_Abstract {
     return result;
   }
 
-  private static ECKey _getNewEncryptedKey(String passphrase){
+  private static ECKey _getNewEncryptedKey(
+      String passphrase,
+      boolean compressed)
+  {
     KeyCrypter crypter = new KeyCrypterScrypt();
     KeyParameter aesKey = crypter.deriveKey(passphrase);
     ECKey k1 = new ECKey(); // unencrypted
+    if(!compressed) k1 = k1.decompress();
     ECKey k2 = k1.encrypt(crypter, aesKey);
     return k2;
+  }
+
+  private static ECKey _getNewEncryptedKey(String passphrase)
+  {
+    return _getNewEncryptedKey(passphrase, true);
   }
 
   private static ECKey.ECDSASignature _signNative(
@@ -974,6 +984,134 @@ public class Test_ECKey extends Test_Abstract {
     return ECKey.fromPublicOnly(pub);
   }
 
+  private static int _twoBitsInfoNaive(
+      ECKey.ECDSASignature  signature,
+      Sha256Hash            message,
+      ECPoint               X)
+  {
+    int twoBitsInfo = -1;
+    for(int i = 0; i < 4; ++i)
+    {
+      ECKey k = ECKey.recoverFromSignature(i, signature, message, true);
+      if(k == null) continue;
+      if(X.equals(k.getPubKeyPoint()))
+      {
+        twoBitsInfo = i;
+        break;
+      }
+    }
+
+    checkCondition(twoBitsInfo != -1, "_twoBitsInfoNaive.1");
+
+    return twoBitsInfo;
+  }
+
+  private static int _twoBitsInfo(
+      ECKey.ECDSASignature  signature,
+      Sha256Hash            message, 
+      ECPoint               X)
+  {
+    // A signature (r,s) is valid for a message and a public key X, if and only
+    // if the ECPoint Y = (s^(-1)e)G + (s^(-1)r)X satisfies proj[Y] = r, where
+    // e = proj[message] and G is the generator of seckp256k1.
+    //
+    // Given a signature and a message, we are not able to recover the public
+    // key associated with the signing private key. Of course, given some Y
+    // satisfiying proj[Y] = r, we can recover a unique X. However, the 
+    // equation proj[Y] = r may have as many as 4 solutions (as explained
+    // in the comment of _recoverFromSignature). Hence in order to recover
+    // the public key X from a signature and message, some additional 
+    // information is required, allowing us to single out a value of Y.
+    // If Y = (a,b) where 0 <= a,b < p is a solution of proj[Y] = r with
+    // 0 <= r < q (q is the order of the curve, not to be confused with p)
+    // then we must have a = r or a = r + q and for each value of a we have
+    // to possible values of b, which are the square roots of (a^3 + 7) mod p.
+    // (Need to justfiy the fact that x^3 + 7 = 0 has no solution in Fp)
+    // So one way to single out a particular value of Y is as follows:
+    //
+    // Y = (a, b) with a = r and b even       -> twoBitsInfo = 0
+    // Y = (a, b) with a = r and b odd        -> twoBitsInfo = 1
+    // Y = (a, b) with a = r + q and b even   -> twoBitsInfo = 2
+    // Y = (a, b) with a = r + q and b odd    -> twoBitsInfo = 3 
+    //
+    // Note that a = r + q only leads to a solution of proj[Y] = r if 
+    // the condition r + q < p holds, which requires r to be very small.
+    //
+    // Hence, in order to compute the twoBitsInfo allowing us to recover
+    // the public key X, we simply need to compute Y = (a, b), check the
+    // parity of b and whether a is r or r + q.
+    //
+
+    // Y = (s^(-1)e)G + (s^(-1)r)X
+    // see sumOfTwoMultiples of ECAlgorithms for an efficient implementation
+    BigInteger r = signature.r;
+    BigInteger s = signature.s;
+    BigInteger q = ECKey.CURVE.getN();
+    BigInteger e = _getProjection(message);
+    BigInteger sInv = s.modInverse(q);
+    ECPoint G = ECKey.CURVE.getG();
+    BigInteger u = sInv.multiply(e).mod(q);
+    BigInteger v = sInv.multiply(r).mod(q);
+    ECPoint U = G.multiply(u);
+    ECPoint V = X.multiply(v);
+    ECPoint Y = U.add(V).normalize();
+
+    checkEquals(_getProjection(Y), r, "_twoBitsInfo.1");
+
+    BigInteger a = Y.getAffineXCoord().toBigInteger();
+    BigInteger b = Y.getAffineYCoord().toBigInteger();
+
+    checkCondition(a.equals(r) || a.equals(r.add(q)), "_twoBitsInfo.2");
+
+    boolean odd     = !_isEven(b);  
+    boolean second  = !a.equals(r);
+
+    int twoBitsInfo = 0;
+    if(odd) twoBitsInfo += 1;
+    if(second) twoBitsInfo += 2;
+
+    return twoBitsInfo;
+  }
+
+  private static void _benchTwoBitsInfo()
+  {
+    logMessage("_benchTwoBitsInfo running ...");
+    ECKey k1 = new ECKey();
+   ECPoint X = k1.getPubKeyPoint();
+
+    long start = Utils.currentTimeSeconds();
+    for(int i = 0; i < 20000; ++i)
+    {
+      Sha256Hash hash = Sha256Hash.wrap(getRandomBytes(32));
+      ECKey.ECDSASignature sig = k1.sign(hash);
+      int bits = _twoBitsInfo(sig, hash, X);
+    }
+    long end = Utils.currentTimeSeconds();
+
+    System.out.println("running time: " + String.valueOf(end - start));
+
+
+  }
+
+  private static void _benchTwoBitsInfoNaive()
+  {
+    logMessage("_benchTwoBitsInfoNaive running ...");
+    ECKey k1 = new ECKey();
+    ECPoint X = k1.getPubKeyPoint();
+
+    long start = Utils.currentTimeSeconds();
+    for(int i = 0; i < 20000; ++i)
+    {
+      Sha256Hash hash = Sha256Hash.wrap(getRandomBytes(32));
+      ECKey.ECDSASignature sig = k1.sign(hash );
+      int bits = _twoBitsInfoNaive(sig, hash, X);
+    }
+    long end = Utils.currentTimeSeconds();
+
+    System.out.println("running time: " + String.valueOf(end - start));
+  }
+
+
   private static String _signBase64(ECKey key, Sha256Hash message)
   {
     // returns the signature of message by key as a Base64 encoded string
@@ -995,76 +1133,24 @@ public class Test_ECKey extends Test_Abstract {
     // 0x21 -> second key with even y, compressed
     // 0x22 -> second key with odd y, compressed
 
-    BigInteger q = ECKey.CURVE.getN();
-
-
     ECPoint X = key.getPubKeyPoint();
-
     ECKey.ECDSASignature signature =  key.sign(message);
-
-    ECPoint G = ECKey.CURVE.getG();
-
-    BigInteger e = _getProjection(message);
-    BigInteger r = signature.r;
-    BigInteger s = signature.s;
-
-    // The ECPoint Y = (s^(-1)e)G + (s^(-1)r)X satisfies proj[Y] = r
-    // Computing Y will allow us to compute the header byte
-
-    BigInteger sInv = s.modInverse(q);
-    BigInteger u = sInv.multiply(e).mod(q);
-    BigInteger v = sInv.multiply(r).mod(q);
-    ECPoint U = G.multiply(u);
-    ECPoint V = X.multiply(v);
-    ECPoint Y = U.add(V).normalize(); // more efficient implementation exist
-
-    checkEquals(_getProjection(Y), r, "_signBase64.1");
-
-    // Note that if k is the pseudo-random secret underlying the signature,
-    // while it is correct to claim that Y = kG, it is incorrect to assume
-    // that k can simply be determined from the message and private key using
-    // _getDeterministicKey. This is not so much because k may correspond to
-    // a non-zero index value (the probability that a pseudo-random k leads
-    // to k = 0 or r = 0 or s = 0 is negligeable, so in practice we only
-    // ever need to call _getDeterministicKey with index = 0). It is rather 
-    // due to fact that our signature is always canonical (i.e s <= q/2 mod q), 
-    // i.e. we return (r,-s) instead of (r,s) if the latter happens to be
-    // non canonical. Changing (r,s) with (r,-s) amounts to changing k with -k.
-    // So it is true to write Y = kG provided we remember that k is either
-    // _getDeterministicKey for index = 0 or its opposit modulo q. 
-
-    BigInteger k = _getDeterministicKey(key.getPrivKey(), message, 0);
-    ECPoint Y1 = G.multiply(k);
-    ECPoint Y2 = G.multiply(k.negate().mod(q));
-
-    checkCondition(Y.equals(Y1) || Y.equals(Y2), "_signBase64.2");
-
-    BigInteger a = Y.getAffineXCoord().toBigInteger();
-    BigInteger b = Y.getAffineYCoord().toBigInteger();
-
-    checkCondition(a.equals(r) || a.equals(r.add(q)), "_signBase64.3");
 
     // Computing header byte
     
     boolean compressed = key.isCompressed();
-
-    boolean even = _isEven(b);  
-
-    boolean first = a.equals(r);
-
-    int header = 27;  // 0x1B
-
+    int twoBitsInfo = _twoBitsInfo(signature, message, X);
+    int header = 27 + twoBitsInfo;
     if(compressed) header += 4;
-
-    if(!even) header += 1;
-
-    if(!first) header += 2;
 
     // Setting up signature bytes prior to Base64 string encoding
 
     byte[] sigBytes = new byte[65];
 
     sigBytes[0] = (byte) header;
+
+    BigInteger r = signature.r;
+    BigInteger s = signature.s;
 
     byte[] rBytes = Utils.bigIntegerToBytes(r, 32);
     byte[] sBytes = Utils.bigIntegerToBytes(s, 32);
@@ -1081,7 +1167,6 @@ public class Test_ECKey extends Test_Abstract {
     String sig = new String(encoded, Charset.forName("UTF-8"));
 
     return sig;
-    // TODO check this
   }
 
 
@@ -1214,12 +1299,16 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   public void checkDecompress(){
-    // per point compressed property will be removed soon
     ECKey k1 = new ECKey();
     checkCondition(k1.isCompressed(),"checkDecompress.1");
     ECKey k2 = k1.decompress();
     checkCondition(!k2.isCompressed(),"checkDecompress.2");
     checkEquals(k1.getPrivKey(), k2.getPrivKey(), "checkDecompress.3");
+    ECKey k3 = _getNewEncryptedKey("some arbitrary passphrase");
+    ECKey k4 = k3.decompress();
+    // decompresion of encrypted key leads to public key only key !!!
+    checkCondition(!k4.isEncrypted(), "checkDecompress.4");  
+    logMessage("-> ECKey::decompress see unit testing code");
   }
   
   public void checkDecompressPoint(){
@@ -2120,11 +2209,62 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   public void checkSignMessage(){
+
+    // random message is some hexadecimal string, does not matter
+    String message = Sha256Hash.wrap(getRandomBytes(32)).toString();
+
+    byte[] data = Utils.formatMessageForSigning(message);
+    Sha256Hash hash = Sha256Hash.twiceOf(data);
+
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.decompress();
+
+    String sig1 = k1.signMessage(message);
+    String sig2 = k2.signMessage(message);
+
+    String check1 = _signBase64(k1, hash);
+    String check2 = _signBase64(k2, hash);
+
+    checkEquals(sig1, check1, "checkSignMessage.1");
+    checkEquals(sig2, check2, "checkSignMessage.2");
+
     // TODO
+    
+    ECKey.ECDSASignature sig = k1.sign(hash);
+    int twoBits = _twoBitsInfo(sig, hash, k1.getPubKeyPoint());
+
   }
 
   public void checkSignMessageFromKeyParameter(){
-    // TODO
+    
+    // random message is some hexadecimal string, does not matter
+    String message = Sha256Hash.wrap(getRandomBytes(32)).toString();
+
+    ECKey k1 = _getNewEncryptedKey("some arbitrary passphrase");
+    ECKey k2 = _getNewEncryptedKey("some arbitrary passphrase", false); // uncomp
+
+    KeyCrypter crypter1 = k1.getKeyCrypter();
+    KeyParameter aesKey1 = crypter1.deriveKey("some arbitrary passphrase");
+
+    KeyCrypter crypter2 = k2.getKeyCrypter();
+    KeyParameter aesKey2 = crypter2.deriveKey("some arbitrary passphrase");
+
+    checkCondition(!k2.isCompressed(), "checkSignMessageFromKeyParameter.1");
+    checkCondition(k2.isEncrypted(), "checkSignMessageFromKeyParameter.2");
+    checkCondition(k2.isPubKeyOnly(), "checkSignMessageFromKeyParameter.3");
+    checkCondition(!k2.isWatching(), "checkSignMessageFromKeyParameter.4");
+
+    String sig1 = k1.signMessage(message, aesKey1);
+    String sig2 = k2.signMessage(message, aesKey2);
+
+    ECKey k3 = k1.decrypt(aesKey1);
+    ECKey k4 = k2.decrypt(aesKey2);
+
+    String sig3 = k3.signMessage(message);
+    String sig4 = k4.signMessage(message);
+
+    checkEquals(sig1, sig3, "checkSignMessageFromKeyParameter.5");
+    checkEquals(sig2, sig4, "checkSignMessageFromKeyParameter.6");
   }
 
   public void checkToAddress(){

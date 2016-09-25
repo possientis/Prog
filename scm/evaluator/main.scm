@@ -24,6 +24,7 @@
 (load "thunk.scm")
 (load "tagged-list.scm")
 (load "true-false.scm")
+(load "unspecified.scm")
 (load "variable.scm")
 
 ; introduce language-defined primitives here

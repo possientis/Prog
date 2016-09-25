@@ -2,10 +2,10 @@ public class Test
 {
   public static void main(String[] args)
   {
-    Ring ring = new RingInteger();
+    Ring ring = new Ring1();
 
-    Number zero = ring.getZero();
-    Number one = ring.getOne();
+    Number zero = ring.zero();
+    Number one = ring.one();
     Number two = one.add(one);
     Number four = two.mul(two);
 

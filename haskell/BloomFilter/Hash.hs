@@ -1,4 +1,7 @@
-{-# LANGUAGE BangPatterns, ForeignFunctionInterface #-}
+{-# LANGUAGE 
+    BangPatterns, 
+    ForeignFunctionInterface, 
+    FlexibleInstances #-}
 
 -- link with object file lookup3.o, e.g. ghci Hash.hs lookup3.o
 
@@ -27,7 +30,82 @@ foreign import ccall unsafe "lookup3.h hashword2"
 foreign import ccall unsafe "lookup3.h hashlittle2"
   hashLittle2 :: Ptr a -> CSize -> Ptr Word32 -> Ptr Word32 -> IO ()
 
-data Hashable = Hashable
-hash = undefined
+hashIO  :: Ptr a  -- value to hash
+        -> CSize  -- number of bytes
+        -> Word64 -- salt
+        -> IO Word64
+-- with :: Storable a => a -> (Ptr a -> IO b) -> IO b 
+hashIO ptr bytes salt =
+  with (fromIntegral salt) $ \sp -> do  
+    let p1 = castPtr sp
+        p2 = castPtr sp `plusPtr` 4
+    go p1 p2
+    peek sp
+  where go p1 p2
+          | bytes .&. 3 == 0 = hashWord2(castPtr ptr) words p1 p2
+          | otherwise        = hashLittle2 ptr bytes p1 p2
+        words = bytes `div` 4 
+
+class Hashable a where
+  hashSalt :: Word64  -- ^ salt
+           -> a       -- ^ value to hash
+           -> Word64
+
+hash :: Hashable a => a -> Word64
+hash = hashSalt 0x106fc397cf62f64d3
+
+hashStorable :: Storable a => Word64 -> a -> Word64
+hashStorable salt k = unsafePerformIO . with k $ \ptr ->
+                      hashIO ptr (fromIntegral (sizeOf k)) salt
+
+instance Hashable Char where hashSalt = hashStorable
+instance Hashable Int where hashSalt = hashStorable
+instance Hashable Double where hashSalt = hashStorable
+
+{- type system becomes undecidable, type checker may loop indefinitely
+instance Storable a => Hashable a where hashSalt = hashStorable
+-}
+
+hashList :: (Storable a) => Word64 -> [a] -> IO Word64
+hashList salt xs =
+  withArrayLen xs $ \len ptr ->
+    hashIO ptr (fromIntegral (len * sizeOf x)) salt
+  where x = head xs
+
+instance (Storable a) => Hashable [a] where
+  hashSalt salt xs = unsafePerformIO $ hashList salt xs
+
+hash2 :: (Hashable a) => a -> Word64 -> Word64
+hash2 k salt = hashSalt salt k
+
+instance (Hashable a, Hashable b) => Hashable (a,b) where
+  hashSalt salt (a,b) = hash2 b . hash2 a $ salt
+
+instance (Hashable a, Hashable b, Hashable c) => Hashable (a,b,c) where
+  hashSalt salt (a,b,c) = hash2 c . hash2 b . hash2 a $ salt
+
+hashByteString :: Word64 -> Strict.ByteString -> IO Word64
+hashByteString salt bs = Strict.useAsCStringLen bs $ \(ptr, len) ->
+                         hashIO ptr (fromIntegral len) salt
+
+instance Hashable Strict.ByteString where
+  hashSalt salt bs = unsafePerformIO $ hashByteString salt bs
+
+rechunk :: Lazy.ByteString -> [Strict.ByteString]
+rechunk s
+  | Lazy.null s = []
+  | otherwise   = let (pre,suf) = Lazy.splitAt chunkSize s
+                  in repack pre : rechunk suf
+  where repack  = Strict.concat . Lazy.toChunks
+        chunkSize = 64*1024
+
+instance Hashable Lazy.ByteString where
+  hashSalt salt bs =  unsafePerformIO $
+                      foldM hashByteString salt (rechunk bs) 
+
+
+
+
+
 doubleHash = undefined
 

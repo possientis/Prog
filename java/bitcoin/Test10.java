@@ -1,3 +1,4 @@
+// from BSE post, cant get it to compile
 import java.security.Security;
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
@@ -6,7 +7,7 @@ import java.security.spec.ECGenParameterSpec;
 import javax.crypto.Cipher;
 
 
-public class Test {
+public class Test10 {
   public static void main(String[] args){
     Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
     KeyFactory f = KeyFactory.getInstance("EC", "SC"); // BC for java
