@@ -2,12 +2,23 @@ public class Test
 {
   public static void main(String[] args)
   {
-    Ring ring = new Ring1();
+    Ring ring1 = new Ring1();
+    Ring ring2 = new Ring2();
 
-    Number zero = ring.zero();
-    Number one = ring.one();
+    Number zero = ring1.zero();
+    Number one = ring1.one();
     Number two = one.add(one);
     Number four = two.mul(two);
+
+    System.out.println("zero = " + zero);
+    System.out.println("one  = " + one);
+    System.out.println("two  = " + two);
+    System.out.println("four = " + four);
+
+    zero = ring2.zero();
+    one = ring2.one();
+    two = one.add(one);
+    four = two.mul(two);
 
     System.out.println("zero = " + zero);
     System.out.println("one  = " + one);

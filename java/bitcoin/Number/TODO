@@ -1,2 +1,3 @@
-fix Error handling 
-implement compareTo, equals, hashCode
+implement equals and hashCode
+write unit-test
+write benchmark code

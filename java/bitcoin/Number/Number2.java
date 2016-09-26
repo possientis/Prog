@@ -1,15 +1,15 @@
 import java.math.BigInteger;
 
-public class Number1 extends Number
+public class Number2 extends Number
 {
   // data
   private final BigInteger  value;
 
   // constructor
-  public Number1(BigInteger value){ this.value = value; }
+  public Number2(BigInteger value){ this.value = value; }
 
-  public static Number ZERO = new Number1(BigInteger.ZERO);
-  public static Number ONE = new Number1(BigInteger.ONE);
+  public static Number ZERO = new Number2(BigInteger.ZERO);
+  public static Number ONE = new Number2(BigInteger.ONE);
 
 
   @Override public Number add(Number rhs)
@@ -19,8 +19,8 @@ public class Number1 extends Number
     {
       throw new ClassCastException("rhs has illegal type");
     }
-    Number1 cast = (Number1) rhs;
-    return new Number1(value.add(cast.value));
+    Number2 cast = (Number2) rhs;
+    return new Number2(value.add(cast.value));
   }
 
   @Override public Number mul(Number rhs)
@@ -30,8 +30,8 @@ public class Number1 extends Number
     {
       throw new ClassCastException("rhs has illegal type");
     }
-    Number1 cast = (Number1) rhs;
-    return new Number1(value.multiply(cast.value));
+    Number2 cast = (Number2) rhs;
+    return new Number2(value.multiply(cast.value));
   }
 
   @Override public String toString()
@@ -46,7 +46,7 @@ public class Number1 extends Number
     {
       throw new ClassCastException("rhs has illegal type");
     }
-    Number1 cast = (Number1) rhs;
+    Number2 cast = (Number2) rhs;
 
     return value.compareTo(cast.value);
 

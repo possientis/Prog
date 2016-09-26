@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.lang.Math;
 import javax.xml.bind.DatatypeConverter;
 import java.security.SecureRandom;
+import java.security.SignatureException;
 import java.nio.charset.Charset;
 
 import org.bitcoin.Secp256k1Context;
@@ -125,8 +126,8 @@ public class Test_ECKey extends Test_Abstract {
     checkVerifyMessage();
     checkVerifyOrThrow();
     checkVerifyOrThrowSigAsBytes();
-    _benchTwoBitsInfo();
-    _benchTwoBitsInfoNaive();
+//    _benchTwoBitsInfo();
+//    _benchTwoBitsInfoNaive();
   }
 
   private static String _getFieldPrimeAsHex(){
@@ -1134,14 +1135,14 @@ public class Test_ECKey extends Test_Abstract {
     // 0x22 -> second key with odd y, compressed
 
     ECPoint X = key.getPubKeyPoint();
+
     ECKey.ECDSASignature signature =  key.sign(message);
 
-    // Computing header byte
-    
-    boolean compressed = key.isCompressed();
     int twoBitsInfo = _twoBitsInfo(signature, message, X);
-    int header = 27 + twoBitsInfo;
-    if(compressed) header += 4;
+
+    int header = 27 + twoBitsInfo;  // header byte of encoding
+
+    if(key.isCompressed()) header += 4;
 
     // Setting up signature bytes prior to Base64 string encoding
 
@@ -2199,13 +2200,45 @@ public class Test_ECKey extends Test_Abstract {
 
   public void checkSignedMessageToKey(){
     ECKey k1 = new ECKey();
-    String message = "This is some arbitrary message";
-    Sha256Hash hash = Sha256Hash.of(message.getBytes());
-    ECKey.ECDSASignature sig = k1.sign(hash);
-    // TODO
+    ECKey k2 = k1.decompress();
+    // some random message (which happens to be an hex string)
+    String message = Sha256Hash.wrap(getRandomBytes(32)).toString();
+    String sig1 = k1.signMessage(message);
+    String sig2 = k2.signMessage(message);
 
-    String check = _signBase64(k1, hash); // temporary
+    ECKey k3 = null;
+    ECKey k4 = null;
 
+    try
+    {
+      k3 = ECKey.signedMessageToKey(message, sig1);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkSignedMessageToKey.1");
+    }
+
+    try
+    {
+      k4 = ECKey.signedMessageToKey(message, sig2);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkSignedMessageToKey.2");
+    }
+
+    byte[] pub1 = k1.getPubKey();
+    byte[] pub2 = k2.getPubKey();
+    byte[] pub3 = k3.getPubKey();
+    byte[] pub4 = k4.getPubKey();
+
+    checkCondition(k3.isWatching(), "checkSignedMessageToKey.3");
+    checkCondition(k4.isWatching(), "checkSignedMessageToKey.4");
+    checkCondition(k3.isCompressed(), "checkSignedMessageToKey.5");
+    checkCondition(!k4.isCompressed(), "checkSignedMessageToKey.6");
+
+    checkCondition(Arrays.equals(pub1,pub3), "checkSignedMessageToKey.7");
+    checkCondition(Arrays.equals(pub2,pub4), "checkSignedMessageToKey.8");
   }
 
   public void checkSignMessage(){
@@ -2227,12 +2260,6 @@ public class Test_ECKey extends Test_Abstract {
 
     checkEquals(sig1, check1, "checkSignMessage.1");
     checkEquals(sig2, check2, "checkSignMessage.2");
-
-    // TODO
-    
-    ECKey.ECDSASignature sig = k1.sign(hash);
-    int twoBits = _twoBitsInfo(sig, hash, k1.getPubKeyPoint());
-
   }
 
   public void checkSignMessageFromKeyParameter(){
@@ -2408,12 +2435,83 @@ public class Test_ECKey extends Test_Abstract {
     );
   }
 
+  // returns array of 8 keys for which signature should verify
+  public ECKey[] _getSignatureKeys(
+      ECKey.ECDSASignature  signature,
+      Sha256Hash            hash)
+  {
+    ECKey[] keys = new ECKey[8]; 
+
+    keys[0] = ECKey.recoverFromSignature(0,signature, hash, true);
+    keys[1] = ECKey.recoverFromSignature(1,signature, hash, true); 
+    keys[2] = ECKey.recoverFromSignature(2,signature, hash, true); 
+    keys[3] = ECKey.recoverFromSignature(3,signature, hash, true); 
+    keys[4] = ECKey.recoverFromSignature(0,signature, hash, false); // uncomp
+    keys[5] = ECKey.recoverFromSignature(1,signature, hash, false); // uncomp
+    keys[6] = ECKey.recoverFromSignature(2,signature, hash, false); // uncomp
+    keys[7] = ECKey.recoverFromSignature(3,signature, hash, false); // uncomp
+
+    return keys;
+
+  }
+
   public void checkVerify(){
-    // TODO
+    byte[] bytes = getRandomBytes(32);
+    byte[] fakes = getRandomBytes(32);
+    Sha256Hash hash = Sha256Hash.wrap(bytes);
+
+    ECKey key = new ECKey();
+    ECKey.ECDSASignature sig = key.sign(hash);
+    byte[] der = sig.encodeToDER();
+
+    // These are the 8 possible keys for which signature should verify
+    ECKey[] k = _getSignatureKeys(sig, hash);
+
+    for(int i = 0; i < 8; ++i)
+    {
+      if(k[i] != null)
+      {
+        checkCondition(k[i].verify(bytes,der), "checkVerify.1");
+        checkCondition(!k[i].verify(fakes,der), "checkVerify.2");
+      }
+    }
+
+    ECKey k9 = new ECKey();
+    checkCondition(!k9.verify(bytes, der), "checkVerify.3");
   }
 
   public void checkVerifyFromPubKeySigAsBytes(){
-    // TODO
+    byte[] bytes = getRandomBytes(32);
+    byte[] fakes = getRandomBytes(32);
+    Sha256Hash hash = Sha256Hash.wrap(bytes);
+
+    ECKey key = new ECKey();
+    ECKey.ECDSASignature sig = key.sign(hash);
+    byte[] der = sig.encodeToDER();
+
+    // These are the 8 possible keys for which signature should verify
+    ECKey[] k = _getSignatureKeys(sig, hash);
+
+    for(int i = 0; i < 8; ++i)
+    {
+      if(k[i] != null)
+      {
+        checkCondition(
+            ECKey.verify(bytes,der,k[i].getPubKey()), 
+            "checkVerifyFromPubKeySigAsBytes.1"
+        );
+        checkCondition(
+            !ECKey.verify(fakes,der,k[i].getPubKey()), 
+            "checkVerifyFromPubKeySigAsBytes.2"
+       );
+      }
+    }
+
+    ECKey k9 = new ECKey();
+    checkCondition(
+        !ECKey.verify(bytes, der,k9.getPubKey()), 
+        "checkVerifyFromPubKeySigAsBytes.3"
+    );
   }
 
   public void checkVerifyFromPubKey(){
