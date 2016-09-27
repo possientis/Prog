@@ -112,16 +112,22 @@
     'vector-length (make-primitive-procedure vector-length) "variable")
   (test-expression 'vector-ref (make-primitive-procedure vector-ref) "variable")
   (test-expression 'vector-set! (make-primitive-procedure vector-set!) "variable")
-
   ;
   ; quoted
-  (display "testing quoted expressions...\n")
+  (display "testing quoted expressions...\n") 
+  (test-expression (quote (quote hello))  (quote hello) "quoted")
+  (test-expression (quote (quote hello))  'hello "quoted")
+  (test-expression '(quote hello)         'hello "quoted")
+  (test-expression (quote 'hello)         'hello "quoted")
+  (test-expression ''hello                'hello "quoted")
+  (test-expression '''3 ''3 "quoted")
+  (test-expression ''3 '3 "quoted")
+  (test-expression '3 3 "quoted")
+  (test-expression '#f #f "quoted")
+  (test-expression '#t #t "quoted")
+
   ;
   ; eval
-  (let ((x (new-eval (quote 'hello))))
-    (if (not (equal? x 'hello)) (display "unit-test: test 3.0 failing\n")))
-  (let ((x (new-eval ''hello)))
-    (if (not (equal? x 'hello)) (display "unit-test: test 3.1 failing\n")))
   (let ((x (new-eval ''(list cons 3 "abc" #\a #t))))
     (if (not (equal? x '(list cons 3 "abc" #\a #t)))
       (display "unit-test: test 3.2 failing\n")))

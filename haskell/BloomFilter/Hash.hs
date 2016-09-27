@@ -104,8 +104,12 @@ instance Hashable Lazy.ByteString where
                       foldM hashByteString salt (rechunk bs) 
 
 
+doubleHash :: Hashable a => Int -> a -> [Word32]
+doubleHash numHashes value = [h1 + h2*i | i <- [0..num]]
+  where h = hashSalt 0x9150a946c4a8966e value
+        h1 = fromIntegral (h `shiftR` 32) .&. maxBound
+        h2 = fromIntegral h
+        num = fromIntegral numHashes
 
 
-
-doubleHash = undefined
 

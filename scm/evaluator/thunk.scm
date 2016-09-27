@@ -23,12 +23,17 @@
     ;
     (define (evaluated? data) (null? (environment data)))
     ;
+    ; This function is called when a thunk is forced. An evaluation of the
+    ; thunk needs to take place and the question naturally arises of which 
+    ; evaluation function to call. We cannot use 'new-eval` as this would
+    ; fail to do anything when eval-mode is 'lazy'. Hence we need to use
+    ; either 'strict-eval' or 'analyze'.
     (define (value data)
       (let ((expr (expression data))
             (env  (environment data)))
         (if (evaluated? data)
           (if (self-evaluating? expr) expr (error "no environment for thunk" expr)) 
-          (let ((value (new-eval expr env)))
+          (let ((value (strict-eval expr env)))
             (set-car! (cdr data) value) ; replacing expression by its value
             (set-car! (cddr data) '())  ; discarding environment for gb release
             value))))
