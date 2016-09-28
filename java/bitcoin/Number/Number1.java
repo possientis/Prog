@@ -52,5 +52,10 @@ public class Number1 extends Number
 
   }
 
+  @Override public int hashCode()
+  {
+    return getClass().hashCode() + value.hashCode();
+  }
+
 }
 

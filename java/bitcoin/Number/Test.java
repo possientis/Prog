@@ -1,3 +1,4 @@
+
 public class Test 
 {
   public static void main(String[] args)
@@ -24,6 +25,10 @@ public class Test
     System.out.println("one  = " + one);
     System.out.println("two  = " + two);
     System.out.println("four = " + four);
+
+    System.out.println(ring1.zero().hashCode());
+    System.out.println(ring2.zero().hashCode());
+
 
   }
 }

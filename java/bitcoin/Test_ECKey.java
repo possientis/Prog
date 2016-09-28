@@ -2515,15 +2515,115 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   public void checkVerifyFromPubKey(){
-    // TODO
+    byte[] bytes = getRandomBytes(32);
+    byte[] fakes = getRandomBytes(32);
+    Sha256Hash hash = Sha256Hash.wrap(bytes);
+
+    ECKey key = new ECKey();
+    ECKey.ECDSASignature sig = key.sign(hash);
+
+    // These are the 8 possible keys for which signature should verify
+    ECKey[] k = _getSignatureKeys(sig, hash);
+
+    for(int i = 0; i < 8; ++i)
+    {
+      if(k[i] != null)
+      {
+        checkCondition(
+            ECKey.verify(bytes,sig,k[i].getPubKey()), 
+            "checkVerifyFromPubKey.1"
+        );
+        checkCondition(
+            !ECKey.verify(fakes,sig,k[i].getPubKey()), 
+            "checkVerifyFromPubKey.2"
+       );
+      }
+    }
+
+    ECKey k9 = new ECKey();
+    checkCondition(
+        !ECKey.verify(bytes, sig,k9.getPubKey()), 
+        "checkVerifyFromPubKey.3"
+    );
   }
 
   public void checkVerifyHash(){
-    // TODO
+    byte[] bytes = getRandomBytes(32);
+    byte[] fakes = getRandomBytes(32);
+    Sha256Hash hash = Sha256Hash.wrap(bytes);
+    Sha256Hash fake = Sha256Hash.wrap(fakes);
+
+    ECKey key = new ECKey();
+    ECKey.ECDSASignature sig = key.sign(hash);
+
+    // These are the 8 possible keys for which signature should verify
+    ECKey[] k = _getSignatureKeys(sig, hash);
+
+    for(int i = 0; i < 8; ++i)
+    {
+      if(k[i] != null)
+      {
+        checkCondition(k[i].verify(hash,sig), "checkVerifyHash.1");
+        checkCondition(!k[i].verify(fake,sig), "checkVerifyHash.2");
+      }
+    }
+
+    ECKey k9 = new ECKey();
+    checkCondition(!k9.verify(hash, sig), "checkVerifyHash.3");
   }
 
   public void checkVerifyMessage(){
-    // TODO
+    // some random message which happens to be an hex string
+    String message = Sha256Hash.wrap(getRandomBytes(32)).toString();
+    String fake = Sha256Hash.wrap(getRandomBytes(32)).toString();
+
+    ECKey k1 = new ECKey();
+    ECKey k2 =k1.decompress();
+
+    String sig1 = k1.signMessage(message);
+    String sig2 = k2.signMessage(message);
+
+    try
+    {
+      k1.verifyMessage(message,sig1);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyMessage.1");
+    }
+
+    try
+    {
+      k2.verifyMessage(message,sig2);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyMessage.2");
+    }
+
+    logMessage("-> ECKey::verifyMessage see unit testing code ...");
+
+    // The function ignores compression status of key.
+    // Why did we bother encoding it in signature
+    try
+    {
+      k2.verifyMessage(message,sig1);   // should throw
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyMessage.3");
+    }
+
+    try
+    {
+      k1.verifyMessage(message,sig2);   // should throw
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyMessage.4");
+    }
+
+
   }
 
   public void checkVerifyOrThrow(){
