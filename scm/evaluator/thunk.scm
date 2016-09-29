@@ -31,6 +31,8 @@
     (define (value data)
       (let ((expr (expression data))
             (env  (environment data)))
+;        (display "check1: expr = ")(display expr)(newline)
+;        (display "check2: env = ")(display env)(newline)
         (if (evaluated? data)
           (if (self-evaluating? expr) expr (error "no environment for thunk" expr)) 
           (let ((value (strict-eval expr env)))

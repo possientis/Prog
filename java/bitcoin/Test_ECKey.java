@@ -2478,6 +2478,15 @@ public class Test_ECKey extends Test_Abstract {
 
     ECKey k9 = new ECKey();
     checkCondition(!k9.verify(bytes, der), "checkVerify.3");
+   
+    // testing with encrypted key
+    key = _getNewEncryptedKey("some arbitrary passphrase");
+    KeyCrypter crypter = key.getKeyCrypter();
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
+    sig = key.sign(hash, aesKey);
+    der = sig.encodeToDER();
+    checkCondition(key.verify(bytes, der), "checkVerify.4");
+    checkCondition(!key.verify(fakes, der), "checkVerify.5");
   }
 
   public void checkVerifyFromPubKeySigAsBytes(){
@@ -2512,6 +2521,23 @@ public class Test_ECKey extends Test_Abstract {
         !ECKey.verify(bytes, der,k9.getPubKey()), 
         "checkVerifyFromPubKeySigAsBytes.3"
     );
+
+    // testing with encrypted key
+    key = _getNewEncryptedKey("some arbitrary passphrase");
+    KeyCrypter crypter = key.getKeyCrypter();
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
+    sig = key.sign(hash, aesKey);
+    der = sig.encodeToDER();
+    checkCondition(
+        ECKey.verify(bytes, der, key.getPubKey()),
+        "checkVerifyFromPubKeySigAsBytes.4"
+    );
+    checkCondition(
+        !ECKey.verify(fakes, der, key.getPubKey()),
+        "checkVerifyFromPubKeySigAsBytes.5"
+    );
+
+
   }
 
   public void checkVerifyFromPubKey(){
@@ -2545,6 +2571,21 @@ public class Test_ECKey extends Test_Abstract {
         !ECKey.verify(bytes, sig,k9.getPubKey()), 
         "checkVerifyFromPubKey.3"
     );
+
+    // testing with encrypted key
+    key = _getNewEncryptedKey("some arbitrary passphrase");
+    KeyCrypter crypter = key.getKeyCrypter();
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
+    sig = key.sign(hash, aesKey);
+    checkCondition(
+        ECKey.verify(bytes, sig, key.getPubKey()), 
+        "checkVerifyFromPubKey.4"
+    );
+    checkCondition(
+        !ECKey.verify(fakes, sig, key.getPubKey()), 
+        "checkVerifyFromPubKey.5"
+    );
+ 
   }
 
   public void checkVerifyHash(){
@@ -2570,7 +2611,16 @@ public class Test_ECKey extends Test_Abstract {
 
     ECKey k9 = new ECKey();
     checkCondition(!k9.verify(hash, sig), "checkVerifyHash.3");
+
+    // testing with encrypted key
+    key = _getNewEncryptedKey("some arbitrary passphrase");
+    KeyCrypter crypter = key.getKeyCrypter();
+    KeyParameter aesKey = crypter.deriveKey("some arbitrary passphrase");
+    sig = key.sign(hash, aesKey);
+    checkCondition(key.verify(hash, sig), "checkVerifyHash.4");
+    checkCondition(!key.verify(fake, sig), "checkVerifyHash.5");
   }
+
 
   public void checkVerifyMessage(){
     // some random message which happens to be an hex string
@@ -2627,11 +2677,110 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   public void checkVerifyOrThrow(){
-    // TODO
+   
+    Sha256Hash hash = Sha256Hash.wrap(getRandomBytes(32));
+    Sha256Hash fake = Sha256Hash.wrap(getRandomBytes(32));
+
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.decompress();
+
+    ECKey.ECDSASignature sig1 = k1.sign(hash);
+    ECKey.ECDSASignature sig2 = k2.sign(hash);
+
+
+    try
+    {
+      k1.verifyOrThrow(hash, sig1);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrow.1");
+    }
+
+    try
+    {
+      k2.verifyOrThrow(hash, sig2);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrow.2");
+    }
+
+    // compression status here does not matter. 
+    // ECDSASignature object or its DER encoding to not allow key recovery
+    try
+    {
+      k1.verifyOrThrow(hash, sig2);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrow.1");
+    }
+
+    try
+    {
+      k2.verifyOrThrow(hash,sig1);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrow.1");
+    }
+
+
+
   }
 
   public void checkVerifyOrThrowSigAsBytes(){
-    // TODO
+
+    Sha256Hash hash = Sha256Hash.wrap(getRandomBytes(32));
+    Sha256Hash fake = Sha256Hash.wrap(getRandomBytes(32));
+
+    ECKey k1 = new ECKey();
+    ECKey k2 = k1.decompress();
+
+    ECKey.ECDSASignature sig1 = k1.sign(hash);
+    ECKey.ECDSASignature sig2 = k2.sign(hash);
+
+    byte[] der1 = sig1.encodeToDER();
+    byte[] der2 = sig2.encodeToDER();
+
+    try
+    {
+      k1.verifyOrThrow(hash.getBytes(),der1);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrowSigAsBytes.1");
+    }
+
+    try
+    {
+      k2.verifyOrThrow(hash.getBytes(),der2);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrowSigAsBytes.2");
+    }
+
+    // compression status here does not matter. 
+    // ECDSASignature object or its DER encoding to not allow key recovery
+    try
+    {
+      k1.verifyOrThrow(hash.getBytes(),der2);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrowSigAsBytes.1");
+    }
+
+    try
+    {
+      k2.verifyOrThrow(hash.getBytes(),der1);
+    }
+    catch(SignatureException e)
+    {
+      checkCondition(false, "checkVerifyOrThrowSigAsBytes.1");
+    }
   }
 
 }

@@ -1,3 +1,4 @@
+(force-thunk (lazy-eval '(list 3))) ; understand why this fails
 continue thinking about quote and the equivalence between code and data
 continue rewriting unit-test
 

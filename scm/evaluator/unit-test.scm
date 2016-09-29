@@ -115,17 +115,21 @@
   ;
   ; quoted
   (display "testing quoted expressions...\n") 
+  (test-expression '(quote hello) 'hello "quoted")
   (test-expression (quote (quote hello))  (quote hello) "quoted")
   (test-expression (quote (quote hello))  'hello "quoted")
   (test-expression '(quote hello)         'hello "quoted")
   (test-expression (quote 'hello)         'hello "quoted")
   (test-expression ''hello                'hello "quoted")
-  (test-expression '''3 ''3 "quoted")
-  (test-expression ''3 '3 "quoted")
-  (test-expression '3 3 "quoted")
-  (test-expression '#f #f "quoted")
-  (test-expression '#t #t "quoted")
-
+  (test-expression '(quote 3) 3 "quoted")
+  (test-expression '(quote 3.5) 3.5 "quoted")
+  (test-expression '(quote #\a) #\a "quoted")
+  (test-expression '(quote "hello") "hello" "quoted")
+  (test-expression '(quote #t) #t "quoted")
+  (test-expression '(quote #f) #f "quoted")
+;  (force-thunk (lazy-eval '(list 3)))
+;  (newline)
+ 
   ;
   ; eval
   (let ((x (new-eval ''(list cons 3 "abc" #\a #t))))
