@@ -1,7 +1,7 @@
 import java.math.BigInteger;
 import java.util.Random;
 
-public class Ring2 extends Ring 
+public class Factory2 extends NumberFactory
 {
   @Override public Number zero(){ return Number2.ZERO; }
   @Override public Number one(){ return Number2.ONE; }

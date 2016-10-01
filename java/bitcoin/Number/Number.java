@@ -3,20 +3,21 @@ import java.security.SecureRandom;
 
 public abstract class Number implements Comparable<Number> {
 
-  private static final Ring _ring = new Ring2();          // choose implementation
-  private static final Random _rnd = new SecureRandom();  // choose implementation
+  // choose implementation of Number and Random
+  private static final NumberFactory _factory = new Factory1();
+  private static final Random _rnd = new SecureRandom();
 
   // static factory functions
  
-  public static Number ZERO = _ring.zero();
-  public static Number ONE = _ring.one();
+  public static Number ZERO = _factory.zero();
+  public static Number ONE = _factory.one();
   public static Number fromBytes(int signum, byte[] val)  // big-endian
   {
-    return _ring.fromBytes(signum, val);
+    return _factory.fromBytes(signum, val);
   }
   public static Number random(int numBits)
   {
-    return _ring.random(numBits, _rnd);
+    return _factory.random(numBits, _rnd);
   }
 
 
@@ -26,9 +27,12 @@ public abstract class Number implements Comparable<Number> {
   public abstract Number mul(Number rhs);
 
 
-  public abstract String toString();
-  public abstract int compareTo(Number rhs);
-  public abstract int hashCode();
-  public boolean equals(Number rhs){ return compareTo(rhs) == 0; }
+  @Override public abstract String toString();
+  @Override public abstract int compareTo(Number rhs);
+  @Override public abstract int hashCode();
+  @Override public boolean equals(Object rhs)
+  { 
+      return getClass() == rhs.getClass() ? compareTo((Number) rhs) == 0 : false;
+  }
 }
 

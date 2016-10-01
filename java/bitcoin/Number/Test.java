@@ -3,8 +3,8 @@ public class Test
 {
   public static void main(String[] args)
   {
-    Ring ring1 = new Ring1();
-    Ring ring2 = new Ring2();
+    NumberFactory ring1 = new Factory1();
+    NumberFactory ring2 = new Factory2();
 
     Number zero = ring1.zero();
     Number one = ring1.one();

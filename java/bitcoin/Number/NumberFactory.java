@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public abstract class Ring
+public abstract class NumberFactory
 {
   public abstract Number zero();
   public abstract Number one();
