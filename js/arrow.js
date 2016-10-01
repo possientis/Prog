@@ -31,15 +31,16 @@ const eatTarget3 = dragonEvents
   [0];
 
 
-print('40')
+//print('40')
 
 
-print(eatTarget);
-print(eatTarget2);
-print(eatTarget3);
+//print(eatTarget);
+//print(eatTarget2);
+//print(eatTarget3);
 
-//console.log(eatTarget);
-//console.log(eatTarget2);
+console.log(eatTarget);
+console.log(eatTarget2);
+console.log(eatTarget3);
 
 
 

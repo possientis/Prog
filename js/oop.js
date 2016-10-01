@@ -15,13 +15,13 @@ c = new B(3,8);
 
 
 function debugObject(x){
-  print("Object is of type: " + typeof(x));
-  print("its list of properties is as follows:")
+  console.log("Object is of type: " + typeof(x));
+  console.log("its list of properties is as follows:")
   for(i in x){
-    print(i + " : " + x[i]);
+    console.log(i + " : " + x[i]);
   }
   if(x.__proto__ == A.prototype){
-    print("object was constructed by A");
+    console.log("object was constructed by A");
   }
 }
 

@@ -8,8 +8,10 @@ import org.bitcoinj.core.AddressFormatException;
 
 
 
-public class Test_DumpedPrivateKey extends Test_Abstract {
+public class Test_DumpedPrivateKey extends Test_VersionedChecksummedBytes {
 
+
+  @Override
   public void run(){
     logMessage("DumpedPrivateKey unit test running ...");
     checkDPKEquals();

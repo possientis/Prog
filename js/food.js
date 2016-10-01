@@ -14,9 +14,9 @@ const carrot = Object.create(food);
 carrot.init('carrot');
 
 
-print('waffle is food: ' + food.isPrototypeOf(waffle));
-print('int is food: ' + food.isPrototypeOf(56254612546));
-print('carrot is food: ' + food.isPrototypeOf(carrot));
+console.log('waffle is food: ' + food.isPrototypeOf(waffle));
+console.log('int is food: ' + food.isPrototypeOf(56254612546));
+console.log('carrot is food: ' + food.isPrototypeOf(carrot));
 
 
 

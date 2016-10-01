@@ -60,26 +60,48 @@ class ApacheLogViewer(object):
         self.outer_vbox.pack_start(self.toolbar, False, False)
         self.outer_vbox.pack_start(self.file_chooser)
         self.outer_vbox.pack_start(self.loglines_window)
-        self.loglines_window.add(self.logline_tree)
+        self.loglines_window.add(self.loglines_tree)
 
         # make everything visible
         self.window.show_all()
         # but specifically hide the file chooser
         self.file_chooser.hide()
 
+    def add_column(self, tree_view, title, columnId, sortable=True):
+        column = gtk.TreeViewColumn(title, gtk.CellRendererText(), text=columnId)
+        column.set_resizable(True)
+        column.set_sort_column_id(columnId)
+        tree_view.append_column(column)
+        
+    def load_logfile(self, widget, data=None):
+        """load logfile data into tree view"""
+        filename = widget.get_filename()
+        print "FILE-->", filename
+        self.file_chooser.hide()
+        self.loglines_store.clear()
+        logfile = open(filename, "r")
+        print "Skipping operation on file..."
+        logfile.close()
 
     def quit(self, widget, data=None):
         """stop the main gtk event loop"""
         gtk.main_quit()
     
     def show_file_chooser(self, widget, data=None):
-        pass    # TODO
+        """make the file chooser dialog visible"""
+        self.file_chooser.show()
 
-    def load_logfile(self, widget, data=None):
-        pass    # TODO
+    def main(self):
+        """start the gtk main event loop"""
+        gtk.main()
 
-    def add_column(self, tree_view, title, columnId, sortable=True):
-        pass    # TODO
+if __name__ == "__main__":
+    l = ApacheLogViewer()
+    l.main()
+
+
+
+
 
 
 

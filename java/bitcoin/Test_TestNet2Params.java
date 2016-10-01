@@ -1,6 +1,8 @@
 import org.bitcoinj.params.TestNet2Params;
 
-public class Test_TestNet2Params extends Test_Abstract {
+public class Test_TestNet2Params extends Test_AbstractBitcoinNetParams {
+
+  @Override
   public void run(){
     logMessage("TestNet2Params unit test running ...");
     checkTESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE();

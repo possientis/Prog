@@ -31,15 +31,12 @@
     (define (value data)
       (let ((expr (expression data))
             (env  (environment data)))
-;        (display "check1: expr = ")(display expr)(newline)
-;        (display "check2: env = ")(display env)(newline)
         (if (evaluated? data)
-          (if (self-evaluating? expr) expr (error "no environment for thunk" expr)) 
+          expr
           (let ((value (strict-eval expr env)))
             (set-car! (cdr data) value) ; replacing expression by its value
             (set-car! (cddr data) '())  ; discarding environment for gb release
             value))))
-
     ;
     ; returning two argument constructor
     ;
@@ -48,7 +45,6 @@
 ; forcing
 (define (force-thunk obj)
   (if (thunk? obj) ((cadr obj) 'value) (error "force-thunk: object not a thunk")))
-
 
 
 ))  ; include guard

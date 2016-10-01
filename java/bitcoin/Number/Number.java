@@ -1,11 +1,27 @@
+import java.util.Random;
+import java.security.SecureRandom;
+
 public abstract class Number implements Comparable<Number> {
-  private static final Ring _ring;
-  static
+
+  private static final Ring _ring = new Ring2();          // choose implementation
+  private static final Random _rnd = new SecureRandom();  // choose implementation
+
+  // static factory functions
+ 
+  public static Number ZERO = _ring.zero();
+  public static Number ONE = _ring.one();
+  public static Number fromBytes(int signum, byte[] val)  // big-endian
   {
-    _ring = new Ring1();  // choose implementation
+    return _ring.fromBytes(signum, val);
+  }
+  public static Number random(int numBits)
+  {
+    return _ring.random(numBits, _rnd);
   }
 
 
+  // instance nembers
+  
   public abstract Number add(Number rhs);
   public abstract Number mul(Number rhs);
 

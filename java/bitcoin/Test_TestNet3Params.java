@@ -1,6 +1,8 @@
 import org.bitcoinj.params.TestNet3Params;
 
-public class Test_TestNet3Params extends Test_Abstract {
+public class Test_TestNet3Params extends Test_AbstractBitcoinNetParams {
+
+  @Override
   public void run(){
     logMessage("TestNet3Params unit test running ...");
     checkTestNet3Params();

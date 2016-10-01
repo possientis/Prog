@@ -12,7 +12,8 @@ import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.params.UnitTestParams;
 
 
-public class Test_Address extends Test_Abstract {
+public class Test_Address extends Test_VersionedChecksummedBytes {
+  @Override
   public void run(){
     logMessage("Address unit test running ...");
     checkLength();

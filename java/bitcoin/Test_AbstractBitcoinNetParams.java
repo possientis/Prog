@@ -14,7 +14,8 @@ import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.params.UnitTestParams;
 
 
-public class Test_AbstractBitcoinNetParams extends Test_Abstract {
+public class Test_AbstractBitcoinNetParams extends Test_NetworkParameters {
+  @Override
   public void run(){
     logMessage("AbstractBitcoinNetParams unit test running ...");
     checkBITCOIN_SCHEME();

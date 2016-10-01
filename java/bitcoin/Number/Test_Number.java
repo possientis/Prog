@@ -2,33 +2,18 @@ public class Test_Number extends Test_Abstract
 {
   public static void main(String[] args)
   {
-    // choose implementation here
-    Ring ring1 = new Ring1();  
-    Ring ring2 = new Ring2();  
-      
-    Test_Abstract test1 = new Test_Number(ring1);
-    Test_Abstract test2 = new Test_Number(ring2);
-
-    test1.run();
-    test2.run();
-
+    Test_Abstract test = new Test_Number();
+    test.run();
   }
 
-  private final Ring _implementation;
-  private final Number ZERO; 
-  private final Number ONE; 
-
-  public Test_Number(Ring implementation)
-  { 
-    checkNotNull(implementation, "Test_Number.1");
-    _implementation = implementation; 
-    ZERO = _implementation.zero();
-    ONE = _implementation.one();
-  }
 
   public void run()
   {
     logMessage("Number unit test running ...");
+    checkZERO();
+    checkONE();
+    checkFromBytes();
+    checkRandom();
     checkAdd();
     checkMul();
     checkToString();
@@ -38,12 +23,19 @@ public class Test_Number extends Test_Abstract
   }
 
 
-  private void checkAdd(){ /* TODO */ }
-  private void checkMul(){ /* TODO */ }
-  private void checkToString(){ /* TODO */ }
-  private void checkCompareTo(){ /* TODO */ }
-  private void checkHashCode(){ /* TODO */ }
-  private void checkNumberEquals(){ /* TODO */ }
+  private static void checkZERO()
+  {
+    Number x = Number.ZERO;
+  }
+  private static void checkONE(){ /* TODO */ }
+  private static void checkFromBytes(){ /* TODO */}
+  private static void checkRandom(){ /* TODO */}
+  private static void checkAdd(){ /* TODO */}
+  private static void checkMul(){ /* TODO */ }
+  private static void checkToString(){ /* TODO */ }
+  private static void checkCompareTo(){ /* TODO */ }
+  private static void checkHashCode(){ /* TODO */ }
+  private static void checkNumberEquals(){ /* TODO */ }
 
 
 }

@@ -11,11 +11,11 @@ data SyslogHandle = SyslogHandle {
 }
 
 
-openLog :: HostName           -- ^ Remote hostname or localhost
+openlog :: HostName           -- ^ Remote hostname or localhost
         -> String             -- ^ Port number or name; 514 is default
         -> String             -- ^ Name to log under
         -> IO SyslogHandle    -- ^ Handle to use for logging
-openLog hostname port progname = 
+openlog hostname port progname = 
   do  -- Look up the hostname and port. Either raises an exception
       -- or returns a nonempty list. First element in that list
       -- is supposed to be the best option.
@@ -56,7 +56,11 @@ makeCode fac pri =
       pricode = fromEnum pri
       in (faccode `shiftL` 3) .|. pricode
 
-
+-- permission denied (even wih sudo)
+main = do 
+  h <- openlog "localhost" "514" "testprog"
+  syslog h USER INFO "This is a message"
+  closelog h
 
 
 

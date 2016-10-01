@@ -14,7 +14,62 @@ data Priority = DEBUG       -- ^ Debug messages
 
 {- Facilities are used by the system to determine where messages are sent -}
 
-data Facility = Facility -- TODO
+data Facility = KERN      -- ^ Kernel messages
+              | USER      -- ^ General userland messages
+              | MAIL      -- ^ E-mail system
+              | DAEMON    -- ^ Daemon (server process) messages
+              | AUTH      -- ^ Authentication or security messages
+              | SYSLOG    -- ^ Internal syslog messages
+              | LPR       -- ^ Printer messages
+              | NEWS      -- ^ Usenet news
+              | UUCP      -- ^ UUCP messages
+              | CRON      -- ^ Cron messages
+              | AUTHPRIV  -- ^ Private authentication messages 
+              | FTP       -- ^ FTP messages
+              | LOCAL0
+              | LOCAL1
+              | LOCAL2
+              | LOCAL3
+              | LOCAL4
+              | LOCAL5
+              | LOCAL6
+              | LOCAL7
+              deriving (Eq, Show, Read)
+
+facToCode = [ (KERN, 0),
+              (USER, 1),
+              (MAIL, 2),
+              (DAEMON, 3),
+              (AUTH, 4),
+              (SYSLOG, 5),
+              (LPR, 6),
+              (NEWS, 7),
+              (UUCP, 8),
+              (CRON, 9),
+              (AUTHPRIV, 10),
+              (FTP, 11),
+              (LOCAL0, 16),
+              (LOCAL1, 17),
+              (LOCAL2, 18),
+              (LOCAL3, 19),
+              (LOCAL4, 20),
+              (LOCAL5, 21),
+              (LOCAL6, 22),
+              (LOCAL7, 23)
+            ]
+
+codeToFac = map (\(x,y) -> (y,x)) facToCode
+
+codeOfFac :: Facility -> Int
+codeOfFac f = case lookup f facToCode of
+                Just x  -> x
+                _       -> error "Internal error in codeOfFac"
+ 
+facOfCode :: Int -> Facility
+facOfCode c = case lookup c codeToFac of
+                Just x  -> x
+                _       -> error "Internal error in facOfCode"      
 
 
-codeOfFac = undefined
+
+
