@@ -1,3 +1,4 @@
+# can't get this to work
 """
 curses based Apache log viewer
 
@@ -49,9 +50,70 @@ class CursesLogViewer(object):
         self.load_loglines()
         
     def load_loglines(self):
-        pass # TODO
+        self.loglines = []
+        logfile = open(self.logfile, 'r')
+        for (i, line) in list(enumerate(logfile)):
+            self.loglines.append((i, line, "x", "y", "z"))
+        logfile.close()
+        self.draw_loglines()
 
     def draw_loglines(self):
-        pass # TODO
+        self.screen.clear()
+        status_col = 4
+        bytes_col = 6
+        remote_host_col = 16
+        status_start = 0
+        bytes_start = 4
+        remote_host_start = 10
+        line_start = 26
+        logline_cols = curses.COLS - status_col - bytes_col - remote_host_col - 1
+        for i in range(curses.LINES):
+            c = self.curr_topline
+            try:
+                curr_line = self.loglines[c]
+            except IndexError:
+                break
+            self.screen.addstr(i, status_start, str(curr_line[2]))
+            self.screen.addstr(i, bytes_start, str(curr_line[3]))
+            self.screen.addstr(i, remote_host_start, str(curr_line[1]))
+            #self.screen.addstr(i, line_start, str(curr_line[4])[logline_cols])
+#            self.screen.addstr(i, line_start, str(curr_line[4]), logline_cols)
+            self.curr_topline += 1
+        self.screen.refresh()
+
+    def main_loop(self, stdscr):
+        stdscr.clear()
+        self.load_loglines()
+        while True:
+            c = self.screen.getch()
+            try:
+                c = chr(c)
+            except ValueError:
+                continue
+            if c == 'd':
+                self.page_down()
+            elif c == 'u':
+                self.page_up()
+            elif c == 't':
+                self.top()
+            elif c == 'b':
+                self.sortby(3)
+            elif c == 'h':
+                self.sortby(1)
+            elif c == 's':
+                self.sortby(2)
+            elif c == 'r':
+                self.sortby(0)
+            elif c == 'q':
+                break
+
+if __name__ == '__main__':
+    infile = sys.argv[1]
+    c = CursesLogViewer(infile)
+    curses.wrapper(c.main_loop)
+
+
+
+    
 
 

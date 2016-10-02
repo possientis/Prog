@@ -45,16 +45,57 @@ public class Test_Number extends Test_Abstract
 
   private static void checkFromBytes()
   {
-    byte[] b0 = {};
-    Number zero = Number.fromBytes(1, b0);
-    checkEquals(zero, Number.ZERO, "checkFromBytes.0");
+    Number x, y, z;
+    String eName = "NumberFormatException";
+
+    byte [] b0 = {};
+    x = Number.fromBytes(1, b0);
+    checkEquals(x, Number.ZERO, "checkFromBytes.1");
+    x = Number.fromBytes(-1, b0);
+    checkEquals(x, Number.ZERO, "checkFromBytes.2");
+    x = Number.fromBytes(0, b0);
+    checkEquals(x, Number.ZERO, "checkFromBytes.3");
+    checkException(() -> Number.fromBytes(2,b0), eName, "checkFromBytes.4");
+    checkException(() -> Number.fromBytes(-2,b0), eName, "checkFromBytes.5");
 
     byte[] b1 = { (byte) 0x00 };
-    Number x = Number.fromBytes(1, b1); // +0
-    checkEquals(x, Number.ZERO, "checkFromBytes.1");
-    Number y = Number.fromBytes(-1, b1); 
-    checkEquals(y, Number.ZERO, "checkFromBytes.2");
-//    Number z = Number.fromBytes(2, b1);
+    x = Number.fromBytes(1, b1);
+    checkEquals(x, Number.ZERO, "checkFromBytes.6");
+    x = Number.fromBytes(-1, b1);
+    checkEquals(x, Number.ZERO, "checkFromBytes.7");
+    x = Number.fromBytes(0, b1);
+    checkEquals(x, Number.ZERO, "checkFromBytes.8");
+    checkException(() -> Number.fromBytes(2,b1), eName, "checkFromBytes.9");
+    checkException(() -> Number.fromBytes(-2,b1), eName, "checkFromBytes.10");
+
+    byte[] b2 = { (byte) 0x00, (byte) 0x00 };
+    x = Number.fromBytes(1, b2);
+    checkEquals(x, Number.ZERO, "checkFromBytes.11");
+    x = Number.fromBytes(-1, b2);
+    checkEquals(x, Number.ZERO, "checkFromBytes.12");
+    x = Number.fromBytes(0, b2);
+    checkEquals(x, Number.ZERO, "checkFromBytes.13");
+    checkException(() -> Number.fromBytes(2,b2), eName, "checkFromBytes.14");
+    checkException(() -> Number.fromBytes(-2,b2), eName, "checkFromBytes.15");
+
+    byte[] b3 = { (byte) 0x01 };
+    x = Number.fromBytes(1, b3);
+    checkEquals(x, Number.ONE, "checkFromBytes.16");
+    checkException(() -> Number.fromBytes(0, b3), eName, "checkFromBytes.17");
+
+    byte[] b4 = getRandomBytes(32); 
+    x = Number.fromBytes(1, b4);
+    y = Number.fromBytes(-1, b4);
+    z = x.add(y);
+    checkEquals(z, Number.ZERO, "checkFromBytes.18");
+    z = Number.fromBytes(-1, b3); // -1
+    z = z.mul(x);
+    checkEquals(y, z, "checkFromBytes.19");
+
+    // check left padding with 0x00 TODO
+
+    // check algebra TODO
+
 
 
   }

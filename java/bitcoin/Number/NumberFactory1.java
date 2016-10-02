@@ -1,7 +1,7 @@
 import java.math.BigInteger;
 import java.util.Random;
 
-public class Factory1 extends NumberFactory
+public class NumberFactory1 extends NumberFactory
 {
   @Override public Number zero(){ return Number1.ZERO; }
   @Override public Number one(){ return Number1.ONE; }

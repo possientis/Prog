@@ -53,5 +53,23 @@ public abstract class Test_Abstract implements Runnable {
     }
   }
 
+  protected static void checkException(Runnable callbk, String name, String msg){
+    try
+    {
+      callbk.run();
+      logMessage(msg + ": checkException failure: no exception detected");
+      System.exit(1);
+    }
+    catch(Exception e)
+    {
+      if(!e.getClass().getName().equals("java.lang." + name)){
+        logMessage(msg + ": checkException failure: wrong exception type");
+        logMessage("Expected: java.lang." + name);
+        logMessage("Actual: " + e.getClass().getName());
+        System.exit(1);
+      }
+    }
+  }
+
 
 }
