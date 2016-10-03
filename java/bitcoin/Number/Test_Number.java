@@ -45,9 +45,10 @@ public class Test_Number extends Test_Abstract
 
   private static void checkFromBytes()
   {
-    Number x, y, z;
+    Number x, y, z, t;
     String eName = "NumberFormatException";
 
+    // empty array
     byte [] b0 = {};
     x = Number.fromBytes(1, b0);
     checkEquals(x, Number.ZERO, "checkFromBytes.1");
@@ -58,6 +59,7 @@ public class Test_Number extends Test_Abstract
     checkException(() -> Number.fromBytes(2,b0), eName, "checkFromBytes.4");
     checkException(() -> Number.fromBytes(-2,b0), eName, "checkFromBytes.5");
 
+    // single 0x00 byte
     byte[] b1 = { (byte) 0x00 };
     x = Number.fromBytes(1, b1);
     checkEquals(x, Number.ZERO, "checkFromBytes.6");
@@ -68,6 +70,7 @@ public class Test_Number extends Test_Abstract
     checkException(() -> Number.fromBytes(2,b1), eName, "checkFromBytes.9");
     checkException(() -> Number.fromBytes(-2,b1), eName, "checkFromBytes.10");
 
+    // two 0x00 bytes
     byte[] b2 = { (byte) 0x00, (byte) 0x00 };
     x = Number.fromBytes(1, b2);
     checkEquals(x, Number.ZERO, "checkFromBytes.11");
@@ -78,26 +81,56 @@ public class Test_Number extends Test_Abstract
     checkException(() -> Number.fromBytes(2,b2), eName, "checkFromBytes.14");
     checkException(() -> Number.fromBytes(-2,b2), eName, "checkFromBytes.15");
 
+    // single 0x01 byte
     byte[] b3 = { (byte) 0x01 };
     x = Number.fromBytes(1, b3);
     checkEquals(x, Number.ONE, "checkFromBytes.16");
     checkException(() -> Number.fromBytes(0, b3), eName, "checkFromBytes.17");
 
+    // x + (-x) = 0
     byte[] b4 = getRandomBytes(32); 
     x = Number.fromBytes(1, b4);
     y = Number.fromBytes(-1, b4);
     z = x.add(y);
     checkEquals(z, Number.ZERO, "checkFromBytes.18");
+
+    // multiplying by -1
     z = Number.fromBytes(-1, b3); // -1
     z = z.mul(x);
     checkEquals(y, z, "checkFromBytes.19");
 
-    // check left padding with 0x00 TODO
+    // padding with 0x00 bytes
+    byte[] b5 = getRandomBytes(28);
+    x = Number.fromBytes(1, b5);
+    y = Number.fromBytes(-1, b5);
+    byte[] b6 = new byte[32];
+    b6[0] = (byte) 0x00;
+    b6[1] = (byte) 0x00;
+    b6[2] = (byte) 0x00;
+    b6[3] = (byte) 0x00;
+    System.arraycopy(b5, 0, b6, 4, 28);
+    z = Number.fromBytes(1, b6);
+    checkEquals(x, z, "checkFromBytes.20");
+    z = Number.fromBytes(-1, b6);
+    checkEquals(y, z, "checkFromBytes.21");
 
-    // check algebra TODO
-
-
-
+    // actual replication
+    byte[] b7 = getRandomBytes(32);
+    byte[] b8 = new byte[1];
+    b8[0] = (byte) 0xFF;
+    Number _256 = Number.fromBytes(1, b8).add(Number.ONE);
+    x = Number.fromBytes(1, b7);
+    y = Number.fromBytes(-1, b7);
+    z = Number.ZERO;
+    t = Number.ZERO;
+    for(int i = 0; i < 32; ++i)
+    { 
+      b8[0] = b7[i];
+      z = z.mul(_256).add(Number.fromBytes(1, b8)); // z = z*256 + b7[i]
+      t = t.mul(_256).add(Number.fromBytes(-1,b8)); // t = t*256 - b7[i]
+    }
+    checkEquals(x, z, "checkFromBytes.22");
+    checkEquals(y, t, "checkFromBytes.23");
   }
 
   private static void checkRandom(){ /* TODO */}

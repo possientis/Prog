@@ -1,4 +1,3 @@
-continue with checkFromBytes
 add toBytes(int numBytes) method to Number API
 write unit-test
 write benchmark code

@@ -1,8 +1,6 @@
 import java.math.BigInteger;
-import org.bitcoinj.core.ECKey;
 import org.spongycastle.math.ec.ECFieldElement;
 import org.spongycastle.math.ec.custom.sec.SecP256K1FieldElement;
-import org.spongycastle.math.ec.ECCurve;
 
 
 public class Test_SecP256K1FieldElement extends Test_ECFieldElement {
@@ -30,15 +28,6 @@ public class Test_SecP256K1FieldElement extends Test_ECFieldElement {
     checkTestBitZero();
     checkToBigInteger();
  
-  }
-
-  protected static final ECCurve _curve = ECKey.CURVE.getCurve();
-  protected static final BigInteger p = _curve.getField().getCharacteristic();
-  protected static ECFieldElement _getRandomElement()
-  {
-    byte[] bytes = getRandomBytes(32);
-    BigInteger n = new BigInteger(1, bytes);
-    return _curve.fromBigInteger(n.mod(p));
   }
 
   public void checkSecP256K1FieldElement()

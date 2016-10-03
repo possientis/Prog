@@ -57,5 +57,10 @@ public class Number1 extends Number
     return getClass().hashCode() + value.hashCode();
   }
 
+  @Override public byte[] toBytes(int numBytes)
+  {
+    return null;  // TODO
+  }
+
 }
 
