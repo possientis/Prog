@@ -21,8 +21,6 @@
     (assert-equal (new-eval exp) value (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode
 
-
-
 (define (unit-test)
   ;
   (newline)
@@ -152,9 +150,28 @@
   (test-expression ''(list cons "abc" #\a) '(list cons "abc" #\a) "quoted")
   (test-expression ''(list cons "abc" #\a) (list 'list 'cons "abc" #\a) "quoted")
   ; the value (list cons "abc" #a) is the value of expression (list cons "abc" #\a)
-  ; Failure !!!
-;  (test-expression '(list cons "abc" #\a) (list cons "abc" #\a) "quoted")
- 
+  ; which is a list of three elements, where the first element is a value (an 
+  ; object) representing the primitive operator 'cons'
+  (test-expression '(list cons "abc" #\a) 
+                   (list (make-primitive-procedure cons) "abc" #\a) "quoted")
+  ; the value of the expression (quote (length (2 3))) is the expression 
+  ; (length (2 3)). However, the expression (length (2 3)) cannot be evaluated
+  ; as the expression (2 3) cannot be evaluated since 2 is not a valid operator
+  (test-expression '(quote (length (2 3))) '(length (2 3)) "quoted")
+  (test-expression '(quote (length (2 3))) (list 'length (list 2 3)) "quoted")
+  ; the value of expression (quote (2 3)) is expression (2 3)
+  (test-expression '(quote (2 3)) '(2 3) "quoted")
+  (test-expression '(quote (2 3)) (list 2 3) "quoted")
+  ; so the value of expression '(2 3) is the expression (2 3) 
+  (test-expression ''(2 3) '(2 3) "quoted")
+  (test-expression ''(2 3) (list 2 3) "quoted")
+  ; the value of expression '(quote (length '(2 3))) is expression (length '(2 3))
+  (test-expression '(quote (length '(2 3))) '(length '(2 3)) "quoted")
+  (test-expression ''(length '(2 3)) '(length '(2 3)) "quoted")
+  (test-expression ''(length (quote (2 3))) '(length '(2 3)) "quoted")
+  (test-expression ''(length '(2 3)) '(length (quote (2 3))) "quoted")
+  (test-expression 
+    ''(length '(2 3)) (list 'length (list 'quote (list 2 3))) "quoted")
   ;
   ; assigment
   (display "testing assignment expressions...\n")
