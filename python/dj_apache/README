@@ -1,0 +1,2 @@
+this directory was created with the command:
+$ django_admin startproject dj_apache

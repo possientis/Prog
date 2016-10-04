@@ -13,6 +13,8 @@ public class Test_Number extends Test_Abstract
     checkZERO();
     checkONE();
     checkFromBytes();
+    checkSignum();
+    checkToBytes();
     checkRandom();
     checkAdd();
     checkMul();
@@ -131,6 +133,19 @@ public class Test_Number extends Test_Abstract
     }
     checkEquals(x, z, "checkFromBytes.22");
     checkEquals(y, t, "checkFromBytes.23");
+  }
+
+  private static void checkToBytes(){ /* TODO */ }
+
+  private static void checkSignum()
+  {
+    byte[] b = getRandomBytes(32);
+    Number x = Number.fromBytes(1, b);
+    Number y = Number.fromBytes(-1, b);
+
+    checkEquals(x.signum(), 1, "checkSignum.1");
+    checkEquals(y.signum(), -1, "checkSignum.2");
+    checkEquals(Number.ZERO.signum(), 0, "checkSignum.3");
   }
 
   private static void checkRandom(){ /* TODO */}

@@ -25,7 +25,8 @@ public abstract class Number implements Comparable<Number> {
   
   public abstract Number add(Number rhs);
   public abstract Number mul(Number rhs);
-  public abstract byte[] toBytes(int numBytes);
+  public abstract byte[] toBytes(int numBytes); // unsigned, big-endian
+  public abstract int signum();                 // 1, 0, -1
 
 
   @Override public abstract String toString();

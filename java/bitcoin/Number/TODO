@@ -1,3 +1,3 @@
-add toBytes(int numBytes) method to Number API
+continue with toBytes(int numBytes) of Number1.java
 write unit-test
 write benchmark code

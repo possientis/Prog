@@ -1,0 +1,12 @@
+this directory what created with the command:
+$ django-admin startapp logview 
+
+The Django framework follows the 'MVT' convention
+(models views templates) which is not the same as 'MVC'
+(models views controls)
+
+
+MVT:
+models: data structures
+views: logic behind the application
+template: presentation layer of overall app

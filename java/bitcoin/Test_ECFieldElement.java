@@ -113,11 +113,83 @@ public class Test_ECFieldElement extends Test_Abstract{
     checkEquals(ny, my, "checkGetEncoded.2");
   }
 
-  public void checkMultiplyMinusProduct(){ /* TODO */ }
-  public void checkMultiplyPlusProduct(){ /* TODO */ }
-  public void checkSquareMinusProduct(){ /* TODO */ }
-  public void checkSquarePlusProduct(){ /* TODO */ }
-  public void checkSquarePow(){ /* TODO */ }
+  public void checkMultiplyMinusProduct()
+  {
+    ECFieldElement a = _getRandomElement();
+    ECFieldElement b = _getRandomElement();
+    ECFieldElement x = _getRandomElement();
+    ECFieldElement y = _getRandomElement();
+
+    ECFieldElement mmp = a.multiplyMinusProduct(b, x, y); // a.b - x.y
+    ECFieldElement check = a.multiply(b).subtract(x.multiply(y));
+
+    checkEquals(mmp, check, "checkMultiplyMinusProduct.1");
+    
+  }
+
+  public void checkMultiplyPlusProduct()
+  {
+    ECFieldElement a = _getRandomElement();
+    ECFieldElement b = _getRandomElement();
+    ECFieldElement x = _getRandomElement();
+    ECFieldElement y = _getRandomElement();
+
+    ECFieldElement mpp = a.multiplyPlusProduct(b, x, y); // a.b + x.y
+    ECFieldElement check = a.multiply(b).add(x.multiply(y));
+
+    checkEquals(mpp, check, "checkMultiplyPlusProduct.1");
+
+   }
+
+  public void checkSquareMinusProduct()
+  {
+    ECFieldElement a = _getRandomElement();
+    ECFieldElement x = _getRandomElement();
+    ECFieldElement y = _getRandomElement();
+
+    ECFieldElement smp = a.squareMinusProduct(x, y); // a^2 - x.y
+    ECFieldElement check = a.square().subtract(x.multiply(y));
+
+    checkEquals(smp, check, "checkSquareMinusProduct.1");
+
+  }
+
+  public void checkSquarePlusProduct()
+  {
+    ECFieldElement a = _getRandomElement();
+    ECFieldElement x = _getRandomElement();
+    ECFieldElement y = _getRandomElement();
+
+    ECFieldElement spp = a.squarePlusProduct(x, y); // a^2 + x.y
+    ECFieldElement check = a.square().add(x.multiply(y));
+
+    checkEquals(spp, check, "checkSquarePlusProduct.1");
+   }
+
+  public void checkSquarePow()
+  {
+    ECFieldElement a = _getRandomElement();
+
+    ECFieldElement sp0 = a.squarePow(0);
+    checkEquals(sp0, a, "checkSquarePow.1");
+
+    ECFieldElement sp1 = a.squarePow(1);
+    ECFieldElement check = a.square();
+    checkEquals(sp1, check, "checkSquarePow.2");
+
+    ECFieldElement sp2 = a.squarePow(2);
+    check = a.square().square();  // a^(2^2)
+    checkEquals(sp2, check, "checkSquarePow.3");
+
+    check = a;
+
+    for(int i = 0; i < 256; ++i)
+    {
+      ECFieldElement spi = a.squarePow(i);
+      checkEquals(spi, check, "checkSquarePow.4");
+      check = check.square();
+    }
+  }
 
   public void checkToString()
   {

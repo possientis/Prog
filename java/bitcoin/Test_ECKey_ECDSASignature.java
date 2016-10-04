@@ -11,7 +11,7 @@ import org.spongycastle.asn1.ASN1Integer;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
-public class Test_ECDSASignature extends Test_ECKey 
+public class Test_ECKey_ECDSASignature extends Test_ECKey 
 {
 
   @Override
