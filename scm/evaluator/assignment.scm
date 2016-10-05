@@ -17,7 +17,8 @@
   (let ((var (assignment-variable exp))
         (rhs (assignment-expression exp)))
     (let ((val (strict-eval rhs env)))
-      ((env 'set!) var val))))
+      ((env 'set!) var val)
+      unspecified-value)))
 
 ; analyze
 (define (analyze-assignment exp)
@@ -27,8 +28,14 @@
       (lambda (env) ((env 'set!) var (val env))))))
 
 ; lazy eval
-(define (lazy-eval-assignment exp env) (thunk exp env))
+(define (lazy-eval-assignment exp env)
+  (let ((var (assignment-variable exp))
+        (rhs (assignment-expression exp)))
+    (let ((val (lazy-eval rhs env)))
+      ((env 'set!) var val)
+      (thunk unspecified-value '()))))  ; should always return a thunk
 
+; REVISE COMMENT
 ; note: the side-effect actually occurs when the thunk is forced
 ; because our implementation uses memoization in the forcing of
 ; thunks, repeated forcing only creates the side effect once.

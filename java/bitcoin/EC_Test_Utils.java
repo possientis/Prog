@@ -2,6 +2,7 @@ import java.math.BigInteger;
 
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
+import org.spongycastle.math.ec.custom.sec.SecP256K1Curve;
 
 public class EC_Test_Utils {
 
@@ -10,15 +11,49 @@ public class EC_Test_Utils {
     if(!cond) throw new ArithmeticException(msg);
   }
 
-  private static String _getFieldPrimeAsHex(){
+  public static String getFieldPrimeAsHex(){
     return "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F";
   }
 
-  private static BigInteger _getFieldPrime(){
-    return new BigInteger(_getFieldPrimeAsHex(), 16);
+  public static String getCurveOrderAsHex(){
+    return "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141"; 
   }
 
+  public static String getCurveGeneratorXAsHex(){
+    return "79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798"; 
+  }
+
+  public static String getCurveGeneratorYAsHex(){
+    return "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8";
+  }
+
+
+  private static BigInteger _getFieldPrime(){
+    return new BigInteger(getFieldPrimeAsHex(), 16);
+  }
+
+  private static BigInteger _getCurveOrder(){
+    return new BigInteger(getCurveOrderAsHex(), 16);
+  }
+
+  private static BigInteger _getCurveGeneratorX(){
+    return new BigInteger(getCurveGeneratorXAsHex(), 16);
+  }
+
+  private static BigInteger _getCurveGeneratorY(){
+    return new BigInteger(getCurveGeneratorYAsHex(), 16);
+  }
+
+
+  public static final ECCurve curve = new SecP256K1Curve();
   public static final BigInteger fieldPrime = _getFieldPrime();
+  public static final BigInteger curveOrder = _getCurveOrder();
+  public static final BigInteger generatorX = _getCurveGeneratorX();
+  public static final BigInteger generatorY = _getCurveGeneratorY();
+  public static final ECPoint G = curve.createPoint(generatorX, generatorY);
+ 
+
+
 
   public static BigInteger sqrt(BigInteger n, boolean isEven){
 
@@ -37,9 +72,10 @@ public class EC_Test_Utils {
 
     // retrieving parity of each square root
 
-    boolean isEven1 = (n1.mod(two) == BigInteger.ZERO);
-    boolean isEven2 = (n2.mod(two) == BigInteger.ZERO);
+    boolean isEven1 = !n1.testBit(0);
+    boolean isEven2 = !n2.testBit(0);
 
+    // TODO
 
     return isEven ? (isEven1 ? n1 : n2) : (isEven1 ? n2 : n1);
   }
@@ -210,6 +246,30 @@ public class EC_Test_Utils {
     BigInteger Y = lambda_X.add(nu).mod(p);
 
     return curve.createPoint(X, Y.negate().mod(p)); 
+  }
+
+
+  public static ECPoint multiply(BigInteger secret, ECPoint point)
+  {
+    BigInteger q = curveOrder;
+    secret = secret.mod(q);
+
+    ECPoint result = curve.getInfinity(); // identity of the EC group
+    ECPoint P = point; // successively equal to point, 2point, 4point, ...
+
+    for(int i = 0; i < 256; ++i)
+    {
+      if(secret.testBit(0))
+      {
+        result = add(result, P);
+      }
+
+      P = twice(P);
+
+      secret = secret.shiftRight(1);   
+    }
+
+    return result;
   }
 
 

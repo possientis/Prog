@@ -1,3 +1,10 @@
+sort out assigment unit-test and assignment lazy and analyze
+
+test the following code in lazy mode (after fixing define)
+(define x 1)
+(set! x (+ x x))
+(display x)(newline)
+
 continue rewriting unit-test
 
 understand possible dissymetry of include between "analyze.scm" and "strict/lazy-eval.scm". do we need to create new type of procedure? strict-eval-procedure v lazy-eval-procedure? (see application.scm for obvious dissymetry, should there be a strict-apply, analyze-apply, lazy-appply?)

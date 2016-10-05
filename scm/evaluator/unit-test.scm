@@ -1,24 +1,25 @@
 (load "main.scm")
 
-(define (assert-equal left right message)
+(define (assert-equals left right message)
   (if (not (equal? left right)) 
     (error "unit-test failure: "
            (string-append message 
                           ": value = " (object->string left)
                           ": expected = " (object->string right)))))
 
-(define (test-expression exp value message)
-  (let ((print (lambda (msg) (string-append message msg)))
+(define (test-expression exp value message . arg)
+  (let ((env (if (null? arg) global-env (car arg))) 
+        (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) ; save eval mode to be restored
-    (assert-equal (strict-eval exp) value (print ": strict-eval")) 
-    (assert-equal (force-thunk (lazy-eval exp)) value (print ": lazy-eval")) 
-    (assert-equal ((analyze exp) global-env) value (print ": analyze"))
+    (assert-equals (strict-eval exp env) value (print ": strict-eval")) 
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (assert-equals ((analyze exp) env) value (print ": analyze"))
     (set-eval-mode 'strict)
-    (assert-equal (new-eval exp) value (print ": new-eval (strict)"))
+    (assert-equals (new-eval exp env) value (print ": new-eval (strict)"))
     (set-eval-mode 'lazy)
-    (assert-equal (force-thunk (new-eval exp)) value (print ": new-eval (lazy)"))
+    (assert-equals (force-thunk(new-eval exp env))value (print ": new-eval (lazy)"))
     (set-eval-mode 'analyze)
-    (assert-equal (new-eval exp) value (print ": new-eval (analyze)"))
+    (assert-equals (new-eval exp env) value (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode
 
 (define (unit-test)
@@ -176,6 +177,21 @@
   ; assigment
   (display "testing assignment expressions...\n")
   ;
+  (let ((env ((global-env 'extended) 'var #f)))   ; working on extended env
+    (test-expression 'var #f "assignment" env)    ; with new variable 'var created
+    (let ((result (strict-eval '(set! var #t) env)))
+      (assert-equals result unspecified-value "assignment")
+      (test-expression 'var #t "assignment" env)) ; testing outcome of assignment
+    (let ((result (lazy-eval '(set! var #\a) env)))
+      (assert-equals (force-thunk result) unspecified-value "assignment")
+;      (display (strict-eval 'var env))(newline)
+;      (test-expression 'var #\a "assignment" env)
+    )
+  )
+
+
+
+    
   ; eval
   (let ((saved-value (new-eval 'modulo)))
     ; redefining primitive in global-env

@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 public abstract class Number implements Comparable<Number> {
 
   // choose implementation of Number and Random
-  private static final NumberFactory _factory = new NumberFactory1();
+  private static final NumberFactory _factory = new NumberFactory2();
   private static final Random _rnd = new SecureRandom();
 
   // static factory functions
@@ -25,6 +25,7 @@ public abstract class Number implements Comparable<Number> {
   
   public abstract Number add(Number rhs);
   public abstract Number mul(Number rhs);
+  public abstract Number negate();
   public abstract byte[] toBytes(int numBytes); // unsigned, big-endian
   public abstract int signum();                 // 1, 0, -1
 

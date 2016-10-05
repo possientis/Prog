@@ -130,30 +130,6 @@ public class Test_ECKey extends Test_Abstract {
 //    _benchTwoBitsInfoNaive();
   }
 
-  private static String _getCurveOrderAsHex(){
-    return "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141"; 
-  }
-
-  private static BigInteger _getCurveOrder(){
-    return new BigInteger(_getCurveOrderAsHex(), 16);
-  }
-
-  private static String _getCurveGeneratorXAsHex(){
-    return "79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798"; 
-  }
-
-  private static BigInteger _getCurveGeneratorX(){
-    return new BigInteger(_getCurveGeneratorXAsHex(), 16);
-  }
-
-  private static String _getCurveGeneratorYAsHex(){
-    return "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8";
-  }
-
-  // used to initialize private field
-  private static BigInteger _getCurveGeneratorY(){
-    return new BigInteger(_getCurveGeneratorYAsHex(), 16);
-  }
 
   // private key example from 'Mastering bitcoin'
   private static String _getSecret1AsHex(){
@@ -305,15 +281,9 @@ public class Test_ECKey extends Test_Abstract {
   }
 
   private static final BigInteger 
-    _curveOrder = _getCurveOrder();
-  private static final BigInteger 
-    halfCurveOrder = _curveOrder.shiftRight(1);
-  private static final BigInteger 
-    curveGeneratorX = _getCurveGeneratorX();
-  private static final BigInteger 
-    curveGeneratorY = _getCurveGeneratorY();
-  private static final String 
-    _curveOrderAsHex = _getCurveOrderAsHex();
+    halfCurveOrder = EC_Test_Utils.curveOrder.shiftRight(1);
+ private static final String 
+    curveOrderAsHex = EC_Test_Utils.getCurveOrderAsHex();
   private static final X9ECParameters 
     curX9 = CustomNamedCurves.getByName("secp256k1"); 
   private static final ASN1Primitive 
@@ -376,13 +346,14 @@ public class Test_ECKey extends Test_Abstract {
     byte[] bytes;
     boolean isGood = false;
     BigInteger secret = BigInteger.ZERO;
+    BigInteger q = EC_Test_Utils.curveOrder;
 
     while(!isGood)
     {
       bytes = getRandomBytes(32);
       secret = new BigInteger(1, bytes);  // unsigned
-      // we want secret to satisfy 1 < secret < _curveOrder
-      if(secret.compareTo(BigInteger.ONE)>0 && secret.compareTo(_curveOrder)<0)
+      // we want secret to satisfy 1 < secret < EC_Test_Utils.curveOrder
+      if(secret.compareTo(BigInteger.ONE)>0 && secret.compareTo(q)<0)
       {
         isGood = true;
       }
@@ -472,23 +443,13 @@ public class Test_ECKey extends Test_Abstract {
 
   // function implemented for the purpose of validating getPubKeyPoint
   private static ECPoint _getPubKeyPoint(ECKey key){
+
     BigInteger secret = key.getPrivKey();
-    ECCurve curve = ECKey.CURVE.getCurve();
-    // generator of the secp256k1 elliptic curve group
-    ECPoint g = curve.createPoint(curveGeneratorX, curveGeneratorY);
 
-    // Setting up result
-    ECPoint result = curve.getInfinity(); // the identity of the EC group
-    ECPoint G = g;  // successively equal to g, 2g, 4g, 8g, ...,  (2^256)g
-    for(int i = 0; i < 256; ++i){
-      if(secret.testBit(0)){
-        result = EC_Test_Utils.add(result, G);
-      }
-      G = EC_Test_Utils.twice(G);
-      secret = secret.shiftRight(1);
-    }
+    ECPoint g = EC_Test_Utils.G;  // generator of secp256k1
 
-    return result;
+    return EC_Test_Utils.multiply(secret, g);
+
   }
 
   private static ECKey _getNewEncryptedKey(
@@ -1004,7 +965,7 @@ public class Test_ECKey extends Test_Abstract {
     BigInteger prime = curve.getCurve().getField().getCharacteristic();
     checkEquals(prime, EC_Test_Utils.fieldPrime, "checkCurve.1");
     // getN() method returns order of elliptic curve
-    checkEquals(curve.getN(), _curveOrder, "checkCurve.2");
+    checkEquals(curve.getN(), EC_Test_Utils.curveOrder, "checkCurve.2");
     // getH() method returns the 'cofactor' of elliptic curve (should be 1)
     checkEquals(curve.getH(), BigInteger.ONE, "checkCurve.3");
     // getG() method returns the curve generator
@@ -1012,8 +973,8 @@ public class Test_ECKey extends Test_Abstract {
     checkCondition(generator.isNormalized(), "checkCurve.4");
     BigInteger x = generator.getAffineXCoord().toBigInteger();
     BigInteger y = generator.getAffineYCoord().toBigInteger();
-    checkEquals(x, curveGeneratorX, "checkCurve.5");
-    checkEquals(y, curveGeneratorY, "checkCurve.6");
+    checkEquals(x, EC_Test_Utils.generatorX, "checkCurve.5");
+    checkEquals(y, EC_Test_Utils.generatorY, "checkCurve.6");
     BigInteger a = curve.getCurve().getA().toBigInteger();
     BigInteger b = curve.getCurve().getB().toBigInteger();
     // Y^2 = X^3 + 7 , so a = 0 and b = 7
@@ -1022,13 +983,13 @@ public class Test_ECKey extends Test_Abstract {
 
     // checking order of elliptic group and underlying field prime
     checkCondition(prime.isProbablePrime(128), "checkCurve.9");
-    checkCondition(_curveOrder.isProbablePrime(128), "checkCurve.10");
-    ECPoint check = ECKey.publicPointFromPrivate(_curveOrder);
-    // (_curveOrder) x G = infinity. This shows that the order of the 
-    // point G divides _curveOrder. However, _curveOrder is prime, and
+    checkCondition(EC_Test_Utils.curveOrder.isProbablePrime(128), "checkCurve.10");
+    ECPoint check = ECKey.publicPointFromPrivate(EC_Test_Utils.curveOrder);
+    // (EC_Test_Utils.curveOrder) x G = infinity. This shows that the order of the 
+    // point G divides EC_Test_Utils.curveOrder. However, EC_Test_Utils.curveOrder is prime, and
     // G is not infinity (its order is not 1). It follows that the
-    // order of G is _curveOrder. This does not actually prove that
-    // _curveOrder is indeed the order of the group. 
+    // order of G is EC_Test_Utils.curveOrder. This does not actually prove that
+    // EC_Test_Utils.curveOrder is indeed the order of the group. 
     checkCondition(check.isInfinity(), "checkCurve.11");
   }
 

@@ -1,1 +1,2 @@
-continue refactoring EC_Test_Utils.java
+allowing EC_Test_Utils.sqrt to return null if argument is not a quadratic residue
+_getRandomPoint from Test_ECPoint

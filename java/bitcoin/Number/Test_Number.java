@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Test_Number extends Test_Abstract
 {
   public static void main(String[] args)
@@ -133,9 +135,35 @@ public class Test_Number extends Test_Abstract
     }
     checkEquals(x, z, "checkFromBytes.22");
     checkEquals(y, t, "checkFromBytes.23");
+
+
+    // using toBytes and signum
+    byte[] b9 = getRandomBytes(32);
+    x = Number.fromBytes(1, b9);
+    y = Number.fromBytes(-1, b9);
+
+    checkEquals(x.signum(), 1, "checkFromBytes.24");
+    checkEquals(y.signum(), -1, "checkFromBytes.25");
+
+    byte[] b10 = x.toBytes(32);
+    byte[] b11 = y.toBytes(32);
+
+    checkCondition(Arrays.equals(b9, b10), "checkFromBytes.26");
+    checkCondition(Arrays.equals(b9, b11), "checkFromBytes.27");
   }
 
-  private static void checkToBytes(){ /* TODO */ }
+  private static void checkToBytes()
+  {
+    String eName = "ArithmeticException";
+
+    byte[] bytes = Number.ZERO.toBytes(0);
+    checkEquals(bytes.length, 0, "checkToBytes.1");
+    checkException(() -> Number.ONE.toBytes(0), eName, "checkToBytes.2");
+
+    // TODO
+
+
+  }
 
   private static void checkSignum()
   {

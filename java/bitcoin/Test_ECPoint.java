@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
 
@@ -40,6 +41,30 @@ public class Test_ECPoint extends Test_Abstract {
     checkToString();
     checkTwice();
     checkTwicePlus();
+  }
+
+  private static ECPoint _getRandomPoint()
+  {
+    ECCurve curve = EC_Test_Utils.curve;
+
+    BigInteger p = EC_Test_Utils.fieldPrime;
+
+    ECPoint result = null;
+
+    boolean done = false;
+
+    while(!done)
+    {
+      byte[] bytes = getRandomBytes(32);
+
+      BigInteger x = (new BigInteger(1, bytes)).mod(p);
+
+      done = true;
+    }
+
+    // TODO
+
+    return null;
   }
 
   private void checkECPointAbstractF2m()
