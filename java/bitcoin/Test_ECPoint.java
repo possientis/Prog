@@ -43,13 +43,15 @@ public class Test_ECPoint extends Test_Abstract {
     checkTwicePlus();
   }
 
-  private static ECPoint _getRandomPoint()
+
+  protected static ECPoint _getRandomPoint()
   {
     ECCurve curve = EC_Test_Utils.curve;
 
     BigInteger p = EC_Test_Utils.fieldPrime;
 
-    ECPoint result = null;
+    BigInteger x = null;
+    BigInteger y = null;
 
     boolean done = false;
 
@@ -57,14 +59,30 @@ public class Test_ECPoint extends Test_Abstract {
     {
       byte[] bytes = getRandomBytes(32);
 
-      BigInteger x = (new BigInteger(1, bytes)).mod(p);
+      x = (new BigInteger(1, bytes)).mod(p);
 
-      done = true;
+      y = EC_Test_Utils.YFromX(x, true);
+
+      if(y != null)
+      {
+        done = true;
+      }
     }
 
-    // TODO
+    // we have a random point (x,y) but always of even parity. Let's flip a coin
 
-    return null;
+    byte[] parity = getRandomBytes(1);
+
+    // should be evenly distributed
+
+    boolean test = BigInteger.valueOf(parity[0] & 0xFF).testBit(0);
+
+    if(test)
+    {
+      y = y.negate().mod(p);
+    }
+
+    return curve.createPoint(x,y);
   }
 
   private void checkECPointAbstractF2m()

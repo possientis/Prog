@@ -51,8 +51,15 @@ public class EC_Test_Utils {
   public static final BigInteger generatorX = _getCurveGeneratorX();
   public static final BigInteger generatorY = _getCurveGeneratorY();
   public static final ECPoint G = curve.createPoint(generatorX, generatorY);
- 
+  public static final BigInteger SEVEN = BigInteger.valueOf(7);
 
+  public static BigInteger square(BigInteger n)
+  {
+    n = n.mod(fieldPrime);
+
+    // there exists a better algorithm for square modulo
+    return n.multiply(n).mod(fieldPrime); 
+  }
 
 
   public static BigInteger sqrt(BigInteger n, boolean isEven){
@@ -75,9 +82,11 @@ public class EC_Test_Utils {
     boolean isEven1 = !n1.testBit(0);
     boolean isEven2 = !n2.testBit(0);
 
-    // TODO
+    BigInteger out = isEven ? (isEven1 ? n1 : n2) : (isEven1 ? n2 : n1);
 
-    return isEven ? (isEven1 ? n1 : n2) : (isEven1 ? n2 : n1);
+    // only return 'out' if it is indeed a square root
+
+    return square(out).equals(arg) ? out : null;
   }
 
   public static BigInteger YFromX(BigInteger x, boolean isEven){
@@ -85,10 +94,9 @@ public class EC_Test_Utils {
     // returns Y such that Y^2 = X^3 + 7 modulo p of given parity
 
     BigInteger p = fieldPrime;
-    BigInteger seven = BigInteger.valueOf(7);
     BigInteger square = x.multiply(x).mod(p);
     BigInteger cube = square.multiply(x).mod(p);
-    BigInteger sum = cube.add(seven);
+    BigInteger sum = cube.add(SEVEN);
 
     return sqrt(sum, isEven);
   }

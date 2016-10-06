@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.math.BigInteger;
 
 public class Test_Number extends Test_Abstract
 {
@@ -155,28 +156,96 @@ public class Test_Number extends Test_Abstract
   private static void checkToBytes()
   {
     String eName = "ArithmeticException";
+    byte[] bytes;
 
-    byte[] bytes = Number.ZERO.toBytes(0);
+    // ZERO
+    bytes = Number.ZERO.toBytes(0);
     checkEquals(bytes.length, 0, "checkToBytes.1");
-    checkException(() -> Number.ONE.toBytes(0), eName, "checkToBytes.2");
 
-    // TODO
+    bytes = Number.ZERO.toBytes(32);
+    checkEquals(bytes.length, 32, "checkToBytes.2");
+    for(int i = 0; i < 32; ++i)
+    {
+      checkEquals(bytes[i], (byte) 0x00, "checkToBytes.3");
+    }
 
+    // ONE
+    checkException(() -> Number.ONE.toBytes(0), eName, "checkToBytes.4");
+    bytes = Number.ONE.toBytes(1);
+    checkEquals(bytes.length, 1, "checkToBytes.5");
+    checkEquals(bytes[0], (byte) 0x01, "checkToBytes.6");
+    bytes = Number.ONE.negate().toBytes(1);
+    checkEquals(bytes.length, 1, "checkToBytes.7");
+    checkEquals(bytes[0], (byte) 0x01, "checkToBytes.8");
+    bytes = Number.ONE.toBytes(32);
+    checkEquals(bytes.length, 32, "checkToBytes.9");
+    checkEquals(bytes[31], (byte) 0x01, "checkToBytes.10"); // big-endian
+    for(int i = 0; i < 31; ++i)
+    {
+      checkEquals(bytes[i], (byte) 0x00, "checkToBytes.11");
+    }
 
+    // random
+    Number x = Number.random(256);
+    Number y = x.negate();
+    bytes = x.toBytes(32);
+    checkEquals(x, Number.fromBytes(1, bytes), "checkToBytes.12");
+    checkEquals(y, Number.fromBytes(-1, bytes), "checkToBytes.13");
+    bytes = y.toBytes(32);
+    checkEquals(x, Number.fromBytes(1, bytes), "checkToBytes.14");
+    checkEquals(y, Number.fromBytes(-1, bytes), "checkToBytes.15");
   }
 
   private static void checkSignum()
   {
+
+
+    checkEquals(Number.ZERO.signum(), 0, "checkSignum.3");
+
     byte[] b = getRandomBytes(32);
     Number x = Number.fromBytes(1, b);
     Number y = Number.fromBytes(-1, b);
 
     checkEquals(x.signum(), 1, "checkSignum.1");
     checkEquals(y.signum(), -1, "checkSignum.2");
-    checkEquals(Number.ZERO.signum(), 0, "checkSignum.3");
   }
 
-  private static void checkRandom(){ /* TODO */}
+  private static void checkRandom(){
+    // checking a random generator should be far more involved
+    // than anything done here.
+
+    Number x;
+    x = Number.random(0);
+    checkEquals(x, Number.ZERO, "checkRandom.1");
+
+    x = Number.random(1);   // single bit
+    checkCondition(x.equals(Number.ZERO)||x.equals(Number.ONE), "checkRandom.2");
+
+    x = Number.random(256);
+    checkEquals(x.signum(), 1, "checkRandom.3");
+
+    int count = 0;
+    for(int i = 0; i < 10000; ++i)
+    {
+      x = Number.random(256);
+      byte[] bytes = x.toBytes(32);
+      
+      Number y = Number.random(5);              // selecting byte 0 to 31
+      int index = y.toBytes(1)[0] & 0xFF;       // 0 to 31
+      int test = bytes[index] & 0xFF;
+      Number z = Number.random(3);              // selecting bit 0...7
+      int bit = z.toBytes(1)[0] & 0xFF;         // 0 to 7
+      if(BigInteger.valueOf(test).testBit(bit)) // inefficient but highly readable
+      {
+        ++count;
+      }
+    }
+
+    // should be able to compute upper-bound on probability of failure
+    checkCondition(count > 4800, "checkRandom.4");
+    checkCondition(count < 5200, "checkRandom.5");
+  }
+
   private static void checkAdd(){ /* TODO */}
   private static void checkMul(){ /* TODO */ }
   private static void checkToString(){ /* TODO */ }
