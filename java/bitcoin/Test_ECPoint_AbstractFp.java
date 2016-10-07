@@ -1,3 +1,5 @@
+import org.spongycastle.math.ec.ECPoint;
+
 public class Test_ECPoint_AbstractFp extends Test_ECPoint {
 
   @Override
@@ -7,6 +9,15 @@ public class Test_ECPoint_AbstractFp extends Test_ECPoint {
     checkSubtract();
   }
 
-  private void checkSubtract(){ /* TODO */ } 
+  private void checkSubtract()
+  {
+    ECPoint x = _getRandomPoint();
+    ECPoint y = _getRandomPoint();
+
+    ECPoint check = x.subtract(y);
+
+    checkEquals(check, x.add(y.negate()), "checkSubtract.1");
+
+  }
 
 }

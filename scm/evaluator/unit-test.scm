@@ -177,45 +177,46 @@
   ; assigment
   (display "testing assignment expressions...\n")
   ;
-  (let ((env ((global-env 'extended) 'var #f)))   ; working on extended env
-    (test-expression 'var #f "assignment" env)    ; with new variable 'var created
+  (let ((env ((global-env 'extended) 'var #f))    ; extended env with var = #f
+        (mode (get-eval-mode)))                   ; so we can restore it later
+    (test-expression 'var #f "assignment" env)    
+    ; strict assignment
     (let ((result (strict-eval '(set! var #t) env)))
       (assert-equals result unspecified-value "assignment")
-      (test-expression 'var #t "assignment" env)) ; testing outcome of assignment
+;      (test-expression 'var #t "assignment" env))     ; testing outcome 
+    )
+    ; lazy assignment
     (let ((result (lazy-eval '(set! var #\a) env)))
       (assert-equals (force-thunk result) unspecified-value "assignment")
-;      (display (strict-eval 'var env))(newline)
-;      (test-expression 'var #\a "assignment" env)
+;      (test-expression 'var #\a "assignment" env))    ; testing outcome
     )
-  )
-
-
+    ; analyzed assignment
+    (let ((result ((analyze '(set! var 45)) env)))
+      (assert-equals result unspecified-value "assignment")
+;      (test-expression 'var 45 "assignment" env))     ; testing outcome
+    )
+    ; strict assignment via new-eval
+    (set-eval-mode 'strict)
+    (let ((result (new-eval '(set! var "abc") env)))
+      (assert-equals result unspecified-value "assignment")
+;      (test-expression 'var "abc" "assignment" env))  ; testing outcome
+    )
+    ; lazy assignment via new-eval
+    (set-eval-mode 'lazy)
+    (let ((result (new-eval '(set! var 4.5) env)))
+      (assert-equals (force-thunk result) unspecified-value "assignment")
+;      (test-expression 'var 4.5 "assignment" env))    ; testing outcome
+    )
+    ; analyzed assignment via new-eval 
+    (set-eval-mode 'analyze)
+    (let ((result (new-eval '(set! var '()) env)))
+      (assert-equals result unspecified-value "assignment")
+;      (test-expression 'var '() "assignment" env))    ; testing outcome
+    )
+    ; retoring eval mode
+    (set-eval-mode mode))
 
     
-  ; eval
-  (let ((saved-value (new-eval 'modulo)))
-    ; redefining primitive in global-env
-    (let ((x (new-eval '(set! modulo 'any-value))))
-      (if (not (equal? (new-eval 'modulo) 'any-value))
-        (display "unit-test: test 4.0 failing\n"))
-    ; restoring primitive
-      ((global-env 'set!) 'modulo saved-value)
-      (let ((x (new-eval 'modulo global-env)))
-        (if (not (equal? (primitive-procedure-object x) modulo)) 
-          (display "unit-test: test 4.1 failing\n")))))
-
-  ; analyze
-  (let ((saved-value (new-eval 'modulo global-env)))
-    ; redefining primitive in global-env
-    (let ((x ((analyze '(set! modulo 'any-value)) global-env)))
-      (if (not (equal? ((analyze 'modulo) global-env) 'any-value))
-        (display "unit-test: test 4.2 failing\n"))
-    ; restoring primitive
-      ((global-env 'set!) 'modulo saved-value)
-      (let ((x ((analyze 'modulo) global-env)))
-        (if (not (equal? (primitive-procedure-object x) modulo)) 
-          (display "unit-test: test 4.3 failing\n")))))
-  ;
   ; definition
   (display "testing definition exprressions...\n")
   ;

@@ -13,8 +13,8 @@ public class Test_Main {
     test = new Test_LazyECPoint(); test.run();                // TODO
     */
     test = new Test_ECPoint(); test.run();                    // TODO
-    test = new Test_ECPoint_AbstractFp(); test.run();         // TODO
-    test = new Test_SecP256K1Point(); test.run();             // TODO
+    test = new Test_ECPoint_AbstractFp(); test.run();
+    test = new Test_SecP256K1Point(); test.run();
     /*
     test = new Test_ECFieldElement(); test.run();
     test = new Test_SecP256K1FieldElement(); test.run();  

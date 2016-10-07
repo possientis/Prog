@@ -15,7 +15,7 @@ public abstract class Number implements Comparable<Number> {
   {
     return _factory.fromBytes(signum, val);
   }
-  public static Number random(int numBits)
+  public static Number random(int numBits)  // uniform 0 .. 2^(numBits) - 1
   {
     return _factory.random(numBits, _rnd);
   }

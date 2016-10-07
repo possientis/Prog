@@ -25,20 +25,20 @@
   (let ((var (assignment-variable exp))
         (rhs (assignment-expression exp)))
     (let ((val (analyze rhs)))
-      (lambda (env) ((env 'set!) var (val env))))))
+      (lambda (env) ((env 'set!) var (val env))
+       unspecified-value ))))
 
 ; lazy eval
 (define (lazy-eval-assignment exp env)
   (let ((var (assignment-variable exp))
         (rhs (assignment-expression exp)))
     (let ((val (lazy-eval rhs env)))
-      ((env 'set!) var val)
+      ((env 'set!) var val)             ; val is a thunk
       (thunk unspecified-value '()))))  ; should always return a thunk
 
-; REVISE COMMENT
-; note: the side-effect actually occurs when the thunk is forced
-; because our implementation uses memoization in the forcing of
-; thunks, repeated forcing only creates the side effect once.
-; This can lead to surprising semantics. 
+; Note: the side effect resulting from a lazy assignment takes place immediately.
+; In other words, the change in binding is not delayed. However, the assignment
+; expression is not evaluated. Instead, a thunk is created and the variable is
+; bound to this thunk.
 
 ))  ; include guard

@@ -9,16 +9,27 @@
 (define (variable? exp) (symbol? exp))
 
 ; strict eval
-(define (strict-eval-variable exp env) ((env 'lookup) exp))
+(define (strict-eval-variable exp env)
+  (let ((value ((env 'lookup) exp)))
+    (if (thunk? value)
+;      (force-thunk value)
+      value
+      value)))
 
 ; analyze
-(define (analyze-variable exp) (lambda (env) ((env 'lookup) exp)))
+(define (analyze-variable exp) 
+  (lambda (env)
+    (let ((value ((env 'lookup) exp)))
+      (if (thunk? value)
+;        (force-thunk value)
+        value
+        value))))
 
 ; lazy eval
 (define (lazy-eval-variable exp env)
-  (let ((possible-thunk ((env 'lookup) exp)))
-    (if (thunk? possible-thunk)
-      possible-thunk
-      (thunk possible-thunk '())))) ; creating evaluated thunk from value
+  (let ((value ((env 'lookup) exp)))
+    (if (thunk? value)
+      value
+      (thunk value '())))) ; creating evaluated thunk from value
 
 ))  ; include guard

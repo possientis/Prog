@@ -24,8 +24,16 @@ public class Test_Number extends Test_Abstract
     checkToString();
     checkCompareTo();
     checkHashCode();
-    checkNumberEquals();
+    checkNumberEquals();  
   }
+
+  private static Number _signedRandom(int numBits)
+  {
+    Number x = Number.random(numBits);
+    Number flip = Number.random(1);
+    return flip.equals(Number.ONE) ? x.negate() : x;
+  }
+
 
 
   private static void checkZERO()
@@ -246,8 +254,96 @@ public class Test_Number extends Test_Abstract
     checkCondition(count < 5200, "checkRandom.5");
   }
 
-  private static void checkAdd(){ /* TODO */}
-  private static void checkMul(){ /* TODO */ }
+  private static void checkAdd()
+  {
+
+    Number x = _signedRandom(256);
+    Number y = _signedRandom(256);
+    Number z = _signedRandom(256);
+
+    // x + 0 = x
+    checkEquals(x.add(Number.ZERO), x, "checkAdd.1");
+
+    // 0 + x = x
+    checkEquals(Number.ZERO.add(x), x, "checkAdd.2");
+
+    // x + (-x) = 0
+    checkEquals(x.add(x.negate()), Number.ZERO, "checkAdd.3");
+
+    // (-x) + x = 0
+    checkEquals(x.negate().add(x), Number.ZERO, "checkAdd.4");
+
+    // x + y = y + x
+    checkEquals(x.add(y), y.add(x), "checkAdd.5");
+
+    // (x + y) + z = x + (y + z)
+    checkEquals(x.add(y).add(z), x.add(y.add(z)), "checkAdd.6");
+
+    // actual check of x + y
+    BigInteger n = new BigInteger(x.signum(), x.toBytes(32));
+    BigInteger m = new BigInteger(y.signum(), y.toBytes(32));
+    BigInteger sum = n.add(m);
+    Number check;
+
+    if(sum.compareTo(BigInteger.ZERO) >= 0)
+    {
+      check = Number.fromBytes(1, sum.toByteArray());
+    }
+    else
+    {
+      check = Number.fromBytes(-1, sum.negate().toByteArray());
+    }
+
+    checkEquals(check, x.add(y), "checkAdd.7");
+
+  }
+
+  private static void checkMul()
+  {
+    Number x = _signedRandom(256);
+    Number y = _signedRandom(256);
+    Number z = _signedRandom(256);
+
+    // x * 0  = 0
+    checkEquals(x.mul(Number.ZERO), Number.ZERO, "checkMul.1");
+
+    // 0 * x = 0
+    checkEquals(Number.ZERO.mul(x), Number.ZERO, "checkMul.2");
+
+    // x * 1  = x
+    checkEquals(x.mul(Number.ONE), x, "checkMul.3");
+
+    // 1 * x = x
+    checkEquals(Number.ONE.mul(x), x, "checkMul.4");
+
+    // (-x) * (-y) = x * y
+    checkEquals(x.negate().mul(y.negate()), x.mul(y), "checkMul.5");
+
+    // x * y = y * x
+    checkEquals(x.mul(y), y.mul(x), "checkMul.6");
+
+    // (x * y) * z = x * (y * z)
+    checkEquals(x.mul(y).mul(z), x.mul(y.mul(z)), "checkMul.7");
+
+    // actual check of x * y
+    BigInteger n = new BigInteger(x.signum(), x.toBytes(32));
+    BigInteger m = new BigInteger(y.signum(), y.toBytes(32));
+    BigInteger prod = n.multiply(m);
+    Number check;
+
+    if(prod.compareTo(BigInteger.ZERO) >= 0)
+    {
+      check = Number.fromBytes(1, prod.toByteArray());
+    }
+    else
+    {
+      check = Number.fromBytes(-1, prod.negate().toByteArray());
+    }
+
+    checkEquals(check, x.mul(y), "checkMul.8");
+
+  }
+
   private static void checkToString(){ /* TODO */ }
   private static void checkCompareTo(){ /* TODO */ }
   private static void checkHashCode(){ /* TODO */ }

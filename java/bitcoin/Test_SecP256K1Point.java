@@ -60,9 +60,56 @@ public class Test_SecP256K1Point extends Test_ECPoint_AbstractFp {
     
   }
 
-  private void checkNegate(){ /* TODO */ }
-  private void checkThreeTimes(){ /* TODO */ }
-  private void checkTwice(){ /* TODO */ }
-  private void checkTwicePlus(){ /* TODO */ }
+  private void checkNegate()
+  {
+    ECPoint zero = EC_Test_Utils.curve.getInfinity();
+
+    ECPoint x = _getRandomPoint();
+
+    // -0 = 0
+    checkEquals(zero.negate(), zero, "checkNegate.1");
+
+    // -(-x) = x
+    checkEquals(x.negate().negate(), x, "checkNegate.2");
+
+    // x + (-x) = 0
+    checkEquals(x.add(x.negate()), zero, "checkNegate.3");
+
+
+    // actual check
+    checkEquals(x.negate(), EC_Test_Utils.negate(x), "checkNegate.4");
+ 
+  }
+
+  private void checkThreeTimes()
+  {
+    ECPoint x = _getRandomPoint();
+
+    ECPoint check = x.threeTimes();
+
+    checkEquals(check, x.add(x.add(x)), "checkThreeTimes.1");
+  }
+
+  private void checkTwice()
+  {
+    ECPoint x = _getRandomPoint();
+
+    ECPoint check = x.twice();
+
+    checkEquals(check, x.add(x), "checkTwice.1");
+
+    checkEquals(check, EC_Test_Utils.twice(x), "checkTwice.2");
+
+   }
+
+  private void checkTwicePlus()
+  {
+    ECPoint x = _getRandomPoint();
+    ECPoint y = _getRandomPoint();
+
+    ECPoint check = x.twicePlus(y);
+
+    checkEquals(check, x.twice().add(y), "checkTwicePlus.1");
+  }
 
 }

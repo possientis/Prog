@@ -1,4 +1,5 @@
-sort out assigment unit-test and assignment lazy and analyze
+sort out unit test failure via run (see variable.scm)
+definition unit-test
 
 test the following code in lazy mode (after fixing define)
 (define x 1)

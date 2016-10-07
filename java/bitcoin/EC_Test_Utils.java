@@ -280,5 +280,17 @@ public class EC_Test_Utils {
     return result;
   }
 
+  public static ECPoint negate(ECPoint point)
+  {
+ 
+    if(point.isInfinity()) return curve.getInfinity();
+
+    BigInteger x = point.getAffineXCoord().toBigInteger();
+    BigInteger y = point.getAffineYCoord().toBigInteger();
+    BigInteger z = y.negate().mod(fieldPrime);
+
+    return curve.createPoint(x,z);
+
+  }
 
 }
