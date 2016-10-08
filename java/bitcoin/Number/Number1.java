@@ -152,5 +152,15 @@ public class Number1 extends Number
     return unsigned;
   }
 
+  @Override public int bitLength()
+  {
+    if(value.compareTo(BigInteger.ZERO) >= 0){
+      return value.bitLength();
+    }
+    else
+    {
+      return value.negate().bitLength();
+    }
+  }
 }
 

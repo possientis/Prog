@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.util.Random;
 import java.security.SecureRandom;
 
@@ -19,6 +20,11 @@ public abstract class Number implements Comparable<Number> {
   {
     return _factory.random(numBits, _rnd);
   }
+  public static Number fromBigInteger(BigInteger n)
+  {
+    return _factory.fromBigInteger(n);
+  }
+
 
 
   // instance nembers
@@ -28,6 +34,7 @@ public abstract class Number implements Comparable<Number> {
   public abstract Number negate();
   public abstract byte[] toBytes(int numBytes); // unsigned, big-endian
   public abstract int signum();                 // 1, 0, -1
+  public abstract int bitLength();              // number of bits of magnitude
 
 
   @Override public abstract String toString();
@@ -37,5 +44,6 @@ public abstract class Number implements Comparable<Number> {
   { 
       return getClass() == rhs.getClass() ? compareTo((Number) rhs) == 0 : false;
   }
+
 }
 

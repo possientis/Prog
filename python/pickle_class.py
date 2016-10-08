@@ -1,15 +1,8 @@
 import pickle
-
-class MyClass(object):
-    def __init__(self):
-        self.data = []
-    def __str__(self):
-        return "Custom Class MyClass Data:: %s" % str(self.data)
-    def add_item(self,item):
-        self.data.append(item)
+import custom_class
 
 
-my_obj = MyClass()
+my_obj = custom_class.MyClass()
 my_obj.add_item(1)
 my_obj.add_item(2)
 my_obj.add_item(3)

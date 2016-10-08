@@ -1,6 +1,7 @@
 import java.math.BigInteger;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
+import org.spongycastle.math.ec.ECFieldElement;
 
 
 public class Test_ECPoint extends Test_Abstract {
@@ -12,7 +13,6 @@ public class Test_ECPoint extends Test_Abstract {
     checkECPointAbstractFp();
     checkECPointF2m();
     checkECPointFp();
-    checkAdd();
     checkECPointEqualsECPoint();
     checkECPointEquals();
     checkGetAffineXCoord();
@@ -87,17 +87,106 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkECPointAbstractF2m()
   {
+    ECPoint.AbstractF2m x;  // compile time check
   }
 
-  private void checkECPointAbstractFp(){ /* TODO */ }
-  private void checkECPointF2m(){ /* TODO */ }
-  private void checkECPointFp(){ /* TODO */ }
-  private void checkAdd(){ /* TODO */ }
-  private void checkECPointEqualsECPoint(){ /* TODO */ }
-  private void checkECPointEquals(){ /* TODO */ }
-  private void checkGetAffineXCoord(){ /* TODO */ }
-  private void checkGetAffineYCoord(){ /* TODO */ }
-  private void checkGetCurve(){ /* TODO */ }
+  private void checkECPointAbstractFp()
+  {
+    ECPoint.AbstractFp x;   // compile time check
+  }
+
+  private void checkECPointF2m()
+  {
+    ECPoint.F2m x;          // compile time check
+  }
+  private void checkECPointFp()
+  {
+    ECPoint.Fp x;           // compile time check
+  }
+
+  private void checkECPointEqualsECPoint()
+  {
+    // not doing much here
+    ECPoint x = _getRandomPoint();
+    ECPoint y = _getRandomPoint();
+    checkCondition(!x.equals(y), "checkECPointEqualsECPoint.1");
+    checkCondition(!y.equals(x), "checkECPointEqualsECPoint.2");
+    checkCondition(x.equals(x), "checkECPointEqualsECPoint.3");
+    checkCondition(y.equals(y), "checkECPointEqualsECPoint.4");
+  }
+
+  private void checkECPointEquals()
+  {
+    // not doing much here
+    Object x = _getRandomPoint();
+    Object y = _getRandomPoint();
+    checkCondition(!x.equals(y), "checkECPointEquals.1");
+    checkCondition(!y.equals(x), "checkECPointEquals.2");
+    checkCondition(x.equals(x), "checkECPointEquals.3");
+    checkCondition(y.equals(y), "checkECPointEquals.4");
+  }
+
+  private void checkGetAffineXCoord()
+  {
+    ECCurve curve = EC_Test_Utils.curve;
+    ECPoint point = _getRandomPoint();
+    ECFieldElement x = point.getAffineXCoord();
+    ECFieldElement y = point.getAffineYCoord();
+
+    BigInteger xx = x.toBigInteger();
+    BigInteger yy = y.toBigInteger();
+
+    ECPoint test = curve.createPoint(xx,yy);
+
+    checkEquals(x, test.getAffineXCoord(), "checkGetAffineXCoord.1");
+
+    // some algebraic operation, result of which is not normalized
+    ECPoint test2 = test.add(test);
+    checkCondition(!test2.isNormalized(), "checkGetAffineXCoord.2");
+
+    // function should throw on non-normalized input
+    checkException(
+        () -> test2.getAffineXCoord(), 
+        "IllegalStateException",
+        "checkGetAffineXCoord.3"
+    );
+  }
+
+  private void checkGetAffineYCoord()
+  {
+    ECCurve curve = EC_Test_Utils.curve;
+    ECPoint point = _getRandomPoint();
+    ECFieldElement x = point.getAffineXCoord();
+    ECFieldElement y = point.getAffineYCoord();
+
+    BigInteger xx = x.toBigInteger();
+    BigInteger yy = y.toBigInteger();
+
+    ECPoint test = curve.createPoint(xx,yy);
+
+    checkEquals(y, test.getAffineYCoord(), "checkGetAffineYCoord.1");
+
+    // some algebraic operation, result of which is not normalized
+    ECPoint test2 = test.add(test);
+    checkCondition(!test2.isNormalized(), "checkGetAffineYCoord.2");
+
+    // function should throw on non-normalized input
+    checkException(
+        () -> test2.getAffineYCoord(), 
+        "IllegalStateException",
+        "checkGetAffineYCoord.3"
+    );
+  }
+
+  private void checkGetCurve()
+  {
+    ECCurve curve = EC_Test_Utils.curve;
+    ECPoint G = EC_Test_Utils.G;
+    ECPoint P = _getRandomPoint();
+    checkEquals(curve, G.getCurve(), "checkGetCurve.1");
+    checkEquals(curve, P.getCurve(), "checkGetCurve.2");
+  }
+
   private void checkGetDetachedPoint(){ /* TODO */ }
   private void checkGetEncoded(){ /* TODO */ }
   private void checkGetRawXCoord(){ /* TODO */ }

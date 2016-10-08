@@ -25,6 +25,9 @@ public class Test_Number extends Test_Abstract
     checkCompareTo();
     checkHashCode();
     checkNumberEquals();  
+    checkFromBigInteger();
+    checkToBigInteger();
+    checkBitLength();
   }
 
   private static Number _signedRandom(int numBits)
@@ -329,25 +332,36 @@ public class Test_Number extends Test_Abstract
     BigInteger n = new BigInteger(x.signum(), x.toBytes(32));
     BigInteger m = new BigInteger(y.signum(), y.toBytes(32));
     BigInteger prod = n.multiply(m);
-    Number check;
-
-    if(prod.compareTo(BigInteger.ZERO) >= 0)
-    {
-      check = Number.fromBytes(1, prod.toByteArray());
-    }
-    else
-    {
-      check = Number.fromBytes(-1, prod.negate().toByteArray());
-    }
-
+    Number check = Number.fromBigInteger(prod);
     checkEquals(check, x.mul(y), "checkMul.8");
+  }
+
+  private static void checkToString()
+  {
+    String check1;
+    String check2;
+    Number x;
+
+    // zero
+    check1 = Number.ZERO.toString();
+    checkEquals(check1, "0", "checkToString.1");
+
+    // one
+    check1 = Number.ONE.toString();
+    checkEquals(check1, "1", "checkToString.1");
+
+    // random positive
+    x = Number.random(256);
+    
 
   }
 
-  private static void checkToString(){ /* TODO */ }
+
   private static void checkCompareTo(){ /* TODO */ }
   private static void checkHashCode(){ /* TODO */ }
   private static void checkNumberEquals(){ /* TODO */ }
-
+  private static void checkFromBigInteger(){ /* TODO */ }
+  private static void checkToBigInteger(){ /* TODO */ }
+  private static void checkBitLength(){ /* TODO */ }
 
 }

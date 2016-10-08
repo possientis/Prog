@@ -9,4 +9,6 @@ public class NumberFactory1 extends NumberFactory
     return new Number1(new BigInteger(signum, val));}
   @Override public Number random(int numBits, Random rnd){
     return new Number1(new BigInteger(numBits, rnd));}
+  @Override public Number fromBigInteger(BigInteger n){
+    return new Number1(n);}
 }
