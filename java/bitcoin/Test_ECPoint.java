@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.math.BigInteger;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
@@ -187,8 +188,88 @@ public class Test_ECPoint extends Test_Abstract {
     checkEquals(curve, P.getCurve(), "checkGetCurve.2");
   }
 
-  private void checkGetDetachedPoint(){ /* TODO */ }
-  private void checkGetEncoded(){ /* TODO */ }
+  private void checkGetDetachedPoint()
+  {
+    // returns a normalized clone it seems
+
+    ECPoint point = _getRandomPoint();
+
+    point = point.add(point); // no longer normalized
+
+    checkCondition(!point.isNormalized(), "checkGetDetachedPoint.1");
+
+    ECPoint cloned = point.getDetachedPoint();
+
+    // cloned should be normalized
+    checkCondition(cloned.isNormalized(), "checkGetDetachedPoint.2");
+
+    // cloned is essentially the same point
+    checkEquals(point, cloned, "checkGetDetachedPoint.3");
+
+    // cloned is a new reference
+    checkCondition(point != cloned, "checkGetDetachedPoint.4");
+  }
+
+  private void checkGetEncoded()
+  {
+    // infinity
+    ECPoint zero = EC_Test_Utils.curve.getInfinity();
+    byte[] z1 = zero.getEncoded(true);
+    byte[] z2 = zero.getEncoded(false);
+    checkEquals(z1.length, 1, "checkGetEncoded.1");
+    checkEquals(z2.length, 1, "checkGetEncoded.2");
+    checkEquals(z1[0], (byte) 0x00, "checkGetEncoded.3");
+    checkEquals(z2[0], (byte) 0x00, "checkGetEncoded.4");
+
+
+    // random
+    ECPoint point = _getRandomPoint();
+    byte[] b1 = point.getEncoded(true);   // compressed
+    byte[] b2 = point.getEncoded(false);  // uncompressed
+
+    boolean parity = point.getAffineYCoord().testBitZero();
+
+    // checking sizes
+    checkEquals(b1.length, 33, "checkGetEncoded.5");
+    checkEquals(b2.length, 65, "checkGetEncoded.6");
+
+    // checking leading bytes
+    byte first = parity ? (byte) 0x03 : (byte) 0x02;
+    checkEquals(b1[0], first, "checkGetEncoded.7");
+    checkEquals(b2[0], (byte) 0x04, "checkGetEncoded.8");
+
+    // checking X
+    byte[] bx = point.getAffineXCoord().getEncoded();
+    checkEquals(bx.length, 32, "checkGetEncoded.9");
+    for(int i = 0; i < 32; ++i)
+    {
+      checkEquals(bx[i], b1[i+1], "checkGetEncoded.10");
+      checkEquals(bx[i], b2[i+1], "checkGetEncoded.11");
+    }
+
+    // checking Y
+    byte[] by = point.getAffineYCoord().getEncoded();
+    checkEquals(by.length, 32, "checkGetEncoded.12");
+    for(int i = 0; i < 32; ++i)
+    {
+      checkEquals(by[i], b2[i+33], "checkGetEncoded.13");
+    }
+
+    // encoding is that of normalized point
+    point = point.add(point);  // no longer normalized
+
+    checkCondition(!point.isNormalized(), "checkGetEncoded.14");
+
+    b1 = point.getEncoded(true);    // compressed
+    b2 = point.getEncoded(false);   // uncompressed
+
+    byte[] test1 = point.normalize().getEncoded(true);
+    byte[] test2 = point.normalize().getEncoded(false);
+
+    checkCondition(Arrays.equals(b1, test1), "checkGetEncoded.15");
+    checkCondition(Arrays.equals(b2, test2), "checkGetEncoded.16");
+  }
+
   private void checkGetRawXCoord(){ /* TODO */ }
   private void checkGetRawYCoord(){ /* TODO */ }
   private void checkGetXCoord(){ /* TODO */ }

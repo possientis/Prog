@@ -162,5 +162,11 @@ public class Number2 extends Number
       return value.negate().bitLength();
     }
   }
+
+  @Override public BigInteger toBigInteger()
+  {
+    return value;
+  }
+
 }
 

@@ -283,20 +283,10 @@ public class Test_Number extends Test_Abstract
     checkEquals(x.add(y).add(z), x.add(y.add(z)), "checkAdd.6");
 
     // actual check of x + y
-    BigInteger n = new BigInteger(x.signum(), x.toBytes(32));
-    BigInteger m = new BigInteger(y.signum(), y.toBytes(32));
+    BigInteger n = x.toBigInteger();
+    BigInteger m = y.toBigInteger();
     BigInteger sum = n.add(m);
-    Number check;
-
-    if(sum.compareTo(BigInteger.ZERO) >= 0)
-    {
-      check = Number.fromBytes(1, sum.toByteArray());
-    }
-    else
-    {
-      check = Number.fromBytes(-1, sum.negate().toByteArray());
-    }
-
+    Number check = Number.fromBigInteger(sum);
     checkEquals(check, x.add(y), "checkAdd.7");
 
   }
@@ -329,8 +319,8 @@ public class Test_Number extends Test_Abstract
     checkEquals(x.mul(y).mul(z), x.mul(y.mul(z)), "checkMul.7");
 
     // actual check of x * y
-    BigInteger n = new BigInteger(x.signum(), x.toBytes(32));
-    BigInteger m = new BigInteger(y.signum(), y.toBytes(32));
+    BigInteger n = x.toBigInteger();
+    BigInteger m = y.toBigInteger();
     BigInteger prod = n.multiply(m);
     Number check = Number.fromBigInteger(prod);
     checkEquals(check, x.mul(y), "checkMul.8");
@@ -356,12 +346,131 @@ public class Test_Number extends Test_Abstract
 
   }
 
+  private static void checkCompareTo()
+  {
 
-  private static void checkCompareTo(){ /* TODO */ }
-  private static void checkHashCode(){ /* TODO */ }
-  private static void checkNumberEquals(){ /* TODO */ }
-  private static void checkFromBigInteger(){ /* TODO */ }
-  private static void checkToBigInteger(){ /* TODO */ }
+    // from random
+    Number x = Number.random(256);  
+    Number y = x.negate();
+
+    checkEquals(x.compareTo(Number.ZERO), 1, "checkCompareTo.1");
+    checkEquals(Number.ZERO.compareTo(x), -1, "checkCompareTo.2");
+    checkEquals(y.compareTo(Number.ZERO), -1, "checkCompareTo.3");
+    checkEquals(Number.ZERO.compareTo(y), 1, "checkCompareTo.4");
+
+    // from bytes
+    byte[] bytes = getRandomBytes(32);
+    x = Number.fromBytes(1, bytes);
+    y = Number.fromBytes(-1, bytes);
+
+    checkEquals(x.compareTo(Number.ZERO), 1, "checkCompareTo.5");
+    checkEquals(Number.ZERO.compareTo(x), -1, "checkCompareTo.6");
+    checkEquals(y.compareTo(Number.ZERO), -1, "checkCompareTo.7");
+    checkEquals(Number.ZERO.compareTo(y), 1, "checkCompareTo.8");
+
+    // from _signedRandom
+    x = _signedRandom(256);
+    y = _signedRandom(256);
+
+    BigInteger n = x.toBigInteger();
+    BigInteger m = y.toBigInteger();
+
+    checkEquals(x.compareTo(y), n.compareTo(m), "checkCompareTo.9");
+    checkEquals(y.compareTo(x), m.compareTo(n), "checkCompareTo.10");
+
+
+    y = Number.fromBigInteger(n);
+    checkEquals(x.compareTo(y), 0, "checkCompareTo.11");
+    checkEquals(y.compareTo(x), 0, "checkCompareTo.12");
+
+    // 0 <= 1
+    checkEquals(Number.ZERO.compareTo(Number.ONE), -1, "checkCompareTo.13");
+    checkEquals(Number.ONE.compareTo(Number.ZERO), 1, "checkCompareTo.14");
+  }
+
+  private static void checkHashCode()
+  {
+    // 0 and 1
+    int hash1 = Number.ZERO.hashCode();
+    int hash2 = Number.ONE.hashCode();
+
+    checkCondition(hash1 != hash2, "checkHashCode.1");
+
+    // x and - x
+    Number x = _signedRandom(256);
+    hash1 = x.hashCode();
+    hash2 = x.negate().hashCode();
+    checkCondition(hash1 != hash2, "checkHashCode.2");
+    
+    // same number
+    BigInteger n = x.toBigInteger();
+    Number y = Number.fromBigInteger(n);
+    hash1 = x.hashCode();
+    hash2 = y.hashCode();
+    checkEquals(hash1, hash2, "checkHashCode.3");
+  }
+
+  private static void checkNumberEquals()
+  {
+    // 0 and 1
+    checkCondition(!Number.ZERO.equals(Number.ONE), "checkNumberEquals.1");
+    checkCondition(!Number.ONE.equals(Number.ZERO), "checkNumberEquals.2");
+
+    // and and -x
+    Number x = _signedRandom(256);
+    checkCondition(!x.equals(x.negate()), "checkNumberEquals.3");
+    checkCondition(!x.negate().equals(x), "checkNumberEquals.4");
+
+    // same number
+    BigInteger n = x.toBigInteger();
+    Number y = Number.fromBigInteger(n);
+    checkCondition(x.equals(y), "checkNumberEquals.5");
+    checkCondition(y.equals(x), "checkNumberEquals.6");
+    checkCondition(x.equals(x), "checkNumberEquals.7");
+    checkEquals(x, y, "checkNumberEquals.8");
+    checkEquals(y, x, "checkNumberEquals.9");
+    checkEquals(x, x, "checkNumberEquals.10");
+  }
+
+
+  private static void checkFromBigInteger()
+  {
+    // 0
+    Number x = Number.fromBigInteger(BigInteger.ZERO);
+    Number y = Number.ZERO;
+    checkEquals(x, y, "checkFromBigInteger.1");
+
+    // 1
+    x = Number.fromBigInteger(BigInteger.ONE);
+    y = Number.ONE;
+    checkEquals(x, y, "checkFromBigInteger.2");
+
+    // signed random
+    x = _signedRandom(256);
+    y = Number.fromBigInteger(x.toBigInteger());
+    checkEquals(x, y, "checkFromBigInteger.3");
+  }
+
+
+  private static void checkToBigInteger()
+  {
+    // 0
+    BigInteger n = Number.ZERO.toBigInteger();
+    BigInteger m = BigInteger.ZERO;
+    checkEquals(n, m, "checktoBigInteger.1");
+
+    // 1
+    n = Number.ONE.toBigInteger();
+    m = BigInteger.ONE;
+    checkEquals(n, m, "checktoBigInteger.2");
+
+    // random
+    // TODO
+
+
+
+  }
+
   private static void checkBitLength(){ /* TODO */ }
 
 }
