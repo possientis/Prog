@@ -457,20 +457,79 @@ public class Test_Number extends Test_Abstract
     // 0
     BigInteger n = Number.ZERO.toBigInteger();
     BigInteger m = BigInteger.ZERO;
-    checkEquals(n, m, "checktoBigInteger.1");
+    checkEquals(n, m, "checkToBigInteger.1");
 
     // 1
     n = Number.ONE.toBigInteger();
     m = BigInteger.ONE;
-    checkEquals(n, m, "checktoBigInteger.2");
+    checkEquals(n, m, "checkToBigInteger.2");
 
     // random
-    // TODO
-
-
+    Number x = _signedRandom(256);
+    n = x.toBigInteger();
+    m = new BigInteger(x.signum(), x.toBytes(32));
+    checkEquals(n, m, "checkToBigInteger.3");
 
   }
 
-  private static void checkBitLength(){ /* TODO */ }
+  private static void checkBitLength()
+  {
+    // 0
+    int check1 = Number.ZERO.bitLength();
+    checkEquals(check1, 0, "checkBitLength.1");
+
+    // 1
+    check1 = Number.ONE.bitLength();
+    checkEquals(check1, 1, "checkBitLength.2");
+
+    // -1
+    check1 = Number.ONE.negate().bitLength();
+    checkEquals(check1, 1, "checkBitLength.3");
+
+    // 2
+    Number _2 = Number.ONE.add(Number.ONE);
+    check1 = _2.bitLength();
+    checkEquals(check1, 2, "checkBitLength.4");
+
+    // -2
+    check1 = _2.negate().bitLength();
+    checkEquals(check1, 2, "checkBitLength.5");
+
+    // 4
+    Number _4 = _2.mul(_2);
+    check1 = _4.bitLength();
+    checkEquals(check1, 3, "checkBitLength.6");
+    
+    // -4
+    check1 = _4.negate().bitLength();
+    checkEquals(check1, 3, "checkBitLength.7");
+
+    // 16
+    Number _16 = _4.mul(_4);
+    check1 = _16.bitLength();
+    checkEquals(check1, 5, "checkBitLength.8");
+
+    // -16
+    check1 = _16.negate().bitLength();
+    checkEquals(check1, 5, "checkBitLength.9");
+
+    // 256
+    Number _256 = _16.mul(_16);
+    check1 = _256.bitLength();
+    checkEquals(check1, 9, "checkBitLength.10");
+
+    // -256
+    check1 = _256.negate().bitLength();
+    checkEquals(check1, 9, "checkBitLength.10");
+
+    // +- 2*256
+    byte[] bytes = new byte[33];
+    bytes[0] = (byte) 0x01;
+    Number x = Number.fromBytes(1, bytes);
+    Number y = Number.fromBytes(-1, bytes);
+    checkEquals(x.bitLength(), 257, "checkBitLength.11");
+    checkEquals(y.bitLength(), 257, "checkBitLength.12");
+
+  }
 
 }

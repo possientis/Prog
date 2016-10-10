@@ -270,11 +270,65 @@ public class Test_ECPoint extends Test_Abstract {
     checkCondition(Arrays.equals(b2, test2), "checkGetEncoded.16");
   }
 
-  private void checkGetRawXCoord(){ /* TODO */ }
-  private void checkGetRawYCoord(){ /* TODO */ }
-  private void checkGetXCoord(){ /* TODO */ }
-  private void checkGetYCoord(){ /* TODO */ }
-  private void checkGetZCoord(){ /* TODO */ }
+  private void checkGetRawXCoord()
+  {
+    // normalized
+    ECPoint point = _getRandomPoint();
+    checkCondition(point.isNormalized(), "checkGetRawXCoord.1");
+    ECFieldElement x1 = point.getRawXCoord();
+    ECFieldElement x2 = point.getAffineXCoord();
+    ECFieldElement x3 = point.getXCoord();
+    checkEquals(x1, x2, "checkGetRawXCoord.2");
+    checkEquals(x1, x3, "checkGetRawXCoord.3");
+
+    // not normalized
+    point = point.add(point);
+    checkCondition(!point.isNormalized(), "checkGetRawXCoord.4");
+    x1 = point.getRawXCoord();
+    x2 = point.normalize().getAffineXCoord();
+    x3 = point.getXCoord();
+    checkCondition(!x1.equals(x2), "checkGetRawXCoord.5");
+    checkEquals(x1, x3, "checkGetRawXCoord.6");
+  }
+
+  private void checkGetRawYCoord()
+  {
+    // normalized
+    ECPoint point = _getRandomPoint();
+    checkCondition(point.isNormalized(), "checkGetRawXCoord.1");
+    ECFieldElement x1 = point.getRawXCoord();
+    ECFieldElement x2 = point.getAffineXCoord();
+    ECFieldElement x3 = point.getXCoord();
+    checkEquals(x1, x2, "checkGetRawXCoord.2");
+    checkEquals(x1, x3, "checkGetRawXCoord.3");
+
+    // not normalized
+    point = point.add(point);
+    checkCondition(!point.isNormalized(), "checkGetRawXCoord.4");
+    x1 = point.getRawXCoord();
+    x2 = point.normalize().getAffineXCoord();
+    x3 = point.getXCoord();
+    checkCondition(!x1.equals(x2), "checkGetRawXCoord.5");
+    checkEquals(x1, x3, "checkGetRawXCoord.6");
+  }
+
+  private void checkGetXCoord()
+  {
+    checkGetRawXCoord();
+  }
+
+  private void checkGetYCoord()
+  {
+    checkGetRawYCoord();
+  }
+
+  private void checkGetZCoord()
+  {
+    ECPoint point = _getRandomPoint();
+    // Y^2 = X^3 + 7.Z^6 ????
+    // TODO
+
+  }
   private void checkGetZCoords(){ /* TODO */ }
   private void checkHashCode(){ /* TODO */ }
   private void checkIsInfinity(){ /* TODO */ }

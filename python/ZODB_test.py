@@ -27,7 +27,8 @@ conn = db.open()
 
 root = conn.root()
 
-print(root.items)
+print(root['list'])
+print(root['dict'])
 
 conn.close()
 
