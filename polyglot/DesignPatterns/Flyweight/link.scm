@@ -1,0 +1,1 @@
+/home/john/Prog/scm/link/link.scm

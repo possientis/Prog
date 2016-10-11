@@ -1,0 +1,1 @@
+/home/john/Prog/c/dict/dict.c

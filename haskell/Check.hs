@@ -234,7 +234,11 @@ parseArgs = do
     die errs    = dump (concat errs ++ info)  >> exitWith (ExitFailure 1)
     help        = dump info                   >> exitWith ExitSuccess
 
-
+options :: [OptDescr Flag]
+options = [ Option ['h'] ["help"] (NoArg Help)
+            "Show this help message",
+            Option ['n'] []       (ReqArg (\s -> N (read s)) "N")
+            "Number of concurrent connections (default 16)" ]
 
 
 

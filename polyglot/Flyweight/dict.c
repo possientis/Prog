@@ -1,1 +1,0 @@
-../../c/dict/dict.c
