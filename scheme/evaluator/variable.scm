@@ -12,7 +12,7 @@
 (define (strict-eval-variable exp env)
   (let ((value ((env 'lookup) exp)))
     (if (thunk? value)
-;      (force-thunk value)
+;      (force-thunk value) ; <------- key change, induces failure via run
       value
       value)))
 

@@ -10,10 +10,10 @@ rm -f c/a.out
 rm -f c/*.o
 rm -f c/tlpi/a.out
 rm -f c/tlpi/*.o
-rm -f cpp/a.out
-rm -f cpp/*.o
-rm -f cpp/bitcoin/a.out
-rm -f cpp/bitcoin/*.o
+rm -f c++/a.out
+rm -f c++/*.o
+rm -f c++/bitcoin/a.out
+rm -f c++/bitcoin/*.o
 rm -f c/secp256k1/a.out
 rm -f c/secp256k1/*.o
 rm -f c#/*.exe
@@ -39,9 +39,9 @@ rm -f clojure/compojure/*.class
 rm -f haskell/*.hi
 rm -f haskell/*.o
 rm -f haskell/test
-rm -f asm/*.o
-rm -f asm/a.out
-rm -f asm/test.dat
+rm -f assembly/*.o
+rm -f assembly/a.out
+rm -f assembly/test.dat
 rm -f scala/*.class
 rm -f coq/*.glob
 rm -f coq/*.vo

@@ -8,10 +8,13 @@
                           ": expected = " (object->string right)))))
 
 (define (test-expression exp value message . arg)
+  (display "check2: exp = ")(display exp)(display " : value = ")(display value)(newline)
   (let ((env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) ; save eval mode to be restored
+    (display "check3:\n")
     (assert-equals (strict-eval exp env) value (print ": strict-eval")) 
+    (display "check4:\n")
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (assert-equals ((analyze exp) env) value (print ": analyze"))
     (set-eval-mode 'strict)
@@ -29,6 +32,7 @@
   ;
   ; self-evaluating
   (display "testing self-evaluating expressions...\n")
+  (display "check1:\n")
   (test-expression '3 3 "self-evaluating")
   (test-expression '3.5 3.5 "self-evaluating")
   (test-expression '"hello" "hello" "self-evaluating")

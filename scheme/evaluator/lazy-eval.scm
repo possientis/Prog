@@ -6,8 +6,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (lazy-eval exp . arg)
+  (display "check5: exp = ")(display exp)(newline)
   (let ((env (if (null? arg) global-env (car arg))))
-    (cond ((self-evaluating? exp) (lazy-eval-self-evaluating exp env))
+    (cond ((self-evaluating? exp) 
+           (display "check6: self-evaluating")(newline)
+           (lazy-eval-self-evaluating exp env))
           ((variable? exp)        (lazy-eval-variable exp env))
           ((quoted? exp)          (lazy-eval-quoted exp env))                 
           ((assignment? exp)      (lazy-eval-assignment exp env))           

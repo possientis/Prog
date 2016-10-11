@@ -6,7 +6,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 ; testing
-(define (thunk? obj) (tagged-list? obj 'thunk))
+(define (thunk? obj) 
+  (tagged-list? obj 'thunk))
 
 ; making
 (define thunk   ; constructor
@@ -44,7 +45,10 @@
 
 ; forcing
 (define (force-thunk obj)
-  (if (thunk? obj) ((cadr obj) 'value) (error "force-thunk: object not a thunk")))
+  (display "check9: force-thunk: cannot evaluate object\n")
+  (if (thunk? obj) 
+    ((cadr obj) 'value)
+    (error "force-thunk: object not a thunk")))
 
 
 ))  ; include guard
