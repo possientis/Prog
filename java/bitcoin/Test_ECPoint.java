@@ -324,13 +324,67 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkGetZCoord()
   {
-    ECPoint point = _getRandomPoint();
-    // Y^2 = X^3 + 7.Z^6 ????
-    // TODO
+    ECPoint point = _getRandomPoint(); // normalized
 
+    BigInteger z = point.getZCoord(0).toBigInteger();
+    checkEquals(z, BigInteger.ONE, "checkGetZCoord.1");
+    checkCondition(point.getZCoord(1) == null, "checkGetZCoord.2"); 
+
+    point = point.add(point);         // no longer normalized
+    z = point.getZCoord(0).toBigInteger();
+    BigInteger x = point.getXCoord().toBigInteger();
+    BigInteger y = point.getYCoord().toBigInteger();
+    BigInteger _7 = BigInteger.valueOf(7);
+    BigInteger p = EC_Test_Utils.fieldPrime;
+    BigInteger y2 = y.multiply(y).mod(p);
+    BigInteger x3 = x.multiply(x).multiply(x).mod(p);
+    BigInteger z2 = z.multiply(z).mod(p);
+    BigInteger z6 = z2.multiply(z2).multiply(z2).mod(p);
+    BigInteger check = x3.add(_7.multiply(z6).mod(p)).mod(p);
+    checkEquals(check, y2, "checkGetZCoord.3"); // Y^2 = X^3 + 7.Z^6
+    point = point.normalize();
+    BigInteger u = point.getXCoord().toBigInteger();
+    BigInteger v = point.getYCoord().toBigInteger();
+    BigInteger zInv = z.modInverse(p);
+    BigInteger zInv2 = zInv.multiply(zInv).mod(p);
+    BigInteger zInv3 = zInv2.multiply(zInv).mod(p);
+    y = y.multiply(zInv3).mod(p);
+    x = x.multiply(zInv2).mod(p);
+    checkEquals(x, u, "checkGetZCoord.4");  // X' = X/Z^2
+    checkEquals(y, v, "checkGetZCoord.5");  // Y' = Y/Z^3
   }
-  private void checkGetZCoords(){ /* TODO */ }
-  private void checkHashCode(){ /* TODO */ }
+
+  private void checkGetZCoords()
+  {
+    ECPoint point = _getRandomPoint();  // normalized
+
+    ECFieldElement[] zs = point.getZCoords();
+    checkEquals(zs.length, 1, "checkGetZCoords.1");
+    BigInteger z = zs[0].toBigInteger();
+    checkEquals(z, BigInteger.ONE, "checkGetZCoords.2");
+
+    point = point.add(point); // no longer normalized
+    zs = point.getZCoords();
+    checkEquals(zs.length, 1, "checkGetZCoords.3");
+    checkEquals(zs[0], point.getZCoord(0), "checkGetZCoords.4");
+  }
+
+  private void checkHashCode()
+  {
+    ECPoint point = _getRandomPoint();      // normalized
+    point = point.add(point);               // no longer normalized;
+    int check = point.hashCode();
+    int hc = ~point.getCurve().hashCode();  // one's complement of curve hash 
+
+    point = point.normalize();
+
+    hc ^= point.getXCoord().hashCode() * 17;
+    hc ^= point.getYCoord().hashCode() * 257;
+
+    checkEquals(check, hc, "checkHashCode.1");
+  }
+
+
   private void checkIsInfinity(){ /* TODO */ }
   private void checkIsNormalized(){ /* TODO */ }
   private void checkIsValid(){ /* TODO */ }

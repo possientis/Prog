@@ -1,1 +1,1 @@
-/home/john/Prog/scm/hash/hash.scm
+/home/john/Prog/scheme/hash/hash.scm

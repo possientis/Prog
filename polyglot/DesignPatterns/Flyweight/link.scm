@@ -1,1 +1,1 @@
-/home/john/Prog/scm/link/link.scm
+/home/john/Prog/scheme/link/link.scm

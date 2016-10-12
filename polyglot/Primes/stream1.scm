@@ -1,1 +1,1 @@
-../../scm/stream/stream1.scm
+/home/john/Prog/scheme/stream/stream1.scm

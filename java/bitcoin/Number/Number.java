@@ -25,9 +25,7 @@ public abstract class Number implements Comparable<Number> {
     return _factory.fromBigInteger(n);
   }
 
-
-
-  // instance nembers
+  // instance members
   
   public abstract Number add(Number rhs);
   public abstract Number mul(Number rhs);
@@ -37,7 +35,6 @@ public abstract class Number implements Comparable<Number> {
   public abstract int bitLength();              // number of bits of magnitude
   public abstract BigInteger toBigInteger();
 
-
   @Override public abstract String toString();
   @Override public abstract int compareTo(Number rhs);
   @Override public abstract int hashCode();
@@ -45,6 +42,5 @@ public abstract class Number implements Comparable<Number> {
   { 
       return getClass() == rhs.getClass() ? compareTo((Number) rhs) == 0 : false;
   }
-
 }
 
