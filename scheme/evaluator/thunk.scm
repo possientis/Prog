@@ -6,16 +6,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 ; testing
-(define (thunk? obj) 
-  (tagged-list? obj 'thunk))
+(define (thunk? obj) (tagged-list? obj 'thunk))
 
 ; making
-(define thunk   ; constructor
+(define make-thunk   ; constructor
   (let ()
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
         (cond ((eq? m 'value) (value data))
+              ((eq? m 'expression) (expression data))
+              ((eq? m 'environment) (environment data))
+              ((eq? m 'evaluated?) (evaluated? data))
               (else (error "thunk: unknown operation error" m)))))
     ;
     (define (expression data) (cadr data))
@@ -43,13 +45,17 @@
     ;
     (lambda (expr env) (list 'thunk (this (list 'data expr env))))))
 
+; destructuring
+(define (thunk-expression obj) ((cadr obj) 'expression))
+(define (thunk-environment obj) ((cadr obj) 'environment))
+(define (thunk-evaluated? obj) ((cadr obj) 'evaluated?))
+
 ; forcing
 (define (force-thunk obj)
   (display "check9: force-thunk: cannot evaluate object\n")
   (if (thunk? obj) 
     ((cadr obj) 'value)
     (error "force-thunk: object not a thunk")))
-
 
 ))  ; include guard
 

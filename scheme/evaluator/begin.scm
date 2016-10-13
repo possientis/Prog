@@ -58,7 +58,7 @@
 ; lazy
 (define (lazy-eval-sequence operands env)
   (if (null? operands)
-    (thunk unspecified-value '())
+    (make-thunk unspecified-value '())
     (let ((first (lazy-eval (car operands) env)))
       (if (null? (cdr operands))
         first

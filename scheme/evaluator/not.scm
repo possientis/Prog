@@ -26,7 +26,7 @@
       (if (true? (pred env)) #f #t))))
 
 ; lazy eval
-(define (lazy-eval-not exp env) (thunk exp env))
+(define (lazy-eval-not exp env) (make-thunk exp env))
 
 ))  ; include guard
 

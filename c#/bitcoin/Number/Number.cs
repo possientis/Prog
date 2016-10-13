@@ -12,9 +12,9 @@ public abstract class Number : IComparable<Number> {
 
   public static Number ZERO = _factory.Zero();
   public static Number ONE = _factory.One();
-  public static Number FromBytes(int signum, byte[] val)  // big-endian
+  public static Number FromBytes(int sign, byte[] val)  // big-endian
   {
-    return _factory.FromBytes(signum, val);
+    return _factory.FromBytes(sign, val);
   }
   public static Number Random(int numBits)  // uniform 0 .. 2^(numBits) -1
   {
@@ -31,7 +31,7 @@ public abstract class Number : IComparable<Number> {
   public abstract Number Mul(Number rhs);
   public abstract Number Negate();
   public abstract byte[] ToBytes(int numBytes); // unsigned, big-endian
-  public abstract int Signum();                 // 1, 0, -1
+  public abstract int Sign { get; }             // 1, 0, -1
   public abstract int bitLength();              // number of bits of magnitude
   public abstract BigInteger ToBigInteger();
 

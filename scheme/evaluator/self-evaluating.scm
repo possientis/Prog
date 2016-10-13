@@ -26,7 +26,7 @@
 ; creates an 'evaluated' thunk which has no embedded environment
 (define (lazy-eval-self-evaluating exp env) 
   (display "check7: exp = ")(display exp)(newline)
-  (let ((x (thunk exp '())))
+  (let ((x (make-thunk exp '())))
     (display "check8: ")(newline)
     (display "check9: x = ")(display x)(newline)
     x))

@@ -26,15 +26,15 @@
         (rhs (assignment-expression exp)))
     (let ((val (analyze rhs)))
       (lambda (env) ((env 'set!) var (val env))
-       unspecified-value ))))
+       unspecified-value))))
 
 ; lazy eval
 (define (lazy-eval-assignment exp env)
   (let ((var (assignment-variable exp))
         (rhs (assignment-expression exp)))
     (let ((val (lazy-eval rhs env)))
-      ((env 'set!) var val)             ; val is a thunk
-      (thunk unspecified-value '()))))  ; should always return a thunk
+      ((env 'set!) var val)                   ; val is a thunk
+      (make-thunk unspecified-value '()))))   ; should always return a thunk
 
 ; Note: the side effect resulting from a lazy assignment takes place immediately.
 ; In other words, the change in binding is not delayed. However, the assignment

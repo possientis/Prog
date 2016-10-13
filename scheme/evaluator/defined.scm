@@ -28,7 +28,7 @@
       (lambda (env) ((env 'defined?) var))))) 
 
 ; lazy eval
-(define (lazy-eval-defined? exp env) (thunk exp env))
+(define (lazy-eval-defined? exp env) (make-thunk exp env))
 
 ))  ; include guard
 

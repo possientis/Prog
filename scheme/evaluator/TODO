@@ -1,7 +1,9 @@
+assert-not-equals?
+
 In order to achieve smooth unit-testing, we felt variable.scm had to be changed 
 so that strict evaluation would go beyond a simple look-up and actually force a 
 thunk whenever it is encountered. This has created all sort of issues. 
-However this change real means that 'thunk expression' should really be part of
+However this change really means that 'thunk expression' should really be part of
 the language and be accepted by strict eval. Review this idea and look at debug.scm.
 
 

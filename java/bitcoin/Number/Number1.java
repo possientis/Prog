@@ -79,7 +79,7 @@ public class Number1 extends Number
   @Override public byte[] toBytes(int numBytes)
   {
     byte[] unsigned;                      // returned byte array
-    byte[] signed = value.toByteArray();  // two's complement, big endian
+
     int signum = value.signum();
 
     switch(signum)
@@ -90,12 +90,14 @@ public class Number1 extends Number
 
         for(int i = 0; i < numBytes; ++i)
         {
-          unsigned[i] = 0;
+          unsigned[i] = (byte) 0x00;
         }
 
         break;
 
       case 1:
+
+        byte[] signed = value.toByteArray();  // two's complement, big endian
 
         unsigned = new byte[numBytes];
 
@@ -106,6 +108,8 @@ public class Number1 extends Number
 
         int size;   // number of bytes nedeed to encode magnitude of number
         int start;  // position from which signed array should be copied over
+
+        // note that signum = 1 ensures signed cannot be the empty array
 
         if((signed[0] & 0xFF) == 0) // signed array has leading 0x00 bytes
         {
@@ -154,7 +158,8 @@ public class Number1 extends Number
 
   @Override public int bitLength()
   {
-    if(value.compareTo(BigInteger.ZERO) >= 0){
+    if(value.signum() >= 0)
+    {
       return value.bitLength();
     }
     else

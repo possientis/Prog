@@ -35,7 +35,7 @@
         (params (analyze-procedure-parameters proc))
         (init-env (analyze-procedure-environment proc)))
     (let ((extended-env ((init-env 'extended) params args)))
-      (thunk (body extended-env) '()))))
+      (make-thunk (body extended-env) '()))))
 
 
 

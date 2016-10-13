@@ -20,6 +20,6 @@
     (lambda (env) qval)))
 
 ; lazy eval
-(define (lazy-eval-quoted exp env) (thunk exp 'dummy-env))
+(define (lazy-eval-quoted exp env) (make-thunk exp 'dummy-env))
 
 ))  ; include guard

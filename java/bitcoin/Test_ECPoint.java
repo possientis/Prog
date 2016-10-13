@@ -385,12 +385,97 @@ public class Test_ECPoint extends Test_Abstract {
   }
 
 
-  private void checkIsInfinity(){ /* TODO */ }
-  private void checkIsNormalized(){ /* TODO */ }
-  private void checkIsValid(){ /* TODO */ }
-  private void checkMultiply(){ /* TODO */ }
-  private void checkNegate(){ /* TODO */ }
-  private void checkNormalize(){ /* TODO */ }
+  private void checkIsInfinity()
+  {
+    ECPoint point = _getRandomPoint();
+    checkCondition(!point.isInfinity(), "checkIsInfinity.1");
+
+    point = point.getCurve().getInfinity();
+    checkCondition(point.isInfinity(), "checkIsInfinity.2");
+  }
+
+  private void checkIsNormalized()
+  {
+    ECPoint point = _getRandomPoint();
+    checkCondition(point.isNormalized(), "checkIsNormalized.1");
+
+    point = point.add(point);
+    checkCondition(!point.isNormalized(), "checkIsNormalized.2");
+  }
+
+  private void checkIsValid()
+  {
+    ECPoint point = _getRandomPoint();
+    checkCondition(point.isValid(), "checkIsValid.1");
+
+    point = point.getCurve().getInfinity();
+    checkCondition(point.isValid(), "checkIsValid.2");
+
+    point = point.getCurve().createPoint(BigInteger.ONE, BigInteger.ONE);
+    checkCondition(!point.isValid(), "checkIsValid.3");
+  }
+
+
+  private void checkMultiply()
+  {
+    ECPoint x = _getRandomPoint();
+    ECPoint g = EC_Test_Utils.G;
+    ECPoint inf = EC_Test_Utils.curve.getInfinity();
+    BigInteger q = EC_Test_Utils.curveOrder; 
+    BigInteger n = (new BigInteger(1, getRandomBytes(32))).mod(q);
+
+    // main test
+    ECPoint check1 = x.multiply(n);
+    ECPoint check2 = EC_Test_Utils.multiply(n, x);
+    checkEquals(check1, check2, "checkMultiply.1");
+
+    // other basic checks
+    check1 = g.multiply(q); // g has order q so result should be inf
+    checkEquals(check1, inf, "checkMultiply.2");
+
+    check1 = inf.multiply(n);
+    checkEquals(check1, inf, "checkMultiply.3");
+
+    check1 = x.multiply(BigInteger.ZERO);
+    checkEquals(check1, inf, "checkMultiply.4");
+  }
+
+  private void checkNegate()
+  {
+    ECPoint x = _getRandomPoint();
+    ECPoint y = x.negate();
+    ECPoint inf = EC_Test_Utils.curve.getInfinity();
+
+    checkEquals(x.add(y), inf, "checkNegate.1");
+    checkEquals(inf.negate(), inf, "checkNegate.2");
+  }
+
+  private void checkNormalize()
+  {
+    ECPoint point = _getRandomPoint();
+    point = point.add(point); // no longer normalized
+
+    BigInteger x = point.getXCoord().toBigInteger();
+    BigInteger y = point.getYCoord().toBigInteger();
+    BigInteger z = point.getZCoord(0).toBigInteger();
+    BigInteger p = EC_Test_Utils.fieldPrime;
+    BigInteger zInv = z.modInverse(p);
+    BigInteger zInv2 = zInv.multiply(zInv).mod(p);
+    BigInteger zInv3 = zInv2.multiply(zInv).mod(p);
+    BigInteger u = x.multiply(zInv2).mod(p);
+    BigInteger v = y.multiply(zInv3).mod(p);
+
+    point = point.normalize();
+    x = point.getXCoord().toBigInteger();
+    y = point.getYCoord().toBigInteger();
+    z = point.getZCoord(0).toBigInteger();
+
+    checkEquals(x, u, "checkNormalize.1");
+    checkEquals(y, v, "checkNormalize.2");
+    checkEquals(z, BigInteger.ONE, "checkNormalize.3");
+  }
+
+
   private void checkScaleX(){ /* TODO */ }
   private void checkScaleY(){ /* TODO */ }
   private void checkSubtract(){ /* TODO */ }

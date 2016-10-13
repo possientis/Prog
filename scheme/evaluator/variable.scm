@@ -30,6 +30,6 @@
   (let ((value ((env 'lookup) exp)))
     (if (thunk? value)
       value
-      (thunk value '())))) ; creating evaluated thunk from value
+      (make-thunk value '())))) ; creating evaluated thunk from value
 
 ))  ; include guard
