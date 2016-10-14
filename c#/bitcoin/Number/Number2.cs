@@ -1,22 +1,22 @@
 using System;
 using System.Numerics;
 
-public class Number1 : Number 
+public class Number2 : Number 
 {
   // data
   private readonly BigInteger val;
 
   // constructor
-  public Number1(BigInteger val){ this.val = val; }
+  public Number2(BigInteger val){ this.val = val; }
 
   // Unlike java, static members in C# are inherited from the base class.
   // Hence the below declarations hides existing static members of class 
   // 'Number' which generates a compiler warning. The keyword 'new' is
   // required to suppress this warning.
 
-  public new static Number ZERO = new Number1(BigInteger.Zero);
+  public new static Number ZERO = new Number2(BigInteger.Zero);
 
-  public new static Number ONE = new Number1(BigInteger.One);
+  public new static Number ONE = new Number2(BigInteger.One);
 
   public override Number Add(Number rhs)
   {
@@ -30,9 +30,9 @@ public class Number1 : Number
       throw new InvalidCastException("rhs has illegal type");
     }
 
-    Number1 cast = (Number1) rhs;
+    Number2 cast = (Number2) rhs;
 
-    return new Number1(BigInteger.Add(this.val, cast.val));
+    return new Number2(BigInteger.Add(this.val, cast.val));
   }
 
   public override Number Mul(Number rhs)
@@ -47,14 +47,14 @@ public class Number1 : Number
       throw new InvalidCastException("rhs has illegal type");
     }
 
-    Number1 cast = (Number1) rhs;
+    Number2 cast = (Number2) rhs;
 
-    return new Number1(BigInteger.Multiply(val, cast.val));
+    return new Number2(BigInteger.Multiply(val, cast.val));
 }
   
   public override Number Negate()
   {
-    return new Number1(BigInteger.Negate(val));
+    return new Number2(BigInteger.Negate(val));
   }
 
   public override string ToString()
@@ -75,7 +75,7 @@ public class Number1 : Number
       throw new InvalidCastException("rhs has illegal type");
     }
 
-    Number1 cast = (Number1) rhs;
+    Number2 cast = (Number2) rhs;
 
     return val.CompareTo(cast.val);
   }

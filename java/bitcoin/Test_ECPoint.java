@@ -36,7 +36,6 @@ public class Test_ECPoint extends Test_Abstract {
     checkNormalize();
     checkScaleX();
     checkScaleY();
-    checkSubtract();
     checkThreeTimes();
     checkTimesPow2();
     checkToString();
@@ -476,12 +475,99 @@ public class Test_ECPoint extends Test_Abstract {
   }
 
 
-  private void checkScaleX(){ /* TODO */ }
-  private void checkScaleY(){ /* TODO */ }
-  private void checkSubtract(){ /* TODO */ }
-  private void checkThreeTimes(){ /* TODO */ }
-  private void checkTimesPow2(){ /* TODO */ }
-  private void checkToString(){ /* TODO */ }
+  private void checkScaleX()
+  {
+    ECPoint point = _getRandomPoint();
+    BigInteger p = EC_Test_Utils.fieldPrime;
+    BigInteger n = (new BigInteger(1, getRandomBytes(32))).mod(p);
+    ECCurve curve = point.getCurve();
+
+    ECFieldElement scale = curve.fromBigInteger(n);
+    ECPoint scaled = point.scaleX(scale);
+
+    BigInteger x = point.getXCoord().toBigInteger();
+    BigInteger y = point.getYCoord().toBigInteger();
+
+    ECPoint check = curve.createPoint(x.multiply(n).mod(p),y);
+    checkEquals(scaled, check, "checkScaleX.1");
+  }
+
+
+  private void checkScaleY()
+  {
+    ECPoint point = _getRandomPoint();
+    BigInteger p = EC_Test_Utils.fieldPrime;
+    BigInteger n = (new BigInteger(1, getRandomBytes(32))).mod(p);
+    ECCurve curve = point.getCurve();
+
+    ECFieldElement scale = curve.fromBigInteger(n);
+    ECPoint scaled = point.scaleY(scale);
+
+    BigInteger x = point.getXCoord().toBigInteger();
+    BigInteger y = point.getYCoord().toBigInteger();
+
+    ECPoint check = curve.createPoint(x, y.multiply(n).mod(p));
+    checkEquals(scaled, check, "checkScaleY.1");
+  }
+
+  private void checkThreeTimes()
+  {
+    ECPoint point = _getRandomPoint();
+
+    ECPoint thrice = point.threeTimes();
+    ECPoint check = point.add(point).add(point);
+
+    checkEquals(thrice, check, "checkThreeTimes.1");
+
+  }
+
+  private void checkTimesPow2()
+  {
+    ECPoint point = _getRandomPoint();
+
+    checkException(
+        () -> point.timesPow2(-1), 
+        "IllegalArgumentException",
+        "checkTimesPow2.1"
+    );
+
+    ECCurve curve = point.getCurve();
+
+    ECPoint[] p = new ECPoint[256];
+
+    p[0] = point.timesPow2(0);
+    checkEquals(p[0], point, "checkTimesPow2.2");
+
+    for(int i = 1; i < 256; ++i)
+    {
+      p[i] = point.timesPow2(i);
+      checkEquals(p[i], p[i-1].add(p[i-1]), "checkTimesPow2.3");
+    }
+  }
+
+  private void checkToString()
+  {
+    ECPoint point = _getRandomPoint();
+    point = point.add(point); // no longer normalized
+    BigInteger x = point.getXCoord().toBigInteger();
+    BigInteger y = point.getYCoord().toBigInteger();
+    BigInteger z = point.getZCoord(0).toBigInteger();
+
+    // (x,y,z)
+    StringBuilder builder = new StringBuilder(1 + 64 + 1 + 64 + 1 + 64 + 1);
+
+    builder.append('(');
+    builder.append(x.toString(16));
+    builder.append(',');
+    builder.append(y.toString(16));
+    builder.append(',');
+    builder.append(z.toString(16));
+    builder.append(')');
+
+    String check = builder.toString();
+    checkEquals(check, point.toString(), "checkToString.1");
+  }
+
   private void checkTwice(){ /* TODO */ }
   private void checkTwicePlus(){ /* TODO */ }
 

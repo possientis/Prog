@@ -17,6 +17,8 @@ rm -f c++/bitcoin/*.o
 rm -f c/secp256k1/a.out
 rm -f c/secp256k1/*.o
 rm -f c#/*.exe
+rm -f c#/bitcoin/Number/*.dll
+rm -f c#/bitcoin/Number/*.exe
 rm -f java/*.class
 rm -f java/bitcoin/Number/*.class
 rm -f java/bitcoin/*.class

@@ -32,7 +32,7 @@ public abstract class Number : IComparable<Number> {
   public abstract Number Negate();
   public abstract byte[] ToBytes(int numBytes); // unsigned, big-endian
   public abstract int Sign { get; }             // 1, 0, -1
-  public abstract int bitLength();              // number of bits of magnitude
+  public abstract int BitLength();              // number of bits of magnitude
   public abstract BigInteger ToBigInteger();
 
   public abstract override string ToString();
