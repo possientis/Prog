@@ -50,9 +50,17 @@
 (define (thunk-environment obj) ((cadr obj) 'environment))
 (define (thunk-evaluated? obj) ((cadr obj) 'evaluated?))
 
+; strict eval
+(define (strict-eval-thunk exp env) ((cadr exp) 'value))
+
+; analyze
+(define (analyze-thunk exp) (lambda (env) ((cadr exp) 'value)))
+
+; lazy eval
+(define (lazy-eval-thunk exp env) exp)
+
 ; forcing
 (define (force-thunk obj)
-  (display "check9: force-thunk: cannot evaluate object\n")
   (if (thunk? obj) 
     ((cadr obj) 'value)
     (error "force-thunk: object not a thunk")))

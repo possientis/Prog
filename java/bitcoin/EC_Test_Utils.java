@@ -1,4 +1,5 @@
 import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
@@ -6,9 +7,21 @@ import org.spongycastle.math.ec.custom.sec.SecP256K1Curve;
 
 public class EC_Test_Utils {
 
+  private static final SecureRandom _random = new SecureRandom();
+
   private static void checkCondition(boolean cond, String msg)
   {
     if(!cond) throw new ArithmeticException(msg);
+  }
+
+  private static byte[] getRandomBytes(int n){
+
+    byte[] bytes = new byte[n];
+
+    _random.nextBytes(bytes);
+
+    return bytes;
+
   }
 
   public static String getFieldPrimeAsHex(){
@@ -52,6 +65,45 @@ public class EC_Test_Utils {
   public static final BigInteger generatorY = _getCurveGeneratorY();
   public static final ECPoint G = curve.createPoint(generatorX, generatorY);
   public static final BigInteger SEVEN = BigInteger.valueOf(7);
+
+  public static ECPoint getRandomPoint()
+  {
+    BigInteger p = fieldPrime;
+
+    BigInteger x = null;
+    BigInteger y = null;
+
+    boolean done = false;
+
+    while(!done)
+    {
+      byte[] bytes = getRandomBytes(32);
+
+      x = (new BigInteger(1, bytes)).mod(p);
+
+      y = YFromX(x, true);
+
+      if(y != null)
+      {
+        done = true;
+      }
+    }
+    
+    // we have a random point (x,y) but always of even parity. Let's flip a coin
+
+    byte[] parity = getRandomBytes(1);
+
+    // should be evenly distributed
+
+    boolean test = BigInteger.valueOf(parity[0] & 0xFF).testBit(0);
+
+    if(test)
+    {
+      y = y.negate().mod(p);
+    }
+
+    return curve.createPoint(x,y);
+  }
 
   public static BigInteger square(BigInteger n)
   {

@@ -1,12 +1,15 @@
 using System;
 using System.Numerics;
+using System.Security.Cryptography;
+using Random = System.Security.Cryptography.RandomNumberGenerator;
 
 
 public abstract class Number : IComparable<Number> {
 
   // choose implementation of Number and Random
+ 
   private static readonly NumberFactory _factory = new NumberFactory1();
-  private static readonly Random _rnd = null; // TODO
+  private static readonly Random _rnd = new RNGCryptoServiceProvider();
 
   // static factory functions
 

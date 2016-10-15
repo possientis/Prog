@@ -2,4 +2,4 @@
 
 (define expr (make-thunk 3 '()))
 
-(display (strict-eval expr))(newline)
+(display (strict-eval expr) (newline))

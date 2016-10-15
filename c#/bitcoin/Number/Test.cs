@@ -31,5 +31,9 @@ public class Test
     x = x.Add(Number.ONE);
     Console.WriteLine("8 has {0} bits", x.BitLength());
     Console.WriteLine("-8 has {0} bits", x.Negate().BitLength());
+
+    int i = 16 / 8;
+    Console.WriteLine("i = {0}", i);
+
   }
 }

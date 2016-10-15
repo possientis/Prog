@@ -8,13 +8,10 @@
                           ": expected = " (object->string right)))))
 
 (define (test-expression exp value message . arg)
-  (display "check2: exp = ")(display exp)(display " : value = ")(display value)(newline)
   (let ((env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) ; save eval mode to be restored
-    (display "check3:\n")
     (assert-equals (strict-eval exp env) value (print ": strict-eval")) 
-    (display "check4:\n")
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (assert-equals ((analyze exp) env) value (print ": analyze"))
     (set-eval-mode 'strict)
@@ -32,7 +29,6 @@
   ;
   ; self-evaluating
   (display "testing self-evaluating expressions...\n")
-  (display "check1:\n")
   (test-expression '3 3 "self-evaluating.1")
   (test-expression '3.5 3.5 "self-evaluating.2")
   (test-expression '"hello" "hello" "self-evaluating.3")
@@ -222,7 +218,7 @@
 
     
   ; definition
-  (display "testing definition exprressions...\n")
+  (display "testing definition expressions...\n")
   ;
   ; eval
   ; simple variable binding
@@ -684,24 +680,23 @@
   ; thunk
   (display "testing thunk ...\n")
 
-  (let ((t1 (make-thunk '(+ 1 1) global-env)))
-    (assert-equals (thunk? t1) #t "thunk.1")
-    (assert-equals (thunk-expression t1) '(+ 1 1) "thunk.2")
-    (assert-equals (thunk-environment t1) global-env "thunk.3")
-    (assert-equals (thunk-evaluated? t1) #f "thunk.4")
-    (assert-equals (force-thunk t1) 2 "thunk.5")
-    (assert-equals (thunk-evaluated? t1) #t "thunk.6")
-    (assert-equals (force-thunk t1) 2 "thunk.7")
-    (assert-equals (force-thunk t1) 2 "thunk.8")
-    (assert-equals (force-thunk t1) 2 "thunk.9")
-    (assert-equals (thunk-evaluated? t1) #t "thunk.10")
-    (assert-equals (thunk? t1) #t "thunk.11")
-
-    (if (thunk? 0) (display "unit-test: test 19.6 failing\n"))
-    (if (thunk? #\a) (display "unit-test: test 19.7 failing\n"))
-    (if (thunk? "a") (display "unit-test: test 19.8 failing\n"))
-    (if (thunk? #t) (display "unit-test: test 19.9 failing\n"))
-    (if (thunk? #f) (display "unit-test: test 19.10 failing\n"))
+  (let ((thunk (make-thunk '(+ 1 1) global-env)))
+    (assert-equals (thunk? thunk) #t "thunk.1")
+    (assert-equals (thunk-expression thunk) '(+ 1 1) "thunk.2")
+    (assert-equals (thunk-environment thunk) global-env "thunk.3")
+    (assert-equals (thunk-evaluated? thunk) #f "thunk.4")
+    (assert-equals (force-thunk thunk) 2 "thunk.5")
+    (assert-equals (thunk-evaluated? thunk) #t "thunk.6")
+    (assert-equals (force-thunk thunk) 2 "thunk.7")
+    (assert-equals (force-thunk thunk) 2 "thunk.8")
+    (assert-equals (force-thunk thunk) 2 "thunk.9")
+    (assert-equals (thunk-evaluated? thunk) #t "thunk.10")
+    (assert-equals (thunk? thunk) #t "thunk.11")
+    (assert-equals (thunk? 0) #f "thunk.12")
+    (assert-equals (thunk? #\a) #f "thunk.13")
+    (assert-equals (thunk? "a") #f "thunk.14")
+    (assert-equals (thunk? #t) #f "thunk.15")
+    (assert-equals (thunk? #f) #f "thunk.16")
   )
  
   ; load

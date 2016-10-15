@@ -22,9 +22,9 @@ public class Test_SecP256K1Point extends Test_ECPoint_AbstractFp {
 
     ECPoint zero = EC_Test_Utils.curve.getInfinity();
 
-    ECPoint x = _getRandomPoint();
-    ECPoint y = _getRandomPoint();
-    ECPoint z = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
+    ECPoint y = EC_Test_Utils.getRandomPoint();
+    ECPoint z = EC_Test_Utils.getRandomPoint();
 
     // 0 + x = x
     check1 = zero.add(x);
@@ -64,7 +64,7 @@ public class Test_SecP256K1Point extends Test_ECPoint_AbstractFp {
   {
     ECPoint zero = EC_Test_Utils.curve.getInfinity();
 
-    ECPoint x = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
 
     // -0 = 0
     checkEquals(zero.negate(), zero, "checkNegate.1");
@@ -83,7 +83,7 @@ public class Test_SecP256K1Point extends Test_ECPoint_AbstractFp {
 
   private void checkThreeTimes()
   {
-    ECPoint x = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
 
     ECPoint check = x.threeTimes();
 
@@ -92,7 +92,7 @@ public class Test_SecP256K1Point extends Test_ECPoint_AbstractFp {
 
   private void checkTwice()
   {
-    ECPoint x = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
 
     ECPoint check = x.twice();
 
@@ -104,8 +104,8 @@ public class Test_SecP256K1Point extends Test_ECPoint_AbstractFp {
 
   private void checkTwicePlus()
   {
-    ECPoint x = _getRandomPoint();
-    ECPoint y = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
+    ECPoint y = EC_Test_Utils.getRandomPoint();
 
     ECPoint check = x.twicePlus(y);
 

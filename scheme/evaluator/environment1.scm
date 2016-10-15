@@ -60,10 +60,7 @@
           (if (null? env)
             (error "Unbound variable -- LOOKUP" var)
             (let ((current (car env)))
-;              (display "check1: var = ")(display var)(newline)
-;              (display "check2: (symbol? var) = ")(symbol? var)(newline)
               (let ((varval ((current 'find) var)))
-;                (display "checkoo\n")
                 (if (eq? #f varval) ; var not in current frame
                   (frame-loop (cdr env))
                   (cdr varval)))))))) ; varval is pair (var . val)

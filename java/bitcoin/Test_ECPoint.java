@@ -44,47 +44,6 @@ public class Test_ECPoint extends Test_Abstract {
   }
 
 
-  protected static ECPoint _getRandomPoint()
-  {
-    ECCurve curve = EC_Test_Utils.curve;
-
-    BigInteger p = EC_Test_Utils.fieldPrime;
-
-    BigInteger x = null;
-    BigInteger y = null;
-
-    boolean done = false;
-
-    while(!done)
-    {
-      byte[] bytes = getRandomBytes(32);
-
-      x = (new BigInteger(1, bytes)).mod(p);
-
-      y = EC_Test_Utils.YFromX(x, true);
-
-      if(y != null)
-      {
-        done = true;
-      }
-    }
-
-    // we have a random point (x,y) but always of even parity. Let's flip a coin
-
-    byte[] parity = getRandomBytes(1);
-
-    // should be evenly distributed
-
-    boolean test = BigInteger.valueOf(parity[0] & 0xFF).testBit(0);
-
-    if(test)
-    {
-      y = y.negate().mod(p);
-    }
-
-    return curve.createPoint(x,y);
-  }
-
   private void checkECPointAbstractF2m()
   {
     ECPoint.AbstractF2m x;  // compile time check
@@ -107,8 +66,8 @@ public class Test_ECPoint extends Test_Abstract {
   private void checkECPointEqualsECPoint()
   {
     // not doing much here
-    ECPoint x = _getRandomPoint();
-    ECPoint y = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
+    ECPoint y = EC_Test_Utils.getRandomPoint();
     checkCondition(!x.equals(y), "checkECPointEqualsECPoint.1");
     checkCondition(!y.equals(x), "checkECPointEqualsECPoint.2");
     checkCondition(x.equals(x), "checkECPointEqualsECPoint.3");
@@ -118,8 +77,8 @@ public class Test_ECPoint extends Test_Abstract {
   private void checkECPointEquals()
   {
     // not doing much here
-    Object x = _getRandomPoint();
-    Object y = _getRandomPoint();
+    Object x = EC_Test_Utils.getRandomPoint();
+    Object y = EC_Test_Utils.getRandomPoint();
     checkCondition(!x.equals(y), "checkECPointEquals.1");
     checkCondition(!y.equals(x), "checkECPointEquals.2");
     checkCondition(x.equals(x), "checkECPointEquals.3");
@@ -129,7 +88,7 @@ public class Test_ECPoint extends Test_Abstract {
   private void checkGetAffineXCoord()
   {
     ECCurve curve = EC_Test_Utils.curve;
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     ECFieldElement x = point.getAffineXCoord();
     ECFieldElement y = point.getAffineYCoord();
 
@@ -155,7 +114,7 @@ public class Test_ECPoint extends Test_Abstract {
   private void checkGetAffineYCoord()
   {
     ECCurve curve = EC_Test_Utils.curve;
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     ECFieldElement x = point.getAffineXCoord();
     ECFieldElement y = point.getAffineYCoord();
 
@@ -182,7 +141,7 @@ public class Test_ECPoint extends Test_Abstract {
   {
     ECCurve curve = EC_Test_Utils.curve;
     ECPoint G = EC_Test_Utils.G;
-    ECPoint P = _getRandomPoint();
+    ECPoint P = EC_Test_Utils.getRandomPoint();
     checkEquals(curve, G.getCurve(), "checkGetCurve.1");
     checkEquals(curve, P.getCurve(), "checkGetCurve.2");
   }
@@ -191,7 +150,7 @@ public class Test_ECPoint extends Test_Abstract {
   {
     // returns a normalized clone it seems
 
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
 
     point = point.add(point); // no longer normalized
 
@@ -222,7 +181,7 @@ public class Test_ECPoint extends Test_Abstract {
 
 
     // random
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     byte[] b1 = point.getEncoded(true);   // compressed
     byte[] b2 = point.getEncoded(false);  // uncompressed
 
@@ -272,7 +231,7 @@ public class Test_ECPoint extends Test_Abstract {
   private void checkGetRawXCoord()
   {
     // normalized
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     checkCondition(point.isNormalized(), "checkGetRawXCoord.1");
     ECFieldElement x1 = point.getRawXCoord();
     ECFieldElement x2 = point.getAffineXCoord();
@@ -293,7 +252,7 @@ public class Test_ECPoint extends Test_Abstract {
   private void checkGetRawYCoord()
   {
     // normalized
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     checkCondition(point.isNormalized(), "checkGetRawXCoord.1");
     ECFieldElement x1 = point.getRawXCoord();
     ECFieldElement x2 = point.getAffineXCoord();
@@ -323,7 +282,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkGetZCoord()
   {
-    ECPoint point = _getRandomPoint(); // normalized
+    ECPoint point = EC_Test_Utils.getRandomPoint(); // normalized
 
     BigInteger z = point.getZCoord(0).toBigInteger();
     checkEquals(z, BigInteger.ONE, "checkGetZCoord.1");
@@ -355,7 +314,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkGetZCoords()
   {
-    ECPoint point = _getRandomPoint();  // normalized
+    ECPoint point = EC_Test_Utils.getRandomPoint();  // normalized
 
     ECFieldElement[] zs = point.getZCoords();
     checkEquals(zs.length, 1, "checkGetZCoords.1");
@@ -370,7 +329,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkHashCode()
   {
-    ECPoint point = _getRandomPoint();      // normalized
+    ECPoint point = EC_Test_Utils.getRandomPoint();      // normalized
     point = point.add(point);               // no longer normalized;
     int check = point.hashCode();
     int hc = ~point.getCurve().hashCode();  // one's complement of curve hash 
@@ -386,7 +345,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkIsInfinity()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     checkCondition(!point.isInfinity(), "checkIsInfinity.1");
 
     point = point.getCurve().getInfinity();
@@ -395,7 +354,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkIsNormalized()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     checkCondition(point.isNormalized(), "checkIsNormalized.1");
 
     point = point.add(point);
@@ -404,7 +363,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkIsValid()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     checkCondition(point.isValid(), "checkIsValid.1");
 
     point = point.getCurve().getInfinity();
@@ -417,7 +376,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkMultiply()
   {
-    ECPoint x = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
     ECPoint g = EC_Test_Utils.G;
     ECPoint inf = EC_Test_Utils.curve.getInfinity();
     BigInteger q = EC_Test_Utils.curveOrder; 
@@ -441,7 +400,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkNegate()
   {
-    ECPoint x = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
     ECPoint y = x.negate();
     ECPoint inf = EC_Test_Utils.curve.getInfinity();
 
@@ -451,7 +410,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkNormalize()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     point = point.add(point); // no longer normalized
 
     BigInteger x = point.getXCoord().toBigInteger();
@@ -477,7 +436,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkScaleX()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     BigInteger p = EC_Test_Utils.fieldPrime;
     BigInteger n = (new BigInteger(1, getRandomBytes(32))).mod(p);
     ECCurve curve = point.getCurve();
@@ -495,7 +454,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkScaleY()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     BigInteger p = EC_Test_Utils.fieldPrime;
     BigInteger n = (new BigInteger(1, getRandomBytes(32))).mod(p);
     ECCurve curve = point.getCurve();
@@ -512,7 +471,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkThreeTimes()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
 
     ECPoint thrice = point.threeTimes();
     ECPoint check = point.add(point).add(point);
@@ -523,7 +482,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkTimesPow2()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
 
     checkException(
         () -> point.timesPow2(-1), 
@@ -547,7 +506,7 @@ public class Test_ECPoint extends Test_Abstract {
 
   private void checkToString()
   {
-    ECPoint point = _getRandomPoint();
+    ECPoint point = EC_Test_Utils.getRandomPoint();
     point = point.add(point); // no longer normalized
     BigInteger x = point.getXCoord().toBigInteger();
     BigInteger y = point.getYCoord().toBigInteger();
@@ -568,9 +527,25 @@ public class Test_ECPoint extends Test_Abstract {
     checkEquals(check, point.toString(), "checkToString.1");
   }
 
-  private void checkTwice(){ /* TODO */ }
-  private void checkTwicePlus(){ /* TODO */ }
+  private void checkTwice()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
 
+    ECPoint twice = point.twice();
+    ECPoint check = point.add(point);
 
+    checkEquals(twice, check, "checkTwice.1");
 
+  }
+
+  private void checkTwicePlus()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
+
+    ECPoint check1 = point.twicePlus(x);
+    ECPoint check2 = point.twice().add(x);
+
+    checkEquals(check1, check2, "checkTwicePLus.1");
+  }
 }

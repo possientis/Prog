@@ -11,8 +11,8 @@ public class Test_ECPoint_AbstractFp extends Test_ECPoint {
 
   private void checkSubtract()
   {
-    ECPoint x = _getRandomPoint();
-    ECPoint y = _getRandomPoint();
+    ECPoint x = EC_Test_Utils.getRandomPoint();
+    ECPoint y = EC_Test_Utils.getRandomPoint();
 
     ECPoint check = x.subtract(y);
 

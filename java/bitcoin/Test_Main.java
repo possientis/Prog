@@ -10,12 +10,12 @@ public class Test_Main {
     test = new Test_DumpedPrivateKey(); test.run();
     test = new Test_Base58(); test.run();
     test = new Test_Sha256Hash(); test.run();
-    test = new Test_LazyECPoint(); test.run();                // TODO
     */
-    test = new Test_ECPoint(); test.run();                    // TODO
+    test = new Test_LazyECPoint(); test.run();                // TODO
+    /*
+    test = new Test_ECPoint(); test.run();       
     test = new Test_ECPoint_AbstractFp(); test.run();
     test = new Test_SecP256K1Point(); test.run();
-    /*
     test = new Test_ECFieldElement(); test.run();
     test = new Test_SecP256K1FieldElement(); test.run();  
     test = new Test_Address(); test.run();

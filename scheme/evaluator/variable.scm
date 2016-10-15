@@ -12,8 +12,8 @@
 (define (strict-eval-variable exp env)
   (let ((value ((env 'lookup) exp)))
     (if (thunk? value)
-;      (force-thunk value) ; <------- key change, induces failure via run
-      value
+      (force-thunk value) ; <------- key change, induces failure via run
+;      value
       value)))
 
 ; analyze
@@ -21,8 +21,8 @@
   (lambda (env)
     (let ((value ((env 'lookup) exp)))
       (if (thunk? value)
-;        (force-thunk value)
-        value
+        (force-thunk value)
+;        value
         value))))
 
 ; lazy eval

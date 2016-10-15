@@ -1,11 +1,9 @@
-assert-not-equals?
-
-In order to achieve smooth unit-testing, we felt variable.scm had to be changed 
-so that strict evaluation would go beyond a simple look-up and actually force a 
-thunk whenever it is encountered. This has created all sort of issues. 
-However this change really means that 'thunk expression' should really be part of
-the language and be accepted by strict eval. Review this idea and look at debug.scm.
-
+scm debug.scm fails
+unit-test fails on run
+revisit variable.scm, as the code is now probably wrong since the evaluator
+has been enhanced to accept 'thunk expression'
+question: should we just return the value of a variable as is, or should we 
+attempt to evaluate that value if it is a thunk? 
 
 
 keep debugging via run (crucial change in variable.scm) : unit-test, lazy-eval, thunk have checks
