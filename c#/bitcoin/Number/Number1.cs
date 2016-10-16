@@ -5,6 +5,15 @@ using Random = System.Security.Cryptography.RandomNumberGenerator;
 
 public class Number1 : Number 
 {
+  // debug TODO remove
+  private static void Debug(string name, byte[] val)
+  {
+    Console.WriteLine("\nArray " + name + " has {0} bytes:", val.Length);
+    for(int i = 0; i < val.Length; ++i){
+      Console.Write("{0},", val[i]);
+    }
+    Console.Write("\n\n");
+  }
   // data
   private readonly BigInteger val;
 
@@ -24,7 +33,18 @@ public class Number1 : Number
   {
     // returning 0
 
-    if(val.Length == 0) return Number1.ZERO;  // sign argument irrelevant 
+    if(val.Length == 0)
+    {
+      if(sign != 0 && sign != 1 && sign != -1)  // for consistency sake
+      {
+        throw new ArgumentException("Invalid sign argument");
+      }
+      else
+      {
+        return Number1.ZERO;  // sign argument irrelevant 
+      }
+    }
+
 
     if(sign == 0) // checking all bytes are 0x00 for consistency sake
     {
@@ -32,7 +52,7 @@ public class Number1 : Number
       {
         if(val[i] != (byte) 0x00)
         {
-          throw new ArithmeticException("Inconsistent arguments");
+          throw new ArgumentException("Inconsistent arguments");
         }
       }
 
@@ -40,7 +60,7 @@ public class Number1 : Number
     }
 
     // non-zero output
-
+    
     byte[] copy = (byte []) val.Clone();
 
     Array.Reverse(copy);  // 'copy' now little-endian
@@ -54,9 +74,9 @@ public class Number1 : Number
 
     byte lead = copy[copy.Length - 1];
 
-    int mask  = 0x80;       // 1000 0000 in binary
+    int mask  = 0x80;           // 1000 0000 in binary
 
-    if((lead & mask) == 1)  // padding is required
+    if((lead & mask) == 0x80)   // padding is required
     {
       byte[] temp = new byte[copy.Length + 1];
 
@@ -81,7 +101,7 @@ public class Number1 : Number
 
       default:
 
-        throw new ArithmeticException("Illegal sign argument");
+        throw new ArgumentException("Illegal sign argument");
     }
  
   }

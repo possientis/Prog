@@ -1,7 +1,5 @@
 #!/bin/sh
 
-DIR1=/home/john/Prog/c#
-DIR2=/home/john/Prog/polyglot
+DIR1=/home/john/Prog/
 
-grep "$1" $DIR1 -r
-grep "$1" $DIR2 -r | grep '.cs'
+grep "$@" $DIR1 -r | grep '\.cs'

@@ -39,7 +39,7 @@ public abstract class Number : IComparable<Number> {
   public abstract BigInteger ToBigInteger();
 
   public abstract override string ToString();
-  public abstract int CompareTo(Number rhs);
+  public abstract int CompareTo(Number rhs);    // IComparable<Number>
   public abstract override int GetHashCode();
   public override bool Equals(Object rhs)
   {

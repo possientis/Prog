@@ -164,6 +164,18 @@ public class Test_Number extends Test_Abstract
     checkCondition(Arrays.equals(b9, b11), "checkFromBytes.27");
   }
 
+  private static void checkSignum()
+  {
+    checkEquals(Number.ZERO.signum(), 0, "checkSignum.1");
+
+    byte[] b = getRandomBytes(32);
+    Number x = Number.fromBytes(1, b);
+    Number y = Number.fromBytes(-1, b);
+
+    checkEquals(x.signum(), 1, "checkSignum.2");
+    checkEquals(y.signum(), -1, "checkSignum.3");
+  }
+
   private static void checkToBytes()
   {
     String eName = "ArithmeticException";
@@ -205,20 +217,6 @@ public class Test_Number extends Test_Abstract
     bytes = y.toBytes(32);
     checkEquals(x, Number.fromBytes(1, bytes), "checkToBytes.14");
     checkEquals(y, Number.fromBytes(-1, bytes), "checkToBytes.15");
-  }
-
-  private static void checkSignum()
-  {
-
-
-    checkEquals(Number.ZERO.signum(), 0, "checkSignum.3");
-
-    byte[] b = getRandomBytes(32);
-    Number x = Number.fromBytes(1, b);
-    Number y = Number.fromBytes(-1, b);
-
-    checkEquals(x.signum(), 1, "checkSignum.1");
-    checkEquals(y.signum(), -1, "checkSignum.2");
   }
 
   private static void checkRandom(){

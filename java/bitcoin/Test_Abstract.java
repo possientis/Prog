@@ -6,13 +6,15 @@ public abstract class Test_Abstract implements Runnable {
 
   private static final SecureRandom _random = new SecureRandom();
 
-  protected static byte[] getRandomBytes(int n){
+  protected static byte[] getRandomBytes(int n)
+  {
     byte[] bytes = new byte[n];
     _random.nextBytes(bytes);
     return bytes;
   }
 
-  protected static void logMessage(String message){
+  protected static void logMessage(String message)
+  {
     System.err.println(message);
   }
 
@@ -39,21 +41,26 @@ public abstract class Test_Abstract implements Runnable {
     }
   }
 
-  protected static void checkNotNull(Object obj, String msg){
-    if(obj == null){
+  protected static void checkNotNull(Object obj, String msg)
+  {
+    if(obj == null)
+    {
       logMessage(msg + ": checkNotNull failure");
       System.exit(1);
     }
   }
 
-  protected static void checkCondition(boolean cond, String msg){
-    if(!cond){
+  protected static void checkCondition(boolean cond, String msg)
+  {
+    if(!cond)
+    {
       logMessage(msg + ": checkCondition failure");
       System.exit(1);
     }
   }
 
-  protected static void checkException(Runnable callbk, String name, String msg){
+  protected static void checkException(Runnable callbk, String name, String msg)
+  {
     try
     {
       callbk.run();
@@ -62,7 +69,8 @@ public abstract class Test_Abstract implements Runnable {
     }
     catch(Exception e)
     {
-      if(!e.getClass().getName().equals("java.lang." + name)){
+      if(!e.getClass().getName().equals("java.lang." + name))
+      {
         logMessage(msg + ": checkException failure: wrong exception type");
         logMessage("Expected: java.lang." + name);
         logMessage("Actual: " + e.getClass().getName());
@@ -70,6 +78,4 @@ public abstract class Test_Abstract implements Runnable {
       }
     }
   }
-
-
 }
