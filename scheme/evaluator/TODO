@@ -1,13 +1,6 @@
-scm debug.scm fails
-unit-test fails on run
-revisit variable.scm, as the code is now probably wrong since the evaluator
-has been enhanced to accept 'thunk expression'
-question: should we just return the value of a variable as is, or should we 
-attempt to evaluate that value if it is a thunk? 
+when evaluating a variable which is bound to a thunk, it seems we need to return
+the thunk without forcing it. So variable.scm is fine and cannot be changed. see debug.scm for example. However, this means we need to fix unit-test
 
-
-keep debugging via run (crucial change in variable.scm) : unit-test, lazy-eval, thunk have checks
-definition unit-test
 
 test the following code in lazy mode (after fixing define)
 (define x 1)

@@ -17,7 +17,7 @@
     (set-eval-mode 'strict)
     (assert-equals (new-eval exp env) value (print ": new-eval (strict)"))
     (set-eval-mode 'lazy)
-    (assert-equals (force-thunk(new-eval exp env))value (print ": new-eval (lazy)"))
+    (assert-equals (force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
     (set-eval-mode 'analyze)
     (assert-equals (new-eval exp env) value (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode
@@ -179,20 +179,19 @@
   ;
   (let ((env ((global-env 'extended) 'var #f))    ; extended env with var = #f
         (mode (get-eval-mode)))                   ; so we can restore it later
-    (test-expression 'var #f "assignment" env)    
+    (test-expression 'var #f "assignment.1" env)    
     ; strict assignment
     (let ((result (strict-eval '(set! var #t) env)))
-      (assert-equals result unspecified-value "assignment")
-;      (test-expression 'var #t "assignment" env))     ; testing outcome 
-    )
+      (assert-equals result unspecified-value "assignment.2")
+      (test-expression 'var #t "assignment.3" env))     ; testing outcome 
     ; lazy assignment
     (let ((result (lazy-eval '(set! var #\a) env)))
-      (assert-equals (force-thunk result) unspecified-value "assignment")
-;      (test-expression 'var #\a "assignment" env))    ; testing outcome
+      (assert-equals (force-thunk result) unspecified-value "assignment.4")
+;      (test-expression 'var #\a "assignment.5" env))    ; testing outcome
     )
     ; analyzed assignment
     (let ((result ((analyze '(set! var 45)) env)))
-      (assert-equals result unspecified-value "assignment")
+      (assert-equals result unspecified-value "assignment.6")
 ;      (test-expression 'var 45 "assignment" env))     ; testing outcome
     )
     ; strict assignment via new-eval

@@ -5,15 +5,7 @@ using Random = System.Security.Cryptography.RandomNumberGenerator;
 
 public class Number2 : Number 
 {
-  // debug TODO remove
-  private static void Debug(string name, byte[] val)
-  {
-    Console.WriteLine("\nArray " + name + " has {0} bytes:", val.Length);
-    for(int i = 0; i < val.Length; ++i){
-      Console.Write("{0},", val[i]);
-    }
-    Console.Write("\n\n");
-  }
+ 
   // data
   private readonly BigInteger val;
 

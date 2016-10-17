@@ -7,13 +7,18 @@ public abstract class Bench_Abstract implements Runnable
 
   private static final SecureRandom _random = new SecureRandom();
 
-  protected static byte[] getRandomBytes(int n){
+  protected static byte[] getRandomBytes(int n)
+  {
+
     byte[] bytes = new byte[n];
+
     _random.nextBytes(bytes);
+
     return bytes;
   }
 
-  protected static void logMessage(String message){
+  protected static void logMessage(String message)
+  {
     System.err.println(message);
   }
 

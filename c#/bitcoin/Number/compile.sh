@@ -16,6 +16,7 @@ mcs   Number.cs               \
 
 mcs "$@"                      \
        Test_Abstract.cs       \
+       Bench_Abstract.cs      \
       -r:Number.dll           \
       -r:System.Numerics.dll
 

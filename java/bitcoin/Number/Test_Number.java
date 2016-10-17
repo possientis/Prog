@@ -246,7 +246,7 @@ public class Test_Number extends Test_Abstract
       int bit = z.toBytes(1)[0] & 0xFF;         // 0 to 7
       if(BigInteger.valueOf(test).testBit(bit)) // inefficient but highly readable
       {
-        ++count;
+        ++count;                                // should be 50% chance occurence
       }
     }
 
@@ -316,12 +316,15 @@ public class Test_Number extends Test_Abstract
     // (x * y) * z = x * (y * z)
     checkEquals(x.mul(y).mul(z), x.mul(y.mul(z)), "checkMul.7");
 
+    // (x + y) * z = (x * z) + (y * z)
+    checkEquals(x.add(y).mul(z), x.mul(z).add(y.mul(z)), "checkMul.8"); 
+
     // actual check of x * y
     BigInteger n = x.toBigInteger();
     BigInteger m = y.toBigInteger();
     BigInteger prod = n.multiply(m);
     Number check = Number.fromBigInteger(prod);
-    checkEquals(check, x.mul(y), "checkMul.8");
+    checkEquals(check, x.mul(y), "checkMul.9");
   }
 
   private static void checkToString()
@@ -336,12 +339,13 @@ public class Test_Number extends Test_Abstract
 
     // one
     check1 = Number.ONE.toString();
-    checkEquals(check1, "1", "checkToString.1");
+    checkEquals(check1, "1", "checkToString.2");
 
     // random positive
     x = Number.random(256);
-    
-
+    check1 = x.toString();
+    check2 = x.toBigInteger().toString();
+    checkEquals(check1, check2, "checkToString.3");
   }
 
   private static void checkCompareTo()
@@ -467,7 +471,6 @@ public class Test_Number extends Test_Abstract
     n = x.toBigInteger();
     m = new BigInteger(x.signum(), x.toBytes(32));
     checkEquals(n, m, "checkToBigInteger.3");
-
   }
 
   private static void checkBitLength()
@@ -527,7 +530,5 @@ public class Test_Number extends Test_Abstract
     Number y = Number.fromBytes(-1, bytes);
     checkEquals(x.bitLength(), 257, "checkBitLength.11");
     checkEquals(y.bitLength(), 257, "checkBitLength.12");
-
   }
-
 }

@@ -1,0 +1,38 @@
+module INumber where
+
+import qualified Data.ByteString as BS  -- ByteString Strict
+import Data.Hashable
+
+type ByteArray = BS.ByteString
+
+newtype Sign = Sign Int
+
+newtype NumBits = NumBits Int
+
+class (Show a, Ord a, Num a, Integral a, Hashable a) => INumber a where 
+
+--  factory functions
+
+    zero        :: a
+    one         :: a
+    fromBytes   :: Sign -> ByteArray -> a     -- big-endian
+    random      :: NumBits ->  IO a           -- uniform 0 .. 2^(numBits) - 1
+--  fromInteger :: Integer -> a               -- inherited from Num
+
+--  instance members
+
+--  (+)         :: a -> a -> a                -- inherited from Num
+--  (*)         :: a -> a -> a                -- inherited from Num
+--  negate      :: a -> a                     -- inherited from Num
+    toBytes     :: a -> NumBits -> ByteArray  -- big-endian encoding of magnitude
+--  signum      :: a -> a                     -- inherited from Num
+    bitLength   :: a -> NumBits
+--  toInteger   :: a -> Integer               -- inherited from Integral
+--  show        :: a -> String                -- inherited from Show
+--  (<=)        :: a -> a -> Bool             -- inherited from Ord
+--  (<)         :: a -> a -> Bool             -- inherited from Ord
+--  hash        :: a -> Int                   -- inherited from Hashable
+--  (==)        :: a -> a -> Bool             -- inherited from Eq
+
+-- Only showing API which corresponds to java's implementation
+

@@ -5,15 +5,7 @@ using Random = System.Security.Cryptography.RandomNumberGenerator;
 
 public class Number1 : Number 
 {
-  // debug TODO remove
-  private static void Debug(string name, byte[] val)
-  {
-    Console.WriteLine("\nArray " + name + " has {0} bytes:", val.Length);
-    for(int i = 0; i < val.Length; ++i){
-      Console.Write("{0},", val[i]);
-    }
-    Console.Write("\n\n");
-  }
+ 
   // data
   private readonly BigInteger val;
 
@@ -136,7 +128,7 @@ public class Number1 : Number
 
     int mask = 0x7f;                      // 0111 1111 in binary
 
-    // we want to regard out 'bytes' array as a big-endian representation,
+    // we want to regard our 'bytes' array as a big-endian representation,
     // so the leading byte is bytes[0], which is the one needing adjustment
    
     while(diff > 0)
@@ -183,7 +175,7 @@ public class Number1 : Number
     Number1 cast = (Number1) rhs;
 
     return new Number1(BigInteger.Multiply(val, cast.val));
-}
+  }
   
   public override Number Negate()
   {

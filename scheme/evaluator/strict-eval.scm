@@ -6,7 +6,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (strict-eval exp . arg)
-;  (newline)(display "strict eval running ...")(newline)
   (let ((env (if (null? arg) global-env (car arg))))
     (cond ((self-evaluating? exp) (strict-eval-self-evaluating exp env))   
           ((variable? exp)        (strict-eval-variable exp env))

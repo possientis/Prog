@@ -9,7 +9,7 @@ public class Bench_Number extends Bench_Abstract
   }
 
 
-  public void run()
+  @Override public void run()
   {
     logMessage("Number benchmark running ...");
 
@@ -81,7 +81,7 @@ public class Bench_Number extends Bench_Abstract
     BigInteger n = x.toBigInteger();
     BigInteger m = y.toBigInteger();
     benchmark(() -> {x.toBytes(32); y.toBytes(32); }, "toBytes", 1000000);
-    // cannot really compare as semantics are different. BigInteger's byteArray
+    // cannot really compare as semantics are different. BigInteger's toByteArray
     // returns a two's complement encoding and does not have adjustable size
     benchmark(() -> {n.toByteArray(); m.toByteArray(); }, "toByteArray*", 1000000);
   }
