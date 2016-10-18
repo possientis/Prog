@@ -1,6 +1,14 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
-module Number2 (Number2, zero, one, fromBytes, random, toBytes, bitLength) where
+module Number2 (  Number2, 
+                  zero, 
+                  one, 
+                  fromBytes, 
+                  random, 
+                  toBytes, 
+                  bitLength,
+                  hash
+  ) where
 
 import INumber
 import Data.Hashable

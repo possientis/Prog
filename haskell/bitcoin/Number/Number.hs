@@ -1,6 +1,12 @@
-module Number (Number, zero, one, fromBytes, random, toBytes, bitLength) where
-
--- toInteger requires special treatment TODO
+module Number ( Number, 
+                zero, 
+                one, 
+                fromBytes, 
+                random, 
+                toBytes, 
+                bitLength,
+                hash
+  ) where
 
 -- choose implementation here
 

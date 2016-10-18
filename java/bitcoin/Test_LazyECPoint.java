@@ -206,17 +206,18 @@ public class Test_LazyECPoint extends Test_Abstract {
     ECPoint point = EC_Test_Utils.getRandomPoint();
     LazyECPoint lazy = new LazyECPoint(point);
 
-    // TODO work out exact semantics of getEncoded()
-    byte[] bytes1 = point.getEncoded(false); // compressed
-    byte[] bytes2 = lazy.getEncoded();
-
-    BigInteger n1 = new BigInteger(1, bytes1);
-    BigInteger n2 = new BigInteger(1, bytes2);
-
-    logMessage(n1.toString(16));
-    logMessage(n2.toString(16));
+    byte[] bytes1 = point.getEncoded(false); // uncompressed
+    byte[] bytes2 = lazy.getEncoded();       // defaults to uncompressed
 
     checkCondition(Arrays.equals(bytes1, bytes2), "checkGetEncoded.1");
+
+    bytes1 = point.getEncoded(true);  // compressed
+    lazy = new LazyECPoint(point.getCurve(), bytes1);
+    bytes2 = lazy.getEncoded();             // defaults to compressed
+    // fuzzy semantics, compressed / uncompressed attributes in ECPoint
+    // will be deprecated. getEncoded() semantics seems to be based on such
+    // attribute
+    logMessage("-> LazyECPoint::getEncoded see unit testing code");
   }
 
   private void checkGetEncodedFromBoolean()
@@ -237,15 +238,92 @@ public class Test_LazyECPoint extends Test_Abstract {
     checkCondition(Arrays.equals(bytes1, bytes2), "checkGetEncodedFromBoolean.2");
   }
 
-  private void checkGetX(){ /* TODO */ }
-  private void checkGetXCoord(){ /* TODO */ }
-  private void checkGetY(){ /* TODO */ }
-  private void checkGetYCoord(){ /* TODO */ }
-  private void checkGetZCoord(){ /* TODO */ }
-  private void checkGetZCoords(){ /* TODO */ }
-  private void checkHashCode(){ /* TODO */ }
-  private void checkIsCompressed(){ /* TODO */ }
-  private void checkIsInfinity(){ /* TODO */ }
+  private void checkGetX()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkEquals(point.getXCoord(), lazy.getX(), "checkGetX.1");
+
+    point = point.add(point);     // no longer normalized
+    lazy = new LazyECPoint(point);
+    checkEquals(point.normalize().getXCoord(), lazy.getX(), "checkGetX.2");
+  }
+
+  private void checkGetXCoord()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkEquals(point.getXCoord(), lazy.getXCoord(), "checkGetXCoord.1");
+
+    point = point.add(point);     // no longer normalized
+    lazy = new LazyECPoint(point);
+    // contrary to getX, getXCoord does not attempt to normalize
+    checkEquals(point.getXCoord(), lazy.getXCoord(), "checkGetXCoord.2");
+  }
+
+  private void checkGetY()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkEquals(point.getYCoord(), lazy.getY(), "checkGetY.1");
+
+    point = point.add(point);     // no longer normalized
+    lazy = new LazyECPoint(point);
+    checkEquals(point.normalize().getYCoord(), lazy.getY(), "checkGetY.2");
+  }
+
+  private void checkGetYCoord()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkEquals(point.getYCoord(), lazy.getYCoord(), "checkGetYCoord.1");
+
+    point = point.add(point);     // no longer normalized
+    lazy = new LazyECPoint(point);
+    // contrary to getY, getYCoord does not attempt to normalize
+    checkEquals(point.getYCoord(), lazy.getYCoord(), "checkGetYCoord.2");
+  }
+
+  private void checkGetZCoord()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkEquals(point.getZCoord(0), lazy.getZCoord(0), "checkGetZCoord.1");
+    checkEquals(null, lazy.getZCoord(1), "checkGetZCoord.2");
+  }
+
+  private void checkGetZCoords()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkEquals(point.getZCoords()[0], lazy.getZCoords()[0], "checkGetZCoords.1");
+    checkEquals(1, lazy.getZCoords().length, "checkGetZCoords.2");
+  }
+
+  private void checkHashCode()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    int hash1 = lazy.hashCode();
+    int hash2 = Arrays.hashCode(lazy.getEncoded(true));
+    checkEquals(hash1, hash2, "checkHashCode.1");
+  }
+
+  private void checkIsCompressed()
+  {
+    // implementation relies on call to deprecated ECPoint::isCompressed()
+    logMessage("-> LazyECPoint::isCompressed see unit testing code");
+  }
+
+  private void checkIsInfinity()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkEquals(false, lazy.isInfinity(), "checkIsInfinity.1");
+    lazy = new LazyECPoint(point.getCurve().getInfinity());
+    checkEquals(true, lazy.isInfinity(), "checkIsInfinity.2");
+  }
+
   private void checkIsNormalized(){ /* TODO */ }
   private void checkIsValid(){ /* TODO */ }
   private void checkMultiply(){ /* TODO */ }
