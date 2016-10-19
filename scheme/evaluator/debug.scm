@@ -1,8 +1,9 @@
 (load "main.scm")
 
-(define expr (make-thunk 3 '()))
-(let ((env ((global-env 'extended) 'var expr)))
-  (display (strict-eval 'var env)) (newline))
+(define x 1)
+(set! x (+ x x))
+(display x)(newline)
+
 
 
 

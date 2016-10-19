@@ -11,13 +11,13 @@
 ; strict eval
 (define (strict-eval-variable exp env)
   (let ((value ((env 'lookup) exp)))
-    value))
+    value))     ; do not force when value is a thunk
 
 ; analyze
 (define (analyze-variable exp) 
   (lambda (env)
     (let ((value ((env 'lookup) exp)))
-      value)))
+      value)))  ; do not force when value is a thunk
 
 ; lazy eval
 (define (lazy-eval-variable exp env)

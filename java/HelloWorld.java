@@ -1,5 +1,6 @@
+// haven't figured out how to run applet
 public class HelloWorld {
-      public static void main(String[] args) {
-                System.out.println("Hello, World");
-                    }
+  public static void init() {
+    System.out.println("Hello, World");
+  }
 }

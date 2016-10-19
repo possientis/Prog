@@ -1,6 +1,4 @@
-when evaluating a variable which is bound to a thunk, it seems we need to return
-the thunk without forcing it. So variable.scm is fine and cannot be changed. see debug.scm for example. However, this means we need to fix unit-test
-
+unit-test definition
 
 test the following code in lazy mode (after fixing define)
 (define x 1)
