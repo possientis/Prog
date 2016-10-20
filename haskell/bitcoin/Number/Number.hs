@@ -1,11 +1,12 @@
-module Number ( Number, 
-                zero, 
-                one, 
-                fromBytes, 
-                random, 
-                toBytes, 
-                bitLength,
-                hash
+module Number 
+  ( Number
+  , zero
+  , one
+  , fromBytes
+  , random
+  , toBytes
+  , bitLength
+  , hash
   ) where
 
 -- choose implementation here

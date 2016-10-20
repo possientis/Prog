@@ -324,11 +324,63 @@ public class Test_LazyECPoint extends Test_Abstract {
     checkEquals(true, lazy.isInfinity(), "checkIsInfinity.2");
   }
 
-  private void checkIsNormalized(){ /* TODO */ }
-  private void checkIsValid(){ /* TODO */ }
-  private void checkMultiply(){ /* TODO */ }
-  private void checkNegate(){ /* TODO */ }
-  private void checkNormalize(){ /* TODO */ }
+  private void checkIsNormalized()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkCondition(lazy.isNormalized(), "checkIsNormalized.1");
+
+    point = point.add(point); // no longer normalized
+    lazy = new LazyECPoint(point);
+    checkCondition(!lazy.isNormalized(), "checkIsNormalized.2");
+  }
+
+  private void checkIsValid()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkCondition(lazy.isValid(), "checkIsValid.1");
+  }
+
+  private void checkMultiply()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    BigInteger n = new BigInteger(1, getRandomBytes(32));
+    BigInteger q = EC_Test_Utils.curveOrder;
+    n = n.mod(q);
+    ECPoint mult = lazy.multiply(n);
+    ECPoint check = lazy.get().multiply(n);
+    checkEquals(mult, check, "checkMultiply.1");
+  }
+
+  private void checkNegate()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    ECPoint neg = lazy.negate();
+    ECPoint check = lazy.get().negate();
+    checkEquals(neg, check, "checkNegate.1");
+  }
+
+  private void checkNormalize()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    point = point.add(point); // no longer normalized
+    LazyECPoint lazy = new LazyECPoint(point);
+    checkCondition(!lazy.isNormalized(), "checkNormalize.1");
+    ECPoint check = lazy.normalize();
+    checkCondition(check.isNormalized(), "checkNormalize.2");
+    checkCondition(lazy.equals(check), "checkNormalize.3");
+//    checkCondition(check.equals(lazy), "checkNormalize.4");
+//    checkCondition(lazy.equals((Object) check), "checkNormalize.4");
+
+
+//    checkEquals(check, lazy, "checkNormalize.3");
+
+
+  }
+
   private void checkScaleX(){ /* TODO */ }
   private void checkScaleY(){ /* TODO */ }
   private void checkSubtract(){ /* TODO */ }

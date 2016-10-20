@@ -2,7 +2,7 @@ import org.bitcoinj.core.ECKey;
 import org.bitcoinj.crypto.LazyECPoint;
 import org.spongycastle.math.ec.ECPoint;
 
-public class Test {
+public class Test13 {
   public static void main(String[] args){
 
     ECKey key = new ECKey();                    // some random (compressed) key
