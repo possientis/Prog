@@ -29,6 +29,15 @@ public abstract class Test_Abstract implements Runnable {
         logMessage("right = " + right);
         System.exit(1);
       }
+      // in case equals override is not symmetric
+      if(!right.equals(left))
+      {
+        logMessage(msg + ": checkEquals failure");
+        logMessage("override of equals method is not symmetric");
+        logMessage("left.equals(right) is true while right.equals(left) is false");
+        System.exit(1);
+      }
+          
     }
     else
     {

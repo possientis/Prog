@@ -124,6 +124,14 @@ public class Test_LazyECPoint extends Test_Abstract {
     checkCondition(!y.equals(x.get()), "checkLazyECPointEqualsECPoint.2");
     checkCondition(x.equals(x.get()), "checkLazyECPointEqualsECPoint.3");
     checkCondition(y.equals(y.get()), "checkLazyECPointEqualsECPoint.4");
+
+    logMessage("-> LazyECPoint::equals see unit testing code");
+    // equality not symmetric
+    checkCondition(!x.get().equals(x), "checkLazyECPoinEqualsECPoint.5");
+
+    // equality no longer true when viewed as object
+    Object same = x.get();
+    checkCondition(!x.equals(same), "checkLazyECPointEqualsECPoint.6");
  }
 
   private void checkLazyECPointEqualsObject()
@@ -372,22 +380,82 @@ public class Test_LazyECPoint extends Test_Abstract {
     ECPoint check = lazy.normalize();
     checkCondition(check.isNormalized(), "checkNormalize.2");
     checkCondition(lazy.equals(check), "checkNormalize.3");
-//    checkCondition(check.equals(lazy), "checkNormalize.4");
-//    checkCondition(lazy.equals((Object) check), "checkNormalize.4");
-
-
-//    checkEquals(check, lazy, "checkNormalize.3");
-
-
+    checkCondition(check.equals(lazy.get()), "checkNormalize.4");
   }
 
-  private void checkScaleX(){ /* TODO */ }
-  private void checkScaleY(){ /* TODO */ }
-  private void checkSubtract(){ /* TODO */ }
-  private void checkThreeTimes(){ /* TODO */ }
-  private void checkTimesPow2(){ /* TODO */ }
-  private void checkTwice(){ /* TODO */ }
-  private void checkTwicePlus(){ /* TODO */ }
+  private void checkScaleX()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    BigInteger p = EC_Test_Utils.fieldPrime;
+    BigInteger n = (new BigInteger(1, getRandomBytes(32))).mod(p);
+    ECCurve curve = point.getCurve();
+    ECFieldElement scale = curve.fromBigInteger(n);
+    ECPoint scaled = lazy.scaleX(scale);
+    ECPoint check = point.scaleX(scale);
+    checkEquals(scaled, check, "checkScaleX.1");
+  }
 
+  private void checkScaleY()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    BigInteger p = EC_Test_Utils.fieldPrime;
+    BigInteger n = (new BigInteger(1, getRandomBytes(32))).mod(p);
+    ECCurve curve = point.getCurve();
+    ECFieldElement scale = curve.fromBigInteger(n);
+    ECPoint scaled = lazy.scaleY(scale);
+    ECPoint check = point.scaleY(scale);
+    checkEquals(scaled, check, "checkScaleY.1");
+  }
 
+  private void checkSubtract()
+  {
+    ECPoint x = EC_Test_Utils.getRandomPoint();
+    ECPoint y = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(x);
+    ECPoint diff = lazy.subtract(y);
+    ECPoint check = x.subtract(y);
+    checkEquals(diff, check, "checkSubtract.1");
+  }
+
+  private void checkThreeTimes()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    ECPoint thrice = lazy.threeTimes();
+    ECPoint check = point.threeTimes();
+    checkEquals(thrice, check, "checkThreeTimes.1");
+  }
+
+  private void checkTimesPow2()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    for(int i = 0; i < 256; ++i)
+    {
+      ECPoint times = lazy.timesPow2(i);
+      ECPoint check = point.timesPow2(i);
+      checkEquals(times, check, "checkTimesPow2.1");
+    }
+  }
+
+  private void checkTwice()
+  {
+    ECPoint point = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(point);
+    ECPoint twice = lazy.twice();
+    ECPoint check = point.twice();
+    checkEquals(twice, check, "checkTwice.1");
+  }
+
+  private void checkTwicePlus()
+  {
+    ECPoint x = EC_Test_Utils.getRandomPoint();
+    ECPoint y = EC_Test_Utils.getRandomPoint();
+    LazyECPoint lazy = new LazyECPoint(x);
+    ECPoint res = lazy.twicePlus(y);
+    ECPoint check = x.twicePlus(y);
+    checkEquals(res, check, "checkTwicePlus.1");
+  }
 }

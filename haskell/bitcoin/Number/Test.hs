@@ -1,6 +1,12 @@
 import Number
+
 import Control.Monad.CryptoRandom
 import System.Entropy
+import System.Random
+
+
+
+
 import qualified Data.ByteString as BS
 import Data.Word
 import Data.Bits 
@@ -31,7 +37,10 @@ testWord8 = do
 testByteString :: IO ()
 testByteString = do
   putStrLn $ "empty = " ++ show BS.empty
-  putStrLn $ "singleton 255 = " ++ (show $ BS.singleton $ fromInteger 255)
+  putStrLn $ "singleton 255 = " ++ (show $ BS.singleton 255)
+  putStrLn $ "pack [0,1,34,208, 255] = " ++ (show $ BS.pack [0, 1, 34, 208, 255])
+  putStrLn $ "unpack (singleton 255) = " ++ (show $ BS.unpack (BS.singleton 255))
+
   
 
 testNumber :: IO ()
@@ -57,10 +66,20 @@ testNumber = do
   putStrLn $ "hash z = " ++ (show $ hash z)
   putStrLn $ "hash t = " ++ (show $ hash t)
 
+testRandom :: IO ()
+testRandom = do
+  bytes <- getEntropy 32
+  putStrLn $ show bytes
+  putStrLn $ (show $ BS.length bytes)
+  g <- newGenIO :: IO SystemRandom
+  return ()
+
+
+
 
 main :: IO ()
 main = do
-  testByteString
+  testRandom
   
 
 

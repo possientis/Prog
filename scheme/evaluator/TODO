@@ -1,4 +1,4 @@
-unit-test definition
+unit-test definition (syntactic sugar for function def)
 
 test the following code in lazy mode (after fixing define)
 (define x 1)

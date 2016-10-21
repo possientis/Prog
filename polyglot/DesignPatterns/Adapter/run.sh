@@ -1,7 +1,16 @@
 #!/bin/sh
 
+set -e
+
+UNAME=Adapter
+LNAME=adapter
+HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
+
+DIR=`pwd`
+cd ${HOME}
+
 echo '\nThis is C ...'
-gcc adapter.c 
+gcc ${LNAME}.c 
 START=$(date +%s%N)
 ./a.out 
 END=$(date +%s%N)
@@ -11,7 +20,7 @@ rm a.out
 
 
 echo '\nThis is C++ ...'
-g++ -std=c++14 adapter.cpp 
+g++ -std=c++14 ${LNAME}.cpp
 START=$(date +%s%N)
 ./a.out 
 END=$(date +%s%N)
@@ -21,9 +30,9 @@ rm a.out
 
 
 echo '\nThis is Java ...'
-javac Adapter.java 
+javac ${UNAME}.java 
 START=$(date +%s%N)
-java Adapter 
+java ${UNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -31,19 +40,19 @@ rm *.class
 
 
 echo '\nThis is C# ...'
-mcs adapter.cs 
+mcs ${LNAME}.cs 
 START=$(date +%s%N)
-mono adapter.exe 
+mono ${LNAME}.exe 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm adapter.exe
+rm *.exe;
 
 
 echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Adapter.scala
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac ${UNAME}.scala
 START=$(date +%s%N)
-scala Adapter 
+scala ${UNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -52,7 +61,7 @@ rm *.class
 
 echo '\nThis is JavaScript ...'
 START=$(date +%s%N)
-node adapter.js
+node ${LNAME}.js
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -60,7 +69,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is PHP ...'
 START=$(date +%s%N)
-php adapter.php
+php ${LNAME}.php
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -68,7 +77,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Python ...'
 START=$(date +%s%N)
-python3 adapter.py
+python3 ${LNAME}.py
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -76,7 +85,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Ruby ...'
 START=$(date +%s%N)
-ruby adapter.rb
+ruby ${LNAME}.rb
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -84,16 +93,16 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-scm adapter.scm
+scm ${LNAME}.scm
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
 echo '\nThis is Clojure ...'
-clojurec adapter 1> /dev/null
+clojurec ${LNAME} 1> /dev/null
 START=$(date +%s%N)
-java -cp .:/usr/share/java/clojure-1.6.0.jar adapter
+java -cp .:/usr/share/java/clojure-1.6.0.jar ${LNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -101,11 +110,12 @@ rm *.class
 
 
 echo '\nThis is Haskell ...'
-ghc -v0 adapter.hs 
+ghc -v0 ${LNAME}.hs 
 START=$(date +%s%N)
-./adapter 
+./${LNAME};
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm adapter adapter.o adapter.hi
+rm ${LNAME} *.hi *.o
 
+cd ${DIR}
