@@ -1,13 +1,22 @@
 import Number
 
-import Control.Monad.CryptoRandom
-import System.Entropy
-import System.Random
+--import Control.Monad.CryptoRandom
+import System.Entropy (getEntropy)
+import Crypto.Random
+--import Crypto.Classes hiding (hash)
+--import Crypto.Classes.Exceptions hiding (hash)
+--import Crypto.HMAC hiding (hash)
+--import Crypto.Modes hiding (hash)
+--import Crypto.Padding hiding (hash)
+--import Crypto.Random hiding (hash)
+--import Crypto.Types hiding (hash)
+--import Crypto.Util hiding (hash)
+
+-- import Data.Tagged
+import Data.Binary
 
 
-
-
-import qualified Data.ByteString as BS
+import qualified Data.ByteString.Lazy as BS
 import Data.Word
 import Data.Bits 
 
@@ -66,20 +75,36 @@ testNumber = do
   putStrLn $ "hash z = " ++ (show $ hash z)
   putStrLn $ "hash t = " ++ (show $ hash t)
 
-testRandom :: IO ()
-testRandom = do
-  bytes <- getEntropy 32
+testEntropy :: IO ()
+testEntropy = do
+  bytes <- getEntropy 32 -- getEntropy :: Int -> IO BS.ByteString
   putStrLn $ show bytes
-  putStrLn $ (show $ BS.length bytes)
-  g <- newGenIO :: IO SystemRandom
+
+testCryptoRandomGen :: IO ()
+testCryptoRandomGen = do
+  g <- newGenIO :: IO SystemRandom    -- newGenIO :: CryptoRandomGen g => IO g
+  case genBytes 32 g of
+    Left e  -> putStrLn $ show e
+    Right (bytes, g') -> putStrLn $ show bytes
+
   return ()
-
-
-
+  
+testBinary :: IO ()
+testBinary = do
+  let x = 0xfffefdfcfbfaf9f8f7 :: Integer
+  print x
+  let bytes = encode x
+  print bytes
+  print $ BS.length bytes
+  return ()
 
 main :: IO ()
 main = do
-  testRandom
+  testWord8
+  testByteString
+  testEntropy 
+  testCryptoRandomGen
+  testBinary
   
 
 
