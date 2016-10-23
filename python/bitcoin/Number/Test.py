@@ -1,4 +1,4 @@
-from Number import Number
+import Number
 
 _0 = Number.ZERO
 _1 = Number.ONE
@@ -20,7 +20,7 @@ print(_4.sign())
 print((-_4).sign())
 print(_0.sign())
 print(x + y)
-print(Number.random(256))
+print('random number = %s' % Number.random(8))
 z = Number.fromInt(2**256)
 t = -z
 print(z)

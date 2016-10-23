@@ -1,3 +1,3 @@
-import Number1
-Number = Number1
+# choose implementation here
+from Number1 import *
 

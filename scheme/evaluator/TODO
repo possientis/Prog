@@ -1,3 +1,6 @@
+strict-eval depends on eval-mode when it should not. This is probably due to the 
+fact that strict-eval has dependency to new-apply which depends on eval-mode
+
 unit-test definition (syntactic sugar for function def)
 
 test the following code in lazy mode (after fixing define)

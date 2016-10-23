@@ -1,4 +1,9 @@
+import random as librandom
+
 class Number1(object):
+
+    # static data
+    randGen = librandom.SystemRandom()
 
     def __init__(self, value):
         self.value = value
@@ -55,13 +60,9 @@ class Number1(object):
             value = -self.value
         return value.bit_length()
 
-
-
     def __str__(self):
         return str(self.value)
-
-
-
+    
 
 
 ZERO = Number1(0)
@@ -71,11 +72,14 @@ def fromInt(x):
     return Number1(x)
 
 def random(numBits):
-    return ZERO # TODO
+    if numBits <= 0:
+        return ZERO
+    else:
+        return Number1(Number1.randGen.getrandbits(numBits))
 
 def fromBytes(sign, bytestring):
     value = int.from_bytes(bytestring, byteorder='big', signed=False)
-    # TODO add some vali
+    # TODO add some validation
     if sign == 0:
         return ZERO
     elif sign == 1:
@@ -84,7 +88,4 @@ def fromBytes(sign, bytestring):
         return Number1(-value)
     else: # TODO find appropriate Exception class
         raise Exception("invalid sign argument")
-
-
-
 

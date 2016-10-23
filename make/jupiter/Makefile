@@ -2,8 +2,10 @@ package = jupiter
 version = 1.0
 tarname = $(package)
 distdir = $(tarname)-$(version)
+prefix=/usr/local
+export prefix	# ok with GNU make, but not portable
 
-all clean check jupiter:
+all clean check install uninstall jupiter:
 	cd src && $(MAKE) $@	# $@ references the current target
 
 dist: $(distdir).tar.gz
@@ -32,4 +34,4 @@ distcheck: dist
 	@echo "*** Package $(distdir).tar.gz is ready for distribution."
 
 # don't look for filesystem objects bearing these target names
-.PHONY: FORCE all clean check dist distcheck
+.PHONY: FORCE all clean check dist distcheck install uninstall
