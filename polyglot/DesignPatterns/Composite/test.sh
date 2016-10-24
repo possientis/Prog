@@ -2,8 +2,8 @@
 
 set -e
 
-UNAME=AbstractFactory
-LNAME=abstractFactory
+UNAME=Composite
+LNAME=composite
 HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
 
 DIR=`pwd`
@@ -93,7 +93,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-scm ${LNAME}.scm
+scm -b -f ${LNAME}.scm
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"

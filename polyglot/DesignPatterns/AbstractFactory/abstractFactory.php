@@ -7,6 +7,7 @@ interface Shape {
   public function draw();
 }
 
+
 abstract class COLOR {
   const RED = 0;
   const GREEN = 1;

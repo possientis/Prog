@@ -1,7 +1,16 @@
 #!/bin/sh
 
+set -e
+
+UNAME=Proxy
+LNAME=proxy
+HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
+
+DIR=`pwd`
+cd ${HOME}
+
 echo '\nThis is C ...'
-gcc chainOfResp.c
+gcc ${LNAME}.c 
 START=$(date +%s%N)
 ./a.out 
 END=$(date +%s%N)
@@ -11,7 +20,7 @@ rm a.out
 
 
 echo '\nThis is C++ ...'
-g++ -std=c++14 chainOfResp.cpp 
+g++ -std=c++14 ${LNAME}.cpp
 START=$(date +%s%N)
 ./a.out 
 END=$(date +%s%N)
@@ -21,9 +30,9 @@ rm a.out
 
 
 echo '\nThis is Java ...'
-javac ChainOfResp.java 
+javac ${UNAME}.java 
 START=$(date +%s%N)
-java ChainOfResp
+java ${UNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -31,27 +40,28 @@ rm *.class
 
 
 echo '\nThis is C# ...'
-mcs chainOfResp.cs 
+mcs ${LNAME}.cs 
 START=$(date +%s%N)
-mono chainOfResp.exe 
+mono ${LNAME}.exe 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm chainOfResp.exe
+rm *.exe;
 
 
 echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac ChainOfResp.scala
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac ${UNAME}.scala
 START=$(date +%s%N)
-scala ChainOfResp 
+scala ${UNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
+
 echo '\nThis is JavaScript ...'
 START=$(date +%s%N)
-node chainOfResp.js
+node ${LNAME}.js
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -59,7 +69,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is PHP ...'
 START=$(date +%s%N)
-php chainOfResp.php
+php ${LNAME}.php
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -67,7 +77,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Python ...'
 START=$(date +%s%N)
-python3 chainOfResp.py
+python3 ${LNAME}.py
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -75,7 +85,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Ruby ...'
 START=$(date +%s%N)
-ruby chainOfResp.rb
+ruby ${LNAME}.rb
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -83,16 +93,16 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-scm chainOfResp.scm  
+scm -b -f ${LNAME}.scm
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
 echo '\nThis is Clojure ...'
-clojurec chainOfResp 1> /dev/null 
+clojurec ${LNAME} 1> /dev/null
 START=$(date +%s%N)
-java -cp .:/usr/share/java/clojure-1.6.0.jar chainOfResp
+java -cp .:/usr/share/java/clojure-1.6.0.jar ${LNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -100,11 +110,12 @@ rm *.class
 
 
 echo '\nThis is Haskell ...'
-ghc -v0 chainOfResp.hs 
+ghc -v0 ${LNAME}.hs 
 START=$(date +%s%N)
-./chainOfResp 
+./${LNAME};
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm chainOfResp chainOfResp.hi chainOfResp.o
+rm ${LNAME} *.hi *.o
 
+cd ${DIR}

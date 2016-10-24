@@ -8,7 +8,7 @@
     (define (this data) ; data ignore here
       (lambda (m)
         (cond ((eq? m 'play) (display "MediaPlayer::play is not implemented\n"))
-              (else (display "MediaPlayer: unknown operation error\n")))))
+              (else (error "MediaPlayer: unknown operation error\n")))))
     ; returning no argument constructor
     (lambda () (this 'ignored))))
 
@@ -23,7 +23,7 @@
                (display "AdvancedMediaPlayer::playVlc is not implemented\n"))
               ((eq? m 'playMp4)
                (display "AdabcedMediaPlayer::playMp4 is not implemented\n"))
-              (else (display "AdvancedMediaPlayer: unkown operation error\n")))))
+              (else (error "AdvancedMediaPlayer: unkown operation error\n")))))
     ; returning no argument constructor
     (lambda () (this 'ignored))))
 

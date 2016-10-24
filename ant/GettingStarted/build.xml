@@ -1,7 +1,25 @@
 <?xml version="1.0"?>
-<project name="firstbuild" default="compile" >
-  <target name="compile">
-    <javac srcdir="." includeantruntime="false"/>
-    <echo>compilation complete!</echo>
+<project name="structured" default="archive" >
+
+  <target name="init">
+    <mkdir dir="build/classes" />
+    <mkdir dir="dist" />
   </target>
+
+  <target name="compile" depends="init">
+    <javac  srcdir="src" 
+            destdir="build/classes"
+            includeantruntime="false"/>
+  </target>
+
+  <target name="archive" depends="compile">
+    <jar  destfile="dist/project.jar"
+          basedir="build/classes" />
+  </target> 
+
+  <target name="clean" depends="init">
+    <delete dir="build" />
+    <delete dir="dist" />
+  </target>
+
 </project>

@@ -1,7 +1,16 @@
 #!/bin/sh
 
+set -e
+
+UNAME=Factory
+LNAME=factory
+HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
+
+DIR=`pwd`
+cd ${HOME}
+
 echo '\nThis is C ...'
-gcc proxy.c 
+gcc ${LNAME}.c 
 START=$(date +%s%N)
 ./a.out 
 END=$(date +%s%N)
@@ -11,7 +20,7 @@ rm a.out
 
 
 echo '\nThis is C++ ...'
-g++ -std=c++14 proxy.cpp
+g++ -std=c++14 ${LNAME}.cpp
 START=$(date +%s%N)
 ./a.out 
 END=$(date +%s%N)
@@ -21,27 +30,29 @@ rm a.out
 
 
 echo '\nThis is Java ...'
-javac Proxy.java 
+javac ${UNAME}.java 
 START=$(date +%s%N)
-java Proxy 
+java ${UNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
+
 echo '\nThis is C# ...'
-mcs proxy.cs 
+mcs ${LNAME}.cs 
 START=$(date +%s%N)
-mono proxy.exe 
+mono ${LNAME}.exe 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm proxy.exe
+rm *.exe;
+
 
 echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Proxy.scala
+env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac ${UNAME}.scala
 START=$(date +%s%N)
-scala Proxy
+scala ${UNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -50,25 +61,23 @@ rm *.class
 
 echo '\nThis is JavaScript ...'
 START=$(date +%s%N)
-node proxy.js
+node ${LNAME}.js
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-
 
 
 echo '\nThis is PHP ...'
 START=$(date +%s%N)
-php proxy.php
+php ${LNAME}.php
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
-
 echo '\nThis is Python ...'
 START=$(date +%s%N)
-python3 proxy.py
+python3 ${LNAME}.py
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -76,7 +85,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Ruby ...'
 START=$(date +%s%N)
-ruby proxy.rb
+ruby ${LNAME}.rb
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -84,16 +93,16 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-scm proxy.scm
+scm -b -f ${LNAME}.scm
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
 echo '\nThis is Clojure ...'
-clojurec proxy 1> /dev/null 
+clojurec ${LNAME} 1> /dev/null
 START=$(date +%s%N)
-java -cp .:/usr/share/java/clojure-1.6.0.jar proxy
+java -cp .:/usr/share/java/clojure-1.6.0.jar ${LNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -101,11 +110,12 @@ rm *.class
 
 
 echo '\nThis is Haskell ...'
-ghc -v0 proxy.hs 
+ghc -v0 ${LNAME}.hs 
 START=$(date +%s%N)
-./proxy
+./${LNAME};
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm proxy proxy.o proxy.hi
+rm ${LNAME} *.hi *.o
 
+cd ${DIR}
