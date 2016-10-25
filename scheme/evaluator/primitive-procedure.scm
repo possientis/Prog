@@ -15,8 +15,17 @@
 ; destructuring
 (define (primitive-procedure-object proc) (cadr proc))
 
-; apply
+; apply (deprecated)
 (define (apply-primitive-procedure proc args)
+  (display "check4: apply-primitive-procedure is deprecated ...")(newline)
+  (apply (primitive-procedure-object proc) args)) 
+
+; strict apply
+(define (strict-apply-primitive-procedure proc args)
+  (apply (primitive-procedure-object proc) args)) 
+
+; analyze apply (same code as strict)
+(define (analyze-apply-primitive-procedure proc args)
   (apply (primitive-procedure-object proc) args)) 
 
 ; lazy

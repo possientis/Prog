@@ -1,6 +1,6 @@
 module INumber where
 
-import qualified Data.ByteString as BS  -- ByteString Strict
+import qualified Data.ByteString.Lazy as BS  -- ByteString Strict
 import Data.Hashable
 
 type ByteArray = BS.ByteString
@@ -8,6 +8,8 @@ type ByteArray = BS.ByteString
 newtype Sign = Sign Int
 
 newtype NumBits = NumBits Int
+
+newtype NumBytes = NumBytes Int
 
 class (Show a, Ord a, Num a, Integral a, Hashable a) => INumber a where 
 
@@ -24,8 +26,9 @@ class (Show a, Ord a, Num a, Integral a, Hashable a) => INumber a where
 --  (+)         :: a -> a -> a                -- inherited from Num
 --  (*)         :: a -> a -> a                -- inherited from Num
 --  negate      :: a -> a                     -- inherited from Num
-    toBytes     :: a -> NumBits -> ByteArray  -- big-endian encoding of magnitude
+    toBytes     :: a -> NumBytes -> ByteArray -- big-endian encoding of magnitude
 --  signum      :: a -> a                     -- inherited from Num
+    sign        :: a -> Int                   -- feels a bit redundant given signum
     bitLength   :: a -> NumBits
 --  toInteger   :: a -> Integer               -- inherited from Integral
 --  show        :: a -> String                -- inherited from Show

@@ -26,6 +26,7 @@ x = zero :: Number
 y = one :: Number
 z = fromInteger 23 :: Number
 t = fromInteger $ -3 :: Number
+a = fromInteger 0xfffefdfcfbfaf9f8f7 :: Number
 
 testWord8 :: IO ()
 testWord8 = do
@@ -67,13 +68,19 @@ testNumber = do
   putStrLn $ "z + t = " ++ (show $ z + t)
   putStrLn $ "z * t = " ++ (show $ z * t)
   putStrLn $ "signum z = " ++ (show $ signum z)
+  putStrLn $ "sign z = " ++ (show $ sign z)
   putStrLn $ "signum t = " ++ (show $ signum t)
+  putStrLn $ "sign t = " ++ (show $ sign t)
   putStrLn $ "signum x = " ++ (show $ signum x)
+  putStrLn $ "sign x = " ++ (show $ sign x)
   putStrLn $ "toInteger z = " ++ (show $ toInteger z)
   putStrLn $ "hash x = " ++ (show $ hash x)
   putStrLn $ "hash y = " ++ (show $ hash y)
   putStrLn $ "hash z = " ++ (show $ hash z)
   putStrLn $ "hash t = " ++ (show $ hash t)
+  putStrLn $ "a = " ++ (show a)
+  putStrLn $ "toBytes a 32 = " ++ (show $toBytes a (NumBytes 32))
+
 
 testEntropy :: IO ()
 testEntropy = do
@@ -96,6 +103,8 @@ testBinary = do
   let bytes = encode x
   print bytes
   print $ BS.length bytes
+  print $ (fromInteger x :: Word8)
+  
   return ()
 
 main :: IO ()
@@ -105,6 +114,7 @@ main = do
   testEntropy 
   testCryptoRandomGen
   testBinary
+  testNumber
   
 
 

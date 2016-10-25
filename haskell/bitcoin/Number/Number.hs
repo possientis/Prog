@@ -1,11 +1,13 @@
 module Number 
   ( Number
+  , NumBytes(..)
   , zero
   , one
   , fromBytes
   , random
   , toBytes
   , bitLength
+  , sign
   , hash
   ) where
 

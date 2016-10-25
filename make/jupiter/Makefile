@@ -24,10 +24,19 @@ FORCE:
 	-rm $(distdir).tar.gz > /dev/null 2>&1	# leading '-' : ignore status code 
 	-rm -rf $(distdir) > /dev/null 2>&1			# returned by command, ignore error
 
+# $$ -> means shell should dereference
 distcheck: dist
-	gzip -cd $(distdir).tar.gz | tar xvf -
+	gzip -cd $(distdir).tar.gz | tar xvf - 
 	cd $(distdir) && $(MAKE) all
 	cd $(distdir) && $(MAKE) check
+	cd $(distdir) && $(MAKE) prefix=$${PWD}/_inst install
+	cd $(distdir) && $(MAKE) prefix=$${PWD}/_inst uninstall
+#	mkdir -p $${PWD}/$(distdir)/_inst/bin
+	@remaining="`find $${PWD}/$(distdir)/_inst -type f | wc -l`"; \
+	if test "$${remaining}" -ne 0; then \
+		echo "*** ${remaining} file(s) remaining in stage directory!"; \
+		exit 1; \
+	fi
 	cd $(distdir) && $(MAKE) clean
 	rm -rf $(distdir)
 # leading '-' suppresses stdout display (so don't get message twice for echo)

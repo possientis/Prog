@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rm -f test.log
 rm -f logic/logic.aux
 rm -f logic/logic.dvi
 rm -f logic/logic.idx

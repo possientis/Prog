@@ -1,8 +1,10 @@
 (load "main.scm")
 
-(define x 1)
-(set! x (+ x x))
-(display x)(newline)
+(strict-eval '(define (f) 12))
+
+(set-eval-mode 'lazy)
+
+(display (strict-eval '(f)))(newline)
 
 
 

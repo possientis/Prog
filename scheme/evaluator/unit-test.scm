@@ -11,13 +11,26 @@
   (let ((env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) ; save eval mode to be restored
-    (assert-equals (strict-eval exp env) value (print ": strict-eval")) 
+    ; strict-eval 
+    (set-eval-mode 'strict)
+    (assert-equals (strict-eval exp env) value (print ": strict-eval (strict)")) 
+    (set-eval-mode 'lazy)
+    ; FAILURE
+;    (assert-equals (strict-eval exp env) value (print ": strict-eval (lazy)")) 
+    (set-eval-mode 'analyze)
+    (assert-equals (strict-eval exp env) value (print ": strict-eval (analyze)")) 
+    (set-eval-mode mode)
+    ; lazy-eval
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    ; analyze
     (assert-equals ((analyze exp) env) value (print ": analyze"))
+    ; new-eval (strict)
     (set-eval-mode 'strict)
     (assert-equals (new-eval exp env) value (print ": new-eval (strict)"))
+    ; new-eval (lazy)
     (set-eval-mode 'lazy)
     (assert-equals (force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
+    ; new-eval (analyze)
     (set-eval-mode 'analyze)
     (assert-equals (new-eval exp env) value (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode

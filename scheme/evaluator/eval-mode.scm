@@ -15,7 +15,9 @@
 
 (set-eval-mode 'strict) ; default
 
-(define (get-eval-mode) __eval-mode__)
+(define (get-eval-mode) 
+  (display "check: eval mode requested: ")(display __eval-mode__)(newline)
+  __eval-mode__)
 
 
 ))  ; include guard

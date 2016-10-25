@@ -7,6 +7,23 @@ BITCOIN=${HOME}/polyglot/Bitcoin
 
 echo 'Testing log file\n' > test.log
 
+echo 'Testing scheme interpreter ...'
+${HOME}/scheme/evaluator/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing Number ...'
+${BITCOIN}/Number/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
 echo 'Testing bitcoinj ...'
 ${HOME}/java/bitcoin/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
@@ -160,22 +177,6 @@ then
 fi
 
 
-echo 'Testing Number ...'
-${BITCOIN}/Number/test.sh >> test.log  2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-
-echo 'Testing scheme interpreter ...'
-${HOME}/scheme/evaluator/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
 
 
 echo 'All tests completed succesfully'
