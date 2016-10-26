@@ -15,7 +15,7 @@ $(distdir).tar.gz: $(distdir)
 	rm -rf $(distdir)
 
 $(distdir): FORCE
-	mkdir -p $(distdir)/src
+	mkdir -p $(distdir)/src									# -p not portable or unsafe for parallel
 	cp Makefile $(distdir)
 	cp src/Makefile $(distdir)/src
 	cp src/main.c $(distdir)/src

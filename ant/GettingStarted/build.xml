@@ -1,25 +1,45 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The order of targets is irrelevant-->
+
 <project name="structured" default="archive" >
+  <description> Compiles and run a simple program </description>
 
   <target name="init">
     <mkdir dir="build/classes" />
     <mkdir dir="dist" />
   </target>
 
-  <target name="compile" depends="init">
-    <javac  srcdir="src" 
-            destdir="build/classes"
-            includeantruntime="false"/>
+  <!-- description attribute useful with ant -projecthelp -->
+  <target name="compile" depends="init" description="Compiles the source code">
+    <javac  srcdir="src" destdir="build/classes" includeantruntime="false"/>
   </target>
 
-  <target name="archive" depends="compile">
-    <jar  destfile="dist/project.jar"
-          basedir="build/classes" />
+  <target name="archive" depends="compile" description="Creates the JAR file">
+    <jar  destfile="dist/project.jar" basedir="build/classes" />
   </target> 
 
-  <target name="clean" depends="init">
+  <target name="clean" 
+    depends="init" description="Removes the temporary directories used">
     <delete dir="build" />
     <delete dir="dist" />
+  </target>
+
+  <target name="execute" depends="compile" description="Runs the program">
+    <!-- 'warning' level ensures display even in quiet mode -->
+    <!-- levels are: error, warning, info (default), verbose, debug -->
+    <echo level="warning" message="running..." />
+    <java
+      classname="org.example.antbook.lesson1.Main"
+      classpath="build/classes">
+      <arg value="a"/>
+      <arg value="b"/>
+      <!-- the 'file' attribute tells ant to resolve the
+           attribute to an absolute file location before
+           calling the program                          -->
+      <arg file="."/>
+    </java>
+    <echo level="warning" message="run complete." />
   </target>
 
 </project>
