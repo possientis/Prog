@@ -1,8 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (not (defined? included-analyze)) 
+(if (not (defined? included-analyze-eval)) 
   (begin
-    (define included-analyze #f)
-    (display "loading analyze")(newline)
+    (define included-analyze-eval #f)
+    (display "loading analyze-eval")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (analyze exp)

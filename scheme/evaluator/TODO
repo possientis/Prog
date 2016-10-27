@@ -1,15 +1,4 @@
-create strict-apply and analyze-apply  along the lines of lazy apply
-
-we now have strict analayze lazy version of apply for each three categories of func object
-
-eval-procedure: need strict and analyze version of apply-eval-proc
-
-application: why are strict-eval application and analyze-application calling new-apply while lazy-eval-application is calling lazy-apply...
-
-look at debug: find out why code returns a thunk, and not a value
-
-strict-eval depends on eval-mode when it should not. This is probably due to the 
-fact that strict-eval has dependency to new-apply which depends on eval-mode
+why is new-apply being called at all ... well it is called in new-map...
 
 unit-test definition (syntactic sugar for function def)
 

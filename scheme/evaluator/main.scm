@@ -1,7 +1,6 @@
 (load "global-env.scm")
 
 (load "analyze-procedure.scm")
-(load "analyze.scm")
 (load "and.scm")
 (load "application.scm")
 (load "assignment.scm")

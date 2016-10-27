@@ -7,7 +7,6 @@
 
 
 (define (new-eval exp . arg)
-  (display "check1: inside new-eval ...")(newline)
   (let ((env (if (null? arg) global-env (car arg))))
     (let ((mode (get-eval-mode)))
       (cond ((eq? mode 'strict) (strict-eval exp env))

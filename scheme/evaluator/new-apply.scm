@@ -6,10 +6,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (new-apply proc args)
-  (cond ((primitive-procedure? proc)  (apply-primitive-procedure proc args))
-        ((eval-procedure? proc)       (apply-eval-procedure proc args))
-        ((analyze-procedure? proc)    (apply-analyze-procedure proc args))
-        (else (error "Unknown procedure type -- APPLY" proc))))
+  (let ((mode (get-eval-mode)))
+    (cond ((eq? mode 'strict) (strict-apply proc args))
+          ((eq? mode 'lazy)   (lazy-apply proc args))
+          ((eq? mode 'analyze)(analyze-apply proc args))
+          (else "new-apply: invalid evaluation mode" mode))))
+
+
 
 ))  ; include guard
 

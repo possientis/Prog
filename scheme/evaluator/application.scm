@@ -14,12 +14,11 @@
 
 ; strict eval
 (define (strict-eval-application exp env)
-  (display "check0: exp = ")(display exp)(newline)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
     (let ((proc (strict-eval operator env))
           (args (map (lambda (x) (strict-eval x env)) operands)))
-      (new-apply proc args))))
+      (strict-apply proc args))))
 
 ; analyze
 (define (analyze-application exp)
@@ -28,7 +27,7 @@
     (let ((proc (analyze operator))
           (args (map analyze operands)))
       (lambda (env)
-        (new-apply (proc env) (map (lambda (x) (x env)) args))))))
+        (analyze-apply (proc env) (map (lambda (x) (x env)) args))))))
 
 ; lazy
 (define (lazy-eval-application exp env)

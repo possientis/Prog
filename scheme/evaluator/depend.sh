@@ -4,9 +4,13 @@ echo analyze-procedure
 scm -b -f analyze-procedure.scm           > /dev/null
 ./run.scm analyze-procedure.scm           > /dev/null
 
-echo analyze
-scm -b -f analyze.scm                     > /dev/null               
-./run.scm analyze.scm                     > /dev/null
+echo analyze-apply
+scm -b -f analyze-apply.scm               > /dev/null               
+./run.scm analyze-apply.scm               > /dev/null
+
+echo analyze-eval
+scm -b -f analyze-eval.scm                > /dev/null               
+./run.scm analyze-eval.scm                > /dev/null
 
 echo and
 scm -b -f and.scm                         > /dev/null               
@@ -184,6 +188,10 @@ scm -b -f quote.scm                       > /dev/null
 echo self-evaluating
 scm -b -f self-evaluating.scm             > /dev/null               
 ./run.scm self-evaluating.scm             > /dev/null
+
+echo strict-apply
+scm -b -f strict-apply.scm                > /dev/null               
+./run.scm strict-apply.scm                > /dev/null
 
 echo strict-eval
 scm -b -f strict-eval.scm                 > /dev/null               

@@ -17,14 +17,6 @@
 (define (analyze-procedure-body procedure) (caddr procedure))
 (define (analyze-procedure-environment procedure) (cadddr procedure))
 
-; apply (deprecated)
-(define (apply-analyze-procedure proc args)
-  (display "check3: apply-analyze-procedure is deprecated ...")(newline)
-  (let ((body (analyze-procedure-body proc))
-        (params (analyze-procedure-parameters proc))
-        (init-env (analyze-procedure-environment proc)))
-    (let ((extended-env ((init-env 'extended) params args)))
-      (body extended-env))))
 
 ; strict apply
 (define (strict-apply-analyze-procedure proc args)

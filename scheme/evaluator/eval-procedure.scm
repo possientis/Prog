@@ -17,14 +17,6 @@
 (define (eval-procedure-body procedure) (caddr procedure))
 (define (eval-procedure-environment procedure) (cadddr procedure))
 
-; apply (deprecated)
-(define (apply-eval-procedure proc args)
-  (display "check2: apply-eval is deprecated ...")(newline)
-  (let ((body (eval-procedure-body proc))
-        (params (eval-procedure-parameters proc))
-        (init-env (eval-procedure-environment proc)))
-    (let ((extended-env ((init-env 'extended) params args)))
-      (new-eval body extended-env))))
 
 ; strict apply
 (define (strict-apply-eval-procedure proc args)

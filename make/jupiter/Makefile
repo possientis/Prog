@@ -2,8 +2,13 @@ package = jupiter
 version = 1.0
 tarname = $(package)
 distdir = $(tarname)-$(version)
-prefix=/usr/local
+prefix	=/usr/local
+exec_prefix = $(prefix)
+bindir	= $(exec_prefix)/bin
+
 export prefix	# ok with GNU make, but not portable
+export exec_prefix
+export bindir
 
 all clean check install uninstall jupiter:
 	cd src && $(MAKE) $@	# $@ references the current target
@@ -29,8 +34,8 @@ distcheck: dist
 	gzip -cd $(distdir).tar.gz | tar xvf - 
 	cd $(distdir) && $(MAKE) all
 	cd $(distdir) && $(MAKE) check
-	cd $(distdir) && $(MAKE) prefix=$${PWD}/_inst install
-	cd $(distdir) && $(MAKE) prefix=$${PWD}/_inst uninstall
+	cd $(distdir) && $(MAKE) DESTDIR=$${PWD}/_inst install
+	cd $(distdir) && $(MAKE) DESTDIR=$${PWD}/_inst uninstall
 #	mkdir -p $${PWD}/$(distdir)/_inst/bin
 	@remaining="`find $${PWD}/$(distdir)/_inst -type f | wc -l`"; \
 	if test "$${remaining}" -ne 0; then \

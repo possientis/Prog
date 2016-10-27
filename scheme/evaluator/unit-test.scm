@@ -11,19 +11,30 @@
   (let ((env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) ; save eval mode to be restored
-    ; strict-eval 
+    ; strict-eval (testing in all three modes)
     (set-eval-mode 'strict)
     (assert-equals (strict-eval exp env) value (print ": strict-eval (strict)")) 
     (set-eval-mode 'lazy)
-    ; FAILURE
-;    (assert-equals (strict-eval exp env) value (print ": strict-eval (lazy)")) 
+    (assert-equals (strict-eval exp env) value (print ": strict-eval (lazy)")) 
     (set-eval-mode 'analyze)
     (assert-equals (strict-eval exp env) value (print ": strict-eval (analyze)")) 
     (set-eval-mode mode)
-    ; lazy-eval
+    ; lazy-eval (testing in all three modes)
+    (set-eval-mode 'strict)
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
-    ; analyze
+    (set-eval-mode 'lazy)
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (set-eval-mode 'analyze)
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (set-eval-mode mode)
+    ; analyze (testing in all three modes)
+    (set-eval-mode 'strict)
     (assert-equals ((analyze exp) env) value (print ": analyze"))
+    (set-eval-mode 'lazy)
+    (assert-equals ((analyze exp) env) value (print ": analyze"))
+    (set-eval-mode 'analyze)
+    (assert-equals ((analyze exp) env) value (print ": analyze"))
+    (set-eval-mode mode)
     ; new-eval (strict)
     (set-eval-mode 'strict)
     (assert-equals (new-eval exp env) value (print ": new-eval (strict)"))
@@ -393,24 +404,26 @@
       (assert-equals (force-thunk result) unspecified-value "definiton.76")
       (assert-equals ((env 'defined?) 'f) #t "definition.77")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.78")
-;     THIS FAILS whereas previous lazy test succeeded
-;     However, previous lazy test was carried out with stict-eval mode
-;     explanation: strict-eval behaves differently depending on eval-mode
-;     which it should not do
-;     (test-expression '(f) #t "definition.79" env)
+      (test-expression '(f) #t "definition.79" env)
       ((env 'delete!) 'f)
       (assert-equals ((env 'defined?) 'f) #f "definition.79")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.80"))
-    
+    ; analyze definition via new-eval: function with no argument
+    (set-eval-mode 'analyze)
+    (let ((result (new-eval '(define (f) #f) env)))
+      (assert-equals result unspecified-value "definiton.81")
+      (assert-equals ((env 'defined?) 'f) #t "definition.82")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.83")
+      (test-expression '(f) #f "definition.84" env)
+      ((env 'delete!) 'f)
+      (assert-equals ((env 'defined?) 'f) #f "definition.85")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.86"))
     (set-eval-mode mode)
+
     )
  
 
   ; syntactic sugar for named functions
-  (let ((x (new-eval '(define (f) 12))))
-    (if (not (equal? (new-eval '(f)) 12))
-      (display "unit-test: test 5.6 failing\n"))
-    ((global-env 'delete!) 'f))
   (let ((x (new-eval '(define (f x) (* x x)))))
     (if (not (equal? (new-eval '(f 5)) 25))
       (display "unit-test: test 5.7 failing\n"))
@@ -421,13 +434,7 @@
     ((global-env 'delete!) 'f))
  
  ; syntactic sugar for named functions
- ;
-  (let ((x ((analyze '(define (f) 12)) global-env)))   
-    (if (not (equal? ((analyze '(f)) global-env) 12))
-      (display "unit-test: test 5.18 failing\n"))
-    ((global-env 'delete!) 'f))
-  ;
-  (let ((x ((analyze '(define (f x) (* x x))) global-env)))  
+ (let ((x ((analyze '(define (f x) (* x x))) global-env)))  
     (if (not (equal? ((analyze '(f 5)) global-env) 25))
       (display "unit-test: test 5.19 failing\n"))
     ((global-env 'delete!) 'f))
