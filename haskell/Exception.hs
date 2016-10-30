@@ -31,9 +31,33 @@ data SomeCompilerException = forall e . Exception e => SomeCompilerException e
 instance Show SomeCompilerException where
   show (SomeCompilerException e) = show e
 
-instance Exception SomeCompilerException
+instance Exception SomeCompilerException where
 
+-- toException :: Exception e => e -> SomeException
+-- we could define it ourselves
 compilerExceptionToException :: Exception e => e -> SomeException
 compilerExceptionToException = toException . SomeCompilerException
+
+-- fromException :: Exception e => SomeException -> Maybe e
+-- we can also define this ourselves, using 
+-- cast :: (Typeable a, Typeable b) => a -> Maybe b
+
+compilerExceptionFromException :: Exception e => SomeException -> Maybe e
+compilerExceptionFromException x = do  -- do notation in the Maybe monad ....
+  SomeCompilerException a <- fromException x
+  cast a
+
+
+
+
+
+
+test2 = SomeCompilerException ThisException
+
+test3 :: IO ()
+test3 = do
+  print $ toException test2
+  print $ compilerExceptionToException test2
+  return ()
 
 

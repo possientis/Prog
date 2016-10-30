@@ -1,6 +1,10 @@
-why is new-apply being called at all ... well it is called in new-map...
+understand failure in debug.scm
+
+resolve FAILURE in unit test
 
 unit-test definition (syntactic sugar for function def)
+
+why is new-apply being called at all ... well it is called in new-map...
 
 test the following code in lazy mode (after fixing define)
 (define x 1)

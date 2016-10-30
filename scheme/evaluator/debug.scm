@@ -1,10 +1,17 @@
 (load "main.scm")
 
-(strict-eval '(define (f) 12))
+; definition with 'analyze' leads to failure of subsequent lazy-eval
+; no such failure occurs when strict definition is used
 
-(set-eval-mode 'lazy)
+((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
 
-(display (strict-eval '(f)))(newline)
+;(strict-eval '(define (f x) (* x x)) global-env)  ; no issues there
+
+
+
+(display (strict-eval '(f 5)))(newline) ; succeeds regardless of definition type
+
+(display (force-thunk (lazy-eval '(f 5)))) (newline) ; fails if analytic definition
 
 
 
