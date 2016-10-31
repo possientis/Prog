@@ -43,6 +43,8 @@ testWord8 = do
   putStrLn $ "bit 5 = " ++ show (bit 5 :: Word8)
   putStrLn $ "bit 6 = " ++ show (bit 6 :: Word8)
   putStrLn $ "bit 7 = " ++ show (bit 7 :: Word8)
+  putStrLn $ "bit 7 of 128 = " ++ show (testBit (0x80::Word8) 7)
+  
 
 testByteString :: IO ()
 testByteString = do
@@ -79,7 +81,22 @@ testNumber = do
   putStrLn $ "hash z = " ++ (show $ hash z)
   putStrLn $ "hash t = " ++ (show $ hash t)
   putStrLn $ "a = " ++ (show a)
-  putStrLn $ "toBytes a 32 = " ++ (show $toBytes a (NumBytes 32))
+  let (Just bytes) = toBytes a (NumBytes 32) 
+  putStrLn $ "toBytes a 32 = " ++ (show bytes)
+  let (Just b) = fromBytes (Sign 1) bytes     :: Maybe Number
+  let (Just c) = fromBytes (Sign $ -1) bytes  :: Maybe Number
+  putStrLn $ "b = " ++ (show b)
+  putStrLn $ "c = " ++ (show c)
+  putStrLn $ "bitLength 0 = " ++ (show $ bitLength (fromInteger 0 :: Number))  
+  putStrLn $ "bitLength 1 = " ++ (show $ bitLength (fromInteger 1 :: Number))  
+  putStrLn $ "bitLength 2 = " ++ (show $ bitLength (fromInteger 2 :: Number))  
+  putStrLn $ "bitLength 3 = " ++ (show $ bitLength (fromInteger 3 :: Number))  
+  putStrLn $ "bitLength 4 = " ++ (show $ bitLength (fromInteger 4 :: Number))  
+  putStrLn $ "bitLength 5 = " ++ (show $ bitLength (fromInteger 5 :: Number))  
+  putStrLn $ "bitLength 6 = " ++ (show $ bitLength (fromInteger 6 :: Number))  
+  putStrLn $ "bitLength 7 = " ++ (show $ bitLength (fromInteger 7 :: Number))  
+  putStrLn $ "bitLength 8 = " ++ (show $ bitLength (fromInteger 8 :: Number))  
+  
 
 
 testEntropy :: IO ()

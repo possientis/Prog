@@ -1,6 +1,8 @@
 module Number 
   ( Number
   , NumBytes(..)
+  , NumBits(..)
+  , Sign(..)
   , zero
   , one
   , fromBytes

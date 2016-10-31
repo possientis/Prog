@@ -3,7 +3,10 @@
 <!-- The order of targets is irrelevant-->
 
 <project name="structured" default="archive" >
+
   <description> Compiles and run a simple program </description>
+
+  <property name="build.debug" value="on"/>
 
   <target name="init">
     <mkdir dir="build/classes" />
@@ -12,7 +15,8 @@
 
   <!-- description attribute useful with ant -projecthelp -->
   <target name="compile" depends="init" description="Compiles the source code">
-    <javac  srcdir="src" destdir="build/classes" includeAntRuntime="false"/>
+    <javac  srcdir="src" destdir="build/classes" 
+      includeAntRuntime="false" debug = "${build.debug}" />
   </target>
 
   <target name="archive" depends="compile" description="Creates the JAR file">
@@ -40,6 +44,18 @@
       <arg file="."/>
     </java>
     <echo level="warning" message="run complete." />
+  </target>
+
+  <target name="echo">
+    <echo message="ant.file = ${ant.file}"/>
+    <echo message="ant.home = ${ant.home}"/>
+    <echo message="ant.java.version = ${ant.java.version}"/>
+    <echo message="ant.version = ${ant.version}"/>
+    <echo message="basedir = ${basedir}"/>
+    <echo message="user.name = ${user.name}"/>
+    <echo message="user.home = ${user.home}"/>
+    <echo message="java.home = ${java.home}"/>
+    <echo message="build.debug = ${build.debug}"/>
   </target>
 
 </project>
