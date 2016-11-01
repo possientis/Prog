@@ -8,6 +8,9 @@
 ;(strict-eval '(define (f x) (* x x)) global-env)  ; no issues there
 
 
+(display "f = ")(display (strict-eval 'f))(newline)
+
+(lazy-eval '(f 5))
 
 (display (strict-eval '(f 5)))(newline) ; succeeds regardless of definition type
 

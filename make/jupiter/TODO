@@ -1,4 +1,0 @@
-make a new configure.ac file
-$ autoreconf
-$ ./configure
-follow book and make changes to Makefile templates

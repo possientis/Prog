@@ -1,3 +1,21 @@
+# @configure_input@
+
+# Package-specific substitution variables
+package 		= @PACKAGE_NAME@
+version 		= @PACKAGE_VERSION@
+tarname 		= @PACKAGE_TARNANE@
+distdir 		= $(tarname)-$(version)
+
+
+# VPATH-specific substitution variables
+srcdir 			= @srcdir@
+VPATH				= @srcdir@
+#
+# Prefix-specific substitution variables
+prefix			= @prefix@
+exec_prefix =	@exec_prefix@
+bindir			= @bindir@
+
 sources = main.c
 target = jupiter
 CFLAGS = -g -O0		# debug symbol + no optimization
@@ -5,7 +23,7 @@ CFLAGS = -g -O0		# debug symbol + no optimization
 all: $(target)
 
 $(target): $(sources)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(sources)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(srcdir)/$(sources)
 
 check: all
 	./jupiter | grep "Hello from .*jupiter!"
@@ -20,5 +38,12 @@ uninstall:
 
 clean:
 	-rm $(target)
+
+Makefile: Makefile.in ../config.status
+	cd .. && ./config,status src/$@
+
+../config.status: ../configure
+	cd .. && ./config,status --recheck
+
 
 .PHONY: all clean check install uninstall

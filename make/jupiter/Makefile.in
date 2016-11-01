@@ -1,14 +1,19 @@
-package = jupiter
-version = 1.0
-tarname = $(package)
-distdir = $(tarname)-$(version)
-prefix	=/usr/local
-exec_prefix = $(prefix)
-bindir	= $(exec_prefix)/bin
+# @configure_input@
 
-export prefix	# ok with GNU make, but not portable
-export exec_prefix
-export bindir
+# Package-specific substitution variables
+package 		= @PACKAGE_NAME@
+version 		= @PACKAGE_VERSION@
+tarname 		= @PACKAGE_TARNANE@
+distdir 		= $(tarname)-$(version)
+
+# VPATH-specific substitution variables
+srcdir 			= @srcdir@
+VPATH				= @srcdir@
+
+# Prefix-specific substitution variables
+prefix			= @prefix@
+exec_prefix =	@exec_prefix@
+bindir			= @bindir@
 
 all clean check install uninstall jupiter:
 	cd src && $(MAKE) $@	# $@ references the current target
@@ -21,9 +26,11 @@ $(distdir).tar.gz: $(distdir)
 
 $(distdir): FORCE
 	mkdir -p $(distdir)/src									# -p not portable or unsafe for parallel
-	cp Makefile $(distdir)
-	cp src/Makefile $(distdir)/src
-	cp src/main.c $(distdir)/src
+	cp $(srcdir)/configure.ac $(distdir)
+	cp $(srcdir)/configure $(distdir)
+	cp $(srcdir)/Makefile.in $(distdir)
+	cp $(srcdir)/src/Makefile.in $(distdir)/src
+	cp $(srcdir)/src/main.c $(distdir)/src
 
 FORCE: 
 	-rm $(distdir).tar.gz > /dev/null 2>&1	# leading '-' : ignore status code 
@@ -32,6 +39,7 @@ FORCE:
 # $$ -> means shell should dereference
 distcheck: dist
 	gzip -cd $(distdir).tar.gz | tar xvf - 
+	cd $(distdir) && ./configure
 	cd $(distdir) && $(MAKE) all
 	cd $(distdir) && $(MAKE) check
 	cd $(distdir) && $(MAKE) DESTDIR=$${PWD}/_inst install
@@ -46,6 +54,12 @@ distcheck: dist
 	rm -rf $(distdir)
 # leading '-' suppresses stdout display (so don't get message twice for echo)
 	@echo "*** Package $(distdir).tar.gz is ready for distribution."
+
+Makefile: Makefile.in config.status
+	./config.status $@
+
+config.status: configure
+	./config.status --recheck
 
 # don't look for filesystem objects bearing these target names
 .PHONY: FORCE all clean check dist distcheck install uninstall
