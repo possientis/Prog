@@ -6,7 +6,28 @@
 
   <description> Compiles and run a simple program </description>
 
-  <property name="build.debug" value="on"/>
+  <!-- property task is allowed to live outside of a target. All
+       tasks outside of a target are evaluated before any target 
+       is executed -->
+  <property file="build.properties" />
+
+  <property name="xdoclet.present" value="maybe" />
+  
+  <!-- available feature may break immutability of properties -->
+  <!-- it is therefore DEPRECATED -->
+  <property name="eckey.present" value="maybe" />
+  <property name="bitcoinj.jar" value="bitcoinj-core-0.14.3.jar" />
+  <available property="eckey.present"
+             classname="org.bitcoinj.core.ECKey"
+             classpath="${bitcoinj.jar}" />
+  <echo message="eckey.present = ${eckey.present}" />
+
+
+  <!-- hmmm, what is this doing -->
+  <property environment="env" />
+
+  <!-- allows to set property to absolute path -->
+  <property name="build.dir" location="build" />
 
   <target name="init">
     <mkdir dir="build/classes" />
@@ -56,6 +77,15 @@
     <echo message="user.home = ${user.home}"/>
     <echo message="java.home = ${java.home}"/>
     <echo message="build.debug = ${build.debug}"/>
+    <echo message="build.dir = ${build.dir}"/>
+    <echo message="output.dir = ${output.dir}"/>
+  </target>
+
+  <!-- does work as exepcted: properties are immutable  -->
+  <target name="override">
+    <property file="build.properties"/>
+    <property name="build.debug" value="on"/>
+    <echo message="debugging is turned ${build.debug}"/>
   </target>
 
 </project>
