@@ -5,16 +5,22 @@
 
 ((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
 
-;(strict-eval '(define (f x) (* x x)) global-env)  ; no issues there
+(define f-obj (strict-eval 'f))
+
+(display "f = ")(display f-obj)(newline)
+
+(define proc-thunk (lazy-eval 'f))
+(define args (list (lazy-eval 5)))
+(define proc (force-thunk proc-thunk)) 
 
 
-(display "f = ")(display (strict-eval 'f))(newline)
+; equivalent code
+(lazy-apply-analyze-procedure proc args)
 
-(lazy-eval '(f 5))
+;(lazy-eval '(f 5))
 
-(display (strict-eval '(f 5)))(newline) ; succeeds regardless of definition type
 
-(display (force-thunk (lazy-eval '(f 5)))) (newline) ; fails if analytic definition
+
 
 
 
