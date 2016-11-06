@@ -25,7 +25,7 @@ public class Weather {
 
   public String getTemp() { return temp; }
   public void setTemp(String temp) { this.temp = temp; }
-}
+
   public String getChill() { return chill; }
   public void setChill(String chill) { this.chill = chill; }
 

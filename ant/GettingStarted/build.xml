@@ -20,14 +20,30 @@
   <available property="eckey.present"
              classname="org.bitcoinj.core.ECKey"
              classpath="${bitcoinj.jar}" />
-  <echo message="eckey.present = ${eckey.present}" />
 
+  <!-- testing for file or directory -->
+  <available property="propertyfile.present"
+             file="build.properties"
+             type="file" />
+
+  <!-- testing for ressources .. can't get this to work-->
+  <available property="xmlfile.exists" resource="build.xml"/>
+
+  <uptodate property="tests.unnecessary">
+    <srcfiles dir="src" includes="**/*.java"/>
+    <mapper type="glob" from="*.java" to="${build.dir}/classes/*.class" />
+  </uptodate>
 
   <!-- hmmm, what is this doing -->
   <property environment="env" />
 
   <!-- allows to set property to absolute path -->
   <property name="build.dir" location="build" />
+
+  <property name="customer" value="acme"/>
+  <xmlproperty file="${customer}.xml"/>
+  <echo message="Building for ${customer(name)}..."/>
+
 
   <target name="init">
     <mkdir dir="build/classes" />
@@ -39,6 +55,14 @@
     <javac  srcdir="src" destdir="build/classes" 
       includeAntRuntime="false" debug = "${build.debug}" />
   </target>
+
+  <!-- example of if ... -->
+  <target name="copysource" depends="init" if="copy.source">
+    <copy todir="build/classes">
+      <fileset dir="src"/>
+    </copy>
+  </target>
+
 
   <target name="archive" depends="compile" description="Creates the JAR file">
     <jar  destfile="dist/project.jar" basedir="build/classes" />
@@ -79,6 +103,20 @@
     <echo message="build.debug = ${build.debug}"/>
     <echo message="build.dir = ${build.dir}"/>
     <echo message="output.dir = ${output.dir}"/>
+    <echo message="eckey.present = ${eckey.present}" />
+    <echo message="propertyfile.present = ${propertyfile.present}" />
+    <echo message="xmlfile.exists = ${xmlfile.exists}" />
+    <echo message="tests.unnecessary = ${tests.unnecessary}" />
+    <tstamp>
+      <format property="dayofweek" pattern="EEEE"/>
+    </tstamp>
+    <echo message="It is ${dayofweek}"/>
+    <tstamp>
+      <format property="buildtime"
+        pattern="yyyy-MM-dd'T'HH:mm:ss" />
+    </tstamp>
+    <echo message="buildtime = ${buildtime}"/>
+    <echo message="classname = ${customer.settings.impl}" />
   </target>
 
   <!-- does work as exepcted: properties are immutable  -->

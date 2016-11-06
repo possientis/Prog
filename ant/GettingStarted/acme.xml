@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<customer name="Acme, Inc.">
+  <settings>
+    <impl>org.example.antbook.acme.SomeClass</impl>
+  </settings>
+</customer>
