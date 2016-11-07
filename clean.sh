@@ -23,6 +23,7 @@ rm -f c#/bitcoin/Number/*.exe
 rm -f java/*.class
 rm -f java/bitcoin/Number/*.class
 rm -f java/bitcoin/*.class
+rm -f java/ijvm/*.class
 rm -f java/universe/*.class
 rm -f scala/*.class
 rm -f scala/bitcoin/*.class

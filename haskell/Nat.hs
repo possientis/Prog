@@ -1,33 +1,16 @@
-import Control.Monad
-import System.Directory
+data Nat = Zero | Succ Nat
 
-data Nat = Zero | Suc Nat deriving (Show)
+data Zero     -- Zero is a type without constructor
+data Succ n   -- Succ is a parameterized type without constructor 
 
-(£) :: Nat -> Nat -> Nat
-x £ Zero = x
-x £ (Suc y) = Suc (x £ y)
+type Three = Succ (Succ (Succ Zero))
 
-zero = Zero
-one = Suc Zero
-two = Suc one
-three = Suc two
-four = Suc three
-five = Suc four
-six = Suc five
-seven = Suc six
-eight = Suc seven
-nine = Suc eight
-ten = Suc nine
+class Even n  where isEven :: n
+class Odd n   where isOdd :: n
 
-p :: Nat -> Bool
-p Zero = True
-p (Suc n) | p n = True
+instance Even Zero
+instance Odd n => Even (Succ n)
+instance Even n => Odd (Succ n)
 
-toInt :: Nat -> Int
-toInt Zero = 0
-toInt (Suc n) = toInt n + 1
-
-show :: Nat -> String
-show n = Prelude.show (toInt n)
 
 

@@ -1,4 +1,4 @@
-interface Example1f {
+interface Example1 {
 
   int ketchup = 5;
 

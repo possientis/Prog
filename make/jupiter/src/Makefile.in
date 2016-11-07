@@ -23,7 +23,7 @@ CFLAGS = -g -O0		# debug symbol + no optimization
 all: $(target)
 
 $(target): $(sources)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(srcdir)/$(sources)
+	$(CC) -I. -I$(srcdir) -I.. $(CPPFLAGS) $(CFLAGS) -o $@ $(srcdir)/$(sources)
 
 check: all
 	./jupiter | grep "Hello from .*jupiter!"

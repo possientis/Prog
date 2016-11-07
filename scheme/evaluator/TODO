@@ -1,3 +1,6 @@
+understand where 'proc' and 'args' are coming from when body is evaluated
+in debug.scm. Which environment? at which meta level?
+
 understand failure in debug.scm
 
 resolve FAILURE in unit test
