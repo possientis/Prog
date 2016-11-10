@@ -3,6 +3,7 @@
 ; definition with 'analyze' leads to failure of subsequent lazy-eval
 ; no such failure occurs when strict definition is used
 
+;(strict-eval '(define (f x) (* x x )) global-env)
 ((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
 
 
@@ -14,6 +15,8 @@
 (define env ((global-env 'extended) params args))
 
 (display "\nbody = ")(display body)(newline)
+(display "\nproc = ")(display proc)(newline)
+;(display "\n(proc env) = ")(display (proc env))(newline)
 
 ; equivalent code
 (body env)

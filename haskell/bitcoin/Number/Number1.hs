@@ -53,7 +53,6 @@ sign_ (Number1 x)
   | x >= 0  = 1
 
 
--- TODO
 fromBytes_ :: Sign -> ByteArray -> Maybe Number1  -- big endian
 fromBytes_  (Sign sig) bytes
   | sig == 0    = Just $ Number1 0

@@ -1,5 +1,4 @@
-understand where 'proc' and 'args' are coming from when body is evaluated
-in debug.scm. Which environment? at which meta level?
+can we keep following the thread of execution?
 
 understand failure in debug.scm
 

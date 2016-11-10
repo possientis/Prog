@@ -38,12 +38,12 @@
   <property environment="env" />
 
   <!-- allows to set property to absolute path -->
+  <!-- 'location' recommended rather than 'value' for files and paths -->
   <property name="build.dir" location="build" />
 
   <property name="customer" value="acme"/>
   <xmlproperty file="${customer}.xml"/>
   <echo message="Building for ${customer(name)}..."/>
-
 
   <target name="init">
     <mkdir dir="build/classes" />
@@ -52,8 +52,10 @@
 
   <!-- description attribute useful with ant -projecthelp -->
   <target name="compile" depends="init" description="Compiles the source code">
-    <javac  srcdir="src" destdir="build/classes" 
-      includeAntRuntime="false" debug = "${build.debug}" />
+    <javac  srcdir="src" 
+            destdir="${build.dir}/classes" 
+            includeAntRuntime="true" 
+            debug="${build.debug}" />
   </target>
 
   <!-- example of if ... -->
@@ -117,6 +119,13 @@
     </tstamp>
     <echo message="buildtime = ${buildtime}"/>
     <echo message="classname = ${customer.settings.impl}" />
+
+    <path id="the.path">
+      <pathelement path="some.jar;another.jar"/>
+    </path>
+    <property name="path.string" refid="the.path"/>
+    <echo message="path = ${path.string}"/>
+
   </target>
 
   <!-- does work as exepcted: properties are immutable  -->
