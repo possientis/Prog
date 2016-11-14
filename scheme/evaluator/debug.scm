@@ -4,7 +4,8 @@
 ; no such failure occurs when strict definition is used
 
 ;(strict-eval '(define (f x) (* x x )) global-env)
-((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
+;((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
+((analyze '(define (f x) x)) global-env)           ; no failure but ...
 
 
 (define proc-thunk (lazy-eval 'f))
@@ -16,13 +17,14 @@
 
 (display "\nbody = ")(display body)(newline)
 (display "\nproc = ")(display proc)(newline)
-;(display "\n(proc env) = ")(display (proc env))(newline)
 
+(lazy-eval '(f 5) global-env)
 ; equivalent code
 (body env)
 
 
-;(lazy-eval '(f 5))
+;(display "\n\nresult = ")(display (force-thunk (lazy-eval '(f 5))))(newline)(newline)
+;(display "\n\nresult = ")(display (force-thunk (body env)))(newline)(newline)
 
 
 #|

@@ -7,5 +7,6 @@ rm -f install-sh
 rm -f Makefile
 rm -f src/Makefile
 rm -f src/jupiter
+rm -f src/a.out   # just in case
 tree
 

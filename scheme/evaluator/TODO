@@ -1,3 +1,6 @@
+looks like (lazy-eval '(f 5)) is a double thunk, unlike (body env)
+please confirm that fact, under scm and run
+
 can we keep following the thread of execution?
 
 understand failure in debug.scm
