@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The order of targets is irrelevant-->
+
+<project name="lucene" default="archive" >
+
+  <description> Compiles and run a simple program </description>
+
+  <property name="build.dir" location="build" />
+  <property name="build.debug" value="true" />
+
+  <target name="init">
+    <mkdir dir="${build.dir}/classes" />
+    <mkdir dir="${build.dir}/dist" />
+  </target>
+
+  <!-- description attribute useful with ant -projecthelp -->
+  <target name="compile" depends="init" description="Compiles the source code">
+    <javac  srcdir="src" 
+            destdir="${build.dir}/classes" 
+            includeAntRuntime="true" 
+            debug="${build.debug}" />
+  </target>
+
+
+  <target name="archive" depends="compile" description="Creates the JAR file">
+    <jar  destfile="${build.dir}dist/project.jar" basedir="${build.dir}/classes" />
+  </target> 
+
+  <target name="clean" 
+    depends="init" description="Removes the temporary directories used">
+    <delete dir="build" />
+  </target>
+
+
+</project>
