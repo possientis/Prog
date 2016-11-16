@@ -1,4 +1,5 @@
 (load "main.scm")
+(set-debug #t)
 
 (define (assert-equals left right message)
   (if (not (equal? left right)) 

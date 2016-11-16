@@ -20,6 +20,7 @@ bindir					= @bindir@
 CC							= @CC@
 CFLAGS					= @CFLAGS@
 CPPFLAGS				= @CPPFLAGS@
+DEFS						= @DEFS@
 LIBS						= @LIBS@
 INSTALL					= @INSTALL@
 INSTALL_DATA		= @INSTALL_DATA@
@@ -28,12 +29,11 @@ INSTALL_SCRIPT 	= @INSTALL_SCRIPT@
 
 sources = main.c
 target = jupiter
-CFLAGS = -g -O0		# debug symbol + no optimization
 
 all: $(target)
 
 $(target): $(sources)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -I. -I$(srcdir) -I.. -o $@ $(srcdir)/$(sources) $(LIBS)
+	$(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) -I. -I$(srcdir) -I.. -o $@ $(srcdir)/$(sources) $(LIBS)
 
 check: all
 	./jupiter | grep "Hello from .*jupiter!"

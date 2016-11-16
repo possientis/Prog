@@ -31,16 +31,17 @@
 
 ; lazy
 (define (lazy-eval-application exp env)
-  (display "check1: exp = ")(display exp)(newline)
+  (debug "\ncheck1: exp = ")(debug exp)(debug-newline)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
     (let ((proc (lazy-eval operator env))
           (args (map (lambda (x) (lazy-eval x env)) operands)))
-      (display "check2: proc = ")(display proc)(newline)
-      (display "check3: (force-thunk proc) = ")(display (force-thunk proc))(newline)
-      (display "check4: args = ")(display args)(newline)
-      (display "check5: (map force-thunk args) = ")
-        (display (map force-thunk args))(newline)
+      (debug "check2: proc = ")(debug proc)(debug-newline)
+      (debug "check3: (force-thunk proc) = ")(debug (force-thunk proc))
+        (debug-newline)
+      (debug "check4: args = ")(debug args)(debug-newline)
+      (debug "check5: (map force-thunk args) = ")
+        (debug (map force-thunk args))(debug-newline)
       (lazy-apply proc args))))
 
 ))  ; include guard

@@ -1,9 +1,10 @@
-looks like (lazy-eval '(f 5)) is a double thunk, unlike (body env)
-please confirm that fact, under scm and run
+(lazy-eval '(f 5)) is a double-thunk 
+(body env) is a single thunk
+yet we thought they were equivalent code... Explain
 
 can we keep following the thread of execution?
 
-understand failure in debug.scm
+understand failure in test.scm
 
 resolve FAILURE in unit test
 

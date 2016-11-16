@@ -17,11 +17,13 @@ static void * print_it(void * data)
 
 int main(int argc, char * argv[])
 {
-#if HAVE_PTHREAD_H
+#if ASYNC_EXEC
+  printf("pthread version is running\n");
   pthread_t tid;
   pthread_create(&tid, 0, print_it, argv[0]);
   pthread_join(tid, 0);
 #else
+  printf("single thread version is running\n");
   print_it(argv[0]);
 #endif
   return 0;

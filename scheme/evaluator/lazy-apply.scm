@@ -6,10 +6,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (lazy-apply proc-thunk args)
-  (display "check6: proc-thunk = ")(display proc-thunk)(newline)
-  (display "check7: args = ")(display args)(newline)
+  (debug "check6: proc-thunk = ")(debug proc-thunk)(debug-newline)
+  (debug "check7: args = ")(debug args)(debug-newline)
   (let ((proc (force-thunk proc-thunk)))
-    (display "check8: proc = ")(display proc)(newline)
+    (debug "check8: proc = ")(debug proc)(debug-newline)
     (cond ((primitive-procedure? proc)  (lazy-apply-primitive-procedure proc args))
           ((eval-procedure? proc)       (lazy-apply-eval-procedure proc args))
           ((analyze-procedure? proc)    (lazy-apply-analyze-procedure proc args))

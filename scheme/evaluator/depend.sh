@@ -32,6 +32,10 @@ echo cond
 scm -b -f cond.scm                        > /dev/null               
 ./run.scm cond.scm                        > /dev/null
 
+echo debug
+scm -b -f debug.scm                       > /dev/null               
+./run.scm debug.scm                       > /dev/null
+
 echo defined-primitive
 scm -b -f defined-primitive.scm           > /dev/null               
 ./run.scm defined-primitive.scm           > /dev/null
