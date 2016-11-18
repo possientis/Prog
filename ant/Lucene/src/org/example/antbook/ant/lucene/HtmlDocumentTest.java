@@ -13,15 +13,19 @@ public class HtmlDocumentTest extends DocumentTestCase
   HtmlDocument doc;
 
   public void setUp() throws IOException {
-    doc = new HtmlDocument(getFile("test.html"));
+    System.err.println("\nsetUp is running");
+//    doc = new HtmlDocument(getFile("test.html"));
   }
 
   public void testDoc() {
-    assertEquals("Title", "Test Title", doc.getTitle());
-    assertEquals("Body", "This is some test", doc.getBodyText());
+    System.err.println("testDoc is running");
+//    assertEquals("Title", "Test Title", doc.getTitle());
+//    assertEquals("Body", "This is some test", doc.getBodyText());
+
   }
 
   public void tearDown() {
+    System.err.println("tearDown is running");
     doc = null;
   }
 

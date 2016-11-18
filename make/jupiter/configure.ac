@@ -15,7 +15,8 @@ AC_CHECK_HEADERS([stdlib.h])
 
 # Checks for command-line options
 AC_ARG_ENABLE([async_exec],
-              [  --disable-async-exec disable async execution feature],
+              [AS_HELP_STRING([--disable-async-exec],
+                [disable asynchronous execution @<:@default: no@:>@])],
               [async_exec=${enableval}], [async_exec=yes])
 
 # Checks for libraries.
@@ -44,6 +45,7 @@ fi
 
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_CHECK_TYPES([uint16_t, uint64_t], [], [], [AC_INCLUDES_DEFAULT])
 
 # Checks for library functions.
 

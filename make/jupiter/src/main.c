@@ -2,6 +2,12 @@
 # include <config.h>
 #endif
 
+#if HAVE_STDINT_H
+# include <stdint.h>
+#elif HAVE_INTTYPES_H
+# include <inttypes.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,8 +15,12 @@
 # include <pthread.h>
 #endif
 
+
 static void * print_it(void * data)
 {
+  uint16_t x = 23;
+  uint64_t y = 345;
+
   printf("Hello from %s!\n", (const char*) data);
   return 0;
 }

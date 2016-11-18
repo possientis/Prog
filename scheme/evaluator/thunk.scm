@@ -43,7 +43,10 @@
     ;
     ; returning two argument constructor
     ;
-    (lambda (expr env) (list 'thunk (this (list 'data expr env))))))
+    (lambda (expr env) 
+      (if (thunk? expr) ; do not create a double thunk
+        expr
+        (list 'thunk (this (list 'data expr env)))))))
 
 ; destructuring
 (define (thunk-expression obj) ((cadr obj) 'expression))
