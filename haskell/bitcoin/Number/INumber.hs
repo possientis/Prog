@@ -1,7 +1,25 @@
-module INumber where
+module INumber
+  ( Rand  -- re-exporting Rand so client code need not bother
+  , toIO
+  , fromIO
+  , rand
+  , ByteArray
+  , Sign(..)
+  , NumBits(..)
+  , NumBytes(..)
+  , INumber
+  , zero
+  , one
+  , fromBytes
+  , random
+  , toBytes
+  , sign
+  , bitLength
+  )  where
 
-import qualified Data.ByteString.Lazy as BS  -- ByteString Strict
+import qualified Data.ByteString as BS  -- ByteString Strict
 import Data.Hashable
+import Rand
 
 type ByteArray = BS.ByteString
 
@@ -18,7 +36,7 @@ class (Show a, Ord a, Num a, Integral a, Hashable a) => INumber a where
     zero        :: a
     one         :: a
     fromBytes   :: Sign -> ByteArray -> Maybe a     -- big-endian
-    random      :: NumBits ->  IO a                 -- uniform 0 .. 2^(numBits) - 1
+    random      :: NumBits ->  Rand a               -- uniform 0 .. 2^(numBits) - 1
 --  fromInteger :: Integer -> a                     -- inherited from Num
 
 --  instance members

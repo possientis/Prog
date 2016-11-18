@@ -5,6 +5,10 @@ module Number1
   , NumBytes(..)
   , NumBits(..)
   , Sign(..)
+  , Rand
+  , toIO
+  , fromIO
+  , rand
   , zero
   , one
   , fromBytes
@@ -18,8 +22,8 @@ module Number1
 import INumber
 import Data.Hashable (Hashable, hash)
 import Data.Word (Word8)
-import Data.Bits (shiftR, shiftL, testBit)
-import qualified Data.ByteString.Lazy as L
+import Data.Bits (shiftR, shiftL, testBit, (.&.))
+import qualified Data.ByteString as BS
 
 
 newtype Number1 = Number1 Integer 
@@ -61,20 +65,64 @@ fromBytes_  (Sign sig) bytes
   | otherwise   = Nothing
   where 
     x     = go 0 list
-    list  = L.unpack bytes
+    list  = BS.unpack bytes
     go :: Integer -> [Word8] -> Integer 
     go acc [] = acc
     go acc (b:bs) = go ((shiftL acc 8) + toInteger b) bs 
 
 
-random_ :: NumBits -> IO Number1
-random_  = undefined     -- TODO
+-- returns unsigned random number of requested size in bits
+random_ :: NumBits -> Rand Number1
+random_ n = do
+  bytes <- randomBytes_ n 
+  case fromBytes (Sign 1) bytes of
+    Just number -> return number
+    Nothing     -> error "random_ : this should not happen"
+
+-- returns unsigned random number as big endian ByteArray
+-- Essentially generates random bytes and subsequently set
+-- the appropriate number of leading bits to 0 so as to 
+-- ensure the final ByteArray has the right bit size.
+randomBytes_ :: NumBits -> Rand ByteArray
+randomBytes_ (NumBits n) = 
+  let len = div (n + 7) 8 in    -- number of bytes required
+    if len == 0 
+      then return $ BS.pack []  -- empty ByteArray
+      else do
+        bytes <- rand len
+        let lead : rest = BS.unpack bytes
+        let diff = len * 8 - n  -- number of leading bits set to 0 
+        let front = truncate_ diff lead
+        return $ BS.pack (front : rest) 
+
+-- returns byte with n leading bits set to 0
+truncate_ :: Int -> Word8 -> Word8  
+truncate_ n w = go 0x7f n w where
+  go :: Word8 -> Int -> Word8 -> Word8
+  go mask n w = 
+    if n == 0
+      then w
+      else go (mask `shiftR` 1) (n - 1) (w .&. mask)
+    
+
+testTruncate :: IO ()
+testTruncate = do
+  putStrLn $ show (truncate_ 0 0xff)
+  putStrLn $ show (truncate_ 1 0xff)
+  putStrLn $ show (truncate_ 2 0xff)
+  putStrLn $ show (truncate_ 3 0xff)
+  putStrLn $ show (truncate_ 4 0xff)
+  putStrLn $ show (truncate_ 5 0xff)
+  putStrLn $ show (truncate_ 6 0xff)
+  putStrLn $ show (truncate_ 7 0xff)
+  putStrLn $ show (truncate_ 8 0xff)
+     
 
 toBytes_ :: Number1 -> NumBytes -> Maybe ByteArray 
 toBytes_  (Number1 x) (NumBytes num)
   | x < 0     = toBytes (Number1 $ -x) (NumBytes num)
   | len < 0   = Nothing
-  | otherwise = Just $ L.pack $ padding len list 
+  | otherwise = Just $ BS.pack $ padding len list 
   where
     list = (unroll x)
     len = num - length list

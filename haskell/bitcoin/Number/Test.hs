@@ -28,6 +28,8 @@ z = fromInteger 23 :: Number
 t = fromInteger $ -3 :: Number
 a = fromInteger 0xfffefdfcfbfaf9f8f7 :: Number
 
+
+
 testWord8 :: IO ()
 testWord8 = do
   putStrLn "Testing type Word8 ..."
@@ -113,6 +115,25 @@ testCryptoRandomGen = do
 
   return ()
   
+testRand :: IO ()
+testRand = toIO $ do  -- inside the Rand monad
+  bytes <- rand 32
+  fromIO $ putStrLn $ "rand 32 = " ++ show bytes
+  num <- random $ NumBits 0 :: Rand Number
+  fromIO $ putStrLn $ "random 0 = " ++ show num
+  num <- random $ NumBits 1 :: Rand Number
+  fromIO $ putStrLn $ "random 1 = " ++ show num
+  num <- random $ NumBits 2 :: Rand Number
+  fromIO $ putStrLn $ "random 2 = " ++ show num
+  num <- random $ NumBits 3 :: Rand Number
+  fromIO $ putStrLn $ "random 3 = " ++ show num
+  num <- random $ NumBits 4 :: Rand Number
+  fromIO $ putStrLn $ "random 4 = " ++ show num
+  num <- random $ NumBits 8 :: Rand Number
+  fromIO $ putStrLn $ "random 8 = " ++ show num
+
+
+
 testBinary :: IO ()
 testBinary = do
   let x = 0xfffefdfcfbfaf9f8f7 :: Integer
@@ -132,6 +153,7 @@ main = do
   testCryptoRandomGen
   testBinary
   testNumber
+  testRand
   
 
 

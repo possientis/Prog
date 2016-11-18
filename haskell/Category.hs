@@ -4,4 +4,7 @@ class Graph a where
 
 class Graph a => Category a where
   compose :: a -> a -> Maybe a
+
+
+
   

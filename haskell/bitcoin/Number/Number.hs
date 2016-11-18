@@ -3,6 +3,10 @@ module Number
   , NumBytes(..)
   , NumBits(..)
   , Sign(..)
+  , Rand
+  , toIO
+  , fromIO
+  , rand
   , zero
   , one
   , fromBytes
