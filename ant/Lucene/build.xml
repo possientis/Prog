@@ -12,31 +12,50 @@
 
   <path id="test.classpath">
     <pathelement location="${junit.jar}" />
-    <pathelement location="${build.dir}/dist/project.jar" />
+    <pathelement location="${build.dir.dist}/project.jar" />
   </path> 
 
 
+  <property name="source.main" location="src/main" />
+  <property name="source.test" location="src/test" />
   <property name="build.dir" location="build" />
+  <property name="build.dir.main" location="${build.dir}/classes" />
+  <property name="build.dir.test" location="${build.dir}/test-classes" />
+  <property name="build.dir.dist" location="${build.dir}/dist" />
   <property name="build.debug" value="true" />
   <property name="junit.jar" value="/usr/share/java/junit4.jar" />
 
 
-
   <target name="init">
-    <mkdir dir="${build.dir}/classes" />
-    <mkdir dir="${build.dir}/dist" />
+    <mkdir dir="${build.dir.main}" />
+    <mkdir dir="${build.dir.test}" />
+    <mkdir dir="${build.dir.dist}" />
   </target>
 
   <!-- description attribute useful with ant -projecthelp -->
   <target name="compile" depends="init" description="Compiles the source code">
-    <javac  srcdir="src" 
-            destdir="${build.dir}/classes" 
+
+    <javac  srcdir="${source.main}"
+            destdir="${build.dir.main}" 
             includeAntRuntime="true" 
             debug="${build.debug}" />
   </target>
 
+  <target name="test-compile" depends="archive" description="Compiles the test source code">
+
+    <javac  srcdir="${source.test}"
+            destdir="${build.dir.test}" 
+            includeAntRuntime="true" 
+            debug="${build.debug}">
+      <classpath>
+        <pathelement location="${build.dir.dist}/project.jar" />
+      </classpath>
+    </javac>
+  </target>
+
+
   <target name="archive" depends="compile" description="Creates the JAR file">
-    <jar  destfile="${build.dir}/dist/project.jar" basedir="${build.dir}/classes" />
+    <jar  destfile="${build.dir}/dist/project.jar" basedir="${build.dir}/classes"/>
   </target> 
 
   <target name="clean" 
@@ -44,9 +63,12 @@
     <delete dir="build" />
   </target>
 
-  <target name="test" depends="archive" description="Runs unit testing code">
+  <target name="test" depends="test-compile" description="Runs unit testing code">
     <junit>
-      <classpath refid="test.classpath" />
+      <!--      <classpath refid="test.classpath" /> -->
+      <classpath>
+        <pathelement location="${build.dir.dist}/project.jar" />
+      </classpath>
       <test name="org.example.antbook.ant.lucene.HtmlDocumentTest" />
     </junit>
   </target>

@@ -1,0 +1,5 @@
+work out out to specify classpath for junit
+managed to specify classpath for javac task of test-compile
+issue:
+1. make it work for refid=
+2. make it work for absolute path e.g. usr/share/java/junit4.jar

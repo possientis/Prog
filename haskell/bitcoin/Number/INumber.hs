@@ -1,10 +1,5 @@
 module INumber
-  ( Rand  -- re-exporting Rand so client code need not bother
-  , toIO
-  , fromIO
-  , rand
-  , ByteArray
-  , Sign(..)
+  ( Sign(..)
   , NumBits(..)
   , NumBytes(..)
   , INumber
@@ -17,11 +12,9 @@ module INumber
   , bitLength
   )  where
 
-import qualified Data.ByteString as BS  -- ByteString Strict
+import Data.ByteString
 import Data.Hashable
 import Rand
-
-type ByteArray = BS.ByteString
 
 newtype Sign = Sign Int deriving Show
 
@@ -35,7 +28,7 @@ class (Show a, Ord a, Num a, Integral a, Hashable a) => INumber a where
 
     zero        :: a
     one         :: a
-    fromBytes   :: Sign -> ByteArray -> Maybe a     -- big-endian
+    fromBytes   :: Sign -> ByteString -> Rand a     -- big-endian, may throw
     random      :: NumBits ->  Rand a               -- uniform 0 .. 2^(numBits) - 1
 --  fromInteger :: Integer -> a                     -- inherited from Num
 
@@ -44,7 +37,7 @@ class (Show a, Ord a, Num a, Integral a, Hashable a) => INumber a where
 --  (+)         :: a -> a -> a                      -- inherited from Num
 --  (*)         :: a -> a -> a                      -- inherited from Num
 --  negate      :: a -> a                           -- inherited from Num
-    toBytes     :: a -> NumBytes -> Maybe ByteArray -- big-endian magnitude
+    toBytes     :: a -> NumBytes -> Rand ByteString -- b.e. magnitude, may throw
 --  signum      :: a -> a                           -- inherited from Num
     sign        :: a -> Int                         -- redundant given signum
     bitLength   :: a -> NumBits

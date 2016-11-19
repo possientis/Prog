@@ -1,3 +1,4 @@
+import Rand
 import Number
 
 --import Control.Monad.CryptoRandom
@@ -12,15 +13,10 @@ import Crypto.Random
 --import Crypto.Types hiding (hash)
 --import Crypto.Util hiding (hash)
 
--- import Data.Tagged
-import Data.Binary
-
-
-import qualified Data.ByteString.Lazy as BS
+import Data.ByteString hiding (putStrLn, length)
 import Data.Word
 import Data.Bits 
 
-type ByteString = BS.ByteString
 
 x = zero :: Number
 y = one :: Number
@@ -50,10 +46,10 @@ testWord8 = do
 
 testByteString :: IO ()
 testByteString = do
-  putStrLn $ "empty = " ++ show BS.empty
-  putStrLn $ "singleton 255 = " ++ (show $ BS.singleton 255)
-  putStrLn $ "pack [0,1,34,208, 255] = " ++ (show $ BS.pack [0, 1, 34, 208, 255])
-  putStrLn $ "unpack (singleton 255) = " ++ (show $ BS.unpack (BS.singleton 255))
+  putStrLn $ "empty = " ++ show empty
+  putStrLn $ "singleton 255 = " ++ (show $ singleton 255)
+  putStrLn $ "pack [0,1,34,208, 255] = " ++ (show $ pack [0, 1, 34, 208, 255])
+  putStrLn $ "unpack (singleton 255) = " ++ (show $ unpack (singleton 255))
 
   
 
@@ -83,10 +79,12 @@ testNumber = do
   putStrLn $ "hash z = " ++ (show $ hash z)
   putStrLn $ "hash t = " ++ (show $ hash t)
   putStrLn $ "a = " ++ (show a)
-  let (Just bytes) = toBytes a (NumBytes 32) 
+  -- very bad thing to do: should be running everything inside Rand rather
+  -- than IO, then pass the whole chain of actions to toIO
+  bytes <- toIO $ toBytes a (NumBytes 32) :: IO ByteString
   putStrLn $ "toBytes a 32 = " ++ (show bytes)
-  let (Just b) = fromBytes (Sign 1) bytes     :: Maybe Number
-  let (Just c) = fromBytes (Sign $ -1) bytes  :: Maybe Number
+  b <- toIO $ fromBytes (Sign 1) bytes    :: IO Number
+  c <- toIO $ fromBytes (Sign $ -1) bytes :: IO Number
   putStrLn $ "b = " ++ (show b)
   putStrLn $ "c = " ++ (show c)
   putStrLn $ "bitLength 0 = " ++ (show $ bitLength (fromInteger 0 :: Number))  
@@ -134,24 +132,12 @@ testRand = toIO $ do  -- inside the Rand monad
 
 
 
-testBinary :: IO ()
-testBinary = do
-  let x = 0xfffefdfcfbfaf9f8f7 :: Integer
-  print x
-  let bytes = encode x
-  print bytes
-  print $ BS.length bytes
-  print $ (fromInteger x :: Word8)
-  
-  return ()
-
 main :: IO ()
 main = do
   testWord8
   testByteString
   testEntropy 
   testCryptoRandomGen
-  testBinary
   testNumber
   testRand
   
