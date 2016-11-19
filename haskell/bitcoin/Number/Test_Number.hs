@@ -71,6 +71,65 @@ checkFromBytes = do
   let action = fromBytes (Sign (-2)) b0 :: Rand Number
   checkException action "InvalidArgument" "checkFromBytes.5"
 
+  -- single 0x00 byte
+  let b1 = pack [0x00]
+  x <- fromBytes (Sign 1) b1 :: Rand Number
+  checkEquals x zero "checkFromBytes.6"
+  x <- fromBytes (Sign (-1)) b1 :: Rand Number
+  checkEquals x zero "checkFromBytes.7"
+  x <- fromBytes (Sign 0) b1 :: Rand Number
+  checkEquals x zero "checkFromBytes.8"
+  let action = fromBytes (Sign 2) b1 :: Rand Number
+  checkException action "InvalidArgument" "checkFromBytes.9"
+  let action = fromBytes (Sign (-2)) b1 :: Rand Number
+  checkException action "InvalidArgument" "checkFromBytes.10"
+  
+  -- two 0x00 bytes
+  let b2 = pack [0x00, 0x00]
+  x <- fromBytes (Sign 1) b2 :: Rand Number
+  checkEquals x zero "checkFromBytes.11"
+  x <- fromBytes (Sign (-1)) b2 :: Rand Number
+  checkEquals x zero "checkFromBytes.12"
+  x <- fromBytes (Sign 0) b2 :: Rand Number
+  checkEquals x zero "checkFromBytes.13"
+  let action = fromBytes (Sign 2) b2 :: Rand Number
+  checkException action "InvalidArgument" "checkFromBytes.14"
+  let action = fromBytes (Sign (-2)) b2 :: Rand Number
+  checkException action "InvalidArgument" "checkFromBytes.15"
+  
+  -- single 0x01 bytes
+  let b3 = pack [0x01]
+  x <- fromBytes (Sign 1) b3 :: Rand Number
+  checkEquals x one "checkFromBytes.16"
+  let action = fromBytes (Sign 0) b3 :: Rand Number
+  checkException action "InvalidArgument" "checkFromBytes.17"
+
+  -- x + (-x) = 0
+  b4 <- getRandomBytes 32
+  x <- fromBytes (Sign 1) b4    :: Rand Number
+  y <- fromBytes (Sign (-1)) b4 :: Rand Number
+  checkEquals (x + y) zero "checkFromBytes.18"
+
+  -- multiplying by -1
+  z <- fromBytes (Sign (-1)) b3 -- (-1)
+  checkEquals (x * z) y "checkFromBytes.19"
+
+  -- padding with 0x00 bytes
+  b5 <- getRandomBytes 28
+  x <- fromBytes (Sign 1) b5    :: Rand Number
+  y <- fromBytes (Sign (-1)) b5 :: Rand Number
+  let b6 = pack $ 0:0:0:0:(unpack b5)
+  z <- fromBytes (Sign 1) b6
+  checkEquals x z "checkfromBytes.20"
+  z <- fromBytes (Sign (-1)) b6
+  checkEquals y z "checkfromBytes.21"
+
+  -- actual replication
+  
+  
+   
+  return ()
+
 
 checkRandom :: Rand ()
 checkRandom = return () -- TODO

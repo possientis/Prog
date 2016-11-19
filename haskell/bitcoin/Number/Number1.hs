@@ -21,6 +21,7 @@ import Data.Hashable (Hashable, hash)
 import Data.Word (Word8)
 import Data.Bits (shiftR, shiftL, testBit, (.&.))
 import Data.ByteString hiding (putStrLn, length, head)
+import Prelude hiding (all)
 
 
 newtype Number1 = Number1 Integer 
@@ -56,9 +57,13 @@ sign_ (Number1 x)
 
 fromBytes_ :: Sign -> ByteString -> Rand Number1  -- big endian
 fromBytes_  (Sign sig) bytes
-  | sig == 0    = return $ Number1 0
   | sig == 1    = return $ Number1 x
   | sig == (-1) = return  $ Number1 (-x) 
+  | sig == 0    = 
+      if all (== 0) bytes
+        then return $ Number1 0
+        else throw $
+          randException "InvalidArgument" "fromBytes: inconsistent arguments"
   | otherwise   = throw $ 
     randException "InvalidArgument" "fromBytes: illegal sign argument"
   where 
@@ -67,7 +72,6 @@ fromBytes_  (Sign sig) bytes
     go :: Integer -> [Word8] -> Integer 
     go acc [] = acc
     go acc (b:bs) = go ((shiftL acc 8) + toInteger b) bs 
-
 
 -- returns unsigned random number of requested size in bits
 random_ :: NumBits -> Rand Number1
@@ -83,7 +87,7 @@ randomBytes_ :: NumBits -> Rand ByteString
 randomBytes_ (NumBits n) = 
   let len = div (n + 7) 8 in    -- number of bytes required
     if len == 0 
-      then return $ pack []  -- empty ByteArray
+      then return empty         -- empty ByteString
       else do
         bytes <- rand len
         let lead : rest = unpack bytes

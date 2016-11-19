@@ -2,10 +2,15 @@ module Test_Abstract
   (logMessage
   , checkEquals
   , checkException
+  , getRandomBytes
   ) where
 
 import Rand
 import System.Exit
+import Data.ByteString hiding (putStrLn)
+
+getRandomBytes :: Int -> Rand ByteString
+getRandomBytes = rand
 
 logMessage :: String -> Rand ()
 logMessage s = fromIO $ putStrLn s
