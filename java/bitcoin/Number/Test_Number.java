@@ -341,11 +341,15 @@ public class Test_Number extends Test_Abstract
     check1 = Number.ONE.toString();
     checkEquals(check1, "1", "checkToString.2");
 
+    // minus one
+    check1 = Number.ONE.negate().toString();
+    checkEquals(check1, "-1", "checkToString.3");
+
     // random positive
     x = Number.random(256);
     check1 = x.toString();
     check2 = x.toBigInteger().toString();
-    checkEquals(check1, check2, "checkToString.3");
+    checkEquals(check1, check2, "checkToString.4");
   }
 
   private static void checkCompareTo()

@@ -7,7 +7,7 @@ module Rand
   , try
   , toIO
   , fromIO
-  , rand
+  , getRandomBytes
   ) where
 
 import Crypto.Random
@@ -94,8 +94,8 @@ toIO m = do                   -- newGenIO :: CryptoRandomGen g => IO g
 
 
 -- main API function
-rand :: Int -> Rand ByteString
-rand n = state $ \s -> do -- inside the IO monad
+getRandomBytes:: Int -> Rand ByteString
+getRandomBytes n = state $ \s -> do -- inside the IO monad
   case genBytes n s of
     Left e            -> return $ Left $ fromGenError e
     Right (bytes, s') -> return $ Right (bytes, s')

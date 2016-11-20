@@ -20,8 +20,8 @@ import Rand
 import Data.Hashable (Hashable, hash)
 import Data.Word (Word8)
 import Data.Bits (shiftR, shiftL, testBit, (.&.))
-import Data.ByteString hiding (putStrLn, length, head)
-import Prelude hiding (all)
+import Data.ByteString hiding (putStrLn, length)
+import Prelude hiding (all, head, tail)
 
 
 newtype Number1 = Number1 Integer 
@@ -89,11 +89,11 @@ randomBytes_ (NumBits n) =
     if len == 0 
       then return empty         -- empty ByteString
       else do
-        bytes <- rand len
-        let lead : rest = unpack bytes
+        bytes <- getRandomBytes len
+        let lead = head bytes
         let diff = len * 8 - n  -- number of leading bits set to 0 
         let front = truncate_ diff lead
-        return $ pack (front : rest) 
+        return $ cons front (tail bytes)
 
 -- returns byte with n leading bits set to 0
 truncate_ :: Int -> Word8 -> Word8  
@@ -138,7 +138,7 @@ bitLength_  (Number1 x)
   where
     list    = unroll x
     len     = length list
-    byte    = head list
+    byte    = list !! 0
     adjust  = leadBitCount byte
   
 

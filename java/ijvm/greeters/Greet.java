@@ -1,3 +1,6 @@
+import org.artima.greeter.GreeterClassLoader;
+import org.artima.greeter.Greeter;
+
 public class Greet {
   // Arguments to this application:
   //
@@ -40,6 +43,7 @@ public class Greet {
       }
       catch (Exception e) {
         e.printStackTrace();
+        System.exit(1);
       }
     }
   }

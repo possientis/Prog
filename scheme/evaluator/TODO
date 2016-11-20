@@ -1,4 +1,17 @@
-understand failure in test.scm
+insight: we are interpreting a 'define' statement using 'analyze'.
+Hence under the hood, we are creating an 'analyze-procedure'.
+Evaluation and application of analyzed code was written before
+the introduction of lazy evaluation features. So the code is ill-prepared 
+to deal with thunks. However, attempting a lazy evaluation produces thunks 
+in some intermediary values, arguments etc. This explains the failure.
+
+So:
+review the code of 'analyze' so it become immune to unexpected
+thunks. For some reasons, 'strict-eval' seems to be coping ok so far.
+
+At some points, we are calling primitives on some arguments. We should make
+sure these arguments are not thunks, but actual values
+  
 
 resolve FAILURE in unit test
 

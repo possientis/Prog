@@ -1,13 +1,13 @@
 (load "main.scm")
 
-(set-debug #f)
+(set-debug #t)
 
 ; definition with 'analyze' leads to failure of subsequent lazy-eval
 ; no such failure occurs when strict definition is used
 
 ;(strict-eval '(define (f x) (* x x )) global-env)
 ;((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
-((analyze '(define (f x) (* x x))) global-env)           ; no failure but ...
+((analyze '(define f (lambda (x) (* x 2)))) global-env)           ; no failure but ...
 
 
 (define proc-thunk (lazy-eval 'f))
@@ -22,6 +22,8 @@
 
 (display "\n\nbody = ")(display body)(newline)(newline)
 (display "\n\nproc = ")(display proc)(newline)(newline)
+(display "\n\nargs = ")(display args)(newline)(newline)
+
 
 #|
 
@@ -44,7 +46,10 @@
 
 |#
 
-(body env)  ; why does this fail?
+(define x (lazy-eval 5))
+(* x 2)
+
+;(body env)  ; why does this fail?
 
 #|
 ; This is the body

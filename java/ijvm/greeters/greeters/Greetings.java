@@ -1,4 +1,4 @@
-import com.artima.greeter.Greeter;
+import org.artima.greeter.Greeter;
 
 public class Greetings implements Greeter {
   public void greet() {

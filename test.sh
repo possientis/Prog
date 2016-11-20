@@ -7,14 +7,13 @@ BITCOIN=${HOME}/polyglot/Bitcoin
 
 echo 'Testing log file\n' > test.log
 
-echo 'Testing scheme interpreter ...'
-${HOME}/scheme/evaluator/test.sh >> test.log 2>&1
+echo 'Testing java ClassLoader ...'
+${HOME}/java/ijvm/greeters/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
   exit 1
 fi
-
 
 echo 'Testing Number ...'
 ${BITCOIN}/Number/test.sh >> test.log  2>&1
@@ -41,6 +40,13 @@ then
   exit 1
 fi
 
+echo 'Testing scheme interpreter ...'
+${HOME}/scheme/evaluator/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
 
 echo 'Testing AbstractFactory ...'
 ${PATTERNS}/AbstractFactory/test.sh >> test.log 2>&1

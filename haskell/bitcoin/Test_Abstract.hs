@@ -2,15 +2,13 @@ module Test_Abstract
   (logMessage
   , checkEquals
   , checkException
+  , checkCondition
   , getRandomBytes
   ) where
 
 import Rand
 import System.Exit
 import Data.ByteString hiding (putStrLn)
-
-getRandomBytes :: Int -> Rand ByteString
-getRandomBytes = rand
 
 logMessage :: String -> Rand ()
 logMessage s = fromIO $ putStrLn s
@@ -31,6 +29,15 @@ checkEquals x y msg =
         fromIO exitFailure
       else
         return ()
+
+checkCondition :: Bool -> String -> Rand ()
+checkCondition cond msg =
+  if not cond
+    then do
+      logMessage (msg ++ ": checkCondition failure")
+      fromIO exitFailure
+    else
+      return ()
 
 checkException :: Rand a -> String -> String -> Rand ()
 checkException action eName msg =

@@ -336,11 +336,15 @@ public class Test_Number : Test_Abstract
     check1 = Number.ONE.ToString();
     CheckEquals(check1, "1", "CheckToString.2");
 
+    // minus one
+    check1 = Number.ONE.Negate().ToString();
+    CheckEquals(check1, "-1", "CheckToString.3");
+    
     // random positive
     x = Number.Random(256);
     check1 = x.ToString();
     check2 = x.ToBigInteger().ToString();
-    CheckEquals(check1, check2, "CheckToString.2");
+    CheckEquals(check1, check2, "CheckToString.4");
   }
 
   private static void CheckCompareTo()

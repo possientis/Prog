@@ -1,4 +1,4 @@
-package com.artima.greeter;
+package org.artima.greeter;
 
 public interface Greeter {
 

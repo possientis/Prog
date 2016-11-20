@@ -1,4 +1,4 @@
-import com.artima.greeter.Greeter;
+import org.artima.greeter.Greeter;
 import java.util.Date;
 
 public class HiTime implements Greeter {
