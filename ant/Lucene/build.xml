@@ -2,19 +2,7 @@
 
 <!-- The order of targets is irrelevant-->
 
-<project name="lucene" default="archive" >
-
-  <description> Compiles and run a simple program </description>
-
-  <path id="compile.classpath">
-    <!-- seems like ant can figure out the obvious -->
-  </path>
-
-  <path id="test.classpath">
-    <pathelement location="${junit.jar}" />
-    <pathelement location="${build.dir.dist}/project.jar" />
-  </path> 
-
+<project name="lucene" default="test" >
 
   <property name="source.main" location="src/main" />
   <property name="source.test" location="src/test" />
@@ -23,7 +11,6 @@
   <property name="build.dir.test" location="${build.dir}/test-classes" />
   <property name="build.dir.dist" location="${build.dir}/dist" />
   <property name="build.debug" value="true" />
-  <property name="junit.jar" value="/usr/share/java/junit4.jar" />
 
 
   <target name="init">
@@ -34,44 +21,55 @@
 
   <!-- description attribute useful with ant -projecthelp -->
   <target name="compile" depends="init" description="Compiles the source code">
+    <!-- no classpath specified for source code compilation -->
+    <javac  srcdir="${source.main}" destdir="${build.dir.main}" 
+            includeAntRuntime="true" debug="${build.debug}" />
 
-    <javac  srcdir="${source.main}"
-            destdir="${build.dir.main}" 
-            includeAntRuntime="true" 
-            debug="${build.debug}" />
   </target>
 
-  <target name="test-compile" depends="archive" description="Compiles the test source code">
+  <target name="archive" depends="compile" description="Creates the JAR file">
+    <jar  destfile="${build.dir.dist}/project.jar" basedir="${build.dir.main}"/>
+  </target> 
 
-    <javac  srcdir="${source.test}"
-            destdir="${build.dir.test}" 
-            includeAntRuntime="true" 
-            debug="${build.debug}">
+  <target name="test-compile" depends="archive" 
+          description="Compiles the test source code">
+
+    <javac  srcdir="${source.test}" destdir="${build.dir.test}" 
+            includeAntRuntime="true" debug="${build.debug}">
+
+      <!-- testing code has dependencies to source code so need to specficy
+           classpath to point out where compiled source code is. Note that
+           it is necessary to spell out jar file here (not just directory) 
+           Furthermore, it seems ant is clever enough to look for junit jar
+           in /usr/share/java, so there is not need to spell that out.
+      -->
+
       <classpath>
         <pathelement location="${build.dir.dist}/project.jar" />
       </classpath>
+
     </javac>
+
   </target>
 
+  <target name="test" depends="test-compile" description="Runs unit testing code">
+    <junit>
 
-  <target name="archive" depends="compile" description="Creates the JAR file">
-    <jar  destfile="${build.dir}/dist/project.jar" basedir="${build.dir}/classes"/>
-  </target> 
+      <classpath>
+        <pathelement location="${build.dir.dist}/project.jar" />
+        <pathelement location="${build.dir.test}" />
+      </classpath>
+
+      <test name="org.example.antbook.ant.lucene.HtmlDocumentTest" />
+
+    </junit>
+  </target>
 
   <target name="clean" 
     depends="init" description="Removes the temporary directories used">
     <delete dir="build" />
   </target>
 
-  <target name="test" depends="test-compile" description="Runs unit testing code">
-    <junit>
-      <!--      <classpath refid="test.classpath" /> -->
-      <classpath>
-        <pathelement location="${build.dir.dist}/project.jar" />
-      </classpath>
-      <test name="org.example.antbook.ant.lucene.HtmlDocumentTest" />
-    </junit>
-  </target>
 
 
 </project>

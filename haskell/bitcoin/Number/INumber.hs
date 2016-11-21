@@ -18,7 +18,7 @@ import Rand
 
 newtype Sign = Sign Int deriving Show
 
-newtype NumBits = NumBits Int deriving Show
+newtype NumBits = NumBits Int deriving (Show, Eq)
 
 newtype NumBytes = NumBytes Int deriving Show
 

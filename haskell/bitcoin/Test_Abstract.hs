@@ -1,5 +1,5 @@
 module Test_Abstract
-  (logMessage
+  ( logMessage
   , checkEquals
   , checkException
   , checkCondition

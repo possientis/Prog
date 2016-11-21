@@ -422,7 +422,7 @@ public class Test_Number extends Test_Abstract
     checkCondition(!Number.ZERO.equals(Number.ONE), "checkNumberEquals.1");
     checkCondition(!Number.ONE.equals(Number.ZERO), "checkNumberEquals.2");
 
-    // and and -x
+    // x and -x
     Number x = _signedRandom(256);
     checkCondition(!x.equals(x.negate()), "checkNumberEquals.3");
     checkCondition(!x.negate().equals(x), "checkNumberEquals.4");
@@ -525,14 +525,14 @@ public class Test_Number extends Test_Abstract
 
     // -256
     check1 = _256.negate().bitLength();
-    checkEquals(check1, 9, "checkBitLength.10");
+    checkEquals(check1, 9, "checkBitLength.11");
 
-    // +- 2*256
+    // +- 2^256
     byte[] bytes = new byte[33];
     bytes[0] = (byte) 0x01;
     Number x = Number.fromBytes(1, bytes);
     Number y = Number.fromBytes(-1, bytes);
-    checkEquals(x.bitLength(), 257, "checkBitLength.11");
-    checkEquals(y.bitLength(), 257, "checkBitLength.12");
+    checkEquals(x.bitLength(), 257, "checkBitLength.12");
+    checkEquals(y.bitLength(), 257, "checkBitLength.13");
   }
 }

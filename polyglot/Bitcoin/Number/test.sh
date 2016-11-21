@@ -16,7 +16,7 @@ java Test_${NAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm *.class
+./clean.sh
 cd ..
 
 echo '\nThis is C# ...'
@@ -27,8 +27,21 @@ mono Test_${NAME}.exe
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm *.dll *.exe
+./clean.sh
 cd ..
+
+
+echo '\nThis is Haskell ...'
+cd haskell
+./compile.sh Test_${NAME}.hs
+START=$(date +%s%N)
+./Test_${NAME}
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+./clean.sh
+cd ..
+
 
 cd ${DIR}
 

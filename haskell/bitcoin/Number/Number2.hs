@@ -5,10 +5,6 @@ module Number2
   , NumBytes(..)
   , NumBits(..)
   , Sign(..)
-  , Rand
-  , toIO
-  , fromIO
-  , rand
   , zero
   , one
   , fromBytes
@@ -20,10 +16,12 @@ module Number2
   ) where
 
 import INumber
+import Rand
 import Data.Hashable (Hashable, hash)
 import Data.Word (Word8)
 import Data.Bits (shiftR, shiftL, testBit, (.&.))
-import qualified Data.ByteString as BS
+import Data.ByteString hiding (putStrLn, length)
+import Prelude hiding (all, head, tail)
 
 
 newtype Number2 = Number2 Integer 
@@ -57,15 +55,20 @@ sign_ (Number2 x)
   | x >= 0  = 1
 
 
-fromBytes_ :: Sign -> ByteArray -> Maybe Number2  -- big endian
+fromBytes_ :: Sign -> ByteString -> Rand Number2  -- big endian
 fromBytes_  (Sign sig) bytes
-  | sig == 0    = Just $ Number2 0
-  | sig == 1    = Just $ Number2 x
-  | sig == (-1) = Just $ Number2 (-x) 
-  | otherwise   = Nothing
+  | sig == 1    = return $ Number2 x
+  | sig == (-1) = return  $ Number2 (-x) 
+  | sig == 0    = 
+      if all (== 0) bytes
+        then return $ Number2 0
+        else throw $
+          randException "InvalidArgument" "fromBytes: inconsistent arguments"
+  | otherwise   = throw $ 
+    randException "InvalidArgument" "fromBytes: illegal sign argument"
   where 
     x     = go 0 list
-    list  = BS.unpack bytes
+    list  = unpack bytes
     go :: Integer -> [Word8] -> Integer 
     go acc [] = acc
     go acc (b:bs) = go ((shiftL acc 8) + toInteger b) bs 
@@ -74,25 +77,23 @@ fromBytes_  (Sign sig) bytes
 random_ :: NumBits -> Rand Number2
 random_ n = do
   bytes <- randomBytes_ n 
-  case fromBytes (Sign 1) bytes of
-    Just number -> return number
-    Nothing     -> error "random_ : this should not happen"
+  fromBytes (Sign 1) bytes
 
 -- returns unsigned random number as big endian ByteArray
 -- Essentially generates random bytes and subsequently set
 -- the appropriate number of leading bits to 0 so as to 
 -- ensure the final ByteArray has the right bit size.
-randomBytes_ :: NumBits -> Rand ByteArray
+randomBytes_ :: NumBits -> Rand ByteString
 randomBytes_ (NumBits n) = 
   let len = div (n + 7) 8 in    -- number of bytes required
     if len == 0 
-      then return $ BS.pack []  -- empty ByteArray
+      then return empty         -- empty ByteString
       else do
-        bytes <- rand len
-        let lead : rest = BS.unpack bytes
+        bytes <- getRandomBytes len
+        let lead = head bytes
         let diff = len * 8 - n  -- number of leading bits set to 0 
         let front = truncate_ diff lead
-        return $ BS.pack (front : rest) 
+        return $ cons front (tail bytes)
 
 -- returns byte with n leading bits set to 0
 truncate_ :: Int -> Word8 -> Word8  
@@ -117,11 +118,12 @@ testTruncate = do
   putStrLn $ show (truncate_ 8 0xff)
      
 
-toBytes_ :: Number2 -> NumBytes -> Maybe ByteArray 
+toBytes_ :: Number2 -> NumBytes -> Rand ByteString
 toBytes_  (Number2 x) (NumBytes num)
   | x < 0     = toBytes (Number2 $ -x) (NumBytes num)
-  | len < 0   = Nothing
-  | otherwise = Just $ BS.pack $ padding len list 
+  | len < 0   = throw $ 
+    randException "InvalidArgument" "toBytes: NumBytes argument is too small"
+  | otherwise = return $ pack $ padding len list 
   where
     list = (unroll x)
     len = num - length list
@@ -136,7 +138,7 @@ bitLength_  (Number2 x)
   where
     list    = unroll x
     len     = length list
-    byte    = head list
+    byte    = list !! 0
     adjust  = leadBitCount byte
   
 

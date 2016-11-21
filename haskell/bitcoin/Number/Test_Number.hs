@@ -15,14 +15,14 @@ run = do
   checkZero
   checkOne
   checkFromBytes
---  checkRandom
+  checkRandom
   checkSign
   checkToBytes
   checkAdd
   checkMul
   checkShow
   checkCompareTo
-  checkHashCode
+  checkHash
   checkNumberEquals
   checkFromInteger
   checkToInteger
@@ -354,19 +354,192 @@ checkShow = do
   
 
 checkCompareTo :: Rand ()
-checkCompareTo = return () -- TODO
+checkCompareTo = do
+  -- from random
+  x <- random (NumBits 256) :: Rand Number
+  let y = negate x
+  
+  checkCondition (x >= zero) "checkCompareTo.1"
+  checkCondition (zero <= x) "checkCompareTo.2"
+  checkCondition (zero >= y) "checkCompareTo.3"
+  checkCondition (y <= zero) "checkCompareTo.4"
 
-checkHashCode :: Rand ()
-checkHashCode = return () -- TODO
+  -- from bytes
+  bytes <- getRandomBytes 32
+  x <- fromBytes (Sign 1)    bytes  :: Rand Number
+  y <- fromBytes (Sign (-1)) bytes  :: Rand Number
+
+  checkCondition (x >= zero) "checkCompareTo.5"
+  checkCondition (zero <= x) "checkCompareTo.6"
+  checkCondition (zero >= y) "checkCompareTo.7"
+  checkCondition (y <= zero) "checkCompareTo.8"
+
+  -- from signedRandom
+  x <- signedRandom (NumBits 256)
+  y <- signedRandom (NumBits 256)
+  
+  let n = toInteger x
+  let m = toInteger y
+
+  checkEquals (x <= y) (n <= m) "checkCompareTo.9"
+  checkEquals (y <= x) (m <= n) "checkCompareTo.10"
+
+  let y = fromInteger n 
+  
+  checkCondition (x <= y) "checkCompareTo.11"
+  checkCondition (y <= x) "checkCompareTo.12"
+
+  -- 0 <= 1
+  checkCondition ((zero :: Number) <= (one  :: Number)) "checkCompareTo.13"
+  checkCondition ((one  :: Number) >= (zero :: Number)) "checkCompareTo.14"
+
+
+checkHash :: Rand ()
+checkHash = do
+  -- 0 and 1
+  let hash0 = hash (zero :: Number)
+  let hash1 = hash (one  :: Number)
+  checkCondition (hash0 /= hash1) "checkHash.1"
+
+  -- x and -x
+  x <- signedRandom (NumBits 256)
+  let hash0 = hash x
+  let hash1 = hash $ negate x
+  checkCondition (hash0 /= hash1) "checkHash.2"
+
+  -- same number
+  let n = toInteger x
+  let y = fromInteger n :: Number
+  let hash0 = hash x
+  let hash1 = hash y
+  checkEquals hash0 hash1 "checkHash.3"
+
 
 checkNumberEquals :: Rand ()
-checkNumberEquals = return () -- TODO
+checkNumberEquals = do
+  
+  -- 0 and 1
+  checkCondition (not $ (zero :: Number) == (one  :: Number)) "checkNumberEquals.1"
+  checkCondition (not $ (one  :: Number) == (zero :: Number)) "checkNumberEquals.2"
+  checkCondition ((zero :: Number) /= (one  :: Number)) "checkNumberEquals.3"
+  checkCondition ((one  :: Number) /= (zero :: Number)) "checkNumberEquals.4"
+
+  -- x and -x
+  x <- signedRandom (NumBits 256)      -- probability of 0 is vanishingly small
+  checkCondition (not $ x == negate x) "checkNumberEquals.5"
+  checkCondition (not $ negate x == x) "checkNumberEquals.6"
+  checkCondition (x /= negate x) "checkNumberEquals.7"
+  checkCondition (negate x /= x) "checkNumberEquals.8"
+
+  -- same number
+  let n = toInteger x
+  let y = fromInteger n :: Number
+  checkCondition (x == y) "checkNumberEquals.9"
+  checkCondition (y == x) "checkNumberEquals.10"
+  checkCondition (x == x) "checkNumberEquals.11"
+  checkEquals x y "checkNumberEquals.12"
+  checkEquals y x "checkNumberEquals.13"
+  checkEquals x x "checkNumberEquals.14"
+
 
 checkFromInteger :: Rand ()
-checkFromInteger = return () -- TODO
+checkFromInteger = do
+  
+  -- 0
+  let x = fromInteger 0 :: Number
+  let y = zero :: Number
+  checkEquals x y "checkFromInteger.1"
+
+  -- 1
+  let x = fromInteger 1 :: Number
+  let y = one :: Number
+  checkEquals x y "checkFromInteger.2"
+
+  -- signed random
+  x <- signedRandom (NumBits 256)
+  let y = fromInteger $ toInteger x :: Number
+  checkEquals x y "checkFromInteger.3"
+
 
 checkToInteger :: Rand ()
-checkToInteger = return () -- TODO
+checkToInteger = do
+
+  -- 0
+  let n = toInteger (zero :: Number)
+  let m = 0 :: Integer
+  checkEquals n m "checkToInteger.1"
+  
+  -- 1
+  let n = toInteger (one :: Number)
+  let m = 1 :: Integer
+  checkEquals n m "checkToInteger.2"
+
+  -- random
+  x <- signedRandom (NumBits 256)
+  let n = toInteger x
+  let y = fromInteger n :: Number
+  checkEquals x y "checkToInteger.3"
+
 
 checkBitLength :: Rand ()
-checkBitLength = return () -- TODO
+checkBitLength = do
+  
+  -- 0
+  let check1 = bitLength (zero :: Number)
+  checkEquals check1 (NumBits 0) "checkBitLength.1"
+
+  -- 1
+  let check1 = bitLength (one :: Number)
+  checkEquals check1 (NumBits 1) "checkBitLength.2"
+
+  -- (-1)
+  let check1 = bitLength (negate one :: Number)
+  checkEquals check1 (NumBits 1) "checkBitLength.3"
+
+  -- 2
+  let _2 = one + one :: Number
+  let check1 = bitLength _2
+  checkEquals check1 (NumBits 2) "checkBitLength.4"
+
+  -- (-2)
+  let check1 = bitLength $ negate _2
+  checkEquals check1 (NumBits 2) "checkBitLength.5"
+
+  -- 4
+  let _4 = _2 * _2
+  let check1 = bitLength _4
+  checkEquals check1 (NumBits 3) "checkBitLength.6"
+  
+  -- (-4)
+  let check1 = bitLength $ negate _4
+  checkEquals check1 (NumBits 3) "checkBitLength.7"
+
+  -- 16
+  let _16 = _4 * _4
+  let check1 = bitLength _16
+  checkEquals check1 (NumBits 5) "checkBitLength.8"
+  
+  -- (-16)
+  let check1 = bitLength $ negate _16
+  checkEquals check1 (NumBits 5) "checkBitLength.9"
+
+  -- 256
+  let _256 = _16 * _16
+  let check1 = bitLength _256
+  checkEquals check1 (NumBits 9) "checkBitLength.10"
+  
+  -- (-256)
+  let check1 = bitLength $ negate _256
+  checkEquals check1 (NumBits 9) "checkBitLength.11"
+
+  -- +- 2^256
+  let b32 = replicate 32 0x00
+  let b33 = cons 0x01 b32
+  x <- fromBytes (Sign 1)    b33  :: Rand Number 
+  y <- fromBytes (Sign (-1)) b33  :: Rand Number
+  checkEquals (bitLength x) (NumBits 257) "checkBitLength.12"
+  checkEquals (bitLength y) (NumBits 257) "checkBitLength.13"
+
+
+ 
+  return ()

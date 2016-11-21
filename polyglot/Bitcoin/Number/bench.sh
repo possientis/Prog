@@ -10,7 +10,7 @@ java Bench_Number
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm *.class
+./clean.sh
 cd $CURRENT
 
 echo '\nThis is C# ...'
@@ -21,7 +21,7 @@ mono Bench_Number.exe
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm *.dll *.exe
+./clean.sh
 cd $CURRENT
 
 
