@@ -7,17 +7,17 @@ HOME=/home/john/Prog/java/ijvm/greeters
 
 cd ${HOME}
 
-echo '\nbuilding ...'
+echo 'building ...'
 ./clean.sh
 ./build.sh
 
 
-echo '\nrunning ...'
+echo 'running ...'
 cd build
 ./run.sh
 cd ..
 
-echo '\ncleaning ...'
+echo 'cleaning ...'
 ./clean.sh
 
 cd ${DIR}

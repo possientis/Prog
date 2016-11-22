@@ -34,7 +34,7 @@ public class GreeterClassLoader extends ClassLoader {
     
     // Check the local cache
     
-    result = (Class) types.get(className);
+    result = types.get(className);
 
     if (result != null) {
 

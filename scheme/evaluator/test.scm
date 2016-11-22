@@ -7,7 +7,7 @@
 
 ;(strict-eval '(define (f x) (* x x )) global-env)
 ;((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
-((analyze '(define f (lambda (x) (* x 2)))) global-env)           ; no failure but ...
+((analyze '(define f (lambda (x) (* x x)))) global-env)           
 
 
 (define proc-thunk (lazy-eval 'f))
@@ -46,10 +46,10 @@
 
 |#
 
-(define x (lazy-eval 5))
-(* x 2)
+;(define x (lazy-eval 5))
+;(* x 2)
 
-;(body env)  ; why does this fail?
+(display (body env))(newline)(newline)  ; why does this fail?
 
 #|
 ; This is the body

@@ -62,11 +62,16 @@
 ; lazy eval
 (define (lazy-eval-thunk exp env) exp)
 
+; Note that we do not throw an error when argument to force-thunk is not a 
+; thunk. This has the disadvantage of removing possible detection of logic
+; errors. However, considering we are mixing various types of evaluations
+; (strict, lazy, analyze), the logic is not very clear anyway, and we often
+; end up with unexpected thunks in the evaluation process. This laxed semantics 
+; of force-thunk allows us to remove possible thunks in a list of arguments. 
+; (See the module primitive-procedure)
 ; forcing
 (define (force-thunk obj)
-  (if (thunk? obj) 
-    ((cadr obj) 'value)
-    (error "force-thunk: object not a thunk")))
+  (if (thunk? obj) ((cadr obj) 'value) obj))
 
 ))  ; include guard
 

@@ -79,6 +79,14 @@ instance Monad Rand where
           Right (b, s'')  -> do
             return $ Right (b, s'')
 
+{-
+instance Functor Rand where
+  fmap f m = state $ \s -> do
+    x <- runRand m s 
+    case x of
+      Left e        -> return $ Left e
+      Right (a, s') -> return $ Right (f a, s')
+-}
 
 -- A Rand action together with an initial state can be translated into
 -- an IO action. The initial state can be retrieved as an IO action.

@@ -17,11 +17,12 @@
 
 ; strict apply
 (define (strict-apply-primitive-procedure proc args)
-  (apply (primitive-procedure-object proc) args)) 
+  (apply (primitive-procedure-object proc) args))
 
 ; analyze apply (same code as strict)
 (define (analyze-apply-primitive-procedure proc args)
-  (apply (primitive-procedure-object proc) args)) 
+  (let ((forced-args (map force-thunk args)))
+    (apply (primitive-procedure-object proc) forced-args))) 
 
 ; lazy
 ; proc is not expected to be of type thunk so no need to force it.

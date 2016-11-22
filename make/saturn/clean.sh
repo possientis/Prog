@@ -15,7 +15,10 @@ rm -f src/Makefile.in
 rm -f src/Makefile
 rm -f missing
 rm -f src/saturn
+rm -f src/*.o
 rm -f src/a.out   # just in case
+rm -f stamp-h1
+rm -f src/.deps -r
 tree
 
 
