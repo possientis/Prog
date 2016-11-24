@@ -6,8 +6,8 @@
 ; no such failure occurs when strict definition is used
 
 ;(strict-eval '(define (f x) (* x x )) global-env)
-;((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
-((analyze '(define f (lambda (x) (* x x)))) global-env)           
+((analyze '(define (f x) (* x x))) global-env)    ; leads to failure
+;((analyze '(define f (lambda (x) (* x x)))) global-env)           
 
 
 (define proc-thunk (lazy-eval 'f))
@@ -20,9 +20,9 @@
 
 (define env ((global-env 'extended) params args)) ; same ??
 
-(display "\n\nbody = ")(display body)(newline)(newline)
-(display "\n\nproc = ")(display proc)(newline)(newline)
-(display "\n\nargs = ")(display args)(newline)(newline)
+;(display "\n\nbody = ")(display body)(newline)(newline)
+;(display "\n\nproc = ")(display proc)(newline)(newline)
+;(display "\n\nargs = ")(display args)(newline)(newline)
 
 
 #|
@@ -57,7 +57,6 @@
   (begin (analyze-apply (proc env) (map (lambda (x) (x env)) args))) 
   #<CLOSURE <anon> "environment1.scm": (m)>)
 |#
-
 
 
 (exit 0)

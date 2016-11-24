@@ -1,6 +1,3 @@
-why forcing arguments prior to strict apply in primitive procedure leads to failure
-in run unit-test ?
-
 resolve FAILURE in unit test
 
 unit-test definition (syntactic sugar for function def)

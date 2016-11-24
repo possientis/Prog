@@ -19,6 +19,9 @@ rm -f src/*.o
 rm -f src/a.out   # just in case
 rm -f stamp-h1
 rm -f src/.deps -r
+rm -f test-driver
+rm -f src/greptest.*
+rm -f src/test-suite.log
 tree
 
 

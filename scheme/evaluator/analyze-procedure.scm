@@ -42,17 +42,10 @@
 ; and we are returning an evaluated thunk (environment is '()).
 
 (define (lazy-apply-analyze-procedure proc args)
-  (debug "check9: proc = ")(debug proc)(debug-newline)
-  (debug "check10: args = ")(debug args)(debug-newline)
   (let ((body (analyze-procedure-body proc))
         (params (analyze-procedure-parameters proc))
         (init-env (analyze-procedure-environment proc)))
-    (debug "check11: body = ")(debug body)(debug-newline)
-    (debug "check12: params = ")(debug params)(debug-newline)
     (let ((extended-env ((init-env 'extended) params args)))
-      (debug "check13: in env (force-thunk x) = ")
-        (debug (force-thunk (strict-eval 'x extended-env)))(debug-newline)
-        (debug "check14: (body env) = ")(debug (body extended-env))(debug-newline)
       (make-thunk (body extended-env) '()))))
 
 

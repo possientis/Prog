@@ -1,6 +1,8 @@
 class Finale {
 
-  protected void finalize() {
+  protected void finalize() /* throws Throwable */ {
+    
+   /*  super.finalize(); */
 
     System.out.println("A Finale object was finalized");
 
