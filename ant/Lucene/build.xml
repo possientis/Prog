@@ -1,73 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- The order of targets is irrelevant-->
+<!-- attempting to mimic Maven project structure -->
 
-<project name="lucene" default="test" >
+<project name="lucene" default="archive" >
 
-  <property name="source.main" location="src/main" />
-  <property name="source.test" location="src/test" />
-  <property name="build.dir" location="build" />
-  <property name="build.dir.main" location="${build.dir}/classes" />
-  <property name="build.dir.test" location="${build.dir}/test-classes" />
-  <property name="build.dir.dist" location="${build.dir}/dist" />
-  <property name="build.debug" value="true" />
+  <property name="project.name" value="lucene" />
+  <property name="project.version" value="1.0" />
+  <property name="source.main" location="src/main/java" />
+  <property name="source.test" location="src/test/java" />
+  <property name="target" location="target" />
+  <property name="target.main" location="${target}/classes" />
+  <property name="target.test" location="${target}/test-classes" />
+  <property name="target.dist" location="${target}" />
+  <property name="target.dist.jar" location=
+    "${target.dist}/${project.name}-${project.version}.jar" />
+  <property name="target.debug" value="true" />
+
+  <!-- classpath used for compiling code including test code -->
+  <path id="compile.classpath">
+    <pathelement location="${target.main}" />
+    <pathelement location="/usr/share/java/junit4.jar" />
+  </path>
+
+  <!-- classpath used for running unit test code -->
+  <path id="test.classpath">
+    <pathelement location="${target.dist.jar}" />
+    <pathelement location="${target.test}" />
+  </path>
 
 
   <target name="init">
-    <mkdir dir="${build.dir.main}" />
-    <mkdir dir="${build.dir.test}" />
-    <mkdir dir="${build.dir.dist}" />
+    <mkdir dir="${target.main}" />
+    <mkdir dir="${target.test}" />
+    <mkdir dir="${target.dist}" />
   </target>
 
-  <!-- description attribute useful with ant -projecthelp -->
   <target name="compile" depends="init" description="Compiles the source code">
-    <!-- no classpath specified for source code compilation -->
-    <javac  srcdir="${source.main}" destdir="${build.dir.main}" 
-            includeAntRuntime="true" debug="${build.debug}" />
-
-  </target>
-
-  <target name="archive" depends="compile" description="Creates the JAR file">
-    <jar  destfile="${build.dir.dist}/project.jar" basedir="${build.dir.main}"/>
-  </target> 
-
-  <target name="test-compile" depends="archive" 
-          description="Compiles the test source code">
-
-    <javac  srcdir="${source.test}" destdir="${build.dir.test}" 
-            includeAntRuntime="true" debug="${build.debug}">
-
-      <!-- testing code has dependencies to source code so need to specficy
-           classpath to point out where compiled source code is. Note that
-           it is necessary to spell out jar file here (not just directory) 
-           Furthermore, it seems ant is clever enough to look for junit jar
-           in /usr/share/java, so there is not need to spell that out.
-      -->
-
-      <classpath>
-        <pathelement location="${build.dir.dist}/project.jar" />
-      </classpath>
-
+    <javac  srcdir="${source.main}" destdir="${target.main}" 
+            includeAntRuntime="false" debug="${target.debug}" />
+    <javac  srcdir="${source.test}" destdir="${target.test}" 
+            includeAntRuntime="false" debug="${target.debug}">
+      <classpath refid="compile.classpath" />
     </javac>
-
   </target>
 
-  <target name="test" depends="test-compile" description="Runs unit testing code">
+  <target name="test" depends="compile" description="Runs unit testing code">
     <junit>
-
-      <classpath>
-        <pathelement location="${build.dir.dist}/project.jar" />
-        <pathelement location="${build.dir.test}" />
-      </classpath>
-
+      <classpath refid="test.classpath" />
       <test name="org.example.antbook.ant.lucene.HtmlDocumentTest" />
-
     </junit>
   </target>
 
+  <target name="archive" depends="test" description="Creates the JAR file">
+    <jar  destfile="${target.dist.jar}" basedir="${target.main}"/>
+  </target> 
+
+
   <target name="clean" 
     depends="init" description="Removes the temporary directories used">
-    <delete dir="build" />
+    <delete dir="target" />
   </target>
 
 
