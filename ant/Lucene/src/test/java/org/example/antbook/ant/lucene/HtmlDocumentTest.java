@@ -19,6 +19,7 @@ public class HtmlDocumentTest extends DocumentTestCase
 
   public void testDoc() {
     System.err.println("testDoc is running");
+//    assertEquals("Test1", true, false);
 //    assertEquals("Title", "Test Title", doc.getTitle());
 //    assertEquals("Body", "This is some test", doc.getBodyText());
 

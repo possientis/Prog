@@ -1,0 +1,19 @@
+task startSession << {
+  chant()
+}
+
+def chant() {
+  ant.echo(message: 'Repeat after me ...')  // implicit ant task usage
+}
+
+3.times {
+  task "yayGradle$it" << {                  // dynamic task definition
+    println 'Gradle rocks'
+  }
+}
+
+
+// task dependency
+yayGradle0.dependsOn startSession
+yayGradle2.dependsOn yayGradle1, yayGradle0
+task groupTherapy(dependsOn: yayGradle2)

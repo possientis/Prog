@@ -11,6 +11,8 @@
   <property name="target" location="target" />
   <property name="target.main" location="${target}/classes" />
   <property name="target.test" location="${target}/test-classes" />
+  <property name="target.reports" location="${target}/reports" />
+  <property name="target.html" location="${target.reports}/html" />
   <property name="target.dist" location="${target}" />
   <property name="target.dist.jar" location=
     "${target.dist}/${project.name}-${project.version}.jar" />
@@ -33,6 +35,8 @@
     <mkdir dir="${target.main}" />
     <mkdir dir="${target.test}" />
     <mkdir dir="${target.dist}" />
+    <mkdir dir="${target.reports}" />
+    <mkdir dir="${target.html}" />
   </target>
 
   <target name="compile" depends="init" description="Compiles the source code">
@@ -45,10 +49,24 @@
   </target>
 
   <target name="test" depends="compile" description="Runs unit testing code">
-    <junit>
+    <!-- printsummary can be "true", "false" but also "withOutAndErr" -->
+    <junit haltonfailure="true" printsummary="true">
       <classpath refid="test.classpath" />
-      <test name="org.example.antbook.ant.lucene.HtmlDocumentTest" />
+      <!-- gives detail on failure
+      <formatter type="brief" usefile="false" /> 
+      -->
+      <!-- it is possible to write your own formatters -->
+      <formatter type="xml" /> 
+      <batchtest todir="${target.reports}">
+        <fileset dir="${target.test}" includes="**/*Test.class" />
+      </batchtest>
     </junit>
+    <junitreport todir="${target.reports}">
+      <fileset dir="${target.reports}">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report format="frames" todir="${target.html}" />
+    </junitreport>
   </target>
 
   <target name="archive" depends="test" description="Creates the JAR file">
