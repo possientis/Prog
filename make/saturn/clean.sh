@@ -22,6 +22,14 @@ rm -f src/.deps -r
 rm -f test-driver
 rm -f src/greptest.*
 rm -f src/test-suite.log
+rm -f common/*.a
+rm -f common/*.o
+rm -f common/Makefile.in
+rm -f common/Makefile
+rm -f common/.deps -r
+rm -f saturn-1.0 -r
+rm -f *.tar.gz
+
 tree
 
 

@@ -12,7 +12,7 @@
   (let ((env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) ; save eval mode to be restored
-    ; strict-eval (testing in all three modes)
+    ; strict-eval: testing in all three modes, just in case
     (set-eval-mode 'strict)
     (assert-equals (strict-eval exp env) value (print ": strict-eval (strict)")) 
     (set-eval-mode 'lazy)
@@ -22,14 +22,11 @@
     (set-eval-mode mode)
     ; lazy-eval (testing in all three modes)
     (set-eval-mode 'strict)
-;    FAILURE
-;    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (set-eval-mode 'lazy)
-;    FAILURE
-;    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (set-eval-mode 'analyze)
-;    FAILURE
-;    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (set-eval-mode mode)
     ; analyze (testing in all three modes)
     (set-eval-mode 'strict)
@@ -44,32 +41,59 @@
     (assert-equals (new-eval exp env) value (print ": new-eval (strict)"))
     ; new-eval (lazy)
     (set-eval-mode 'lazy)
-;    FAILURE
-;    (assert-equals (force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
+    (assert-equals (force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
     ; new-eval (analyze)
     (set-eval-mode 'analyze)
     (assert-equals (new-eval exp env) value (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode
 
-(define (test-thunk exp value message . arg)
+; same semantics as test-expression, except that expression is forced
+; following evaluation and prior to comparing to expected value
+(define (test-forced-expression exp value message . arg)
   (let ((env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) ; save eval mode to be restored
-    (assert-equals 
-      (force-thunk (strict-eval exp env)) value (print ": strict-eval")) 
-    (assert-equals 
-      (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
-    (assert-equals 
-      (force-thunk ((analyze exp) env)) value (print ": analyze"))
+    ; strict-eval: testing in all three modes, just in case
     (set-eval-mode 'strict)
-    (assert-equals 
-      (force-thunk (new-eval exp env)) value (print ": new-eval (strict)"))
+    (assert-equals (force-thunk (strict-eval exp env)) value 
+                   (print ": strict-eval (strict)")) 
     (set-eval-mode 'lazy)
-    (assert-equals 
-      (force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
+    (assert-equals (force-thunk (strict-eval exp env)) value 
+                   (print ": strict-eval (lazy)")) 
     (set-eval-mode 'analyze)
-    (assert-equals 
-      (force-thunk (new-eval exp env)) value (print ": new-eval (analyze)"))
+    (assert-equals (force-thunk (strict-eval exp env)) value 
+                   (print ": strict-eval (analyze)")) 
+    (set-eval-mode mode)
+    ; lazy-eval (testing in all three modes)
+    (set-eval-mode 'strict)
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (set-eval-mode 'lazy)
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (set-eval-mode 'analyze)
+    (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (set-eval-mode mode)
+    ; analyze (testing in all three modes)
+    (set-eval-mode 'strict)
+    (assert-equals (force-thunk ((analyze exp) env)) value 
+                   (print ": analyze"))
+    (set-eval-mode 'lazy)
+    (assert-equals (force-thunk ((analyze exp) env)) value 
+                   (print ": analyze"))
+    (set-eval-mode 'analyze)
+    (assert-equals (force-thunk ((analyze exp) env)) value 
+                   (print ": analyze"))
+    (set-eval-mode mode)
+    ; new-eval (strict)
+    (set-eval-mode 'strict)
+    (assert-equals (force-thunk (new-eval exp env)) value 
+                   (print ": new-eval (strict)"))
+    ; new-eval (lazy)
+    (set-eval-mode 'lazy)
+    (assert-equals (force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
+    ; new-eval (analyze)
+    (set-eval-mode 'analyze)
+    (assert-equals (force-thunk (new-eval exp env)) value 
+                   (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode
 
 
@@ -245,54 +269,31 @@
     (let ((result (strict-eval '(set! var #t) env)))
       (assert-equals result unspecified-value "assignment.2")
       (test-expression 'var #t "assignment.3" env))     ; testing outcome 
-    ; lazy assignment : cannot use test-expression in this case, because
-    ; of weird semantics of lazy assignment followed by strict-eval which
-    ; returns a thunk, despite being strict. Not sure how to fix this
-    (let ((result (lazy-eval '(set! var #\a) env))
-          (mode (get-eval-mode))) 
+    ; lazy assignment : cannot use test-expression (need 'test-forced-expression')
+    (let ((result (lazy-eval '(set! var #\a) env))) 
       (assert-equals (force-thunk result) unspecified-value "assignment.4")
-      (assert-equals (force-thunk (strict-eval 'var env)) #\a "assignment.5")
-      (assert-equals (force-thunk (lazy-eval 'var env)) #\a "assignment.6")
-      (assert-equals (force-thunk ((analyze 'var) env)) #\a "assignment.7")
-      (set-eval-mode 'strict)
-      (assert-equals (force-thunk (new-eval 'var env)) #\a "assignment.6")
-      (set-eval-mode 'lazy)
-      (assert-equals (force-thunk (new-eval 'var env)) #\a "assignment.7")
-      (set-eval-mode 'analyze)
-      (assert-equals (force-thunk (new-eval 'var env)) #\a "assignment.8")
-      (set-eval-mode mode))  ; restoring eval mode
+      (test-forced-expression 'var #\a "assignment.5" env))
     ; analyzed assignment
     (let ((result ((analyze '(set! var 45)) env)))
-      (assert-equals result unspecified-value "assignment.9")
-      (test-expression 'var 45 "assignment.10" env))     ; testing outcome
+      (assert-equals result unspecified-value "assignment.6")
+      (test-expression 'var 45 "assignment.7" env))
     ; strict assignment via new-eval
     (set-eval-mode 'strict)
     (let ((result (new-eval '(set! var "abc") env)))
-      (assert-equals result unspecified-value "assignment.11")
-      (test-expression 'var "abc" "assignment.12" env))  ; testing outcome
-    ; lazy assignment via new-eval (cannot use test-expression)
+      (assert-equals result unspecified-value "assignment.8")
+      (test-expression 'var "abc" "assignment.9" env))
+    ; lazy assignment via new-eval: need 'test-forced-expression'
     (set-eval-mode 'lazy)
-    (let ((result (new-eval '(set! var 4.5) env))
-          (mode (get-eval-mode)))
-      (assert-equals (force-thunk result) unspecified-value "assignment.13")
-      (assert-equals (force-thunk (strict-eval 'var env)) 4.5 "assignment.14")
-      (assert-equals (force-thunk (lazy-eval 'var env)) 4.5 "assignment.15")
-      (assert-equals (force-thunk ((analyze 'var) env)) 4.5 "assignment.16")
-      (set-eval-mode 'strict)
-      (assert-equals (force-thunk (new-eval 'var env)) 4.5 "assignment.17")
-      (set-eval-mode 'lazy)
-      (assert-equals (force-thunk (new-eval 'var env)) 4.5 "assignment.18")
-      (set-eval-mode 'analyze)
-      (assert-equals (force-thunk (new-eval 'var env)) 4.5 "assignment.19")
-      (set-eval-mode mode))  ; restoring eval mode
+    (let ((result (new-eval '(set! var 4.5) env)))
+      (assert-equals (force-thunk result) unspecified-value "assignment.10")
+      (test-forced-expression 'var 4.5 "assignment.11" env))
     ; analyzed assignment via new-eval 
     (set-eval-mode 'analyze)
     (let ((result (new-eval '(set! var '()) env)))
-      (assert-equals result unspecified-value "assignment.20")
-      (test-expression 'var '() "assignment.21" env))    ; testing outcome
+      (assert-equals result unspecified-value "assignment.12")
+      (test-expression 'var '() "assignment.13" env))    ; testing outcome
     ; retoring eval mode
     (set-eval-mode mode))
-
     
   ; definition
   (display "testing definition expressions...\n")
@@ -314,12 +315,12 @@
       ((env 'delete!) 'var)
       (assert-equals ((env 'defined?) 'var) #f "definition.10")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.11"))
-    ; lazy definition (cannot use 'test-expression', need 'test-thunk')
+    ; lazy definition (cannot use 'test-expression', need 'test-forced-expression')
     (let ((result (lazy-eval '(define var 0.3) env)))
       (assert-equals (force-thunk result) unspecified-value "definiton.12")
       (assert-equals ((env 'defined?) 'var) #t "definition.13")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.14")
-      (test-thunk 'var 0.3 "definition.15" env)
+      (test-forced-expression 'var 0.3 "definition.15" env)
       ((env 'delete!) 'var)
       (assert-equals ((env 'defined?) 'var) #f "definition.21")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.22"))
@@ -342,13 +343,13 @@
       ((env 'delete!) 'var)
       (assert-equals ((env 'defined?) 'var) #f "definition.33")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.34"))
-    ; lazy definition via new-eval (need to use 'test-thunk)
+    ; lazy definition via new-eval (need to use 'test-forced-expression')
     (set-eval-mode 'lazy)
     (let ((result (new-eval '(define var #t) env)))
       (assert-equals (force-thunk result) unspecified-value "definiton.35")
       (assert-equals ((env 'defined?) 'var) #t "definition.36")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.37")
-      (test-thunk 'var #t "definition.38" env)
+      (test-forced-expression 'var #t "definition.38" env)
       ((env 'delete!) 'var)
       (assert-equals ((env 'defined?) 'var) #f "definition.44")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.45"))
@@ -372,7 +373,7 @@
       ((env 'delete!) 'f)
       (assert-equals ((env 'defined?) 'f) #f "definition.56")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.57"))
-    ; lazy definition: function with no argument (can use 'test-expression')
+    ; lazy definition: function with no argument (test-expression works !!)
     (let ((result (lazy-eval '(define (f) 0.3) env)))
       (assert-equals (force-thunk result) unspecified-value "definiton.58")
       (assert-equals ((env 'defined?) 'f) #t "definition.59")
@@ -400,7 +401,7 @@
       ((env 'delete!) 'f)
       (assert-equals ((env 'defined?) 'f) #f "definition.74")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.75"))
-    ; lazy definition via new-eval: function with no argument
+    ; lazy definition via new-eval: function with no argument (test-expression !!)
     (set-eval-mode 'lazy)
     (let ((result (new-eval '(define (f) #t) env)))
       (assert-equals (force-thunk result) unspecified-value "definiton.76")
@@ -430,7 +431,7 @@
       ((env 'delete!) 'f)
       (assert-equals ((env 'defined?) 'f) #f "definition.91")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.92"))
-    ; lazy definition: function with a single argument (can use 'test-expression')
+    ; lazy definition: function with a single argument (test-expression works !!)
     (let ((result (lazy-eval '(define (f x) (* x x x)) env)))
       (assert-equals (force-thunk result) unspecified-value "definiton.93")
       (assert-equals ((env 'defined?) 'f) #t "definition.94")
@@ -444,30 +445,46 @@
       (assert-equals result unspecified-value "definiton.99")
       (assert-equals ((env 'defined?) 'f) #t "definition.100")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.101")
-;     FAILURE
       (test-expression '(f 6) 18 "definition.102" env)
       ((env 'delete!) 'f)
       (assert-equals ((env 'defined?) 'f) #f "definition.103")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.104"))
-   
+    ; strict definition via new-eval: function with a single argument
+    (set-eval-mode 'strict)
+    (let ((result (new-eval '(define (f x) (* x x x x)) env)))
+      (assert-equals result unspecified-value "definiton.105")
+      (assert-equals ((env 'defined?) 'f) #t "definition.106")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.107")
+      (test-expression '(f 2) 16 "definition.108" env)
+      ((env 'delete!) 'f)
+      (assert-equals ((env 'defined?) 'f) #f "definition.109")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.110"))
+    ; lazy definition via new-eval: function with a single argument
+    (set-eval-mode 'lazy)
+    (let ((result (new-eval '(define (f x) (* x 3)) env)))
+      (assert-equals (force-thunk result) unspecified-value "definiton.111")
+      (assert-equals ((env 'defined?) 'f) #t "definition.112")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.113")
+      (test-expression '(f 5) 15 "definition.114" env)
+      ((env 'delete!) 'f)
+      (assert-equals ((env 'defined?) 'f) #f "definition.115")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.116"))
+    (set-eval-mode mode)
+    ; analyze definition via new-eval: function with a single argument
+    (set-eval-mode 'analyze)
+    (let ((result (new-eval '(define (f x) (+ 20 x)) env)))
+      (assert-equals result unspecified-value "definiton.117")
+      (assert-equals ((env 'defined?) 'f) #t "definition.118")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.119")
+      (test-expression '(f 10) 30 "definition.120" env)
+      ((env 'delete!) 'f)
+      (assert-equals ((env 'defined?) 'f) #f "definition.120")
+      (assert-equals ((global-env 'defined?) 'f) #f "definition.121"))
+    (set-eval-mode mode)
+
     )
  
 
-  ; syntactic sugar for named functions
-  (let ((x (new-eval '(define (f x) (* x x)))))
-    (if (not (equal? (new-eval '(f 5)) 25))
-      (display "unit-test: test 5.7 failing\n"))
-    ((global-env 'delete!) 'f))
-  (let ((x (new-eval '(define (f x y) (+ x y)))))
-    (if (not (equal? (new-eval '(f 3 4)) 7))
-      (display "unit-test: test 5.8 failing\n"))
-    ((global-env 'delete!) 'f))
- 
- ; syntactic sugar for named functions
- (let ((x ((analyze '(define (f x) (* x x))) global-env)))  
-    (if (not (equal? ((analyze '(f 5)) global-env) 25))
-      (display "unit-test: test 5.19 failing\n"))
-    ((global-env 'delete!) 'f))
   ;
   (let ((x ((analyze '(define (f x y) (+ x y))) global-env)))
     (if (not (equal? ((analyze '(f 3 4)) global-env) 7))

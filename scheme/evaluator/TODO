@@ -1,6 +1,5 @@
-resolve FAILURE in unit test
+unit-test definition (syntactic sugar (f x y) )
 
-unit-test definition (syntactic sugar for function def)
 
 why is new-apply being called at all ... well it is called in new-map...
 

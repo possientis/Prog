@@ -10,6 +10,8 @@ AC_CONFIG_HEADERS([config.h])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
+AC_PROG_RANLIB
+AM_PROG_CC_C_O
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h])
@@ -43,14 +45,10 @@ if test "x${async_exec}" = xyes; then
   AC_DEFINE([ASYNC_EXEC], 1, [async execution enable])
 fi
 
-
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_CHECK_TYPES([uint16_t, uint64_t], [], [], [AC_INCLUDES_DEFAULT])
-
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
+                 common/Makefile
                  src/Makefile])
 AC_OUTPUT
 
