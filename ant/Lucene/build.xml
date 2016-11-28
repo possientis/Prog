@@ -50,7 +50,12 @@
 
   <target name="test" depends="compile" description="Runs unit testing code">
     <!-- printsummary can be "true", "false" but also "withOutAndErr" -->
-    <junit haltonfailure="true" printsummary="true">
+    <!-- advised to keep haltonfailure set to false, so the build can 
+         continue and generate reports. We stop build later with fail task -->
+    <junit  haltonfailure="false" 
+      printsummary="false"
+      errorProperty="test.failed"
+      failureProperty="test.failed">
       <classpath refid="test.classpath" />
       <!-- gives detail on failure
       <formatter type="brief" usefile="false" /> 
@@ -61,12 +66,16 @@
         <fileset dir="${target.test}" includes="**/*Test.class" />
       </batchtest>
     </junit>
+
     <junitreport todir="${target.reports}">
       <fileset dir="${target.reports}">
         <include name="TEST-*.xml" />
       </fileset>
       <report format="frames" todir="${target.html}" />
     </junitreport>
+
+    <fail message="Tests failed. Check log and/or reports."
+      if="test.failed" /> <!-- conditional <fail> task-based -->
   </target>
 
   <target name="archive" depends="test" description="Creates the JAR file">

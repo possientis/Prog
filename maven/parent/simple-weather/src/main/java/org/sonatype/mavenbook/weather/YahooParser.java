@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sonatype.mavenbook.weather.model.Weather;
+
 import org.apache.log4j.Logger;
 
 import org.dom4j.Document;
