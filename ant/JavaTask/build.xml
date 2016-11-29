@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="JavaTask" default="run" >
+
+  <property name="build.dir" location="build" />
+  <property name="source.dir" location="src/main/java" />
+
+  <path id="compile.classpath">
+  </path>
+
+  <path id="run.classpath">
+    <pathelement location="${build.dir}/classes" />
+  </path>
+
+  <target name="init">
+    <mkdir dir="${build.dir}/classes" />
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${source.dir}" 
+      destdir="${build.dir}/classes" includeAntRuntime="false"/>
+  </target>
+
+  <target name="run" depends="compile">
+    <echo>running a search</echo>
+    <java classname="org.example.antbook.Search">
+      <arg value="abc"/>
+      <arg value="def"/>
+      <classpath refid="run.classpath" />
+    </java>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${build.dir}" />
+  </target>
+
+</project>
+

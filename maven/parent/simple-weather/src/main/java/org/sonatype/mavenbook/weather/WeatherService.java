@@ -6,34 +6,36 @@ import org.sonatype.mavenbook.weather.model.Weather;
 
 public class WeatherService {
 
-  private YahooRetriever yahooRetriever;
-  private YahooParser yahooParser;
+	private YahooRetriever yahooRetriever;
+	private YahooParser yahooParser;
 
-  public WeatherService() {}
+	public WeatherService() {
+	}
 
-  public Weather retrieveForecast(String zip) throws Exception {
-    // Retrieve Data
-    InputStream dataIn = yahooRetriever.retrieve(zip);
+	public Weather retrieveForecast(String zip) throws Exception {
+		// Retrieve Data
+		InputStream dataIn = yahooRetriever.retrieve(zip);
 
-    // Parse DataS
-    Weather weather = yahooParser.parse(zip, dataIn);
+		// Parse DataS
+		Weather weather = yahooParser.parse(zip, dataIn);
 
-    return weather;
-  }
+		return weather;
+	}
 
-  public YahooRetriever getYahooRetriever() {
-    return yahooRetriever;
-  }
+	public YahooRetriever getYahooRetriever() {
+		return yahooRetriever;
+	}
 
-  public void setYahooRetriever(YahooRetriever yahooRetriever) {
-    this.yahooRetriever = yahooRetriever;
-  }
+	public void setYahooRetriever(YahooRetriever yahooRetriever) {
+		this.yahooRetriever = yahooRetriever;
+	}
 
-  public YahooParser getYahooParser() {
-    return yahooParser;
-  }
+	public YahooParser getYahooParser() {
+		return yahooParser;
+	}
 
-  public void setYahooParser(YahooParser yahooParser) {
-    this.yahooParser = yahooParser;
-  }
+	public void setYahooParser(YahooParser yahooParser) {
+		this.yahooParser = yahooParser;
+	}
+
 }
