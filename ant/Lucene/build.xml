@@ -21,7 +21,7 @@
   <!-- classpath used for compiling code including test code -->
   <path id="compile.classpath">
     <pathelement location="${target.main}" />
-    <pathelement location="/usr/share/java/junit4.jar" />
+    <pathelement location="/usr/share/java/junit.jar" />
   </path>
 
   <!-- classpath used for running unit test code -->

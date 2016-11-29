@@ -23,8 +23,6 @@ colorscheme solarized
 set encoding=utf-8
 set t_Co=256
 
-au BufRead,BufNewFile *.scala set filetype=scala
-au! Syntax scala source /usr/share/vim/vim74/syntax/scala.vim
-
-au BufRead,BufNewFile *.v set filetype=coq  "will conflict with verilog, beware !!
-au! Syntax coq source /usr/share/vim/vim74/syntax/coq.vim
+" will conflict with verilog, beware !!
+au BufRead,BufNewFile *.v set filetype=coq  
+au! Syntax coq source /usr/share/vim/vim80/syntax/coq.vim
