@@ -8,6 +8,7 @@
 int main(int argc, char* argv[])
 {
 
+  std::cout << "Why is this program doing nothing?\n";
 
   return 0;
 

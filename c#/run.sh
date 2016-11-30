@@ -1,3 +1,3 @@
 #!/bin/sh
-mcs  Main.cs    # compiler
-mono Main.exe   # running .net code?
+mcs  Main.cs    # compiling
+mono Main.exe   # running CLI bytecodes
