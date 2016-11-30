@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "stream.scm")
 
 (define (stream-test)

@@ -10,6 +10,8 @@ cd ${HOME}
 ./bst/test.sh
 ./digital/test.sh       # currently have failures
 ./evaluator/test.sh
+./hash/test.sh
+./stream/test.sh
 
 cd ${DIR}
 echo '\nAll scheme tests completed succesfully\n'

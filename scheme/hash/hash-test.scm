@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "hash.scm")
 
 (define (hash-test)
@@ -13,5 +12,5 @@
   (display "hash: unit test complete\n"))
 
 (hash-test)
-(quit)
+(exit 0)
 
