@@ -22,6 +22,14 @@ then
   exit 1
 fi
 
+echo 'Testing C ...'
+${HOME}/c/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
 echo 'Testing java ...'
 ${HOME}/java/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]

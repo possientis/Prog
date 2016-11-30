@@ -1,4 +1,5 @@
 // link.t.c
+#include "link_node.h"
 #include "link.h"
 #include <stdio.h>
 #include <assert.h>

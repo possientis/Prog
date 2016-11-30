@@ -1,3 +1,4 @@
+#include "link.h"
 #include "dict.h"
 #include <stdio.h>
 
