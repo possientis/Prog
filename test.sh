@@ -15,6 +15,14 @@ then
   exit 1
 fi
 
+echo 'Testing make ...'
+${HOME}/make/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
 #echo 'Testing java ClassLoader ...'
 #${HOME}/java/ijvm/greeters/test.sh >> test.log 2>&1
 #if [ $? -ne 0 ]
