@@ -1,10 +1,8 @@
 #!/bin/sh
 
 set -e 
-
 DIR=`pwd`
 HOME=/home/john/Prog/java/ijvm/greeters
-
 cd ${HOME}
 
 echo 'building ...'
@@ -21,7 +19,6 @@ echo 'cleaning ...'
 ./clean.sh
 
 cd ${DIR}
-
 echo '\ntest completed succesfully\n'
 
 

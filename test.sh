@@ -31,15 +31,14 @@ then
   exit 1
 fi
 
+echo 'Testing java ...'
+${HOME}/java/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
 
-#echo 'Testing java ClassLoader ...'
-#${HOME}/java/ijvm/greeters/test.sh >> test.log 2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
 #echo 'Testing Number ...'
 #${BITCOIN}/Number/test.sh >> test.log  2>&1
 #if [ $? -ne 0 ]
@@ -48,13 +47,7 @@ fi
 #  exit 1
 #fi
 #
-#echo 'Testing bitcoinj ...'
-#${HOME}/java/bitcoin/test.sh >> test.log 2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
+
 #
 #
 #echo 'Testing libbitcoin ...'
