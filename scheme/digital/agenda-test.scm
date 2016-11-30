@@ -176,4 +176,4 @@
   'done)
 
 (agenda-test)
-(quit)
+(exit 0)

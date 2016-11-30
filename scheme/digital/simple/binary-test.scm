@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "binary.scm")
 
 (define (binary-test)
@@ -225,4 +224,4 @@
   (display "binary: unit test complete\n"))
 
 (binary-test)
-(quit)
+(exit 0)

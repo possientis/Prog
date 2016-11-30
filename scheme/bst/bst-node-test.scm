@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "bst-node.scm")
 
 (define (bst-node-test)
@@ -38,4 +37,4 @@
   (display "bst-node: unit test complete\n"))
 
 (bst-node-test)
-(quit)
+(exit 0)

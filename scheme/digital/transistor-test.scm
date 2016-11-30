@@ -3716,4 +3716,4 @@
   )
 
 (transistor-test)
-(quit)
+(exit 0)

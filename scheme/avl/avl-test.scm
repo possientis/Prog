@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "avl.scm")
 
 (define (avl-test)
@@ -468,4 +467,4 @@
   (display "avl: unit test complete\n"))
 
 (avl-test)
-(quit)
+(exit 0)

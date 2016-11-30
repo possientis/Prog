@@ -99,4 +99,4 @@
   (display "source: unit test complete\n"))
 
 (source-test)
-(quit)
+(exit 0)

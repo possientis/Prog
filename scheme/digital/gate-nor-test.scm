@@ -139,5 +139,5 @@
   (display "gate-nor: unit test complete\n"))
 
 (gate-nor-test)
-(quit)
+(exit 0)
 

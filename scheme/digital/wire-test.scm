@@ -210,4 +210,4 @@
   (display "wire: unit test complete\n"))
 
 (wire-test)
-(quit)
+(exit 0)

@@ -141,5 +141,5 @@
   (display "gate-nand: unit test complete\n"))
 
 (gate-nand-test)
-(quit)
+(exit 0)
 

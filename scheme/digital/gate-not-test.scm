@@ -47,4 +47,4 @@
   (display "gate-not: unit test complete\n"))
 
 (gate-not-test)
-(quit)
+(exit 0)

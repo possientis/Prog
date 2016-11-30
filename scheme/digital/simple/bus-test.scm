@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "bus.scm")
 
 (define (bus-test)

@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "bst.scm")
 
 (define (bst-test)
@@ -364,4 +363,4 @@
   (display "bst: unit test complete\n"))
 
 (bst-test)
-(quit)
+(exit 0)

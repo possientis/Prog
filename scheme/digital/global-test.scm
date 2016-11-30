@@ -57,4 +57,4 @@
   (display "global: unit test complete\n"))
 
 (global-test)
-(quit)
+(exit 0)

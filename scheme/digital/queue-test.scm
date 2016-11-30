@@ -45,4 +45,4 @@
   'done)
 
 (queue-test)
-(quit)
+(exit 0)

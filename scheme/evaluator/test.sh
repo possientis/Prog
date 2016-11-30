@@ -1,17 +1,16 @@
 #!/bin/sh
 
-HOME=/home/john/Prog/scheme/evaluator/
+set -e 
 DIR=`pwd`
-
+HOME=/home/john/Prog/scheme/evaluator
 cd ${HOME}
 
-scm -b -f unit-test.scm # non-interactively
-
-if [ $? -ne 0 ]
-then
-  echo "\nSCHEME INTERPRETER UNIT TEST HAS FAILED!!!\n"
-  cd ${DIR}
-  exit 1
-fi
+echo 'starting scheme evaluator unit test ...'
+scm -b -f unit-test.scm
 
 cd ${DIR}
+echo '\nscheme evaluator unit test completed succesfully\n'
+
+
+
+

@@ -1,4 +1,3 @@
-#!/usr/bin/scm
 (load "avl-node.scm")
 
 (define (avl-node-test)
@@ -48,4 +47,5 @@
   (display "avl-node: unit test complete\n"))
 
 (avl-node-test)
-(quit)
+(exit 0)
+

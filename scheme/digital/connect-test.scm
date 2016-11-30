@@ -145,6 +145,6 @@
   (display "connect: unit test complete\n"))
 
 (connect-test)
-(quit)
+(exit 0)
 
 
