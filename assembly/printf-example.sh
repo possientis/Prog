@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 as --32 -o printf-example.o printf-example.s
 
 ld -melf_i386 -lc -o printf-example printf-example.o \

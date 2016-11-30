@@ -1,3 +1,7 @@
+#!/bin/sh
+
+set -e
+
 as --32 integer-to-string.s -o integer-to-string.o
 as --32 count-chars.s -o count-chars.o
 as --32 write-newline.s -o write-newline.o

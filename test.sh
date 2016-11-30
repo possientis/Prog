@@ -4,11 +4,26 @@ HOME=/home/john/Prog
 PATTERNS=${HOME}/polyglot/DesignPatterns
 BITCOIN=${HOME}/polyglot/Bitcoin
 
-
 echo 'Testing log file\n' > test.log
 
 echo 'Testing ant ...'
 ${HOME}/ant/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+echo 'Testing assembly ...'
+${HOME}/assembly/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+echo 'Testing java ...'
+${HOME}/java/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
@@ -31,13 +46,6 @@ then
   exit 1
 fi
 
-echo 'Testing java ...'
-${HOME}/java/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
 
 #echo 'Testing Number ...'
 #${BITCOIN}/Number/test.sh >> test.log  2>&1

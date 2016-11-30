@@ -2,6 +2,7 @@
 # read first names from file test.dat
 # run write-prog.sh to create that file first
 
+set -e
 as --32 -o read-prog.o read-prog.s
 as --32 -o read-record.o read-record.s
 as --32 -o count-chars.o count-chars.s
