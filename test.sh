@@ -6,8 +6,8 @@ BITCOIN=${HOME}/polyglot/Bitcoin
 
 echo 'Testing log file\n' > test.log
 
-echo 'Testing ant ...'
-${HOME}/ant/test.sh >> test.log 2>&1
+echo 'Testing c ...'
+${HOME}/c/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
@@ -22,16 +22,8 @@ then
   exit 1
 fi
 
-echo 'Testing c ...'
-${HOME}/c/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing c# ...'
-${HOME}/c#/test.sh >> test.log 2>&1
+echo 'Testing make ...'
+${HOME}/make/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
@@ -54,8 +46,8 @@ then
   exit 1
 fi
 
-echo 'Testing make ...'
-${HOME}/make/test.sh >> test.log 2>&1
+echo 'Testing ant ...'
+${HOME}/ant/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
@@ -64,6 +56,22 @@ fi
 
 echo 'Testing maven ...'
 ${HOME}/maven/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+echo 'Testing gradle ...'
+${HOME}/gradle/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+echo 'Testing c# ...'
+${HOME}/c#/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
