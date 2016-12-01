@@ -1,4 +1,5 @@
 #!/bin/sh
+
 COMPOJURE_JARS=
 for d in `dirname $0`/*.jar
 do
