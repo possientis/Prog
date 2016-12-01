@@ -96,17 +96,7 @@ fi
 #fi
 #
 
-#
-#
-#echo 'Testing libbitcoin ...'
-#${HOME}/c++/bitcoin/test.sh >> test.log 2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
+
 #echo 'Testing AbstractFactory ...'
 #${PATTERNS}/AbstractFactory/test.sh >> test.log 2>&1
 #if [ $? -ne 0 ]
