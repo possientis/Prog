@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Env" default="echo" >
+
+
+  <target name="echo">
+    <property environment="env" />
+    <echo>Path is ${env.PATH} </echo>
+    <echo>Home is ${env.HOME} </echo>
+  </target>
+
+
+</project>

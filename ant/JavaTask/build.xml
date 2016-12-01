@@ -23,8 +23,8 @@
 
   <target name="run" depends="compile">
     <echo>running a search</echo>
-    <java classname="org.example.antbook.Search">
-      <arg value="abc"/>
+    <java classname="org.example.antbook.Search" fork="true" failonerror="true">
+      <arg value="abc"/> <!-- value, but also file, line, path. see p 150 -->
       <arg value="def"/>
       <classpath refid="run.classpath" />
     </java>

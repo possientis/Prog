@@ -5,9 +5,10 @@ DIR=`pwd`
 HOME=/home/john/Prog/ant/
 cd ${HOME}
 
+./Env/test.sh
 ./GettingStarted/test.sh
-./Lucene/test.sh
 ./JavaTask/test.sh
+./Lucene/test.sh
 
 cd ${DIR}
 echo '\nAll ant tests completed succesfully\n'
