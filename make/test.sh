@@ -10,7 +10,7 @@ cd ${HOME}
 
 
 cd ${DIR}
-echo '\n All make tests completed succesfully\n'
+echo '\nAll make tests completed succesfully\n'
 
 
 

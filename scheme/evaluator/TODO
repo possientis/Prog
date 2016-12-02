@@ -1,4 +1,5 @@
-understand issue test.scm
+understand issue test.scm: lazy-eval of '(f 0) is not the same as
+lazy-apply function f to '(0). Need to figure out why
 
 unit-test definition (optional arguments)
 
