@@ -6,6 +6,7 @@ HOME=/home/john/Prog/java/
 cd ${HOME}
 
 ./ijvm/test.sh
+./jdbc/test.sh
 ./bitcoin/test.sh
 
 cd ${DIR}

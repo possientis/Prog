@@ -11,4 +11,4 @@ rm -f *.class
 rm -f *.class
 
 cd ${DIR}
-echo '\nbitcoinj tests completed succesfully\n'
+echo '\nbitcoinj test completed succesfully\n'

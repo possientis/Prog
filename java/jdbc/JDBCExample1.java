@@ -1,16 +1,13 @@
 import java.sql.DriverManager;
-import java.sql.Connection; // Connection class
+import java.sql.Connection;
 import java.sql.SQLException;
 
-// Eventhough the postgresql-jdbc4.jar is placed in the usual 
-// directory /usr/share/java, you still need to spell it out 
-// when running the program (add the jar to your classpath)
-// Do not forget the '.:' when specifiying the -cp option. 
+// java -cp .:/usr/share/java/postgresql.jar JDBCExample1
 
-// java -cp .:/usr/share/java/postgresql-jdbc4.jar JDBCExample
+public class JDBCExample1 {
 
-public class JDBCExample {
-  public static void main(String[] args){
+  public static void main(String[] args) {
+
     System.out.println("PostgreSQL jdbc connection testing ...");
 
     try {
@@ -20,8 +17,10 @@ public class JDBCExample {
     } catch (ClassNotFoundException e){
 
       System.out.println("Cannot find PostgreSQL jdbc driver.");
+
       e.printStackTrace(); 
-      return;
+
+      System.exit(1);
     }
 
     System.out.println("PostgreSQL jdbc driver is registered!");
@@ -30,21 +29,35 @@ public class JDBCExample {
 
     try {
 
-      connection = DriverManager.getConnection(
-          "jdbc:postgresql://127.0.0.1/test", "john", "john");
+      final String dbname = "jdbc:postgresql://127.0.0.1/john";
+
+      final String username = "john";
+
+      final String password = "john";
+
+      connection = DriverManager.getConnection(dbname, username, password);
 
     } catch (SQLException e) {
 
       System.out.println("Connection Failed! Check output console");
+
       e.printStackTrace();
-      return;
+
+      System.exit(1);
 
     }
 
     if (connection != null) {
+
       System.out.println("You made it, take control your database now!");
+
+      System.exit(0);
+
     } else {
+
        System.out.println("Failed to make connection!");
+
+       System.exit(1);
     }
   }
 }
