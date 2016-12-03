@@ -9,7 +9,7 @@
 
 // and it is not going to run either without the appropriate jar
 
-// java -cp .:/usr/share/java/slf4j-api.jar SLF4JExample
+// java -cp /usr/share/java/slf4j-api.jar:. SLF4JExample
 
 // However, if you simply use slf4j-api.jar, you are including the generic 
 // facade code, but missing a binding to a concrete logging framework
@@ -31,13 +31,10 @@
 // /usr/share/java/slf4j-migrator.jar
 // /usr/share/java/slf4j-nop.jar    
 // /usr/share/java/slf4j-simple.jar
-
-// see script slf4j.sh for examples of how to compile and run.
 //
 // Note that not all of the above options will work immediately. There is
 // probably a need to add more dependency jars on your classpath, or some 
 // configuration xml file may be required somewhere etc. 
-//
 //
 // Only the bindings 'simple' 'jdk14' and 'nop' work immediately.
 
@@ -47,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 public class SLF4JExample {
   public static void main(String[] args) {
-    Logger logger = LoggerFactory.getLogger("Some Class Name");
+    Logger logger = LoggerFactory.getLogger("<SomeMessageCategoryName>");
     logger.info("Hello World");
   }
 }

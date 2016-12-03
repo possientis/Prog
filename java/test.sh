@@ -7,6 +7,7 @@ cd ${HOME}
 
 ./ijvm/test.sh
 ./jdbc/test.sh
+./slf4j/test.sh
 ./bitcoin/test.sh
 
 cd ${DIR}

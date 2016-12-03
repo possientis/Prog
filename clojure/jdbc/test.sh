@@ -19,6 +19,7 @@ java -cp "$JDBC_JARS" test_java_jdbc
 
 # clean up
 rm *.class 
+rm clojure/*.class
 rm clojure/java/*.class 
 rm clojure/java/jdbc/*.class
 
