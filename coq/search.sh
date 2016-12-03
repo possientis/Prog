@@ -1,2 +1,5 @@
 #!/bin/sh
-grep $1 ~/Prog/coq -r
+
+DIR1=/home/john/Prog/
+
+grep "$@" $DIR1 -r | grep '\.v'

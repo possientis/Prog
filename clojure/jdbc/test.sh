@@ -19,7 +19,7 @@ java -cp "$JDBC_JARS" test_java_jdbc
 
 # clean up
 rm *.class 
-rm clojure/*.class
+rm -f clojure/*.class   # TODO investigate diff of behaviour front v back
 rm clojure/java/*.class 
 rm clojure/java/jdbc/*.class
 
