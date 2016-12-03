@@ -6,6 +6,7 @@ HOME=/home/john/Prog/ant/
 cd ${HOME}
 
 ./Env/test.sh
+./ExecTask/test.sh
 ./GettingStarted/test.sh
 ./JavaTask/test.sh
 ./Lucene/test.sh

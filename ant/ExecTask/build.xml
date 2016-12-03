@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ExecTask" default="run" >
+
+
+  <target name="run">
+
+    <echo>executing ls -l ...</echo>
+    <!-- timeout in milliseconds -->
+    <exec executable="ls" 
+      failonerror="true" newenvironment="false" timeout="100">
+      <arg value="-l"/> 
+    </exec>
+
+    <echo>executing ls -l | grep build > log</echo>
+    <exec executable="sh"
+      failonerror="true" newenvironment="false" timeout="100">
+      <!-- works despite not escaping '>' as '&gt;' -->
+      <arg line="-c 'ls -l | grep build > log'" /> 
+    </exec>
+
+    <echo>executing rm -f log</echo>
+    <exec executable="rm"
+      failonerror="true" newenvironment="false" timeout="100">
+      <arg value="-f"/>
+      <arg value="log"/>
+    </exec>
+
+
+  </target>
+
+</project>
+
