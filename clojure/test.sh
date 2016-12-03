@@ -8,6 +8,7 @@ cd ${HOME}
 ./hiccup/test.sh
 ./rabbitmq/test.sh
 ./redis/test.sh
+./jdbc/test.sh
 
 cd ${DIR}
 echo '\nAll clojure tests completed succesfully\n'

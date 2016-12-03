@@ -1,4 +1,5 @@
-; the purpose of this file is to demonstrate the use of the clojure library ; java.jdbc which is based on java's JDBC. See file JDBCExample2.java for
+; the purpose of this file is to demonstrate the use of the clojure library 
+; java.jdbc which is based on java's JDBC. See file JDBCExample2.java for
 ; an example of use in java. We are now focussing on closure.
 
 ; the call to the ns macro below defines a namespace of the same name as the file
@@ -22,45 +23,96 @@
 ;
 ; In order to run the program, WE CANNOT simply use the usual java command:
 ;
-; $ java -cp .:/usr/share/java/clojure-1.6.0.jar test_java_jdbc
+; $ java -cp /usr/share/java/clojure-1.6.0.jar:. test_java_jdbc
 ;
-; We need to INCLUDE the postgresql driver jar (with of course '.:')
+; We need to INCLUDE the postgresql driver jar
 ; 
 ; $ java -cp \
-; .:/usr/share/java/clojure-1.6.0.jar:/usr/share/java/postgresql-jdbc4.jar \
+; /usr/share/java/clojure-1.6.0.jar:/usr/share/java/postgresql.jar:. \
 ; test_java_jdbc
 ;
-
 ; be careful with lazy evaluation, if you attempt to get results
 ; after a connection is closed....
 
-
 (ns test_java_jdbc
   (:gen-class)
-  (:require [clojure.java.jdbc :as j]))
+  (:require [clojure.java.jdbc :as j])
+  (:require [clojure.string :as s]))
 
 
-(def db { :subprotocol "postgresql"
-          :subname "//127.0.0.1:5432/test"
-          :user "john"
-          :password "john"})
+(def db { :subprotocol  "postgresql"
+          :subname      "//127.0.0.1:5432/john" ; port number is optional
+          :user         "john"
+          :password     "john" })
+
+(defn create-table [conn]
+  (let [sql (str "CREATE  TABLE COMPANY ("
+                 "ID      INT PRIMARY KEY NOT NULL,"
+                 "NAME    TEXT            NOT NULL,"
+                 "AGE     INT             NOT NULL,"
+                 "ADDRESS CHAR(50)                ,"
+                 "SALARY  REAL                    );")]
+    (j/execute! conn [sql])))
+
+(defn delete-table [conn]
+  (let [sql "DROP TABLE COMPANY;"]
+    (j/execute! conn [sql])))
+
+
+; clojure has syntax for destructuring, which is not used here 
+(defn display-item [item]
+  (println (str "ID: "          (:id item)
+                ",\tNAME: "     (:name item)
+                ",\tAGE: "      (:age item)
+                ",\tADDRESS: "  (s/trim (:address item))
+                ",\tSALARY: "   (:salary item))))
+
+(defn query-table [conn]
+  (let [rows (j/query conn ["SELECT * FROM COMPANY;"])]
+    (dorun
+      (for [item rows]
+        (display-item item)))))
 
 
 (defn -main [& args]
+
   (println "test_java_jdbc is running ...")
-    (j/with-db-connection [conn db]
-      (let [rows (j/query conn ["SELECT * FROM FRUIT WHERE NAME=?" "Apple"])]
-        (println (first rows))) ;{:cost 24, :appearance rosy, :name Apple, :id 1} 
-      (let [rows (j/query conn 
-                          ; specifies function to be applied to each row
-                          ["SELECT * FROM FRUIT WHERE ID=?" 1] {:row-fn :name})]
-        (println rows)) ; (Apple)
-      (j/insert! conn :fruit {:cost 12, :appearance "blue", :name "Pear", :id 2})
-      (j/update! conn :fruit {:appearance "green"} ["id=?" 2])
-      ;(j/delete! conn :fruit ["id=?" 2])
-      (j/execute! conn ["DELETE FROM FRUIT WHERE ID=?" 2])  ; generic sql
-      )
+
+  (j/with-db-connection [conn db]
+    (create-table conn)
+
+    (let [item {:id 1 :name "Paul" :age 32 :address "California" :salary 20000.0}]
+      (j/insert! conn :company item))
+
+    (let [item {:id 2 :name "Allen" :age 25 :address "Texas" :salary 15000.0}]
+      (j/insert! conn :company item))
+
+    (let [item {:id 3 :name "Teddy" :age 23 :address "Norway" :salary 20000.0}]
+      (j/insert! conn :company item))
+
+    (let [item {:id 4 :name "Mark" :age 25 :address "Rich-Mond" :salary 65000.0}]
+      (j/insert! conn :company item))
+
+    (query-table conn)
+
+    (println "updating salary to 25,000 for id = 1 ...")
+
+    (j/update! conn :company {:salary 25000.0} ["id=?" 1])
+
+    (query-table conn)
+
+    (println "deleting entry with id = 2 ...")
+
+    (j/delete! conn :company ["id=?" 2])
+
+    (query-table conn)
+
+    (delete-table conn)
+  )
 )
+
+
+
 
 
 
