@@ -1,6 +1,6 @@
 <b>Current Weather Conditions for:
-  ${weather.location.city}, ${weather.location.region},
-  ${weather.location.country}</b><br/>
+  ${weather.location.city}, ${weather.location.region}, ${weather.location.country}</b><br/>
+  
 <ul>
   <li>Temperature: ${weather.condition.temp}</li>
   <li>Condition: ${weather.condition.text}</li>
