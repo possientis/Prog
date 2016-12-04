@@ -9,6 +9,7 @@ cd ${HOME}
 ./configure
 make
 ./src/saturn
+make check
 make clean
 ./clean.sh
 

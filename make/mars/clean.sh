@@ -19,6 +19,7 @@ rm -f src/*.o
 rm -f src/a.out   # just in case
 rm -f stamp-h1
 rm -f src/.deps -r
+rm -f src/.libs -r
 rm -f test-driver
 rm -f src/greptest.*
 rm -f src/test-suite.log
@@ -31,10 +32,13 @@ rm -f include/Makefile.in
 rm -f include/Makefile
 rm -f libmar/Makefile.in
 rm -f libmar/Makefile
+rm -f libmar/.deps -r
+rm -f libmar/.libs -r
 rm -f libtool
 rm -f ltmain.sh
 rm -f mars-1.0 -r
 rm -f *.tar.gz
+rm -f libmar/libmars*
 
 tree
 

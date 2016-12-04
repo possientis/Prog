@@ -9,6 +9,7 @@ cd ${HOME}
 ./configure
 make
 ./src/jupiter
+make check
 make clean
 ./clean.sh
 

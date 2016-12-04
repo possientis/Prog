@@ -7,6 +7,7 @@ cd ${HOME}
 
 ./jupiter/test.sh
 ./saturn/test.sh
+./mars/test.sh
 
 
 cd ${DIR}

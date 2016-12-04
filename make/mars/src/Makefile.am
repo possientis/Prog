@@ -1,7 +1,7 @@
 bin_PROGRAMS = mars
 mars_SOURCES = main.c
-mars_CPPFLAGS = -I$(top_srcdir)/common
-mars_LDADD = ../common/libmarcommon.a
+mars_CPPFLAGS = -I$(top_srcdir)/include
+mars_LDADD = ../libmar/libmars.la
 
 check_SCRIPTS = greptest.sh
 TESTS = $(check_SCRIPTS)
