@@ -23,7 +23,7 @@
 (define (analyze-self-evaluating exp) (lambda (env) exp)) 
 
 ; lazy eval  
-; creates an 'evaluated' thunk which has no embedded environment
+; creates an 'evaluated' thunk (i.e. which has no embedded environment)
 (define (lazy-eval-self-evaluating exp env) 
   (make-thunk exp '()))
 

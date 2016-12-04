@@ -11,7 +11,7 @@
 ; strict eval
 (define (strict-eval-variable exp env)
   (let ((value ((env 'lookup) exp)))
-    value))     ; do not force when value is a thunk
+    value)) ; forcing potential thunks here triggers various failures. why?
 
 ; analyze
 (define (analyze-variable exp) 

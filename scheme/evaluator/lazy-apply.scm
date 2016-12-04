@@ -6,6 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (lazy-apply proc-thunk args)
+  (debug "\nlazy-apply: calling lazy-apply-eval-procedure\n")
   (let ((proc (force-thunk proc-thunk)))
     (cond ((primitive-procedure? proc)  (lazy-apply-primitive-procedure proc args))
           ((eval-procedure? proc)       (lazy-apply-eval-procedure proc args))

@@ -42,6 +42,8 @@
 ; either. Instead, we pass them directly as values to construct
 ; an extended environment, from which we return a new thunk.
 (define (lazy-apply-eval-procedure proc args)
+  (debug "\nlazy-apply-eval-procedure: proc = ")(debug proc)(newline)
+  (debug "lazy-apply-eval-procedure: args = ")(debug args)(newline)
   (if (thunk? proc) (error "lazy-apply-eval-procedure: thunk proc detected"))
   (let ((body (eval-procedure-body proc))
         (params (eval-procedure-parameters proc))
