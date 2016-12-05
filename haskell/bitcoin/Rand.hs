@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module Rand
   ( Rand
   , RandException
@@ -13,6 +15,8 @@ module Rand
 import Crypto.Random
 import Data.Word
 import Data.ByteString
+import Control.Applicative (Applicative(..))
+import Control.Monad (liftM, ap)
 
 -- Exception Handling
 
@@ -78,6 +82,14 @@ instance Monad Rand where
           Left e          -> return $ Left e
           Right (b, s'')  -> do
             return $ Right (b, s'')
+
+-- needed to compile
+instance Functor Rand where
+  fmap = liftM
+-- needed to compile
+instance Applicative Rand where
+  pure = return
+  (<*>) = ap
 
 {-
 instance Functor Rand where

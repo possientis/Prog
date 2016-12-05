@@ -22,12 +22,12 @@ cd ..
 if [ ${VERSION} = 8.4 ];
 then
 
-  coqtop -batch -lv sort.v -I Lib
+  coqtop -batch -l sort.v -I Lib
 
 elif [ ${VERSION} = 8.5 ];
 then
 
-  coqtop -batch -lv sort.v -R Lib ''
+  coqtop -batch -l sort.v -R Lib ''
 
 else
 

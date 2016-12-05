@@ -259,7 +259,7 @@ checkRandom = do
 
   count <- multiGen 10000
 
-  fromIO $ putStrLn (show count)
+--  fromIO $ putStrLn (show count)
   
   --checkCondition (count > 4800) "checkRandom.4"
   --checkCondition (count < 5200) "checkRandom.5"

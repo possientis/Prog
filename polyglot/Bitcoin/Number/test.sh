@@ -1,11 +1,9 @@
 #!/bin/sh
 
 set -e
-
+DIR=`pwd`
 NAME=Number
 HOME=/home/john/Prog/polyglot/Bitcoin/${NAME}
-
-DIR=`pwd`
 cd ${HOME}
 
 echo '\nThis is Java ...'
@@ -44,5 +42,6 @@ cd ..
 
 
 cd ${DIR}
+echo '\nAll Number tests completed succesfully\n'
 
 
