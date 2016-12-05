@@ -5,6 +5,7 @@ DIR=`pwd`
 HOME=/home/john/Prog/ant/
 cd ${HOME}
 
+./Available/test.sh
 ./Env/test.sh
 ./ExecTask/test.sh
 ./GettingStarted/test.sh

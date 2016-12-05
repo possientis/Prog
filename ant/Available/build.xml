@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Available" default="failifnotfound" >
+
+  <property environment="env" />
+
+  <target name="probe">
+    <condition property="not.found">
+      <not>
+        <or>
+          <available file="gcc" filepath="${env.PATH}" />
+          <available file="gcc.exe" filepath="${env.PATH}" />
+          <available file="gcc.exe" filepath="${env.Path}" />
+        </or>
+      </not>
+    </condition>
+  </target>
+
+  <target name="echo" depends="probe">
+    <echo>PATH = ${env.PATH}</echo>
+    <echo>Program found = ${found.prog}</echo>
+  </target>
+
+  <target name="failifnotfound" depends="echo">
+    <fail if="${not.found}" />
+  </target>
+
+</project>

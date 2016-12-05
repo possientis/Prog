@@ -49,6 +49,10 @@ rm -f assembly/test.dat
 rm -f scala/*.class
 rm -f coq/*.glob
 rm -f coq/*.vo
+rm -f coq/.*.aux
+rm -f coq/Lib/*.glob
+rm -f coq/Lib/*.vo
+rm -f coq/Lib/.*.aux
 rm -fr python/__pycache__
 git status
 
