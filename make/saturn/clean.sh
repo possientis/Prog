@@ -30,7 +30,7 @@ rm -f common/.deps -r
 rm -f saturn-1.0 -r
 rm -f *.tar.gz
 
-tree
+tree -a
 
 
 # autoreconf -i 

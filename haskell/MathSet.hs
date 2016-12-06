@@ -1,6 +1,7 @@
+--module Set (main, ISet, empty, set, inc, belong, singleton, union, subset, Set()) where
 
-module Set (ISet, empty, set, inc, belong, singleton, union, subset, Set()) where
 import qualified Data.Map as Map
+import Control.Monad
 
 class ISet a where
   empty     :: a
@@ -927,6 +928,13 @@ instance Monad Hash where
     let (x, manager') = hashApply m manager in 
       hashApply (k x) manager')
 
+instance Functor Hash where
+  fmap = liftM
+
+instance Applicative Hash where
+  pure = return
+  (<*>) = ap
+
 findSingleton :: Int -> Hash (Maybe Int)  
 findSingleton h = Hash (\manager -> (Map.lookup h (singletonMap manager), manager))
 
@@ -960,7 +968,7 @@ hash (Union x y)        =  do hx      <- hash x
                                 Nothing   -> insertUnion hx hy 
 
 
-main :: IO()
+main :: IO ()
 main = do
   let h0 = hash zero
   let h1 = hash one

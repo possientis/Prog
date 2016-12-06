@@ -25,9 +25,12 @@ rm -f src/greptest.*
 rm -f src/test-suite.log
 rm -f common/*.a
 rm -f common/*.o
+rm -f common/*.lo
+rm -f common/*.la
 rm -f common/Makefile.in
 rm -f common/Makefile
 rm -f common/.deps -r
+rm -f common/.libs -r
 rm -f include/Makefile.in
 rm -f include/Makefile
 rm -f libmar/Makefile.in
@@ -40,7 +43,7 @@ rm -f mars-1.0 -r
 rm -f *.tar.gz
 rm -f libmar/libmars*
 
-tree
+tree -a
 
 
 # autoreconf -i 
