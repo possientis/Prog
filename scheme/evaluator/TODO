@@ -1,8 +1,4 @@
-running unit test with debug flag off gives weird output
-understand issue test.scm: lazy-eval of '(f 0) is not the same as
-lazy-apply function f to '(0). Need to figure out why
-
-unit-test definition (optional arguments)
+unit-test definition (optional arguments, lazy via new eval)
 
 why is new-apply being called at all ... well it is called in new-map...
 

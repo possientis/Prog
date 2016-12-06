@@ -34,11 +34,13 @@
 
 (define w (lazy-eval '(f 0)))
 (define y (force-thunk w))
-(define z (map force-thunk y))  ; needed to get expected result !!
-
 (display "\n(force-thunk (lazy-eval '(f 0))) = ")(display y)(newline)
 
-;(display z)(newline)
+(define z (lazy-eval '(car (f 0))))
+
+(display "\n(force-thunk (lazy-eval '(car (f 0)))) = ")
+(display (force-thunk z))(newline)
+
 
 
 (exit 0)

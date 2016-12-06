@@ -78,6 +78,14 @@ then
   exit 1
 fi
 
+echo 'Testing javascript ...'
+${HOME}/javascript/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
 echo 'Testing clojure ...'
 ${HOME}/clojure/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
@@ -94,6 +102,14 @@ then
   exit 1
 fi
 
+echo 'Testing haskell ...'
+${HOME}/haskell/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
 echo 'Testing coq ...'
 ${HOME}/coq/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
@@ -103,7 +119,7 @@ then
 fi
 
 
-echo 'Testing Number ...'
+echo 'Testing number ...'
 ${BITCOIN}/Number/test.sh >> test.log  2>&1
 if [ $? -ne 0 ]
 then
