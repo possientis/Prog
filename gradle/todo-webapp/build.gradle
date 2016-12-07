@@ -1,19 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'jetty'
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
+
 
 repositories {
     mavenCentral()
 }
-
-/*
-jettyRun {
-  dependencies {
-    providedCompile 'org.eclipse.jetty:jetty-http:9.4.0.RC0'
-    providedRuntime 'org.eclipse.jetty:jetty-http:9.4.0.RC0'
-  }
-}
-*/
 
 dependencies {
     providedCompile 'javax.servlet:servlet-api:2.5',

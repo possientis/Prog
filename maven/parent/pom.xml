@@ -12,7 +12,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <hibernate.annotations.version>3.3.0.ga</hibernate.annotations.version>
+    <hsqldb.version>1.8.0.7</hsqldb.version>
   </properties>
+
 
   <modules>
     <module>simple-command</module>
@@ -25,6 +28,7 @@
   <build>
     <pluginManagement>
       <plugins>
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -34,6 +38,7 @@
             <target>1.8</target>
           </configuration>
         </plugin>
+
       </plugins>
     </pluginManagement>
   </build>
@@ -48,7 +53,6 @@
     </dependency>
   </dependencies>
   -->
-
   <dependencyManagement>
     <dependencies>
 
@@ -67,13 +71,15 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-annotations</artifactId>
-        <version>3.3.0.ga</version>
+        <version>${hibernate.annotations.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-commons-annotations</artifactId>
-        <version>3.3.0.ga</version>
+        <version>${hibernate.annotations.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate</artifactId>
@@ -85,6 +91,7 @@
           </exclusion>
         </exclusions>
       </dependency>
+
     </dependencies>
   </dependencyManagement>
 

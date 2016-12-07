@@ -15,16 +15,18 @@
   <packaging>jar</packaging>
   <name>Simple Persistence API</name>
 
+  <!-- defined in parent pom
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  -->
 
   <dependencies>
 
     <dependency>
-      <groupId>org.sonatype.mavenbook.ch07</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>simple-model</artifactId>
-      <version>1.0</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>

@@ -15,9 +15,11 @@
   <packaging>jar</packaging>
   <name>Simple Object Model</name>
 
+  <!-- defined in parent pom
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  -->
 
   <dependencies>
 
