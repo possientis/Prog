@@ -1,4 +1,4 @@
-unit-test definition (optional arguments, lazy via new eval)
+unit-test: lambda
 
 why is new-apply being called at all ... well it is called in new-map...
 
