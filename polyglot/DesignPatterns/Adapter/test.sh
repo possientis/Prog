@@ -50,7 +50,7 @@ rm *.exe;
 
 
 echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac ${UNAME}.scala
+scalac ${UNAME}.scala
 START=$(date +%s%N)
 scala ${UNAME}
 END=$(date +%s%N)
@@ -102,7 +102,7 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 echo '\nThis is Clojure ...'
 clojurec ${LNAME} 1> /dev/null
 START=$(date +%s%N)
-java -cp .:/usr/share/java/clojure-1.6.0.jar ${LNAME}
+java -cp .:/usr/share/java/clojure.jar ${LNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"

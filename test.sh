@@ -86,8 +86,8 @@ then
   exit 1
 fi
 
-echo 'Testing clojure ...'
-${HOME}/clojure/test.sh >> test.log 2>&1
+echo 'Testing php ...'
+${HOME}/php/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
@@ -96,6 +96,14 @@ fi
 
 echo 'Testing scheme ...'
 ${HOME}/scheme/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+echo 'Testing clojure ...'
+${HOME}/clojure/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
