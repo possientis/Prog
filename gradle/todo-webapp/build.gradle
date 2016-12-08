@@ -5,6 +5,9 @@ apply from: 'gretty.plugin'
 
 repositories {
     mavenCentral()
+    maven {
+      url "https://jcenter.bintray.com"
+    }
 }
 
 dependencies {

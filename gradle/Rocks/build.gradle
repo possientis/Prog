@@ -1,5 +1,7 @@
-task startSession << {
-  chant()
+task startSession {
+  doLast {
+    chant()
+  }
 }
 
 def chant() {
@@ -7,8 +9,10 @@ def chant() {
 }
 
 3.times {
-  task "yayGradle$it" << {                  // dynamic task definition
-    println 'Gradle rocks'
+  task "yayGradle$it" {                  // dynamic task definition
+    doLast {
+      println 'Gradle rocks'
+    }
   }
 }
 

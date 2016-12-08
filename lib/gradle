@@ -1,0 +1,4 @@
+#!/bin/sh
+
+env GRADLE_HOME=/home/john/Libs/gradle-3.2.1 \
+	/home/john/Libs/gradle-3.2.1/bin/gradle "$@"

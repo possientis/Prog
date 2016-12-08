@@ -1,3 +1,5 @@
-task helloWorld << {      // << for doLast
-  println 'Hello world!'
+task helloWorld {
+  doLast {
+    println 'Hello world!'
+  }
 }
