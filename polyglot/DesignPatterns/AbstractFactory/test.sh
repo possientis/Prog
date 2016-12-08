@@ -49,27 +49,19 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.exe;
 
 
-echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac ${UNAME}.scala
+echo '\nThis is Haskell ...'
+ghc -v0 ${LNAME}.hs 
 START=$(date +%s%N)
-scala ${UNAME}
+./${LNAME};
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm *.class
+rm ${LNAME} *.hi *.o
 
 
-echo '\nThis is JavaScript ...'
+echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-node ${LNAME}.js
-END=$(date +%s%N)
-DIFF=$(( $END - $START ))
-echo "It took $(( $DIFF / 1000000 )) ms"
-
-
-echo '\nThis is PHP ...'
-START=$(date +%s%N)
-php ${LNAME}.php
+scm -b -f ${LNAME}.scm
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -91,31 +83,39 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
-echo '\nThis is Scheme ...'
+echo '\nThis is JavaScript ...'
 START=$(date +%s%N)
-scm -b -f ${LNAME}.scm
+node ${LNAME}.js
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
-echo '\nThis is Clojure ...'
-clojurec ${LNAME} 1> /dev/null
+echo '\nThis is PHP ...'
 START=$(date +%s%N)
-java -cp .:/usr/share/java/clojure-1.6.0.jar ${LNAME}
+php ${LNAME}.php
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is Scala ...'
+scalac ${UNAME}.scala
+START=$(date +%s%N)
+scala ${UNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
-echo '\nThis is Haskell ...'
-ghc -v0 ${LNAME}.hs 
+echo '\nThis is Clojure ...'
+clojurec ${LNAME} 1> /dev/null
 START=$(date +%s%N)
-./${LNAME};
+java -cp .:/usr/share/java/clojure.jar ${LNAME}
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm ${LNAME} *.hi *.o
+rm *.class
 
 cd ${DIR}

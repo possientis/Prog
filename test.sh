@@ -78,6 +78,22 @@ then
   exit 1
 fi
 
+echo 'Testing haskell ...'
+${HOME}/haskell/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+echo 'Testing scheme ...'
+${HOME}/scheme/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
 echo 'Testing javascript ...'
 ${HOME}/javascript/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
@@ -94,24 +110,9 @@ then
   exit 1
 fi
 
-echo 'Testing scheme ...'
-${HOME}/scheme/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
 
 echo 'Testing clojure ...'
 ${HOME}/clojure/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing haskell ...'
-${HOME}/haskell/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'
@@ -142,44 +143,41 @@ then
   exit 1
 fi
 
+echo 'Testing abstract factory ...'
+${PATTERNS}/AbstractFactory/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+echo 'Testing adapter ...'
+${PATTERNS}/Adapter/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
 
 
-#echo 'Testing AbstractFactory ...'
-#${PATTERNS}/AbstractFactory/test.sh >> test.log 2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Adapter ...'
-#${PATTERNS}/Adapter/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Bridge ...'
-#${PATTERNS}/Bridge/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Builder ...'
-#${PATTERNS}/Builder/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
+echo 'Testing bridge ...'
+${PATTERNS}/Bridge/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing builder ...'
+${PATTERNS}/Builder/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
 #echo 'Testing ChainOfResp ...'
 #${PATTERNS}/ChainOfResp/test.sh >> test.log  2>&1
 #if [ $? -ne 0 ]

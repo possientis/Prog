@@ -49,27 +49,19 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.exe;
 
 
-echo '\nThis is Scala ...'
-scalac ${UNAME}.scala
+echo '\nThis is Haskell ...'
+ghc -v0 ${LNAME}.hs 
 START=$(date +%s%N)
-scala ${UNAME}
+./${LNAME};
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm *.class
+rm ${LNAME} *.hi *.o
 
 
-echo '\nThis is JavaScript ...'
+echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-node ${LNAME}.js
-END=$(date +%s%N)
-DIFF=$(( $END - $START ))
-echo "It took $(( $DIFF / 1000000 )) ms"
-
-
-echo '\nThis is PHP ...'
-START=$(date +%s%N)
-php ${LNAME}.php
+scm -b -f ${LNAME}.scm
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -91,12 +83,30 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
-echo '\nThis is Scheme ...'
+echo '\nThis is JavaScript ...'
 START=$(date +%s%N)
-scm -b -f ${LNAME}.scm
+node ${LNAME}.js
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is PHP ...'
+START=$(date +%s%N)
+php ${LNAME}.php
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+
+
+echo '\nThis is Scala ...'
+scalac ${UNAME}.scala
+START=$(date +%s%N)
+scala ${UNAME}
+END=$(date +%s%N)
+DIFF=$(( $END - $START ))
+echo "It took $(( $DIFF / 1000000 )) ms"
+rm *.class
 
 
 echo '\nThis is Clojure ...'
@@ -108,14 +118,5 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
-
-echo '\nThis is Haskell ...'
-ghc -v0 ${LNAME}.hs 
-START=$(date +%s%N)
-./${LNAME};
-END=$(date +%s%N)
-DIFF=$(( $END - $START ))
-echo "It took $(( $DIFF / 1000000 )) ms"
-rm ${LNAME} *.hi *.o
 
 cd ${DIR}
