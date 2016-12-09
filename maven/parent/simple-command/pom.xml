@@ -60,6 +60,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>hibernate3-maven-plugin</artifactId>
+        <!--- defined in parent pom 
         <version>2.1</version>
         <configuration>
           <components>
@@ -76,6 +77,7 @@
             <version>${hsqldb.version}</version>
           </dependency>
         </dependencies>
+        -->
       </plugin>
 
     </plugins>
@@ -95,25 +97,34 @@
     </dependency>
 
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>simple-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+
+    <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>velocity</artifactId>
-      <!-- version in parent pom
-      <version>1.7</version>
-      -->
+      <!-- version in parent pom -->
     </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring</artifactId>
-      <!-- version in parent pom 
-      <version>2.5.6</version>
-      -->
+      <!-- version in parent pom  -->
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <!-- version in parent pom  -->
     </dependency>
 
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>1.8.0.7</version>
+      <version>${hsqldb.version}</version>
     </dependency>
 
   </dependencies>

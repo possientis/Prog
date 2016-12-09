@@ -21,7 +21,6 @@ then
 
 else
 
-  echo "\nVERSION=${VERSION}"
   echo '\n/usr/bin/scalac version is not supported'
   exit 1
 

@@ -42,6 +42,12 @@
     </dependency>
 
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>simple-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>4.3.4.RELEASE</version>
@@ -78,6 +84,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>hibernate3-maven-plugin</artifactId>
+        <!-- defined in parent pom
         <version>2.0</version>
         <configuration>
           <components>
@@ -91,9 +98,10 @@
           <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>1.8.0.7</version>
+            <version>${hsqldb.version}</version>
           </dependency>
         </dependencies>
+        -->
       </plugin>
 
     </plugins>

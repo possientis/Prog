@@ -1,0 +1,18 @@
+project.ext.prop1 = 'value1'
+ext.prop2 = 'value2'
+
+ext {
+  prop3 = 'value3'
+}
+
+assert prop1 == 'value1'
+
+task printProperties {
+    
+  doLast {
+    println "prop1 = $prop1"
+    println "prop2 = $project.prop2"
+    println "prop3 = $prop3"
+    println "prop4 = $prop4" // defined in gradle.properties without ' '
+  }
+}

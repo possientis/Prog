@@ -44,6 +44,12 @@
       -->
     </dependency>
 
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>persistence-api</artifactId>
+      <!-- version in parent pom -->
+    </dependency>
+
   </dependencies>
 
 </project>
