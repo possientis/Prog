@@ -12,7 +12,7 @@ All these elements can be used by client code. However, in most
 cases client code simply wants to provide an input and retrieve
 the compiled output. We implement a 'Facade' for this system via
 the Compiler class and its 'compile' method. -}
-
+import Prelude hiding (traverse)
 -- a type for source code inputs
 data InputStream = InputStream { filename :: String }
 newInputStream :: String -> IO InputStream

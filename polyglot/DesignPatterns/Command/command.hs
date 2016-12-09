@@ -1,5 +1,5 @@
 -- Command Design Pattern
-
+import Control.Monad
 -- from https://en.wikipedia.org/wiki/Command_pattern 
 -- In object-oriented programming, the command pattern is a behavioral 
 -- design pattern in which an object is used to encapsulate all information 
@@ -77,6 +77,14 @@ instance Monad TV where
   return a = TV (\state -> return (a, state))
   k >>= f  = TV (\state -> do   (x, newState) <- run k state 
                                 run (f x) newState) 
+-- needed to compile
+instance Functor TV where
+  fmap = liftM
+-- needed to compile
+instance Applicative TV where
+  pure = return
+  (<*>) = ap
+
 
 switchOnTV :: TV () 
 switchOnTV  = TV (

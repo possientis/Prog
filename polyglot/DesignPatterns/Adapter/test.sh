@@ -1,11 +1,9 @@
 #!/bin/sh
 
 set -e
-
 UNAME=Adapter
 LNAME=adapter
 HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
-
 DIR=`pwd`
 cd ${HOME}
 
@@ -120,3 +118,4 @@ rm *.class
 
 
 cd ${DIR}
+echo '\nadapter test completed successfully'

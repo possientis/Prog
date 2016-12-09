@@ -1,4 +1,7 @@
 -- Filter design pattern
+
+{-# LANGUAGE MultiParamTypeClasses, TypeSynonymInstances, FlexibleInstances #-}
+
 import Data.Char  -- toUpper
 -- This pattern allows to use a list of objects and perform
 -- a filtering operation on that list so as to obtain a new

@@ -178,69 +178,69 @@ then
 fi
 
 
-#echo 'Testing ChainOfResp ...'
-#${PATTERNS}/ChainOfResp/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Command ...'
-#${PATTERNS}/Command/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Composite ...'
-#${PATTERNS}/Composite/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Decorator ...'
-#${PATTERNS}/Decorator/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Facade ...'
-#${PATTERNS}/Facade/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Factory ...'
-#${PATTERNS}/Factory/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Filter ...'
-#${PATTERNS}/Filter/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
+echo 'Testing chain of responsibility ...'
+${PATTERNS}/ChainOfResp/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing command ...'
+${PATTERNS}/Command/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing composite ...'
+${PATTERNS}/Composite/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing decorator ...'
+${PATTERNS}/Decorator/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing facade ...'
+${PATTERNS}/Facade/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing factory ...'
+${PATTERNS}/Factory/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing filter ...'
+${PATTERNS}/Filter/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
 #echo 'Testing Flyweight ...'
 #${PATTERNS}/Flyweight/test.sh >> test.log  2>&1
 #if [ $? -ne 0 ]
