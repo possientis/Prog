@@ -18,7 +18,7 @@ rm testout.dat
 
 
 cd ${DIR}
-echo '\nassembly tests completed succesfully\n'
+echo '\nassembly tests completed successfully\n'
 
 
 

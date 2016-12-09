@@ -14,7 +14,7 @@ cd ${HOME}
 ./bitcoin/test.sh
 
 cd ${DIR}
-echo '\nAll c++ tests completed succesfully\n'
+echo '\nAll c++ tests completed successfully\n'
 
 
 

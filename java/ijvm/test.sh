@@ -8,7 +8,7 @@ cd ${HOME}
 ./greeters/test.sh
 
 cd ${DIR}
-echo '\nijvm test completed succesfully\n'
+echo '\nijvm test completed successfully\n'
 
 
 

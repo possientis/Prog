@@ -288,5 +288,5 @@ fi
 #
 
 
-echo 'All tests completed succesfully'
+echo 'All tests completed successfully'
 

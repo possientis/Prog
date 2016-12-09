@@ -86,7 +86,7 @@ instance ISet Set where
   -- Definition 2: we define x == y as (x <= y && y <= x)
   --
   -- We do not know anything about == at this stage. One 
-  -- succesful application of structural induction is
+  -- successful application of structural induction is
   -- as follows. We start with a definition:
   --
   -- Definition 3: We define the map E: X -> P(X) by:

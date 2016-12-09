@@ -6,13 +6,12 @@ HOME=/home/john/Prog/javascript/
 cd ${HOME}
 
 node node.js
-echo '\nnodejs test completed succesfully\n'
+echo '\nnodejs test completed successfully\n'
 
-# This test fails when offline
-#./bitcoin/test.sh
+./bitcoin/test.sh
 
 cd ${DIR}
-echo '\nAll javascript tests completed succesfully\n'
+echo '\nAll javascript tests completed successfully\n'
 
 
 

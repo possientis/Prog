@@ -10,5 +10,5 @@ cd ${HOME}
 rm a.out
 
 cd ${DIR}
-echo '\nlibbitcoin test completed succesfully\n'
+echo '\nlibbitcoin test completed successfully\n'
 

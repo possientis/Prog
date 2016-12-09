@@ -341,7 +341,7 @@
           ;; if right child exists, every key to the right has to be larger
           ((and (not (null? (node 'right)))
                 (less? ((find-min-node (node 'right)) 'key) (node 'key))) #f)
-          ;; every test was passed succesfully
+          ;; every test was passed successfully
           (else #t)))
   ;; checks that every child has the appropriate parent pointer
   (define (check-parent-node node)
@@ -354,7 +354,7 @@
           ;; if right child exists, its parent pointer should refer to 'node'
           ((and (not (null? (node 'right)))
                 (not (eq? node ((node 'right) 'parent)))) #f)
-          ;; every test was passed succesfully
+          ;; every test was passed successfully
           (else #t)))
   ;;
   ;; the procedure returns in constant time but return value possibly incorrect

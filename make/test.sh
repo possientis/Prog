@@ -11,7 +11,7 @@ cd ${HOME}
 
 
 cd ${DIR}
-echo '\nAll make tests completed succesfully\n'
+echo '\nAll make tests completed successfully\n'
 
 
 

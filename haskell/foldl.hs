@@ -1,6 +1,6 @@
 import Data.List  -- foldl' efficient foldl 
 
--- just to ensure succesful compilation
+-- just to ensure successful compilation
 someFunc x = x
 anotherFunc x y = y
 

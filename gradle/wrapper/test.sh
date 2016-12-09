@@ -9,7 +9,7 @@ gradle wrapper
 ./clean.sh
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

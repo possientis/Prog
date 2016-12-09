@@ -9,7 +9,7 @@ echo 'starting scheme evaluator unit test ...'
 scm -b -f unit-test.scm
 
 cd ${DIR}
-echo '\nscheme evaluator unit test completed succesfully\n'
+echo '\nscheme evaluator unit test completed successfully\n'
 
 
 

@@ -37,13 +37,13 @@ print("attempting to establish ftp connection to %s" % options.remote_host_addre
 
 ftp = FTP(options.remote_host_address)
 
-print("connection established succesfully")
+print("connection established successfully")
 
 if options.username:
     try:
         print("attempting to login as %s" % options.username)
         ftp.login(options.username, options.password)
-        print("login was succesful")
+        print("login was successful")
     except ftplib.error_perm as e:
         print("Login failed: %s" % e)
         sys.exit(1)
@@ -51,7 +51,7 @@ else:
     try:
         print("attempting to login anonymously")
         ftp.login()
-        print("login was succesful")
+        print("login was successful")
     except ftplib.error_perm as e:
         print("Anonymous login failed: %s" % e)
         sys.exit(1)

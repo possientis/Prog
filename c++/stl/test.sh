@@ -10,7 +10,7 @@ g++ --std=c++14 remove_copy.cpp
 rm a.out
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

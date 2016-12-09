@@ -20,7 +20,7 @@ scm -b -f gate-nand-test.scm    # currently have failures
 
 
 cd ${DIR}
-echo '\ndigital tests completed succesfully\n'
+echo '\ndigital tests completed successfully\n'
 
 
 

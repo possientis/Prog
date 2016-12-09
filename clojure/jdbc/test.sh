@@ -24,7 +24,7 @@ rm clojure/java/*.class
 rm clojure/java/jdbc/*.class
 
 cd ${DIR}
-echo '\njdbc test completed succesfully\n'
+echo '\njdbc test completed successfully\n'
 
 
 

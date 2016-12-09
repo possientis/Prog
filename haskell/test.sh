@@ -10,7 +10,7 @@ ghc -v0 hello.hs
 rm hello hello.o hello.hi
 
 cd ${DIR}
-echo '\nAll haskell tests completed succesfully\n'
+echo '\nAll haskell tests completed successfully\n'
 
 
 

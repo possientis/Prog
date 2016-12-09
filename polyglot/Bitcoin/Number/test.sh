@@ -42,6 +42,6 @@ cd ..
 
 
 cd ${DIR}
-echo '\nAll Number tests completed succesfully\n'
+echo '\nAll Number tests completed successfully\n'
 
 

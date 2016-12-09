@@ -16,7 +16,7 @@ java -cp /usr/share/java/postgresql.jar:. JDBCExample2
 rm *.class
 
 cd ${DIR}
-echo '\njdbc test completed succesfully\n'
+echo '\njdbc test completed successfully\n'
 
 
 

@@ -15,7 +15,7 @@ public class Test_RegTestParams extends Test_TestNet2Params {
 
 
   public void checkRegTestParams(){
-    // only checking constructor can be succesfully called
+    // only checking constructor can be successfully called
     // correctness of built object stems of other public interface validation
     RegTestParams test = new RegTestParams();
     checkNotNull(test, "checkRegTestParams.1");

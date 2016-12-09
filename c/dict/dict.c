@@ -313,7 +313,7 @@ int Dictionary_isConsistent(Dictionary* self){
     }
   }
   if(count != self-> num)     return 0;
-  return 1; // all tests were succesful
+  return 1; // all tests were successful
 } 
 
 int Dictionary_isEmpty(Dictionary* self){

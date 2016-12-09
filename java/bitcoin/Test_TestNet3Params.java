@@ -12,7 +12,7 @@ public class Test_TestNet3Params extends Test_AbstractBitcoinNetParams {
   }
 
   public void checkTestNet3Params(){
-    // only checking constructor can be called succesfully
+    // only checking constructor can be called successfully
     // whether object is correctly built should hopefully 
     // follow from the validation of the class public interface
     TestNet3Params test = new TestNet3Params();

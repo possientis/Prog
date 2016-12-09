@@ -46,7 +46,7 @@
 ; require knowledge of the concrete object data, which is where the virtual
 ; table normally comes in handy.
 ;
-; The following code was succesfully implemented in JavaScript where the object
+; The following code was successfully implemented in JavaScript where the object
 ; model seems to be what we have just described (dictionaries with a __prot__ 
 ; reference leading to a base object) and seemingly no virtual table under
 ; the hood. Why is it working in JavaScript without any notion of virtual 

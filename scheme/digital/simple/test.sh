@@ -10,7 +10,7 @@ scm -b -f bus-test.scm
 scm -b -f wire-test.scm
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

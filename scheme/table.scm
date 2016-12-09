@@ -83,7 +83,7 @@
     (if (not (eq? #f ((a 'get) "bar"))) (print "table: error as bar deleted"))
     ((a 'delete) "bar")     ; should have no impact
     ;; checking inserts after delete
-    ((a 'insert) 'foo 45)   ; checking inserts still succesful after delete
+    ((a 'insert) 'foo 45)   ; checking inserts still successful after delete
     ((a 'insert) "bar" 56)
     ((a 'insert) 30 "test")
     (if (not (= 45 ((a 'get) 'foo))) (print "table: error get foo"))

@@ -11,7 +11,7 @@ cd ${HOME}
 ./bitcoin/test.sh
 
 cd ${DIR}
-echo '\nAll java tests completed succesfully\n'
+echo '\nAll java tests completed successfully\n'
 
 
 

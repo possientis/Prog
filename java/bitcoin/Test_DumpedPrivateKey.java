@@ -207,7 +207,7 @@ public class Test_DumpedPrivateKey extends Test_VersionedChecksummedBytes {
     checkEquals(n, keyTest1.getPrivKey(), "checkGetKey.3");
     */
 
-    // tests are succesful when dealing with uncompressed key
+    // tests are successful when dealing with uncompressed key
     checkEquals(n, keyTest2.getPrivKey(), "checkGetKey.4");
     checkEquals(n, keyMain2.getPrivKey(), "checkGetKey.5");
 

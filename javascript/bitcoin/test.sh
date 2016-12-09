@@ -12,10 +12,10 @@ do
   BITCOINJ_JARS="$d:$BITCOINJ_JARS"
 done
 
-jjs -cp "$BITCOINJ_JARS" demo.js
+jjs -cp "$BITCOINJ_JARS" test.js
 
 cd ${DIR}
-echo '\njjs test completed succesfully\n'
+echo '\njjs test completed successfully\n'
 
 
 

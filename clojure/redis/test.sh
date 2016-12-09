@@ -22,7 +22,7 @@ rm redis/connection_pool/*.class
 rm redis/protocol/*.class
 
 cd ${DIR}
-echo '\nredis test completed succesfully\n'
+echo '\nredis test completed successfully\n'
 
 
 

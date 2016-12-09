@@ -17,7 +17,7 @@ java -cp ${RABBIT_JARS} test_rabbitmq
 rm *.class
 
 cd ${DIR}
-echo '\nrabbitmq test completed succesfully\n'
+echo '\nrabbitmq test completed successfully\n'
 
 
 

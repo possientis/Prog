@@ -69,7 +69,7 @@ public class JDBCExample2 {
     {
       conn = DriverManager.getConnection(url, user, password);
 
-      System.out.println("Connected to PostgreSQL server succesfully ...");
+      System.out.println("Connected to PostgreSQL server successfully ...");
     } 
     catch (SQLException e)
     {
@@ -116,7 +116,7 @@ public class JDBCExample2 {
       System.exit(1);
     }
 
-    System.out.println("Table created succesfully ...");
+    System.out.println("Table created successfully ...");
 
   }
   
@@ -167,7 +167,7 @@ public class JDBCExample2 {
       System.exit(1);
     }
 
-    System.out.println("Records were created succesfully ...");
+    System.out.println("Records were created successfully ...");
 
   }
 
@@ -250,7 +250,7 @@ public class JDBCExample2 {
       System.exit(1);
     }
 
-    System.out.println("record updated succesfully ...");
+    System.out.println("record updated successfully ...");
   }
 
   public static void deleteExample(Connection conn){
@@ -281,7 +281,7 @@ public class JDBCExample2 {
       System.exit(1);
     }
 
-    System.out.println("record deleted succesfully ...");
+    System.out.println("record deleted successfully ...");
   }
 
   public static void deleteTableExample(Connection conn){
@@ -312,7 +312,7 @@ public class JDBCExample2 {
       System.exit(1);
     }
 
-    System.out.println("Table was deleted succesfully ...");
+    System.out.println("Table was deleted successfully ...");
   }
 }
 

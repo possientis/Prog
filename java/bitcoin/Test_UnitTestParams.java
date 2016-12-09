@@ -33,7 +33,7 @@ public class Test_UnitTestParams extends Test_AbstractBitcoinNetParams {
 
 
   public void checkUnitTestParams(){
-    // only checking constructor can be called succesfully
+    // only checking constructor can be called successfully
     // whether object is correctly built should hopefully 
     // follow from the validation of the class public interface
     UnitTestParams test = new UnitTestParams();

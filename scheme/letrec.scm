@@ -17,7 +17,7 @@
 ; (if (= 0 n) 1 (* n (loop (- n 1))))                       , Env = {n:5}  --> this environement has no binding for 'loop', hence failure
 
 ; conclusion : Failure occurs because (lambda (n) (if (= 0 n)) 1 (* n (loop (- n 1)))) is evaluated in an environment which has no binding for 'loop'.
-; so although such evaluation is succesful, due to static scoping, the procedure object created from the evaluation contains an environment without
+; so although such evaluation is successful, due to static scoping, the procedure object created from the evaluation contains an environment without
 ; binding for 'loop'. Hence when this procedure is applied to '5', it needs to evaluate its body in an environment without binding for 'loop'.
 
 #|

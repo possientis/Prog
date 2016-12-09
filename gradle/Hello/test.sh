@@ -8,7 +8,7 @@ cd ${HOME}
 gradle hW
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

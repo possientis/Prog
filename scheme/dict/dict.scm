@@ -207,7 +207,7 @@
                     (loop (+ 1 i)))))
               (if (not (= count num))
               #f      ; counted number of elements does not fit expectation
-              #t))))) ; all sanity checks were succesful
+              #t))))) ; all sanity checks were successful
   ;;
   ;; initializing vector
   (vector-fill! data '())

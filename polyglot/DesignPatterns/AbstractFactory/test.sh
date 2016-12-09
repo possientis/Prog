@@ -1,11 +1,9 @@
 #!/bin/sh
 
 set -e
-
 UNAME=AbstractFactory
 LNAME=abstractFactory
 HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
-
 DIR=`pwd`
 cd ${HOME}
 
@@ -119,3 +117,4 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 cd ${DIR}
+echo '\nabstract factory test completed successfully'

@@ -16,7 +16,7 @@ rm hiccup/util/*.class
 
 
 cd ${DIR}
-echo '\nhiccup test completed succesfully\n'
+echo '\nhiccup test completed successfully\n'
 
 
 

@@ -16,7 +16,7 @@ rm a.out
 
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

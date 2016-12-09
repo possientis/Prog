@@ -11,7 +11,7 @@ cd ${HOME}
 ./jdbc/test.sh
 
 cd ${DIR}
-echo '\nAll clojure tests completed succesfully\n'
+echo '\nAll clojure tests completed successfully\n'
 
 
 

@@ -12,7 +12,7 @@ cd ${HOME}
 ./parent/test.sh
 
 cd ${DIR}
-echo '\nAll maven tests completed succesfully\n'
+echo '\nAll maven tests completed successfully\n'
 
 
 

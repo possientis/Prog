@@ -62,7 +62,7 @@
 (println (deref agent-two))
 (println (deref agent-three))
 (println (deref agent-four))
-(println "x = " x)          ; true on succesful completion it seems
+(println "x = " x)          ; true on successful completion it seems
 
 (defn bad-action [value]
   (Thread/sleep 1000))

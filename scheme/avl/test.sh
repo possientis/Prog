@@ -9,7 +9,7 @@ scm -b -f avl-node-test.scm
 scm -b -f avl-test.scm
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

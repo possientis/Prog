@@ -13,7 +13,7 @@ cd ${HOME}
 ./Lucene/test.sh
 
 cd ${DIR}
-echo '\nAll ant tests completed succesfully\n'
+echo '\nAll ant tests completed successfully\n'
 
 
 

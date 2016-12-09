@@ -42,7 +42,7 @@ rm -f Lib/*.glob
 rm -f Lib/*.vo
  
 cd ${DIR}
-echo '\nAll coq tests completed succesfully\n'
+echo '\nAll coq tests completed successfully\n'
 
 
 

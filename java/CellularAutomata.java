@@ -12,7 +12,7 @@ public class CellularAutomata {
     this.barrier = new CyclicBarrier(count, //  <------ count argument for barrier
         new Runnable() {
           public void run() {
-            mainBoard.commitNewValues();  // <---------------- executed after all threads have succesfully passed barrier
+            mainBoard.commitNewValues();  // <---------------- executed after all threads have successfully passed barrier
           }});
     this.workers = new Worker[count];
     for (int i = 0; i < count; i++)

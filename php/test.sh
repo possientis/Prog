@@ -8,7 +8,7 @@ cd ${HOME}
 php hello.php
 
 cd ${DIR}
-echo '\nAll php tests completed succesfully\n'
+echo '\nAll php tests completed successfully\n'
 
 
 

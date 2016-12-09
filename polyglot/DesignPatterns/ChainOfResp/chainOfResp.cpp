@@ -32,7 +32,7 @@
 // of specific bank notes. So the machine relies on a service for the 
 // delivery of $5 notes, another service for the delivery of $10 notes
 // and so forth. This is a case where the Chain of Responsibility 
-// design pattern can be succesfully applied, allowing the implementation 
+// design pattern can be successfully applied, allowing the implementation 
 // of the ATM machine to forget about all those different services and 
 // the details of how to convert an amount of cash into a set of notes.
 

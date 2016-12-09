@@ -15,7 +15,7 @@ pdflatex -halt-on-error logic
 
 
 cd ${DIR}
-echo '\nlogic test completed succesfully\n'
+echo '\nlogic test completed successfully\n'
 
 
 

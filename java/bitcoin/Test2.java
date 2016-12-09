@@ -70,7 +70,7 @@ public class Test2 {
     keyTest1 = dpkTest1.getKey();
     keyTest2 = dpkTest2.getKey();
 
-    // testing is succesful for uncompressed keys ...
+    // testing is successful for uncompressed keys ...
     checkEquals(secret, keyMain2.getPrivKey(), "test6");
     checkEquals(secret, keyTest2.getPrivKey(), "test7");
 

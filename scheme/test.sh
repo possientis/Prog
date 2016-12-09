@@ -14,7 +14,7 @@ cd ${HOME}
 ./stream/test.sh
 
 cd ${DIR}
-echo '\nAll scheme tests completed succesfully\n'
+echo '\nAll scheme tests completed successfully\n'
 
 
 

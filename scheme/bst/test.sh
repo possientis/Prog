@@ -9,7 +9,7 @@ scm -b -f bst-node-test.scm
 scm -b -f bst-test.scm
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

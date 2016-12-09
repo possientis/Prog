@@ -8,7 +8,7 @@ cd ${HOME}
 scm -b -f stream-test.scm
 
 cd ${DIR}
-echo '\ntest completed succesfully\n'
+echo '\ntest completed successfully\n'
 
 
 

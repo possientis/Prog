@@ -10,7 +10,7 @@ mono Sort.exe
 rm Sort.exe
 
 cd ${DIR}
-echo '\nAll c# tests completed succesfully\n'
+echo '\nAll c# tests completed successfully\n'
 
 
 

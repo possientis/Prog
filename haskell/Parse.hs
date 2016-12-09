@@ -109,7 +109,7 @@ test2 = parse parseByte (L8.pack "")          -- Left "byte offset 0: no more in
 test3 = parse (id <$> parseByte) (L8.pack "") -- Left "byte offset 0: no more input"
 -- we cannot conclude that (id <$>) is the identity on Parse GHC.Word.Word8
 -- we cannot even conclude that they coincide on the particular parser parseByte,
--- but at least we have succesfully checked that the two parsers (id <$> parseByte)
+-- but at least we have successfully checked that the two parsers (id <$> parseByte)
 -- parseByte produce the same output on the empty ByteString.
 
 test4 = L8.pack "foo"

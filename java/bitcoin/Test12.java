@@ -19,7 +19,7 @@ public class Test12
     System.out.println(sig1);   // INgDhkt98Mme9m9AQ+nqtjyvjj ...
     System.out.println(sig2);   // HNgDhkt98Mme9m9AQ+nqtjyvjj ...
 
-    // signatures are verified succesfully
+    // signatures are verified successfully
     try
     {
       k1.verifyMessage(message, sig1);  // compressed case
