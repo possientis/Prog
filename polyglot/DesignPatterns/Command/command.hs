@@ -1,5 +1,6 @@
 -- Command Design Pattern
-import Control.Monad
+import Control.Monad (liftM, ap)
+import Control.Applicative (Applicative(..))
 -- from https://en.wikipedia.org/wiki/Command_pattern 
 -- In object-oriented programming, the command pattern is a behavioral 
 -- design pattern in which an object is used to encapsulate all information 
