@@ -1,5 +1,7 @@
 -- Flyweight Design Pattern
 import qualified Data.Map as Map
+import Control.Monad (liftM, ap)
+import Control.Applicative (Applicative(..))
 
 -- The main idea of the flyweight design pattern is to store objects
 -- in a dictionary so they can be reused, rather than new objects be
@@ -179,6 +181,15 @@ instance Monad SM where
   return x = SM (\manager -> (x, manager))
   m >>= k  = SM (\manager -> let (x, tempManager) = apply m manager 
                              in apply (k x) tempManager)
+-- needed to compile
+instance Functor SM where
+  fmap = liftM
+-- needed to compile
+instance Applicative SM where
+  pure = return
+  (<*>) = ap
+
+
 
 -- returns object corresponding to hash value
 getObject :: Int -> SM (Maybe Set)

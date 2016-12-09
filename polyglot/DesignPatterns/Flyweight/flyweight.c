@@ -428,6 +428,9 @@ Zero* Zero_copy(Zero* self){
 }
 
 // override
+
+void SetManager_deallocate_zero(Zero*); // forward
+
 void Zero_delete(Zero* self){
   assert(self != NULL);
   Set* base = (Set*) self;
@@ -490,6 +493,7 @@ Set* Zero_right(Zero* self){
   return NULL;
 }
 
+void SetManager_deallocate(void); // forward
 
 void Zero_test(){
   char buffer[8];
@@ -544,6 +548,7 @@ Singleton* Singleton_copy(Singleton* self){
   return self;
 }
 
+void SetManager_deallocate_singleton(Singleton*); // forward
 // override
 void Singleton_delete(Singleton* self){
   assert(self != NULL);
@@ -682,6 +687,8 @@ Union* Union_copy(Union* self){
   Set_log("Making copy of Union %lx\n", self);
   return self;
 }
+
+void SetManager_deallocate_union(Union*); // forward
 
 // override
 void Union_delete(Union* self){
@@ -892,14 +899,14 @@ void SetManager_delete(SetManager* self){
 
 SetManager* SetManager_instance(int);
 //
-SetManager_deallocate(){            // final clean up
+void SetManager_deallocate(){            // final clean up
   SetManager_instance(1);           // deallocating set manager
   SetvTable_Zero_instance(1);       // deallocating vTable
   SetvTable_Singleton_instance(1);  // deallocating vTable
   SetvTable_Union_instance(1);      // deallocating vTable
 }
 
-SetManager_deallocate_zero(Zero* obj){
+void SetManager_deallocate_zero(Zero* obj){
   // temporary
   assert(obj != NULL);
   Set* ptr = (Set*) obj; 
@@ -910,7 +917,7 @@ SetManager_deallocate_zero(Zero* obj){
   free(obj);
 }
 
-SetManager_deallocate_singleton(Singleton* obj){
+void SetManager_deallocate_singleton(Singleton* obj){
   // temporary
   assert(obj != NULL);
   Set* ptr = (Set*) obj; 
@@ -923,7 +930,7 @@ SetManager_deallocate_singleton(Singleton* obj){
   free(obj);
 }
 
-SetManager_deallocate_union(Union* obj){
+void SetManager_deallocate_union(Union* obj){
   // temporary
   assert(obj != NULL);
   Set* ptr = (Set*) obj; 

@@ -241,51 +241,49 @@ then
 fi
 
 
-#echo 'Testing Flyweight ...'
-#${PATTERNS}/Flyweight/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Interpreter ...'
-#${PATTERNS}/Interpreter/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Prototype ...'
-#${PATTERNS}/Prototype/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Proxy ...'
-#${PATTERNS}/Proxy/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
-#echo 'Testing Singleton ...'
-#${PATTERNS}/Singleton/test.sh >> test.log  2>&1
-#if [ $? -ne 0 ]
-#then
-#  echo 'TESTING FAILED !!!'
-#  exit 1
-#fi
-#
-#
+echo 'Testing flyweight ...'
+${PATTERNS}/Flyweight/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing interpreter ...'
+${PATTERNS}/Interpreter/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing prototype ...'
+${PATTERNS}/Prototype/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing proxy ...'
+${PATTERNS}/Proxy/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
+
+echo 'Testing Singleton ...'
+${PATTERNS}/Singleton/test.sh >> test.log  2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
 
 
 echo 'All tests completed successfully'

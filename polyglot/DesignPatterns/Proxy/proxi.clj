@@ -1,5 +1,5 @@
 ; Proxy Design Pattern
-(ns proxy (:gen-class))
+(ns proxi (:gen-class)) ; 'proxy' seems to be a clojure keyword
 ; This code exercise is borrowed from Design Patterns in C# - 13 Proxy 
 ; https://www.youtube.com/watch?v=XvbDqLrnkmA
 
