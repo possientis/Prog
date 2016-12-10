@@ -1,6 +1,6 @@
 import hashlib
 
-text = "I am Satoshi Nakamoto"
+text = "I am Satoshi"
 
 # iterate nonce from 0 to 19
 for nonce in range(20):

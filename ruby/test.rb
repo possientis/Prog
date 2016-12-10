@@ -122,4 +122,6 @@ print ((1..5).map do |x| x.to_f end)
 puts
 print (1..5).map(&:to_f)
 
+puts ""
+
 
