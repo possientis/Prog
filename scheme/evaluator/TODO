@@ -1,3 +1,5 @@
+understand failure in test.scm (see how 'new-apply' appears in debug output)
+
 unit-test: lambda
 
 why is new-apply being called at all ... well it is called in new-map...

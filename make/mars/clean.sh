@@ -43,6 +43,14 @@ rm -f mars-1.0 -r
 rm -f *.tar.gz
 rm -f libmar/libmars*
 
+rm -f src/modules/hithere/.deps -r
+rm -f src/modules/hithere/.libs -r
+rm -f src/modules/hithere/*.o
+rm -f src/modules/hithere/*.lo
+rm -f src/modules/hithere/*.la
+rm -f src/modules/hithere/Makefile
+rm -f src/modules/hithere/Makefile.in
+
 tree -a
 
 

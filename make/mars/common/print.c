@@ -15,21 +15,31 @@
 
 static void * print_it(void * data)
 {
-  printf("Hello from %s!\n", (const char*) data);
+  const char** strings = (const char **) data;
+
+  printf("%s from %s!\n", strings[0], strings[1]);
+
   return 0;
 }
 
-int print_routine(const char * name)
+int print_routine(const char * salutation, const char * name)
 {
+  const char * strings[] = {salutation, name};
+
 #if ASYNC_EXEC
+
   printf("pthread version is running\n");
   pthread_t tid;
-  pthread_create(&tid, 0, print_it, (void*)name);
+  pthread_create(&tid, 0, print_it, strings);
   pthread_join(tid, 0);
+
 #else
+
   printf("single thread version is running\n");
-  print_it(name);
+  print_it(strings);
+
 #endif
+
   return 0;
 }
 

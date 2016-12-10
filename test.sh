@@ -277,7 +277,7 @@ then
 fi
 
 
-echo 'Testing Singleton ...'
+echo 'Testing singleton ...'
 ${PATTERNS}/Singleton/test.sh >> test.log  2>&1
 if [ $? -ne 0 ]
 then

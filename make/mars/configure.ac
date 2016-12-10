@@ -16,7 +16,7 @@ AC_PROG_INSTALL
 AM_PROG_CC_C_O
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([stdlib.h dlfcn.h])
 
 # Checks for command-line options
 AC_ARG_ENABLE([async_exec],
@@ -25,6 +25,7 @@ AC_ARG_ENABLE([async_exec],
               [async_exec=${enableval}], [async_exec=yes])
 
 # Checks for libraries.
+
 if test "x${async_exec}" = xyes; then
   have_pthreads=no
   AC_SEARCH_LIBS([pthread_create], [pthread], [have_pthreads=yes])
@@ -49,11 +50,16 @@ fi
 
 # Checks for library functions.
 
+AC_SEARCH_LIBS([dlopen], [dl])
+
+
+
 AC_CONFIG_FILES([Makefile
                  common/Makefile
                  include/Makefile
                  libmar/Makefile
-                 src/Makefile])
+                 src/Makefile
+                 src/modules/hithere/Makefile])
 AC_OUTPUT
 
 echo \
@@ -61,6 +67,7 @@ echo \
  ${PACKAGE_NAME} Version ${PACKAGE_VERSION}
  Prefix: '${prefix}'.
  Compiler: '${CC} ${CFLAGS} ${DEFS} ${CPPFLAGS}'
+ Libraries: '${LIBS}'
  Package features:
  Async Execution: ${async_exec}
  Now type 'make @<:@<target>@:>@'

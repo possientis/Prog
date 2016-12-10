@@ -40,7 +40,7 @@
           (args (map (lambda (x) (lazy-eval x env)) operands)))
       (debug "lazy-eval-application: proc = ")(debug proc)(debug-newline)
       (debug "lazy-eval-application: args = ")(debug args)(debug-newline)
-      (debug "lazy-eval-application: calling (lazy-apply proc args) ...\n")
+      (debug "lazy-eval-application: calling lazy-apply ...\n")
       (lazy-apply proc args))))
 
 ))  ; include guard
