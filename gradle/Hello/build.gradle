@@ -1,5 +1,30 @@
+version = '1.0'
+
 task helloWorld {
+  doFirst {
+    println 'Initializing ...'
+  }
+
   doLast {
-    println 'Hello world!'
+    println "Hello world!: version ${version}"
   }
 }
+
+task other (  // another way to set properties
+  group: 'miscellanious', 
+  description: 'Illustrates how to add actions to tasks') {}
+
+// very useful for adding actions to existing tasks which we did no write
+other.doFirst { println 'other ...' }
+other.doLast  { println 'This works too ...' }
+
+task printVersion {
+  // useful for 'gradle tasks'
+  group = 'versioning'
+  description = 'Prints project version.'
+  
+  doLast {
+    logger.quiet "Version: $version"  // curly {} in ${version} optional
+  }
+}
+

@@ -1,0 +1,24 @@
+version = '1.0'
+
+task first {
+  doLast { println "first" }
+}
+
+task second {
+  doLast { println "second" }
+}
+
+task printVersion(
+  dependsOn: [second, first]) { // execution order not deterministic
+  doLast {
+    logger.quiet "Version: ${version}"
+  }
+}
+
+task third {
+  doLast {
+    println "third"
+  }
+}
+
+third.dependsOn = [printVersion]
