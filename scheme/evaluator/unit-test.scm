@@ -130,7 +130,7 @@
   (test-expression '<= (make-primitive-procedure <=) "variable.8")
   (test-expression '>= (make-primitive-procedure >=) "variable.9")
   (test-expression 'append (make-primitive-procedure append) "variable.10")
-  (test-expression 'apply (make-primitive-procedure new-apply) "variable.11")
+;  (test-expression 'apply (make-primitive-procedure new-apply) "variable.11")
   (test-expression 'boolean? (make-primitive-procedure boolean?) "variable.12")
   (test-expression 'caadr (make-primitive-procedure caadr) "variable.13")
   (test-expression 'caar (make-primitive-procedure caar) "variable.14")
@@ -151,7 +151,7 @@
   (test-expression 'eq? (make-primitive-procedure eq?) "variable.29")
   (test-expression 'equal? (make-primitive-procedure equal?) "variable.30")
   (test-expression 'error (make-primitive-procedure error) "variable.31")
-  (test-expression 'eval (make-primitive-procedure new-eval) "variable.32")
+;  (test-expression 'eval (make-primitive-procedure new-eval) "variable.32")
   (test-expression 'exit (make-primitive-procedure exit) "variable.33")
   (test-expression 'hash (make-primitive-procedure hash) "variable.34")
 

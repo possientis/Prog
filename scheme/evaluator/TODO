@@ -1,3 +1,5 @@
+continue with variable.scm with the aim of removing 'apply and 'eval from primitive.scm
+
 understand failure in test.scm (see how 'new-apply' appears in debug output)
 
 unit-test: lambda
