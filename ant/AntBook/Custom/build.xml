@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+
+<!-- declare include files -->
+
+<!DOCTYPE project [
+  <!ENTITY properties SYSTEM "../properties.xml">
+  <!ENTITY tests_uptodate SYSTEM "../tests_uptodate.xml">
+  <!ENTITY taskdef SYSTEM "../taskdef.xml">
+  <!ENTITY targets SYSTEM "../targets.xml">
+]>
+
+<project name="AntBook - Custom Ant Tasks" default="default">
+
+  <description>
+    Custom Ant task to index text and HTML documents
+  </description>
+
+  <!-- import external XML fragments -->
+  &properties;
+  &taskdef;
+  &targets;
+
+  <!-- For XDoclet usage -->
+  <property name="template.dir" location="templates"/>
+  <property name="taskdef.template" location="${template.dir}/taskdef.xdt"/>
+  <property name="taskdef.properties" value="taskdef.properties"/>
+
+  <!-- ========================================================== -->
+  <!-- Datatype declarations                                      -->
+  <!-- ========================================================== -->
+
+  <path id="compile.classpath">
+    <pathelement location="${lucene.jar}"/>
+    <pathelement location="${jtidy.jar}"/>
+  </path>
+
+  <path id="test.classpath">
+    <path refid="compile.classpath"/>
+    <pathelement location="${junit.jar}"/>
+    <pathelement location="${build.classes.dir}"/>
+    <pathelement location="${test.classes.dir}"/>
+  </path>
+
+  <!-- ========================================================== -->
+  <!-- Public targets                                             -->
+  <!-- ========================================================== -->
+
+  <target name="default" depends="dist" description="default: build verything" />
+  <target name="all" depends="test,dist" description="build and test everything"/>
+  <target name="test" depends="run-tests" description="run tests" />
+  <target name="docs" depends="javadocs" description="generate documentation" />
+  <target name="clean" description="Deletes all previous build artifacts">
+    <delete dir="${build.dir}"/>
+    <delete dir="${build.classes.dir}"/>
+    <delete dir="${dist.dir}"/>
+    <delete dir="${test.dir}"/>
+    <delete dir="${test.classes.dir}"/>
+    <delete dir="${test.data.dir}"/>
+    <delete dir="${test.reports.dir}"/>
+  </target>
+
+  <target name="dist" depends="taskdef,compile" description="Create JAR">
+    <jar destfile="${antbook-ant.jar}"
+      basedir="${build.classes.dir}"/>
+  </target>
+
+  <!-- ========================================================== -->
+  <!-- Private targets                                            -->
+  <!-- ========================================================== -->
+
+  <target name="release-settings" if="release.build">
+    <property name="build.debuglevel" value="lines"/>
+  </target>
+
+  <!-- compile the java sources using the compilation classpath -->
+  <target name="compile" depends="init,release-settings">
+    <property name="build.optimize" value="false"/>
+    <property name="build.debuglevel" value="lines,vars,source"/>
+    <echo>debug level=${build.debuglevel}</echo>
+    <javac destdir="${build.classes.dir}"
+      debug="${build.debug}"
+      includeAntRuntime="yes"
+      srcdir="${src.dir}">
+      <classpath refid="compile.classpath"/>
+      <include name="**/*.java"/>
+    </javac>
+  </target>
+
+  <target name="javadocs" depends="compile">
+    <mkdir dir="${javadoc.dir}"/>
+    <javadoc author="true"
+      destdir="${javadoc.dir}"
+      packagenames="org.example.antbook.*"
+      sourcepath="${src.dir}"
+      use="true"
+      version="true"
+      windowtitle="ant book task"
+      private="true"
+      >
+      <classpath refid="compile.classpath"/>
+    </javadoc>
+  </target>
+
+  <target name="test-compile" depends="compile" unless="tests.uptodate">
+    <javac destdir="${test.classes.dir}"
+      debug="${build.debug}"
+      includeAntRuntime="yes"
+      srcdir="${test.src.dir}">
+      <classpath refid="test.classpath"/>
+    </javac>
+
+    <!-- copy resources to be in classpath -->
+    <copy todir="${test.classes.dir}">
+      <fileset dir="${test.src.dir}" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+  <target name="run-tests" depends="test-compile" unless="tests.uptodate">
+    <junit printsummary="no"
+      errorProperty="test.failed"
+      failureProperty="test.failed"
+      fork="${junit.fork}">
+      <classpath refid="test.classpath"/>
+
+      <sysproperty key="docs.dir" value="${test.classes.dir}"/>
+      <sysproperty key="index.dir" value="${test.dir}/index"/>
+
+      <formatter type="xml"/>
+      <formatter type="brief" usefile="false"/>
+
+      <test name="${testcase}" if="testcase"/>
+      <batchtest todir="${test.data.dir}" unless="testcase">
+        <fileset dir="${test.classes.dir}" includes="**/*Test.class"/>
+      </batchtest>
+    </junit>
+
+    <junitreport todir="${test.data.dir}">
+      <fileset dir="${test.data.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${test.reports.dir}"/>
+    </junitreport>
+
+    <!-- create temporary file indicating these tests failed -->
+    <echo message="last build failed tests" file="${test.last.failed.file}"/>
+    <fail if="test.failed">
+      Unit tests failed. Check log or reports for details
+    </fail>
+
+    <!-- Remove test failed file, as these tests succeeded -->
+    <delete file="${test.last.failed.file}"/>
+  </target>
+
+  <target name="todo" depends="init">
+    <mkdir dir="${build.dir}/todo"/>
+    <document sourcepath="${src.dir}"
+      destdir="${build.dir}/todo"
+      classpathref="xdoclet.classpath">
+      <fileset dir="${src.dir}">
+        <include name="**/*.java" />
+      </fileset>
+      <info header="Todo list"
+        tag="todo"/>
+    </document>
+  </target>
+
+  <target name="taskdef" depends="init" unless="taskdef.uptodate">
+    <echo message="Building taskdef descriptors"/>
+    <property name="xdoclet.classpath.value" refid="xdoclet.classpath"/>
+    <xdoclet sourcepath="${src.dir}"
+      destdir="${build.classes.dir}"
+      classpathref="xdoclet.classpath">
+      <fileset dir="${src.dir}">
+        <include name="**/*.java" />
+      </fileset>
+      <template templateFile="${taskdef.template}"
+                destinationfile="${taskdef.properties}">
+        <configParam name="date" value="${DSTAMP} @ ${TSTAMP}"/>
+      </template>
+    </xdoclet>
+  </target>
+
+  <target name="init">
+    <echo message="Building ${ant.project.name}"/>
+    <tstamp/>
+
+    <!-- create directories used for building -->
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+
+    <!-- create directories used for testing -->
+    <mkdir dir="${test.dir}"/>
+    <mkdir dir="${test.classes.dir}"/>
+    <mkdir dir="${test.data.dir}"/>
+    <mkdir dir="${test.reports.dir}"/>
+
+    <!-- Include common test bypass check condition -->
+    &tests_uptodate;
+
+    <!-- Check taskdef.properties dependency to speed up build -->
+    <uptodate property="taskdef.uptodate"
+      targetfile="${build.classes.dir}/${taskdef.properties}">
+      <srcfiles dir="${src.dir}" includes="**/*.java"/>
+      <srcfiles dir="${template.dir}" includes="taskdef.xdt"/>
+    </uptodate>
+  </target>
+
+</project>
+
+
+
+
+
+
+
+
