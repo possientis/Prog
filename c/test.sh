@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install package gcc
 
 set -e 
 DIR=`pwd`

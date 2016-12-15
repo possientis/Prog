@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install packages make automake libtool
 
 set -e 
 DIR=`pwd`

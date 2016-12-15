@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install packages gcc-multilib and g++-multilib
 
 set -e 
 DIR=`pwd`

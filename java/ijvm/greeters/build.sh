@@ -20,6 +20,8 @@ rm -f build/greeters/org/ -r
 
 echo '#!/bin/sh' > build/run.sh
 
+echo 'set -e' >> build/run.sh 
+
 echo "echo '\n'" >> build/run.sh 
 
 echo 'java Greet greeters Hello Greetings Salutations \

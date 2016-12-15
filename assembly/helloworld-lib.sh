@@ -1,4 +1,7 @@
 #!/bin/sh
+
+# you may need to install packages gcc-multilib and g++-multilib
+
 set -e
 
 # dynamic linking -> executable really finalized at program 
@@ -19,7 +22,6 @@ as --32 -o helloworld-lib.o helloworld-lib.s
 # reference:
 # https://stackoverflow.com/questions/34374591/linking-an-assembler-program-error-undefined-reference-to-printf
 
-# you may need to install packages gcc-multilib et g++-multilib
 #
 ld -melf_i386 -e main -dynamic-linker /lib/ld-linux.so.2 -o helloworld-lib helloworld-lib.o -lc
 #gcc -m32 helloworld-lib.o -o helloworld-lib

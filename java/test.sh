@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install opendjk-8-jdk
 
 set -e 
 DIR=`pwd`

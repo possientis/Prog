@@ -28,4 +28,8 @@
         ((application? exp)     (analyze-application exp))   
         (else  (error "Unknown expression type -- ANALYSE" exp))))
 
+(define (analyze-eval exp . arg)
+  (let ((env (if (null? arg) global-env (car arg))))
+    ((analyze exp) env)))
+
 ))  ; include guard

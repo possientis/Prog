@@ -5,29 +5,42 @@
     (display "loading variable")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+(load "primitive.scm")
+(load "primitive-procedure.scm")
+
 ; testing
 (define (variable? exp) (symbol? exp))
 
+; helper
+(define strict-apply-primitive (make-primitive-procedure strict-apply))
+(define strict-eval-primitive (make-primitive-procedure strict-eval))
+(define analyze-apply-primitive (make-primitive-procedure analyze-apply))
+(define analyze-eval-primitive (make-primitive-procedure analyze-eval))
+(define lazy-apply-primitive (make-primitive-procedure lazy-apply))
+(define lazy-eval-primitive (make-primitive-procedure lazy-eval))
+
 ; strict eval
 (define (strict-eval-variable exp env)
-  (cond ((equal? exp 'apply) (make-primitive-procedure strict-apply))
-        ((equal? exp 'eval) (make-primitive-procedure strict-eval))
+  (cond ((equal? exp 'apply) strict-apply-primitive)
+        ((equal? exp 'eval) strict-eval-primitive)
         (else (let ((value ((env 'lookup) exp)))
                 value)))) ; forcing value here creates failure, why?
 
 ; analyze
 (define (analyze-variable exp) 
-  (lambda (env)
-    (let ((value ((env 'lookup) exp)))
-      value)))  ; do not force when value is a thunk
+  (cond ((equal? exp 'apply) (lambda (env) analyze-apply-primitive))
+        ((equal? exp 'eval) (lambda (env) analyze-eval-primitive))
+        (else (lambda (env) (let ((value ((env 'lookup) exp))) 
+                              value)))))
 
 ; lazy eval
 (define (lazy-eval-variable exp env)
   (debug "lazy-eval-variable: exp = ")(debug exp)(debug-newline)
-  (let ((value ((env 'lookup) exp)))
-    (debug "lazy-eval-variable: value = ")(debug value)(debug-newline)
-    (if (thunk? value)
-      value
-      (make-thunk value '())))) ; creating evaluated thunk from value
+  (cond ((equal? exp 'apply) lazy-apply-primitive)
+        ((equal? exp 'eval) lazy-eval-primitive)
+        (else (let ((value ((env 'lookup) exp)))
+                (debug "lazy-eval-variable: value = ")(debug value)(debug-newline)
+                (if (thunk? value) value
+                  (make-thunk value '())))))) ; evaluated thunk from value
 
 ))  ; include guard
