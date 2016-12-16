@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install mono-mcs
 
 set -e 
 DIR=`pwd`

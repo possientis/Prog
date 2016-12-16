@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install python3-ecdsa
 
 set -e 
 DIR=`pwd`

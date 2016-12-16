@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install ruby
 
 set -e 
 DIR=`pwd`

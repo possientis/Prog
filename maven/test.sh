@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install package maven
 
 set -e 
 DIR=`pwd`

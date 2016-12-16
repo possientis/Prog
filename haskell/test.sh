@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install ghc
 
 set -e 
 DIR=`pwd`

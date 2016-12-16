@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install packages ant junit
 
 set -e 
 DIR=`pwd`

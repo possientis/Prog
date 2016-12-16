@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install scm
 
 set -e 
 DIR=`pwd`

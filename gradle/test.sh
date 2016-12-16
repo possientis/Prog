@@ -1,4 +1,6 @@
 #!/bin/sh
+# need to create symlink to lib/gradle.sh in /usr/local/bin called 'gradle' 
+# need to set up gradle.properties
 
 set -e 
 DIR=`pwd`

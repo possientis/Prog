@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install nodejs (which may not be a debian package)
 
 set -e 
 DIR=`pwd`
