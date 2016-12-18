@@ -1,4 +1,9 @@
 #!/bin/sh
+# need to install: 
+# libmono-system-numerics4.0-cil
+# libghc-hashable-dev
+# libghc-crypto-random-api-dev
+# libghc-monadcryptorandom-dev
 
 set -e
 DIR=`pwd`

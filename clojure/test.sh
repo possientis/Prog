@@ -1,4 +1,5 @@
 #!/bin/sh
+# need to install libcommons-pool-java
 
 set -e 
 DIR=`pwd`

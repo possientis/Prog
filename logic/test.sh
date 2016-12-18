@@ -1,4 +1,6 @@
 #!/bin/sh
+# need to install texlive-latex-base texlive-humanities textlive-pictures
+
 
 set -e 
 DIR=`pwd`
