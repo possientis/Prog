@@ -24,14 +24,14 @@
   (cond ((equal? exp 'apply) strict-apply-primitive)
         ((equal? exp 'eval) strict-eval-primitive)
         (else (let ((value ((env 'lookup) exp)))
-                value)))) ; forcing value here creates failure, why?
+                (force-thunk value)))))
 
 ; analyze
 (define (analyze-variable exp) 
   (cond ((equal? exp 'apply) (lambda (env) analyze-apply-primitive))
         ((equal? exp 'eval) (lambda (env) analyze-eval-primitive))
         (else (lambda (env) (let ((value ((env 'lookup) exp))) 
-                              value)))))
+                              (force-thunk value))))))
 
 ; lazy eval
 (define (lazy-eval-variable exp env)

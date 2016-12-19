@@ -22,7 +22,10 @@
     (set-eval-mode mode)
     ; lazy-eval (testing in all three modes)
     (set-eval-mode 'strict)
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; FAILURE in run
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (set-eval-mode 'lazy)
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (set-eval-mode 'analyze)
@@ -89,7 +92,7 @@
                    (print ": new-eval (strict)"))
     ; new-eval (lazy)
     (set-eval-mode 'lazy)
-    (assert-equals (force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
+    (assert-equals(force-thunk(new-eval exp env))value(print ": new-eval (lazy)"))
     ; new-eval (analyze)
     (set-eval-mode 'analyze)
     (assert-equals (force-thunk (new-eval exp env)) value 
@@ -144,10 +147,13 @@
   (test-expression 'cdddr (make-primitive-procedure cdddr) "variable.22")
   (test-expression 'cddr (make-primitive-procedure cddr) "variable.23")
   (test-expression 'char? (make-primitive-procedure char?) "variable.24")
-  (test-expression 'close-port (make-primitive-procedure close-port) "variable.25")
+  (test-expression 'close-port(make-primitive-procedure close-port) "variable.25")
   (test-expression 'cons (make-primitive-procedure cons) "variable.26")
   (test-expression 'display (make-primitive-procedure new-display) "variable.27")
-  (test-expression 'eof-object?(make-primitive-procedure eof-object?)"variable.28")
+
+  (test-expression 
+    'eof-object? (make-primitive-procedure eof-object?) "variable.28")
+
   (test-expression 'eq? (make-primitive-procedure eq?) "variable.29")
   (test-expression 'equal? (make-primitive-procedure equal?) "variable.30")
   (test-expression 'error (make-primitive-procedure error) "variable.31")
@@ -161,7 +167,10 @@
   (test-expression 'length (make-primitive-procedure length) "variable.36")
   (test-expression 'list (make-primitive-procedure list) "variable.37")
   (test-expression 'load (make-primitive-procedure new-load) "variable.38")
-  (test-expression 'make-vector(make-primitive-procedure make-vector)"variable.39")
+
+  (test-expression 
+    'make-vector (make-primitive-procedure make-vector) "variable.39")
+
   (test-expression 'map (make-primitive-procedure new-map) "variable.40")
   (test-expression 'modulo (make-primitive-procedure modulo) "variable.41")
   (test-expression 'newline (make-primitive-procedure newline) "variable.42")
@@ -194,8 +203,11 @@
   (test-expression 
     'vector-length (make-primitive-procedure vector-length) "variable.58")
 
-  (test-expression 'vector-ref (make-primitive-procedure vector-ref) "variable.59")
-  (test-expression 'vector-set!(make-primitive-procedure vector-set!)"variable.60")
+  (test-expression 
+    'vector-ref (make-primitive-procedure vector-ref) "variable.59")
+
+  (test-expression 
+    'vector-set!(make-primitive-procedure vector-set!)"variable.60")
   ;
   ; quoted
   (display "testing quoted expressions...\n") 

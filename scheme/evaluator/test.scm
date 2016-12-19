@@ -1,13 +1,17 @@
 (load "main.scm")
 
-(set-debug #f)
+(set-debug #t)
 
-(define expr '((lambda arg (apply + arg)) 1 2 3 4 5))
+(define expr '3)
 
+(set-eval-mode 'strict)
 
+(display (lazy-eval '3))(newline)
 
-(define x (analyze-eval expr))
-(display "x = ")(display (force-thunk x))(newline)
+(define x (lazy-eval '3))
+
+(x 'value)
+
 
 
 (exit 0)
