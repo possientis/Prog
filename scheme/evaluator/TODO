@@ -1,4 +1,4 @@
-understand failure in test.scm (recall we are forcing value in variable.scm)
+understand failure in test.scm (failure arising in thunk.scm)
 
 unit-test: lambda
 

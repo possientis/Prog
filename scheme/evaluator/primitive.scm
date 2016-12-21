@@ -88,6 +88,7 @@
         (list 'inexact->exact inexact->exact)
         (list 'length length)
         (list 'list list)
+        (list 'list? list?)
         (list 'load    new-load)
         (list 'make-vector make-vector)
         (list 'map new-map)

@@ -6,7 +6,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 ; testing
-(define (thunk? obj) (tagged-list? obj 'thunk))
+(define (thunk? obj) 
+  (tagged-list? obj 'thunk))
 
 ; making
 (define make-thunk   ; constructor
@@ -71,7 +72,13 @@
 ; (See the module primitive-procedure)
 ; forcing
 (define (force-thunk obj)
-  (if (thunk? obj) ((cadr obj) 'value) obj))
+  (if (thunk? obj) 
+    (begin 
+      (debug "thunk? was successful")(debug-newline)
+      (debug "(cadr obj) = ") (debug (cadr obj))(debug-newline)
+      ((cadr obj) 'value)
+    )
+    obj))
 
 ))  ; include guard
 

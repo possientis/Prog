@@ -21,6 +21,7 @@
 
 ; strict eval
 (define (strict-eval-variable exp env)
+  (debug "strict-eval-variable: exp = ")(debug exp)(debug-newline)
   (cond ((equal? exp 'apply) strict-apply-primitive)
         ((equal? exp 'eval) strict-eval-primitive)
         (else (let ((value ((env 'lookup) exp)))
