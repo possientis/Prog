@@ -10,7 +10,7 @@
 
 (define x (lazy-eval '3))
 
-(list? x)
+;(list? x)
 
 
 

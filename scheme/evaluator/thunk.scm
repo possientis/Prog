@@ -15,6 +15,7 @@
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m)
+        (debug "inside thunk object...")(debug-newline)
         (cond ((eq? m 'value) (value data))
               ((eq? m 'expression) (expression data))
               ((eq? m 'environment) (environment data))

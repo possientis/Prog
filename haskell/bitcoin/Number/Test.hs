@@ -115,20 +115,20 @@ testCryptoRandomGen = do
   
 testRand :: IO ()
 testRand = toIO $ do  -- inside the Rand monad
-  bytes <- rand 32
-  fromIO $ putStrLn $ "rand 32 = " ++ show bytes
+  bytes <- getRandomBytes 32
+  liftIO $ putStrLn $ "getRandomBytes 32 = " ++ show bytes
   num <- random $ NumBits 0 :: Rand Number
-  fromIO $ putStrLn $ "random 0 = " ++ show num
+  liftIO $ putStrLn $ "random 0 = " ++ show num
   num <- random $ NumBits 1 :: Rand Number
-  fromIO $ putStrLn $ "random 1 = " ++ show num
+  liftIO $ putStrLn $ "random 1 = " ++ show num
   num <- random $ NumBits 2 :: Rand Number
-  fromIO $ putStrLn $ "random 2 = " ++ show num
+  liftIO $ putStrLn $ "random 2 = " ++ show num
   num <- random $ NumBits 3 :: Rand Number
-  fromIO $ putStrLn $ "random 3 = " ++ show num
+  liftIO $ putStrLn $ "random 3 = " ++ show num
   num <- random $ NumBits 4 :: Rand Number
-  fromIO $ putStrLn $ "random 4 = " ++ show num
+  liftIO $ putStrLn $ "random 4 = " ++ show num
   num <- random $ NumBits 8 :: Rand Number
-  fromIO $ putStrLn $ "random 8 = " ++ show num
+  liftIO $ putStrLn $ "random 8 = " ++ show num
 
 
 

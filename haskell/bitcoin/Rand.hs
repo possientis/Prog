@@ -8,7 +8,7 @@ module Rand
   , throw
   , try
   , toIO
-  , fromIO
+  , liftIO
   , getRandomBytes
   ) where
 
@@ -17,6 +17,7 @@ import Data.Word
 import Data.ByteString
 import Control.Applicative (Applicative(..))
 import Control.Monad (liftM, ap)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 
 -- Exception Handling
 
@@ -91,6 +92,11 @@ instance Applicative Rand where
   pure = return
   (<*>) = ap
 
+instance MonadIO Rand where
+  liftIO m = state $ \s -> do -- inside the IO monad
+    a <- m                    -- run IO action
+    return $ Right (a, s)     -- no change in state
+
 {-
 instance Functor Rand where
   fmap f m = state $ \s -> do
@@ -120,8 +126,4 @@ getRandomBytes n = state $ \s -> do -- inside the IO monad
     Left e            -> return $ Left $ fromGenError e
     Right (bytes, s') -> return $ Right (bytes, s')
 
-fromIO :: IO a -> Rand a
-fromIO m = state $ \s -> do -- inside the IO monad
-  a <- m                    -- run IO action
-  return $ Right (a, s)     -- no change in state
 

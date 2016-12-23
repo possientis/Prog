@@ -1,14 +1,19 @@
+{-# LANGUAGE BangPatterns #-}
+
 module Bench_Abstract
   ( logMessage 
   , benchmark
   ) where
 
 import Rand
+import Data.Time.Clock (NominalDiffTime)
 import Data.Time.Clock.POSIX
 import Text.Printf
+import Control.Monad (replicateM_, replicateM)
+import Control.Monad.IO.Class
 
 logMessage :: String -> Rand ()
-logMessage s = fromIO $ putStrLn s
+logMessage s = liftIO $ putStrLn s
 
 {- some interesting analysing in Real World Haskell 
  - in relation to measuring code performance, page 548 (588 of 712)
@@ -43,29 +48,73 @@ logMessage s = fromIO $ putStrLn s
  - $ ghc myProg.hs -rtsopts
  -}
 
-benchmark :: Rand a -> String -> Int -> Rand ()
+{-
+time :: MonadIO m => m a -> m NominalDiffTime
+time action = do
+  start <- liftIO getPOSIXTime
+  action
+  end <- liftIO getPOSIXTime
+  let !delta = end - start
+  return delta
+
 benchmark action name iterations = do
-
-    
-  let go n
-        | n <= 0    = return ()
-        | otherwise = do
-          action
-          go (n-1)  :: Rand ()
-
-  start <- fromIO getPOSIXTime
-
-  go iterations
-
-  end <- fromIO getPOSIXTime
+  !overhead <- time $ replicateM_ iterations (return ())
+  !delta <- time $ replicateM_ iterations action
+  let diff = realToFrac (delta - overhead) :: Double
+  liftIO $ printf "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
+    name iterations diff
+-}
   
-  let time = realToFrac $ (end - start) :: Double 
 
-  fromIO $ printf "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
-    name iterations time
+
+
 
 {-
-test :: IO ()
-test = toIO $ do
-  benchmark (logMessage "Hello World") "logMessage" 1000
+benchmark :: MonadIO m => m a -> String -> Int -> m ()
+benchmark action name iterations = do
+  time   <- realToFrac <$> runAction action iterations
+  liftIO $ printf "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
+    name iterations (time :: Double)
+
+runAction :: MonadIO m => m a -> Int -> m NominalDiffTime
+runAction action iterations= sum <$> replicateM iterations action'
+  where
+    action' = do
+      start <- liftIO getPOSIXTime
+      action
+      end <- liftIO getPOSIXTime
+      let !delta = end - start
+      return delta
 -}
+
+{-
+runAction :: MonadIO m => m a -> Int -> m NominalDiffTime
+runAction action iterations
+  | iterations <= 0   = return 0
+  | otherwise         = do
+    start <- liftIO getPOSIXTime
+    action
+    end <- liftIO getPOSIXTime
+    rest <- runAction action (iterations -1)
+    let total = end - start + rest
+    total `seq` return total
+-}
+
+
+-- original post
+
+benchmark action name iterations = do
+  start <- liftIO getPOSIXTime
+  runAction action iterations
+  end <- liftIO getPOSIXTime
+  let time = realToFrac $ (end - start) :: Double 
+  liftIO $ printf "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
+    name iterations time
+
+runAction :: Monad m => m a -> Int -> m ()
+runAction action iterations
+  | iterations <= 0   = return ()
+  | otherwise         = do
+    action
+    runAction action (iterations -1)
+

@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- declare include files -->
-
+<!-- declare #include files -->
 <!DOCTYPE project [
   <!ENTITY properties SYSTEM "../properties.xml">
   <!ENTITY tests_uptodate SYSTEM "../tests_uptodate.xml">
@@ -15,7 +14,7 @@
     Custom Ant task to index text and HTML documents
   </description>
 
-  <!-- import external XML fragments -->
+  <!-- import #include files  -->
   &properties;
   &taskdef;
   &targets;

@@ -13,7 +13,7 @@
         ((boolean? exp) #t)
         ((primitive-procedure? exp) #t)
         ((eval-procedure? exp) #t)
-        ((analyze-procedure? exp))
+        ((analyze-procedure? exp) #t)
         (else #f)))
 
 ; strict eval

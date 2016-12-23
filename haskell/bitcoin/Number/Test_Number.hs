@@ -40,7 +40,7 @@ signedRandom n = do
 testSignedRandom :: IO ()
 testSignedRandom = toIO $ do
   x <- signedRandom (NumBits 256)
-  fromIO $ putStrLn $ show x
+  liftIO $ putStrLn $ show x
 -}
 
 checkZero :: Rand ()
@@ -240,29 +240,10 @@ checkRandom = do
   -- selecting a random byte of this integer and a random bit of this byte
   -- repeating the process 10000 times and counting the number of set bits
 
-  
-  {-
-  let go acc i =
-        if i <= (0 :: Int)                            -- loop terminates
-          then return acc :: Rand Int
-          else do
-            add <- generate
-            go (acc + add) (i - 1)
-   
-  count <- go 0 10000
-  -}
- 
-
-  {-
-  count <- sum `fmap` forM [1..10000] (\i -> generate)
-  -}
-
   count <- multiGen 10000
 
---  fromIO $ putStrLn (show count)
-  
-  --checkCondition (count > 4800) "checkRandom.4"
-  --checkCondition (count < 5200) "checkRandom.5"
+  checkCondition (count > 4800) "checkRandom.4"
+  checkCondition (count < 5200) "checkRandom.5"
 
   return ()
 
@@ -272,7 +253,9 @@ multiGen i
   | otherwise = do
     count <- multiGen (i - 1)
     x     <- singleGen
-    return $ count + x
+    case x of
+      0 -> return $ count
+      1 -> return $ count + 1
 
 
 singleGen :: Rand Int
