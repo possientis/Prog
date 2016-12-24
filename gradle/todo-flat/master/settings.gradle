@@ -1,0 +1,3 @@
+includeFlat 'model'
+includeFlat 'repository'
+includeFlat 'web'
