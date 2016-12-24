@@ -58,7 +58,7 @@ sign_ (Number1 x)
 fromBytes_ :: Sign -> ByteString -> Rand Number1  -- big endian
 fromBytes_  (Sign sig) bytes
   | sig == 1    = return $ Number1 x
-  | sig == (-1) = return  $ Number1 (-x) 
+  | sig == (-1) = return  $ Number1 (-x)
   | sig == 0    = 
       if all (== 0) bytes
         then return $ Number1 0

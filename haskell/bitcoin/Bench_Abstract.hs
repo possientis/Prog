@@ -48,61 +48,8 @@ logMessage s = liftIO $ putStrLn s
  - $ ghc myProg.hs -rtsopts
  -}
 
-{-
-time :: MonadIO m => m a -> m NominalDiffTime
-time action = do
-  start <- liftIO getPOSIXTime
-  action
-  end <- liftIO getPOSIXTime
-  let !delta = end - start
-  return delta
-
-benchmark action name iterations = do
-  !overhead <- time $ replicateM_ iterations (return ())
-  !delta <- time $ replicateM_ iterations action
-  let diff = realToFrac (delta - overhead) :: Double
-  liftIO $ printf "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
-    name iterations diff
--}
-  
-
-
-
-
-{-
+-- This code is probably very naive and does not actually measure performance
 benchmark :: MonadIO m => m a -> String -> Int -> m ()
-benchmark action name iterations = do
-  time   <- realToFrac <$> runAction action iterations
-  liftIO $ printf "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
-    name iterations (time :: Double)
-
-runAction :: MonadIO m => m a -> Int -> m NominalDiffTime
-runAction action iterations= sum <$> replicateM iterations action'
-  where
-    action' = do
-      start <- liftIO getPOSIXTime
-      action
-      end <- liftIO getPOSIXTime
-      let !delta = end - start
-      return delta
--}
-
-{-
-runAction :: MonadIO m => m a -> Int -> m NominalDiffTime
-runAction action iterations
-  | iterations <= 0   = return 0
-  | otherwise         = do
-    start <- liftIO getPOSIXTime
-    action
-    end <- liftIO getPOSIXTime
-    rest <- runAction action (iterations -1)
-    let total = end - start + rest
-    total `seq` return total
--}
-
-
--- original post
-
 benchmark action name iterations = do
   start <- liftIO getPOSIXTime
   runAction action iterations
