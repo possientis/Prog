@@ -77,6 +77,7 @@
     (begin 
       (debug "thunk? was successful")(debug-newline)
       (debug "(cadr obj) = ") (debug (cadr obj))(debug-newline)
+;      (strict-apply (cadr obj) (list 'value))
       ((cadr obj) 'value)
     )
     obj))

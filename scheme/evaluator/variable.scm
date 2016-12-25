@@ -25,6 +25,7 @@
   (cond ((equal? exp 'apply) strict-apply-primitive)
         ((equal? exp 'eval) strict-eval-primitive)
         (else (let ((value ((env 'lookup) exp)))
+;                value))))
                 (force-thunk value)))))
 
 ; analyze

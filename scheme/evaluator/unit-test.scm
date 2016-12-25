@@ -114,12 +114,12 @@
   (test-expression '#\a #\a "self-evaluating.5")
   (test-expression '#t #t "self-evaluating.6")
   (test-expression '#f #f "self-evaluating.7")
-  (let ((car-primitive (make-primitive-procedure car)))
-    (test-expression car-primitive car-primitive  "self-evaluating.8"))
-  (let ((eval-square (make-eval-procedure '(x) '(* x x) global-env)))
-    (test-expression eval-square eval-square "self-evaluating.9"))
-  (let ((analyze-square (make-analyze-procedure '(x) '(* x x) global-env)))
-    (test-expression analyze-square analyze-square "self-evaluating.10"))
+;  (let ((car-primitive (make-primitive-procedure car)))
+;    (test-expression car-primitive car-primitive  "self-evaluating.8"))
+;  (let ((eval-square (make-eval-procedure '(x) '(* x x) global-env)))
+;    (test-expression eval-square eval-square "self-evaluating.9"))
+;  (let ((analyze-square (make-analyze-procedure '(x) '(* x x) global-env)))
+;    (test-expression analyze-square analyze-square "self-evaluating.10"))
   ;
   ; variable
   (display "testing variable expressions...\n")

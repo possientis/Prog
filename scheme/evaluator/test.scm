@@ -2,15 +2,9 @@
 
 (set-debug #t)
 
-(define expr '3)
+(define x list?)
 
-(set-eval-mode 'strict)
-
-(display (lazy-eval '3))(newline)
-
-(define x (lazy-eval '3))
-
-;(list? x)
+(display (x '()))(newline)
 
 
 

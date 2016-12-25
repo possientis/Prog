@@ -1,4 +1,5 @@
-understand failure in test.scm (failure arising in thunk.scm)
+understand unit-test failure (run.scm)
+self-evaluating.scm, unit-test.scm, variable.scm, thunk.scm, test.scm
 
 unit-test: lambda
 
