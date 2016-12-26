@@ -13,6 +13,7 @@ cat /home/john/.gradle/gradle.properties | grep 'org\.gradle\.daemon=true'
 ./Rocks/test.sh
 ./todo-app/test.sh
 ./todo-webapp/test.sh
+./todo-multi/test.sh
 ./props/test.sh
 ./wrapper/test.sh
 ./dependency/test.sh

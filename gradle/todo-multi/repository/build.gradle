@@ -1,0 +1,9 @@
+dependencies {
+  compile project(':model')
+}
+
+task hello(dependsOn: ':web:hello') {
+  doLast {
+    println 'Hello from repository project'
+  }
+}

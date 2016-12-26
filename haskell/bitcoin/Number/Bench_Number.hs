@@ -33,11 +33,8 @@ run = do
 
 benchZero :: IO ()
 benchZero = do 
-{-
   benchmark (return (zero :: Number)) "zero" 1000000
   benchmark (return (0 :: Integer)) "zero*" 1000000
--}
-  benchmark (return ()) "return" 1000000
 
 
 benchOne :: Rand ()
@@ -54,23 +51,62 @@ benchFromBytes = do
     fromBytes (Sign (-1)) bytes :: Rand Number
     ) "fromBytes" 1000000
 
-benchToBytes :: Rand()
-benchToBytes = return () -- TODO
+benchToBytes :: Rand ()
+benchToBytes = do
+  x <- random (NumBits 256) :: Rand Number
+  let y = negate x
+  let n = toInteger x
+  let m = toInteger y 
+  benchmark ( do
+    toBytes x (NumBytes 32)
+    toBytes y (NumBytes 32)
+    ) "toBytes" 1000000
+
+
 
 benchAdd :: Rand()
-benchAdd = return () -- TODO
+benchAdd = do
+  x <- random (NumBits 256) :: Rand Number
+  y <- negate <$> random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ x + y) >> (return $ y + x)) "add" 1000000
+  benchmark ((return $ n + m) >> (return $ m + n)) "add*" 1000000
 
 benchMul :: Rand()
-benchMul = return () -- TODO
+benchMul = do 
+  x <- random (NumBits 256) :: Rand Number
+  y <- negate <$> random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ x * y) >> (return $ y * x)) "mul" 1000000
+  benchmark ((return $ n * m) >> (return $ m * n)) "mul*" 1000000
+
+  
 
 benchShow :: Rand()
-benchShow = return () -- TODO
+benchShow = do
+  x <- random (NumBits 256) :: Rand Number
+  y <- negate <$> random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ show x) >> (return $ show y)) "show (10k)" 10000
+  benchmark ((return $ show n) >> (return $ show m)) "show* (10k)" 10000
+
 
 benchRandom :: Rand()
-benchRandom = return () -- TODO
+benchRandom = benchmark (random (NumBits 256) :: Rand Number) "random (10k)" 10000
 
 benchSign :: Rand()
-benchSign = return () -- TODO
+benchSign = do
+  x <- random (NumBits 256) :: Rand Number
+  y <- negate <$> random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ sign x) >> (return $ sign y)) "sign" 1000000
+  benchmark ((return $ signum x) >> (return $ signum y)) "signum" 1000000
+  benchmark ((return $ signum n) >> (return $ signum m)) "signum*" 1000000
+
 
 benchCompareTo :: Rand()
 benchCompareTo = return () -- TODO
