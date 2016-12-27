@@ -21,27 +21,25 @@
 
 ; strict eval
 (define (strict-eval-variable exp env)
-  (debug "strict-eval-variable: exp = ")(debug exp)(debug-newline)
   (cond ((equal? exp 'apply) strict-apply-primitive)
         ((equal? exp 'eval) strict-eval-primitive)
         (else (let ((value ((env 'lookup) exp)))
-;                value))))
-                (force-thunk value)))))
+                value))))
+;                (force-thunk value))))) 
 
 ; analyze
 (define (analyze-variable exp) 
   (cond ((equal? exp 'apply) (lambda (env) analyze-apply-primitive))
         ((equal? exp 'eval) (lambda (env) analyze-eval-primitive))
         (else (lambda (env) (let ((value ((env 'lookup) exp))) 
-                              (force-thunk value))))))
+                              value)))))
+;                              (force-thunk value))))))
 
 ; lazy eval
 (define (lazy-eval-variable exp env)
-  (debug "lazy-eval-variable: exp = ")(debug exp)(debug-newline)
   (cond ((equal? exp 'apply) lazy-apply-primitive)
         ((equal? exp 'eval) lazy-eval-primitive)
         (else (let ((value ((env 'lookup) exp)))
-                (debug "lazy-eval-variable: value = ")(debug value)(debug-newline)
                 (if (thunk? value) value
                   (make-thunk value '())))))) ; evaluated thunk from value
 

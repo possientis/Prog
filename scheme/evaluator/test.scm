@@ -2,10 +2,8 @@
 
 (set-debug #t)
 
-(define x list?)
+(define x (make-thunk 3 '()))
 
-(display (x '()))(newline)
-
-
+(display "x = ")(display x)(newline)
 
 (exit 0)

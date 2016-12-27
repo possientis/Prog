@@ -1,5 +1,4 @@
-understand unit-test failure (run.scm)
-self-evaluating.scm, unit-test.scm, variable.scm, thunk.scm, test.scm
+write comment about flaw in thunk 
 
 unit-test: lambda
 

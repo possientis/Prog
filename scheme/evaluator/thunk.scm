@@ -73,14 +73,7 @@
 ; (See the module primitive-procedure)
 ; forcing
 (define (force-thunk obj)
-  (if (thunk? obj) 
-    (begin 
-      (debug "thunk? was successful")(debug-newline)
-      (debug "(cadr obj) = ") (debug (cadr obj))(debug-newline)
-;      (strict-apply (cadr obj) (list 'value))
-      ((cadr obj) 'value)
-    )
-    obj))
+  (if (thunk? obj) ((cadr obj) 'value) obj))
 
 ))  ; include guard
 

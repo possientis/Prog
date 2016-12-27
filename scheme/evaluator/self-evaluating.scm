@@ -11,9 +11,6 @@
         ((string? exp) #t)
         ((char? exp)  #t)
         ((boolean? exp) #t)
-;        ((primitive-procedure? exp) #t)  ; should be removed
-;        ((eval-procedure? exp) #t)       ; should be removed
-;        ((analyze-procedure? exp) #t)    ; should be removed
         (else #f)))
 
 ; strict eval

@@ -22,10 +22,7 @@
     (set-eval-mode mode)
     ; lazy-eval (testing in all three modes)
     (set-eval-mode 'strict)
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ; FAILURE in run
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (set-eval-mode 'lazy)
     (assert-equals (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (set-eval-mode 'analyze)
@@ -114,12 +111,6 @@
   (test-expression '#\a #\a "self-evaluating.5")
   (test-expression '#t #t "self-evaluating.6")
   (test-expression '#f #f "self-evaluating.7")
-;  (let ((car-primitive (make-primitive-procedure car)))
-;    (test-expression car-primitive car-primitive  "self-evaluating.8"))
-;  (let ((eval-square (make-eval-procedure '(x) '(* x x) global-env)))
-;    (test-expression eval-square eval-square "self-evaluating.9"))
-;  (let ((analyze-square (make-analyze-procedure '(x) '(* x x) global-env)))
-;    (test-expression analyze-square analyze-square "self-evaluating.10"))
   ;
   ; variable
   (display "testing variable expressions...\n")
@@ -133,7 +124,6 @@
   (test-expression '<= (make-primitive-procedure <=) "variable.8")
   (test-expression '>= (make-primitive-procedure >=) "variable.9")
   (test-expression 'append (make-primitive-procedure append) "variable.10")
-;  (test-expression 'apply (make-primitive-procedure new-apply) "variable.11")
   (test-expression 'boolean? (make-primitive-procedure boolean?) "variable.12")
   (test-expression 'caadr (make-primitive-procedure caadr) "variable.13")
   (test-expression 'caar (make-primitive-procedure caar) "variable.14")
@@ -157,7 +147,6 @@
   (test-expression 'eq? (make-primitive-procedure eq?) "variable.29")
   (test-expression 'equal? (make-primitive-procedure equal?) "variable.30")
   (test-expression 'error (make-primitive-procedure error) "variable.31")
-;  (test-expression 'eval (make-primitive-procedure new-eval) "variable.32")
   (test-expression 'exit (make-primitive-procedure exit) "variable.33")
   (test-expression 'hash (make-primitive-procedure hash) "variable.34")
 
@@ -810,7 +799,7 @@
   (test-expression '((lambda () 45)) 45 "lambda.4")
   (test-expression '((lambda (x) (+ x 7)) 5) 12 "lambda.5")
   (test-expression '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) 11 "lambda.6")
-;  (test-expression '((lambda arg (apply + arg)) 1 2 3 4 5) 15 "lambda.7")
+  (test-expression '((lambda arg (apply + arg)) 1 2 3 4 5) 15 "lambda.7")
 
   (let ((env ((global-env 'extended) '(y) '(5))))
     (test-expression '((lambda (x) (+ x y)) 6) 11 "lambda.xxx" env))
