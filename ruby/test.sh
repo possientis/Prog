@@ -9,7 +9,6 @@ cd ${HOME}
 ruby hello.rb
 jruby hello.rb
 ruby meta.rb
-jruby meta.rb
 ruby class.rb
 jruby class.rb
 
