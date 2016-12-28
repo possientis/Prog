@@ -6,20 +6,11 @@ DIR=`pwd`
 HOME=/home/john/Prog/assembly
 cd ${HOME}
 
-./write-prog.sh
-./read-prog.sh
-./add-year.sh
-rm test.dat
-rm testout.dat
-
-./helloworld-lib.sh
-./run.sh helloworld-nolib
-./printf-example.sh
-./conversion-program.sh
-
+./32bits/test.sh
+./64bits/test.sh
 
 cd ${DIR}
-echo '\nassembly tests completed successfully\n'
+echo '\nAll assembly tests completed successfully\n'
 
 
 
