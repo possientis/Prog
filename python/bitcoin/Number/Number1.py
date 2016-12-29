@@ -79,13 +79,15 @@ def random(numBits):
 
 def fromBytes(sign, bytestring):
     value = int.from_bytes(bytestring, byteorder='big', signed=False)
-    # TODO add some validation
     if sign == 0:
-        return ZERO
+        if value != 0:
+            raise ValueError("inconsistent sign argument")
+        else:
+            return ZERO
     elif sign == 1:
         return Number1(value)
     elif sign == -1:
         return Number1(-value)
-    else: # TODO find appropriate Exception class
-        raise Exception("invalid sign argument")
+    else:
+        raise ValueError("invalid sign argument")
 

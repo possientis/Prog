@@ -801,283 +801,92 @@
   (test-expression '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) 11 "lambda.6")
   (test-expression '((lambda arg (apply + arg)) 1 2 3 4 5) 15 "lambda.7")
 
+  (test-expression 
+    '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3) 6 "lambda.8")
+  (test-expression 
+    '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3 4) 10 "lambda.9")
+  (test-expression 
+    '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3 4 5) 15 "lambda.10")
+
   (let ((env ((global-env 'extended) '(y) '(5))))
-    (test-expression '((lambda (x) (+ x y)) 6) 11 "lambda.xxx" env))
+    (test-expression '((lambda (x) (+ x y)) 6) 11 "lambda.11" env))
 
-  (let ((x (new-eval '(lambda arg (apply + arg)))))
-    ((global-env 'define!) 'f x)
-    (let ((y (new-eval '(f 1 2 3 4 5))))
-      (if (not (equal? y 15)) (display "unit-test: test 8.6.1 failing\n")))
-    ((global-env 'delete!) 'f))
-  (let ((x (new-eval '(lambda (x y z . t) (+ x y z (apply + t))))))
-    ((global-env 'define!) 'f x)
-    (let ((y (new-eval '(f 1 2 3 4 5))))
-      (if (not (equal? y 15)) (display "unit-test: test 8.6.2 failing\n")))
-    (let ((y (new-eval '(f 1 2 3 4))))
-      (if (not (equal? y 10)) (display "unit-test: test 8.6.3 failing\n")))
-    (let ((y (new-eval '(f 1 2 3))))
-      (if (not (equal? y 6)) (display "unit-test: test 8.6.4 failing\n")))
-    ((global-env 'delete!) 'f))
-
-
-  ; analyze
-  (let ((x ((analyze '(lambda () (+ 3 5))) global-env)))
-    ((global-env 'define!) 'f x)
-    (let ((y ((analyze '(f)) global-env)))
-      (if (not (equal? y 8)) (display "unit-test: test 8.7 failing\n")))
-    ((global-env 'delete!) 'f))
-  (let ((x ((analyze '(lambda (x) (* 3 x))) global-env)))
-    ((global-env 'define!) 'f x)
-    (let ((y ((analyze '(f 5)) global-env)))
-      (if (not (equal? y 15)) (display "unit-test: test 8.8 failing\n")))
-    ((global-env 'delete!) 'f))
-  (let ((x ((analyze '(lambda (x y) (+ x y))) global-env)))
-    ((global-env 'define!) 'f x)
-    (let ((y ((analyze '(f 3 4)) global-env)))
-      (if (not (equal? y 7)) (display "unit-test: test 8.9 failing\n")))
-    ((global-env 'delete!) 'f))
-  (let ((plus5 ((analyze '(lambda (x) (+ x y))) ((global-env 'extended)'(y)'(5)))))
-    ((global-env 'define!) 'f plus5)
-    (let ((y ((analyze '(f 6)) global-env)))
-      (if (not (equal? y 11)) (display "unit-test: test 8.10 failing\n")))
-    ((global-env 'delete!) 'f))
-  (let ((x ((analyze '((lambda () 45))) global-env)))
-    (if (not (equal? x 45)) (display "unit-test: test 8.11 failing\n")))
-  (let ((x ((analyze '((lambda (x) (+ x 7)) 5)) global-env)))
-    (if (not (equal? x 12)) (display "unit-test: test 8.12 failing\n")))
-  (let ((x ((analyze '(let ((x 5)) ((lambda (u v) (+ u v)) x 6))) global-env)))
-    (if (not (equal? x 11)) (display "unit-test: test 8.13 failing\n")))
-  (let ((x ((analyze '(lambda arg (apply + arg))) global-env)))
-    ((global-env 'define!) 'f x)
-    (let ((y ((analyze '(f 1 2 3 4 5)) global-env)))
-      (if (not (equal? y 15)) (display "unit-test: test 8.14 failing\n")))
-    ((global-env 'delete!) 'f))
-  (let ((x ((analyze '(lambda (x y z . t) (+ x y z (apply + t)))) global-env)))
-    ((global-env 'define!) 'f x)
-    (let ((y ((analyze '(f 1 2 3 4 5)) global-env)))
-      (if (not (equal? y 15)) (display "unit-test: test 8.15 failing\n")))
-    (let ((y ((analyze '(f 1 2 3 4)) global-env)))
-      (if (not (equal? y 10)) (display "unit-test: test 8.16 failing\n")))
-    (let ((y ((analyze '(f 1 2 3)) global-env)))
-      (if (not (equal? y 6)) (display "unit-test: test 8.17 failing\n")))
-    ((global-env 'delete!) 'f))
-  ;
   ; begin
   (display "testing begin expressions...\n")
-  ;
-  (let ((x (new-eval '(begin 1 2 3 4))))
-    (if (not (equal? x 4)) (display "unit-test: test 9.0 failing\n")))
-  ;
-  (let ((x ((analyze '(begin 1 2 3 4)) global-env)))
-    (if (not (equal? x 4)) (display "unit-test: test 9.1 failing\n")))
-  ;
-  ;cond
-  ;
-  ; eval
-  (let ((x (new-eval '(cond (#t 0) (#f 1) (#f 2) (else 3)))))
-    (if (not (equal? x 0)) (display "unit-test: test 10.0 failing\n")))
-  (let ((x (new-eval '(cond (#f 0) (#t 1) (#f 2) (else 3)))))
-    (if (not (equal? x 1)) (display "unit-test: test 10.1 failing\n")))
-  (let ((x (new-eval '(cond (#f 0) (#f 1) (#t 2) (else 3)))))
-    (if (not (equal? x 2)) (display "unit-test: test 10.2 failing\n")))
-  (let ((x (new-eval '(cond (#f 0) (#f 1) (#f 2) (else 3)))))
-    (if (not (equal? x 3)) (display "unit-test: test 10.3 failing\n")))
-  (let ((x (new-eval '(cond (#f 0) (else 4)))))
-    (if (not (equal? x 4)) (display "unit-test: test 10.4 failing\n")))
-  (let ((x (new-eval '(cond (else 5)))))
-    (if (not (equal? x 5)) (display "unit-test: test 10.5 failing\n")))
+  (test-expression '(begin 1 2 3 4) 4 "begin.1")
 
-  ; analyze
-  (let ((x ((analyze '(cond (#t 0) (#f 1) (#f 2) (else 3))) global-env)))
-    (if (not (equal? x 0)) (display "unit-test: test 10.6 failing\n")))
-  (let ((x ((analyze '(cond (#f 0) (#t 1) (#f 2) (else 3))) global-env)))
-    (if (not (equal? x 1)) (display "unit-test: test 10.7 failing\n")))
-  (let ((x ((analyze '(cond (#f 0) (#f 1) (#t 2) (else 3))) global-env)))
-    (if (not (equal? x 2)) (display "unit-test: test 10.8 failing\n")))
-  (let ((x ((analyze '(cond (#f 0) (#f 1) (#f 2) (else 3))) global-env)))
-    (if (not (equal? x 3)) (display "unit-test: test 10.9 failing\n")))
-  (let ((x ((analyze '(cond (#f 0) (else 4))) global-env)))
-    (if (not (equal? x 4)) (display "unit-test: test 10.10 failing\n")))
-  (let ((x ((analyze '(cond (else 5))) global-env)))
-    (if (not (equal? x 5)) (display "unit-test: test 10.11 failing\n")))
-  ;
+  ; cond
+  (display "testing cond expressions...\n")
+  (test-expression '(cond (#t 0) (#f 1) (#f 2) (else 3)) 0 "cond.1")
+  (test-expression '(cond (#t 0) (#t 1) (#f 2) (else 3)) 0 "cond.2")
+  (test-expression '(cond (#t 0) (#f 1) (#t 2) (else 3)) 0 "cond.3")
+  (test-expression '(cond (#t 0) (#t 1) (#t 2) (else 3)) 0 "cond.4")
+  (test-expression '(cond (#f 0) (#t 1) (#f 2) (else 3)) 1 "cond.5")
+  (test-expression '(cond (#f 0) (#t 1) (#t 2) (else 3)) 1 "cond.6")
+  (test-expression '(cond (#f 0) (#f 1) (#t 2) (else 3)) 2 "cond.7")
+  (test-expression '(cond (#f 0) (#f 1) (#f 2) (else 3)) 3 "cond.8")
+  (test-expression '(cond (#f 0) (else 4)) 4 "cond.9")
+  (test-expression '(cond (else 5)) 5 "cond.10")
+  
   ; or
   (display "testing or expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(or #t nonsense1 nonsense2))))
-    (if (not (equal? x #t)) (display "unit-test: test 11.0 failing\n")))
-  (let ((x (new-eval '(or #f #t nonsense))))
-    (if (not (equal? x #t)) (display "unit-test: test 11.1 failing\n")))
-  (let ((x (new-eval '(or #f #f #t))))
-    (if (not (equal? x #t)) (display "unit-test: test 11.2 failing\n")))
-  (let ((x (new-eval '(or #f #f #f))))
-    (if (not (equal? x #f)) (display "unit-test: test 11.3 failing\n")))
-  (let ((x (new-eval '(or))))
-    (if (not (equal? x #f)) (display "unit-test: test 11.4 failing\n")))
-  (let ((x (new-eval '(or #t))))
-    (if (not (equal? x #t)) (display "unit-test: test 11.5 failing\n")))
-  (let ((x (new-eval '(or #f))))
-    (if (not (equal? x #f)) (display "unit-test: test 11.6 failing\n")))
+  (test-expression '(or #t nonsense1 nonsense2) #t "or.1")
+  (test-expression '(or #f #t nonsense) #t "or.2")
+  (test-expression '(or #f #f #t) #t "or.3")
+  (test-expression '(or #f #f #f) #f "or.4")
+  (test-expression '(or) #f "or.5")
+  (test-expression '(or #t) #t "or.6")
+  (test-expression '(or #f) #f "or.7")
 
-  ; analyze
-  (let ((x ((analyze '(or #t nonsense1 nonsense2)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 11.7 failing\n")))
-  (let ((x ((analyze '(or #f #t nonsense)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 11.8 failing\n")))
-  (let ((x ((analyze '(or #f #f #t)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 11.9 failing\n")))
-  (let ((x ((analyze '(or #f #f #f)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 11.10 failing\n")))
-  (let ((x ((analyze '(or)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 11.11 failing\n")))
-  (let ((x ((analyze '(or #t)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 11.12 failing\n")))
-  (let ((x ((analyze '(or #f)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 11.13 failing\n")))
-  ;
   ; and
   (display "testing and expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(and #f nonsense1 nonsense2))))
-    (if (not (equal? x #f)) (display "unit-test: test 12.0 failing\n")))
-  (let ((x (new-eval '(and #t #f nonsense))))
-    (if (not (equal? x #f)) (display "unit-test: test 12.1 failing\n")))
-  (let ((x (new-eval '(and #t #t #f))))
-    (if (not (equal? x #f)) (display "unit-test: test 12.2 failing\n")))
-  (let ((x (new-eval '(and #t #t #t))))
-    (if (not (equal? x #t)) (display "unit-test: test 12.3 failing\n")))
-  (let ((x (new-eval '(and))))
-    (if (not (equal? x #t)) (display "unit-test: test 12.4 failing\n")))
-  (let ((x (new-eval '(and #t))))
-    (if (not (equal? x #t)) (display "unit-test: test 12.5 failing\n")))
-  (let ((x (new-eval '(and #f))))
-    (if (not (equal? x #f)) (display "unit-test: test 12.6 failing\n")))
+  (test-expression '(and #f nonsense1 nonsense2) #f "and.1")
+  (test-expression '(and #t #f nonsense) #f "and.2")
+  (test-expression '(and #t #t #f) #f "and.3")
+  (test-expression '(and #t #t #t) #t "and.4")
+  (test-expression '(and) #t "and.5")
+  (test-expression '(and #f) #f "and.6")
+  (test-expression '(and #t) #t "and.7")
 
-  ; analyze
-  (let ((x ((analyze '(and #f nonsense1 nonsense2)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 12.7 failing\n")))
-  (let ((x ((analyze '(and #t #f nonsense)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 12.8 failing\n")))
-  (let ((x ((analyze '(and #t #t #f)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 12.9 failing\n")))
-  (let ((x ((analyze '(and #t #t #t)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 12.10 failing\n")))
-  (let ((x ((analyze '(and)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 12.11 failing\n")))
-  (let ((x ((analyze '(and #t)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 12.12 failing\n")))
-  (let ((x ((analyze '(and #f)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 12.13 failing\n")))
-  ;
   ; let
   (display "testing let expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(let ((x 5)) (+ x 7)))))
-    (if (not (equal? x 12)) (display "unit-test: test 13.0 failing\n")))
-  (let ((x (new-eval '(let ((x 5) (y 3)) (+ x y)))))
-    (if (not (equal? x 8)) (display "unit-test: test 13.1 failing\n")))
-  (let ((x (new-eval '(let ((x 5)(y 6)) (let ((z 7)) (+ x y z))))))
-    (if (not (equal? x 18)) (display "unit-test: test 13.2 failing\n")))
-  (let ((x (new-eval '(let ((x 5)(y 6)) (let ((z 7) (x 10)) (+ x y z))))))
-    (if (not (equal? x 23)) (display "unit-test: test 13.3 failing\n")))
-  (let ((x (new-eval '(let ((x 1)) (let ((y 2)) (let ((z 3)) (+ x y z)))))))
-    (if (not (equal? x 6)) (display "unit-test: test 13.4 failing\n")))
+  (test-expression '(let ((x 5)) (+ x 7)) 12 "let.1")
+  (test-expression '(let ((x 5) (y 3)) (+ x y)) 8 "let.2")
+  (test-expression '(let ((x 5) (y 6)) (let ((z 7)) (+ x y z))) 18 "let.3")
+  (test-expression '(let ((x 5) (y 6)) (let ((z 7) (x 10)) (+ x y z))) 23 "let.4")
+  (test-expression '(let ((x 1)) (let ((y 2)) (let ((z 3)) (+ x y z)))) 6 "let.5")
 
-  ; analyze
-  (let ((x ((analyze '(let ((x 5)) (+ x 7))) global-env)))
-    (if (not (equal? x 12)) (display "unit-test: test 13.5 failing\n")))
-  (let ((x ((analyze '(let ((x 5) (y 3)) (+ x y))) global-env)))
-    (if (not (equal? x 8)) (display "unit-test: test 13.6 failing\n")))
-  (let ((x ((analyze '(let ((x 5)(y 6)) (let ((z 7)) (+ x y z)))) global-env)))
-    (if (not (equal? x 18)) (display "unit-test: test 13.7 failing\n")))
-  (let ((x ((analyze '(let ((x 5)(y 6)) (let ((z 7) (x 10)) (+ x y z)))) 
-            global-env)))
-    (if (not (equal? x 23)) (display "unit-test: test 13.8 failing\n")))
-  (let ((x ((analyze '(let ((x 1)) (let ((y 2)) (let ((z 3)) (+ x y z))))) 
-            global-env)))
-    (if (not (equal? x 6)) (display "unit-test: test 13.9 failing\n")))
-  ;
   ; named-let
   (display "testing named let expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(let loop ((i 5) (acc 1)) 
-                     (if (equal? 1 i) acc (loop (- i 1) (* i acc)))))))
-    (if (not (equal? x 120)) (display "unit-test: unit 14.0 failing\n")))
+  (test-expression
+    '(let loop ((i 5) (acc 1))
+       (if (equal? 1 i) acc (loop (- i 1) (* i acc)))) 120 "named-let.1")
 
-  ; analyze
-  (let ((x ((analyze '(let loop ((i 5) (acc 1)) 
-                     (if (equal? 1 i) acc (loop (- i 1) (* i acc))))) global-env)))
-    (if (not (equal? x 120)) (display "unit-test: unit 14.1 failing\n")))
-  ;
   ; let*
   (display "testing let* expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(let* ((x 5)(y (+ x 2))) (+ x y)))))
-    (if (not (equal? x 12)) (display "unit-test: test 15.0 failing\n")))
+  (test-expression '(let* ((x 5) (y (+ x 2))) (+ x y)) 12 "let*.1")
 
-  ; analyze
-  (let ((x ((analyze '(let* ((x 5)(y (+ x 2))) (+ x y))) global-env)))
-    (if (not (equal? x 12)) (display "unit-test: test 15.1 failing\n")))
-  ;
+
   ; letrec
   (display "testing recursive let expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(letrec 
-                    ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
-                    (loop 5)))))
-    (if (not (equal? x 120)) (display "unit-test: test 15.2 failing\n")))
-
-  ; analyze
-  (let ((x ((analyze '(letrec 
-                     ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
-                     (loop 5))) global-env)))
-    (if (not (equal? x 120)) (display "unit-test: test 15.3 failing\n")))
-  ;
+  (test-expression
+    '(letrec
+       ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
+       (loop 5)) 120 "letrec.1")
+ 
   ; application
   (display "testing application expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(+))))
-    (if (not (equal? x 0)) (display "unit-test: test 16.0 failing\n")))
-  (let ((x (new-eval '(+ 2))))
-    (if (not (equal? x 2)) (display "unit-test: test 16.1 failing\n")))
-  (let ((x (new-eval '(+ 2 4))))
-    (if (not (equal? x 6)) (display "unit-test: test 16.2 failing\n")))
-  (let ((x (new-eval '(car '(1 2)))))
-    (if (not (equal? x 1)) (display "unit-test: test 16.3 failing\n")))
-  (let ((x (new-eval '(cdr '(1 2)))))
-    (if (not (equal? x (list 2))) (display "unit-test: test 16.4 failing\n")))
-  (let ((x (new-eval '(cons 2 '()))))
-    (if (not (equal? x (list 2))) (display "unit-test: test 16.5 failing\n")))
-  (let ((x (new-eval '(cons 5 (cons 2 '())))))
-    (if (not (equal? x (list 5 2))) (display "unit-test: test 16.6 failing\n")))
-  (let ((x (new-eval '(eval (+ 1 2)))))
-    (if (not (equal? x 3)) (display "unit-test:test 16.7 failing\n")))
+  (test-expression '(+) 0 "application.1")
+  (test-expression '(+ 2) 2 "application.2")
+  (test-expression '(+ 2 4) 6 "application.3")
+  (test-expression '(car '(1 2)) 1 "application.4")
+  (test-expression '(cdr '(1 2)) (list 2) "application.5")
+  (test-expression '(cons 2 '()) (list 2) "application.6")
+  (test-expression '(cons 5 (cons 2 '())) (list 5 2) "application.7")
+  (test-expression '(eval (+ 1 2)) 3 "application.8")
+  (test-expression '(apply + '(1 2)) 3 "application.9")
 
-  ; analyze
-  (let ((x ((analyze '(+)) global-env)))
-    (if (not (equal? x 0)) (display "unit-test: test 16.8 failing\n")))
-  (let ((x ((analyze '(+ 2)) global-env)))
-    (if (not (equal? x 2)) (display "unit-test: test 16.9 failing\n")))
-  (let ((x ((analyze '(+ 2 4)) global-env)))
-    (if (not (equal? x 6)) (display "unit-test: test 16.10 failing\n")))
-  (let ((x ((analyze '(car '(1 2))) global-env)))
-    (if (not (equal? x 1)) (display "unit-test: test 16.11 failing\n")))
-  (let ((x ((analyze '(cdr '(1 2))) global-env)))
-    (if (not (equal? x (list 2))) (display "unit-test: test 16.12 failing\n")))
-  (let ((x ((analyze '(cons 2 '())) global-env)))
-    (if (not (equal? x (list 2))) (display "unit-test: test 16.13 failing\n")))
-  (let ((x ((analyze '(cons 5 (cons 2 '()))) global-env)))
-    (if (not (equal? x (list 5 2))) (display "unit-test: test 16.14 failing\n")))
-  (let ((x ((analyze '(eval (+ 1 2))) global-env)))
-    (if (not (equal? x 3)) (display "unit-test:test 16.15 failing\n")))
-  ;
+
   ; defined?
   (display "testing defined? expressions...\n")
   ;

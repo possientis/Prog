@@ -12,6 +12,8 @@ rm -f c/a.out
 rm -f c/*.o
 rm -f c/tlpi/a.out
 rm -f c/tlpi/*.o
+rm -f c/hacking/a.out
+rm -f c/hacking/*.o
 rm -f c++/a.out
 rm -f c++/*.o
 rm -f c++/bitcoin/a.out

@@ -1,3 +1,7 @@
+
+-- This code is running fine, but unlikely to be measuring the performance
+-- of anything. The lesson is: writing bench-marking code in haskell is hard.
+
 import Bench_Abstract
 import Rand
 import Number
@@ -109,22 +113,61 @@ benchSign = do
 
 
 benchCompareTo :: Rand()
-benchCompareTo = return () -- TODO
+benchCompareTo = do
+  x <- random (NumBits 256) :: Rand Number
+  y <- random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ x <= y) >> (return $ y <= x)) "<=" 1000000
+  benchmark ((return $ x < y) >> (return $ y < x)) "<" 1000000
+  benchmark ((return $ n <= m) >> (return $ m <= n)) "<=*" 1000000
+  benchmark ((return $ n < m) >> (return $ m < n)) "<*" 1000000
+
+
 
 benchHash :: Rand()
-benchHash = return () -- TODO
+benchHash = do
+  x <- random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  benchmark (return $ hash x) "hash" 1000000
+  benchmark (return $ hash n) "hash*" 1000000
+ 
 
 benchNumberEquals :: Rand()
-benchNumberEquals = return () -- TODO
+benchNumberEquals = do
+  x <- random (NumBits 256) :: Rand Number
+  y <- random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ x == y) >> (return $ y == x)) "==" 1000000
+  benchmark ((return $ n == m) >> (return $ m == n)) "==*" 1000000
+
+
 
 benchFromInteger :: Rand()
-benchFromInteger = return () -- TODO
+benchFromInteger = do
+  x <- random (NumBits 256) :: Rand Number
+  let y = negate x
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ fromInteger n) >> (return $ fromInteger m)) 
+            "fromInteger" 1000000
 
 benchToInteger :: Rand()
-benchToInteger = return () -- TODO
+benchToInteger = do
+  x <- random (NumBits 256) :: Rand Number
+  let y = negate x
+  benchmark ((return $ toInteger x) >> (return $ toInteger y))
+            "toInteger" 1000000
+
 
 benchBitLength :: Rand()
-benchBitLength = return () -- TODO
+benchBitLength = do
+  x <- random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  benchmark (return $ bitLength x) "bitLength" 1000000
+
+
 
 
 

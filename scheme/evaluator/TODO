@@ -1,6 +1,4 @@
-write comment about flaw in thunk 
-
-unit-test: lambda
+unit-test: defined?
 
 why is new-apply being called at all ... well it is called in new-map...
 

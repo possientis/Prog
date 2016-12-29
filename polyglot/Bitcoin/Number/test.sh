@@ -13,6 +13,7 @@ cd ${HOME}
 ./java/test.sh
 ./c#/test.sh
 ./haskell/test.sh
+./python/test.sh
 
 cd ${DIR}
 echo '\nAll Number tests completed successfully\n'

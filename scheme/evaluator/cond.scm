@@ -29,7 +29,7 @@
 
 ; lazy eval
 (define (lazy-eval-cond exp env)
-  (lazy-eval (cond-if exp) env))
+  (lazy-eval (cond->if exp) env))
 
 
 (define (cond->if exp) 
