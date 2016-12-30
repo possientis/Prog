@@ -8,6 +8,8 @@ cd ${HOME}
 ./java/bench.sh
 ./c#/bench.sh
 ./haskell/bench.sh
+./python/bench.sh
+
 
 cd ${DIR}
 

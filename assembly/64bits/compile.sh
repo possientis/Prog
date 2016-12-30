@@ -11,5 +11,3 @@
 
 yasm -f elf64 -g dwarf2 -l $1.lst $1.asm 
 
-ld -o $1 $1.o
-

@@ -7,7 +7,7 @@ class Test_Abstract(object):
     randGen = random.SystemRandom()
 
     def run():
-        raise NotImplementedError
+        raise NotImplementedError("Test_Abstract: run is abstract")
 
 
 def getRandomBytes(numBytes):

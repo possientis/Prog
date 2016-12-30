@@ -19,7 +19,7 @@ rm testout.dat
 
 
 cd ${DIR}
-echo '\ntest completed successfully\n'
+echo '\n32 bits tests completed successfully\n'
 
 
 

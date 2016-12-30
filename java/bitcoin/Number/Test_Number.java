@@ -389,7 +389,7 @@ public class Test_Number extends Test_Abstract
     checkEquals(x.compareTo(y), 0, "checkCompareTo.11");
     checkEquals(y.compareTo(x), 0, "checkCompareTo.12");
 
-    // 0 <= 1
+    // 0 < 1
     checkEquals(Number.ZERO.compareTo(Number.ONE), -1, "checkCompareTo.13");
     checkEquals(Number.ONE.compareTo(Number.ZERO), 1, "checkCompareTo.14");
   }
@@ -470,7 +470,7 @@ public class Test_Number extends Test_Abstract
     m = BigInteger.ONE;
     checkEquals(n, m, "checkToBigInteger.2");
 
-    // random
+    // signed random
     Number x = _signedRandom(256);
     n = x.toBigInteger();
     m = new BigInteger(x.signum(), x.toBytes(32));
