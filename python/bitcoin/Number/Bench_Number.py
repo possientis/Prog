@@ -18,7 +18,7 @@ class Bench_Number(Bench_Abstract):
         if runAll:
             benchZERO();
             benchONE();
-            benchSignum();
+            benchSign();
             benchCompareTo();
             benchHashCode();
             benchNumberEquals();  
@@ -52,16 +52,84 @@ def benchFromBytes():
         int.from_bytes(bs, byteorder='big', signed=False)
         -int.from_bytes(bs, byteorder='big', signed=False)
 
-    benchmark(test1, "fromBytes (10k)", 10000)
-    benchmark(test2, "fromBytes* (10k)", 10000)
+    benchmark(test1, "fromBytes (10k)", 10000)  # 1 million too slow
+    benchmark(test2, "fromBytes* (10k)", 10000) # 1 million too slow
 
 
-def benchToBytes(): pass # TODO
-def benchAdd(): pass # TODO
-def benchMul(): pass # TODO
-def benchToString(): pass # TODO
-def benchRandom(): pass # TODO
-def benchSignum(): pass # TODO
+def benchToBytes():
+    x = Number.random(256)
+    y = -x
+    n = int(x)
+    m = int(y)
+    def test1():
+        x.toBytes(32)
+        y.toBytes(32)
+    def test2():
+        n.to_bytes(32, byteorder='big', signed=False)
+        m.to_bytes(33, byteorder='big', signed=True)
+    benchmark(test1, "toBytes (10k)", 10000)    # 1 million too slow
+    benchmark(test2, "toBytes* (10k)", 10000)   # 1 million too slow
+
+def benchAdd():
+    x = Number.random(256)
+    y = -Number.random(256)
+    n = int(x)
+    m = int(y)
+    def test1():
+        x + y
+        y + x
+    def test2():
+        n + m
+        m + n
+    benchmark(test1, "add (10k)", 10000)
+    benchmark(test2, "add* (10k)", 10000)
+
+def benchMul():
+    x = Number.random(256)
+    y = -Number.random(256)
+    n = int(x)
+    m = int(y)
+    def test1():
+        x * y
+        y * x
+    def test2():
+        n * m
+        m * n
+    benchmark(test1, "mul (10k)", 10000)
+    benchmark(test2, "mul* (10k)", 10000)
+
+
+def benchToString():
+    x = Number.random(256)
+    y = -x
+    n = int(x)
+    m = int(y)
+    def test1():
+        str(x)
+        str(y)
+    def test2():
+        str(n)
+        str(m)
+    benchmark(test1, "str (10k)", 10000)
+    benchmark(test2, "str* (10k)", 10000)
+
+
+
+def benchRandom():
+    benchmark(lambda : Number.random(256), "random (10k)", 10000)
+
+
+def benchSign():
+    x = Number.random(256)
+    y = -x
+    n = int(x)
+    m = int(y)
+    def test1():
+        x.sign()
+        y.sign()
+    benchmark(test1, "sign", 1000000)
+
+
 def benchCompareTo(): pass # TODO
 def benchHashCode(): pass # TODO
 def benchNumberEquals(): pass # TODO

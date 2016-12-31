@@ -8,7 +8,7 @@
 (define (new-load filename)
   (let ((code (filename->code filename)))
     (new-eval code)
-    (string-append " " filename " loaded")))
-
+    (string-append " " filename " loaded")
+    unspecified-value))
 
 ))  ; include guard

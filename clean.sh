@@ -57,6 +57,7 @@ rm -f coq/Lib/*.glob
 rm -f coq/Lib/*.vo
 rm -f coq/Lib/.*.aux
 rm -fr python/__pycache__
+rm -fr python/bitcoin/Number/__pycache__
 git status
 
 

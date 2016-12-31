@@ -889,34 +889,14 @@
 
   ; defined?
   (display "testing defined? expressions...\n")
-  ;
-  ; eval
-  (let ((x (new-eval '(defined? +))))
-    (if (not (equal? x #t)) (display "unit-test: test 17.0 failing\n")))
-  (let ((x (new-eval '(defined? car))))
-    (if (not (equal? x #t)) (display "unit-test: test 17.1 failing\n")))
-  (let ((x (new-eval '(defined? cdr))))
-    (if (not (equal? x #t)) (display "unit-test: test 17.2 failing\n")))
-  (let ((x (new-eval '(defined? some-random-name))))
-    (if (not (equal? x #f)) (display "unit-test: test 17.3 failing\n")))
-  (let ((x (new-eval '(defined? (this is not even a name)))))
-    (if (not (equal? x #f)) (display "unit-test: test 17.4 failing\n")))
-
-  ; analyze
-  (let ((x ((analyze '(defined? +)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 17.5 failing\n")))
-  (let ((x ((analyze '(defined? car)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 17.6 failing\n")))
-  (let ((x ((analyze '(defined? cdr)) global-env)))
-    (if (not (equal? x #t)) (display "unit-test: test 17.7 failing\n")))
-  (let ((x ((analyze '(defined? some-random-name)) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 17.8 failing\n")))
-  (let ((x ((analyze '(defined? (this is not even a name))) global-env)))
-    (if (not (equal? x #f)) (display "unit-test: test 17.9 failing\n")))
+  (test-expression '(defined? +) #t "defined?.1")
+  (test-expression '(defined? car) #t "defined?.2")
+  (test-expression '(defined? cdr) #t "defined?.3")
+  (test-expression '(defined? some-random-name) #f "defined?.4")
+  (test-expression '(defined? (this is not even a name)) #f "defined?.5")
 
   ; thunk
   (display "testing thunk ...\n")
-
   (let ((thunk (make-thunk '(+ 1 1) global-env)))
     (assert-equals (thunk? thunk) #t "thunk.1")
     (assert-equals (thunk-expression thunk) '(+ 1 1) "thunk.2")
@@ -933,24 +913,19 @@
     (assert-equals (thunk? #\a) #f "thunk.13")
     (assert-equals (thunk? "a") #f "thunk.14")
     (assert-equals (thunk? #t) #f "thunk.15")
-    (assert-equals (thunk? #f) #f "thunk.16")
-  )
+    (assert-equals (thunk? #f) #f "thunk.16"))
  
   ; load
   (display "testing loading files ...\n") 
+  (let ((mode (get-eval-mode)))
+    (set! global-env (setup-environment)) 
+    (set-eval-mode 'strict)
+    (assert-equals (new-eval '(load "test-files.scm")) unspecified-value "load.1")
+    (set-eval-mode mode)
 
-  ; eval
-  (let ((s (new-eval '(load "test-files.scm"))))
-    (if (not (equal? s " test-files.scm loaded"))
-      (display "unit-test: test 18.0 failing\n")))
+    )
 
-  (set! global-env (setup-environment)) ; clears include guards
 
-  ; analyze
-  (let ((s (analyze '(load "test-files.scm"))))
-    (let ((t (s global-env)))
-      (if (not (equal? t " test-files.scm loaded"))
-        (display "unit-test: test 18.1 failing\n"))))
 
   (display "unit-test: test complete\n"))
 
