@@ -23,7 +23,7 @@ class Bench_Number(Bench_Abstract):
             benchHashCode();
             benchNumberEquals();  
             benchFromBigInteger();
-            benchToBigInteger();
+            benchToInt();
             benchBitLength();
  
 
@@ -130,12 +130,64 @@ def benchSign():
     benchmark(test1, "sign", 1000000)
 
 
-def benchCompareTo(): pass # TODO
-def benchHashCode(): pass # TODO
-def benchNumberEquals(): pass # TODO
-def benchFromBigInteger(): pass # TODO
-def benchToBigInteger(): pass # TODO
-def benchBitLength(): pass # TODO
+def benchCompareTo():
+    x = Number.random(256)
+    y = Number.random(256)
+    n = int(x)
+    m = int(y)
+    def test1():
+        x < y
+        y < x
+    def test2():
+        n < m
+        m < n
+    benchmark(test1, "compareTo", 1000000)
+    benchmark(test2, "compareTo*", 1000000)
+
+def benchHashCode():
+    x = Number.random(256)
+    n = int(x)
+    benchmark(lambda : hash(x), "hash", 1000000)
+    benchmark(lambda : hash(n), "hash*", 1000000)
+
+def benchNumberEquals():
+    x = Number.random(256)
+    y = Number.random(256)
+    n = int(x)
+    m = int(y)
+    def test1():
+        x == y
+        y == x
+    def test2():
+        n == m
+        m == n
+    benchmark(test1, "equals", 1000000)
+    benchmark(test2, "equals*", 1000000)
+
+
+def benchFromBigInteger():
+    x = Number.random(256)
+    n = int(x)
+    m = -n
+    def test1():
+        Number.fromInt(n)
+        Number.fromInt(m)
+    benchmark(test1, "fromInt", 1000000)
+
+def benchToInt():
+    x = Number.random(256)
+    y = -x
+    def test1():
+        int(x)
+        int(y)
+    benchmark(test1, "toInt", 1000000)
+
+def benchBitLength():
+    x = Number.random(256)
+    n = int(x)
+    benchmark(lambda : x.bitLength(), "bitLength", 1000000)
+    benchmark(lambda : n.bit_length(), "bitLength*", 1000000)
+
 
 bench = Bench_Number()
 bench.run()

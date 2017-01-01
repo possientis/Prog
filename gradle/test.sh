@@ -18,6 +18,7 @@ cat /home/john/.gradle/gradle.properties | grep 'org\.gradle\.daemon=true'
 ./wrapper/test.sh
 ./dependency/test.sh
 ./pogo/test.sh
+./ant/test.sh
 
 cd ${DIR}
 echo '\nAll gradle tests completed successfully\n'

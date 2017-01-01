@@ -20,6 +20,10 @@ main:
       mov   rbp, rsp  ; set rbp to point to the stack frame  
       sub   rsp, 16   ; leave some room for local variable
                       ; leave rsp on a 16 byte boundary
+      mov   rax, 0x1a1a1a1a1a1a1a1a
+      mov   eax, 100
+      mov   rax, 0x1a1a1a1a1a1a1a1a
+      mov   rax, 100
       xor   eax, eax  ; set rax to 0 for return value
       leave           ; undo the stack frame manipulation
       ret

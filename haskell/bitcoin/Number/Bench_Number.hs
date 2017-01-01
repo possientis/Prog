@@ -5,6 +5,7 @@
 import Bench_Abstract
 import Rand
 import Number
+import Data.Functor
 
 main :: IO ()
 main = toIO run
