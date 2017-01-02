@@ -52,11 +52,7 @@
 ; args is expected to be a list of thunk which we need to force.
 ; the procedure returns an evaluated thunk, one for which environment is '().
 (define (lazy-apply-primitive-procedure proc args)
-  (debug "\nlazy-apply-primitive-procedure: proc = ")(debug proc)(debug-newline)
-  (debug "lazy-apply-primitive-procedure: args = ")(debug args)(debug-newline)
   (let ((forced-args (map force-thunk args)))
-    (debug "lazy-apply-primitive-procedure: forced-args = ")
-    (debug forced-args)(debug-newline)
     (make-thunk (apply (primitive-procedure-object proc) forced-args) '())))
 
 ))  ; include guard

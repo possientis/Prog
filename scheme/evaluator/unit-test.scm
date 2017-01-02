@@ -1,5 +1,5 @@
 (load "main.scm")
-(set-debug #f)
+(set-debug #t)
 
 (define (assert-equals left right message)
   (if (not (equal? left right)) 
@@ -155,7 +155,6 @@
 
   (test-expression 'length (make-primitive-procedure length) "variable.36")
   (test-expression 'list (make-primitive-procedure list) "variable.37")
-  (test-expression 'load (make-primitive-procedure new-load) "variable.38")
 
   (test-expression 
     'make-vector (make-primitive-procedure make-vector) "variable.39")
@@ -919,11 +918,16 @@
   (display "testing loading files ...\n") 
   (let ((mode (get-eval-mode)))
     (set! global-env (setup-environment)) 
-    (set-eval-mode 'strict)
-    (assert-equals (new-eval '(load "test-files.scm")) unspecified-value "load.1")
-    (set-eval-mode mode)
-
-    )
+    (assert-equals (strict-eval '(load "main.scm")) unspecified-value "load.1")
+    (set! global-env (setup-environment))
+    (set! global-env (setup-environment)) 
+    (assert-equals (analyze-eval '(load "main.scm")) unspecified-value "load.2")
+    (set! global-env (setup-environment))
+    (set! global-env (setup-environment)) 
+    (assert-equals (force-thunk (lazy-eval '(load "if.scm"))) 
+                   unspecified-value "load.3")
+    (set! global-env (setup-environment))
+     )
 
 
 

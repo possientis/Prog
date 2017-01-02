@@ -12,6 +12,10 @@ echo analyze-eval
 scm -b -f analyze-eval.scm                > /dev/null               
 ./run.scm analyze-eval.scm                > /dev/null
 
+echo analyze-load
+scm -b -f analyze-load.scm                > /dev/null               
+./run.scm analyze-load.scm                > /dev/null
+
 echo and
 scm -b -f and.scm                         > /dev/null               
 ./run.scm and.scm                         > /dev/null
@@ -125,6 +129,10 @@ echo lazy-eval
 scm -b -f lazy-eval.scm                   > /dev/null               
 ./run.scm lazy-eval.scm                   > /dev/null
 
+echo lazy-load
+scm -b -f lazy-load.scm                   > /dev/null               
+./run.scm lazy-load.scm                   > /dev/null
+
 echo let-rec
 scm -b -f let-rec.scm                     > /dev/null               
 ./run.scm let-rec.scm                     > /dev/null
@@ -200,6 +208,10 @@ scm -b -f strict-apply.scm                > /dev/null
 echo strict-eval
 scm -b -f strict-eval.scm                 > /dev/null               
 ./run.scm strict-eval.scm                 > /dev/null
+
+echo strict-load
+scm -b -f strict-load.scm                 > /dev/null               
+./run.scm strict-load.scm                 > /dev/null
 
 echo tagged-list
 scm -b -f tagged-list.scm                 > /dev/null               

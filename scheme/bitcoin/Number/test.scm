@@ -1,8 +1,8 @@
 (load "number.scm")
 
-(define x (number 25))
-(define y (number 3))
-(define w (number -12))
+(define x ((number 'from-integer) 25))
+(define y ((number 'from-integer) 3))
+(define w ((number 'from-integer) -12))
 
 (define zero (number 'zero))
 (define one (number 'one))
@@ -32,6 +32,19 @@
 (display "(w 'sign) = ")(display (w 'sign))(newline)
 
 (display "((x'to-bytes) 32) = ")(display ((x 'to-bytes) 32))(newline)
+
+(display "(bit-length zero) = ")(display (zero 'bit-length))(newline)
+(display "(bit-length one) = ")(display (one 'bit-length))(newline)
+(display "(bit-length -one) = ")(display ((one 'negate) 'bit-length))(newline)
+(display "(bit-length x) = ")(display (x 'bit-length))(newline)
+(display "(bit-length y) = ")(display (y 'bit-length))(newline)
+
+(let ((bytes ((x 'to-bytes) 32)))
+  (let ((xx ((number 'from-bytes) 1 bytes))
+        (yy ((number 'from-bytes) -1 bytes)))
+    (display "xx = ")(display (xx 'to-string))(newline)
+    (display "yy = ")(display (yy 'to-string))(newline)))
+
 
 
 

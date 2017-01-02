@@ -31,16 +31,10 @@
 
 ; lazy
 (define (lazy-eval-application exp env)
-  (debug "\nlazy-eval-application: exp = ")(debug exp)(debug-newline) 
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
-    (debug "lazy-eval-application: proc-exp = ")(debug operator)(debug-newline)
-    (debug "lazy-eval-application: args-exp = ")(debug operands)(debug-newline)
     (let ((proc (lazy-eval operator env))
           (args (map (lambda (x) (lazy-eval x env)) operands)))
-      (debug "lazy-eval-application: proc = ")(debug proc)(debug-newline)
-      (debug "lazy-eval-application: args = ")(debug args)(debug-newline)
-      (debug "lazy-eval-application: calling lazy-apply ...\n")
       (lazy-apply proc args))))
 
 ))  ; include guard
