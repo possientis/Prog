@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="JNI" default="headers" >
+
+  <property name="target.dir" location="target" />
+  <property name="classes.dir" location="${target.dir}/classes" />
+  <property name="generated.dir" location="${target.dir}/generated" />
+
+  <target name="init">
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${generated.dir}" />
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="src" includes="**/*.java" destdir="${classes.dir}" 
+      includeantruntime="no"/>
+  </target>
+
+  <target name="clean" depends="init" >
+    <delete dir="${target.dir}"/>
+  </target>
+
+  <!-- same as excuting the following shell command -->
+  <!-- javah -d target/generated -cp target/classes/ \
+       org.example.antbook.cpu.CpuInfo              -->
+  <target name="headers" depends="compile">
+    <javah destdir="${generated.dir}" force="yes" classpath="${classes.dir}">
+      <class name="org.example.antbook.cpu.CpuInfo" />
+    </javah>
+  </target>
+
+</project>
+
+

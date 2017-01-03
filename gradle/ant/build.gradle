@@ -1,5 +1,15 @@
 ant.importBuild 'build.xml'
 
+hello.doFirst {
+  println 'About to execute ant target ...'
+}
+
 hello.doLast {
   println 'Hello again!'
+}
+
+task antTask {
+  doLast {
+    ant.echo('Currently executing an ant task')
+  }
 }

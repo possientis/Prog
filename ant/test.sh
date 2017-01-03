@@ -11,6 +11,7 @@ cd ${HOME}
 ./ExecTask/test.sh
 ./GettingStarted/test.sh
 ./JavaTask/test.sh
+./JNI/test.sh
 ./Lucene/test.sh
 
 cd ${DIR}

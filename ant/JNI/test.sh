@@ -2,11 +2,11 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/gradle/ant
+HOME=/home/john/Prog/ant/JNI
 cd ${HOME}
 
-gradle hello
-gradle antTask
+ant
+ant clean
 
 cd ${DIR}
 echo '\ntest completed successfully\n'
