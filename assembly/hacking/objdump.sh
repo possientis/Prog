@@ -1,3 +1,3 @@
 #!/bin/sh
 
-objdump -d -M intel ./a.out | grep -A20 main\>:
+objdump -d -M intel ./a.out | grep -A30 main\>:

@@ -30,11 +30,11 @@
     (set-eval-mode mode)
     ; analyze (testing in all three modes)
     (set-eval-mode 'strict)
-    (assert-equals ((analyze exp) env) value (print ": analyze"))
+    (assert-equals (analyze-eval exp env) value (print ": analyze"))
     (set-eval-mode 'lazy)
-    (assert-equals ((analyze exp) env) value (print ": analyze"))
+    (assert-equals (analyze-eval exp env) value (print ": analyze"))
     (set-eval-mode 'analyze)
-    (assert-equals ((analyze exp) env) value (print ": analyze"))
+    (assert-equals (analyze-eval exp env) value (print ": analyze"))
     (set-eval-mode mode)
     ; new-eval (strict)
     (set-eval-mode 'strict)
@@ -74,13 +74,13 @@
     (set-eval-mode mode)
     ; analyze (testing in all three modes)
     (set-eval-mode 'strict)
-    (assert-equals (force-thunk ((analyze exp) env)) value 
+    (assert-equals (force-thunk (analyze-eval exp env)) value 
                    (print ": analyze"))
     (set-eval-mode 'lazy)
-    (assert-equals (force-thunk ((analyze exp) env)) value 
+    (assert-equals (force-thunk (analyze-eval exp env)) value 
                    (print ": analyze"))
     (set-eval-mode 'analyze)
-    (assert-equals (force-thunk ((analyze exp) env)) value 
+    (assert-equals (force-thunk (analyze-eval exp env)) value 
                    (print ": analyze"))
     (set-eval-mode mode)
     ; new-eval (strict)
@@ -96,6 +96,20 @@
                    (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode
 
+(define (test-load filename message . arg) 
+  (let ((init-env (if (null? arg) global-env (car arg))) 
+        (print (lambda (msg) (string-append message msg)))
+        (mode (get-eval-mode))) 
+    (let ((env ((init-env 'extended) '() '())))
+      (assert-equals 
+        (strict-load filename env) unspecified-value (print ": strict")))
+    (let ((env ((init-env 'extended) '() '())))
+      (assert-equals 
+        (analyze-load filename env) unspecified-value (print ": analyze")))
+    (let ((env ((init-env 'extended) '() '())))
+      (assert-equals 
+        (lazy-load filename env) unspecified-value (print ": analyze")))
+    ))
 
 (define (unit-test)
   ;
@@ -274,7 +288,7 @@
       (assert-equals (force-thunk result) unspecified-value "assignment.4")
       (test-forced-expression 'var #\a "assignment.5" env))
     ; analyzed assignment
-    (let ((result ((analyze '(set! var 45)) env)))
+    (let ((result (analyze-eval '(set! var 45) env)))
       (assert-equals result unspecified-value "assignment.6")
       (test-expression 'var 45 "assignment.7" env))
     ; strict assignment via new-eval
@@ -327,7 +341,7 @@
       (assert-equals ((env 'defined?) 'var) #f "definition.21")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.22"))
     ; analyze definition
-    (let ((result ((analyze '(define var "hello")) env)))
+    (let ((result (analyze-eval '(define var "hello") env)))
       (assert-equals result unspecified-value "definiton.23")
       (assert-equals ((env 'defined?) 'var) #t "definition.24")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.25")
@@ -359,7 +373,7 @@
     (set-eval-mode mode)
     ; analyze definition via new-eval
     (set-eval-mode 'analyze)
-    (let ((result ((analyze '(define var #f)) env)))
+    (let ((result (analyze-eval '(define var #f) env)))
       (assert-equals result unspecified-value "definiton.46")
       (assert-equals ((env 'defined?) 'var) #t "definition.47")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.48")
@@ -387,7 +401,7 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.62")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.63"))
     ; analyze definition: function with no argument
-    (let ((result ((analyze '(define (f) "hello")) env)))
+    (let ((result (analyze-eval '(define (f) "hello") env)))
       (assert-equals result unspecified-value "definiton.64")
       (assert-equals ((env 'defined?) 'f) #t "definition.65")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.66")
@@ -447,7 +461,7 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.97")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.98"))
     ; analyze definition: function with a single argument
-    (let ((result ((analyze '(define (f x) (+ x x x))) env)))
+    (let ((result (analyze-eval '(define (f x) (+ x x x)) env)))
       (assert-equals result unspecified-value "definiton.99")
       (assert-equals ((env 'defined?) 'f) #t "definition.100")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.101")
@@ -507,7 +521,7 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.132")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.133"))
     ; analyze definition: function with two arguments
-    (let ((result ((analyze '(define (f a b) (+ a b 7))) env)))
+    (let ((result (analyze-eval '(define (f a b) (+ a b 7)) env)))
       (assert-equals result unspecified-value "definiton.134")
       (assert-equals ((env 'defined?) 'f) #t "definition.135")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.136")
@@ -588,7 +602,7 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.186")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.187"))
     ; analyze definition: function with optional arguments
-    (let ((result ((analyze '(define (f . args) args)) env)))
+    (let ((result (analyze-eval '(define (f . args) args) env)))
       (assert-equals result unspecified-value "definiton.188")
       (assert-equals ((env 'defined?) 'f) #t "definition.189")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.190")
@@ -701,7 +715,7 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.272")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.273"))
     ; analyze definition: function with optional arguments + 1 required
-    (let ((result ((analyze '(define (f x . args) (cons x args))) env)))
+    (let ((result (analyze-eval '(define (f x . args) (cons x args)) env)))
       (assert-equals result unspecified-value "definiton.274")
       (assert-equals ((env 'defined?) 'f) #t "definition.275")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.276")
@@ -916,19 +930,23 @@
  
   ; load
   (display "testing loading files ...\n") 
-  (let ((mode (get-eval-mode)))
-    (set! global-env (setup-environment)) 
-    (assert-equals (strict-eval '(load "main.scm")) unspecified-value "load.1")
-    (set! global-env (setup-environment))
-    (set! global-env (setup-environment)) 
-    (assert-equals (analyze-eval '(load "main.scm")) unspecified-value "load.2")
-    (set! global-env (setup-environment))
-    (set! global-env (setup-environment)) 
-    (assert-equals (force-thunk (lazy-eval '(load "if.scm"))) 
-                   unspecified-value "load.3")
-    (set! global-env (setup-environment))
-     )
-
+  (test-load "debug.scm" "load.1") 
+  (test-load "eval-mode.scm" "load.2") 
+  (test-load "strict-eval.scm" "load.3") 
+  (test-load "analyze-eval.scm" "load.4") 
+  (test-load "lazy-eval.scm" "load.5") 
+  (test-load "new-eval.scm" "load.6") 
+  (test-load "strict-apply.scm" "load.7") 
+  (test-load "analyze-apply.scm" "load.8") 
+  (test-load "lazy-apply.scm" "load.9") 
+  (test-load "new-apply.scm" "load.10") 
+  (test-load "strict-load.scm" "load.11") 
+  (test-load "analyze-load.scm" "load.12") 
+  (test-load "lazy-load.scm" "load.13") 
+  (test-load "new-load.scm" "load.14") 
+  (test-load "new-require.scm" "load.15") 
+  (test-load "new-object-to-string.scm" "load.16") 
+   
 
 
   (display "unit-test: test complete\n"))

@@ -5,9 +5,10 @@
     (display "loading analyze-load")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (analyze-load filename)
-  (let ((code (filename->code filename)))
-    (analyze-eval code)
+(define (analyze-load filename . arg)
+  (let ((env (if (null? arg) global-env (car arg))) 
+        (code (filename->code filename)))
+    (analyze-eval code env)
     unspecified-value))
 
 ))  ; include guard

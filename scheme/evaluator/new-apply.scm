@@ -6,7 +6,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (new-apply proc args)
-;  (display "running new-apply: proc = ")(display proc)(display " : args = ")(display args)(newline)
   (let ((mode (get-eval-mode)))
     (cond ((eq? mode 'strict) (strict-apply proc args))
           ((eq? mode 'lazy)   (lazy-apply proc args))

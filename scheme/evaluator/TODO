@@ -1,4 +1,5 @@
-unit-test: load
+continue load unit-test with files from primitive.scm
+unit-test: load (called directly) and load (by eval)
 
 why is new-apply being called at all ... well it is called in new-map...
 
