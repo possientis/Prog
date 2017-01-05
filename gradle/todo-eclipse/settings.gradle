@@ -1,0 +1,2 @@
+include 'model'             // adds subproject to build
+include 'repository', 'web' // can use same line

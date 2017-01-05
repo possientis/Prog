@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="JNI" default="headers" >
+<project name="JNI" default="includes" >
 
   <property name="target.dir" location="target" />
   <property name="classes.dir" location="${target.dir}/classes" />
   <property name="generated.dir" location="${target.dir}/generated" />
+  <property name="imported.dir" location="${target.dir}/imported/jni" />
+  <property name="jvm" location="/usr/lib/jvm/java-8-openjdk-amd64" />
 
   <target name="init">
     <mkdir dir="${classes.dir}"/>
     <mkdir dir="${generated.dir}" />
+    <mkdir dir="${imported.dir}" />
   </target>
 
   <target name="compile" depends="init">
@@ -28,6 +31,13 @@
       <class name="org.example.antbook.cpu.CpuInfo" />
     </javah>
   </target>
+
+  <target name="includes" depends="headers">
+    <copy todir="${imported.dir}">
+      <fileset dir="${jvm}/include" includes="**/*.h" />
+    </copy>
+  </target>
+
 
 </project>
 
