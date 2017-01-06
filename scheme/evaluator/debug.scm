@@ -22,5 +22,5 @@
 (define (debug-newline)
   (if __debug__ (newline)))
 
-)) ; include guard
+) (display "debug.scm is already loaded\n")) ; include guard
 

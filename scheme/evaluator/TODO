@@ -1,3 +1,4 @@
+understand why test-load affects global-env
 continue load unit-test with files from primitive.scm
 unit-test: load (called directly) and load (by eval)
 

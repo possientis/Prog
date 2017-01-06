@@ -1,4 +1,5 @@
 (load "number.scm")
+(load "rand.scm")
 
 (define x (number 'from-integer 25))
 (define y (number 'from-integer 3))
@@ -44,5 +45,13 @@
         (yy (number 'from-bytes -1 bytes)))
     (display "xx = ")(display (xx 'to-string))(newline)
     (display "yy = ")(display (yy 'to-string))(newline)))
+
+(define gen (rand 'new))
+
+(define bytes (gen 'get-random-bytes 32))
+
+(define test (number 'from-bytes 1 bytes))
+
+(display "test = ")(display (test 'to-string))(newline)
 
 (exit 0)
