@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="JNI" default="includes" >
+<project name="JNI" default="cc" >
 
   <property name="target.dir" location="target" />
   <property name="classes.dir" location="${target.dir}/classes" />
+  <property name="obj.dir" location="${target.dir}/obj" />
   <property name="generated.dir" location="${target.dir}/generated" />
   <property name="imported.dir" location="${target.dir}/imported/jni" />
   <property name="jvm" location="/usr/lib/jvm/java-8-openjdk-amd64" />
+  <property name="build.debug" value="yes" />
 
   <target name="init">
     <mkdir dir="${classes.dir}"/>
     <mkdir dir="${generated.dir}" />
     <mkdir dir="${imported.dir}" />
+    <mkdir dir="${obj.dir}" />
   </target>
 
   <target name="compile" depends="init">
@@ -36,6 +39,23 @@
     <copy todir="${imported.dir}">
       <fileset dir="${jvm}/include" includes="**/*.h" />
     </copy>
+  </target>
+
+  <target name="cc" depends="includes">
+    <exec 
+      executable="g++" failonerror="true" newenvironment="false" timeout="1000">
+      <arg value="src/c++/org_example_antbook_cpu_CpuInfo.cpp" />
+      <arg value="-c" />
+      <arg value="-I${generated.dir}" />
+      <arg value="-I${imported.dir}" />
+      <arg value="-I${imported.dir}/linux" />
+    </exec>
+    <exec
+      executable="mv" failonerror="true" newenvironment="false" timeout="100">
+      <arg value="org_example_antbook_cpu_CpuInfo.o" />
+      <arg value="${obj.dir}/org_example_antbook_cpu_CpuInfo.o" />
+    </exec>
+
   </target>
 
 
