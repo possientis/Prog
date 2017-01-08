@@ -79,7 +79,7 @@ random_ n = do
   bytes <- randomBytes_ n 
   fromBytes (Sign 1) bytes
 
--- returns unsigned random number as big endian ByteArray
+-- Returns unsigned random number as big endian ByteArray
 -- Essentially generates random bytes and subsequently set
 -- the appropriate number of leading bits to 0 so as to 
 -- ensure the final ByteArray has the right bit size.

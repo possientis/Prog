@@ -1,8 +1,11 @@
+(load "rand.scm")
 (require 'object->string)
 (require 'byte-number)
 
 (define number1
   (let ()
+    ; static data
+    (define generator (rand 'new))
     ; object created from data is message passing interface
     (define (this data)
       (lambda (m . args)
@@ -23,6 +26,7 @@
             ((eq? m 'one) (one))
             ((eq? m 'from-integer) (apply from-integer args))
             ((eq? m 'from-bytes) (apply from-bytes args))
+            ((eq? m 'random) (apply random args))
             (else (error "number1: unknown static member" m))))
     ;
     (define (zero) (from-integer 0))
@@ -83,13 +87,33 @@
         (if (< x 0)
           (integer-length (- x))
           (integer-length x))))
+    ;
+    (define (random num-bits)
+        (from-bytes 1 (random-bytes num-bits)))  
+    ;
+    ; Returns unsigned random number as big-endian bytes.
+    ; Essentially generates random bytes and subsequently 
+    ; set the appropriate number of leading bits to 0 so 
+    ; as to ensure the final bytes have the right bit size
+    (define (random-bytes num-bits)
+      (let ((len (quotient (+ num-bits 7) 8)))  ; number of bytes required
+        (if (equal? 0 len)
+          (integer->bytes 0 0)                  ; empty bytes string
+          (let ((bytes (bytes->list (generator 'get-random-bytes len))))
+            (let ((lead (car bytes))
+                  (diff (- (* len 8) num-bits))); number of leading bits set to 0
+              (let ((front (shave diff lead)))  ; new leading byte
+                (list->bytes (cons front (cdr bytes)))))))))
+    ;
+    ; return byte with n leading bits set to 0
+    (define (shave n byte)
+      (let loop ((mask #x7f) (n n) (byte byte))
+        (if (equal? n 0)
+          byte
+          (loop (ash mask -1) (- n 1) (logand byte mask)))))
 
     ; returning static interface
     static))
-
-
-
-
 
 
 

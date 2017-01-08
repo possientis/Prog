@@ -100,15 +100,18 @@
   (let ((init-env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) 
-    (let ((env ((init-env 'extended) '() '())))
-      (assert-equals 
-        (strict-load filename env) unspecified-value (print ": strict")))
+;    (let ((env ((init-env 'extended) '() '())))
+;      (assert-equals 
+;        (strict-load filename env) unspecified-value (print ": strict")))
+
     (let ((env ((init-env 'extended) '() '())))
       (assert-equals 
         (analyze-load filename env) unspecified-value (print ": analyze")))
-    (let ((env ((init-env 'extended) '() '())))
-      (assert-equals 
-        (lazy-load filename env) unspecified-value (print ": analyze")))
+
+;    (let ((env ((init-env 'extended) '() '())))
+;      (assert-equals 
+;        (lazy-load filename env) unspecified-value (print ": analyze")))
+    'ok
     ))
 
 (define (unit-test)
@@ -153,7 +156,7 @@
   (test-expression 'char? (make-primitive-procedure char?) "variable.24")
   (test-expression 'close-port(make-primitive-procedure close-port) "variable.25")
   (test-expression 'cons (make-primitive-procedure cons) "variable.26")
-  (test-expression 'display (make-primitive-procedure new-display) "variable.27")
+;  (test-expression 'display (make-primitive-procedure new-display) "variable.27")
 
   (test-expression 
     'eof-object? (make-primitive-procedure eof-object?) "variable.28")
@@ -930,8 +933,12 @@
  
   ; load
   (display "testing loading files ...\n") 
+;  (debug "global-env = \n")(debug (global-env 'to-string))(debug-newline)
+  (display (object->string ((global-env 'lookup) 'display)))(newline) 
   (test-load "debug.scm" "load.1") 
-  (set! global-env (setup-environment))
+  (display (object->string ((global-env 'lookup) 'display)))(newline) 
+;  (debug "global-env = \n")(debug (global-env 'to-string))(debug-newline)
+;  (set! global-env (setup-environment))
   (test-load "debug.scm" "load.1") 
 ;  (test-load "eval-mode.scm" "load.2") 
 ;  (test-load "strict-eval.scm" "load.3") 

@@ -52,6 +52,25 @@
 
 (define test (number 'from-bytes 1 bytes))
 
-(display "test = ")(display (test 'to-string))(newline)
+(display "test = ")(display (number->string (test 'to-integer) 16))(newline)
+
+(display (number->string (bit-field #b1101101010 0 6) 2))(newline)
+
+(display (ash 9 -1))(newline)
+
+(define r (number 'random 256))
+
+(display "r = ")(display (r 'to-string))(newline)
+
+(define r0 (number 'random 0))
+(display "r0 = ")(display (r0 'to-string))(newline)
+
+(define r1 (number 'random 1))
+(display "r1 = ")(display (r1 'to-string))(newline)
+
+(define r2 (number 'random 2))
+(display "r2 = ")(display (r2 'to-string))(newline)
+
+
 
 (exit 0)
