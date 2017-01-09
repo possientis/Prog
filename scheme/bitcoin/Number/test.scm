@@ -1,5 +1,7 @@
 (load "number.scm")
 (load "rand.scm")
+(load "test-abstract.scm")
+(load "test-number.scm")
 
 (define x (number 'from-integer 25))
 (define y (number 'from-integer 3))
@@ -71,6 +73,29 @@
 (define r2 (number 'random 2))
 (display "r2 = ")(display (r2 'to-string))(newline)
 
+(define gen2 (test-abstract 'generator))
+
+(define r3 (number 'from-bytes 1 (gen2 'get-random-bytes 32)))
+(display "r3 = ")(display (r3 'to-string))(newline)
+
+(define test1 (test-abstract 'new #f))
+
+(display (test1 'self))(newline)
+
+(define r4 (number 'from-bytes 1 (get-random-bytes 32)))
+(display "r4 = ")(display (r4 'to-string))(newline)
+
+;(test1 'run)
+
+(log-message "This is an error message")
+
+(check-equals "abc" "abc" "testing check-equals")
+
+(check-condition #t "testing check-condition")
+
+(define test2 (test-number))
+
+(test2 'run)
 
 
 (exit 0)

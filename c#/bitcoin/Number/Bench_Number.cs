@@ -19,6 +19,7 @@ public class Bench_Number : Bench_Abstract
     BenchToBytes();
     BenchAdd();
     BenchMul();
+    BenchNegate();
     BenchToString();
     BenchRandom();
 
@@ -113,6 +114,17 @@ public class Bench_Number : Bench_Abstract
         () => { BigInteger.Multiply(n,m); BigInteger.Multiply(m,n); }, 
         "Mul*", 1000000
     );
+  }
+
+  private static void BenchNegate()
+  {
+    Number x = Number.Random(256);
+    Number y = Number.Random(256).Negate();
+    BigInteger n = x.ToBigInteger();
+    BigInteger m = y.ToBigInteger();
+    Benchmark(() => { x.Negate(); y.Negate(); }, "Negate", 1000000);
+    Benchmark(() => { BigInteger.Negate(n); BigInteger.Negate(m); }, 
+        "Negate*", 1000000);
   }
 
   private static void BenchToString()

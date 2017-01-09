@@ -19,6 +19,7 @@ public class Bench_Number extends Bench_Abstract
     benchToBytes();
     benchAdd();
     benchMul();
+    benchNegate();
     benchToString();
     benchRandom();
 
@@ -109,6 +110,16 @@ public class Bench_Number extends Bench_Abstract
     BigInteger m = y.toBigInteger();
     benchmark(() -> { x.mul(y); y.mul(x); }, "mul", 1000000);
     benchmark(() -> { n.multiply(m); m.multiply(n); }, "mul*", 1000000);
+  }
+
+  private static void benchNegate()
+  {
+    Number x = Number.random(256);
+    Number y = Number.random(256).negate();
+    BigInteger n = x.toBigInteger();
+    BigInteger m = y.toBigInteger();
+    benchmark(() -> { x.negate(); y.negate(); }, "negate", 1000000);
+    benchmark(() -> { n.negate(); m.negate(); }, "negate*", 1000000);
   }
 
   private static void benchToString()

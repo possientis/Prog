@@ -21,6 +21,7 @@ public class Test_Number extends Test_Abstract
     checkRandom();
     checkAdd();
     checkMul();
+    checkNegate();
     checkToString();
     checkCompareTo();
     checkHashCode();
@@ -326,6 +327,22 @@ public class Test_Number extends Test_Abstract
     Number check = Number.fromBigInteger(prod);
     checkEquals(check, x.mul(y), "checkMul.9");
   }
+
+  private static void checkNegate()
+  {
+    Number x = _signedRandom(256);
+    Number y = x.negate();
+
+    // x + (-x) = 0
+    checkEquals(Number.ZERO, x.add(y), "checkNegate.1");
+
+    // actual check
+    BigInteger n = x.toBigInteger();
+    Number z = Number.fromBigInteger(n.negate());
+    checkEquals(y, z, "checkNegate.2");
+
+  }
+
 
   private static void checkToString()
   {

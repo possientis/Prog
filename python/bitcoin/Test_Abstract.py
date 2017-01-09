@@ -43,7 +43,7 @@ def checkNotNone(obj, message):
 
 def checkCondition(cond, message):
     if not cond:
-        logMessage(message + ":checkCondition failure")
+        logMessage(message + ": checkCondition failure")
         sys.exit(1)
 
 def checkException(callbk, name, message):

@@ -20,6 +20,7 @@ public class Test_Number : Test_Abstract
     CheckRandom();
     CheckAdd();
     CheckMul();
+    CheckNegate();
     CheckToString();
     CheckCompareTo();
     CheckHashCode();
@@ -320,6 +321,20 @@ public class Test_Number : Test_Abstract
     BigInteger prod = BigInteger.Multiply(n, m);
     Number Check = Number.FromBigInteger(prod);
     CheckEquals(Check, x.Mul(y), "CheckMul.9");
+  }
+
+  private static void CheckNegate()
+  {
+    Number x = _SignedRandom(256);
+    Number y = x.Negate();
+
+    // x + (-x) = 0
+    CheckEquals(Number.ZERO, x.Add(y), "CheckNegate.1");
+
+    // actual check
+    BigInteger n = x.ToBigInteger();
+    Number z = Number.FromBigInteger(BigInteger.Negate(n));
+    CheckEquals(y, z, "CheckNegate.2");
   }
 
   private static void CheckToString()

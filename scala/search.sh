@@ -1,3 +1,5 @@
 #!/bin/sh
-grep $1 . -r
-grep $1 ../polyglot/ -r | grep '\.scala'
+
+DIR1=/home/john/Prog/
+
+grep "$@" $DIR1 -r | grep '\.scala'
