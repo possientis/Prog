@@ -46,9 +46,8 @@ rm -f clojure/compojure/*.class
 rm -f haskell/*.hi
 rm -f haskell/*.o
 rm -f haskell/test
-rm -f assembly/*.o
-rm -f assembly/a.out
-rm -f assembly/test.dat
+rm -f assembly/hacking/*.o
+rm -f assembly/hacking/a.out
 rm -f scala/*.class
 rm -f coq/*.glob
 rm -f coq/*.vo

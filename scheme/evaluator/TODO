@@ -1,5 +1,8 @@
-understand why object->string gives different output before and after (see unit-test)
-understand why lazy part of test-load affects global-env
+strict-load, analyze-load .... should not have an environment argument?
+test-load has side effect on wrapper.scm since the code "(load "debug.scm")" will
+impact global-env... is that a correct interpretation?
+
+ 
 continue load unit-test with files from primitive.scm
 unit-test: load (called directly) and load (by eval)
 

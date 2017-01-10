@@ -100,18 +100,17 @@
   (let ((init-env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) 
-;    (let ((env ((init-env 'extended) '() '())))
-;      (assert-equals 
-;        (strict-load filename env) unspecified-value (print ": strict")))
-
     (let ((env ((init-env 'extended) '() '())))
       (assert-equals 
-        (analyze-load filename env) unspecified-value (print ": analyze")))
+        (strict-load filename env) unspecified-value (print ": strict")))
 
 ;    (let ((env ((init-env 'extended) '() '())))
 ;      (assert-equals 
-;        (lazy-load filename env) unspecified-value (print ": analyze")))
-    'ok
+;        (analyze-load filename env) unspecified-value (print ": analyze")))
+
+;    (let ((env ((init-env 'extended) '() '())))
+;      (assert-equals 
+;        (lazy-load filename env) unspecified-value (print ": lazy")))
     ))
 
 (define (unit-test)
@@ -933,13 +932,10 @@
  
   ; load
   (display "testing loading files ...\n") 
-;  (debug "global-env = \n")(debug (global-env 'to-string))(debug-newline)
-  (display (object->string ((global-env 'lookup) 'display)))(newline) 
-  (test-load "debug.scm" "load.1") 
-  (display (object->string ((global-env 'lookup) 'display)))(newline) 
-;  (debug "global-env = \n")(debug (global-env 'to-string))(debug-newline)
-;  (set! global-env (setup-environment))
-  (test-load "debug.scm" "load.1") 
+  (set! global-env (setup-environment))
+;  (display "global-env=\n")(display (global-env 'to-string))(newline)
+  (test-load "wrapper.scm" "load.1") 
+;  (display "global-env=\n")(display (global-env 'to-string))(newline)
 ;  (test-load "eval-mode.scm" "load.2") 
 ;  (test-load "strict-eval.scm" "load.3") 
 ;  (test-load "analyze-eval.scm" "load.4") 
