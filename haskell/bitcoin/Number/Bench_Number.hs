@@ -20,6 +20,7 @@ run = do
   benchToBytes
   benchAdd
   benchMul
+  benchNegate
   benchShow
   benchRandom
 
@@ -87,6 +88,16 @@ benchMul = do
   benchmark ((return $ x * y) >> (return $ y * x)) "mul" 1000000
   benchmark ((return $ n * m) >> (return $ m * n)) "mul*" 1000000
 
+benchNegate :: Rand ()
+benchNegate  = do
+  x <- random (NumBits 256) :: Rand Number
+  y <- negate <$> random (NumBits 256) :: Rand Number
+  let n = toInteger x
+  let m = toInteger y
+  benchmark ((return $ (-x)) >> (return $ (-y))) "negate" 1000000
+  benchmark ((return $ (-n)) >> (return $ (-m))) "negate*" 1000000
+
+  
   
 
 benchShow :: Rand()

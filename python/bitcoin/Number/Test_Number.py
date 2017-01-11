@@ -13,6 +13,7 @@ class Test_Number(Test_Abstract):
         checkRandom()
         checkAdd()
         checkMul()
+        checkNegate()
         checkToString()
         checkCompareTo()
         checkHash()
@@ -285,6 +286,18 @@ def checkMul():
     p = n * m
     check = Number.fromInt(p)
     checkEquals(check, x * y, "checkMul.9")
+
+def checkNegate():
+    x = signedRandom(256)
+    y = -x
+
+    # x + (-x) = 0
+    checkEquals(Number.ZERO, x + y, "checkNegate.1")
+
+    # actual check
+    n = int(x)
+    z = Number.fromInt(-n)
+    checkEquals(y, z, "checkNegate.2")
 
 
 def checkToString():

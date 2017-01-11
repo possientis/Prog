@@ -40,13 +40,18 @@
       (let ((bytes (string->bytes message)) (stderr (current-error-port)))
         (write-bytes bytes len stderr)))))
 
-(define (check-equals left right message)
-  (if (not (equal? left right))
-    (begin
-      (log-message (string-append message ": check-equals failure"))
-      (log-message (string-append "left = " (object->string left)))
-      (log-message (string-append "right = " (object->string right)))
-      (exit 1))))
+; optional argument to override equality predicate
+; if equality predicate is overridden, function assumes
+; that objects being compared have a 'to-string method
+(define (check-equals left right message . args)
+  (let ((predicate (if (null? args) equal? (car args)))
+        (show (if (null? args) object->string (lambda (x) (x 'to-string)))))
+    (if (not (predicate left right))
+      (begin
+        (log-message (string-append message ": check-equals failure"))
+        (log-message (string-append "left = " (show left)))
+        (log-message (string-append "right = " (show right)))
+        (exit 1)))))
 
 (define (check-condition condition message)
   (if (not condition)

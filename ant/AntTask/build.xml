@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="AntTask" default="simpletask" >
+
+  <property name="build.dir" location="build"/>
+  <property name="classes.dir" location="${build.dir}/classes" />
+  <property name="src.dir" location="src" />
+  <property name="src.main.dir" location="${src.dir}/main/java" />
+  <property name="build.debug" value="yes" />
+
+
+  <target name="init">
+    <mkdir dir="${classes.dir}" />
+  </target>
+
+  <target name="compile" depends="init">
+    <javac  srcdir="${src.main.dir}" destdir="${classes.dir}" 
+            includeAntRuntime="true" debug="${build.debug}" />
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${build.dir}" />
+  </target>
+
+  <target name="simpletask" depends="compile">
+    <!-- defining the custom ant task before using it -->
+    <taskdef name="simpletask"
+             classname="org.example.antbook.tasks.SimpleTask"
+             classpath="${classes.dir}"
+    />
+
+    <!-- no using it -->
+    <simpletask />
+
+   </target>
+
+</project>

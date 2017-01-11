@@ -15,6 +15,7 @@
               ((eq? m 'mul) (apply (mul data) args))
               ((eq? m 'negate) (negate data))
               ((eq? m 'compare-to) (apply (compare-to data) args))
+              ((eq? m 'equal?) (apply (equal-to data) args))
               ((eq? m 'hash) (hash-code data))
               ((eq? m 'sign) (sign data))
               ((eq? m 'to-bytes) (apply (to-bytes data) args))
@@ -27,6 +28,7 @@
             ((eq? m 'from-integer) (apply from-integer args))
             ((eq? m 'from-bytes) (apply from-bytes args))
             ((eq? m 'random) (apply random args))
+            ((eq? m 'equal?) number-equal?) 
             (else (error "number1: unknown static member" m))))
     ;
     (define (zero) (from-integer 0))
@@ -61,12 +63,20 @@
           (from-integer (* x y)))))
     ;
     (define (compare-to data)
-      (lambda (obj)
-        (let ((x (cadr data)) (y (obj 'to-integer)))
+      (lambda (lhs)
+        (let ((x (cadr data)) (y (lhs 'to-integer)))
           (cond ((eq? x y)  0)
                 ((< x y)   -1)
                 ((> x y)    1)
                 (else (error "number1: unexpected error in compare-to"))))))
+    ;
+    (define (equal-to data)
+      (lambda (lhs)
+        (let ((x (cadr data)) (y (lhs 'to-integer)))
+          (equal? x y))))
+    ;
+    (define (number-equal? lhs rhs)
+      (equal? (lhs 'to-integer) (rhs 'to-integer)))
     ;
     (define (sign data)
       (let ((x (cadr data)))
@@ -98,7 +108,7 @@
     (define (random-bytes num-bits)
       (let ((len (quotient (+ num-bits 7) 8)))  ; number of bytes required
         (if (equal? 0 len)
-          (integer->bytes 0 0)                  ; empty bytes string
+          (make-bytes 0)                        ; empty bytes string
           (let ((bytes (bytes->list (generator 'get-random-bytes len))))
             (let ((lead (car bytes))
                   (diff (- (* len 8) num-bits))); number of leading bits set to 0

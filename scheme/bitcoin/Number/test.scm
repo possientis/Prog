@@ -1,7 +1,6 @@
 (load "number.scm")
 (load "rand.scm")
 (load "test-abstract.scm")
-(load "test-number.scm")
 
 (define x (number 'from-integer 25))
 (define y (number 'from-integer 3))
@@ -92,10 +91,6 @@
 (check-equals "abc" "abc" "testing check-equals")
 
 (check-condition #t "testing check-condition")
-
-(define test2 (test-number))
-
-(test2 'run)
 
 
 (exit 0)

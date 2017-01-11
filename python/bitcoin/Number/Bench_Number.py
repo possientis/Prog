@@ -8,28 +8,29 @@ class Bench_Number(Bench_Abstract):
 
         runAll = True
 
-        benchFromBytes();
-        benchToBytes();
-        benchAdd();
-        benchMul();
-        benchToString();
-        benchRandom();
+        benchFromBytes()
+        benchToBytes()
+        benchAdd()
+        benchMul()
+        benchNegate()
+        benchToString()
+        benchRandom()
 
         if runAll:
-            benchZERO();
-            benchONE();
-            benchSign();
-            benchCompareTo();
-            benchHashCode();
-            benchNumberEquals();  
-            benchFromBigInteger();
-            benchToInt();
-            benchBitLength();
+            benchZERO()
+            benchONE()
+            benchSign()
+            benchCompareTo()
+            benchHashCode()
+            benchNumberEquals()  
+            benchFromBigInteger()
+            benchToInt()
+            benchBitLength()
  
 
 def benchZERO():
     def test1():
-        x = Number.ZERO;
+        x = Number.ZERO
     def test2():
         x = 0
     benchmark(test1, "ZERO", 1000000)
@@ -37,7 +38,7 @@ def benchZERO():
 
 def benchONE():
     def test1():
-        x = Number.ONE;
+        x = Number.ONE
     def test2():
         x = 1
     benchmark(test1, "ONE", 1000000)
@@ -98,6 +99,19 @@ def benchMul():
     benchmark(test1, "mul (10k)", 10000)
     benchmark(test2, "mul* (10k)", 10000)
 
+def benchNegate():
+    x =  Number.random(256)
+    y = -Number.random(256)
+    n = int(x)
+    m = int(y)
+    def test1():
+        -x
+        -y
+    def test2():
+        -n
+        -m
+    benchmark(test1, "negate (10k)", 10000)
+    benchmark(test2, "negate* (10k)", 10000)
 
 def benchToString():
     x = Number.random(256)

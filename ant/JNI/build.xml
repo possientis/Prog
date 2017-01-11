@@ -51,7 +51,7 @@
       <arg value="-I${imported.dir}/linux" />
     </exec>
     <exec
-      executable="mv" failonerror="true" newenvironment="false" timeout="100">
+      executable="mv" failonerror="true" newenvironment="false" timeout="1000">
       <arg value="org_example_antbook_cpu_CpuInfo.o" />
       <arg value="${obj.dir}/org_example_antbook_cpu_CpuInfo.o" />
     </exec>

@@ -7,6 +7,7 @@ HOME=/home/john/Prog/ant/
 cd ${HOME}
 
 ./Available/test.sh
+./AntTask/test.sh
 ./Env/test.sh
 ./ExecTask/test.sh
 ./GettingStarted/test.sh

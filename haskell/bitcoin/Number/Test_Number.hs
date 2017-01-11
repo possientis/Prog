@@ -21,6 +21,7 @@ run = do
   checkToBytes
   checkAdd
   checkMul
+  checkNegate
   checkShow
   checkCompareTo
   checkHash
@@ -343,6 +344,18 @@ checkMul = do
   let check = fromInteger prod
   checkEquals check (x * y) "checkMul.9" 
 
+checkNegate :: Rand ()
+checkNegate = do
+  x <- signedRandom (NumBits 256) 
+  let y = negate x
+
+  -- x + (-x) = 0
+  checkEquals zero (x + y) "checkNegate.1"
+
+  -- actual check
+  let n = toInteger x
+  let z = fromInteger (-n)
+  checkEquals y z "checkNegate.2"
 
 
 checkShow :: Rand ()
