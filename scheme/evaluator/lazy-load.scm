@@ -5,9 +5,8 @@
     (display "loading lazy-load")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (lazy-load filename . arg)
-  (let ((env (if (null? arg) global-env (car arg))) 
-        (code (filename->code filename)))
+(define (lazy-load filename)
+  (let ((env global-env) (code (filename->code filename)))
     (lazy-eval code env)
     unspecified-value))
 

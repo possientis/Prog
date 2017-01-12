@@ -1,9 +1,5 @@
-strict-load, analyze-load .... should not have an environment argument?
-test-load has side effect on wrapper.scm since the code "(load "debug.scm")" will
-impact global-env... is that a correct interpretation?
-
- 
-continue load unit-test with files from primitive.scm
+continue writing comment in strict-load.scm
+loading global-env in lazy mode fails
 unit-test: load (called directly) and load (by eval)
 
 why is new-apply being called at all ... well it is called in new-map...

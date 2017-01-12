@@ -18,6 +18,10 @@
 
 (define global-env (setup-environment))
 
+(define (global-env-reset!)
+  (set! global-env (setup-environment)))
+
+
 ;(display (global-env 'to-string))(newline)
 
 ))  ; include guard

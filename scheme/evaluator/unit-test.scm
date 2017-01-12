@@ -96,22 +96,18 @@
                    (print ": new-eval (analyze)"))
     (set-eval-mode mode)))  ; restoring eval mode
 
-(define (test-load filename message . arg) 
-  (let ((init-env (if (null? arg) global-env (car arg))) 
-        (print (lambda (msg) (string-append message msg)))
+(define (test-load filename message) 
+  (let ((print (lambda (msg) (string-append message msg)))
         (mode (get-eval-mode))) 
-    (let ((env ((init-env 'extended) '() '())))
-      (assert-equals 
-        (strict-load filename env) unspecified-value (print ": strict")))
+    (global-env-reset!)
+    (assert-equals (strict-load filename) unspecified-value (print ": strict"))
+    (global-env-reset!)
+    (assert-equals (analyze-load filename) unspecified-value (print ": analyze"))
+    (global-env-reset!)
+;    (assert-equals (lazy-load filename) unspecified-value (print ": lazy"))
+    (global-env-reset!)
 
-;    (let ((env ((init-env 'extended) '() '())))
-;      (assert-equals 
-;        (analyze-load filename env) unspecified-value (print ": analyze")))
-
-;    (let ((env ((init-env 'extended) '() '())))
-;      (assert-equals 
-;        (lazy-load filename env) unspecified-value (print ": lazy")))
-    ))
+   ))
 
 (define (unit-test)
   ;
@@ -932,10 +928,8 @@
  
   ; load
   (display "testing loading files ...\n") 
-  (set! global-env (setup-environment))
-;  (display "global-env=\n")(display (global-env 'to-string))(newline)
-  (test-load "wrapper.scm" "load.1") 
-;  (display "global-env=\n")(display (global-env 'to-string))(newline)
+  ;
+;  (test-load "debug.scm" "load.1") 
 ;  (test-load "eval-mode.scm" "load.2") 
 ;  (test-load "strict-eval.scm" "load.3") 
 ;  (test-load "analyze-eval.scm" "load.4") 
@@ -953,8 +947,11 @@
 ;  (test-load "new-object-to-string.scm" "load.16") 
 ;  (test-load "new-map.scm" "load.17") 
 ;  (test-load "new-display.scm" "load.18")
+  ;
 ;  (test-load "primitive.scm" "load.19")
+  ;
 ;  (test-load "primitive-procedure.scm" "load.20")
+  ;
 ;  (test-load "frame1.scm" "load.21")
 ;  (test-load "frame2.scm" "load.22")
 ;  (test-load "link-node.scm" "load.23")
@@ -962,11 +959,13 @@
 ;  (test-load "hash.scm" "load.24")
 ;  (test-load "dict.scm" "load.25")
 ;  (test-load "frame3.scm" "load.26")
-; (test-load "frame4.scm" "load.27")  ; (require 'hash-table)
+;; (test-load "frame4.scm" "load.27")  ; (require 'hash-table)
 ;  (test-load "frame.scm" "load.28")
 ;  (test-load "environment1.scm" "load.29")
+  ;
 ;  (test-load "environment.scm" "load.30")
-;  (test-load "global-env.scm" "load.31")
+  ;
+  (test-load "global-env.scm" "load.31")
    
 
 

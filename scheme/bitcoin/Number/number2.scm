@@ -2,7 +2,7 @@
 (require 'object->string)
 (require 'byte-number)
 
-(define number1
+(define number2
   (let ()
     ; static data
     (define generator (rand 'new))
@@ -20,7 +20,7 @@
               ((eq? m 'sign) (sign data))
               ((eq? m 'to-bytes) (apply (to-bytes data) args))
               ((eq? m 'bit-length) (bit-length data))
-              (else (error "number1: unknown instance member" m)))))
+              (else (error "number2: unknown instance member" m)))))
     ; static interface
     (define (static m . args)
       (cond ((eq? m 'zero) (zero))
@@ -29,7 +29,7 @@
             ((eq? m 'from-bytes) (apply from-bytes args))
             ((eq? m 'random) (apply random args))
             ((eq? m 'equal?) number-equal?) 
-            (else (error "number1: unknown static member" m))))
+            (else (error "number2: unknown static member" m))))
     ;
     (define (zero) (from-integer 0))
     ;
@@ -65,10 +65,10 @@
     (define (compare-to data)
       (lambda (lhs)
         (let ((x (cadr data)) (y (lhs 'to-integer)))
-          (cond ((equal? x y)  0)
+          (cond ((eq? x y)  0)
                 ((< x y)   -1)
                 ((> x y)    1)
-                (else (error "number1: unexpected error in compare-to"))))))
+                (else (error "number2: unexpected error in compare-to"))))))
     ;
     (define (equal-to data)
       (lambda (lhs)
@@ -80,10 +80,10 @@
     ;
     (define (sign data)
       (let ((x (cadr data)))
-        (cond ((equal? x 0) 0)
+        (cond ((eq? x 0) 0)
               ((< x 0)  -1)
               ((> x 0)   1)
-              (else (error "number1: unexpected error in sign")))))
+              (else (error "number2: unexpected error in sign")))))
     ;
     (define (to-bytes data)
       (lambda (num-bytes)
