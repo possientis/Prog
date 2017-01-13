@@ -18,11 +18,11 @@
     ;
     (define (get-random-bytes data)
       (lambda (num) 
-        (let ((draw (random (expt 2 (* 8 num)) (state data))))
+        (let ((draw (random (ash 1 (* 8 num)) (state data))))
           (integer->bytes draw num))))
     ;
     (define (get-seed)
-      (let ((file (open-file "/dev/random" "rb")))
+      (let ((file (open-file "/dev/urandom" "rb")))
         (let ((bytes (read-bytes 32 file)))
           (close-port file)
           (bytes->integer bytes 32))))

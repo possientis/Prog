@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="AntTask" default="simpletask" >
+<project name="AntTask" default="messagetask" >
 
   <property name="build.dir" location="build"/>
   <property name="classes.dir" location="${build.dir}/classes" />
@@ -33,5 +33,19 @@
     <simpletask />
 
    </target>
+
+  <target name="messagetask" depends="simpletask">
+    <!-- defining the custom ant task before using it -->
+    <taskdef name="message"
+             classname="org.example.antbook.tasks.MessageTask"
+             classpath="${classes.dir}"
+    />
+
+    <!-- no using it -->
+    <property name="the.message" value="This is a message" />
+    <message message="${the.message}" />
+
+   </target>
+
 
 </project>

@@ -46,7 +46,6 @@
           (check-num-equals x y "check-zero.1")
           (check-num-equals x z "check-zero.2" ))))
     ;
-
     (define (check-one)
       (let ((one (number 'one)) (x (number 'random 256)))
         (let ((y (one 'mul x)) (z (x 'mul one)))
@@ -220,22 +219,16 @@
             (z (signed-random 256)))
         ; x + 0 = x
         (check-num-equals (x 'add (number 'zero)) x "check-add.1")
-
         ; 0 + x = x
         (check-num-equals ((number 'zero) 'add x) x "check-add.2")
-
         ; x + (-x) = 0
         (check-num-equals (x 'add (x 'negate)) (number 'zero) "check-add.3")
-
         ; (-x) + x = 0
         (check-num-equals ((x 'negate) 'add x) (number 'zero) "check-add.4")
-
         ; x + y = y + x
         (check-num-equals (x 'add y) (y 'add x) "check-add.5")
-
         ; (x + y) + z = x + (y + z)
         (check-num-equals ((x 'add y) 'add z) (x 'add (y 'add z)) "check-add.6")
-
         ; actual check of x + y
         (let ((n (x 'to-integer)) (m (y 'to-integer)))
           (let ((check (number 'from-integer (+ n m))))
@@ -248,29 +241,21 @@
             (z (signed-random 256)))
         ; x * 0 = 0
         (check-num-equals (x 'mul (number 'zero)) (number 'zero) "check-mul.1")
-
         ; 0 * x = 0
         (check-num-equals ((number 'zero) 'mul x) (number 'zero) "check-mul.2")
-          
         ; x * 1 = x
         (check-num-equals (x 'mul (number 'one)) x "check-mul.3")
-
         ; 1 * x = x
         (check-num-equals ((number 'one) 'mul x) x "check-mul.4")
-
         ; (-x) * (-y) = x * y
         (check-num-equals ((x 'negate) 'mul (y 'negate)) (x 'mul y) "check-mul.5")
-
         ; x * y = y * x
         (check-num-equals (x 'mul y) (y 'mul x) "check-mul.6")
-
         ; (x * y) * z = x * (y * z)
         (check-num-equals ((x 'mul y) 'mul z) (x 'mul (y 'mul z)) "check-mul.7")
-        
         ; (x + y) * z = (x * z) + (y * z)
         (check-num-equals 
           ((x 'add y) 'mul z) ((x 'mul z) 'add (y 'mul z)) "check-mul.8")
-
         ; actual check of x * y
         (let ((n (x 'to-integer)) (m (y 'to-integer)))
           (let ((check (number 'from-integer (* n m))))
@@ -298,7 +283,6 @@
       ; minus one
       (let ((check1 (((number 'one) 'negate) 'to-string)))
         (check-equals check1 "-1" "check-to-string.3"))
-
       ; random positive
       (let ((x (number 'random 256)))
         (let ((check1 (x 'to-string)) 

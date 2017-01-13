@@ -65,10 +65,10 @@
     (define (compare-to data)
       (lambda (lhs)
         (let ((x (cadr data)) (y (lhs 'to-integer)))
-          (cond ((equal? x y)  0)
-                ((< x y)   -1)
-                ((> x y)    1)
-                (else (error "number1: unexpected error in compare-to"))))))
+          (cond ((< x y) -1)
+                ((> x y)  1)
+                (else     0)))))
+;                (else (error "number1: unexpected error in compare-to"))))))
     ;
     (define (equal-to data)
       (lambda (lhs)
@@ -105,15 +105,18 @@
     ; Essentially generates random bytes and subsequently 
     ; set the appropriate number of leading bits to 0 so 
     ; as to ensure the final bytes have the right bit size
+    ;
     (define (random-bytes num-bits)
       (let ((len (quotient (+ num-bits 7) 8)))  ; number of bytes required
         (if (equal? 0 len)
-          (make-bytes 0)                        ; empty bytes string
-          (let ((bytes (bytes->list (generator 'get-random-bytes len))))
-            (let ((lead (car bytes))
+          (make-bytes 0)                        ; returning empty byte-string
+          (let ((bytes (generator 'get-random-bytes len)))
+            (let ((lead (byte-ref bytes 0))     ; high order byte
                   (diff (- (* len 8) num-bits))); number of leading bits set to 0
               (let ((front (shave diff lead)))  ; new leading byte
-                (list->bytes (cons front (cdr bytes)))))))))
+                (byte-set! bytes 0 front)
+                bytes))))))
+                  
     ;
     ; return byte with n leading bits set to 0
     (define (shave n byte)

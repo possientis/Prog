@@ -1,6 +1,8 @@
 (load "number.scm")
 (load "rand.scm")
 (load "test-abstract.scm")
+(load "bench-abstract.scm")
+(require 'current-time)
 
 (define x (number 'from-integer 25))
 (define y (number 'from-integer 3))
@@ -78,8 +80,8 @@
 (display "r3 = ")(display (r3 'to-string))(newline)
 
 (define test1 (test-abstract 'new #f))
-
 (display (test1 'self))(newline)
+
 
 (define r4 (number 'from-bytes 1 (get-random-bytes 32)))
 (display "r4 = ")(display (r4 'to-string))(newline)
@@ -92,5 +94,9 @@
 
 (check-condition #t "testing check-condition")
 
+(define bench1 (bench-abstract 'new #f))  
+(display (bench1 'self))(newline)
+
+(benchmark (lambda () (get-random-bytes 32)) "get-random-bytes" 1000)
 
 (exit 0)
