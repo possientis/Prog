@@ -1,5 +1,5 @@
 ; choose implementation here
 
-(load "number1.scm")
+(load "number2.scm")
 
-(define number number1)
+(define number number2)

@@ -1,3 +1,6 @@
+check 'eval' and 'load' on scm and slib.
+design an example of code with an 'eval' statement within the body of a function  
+
 continue writing comment in strict-load.scm
 loading global-env in lazy mode fails
 unit-test: load (called directly) and load (by eval)

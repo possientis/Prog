@@ -114,10 +114,37 @@
           (benchmark (lambda () (hash n 1000000000)) "hash*" 1000000))))
 
 
-    (define (bench-number-equals) 'TODO)
-    (define (bench-from-integer) 'TODO)
-    (define (bench-to-integer) 'TODO)
-    (define (bench-bit-length) 'TODO)
+    (define (bench-number-equals)
+      (let ((x (number 'random 256)) (y (number 'random 256)))
+        (let ((n (x 'to-integer)) (m (y 'to-integer)))
+          (benchmark (lambda () (x 'equal? y) (y 'equal? x)) "equal?" 1000000)
+          (benchmark (lambda () (equal? n m) (equal? m n)) "equal?*" 1000000)
+          (benchmark
+            (lambda () ((number 'equal?) x y) ((number 'equal?) y x))
+            "equal? (static)" 1000000))))
+
+    (define (bench-from-integer)
+      (let ((bs (get-random-bytes 32)))
+        (let ((n (bytes->integer bs 32)))
+          (let ((m (- n)))
+            (benchmark 
+              (lambda () (number 'from-integer n) (number 'from-integer m))
+              "from-integer" 1000000)))))
+
+
+    (define (bench-to-integer)
+      (let ((x (number 'random 256)))
+        (let ((y (x 'negate)))
+          (benchmark 
+            (lambda () (x 'to-integer) (y 'to-integer))
+            "to-integer" 1000000))))
+
+    (define (bench-bit-length)
+      (let ((x (number 'random 256)))
+        (let ((n (x 'to-integer)))
+          (benchmark (lambda () (x 'bit-length)) "bit-length" 1000000)
+          (benchmark (lambda () (integer-length n)) "bit-length*" 1000000))))
+
 
     ; returning no argument constructor
     (lambda ()
