@@ -48,12 +48,12 @@
       (if (< i iterations)
         (begin
           (call-back)
-          (loop (+ i 1)))
-        (let ((end (get-internal-run-time)))
-          (fprintf (current-error-port) 
-                   "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
-                   name 
-                   iterations 
-                   (/ (- end start) internal-time-units-per-second)))))))
+          (loop (+ i 1)))))
+    (let ((end (get-internal-run-time)))
+      (fprintf (current-error-port) 
+               "Benchmark: %s, %d iterations ran in %.3f seconds\n" 
+               name 
+               iterations 
+               (/ (- end start) internal-time-units-per-second)))))
   
 

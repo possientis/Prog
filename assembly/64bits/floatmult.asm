@@ -59,11 +59,11 @@ _stopa:                           ; a = sa.fa.2^(ea - 52)
 _stopb:                           ; b = sb.fb.2^(eb - 52)
         mov rax, [fa]             ; load fraction of a into rax
         imul qword [fb]           ; fa*fb -> rdx:rax
-        mov rcx, 0x1ffffffffff    ; 41 bits mask for rdx 
-        and rdx, rcx              ; extracting lower 41 bits
         shr rax, 52               ; keeping highest 12 bits of rax
         shl rdx, 12               ; aligning bits
-        or  rax, rdx              ; fraction for product with 53th bit set
+        or  rax, rdx              ; fa*fb/2^52 -> rax
+        ; TODO  branch required depending whether 54th bit of rax is set
+        ; or maybe allow fraction to have 54 bits prior to encoding
         mov [f], rax              ; storing fraction
         mov ax, [ea]              ; load exponent for a
         add ax, [eb]              ; ea + eb

@@ -3,18 +3,18 @@
 (require 'byte-number)
 
 (define number2
-  (let ((generator (rand 'new)))
+  (let ((generator (rand 'new)) (zero #f) (one #f))
     ; object created from data is message passing interface
     (define this 
       (lambda (data)
         (lambda (m . args)
-          (cond ((eq? m 'to-integer) (cadr data))
+          (cond ((eq? m 'to-integer) data)
                 ((eq? m 'compare-to) (apply (compare-to data) args))
-                ((eq? m 'hash) (hash data 1000000))
+                ((eq? m 'hash) (hash data 1000000000))
                 ((eq? m 'to-string) (to-string data))
                 ((eq? m 'add) (apply (add data) args))
                 ((eq? m 'mul) (apply (mul data) args))
-                ((eq? m 'negate) (this (list 'data (- (cadr data)))))
+                ((eq? m 'negate) (this (- data)))
                 ((eq? m 'equal?) (apply (equal-to data) args))
                 ((eq? m 'to-bytes) (apply (to-bytes data) args))
                 ((eq? m 'bit-length) (bit-length data))
@@ -23,9 +23,9 @@
     ; static interface
     (define static 
       (lambda (m . args)
-        (cond ((eq? m 'zero) (this (list 'data 0)))
-              ((eq? m 'one) (this (list 'data 1)))
-              ((eq? m 'from-integer) (this (list 'data (car args))))
+        (cond ((eq? m 'zero) zero)
+              ((eq? m 'one) one)
+              ((eq? m 'from-integer) (this (car args)))
               ((eq? m 'from-bytes) (apply from-bytes args))
               ((eq? m 'random) (apply random args))
               ((eq? m 'equal?) number-equal?) 
@@ -35,56 +35,53 @@
       (let ((count (bytes-length bytes)))
         (let ((value (bytes->integer bytes count)))
           (if (< sign 0)
-            (this (list 'data (- value)))
-            (this (list 'data value))))))
+            (this (- value))
+            (this value)))))
     ;
-    (define (to-string data) (object->string (cadr data)))
+    (define (to-string data) (object->string data))
     ;
     (define (add data) 
       (lambda (obj) 
-        (let ((x (cadr data)) (y (obj 'to-integer)))
-          (this (list 'data (+ x y))))))
+        (let ((y (obj 'to-integer)))
+          (this (+ data y)))))
     ;
     (define (mul data) 
       (lambda (obj)
-        (let ((x (cadr data)) (y (obj 'to-integer)))
-          (this (list 'data (* x y))))))
+        (let ((y (obj 'to-integer)))
+          (this (* data y)))))
     ;
     (define (compare-to data)
       (lambda (lhs)
-        (let ((x (cadr data)) (y (lhs 'to-integer)))
-          (cond ((< x y) -1)
-                ((> x y)  1)
+        (let ((y (lhs 'to-integer)))
+          (cond ((< data y) -1)
+                ((> data y)  1)
                 (else     0)))))
 ;                (else (error "number2: unexpected error in compare-to"))))))
     ;
     (define (equal-to data)
       (lambda (lhs)
-        (let ((x (cadr data)) (y (lhs 'to-integer)))
-          (equal? x y))))
+        (let ((y (lhs 'to-integer)))
+          (equal? data y))))
     ;
     (define (number-equal? lhs rhs)
       (equal? (lhs 'to-integer) (rhs 'to-integer)))
     ;
     (define (sign data)
-      (let ((x (cadr data)))
-        (cond ((equal? x 0) 0)
-              ((< x 0)  -1)
-              ((> x 0)   1)
-              (else (error "number2: unexpected error in sign")))))
+      (cond ((equal? data 0) 0)
+            ((< data 0)  -1)
+            ((> data 0)   1)
+            (else (error "number2: unexpected error in sign"))))
     ;
     (define (to-bytes data)
       (lambda (num-bytes)
-        (let ((x (cadr data)))
-          (if (< x 0)
-            (integer->bytes (- x) num-bytes)
-            (integer->bytes x num-bytes)))))
+        (if (< data 0)
+          (integer->bytes (- data) num-bytes)
+          (integer->bytes data num-bytes))))
     ;
     (define (bit-length data)
-      (let ((x (cadr data)))
-        (if (< x 0)
-          (integer-length (- x))
-          (integer-length x))))
+      (if (< data 0)
+        (integer-length (- data))
+        (integer-length data)))
     ;
     (define (random num-bits)
         (from-bytes 1 (random-bytes num-bits)))  
@@ -113,6 +110,9 @@
           byte
           (loop (ash mask -1) (- n 1) (logand byte mask)))))
 
+    ; initialization
+    (set! zero (this 0))
+    (set! one (this 1))
     ; returning static interface
     static))
 

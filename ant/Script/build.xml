@@ -1,0 +1,23 @@
+<project name="script_example" default="test-random">
+
+  <description>
+    Use a script task to generate a random number, then print it
+  </description>
+
+  <target name="random-js">
+    <script language="javascript"><![CDATA[
+      //NB: an unqualified Math is the JavaScript object
+      var r=java.lang.Math.random();
+      var num = Math.round(r*10);
+      project.setNewProperty("random.js", num);
+      self.log("JavaScript generated random number " + num, project.MSG_DEBUG);
+    ]]>
+    </script>
+  </target>
+
+
+  <target name="test-random" depends="random-js">
+    <echo>JavaScript random number is ${random.js}</echo>
+  </target>
+
+</project>
