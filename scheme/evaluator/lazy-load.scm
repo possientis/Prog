@@ -5,6 +5,8 @@
     (display "loading lazy-load")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; see comments from strict-load.scm
+
 (define (lazy-load filename)
   (let ((env global-env) (code (filename->code filename)))
     (lazy-eval code env)

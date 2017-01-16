@@ -5,8 +5,8 @@
     (display "loading frame3")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
-
 (load "dict.scm")
 (define frame3 dictionary)
+
 
 ))  ; include guard 

@@ -5,6 +5,8 @@
     (display "loading analyze-load")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; see comments from strict-load.scm
+
 (define (analyze-load filename)
   (let ((env global-env) (code (filename->code filename)))
     (analyze-eval code env)

@@ -1,12 +1,8 @@
-(define test
-  (let ()
-    (define x 12)
-    (display "test is running\n")
-    x))
+(define x 20)
 
-(display test)(newline)
-(display test)(newline)
-(display test)(newline)
-(display test)(newline)
+(define (f x)
+  (display "x = ")(display (eval 'x))(newline))
+
+(f 5)
 
 (exit 0)

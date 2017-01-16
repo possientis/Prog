@@ -104,7 +104,9 @@
             (lambda () (x 'compare-to y) (y 'compare-to x))
             "compare-to" 1000000)
           (benchmark 
-            (lambda () (if (< n m) -1 1) (if (< m n) -1 1))
+            (lambda () 
+              (if (< n m) -1 (if (> n m) 1 0)) 
+              (if (< m n) -1 (if (> m n) 1 0)))
             "compare-to*" 1000000))))
 
     (define (bench-hash)

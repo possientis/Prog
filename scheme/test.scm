@@ -1,8 +1,3 @@
-
-(define (f x)
-  (+ x y))
-
-(define g (lambda (x) (+ x y)))
-
-
-(display (g 5))
+(define x 5)
+(display "x = ")(display x)(newline)
+(exit 0)

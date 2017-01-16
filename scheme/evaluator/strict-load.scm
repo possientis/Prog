@@ -67,6 +67,10 @@
 ; statement, the expression argument of such 'eval' statement will be evaluated
 ; in the 'wrong' environment global-env.
 ;
+; (define x 20)
+; (define (f x) (display "x = ") (display (eval 'x)) (newline))
+; (f 5) ; x = 20
+;
 ;  
 (define (strict-load filename)
   (let ((env global-env) (code (filename->code filename)))
