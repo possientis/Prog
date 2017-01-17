@@ -1,6 +1,6 @@
         segment .data
 a       dq  -629.67
-b       dq  123.7592
+b       dq   123.7592
 
         segment .bss
 p       dq  0                     ; holding product 
@@ -10,9 +10,10 @@ fa      dq  0
 sb      db  0
 eb      dw  0
 fb      dq  0 
-s       db  0
-e       dw  0
-f       dq  0
+s       db  0 ; sign bit
+e       dw  0 ; exponent with bias
+f       dq  0 ; 53 bits (53th bit set)
+c       dq  0 ; result
 
 
         segment .text
@@ -62,15 +63,36 @@ _stopb:                           ; b = sb.fb.2^(eb - 52)
         shr rax, 52               ; keeping highest 12 bits of rax
         shl rdx, 12               ; aligning bits
         or  rax, rdx              ; fa*fb/2^52 -> rax
-        ; TODO  branch required depending whether 54th bit of rax is set
-        ; or maybe allow fraction to have 54 bits prior to encoding
+        mov rcx, 0x20000000000000 ; 54th bit
+        mov rbx, rax              ; copy
+        and rbx, rcx              ; testing 54th bit
+        jz  _cont1
+        shr rax, 1                ; 54th bit set becomes 53th bit
+_cont1:
+        shr rbx, 53               ; result of test as 1 or 0
         mov [f], rax              ; storing fraction
         mov ax, [ea]              ; load exponent for a
         add ax, [eb]              ; ea + eb
+        add ax, bx                ; add 1 if 54th bit was set
         mov [e], ax               ; storing exponent
         mov al, [sa]              ; load sign of a
         xor al, [sb]              ; sa*sb -> al
         mov [s], al               ; storing sign
-        
+
+_extract:
+        mov rax, [f]                
+        mov rcx, 0x10000000000000 ; 53th bit
+        xor rax, rcx              ; clearing 53th bit
+        mov rbx, 0
+        mov bx, [e]               ; exponent with bias
+        add bx, 1023              ; restoring bias 
+        shl rbx, 52               ; aligning exponent bits
+        or rax, rbx               ; including exponent bits
+        mov rbx, 0
+        mov bl, [s]               ; sign
+        shl rbx, 63               ; aligning sign bit
+        or rax, rbx               ; including sign bit
+        mov [c], rax              ; saving result
+
 _exit:
         ret
