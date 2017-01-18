@@ -26,7 +26,5 @@
 (load "unspecified.scm")
 (load "variable.scm")
 
-; introduce language-defined primitives here
-;(new-load "test.scm")
 
 

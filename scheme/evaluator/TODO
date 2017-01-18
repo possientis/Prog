@@ -1,3 +1,5 @@
+remove new-eval new-apply new-load
+
 continue investigating failure in unit-test due to setup-environment 
 in global-env.scm. Note that calls to (environment) ((environment) 'extended) 
 (primitive-procedure-names) (primitive-procedure-objects) are successful.
@@ -6,7 +8,7 @@ in global-env.scm. Note that calls to (environment) ((environment) 'extended)
 loading global-env in lazy mode fails
 unit-test: load (called directly) and load (by eval)
 
-why is new-apply being called at all ... well it is called in new-map...
+lazy-run analyze-rundo not work
 
 test the following code in lazy mode (after fixing define)
 (define x 1)

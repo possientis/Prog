@@ -37,22 +37,25 @@
 ; whose code is itself interpreted...
 
 (load "debug.scm")
-(load "eval-mode.scm")
+
 (load "strict-eval.scm")
 (load "analyze-eval.scm")
 (load "lazy-eval.scm")
-(load "new-eval.scm")
+
 (load "strict-apply.scm")
 (load "analyze-apply.scm")
 (Load "lazy-apply.scm")
-(load "new-apply.scm")
+
 (load "strict-load.scm")
 (load "analyze-load.scm")
 (load "lazy-load.scm")
-(load "new-load.scm")
+
+(load "strict-map.scm")
+(load "analyze-map.scm")
+(load "lazy-map.scm")
+
 (load "new-require.scm")
 (load "new-object-to-string.scm")
-(load "new-map.scm")
 (load "new-display.scm")
 
 (define primitive-procedures
@@ -93,7 +96,6 @@
         (list 'list list)
         (list 'list? list?)
         (list 'make-vector make-vector)
-        (list 'map new-map)
         (list 'modulo modulo)
         (list 'newline newline)
         (list 'null? null?)
