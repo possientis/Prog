@@ -1,0 +1,3 @@
+# sh and bash
+
+echo *
