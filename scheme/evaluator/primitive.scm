@@ -58,6 +58,7 @@
 (load "new-object-to-string.scm")
 (load "new-display.scm")
 
+
 (define primitive-procedures
   (list (list '+ +)
         (list '* *)
@@ -119,7 +120,8 @@
         ; more to be included
         ))
 
-(define (primitive-procedure-names) (map car primitive-procedures))
+(define (primitive-procedure-names) 
+  (map car primitive-procedures))
 
 (define (primitive-procedure-objects)
   (map (lambda (proc) (make-primitive-procedure (cadr proc))) 

@@ -42,14 +42,17 @@
 (do-run '(define proc-objects (primitive-procedure-objects)))
 
 (do-run '(display extend-proc))
-(newline)
-(newline)
 
+(newline)
+(newline)
 (do-run '(display proc-names))
+
 (newline)
 (newline)
 (do-run '(display proc-objects))
 
+(newline)
+(newline)
 (do-run '(extend-proc proc-names proc-objects))
 
 

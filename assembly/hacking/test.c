@@ -1,15 +1,11 @@
 #include <stdio.h>
 
-void f(unsigned int x){
-  printf("x = %x\n", x);
-}
+char a[]="1234567890";
 
 int main()
 {
 
-  int a = -5;
-
-  f(a);
+  printf("size = %d\n", sizeof(a));
 
   return 0;
 }
