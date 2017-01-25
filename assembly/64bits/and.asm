@@ -13,4 +13,6 @@ _start:
         idiv  rcx       ; rax = 0x0123456781234567
         and   rax, 0xf  ; rax = 0x7, rdx = 0x8
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

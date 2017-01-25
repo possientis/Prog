@@ -6,4 +6,6 @@ _start:
         or  rax, 1        ; make he number odd
         or  rax, 0xff00   ; set bits 15-8
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

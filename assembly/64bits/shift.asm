@@ -16,4 +16,6 @@ _start:
         shl rdx, 8          ; shift the new bits to align
         or  rax, rdx        ; rax = 0x1234aa78
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

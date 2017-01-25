@@ -25,4 +25,6 @@ _next:
         rol rax, 23             ; realign the bit fields
         mov [sample], rax       ; store the fields in memory
 
-        ret 
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

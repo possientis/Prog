@@ -36,4 +36,6 @@ _final: ; three operands (64 bits result), third op is immediate
         imul  rbx, qword [a], 100 ; store a*100 in rbx  ('qword' optional)
         imul  rdx, rbx, 50        ; store 50* rbx in rdx
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

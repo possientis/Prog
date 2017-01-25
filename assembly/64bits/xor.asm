@@ -7,5 +7,7 @@ _start:
         mov rax, 0x1234
         xor rax, 0xf    ; change to 0x123b
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0    ; returned status code
+        int   0x80
         

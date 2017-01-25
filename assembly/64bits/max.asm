@@ -13,5 +13,6 @@ _start:
         mov [a], rbx
         mov [b], rax 
 in_order:
-        xor eax, eax
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

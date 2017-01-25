@@ -22,6 +22,7 @@ _start:
         mov rbx, 102        ; go here if i == 2
 
 .end:                       ; defining local label .case3 (local to _start) 
-        xor rax, rax
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0    ; returned status code
+        int   0x80
 

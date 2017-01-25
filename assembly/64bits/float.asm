@@ -30,6 +30,8 @@ _start:                           ; read 64 bits float and extracts components
         mov [f], rbx              ; storing fraction into memory
 
 _exit:
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80
         
 

@@ -14,4 +14,6 @@ _start:
         mov   [quot], rax ; store the quotient
         mov   [rem], rdx  ; store the remainder
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

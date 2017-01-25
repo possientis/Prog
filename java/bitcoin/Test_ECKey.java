@@ -10,10 +10,6 @@ import java.security.SecureRandom;
 import java.security.SignatureException;
 import java.nio.charset.Charset;
 
-import org.bitcoin.Secp256k1Context;
-import org.bitcoin.NativeSecp256k1;
-import org.bitcoin.NativeSecp256k1Util;
-
 import org.bitcoinj.core.Utils;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
@@ -34,10 +30,6 @@ import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
-import org.spongycastle.crypto.digests.SHA256Digest;
-import org.spongycastle.crypto.signers.HMacDSAKCalculator;
-import org.spongycastle.crypto.signers.ECDSASigner;
-import org.spongycastle.crypto.params.ECPrivateKeyParameters;
 import org.spongycastle.crypto.ec.CustomNamedCurves;
 import org.spongycastle.asn1.DERSequenceGenerator;
 import org.spongycastle.asn1.ASN1Integer;
@@ -469,92 +461,6 @@ public class Test_ECKey extends Test_Abstract {
     return _getNewEncryptedKey(passphrase, true);
   }
 
-  private static ECKey.ECDSASignature _signNative(
-      Sha256Hash input, 
-      byte[] priv)
-  {
-
-    // being ultra careful before calling native C
-    checkCondition(Secp256k1Context.isEnabled(), "_signNative.1");
-    checkNotNull(input, "_signNative.2");
-    checkNotNull(priv, "_signNative.3");
-    checkEquals(priv.length, 32, "_signNative.4");
-
-    try {
-      byte[] signature = NativeSecp256k1.sign(input.getBytes(), priv);
-      return ECKey.ECDSASignature.decodeFromDER(signature);
-    } catch (NativeSecp256k1Util.AssertFailException e){
-      checkCondition(false, "_signNative.5");
-      return null;
-    }
-  }
-
-  private static ECKey.ECDSASignature _signSpongy(
-      Sha256Hash input, 
-      byte[] priv)
-  {
-
-    SHA256Digest digest = new SHA256Digest();
-    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
-    ECDSASigner signer = new ECDSASigner(calculator);
-
-    BigInteger secret = new BigInteger(1, priv);
-    ECPrivateKeyParameters key = new ECPrivateKeyParameters(secret, ECKey.CURVE);
-
-    signer.init(true, key);
-    BigInteger[] components = signer.generateSignature(input.getBytes());
-
-    BigInteger r = components[0];
-    BigInteger s = components[1];
-
-    return new ECKey.ECDSASignature(r,s).toCanonicalised();
-  }
-
-  private static BigInteger _getDeterministicKey(
-      BigInteger secret,
-      Sha256Hash message,
-      int index)
-  {
-    // ECDSA Signature scheme requires the generation of a random private key
-    // However, using the same random private key twice to sign two different
-    // messages exposes the signer's private key with potentially disastrous
-    // consequences for someone re-using the same bitcoin address. To avoid 
-    // this risk, a pseudo-random private key is generated from the signer's 
-    // private key and message. An index argument exists to allow the retrieval
-    // of various elements of the pseudo-random sequence. In practice, calling
-    // the function with index = 0 should be enough, but it is possible to use
-    // index = 1, 2 , .. in the unlikely event that a fresh key is required.
-    
-    checkCondition(index >= 0, "_getDeterministicKey.1");
-
-    BigInteger q = ECKey.CURVE.getN();  // secp256k1 curve order
-
-    SHA256Digest digest = new SHA256Digest();
-
-    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
-
-    calculator.init(q, secret, message.getBytes());
-
-    int count = 0;
-
-    BigInteger k = null;
-
-    while(count <= index)
-    {
-      k = calculator.nextK(); 
-
-      ++count;
-    }
-
-    // returned k should be integer modulo q. Checking just in case
-
-    checkCondition(k.compareTo(BigInteger.ZERO) >= 0, "_getDeterministicKey.2");
-
-    checkCondition(k.compareTo(q) < 0, "_getDeterministicKey.3");
-
-    return k;
-  }
-
   private static BigInteger _getProjection(ECPoint point)
   {
     // when using the DSA or ECDSA signature scheme, we typically have 
@@ -622,7 +528,7 @@ public class Test_ECKey extends Test_Abstract {
     {
 
       // First obtain deterministic pseudo random secret k
-      BigInteger k = _getDeterministicKey(x, message, index++);
+      BigInteger k = EC_Test_Utils.getDeterministicKey(x, message, index++);
 
       if(k.equals(BigInteger.ZERO)) continue; // start all over
 
@@ -1878,8 +1784,8 @@ public class Test_ECKey extends Test_Abstract {
     ECKey k2 = k1.decompress();
     byte[] priv = k1.getPrivKeyBytes(); // same for k2
 
-    ECKey.ECDSASignature sig  = _signNative(hash, priv);
-    ECKey.ECDSASignature check  = _signSpongy(hash, priv);
+    ECKey.ECDSASignature sig  = EC_Test_Utils.signNative(hash, priv);
+    ECKey.ECDSASignature check  = EC_Test_Utils.signSpongy(hash, priv);
     checkEquals(check, sig, "checkRecoverFromSignature.1");
 
     // recovering compressed public key
@@ -1939,8 +1845,8 @@ public class Test_ECKey extends Test_Abstract {
     ECKey key = new ECKey();
     byte[] priv = key.getPrivKeyBytes();
     ECKey.ECDSASignature sig = key.sign(hash);
-    ECKey.ECDSASignature check1 = _signNative(hash, priv);
-    ECKey.ECDSASignature check2 = _signSpongy(hash, priv);
+    ECKey.ECDSASignature check1 = EC_Test_Utils.signNative(hash, priv);
+    ECKey.ECDSASignature check2 = EC_Test_Utils.signSpongy(hash, priv);
     ECKey.ECDSASignature check3 = _signCheck(hash, priv);
 
     checkEquals(check1, sig, "checkSign.1");

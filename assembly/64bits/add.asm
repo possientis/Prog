@@ -17,5 +17,8 @@ _start:
         add   rax, [a]  ; add the content of a
         mov   [sum], rax; save sum in sum 
         mov   rax, 0 
+
         leave
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0    ; returned status code
+        int   0x80

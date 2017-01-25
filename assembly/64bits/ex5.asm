@@ -22,4 +22,6 @@ _start:
 
         add   rax, rcx  ; (x1 - x2)^2 + (y1 - y2)^2
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

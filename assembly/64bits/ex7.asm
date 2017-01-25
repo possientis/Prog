@@ -16,4 +16,6 @@ _start:               ; swapping a and b
         mov [a], rax
         mov [b], rbx
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

@@ -1,9 +1,20 @@
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+import org.bitcoin.Secp256k1Context;
+import org.bitcoin.NativeSecp256k1;
+
+import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.ECKey;
+import org.bitcoin.NativeSecp256k1Util;
+
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.ECCurve;
 import org.spongycastle.math.ec.custom.sec.SecP256K1Curve;
+import org.spongycastle.crypto.digests.SHA256Digest;
+import org.spongycastle.crypto.signers.HMacDSAKCalculator;
+import org.spongycastle.crypto.signers.ECDSASigner;
+import org.spongycastle.crypto.params.ECPrivateKeyParameters;
 
 public class EC_Test_Utils {
 
@@ -343,6 +354,94 @@ public class EC_Test_Utils {
 
     return curve.createPoint(x,z);
 
+  }
+
+  public static ECKey.ECDSASignature signNative(
+      Sha256Hash input, 
+      byte[] priv)
+  {
+
+    // being ultra careful before calling native C
+    checkCondition(Secp256k1Context.isEnabled(), "_signNative.1");
+//    checkNotNull(input, "_signNative.2");
+//    checkNotNull(priv, "_signNative.3");
+//    checkEquals(priv.length, 32, "_signNative.4");
+
+    try {
+      byte[] signature = NativeSecp256k1.sign(input.getBytes(), priv);
+      return ECKey.ECDSASignature.decodeFromDER(signature);
+    } catch (NativeSecp256k1Util.AssertFailException e){
+      checkCondition(false, "_signNative.5");
+      return null;
+    }
+  }
+
+
+  public static ECKey.ECDSASignature signSpongy(
+      Sha256Hash input, 
+      byte[] priv)
+  {
+
+    SHA256Digest digest = new SHA256Digest();
+    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
+    ECDSASigner signer = new ECDSASigner(calculator);
+
+    BigInteger secret = new BigInteger(1, priv);
+    ECPrivateKeyParameters key = new ECPrivateKeyParameters(secret, ECKey.CURVE);
+
+    signer.init(true, key);
+    BigInteger[] components = signer.generateSignature(input.getBytes());
+
+    BigInteger r = components[0];
+    BigInteger s = components[1];
+
+    return new ECKey.ECDSASignature(r,s).toCanonicalised();
+  }
+
+
+  public static BigInteger getDeterministicKey(
+      BigInteger secret,
+      Sha256Hash message,
+      int index)
+  {
+    // ECDSA Signature scheme requires the generation of a random private key
+    // However, using the same random private key twice to sign two different
+    // messages exposes the signer's private key with potentially disastrous
+    // consequences for someone re-using the same bitcoin address. To avoid 
+    // this risk, a pseudo-random private key is generated from the signer's 
+    // private key and message. An index argument exists to allow the retrieval
+    // of various elements of the pseudo-random sequence. In practice, calling
+    // the function with index = 0 should be enough, but it is possible to use
+    // index = 1, 2 , .. in the unlikely event that a fresh key is required.
+    
+    checkCondition(index >= 0, "_getDeterministicKey.1");
+
+    BigInteger q = ECKey.CURVE.getN();  // secp256k1 curve order
+
+    SHA256Digest digest = new SHA256Digest();
+
+    HMacDSAKCalculator calculator = new HMacDSAKCalculator(digest);
+
+    calculator.init(q, secret, message.getBytes());
+
+    int count = 0;
+
+    BigInteger k = null;
+
+    while(count <= index)
+    {
+      k = calculator.nextK(); 
+
+      ++count;
+    }
+
+    // returned k should be integer modulo q. Checking just in case
+
+    checkCondition(k.compareTo(BigInteger.ZERO) >= 0, "_getDeterministicKey.2");
+
+    checkCondition(k.compareTo(q) < 0, "_getDeterministicKey.3");
+
+    return k;
   }
 
 }

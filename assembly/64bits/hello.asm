@@ -11,6 +11,8 @@ main:
         lea   rdi, [msg]  ; parameter 1 for printf
         xor   eax, eax    ; 0 floating point parameter
         call  printf
+
         xor   eax, eax    ; returns 0
         pop   rbp
         ret
+

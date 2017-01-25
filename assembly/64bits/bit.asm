@@ -17,4 +17,6 @@ _start:
         bts   [a+8*rbx], rcx  ; set the bit, insert into set (test and set)
         btr   [a+8*rbx], rcx  ; clear the bit, remove from set (test and reset) 
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

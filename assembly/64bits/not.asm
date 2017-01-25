@@ -11,4 +11,6 @@ _start:
         div rbx       ; unsigned divide, rax = 0x1111111111111111
         not rax       ; rax = 0xeeeeeeeeeeeeeeee
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

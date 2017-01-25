@@ -10,5 +10,6 @@ _start:
         pop rsp
         pop rsp
 end:
-        xor eax, eax
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0    ; returned status code
+        int   0x80

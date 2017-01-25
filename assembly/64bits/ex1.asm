@@ -63,4 +63,6 @@ _ent1:
 
 _end:
         xor rax, rax
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

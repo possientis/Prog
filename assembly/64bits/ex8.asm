@@ -57,4 +57,6 @@ _start:                         ; computes xor of 8 bytes
         ror rbx, 8              ; restore to initial value
 
 _exit:
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

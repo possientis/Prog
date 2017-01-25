@@ -20,4 +20,7 @@ _start:
         mov   [diff], rax ; move difference to diff 
         mov   rax, 0
         leave
-        ret
+
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0   ; returned status code
+        int   0x80

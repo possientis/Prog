@@ -18,4 +18,7 @@ _start:
         neg   rax
         cmovl rax, rbx  ; rax should be abs(b)
 
-        ret
+        mov   eax, 1    ; sys call number
+        mov   ebx, 0    ; returned status code
+        int   0x80
+

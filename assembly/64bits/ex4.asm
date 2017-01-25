@@ -33,9 +33,8 @@ _test:
       mov     [a], rax        ; move register value into memory
       mov     rbx, rax        ; move value of rax into rbx
 
-
-      
-      xor   rax, rax
-      ret
+      mov   eax, 1    ; sys call number
+      mov   ebx, 0   ; returned status code
+      int   0x80
 
 
