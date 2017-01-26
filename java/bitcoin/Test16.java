@@ -3,7 +3,7 @@ import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.ECKey.ECDSASignature;
 import org.bitcoinj.core.Utils;
 
-class Test {
+class Test16 {
   public static void main(String[] args)
   {
 

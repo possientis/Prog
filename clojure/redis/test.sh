@@ -14,12 +14,7 @@ done
 
 clojurec -cp ${RABBIT_JARS} test_redis 1> /dev/null
 java -cp ${RABBIT_JARS} test_redis
-rm *.class
-rm redis/*.class
-rm redis/channel/*.class
-rm redis/connection/*.class
-rm redis/connection_pool/*.class
-rm redis/protocol/*.class
+./clean.sh
 
 cd ${DIR}
 echo '\nredis test completed successfully\n'

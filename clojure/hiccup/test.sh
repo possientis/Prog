@@ -9,10 +9,7 @@ clojurec -cp clojure-1.6.0.jar test_hiccup 1> /dev/null
 
 java -cp clojure-1.6.0.jar:. test_hiccup
 
-rm *.class
-rm hiccup/*.class
-rm hiccup/compiler/*.class
-rm hiccup/util/*.class
+./clean.sh
 
 
 cd ${DIR}

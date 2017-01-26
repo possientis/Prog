@@ -45,6 +45,14 @@
     ; returning two argument constructor
     ;
     (lambda (expr env) 
+      (if (null? expr)
+        (begin
+          (debug "[DEBUG]: make-thunk: expression is null")
+          (debug-newline)
+          (if (null? env)
+            (debug "[DEBUG]: make-thunk while environment is also null")
+            (debug "[DEBUG]: make-thunk while environment is not null"))
+          (debug-newline)))
       (if (thunk? expr) ; do not create a double thunk
         expr
         (list 'thunk (this (list 'data expr env)))))))

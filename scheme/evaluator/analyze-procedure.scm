@@ -42,6 +42,8 @@
 ; and we are returning an evaluated thunk (environment is '()).
 
 (define (lazy-apply-analyze-procedure proc args)
+  (debug "[DEBUG]: lazy-apply-analyze-procedure: proc = ")
+  (debug proc)(debug-newline)
   (let ((body (analyze-procedure-body proc))
         (params (analyze-procedure-parameters proc))
         (init-env (analyze-procedure-environment proc)))

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/java/bitcoin/Number
+HOME=/home/john/Prog/scala
 cd ${HOME}
 
 rm -f *.class

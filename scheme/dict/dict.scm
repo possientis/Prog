@@ -87,6 +87,7 @@
   ;; Linear time temporary vector of elements used to re-build hash table
   ;; following increase of decrease of allocated memory space.
   (define (temp-vector)     ;; returns a vector of all pairs (key . value)
+    (display "[DEBUG]: dict : temp-vector: running...\n")
     (let ((temp (make-vector num))) ;; allocating vector for all table elements
       (let ((index 0))              ;; storing index in new vector
         (let loop ((i 0))             ;; outer loop through hash table entries
@@ -94,14 +95,16 @@
             (begin
               (let ((link-list (vector-ref data i)))
                 (if (not (null? link-list))
-                  (let loop2 ((iter (link-list 'iter)))
-                    (if (not (iter 'null?))
-                      (begin
-                        (vector-set! temp index (cons (iter 'key) (iter 'value)))
-                        (set! index (+ index 1))
-                        (iter '++)
-                        (loop2 iter))))))
-            (loop (+ i 1))))))
+                  (begin
+                    (display "[DEBUG]: dict: temp-vector: link-list is not null\n")
+                    (let loop2 ((iter (link-list 'iter)))
+                      (if (not (iter 'null?))
+                        (begin
+                          (vector-set! temp index (cons (iter 'key) (iter 'value)))
+                          (set! index (+ index 1))
+                          (iter '++)
+                          (loop2 iter)))))))
+              (loop (+ i 1))))))
         temp))
   ;;
   ;; re-creating hash table from scratch with more allocated space to reduce load

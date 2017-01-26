@@ -461,103 +461,6 @@ public class Test_ECKey extends Test_Abstract {
     return _getNewEncryptedKey(passphrase, true);
   }
 
-  private static BigInteger _getProjection(ECPoint point)
-  {
-    // when using the DSA or ECDSA signature scheme, we typically have 
-    // an underlying cyclic group G and some mapping proj: G -> Fq which 
-    // projects the group elements to the prime field Fq modulo the order 
-    // of the group. This projection mapping is required when computing 
-    // a signature (r,s), as r = proj(kG') where k is some random or pseudo
-    // -random non-zero element of Fq, and G' is the chosen generator of 
-    // the cyclic group. In the case of DSA, the group is a cyclic subgroup 
-    // (of prime order q) of Zp* for some prime p (so q divides p - 1), 
-    // and proj: G -> Fq simply sends [x]p (class modulo p) to [x]q (class 
-    // modulo q), where the representative x of [x]p is chosen in [0,p-1]. 
-    // In the case of ECDSA, the group is an elliptic curve and a point 
-    // ([x]p,[y]p) is sent to [x]q.
-
-    if(point.isInfinity()) return BigInteger.ZERO;  // projection always defined
-
-    BigInteger p = EC_Test_Utils.fieldPrime;
-
-    BigInteger q = ECKey.CURVE.getN();  // seckp256k1 curve order
-
-    BigInteger x = point.getAffineXCoord().toBigInteger();
-
-    // asserting that 0 <= x < p
- 
-    checkCondition(BigInteger.ZERO.compareTo(x) <= 0, "_getProjection.1");
-
-    checkCondition(x.compareTo(p) == -1, "_getProjection.2");
-    
-    return x.mod(q);
-  }
-
-  private static BigInteger _getProjection(Sha256Hash hash)
-  {
-    // just like in the case of an ECPoint, a message hash needs to 
-    // be projected onto the prime field Fq (where q is the curve order)
-    // in order to produce a signature. The projection mapping
-    // proj : Hash -> Fq is simply a reduction modulo q
-    
-    BigInteger q = ECKey.CURVE.getN();
-
-    return hash.toBigInteger().mod(q);
-  }
-
-
-  private static ECKey.ECDSASignature _signCheck(
-      Sha256Hash  message, 
-      byte[]      priv)
-  {
-    
-    BigInteger q = ECKey.CURVE.getN();  // order of secp256k1
-
-    BigInteger x = new BigInteger(1, priv).mod(q); // signer's private key
-
-    boolean newKeyNeeded = true;        // will loop until false
-
-    int index = 0;                      // index in pseudo-radom sequence
-
-    BigInteger r = null;                // returning (r,s)
-
-    BigInteger s = null;                // returning (r,s)
-
-
-    while(newKeyNeeded)
-    {
-
-      // First obtain deterministic pseudo random secret k
-      BigInteger k = EC_Test_Utils.getDeterministicKey(x, message, index++);
-
-      if(k.equals(BigInteger.ZERO)) continue; // start all over
-
-      // get associated ECPoint
-      ECPoint point = ECKey.publicPointFromPrivate(k).normalize();
-
-      // signature = (r,s)
-      r = _getProjection(point);
-
-      if(r.equals(BigInteger.ZERO)) continue; // start all over
-
-      // message hash needs to be projected onto prime field Fq 
-      BigInteger e = _getProjection(message);
-
-      // signature = (r,s) where s = k^(-1)(e + rx)
-      // This latter expression is an algebraic expression in the field Fq 
-
-      s = r.multiply(x).mod(q);               // s = rx
-      s = e.add(s).mod(q);                    // s = e + rx
-      s = k.modInverse(q).multiply(s).mod(q); // s = k^(-1)(e + rx)
-
-      if(s.equals(BigInteger.ZERO)) continue; // start all over
-
-      newKeyNeeded = false;
-
-    }
-
-    return new ECKey.ECDSASignature(r,s).toCanonicalised();
-  }
 
   private static ECKey _recoverFromSignature(
   // Attempting to replicate the functionality of ECKey's method.
@@ -641,7 +544,7 @@ public class Test_ECKey extends Test_Abstract {
 
     // Need to compute ECPoint X = (r^(-1)s)Y - (r^(-1)e)G
     // see sumOfTwoMultiples of ECAlgorithms for an efficient implementation
-    BigInteger e = _getProjection(message);
+    BigInteger e = EC_Test_Utils.getProjection(message);
     BigInteger rInv = r.modInverse(q);
     BigInteger u = rInv.multiply(s).mod(q);
     BigInteger v = rInv.multiply(e).negate().mod(q);
@@ -718,7 +621,7 @@ public class Test_ECKey extends Test_Abstract {
     BigInteger r = signature.r;
     BigInteger s = signature.s;
     BigInteger q = ECKey.CURVE.getN();
-    BigInteger e = _getProjection(message);
+    BigInteger e = EC_Test_Utils.getProjection(message);
     BigInteger sInv = s.modInverse(q);
     ECPoint G = ECKey.CURVE.getG();
     BigInteger u = sInv.multiply(e).mod(q);
@@ -727,7 +630,7 @@ public class Test_ECKey extends Test_Abstract {
     ECPoint V = X.multiply(v);
     ECPoint Y = U.add(V).normalize();
 
-    checkEquals(_getProjection(Y), r, "_twoBitsInfo.1");
+    checkEquals(EC_Test_Utils.getProjection(Y), r, "_twoBitsInfo.1");
 
     BigInteger a = Y.getAffineXCoord().toBigInteger();
     BigInteger b = Y.getAffineYCoord().toBigInteger();
@@ -1847,7 +1750,7 @@ public class Test_ECKey extends Test_Abstract {
     ECKey.ECDSASignature sig = key.sign(hash);
     ECKey.ECDSASignature check1 = EC_Test_Utils.signNative(hash, priv);
     ECKey.ECDSASignature check2 = EC_Test_Utils.signSpongy(hash, priv);
-    ECKey.ECDSASignature check3 = _signCheck(hash, priv);
+    ECKey.ECDSASignature check3 = EC_Test_Utils.signCheck(hash, priv);
 
     checkEquals(check1, sig, "checkSign.1");
     checkEquals(check2, sig, "checkSign.2");

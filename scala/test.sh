@@ -7,7 +7,7 @@ cd ${HOME}
 
 scalac HelloWorld.scala
 scala HelloWorld
-rm -f *.class
+./clean.sh
 
 cd ${DIR}
 echo '\nAll scala tests completed successfully\n'

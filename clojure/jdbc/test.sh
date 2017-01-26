@@ -18,10 +18,7 @@ clojurec -cp "$JDBC_JARS" test_java_jdbc 1> /dev/null
 java -cp "$JDBC_JARS" test_java_jdbc
 
 # clean up
-rm *.class 
-rm -f clojure/*.class   # TODO investigate diff of behaviour front v back
-rm clojure/java/*.class 
-rm clojure/java/jdbc/*.class
+./clean.sh
 
 cd ${DIR}
 echo '\njdbc test completed successfully\n'

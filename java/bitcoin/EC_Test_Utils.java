@@ -444,4 +444,101 @@ public class EC_Test_Utils {
     return k;
   }
 
+  public static BigInteger getProjection(ECPoint point)
+  {
+    // when using the DSA or ECDSA signature scheme, we typically have 
+    // an underlying cyclic group G and some mapping proj: G -> Fq which 
+    // projects the group elements to the prime field Fq modulo the order 
+    // of the group. This projection mapping is required when computing 
+    // a signature (r,s), as r = proj(kG') where k is some random or pseudo
+    // -random non-zero element of Fq, and G' is the chosen generator of 
+    // the cyclic group. In the case of DSA, the group is a cyclic subgroup 
+    // (of prime order q) of Zp* for some prime p (so q divides p - 1), 
+    // and proj: G -> Fq simply sends [x]p (class modulo p) to [x]q (class 
+    // modulo q), where the representative x of [x]p is chosen in [0,p-1]. 
+    // In the case of ECDSA, the group is an elliptic curve and a point 
+    // ([x]p,[y]p) is sent to [x]q.
+
+    if(point.isInfinity()) return BigInteger.ZERO;  // projection always defined
+
+    BigInteger p = EC_Test_Utils.fieldPrime;
+
+    BigInteger q = ECKey.CURVE.getN();  // seckp256k1 curve order
+
+    BigInteger x = point.getAffineXCoord().toBigInteger();
+
+    // asserting that 0 <= x < p
+ 
+    checkCondition(BigInteger.ZERO.compareTo(x) <= 0, "_getProjection.1");
+
+    checkCondition(x.compareTo(p) == -1, "_getProjection.2");
+    
+    return x.mod(q);
+  }
+
+  public static BigInteger getProjection(Sha256Hash hash)
+  {
+    // just like in the case of an ECPoint, a message hash needs to 
+    // be projected onto the prime field Fq (where q is the curve order)
+    // in order to produce a signature. The projection mapping
+    // proj : Hash -> Fq is simply a reduction modulo q
+    
+    BigInteger q = ECKey.CURVE.getN();
+
+    return hash.toBigInteger().mod(q);
+  }
+
+  public static ECKey.ECDSASignature signCheck(
+      Sha256Hash  message, 
+      byte[]      priv)
+  {
+    
+    BigInteger q = ECKey.CURVE.getN();  // order of secp256k1
+
+    BigInteger x = new BigInteger(1, priv).mod(q); // signer's private key
+
+    boolean newKeyNeeded = true;        // will loop until false
+
+    int index = 0;                      // index in pseudo-radom sequence
+
+    BigInteger r = null;                // returning (r,s)
+
+    BigInteger s = null;                // returning (r,s)
+
+
+    while(newKeyNeeded)
+    {
+
+      // First obtain deterministic pseudo random secret k
+      BigInteger k = getDeterministicKey(x, message, index++);
+
+      if(k.equals(BigInteger.ZERO)) continue; // start all over
+
+      // get associated ECPoint
+      ECPoint point = ECKey.publicPointFromPrivate(k).normalize();
+
+      // signature = (r,s)
+      r = getProjection(point);
+
+      if(r.equals(BigInteger.ZERO)) continue; // start all over
+
+      // message hash needs to be projected onto prime field Fq 
+      BigInteger e = getProjection(message);
+
+      // signature = (r,s) where s = k^(-1)(e + rx)
+      // This latter expression is an algebraic expression in the field Fq 
+
+      s = r.multiply(x).mod(q);               // s = rx
+      s = e.add(s).mod(q);                    // s = e + rx
+      s = k.modInverse(q).multiply(s).mod(q); // s = k^(-1)(e + rx)
+
+      if(s.equals(BigInteger.ZERO)) continue; // start all over
+
+      newKeyNeeded = false;
+
+    }
+
+    return new ECKey.ECDSASignature(r,s).toCanonicalised();
+  }
+
 }

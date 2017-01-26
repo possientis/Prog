@@ -14,7 +14,7 @@ done
 
 clojurec -cp ${RABBIT_JARS} test_rabbitmq 1> /dev/null
 java -cp ${RABBIT_JARS} test_rabbitmq
-rm *.class
+./clean.sh
 
 cd ${DIR}
 echo '\nrabbitmq test completed successfully\n'

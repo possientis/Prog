@@ -9,12 +9,26 @@ int main(int argc, char *argv[]) {
   strcpy(buffer_one, "one"); /* Put "one" into buffer_one. */
   strcpy(buffer_two, "two"); /* Put "two" into buffer_two. */
 
-  printf("[BEFORE] buffer_two is at %14p and contains \'%s\'\n", buffer_two, buffer_two);
-  printf("[BEFORE] buffer_one is at %14p and contains \'%s\'\n", buffer_one, buffer_one);
-  printf("[BEFORE] value is at %14p and is %d (0x%08x)\n", &value, value, value);
+  printf("[BEFORE] buffer_two is at %14p and contains \'%s\'\n", 
+      buffer_two, buffer_two);
+
+  printf("[BEFORE] buffer_one is at %14p and contains \'%s\'\n", 
+      buffer_one, buffer_one);
+
+  printf("[BEFORE] value is at %14p and is %d (0x%08x)\n", 
+      &value, value, value);
+
   printf("\n[STRCPY] copying %d bytes into buffer_two\n\n", strlen(argv[1]));
   strcpy(buffer_two, argv[1]); /* Copy first argument into buffer_two. */
-  printf("[AFTER] buffer_two is at %14p and contains \'%s\'\n", buffer_two, buffer_two);
-  printf("[AFTER] buffer_one is at %14p and contains \'%s\'\n", buffer_one, buffer_one);
-  printf("[AFTER] value is at %14p and is %d (0x%08x)\n", &value, value, value);
+
+  printf("[AFTER] buffer_two is at %14p and contains \'%s\'\n", 
+      buffer_two, buffer_two);
+
+  printf("[AFTER] buffer_one is at %14p and contains \'%s\'\n", 
+      buffer_one, buffer_one);
+
+  printf("[AFTER] value is at %14p and is %d (0x%08x)\n", 
+      &value, value, value);
+
+  return 0;
 }
