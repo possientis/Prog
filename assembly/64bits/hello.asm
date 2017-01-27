@@ -9,7 +9,7 @@ main:
         push  rbp
         mov   rbp, rsp
         lea   rdi, [msg]  ; parameter 1 for printf
-        xor   eax, eax    ; 0 floating point parameter
+        xor   eax, eax    ; 0 floating point parameter (what is that?)
         call  printf
 
         xor   eax, eax    ; returns 0
