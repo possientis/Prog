@@ -8,7 +8,7 @@ cd ${HOME}
 
 ghc -v0 hello.hs
 ./hello
-rm hello hello.o hello.hi
+./clean.sh
 
 cd ${DIR}
 echo '\nAll haskell tests completed successfully\n'

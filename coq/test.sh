@@ -37,9 +37,7 @@ else
 fi
 
 # clean up
-rm -f Lib/.*.aux
-rm -f Lib/*.glob
-rm -f Lib/*.vo
+#./clean.sh
  
 cd ${DIR}
 echo '\nAll coq tests completed successfully\n'
