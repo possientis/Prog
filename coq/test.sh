@@ -5,11 +5,13 @@ DIR=`pwd`
 HOME=/home/john/Prog/coq
 cd ${HOME}
 
+
+
 # coqtop introduces change of behaviour for -I option between 8.4 and 8.5 
 # Need to figure out version number to create portable script
 case `coqtop --version | grep '8\.'` in
   *8.4*) VERSION=8.4;;
-  *8.5*) VERSION=8.5;;
+  *8.6*) VERSION=8.6;;
   *)     VERSION=0;;
 esac
 
@@ -24,7 +26,7 @@ then
 
   coqtop -batch -l sort.v -I Lib
 
-elif [ ${VERSION} = 8.5 ];
+elif [ ${VERSION} = 8.6 ];
 then
 
   coqtop -batch -l sort.v -R Lib ''
@@ -37,7 +39,7 @@ else
 fi
 
 # clean up
-#./clean.sh
+./clean.sh
  
 cd ${DIR}
 echo '\nAll coq tests completed successfully\n'

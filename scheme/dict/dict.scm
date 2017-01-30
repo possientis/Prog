@@ -97,6 +97,11 @@
                 (if (not (null? link-list))
                   (begin
                     (display "[DEBUG]: dict: temp-vector: link-list is not null\n")
+                    (display "[DEBUG]: dict: temp-vector: link-list = ")
+                    (display (null? link-list))
+                    (display (not (null? link-list)))
+                    (newline)
+                    
                     (let loop2 ((iter (link-list 'iter)))
                       (if (not (iter 'null?))
                         (begin
