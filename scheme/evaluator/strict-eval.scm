@@ -24,7 +24,6 @@
           ((named-let? exp)       (strict-eval-named-let exp env))
           ((let*? exp)            (strict-eval-let* exp env))
           ((letrec? exp)          (strict-eval-letrec exp env))
-          ((thunk? exp)           (strict-eval-thunk exp env))
           ((application? exp)     (strict-eval-application exp env))
           (else  (error "Unknown expression type -- STRICT-EVAL" exp)))))
 

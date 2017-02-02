@@ -1,3 +1,6 @@
+add thunk-value
+continue with null.scm
+restore memoization in thunks
 see dict.scm : both (null? link-list) and (not (null? link-list)) return #t
 continue with test.scm, understanding failure in lazy mode
 

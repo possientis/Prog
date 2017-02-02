@@ -100,6 +100,7 @@
                     (display "[DEBUG]: dict: temp-vector: link-list = ")
                     (display (null? link-list))
                     (display (not (null? link-list)))
+                    (display link-list)
                     (newline)
                     
                     (let loop2 ((iter (link-list 'iter)))

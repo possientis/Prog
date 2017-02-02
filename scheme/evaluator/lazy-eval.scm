@@ -24,7 +24,6 @@
           ((named-let? exp)       (lazy-eval-named-let exp env))
           ((let*? exp)            (lazy-eval-let* exp env))
           ((letrec? exp)          (lazy-eval-letrec exp env))
-          ((thunk? exp)           (lazy-eval-thunk exp env))
           ((application? exp)     (lazy-eval-application exp env))
           (else  (error "Unknown expression type -- LAZY-EVAL" exp)))))
 

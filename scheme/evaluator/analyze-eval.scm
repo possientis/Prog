@@ -24,7 +24,6 @@
         ((named-let? exp)       (analyze-named-let exp))
         ((let*? exp)            (analyze-let* exp))
         ((letrec? exp)          (analyze-letrec exp))
-        ((thunk? exp)           (analyze-thunk exp))
         ((application? exp)     (analyze-application exp))   
         (else  (error "Unknown expression type -- ANALYSE" exp))))
 

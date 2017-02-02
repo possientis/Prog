@@ -38,8 +38,8 @@
         (if (evaluated? data)
           expr
           (let ((value (strict-eval expr env)))
-            (set-car! (cdr data) value) ; replacing expression by its value
-            (set-car! (cddr data) '())  ; discarding environment for gb release
+;            (set-car! (cdr data) value) ; replacing expression by its value
+;            (set-car! (cddr data) '())  ; discarding environment for gb release
             value))))
     ;
     ; returning two argument constructor
@@ -61,15 +61,6 @@
 (define (thunk-expression obj) ((cadr obj) 'expression))
 (define (thunk-environment obj) ((cadr obj) 'environment))
 (define (thunk-evaluated? obj) ((cadr obj) 'evaluated?))
-
-; strict eval
-(define (strict-eval-thunk exp env) ((cadr exp) 'value))
-
-; analyze
-(define (analyze-thunk exp) (lambda (env) ((cadr exp) 'value)))
-
-; lazy eval
-(define (lazy-eval-thunk exp env) exp)
 
 ; Note that we do not throw an error when argument to force-thunk is not a 
 ; thunk. This has the disadvantage of removing possible detection of logic

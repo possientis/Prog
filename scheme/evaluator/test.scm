@@ -1,23 +1,7 @@
+; need to investigate null.scm before coming back to this
+
 (load "main.scm")
-
-(define mode 'lazy)
-(define load-proc 
-  (eval 
-    (string->symbol 
-      (string-append (symbol->string mode) "-load"))))
-
-; more readable
-(define eval-proc 
-  (cond ((eq? 'strict mode) strict-eval)
-        ((eq? 'analyze mode) analyze-eval)
-        ((eq? 'lazy mode) lazy-eval)
-        (else "error: unknown evaluation mode" mode)))
-
-(define (do-load filename)
-  (apply load-proc (list filename)))
-
-(define (do-run expr)
-  (apply eval-proc (list expr)))
+(load "do-run.scm")
 
 
 (do-load "primitive.scm")           ; interpreter running file
