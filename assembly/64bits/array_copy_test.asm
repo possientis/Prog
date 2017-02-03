@@ -6,7 +6,7 @@ b     dd 0,0,0,0,0
 
       segment .text
       global main
-      extern copy_array
+      extern array_copy
 
 main:
       
@@ -16,7 +16,7 @@ main:
       lea   rdi,  [b]
       lea   rsi,  [a]
       mov   rdx,  5
-      call copy_array 
+      call array_copy 
 
       leave
       ret

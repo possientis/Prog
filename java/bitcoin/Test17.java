@@ -4,7 +4,7 @@ import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Address;
 
-class Test {
+class Test17 {
   public static void main(String[] args)
   {
     

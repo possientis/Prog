@@ -1,7 +1,8 @@
       segment .text
-      global copy_array
+      global array_copy
 
-copy_array:
+;     array_copy ( destination, source, size )
+array_copy:
 
       xor ecx, ecx  ; rcx = 0
 
