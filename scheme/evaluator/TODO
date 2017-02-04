@@ -1,13 +1,12 @@
-add thunk-value
-continue with null.scm
-restore memoization in thunks
-see dict.scm : both (null? link-list) and (not (null? link-list)) return #t
-continue with test.scm, understanding failure in lazy mode
+
 
 continue investigating failure in unit-test due to setup-environment 
 in global-env.scm. Note that calls to (environment) ((environment) 'extended) 
 (primitive-procedure-names) (primitive-procedure-objects) are successful.
 
+investigate failure of ./strict-run.sh unit-test.scm
+
+restore memoization of thunk
 
 loading global-env in lazy mode fails
 unit-test: load (called directly) and load (by eval)

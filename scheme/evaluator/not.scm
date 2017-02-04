@@ -27,7 +27,6 @@
 
 ; lazy eval
 (define (lazy-eval-not exp env) 
-  (debug "[DEBUG]: lazy-eval-not: exp = ")(debug exp)(debug-newline)
   (make-thunk exp env))
 
 ))  ; include guard

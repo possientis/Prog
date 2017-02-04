@@ -45,14 +45,6 @@
     ; returning two argument constructor
     ;
     (lambda (expr env) 
-      (if (null? expr)
-        (begin
-          (debug "[DEBUG]: make-thunk: expression is null")
-          (debug-newline)
-          (if (null? env)
-            (debug "[DEBUG]: make-thunk while environment is also null")
-            (debug "[DEBUG]: make-thunk while environment is not null"))
-          (debug-newline)))
       (if (thunk? expr) ; do not create a double thunk
         expr
         (list 'thunk (this (list 'data expr env)))))))
@@ -61,6 +53,7 @@
 (define (thunk-expression obj) ((cadr obj) 'expression))
 (define (thunk-environment obj) ((cadr obj) 'environment))
 (define (thunk-evaluated? obj) ((cadr obj) 'evaluated?))
+(define (thunk-value obj) ((cadr obj) 'value))
 
 ; Note that we do not throw an error when argument to force-thunk is not a 
 ; thunk. This has the disadvantage of removing possible detection of logic
@@ -71,7 +64,7 @@
 ; (See the module primitive-procedure)
 ; forcing
 (define (force-thunk obj)
-  (if (thunk? obj) ((cadr obj) 'value) obj))
+  (if (thunk? obj) (thunk-value obj) obj))
 
 ))  ; include guard
 
