@@ -9,8 +9,7 @@ cd ${HOME}
 ./compile.sh exit; ld exit.o; ./a.out; ./clean.sh             #_start
 ./compile.sh memory; gcc memory.o; ./a.out; ./clean.sh        # main , no c lib
 ./compile.sh hello; gcc -static hello.o; ./a.out; ./clean.sh  # main, c lib
-
-
+./array_build.sh; ./array 20; ./clean.sh
 
 
 cd ${DIR}

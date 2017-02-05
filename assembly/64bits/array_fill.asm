@@ -15,7 +15,8 @@ array_fill:
         mov     [rsp+.array], rdi ; saving first argument in local var
         mov     [rsp+.size],  rsi ; saving second argument in local var
         xor     ecx, ecx          ; setting counter to 0
-.more   mov     [rsp+.i], rcx
+
+.more   mov     [rsp+.i], rcx     ; saving counter register in local var
         call    random    ; may change rdi, rsi, rcx ? see caller vs callee regs
         mov     rcx, [rsp+.i]     ; restoring rcx
         mov     rdi, [rsp+.array] ; restoring rdx

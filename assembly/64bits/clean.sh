@@ -7,5 +7,6 @@ cd ${HOME}
 rm -f *.lst
 rm -f *.o
 rm -f a.out
+rm -f array
 
 cd ${DIR}
