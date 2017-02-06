@@ -1,26 +1,10 @@
-
-
-continue investigating failure in unit-test due to setup-environment 
-in global-env.scm. Note that calls to (environment) ((environment) 'extended) 
-(primitive-procedure-names) (primitive-procedure-objects) are successful.
-
 investigate failure of ./strict-run.sh unit-test.scm
-
-restore memoization of thunk
-
-loading global-env in lazy mode fails
-unit-test: load (called directly) and load (by eval)
-
-lazy-run analyze-rundo not work
 
 test the following code in lazy mode (after fixing define)
 (define x 1)
 (set! x (+ x x))
 (display x)(newline)
 
-continue rewriting unit-test
-
-understand possible dissymetry of include between "analyze.scm" and "strict/lazy-eval.scm". do we need to create new type of procedure? strict-eval-procedure v lazy-eval-procedure? (see application.scm for obvious dissymetry, should there be a strict-apply, analyze-apply, lazy-appply?)
 analyze: review code and understand why no pick up in perf
 
 lazy-repl:
@@ -32,8 +16,6 @@ fails
 (define (try a b) (if (= 0 a) 1 b))
 compare lazy and strict eval of
 > (try 0 (error))
-
-
 
 
 define primitives from language itself

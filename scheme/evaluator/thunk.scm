@@ -38,8 +38,8 @@
         (if (evaluated? data)
           expr
           (let ((value (strict-eval expr env)))
-;            (set-car! (cdr data) value) ; replacing expression by its value
-;            (set-car! (cddr data) '())  ; discarding environment for gb release
+            (set-car! (cdr data) value) ; replacing expression by its value
+            (set-car! (cddr data) '())  ; discarding environment for gb release
             value))))
     ;
     ; returning two argument constructor

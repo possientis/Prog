@@ -33,14 +33,33 @@
 (define (test-load filename message) 
   (let ((print (lambda (msg) (string-append message msg))))
     (global-env-reset!)
-    (assert-equals (strict-load filename) unspecified-value (print ": strict"))
-    (global-env-reset!)
-    (assert-equals (analyze-load filename) unspecified-value (print ": analyze"))
-    (global-env-reset!)
-;    (assert-equals (lazy-load filename) unspecified-value (print ": lazy"))
-    (global-env-reset!)
+    (assert-equals 
+      (strict-load filename) unspecified-value (print ": strict-load"))
 
-   ))
+    (global-env-reset!)
+    (assert-equals 
+      (analyze-load filename) unspecified-value (print ": analyze-load"))
+
+    (global-env-reset!)
+    (assert-equals 
+      (lazy-load filename) unspecified-value (print ": lazy-load"))
+
+    (global-env-reset!)
+    (assert-equals 
+      (strict-eval (list 'load filename)) 
+      unspecified-value (print ": strict-eval"))
+
+    (global-env-reset!)
+    (assert-equals 
+      (analyze-eval (list 'load filename)) 
+      unspecified-value (print ": analyze-eval"))
+
+    (global-env-reset!)
+    (assert-equals 
+      (force-thunk (lazy-eval (list 'load filename))) 
+      unspecified-value (print ": lazy-eval"))
+
+    (global-env-reset!)))
 
 (define (unit-test)
   ;
@@ -205,10 +224,7 @@
   ;
   ; assigment
   (display "testing assignment expressions...\n")
-  ;
-  (let ((env ((global-env 'extended) 'var #f))    ; extended env with var = #f
-;        (mode (get-eval-mode)))                   ; so we can restore it later
-    )
+  (let ((env ((global-env 'extended) 'var #f)))    ; extended env with var = #f
     (test-expression 'var #f "assignment.1" env)    
     ; strict assignment
     (let ((result (strict-eval '(set! var #t) env)))
@@ -222,9 +238,9 @@
     (let ((result (analyze-eval '(set! var 45) env)))
       (assert-equals result unspecified-value "assignment.6")
       (test-expression 'var 45 "assignment.7" env)))    
+  ;
   ; definition
   (display "testing definition expressions...\n")
-
   (let ((env ((global-env 'extended) 'var #f)))
     (test-expression 'var #f "definition.1" env)
     (assert-equals ((env 'defined?) 'var) #t "definition.2")
@@ -451,7 +467,6 @@
       ((env 'delete!) 'f)
       (assert-equals ((env 'defined?) 'f) #f "definition.286")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.287")))
- 
 
   ; if
   (display "testing if expressions...\n")
@@ -581,11 +596,9 @@
     (assert-equals (thunk-environment thunk) global-env "thunk.3")
     (assert-equals (thunk-evaluated? thunk) #f "thunk.4")
     (assert-equals (force-thunk thunk) 2 "thunk.5")
-;    (assert-equals (thunk-evaluated? thunk) #t "thunk.6")
     (assert-equals (force-thunk thunk) 2 "thunk.7")
     (assert-equals (force-thunk thunk) 2 "thunk.8")
     (assert-equals (force-thunk thunk) 2 "thunk.9")
-;    (assert-equals (thunk-evaluated? thunk) #t "thunk.10")
     (assert-equals (thunk? thunk) #t "thunk.11")
     (assert-equals (thunk? 0) #f "thunk.12")
     (assert-equals (thunk? #\a) #f "thunk.13")
@@ -596,44 +609,69 @@
   ; load
   (display "testing loading files ...\n") 
   ;
-;  (test-load "debug.scm" "load.1") 
-;  (test-load "eval-mode.scm" "load.2") 
-;  (test-load "strict-eval.scm" "load.3") 
-;  (test-load "analyze-eval.scm" "load.4") 
-;  (test-load "lazy-eval.scm" "load.5") 
-;  (test-load "new-eval.scm" "load.6") 
-;  (test-load "strict-apply.scm" "load.7") 
-;  (test-load "analyze-apply.scm" "load.8") 
-;  (test-load "lazy-apply.scm" "load.9") 
-;  (test-load "new-apply.scm" "load.10") 
-;  (test-load "strict-load.scm" "load.11") 
-;  (test-load "analyze-load.scm" "load.12") 
-;  (test-load "lazy-load.scm" "load.13") 
-;  (test-load "new-load.scm" "load.14") 
-;  (test-load "new-require.scm" "load.15") 
-;  (test-load "new-object-to-string.scm" "load.16") 
-;  (test-load "new-map.scm" "load.17") 
-;  (test-load "new-display.scm" "load.18")
+  (test-load "debug.scm" "load.1") 
+  (test-load "strict-eval.scm" "load.2") 
+  (test-load "analyze-eval.scm" "load.3") 
+  (test-load "lazy-eval.scm" "load.4") 
+  (test-load "strict-apply.scm" "load.5") 
+  (test-load "analyze-apply.scm" "load.6") 
+  (test-load "lazy-apply.scm" "load.7") 
+  (test-load "strict-load.scm" "load.8") 
+  (test-load "analyze-load.scm" "load.9") 
+  (test-load "lazy-load.scm" "load.10") 
+  (test-load "strict-map.scm" "load.11") 
+  (test-load "analyze-map.scm" "load.12") 
+  (test-load "lazy-map.scm" "load.13") 
+  (test-load "new-require.scm" "load.14") 
+  (test-load "new-object-to-string.scm" "load.15") 
+  (test-load "new-display.scm" "load.16")
   ;
-;  (test-load "primitive.scm" "load.19")
+  (test-load "primitive.scm" "load.17")
   ;
-;  (test-load "primitive-procedure.scm" "load.20")
+  (test-load "primitive-procedure.scm" "load.18")
   ;
-;  (test-load "frame1.scm" "load.21")
-;  (test-load "frame2.scm" "load.22")
-;  (test-load "link-node.scm" "load.23")
-;  (test-load "link.scm" "load.23")
-;  (test-load "hash.scm" "load.24")
-;  (test-load "dict.scm" "load.25")
-;  (test-load "frame3.scm" "load.26")
-;; (test-load "frame4.scm" "load.27")  ; (require 'hash-table)
-;  (test-load "frame.scm" "load.28")
-;  (test-load "environment1.scm" "load.29")
+  (test-load "frame1.scm" "load.19")
+  (test-load "frame2.scm" "load.20")
+  (test-load "link-node.scm" "load.21")
+  (test-load "link.scm" "load.22")
+  (test-load "hash.scm" "load.23")
+  (test-load "dict.scm" "load.24")
+  (test-load "frame3.scm" "load.25")
+; (test-load "frame4.scm" "load.26")  ; (require 'hash-table)
+  (test-load "frame.scm" "load.27")
+  (test-load "environment1.scm" "load.28")
   ;
-;  (test-load "environment.scm" "load.30")
+  (test-load "environment.scm" "load.29")
   ;
-  (test-load "global-env.scm" "load.31")
-   
+  (test-load "global-env.scm" "load.30")
+  ;
+  (test-load "analyze-procedure.scm" "load.31")
+  (test-load "and.scm" "load.32")
+  (test-load "application.scm" "load.33")
+  (test-load "assignment.scm" "load.34")
+  (test-load "begin.scm" "load.35")
+  (test-load "cond.scm" "load.36")
+  (test-load "defined.scm" "load.37")
+  (test-load "definition.scm" "load.38")
+  (test-load "eval-procedure.scm" "load.39")
+  (test-load "file-to-code.scm" "load.40")
+  (test-load "if.scm" "load.41")
+  (test-load "lambda.scm" "load.42")
+  (test-load "let-rec.scm" "load.43")
+  (test-load "let.scm" "load.44")
+  (test-load "let-star.scm" "load.45")
+  (test-load "named-let.scm" "load.46")
+  (test-load "not.scm" "load.47")
+  (test-load "or.scm" "load.48")
+  (test-load "quote.scm" "load.49")
+  (test-load "self-evaluating.scm" "load.50")
+  (test-load "thunk.scm" "load.51")
+  (test-load "tagged-list.scm" "load.52")
+  (test-load "true-false.scm" "load.53")
+  (test-load "unspecified.scm" "load.54")
+  (test-load "variable.scm" "load.55")
+  ;
+  (test-load "main.scm" "load.56")
 
 
   (display "unit-test: test complete\n"))

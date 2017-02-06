@@ -6,7 +6,7 @@
 ./compile.sh array_print
 ./compile.sh array_min
 
-gcc -no-pie -o array \
+gcc -static -o array \
   array_main.o \
   array_create.o \
   array_fill.o \
