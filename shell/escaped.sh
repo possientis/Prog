@@ -46,5 +46,19 @@ echo
 
 # Assigning ASCII characters to a variable.
 # ----------------------------------------
-# TODO
+quote=$'\042'     # " assigned to a variable
+echo "$quote Quoted string $quote and this lies outside the quotes."
+echo
+
+ABC=$'\101\102\103\010' # 101, 102, 103 are octal A, B, C.
+echo "--$ABC--"         # --AB-- , 010 is octal backspace
+echo
+
+escape=$'\033'          # 033 is octal for escape
+echo "\"escape\" echoes as $escape"
+echo
+
+
+
+
 
