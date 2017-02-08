@@ -1,4 +1,4 @@
-(define mode 'lazy)
+(define mode 'strict)
 
 (define load-proc 
   (cond ((eq? 'strict mode) strict-load)

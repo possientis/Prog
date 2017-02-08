@@ -1,65 +1,7 @@
 (load "main.scm")
+(load "tools.scm")
+
 (set-debug #t)
-
-(define (assert-equals left right message)
-  (if (not (equal? left right)) 
-    (error "unit-test failure: "
-           (string-append message 
-                          ": value = " (object->string left)
-                          ": expected = " (object->string right)))))
-
-(define (test-expression exp value message . arg)
-  (let ((env (if (null? arg) global-env (car arg))) 
-        (print (lambda (msg) (string-append message msg))))
-    (assert-equals 
-      (strict-eval exp env) value (print ": strict-eval")) 
-    (assert-equals 
-      (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
-    (assert-equals 
-      (analyze-eval exp env) value (print ": analyze"))))
-
-; same semantics as test-expression, except that expression is forced
-; following evaluation and prior to comparing to expected value
-(define (test-forced-expression exp value message . arg)
-  (let ((env (if (null? arg) global-env (car arg))) 
-        (print (lambda (msg) (string-append message msg))))
-    (assert-equals 
-      (force-thunk (strict-eval exp env)) value (print ": strict-eval")) 
-    (assert-equals 
-      (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
-    (assert-equals 
-      (force-thunk (analyze-eval exp env)) value (print ": analyze"))))
-
-(define (test-load filename message) 
-  (let ((print (lambda (msg) (string-append message msg))))
-    (global-env-reset!)
-    (assert-equals 
-      (strict-load filename) unspecified-value (print ": strict-load"))
-
-    (global-env-reset!)
-    (assert-equals 
-      (analyze-load filename) unspecified-value (print ": analyze-load"))
-
-    (global-env-reset!)
-    (assert-equals 
-      (lazy-load filename) unspecified-value (print ": lazy-load"))
-
-    (global-env-reset!)
-    (assert-equals 
-      (strict-eval (list 'load filename)) 
-      unspecified-value (print ": strict-eval"))
-
-    (global-env-reset!)
-    (assert-equals 
-      (analyze-eval (list 'load filename)) 
-      unspecified-value (print ": analyze-eval"))
-
-    (global-env-reset!)
-    (assert-equals 
-      (force-thunk (lazy-eval (list 'load filename))) 
-      unspecified-value (print ": lazy-eval"))
-
-    (global-env-reset!)))
 
 (define (unit-test)
   ;
@@ -222,7 +164,7 @@
   (test-expression 
     ''(length '(2 3)) (list 'length (list 'quote (list 2 3))) "quoted.36")
   ;
-  ; assigment
+  ; assignment
   (display "testing assignment expressions...\n")
   (let ((env ((global-env 'extended) 'var #f)))    ; extended env with var = #f
     (test-expression 'var #f "assignment.1" env)    
@@ -231,9 +173,9 @@
       (assert-equals result unspecified-value "assignment.2")
       (test-expression 'var #t "assignment.3" env))     ; testing outcome 
     ; lazy assignment : cannot use test-expression (need 'test-forced-expression')
-    (let ((result (lazy-eval '(set! var #\a) env))) 
-      (assert-equals (force-thunk result) unspecified-value "assignment.4")
-      (test-forced-expression 'var #\a "assignment.5" env))
+;    (let ((result (lazy-eval '(set! var #\a) env))) 
+;      (assert-equals (force-thunk result) unspecified-value "assignment.4")
+;      (test-forced-expression 'var #\a "assignment.5" env))
     ; analyzed assignment
     (let ((result (analyze-eval '(set! var 45) env)))
       (assert-equals result unspecified-value "assignment.6")
@@ -258,14 +200,14 @@
       (assert-equals ((env 'defined?) 'var) #f "definition.10")
       (assert-equals ((global-env 'defined?) 'var) #f "definition.11"))
     ; lazy definition (cannot use 'test-expression', need 'test-forced-expression')
-    (let ((result (lazy-eval '(define var 0.3) env)))
-      (assert-equals (force-thunk result) unspecified-value "definiton.12")
-      (assert-equals ((env 'defined?) 'var) #t "definition.13")
-      (assert-equals ((global-env 'defined?) 'var) #f "definition.14")
-      (test-forced-expression 'var 0.3 "definition.15" env)
-      ((env 'delete!) 'var)
-      (assert-equals ((env 'defined?) 'var) #f "definition.21")
-      (assert-equals ((global-env 'defined?) 'var) #f "definition.22"))
+;    (let ((result (lazy-eval '(define var 0.3) env)))
+;      (assert-equals (force-thunk result) unspecified-value "definiton.12")
+;      (assert-equals ((env 'defined?) 'var) #t "definition.13")
+;      (assert-equals ((global-env 'defined?) 'var) #f "definition.14")
+;      (test-forced-expression 'var 0.3 "definition.15" env)
+;      ((env 'delete!) 'var)
+;      (assert-equals ((env 'defined?) 'var) #f "definition.21")
+;      (assert-equals ((global-env 'defined?) 'var) #f "definition.22"))
     ; analyze definition
     (let ((result (analyze-eval '(define var "hello") env)))
       (assert-equals result unspecified-value "definiton.23")
@@ -285,14 +227,14 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.56")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.57"))
     ; lazy definition: function with no argument (test-expression works !!)
-    (let ((result (lazy-eval '(define (f) 0.3) env)))
-      (assert-equals (force-thunk result) unspecified-value "definiton.58")
-      (assert-equals ((env 'defined?) 'f) #t "definition.59")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.60")
-      (test-expression '(f) 0.3 "definition 61" env)
-      ((env 'delete!) 'f)
-      (assert-equals ((env 'defined?) 'f) #f "definition.62")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.63"))
+;    (let ((result (lazy-eval '(define (f) 0.3) env)))
+;      (assert-equals (force-thunk result) unspecified-value "definiton.58")
+;      (assert-equals ((env 'defined?) 'f) #t "definition.59")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.60")
+;      (test-expression '(f) 0.3 "definition 61" env)
+;      ((env 'delete!) 'f)
+;      (assert-equals ((env 'defined?) 'f) #f "definition.62")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.63"))
     ; analyze definition: function with no argument
     (let ((result (analyze-eval '(define (f) "hello") env)))
       (assert-equals result unspecified-value "definiton.64")
@@ -312,14 +254,14 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.91")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.92"))
     ; lazy definition: function with a single argument (test-expression works !!)
-    (let ((result (lazy-eval '(define (f x) (* x x x)) env)))
-      (assert-equals (force-thunk result) unspecified-value "definiton.93")
-      (assert-equals ((env 'defined?) 'f) #t "definition.94")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.95")
-      (test-expression '(f 3) 27 "definition.96" env)
-      ((env 'delete!) 'f)
-      (assert-equals ((env 'defined?) 'f) #f "definition.97")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.98"))
+;    (let ((result (lazy-eval '(define (f x) (* x x x)) env)))
+;      (assert-equals (force-thunk result) unspecified-value "definiton.93")
+;      (assert-equals ((env 'defined?) 'f) #t "definition.94")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.95")
+;      (test-expression '(f 3) 27 "definition.96" env)
+;      ((env 'delete!) 'f)
+;      (assert-equals ((env 'defined?) 'f) #f "definition.97")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.98"))
     ; analyze definition: function with a single argument
     (let ((result (analyze-eval '(define (f x) (+ x x x)) env)))
       (assert-equals result unspecified-value "definiton.99")
@@ -339,14 +281,14 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.126")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.127"))
     ; lazy definition: function with two arguments (test-expression works !!)
-    (let ((result (lazy-eval '(define (f x y) (* x y)) env)))
-      (assert-equals (force-thunk result) unspecified-value "definiton.128")
-      (assert-equals ((env 'defined?) 'f) #t "definition.129")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.130")
-      (test-expression '(f 3 5) 15 "definition.131" env)
-      ((env 'delete!) 'f)
-      (assert-equals ((env 'defined?) 'f) #f "definition.132")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.133"))
+;    (let ((result (lazy-eval '(define (f x y) (* x y)) env)))
+;      (assert-equals (force-thunk result) unspecified-value "definiton.128")
+;      (assert-equals ((env 'defined?) 'f) #t "definition.129")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.130")
+;      (test-expression '(f 3 5) 15 "definition.131" env)
+;      ((env 'delete!) 'f)
+;      (assert-equals ((env 'defined?) 'f) #f "definition.132")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.133"))
     ; analyze definition: function with two arguments
     (let ((result (analyze-eval '(define (f a b) (+ a b 7)) env)))
       (assert-equals result unspecified-value "definiton.134")
@@ -378,23 +320,23 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.171")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.172"))
     ; lazy definition: function with optional arguments
-    (let ((result (lazy-eval '(define (f . args) args) env)))
-      (assert-equals (force-thunk result) unspecified-value "definiton.173")
-      (assert-equals ((env 'defined?) 'f) #t "definition.174")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.175")
-      (test-expression '(f) '() "definition.176" env)
-      (test-expression '(car (f 0)) 0  "definition.177" env)
-      (test-expression '(cdr (f 0)) '() "definition.178" env)
-      (test-expression '(car (f 2 3)) 2  "definition.179" env)
-      (test-expression '(cadr (f 2 3)) 3  "definition.180" env)
-      (test-expression '(cddr (f 2 3)) '() "definition.181" env)
-      (test-expression '(car (f 4 5 6)) 4  "definition.182" env)
-      (test-expression '(cadr (f 4 5 6)) 5  "definition.183" env)
-      (test-expression '(caddr (f 4 5 6)) 6  "definition.184" env)
-      (test-expression '(cdddr (f 4 5 6)) '() "definition.185" env)
-       ((env 'delete!) 'f)
-      (assert-equals ((env 'defined?) 'f) #f "definition.186")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.187"))
+;    (let ((result (lazy-eval '(define (f . args) args) env)))
+;      (assert-equals (force-thunk result) unspecified-value "definiton.173")
+;      (assert-equals ((env 'defined?) 'f) #t "definition.174")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.175")
+;      (test-expression '(f) '() "definition.176" env)
+;      (test-expression '(car (f 0)) 0  "definition.177" env)
+;      (test-expression '(cdr (f 0)) '() "definition.178" env)
+;      (test-expression '(car (f 2 3)) 2  "definition.179" env)
+;      (test-expression '(cadr (f 2 3)) 3  "definition.180" env)
+;      (test-expression '(cddr (f 2 3)) '() "definition.181" env)
+;      (test-expression '(car (f 4 5 6)) 4  "definition.182" env)
+;      (test-expression '(cadr (f 4 5 6)) 5  "definition.183" env)
+;      (test-expression '(caddr (f 4 5 6)) 6  "definition.184" env)
+;      (test-expression '(cdddr (f 4 5 6)) '() "definition.185" env)
+;       ((env 'delete!) 'f)
+;      (assert-equals ((env 'defined?) 'f) #f "definition.186")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.187"))
     ; analyze definition: function with optional arguments
     (let ((result (analyze-eval '(define (f . args) args) env)))
       (assert-equals result unspecified-value "definiton.188")
@@ -434,22 +376,22 @@
       (assert-equals ((env 'defined?) 'f) #f "definition.258")
       (assert-equals ((global-env 'defined?) 'f) #f "definition.259"))
     ; lazy definition: function with optional arguments + 1 required
-    (let ((result (lazy-eval '(define (f x . args) (cons x args)) env)))
-      (assert-equals (force-thunk result) unspecified-value "definiton.260")
-      (assert-equals ((env 'defined?) 'f) #t "definition.261")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.262")
-      (test-expression '(car (f 0)) 0  "definition.263" env)
-      (test-expression '(cdr (f 0)) '() "definition.264" env)
-      (test-expression '(car (f 2 3)) 2  "definition.265" env)
-      (test-expression '(cadr (f 2 3)) 3  "definition.266" env)
-      (test-expression '(cddr (f 2 3)) '() "definition.267" env)
-      (test-expression '(car (f 4 5 6)) 4  "definition.268" env)
-      (test-expression '(cadr (f 4 5 6)) 5  "definition.269" env)
-      (test-expression '(caddr (f 4 5 6)) 6  "definition.270" env)
-      (test-expression '(cdddr (f 4 5 6)) '() "definition.271" env)
-       ((env 'delete!) 'f)
-      (assert-equals ((env 'defined?) 'f) #f "definition.272")
-      (assert-equals ((global-env 'defined?) 'f) #f "definition.273"))
+;    (let ((result (lazy-eval '(define (f x . args) (cons x args)) env)))
+;      (assert-equals (force-thunk result) unspecified-value "definiton.260")
+;      (assert-equals ((env 'defined?) 'f) #t "definition.261")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.262")
+;      (test-expression '(car (f 0)) 0  "definition.263" env)
+;      (test-expression '(cdr (f 0)) '() "definition.264" env)
+;      (test-expression '(car (f 2 3)) 2  "definition.265" env)
+;      (test-expression '(cadr (f 2 3)) 3  "definition.266" env)
+;      (test-expression '(cddr (f 2 3)) '() "definition.267" env)
+;      (test-expression '(car (f 4 5 6)) 4  "definition.268" env)
+;      (test-expression '(cadr (f 4 5 6)) 5  "definition.269" env)
+;      (test-expression '(caddr (f 4 5 6)) 6  "definition.270" env)
+;      (test-expression '(cdddr (f 4 5 6)) '() "definition.271" env)
+;       ((env 'delete!) 'f)
+;      (assert-equals ((env 'defined?) 'f) #f "definition.272")
+;      (assert-equals ((global-env 'defined?) 'f) #f "definition.273"))
     ; analyze definition: function with optional arguments + 1 required
     (let ((result (analyze-eval '(define (f x . args) (cons x args)) env)))
       (assert-equals result unspecified-value "definiton.274")
@@ -590,22 +532,22 @@
 
   ; thunk
   (display "testing thunk ...\n")
-  (let ((thunk (make-thunk '(+ 1 1) global-env)))
-    (assert-equals (thunk? thunk) #t "thunk.1")
-    (assert-equals (thunk-expression thunk) '(+ 1 1) "thunk.2")
-    (assert-equals (thunk-environment thunk) global-env "thunk.3")
-    (assert-equals (thunk-evaluated? thunk) #f "thunk.4")
-    (assert-equals (force-thunk thunk) 2 "thunk.5")
-    (assert-equals (force-thunk thunk) 2 "thunk.7")
-    (assert-equals (force-thunk thunk) 2 "thunk.8")
-    (assert-equals (force-thunk thunk) 2 "thunk.9")
-    (assert-equals (thunk? thunk) #t "thunk.11")
-    (assert-equals (thunk? 0) #f "thunk.12")
-    (assert-equals (thunk? #\a) #f "thunk.13")
-    (assert-equals (thunk? "a") #f "thunk.14")
-    (assert-equals (thunk? #t) #f "thunk.15")
-    (assert-equals (thunk? #f) #f "thunk.16"))
- 
+;  (let ((thunk (make-thunk '(+ 1 1) global-env)))
+;    (assert-equals (thunk? thunk) #t "thunk.1")
+;    (assert-equals (thunk-expression thunk) '(+ 1 1) "thunk.2")
+;    (assert-equals (thunk-environment thunk) global-env "thunk.3")
+;    (assert-equals (thunk-evaluated? thunk) #f "thunk.4")
+;    (assert-equals (force-thunk thunk) 2 "thunk.5")
+;    (assert-equals (force-thunk thunk) 2 "thunk.7")
+;    (assert-equals (force-thunk thunk) 2 "thunk.8")
+;    (assert-equals (force-thunk thunk) 2 "thunk.9")
+;    (assert-equals (thunk? thunk) #t "thunk.11")
+;    (assert-equals (thunk? 0) #f "thunk.12")
+;    (assert-equals (thunk? #\a) #f "thunk.13")
+;    (assert-equals (thunk? "a") #f "thunk.14")
+;    (assert-equals (thunk? #t) #f "thunk.15")
+;    (assert-equals (thunk? #f) #f "thunk.16"))
+
   ; load
   (display "testing loading files ...\n") 
   ;

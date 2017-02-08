@@ -1,3 +1,4 @@
+understand failure of test.scm
 investigate failure of ./strict-run.sh unit-test.scm
 
 test the following code in lazy mode (after fixing define)
