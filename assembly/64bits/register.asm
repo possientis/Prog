@@ -1,4 +1,7 @@
         section .data
+text1   db      "register.asm is running ...", 0x0a
+g_256   dd      -3.562, 7,361, -4.987, 3.891
+f_128   dq      -1.234, 2.789
 a_64    dq      0x1234567890123456
 b_32    dd      0x12345678
 c_16    dw      0x9012 
@@ -9,6 +12,27 @@ e_8     db      0x56
         global _start
 
 _start:
+        ; 256 bits
+;        movups  ymm0, [g_256]
+
+        ; 128 bits
+        movups  xmm0, [f_128]
+        movups  xmm1, [f_128]
+        movups  xmm2, [f_128]
+        movups  xmm3, [f_128]
+        movups  xmm4, [f_128]
+        movups  xmm5, [f_128]
+        movups  xmm6, [f_128]
+        movups  xmm7, [f_128]
+        movups  xmm8, [f_128]
+        movups  xmm9, [f_128]
+        movups  xmm10,[f_128]
+        movups  xmm11,[f_128]
+        movups  xmm12,[f_128]
+        movups  xmm13,[f_128]
+        movups  xmm14,[f_128]
+        movups  xmm15,[f_128]
+
         ; 64 bits
         mov   rax, [a_64]
         mov   rbx, [a_64]
@@ -87,8 +111,14 @@ _start:
         mov ch, [e_8]
         mov dh, [e_8]
 
+        ; writing some message
+        mov   rax, 1            ; write
+        mov   rdi, 1            ; stdout
+        mov   rsi, text1        ; buffer
+        mov   rdx, 28           ; 28 bytes 
+        syscall
 
-
+        ; exiting
         mov   rax, 0x3c
         mov   rdi, 0
         syscall

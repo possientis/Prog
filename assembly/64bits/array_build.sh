@@ -1,10 +1,10 @@
 #!/bin/sh
 
-./compile.sh array_main
-./compile.sh array_create
-./compile.sh array_fill
-./compile.sh array_print
-./compile.sh array_min
+./yasm.sh array_main
+./yasm.sh array_create
+./yasm.sh array_fill
+./yasm.sh array_print
+./yasm.sh array_min
 
 gcc -static -o array \
   array_main.o \

@@ -43,7 +43,30 @@ while true; do
     $'\x1b\x5b\x36\x7e')
       echo Page Down
     ;;
-    # TODO
+    $'\x1b\x5b\x41')
+      echo Up Arrow
+    ;;
+    $'\x1b\x5b\x42')
+      echo Down Arrow
+    ;;
+    $'\x1b\x5b\x43')
+      echo Right Arrow
+    ;;
+    $'\x1b\x5b\x44')
+      echo Left Arrow
+    ;;
+    $'\x09')
+      echo Tab Key
+    ;;
+    $'\x0a')
+      echo Enter Key
+    ;;
+    $'\x1b')
+      echo Escape Key
+    ;;
+    $'\x20')
+      echo Space Key
+    ;;
     d)
       date
     ;;
