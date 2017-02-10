@@ -1,4 +1,4 @@
-; generated with gcc -S
+# generated with gcc -S
 
 	.file	"countbits.c"
 	.text

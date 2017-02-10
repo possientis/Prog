@@ -1,3 +1,4 @@
+need to find a way to distingish first order thunks from second order thunks
 understand failure of test.scm
 investigate failure of ./strict-run.sh unit-test.scm
 

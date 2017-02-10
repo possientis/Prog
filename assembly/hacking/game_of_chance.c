@@ -281,7 +281,8 @@ void play_the_game() {
   char selection;
 
   while(play_again) {
-    printf("\n[DEBUG] current_game pointer @ 0x%08x\n", player.current_game);
+    printf("\n[DEBUG] current_game pointer @ %14p\n", player.current_game);
+    printf("\n[DEBUG] jackpot pointer @ %14p\n", jackpot);
     if(player.current_game() != -1) { // If the game plays without error and
       if(player.credits > player.highscore) // a new high score is set,
         player.highscore = player.credits; // update the highscore.
