@@ -6,7 +6,8 @@
 _start:
         mov rax, 0
         not rax       ; rax = 0xffffffffffffffff
-        mov rdx, 0    ; preparing for divide
+        mov rdx, 0    ; div actually divides 128 bits rdx:rax
+                      ; result in rax, remainder in rdx
         mov rbx, 15   ; will divide by 15 (0xf)
         div rbx       ; unsigned divide, rax = 0x1111111111111111
         not rax       ; rax = 0xeeeeeeeeeeeeeeee

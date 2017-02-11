@@ -1,19 +1,20 @@
         section .data
-text1   db      "register.asm is running ...", 0x0a
-g_256   dd      -3.562, 7,361, -4.987, 3.891
+g_256   dq      -3.562, 7.361, -4.987, 3.891
 f_128   dq      -1.234, 2.789
 a_64    dq      0x1234567890123456
 b_32    dd      0x12345678
 c_16    dw      0x9012 
 d_8     db      0x34
 e_8     db      0x56
+text1   db      "register.asm is running ...", 0x0a
 
         section .text
         global _start
 
 _start:
         ; 256 bits
-;        movups  ymm0, [g_256]
+;        movupd  ymm0, [g_256]
+        
 
         ; 128 bits
         movups  xmm0, [f_128]

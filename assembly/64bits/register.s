@@ -1,4 +1,6 @@
       .section .data
+g_256:.double -3.562, 7.361, -4.987, 3.891
+f_128:.double -1.234, 2.789
 a_64: .quad 0x1234567890123456
 b_32: .long 0x12345678
 c_16: .word 0x9012
@@ -13,6 +15,8 @@ text1:.ascii "register.s is running ...\x0a"
 
 
 _start:
+      # 128 bits
+ 
       # 64 bits
       movq (a_64), %rax
       movq (a_64), %rbx

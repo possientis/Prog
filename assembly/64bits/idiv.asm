@@ -9,7 +9,7 @@ rem     dq  0
 _start:
 
         mov   rax, [x]    
-        mov   rdx, 0      ; rdx:rax == rax
+        mov   rdx, 0      ; idiv divides 128 bits rdx:rax
         idiv  qword [y]   ; divide by y
         mov   [quot], rax ; store the quotient
         mov   [rem], rdx  ; store the remainder
