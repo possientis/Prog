@@ -10,8 +10,8 @@
         (print (lambda (msg) (string-append message msg))))
     (assert-equals 
       (strict-eval exp env) value (print ": strict-eval")) 
-;    (assert-equals 
-;      (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
+    (assert-equals 
+      (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (assert-equals 
       (analyze-eval exp env) value (print ": analyze"))))
 
@@ -39,8 +39,8 @@
       (analyze-load filename) unspecified-value (print ": analyze-load"))
 
     (global-env-reset!)
-;    (assert-equals 
-;      (lazy-load filename) unspecified-value (print ": lazy-load"))
+    (assert-equals 
+      (lazy-load filename) unspecified-value (print ": lazy-load"))
 
     (global-env-reset!)
     (assert-equals 
@@ -53,9 +53,9 @@
       unspecified-value (print ": analyze-eval"))
 
     (global-env-reset!)
-;    (assert-equals 
-;      (force-thunk (lazy-eval (list 'load filename))) 
-;      unspecified-value (print ": lazy-eval"))
+    (assert-equals 
+      (force-thunk (lazy-eval (list 'load filename))) 
+      unspecified-value (print ": lazy-eval"))
 
     (global-env-reset!)))
 

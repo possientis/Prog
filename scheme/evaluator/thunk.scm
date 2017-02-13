@@ -1,13 +1,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (if (not (defined? included-thunk)) 
   (begin
-    (define included-thunk #f)
-    (display "loading thunk")(newline)
+    (define included-thunk #f) (display "loading thunk")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+; hack to determine if running code is native scheme
+(define (native-scheme?) (not (list? +)))
+
+; using the different tags to mark thunks in native scheme or interpreted scheme
+(define (thunk-tag)
+  (if (native-scheme?) 'thunk 'thunk+))
 
 ; testing
 (define (thunk? obj) 
-  (tagged-list? obj 'thunk))
+  (tagged-list? obj (thunk-tag)))
 
 ; making
 (define make-thunk   ; constructor
@@ -47,7 +53,7 @@
     (lambda (expr env) 
       (if (thunk? expr) ; do not create a double thunk
         expr
-        (list 'thunk (this (list 'data expr env)))))))
+        (list (thunk-tag) (this (list 'data expr env)))))))
 
 ; destructuring
 (define (thunk-expression obj) ((cadr obj) 'expression))
