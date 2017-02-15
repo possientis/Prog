@@ -1,5 +1,5 @@
         segment .data
-hello:  db "Hello world intel!", 0x0a
+hello:  db "Hello World!", 0x0a
 
         segment .text
         global _start
@@ -10,7 +10,7 @@ _start:
         mov   eax, 4        ; sys_write for 32 bits
         mov   ebx, 1        ; stdout
         lea   ecx, [hello]  ; buffer
-        mov   edx, 19       ; size
+        mov   edx, 13       ; size
         int   0x80          ; syscall for 32 bits
 
         ; this is 64 bit code

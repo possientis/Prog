@@ -1,5 +1,9 @@
 
-(display (defined? log))(newline)
+(display (getpw 1000))(newline)
 
-(newline)
+(define x (initscr))
+
+(endwin)
+
+
 (exit 0)

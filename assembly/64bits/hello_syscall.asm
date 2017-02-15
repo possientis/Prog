@@ -1,5 +1,5 @@
       section .data
-text  db "Hello World!",0x0a   ; string is not null terminated, using write
+text: db "Hello World!",0x0a   ; string is not null terminated, using write
 
       section .text
       global _start 

@@ -1,5 +1,5 @@
         .section .data
-hello:  .ascii  "Hello world at&t!\n"
+hello:  .ascii  "Hello World!\n"
 
         .section .text
         .global  _start
@@ -10,7 +10,7 @@ _start:
         movl $4, %eax       # sys_write for 32 bits
         movl $1, %ebx       # stdout
         leal (hello), %ecx  # buffer
-        movl $18, %edx      # size
+        movl $13, %edx      # size
         int  $0x80          # syscall for 32 bits
 
         # this is 64 bit code

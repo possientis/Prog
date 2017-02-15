@@ -1,14 +1,31 @@
-#!/bin/sh
+echo
 
-while true
-do
-  unset K1 K2 K3
-  read -s -N1
-  K1="$REPLY"
-  read -s -N2 -t 0.01
-  K2="$REPLY"
-  read -s -N1 -t 0.01
-  K3="$REPLY"
-  key="$K1$K2$K3"
-  echo "key = $key"
-done
+if test -z "$1"
+then
+  echo "No command-line arguments."
+else
+  echo "First command-line argument is $1."
+fi
+
+if /usr/bin/test -z "$1"  # equivalent to "test" builtin
+#  ^^^^^^^^^^^^^          # specifying full pathname
+then
+  echo "No command-line arguments."
+else
+  echo "First command-line argument is $1."
+fi
+
+if [ -z "$1" ]  # same thing
+then
+  echo "No command-line arguments."
+else
+  echo "First command-line argument is $1."
+fi
+
+
+if /usr/bin/[ -z "$1" ]  # same as builtin
+then
+  echo "No command-line arguments."
+else
+  echo "First command-line argument is $1."
+fi
