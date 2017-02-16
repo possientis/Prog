@@ -1,4 +1,4 @@
-(define mode 'strict)
+(define mode 'strict) ; select here
 
 (define load-proc 
   (cond ((eq? 'strict mode) strict-load)

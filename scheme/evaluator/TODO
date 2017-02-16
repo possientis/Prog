@@ -1,4 +1,5 @@
-write up explanation for thunk-tag
+write up explanation for native-scheme?
+
 understand failure of test.scm
 investigate failure of ./strict-run.sh unit-test.scm
 

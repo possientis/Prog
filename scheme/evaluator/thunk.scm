@@ -4,12 +4,75 @@
     (define included-thunk #f) (display "loading thunk")(newline)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+; When attempting to determine whether an object is a thunk using the 'thunk?'
+; function, the interpreter simply checks for a tag 'thunk. This creates a bug,
+; as it is possible for a data stucture to appear as a thunk without being one:
+; For example, imagine our interpreter (implemented in native scheme) is running 
+; its own code: we obtain a second level interpreter which is running in inter-
+; preted code rather than native scheme. This second level interpreter will handle
+; data structures with a 'thunk tag and which it considers to be a thunk object.
+; However, from the point of view of the first level interpreter running in native
+; scheme, such data structure is not a thunk, and wrongly viewing it as a thunk
+; generates an error. Suppose we run the following code in native scheme:
+;
+; (load "main.scm")                 ; define 'strict-eval and dependencies
+; (strict-eval '(load "main.scm"))
+; 
+; When running (load "main.scm") in native scheme, we are defining the function
+; 'strict-eval', which allows us to run our interpreter.
+;
+; (display (strict-eval '(+ 1 1)))  ; 2
+;
+; By running (strict-eval '(load "main.scm")) in native scheme, we are asking
+; our interpreter to run (load "main.scm"), hence creating all necessary bindings
+; in the interpreter's global environment to use 'strict-eval in interpreted code:
+;
+; (display (strict-eval '(strict-eval '(+ 1 1)))) ; 2
+;
+; We can also create a thunk object in interpreted code:
+;
+; (strict-eval '(define t (make-thunk '(+ 1 1) global-env)))
+;
+; The intepreter's global environment now has a binding for the variable t
+;
+; (define value ((global-env 'lookup) 't))
+;
+; And we can inspect the value associated with this variable:
+;
+; (display value)
+;
+; (thunk (eval-procedure (m) (begin (cond ((eq? m (quote value)) (value data)) 
+; ((eq? m (quote expression)) (expression data)) ((eq? m (quote environment)) 
+; (environment data)) ((eq? m (quote evaluated?)) (evaluated? data)) (else 
+; (error thunk: unknown operation error m)))) 
+; #<CLOSURE <anon> "environment1.scm": (m)>))
+; 
+; This native scheme value is of the form (thunk object) and deceptively appears
+; to be a thunk. However, in order for this value to qualify as a thunk, 'object'
+; would need to be a native scheme object which it is not. 'object' is in fact
+; a data sructure used by our interpreter to represent a procedure. In short,
+; 'object' is an interpreted scheme object, not a native scheme object. 
+; If our native scheme interpreter wrongly interprets this 'value' as a thunk,
+; it will wrongly regard 'object' as a native scheme procedure and attempt to
+; run it when forcing the thunk, thereby creating an error.
+;
+; Hence, when implementing the function thunk? which determines whether an
+; object is of type thunk, we need to be able to distinguish the true thunks
+; of our native scheme interpreter, from the data structures which are thunks
+; of a higher level interpreter. We do this by using a different tag, depending
+; on whether we are running native scheme or interpreted scheme. Note that this
+; solution is temporary: it will allow us to distinguish thunks of the native
+; scheme interpreter from those of an interpreted scheme interperter. But it
+; will not allow us to go one level deeper.
+
 ; hack to determine if running code is native scheme
 (define (native-scheme?) (not (list? +)))
 
-; using the different tags to mark thunks in native scheme or interpreted scheme
+; using the different tags to mark thunks in native scheme or interpreted scheme.
 (define (thunk-tag)
   (if (native-scheme?) 'thunk 'thunk+))
+
+
 
 ; testing
 (define (thunk? obj) 

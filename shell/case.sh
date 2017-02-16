@@ -7,3 +7,20 @@ case "$variable" in
   def)  echo "\$variable = def" ;;  # double semicolon 
 esac
 
+
+# case can perform pattern matching as follows:
+case "$1" in
+  bye)
+    echo Fine, bye.
+    ;;
+  hi|hello)
+    echo Nice to see you.
+    ;;
+  what*)
+    echo Whatever.
+    ;;
+  *)
+    echo 'Huh?'
+    ;;
+esac
+
