@@ -1,14 +1,11 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits
+HOME=/home/john/Prog/assembly/64bits/hello
 cd ${HOME}
 
 rm -f *.lst
 rm -f *.o
 rm -f a.out
-rm -f array
-
-./hello/clean.sh
 
 cd ${DIR}
