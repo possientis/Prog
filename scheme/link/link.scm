@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-link)) 
+  (begin
+    (define included-link #f)
+    (display "loading link")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (load "link-node.scm")
 
 (define link  ; constructor
@@ -102,3 +110,5 @@
     (lambda (same-key?)
       (this (list 'data '() same-key?)))))
 
+
+))  ; include guard

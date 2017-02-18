@@ -1,7 +1,8 @@
+review thunk-tag for multilevel tagging
 write up explanation for native-scheme?
 
-understand failure of test.scm
-investigate failure of ./strict-run.sh unit-test.scm
+test-load fails on frame-test.scm
+review test-files.scm
 
 test the following code in lazy mode (after fixing define)
 (define x 1)

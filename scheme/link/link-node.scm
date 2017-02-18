@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-link-node)) 
+  (begin
+    (define included-link-node #f)
+    (display "loading link-node")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (define link-node ; constructor
   (let ((let-for-name-encapsulation #t))
     ; object created from data is message passing interface
@@ -27,4 +35,4 @@
     (lambda (key value)
       (this (list 'data key value '())))))
 
- 
+))  ; include guard 

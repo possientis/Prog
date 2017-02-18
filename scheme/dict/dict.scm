@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-dict)) 
+  (begin
+    (define included-dict #f)
+    (display "loading dict")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (require 'object->string)
 (load "link.scm")
 (load "hash.scm")
@@ -215,3 +223,4 @@
   ;; returning interface
   dispatch))))
 
+))  ; include guard

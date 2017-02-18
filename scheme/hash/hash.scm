@@ -1,3 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; include guard ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (defined? included-hash)) 
+  (begin
+    (define included-hash #f)
+    (display "loading hash")(newline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+
 (define hash-lib
   ;;
   ;; static private member
@@ -18,3 +26,4 @@
     ;;returning public interface
     dispatch)))
 
+))  ; include guard

@@ -614,6 +614,12 @@
   (test-load "variable.scm" "load.55")
   ;
   (test-load "main.scm" "load.56")
+  ;
+  
+  ;
+  (display "testing frames ...\n")
+  (load "frame-test.scm")
+;  (test-load "frame-test.scm")
 
 
   (display "unit-test: test complete\n"))
