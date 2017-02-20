@@ -2,7 +2,47 @@
         global  _start
 _start:
         nop
-        mov eax, 1
-        mov ebx, 0
-        int 0x80
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+
+        nop
+        nop
+        nop
+
+        mov rax, 60
+        mov rdi, 0
+        syscall
+
 

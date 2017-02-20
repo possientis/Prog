@@ -1,6 +1,8 @@
 #!/bin/sh
 
-as -g -o $1.o $1.s
+name=$(basename "$1" .s)
+
+as -g -o $name.o $name.s
 
 
 

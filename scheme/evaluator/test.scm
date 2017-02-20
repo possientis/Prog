@@ -1,19 +1,12 @@
-(load "main.scm") ; defining analyze-eval
-(strict-eval '(load "main.scm"))
-(strict-eval '(strict-eval '(load "main.scm")))
+;(load "unit-test.scm")
+
+(load "main.scm") ; defining 'strict-eval'
+;(strict-eval '(load "unit-test.scm"))
 
 
-(display "+ = ")(display +)(newline)
+(strict-eval '(load "main.scm"))  ; defning 'strict-eval'
 
-(display "+ = ")(display (strict-eval '+))(newline)
+(strict-eval '(strict-eval '(load "unit-test.scm")))
 
-(display "+ = ")(display (strict-eval '(strict-eval '+)))(newline)
-
-(display "+ = ")(display (strict-eval '(strict-eval '(strict-eval '+))))(newline)
-
-;+ = #<primitive-procedure +>
-;+ = (primitive-procedure #<primitive-procedure +>)
-;+ = (primitive-procedure (primitive-procedure #<primitive-procedure +>))
-;+ = (primitive-procedure (primitive-procedure (primitive-procedure #<primitive-procedure +>)))
 
 (exit 0)

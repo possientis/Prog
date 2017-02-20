@@ -59,19 +59,41 @@
 ; Hence, when implementing the function thunk? which determines whether an
 ; object is of type thunk, we need to be able to distinguish the true thunks
 ; of our native scheme interpreter, from the data structures which are thunks
-; of a higher level interpreter. We do this by using a different tag, depending
-; on whether we are running native scheme or interpreted scheme. Note that this
-; solution is temporary: it will allow us to distinguish thunks of the native
-; scheme interpreter from those of an interpreted scheme interperter. But it
-; will not allow us to go one level deeper.
+; of a higher level interpreter. We do this by using a different tag 'thunk0'
+; 'thunk1', 'thunk2', etc... depending on the level of the intepreter which is 
+; running. One way to make the code self-aware of its running level is to 
+; evaluate the operator +. In native scheme, this operator evaluates to:
+;
+; (display +)                 ; #<primitive-procedure +>
+; 
+; while our interpreter evaluates + as:
+; 
+; (display (strict-eval '+))  ;(primitive-procedure #<primitive-procedure +>)
+;
+; and (display (strict-eval '(strict-eval '+))) returns the list:
+;
+; (primitive-procedure (primitive-procedure #<primitive-procedure +>))
+;
+; Hence we can implement a function scheme-interpreter-level as follows:
 
-; hack to determine if running code is native scheme
-(define (native-scheme?) (not (list? +)))
+(define (scheme-interpreter-level)
+  (let loop ((test +))
+    (if (not (list? test))
+      0                             ; test is #<primitive-procedure>
+      (+ 1 (loop (cadr test))))))   ; test is (primitive-procedure ... )
 
-; using the different tags to mark thunks in native scheme or interpreted scheme.
+; We can now implement a thunk-tag function which generates a different tag
+; for each scheme interpreter level, simply by appending a number to "thunk".
+; For performance reason, this function is memoized:
+
 (define (thunk-tag)
-  (if (native-scheme?) 'thunk 'thunk+))
-
+  (let ((tag #f))   ; memoization
+    (if (eq? #f tag)
+      (set! tag (string->symbol 
+                  (string-append 
+                    "thunk" 
+                    (number->string (scheme-interpreter-level))))))
+    tag))
 
 
 ; testing

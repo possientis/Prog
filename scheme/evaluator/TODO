@@ -1,5 +1,3 @@
-review thunk-tag for multilevel tagging
-write up explanation for native-scheme?
 
 test-load fails on frame-test.scm
 review test-files.scm

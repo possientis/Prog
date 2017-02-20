@@ -14,3 +14,9 @@ fi
 rm -f log1 log2
 
 
+# best to replace newline delimiter by null character with -print0 option
+# then use xargs with -0 option. 
+
+find . -name '*.sh' -print0 | xargs -0 file
+
+

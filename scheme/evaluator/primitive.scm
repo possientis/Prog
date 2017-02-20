@@ -112,6 +112,7 @@
         (list 'set-cdr! set-cdr!)
         (list 'string? string?)
         (list 'string-append string-append)
+        (list 'string->symbol string->symbol)
         (list 'symbol? symbol?)
         (list 'vector-fill! vector-fill!)
         (list 'vector-length vector-length)

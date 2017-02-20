@@ -9,5 +9,7 @@
 # The -1 exit . 1st asks for a listing file which 
 # shows the generated code in hexadecimal.
 
-yasm -f elf64 -g dwarf2 -l $1.lst $1.asm 
+name=$(basename "$1" .asm)
+
+yasm -f elf64 -g dwarf2 -l $name.lst $name.asm 
 
