@@ -13,3 +13,8 @@
       0             ; (DP n x) = 0 for x < 0
       ;; n > 0 and x >= 0 at this stage
       (+ (DP (- n 1) x) (DP n (- x (d (- n 1))))))))
+
+
+(display (DP 5 5))(newline)
+
+(exit 0)

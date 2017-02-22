@@ -1,7 +1,3 @@
-
-test-load fails on frame-test.scm
-review test-files.scm
-
 test the following code in lazy mode (after fixing define)
 (define x 1)
 (set! x (+ x x))

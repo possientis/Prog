@@ -550,14 +550,39 @@
 
   ; load
   (display "testing loading files ...\n") 
-  ;
-;  (test-all-files)
-  
-  ;
-  (display "testing frames ...\n")
-  (load "frame-test.scm")
-;  (test-load "frame-test.scm")
+  (test-all-files)
 
+  ; higher level interpreters
+  (display "testing higher order interpreter ...\n")
+
+  (display "testing native scheme (level 0) ...\n")
+  (assert-equals 
+    (+ 1 1) 
+    2 "higher.0") 
+
+  (display "testing interpreter (level 1) ...\n")
+  (assert-equals 
+    (strict-eval '(+ 1 1)) 
+    2 "higher.1")
+  (assert-equals 
+    (analyze-eval '(+ 1 1)) 
+    2 "higher.2")
+  (assert-equals 
+    (force-thunk (lazy-eval '(+ 1 1)))
+    2 "higher.3")
+
+  (display "setting up higher order interpreter (level 2) ...\n")
+  (strict-eval '(load "main.scm"))
+  (display "testing higher order interpreter (level 2) ...\n")
+  (assert-equals 
+    (strict-eval '(strict-eval '(+ 1 1))) 
+    2 "higher.4")
+  (assert-equals 
+    (analyze-eval '(analyze-eval '(+ 1 1))) 
+    2 "higher.5")
+  (assert-equals 
+    (force-thunk (lazy-eval '(force-thunk (lazy-eval '(+ 1 1))))) 
+    2 "higher.6")
 
   (display "unit-test: test complete\n"))
 

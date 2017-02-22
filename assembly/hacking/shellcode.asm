@@ -1,24 +1,15 @@
         section .text
         global _start
-
 _start:
-        xor   eax, eax
-        xor   ebx, ebx
-        xor   ecx, ecx
-        cdq             ; what is that?
-        mov   al, 0xa4  ; probably some 2 bits system call
-        int   0x80      ; gdb shows system call failing (returns -1)
-        push  0xb
-        pop   rax
-        push  rcx
-        push  0x68732f2f
-        push  0x6e69622f
-        mov   ebx, esp
-        push  rcx
-        mov   edx, esp
-        push  rbx
-        mov   ecx, esp
-        int   0x80 
-        mov   rax, 0x3c
-        mov   rdi, 0
+        mov   rax, 1          ; sys_write
+        mov   rdi, 1          ; stdout
+        lea   rsi, [rip+0x19] ; buffer in code segment below
+        mov   rdx, 22         ; size
         syscall
+
+        mov   rax, 60       ; exit
+        mov   rdi, 0        ; exit 0
+        syscall
+        db  0x73,0x68,0x65,0x6c,0x6c,0x20,0x63,0x6f
+        db  0x64,0x65,0x20,0x69,0x73,0x20,0x72,0x75
+        db  0x6e,0x6e,0x69,0x6e,0x67,0x0a

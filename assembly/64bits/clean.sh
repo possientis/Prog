@@ -8,6 +8,10 @@ rm -f *.lst
 rm -f *.o
 rm -f a.out
 rm -f array
+rm -f customer.dat
+rm -f log1
+rm -f log2
+rm -f test
 
 ./hello/clean.sh
 

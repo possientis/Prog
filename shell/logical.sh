@@ -38,3 +38,5 @@ echo $var               # 0
 
 var=-2 && (( var+=2 )) && echo $var # will not echo $var!
 echo $?
+
+
