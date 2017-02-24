@@ -1,15 +1,4 @@
-test the following code in lazy mode (after fixing define)
-(define x 1)
-(set! x (+ x x))
-(display x)(newline)
-
-analyze: review code and understand why no pick up in perf
-
-lazy-repl:
-(define (error) (display "This is an error\n"))
-understand why:
-> (error) 
-fails
+Understand why (test) is running in test.scm
 
 (define (try a b) (if (= 0 a) 1 b))
 compare lazy and strict eval of

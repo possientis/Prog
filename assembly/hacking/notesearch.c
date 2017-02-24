@@ -50,7 +50,7 @@ int print_notes(int fd, int uid, const char *searchstring) {
   note_buffer[note_length] = 0;       // Terminate the string.
   //
   if(search_note(note_buffer, searchstring)) // If searchstring found,
-    printf(note_buffer);
+    printf(note_buffer);  /* VULNERABILITY */
 
   return 1;
 }
