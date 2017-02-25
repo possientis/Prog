@@ -7,13 +7,18 @@
 %macro exitcode 1     ; 1 argument
     mov rax, SYS_EXIT
     mov rdi, %1       ; first argument referred to as %1
-    syscall
+    syscall           ; %0 is number of arguments
 %endmacro
 
 %macro freeze 0
 %%loop:           ; macro label, gets its unique name upon macro expansion
   jmp %%loop
 %endmacro
+
+; preprocessor variables
+%assign i 1
+%assign i i+1
+
 
 STDIN     equ 0
 STDOUT    equ 1

@@ -11,13 +11,21 @@ option=$(sh option.sh)
 # Hello world!
 echo
 echo -n "32 bits system call with AT&T syntax:     "
-./as.sh hello_32bits.s; ld hello_32bits.o; ./a.out; ./clean.sh    # 32 bits at&t
+./as.sh hello_32bits.s; ld hello_32bits.o; ./a.out; ./clean.sh    
 
 echo -n "64 bits system call with AT&T syntax:     "
-./as.sh hello_syscall.s; ld hello_syscall.o; ./a.out; ./clean.sh  # 64 bits syscall
+./as.sh hello_syscall.s; ld hello_syscall.o; ./a.out; ./clean.sh  
 
 echo -n "C library write call with AT&T syntax:    "
 ./as.sh hello_write.s; gcc $option hello_write.o; ./a.out; ./clean.sh  
+
+echo -n "printf via macro with AT&T syntax:        "
+./as.sh hello_macro.s; gcc $option hello_macro.o; ./a.out; ./clean.sh
+
+echo -n "printf via function with Intel AT&T:      "
+./as.sh print_string.s
+./as.sh hello_function.s 
+gcc $option hello_function.o print_string.o; ./a.out; ./clean.sh
 
 echo 
 echo -n "1 argument printf call with AT&T syntax:  "
@@ -54,6 +62,15 @@ echo -n "64 bits system call with Intel syntax:    "
 
 echo -n "C library write call with Intel syntax:   "
 ./yasm.sh hello_write.asm; gcc $option hello_write.o; ./a.out; ./clean.sh   
+
+echo -n "printf via macro with Intel syntax:       "
+./yasm.sh hello_macro.asm; gcc $option hello_macro.o; ./a.out; ./clean.sh
+
+echo -n "printf via function with Intel syntax:    "
+./yasm.sh print_string.asm
+./yasm.sh hello_function.asm 
+gcc $option hello_function.o print_string.o; ./a.out; ./clean.sh
+
 
 echo 
 

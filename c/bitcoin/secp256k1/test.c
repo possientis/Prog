@@ -3,6 +3,10 @@
 #include <assert.h>
 #include <stdio.h>
 
+/* trick to convert value of a macro into a string constant */
+# define STR(EXP) "\'"STR_(EXP)"\'" 
+# define STR_(EXP) #EXP /* # is preprocesssor 'stringify operator' */
+
 int main()
 {
   secp256k1_context *ctx;         // pointer
@@ -17,6 +21,11 @@ int main()
 
 # if defined(SECP256K1_GNUC_PREREQ)
   printf("SECP256K1_GNUC_PREREQ is defined\n");
+  printf("SECP256K1_GNUC_PREREQ(6,1)=%d\n", SECP256K1_GNUC_PREREQ(6,1));
+  printf("SECP256K1_GNUC_PREREQ(6,2)=%d\n", SECP256K1_GNUC_PREREQ(6,2));
+  printf("SECP256K1_GNUC_PREREQ(6,3)=%d\n", SECP256K1_GNUC_PREREQ(6,3));
+  printf("SECP256K1_GNUC_PREREQ(5,2)=%d\n", SECP256K1_GNUC_PREREQ(5,2));
+  printf("SECP256K1_GNUC_PREREQ(7,2)=%d\n", SECP256K1_GNUC_PREREQ(7,2));
 # else
   printf("SECP256K1_GNUC_PREREQ is not defined\n");
 #endif
@@ -27,7 +36,54 @@ int main()
   printf("__GNUC__is not defined\n");
 #endif
  
-  
+# if defined(__GNUC_MINOR__)
+  printf("__GNUC_MINOR__ is defined and equal to %d\n", __GNUC_MINOR__);
+# else
+  printf("__GNUC_MINOR__ is not defined\n");
+#endif 
+
+
+# if defined(__STDC_VERSION__)
+  printf("__STDC_VERSION__ is defined and equal to %d\n", __STDC_VERSION__);
+# else
+  printf("__STDC_VERSION__ is not defined\n");
+#endif
+
+# if defined(SECP256K1_INLINE)
+  printf("SECP256K1_INLINE is defined and equal to %s\n", STR(SECP256K1_INLINE));
+# else
+  printf("SECP256K1_INLINE is not defined\n");
+#endif
+
+
+# if defined(_WIN32)
+  printf("_WIN32 is defined and equal to %s\n", STR(_WIN32));
+# else
+  printf("_WIN32 is not defined\n");
+#endif
+
+# if defined(SECP256K1_BUILD)
+  printf("SECP256K1_BUILD is defined and equal to %s\n", STR(SECP256K1_BUILD));
+# else
+  printf("SECP256K1_BUILD is not defined\n");
+#endif
+
+
+# if defined(SECP256K1_API)
+  printf("SECP256K1_API is defined and equal to %s\n", STR(SECP256K1_API));
+# else
+  printf("SECP256K1_API is not defined\n");
+#endif
+
+
+
+
+
+
+
+
+
+
 
 
   return 0;

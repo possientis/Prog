@@ -1,9 +1,11 @@
-%include "macro.inc"  ; extension need not be 'inc'
+%include "macro.asm"  ; extension need not be 'asm'
+
+%define num 15  ; one line macro here
 
 section .text
 global _start
 
 _start:
-  exitcode 15
+  exitcode num
 
 
