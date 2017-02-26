@@ -8,6 +8,7 @@ rm -f test.log
 ./java/clean.sh
 ./c#/clean.sh
 ./haskell/clean.sh
+./scheme/clean.sh
 ./python/clean.sh
 ./scala/clean.sh
 ./clojure/clean.sh

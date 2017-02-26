@@ -550,7 +550,7 @@
 
   ; load
   (display "testing loading files ...\n") 
-  (test-all-files)
+;  (test-all-files)
 
   ; higher level interpreters
   (display "testing higher order interpreter ...\n")

@@ -1,57 +1,26 @@
-Section FreeUniversalAlgebraFOL.
-  Variable V : Set.
+Set Implicit Arguments.
 
-  Inductive P : Set :=
-  | Belong : V -> V -> P
-  | Bot    : P
-  | Imply  : P -> P -> P
-  | Forall : V -> P -> P.
-
-End FreeUniversalAlgebraFOL.
+Inductive P (V : Set) : Set :=
+  | Belong : V -> V -> P V
+  | Bot    : P V
+  | Imply  : P V -> P V -> P V 
+  | Forall : V -> P V -> P V.
 
 
-Section SubstitutionMapping.
-  Variable V : Set.
-  Variable W : Set.
-  Variable sig : V -> W.
+Fixpoint subst {V:Set}{W:Set} (sig: V -> W) (phi: P V) : P W :=
+  match phi with
+    | Belong x y        => Belong (sig x) (sig y)
+    | Bot _             => Bot _
+    | Imply f1 f2       => Imply (subst sig f1) (subst sig f2) 
+    | Forall x f1       => Forall (sig x) (subst sig f1)
+  end.
 
-  Fixpoint Subst (phi : P V) : P W :=
-    match phi with
-      | Belong x y        => (Belong W)(sig x)(sig y)
-      | Bot               => (Bot W)
-      | Imply phi_1 phi_2 => (Imply W)(Subst phi_1)(Subst phi_2)
-      | Forall x phi_1    => (Forall W)(sig x)(Subst phi_1)
-    end.
-End SubstitutionMapping.
+Definition compose {U:Set}{V:Set}{W:Set}(tau:U->V)(sig:V->W): U->W :=
+  fun x => sig (tau x).
 
-Section Composition.
-  Variables U V W: Set.
+Lemma subst_compose: forall U V W: Set, 
+  forall tau: U->V, forall sig: V->W, forall phi: P U, 
+  subst (compose tau sig) = compose (subst tau) (subst sig).
 
-  Definition compose (tau: U->V) (sig: V->W) : U->W :=
-    fun x => sig (tau x).
-End Composition.
-
-Lemma subst_compose: forall U V W:Set, forall tau:U->V, forall sig: V->W, forall
-phi: P U, Subst U W (compose U V W tau sig) phi = 
-  compose (P U) (P V) (P W) (Subst U V tau) (Subst V W sig) phi. 
-  induction phi.
-  simpl.
-  unfold compose.
-  unfold Subst.
-  reflexivity.
-  simpl.
-  unfold compose.
-  unfold Subst.
-  reflexivity.
-  unfold compose at 1.
-  simpl.
-
- 
-
-
-
-
-
-
-
+  Proof.
 

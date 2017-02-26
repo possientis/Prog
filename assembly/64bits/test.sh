@@ -12,8 +12,8 @@ cd ${HOME}
 # intel syntax
 ./yasm.sh exit.asm; ld exit.o; ./a.out; ./clean.sh             #_start
 ./yasm.sh memory.asm; gcc memory.o; ./a.out; ./clean.sh        # main , no c lib
-./yasm.sh register.asm; ld register.o; ./a.out; ./clean.sh
 ./array_build.sh; ./array 20; ./clean.sh
+./yasm.sh register.asm; ld register.o; ./a.out; ./clean.sh
 
 
 # at&t syntax

@@ -13,22 +13,7 @@ text1   db      "register.asm is running ...", 0x0a
 
 _start:
         ; 256 bits
-        vmovupd  ymm0, [g_256]
-        vmovupd  ymm1, [g_256]
-        vmovupd  ymm2, [g_256]
-        vmovupd  ymm3, [g_256]
-        vmovupd  ymm4, [g_256]
-        vmovupd  ymm5, [g_256]
-        vmovupd  ymm6, [g_256]
-        vmovupd  ymm7, [g_256]
-        vmovupd  ymm8, [g_256]
-        vmovupd  ymm9, [g_256]
-        vmovupd  ymm10,[g_256]
-        vmovupd  ymm11,[g_256]
-        vmovupd  ymm12,[g_256]
-        vmovupd  ymm13,[g_256]
-        vmovupd  ymm14,[g_256]
-        vmovupd  ymm15,[g_256]
+;        vmovupd  ymm0, [g_256]
         
 
         ; 128 bits

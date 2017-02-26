@@ -16,22 +16,7 @@ text1:.ascii "register.s is running ...\x0a"
 
 _start:
       # 256 bits
-      vmovupd (g_256), %ymm0
-      vmovupd (g_256), %ymm1
-      vmovupd (g_256), %ymm2
-      vmovupd (g_256), %ymm3
-      vmovupd (g_256), %ymm4
-      vmovupd (g_256), %ymm5
-      vmovupd (g_256), %ymm6
-      vmovupd (g_256), %ymm7
-      vmovupd (g_256), %ymm8
-      vmovupd (g_256), %ymm9
-      vmovupd (g_256), %ymm10
-      vmovupd (g_256), %ymm11
-      vmovupd (g_256), %ymm12
-      vmovupd (g_256), %ymm13
-      vmovupd (g_256), %ymm14
-      vmovupd (g_256), %ymm15
+#      vmovupd (g_256), %ymm0
 
       # 128 bits
       movups (f_128), %xmm0

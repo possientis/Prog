@@ -7,5 +7,6 @@
 
 void fatal(const char *message);
 void *ec_malloc(unsigned int size);
+void dump(const unsigned char *data_buffer, unsigned int length);
 
 #endif

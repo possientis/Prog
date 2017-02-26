@@ -1,4 +1,5 @@
-Understand why (test) is running in test.scm
+carefully re-think semantics of lazy-eval (do we need dorun primitive?)
+why is lazy-run not doing anything?
 
 (define (try a b) (if (= 0 a) 1 b))
 compare lazy and strict eval of
