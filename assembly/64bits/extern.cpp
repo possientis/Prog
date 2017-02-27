@@ -24,7 +24,7 @@ int main()
 
   long res = longASMFunction(x1, x2, x3, x4, x5, x6);
 
-  cout << hex << "Result = " << res << endl;
+  cout << hex << "Result = 0x" << res << endl;
   
   return 0;
 }

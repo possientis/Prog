@@ -34,7 +34,11 @@ int main()
   WARN_IF_YET_AGAIN(i == 0) // odd syntax
   WARN_IF_YET_AGAIN(j == 0) // odd syntax
 
+  printf("i = %d\n", i);
+  printf("i = %d\n", i);
+
   return 0;
 }
+
 
 

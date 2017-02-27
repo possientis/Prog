@@ -22,10 +22,18 @@ echo -n "C library write call with AT&T syntax:    "
 echo -n "printf via macro with AT&T syntax:        "
 ./as.sh hello_macro.s; gcc $option hello_macro.o; ./a.out; ./clean.sh
 
-echo -n "printf via function with Intel AT&T:      "
+echo -n "printf via function with AT&T syntax:     "
 ./as.sh print_string.s
 ./as.sh hello_function.s 
 gcc $option hello_function.o print_string.o; ./a.out; ./clean.sh
+
+echo -n "C program via AT&T assembly function:     "
+./as.sh print_string.s
+gcc $option hello_function.c print_string.o; ./a.out; ./clean.sh
+
+echo -n "C++ program via AT&T assembly function:   "
+./as.sh print_string.s
+g++ $option hello_function.cpp print_string.o; ./a.out; ./clean.sh
 
 echo 
 echo -n "1 argument printf call with AT&T syntax:  "
@@ -70,6 +78,15 @@ echo -n "printf via function with Intel syntax:    "
 ./yasm.sh print_string.asm
 ./yasm.sh hello_function.asm 
 gcc $option hello_function.o print_string.o; ./a.out; ./clean.sh
+
+
+echo -n "C program via Intel assembly function:    "
+./yasm.sh print_string.asm
+gcc $option hello_function.c print_string.o; ./a.out; ./clean.sh
+
+echo -n "C++ program via Intel assembly function:  "
+./yasm.sh print_string.asm
+g++ $option hello_function.cpp print_string.o; ./a.out; ./clean.sh
 
 
 echo 

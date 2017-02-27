@@ -20,7 +20,28 @@ Definition compose {U:Set}{V:Set}{W:Set}(tau:U->V)(sig:V->W): U->W :=
 
 Lemma subst_compose: forall U V W: Set, 
   forall tau: U->V, forall sig: V->W, forall phi: P U, 
-  subst (compose tau sig) = compose (subst tau) (subst sig).
+  subst (compose tau sig) phi = compose (subst tau) (subst sig) phi.
 
   Proof.
+  intros U V W tau sig phi. elim phi.
+
+  clear phi. intros x y. unfold subst at 1. unfold compose at 3.
+  unfold subst at 2. unfold subst at 1. unfold compose. reflexivity.
+
+  clear phi. unfold subst at 1. unfold compose. unfold subst at 2. 
+  unfold subst. reflexivity.
+
+  clear phi. intros p1 H1 p2 H2. unfold subst at 1.
+  fold (subst (compose tau sig) p1). fold (subst (compose tau sig) p2).
+  unfold compose at 3. unfold subst at 4. 
+  fold (subst tau p1). fold (subst tau p2). unfold subst at 3.
+  fold (subst sig (subst tau p1)). fold (subst sig (subst tau p2)).
+  fold (compose (subst tau) (subst sig) p1).
+  fold (compose (subst tau) (subst sig) p2).
+  rewrite <- H1. rewrite <- H2. reflexivity.
+
+  clear phi. intros x p1 H1. unfold subst at 1. 
+  fold (subst (compose tau sig) p1).
+
+Show.
 

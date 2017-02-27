@@ -1,11 +1,11 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/scheme
+HOME=/home/john/Prog/scheme/guile
 cd ${HOME}
 
 rm -f a.out
 rm -f *.o
-./guile/clean.sh
+rm -f libguile-bessel.so
 
 cd ${DIR}

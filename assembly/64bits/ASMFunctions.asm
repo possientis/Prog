@@ -8,7 +8,7 @@ global longASMFunction
 extern printf
 
 section .data
-format  db "x%d = %ld",10,0
+format  db "x%d = %lx",10,0
 
 section .text
 
@@ -46,6 +46,7 @@ printArgument:  ; printf(format, i, value)
   mov rdx, rsi    ; second argument of print becomes third argument of printf
   mov rsi, rdi    ; first argument of print becomes second argument of printf
   mov rdi, format ; first argument of printf
+  xor rax, rax
   call printf
   ret
 
