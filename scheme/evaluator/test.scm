@@ -1,11 +1,10 @@
 (load "main.scm")
 
+(lazy-eval
+  '(define (test)
+     (display "+++test+++ is running\n")
+     #f))
 
-(force-thunk 
-  (lazy-eval 
-    '(begin
-       (display "abcdef\n")
-       (display "+++test.scm is running+++\n"))))
-
+(display (lazy-eval '(test)))(newline)
 
 (exit 0)

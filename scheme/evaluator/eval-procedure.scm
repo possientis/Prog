@@ -42,11 +42,12 @@
 ; either. Instead, we pass them directly as values to construct
 ; an extended environment, from which we return a new thunk.
 (define (lazy-apply-eval-procedure proc args)
-  (if (thunk? proc) (error "lazy-apply-eval-procedure: thunk proc detected"))
   (let ((body (eval-procedure-body proc))
         (params (eval-procedure-parameters proc))
         (init-env (eval-procedure-environment proc)))
     (let ((extended-env ((init-env 'extended) params args)))
+      (debug "[DEBUG]: lazy-apply-eval-procedure: body =")
+      (debug body)(debug-newline)
       (lazy-eval body extended-env))))
 
 ))  ; include guard

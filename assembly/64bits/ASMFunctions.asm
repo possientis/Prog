@@ -1,55 +1,46 @@
-%macro print 1    ; 1 argument
-  mov rdi, %1
-  mov rsi, [rbp-%1*8]
-  call printArgument
-%endmacro
- 
-global longASMFunction
-extern printf
-
-section .data
-format  db "x%d = %lx",10,0
-
-section .text
+        section .text
+        global longASMFunction
 
 
-longASMFunction:
-  ; prologue
+longASMFunction:    ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
+                    ; index : rdi
+                    ; x1    : rsi
+                    ; x2    : rcx
+                    ; x3    ; rdx
+                    ; x4    ; r8
+                    ; x5    ; r9
+                    ; x6    ; stack pushed last
+                    ; x7    ; stack pushed second
+                    ; x8    ; stack pushed first
+  ; prologue 
   push rbp
   mov  rbp, rsp
-  sub  rsp, 48
+  sub  rsp, 64      ; allocating stack space for 8 long
 
   ; saving arguments
-  mov [rbp-8], rdi
-  mov [rbp-16], rsi
-  mov [rbp-24], rdx
-  mov [rbp-32], rcx
-  mov [rbp-40], r8
-  mov [rbp-48], r9
+  mov rax, rdi      ; index
+  mov [rbp-8],  rsi ; x1
+  mov [rbp-16], rdx ; x2
+  mov [rbp-24], rcx ; x3
+  mov [rbp-32], r8  ; x4
+  mov [rbp-40], r9  ; x5
 
-  print 1
-  print 2
-  print 3
-  print 4
-  print 5
-  print 6
-
-  ; return value
-  mov rax, 0x1234567812345678
+  mov r10, [rbp+16] 
+  mov [rbp-48], r10 ; x6
   
+  mov r10, [rbp+24] 
+  mov [rbp-56], r10 ; x7
+
+  mov r10, [rbp+32]
+  mov [rbp-64], r10 ; x8
+
+  ; returning relevant argument
+  neg rax
+  mov rax, [rbp+8*rax]   
+
   ; epilogue
   leave
   ret  
 
 
-printArgument:  ; printf(format, i, value)
-  mov rdx, rsi    ; second argument of print becomes third argument of printf
-  mov rsi, rdi    ; first argument of print becomes second argument of printf
-  mov rdi, format ; first argument of printf
-  xor rax, rax
-  call printf
-  ret
-
- 
-  
 
