@@ -14,5 +14,6 @@ rm -f log2
 rm -f test
 
 ./hello/clean.sh
+./extern/clean.sh
 
 cd ${DIR}

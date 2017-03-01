@@ -6,7 +6,7 @@ HOME=/home/john/Prog/assembly/64bits/hello
 cd ${HOME}
 
 
-option=$(sh option.sh)
+option=$(sh ../option.sh)
 
 # Hello world!
 echo

@@ -11,6 +11,7 @@
 # $ ./att.sh movq \$2, %rax
 # 48 c7 c0 02 00 00 00 mov $0x2,%rax
 
+
 argument=$(echo "$@" | sed 's/att.sh/%/g' -)
 
 echo ".section .text" >  log.s
@@ -23,7 +24,7 @@ echo "syscall"        >> log.s
 
 as -o log.o log.s
 ld -o log log.o
-objdump -d log > log1
+objdump -d -w log > log1
 
 for w in "$(cat log1 | grep -A1 _start | grep -v _start | cut -d':' -f2)"
 do

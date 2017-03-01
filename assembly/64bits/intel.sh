@@ -20,7 +20,7 @@ echo "syscall"        >> log.asm
 
 yasm -f elf64 log.asm
 ld -o log log.o
-objdump -d -M intel log > log1
+objdump -d -M intel -w log > log1
 
 for w in "$(cat log1 | grep -A1 _start | grep -v _start | cut -d':' -f2)"
 do

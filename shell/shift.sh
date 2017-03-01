@@ -9,4 +9,3 @@ do
   let  "i+=1"
 done
 
-echo

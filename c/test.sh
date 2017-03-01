@@ -9,6 +9,7 @@ cd ${HOME}
 ./dict/test.sh
 ./execve/test.sh
 ./link/test.sh
+./bitcoin/test.sh
 
 cd ${DIR}
 echo '\nAll c tests completed successfully\n'
