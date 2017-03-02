@@ -20,6 +20,8 @@ shortASMFunction(
 
 int main()
 {
+  int i;
+
   unsigned short x[] = {
     SHORT(1),     // 0x1111U
     SHORT(2),     // 0x2222U
@@ -32,7 +34,7 @@ int main()
   };
 
   printf("\nAssembly function call from C with shorts ...\n");
-  for(int i = 0; i < 8; ++i) {
+  for(i = 0; i < 8; ++i) {
     printf("x%d = 0x%x\n", i + 1, x[i]); 
     assert(x[i] == shortASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }

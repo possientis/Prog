@@ -10,6 +10,8 @@ cd ${HOME}
 ./execve/test.sh
 ./link/test.sh
 ./bitcoin/test.sh
+./pragma/test.sh
+./dlopen/test.sh
 
 cd ${DIR}
 echo '\nAll c tests completed successfully\n'

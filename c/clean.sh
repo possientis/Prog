@@ -8,5 +8,7 @@ rm -f a.out
 rm -f *.o
 ./bitcoin/clean.sh
 ./tlpi/clean.sh
+./pragma/clean.sh
+./dlopen/clean.sh
 
 cd ${DIR}

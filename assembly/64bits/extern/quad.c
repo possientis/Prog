@@ -19,6 +19,8 @@ longASMFunction(
 
 int main()
 {
+  int i;
+
   unsigned long x[] = {
     LONG(1),    // 0x1111111111111111L
     LONG(2),    // 0x2222222222222222L
@@ -31,7 +33,7 @@ int main()
   };
 
   printf("\nAssembly function call from C with longs ...\n");
-  for(int i = 0; i < 8; ++i) {
+  for(i = 0; i < 8; ++i) {
     printf("x%d = 0x%lx\n", i + 1, x[i]);
     assert(x[i] == longASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }

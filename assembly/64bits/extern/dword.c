@@ -19,6 +19,8 @@ intASMFunction(
 
 int main()
 {
+  int i;
+
   unsigned int x[] = {
     INT(1),     // 0x11111111U
     INT(2),     // 0x22222222U
@@ -31,7 +33,7 @@ int main()
   };
 
   printf("\nAssembly function call from C with ints ...\n");
-  for(int i = 0; i < 8; ++i) {
+  for(i = 0; i < 8; ++i) {
     printf("x%d = 0x%x\n", i + 1, x[i]); 
     assert(x[i] == intASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }

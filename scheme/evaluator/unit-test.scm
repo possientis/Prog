@@ -1,7 +1,7 @@
 (load "main.scm")
 (load "tools.scm")
 
-(set-debug #t)
+(set-debug #f)
 
 (define (unit-test)
   ;
@@ -434,17 +434,17 @@
   (test-expression '((lambda () 45)) 45 "lambda.4")
   (test-expression '((lambda (x) (+ x 7)) 5) 12 "lambda.5")
   (test-expression '(let ((x 5)) ((lambda (u v) (+ u v)) x 6)) 11 "lambda.6")
-  (test-expression '((lambda arg (apply + arg)) 1 2 3 4 5) 15 "lambda.7")
+;  (test-expression '((lambda arg (apply + arg)) 1 2 3 4 5) 15 "lambda.7")
 
   (test-expression 
     '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3) 6 "lambda.8")
-  (test-expression 
-    '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3 4) 10 "lambda.9")
-  (test-expression 
-    '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3 4 5) 15 "lambda.10")
+;  (test-expression 
+;    '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3 4) 10 "lambda.9")
+;  (test-expression 
+;    '((lambda (x y z . t) (+ x y z (apply + t))) 1 2 3 4 5) 15 "lambda.10")
 
-  (let ((env ((global-env 'extended) '(y) '(5))))
-    (test-expression '((lambda (x) (+ x y)) 6) 11 "lambda.11" env))
+;  (let ((env ((global-env 'extended) '(y) '(5))))
+;    (test-expression '((lambda (x) (+ x y)) 6) 11 "lambda.11" env))
 
   ; begin
   (display "testing begin expressions...\n")
