@@ -6,9 +6,12 @@ cd ${HOME}
 
 rm -f a.out
 rm -f *.o
+rm -f log
+
 ./bitcoin/clean.sh
 ./tlpi/clean.sh
 ./pragma/clean.sh
 ./dlopen/clean.sh
+./library/clean.sh
 
 cd ${DIR}

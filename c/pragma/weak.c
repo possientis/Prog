@@ -7,6 +7,8 @@ void foo() { printf("default foo version is running\n");}
 int main(int argc, char* argv[], char* envp[]){
 
   foo();
+
+  return 0;
 }
 
 

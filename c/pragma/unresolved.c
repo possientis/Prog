@@ -11,4 +11,5 @@ void (*debugfunc)(void) = debug;
 int main() {
       printf("Hello World!\n");
       if (debugfunc) (*debugfunc)();
+      return 0;
 }
