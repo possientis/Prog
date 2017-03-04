@@ -1,3 +1,6 @@
+// c++ source code which calls an assembly function
+// which itself calls a c++ function.
+
 #include <iostream>
 #include <assert.h>
 
@@ -5,7 +8,9 @@ using namespace std;
 
 #define SHORT(n) 0x##n##n##n##n##U
 
+// This is the prototype of the assembly function called in this source
 // simply returns argument of given index 1-8
+
 extern "C" unsigned short 
 shortASMFunction(
     int index, 
@@ -18,6 +23,7 @@ shortASMFunction(
     unsigned short x7, 
     unsigned short x8
 );
+
 
 int main()
 {
@@ -33,8 +39,15 @@ int main()
   };
 
   cout << "\nAssembly function call from C++ with shorts ...\n";
-  for(int i = 0; i < 8; ++i) {
+
+  for(int i = 0; i < 8; ++i) 
+  {
     cout << "x" << i + 1 << " = 0x" << hex << x[i] << endl;
+
+    // checking the call to assembly function is succesful
+    // This implicitely validates the call of the assembly 
+    // function to the c++ function.
+
     assert(x[i] == shortASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }
 

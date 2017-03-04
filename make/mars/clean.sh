@@ -1,5 +1,9 @@
 #!/bin/sh
 
+DIR=`pwd`
+HOME=/home/john/Prog/make/mars
+cd ${HOME}
+
 rm -f aclocal.m4
 rm -f autom4te.cache -r
 rm -f compile
@@ -51,8 +55,7 @@ rm -f src/modules/hithere/*.la
 rm -f src/modules/hithere/Makefile
 rm -f src/modules/hithere/Makefile.in
 
-tree -a
-
-
+# tree -a
 # autoreconf -i 
 
+cd ${DIR}

@@ -34,7 +34,6 @@
         ((equal? exp 'load) strict-load-primitive)
         ((equal? exp 'map) strict-map-primitive)
         (else (let ((value ((env 'lookup) exp)))
-;                value))))
                 (force-thunk value))))) 
 
 ; analyze
@@ -44,7 +43,6 @@
         ((equal? exp 'load) (lambda (env) analyze-load-primitive))
         ((equal? exp 'map) (lambda (env) analyze-map-primitive))
         (else (lambda (env) (let ((value ((env 'lookup) exp))) 
-;                              value)))))
                               (force-thunk value))))))
 
 ; lazy eval

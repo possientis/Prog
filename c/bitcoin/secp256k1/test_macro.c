@@ -1,4 +1,7 @@
-//#define SECP256K1_BUILD
+// SECP256K1_API becomes '__attribute__ ((visibility ("default")))'
+// when SECP256K1_BUILD is defines, it is '' otherwise.
+// #define SECP256K1_BUILD 
+
 #include "secp256k1/include/secp256k1.h"
 
 #include <stdio.h>

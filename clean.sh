@@ -4,6 +4,7 @@ rm -f test.log
 
 ./assembly/clean.sh
 ./c/clean.sh
+./make/clean.sh
 ./c++/clean.sh
 ./java/clean.sh
 ./c#/clean.sh

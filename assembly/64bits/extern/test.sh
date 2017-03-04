@@ -8,8 +8,9 @@ cd ${HOME}
 option=$(sh ../option.sh)
 
 # quad
-../yasm.sh ASMFunctions.asm;
-g++ $option quad.cpp ASMFunctions.o; ./a.out; ./clean.sh
+g++ -c functions.cpp
+../yasm.sh ASMFunctions2.asm;
+g++ $option quad.cpp ASMFunctions2.o functions.o; ./a.out; ./clean.sh
 
 ../yasm.sh ASMFunctions.asm;
 gcc $option quad.c ASMFunctions.o; ./a.out; ./clean.sh

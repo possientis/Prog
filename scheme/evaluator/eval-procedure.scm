@@ -46,9 +46,6 @@
         (params (eval-procedure-parameters proc))
         (init-env (eval-procedure-environment proc)))
     (let ((extended-env ((init-env 'extended) params args)))
-      (debug "[DEBUG]: lazy-apply-eval-procedure: body =")
-      (debug body)(debug-newline)
       (make-thunk body extended-env))))
-;      (lazy-eval body extended-env))))
 
 ))  ; include guard

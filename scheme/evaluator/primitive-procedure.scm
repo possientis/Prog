@@ -16,19 +16,9 @@
 (define (primitive-procedure-object proc) (cadr proc))
 
 ; strict apply
-; In contrast to the 'analyze' case, we do not attempt to call
-; force-thunks on the arguments prior to calling apply. We cannot
-; say that the reason for this is very clear (the overall semantics
-; of the evaluator mixing various modes of evaluation is rather
-; complex) but we can think of at least two reasons. One reason is 
-; that while the unit testing code succeeds when run by native scm, 
-; it does lead to failure when run by the evaluator itself. Another
-; reason is that forcing thunks would probably create circular depency: 
-; force-thunk -> strict-eval -> strict-apply -> 
-; strict-apply-primitive-procedure -> force-thunk
-
 (define (strict-apply-primitive-procedure proc args)
-  (apply (primitive-procedure-object proc) args))
+  (let ((forced-args (map force-thunk args)))
+    (apply (primitive-procedure-object proc) forced-args)))
 
 ; analyze apply
 ; We are calling force-thunk on the arguments prior to calling

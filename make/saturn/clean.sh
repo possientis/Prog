@@ -1,5 +1,9 @@
 #!/bin/sh
 
+DIR=`pwd`
+HOME=/home/john/Prog/make/saturn
+cd ${HOME}
+
 rm -f aclocal.m4
 rm -f autom4te.cache -r
 rm -f compile
@@ -30,8 +34,9 @@ rm -f common/.deps -r
 rm -f saturn-1.0 -r
 rm -f *.tar.gz
 
-tree -a
-
+# tree -a
 
 # autoreconf -i 
+
+cd ${DIR}
 

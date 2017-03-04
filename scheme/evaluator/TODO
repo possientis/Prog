@@ -1,8 +1,6 @@
-understand why thunk of test.scm cannot be forced without error
-remove errors in unit-test
-review file eval-procedure and accept change at bottom
 carefully re-think semantics of lazy-eval (do we need dorun primitive?)
 why is lazy-run not doing anything?
+can we unify test-expression tools with some force-thunk?
 
 (define (try a b) (if (= 0 a) 1 b))
 compare lazy and strict eval of

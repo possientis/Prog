@@ -1,9 +1,14 @@
+// c source code which calls an assembly function
+// which itself calls a c function.
+
 #include <stdio.h>
 #include <assert.h>
 
 #define LONG(n) 0x##n##n##n##n##n##n##n##n##n##n##n##n##n##n##n##n##UL
 
+// This is the prototype of the assembly function called in this source
 // simply returns argument of given index 1-8
+
 unsigned long 
 longASMFunction(
     int index, 
@@ -33,8 +38,15 @@ int main()
   };
 
   printf("\nAssembly function call from C with longs ...\n");
-  for(i = 0; i < 8; ++i) {
+
+  for(i = 0; i < 8; ++i) 
+  {
     printf("x%d = 0x%lx\n", i + 1, x[i]);
+    
+    // checking the call to assembly function is succesful
+    // This implicitely validates the call of the assembly 
+    // function to the c++ function.
+
     assert(x[i] == longASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }
 

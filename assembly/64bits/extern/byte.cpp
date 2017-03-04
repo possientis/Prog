@@ -1,3 +1,6 @@
+// c++ source code which calls an assembly function
+// which itself calls a c++ function.
+
 #include <iostream>
 #include <assert.h>
 #include <stdio.h>
@@ -6,7 +9,9 @@ using namespace std;
 
 #define CHAR(n) 0x##n##n##U
 
+// This is the prototype of the assembly function called in this source
 // simply returns argument of given index 1-8
+
 extern "C" unsigned char
 charASMFunction(
     int index, 
@@ -34,9 +39,15 @@ int main()
   };
 
   cout << "\nAssembly function call from C++ with chars ...\n";
-  for(int i = 0; i < 8; ++i) {
-//    cout << "x" << i + 1 << " = 0x" << hex << x[i] << endl;
+
+  for(int i = 0; i < 8; ++i) 
+  {
     printf("x%d = 0x%02x\n", i + 1, x[i]); // how do do this with cout? 
+
+    // checking the call to assembly function is succesful
+    // This implicitely validates the call of the assembly 
+    // function to the c++ function.
+    //
     assert(x[i] == charASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }
 
