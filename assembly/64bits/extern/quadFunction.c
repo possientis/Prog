@@ -1,9 +1,9 @@
-#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
-using namespace std;
 
-extern "C" unsigned long 
-longFunction(
+unsigned long 
+quadFunction(
     int index,
     unsigned long x1, 
     unsigned long x2, 
@@ -26,7 +26,7 @@ longFunction(
     case 7: return x7;
     case 8: return x8;
     default: 
-      cerr << "longFunction: invalid index argument\n";
+      fprintf(stderr, "quadFunction: invalid index argument\n");
       exit(1);
   }
 }

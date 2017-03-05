@@ -1,10 +1,9 @@
         section .text
-        global longASMFunction
-        extern longFunction
+        global byteASMFunction
+        extern byteFunction
 
-
-                    ; the same code works for dword (int) as well as quad (long)
-longASMFunction:    ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
+; This assembly function calls a C (or C++ depending on linking) function.
+byteASMFunction:     ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
                     ; index : rdi
                     ; x1    : rsi
                     ; x2    : rcx
@@ -57,7 +56,7 @@ longASMFunction:    ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
   mov   rax, [rbp-48]
   push rax
 
-  call longFunction ; result in rax
+  call byteFunction  ; result in rax
   add   rsp, 24     ; stack clean up
 
   ; epilogue

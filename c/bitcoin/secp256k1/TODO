@@ -1,0 +1,2 @@
+ensure I am linking against local shared library
+ensure I am loading local shared library at run time

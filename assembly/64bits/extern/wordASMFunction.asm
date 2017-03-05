@@ -1,14 +1,9 @@
         section .text
-        global longASMFunction
-        global intASMFunction
-        global shortASMFunction
-        global charASMFunction
+        global wordASMFunction
+        extern wordFunction
 
-
-charASMFunction:
-shortASMFunction:
-intASMFunction:     ; the same code works for dword (int) as well as quad (long)
-longASMFunction:    ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
+; This assembly function calls a C (or C++ depending on linking) function.
+wordASMFunction:     ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
                     ; index : rdi
                     ; x1    : rsi
                     ; x2    : rcx
@@ -41,8 +36,28 @@ longASMFunction:    ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
   mov [rbp-64], r10 ; x8
 
   ; returning relevant argument
-  neg rax
-  mov rax, [rbp+8*rax]   
+
+  ; instead of simply picking the argument and returning it,
+  ;  we shall call C/C++ function instead:
+
+  mov   rdi, rax
+  mov   rsi, [rbp-8]
+  mov   rdx, [rbp-16]
+  mov   rcx, [rbp-24]
+  mov   r8,  [rbp-32]
+  mov   r9,  [rbp-40]
+
+  mov   rax, [rbp-64]
+  push  rax
+
+  mov   rax, [rbp-56]
+  push rax
+
+  mov   rax, [rbp-48]
+  push rax
+
+  call wordFunction  ; result in rax
+  add   rsp, 24     ; stack clean up
 
   ; epilogue
   leave

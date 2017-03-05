@@ -8,33 +8,40 @@ cd ${HOME}
 option=$(sh ../option.sh)
 
 # quad
-g++ -c functions.cpp
-../yasm.sh ASMFunctions2.asm;
-g++ $option quad.cpp ASMFunctions2.o functions.o; ./a.out; ./clean.sh
+g++ -c quadFunction.cpp
+../yasm.sh quadASMFunction.asm;
+g++ $option quad.cpp quadASMFunction.o quadFunction.o; ./a.out; ./clean.sh
 
-../yasm.sh ASMFunctions.asm;
-gcc $option quad.c ASMFunctions.o; ./a.out; ./clean.sh
+gcc -c quadFunction.c
+../yasm.sh quadASMFunction.asm;
+gcc $option quad.c quadASMFunction.o quadFunction.o; ./a.out; ./clean.sh
 
 # dword
-../yasm.sh ASMFunctions.asm;
-g++ $option dword.cpp ASMFunctions.o; ./a.out; ./clean.sh
+g++ -c dwordFunction.cpp
+../yasm.sh dwordASMFunction.asm;
+g++ $option dword.cpp dwordASMFunction.o dwordFunction.o; ./a.out; ./clean.sh
 
-../yasm.sh ASMFunctions.asm;
-gcc $option dword.c ASMFunctions.o; ./a.out; ./clean.sh
+gcc -c dwordFunction.c
+../yasm.sh dwordASMFunction.asm;
+gcc $option dword.c dwordASMFunction.o dwordFunction.o; ./a.out; ./clean.sh
 
 # word
-../yasm.sh ASMFunctions.asm;
-g++ $option word.cpp ASMFunctions.o; ./a.out; ./clean.sh
+g++ -c wordFunction.cpp
+../yasm.sh wordASMFunction.asm;
+g++ $option word.cpp wordASMFunction.o wordFunction.o; ./a.out; ./clean.sh
 
-../yasm.sh ASMFunctions.asm;
-gcc $option word.c ASMFunctions.o; ./a.out; ./clean.sh
+gcc -c wordFunction.c
+../yasm.sh wordASMFunction.asm;
+gcc $option word.c wordASMFunction.o wordFunction.o; ./a.out; ./clean.sh
 
 # byte
-../yasm.sh ASMFunctions.asm;
-g++ $option byte.cpp ASMFunctions.o; ./a.out; ./clean.sh
+g++ -c byteFunction.cpp
+../yasm.sh byteASMFunction.asm;
+g++ $option byte.cpp byteASMFunction.o byteFunction.o; ./a.out; ./clean.sh
 
-../yasm.sh ASMFunctions.asm;
-gcc $option byte.c ASMFunctions.o; ./a.out; ./clean.sh
+gcc -c byteFunction.c
+../yasm.sh byteASMFunction.asm;
+gcc $option byte.c byteASMFunction.o byteFunction.o; ./a.out; ./clean.sh
 
 cd ${DIR}
 echo

@@ -12,7 +12,7 @@ using namespace std;
 // simply returns argument of given index 1-8
 
 extern "C" unsigned long 
-longASMFunction(
+quadASMFunction(
     int index, 
     unsigned long x1, 
     unsigned long x2, 
@@ -48,7 +48,7 @@ int main()
     // This implicitely validates the call of the assembly 
     // function to the c++ function.
 
-    assert(x[i] == longASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
+    assert(x[i] == quadASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }
 
   return 0;

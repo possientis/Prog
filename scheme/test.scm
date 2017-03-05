@@ -1,9 +1,10 @@
 
-(display (getpw 1000))(newline)
+(display (string=? "yes" "YES"))(newline)
+(display (string=? "yes" "yes"))(newline)
 
-(define x (initscr))
+(define x "yes")
 
-(endwin)
-
+(display (equal? "yes" x))(newline)
+(display (equal? "yes" "YES"))(newline)
 
 (exit 0)

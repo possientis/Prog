@@ -57,6 +57,70 @@ int main()
   /*                     COMMON PREDEFINED MACROS                            */
   /***************************************************************************/
 
+  // Common predefined macros are GNU extensions
+
+  printf("value of __COUNTER__ is: %d\n", __COUNTER__); 
+  printf("value of __COUNTER__ is: %d\n", __COUNTER__); 
+  printf("value of __COUNTER__ is: %d\n", __COUNTER__); 
+
+# ifdef __GFORTRAN__
+ assert(false);
+# endif
+
+  printf("value of __GNUC__ is: %d\n", __GNUC__);
+  printf("value of __GNUC_MINOR__ is: %d\n", __GNUC_MINOR__);
+  printf("value of __GNUC_PATCHLEVEL__ is: %d\n", __GNUC_PATCHLEVEL__);
+
+# define IS_VERSION_EQUAL_OR_ABOVE(_maj,_min,_patch) \
+  ((__GNUC__ << 16) + (__GNUC_MINOR__ << 8) + __GNUC_PATCHLEVEL__) >= \
+  ((_maj     << 16) + (_min           << 8) + _patch)
+
+#if IS_VERSION_EQUAL_OR_ABOVE(6,3,0)
+  printf("gcc version is equal or above 6.3.0\n");
+#else
+  printf("gcc version is not equal or above 6.3.0\n");
+#endif
+
+#if IS_VERSION_EQUAL_OR_ABOVE(6,3,1)
+  printf("gcc version is equal or above 6.3.1\n");
+#else
+  printf("gcc version is not equal or above 6.3.1\n");
+#endif
+
+#if IS_VERSION_EQUAL_OR_ABOVE(6,4,0)
+  printf("gcc version is equal or above 6.4.0\n");
+#else
+  printf("gcc version is not equal or above 6.4.0\n");
+#endif
+
+#if IS_VERSION_EQUAL_OR_ABOVE(7,3,0)
+  printf("gcc version is equal or above 7.3.0\n");
+#else
+  printf("gcc version is not equal or above 7.3.0\n");
+#endif
+
+#if IS_VERSION_EQUAL_OR_ABOVE(6,2,9)
+  printf("gcc version is equal or above 6.2.9\n");
+#else
+  printf("gcc version is not equal or above 6.2.9\n");
+#endif
+
+#if IS_VERSION_EQUAL_OR_ABOVE(6,2,0)
+  printf("gcc version is equal or above 6.2.0\n");
+#else
+  printf("gcc version is not equal or above 6.2.0\n");
+#endif
+
+#if IS_VERSION_EQUAL_OR_ABOVE(5,15,18)
+  printf("gcc version is equal or above 5.15.18\n");
+#else
+  printf("gcc version is not equal or above 5.15.18\n");
+#endif
+
+
+
+
+
   return 0;
 }
 

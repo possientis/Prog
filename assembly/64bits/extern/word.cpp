@@ -12,7 +12,7 @@ using namespace std;
 // simply returns argument of given index 1-8
 
 extern "C" unsigned short 
-shortASMFunction(
+wordASMFunction(
     int index, 
     unsigned short x1, 
     unsigned short x2, 
@@ -48,7 +48,7 @@ int main()
     // This implicitely validates the call of the assembly 
     // function to the c++ function.
 
-    assert(x[i] == shortASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
+    assert(x[i] == wordASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }
 
   return 0;

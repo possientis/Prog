@@ -12,7 +12,7 @@ using namespace std;
 // simply returns argument of given index 1-8
 
 extern "C" unsigned int 
-intASMFunction(
+dwordASMFunction(
     int index, 
     unsigned int x1, 
     unsigned int x2, 
@@ -48,7 +48,7 @@ int main()
     // This implicitely validates the call of the assembly 
     // function to the c++ function.
 
-    assert(x[i] == intASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
+    assert(x[i] == dwordASMFunction(i+1,x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]));
   }
 
   return 0;
