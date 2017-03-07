@@ -30,7 +30,9 @@ int main()
   printf("value of __STDC__ is: %d\n", __STDC__);
   assert(__STDC__ == 1);
 
+# ifdef __STDC_VERSION__
   printf("value of __STDC_VERSION__ is: %ld\n", __STDC_VERSION__);
+# endif
 
   // should be 1 if compiler target is hosted environment, i.e.
   // where complete facilities of the standard c library available.
@@ -75,48 +77,106 @@ int main()
   ((__GNUC__ << 16) + (__GNUC_MINOR__ << 8) + __GNUC_PATCHLEVEL__) >= \
   ((_maj     << 16) + (_min           << 8) + _patch)
 
-#if IS_VERSION_EQUAL_OR_ABOVE(6,3,0)
+# if IS_VERSION_EQUAL_OR_ABOVE(6,3,0)
   printf("gcc version is equal or above 6.3.0\n");
-#else
+# else
   printf("gcc version is not equal or above 6.3.0\n");
-#endif
+# endif
 
-#if IS_VERSION_EQUAL_OR_ABOVE(6,3,1)
+# if IS_VERSION_EQUAL_OR_ABOVE(6,3,1)
   printf("gcc version is equal or above 6.3.1\n");
-#else
+# else
   printf("gcc version is not equal or above 6.3.1\n");
-#endif
+# endif
 
-#if IS_VERSION_EQUAL_OR_ABOVE(6,4,0)
+# if IS_VERSION_EQUAL_OR_ABOVE(6,4,0)
   printf("gcc version is equal or above 6.4.0\n");
-#else
+# else
   printf("gcc version is not equal or above 6.4.0\n");
-#endif
+# endif
 
-#if IS_VERSION_EQUAL_OR_ABOVE(7,3,0)
+# if IS_VERSION_EQUAL_OR_ABOVE(7,3,0)
   printf("gcc version is equal or above 7.3.0\n");
-#else
+# else
   printf("gcc version is not equal or above 7.3.0\n");
-#endif
+# endif
 
-#if IS_VERSION_EQUAL_OR_ABOVE(6,2,9)
+# if IS_VERSION_EQUAL_OR_ABOVE(6,2,9)
   printf("gcc version is equal or above 6.2.9\n");
-#else
+# else
   printf("gcc version is not equal or above 6.2.9\n");
-#endif
+# endif
 
-#if IS_VERSION_EQUAL_OR_ABOVE(6,2,0)
+# if IS_VERSION_EQUAL_OR_ABOVE(6,2,0)
   printf("gcc version is equal or above 6.2.0\n");
-#else
+# else
   printf("gcc version is not equal or above 6.2.0\n");
-#endif
+# endif
 
-#if IS_VERSION_EQUAL_OR_ABOVE(5,15,18)
+# if IS_VERSION_EQUAL_OR_ABOVE(5,15,18)
   printf("gcc version is equal or above 5.15.18\n");
-#else
+# else
   printf("gcc version is not equal or above 5.15.18\n");
-#endif
+# endif
 
+# ifdef __STRICT_ANSI__
+  printf("__STRICT_ANSI__ is defined and equal to %d\n", __STRICT_ANSI__);
+# else
+  printf("macro __STRICT_ANSI__ is undefined\n");
+# endif
+
+  printf("value of __BASE_FILE__ is %s\n", __BASE_FILE__);
+  printf("value of __INCLUDE_LEVEL is %d\n", __INCLUDE_LEVEL__);
+  printf("value of __ELF__ is %d\n", __ELF__);
+  printf("value of __VERSION__ is %s\n", __VERSION__);
+
+# ifdef __OPTIMIZE__
+  printf("__OPTIMIZE__ is defined and equal to %d\n", __OPTIMIZE__);
+# else
+  printf("macro __OPTIMIZE__ is undefined\n");
+# endif
+
+# ifdef __OPTIMIZE_SIZE__
+  printf("__OPTIMIZE_SIZE__ is defined and equal to %d\n", __OPTIMIZE_SIZE__);
+# else
+  printf("macro __OPTIMIZE_SIZE__ is undefined\n");
+# endif
+
+# ifdef __NO_INLINE__
+  printf("__NO_INLINE__ is defined and equal to %d\n", __NO_INLINE__);
+# else
+  printf("macro __NO_INLINE__ is undefined\n");
+# endif
+
+# ifdef __GNUC_GNU_INLINE__
+  printf("__GNUC_GNU_INLINE__ is defined and equal to %d\n", __GNUC_GNU_INLINE__);
+# else
+  printf("macro __GNUC_GNU_INLINE__ is undefined\n");
+# endif
+
+# ifdef __GNUC_STDC_INLINE__
+  printf("__GNUC_STDC_INLINE__ is defined and equal to %d\n", __GNUC_STDC_INLINE__);
+# else
+  printf("macro __GNUC_STDC_INLINE__ is undefined\n");
+# endif
+
+# ifdef __CHAR_UNSIGNED__
+  printf("__CHAR_UNSIGNED__ is defined and equal to %d\n", __CHAR_UNSIGNED__);
+# else
+  printf("macro __CHAR_UNSIGNED__ is undefined\n");
+# endif
+
+# ifdef __WCHAR_UNSIGNED__
+  printf("__WCHAR_UNSIGNED__ is defined and equal to %d\n", __WCHAR_UNSIGNED__);
+# else
+  printf("macro __WCHAR_UNSIGNED__ is undefined\n");
+# endif
+
+
+  printf("value of __CHAR_BIT__ is %d\n", __CHAR_BIT__);
+  printf("value of __ORDER_LITTLE_ENDIAN__ is %d\n", __ORDER_LITTLE_ENDIAN__);
+  printf("value of __ORDER_BIG_ENDIAN__ is %d\n", __ORDER_BIG_ENDIAN__);
+  printf("value of __BYTE_ORDER__ is %d\n", __BYTE_ORDER__);
 
 
 

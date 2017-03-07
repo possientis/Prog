@@ -126,7 +126,7 @@ int main()
 
   // secp256k1_ec_pubkey_parse
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub, pub4, 65); 
-  assert(return_value == 1);  // public key is invalid
+  assert(return_value == 1);  // public key is valid
 
 
   const unsigned char *pub5 = "\x04"  // this key is invalid (typo \xff)
@@ -139,10 +139,10 @@ int main()
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub, pub5, 65); 
   assert(return_value == 0);  // public key is invalid
 
- 
+  
   // secp256k1_ec_pubkey_parse (NULL context)
   return_value = secp256k1_ec_pubkey_parse(NULL, &pub, pub4, 65); 
-  assert(return_value == 1);  // public key is valid
+  assert(return_value == 1);  // SUCCESSFUL DESPITE NULL CONTEXT
 
   // secp256k1_ec_pubkey_parse (NULL secp256k1_pubkey pointer)
   return_value = secp256k1_ec_pubkey_parse(ctx, NULL, pub4, 65); 

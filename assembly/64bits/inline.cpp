@@ -15,6 +15,7 @@ extern "C" int getValueFromYASM();
 
 int main()
 {
+
   cout << "ASM said " << getValueFromASM() << endl;
   cout << "YASM said " << getValueFromYASM() << endl;
 
