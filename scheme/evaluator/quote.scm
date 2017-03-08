@@ -12,7 +12,8 @@
 (define (text-of-quotation exp) (cadr exp))
 
 ; strict eval
-(define (strict-eval-quoted exp env) (text-of-quotation exp))
+(define (strict-eval-quoted exp env) 
+  (text-of-quotation exp))
 
 ; analyze
 (define (analyze-quoted exp)
@@ -20,6 +21,7 @@
     (lambda (env) qval)))
 
 ; lazy eval
-(define (lazy-eval-quoted exp env) (make-thunk exp 'dummy-env))
+(define (lazy-eval-quoted exp env) 
+  (text-of-quotation exp))          ; not worth creating a thunk
 
 ))  ; include guard

@@ -42,13 +42,12 @@
   (let ((var (definition-variable exp))
         (rhs (definition-expression exp)))
     (let ((val (lazy-eval rhs env)))
-      ((env 'define!) var val)                ; val is a thunk
-      (make-thunk unspecified-value '()))))   ; should always return a thunk
+      ((env 'define!) var val)          ; val possibly a thunk
+      unspecified-value)))   
 
 ; Note: the side effect resulting from a lazy definition takes place immediately.
 ; In other words, the creation of a new binding is not delayed. However, the 
-; definition expression is not evaluated. Instead, a thunk is created and the 
-; variable is bound to this thunk.
+; definition expression is only lazily evaluated. The variable is bound to a thunk.
 
 
 ))  ; include guard

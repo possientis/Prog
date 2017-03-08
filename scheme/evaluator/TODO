@@ -1,4 +1,4 @@
-carefully re-think semantics of lazy-eval (do we need dorun primitive?)
+review semantics of lazy-eval (not.scm)
 why is lazy-run not doing anything?
 can we unify test-expression tools with some force-thunk?
 

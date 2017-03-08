@@ -179,6 +179,165 @@ int main()
   printf("value of __BYTE_ORDER__ is %d\n", __BYTE_ORDER__);
 
 
+# ifdef __FLOAT_WORD_ORDER__
+  printf("__FLOAT_WORD_ORDER__ is defined and equal to %d\n", __FLOAT_WORD_ORDER__);
+# else
+  printf("macro __FLOAT_WORD_ORDER__ is undefined\n");
+# endif
+
+# ifdef __DEPRECATED
+  printf("__DEPRECATED is defined and equal to %d\n", __DEPRECATED);
+# else
+  printf("macro __DEPRECATED is undefined\n");
+# endif
+
+# ifdef __EXCEPTIONS
+  printf("__EXCEPTIONS is defined and equal to %d\n", __EXCEPTIONS);
+# else
+  printf("macro __EXCEPTIONS is undefined\n");
+# endif
+
+# ifdef __GXX_RTTI
+  printf("__GXX_RTTI is defined and equal to %d\n", __GXX_RTTI);
+# else
+  printf("macro __GXX_RTTI is undefined\n");
+# endif
+
+# ifdef __USING_SJLJ_EXCEPTIONS__
+  printf("__USING_SJLJ_EXCEPTIONS__ is defined and equal to %d\n", __USING_SJLJ_EXCEPTIONS__);
+# else
+  printf("macro __USING_SJLJ_EXCEPTIONS__ is undefined\n");
+# endif
+
+# ifdef __GXX_EXPERIMENTAL_CXXOX__
+  printf("__GXX_EXPERIMENTAL_CXXOX__ is defined and equal to %d\n", __GXX_EXPERIMENTAL_CXXOX__);
+# else
+  printf("macro __GXX_EXPERIMENTAL_CXXOX__ is undefined\n");
+# endif
+
+# ifdef __GXX_WEAK__
+  printf("__GXX_WEAK__ is defined and equal to %d\n", __GXX_WEAK__);
+# else
+  printf("macro __GXX_WEAK__ is undefined\n");
+# endif
+
+# ifdef __NEXT_RUNTIME__
+  printf("__NEXT_RUNTIME__ is defined and equal to %d\n", __NEXT_RUNTIME__);
+# else
+  printf("macro __NEXT_RUNTIME__ is undefined\n");
+# endif
+
+# ifdef __LP64__
+  printf("__LP64__ is defined and equal to %d\n", __LP64__);
+# else
+  printf("macro __LP64__ is undefined\n");
+# endif
+
+# ifdef _LP64
+  printf("_LP64 is defined and equal to %d\n", _LP64);
+# else
+  printf("macro _LP64 is undefined\n");
+# endif
+
+# ifdef __SSP__
+  printf("__SSP__ is defined and equal to %d\n", __SSP__);
+# else
+  printf("macro __SSP__ is undefined\n");
+# endif
+
+# ifdef __SSP_ALL__
+  printf("__SSP_ALL__ is defined and equal to %d\n", __SSP_ALL__);
+# else
+  printf("macro __SSP_ALL__ is undefined\n");
+# endif
+
+# ifdef __SSP_STRONG__
+  printf("__SSP_STRONG__ is defined and equal to %d\n", __SSP_STRONG__);
+# else
+  printf("macro __SSP_STRONG__ is undefined\n");
+# endif
+
+# ifdef __SSP_EXPLICIT__
+  printf("__SSP_EXPLICIT__ is defined and equal to %d\n", __SSP_EXPLICIT__);
+# else
+  printf("macro __SSP_EXPLICIT__ is undefined\n");
+# endif
+
+// This does not seem to conform to cpp manual page 31 (34)
+# ifdef __SANITIZE_ADDRESS__
+  printf("__SANITIZE_ADDRESS__ is defined and equal to %d\n", __SANITIZE_ADDRESS__);
+# else
+  printf("macro __SANITIZE_ADDRESS__ is undefined\n");
+# endif
+
+  printf("current value of __TIMESTAMP__ is %s\n", __TIMESTAMP__);
+
+# ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1
+  printf("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 is defined and equal to %d\n", __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1);
+# else
+  printf("macro __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 is undefined\n");
+# endif
+
+# ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2
+  printf("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 is defined and equal to %d\n", __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2);
+# else
+  printf("macro __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 is undefined\n");
+# endif
+
+# ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+  printf("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 is defined and equal to %d\n", __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4);
+# else
+  printf("macro __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 is undefined\n");
+# endif
+
+# ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8
+  printf("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 is defined and equal to %d\n", __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8);
+# else
+  printf("macro __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 is undefined\n");
+# endif
+
+# ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_16
+  printf("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_16 is defined and equal to %d\n", __GCC_HAVE_SYNC_COMPARE_AND_SWAP_16);
+# else
+  printf("macro __GCC_HAVE_SYNC_COMPARE_AND_SWAP_16 is undefined\n");
+# endif
+
+# ifdef __GCC_HAVE_DWARF2_CFI_ASM
+  printf("__GCC_HAVE_DWARF2_CFI_ASM is defined and equal to %d\n", __GCC_HAVE_DWARF2_CFI_ASM);
+# else
+  printf("macro __GCC_HAVE_DWARF2_CFI_ASM is undefined\n");
+# endif
+
+
+# ifdef __FP_FAST_FMA
+  printf("__FP_FAST_FMA is defined and equal to %d\n", __FP_FAST_FMA);
+# else
+  printf("macro __FP_FAST_FMA is undefined\n");
+# endif
+
+# ifdef __FP_FAST_FMAF
+  printf("__FP_FAST_FMAF is defined and equal to %d\n", __FP_FAST_FMAF);
+# else
+  printf("macro __FP_FAST_FMAF is undefined\n");
+# endif
+
+# ifdef __FP_FAST_FMAL
+  printf("__FP_FAST_FMAL is defined and equal to %d\n", __FP_FAST_FMAL);
+# else
+  printf("macro __FP_FAST_FMAL is undefined\n");
+# endif
+
+# ifdef __NO_MATH_ERRNO__
+  printf("__NO_MATH_ERRNO__ is defined and equal to %d\n", __NO_MATH_ERRNO__);
+# else
+  printf("macro __NO_MATH_ERRNO__ is undefined\n");
+# endif
+
+  /***************************************************************************/
+  /*                 SYSTEM-SPECIFIC PREDEFINED MACROS                       */
+  /***************************************************************************/
+
+
 
 
   return 0;

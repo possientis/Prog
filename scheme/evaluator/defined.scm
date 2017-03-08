@@ -27,8 +27,16 @@
       (lambda (env) #f)
       (lambda (env) ((env 'defined?) var))))) 
 
+; It feels like the evaluation should not be delayed: when testing whether
+; a binding exists for a variable, we probably want to know the answer for
+; the current state of the environment, not the (future) state when the 
+; thunk is actually being evaluated. However, it is likely that this decision 
+; has no impact, as an 'if' statement will probably force the thunk before 
+; branching anyway.
+
 ; lazy eval
-(define (lazy-eval-defined? exp env) (make-thunk exp env))
+(define (lazy-eval-defined? exp env)
+  (strict-eval-defined? exp env))
 
 ))  ; include guard
 

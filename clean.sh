@@ -15,6 +15,7 @@ rm -f test.log
 ./clojure/clean.sh
 ./coq/clean.sh
 ./logic/clean.sh
+./flex/clean.sh
 
 git status
 

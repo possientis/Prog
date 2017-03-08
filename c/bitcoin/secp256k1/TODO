@@ -1,2 +1,3 @@
-ensure I am linking against local shared library
-ensure I am loading local shared library at run time
+use priv.cpp to retrieve private key for example
+use java to get signature  of some hash  w.r. to priv
+test signature parsing

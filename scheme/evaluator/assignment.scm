@@ -33,12 +33,11 @@
   (let ((var (assignment-variable exp))
         (rhs (assignment-expression exp)))
     (let ((val (lazy-eval rhs env)))
-      ((env 'set!) var val)                   ; val is a thunk
-      (make-thunk unspecified-value '()))))   ; should always return a thunk
+      ((env 'set!) var val)           ; val possibly a thunk
+      unspecified-value)))   
 
 ; Note: the side effect resulting from a lazy assignment takes place immediately.
 ; In other words, the change in binding is not delayed. However, the assignment
-; expression is not evaluated. Instead, a thunk is created and the variable is
-; bound to this thunk.
+; expression is only lazily evaluated. The variable is bound to a potential thunk.
 
 ))  ; include guard

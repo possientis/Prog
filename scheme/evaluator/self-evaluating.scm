@@ -20,9 +20,10 @@
 (define (analyze-self-evaluating exp) (lambda (env) exp)) 
 
 ; lazy eval  
-; creates an 'evaluated' thunk (i.e. which has no embedded environment)
+; function returns value rather than evaluated thunk encapsulating value.
+; for some reason, this abuse of the type system works fine.
 (define (lazy-eval-self-evaluating exp env) 
-  (make-thunk exp '()))
+  exp)
 
 
 ))  ; include guard

@@ -33,9 +33,11 @@
     (lambda (env)
       (if (true? (pred env)) (conseq env) (alter env)))))
 
+; predicate is strictly evaluated, so branching can occur
+
 ; lazy eval
 (define (lazy-eval-if exp env) 
-  (let ((pred (force-thunk (lazy-eval (if-predicate exp) env))))
+  (let ((pred (strict-eval (if-predicate exp) env)))
     (if (true? pred)
       (lazy-eval (if-consequent exp) env)
       (lazy-eval (if-alternative exp) env))))
