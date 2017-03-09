@@ -1,0 +1,10 @@
+verb is am are were was be being been do does did will would should can could has have had go went gone eat
+adv very simply gently quietly calmly angrily
+prep to from behind above below between
+conj if then and but or
+adj their my your our his her its
+pron I you he she we they
+noun dog cat oat horse cow
+
+
+dog could quietly eat my cat if behind their cow

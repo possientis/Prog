@@ -1,5 +1,13 @@
 #!/usr/bin/guile -s
-;!#  ; commented out, guile manual says it should be there, why?
+!# ; required by guile script, end of multi-line comment
+
 ; need to set GUILE_AUTO_COMPILE=0 before launching batch
+
+
+#!
+This is a 
+multiline comment
+!#
+
 (display "Hello world!\n")
-(quit)
+(exit 0)

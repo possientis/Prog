@@ -25,8 +25,10 @@ AWKSCRIPT=' { srand(); print rand() } '
 
 echo -n "Random number between 0 and 1 = "
 
-echo | awk "$AWKSCRIPT"   # hmmm, don't understand this
+echo | awk "$AWKSCRIPT"   
 # what happens if you leave out the 'echo' ?
+# Piping an empty "echo" to awk gives it dummy input,
+#+ and thus makes it unnecessary to supply a filename.
 
 exit 0
 

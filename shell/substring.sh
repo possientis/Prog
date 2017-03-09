@@ -52,5 +52,60 @@ echo ${stringZ%%b*c}     # a
 # strip out longest match between 'b' and 'c' from back of stringZ
 
 
+echo ${stringZ/abc/xyz}         # xyzABC123ABCabc , replaces first match only
+echo ${stringZ//abc/xyz}        # xyzABC123ABCxyz , replaces all matches
+echo $stringZ                   # abcABC123ABCabc, string itself unaffected
+
+
+# can match and replacement string be parameterized ?
+match=abc
+repl=xyz
+
+echo ${stringZ/$match/$repl}    # xyzABC123ABCabc
+echo ${stringZ//$match/$repl}   # xyzABC123ABCxyz
+
+# What happens if no $replacement string is supplied?
+echo ${stringZ/abc}             # ABC123ABCabc
+echo ${stringZ//abc}            # ABC123ABC
+# A simple deletion takes place.
+
+echo ${stringZ/#abc/xyz}        # XYZABC123ABCabc
+# Replaces front-end match of 'abc' with 'XYZ'.
+echo ${stringZ/%abc/xyz}        # abcABC123ABCXYZ
+# Replaces back-end match of 'abc' with 'XYZ'.
+
+
+
+String=23skidoo1
+#      012345678  Bash
+#      123456789  awk
+
+# Note different string indexing system:
+# Bash numbers first character of string as 0.
+# Awk numbers first character of string as 1.
+
+echo ${String:2:4}    # position 3 (0-1-2), 4 characters long
+                      # skid
+
+# The awk equivalent of ${string:pos:length} is substr(string,pos,length).
+echo | awk '
+{ 
+  print substr("'"${String}"'",3,4)   # skid
+}
+'
+# Piping an empty "echo" to awk gives it dummy input,
+#+ and thus makes it unnecessary to supply a filename.
+
+echo "----"
+# And likewise:
+echo | awk '
+{ 
+  print index("'"${String}"'", "skid") # 3
+} 
+'  # (skid starts at position 3)
+
+# The awk equivalent of "expr index" ...
+
+exit 0
 
 

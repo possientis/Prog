@@ -1,3 +1,1 @@
-use priv.cpp to retrieve private key for example
-use java to get signature  of some hash  w.r. to priv
 test signature parsing
