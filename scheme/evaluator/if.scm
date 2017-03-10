@@ -21,7 +21,7 @@
 ; strict eval
 (define (strict-eval-if exp env)
   (let ((pred (strict-eval (if-predicate exp) env)))
-    (if (true? pred)
+    (if pred
       (strict-eval (if-consequent exp) env)
       (strict-eval (if-alternative exp) env))))
 
@@ -31,14 +31,14 @@
         (conseq (analyze (if-consequent exp)))
         (alter  (analyze (if-alternative exp))))
     (lambda (env)
-      (if (true? (pred env)) (conseq env) (alter env)))))
+      (if (pred env) (conseq env) (alter env)))))
 
 ; predicate is strictly evaluated, so branching can occur
 
 ; lazy eval
 (define (lazy-eval-if exp env) 
   (let ((pred (strict-eval (if-predicate exp) env)))
-    (if (true? pred)
+    (if pred
       (lazy-eval (if-consequent exp) env)
       (lazy-eval (if-alternative exp) env))))
 

@@ -22,7 +22,6 @@
 (load "self-evaluating.scm")
 (load "thunk.scm")
 (load "tagged-list.scm")
-(load "true-false.scm")
 (load "unspecified.scm")
 (load "variable.scm")
 

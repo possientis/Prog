@@ -1,10 +1,10 @@
-review semantics of lazy-eval (not.scm)
-why is lazy-run not doing anything?
 can we unify test-expression tools with some force-thunk?
+
 
 (define (try a b) (if (= 0 a) 1 b))
 compare lazy and strict eval of
 > (try 0 (error))
+what happens if we use lazy-run? is lazy-run the same as strict-run? 
 
 
 define primitives from language itself

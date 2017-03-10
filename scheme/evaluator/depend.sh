@@ -213,10 +213,6 @@ echo thunk
 scm -b -f thunk.scm                       > /dev/null               
 ./strict-run.scm thunk.scm                > /dev/null
 
-echo true-false 
-scm -b -f true-false.scm                  > /dev/null               
-./strict-run.scm true-false.scm           > /dev/null
-
 echo unspecified 
 scm -b -f unspecified.scm                 > /dev/null               
 ./strict-run.scm unspecified.scm          > /dev/null

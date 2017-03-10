@@ -124,7 +124,6 @@
 ;  (test-load "self-evaluating.scm" "load.50")
 ;  (test-load "thunk.scm" "load.51")
 ;  (test-load "tagged-list.scm" "load.52")
-;  (test-load "true-false.scm" "load.53")
 ;  (test-load "unspecified.scm" "load.54")
 ;  (test-load "variable.scm" "load.55")
   ;

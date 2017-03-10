@@ -9,7 +9,7 @@
 
 (define (lazy-load filename)
   (let ((env global-env) (code (filename->code filename)))
-    (lazy-eval code env)
+    (force-thunk (lazy-eval code env))
     unspecified-value))
 
 ))  ; include guard

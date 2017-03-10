@@ -21,18 +21,18 @@
 
 ; lazy eval
 (define (lazy-eval-and exp env)
-  (lazy-eval (and->if exp) env))
+  (make-thunk exp env))
 
 (define (and->if exp)
   (expand-and-predicates (and-predicates exp)))
 
 (define (expand-and-predicates predicates)
   (if (null? predicates)
-    '#t ; returning symbol '#t which will be evaluated to #t
+    #t
     (let ((first (car predicates))
           (rest (cdr predicates)))
       (if (null? rest)
         first
-        (make-if (make-not first) '#f (expand-and-predicates rest))))))
+        (make-if (make-not first) #f (expand-and-predicates rest))))))
 
 ))  ; include guard

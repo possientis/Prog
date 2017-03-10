@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 void default_callback(const char* message, void* data){
-  printf("default_callback: %s\n", message);
+  fprintf(stderr, "default_callback: %s\n", message);
   *((int*) data) = 42;
 }
 
@@ -16,13 +16,14 @@ int main()
   secp256k1_context *clone;       // pointer
   secp256k1_pubkey pub;           // 64 bytes
 
-  secp256k1_ecdsa_signature sig;  // 64 bytes
+  secp256k1_ecdsa_signature sig1;  // 64 bytes
+  secp256k1_ecdsa_signature sig2;  // 64 bytes
   secp256k1_nonce_function fun;   // pointer
 
   assert(sizeof(ctx) == 8);
   assert(sizeof(clone) == 8);
   assert(sizeof(pub) == 64);
-  assert(sizeof(sig) == 64);
+  assert(sizeof(sig1) == 64);
   assert(sizeof(fun) == 8);
 
   printf("testing contexts ...\n");
@@ -151,11 +152,13 @@ int main()
   return_value = secp256k1_ec_pubkey_parse(ctx, NULL, bytes4, 65); 
   assert(return_value == 0);    // failing call
   assert(call_back_data == 42); // call back return value
+  call_back_data = 0;           // make sure next error correctly sets it
 
   // secp256k1_ec_pubkey_parse (NULL context)
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 65); 
   assert(return_value == 0);    // failing call
   assert(call_back_data == 42); // call back return value
+  call_back_data = 0;           // make sure next error correctly sets it
 
 
   // pub1 and pub4 should parse into the same key
@@ -208,7 +211,79 @@ int main()
 
 
   printf("testing parsing signature ...\n");
+  const unsigned char* sig_bytes1 = 
+    "\x98\x62\x10\xb9\xdc\x0a\x2f\x21\xbc\xae\xc0\x96\xf4\xf5\x5f\xf4"
+    "\x48\x6f\xcc\x4e\x3a\xaf\xe7\xe0\xcb\xf6\x46\x92\x59\x6e\x99\x4a"
+    "\x0e\x5c\x6e\xc6\x54\x08\xd6\x5a\xae\x9e\x1c\xe8\xe9\x53\xc3\x1e"
+    "\xd0\x3f\x41\x79\x09\x1d\x20\xd1\x59\xda\xe4\x19\xe9\x0c\xa3\x63";
+
+  // NULL context (still works)
+  return_value = secp256k1_ecdsa_signature_parse_compact(NULL, &sig1, sig_bytes1); 
+  assert(return_value == 1);  // succesful parse
+
+  // NULL output pointer
+  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, NULL, sig_bytes1);  
+  assert(return_value == 0);  // can't parse
+  assert(call_back_data == 42);
+  call_back_data = 0;           // make sure next error correctly sets it
+
+
+  // NULL input pointer
+  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, NULL);  
+  assert(return_value == 0);  // can't parse
+  assert(call_back_data == 42);
+  call_back_data = 0;           // make sure next error correctly sets it
   
+  // secp256k1_ecdsa_signature_parse_compact
+  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);  
+  assert(return_value == 1);  // succesful parse
+  
+  printf("testing serializing signature (DER) ...\n");
+  unsigned char der[128];
+  size = 128;
+  
+  // NULL context
+  return_value = secp256k1_ecdsa_signature_serialize_der(NULL,der,&size,&sig1); 
+  assert(return_value == 1);  // still works
+  size = 128;
+
+  // NULL output pointer
+  return_value = secp256k1_ecdsa_signature_serialize_der(ctx,NULL,&size,&sig1); 
+  assert(return_value == 0);  // can't serialize
+  assert(call_back_data == 42);
+  call_back_data = 0;           // make sure next error correctly sets it
+  size = 71;
+  
+  // output pointer only 71 bytes
+  return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
+  assert(return_value == 1);  // still works
+  size = 70;
+
+  // output pointer only 70 bytes (CALLBACK not being called)
+  return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
+  assert(return_value == 0);  // can't serialize
+//  assert(call_back_data == 42);
+//  call_back_data = 0;           // make sure next error correctly sets it
+  size = 128;
+
+  // null input pointer
+  return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,NULL); 
+  assert(return_value == 0);  // can't serialize
+  assert(call_back_data == 42);
+  call_back_data = 0;           // make sure next error correctly sets it
+  size = 128;
+
+  // secp256k1_ecdsa_signature_serialize_der
+  return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
+  assert(return_value == 1);
+  printf("size of DER serializarion: %d bytes\n", size);
+ 
+
+  printf("testing parsing DER signature (TODO)...\n");
+
+  // secp256k1_ecdsa_signature_parse_der
+
+
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);
 

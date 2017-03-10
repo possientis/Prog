@@ -24,7 +24,7 @@
 
 ; lazy eval
 (define (lazy-eval-let* exp env)
-  (lazy-eval (let*->nested-lets exp) env))
+  (make-thunk exp env))
 
 (define (let*->nested-lets exp)
   (let ((bindings (let*-bindings exp)))

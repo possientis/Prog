@@ -20,7 +20,7 @@
 ; in a new wrapper inside which an environment object is also included. As
 ; an implementation detail, the body of the lambda expression is converted
 ; from a list of expressions to a single 'begin' expression, thereby removing
-; the direct dependency of apply-eval-expression to code relating to sequence 
+; the direct dependency of apply-eval-procedure to code relating to sequence 
 ; evaluation.
 
 ; Analyzing a lambda expression is similar in structure to the evaluation. One
@@ -52,12 +52,9 @@
       (lambda (env)
         (make-analyze-procedure params analyze-body env)))))
 
-; lazy eval (do we need to create new type of procedure?)
+; lazy eval
 (define (lazy-eval-lambda exp env)
-  (let ((params (lambda-params exp))
-        (body (lambda-body exp)))
-    (let ((eval-body (make-begin body)))
-      (make-eval-procedure params eval-body env))))
+  (make-thunk exp env))
 
 ))  ; include guard
 

@@ -16,14 +16,13 @@
 
 ; strict eval
 (define (strict-eval-not exp env)
-  (let ((pred (strict-eval (not-predicate exp) env)))
-    (if (true? pred) #f #t)))  
+  (not (strict-eval (not-predicate exp) env)))
 
 ; analyze
 (define (analyze-not exp)
   (let ((pred (analyze (not-predicate exp))))
     (lambda (env)
-      (if (true? (pred env)) #f #t))))
+      (not (pred env)))))
 
 ; lazy eval
 (define (lazy-eval-not exp env) 

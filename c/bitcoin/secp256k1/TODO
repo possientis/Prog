@@ -1,1 +1,2 @@
-test signature parsing
+go back to pubkey serializing and check behaviour when output buffer too small
+test signature parsing DER

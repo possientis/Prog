@@ -33,8 +33,7 @@
 
 ; lazy eval
 (define (lazy-eval-begin exp env)
-  (let ((actions (begin-actions exp)))
-    (lazy-eval-sequence actions env)))
+  (make-thunk exp env))
 
 ; eval
 (define (strict-eval-sequence operands env)
@@ -54,15 +53,6 @@
         first
         (let ((rest (analyze-sequence (cdr operands))))
           (lambda (env) (first env) (rest env))))))) ; 'first' for side-effects
-
-; lazy
-(define (lazy-eval-sequence operands env)
-  (if (null? operands)
-    (make-thunk unspecified-value '())
-    (let ((first (lazy-eval (car operands) env)))
-      (if (null? (cdr operands))
-        first
-        (lazy-eval-sequence (cdr operands) env)))));
 
 ))  ; include guard
 
