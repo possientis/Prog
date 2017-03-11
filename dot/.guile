@@ -1,0 +1,8 @@
+(use-modules (ice-9 readline))
+(activate-readline)
+
+(newline)
+(display "*************************************************************")(newline)
+(display "* Update file ~/.guile in order to customize guile sessions *")(newline)
+(display "*************************************************************")(newline)
+(newline)

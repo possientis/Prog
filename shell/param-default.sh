@@ -43,4 +43,14 @@ unset variable
 echo "${variable-2}"    # 2
 echo "${variable:-3}"   # 3
 
+
+echo
+echo ${var=abc}         # abc
+echo ${var=xyz}         # abc (var has already been set to abc)
+
+
+
+
+
+
 exit 0

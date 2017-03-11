@@ -1,2 +1,1 @@
-go back to pubkey serializing and check behaviour when output buffer too small
-test signature parsing DER
+secp256k1_ecdsa_signature_serialize_compact
