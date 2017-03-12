@@ -4,7 +4,7 @@
  */
 #include <stdio.h>
 extern int yylex(void);
-extern void yyerror(char*);
+extern int yyerror(char*);
 
 %}
 
@@ -12,16 +12,34 @@ extern void yyerror(char*);
 
 %%
 
-sentence: subject VERB object { printf("Sentence is valid.\n"); }
-         ;
+sentence:           simple_sentence { printf("Parsed a simple sentence.\n"); }
+                  | compound_sentence { printf("Parsed a compound sentence.\n"); } 
+                  ;
 
-subject:  NOUN 
-        | PRONOUN
-        ;
+simple_sentence:    subject verb object
+                  | subject verb object prep_phrase 
+                  ;
 
-object:   NOUN
-        ;
+compound_sentence:  simple_sentence CONJUNCTION simple_sentence
+                  | compound_sentence CONJUNCTION simple_sentence
+                  ;
 
+subject:            NOUN 
+                  | PRONOUN
+                  | ADJECTIVE subject
+                  ;
+
+verb:               VERB
+                  | ADVERB VERB
+                  | verb VERB
+                  ;
+
+object:             NOUN
+                  | ADJECTIVE object
+                  ;
+
+prep_phrase:        PREPOSITION NOUN
+                  ;
 %%
 
 extern FILE *yyin;
@@ -31,9 +49,13 @@ int main()
   while(!feof(yyin)) {
     yyparse();
   }
+ 
+  return 0;
 }
 
-void yyerror(char *s)
+int yyerror(char* s)
 {
   fprintf(stderr, "%s\n", s);
+  return -1;
 }
+

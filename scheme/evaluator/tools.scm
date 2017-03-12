@@ -15,18 +15,6 @@
     (assert-equals 
       (analyze-eval exp env) value (print ": analyze"))))
 
-; same semantics as test-expression, except that expression is forced
-; following evaluation and prior to comparing to expected value
-(define (test-forced-expression exp value message . arg)
-  (let ((env (if (null? arg) global-env (car arg))) 
-        (print (lambda (msg) (string-append message msg))))
-    (assert-equals 
-      (force-thunk (strict-eval exp env)) value (print ": strict-eval")) 
-    (assert-equals 
-      (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
-    (assert-equals 
-      (force-thunk (analyze-eval exp env)) value (print ": analyze"))))
-
 
 (define (test-load filename message) 
   (let ((print (lambda (msg) (string-append message msg))))

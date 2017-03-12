@@ -1,0 +1,1 @@
+(display (%site-dir))(newline)

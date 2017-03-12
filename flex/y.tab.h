@@ -6,5 +6,5 @@
 #define PREPOSITION 262
 #define CONJUNCTION 263
 
-extern int yylex(void);
-extern void yyerror(char* s);
+//extern int yylex(void);
+//extern void yyerror(char* s);

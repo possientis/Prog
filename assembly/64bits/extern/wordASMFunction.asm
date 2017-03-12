@@ -6,8 +6,8 @@
 wordASMFunction:     ; (index, x1, x2, x3, x4, x5, x6, x7, x8)
                     ; index : rdi
                     ; x1    : rsi
-                    ; x2    : rcx
-                    ; x3    ; rdx
+                    ; x2    : rdx
+                    ; x3    ; rcx
                     ; x4    ; r8
                     ; x5    ; r9
                     ; x6    ; stack pushed last

@@ -1,1 +1,3 @@
+buffer_clear of test.c
+secp256k1_pubkey_serialize: incorporate failing cases
 secp256k1_ecdsa_signature_serialize_compact

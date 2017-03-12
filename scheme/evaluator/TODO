@@ -1,5 +1,15 @@
-can we unify test-expression tools with some force-thunk?
+change in semantics for lazy eval of primitives does not even solve test.scm issue
 
+review unit-test in light of new lazy-apply-primitive-procedure semantics
+and see what needs to be done for failing tests to pass: it may b as simple
+as forcing something within 'test-expression'
+
+lazy-apply-primitive-procedure: review change
+understand why:
+   try(0 (test)) 
+behaves as expected while:
+   try(0 (display "oh no"))
+does not in test.scm
 
 (define (try a b) (if (= 0 a) 1 b))
 compare lazy and strict eval of

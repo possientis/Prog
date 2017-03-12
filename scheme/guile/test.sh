@@ -15,7 +15,8 @@ guile -s hello.scm
 echo
 
 echo "testing creation of guile executable from c source ..."
-gcc simple-guile.c $(pkg-config --cflags --libs guile-2.0); 
+gcc -c simple-guile.c $(pkg-config --cflags guile-2.0)
+gcc simple-guile.o $(pkg-config --libs guile-2.0)
 echo
 
 echo "running custom executable ..."
