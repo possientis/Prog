@@ -6,6 +6,7 @@ DIR=`pwd`
 HOME=/home/john/Prog/make
 cd ${HOME}
 
+./guile/test.sh
 ./jupiter/test.sh
 ./saturn/test.sh
 ./mars/test.sh

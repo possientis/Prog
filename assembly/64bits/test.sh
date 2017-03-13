@@ -13,6 +13,8 @@ option=$(sh option.sh)
 # calls from C and C++
 ./extern/test.sh
 
+# testing assembly multiplication semantics
+./mul/test.sh
 
 # intel syntax
 ./yasm.sh register.asm; ld register.o; ./a.out; ./clean.sh

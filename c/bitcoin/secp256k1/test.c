@@ -26,10 +26,33 @@ int buffer_equals(const void *ptr, const void* qtr, size_t size)
   return 1;
 }
 
+int buffer_null(const void *ptr, size_t size)
+{
+  if(ptr == NULL) return 0;
+  if(size < 0) return 0;
+
+  const unsigned char *p = ptr;
+
+  size_t i;
+  for(i = 0; i < size; ++i)
+  {
+    if( *p++ != '\x00' ) return 0;
+  }
+
+  return 1;
+}
+
 void buffer_clear(void *ptr, size_t size){
   if(ptr == NULL) return;
   if(size < 0)  return;   // should be ignored by compiler if size_t unsigned 
-  // TODO
+
+  unsigned char *p = ptr;
+  
+  size_t i;
+  for(i = 0; i < size; ++i)
+  {
+    *p++ = '\x00';
+  }
 }
 
 
@@ -165,12 +188,14 @@ int main()
 
   // secp256k1_ec_pubkey_parse
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub, bytes5, 65); 
-  assert(return_value == 0);  // public key is invalid
-
+  assert(return_value == 0);        // public key is invalid
+//  assert(call_back_data == 42);   // CALLBACK IS NOT CALLED (WRONG?)
+  call_back_data = 0;
   
   // secp256k1_ec_pubkey_parse (NULL context)
   return_value = secp256k1_ec_pubkey_parse(NULL, &pub, bytes4, 65); 
-  assert(return_value == 1);  // SUCCESSFUL DESPITE NULL CONTEXT
+  assert(return_value == 1);        // SUCCESSFUL DESPITE NULL CONTEXT
+  assert(call_back_data == 0);      // unaffected by call
 
   // secp256k1_ec_pubkey_parse (NULL secp256k1_pubkey pointer)
   return_value = secp256k1_ec_pubkey_parse(ctx, NULL, bytes4, 65); 
@@ -201,67 +226,129 @@ int main()
   size_t size = 65;
 
   // compressed
-
+  printf("compressed format ...\n");
   // serializing with output buffer too small
   size = 32;
+  buffer_clear(buffer, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
-  assert(return_value == 0);  // should always be the case
-  assert(size == 32);         // size unchanged here
-  assert(call_back_data == 42); // call back return value
-  call_back_data = 0;           // make sure next error correctly sets it
+  assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION) 
+  assert(size == 32);               // size unchanged here
+  assert(buffer_null(buffer, 65));  // output buffer unaffected 
+  assert(call_back_data == 42);     // call back return value
+  call_back_data = 0;               // make sure next error correctly sets it
 
   // NULL context
   size = 65;
+  buffer_clear(buffer, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       NULL, buffer, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
-  assert(return_value == 1);  // should always be the case
-  assert(size == 33);         // expecting 33 bytes written
-  assert(buffer_equals(buffer, bytes1, 33)); // success despite NULL context
+  assert(return_value == 1);                  // serialization succeeded
+  assert(size == 33);                         // expecting 33 bytes written
+  assert(buffer_equals(buffer, bytes1, 33));  // success despite NULL context
+  assert(call_back_data == 0);                // unaffected by call
 
   // NULL output buffer
   size = 65;
+  buffer_clear(buffer, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, NULL, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
-  assert(return_value == 0);  // failure (DOCUMENTATION IS WRONG)
-  assert(size == 0);          // 0 bytes written
-  assert(buffer_equals(buffer, bytes1, 33)); // success despite NULL context
+  assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
+  assert(size == 0);                // 0 bytes written
+  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(call_back_data == 42);     // call back return value
+  call_back_data = 0;               // make sure next error correctly sets it
 
+  // NULL input pubkey pointer
+  size = 65;
+  buffer_clear(buffer, 65);
+  return_value = secp256k1_ec_pubkey_serialize(
+      ctx, buffer, &size, NULL, SECP256K1_EC_COMPRESSED
+  );
+  assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
+  assert(size == 0);                // 0 bytes written
+  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(call_back_data == 42);     // call back return value
+  call_back_data = 0;               // make sure next error correctly sets it
 
 
   // secp256k1_ec_pubkey_serialize
   size = 65;
+  buffer_clear(buffer, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
-  assert(return_value == 1);  // should always be the case
-  assert(size == 33);         // expecting 33 bytes written
+  assert(return_value == 1);        // should always be the case
+  assert(size == 33);               // expecting 33 bytes written
   assert(buffer_equals(buffer, bytes1, 33));
+  assert(call_back_data == 0);      // unaffected by call
 
   // uncompressed
+  printf("uncompressed format ...\n");
   
   // serializing with output buffer too small
   size = 64;
+  buffer_clear(buffer, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
   );
   assert(return_value == 0);    // should always be the case
   assert(size == 64);           // size unchanged here
+  assert(buffer_null(buffer, 65));  // output buffer unaffected
   assert(call_back_data == 42); // call back return value
   call_back_data = 0;           // make sure next error correctly sets it
 
+  // NULL context
   size = 65;
+  buffer_clear(buffer, 65);
+  return_value = secp256k1_ec_pubkey_serialize(
+      NULL, buffer, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
+  );
+  assert(return_value == 1);                  // serialization succeeded
+  assert(size == 65);                         // expecting 33 bytes written
+  assert(buffer_equals(buffer, bytes4, 65));  // success despite NULL context
+  assert(call_back_data == 0);                // unaffected by call
+
+  // NULL output buffer
+  size = 65;
+  buffer_clear(buffer, 65);
+  return_value = secp256k1_ec_pubkey_serialize(
+      ctx, NULL, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
+  );
+  assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
+  assert(size == 0);                // 0 bytes written
+  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(call_back_data == 42);     // call back return value
+  call_back_data = 0;               // make sure next error correctly sets it
+
+  // NULL input pubkey pointer
+  size = 65;
+  buffer_clear(buffer, 65);
+  return_value = secp256k1_ec_pubkey_serialize(
+      ctx, buffer, &size, NULL, SECP256K1_EC_UNCOMPRESSED
+  );
+  assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
+  assert(size == 0);                // 0 bytes written
+  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(call_back_data == 42);     // call back return value
+  call_back_data = 0;               // make sure next error correctly sets it
+
+
+  size = 65;
+  buffer_clear(buffer, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
   );
-  assert(return_value == 1);  // should always be the case
-  assert(size == 65);         // expecting 33 bytes written
+  assert(return_value == 1);        // should always be the case
+  assert(size == 65);               // expecting 33 bytes written
   assert(buffer_equals(buffer, bytes4, 65));
+  assert(call_back_data == 0);      // unaffected by call
 
-  printf("\ntesting parsing signature ...\n");
+
+  printf("\ntesting parsing signature (compact) ...\n");
 
   const unsigned char* sig_bytes1 = 
     "\x98\x62\x10\xb9\xdc\x0a\x2f\x21\xbc\xae\xc0\x96\xf4\xf5\x5f\xf4"
@@ -271,73 +358,87 @@ int main()
 
   // NULL context (still works)
   return_value = secp256k1_ecdsa_signature_parse_compact(NULL, &sig1, sig_bytes1); 
-  assert(return_value == 1);  // succesful parse
+  assert(return_value == 1);      // parsing succeeded
+  assert(call_back_data == 0);    // unaffected by call
 
   // NULL output pointer
   return_value = secp256k1_ecdsa_signature_parse_compact(ctx, NULL, sig_bytes1);  
-  assert(return_value == 0);  // can't parse
-  assert(call_back_data == 42);
-  call_back_data = 0;           // make sure next error correctly sets it
+  assert(return_value == 0);      // parsing failed
+  assert(call_back_data == 42);   // callback return value
+  call_back_data = 0;             // make sure next error correctly sets it
 
 
   // NULL input pointer
   return_value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, NULL);  
-  assert(return_value == 0);  // can't parse
-  assert(call_back_data == 42);
-  call_back_data = 0;           // make sure next error correctly sets it
+  assert(return_value == 0);      // parsing failed
+  assert(call_back_data == 42);   // callback return value
+  call_back_data = 0;             // make sure next error correctly sets it
   
   // secp256k1_ecdsa_signature_parse_compact
   return_value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);  
-  assert(return_value == 1);  // succesful parse
+  assert(return_value == 1);      // parsing succeeded
+  assert(call_back_data == 0);    // unaffected by call
   
-  printf("testing serializing signature (DER) ...\n");
+
+  printf("\ntesting serializing signature (DER) ...\n");
   unsigned char der[128];
   
   // NULL context
   size = 128;
+  buffer_clear(der, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(NULL,der,&size,&sig1); 
-  assert(return_value == 1);    // still works
-  assert(size == 71);           // der serialization is 71 bytes in this case
+  assert(return_value == 1);      // serialization succeeded
+  assert(size == 71);             // der serialization is 71 bytes in this case
+  assert(call_back_data == 0);    // unaffected by call
 
   // NULL output pointer
   size = 128;
+  buffer_clear(der, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,NULL,&size,&sig1); 
-  assert(return_value == 0);    // can't serialize
-  assert(size == 128);          // size unchanged
-  assert(call_back_data == 42); // check callback return value
-  call_back_data = 0;           // make sure next error correctly sets it
+  assert(return_value == 0);      // serialization failed
+  assert(size == 128);            // size unchanged
+  assert(buffer_null(der, 128));  // output buffer unaffected
+  assert(call_back_data == 42);   // check callback return value
+  call_back_data = 0;             // make sure next error correctly sets it
   
   // output pointer only 71 bytes
   size = 71;
+  buffer_clear(der, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
-  assert(return_value == 1);      // still works
+  assert(return_value == 1);      // serialization succeeded
   assert(size == 71);
+  assert(call_back_data == 0);    // unaffected by call
 
   // output pointer only 70 bytes (CALLBACK not being called)
   size = 70;
+  buffer_clear(der, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
   assert(return_value == 0);      // can't serialize
   assert(size == 71);             // size is changed here 
-  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED !
+  assert(buffer_null(der, 128));  // output buffer unaffected
+  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
   call_back_data = 0;             // make sure next error correctly sets it
 
   // null input pointer
   size = 128;
+  buffer_clear(der, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,NULL); 
   assert(return_value == 0);      // can't serialize
   assert(size == 128);            // size is unchanged
+  assert(buffer_null(der, 128));  // output buffer unaffected
   assert(call_back_data == 42);   // checking callback return value
   call_back_data = 0;             // make sure next error correctly sets it
 
   // secp256k1_ecdsa_signature_serialize_der
   size = 128;
+  buffer_clear(der, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
   assert(return_value == 1);
   assert(size == 71);
   assert(call_back_data == 0);    // unaffected by call
  
 
-  printf("testing parsing DER signature ...\n");
+  printf("\ntesting parsing signature (DER) ...\n");
 
   // NULL context 
   size = 71;
@@ -349,17 +450,23 @@ int main()
   size = 71;
   return_value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,NULL,size); 
   assert(return_value == 0);      // can't parse
+//  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
+//  call_back_data = 0;             // make sure next error correctly sets it
 
   // NULL output pointer
   size = 71;
   return_value = secp256k1_ecdsa_signature_parse_der(ctx,NULL,der,size); 
   assert(return_value == 0);      // can't parse
+//  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
+//  call_back_data = 0;             // make sure next error correctly sets it
 
   // wrong size input
   size = 70;
   return_value = secp256k1_ecdsa_signature_parse_der(ctx,NULL,der,size); 
   assert(return_value == 0);      // can't parse
   assert(size == 70);             // size unchanged
+//  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
+//  call_back_data = 0;             // make sure next error correctly sets it
 
   // secp256k1_ecdsa_signature_parse_der
   size = 71;
@@ -367,7 +474,7 @@ int main()
   assert(return_value == 1);      // parsing was succesful
   assert(buffer_equals(&sig1, &sig2, sizeof(secp256k1_ecdsa_signature)));
 
-  printf("testing serializing signature (compact) ...\n");
+  printf("\ntesting serializing signature (compact) ...\n");
 
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);

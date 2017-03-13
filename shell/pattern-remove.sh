@@ -29,4 +29,14 @@ strip_leading_zero 00
 var=$?
 echo $var
 
+echo `basename $PWD`  # basename of current working directory
+echo "${PWD##*/}"     # same achieved by removing longest match from left
+echo
+echo `basename $0`    # basename of script
+echo $0               # name of script as specified 
+echo "${0##*/}"       # basename of scipt achieved by pattern removal
+echo
+filename=test.data
+echo "${filename##*.}" # filename's extension
+
 

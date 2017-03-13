@@ -16,7 +16,7 @@ int main()
   int y;
   int i;
 
-  for(i = 0; i < 5; ++i) {
+  for(i = 0; i < 16; ++i) {
     printf("checking assembly instruction 'mul %s'\n", regs[i]);
     for(x = 0; x < 256; ++x) {
       for(y = 0; y < 256; ++y) {

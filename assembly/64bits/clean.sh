@@ -13,5 +13,6 @@ rm -f test
 
 ./hello/clean.sh
 ./extern/clean.sh
+./mul/clean.sh
 
 cd ${DIR}
