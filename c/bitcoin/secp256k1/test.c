@@ -62,7 +62,9 @@ int main()
   secp256k1_context *ctx;         // pointer
   secp256k1_context *clone;       // pointer
   secp256k1_pubkey pub;           // 64 bytes
-
+  secp256k1_pubkey pub1;
+  secp256k1_pubkey pub2;
+ 
   secp256k1_ecdsa_signature sig;  // 64 bytes
   secp256k1_ecdsa_signature sig1;  // 64 bytes
   secp256k1_ecdsa_signature sig2;  // 64 bytes
@@ -125,7 +127,7 @@ int main()
   int call_back_data;
  
   // secp2561k1_context_create
-  ctx = secp256k1_context_create(SECP256K1_CONTEXT_NONE);
+  ctx = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY | SECP256K1_CONTEXT_SIGN);
 
   // secp256k1_context_set_illegal_callback
   secp256k1_context_set_illegal_callback(ctx,default_callback, &call_back_data);
@@ -186,6 +188,10 @@ int main()
     "\x07\xcf\x33\xda\x18\xbd\x73\x4c\x60\x0b\x96\xa7\x2b\xbc\x47\x49"
     "\xd5\x14\x1c\x90\xec\x8a\xc3\x28\xae\x52\xdd\xfe\x2e\x50\x5b\xdb";
 
+  const unsigned char *bytes6 = "\x03" // typo first byte, but valid
+    "\xff\x28\x89\x2b\xad\x7e\xd5\x7d\x2f\xb5\x7b\xf3\x30\x81\xd5\xcf"
+    "\xcf\x6f\x9e\xd3\xd3\xd7\xf1\x59\xc2\xe2\xff\xf5\x79\xdc\x34\x1a";
+
   // secp256k1_ec_pubkey_parse
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub, bytes5, 65); 
   assert(return_value == 0);        // public key is invalid
@@ -211,8 +217,6 @@ int main()
 
 
   // pub1 and pub4 should parse into the same key
-  secp256k1_pubkey pub1;
-  secp256k1_pubkey pub2;
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub1, bytes1, 33);
   assert(return_value == 1);
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub2, bytes4, 65);
@@ -450,23 +454,23 @@ int main()
   size = 71;
   return_value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,NULL,size); 
   assert(return_value == 0);      // can't parse
-//  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
-//  call_back_data = 0;             // make sure next error correctly sets it
+  assert(call_back_data == 42); 
+  call_back_data = 0;             // make sure next error correctly sets it
 
   // NULL output pointer
   size = 71;
   return_value = secp256k1_ecdsa_signature_parse_der(ctx,NULL,der,size); 
   assert(return_value == 0);      // can't parse
-//  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
-//  call_back_data = 0;             // make sure next error correctly sets it
+  assert(call_back_data == 42);    
+  call_back_data = 0;             // make sure next error correctly sets it
 
   // wrong size input
   size = 70;
   return_value = secp256k1_ecdsa_signature_parse_der(ctx,NULL,der,size); 
   assert(return_value == 0);      // can't parse
   assert(size == 70);             // size unchanged
-//  assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
-//  call_back_data = 0;             // make sure next error correctly sets it
+  assert(call_back_data == 42);    
+  call_back_data = 0;             // make sure next error correctly sets it
 
   // secp256k1_ecdsa_signature_parse_der
   size = 71;
@@ -476,9 +480,89 @@ int main()
 
   printf("\ntesting serializing signature (compact) ...\n");
 
+  unsigned char buffer64[64];
+
+  // NULL context
+  buffer_clear(buffer64, 64);
+  return_value = secp256k1_ecdsa_signature_serialize_compact(NULL,buffer64,&sig1);
+  assert(return_value ==1);                       // serialization succeeded
+  assert(buffer_equals(buffer64,sig_bytes1,64));  // initial signature
+  assert(call_back_data == 0);
+
+  // NULL output buffer
+  buffer_clear(buffer64, 64);
+  return_value = secp256k1_ecdsa_signature_serialize_compact(ctx,NULL,&sig1);
+  assert(return_value ==0);                       // serialization failed
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // NULL input signature pointer
+  buffer_clear(buffer64, 64);
+  return_value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,NULL);
+  assert(return_value ==0);                       // serialization failed
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  
+  // secp2561_ecdsa_signature_serialize_compact
+  buffer_clear(buffer64, 64);
+  return_value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,&sig1);
+  assert(return_value ==1);                       // serialization succeeded
+  assert(buffer_equals(buffer64,sig_bytes1,64));  // initial signature
+  assert(call_back_data == 0);
+
+  printf("\ntesting verifying signature ...\n");
+  
+  unsigned char *hash1 = 
+    "\x7f\x83\xb1\x65\x7f\xf1\xfc\x53\xb9\x2d\xc1\x81\x48\xa1\xd6\x5d"
+    "\xfc\x2d\x4b\x1f\xa3\xd6\x77\x28\x4a\xdd\xd2\x00\x12\x6d\x90\x69";
+
+  unsigned char *hash2 =  /* typo in first byte */
+    "\xff\x83\xb1\x65\x7f\xf1\xfc\x53\xb9\x2d\xc1\x81\x48\xa1\xd6\x5d"
+    "\xfc\x2d\x4b\x1f\xa3\xd6\x77\x28\x4a\xdd\xd2\x00\x12\x6d\x90\x69";
+
+  // NULL context (segmentation fault)
+//  return_value = secp256k1_ecdsa_verify(NULL, &sig1, hash1, &pub1); 
+//  assert(return_value == 1);
+ // assert(call_back_data == 0);
+
+  // NULL signature pointer
+  return_value = secp256k1_ecdsa_verify(ctx, NULL, hash1, &pub1); 
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // NULL msg32 pointer
+  return_value = secp256k1_ecdsa_verify(ctx, &sig1, NULL, &pub1); 
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // NULL pubkey pointer
+  return_value = secp256k1_ecdsa_verify(ctx, &sig1, hash1, NULL); 
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // wrong message
+  return_value = secp256k1_ecdsa_verify(ctx, &sig1, hash2, &pub1); 
+  assert(return_value == 0);    // verification failes
+  assert(call_back_data == 0);  // but this is not an error, callback not called
+
+  // wrong pubkey
+  return_value = secp256k1_ec_pubkey_parse(ctx,&pub2, bytes6, 33);
+  assert(return_value == 1);
+  return_value = secp256k1_ecdsa_verify(ctx, &sig1, hash1, &pub2); 
+  assert(return_value == 0);    // verification fails
+  assert(call_back_data == 0);  // but not an error
+
+  // secp256k1_ecdsa_verify
+  return_value = secp256k1_ecdsa_verify(ctx, &sig1, hash1, &pub1); 
+  assert(return_value == 1);
+  assert(call_back_data == 0);
+
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);
-
 
 }
 

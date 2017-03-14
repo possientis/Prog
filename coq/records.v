@@ -22,7 +22,6 @@ Record plane : Set := point { point_x:Z ; point_y:Z }.
 Print plane.
 Print point_x.
 
-Check plane_rec.
 Check Zabs_nat.
 
 Definition manhattan_dist (p q: plane) : nat :=

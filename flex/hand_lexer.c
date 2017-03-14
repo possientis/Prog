@@ -7,6 +7,8 @@ char *progname;
 #define TEXT 402
 #define COMMAND 403
 
+int lexer();
+
 int main(int argc, char *argv[])
 {
   int val;
@@ -26,14 +28,41 @@ int lexer()
   if(c == EOF)
     return 0;
 
-  if(c == '.' || isdigit(c)) { /* number */
+  /* number */
+  if(c == '.' || isdigit(c)) {
     while((c = getchar()) != EOF && isdigit(c));
     
     if(c == '.') while ((c = getchar()) != EOF && isdigit(c));
 
-    unget(c, stdin);
+    ungetc(c, stdin);
     return NUMBER;
   }
-  // TODO
+
+  /* comment */
+  if(c == '#') {
+    int index = 1;
+    while((c = getchar()) != EOF && c != '\n');
+    ungetc(c, stdin);
+    return COMMENT;
+  }
+
+  /* literal text */
+  if(c == '\"') {
+    int index = 1;
+    while((c = getchar()) != EOF && c != '\"' & c != '\n');
+    if(c == '\n') ungetc(c, stdin);
+    return TEXT;
+  }
+
+  /* check to see if it is a command */
+  if(isalpha(c)) {
+    int index = 1;
+    while((c = getchar()) != EOF && isalnum(c));
+    ungetc(c, stdin);
+    return COMMAND;
+  }
+
+  return c;
+}
     
 

@@ -109,8 +109,12 @@ Proof.
     clear n. unfold id. simpl. reflexivity.
     clear n. intros n IH. unfold id. unfold id in IH.
     unfold sub. fold sub.  
+Abort.
 
-Show.
+Eval compute in from O.
+Eval compute in head (from O).
+Eval compute in tail (from O).
+
 
 
 
