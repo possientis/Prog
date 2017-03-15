@@ -1,11 +1,14 @@
-# This works only with bash
+x=3
 
-# comma operator used to link together arithmetic operations
-# All are evaluated, but only the last one is returned
+# (( expression ))
+(( x = x + 2 ))
 
-let "t2 = ((a = 9, 15 / 3))"  # set a = 9 and t2 = 15/3
+echo "x = $x"
 
-echo $a   # 9
-echo $t2  # 5
+let "x = x + 2"
+
+# exactly the same as:
+# let "expression"
+echo "x = $x"
 
 
