@@ -31,16 +31,10 @@
 
 ; lazy
 (define (lazy-eval-application exp env)
-  (debug "[DEBUG]: ***************** Start *********************\n")
-  (debug "[DEBUG]: lazy-eval-application: exp = ")(debug exp)(debug-newline)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
     (let ((proc (strict-eval operator env))
-          (args (map (lambda (x) (lazy-eval x env)) operands)))
-
-      (debug "[DEBUG]: lazy-eval-application: proc = ")(debug proc)(debug-newline)
-      (debug "[DEBUG]: lazy-eval-application: args = ")(debug args)(debug-newline)
-      (debug "[DEBUG]: ****************** End **********************\n")
+          (args (map (lambda (x) (make-thunk x env)) operands))) 
       (lazy-apply proc args))))
 
 

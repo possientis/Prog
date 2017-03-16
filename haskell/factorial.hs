@@ -1,14 +1,9 @@
-factorial n | n < 2 = 1
-factorial n         = n * factorial (n - 1)
+factorial 0 = 1
+factorial n = n * factorial (n - 1)
 
-roots :: Float -> Float -> Float -> (Float, Float)
-roots a b c = ((-b -d)/e, (-b + d)/e) where {
-  d = sqrt(b * b  - 4 * a * c);
-  e = 2 * a
-}
 
-roots' :: Float -> Float -> Float -> (Float, Float)
-roots' a b c = ((-b -d)/e, (-b + d)/e) where 
-  d = sqrt(b * b  - 4 * a * c)
-  e = 2 * a
 
+factorial' n = go 1 n 
+  where
+  go n 0  = n
+  go n m  = go (n*m) (m-1) 

@@ -50,6 +50,23 @@ class Test18 {
     System.out.println("r = " + sig.r.toString(16));
     System.out.println("s = " + sig.s.toString(16));
 
+
+    // checking signature verifies
+    System.out.println("Signature successfully verified: " + key.verify(hash,sig));
+
+    // Computing non-normalized signature counterpart:
+    BigInteger order = ECKey.CURVE.getN();
+    BigInteger r = sig.r; 
+    BigInteger s = sig.s.negate().mod(order);
+    ECDSASignature sig2 = new ECDSASignature(r,s);
+
+    // verifying non-normalized signature
+    System.out.println("Non-normal signature successfully verified: " + key.verify(hash,sig2));
+
+    ECDSASignature sig3 = sig2.toCanonicalised();
+    System.out.println("third signature successfully verified: " + key.verify(hash,sig3));
+    System.out.println("First key = Third key: " + sig.equals(sig3));
+
   }
 
   public static void dump(byte[] bytes)
