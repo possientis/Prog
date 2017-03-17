@@ -19,6 +19,10 @@ echo "Testing equivalent auto lexer ..."
 flex auto_lexer.l; gcc lex.yy.c -ll; ./a.out < input2.txt; ./clean.sh
 echo
 
+echo "Testing decimal number lexical analyser ..."
+#flex decimal.l; gcc decimal.c lex.yy.c -ll; ./a.out < input3.txt; ./clean.sh
+echo
+
 
 cd ${DIR}
 echo '\nAll flex tests completed successfully\n'

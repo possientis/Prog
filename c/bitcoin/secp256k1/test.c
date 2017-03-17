@@ -68,6 +68,7 @@ int main()
   secp256k1_ecdsa_signature sig;  // 64 bytes
   secp256k1_ecdsa_signature sig1;  // 64 bytes
   secp256k1_ecdsa_signature sig2;  // 64 bytes
+  secp256k1_ecdsa_signature sig3;  // 64 bytes
   secp256k1_nonce_function fun;   // pointer
 
   assert(sizeof(ctx) == 8);
@@ -513,11 +514,11 @@ int main()
 
   printf("\ntesting verifying signature ...\n");
   
-  unsigned char *hash1 = 
+  const unsigned char *hash1 = 
     "\x7f\x83\xb1\x65\x7f\xf1\xfc\x53\xb9\x2d\xc1\x81\x48\xa1\xd6\x5d"
     "\xfc\x2d\x4b\x1f\xa3\xd6\x77\x28\x4a\xdd\xd2\x00\x12\x6d\x90\x69";
 
-  unsigned char *hash2 =  /* typo in first byte */
+  const unsigned char *hash2 =  /* typo in first byte */
     "\xff\x83\xb1\x65\x7f\xf1\xfc\x53\xb9\x2d\xc1\x81\x48\xa1\xd6\x5d"
     "\xfc\x2d\x4b\x1f\xa3\xd6\x77\x28\x4a\xdd\xd2\x00\x12\x6d\x90\x69";
 
@@ -560,6 +561,75 @@ int main()
   return_value = secp256k1_ecdsa_verify(ctx, &sig1, hash1, &pub1); 
   assert(return_value == 1);
   assert(call_back_data == 0);
+
+  printf("\ntesting normalizing signature ...\n");
+
+
+  // non-normalized counterpart of sig_bytes1
+  const unsigned char* sig_bytes2 = 
+    "\x98\x62\x10\xb9\xdc\x0a\x2f\x21\xbc\xae\xc0\x96\xf4\xf5\x5f\xf4"
+    "\x48\x6f\xcc\x4e\x3a\xaf\xe7\xe0\xcb\xf6\x46\x92\x59\x6e\x99\x4a"
+    "\xf1\xa3\x91\x39\xab\xf7\x29\xa5\x51\x61\xe3\x17\x16\xac\x3c\xdf"
+    "\xea\x6f\x9b\x6d\xa6\x2b\x7f\x6a\x65\xf7\x7a\x72\xe7\x29\x9d\xde";
+
+  // parsing key
+  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
+  assert(return_value == 1);  // parsing successful 
+
+  // key not normalized, hence signature verification should fail
+  return_value = secp256k1_ecdsa_verify(ctx, &sig2, hash1, &pub1);
+  assert(return_value == 0);  // verification fails 
+
+  // normalizing sig2
+  return_value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, &sig2);
+  assert(return_value == 1);                  // sig2 was *not* normalized
+  assert(buffer_equals(&sig1, &sig3, 64));    // sig1 == sig3
+
+  // normalizing sig1
+  return_value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, &sig1);
+  assert(return_value == 0);                  // sig1 was already normalized
+
+  // NULL context
+  return_value = secp256k1_ecdsa_signature_normalize(NULL, &sig3, &sig2);
+  assert(return_value == 1);                  // sig2 was *not* normalized
+
+  // NULL ouput (only testing sig2 for normality)
+  return_value = secp256k1_ecdsa_signature_normalize(ctx, NULL, &sig2);
+  assert(return_value == 1);                  // sig2 was *not* normalized
+
+  // NULL input
+  return_value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, NULL);
+  assert(return_value == 0);                  // not meaningful
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+
+
+  printf("\ntesting rfc6979 nonce function ...\n");
+
+  const secp256k1_nonce_function f1 = secp256k1_nonce_function_rfc6979;
+  const secp256k1_nonce_function f2 = secp256k1_nonce_function_default;
+
+  unsigned char nonce1[32];
+  unsigned char nonce2[32];
+
+  buffer_clear(nonce1, 32);
+  buffer_clear(nonce2, 32);
+
+  return_value = f1(nonce1, hash1, hash2, NULL, NULL, 0);
+  assert(return_value == 1);
+
+  return_value = f2(nonce2, hash1, hash2, NULL, NULL, 0);
+  assert(return_value == 1);
+
+  assert(buffer_equals(nonce1, nonce2, 32));
+
+
+
+
+
+
+
 
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);

@@ -3,8 +3,9 @@
  * A parser for the basic grammar to use for recognizing English sentences.
  */
 #include <stdio.h>
-extern int yylex(void);
-extern int yyerror(char*);
+int yylex(void);
+int yyerror(char*);
+void yyset_in(FILE*);
 
 %}
 
@@ -46,6 +47,8 @@ extern FILE *yyin;
 
 int main()
 {
+  yyset_in(stdin);
+
   while(!feof(yyin)) {
     yyparse();
   }

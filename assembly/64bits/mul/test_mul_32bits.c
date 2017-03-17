@@ -16,7 +16,7 @@ int main()
   long y;
   int i;
 
-  for(i = 0; i < 2; ++i) {
+  for(i = 0; i < 16; ++i) {
     printf("checking assembly instruction 'mul %s'\n", regs[i]);
     for(x = 0; x < 4294967296UL ; x +=902639) {  // can't test everything
       for(y = 0; y < 4294967296UL; y +=905269) { // can't test everything

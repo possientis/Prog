@@ -3,7 +3,7 @@ factorial n = n * factorial (n - 1)
 
 
 
-factorial' n = go 1 n 
+factorial' n = go n 1
   where
-  go n 0  = n
-  go n m  = go (n*m) (m-1) 
+  go 0 n  = n
+  go m n  = go (m-1) (n*m) 

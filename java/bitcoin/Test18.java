@@ -64,8 +64,11 @@ class Test18 {
     System.out.println("Non-normal signature successfully verified: " + key.verify(hash,sig2));
 
     ECDSASignature sig3 = sig2.toCanonicalised();
-    System.out.println("third signature successfully verified: " + key.verify(hash,sig3));
+    System.out.println("Third signature successfully verified: " + key.verify(hash,sig3));
     System.out.println("First key = Third key: " + sig.equals(sig3));
+    System.out.println("Second signature as follows:");
+    System.out.println("r = " + sig2.r.toString(16));
+    System.out.println("s = " + sig2.s.toString(16));
 
   }
 
