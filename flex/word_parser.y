@@ -13,7 +13,7 @@ void yyset_in(FILE*);
 
 %%
 
-sentence:           simple_sentence { printf("Parsed a simple sentence.\n"); }
+sentence:           simple_sentence   { printf("Parsed a simple sentence.\n"); }
                   | compound_sentence { printf("Parsed a compound sentence.\n"); } 
                   ;
 
@@ -59,6 +59,5 @@ int main()
 int yyerror(char* s)
 {
   fprintf(stderr, "%s\n", s);
-  return -1;
 }
 

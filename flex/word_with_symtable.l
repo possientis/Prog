@@ -26,17 +26,19 @@ int lookup_word(const char *word);
 
     /* end of line, return to default state */
 
+\\\n  /* ignore */
+
 \n  { state = LOOKUP; }
 
     /* whenever a line starts with a reserved part of speech name */
     /* start defining words of that type */
-^verb { state = VERB; }
-^adj  { state = ADJ; }
-^adv  { state = ADV; }
-^noun { state = NOUN; }
-^prep { state = PREP; }
-^pron { state = PRON; }
-^conj { state = CONJ; }
+^#define[\t ]+verb        { state = VERB; }
+^#define[\t ]+adjective   { state = ADJ; }
+^#define[\t ]+adverb      { state = ADV; }
+^#define[\t ]+noun        { state = NOUN; }
+^#define[\t ]+preposition { state = PREP; }
+^#define[\t ]+pronoun     { state = PRON; }
+^#define[\t ]+conjunction { state = CONJ; }
 
     /* a normal word, define it or look it up */
 [a-zA-Z]+ {

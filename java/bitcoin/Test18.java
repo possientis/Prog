@@ -5,6 +5,7 @@ import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.ECKey.ECDSASignature;
 
+
 class Test18 {
   public static void main(String[] args)
   {
@@ -69,6 +70,13 @@ class Test18 {
     System.out.println("Second signature as follows:");
     System.out.println("r = " + sig2.r.toString(16));
     System.out.println("s = " + sig2.s.toString(16));
+
+    BigInteger nonce = EC_Test_Utils.getDeterministicKey(nkey, hash, 0);
+    System.out.println("Private key = " + k.toLowerCase());
+    System.out.println("Nonce = " + nonce.toString(16));
+    
+
+     
 
   }
 

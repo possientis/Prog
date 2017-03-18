@@ -3,8 +3,9 @@
  * We now build a lexical analyzer to be used by a higher level parser.
  */
 
-#include<malloc.h>
-#include<string.h>
+#include <malloc.h>
+#include <string.h>
+#include <stdio.h>
 
 #include "y.tab.h"  /* token codes from the parser */
 
@@ -17,6 +18,7 @@ int lookup_word(const char *word);
 %}
 
 %%
+    /* \\\n */  /* ignore */
 
 \n    { state = LOOKUP; }
 
@@ -24,13 +26,33 @@ int lookup_word(const char *word);
         state = LOOKUP;
         return 0;  /* end of sentence */
       }
-^verb { state = VERB; }
-^adj  { state = ADJECTIVE; }
-^adv  { state = ADVERB; }
-^noun { state = NOUN; }
-^prep { state = PREPOSITION; }
-^pron { state = PRONOUN; }
-^conj { state = CONJUNCTION; }
+^#define[\t ]+verb        { state = VERB; 
+                            printf("defining verbs ...\n"); 
+                          }
+
+^#define[\t ]+adjective   { state = ADJECTIVE; 
+                            printf("defining adjectives ...\n");  
+                          }
+
+^#define[\t ]+adverb      { state = ADVERB; 
+                            printf("defining adverbs ...\n"); 
+                          }
+
+^#define[\t ]+noun        { state = NOUN; 
+                            printf("defining nouns ...\n"); 
+                          }
+
+^#define[\t ]+preposition { state = PREPOSITION; 
+                            printf("defining prepositions ...\n"); 
+                          }
+
+^#define[\t ]+pronoun     { state = PRONOUN; 
+                            printf("defining pronouns ...\n"); 
+                          }
+
+^#define[\t ]+conjunction { state = CONJUNCTION; 
+                            printf("defining conjunctions ...\n"); 
+                          }
 
 [a-zA-Z]+ {
             if(state != LOOKUP) {

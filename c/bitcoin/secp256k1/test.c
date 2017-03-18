@@ -624,9 +624,39 @@ int main()
 
   assert(buffer_equals(nonce1, nonce2, 32));
 
+  // private key from Mastering Bitcoin
+  const unsigned char* priv =
+    "\x1e\x99\x42\x3a\x4e\xd2\x76\x08\xa1\x5a\x26\x16\xa2\xb0\xe9\xe5"
+    "\x2c\xed\x33\x0a\xc5\x30\xed\xcc\x32\xc8\xff\xc6\xa5\x26\xae\xdd";
 
+  return_value = f1(nonce1, hash1, priv, NULL, NULL, 0); 
+  assert(return_value == 1);
 
+  return_value = f2(nonce2, hash1, priv, NULL, NULL, 0); 
+  assert(return_value == 1);
+ 
+  // see java EC_Test_Utils.getDeterministicKey and Test18.java
+  const unsigned char* nonce = 
+    "\x8b\x87\x1e\x0f\x28\x6b\x37\x91\xab\xb6\xe1\xd7\xc2\x8e\x6c\x7e"
+    "\x07\x19\x82\x9e\xfc\x03\xf6\x09\x4f\x70\xda\xb1\xb0\xf0\x0e\xfb";
 
+  assert(buffer_equals(nonce1, nonce, 32));
+  assert(buffer_equals(nonce2, nonce, 32));
+
+  // NULL output pointer (segmentation fault: WRONG?)
+  // return_value = f1(NULL, hash1, priv, NULL, NULL, 0); 
+
+  // NULL message pointer (segmentation fault: WRONG?)
+  // return_value = f1(nonce1, NULL, priv, NULL, NULL, 0); 
+
+  // NULL key pointer (segmentation fault: WRONG?)
+  // return_value = f1(nonce1, hash1, NULL, NULL, NULL, 0); 
+
+  printf("\ntesting ecdsa signature generation ...\n");
+
+  return_value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv, f1, NULL);
+  assert(return_value == 1);
+  assert(buffer_equals(&sig,&sig1,64));
 
 
 

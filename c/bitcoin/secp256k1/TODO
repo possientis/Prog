@@ -1,2 +1,2 @@
-use bitcoinj to validate rfc6979 nonce function 
+secp256k1_ecdsa_sign
 

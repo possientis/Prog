@@ -1,4 +1,6 @@
-understand why lazy-eval of 'code' in test.scm does not behave as expected
+problem with lazy evaluation of begin statement. 
+Only the last statement is ever forced.
+
 
 solve paradox: when runing lazy-eval with scm, we get the right behaviour, unlike what we get with ./lazy-run.sh
 

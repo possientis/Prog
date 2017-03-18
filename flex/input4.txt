@@ -7,5 +7,3 @@
 #define pronoun I you he she we they
 #define noun dog cat oat horse cow
 
-
-dog could quietly eat my cat if behind their cow
