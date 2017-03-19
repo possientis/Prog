@@ -23,7 +23,6 @@ public class Foreach {
       System.out.println(s);
     }
 
-
     System.out.println("Done!");
 
   }

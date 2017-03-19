@@ -13,6 +13,7 @@ void yyset_in(FILE*);
 
 %%
 
+
 sentence:           simple_sentence   { printf("Parsed a simple sentence.\n"); }
                   | compound_sentence { printf("Parsed a compound sentence.\n"); } 
                   ;

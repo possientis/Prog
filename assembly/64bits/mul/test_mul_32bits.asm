@@ -37,7 +37,7 @@ test_mul_32bits:
 _eax:
   cmp dx,0
   jnz _ebx
-  mov eax, esi    ; rsi -> eax (overwrites previous al value) 
+  mov eax, esi    ; rsi -> eax (overwrites previous eax value) 
   mul eax         ; eax*eax -> edx:eax
   shl rdx, 32     ; aligning edx with edx:eax
   add rax, rdx    ; result in rax

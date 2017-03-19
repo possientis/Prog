@@ -37,7 +37,7 @@ test_mul_16bits:
 _ax:
   cmp dx,0
   jnz _bx
-  mov ax, si      ; rsi -> ax (overwrites previous al value) 
+  mov ax, si      ; rsi -> ax (overwrites previous ax value) 
   mul ax          ; ax*ax -> dx:ax
   shl rdx, 16     ; aligning dx with dx:ax
   add rax, rdx    ; result in rax

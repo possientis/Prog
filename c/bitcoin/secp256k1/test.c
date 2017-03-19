@@ -625,14 +625,14 @@ int main()
   assert(buffer_equals(nonce1, nonce2, 32));
 
   // private key from Mastering Bitcoin
-  const unsigned char* priv =
+  const unsigned char* priv1 =
     "\x1e\x99\x42\x3a\x4e\xd2\x76\x08\xa1\x5a\x26\x16\xa2\xb0\xe9\xe5"
     "\x2c\xed\x33\x0a\xc5\x30\xed\xcc\x32\xc8\xff\xc6\xa5\x26\xae\xdd";
 
-  return_value = f1(nonce1, hash1, priv, NULL, NULL, 0); 
+  return_value = f1(nonce1, hash1, priv1, NULL, NULL, 0); 
   assert(return_value == 1);
 
-  return_value = f2(nonce2, hash1, priv, NULL, NULL, 0); 
+  return_value = f2(nonce2, hash1, priv1, NULL, NULL, 0); 
   assert(return_value == 1);
  
   // see java EC_Test_Utils.getDeterministicKey and Test18.java
@@ -644,22 +644,131 @@ int main()
   assert(buffer_equals(nonce2, nonce, 32));
 
   // NULL output pointer (segmentation fault: WRONG?)
-  // return_value = f1(NULL, hash1, priv, NULL, NULL, 0); 
+  // return_value = f1(NULL, hash1, priv1, NULL, NULL, 0); 
 
   // NULL message pointer (segmentation fault: WRONG?)
-  // return_value = f1(nonce1, NULL, priv, NULL, NULL, 0); 
+  // return_value = f1(nonce1, NULL, priv1, NULL, NULL, 0); 
 
   // NULL key pointer (segmentation fault: WRONG?)
   // return_value = f1(nonce1, hash1, NULL, NULL, NULL, 0); 
 
   printf("\ntesting ecdsa signature generation ...\n");
 
-  return_value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv, f1, NULL);
+  // NULL context: segmentation fault
+//  return_value = secp256k1_ecdsa_sign(NULL, &sig, hash1, priv1, f1, NULL);
+
+  // NULL output pointer
+  return_value = secp256k1_ecdsa_sign(ctx, NULL, hash1, priv1, f1, NULL);
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // NULL message pointer
+  return_value = secp256k1_ecdsa_sign(ctx, &sig, NULL, priv1, f1, NULL);
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // NULL priv1ate key pointer
+  return_value = secp256k1_ecdsa_sign(ctx, &sig, hash1, NULL, f1, NULL);
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // NULL nonce function pointer
+  buffer_clear(&sig, 64);
+  return_value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv1, NULL, NULL);
+  assert(return_value == 1);  // signing successful (default nonce is used)
+  assert(buffer_equals(&sig,&sig1,64));
+  assert(call_back_data == 0);
+
+  // secp256k1_ecdsa_sign
+  buffer_clear(&sig, 64);
+  return_value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv1, f1, NULL);
   assert(return_value == 1);
   assert(buffer_equals(&sig,&sig1,64));
+  assert(call_back_data == 0);
 
+  printf("\ntesting veryfying secret keys ...\n");
 
+  const unsigned char* order = 
+    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe"
+    "\xba\xae\xdc\xe6\xaf\x48\xa0\x3b\xbf\xd2\x5e\x8c\xd0\x36\x41\x41";
+  
+  // curve order is not a valid private key
+  return_value = secp256k1_ec_seckey_verify(ctx, order);
+  assert(return_value == 0);
+  assert(call_back_data == 0);
 
+  const unsigned char* order_minus_one = 
+    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe"
+    "\xba\xae\xdc\xe6\xaf\x48\xa0\x3b\xbf\xd2\x5e\x8c\xd0\x36\x41\x40";
+
+  // curve order less one is a valid private key
+  return_value = secp256k1_ec_seckey_verify(ctx, order_minus_one);
+  assert(return_value == 1);
+  assert(call_back_data == 0);
+
+  // zero is not a valid private key
+  buffer_clear(nonce1, 32);
+  return_value = secp256k1_ec_seckey_verify(ctx, nonce1);
+  assert(return_value == 0);
+  assert(call_back_data == 0);
+
+  // one is a valid private key
+  buffer_clear(nonce1, 32);
+  nonce1[31] = 0x01;
+  return_value = secp256k1_ec_seckey_verify(ctx, nonce1);
+  assert(return_value == 1);
+  assert(call_back_data == 0);
+
+  // 2^32 -1 is not a valid private key
+  int i;
+  for(i = 0; i < 32; ++i)
+    nonce1[i] = 0xff;
+  return_value = secp256k1_ec_seckey_verify(ctx, nonce1);
+  assert(return_value == 0);
+  assert(call_back_data == 0);
+
+  // NULL context
+  return_value = secp256k1_ec_seckey_verify(NULL, priv1);
+  assert(return_value == 1);
+  assert(call_back_data == 0);
+
+  // Mastering Bitcoin private key is valid
+  return_value = secp256k1_ec_seckey_verify(ctx, priv1);
+  assert(return_value == 1);
+  assert(call_back_data == 0);
+
+ 
+  printf("\ntesting public key creation from private key ...\n");
+
+  // NULL context: segmentation fault
+//  return_value = secp256k1_ec_pubkey_create(NULL, &pub, priv1);
+
+  // NULL output buffer
+  return_value = secp256k1_ec_pubkey_create(ctx, NULL, priv1);
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // NULL private key pointer
+  return_value = secp256k1_ec_pubkey_create(ctx, &pub, NULL);
+  assert(return_value == 0);
+  assert(call_back_data == 42);
+  call_back_data = 0;
+
+  // invalid private key
+  return_value = secp256k1_ec_pubkey_create(ctx, &pub, order);
+  assert(return_value == 0);    // failure
+  assert(call_back_data == 0);  // but not an error
+
+  // secp256k1_ec_pubkey_create
+  buffer_clear(&pub, 64);
+  return_value = secp256k1_ec_pubkey_create(ctx, &pub, priv1);
+  assert(return_value == 1);
+  assert(call_back_data == 0);
+  assert(buffer_equals(&pub, &pub1, 64));
 
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);

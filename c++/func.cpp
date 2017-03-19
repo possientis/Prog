@@ -29,7 +29,6 @@ int main(){
   std::cout << myTest(7.6) << std::endl;
   // i would have thought this should work
   //std::cout << foo(myTest) << std::endl;
-
   return 0;
 
 }

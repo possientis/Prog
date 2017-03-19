@@ -1,4 +1,7 @@
+#include <stdlib.h>
 #include <libguile.h>
+
+static scm_t_bits image_tag;
 
 struct image {
   int width, height;
@@ -13,20 +16,10 @@ struct image {
   SCM update_func;
 };
 
-static scm_t_bits image_tag;
 
-SCM mark_image(SCM);
 
-void
-init_image_type (void)
-{
-  image_tag = scm_make_smob_type ("image", sizeof (struct image));
-  scm_set_smob_mark (image_tag, mark_image);
-  scm_set_smob_free (image_tag, free_image);
-  scm_set_smob_print (image_tag, print_image);
-}
-
-SCM
+// static keyword limits scope to translation unit
+static SCM
 make_image(SCM name, SCM s_width, SCM s_height)
 {
   SCM smob;
@@ -45,7 +38,7 @@ make_image(SCM name, SCM s_width, SCM s_height)
   image->update_func = SCM_BOOL_F;
 
   // step 3: create the smob (exception thrown if fails)
-  smob = scm_new_smob(image_tag, image);
+  smob = scm_new_smob(image_tag, (scm_t_bits) image);
 
   // step 4: finish the initialization
   image->name = name;
@@ -56,6 +49,7 @@ make_image(SCM name, SCM s_width, SCM s_height)
 
   return smob;
 }
+
 
 SCM
 clear_image(SCM image_smob)
@@ -82,7 +76,7 @@ clear_image(SCM image_smob)
 // keep the code minimal
 // written for illustration, not need as we used scm_gc_...
 SCM
-mark_image (SCM image_smob)
+static mark_image (SCM image_smob)
 {
 
   /* Mark the image’s name and update function. */
@@ -92,9 +86,10 @@ mark_image (SCM image_smob)
   return SCM_BOOL_F;
 }
 
+
 // keep the code minimal
 // written for illustration, not need as we used scm_gc_...
-size_t
+static size_t
 free_image(SCM image_smob)
 {
   struct image *image = (struct image *) SCM_SMOB_DATA (image_smob);
@@ -106,7 +101,48 @@ free_image(SCM image_smob)
   return 0;
 }
 
+static int
+print_image (SCM image_smob, SCM port, scm_print_state *pstate)
+{
+  struct image *image = (struct image *) SCM_SMOB_DATA (image_smob);
+  scm_puts ("#<image ", port);
+  scm_display (image->name, port);
+  scm_puts (">", port);
+  /* non-zero means success */
+  return 1;
+}
 
+void
+init_image_type (void)
+{
+  image_tag = scm_make_smob_type ("image", sizeof (struct image));
+  scm_set_smob_mark (image_tag, mark_image);
+  scm_set_smob_free (image_tag, free_image);
+  scm_set_smob_print (image_tag, print_image);
+}
+
+
+SCM
+image_to_list (SCM image_smob)
+{
+  struct image *image;
+  SCM lst;
+  int i;
+
+  scm_assert_smob_type (image_tag, image_smob);
+
+  image = (struct image *) SCM_SMOB_DATA (image_smob);
+
+  lst = SCM_EOL;
+  for (i = image->width * image->height - 1; i >= 0; i--)
+    lst = scm_cons (scm_from_char (image->pixels[i]), lst);
+
+  // creates a reference to image_smog so garbage collector
+  // does not free it 
+  scm_remember_upto_here_1 (image_smob);
+
+  return lst;
+}
 
 
 

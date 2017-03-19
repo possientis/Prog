@@ -2,7 +2,6 @@
 /*
  * We now build a lexical analyzer to be used by a higher level parser.
  */
-
 #include <malloc.h>
 #include <string.h>
 #include <stdio.h>

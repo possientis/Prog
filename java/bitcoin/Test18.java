@@ -9,7 +9,6 @@ import org.bitcoinj.core.ECKey.ECDSASignature;
 class Test18 {
   public static void main(String[] args)
   {
-
     // Choose some message
     String message = "Hello World!";
     System.out.println("message = " + message);
@@ -74,9 +73,8 @@ class Test18 {
     BigInteger nonce = EC_Test_Utils.getDeterministicKey(nkey, hash, 0);
     System.out.println("Private key = " + k.toLowerCase());
     System.out.println("Nonce = " + nonce.toString(16));
-    
 
-     
+    System.out.println("Curve order = " + order.toString(16));
 
   }
 

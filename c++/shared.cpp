@@ -9,7 +9,6 @@ template <typename T> class IPointer {
 }; 
 
 template <typename T> class Pointer : public IPointer<T> {
-
   T* _pointer;
   int* _count;
 

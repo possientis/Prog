@@ -16,6 +16,7 @@ struct rectangle {
   struct point top_left, bottom_right;
 };
 
+struct zero {}; // gnu extension
 
 int main()
 {
@@ -34,6 +35,8 @@ int main()
   struct rectangle S = { 1, 4, 8, 1 };
   printf("S.top_left     = (%d,%d)\n", S.top_left.x, S.top_left.y);
   printf("S.bottom_right = (%d,%d)\n", S.bottom_right.x, R.top_left.y);
+
+  printf("size of 'struct zero' = %d\n", sizeof(struct zero));
 
   return 0;
 }
