@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 
 void default_callback(const char* message, void* data){
@@ -769,6 +770,85 @@ int main()
   assert(return_value == 1);
   assert(call_back_data == 0);
   assert(buffer_equals(&pub, &pub1, 64));
+
+  printf("\ntesting privkey_tweak_add ...\n");
+
+  // NULL context
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  nonce2[31] = 0x01;          // tweak = 1
+  return_value = secp256k1_ec_privkey_tweak_add(NULL,nonce1,nonce2);
+  assert(return_value == 1);                // tweak successful
+  assert(call_back_data == 0);              // call back was never called
+  assert(buffer_equals(nonce1, priv1, 31)); // tweak no impact on high order bytes
+  assert(nonce1[31] == priv1[31] + 1);
+
+  // NULL output buffer
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  nonce2[31] = 0x01;          // tweak = 1
+  return_value = secp256k1_ec_privkey_tweak_add(ctx, NULL, nonce2);
+  assert(return_value == 0);                // tweak failed
+  assert(call_back_data == 42);             // error
+  call_back_data = 0;
+  
+  // NULL input buffer
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  nonce2[31] = 0x01;          // tweak = 1
+  return_value = secp256k1_ec_privkey_tweak_add(ctx, nonce1, NULL);
+  assert(return_value == 0);                // tweak failed
+  assert(call_back_data == 42);             // error
+  call_back_data = 0;
+     
+  // adding tweak of 0
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  return_value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
+  assert(return_value == 1);                // tweak successful
+  assert(call_back_data == 0);              // call back was never called
+  assert(buffer_equals(nonce1, priv1, 32)); // 0 tweak has no impact
+
+  // adding tweak of 1
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  nonce2[31] = 0x01;
+  return_value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
+  assert(return_value == 1);                // tweak successful
+  assert(call_back_data == 0);              // call back was never called
+  assert(buffer_equals(nonce1, priv1, 31)); // tweak no impact on high order bytes
+  assert(nonce1[31] == priv1[31] + 1);
+
+  // adding tweak of 1 to order_minus_one
+  memcpy(nonce1, order_minus_one, 32);
+  buffer_clear(nonce2, 32);
+  nonce2[31] = 0x01;
+  return_value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
+  assert(return_value == 0);                // tweak failed
+  assert(call_back_data == 0);              // but no error
+
+  printf("\ntesting pubkey_tweak_add ...\n");
+
+  const unsigned char* tweak = 
+    "\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe"
+    "\xba\xae\xdc\xe6\xaf\x48\xa0\x3b\xbf\xd2\x5e\x8c\xd0\x36\x41\x41";
+
+  // adding tweak to private key then retrieving public key -> pub
+  memcpy(nonce1, priv1, 32);
+  return_value = secp256k1_ec_privkey_tweak_add(ctx, nonce1, tweak);
+  assert(return_value == 1);
+  return_value = secp256k1_ec_pubkey_create(ctx, &pub, nonce1);
+  assert(return_value == 1);
+
+  // adding tweak to public key -> pub2
+  memcpy(&pub2, &pub1, 64);
+  return_value = secp256k1_ec_pubkey_tweak_add(ctx, &pub2, tweak);
+  assert(return_value == 1);
+
+  // the two public keys are the same
+ assert(buffer_equals(&pub, &pub2, 64));
+
+
 
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);

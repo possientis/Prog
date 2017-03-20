@@ -51,8 +51,9 @@ make_image(SCM name, SCM s_width, SCM s_height)
 }
 
 
-SCM
-clear_image(SCM image_smob)
+SCM_DEFINE(clear_image, "clear-image", 1, 0, 0, 
+    (SCM image_smob), 
+    "Clear the image.")
 {
   int area;
   struct image *image;
@@ -115,6 +116,7 @@ print_image (SCM image_smob, SCM port, scm_print_state *pstate)
 void
 init_image_type (void)
 {
+  #include "image-type.x"
   image_tag = scm_make_smob_type ("image", sizeof (struct image));
   scm_set_smob_mark (image_tag, mark_image);
   scm_set_smob_free (image_tag, free_image);

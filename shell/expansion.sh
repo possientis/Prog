@@ -19,7 +19,6 @@ echo $((2+5))             # 7
 echo $(uname)             # Linux
 echo `uname`              # Linux
 
-
 # double-quotes suppresses some form of expansion but not all
 # suppressed: 
 #   - word-splitting
