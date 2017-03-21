@@ -8,6 +8,12 @@ factorial n = n * factorial (n - 1)
 factorial' n = go n 1
   where
   go 0 n  = n
-  go m n  = go (m-1) (n*m) 
+  go m n  = go (m-1) (n*m)
 
 factorial'' n = product [1..n]
+
+
+main :: IO ()
+main = do
+  putStrLn $ show $ factorial' 100000
+

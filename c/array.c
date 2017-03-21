@@ -45,7 +45,7 @@ int main()
   char white[] = { 'a', 'b', 'c' }; 
   char orange[] = "abc";
   char *green   = "abc";
-  //  This fails however
+  //  This fails however without cast
   char *pink    = (char[]) { 'a', 'b', 'c' };
 
 

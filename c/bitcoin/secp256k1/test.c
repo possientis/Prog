@@ -846,9 +846,37 @@ int main()
   assert(return_value == 1);
 
   // the two public keys are the same
- assert(buffer_equals(&pub, &pub2, 64));
+  assert(buffer_equals(&pub, &pub2, 64));
 
 
+  printf("\ntesting privkey_tweak_mul ...\n");
+  
+  // multiplying with tweak of 1
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  nonce2[31] = 0x01;
+  return_value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
+  assert(return_value == 1);                // tweak succeeds
+  assert(call_back_data == 0);              // no error
+  assert(buffer_equals(nonce1, priv1, 32)); // no impact
+
+  // multiplying with tweak of 0
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  return_value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
+  assert(return_value == 0);                // tweak fails
+  assert(call_back_data == 0);              // but no error
+
+  // multiplying with tweak of 2
+  memcpy(nonce1, priv1, 32);
+  buffer_clear(nonce2, 32);
+  nonce2[31] = 2;
+  return_value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
+  assert(return_value == 1);                // tweak fails
+  assert(call_back_data == 0);              // but no error
+  assert(nonce1[0] == (0x1e << 1) + 1);
+ 
+  printf("\ntesting pubkey_tweak_mul ...\n");
 
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);

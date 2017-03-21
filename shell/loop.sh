@@ -7,3 +7,10 @@ echo
 for str in one two three four; do
   echo "str = $str"
 done
+
+
+for (( i=0 ; i < 5 ; i++))
+do
+  echo "Hello there"
+done
+

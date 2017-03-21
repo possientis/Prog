@@ -41,7 +41,7 @@ _rax:
   cmp dx,0
   jnz _rbx
   mov rax, rsi        ; rsi -> rax (overwrites previous rax value) 
-  mul rax             ; rax*rax -> rdx:eax
+  mul rax             ; rax*rax -> rdx:rax
   jmp exit
 
 ; if dl == 1, r = rbx
