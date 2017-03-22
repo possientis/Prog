@@ -26,7 +26,7 @@ Read:
         je  Exit          
 
         mov esi,  Buff
-        mov rsi,  HexStr
+        mov edi,  HexStr
         xor ecx,  ecx
 
 Scan:
@@ -39,12 +39,12 @@ Scan:
         mov al,   byte [esi+ecx]      ; take byte from read buffer
         mov ebx,  eax                 ; duplicate for second nimble
 
-        and eax,  0xf                 ; keep low nibble
+        and al,  0x0f                 ; keep low nibble
         mov al,   byte [Digits+eax]   ; get corresponding hex digit
         mov byte  [HexStr+edx+2], al  ; write to output string
 
         shr bl,   4                   ; align high nibble
-        and ebx,  0xf                 ; mask out everything else
+;        and ebx,  0xf                 ; mask out everything else
         mov bl,   byte [Digits+ebx]   ; get corresponding hex digit
         mov byte  [HexStr+edx+1], bl  ; write to output string
 

@@ -1,4 +1,6 @@
 // 'static' keyword creates local symbols within translation unit
+// This is 'static' as in 'static linkage', not to be confused with
+// local variables of functions which have static storage.
 
 int main(){ return 0;}
 

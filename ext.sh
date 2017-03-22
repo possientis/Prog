@@ -32,6 +32,7 @@ filtered=$( \
   | grep -v "file:" \
   | grep -v "deleted:" \
   | grep -v '.out' \
+  | grep -v '.vim' \
   | grep '\.' \
   )
 

@@ -877,7 +877,24 @@ int main()
   assert(nonce1[0] == (0x1e << 1) + 1);
  
   printf("\ntesting pubkey_tweak_mul ...\n");
+  // not doing much here, don't understand this function yet
+  // multiplying tweak to public key -> pub2
+  memcpy(&pub2, &pub1, 64);
+  return_value = secp256k1_ec_pubkey_tweak_mul(ctx, &pub2, tweak);
+  assert(return_value == 1);
 
+
+  printf("\ntesting context_randomize ...\n");
+  return_value = secp256k1_context_randomize(ctx, priv1);
+  assert(return_value == 1);
+
+  printf("\ntesting pubkey_combine ...\n");
+  // not doing much here
+  memcpy(&pub2, &pub1, 64);
+  const secp256k1_pubkey* const list[2] = { &pub1, &pub2 };
+  return_value = secp256k1_ec_pubkey_combine(ctx, &pub, list, 2);
+  assert(return_value == 1);
+  
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);
 

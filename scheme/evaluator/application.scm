@@ -33,7 +33,7 @@
 (define (lazy-eval-application exp env)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
-    (let ((proc (strict-eval operator env))
+    (let ((proc (force-thunk (lazy-eval operator env)))
           (args (map (lambda (x) (make-thunk x env)) operands))) 
       (lazy-apply proc args))))
 

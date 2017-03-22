@@ -1,7 +1,7 @@
-./lazy-run.scm test.scm works as expected, however if we had
-(display (try (test)))
-Then it would no longer work as expected: review code , there is a difference
-between strict-evaluation and forced-lazy evaluation
+bug in lazy evaluation: cause is the way thunk forcing is implemented:
+strict-evaluating a big chunk of code induces the wrong semantics. (see test.scm) 
+
+./lazy-run.scm test.scm
 
 design unit-test for lazy semantics
 (define (try a b) (if (= 0 a) 1 b))
