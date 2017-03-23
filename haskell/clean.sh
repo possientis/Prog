@@ -8,6 +8,7 @@ rm -f *.hi
 rm -f *.o
 rm -f test
 rm -f hello
+rm -f a.out
 
 ./bitcoin/clean.sh
 

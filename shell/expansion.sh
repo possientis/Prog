@@ -1,42 +1,98 @@
 # various forms of expansions are carried by bash prior to executing command
-#   - word-splitting
-echo this is a       test # this is a test
-#   - pathmane expansion
-echo a*k.sh               # asterisk.sh awk.sh
-#   - tilde expansion
-echo ~                    # /home/john
-echo ~root                # /root
-echo ~john                # /home/john
-#   - brace expansion
+# There are 7 possible types of expansion
+# On some system which support it, there is an 8th form of subsitution:
+
+# 8. process substitution (??)
+
+# After, the expansions havebeen performed, quote characters in the original 
+# word are removed unless they have been quoted themselves:
+
+# 9. quote removal
+
+# Only brace expansion (1.) word splitting (6.) and pathname expansion (7.)
+# can change the number of words of the expansion; other expansions expand
+# a single word to a single word. The only exceptions to this are the 
+# expansions of "$@" and "${name[@]}".
+echo
+
+#   - 1. brace expansion
+echo "Examples of brace expansions:"
 echo log{1,2,5}           # log1 log2 log5
 echo log{Z..W}            # logZ logY logX logW
 echo log{0..3}            # log0 log1 log2 log3
-#   - parameter expansion
+echo log\{0..3\}          # log{0..3} (not a brace expansion)
+echo
+
+# the string '${' is not considered eligible for brace expansion.
+# the character '{' can be escaped with '\' as in '\{'
+
+#   - 2. tilde expansion
+echo "Examples of tilde expansions:"
+echo ~                    # /home/john
+echo ~root                # /root
+echo ~john                # /home/john
+echo path:~/Prog          # path:~/Prog (not a tilde expansion)
+echo path=~Prog           # path=~Prog  (not a tilde expansion)
+echo path is ~/Prog       # path is /home/john/Prog
+echo
+
+# tilde expansion is not performed when '~' immediately follows ':' or '='
+
+#   - 3. parameter expansion
+echo "Examples of parameter expansions:"
 echo $USER                # john
-#   - arithmetic expansion
+echo ${USER}              # john (braces are often useful to protect var)
+echo ${USER}ny            # johnny (need braces)
+echo ${10}                # positional argument with 2 digits (need braces)
+echo
+
+#   - 4. arithmetic expansion
+echo "Examples of arithmetic expansions:"
 echo $((2+5))             # 7
-#   - command substitution
+echo
+
+#   - 5. command substitution (done left to right)
+echo "Examples of command substitutions:"
 echo $(uname)             # Linux
 echo `uname`              # Linux
+echo
+
+#   - 6. word-splitting
+var="hello    word"
+echo "Examples of word splittings:"
+echo this is a       test: $var # this is a test: hello world
+echo
+
+#   - 7. pathmane expansion
+echo "Examples of pathname expansions:"
+echo a*k.sh               # asterisk.sh awk.sh
+echo
 
 # double-quotes suppresses some form of expansion but not all
 # suppressed: 
-#   - word-splitting
-echo "this is a     test" # this is a     test
-#   - pathname expansion 
-echo "a*k.sh"             # a*k.sh
-#   - tilde expansion
-echo "~"                  # ~
-#   - brace expansion
+
+#   - 1. brace expansion
 echo "log{1,2,5}"         # log{1,2,5}
+
+#   - 2. tilde expansion
+echo "~"                  # ~
+
+#   - 6. word-splitting
+echo "this is a     test" # this is a     test
+
+#   - 7. pathname expansion 
+echo "a*k.sh"             # a*k.sh
 
 
 # not suppressed: 
-#   - parameter expansion 
+
+#   - 3. parameter expansion 
 echo "$USER"              # john
-#   - arithmetic expansion
+
+#   - 4. arithmetic expansion
 echo "$((2+5))"           # 7
-#   - command substitution
+
+#   - 5. command substitution
 echo "$(uname)"           # Linux
 
 # However, this is not to say that behaviour is identical

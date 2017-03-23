@@ -1,6 +1,7 @@
 // C99 standard
 #include<complex.h>
 #include<stdio.h>
+#include<math.h>  // sqrt
 
 int main()
 {
@@ -44,7 +45,9 @@ int main()
   printf("Re(zz) = %f\n", x);
   printf("Im(zz) = %f\n", y);
 
-  printf("|zz| = %f\n", cabs(zz));  // this works !!!
+
+  printf("|zz| = %f\n", cabs(zz));    // this works !!!
+  printf("|zz| = %f\n", sqrt(zz * ~zz));  // conjugation ~ is a gnu extension
 
   return 0;
 }
