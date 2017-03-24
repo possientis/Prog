@@ -1,31 +1,11 @@
-(load "main.scm")
-
-(strict-eval '(define (test)
-                (display "test is running\n")))
-
-(strict-eval '(define (try a)
-                (display "try is running\n") #t))
-
-(define t (lazy-eval '(try (test))))
-
-(define s (make-thunk '(try (test)) global-env))
-
-(force-thunk s) ; HERE !!!!!! doing strict eval when forcing -> wrong semantics
+(define lazy?
+  (let ((**lazy?** #t))
+    (let ((unset-lazy (lambda () (set! **lazy?** #f)))
+          (try (lambda (x) 'done)))
+      (lambda () (try (unset-lazy)) **lazy?**))))
 
 
-#|
-(define (test) 
-  (display "test is running\n"))
-
-
-(define (try a) 
-  (display "try is running\n") #t)
-
-
-(display (try (test)))
-
-|#
+(display "lazy? = ")(display (lazy?))(newline)
 
 (exit 0)
-
 

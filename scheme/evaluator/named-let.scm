@@ -34,7 +34,7 @@
 
 ; lazy eval
 (define (lazy-eval-named-let exp env)
-  (make-thunk exp env))
+  (lazy-eval (named-let->combination exp) env))
 
 (define (named-let->combination exp)
   (cons (make-lambda (named-let-parameters exp) 

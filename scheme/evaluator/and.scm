@@ -21,7 +21,7 @@
 
 ; lazy eval
 (define (lazy-eval-and exp env)
-  (make-thunk exp env))
+  (lazy-eval (and->if exp) env))
 
 (define (and->if exp)
   (expand-and-predicates (and-predicates exp)))

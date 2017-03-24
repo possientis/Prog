@@ -44,6 +44,4 @@
 
 ; note: memoization is likely to be a problem here
 
-
-
 ))  ; include guard

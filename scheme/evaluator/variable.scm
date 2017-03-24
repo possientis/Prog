@@ -58,6 +58,7 @@
         ((equal? exp 'eval) lazy-eval-primitive)
         ((equal? exp 'load) lazy-load-primitive)
         ((equal? exp 'map) lazy-map-primitive)
-        (else (make-thunk exp env))))
+        (else (let ((value ((env 'lookup) exp)))
+                value))))
 
 ))  ; include guard

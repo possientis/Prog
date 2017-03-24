@@ -1,5 +1,3 @@
-bug in lazy evaluation: cause is the way thunk forcing is implemented:
-strict-evaluating a big chunk of code induces the wrong semantics. (see test.scm) 
 
 ./lazy-run.scm test.scm
 

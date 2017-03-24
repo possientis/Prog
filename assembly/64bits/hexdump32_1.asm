@@ -44,7 +44,7 @@ Scan:
         mov byte  [HexStr+edx+2], al  ; write to output string
 
         shr bl,   4                   ; align high nibble
-;        and ebx,  0xf                 ; mask out everything else
+        and ebx,  0xf                 ; mask out everything else
         mov bl,   byte [Digits+ebx]   ; get corresponding hex digit
         mov byte  [HexStr+edx+1], bl  ; write to output string
 

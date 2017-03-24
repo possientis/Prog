@@ -54,7 +54,12 @@
 
 ; lazy eval
 (define (lazy-eval-lambda exp env)
-  (make-thunk exp env))
+  (let ((params (lambda-params exp))
+        (body (lambda-body exp)))
+    (let ((eval-body (make-begin body)))
+      (make-eval-procedure params eval-body env))))
+
+
 
 ))  ; include guard
 

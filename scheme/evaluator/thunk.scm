@@ -128,7 +128,7 @@
             (env  (environment data)))
         (if (evaluated? data)
           expr
-          (let ((value (strict-eval expr env)))
+          (let ((value (force-thunk (lazy-eval expr env))))
             (set-car! (cdr data) value) ; replacing expression by its value
             (set-car! (cddr data) '())  ; discarding environment for gb release
             value))))

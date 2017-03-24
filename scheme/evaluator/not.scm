@@ -26,7 +26,7 @@
 
 ; lazy eval
 (define (lazy-eval-not exp env) 
-  (make-thunk exp env))
+  (not (force-thunk (lazy-eval (not-predicate exp) env))))
 
 ))  ; include guard
 

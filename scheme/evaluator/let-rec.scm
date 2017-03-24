@@ -32,7 +32,7 @@
 
 ; lazy eval
 (define (lazy-eval-letrec exp env)
-  (make-thunk exp env))
+  (lazy-eval (letrec->combination exp) env))
 
 (define (letrec->combination exp)
   (list (make-lambda '() (letrec-new-body exp))))
