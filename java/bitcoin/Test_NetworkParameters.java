@@ -190,10 +190,14 @@ public class Test_NetworkParameters extends Test_Abstract {
     "dnsseed.bitcoin.dashjr.org",  // Luke Dashjr
     "seed.bitcoinstats.com",       // Chris Decker
     "seed.bitnodes.io",            // Addy Yeow
+    "bitseed.xf2.org",              // Jeff Garzik
+    "seed.bitcoin.jonasschnelli.ch" // Jonas Schnelli
   };
   private static final String[] testDnsSeeds = new String[] {
-    "testnet-seed.bitcoin.schildbach.de", // Andreas Schildbach
-    "testnet-seed.bitcoin.petertodd.org"  // Peter Todd
+    "testnet-seed.bitcoin.jonasschnelli.ch",  // Jonas Schnelli
+    "testnet-seed.bluematt.me",               // Matt Corallo
+    "testnet-seed.bitcoin.petertodd.org",     // Peter Todd
+    "testnet-seed.bitcoin.schildbach.de"      // Andreas Schildbach
   };
 
 
@@ -733,7 +737,7 @@ public class Test_NetworkParameters extends Test_Abstract {
     // MainNetParams
     checkEquals(check1, NetworkParameters.INTERVAL, "checkGetInterval.1");
     checkEquals(check2, NetworkParameters.INTERVAL, "checkGetInterval.2");
-    checkEquals(check3, 10000, "checkGetInterval.3"); // RegTestParams
+    checkEquals(check3, 2147483647, "checkGetInterval.3"); // RegTestParams
     checkEquals(check4, NetworkParameters.INTERVAL, "checkGetInterval.4");
     checkEquals(check5, 10, "checkGetInterval.5");    // UnitTestParams
   }
