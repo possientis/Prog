@@ -7,6 +7,7 @@ rm -f test.log
 ./make/clean.sh
 ./c++/clean.sh
 ./java/clean.sh
+./gradle/clean.sh
 ./c#/clean.sh
 ./haskell/clean.sh
 ./scheme/clean.sh
