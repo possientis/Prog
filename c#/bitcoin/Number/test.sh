@@ -1,4 +1,5 @@
 #!/bin/sh
+# need libmono-system-numerics4.0-cil
 
 set -e
 DIR=`pwd`

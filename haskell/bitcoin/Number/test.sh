@@ -1,4 +1,6 @@
 #!/bin/sh
+# libghc-monadcryptorandom-dev
+# libghc-hashable-dev
 
 set -e
 DIR=`pwd`
