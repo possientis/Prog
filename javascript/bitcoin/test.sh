@@ -7,7 +7,7 @@ cd ${HOME}
 
 BITCOINJ_JARS=
 
-for d in *.jar
+for d in lib/*.jar
 do
   BITCOINJ_JARS="$d:$BITCOINJ_JARS"
 done

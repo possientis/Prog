@@ -5,9 +5,9 @@ DIR=`pwd`
 HOME=/home/john/Prog/clojure/hiccup
 cd ${HOME}
 
-clojurec -cp clojure-1.6.0.jar test_hiccup 1> /dev/null
+clojurec -cp clojure.jar test_hiccup 1> /dev/null
 
-java -cp clojure-1.6.0.jar:. test_hiccup
+java -cp clojure.jar:. test_hiccup
 
 ./clean.sh
 
