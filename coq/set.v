@@ -76,7 +76,7 @@ Proof.
 Qed.
 
 (* order(a) + order(b) = 0 =>  b = 0  *)
-Lemma order_sum_eq_0_r : forall (a b:set),
+Proposition order_sum_eq_0_r : forall (a b:set),
   order a + order b = 0 -> b = Empty.
 Proof.
   intros a b H. rewrite plus_comm in H. apply order_sum_eq_0_l
@@ -84,7 +84,7 @@ Proof.
 Qed.
 
 (* order({x}) + order(b) <= n+1  =>  order(x) + order(b) <= n  *)
-Lemma order_sum_singleton_l : forall (n:nat) (x b:set),
+Proposition order_sum_singleton_l : forall (n:nat) (x b:set),
   order (Singleton x) + order b <= S n ->
   order x + order b <= n.
 Proof.
@@ -92,8 +92,8 @@ Proof.
   (m:= order (Singleton x) + order b). simpl. apply le_n. exact H.
 Qed.
 
-(* order(a) + order({y}) <= n+1  => order(a) + order(y) <= n  *)
-Lemma order_sum_singleton_r : forall (n:nat) (a y:set),
+(* order(a) + order({y}) <= n+1  =>  order(a) + order(y) <= n  *)
+Proposition order_sum_singleton_r : forall (n:nat) (a y:set),
   order a + order (Singleton y) <= S n ->
   order a + order y <= n.
 Proof. 
@@ -101,16 +101,27 @@ Proof.
   rewrite plus_comm in H. exact H.
 Qed.
 
-(* TODO *)
 
-(* simply use commutativity of addition and apply 'left' version *)
+(* order({x}) + order({y}) <= n+1  =>  order(x) + order(y) < n *)  
+Proposition order_sum_singleton_strong : forall (n:nat) (x y:set),
+  order (Singleton x) + order (Singleton y) <= S n ->
+  order x + order y < n.
+Proof.
+  intros n x y H. unfold lt. apply le_S_n. apply le_trans with
+  (m:= order (Singleton x) + order (Singleton y)). simpl.
+  rewrite <- plus_Snm_nSm. simpl. reflexivity. exact H.
+Qed.
+
+(* This is a weakening of the previous result *)
+(* order({x}) + order({y}) <= n+1  => order(x) + order(y) <= n *)
 Lemma order_sum_singleton : forall (n:nat) (x y:set),
   order (Singleton x) + order (Singleton y) <= S n ->
   order x + order y <= n.
 Proof.
-  intros n x y H. apply order_sum_singleton_l. rewrite plus_comm.
-  apply order_sum_singleton_l. rewrite plus_comm. apply le_S. exact H.
+  intros n x y H. apply le_S_n. apply le_S. fold (order x + order y < n).
+  apply order_sum_singleton_strong. exact H.
 Qed.
+
 
 (* 'L' refers to where 'Union' stands in the sum
 ** while 'l' refers to the left argument of Union *)
@@ -645,4 +656,3 @@ Proof.
   apply subset_elements with (a:=b). exact Hbc. elim Hy. auto.
   apply subset_elements with (a:=a). exact Hab. exact Hx.
 Qed.
-

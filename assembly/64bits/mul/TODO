@@ -1,1 +1,3 @@
+clean up u_int
+clean up 8, 16, 32 bits files
 imul

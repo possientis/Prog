@@ -1,20 +1,15 @@
-import Prelude hiding (scanl)
+--import Prelude hiding (scanl)
+--import Prelude hiding (scanl')
 
-scanl :: (b -> a -> b) -> b -> [a] -> [b]
-scanl op acc []     = [acc]
-scanl op acc (x:xs) = acc : scanl op (op acc x) xs 
-
-
+-- definition using recursion
 scanl' :: (b -> a -> b) -> b -> [a] -> [b]
-scanl' op acc = foldl (\xs x -> xs ++ [op (last xs) x]) [acc]
+scanl' op acc []     = [acc]
+scanl' op acc (x:xs) = acc : scanl' op (op acc x) xs 
 
--- returns initial segments of a list
-initials :: [a] -> [[a]]
-initials []      = [[]]
-initials (x:xs)  = []:map (x:) (initials xs)
 
+--definition using foldl
 scanl'' :: (b -> a -> b) -> b -> [a] -> [b]
-scanl'' op acc = map (foldl op acc) . initials
+scanl'' op acc = foldl (\ys x -> ys ++ [op (last ys) x]) [acc]
 
 
 
