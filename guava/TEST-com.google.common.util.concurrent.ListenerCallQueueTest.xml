@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="4" failures="0" name="com.google.common.util.concurrent.ListenerCallQueueTest" time="0.274" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64"/>
+    <property name="java.vm.version" value="25.121-b13"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="gwt.test.include" value="**/DoesNotMatchAnyTests.java"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="IN"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/home/john/Libs/guava/guava-tests"/>
+    <property name="java.runtime.version" value="1.8.0_121-8u121-b13-4-b13"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="basedir" value="/home/john/Libs/guava/guava-tests"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="surefire.real.class.path" value="/home/john/Libs/guava/guava-tests/target/surefire/surefirebooter4140074447063560316.jar"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Linux"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="surefire.test.class.path" value="/home/john/Libs/guava/guava-tests/target/test-classes:/home/john/Libs/guava/guava-tests/target/classes:/home/john/Libs/guava/guava-testlib/target/guava-testlib-21.0.jar:/home/john/Libs/guava/guava/target/guava-21.0.jar:/home/john/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar:/home/john/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.15/error_prone_annotations-2.0.15.jar:/home/john/.m2/repository/junit/junit/4.8.2/junit-4.8.2.jar:/home/john/.m2/repository/org/easymock/easymock/3.0/easymock-3.0.jar:/home/john/.m2/repository/cglib/cglib-nodep/2.2/cglib-nodep-2.2.jar:/home/john/.m2/repository/org/objenesis/objenesis/1.2/objenesis-1.2.jar:/home/john/.m2/repository/org/mockito/mockito-core/2.1.0/mockito-core-2.1.0.jar:/home/john/.m2/repository/net/bytebuddy/byte-buddy/1.4.26/byte-buddy-1.4.26.jar:/home/john/.m2/repository/net/bytebuddy/byte-buddy-agent/1.4.26/byte-buddy-agent-1.4.26.jar:/home/john/.m2/repository/com/google/truth/truth/0.31/truth-0.31.jar:/home/john/.m2/repository/com/google/truth/extensions/truth-java8-extension/0.31/truth-java8-extension-0.31.jar:/home/john/.m2/repository/com/google/jimfs/jimfs/1.1/jimfs-1.1.jar:/home/john/.m2/repository/com/google/caliper/caliper/1.0-beta-2/caliper-1.0-beta-2.jar:/home/john/.m2/repository/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar:/home/john/.m2/repository/joda-time/joda-time/2.1/joda-time-2.1.jar:/home/john/.m2/repository/com/sun/jersey/jersey-client/1.11/jersey-client-1.11.jar:/home/john/.m2/repository/com/sun/jersey/jersey-core/1.11/jersey-core-1.11.jar:/home/john/.m2/repository/com/google/inject/guice/3.0/guice-3.0.jar:/home/john/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/home/john/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/home/john/.m2/repository/com/google/inject/extensions/guice-multibindings/3.0/guice-multibindings-3.0.jar:/home/john/.m2/repository/com/google/inject/extensions/guice-assistedinject/3.0/guice-assistedinject-3.0.jar:/home/john/.m2/repository/org/apache/commons/commons-math/2.2/commons-math-2.2.jar:/home/john/.m2/repository/com/google/code/java-allocation-instrumenter/java-allocation-instrumenter/3.0/java-allocation-instrumenter-3.0.jar:/home/john/.m2/repository/org/ow2/asm/asm/5.0.3/asm-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-analysis/5.0.3/asm-analysis-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-commons/5.0.3/asm-commons-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-tree/5.0.3/asm-tree-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-util/5.0.3/asm-util-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-xml/5.0.3/asm-xml-5.0.3.jar:"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="4.8.0-1-amd64"/>
+    <property name="test.include" value="**/ListenerCallQueueTest.java"/>
+    <property name="user.home" value="/home/john"/>
+    <property name="user.timezone" value="Europe/London"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="user.name" value="john"/>
+    <property name="java.class.path" value="/home/john/Libs/guava/guava-tests/target/test-classes:/home/john/Libs/guava/guava-tests/target/classes:/home/john/Libs/guava/guava-testlib/target/guava-testlib-21.0.jar:/home/john/Libs/guava/guava/target/guava-21.0.jar:/home/john/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar:/home/john/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.15/error_prone_annotations-2.0.15.jar:/home/john/.m2/repository/junit/junit/4.8.2/junit-4.8.2.jar:/home/john/.m2/repository/org/easymock/easymock/3.0/easymock-3.0.jar:/home/john/.m2/repository/cglib/cglib-nodep/2.2/cglib-nodep-2.2.jar:/home/john/.m2/repository/org/objenesis/objenesis/1.2/objenesis-1.2.jar:/home/john/.m2/repository/org/mockito/mockito-core/2.1.0/mockito-core-2.1.0.jar:/home/john/.m2/repository/net/bytebuddy/byte-buddy/1.4.26/byte-buddy-1.4.26.jar:/home/john/.m2/repository/net/bytebuddy/byte-buddy-agent/1.4.26/byte-buddy-agent-1.4.26.jar:/home/john/.m2/repository/com/google/truth/truth/0.31/truth-0.31.jar:/home/john/.m2/repository/com/google/truth/extensions/truth-java8-extension/0.31/truth-java8-extension-0.31.jar:/home/john/.m2/repository/com/google/jimfs/jimfs/1.1/jimfs-1.1.jar:/home/john/.m2/repository/com/google/caliper/caliper/1.0-beta-2/caliper-1.0-beta-2.jar:/home/john/.m2/repository/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar:/home/john/.m2/repository/joda-time/joda-time/2.1/joda-time-2.1.jar:/home/john/.m2/repository/com/sun/jersey/jersey-client/1.11/jersey-client-1.11.jar:/home/john/.m2/repository/com/sun/jersey/jersey-core/1.11/jersey-core-1.11.jar:/home/john/.m2/repository/com/google/inject/guice/3.0/guice-3.0.jar:/home/john/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/home/john/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/home/john/.m2/repository/com/google/inject/extensions/guice-multibindings/3.0/guice-multibindings-3.0.jar:/home/john/.m2/repository/com/google/inject/extensions/guice-assistedinject/3.0/guice-assistedinject-3.0.jar:/home/john/.m2/repository/org/apache/commons/commons-math/2.2/commons-math-2.2.jar:/home/john/.m2/repository/com/google/code/java-allocation-instrumenter/java-allocation-instrumenter/3.0/java-allocation-instrumenter-3.0.jar:/home/john/.m2/repository/org/ow2/asm/asm/5.0.3/asm-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-analysis/5.0.3/asm-analysis-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-commons/5.0.3/asm-commons-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-tree/5.0.3/asm-tree-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-util/5.0.3/asm-util-5.0.3.jar:/home/john/.m2/repository/org/ow2/asm/asm-xml/5.0.3/asm-xml-5.0.3.jar:"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/usr/lib/jvm/java-8-openjdk-amd64/jre"/>
+    <property name="sun.java.command" value="/home/john/Libs/guava/guava-tests/target/surefire/surefirebooter4140074447063560316.jar /home/john/Libs/guava/guava-tests/target/surefire/surefire4277592844054393400tmp /home/john/Libs/guava/guava-tests/target/surefire/surefire4664502074171474153tmp"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="hi"/>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_121"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jfr.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="localRepository" value="/home/john/.m2/repository"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase classname="com.google.common.util.concurrent.ListenerCallQueueTest" name="testAddAndExecute" time="0.043"/>
+  <testcase classname="com.google.common.util.concurrent.ListenerCallQueueTest" name="testAddAndExecute_withExceptions" time="0.073"/>
+  <testcase classname="com.google.common.util.concurrent.ListenerCallQueueTest" name="testAddAndExecute_multithreaded" time="0.016"/>
+  <testcase classname="com.google.common.util.concurrent.ListenerCallQueueTest" name="testAddAndExecute_multithreaded_withThrowingRunnable" time="0.011"/>
+</testsuite>
