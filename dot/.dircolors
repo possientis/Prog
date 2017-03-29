@@ -157,21 +157,21 @@ EIGHTBIT 1
 #     SolDark              SolLight
 #
 #   ~~~~~~~~~~~~~~~       ~~~~~~~~~  ~~~~~                ~~~~~~~~~ 
-#   00    none                                            NORMAL, FILE          <SAME>               <SAME>
+#   00    none                                            NORMAL, FILE          
 #   30    black           base02
 #   01;30 bright black    base03     bg of SolDark
-#   31    red             red                             docs & mm src         <SAME>               <SAME>
-#   01;31 bright red      orange                          EXEC                  <SAME>               <SAME>
-#   32    green           green                           editable text         <SAME>               <SAME>
-#   01;32 bright green    base01                          unimportant text      <SAME>
-#   33    yellow          yellow     unclear in light bg  multimedia            <SAME>               <SAME>
-#   01;33 bright yellow   base00     fg of SolLight                             unimportant non-text
-#   34    blue            blue       unclear in dark bg   user customized       <SAME>               <SAME>
-#   01;34 bright blue     base0      fg in SolDark                                                   unimportant text
-#   35    magenta         magenta                         LINK                  <SAME>               <SAME>
-#   01;35 bright magenta  violet                          archive/compressed    <SAME>               <SAME>
-#   36    cyan            cyan                            DIR                   <SAME>               <SAME>
-#   01;36 bright cyan     base1                           unimportant non-text                       <SAME>
+#   31    red             red                             docs & mm src 
+#   01;31 bright red      orange                          EXEC         
+#   32    green           green                           editable text
+#   01;32 bright green    base01                          unimportant text
+#   33    yellow          yellow     unclear in light bg  multimedia     
+#   01;33 bright yellow   base00     fg of SolLight       unimportant non-text
+#   34    blue            blue       unclear in dark bg   user customized
+#   01;34 bright blue     base0      fg in SolDark        unimportant text
+#   35    magenta         magenta                         LINK 
+#   01;35 bright magenta  violet                          archive/compressed
+#   36    cyan            cyan                            DIR          
+#   01;36 bright cyan     base1                           unimportant non-text
 #   37    white           base2
 #   01;37 bright white    base3      bg in SolLight
 #   05;37;41                         unclear in Putty dark
@@ -237,6 +237,8 @@ EXEC 01;31  # Unix
 .c 32
 .C 32
 .cc 32
+.clj 32
+.cs 32
 .cpp 32
 .cxx 32
 .objc 32
@@ -263,6 +265,8 @@ EXEC 01;31  # Unix
 .rdf 32
 .css 32
 .sass 32
+.scala 32
+.scm 32
 .scss 32
 .less 32
 .js 32

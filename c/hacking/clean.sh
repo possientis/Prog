@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/assembly/hacking
+HOME=/home/john/Prog/c/hacking
 cd ${HOME}
 
 rm -f *.o

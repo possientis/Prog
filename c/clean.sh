@@ -13,5 +13,6 @@ rm -f log
 ./pragma/clean.sh
 ./dlopen/clean.sh
 ./library/clean.sh
+./hacking/clean.sh
 
 cd ${DIR}
