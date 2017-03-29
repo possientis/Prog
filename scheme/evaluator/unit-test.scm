@@ -1,7 +1,7 @@
 (load "main.scm")
 (load "tools.scm")
 
-(set-debug #f)
+(set-debug #t)
 
 (define (unit-test)
   ;
@@ -20,6 +20,9 @@
   ;
   ; variable
   (display "testing variable expressions...\n")
+  (display "+ is bound to: ")(display ((global-env 'lookup) '+))(newline)
+  (strict-eval '+)  ; Failing under ./lazy-run.sh
+  (debug "[DEBUG]: should not reach this stage...")
   (test-expression '+ (make-primitive-procedure +) "variable.1")
   (test-expression '* (make-primitive-procedure *) "variable.2")
   (test-expression '- (make-primitive-procedure -) "variable.3")
@@ -531,7 +534,7 @@
   (test-expression '(defined? (this is not even a name)) #f "defined?.5")
 
   ; thunk
-  (display "testing thunk ...\n")
+  (display "testing thunk...\n")
   (let ((thunk (make-thunk '(+ 1 1) global-env)))
     (assert-equals (thunk? thunk) #t "thunk.1")
     (assert-equals (thunk-expression thunk) '(+ 1 1) "thunk.2")
@@ -549,18 +552,30 @@
     (assert-equals (thunk? #f) #f "thunk.16"))
 
   ; load
-  (display "testing loading files ...\n") 
+  (display "testing loading files...\n") 
 ;  (test-all-files)
 
-  ; higher level interpreters
-  (display "testing higher order interpreter ...\n")
+  ; testing lazy evaluation
+  (display "testing lazy evaluation...\n")
+  (strict-eval '(load "lazy.scm"))
+  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.1")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.2")
+  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.3")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.4")
+  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.5")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.6")
+  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.7")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.8")
 
-  (display "testing native scheme (level 0) ...\n")
+  ; higher level interpreters
+  (display "testing higher order interpreter...\n")
+
+  (display "testing native scheme (level 0)...\n")
   (assert-equals 
     (+ 1 1) 
     2 "higher.0") 
 
-  (display "testing interpreter (level 1) ...\n")
+  (display "testing interpreter (level 1)...\n")
   (assert-equals 
     (strict-eval '(+ 1 1)) 
     2 "higher.1")

@@ -1,18 +1,8 @@
-#include <linux/version.h>
-#include <linux/init.h>
-#include <linux/module.h>
+#include <stdio.h>
 
-static int hello_init(void)
+int main()
 {
-  printk(KERN_ALERT "Hello, world\n");
+
+  printf("Hello World!\n");
   return 0;
 }
-
-static void hello_exit(void)
-{
-  printk(KERN_ALERT "Goodbye, cruel world\n");
-}
-
-module_init(hello_init);
-module_exit(hello_exit);
-

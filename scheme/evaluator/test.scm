@@ -1,11 +1,15 @@
-(define lazy?
-  (let ((**lazy?** #t))
-    (let ((unset-lazy (lambda () (set! **lazy?** #f)))
-          (try (lambda (x) 'done)))
-      (lambda () (try (unset-lazy)) **lazy?**))))
+(load "main.scm")                 ; setting up interpreter
 
+(strict-eval '(load "lazy.scm"))  ; defining 'lazy?'
 
-(display "lazy? = ")(display (lazy?))(newline)
+(display (strict-eval '(lazy?)))(newline)
+(display (strict-eval '(lazy?)))(newline)
+(display (analyze-eval '(lazy?)))(newline)
+(display (force-thunk (lazy-eval '(lazy?))))(newline)
+(display (analyze-eval '(lazy?)))(newline)
+(display (force-thunk (lazy-eval '(lazy?))))(newline)
+(display (strict-eval '(lazy?)))(newline)
+(display (force-thunk (lazy-eval '(lazy?))))(newline)
+
 
 (exit 0)
-

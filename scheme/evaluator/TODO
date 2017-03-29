@@ -1,12 +1,4 @@
-
-./lazy-run.scm test.scm
-
-design unit-test for lazy semantics
-(define (try a b) (if (= 0 a) 1 b))
-compare lazy and strict eval of
-> (try 0 (error))
-what happens if we use lazy-run? is lazy-run the same as strict-run? 
-
+./lazy-run unit-test.scm fails
 
 define primitives from language itself
 implement macros

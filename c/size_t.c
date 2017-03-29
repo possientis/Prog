@@ -1,4 +1,4 @@
-#include<sys/types.h>
+#include<stddef.h>
 #include<stdio.h>
 
 // local variables x and y contain the same data.
@@ -31,7 +31,9 @@ int main()
   else
   {
    printf("y is positive\n");
-  } 
+  }
+
+  printf("sizeof(size_t) = %d\n", sizeof(size_t)); 
 
   return 0;
 }

@@ -1,17 +1,37 @@
-l = [x^2 | x <- [1..5]]
-m = [(x,y) | x <- [1..3] , y <- [4..5]]
-n = [(x,y,z) | x <- [1..3] , y <- [3..5] , z <- [6..8]]
-o = [(x,y) | x <- [1..5] , y <- [(x+1)..5]]
-myConcat :: [[a]] -> [a]
-myConcat xss = [x | xs <- xss, x <- xs]
-factors :: Int -> [Int]
-factors n = [x | x <- [1..n], n `mod` x == 0]
-prime :: Int -> Bool
-prime n = factors n == [1,n]
-primes :: Int -> [Int]
-primes n = [x | x <- [1..n], prime x]
-pairs :: [a] -> [(a,a)]
-pairs xs = zip xs (tail xs)
-sorted xs = and [x <= y | (x,y) <- pairs xs]
-pyths :: Int -> [(Int,Int,Int)]
-pyths n = [(x,y,z) | x <- [1..n], y <- [1..n], z <- [1..n], x^2 + y^2 == z^2, x <= y]
+
+xs = [1..1000]            :: [Int]
+p1 = even                 :: Int -> Bool
+p2 = (<=15)               :: Int -> Bool 
+f  = (\x -> x*x)          :: Int -> Int
+ps = zip [1..20] [11..30] :: [(Int, Int)]
+
+-- list comprehension is syntactic sugar:
+as = [f x | x <- xs, p1 x, p2 x]
+
+-- is the same as:
+bs = map f $ filter (\x -> p1 x && p2 x) xs
+
+
+cs = [f x | (x,y) <- ps, p1 y]
+--
+ds = map (f . fst) $ filter (\(x,y) -> p1 y) ps
+
+
+allPairs1 = [(x,y) | x <- [1..4], y <- [5..8], x + y <= 10 ]
+
+allPairs2 :: [(Int,Int)]
+allPairs2 = do
+  x <- [1..4]
+  y <- [5..8]
+  return (x,y)  -- hmmm what do i do here?
+
+
+main :: IO ()
+main = do
+  putStrLn $ show as
+  putStrLn $ show bs
+  putStrLn $ show cs
+  putStrLn $ show ds
+  putStrLn $ show allPairs1
+  putStrLn $ show allPairs2
+

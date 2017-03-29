@@ -33,6 +33,10 @@ filtered=$( \
   | grep -v "deleted:" \
   | grep -v '.out' \
   | grep -v '.vim' \
+  | grep -v '.txt' \
+  | grep -v '.gdbinit' \
+  | grep -v '.vimrc' \
+  | grep -v '.dircolors' \
   | grep '\.' \
   )
 
@@ -51,8 +55,9 @@ extensions=$( \
   done \
   | sed 's/^h$/c/g' \
   | sed 's/^hpp$/cpp/g' \
-  | sed 's/^txt$/l/g' \
   | sed 's/^y$/l/g' \
+  | sed 's/^ac$/m4/g' \
+  | sed 's/^am$/m4/g' \
   | sort \
   | uniq \
   )

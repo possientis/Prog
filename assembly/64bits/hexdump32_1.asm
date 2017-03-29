@@ -50,7 +50,7 @@ Scan:
 
         inc ecx
         cmp ecx, ebp
-        jna Scan
+        jb Scan
 
 
         mov eax,  4

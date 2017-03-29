@@ -14,5 +14,6 @@ rm -f log
 ./dlopen/clean.sh
 ./library/clean.sh
 ./hacking/clean.sh
+./cpp/clean.sh
 
 cd ${DIR}
