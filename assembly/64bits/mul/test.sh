@@ -32,6 +32,12 @@ gcc $option test_mul_64bits.c test_mul_64bits.o
 ./a.out; ./clean.sh
 echo
 
+echo "testing 8 bits signed multiplication..." 
+../yasm.sh test_imul_8bits.asm 
+gcc test_imul_8bits.c test_imul_8bits.o
+./a.out; ./clean.sh
+echo
+
 
 cd ${DIR}
 echo

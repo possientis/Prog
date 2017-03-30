@@ -1,8 +1,8 @@
 (* coqtop -lv filename -I LibDirectory *)
 
-Require Import option_lib.  (* personal *)
-Require Import list_lib.    (* personal *)
-Require Import permute_lib. (* personal *)
+Require Import option.      (* personal *)
+Require Import list.        (* personal *)
+Require Import permute.     (* personal *)
 
 Require Import List.
 Require Import Arith.

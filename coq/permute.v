@@ -1,6 +1,6 @@
 Require Import List.
 Require Import Relations.
-Require Import list_lib.
+Require Import list.
 
 (* inductive predicate expressing the fact that two lists are obtained from
 each other, by the permutation of two consecutive elements  *)

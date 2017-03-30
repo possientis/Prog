@@ -8,8 +8,10 @@ rm -f .*.aux
 rm -f *.glob
 rm -f *.vo
 
-rm -f Lib/.*.aux
-rm -f Lib/*.glob
-rm -f Lib/*.vo
+rm -f lib/.*.aux
+rm -f lib/*.glob
+rm -f lib/*.vo
+
+./set/clean.sh
 
 cd ${DIR}

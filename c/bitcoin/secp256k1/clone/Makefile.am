@@ -61,8 +61,8 @@ include_HEADERS = include/secp256k1.h
 #COMMON_LIB =
 #endif
 
-#pkgconfigdir = $(libdir)/pkgconfig
-#pkgconfig_DATA = libsecp256k1.pc
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libsecp256k1.pc
 
 #if USE_EXTERNAL_ASM
 #if USE_ASM_ARM
@@ -71,15 +71,13 @@ include_HEADERS = include/secp256k1.h
 #endif
 
 libsecp256k1_la_SOURCES = src/secp256k1.c
-#libsecp256k1_la_CPPFLAGS = -DSECP256K1_BUILD -I$(top_srcdir)/include -I$(top_srcdir)/src $(SECP_INCLUDES)
-libsecp256k1_la_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(SECP_INCLUDES)
-#libsecp256k1_la_LIBADD = $(JNI_LIB) $(SECP_LIBS) $(COMMON_LIB)
-libsecp256k1_la_LIBADD = $(SECP_LIBS) $(COMMON_LIB)
+libsecp256k1_la_CPPFLAGS = -DSECP256K1_BUILD -I$(top_srcdir)/include -I$(top_srcdir)/src $(SECP_INCLUDES)
+libsecp256k1_la_LIBADD = $(JNI_LIB) $(SECP_LIBS) $(COMMON_LIB)
 
 #libsecp256k1_jni_la_SOURCES  = src/java/org_bitcoin_NativeSecp256k1.c src/java/org_bitcoin_Secp256k1Context.c
 #libsecp256k1_jni_la_CPPFLAGS = -DSECP256K1_BUILD $(JNI_INCLUDES)
 
-#noinst_PROGRAMS =
+noinst_PROGRAMS =
 #if USE_BENCHMARK
 #noinst_PROGRAMS += bench_verify bench_sign bench_internal
 #bench_verify_SOURCES = src/bench_verify.c
@@ -91,7 +89,7 @@ libsecp256k1_la_LIBADD = $(SECP_LIBS) $(COMMON_LIB)
 #bench_internal_CPPFLAGS = -DSECP256K1_BUILD $(SECP_INCLUDES)
 #endif
 
-#TESTS =
+TESTS =
 #if USE_TESTS
 #noinst_PROGRAMS += tests
 #tests_SOURCES = src/tests.c
@@ -115,7 +113,7 @@ libsecp256k1_la_LIBADD = $(SECP_LIBS) $(COMMON_LIB)
 #exhaustive_tests_LDFLAGS = -static
 #TESTS += exhaustive_tests
 #endif
-
+#
 #JAVAROOT=src/java
 #JAVAORG=org/bitcoin
 #JAVA_GUAVA=$(srcdir)/$(JAVAROOT)/guava/guava-18.0.jar
@@ -125,7 +123,7 @@ libsecp256k1_la_LIBADD = $(SECP_LIBS) $(COMMON_LIB)
 #  $(JAVAROOT)/$(JAVAORG)/NativeSecp256k1Test.java \
 #  $(JAVAROOT)/$(JAVAORG)/NativeSecp256k1Util.java \
 #  $(JAVAROOT)/$(JAVAORG)/Secp256k1Context.java
-
+#
 #if USE_JNI
 #
 #$(JAVA_GUAVA):
@@ -164,7 +162,7 @@ libsecp256k1_la_LIBADD = $(SECP_LIBS) $(COMMON_LIB)
 #
 #src/ecmult_static_context.h: $(gen_context_BIN)
 #	./$(gen_context_BIN)
-
+#
 #CLEANFILES = $(gen_context_BIN) src/ecmult_static_context.h $(JAVAROOT)/$(JAVAORG)/*.class .stamp-java
 #endif
 

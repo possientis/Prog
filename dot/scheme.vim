@@ -181,6 +181,11 @@ syn match	schemeCharacter	"#\\tab"
 syn match	schemeCharacter	"#\\backspace"
 syn match	schemeCharacter	"#\\alarm"
 syn match	schemeCharacter	"#\\nul"
+syn match	schemeCharacter	"#\\vtab"
+syn match	schemeCharacter	"#\\page"
+syn match	schemeCharacter	"#\\return"
+syn match	schemeCharacter	"#\\esc"
+syn match	schemeCharacter	"#\\delete"
 syn match	schemeError	!#\\newline[^ \t\[\]()";]\+!
 
 " R6RS

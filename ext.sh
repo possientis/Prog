@@ -58,6 +58,7 @@ extensions=$( \
   | sed 's/^y$/l/g' \
   | sed 's/^ac$/m4/g' \
   | sed 's/^am$/m4/g' \
+  | sed 's/^in$/m4/g' \
   | sort \
   | uniq \
   )

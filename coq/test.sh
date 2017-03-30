@@ -16,7 +16,7 @@ case `coqtop --version | grep '8\.'` in
 esac
 
 # compiling sample library files
-cd Lib
+cd lib
 coqc *.v
 cd ..
 
@@ -24,12 +24,12 @@ cd ..
 if [ ${VERSION} = 8.4 ];
 then
 
-  coqtop -batch -l sort.v -I Lib
+  coqtop -batch -l sort.v -I lib
 
 elif [ ${VERSION} = 8.6 ];
 then
 
-  coqtop -batch -l sort.v -R Lib ''
+  coqtop -batch -l sort.v -R lib ''
 
 else
 
