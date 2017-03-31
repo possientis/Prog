@@ -184,7 +184,8 @@ syn match	schemeCharacter	"#\\nul"
 syn match	schemeCharacter	"#\\vtab"
 syn match	schemeCharacter	"#\\page"
 syn match	schemeCharacter	"#\\return"
-syn match	schemeCharacter	"#\\esc"
+syn match	schemeCharacter	"#\\escape"
+syn match	schemeCharacter	"#\\esc[^a]"
 syn match	schemeCharacter	"#\\delete"
 syn match	schemeError	!#\\newline[^ \t\[\]()";]\+!
 

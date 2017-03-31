@@ -26,6 +26,10 @@ allPairs2 = do
   return (x,y)  -- hmmm what do i do here?
 
 
+catMaybes :: [Maybe a] -> [a]
+catMaybes xs = [ x | Just x <- xs ] -- nice !!
+
+
 main :: IO ()
 main = do
   putStrLn $ show as

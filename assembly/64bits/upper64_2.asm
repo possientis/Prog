@@ -13,7 +13,7 @@ _start:
 
         nop               ; debugger happy
 
-Read:   mov rax,  0       ; sys_read 4 bits ABI
+Read:   mov rax,  0       ; sys_read 64 bits ABI
         mov rdi,  0       ; stdin
         mov rsi,  Buff    ; buffer for read
         mov rdx,  BUFFLEN ; number of bytes to read

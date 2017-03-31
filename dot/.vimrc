@@ -20,6 +20,7 @@ set shiftwidth=2
 set expandtab
 set laststatus=2
 set t_Co=256
+set nocp                  " no vi compatibility mode
 
 " will conflict with verilog, beware !!
 au BufRead,BufNewFile *.v set filetype=coq  
