@@ -6,8 +6,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define nul #\nul)
 (assert (char=? nul #\nul)    "nul.0")
-(assert (char=? nul #\000)    "nul.1")
-(assert (char=? nul #\x0000)  "nul.2")
+(assert (char=? nul #\null)   "nul.1")
+(assert (char=? nul #\000)    "nul.2")
+(assert (char=? nul #\x0000)  "nul.3")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                  1                                   ;;
@@ -92,8 +93,9 @@
 (assert (char=? linefeed #\linefeed)  "linefeed.0")
 (assert (char=? linefeed #\lf)        "linefeed.1")
 (assert (char=? linefeed #\newline)   "linefeed.2")
-(assert (char=? linefeed #\012)       "linefeed.3")
-(assert (char=? linefeed #\x000a)     "linefeed.4")
+(assert (char=? linefeed #\nl)        "linefeed.3")
+(assert (char=? linefeed #\012)       "linefeed.4")
+(assert (char=? linefeed #\x000a)     "linefeed.5")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                 11                                   ;;
@@ -110,8 +112,9 @@
 (define page #\page)
 (assert (char=? page #\page)   "page.0")
 (assert (char=? page #\ff)     "page.1")
-(assert (char=? page #\014)    "page.2")
-(assert (char=? page #\x000c)  "page.3")
+(assert (char=? page #\np)     "page.2")
+(assert (char=? page #\014)    "page.3")
+(assert (char=? page #\x000c)  "page.4")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                 13                                   ;;
@@ -286,12 +289,5 @@
 (assert (char=? delete #\del)    "delete.1")
 (assert (char=? delete #\177)    "delete.2")
 (assert (char=? delete #\x007f)  "delete.3")
-
-
-
-
-
-
-
 
 (exit 0)

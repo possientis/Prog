@@ -37,6 +37,7 @@ filtered=$( \
   | grep -v '.gdbinit' \
   | grep -v '.vimrc' \
   | grep -v '.dircolors' \
+  | grep -v '.mem' \
   | grep '\.' \
   )
 

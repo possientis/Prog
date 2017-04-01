@@ -38,7 +38,7 @@ _al:
   cmp dl,0
   jnz _bl
   mov al, sil     ; rsi -> al (overwrites previous al value) 
-  imul al          ; al*al -> ax
+  imul al         ; al*al -> ax
   ret
 
 ; if dl == 1, r = bl
@@ -46,7 +46,7 @@ _bl:
   dec dl
   jnz _cl
   mov bl, sil     ; rsi -> bl
-  imul bl          ; al*bl -> ax
+  imul bl         ; al*bl -> ax
   ret
 
 ; if dl == 2, r = cl
@@ -54,7 +54,7 @@ _cl:
   dec dl
   jnz _dl
   mov cl, sil     ; rsi -> cl
-  imul cl          ; al*cl -> ax
+  imul cl         ; al*cl -> ax
   ret
 
 ; if dl == 3, r = dl
@@ -62,7 +62,7 @@ _dl:
   dec dl
   jnz _dil
   mov dl, sil     ; rsi -> dl
-  imul dl          ; al*dl -> ax
+  imul dl         ; al*dl -> ax
   ret
 
 ; if dl == 4, r = dil
@@ -70,7 +70,7 @@ _dil:
   dec dl
   jnz _sil
   mov dil, sil    ; rsi -> dil
-  imul dil         ; al*dil -> ax
+  imul dil        ; al*dil -> ax
   ret
 
 ; if dl == 5, r = sil
@@ -78,7 +78,7 @@ _sil:
   dec dl
   jnz _bpl
   mov sil, sil    ; rsi -> sil
-  imul sil         ; al*sil -> ax
+  imul sil        ; al*sil -> ax
   ret
 
 ; if dl == 6, r = bpl
@@ -88,7 +88,7 @@ _bpl:
   jnz _spl
   mov r8, rbp     ; saving base pointer 
   mov bpl, sil    ; rsi -> bpl
-  imul bpl         ; al*bpl -> ax
+  imul bpl        ; al*bpl -> ax
   mov rbp, r8     ; restoring base pointer
   ret
 
@@ -99,7 +99,7 @@ _spl:
   jnz _r8b
   mov r8, rsp     ; saving stack pointer
   mov spl, sil    ; rsi -> spl
-  imul spl         ; al*spl -> ax
+  imul spl        ; al*spl -> ax
   mov rsp,r8      ; restoring stack pointer
   ret
 
@@ -108,7 +108,7 @@ _r8b:
   dec dl
   jnz _r9b
   mov r8b, sil    ; rsi -> r8b
-  imul r8b         ; al*r8b -> ax
+  imul r8b        ; al*r8b -> ax
   ret
 
 ; if dl == 9, r = r9b
@@ -116,7 +116,7 @@ _r9b:
   dec dl
   jnz _r10b
   mov r9b, sil    ; rsi -> r9b
-  imul r9b         ; al*r9b -> ax
+  imul r9b        ; al*r9b -> ax
   ret
 
 ; if dl == 10, r = r10b
@@ -124,7 +124,7 @@ _r10b:
   dec dl
   jnz _r11b
   mov r10b, sil    ; rsi -> r10b
-  imul r10b         ; al*r10b -> ax
+  imul r10b        ; al*r10b -> ax
   ret
 
 ; if dl == 11, r = r11b
@@ -132,7 +132,7 @@ _r11b:
   dec dl
   jnz _r12b
   mov r11b, sil    ; rsi -> r11b
-  imul r11b         ; al*r11b -> ax
+  imul r11b        ; al*r11b -> ax
   ret
  
 ; if dl == 12, r = r12b
@@ -140,7 +140,7 @@ _r12b:
   dec dl
   jnz _r13b
   mov r12b, sil    ; rsi -> r12b
-  imul r12b         ; al*r12b -> ax
+  imul r12b        ; al*r12b -> ax
   ret
  
 ; if dl == 13, r = r13b
@@ -148,7 +148,7 @@ _r13b:
   dec dl
   jnz _r14b
   mov r13b, sil    ; rsi -> r13b
-  imul r13b         ; al*r13b -> ax
+  imul r13b        ; al*r13b -> ax
   ret
 
 ; if dl == 14, r = r14b
@@ -156,7 +156,7 @@ _r14b:
   dec dl
   jnz _r15b
   mov r14b, sil    ; rsi -> r14b
-  imul r14b         ; al*r14b -> ax
+  imul r14b        ; al*r14b -> ax
   ret
 
 ; if dl == 15, r = r15b
@@ -164,7 +164,7 @@ _r15b:
   dec dl
   jnz error
   mov r15b, sil    ; rsi -> r15b
-  imul r15b         ; al*r15b -> ax
+  imul r15b        ; al*r15b -> ax
   ret
  
 error:

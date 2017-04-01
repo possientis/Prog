@@ -1,20 +1,21 @@
-all: order
+all: subset.vo
 
-set: set.vo set.glob .set.vo.aux
-
-set.glob: set.v
-	coqc set.v
+##########################################################################
+#                              set                                       #
+##########################################################################
 set.vo: set.v
 	coqc set.v
-.set.vo.aux: set.v
-	coqc set.v
 
-order: set order.vo order.glob .order.vo.aux
+##########################################################################
+#                             order                                      #
+##########################################################################
+order.vo: set.vo order.v
+	coqc order.v
 
-order.glob: order.v
-	coqc order.v
-order.vo: order.v
-	coqc order.v
-.order.vo.aux: order.v
-	coqc order.v
+##########################################################################
+#                             subset                                     #
+##########################################################################
+
+subset.vo: order.vo subset.v
+	coqc subset.v
 
