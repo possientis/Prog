@@ -10,7 +10,7 @@
   (cond ((null? seq) '())
         (else
           (cons (lazy-apply procedure (list (car seq)))
-                (lazy-map procedure (cdr seq))))))
+                 (lazy-map procedure (cdr seq))))))
 
 
 ))  ; include guard
