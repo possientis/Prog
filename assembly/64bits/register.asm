@@ -35,7 +35,6 @@ _start:
         movups  xmm15,[f_128]
 
         ; 64 bits
-        mov   mmx0, [a_64]
         mov   rax, [a_64]
         mov   rbx, [a_64]
         mov   rcx, [a_64]

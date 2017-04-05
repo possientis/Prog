@@ -228,6 +228,8 @@ EXEC 01;31  # Unix
 # build & config files
 .vim 33
 .xml 33
+.pom 33
+.sqlite 33
 .gradle 33
 .conf 33
 .am 33
@@ -510,4 +512,3 @@ EXEC 01;31  # Unix
 .3des 34
 .aes 34
 .enc 34
-.sqlite 34

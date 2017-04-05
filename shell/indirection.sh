@@ -70,7 +70,6 @@ for i in "${!array1[*]}"; do echo $i; done
 # yza
 for i in "${!array1[@]}"; do echo ${array1[$i]}; done
 
-# TODO ${#parameter} 
 
 
 
