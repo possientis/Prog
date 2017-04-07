@@ -60,6 +60,7 @@ extensions=$( \
   | sed 's/^ac$/m4/g' \
   | sed 's/^am$/m4/g' \
   | sed 's/^in$/m4/g' \
+  | sed 's/^jar$/java/g' \
   | sort \
   | uniq \
   )

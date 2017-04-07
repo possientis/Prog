@@ -2,7 +2,7 @@ section .text
 global test_mul_8bits
 
 ; testing assembly multiplication instruction 'mul r'
-; the semantics of which is al*r -> ax
+; the semantics of which is al*r -> ax (unsigned multiplication)
 ; 
 ; input:
 ; rdi : contains desired value of al
@@ -39,6 +39,7 @@ _al:
   jnz _bl
   mov al, sil     ; rsi -> al (overwrites previous al value) 
   mul al          ; al*al -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 1, r = bl
@@ -47,6 +48,7 @@ _bl:
   jnz _cl
   mov bl, sil     ; rsi -> bl
   mul bl          ; al*bl -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 2, r = cl
@@ -55,6 +57,7 @@ _cl:
   jnz _dl
   mov cl, sil     ; rsi -> cl
   mul cl          ; al*cl -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 3, r = dl
@@ -63,6 +66,7 @@ _dl:
   jnz _dil
   mov dl, sil     ; rsi -> dl
   mul dl          ; al*dl -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 4, r = dil
@@ -71,6 +75,7 @@ _dil:
   jnz _sil
   mov dil, sil    ; rsi -> dil
   mul dil         ; al*dil -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 5, r = sil
@@ -79,6 +84,7 @@ _sil:
   jnz _bpl
   mov sil, sil    ; rsi -> sil
   mul sil         ; al*sil -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 6, r = bpl
@@ -90,6 +96,7 @@ _bpl:
   mov bpl, sil    ; rsi -> bpl
   mul bpl         ; al*bpl -> ax
   mov rbp, r8     ; restoring base pointer
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 7, r = spl
@@ -101,6 +108,7 @@ _spl:
   mov spl, sil    ; rsi -> spl
   mul spl         ; al*spl -> ax
   mov rsp,r8      ; restoring stack pointer
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 8, r = r8b
@@ -109,6 +117,7 @@ _r8b:
   jnz _r9b
   mov r8b, sil    ; rsi -> r8b
   mul r8b         ; al*r8b -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 9, r = r9b
@@ -117,6 +126,7 @@ _r9b:
   jnz _r10b
   mov r9b, sil    ; rsi -> r9b
   mul r9b         ; al*r9b -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 10, r = r10b
@@ -125,6 +135,7 @@ _r10b:
   jnz _r11b
   mov r10b, sil    ; rsi -> r10b
   mul r10b         ; al*r10b -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 11, r = r11b
@@ -133,6 +144,7 @@ _r11b:
   jnz _r12b
   mov r11b, sil    ; rsi -> r11b
   mul r11b         ; al*r11b -> ax
+  and rax, 0xffff ; keeping ax
   ret
  
 ; if dl == 12, r = r12b
@@ -141,6 +153,7 @@ _r12b:
   jnz _r13b
   mov r12b, sil    ; rsi -> r12b
   mul r12b         ; al*r12b -> ax
+  and rax, 0xffff ; keeping ax
   ret
  
 ; if dl == 13, r = r13b
@@ -149,6 +162,7 @@ _r13b:
   jnz _r14b
   mov r13b, sil    ; rsi -> r13b
   mul r13b         ; al*r13b -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 14, r = r14b
@@ -157,6 +171,7 @@ _r14b:
   jnz _r15b
   mov r14b, sil    ; rsi -> r14b
   mul r14b         ; al*r14b -> ax
+  and rax, 0xffff ; keeping ax
   ret
 
 ; if dl == 15, r = r15b
@@ -165,6 +180,7 @@ _r15b:
   jnz error
   mov r15b, sil    ; rsi -> r15b
   mul r15b         ; al*r15b -> ax
+  and rax, 0xffff ; keeping ax
   ret
  
 error:

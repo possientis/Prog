@@ -23,7 +23,7 @@ int main()
 
         // x and y are long which are signed 64 bits integer (on this 
         // platform). However, x and y range from 0 to 2^32 -1  so can
-        // fit in 32 bits as unsigned integerss. Hence we can cast x and y
+        // fit in 32 bits as unsigned integers. Hence we can cast x and y
         // to uint32_t without loss. However, casting x and y to uint32_t
         // means the compiler will use 32 bits multiplication when 
         // computing x * y which will overflow. Hence we are casting

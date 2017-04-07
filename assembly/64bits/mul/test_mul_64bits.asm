@@ -5,7 +5,7 @@ section .text
 global test_mul_64bits
 
 ; testing assembly multiplication instruction 'mul <reg>'
-; the semantics of which is rax*<reg> -> rdx:rax
+; the semantics of which is rax*<reg> -> rdx:rax (unsigned multiplication)
 ; 
 ; input:
 ; rdi : contains desired value of rax
