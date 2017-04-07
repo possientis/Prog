@@ -9,9 +9,41 @@ Require Import order.
 (******************************************************************************)
 (*
   We have defined a type 'set' which is meant to represent a subclass of the 
-  set theoretic class of finite sets.
+  set theoretic class of finite sets. However, we know that equality on sets
+  is of no value and an appropriate equivalence relation needs to be defined.
+  One key step on the path to defining equivalence between sets is to define
+  the inclusion relation <= on sets. Set membership is another important 
+  relation on sets, but we shall find it more convenient to focus first on the
+  inclusion relation as primitive, and define 'x in y' in terms of {x} <= y. 
+    
+  The inclusion relation <= should satisfy the following properties:
 
+  (i)   0 <= x                                , forall x
+  (ii)  ¬({x} <= 0)                           , forall x
+  (iii) {x} <= {y}  <-> (x <= y) /\ (y <= x)  , forall x,y
+  (iv)  {x} <= yUz  <-> {x] <= y \/ {x} <= z  , forall x,y,z
+  (v)   xUy <= z    <->  x <= z  /\  y <= z   , forall x,y,z
+
+  Looking at the inclusion relation <= as a map subset :: set -> set -> Bool
+  in Haskell, it could be defined as follows:
+
+  subset Empty _                      = True
+  subset (Singleton x) Empty          = False
+  subset (Singleton x) (Singleton y)  = (subset x y) && (subset y x)
+  subset (Singleton x) (Union y z)    = (subset (Singleton x) y) 
+                                      ||(subset (Singleton x) z)
+  subset (Union x y) z                = (subset x z) && (subset y z) 
+
+  This looks like a recursive definition: first 'subset Empty' is defined.
+  Then 'subset (Singleton x)' is defined and last 'subset (Union x y)'. 
+  The definition of 'subset (Union x y)' involves 'subset x' and 'subset y'
+  which is legtimate for a structural recursion. Now the definition of
+  'subset (Singleton x)' itself looks like a structural recursion: it is
+  first defined on Empty, then on (Singleton y) and finally on (Union y z).
   TODO
+
+
+
 *)
 
 Fixpoint subset_n (n:nat) : set -> set -> Prop :=
