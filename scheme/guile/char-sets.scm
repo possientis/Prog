@@ -11,6 +11,22 @@
 
 (define iter (char-set-cursor set))
 
+(define (char-set-for-each proc cs)
+  (display "for-each is running ...\n")
+  (if (not (char-set? cs)) 
+    (error "char-set-for-each: set argument should be a character set"))
+  (let loop ((cursor (char-set-cursor cs)))
+    (if (end-of-char-set? cursor)
+      'done
+      (begin
+        (proc (char-set-ref cs cursor))
+        (loop (char-set-cursor-next cs cursor))))))
+
+
+(define new char-set:symbol)
+
+
+(display (string-append "abc" "def" "hij"))(newline)
 
 
 (exit 0)

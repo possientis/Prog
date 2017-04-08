@@ -1,11 +1,11 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/c/bitcoin/secp256k1
+HOME=/home/john/Prog/assembly/64bits/carry
 cd ${HOME}
 
+rm -f *.lst
 rm -f *.o
 rm -f a.out
-./clone/clean.sh
 
 cd ${DIR}

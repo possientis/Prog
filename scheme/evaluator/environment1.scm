@@ -7,6 +7,7 @@
 
 
 ; one possible implementation of environment
+(load "debug.scm")
 (load "frame.scm")
 
 (define environment1    ; constructor
@@ -126,6 +127,10 @@
 ;          (debug "[DEBUG] : make-frame: inside loop: new-frame = ")
 ;          (debug (new-frame 'to-string))
 ;          (debug-newline)(debug-newline)
+          (if (new-frame 'empty?)
+;            (debug "[DEBUG]: make-frame: insideloop: new-frame is empty\n")
+          'done
+          )
           (cond ((null? vars) new-frame)
                 ((symbol? vars) ((new-frame 'insert!) vars vals) new-frame)
                 (else ((new-frame 'insert!) (car vars) (car vals))

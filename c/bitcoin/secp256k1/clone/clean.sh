@@ -36,10 +36,12 @@ rm -f src/libsecp256k1-config.h
 rm -f src/libsecp256k1_la-secp256k1.lo
 rm -f src/libsecp256k1_la-secp256k1.o
 rm -f src/stamp-h1
+rm -f test-suite.log
 
 rm -f *.o
+rm -f a.out
 
-tree -a
+# tree -a
 
 cd ${DIR}
 

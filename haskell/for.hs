@@ -1,8 +1,11 @@
-l = [i | i <- [1..1000], mod i 2 /= 0, mod i 3 /= 0]
+for :: a -> (a -> Bool) -> (a -> a) -> (a -> IO ()) -> IO ()
+for i p f job =
+  if (p i)
+    then do
+      job i
+      for (f i) p f job
+    else return ()
+  
+-- for(i = 0 ; i < 10; ++i){ printf("i = %d\n", i); }
 
-m = proc 1000 [] p where
-  proc 0 xs  p = xs
-  proc n xs  p = if p n then proc (n-1) (n:xs) p else proc (n-1) xs p
-  p n = and [mod n 2 /= 0, mod n 3 /= 0]
-
-myMap f = foldr (\x -> \y -> (f x) : y) []
+main = for 0 (<10) (+1) (\i -> putStrLn $ "i = " ++ (show i))

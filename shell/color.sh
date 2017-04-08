@@ -1,3 +1,5 @@
+# for sh not bash
+
 escseq="\033[s\033[0;0H\033[0;41m\033[K\033[1;33mHello World!\033[0m\033[u"
 restore="\033[s\033[0;0H\033[0m\033[K\033[u"
 

