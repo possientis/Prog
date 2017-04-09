@@ -38,6 +38,17 @@ gcc test_imul_8bits.c test_imul_8bits.o
 ./a.out; ./clean.sh
 echo
 
+echo "testing 16 bits signed multiplication..." 
+../yasm.sh test_imul_16bits.asm 
+gcc test_imul_16bits.c test_imul_16bits.o
+./a.out; ./clean.sh
+echo
+
+echo "testing 32 bits signed multiplication..." 
+../yasm.sh test_imul_32bits.asm 
+gcc test_imul_32bits.c test_imul_32bits.o
+./a.out; ./clean.sh
+echo
 
 cd ${DIR}
 echo

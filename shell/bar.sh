@@ -1,7 +1,4 @@
-foo()
+bar()
 {
   return 5
 }
-
-
-

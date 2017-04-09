@@ -13,8 +13,8 @@ Require Import order.
   is of no value and an appropriate equivalence relation needs to be defined.
   One key step on the path to defining equivalence between sets is to define
   the inclusion relation <= on sets. Set membership is another important 
-  relation on sets, but we shall find it more convenient to focus first on the
-  inclusion relation as primitive, and define 'x in y' in terms of {x} <= y. 
+  relation on sets, but we shall find it more convenient to focus first on 
+  the inclusion relation as a primitive, and define 'x in y' as {x} <= y. 
     
   The inclusion relation <= should satisfy the following properties:
 
@@ -24,23 +24,50 @@ Require Import order.
   (iv)  {x} <= yUz  <-> {x] <= y \/ {x} <= z  , forall x,y,z
   (v)   xUy <= z    <->  x <= z  /\  y <= z   , forall x,y,z
 
-  Looking at the inclusion relation <= as a map subset :: set -> set -> Bool
-  in Haskell, it could be defined as follows:
+  Property (i) states that the empty set is a subset of all sets. 
+  Property (ii) states that no singleton set {x} is ever a subset of the 
+  empty set. Property (iii) states that a singleton set {x} is a subset
+  of another singleton {y} if and only if x and y are 'equal' (we do not
+  mean 'equal' as elements of 'set' of course), that is 'equivalent' (as 
+  we shall later define it) which means that x and y are both subsets of 
+  each other. Property (iv) states that a singleton set {x} is a subset of
+  a union yUz if and only if x is an element of y or x is an element of z, 
+  which in turn means that {x} is a subset of y or {x} is a subset of z.
+  Property (v) states that a union xUy is a subset of z, if and only if
+  both x and y are subsets of z. 
 
-  subset Empty _                      = True
-  subset (Singleton x) Empty          = False
-  subset (Singleton x) (Singleton y)  = (subset x y) && (subset y x)
-  subset (Singleton x) (Union y z)    = (subset (Singleton x) y) 
-                                      ||(subset (Singleton x) z)
-  subset (Union x y) z                = (subset x z) && (subset y z) 
+  All these properties are pretty natural, and we expect them to hold for 
+  a binary relation <=, if it is to be viewed as a suitable candidate for 
+  modelling the inclusion relation on set. However, because properties 
+  (i)-(v) appear to be very similar to a definition by recursion of <= 
+  (viewed as a curried operator with boolean values <= : set -> set -> bool), 
+  it is tempting to believe that these are actually defining properties. 
+  In other words, it is tempting to believe that not only does there exists
+  a relation on set which satisfies properties (i)-(v), but such relation
+  is in fact unique. Proving existence and uniqueness of this relation is 
+  the purpose of what follows. 
+  
+  Defining the Haskell type: data Set = O | S Set | U Set Set, the inclusion 
+  relation <= can be viewed as a map: subset :: Set -> Set -> Bool which 
+  (following properties (i)-(v)) could be defined as follows:
 
-  This looks like a recursive definition: first 'subset Empty' is defined.
-  Then 'subset (Singleton x)' is defined and last 'subset (Union x y)'. 
-  The definition of 'subset (Union x y)' involves 'subset x' and 'subset y'
-  which is legtimate for a structural recursion. Now the definition of
-  'subset (Singleton x)' itself looks like a structural recursion: it is
-  first defined on Empty, then on (Singleton y) and finally on (Union y z).
-  TODO
+  subset O _            = True                                  -- prop (i)
+  subset (S x) O        = False                                 -- prop (ii)
+  subset (S x) (S y)    = (subset x y) && (subset y x)          -- prop (iii)
+  subset (S x) (U y z)  = (subset (S x) y) || (subset (S x) z)  -- prop (iv)
+  subset (U x y) z      = (subset x z) && (subset y z)          -- prop (v)
+
+  This looks like a recursive definition: first 'subset 0' is defined.
+  Then 'subset (S x)' is defined and lastly 'subset (U x y)'. The definition 
+  of 'subset (U x y)' involves 'subset x' and 'subset y' which is legtimate 
+  for a structural recursion. Now the definition of 'subset (S x)' itself 
+  looks like a structural recursion: it is first defined on O, then on (S y) 
+  and finally on (U y z). The definition on (U y z) only involves evaluations
+  of subset (S x) on y and z which is also very nice. However, something is
+  not quite right when defining subset (S x) on (S y). A normal recursive
+  definition of subset (S x) on (S y) should involve subset (S x) evaluated
+  at y. Unfortunately, this is not what we have: our definition of subset (S x)
+  on (S y) involves subset x y and subset y x. 
 
 
 
