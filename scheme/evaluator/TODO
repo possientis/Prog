@@ -1,3 +1,4 @@
+retore debugging in dict.scm
 environment1.scm undertsand why new-frame goes empty inside loop when test.scm runs
 
 scm test.scm fails (due to (lazy-eval '(load "main.scm")) bizarre that list of primitives seems correct, yet global-env does not have them

@@ -1,61 +1,9 @@
-#include "secp256k1/include/secp256k1.h"
+#include "../secp256k1/include/secp256k1.h"
+#include "test.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-
-
-void default_callback(const char* message, void* data){
-  fprintf(stderr, "callback function is rightly called: %s\n", message);
-  *((int*) data) = 42;
-}
-
-int buffer_equals(const void *ptr, const void* qtr, size_t size)
-{
-  if(ptr == NULL) return 0;
-  if(qtr == NULL) return 0;
-  if(size < 0)    return 0; // should be ignored by compiler if size_t unsigned
-
-  const unsigned char *p = ptr;
-  const unsigned char *q = qtr;
-
-  size_t i;
-  for(i = 0; i < size; ++i)
-  {
-    if(*p++ != *q++) return 0;
-  }
-  return 1;
-}
-
-int buffer_null(const void *ptr, size_t size)
-{
-  if(ptr == NULL) return 0;
-  if(size < 0) return 0;
-
-  const unsigned char *p = ptr;
-
-  size_t i;
-  for(i = 0; i < size; ++i)
-  {
-    if( *p++ != '\x00' ) return 0;
-  }
-
-  return 1;
-}
-
-void buffer_clear(void *ptr, size_t size){
-  if(ptr == NULL) return;
-  if(size < 0)  return;   // should be ignored by compiler if size_t unsigned 
-
-  unsigned char *p = ptr;
-  
-  size_t i;
-  for(i = 0; i < size; ++i)
-  {
-    *p++ = '\x00';
-  }
-}
-
 
 int main()
 {
@@ -899,5 +847,3 @@ int main()
   secp256k1_context_destroy(ctx);
 
 }
-
-

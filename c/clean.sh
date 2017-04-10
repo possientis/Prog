@@ -8,6 +8,7 @@ rm -f a.out
 rm -f *.o
 rm -f log
 
+./attribute/clean.sh
 ./bitcoin/clean.sh
 ./tlpi/clean.sh
 ./pragma/clean.sh

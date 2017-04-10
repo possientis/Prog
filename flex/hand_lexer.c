@@ -64,5 +64,3 @@ int lexer()
 
   return c;
 }
-    
-

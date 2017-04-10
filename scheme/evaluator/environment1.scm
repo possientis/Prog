@@ -124,17 +124,26 @@
         (debug (new-frame 'to-string))
         (debug-newline)(debug-newline)
         (let loop ((vars vars) (vals vals))
+          (if (new-frame 'empty?)
+            (debug "[DEBUG]: make-frame: inside loop: new-frame is empty\n")
+          'done
+          )
+          (debug "[DEBUG] : make-frame: inside loop: vars = ")
+          (debug vars)(debug-newline)
 ;          (debug "[DEBUG] : make-frame: inside loop: new-frame = ")
 ;          (debug (new-frame 'to-string))
 ;          (debug-newline)(debug-newline)
-          (if (new-frame 'empty?)
-;            (debug "[DEBUG]: make-frame: insideloop: new-frame is empty\n")
-          'done
-          )
-          (cond ((null? vars) new-frame)
+         (cond ((null? vars) new-frame)
                 ((symbol? vars) ((new-frame 'insert!) vars vals) new-frame)
-                (else ((new-frame 'insert!) (car vars) (car vals))
-                      (loop (cdr vars) (cdr vals)))))))
+                (else 
+                  (debug "[DEBUG] : make-frame: inside loop: about to call ")
+                  (debug "(new-frame 'insert!) on var =")
+                  (debug (car vars))(debug-newline)
+                  ((new-frame 'insert!) (car vars) (car vals))
+                  (if (new-frame 'empty?)
+                    (debug 
+                      "[DEBUG] : (new-frame 'insert!) RETURNED EMPTY FRAME !!\n"))
+                  (loop (cdr vars) (cdr vals)))))))
     ;
     ; returning no argument constructor
     ;
