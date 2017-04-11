@@ -9,7 +9,7 @@ Require Import order.
 (******************************************************************************)
 (*
   We have defined a type 'set' which is meant to represent a subclass of the 
-  set theoretic class of finite sets. However, we know that equality on sets
+  set theoretic class of finite sets. However, we know that equality on 'set'
   is of no value and an appropriate equivalence relation needs to be defined.
   One key step on the path to defining equivalence between sets is to define
   the inclusion relation <= on sets. Set membership is another important 
@@ -38,7 +38,7 @@ Require Import order.
 
   All these properties are pretty natural, and we expect them to hold for 
   a binary relation <=, if it is to be viewed as a suitable candidate for 
-  modelling the inclusion relation on set. However, because properties 
+  modelling the inclusion relation on 'set'. However, because properties 
   (i)-(v) appear to be very similar to a definition by recursion of <= 
   (viewed as a curried operator with boolean values <= : set -> set -> bool), 
   it is tempting to believe that these are actually defining properties. 
@@ -47,9 +47,12 @@ Require Import order.
   is in fact unique. Proving existence and uniqueness of this relation is 
   the purpose of what follows. 
   
-  Defining the Haskell type: data Set = O | S Set | U Set Set, the inclusion 
-  relation <= can be viewed as a map: subset :: Set -> Set -> Bool which 
-  (following properties (i)-(v)) could be defined as follows:
+  Defining the Haskell type: 
+  
+    data Set = O | S Set | U Set Set
+  
+  the relation <= can be viewed as a map: subset :: Set -> Set -> Bool 
+  which (following properties (i)-(v)) could be defined as follows:
 
   subset O _            = True                                  -- prop (i)
   subset (S x) O        = False                                 -- prop (ii)
@@ -69,7 +72,38 @@ Require Import order.
   at y. Unfortunately, this is not what we have: our definition of subset (S x)
   on (S y) involves subset x y and subset y x. 
 
+  Hence we cannot claim that the above Haskell definition constitutes a
+  mathematically acceptable recursive definition. We may have valid 
+  Haskell syntax and possibly prove that function evaluations would 
+  always terminate, but we cannot claim to have 'mathematically' proved
+  the existence of a binary relation <= on set, which satisfies (i)-(v).
 
+  In fact, attempting to replicate this definition in Coq will not yield
+  valid code: "Error: Recursive definition of subset is ill-formed."
+
+  Fixpoint subset (a:set): set -> Prop :=
+    match a with
+      | Empty       => (fun b => True)
+      | Singleton x => (fun b =>
+        match b with
+          | Empty             => False
+          | Singleton y       => subset x y /\ subset y x   (* problem here *) 
+          | Union y z         => subset a y \/ subset a z 
+        end)
+      | Union x y   => (fun b => subset x b /\ subset y b) 
+    end.
+
+  Rather than attempting to define a map subset : set -> set -> Prop directly,
+  we shall define a sequence of maps Rn : set -> set -> Prop indexed by the 
+  natural numbers. This sequence will be defined by a standard recursion on N, 
+  making sure the map Rn for (n >= 1) is solely defined in terms of R(n-1).
+  While we consider Rn to have values in 'Prop' when working with Coq, when
+  translating the argument into standard ZF-based mathematics, we shall 
+  regard Rn: set -> set -> 2 = {0,1}. Defining R0 x y = 1, for n >=1 we set: 
+
+    Rn 0 _    = 1
+    Rn {x} 0  = 0
+    Rn 
 
 *)
 

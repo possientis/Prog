@@ -171,7 +171,7 @@ int main()
   assert(return_value == 1);
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub2, bytes4, 65);
   assert(return_value == 1);
-  assert(buffer_equals(&pub1, &pub2, sizeof(secp256k1_pubkey)));
+  assert(memcmp(&pub1, &pub2, sizeof(secp256k1_pubkey)) == 0);
 
 
   printf("\ntesting serializing public key ...\n");
@@ -183,7 +183,7 @@ int main()
   printf("compressed format ...\n");
   // serializing with output buffer too small
   size = 32;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
@@ -195,18 +195,18 @@ int main()
 
   // NULL context
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       NULL, buffer, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
   assert(return_value == 1);                  // serialization succeeded
   assert(size == 33);                         // expecting 33 bytes written
-  assert(buffer_equals(buffer, bytes1, 33));  // success despite NULL context
+  assert(memcmp(buffer, bytes1, 33) == 0);  // success despite NULL context
   assert(call_back_data == 0);                // unaffected by call
 
   // NULL output buffer
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, NULL, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
@@ -218,7 +218,7 @@ int main()
 
   // NULL input pubkey pointer
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, NULL, SECP256K1_EC_COMPRESSED
   );
@@ -231,13 +231,13 @@ int main()
 
   // secp256k1_ec_pubkey_serialize
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_COMPRESSED
   );
   assert(return_value == 1);        // should always be the case
   assert(size == 33);               // expecting 33 bytes written
-  assert(buffer_equals(buffer, bytes1, 33));
+  assert(memcmp(buffer, bytes1, 33) == 0);
   assert(call_back_data == 0);      // unaffected by call
 
   // uncompressed
@@ -245,7 +245,7 @@ int main()
   
   // serializing with output buffer too small
   size = 64;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
   );
@@ -257,18 +257,18 @@ int main()
 
   // NULL context
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       NULL, buffer, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
   );
   assert(return_value == 1);                  // serialization succeeded
   assert(size == 65);                         // expecting 33 bytes written
-  assert(buffer_equals(buffer, bytes4, 65));  // success despite NULL context
+  assert(memcmp(buffer, bytes4, 65) == 0);  // success despite NULL context
   assert(call_back_data == 0);                // unaffected by call
 
   // NULL output buffer
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, NULL, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
   );
@@ -280,7 +280,7 @@ int main()
 
   // NULL input pubkey pointer
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, NULL, SECP256K1_EC_UNCOMPRESSED
   );
@@ -292,13 +292,13 @@ int main()
 
 
   size = 65;
-  buffer_clear(buffer, 65);
+  memset(buffer,0x00, 65);
   return_value = secp256k1_ec_pubkey_serialize(
       ctx, buffer, &size, &pub1, SECP256K1_EC_UNCOMPRESSED
   );
   assert(return_value == 1);        // should always be the case
   assert(size == 65);               // expecting 33 bytes written
-  assert(buffer_equals(buffer, bytes4, 65));
+  assert(memcmp(buffer, bytes4, 65) == 0);
   assert(call_back_data == 0);      // unaffected by call
 
 
@@ -339,7 +339,7 @@ int main()
   
   // NULL context
   size = 128;
-  buffer_clear(der, 128);
+  memset(der,0x00, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(NULL,der,&size,&sig1); 
   assert(return_value == 1);      // serialization succeeded
   assert(size == 71);             // der serialization is 71 bytes in this case
@@ -347,7 +347,7 @@ int main()
 
   // NULL output pointer
   size = 128;
-  buffer_clear(der, 128);
+  memset(der,0x00, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,NULL,&size,&sig1); 
   assert(return_value == 0);      // serialization failed
   assert(size == 128);            // size unchanged
@@ -357,7 +357,7 @@ int main()
   
   // output pointer only 71 bytes
   size = 71;
-  buffer_clear(der, 128);
+  memset(der,0x00, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
   assert(return_value == 1);      // serialization succeeded
   assert(size == 71);
@@ -365,7 +365,7 @@ int main()
 
   // output pointer only 70 bytes (CALLBACK not being called)
   size = 70;
-  buffer_clear(der, 128);
+  memset(der,0x00, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
   assert(return_value == 0);      // can't serialize
   assert(size == 71);             // size is changed here 
@@ -375,7 +375,7 @@ int main()
 
   // null input pointer
   size = 128;
-  buffer_clear(der, 128);
+  memset(der,0x00, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,NULL); 
   assert(return_value == 0);      // can't serialize
   assert(size == 128);            // size is unchanged
@@ -385,7 +385,7 @@ int main()
 
   // secp256k1_ecdsa_signature_serialize_der
   size = 128;
-  buffer_clear(der, 128);
+  memset(der,0x00, 128);
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
   assert(return_value == 1);
   assert(size == 71);
@@ -398,7 +398,7 @@ int main()
   size = 71;
   return_value = secp256k1_ecdsa_signature_parse_der(NULL,&sig,der,size); 
   assert(return_value == 1);      // parsing was succesful
-  assert(buffer_equals(&sig1, &sig, sizeof(secp256k1_ecdsa_signature)));
+  assert(memcmp(&sig1, &sig, sizeof(secp256k1_ecdsa_signature)) == 0);
 
   // NULL input pointer
   size = 71;
@@ -426,28 +426,28 @@ int main()
   size = 71;
   return_value = secp256k1_ecdsa_signature_parse_der(ctx,&sig2,der,size); 
   assert(return_value == 1);      // parsing was succesful
-  assert(buffer_equals(&sig1, &sig2, sizeof(secp256k1_ecdsa_signature)));
+  assert(memcmp(&sig1, &sig2, sizeof(secp256k1_ecdsa_signature)) == 0);
 
   printf("\ntesting serializing signature (compact) ...\n");
 
   unsigned char buffer64[64];
 
   // NULL context
-  buffer_clear(buffer64, 64);
+  memset(buffer64,0x00, 64);
   return_value = secp256k1_ecdsa_signature_serialize_compact(NULL,buffer64,&sig1);
   assert(return_value ==1);                       // serialization succeeded
-  assert(buffer_equals(buffer64,sig_bytes1,64));  // initial signature
+  assert(memcmp(buffer64,sig_bytes1,64) == 0);  // initial signature
   assert(call_back_data == 0);
 
   // NULL output buffer
-  buffer_clear(buffer64, 64);
+  memset(buffer64,0x00, 64);
   return_value = secp256k1_ecdsa_signature_serialize_compact(ctx,NULL,&sig1);
   assert(return_value ==0);                       // serialization failed
   assert(call_back_data == 42);
   call_back_data = 0;
 
   // NULL input signature pointer
-  buffer_clear(buffer64, 64);
+  memset(buffer64,0x00, 64);
   return_value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,NULL);
   assert(return_value ==0);                       // serialization failed
   assert(call_back_data == 42);
@@ -455,10 +455,10 @@ int main()
 
   
   // secp2561_ecdsa_signature_serialize_compact
-  buffer_clear(buffer64, 64);
+  memset(buffer64,0x00, 64);
   return_value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,&sig1);
   assert(return_value ==1);                       // serialization succeeded
-  assert(buffer_equals(buffer64,sig_bytes1,64));  // initial signature
+  assert(memcmp(buffer64,sig_bytes1,64) == 0);  // initial signature
   assert(call_back_data == 0);
 
   printf("\ntesting verifying signature ...\n");
@@ -532,7 +532,7 @@ int main()
   // normalizing sig2
   return_value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, &sig2);
   assert(return_value == 1);                  // sig2 was *not* normalized
-  assert(buffer_equals(&sig1, &sig3, 64));    // sig1 == sig3
+  assert(memcmp(&sig1, &sig3, 64) == 0);    // sig1 == sig3
 
   // normalizing sig1
   return_value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, &sig1);
@@ -562,8 +562,8 @@ int main()
   unsigned char nonce1[32];
   unsigned char nonce2[32];
 
-  buffer_clear(nonce1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce1,0x00, 32);
+  memset(nonce2,0x00, 32);
 
   return_value = f1(nonce1, hash1, hash2, NULL, NULL, 0);
   assert(return_value == 1);
@@ -571,7 +571,7 @@ int main()
   return_value = f2(nonce2, hash1, hash2, NULL, NULL, 0);
   assert(return_value == 1);
 
-  assert(buffer_equals(nonce1, nonce2, 32));
+  assert(memcmp(nonce1, nonce2, 32) == 0);
 
   // private key from Mastering Bitcoin
   const unsigned char* priv1 =
@@ -589,8 +589,8 @@ int main()
     "\x8b\x87\x1e\x0f\x28\x6b\x37\x91\xab\xb6\xe1\xd7\xc2\x8e\x6c\x7e"
     "\x07\x19\x82\x9e\xfc\x03\xf6\x09\x4f\x70\xda\xb1\xb0\xf0\x0e\xfb";
 
-  assert(buffer_equals(nonce1, nonce, 32));
-  assert(buffer_equals(nonce2, nonce, 32));
+  assert(memcmp(nonce1, nonce, 32) == 0);
+  assert(memcmp(nonce2, nonce, 32) == 0);
 
   // NULL output pointer (segmentation fault: WRONG?)
   // return_value = f1(NULL, hash1, priv1, NULL, NULL, 0); 
@@ -625,17 +625,17 @@ int main()
   call_back_data = 0;
 
   // NULL nonce function pointer
-  buffer_clear(&sig, 64);
+  memset(&sig,0x00, 64);
   return_value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv1, NULL, NULL);
   assert(return_value == 1);  // signing successful (default nonce is used)
-  assert(buffer_equals(&sig,&sig1,64));
+  assert(memcmp(&sig,&sig1,64) == 0);
   assert(call_back_data == 0);
 
   // secp256k1_ecdsa_sign
-  buffer_clear(&sig, 64);
+  memset(&sig,0x00, 64);
   return_value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv1, f1, NULL);
   assert(return_value == 1);
-  assert(buffer_equals(&sig,&sig1,64));
+  assert(memcmp(&sig,&sig1,64) == 0);
   assert(call_back_data == 0);
 
   printf("\ntesting veryfying secret keys ...\n");
@@ -659,13 +659,13 @@ int main()
   assert(call_back_data == 0);
 
   // zero is not a valid private key
-  buffer_clear(nonce1, 32);
+  memset(nonce1,0x00, 32);
   return_value = secp256k1_ec_seckey_verify(ctx, nonce1);
   assert(return_value == 0);
   assert(call_back_data == 0);
 
   // one is a valid private key
-  buffer_clear(nonce1, 32);
+  memset(nonce1,0x00, 32);
   nonce1[31] = 0x01;
   return_value = secp256k1_ec_seckey_verify(ctx, nonce1);
   assert(return_value == 1);
@@ -713,27 +713,27 @@ int main()
   assert(call_back_data == 0);  // but not an error
 
   // secp256k1_ec_pubkey_create
-  buffer_clear(&pub, 64);
+  memset(&pub,0x00, 64);
   return_value = secp256k1_ec_pubkey_create(ctx, &pub, priv1);
   assert(return_value == 1);
   assert(call_back_data == 0);
-  assert(buffer_equals(&pub, &pub1, 64));
+  assert(memcmp(&pub, &pub1, 64) == 0);
 
   printf("\ntesting privkey_tweak_add ...\n");
 
   // NULL context
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;          // tweak = 1
   return_value = secp256k1_ec_privkey_tweak_add(NULL,nonce1,nonce2);
   assert(return_value == 1);                // tweak successful
   assert(call_back_data == 0);              // call back was never called
-  assert(buffer_equals(nonce1, priv1, 31)); // tweak no impact on high order bytes
+  assert(memcmp(nonce1, priv1, 31) == 0); // tweak no impact on high order bytes
   assert(nonce1[31] == priv1[31] + 1);
 
   // NULL output buffer
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;          // tweak = 1
   return_value = secp256k1_ec_privkey_tweak_add(ctx, NULL, nonce2);
   assert(return_value == 0);                // tweak failed
@@ -742,7 +742,7 @@ int main()
   
   // NULL input buffer
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;          // tweak = 1
   return_value = secp256k1_ec_privkey_tweak_add(ctx, nonce1, NULL);
   assert(return_value == 0);                // tweak failed
@@ -751,25 +751,25 @@ int main()
      
   // adding tweak of 0
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   return_value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
   assert(return_value == 1);                // tweak successful
   assert(call_back_data == 0);              // call back was never called
-  assert(buffer_equals(nonce1, priv1, 32)); // 0 tweak has no impact
+  assert(memcmp(nonce1, priv1, 32) == 0); // 0 tweak has no impact
 
   // adding tweak of 1
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;
   return_value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
   assert(return_value == 1);                // tweak successful
   assert(call_back_data == 0);              // call back was never called
-  assert(buffer_equals(nonce1, priv1, 31)); // tweak no impact on high order bytes
+  assert(memcmp(nonce1, priv1, 31) == 0); // tweak no impact on high order bytes
   assert(nonce1[31] == priv1[31] + 1);
 
   // adding tweak of 1 to order_minus_one
   memcpy(nonce1, order_minus_one, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;
   return_value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
   assert(return_value == 0);                // tweak failed
@@ -794,30 +794,30 @@ int main()
   assert(return_value == 1);
 
   // the two public keys are the same
-  assert(buffer_equals(&pub, &pub2, 64));
+  assert(memcmp(&pub, &pub2, 64) == 0);
 
 
   printf("\ntesting privkey_tweak_mul ...\n");
   
   // multiplying with tweak of 1
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;
   return_value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
   assert(return_value == 1);                // tweak succeeds
   assert(call_back_data == 0);              // no error
-  assert(buffer_equals(nonce1, priv1, 32)); // no impact
+  assert(memcmp(nonce1, priv1, 32) == 0); // no impact
 
   // multiplying with tweak of 0
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   return_value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
   assert(return_value == 0);                // tweak fails
   assert(call_back_data == 0);              // but no error
 
   // multiplying with tweak of 2
   memcpy(nonce1, priv1, 32);
-  buffer_clear(nonce2, 32);
+  memset(nonce2,0x00, 32);
   nonce2[31] = 2;
   return_value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
   assert(return_value == 1);                // tweak fails
@@ -845,5 +845,7 @@ int main()
   
   // secp2561k1_context_destroy
   secp256k1_context_destroy(ctx);
+
+  return 0;
 
 }
