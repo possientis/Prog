@@ -102,10 +102,10 @@
     ;
     (define (extended data)
       (lambda (vars vals)
-        (debug "[DEBUG] : extended: vars = ")(debug vars)
-        (debug-newline)(debug-newline)
-        (debug "[DEBUG] : extended: vals = ")(debug vals)
-        (debug-newline)(debug-newline)
+;        (debug "[DEBUG] : extended: vars = ")(debug vars)
+;        (debug-newline)(debug-newline)
+;        (debug "[DEBUG] : extended: vals = ")(debug vals)
+;        (debug-newline)(debug-newline)
         ; returning new environment instance, with additional frame
         (let ((new-frame (make-frame vars vals)))
           (this (cons 'data (cons new-frame (cdr data)))))))
@@ -115,34 +115,34 @@
     ; Private helper functions
     ;
     (define (make-frame vars vals)
-      (debug "[DEBUG] : make-frame: vars = ")(debug vars)
-      (debug-newline)(debug-newline)
-      (debug "[DEBUG] : make-frame: vals = ")(debug vals)
-      (debug-newline)(debug-newline)
+;      (debug "[DEBUG] : make-frame: vars = ")(debug vars)
+;      (debug-newline)(debug-newline)
+;      (debug "[DEBUG] : make-frame: vals = ")(debug vals)
+;      (debug-newline)(debug-newline)
       (let ((new-frame (frame)))            ; empty-frame
-        (debug "[DEBUG] : make-frame: outside loop: new-frame = ")
-        (debug (new-frame 'to-string))
-        (debug-newline)(debug-newline)
+;        (debug "[DEBUG] : make-frame: outside loop: new-frame = ")
+;        (debug (new-frame 'to-string))
+;        (debug-newline)(debug-newline)
         (let loop ((vars vars) (vals vals))
           (if (new-frame 'empty?)
-            (debug "[DEBUG]: make-frame: inside loop: new-frame is empty\n")
+;            (debug "[DEBUG]: make-frame: inside loop: new-frame is empty\n")
           'done
           )
-          (debug "[DEBUG] : make-frame: inside loop: vars = ")
-          (debug vars)(debug-newline)
+;          (debug "[DEBUG] : make-frame: inside loop: vars = ")
+;          (debug vars)(debug-newline)
 ;          (debug "[DEBUG] : make-frame: inside loop: new-frame = ")
 ;          (debug (new-frame 'to-string))
 ;          (debug-newline)(debug-newline)
          (cond ((null? vars) new-frame)
                 ((symbol? vars) ((new-frame 'insert!) vars vals) new-frame)
                 (else 
-                  (debug "[DEBUG] : make-frame: inside loop: about to call ")
-                  (debug "(new-frame 'insert!) on var =")
-                  (debug (car vars))(debug-newline)
+;                  (debug "[DEBUG] : make-frame: inside loop: about to call ")
+;                  (debug "(new-frame 'insert!) on var =")
+;                  (debug (car vars))(debug-newline)
                   ((new-frame 'insert!) (car vars) (car vals))
-                  (if (new-frame 'empty?)
-                    (debug 
-                      "[DEBUG] : (new-frame 'insert!) RETURNED EMPTY FRAME !!\n"))
+;                  (if (new-frame 'empty?)
+;                    (debug 
+;                      "[DEBUG] : (new-frame 'insert!) RETURNED EMPTY FRAME !!\n"))
                   (loop (cdr vars) (cdr vals)))))))
     ;
     ; returning no argument constructor

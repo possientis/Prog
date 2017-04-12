@@ -4,7 +4,7 @@
 
 // testing the equivalence:
 // carry(x,y) = 1 <-> x + y < min(x,y)
-extern int carry_8bits(uint8_t, uint8_t);
+extern int add_carry_8bits(uint8_t, uint8_t);
 
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
 
@@ -20,7 +20,7 @@ int main()
       uint8_t y8 = y;
       uint8_t sum = x8 + y8;
       uint8_t min = MIN(x8,y8);
-      int carry = carry_8bits(x8,y8);
+      int carry = add_carry_8bits(x8,y8);
 
       assert(carry == (sum < min));
 

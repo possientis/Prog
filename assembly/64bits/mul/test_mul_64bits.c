@@ -46,10 +46,10 @@ int main()
 
   for(i = 0; i < 16; ++i) {
     printf("checking assembly instruction 'mul %s'\n", regs[i]);
-    for(x1 = 0; x1 < 4294967296UL; x1 += 90000083) {
-      for(x0 = 0; x0 < 4294967296UL; x0 += 90000083) {
-        for(y1 = 0; y1 < 4294967296UL; y1 += 90000083) {
-          for(y0 = 0; y0 < 4294967296UL; y0 += 90000083) {
+    for(x1 = 0; x1 < 4294967296UL; x1 += 200000033) {
+      for(x0 = 0; x0 < 4294967296UL; x0 += 200000033) {
+        for(y1 = 0; y1 < 4294967296UL; y1 += 200000033) {
+          for(y0 = 0; y0 < 4294967296UL; y0 += 200000033) {
 
             uint64_t x64 = x1*4294967296UL + x0;// 64 bits 'rax' operand 
             uint64_t y64 = y1*4294967296UL + y0;// 64 bits 'reg' operand 

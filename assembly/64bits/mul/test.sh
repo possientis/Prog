@@ -50,6 +50,8 @@ gcc test_imul_32bits.c test_imul_32bits.o
 ./a.out; ./clean.sh
 echo
 
+# TODO 64 bits signed multiplication
+
 cd ${DIR}
 echo
 echo "multiplication tests completed successfully"

@@ -1,12 +1,12 @@
 section .text
-global carry_8bits
+global sub_carry_8bits
 
 
-carry_8bits:
+sub_carry_8bits:
 
   mov al, dil
   mov bl, sil
-  add al, bl
+  sub al, bl
   jc carry
   xor rax, rax  ; no carry from addition
   ret

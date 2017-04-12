@@ -1,7 +1,7 @@
 (load "main.scm")
 (load "tools.scm")
 
-(set-debug #f)
+(set-debug #t)
 
 (define (unit-test)
   ;
@@ -20,9 +20,9 @@
   ;
   ; variable
   (display "testing variable expressions...\n")
-  (display "+ is bound to: ")(display ((global-env 'lookup) '+))(newline)
-  (strict-eval '+)  ; Failing under ./lazy-run.sh
-  (debug "[DEBUG]: should not reach this stage...")
+;  (display "+ is bound to: ")(display ((global-env 'lookup) '+))(newline)
+;  (strict-eval '+)  ; Failing under ./lazy-run.sh
+;  (debug "[DEBUG]: should not reach this stage...")
   (test-expression '+ (make-primitive-procedure +) "variable.1")
   (test-expression '* (make-primitive-procedure *) "variable.2")
   (test-expression '- (make-primitive-procedure -) "variable.3")

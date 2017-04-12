@@ -18,8 +18,8 @@ int main()
 
   for(i = 0; i < 16; ++i) {
     printf("checking assembly instruction 'imul %s'\n", regs[i]);
-    for(x = -2147483648L; x < 2147483648L; x +=902639) {    // partial test
-      for(y = -2147483648L; y < 2147483648L; y +=905269) {  // partial test
+    for(x = -2147483648L; x < 2147483648L; x +=2000003) {    // partial test
+      for(y = -2147483648L; y < 2147483648L; y +=2000003) {  // partial test
 
         // x and y are long which are signed 64 bits integer (on this 
         // platform). However, x and y range from -2^31 to 2^31 - 1 so can

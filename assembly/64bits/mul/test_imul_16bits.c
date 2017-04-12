@@ -17,8 +17,8 @@ int main()
 
   for(i = 0; i < 16; ++i) {
     printf("checking assembly instruction 'imul %s'\n", regs[i]);
-    for(x = -32768; x < 32768 ; x +=17) {  // can't test everything
-      for(y = -32768; y < 32768; y +=23) { // can't test everything
+    for(x = -32768; x < 32768 ; x +=53) {  // can't test everything
+      for(y = -32768; y < 32768; y +=53) { // can't test everything
 
         int16_t x16 = x;
         int16_t y16 = y;
