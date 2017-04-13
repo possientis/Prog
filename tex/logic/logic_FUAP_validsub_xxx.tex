@@ -1,0 +1,341 @@
+\begin{defin}\label{logic:def:FUAP:strongvalidsub:strongvalidsub}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. We say that
+$\sigma$ is {\em valid for} $\pi\in\pvs$, \ifand\ it is weakly valid
+for $\pi$ and for all $\rho\in\pvs$\,:
+    \[
+    \rho\preceq\pi\ \Rightarrow\ \mbox{$\sigma$ valid for
+    $\vals(\rho)$}
+    \]
+where $\vals:\pvs\to\pv$ is the valuation mapping modulo of {\em
+definition~(\ref{logic:def:FUAP:valuationmod:valuation:modulo})}.
+\end{defin}
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:valuation:v:mod}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Then $\sigma$ is
+valid for a totally clean proof $\pi$ \ifand\ it is weakly valid for
+$\pi$ and for all $\rho$:
+    \[
+    \rho\preceq\pi\ \Rightarrow\ \mbox{$\sigma$ valid for
+    $\val(\rho)$}
+    \]
+\end{prop}
+\begin{proof}
+We assume that $\pi\in\pvs$ is totally clean. From
+proposition~(\ref{logic:prop:FUAP:clean:sub:proof}), any sub-proof
+$\rho\preceq\pi$ is also totally clean. From
+proposition~(\ref{logic:prop:FUAP:valuationmod:clean:proof})
+$\vals(\rho)=\val(\rho)$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:subformula}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi\in\pvs$.
+Then $\sigma$ is valid for $\pi$ \ifand\ it is valid for any
+sub-proof $\rho\preceq\pi$.
+\end{prop}
+\begin{proof}
+If $\sigma$ is valid for any sub-proof of $\pi$, then in particular
+it is valid for $\pi$. So we assume that $\sigma$ is valid for $\pi$
+and consider a sub-proof $\rho\preceq\pi$. We need to show that
+$\sigma$ is also valid for $\rho$. Using
+proposition~(\ref{logic:prop:FUAP:validsub:subformula}), $\sigma$ is
+certainly weakly valid for $\rho$. So let $\kappa\preceq\rho$. It
+remains to show that $\sigma$ is valid for $\vals(\kappa)$. However,
+by transitivity of the sub-proof partial order we have
+$\kappa\preceq\pi$ and since $\sigma$ is valid for $\pi$ we see that
+$\sigma$ is valid for $\vals(\kappa)$ as requested.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:recursion:formula}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi\in\pvs$,
+where $\pi=\phi$ for $\phi\in\pv$. Then the following are
+equivalent:
+    \begin{eqnarray*}
+    (i)&&\mbox{$\sigma$ is weakly valid for $\pi$}\\
+    (ii)&&\mbox{$\sigma$ is valid for $\phi$}\\
+    (iii)&&\mbox{$\sigma$ is valid for $\pi$}
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+We already know from
+proposition~(\ref{logic:prop:FUAP:validsub:recursion:formula}) that
+$(i)$ and $(ii)$ are equivalent. We also know that $(iii)\Rightarrow
+(i)$ by definition. So it remains to show that
+$(i)\Rightarrow(iii)$. So we assume that $\sigma$ is weakly valid
+for $\pi=\phi$. Let $\rho\preceq\pi$ be a sub-proof of $\pi$. We
+need to show that $\sigma$ is valid for $\vals(\rho)$. However, the
+only sub-proof of $\pi$ is $\pi$ itself. So $\rho=\phi$. Since
+$(i)\Rightarrow(ii)$,  $\sigma$ is valid for $\phi=\vals(\rho)$.
+\end{proof}
+
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:recursion:axiom}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi\in\pvs$
+where $\pi=\axi\phi$, $\phi\in\pv$.Then the following are
+equivalent:
+    \begin{eqnarray*}
+    (i)&&\mbox{$\sigma$ is weakly valid for $\pi$}\\
+    (ii)&&\mbox{$\sigma$ is valid for $\phi$}\\
+    (iii)&&\mbox{$\sigma$ is valid for $\pi$}
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+We already know from
+proposition~(\ref{logic:prop:FUAP:validsub:recursion:axiom}) that
+$(i)$ and $(ii)$ are equivalent. We also know that $(iii)\Rightarrow
+(i)$ by definition. So it remains to show that
+$(i)\Rightarrow(iii)$. So we assume that $\sigma$ is weakly valid
+for $\pi=\axi\phi$. Then $\sigma$ is valid for $\phi$. Let
+$\rho\preceq\pi$. We need to show that $\sigma$ is valid for
+$\vals(\rho)$. However, the only sub-proof of $\pi$ is $\pi$ itself.
+So $\rho=\axi\phi$. We shall distinguish two cases: first we assume
+that $\phi\in\avs$. Then $\vals(\rho)=\phi$ and $\sigma$ is valid
+for $\vals(\rho)$. Next we assume that $\phi\not\in\avs$. Then
+$\vals(\rho)=\bot\to\bot$ and $\sigma$ is again valid for
+$\vals(\rho)$.
+\end{proof}
+
+
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:recursion:pon}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Then $\sigma$ is
+valid for a proof $\pi=\pi_{1}\pon\pi_{2}$ \ifand\ it is valid for
+both $\pi_{1}$ and $\pi_{2}$.
+\end{prop}
+\begin{proof}
+First we show the 'only if' part: so we assume that $\sigma$ is
+valid for $\pi=\pi_{1}\pon\pi_{2}$ where $\pi_{1},\pi_{2}\in\pvs$.
+We need to show that it is valid for both $\pi_{1}$ and $\pi_{2}$.
+This follows immediately from $\pi_{1}\preceq\pi$ and
+$\pi_{2}\preceq\pi$ together with
+proposition~(\ref{logic:prop:FUAP:strongvalidsub:subformula}). We
+now show the 'if' part: so we assume that $\sigma$ is valid for
+$\pi_{1}$ and $\pi_{2}$. We need to show that it is also valid for
+$\pi=\pi_{1}\pon\pi_{2}$. However, we already know from
+proposition~(\ref{logic:prop:FUAP:validsub:recursion:pon}) that it
+is weakly valid for $\pi$. So let $\rho\preceq\pi$. It remains to
+show that $\sigma$ is valid for $\vals(\rho)$. Since
+$\rho\in\subf(\pi)=\subf(\pi_{1})\cup\subf(\pi_{2})\cup\{\pi_{1}\pon\pi_{2}\}$
+we shall distinguish three cases: First we assume that
+$\rho\preceq\pi_{1}$. Then $\sigma$ is indeed valid for
+$\vals(\rho)$ since it is valid for $\pi_{1}$. Next we assume that
+$\rho\preceq\pi_{2}$. Then likewise, $\sigma$ is valid for
+$\vals(\rho)$ since it is valid for $\pi_{2}$. Finally we assume
+that $\rho=\pi_{1}\pon\pi_{2}$ and we shall distinguish two further
+cases: first we assume that $\vals(\rho)=\bot\to\bot$. Then $\sigma$
+is clearly valid for $\vals(\rho)$. Next we assume that
+$\vals(\rho)\neq\bot\to\bot$. Then we must have
+$\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ for some
+$\psi_{1},\psi_{2}\in\pv$ where $\psi_{1}\sim\vals(\pi_{1})$ and
+$\sim$ is the substitution congruence on \pv. Having assumed that
+$\sigma$ is valid for $\pi_{2}$, in particular $\sigma$ is valid for
+$\vals(\pi_{2})$. Hence, it follows from
+$\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ and
+proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}) that
+$\sigma$ is valid for $\psi_{2}$. However, from
+definition~(\ref{logic:def:FUAP:valuationmod:valuation:modulo}) we
+have $\psi_{2}=\vals(\rho)$ and it follows that $\sigma$ is valid
+for $\vals(\rho)$ as requested.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:recursion:gen}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Then $\sigma$ is
+valid for a proof $\pi=\gen x\pi_{1}$ \ifand\ it is valid for
+$\pi_{1}$ and we have:
+    \begin{eqnarray*}
+    (i)&&u\in\free(\vals(\pi))\ \Rightarrow\ \sigma(u)\neq\sigma(x)\\
+    (ii)&&u\in\spec(\pi_{1})\setminus\{x\}\ \ \Rightarrow\
+    \sigma(u)\neq\sigma(x)
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+First we show the 'only if' part: so we assume that $\sigma$ is
+valid for $\pi=\gen x\pi_{1}$ where $x\in V$ and $\pi_{1}\in\pvs$.
+From proposition~(\ref{logic:prop:FUAP:validsub:subformula}),
+$\sigma$ is valid for $\pi_{1}\preceq\pi$. So it remains to show
+that $(i)$ and $(ii)$ hold. First we show $(i)$\,: so suppose
+$u\in\free(\vals(\pi))$. We need to show that
+$\sigma(u)\neq\sigma(x)$. From $u\in\free(\vals(\pi))$ it follows in
+particular that $\vals(\pi)\neq\bot\to\bot$. So
+$x\not\in\spec(\pi_{1})$ and we have $\vals(\pi)=\forall
+x\vals(\pi_{1})$. Having assumed that $\sigma$ is valid for $\pi$,
+in particular $\sigma$ is valid for $\vals(\pi)$. Hence we see that
+$\sigma$ is valid for $\forall x\vals(\pi_{1})$ and furthermore
+$u\in\free(\forall x\vals(\pi_{1}))$. From
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) we
+conclude that $\sigma(u)\neq\sigma(x)$ as requested. We now show
+$(ii)$\,: so suppose $u\in\spec(\pi_{1})\setminus\{x\}$. We need to
+show that $\sigma(u)\neq\sigma(x)$. However, since $\sigma$ is valid
+for $\pi$, in particular it is weakly valid for $\pi$, and
+$\sigma(u)\neq\sigma(x)$ follows immediately from
+proposition~(\ref{logic:prop:FUAP:validsub:recursion:gen}). We now
+show the 'if' part: so we assume that $\sigma$ is valid for
+$\pi_{1}$ and furthermore that $(i)$ and $(ii)$ hold. We need to
+show that $\sigma$ is valid for $\pi$. However, using
+proposition~(\ref{logic:prop:FUAP:validsub:recursion:gen}) together
+with $(ii)$ and the weak validity of $\sigma$ for $\pi_{1}$, we see
+that $\sigma$ is weakly valid for $\pi$. So let $\rho\preceq\pi$. It
+remains to show that $\sigma$ is valid for $\vals(\rho)$. From
+$\subf(\pi)=\{\gen x\pi_{1}\}\cup\subf(\pi_{1})$ there are two
+possible cases: first we assume that $\rho\in\subf(\pi_{1})$. Then
+$\rho\preceq\pi_{1}$ and having assumed that $\sigma$ is valid for
+$\pi_{1}$ we see that $\sigma$ is valid for $\vals(\rho)$ as
+requested. Next we assume that $\rho=\gen x\pi_{1}$. We shall
+distinguish two further cases: first we assume that
+$x\in\spec(\pi_{1})$. Then $\vals(\rho)=\bot\to\bot$ and $\sigma$ is
+clearly valid for $\vals(\rho)$. Next we assume that
+$x\not\in\spec(\pi_{1})$. Then we have $\vals(\rho)=\forall
+x\vals(\pi_{1})$. Using
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) it is
+therefore sufficient to prove that $\sigma$ is valid for
+$\vals(\pi_{1})$ and furthermore that we have the implication:
+    \[
+    u\in\free(\vals(\rho))\ \Rightarrow\ \sigma(u)\neq\sigma(x)
+    \]
+Since $\rho=\pi$, this implication is true by assumption $(i)$. As
+for the validity of $\sigma$ for $\vals(\pi_{1})$, this follows
+immediately from the validity of $\sigma$ for $\pi_{1}$.
+\end{proof}
+
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:injective}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi\in\pvs$.
+We assume that $\sigma_{|\var(\pi)}$ is an injective map. Then
+$\sigma$ is valid for $\pi$.
+\end{prop}
+\begin{proof}
+We already know from
+proposition~(\ref{logic:prop:FUAP:validsub:injective}) that $\sigma$
+is weakly valid for $\pi$. So let $\rho\preceq\pi$. It remains to
+show that $\sigma$ is valid for $\vals(\rho)$. From
+proposition~(\ref{logic:prop:FOPL:valid:injective}), it is
+sufficient to show that $\sigma$ is injective on
+$\var(\vals(\rho))$. Since $\sigma$ is injective on $\var(\pi)$, we
+simply need to show the inclusion
+$\var(\vals(\rho))\subseteq\var(\pi)$ which follows from
+proposition~(\ref{logic:prop:FUAP:varvalmod:conclusions:sub:proof}).
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:singlevar}
+Let $V$ be a set and $x,y\in V$. Let $\pi\in\pvs$. Then we have:
+    \[
+    y\not\in\var(\pi)\ \Rightarrow\ (\mbox{$[y/x]$ valid for
+    $\pi$})
+    \]
+\end{prop}
+\begin{proof}
+We assume that $y\not\in\var(\pi)$. We need to show the substitution
+$[y/x]$ is valid for $\pi$. Using
+proposition~(\ref{logic:prop:FUAP:strongvalidsub:injective}), it is
+sufficient to prove that $[y/x]_{|\var(\pi)}$ is an injective map
+which follows from $y\not\in\var(\pi)$ and
+proposition~(\ref{logic:prop:FOPL:singlevar:support}).
+\end{proof}
+
+The following result relies on
+proposition~(\ref{logic:prop:FUAP:strongvalsubalmostclean:valuation:commute})
+which has not yet been proved. We shall check  that no circular
+reference occurs.
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:composition}
+Let $U$, $V$, $W$ be sets and $\tau:U\to V$ and $\sigma:V\to W$ be
+maps. Then for all $\pi\in{\bf\Pi}(U)$, if $\pi$ is clean we have
+the equivalence:
+\[
+    (\mbox{$\tau$ valid for $\pi$})\land(\mbox{$\sigma$ valid for
+    $\tau(\pi)$})\ \Leftrightarrow\ (\mbox{$\sigma\circ\tau$ valid for
+    $\pi$})
+\]
+where $\tau:{\bf\Pi}(U)\to{\bf\Pi}(V)$ also denotes the associated
+proof substitution mapping.
+\end{prop}
+\begin{proof}
+Let $\pi\in{\bf\Pi}(U)$ be a clean proof. First we show
+$\Rightarrow$\,: so we assume that $\tau$ is valid for $\pi$ and
+$\sigma$ is valid for $\tau(\pi)$. We need to show that
+$\sigma\circ\tau$ is valid for $\pi$. Using
+proposition~(\ref{logic:prop:FUAP:validsub:composition}) we already
+know that $\sigma\circ\tau$ is weakly valid for $\pi$. So let
+$\rho\preceq\pi$. It remains to show that $\sigma\circ\tau$ is valid
+for $\vals(\rho)$. From
+proposition~(\ref{logic:prop:FOPL:valid:composition}), it is
+sufficient to prove that $\tau$ is valid for $\vals(\rho)$ and
+$\sigma$ is valid for $\tau\circ\vals(\rho)$. The fact that $\tau$
+is valid for $\vals(\rho)$ follows immediately from
+definition~(\ref{logic:def:FUAP:strongvalidsub:strongvalidsub}) of
+the validity of $\tau$ for $\pi$. So it remains to show that
+$\sigma$ is valid for $\tau\circ\vals(\rho)$. However, having
+assumed that $\pi$ is clean it follows from
+proposition~(\ref{logic:prop:FUAP:almostclean:sub:proof}) that
+$\rho\preceq\pi$ is also clean. Furthermore since $\tau$ is valid
+for $\pi$, from
+proposition~(\ref{logic:prop:FUAP:strongvalidsub:subformula}) it is
+also valid for $\rho\preceq\pi$. It follows from
+proposition~(\ref{logic:prop:FUAP:strongvalsubalmostclean:valuation:commute})
+that $\vals\circ\tau(\rho)=\tau\circ\vals(\rho)$. It is therefore
+sufficient to prove that $\sigma$ is valid for
+$\vals\circ\tau(\rho)$. Having assumed that $\sigma$ is valid for
+$\tau(\pi)$, we simply need to show is that
+$\tau(\rho)\preceq\tau(\pi)$ which follows from
+proposition~(\ref{logic:prop:FUAP:substitution:subformula}) and the
+fact that $\rho\preceq\pi$. We shall now prove $\Leftarrow$\,: so we
+assume that $\sigma\circ\tau$ is valid for $\pi$. We need to show
+that $\tau$ is valid for $\pi$ and furthermore that $\sigma$ is
+valid for $\tau(\pi)$. First we show that $\tau$ is valid for $\pi$.
+From proposition~(\ref{logic:prop:FUAP:validsub:composition}) we
+already know that $\tau$ is weakly valid for $\pi$. So let
+$\rho\preceq\pi$. It remains to show that $\tau$ is valid for
+$\vals(\rho)$. However, having assumed that $\sigma\circ\tau$ is
+valid for $\pi$, in particular $\sigma\circ\tau$ is valid for
+$\vals(\rho)$. It follows from
+proposition~(\ref{logic:prop:FOPL:valid:composition}) that $\tau$ is
+valid for $\vals(\rho)$ as requested. We now prove that $\sigma$ is
+valid for $\tau(\pi)$. From
+proposition~(\ref{logic:prop:FUAP:validsub:composition}), we already
+know that $\sigma$ is weakly valid for $\tau(\pi)$. So let
+$\kappa\preceq\tau(\pi)$. It remains to show that $\sigma$ is valid
+for $\vals(\kappa)$. However, from
+proposition~(\ref{logic:prop:FUAP:substitution:subformula}) we have
+$\subf(\tau(\pi))=\tau(\subf(\pi))$. It follows that
+$\kappa=\tau(\rho)$ for some $\rho\preceq\pi$. So we need to show
+that $\sigma$ is valid for $\vals\circ\tau(\rho)$. However, having
+assumed that $\pi$ is clean, the same can be said of $\rho$.
+Furthermore, having proved that $\tau$ is valid for $\pi$, it is
+also valid for $\rho$. It follows from
+proposition~(\ref{logic:prop:FUAP:strongvalsubalmostclean:valuation:commute})
+that $\vals\circ\tau(\rho)=\tau\circ\vals(\rho)$ and it remains to
+show that $\sigma$ is valid for $\tau\circ\vals(\rho)$. However,
+having assumed that $\sigma\circ\tau$ is valid for $\pi$, in
+particular it is valid for $\vals(\rho)$. It follows from
+proposition~(\ref{logic:prop:FOPL:valid:composition}) that $\sigma$
+is valid for $\tau\circ\vals(\rho)$ as requested.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FUAP:strongvalidsub:equal:image}
+Let $V,W$ be sets and $\sigma,\tau:V\to W$ be maps. Let $\pi\in\pvs$
+such that the equality $\sigma(\pi)=\tau(\pi)$ holds. Then we have
+the equivalence:
+    \[
+    (\mbox{$\sigma$ valid for $\pi$})\ \Leftrightarrow\
+    (\mbox{$\tau$ valid for $\pi$})
+    \]
+\end{prop}
+\begin{proof}
+It is sufficient to prove $\Rightarrow$\,: so we assume that
+$\sigma(\pi)=\tau(\pi)$ and $\sigma$ is valid for $\pi$. We need to
+show that $\tau$ is also valid for $\pi$. From
+proposition~(\ref{logic:prop:FUAP:validsub:equal:image}) we already
+know that $\tau$ is weakly valid for $\pi$. So let $\rho\preceq\pi$.
+It remains to show that $\tau$ is valid for $\vals(\rho)$. Having
+assumed that $\sigma$ is valid for $\pi$, we know that $\sigma$ is
+valid for $\vals(\rho)$. Using
+proposition~(\ref{logic:prop:FOPL:validsub:image}), it is therefore
+sufficient to show that
+$\sigma\circ\vals(\rho)=\tau\circ\vals(\rho)$. From
+proposition~(\ref{logic:prop:substitution:support}) we simply need
+to show that $\sigma$ and $\tau$ coincide on $\var(\vals(\rho))$.
+From
+proposition~(\ref{logic:prop:FUAP:varvalmod:conclusions:sub:proof})
+we have $\var(\vals(\rho))\subseteq\var(\pi)$. So it is sufficient
+to show that $\sigma$ and $\tau$ coincide on $\var(\pi)$ which
+follows from $\sigma(\pi)=\tau(\pi)$ and
+proposition~(\ref{logic:prop:FUAP:variable:support}).
+\end{proof}

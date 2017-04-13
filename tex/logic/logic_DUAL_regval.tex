@@ -1,0 +1,279 @@
+We want to prove G\"odel's completeness theorem. Our strategy to do
+so will be to show that {\em every valuation has a model}, namely
+that for all $v:\pv\to 2$ element of the dual space \pvd\ of
+definition~(\ref{logic:def:FOPL:semantics:valuation}), there exists
+a model $(M,r)$ together with an assignment $a:V\to M$ such that
+$v=\beta(\,\cdot\,)(a)$, where $\beta$ denotes the associated model
+valuation function of
+definition~(\ref{logic:def:FOPL:model:valuation:function}). This
+strategy is clearly sufficient: G\"odel's completeness theorem is
+usually known as the statement that a valid formula must be
+provable. However, the word {\em valid} is usually understood as
+{\em being true under every model and assignment} which does not
+correspond to
+definition~(\ref{logic:def:FOPL:semantics:entailments}) where we
+defined a {\em valid} formula in terms of valuations and not models.
+So for us G\"odel's completeness theorem is the statement that if a
+formula is true under any model and assignment, then it must be
+provable. Now suppose we have proved that every valuation has a
+model. Then if $\phi\in\pv$ is a formula which is true under any
+model and assignment, then it is also true under any valuation.
+Indeed, let $v\in\pvd$. Then $v$ has a model, i.e.
+$v=\beta(\,\cdot\,)(a)$ for some model $(M,r)$ and assignment
+$a:V\to M$. By assumption we have $M\vDash\phi[a]$ which is
+$\beta(\phi)(a)=1$ and consequently $v(\phi)=1$, i.e. $v\vDash\phi$.
+Having proved that $\phi$ is true under any valuation, we conclude
+from theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) of
+page~\pageref{logic:the:FOPL:semantics:syn:equiv:sem} that $\phi$ is
+provable, and G\"odel's completeness theorem is true.
+
+In this section, we shall study the notion of {\em regular
+valuation} which will allow us to follow the spirit of Leon Henkin's
+proof of G\"odel's completeness theorem, by considering maximal
+consistent sets in which every existential statement has a {\em
+Henkin witness}. A regular valuation $v:\pv\to 2$ is a valuation for
+which:
+    \begin{equation}\label{logic:eqn:FOPL:regval:regular:1}
+    v(\forall x\phi_{1})=\min\left\{v(\phi_{1}[y/x])\ :\ y\in V\right\}
+    \end{equation}
+Since $\phi=\forall x\phi_{1}\to\phi_{1}[y/x]$ is an axiom of first
+order logic, it is a provable formula and consequently $v(\phi)=1$
+which is $v(\forall x\phi_{1})\leq v(\phi_{1}[y/x])$ for all
+$v\in\pvd$. So the interpretation of
+equation~(\ref{logic:eqn:FOPL:regval:regular:1}) can be thought of
+as follows: whenever a valuation $v$ is regular, if a statement
+$\forall x\phi_{1}$ is false then there must exist some $y\in V$ for
+which the statement $\phi_{1}[y/x]$ is also false. We already know
+from
+proposition~(\ref{logic:prop:FOPL:semantics:bijection:max:cons:val})
+that a valuation can be identified with a maximal consistent set. We
+are also familiar with the duality $\forall
+x\leftrightarrow\lnot\exists x\lnot$. Hence another way to think of
+equation~(\ref{logic:eqn:FOPL:regval:regular:1}) is as follows:
+whenever a maximal consistent set is regular, if it contains a
+statement $\exists x\phi_{1}$ then it must also contain
+$\phi_{1}[y/x]$ for some $y\in V$. In other words, every true
+statement $\exists x\phi_{1}$ has a {\em Henkin witness}.
+
+One interesting point to note is that
+equation~(\ref{logic:eqn:FOPL:regval:regular:1}) is in general very
+hard to write with full mathematical rigor, since the substitution
+$[y/x]$ is usually not valid for $\phi_{1}$. Fortunately for us, the
+notation $[y/x]:\pv\to\pv$ refers to an essential substitution of
+$y$ in place of $x$, which eliminates the issue altogether.
+
+\index{regular@Regular valuation}\index{valuation@Regular valuation}
+\begin{defin}\label{logic:def:FOPL:regval:regular}
+Let $V$ be a set and $v:\pv\to 2$ be a valuation on \pv. we say that
+$v$ is {\em regular}, \ifand\ for all $\phi_{1}\in\pv$ and $x\in V$
+we have:
+    \[
+    v(\forall x\phi_{1})=\min\left\{v(\phi_{1}[y/x])\ :\ y\in V\right\}
+    \]
+where $[y/x]:\pv\to\pv$ denotes an essential substitution of $y$ in
+place of $x$.
+\end{defin}
+
+Regular valuations have the very appealing property of being induced
+by their {\em naive model}. In other words, if $v:\pv\to 2$ is a
+regular valuation then $v=\beta(\,\cdot\,)(i)$ where $\beta$ is the
+model valuation function associated with the naive model of $v$ and
+$i:V\to V$ is the identity assignment. The {\em naive model} of $v$
+is simply the model $(M,r)$ where $M=V$ and $r=\{(x,y)\in V\times V\
+:\ v(x\in y)=1\}$.
+
+\index{model@Naive model of valuation} \index{naive@Naive model of
+valuation}
+\begin{defin}\label{logic:def:FOPL:naive:model}
+Let $V$ be a set and $v:\pv\to 2$ be a valuation on \pv. We call
+{\em naive model} of\, $v$ the ordered pair $(M,r)$ defined by $M=V$
+and:
+    \[
+    r=\{(x,y)\in V\times V\ :\ v(x\in y)=1\}
+    \]
+\end{defin}
+
+In fact the converse is also true: if a valuation is induced by its
+naive model then it is regular, as we shall now see from the
+following theorem:
+
+\index{regular@Regular valuation and naive model}\index{naive@Naive
+model and regular valuation}
+\begin{theorem}\label{logic:the:FOPL:regval:regular:naive}
+Let $V$ be a set and $v\in\pvd$. Then $v$ is regular, \ifand\ it is
+induced by its naive model and the identity assignment $i:V\to V$,
+i.e.\,:
+    \[
+    \forall \phi\in\pv\ ,\ v(\phi)=\beta(\phi)(i)
+    \]
+where $\beta$ is the model valuation function associated with the
+naive model of $v$.
+\end{theorem}
+\begin{proof}
+First we show the 'if' part: so we assume that $v:\pv\to 2$ is a
+valuation such that $v(\phi)=\beta(\phi)(i)$ for all $\phi\in\pv$,
+where $\beta$ is the model valuation function associated with the
+naive model of $v$, and $i:V\to V$ is the identity. We need to show
+that $v$ is regular. So let $\phi_{1}\in\pv$ and $x\in V$. We have:
+    \begin{eqnarray*}
+    v(\forall x\phi_{1})&=&\beta(\forall x\phi_{1})(i)\\
+    &=&\min\left\{\beta(\phi_{1})(b)\ :\ b=i\mbox{\ on\
+    }V_{x}\right\}\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\min\left\{\beta(\phi_{1})([y/x])\ :\ y\in V\right\}\\
+    &=&\min\left\{\beta(\phi_{1})(\,i\circ[y/x]\,)\ :\ y\in V\right\}\\
+    \mbox{B: to be proved}\ \rightarrow
+    &=&\min\left\{\beta(\,[y/x](\phi_{1})\,)(i)\ :\ y\in V\right\}\\
+    &=&\min\left\{\beta(\phi_{1}[y/x])(i)\ :\ y\in V\right\}\\
+    &=&\min\left\{v(\phi_{1}[y/x])\ :\ y\in V\right\}\\
+    \end{eqnarray*}
+So it remains to justify points A and B. For point A, we need to
+show:
+    \[
+    X=\{b:V\to V\ :\ b=i\mbox{\ on\ }V_{x}\}=\{[y/x]:V\to V\ ,\ y\in
+    V\}=Y
+    \]
+First we show that $X\subseteq Y$: so suppose $b=i$ on
+$V\setminus\{x\}$. Define $y=b(x)$. In order to show that $b\in Y$
+it is sufficient to prove that $b=[y/x]$. So suppose $u\in V$. If
+$u=x$, then $b(x)=[y/x](x)$ follows from our definition of $y$. If
+$u\neq x$ then we have $b(u)=i(u)=u=[y/x](u)$. So we now prove that
+$Y\subseteq X$: so let $b=[y/x]$ for some $y\in V$. Then it is clear
+that $b=i$ on $V\setminus\{x\}$. It remains to justify point B,
+which is an immediate consequence of
+theorem~(\ref{logic:the:FOPL:model:essential:substitution}) of
+page~\pageref{logic:the:FOPL:model:essential:substitution} provided
+the map $[y/x]:\pv\to\pv$ is understood to be an arbitrary essential
+substitution associated with the map $[y/x]:V\to V$. Note that such
+an essential substitution always exists by virtue of
+theorem~(\ref{logic:the:FOPL:esssubst:existence}) of
+page~\pageref{logic:the:FOPL:esssubst:existence}. We now show the
+'only if' part: so we assume that $v:\pv\to 2$ is a valuation which
+is regular. We need to show that $\beta(\phi)(i)=v(\phi)$ for all
+$\phi\in\pv$, where $\beta$ is the model valuation function of the
+naive model of $v$ and $i:V\to V$ is the identity. We shall prove
+the seemingly stronger result that
+$\beta(\phi)(\sigma)=v(\sigma(\phi))$ for all essential
+substitutions $\sigma:\pv\to\pv$. We shall do so by structural
+induction, using theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Note that from
+proposition~(\ref{logic:prop:FOPL:esssubstprop:injective}) the
+identity $i:\pv\to\pv$ being injective, is an essential substitution
+associated with the identity $i:V\to V$. So what we set out to prove
+is indeed sufficient. First we assume that $\phi=(x\in y)$ for some
+$x,y\in V$. Let $\sigma:\pv\to\pv$ be an arbitrary essential
+substitution:
+    \begin{eqnarray*}
+    \beta(\phi)(\sigma)&=&\beta(x\in y)(\sigma)\\
+        &=&1_{r}(\sigma(x),\sigma(y))\\
+        \mbox{def.~(\ref{logic:def:FOPL:naive:model})}\ \rightarrow
+        &=&v(\sigma(x)\in \sigma(y))\\
+        \mbox{prop.~(\ref{logic:prop:FOPL:esssubstprop:charac})}\ \rightarrow
+        &=&v(\sigma(\phi))\\
+    \end{eqnarray*}
+Next we assume that $\phi=\bot$. We have
+$\beta(\bot)(\sigma)=0=v(\bot)=v(\sigma(\bot))$, where
+$\bot=\sigma(\bot)$ follows from
+proposition~(\ref{logic:prop:FOPL:esssubstprop:charac}). So we now
+assume that $\phi=\phi_{1}\to\phi_{2}$ where
+$\phi_{1},\phi_{2}\in\pv$ satisfy our equality for any
+$\sigma:\pv\to\pv$ essential:
+    \begin{eqnarray*}
+    \beta(\phi)(\sigma)&=&\beta(\phi_{1}\to\phi_{2})(\sigma)\\
+    &=&\beta(\phi_{1})(\sigma)\to\beta(\phi_{2})(\sigma)\\
+    &=&v(\sigma(\phi_{1}))\to v(\sigma(\phi_{2}))\\
+    &=&v(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)\\
+    \mbox{A: to be proved}\ \rightarrow&=&v(\sigma(\phi))\\
+    \end{eqnarray*}
+It remains to show that
+$v(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)=v(\sigma(\phi))$. From
+proposition~(\ref{logic:prop:FOPL:esssubstprop:charac}) we have
+$\sigma(\phi)\sim\sigma(\phi_{1})\to\sigma(\phi_{2})$ where $\sim$
+is the substitution congruence. So our desired equality follows from
+proposition~(\ref{logic:prop:FOPL:semantics:stronger:congruence}).
+We now assume that $\phi=\forall x\phi_{1}$ where $\phi_{1}\in\pv$
+satisfies our equality for all $\sigma:\pv\to\pv$ essential. We need
+to show the same is true of $\phi$. So let $\sigma:\pv\to\pv$ be an
+essential substitution. Using
+proposition~(\ref{logic:prop:FOPL:esssubstprop:tau}), let
+$\tau:\pv\to\pv$ be an essential substitution such that
+$\tau=\sigma$ on $V\setminus\{x\}$, and
+$\tau(x)\not\in\free(\sigma(\phi))$. Note that we have the
+substitution equivalence
+$\sigma(\phi)\sim\forall\tau(x)\tau(\phi_{1})$ and consequently:
+    \begin{eqnarray*}
+    \beta(\phi)(\sigma)&=&\beta(\forall x\phi_{1})(\sigma)\\
+    &=&\min\left\{\beta(\phi_{1})(b)\ :\ b=\sigma\mbox{\ on\
+    }V_{x}\right\}\\
+    \tau=\sigma\mbox{\ on\ }V_{x}\ \rightarrow
+    &=&\min\left\{\beta(\phi_{1})(b)\ :\ b=\tau\mbox{\ on\
+    }V_{x}\right\}\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\min\left\{\beta(\phi_{1})(\,[y/\tau(x)]\circ\tau\,)\ :\ y\in V\right\}\\
+    \mbox{B: to be proved}\ \rightarrow
+    &=&\min\left\{v(\,\,[y/\tau(x)]\circ\tau(\phi_{1})\,\,)\ :\ y\in V\right\}\\
+    &=&\min\left\{v(\,\tau(\phi_{1})[y/\tau(x)]\,)\ :\ y\in V\right\}\\
+    \mbox{$v$ is regular}\ \rightarrow&=&v(\,\forall\tau(x)\tau(\phi_{1})\,)\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:semantics:stronger:congruence})}\ \rightarrow
+    &=&v(\sigma(\phi))
+    \end{eqnarray*}
+So it remains to prove points A and B. First we start with point
+$B$: we need to show the equality
+$\beta(\phi_{1})(\,[y/\tau(x)]\circ\tau\,)=v(\,\,[y/\tau(x)]\circ\tau(\phi_{1})\,\,)$
+which is in fact simply our induction hypothesis, provided
+$[y/\tau(x)]\circ\tau:\pv\to\pv$ is an essential substitution.
+However, we already know that $\tau:\pv\to\pv$ is essential, and
+from theorem~(\ref{logic:the:FOPL:esssubst:existence}) of
+page~\pageref{logic:the:FOPL:esssubst:existence} we can choose
+$[y/\tau(x)]:\pv\to\pv$ to be an essential map associated with
+$[y/\tau(x)]:V\to V$. From
+proposition~(\ref{logic:prop:FOPL:esssubstprop:composition}), the
+composition $[y/\tau(x)]\circ\tau:\pv\to\pv$ is indeed an essential
+substitution, associated with $[y/\tau(x)]\circ\tau: V\to V$. So it
+remains to prove A, which is:
+    \[
+    X=\left\{\beta(\phi_{1})(b)\ :\ b=\tau\mbox{\ on\
+    }V_{x}\right\}=\left\{\beta(\phi_{1})(\,[y/\tau(x)]\circ\tau\,)\ :\ y\in
+    V\right\}=Y
+    \]
+First we show that $X\subseteq Y$: so let $\epsilon\in X$. There
+exists an assignment $b:V\to V$ such that $b=\tau$ on
+$V\setminus\{x\}$ and $\epsilon=\beta(\phi_{1})(b)$. We need to show
+that $\epsilon\in Y$. Let $y=b(x)$. In order to show that
+$\epsilon\in Y$, it is sufficient to show that $\epsilon
+=\beta(\phi_{1})(\,[y/\tau(x)]\circ\tau\,)$. So we need to show
+$\beta(\phi_{1})(b)=\beta(\phi_{1})(\,[y/\tau(x)]\circ\tau\,)$.
+Using proposition~(\ref{logic:prop:FOPL:model:assignment:support}),
+it is sufficient to prove that $b$ and $[y/\tau(x)]\circ\tau$
+coincide on $\free(\phi_{1})$. So let $u\in\free(\phi_{1})$. We need
+to show that $b(u)=[y/\tau(x)]\circ\tau(u)$. We shall distinguish
+two cases: first we assume that $u=x$. Then we need to show that
+$b(x)=y$ which is true by definition of $y$. Next we assume that
+$u\neq x$. Then $u\in\free(\phi_{1})\setminus\{x\}=\free(\phi)$.
+From proposition~(\ref{logic:prop:FOPL:esssubstprop:free:commute})
+we have $\free(\sigma(\phi))=\sigma(\free(\phi))$. It follows that
+$\sigma(u)\in\free(\sigma(\phi))$. Furthermore, since $\tau=\sigma$
+on $V\setminus\{x\}$ we have $\tau(u)=\sigma(u)$. So we see that
+$\tau(u)\in\free(\sigma(\phi))$. Having assumed that
+$\tau(x)\not\in\free(\sigma(\phi))$ it follows that
+$\tau(u)\neq\tau(x)$. Hence, we see that
+$[y/\tau(x)]\circ\tau(u)=\tau(u)$, and the equality
+$b(u)=[y/\tau(x)]\circ\tau(u)$ follows from the fact that $b=\tau$
+on $V\setminus\{x\}$. So we now prove that $Y\subseteq X$: let
+$\epsilon\in Y$. There exists $y\in V$ such that
+$\epsilon=\beta(\phi_{1})(\,[y/\tau(x)]\circ\tau\,)$. We need to
+show that $\epsilon\in X$. Define the assignment $b:V\to V$ by
+setting $b=\tau$ on $V\setminus\{x\}$ and $b(x)=y$. In order to show
+that $\epsilon\in X$, it is sufficient to prove that $\epsilon
+=\beta(\phi_{1})(b)$. So we need to show that
+$\beta(\phi_{1})(b)=\beta(\phi_{1})(\,[y/\tau(x)]\circ\tau\,)$.
+Using proposition~(\ref{logic:prop:FOPL:model:assignment:support}),
+it is sufficient to prove that $b$ and $[y/\tau(x)]\circ\tau$
+coincide on $\free(\phi_{1})$. So let $u\in\free(\phi_{1})$. We need
+to show that $b(u)=[y/\tau(x)]\circ\tau(u)$. We shall distinguish
+two cases: first we assume that $u=x$. Then we need to show that
+$b(x)=y$ which is true by definition of $b$. Next we assume that
+$u\neq x$. Then using an identical argument as previously we obtain
+$\tau(u)\neq\tau(x)$ and we therefore need to show that
+$b(u)=\tau(u)$ which is true by definition of $b$.
+\end{proof}

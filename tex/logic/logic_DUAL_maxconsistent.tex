@@ -1,0 +1,360 @@
+In this section we introduce the notion of {\em consistency} and
+define {\em maximal consistent subsets} leading up to Lindenbaum's
+lemma~(\ref{logic:lemma:FOPL:semantics:lindenbaum}) in the following
+section.
+
+\index{consistent@Consistent subset
+$\Gamma$}\index{gamma@$\Gamma\vdash\bot$ : $\Gamma$ is inconsistent}
+\begin{defin}\label{logic:def:FOPL:semantics:consistent:subset}
+Let $V$ be a set and $\Gamma\subseteq\pv$. We say that $\Gamma$ is
+{\em consistent} \ifand\ there exists no proof of $\bot$ from
+$\Gamma$, i.e. the sequent $\Gamma\vdash\bot$ is false.
+\end{defin}
+
+It is clear that any subset $\Delta$ which is larger than an
+inconsistent subset $\Gamma$ is itself inconsistent. At this point
+in time, we do not know of any subset $\Gamma$ which is consistent.
+Since we have not yet proved that the sequent $\vdash\bot$ is false,
+it may be that the empty set itself is inconsistent. If this were
+the case, then any sequent $\Gamma\vdash\phi$ would be true, as the
+following proposition shows:
+
+\index{inconsistent@Inconsistency proves everything}
+\begin{prop}\label{logic:prop:FOPL:semantics:inconsistent:everything}
+Let $V$ be a set and $\Gamma\subseteq\pv$ be an inconsistent
+subset\,:
+    \[
+    \forall\phi\in\pv\ ,\ \Gamma\vdash\phi
+    \]
+In other words, every formula can be proved from an inconsistent
+subset.
+\end{prop}
+\begin{proof}
+We assume that $\Gamma$ is inconsistent, i.e. $\Gamma\vdash\bot$.
+Given $\phi\in\pv$, we need to show that $\Gamma\vdash\phi$.
+However, using the simplification property of
+proposition~(\ref{logic:prop:FOPL:simplification}) we obtain
+$\Gamma\vdash[(\phi\to\bot)\to\bot]$. Hence we see from the
+transposition property of
+proposition~(\ref{logic:prop:FOPL:transposition}) that
+$\Gamma\vdash\phi$ as requested.
+\end{proof}
+
+If a statement $\phi$ cannot be proven from a set of premises
+$\Gamma$, then in particular $\Gamma$ must be consistent by virtue
+of
+proposition~(\ref{logic:prop:FOPL:semantics:inconsistent:everything}).
+In fact, we can add the negation of $\phi$ to the set $\Gamma$ and
+still obtain a consistent set. In short, if something is not
+provable, adding its negation to a set of premises is consistent.
+
+\index{provability@Provability and
+consistency}\index{consistentcy@Consistency and provability}
+\begin{prop}\label{logic:prop:FOPL:semantics:consistent:sequent}
+Let $V$ be a set. Then for all $\phi\in\pv$ and
+$\Gamma\subseteq\pv$\,:
+    \[
+    \Gamma\vdash\phi\mbox{\ is false}\ \Leftrightarrow\
+    \Gamma\cup\{\phi\to\bot\}\mbox{\ is consistent}
+    \]
+\end{prop}
+\begin{proof}
+First we show $\Rightarrow$\,: so suppose the sequent
+$\Gamma\vdash\phi$ is false. We need to show that
+$\Gamma\cup\{\phi\to\bot\}$ is consistent. Suppose to the contrary
+that $\Gamma\cup\{\phi\to\bot\}$ is not consistent. Then we can
+deduce a contradiction from it, i.e. we have
+$\Gamma\cup\{\phi\to\bot\}\vdash\bot$. Using the deduction
+theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} we obtain
+$\Gamma\vdash(\phi\to\bot)\to\bot$ and consequently, from the
+transposition property of
+proposition~(\ref{logic:prop:FOPL:transposition}) we conclude that
+$\Gamma\vdash\phi$ which is a contradiction. We now prove
+$\Leftarrow$\,: so we assume that $\Gamma\cup\{\phi\to\bot\}$ is
+consistent. We need to show that $\Gamma\vdash\phi$ is false. So
+suppose to the contrary that $\Gamma\vdash\phi$ is true. Then in
+particular we have $\Gamma\cup\{\phi\to\bot\}\vdash\phi$. However,
+it is clear that $\Gamma\cup\{\phi\to\bot\}\vdash(\phi\to\bot)$.
+Using the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) we obtain
+$\Gamma\cup\{\phi\to\bot\}\vdash\bot$, which contradicts our
+assumption that $\Gamma\cup\{\phi\to\bot\}$ is consistent.
+\end{proof}
+
+As we shall see in
+theorem~(\ref{logic:the:FOPL:semantics:satis:equiv:consistent}) of
+page~\pageref{logic:the:FOPL:semantics:satis:equiv:consistent}, the
+notions of {\em consistent} and {\em satisfiable} subsets are in
+fact equivalent. This will allow us to derive the compactness
+theorem~(\ref{logic:the:FOPL:semantics:compactness}) of
+page~\pageref{logic:the:FOPL:semantics:compactness}. We can now
+prove one side of the equivalence:
+
+\begin{prop}\label{logic:prop:FOPL:semantics:satis:imp:consistent}
+Let $V$ be a set and $\Gamma\subseteq\pv$. Then we have the
+implication:
+    \[
+    \Gamma\mbox{\ is satisfiable}\ \Rightarrow\ \Gamma\mbox{\
+    is consistent}
+    \]
+\end{prop}
+\begin{proof}
+We assume that $\Gamma$ is satisfiable. So there exists a valuation
+$v\in\pvd$ which satisfies $\Gamma$, i.e. such that $v\vDash\Gamma$.
+We need to show that $\Gamma$ is consistent. So suppose to the
+contrary that $\Gamma$ is not consistent. Then the sequent
+$\Gamma\vdash\bot$ is true. Using
+proposition~(\ref{logic:prop:FOPL:semantics:syn:imp:sem}) it follows
+that $\Gamma\vDash\bot$. Since the valuation $v$ satisfies $\Gamma$
+we conclude that it also satisfies $\bot$, i.e. $v\vDash\bot$. Hence
+we obtain $v(\bot)=1$ which contradicts
+definition~(\ref{logic:def:FOPL:semantics:valuation}) of $v$ being a
+valuation on \pv.
+\end{proof}
+
+The subsets $\Gamma\subseteq\pv$ which are consistent form a subset
+$X$ of the power set ${\cal P}(\pv)$. In other words, they form a
+set of subsets of \pv. This set $X$ can be partially ordered by
+inclusion. A maximal consistent set $\Gamma$ is an element of $X$
+which is a maximal element with respect to this partial order.
+Recall that given a partially ordered set $(X,\leq)$, an element
+$a\in X$ is said to be {\em maximal} \ifand\ for all $b\in X$ we
+have the implication:
+    \[
+    a\leq b\ \Rightarrow\ a=b
+    \]
+We shall need to remember this when stating Zorn's lemma in the next
+section.
+
+\index{maximal@Maximal consistent subset}\index{consistent@Maximal
+consistent subset $\Gamma$}
+\begin{defin}\label{logic:def:FOPL:semantics:maximal:consistent}
+Let $V$ be a set and $\Gamma\subseteq\pv$. We say that $\Gamma$ is
+{\em maximal consistent} \ifand\ it is consistent and for all
+$\Delta\subseteq\pv$ we have:
+    \[
+    (\Gamma\subseteq\Delta)\land(\Delta\mbox{\ consistent})\
+    \Rightarrow \Gamma=\Delta
+    \]
+\end{defin}
+
+Maximal consistent subsets have many interesting properties. In
+particular, they are {\em closed under syntactic entailment}. In
+other words, anything which can be proven from a maximal consistent
+subset, actually belongs to that subset.
+
+\begin{prop}\label{logic:prop:FOPL:semantics:max:cons:deduction}
+Let $V$ be a set and $\Gamma\subseteq\pv$ be maximal consistent.
+Then:
+    \[
+    \forall\phi\in\pv\ ,\ (\,\Gamma\vdash\phi\ \Rightarrow\
+    \phi\in\Gamma\,)
+    \]
+\end{prop}
+\begin{proof}
+We assume that $\Gamma\subseteq\pv$ is maximal consistent. Let
+$\phi\in\pv$ be such that $\Gamma\vdash\phi$. We need to show that
+$\phi\in\Gamma$. So suppose to the contrary that
+$\phi\not\in\Gamma$. Then $\Delta=\Gamma\cup\{\phi\}$ is a set which
+is strictly larger than $\Gamma$. Having assumed that $\Gamma$ is
+maximal consistent, $\Delta$ cannot be consistent. It follows that
+$\Delta\vdash\bot$ which is $\Gamma\cup\{\phi\}\vdash\bot$. Using
+the deduction theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction} we obtain
+$\Gamma\vdash(\phi\to\bot)$. However, by assumption
+$\Gamma\vdash\phi$. Using the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) we see that
+$\Gamma\vdash\bot$, contradicting the consistency of $\Gamma$.
+\end{proof}
+
+Another interesting property of maximal consistent subsets is the
+fact they always contain a formula $\phi$ or its negation
+$\phi\to\bot$, for all $\phi\in\pv$. Obviously they cannot contain
+both without being inconsistent. Hence we have:
+
+\begin{prop}\label{logic:prop:FOPL:semantics:max:cons:dychotomy}
+Let $V$ be a set and $\Gamma\subseteq\pv$ be maximal consistent.
+Then for all $\phi\in\pv$ we have $\phi\in\Gamma$ or
+$(\phi\to\bot)\in\Gamma$, and these are exclusive.
+\end{prop}
+\begin{proof}
+If $\Gamma$ is consistent, it is clear we cannot have both
+$\phi\in\Gamma$ and $(\phi\to\bot)\in\Gamma$, as otherwise the
+sequents $\Gamma\vdash\phi$ and $\Gamma\vdash(\phi\to\bot)$ would
+both be true, and using the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}), this would imply
+$\Gamma\vdash\bot$ contradicting the consistency of $\Gamma$. So we
+assume that $\Gamma\subseteq\pv$ is maximal consistent and given
+$\phi\in\pv$, we need to show that $\phi\in\Gamma$ or
+$(\phi\to\bot)\in\Gamma$. So we assume that
+$(\phi\to\bot)\not\in\Gamma$. We need to show that $\phi\in\Gamma$.
+However, having assumed $(\phi\to\bot)\not\in\Gamma$, the set
+$\Delta=\Gamma\cup\{\phi\to\bot\}$ is a set which is strictly larger
+than $\Gamma$. Having assumed $\Gamma$ is maximal consistent, it
+follows that $\Delta$ cannot be consistent. So
+$\Gamma\cup\{\phi\to\bot\}$ is not consistent and consequently from
+proposition~(\ref{logic:prop:FOPL:semantics:consistent:sequent}) we
+see that the sequent $\Gamma\vdash\phi$ is true. Since $\Gamma$ is
+maximal consistent, using
+proposition~(\ref{logic:prop:FOPL:semantics:max:cons:deduction}) we
+conclude that $\phi\in\Gamma$ as requested.
+\end{proof}
+
+A maximal consistent subset can be thought of as the set of {\em
+true} formulas of a valuation $v\in\pvd$. This fact will be made
+precise after we show the following proposition,  which expresses
+the familiar idea that an implication $\phi_{1}\to\phi_{2}$ is {\em
+true}, \ifand\ $\phi_{1}$ is {\em false} or $\phi_{2}$ is {\em
+true}. More precisely, we have:
+
+\begin{prop}\label{logic:prop:FOPL:max:cons:implication:charac}
+Let $V$ be a set and $\Gamma\subseteq\pv$ be a maximal consistent
+subset. Then for all formulas $\phi_{1},\phi_{2}\in\pv$ we have the
+equivalence:
+    \[
+    (\phi_{1}\to\phi_{2})\in\Gamma\ \Leftrightarrow\
+    (\phi_{1}\not\in\Gamma)\lor(\phi_{2}\in\Gamma)
+    \]
+\end{prop}
+\begin{proof}
+First we prove $\Rightarrow$\,: so we assume that
+$(\phi_{1}\to\phi_{2})\in\Gamma$. We need to show that
+$\phi_{1}\not\in\Gamma$ or $\phi_{2}\in\Gamma$. So suppose
+$\phi_{1}\in\Gamma$. We need to show that $\phi_{2}\in\Gamma$.
+However, we obviously have $\Gamma\vdash(\phi_{1}\to\phi_{2})$ and
+$\Gamma\vdash\phi_{1}$. Using the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) we obtain
+$\Gamma\vdash\phi_{2}$. Having assumed $\Gamma$ is maximal
+consistent, it follows from
+proposition~(\ref{logic:prop:FOPL:semantics:max:cons:deduction})
+that $\phi_{2}\in\Gamma$ as requested. We now prove $\Leftarrow$\,:
+so we assume that $\phi_{1}\not\in\Gamma$ or $\phi_{2}\in\Gamma$. We
+need to show that $(\phi_{1}\to\phi_{2})\in\Gamma$. Using
+proposition~(\ref{logic:prop:FOPL:semantics:max:cons:deduction})
+once more, it is sufficient to prove that
+$\Gamma\vdash(\phi_{1}\to\phi_{2})$. From the deduction
+theorem~(\ref{logic:the:FOPL:deduction}) of
+page~\pageref{logic:the:FOPL:deduction}, it is therefore sufficient
+to show that $\Gamma\cup\{\phi_{1}\}\vdash\phi_{2}$. This is clearly
+true if $\phi_{2}\in\Gamma$, so we may assume that
+$\phi_{2}\not\in\Gamma$. However by assumption, this implies that
+$\phi_{1}\not\in\Gamma$. Having assumed $\Gamma$ is maximal
+consistent, from
+proposition~(\ref{logic:prop:FOPL:semantics:max:cons:dychotomy}) it
+follows that $(\phi_{1}\to\bot)\in\Gamma$ and in particular we have
+$\Gamma\vdash(\phi_{1}\to\bot)$. Using the deduction theorem once
+more, we see that $\Gamma\cup\{\phi_{1}\}\vdash\bot$. So the subset
+$\Gamma\cup\{\phi_{1}\}$ is inconsistent and the required sequent
+$\Gamma\cup\{\phi_{1}\}\vdash\phi_{2}$ follows from
+proposition~(\ref{logic:prop:FOPL:semantics:inconsistent:everything}).
+\end{proof}
+
+The following proposition establishes a bijection between the dual
+space \pvd\ and the set of maximal consistent subsets of \pv. This
+gives us valuable insight, and allows us to view any valuation
+$v:\pv\to 2$ as a maximal consistent subset, or to regard any
+maximal consistent subset as a valuation. This result will be
+particularly interesting once we show that $\pvd\neq\emptyset$.
+
+\index{maximal@Maximal consistent and
+valuation}\index{valuation@Valuation and maximal consistent}
+\begin{prop}\label{logic:prop:FOPL:semantics:bijection:max:cons:val}
+Let $V$ be a set and $v:\pv\to 2$ be a valuation. Consider:
+    \[
+    \Gamma_{v}=\{\phi\in\pv:v(\phi)=1\}
+    \]
+Then $\Gamma_{v}$ is maximal consistent. Conversely, let $\Gamma$ be
+maximal consistent and:
+     \[
+     \forall \phi\in\pv\ ,\ 1_{\Gamma}(\phi)=\left\{
+        \begin{array}{lcl}
+        1&\mbox{\ if\ }&\phi\in\Gamma\\
+        0&\mbox{\ if\ }&\phi\not\in\Gamma
+        \end{array}
+    \right.
+    \]
+Then the characteristic function $1_{\Gamma}:\pv\to 2$ is a
+valuation. Furthermore, the maps $v\to\Gamma_{v}$ and $\Gamma\to
+1_{\Gamma}$ are bijections which are inverse of each other, between
+the dual space \pvd\ and the set of maximal consistent subsets of
+\pv.
+\end{prop}
+\begin{proof}
+We first consider a valuation $v:\pv\to 2$ and
+$\Gamma_{v}=\{\phi\in\pv:v(\phi)=1\}$. We need to show that
+$\Gamma_{v}$ is maximal consistent. First we show that $\Gamma_{v}$
+is consistent. So suppose to the contrary that $\Gamma_{v}$ is not
+consistent. Then we have $\Gamma_{v}\vdash\bot$. It follows from
+proposition~(\ref{logic:prop:FOPL:semantics:syn:imp:sem}) that
+$\Gamma_{v}\vDash\bot$. However, for all $\phi\in\Gamma_{v}$ we have
+$v(\phi)=1$. So $v$ satisfies $\Gamma_{v}$, i.e. we have
+$v\vDash\Gamma_{v}$. From $\Gamma_{v}\vDash\bot$ we therefore
+conclude that $v\vDash\bot$ which is $v(\bot)=1$ and contradicts
+definition~(\ref{logic:def:FOPL:semantics:valuation}) of $v$ being a
+valuation on \pv. So we now show that $\Gamma_{v}$ is in fact
+maximal consistent. So suppose $\Delta\subseteq\pv$ is a set which
+is strictly larger than $\Gamma_{v}$. We need to show that $\Delta$
+is not consistent, i.e. that $\Delta\vdash\bot$. However by
+assumption the set $\Delta\setminus\Gamma_{v}$ is not empty. So let
+$\phi\in\Delta\setminus\Gamma_{v}$. From $\phi\not\in\Gamma_{v}$ we
+obtain $v(\phi)=0$ and consequently $v(\phi\to\bot)=v(\phi)\to
+v(\bot)=v(\phi)\to 0=1$. It follows that
+$(\phi\to\bot)\in\Gamma_{v}$. However, from
+$\Gamma_{v}\subseteq\Delta$ we also have $(\phi\to\bot)\in\Delta$.
+Furthermore, by assumption $\phi\in\Delta$. Hence we see that
+$\Delta\vdash\phi$ and $\Delta\vdash(\phi\to\bot)$ are both true and
+using the modus ponens property of
+proposition~(\ref{logic:prop:FOPL:modus:ponens}) we obtain
+$\Delta\vdash\bot$ as requested. So we have proved that $\Gamma_{v}$
+is maximal consistent. We now assume that $\Gamma\subseteq\pv$ is
+maximal consistent and we need to show that its characteristic
+function $1_{\Gamma}:\pv\to 2$ is a valuation. First we show that
+$1_{\Gamma}(\bot)=0$: we need to prove that $\bot\not\in\Gamma$.
+This is clearly the case since $\bot\in\Gamma$ implies
+$\Gamma\vdash\bot$ which would contradict the consistency of
+$\Gamma$. Next we show that
+$1_{\Gamma}(\phi_{1}\to\phi_{2})=1_{\Gamma}(\phi_{1})\to
+1_{\Gamma}(\phi_{2})$ for all $\phi_{1},\phi_{2}\in\pv$. This goes
+as follows:
+    \begin{eqnarray*}
+    1_{\Gamma}(\phi_{1}\to\phi_{2})=1&\Leftrightarrow&(\phi_{1}\to\phi_{2})\in\Gamma\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:max:cons:implication:charac})}
+    \ \rightarrow&\Leftrightarrow&(\phi_{1}\not\in\Gamma)\lor(\phi_{2}\in\Gamma)\\
+    &\Leftrightarrow&(1_{\Gamma}(\phi_{1})=0)\lor(1_{\Gamma}(\phi_{2})=1)\\
+    &\Leftrightarrow&1_{\Gamma}(\phi_{1})\to1_{\Gamma}(\phi_{2})=1
+    \end{eqnarray*}
+Finally given $\phi\in\pv$, we need to show the implication
+$\vdash\phi\ \Rightarrow\ 1_{\Gamma}(\phi)=1$. So we assume that
+$\vdash\phi$. We need to show that $1_{\Gamma}(\phi)=1$, i.e. that
+$\phi\in\Gamma$. However, from $\vdash\phi$ we have in particular
+$\Gamma\vdash\phi$. Having assumed $\Gamma$ is maximal consistent,
+using
+proposition~(\ref{logic:prop:FOPL:semantics:max:cons:deduction}) we
+obtain $\phi\in\Gamma$ as requested. So we have proved that
+$1_{\Gamma}:\pv\to 2$ is a valuation on \pv. It remains to show that
+the maps $v\to\Gamma_{v}$ and $\Gamma\to 1_{\Gamma}$ are bijections
+which are inverse of one another, from $\pvd$ to the set of maximal
+consistent subsets of \pv. Let us denote ${\cal C}(V)$ the set of
+maximal consistent subsets of \pv, and define $f:\pvd\to{\cal C}(V)$
+by $f(v)=\Gamma_{v}$ and $g:{\cal C}(V)\to\pvd$ by
+$g(\Gamma)=1_{\Gamma}$. Until now we have proved that the range of
+$f$ is indeed a subset of ${\cal C}(V)$ while the range of $g$ is
+indeed a subset of \pvd. We need to show that $f$ and $g$ are
+bijective and inverse of one another. First we show that $g\circ
+f(v)=v$ for all $v\in\pvd$. This will show that $f$ is injective and
+$g$ is surjective. We need to show that $1_{\Gamma_{v}}=v$. Let
+$\phi\in\pv$\,:
+    \[
+    1_{\Gamma_{v}}(\phi)=1\ \Leftrightarrow\ \phi\in\Gamma_{v}\
+    \Leftrightarrow\ v(\phi)=1
+    \]
+We now show that $f\circ g(\Gamma)=\Gamma$ for all $\Gamma\in{\cal
+C}(V)$. This will show that $g$ is injective and $f$ is surjective.
+We need to show that $\Gamma_{1_{\Gamma}}=\Gamma$. Let
+$\phi\in\pv$\,:
+    \[
+    \phi\in\Gamma_{1_{\Gamma}}\ \Leftrightarrow\ 1_{\Gamma}(\phi)=1\
+    \Leftrightarrow\ \phi\in\Gamma
+    \]
+\end{proof}

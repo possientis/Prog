@@ -1,0 +1,235 @@
+Given a substitution mapping $\sigma:\pv\to{\bf P}(W)$ arising from
+an injective map $\sigma:V\to W$, and given an arbitrary congruence
+$\sim$ on ${\bf P}(W)$, we showed in
+proposition~(\ref{logic:prop:substitution:congruence}) that the
+relation $\equiv$ on \pv\ defined by $\phi\equiv\psi$ \ifand\
+$\sigma(\phi)\sim\sigma(\psi)$ is a congruence on \pv. We now apply
+this fact to the strong substitution congruence on ${\bf P}(W)$ to
+show that $\sigma(\phi)\sim\sigma(\psi)$ whenever we have
+$\phi\sim\psi$, where $\sim$ also denotes the strong substitution
+congruence on \pv. In other words, substitution mappings arising
+from injective substitution preserve the strong substitution
+congruence. Since we know that $\equiv$ is a congruence on \pv, the
+proof simply consists in showing that $R_{0}\subseteq\,\equiv$,
+where $R_{0}$ is the generator of the strong substitution congruence
+on \pv\ as per definition~(\ref{logic:def:strong:sub:congruence}).
+\begin{prop}\label{logic:prop:strong:injective:substitution}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be an injective map.
+Let~$\sim$ be the strong substitution congruence both on \pv\ and
+${\bf P}(W)$. Then:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \sigma(\phi)\sim\sigma(\psi)
+    \]
+for all $\phi,\psi\in\pv$, where $\sigma:\pv\to{\bf P}(W)$ is also
+the substitution mapping.
+\end{prop}
+\begin{proof}
+Let $\equiv$ be the relation on \pv\ defined by $\phi\equiv\psi\
+\Leftrightarrow\ \sigma(\phi)\sim\sigma(\psi)$. We need to show that
+$\phi\sim\psi\ \Rightarrow\ \phi\equiv\psi$ or equivalently that the
+inclusion $\sim\,\subseteq\,\equiv$ holds. Since $\sim$ is the
+strong substitution congruence on \pv, it is the smallest congruence
+on \pv\ which contains the set $R_{0}$ of
+definition~(\ref{logic:def:strong:sub:congruence}). In order to show
+the inclusion $\sim\,\subseteq\,\equiv$ it is therefore sufficient
+to show that $\equiv$ is a congruence on \pv\ such that
+$R_{0}\subseteq\,\equiv$. However, we already know from
+proposition~(\ref{logic:prop:substitution:congruence}) that $\equiv$
+is a congruence on \pv. So it remains to show that
+$R_{0}\subseteq\,\equiv$. So let $\phi_{1}\in\pv$ and $x,y\in V$ be
+such that $x\neq y$ and $y\not\in\var(\phi_{1})$. Define
+$\phi=\forall x\phi_{1}$ and $\psi=\forall y\,\phi_{1}[y/x]$. We
+need to show that $\phi\equiv\psi$ or equivalently that
+$\sigma(\phi)\sim\sigma(\psi)$. In order to do so, it is sufficient
+to show that the ordered pair $(\sigma(\phi),\sigma(\psi))$ belongs
+to the generator $R_{0}'$ of the strong substitution congruence on
+${\bf P}(W)$ as per
+definition~(\ref{logic:def:strong:sub:congruence}). In other words,
+it is sufficient to show the existence of $\phi_{1}'\in{\bf P}(W)$
+and $x',y'\in W$ with $x'\neq y'$ and $y'\not\in\var(\phi_{1}')$,
+such that $\sigma(\phi)=\forall x'\phi_{1}'$ and
+$\sigma(\psi)=\forall y'\,\phi_{1}'[y'/x']$. Take
+$\phi_{1}'=\sigma(\phi_{1})\in{\bf P}(W)$ together with
+$x'=\sigma(x)\in W$ and $y'=\sigma(y)\in W$. Then, we have:
+    \[
+    \sigma(\phi)=\sigma(\forall x\phi_{1})\\
+        =\forall\sigma(x)\,\sigma(\phi_{1})\\
+        =\forall x'\phi_{1}'
+    \]
+Furthermore, if we accept for now that
+$\sigma\circ[y/x]=[\sigma(y)/\sigma(x)]\circ\sigma$, we have:
+    \begin{eqnarray*}
+    \sigma(\psi)&=&\sigma(\forall y\,\phi_{1}[y/x])\\
+    &=&\forall\sigma(y)\,\sigma(\phi_{1}[y/x])\\
+    &=&\forall y'\,\sigma([y/x](\phi_{1}))\\
+    &=&\forall y'\,\sigma\circ [y/x]\,(\phi_{1})\\
+    &=&\forall y'\, [\sigma(y)/\sigma(x)]\circ\sigma\,(\phi_{1})\\
+    &=&\forall y'\,[y'/x'](\phi_{1}')\\
+    &=&\forall y'\,\phi_{1}'[y'/x']
+    \end{eqnarray*}
+So it remains to show that
+$\sigma\circ[y/x]=[\sigma(y)/\sigma(x)]\circ\sigma$ is indeed true,
+and furthermore that $x'\neq y'$ and $y'\not\in\var(\phi_{1}')$.
+Since $\sigma:V\to W$ is an injective map, $x'\neq y'$ follows
+immediately from $x\neq y$. We now show that
+$y'\not\in\var(\phi_{1}')$. So suppose to the contrary that
+$y'\in\var(\phi_{1}')$. We shall arrive at a contradiction. Since
+$\phi_{1}'=\sigma(\phi_{1})$, from
+proposition~(\ref{logic:prop:var:of:substitution}) we have:
+ \[ \var(\phi_{1}')=\{\sigma(u):u\in\var(\phi_{1})\}
+ \]
+It follows that there exists $u\in\var(\phi_{1})$ such that
+$y'=\sigma(u)$. However, $y'=\sigma(y)$ and $\sigma:V\to W$ is an
+injective map. Hence we see that $u=y$ and consequently
+$y\in\var(\phi_{1})$ which contradicts our initial assumption of
+$y\not\in\var(\phi_{1})$. We shall complete the proof of this
+proposition by showing that
+$\sigma\circ[y/x]=[\sigma(y)/\sigma(x)]\circ\sigma$. So let $u\in
+V$, and suppose first that $u\neq x$. Then:
+    \begin{eqnarray*}
+    \sigma\circ[y/x](u)&=&\sigma([y/x](u))\\
+    &=&\sigma(u)\\
+    &=&[\sigma(y)/\sigma(x)](\sigma(u))\\
+    &=&[\sigma(y)/\sigma(x)]\circ\sigma(u)
+    \end{eqnarray*}
+where the third equality crucially depends on
+$\sigma(u)\neq\sigma(x)$ which itself follows from the injectivity
+of $\sigma$ and $u\neq x$. We now assume that $u=x$. Then:
+     \begin{eqnarray*}
+    \sigma\circ[y/x](u)&=&\sigma([y/x](u))\\
+    &=&\sigma(y)\\
+    &=&[\sigma(y)/\sigma(x)](\sigma(u))\\
+    &=&[\sigma(y)/\sigma(x)]\circ\sigma(u)
+    \end{eqnarray*}
+In both cases $u\neq x$ and $u=x$ we see that
+$\sigma\circ[y/x](u)=[\sigma(y)/\sigma(x)]\circ\sigma(u)$.
+\end{proof}
+
+We now wish to apply
+proposition~(\ref{logic:prop:strong:injective:substitution}) to the
+substitution mapping $[y/x]$ which is not injective when $x\neq y$.
+The trick is to consider the permutation mapping $[y\!:\!x]$ and
+argue that $\phi[y/x]$ coincides with $\phi[y\!:\!x]$ while
+$\psi[y/x]$ coincides with $\psi[y\!:\!x]$, provided the condition
+$y\not\in\var(\phi)\cup\var(\psi)$ is satisfied.
+\begin{prop}\label{logic:prop:substitution:single:var}
+Let $\sim$ be the strong substitution congruence on \pv\ where $V$
+is a set. Let $\phi,\psi\in\pv$ and $x,y\in V$ such that
+$y\not\in\var(\phi)\cup\var(\psi)$. Then:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \phi[y/x]\sim\psi[y/x]
+    \]
+\end{prop}
+\begin{proof}
+We assume that $\phi\sim\psi$. We need to show that
+$\phi[y/x]\sim\psi[y/x]$. Unfortunately, the map $[y/x]:V\to V$ is
+not injective when $x\neq y$ since $[y/x](x)=y=[y/x](y)$. So we
+cannot argue directly from
+proposition~(\ref{logic:prop:strong:injective:substitution}) that
+$\phi[y/x]\sim\psi[y/x]$. Instead, we shall consider the permutation
+$[y\!:\!x]:V\to V$ as per
+definition~(\ref{logic:def:single:var:permutation}). Since
+$[y\!:\!x]$ is injective, from
+proposition~(\ref{logic:prop:strong:injective:substitution}) we have
+$\phi[y\!:\!x]\sim\psi[y\!:\!x]$. We shall complete the proof of the
+proposition by proving $\phi[y\!:\!x]=\phi[y/x]$ and
+$\psi[y\!:\!x]=\psi[y/x]$. But this follows immediately from
+proposition~(\ref{logic:prop:permutation:is:substitution}) and the
+assumption $y\not\in\var(\phi)\cup\var(\psi)$.
+\end{proof}
+
+As can be seen from
+definition~(\ref{logic:def:strong:sub:congruence}), the strong
+substitution congruence was defined so as to ensure that $\forall
+x\phi_{1}$ is always equivalent to $\forall y\phi_{1}[y/x]$ when
+$x\neq y$, provided we have $y\not\in\var(\phi_{1})$. The
+fundamental idea is that if we replace a variable $x$ which is not
+free, by a variable $y$ which is not already present in a formula,
+then we do not change the {\em meaning} of the formula. We now check
+that this property is indeed true. The proof is done by structural
+induction.
+
+\begin{prop}\label{logic:prop:substitution:invariant}
+Let $\sim$ be the strong substitution congruence on \pv\ where $V$
+is a set. Let $\phi\in\pv$, $x,y\in V$ such that
+$y\not\in\var(\phi)$ and $x\not\in\free(\phi)$. Then:
+    \[
+    \phi[y/x]\sim\phi
+    \]
+\end{prop}
+\begin{proof}
+We assume $x,y\in V$ given. For all $\phi\in\pv$, we need to show
+the implication $(y\not\in\var(\phi))\land(x\not\in\free(\phi))\
+\Rightarrow\ \phi[y/x]\sim\phi$. We shall do so by structural
+induction, using theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since \pvo\ is a generator
+of \pv, we show first that the property is true on \pvo. So let
+$\phi = (u\in v)\in\pvo$, where $u,v\in V$. We assume that
+$y\not\in\var(\phi)$ and $x\not\in\free(\phi)$, and we need to show
+that $\phi[y/x]\sim\phi$. Since $\var(\phi)=\free(\phi)=\{u,v\}$, we
+have $x,y\not\in\{u,v\}$. In particular, $x\not\in\{u,v\}$ and
+consequently we have:
+    \[
+    \phi[y/x]=(\,[y/x](u)\,\in\,[y/x](v)\,)=(u\in v)=\phi
+    \]
+In particular $\phi[y/x]\sim\phi$. Next we check that the property
+is true for $\bot\in\pv$:
+    \[
+    \bot[y/x]=[y/x](\bot)=\bot
+    \]
+and in particular $\bot[y/x]\sim\bot$. Next we check that the
+property is true for $\phi=\phi_{1}\to\phi_{2}$, if it is true for
+$\phi_{1},\phi_{2}\in\pv$. So we assume that $y\not\in\var(\phi)$
+and $x\not\in\free(\phi)$, and we need to show that
+$\phi[y/x]\sim\phi$. From the equality
+$\var(\phi)=\var(\phi_{1})\cup\var(\phi_{2})$ we see that
+$y\not\in\var(\phi_{1})$ and $y\not\in\var(\phi_{2})$. Likewise,
+from $\free(\phi)=\free(\phi_{1})\cup\free(\phi_{2})$ we obtain
+$x\not\in\free(\phi_{1})$ and $x\not\in\free(\phi_{2})$. Having
+assumed the property is true for $\phi_{1}$ and $\phi_{2}$, it
+follows that $\phi_{1}[y/x]\sim\phi_{1}$ and
+$\phi_{2}[y/x]\sim\phi_{2}$. The strong substitution congruence
+being a congruent relation:
+    \[
+    \phi[y/x]\,=\,\phi_{1}[y/x]\to\phi_{2}[y/x]\,\sim\,\phi_{1}\to\phi_{2}\,=\,\phi
+    \]
+Finally we check that the property is true for $\phi=\forall
+u\phi_{1}$, if it is true for $\phi_{1}$. So we assume that
+$y\not\in\var(\phi)$ and $x\not\in\free(\phi)$, and we need to show
+that $\phi[y/x]\sim\phi$. We shall distinguish two cases. First we
+assume that $x\neq u$. Then, we have:
+    \[
+    \phi[y/x]=[y/x](\forall u\phi_{1})=\forall\,[y/x](u)\,\phi_{1}[y/x]=\forall u\phi_{1}[y/x]
+    \]
+So we need to show that $\forall u\phi_{1}[y/x]\sim\forall
+u\phi_{1}$. The strong substitution congruence being a congruent
+relation, it is sufficient to prove that
+$\phi_{1}[y/x]\sim\phi_{1}$. Having assumed the property is true for
+$\phi_{1}$, it is therefore sufficient to show
+$y\not\in\var(\phi_{1})$ and $x\not\in\free(\phi_{1})$. Since
+$y\not\in\var(\phi)$ and $\var(\phi)=\{u\}\cup\var(\phi_{1})$, it is
+clear that $y\not\in\var(\phi_{1})$. So we need to show that
+$x\not\in\free(\phi_{1})$. So suppose to the contrary that
+$x\in\free(\phi_{1})$. Since
+$\free(\phi)=\free(\phi_{1})\setminus\{u\}$ and $x\neq u$, we obtain
+$x\in\free(\phi)$ which contradicts our initial assumption of
+$x\not\in\free(\phi)$. This completes our proof in the case when
+$x\neq u$. We now assume $x=u$. Then:
+    \[
+    \phi[y/x]=[y/x](\forall u\phi_{1})=\forall\,[y/x](u)\,\phi_{1}[y/x]=\forall y\phi_{1}[y/x]
+    \]
+So we need to show that $\forall y\phi_{1}[y/x]\sim\forall
+x\phi_{1}$. We shall consider two cases. First we assume that $x=y$.
+So we need to show that $\forall x\phi_{1}[x/x]\sim\forall
+x\phi_{1}$, for which it is sufficient to prove that
+$\phi_{1}[x/x]=\phi_{1}$ which follows from
+proposition~(\ref{logic:prop:substitution:identity}) and the fact
+that $[x/x]:V\to V$ is the identity mapping. We now assume that
+$x\neq y$. It is sufficient to prove that the ordered pair $(\forall
+x\phi_{1},\forall y\phi_{1}[y/x])$ belongs to the generator $R_{0}$
+of the strong substitution congruence on \pv\ as per
+definition~(\ref{logic:def:strong:sub:congruence}). Since $x\neq y$,
+it remains to show that $y\not\in\var(\phi_{1})$ which follows
+immediately from $y\not\in\var(\phi)$ and
+$\var(\phi)=\{x\}\cup\var(\phi_{1})$.
+\end{proof}

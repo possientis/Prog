@@ -150,8 +150,8 @@ then
   exit 1
 fi
 
-echo 'Testing logic ...'
-${HOME}/logic/test.sh >> test.log 2>&1
+echo 'Testing tex ...'
+${HOME}/tex/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'

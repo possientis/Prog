@@ -1,0 +1,611 @@
+In definition~(\ref{logic:def:strong:sub:congruence}) the strong
+substitution congruence was defined in terms of a generator. This
+makes it very convenient to show that two given formulas $\phi$ and
+$\psi$ are equivalent. For instance, if $\phi=\forall x\forall
+y(x\in y)$ and $\psi=\forall y\forall x(y\in x)$, if there is $u\in
+V$ such that $u\not\in\{x,y\}$, the proof that $\phi\sim\psi$ would
+go as follows:
+    \begin{eqnarray*}
+    \forall x\forall y(x\in y)&\sim&\forall u\forall y(u\in y)\\
+    &\sim&\forall u\forall x(u\in x)\\
+    &\sim&\forall y\forall x(y\in x)
+    \end{eqnarray*}
+The first and third equivalence stem directly from
+definition~(\ref{logic:def:strong:sub:congruence}), as does the
+equivalence $\forall y(u\in y)\sim\forall x(u\in x)$. Knowing that
+$\sim$ is a congruent relation allows us to establish the second
+equivalence, while knowing that $\sim$ is a transitive relation
+allows us to conclude that $\phi\sim\psi$. More generally, the
+knowledge of the generator $R_{0}$ of
+definition~(\ref{logic:def:strong:sub:congruence}) gives us the
+equivalence $\phi\sim\psi$ immediately, for many pairs
+$(\phi,\psi)$. Using the congruent property, reflexivity, symmetry
+and transitivity of the relation~$\sim$, we readily obtain this
+equivalence for many more pairs. So showing that $\phi\sim\psi$ is
+usually the easy part.
+
+What is more difficult is proving that an equivalence $\phi\sim\psi$
+does not hold. For instance, if $\phi=(x\in y)$ and $\psi=\bot$, we
+would like to think that $\phi$ is not equivalent to $\psi$.
+However, definition~(\ref{logic:def:strong:sub:congruence}) does not
+give us an immediate tool to prove that $\phi\not\sim\psi$.
+Fortunately, we showed in
+proposition~(\ref{logic:prop:strong:freevar}) that if $\phi\sim\psi$
+then we must have $\free(\phi)=\free(\psi)$. Since
+$\free(\phi)=\{x,y\}$ while $\free(\psi)=\emptyset$ we are able in
+this case to conclude that $\phi$ is not equivalent to $\psi$. But
+if $\phi=(x\in y)$ while $\psi=(y\in x)$ with $x\neq y$, then the
+implication $\phi\sim\psi\ \Rightarrow\ \free(\phi)=\free(\psi)$
+does not help us to conclude that $\phi\not\sim\psi$. Somehow we
+need something sharper.
+
+So we need to prove an implication $\phi\sim\psi\ \Rightarrow\
+\phi\simeq\psi$, having chosen a relation $\simeq$ which tells us a
+bit more about the formulas $\phi$ and $\psi$, than the simple
+$\free(\phi)=\free(\psi)$. In fact, we shall choose the relation
+$\simeq$ so as to have the equivalence $\phi\sim\psi\
+\Leftrightarrow\ \phi\simeq\psi$, as a way of ensuring that the
+statement $\phi\simeq\psi$ tells us as much as possible about the
+formulas $\phi$ and $\psi$. So before we prove anything, our first
+task is to choose a sensible relation $\simeq$.
+
+So let us assume that $\phi\sim\psi$. We know from
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} that any formula of
+first order predicate logic is either of the form $(x\in y)$, or is
+the contradiction constant $\bot$, or is an implication
+$\phi_{1}\to\phi_{2}$ or is a quantification $\forall x\phi_{1}$.
+Let us review all these four cases in relation to $\phi$: so suppose
+first that $\phi=(x\in y)$ with $\phi\sim\psi$. Clearly we would
+expect the formula $\psi$ to be equal to the formula $\phi$. Suppose
+now that $\phi=\bot$. Then we would expect the formula $\psi$ to be
+equal to $\bot$. Suppose now that $\phi$ is an implication
+$\phi=\phi_{1}\to\phi_{2}$. If $\phi\sim\psi$ we would also expect
+the formula $\psi$ to be an implication $\psi=\psi_{1}\to\psi_{2}$.
+Furthermore, we would expect to have $\phi_{1}\sim\psi_{1}$ and
+$\phi_{2}\sim\psi_{2}$.
+
+Suppose now that $\phi$ is a quantification $\phi=\forall
+x\phi_{1}$. Then we would also expect the formula $\psi$ to be a
+quantification  $\psi=\forall y\psi_{1}$. However, we would not
+expect the variables $x$ and $y$ to be the same in general. If $x=y$
+then we would expect to have $\phi_{1}\sim\psi_{1}$, but if $x\neq
+y$ then the relationship between $\phi_{1}$ and $\psi_{1}$ should be
+more complex. Informally, we would expect the formula $\psi_{1}$ to
+be the {\em same mathematical statement} as the formula $\phi_{1}$,
+but with the variable $x$ replaced by the variable $y$. Of course we
+cannot hope to have $\psi_{1}=\phi_{1}[y/x]$ in general, as there
+may have been other {\em changes of variable} within the formulas
+$\phi_{1}$ and $\psi_{1}$. However, we would expect to have the
+equivalence $\psi_{1}\sim\phi_{1}[y/x]$.
+
+Unfortunately, this does not quite work. We already know from
+definition~(\ref{logic:def:strong:sub:congruence}) that considering
+the formula $\phi_{1}[y/x]$ is not very safe unless we have
+$y\not\in\var(\phi_{1})$. We have made no mention of this fact so
+far, so it is likely that the simple condition
+$\psi_{1}\sim\phi_{1}[y/x]$ is doomed, without further
+qualification. In fact, consider the case when $\phi=\forall
+x\forall y (x\in y)$ and $\psi=\forall y\forall x(y\in x)$ with
+$x\neq y$. Then $\phi_{1}=\forall y(x\in y)$ and $\psi_{1}=\forall
+x(y\in x)$. So we obtain $\phi_{1}[y/x]=\forall y(y\in y)$ and we
+certainly expect the equivalence $\psi_{1}\sim\phi_{1}[y/x]$ to be
+false. So we need to look for something more complicated. Suppose
+there exists $u\in V$ such that $u\not\in\{x,y\}$. Defining the
+formula $\theta=\forall u (x\in u)$ the condition
+$y\not\in\var(\theta)$ is now satisfied and we can safely consider
+the formula $\theta[y/x]=\forall u(y\in u)$. From
+definition~(\ref{logic:def:strong:sub:congruence}) we obtain
+immediately $\phi_{1}\sim\theta$ and $\psi_{1}\sim\theta[y/x]$. So
+this may be the relationship we are looking for between the formula
+$\phi_{1}$ and the formula $\psi_{1}$: the existence of a third
+formula $\theta$ such that $\phi_{1}\sim\theta$ and
+$\psi_{1}\sim\theta[y/x]$, with the additional condition
+$y\not\in\var(\theta)$. Note that we cannot hope to make this
+relationship simpler in general. We have already established that
+$\phi_{1}=\theta$ and $\psi_{1}\sim\theta[y/x]$, (or indeed
+$\phi_{1}=\theta$ and $\psi_{1}=\theta[y/x]$) fails to work. The
+condition $\phi_{1}\sim\theta$ and $\psi_{1}=\theta[y/x]$ does not
+work in general either: from
+proposition~(\ref{logic:prop:inplaceof:notvar}) we know that $x$ can
+never be a variable of $\theta[y/x]$ when $x\neq y$, and
+consequently we cannot hope to have the equality
+$\psi_{1}=\theta[y/x]$ in the case when $\psi_{1}=\forall x(y\in
+x)$. In the light of these comments, we can now venture a sensible
+guess for our relation $\simeq$.
+
+\begin{defin}\label{logic:def:almost:strong:equivalent}
+Let $\sim$ be the strong substitution congruence on \pv\ where $V$ is a set. Let $\phi,\psi\in\pv$. We say that $\phi$ is {\em almost strongly equivalent to $\psi$} and we write $\phi\simeq\psi$, \ifand\ one of the following is the case:
+    \begin{eqnarray*}
+    (i)&&\phi\in\pvo\ ,\ \psi\in\pvo\ ,\ \mbox{and}\ \phi=\psi\\
+    (ii)&&\phi=\bot\ \mbox{and}\ \psi=\bot\\
+    (iii)&&\phi=\phi_{1}\to\phi_{2}\ ,\ \psi=\psi_{1}\to\psi_{2}\ ,\
+    \phi_{1}\sim\psi_{1}\ \mbox{and}\ \phi_{2}\sim\psi_{2}\\
+    (iv)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall x\psi_{1}\ \mbox{and}\ \phi_{1}\sim\psi_{1}\\
+    (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
+    \phi_{1}\sim \theta\ ,\ \psi_{1}\sim \theta[y/x]\ ,\ y\not\in\var(\theta)
+    \end{eqnarray*}
+\end{defin}
+
+It should be noted that $(v)$ of
+definition~(\ref{logic:def:almost:strong:equivalent}) is a
+notational shortcut for the more detailed statement $\phi=\forall
+x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y$ and {\em there
+exists a formula} $\theta\in\pv$ such that $\phi_{1}\sim \theta\ ,\
+\psi_{1}\sim \theta[y/x]\ ,\ y\not\in\var(\theta)$.
+
+\begin{prop}
+$(i),(ii),(iii),(iv), (v)$ of {\em
+definition~(\ref{logic:def:almost:strong:equivalent})} are mutually
+exclusive.
+\end{prop}
+\begin{proof}
+This is an immediate consequence of
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} applied to the free
+universal algebra \pv\ with free generator \pvo, where a formula
+$\phi\in\pv$ is either an element of \pvo, or the contradiction
+constant $\phi=\bot$, or an implication $\phi=\phi_{1}\to\phi_{2}$,
+or a quantification $\phi=\forall x\phi_{1}$, but cannot be equal to
+any two of those things simultaneously. Since $(v)$ can only occur
+with $x\neq y$, it also follows from
+theorem~(\ref{logic:the:unique:representation}) that $(v)$ cannot
+occur at the same time as $(iv)$.
+\end{proof}
+
+So we have defined our relation $\simeq$ and it remains to prove the
+equivalence:
+    \[
+    \phi\sim\psi\ \Leftrightarrow\ \phi\simeq\psi
+    \]
+As we will soon discover, the difficult part is showing the
+implication $\Rightarrow$. In order to do so, we shall need to show
+that $\simeq$ is a congruence on \pv\ which contains the generator
+$R_{0}$ of definition~(\ref{logic:def:strong:sub:congruence}). So we
+start by proving $R_{0}\subseteq\,\simeq$\,.
+
+\begin{prop}\label{logic:prop:almost:strong:contains:r0}
+Let $\simeq$ be the almost strong equivalence relation on \pv\ where
+$V$ is a set. Then $\simeq$ contains the generator $R_{0}$ of {\em
+definition~(\ref{logic:def:strong:sub:congruence})}.
+\end{prop}
+\begin{proof}
+Suppose $x,y\in V$ and $\phi_{1}\in\pv$ are such that $x\neq y$ and
+$y\not\in\var(\phi_{1})$. Note that this cannot happen unless $V$
+has at least two elements. We define $\phi=\forall x\phi_{1}$ and
+$\psi=\forall y\,\phi_{1}[y/x]$. We need to show that
+$\phi\simeq\psi$. We shall do so by proving that $(v)$ of
+proposition~(\ref{logic:def:almost:strong:equivalent}) is the case.
+Define  $\theta=\phi_{1}$ and $\psi_{1}=\phi_{1}[y/x]=\theta[y/x]$.
+Since the strong substitution congruence $\sim$ is reflexive on \pv,
+we have $\phi_{1}\sim\theta$ and $\psi_{1}\sim\theta[y/x]$. It
+follows that $\phi=\forall x\phi_{1}$, $\psi=\forall y\psi_{1}$,
+$x\neq y$, $\phi_{1}\sim\theta$, $\psi_{1}\sim\theta[y/x]$ and
+$y\not\in\var(\theta)$.
+\end{proof}
+
+We now need to show that $\simeq$ is a congruence on \pv. In
+particular, it is an equivalence relation, i.e. a relation on \pv\
+which is reflexive, symmetric and transitive. We first deal with the
+reflexivity.
+
+\begin{prop}\label{logic:prop:almost:strong:reflexive}
+Let $\simeq$ be the almost strong equivalence relation on \pv\ where
+$V$ is a set. Then $\simeq$ is a reflexive relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi\in\pv$. We need to show that $\phi\simeq\phi$. From
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we know that $\phi$
+is either an element of \pvo, or $\phi=\bot$ or
+$\phi=\phi_{1}\to\phi_{2}$ or $\phi=\forall x\phi_{1}$ for some
+$\phi_{1},\phi_{2}\in\pv$ and $x\in V$. We shall consider these four
+mutually exclusive cases separately. Suppose first that
+$\phi\in\pvo$: then from $\phi=\phi$ we obtain $\phi\simeq\phi$.
+Suppose next that $\phi=\bot$: then it is clear that
+$\phi\simeq\phi$. Suppose now that $\phi=\phi_{1}\to\phi_{2}$. Since
+the strong substitution congruence $\sim$ is reflexive, we have
+$\phi_{1}\sim\phi_{1}$ and $\phi_{2}\sim\phi_{2}$. It follows from
+$(iii)$ of definition~(\ref{logic:def:almost:strong:equivalent})
+that $\phi\simeq\phi$. Suppose finally that $\phi=\forall
+x\phi_{1}$. From $\phi_{1}\sim\phi_{1}$ and $(iv)$ of
+definition~(\ref{logic:def:almost:strong:equivalent}) we conclude
+that $\phi\simeq\phi$. In all cases, we have proved that
+$\phi\simeq\phi$.
+\end{proof}
+
+
+\begin{prop}\label{logic:prop:almost:strong:symmetric}
+Let $\simeq$ be the almost strong equivalence relation on \pv\ where
+$V$ is a set. Then $\simeq$ is a symmetric relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi,\psi\in\pv$ be such that $\phi\simeq\psi$. We need to show that $\psi\simeq\phi$. We shall consider the five possible cases of definition~(\ref{logic:def:almost:strong:equivalent}): suppose first that $\phi\in\pvo$, $\psi\in\pvo$ and $\phi=\psi$. Then it is clear that $\psi\simeq\phi$. Suppose next that $\phi=\bot$ and $\psi=\bot$. Then we also have $\psi\simeq\phi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$ and $\psi=\psi_{1}\to\psi_{2}$ with $\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$. Since the strong substitution congruence on \pv\ is symmetric, we have $\psi_{1}\sim\phi_{1}$ and $\psi_{2}\sim\phi_{2}$. Hence we have $\psi\simeq\phi$. We now assume that $\phi=\forall x\phi_{1}$ and $\psi=\forall x\psi_{1}$ with $\phi_{1}\sim\psi_{1}$. Then once again by symmetry of the strong substitution congruence we have $\psi_{1}\sim\phi_{1}$ and consequently $\psi\simeq\phi$. We finally consider the last possible case of $\phi=\forall x\phi_{1}$, $\psi=\forall y\psi_{1}$ with $x\neq y$ and we assume the existence of $\theta\in\pv$ such that $\phi_{1}\sim\theta$, $\psi_{1}\sim\theta[y/x]$ and $y\not\in\var(\theta)$. Define $\theta^{*}=\theta[y/x]$. In order to show that $\psi\simeq\phi$ it is sufficient to prove that $\phi_{1}\sim\theta^{*}[x/y]$ and $x\not\in\var(\theta^{*})$. First we show that $x\not\in\var(\theta^{*})$. So we need to show that $x\not\in\var(\theta[y/x])$ which in fact follows immediately from proposition~(\ref{logic:prop:inplaceof:notvar}) and $x\neq y$. We now show that $\phi_{1}\sim\theta^{*}[x/y]=\theta[y/x][x/y]$. Since $\phi_{1}\sim\theta$ and the strong substitution congruence on \pv\ is a transitive relation, it is sufficient to prove that:
+    \[
+    \theta\sim\theta[y/x][x/y]
+    \]
+In fact, the strong substitution congruence being reflexive, it is
+sufficient to prove that $\theta=\theta[y/x][x/y]$. From
+proposition~(\ref{logic:prop:single:composition}), since
+$y\not\in\var(\theta)$ we obtain $\theta[x/x]=\theta[y/x][x/y]$.
+Since $[x/x]:V\to V$ is the identity mapping, we conclude from
+proposition~(\ref{logic:prop:substitution:identity}) that
+$\theta[x/x]=\theta$ and finally $\theta=\theta[y/x][x/y]$.
+\end{proof}
+
+Having shown that $\simeq$ is a reflexive and symmetric relation on
+\pv, we now prove that it is also a transitive relation. This is by
+far the most difficult result of this section as many technical
+details need to be checked.
+
+\begin{prop}\label{logic:prop:almost:strong:transitive}
+Let $\simeq$ be the almost strong equivalence relation on \pv\ where
+$V$ is a set. Then $\simeq$ is a transitive relation on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi,\psi$ and $\chi\in\pv$ be such that $\phi\simeq\psi$ and
+$\psi\simeq\chi$. We need to show that $\phi\simeq\chi$. We shall
+consider the five possible cases of
+definition~(\ref{logic:def:almost:strong:equivalent}) in relation to
+$\phi\simeq\psi$. Suppose first that $\phi,\psi\in\pvo$ and
+$\phi=\psi$. Then from $\psi\simeq\chi$ we obtain $\psi,\chi\in\pvo$
+and $\psi=\chi$. It follows that $\phi,\chi\in\pvo$ and $\phi=\chi$.
+Hence we see that $\phi\simeq\chi$. We now assume that
+$\phi=\psi=\bot$. Then from $\psi\simeq\chi$ we obtain
+$\psi=\chi=\bot$. It follows that $\phi=\chi=\bot$ and consequently
+$\phi\simeq\chi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$ and
+$\psi=\psi_{1}\to\psi_{2}$ with $\phi_{1}\sim\psi_{1}$ and
+$\phi_{2}\sim\psi_{2}$. From $\psi\simeq\chi$ we obtain
+$\chi=\chi_{1}\to\chi_{2}$ with $\psi_{1}\sim\chi_{1}$ and
+$\psi_{2}\sim\chi_{2}$. The strong substitution congruence being
+transitive, it follows that $\phi_{1}\sim\chi_{1}$ and
+$\phi_{2}\sim\chi_{2}$. Hence we see that $\phi\simeq\chi$. We now
+assume that $\phi=\forall x\phi_{1}$ and $\psi=\forall x\psi_{1}$
+with $\phi_{1}\sim\psi_{1}$, for some $x\in V$. From
+$\psi\simeq\chi$ only the cases $(iv)$ and $(v)$ of
+definition~(\ref{logic:def:almost:strong:equivalent}) are possible.
+First we assume that $(iv)$ is the case. Then $\chi=\forall
+x\chi_{1}$ with $\psi_{1}\sim\chi_{1}$. The strong substitution
+congruence being transitive, we obtain $\phi_{1}\sim\chi_{1}$ and
+consequently $\phi\simeq\chi$. We now assume that $(v)$ is the case.
+Then $\chi=\forall y\chi_{1}$ for some $y\in V$ with $x\neq y$, and
+there exists $\theta\in\pv$ such that $\psi_{1}\sim\theta$,
+$\chi_{1}\sim\theta[y/x]$ and $y\not\in\var(\theta)$. The strong
+substitution congruence being transitive, we obtain
+$\phi_{1}\sim\theta$ and consequently $\phi\simeq\chi$. It remains
+to consider the last possible case of
+definition~(\ref{logic:def:almost:strong:equivalent}). So we assume
+that $\phi=\forall x\phi_{1}$ and $\psi=\forall y\psi_{1}$ with
+$x\neq y$, and we assume the existence of $\theta\in\pv$ such that
+$\phi_{1}\sim\theta$, $\psi_{1}\sim\theta[y/x]$ and
+$y\not\in\var(\theta)$. From $\psi\simeq\chi$ only the cases $(iv)$
+and $(v)$ of definition~(\ref{logic:def:almost:strong:equivalent})
+are possible. First we assume that $(iv)$ is the case. Then
+$\chi=\forall y\chi_{1}$ with $\psi_{1}\sim\chi_{1}$. The strong
+substitution congruence being transitive, we obtain
+$\chi_{1}\sim\theta[y/x]$ and consequently $\phi\simeq\chi$. We now
+assume that $(v)$ is the case. Then $\chi=\forall z\chi_{1}$ for
+some $z\in V$ with $y\neq z$, and there exists $\theta^{*}\in\pv$
+such that $\psi_{1}\sim\theta^{*}$, $\chi_{1}\sim\theta^{*}[z/y]$
+and $z\not\in\var(\theta^{*})$. We shall now distinguish two cases.
+First we assume that $x=z$. Then $\phi=\forall x\phi_{1}$ and
+$\chi=\forall x\chi_{1}$ and in order to show that $\phi\simeq\chi$
+it is sufficient to prove that $\phi_{1}\sim\chi_{1}$. Since
+$\phi_{1}\sim\theta$ and $\chi_{1}\sim\theta^{*}[z/y]$, using the
+symmetry and transitivity of the strong substitution congruence, it
+remains to show that $\theta\sim\theta^{*}[z/y]$. Having assumed
+that $x=z$, we have to prove that $\theta\sim\theta^{*}[x/y]$. Since
+$y\not\in\var(\theta)$, from
+proposition~(\ref{logic:prop:single:composition}) we have
+$\theta[y/x][x/y]=\theta[x/x]$ and from
+proposition~(\ref{logic:prop:substitution:identity}) we obtain
+$\theta[x/x]=\theta$. It follows that $\theta[y/x][x/y]=\theta$ and
+it remains to prove that $\theta[y/x][x/y]\sim\theta^{*}[x/y]$.
+Using proposition~(\ref{logic:prop:substitution:single:var}), it is
+sufficient to prove that $\theta[y/x]\sim\theta^{*}$ and
+$x\not\in\var(\theta[y/x])\cup\var(\theta^{*})$. The fact that
+$\theta[y/x]\sim\theta^{*}$ follows from $\psi_{1}\sim\theta[y/x]$
+and $\psi_{1}\sim\theta^{*}$, using the symmetry and transitivity of
+the strong substitution congruence on \pv. The fact that
+$x\not\in\var(\theta[y/x])$ follows from
+proposition~(\ref{logic:prop:inplaceof:notvar}) and the assumption
+$x\neq y$. The fact that $x\not\in\var(\theta^{*})$ follows from the
+assumptions $x=z$ and $z\not\in\var(\theta^{*})$. This completes our
+proof in the case when $x=z$. We now assume that $x\neq z$. So we
+have $x\neq y$, $y\neq z$ and $x\neq z$, with $\phi=\forall
+x\phi_{1}$, $\psi=\forall y\psi_{1}$ and $\chi=\forall z\chi_{1}$.
+Furthermore, there exist $\theta$ and $\theta^{*}\in\pv$ such that
+$\phi_{1}\sim\theta$, $\psi_{1}\sim\theta[y/x]$,
+$\psi_{1}\sim\theta^{*}$ and $\chi_{1}\sim\theta^{*}[z/y]$. Finally,
+we have $y\not\in\var(\theta)$ and $z\not\in\var(\theta^{*})$, and
+we need to show that $\phi\simeq\chi$. Define $\eta=\theta[y/z]$. It
+is sufficient to show that $\phi_{1}\sim\eta$ and
+$\chi_{1}\sim\eta[z/x]$ with $z\not\in\var(\eta)$. The fact that
+$z\not\in\var(\eta)$ is a direct consequence of
+proposition~(\ref{logic:prop:inplaceof:notvar}) and $y\neq z$. So it
+remains to show that $\phi_{1}\sim\eta$ and $\chi_{1}\sim\eta[z/x]$.
+First we show that $\phi_{1}\sim\eta$. Since $\phi_{1}\sim\theta$
+and $\eta=\theta[y/z]$, from the symmetry and transitivity of the
+strong substitution congruence on \pv\, it is sufficient to prove
+that $\theta[y/z]\sim\theta$, which itself follows from
+proposition~(\ref{logic:prop:substitution:invariant}) provided we
+show that $y\not\in\var(\theta)$ and $z\not\in\free(\theta)$. We
+already know that $y\not\in\var(\theta)$, so it remains to prove
+that $z\not\in\free(\theta)$. In order to do so, we shall first
+prove the implication:
+    \begin{equation}\label{logic:eqn:strong:transitivity:1}
+    z\in\free(\theta)\ \Rightarrow\ z\in\free(\theta[y/x])
+    \end{equation}
+using proposition~(\ref{logic:prop:freevar:single:subst}) and the
+assumption $y\not\in\var(\theta)$. In the case
+$x\not\in\free(\theta)$, we obtain
+$\free(\theta[y/x])=\free(\theta)$ and the
+implication~(\ref{logic:eqn:strong:transitivity:1}) is clear. In the
+case when $x\in\free(\theta)$, we obtain
+$\free(\theta[y/x])=\free(\theta)\setminus\{x\}\cup\{y\}$, and the
+implication~(\ref{logic:eqn:strong:transitivity:1}) follows
+immediately from the fact that $z\neq x$. Having proved the
+implication~(\ref{logic:eqn:strong:transitivity:1}), we can now show
+that $z\not\in\free(\theta)$ by instead proving that
+$z\not\in\free(\theta[y/x])$. Since $\psi_{1}\sim\theta[y/x]$ and
+$\psi_{1}\sim\theta^{*}$ it follows from the symmetry and
+transitivity of the strong substitution congruence on \pv\ that
+$\theta[y/x]\sim\theta^{*}$. Thus, from
+proposition~(\ref{logic:prop:strong:freevar}) we obtain
+$\free(\theta[y/x])=\free(\theta^{*})$, and it is therefore
+sufficient to prove that $z\not\in\free(\theta^{*})$, which follows
+immediately from $z\not\in\var(\theta^{*})$ and
+$\free(\theta^{*})\subseteq\var(\theta^{*})$, the latter being a
+consequence of proposition~(\ref{logic:prop:FOPL:boundvar:free}).
+This completes our proof of $\phi_{1}\sim\eta$. It remains to show
+that $\chi_{1}\sim\eta[z/x]$. Since $\chi_{1}\sim\theta^{*}[z/y]$
+and $\eta=\theta[y/z]$ we have to show:
+    \begin{equation}\label{logic:eqn:strong:transitivity:2}
+    \theta[y/z][z/x]\sim\theta^{*}[z/y]
+    \end{equation}
+We shall prove the
+equivalence~(\ref{logic:eqn:strong:transitivity:2}) by proving the
+following two results:
+    \begin{equation}\label{logic:eqn:strong:transitivity:3}
+    \theta[y/z][z/x]\sim\theta[y/z][z/x][x/y]
+    \end{equation}
+    \begin{equation}\label{logic:eqn:strong:transitivity:4}
+    \theta^{*}[z/y]\sim\theta[y/x][x/z][z/y]
+    \end{equation}
+Suppose for now that (\ref{logic:eqn:strong:transitivity:3}) and
+(\ref{logic:eqn:strong:transitivity:4}) have been proved. Comparing
+with the equivalence~(\ref{logic:eqn:strong:transitivity:2}), it is
+sufficient to show that:
+    \begin{equation}\label{logic:eqn:strong:transitivity:5}
+    \theta[y/z][z/x][x/y]=\theta[y/x][x/z][z/y]
+    \end{equation}
+So we shall now prove
+equation~(\ref{logic:eqn:strong:transitivity:5}). From
+proposition~(\ref{logic:prop:substitution:support}) it is sufficient
+to show that the maps $[x/y]\circ[z/x]\circ[y/z]$ and
+$[z/y]\circ[x/z]\circ[y/x]$ coincide on $\var(\theta)$. So let
+$u\in\var(\theta)$. In particular $u\neq y$ and we have to show
+that:
+    \begin{equation}\label{logic:eqn:strong:transitivity:6}
+    [x/y]\circ[z/x]\circ[y/z](u)=[z/y]\circ[x/z]\circ[y/x](u)
+    \end{equation}
+We shall distinguish three cases. First we assume that
+$u\not\in\{x,y,z\}$. Then it is clear that the
+equality~(\ref{logic:eqn:strong:transitivity:6}) holds. Next we
+assume that $u=x$:
+    \[
+    [x/y]\circ[z/x]\circ[y/z](u)=[x/y]\circ[z/x](u)=[x/y](z)=z
+    \]
+and:
+    \[
+    [z/y]\circ[x/z]\circ[y/x](u) = [z/y]\circ[x/z](y)=[z/y](y)=z
+    \]
+So the equality~(\ref{logic:eqn:strong:transitivity:6}) holds.
+Finally we assume that $u=z$:
+    \[
+    [x/y]\circ[z/x]\circ[y/z](u)=[x/y]\circ[z/x](y)=[x/y](y)=x
+    \]
+and:
+    \[
+    [z/y]\circ[x/z]\circ[y/x](u) = [z/y]\circ[x/z](u)=[z/y](x)=x
+    \]
+So the equality~(\ref{logic:eqn:strong:transitivity:6}) holds again.
+This completes our proof of~(\ref{logic:eqn:strong:transitivity:6})
+and~(\ref{logic:eqn:strong:transitivity:5}). It remains to show that
+the equivalence~(\ref{logic:eqn:strong:transitivity:3})
+and~(\ref{logic:eqn:strong:transitivity:4}) are true. First we show
+the equivalence~(\ref{logic:eqn:strong:transitivity:3}). Using
+proposition~(\ref{logic:prop:substitution:invariant}), it is
+sufficient to show that we have both
+$x\not\in\var(\theta[y/z][z/x])$ and
+$y\not\in\free(\theta[y/z][z/x])$. The fact that
+$x\not\in\var(\theta[y/z][z/x])$ is a consequence of
+proposition~(\ref{logic:prop:inplaceof:notvar}) and $x\neq z$. So we
+need to show that $y\not\in\free(\theta[y/z][z/x])$. We shall do so
+by applying proposition~(\ref{logic:prop:freevar:single:subst}) from
+which we obtain, provided we show $z\not\in\var(\theta[y/z])$:
+    \begin{equation}\label{logic:eqn:strong:transitivity:7}
+    \free(\theta[y/z][z/x])=\left\{\begin{array}{lcl}
+    \free(\theta[y/z])\setminus\{x\}\cup\{z\}&\mbox{\ if\ }&x\in\free(\theta[y/z])\\
+    \free(\theta[y/z])&\mbox{\ if\ }&x\not\in\free(\theta[y/z])
+    \end{array}
+    \right.
+    \end{equation}
+However, before we can use
+equation~(\ref{logic:eqn:strong:transitivity:7}) we need to check
+$z\not\in\var(\theta[y/z])$, which in fact immediately follows from
+proposition~(\ref{logic:prop:inplaceof:notvar}) and $y\neq z$.
+Having justified equation~(\ref{logic:eqn:strong:transitivity:7}),
+it is now clear that in order to prove
+$y\not\in\free(\theta[y/z][z/x])$, it is sufficient to prove that
+$y\not\in\free(\theta[y/z])$. Since $y\not\in\var(\theta)$, we can
+apply proposition~(\ref{logic:prop:freevar:single:subst}) once more,
+and having already shown $z\not\in\free(\theta)$ while proving the
+equivalence $\phi_{1}\sim\eta$, we obtain
+$\free(\theta[y/z])=\free(\theta)$. Hence, it is sufficient to prove
+that $y\not\in\free(\theta)$ which follows immediately from
+$y\not\in\var(\theta)$ and $\free(\theta)\subseteq\var(\theta)$.
+This completes our proof of the
+equivalence~(\ref{logic:eqn:strong:transitivity:3}). It remains to
+show that the equivalence~(\ref{logic:eqn:strong:transitivity:4}) is
+true. Using proposition~(\ref{logic:prop:substitution:single:var}),
+it is sufficient to prove that $\theta^{*}\sim\theta[y/x][x/z]$ and
+$z\not\in\var(\theta^{*})\cup\var(\theta[y/x][x/z])$. We already
+know that $z\not\in\var(\theta^{*})$, and
+$z\not\in\var(\theta[y/x][x/z])$ is an immediate consequence of
+proposition~(\ref{logic:prop:inplaceof:notvar}) and $x\neq z$. So we
+need to show that $\theta^{*}\sim\theta[y/x][x/z]$. From
+$\psi_{1}\sim\theta[y/x]$ and $\psi_{1}\sim\theta^{*}$ we obtain
+$\theta[y/x]\sim\theta^{*}$ and it is therefore sufficient to prove
+that $\theta[y/x]\sim\theta[y/x][x/z]$. Using
+proposition~(\ref{logic:prop:substitution:invariant}), it is
+sufficient to show that $x\not\in\var(\theta[y/x])$ and
+$z\not\in\free(\theta[y/x])$. The fact that
+$x\not\in\var(\theta[y/x])$ is an immediate consequence of
+proposition~(\ref{logic:prop:inplaceof:notvar}) and $x\neq y$. So it
+remains to show that $z\not\in\free(\theta[y/x])$, which in fact was
+already proved in the course of proving the equivalence
+$\phi_{1}\sim\eta$.
+\end{proof}
+
+Having shown that $\simeq$ is a reflexive, symmetric and transitive
+relation on \pv, it remains to prove that it is also a congruent
+relation on \pv. However, this cannot be done before we show the
+implication $\phi\simeq\psi\ \Rightarrow\ \phi\sim\psi$.
+
+\begin{prop}\label{logic:prop:almost:strong:implies:strong}
+Let $\simeq$ be the almost strong equivalence and $\sim$ be the
+strong substitution congruence on \pv, where $V$ is a set. For all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\simeq\psi\ \Rightarrow\ \phi\sim\psi
+    \]
+\end{prop}
+\begin{proof}
+Let $\phi,\psi\in\pv$ such that $\phi\simeq\psi$. We need to show
+that $\phi\sim\psi$. We shall consider the five possible cases of
+definition~(\ref{logic:def:almost:strong:equivalent}) in relation to
+$\phi\simeq\psi$. Suppose first that $\phi=\psi\in\pvo$. From the
+reflexivity of the strong substitution congruence, it is clear that
+$\phi\sim\psi$. Suppose next that $\phi=\psi=\bot$. Then we also
+have $\phi\sim\psi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$
+and $\psi=\psi_{1}\to\psi_{2}$ where $\phi_{1}\sim\psi_{1}$ and
+$\phi_{2}\sim\psi_{2}$. The strong substitution congruence being a
+congruent relation on \pv, we obtain $\phi\sim\psi$. Next we assume
+that $\phi=\forall x\phi_{1}$ and $\psi=\forall x\psi_{1}$ where
+$\phi_{1}\sim\psi_{1}$ and $x\in\ V$. Again, the strong substitution
+congruence being a congruent relation we obtain $\phi\sim\psi$.
+Finally we assume that $\phi=\forall x\phi_{1}$ and $\psi=\forall
+y\psi_{1}$ where $x\neq y$, and there exists $\theta\in\pv$ such
+that $\phi_{1}\sim\theta$, $\psi_{1}\sim\theta[y/x]$ and
+$y\not\in\var(\theta)$. Using once again the fact that the strong
+substitution congruence is a congruent relation, we see that
+$\phi\sim\forall x\,\theta$ and $\psi\sim\forall y\,\theta[y/x]$. By
+symmetry and transitivity of the strong substitution congruence, it
+is therefore sufficient to show that $\forall x\,\theta\sim\forall
+y\,\theta[y/x]$ which follows immediately from $x\neq y$,
+$y\not\in\var(\theta)$ and
+definition~(\ref{logic:def:strong:sub:congruence}).
+\end{proof}
+
+We are now in a position to show that $\simeq$ is a congruent
+relation, which is the last part missing before we can conclude that
+$\simeq$ is a congruence on \pv.
+
+\begin{prop}\label{logic:prop:almost:strong:congruent}
+Let $\simeq$ be the almost strong equivalence relation on \pv\ where
+$V$ is a set. Then $\simeq$ is a congruent relation on \pv.
+\end{prop}
+\begin{proof}
+From proposition~(\ref{logic:prop:almost:strong:reflexive}), the
+almost strong equivalence $\simeq$ is reflexive and so
+$\bot\simeq\bot$. We now assume that $\phi=\phi_{1}\to\phi_{2}$ and
+$\psi=\psi_{1}\to\psi_{2}$ where $\phi_{1}\simeq\psi_{1}$ and
+$\phi_{2}\simeq\psi_{2}$. We need to show that $\phi\simeq\psi$.
+However from
+proposition~(\ref{logic:prop:almost:strong:implies:strong}) we have
+$\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$ and it follows
+from definition~(\ref{logic:def:almost:strong:equivalent}) that
+$\phi\simeq\psi$. We now assume that $\phi=\forall x\phi_{1}$ and
+$\psi=\forall x\psi_{1}$ where $\phi_{1}\simeq\psi_{1}$ and $x\in
+V$. We need to show that $\phi\simeq\psi$. Once again from
+proposition~(\ref{logic:prop:almost:strong:implies:strong}) we have
+$\phi_{1}\sim\psi_{1}$ and consequently from
+definition~(\ref{logic:def:almost:strong:equivalent}) we obtain
+$\phi\simeq\psi$.
+\end{proof}
+
+
+\begin{prop}\label{logic:prop:almost:strong:congruence}
+Let $\simeq$ be the almost strong equivalence relation on \pv\ where
+$V$ is a set. Then $\simeq$ is a congruence on \pv.
+\end{prop}
+\begin{proof}
+We need to show that $\simeq$ is reflexive, symmetric, transitive
+and that it is a congruent relation on \pv. From
+proposition~(\ref{logic:prop:almost:strong:reflexive}), the
+relation~$\simeq$ is reflexive. From
+proposition~(\ref{logic:prop:almost:strong:symmetric}) it is
+symmetric while from
+proposition~(\ref{logic:prop:almost:strong:transitive}) it is
+transitive. Finally from
+proposition~(\ref{logic:prop:almost:strong:congruent}) the
+relation~$\simeq$ is a congruent relation.
+\end{proof}
+
+So $\simeq$ is a congruence on \pv\ such that
+$R_{0}\subseteq\,\simeq$. We conclude this section with the
+equivalence $\phi\sim\psi\ \Leftrightarrow\ \phi\simeq\psi$ and
+summarize with
+theorem~(\ref{logic:the:strong:sub:congruence:charac}) below.
+
+\begin{prop}\label{logic:prop:almost:strong:is:strong}
+Let $\simeq$ be the almost strong equivalence and $\sim$ be the
+strong substitution congruence on \pv, where $V$ is a set. For all
+$\phi,\psi\in\pv$:
+    \[
+    \phi\simeq\psi\ \Leftrightarrow\ \phi\sim\psi
+    \]
+\end{prop}
+\begin{proof}
+From proposition~(\ref{logic:prop:almost:strong:implies:strong}) it
+is sufficient to show the implication $\Leftarrow$ or equivalently
+the inclusion $\sim\,\subseteq\,\simeq\,$. Since $\sim$ is the
+strong substitution congruence on \pv, it is the smallest congruence
+on \pv\ which contains the set $R_{0}$ of
+definition~(\ref{logic:def:strong:sub:congruence}). In order to show
+the inclusion $\sim\,\subseteq\,\simeq$ it is therefore sufficient
+to show that $\simeq$ is a congruence on \pv\ such that
+$R_{0}\subseteq\,\simeq$. The fact that it is a congruence stems
+from proposition~(\ref{logic:prop:almost:strong:congruence}). The
+fact that $R_{0}\subseteq\,\simeq$ follows from
+proposition~(\ref{logic:prop:almost:strong:contains:r0}).
+\end{proof}
+
+We are now ready to provide a characterization of the strong
+substitution congruence. It should be noted that $(v)$ of
+theorem~(\ref{logic:the:strong:sub:congruence:charac}) below is a
+notational shortcut for the more detailed statement $\phi=\forall
+x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y$ and {\em there
+exists a formula} $\theta\in\pv$ such that $\phi_{1}\sim \theta\ ,\
+\psi_{1}\sim \theta[y/x]\ ,\ y\not\in\var(\theta)$.
+\index{congruence@Charact. of strong congruence}
+\begin{theorem}\label{logic:the:strong:sub:congruence:charac}
+Let $\sim$ be the strong substitution congruence on \pv\ where $V$
+is a set. For all $\phi,\psi\in\pv$, $\phi\sim\psi$ \ifand\ one of
+the following is the case:
+    \begin{eqnarray*}
+    (i)&&\phi\in\pvo\ ,\ \psi\in\pvo\ ,\ \mbox{and}\ \phi=\psi\\
+    (ii)&&\phi=\bot\ \mbox{and}\ \psi=\bot\\
+    (iii)&&\phi=\phi_{1}\to\phi_{2}\ ,\ \psi=\psi_{1}\to\psi_{2}\ ,\
+    \phi_{1}\sim\psi_{1}\ \mbox{and}\ \phi_{2}\sim\psi_{2}\\
+    (iv)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall x\psi_{1}\ \mbox{and}\ \phi_{1}\sim\psi_{1}\\
+    (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
+    \phi_{1}\sim \theta\ ,\ \psi_{1}\sim \theta[y/x]\ ,\ y\not\in\var(\theta)
+    \end{eqnarray*}
+\end{theorem}
+\begin{proof}
+Immediately follows from
+proposition~(\ref{logic:prop:almost:strong:is:strong}) and
+definition~(\ref{logic:def:almost:strong:equivalent}).
+\end{proof}

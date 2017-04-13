@@ -1,0 +1,45 @@
+In this section, we prove that a free generator is also a generator.
+This is one case where considering the order $\om:X\to\N$ on a free
+universal algebra $X$ can be seen to be very useful.
+\begin{defin}\label{logic:def:generator}
+Let $X$ be a universal algebra of type $\alpha$ and $X_{0}\subseteq
+X$. We say that $X_{0}$ is a {\em generator} of $X$, \ifand\
+$\langle X_{0}\rangle =X$.
+\end{defin}
+\begin{prop}\label{logic:prop:free:generator:generator}
+Let $X$ be a universal algebra of type $\alpha$ and $X_{0}\subseteq
+X$. If $X_{0}$ is a free generator of $X$, then it is also a
+generator of $X$.
+\end{prop}
+\begin{proof}
+Suppose $X_{0}$ is a free generator of $X$. We want to show that
+$X_{0}$ is a generator of $X$, i.e. that $\langle X_{0}\rangle =X$.
+Suppose to the contrary that there exists $y\in X$ such that
+$y\not\in\langle X_{0}\rangle$. Let $\om:X\to\N$ be the order on the
+free universal algebra $X$ and consider the set:
+    \[
+    A=\{\om(y):y\in X\ ,\ y\not\in\langle X_{0}\rangle\}
+    \]
+Then $A$ is a non-empty subset of $\N$ which therefore has a
+smallest element. So assume that $y\not\in\langle X_{0}\rangle$
+corresponds to the smallest element of $A$. Since
+$X_{0}\subseteq\langle X_{0}\rangle$, it is clear that $y\not\in
+X_{0}$. Since $X$ is a free universal algebra, from
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} there exist
+$f\in\alpha$ and $x\in X^{\alpha(f)}$ such that $y=f(x)$. It follows
+from proposition~(\ref{logic:prop:order}) that:
+    \[
+    \om(y)=\om(f(x))=1+\max\{\om(x(i)):i\in\alpha(f)\}
+    \]
+In particular, we see that $\om(x(i))<\om(y)$ for all
+$i\in\alpha(f)$. From the minimality of $\om(y)$ it follows that
+$x(i)\in\langle X_{0}\rangle$ for all $i\in\alpha(f)$. So
+$x\in\langle X_{0}\rangle^{\alpha(f)}$. Note that this conclusion
+holds even if $\alpha(f)=0$, and the argument presented is perfectly
+valid in that case. Now since $\langle X_{0}\rangle$ is a universal
+sub-algebra of $X$, we conclude from $x\in\langle
+X_{0}\rangle^{\alpha(f)}$ that $f(x)\in\langle X_{0}\rangle$. So we
+have proved that $y\in\langle X_{0}\rangle$ which contradicts the
+initial assumption.
+\end{proof}

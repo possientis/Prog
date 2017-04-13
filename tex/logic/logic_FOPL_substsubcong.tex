@@ -1,0 +1,75 @@
+We now show that equivalence between formulas is invariant under
+injective substitution. The following proposition is the counterpart
+of proposition~(\ref{logic:prop:strong:injective:substitution}) of
+the strong substitution congruence.
+
+\begin{prop}\label{logic:prop:sub:congruence:injective:substitution}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be an injective map.
+Let~$\sim$ be the substitution congruence both on \pv\ and ${\bf
+P}(W)$. Then:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \sigma(\phi)\sim\sigma(\psi)
+    \]
+for all $\phi,\psi\in\pv$, where $\sigma:\pv\to{\bf P}(W)$ is also
+the substitution mapping.
+\end{prop}
+\begin{proof}
+Let $\equiv$ be the relation on \pv\ defined by $\phi\equiv\psi\
+\Leftrightarrow\ \sigma(\phi)\sim\sigma(\psi)$. We need to show that
+$\phi\sim\psi\ \Rightarrow\ \phi\equiv\psi$ or equivalently that the
+inclusion $\sim\,\subseteq\,\equiv$ holds. Since $\sim$ is the
+substitution congruence on \pv, it is the smallest congruence on
+\pv\ which contains the set $R_{0}$ of
+definition~(\ref{logic:def:sub:congruence}). In order to show the
+inclusion $\sim\,\subseteq\,\equiv$ it is therefore sufficient to
+show that $\equiv$ is a congruence on \pv\ such that
+$R_{0}\subseteq\,\equiv$. However, we already know from
+proposition~(\ref{logic:prop:substitution:congruence}) that $\equiv$
+is a congruence on \pv. So it remains to show that
+$R_{0}\subseteq\,\equiv$. So let $\phi_{1}\in\pv$ and $x,y\in V$ be
+such that $x\neq y$ and $y\not\in\free(\phi_{1})$. Define
+$\phi=\forall x\phi_{1}$ and $\psi=\forall y\,\phi_{1}[y\!:\!x]$. We
+need to show that $\phi\equiv\psi$ or equivalently that
+$\sigma(\phi)\sim\sigma(\psi)$. In order to do so, it is sufficient
+to show that the ordered pair $(\sigma(\phi),\sigma(\psi))$ belongs
+to the generator $R_{0}'$ of the substitution congruence on ${\bf
+P}(W)$ as per definition~(\ref{logic:def:sub:congruence}). In other
+words, it is sufficient to show the existence of $\phi_{1}'\in{\bf
+P}(W)$ and $x',y'\in W$ with $x'\neq y'$ and
+$y'\not\in\free(\phi_{1}')$, such that $\sigma(\phi)=\forall
+x'\phi_{1}'$ and $\sigma(\psi)=\forall y'\,\phi_{1}'[y'\!:\!x']$.
+Take $\phi_{1}'=\sigma(\phi_{1})\in{\bf P}(W)$ together with
+$x'=\sigma(x)\in W$ and $y'=\sigma(y)\in W$. Then:
+    \[
+    \sigma(\phi)=\sigma(\forall x\phi_{1})\\
+        =\forall\sigma(x)\,\sigma(\phi_{1})\\
+        =\forall x'\phi_{1}'
+    \]
+Furthermore, from
+proposition~(\ref{logic:prop:FUAP:singlevar:composition:injective})
+we have $\sigma\circ[y\!:\!x]=[\sigma(y)\!:\!\sigma(x)]\circ\sigma$
+and so:
+    \begin{eqnarray*}
+    \sigma(\psi)&=&\sigma(\forall y\,\phi_{1}[y\!:\!x])\\
+    &=&\forall\sigma(y)\,\sigma(\phi_{1}[y\!:\!x])\\
+    &=&\forall y'\,\sigma([y\!:\!x](\phi_{1}))\\
+    &=&\forall y'\,\sigma\circ [y\!:\!x]\,(\phi_{1})\\
+    &=&\forall y'\, [\sigma(y)\!:\!\sigma(x)]\circ\sigma\,(\phi_{1})\\
+    &=&\forall y'\,[y'\!:\!x'](\phi_{1}')\\
+    &=&\forall y'\,\phi_{1}'[y'\!:\!x']
+    \end{eqnarray*}
+So it remains to show that $x'\neq y'$ and
+$y'\not\in\free(\phi_{1}')$. Since $\sigma:V\to W$ is an injective
+map, $x'\neq y'$ follows immediately from $x\neq y$. We now show
+that $y'\not\in\free(\phi_{1}')$. So suppose to the contrary that
+$y'\in\free(\phi_{1}')$. We shall arrive at a contradiction. Since
+$\phi_{1}'=\sigma(\phi_{1})$, from
+proposition~(\ref{logic:prop:freevar:of:substitution}) we have:
+ \[ \free(\phi_{1}')=\{\sigma(u):u\in\free(\phi_{1})\}
+ \]
+It follows that there exists $u\in\free(\phi_{1})$ such that
+$y'=\sigma(u)$. However, $y'=\sigma(y)$ and $\sigma:V\to W$ is an
+injective map. Hence we see that $u=y$ and consequently
+$y\in\free(\phi_{1})$ which contradicts our initial assumption of
+$y\not\in\free(\phi_{1})$.
+\end{proof}

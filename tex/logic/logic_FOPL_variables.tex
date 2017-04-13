@@ -1,0 +1,280 @@
+Let $V$ be a set and $x,y\in V$. Then $\phi=\forall x(x\in y)$ is an
+element of \pv. In this section, we aim to formalize the idea that
+the {\em set of variables} of $\phi$ is $\{x,y\}$. Hence we want to
+define a map $\var:\pv\to{\cal P}(V)$ such that
+$\var(\phi)=\{x,y\}$.
+\index{variable@Variables of
+formula}\index{variable@$\var(\phi)\,$: set of variables of $\phi$}
+\begin{defin}\label{logic:def:variable}
+Let $V$ be a set. The map $\var:\pv\to {\cal P}(V)$ defined by the
+following structural recursion is called {\em variable mapping on
+\pv}:
+ \begin{equation}\label{logic:eqn:var:recursion}
+    \forall\phi\in\pv\ ,\ \var(\phi)=\left\{
+                    \begin{array}{lcl}
+                    \{x,y\}&\mbox{\ if\ }&\phi=(x\in y)\\
+                    \emptyset&\mbox{\ if\ }&\phi=\bot\\
+                    \var(\phi_{1})\cup\var(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
+                    \{x\}\cup\var(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
+                    \end{array}\right.
+    \end{equation}
+We say that $x\in V$ is a {\em variable} of $\phi\in\pv$ \ifand\ $x\in\var(\phi)$.
+\end{defin}
+\begin{prop}\label{logic:prop:variable}
+The structural recursion of {\em definition~(\ref{logic:def:variable})} is legitimate.
+\end{prop}
+\begin{proof}
+We need to show the existence and uniqueness of $\var:\pv\to{\cal
+P}(V)$ satisfying equation~(\ref{logic:eqn:var:recursion}). This
+follows from an immediate application of
+theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion} to the free universal
+algebra \pv\ and the set $A={\cal P}(V)$, using $g_{0}:\pvo\to A$
+defined by $g_{0}(x\in y)=\{x,y\}$ for all $x,y\in V$, and the
+operators $h(f):A^{\alpha(f)}\to A$ ($f\in\alpha$) defined for all
+$V_{1},V_{2}\in A$ and $x\in V$ as:
+    \begin{eqnarray*}
+    (i)&&h(\bot)(0)=\emptyset\\
+    (ii)&&h(\to)(V_{1},V_{2})=V_{1}\cup V_{2}\\
+    (iii)&&h(\forall x)(V_{1})=\{x\}\cup V_{1}
+    \end{eqnarray*}
+\end{proof}
+
+Recall that a set $A$ is said to be finite \ifand\ there exists a
+bijection $j:n\to A$ for some $n\in\N$. The set $A$ is said to be
+infinite if it is not finite. Note that if $A$ and $B$ are finite
+sets, then $A\cup B$ is also finite. We shall accept this fact
+without proof in this document. The following proposition shows that
+a formula of first order predicate logic always has a finite number
+of variables.
+\begin{prop}\label{logic:prop:var:is:finite}
+Let $V$ be a set and $\phi\in\pv$. Then $\var(\phi)$ is finite.
+\end{prop}
+\begin{proof}
+Given $\phi\in\pv$, we need to show that $\var(\phi)$ is a finite
+set. We shall do so by structural induction using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since \pvo\ is a generator
+of \pv, we first check that the property is true for $\phi\in\pvo$.
+So suppose $\phi=(x\in y)$ for some $x,y\in V$. Since
+$\var(\phi)=\{x,y\}$, it is indeed a finite set. Next we check that
+the property is true for $\bot\in\pv$, which is clear since
+$\var(\bot)=\emptyset$. Next we check that the property is true for
+$\phi=\phi_{1}\to\phi_{2}$, if it is true for
+$\phi_{1},\phi_{2}\in\pv$. This follows immediately from
+$\var(\phi)=\var(\phi_{1})\cup\var(\phi_{2})$ which is clearly a
+finite set if both $\var(\phi_{1})$ and $\var(\phi_{2})$ are finite.
+Finally we check that the property is true for $\phi=\forall
+x\phi_{1}$ if it is true for $\phi_{1}$. This is also immediate from
+$\var(\phi)=\{x\}\cup\var(\phi_{1})$ and the fact that
+$\var(\phi_{1})$ is finite.
+\end{proof}
+
+In the following proposition we show that if $\psi\preceq\phi$ is a
+sub-formula of $\phi$, then the variables of $\psi$ are also
+variables of $\phi$ as we should expect:
+\index{subformula@$\phi\preceq\psi\,$: $\phi$ is a sub-formula of
+$\psi$}
+\begin{prop}\label{logic:prop:FOBL:variable:subformula}
+Let $V$ be a set and $\phi,\psi\in\pv$. Then we have:
+    \[
+    \psi\preceq\phi\ \Rightarrow\ \var(\psi)\subseteq\var(\phi)
+    \]
+\end{prop}
+\begin{proof}
+This is a simple application of
+proposition~(\ref{logic:prop:UA:subformula:non:decreasing}) to
+$\var:X\to A$ where $X=\pv$ and $A={\cal P}(V)$ where the preorder
+$\leq$ on $A$ is the usual inclusion $\subseteq$. We simply need to
+check that given $\phi_{1},\phi_{2}\in\pv$ and $x\in V$ we have the
+inclusions $\var(\phi_{1})\subseteq\var(\phi_{1}\to\phi_{2})$,
+$\var(\phi_{2})\subseteq\var(\phi_{1}\to\phi_{2})$ and
+$\var(\phi_{1})\subseteq\var(\forall x\phi_{1})$ which follow
+immediately from the recursive
+definition~(\ref{logic:def:variable}).
+\end{proof}
+
+Let $V,W$ be sets and $\sigma:V\to W$ be a map with associated
+substitution mapping $\sigma:\pv\to{\bf P}(W)$. Given $\phi\in\pv$,
+the variables of $\phi$ are the elements of the set $\var(\phi)$.
+The following proposition allows us to determine which are the
+variables of $\sigma(\phi)$. Specifically:
+    \[
+    \var(\sigma(\phi))=\{\sigma(x)\ :\ x\in\var(\phi)\}
+    \]
+In other words the variables of $\sigma(\phi)$ coincide with the
+range of the restriction $\sigma_{|\var(\phi)}$. As discussed in
+page~\pageref{logic:lemma:pullback}, this range is denoted
+$\sigma(\var(\phi))$.
+\begin{prop}\label{logic:prop:var:of:substitution}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Then:
+    \[
+    \forall\phi\in\pv\ ,\ \var(\sigma(\phi))=\sigma(\var(\phi))
+    \]
+where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated substitution mapping.
+\end{prop}
+\begin{proof}
+Given $\phi\in\pv$, we need to show that
+$\var(\sigma(\phi))=\{\sigma(x):x\in\var(\phi)\}$. We shall do so by
+structural induction using theorem~(\ref{logic:the:proof:induction})
+of page~\pageref{logic:the:proof:induction}. Since \pvo\ is a
+generator of \pv, we first check that the property is true for
+$\phi\in\pvo$. So suppose $\phi=(x\in y)\in\pvo$ for some $x,y\in
+V$. Then we have:
+    \begin{eqnarray*}
+    \var(\sigma(\phi))&=&\var(\sigma(x\in y))\\
+    &=&\var(\,\sigma(x)\in\sigma(y)\,)\\
+    &=&\{\sigma(x),\sigma(y)\}\\
+    &=&\{\sigma(u):u\in\{x,y\}\}\\
+    &=&\{\sigma(u):u\in\var(x\in y)\}\\
+    &=&\{\sigma(x):x\in\var(\phi)\}
+    \end{eqnarray*}
+Next we check that the property is true for $\bot\in\pv$:
+    \[
+    \var(\sigma(\bot))=\var(\bot)=\emptyset=\{\sigma(x):x\in\var(\bot)\}
+    \]
+Next we check that the property is true for
+$\phi=\phi_{1}\to\phi_{2}$ if it is true for $\phi_{1},\phi_{2}$:
+    \begin{eqnarray*}
+    \var(\sigma(\phi))&=&\var(\sigma(\phi_{1}\to\phi_{2}))\\
+    &=&\var(\sigma(\phi_{1})\to\sigma(\phi_{2}))\\
+    &=&\var(\sigma(\phi_{1}))\cup\var(\sigma(\phi_{2}))\\
+    &=&\{\,\sigma(x):x\in\var(\phi_{1})\,\}\cup\{\,\sigma(x):x\in\var(\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\var(\phi_{1})\cup\var(\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\var(\phi_{1}\to\phi_{2})\,\}\\
+    &=&\{\,\sigma(x):x\in\var(\phi)\,\}
+    \end{eqnarray*}
+Finally we check that the property is true for $\phi=\forall
+x\phi_{1}$ if it is true for $\phi_{1}$:
+    \begin{eqnarray*}
+    \var(\sigma(\phi))&=&\var(\sigma(\forall x\phi_{1}))\\
+    &=&\var(\forall\sigma(x)\,\sigma(\phi_{1}))\\
+    &=&\{\,\sigma(x)\,\}\cup\var(\sigma(\phi_{1}))\\
+    &=&\{\,\sigma(x)\,\}\cup\{\,\sigma(u):u\in\var(\phi_{1})\,\}\\
+    &=&\{\,\sigma(u):u\in\{x\}\cup\var(\phi_{1})\,\}\\
+    &=&\{\,\sigma(u):u\in\var(\forall x\phi_{1})\,\}\\
+    &=&\{\,\sigma(x):x\in\var(\phi)\,\}
+    \end{eqnarray*}
+\end{proof}
+
+Let $V,W$ be sets and $\sigma:V\to W$ be a map with associated
+substitution mapping $\sigma:\pv\to{\bf P}(W)$. It will soon be
+apparent that whether or not $\sigma:V\to W$ is injective plays a
+crucial role. For example if $\phi=\forall x\forall y(x\in y)$ with
+$x\neq y$ and $\sigma(x)=u$ while $\sigma(y)=v$, we obtain
+$\sigma(\phi)=\forall u\forall v(u\in v)$. When $\sigma$ is
+injective we have $u\neq v$ and it is possible to argue in some
+sense that the {\em meaning} of $\sigma(\phi)$ is the same as that
+of $\phi$. If $\sigma$ is not an injective map, then we no longer
+have the guarantee that $u\neq v$. In that case $\sigma(\phi)$ may
+be equal to $\forall u\forall u(u\in u)$, which is a different
+mathematical statement from that of $\phi$. Substitution mappings
+which arise from an injective map are therefore important. However,
+there will be cases when we shall need to consider a map $\tau:V\to
+W$ which is not injective. One common example is the map $[y/x]:V\to
+V$ defined in definition~(\ref{logic:def:single:var:substitution})
+which replaces a variable $x$ by a variable $y$, but leaves the
+variable $y$ as it is, if already present in the formula. Since
+$[y/x](x)=y=[y/x](y)$, this map is not injective when $x\neq y$.
+This map is not the same as the map $[y\!:\!x]:V\to V$ defined in
+definition~(\ref{logic:def:single:var:permutation}) which permutes
+the two variables $x$ and $y$. In contrast to $[y/x]$ the
+permutation $[y:x]$ is an injective map. However if a formula
+$\phi\in\pv$ does not contain the variable $y$, it is easy to
+believe that the associated substitution mappings $[y/x]:\pv\to\pv$
+and $[y\!:\!x]:\pv\to\pv$ have an identical effect on the formula
+$\phi$, or in other words that $[y/x](\phi)=[y\!:\!x](\phi)$. If
+this is the case, many things can be said about the formula
+$[y/x](\phi)$ despite the fact that $[y/x]$ is not an injective map,
+simply because of the equality $[y/x](\phi)=[y\!:\!x](\phi)$. More
+generally, many things can be said about a formula $\tau(\phi)$
+whenever it coincides with a formula $\sigma(\phi)$, and $\sigma$ is
+an injective map. To achieve the equality $\sigma(\phi)=\tau(\phi)$
+we only need $\sigma$ and $\tau$ to coincide on $\var(\phi)$ as we
+shall now check in the following proposition.
+
+\begin{prop}\label{logic:prop:substitution:support}
+Let $V$ and $W$ be sets and $\sigma,\tau:V\to W$ be two maps. Then:
+    \[
+    \sigma_{|\var(\phi)}=\tau_{|\var(\phi)}\ \ \Leftrightarrow\
+    \ \sigma(\phi)=\tau(\phi)
+    \]
+for all $\phi\in\pv$, where $\sigma,\tau:\pv\to{\bf P}(W)$ are also
+the substitution mappings.
+\end{prop}
+\begin{proof}
+Given $\phi\in\pv$, we need to show that if $\sigma$ and $\tau$
+coincide on $\var(\phi)\subseteq V$, then $\sigma(\phi)=\tau(\phi)$,
+and conversely that if $\sigma(\phi)=\tau(\phi)$, then $\sigma$ and
+$\tau$ coincide on $\var(\phi)$. We shall do so by structural
+induction using theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since \pvo\ is a generator
+of \pv, we first check that the equivalence is true for
+$\phi\in\pvo$. So suppose $\phi=(x\in y)$ for some $x,y\in V$, and
+suppose furthermore that $\sigma_{|\var(\phi)}=\tau_{|\var(\phi)}$.
+Since $\var(\phi)=\{x,y\}$ it follows that $\sigma(x)=\tau(x)$ and
+$\sigma(y)=\tau(y)$. Hence, we have the following equalities:
+    \begin{eqnarray*}
+    \sigma(\phi)&=&\sigma(x\in y)\\
+    &=&(\,\sigma(x)\in\sigma(y)\,)\\
+    &=&(\,\tau(x)\in\tau(y)\,)\\
+    &=&\tau(x\in y)\\
+    &=&\tau(\phi)
+    \end{eqnarray*}
+Conversely, if $\sigma(\phi)=\tau(\phi)$ then
+$(\,\sigma(x)\in\sigma(y)\,)=(\,\tau(x)\in\tau(y)\,)$ and it follows
+that $\sigma(x)=\tau(x)$ and $\sigma(y)=\tau(y)$. So $\sigma$ and
+$\tau$ coincide on $\var(\phi)$. Next we check that the equivalence
+is true for $\bot\in\pv$. Since $\var(\bot)=\emptyset$, we always
+have the equality
+$\sigma_{|\var(\bot)}=\emptyset=\tau_{|\var(\bot)}$. Furthermore
+$\sigma(\bot)=\bot=\tau(\bot)$ is also always true. So the
+equivalence does indeed hold. Next we check that the equivalence is
+true for $\phi=\phi_{1}\to\phi_{2}$, if it is true for
+$\phi_{1},\phi_{2}\in\pv$. So we assume that $\sigma$ and $\tau$
+coincide on $\var(\phi)$. We need to prove that
+$\sigma(\phi)=\tau(\phi)$. However, since
+$\var(\phi)=\var(\phi_{1})\cup\var(\phi_{2})$, $\sigma$~and $\tau$
+coincide both on $\var(\phi_{1})$ and $\var(\phi_{2})$. Having
+assumed the property is true for $\phi_{1}$ and $\phi_{2}$ it
+follows that $\sigma(\phi_{1})=\tau(\phi_{1})$ and
+$\sigma(\phi_{2})=\tau(\phi_{2})$. Hence:
+    \begin{eqnarray*}
+    \sigma(\phi)&=&\sigma(\phi_{1}\to\phi_{2})\\
+    &=&\sigma(\phi_{1})\to\sigma(\phi_{2})\\
+    &=&\tau(\phi_{1})\to\tau(\phi_{2})\\
+    &=&\tau(\phi_{1}\to\phi_{2})\\
+    &=&\tau(\phi)
+    \end{eqnarray*}
+Conversely if $\sigma(\phi)=\tau(\phi)$ then we obtain
+$\sigma(\phi_{1})\to\sigma(\phi_{2})=\tau(\phi_{1})\to\tau(\phi_{2})$.
+Using theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} it follows that
+$\sigma(\phi_{1})=\tau(\phi_{1})$ and
+$\sigma(\phi_{2})=\tau(\phi_{2})$. Having assumed the equivalence is
+true for $\phi_{1}$ and $\phi_{2}$ we conclude that $\sigma$ and
+$\tau$ coincide on $\var(\phi_{1})$ and $\var(\phi_{2})$ and
+consequently they coincide on $\var(\phi)$. Finally we check that
+the equivalence is true for $\phi=\forall x\phi_{1}$ if it is true
+for $\phi_{1}$. So we assume that $\sigma$ and $\tau$ coincide on
+$\var(\phi)$. We need to show $\sigma(\phi)=~\tau(\phi)$. However,
+since $\var(\phi)=\{x\}\cup\var(\phi_{1})$, $\sigma$ and $\tau$
+coincide on $\var(\phi_{1})$ and we have $\sigma(x)=\tau(x)$. Having
+assumed the property is true for $\phi_{1}$ it follows that
+$\sigma(\phi_{1})=\tau(\phi_{1})$, and consequently:
+\begin{eqnarray*}
+    \sigma(\phi)&=&\sigma(\forall x\phi_{1})\\
+    &=&\forall\sigma(x)\,\sigma(\phi_{1})\\
+    &=&\forall\tau(x)\,\tau(\phi_{1})\\
+    &=&\tau(\forall x\phi_{1})\\
+    &=&\tau(\phi)
+    \end{eqnarray*}
+Conversely if $\sigma(\phi)=\tau(\phi)$ then we obtain
+$\forall\sigma(x)\,\sigma(\phi_{1})=\forall\tau(x)\,\tau(\phi_{1})$.
+Using theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} it follows that
+$\sigma(\phi_{1})=\tau(\phi_{1})$ and $\sigma(x)=\tau(x)$. Having
+assumed the equivalence is true for $\phi_{1}$ we conclude that
+$\sigma$ and $\tau$ coincide on $\var(\phi_{1})$ and consequently
+they coincide on $\var(\phi)=\{x\}\cup\var(\phi_{1})$.
+\end{proof}

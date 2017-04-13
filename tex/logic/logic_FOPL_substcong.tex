@@ -1,0 +1,72 @@
+Let $V,W$ be sets and $\sigma:V\to W$ be a map. From
+definition~(\ref{logic:def:substitution}) we have a substitution
+mapping $\sigma:\pv\to{\bf P}(W)$ which we still denote '$\sigma$'
+by virtue of
+proposition~(\ref{logic:prop:substitution:composition}). Suppose we
+have a congruence on \pv\ and a congruence on ${\bf P}(W)$, both
+denoted $\sim$ for the purpose of this discussion. Given
+$\phi,\psi\in\pv$ such that $\phi\sim\psi$, it will often be useful
+for us to know whether the substitution mapping $\sigma$ {\em
+preserves the equivalence} of $\phi$ and $\psi$, i.e. whether
+$\sigma(\phi)\sim\sigma(\psi)$. When this is the case, a very common
+strategy to go about the proof is to consider a relation $\equiv$ on
+\pv\ defined by $\phi\equiv\psi$ \ifand\
+$\sigma(\phi)\sim\sigma(\psi)$, and to argue that $\equiv$ is in
+fact a congruence on \pv. Once we know that $\equiv$ is a congruence
+on \pv, a proof of $\sigma(\phi)\sim\sigma(\psi)$ is simply achieved
+by showing an inclusion of the form $R_{0}\subseteq\equiv$ where
+$R_{0}$ is a {\em generator} of the congruence $\sim$ on \pv, in the
+sense of definition~(\ref{logic:def:generated:congruence}). Indeed,
+such an inclusion implies that $\sim\,\subseteq\,\equiv$ from which
+we see that for all $\phi,\psi\in\pv$ we have:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \sigma(\phi)\sim\sigma(\psi)
+    \]
+The following proposition confirms that $\equiv$ is a congruence on
+\pv.
+\begin{prop}\label{logic:prop:substitution:congruence}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let $\sim$ be
+an arbitrary congruence on ${\bf P}(W)$ and let $\equiv$ be the
+relation on \pv\ defined by:
+    \[
+    \phi\equiv\psi\ \Leftrightarrow\ \sigma(\phi)\sim\sigma(\psi)
+    \]
+for all $\phi,\psi\in\pv$. Then $\equiv$ is a congruence on \pv.
+\end{prop}
+\begin{proof}
+Since the congruence $\sim$ on ${\bf P}(W)$ is an equivalence
+relation, $\equiv$ is clearly reflexive, symmetric and transitive on
+\pv. So we simply need to show that $\equiv$ is a congruent relation
+on \pv. Since $\sim$ is reflexive, we have
+$\sigma(\bot)\sim\sigma(\bot)$ and so $\bot\equiv\bot$. Suppose
+$\phi_{1},\phi_{2},\psi_{1}$ and $\psi_{2}\in\pv$ are such that
+$\phi_{1}\equiv\psi_{1}$ and $\phi_{2}\equiv\psi_{2}$. Define
+$\phi=\phi_{1}\to\phi_{2}$ and $\psi=\psi_{1}\to\psi_{2}$. We need
+to show that $\phi\equiv\psi$, or equivalently that
+$\sigma(\phi)\sim\sigma(\psi)$. This follows from the fact that
+$\sigma(\phi_{1})\sim\sigma(\psi_{1})$,
+$\sigma(\phi_{2})\sim\sigma(\psi_{2})$ and furthermore:
+    \begin{eqnarray*}
+    \sigma(\phi)&=&\sigma(\phi_{1}\to\phi_{2})\\
+    &=&\sigma(\phi_{1})\to\sigma(\phi_{2})\\
+    &\sim&\sigma(\psi_{1})\to\sigma(\psi_{2})\\
+    &=&\sigma(\psi_{1}\to\psi_{2})\\
+    &=&\sigma(\psi)
+    \end{eqnarray*}
+where the intermediate $\sim$ crucially depends on $\sim$ being a
+congruent relation on ${\bf P}(W)$. We now suppose that
+$\phi_{1},\psi_{1}\in\pv$ are such that $\phi_{1}\equiv\psi_{1}$.
+Let $x\in V$ and define $\phi=\forall x\phi_{1}$ and $\psi=\forall
+x\psi_{1}$. We need to show that $\phi\equiv\psi$, or equivalently
+that $\sigma(\phi)\sim\sigma(\psi)$. This follows from
+$\sigma(\phi_{1})\sim\sigma(\psi_{1})$ and:
+    \begin{eqnarray*}
+    \sigma(\phi)&=&\sigma(\forall x\phi_{1})\\
+    &=&\forall\sigma(x)\,\sigma(\phi_{1})\\
+    &\sim&\forall\sigma(x)\sigma(\psi_{1})\\
+    &=&\sigma(\forall x\psi_{1})\\
+    &=&\sigma(\psi)
+    \end{eqnarray*}
+where the intermediate $\sim$ crucially depends on $\sim$ being a
+congruent relation.
+\end{proof}

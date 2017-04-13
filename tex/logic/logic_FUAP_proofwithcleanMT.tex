@@ -1,0 +1,185 @@
+As you may recall, we defined a minimal transform for proofs which
+naturally led to the notion of substitution congruence on \pvs. We
+gave a result to characterize this $\alpha$-equivalence in
+theorem~(\ref{logic:the:FUAP:charsubcong:charac}) of
+page~\pageref{logic:the:FUAP:charsubcong:charac}. We also
+established the equivalence between $\pi\sim\rho$ and ${\cal
+M}(\pi)={\cal M}(\rho)$ in
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} which serves
+as a neat validation of our definition choices so far. One other
+thing to check is that two equivalent proofs are indeed {\em the
+same}. Specifically, if $\sim$ denotes the substitution congruence
+on \pvs\ and $\pi\sim\rho$, we want to make sure the {\em
+fundamental properties} of $\pi$ are also those of $\rho$. So if
+$\pi$ is a clean proof, we should expect $\rho$ to be clean as well.
+We should also expect $\pi$ and $\rho$ to have equivalent valuation
+modulo, i.e. $\vals(\pi)\sim\vals(\rho)$ where $\sim$ now denotes
+the substitution congruence on \pv. Finally, we would want to check
+we have the equality $\hyp(\pi)\sim\hyp(\rho)$ modulo the
+substitution congruence, as per
+definition~(\ref{logic:def:FUAP:valuationmod:equality:modulo}). In
+short, two equivalent proofs should prove the same thing from the
+same hypothesis, modulo $\alpha$-equivalence, and they should both
+be clean if one of them is. These results will be established in the
+next section. For now, we shall focus on proving the following
+proposition from which every thing else will flow. From
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})
+we already know that  the minimal transform of a clean proof is
+clean. The following proposition establishes the reverse implication
+$({\cal M}(\pi)\mbox{ is clean })\ \Rightarrow\ (\pi\mbox{ is
+clean})$. This type of result requires proofs which are more
+elaborate than usual. It is very similar to
+lemma~(\ref{logic:lemma:FUAP:valsubaxmodulo:m:phi:phi}) where we
+proved the implication $({\cal M}(\phi)\mbox{ is an axiom })\
+\Rightarrow\ (\phi\mbox{ is an axiom modulo})$. As we shall see, the
+proof of
+proposition~(\ref{logic:prop:FUAP:proofwithcleanMT:mintrans:clean:equivalence})
+below will rely on the local inversion theorem for proofs, which is
+theorem~(\ref{logic:the:FUAP:localinversion:inversion}) of
+page~\pageref{logic:the:FUAP:localinversion:inversion}. Until now,
+the local inversion theorem was only ever used to prove the
+implication ${\cal M}(\pi)={\cal M}(\rho)\ \Rightarrow\
+\pi\sim\rho$.
+
+\index{clean@Proof with clean min. transform}
+\begin{prop}\label{logic:prop:FUAP:proofwithcleanMT:mintrans:clean:equivalence}
+Let $V$ be a set and $\pi\in\pvs$. Then we have the equivalence:
+    \[
+    (\,\mbox{$\pi$ is clean}\,)\ \Leftrightarrow\ (\,\mbox{${\cal M}(\pi)$ is clean}\,)
+    \]
+where ${\cal M}(\pi)$ is the minimal transform of $\pi$ as per {\em
+definition~(\ref{logic:def:FUAP:mintransproof:transform}).}
+\end{prop}
+\begin{proof}
+The implication $\Rightarrow$ is already known from
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute}).
+We shall prove $\Leftarrow$ with an induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then from
+definition~(\ref{logic:def:FUAP:almostclean:definition}) we see that
+$\pi$ is always clean in this case, so our implication is true. Next
+we assume that $\pi=\axi\phi$ for some $\phi\in\pv$. We need to show
+our implication is true for $\pi$. So we assume that ${\cal M}(\pi)$
+is clean. We need to show that $\pi$ is also clean. However, we have
+${\cal M}(\pi)=\axi{\cal M}(\phi)$ and it follows that ${\cal
+M}(\phi)$ is an axiom modulo, i.e. ${\cal M}(\phi)\in{\bf
+A}^{+}(\bar{V})$. Using
+proposition~(\ref{logic:prop:FUAP:valsubaxmodulo:min:transform}) we
+see that $\phi\in\avs$, i.e. $\phi$ is itself an axiom modulo. So
+$\pi$ is clean as requested. We now assume that
+$\pi=\pi_{1}\pon\pi_{2}$, where $\pi_{1},\pi_{2}\in\pvs$ are proofs
+satisfying our implication. We need to show the same is true of
+$\pi$. So we assume that ${\cal M}(\pi)={\cal M}(\pi_{1})\pon\,{\cal
+M}(\pi_{2})$ is clean. We need to show that $\pi$ is itself clean.
+However, from
+proposition~(\ref{logic:prop:FUAP:almostclean:modus:ponens}) we see
+that both ${\cal M}(\pi_{1})$ and ${\cal M}(\pi_{2})$ are clean, and
+furthermore $\vals\circ{\cal M}(\pi_{2})=\chi_{1}\to\chi_{2}$ for
+some $\chi_{1},\chi_{2}\in\pvb$ such that
+$\chi_{1}\sim\vals\circ{\cal M}(\pi_{1})$, where $\sim$ refers to
+the substitution congruence on \pvb. Having assumed our implication
+is true for $\pi_{1}$ and $\pi_{2}$, it follows that both $\pi_{1}$
+and $\pi_{2}$ are clean. Using
+proposition~(\ref{logic:prop:FUAP:almostclean:modus:ponens}), in
+order to show that $\pi$ is clean it remains to prove that
+$\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ for some
+$\psi_{1},\psi_{2}\in\pv$ such that $\psi_{1}\sim\vals(\pi_{1})$,
+where $\sim$ is now the substitution congruence on \pv. However,
+using
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})
+and the fact that $\pi_{2}$ is clean, we obtain ${\cal
+M}\circ\vals(\pi_{2})\sim\vals\circ{\cal
+M}(\pi_{2})=\chi_{1}\to\chi_{2}$. From
+theorem~(\ref{logic:the:sub:congruence:charac}) of
+page~\pageref{logic:the:sub:congruence:charac} it follows that
+${\cal M}\circ\vals(\pi_{2})=\chi_{1}'\to\chi_{2}'$ for some
+$\chi_{1}',\chi_{2}'\in\pvb$ such that $\chi_{1}\sim\chi_{1}'$ and
+$\chi_{2}\sim\chi_{2}'$. Looking at
+definition~(\ref{logic:def:FOPL:mintransform:transform}) of the
+minimal transform and arguing from the uniqueness property of
+theorem~(\ref{logic:the:unique:representation}) or
+page~\pageref{logic:the:unique:representation}, we see that
+$\vals(\pi_{2})$ must be of the form
+$\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ for some
+$\psi_{1},\psi_{2}\in\pv$ such that $\chi_{1}'={\cal M}(\psi_{1})$.
+In order to show that $\pi$ is clean, it remains to prove that
+$\psi_{1}\sim\vals(\pi_{1})$. From
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:kernel}, this amounts
+to showing the equality ${\cal M}(\psi_{1})={\cal
+M}\circ\vals(\pi_{1})$, for which it is in fact sufficient to show
+the equivalence ${\cal M}(\psi_{1})\sim{\cal M}\circ\vals(\pi_{1})$
+by virtue of
+proposition~(\ref{logic:prop:FOPL:esssubst:mintransform:equiv:imp:equal}).
+Since $\pi_{1}$ is clean, we can apply
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})
+and obtain:
+    \begin{eqnarray*}
+    {\cal M}(\psi_{1})&=&\chi_{1}'\\
+    &\sim&\chi_{1}\\
+    &\sim&\vals\circ{\cal M}(\pi_{1})\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})}\ \rightarrow
+    &\sim&{\cal M}\circ\vals(\pi_{1})\\
+    \end{eqnarray*}
+So we have proved that $\pi$ is clean as requested. We now assume
+that $\pi=\gen x\pi_{1}$ for some $x\in V$ and $\pi_{1}\in\pvs$
+satisfying our implication. We need to show the same is true of
+$\pi$. So we assume that ${\cal M}(\pi)$ is clean. We need to show
+that $\pi$ is itself clean. Using
+proposition~(\ref{logic:prop:FUAP:almostclean:generalization}), it
+is sufficient to show that $\pi_{1}$ is clean and furthermore that
+$x\not\in\spec(\pi_{1})$. However from
+definition~(\ref{logic:def:FUAP:mintransproof:transform}) we obtain
+the equality ${\cal M}(\pi)=\gen n{\cal M}(\pi_{1})[n/x]$ where
+$n\in\N$ is the smallest natural number for which $[n/x]$ is valid
+for ${\cal M}(\pi_{1})$. Having assumed that ${\cal M}(\pi)$ is
+clean, it follows from
+proposition~(\ref{logic:prop:FUAP:almostclean:generalization}) that
+${\cal M}(\pi_{1})[n/x]$ is clean and furthermore
+$n\not\in\spec({\cal M}(\pi_{1})[n/x])$. So let us show that
+$\pi_{1}$ is clean: Consider the substitution
+$\sigma:\bar{V}\to\bar{V}$ defined by $\sigma=[n/x]$. We shall first
+show that ${\cal M}(\pi_{1})$ is clean using the local inversion
+theorem~(\ref{logic:the:FUAP:localinversion:inversion}) of
+page~\pageref{logic:the:FUAP:localinversion:inversion}. So consider
+the sets $V_{0}=V$ and $V_{1}=\N$. It is clear that both
+$\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are injective maps. Define:
+    \[
+    \Pi=\{\kappa\in{\bf\Pi}(\bar{V}):(\free(\kappa)\subseteq
+    V_{0})\land(\bound(\kappa)\subseteq V_{1})\land(\mbox{$\sigma$
+    valid for $\kappa$})\}
+    \]
+Then using theorem~(\ref{logic:the:FUAP:localinversion:inversion})
+there exits $\tau:{\bf\Pi}(\bar{V})\to{\bf\Pi}(\bar{V})$ such that
+$\tau\circ\sigma(\kappa)=\kappa$ for all $\kappa\in\Pi$. Using
+propositions~(\ref{logic:prop:FUAP:mintransformproof:freevar}),
+(\ref{logic:prop:FUAP:mintransformproof:boundvar}) and the fact that
+$[n/x]$ is valid for ${\cal M}(\pi_{1})$, it follows that ${\cal
+M}(\pi_{1})\in\Pi$. Thus we obtain $\tau({\cal
+M}(\pi_{1})[n/x])={\cal M}(\pi_{1})$. Since ${\cal M}(\pi_{1})[n/x]$
+is clean, in order to show that ${\cal M}(\pi_{1})$ is itself clean
+it is sufficient to prove that $\tau$ is valid for ${\cal
+M}(\pi_{1})[n/x]$, by virtue for
+proposition~(\ref{logic:prop:FUAP:strongvalsubalmostclean:valuation:commute}).
+Using proposition~(\ref{logic:prop:FUAP:validsubproof:composition}),
+it is therefore sufficient to prove that $\tau\circ[n/x]$ is valid
+for ${\cal M}(\pi_{1})$, which follows from
+proposition~(\ref{logic:prop:FUAP:validsubproof:equal:image}) and
+$\tau({\cal M}(\pi_{1})[n/x])={\cal M}(\pi_{1})$. So we have proved
+that ${\cal M}(\pi_{1})$ is a clean proof and consequently $\pi_{1}$
+itself, as follows from the induction hypothesis. We now show that
+$x\not\in\spec(\pi_{1})$: since $[n/x]$ is valid for ${\cal
+M}(\pi_{1})$, from
+proposition~(\ref{logic:prop:FUAP:validsubproof:specvar}) we have
+the equality $\spec({\cal M}(\pi_{1})[n/x])=[n/x](\,\spec({\cal
+M}(\pi_{1}))\,)$. Hence we have $n\not\in[n/x](\,\spec({\cal
+M}(\pi_{1}))\,)$ and consequently $x\not\in\spec({\cal
+M}(\pi_{1}))$. However having established that $\pi_{1}$ is a clean
+proof, from
+proposition~(\ref{logic:prop:FUAP:mintransproof:variable}) we have
+$\spec({\cal M}(\pi_{1}))=\spec(\pi_{1})$. We conclude that
+$x\not\in\spec(\pi_{1})$ as requested, which completes our induction
+argument.
+\end{proof}

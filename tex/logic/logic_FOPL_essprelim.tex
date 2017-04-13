@@ -1,0 +1,53 @@
+The notion of {\em essential substitution} arises from the more
+general issue of {\em capture-avoiding substitutions} in formal
+languages with variable binding. This question is already dealt with
+in the computer science literature of which by and large, we are
+sadly unaware. It is therefore very difficult for us to give due
+credit to the work that has already been done. However, we would
+like to mention the papers of Murdoch J. Gabbay~\cite{GabbaySub} and
+Murdoch J. Gabbay and Aad Mathijssen~\cite{GabbayCapture}, whose
+existence came to our attention, and which deal with {\em
+capture-avoiding substitutions}. Our own approach we think is
+original, but of course we cannot be sure. The whole question of
+{\em capture-avoiding substitutions} arises from the fact that most
+substitutions $\sigma:\pv\to{\bf P}(W)$ associated with a map
+$\sigma:V\to W$ are not {\em capture-avoiding}. We introduced the
+notion of {\em valid substitutions} in
+definition~(\ref{logic:def:FOPL:valid:substitution}) so as to
+distinguish those cases when $\sigma(\phi)$ is {\em
+capture-avoiding} and those when it is not. This was clearly a step
+forward but we were still very short of defining a total map
+$\sigma:\pv\to{\bf P}(W)$ which would somehow be associated to
+$\sigma:V\to W$, while avoiding capture for every $\phi\in\pv$. Our
+solution to the problem relies on the introduction of the {\em
+minimal transform mapping} ${\cal M}:\pv\to\pvb$ where
+$\bar{V}=V\oplus\N$ is the direct sum of $V$ and \N. In considering
+the {\em minimal extension} $\bar{V}$ of the set $V$, we are
+effectively adding a new set of variables specifically for the
+purpose of variable binding, an idea which bears some resemblance
+with the introduction of {\em atoms} in the {\em nominal set}
+approach of Murdoch J. Gabbay. The {\em minimal transform mapping}
+replaces all bound variables from the set $V$ to the set \N. The
+benefit of doing so is immediate as given a map $\sigma:V\to W$, the
+obvious extension $\bar{\sigma}:\bar{V}\to\bar{W}$ applied to the
+minimal transform ${\cal M}(\phi)$ is now {\em capture-avoiding} for
+all $\phi$. In other words, the formula $\bar{\sigma}\circ{\cal
+M}(\phi)$ is always logically meaningful. However, this formula
+belongs to the space ${\bf P}(\bar{W})$ and we are still short of
+defining {\em an essential substitution} $\sigma:\pv\to{\bf P}(W)$.
+The breakthrough consists in noting that, provided the set $W$ is
+infinite or larger than the set $V$, it is always possible to
+express the formula $\bar{\sigma}\circ{\cal M}(\phi)$ as the {\em
+minimal transform} ${\cal M}(\psi)$ for some formula $\psi\in{\bf
+P}(W)$. Using the axiom of choice, an {\em essential substitution}
+$\sigma:\pv\to{\bf P}(W)$ associated with the map $\sigma:V\to W$ is
+simply defined in terms of ${\cal
+M}\circ\sigma=\bar{\sigma}\circ{\cal M}$, and is uniquely
+characterized modulo $\alpha$-equivalence, i.e. the substitution
+congruence. Of course, anyone interested in computer science and
+computability in general will not look favorably upon the use of the
+axiom of choice. We are dealing with arbitrary sets $V$ and $W$ of
+arbitrary cardinality. In practice, a computer scientist will have
+sets of variables which are well-ordered, and it is not difficult to
+find some $\psi\in{\bf P}(W)$ such that $\bar{\sigma}\circ{\cal
+M}(\phi)={\cal M}(\psi)$ in a way which is deterministic.

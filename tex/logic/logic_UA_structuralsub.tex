@@ -1,0 +1,95 @@
+If $V$ and $W$ are sets and $\sigma:V\to W$ is a map, we shall see
+from definition~(\ref{logic:def:substitution}) and
+definition~(\ref{logic:def:FUAP:substitution:substitution}) that it
+is possible to define corresponding $\sigma:\pv\to{\bf P}(W)$ or
+$\sigma:\pvs\to{\bf \Pi}(W)$ which are substitutions of variable
+inside formulas or inside proofs. These maps are not morphisms of
+free universal algebras, if only because \pv\ and ${\bf P}(W)$ do
+not have the same type. However, these maps are pretty close to
+being morphism, and we shall now study some of their common
+properties under the possible abstraction of {\em structural
+substitution}. Recall that given a type of universal algebra
+$\alpha$ and $f\in\alpha$, the arity of $f$ is denoted $\alpha(f)$.
+
+\begin{defin}\label{logic:def:UA:structuralsub:arity:preserving}
+Let $\alpha$ and $\beta$ be two types of universal algebra. We say
+that a map $q:\alpha\to\beta$ is {\em arity preserving}, \ifand\ for
+all $f\in\alpha$ we have:
+    \[
+    \beta\circ q(f)=\alpha(f)
+    \]
+In other words the arity of the operator $q(f)\in\beta$ is the same
+as that of $f\in\alpha$.
+\end{defin}
+
+Recall that the '$\sigma$' which appears on the right-hand-side of
+$(ii)$ in
+definition~(\ref{logic:def:UA:structuralsub:structural:substitution})
+below refers to the map $\sigma:X^{\alpha(f)}\to Y^{\alpha(f)}$
+defined by $\sigma(x)(i)=\sigma(x(i))$ for all $i\in\alpha(f)$. It
+follows that the expression $q(f)(\sigma(x))$ is always meaningful
+since $q:\alpha\to\beta$ is arity preserving and $\alpha(f)$ is
+precisely the arity of $q(f)$. \index{structural@Structural
+substitution}
+\begin{defin}\label{logic:def:UA:structuralsub:structural:substitution}
+Let $X,Y$ be free universal algebras of type $\alpha,\beta$ and with
+free generators $X_{0},Y_{0}$ respectively. A map $\sigma:X\to Y$ is
+a {\em structural substitution} \ifand\ there exists an arity
+preserving map $q:\alpha\to\beta$ such that:
+    \begin{eqnarray*}
+    (i)&&x\in X_{0}\ \Rightarrow\ \sigma(x)\in Y_{0}\\
+    (ii)&&x\in X^{\alpha(f)}\ \Rightarrow\
+    \sigma(f(x))= q(f)(\sigma(x))
+    \end{eqnarray*}
+where $(ii)$ holds for all $f\in\alpha$.
+\end{defin}
+
+One of the motivations to consider structural substitutions is to
+prove the following proposition in a general setting. If
+$\sigma:X\to Y$ is a structural substitution between two free
+universal algebras, then given $x,y\in X$ we have:
+    \[
+    y\preceq x\ \Rightarrow\ \sigma(y)\preceq\sigma(x)
+    \]
+In other words, if $y$ is a sub-formula of $x$ then $\sigma(y)$ is
+also a sub-formula of $\sigma(x)$. This property can be summarized
+with the inclusion $\sigma(\subf(x))\subseteq\subf(\sigma(x))$ for
+all $x\in X$. As it turns out, the reverse inclusion is also true:
+\begin{prop}\label{logic:prop:UA:structuralsub:subformula}
+Let $X,Y$ be free universal algebras and $\sigma:X\to Y$ be a
+structural substitution. Then for all $x\in X$ we have the equality:
+    \[
+    \subf(\sigma(x))=\sigma(\subf(x))
+    \]
+i.e. the sub-formulas of $\sigma(x)$ are the images of the
+sub-formulas of $x$ by $\sigma$.
+\end{prop}
+\begin{proof}
+Given $x\in X$ we need to show that
+$\subf(\sigma(x))=\sigma(\subf(x))$. We shall do so with a
+structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that $x\in
+X_{0}$. Since $\sigma:X\to Y$ is structural we have $\sigma(x)\in
+Y_{0}$ and so:
+    \[
+    \subf(\sigma(x))=\{\sigma(x)\}=\sigma(\{x\})=\sigma(\subf(x))
+    \]
+So let $f\in\alpha$ and $x\in X^{\alpha(f)}$ be such that the
+equality is true for all $x(i)$ with $i\in\alpha(f)$. We need to
+show the equality is also true for $f(x)$. Since $\sigma:X\to Y$ is
+a structural substitution, let $q:\alpha\to\beta$ be an arity
+preserving map for which $(ii)$ of
+definition~(\ref{logic:def:UA:structuralsub:structural:substitution})
+holds. Then we have the equalities:
+    \begin{eqnarray*}
+    \subf(\sigma(f(x)))&=&\subf(\,q(f)(\sigma(x))\,)\\
+    \mbox{def.~(\ref{logic:def:subformula})}\ \rightarrow
+    &=&\{\,q(f)(\sigma(x))\,\}\cup\bigcup_{i\in\beta(q(f))}\subf(\,\sigma(x)(i)\,)\\
+    \mbox{$q$ arity preserving}\ \rightarrow
+    &=&\{\sigma(f(x))\}\cup\bigcup_{i\in\alpha(f)}\subf(\,\sigma(x(i))\,)\\
+    \mbox{induction}\ \rightarrow&=&\{\sigma(f(x))\}\cup\bigcup_{i\in\alpha(f)}\sigma(\,\subf(x(i))\,)\\
+    &=&\sigma(\,\,\{f(x)\}\cup\bigcup_{i\in\alpha(f)}\subf(x(i))\,\,)\\
+    \mbox{def.~(\ref{logic:def:subformula})}\ \rightarrow&=&\sigma(\,\subf(f(x))\,)
+    \end{eqnarray*}
+\end{proof}

@@ -1,0 +1,115 @@
+Having established
+proposition~(\ref{logic:prop:FUAP:proofwithcleanMT:mintrans:clean:equivalence})
+in the previous section, we are now in a position to check that
+$\alpha$-equivalence between proofs is a sensible notion. This means
+that equivalent proofs prove the same thing from the same
+hypothesis, modulo the substitution congruence, at least when one of
+them is clean. When this is the case, then both proofs are in fact
+clean. Note that $\pi\sim\rho$ may not imply
+$\vals(\pi)\sim\vals(\rho)$ if $\pi$ and $\rho$ are not clean
+proofs. As already pointed out on several occasions, dealing with
+proofs which are not clean is typically a waste of time as nothing
+sensible can be said about them. For example, suppose $x\neq y$ and
+consider $\pi_{1}=\gen x(x\in x)$ and $\rho_{1}=\gen y(y\in y)$.
+These proofs are not clean and we have
+$\vals(\pi_{1})=\bot\to\bot=\vals(\rho_{1})$. However, from the
+equivalence $\pi_{1}\sim\rho_{1}$ we see that $\pi\sim\rho$ where
+$\pi=\gen x\pi_{1}$ and $\rho=\gen x\rho_{1}$. Furthermore, since
+$x\in\spec(\pi_{1})=\{x\}$ we have $\vals(\pi)=\bot\to\bot$, while
+from $x\not\in\spec(\rho_{1})=\{y\}$ we obtain $\vals(\rho)=\forall
+x\vals(\rho_{1})=\forall x(\bot\to\bot)$. From
+theorem~(\ref{logic:the:sub:congruence:charac}) of
+page~\pageref{logic:the:sub:congruence:charac}, the formulas
+$\forall x(\bot\to\bot)$ and $\bot\to\bot$ are not
+$\alpha$-equivalent. Thus we see that it is possible to have the
+equivalence $\pi\sim\rho$ and $\vals(\pi)\not\sim\vals(\rho)$. As
+the following proposition shows, this possibility is removed by
+assuming one of the proofs $\pi$ or $\rho$ is a clean proof.
+
+\index{valuation@Valuation of equivalent proofs}
+\begin{prop}\label{logic:prop:FUAP:valmodsubcong:main}
+Let $V$ be a set and $\pi\in\pvs$ be a clean proof. Then for all
+$\rho\in\pvs$, if we have the equivalence $\pi\sim\rho$ then $\rho$
+is itself clean and:
+    \[
+    \vals(\pi)\sim\vals(\rho)
+    \]
+where $\sim$ denotes the substitution congruence both on \pv\ and
+\pvs.
+\end{prop}
+\begin{proof}
+We assume that $\pi$ is clean and $\pi\sim\rho$. We need to show
+that $\rho$ is clean and $\vals(\pi)\sim\vals(\rho)$. First we show
+that $\rho$ is clean: from
+theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} we obtain
+${\cal M}(\pi)={\cal M}(\rho)$. Furthermore since $\pi$ is clean,
+from
+proposition~(\ref{logic:prop:FUAP:proofwithcleanMT:mintrans:clean:equivalence})
+it follows that ${\cal M}(\pi)$ is clean. Hence we see that ${\cal
+M}(\rho)$ is clean and using
+proposition~(\ref{logic:prop:FUAP:proofwithcleanMT:mintrans:clean:equivalence})
+once more we conclude that $\rho$ is a clean proof. In order to show
+the equivalence $\vals(\pi)\sim\vals(\rho)$, it is sufficient to
+show the equality ${\cal M}\circ\vals(\pi)={\cal M}\circ\vals(\rho)$
+by virtue of theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel})
+of page~\pageref{logic:the:FOPL:mintransfsubcong:kernel}. In fact,
+using
+proposition~(\ref{logic:prop:FOPL:esssubst:mintransform:equiv:imp:equal}),
+it is sufficient to show the equivalence ${\cal
+M}\circ\vals(\pi)\sim{\cal M}\circ\vals(\rho)$ where $\sim$ now
+denotes the substitution congruence on \pvb. Since $\pi$ and $\rho$
+are clean proofs, using
+proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})
+we obtain:
+    \begin{eqnarray*}
+    {\cal M}\circ\vals(\pi)&\sim&\vals\circ{\cal M}(\pi)\\
+    &=&\vals\circ{\cal M}(\rho)\\
+    \mbox{prop.~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})}\ \rightarrow
+    &\sim&{\cal M}\circ\vals(\rho)\\
+    \end{eqnarray*}
+\end{proof}
+
+We complete this section by showing the hypothesis of equivalent
+proofs are the same, modulo the substitution congruence, provided
+these proofs are clean. For a counter-example involving equivalent
+proofs which are not clean, simply consider $\pi=\gen x(x\in x)$ and
+$\rho=\gen y(y\in y)$ where $x\neq y$.
+
+\begin{prop}\label{logic:prop:FUAP:valmodsubcong:hypothesis}
+Let $V$ be a set and $\pi\in\pvs$ be a clean proof. Then for all
+$\rho\in\pvs$, if we have the substitution equivalence $\pi\sim\rho$
+then we also have:
+    \[
+    \hyp(\pi)\sim\hyp(\rho)
+    \]
+where $\sim$ is the equality modulo the substitution congruence as
+per {\em
+definition~(\ref{logic:def:FUAP:valuationmod:equality:modulo})}.
+\end{prop}
+\begin{proof}
+If $\pi$ is clean and $\pi\sim\rho$ we know that $\rho$ is clean
+from proposition~(\ref{logic:prop:FUAP:valmodsubcong:main}). We have
+to show that the equality $\hyp(\pi)\sim\hyp(\rho)$ modulo the
+substitution congruence is true. From
+definition~(\ref{logic:def:FUAP:valuationmod:equality:modulo}), we
+need to prove the inclusions modulo $\hyp(\pi)\precsim\hyp(\rho)$
+and $\hyp(\rho)\precsim\hyp(\pi)$, and it is clearly sufficient to
+focus on one of these inclusions. So let $\phi\in\hyp(\pi)$. From
+definition~(\ref{logic:def:FUAP:valuationmod:inclusion:modulo}), we
+need to show the existence of $\psi\in\hyp(\rho)$ such that
+$\phi\sim\psi$. However, since $\pi$ is a clean proof, from
+proposition~(\ref{logic:prop:FUAP:mintransproof:hypothesis}) we have
+$\hyp({\cal M}(\pi))={\cal M}(\hyp(\pi))$. It follows that ${\cal
+M}(\phi)\in\hyp({\cal M}(\pi))$. Having assumed that $\pi\sim\rho$,
+from theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} we obtain
+${\cal M}(\pi)={\cal M}(\rho)$ and consequently ${\cal
+M}(\phi)\in\hyp({\cal M}(\rho))$. However, $\rho$ is also a clean
+proof and we have $\hyp({\cal M}(\rho))={\cal M}(\hyp(\rho))$. It
+follows that ${\cal M}(\phi)\in{\cal M}(\hyp(\rho))$ and we see that
+there exists $\psi\in\hyp(\rho)$ such that ${\cal M}(\phi)={\cal
+M}(\psi)$ which is $\phi\sim\psi$ by virtue of
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:kernel}.
+\end{proof}

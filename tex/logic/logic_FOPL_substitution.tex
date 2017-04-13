@@ -1,0 +1,314 @@
+Let $V$ be a set and $x,y,z\in V$. Then $\phi=\forall x(x\in z)$ and
+$\psi=\forall y(y\in z)$ are elements of \pv. In the case when
+$x\neq z$ and $y\neq z$ most of us would regard $\phi$ and $\psi$ as
+being the same {\em mathematical statement}. Yet from
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation}, $\phi$ and $\psi$
+are distinct elements of \pv\ when $x\neq y$. We are still a long
+way to have a clear opinion on what an appropriate congruence on
+\pv\ should be. Yet we feel that whatever our choice of congruence
+$\sim$, we should have $\phi\sim\psi$. So we need to formalize the
+idea that {\em replacing the variable $x$ in $\phi=\forall x(x\in
+z)$ by the variable $y$} does not change the {\em meaning} of the
+formula $\phi$. The first step is for us to formally define the
+notion of variable substitution.
+
+Variable substitutions is a key idea in every textbook of
+mathematical logic. However, the usual treatment attempts to define
+substitutions where variables are replaced by {\em terms}. Since
+quantification can only occur with respect to a variable, only free
+occurrences of variables are substituted with terms, leaving bound
+occurrences unchanged. This creates a major drawback: if
+$\sigma:V\to W$ is a map and $\phi\in\pv$, we certainly want the
+substituted formula $\sigma(\phi)$ to be an element of ${\bf P}(W)$,
+which would be impossible to achieve if we were to leave bound
+occurrences of variables unchanged. So contrary to standard
+practice, we shall define a notion of variable substitution where
+every variable is {\em carried over} by $\sigma:V\to W$. Defining
+$\sigma:\pv\to{\bf P}(W)$ from the map $\sigma:V\to W$ we believe is
+very fruitful. This type of substitution will not be
+capture-avoiding in general, but this is no different from the
+general treatment where we often require a term $t$ to be {\em
+substitutable} for a variable $x$ in $\phi$, or to be {\em free for
+$x$} in $\phi$. Note that our formal language \pv\ has no term
+beyond the variables themselves. So focussing on variables only for
+substitutions is no restriction of generality. In our view, terms or
+constants should not exist in a low level mathematical statement.
+The constant $\pi=3.14159\ldots$ should be a low level predicate
+$\pi(x)$, and given a predicate $Q(x)$ the statement $Q(\pi)$
+obtained by substituting the variable $x$ by the ground term $\pi$,
+should in fact be the statement $\forall x[\pi(x)\to Q(x)]$ which is
+syntactically a very different operation from a substitution of
+variable. \index{substitution@$\sigma\,$: a map $\sigma:V\to
+W$}\index{substitution@$\sigma\,$: associated $\sigma:\pv\to{\bf
+P}(W)$}\index{substitution@Substitution of
+variables}\index{substitution@$\sigma(\phi)\,$: image
+$\sigma:\pv\to{\bf P}(W)$}
+\begin{defin}\label{logic:def:substitution}
+Let $V$ and $W$ be two sets and $\sigma:V\to W$ be a map. We call
+{\em substitution mapping between \pv\ and ${\bf P}(W)$ associated
+with $\sigma:V\to W$} the map $\sigma^{*}:\pv\to{\bf P}(W)$ defined
+by the structural recursion:
+    \begin{equation}\label{logic:eqn:substitution:recursion}
+    \forall\phi\in\pv\ ,\ \sigma^{*}(\phi)=\left\{
+                    \begin{array}{lcl}
+                    (\sigma(x)\in\sigma(y))&\mbox{\ if\ }&\phi=(x\in y)\\
+                    \bot&\mbox{\ if\ }&\phi=\bot\\
+                    \sigma^{*}(\phi_{1})\to \sigma^{*}(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
+                    \forall\sigma(x)\,\sigma^{*}(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
+                    \end{array}\right.
+    \end{equation}
+\end{defin}
+This is one of our first definition by {\em structural recursion}.
+The principle of such definition on a free universal algebra is
+justified by virtue of
+theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion}. As this is one of our
+first use of this theorem, we shall make sure its application is
+done appropriately by checking all the relevant details.
+\begin{prop}\label{logic:prop:substitution}
+The structural recursion of {\em definition~(\ref{logic:def:substitution})} is legitimate.
+\end{prop}
+\begin{proof}
+We need to show the existence and uniqueness of the map
+$\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
+equation~(\ref{logic:eqn:substitution:recursion}). We shall do so by
+applying theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion} to the free universal
+algebra \pv\ with free generator $X_{0}=\pvo$ and the set $A={\bf
+P}(W)$. First we define $g_{0}:X_{0}\to A$ by $g_{0}(x\in
+y)=(\sigma(x)\in\sigma(y))$ for all $x,y\in V$. Next, given
+$f\in\alpha$ we need to define an operator $h(f):A^{\alpha(f)}\to
+A$. For all $\phi_{1},\phi_{2}\in A$ and for all $x\in V$, we set:
+    \begin{eqnarray*}
+    (i)&&h(\bot)(0)=\bot\\
+    (ii)&&h(\to)(\phi_{1},\phi_{2})=\phi_{1}\to\phi_{2}\\
+    (iii)&&h(\forall x)(\phi_{1})=\forall \sigma(x)\phi_{1}
+    \end{eqnarray*}
+Applying theorem~(\ref{logic:the:structural:recursion}) of
+page~\pageref{logic:the:structural:recursion}, there exists a unique
+map $\sigma^{*}:\pv\to A$ such that $\sigma^{*}_{|X_{0}}=g_{0}$ and
+for all $f\in\alpha$ and $y\in\pv^{\alpha(f)}$:
+    \begin{equation}\label{logic:eqn:substitution:recursion:proof}
+    \sigma^{*}(f(y))=h(f)(\sigma^{*}(y))
+    \end{equation}
+In other words, there exists a unique map $\sigma^{*}:\pv\to{\bf
+P}(W)$ such that for all $x,y\in V$ we have  $\sigma^{*}(x\in
+y)=(\sigma(x)\in\sigma(y))$  and which satisfies
+equation~(\ref{logic:eqn:substitution:recursion:proof}). Taking
+$f=\bot$ and $y=0$ in
+equation~(\ref{logic:eqn:substitution:recursion:proof}) we obtain:
+    \begin{equation}\label{logic:eqn:substitution:bot}
+    \sigma^{*}(\bot)=\sigma^{*}(\bot(0))=h(\bot)(0)=\bot
+    \end{equation}
+Taking $f=\to$ and $y=(\phi_{1},\phi_{2})\in\pv^{2}$ we obtain:
+    \begin{equation}\label{logic:eqn:substitution:to}
+    \sigma^{*}(\phi_{1}\to\phi_{2})=h(\to)(\sigma^{*}(\phi_{1}),\sigma^{*}(\phi_{2}))
+    =\sigma^{*}(\phi_{1})\to\sigma^{*}(\phi_{2})
+    \end{equation}
+Finally, taking $f=\forall x$ and $y=\phi_{1}\in\pv^{1}$ given $x\in V$:
+    \begin{equation}\label{logic:eqn:substitution:forall}
+    \sigma^{*}(\forall x\phi_{1})=h(\forall x)(\sigma^{*}(\phi_{1}))
+    =\forall\sigma(x)\,\sigma^{*}(\phi_{1})
+    \end{equation}
+Since equations~(\ref{logic:eqn:substitution:bot}),
+(\ref{logic:eqn:substitution:to}) and
+(\ref{logic:eqn:substitution:forall}) are exactly as
+equation~(\ref{logic:eqn:substitution:recursion}), we conclude there
+is a unique map $\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
+equation~(\ref{logic:eqn:substitution:recursion}).
+\end{proof}
+
+Let $U,V,W$ be sets while $\tau:U\to V$ and $\sigma:V\to W$ are
+maps. From definition~(\ref{logic:def:substitution}) we obtain the
+substitution mappings $\tau^{*}:{\bf P}(U)\to\pv$ and
+$\sigma^{*}:\pv\to{\bf P}(W)$. However, $\sigma\circ\tau:U\to W$ is
+also a map and we therefore have a substitution mapping
+$(\sigma\circ\tau)^{*}:{\bf P}(U)\to{\bf P}(W)$. One natural
+question to ask is whether $(\sigma\circ\tau)^{*}$ coincide with the
+composition $\sigma^{*}\circ\tau^{*}$. The following proposition
+shows that it is indeed the case. As a consequence, we shall be able
+to simplify our notations by referring to the substitution mappings
+$\tau^{*}$, $\sigma^{*}$ and $(\sigma\circ\tau)^{*}$ simply as
+$\tau$, $\sigma$ and $\sigma\circ\tau$, i.e.  we shall {\em drop}
+the '$*$' when referring to a substitution mapping. Whether the
+notation '$\sigma\circ\tau$' is understood to mean
+$\sigma^{*}\circ\tau^{*}$ or $(\sigma\circ\tau)^{*}$ no longer
+matters since the two mappings coincide anyway.
+
+\begin{prop}\label{logic:prop:substitution:composition}
+Let $U$, $V$ and $W$ be sets. Let $\tau:U\to V$ and $\sigma:V\to W$
+be maps. Let $\tau^{*}:{\bf P}(U)\to\pv$ and $\sigma^{*}:\pv\to{\bf
+P}(W)$ be the substitution mappings associated with $\tau$ and
+$\sigma$ respectively. Then:
+    \[
+    (\sigma\circ\tau)^{*}=\sigma^{*}\circ\tau^{*}
+    \]
+where $(\sigma\circ\tau)^{*}:{\bf P}(U)\to {\bf P}(W)$ is the
+substitution mapping associated with $\sigma\circ\tau$.
+\end{prop}
+\begin{proof}
+We need to show that
+$(\sigma\circ\tau)^{*}(\phi)=\sigma^{*}\circ\tau^{*}(\phi)$ for all
+$\phi\in{\bf P}(U)$. We shall do so by structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since ${\bf P}_{0}(U)$ is
+a generator of ${\bf P}(U)$, we show first that the property is true
+on ${\bf P}_{0}(U)$. So let $\phi = (x\in y)\in{\bf P}_{0}(U)$,
+where $x,y\in U$. We have:
+    \[
+    (\sigma\circ\tau)^{*}(\phi)=(\,\sigma(\tau(x))\,\in\,\sigma(\tau(y))\,)=
+    \sigma^{*}(\,\tau(x)\in\tau(y)\,)=\sigma^{*}\circ\tau^{*}(\phi)
+    \]
+Next we check that the property is true for $\bot\in{\bf P}(U)$:
+    \[
+    (\sigma\circ\tau)^{*}(\bot)=\bot=\sigma^{*}(\bot)=\sigma^{*}\circ\tau^{*}(\bot)
+    \]
+Next we check that the property is true for
+$\phi=\phi_{1}\to\phi_{2}$, if it is true for $\phi_{1},\phi_{2}$:
+    \begin{eqnarray*}
+    (\sigma\circ\tau)^{*}(\phi)&=&(\sigma\circ\tau)^{*}(\phi_{1})\to
+    (\sigma\circ\tau)^{*}(\phi_{2})\\
+    &=&\sigma^{*}(\tau^{*}(\phi_{1}))\to\sigma^{*}(\tau^{*}(\phi_{2}))\\
+    &=&\sigma^{*}(\,\tau^{*}(\phi_{1})\to\tau^{*}(\phi_{2})\,)\\
+    &=&\sigma^{*}(\tau^{*}(\phi_{1}\to\phi_{2}))\\
+    &=&\sigma^{*}\circ\tau^{*}(\phi)
+    \end{eqnarray*}
+Finally we check that the property is true for $\phi=\forall
+x\phi_{1}$, if it is true for $\phi_{1}$:
+    \begin{eqnarray*}
+    (\sigma\circ\tau)^{*}(\phi)&=&\forall \sigma(\tau(x))\,(\sigma\circ\tau)^{*}(\phi_{1})\\
+    &=&\forall\sigma(\tau(x))\,\sigma^{*}(\tau^{*}(\phi_{1}))\\
+    &=&\sigma^{*}(\forall\tau(x)\tau^{*}(\phi_{1}))\\
+    &=&\sigma^{*}(\tau^{*}(\forall x\phi_{1}))\\
+    &=&\sigma^{*}\circ\tau^{*}(\phi)
+    \end{eqnarray*}
+\end{proof}
+
+In the case when $W=V$ and $\sigma:V\to W$ is the identity mapping
+defined by $\sigma(x)=x$ for all $x\in V$,
+equation~(\ref{logic:eqn:substitution:recursion}) of
+definition~(\ref{logic:def:substitution}) becomes:
+    \[
+    \forall\phi\in\pv\ ,\ \sigma(\phi)=\left\{
+                    \begin{array}{lcl}
+                    (x\in y)&\mbox{\ if\ }&\phi=(x\in y)\\
+                    \bot&\mbox{\ if\ }&\phi=\bot\\
+                    \sigma(\phi_{1})\to \sigma(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
+                    \forall x\,\sigma(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
+                    \end{array}\right.
+    \]
+It seems pretty obvious that $\sigma:\pv\to\pv$ is also the identity
+mapping, i.e. that $\sigma(\phi)=\phi$ for all $\phi\in\pv$. Yet,
+formally speaking, there seems to be no other way but to prove this
+once and for all. So we shall do so now:
+\begin{prop}\label{logic:prop:substitution:identity}
+Let $V$ be a set and $i:V\to V$ be the identity mapping. Then, the
+associated substitution mapping $i:\pv\to\pv$ is also the identity.
+\end{prop}
+\begin{proof}
+We need to show that $i(\phi)=\phi$ for all $\phi\in\pv$. We shall
+do so by structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. Since $\pvo$ is a
+generator of \pv, we show first that the property is true on \pvo.
+So let $\phi = (x\in y)\in\pvo$:
+    \[
+    i(\phi)=(\,i(x)\,\in\,i(y)\,)=
+    (x\in y)=\phi
+    \]
+The property is clearly true for $\bot\in\pv$ since $i(\bot)=\bot$.
+Next we check that the property is true for
+$\phi=\phi_{1}\to\phi_{2}$, if it is true for
+$\phi_{1},\phi_{2}\in\pv$:
+    \[
+    i(\phi)=i(\phi_{1})\to i(\phi_{2})=\phi_{1}\to\phi_{2}=\phi
+    \]
+Finally we check that the property is true for $\phi=\forall
+x\phi_{1}$, if it is true for $\phi_{1}$:
+    \[
+    i(\phi)=\forall i(x)i(\phi_{1})=\forall x\phi_{1}=\phi
+    \]
+\end{proof}
+
+Since \pv\ is a free universal algebra, every formula $\phi\in\pv$
+has a well defined set of sub-formulas $\subf(\phi)$ as per
+definition~(\ref{logic:def:subformula}) of
+page~\pageref{logic:def:subformula}. If $V$ and $W$ are sets and
+$\sigma:V\to W$ is a map with associated substitution mapping
+$\sigma:\pv\to{\bf P}(W)$, then given $\phi\in\pv$ and a sub-formula
+$\psi\preceq\phi$ it seems pretty obvious that the image
+$\sigma(\psi)$ is also a sub-formula of $\sigma(\phi)$. In fact, the
+converse is also true and the sub-formulas of $\sigma(\phi)$ are
+simply the images $\sigma(\psi)$ by $\sigma$ of the sub-formulas
+$\psi\preceq\phi$. This property stems from the fact that
+$\sigma:\pv\to{\bf P}(W)$ is a structural substitution, as per
+definition~(\ref{logic:def:UA:structuralsub:structural:substitution}).
+
+\begin{prop}\label{logic:prop:FOPL:substitution:subformula}
+Let $V,W$ be sets and $\sigma:V\to W$ be a map. The associated
+substitution $\sigma:\pv\to{\bf P}(W)$ is a structural substitution
+and for all $\phi\in\pv$\,:
+    \[
+    \subf(\sigma(\phi))=\sigma(\subf(\phi))
+    \]
+\end{prop}
+\begin{proof}
+By virtue of
+proposition~(\ref{logic:prop:UA:structuralsub:subformula}) it is
+sufficient to prove that $\sigma:\pv\to{\bf P}(W)$ is a structural
+substitution as per
+definition~(\ref{logic:def:UA:structuralsub:structural:substitution}).
+Let $\alpha(V)$ and $\alpha(W)$ denote the first order logic types
+associated with $V$ and $W$ respectively as per
+definition~(\ref{logic:def:FOPL:type}). Let
+$q:\alpha(V)\to\alpha(W)$ be the map defined by:
+    \[
+    \forall f\in\alpha(V)\ ,\ q(f)=\left\{
+        \begin{array}{lcl}
+        \bot&\mbox{\ if\ }&f=\bot\\
+        \to&\mbox{\ if\ }&f=\to\\
+        \forall\sigma(x)&\mbox{\ if\ }&f=\forall x
+        \end{array}
+    \right.
+    \]
+Then $q$ is clearly arity preserving. In order to show that $\sigma$
+is a structural substitution, we simply need to check that
+properties $(i)$ and $(ii)$ of
+definition~(\ref{logic:def:UA:structuralsub:structural:substitution})
+are met. First we start with property $(i)$: so let $\phi\in\pvo$.
+Then $\phi=(x\in y)$ for some $x,y\in V$ and we need to show that
+$\sigma(\phi)\in{\bf P}_{0}(W)$ which follows immediately from
+$\sigma(\phi)=\sigma(x)\in\sigma(y)$. So we now show property
+$(ii)$. Given $f\in\alpha(V)$, given $\phi\in\pv^{\alpha(f)}$ we
+need to show that $\sigma(f(\phi))=q(f)(\sigma(\phi))$. First we
+assume that $f=\bot$. Then $\alpha(f)=0$, $\phi=0$ and consequently:
+    \begin{eqnarray*}
+    \sigma(f(\phi))&=&\sigma(\bot(0))\\
+    \mbox{$\bot(0)$ denoted '$\bot$'}\ \rightarrow&=&\sigma(\bot)\\
+    \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow&=&\bot\\
+    \mbox{$\bot(0)$ denoted '$\bot$'}\ \rightarrow&=&\bot(0)\\
+    \sigma:\{0\}\to\{0\}\ \rightarrow&=&q(\bot)(\sigma(0))\\
+    &=&q(f)(\sigma(\phi))
+    \end{eqnarray*}
+Next we assume that $f=\to$. Then $\alpha(f)=2$ and given
+$\phi=(\phi_{0},\phi_{1})$\,:
+    \begin{eqnarray*}
+    \sigma(f(\phi))&=&\sigma(\phi_{0}\to\phi_{1})\\
+    \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow
+    &=&\sigma(\phi_{0})\to\sigma(\phi_{1})\\
+    \sigma:\pv^{2}\to{\bf P}(W)^{2}\ \rightarrow
+    &=&q(\to)(\sigma(\phi_{0},\phi_{1}))\\
+    &=&q(f)(\sigma(\phi))
+    \end{eqnarray*}
+Finally we assume that $f=\forall x$, $x\in V$. Then $\alpha(f)=1$
+and given $\phi=(\phi_{0})$\,:
+    \begin{eqnarray*}
+    \sigma(f(\phi))&=&\sigma(\forall x\phi_{0})\\
+    \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow
+    &=&\forall\sigma(x)\sigma(\phi_{0})\\
+    \sigma:\pv^{1}\to{\bf P}(W)^{1}\ \rightarrow
+    &=&q(\forall x)(\sigma(\phi_{0}))\\
+    &=&q(f)(\sigma(\phi))
+    \end{eqnarray*}
+\end{proof}

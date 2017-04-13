@@ -1,0 +1,472 @@
+Any map $\sigma:V\to W$ gives rise to a substitution mapping
+$\sigma:\pv\to{\bf P}(W)$. In general, this substitution mapping has
+little chance to be injective unless $\sigma:V\to W$ is itself
+injective. However even when $\sigma$ is not injective, there may be
+cases where we can still argue the following implication is true:
+    \begin{equation}\label{logic:eqn:FOPL:localinv:intro:1}
+    \sigma(\phi)=\sigma(\psi)\ \Rightarrow\ \phi=\psi
+    \end{equation}
+For example, if $\var(\phi)=\var(\psi)$ it is sufficient that
+$\sigma_{|\var(\phi)}$ be an injective map
+for~(\ref{logic:eqn:FOPL:localinv:intro:1}) to be true. But this
+itself is not necessary. Consider the case when $\phi=\forall y(x\in
+y)\to(x\in z)$ with $x,y,z$ distinct and $\sigma=[y/z]$. Then we
+have $\sigma(\phi)=\forall y(x\in y)\to(x\in y)$. Suppose we knew
+for some reason that $\bound(\psi)=\bound(\phi)=\{y\}$. Then this
+would exclude $\psi=\forall z(x\in z)\to(x\in z)$ and the
+implication~(\ref{logic:eqn:FOPL:localinv:intro:1}) would hold, if
+not everywhere at least on the set:
+    \[
+    \Gamma(\phi)=\{\psi\in\pv:\bound(\psi)=\bound(\phi)\}
+    \]
+However, if $\sigma=[y/x]$ then $\sigma(\phi)=\forall y(y\in
+y)\to(y\in z)$ and the
+implication~(\ref{logic:eqn:FOPL:localinv:intro:1}) fails to be true
+even if $\psi\in\Gamma(\phi)$. As it turns out, the substitution
+$\sigma$ is not valid for $\phi$, and $\Gamma(\phi)$ is of little
+use if we mix up free and bound variables.
+
+In this section, we wish to establish sufficient conditions for the
+implication~(\ref{logic:eqn:FOPL:localinv:intro:1}) to hold, if not
+everywhere at least locally on a domain $\Gamma(\phi)$. One way to
+achieve this is to prove that the substitution $\sigma:\pv\to{\bf
+P}(W)$ has a left-inverse locally around $\phi$, i.e. that there
+exists a subset $\Gamma\subseteq\pv$ and a map $\tau:{\bf
+P}(W)\to\pv$ such that $\tau\circ\sigma(\phi)=\phi$ for all
+$\phi\in\Gamma$. So if we happen to know that both $\phi$ and $\psi$
+are elements of $\Gamma$, we are guaranteed the
+implication~(\ref{logic:eqn:FOPL:localinv:intro:1}) is true. So we
+are given a map $\sigma:V\to W$ and we want to design a map
+$\tau:{\bf P}(W)\to\pv$ which will reverse the effect of the
+substitution $\sigma:\pv\to{\bf P}(W)$, at least locally on some
+interesting domain $\Gamma$. We cannot hope to achieve this for
+every $\sigma$, but we would like our result to be general enough.
+Suppose we knew our substitution $\sigma$ behaved on free variables
+in a reversible way. Specifically, we would have $V_{0}\subseteq V$
+such that $\sigma_{|V_{0}}$ is an injective map and
+$\free(\phi)\subseteq V_{0}$. Suppose likewise that the impact on
+bound variables was also reversible. So we assume there is
+$V_{1}\subseteq V$ such that $\sigma_{|V_{1}}$ is an injective map
+and $\bound(\phi)\subseteq V_{1}$. For example, if we go back to
+$\phi=\forall y(x\in y)\to(x\in z)$ with $x,y,z$ distinct and
+$\sigma=[y/z]$, then $\sigma$ is of course not injective but
+$\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are both injective with
+$V_{0}=V\setminus\{y\}$ and $V_{1}=V\setminus\{x,z\}$. As it turns
+out, we also have $\free(\phi)\subseteq V_{0}$ and
+$\bound(\phi)\subseteq V_{1}$. So $\sigma$ behaves in a reversible
+way both on free and bound variables. Consider now
+$\tau_{0},\tau_{1}:W\to V$ which are left-inverse of $\sigma$ on
+$V_{0}$ and $V_{1}$ respectively, i.e. such that:
+    \begin{eqnarray*}
+    (i)&&u\in V_{0}\ \Rightarrow\ \tau_{0}\circ\sigma(u)=u\\
+    (ii)&&u\in V_{1}\ \Rightarrow\ \tau_{1}\circ\sigma(u)=u
+    \end{eqnarray*}
+Then we should hope to reverse the impact of $\sigma:\pv\to{\bf
+P}(W)$ by acting separately on the free and bound variables of
+$\sigma(\phi)$ according to $\tau_{0}$ and $\tau_{1}$ respectively.
+Specifically, if we consider $\tau:{\bf P}(W)\to\pv$ the dual
+variable substitution associated with the ordered pair
+$(\tau_{0},\tau_{1})$ as per
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) of
+page~\pageref{logic:def:FOPL:dualsubst:dualsubst}, we should hope to
+obtain $\tau\circ\sigma(\phi)=\phi$ at least for all $\phi$ such
+that $\free(\phi)\subseteq V_{0}$ and $\bound(\phi)\subseteq V_{1}$.
+So let us see if this works in our case:
+    \begin{eqnarray*}
+    \tau\circ\sigma(\phi)&=&\tau\circ\sigma(\forall y(x\in y)\to(x\in
+    z))\\
+    \sigma=[y/z]\ \rightarrow&=&\tau(\forall y(x\in y)\to(x\in y))\\
+    \mbox{$W=V$ and definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
+    \rightarrow
+    &=&\tau^{*}(\,\forall y(x\in y)\to(x\in y)\,)(V)\\
+    &=&\tau^{*}(\,\forall y(x\in y)\,)(V)\to\tau^{*}(x\in y)(V)\\
+    &=&\forall \tau_{1}(y)\tau^{*}(x\in
+    y)(V\!\setminus\!\!\{y\})\to(\tau_{0}(x)\in\tau_{0}(y))\\
+    &=&\forall\tau_{1}(y)(\tau_{0}(x)\in
+    \tau_{1}(y))\to(\tau_{0}(x)\in\tau_{0}(y))\\
+    \mbox{A: to be proved}\ \rightarrow&=&\forall y(x\in y)\to(x\in z)\\
+    &=&\phi
+    \end{eqnarray*}
+So it remains to show that $\tau_{1}(y)=y$, $\tau_{0}(x)=x$ and
+$\tau_{0}(y)=z$. Since we have $V_{0}=V\setminus\{y\}$ we obtain
+$x,z\in V_{0}$ and consequently from $(i)$ above it follows that
+$\tau_{0}(x)=\tau_{0}\circ[y/z](x)=x$ and
+$\tau_{0}(y)=\tau_{0}\circ[y/z](z)=z$. Similarly, since
+$V_{1}=V\setminus\{x,z\}$ we have $y\in V_{1}$ and consequently from
+$(ii)$ above it follows that $\tau_{1}(y)=\tau_{1}\circ[y/z](y)=y$
+as requested. Hence we see that our inversion scheme is working, at
+least in this case. As it turns out, the substitution $\sigma=[y/z]$
+is valid for the formula $\phi=\forall y(x\in y)\to(x\in z)$. But
+what if $\sigma$ wasn't valid for $\phi$? Well obviously, when the
+substitution $\sigma$ is not valid for $\phi$ the free and bound
+variables of $\sigma(\phi)$ have been muddled up. We cannot expect
+our scheme to work any longer. So let us consider $\sigma=[y/x]$
+instead which is clearly not valid for $\phi=\forall y(x\in
+y)\to(x\in z)$. Then $\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are
+still injective and we still have $\free(\phi)\subseteq V_{0}$ and
+$\bound(\phi)\subseteq V_{1}$. Of course the maps
+$\tau_{0},\tau_{1}:V\to V$ would need to be different but even
+assuming $(i)$ and $(ii)$ above, our scheme would fail:
+    \begin{eqnarray*}
+    \tau\circ\sigma(\phi)&=&\tau\circ\sigma(\forall y(x\in y)\to(x\in
+    z))\\
+    \sigma=[y/x]\ \rightarrow&=&\tau(\forall y(y\in y)\to(y\in z))\\
+    \mbox{$W=V$ and definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
+    \rightarrow
+    &=&\tau^{*}(\,\forall y(y\in y)\to(y\in z)\,)(V)\\
+    &=&\tau^{*}(\,\forall y(y\in y)\,)(V)\to\tau^{*}(y\in z)(V)\\
+    &=&\forall \tau_{1}(y)\tau^{*}(y\in
+    y)(V\!\setminus\!\!\{y\})\to(\tau_{0}(y)\in\tau_{0}(z))\\
+    &=&\forall\tau_{1}(y)(\tau_{1}(y)\in
+    \tau_{1}(y))\to(\tau_{0}(y)\in\tau_{0}(z))\\
+    \mbox{A: to be proved}\ \rightarrow&=&\forall y(y\in y)\to(x\in z)\\
+    &\neq&\phi
+    \end{eqnarray*}
+So it remains to show that $\tau_{1}(y)=y$, $\tau_{0}(y)=x$ and
+$\tau_{0}(z)=z$. Since we have $V_{0}=V\setminus\{y\}$ we obtain
+$x,z\in V_{0}$ and consequently from $(i)$ above it follows that
+$\tau_{0}(y)=\tau_{0}\circ[y/x](x)=x$ and
+$\tau_{0}(z)=\tau_{0}\circ[y/x](z)=z$. Similarly, since
+$V_{1}=V\setminus\{x,z\}$ we have $y\in V_{1}$ and consequently from
+$(ii)$ above it follows that $\tau_{1}(y)=\tau_{1}\circ[y/x](y)=y$
+as requested. Ok so we are now ready to proceed. We are given a map
+$\sigma:V\to W$ and $V_{0}, V_{1}\subseteq V$ such that
+$\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are injective maps. We then
+consider $\Gamma\subseteq\pv$ defined by:
+    \[
+    \Gamma=\{\phi\in\pv:(\free(\phi)\subseteq
+    V_{0})\land(\bound(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
+    valid for $\phi$})\}
+    \]
+We are hoping the inversion scheme will work on $\Gamma$, namely
+that we can build a map $\tau:{\bf P}(W)\to\pv$ such that
+$\tau\circ\sigma(\phi)=\phi$ for all $\phi\in\Gamma$. This result is
+the object of theorem~(\ref{logic:the:FOPL:localinv:main}) of
+page~\pageref{logic:the:FOPL:localinv:main} below. The proof of this
+theorem relies on a technical lemma for which we shall now provide a
+few words of explanations: proving the formula
+$\tau\circ\sigma(\phi)=\phi$ is in fact showing
+$\tau^{*}(\sigma(\phi))(W)=\phi$ as follows from
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}). A structural
+induction with $\phi=\forall x\phi_{1}$ leads to:
+    \begin{eqnarray*}
+    \tau^{*}(\sigma(\phi))(W)&=&\tau^{*}(\sigma(\forall
+    x\phi_{1}))(W)\\
+    &=&\tau^{*}(\,\forall
+    \sigma(x)\sigma(\phi_{1})\,)(W)\\
+    &=&\forall
+    \tau_{1}\circ\sigma(x)\,\tau^{*}(\sigma(\phi_{1}))(W\setminus\{\sigma(x)\})\\
+    x\in\bound(\phi)\subseteq V_{1}\ \rightarrow
+    &=&\forall x\,\tau^{*}(\sigma(\phi_{1}))(W\setminus\{\sigma(x)\})
+    \end{eqnarray*}
+So we are immediately confronted with two separate issues. One the
+one hand we cannot hope to carry out a successful induction argument
+relating to $W$ only, since $W\setminus\{\sigma(x)\}$ appears on the
+right-hand-side of this equation. So we need to prove something
+which relates to some $\tau^{*}(\sigma(\phi))(W\setminus\sigma(U))$
+rather than $\tau^{*}(\sigma(\phi))(W)$ where $U$ is a possibly
+non-empty subset of $V$. On the other hand, the condition
+$\phi\in\Gamma$ is not very useful when $\phi=\forall x\phi_{1}$.
+From the equality $\free(\phi)=\free(\phi_{1})\setminus\{x\}$, it is
+clear that the condition $\free(\phi)\subseteq V_{0}$ does not imply
+$\free(\phi_{1})\subseteq V_{0}$. So it is possible to have
+$\phi\in\Gamma$ and yet $\phi_{1}\not\in\Gamma$. It is important for
+us to design an induction argument in such a way that if an
+assumption is made about $\phi=\forall x\phi_{1}$, this assumption
+is also satisfied by $\phi_{1}$ so we can use our induction
+hypothesis. The following lemma addresses these two issues:
+\begin{lemma}\label{logic:lemma:FOPL:localinv:lem}
+Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
+$V_{1}$ be subsets of $V$ and $\tau_{0},\tau_{1}:W\to V$ be maps
+such that for all $x\in V$:
+   \begin{eqnarray*}
+    (i)&&x\in V_{0}\ \Rightarrow\ \tau_{0}\circ\sigma(x)=x\\
+    (ii)&&x\in V_{1}\ \Rightarrow\ \tau_{1}\circ\sigma(x)=x
+    \end{eqnarray*}
+Let $\tau^{*}:{\bf P}(W)\to[{\cal P}(W)\to\pv]$ be the map
+associated with $(\tau_{0},\tau_{1})$ as per {\em
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}. Then for all
+$U\in{\cal P}(V)$ and $\phi\in\pv$ we have:
+    \begin{equation}\label{logic:eqn:FOPL:localinv:lemma:1}
+    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))=\phi
+    \end{equation}
+provided $U$ and $\phi$ satisfy the following properties:
+    \begin{eqnarray*}
+    (iii)&&(\,\free(\phi)\setminus U\subseteq V_{0}\,)
+    \land(\,\bound(\phi)\cup U\subseteq V_{1}\,)\\
+    (iv)&&(\,\mbox{$\sigma$ valid for $\phi$}\,)\land
+    (\,\sigma(U)\cap\sigma(\free(\phi)\setminus U)=\emptyset\,)\\
+    \end{eqnarray*}
+\end{lemma}
+\begin{proof}
+We assume $\sigma:V\to W$ is given together with the subsets
+$V_{0}$, $V_{1}$ and the maps $\tau_{0},\tau_{1}:W\to V$ satisfying
+$(i)$ and $(ii)$. Let $\tau^{*}:{\bf P}(W)\to[{\cal P}(W)\to\pv]$ be
+the map associated with the ordered pair $(\tau_{0},\tau_{1})$ as
+per definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) of
+page~\pageref{logic:def:FOPL:dualsubst:dualsubst}. Given $U\subseteq
+V$ and $\phi\in\pv$ consider the property $q(U,\phi)$ defined by
+$(iii)$ and $(iv)$. Then we need to show that for all $\phi\in\pv$
+we have the property:
+    \[
+    \forall U\subseteq V\ ,\ [\,q(U,\phi)\ \Rightarrow\
+    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))=\phi\,]
+    \]
+We shall do so by a structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\phi=(x\in y)$ for some $x, y\in V$. Let $U\subseteq V$ and suppose
+$q(U,\phi)$ is true. We need to show that
+equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds. We have:
+    \begin{eqnarray*}
+    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))&=&
+    \tau^{*}(\sigma(x\in y))(W\setminus\sigma(U))\\
+    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
+    &=&\tau^{*}(\sigma(x\in y))(U^{*})\\
+    &=&\tau^{*}(\,\sigma(x)\in \sigma(y)\,)(U^{*})\\
+    \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
+    \rightarrow
+    &=&\tau_{U^{*}}\circ\sigma(x)\in \tau_{U^{*}}\circ\sigma(y)\\
+    \mbox{A: to be proved}\ \rightarrow&=&x\in y\\
+    &=&\phi
+    \end{eqnarray*}
+So it remains to show that $\tau_{U^{*}}\circ\sigma(x)=x$ and
+$\tau_{U^{*}}\circ\sigma(y)=y$. First we show that
+$\tau_{U^{*}}\circ\sigma(x)=x$. We shall distinguish two cases:
+first we assume that $x\in U$. Then $\sigma(x)\in\sigma(U)$ and it
+follows that $\sigma(x)\not\in U^{*}$. Thus, using
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) we have
+$\tau_{U^{*}}\circ\sigma(x)=\tau_{1}\circ\sigma(x)$. From the
+property $(ii)$ above we have $\tau_{1}\circ\sigma(x)=x$ whenever
+$x\in V_{1}$. So we only need to show that $x\in V_{1}$. However,
+having assumed that $q(U,\phi)$ is true, in particular we have
+$\bound(\phi)\cup U\subseteq V_{1}$. So $x\in V_{1}$ follows
+immediately from our assumption $x\in U$. Next we assume that
+$x\not\in U$. Since $\phi=(x\in y)$ we have $x\in\free(\phi)$. So it
+follows that $x\in\free(\phi)\setminus U$ and consequently
+$\sigma(x)\in\sigma(\free(\phi)\setminus U)$. Having assumed that
+$q(U,\phi)$ is true, in particular we have
+$\sigma(U)\cap\sigma(\free(\phi)\setminus U)=\emptyset$. Thus, from
+$\sigma(x)\in\sigma(\free(\phi)\setminus U)$ we obtain
+$\sigma(x)\not\in\sigma(U)$ and we see that $\sigma(x)\in U^{*}$.
+Thus, using definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) we
+have $\tau_{U^{*}}\circ\sigma(x)=\tau_{0}\circ\sigma(x)$. From the
+property $(i)$ above we have $\tau_{0}\circ\sigma(x)=x$ whenever
+$x\in V_{0}$. So it remains to show that $x\in V_{0}$. Having
+assumed that $q(U,\phi)$ is true, in particular we have
+$\free(\phi)\setminus U\subseteq V_{0}$. So $x\in V_{0}$ follows
+immediately from $x\in\free(\phi)\setminus U$ which we have already
+proved. This completes our proof of $\tau_{U^{*}}\circ\sigma(x)=x$.
+The proof of $\tau_{U^{*}}\circ\sigma(y)=y$ is identical so we are
+now done with the case $\phi=(x\in y)$. Next we assume that
+$\phi=\bot$. Let $U\subseteq V$ and suppose $q(U,\phi)$ is true. We
+need to show that equation~(\ref{logic:eqn:FOPL:localinv:lemma:1})
+holds:
+    \[
+    \tau^{*}(\sigma(\bot))(W\setminus\sigma(U))
+    =\tau^{*}(\bot)(W\setminus\sigma(U))=\bot
+    \]
+Next we assume that $\phi=\phi_{1}\to\phi_{2}$ where
+$\phi_{1},\phi_{2}\in\pv$ satisfy our desired property. We need to
+show that the same is true of $\phi$. So let $U\subseteq V$ and
+suppose $q(U,\phi)$ is true. We need to show that
+equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds:
+    \begin{eqnarray*}
+    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))&=&
+    \tau^{*}(\sigma(\phi_{1}\to\phi_{2}))(W\setminus\sigma(U))\\
+    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
+    &=&\tau^{*}(\sigma(\phi_{1}\to\phi_{2}))(U^{*})\\
+    &=&\tau^{*}(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)(U^{*})\\
+    \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
+    \rightarrow
+    &=&\tau^{*}(\sigma(\phi_{1}))(U^{*})\to\tau^{*}(\sigma(\phi_{2}))(U^{*})\\
+    \mbox{A: to be proved}\ \rightarrow&=&\phi_{1}\to\phi_{2}\\
+    &=&\phi
+    \end{eqnarray*}
+So it remains to show that
+equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds for
+$\phi_{1}$ and $\phi_{2}$. However, from our induction hypothesis,
+our property is true for $\phi_{1}$ and $\phi_{2}$. Hence, it is
+sufficient to prove that $q(U,\phi_{1})$ and $q(U,\phi_{2})$ are
+true. First we show that $q(U,\phi_{1})$ is true. We need to prove
+that $(iii)$ and $(iv)$ above are true for $\phi_{1}$:
+    \[
+    \free(\phi_{1})\setminus U\subseteq\free(\phi)\setminus U\subseteq V_{0}
+    \]
+where the second inclusion follows from our assumption of
+$q(U,\phi)$. Furthermore:
+    \[
+    \bound(\phi_{1})\cup U\subseteq\bound(\phi)\cup U\subseteq V_{1}
+    \]
+So $(iii)$ is now established for $\phi_{1}$. Also from $q(U,\phi)$
+we obtain:
+    \[
+    \sigma(U)\cap\sigma(\free(\phi_{1})\setminus U)\subseteq
+    \sigma(U)\cap\sigma(\free(\phi)\setminus U)=\emptyset
+    \]
+So it remains to show that $\sigma$ is valid for $\phi_{1}$, which
+follows immediately from
+proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}) and the
+validity of $\sigma$ for $\phi=\phi_{1}\to\phi_{2}$. This completes
+our proof of $q(U,\phi_{1})$. The proof of $q(U,\phi_{2})$ being
+identical, we are now done with the case $\phi=\phi_{1}\to\phi_{2}$.
+So we now assume that $\phi=\forall x\phi_{1}$ where $x\in V$ and
+$\phi_{1}\in\pv$ satisfy our induction hypothesis. We need to show
+the same is true for $\phi$. So let $U\subseteq V$ and suppose
+$q(U,\phi)$ is true. We need to show that
+equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds for $U$,
+which goes as follows:
+    \begin{eqnarray*}
+    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))&=&
+    \tau^{*}(\sigma(\forall x\phi_{1}))(W\setminus\sigma(U))\\
+    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
+    &=&\tau^{*}(\sigma(\forall x\phi_{1}))(U^{*})\\
+    &=&\tau^{*}(\,\forall\sigma(x)\sigma(\phi_{1})\,)(U^{*})\\
+    \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
+    \rightarrow
+    &=&\forall \tau_{1}\circ\sigma(x)\,\tau^{*}(
+    \sigma(\phi_{1}))(\,U^{*}\setminus\{\sigma(x)\}\,)\\
+    \mbox{$(ii)$ and $x\in\bound(\phi)\subseteq V_{1}$}\ \rightarrow
+    &=&\forall x\,\tau^{*}(
+    \sigma(\phi_{1}))(\,U^{*}\setminus\{\sigma(x)\}\,)\\
+    \mbox{define $U_{1}^{*}=U^{*}\setminus\{\sigma(x)\}$}\ \rightarrow
+    &=&\forall x\,\tau^{*}(\sigma(\phi_{1}))(U_{1}^{*})\\
+    \mbox{A: to be proved}\ \rightarrow&=&\forall x\phi_{1}\\
+    &=&\phi
+    \end{eqnarray*}
+So it remains to show that
+$\tau^{*}(\sigma(\phi_{1}))(U_{1}^{*})=\phi_{1}$. From
+$U^{*}=W\setminus\sigma(U)$ and
+$U_{1}^{*}=U^{*}\setminus\{\sigma(x)\}$ we obtain
+$U_{1}^{*}=W\setminus\sigma(U_{1})$ where $U_{1}=U\cup\{x\}$. So it
+remains to show that
+$\tau^{*}(\sigma(\phi_{1}))(W\setminus\sigma(U_{1}))=\phi_{1}$, or
+equivalently that equation~(\ref{logic:eqn:FOPL:localinv:lemma:1})
+holds for $U_{1}$ and $\phi_{1}$. Having assumed $\phi_{1}$
+satisfies our induction hypothesis, it is therefore sufficient to
+prove that $q(U_{1},\phi_{1})$ is true. So we need to show that
+$(iii)$ and $(iv)$ above are true for $U_{1}$ and $\phi_{1}$:
+    \begin{eqnarray*}
+    \free(\phi_{1})\setminus
+    U_{1}&=&\free(\phi_{1})\setminus\{x\}\setminus U\\
+    &=&\free(\phi)\setminus U\\
+    q(U,\phi)\ \rightarrow&\subseteq&V_{0}
+    \end{eqnarray*}
+Furthermore:
+    \begin{eqnarray*}
+    \bound(\phi_{1})\cup U_{1}&=&\bound(\phi_{1})\cup\{x\}\cup U\\
+    &=&\bound(\phi)\cup U\\
+    q(U,\phi)\ \rightarrow&\subseteq& V_{1}
+    \end{eqnarray*}
+and:
+    \begin{eqnarray*}
+    \sigma(U_{1})\cap\sigma(\free(\phi_{1})\setminus U_{1})
+    &=&\sigma(U_{1})\cap\sigma(\,\free(\phi_{1})\setminus\{x\}\setminus
+    U\,)\\
+    &=&\sigma(U_{1})\cap\sigma(\free(\phi)\setminus U)\\
+    &=&(\sigma(U)\cup\{\sigma(x)\})\cap\sigma(\free(\phi)\setminus
+    U)\\
+    q(U,\phi)\ \rightarrow&=&\{\sigma(x)\}\cap\sigma(\free(\phi)\setminus
+    U)\\
+    &\subseteq&\{\sigma(x)\}\cap\sigma(\free(\phi))\\
+    \mbox{A: to be proved}\ \rightarrow&=&\emptyset
+    \end{eqnarray*}
+So we need to show that $\sigma(u)\neq\sigma(x)$ whenever
+$u\in\free(\phi)$, which follows immediately from
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) and the
+validity of $\sigma$ for $\phi=\forall x\phi_{1}$, itself a
+consequence of our assumption $q(U,\phi)$. So we are almost done
+proving $q(U_{1},\phi_{1})$ and it remains to show that $\sigma$ is
+valid for $\phi_{1}$, which is another immediate consequence of
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}). This
+completes our induction argument.
+\end{proof}
+\index{local@Local inversion for formula}
+\begin{theorem}\label{logic:the:FOPL:localinv:main}
+Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
+$V_{1}$ be subsets of $V$ such that $\sigma_{|V_{0}}$ and
+$\sigma_{|V_{1}}$ are injective maps. Let $\Gamma$ be the subset of
+\pv:
+    \[
+    \Gamma=\{\phi\in\pv:(\free(\phi)\subseteq
+    V_{0})\land(\bound(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
+    valid for $\phi$})\}
+    \]
+Then, there exits $\tau:{\bf P}(W)\to\pv$ such that:
+    \[
+    \forall\phi\in\Gamma\ ,\ \tau\circ\sigma(\phi)=\phi
+    \]
+where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated
+substitution mapping.
+\end{theorem}
+\begin{proof}
+Let $\sigma:V\to W$ be a map and $V_{0},V_{1}\subseteq V$ be such
+that $\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are injective maps. We
+shall distinguish two cases: first we assume that $V=\emptyset$.
+Then for all $\phi\in\pv$ the inclusions $\free(\phi)\subseteq
+V_{0}$ and $\bound(\phi)\subseteq V_{1}$ are always true.
+Furthermore, from
+definition~(\ref{logic:def:FOPL:valid:substitution}) the
+substitution $\sigma$ is always valid for~$\phi$. Hence we have
+$\Gamma=\pv$ and we need to find $\tau:{\bf P}(W)\to\pv$ such that
+$\tau\circ\sigma(\phi)=\phi$ for all $\phi\in\pv$. We define $\tau$
+with the following recursion:
+    \begin{equation}\label{logic:eqn:FOPL:localinv:the:1}
+                    \tau(\psi)=\left\{
+                    \begin{array}{lcl}
+                    \bot&\mbox{\ if\ }&\psi=(u\in v)\\
+                    \bot&\mbox{\ if\ }&\psi=\bot\\
+                    \tau(\psi_{1})\to\tau(\psi_{2})
+                    &\mbox{\ if\ }&\psi=\psi_{1}\to\psi_{2}\\
+                    \bot&
+                    \mbox{\ if\ }&\psi=\forall u\psi_{1}
+                    \end{array}\right.
+    \end{equation}
+We shall now prove that $\tau\circ\sigma(\phi)=\phi$ using a
+structural induction argument.  Since $V=\emptyset$ there is nothing
+to check in the case when $\phi=(x\in y)$. So we assume that
+$\phi=\bot$. Then $\sigma(\phi)=\bot$ and
+$\tau\circ\sigma(\phi)=\bot$ as requested. Next we assume that
+$\phi=\phi_{1}\to\phi_{2}$ with $\tau\circ\sigma(\phi_{1})=\phi_{1}$
+and $\tau\circ\sigma(\phi_{2})=\phi_{2}$. Then:
+    \begin{eqnarray*}
+    \tau\circ\sigma(\phi)&=&\tau\circ\sigma(\phi_{1}\to\phi_{2})\\
+    &=&\tau(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)\\
+    &=&\tau\circ\sigma(\phi_{1})\to\tau\circ\sigma(\phi_{2})\\
+    &=&\phi_{1}\to\phi_{2}\\
+    &=&\phi
+    \end{eqnarray*}
+Since $V=\emptyset$ there is nothing to check in the case when
+$\phi=\forall x\phi_{1}$. So this completes our proof when
+$V=\emptyset$, and we now assume that $V\neq\emptyset$. Let
+$x_{0}\in V$ and consider $\tau_{0}:\sigma(V_{0})\to V$ and
+$\tau_{1}:\sigma(V_{1})\to V$ to be the inverse mappings of
+$\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ respectively. Extend
+$\tau_{0}$ and $\tau_{1}$ to the whole of $W$ by setting
+$\tau_{0}(u)=x_{0}$ if $u\not\in\sigma(V_{0})$ and
+$\tau_{1}(u)=x_{0}$ if $u\not\in\sigma(V_{1})$. Then $\tau_{0},
+\tau_{1}:W\to V$ are left-inverse of $\sigma$ on $V_{0}$ and $V_{1}$
+respectively, i.e. we have:
+    \begin{eqnarray*}
+    (i)&&x\in V_{0}\ \Rightarrow\ \tau_{0}\circ\sigma(x)=x\\
+    (ii)&&x\in V_{1}\ \Rightarrow\ \tau_{1}\circ\sigma(x)=x
+    \end{eqnarray*}
+Let $\tau:{\bf P}(W)\to\pv$ be the dual variable substitution
+associated with the ordered pair $(\tau_{0},\tau_{1})$ as per
+definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}). We shall
+complete the proof of the theorem by showing that
+$\tau\circ\sigma(\phi)=\phi$ for all $\phi\in\Gamma$ where:
+    \[
+    \Gamma=\{\phi\in\pv:(\free(\phi)\subseteq
+    V_{0})\land(\bound(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
+    valid for $\phi$})\}
+    \]
+So let $\phi\in\Gamma$. Then in particular $\phi$ satisfies property
+$(iii)$ and $(iv)$ of lemma~(\ref{logic:lemma:FOPL:localinv:lem}) in
+the particular case when $U=\emptyset$. So applying
+lemma~(\ref{logic:lemma:FOPL:localinv:lem}) for $U=\emptyset$, we
+see that $\tau^{*}(\sigma(\phi))(W\setminus\sigma(\emptyset))=\phi$
+where $\tau^{*}:{\bf P}(W)\to[{\cal P}(W)\to\pv]$ is the map
+associated with $\tau$. Hence we conclude that
+$\tau\circ\sigma(\phi)=\tau^{*}(\sigma(\phi))(W)=\phi$.
+\end{proof}

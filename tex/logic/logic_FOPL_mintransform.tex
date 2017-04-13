@@ -1,0 +1,420 @@
+There will come a point when we will want to invoke $\forall
+x\phi_{1}\to\phi_{1}[a]$ as an instance of the specialization axioms
+to argue that $\phi_{1}[a]$ must be true if we know that $\forall
+x\phi_{1}$ is itself true. In doing so, the formula $\phi_{1}[a]$
+should be some form of {\em evaluation} of the formula $\phi_{1}$,
+where the free variable $x$ of $\phi_{1}$ has been replaced by $a$.
+For example, when $\phi_{1}=\forall y(x\in y)$ with $x\neq y$, it
+would be natural to define $\phi_{1}[a]=\forall y(a\in y)$, provided
+$a\neq y$. In the case when $a=y$ such definition would not work. So
+we have a problem. It is important for us to argue that $\forall
+x\phi_{1}\to\phi_{1}[a]$ is a legitimate axiom even in the case when
+$a=y$. If we fail to do so, our deductive system will be too weak
+and we will most likely have a very hard time attempting to prove
+G\"odel's completeness theorem.
+
+There are no doubt several ways to solve our problem. One of them is
+to abandon the aim of defining $\phi_{1}[a]$ as a formula and define
+it instead as an equivalence class. So $\phi_{1}[y]$ would not be
+defined as $\forall u(y\in u)$ for an arbitrary $u\neq y$ but rather
+as the full equivalence class of $\forall u(y\in u)$ (modulo the
+substitution congruence for example). It is always an ugly thing to
+do to define a mapping $a\to\phi_{1}[a]$ in terms of a randomly
+chosen $u\neq y$. By viewing $\phi_{1}[a]$ as an equivalence class
+we eliminate this dependency in $u$, which is aesthetically far more
+pleasing. On the negative side, if we are later to attempt defining
+a {\em deductive congruence} by setting  $\phi\sim\psi$ whenever
+both $\phi\to\psi$ and $\psi\to\phi$ are provable from our deductive
+system, having $\phi_{1}[a]$ defined as an equivalence class would
+mean our deductive congruence fails to be decoupled from the
+substitution congruence. It would be very nice to define a deductive
+congruence which has no dependency to a substitution congruence.
+
+There is possibly another approach to resolve our problem which is
+the one pursued in this section. The formula $\phi_{1}=\forall
+y(x\in y)$ is a problem to us simply because it has $y$ as a
+variable. The way we have defined the algebra \pv\ has a major
+drawback: we are using the same set of variables $V$ to represent
+variables which are free and those which are not. Things would be so
+much simpler if we had $\forall *(x\in *)$ or $\forall\,0\,(x\in 0)$
+instead of $\forall y(x\in y)$. Life would be a lot easier if we had
+an algebra where the free variables and the bound variables were
+taken from different sets, more specifically sets with empty
+intersection.
+\index{minimal@Minimal extension of
+set}\index{v@$\bar{V}$ : minimal extension  $V\oplus\N$}
+\begin{defin}\label{logic:def:FOPL:mintransform:minextension:set}
+Let $V$ be a set. We call {\em minimal extension} of $V$ the set
+$\bar{V}$ defined as the disjoint union of $V$ and \N, that is:
+    \[
+    \bar{V}=\{0\}\times V\cup \{1\}\times\N
+    \]
+\end{defin}
+
+So now we have a set of variables $\bar{V}$ with fundamentally two
+types of elements. We can use the elements of the form $(0,x)$ with
+$x\in V$ to represent free variables of a formula, and the elements
+of the form $(1,n)$ with $n\in\N$ to represent variables which are
+not free. Furthermore, since we have two obvious embeddings
+$i:V\to\bar{V}$ and $j:\N\to\bar{V}$ there is no point writing
+$(0,x)$ or $(1,n)$ and we can simply represent elements of $\bar{V}$
+as $x$ and $n$, having in mind the inclusions $V\subseteq\bar{V}$
+and $\N\subseteq\bar{V}$ with $V\cap\N=\emptyset$. So we can now
+represent elements of \pvb\ as $\bar{\phi}=\forall\,0\,(x\in 0)$
+without ambiguity. Of course, the formula $\bar{\phi}=\forall x(0\in
+x)$ is also an element of \pvb\ which is contrary to the spirit of
+why we have defined $\bar{V}$ in the first place: we want free
+variables of any formula to be chosen from $V$ and bound variables
+to be chosen from \N. So not every element of \pvb\ will be
+interesting to us. We will need to restrict our attention to a
+meaningful subset of \pvb. We shall do so by defining a mapping
+${\cal M}:\pv\to\pvb$ which will make sure the formula ${\cal
+M}(\phi)\in\pvb$ abides to the right variable conventions, for all
+$\phi\in\pv$. The range of this mapping ${\cal M}(\pv)\subseteq\pvb$
+will hopefully be an interesting algebra to look at.
+
+So how should our mapping ${\cal M}:\pv\to\pvb$ look like? Given
+$x,y\in V$ we would probably want to have ${\cal M}(x\in y)=x\in
+y\in\pvb$. We would also request that ${\cal M}(\bot)=\bot$ and
+${\cal M}(\phi_{1}\to\phi_{2})={\cal M}(\phi_{1})\to{\cal
+M}(\phi_{2})$. The real question is to determine how ${\cal
+M}(\forall x\phi_{1})$ should be defined, given $\phi_{1}\in\pv$ and
+$x\in V$. The whole idea of the mapping ${\cal M}:\pv\to\pvb$ is to
+replace bound variables in $V$ of a formula $\phi\in\pv$ with nice
+looking variables $0,1,2,3\ldots$ in the formula ${\cal M}(\phi)$.
+So ${\cal M}(\forall x\phi_{1})$ should be defined as:
+    \[
+    {\cal M}(\forall x\phi_{1})=\forall n{\cal M}(\phi_{1})[n/x]
+    \]
+where $n\in\N\subseteq\bar{V}$. With such definition, we start from
+the formula ${\cal M}(\phi_{1})$ which has been adequately
+transformed until now, and then replace the free variable $x$ (if
+applicable) with an integer variable $n$ so as to obtain ${\cal
+M}(\phi_{1})[n/x]$, and we finally substitute the quantification
+$\forall x$ with the corresponding $\forall n$. This is all looking
+good. The only thing left to determine is how to choose the integer
+$n$. We know from our study of valid substitutions defined in
+page~\pageref{logic:def:FOPL:valid:substitution} that we cannot just
+pick any $n$. It would not make sense to consider ${\cal
+M}(\phi_{1})[n/x]$ unless the substitution $[n/x]$ is valid for
+${\cal M}(\phi_{1})$. For example, suppose $\phi=\forall x\forall
+y(x\in y)$, i.e. $\phi_{1}=\forall y(x\in y)$. It is acceptable to
+define ${\cal M}(\phi_{1})=\forall\,0\,(x\in 0)$ and choose $n=0$ or
+indeed ${\cal M}(\phi_{1})=\forall\,7\,(x\in 7)$ is also fine, since
+$[n/y]$ is always valid for $(x\in y)$ regardless of the particular
+choice of $n$. However, having decided upon ${\cal
+M}(\phi_{1})=\forall\,0\,(x\in 0)$, we cannot define ${\cal
+M}(\phi)=\forall\,0\,\forall\,0\,(0\in 0)$ as this would make no
+sense. The substitution $[0/x]$ is not valid for $\forall\,0\,(x\in
+0)$. We have to choose a different integer and set ${\cal
+M}(\phi)=\forall\,1\,\forall\,0\,(1\in 0)$. The substitution $[n/x]$
+should be valid for the formula ${\cal M}(\phi_{1})$. In fact, the
+obvious choice of integer is to pick $n$ as the smallest integer for
+which $[n/x]$ is valid for ${\cal M}(\phi_{1})$. Note that such an
+integer always exists: we know that ${\cal M}(\phi_{1})$ has a
+finite number of variables, so there exists $n\in\N$ which is not a
+variable of ${\cal M}(\phi_{1})$. Having chosen such an $n$, we see
+from proposition~(\ref{logic:prop:FOPL:validsub:singlevar}) that
+$[n/x]$ is valid for ${\cal M}(\phi_{1})$.
+\index{minimal@Minimal
+transform of formula}\index{m@${\cal M}(\phi)$ : minimal transform
+of $\phi$}
+\begin{defin}\label{logic:def:FOPL:mintransform:transform}
+Let $V$ be a set with minimal extension $\bar{V}$. We call {\em
+minimal transform mapping on \pv\ }the map ${\cal M}:\pv\to\pvb$
+defined by:
+\begin{equation}\label{logic:eqn:FOPL:mintransform:transform}
+    \forall\phi\in\pv\ ,\ {\cal M}(\phi)=\left\{
+                    \begin{array}{lcl}
+                    (x\in y)&\mbox{\ if\ }&\phi=(x\in y)\\
+                    \bot&\mbox{\ if\ }&\phi=\bot\\
+                    {\cal M}(\phi_{1})\to{\cal M}(\phi_{2})&\mbox{\ if\ }&
+                    \phi=\phi_{1}\to\phi_{2}\\
+                    \forall n{\cal M}(\phi_{1})[n/x]&\mbox{\ if\ }&\phi=\forall x\phi_{1}\\
+                    \end{array}\right.
+    \end{equation}
+where $n=\min\{k\in\N:\mbox{$[k/x]$ valid for ${\cal
+M}(\phi_{1})$}\}$.
+\end{defin}
+Given $\phi\in\pv$ we call ${\cal M}(\phi)$ the {\em minimal
+transform} of $\phi$.
+
+\begin{prop}\label{logic:prop:FOPL:mintransform:recursion}
+The structural recursion of {\em
+definition~(\ref{logic:def:FOPL:mintransform:transform})} is
+legitimate.
+\end{prop}
+\begin{proof}
+We need to prove that there exists a unique map ${\cal
+M}:\pv\to\pvb$ which satisfies
+equation~(\ref{logic:eqn:FOPL:mintransform:transform}). We shall do
+so using theorem~(\ref{logic:the:structural:recursion}) or
+page~\pageref{logic:the:structural:recursion}. So take $X=\pv$,
+$X_{0}=\pvo$ and $A=\pvb$. Define $g_{0}:X_{0}\to A$ by setting
+$g_{0}(x\in y)=(x\in y)$. Define $h(\bot):A^{0}\to A$ by setting
+$h(\bot)(0)=\bot$ and $h(\to):A^{2}\to A$ by setting
+$h(\to)(\phi_{1},\phi_{2})= \phi_{1}\to\phi_{2}$. Finally, given
+$x\in V$, define $h(\forall x):A^{1}\to A$ by setting $h(\forall
+x)(\phi_{1})=\forall n\phi_{1}[n/x]$ where:
+    \[
+    n=n(\forall
+    x)(\phi_{1})=\min\{k\in\N:\mbox{$[k/x]$ valid for
+    $\phi_{1}$}\}
+    \]
+Then applying theorem~(\ref{logic:the:structural:recursion}), there
+exists a unique map ${\cal M}:X\to A$ satisfying the following
+conditions: first we have ${\cal M}(x\in y)=g_{0}(x\in y)=(x\in y)$
+which is the first line of
+equation~(\ref{logic:eqn:FOPL:mintransform:transform}). Next we have
+${\cal M}(\bot) =h(\bot)(0) = \bot$ which is the second line. Next
+we have:
+     \[
+     {\cal M}(\phi_{1}\to\phi_{2})=h(\to)({\cal
+    M}(\phi_{1}),{\cal M}(\phi_{2}))={\cal M}(\phi_{1})\to{\cal
+    M}(\phi_{2})
+    \]
+which is the third line. Finally, given $x\in V$ we have:
+    \[
+    {\cal M}(\forall x\phi_{1})=h(\forall x)({\cal M}(\phi_{1}))=\forall n{\cal M}(\phi_{1})[n/x]
+    \]
+where $n=\min\{k\in\N:\mbox{$[k/x]$ valid for
+    ${\cal M}(\phi_{1})$}\}$ and this is the fourth line.
+\end{proof}
+
+The variables of the minimal transform ${\cal M}(\phi)$ are what we
+expect:
+
+\begin{prop}\label{logic:prop:FOPL:mintransform:variables}
+Let $V$ be a set and $\phi\in\pv$. Then we have:
+    \begin{equation}\label{logic:eqn:FOPL:mintransform:variables:1}
+    \free({\cal M}(\phi))=\var({\cal M}(\phi))\cap V=\free(\phi)
+    \end{equation}
+where ${\cal M}(\phi)\in\pvb$ is the minimal transform of
+$\phi\in\pv$.
+\end{prop}
+\begin{proof}
+We shall prove
+equation~(\ref{logic:eqn:FOPL:mintransform:variables:1}) with a
+structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\phi=(x\in y)$ with $x,y\in V$. We need to show the equation is
+true for $\phi$. However, we have ${\cal M}(\phi)=(x\in y)$ and
+consequently $\free({\cal M}(\phi))=\{x,y\}=\var({\cal M}(\phi))$.
+So the equation is clearly true. Next we assume that $\phi=\bot$.
+Then ${\cal M}(\phi)=\bot$ and $\free({\cal
+M}(\phi))=\emptyset=\var({\cal M}(\phi))$. So the equation is also
+clearly true. Next we assume that $\phi=\phi_{1}\to\phi_{2}$ where
+the equation is true for $\phi_{1},\phi_{2}\in\pv$. We need to show
+the equation is also true for $\phi$. On the one hand we have:
+    \begin{eqnarray*}
+    \var({\cal M}(\phi))\cap V&=&\var({\cal
+    M}(\phi_{1}\to\phi_{2}))\cap V\\
+    &=&\var({\cal M}(\phi_{1})\to{\cal M}(\phi_{2}))\cap V\\
+    &=&[\,\var({\cal M}(\phi_{1}))\cup\var({\cal M}(\phi_{2}))\,]\cap
+    V\\
+    &=&[\var({\cal M}(\phi_{1}))\cap V]\,\cup\,[\var({\cal
+    M}(\phi_{2}))\cap V]\\
+    &=&\free(\phi_{1})\cup\free(\phi_{2})\\
+    &=&\free(\phi_{1}\to\phi_{2})\\
+    &=&\free(\phi)
+    \end{eqnarray*}
+and on the other hand:
+    \begin{eqnarray*}
+    \free({\cal M}(\phi))&=&\free({\cal M}(\phi_{1}\to\phi_{2}))\\
+    &=&\free({\cal M}(\phi_{1})\to{\cal M}(\phi_{2}))\\
+    &=&\free({\cal M}(\phi_{1}))\cup\free({\cal M}(\phi_{2}))\\
+    &=&\free(\phi_{1})\cup\free(\phi_{2})\\
+    &=&\free(\phi_{1}\to\phi_{2})\\
+    &=&\free(\phi)
+    \end{eqnarray*}
+So the equation is indeed true for $\phi=\phi_{1}\to\phi_{2}$. Next
+we assume that $\phi=\forall x\phi_{1}$ where $x\in V$ and the
+equation is true for $\phi_{1}\in\pv$. We need to show the equation
+is also true for $\phi$. Since ${\cal M}(\phi)=\forall n{\cal
+M}(\phi_{1})[n/x]$ for some $n\in\N$:
+    \begin{eqnarray*}
+    \var({\cal M}(\phi))\cap V&=&\var(\,\forall n{\cal
+    M}(\phi_{1})[n/x]\,)\cap V\\
+    &=&(\,\{n\}\cup\var(\,{\cal M}(\phi_{1})[n/x]\,)\,)\cap V\\
+    \mbox{$V\cap\N=\emptyset$ in $\bar{V}$}\ \rightarrow
+    &=&\var(\,{\cal M}(\phi_{1})[n/x]\,)\cap V\\
+    &=&\var(\,[n/x](\,{\cal M}(\phi_{1})\,)\,)\cap V\\
+    \mbox{prop.~(\ref{logic:prop:var:of:substitution})}\ \rightarrow
+    &=&[n/x](\,\var(\,{\cal M}(\phi_{1})\,)\,)\cap V\\
+    \mbox{$[n/x](x)=n\not\in V$}\ \rightarrow
+    &=&[n/x](\,\var(\,{\cal M}(\phi_{1})\,)\setminus\{x\}\,)\cap V\\
+    \mbox{$[n/x](u)=u$ if $u\neq x$}\ \rightarrow
+    &=&(\,\var(\,{\cal M}(\phi_{1})\,)\setminus\{x\}\,)\cap V\\
+    &=&(\,\var({\cal M}(\phi_{1}))\cap V\,)\setminus\{x\}\\
+    &=&\free(\phi_{1})\setminus\{x\}\\
+    &=&\free(\forall x\phi_{1})\\
+    &=&\free(\phi)
+    \end{eqnarray*}
+Furthermore, since $[n/x]$ is valid for ${\cal M}(\phi_{1})$, we
+have:
+    \begin{eqnarray*}
+    \free({\cal M}(\phi))&=&\free(\,\forall n{\cal
+    M}(\phi_{1})[n/x]\,)\\
+    &=&\free(\,{\cal
+    M}(\phi_{1})[n/x]\,)\setminus\{n\}\\
+    &=&\free(\,[n/x](\,{\cal M}(\phi_{1})\,)\,)\setminus\{n\}\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:valid:free:commute}),
+    $[n/x]$ valid for ${\cal M}(\phi_{1})$}\ \rightarrow
+    &=&[n/x](\,\free(\,{\cal M}(\phi_{1})\,)\,)\setminus\{n\}\\
+    \mbox{$[n/x](x)=n$}\ \rightarrow
+    &=&[n/x](\,\free(\,{\cal
+    M}(\phi_{1})\,)\setminus\{x\}\,)\setminus\{n\}\\
+    \mbox{$[n/x](u)=u$ if $u\neq x$}\ \rightarrow
+    &=&\free(\,{\cal
+    M}(\phi_{1})\,)\setminus\{x\}\setminus\{n\}\\
+    &=&\free(\phi_{1})\setminus\{x\}\setminus\{n\}\\
+    \mbox{$\free(\phi_{1})\subseteq V$, $n\in\N$}\ \rightarrow
+    &=&\free(\phi_{1})\setminus\{x\}\\
+    &=&\free(\forall x\phi_{1})\\
+    &=&\free(\phi)
+    \end{eqnarray*}
+So we see that
+equation~(\ref{logic:eqn:FOPL:mintransform:variables:1}) is also
+true for $\phi=\forall x\phi_{1}$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:FOPL:mintransform:variables:bound}
+Let $V$ be a set and $\phi\in\pv$. Then we have:
+    \begin{equation}\label{logic:eqn:FOPL:mintransform:variables:bound:1}
+    \bound({\cal M}(\phi))=\var({\cal M}(\phi))\cap\N
+    \end{equation}
+where ${\cal M}(\phi)\in\pvb$ is the minimal transform of
+$\phi\in\pv$.
+\end{prop}
+\begin{proof}
+We shall prove
+equation~(\ref{logic:eqn:FOPL:mintransform:variables:bound:1}) with
+a structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\phi=(x\in y)$ with $x,y\in V$. We need to show the equation is
+true for $\phi$. However, we have ${\cal M}(\phi)=(x\in y)$ and
+consequently $\bound({\cal M}(\phi))=\emptyset=\var({\cal
+M}(\phi))\cap\N$. So the equation is true. Next we assume that
+$\phi=\bot$. Then ${\cal M}(\phi)=\bot$ and $\bound({\cal
+M}(\phi))=\emptyset=\var({\cal M}(\phi))$. So the equation is also
+true. Next we assume that $\phi=\phi_{1}\to\phi_{2}$ where the
+equation is true for $\phi_{1},\phi_{2}\in\pv$. We need to show it
+is also true for $\phi$:
+    \begin{eqnarray*}
+    \bound({\cal M}(\phi))&=&\bound({\cal M}(\phi_{1}\to\phi_{2}))\\
+    &=&\bound({\cal M}(\phi_{1})\to{\cal M}(\phi_{2}))\\
+    &=&\bound({\cal M}(\phi_{1}))\cup\bound({\cal M}(\phi_{2}))\\
+    &=&(\var({\cal M}(\phi_{1}))\cap\N)\cup(\var({\cal M}(\phi_{2}))\cap\N)\\
+    &=&(\,\var({\cal M}(\phi_{1}))\cup\var({\cal M}(\phi_{2}))\,)\cap\N\\
+    &=&\var({\cal M}(\phi_{1})\to{\cal M}(\phi_{2}))\cap\N\\
+    &=&\var({\cal M}(\phi_{1}\to\phi_{2}))\cap\N\\
+    &=&\var({\cal M}(\phi))\cap\N
+    \end{eqnarray*}
+So the equation is indeed true for $\phi=\phi_{1}\to\phi_{2}$. Next
+we assume that $\phi=\forall x\phi_{1}$ where $x\in V$ and the
+equation is true for $\phi_{1}\in\pv$. We need to show the equation
+is also true for $\phi$. Since ${\cal M}(\phi)=\forall n{\cal
+M}(\phi_{1})[n/x]$ for some $n\in\N$:
+    \begin{eqnarray*}
+    \bound({\cal M}(\phi))&=&\bound(\,\forall n{\cal
+    M}(\phi_{1})[n/x]\,)\\
+    &=&\{n\}\cup\bound({\cal M}(\phi_{1})[n/x])\\
+    &=&\{n\}\cup\bound(\,[n/x]({\cal M}(\phi_{1}))\,)\\
+    \mbox{prop.~(\ref{logic:prop:boundvar:of:substitution})}\ \rightarrow
+    &=&\{n\}\cup[n/x](\,\bound({\cal M}(\phi_{1}))\,)\\
+    \mbox{$[n/x](x)=n$}\ \rightarrow
+    &=&\{n\}\cup[n/x](\,\bound({\cal
+    M}(\phi_{1}))\setminus\{x\}\,)\\
+    \mbox{$[n/x](u)=u$ if $u\neq x$}\ \rightarrow
+    &=&\{n\}\cup\bound({\cal M}(\phi_{1}))\setminus\{x\}\\
+    &=&\{n\}\cup(\,\var({\cal M}(\phi_{1}))\cap\N\,)\setminus\{x\}\\
+    &=&(\,\{n\}\cup\var({\cal M}(\phi_{1}))\setminus\{x\}\,)\cap\N\\
+    \mbox{$[n/x](u)=u$ if $u\neq x$}\ \rightarrow
+    &=&(\,\{n\}\cup[n/x](\,\var({\cal
+    M}(\phi_{1}))\setminus\{x\}\,)\,)\cap\N\\
+    \mbox{$[n/x](x)=n$}\ \rightarrow
+    &=&(\,\{n\}\cup[n/x](\,\var({\cal M}(\phi_{1}))\,)\,)\cap\N\\
+    \mbox{prop.~(\ref{logic:prop:var:of:substitution})}\ \rightarrow
+    &=&(\,\{n\}\cup\var(\,[n/x]({\cal M}(\phi_{1}))\,)\,)\cap\N\\
+    &=&(\,\{n\}\cup\var(\,{\cal M}(\phi_{1})[n/x]\,)\,)\cap\N\\
+    &=&\var(\forall n{\cal M}(\phi_{1})[n/x])\cap\N\\
+    &=&\var({\cal M}(\phi))\cap\N
+    \end{eqnarray*}
+So we see that
+equation~(\ref{logic:eqn:FOPL:mintransform:variables:bound:1}) is
+also true for $\phi=\forall x\phi_{1}$.
+\end{proof}
+
+Given $\phi\in\pv$ the minimal transform ${\cal M}(\phi)$ is an
+element of \pvb. So it is difficult to argue that both formulas
+$\phi$ and ${\cal M}(\phi)$ are substitution equivalent as they do
+not sit on the same space. However, if we consider the inclusion map
+$i:V\to\bar{V}$, it is possible to regard $\phi$ as an element of
+\pvb\ and ask whether both formulas are equivalent. Indeed, we have:
+
+\begin{prop}\label{logic:prop:FOPL:mintransform:eqivalence}
+Let $V$ be a set and $i:V\to\bar{V}$ be the inclusion map. We
+denote~$\sim$ the substitution congruence on \pvb. Then for all
+$\phi\in\pv$ we have:
+    \[
+    {\cal M}(\phi)\sim\, i(\phi)
+    \]
+\end{prop}
+\begin{proof}
+We shall prove the equivalence ${\cal M}(\phi)\sim\, i(\phi)$ by a
+structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\phi=(x\in y)$ for some $x,y\in V$. Then we have the equality
+${\cal M}(\phi)=(x\in y)=i(\phi)$ and the equivalence is clear. Next
+we assume that $\phi=\bot$. Then we have ${\cal
+M}(\phi)=\bot=i(\phi)$ and the equivalence is also clear. So we
+assume that $\phi=\phi_{1}\to\phi_{2}$ where
+$\phi_{1},\phi_{2}\in\pv$ satisfy the equivalence. Then we have:
+    \begin{eqnarray*}
+    {\cal M}(\phi)&=&{\cal M}(\phi_{1}\to\phi_{2})\\
+    &=&{\cal M}(\phi_{1})\to{\cal M}(\phi_{2})\\
+    &\sim&i(\phi_{1})\to i(\phi_{2})\\
+    &=&i(\phi_{1}\to\phi_{2})\\
+    &=&i(\phi)
+    \end{eqnarray*}
+Finally we assume that $\phi=\forall x\phi_{1}$ where $x\in V$ and
+$\phi_{1}\in\pv$ satisfies the equivalence. In this case we have:
+    \begin{eqnarray*}
+    {\cal M}(\phi)&=&{\cal M}(\forall x\phi_{1})\\
+    n=\min\{k:[k/x]\mbox{ valid for }{\cal M}(\phi_{1})\}\
+    \rightarrow
+    &=&\forall n{\cal M}(\phi_{1})[n/x]\\
+    &=&[n/x](\forall x{\cal M}(\phi_{1}))\\
+    \mbox{A: to be proved}\ \rightarrow
+    &\sim&\forall x{\cal M}(\phi_{1})\\
+    &\sim&\forall x\, i(\phi_{1})\\
+    &=&\forall i(x)\, i(\phi_{1})\\
+    &=&i(\forall x\phi_{1})\\
+    &=&i(\phi)
+    \end{eqnarray*}
+So it remains to show that $[n/x](\forall x{\cal
+M}(\phi_{1}))\sim\forall x{\cal M}(\phi_{1})$. Hence, from
+proposition~(\ref{logic:prop:admissible:sub:congruence}) it is
+sufficient to prove that $[n/x]$ is an admissible substitution for
+$\forall x{\cal M}(\phi_{1})$. We already know that $[n/x]$ is valid
+for ${\cal M}(\phi_{1})$. Using
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}), given
+$u\in\free(\forall x{\cal M}(\phi_{1}))$, in order to prove that
+$[n/x]$ is valid for $\forall x{\cal M}(\phi_{1})$ we need to show
+that $[n/x](u)\neq[n/x](x)$. So it is sufficient to show that
+$[n/x](u)\neq n$. Since $u\in\free(\forall x{\cal M}(\phi_{1}))$, in
+particular we have $u\neq x$. Hence, we have to show that $u\neq n$.
+Using proposition~(\ref{logic:prop:FOPL:mintransform:variables}) we
+have:
+    \[
+    u\in\free(\forall x{\cal M}(\phi_{1}))\subseteq\free({\cal M}(\phi_{1}))\subseteq V
+    \]
+and consequently from $V\cap\N=\emptyset$ we conclude that $u\neq
+n$. In order to show that  $[n/x]$ is an admissible substitution for
+$\forall x{\cal M}(\phi_{1})$ it remains to prove that $[n/x](u)=u$
+for all $u\in\free(\forall x{\cal M}(\phi_{1}))$, which follows from
+$u\neq x$.
+\end{proof}

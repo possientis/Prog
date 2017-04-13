@@ -1,0 +1,270 @@
+In this section we introduce the notion of universal sub-algebras.
+The main motivation for this will appear later when we investigate
+equivalence relations and congruences on universal algebras. An
+equivalence relation on a universal algebra $X$ is a subset of
+$X\times X$ with certain closure properties, and can therefore be
+regarded as a universal sub-algebra of $X\times X$, provided the
+latter has been embedded with the appropriate structure of universal
+algebra. Rather, than focussing on the specifics of $X\times X$, we
+will study universal sub-algebras in a general setting.
+\index{subalgebra@Sub-algebra of universal algebra}
+\begin{defin}\label{logic:def:universal:sub:algebra}
+Let $X$ be a universal algebra of type $\alpha$. We say that
+$Y\subseteq X$ is a {\em Universal Sub-Algebra} of $X$ \ifand\ it is
+closed under every operator i.e.
+    \[
+    \forall f\in\alpha\ ,\ \forall x\in X^{\alpha(f)}\ ,\ [\ x\in
+    Y^{\alpha(f)}\ \Rightarrow\ f(x)\in Y\ ]
+    \]
+If $Y$ is a universal sub-algebra of $X$, we call {\em induced
+structure on} $Y$ the map $T$ with domain $\alpha$ such that for all
+$f\in\alpha$, the operator $T(f):Y^{\alpha(f)}\to Y$ is:
+    \[
+    \forall x\in Y^{\alpha(f)}\ ,\ T(f)(x) = f(x)\in Y
+    \]
+\end{defin}
+
+Let $X$ be a universal algebra of type $\alpha$ and $Y$ be a
+universal sub-algebra of $X$. Given $f\in\alpha$, when using loose
+notations we have two operators $f:X^{\alpha(f)}\to X$ and
+$f:Y^{\alpha(f)}\to Y$. However, the latter is simply the
+restriction of the former to the smaller domain
+$Y^{\alpha(f)}\subseteq X^{\alpha(f)}$, and the notation '$f(x)$' is
+therefore unambiguous whenever $x$ is an element of $Y^{\alpha(f)}$.
+The best example of universal sub-algebras are possibly homomorphic
+images of universal algebras. We have:
+
+\begin{prop}\label{logic:prop:UA:subalg:homomorphic:image}
+Let $h:X\to Y$ be a homomorphism between two universal algebras $X$
+and $Y$ of type $\alpha$. Then the image $h(X)$ is a sub-algebra of
+$Y$.
+\end{prop}
+\begin{proof}
+Let $f\in\alpha$ and $y\in h(X)^{\alpha(f)}$. We need to show that
+$f(y)\in h(X)$. However, for all $i\in\alpha(f)$ we have $y(i)\in
+h(X)$. Hence there exists $x_{i}\in X$ such that $y(i)=h(x_{i})$.
+Let $x\in X^{\alpha(f)}$ be defined by $x(i)=x_{i}$ for all
+$i\in\alpha(f)$. Then we have $y(i)=h(x_{i})=h(x(i))=h(x)(i)$ for
+all $i\in\alpha(f)$ and consequently $y=h(x)$. Since $h:X\to Y$ is a
+homomorphism, it follows that $f(y)=f\circ h(x)=h\circ
+f(x)=h(x^{*})$ with $x^{*}=f(x)$. So we have found $x^{*}\in X$ such
+that $f(y)=h(x^{*})$ and we conclude that $f(y)\in h(X)$.
+\end{proof}
+
+The restrictions of homomorphisms to universal sub-algebras are
+themselves homomorphisms. We had to say this once to avoid future logical flaws
+in forthcoming arguments. For example, if $h:X\to Y$ is a morphism
+and $X_{0}$ is a sub-algebra of $X$, we would like to use
+proposition~(\ref{logic:prop:UA:subalg:homomorphic:image}) to argue
+that $h(X_{0})$ is a sub-algebra of $Y$. This is indeed the case,
+but we need to argue that $h_{|X_{0}}:X_{0}\to Y$ is a morphism.
+
+\begin{prop}\label{logic:prop:UA:subalg:restriction:morphism}
+Let $h:X\to Y$ be a morphism  between two universal algebras of type
+$\alpha$. Given a sub-algebra $X_{0}\subseteq X$, the restriction
+$h_{|X_{0}}$ is a morphism.
+\end{prop}
+\begin{proof}
+Given $f\in\alpha$ and $x\in X_{0}^{\alpha(f)}$ we need to check the
+equality $h\circ f(x)=f\circ h(x)$. This follows from the fact that
+every operator $f:X_{0}^{\alpha(f)}\to X_{0}$ is the restriction of
+$f:X^{\alpha(f)}\to X$ and $h:X_{0}\to Y$ is the restriction of
+$h:X\to Y$.
+\end{proof}
+
+
+Let ${\cal A}$ be a non-empty set. Recall that $\cap{\cal A}$ is the
+set defined by:
+    \[
+    \cap{\cal A}=\{x:\forall Z\in{\cal A}\ ,\ x\in Z\}
+    \]
+When ${\cal A}=\emptyset$, the set $\cap{\cal A}$ is normally not
+defined, as there is no such things as {\em the set of all sets}.
+Suppose now that ${\cal A}$ is a non-empty set of subsets of a given
+set $X$. Since ${\cal A}$ is non-empty, it has an element $Z\in{\cal
+A}$ which by assumption is a subset of $X$. So every element $x\in
+Z$ is also an element of $X$ and it follows that $\cap{\cal A}$
+could equally have been defined as:
+    \[
+    \cap{\cal A}=\{x\in X: \forall Z\in{\cal A}\ ,\ x\in Z\}
+    \]
+This last expression is now meaningful when ${\cal A}=\emptyset$,
+and yields $\cap\emptyset = X$. Hence we shall adopt the convention
+that $\cap{\cal A}=X$ whenever ${\cal A}=\emptyset$ is viewed as a
+set of subsets of $X$, and $X$ is clearly given from the context.
+\begin{prop}\label{logic:prop:intersection}
+Let $X$ be a universal algebra of type $\alpha$ and ${\cal A}$ be a
+set of universal sub-algebras of $X$. Then $\cap{\cal A}$ is a
+universal sub-algebra of $X$.
+\end{prop}
+\begin{proof}
+Let $Y=\cap{\cal A}$. We need to show that $Y$ is a universal
+sub-algebra of $X$. So let $f\in\alpha$ and $x\in Y^{\alpha(f)}$. We
+need to show that $f(x)\in Y$. So let $Z\in{\cal A}$. We need to
+show that $f(x)\in Z$. But $Y\subseteq Z$ and $x\in Y^{\alpha(f)}$.
+So $x\in Z^{\alpha(f)}$. Since $Z$ is a universal sub-algebra of
+$X$, we conclude that $f(x)\in Z$.
+\end{proof}
+\index{x@$\langle X_{0}\rangle\,$: sub-algebra generated by $X_{0}$}
+\begin{defin}\label{logic:def:generated:sub:algebra}
+Let $X$ be a universal algebra of type $\alpha$ and $X_{0}\subseteq
+X$. Let ${\cal A}$ be the set of universal sub-algebras of $X$
+defined by:
+    \[
+    {\cal A}=\{Y: X_{0}\subseteq Y\mbox{\ and\ } Y\mbox{\ universal sub-algebra of\ }X\}
+    \]
+We call {\em Universal Sub-Algebra of $X$ generated by $X_{0}$} the
+universal sub-algebra of $X$ denoted $\langle X_{0}\rangle$ and
+defined by $\langle X_{0}\rangle=\cap{\cal A}$.
+\end{defin}
+\begin{prop}\label{logic:prop:generated:smallest}
+Let $X$ be a universal algebra of type $\alpha$ and $X_{0}\subseteq
+X$. Then, the universal sub-algebra $\langle X_{0}\rangle$ generated
+by $X_{0}$ is the smallest universal sub-algebra of $X$ {\em
+containing} $X_{0}$, i.e. such that $X_{0}\subseteq \langle
+X_{0}\rangle$.
+\end{prop}
+\begin{proof}
+Define ${\cal A}=\{Y: X_{0}\subseteq Y\mbox{\ and\ } Y\mbox{\
+universal sub-algebra of\ }X\}$. From
+definition~(\ref{logic:def:generated:sub:algebra}), we have $\langle
+X_{0}\rangle = \cap{\cal A}$. We need to show that $\langle
+X_{0}\rangle$ is a universal sub-algebra of $X$ which contains
+$X_{0}$, and that it is the smallest universal sub-algebra of $X$
+with such property. Since every element of ${\cal A}$ is a universal
+sub-algebra of $X$, from
+proposition~(\ref{logic:prop:intersection}), $\langle X_{0}\rangle
+=\cap{\cal A}$ is also a universal sub-algebra of $X$. To show that
+$X_{0}\subseteq \langle X_{0}\rangle$ assume that $x\in X_{0}$. We
+need to show that $x\in\cap{\cal A}$. So let $Y\in{\cal A}$. We need
+to show that $x\in Y$. But this is clear since $X_{0}\subseteq Y$.
+So we have proved that $\langle X_{0}\rangle$ is a universal
+sub-algebra of $X$ containing $X_{0}$. Suppose that $Y$ is another
+universal sub-algebra of $X$ such that $X_{0}\subseteq Y$. We need
+to show that $\langle X_{0}\rangle$ is {\em smaller} than $Y$, that
+is $\langle X_{0}\rangle\subseteq Y$. But $Y$ is clearly an element
+of ${\cal A}$. Hence if $x\in\langle X_{0}\rangle =\cap{\cal A}$, it
+follows immediately that $x\in Y$. This shows that $\langle
+X_{0}\rangle \subseteq Y$.
+\end{proof}
+
+Suppose $X$ and $Y$ are universal algebras of type $\alpha$ and
+$g:X\to Y$ is a morphism. Given $X_{0}\subseteq X$, the following
+proposition asserts that the direct image $g(\langle X_{0}\rangle)$
+of the universal sub-algebra of $X$ generated by $X_{0}$ is also the
+universal sub-algebra $\langle g(X_{0})\rangle$ of $Y$ generated by
+the direct image $g(X_{0})$.
+
+\begin{prop}\label{logic:prop:UA:subalg:generated:direct:image}
+Let $X,Y$ be universal algebras of type $\alpha$ and $g:X\to Y$ be a
+morphism. For every subset $X_{0}\subseteq X$ we have the following
+equality:
+    \[
+    g(\langle X_{0}\rangle)=\langle g(X_{0})\rangle
+    \]
+\end{prop}
+\begin{proof}
+First we show $\supseteq$\,: by virtue of
+proposition~(\ref{logic:prop:generated:smallest}), $\langle
+g(X_{0})\rangle$ is the smallest sub-algebra of $Y$ containing the
+direct image $g(X_{0})$. In order to prove $\supseteq$\,, it is
+therefore sufficient to show that $g(\langle X_{0}\rangle)$ is a
+sub-algebra of $Y$ with $g(\langle X_{0}\rangle)\supseteq g(X_{0})$.
+This last inclusion follows immediately from $\langle
+X_{0}\rangle\supseteq X_{0}$. Being a homomorphic image of the
+sub-algebra $\langle X_{0}\rangle$, the fact that $g(\langle
+X_{0}\rangle)$ is a sub-algebra of $Y$ follows from
+proposition~(\ref{logic:prop:UA:subalg:homomorphic:image}). So we
+now prove $\subseteq$\,. Consider the subset $X_{1}$ defined by:
+    \[
+    X_{1}=\{\,x\in \langle X_{0}\rangle\ :\ g(x)\in\langle
+    g(X_{0})\rangle\,\}
+    \]
+In order to prove $\subseteq$\,, it is sufficient to prove that
+$\langle X_{0}\rangle\subseteq X_{1}$. Thus we need to show that
+$X_{1}$ is a sub-algebra of $X$ with $X_{0}\subseteq X_{1}$. The
+fact that $X_{0}\subseteq X_{1}$ follows from the inclusions
+$X_{0}\subseteq\langle X_{0}\rangle$ and $g(X_{0})\subseteq\langle
+g(X_{0})\rangle$. So it remains to show that $X_{1}$ is a
+sub-algebra of $X$. Consider $f\in\alpha$ and $x\in
+X_{1}^{\alpha(f)}$. We need to show that $f(x)\in X_{1}$. However,
+from $X_{1}\subseteq \langle X_{0}\rangle$ we obtain $x\in\langle
+X_{0}\rangle^{\alpha(f)}$ and it follows that $f(x)\in\langle
+X_{0}\rangle$ since $\langle X_{0}\rangle$ is a sub-algebra of $X$.
+In order to show that $f(x)\in X_{1}$, it remains to prove that
+$g\circ f(x)\in\langle g(X_{0})\rangle$. Having assumed that $g:X\to
+Y$ is a morphism, this amounts to showing that $f\circ
+g(x)\in\langle g(X_{0})\rangle$. However, since $\langle
+g(X_{0})\rangle$ is a sub-algebra of $Y$, in order to show that
+$f\circ g(x)\in\langle g(X_{0})\rangle$ we simply need to prove that
+$g(x)\in\langle g(X_{0})\rangle^{\alpha(f)}$. Thus given
+$i\in\alpha(f)$, we need to show that $g(x)(i)=g(x(i))\in\langle
+g(X_{0})\rangle$. It is therefore sufficient to prove that $x(i)\in
+X_{1}$ which follows from $x\in X_{1}^{\alpha(f)}$.
+\end{proof}
+
+Let $X$ be a universal algebra of type $\alpha$ and $X_{0}\subseteq
+X$. The universal sub-algebra $\langle X_{0}\rangle$ generated by
+$X_{0}$ was defined in terms of an intersection $\cap{\cal A}$. This
+may be viewed as a {\em definition from above}: we start from
+universal sub-algebras which are larger than $\langle X_{0}\rangle$,
+including $X$ itself, and we {\em reduce} these universal
+sub-algebras by taking the intersection between them, until we
+arrive at $\langle X_{0}\rangle$. The following proposition may be
+viewed as a {\em definition from below}. We start from the smallest
+possible set, which is the generator $X_{0}$, and we gradually {\em
+add} all the elements which should belong to $\langle X_{0}\rangle$
+in view of its closure properties. Note that the {\em definition
+from below} makes use of a recursion principle, whereas the {\em
+definition from above} does not.
+\begin{prop}\label{logic:prop:characterisation:generated}
+Let $X$ be a universal algebra of type $\alpha$ and $X_{0}\subseteq
+X$. Define:
+    \[
+    X_{n+1}=X_{n}\cup\bar{X}_{n}\ ,\ n\in\N
+    \]
+with:
+    \[
+    \bar{X}_{n}=\left\{f(x):\ f\in\alpha\ ,\ x\in X_{n}^{\alpha(f)}\right\}
+    \]
+Then:
+    \[
+    \langle X_{0}\rangle=\bigcup_{n=0}^{+\infty}X_{n}
+    \]
+\end{prop}
+\begin{proof}
+Let $Y=\cup_{n\in\N}X_{n}$. We need to show that $Y=\langle
+X_{0}\rangle$. First we show that $Y\subseteq \langle X_{0}\rangle$.
+It is sufficient to prove by induction that $X_{n}\subseteq\langle
+X_{0}\rangle$ for all $n\in\N$. Since $X_{0}\subseteq \langle
+X_{0}\rangle$, this is obviously true for $n=0$. Suppose we have
+$X_{n}\subseteq \langle X_{0}\rangle$. We claim that
+$X_{n+1}\subseteq\langle X_{0}\rangle$. It is sufficient to prove
+that $\bar{X}_{n}\subseteq\langle X_{0}\rangle$. So let $f\in\alpha$
+and $x\in X_{n}^{\alpha(f)}$. We have to show that $f(x)\in\langle
+X_{0}\rangle$. But since $X_{n}\subseteq\langle X_{0}\rangle$, we
+have $X_{n}^{\alpha(f)}\subseteq\langle X_{0}\rangle^{\alpha(f)}$.
+It follows that $x\in\langle X_{0}\rangle^{\alpha(f)}$. But $\langle
+X_{0}\rangle$ is a universal sub-algebra of $X$, and we conclude
+that $f(x)\in\langle X_{0}\rangle$. This completes our induction
+argument, and we have proved that $Y\subseteq \langle X_{0}\rangle$.
+We now show that $\langle X_{0}\rangle\subseteq Y$. Since
+$X_{0}\subseteq Y$, from
+proposition~(\ref{logic:prop:generated:smallest}), $\langle
+X_{0}\rangle$ being the smallest universal sub-algebra containing
+$X_{0}$, it is sufficient to show that $Y$ is also a universal
+sub-algebra of $X$. So let $f\in\alpha$ and $x\in Y^{\alpha(f)}$. We
+need to show that $f(x)\in Y$.  It is sufficient to show that $x\in
+X_{n}^{\alpha(f)}$ for some $n\in\N$, as this will imply
+$f(x)\in\bar{X}_{n}\subseteq X_{n+1}\subseteq Y$. If $\alpha(f)=0$
+then $X_{n}^{\alpha(f)}=1=Y^{\alpha(f)}$ for all $n\in\N$ and $x\in
+X_{n}^{\alpha(f)}$ for all $n\in\N$. Suppose $\alpha(f)\geq 1$.
+Given $i\in\alpha(f)$, since $x\in Y^{\alpha(f)}$ we have $x(i)\in
+Y$. So there exists $n_{i}\in\N$ such that $x(i)\in X_{n_{i}}$.
+Define $n\in\N$ by:
+     \[
+     n=\max(n_{0},\ldots,n_{\alpha(f)-1})
+     \]
+Since $X_{n_{i}}\subseteq X_{n}$, we have $x(i)\in X_{n}$ for all $i\in\alpha(f)$.
+So $x\in X_{n}^{\alpha(f)}$.
+\end{proof}

@@ -1,0 +1,89 @@
+In this section we define the {\em quotient universal algebra $[X]$
+of type $\alpha$} derived from a universal algebra $X$ of type
+$\alpha$ and a congruence $\sim$ on $X$. Given $x\in X$, we shall
+denote $[x]$ the {\em equivalent class of $x$ modulo $\sim$},
+namely:
+    \[
+    [x]=\{y\in X:x\sim y\}
+    \]
+Note that $[x]=[y]$ is equivalent to $x\sim y$ for all $x,y\in X$.
+Given $f\in\alpha$ and $x\in X^{\alpha(f)}$, $[x]$ to denote the
+element of $[X]^{\alpha(f)}$ defined by $[x](i)=[x(i)]$.
+\index{quotient@Quotient universal algebra}
+\begin{theorem}\label{logic:the:quotient}
+Let $X$ be a universal algebra of type $\alpha$ and $\sim$ be a
+congruence on~$X$. Given $x\in X$, let $[x]$ denote the equivalence
+class of $x$ modulo $\sim$ and $[X]$ be the quotient set $[X] =
+\{[x]:x\in X\}$. Let $\pi:X\to[X]$ be defined by $\pi(x)=[x]$ for
+all $x\in X$. Then, there exists a unique structure of universal
+algebra of type $\alpha$ on $[X]$ such that $\pi$ is a surjective
+morphism. Furthermore:
+    \begin{equation}\label{logic:eqn:quotient}
+    \forall x\in X^{\alpha(f)}\ ,\ f([x]) = [f(x)]
+    \end{equation}
+for all $f\in\alpha$. This structure is called the {\em quotient
+structure on $[X]$}.
+\end{theorem}
+\begin{proof}
+Note that given $f\in\alpha$ and $x\in X^{\alpha(f)}$, $[x]$ refers
+to the element of $[X]^{\alpha(f)}$ defined by $[x](i)=[x(i)]$ for
+all $i\in\alpha(f)$, being understood that $[x]=0$ is $\alpha(f)=0$.
+It follows that equation~(\ref{logic:eqn:quotient}) is meaningful.
+Note also that $\pi:X\to [X]$ is a surjective map, regardless of any
+structure on $[X]$. We shall first prove the existence of a
+structure of universal algebra of type $\alpha$ on $[X]$ which makes
+$\pi:X\to[X]$ into a morphism. We need to show the existence of a
+map $T$ with domain $\alpha$ such that $T(f):[X]^{\alpha(f)}\to[X]$
+for all $f\in\alpha$ and:
+    \begin{equation}\label{logic:eqn:quotient:morphism}
+    \forall x\in X^{\alpha(f)}\ ,\ \pi\circ f(x) = T(f)\circ\pi(x)
+    \end{equation}
+So let $f\in\alpha$. We need to define some
+$T(f):[X]^{\alpha(f)}\to[X]$. Let $x^{*}\in[X]^{\alpha(f)}$. We need
+to define $T(f)(x*)$. First we shall show that there exists $x\in
+X^{\alpha(f)}$ such that $x^{*}=[x]$. Indeed, for all
+$i\in\alpha(f)$, $x^{*}(i)$ is an element of $[X]$. So there exists
+$x_{i}\in X$ such that $x^{*}(i)=[x_{i}]$. Define $x\in
+X^{\alpha(f)}$ by setting $x(i)=x_{i}$ for all $i\in\alpha(f)$,
+being understood that $x=0$ if $\alpha(f)=0$. Then, for all
+$i\in\alpha(f)$ we have $[x](i)=[x(i)]=[x_{i}]=x^{*}(i)$ and it
+follows that $[x]=x^{*}$. We now define $T(f)(x^{*})=[f(x)]$. We
+need to check that this definition is valid, namely that $[f(x)]$ is
+independent of the particular $x\in X^{\alpha(f)}$ such that
+$x^{*}=[x]$. So suppose that $x,y\in X^{\alpha(f)}$ such that
+$[x]=[y]$. We need to show that $[f(x)]=[f(y)]$ or equivalently that
+$f(x)\sim f(y)$. Since $\sim$ is a congruence, this will be achieved
+by showing that $x\sim y$ or equivalently that $x(i)\sim y(i)$ for
+all $i\in\alpha(f)$. However, $[x]=[y]$ and it follows that
+$[x(i)]=[x](i)=[y](i)=[y(i)]$ for all $i\in\alpha(f)$ from which we
+obtain $x(i)\sim y(i)$. So we have proved that $T(f)(x^{*})$ is well
+defined. Furthermore since $T(f)(x^{*})=[f(x)]$, we have
+$T(f)(x^{*})\in [X]$. Hence we have successfully defined
+$T(f):[X]^{\alpha(f)}\to[X]$ for all $f\in\alpha$. It follows that
+the ordered pair $([X],T)$ is a universal algebra of type $\alpha$.
+it remains to check that $\pi:X\to[X]$ is a morphism under this
+particular structure, i.e. that
+equation~(\ref{logic:eqn:quotient:morphism}) is satisfied for all
+$f\in\alpha$. So let $x\in X^{\alpha(f)}$ and $x^{*}=[x]$. We have:
+    \[
+    \pi\circ f(x)=[f(x)]=T(f)(x^{*})=T(f)([x])=T(f)\circ\pi(x)
+    \]
+This completes our proof of the existence of a structure of
+universal algebra of type $\alpha$ on $[X]$ such that $\pi:X\to[X]$
+is a surjective morphism. We shall now prove the uniqueness. So
+suppose $S$ is another map with domain $\alpha$ such that
+$S(f):[X]^{\alpha(f)}\to[X]$ for all $f\in\alpha$ with respect to
+which $\pi$ is a morphism. We need to show that $S=T$. So let
+$f\in\alpha$. We need to show that $S(f)=T(f)$. So let
+$x^{*}\in[X]^{\alpha(f)}$. We need to show that
+$S(f)(x^{*})=T(f)(x^{*})$. Let $x\in X^{\alpha(f)}$ be such that
+$x^{*}=[x]$. Since $\pi$ is a morphism under $S$ we obtain:
+    \[
+    S(f)(x^{*})=S(f)([x])=S(f)\circ\pi(x)=\pi\circ f(x)=[f(x)]=T(f)(x^{*})
+    \]
+We shall complete the proof of the theorem by showing that
+equation~(\ref{logic:eqn:quotient}) holds for all $f\in\alpha$. So
+let $x\in X^{\alpha(f)}$. We need to show that $f([x])=[f(x)]$. But
+this follows immediately from $T(f)([x])=[f(x)]$ and the fact that
+'$f([x])$' is a notational shortcut for '$T(f)([x])$'.
+\end{proof}

@@ -1,0 +1,187 @@
+In this section, we define and establish elementary properties of
+the set $\ax(\pi)$ representing the set of all axioms being invoked
+in a proof $\pi\in\pvs$. The set $\ax(\pi)$ is casually called the
+{\em set of axioms of} $\pi$ just like $\hyp(\pi)$ is the set of
+hypothesis of $\pi$. An element of $\ax(\pi)$ is casually called an
+{\em axiom of} $\pi$. This terminology is slightly unfortunate since
+an {\em axiom of} $\pi$ may not be an axiom at all. For convenience,
+we allowed $\axi\phi$ to be meaningful for all $\phi\in\pv$. So the
+inclusion $\ax(\pi)\subseteq\av$ does not hold in general, unless
+$\pi$ is totally clean. \index{axiom@Axiom set
+mapping}\index{a@$\ax(\pi)$ : set of axioms of
+$\pi$}\index{axiom@Axioms of a proof}
+\begin{defin}\label{logic:def:FUAP:axiomset:axiom:set}
+Let $V$ be a set. The map $\ax:\pvs\to{\cal P}(\pv)$ defined by the
+following structural recursion is called the {\em axiom set mapping}
+on \pvs:
+ \begin{equation}\label{logic:eqn:FUAP:axiomset:recursion}
+    \forall\pi\in\pvs\ ,\ \ax(\pi)=\left\{
+                    \begin{array}{lcl}
+                    \ \emptyset&\mbox{\ if\ }&\pi=\phi\in\pv\\
+                    \{\phi\}&\mbox{\ if\ }&\pi=\axi\phi\\
+                    \ax(\pi_{1})\cup\ax(\pi_{2}) &\mbox{\ if\ }&\pi=\pi_{1}\pon\pi_{2}\\
+                    \ax(\pi_{1})&\mbox{\ if\ }&\pi=\gen x\pi_{1}\\
+                    \end{array}\right.
+    \end{equation}
+We say that $\phi\in\pv$ is an axiom of $\pi\in\pvs$ \ifand\
+$\phi\in\ax(\pi)$.
+\end{defin}
+The recursive definition~(\ref{logic:def:FUAP:axiomset:axiom:set})
+is easily seen to be legitimate and furthermore $\ax(\pi)$ is a
+finite set, as a straightforward structural induction will show.
+
+\begin{prop}\label{logic:prop:FUAP:axiomset:charac}
+Let $V$ be a set and $\pi\in\pvs$. Then for all $\phi\in\pv$\,:
+    \[
+    \phi\in\ax(\pi)\ \Leftrightarrow\
+    \axi\phi\preceq\pi
+    \]
+In other words, $\phi$ is an axiom $\pi$ \ifand\ $\axi\phi$ is a
+sub-proof of $\pi$.
+\end{prop}
+\begin{proof}
+Consider the map $\axi:\pv\to\pvs$ defined by $\axi(\phi)=\axi\phi$.
+We need to show:
+    \[
+    \ax(\pi)=\axi^{-1}(\subf(\pi))=\{\phi\in\pv\ :\
+    \axi(\phi)\in\subf(\pi)\}
+    \]
+We shall do so with an induction argument using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}.  First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then $\ax(\pi)=\emptyset$ while
+$\subf(\pi)=\{\phi\}$. Using
+theorem~(\ref{logic:the:unique:representation}) of
+page~\pageref{logic:the:unique:representation} we obtain
+$\axi^{-1}(\subf(\pi))=\emptyset$. So the equality is true. Next we
+assume that $\pi=\axi\phi$ for some $\phi\in\pv$. Then we have
+$\ax(\pi)=\{\phi\}$ and from definition~(\ref{logic:def:subformula})
+$\subf(\pi)=\{\axi\phi\}$. Since from
+proposition~(\ref{logic:prop:FUAP:proof:axi:injective}) $\axi$ is an
+injective map, we have $\axi^{-1}(\subf(\pi))=\{\phi\}$ and the
+equality is true. Next we assume that $\pi=\pi_{1}\pon\pi_{2}$ where
+$\pi_{1},\pi_{2}\in\pvs$ satisfy the equality:
+    \begin{eqnarray*}
+    \ax(\pi)&=&\ax(\pi_{1}\pon\pi_{2})\\
+    &=&\ax(\pi_{1})\cup\ax(\pi_{2})\\
+    &=&\axi^{-1}(\subf(\pi_{1}))\,\cup\,\axi^{-1}(\subf(\pi_{2}))\\
+    &=&\axi^{-1}(\,\subf(\pi_{1})\cup\subf(\pi_{2})\,)\\
+    \mbox{theorem~(\ref{logic:the:unique:representation})
+    of p.~\pageref{logic:the:unique:representation}}\ \rightarrow
+    &=&\axi^{-1}(\,\{\pi_{1}\pon\pi_{2}\}\cup\subf(\pi_{1})\cup\subf(\pi_{2})\,)\\
+    &=&\axi^{-1}(\subf(\pi_{1}\pon\pi_{2}))\\
+    &=&\axi^{-1}(\subf(\pi))
+    \end{eqnarray*}
+Finally we assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}$ satisfies the equality:
+    \begin{eqnarray*}
+    \ax(\pi)&=&\ax(\gen x\pi_{1})\\
+    &=&\ax(\pi_{1})\\
+    &=&\axi^{-1}(\subf(\pi_{1}))\\
+    \mbox{theorem~(\ref{logic:the:unique:representation})
+    of p.~\pageref{logic:the:unique:representation}}\ \rightarrow
+    &=&\axi^{-1}(\,\{\gen x\pi_{1}\}\cup\subf(\pi_{1})\,)\\
+    &=&\axi^{-1}(\subf(\gen x\pi_{1}))\\
+    &=&\axi^{-1}(\subf(\pi))
+    \end{eqnarray*}
+\end{proof}
+
+The axioms of a totally clean proof are indeed axioms of first order
+logic.
+\begin{prop}\label{logic:prop:FUAP:axiomset:clean:proof}
+Let $V$ be a set and $\pi\in\pvs$. Then we have the implication:
+    \[
+    (\mbox{$\pi$ totally clean})\ \Rightarrow\ \ax(\pi)\subseteq\av
+    \]
+\end{prop}
+\begin{proof}
+Let $\pi\in\pvs$ be totally clean. We need to show that
+$\ax(\pi)\subseteq\av$. So let $\phi\in\ax(\pi)$. We need to show
+that $\phi\in\av$. However from
+proposition~(\ref{logic:prop:FUAP:axiomset:charac}) we obtain
+$\axi\phi\preceq\pi$. Since $\pi$ is totally clean, it follows from
+proposition~(\ref{logic:prop:FUAP:clean:sub:proof}) that $\axi\phi$
+is also totally clean. From
+definition~(\ref{logic:def:FUAP:clean:clean:proof}) we see that
+$\phi\in\av$.
+\end{proof}
+
+The map $\ax:\pvs\to{\cal P}(\pv)$ defined on the free universal
+algebra \pvs\ is increasing with respect to the inclusion partial
+order on ${\cal P}(\pv)$.
+
+\begin{prop}\label{logic:prop:FUAP:axiomset:subformula}
+Let $V$ be a set and $\rho,\pi\in\pvs$. Then we have:
+    \[
+    \rho\preceq\pi\ \Rightarrow\ \ax(\rho)\subseteq\ax(\pi)
+    \]
+\end{prop}
+\begin{proof}
+This follows from an application of
+proposition~(\ref{logic:prop:UA:subformula:non:decreasing}) to
+$\ax:X\to A$ where $X=\pvs$ and $A={\cal P}(\pv)$ where the preorder
+$\leq$ on $A$ is the usual inclusion $\subseteq$. We simply need to
+check that given $\pi_{1},\pi_{2}\in\pvs$ and $x\in V$ we have the
+inclusions $\ax(\pi_{1})\subseteq\ax(\pi_{1}\pon\pi_{2})$,
+$\ax(\pi_{2})\subseteq\ax(\pi_{1}\pon\pi_{2})$ and
+$\ax(\pi_{1})\subseteq\ax(\gen x\pi_{1})$ which follow from the
+recursive definition~(\ref{logic:def:FUAP:axiomset:axiom:set}).
+\end{proof}
+
+Given a map $\sigma:V\to W$ and a proof $\pi\in\pvs$, the axioms of
+the proof $\sigma(\pi)$ are the images by $\sigma:\pv\to{\bf P}(W)$
+of the axioms of $\pi$. Note that the symbol '$\sigma$' is
+overloaded and refers to three possible maps: apart from
+$\sigma:V\to W$, there is $\sigma:\pvs\to{\bf\Pi}(W)$ when referring
+to $\sigma(\pi)$. There is also $\sigma:\pv\to{\bf P}(W)$ whose
+restriction to $\ax(\pi)$ has a range denoted $\sigma(\ax(\pi))$.
+Hence we have:
+
+\begin{prop}\label{logic:prop:FUAP:axiomset:substitution}
+Let $V, W$ be sets and $\sigma:V\to W$ be a map. Let $\pi\in\pvs$\,:
+    \[
+    \ax(\sigma(\pi))=\sigma(\ax(\pi))
+    \]
+where $\sigma:\pvs\to{\bf\Pi}(W)$ also denotes the proof
+substitution mapping.
+\end{prop}
+\begin{proof}
+We shall prove this equality with an induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\pi=\phi$ for some $\phi\in\pv$. Then $\sigma(\pi)=\sigma(\phi)$
+and consequently $\ax(\sigma(\pi))=\emptyset$. So the equality is
+clear. Next we assume that $\pi=\axi\phi$ for some $\phi\in\pv$.
+Then we have the equalities:
+    \begin{eqnarray*}
+    \ax(\sigma(\pi))&=&\ax(\sigma(\axi\phi))\\
+    &=&\ax(\axi\sigma(\phi))\\
+    &=&\{\sigma(\phi)\}\\
+    &=&\sigma(\{\phi\})\\
+    &=&\sigma(\ax(\axi\phi))\\
+    &=&\sigma(\ax(\pi))
+    \end{eqnarray*}
+Next we assume that $\pi=\pi_{1}\pon\pi_{2}$ where
+$\pi_{1},\pi_{2}\in\pvs$ are proofs for which the equality is true.
+We need to show the same is true of $\pi$:
+    \begin{eqnarray*}
+    \ax(\sigma(\pi))&=&\ax(\sigma(\pi_{1}\pon\pi_{2}))\\
+    &=&\ax(\,\sigma(\pi_{1})\pon\,\sigma(\pi_{2})\,)\\
+    &=&\ax(\sigma(\pi_{1}))\cup\ax(\sigma(\pi_{2}))\\
+    &=&\sigma(\ax(\pi_{1}))\cup\sigma(\ax(\pi_{2}))\\
+    &=&\sigma(\,\ax(\pi_{1})\cup\ax(\pi_{2})\,)\\
+    &=&\sigma(\ax(\pi_{1}\pon\pi_{2}))\\
+    &=&\sigma(\ax(\pi))\\
+    \end{eqnarray*}
+Finally, we assume that $\pi=\gen x\pi_{1}$ where $x\in V$ and
+$\pi_{1}\in\pvs$ is a proof for which the equality is true. We need
+to show the same is true of $\pi$:
+    \begin{eqnarray*}
+    \ax(\sigma(\pi))&=&\ax(\sigma(\gen x\pi_{1}))\\
+    &=&\ax(\,\gen\sigma(x)\sigma(\pi_{1})\,)\\
+    &=&\ax(\sigma(\pi_{1}))\\
+    &=&\sigma(\ax(\pi_{1}))\\
+    &=&\sigma(\ax(\gen x\pi_{1}))\\
+    &=&\sigma(\ax(\pi))
+    \end{eqnarray*}
+\end{proof}

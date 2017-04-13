@@ -1,0 +1,169 @@
+We start with a couple of definitions including that of {\em
+elementary permutation} which formalizes the idea of 'adjacent
+moves'.
+\index{permutation@Permutation of order $n$}
+\begin{defin}\label{logic:def:integer:permutation}
+Let $n\in\N$ we call {\em permutation of order $n$} a bijection
+$\sigma:n\to n$.
+\end{defin}
+\index{permutation@Elementary permutation}\index{i@$[i:i+1]$ :
+permutation}
+\begin{defin}\label{logic:def:elementary:permutation}
+Let $n\in\N$, $n\geq 2$. We call {\em elementary permutation of
+order $n$} any permutation $\sigma:n\to n$ of the form $\sigma=[i
+:i+1]$ for some $i\in n-1$.
+\end{defin}
+
+For the sake of brevity, we allowed ourselves to use the notational
+shortcut $\sigma = \tau_{k}\circ\ldots\circ\tau_{1}$ in the
+following proof. This is fair enough. In a way, we are still doing
+meta-mathematics with the established standards of usual
+mathematics. If we are one day to provide a formal proof of the
+following lemma, we shall either need to discard the '\ldots', or
+create a high level language where its use is permitted, and
+corresponding formulas correctly compiled as low level formulas of
+first order logic with some form of recursive wording.
+\index{permutation@Decomposition of permutation}
+\begin{lemma}\label{logic:lemma:integer:permutation}
+Let $n\in\N$, $n\geq 2$. Any permutation $\sigma:n\to n$ of order
+$n$ is a composition of elementary permutations, i.e. there exist
+$k\in\N^{*}$ and elementary permutations $\tau_{1},\ldots,\tau_{k}$
+such that:
+    \[
+    \sigma = \tau_{k}\circ\ldots\circ\tau_{1}
+    \]
+\end{lemma}
+\begin{proof}
+We shall prove lemma~(\ref{logic:lemma:integer:permutation}), using
+an induction argument on $n\geq 2$. First we show that the lemma is
+true for $n=2$. So suppose $\sigma:2\to 2$ is a permutation of order
+$2$. We shall distinguish two cases. First we assume that $\sigma =
+[0\!:\!1]$. Then $\sigma$ is an elementary permutation and there is
+nothing else to prove. We now assume that $\sigma$ is the identity.
+Then $\sigma$ can be expressed as $\sigma =
+[0\!:\!1]\circ[0\!:\!1]$. Having considered the only two possible
+cases, we conclude that
+lemma~(\ref{logic:lemma:integer:permutation}) is true when $n=2$. We
+now assume that lemma~(\ref{logic:lemma:integer:permutation}) is
+true for $n\geq 2$. We need to show that it is true for $n+1$. So we
+assume that $\sigma: (n+1)\to(n+1)$ is a permutation of order $n+1$.
+We need to show that $\sigma$ can be expressed as a composition of
+elementary permutations. We shall distinguish two cases. First we
+assume that $\sigma(n)=n$. Then the restriction $\sigma_{|n}$ is
+easily seen to be a permutation of order $n$. Indeed, it is clearly
+an injective map $\sigma_{|n}:n\to n$ which is also surjective.
+Using the induction hypothesis, there exist $k\in\N^{*}$ and
+elementary permutations $\tau_{1},\ldots,\tau_{k}$ of order $n$ such
+that:
+    \[
+    \sigma_{|n}=\tau_{k}\circ\ldots\circ\tau_{1}
+    \]
+For all $j\in\{1,\ldots,k\}$ consider the extension $\tau^{*}_{j}$
+of $\tau_{j}$ on $n+1$ defined by $(\tau^{*}_{j})_{|n}=\tau_{j}$ and
+$\tau_{j}^{*}(n)=n$. Having assumed that $\sigma(n)=n$, we obtain:
+     \[
+    \sigma =\tau^{*}_{k}\circ\ldots\circ\tau^{*}_{1}
+    \]
+It is therefore sufficient to show that each $\tau^{*}_{j}$ is an
+elementary permutation of order $n+1$. So let $j\in\{1,\ldots,k\}$.
+Since $\tau_{j}$ is an elementary permutation of order $n$, there
+exists $i\in n-1$ such that $\tau_{j}=[i:i+1]$ (of order $n$). It
+follows immediately that $\tau^{*}_{j}=[i:i+1]$ (or order $n+1$). So
+$\tau^{*}_{j}$ is indeed an elementary permutation of order $n+1$.
+This completes our proof of
+lemma~(\ref{logic:lemma:integer:permutation}) for $n+1$ in the case
+when $\sigma(n)=n$. We now assume that $\sigma(n)\neq n$. Then
+$\sigma(n)\in n$. In other words, there exists $j\in n$ such that
+$\sigma(n)=n-1-j$. We shall prove by induction on $j\in n$ that
+$\sigma$ can be expressed as a composition of elementary
+permutations of order $n+1$. Note that in order to do so, it is
+sufficient to prove the existence of $m\in\N^{*}$ and elementary
+permutations $\tau_{1}',\ldots ,\tau_{m}'$ such that:
+    \[
+    \tau_{m}'\circ\ldots\circ\tau_{1}'\circ\sigma(n)=n
+    \]
+Indeed if that is the case, having proved
+lemma~(\ref{logic:lemma:integer:permutation}) for $n+1$ in the case
+when $\sigma(n)=n$, we deduce the existence of $k\in\N^{*}$ and
+elementary permutations $\tau_{1},\ldots,\tau_{k}$ of order $n+1$
+such that:
+    \[
+    \tau_{m}'\circ\ldots\circ\tau_{1}'\circ\sigma = \tau_{k}\circ\ldots\circ\tau_{1}
+    \]
+and since $\tau^{-1}=\tau$ for every elementary permutation $\tau$,
+we conclude that:
+    \[
+    \sigma=\tau_{1}'\circ\ldots\tau_{m}'\circ\tau_{k}\circ\ldots\circ\tau_{1}
+    \]
+So we need to show the existence of $m\in\N^{*}$ and elementary
+permutations $\tau_{1}',\ldots ,\tau_{m}'$ such that
+$\tau_{m}'\circ\ldots\circ\tau_{1}'\circ\sigma(n)=n$, and we shall
+do so by induction on $j\in n$ such that $\sigma(n)=n-1-j$. First we
+assume that $j=0$. Then $\sigma(n)=n-1$ and it is clear that
+$[\,n-1:n\,]\circ\sigma(n)=n$. So the property is true for $j=0$. We
+now assume that the property is true for $j\in (n-1)$ and we need to
+show that it is true for $j+1$. So we assume that $\sigma(n)= n-1
+-(j+1)$. Then we have:
+    \[
+    [\,n-1 -(j+1)\,:\,n-1-j\,]\circ\sigma(n)=n-1-j
+    \]
+Having assumed the property is true for $j$, there exist
+$m\in\N^{*}$ and elementary permutations $\tau_{1}',\ldots
+,\tau_{m}'$ such that:
+    \[
+    \tau_{m}'\circ\ldots\circ\tau_{1}'\circ[\,n-1 -(j+1)\,:\,n-1-j\,]\circ\sigma(n)=n
+    \]
+Hence we see that the property is also true for $j+1$.
+\end{proof}
+
+Having established that every permutation $\sigma:n\to n$ is a
+composition of elementary permutations for $n\geq 2$, our main
+objective is to design a proof of\,:
+    \begin{equation}\label{logic:eqn:FOPL:integerperm:eqn1}
+    \forall x_{n-1}\ldots\forall x_{0}\,\phi_{1}\sim\forall
+    x_{\sigma(n-1)}\ldots x_{\sigma(0)}\,\phi_{1}
+    \end{equation}
+However, we would also like to do so while at the same time creating
+a more condensed formalism. In the next section, we shall define the
+notion of {\em iterated quantification}, allowing us to replace the
+expression $ \forall x_{n-1}\ldots\forall x_{0}\,\phi_{1}$ by a
+simple $\forall x\phi_{1}$ with $x\in V^{n}$. Before we do so we
+shall introduce a simple equivalence relation on $V^{n}$ so as to
+identify $x\in V^{n}$ with $y=x\circ\sigma$. This will allow us to
+replace the statement of the
+equivalence~(\ref{logic:eqn:FOPL:integerperm:eqn1}) with the
+following implication:
+    \[
+    x\sim y\ \Rightarrow\ \forall x\phi_{1}\sim\forall
+    y\phi_{1}
+    \]
+\index{x@$x\sim y$, $x,y\in V^{n}$ : equivalence}
+\begin{defin}\label{logic:def:permutation:equivalence:vn}
+Let $V$ be a set, $n\in\N$ and $x,y\in V^{n}$. We say that $x$ is
+{\em permutation equivalent to $y$} and we write $x\sim y$ \ifand\
+there exists a permutation $\sigma:n\to n$ of order $n$ such that
+$y=x\circ \sigma$.
+\end{defin}
+\begin{prop}\label{logic:prop:permutation:equivalence:vn}
+Let $V$ be a set and $n\in\N$. Let $\sim$ denote the permutation
+equivalence on $V^{n}$. Then $\sim$ is an equivalence relation on
+$V^{n}$.
+\end{prop}
+\begin{proof}
+We need to show that $\sim$ is a reflexive, symmetric and transitive
+relation on $V^{n}$. First we show that $\sim$ is reflexive. So
+suppose $x\in V^{n}$. We need to show that $x\sim x$. Let
+$\sigma:n\to n$ be the identity permutation. Then we have $x=x\circ
+\sigma$. Note that if $n=0$, then $x=0$ and $\sigma=0$ and the
+equality $x=x\circ\sigma$ is still true. This shows that $x\sim x$.
+We now show that $\sim$ is symmetric. So suppose $x,y\in V^{n}$ and
+$x\sim y$. We need to show that $y\sim x$. By assumption, there
+exists a permutation $\sigma:n\to n$ such that $y=x\circ \sigma$.
+Composing to the right by the inverse permutation $\sigma^{-1}:n\to
+n$ we obtain $y\circ \sigma^{-1} = x$ and it follows that $y\sim x$.
+We now show that $\sim$ is transitive. So suppose $x,y,z\in V^{n}$
+are such that $x\sim y$ and $y\sim z$. We need to show that $x\sim
+z$. However, there exist permutations $\sigma:n\to n$ and $\tau:n\to
+n$ such that $y=x\circ \sigma$ and $z=y\circ \tau$. It follows that
+$z=x\circ(\sigma\circ\tau)$ and finally $x\sim z$.
+\end{proof}

@@ -1,0 +1,119 @@
+The theorem which follows is yet another indirect consequence of
+Lindenbaum's lemma~(\ref{logic:lemma:FOPL:semantics:lindenbaum}). It
+provides us with a characterization of the Hilbert deductive
+congruence in terms of the dual space \pvd. The result has nothing
+to do with model theory: We started from a consequence relation
+$\vdash\,\subseteq{\cal P}(\pv)\times\pv$ from which both a
+congruence and a dual space were defined. This congruence turns out
+to be fully characterized by this dual space. Obviously the question
+should be asked: is the result specific to the Hilbert deductive
+congruence, or are there other congruences on \pv\ for which a {\em
+natural consequence relation and dual space} can be defined, leading
+up to the following characterization?
+
+\index{congruence@Charact. of deductive congruence}
+\begin{theorem}\label{logic:the:FOPL:semantics:HDC:charac}
+Let $V$ be a set and $\equiv$ be the Hilbert deductive congruence on
+\pv. Then for all formulas $\phi,\psi\in\pv$ we have the
+equivalence:
+    \[
+    \phi\equiv\psi\ \Leftrightarrow\ \forall v\in\pvd\ ,\
+    v(\phi)=v(\psi)
+    \]
+\end{theorem}
+\begin{proof}
+The implication $\Rightarrow$ follows from
+proposition~(\ref{logic:prop:FOPL:semantics:stronger:congruence}).
+So we now prove $\Leftarrow$\,: let $\phi,\psi\in\pv$ such that
+$v(\phi)=v(\psi)$ for all $v\in\pvd$. We need to show that
+$\phi\equiv\psi$. By symmetry, it is sufficient to show that
+$\phi\leq\psi$ i.e. that we have $\vdash(\phi\to\psi)$. Using
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) it is
+therefore sufficient to prove that $\vDash(\phi\to\psi)$. In other
+words, from
+proposition~(\ref{logic:prop:FOPL:semantics:validity:charac}) it is
+sufficient to show that $v(\phi\to\psi)=1$ for all $v\in\pvd$.
+However, given $v\in\pvd$ we have:
+    \[
+    v(\phi\to\psi)=v(\phi)\to v(\psi)=v(\phi)\to v(\phi)=1
+    \]
+\end{proof}
+
+From theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}) of
+page~\pageref{logic:the:FOPL:semantics:syn:equiv:sem} we have the
+equivalence $\vdash\phi\ \Leftrightarrow\ \vDash\phi$. In other
+words, a formula is provable \ifand\ it is valid. In fact as we
+shall now see, a formula is provable \ifand\ it is logically
+equivalent to $\bot\to\bot$.
+
+\begin{prop}\label{logic:prop:FOPL:semantics:provable:charac}
+Let $V$ be a set. For all $\phi\in\pv$ we have the equivalence:
+    \[
+    \vdash\phi\ \Leftrightarrow\ \phi\equiv(\bot\to\bot)
+    \]
+where $\equiv$ is the Hilbert deductive congruence on \pv.
+\end{prop}
+\begin{proof}
+Using theorem~(\ref{logic:the:FOPL:semantics:HDC:charac}), the
+statement $\phi\equiv(\bot\to\bot)$ is equivalent to $v(\phi)=1$ for
+all $v\in\pvd$. Using
+proposition~(\ref{logic:prop:FOPL:semantics:validity:charac}), this
+is in turn equivalent to $\vDash\phi$, which is itself equivalent to
+$\vdash\phi$ by virtue of
+theorem~(\ref{logic:the:FOPL:semantics:syn:equiv:sem}).
+\end{proof}
+
+In definition~(\ref{logic:def:FOPL:semantics:valuation}), we defined
+the dual space \pvd\ in terms of the consequence relation $\vdash$
+by imposing the {\em soundness} property $\vdash\phi\ \Rightarrow\
+v(\phi)=1$. The following theorem shows that \pvd\ could equally
+have been defined directly in terms of the Hilbert deductive
+congruence $\equiv$\,, induced by the consequence relation $\vdash$.
+In other words, we do not need to have a consequence relation in
+order to define a dual space: given a congruence $\sim$ on \pv, we
+can define an associated dual space \pvd\ as the set of all
+propositional valuations $v$ which are compatible with the
+congruence $\sim$\,, i.e. for which given $\phi,\psi\in\pv$\,:
+    \[
+    \phi\sim\psi\ \Rightarrow\ v(\phi)=v(\psi)
+    \]
+We can then investigate whether this dual space \pvd\ gives rise to
+a characterization of the congruence~$\sim$ which is similar to that
+of theorem~(\ref{logic:the:FOPL:semantics:HDC:charac}).
+
+\index{congruence@Deductive congruence and dual} \index{dual@Dual
+and deductive congruence}
+\begin{theorem}\label{logic:the:FOPL:semantics:valuation:charac}
+Let $V$ be a set and $v:\pv\to 2$ be a map. Then $v$ is a valuation
+\ifand\ it is a propositional valuation such that for all
+$\phi,\psi\in\pv$\,:
+    \[
+    \phi\equiv\psi\ \Rightarrow\ v(\phi)=v(\psi)
+    \]
+i.e. such that $v$ is compatible with the Hilbert deductive
+congruence $\equiv$ on \pv.
+\end{theorem}
+\begin{proof}
+First we show the 'only if' part: so we assume that $v:\pv\to 2$ is
+a valuation. From
+definition~(\ref{logic:def:FOPL:semantics:valuation}) we see that
+$v(\bot)=0$ and $v(\phi_{1}\to\phi_{2})=v(\phi_{1})\to v(\phi_{2})$
+for all $\phi_{1},\phi_{2}\in\pv$. Comparing with
+definition~(\ref{logic:def:FOPL:propcong:prop:valuation}) it follows
+that $v$ is indeed a propositional valuation. Furthermore, if
+$\phi,\psi\in\pv$ are such that $\phi\equiv\psi$, it is clear from
+theorem~(\ref{logic:the:FOPL:semantics:HDC:charac}) that
+$v(\phi)=v(\psi)$. So we now prove the 'if' part: we assume that
+$v:\pv\to 2$ is a propositional valuation which is compatible with
+the Hilbert deductive congruence, i.e. such that $v(\phi)=v(\psi)$
+whenever we have $\phi\equiv\psi$. We need to show that $v$ is a
+valuation. Being a propositional valuation, we already know that
+$v(\bot)=0$ and $v(\phi_{1}\to\phi_{2})=v(\phi_{1})\to v(\phi_{2})$
+for all $\phi_{1},\phi_{2}\in\pv$. It remains to show the
+implication $\vdash\phi\ \Rightarrow\ v(\phi)=1$. So we assume that
+$\phi\in\pv$ is such that $\vdash\phi$. We need to show that
+$v(\phi)=1$. However, from $\vdash\phi$ and
+proposition~(\ref{logic:prop:FOPL:semantics:provable:charac}) we
+obtain $\phi\equiv(\bot\to\bot)$. By assumption, it follows that
+$v(\phi)=v(\bot\to\bot)= v(\bot)\to v(\bot)=0\to 0=1$ as requested.
+\end{proof}

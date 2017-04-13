@@ -1,0 +1,521 @@
+Let $M$ be a model and $\sigma:V\to W$ be a map. For each variables
+assignment $a:W\to M$ we obtain map $a\circ \sigma:V\to M$ which is
+also a variables assignment. Given $\phi\in\pv$, it is therefore
+meaningful to ask whether the formula $\phi$ is true in the model
+$M$ under the assignment $a\circ\sigma$. Denoting $\beta$ the model
+valuation function of $M$ on \pv, this amounts to asking whether
+$\beta(\phi)(a\circ\sigma)=1$. Now consider the formula
+$\sigma(\phi)\in{\bf P}(W)$. It is also meaningful to ask wether the
+formula $\sigma(\phi)$ is true in the model $M$ under the assignment
+$a$. Again denoting $\beta$ the model valuation function of $M$ on
+${\bf P}(W)$ this amounts to asking whether
+$\beta(\sigma(\phi))(a)=1$. However, the formula $\sigma(\phi)$ is
+roughly speaking identical to the formula $\phi$, after all
+variables have been interpreted in $W$ according to the {\em
+assignment} $\sigma:V\to W$. It follows that interpreting the
+variables of $\sigma(\phi)$ in $M$ according to the assignment
+$a:W\to M$ seemingly amounts to interpreting the variables of $\phi$
+in $M$ according to the assignment $a\circ\sigma:V\to M$. So if the
+formula $\sigma(\phi)$ is true under the assignment $a$, we should
+expect the formula $\phi$ to be true under the assignment
+$a\circ\sigma$ and conversely. In other words we expect:
+    \begin{equation}\label{logic:eqn:FOPL:semsubthe:lemma}
+    \beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)
+    \end{equation}
+Of course things are slightly more complicated and we are now well
+aware that things usually go wrong when $\sigma$ is not a valid
+substitution for $\phi$. So let us find a simple counterexample:
+Consider $V=\{x,y\}$ with $x\neq y$ and $W=\{u\}$. Let $\sigma$ be
+the unique map $\sigma:V\to W$ defined by $\sigma(x)=\sigma(y)=u$.
+Let $\phi=\forall y(x\in y)$. Then we have $\sigma(\phi)=\forall
+u(u\in u)$ and $\sigma$ is clearly not valid for $\phi$. It should
+not be difficult to find a model $(M,r)$ together with an assignment
+$a:W\to M$ for which the
+equation~(\ref{logic:eqn:FOPL:semsubthe:lemma}) fails. We cannot use
+the empty model $M=\emptyset$ as there exists no assignment $a:W\to
+M$ in this case. So let us try a model with a single element, namely
+$M=1=\{0\}$. In this case, there exists a unique assignment $a:W\to
+M$ defined by $a(u)=0$. It follows that $a\circ\sigma:V\to M$ is
+given by $a\circ\sigma(x)=a\circ\sigma(y)=0$. So every variable of
+$\phi=\forall y(x\in y)$ or $\sigma(\phi)=\forall u(u\in u)$ is
+interpreted as $0$ in $M$. Now we need to choose a binary relation
+$r$ on $M$. Since $M\times M=1\times 1=\{(0,0)\}$, we have two
+possible choices, namely $r=\emptyset$ or $r=M\times M$. First we
+assume that $r=\emptyset$. Then we have:
+    \begin{eqnarray*}
+    \beta(\sigma(\phi))(a)&=&\beta(\,\forall u(u\in u)\,)(a)\\
+    &=&\min\left\{\beta(u\in u)(b)\ :\ b=a\mbox{\ on\ }W_{u}\right\}\\
+    &=&\min\left\{1_{r}(b(u),b(u))\ :\ b=a\mbox{\ on\ }W_{u}\right\}\\
+    r=\emptyset\ \rightarrow
+    &=&\min\left\{0\ :\ b=a\mbox{\ on\ }W_{u}\right\}\\
+    &=&0
+    \end{eqnarray*}
+So the formula $\sigma(\phi)=\forall u(u\in u)$ is false in $M$
+under the assignment $a$ in the case when $r=\emptyset$, a fact
+which we could have guessed from our intuition. Now:
+    \begin{eqnarray*}
+    \beta(\phi)(a\circ\sigma)&=&\beta(\,\forall y(x\in y)\,)(a\circ\sigma)\\
+    &=&\min\left\{\beta(x\in y)(c)\ :\ c=a\circ\sigma\mbox{\ on\
+    }V_{y}\right\}\\
+    &=&\min\left\{1_{r}(c(x),c(y))\ :\ c=a\circ\sigma\mbox{\ on\
+    }V_{y}\right\}\\
+    r=\emptyset\ \rightarrow&=&\min\left\{0\ :\ c=a\circ\sigma\mbox{\ on\
+    }V_{y}\right\}\\
+    &=&0
+    \end{eqnarray*}
+So the formula $\phi=\forall y(x\in y)$ is also false in $M$ under
+the assignment $a\circ\sigma$, and the case $r=\emptyset$ fails to
+provide us with a counterexample. So we now assume that $r=M\times
+M$. Then $1_{r}=1$ and going through the same calculations as above,
+we obtain $\beta(\sigma(\phi))(a)=1=\beta(\phi)(a\circ\sigma)$. So
+once again, we fail to obtain our desired counterexample. So we now
+consider a more complicated model with two elements namely
+$M=2=\{0,1\}$. There are two possible assignments $a:W\to M$
+depending on whether $a(u)=0$ or $a(u)=1$. Since we have not yet
+chosen any relation $r\subseteq M\times M$, it is easy to believe
+that choosing the assignment $a(u)=0$ bears no loss of generality.
+Now we want to find a relation $r$ on $M$ so that $\forall y(x\in
+y)$ and $\forall u(u\in u)$ have different truth value in $(M,r)$.
+For example, we want $\forall y(x\in y)$ to be true and $\forall
+u(u\in u)$ to be false. Loosely speaking, since $a\circ\sigma(x)=0$
+we want $\forall y(0\in y)$ to be true while $\forall u(u\in u)$ is
+false. So let us pick $r=\{(0,0),(0,1)\}$. Then we have:
+    \begin{eqnarray*}
+    \beta(\sigma(\phi))(a)&=&\beta(\,\forall u(u\in u)\,)(a)\\
+    &=&\min\left\{\beta(u\in u)(b)\ :\ b=a\mbox{\ on\ }W_{u}\right\}\\
+    \mbox{for any\ }b:W\to M\ \rightarrow&\leq&\beta(u\in u)(b)\\
+    &=&1_{r}(b(u),b(u))\\
+    \mbox{choosing\ }b(u)=1\ \rightarrow&=&1_{r}(1,1)\\
+    (1,1)\not\in r\ \rightarrow&=&0
+    \end{eqnarray*}
+and:
+    \begin{eqnarray*}
+    \beta(\phi)(a\circ\sigma)&=&\beta(\,\forall y(x\in y)\,)(a\circ\sigma)\\
+    &=&\min\left\{\beta(x\in y)(c)\ :\ c=a\circ\sigma\mbox{\ on\
+    }V_{y}\right\}\\
+    c_{1}(y)=0\mbox{\ while\ }c_{2}(y)=1\ \rightarrow
+    &=&\beta(x\in y)(c_{1})\land\beta(x\in y)(c_{2})\\
+    &=&1_{r}(c_{1}(x),c_{1}(y))\land 1_{r}(c_{2}(x),c_{2}(y))\\
+    &=&1_{r}(c_{1}(x),0)\land 1_{r}(c_{2}(x),1)\\
+    x\in V_{y}\ \rightarrow
+    &=&1_{r}(a\circ\sigma(x),0)\land 1_{r}(a\circ\sigma(x),1)\\
+    &=&1_{r}(0,0)\land 1_{r}(0,1)\\
+    &=& 1\land 1\\
+    &=&1
+    \end{eqnarray*}
+So we have found a counterexample to
+equation~(\ref{logic:eqn:FOPL:semsubthe:lemma}) in the case when
+$\sigma$ is not a valid substitution for $\phi\in\pv$. We shall now
+establish the positive result:
+
+\index{substitution@Substitution lemma valid}
+\begin{prop}\label{logic:prop:FOPL:model:valid:substitution}
+Let $V,W$ be sets and $\sigma:V\to W$ be a map. Let $M$ be a model
+of \pv\ and ${\bf P}(W)$ with associated model valuation functions
+denoted $\beta$. Then for all $\phi\in\pv$ and assignment $a:W\to
+M$, if $\sigma$ is valid for $\phi$ we have:
+    \[
+    \beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)
+    \]
+where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated
+substitution mapping.
+\end{prop}
+\begin{proof}
+Note that the '$\beta$' appearing on the left-hand-side is the model
+valuation function $\beta:{\bf P}(W)\to{\cal P}(M^{W})$ while the
+'$\beta$' appearing on the right-hand-side is the model valuation
+function $\beta:\pv\to{\cal P}(M^{V})$. Recall that
+$\sigma:\pv\to{\bf P}(W)$ is the associated substitution mapping as
+per definition~(\ref{logic:def:substitution}) and consequently
+$\sigma(\phi)\in{\bf P}(W)$ whenever $\phi\in\pv$. Finally, if
+$a:W\to M$ is an assignment, then $a\circ\sigma:V\to M$ is also an
+assignment. So everything makes sense. Given $M$ and $\sigma:V\to
+W$, for all $\phi\in\pv$ we need to prove that for all $a:W\to M$:
+    \[
+    (\mbox{$\sigma$ valid for $\phi$})\ \Rightarrow\
+    \beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)
+    \]
+We shall do so by a structural induction argument, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\phi=(x\in y)$ where $x,y\in V$. Let $a:W\to M$. Then $\sigma$ is
+always valid for $\phi$ and denoting $r\subseteq M\times M$ the
+relation on $M$ we have:
+    \begin{eqnarray*}
+    \beta(\sigma(\phi))(a)&=&\beta(\sigma(x\in y))(a)\\
+    &=&\beta(\,\sigma(x)\in\sigma(y)\,)(a)\\
+    &=&1_{r}(\,a(\sigma(x))\,,\,a(\sigma(y))\,)\\
+    &=&1_{r}(\,a\circ\sigma(x)\,,\,a\circ\sigma(y)\,)\\
+    &=&\beta(x\in y)(a\circ\sigma)\\
+    &=&\beta(\phi)(a\circ\sigma)\\
+    \end{eqnarray*}
+We now assume that $\phi=\bot$. Then given $a:W\to M$ we have:
+    \[
+    \beta(\sigma(\bot))(a)=\beta(\bot)(a)=0=\beta(\bot)(a\circ\sigma)
+    \]
+So we now assume that $\phi=\phi_{1}\to\phi_{2}$ where
+$\phi_{1},\phi_{2}\in\pv$ satisfy our property. We need to show the
+same is true of $\phi$. So let $a:W\to M$ be an assignment and
+suppose $\sigma$ is valid for $\phi$. We need to show
+$\beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)$. However,
+using proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}),
+$\sigma$ is valid for both $\phi_{1}$ and $\phi_{2}$. Hence the
+equation is true both for $\phi_{1}$ and $\phi_{2}$ and consequently
+we have:
+    \begin{eqnarray*}
+    \beta(\sigma(\phi))(a)&=&\beta(\sigma(\phi_{1}\to\phi_{2}))(a)\\
+    &=&\beta(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)(a)\\
+    &=&\beta(\sigma(\phi_{1}))(a)\to\beta(\sigma(\phi_{2}))(a)\\
+    &=&\beta(\phi_{1})(a\circ\sigma)\to\beta(\phi_{2})(a\circ\sigma)\\
+    &=&\beta(\phi_{1}\to\phi_{2})(a\circ\sigma)\\
+    &=&\beta(\phi)(a\circ\sigma)\\
+    \end{eqnarray*}
+So we now assume that $\phi=\forall x\phi_{1}$ where $x\in V$ and
+$\phi_{1}\in\pv$ satisfy our property. We need to show the same is
+true for $\phi$. So let $a:W\to M$ be an assignment and suppose
+$\sigma$ is valid for $\phi$. We want
+$\beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)$. However,
+from proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}),
+$\sigma$ is also valid for $\phi_{1}$. Hence, the equation is true
+for $\phi_{1}$ and any assignment $b:W\to M$. It follows that:
+    \begin{eqnarray*}
+    \beta(\sigma(\phi))(a)&=&\beta(\sigma(\forall x\phi_{1}))(a)\\
+    &=&\beta(\,\forall\sigma(x)\sigma(\phi_{1})\,)(a)\\
+    &=&\min\left\{\,\beta(\sigma(\phi_{1}))(b)\ :\ b=a\mbox{\ on\ }W_{\sigma(x)}\,\right\}\\
+    &=&\min\left\{\,\beta(\phi_{1})(b\circ\sigma)\ :\ b=a\mbox{\ on\ }W_{\sigma(x)}\,\right\}\\
+    \mbox{A: to be proved}\ \rightarrow
+    &=&\min\left\{\,\beta(\phi_{1})(k)\ :\ k=a\circ\sigma\mbox{\ on\ }V_{x}\,\right\}\\
+    &=&\beta(\forall x\phi_{1})(a\circ\sigma)\\
+    &=&\beta(\phi)(a\circ\sigma)\\
+    \end{eqnarray*}
+So it remains to prove point A, for which it is sufficient to show
+the set equality:
+    \[
+    X=\left\{\,\beta(\phi_{1})(b\circ\sigma)\ :\ b=a\mbox{\ on\ }W_{\sigma(x)}\,\right\}
+    = \left\{\,\beta(\phi_{1})(k)\ :\ k=a\circ\sigma\mbox{\ on\
+    }V_{x}\,\right\}=Y
+    \]
+First we show that $X\subseteq Y$. So let $\epsilon\in X$. There
+exists an assignment $b:W\to M$ which coincides with $a$ on
+$W\setminus\{\sigma(x)\}$ such that
+$\epsilon=\beta(\phi_{1})(b\circ\sigma)$. We need to show that
+$\epsilon\in Y$. Define the assignment $k:V\to M$ by setting
+$k=a\circ\sigma$ on $V\setminus\{x\}$ and $k(x)=b\circ\sigma(x)$. In
+order to show that $\epsilon\in Y$ it is sufficient to show that
+$\epsilon=\beta(\phi_{1})(k)$. So we need to show that
+$\beta(\phi_{1})(b\circ\sigma)=\beta(\phi_{1})(k)$. Using
+proposition~(\ref{logic:prop:FOPL:model:assignment:support}), it is
+sufficient to prove that $b\circ\sigma$ and $k$ coincide on
+$\free(\phi_{1})$. So let $u\in\free(\phi_{1})$. We need to show
+that $b\circ\sigma(u)=k(u)$. We shall distinguish two cases: first
+we assume that $u=x$. Then $b\circ\sigma(x)=k(x)$ is true by
+definition of $k$. Next we assume that $u\neq x$. Then
+$u\in\free(\phi_{1})\setminus\{x\}=\free(\phi)$. From the validity
+of $\sigma$ for $\phi$ and
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) we obtain
+$\sigma(u)\neq\sigma(x)$. It follows that $a$ and $b$ coincide on
+$\sigma(u)$ i.e. $a\circ\sigma(u)=b\circ\sigma(u)$. However by
+definition, the assignment $k$ coincides with $a\circ\sigma$ on
+$V\setminus\{x\}$. Since $u\neq x$ we obtain $k(u)=a\circ\sigma(u)$
+and it follows that $b\circ\sigma(u)=k(u)$ as requested. So we now
+show that $Y\subseteq X$: let $\epsilon\in Y$. There exists an
+assignment $k:V\to M$ which coincides with $a\circ\sigma$ on
+$V\setminus\{x\}$ such that $\epsilon=\beta(\phi_{1})(k)$. We need
+to show that $\epsilon\in X$. Define the assignment $b:W\to M$ by
+setting $b=a$ on $W\setminus\{\sigma(x)\}$ and $b(\sigma(x))=k(x)$.
+In order to show that $\epsilon\in X$ it is sufficient to prove that
+$\epsilon=\beta(\phi_{1})(b\circ\sigma)$. So we need to show that
+$\beta(\phi_{1})(b\circ\sigma)=\beta(\phi_{1})(k)$, for which we
+shall pretty much repeat our previous argument: using
+proposition~(\ref{logic:prop:FOPL:model:assignment:support}), it is
+sufficient to prove that $b\circ\sigma$ and $k$ coincide on
+$\free(\phi_{1})$. So let $u\in\free(\phi_{1})$. We need to show
+that $b\circ\sigma(u)=k(u)$. We shall distinguish two cases: first
+we assume that $u=x$. Then $b\circ\sigma(x)=k(x)$ is true by
+definition of $b$. Next we assume that $u\neq x$. Then
+$u\in\free(\phi_{1})\setminus\{x\}=\free(\phi)$. From the validity
+of $\sigma$ for $\phi$ and
+proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) we obtain
+$\sigma(u)\neq\sigma(x)$.  However by definition, the assignment $b$
+coincides with $a$ on $W\setminus\{\sigma(x)\}$. Since
+$\sigma(u)\neq\sigma(x)$ we obtain
+$b\circ\sigma(u)=a\circ\sigma(u)$. Furthermore, since the assignment
+$k$ coincide with $a\circ\sigma$ on $V\setminus\{x\}$ and $u\neq x$
+we have $a\circ\sigma(u)=k(u)$ and it follows that
+$b\circ\sigma(u)=k(u)$.
+\end{proof}
+
+So we know that
+$\beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)$ whenever
+$\sigma:V\to W$ is valid for $\phi\in\pv$ and $a:W\to M$ is an
+arbitrary assignment. As we have done on several occasions before,
+we would like to extend this formula from valid substitutions to
+essential substitutions of
+definition~(\ref{logic:def:FOPL:esssubstprop:essential}). So we need
+to say something about minimal transforms of
+definition~(\ref{logic:def:FOPL:mintransform:transform}). So let $V$
+be a set with minimal extension $\bar{V}$. Given $\phi\in\pv$ with
+minimal transform the formula ${\cal M}(\phi)\in\pvb$, we know that
+$\phi$ and ${\cal M}(\phi)$ are essentially the same formula where
+the bound variables of $\phi$ have been replaced with elements of
+\N. So we would expect the {\em truth} of the formula $\phi$ in a
+model $M$ under an assignment $a:V\to M$ to be equivalent to the
+{\em truth} of ${\cal M}(\phi)$ under the same assignment. More
+precisely, whichever way we decide to extend the assignment $a:V\to
+M$ into an assignment $a^{*}:\bar{V}\to M$, since every $n\in\N$
+cannot be a free variable of the minimal transform ${\cal M}(\phi)$,
+we know from the relevance lemma of
+proposition~(\ref{logic:prop:FOPL:model:assignment:support}) that
+$\beta({\cal M}(\phi))(a^{*})$ will essentially depend on $a$ and
+not on the specifics of the extension $a^{*}$. In fact, we expect
+$\beta({\cal M}(\phi))(a^{*})=\beta(\phi)(a)$\,:
+\begin{prop}\label{logic:prop:FOPL:model:min:transform}
+Let $V$ be a set with minimal extension $\bar{V}$. Let $M$ be a
+model of\, \pv\ and \pvb\ with associated model valuation functions
+denoted $\beta$. Let $a:V\to M$ and $a^{*}:\bar{V}\to M$ be an
+arbitrary extension of $a$. For all $\phi\in\pv$\,:
+    \begin{equation}\label{logic:eqn:FOPL:model:min:transform:1}
+    \beta({\cal M}(\phi))(a^{*})=\beta(\phi)(a)
+    \end{equation}
+where ${\cal M}(\phi)\in\pvb$ is the minimal transform of $\phi$ as
+per {\em definition~(\ref{logic:def:FOPL:mintransform:transform})}.
+\end{prop}
+\begin{proof}
+Given $\phi\in\pv$ we need to show that for any assignment $a:V\to
+M$ and any extension $a^{*}:\bar{V}\to M$, the
+equality~(\ref{logic:eqn:FOPL:model:min:transform:1}) holds. We
+shall do so by structural induction, using
+theorem~(\ref{logic:the:proof:induction}) of
+page~\pageref{logic:the:proof:induction}. First we assume that
+$\phi=(x\in y)$ where $x,y\in V$. Let $a:V\to M$ and
+$a^{*}:\bar{V}\to M$ be an extension of $a$. Then, denoting
+$r\subseteq M\times M$ the relation on $M$, we have:
+    \begin{eqnarray*}
+    \beta({\cal M}(\phi))(a^{*})&=&\beta({\cal M}(x\in y))(a^{*})\\
+    &=&\beta(x\in y)(a^{*})\\
+    &=&1_{r}(a^{*}(x),a^{*}(y))\\
+    a^{*}_{|V}=a\ \rightarrow&=&1_{r}(a(x),a(y))\\
+    &=&\beta(x\in y)(a)\\
+    &=&\beta(\phi)(a)\\
+    \end{eqnarray*}
+Next we assume that $\phi=\bot$. Given $a:V\to M$ and extension
+$a^{*}:\bar{V}\to M$\,:
+    \[
+    \beta({\cal M}(\bot))(a^{*})=\beta(\bot)(a^{*})=0=\beta(\bot)(a)
+    \]
+So we now assume that $\phi=\phi_{1}\to\phi_{2}$ where
+$\phi_{1},\phi_{2}\in\pv$ are such that for all $a:V\to M$ and
+extension $a^{*}:\bar{V}\to M$, the
+equality~(\ref{logic:eqn:FOPL:model:min:transform:1}) holds. We need
+to show the same is true of $\phi$. So let $a:V\to M$ with extension
+$a^{*}:\bar{V}\to M$\,:
+    \begin{eqnarray*}
+    \beta({\cal M}(\phi))(a^{*})&=&\beta({\cal M}(\phi_{1}\to\phi_{2}))(a^{*})\\
+    &=&\beta(\,{\cal M}(\phi_{1})\to{\cal M}(\phi_{2})\,)(a^{*})\\
+    &=&\beta({\cal M}(\phi_{1}))(a^{*})\to\beta({\cal M}(\phi_{2}))(a^{*})\\
+    &=&\beta(\phi_{1})(a)\to\beta(\phi_{2})(a)\\
+    &=&\beta(\phi_{1}\to\phi_{2})(a)\\
+    &=&\beta(\phi)(a)\\
+    \end{eqnarray*}
+Finally, we assume that $\phi=\forall x\phi_{1}$ where $x\in V$ and
+$\phi_{1}\in\pv$ is such that for all $a:V\to M$ and extension
+$a^{*}:\bar{V}\to M$, the
+equality~(\ref{logic:eqn:FOPL:model:min:transform:1}) holds. We need
+to show the same is true of $\phi$. So let $a:V\to M$ with extension
+$a^{*}:\bar{V}\to M$\,:
+    \begin{eqnarray*}
+    \beta({\cal M}(\phi))(a^{*})&=&\beta({\cal M}(\forall x\phi_{1}))(a^{*})\\
+    \mbox{$[n/x]$\ valid for\ }{\cal M}(\phi_{1})\ \rightarrow
+    &=&\beta(\,\forall n{\cal M}(\phi_{1})[n/x]\,)(a^{*})\\
+    &=&\min\left\{\beta(\,[n/x]\circ{\cal M}(\phi_{1})\,)(b^{*}):
+    b^{*}=a^{*}\mbox{\ on\ }\bar{V}_{n}\right\}\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:model:valid:substitution})}\ \rightarrow
+    &=&\min\left\{\beta({\cal M}(\phi_{1}))(\,b^{*}\circ[n/x]\,):
+    b^{*}=a^{*}\mbox{\ on\ }\bar{V}_{n}\right\}\\
+    &=&\min\left\{\beta(\phi_{1})(\,(b^{*}\circ[n/x])_{|V}\,):
+    b^{*}=a^{*}\mbox{\ on\ }\bar{V}_{n}\right\}\\
+    \mbox{A: to be proved}\ \rightarrow&=&\min\left\{\beta(\phi_{1})(b)\ :\
+    b=a\mbox{\ on\ }V_{x}\right\}\\
+    &=&\beta(\forall x\phi_{1})(a)\\
+    &=&\beta(\phi)(a)\\
+    \end{eqnarray*}
+So it remains to prove point A, for which it is sufficient to show
+the set equality:
+    \[
+    X=\left\{\beta(\phi_{1})(\,(b^{*}\circ[n/x])_{|V}\,):
+    b^{*}=a^{*}\mbox{\ on\ }\bar{V}_{n}\right\}=\left\{\beta(\phi_{1})(b)\ :\
+    b=a\mbox{\ on\ }V_{x}\right\}=Y
+    \]
+First we show that $X\subseteq Y$: so let $\epsilon\in X$. There
+exists an assignment $b^{*}:\bar{V}\to M$ such that $b^{*}=a^{*}$ on
+$\bar{V}\setminus\{n\}$ and
+$\epsilon=\beta(\phi_{1})(\,(b^{*}\circ[n/x])_{|V}\,)$. We need to
+show that $\epsilon\in Y$. Define the assignment $b:V\to M$ by
+setting $b=a$ on $V\setminus\{x\}$ and $b(x)= b^{*}(n)$. In order to
+show that $\epsilon\in Y$, it is sufficient to prove that
+$\epsilon=\beta(\phi_{1})(b)$. So we need to show that
+$\beta(\phi_{1})(\,(b^{*}\circ[n/x])_{|V}\,)=\beta(\phi_{1})(b)$.
+Using proposition~(\ref{logic:prop:FOPL:model:assignment:support}),
+it is sufficient to prove that $(b^{*}\circ[n/x])_{|V}$ and $b$
+coincide on $\free(\phi_{1})$. So let $u\in\free(\phi_{1})$. We need
+to prove that $b^{*}\circ[n/x](u)=b(u)$. We shall distinguish two
+cases: first we assume that $u=x$. Then we need to show that
+$b^{*}(n)=b(x)$ which is true by definition of $b$. Next we assume
+that $u\neq x$. Then we need to show that $b^{*}(u)=b(u)$. However,
+since $b^{*}=a^{*}$ on $\bar{V}\setminus\{n\}$ and $u\in V$, we have
+$u\neq n$ and consequently $b^{*}(u)=a^{*}(u)$. Furthermore, $a^{*}$
+is an extension of $a$ so $a^{*}(u)=a(u)$. So we need to show that
+$a(u)=b(u)$ which is true by definition of $b$ and $u\neq x$. We now
+show that $Y\subseteq X$: so let $\epsilon\in Y$. There exists an
+assignment $b:V\to M$ such that $b=a$ on $V\setminus\{x\}$ and
+$\epsilon=\beta(\phi_{1})(b)$. We need to show that $\epsilon\in X$.
+Define the assignment $b^{*}:\bar{V}\to M$ by setting $b^{*}=a^{*}$
+on $\bar{V}\setminus\{n\}$ and $b^{*}(n)=b(x)$. In order to show
+that $\epsilon\in X$ it is sufficient to prove that
+$\epsilon=\beta(\phi_{1})(\,(b^{*}\circ[n/x])_{|V}\,)$. Hence we
+need to show the equality
+$\beta(\phi_{1})(\,(b^{*}\circ[n/x])_{|V}\,)=\beta(\phi_{1})(b)$.
+Using proposition~(\ref{logic:prop:FOPL:model:assignment:support}),
+it is sufficient to prove that $(b^{*}\circ[n/x])_{|V}$ and $b$
+coincide on $\free(\phi_{1})$. So let $u\in\free(\phi_{1})$. We need
+to prove that $b^{*}\circ[n/x](u)=b(u)$. We shall distinguish two
+cases: first we assume that $u=x$. Then we need to show that
+$b^{*}(n)=b(x)$ which is true by definition of $b^{*}$. Next we
+assume that $u\neq x$. Then we need to show that $b^{*}(u)=b(u)$.
+However, since $b^{*}=a^{*}$ on $\bar{V}\setminus\{n\}$ and $u\in
+V$, we have $u\neq n$ and consequently $b^{*}(u)=a^{*}(u)$.
+Furthermore, $a^{*}$ is an extension of $a$ so $a^{*}(u)=a(u)$. So
+we need to show that $a(u)=b(u)$ which follows from $u\neq x$.
+\end{proof}
+
+Having established
+proposition~(\ref{logic:prop:FOPL:model:min:transform}) we are able
+to link the notions of minimal transform ${\cal M}(\phi)$ and that
+of model valuation function $\beta$. So we can now hope to prove the
+formula $\beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)$ in
+the general case when $\sigma:\pv\to{\bf P}(W)$ is an essential
+substitution as per
+definition~(\ref{logic:def:FOPL:esssubstprop:essential}). However
+before we do so, we need to check the formula makes sense in
+principle. So let $\sigma:\pv\to{\bf P}(W)$ be an essential
+substitution. Then $\sigma$ is associated to a unique map
+$\sigma:V\to W$ (also denoted $\sigma$) and for every map $a:W\to
+M$, we have a meaningful assignment $a\circ\sigma:V\to M$. Hence the
+expression $\beta(\phi)(\,a\circ\sigma\,)$ makes perfect sense for
+all $\phi\in\pv$. However, we know from
+proposition~(\ref{logic:prop:FOPL:esssubstprop:redefine}) that any
+essential substitution $\sigma:\pv\to{\bf P}(W)$ can be redefined
+arbitrarily modulo the substitution congruence, without changing its
+associated map $\sigma:V\to W$. So the formula
+$\beta(\sigma(\phi))(a)=\beta(\phi)(\,a\circ\sigma\,)$ cannot be
+true unless $\beta(\,\cdot\,)(a)$ is invariant with respect to a
+particular choice of formula modulo substitution. The following
+proposition ensures this is the case. As we shall soon discover from
+theorem~(\ref{logic:the:FOPL:soundness:soundness:2}) of
+page~\pageref{logic:the:FOPL:soundness:soundness:2},
+$\beta(\,\cdot\,)(a)$ is in fact a valuation and
+proposition~(\ref{logic:prop:FOPL:model:subcong}) below is therefore
+a particular case of
+proposition~(\ref{logic:prop:FOPL:semantics:stronger:congruence}).
+\begin{prop}\label{logic:prop:FOPL:model:subcong}
+Let $V$ be a set and $M$ be a model of\, \pv\ with model valuation
+function $\beta$. Then for all $\phi,\psi\in\pv$ and assignment
+$a:V\to M$\,:
+    \[
+    \phi\sim\psi\ \Rightarrow\ \beta(\phi)(a)=\beta(\psi)(a)
+    \]
+where $\sim$ denotes the substitution congruence on \pv.
+\end{prop}
+\begin{proof}
+Let $\phi,\psi\in\pv$ such that $\phi\sim\psi$ and let $a:V\to M$ be
+an assignment. We need to show that $\beta(\phi)(a)=\beta(\psi)(a)$.
+We shall distinguish two cases: first we assume that there exists an
+assignment $a^{*}:\bar{V}\to M$ which is an extension of $a$. Then
+using proposition~(\ref{logic:prop:FOPL:model:min:transform}) we
+obtain the following equalities:
+    \[
+    \beta(\phi)(a)=\beta({\cal M}(\phi))(a^{*})=\beta({\cal
+    M}(\psi))(a^{*})=\beta(\psi)(a)
+    \]
+where we have used the fact that ${\cal M}(\phi)={\cal M}(\psi)$,
+itself a consequence of $\phi\sim\psi$ and
+theorem~(\ref{logic:the:FOPL:mintransfsubcong:kernel}) of
+page~\pageref{logic:the:FOPL:mintransfsubcong:kernel}. Next we
+assume that there exists no extension $a^{*}:\bar{V}\to M$. This can
+only be the case when $M=\emptyset$. Otherwise, pick an arbitrary
+$m^{*}\in M$ and define $a^{*}(n)=m^{*}$ for all $n\in\N$. Now if
+$M=\emptyset$, the only possible assignment $a:V\to M$ is the map
+with empty domain, i.e. $a=\emptyset$. It follows that $V=\emptyset$
+and consequently from definition~(\ref{logic:def:sub:congruence}),
+the substitution congruence on \pv\ is generated by the empty set.
+Hence from the equivalence $\phi\sim\psi$ we obtain $\phi=\psi$ and
+the equality $\beta(\phi)(a)=\beta(\psi)(a)$ follows.
+\end{proof}
+
+We are now ready to prove our next theorem which extends
+proposition~(\ref{logic:prop:FOPL:model:valid:substitution}) to
+essential substitutions and is commonly known as the {\em
+Substitution Lemma}.
+
+\index{substitution@Substitution lemma essential}
+\begin{theorem}\label{logic:the:FOPL:model:essential:substitution}
+Let $V,W$ be sets and $\sigma:\pv\to{\bf P}(W)$ be an essential
+substitution. Let $M$ be a model of \pv\ and ${\bf P}(W)$ with model
+valuation functions~$\beta$. Then for all $\phi\in\pv$ and
+assignment $a:W\to M$, we have the equality:
+    \begin{equation}\label{logic:eqn:FOPL:model:essential:substitution:1}
+    \beta(\sigma(\phi))(a)=\beta(\phi)(a\circ\sigma)
+    \end{equation}
+\end{theorem}
+\begin{proof}
+Note that the '$\sigma$' appearing on the right-hand-side of
+equation~(\ref{logic:eqn:FOPL:model:essential:substitution:1}) is
+the map $\sigma:V\to W$ associated with the essential substitution
+$\sigma:\pv\to{\bf P}(W)$, i.e. the unique map $\sigma$ such that
+${\cal M}\circ\sigma=\bar{\sigma}\circ{\cal M}$ as per
+definition~(\ref{logic:def:FOPL:esssubstprop:essential}). So if
+$a:W\to M$ is an assignment then $a\circ\sigma:V\to M$ is also an
+assignment. Now given $\phi\in\pv$ and an assignment $a:W\to M$, we
+need to prove
+equation~(\ref{logic:eqn:FOPL:model:essential:substitution:1}). We
+shall distinguish two cases: first we assume there exists an
+extension $a^{*}:\bar{W}\to M$ of the assignment $a$. Then using
+proposition~(\ref{logic:prop:FOPL:model:min:transform}) we obtain:
+    \begin{eqnarray*}
+    \beta(\sigma(\phi))(a)&=&\beta(\,{\cal M}\circ\sigma(\phi)\,)(a^{*})\\
+    \mbox{def.~(\ref{logic:def:FOPL:esssubstprop:essential})}\ \rightarrow
+    &=&\beta(\,\bar{\sigma}\circ{\cal M}(\phi)\,)(a^{*})\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:model:valid:substitution}),
+    $\bar{\sigma}$ valid for ${\cal M}(\phi)$}\ \rightarrow
+    &=&\beta({\cal M}(\phi))(\,a^{*}\circ\bar{\sigma}\,)\\
+    \mbox{prop.~(\ref{logic:prop:FOPL:model:min:transform})}\ \rightarrow
+    &=&\beta(\phi)(\,(a^{*}\circ\bar{\sigma})_{|V}\,)\\
+    \bar{\sigma}_{|V}=\sigma,\ a^{*}_{|W}=a\ \rightarrow
+    &=&\beta(\phi)(a\circ\sigma)\\
+    \end{eqnarray*}
+We now assume that there exists no extension $a^{*}:\bar{W}\to M$.
+This can only be the case when $M=\emptyset$. Otherwise, pick an
+arbitrary $m^{*}\in M$ and define $a^{*}(n)=m^{*}$ for all $n\in\N$.
+Now if $M=\emptyset$, the only possible assignment $a:W\to M$ is the
+map with empty domain, i.e. $a=\emptyset$. It follows that
+$W=\emptyset$. However, since $\sigma:\pv\to{\bf P}(W)$ is an
+essential substitution, using
+theorem~(\ref{logic:the:FOPL:esssubst:existence}) of
+page~\pageref{logic:the:FOPL:esssubst:existence} we see that
+$V=\emptyset=W$. From definition~(\ref{logic:def:sub:congruence})
+the substitution congruence on \pv\ is generated by the empty set
+and therefore coincides with the equality. Using
+proposition~(\ref{logic:prop:FOPL:esssubstprop:charac}) it follows
+that
+$\sigma(\phi_{1}\to\phi_{2})=\sigma(\phi_{1})\to\sigma(\phi_{2})$
+for all $\phi_{1},\phi_{2}\in\pv$, and $\sigma(\bot)=\bot$. A simple
+induction argument shows that $\sigma:\pv\to\pv$ coincides with the
+identity mapping, which is associated to the empty mapping
+$\sigma:V\to V$ as per
+definition~(\ref{logic:def:FOPL:esssubstprop:essential}) since
+${\cal M}\circ\sigma=\bar{\emptyset}\circ{\cal M}$, as the minimal
+extension $\bar{\emptyset}:\bar{V}\to\bar{V}$ is simply the identity
+on \N. So $a\circ\sigma$ is the empty assignment and the
+equality~(\ref{logic:eqn:FOPL:model:essential:substitution:1})
+follows.
+\end{proof}
