@@ -5,5 +5,6 @@ HOME=/home/john/Prog/tex
 cd ${HOME}
 
 ./logic/clean.sh
+./notes/clean.sh
 
 cd ${DIR}
