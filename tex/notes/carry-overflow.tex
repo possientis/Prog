@@ -117,7 +117,10 @@ one of the fundamental primitives of a CPU. So whenever an addition $x+y$ is
 perfomed, the carry flag will be set or cleared, depending on whether 
 $c(x,y)=1$ or $c(x,y)=0$. The ability to test this carry flag and introduce
 branching instructions in the code which depend on the outcome is also one
-of the primitives of computer hardware. This in turn allows us to compare:
+of the primitives of computer hardware. While we have not yet discussed 
+the {\em carry} following a subtraction, this carry is essentially the same 
+bit being set or cleared after the operation is performed, and as will
+shall see the ability to test this flag allows us to compare:
 
 
 \begin{defin}\label{carry:order:zq}
@@ -125,17 +128,23 @@ of the primitives of computer hardware. This in turn allows us to compare:
 \end{defin}
 
 Mathematically speaking, the order $\leq$ thus defined on \zq\ may 
-not be very interesting. However, it is interesting to us as it is 
-a relation which can be tested by a CPU (As we shall see, it can
-be tested using the {\em carry for subtraction}).
-Note that having defined the relation $\leq$ on \zq, we have implicitely 
-defined $<$, $>$ and $>=$, and since we can test these conditions, 
+not be very interesting as it is not compatible with addition 
+(the inequality $x\leq y$ does not imply $x+z\leq y+z$). 
+However, it is interesting to us as it is 
+a relation which can be tested by a CPU (as mentioned, it can
+be tested using the {\em carry for subtraction}). It is also 
+interesting because it is defined to perfectly mimic the 
+inequality $x^{*} \leq y^{*}$ satisfied or not by the natural 
+numbers represented by $x$ and $y$. Note that having defined 
+the relation $\leq$ on \zq, we have implicitely defined $>$, 
+$\geq$ and $<$, and since we can test these conditions
+(the {\em zero} flag allows us to test equality), 
 we are able to compute the corresponding binary $\min$ and $\max$ 
 functions. So while definition~(\ref{carry:unsigned:add:carry}) 
 relies on the quantity $x^{*}+y^{*}$ which we cannot compute,
 the following proposition defines the {\em carry for addition} in
-terms of conditions which can all be easily tested in assembly
-language, thereby offering a possible validation.
+terms of conditions which can easily be tested in assembly
+language:
 
 \begin{prop}\label{carry:unsigned:add:criterium}
   For all $x,y\in\zq$, the following are equivalent:
@@ -300,12 +309,12 @@ of $-128\in\Z$ is $128\in\zq$ and the two's complement representation of
 $-1\in\Z$ is $255\in\zq$.
 
 \begin{prop}
-The map $r:\zq\rightarrow\Z\cap[-q/2,q/2[$ is indeed a bijection.
+  The map $r:\zq\rightarrow\Z\cap[-q/2,q/2[$ is indeed a bijection.
 \end{prop}
 \begin{proof}
 First we show that $r$ is injective. So suppose $r(x)=r(y)$ for some 
 $x,y\in\zq$. We need to show that $x=y$ or equivalently that 
-$x^{*}=y^{*}$. We consider $4$ cases:
+$x^{*}=y^{*}$. Consider four cases:
   \begin{itemize}
     \item $x\in[0,q/2[$ and $y\in[0,q/2[$: then $r(x)=x^{*}$ and $r(y)=y^{*}$
       and the equality $r(x)=r(y)$ yield $x^{*}=y^{*}$ as requested.
@@ -320,17 +329,162 @@ $x^{*}=y^{*}$. We consider $4$ cases:
       requested.
   \end{itemize}
 We now show that $r$ is surjective. So let $n$ be an integer in $[-q/2,q/2[$.
-  We need to show the existence of $x\in\zq$ such that $n=r(x)$. We consider
-  $2$ cases:
+  We need to show the existence of $x\in\zq$ such that $n=r(x)$. Define $x$
+  simply to be the class of $n$ modulo $q$. We need to check that $r(x)=n$. 
+  Consider two cases:
   \begin{itemize}
-    \item $n\in[-q/2,0[$: then $n+q\in[q/2,q[$ and defining $x\in\zq$ to be
-      the class of $n$ modulo
+    \item $n\in[-q/2,0[$: then $n+q\in[q/2,q[$. Hence we see that $n+q\in[0,q[$
+      while being equal to $x$ modulo $q$. It follows that $x^{*}=n+q\in[q/2,q[$
+      from which we obtain $r(x) = x^{*} - q = n$ as requested.
+    \item $n\in[0,q/2[$: then $n\in[0,q[$ while being equal to $x$ modulo $q$.
+      It follows that $x^{*}=n\in[0,q/2[$ from which we obtain $r(x)=x^{*}=n$
+      as requested.
   \end{itemize}
- 
 \end{proof}
 
+Hence we see that the {\em representable} integers belonging to $[-q/2,q/2[$
+are in fact the range of the two's complement representation mapping
+$r:\zq\rightarrow\Z$. If $r(x)$ and $r(y)$ are two {\em representable} 
+integers, the fundamental question for us is whether $x+y$ is a 
+representation of the sum $r(x)+r(y)$. As it turns out, the answer is once 
+again 'yes' provided of course that $r(x)+r(y)$ is {\em representable}. 
+This result may be regarded as somewhat of a miracle: despite its relative
+complexity, the two's complement representation allows us to compute 
+the sum $r(x)+r(y)\in\Z$ simply by 
+performing the standard operation $x+y\in\zq$. 
+\begin{prop}\label{carry:signed:add:morphism}
+  For all $x,y\in\zq$, the following are equivalent:
+    \begin{eqnarray*}
+      (i)&\ &r(x)+r(y)\in[-q/2,q/2[\\
+      (ii)&\ &r(x+y)=r(x)+r(y)
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+  The implication $(ii)\Rightarrow(i)$ is clear. It remains to show 
+  $(i)\Rightarrow(ii)$, for which we shall consider four difference cases:
+  \begin{itemize}
+    \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case we have $r(x)=x^{*}$
+      and $r(y)=y^{*}$ and condition $(i)$ reduces to $x^{*}+y^{*}\in[-q/2,q/2[$
+      which in fact is equivalent to $x^{*}+y^{*}\in[0,q/2[$ (since $x^{*}+y^{*}$
+      is never negative). So if $(i)$ is true, we see that $x^{*}+y^{*}\in[0,q[$
+      while being equal to $x+y$ modulo $q$, which in turn implies that 
+      $(x+y)^{*}=x^{*}+y^{*}\in[0,q/2[$ from which we obtain 
+      $r(x+y)=(x+y)^{*}=x^{*}+y^{*}=r(x)+r(y)$ which is condition $(ii)$. 
+    \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case we have $r(x)=x^{*}$
+      and $r(y)=y^{*}-q$ and condition $(i)$ reduces to 
+      $x^{*}+y^{*}-q\in[-q/2,q/2[$ or equivalently $x^{*}+y^{*}\in[q/2,3q/2[$
+      which is always true in this case (since $x^{*}\in[0,q/2[$ and 
+      $y^{*}\in[q/2,q[$). So we simply need to prove that $r(x+y)=r(x)+r(y)$,
+      for which we shall consider two further cases: First we assume that
+      $x^{*}+y^{*}-q\in[-q/2,0[$. Then we see that $x^{*}+y^{*}\in[q/2,q[$
+      while being equal to $x+y$ modulo $q$. It follows that 
+      $(x+y)^{*}=x^{*}+y^{*}\in[q/2,q[$ and consequently 
+      $r(x+y)= (x+y)^{*}-q=x^{*}+y^{*}-q = r(x)+r(y)$ as requested.
+      We now assume that $x^{*}+y^{*}-q\in[0,q/2[$. Since it is also equal
+      to $x+y$ modulo $q$ we obtain $(x+y)^{*}=x^{*}+y^{*}-q\in[0,q/2[$.
+      It follows that $r(x+y)=(x+y)^{*}=x^{*}+y^{*}-q = r(x)+r(y)$ as 
+      requested.
+    \item $x\in[q/2,q[$ and $y\in[0,q/2[$: addition being commutative
+      in \Z\ and \zq, we can conclude that $r(x+y)=r(x)+r(y)$ from
+      the previous case.
+    \item $x\in[q/2,q[$ and $y\in[q/2,q[$: in this case we have $r(x)=x^{*}-q$
+      and $r(y)=y^{*}-q$ and condition $(i)$ reduces to 
+      $x^{*}+y^{*}-2q\in[-q/2,q/2[$ which is $x^{*}+y^{*}-q\in[q/2,3q/2[$
+      which is in fact equivalent to $x^{*}+y^{*}-q\in[q/2,q[$ (since 
+      $x^{*}\in[q/2,q[$ and $y^{*}\in[q/2,q[$). Hence we see that $(i)$ 
+      implies $x^{*}+y^{*}-q\in[q/2,q[$ while being equal to $x+y$ modulo
+      $q$. It follows that $(x+y)^{*}=x^{*}+y^{*}-q\in[q/2,q[$ and
+      consequently $r(x+y) = (x+y)^{*}-q=x^{*}+y^{*}-2q=r(x)+r(y)$ as 
+      requested.
+  \end{itemize}
+\end{proof}
 
+As we can see from propostion~(\ref{carry:signed:add:morphism}) there 
+may be cases where $x+y\in\zq$ fails to be a representation of the sum
+$r(x)+r(y)\in\Z$. The condition under which this anomaly arises is 
+called an {\em overflow} rather than {\em carry}:
 
+\begin{defin}\label{carry:signed:add:overflow}
+We call {\em overflow for addition} the map $o:\zq\!\times\!\zq\rightarrow2$ defined by:
+  \[
+    o(x,y) = 1  \ \ \Leftrightarrow\ \ r(x)+r(y)\not\in[-q/2,q/2[
+  \]
+\end{defin}
 
+As before, this definition is not terribly useful, unless we have some way
+of determining when an overflow situation arises:
+
+\begin{prop}\label{carry:signed:add:criterium}
+  For all $x,y\in\zq$, we have $o(x,y)=1$ \ifand:
+  \[
+    x\in[0,q/2[\mbox{\ and\ }y\in[0,q/2[\mbox{\ and\ }x+y\in[q/2,q[
+  \]
+or:
+  \[
+    x\in[q/2,q[\mbox{\ and\ }y\in[q/2,q[\mbox{\ and\ }x+y\in[0,q[
+  \]
+where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of 
+  definition~(\ref{carry:signed:add:overflow}).
+\end{prop}
+\begin{proof}
+  First we assume that $x\in[0,q/2[$, $y\in[0,q/2[$ and $x+y\in[q/2,q[$, and 
+  we need to show that $o(x,y)=1$ or equivalently $r(x)+r(y)\not\in[-q/2,q/2[$.
+  However in this case, we have $r(x)=x^{*}$ and $r(y)=y^{*}$ and 
+  $x^{*}+y^{*}\in[0,q[$ (since $x^{*}\in[0,q/2[$ and $y^{*}\in[0,q/2[$).
+  Since $x^{*}+y^{*}$ is equal to $x+y$ modulo $q$ we obtain
+  $(x+y)^{*}=x^{*}+y^{*}$ and the assumption $x+y\in[q/2,q[$ therefore
+  yields $x^{*}+y^{*}\in[q/2,q[$ which is $r(x)+r(y)\in[q/2,q[$. So we see
+  that $r(x)+r(y)$ does not belong to $[-q/2,q/2[$ as requested.
+
+  Next we assume that $x\in[q/2,q[$, $y\in[q/2,q[$ and $x+y\in[0,q/2[$,
+  and we need to show that $o(x,y)=1$ or equivalently 
+  $r(x)+r(x)\not\in[-q/2,q/2[$. However in this case, we have $r(x)=x^{*}-q$
+  and $r(y)=y^{*}-q$ and $x^{*}+y^{*}-q\in[0,q[$ (since $x^{*}\in[q/2,q[$
+  and $y^{*}\in[q/2,q[$). Since $x^{*}+y^{*}-q$ is equal to $x+y$ modulo $q$
+  we obtain $(x+y)^{*}=x^{*}+y^{*}-q$ and the assumption $x+y\in[0,q/2[$
+  therefore yields $x^{*}+y^{*}-q\in[0,q/2[$ which is $r(x)+r(y)\in[-q,-q/2[$.
+  So we see that $r(x)+r(y)$ does not belong to $[-q/2,q/2[$ as requested.
+
+  Conversely we assume that $o(x,y)=1$ or equivalently that 
+  $r(x)+r(x)\not\in[-q/2,q/2[$ and we need to show that one of
+  the two propeties of proposition~(\ref{carry:signed:add:criterium})
+  is satisfied. We shall distinguish four cases:
+  \begin{itemize}
+    \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case, we only
+      need to prove that $x+y\in[q/2,q[$ in order to prove the first 
+      property of proposition~(\ref{carry:signed:add:criterium}).
+      However, in this case we have $r(x)=x^{*}$ and $r(y)=y^{*}$
+      and the condition $o(x,y)=1$ reduces to $x^{*}+y^{*}\not\in[-q/2,q/2[$
+      which is equivalent to $x^{*}+y^{*}\not\in[0,q/2[$ (since $x^{*}+y^{*}$ 
+      cannot be negative). However we know that $x^{*}+y^{*}\in[0,q[$ 
+      (since $x^{*}\in[0,q/2[$ and $y^{*}\in[0,q/2[$) and it follows
+      that $x^{*}+y^{*}\in[q/2,q[$. Furthermore, since $x^{*}+y^{*}$ is
+      equal to $x+y$ modulo $q$, we see that $(x+y)^{*}=x^{*}+y^{*}$
+      and consequently $(x+y)^{*}\in[q/2,q[$ which is $x+y\in[q/2,q[$
+      as requested.
+    \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case we have $r(x)=x^{*}$
+      and $r(y)=y^{*}-q$ and the condition $o(x,y)=1$ reduces to
+      $x^{*}+y^{*}-q\not\in[-q/2,q/2[$ which cannot happen (since
+      $x^{*}\in[0,q/2[$ and $y^{*}\in[q/2,q[$). So this case can 
+      never happen when $o(x,y)=1$ and there is nothing further to 
+      prove.
+    \item $x\in[q/2,q[$ and $y\in[0,q/2[$: likewise, having made the
+      assumption $o(x,y)=1$ this case can never happen and there is 
+      nothing to prove.
+    \item $x\in[q/2,q[$ and $y\in[q/2,q[$: in this case, we only 
+      need to prove that $x+y\in[0,q/2[$ in order to prove the 
+      second property of proposition~(\ref{carry:signed:add:criterium}). 
+      However, in this case we have $r(x)=x^{*}-q$ and $r(y)=y^{*}-q$
+      and the condition $o(x,y)=1$ reduces to 
+      $x^{*}+y^{*}-2q\not\in[-q/2,q/2[$ which is $x^{*}+y^{*}-q\not\in
+      [q/2,3q/2[$, which is equivalent to $x^{*}+y^{*}-q\not\in[q/2,q[$
+      (since $x^{*}\in[q/2,q[$ and $y^{*}\in[q/2,q[$ and $x^{*}+y^{*}-q$
+      belongs to $[0,q[$ anyway). Hence, having assumed that $o(x,y)=1$
+      we see that $x^{*}+y^{*}-q\in[0,q/2[$. Furthermore, since
+      $x^{*}+y^{*}-q$ is equal to $x+y$ modulo $q$, we obtain
+      $(x+y)^{*}=x^{*}+y^{*}-q$ and consequently $(x+y)^{*}\in[0,q/2[$
+      which is $x+y\in[0,q/2[$ as requested.
+  \end{itemize}
+\end{proof}
 
 \end{document}
