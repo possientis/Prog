@@ -15,7 +15,7 @@ rm -f test.log
 ./scala/clean.sh
 ./clojure/clean.sh
 ./coq/clean.sh
-./logic/clean.sh
+./tex/clean.sh
 ./flex/clean.sh
 
 git status

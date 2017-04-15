@@ -1,0 +1,336 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\input{shortcuts}
+\newcommand{\zq}{\mbox{${\bf Z}_{q}$}}
+\title{A Note on Carry and Overflow}
+\author{Paul Ossientis}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+In this note we assume given a natural number $q=2^{n}$ where 
+$n\in\{8,16,32,64\}$. We denote \zq\ the ring of integers modulo $q$. 
+The purpose of this note is to provide a formal presentation of the mathematics
+underlying some operations of a computer's CPU and explain the notions of {\em
+carry} and {\em overflow} within that formal framework. It all starts with the
+realization that computer hardware is designed to perfectly perform the
+operation of addition $+$ on the ring \zq. There is no approximation,
+there is no error, no overflow, the result is always perfect and exact: 
+computer hardware naturally operates on \zq. It is also very good at 
+inverting bits: so given $x\in\zq$ it can easily compute $\lnot x$.
+Furthermore, since $x+\lnot x = q-1$ we have the equality $-x = \lnot x + 1$.
+It follows that a CPU can easily (and exactly) compute the opposit $-x$ of 
+any $x\in\zq$, simply by incrementing $\lnot x$. Hence we see that not only 
+is the addition $+$ a natural primitive of computer hardware, but so is
+the subtraction $-$ defined by $x-y = x + (-y)$ for all $x,y\in\zq$.
+
+\begin{defin}\label{carry:star} 
+  For all $x\in\zq$, we define $x^{*}$ the unique integer with the property:
+    \[
+      x^{*} = x\ \mbox{mod}\ q\mbox{\ \ and\ \ }x^{*}\in[0,q[
+    \]
+\end{defin}
+
+\section{Carry for Addition}
+Users of computer hardware are not interested in \zq. One of their first interests
+is to perform the operation of addition $+$ on the set of natural numbers \N, 
+an operation commonly referred to as {\em unsigned addition} by computer 
+scientists. While it is possible (and indeed is a built-in feature of many modern 
+computer languages such as Python or Haskell) to handle every possible values 
+of \N\ (as permitted by a computer's memory), for historical reasons and the 
+purpose of this note on {\em carry} and {\em overflow}, it is important to 
+restrict our attention to natural numbers which can be represented as 
+{\em unsigned integers} within an $n$-bits register. These {\em representable}
+natural numbers are exactly those belonging the interval $[0,q[$ and the
+representation is exactly the associated integer modulo $q$. In other words,
+the {\em representable} natural numbers are the range of the mapping 
+$x\rightarrow x^{*}$ from \zq\ to \N, and for all $x\in\zq$, $x$ is the
+representation (in computer hardware) of the natural number $x^{*}$. Now,
+given two {\em representable} natural numbers $x^{*}$ and $y^{*}$, the users of 
+computer hardware are interested in computing the sum $x^{*} + y^{*}$, while 
+their machine only knows about $x+y$. Luckily, the following proposition shows that
+computing $x+y$ allows us to infer the value of $x^{*}+y^{*}$, provided the 
+latter is also {\em representable}:
+
+\begin{prop}\label{carry:unsigned:add:morphism}
+For all $x,y\in\zq$ the following are equivalent:
+  \begin{eqnarray*}
+    (i)&\ &x^{*} + y^{*}\in [0,q[\\
+    (ii)&\ &(x + y)^{*} = x^{*} + y^{*} 
+  \end{eqnarray*}
+\end{prop}
+\begin{proof}
+  For all $x\in\zq$, from definition~(\ref{carry:star}) $x^{*}$ is an element 
+  of $[0,q[$. It follows that $(i)$ is an immediate consequence of $(ii)$. 
+  Conversely, if we assume that $(i)$ is true, then since it is clear that 
+  $x^{*} + y^{*} = x + y$ modulo $q$, we conclude from 
+  definition~(\ref{carry:star}) that $(x+y)^{*} = x^{*} + y^{*}$, 
+  which completes our proof.
+\end{proof}
+
+Hence we see that as long as $x^{*}+y^{*}$ is a {\em representable} natural
+number, it does not matter that our CPU should only know about addition in \zq:
+adding the two representations $x$ and $y$ gives us a representation of 
+$x^{*}+y^{*}$ which is as good as we can hope. However, there are cases 
+when $x^{*} + y^{*}$ is not a {\em representable} natural number, in which 
+case equality~$(ii)$ of proposition~(\ref{carry:unsigned:add:morphism}) 
+does not hold. One way to think about this situation is saying that 
+{\em the result of $x+y$ is wrong}. As it turns, there is nothing wrong 
+with $x+y$ which is a perfectly correct answer to the question of adding 
+two numbers in \zq. However, $x+y$ is not a representation of $x^{*}+y^{*}$, 
+and in that sense, it is clearly wrong. This is where the notion of 
+{\em carry for addition} naturally comes in:
+
+\begin{defin}\label{carry:unsigned:add:carry}
+We call {\em carry for addition} the map $c:\zq\times\zq\rightarrow2$ defined by:
+  \[
+    c(x,y) = 1  \ \ \Leftrightarrow\ \ x^{*} + y^{*} \not\in[0,q[
+  \]
+\end{defin}
+
+By convention we denote $2=\{0,1\}$ which is our choice of boolean type, 
+and the {\em carry for addition} is therefore a boolean function defined 
+on the cartesian product $\zq\times\zq$, the purpose of which
+is to flag any situation where the result of $x+y$ is {\em wrong} or (to
+phrase it more accurately) any situation where $x+y$ is not a representation 
+of the natural number $x^{*}+y^{*}$. 
+
+So we now understand what the {\em carry} is, a notion which we have defined 
+in the context of unsigned addition. As we shall see, there will be a notion 
+of carry for (unsigned) subtraction, and similar notions for signed addition 
+and subtraction (called {\em overflow} rather than {\em carry} for signed 
+operations). What all these notions have in common is their purpose: 
+to warn a user of computer hardware that the result of a primitive operation 
+perfomed by the CPU on elements of \zq\ (which are representations of elements
+of \N\ or \Z\ as the case may be), does not yield a representation of the result 
+to the corresponding operation on natural numbers or signed integers. In short, 
+{\em carry} and {\em overflow} are designed to tell us when the result of an
+operation is {\em wrong}.
+
+For those writing computer software, the ability to compute the carry flag 
+$c(x,y)$ is crucial, as we need to know when $x+y$ ceases to be an accurate 
+representation of the result we care about. For this reason, designers of
+computer hardware have made the computation of the carry flag for addition, 
+one of the fundamental primitives of a CPU. So whenever an addition $x+y$ is
+perfomed, the carry flag will be set or cleared, depending on whether 
+$c(x,y)=1$ or $c(x,y)=0$. The ability to test this carry flag and introduce
+branching instructions in the code which depend on the outcome is also one
+of the primitives of computer hardware. This in turn allows us to compare:
+
+
+\begin{defin}\label{carry:order:zq}
+  Given $x,y\in\zq$ we say that $x\leq y$ \ifand\ $x^{*}\leq y^{*}$.
+\end{defin}
+
+Mathematically speaking, the order $\leq$ thus defined on \zq\ may 
+not be very interesting. However, it is interesting to us as it is 
+a relation which can be tested by a CPU (As we shall see, it can
+be tested using the {\em carry for subtraction}).
+Note that having defined the relation $\leq$ on \zq, we have implicitely 
+defined $<$, $>$ and $>=$, and since we can test these conditions, 
+we are able to compute the corresponding binary $\min$ and $\max$ 
+functions. So while definition~(\ref{carry:unsigned:add:carry}) 
+relies on the quantity $x^{*}+y^{*}$ which we cannot compute,
+the following proposition defines the {\em carry for addition} in
+terms of conditions which can all be easily tested in assembly
+language, thereby offering a possible validation.
+
+\begin{prop}\label{carry:unsigned:add:criterium}
+  For all $x,y\in\zq$, the following are equivalent:
+    \begin{eqnarray*}
+      (i)&\ &c(x,y) = 1\\
+      (ii)&\ & x + y < \min(x,y)\\
+      (iii)&\ & x + y < \max(x,y)\\
+      (iv)&\ & x + y < x\\
+      (v) &\ & x + y < y
+    \end{eqnarray*}
+where $c:\zq\times\zq\rightarrow 2$ is the carry for addition of 
+  definition~(\ref{carry:unsigned:add:carry}).
+\end{prop}
+\begin{proof}
+  Since for all $x,y\in\zq$, $\min(x,y)\leq x, y\leq\max(x,y)$ we immediately 
+  have the implications $(ii)\Rightarrow(iv)$, $(ii)\Rightarrow(v)$, 
+  $(iv)\Rightarrow(iii)$ and $(v)\Rightarrow(iii)$. In order to complete
+  the proof, it remains to show that $(i)\Rightarrow(ii)$ and 
+  $(iii)\Rightarrow(i)$. We first show that $(i)\Rightarrow(ii)$. So 
+  we assume that $c(x,y) = 1$, and need to show that $x+y<\min(x,y)$.
+  In other words we need to show that both inequalities $x+y<x$ and 
+  $x+y<y$ hold. However from definition~(\ref{carry:unsigned:add:carry}),
+  our assumption is equivalent to $x^{*}+y^{*}\not\in[0,q[$, and we know
+  from definition~(\ref{carry:star}) that both $x^{*}$ and $y^{*}$ are elements
+  of $[0,q[$. It follows that $x^{*}+y^{*}$ must be an element of $[0,2q[$
+  without being an element of $[0,q[$. Hence it must be an element of
+  $[q,2q[$, from which we see that $x^{*}+y^{*}-q$ is an element of $[0,q[$,
+  while being equal to $x+y$ modulo $q$. From definition~(\ref{carry:star})
+  it follows that $(x+y)^{*}=x^{*}+y^{*}-q$, and since both $y^{*}-q <0$ and 
+  $x^{*}-q<0$ we obtain $(x+y)^{*}<x^{*}$ and $(x+y)^{*}<y^{*}$ which by
+  virtue of definition~(\ref{carry:order:zq}) is equivalent to $(x+y)<x$ and 
+  $(x+y)<y$ as requested. We now prove that $(iii)\Rightarrow(i)$. So we
+  assume that $x+y <\max(x,y)$ and we need to show that $c(x,y)=1$, or
+  equivalently that $x^{*}+y^{*}\not\in[0,q[$. However, our assumption
+  implies that $x+y<x$ or $x+y<y$. So we shall distinguish two cases:
+  first we assume that $x+y<x$. From definiton~(\ref{carry:order:zq}), 
+  this means that $(x+y)^{*}<x^{*}$. Hence, it is impossible that 
+  $x^{*}+y^{*}\in[0,q[$ as this would imply that $(x+y)^{*}=x^{*}+y^{*}$ 
+  (being equal to $x+y$ modulo $q$) and consequently $x^{*}+y^{*}<x^{*}$, 
+  yielding the contradiction $y^{*}<0$. Likewise, if we assume that $x+y<y$ 
+  then $x^{*}+y^{*}\in[0,q[$ implies the contradiction $x^{*}<0$.
+\end{proof}
+\section{Carry for Subtraction}
+Given two {\em representable} natural numbers $x^{*}$ and $y^{*}$, users of
+computer hardware commonly want to compute their difference $x^{*}-y^{*}$. 
+Unfortunately, the only result available to them is the difference $x-y\in\zq$
+performed by the CPU on their representations $x$, $y$. In light of our
+analysis for addition, the first question we should ask is whether $x-y$ 
+is a representation of $x^{*}-y^{*}$. As before, as long as the sought out 
+result is {\em representable}, the answer is 'yes':
+\begin{prop}\label{carry:unsigned:sub:morphism}
+  For all $x,y\in\zq$, the following are equivalent:
+    \begin{eqnarray*}
+      (i)&\ &x^{*}-y^{*}\in[0,q[\\
+      (ii)&\ &x^{*}\geq y^{*}\\
+      (iii)&\ &(x-y)^{*}=x^{*}-y^{*}
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+Since both $x^{*}$ and $y^{*}$ are always elements of $[0,q[$, the difference
+  $x^{*}-y^{*}$ is always an element of $]-q,q[$. Hence the equivalence between
+  $(i)$ and $(ii)$ is clear. It remains to show the equivalence between $(ii)$
+  and $(iii)$. First we show $(ii)\Rightarrow(iii)$. So suppose 
+  $x^{*} \geq y^{*}$. Since $x^{*}-y^{*}$ is an element of $]-q,q[$, it is
+  in fact an element of $[0,q[$ while being equal to $x-y$ modulo $q$. It
+  follows from definition~(\ref{carry:star}) that $x^{*}-y^{*}=(x-y)^{*}$
+  as requested. Conversely, if we assume that $x^{*}-y^{*}=(x-y)^{*}$ then
+  in particular $x^{*}-y^{*}$is an element of $[0,q[$, so $x^{*}\geq y^{*}$.
+\end{proof}
+
+This in turn immediately motivates the following definition, whose purpose
+it is to highlight any situation where the result of $x-y$ is {\em wrong}, that
+is a situation where $x-y$ ceases to be a representation of the difference 
+$x^{*}-y^{*}$.
+
+\begin{defin}\label{carry:unsigned:sub:carry}
+We call {\em carry for subtraction} the map $c:\zq\!\times\!\zq\rightarrow2$ defined by:
+  \[
+    c(x,y) = 1  \ \ \Leftrightarrow\ \ x^{*} < y^{*}
+  \]
+\end{defin}
+
+In similar fashion to proposition~(\ref{carry:unsigned:add:criterium}) we state:
+
+\begin{prop}\label{carry:unsigned:sub:criterium}
+  For all $x,y\in\zq$, the following are equivalent:
+    \begin{eqnarray*}
+      (i)&\ &c(x,y) = 1\\
+      (ii)&\ & x < y
+    \end{eqnarray*}
+where $c:\zq\times\zq\rightarrow 2$ is the carry for subtraction of 
+  definition~(\ref{carry:unsigned:sub:carry}).
+\end{prop}
+\begin{proof}
+Immediate from definition~(\ref{carry:unsigned:sub:carry}) and the fact 
+that $x<y$ is equivalent $x^{*}<y^{*}$.
+\end{proof}
+
+The point of proposition~(\ref{carry:unsigned:sub:criterium}) is to be 
+able to validate in software the consistency between testing for the 
+carry flag after a subtraction $x-y$, and testing for the condition $x<y$.
+Whenever a 'sub x y' instructtion is performed, the carry flag should be
+set if and only if the condition $x<y$ holds.
+
+\section{Overflow for Addition}
+Users of computer hardware are not interested in \zq, and they may not be
+interested in the set of natural numbers \N\ either. Given two integers 
+$u,v\in\Z$ they often want to compute their sums $u+v$, an operation 
+commonly referred to as {\em signed addition} by computer scientists.
+Unfortunately, as we can guess by now, a CPU has no interstanding of
+integers in \Z\ (it only knows about \zq) let alone of how to compute
+their sum. We humans have to come up with a trick to obtain the answers
+we want from a machine which is limited to operating on \zq. When faced
+with operations on \N, we designed a successful strategy: first we 
+restricted our domain to a subset of \N\ namely those natural numbers
+belonging to $[0,q[$. Then we decided to give every natural number $x^{*}$
+of this domain a representation $x$ in \zq. Then we let the CPU operate
+on the representations $x$ and $y$ of our chosen natural numbers, 
+hoping to obtain a representation of the sum $x^{*} + y^{*}$ or the 
+difference $x^{*}-y^{*}$ as the case may be. This strategy works well,
+but is not immune to failure, which led to the notions of {\em carry}
+for addition and subtraction giving software designers the ability
+to know if and when the CPU representations $x+y$ and $x-y$ in \zq\ 
+are indeed what they want. We shall now spell out a similar strategy 
+for \Z, that of {\em two's complement representation}:
+
+\begin{defin}\label{carry:signed:representable}
+We say that $n\in\Z$ is {\em representable} \ifand\ $n\in[-q/2,q/2[$.
+\end{defin}
+ 
+Definition~(\ref{carry:signed:representable}) describes our domain. We
+have now defined the term {\em representable} in the context of signed 
+addition (addition in \Z) which should not be confused with 
+{\em representable} in the context of unsigned addition (addition in \N).
+A {\em representable} natural number (aka unsigned integer) belongs to 
+$[0,q[$, while a {\em representable} integer (aka signed integer) belongs
+to $[-q/2,q/2[$. Now given a {\em representable} integer in $[-q/2,q/2[$,
+we need to define its representation in \zq:
+
+\begin{defin}\label{carry:signed:2:complement}
+The bijection $r:\zq\rightarrow\Z\cap[-q/2,q/2[$ defined by:
+  \[
+    \forall x\in\zq\ ,\ r(x)=
+      \left\{
+          \begin{array}{lcr}
+          x^{*}&\mbox{\ if\ }&x\in[0,q/2[\\
+          x^{*}-q&\mbox{\ if\ }&x\in[q/2,q[
+        \end{array}
+      \right\}
+  \]
+is called {\em the two's complement representation mapping}. Given $x\in\zq$,
+  we say that $x$ is the {\em two's complement representation} of the 
+  integer $r(x)\in[-q/2,q/2[$.
+\end{defin}
+
+Now consider the simplest case when $q=2^8$. We have $256$ elements of \zq, 
+from $0$ to $255$. According to definition~(\ref{carry:signed:2:complement}),
+we have $r(0)=0$ and $r(1) = 1$ etc. up to $r(127)=127$. Then we see that 
+$r(128)=-128$, $r(129)=-127$, etc. up to $r(255)=-1$. The two's complement
+representation of $0\in\Z$ is $0\in\zq$. The two's complement representation
+of $-128\in\Z$ is $128\in\zq$ and the two's complement representation of 
+$-1\in\Z$ is $255\in\zq$.
+
+\begin{prop}
+The map $r:\zq\rightarrow\Z\cap[-q/2,q/2[$ is indeed a bijection.
+\end{prop}
+\begin{proof}
+First we show that $r$ is injective. So suppose $r(x)=r(y)$ for some 
+$x,y\in\zq$. We need to show that $x=y$ or equivalently that 
+$x^{*}=y^{*}$. We consider $4$ cases:
+  \begin{itemize}
+    \item $x\in[0,q/2[$ and $y\in[0,q/2[$: then $r(x)=x^{*}$ and $r(y)=y^{*}$
+      and the equality $r(x)=r(y)$ yield $x^{*}=y^{*}$ as requested.
+    \item $x\in[0,q/2[$ and $y\in[q/2,q[$: then $r(x)=x^{*}$ and 
+      $r(y)=y^{*}-q$ and the equality $r(x) = r(y)$ yields $x^{*}=y^{*}-q < 0$
+      which is a contradiction. Hence this case cannot occur whenever 
+      $r(x)=r(y)$.
+    \item $x\in[q/2,q[$ and $y\in[0,q/2[$: a similar argument shows that this
+      case cannot occur whenever $r(x)=r(y)$.
+    \item $x\in[q/2,q[$ and $y\in[q/2,q[$: then $r(x)=x^{*}-q$ and 
+      $r(y)=y^{*}-q$ and the equality $r(x)=r(y)$ yields $x^{*}=y^{*}$ as 
+      requested.
+  \end{itemize}
+We now show that $r$ is surjective. So let $n$ be an integer in $[-q/2,q/2[$.
+  We need to show the existence of $x\in\zq$ such that $n=r(x)$. We consider
+  $2$ cases:
+  \begin{itemize}
+    \item $n\in[-q/2,0[$: then $n+q\in[q/2,q[$ and defining $x\in\zq$ to be
+      the class of $n$ modulo
+  \end{itemize}
+ 
+\end{proof}
+
+
+
+
+
+\end{document}

@@ -14,7 +14,7 @@
 ;
 
 ; choose implementation here
-(load "frame1.scm")
-(define frame frame1)
+(load "frame2.scm")
+(define frame frame2)
 
 ))  ; include guard

@@ -20,9 +20,6 @@
   ;
   ; variable
   (display "testing variable expressions...\n")
-;  (display "+ is bound to: ")(display ((global-env 'lookup) '+))(newline)
-;  (strict-eval '+)  ; Failing under ./lazy-run.sh
-;  (debug "[DEBUG]: should not reach this stage...")
   (test-expression '+ (make-primitive-procedure +) "variable.1")
   (test-expression '* (make-primitive-procedure *) "variable.2")
   (test-expression '- (make-primitive-procedure -) "variable.3")
@@ -511,7 +508,7 @@
     '(letrec
        ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
        (loop 5)) 120 "letrec.1")
- 
+
   ; application
   (display "testing application expressions...\n")
   (test-expression '(+) 0 "application.1")

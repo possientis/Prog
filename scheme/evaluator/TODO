@@ -1,12 +1,7 @@
-remove debugging traces
-retore debugging in dict.scm
-environment1.scm undertsand why new-frame goes empty inside loop when test.scm runs
+continue to attempt replicating failure of ./lazy-run unit-test.scm
+for named-let in test.scm
 
-scm test.scm fails (due to (lazy-eval '(load "main.scm")) bizarre that list of primitives seems correct, yet global-env does not have them
-
-./lazy-run unit-test.scm fails even with frame2.scm
-./lazy-run unit-test.scm fails (This is a bug in frame3.scm)
-
+resolve bug in frame3 (scm frame3-bug.scm (under frame3): wrong environment created) 
 define primitives from language itself
 implement macros
 lazy evaluation of arguments (with or without memoization)

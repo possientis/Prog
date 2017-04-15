@@ -34,6 +34,7 @@ filtered=$( \
   | grep -v '.out' \
   | grep -v '.vim' \
   | grep -v '.txt' \
+  | grep -v '.pdf' \
   | grep -v '.gdbinit' \
   | grep -v '.vimrc' \
   | grep -v '.dircolors' \
