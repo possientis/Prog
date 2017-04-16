@@ -1,18 +1,24 @@
 ; loading interpreter
 (load "main.scm") 
-(set-debug #t)
 
 (force-thunk (lazy-eval '(load "main.scm")))
 (force-thunk (lazy-eval '(load "tools.scm")))
 
-(define sub-expr
-  '(letrec
-     ((loop (lambda (n) (if (= 0 n) 1 (* n (loop (- n 1)))))))
-     (loop 5)))
+(define code 
+  '(begin 
+     (define (proc) 
+       (test-expression 
+         (quote (let loop ((i 5) (acc 1)) 
+                  (if (equal? 1 i) 
+                    acc 
+                    (loop (- i 1) (* i acc))))) 
+         120 "named-let.1")) 
+     (proc) 
+     (exit 0)))
 
-(define expr (list 'test-expression sub-expr 120 "letrec.test"))
 
-(force-thunk (lazy-eval expr))
+(force-thunk (lazy-eval code))
+
 
 (exit 0)
 

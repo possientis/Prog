@@ -77,7 +77,7 @@ $x^{*}+y^{*}$ which is as good as we can hope. However, there are cases
 when $x^{*} + y^{*}$ is not a {\em representable} natural number, in which 
 case equality~$(ii)$ of proposition~(\ref{carry:unsigned:add:morphism}) 
 does not hold. One way to think about this situation is saying that 
-{\em the result of $x+y$ is wrong}. As it turns, there is nothing wrong 
+{\em the result of $x+y$ is wrong}. As it turns out, there is nothing wrong 
 with $x+y$ which is a perfectly correct answer to the question of adding 
 two numbers in \zq. However, $x+y$ is not a representation of $x^{*}+y^{*}$, 
 and in that sense, it is clearly wrong. This is where the notion of 
@@ -156,7 +156,9 @@ language:
       (v) &\ & x + y < y
     \end{eqnarray*}
 where $c:\zq\times\zq\rightarrow 2$ is the carry for addition of 
-  definition~(\ref{carry:unsigned:add:carry}).
+  definition~(\ref{carry:unsigned:add:carry}), and the order $<$
+  is derived from the relation $\leq$ of 
+  definition~(\ref{carry:order:zq}) defined on \zq.
 \end{prop}
 \begin{proof}
   Since for all $x,y\in\zq$, $\min(x,y)\leq x, y\leq\max(x,y)$ we immediately 
@@ -236,7 +238,9 @@ In similar fashion to proposition~(\ref{carry:unsigned:add:criterium}) we state:
       (ii)&\ & x < y
     \end{eqnarray*}
 where $c:\zq\times\zq\rightarrow 2$ is the carry for subtraction of 
-  definition~(\ref{carry:unsigned:sub:carry}).
+  definition~(\ref{carry:unsigned:sub:carry}), and the order $<$
+  is derived from the relation $\leq$ of 
+  definition~(\ref{carry:order:zq}) defined on \zq.
 \end{prop}
 \begin{proof}
 Immediate from definition~(\ref{carry:unsigned:sub:carry}) and the fact 
@@ -315,7 +319,7 @@ $-1\in\Z$ is $255\in\zq$.
 First we show that $r$ is injective. So suppose $r(x)=r(y)$ for some 
 $x,y\in\zq$. We need to show that $x=y$ or equivalently that 
 $x^{*}=y^{*}$. Consider four cases:
-  \begin{itemize}
+  \begin{enumerate}
     \item $x\in[0,q/2[$ and $y\in[0,q/2[$: then $r(x)=x^{*}$ and $r(y)=y^{*}$
       and the equality $r(x)=r(y)$ yield $x^{*}=y^{*}$ as requested.
     \item $x\in[0,q/2[$ and $y\in[q/2,q[$: then $r(x)=x^{*}$ and 
@@ -327,19 +331,19 @@ $x^{*}=y^{*}$. Consider four cases:
     \item $x\in[q/2,q[$ and $y\in[q/2,q[$: then $r(x)=x^{*}-q$ and 
       $r(y)=y^{*}-q$ and the equality $r(x)=r(y)$ yields $x^{*}=y^{*}$ as 
       requested.
-  \end{itemize}
+  \end{enumerate}
 We now show that $r$ is surjective. So let $n$ be an integer in $[-q/2,q/2[$.
   We need to show the existence of $x\in\zq$ such that $n=r(x)$. Define $x$
   simply to be the class of $n$ modulo $q$. We need to check that $r(x)=n$. 
   Consider two cases:
-  \begin{itemize}
+  \begin{enumerate}
     \item $n\in[-q/2,0[$: then $n+q\in[q/2,q[$. Hence we see that $n+q\in[0,q[$
       while being equal to $x$ modulo $q$. It follows that $x^{*}=n+q\in[q/2,q[$
       from which we obtain $r(x) = x^{*} - q = n$ as requested.
     \item $n\in[0,q/2[$: then $n\in[0,q[$ while being equal to $x$ modulo $q$.
       It follows that $x^{*}=n\in[0,q/2[$ from which we obtain $r(x)=x^{*}=n$
       as requested.
-  \end{itemize}
+  \end{enumerate}
 \end{proof}
 
 Hence we see that the {\em representable} integers belonging to $[-q/2,q/2[$
@@ -361,8 +365,8 @@ performing the standard operation $x+y\in\zq$.
 \end{prop}
 \begin{proof}
   The implication $(ii)\Rightarrow(i)$ is clear. It remains to show 
-  $(i)\Rightarrow(ii)$, for which we shall consider four difference cases:
-  \begin{itemize}
+  $(i)\Rightarrow(ii)$, for which we shall consider four different cases:
+  \begin{enumerate}
     \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case we have $r(x)=x^{*}$
       and $r(y)=y^{*}$ and condition $(i)$ reduces to $x^{*}+y^{*}\in[-q/2,q/2[$
       which in fact is equivalent to $x^{*}+y^{*}\in[0,q/2[$ (since $x^{*}+y^{*}$
@@ -396,7 +400,7 @@ performing the standard operation $x+y\in\zq$.
       $q$. It follows that $(x+y)^{*}=x^{*}+y^{*}-q\in[q/2,q[$ and
       consequently $r(x+y) = (x+y)^{*}-q=x^{*}+y^{*}-2q=r(x)+r(y)$ as 
       requested.
-  \end{itemize}
+  \end{enumerate}
 \end{proof}
 
 As we can see from propostion~(\ref{carry:signed:add:morphism}) there 
@@ -438,7 +442,7 @@ where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of
 
   Next we assume that $x\in[q/2,q[$, $y\in[q/2,q[$ and $x+y\in[0,q/2[$,
   and we need to show that $o(x,y)=1$ or equivalently 
-  $r(x)+r(x)\not\in[-q/2,q/2[$. However in this case, we have $r(x)=x^{*}-q$
+  $r(x)+r(y)\not\in[-q/2,q/2[$. However in this case, we have $r(x)=x^{*}-q$
   and $r(y)=y^{*}-q$ and $x^{*}+y^{*}-q\in[0,q[$ (since $x^{*}\in[q/2,q[$
   and $y^{*}\in[q/2,q[$). Since $x^{*}+y^{*}-q$ is equal to $x+y$ modulo $q$
   we obtain $(x+y)^{*}=x^{*}+y^{*}-q$ and the assumption $x+y\in[0,q/2[$
@@ -446,10 +450,10 @@ where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of
   So we see that $r(x)+r(y)$ does not belong to $[-q/2,q/2[$ as requested.
 
   Conversely we assume that $o(x,y)=1$ or equivalently that 
-  $r(x)+r(x)\not\in[-q/2,q/2[$ and we need to show that one of
+  $r(x)+r(y)\not\in[-q/2,q/2[$ and we need to show that one of
   the two propeties of proposition~(\ref{carry:signed:add:criterium})
   is satisfied. We shall distinguish four cases:
-  \begin{itemize}
+  \begin{enumerate}
     \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case, we only
       need to prove that $x+y\in[q/2,q[$ in order to prove the first 
       property of proposition~(\ref{carry:signed:add:criterium}).
@@ -484,7 +488,222 @@ where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of
       $x^{*}+y^{*}-q$ is equal to $x+y$ modulo $q$, we obtain
       $(x+y)^{*}=x^{*}+y^{*}-q$ and consequently $(x+y)^{*}\in[0,q/2[$
       which is $x+y\in[0,q/2[$ as requested.
-  \end{itemize}
+  \end{enumerate}
 \end{proof}
+
+For all $x\in\zq$, we have $r(x)=x^{*}\geq 0$ when $x\in[0,q/2[$ 
+and furthermore $r(x)=x^{*}-q < 0$ when $x\in[q/2,q[$. So $x$ represents a 
+non-negative integer when $x\in[0,q/2[$ and it represents a 
+negative integer when $x\in[q/2,q[$. If we think of the binary
+representation of $x\in\zq$, it is easy to see that the condition
+$x\in[0,q/2[$ corresponds to the highest order bit being cleared,
+while $x\in[q/2,q[$ corresponds to the highest order bit being set.
+This explains why the highest order bit is commonly called 
+the {\em sign bit}. For this reason we define:
+
+\begin{defin}\label{carry:sign:bit}
+  We call {\em sign bit mapping} the map $s:\zq\rightarrow 2$ defined by:
+    \[
+      s(x) = 1\ \Leftrightarrow\ x\in[q/2,q[
+    \]
+\end{defin}
+
+In the light of definition~(\ref{carry:sign:bit}) we can rephrase 
+proposition~(\ref{carry:signed:add:criterium}) as follows:
+\begin{prop}\label{carry:signed:add:criterium:2}
+  For all $x,y\in\zq$, we have $o(x,y)=1$ \ifand:
+  \[
+    s(x)=0\mbox{\ and\ }s(y)=0\mbox{\ and\ }s(x+y)=1
+  \]
+or:
+  \[
+    s(x)=1\mbox{\ and\ }s(y)=1\mbox{\ and\ }s(x+y)=0
+  \]
+where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of 
+  definition~(\ref{carry:signed:add:overflow}), while $s:\zq\rightarrow 2$
+  is the sign bit mapping of definition~(\ref{carry:sign:bit}).
+\end{prop}
+\begin{proof}
+  Follows immediately from proposition~(\ref{carry:signed:add:criterium})
+  and definition~(\ref{carry:sign:bit}).
+\end{proof}
+
+\section{Overflow for subtraction}
+Here we are now asking ourselves the same question again: when does the
+native CPU operation on \zq\ yield a representation of the result from
+the corresponding operation on \Z\,? As before, as long as the result 
+from the operation on \Z\ is {\em representable}, the native CPU operation 
+on \zq\ provides a representation of it. Given two {\em representable}
+integers $r(x)$ and $r(y)$ such that $r(x)-r(y)$ is itself 
+{\em representable}, the equation $r(x-y)=r(x)-r(y)$ fundamentally says:
+$x-y\in\zq$ is a representation
+(in computer hardware) of the difference $r(x)-r(y)\in\Z$. 
+
+
+\begin{prop}\label{carry:signed:sub:morphism}
+  For all $x,y\in\zq$, the following are equivalent:
+    \begin{eqnarray*}
+      (i)&\ &r(x)-r(y)\in[-q/2,q/2[\\
+      (ii)&\ &r(x-y)=r(x)-r(y)
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+  The implication $(ii)\Rightarrow(i)$ is clear, so we only need to prove
+  $(i)\Rightarrow(ii)$. So we assume that $r(x)-r(y)\in[-q/2,q/2[$ and
+  we need to show the equality $r(x-y)=r(x)-r(y)$. We shall distinguish
+  four cases:
+  \begin{enumerate}
+    \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case we have $r(x)=x^{*}$
+      and $r(y)=y^{*}$ and our assumption reduces to $x^{*}-y^{*}\in[-q/2,q/2[$
+      which is necessarily true in this case (there is no need to assume it)
+      since $x^{*}\in[0,q/2[$ and $y^{*}\in[0,q/2[$ implies 
+      $x^{*}-y^{*}\in]-q/2, q/2[$. So we need to prove that 
+      $r(x-y)=x^{*}-y^{*}$. We shall distinguish two further cases:
+      first we assume that $x^{*}-y^{*}\in]-q/2,0[$. Then $x^{*}-y^{*}+q$
+      belongs to $]q/2,q[$ while being equal to $x-y$ modulo $q$.
+      It follows that $(x-y)^{*}=x^{*}-y^{*}+q\in]q/2,q[$ and
+      consequently $r(x-y) = (x-y)^{*} - q = x^{*}-y^{*}=r(x)-r(y)$
+      as requested. We now assume that $x^{*}-y^{*}\in[0,q/2[$. In 
+      this case we obtain $(x-y)^{*}=x^{*}-y^{*}\in[0,q/2[$ and
+      consequently we have the equation 
+      $r(x-y)=(x-y)^{*}=x^{*}-y^{*}=r(x)-r(y)$ as requested.
+    \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case we have $r(x)=x^{*}$
+      as well as $r(y)=y^{*}-q$ and our assumption reduces to 
+      $x^{*}-y^{*}+q\in[-q/2,q/2[$, while we need to prove that 
+      $r(x-y)=x^{*}-y^{*}+q$. However from $x^{*}\in[0,q/2[$ and 
+      $y^{*}\in[q/2,q[$ we obtain $x^{*}-y^{*}\in]-q,0[$ which is
+      $x^{*}-y^{*}+q\in]0,q[$. It follows that $x^{*}-y^{*}+q\in]0,q/2[$
+      while being equal to $x-y$ modulo $q$. Hence we see that 
+      $(x-y)^{*}=x^{*}-y^{*}+q\in]0,q/2[$ and consequently 
+      $r(x-y) = (x-y)^{*}=x^{*}-y^{*}+q$ as requested.
+    \item $x\in[q/2,q[$ and $y\in[0,q/2[$: in this case we have 
+      $r(x)=x^{*}-q$ and $r(y)=y^{*}$ and our assumption reduces to
+      $x^{*}-y^{*}-q\in[-q/2,q/2[$ which is $x^{*}-y^{*}\in[q/2,3q/2[$, 
+      while we need to prove that $r(x-y)=x^{*}-y^{*}-q$. 
+      However from $x^{*}\in[q/2,q[$ and $y^{*}\in[0,q/2[$ we obtain 
+      $x^{*}-y^{*}\in]0,q[$. It follows that $x^{*}-y^{*}\in[q/2,q[$
+      while being equal to $x-y$ modulo $q$. Hence we see that 
+      $(x-y)^{*}=x^{*}-y^{*}\in[q/2,q[$ and consequently we have
+      $r(x-y)=(x-y)^{*}-q=x^{*}-y^{*}-q$ as requested.
+    \item $x\in[q/2,q[$ and $y\in[q/2,q[$: in this case we have 
+      $r(x)=x^{*}-q$ as well as $r(y)=y^{*}-q$ and our assumption reduces to
+      $x^{*}-y^{*}\in[-q/2,q/2[$, while we need to prove that 
+      $r(x-y)=x^{*}-y^{*}$. However, from $x^{*}\in[q/2,q[$ and 
+      $y^{*}\in[q/2,q[$ we obtain $x^{*}-y^{*}\in]-q/2,q/2[$ so our
+      assumption is always true in this case (there is no need to 
+      assume it). We shall distinguish two further cases: first 
+      we assume that $x^{*}-y^{*}\in]-q/2,0[$. Then $x^{*}-y^{*}+q\in]q/2,q[$
+      while being equal to $x-y$ modulo $q$. It follows that we have 
+      $(x-y)^{*}= x^{*}-y^{*}+q\in]q/2,q[$ and consequently we conclude
+      $r(x-y)=(x-y)^{*}-q=x^{*}-y^{*}$ as requested. We now assume that
+      $x^{*}-y^{*}\in[0,q/2[$. Then $(x-y)^{*}=x^{*}-y^{*}\in[0,q/2[$ and
+      consequently $r(x-y)=(x-y)^{*}=x^{*}-y^{*}$ as requested.
+  \end{enumerate}
+\end{proof}
+In the light of proposition~(\ref{carry:signed:sub:morphism}) we now define:
+\begin{defin}\label{carry:signed:sub:overflow}
+We call {\em overflow for subtraction} the map 
+$o\!:\!\zq\!\!\times\!\!\zq\!\rightarrow\!2\!$ defined by:
+  \[
+    o(x,y) = 1  \ \ \Leftrightarrow\ \ r(x)-r(y)\not\in[-q/2,q/2[
+  \]
+\end{defin}
+Similarly to proposition~(\ref{carry:signed:add:criterium}) we now 
+characterize the overflow for subtraction:
+\begin{prop}\label{carry:signed:sub:criterium}
+  For all $x,y\in\zq$, we have $o(x,y)=1$ \ifand:
+  \[
+    x\in[0,q/2[\mbox{\ and\ }y\in[q/2,q[\mbox{\ and\ }x-y\in[q/2,q[
+  \]
+or:
+  \[
+    x\in[q/2,q[\mbox{\ and\ }y\in[0,q/2[\mbox{\ and\ }x-y\in[0,q[
+  \]
+where $o:\zq\times\zq\rightarrow 2$ is the overflow for subtraction of 
+  definition~(\ref{carry:signed:add:overflow}).
+\end{prop}
+\begin{proof}
+  First we assume that $x\in[0,q/2[$, $y\in[q/2,q[$ and $x-y\in[q/2,q[$, and 
+  we need to show that $o(x,y)=1$ or equivalently $r(x)-r(y)\not\in[-q/2,q/2[$.
+  However in this case, we have $r(x)=x^{*}$ and $r(y)=y^{*}-q$ and 
+  $x^{*}-y^{*}+q\in]0,q[$ (since $x^{*}\in[0,q/2[$ and $y^{*}\in[q/2,q[$).
+  Since $x^{*}-y^{*}+q$ is equal to $x-y$ modulo $q$ we obtain
+  $(x-y)^{*}=x^{*}-y^{*}+q$ and the assumption $x-y\in[q/2,q[$ therefore
+  yields $x^{*}-y^{*}+q\in[q/2,q[$ which is $r(x)-r(y)\in[q/2,q[$. So we see
+  that $r(x)-r(y)$ does not belong to $[-q/2,q/2[$ as requested.
+
+  Next we assume that $x\in[q/2,q[$, $y\in[0,q/2[$ and $x-y\in[0,q/2[$,
+  and we need to show that $o(x,y)=1$ or equivalently 
+  $r(x)-r(y)\not\in[-q/2,q/2[$. However in this case, we have $r(x)=x^{*}-q$
+  and $r(y)=y^{*}$ and $x^{*}-y^{*}\in]0,q[$ (since $x^{*}\in[q/2,q[$
+  and $y^{*}\in[0,q/2[$). Since $x^{*}-y^{*}$ is equal to $x-y$ modulo $q$
+  we obtain $(x-y)^{*}=x^{*}-y^{*}$ and the assumption $x-y\in[0,q/2[$
+  therefore yields $x^{*}-y^{*}\in[0,q/2[$ which is $r(x)-r(y)\in[-q,-q/2[$.
+  So we see that $r(x)-r(y)$ does not belong to $[-q/2,q/2[$ as requested.
+
+  Conversely we assume $o(x,y)=1$ or equivalently
+  $r(x)-r(y)\not\in[-q/2,q/2[$ and we need to show that one of
+  the two propeties of proposition~(\ref{carry:signed:sub:criterium})
+  is satisfied. We shall distinguish four cases:
+  \begin{enumerate}
+    \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case we have $r(x)=x^{*}$
+      and $r(y)=y^{*}$ and the condition $o(x,y)=1$ reduces to
+      $x^{*}-y^{*}\not\in[-q/2,q/2[$ which cannot happen (since
+      $x^{*}\in[0,q/2[$ and $y^{*}\in[0,q/2[$). So this case can 
+      never happen when $o(x,y)=1$ and there is nothing further to 
+      prove.
+     \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case, we only
+      need to prove that $x-y\in[q/2,q[$ in order to prove the first 
+      property of proposition~(\ref{carry:signed:sub:criterium}).
+      However, in this case we have $r(x)=x^{*}$ and $r(y)=y^{*}-q$
+      and the condition $o(x,y)=1$ reduces to 
+      $x^{*}-y^{*}+q\not\in[-q/2,q/2[$. However we know that 
+      $x^{*}-y^{*}+q\in]0,q[$ 
+      (since $x^{*}\in[0,q/2[$ and $y^{*}\in[q/2,q[$) and it follows
+      that $x^{*}-y^{*}+q\in[q/2,q[$. Furthermore, since $x^{*}-y^{*}+q$ is
+      equal to $x-y$ modulo $q$, we see that $(x-y)^{*}=x^{*}-y^{*}+q$
+      and consequently $(x-y)^{*}\in[q/2,q[$ which is $x-y\in[q/2,q[$
+      as requested.
+   \item $x\in[q/2,q[$ and $y\in[0,q/2[$: in this case, we only 
+      need to prove that $x-y\in[0,q/2[$ in order to prove the 
+      second property of proposition~(\ref{carry:signed:sub:criterium}). 
+      However, in this case we have $r(x)=x^{*}-q$ and $r(y)=y^{*}$
+      and the condition $o(x,y)=1$ reduces to 
+      $x^{*}-y^{*}-q\not\in[-q/2,q/2[$ or equivalently $x^{*}-y^{*}\not\in
+      [q/2,3q/2[$. However, we know that $x^{*}-y^{*}\in]0,q[$
+      (from the conditions $x^{*}\in[q/2,q[$ and $y^{*}\in[0,q/2[$). 
+      Hence, having assumed that $o(x,y)=1$ we see that 
+      $x^{*}-y^{*}\in]0,q/2[$. Furthermore, since
+      $x^{*}-y^{*}$ is equal to $x-y$ modulo $q$, we obtain
+      $(x-y)^{*}=x^{*}-y^{*}$ and consequently $(x-y)^{*}\in]0,q/2[$
+      which is $x-y\in]0,q/2[\subseteq[0,q/2[$ as requested.
+   \item $x\in[q/2,q[$ and $y\in[q/2,q[$: in this case we have
+     $r(x)=x^{*}-q$ and $r(y)=y^{*}-q$ and the condition $o(x,y)=1$
+      reduces to $x^{*}-y^{*}\not\in[-q/2,q/2[$ which cannot happen
+      (since $x^{*}\in[q/2,q[$ and $y^{*}\in[q/2,q[$). So this case can
+      never happen when $o(x,y)=1$ and there is nothing further to prove.
+   \end{enumerate}
+\end{proof}
+
+Proposition~(\ref{carry:signed:sub:criterium}) can equivalently be expressed
+in terms of sign bits.
+\begin{prop}\label{carry:signed:sub:criterium:2}
+  For all $x,y\in\zq$, we have $o(x,y)=1$ \ifand:
+  \[
+    s(x)=0\mbox{\ and\ }s(y)=1\mbox{\ and\ }s(x-y)=1
+  \]
+or:
+  \[
+    s(x)=1\mbox{\ and\ }s(y)=0\mbox{\ and\ }s(x-y)=0
+  \]
+where $o:\zq\times\zq\rightarrow 2$ is the overflow for subtraction of 
+  definition~(\ref{carry:signed:sub:overflow}), while $s:\zq\rightarrow 2$
+  is the sign bit mapping of definition~(\ref{carry:sign:bit}).
+\end{prop}
+\begin{proof}
+  Follows immediately from proposition~(\ref{carry:signed:sub:criterium})
+  and definition~(\ref{carry:sign:bit}).
+\end{proof}
+
 
 \end{document}
