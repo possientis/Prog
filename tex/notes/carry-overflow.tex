@@ -119,7 +119,7 @@ $c(x,y)=1$ or $c(x,y)=0$. The ability to test this carry flag and introduce
 branching instructions in the code which depend on the outcome is also one
 of the primitives of computer hardware. While we have not yet discussed 
 the {\em carry} following a subtraction, this carry is essentially the same 
-bit being set or cleared after the operation is performed, and as will
+bit being set or cleared after the operation is performed, and as we
 shall see the ability to test this flag allows us to compare:
 
 
@@ -156,7 +156,7 @@ language:
       (v) &\ & x + y < y
     \end{eqnarray*}
 where $c:\zq\times\zq\rightarrow 2$ is the carry for addition of 
-  definition~(\ref{carry:unsigned:add:carry}), and the order $<$
+  definition~(\ref{carry:unsigned:add:carry}), and the strict order $<$
   is derived from the relation $\leq$ of 
   definition~(\ref{carry:order:zq}) defined on \zq.
 \end{prop}
@@ -238,7 +238,7 @@ In similar fashion to proposition~(\ref{carry:unsigned:add:criterium}) we state:
       (ii)&\ & x < y
     \end{eqnarray*}
 where $c:\zq\times\zq\rightarrow 2$ is the carry for subtraction of 
-  definition~(\ref{carry:unsigned:sub:carry}), and the order $<$
+  definition~(\ref{carry:unsigned:sub:carry}), and the strict order $<$
   is derived from the relation $\leq$ of 
   definition~(\ref{carry:order:zq}) defined on \zq.
 \end{prop}
@@ -250,8 +250,8 @@ that $x<y$ is equivalent $x^{*}<y^{*}$.
 The point of proposition~(\ref{carry:unsigned:sub:criterium}) is to be 
 able to validate in software the consistency between testing for the 
 carry flag after a subtraction $x-y$, and testing for the condition $x<y$.
-Whenever a 'sub x y' instructtion is performed, the carry flag should be
-set if and only if the condition $x<y$ holds.
+Whenever a 'sub x y' or 'cmp x y' instructtion is performed, the carry 
+flag should be set if and only if the condition $x<y$ holds.
 
 \section{Overflow for Addition}
 Users of computer hardware are not interested in \zq, and they may not be
@@ -297,7 +297,7 @@ The bijection $r:\zq\rightarrow\Z\cap[-q/2,q/2[$ defined by:
           x^{*}&\mbox{\ if\ }&x\in[0,q/2[\\
           x^{*}-q&\mbox{\ if\ }&x\in[q/2,q[
         \end{array}
-      \right\}
+      \right.
   \]
 is called {\em the two's complement representation mapping}. Given $x\in\zq$,
   we say that $x$ is the {\em two's complement representation} of the 
@@ -321,7 +321,7 @@ $x,y\in\zq$. We need to show that $x=y$ or equivalently that
 $x^{*}=y^{*}$. Consider four cases:
   \begin{enumerate}
     \item $x\in[0,q/2[$ and $y\in[0,q/2[$: then $r(x)=x^{*}$ and $r(y)=y^{*}$
-      and the equality $r(x)=r(y)$ yield $x^{*}=y^{*}$ as requested.
+      and the equality $r(x)=r(y)$ yields $x^{*}=y^{*}$ as requested.
     \item $x\in[0,q/2[$ and $y\in[q/2,q[$: then $r(x)=x^{*}$ and 
       $r(y)=y^{*}-q$ and the equality $r(x) = r(y)$ yields $x^{*}=y^{*}-q < 0$
       which is a contradiction. Hence this case cannot occur whenever 
@@ -375,14 +375,14 @@ performing the standard operation $x+y\in\zq$.
       $(x+y)^{*}=x^{*}+y^{*}\in[0,q/2[$ from which we obtain 
       $r(x+y)=(x+y)^{*}=x^{*}+y^{*}=r(x)+r(y)$ which is condition $(ii)$. 
     \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case we have $r(x)=x^{*}$
-      and $r(y)=y^{*}-q$ and condition $(i)$ reduces to 
+      as well as $r(y)=y^{*}-q$ and condition $(i)$ reduces to 
       $x^{*}+y^{*}-q\in[-q/2,q/2[$ or equivalently $x^{*}+y^{*}\in[q/2,3q/2[$
       which is always true in this case (since $x^{*}\in[0,q/2[$ and 
-      $y^{*}\in[q/2,q[$). So we simply need to prove that $r(x+y)=r(x)+r(y)$,
-      for which we shall consider two further cases: First we assume that
-      $x^{*}+y^{*}-q\in[-q/2,0[$. Then we see that $x^{*}+y^{*}\in[q/2,q[$
-      while being equal to $x+y$ modulo $q$. It follows that 
-      $(x+y)^{*}=x^{*}+y^{*}\in[q/2,q[$ and consequently 
+      $y^{*}\in[q/2,q[$). So we simply need to prove the equation 
+      $r(x+y)=r(x)+r(y)$ for which we shall consider two further cases: 
+      First we assume that $x^{*}+y^{*}-q\in[-q/2,0[$. Then we see that 
+      $x^{*}+y^{*}\in[q/2,q[$ while being equal to $x+y$ modulo $q$. 
+      So $(x+y)^{*}=x^{*}+y^{*}\in[q/2,q[$ and consequently 
       $r(x+y)= (x+y)^{*}-q=x^{*}+y^{*}-q = r(x)+r(y)$ as requested.
       We now assume that $x^{*}+y^{*}-q\in[0,q/2[$. Since it is also equal
       to $x+y$ modulo $q$ we obtain $(x+y)^{*}=x^{*}+y^{*}-q\in[0,q/2[$.
@@ -398,8 +398,8 @@ performing the standard operation $x+y\in\zq$.
       $x^{*}\in[q/2,q[$ and $y^{*}\in[q/2,q[$). Hence we see that $(i)$ 
       implies $x^{*}+y^{*}-q\in[q/2,q[$ while being equal to $x+y$ modulo
       $q$. It follows that $(x+y)^{*}=x^{*}+y^{*}-q\in[q/2,q[$ and
-      consequently $r(x+y) = (x+y)^{*}-q=x^{*}+y^{*}-2q=r(x)+r(y)$ as 
-      requested.
+      consequently we obtain the equation 
+      $r(x+y) = (x+y)^{*}-q=x^{*}+y^{*}-2q=r(x)+r(y)$ as requested.
   \end{enumerate}
 \end{proof}
 
@@ -449,7 +449,7 @@ where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of
   therefore yields $x^{*}+y^{*}-q\in[0,q/2[$ which is $r(x)+r(y)\in[-q,-q/2[$.
   So we see that $r(x)+r(y)$ does not belong to $[-q/2,q/2[$ as requested.
 
-  Conversely we assume that $o(x,y)=1$ or equivalently that 
+  Conversely we assume $o(x,y)=1$ or equivalently 
   $r(x)+r(y)\not\in[-q/2,q/2[$ and we need to show that one of
   the two propeties of proposition~(\ref{carry:signed:add:criterium})
   is satisfied. We shall distinguish four cases:
@@ -459,16 +459,16 @@ where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of
       property of proposition~(\ref{carry:signed:add:criterium}).
       However, in this case we have $r(x)=x^{*}$ and $r(y)=y^{*}$
       and the condition $o(x,y)=1$ reduces to $x^{*}+y^{*}\not\in[-q/2,q/2[$
-      which is equivalent to $x^{*}+y^{*}\not\in[0,q/2[$ (since $x^{*}+y^{*}$ 
-      cannot be negative). However we know that $x^{*}+y^{*}\in[0,q[$ 
-      (since $x^{*}\in[0,q/2[$ and $y^{*}\in[0,q/2[$) and it follows
-      that $x^{*}+y^{*}\in[q/2,q[$. Furthermore, since $x^{*}+y^{*}$ is
-      equal to $x+y$ modulo $q$, we see that $(x+y)^{*}=x^{*}+y^{*}$
-      and consequently $(x+y)^{*}\in[q/2,q[$ which is $x+y\in[q/2,q[$
-      as requested.
+      which is equivalent to the condition $x^{*}+y^{*}\not\in[0,q/2[$ 
+      (since $x^{*}+y^{*}$  cannot be negative). However we know that 
+      $x^{*}+y^{*}\in[0,q[$ (since $x^{*}\in[0,q/2[$ and $y^{*}\in[0,q/2[$) 
+      and it follows that $x^{*}+y^{*}\in[q/2,q[$. Furthermore, since 
+      $x^{*}+y^{*}$ is equal to $x+y$ modulo $q$, we see that 
+      $(x+y)^{*}=x^{*}+y^{*}$ and consequently $(x+y)^{*}\in[q/2,q[$ 
+      which is $x+y\in[q/2,q[$ as requested.
     \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case we have $r(x)=x^{*}$
-      and $r(y)=y^{*}-q$ and the condition $o(x,y)=1$ reduces to
-      $x^{*}+y^{*}-q\not\in[-q/2,q/2[$ which cannot happen (since
+      as well as $r(y)=y^{*}-q$ and the condition $o(x,y)=1$ reduces to the
+      condition $x^{*}+y^{*}-q\not\in[-q/2,q/2[$ which cannot happen (since
       $x^{*}\in[0,q/2[$ and $y^{*}\in[q/2,q[$). So this case can 
       never happen when $o(x,y)=1$ and there is nothing further to 
       prove.
@@ -520,8 +520,9 @@ or:
     s(x)=1\mbox{\ and\ }s(y)=1\mbox{\ and\ }s(x+y)=0
   \]
 where $o:\zq\times\zq\rightarrow 2$ is the overflow for addition of 
-  definition~(\ref{carry:signed:add:overflow}), while $s:\zq\rightarrow 2$
-  is the sign bit mapping of definition~(\ref{carry:sign:bit}).
+  definition~(\ref{carry:signed:add:overflow}), while the map 
+  $s:\zq\rightarrow 2$ is the sign bit mapping of 
+  definition~(\ref{carry:sign:bit}).
 \end{prop}
 \begin{proof}
   Follows immediately from proposition~(\ref{carry:signed:add:criterium})
@@ -697,12 +698,179 @@ or:
     s(x)=1\mbox{\ and\ }s(y)=0\mbox{\ and\ }s(x-y)=0
   \]
 where $o:\zq\times\zq\rightarrow 2$ is the overflow for subtraction of 
-  definition~(\ref{carry:signed:sub:overflow}), while $s:\zq\rightarrow 2$
+  definition~(\ref{carry:signed:sub:overflow}), while the map $s:\zq\rightarrow 2$
   is the sign bit mapping of definition~(\ref{carry:sign:bit}).
 \end{prop}
 \begin{proof}
   Follows immediately from proposition~(\ref{carry:signed:sub:criterium})
   and definition~(\ref{carry:sign:bit}).
+\end{proof}
+
+\section{Unsigned Comparison}
+Users of computer hardware are not interested in \zq. What holds true
+for operations is equally true for comparisons: given $x,y\in\zq$, what
+matters is not so much whether $x<y$, but rather whether $x^{*}<y^{*}$.
+We care about natural numbers and their properties, not what may or
+may not be true of their representation in \zq. As it turns out, there
+is no difference between $x<y$ and $x^{*}<y^{*}$ as we artificially
+defined the order on \zq\ so that the two notions coincide. Furthermore,
+from definition~(\ref{carry:unsigned:sub:carry}) the condition 
+$x^{*}<y^{*}$ is precisely the condition $c(x,y)=1$ where $c$ is 
+the {\em carry for subtraction}. This carry is a fundamental primitive
+of computer hardware, allowing users to be warned of situation where
+$x-y$ is no longer a representation of $x^{*}-y^{*}$. Hence typically,
+whenever the assembly instruction '{\rm cmp x,y}' (or '{\rm sub x,y}')
+is executed, the carry flag will be set or cleared, depending on whether
+$x<y$ or not. Using this carry flag, we are able to test the conditions.
+$x<y$ and $x\geq y$. In order to test for $x>y$ and $x\leq y$, we
+either use '{\rm cmp y, x'}' rather than '{\rm cmp x,y}', or we need
+to also test for equality. For completeness, we now define:
+
+\begin{defin}\label{carry:zero:bit}
+  We call {\em zero bit mapping} the map $z:\zq\rightarrow 2$ defined by:
+    \[
+      z(x) = 1\ \Leftrightarrow\ x=0
+    \]
+\end{defin}
+
+The {\em zero bit mapping} is typically implemented as a flag which is set
+or cleared depending on whether $z(x)=1$ or $z(x)=0$, where $x\in\zq$ is 
+a quantity (often the result) relevant to the last executed CPU instruction. 
+We now state:
+
+\begin{prop}\label{carry:unsigned:comparison}
+  Let $c:\zq\times\zq\rightarrow 2$ and $z:\zq\rightarrow 2$ be the {\em carry 
+  for subtraction} and {\em zero bit mapping} as defined 
+  in definitions~(\ref{carry:unsigned:sub:carry} and~(\ref{carry:zero:bit}) 
+  respectively. Then for all $x,y\in\zq$ we have the following equivalences:
+    \begin{eqnarray*}
+      x^{*} = y^{*}&\Leftrightarrow&z(x-y)=1\\ 
+      x^{*}\neq y^{*}&\Leftrightarrow&z(x-y)=0\\
+      x^{*} < y^{*}&\Leftrightarrow&c(x,y)=1\\
+      x^{*}\leq y^{*}&\Leftrightarrow&c(x,y)=1\lor z(x-y)=1\\
+      x^{*}\geq y^{*}&\Leftrightarrow &c(x,y)=0\\
+      x^{*}>y^{*}&\Leftrightarrow& c(x,y)=0 \land z(x-y)=0
+    \end{eqnarray*}
+\end{prop}
+\begin{proof}
+  From definition~(\ref{carry:zero:bit}) the equality $z(x-y)=1$ is equivalent
+  to $x-y=0$ which is $x=y$. This is in turn equivalent to $x^{*}=y^{*}$ since
+  $x\rightarrow x^{*}$ is a bijection from $\zq$ to $\N\cap[0,q[$. The 
+  equivalence between $x^{*}<y^{*}$ and $c(x,y)=1$ is true from the very
+  definition (definition~(\ref{carry:unsigned:sub:carry})) of {\em carry
+  for subtraction}. Every other equivalence of 
+  proposition~(\ref{carry:unsigned:comparison}) follow from simple logic.
+\end{proof}
+
+\section{Signed Comparison}
+If $r(x)$ and $r(y)$ are two representable integers, while the ability 
+to compute their sum and difference is paramount, it is often just as 
+important to compare these numbers. As already suggested in the unsigned
+case, the conditions $r(x)<r(y)$ and $x<y$ are in principle two very
+different things. In fact, as we now know, $x<y$ is a condition based
+on carry for subtraction, while $r(x)<r(y)$ has
+little to do with carry at all, as can be seen from this next proposition:
+
+\begin{prop}\label{carry:signed:comparison}
+  Let $o:\zq\times\zq\rightarrow 2$, $s:\zq\rightarrow 2$ and 
+  $z:\zq\rightarrow 2$ be the {\em overflow for subtraction}, the
+  {\em sign bit mapping} and the {\em zero bit mapping} as defined 
+  in definitions~(\ref{carry:signed:sub:overflow}, 
+  (\ref{carry:sign:bit}) and~(\ref{carry:zero:bit}) 
+  respectively. Then for all $x,y\in\zq$ we have:
+    \begin{eqnarray*}
+      r(x) = r(y)&\Leftrightarrow&z(x-y)=1\\ 
+      r(x)\neq r(y)&\Leftrightarrow&z(x-y)=0\\
+      r(x) < r(y)&\Leftrightarrow&o(x,y)\neq s(x-y)\\
+      r(x)\leq r(y)&\Leftrightarrow&o(x,y)\neq s(x-y)\lor z(x-y)=1\\
+      r(x)\geq r(y)&\Leftrightarrow &o(x,y)=s(x-y)\\
+      r(x)>r(y)&\Leftrightarrow&o(x,y)=s(x-y) \land z(x-y)=0
+    \end{eqnarray*}
+  where $r:\zq\rightarrow\Z\cap[-q/2,q/2[$ is the {\em two's complement
+  representation} of~(\ref{carry:signed:2:complement}).
+\end{prop}
+\begin{proof}
+  From definition~(\ref{carry:zero:bit}) the equality $z(x-y)=1$ is equivalent
+  to $x-y=0$ which is $x=y$. This is in turn equivalent to $r(x)=r(y)$ since
+  $r$ is a bijection from $\zq$ to $\Z\cap[-q/2,q/2[$. Every other equivalence
+  follows from elementary logic, once we have proven that $r(x)<r(x)$ is
+  equivalent to $o(x,y)\neq s(x-y)$ which we shall do now. So first we 
+  assume that $r(x)<r(y)$ and we need to show that $o(x,y)\neq s(x-y)$.
+  We shall distinguish four cases:
+  \begin{enumerate}
+    \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case, from 
+      proposition~(\ref{carry:signed:sub:criterium}) the overflow for
+      subtraction has to be $o(x,y)=0$ and we therefore need to prove
+      that $s(x-y)=1$ or equivalently that $x-y\in[q/2,q[$. Furthermore,
+      in this case the assumption $r(x)<r(y)$ becomes $x^{*}<y^{*}$.
+      However, we know that $x^{*}-y^{*}\in]-q/2,q/2[$ (since 
+      $x^{*}\in[0,q/2[$ and $y^{*}\in[0,q/2[$). It follows that
+      $x^{*}-y^{*}\in]-q/2,0[$ which is $x^{*}-y^{*}+q\in]q/2,q[$
+      while being equal to $x-y$ modulo $q$. Hence we see that
+      $(x-y)^{*}=x^{*}-y^{*}+q\in]q/2,q[$ which implies that
+      $x-y\in]q/2,q[\subseteq[q/2,q[$ as requested.
+    \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case the assumption 
+      $r(x)<r(y)$ becomes $x^{*}<y^{*}-q$ which leads to the
+      contradiction $x^{*}<0$. Hence this case cannot occur 
+      when $r(x)<r(y)$ and there is nothing further to prove.
+    \item $x\in[q/2,q[$ and $y\in[0,q/2[$: in this case, from
+      proposition~(\ref{carry:signed:sub:criterium}) the overflow
+      for substraction $o(x,y)$ is equal to $1$ \ifand\ $x-y\in[0,q/2[$.
+      However, this is equivalent to $s(x-y)=0$. Hence we see that
+      $o(x,y)\neq s(x-y)$ as requested. We did not make use of the 
+      assumption $r(x)<r(y)$ in this case, which reduces to 
+      $x^{*}-q < y^{*}$ and is always true anyway. 
+    \item $x\in[q/2,q[$ and $y\in[q/2,q[$: in this case, from
+      proposition~(\ref{carry:signed:sub:criterium}) the overflow for 
+      subtraction is $o(x,y)=0$ and we therefore need to prove 
+      $s(x-y)=1$ or equivalently that $x-y\in[q/2,q[$. Furthermore,
+      in this case the assumption $r(x)<r(y)$ becomes $x^{*}-q<y^{*}-q$
+      which is $x^{*}<y^{*}$. However, we know that $x^{*}-y^{*}\in]-q/2,q/2[$
+      (since $x^{*}\in[q/2,q[$ and $y^{*}\in[q/2,q[$). It follows that
+      $x^{*}-y^{*}\in]-q/2,0[$ which is $x^{*}-y^{*}+q\in]q/2,q[$
+      while being equal to $x-y$ modulo $q$. Hence we see that
+      $(x-y)^{*}=x^{*}-y^{*}+q\in]q/2,q[$ which implies that
+      $x-y\in]q/2,q[\subseteq[q/2,q[$ as requested.
+  \end{enumerate}
+  Conversely, we asssume that $o(x,y)\neq s(x-y)$ and we need to prove
+  that $r(x)<r(y)$. We shall distinguish four cases:
+    \begin{enumerate}
+      \item $x\in[0,q/2[$ and $y\in[0,q/2[$: in this case, we need to prove 
+        that $x^{*}<y^{*}$. However, from 
+        proposition~(\ref{carry:signed:sub:criterium}) we have $o(x,y)=0$
+        and our assumption $o(x,y)\neq s(x-y)$ therefore reduces to 
+        $s(x-y)=1$ which is $x-y\in[q/2,q[$. However, we know that 
+        $x^{*}-y^{*}\in]-q/2,q/2[$ (since $x^{*}\in[0,q/2[$ and 
+        $y^{*}\in[0,q/2[$) and in order to prove $x^{*}<y^{*}$ it is 
+        sufficient to show that $x^{*}-y^{*}\not\in[0,q/2[$. So
+        suppose $x^{*}-y^{*}\in[0,q/2[$. We shall reach a contradiction.
+        Since it is also equal to $x-y$ modulo $q$, we obtain
+        the equation $(x-y)^{*}=x^{*}-y^{*}$  and our assumption 
+        $x-y\in[q/2,q[$ now becomes $x^{*}-y^{*}\in[q/2,q[$ which 
+        is our desired contradiction.
+      \item $x\in[0,q/2[$ and $y\in[q/2,q[$: in this case, from
+        proposition~(\ref{carry:signed:sub:criterium}) we see that 
+        $o(x,y)=1$ \ifand\ $x-y\in[q/2,q[$ which is $s(x-y)=1$. It 
+        follows that $o(x,y)=s(x-y)$ contradicting our assumption
+        $o(x,y)\neq s(x-y)$. So this case cannot happen and there 
+        is nothing prove.
+      \item $x\in[q/2,q[$ and $y\in[0,q/2[$: in this case, we need
+        to prove that $x^{*}-q < y^{*}$ which is clear since $x^{*}-q <0$
+        while $y^{*}\geq 0$.
+      \item $x\in[q/2,q[$ and $y\in[q/2,q[$: in this case, we need to 
+        prove $x^{*}-q < y^{*}-q$ which is $x^{*}<y^{*}$. However,
+        from proposition~(\ref{carry:signed:sub:criterium}) we have
+        $o(x,y)=0$ and our assumption $o(x,y)\neq s(x-y)$ therefore
+        reduces to $s(x-y)=1$ which is $x-y\in[q/2,q[$. Now we know
+        that $x^{*}-y^{*}\in]-q/2,q/2[$ (since $x^{*}\in[q/2,q[$
+        and $y^{*}\in[q/2,q[$). In order to prove that $x^{*}<y^{*}$
+        it is sufficient to show that $x^{*}-y^{*}\not\in[0,q/2[$.
+        So let us assume that $x^{*}-y^{*}\in[0,q/2[$. We shall
+        reach a contradiction. Since it is equal to $x-y$ modulo
+        $q$ we obtain $(x-y)^{*}=x^{*}-y^{*}$ and our assumption
+        $x-y\in[q/2,q[$ now becomes $x^{*}-y^{*}\in[q/2,q[$ which is
+        our desired contradiction.
+    \end{enumerate}
 \end{proof}
 
 
