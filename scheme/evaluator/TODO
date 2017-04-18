@@ -1,3 +1,4 @@
+test.scm: error occurs when (quote ... ) around (let loop ...)
 further isolate bug in test.scm
 
 resolve bug in frame3 (scm frame3-bug.scm (under frame3): wrong environment created) 

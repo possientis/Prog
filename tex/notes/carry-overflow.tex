@@ -721,9 +721,9 @@ of computer hardware, allowing users to be warned of situation where
 $x-y$ is no longer a representation of $x^{*}-y^{*}$. Hence typically,
 whenever the assembly instruction '{\rm cmp x,y}' (or '{\rm sub x,y}')
 is executed, the carry flag will be set or cleared, depending on whether
-$x<y$ or not. Using this carry flag, we are able to test the conditions.
+$x<y$ or not. Using this carry flag, we are able to test the conditions
 $x<y$ and $x\geq y$. In order to test for $x>y$ and $x\leq y$, we
-either use '{\rm cmp y, x'}' rather than '{\rm cmp x,y}', or we need
+either use '{\rm cmp y, x}' rather than '{\rm cmp x,y}', or we need
 to also test for equality. For completeness, we now define:
 
 \begin{defin}\label{carry:zero:bit}
@@ -793,7 +793,7 @@ little to do with carry at all, as can be seen from this next proposition:
   From definition~(\ref{carry:zero:bit}) the equality $z(x-y)=1$ is equivalent
   to $x-y=0$ which is $x=y$. This is in turn equivalent to $r(x)=r(y)$ since
   $r$ is a bijection from $\zq$ to $\Z\cap[-q/2,q/2[$. Every other equivalence
-  follows from elementary logic, once we have proven that $r(x)<r(x)$ is
+  follows from elementary logic, once we have proven that $r(x)<r(y)$ is
   equivalent to $o(x,y)\neq s(x-y)$ which we shall do now. So first we 
   assume that $r(x)<r(y)$ and we need to show that $o(x,y)\neq s(x-y)$.
   We shall distinguish four cases:

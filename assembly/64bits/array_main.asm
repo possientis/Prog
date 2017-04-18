@@ -1,6 +1,6 @@
         segment .text
         global main
-        extern atoi
+;        extern atoi
         extern printf
         extern array_create
         extern array_fill
