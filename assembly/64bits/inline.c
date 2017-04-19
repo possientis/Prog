@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+/* possible to use 'gcc -masm=intel ...' and replace
+ * at&t syntax with intel syntax in asm statements */
+
+
 /* inline assembly forces you to use AT&T syntax */
 int getValueFromASM()
 {

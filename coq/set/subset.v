@@ -101,9 +101,11 @@ Require Import order.
   translating the argument into standard ZF-based mathematics, we shall 
   regard Rn: set -> set -> 2 = {0,1}. Defining R0 x y = 1, for n >=1 we set: 
 
-    Rn 0 _    = 1
-    Rn {x} 0  = 0
-    Rn 
+    Rn 0 _      = 1
+    Rn {x} 0    = 0
+    Rn {x} {y}  = R(n-1) x y /\ R(n-1) y x   
+    Rn {x} yUz  = R(n-1) {x} y \/ R(n-1) {x} z
+    Rn xUy z    = R(n-1) x z /\ R(n-1) y z
 
 *)
 
@@ -123,6 +125,16 @@ Fixpoint subset_n (n:nat) : set -> set -> Prop :=
         | Union x y       => subset_n p x b /\ subset_n p y b
       end)
   end.
+
+(* 
+
+Once we have defined the sequence of mappings Rn: set -> set -> 2,
+the key is to realize that given a b:set, the boolean sequence
+(Rn a b) is eventually constant. Specifically, we have:
+
+  order(a) + order(b) <= n -> Rn a b = R(n+1) a b
+
+*)
 
 Lemma subset_n_Sn : forall (n:nat) (a b:set),
   order a + order b <= n -> (subset_n n a b <-> subset_n (S n) a b).
@@ -169,8 +181,16 @@ Proof.
   simpl. reflexivity.
   Qed.
 
+(* This allows us to define R: set -> set -> 2 as by setting
+R a b = Rn a b for n large enough, specifically n = order a + order b
+*)
 Definition subset (a b:set) : Prop :=
   let n:= order a + order b in subset_n n a b.
+
+
+(*
+We now check the obvious, namely that R a b = Rn a b for n large enough
+*)
 
 Lemma subset_subset_n : forall (n:nat) (a b:set),
   order a + order b <= n -> (subset a b <-> subset_n n a b).
@@ -195,6 +215,18 @@ Proof.
   apply le_lt_or_eq. exact H.
 Qed.
 
+(* 
+At this stage we have defined a relation R: set -> set -> 2.
+It remains to prove that R satisfies properties (i)-(v).
+
+  (i)   0 <= x                                , forall x
+  (ii)  ¬({x} <= 0)                           , forall x
+  (iii) {x} <= {y}  <-> (x <= y) /\ (y <= x)  , forall x,y
+  (iv)  {x} <= yUz  <-> {x] <= y \/ {x} <= z  , forall x,y,z
+  (v)   xUy <= z    <->  x <= z  /\  y <= z   , forall x,y,z
+
+  We start with (i)
+*)
 Lemma subset_0_all : forall (b:set), subset Empty b.
 Proof.
   (* induction on b *)
@@ -207,12 +239,19 @@ Proof.
   clear b. intros x Hx y Hy. unfold subset. simpl. apply I.
 Qed.
 
+(*
+property (ii)
+*)
+
 Lemma subset_single_0 : forall (x:set), ~subset (Singleton x) Empty.
 Proof.
   (* not structural induction necessary *)
   intro x. unfold subset. simpl. tauto.
 Qed.
 
+(*
+property (iii)
+*)
 
 Lemma subset_single_single : forall (x y:set),
   subset (Singleton x) (Singleton y) <-> (subset x y)/\(subset y x).
@@ -222,6 +261,10 @@ Proof.
   rewrite plus_comm. apply plus_le_compat_l. apply le_S. apply le_n.
   apply plus_le_compat_l. apply le_S. apply le_n.
 Qed.
+
+(*
+property (iv)
+*)
 
 Lemma subset_single_union: forall (x y z:set),
   subset (Singleton x) (Union y z) <-> 
@@ -235,6 +278,10 @@ Proof.
   apply plus_le_compat_l. apply le_max_l.
 Qed.
 
+(*
+property (v)
+*)
+
 Lemma subset_union_all : forall (x y b:set),
   subset (Union x y) b <-> (subset x b)/\(subset y b).
 Proof.
@@ -242,6 +289,13 @@ Proof.
   rewrite <- subset_subset_n, <- subset_subset_n. tauto.
   apply plus_le_compat_r. apply le_max_r. apply plus_le_compat_r. apply le_max_l.
 Qed.
+
+(*
+Wrapping things up for the existence result: defining a few predicates
+on relations of type set -> set -> 2. Each predicate refers to one
+of the properties (i)-(v) which we have proved our inclusion 
+relation satisfies
+*)
 
 Definition subset_prop_1 (relation: set -> set -> Prop) : Prop :=
   forall (b:set), relation Empty b.
@@ -262,6 +316,15 @@ Definition subset_prop_5 (relation: set -> set -> Prop) : Prop :=
   forall (x y b:set),
   relation (Union x y) b <-> relation x b /\ relation y b.
 
+(*
+There exists a binary relation on set which satisfies (i)-(v)
+  (i)   0 <= x                                , forall x
+  (ii)  ¬({x} <= 0)                           , forall x
+  (iii) {x} <= {y}  <-> (x <= y) /\ (y <= x)  , forall x,y
+  (iv)  {x} <= yUz  <-> {x] <= y \/ {x} <= z  , forall x,y,z
+  (v)   xUy <= z    <->  x <= z  /\  y <= z   , forall x,y,z
+*)
+
 Lemma subset_exist :
   subset_prop_1 subset /\
   subset_prop_2 subset /\
@@ -276,7 +339,10 @@ Proof.
   unfold subset_prop_5. apply subset_union_all.
 Qed.
 
-(* subset is the unique relation on set satisfying properties 1-5 *) 
+(*
+Such relation is in fact unique.
+*)
+
 Lemma subset_unique : forall (relation : set -> set -> Prop),
   subset_prop_1 relation ->
   subset_prop_2 relation ->

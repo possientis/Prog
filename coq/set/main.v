@@ -122,7 +122,6 @@ Proof.
   apply Hy. intros a Ha. apply H. simpl. apply in_or_app. right. exact Ha.
 Qed.
 
-
 Lemma subset_reflexive : forall (a:set), subset a a.
 Proof.
   (* induction on the order of a *)
@@ -144,6 +143,8 @@ Proof.
   (* clean up *)
   apply le_lt_or_eq. exact H.
 Qed.
+
+
 
 Lemma equiv_reflexive: forall (a:set), equiv a a.
 Proof.
