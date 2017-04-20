@@ -6,6 +6,7 @@ cd ${HOME}
 
 rm -f *.o
 rm -f a.out
+rm -f log log1 log2
 
 
 cd ${DIR}

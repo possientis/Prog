@@ -1,3 +1,4 @@
+; This shellcode is no good, as it contains null bytes
         section .text
         global _start
 _start:
