@@ -189,7 +189,7 @@ int main()
   );
   assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION) 
   assert(size == 32);               // size unchanged here
-  assert(buffer_null(buffer, 65));  // output buffer unaffected 
+  assert(is_all_null(buffer, 65));  // output buffer unaffected 
   assert(call_back_data == 42);     // call back return value
   call_back_data = 0;               // make sure next error correctly sets it
 
@@ -212,7 +212,7 @@ int main()
   );
   assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
   assert(size == 0);                // 0 bytes written
-  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(is_all_null(buffer, 65));  // output buffer unaffected
   assert(call_back_data == 42);     // call back return value
   call_back_data = 0;               // make sure next error correctly sets it
 
@@ -224,7 +224,7 @@ int main()
   );
   assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
   assert(size == 0);                // 0 bytes written
-  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(is_all_null(buffer, 65));  // output buffer unaffected
   assert(call_back_data == 42);     // call back return value
   call_back_data = 0;               // make sure next error correctly sets it
 
@@ -251,7 +251,7 @@ int main()
   );
   assert(return_value == 0);    // should always be the case
   assert(size == 64);           // size unchanged here
-  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(is_all_null(buffer, 65));  // output buffer unaffected
   assert(call_back_data == 42); // call back return value
   call_back_data = 0;           // make sure next error correctly sets it
 
@@ -274,7 +274,7 @@ int main()
   );
   assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
   assert(size == 0);                // 0 bytes written
-  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(is_all_null(buffer, 65));  // output buffer unaffected
   assert(call_back_data == 42);     // call back return value
   call_back_data = 0;               // make sure next error correctly sets it
 
@@ -286,7 +286,7 @@ int main()
   );
   assert(return_value == 0);        // serialization failed (WRONG DOCUMENTATION)
   assert(size == 0);                // 0 bytes written
-  assert(buffer_null(buffer, 65));  // output buffer unaffected
+  assert(is_all_null(buffer, 65));  // output buffer unaffected
   assert(call_back_data == 42);     // call back return value
   call_back_data = 0;               // make sure next error correctly sets it
 
@@ -351,7 +351,7 @@ int main()
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,NULL,&size,&sig1); 
   assert(return_value == 0);      // serialization failed
   assert(size == 128);            // size unchanged
-  assert(buffer_null(der, 128));  // output buffer unaffected
+  assert(is_all_null(der, 128));  // output buffer unaffected
   assert(call_back_data == 42);   // check callback return value
   call_back_data = 0;             // make sure next error correctly sets it
   
@@ -369,7 +369,7 @@ int main()
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
   assert(return_value == 0);      // can't serialize
   assert(size == 71);             // size is changed here 
-  assert(buffer_null(der, 128));  // output buffer unaffected
+  assert(is_all_null(der, 128));  // output buffer unaffected
   assert(call_back_data == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
   call_back_data = 0;             // make sure next error correctly sets it
 
@@ -379,7 +379,7 @@ int main()
   return_value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,NULL); 
   assert(return_value == 0);      // can't serialize
   assert(size == 128);            // size is unchanged
-  assert(buffer_null(der, 128));  // output buffer unaffected
+  assert(is_all_null(der, 128));  // output buffer unaffected
   assert(call_back_data == 42);   // checking callback return value
   call_back_data = 0;             // make sure next error correctly sets it
 

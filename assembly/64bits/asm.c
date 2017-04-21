@@ -34,8 +34,17 @@ int main()
   int dst;
 
   asm(CODE : "=r" (dst) : "r" (src));
-
   printf("dst = %d\n", dst);
+
+#ifndef INTEL
+
+  asm("mov %[aSrc], %[aDst]""\n\t"
+      "add $2, %[aDst]"
+      : [aDst] "=r" (dst)
+      : [aSrc] "r"  (src)
+      : "cc");
+  printf("dst = %d\n", dst);
+#endif
 
 
 #ifndef INTEL
