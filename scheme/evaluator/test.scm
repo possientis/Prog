@@ -2,30 +2,47 @@
 (load "main.scm") 
 
 (force-thunk (lazy-eval '(load "main.scm")))
-(force-thunk (lazy-eval '(load "tools.scm")))
 (force-thunk (lazy-eval '(set-debug #t)))
 
-(define code 
-  '(test-expression 
-     (quote (let loop ((i 5) (acc 1)) 
+(define (wrap code)
+  (list 'strict-eval code))
+
+(define code1                 ; fails under lazy-eval
+  (quote
+    (quote 
+      (let loop ((i 5) (acc 1)) 
         (if (equal? 1 i) 
           acc 
-          (loop (- i 1) (* i acc))))) 
-         120 "named-let.1")
-)
+          (loop (- i 1) (* i acc)))))))
 
-(define code2
-  '(let loop ((i 5) (acc 1)) 
-     (if (equal? 1 i) 
-       acc 
-       (loop (- i 1) (* i acc))))) 
 
-(define code3 
-  (list 'assert-equals (list 'strict-eval code2) 120 "abc"))
+(define code2                 ; succeeds under lazy-eval
+  (quote 
+    (let loop ((i 5) (acc 1)) 
+      (if (equal? 1 i) 
+        acc 
+        (loop (- i 1) (* i acc))))))
 
-;(force-thunk (lazy-eval code3))  ; this does not fail ... but why?
- 
-(force-thunk (lazy-eval code))
+(newline)
+(display "code1 (fails):\n")(display (wrap code1))(newline)
+(newline)
+(display "code2 (succeeds):\n")(display (wrap code2))(newline)
+
+(newline)
+(display (force-thunk (lazy-eval (wrap code2))))(newline)
+
+(newline)
+(display "value1 = ")(display (eval code1))(newline)
+(display "value2 = ")(display (eval code2))(newline)
+
+(display 
+  (force-thunk 
+    (lazy-eval
+      (quote
+        (let loop ((i 5) (acc 1)) 
+          (if (equal? 1 i) 
+            acc 
+            (loop (- i 1) (* i acc))))))))
 
 
 (exit 0)

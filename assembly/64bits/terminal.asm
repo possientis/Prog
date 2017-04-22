@@ -1,8 +1,8 @@
 section     .data
 SCRWIDTH:   equ 80                  ; by default we assume 80 chars wide
-PosTerm:    db 27,"[01;01H"         ; <ESC>[<Y>;<X>H
+PosTerm:    db 27,"[01;01H"         ; <ESC>[<Y>;<X>H  , control string for positioning
 POSLEN:     equ $-PosTerm           ; Length of Term position string 
-ClearTerm:  db 27,"[2J"             ; <ESC>[2J
+ClearTerm:  db 27,"[2J"             ; <ESC>[2J        , control string for clearing screen
 CLEARLEN:   equ $-ClearTerm         ; Length of Term clearing string
 Msg:        db "Hello, world!"      ; message
 MSGLEN:     equ $-Msg               ; Length of message
@@ -25,8 +25,6 @@ Digits:     db "0001020304050607080910111213141516171819"
 
 section     .text
 ClrScr:
-            push  rax               ; save pertinent registers
-            push  rbx        
             push  rcx
             push  rdx
             mov   rcx, ClearTerm    ; pass offset of terminal control string
@@ -34,8 +32,6 @@ ClrScr:
             call  WriteStr          ; send control string to console
             pop   rdx
             pop   rcx
-            pop   rbx
-            pop   rax
             ret                     ; go home
 
 ; IN: X in AH, Y in AL
@@ -78,13 +74,15 @@ WriteCtr:
             ret 
             
 WriteStr:
-            push  rax
-            push  rbx
-            mov   eax, 4
-            mov   ebx, 1
-            int   0x80 
-            pop   rbx
-            pop   rax
+            pushaq
+
+            mov   rax, 1            ; sys_write 64 bits
+            mov   rdi, 1            ; stdout
+            mov   rsi, rcx          ; buffer expected in rcx 
+            ;mov   rdx, rdx         ;  length argument expected in rdx
+            syscall
+
+            popaq
             ret
 
 global _start
@@ -103,13 +101,11 @@ _start:
             mov   rdx, PROMPTLEN
             call  WriteStr
 
-            mov   eax, 3            ; sys_read 32 bits
-            mov   ebx, 0            ; stdin
-            int   0x80
+            mov   rax, 0            ; sys_read 64 bits
+            mov   rdi, 0            ; stdin
+            syscall
 
-            mov   eax, 1
-            mov   ebx, 0
-            int   0x80
-            
-
+            mov   rax, 60
+            mov   rdi, 0
+            syscall
 

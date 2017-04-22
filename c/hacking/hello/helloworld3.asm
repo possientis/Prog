@@ -3,9 +3,9 @@
 ;_start:
 ; But we only want to assemble for shellcode, not make executable file
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; BEAUTIFUL: the shellcode has no null byte !!!                             ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; BEAUTIFUL: the shellcode has no null byte !!!
+
+
 
 ; helloworld3.o:     file format elf64-x86-64
 ; 

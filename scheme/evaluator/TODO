@@ -1,4 +1,4 @@
-in test.scm write different version of 'code' with explicit 'quote' and 'list'
+test.scm: see code1 vs code2 
 
 see debug in tools.scm while running test.scm. It seems that when evaluation
 of left is carried out, it no longer has the appropriate environment to find 'loop'

@@ -26,7 +26,7 @@ main2 = do
   let full = first ++ " " ++ last
   putStrLn ("Pleased to meet you, " ++ full ++ "!")
 
--- usinf hFlush
+-- using hFlush
 main3 :: IO ()
 main3 = do
   putStr "What is your first name? "
@@ -38,8 +38,19 @@ main3 = do
   let full = first ++ " " ++ last
   putStrLn ("Pleased to meet you, " ++ full ++ "!")
 
+--using hFlush and chaining binds
+main4 :: IO ()
+main4 = putStr "What is your first name? "  >>
+        hFlush stdout >>
+        getLine >>= \first -> 
+        putStr "And your last name? " >>
+        hFlush stdout >>
+        getLine >>= \last ->
+        let full = first ++ " " ++ last 
+        in putStrLn ("Pleased to meet you, " ++ full ++ "!") 
+
 main :: IO ()
-main = main3
+main = main4
 
 
 
