@@ -7,14 +7,15 @@ HOME=/home/john/Prog/scheme/
 cd ${HOME}
 
 
-./guile/test.sh
-./dict/test.sh
 ./avl/test.sh
 ./bst/test.sh
+./dict/test.sh
 ./digital/test.sh       # currently have failures
+./evaluator/test.sh
+./guile/test.sh
 ./hash/test.sh
 ./stream/test.sh
-./evaluator/test.sh
+./types/test.sh
 
 cd ${DIR}
 echo '\nAll scheme tests completed successfully\n'
