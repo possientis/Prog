@@ -35,7 +35,6 @@
 ;   2a:	77 6f                	ja     0x9b
 ;   2c:	72 6c                	jb     0x9a
 ;   2e:	64 21 0a             	and    DWORD PTR fs:[rdx],ecx
-;   31:	0d                   	.byte 0xd
 
 
 jmp short one ; jump down to the call at the end (short jmp -> no null byte)
@@ -63,4 +62,4 @@ syscall
 
 one:
 call two  ; call back upwards to avoid null bytes
-db "Hello, world!",0x0a,0x0d
+db "Hello, world!",0x0a

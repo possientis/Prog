@@ -1,6 +1,4 @@
 (define (assert-equals left right message)
-  (debug "[DEBUG]: assert-equals is running\n")
-  (debug "[DEBUG]: left = ")(debug left)(debug-newline)
   (if (not (equal? left right)) 
     (error "unit-test failure: "
            (string-append message 
@@ -10,10 +8,8 @@
 (define (test-expression exp value message . arg)
   (let ((env (if (null? arg) global-env (car arg))) 
         (print (lambda (msg) (string-append message msg))))
-    (debug "[DEBUG]: about to fail\n")
     (assert-equals 
       (strict-eval exp env) value (print ": strict-eval")) 
-    (debug "[DEBUG]: should not reach this point\n")
     (assert-equals 
       (force-thunk (lazy-eval exp env)) value (print ": lazy-eval")) 
     (assert-equals 

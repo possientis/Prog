@@ -10,7 +10,6 @@ extern int yylval;
 %%
 [0-9]+      { 
               yylval = atoi(yytext); 
-              fprintf(stderr, "lexer: number found: %d\n", yylval);
               return NUMBER; 
             }
 [ \t]+      ;           /* ignore whitespace */

@@ -23,8 +23,10 @@
   printf(#NAME" is defined\n") 
 
 
-int main() 
+int test_macro() 
 {
+
+  printf("\ntesting macros...\n");
 
 # if defined(SECP256K1_GNUC_PREREQ)
   MACRO_DEFINED(SECP256K1_GNUC_PREREQ);

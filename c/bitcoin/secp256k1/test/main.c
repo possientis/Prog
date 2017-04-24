@@ -1,12 +1,22 @@
-#include "../secp256k1/include/secp256k1.h"
-#include "test.h"
-
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
+#include <secp256k1.h>
+#include "test.h"
+
+
+extern int test_macro();
+extern int test_context();
+extern int test_callback();
+
+
 int main()
 {
+
+  assert(test_macro() == 0);
+  assert(test_context() == 0);
+  assert(test_callback() == 0);
 
   secp256k1_context *ctx;         // pointer
   secp256k1_context *clone;       // pointer
@@ -26,54 +36,7 @@ int main()
   assert(sizeof(sig1) == 64);
   assert(sizeof(fun) == 8);
 
-  printf("\ntesting contexts ...\n");
 
-  // SECP256K1_CONTEXT_VERIFY
-  
-  // secp2561k1_context_create
-  ctx = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY);
-  assert(ctx != NULL);
-
-  // secp2561k1_context_clone
-  clone = secp256k1_context_clone(ctx);
-  assert(clone != NULL);
-  assert(clone != ctx);
-
-  // secp2561k1_context_destroy
-  secp256k1_context_destroy(ctx);
-  secp256k1_context_destroy(clone);
-
-  // SECP2561K1_CONTEXT_SIGN
-  
-  // secp2561k1_context_create
-  ctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
-  assert(ctx != NULL);
-
-  // secp2561k1_context_clone
-  clone = secp256k1_context_clone(ctx);
-  assert(clone != NULL);
-  assert(clone != ctx);
-
-  // secp2561k1_context_destroy
-  secp256k1_context_destroy(ctx);
-  secp256k1_context_destroy(clone);
-
-  // SECP256K1_CONTEXT_NONE
-  
-  // secp2561k1_context_create
-  ctx = secp256k1_context_create(SECP256K1_CONTEXT_NONE);
-  assert(ctx != NULL);
-
-  // secp2561k1_context_clone
-  clone = secp256k1_context_clone(ctx);
-  assert(clone != NULL);
-  assert(clone != ctx);
-
-  // secp2561k1_context_destroy
-  secp256k1_context_destroy(ctx);
-  secp256k1_context_destroy(clone);
-
-  printf("\ntesting setting up callbacks ...\n");
   int call_back_data;
  
   // secp2561k1_context_create
@@ -86,7 +49,7 @@ int main()
   secp256k1_context_set_error_callback(ctx,default_callback, &call_back_data);
 
 
-  printf("\ntesting parsing public key ...\n");
+  fprintf(stderr,"\ntesting parsing public key...\n");
 
   int return_value;
 
@@ -94,12 +57,9 @@ int main()
 // "04f028892bad7ed57d2fb57bf33081d5cfcf6f9ed3d3d7f159c2e2fff579dc341a"
 //   "07cf33da18bd734c600b96a72bbc4749d5141c90ec8ac328ae52ddfe2e505bdb",
   
-  const unsigned char *bytes1 = "\x03"
-    "\xf0\x28\x89\x2b\xad\x7e\xd5\x7d\x2f\xb5\x7b\xf3\x30\x81\xd5\xcf"
-    "\xcf\x6f\x9e\xd3\xd3\xd7\xf1\x59\xc2\xe2\xff\xf5\x79\xdc\x34\x1a";
 
   // secp256k1_ec_pubkey_parse
-  return_value = secp256k1_ec_pubkey_parse(ctx, &pub, bytes1, 33); 
+  return_value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes1, 33); 
   assert(return_value == 1);  // public key is valid
 
 
@@ -167,20 +127,20 @@ int main()
 
 
   // pub1 and pub4 should parse into the same key
-  return_value = secp256k1_ec_pubkey_parse(ctx, &pub1, bytes1, 33);
+  return_value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
   assert(return_value == 1);
   return_value = secp256k1_ec_pubkey_parse(ctx, &pub2, bytes4, 65);
   assert(return_value == 1);
   assert(memcmp(&pub1, &pub2, sizeof(secp256k1_pubkey)) == 0);
 
 
-  printf("\ntesting serializing public key ...\n");
+  fprintf(stderr,"\ntesting serializing public key...\n");
 
   unsigned char buffer[65];
   size_t size = 65;
 
   // compressed
-  printf("compressed format ...\n");
+  fprintf(stderr,"compressed format...\n");
   // serializing with output buffer too small
   size = 32;
   memset(buffer,0x00, 65);
@@ -201,7 +161,7 @@ int main()
   );
   assert(return_value == 1);                  // serialization succeeded
   assert(size == 33);                         // expecting 33 bytes written
-  assert(memcmp(buffer, bytes1, 33) == 0);  // success despite NULL context
+  assert(memcmp(buffer, pubkey_bytes1, 33) == 0);  // success despite NULL context
   assert(call_back_data == 0);                // unaffected by call
 
   // NULL output buffer
@@ -237,11 +197,11 @@ int main()
   );
   assert(return_value == 1);        // should always be the case
   assert(size == 33);               // expecting 33 bytes written
-  assert(memcmp(buffer, bytes1, 33) == 0);
+  assert(memcmp(buffer, pubkey_bytes1, 33) == 0);
   assert(call_back_data == 0);      // unaffected by call
 
   // uncompressed
-  printf("uncompressed format ...\n");
+  fprintf(stderr,"uncompressed format...\n");
   
   // serializing with output buffer too small
   size = 64;
@@ -302,21 +262,21 @@ int main()
   assert(call_back_data == 0);      // unaffected by call
 
 
-  printf("\ntesting parsing signature (compact) ...\n");
+  fprintf(stderr,"\ntesting parsing signature (compact)...\n");
 
-  const unsigned char* sig_bytes1 = 
+  const unsigned char* sig_pubkey_bytes1 = 
     "\x98\x62\x10\xb9\xdc\x0a\x2f\x21\xbc\xae\xc0\x96\xf4\xf5\x5f\xf4"
     "\x48\x6f\xcc\x4e\x3a\xaf\xe7\xe0\xcb\xf6\x46\x92\x59\x6e\x99\x4a"
     "\x0e\x5c\x6e\xc6\x54\x08\xd6\x5a\xae\x9e\x1c\xe8\xe9\x53\xc3\x1e"
     "\xd0\x3f\x41\x79\x09\x1d\x20\xd1\x59\xda\xe4\x19\xe9\x0c\xa3\x63";
 
   // NULL context (still works)
-  return_value = secp256k1_ecdsa_signature_parse_compact(NULL, &sig1, sig_bytes1); 
+  return_value = secp256k1_ecdsa_signature_parse_compact(NULL, &sig1, sig_pubkey_bytes1); 
   assert(return_value == 1);      // parsing succeeded
   assert(call_back_data == 0);    // unaffected by call
 
   // NULL output pointer
-  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, NULL, sig_bytes1);  
+  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, NULL, sig_pubkey_bytes1);  
   assert(return_value == 0);      // parsing failed
   assert(call_back_data == 42);   // callback return value
   call_back_data = 0;             // make sure next error correctly sets it
@@ -329,12 +289,12 @@ int main()
   call_back_data = 0;             // make sure next error correctly sets it
   
   // secp256k1_ecdsa_signature_parse_compact
-  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);  
+  return_value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_pubkey_bytes1);  
   assert(return_value == 1);      // parsing succeeded
   assert(call_back_data == 0);    // unaffected by call
   
 
-  printf("\ntesting serializing signature (DER) ...\n");
+  fprintf(stderr,"\ntesting serializing signature (DER)...\n");
   unsigned char der[128];
   
   // NULL context
@@ -392,7 +352,7 @@ int main()
   assert(call_back_data == 0);    // unaffected by call
  
 
-  printf("\ntesting parsing signature (DER) ...\n");
+  fprintf(stderr,"\ntesting parsing signature (DER)...\n");
 
   // NULL context 
   size = 71;
@@ -428,7 +388,7 @@ int main()
   assert(return_value == 1);      // parsing was succesful
   assert(memcmp(&sig1, &sig2, sizeof(secp256k1_ecdsa_signature)) == 0);
 
-  printf("\ntesting serializing signature (compact) ...\n");
+  fprintf(stderr,"\ntesting serializing signature (compact)...\n");
 
   unsigned char buffer64[64];
 
@@ -436,7 +396,7 @@ int main()
   memset(buffer64,0x00, 64);
   return_value = secp256k1_ecdsa_signature_serialize_compact(NULL,buffer64,&sig1);
   assert(return_value ==1);                       // serialization succeeded
-  assert(memcmp(buffer64,sig_bytes1,64) == 0);  // initial signature
+  assert(memcmp(buffer64,sig_pubkey_bytes1,64) == 0);  // initial signature
   assert(call_back_data == 0);
 
   // NULL output buffer
@@ -458,10 +418,10 @@ int main()
   memset(buffer64,0x00, 64);
   return_value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,&sig1);
   assert(return_value ==1);                       // serialization succeeded
-  assert(memcmp(buffer64,sig_bytes1,64) == 0);  // initial signature
+  assert(memcmp(buffer64,sig_pubkey_bytes1,64) == 0);  // initial signature
   assert(call_back_data == 0);
 
-  printf("\ntesting verifying signature ...\n");
+  fprintf(stderr,"\ntesting verifying signature...\n");
   
   const unsigned char *hash1 = 
     "\x7f\x83\xb1\x65\x7f\xf1\xfc\x53\xb9\x2d\xc1\x81\x48\xa1\xd6\x5d"
@@ -511,10 +471,10 @@ int main()
   assert(return_value == 1);
   assert(call_back_data == 0);
 
-  printf("\ntesting normalizing signature ...\n");
+  fprintf(stderr,"\ntesting normalizing signature...\n");
 
 
-  // non-normalized counterpart of sig_bytes1
+  // non-normalized counterpart of sig_pubkey_bytes1
   const unsigned char* sig_bytes2 = 
     "\x98\x62\x10\xb9\xdc\x0a\x2f\x21\xbc\xae\xc0\x96\xf4\xf5\x5f\xf4"
     "\x48\x6f\xcc\x4e\x3a\xaf\xe7\xe0\xcb\xf6\x46\x92\x59\x6e\x99\x4a"
@@ -554,7 +514,7 @@ int main()
 
 
 
-  printf("\ntesting rfc6979 nonce function ...\n");
+  fprintf(stderr,"\ntesting rfc6979 nonce function...\n");
 
   const secp256k1_nonce_function f1 = secp256k1_nonce_function_rfc6979;
   const secp256k1_nonce_function f2 = secp256k1_nonce_function_default;
@@ -601,7 +561,7 @@ int main()
   // NULL key pointer (segmentation fault: WRONG?)
   // return_value = f1(nonce1, hash1, NULL, NULL, NULL, 0); 
 
-  printf("\ntesting ecdsa signature generation ...\n");
+  fprintf(stderr,"\ntesting ecdsa signature generation...\n");
 
   // NULL context: segmentation fault
 //  return_value = secp256k1_ecdsa_sign(NULL, &sig, hash1, priv1, f1, NULL);
@@ -638,7 +598,7 @@ int main()
   assert(memcmp(&sig,&sig1,64) == 0);
   assert(call_back_data == 0);
 
-  printf("\ntesting veryfying secret keys ...\n");
+  fprintf(stderr,"\ntesting veryfying secret keys...\n");
 
   const unsigned char* order = 
     "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe"
@@ -690,7 +650,7 @@ int main()
   assert(call_back_data == 0);
 
  
-  printf("\ntesting public key creation from private key ...\n");
+  fprintf(stderr,"\ntesting public key creation from private key...\n");
 
   // NULL context: segmentation fault
 //  return_value = secp256k1_ec_pubkey_create(NULL, &pub, priv1);
@@ -719,7 +679,7 @@ int main()
   assert(call_back_data == 0);
   assert(memcmp(&pub, &pub1, 64) == 0);
 
-  printf("\ntesting privkey_tweak_add ...\n");
+  fprintf(stderr,"\ntesting privkey_tweak_add...\n");
 
   // NULL context
   memcpy(nonce1, priv1, 32);
@@ -775,7 +735,7 @@ int main()
   assert(return_value == 0);                // tweak failed
   assert(call_back_data == 0);              // but no error
 
-  printf("\ntesting pubkey_tweak_add ...\n");
+  fprintf(stderr,"\ntesting pubkey_tweak_add...\n");
 
   const unsigned char* tweak = 
     "\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe"
@@ -797,7 +757,7 @@ int main()
   assert(memcmp(&pub, &pub2, 64) == 0);
 
 
-  printf("\ntesting privkey_tweak_mul ...\n");
+  fprintf(stderr,"\ntesting privkey_tweak_mul...\n");
   
   // multiplying with tweak of 1
   memcpy(nonce1, priv1, 32);
@@ -824,7 +784,7 @@ int main()
   assert(call_back_data == 0);              // but no error
   assert(nonce1[0] == (0x1e << 1) + 1);
  
-  printf("\ntesting pubkey_tweak_mul ...\n");
+  fprintf(stderr,"\ntesting pubkey_tweak_mul...\n");
   // not doing much here, don't understand this function yet
   // multiplying tweak to public key -> pub2
   memcpy(&pub2, &pub1, 64);
@@ -832,11 +792,11 @@ int main()
   assert(return_value == 1);
 
 
-  printf("\ntesting context_randomize ...\n");
+  fprintf(stderr,"\ntesting context_randomize...\n");
   return_value = secp256k1_context_randomize(ctx, priv1);
   assert(return_value == 1);
 
-  printf("\ntesting pubkey_combine ...\n");
+  fprintf(stderr,"\ntesting pubkey_combine...\n");
   // not doing much here
   memcpy(&pub2, &pub1, 64);
   const secp256k1_pubkey* const list[2] = { &pub1, &pub2 };

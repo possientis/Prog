@@ -4,46 +4,20 @@
 (force-thunk (lazy-eval '(load "main.scm")))
 (force-thunk (lazy-eval '(set-debug #t)))
 
-(define (wrap code)
-  (list 'strict-eval code))
+(define (do-run expr)
+  (force-thunk (lazy-eval expr)))
 
-(define code1                 ; fails under lazy-eval
+
+(define code
   (quote
-    (quote 
-      (let loop ((i 5) (acc 1)) 
-        (if (equal? 1 i) 
-          acc 
-          (loop (- i 1) (* i acc)))))))
+    (quote
+      ((lambda (i acc) 
+         (define loop 
+           (lambda (i acc) (if (equal? 1 i) acc (loop (- i 1) (* i acc))))) 
+         (loop i acc)) 5 1))))
 
 
-(define code2                 ; succeeds under lazy-eval
-  (quote 
-    (let loop ((i 5) (acc 1)) 
-      (if (equal? 1 i) 
-        acc 
-        (loop (- i 1) (* i acc))))))
-
-(newline)
-(display "code1 (fails):\n")(display (wrap code1))(newline)
-(newline)
-(display "code2 (succeeds):\n")(display (wrap code2))(newline)
-
-(newline)
-(display (force-thunk (lazy-eval (wrap code2))))(newline)
-
-(newline)
-(display "value1 = ")(display (eval code1))(newline)
-(display "value2 = ")(display (eval code2))(newline)
-
-(display 
-  (force-thunk 
-    (lazy-eval
-      (quote
-        (let loop ((i 5) (acc 1)) 
-          (if (equal? 1 i) 
-            acc 
-            (loop (- i 1) (* i acc))))))))
-
+(display (do-run (list 'strict-eval code 'global-env)))(newline)
 
 (exit 0)
 
