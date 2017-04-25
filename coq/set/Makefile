@@ -1,4 +1,4 @@
-all: equiv.vo
+all:  equiv_symmetric.vo equiv_reflexive.vo
 
 ##########################################################################
 #                              set                                       #
@@ -9,27 +9,68 @@ set.vo: set.v
 ##########################################################################
 #                             order                                      #
 ##########################################################################
-order.vo: set.vo order.v
+order.vo: order.v \
+	set.vo
 	coqc order.v
-
-##########################################################################
-#                             elements                                   #
-##########################################################################
-elements.vo: set.vo order.vo elements.v
-	coqc elements.v
-
 
 ##########################################################################
 #                             subset                                     #
 ##########################################################################
 
-subset.vo: set.vo order.vo subset.v
+subset.vo: subset.v \
+	set.vo \
+	order.vo
 	coqc subset.v
 
 ##########################################################################
 #                             equiv                                      #
 ##########################################################################
 
-equiv.vo: set.vo order.vo elements.vo subset.vo equiv.v
+equiv.vo: equiv.v \
+	set.vo \
+	subset.vo
 	coqc equiv.v
+
+##########################################################################
+#                            equiv_symmetric                             #
+##########################################################################
+
+equiv_symmetric.vo: equiv_symmetric.v \
+	set.vo \
+	subset.vo \
+	equiv.vo
+	coqc equiv_symmetric.v
+
+
+##########################################################################
+#                             elements                                   #
+##########################################################################
+elements.vo: elements.v \
+	set.vo \
+	order.vo \
+	subset.vo \
+	equiv.vo 
+	coqc elements.v
+
+##########################################################################
+#                           subset_reflexive                             #
+##########################################################################
+subset_reflexive.vo: subset_reflexive.v \
+	set.vo \
+	order.vo \
+	subset.vo \
+	equiv.vo  \
+	elements.vo
+	coqc subset_reflexive.v
+
+##########################################################################
+#                           equiv_reflexive                              #
+##########################################################################
+equiv_reflexive.vo: equiv_reflexive.v \
+	set.vo \
+	equiv.vo \
+	subset_reflexive.vo
+	coqc equiv_reflexive.v
+
+
 

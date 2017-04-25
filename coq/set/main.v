@@ -6,50 +6,12 @@ Require Import List.
 
 Require Import set.
 Require Import order.
-Require Import elements.
 Require Import subset.
 Require Import equiv.
-
-Lemma subset_reflexive : forall (a:set), subset a a.
-Proof.
-  (* induction on the order of a *)
-  cut(forall (n:nat) (a:set), order a <= n -> subset a a).
-  intros H a. apply H with (n:= order a). apply le_n. intro n. elim n.
-  (* order a <= 0 *)
-  intros a H. cut (a = Empty). intro H'. rewrite H'. unfold subset. simpl.
-  reflexivity. apply order_eq_0. symmetry. apply le_n_0_eq. exact H.
-  (* order a <= S n *)
-  clear n. intros n IH a H. cut(order a < S n \/ order a = S n). intro H'. elim H'.
-  (* order a < S n *)
-  intro H''. unfold lt in H''. apply IH. apply le_S_n. exact H''.
-  (* order a = S n *)
-  intro H''. apply subset_elements. intros x Hx. exists x. split. exact Hx.
-  unfold equiv. cut (subset x x). intro Hx'. split. exact Hx'. exact Hx'.
-
-  apply IH. apply le_S_n. rewrite <- H''. apply elements_order.
-  exact Hx.
-  (* clean up *)
-  apply le_lt_or_eq. exact H.
-Qed.
-
-
-Lemma equiv_reflexive: forall (a:set), equiv a a.
-Proof.
-  intro a. unfold equiv. simpl. split. apply subset_reflexive.
-  apply subset_reflexive.
-Qed.
-
-Lemma equiv_symmetric : forall (a b:set),
-  equiv a b <-> equiv b a.
-Proof.
-  intros a b. unfold equiv. simpl. split. 
-  intro H. split. 
-  apply proj2 with (A:= subset a b). exact H.
-  apply proj1 with (B:= subset b a). exact H.
-  intro H. split.
-  apply proj2 with (A:= subset b a). exact H.
-  apply proj1 with (B:= subset a b). exact H.
-Qed.
+Require Import equiv_symmetric.
+Require Import elements.
+Require Import subset_reflexive.
+Require Import equiv_reflexive.
 
 Lemma subset_x_xUy : forall (x y: set), subset x (Union x y).
 Proof.

@@ -2,10 +2,21 @@
 #define INCLUDED_TEST_H
 
 #include <stddef.h>
+#include<secp256k1.h>
+
+// global test data
+extern int callback_data;
+extern secp256k1_context *ctx;
+extern const unsigned char *pubkey_bytes1;
+extern const unsigned char *pubkey_bytes2;
+extern const unsigned char *pubkey_bytes3;
+extern const unsigned char *pubkey_bytes4;
+extern const unsigned char *pubkey_bytes5;
+extern const unsigned char *pubkey_bytes6;
 
 void default_callback(const char* message, void* data);
 int is_all_null(const void *ptr, size_t size);
+int test_setup();
 
-extern const unsigned char *pubkey_bytes1;
 
 #endif
