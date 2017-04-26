@@ -17,12 +17,12 @@ prog:
 ;
 
 stmt:
-  expr ';' %dprec 1
+  expr ';'  %dprec 1
 | decl      %dprec 2
 ; 
 
 expr:
-  ID                    { printf ("%s ", $$); }
+  ID                      { printf ("%s ", $$); }
 | TYPENAME '(' expr ')'   { printf ("%s <cast> ", $1); }
 | expr '+' expr           { printf ("+ "); }
 | expr '=' expr           { printf ("= "); }

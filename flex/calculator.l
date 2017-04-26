@@ -1,9 +1,6 @@
 %{
 
-#include <stdio.h>
 #include "calculator.tab.h"
-extern int yylval;
-
 
 %}
 
@@ -17,7 +14,4 @@ extern int yylval;
 .           return yytext[0];
 %%
 
-int yyerror(const char *s)
-{
-  fprintf(stderr, "%s\n", s);
-}
+

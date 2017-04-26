@@ -20,7 +20,7 @@
 ;    8:	48 31 ff             	xor    rdi,rdi
 ;    b:	ff c7                	inc    edi
 ;    d:	48 31 d2             	xor    rdx,rdx
-;   10:	b2 0f                	mov    dl,0xf
+;   10:	b2 0e                	mov    dl,0xe
 ;   12:	0f 05                	syscall 
 ;   14:	48 31 c0             	xor    rax,rax
 ;   17:	b0 3c                	mov    al,0x3c
@@ -48,8 +48,8 @@ inc eax       ; mov rax, 1 ... but avoiding null bytes
 xor rdi, rdi  ; mov rdi, 1 ... but avoiding null bytes
 inc edi
 
-xor rdx, rdx  ; mov rdx, 15 ... but avoiding null bytes
-mov dl, 15
+xor rdx, rdx  ; mov rdx, 14 ... but avoiding null bytes
+mov dl, 14
 
 syscall
 
@@ -63,3 +63,6 @@ syscall
 one:
 call two  ; call back upwards to avoid null bytes
 db "Hello, world!",0x0a
+
+nop       ; so shellcode does not end with 0x0a, which confuses bash
+

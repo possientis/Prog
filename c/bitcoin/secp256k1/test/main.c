@@ -38,45 +38,8 @@ int main()
 
   int value;
 
-  // secp256k1_ec_pubkey_parse
 
-
-  // secp256k1_ec_pubkey_parse
-  value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes4, 65); 
-  assert(value == 1);  // public key is valid
-
-
-  // secp256k1_ec_pubkey_parse
-  value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes5, 65); 
-  assert(value == 0);        // public key is invalid
-//  assert(callback_data == 42);   // CALLBACK IS NOT CALLED (WRONG?)
-  callback_data = 0;
-  
-  // secp256k1_ec_pubkey_parse (NULL context)
-  value = secp256k1_ec_pubkey_parse(NULL, &pub, pubkey_bytes4, 65); 
-  assert(value == 1);        // SUCCESSFUL DESPITE NULL CONTEXT
-  assert(callback_data == 0);      // unaffected by call
-
-  // secp256k1_ec_pubkey_parse (NULL secp256k1_pubkey pointer)
-  value = secp256k1_ec_pubkey_parse(ctx, NULL, pubkey_bytes4, 65); 
-  assert(value == 0);    // failing call
-  assert(callback_data == 42); // call back return value
-  callback_data = 0;           // make sure next error correctly sets it
-
-  // secp256k1_ec_pubkey_parse (NULL context)
-  value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 65); 
-  assert(value == 0);    // failing call
-  assert(callback_data == 42); // call back return value
-  callback_data = 0;           // make sure next error correctly sets it
-
-
-  // pub1 and pub4 should parse into the same key
-  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
-  assert(value == 1);
-  value = secp256k1_ec_pubkey_parse(ctx, &pub2, pubkey_bytes4, 65);
-  assert(value == 1);
-  assert(memcmp(&pub1, &pub2, sizeof(secp256k1_pubkey)) == 0);
-
+ 
 
   fprintf(stderr,"\ntesting serializing public key...\n");
 
