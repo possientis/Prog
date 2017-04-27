@@ -1,4 +1,6 @@
-all:  equiv_symmetric.vo equiv_reflexive.vo
+all:  subset_transitive.vo \
+			equiv_transitive.vo \
+			subset_compatible.vo
 
 ##########################################################################
 #                              set                                       #
@@ -71,6 +73,44 @@ equiv_reflexive.vo: equiv_reflexive.v \
 	equiv.vo \
 	subset_reflexive.vo
 	coqc equiv_reflexive.v
+
+##########################################################################
+#                           subset_transitive                            #
+##########################################################################
+subset_transitive.vo: subset_transitive.v \
+	set.vo \
+	order.vo \
+	subset.vo \
+	equiv.vo \
+	elements.vo \
+	subset_reflexive.vo \
+	equiv_reflexive.vo \
+	equiv_symmetric.vo
+
+	coqc subset_transitive.v
+
+##########################################################################
+#                           equiv_transitive                             #
+##########################################################################
+equiv_transitive.vo: equiv_transitive.v \
+	set.vo \
+	subset.vo \
+	equiv.vo \
+	subset_transitive.vo
+
+	coqc equiv_transitive.v
+
+##########################################################################
+#                          subset_compatible                             #
+##########################################################################
+subset_compatible.vo: subset_compatible.v \
+	set.vo \
+	subset.vo \
+	equiv.vo \
+	subset_transitive.vo
+
+	coqc subset_compatible.v
+
 
 
 

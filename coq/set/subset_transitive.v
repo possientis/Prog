@@ -1,5 +1,5 @@
 Set Implicit Arguments.
-Require Import Bool.
+
 Require Import Arith.
 Require Import Arith.Max.
 Require Import List.
@@ -8,10 +8,10 @@ Require Import set.
 Require Import order.
 Require Import subset.
 Require Import equiv.
-Require Import equiv_symmetric.
 Require Import elements.
 Require Import subset_reflexive.
 Require Import equiv_reflexive.
+Require Import equiv_symmetric.
 
 Lemma subset_x_xUy : forall (x y: set), subset x (Union x y).
 Proof.

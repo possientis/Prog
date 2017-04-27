@@ -6,7 +6,7 @@ understand why (lambda () (define x 0) (display x)) would fail unlike
 find bug in test.scm
 resolve bug in frame3 (scm frame3-bug.scm (under frame3): wrong environment created) 
 define primitives from language itself
-implement macros
+implement macros !!!!!
 lazy evaluation of arguments (with or without memoization)
 change semantics of apply
 check semantics of '() vs ()
