@@ -158,8 +158,8 @@ then
   exit 1
 fi
 
-echo 'Testing flex ...'
-${HOME}/flex/test.sh >> test.log 2>&1
+echo 'Testing bison ...'
+${HOME}/bison/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]
 then
   echo 'TESTING FAILED !!!'

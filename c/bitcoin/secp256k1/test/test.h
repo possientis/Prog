@@ -4,8 +4,11 @@
 #include <stddef.h>
 #include<secp256k1.h>
 
+typedef union {const char* in; int out;} callback_t;
+
+
 // global test data
-extern int callback_data;
+extern callback_t callback_data;
 extern secp256k1_context *ctx;
 extern const unsigned char *pubkey_bytes1;
 extern const unsigned char *pubkey_bytes2;

@@ -43,7 +43,9 @@
     (let ((first (strict-eval (car operands) env)))  ; side effects now
       (if (null? (cdr operands))
         first
-        (strict-eval-sequence (cdr operands) env))))); don't re-evaluate first
+        (begin
+          (force-thunk first)  ; why do we need to add this line? yet we do ...
+          (strict-eval-sequence (cdr operands) env))))))
 
 ; analyze
 (define (analyze-sequence operands)

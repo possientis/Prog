@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/flex
+HOME=/home/john/Prog/bison
 cd ${HOME}
 
 rm -f *.tab.c

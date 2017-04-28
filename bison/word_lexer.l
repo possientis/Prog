@@ -1,12 +1,10 @@
 %{
-/*
- * We now build a lexical analyzer to be used by a higher level parser.
- */
+
 #include <malloc.h>
 #include <string.h>
 #include <stdio.h>
 
-#include "y.tab.h"  /* token codes from the parser */
+#include "word_parser.tab.h"  /* token codes from the parser */
 
 #define LOOKUP 0    /* default - not a defined word type */ 
 
@@ -14,10 +12,20 @@ int state;
 int add_word(int type, const char *word); 
 int lookup_word(const char *word);
 
+/* define a link list of words and types */
+struct word {
+  char  *word_name;
+  int   word_type;
+  struct word *next;
+}; 
+
+struct word *word_list; /* first element in word list */
+
+
 %}
 
 %%
-    /* \\\n */  /* ignore */
+\\\n  ;  /* ignore */
 
 \n    { state = LOOKUP; }
 
@@ -53,7 +61,9 @@ int lookup_word(const char *word);
                             printf("defining conjunctions ...\n"); 
                           }
 
-[a-zA-Z]+ {
+[\t ]+     ;
+
+[a-zA-Z]+ { 
             if(state != LOOKUP) {
               add_word(state, yytext);
             } 
@@ -79,18 +89,9 @@ int lookup_word(const char *word);
               }
             } 
           }
-.   ;
+.    { printf ("catch all action running: '%s'...\n", yytext); }
               
 %%
-
-/* define a link list of words and types */
-struct word {
-  char  *word_name;
-  int   word_type;
-  struct word *next;
-}; 
-
-struct word *word_list; /* first element in word list */
 
 int
 add_word(int type, const char *word)
@@ -131,7 +132,5 @@ lookup_word(const char *word)
     
     return LOOKUP;  /* not found */
 }
-
-
 
 

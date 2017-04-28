@@ -4,8 +4,7 @@
 #define preposition to from behind above below between
 #define conjunction if then and but or
 #define adjective their my your our his her its
-#define pronoun I you he she we they
-#define noun dog cat oat horse cow
+#define pronoun I you he she we they me
+#define noun dog cat oat horse cow 
 
-dog could quietly eat my cat if behind their cow
-
+I am me and dog angrily eat cat

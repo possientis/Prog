@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-int callback_data;
+callback_t callback_data;
 
 secp256k1_context *ctx;
 
@@ -41,8 +41,16 @@ const unsigned char *pubkey_bytes6 = "\x03"
    "\xcf\x6f\x9e\xd3\xd3\xd7\xf1\x59\xc2\xe2\xff\xf5\x79\xdc\x34\x1a";
 
 void default_callback(const char* message, void* data){
-  fprintf(stderr, "callback function is rightly called: %s\n", message);
-  *((int*) data) = 42;
+
+  const char* default_message = "<no message>";
+  assert(data != NULL);
+
+  const char* msg = ((callback_t*) data)->in;
+  if(msg == NULL) msg = default_message;
+
+  fprintf(stderr, "%s: callback function is rightly called: %s\n", msg, message);
+
+  ((callback_t*) data)->out = 42;  
 }
 
 int is_all_null(const void *ptr, size_t size)

@@ -8,7 +8,10 @@ int test_callback()
 
   fprintf(stderr,"\ntesting setting up callbacks...\n");
 
-  int data;
+  callback_t data;
+
+  data.in = "This is an error message";
+
   secp256k1_context *new;
   
   // secp2561k1_context_create

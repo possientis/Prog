@@ -1,3 +1,2 @@
-clean up pushaq and popaq bogus instructions
-continue with vidbuff (figure out how to replace pushad/popad)
+continue with vidbuff
 incorporate switch pattern in mul tests

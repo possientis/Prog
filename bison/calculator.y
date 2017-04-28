@@ -30,7 +30,7 @@ expression:
 int main()
 {
 
-  printf("main is running...\n");
+  printf("calculator is running...\n");
 
   yyset_in(stdin);
 

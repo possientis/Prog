@@ -1,18 +1,16 @@
 %{
-/*
- * A parser for the basic grammar to use for recognizing English sentences.
- */
 #include <stdio.h>
-int yylex(void);
-int yyerror(char*);
-void yyset_in(FILE*);
+
+extern int yylex(void);
+extern int yyerror(char*);
+extern FILE *yyin;
+extern void yyset_in(FILE*);
 
 %}
 
 %token NOUN PRONOUN VERB ADVERB ADJECTIVE PREPOSITION CONJUNCTION
 
 %%
-
 
 sentence:           simple_sentence   { printf("Parsed a simple sentence.\n"); }
                   | compound_sentence { printf("Parsed a compound sentence.\n"); } 
@@ -37,6 +35,7 @@ verb:               VERB
                   ;
 
 object:             NOUN
+                  | PRONOUN
                   | ADJECTIVE object
                   ;
 
@@ -44,10 +43,11 @@ prep_phrase:        PREPOSITION NOUN
                   ;
 %%
 
-extern FILE *yyin;
 
 int main()
 {
+  printf("word parser is running ...\n");
+
   yyset_in(stdin);
 
   while(!feof(yyin)) {

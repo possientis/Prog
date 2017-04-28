@@ -74,15 +74,20 @@ WriteCtr:
             ret 
             
 WriteStr:
-            pushaq
+            push  rax
+            push  rdi
+            push  rsi
 
             mov   rax, 1            ; sys_write 64 bits
             mov   rdi, 1            ; stdout
             mov   rsi, rcx          ; buffer expected in rcx 
             ;mov   rdx, rdx         ;  length argument expected in rdx
             syscall
+            
+            pop   rsi
+            pop   rdi
+            pop   rax 
 
-            popaq
             ret
 
 global _start

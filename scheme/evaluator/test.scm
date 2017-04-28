@@ -8,7 +8,7 @@
   (force-thunk (lazy-eval expr)))
 
 
-(define code
+(define code1
   (quote
     (quote
 
@@ -24,7 +24,19 @@
 
       )))
 
-(do-run (list 'strict-eval code 'global-env))(newline)
+(define code2
+  (quote
+    (quote
+
+     (begin 
+       (display "This is not the last\n")
+       (display "only the last line will be executed\n")
+     )
+
+      )))
+
+(do-run (list 'strict-eval code1))(newline)
+;(do-run '(strict-eval '(begin (display "A\n")(display "B\n"))))
 
 (exit 0)
 
