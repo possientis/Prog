@@ -227,7 +227,7 @@ It remains to prove that R satisfies properties (i)-(v).
 
   We start with (i)
 *)
-Lemma subset_0_all : forall (b:set), subset Empty b.
+Proposition subset_0_all : forall (b:set), subset Empty b.
 Proof.
   (* induction on b *)
   intro b. elim b.
@@ -243,7 +243,7 @@ Qed.
 property (ii)
 *)
 
-Lemma subset_single_0 : forall (x:set), ~subset (Singleton x) Empty.
+Proposition subset_single_0 : forall (x:set), ~subset (Singleton x) Empty.
 Proof.
   (* not structural induction necessary *)
   intro x. unfold subset. simpl. tauto.
@@ -253,7 +253,7 @@ Qed.
 property (iii)
 *)
 
-Lemma subset_single_single : forall (x y:set),
+Proposition subset_single_single : forall (x y:set),
   subset (Singleton x) (Singleton y) <-> (subset x y)/\(subset y x).
 Proof.
   intros x y. unfold subset at 1. simpl. 
@@ -266,7 +266,7 @@ Qed.
 property (iv)
 *)
 
-Lemma subset_single_union: forall (x y z:set),
+Proposition subset_single_union: forall (x y z:set),
   subset (Singleton x) (Union y z) <-> 
   (subset (Singleton x) y)\/(subset (Singleton x) z).
 Proof.
@@ -282,7 +282,7 @@ Qed.
 property (v)
 *)
 
-Lemma subset_union_all : forall (x y b:set),
+Proposition subset_union_all : forall (x y b:set),
   subset (Union x y) b <-> (subset x b)/\(subset y b).
 Proof.
   intros x y b. unfold subset at 1. simpl.
@@ -387,8 +387,4 @@ Proof.
   apply order_sum_union_Lr with (x:=x). exact H.
   apply order_sum_union_Ll with (y:=y). exact H.
 Qed.
-
-
-
-
 

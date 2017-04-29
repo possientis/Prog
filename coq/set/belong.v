@@ -2,8 +2,7 @@ Require Import set.
 Require Import subset.
 
 (******************************************************************************)
-(*                        equiv : set -> set -> Prop                          *)
+(*                        belong : set -> set -> Prop                         *)
 (******************************************************************************)
 
-Definition equiv (a b:set) : Prop := (subset a b) /\ (subset b a).
-
+Definition belong (a b:set) : Prop := subset (Singleton a) b. 

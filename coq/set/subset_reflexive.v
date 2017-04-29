@@ -7,7 +7,7 @@ Require Import subset.
 Require Import equiv.
 Require Import elements.
 
-Lemma subset_reflexive : forall (a:set), subset a a.
+Proposition subset_reflexive : forall (a:set), subset a a.
 Proof.
   (* induction on the order of a *)
   cut(forall (n:nat) (a:set), order a <= n -> subset a a).

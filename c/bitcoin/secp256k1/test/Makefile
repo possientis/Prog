@@ -1,13 +1,15 @@
 all: main.o test.o \
-	test_macro.o \
-	test_context.o \
-	test_callback.o \
-	test_pubkey.o
+	macro.t.o \
+	context.t.o \
+	callback.t.o \
+	ec_pubkey.t.o \
+	ecdsa_signature.t.o
 
 	gcc -lsecp256k1 -o a.out main.o test.o \
-		test_macro.o	\
-		test_context.o \
-		test_callback.o \
-		test_pubkey.o
+		macro.t.o	\
+		context.t.o \
+		callback.t.o \
+		ec_pubkey.t.o \
+		ecdsa_signature.t.o
 
 

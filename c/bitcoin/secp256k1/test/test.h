@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include<secp256k1.h>
 
-typedef union {const char* in; int out;} callback_t;
+typedef struct {const char* in; int out;} callback_t;
 
 
 // global test data

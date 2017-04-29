@@ -4,20 +4,20 @@
 #include "secp256k1.h"
 #include "test.h"
 
-static int test_pubkey_parse();
-static int test_pubkey_serialize(int);
+static int test_ec_pubkey_parse();
+static int test_ec_pubkey_serialize(int);
 
-int test_pubkey()
+int test_ec_pubkey()
 {
-  assert(test_pubkey_parse() == 0);
-  assert(test_pubkey_serialize(SECP256K1_EC_COMPRESSED) == 0);
-  assert(test_pubkey_serialize(SECP256K1_EC_UNCOMPRESSED) == 0);
+  assert(test_ec_pubkey_parse() == 0);
+  assert(test_ec_pubkey_serialize(SECP256K1_EC_COMPRESSED) == 0);
+  assert(test_ec_pubkey_serialize(SECP256K1_EC_UNCOMPRESSED) == 0);
 
   return 0;
 
 }
 
-int test_pubkey_serialize(int flag)
+static int test_ec_pubkey_serialize(int flag)
 {
 
   int value;
@@ -33,12 +33,14 @@ int test_pubkey_serialize(int flag)
   const char* str = compressed ? "": "un";
   int expected_size = compressed ? 33 : 65;
   const unsigned char* bytes = compressed ? pubkey_bytes1 : pubkey_bytes4;
+  
 
   fprintf(stderr,"\ntesting serializing public key (%scompressed) ...\n", str);
 
   // output buffer is too small
   size = expected_size - 1;
-  callback_data.in = 0;               
+  callback_data.in = "pubkey_serialize.1";               
+  callback_data.out = 0;
   memset(buffer,0x00, 65);
   value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, &pub1, flag);
   assert(value == 0);               // serialization failed
@@ -48,7 +50,8 @@ int test_pubkey_serialize(int flag)
 
   // NULL context
   size = 65;
-  callback_data.in = 0;               
+  callback_data.in = "pubkey_serialize.0";               
+  callback_data.out = 0;
   memset(buffer,0x00, 65);
   value = secp256k1_ec_pubkey_serialize(NULL, buffer, &size, &pub1, flag);
   assert(value == 1);               // serialization succeeded
@@ -58,7 +61,8 @@ int test_pubkey_serialize(int flag)
 
   // NULL output buffer
   size = 65;
-  callback_data.in = 0;               
+  callback_data.in = "pubkey_serialize.2";               
+  callback_data.out = 0;
   memset(buffer,0x00, 65);
   value = secp256k1_ec_pubkey_serialize(ctx, NULL, &size, &pub1, flag);
   assert(value == 0);               // serialization failed
@@ -68,7 +72,8 @@ int test_pubkey_serialize(int flag)
 
   // NULL output buffer size pointer
   size = 65;
-  callback_data.in = 0;               
+  callback_data.in = "pubkey_serialize.3";               
+  callback_data.out = 0;
   memset(buffer,0x00, 65);
   value = secp256k1_ec_pubkey_serialize(ctx, buffer, NULL, &pub1, flag);
   assert(value == 0);               // serialization failed
@@ -78,7 +83,8 @@ int test_pubkey_serialize(int flag)
 
   // NULL input pubkey pointer
   size = 65;
-  callback_data.in = 0;               
+  callback_data.in = "pubkey_serialize.4";               
+  callback_data.out = 0;
   memset(buffer,0x00, 65);
   value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, NULL, flag);
   assert(value == 0);               // serialization failed
@@ -88,7 +94,8 @@ int test_pubkey_serialize(int flag)
 
   // normal call
   size = 65;
-  callback_data.in = 0;               
+  callback_data.in = "pubkey_serialize.0";               
+  callback_data.out = 0;
   memset(buffer,0x00, 65);
   value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, &pub1, flag);
   assert(value == 1);               // serialization succeeded
@@ -100,7 +107,7 @@ int test_pubkey_serialize(int flag)
   return 0;
 }
 
-int test_pubkey_parse()
+static int test_ec_pubkey_parse()
 {
   secp256k1_pubkey pub;
   secp256k1_pubkey pub1;
@@ -113,125 +120,149 @@ int test_pubkey_parse()
   fprintf(stderr,"\ntesting parsing public key...\n");
 
   // secp256k1_ec_pubkey_parse
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes1, 33); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes2, 33); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes3, 33); 
   assert(value == 0);         // public key is invalid
   assert(callback_data.out == 0); // but no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes4, 65); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes5, 65); 
   assert(value == 0);         // public key is invalid
   assert(callback_data.out == 0); // but no error 
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, pubkey_bytes6, 33); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error 
   
   // NULL context
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(NULL, &pub, pubkey_bytes1, 33); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(NULL, &pub, pubkey_bytes2, 33); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(NULL, &pub, pubkey_bytes3, 33); 
   assert(value == 0);         // public key is invalid
   assert(callback_data.out == 0); // but no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(NULL, &pub, pubkey_bytes4, 65); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(NULL, &pub, pubkey_bytes5, 65); 
   assert(value == 0);         // public key is invalid
   assert(callback_data.out == 0); // but no error 
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.0";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(NULL, &pub, pubkey_bytes6, 33); 
   assert(value == 1);         // public key is valid
   assert(callback_data.out == 0); // no error 
  
   // NULL pubkey pointer
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.1";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, NULL, pubkey_bytes1, 33); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.2";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, NULL, pubkey_bytes2, 33); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.3";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, NULL, pubkey_bytes3, 33); 
   assert(value == 0);         // invald call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.4";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, NULL, pubkey_bytes4, 65); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.5";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, NULL, pubkey_bytes5, 65); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.6";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, NULL, pubkey_bytes6, 33); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback 
   
   // NULL bytes pointer
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.7";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 33); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.8";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 33); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.9";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 33); 
   assert(value == 0);         // invald call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.10";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 65); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.11";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 65); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback
 
-  callback_data.in = 0;
+  callback_data.in = "pubkey_parse.12";
+  callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx, &pub, NULL, 33); 
   assert(value == 0);         // invalid call
   assert(callback_data.out == 42);// data returned from callback 

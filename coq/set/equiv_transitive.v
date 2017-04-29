@@ -5,7 +5,7 @@ Require Import subset.
 Require Import equiv.
 Require Import subset_transitive.
 
-Lemma equiv_transitive: forall (a b c:set),
+Proposition equiv_transitive: forall (a b c:set),
   equiv a b -> equiv b c -> equiv a c.
 Proof.
   intros a b c Hab Hbc.

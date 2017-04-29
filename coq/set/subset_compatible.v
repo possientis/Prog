@@ -3,7 +3,7 @@ Require Import subset.
 Require Import equiv.
 Require Import subset_transitive.
 
-Lemma subset_compatible: forall (a a' b b':set),
+Proposition subset_compatible: forall (a a' b b':set),
   equiv a a' -> equiv b b' -> subset a b -> subset a' b'.
 Proof.
   intros a a' b b' Eaa' Ebb' Hab.

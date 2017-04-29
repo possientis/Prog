@@ -24,7 +24,7 @@ Fixpoint order (s:set) : nat :=
   end.
 
 (*  order(a) = 0  =>  a = 0  *)
-Proposition order_eq_0 : forall (a:set), order a = 0 -> a = Empty.
+Lemma order_eq_0 : forall (a:set), order a = 0 -> a = Empty.
 Proof.
   intro a. elim a. auto. clear a. intro a. intro IH. intro H.
   simpl in H. discriminate H. clear a. intro a. intro IH. intro b. intro H.
@@ -32,7 +32,7 @@ Proof.
 Qed.
 
 (* order(a) + order(b) = 0  =>  a = 0  *)
-Proposition order_sum_eq_0_l : forall (a b:set),
+Lemma order_sum_eq_0_l : forall (a b:set),
   order a + order b = 0 -> a = Empty.
 Proof.
   intros a b H. apply order_eq_0. 
@@ -41,7 +41,7 @@ Proof.
 Qed.
 
 (* order(a) + order(b) = 0 =>  b = 0  *)
-Proposition order_sum_eq_0_r : forall (a b:set),
+Lemma order_sum_eq_0_r : forall (a b:set),
   order a + order b = 0 -> b = Empty.
 Proof.
   intros a b H. rewrite plus_comm in H. apply order_sum_eq_0_l
@@ -49,7 +49,7 @@ Proof.
 Qed.
 
 (* order({x}) + order(b) <= n+1  =>  order(x) + order(b) <= n  *)
-Proposition order_sum_singleton_l : forall (n:nat) (x b:set),
+Lemma order_sum_singleton_l : forall (n:nat) (x b:set),
   order (Singleton x) + order b <= S n ->
   order x + order b <= n.
 Proof.
@@ -58,7 +58,7 @@ Proof.
 Qed.
 
 (* order(a) + order({y}) <= n+1  =>  order(a) + order(y) <= n  *)
-Proposition order_sum_singleton_r : forall (n:nat) (a y:set),
+Lemma order_sum_singleton_r : forall (n:nat) (a y:set),
   order a + order (Singleton y) <= S n ->
   order a + order y <= n.
 Proof. 
@@ -68,7 +68,7 @@ Qed.
 
 
 (* order({x}) + order({y}) <= n+1  =>  order(x) + order(y) < n *)  
-Proposition order_sum_singleton_strong : forall (n:nat) (x y:set),
+Lemma order_sum_singleton_strong : forall (n:nat) (x y:set),
   order (Singleton x) + order (Singleton y) <= S n ->
   order x + order y < n.
 Proof.

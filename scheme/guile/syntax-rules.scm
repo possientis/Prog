@@ -50,8 +50,42 @@
 (newline)
 (display (letv #((x 5)(y 3)) (+ x y)))  ; 8
 
+(define-syntax cond1
+  (syntax-rules (=> else)
+    ((cond1 test => fun)
+     (let ((exp test))
+       (if exp (fun exp) #f)))
+    ((cond1 test exp exp* ...)
+     (if test (begin exp exp* ...)))
+    ((cond1 else exp exp* ...)
+     (begin exp exp* ...))))
+
+(newline)
+(define (square x) (* x x))
+(display (cond1 10 => square))          ; 100
+
+(newline)
+(let ((=> #t))  ; identifier '=> is now bound, will not macth literal
+  (display (cond1 10 => square)))       ; #<procedure square (x)>
 
 
+(define-syntax define-matcher-macro
+  (syntax-rules ()
+    ((_ name lit)
+     (define-syntax name
+       (syntax-rules ()
+         ((_ lit) #t)
+         ((_ else) #f))))))
+
+(define-matcher-macro is-literal-foo? "foo")  ; defines new macro for is-literal-foo?
+
+(newline)
+(display (is-literal-foo? "foo"))      ; #t 
+(newline)
+(display (is-literal-foo? "bar"))      ; #f
+
+(newline) ; mtachingoccurs at expansion-time, not run-time
+(display (let ((foo "foo")) (is-literal-foo? foo))) ; #f
 
 
 (exit 0)

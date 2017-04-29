@@ -4,7 +4,7 @@ Require Import set.
 Require Import subset.
 Require Import equiv.
 
-Lemma equiv_symmetric : forall (a b:set),
+Proposition equiv_symmetric : forall (a b:set),
   equiv a b <-> equiv b a.
 Proof.
   intros a b. unfold equiv. simpl. split. 

@@ -12,3 +12,9 @@ binChar :: String -> Maybe Int
 binChar s = digit 0 s `mplus` digit 1 s
 
 
+char :: Char -> String -> Maybe (Char, String)
+char c s = if c' == c then Just (c',s') else Nothing
+  where (c':s') = s
+
+
+

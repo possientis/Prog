@@ -36,4 +36,12 @@
   (my-or #f "rockaway beach"))
 )
 
+; short hand
+(define-syntax-rule (when c e ...)
+  (if c (begin e ...)))
+
+(newline)
+(when #t (display "This is true") (display ", and so is this"))
+
+
 (exit 0)
