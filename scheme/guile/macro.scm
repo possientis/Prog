@@ -10,6 +10,7 @@
   (display "hey ho\n")
   (display "let's go\n"))
 
+
 (display 
 (let-syntax ((unless
                (syntax-rules ()
@@ -35,10 +36,6 @@
                           (my-or rest ...)))))))
   (my-or #f "rockaway beach"))
 )
-
-; short hand
-(define-syntax-rule (when c e ...)
-  (if c (begin e ...)))
 
 (newline)
 (when #t (display "This is true") (display ", and so is this"))

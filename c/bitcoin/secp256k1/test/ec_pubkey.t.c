@@ -17,96 +17,6 @@ int test_ec_pubkey()
 
 }
 
-static int test_ec_pubkey_serialize(int flag)
-{
-
-  int value;
-  unsigned char buffer[65];
-  size_t size;
-  secp256k1_pubkey pub1;
-
-  // setting pubkey object to be serialized
-  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
-
-  // some parameters
-  int compressed = (flag == SECP256K1_EC_COMPRESSED);
-  const char* str = compressed ? "": "un";
-  int expected_size = compressed ? 33 : 65;
-  const unsigned char* bytes = compressed ? pubkey_bytes1 : pubkey_bytes4;
-  
-
-  fprintf(stderr,"\ntesting serializing public key (%scompressed) ...\n", str);
-
-  // output buffer is too small
-  size = expected_size - 1;
-  callback_data.in = "pubkey_serialize.1";               
-  callback_data.out = 0;
-  memset(buffer,0x00, 65);
-  value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, &pub1, flag);
-  assert(value == 0);               // serialization failed
-  assert(size == expected_size - 1);// size unchanged here
-  assert(is_all_null(buffer, 65));  // output buffer unaffected 
-  assert(callback_data.out == 42);      // call back return value
-
-  // NULL context
-  size = 65;
-  callback_data.in = "pubkey_serialize.0";               
-  callback_data.out = 0;
-  memset(buffer,0x00, 65);
-  value = secp256k1_ec_pubkey_serialize(NULL, buffer, &size, &pub1, flag);
-  assert(value == 1);               // serialization succeeded
-  assert(size == expected_size);    // 33 bytes written
-  assert(memcmp(buffer, bytes, expected_size) == 0);
-  assert(callback_data.out == 0);       // no error 
-
-  // NULL output buffer
-  size = 65;
-  callback_data.in = "pubkey_serialize.2";               
-  callback_data.out = 0;
-  memset(buffer,0x00, 65);
-  value = secp256k1_ec_pubkey_serialize(ctx, NULL, &size, &pub1, flag);
-  assert(value == 0);               // serialization failed
-  assert(size == 0);                // 0 bytes written
-  assert(is_all_null(buffer,65));   // output buffer unaffected
-  assert(callback_data.out == 42);      // call back return value
-
-  // NULL output buffer size pointer
-  size = 65;
-  callback_data.in = "pubkey_serialize.3";               
-  callback_data.out = 0;
-  memset(buffer,0x00, 65);
-  value = secp256k1_ec_pubkey_serialize(ctx, buffer, NULL, &pub1, flag);
-  assert(value == 0);               // serialization failed
-  assert(size == 65);               // size unaffected
-  assert(is_all_null(buffer,65));   // output buffer unaffected
-  assert(callback_data.out == 42);      // call back return value
-
-  // NULL input pubkey pointer
-  size = 65;
-  callback_data.in = "pubkey_serialize.4";               
-  callback_data.out = 0;
-  memset(buffer,0x00, 65);
-  value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, NULL, flag);
-  assert(value == 0);               // serialization failed
-  assert(size == 0);                // 0 bytes written
-  assert(is_all_null(buffer,65));   // output buffer unaffected
-  assert(callback_data.out == 42);      // call back return value
-
-  // normal call
-  size = 65;
-  callback_data.in = "pubkey_serialize.0";               
-  callback_data.out = 0;
-  memset(buffer,0x00, 65);
-  value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, &pub1, flag);
-  assert(value == 1);               // serialization succeeded
-  assert(size == expected_size);    // 33 bytes written
-  assert(memcmp(buffer, bytes, expected_size) == 0);
-  assert(callback_data.out == 0);       // no error
-
-
-  return 0;
-}
-
 static int test_ec_pubkey_parse()
 {
   secp256k1_pubkey pub;
@@ -272,6 +182,96 @@ static int test_ec_pubkey_parse()
   value =  secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
   value = secp256k1_ec_pubkey_parse(ctx, &pub2, pubkey_bytes4, 65);
   assert(memcmp(&pub1, &pub2, sizeof(secp256k1_pubkey)) == 0);
+
+  return 0;
+}
+
+static int test_ec_pubkey_serialize(int flag)
+{
+
+  int value;
+  unsigned char buffer[65];
+  size_t size;
+  secp256k1_pubkey pub1;
+
+  // setting pubkey object to be serialized
+  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
+
+  // some parameters
+  int compressed = (flag == SECP256K1_EC_COMPRESSED);
+  const char* str = compressed ? "": "un";
+  int expected_size = compressed ? 33 : 65;
+  const unsigned char* bytes = compressed ? pubkey_bytes1 : pubkey_bytes4;
+  
+
+  fprintf(stderr,"\ntesting serializing public key (%scompressed) ...\n", str);
+
+  // output buffer is too small
+  size = expected_size - 1;
+  callback_data.in = "pubkey_serialize.1";               
+  callback_data.out = 0;
+  memset(buffer,0x00, 65);
+  value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, &pub1, flag);
+  assert(value == 0);               // serialization failed
+  assert(size == expected_size - 1);// size unchanged here
+  assert(is_all_null(buffer, 65));  // output buffer unaffected 
+  assert(callback_data.out == 42);      // call back return value
+
+  // NULL context
+  size = 65;
+  callback_data.in = "pubkey_serialize.0";               
+  callback_data.out = 0;
+  memset(buffer,0x00, 65);
+  value = secp256k1_ec_pubkey_serialize(NULL, buffer, &size, &pub1, flag);
+  assert(value == 1);               // serialization succeeded
+  assert(size == expected_size);    // 33 bytes written
+  assert(memcmp(buffer, bytes, expected_size) == 0);
+  assert(callback_data.out == 0);       // no error 
+
+  // NULL output buffer
+  size = 65;
+  callback_data.in = "pubkey_serialize.2";               
+  callback_data.out = 0;
+  memset(buffer,0x00, 65);
+  value = secp256k1_ec_pubkey_serialize(ctx, NULL, &size, &pub1, flag);
+  assert(value == 0);               // serialization failed
+  assert(size == 0);                // 0 bytes written
+  assert(is_all_null(buffer,65));   // output buffer unaffected
+  assert(callback_data.out == 42);      // call back return value
+
+  // NULL output buffer size pointer
+  size = 65;
+  callback_data.in = "pubkey_serialize.3";               
+  callback_data.out = 0;
+  memset(buffer,0x00, 65);
+  value = secp256k1_ec_pubkey_serialize(ctx, buffer, NULL, &pub1, flag);
+  assert(value == 0);               // serialization failed
+  assert(size == 65);               // size unaffected
+  assert(is_all_null(buffer,65));   // output buffer unaffected
+  assert(callback_data.out == 42);      // call back return value
+
+  // NULL input pubkey pointer
+  size = 65;
+  callback_data.in = "pubkey_serialize.4";               
+  callback_data.out = 0;
+  memset(buffer,0x00, 65);
+  value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, NULL, flag);
+  assert(value == 0);               // serialization failed
+  assert(size == 0);                // 0 bytes written
+  assert(is_all_null(buffer,65));   // output buffer unaffected
+  assert(callback_data.out == 42);      // call back return value
+
+  // normal call
+  size = 65;
+  callback_data.in = "pubkey_serialize.0";               
+  callback_data.out = 0;
+  memset(buffer,0x00, 65);
+  value = secp256k1_ec_pubkey_serialize(ctx, buffer, &size, &pub1, flag);
+  assert(value == 1);               // serialization succeeded
+  assert(size == expected_size);    // 33 bytes written
+  assert(memcmp(buffer, bytes, expected_size) == 0);
+  assert(callback_data.out == 0);       // no error
+
 
   return 0;
 }

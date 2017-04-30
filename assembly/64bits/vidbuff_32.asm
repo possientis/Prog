@@ -84,7 +84,7 @@ ptEOL:
 ; IN: address of string in RSI
 ;     X position (col # 1-based) in RBX
 ;     Y position (row # 1-based) in RAX
-;     Length of the string in in chars in RCX
+;     Length of the string in RCX
 WrtLn:
   push  rax
   push  rbx
@@ -105,16 +105,67 @@ WrtLn:
   pop   rax
   ret
 
+; generates a horizontal bar at X,Y in video buffer
+; IN: 
+;     X position (col # 1-based) in RBX
+;     Y position (row # 1-based) in RAX
+;     Length of the bar in chars in RCX
+; 
+WrtDsh:
+  push  rax
+  push  rbx
+  push  rcx
+  push  rdi
+  cld
+  mov   rdi, VidBuff
+  dec   rax
+  dec   rbx
+  mov   ah, COLS
+  mul   ah
+  add   rdi, rax
+  add   rdi, rbx
+  mov   al, DASHCHR  
+  rep   stosb
+  pop   rdi
+  pop   rcx
+  pop   rbx
+  pop   rax
+  ret
+  
+; generates a "1234567890"-style ruler at X,Y in video buffer
+; IN: 
+;     X position (col # 1-based) in RBX
+;     Y position (row # 1-based) in RAX
+;     Length of the ruler in chars in RCX
+; 
+Ruler:
+  mov rdi, VidBuff
+  dec rax
+  dec rbx 
+  mov ah, COLS
+  mul ah
+  add rdi, rax
+  add rdi, rbx
+  mov al, '1'   ; start ruler with digit '1'
+doChar:
+  stosb         ; there is no 'rep' prefix !!
+  add al, 1     ; bump character value by 1
+
 _start
 
 ;  ClearTerminal
-;  ClrVid
+  call ClrVid
   mov rax, 1
   mov rbx, 1
+  mov rcx, 80
+  call WrtDsh
+  mov rax, 25
+  call WrtDsh
+  mov rax, 12
   mov rcx, MSGLEN
-  mov rsi, Msg
-  WrtLn
-;  Show
+  mov rsi, Message
+  call WrtLn
+  call Show
   
 
   mov rax, 60

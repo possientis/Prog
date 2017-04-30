@@ -1,10 +1,5 @@
+(define arg '(1 2 3))
 
-(display (string=? "yes" "YES"))(newline)
-(display (string=? "yes" "yes"))(newline)
-
-(define x "yes")
-
-(display (equal? "yes" x))(newline)
-(display (equal? "yes" "YES"))(newline)
+(display x)
 
 (exit 0)

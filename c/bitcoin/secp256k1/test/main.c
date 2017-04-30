@@ -32,7 +32,6 @@ int main()
   secp256k1_ecdsa_signature sig3;  // 64 bytes
   secp256k1_nonce_function fun;   // pointer
 
-  assert(sizeof(sig1) == 64);
   assert(sizeof(fun) == 8);
 
   int value;
@@ -41,44 +40,7 @@ int main()
   size_t size = 65;
 
   value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
-
-  fprintf(stderr,"\ntesting parsing signature (compact)...\n");
-
-  const unsigned char* sig_pubkey_bytes1 = 
-    "\x98\x62\x10\xb9\xdc\x0a\x2f\x21\xbc\xae\xc0\x96\xf4\xf5\x5f\xf4"
-    "\x48\x6f\xcc\x4e\x3a\xaf\xe7\xe0\xcb\xf6\x46\x92\x59\x6e\x99\x4a"
-    "\x0e\x5c\x6e\xc6\x54\x08\xd6\x5a\xae\x9e\x1c\xe8\xe9\x53\xc3\x1e"
-    "\xd0\x3f\x41\x79\x09\x1d\x20\xd1\x59\xda\xe4\x19\xe9\x0c\xa3\x63";
-
-  // NULL context (still works)
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_compact(NULL, &sig1, sig_pubkey_bytes1); 
-  assert(value == 1);      // parsing succeeded
-  assert(callback_data.out == 0);    // unaffected by call
-
-  // NULL output pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_compact(ctx, NULL, sig_pubkey_bytes1);  
-  assert(value == 0);      // parsing failed
-  assert(callback_data.out == 42);   // callback return value
-
-
-  // NULL input pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, NULL);  
-  assert(value == 0);      // parsing failed
-  assert(callback_data.out == 42);   // callback return value
-  
-  // secp256k1_ecdsa_signature_parse_compact
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_pubkey_bytes1);  
-  assert(value == 1);      // parsing succeeded
-  assert(callback_data.out == 0);    // unaffected by call
-  
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
 
   fprintf(stderr,"\ntesting serializing signature (DER)...\n");
   unsigned char der[128];
@@ -202,28 +164,8 @@ int main()
   assert(value == 1);      // parsing was succesful
   assert(memcmp(&sig1, &sig2, sizeof(secp256k1_ecdsa_signature)) == 0);
 
-  fprintf(stderr,"\ntesting serializing signature (compact)...\n");
 
   unsigned char buffer64[64];
-
-  // NULL context
-  memset(buffer64,0x00, 64);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_compact(NULL,buffer64,&sig1);
-  assert(value ==1);                       // serialization succeeded
-  assert(memcmp(buffer64,sig_pubkey_bytes1,64) == 0);  // initial signature
-  assert(callback_data.out == 0);
-
-  // NULL output buffer
-  memset(buffer64,0x00, 64);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_compact(ctx,NULL,&sig1);
-  assert(value ==0);                       // serialization failed
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
 
   // NULL input signature pointer
   memset(buffer64,0x00, 64);
@@ -242,7 +184,7 @@ int main()
   callback_data.out = 0;
   value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,&sig1);
   assert(value ==1);                       // serialization succeeded
-  assert(memcmp(buffer64,sig_pubkey_bytes1,64) == 0);  // initial signature
+  assert(memcmp(buffer64,sig_bytes1,64) == 0);  // initial signature
   assert(callback_data.out == 0);
 
   fprintf(stderr,"\ntesting verifying signature...\n");
@@ -313,17 +255,10 @@ int main()
   fprintf(stderr,"\ntesting normalizing signature...\n");
 
 
-  // non-normalized counterpart of sig_pubkey_bytes1
-  const unsigned char* sig_pubkey_bytes2 = 
-    "\x98\x62\x10\xb9\xdc\x0a\x2f\x21\xbc\xae\xc0\x96\xf4\xf5\x5f\xf4"
-    "\x48\x6f\xcc\x4e\x3a\xaf\xe7\xe0\xcb\xf6\x46\x92\x59\x6e\x99\x4a"
-    "\xf1\xa3\x91\x39\xab\xf7\x29\xa5\x51\x61\xe3\x17\x16\xac\x3c\xdf"
-    "\xea\x6f\x9b\x6d\xa6\x2b\x7f\x6a\x65\xf7\x7a\x72\xe7\x29\x9d\xde";
-
   // parsing key
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_pubkey_bytes2);
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
   assert(value == 1);  // parsing successful 
 
   // key not normalized, hence signature verification should fail
