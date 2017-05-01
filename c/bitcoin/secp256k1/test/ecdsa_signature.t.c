@@ -91,11 +91,98 @@ static int test_ecdsa_signature_serialize_compact(){
   assert(value == 0);                           // serialization failed
   assert(callback_data.out == 42);              // callback return value
 
+  // NULL input signature pointer
+  memset(buffer,0x00, 64);        
+  callback_data.in = "signature_serialize_compact.2";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer,NULL);
+  assert(value == 0);                           // serialization failed
+  assert(is_all_null(buffer, 64));              // buffer unaffected
+  assert(callback_data.out == 42);              // callback return value
+
+  // normal call
+  memset(buffer,0x00, 64);        
+  callback_data.in = "signature_serialize_compact.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer,&sig1);
+  assert(value == 1);                           // serialization succeeded
+  assert(memcmp(buffer, sig_bytes1, 64) == 0);  // serialization is correct
+  assert(callback_data.out == 0);               // no error
+
 
   return 0;
 }
 
-static int test_ecdsa_signature_parse_der(){return 0;}
+static int test_ecdsa_signature_parse_der(){
+
+  secp256k1_ecdsa_signature sig, sig1;
+  int value;
+  size_t size;
+  unsigned char der_bytes[71];  // bytes to be parsed
+
+  // computing bytes to be parsed dynamically by serializing in DER 
+  // format a signature obtained by parsing bytes in compact format.
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
+  value = secp256k1_ecdsa_signature_serialize_der(ctx, der_bytes, &size, &sig1); 
+  assert(value == 1); assert(size == 71);
+
+  assert(sizeof(sig) == 64);
+
+  fprintf(stderr,"\ntesting parsing signature (DER)...\n");
+  
+  // NULL context 
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_parse_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_parse_der(NULL,&sig,der_bytes,71); 
+  assert(value == 1);                   // parsing succeeded
+  assert(memcmp(&sig1, &sig, 64) == 0); // parsing is correct
+  assert(callback_data.out == 0);       // no error
+
+  // NULL output pointer 
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_parse_der.1";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_parse_der(ctx,NULL,der_bytes,71); 
+  assert(value == 0);                   // parsing failed
+  assert(callback_data.out == 42);      // callback return value
+
+  // NULL input buffer
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_parse_der.2";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,NULL,71); 
+  assert(value == 0);                   // parsing failed
+  assert(callback_data.out == 42);      // callback return value
+
+  // Wrong size input (70)
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_parse_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,der_bytes,70); 
+  assert(value == 0);                   // parsing failed
+  assert(callback_data.out == 0);       // but no error
+
+  // Wrong size input (72) (possible buffer read overflow)
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_parse_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,der_bytes,72); 
+  assert(value == 0);                   // parsing failed
+  assert(callback_data.out == 0);       // but no error
+
+  // normal call
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_parse_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,der_bytes,71); 
+  assert(value == 1);                   // parsing succeeded
+  assert(callback_data.out == 0);       // no error
+
+
+  return 0;
+
+}
 static int test_ecdsa_signature_serialize_der(){return 0;}
 
 

@@ -12,3 +12,4 @@ item = parser (\cs -> case cs of
 
 instance Monad Parser where
   return a  = parser (\cs -> [(a,cs)])
+  m >>= f   = parser (\cs -> let xs = run m cs in concatMap (\(a,s) -> run (f a) s) xs)

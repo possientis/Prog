@@ -3,9 +3,10 @@ Require Import Arith.
 
 Require Import set.
 Require Import order.
+Require Import order_elements.
 Require Import subset.
 Require Import equiv.
-Require Import elements.
+Require Import subset_elements.
 
 Proposition subset_reflexive : forall (a:set), subset a a.
 Proof.
@@ -23,7 +24,7 @@ Proof.
   intro H''. apply subset_elements. intros x Hx. exists x. split. exact Hx.
   unfold equiv. cut (subset x x). intro Hx'. split. exact Hx'. exact Hx'.
 
-  apply IH. apply le_S_n. rewrite <- H''. apply elements_order.
+  apply IH. apply le_S_n. rewrite <- H''. apply order_elements.
   exact Hx.
   (* clean up *)
   apply le_lt_or_eq. exact H.

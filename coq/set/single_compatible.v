@@ -1,6 +1,6 @@
 Require Import set.
-Require Import equiv.
 Require Import subset.
+Require Import equiv.
 
 Proposition single_compatible: forall (a a':set),
   equiv a a' -> equiv (Singleton a) (Singleton a'). 

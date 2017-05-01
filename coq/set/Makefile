@@ -1,17 +1,22 @@
 all: 	set.vo \
  			order.vo \
+			elements.vo \
+			order_elements.vo \
 			subset.vo	\
 			belong.vo	\
 			equiv.vo \
+			single_compatible.vo \
+			subset_elements.vo \
+			belong_elements.vo \
 			equiv_symmetric.vo \
-			elements.vo \
 			subset_reflexive.vo\
 			equiv_reflexive.vo \
 			subset_transitive.vo \
 			equiv_transitive.vo \
-			subset_compatible.vo \
 			equiv_compatible.vo \
-			single_compatible.vo
+			union_compatible.vo \
+			subset_compatible.vo \
+			belong_compatible.vo
 
 # set
 set.vo: set.v
@@ -21,6 +26,18 @@ set.vo: set.v
 order.vo: order.v \
 	set.vo
 	coqc order.v
+
+# elements
+elements.vo: elements.v \
+	set.vo
+	coqc elements.v
+
+# order_elements
+order_elements.vo: order_elements.v \
+	set.vo \
+	order.vo \
+	elements.vo
+	coqc order_elements.v
 
 # subset
 subset.vo: subset.v \
@@ -40,6 +57,31 @@ equiv.vo: equiv.v \
 	subset.vo
 	coqc equiv.v
 
+# single_compatible
+single_compatible.vo: single_compatible.v \
+	set.vo \
+	subset.vo \
+	equiv.vo 
+	coqc single_compatible.v
+
+# subset_elements
+subset_elements.vo: subset_elements.v \
+	set.vo \
+	elements.vo \
+	subset.vo \
+	equiv.vo 
+	coqc subset_elements.v
+
+# belong_elements
+belong_elements.vo: belong_elements.v \
+	set.vo \
+	elements.vo \
+	subset.vo \
+	belong.vo \
+	equiv.vo \
+	subset_elements.vo
+	coqc belong_elements.v
+
 # equiv_symmetric
 equiv_symmetric.vo: equiv_symmetric.v \
 	set.vo \
@@ -47,22 +89,14 @@ equiv_symmetric.vo: equiv_symmetric.v \
 	equiv.vo
 	coqc equiv_symmetric.v
 
-
-# elements
-elements.vo: elements.v \
-	set.vo \
-	order.vo \
-	subset.vo \
-	equiv.vo 
-	coqc elements.v
-
 # subset_reflexive
 subset_reflexive.vo: subset_reflexive.v \
 	set.vo \
 	order.vo \
+	order_elements.vo \
 	subset.vo \
-	equiv.vo  \
-	elements.vo
+	equiv.vo \
+	subset_elements.vo
 	coqc subset_reflexive.v
 
 # equiv_reflexive
@@ -76,12 +110,14 @@ equiv_reflexive.vo: equiv_reflexive.v \
 subset_transitive.vo: subset_transitive.v \
 	set.vo \
 	order.vo \
+	elements.vo \
+	order_elements.vo \
 	subset.vo \
 	equiv.vo \
-	elements.vo \
+	subset_elements.vo \
+	equiv_symmetric.vo \
 	subset_reflexive.vo \
-	equiv_reflexive.vo \
-	equiv_symmetric.vo
+	equiv_reflexive.vo 
 	coqc subset_transitive.v
 
 # equiv_transitive
@@ -92,14 +128,6 @@ equiv_transitive.vo: equiv_transitive.v \
 	subset_transitive.vo
 	coqc equiv_transitive.v
 
-# subset_compatible
-subset_compatible.vo: subset_compatible.v \
-	set.vo \
-	subset.vo \
-	equiv.vo \
-	subset_transitive.vo
-	coqc subset_compatible.v
-
 # equiv_compatible
 equiv_compatible.vo: equiv_compatible.v \
 	set.vo \
@@ -108,13 +136,31 @@ equiv_compatible.vo: equiv_compatible.v \
 	equiv_transitive.vo
 	coqc equiv_compatible.v
 
-# single_compatible
-single_compatible.vo: single_compatible.v \
+# union_compatible
+union_compatible.vo: union_compatible.v \
 	set.vo \
+	subset.vo \
 	equiv.vo \
-	subset.vo
-	coqc single_compatible.v
+	subset_transitive.vo
+	coqc union_compatible.v
 
 
+# subset_compatible
+subset_compatible.vo: subset_compatible.v \
+	set.vo \
+	subset.vo \
+	equiv.vo \
+	subset_transitive.vo
+	coqc subset_compatible.v
+
+# belong_compatible
+belong_compatible.vo: belong_compatible.v \
+	set.vo \
+	subset.vo \
+	belong.vo \
+	equiv.vo \
+	single_compatible.vo \
+	subset_compatible.vo 
+	coqc belong_compatible.v 
 
 

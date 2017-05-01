@@ -114,79 +114,10 @@ int main()
   assert(size == 71);
   assert(callback_data.out == 0);    // unaffected by call
  
-
-  fprintf(stderr,"\ntesting parsing signature (DER)...\n");
-
-  // NULL context 
-  size = 71;
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_der(NULL,&sig,der,size); 
-  assert(value == 1);      // parsing was succesful
-  assert(memcmp(&sig1, &sig, sizeof(secp256k1_ecdsa_signature)) == 0);
-
-  // NULL input pointer
-  size = 71;
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,NULL,size); 
-  assert(value == 0);      // can't parse
-  assert(callback_data.out == 42); 
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-
-  // NULL output pointer
-  size = 71;
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_der(ctx,NULL,der,size); 
-  assert(value == 0);      // can't parse
-  assert(callback_data.out == 42);    
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-
-  // wrong size input
-  size = 70;
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_der(ctx,NULL,der,size); 
-  assert(value == 0);      // can't parse
-  assert(size == 70);             // size unchanged
-  assert(callback_data.out == 42);    
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-
-  // secp256k1_ecdsa_signature_parse_der
-  size = 71;
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_parse_der(ctx,&sig2,der,size); 
-  assert(value == 1);      // parsing was succesful
-  assert(memcmp(&sig1, &sig2, sizeof(secp256k1_ecdsa_signature)) == 0);
-
-
+  
   unsigned char buffer64[64];
 
-  // NULL input signature pointer
-  memset(buffer64,0x00, 64);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,NULL);
-  assert(value ==0);                       // serialization failed
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
   
-  // secp2561_ecdsa_signature_serialize_compact
-  memset(buffer64,0x00, 64);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_compact(ctx,buffer64,&sig1);
-  assert(value ==1);                       // serialization succeeded
-  assert(memcmp(buffer64,sig_bytes1,64) == 0);  // initial signature
-  assert(callback_data.out == 0);
-
   fprintf(stderr,"\ntesting verifying signature...\n");
   
   const unsigned char *hash1 = 

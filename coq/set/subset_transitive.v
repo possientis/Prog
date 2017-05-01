@@ -6,12 +6,14 @@ Require Import List.
 
 Require Import set.
 Require Import order.
+Require Import elements.
+Require Import order_elements.
 Require Import subset.
 Require Import equiv.
-Require Import elements.
+Require Import subset_elements.
+Require Import equiv_symmetric.
 Require Import subset_reflexive.
 Require Import equiv_reflexive.
-Require Import equiv_symmetric.
 
 Proposition subset_transitive: forall (a b c:set),
   subset a b -> subset b c -> subset a c.
@@ -40,11 +42,11 @@ Proof.
   split.
 
   apply IH with (b:=y). 
-  apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx. 
+  apply le_S_n. apply le_trans with (m:= order a). apply order_elements. exact Hx. 
   exact Ha. 
-  apply le_S_n. apply le_trans with (m:=order b). apply elements_order. elim Hy.
+  apply le_S_n. apply le_trans with (m:=order b). apply order_elements. elim Hy.
   auto. exact Hb.
-  apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
+  apply le_S_n. apply le_trans with (m:= order c). apply order_elements. elim Hz.
   auto. exact Hc.
  
   elim Hy. intros H0 EQxy. clear H0. unfold equiv in EQxy. 
@@ -54,11 +56,11 @@ Proof.
   apply proj1 with (B:= subset z y). exact EQyz.
 
   apply IH with (b:=y).
-  apply le_S_n. apply le_trans with (m:= order c). apply elements_order. elim Hz.
+  apply le_S_n. apply le_trans with (m:= order c). apply order_elements. elim Hz.
   auto. exact Hc.
-  apply le_S_n. apply le_trans with (m:= order b). apply elements_order. elim Hy.
+  apply le_S_n. apply le_trans with (m:= order b). apply order_elements. elim Hy.
   auto. exact Hb.
-  apply le_S_n. apply le_trans with (m:= order a). apply elements_order. exact Hx.
+  apply le_S_n. apply le_trans with (m:= order a). apply order_elements. exact Hx.
   exact Ha.
   
   elim Hz. intros H0 EQyz. clear H0. unfold equiv in EQyz. 
