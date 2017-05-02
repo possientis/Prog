@@ -42,68 +42,8 @@ int main()
   value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
 
-  fprintf(stderr,"\ntesting serializing signature (DER)...\n");
-  unsigned char der[128];
+ unsigned char der[128];
   
-  // NULL context
-  size = 128;
-  memset(der,0x00, 128);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_der(NULL,der,&size,&sig1); 
-  assert(value == 1);      // serialization succeeded
-  assert(size == 71);             // der serialization is 71 bytes in this case
-  assert(callback_data.out == 0);    // unaffected by call
-
-  // NULL output pointer
-  size = 128;
-  memset(der,0x00, 128);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_der(ctx,NULL,&size,&sig1); 
-  assert(value == 0);      // serialization failed
-  assert(size == 128);            // size unchanged
-  assert(is_all_null(der, 128));  // output buffer unaffected
-  assert(callback_data.out == 42);   // check callback return value
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  
-  // output pointer only 71 bytes
-  size = 71;
-  memset(der,0x00, 128);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
-  assert(value == 1);      // serialization succeeded
-  assert(size == 71);
-  assert(callback_data.out == 0);    // unaffected by call
-
-  // output pointer only 70 bytes (CALLBACK not being called)
-  size = 70;
-  memset(der,0x00, 128);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
-  assert(value == 0);      // can't serialize
-  assert(size == 71);             // size is changed here 
-  assert(is_all_null(der, 128));  // output buffer unaffected
-  assert(callback_data.out == 0);    // CALLBACK IS NOT CALLED ! (WRONG)
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-
-  // null input pointer
-  size = 128;
-  memset(der,0x00, 128);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,NULL); 
-  assert(value == 0);      // can't serialize
-  assert(size == 128);            // size is unchanged
-  assert(is_all_null(der, 128));  // output buffer unaffected
-  assert(callback_data.out == 42);   // checking callback return value
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-
   // secp256k1_ecdsa_signature_serialize_der
   size = 128;
   memset(der,0x00, 128);

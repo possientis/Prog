@@ -12,8 +12,13 @@ extern char buffer[100];
 
 %%
 
+program:
+       statement
+      | statement program
+      ;
+
 statement:
-  NAME ':' '<' NUMBER '>'   { printf("NAME = %s\n", buffer); }
+  NAME ':' '<' NUMBER '>'   { printf("%s\n", buffer); }
 
 %%
 

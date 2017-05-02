@@ -177,13 +177,100 @@ static int test_ecdsa_signature_parse_der(){
   callback_data.out = 0;
   value = secp256k1_ecdsa_signature_parse_der(ctx,&sig,der_bytes,71); 
   assert(value == 1);                   // parsing succeeded
+  assert(memcmp(&sig1, &sig, 64) == 0); // parsing is correct
   assert(callback_data.out == 0);       // no error
-
 
   return 0;
 
 }
-static int test_ecdsa_signature_serialize_der(){return 0;}
+static int test_ecdsa_signature_serialize_der(){
+  
+  secp256k1_ecdsa_signature sig1;       // signature to be serialized
+  int value;
+  size_t size;
+  unsigned char buffer[128];            // der output buffer
+
+  // parsing signature in compact format so it can be serialized in DER format
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
+
+  fprintf(stderr,"\ntesting serializing signature (DER)...\n");
+
+  // NULL context
+  size = 128;
+  memset(buffer,0x00, 128);
+  callback_data.in = "signature_serialize_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_der(NULL,buffer,&size, &sig1); 
+  assert(value == 1);                   // serialization succeeded
+  assert(size == 71);                   // 71 bytes output in this case
+  assert(callback_data.out == 0);       // no error
+
+  // NULL output buffer
+  size = 128;
+  memset(buffer,0x00, 128);
+  callback_data.in = "signature_serialize_der.1";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_der(ctx, NULL,&size, &sig1); 
+  assert(value == 0);                   // serialization failed
+  assert(size == 128);                  // size argument unaffected
+  assert(is_all_null(buffer, 128));     // buffer unaffected
+  assert(callback_data.out == 42);      // callback return value
+
+  // output buffer exactly 71 bytes
+  size = 71;
+  memset(buffer,0x00, 128);
+  callback_data.in = "signature_serialize_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_der(ctx, buffer,&size, &sig1); 
+  assert(value == 1);                   // serialization succeeded
+  assert(size == 71);                   // 71 bytes output
+  assert(callback_data.out == 0);       //  no error
+
+  // output buffer too small
+  size = 70;
+  memset(buffer,0x00, 128);
+  callback_data.in = "signature_serialize_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_der(ctx, buffer,&size, &sig1); 
+  assert(value == 0);                   // serialization failed
+  assert(size == 71);                   // size argument unaffected
+  assert(is_all_null(buffer, 128));     // buffer unaffected
+  assert(callback_data.out == 0);       // no error
+
+  // NULL size pointer
+  size = 128;
+  memset(buffer,0x00, 128);
+  callback_data.in = "signature_serialize_der.2";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_der(ctx, buffer, NULL, &sig1); 
+  assert(value == 0);                   // serialization failed
+  assert(size == 128);                  // size argument unaffected
+  assert(is_all_null(buffer, 128));     // buffer unaffected
+  assert(callback_data.out == 42);      // callback return value
+
+  // NULL signature pointer
+  size = 128;
+  memset(buffer,0x00, 128);
+  callback_data.in = "signature_serialize_der.3";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_der(ctx, buffer, &size, NULL); 
+  assert(value == 0);                   // serialization failed
+  assert(size == 128);                  // size argument unaffected
+  assert(is_all_null(buffer, 128));     // buffer unaffected
+  assert(callback_data.out == 42);      // callback return value
+  
+  // Normal call
+  size = 128;
+  memset(buffer,0x00, 128);
+  callback_data.in = "signature_serialize_der.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_serialize_der(ctx, buffer, &size, &sig1); 
+  assert(value == 1);                   // serialization failed
+  assert(size == 71);                   // 71 bytes output
+  assert(callback_data.out == 0);       //  no error
+
+  return 0;
+}
 
 
 

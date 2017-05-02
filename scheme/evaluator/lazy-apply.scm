@@ -6,7 +6,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (define (lazy-apply proc args)
-  (cond ((primitive-procedure? proc) (lazy-apply-primitive-procedure proc args))
+  (debug "[DEBUG]: lazy-apply: proc = ")(debug proc)(debug-newline)
+  (cond ((primitive-procedure? proc) 
+         (debug "[DEBUG]: lazy-apply: proc is a primitive procedure")
+         (debug-newline)
+         (lazy-apply-primitive-procedure proc args))
         ((eval-procedure? proc) (lazy-apply-eval-procedure proc args))
         ((analyze-procedure? proc) (lazy-apply-analyze-procedure proc args))
         (else (error "Unknown procedure type -- LAZY-APPLY" proc))))

@@ -29,9 +29,10 @@ flex calculator.l; bison -d calculator.y;
 gcc calculator.tab.c lex.yy.c -ll; echo -n 123+27 | ./a.out; ./clean.sh
 echo
 
-#echo "Testing decimal number lexical analyser ..."
-#flex decimal.l; gcc decimal.c lex.yy.c -ll; ./a.out < input3.txt; ./clean.sh
-#echo
+echo "Testing decimal number lexical analyser ..."
+flex decimal.l; bison -d decimal.y; 
+gcc decimal.tab.c lex.yy.c -ll; ./a.out < input3.txt; ./clean.sh
+echo
 
 
 

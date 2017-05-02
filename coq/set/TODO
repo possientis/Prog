@@ -1,4 +1,3 @@
-subset_belong
 set up test.sh
 define single-step eval relation
 determinacy of single step: t->t' /\ t->t'' => t'=t''

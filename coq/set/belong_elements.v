@@ -6,6 +6,8 @@ Require Import subset.
 Require Import belong.
 Require Import equiv.
 Require Import subset_elements.
+Require Import equiv_reflexive.
+
 
 Proposition belong_elements : forall (a b: set),
   belong a b <-> exists (c:set), In c (elements b) /\ equiv a c.
@@ -19,3 +21,9 @@ Proof.
   intros Eax. rewrite <- Eax. exact Hc. apply False_ind.
 Qed.
 
+Corollary element_imp_belong: forall (a b:set),
+  In a (elements b) -> belong a b.
+Proof.
+  intros a b Hab. apply belong_elements. exists a.
+  split. exact Hab. apply equiv_reflexive.
+Qed.

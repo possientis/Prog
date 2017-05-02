@@ -2,7 +2,7 @@ section .data
   EOL       equ 10    ; 0x0a
   FILLCHR   equ 32    ; 0x20
   DASHCHR   equ 45    ; 0x2d
-  STARTROW  equ 2     ; row where graph begins
+  STRTROW   equ 2     ; row where graph begins
 
   ; table of byte-length numbers
   Dataset   db  9,71,17,52,55,18,29,36,18,68,77,63,58,44,0
@@ -66,7 +66,7 @@ ClrVid:
   mov   al, FILLCHR
   mov   rdi, VidBuff
   mov   rcx, COLS*ROWS
-  rep   stosb                 ; *rdi++ = al
+  rep   stosb                 ; do { *rdi++ = al; rcx--; } while (rcx > 0);
   ; need to insert EOL's
   mov   rdi, VidBuff
   dec   rdi                   ; index -1  
@@ -139,37 +139,81 @@ WrtDsh:
 ;     Length of the ruler in chars in RCX
 ; 
 Ruler:
-  mov rdi, VidBuff
-  dec rax
-  dec rbx 
-  mov ah, COLS
-  mul ah
-  add rdi, rax
-  add rdi, rbx
-  mov al, '1'   ; start ruler with digit '1'
-doChar:
-  stosb         ; there is no 'rep' prefix !!
-  add al, 1     ; bump character value by 1
+  push  rax
+  push  rbx
+  push  rcx
+  push  rdi
+ 
+  mov   rdi, VidBuff
+  dec   rax
+  dec   rbx 
+  mov   ah, COLS
+  mul   ah
+  add   rdi, rax
+  add   rdi, rbx
+  mov   al, '1'   ; start ruler with digit '1'
+DoChar:
+  stosb           ; there is no 'rep' prefix !!
+  add   al, 1     ; bump character value by 1
+  cmp   al,'9'
+  jbe   DoLoop
+  mov   al, '0'
+DoLoop:
+  loop  DoChar
 
+  pop   rdi
+  pop   rcx
+  pop   rbx
+  pop   rax
+  ret
+  
 _start
 
-;  ClearTerminal
-  call ClrVid
-  mov rax, 1
-  mov rbx, 1
-  mov rcx, 80
-  call WrtDsh
-  mov rax, 25
-  call WrtDsh
-  mov rax, 12
-  mov rcx, MSGLEN
-  mov rsi, Message
-  call WrtLn
-  call Show
-  
+  ClearTerminal     ; macro call 
+  call  ClrVid      ; function call
 
-  mov rax, 60
-  mov rdi, 0
+  ; display top ruler
+  mov   rax, 1
+  mov   rbx, 1
+  mov   rcx, COLS-1
+  call  Ruler
+  
+  ; loop through dataset and graph data
+  mov   rsi, Dataset
+  mov   rbx, 1        ; X = 1
+  mov   rbp, 0        ; index = 0
+.blast
+  mov   rax, rbp
+  add   rax, STRTROW
+  mov   cl, byte [rsi+rbp]
+  cmp   rcx, 0
+  je    .rule2        ; if 0 from dataset -> done
+  call  WrtDsh
+  inc   rbp           ; index++
+  jmp   .blast
+  
+  ; display bottom ruler
+.rule2
+  mov   rax, rbp      ; rax = index 
+  add   rax, STRTROW
+  mov   rbx, 1
+  mov   rcx, COLS-1
+  call  Ruler
+
+  ;informative message on the last line
+  mov   rsi, Message 
+  mov   rcx, MSGLEN
+  mov   rbx, COLS
+  sub   rbx, rcx
+  shr   rbx, 1
+  mov   rax, 24       ; last line
+  call  WrtLn
+
+  ; display video buffer
+  call Show 
+
+  mov   rax, 60
+  mov   rdi, 0
   syscall
 
 

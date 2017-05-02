@@ -10,7 +10,7 @@
   (cons 'begin 
         (reverse 
           (let loop ((acc '()))
-            (let ((input (read file)))
+            (let ((input (force-thunk (read file))))
               (if (not (eof-object? input))
                 (loop (cons input acc))
                 acc))))))
