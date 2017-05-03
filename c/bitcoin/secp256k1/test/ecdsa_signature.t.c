@@ -285,13 +285,6 @@ static int test_ecdsa_signature_verify(){
 
   fprintf(stderr,"\ntesting verifying signature...\n");
 
-  // NULL ctx
-  callback_data.in = "signature_verify.1";
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(NULL, &sig1, hash_bytes1, &pub1); 
-  assert(value == 0);
-  assert(callback_data.out == 1);
-
 
   // normal call
   callback_data.in = "signature_verify.0";
