@@ -8,7 +8,16 @@ module FirstOrder
   , imply
   , forall
   , asType
+  , equalF
+  , showF
   ) where
+
+data  FormulaType v k  
+    = BelongType v v 
+    | BotType
+    | ImplyType (k v) (k v)
+    | ForallType v (k v)
+
 
 class FirstOrder m where
   belong    :: v -> v -> m v
@@ -17,36 +26,25 @@ class FirstOrder m where
   forall    :: v -> m v -> m v
   asType    :: m v -> FormulaType v m 
 
-data  FormulaType v k  
-    = BelongType v v 
-    | BotType
-    | ImplyType (k v) (k v)
-    | ForallType v (k v)
+  equalF :: (Eq v) => m v -> m v -> Bool
+  equalF (asType -> BelongType x1 y1)
+         (asType -> BelongType x2 y2)  = (x1 == x2) && (y1 == y2)
+  equalF (asType -> BotType)
+         (asType -> BotType)           = True
+  equalF (asType -> ImplyType p1 q1)
+         (asType -> ImplyType p2 q2)   = (equalF p1 p2) && (equalF q1 q2)
+  equalF (asType -> ForallType x1 p1)
+         (asType -> ForallType x2 p2)  = (x1 == x2) && (equalF p1 p2)
 
-instance (Eq v, FirstOrder m) => Eq (m v) where
-  (==)  (asType -> BelongType x1 y1) 
-        (asType -> BelongType x2 y2)  = (x1 == x2) && (y1 == y2)
-  (==)  (asType -> BotType)
-        (asType -> BotType)           = True
-  (==)  (asType -> ImplyType p1 q1) 
-        (asType -> ImplyType p2 q2)   = (p1 == p2) && (q1 == q2) 
-  (==)  (asType -> ForallType x1 p1)
-        (asType -> ForallType x2 p2)  = (x1 == x2) && (p1 == p2)
-  (==)  _ 
-        _                             = False
+  showF :: (Show v) => m v -> String
+  showF (asType -> BelongType x y)  = (show x) ++ ":" ++ (show y)
+  showF (asType -> BotType)         = "!"
+  showF (asType -> ImplyType p q)   = "(" ++ (showF p) ++ " -> " ++ (showF q) ++ ")"
+  showF (asType -> ForallType x p)  = "A" ++ (show x) ++ "." ++ (showF p) 
 
-instance (Show v, FirstOrder m) => Show (m v) where
-  show (asType -> BelongType x y) = (show x) ++ ":" ++ (show y)
-  show (asType -> BotType)        = "!"
-  show (asType -> ImplyType p q)  = "(" ++ (show p) ++ " -> " ++ (show q) ++ ")"
-  show (asType -> ForallType x p) = "A" ++ (show x) ++ "." ++ (show p)
-  
-
-instance (FirstOrder m) => Functor m where
-  fmap f (asType -> BelongType x y)  = belong (f x) (f y)
-  fmap f (asType -> BotType)         = bot
-  fmap f (asType -> ImplyType p q)   = imply (fmap f p) (fmap f q)  
-  fmap f (asType -> ForallType x p)  = forall (f x) (fmap f p)
+  mapF  :: (v -> w) -> m v -> m w
+  -- TODO
+        
 
 
 

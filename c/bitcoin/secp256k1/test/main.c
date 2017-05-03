@@ -42,41 +42,17 @@ int main()
   value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
 
- unsigned char der[128];
   
-  // secp256k1_ecdsa_signature_serialize_der
-  size = 128;
-  memset(der,0x00, 128);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_serialize_der(ctx,der,&size,&sig1); 
-  assert(value == 1);
-  assert(size == 71);
-  assert(callback_data.out == 0);    // unaffected by call
- 
   
-  unsigned char buffer64[64];
-
-  
-  fprintf(stderr,"\ntesting verifying signature...\n");
-  
-  const unsigned char *hash1 = 
-    "\x7f\x83\xb1\x65\x7f\xf1\xfc\x53\xb9\x2d\xc1\x81\x48\xa1\xd6\x5d"
-    "\xfc\x2d\x4b\x1f\xa3\xd6\x77\x28\x4a\xdd\xd2\x00\x12\x6d\x90\x69";
-
-  const unsigned char *hash2 =  /* typo in first byte */
-    "\xff\x83\xb1\x65\x7f\xf1\xfc\x53\xb9\x2d\xc1\x81\x48\xa1\xd6\x5d"
-    "\xfc\x2d\x4b\x1f\xa3\xd6\x77\x28\x4a\xdd\xd2\x00\x12\x6d\x90\x69";
-
   // NULL context (segmentation fault)
-//  value = secp256k1_ecdsa_verify(NULL, &sig1, hash1, &pub1); 
+//  value = secp256k1_ecdsa_verify(NULL, &sig1, hash_bytes1, &pub1); 
 //  assert(value == 1);
  // assert(callback_data.out == 0);
 
   // NULL signature pointer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, NULL, hash1, &pub1); 
+  value = secp256k1_ecdsa_verify(ctx, NULL, hash_bytes1, &pub1); 
   assert(value == 0);
   assert(callback_data.out == 42);
   callback_data.in = 0;
@@ -94,7 +70,7 @@ int main()
   // NULL pubkey pointer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig1, hash1, NULL); 
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, NULL); 
   assert(value == 0);
   assert(callback_data.out == 42);
   callback_data.in = 0;
@@ -103,7 +79,7 @@ int main()
   // wrong message
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig1, hash2, &pub1); 
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes2, &pub1); 
   assert(value == 0);    // verification failes
   assert(callback_data.out == 0);  // but this is not an error, callback not called
 
@@ -112,16 +88,9 @@ int main()
   callback_data.out = 0;
   value = secp256k1_ec_pubkey_parse(ctx,&pub2, pubkey_bytes6, 33);
   assert(value == 1);
-  value = secp256k1_ecdsa_verify(ctx, &sig1, hash1, &pub2); 
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, &pub2); 
   assert(value == 0);    // verification fails
   assert(callback_data.out == 0);  // but not an error
-
-  // secp256k1_ecdsa_verify
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig1, hash1, &pub1); 
-  assert(value == 1);
-  assert(callback_data.out == 0);
 
   fprintf(stderr,"\ntesting normalizing signature...\n");
 
@@ -135,7 +104,7 @@ int main()
   // key not normalized, hence signature verification should fail
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig2, hash1, &pub1);
+  value = secp256k1_ecdsa_verify(ctx, &sig2, hash_bytes1, &pub1);
   assert(value == 0);  // verification fails 
 
   // normalizing sig2
@@ -187,12 +156,12 @@ int main()
 
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = f1(nonce1, hash1, hash2, NULL, NULL, 0);
+  value = f1(nonce1, hash_bytes1, hash_bytes2, NULL, NULL, 0);
   assert(value == 1);
 
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = f2(nonce2, hash1, hash2, NULL, NULL, 0);
+  value = f2(nonce2, hash_bytes1, hash_bytes2, NULL, NULL, 0);
   assert(value == 1);
 
   assert(memcmp(nonce1, nonce2, 32) == 0);
@@ -204,12 +173,12 @@ int main()
 
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = f1(nonce1, hash1, priv1, NULL, NULL, 0); 
+  value = f1(nonce1, hash_bytes1, priv1, NULL, NULL, 0); 
   assert(value == 1);
 
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = f2(nonce2, hash1, priv1, NULL, NULL, 0); 
+  value = f2(nonce2, hash_bytes1, priv1, NULL, NULL, 0); 
   assert(value == 1);
  
   // see java EC_Test_Utils.getDeterministicKey and Test18.java
@@ -221,23 +190,23 @@ int main()
   assert(memcmp(nonce2, nonce, 32) == 0);
 
   // NULL output pointer (segmentation fault: WRONG?)
-  // value = f1(NULL, hash1, priv1, NULL, NULL, 0); 
+  // value = f1(NULL, hash_bytes1, priv1, NULL, NULL, 0); 
 
   // NULL message pointer (segmentation fault: WRONG?)
   // value = f1(nonce1, NULL, priv1, NULL, NULL, 0); 
 
   // NULL key pointer (segmentation fault: WRONG?)
-  // value = f1(nonce1, hash1, NULL, NULL, NULL, 0); 
+  // value = f1(nonce1, hash_bytes1, NULL, NULL, NULL, 0); 
 
   fprintf(stderr,"\ntesting ecdsa signature generation...\n");
 
   // NULL context: segmentation fault
-//  value = secp256k1_ecdsa_sign(NULL, &sig, hash1, priv1, f1, NULL);
+//  value = secp256k1_ecdsa_sign(NULL, &sig, hash_bytes1, priv1, f1, NULL);
 
   // NULL output pointer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_sign(ctx, NULL, hash1, priv1, f1, NULL);
+  value = secp256k1_ecdsa_sign(ctx, NULL, hash_bytes1, priv1, f1, NULL);
   assert(value == 0);
   assert(callback_data.out == 42);
   callback_data.in = 0;
@@ -255,7 +224,7 @@ int main()
   // NULL priv1ate key pointer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash1, NULL, f1, NULL);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, NULL, f1, NULL);
   assert(value == 0);
   assert(callback_data.out == 42);
   callback_data.in = 0;
@@ -265,7 +234,7 @@ int main()
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
   memset(&sig,0x00, 64);
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv1, NULL, NULL);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv1, NULL, NULL);
   assert(value == 1);  // signing successful (default nonce is used)
   assert(memcmp(&sig,&sig1,64) == 0);
   assert(callback_data.out == 0);
@@ -274,7 +243,7 @@ int main()
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
   memset(&sig,0x00, 64);
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash1, priv1, f1, NULL);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv1, f1, NULL);
   assert(value == 1);
   assert(memcmp(&sig,&sig1,64) == 0);
   assert(callback_data.out == 0);

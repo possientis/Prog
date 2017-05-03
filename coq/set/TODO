@@ -1,4 +1,4 @@
-set up test.sh
+continue with eset
 define single-step eval relation
 determinacy of single step: t->t' /\ t->t'' => t'=t''
 define multi-stop eval relation

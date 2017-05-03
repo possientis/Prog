@@ -8,6 +8,7 @@ static int test_ecdsa_signature_parse_compact();
 static int test_ecdsa_signature_serialize_compact();
 static int test_ecdsa_signature_parse_der();
 static int test_ecdsa_signature_serialize_der();
+static int test_ecdsa_signature_verify();
 
 int test_ecdsa_signature()
 {
@@ -15,6 +16,7 @@ int test_ecdsa_signature()
   assert(test_ecdsa_signature_serialize_compact() == 0);
   assert(test_ecdsa_signature_parse_der() == 0);
   assert(test_ecdsa_signature_serialize_der() == 0);
+  assert(test_ecdsa_signature_verify() == 0);
 
   return 0;
 }
@@ -272,5 +274,34 @@ static int test_ecdsa_signature_serialize_der(){
   return 0;
 }
 
+static int test_ecdsa_signature_verify(){
+
+  int value;
+  secp256k1_pubkey pub1;
+  secp256k1_ecdsa_signature sig1;
+
+  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
+
+  fprintf(stderr,"\ntesting verifying signature...\n");
+
+  // NULL ctx
+  callback_data.in = "signature_verify.1";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(NULL, &sig1, hash_bytes1, &pub1); 
+  assert(value == 0);
+  assert(callback_data.out == 1);
+
+
+  // normal call
+  callback_data.in = "signature_verify.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, &pub1); 
+  assert(value == 1);
+  assert(callback_data.out == 0);
+
+
+  return 0;
+} 
 
 
