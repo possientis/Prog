@@ -10,7 +10,7 @@
   (cons 'begin 
         (reverse 
           (let loop ((acc '()))
-            (let ((input (force-thunk (read file))))
+            (let ((input (read file)))
               (if (not (eof-object? input))
                 (loop (cons input acc))
                 acc))))))
@@ -18,6 +18,7 @@
 (define (filename->code filename)
   (let ((file (open-file filename "r")))
     (let ((code (file->code file)))
+;      (force code)
       (close-port file)
       code)))
 

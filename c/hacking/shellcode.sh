@@ -9,7 +9,7 @@
 yasm -f elf64 shellcode.asm
 
 out1=$(objdump -d -M intel shellcode.o | cut -d ':' -f 2)
-out2=$(for i in $out1; do echo $i; done | grep -v [g-zA-Z])
+out2=$(for i in $out1; do echo $i; done | grep -Ev '[g-zA-Z]|(bad)')
 out3=$(for i in $out2; do echo -n "\x${i}"; done)
 
 echo -en "$out3" > shellcode.bin

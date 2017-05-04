@@ -57,6 +57,7 @@
 (load "new-require.scm")
 (load "new-object-to-string.scm")
 (load "new-display.scm")
+(load "new-force.scm")
 
 
 (define primitive-procedures
@@ -91,6 +92,7 @@
         (list 'equal? equal?)
         (list 'error error)
         (list 'exit exit)
+        (list 'force new-force)
         (list 'hash hash)
         (list 'inexact->exact inexact->exact)
         (list 'length length)

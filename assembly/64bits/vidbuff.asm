@@ -1,3 +1,4 @@
+; illustrate the use of string instructions
 section .data
   EOL       equ 10    ; 0x0a
   FILLCHR   equ 32    ; 0x20
@@ -65,7 +66,7 @@ ClrVid:
   cld                         ; clear DF (direction flag), counting up memory
   mov   al, FILLCHR
   mov   rdi, VidBuff
-  mov   rcx, COLS*ROWS
+  mov   rcx, COLS*ROWS        ; stosb alone as semantics: *rdi++ = al
   rep   stosb                 ; do { *rdi++ = al; rcx--; } while (rcx > 0);
   ; need to insert EOL's
   mov   rdi, VidBuff
@@ -99,7 +100,7 @@ WrtLn:
   add   rdi, rax              ; add Y offset into VidBuff to rdi
   add   rdi, rbx              ; add X offset into VidBuff to rdi
   rep   movsb                 ; *rdi++ = *rsi++
-  pop   rdi
+  pop   rdi                   ; movsb, movsw, movsd, movsq
   pop   rcx
   pop   rbx
   pop   rax
@@ -153,13 +154,13 @@ Ruler:
   add   rdi, rbx
   mov   al, '1'   ; start ruler with digit '1'
 DoChar:
-  stosb           ; there is no 'rep' prefix !!
+  stosb           ; *rdi++ = al;
   add   al, 1     ; bump character value by 1
   cmp   al,'9'
   jbe   DoLoop
   mov   al, '0'
 DoLoop:
-  loop  DoChar
+  loop  DoChar    ; dec rcx; jnz DoChar
 
   pop   rdi
   pop   rcx

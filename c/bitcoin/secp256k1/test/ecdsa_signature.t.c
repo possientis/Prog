@@ -9,6 +9,7 @@ static int test_ecdsa_signature_serialize_compact();
 static int test_ecdsa_signature_parse_der();
 static int test_ecdsa_signature_serialize_der();
 static int test_ecdsa_signature_verify();
+static int test_ecdsa_signature_normalize();
 
 int test_ecdsa_signature()
 {
@@ -17,6 +18,7 @@ int test_ecdsa_signature()
   assert(test_ecdsa_signature_parse_der() == 0);
   assert(test_ecdsa_signature_serialize_der() == 0);
   assert(test_ecdsa_signature_verify() == 0);
+  assert(test_ecdsa_signature_normalize() == 0);
 
   return 0;
 }
@@ -277,24 +279,130 @@ static int test_ecdsa_signature_serialize_der(){
 static int test_ecdsa_signature_verify(){
 
   int value;
-  secp256k1_pubkey pub1;
-  secp256k1_ecdsa_signature sig1;
+  secp256k1_pubkey pub1, pub2, pub3;
+  secp256k1_ecdsa_signature sig1, sig2, sig;
 
+  // parsing key with which to successfully verify signature
   value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
+  // parsing key with which to unsuccessfully verify signature 
+  value = secp256k1_ec_pubkey_parse(ctx, &pub2, pubkey_bytes2, 33);
+  // parsing signature to be verified
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
+  // parsing non-normalized counterpart of sig1
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
 
   fprintf(stderr,"\ntesting verifying signature...\n");
+/* waiting for issue to be resolved before re-activating test
+  // NULL context (segmentation fault)
+  callback_data.in = "signature_verify.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(NULL, &sig1, hash_bytes1, &pub1); 
+  assert(value == 0);
+  assert(callback_data.out == 42);
+*/
 
+  // NULL signature pointer
+  callback_data.in = "signature_verify.1";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, NULL, hash_bytes1, &pub1); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 42);  // callback return value
+
+  // NULL hash pointer
+  callback_data.in = "signature_verify.2";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig1, NULL, &pub1); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 42);  // callback return value
+
+  // NULL public key pointer
+  callback_data.in = "signature_verify.3";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, NULL); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 42);  // callback return value
+
+  // 'null' valued public key
+  memset(&pub3, 0x0, 64);
+  callback_data.in = "signature_verify.4";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, &pub3); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 42);  // callback return value
+
+  // invalid public key
+  memset(&pub3, 0x01, 64);
+  callback_data.in = "signature_verify.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, &pub3); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 0);   // but no error
+
+  // wrong message
+  callback_data.in = "signature_verify.0";             
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes2, &pub1); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 0);   // but no error
+
+  // wrong public key
+  callback_data.in = "signature_verify.0";             
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, &pub2); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 0);   // but no error
+
+  // non-normalized signature
+  callback_data.in = "signature_verify.0";             
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_verify(ctx, &sig2, hash_bytes1, &pub1); 
+  assert(value == 0);               // verification failed
+  assert(callback_data.out == 0);   // but no error
 
   // normal call
   callback_data.in = "signature_verify.0";
-  callback_data.out = 0;
+  callback_data.out = 0;            
   value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, &pub1); 
-  assert(value == 1);
-  assert(callback_data.out == 0);
+  assert(value == 1);               // verification succeeded
+  assert(callback_data.out == 0);   // no error
 
 
   return 0;
 } 
+
+static int test_ecdsa_signature_normalize(){
+
+  int value;
+  secp256k1_ecdsa_signature sig1, sig2, sig;
+
+  // sig2 is the non-normalized counterpart of sig1
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
+
+  // NULL context (not normalized)
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_normalize.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_normalize(NULL, &sig, &sig2);
+  assert(value == 1);                     // signature was not normalized       
+  assert(memcmp(&sig, &sig1, 64) == 0);   // normalization is correct
+  assert(callback_data.out == 0);         // no error
+
+  // NULL context (already normalized)
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_normalize.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_normalize(NULL, &sig, &sig1);
+  assert(value == 0);                     // signature was already normalized       
+  assert(memcmp(&sig, &sig1, 64) == 0);   // normalization is correct
+  assert(callback_data.out == 0);         // no error
+
+ 
+
+  fprintf(stderr,"\ntesting normalizing signature...\n");
+
+  return 0;
+}
+
 
 

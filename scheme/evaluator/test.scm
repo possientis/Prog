@@ -11,6 +11,7 @@
 
 (do-run (let ((file (open-file "and.scm" "r")))
           (let ((code (read file)))
+            (force code)
             (close-port file)
             (display code)
             'ok)))

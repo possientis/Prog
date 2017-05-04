@@ -41,71 +41,8 @@ int main()
 
   value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
-
-  
-  
-  // NULL context (segmentation fault)
-//  value = secp256k1_ecdsa_verify(NULL, &sig1, hash_bytes1, &pub1); 
-//  assert(value == 1);
- // assert(callback_data.out == 0);
-
-  // NULL signature pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, NULL, hash_bytes1, &pub1); 
-  assert(value == 0);
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
-  // NULL msg32 pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig1, NULL, &pub1); 
-  assert(value == 0);
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
-  // NULL pubkey pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, NULL); 
-  assert(value == 0);
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
-  // wrong message
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes2, &pub1); 
-  assert(value == 0);    // verification failes
-  assert(callback_data.out == 0);  // but this is not an error, callback not called
-
-  // wrong pubkey
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ec_pubkey_parse(ctx,&pub2, pubkey_bytes6, 33);
-  assert(value == 1);
-  value = secp256k1_ecdsa_verify(ctx, &sig1, hash_bytes1, &pub2); 
-  assert(value == 0);    // verification fails
-  assert(callback_data.out == 0);  // but not an error
-
-  fprintf(stderr,"\ntesting normalizing signature...\n");
-
-
-  // parsing key
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
-  assert(value == 1);  // parsing successful 
 
-  // key not normalized, hence signature verification should fail
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_verify(ctx, &sig2, hash_bytes1, &pub1);
-  assert(value == 0);  // verification fails 
 
   // normalizing sig2
   callback_data.in = 0;             // make sure next error correctly sets it
@@ -119,12 +56,6 @@ int main()
   callback_data.out = 0;
   value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, &sig1);
   assert(value == 0);                  // sig1 was already normalized
-
-  // NULL context
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_normalize(NULL, &sig3, &sig2);
-  assert(value == 1);                  // sig2 was *not* normalized
 
   // NULL ouput (only testing sig2 for normality)
   callback_data.in = 0;             // make sure next error correctly sets it

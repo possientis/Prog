@@ -41,7 +41,11 @@
 ; proc is not expected to be of type thunk so no need to force it.
 ; args is expected to be a list of thunk which we need to force.
 (define (lazy-apply-primitive-procedure proc args)
+  (debug "[DEBUG]: lazy-apply-primitive-procedure: proc = ")
+  (debug proc)(debug-newline)
   (let ((forced-args (map force-thunk args)))
+    (debug "[DEBUG]: lazy-apply-primitive-procedure: args = ")
+    (debug forced-args)(debug-newline)
     (apply (primitive-procedure-object proc) forced-args)))
 
 ))  ; include guard

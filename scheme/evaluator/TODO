@@ -1,3 +1,6 @@
+understand why the 'solution' of forcing code in file-to-code.scm leads to 
+unit test failures.
+
 need a way to force (read file) in test.scm, before closing port
 reduce bug in test.scm
 (strict-eval '(load "main.scm")) fails under lazy-eval (cf unit-test)

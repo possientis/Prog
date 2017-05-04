@@ -1,6 +1,6 @@
 %{
 #include <stdio.h>
-
+/* grammar where operator precedence and left associativity are explicit */
 extern int yylex(void);
 extern int yyerror(const char*);
 extern FILE *yyin;
@@ -8,6 +8,10 @@ extern void yyset_in(FILE*);
 
 %}
 
+%left '+' '-'       /* left associative and at the lowest precedence level */
+%left '*' '/'       /* left associative and at the next precedence level */
+%nonassoc UMINUS    /* 'UMINUS' pseudo token for unary minus, has no associativity
+                        and stands at the highest precedence level */
 %token NAME NUMBER
 
 %%
@@ -25,10 +29,10 @@ expression: expression '+' expression { $$ = $1 + $3; }
                     yyerror("divide by zero");
                   else
                     $$ = $1 / $3;
-                }
-    |       '-' expression            { $$ = -$2; }
-    |       '(' expression ')'        { $$ = $2; }
-    |       NUMBER                    { $$ = $1; }
+                } /* %prec tells bison to use precedence of UMINUS for rule */
+    |       '-' expression %prec UMINUS { $$ = -$2; } 
+    |       '(' expression ')'          { $$ = $2; }
+    |       NUMBER                      { $$ = $1; }
     ;       
 
 %%
