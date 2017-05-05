@@ -8,6 +8,7 @@ data Term
   | TmSucc Term
   | TmPred Term
   | TmIsZero Term
+  deriving (Eq, Show)
 
 isNumerical :: Term -> Bool
 isNumerical (TmZero)    = True
@@ -32,6 +33,23 @@ eval1 (TmIsZero TmZero)       = Just TmTrue
 eval1 (TmIsZero (TmSucc nv1)) | isNumerical nv1 = Just TmFalse
 eval1 (TmIsZero t1)           = eval1 t1 >>= (\t1' -> Just $ TmIsZero t1')
 eval1 _                       = Nothing
+
+eval :: Term -> Maybe Term
+eval t = case eval1 t of
+  Just t1 -> eval t1
+  Nothing -> Just t 
+
+eval' :: Term -> Maybe Term
+eval' v@(isVal -> True)                                         = Just v
+eval' (TmIf (eval' -> Just TmTrue) t2 t3)                       = eval' t2
+eval' (TmIf (eval' -> Just TmFalse)t2 t3)                       = eval' t3
+eval' (TmSucc t1@(isNumerical -> True))                         = Just $ TmSucc t1 
+eval' (TmPred (eval' -> Just TmZero))                           = Just TmZero
+eval' (TmPred (eval' -> Just (TmSucc t2@(isNumerical -> True))))= Just t2
+eval' (TmIsZero (eval' -> Just TmZero))                         = Just TmTrue 
+eval' (TmIsZero (TmSucc (isNumerical -> True)))                 = Just TmFalse
+
+
 
 
 

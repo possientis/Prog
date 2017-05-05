@@ -33,10 +33,10 @@ main = do
   putStrLn $ "q2 = " ++ (show q2)
   putStrLn $ "q3 = " ++ (show q3)
   putStrLn $ "q4 = " ++ (show q4)
+  runTestTT tests
 
 test0 = TestCase (assertEqual "p1 == p1" p1 p1)
 test1 = TestCase (assertEqual "p1 == p2" p1 p2)
-
-tests_equal = TestList [TestLabel "(==).0" test0, TestLabel "(==).1" test1]
+tests = TestList [TestLabel "(==).0" test0, TestLabel "(==).1" test1]
 
 

@@ -10,6 +10,7 @@ module FirstOrder
   , asType
   , equalF
   , showF
+  , mapF
   ) where
 
 data  FormulaType v k  
@@ -35,6 +36,7 @@ class FirstOrder m where
          (asType -> ImplyType p2 q2)   = (equalF p1 p2) && (equalF q1 q2)
   equalF (asType -> ForallType x1 p1)
          (asType -> ForallType x2 p2)  = (x1 == x2) && (equalF p1 p2)
+  equalF  _ _                          = False
 
   showF :: (Show v) => m v -> String
   showF (asType -> BelongType x y)  = (show x) ++ ":" ++ (show y)
@@ -43,7 +45,10 @@ class FirstOrder m where
   showF (asType -> ForallType x p)  = "A" ++ (show x) ++ "." ++ (showF p) 
 
   mapF  :: (v -> w) -> m v -> m w
-  -- TODO
+  mapF  f (asType -> BelongType x y)   = belong (f x) (f y)
+  mapF  f (asType -> BotType)          = bot
+  mapF  f (asType -> ImplyType p q)    = imply (mapF f p) (mapF f q)
+  mapF  f (asType -> ForallType x p)   = forall (f x) (mapF f p)
         
 
 

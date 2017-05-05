@@ -1,1 +1,1 @@
-check guards semantics
+test eval and eval' (they probably differ on errors)
