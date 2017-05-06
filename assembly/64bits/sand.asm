@@ -4,11 +4,7 @@ global _start
 
 _start:
   
-  mov al, 255
-  mov bl, 0 
-  sub al, bl
-
-
+  nop
 
   mov rax, 60
   mov rdi, 0

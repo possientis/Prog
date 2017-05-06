@@ -157,10 +157,6 @@ echo new-display
 scm -b -f new-display.scm                 > /dev/null               
 ./strict-run.scm new-display.scm          > /dev/null
 
-echo new-force
-scm -b -f new-force.scm                   > /dev/null               
-./strict-run.scm new-force.scm            > /dev/null
-
 echo new-object-to-string
 scm -b -f new-object-to-string.scm        > /dev/null               
 ./strict-run.scm new-object-to-string.scm > /dev/null

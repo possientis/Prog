@@ -1,12 +1,6 @@
-understand why the 'solution' of forcing code in file-to-code.scm leads to 
-unit test failures.
+make lazy evaluation test work under lazy evaluation
 
-need a way to force (read file) in test.scm, before closing port
-reduce bug in test.scm
-(strict-eval '(load "main.scm")) fails under lazy-eval (cf unit-test)
-scm unit-test fails with (test-all-files)
-decide with lazy-load should force thunk or not
-resolve bug in frame3 (scm frame3-bug.scm (under frame3): wrong environment created) 
+resolve bug in frame3 (scm frame3-bug.scm (under frame3): wrong environment created)
 define primitives from language itself
 implement macros !!!!!
 lazy evaluation of arguments (with or without memoization)
