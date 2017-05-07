@@ -1,5 +1,10 @@
 {-# LANGUAGE ViewPatterns #-}
 
+module Term 
+  ( Term(..)
+  , eval1
+  ) where 
+
 data Term
   = TmTrue
   | TmFalse
@@ -37,7 +42,7 @@ eval1 _                       = Nothing
 eval :: Term -> Maybe Term
 eval t = case eval1 t of
   Just t1 -> eval t1
-  Nothing -> Just t 
+  Nothing -> if isVal t then Just t else Nothing
 
 eval' :: Term -> Maybe Term
 eval' v@(isVal -> True)                                         = Just v

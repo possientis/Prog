@@ -11,6 +11,7 @@ rm -f hello
 rm -f a.out
 
 ./bitcoin/clean.sh
+./logic/clean.sh
 
 
 cd ${DIR}

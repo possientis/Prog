@@ -29,26 +29,26 @@ class FirstOrder m where
 
   equalF :: (Eq v) => m v -> m v -> Bool
   equalF (asType -> BelongType x1 y1)
-         (asType -> BelongType x2 y2)  = (x1 == x2) && (y1 == y2)
+         (asType -> BelongType x2 y2) = (x1 == x2) && (y1 == y2)
   equalF (asType -> BotType)
-         (asType -> BotType)           = True
+         (asType -> BotType)          = True
   equalF (asType -> ImplyType p1 q1)
-         (asType -> ImplyType p2 q2)   = (equalF p1 p2) && (equalF q1 q2)
+         (asType -> ImplyType p2 q2)  = (equalF p1 p2) && (equalF q1 q2)
   equalF (asType -> ForallType x1 p1)
-         (asType -> ForallType x2 p2)  = (x1 == x2) && (equalF p1 p2)
-  equalF  _ _                          = False
+         (asType -> ForallType x2 p2) = (x1 == x2) && (equalF p1 p2)
+  equalF  _ _                         = False
 
   showF :: (Show v) => m v -> String
-  showF (asType -> BelongType x y)  = (show x) ++ ":" ++ (show y)
-  showF (asType -> BotType)         = "!"
-  showF (asType -> ImplyType p q)   = "(" ++ (showF p) ++ " -> " ++ (showF q) ++ ")"
-  showF (asType -> ForallType x p)  = "A" ++ (show x) ++ "." ++ (showF p) 
+  showF (asType -> BelongType x y) = (show x) ++ ":" ++ (show y)
+  showF (asType -> BotType)        = "!"
+  showF (asType -> ImplyType p q)  = "(" ++ (showF p) ++ " -> " ++ (showF q) ++ ")"
+  showF (asType -> ForallType x p) = "A" ++ (show x) ++ "." ++ (showF p) 
 
   mapF  :: (v -> w) -> m v -> m w
-  mapF  f (asType -> BelongType x y)   = belong (f x) (f y)
-  mapF  f (asType -> BotType)          = bot
-  mapF  f (asType -> ImplyType p q)    = imply (mapF f p) (mapF f q)
-  mapF  f (asType -> ForallType x p)   = forall (f x) (mapF f p)
+  mapF  f (asType -> BelongType x y) = belong (f x) (f y)
+  mapF  f (asType -> BotType)        = bot
+  mapF  f (asType -> ImplyType p q)  = imply (mapF f p) (mapF f q)
+  mapF  f (asType -> ForallType x p) = forall (f x) (mapF f p)
         
 
 
