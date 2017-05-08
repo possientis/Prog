@@ -9,10 +9,17 @@
 
 (define lazy?
   (let ((**lazy?** #t))
-    (let ((unset-lazy (lambda () (set! **lazy?** #f)))
-          (try (lambda (x) 'done)))
+    (let ((unset-lazy (lambda () 
+                        (display "[DEBUG]: unset-lazy being called\n")
+                        (set! **lazy?** #f)))
+          (try (lambda (x) 
+                 (display "[DEBUG]: try being called\n")
+                 'done)))
       (lambda () 
+        (display "[DEBUG] lazy?: 1. **lazy?** = ")(display **lazy?**)(newline)
         (set! **lazy?** #t)
+        (display "[DEBUG] lazy?: 2. **lazy?** = ")(display **lazy?**)(newline)
         (try (unset-lazy)) 
+        (display "[DEBUG] lazy?: 3. **lazy?** = ")(display **lazy?**)(newline)
         **lazy?**))))
 

@@ -12,6 +12,7 @@ rm -f a.out
 
 ./bitcoin/clean.sh
 ./logic/clean.sh
+./json/clean.sh
 
 
 cd ${DIR}

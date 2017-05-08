@@ -37,6 +37,7 @@
 ; whose code is itself interpreted...
 
 (load "debug.scm")
+(load "lazy.scm")
 
 (load "strict-eval.scm")
 (load "analyze-eval.scm")

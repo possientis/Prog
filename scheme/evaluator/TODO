@@ -1,3 +1,6 @@
+see lazy.scm: crucial line in function 'try' changes behaviour
+see test.scm: (lazy?) returning #t under strict-evaluation within lazy interpreter
+
 make lazy evaluation test work under lazy evaluation
 
 resolve bug in frame3 (scm frame3-bug.scm (under frame3): wrong environment created)

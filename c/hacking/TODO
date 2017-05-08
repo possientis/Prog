@@ -1,1 +1,1 @@
-remote_shell.c (add dup2 code + execve code)
+continue with remote_shell.asm, debug remote_shell.c

@@ -555,14 +555,14 @@
   ; testing lazy evaluation
   (display "testing lazy evaluation...\n")
   (strict-eval '(load "lazy.scm"))
-;  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.1")
-;  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.2")
-;  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.3")
-;  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.4")
-;  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.5")
-;  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.6")
-;  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.7")
-;  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.8")
+  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.1")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.2")
+  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.3")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.4")
+  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.5")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.6")
+  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.7")
+  (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.8")
 
   ; higher level interpreters
   (display "testing higher order interpreter...\n")
