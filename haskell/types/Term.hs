@@ -2,7 +2,11 @@
 
 module Term 
   ( Term(..)
+  , eval
+  , eval'
   , eval1
+  , isNumerical
+  , isVal
   ) where 
 
 data Term
@@ -21,8 +25,8 @@ isNumerical (TmSucc x)  = isNumerical x
 isNumerical     _       = False
 
 isVal :: Term -> Bool
-isVal (TmTrue)               = True
-isVal (TmFalse)              = False
+isVal (TmTrue)              = True
+isVal (TmFalse)             = True
 isVal (isNumerical -> True) = True
 isVal         _             = False
 

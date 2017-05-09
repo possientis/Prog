@@ -1,4 +1,4 @@
-{-# LANGUAGE ViewPatterns, FlexibleInstances, UndecidableInstances #-}
+{-# LANGUAGE ViewPatterns #-}
 
 module FirstOrder
   ( FirstOrder
@@ -50,8 +50,4 @@ class FirstOrder m where
   mapF  f (asType -> ImplyType p q)  = imply (mapF f p) (mapF f q)
   mapF  f (asType -> ForallType x p) = forall (f x) (mapF f p)
         
-
-
-
-
 

@@ -1,4 +1,4 @@
-module Variables 
+module V
   ( V(..)
   , x
   , y
