@@ -1,19 +1,8 @@
 module JLexer
   ( JLexer
   , JToken(..)
-  , jbool
-  , jbracel
-  , jbracer
-  , jbracketl
-  , jbracketr
-  , jcolon
-  , jcomma
-  , jflex
-  , jnull
-  , jnumber
-  , jspace
-  , jstring
-  , jtoken
+  , run
+  , jflex   -- :: JLexer [JToken]
   ) where
 
 import Parser
@@ -36,7 +25,7 @@ data JToken
   | TokColon
   | TokComma
   | TokSpace
-  deriving (Show)
+  deriving (Show, Eq)
 
 
 string :: JLexer String
@@ -97,7 +86,7 @@ jtoken  =   jstring
         +++ jspace
 
 jflex :: JLexer [JToken]
-jflex = (greed . plus) jtoken
+jflex = liftM (filter (/=TokSpace)) $ (greed . plus) jtoken
 
 
 
