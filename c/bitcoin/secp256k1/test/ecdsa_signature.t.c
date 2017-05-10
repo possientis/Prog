@@ -11,6 +11,7 @@ static int test_ecdsa_signature_serialize_der();
 static int test_ecdsa_signature_verify();
 static int test_ecdsa_signature_normalize();
 
+
 int test_ecdsa_signature()
 {
   assert(test_ecdsa_signature_parse_compact() == 0);
@@ -292,6 +293,7 @@ static int test_ecdsa_signature_verify(){
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
 
   fprintf(stderr,"\ntesting verifying signature...\n");
+  
 /* waiting for issue to be resolved before re-activating test
   // NULL context (segmentation fault)
   callback_data.in = "signature_verify.0";
@@ -379,6 +381,8 @@ static int test_ecdsa_signature_normalize(){
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
 
+  fprintf(stderr,"\ntesting normalizing signature...\n");
+
   // NULL context (not normalized)
   memset(&sig, 0x00, 64);
   callback_data.in = "signature_normalize.0";
@@ -397,9 +401,51 @@ static int test_ecdsa_signature_normalize(){
   assert(memcmp(&sig, &sig1, 64) == 0);   // normalization is correct
   assert(callback_data.out == 0);         // no error
 
- 
+  // NULL output pointer (not normalized)
+  // This use of NULL pointer for output is permitted by API, the function
+  // simply returns 1 (not normalized) or 0 (normalized) based on input.
+  callback_data.in = "signature_normalize.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_normalize(ctx, NULL, &sig2);
+  assert(value == 1);                     // signature was not normalized       
+  assert(callback_data.out == 0);         // no error
 
-  fprintf(stderr,"\ntesting normalizing signature...\n");
+  // NULL output pointer (already normalized)
+  // This use of NULL pointer for output is permitted by API, the function
+  // simply returns 1 (not normalized) or 0 (normalized) based on input.
+  callback_data.in = "signature_normalize.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_normalize(ctx, NULL, &sig1);
+  assert(value == 0);                     // signature was already normalized       
+  assert(callback_data.out == 0);         // no error
+
+   // NULL input pointer
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_normalize.1";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_normalize(ctx, &sig, NULL);
+  assert(value == 0);                     // well it returns here, why not      
+  assert(callback_data.out == 42);        // backup return value
+
+
+  // normal call (not normalized)
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_normalize.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_normalize(ctx, &sig, &sig2);
+  assert(value == 1);                     // signature was not normalized       
+  assert(memcmp(&sig, &sig1, 64) == 0);   // normalization is correct
+  assert(callback_data.out == 0);         // no error
+
+  // normal call (already normalized)
+  memset(&sig, 0x00, 64);
+  callback_data.in = "signature_normalize.0";
+  callback_data.out = 0;
+  value = secp256k1_ecdsa_signature_normalize(ctx, &sig, &sig1);
+  assert(value == 0);                     // signature was already normalized       
+  assert(memcmp(&sig, &sig1, 64) == 0);   // normalization is correct
+  assert(callback_data.out == 0);         // no error
+
 
   return 0;
 }

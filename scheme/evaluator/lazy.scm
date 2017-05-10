@@ -16,10 +16,10 @@
                  (display "[DEBUG]: try being called\n")
                  'done)))
       (lambda () 
-        (display "[DEBUG] lazy?: 1. **lazy?** = ")(display **lazy?**)(newline)
+;        (display "[DEBUG] lazy?: 1. **lazy?** = ")(display **lazy?**)(newline)
         (set! **lazy?** #t)
-        (display "[DEBUG] lazy?: 2. **lazy?** = ")(display **lazy?**)(newline)
+;        (display "[DEBUG] lazy?: 2. **lazy?** = ")(display **lazy?**)(newline)
         (try (unset-lazy)) 
-        (display "[DEBUG] lazy?: 3. **lazy?** = ")(display **lazy?**)(newline)
+;        (display "[DEBUG] lazy?: 3. **lazy?** = ")(display **lazy?**)(newline)
         **lazy?**))))
 

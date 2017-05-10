@@ -11,6 +11,7 @@ extern int test_context();
 extern int test_callback();
 extern int test_ec_pubkey();
 extern int test_ecdsa_signature();
+extern int test_nonce_function();
 
 
 int main()
@@ -21,6 +22,7 @@ int main()
   assert(test_callback() == 0);
   assert(test_ec_pubkey() == 0);
   assert(test_ecdsa_signature() == 0);
+  assert(test_nonce_function() == 0);
 
   secp256k1_pubkey pub;           // 64 bytes
   secp256k1_pubkey pub1;
@@ -44,37 +46,6 @@ int main()
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
 
 
-  // normalizing sig2
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, &sig2);
-  assert(value == 1);                  // sig2 was *not* normalized
-  assert(memcmp(&sig1, &sig3, 64) == 0);    // sig1 == sig3
-
-  // normalizing sig1
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, &sig1);
-  assert(value == 0);                  // sig1 was already normalized
-
-  // NULL ouput (only testing sig2 for normality)
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_normalize(ctx, NULL, &sig2);
-  assert(value == 1);                  // sig2 was *not* normalized
-
-  // NULL input
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_signature_normalize(ctx, &sig3, NULL);
-  assert(value == 0);                  // not meaningful
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
-
-
-  fprintf(stderr,"\ntesting rfc6979 nonce function...\n");
 
   const secp256k1_nonce_function f1 = secp256k1_nonce_function_rfc6979;
   const secp256k1_nonce_function f2 = secp256k1_nonce_function_default;
@@ -87,44 +58,22 @@ int main()
 
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = f1(nonce1, hash_bytes1, hash_bytes2, NULL, NULL, 0);
+  value = f1(nonce1, hash_bytes1, priv_bytes1, NULL, NULL, 0); 
   assert(value == 1);
 
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = f2(nonce2, hash_bytes1, hash_bytes2, NULL, NULL, 0);
-  assert(value == 1);
-
-  assert(memcmp(nonce1, nonce2, 32) == 0);
-
-  // private key from Mastering Bitcoin
-  const unsigned char* priv1 =
-    "\x1e\x99\x42\x3a\x4e\xd2\x76\x08\xa1\x5a\x26\x16\xa2\xb0\xe9\xe5"
-    "\x2c\xed\x33\x0a\xc5\x30\xed\xcc\x32\xc8\xff\xc6\xa5\x26\xae\xdd";
-
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = f1(nonce1, hash_bytes1, priv1, NULL, NULL, 0); 
-  assert(value == 1);
-
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = f2(nonce2, hash_bytes1, priv1, NULL, NULL, 0); 
+  value = f2(nonce2, hash_bytes1, priv_bytes1, NULL, NULL, 0); 
   assert(value == 1);
  
-  // see java EC_Test_Utils.getDeterministicKey and Test18.java
-  const unsigned char* nonce = 
-    "\x8b\x87\x1e\x0f\x28\x6b\x37\x91\xab\xb6\xe1\xd7\xc2\x8e\x6c\x7e"
-    "\x07\x19\x82\x9e\xfc\x03\xf6\x09\x4f\x70\xda\xb1\xb0\xf0\x0e\xfb";
-
-  assert(memcmp(nonce1, nonce, 32) == 0);
-  assert(memcmp(nonce2, nonce, 32) == 0);
+  assert(memcmp(nonce1, nonce_bytes1, 32) == 0);
+  assert(memcmp(nonce2, nonce_bytes1, 32) == 0);
 
   // NULL output pointer (segmentation fault: WRONG?)
-  // value = f1(NULL, hash_bytes1, priv1, NULL, NULL, 0); 
+  // value = f1(NULL, hash_bytes1, priv_bytes1, NULL, NULL, 0); 
 
   // NULL message pointer (segmentation fault: WRONG?)
-  // value = f1(nonce1, NULL, priv1, NULL, NULL, 0); 
+  // value = f1(nonce1, NULL, priv_bytes1, NULL, NULL, 0); 
 
   // NULL key pointer (segmentation fault: WRONG?)
   // value = f1(nonce1, hash_bytes1, NULL, NULL, NULL, 0); 
@@ -132,12 +81,12 @@ int main()
   fprintf(stderr,"\ntesting ecdsa signature generation...\n");
 
   // NULL context: segmentation fault
-//  value = secp256k1_ecdsa_sign(NULL, &sig, hash_bytes1, priv1, f1, NULL);
+//  value = secp256k1_ecdsa_sign(NULL, &sig, hash_bytes1, priv_bytes1, f1, NULL);
 
   // NULL output pointer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_sign(ctx, NULL, hash_bytes1, priv1, f1, NULL);
+  value = secp256k1_ecdsa_sign(ctx, NULL, hash_bytes1, priv_bytes1, f1, NULL);
   assert(value == 0);
   assert(callback_data.out == 42);
   callback_data.in = 0;
@@ -146,13 +95,13 @@ int main()
   // NULL message pointer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ecdsa_sign(ctx, &sig, NULL, priv1, f1, NULL);
+  value = secp256k1_ecdsa_sign(ctx, &sig, NULL, priv_bytes1, f1, NULL);
   assert(value == 0);
   assert(callback_data.out == 42);
   callback_data.in = 0;
   callback_data.out = 0;
 
-  // NULL priv1ate key pointer
+  // NULL priv_bytes1ate key pointer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
   value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, NULL, f1, NULL);
@@ -165,7 +114,7 @@ int main()
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
   memset(&sig,0x00, 64);
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv1, NULL, NULL);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv_bytes1, NULL, NULL);
   assert(value == 1);  // signing successful (default nonce is used)
   assert(memcmp(&sig,&sig1,64) == 0);
   assert(callback_data.out == 0);
@@ -174,7 +123,7 @@ int main()
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
   memset(&sig,0x00, 64);
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv1, f1, NULL);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv_bytes1, f1, NULL);
   assert(value == 1);
   assert(memcmp(&sig,&sig1,64) == 0);
   assert(callback_data.out == 0);
@@ -233,14 +182,14 @@ int main()
   // NULL context
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ec_seckey_verify(NULL, priv1);
+  value = secp256k1_ec_seckey_verify(NULL, priv_bytes1);
   assert(value == 1);
   assert(callback_data.out == 0);
 
   // Mastering Bitcoin private key is valid
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ec_seckey_verify(ctx, priv1);
+  value = secp256k1_ec_seckey_verify(ctx, priv_bytes1);
   assert(value == 1);
   assert(callback_data.out == 0);
 
@@ -248,12 +197,12 @@ int main()
   fprintf(stderr,"\ntesting public key creation from private key...\n");
 
   // NULL context: segmentation fault
-//  value = secp256k1_ec_pubkey_create(NULL, &pub, priv1);
+//  value = secp256k1_ec_pubkey_create(NULL, &pub, priv_bytes1);
 
   // NULL output buffer
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ec_pubkey_create(ctx, NULL, priv1);
+  value = secp256k1_ec_pubkey_create(ctx, NULL, priv_bytes1);
   assert(value == 0);
   assert(callback_data.out == 42);
   callback_data.in = 0;
@@ -277,7 +226,7 @@ int main()
 
   // secp256k1_ec_pubkey_create
   memset(&pub,0x00, 64);
-  value = secp256k1_ec_pubkey_create(ctx, &pub, priv1);
+  value = secp256k1_ec_pubkey_create(ctx, &pub, priv_bytes1);
   assert(value == 1);
   assert(callback_data.out == 0);
   assert(memcmp(&pub, &pub1, 64) == 0);
@@ -285,7 +234,7 @@ int main()
   fprintf(stderr,"\ntesting privkey_tweak_add...\n");
 
   // NULL context
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;          // tweak = 1
   callback_data.in = 0;             // make sure next error correctly sets it
@@ -293,11 +242,11 @@ int main()
   value = secp256k1_ec_privkey_tweak_add(NULL,nonce1,nonce2);
   assert(value == 1);                // tweak successful
   assert(callback_data.out == 0);              // call back was never called
-  assert(memcmp(nonce1, priv1, 31) == 0); // tweak no impact on high order bytes
-  assert(nonce1[31] == priv1[31] + 1);
+  assert(memcmp(nonce1, priv_bytes1, 31) == 0); // tweak no impact on high order bytes
+  assert(nonce1[31] == priv_bytes1[31] + 1);
 
   // NULL output buffer
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;          // tweak = 1
   callback_data.in = 0;             // make sure next error correctly sets it
@@ -309,7 +258,7 @@ int main()
   callback_data.out = 0;
   
   // NULL input buffer
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;          // tweak = 1
   callback_data.in = 0;             // make sure next error correctly sets it
@@ -321,17 +270,17 @@ int main()
   callback_data.out = 0;
      
   // adding tweak of 0
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
   value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
   assert(value == 1);                // tweak successful
   assert(callback_data.out == 0);              // call back was never called
-  assert(memcmp(nonce1, priv1, 32) == 0); // 0 tweak has no impact
+  assert(memcmp(nonce1, priv_bytes1, 32) == 0); // 0 tweak has no impact
 
   // adding tweak of 1
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;
   callback_data.in = 0;             // make sure next error correctly sets it
@@ -339,8 +288,8 @@ int main()
   value = secp256k1_ec_privkey_tweak_add(ctx,nonce1,nonce2);
   assert(value == 1);                // tweak successful
   assert(callback_data.out == 0);              // call back was never called
-  assert(memcmp(nonce1, priv1, 31) == 0); // tweak no impact on high order bytes
-  assert(nonce1[31] == priv1[31] + 1);
+  assert(memcmp(nonce1, priv_bytes1, 31) == 0); // tweak no impact on high order bytes
+  assert(nonce1[31] == priv_bytes1[31] + 1);
 
   // adding tweak of 1 to order_minus_one
   memcpy(nonce1, order_minus_one, 32);
@@ -359,7 +308,7 @@ int main()
     "\xba\xae\xdc\xe6\xaf\x48\xa0\x3b\xbf\xd2\x5e\x8c\xd0\x36\x41\x41";
 
   // adding tweak to private key then retrieving public key -> pub
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
   value = secp256k1_ec_privkey_tweak_add(ctx, nonce1, tweak);
@@ -381,7 +330,7 @@ int main()
   fprintf(stderr,"\ntesting privkey_tweak_mul...\n");
   
   // multiplying with tweak of 1
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;
   callback_data.in = 0;             // make sure next error correctly sets it
@@ -389,10 +338,10 @@ int main()
   value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
   assert(value == 1);                // tweak succeeds
   assert(callback_data.out == 0);              // no error
-  assert(memcmp(nonce1, priv1, 32) == 0); // no impact
+  assert(memcmp(nonce1, priv_bytes1, 32) == 0); // no impact
 
   // multiplying with tweak of 0
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
@@ -401,7 +350,7 @@ int main()
   assert(callback_data.out == 0);              // but no error
 
   // multiplying with tweak of 2
-  memcpy(nonce1, priv1, 32);
+  memcpy(nonce1, priv_bytes1, 32);
   memset(nonce2,0x00, 32);
   nonce2[31] = 2;
   callback_data.in = 0;             // make sure next error correctly sets it
@@ -424,7 +373,7 @@ int main()
   fprintf(stderr,"\ntesting context_randomize...\n");
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_context_randomize(ctx, priv1);
+  value = secp256k1_context_randomize(ctx, priv_bytes1);
   assert(value == 1);
 
   fprintf(stderr,"\ntesting pubkey_combine...\n");

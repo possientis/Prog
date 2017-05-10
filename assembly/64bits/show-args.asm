@@ -20,12 +20,11 @@ _start:
   mov       [ArgCount], rcx
   
   mov       rdi,  [ArgCount]
-  jmp       Exit
 
 ; save arguments pointers
   xor       rdx,  rdx
 SaveArgs:
-  pop       qword [ArgPtrs+8*rdx]
+  pop qword [ArgPtrs+8*rdx]
   inc       rdx
   cmp       rdx,  rcx
   jb        SaveArgs
@@ -40,7 +39,27 @@ ScanOne:
   mov       rdx, rdi                  ; copy into rdx
   cld                                 ; clear direction flag (memory++)
   repne     scasb                     ; search byte == al in string at rdi
-  ; TODO
+  jnz       Error                     ; REPNE SCASB ended without finding AL
+  mov byte  [rdi-1], 10               ; Store EOL where the null byte used to be  
+  sub       rdi, rdx                  ; 
+  mov qword [ArgLens+8*rbx], rdi      ; saving length
+  inc       rbx                       ; next argument 
+  cmp       rbx, [ArgCount]
+  jb        ScanOne
+
+; display arguments
+  xor       rbx, rbx
+Show
+  mov       rax, 1                    ; sys_write 64 bits
+  mov       rdi, 1                    ; stdout
+  mov       rsi, [ArgPtrs+8*rbx]      ; string address in rsi
+  mov       rdx, [ArgLens+8*rbx]      ; length of string in rdx
+  syscall
+  inc       rbx
+  cmp       rbx, [ArgCount]
+  jb        Show
+
+  jmp       Exit
 
 Error:
   mov       rax,  1         ; sys_write 64 bytes 
@@ -52,4 +71,5 @@ Error:
 
 Exit:
   mov       rax,  60
+  mov       rdi, 0
   syscall

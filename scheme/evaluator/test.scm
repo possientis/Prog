@@ -6,11 +6,12 @@
 
 (define-syntax do-run
   (syntax-rules ()
-    ((do-run expr ...)
-     (force-thunk (lazy-eval '(strict-eval '(begin expr ...)))))))
+    ((do-run expr)
+     (force-thunk (lazy-eval 'expr)))))
 
-(do-run (load "lazy.scm"))
-(do-run (display (lazy?))(newline))
+(do-run (strict-eval '(load "lazy.scm")))
+
+(display (do-run (strict-eval '(lazy?))))(newline)
 
 
 (exit 0)

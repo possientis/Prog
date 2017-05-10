@@ -23,6 +23,7 @@
 
 ; strict eval
 (define (strict-eval-begin exp env)
+  (debug "[DEBUG]: strict-eval-begin: exp = ")(debug exp)(debug-newline)
   (let ((actions (begin-actions exp)))
     (strict-eval-sequence actions env)))
 

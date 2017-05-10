@@ -14,6 +14,7 @@
 
 ; strict eval
 (define (strict-eval-application exp env)
+  (debug "[DEBUG]: strict-eval: exp = ")(debug exp)(debug-newline)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
     (let ((proc (strict-eval operator env))
