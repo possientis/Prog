@@ -3,17 +3,16 @@ module Parser
   , char
   , greed
   , match
-  , nil
   , option
   , plus
   , plus'
-  , predicate
+  , sat
   , range
   , star
   , star'
+  , (<|>)
   , (&&&)
   , (<&&>)
-  , (+++)
   , (|||)
   ) where
 
@@ -39,43 +38,46 @@ instance Monad (Parser b) where
   return a  = Parser (\cs -> [(a,cs)])
   m >>= f   = Parser (\cs -> concat [ run (f a) cs' | (a, cs') <- run m cs ]) 
 
-nil :: Parser b [b]
-nil = Parser (\cs -> [([],cs)])
+instance Alternative (Parser b) where
+  empty = mzero
+  (<|>) = mplus
 
-predicate :: (b -> Bool) -> Parser b [b]
-predicate pred = Parser f where
+instance MonadPlus (Parser b) where
+  mzero = Parser (\cs -> [])        -- no parse, not to be confused with return []
+  mplus p q = Parser (\cs -> run p cs ++ run q cs)
+
+sat :: (b -> Bool) -> Parser b [b]
+sat pred = Parser f where
   f []      = []
   f (c:cs)  = if pred c then [([c],cs)] else []
 
 itemParser :: Parser b [b]
-itemParser = predicate $ const True
+itemParser = sat $ const True
 
 char :: (Eq b) => b -> Parser b [b]
-char b = predicate (== b)
+char b = sat (== b)
 
 range :: (Eq b) => [b] -> Parser b [b]
 range []      = error "range: empty list"
 range [c]     = char c
-range (c:cs)  = (char c) +++ range cs
+range (c:cs)  = (char c) <|> range cs
 
 (&&&) :: Parser b a -> Parser b a' -> Parser b (a,a')
 (&&&) par1 par2 = do { a   <- par1; a'  <- par2; return (a,a') }
 
 (<&&>) :: Parser b [b] -> Parser b [b] -> Parser b [b]
-(<&&>) par1 par2 = (liftM (\(x,y) -> x++y)) (par1 &&& par2)
+(<&&>) par1 par2 = do { s1 <- par1; s2 <- par2; return $ s1 ++ s2 }
 
-(+++) :: Parser b a -> Parser b a -> Parser b a 
-(+++) par1 par2 = Parser (\cs -> run par1 cs ++ run par2 cs)
   
 (|||) :: Parser b a -> Parser b a' -> Parser b (Either a a')
-(|||) par1 par2 =  liftM Left par1 +++ liftM Right par2
+(|||) par1 par2 =  Left <$> par1 <|> Right <$> par2
 
 plus :: Parser b a -> Parser b [a]
-plus par = liftM (\x -> [x]) par +++
+plus par = liftM (\x -> [x]) par <|>
                  liftM (\(x,y) -> (x:y)) (par &&& (plus par))
 
 star :: Parser b [b] -> Parser b [[b]]
-star par = liftM (\x -> [x]) nil +++ plus par
+star par = return [[]] <|> plus par
 
 plus' :: Parser b [b] -> Parser b [b]
 plus' = liftM concat . plus
@@ -89,7 +91,7 @@ star' = liftM concat . star
 -- the remaining string of type [b]. 
 -- The function 'minimum' will throw an exception on []
 -- However, if xs = [] then filter should return [] and
--- the predicate 'pred' should not be evaluated, so the
+-- the sat 'pred' should not be evaluated, so the
 -- function 'minimum' should not be called at all.  
 greed :: Parser b a -> Parser b a
 greed par = Parser f where
@@ -99,10 +101,10 @@ greed par = Parser f where
     minLength       = minimum $ map (length . snd) xs
 
 option :: Parser b [b] -> Parser b [b]
-option par = par +++ nil
+option par = par <|> return []
 
 match :: (Eq b) => [b] -> Parser b [b]
-match []  = nil
+match []  = return []
 match (c:cs) = char c <&&> match cs 
 
 

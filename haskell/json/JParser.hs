@@ -33,11 +33,11 @@ jnull :: JParser JValue
 jnull = liftM (\x -> JNull) (char TokNull)
 
 jvalue  =   jstring 
-        +++ jnumber 
-        +++ jbool 
-        +++ jnull 
-        +++ jarray
-        +++ jobject
+        <|> jnumber 
+        <|> jbool 
+        <|> jnull 
+        <|> jarray
+        <|> jobject
 
 jkeyval :: JParser JKeyVal
 jkeyval = do
@@ -71,7 +71,7 @@ jarray_many = do
   return $ JArray jvs
 
 jarray :: JParser JValue
-jarray = jarray_empty +++ jarray_single +++ jarray_many 
+jarray = jarray_empty <|> jarray_single <|> jarray_many 
 
 
 jobject_empty :: JParser JValue  
@@ -98,7 +98,7 @@ jobject_many = do
   return $ JObject kvs
 
 jobject :: JParser JValue
-jobject = jobject_empty +++ jobject_single +++ jobject_many 
+jobject = jobject_empty <|> jobject_single <|> jobject_many 
 
 jparse :: String -> JValue
 jparse cs = let 

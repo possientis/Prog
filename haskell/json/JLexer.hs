@@ -31,13 +31,13 @@ data JToken
 string :: JLexer String
 string = do
   s1 <- char '\"'
-  s2 <- star' (predicate (/= '\"')) 
+  s2 <- star' (sat (/= '\"')) 
   s3 <- char '\"'
   return s2
 
 bool :: JLexer Bool
 bool  = liftM (\s -> if s == "true" then True else False) $
-  match "true" +++ match "false"
+  match "true" <|> match "false"
 
 jstring :: JLexer JToken
 jstring = liftM TokString string
@@ -74,16 +74,16 @@ jspace = greed $ liftM (const TokSpace) ((plus' . range) " \t\n")
 
 jtoken :: JLexer JToken
 jtoken  =   jstring
-        +++ jnumber
-        +++ jbool
-        +++ jnull
-        +++ jbracel
-        +++ jbracer
-        +++ jbracketl
-        +++ jbracketr
-        +++ jcolon
-        +++ jcomma 
-        +++ jspace
+        <|> jnumber
+        <|> jbool
+        <|> jnull
+        <|> jbracel
+        <|> jbracer
+        <|> jbracketl
+        <|> jbracketr
+        <|> jcolon
+        <|> jcomma 
+        <|> jspace
 
 jflex :: JLexer [JToken]
 jflex = liftM (filter (/=TokSpace)) $ (greed . plus) jtoken

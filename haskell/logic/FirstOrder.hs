@@ -26,6 +26,12 @@ class FirstOrder m where
   imply     :: m v -> m v -> m v
   forall    :: v -> m v -> m v
   asType    :: m v -> FormulaType v m 
+  fold      :: (v -> v -> b) -> b -> (b -> b -> b) -> (v -> b -> b) -> m v -> b
+  fold  fbelong fbot fimply fforall = f where
+    f (asType -> BelongType x y)  = fbelong x y
+    f (asType -> BotType)         = fbot
+    f (asType -> ImplyType p q)   = fimply (f p) (f q)
+    f (asType -> ForallType x p)  = fforall x (f p)
 
   equalF :: (Eq v) => m v -> m v -> Bool
   equalF (asType -> BelongType x1 y1)
@@ -39,15 +45,17 @@ class FirstOrder m where
   equalF  _ _                         = False
 
   showF :: (Show v) => m v -> String
-  showF (asType -> BelongType x y) = (show x) ++ ":" ++ (show y)
-  showF (asType -> BotType)        = "!"
-  showF (asType -> ImplyType p q)  = "(" ++ (showF p) ++ " -> " ++ (showF q) ++ ")"
-  showF (asType -> ForallType x p) = "A" ++ (show x) ++ "." ++ (showF p) 
+  showF = fold fbelong fbot fimply fforall where
+    fbelong x y = (show x) ++ ":" ++ (show y)
+    fbot        = "!"
+    fimply s t  = "(" ++ s ++ " -> " ++ t ++ ")"
+    fforall x s = "A" ++ (show x) ++ "." ++ s
 
   mapF  :: (v -> w) -> m v -> m w
-  mapF  f (asType -> BelongType x y) = belong (f x) (f y)
-  mapF  f (asType -> BotType)        = bot
-  mapF  f (asType -> ImplyType p q)  = imply (mapF f p) (mapF f q)
-  mapF  f (asType -> ForallType x p) = forall (f x) (mapF f p)
+  mapF f  = fold fbelong fbot fimply fforall where
+    fbelong x y = belong (f x) (f y)
+    fbot        = bot
+    fimply p q  = imply p q
+    fforall x p = forall (f x) p
         
 

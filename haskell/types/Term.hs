@@ -57,6 +57,7 @@ eval' (TmPred (eval' -> Just TmZero))                           = Just TmZero
 eval' (TmPred (eval' -> Just (TmSucc t2@(isNumerical -> True))))= Just t2
 eval' (TmIsZero (eval' -> Just TmZero))                         = Just TmTrue 
 eval' (TmIsZero (TmSucc (isNumerical -> True)))                 = Just TmFalse
+eval' _                                                         = Nothing
 
 
 

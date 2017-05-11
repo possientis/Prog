@@ -6,13 +6,6 @@
 #include "test.h"
 
 
-extern int test_macro();
-extern int test_context();
-extern int test_callback();
-extern int test_ec_pubkey();
-extern int test_ecdsa_signature();
-extern int test_nonce_function();
-
 
 int main()
 {
@@ -23,132 +16,46 @@ int main()
   assert(test_ec_pubkey() == 0);
   assert(test_ecdsa_signature() == 0);
   assert(test_nonce_function() == 0);
+  assert(test_ec_seckey() == 0);
 
   secp256k1_pubkey pub;           // 64 bytes
   secp256k1_pubkey pub1;
   secp256k1_pubkey pub2;
- 
   secp256k1_ecdsa_signature sig;  // 64 bytes
   secp256k1_ecdsa_signature sig1;  // 64 bytes
   secp256k1_ecdsa_signature sig2;  // 64 bytes
   secp256k1_ecdsa_signature sig3;  // 64 bytes
   secp256k1_nonce_function fun;   // pointer
 
-  assert(sizeof(fun) == 8);
 
   int value;
-
   unsigned char buffer[65];
   size_t size = 65;
+  unsigned char nonce1[32];
+  unsigned char nonce2[32];
 
   value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
-
-
-
   const secp256k1_nonce_function f1 = secp256k1_nonce_function_rfc6979;
   const secp256k1_nonce_function f2 = secp256k1_nonce_function_default;
 
-  unsigned char nonce1[32];
-  unsigned char nonce2[32];
-
-  memset(nonce1,0x00, 32);
-  memset(nonce2,0x00, 32);
-
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = f1(nonce1, hash_bytes1, priv_bytes1, NULL, NULL, 0); 
-  assert(value == 1);
-
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = f2(nonce2, hash_bytes1, priv_bytes1, NULL, NULL, 0); 
-  assert(value == 1);
- 
-  assert(memcmp(nonce1, nonce_bytes1, 32) == 0);
-  assert(memcmp(nonce2, nonce_bytes1, 32) == 0);
-
-  // NULL output pointer (segmentation fault: WRONG?)
-  // value = f1(NULL, hash_bytes1, priv_bytes1, NULL, NULL, 0); 
-
-  // NULL message pointer (segmentation fault: WRONG?)
-  // value = f1(nonce1, NULL, priv_bytes1, NULL, NULL, 0); 
-
-  // NULL key pointer (segmentation fault: WRONG?)
-  // value = f1(nonce1, hash_bytes1, NULL, NULL, NULL, 0); 
-
-  fprintf(stderr,"\ntesting ecdsa signature generation...\n");
-
-  // NULL context: segmentation fault
-//  value = secp256k1_ecdsa_sign(NULL, &sig, hash_bytes1, priv_bytes1, f1, NULL);
-
-  // NULL output pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_sign(ctx, NULL, hash_bytes1, priv_bytes1, f1, NULL);
-  assert(value == 0);
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
-  // NULL message pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_sign(ctx, &sig, NULL, priv_bytes1, f1, NULL);
-  assert(value == 0);
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
-  // NULL priv_bytes1ate key pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, NULL, f1, NULL);
-  assert(value == 0);
-  assert(callback_data.out == 42);
-  callback_data.in = 0;
-  callback_data.out = 0;
-
-  // NULL nonce function pointer
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  memset(&sig,0x00, 64);
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv_bytes1, NULL, NULL);
-  assert(value == 1);  // signing successful (default nonce is used)
-  assert(memcmp(&sig,&sig1,64) == 0);
-  assert(callback_data.out == 0);
-
-  // secp256k1_ecdsa_sign
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  memset(&sig,0x00, 64);
-  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv_bytes1, f1, NULL);
-  assert(value == 1);
-  assert(memcmp(&sig,&sig1,64) == 0);
-  assert(callback_data.out == 0);
 
   fprintf(stderr,"\ntesting veryfying secret keys...\n");
 
-  const unsigned char* order = 
-    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe"
-    "\xba\xae\xdc\xe6\xaf\x48\xa0\x3b\xbf\xd2\x5e\x8c\xd0\x36\x41\x41";
-  
+ 
   // curve order is not a valid private key
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ec_seckey_verify(ctx, order);
+  value = secp256k1_ec_seckey_verify(ctx, order_bytes);
   assert(value == 0);
   assert(callback_data.out == 0);
 
-  const unsigned char* order_minus_one = 
-    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe"
-    "\xba\xae\xdc\xe6\xaf\x48\xa0\x3b\xbf\xd2\x5e\x8c\xd0\x36\x41\x40";
 
   // curve order less one is a valid private key
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ec_seckey_verify(ctx, order_minus_one);
+  value = secp256k1_ec_seckey_verify(ctx, order_minus_one_bytes);
   assert(value == 1);
   assert(callback_data.out == 0);
 
@@ -220,7 +127,7 @@ int main()
   // invalid private key
   callback_data.in = 0;             // make sure next error correctly sets it
   callback_data.out = 0;
-  value = secp256k1_ec_pubkey_create(ctx, &pub, order);
+  value = secp256k1_ec_pubkey_create(ctx, &pub, order_bytes);
   assert(value == 0);    // failure
   assert(callback_data.out == 0);  // but not an error
 
@@ -291,8 +198,8 @@ int main()
   assert(memcmp(nonce1, priv_bytes1, 31) == 0); // tweak no impact on high order bytes
   assert(nonce1[31] == priv_bytes1[31] + 1);
 
-  // adding tweak of 1 to order_minus_one
-  memcpy(nonce1, order_minus_one, 32);
+  // adding tweak of 1 to order_minus_one_bytes
+  memcpy(nonce1, order_minus_one_bytes, 32);
   memset(nonce2,0x00, 32);
   nonce2[31] = 0x01;
   callback_data.in = 0;             // make sure next error correctly sets it

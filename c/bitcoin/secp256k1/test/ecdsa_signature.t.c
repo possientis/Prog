@@ -10,6 +10,7 @@ static int test_ecdsa_signature_parse_der();
 static int test_ecdsa_signature_serialize_der();
 static int test_ecdsa_signature_verify();
 static int test_ecdsa_signature_normalize();
+static int test_ecdsa_signature_sign();
 
 
 int test_ecdsa_signature()
@@ -20,6 +21,7 @@ int test_ecdsa_signature()
   assert(test_ecdsa_signature_serialize_der() == 0);
   assert(test_ecdsa_signature_verify() == 0);
   assert(test_ecdsa_signature_normalize() == 0);
+  assert(test_ecdsa_signature_sign() == 0);
 
   return 0;
 }
@@ -451,4 +453,69 @@ static int test_ecdsa_signature_normalize(){
 }
 
 
+static int test_ecdsa_signature_sign(){
 
+  int value;
+  secp256k1_ecdsa_signature sig1, sig;
+  secp256k1_nonce_function f1 = secp256k1_nonce_function_rfc6979;
+
+  // parsing expected signature for comparison after signing
+  value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig1, sig_bytes1);
+
+  fprintf(stderr,"\ntesting ecdsa signature generation...\n");
+
+  /*
+  // NULL context (segmentation fault)
+  callback_data.in = "signature_sign.0"; 
+  callback_data.out = 0;
+  memset(&sig,0x00, 64);
+  value = secp256k1_ecdsa_sign(NULL, &sig, hash_bytes1, priv_bytes1, f1, NULL);
+  assert(value == 0);
+  assert(memcmp(&sig,&sig1,64) == 0);
+  assert(callback_data.out == 0);
+  */
+
+  // NULL output pointer 
+  callback_data.in = "signature_sign.1"; 
+  callback_data.out = 0;
+  memset(&sig,0x00, 64);
+  value = secp256k1_ecdsa_sign(ctx, NULL, hash_bytes1, priv_bytes1, f1, NULL);
+  assert(value == 0);
+  assert(callback_data.out == 42);
+
+  // NULL message pointer
+  callback_data.in = "signature_sign.2"; 
+  callback_data.out = 0;
+  memset(&sig,0x00, 64);
+  value = secp256k1_ecdsa_sign(ctx, &sig, NULL, priv_bytes1, f1, NULL);
+  assert(value == 0);
+  assert(callback_data.out == 42);
+
+  // NULL private key pointer
+  callback_data.in = "signature_sign.3"; 
+  callback_data.out = 0;
+  memset(&sig,0x00, 64);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, NULL, f1, NULL);
+  assert(value == 0);
+  assert(callback_data.out == 42);
+
+  // NULL nonce function (using default)
+  callback_data.in = "signature_sign.0"; 
+  callback_data.out = 0;
+  memset(&sig,0x00, 64);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv_bytes1, NULL, NULL);
+  assert(value == 1);
+  assert(memcmp(&sig,&sig1,64) == 0);
+  assert(callback_data.out == 0);
+
+  // normal call
+  callback_data.in = "signature_sign.0"; 
+  callback_data.out = 0;
+  memset(&sig,0x00, 64);
+  value = secp256k1_ecdsa_sign(ctx, &sig, hash_bytes1, priv_bytes1, f1, NULL);
+  assert(value == 1);
+  assert(memcmp(&sig,&sig1,64) == 0);
+  assert(callback_data.out == 0);
+
+  return 0;
+}

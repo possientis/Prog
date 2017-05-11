@@ -8,7 +8,7 @@ import Data.Char
 import Control.Monad
 
 digit :: Parser Char String       
-digit = predicate isDigit 
+digit = sat isDigit 
 
 digits = (greed . plus') digit
 
@@ -44,7 +44,7 @@ posDouble = do
   return $ d1 + d3
 
 posNumber :: Parser Char Double  
-posNumber = greed $ posDouble +++ (liftM fromIntegral natural)
+posNumber = greed $ posDouble <|> (fromIntegral <$> natural)
 
 number :: Parser Char Double
 number = do

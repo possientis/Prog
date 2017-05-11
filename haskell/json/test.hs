@@ -18,7 +18,6 @@ test5 = TestCase $ assertEqual "test5" value5 $ jparse (show value5)
 tests = TestList [ test1, test2, test3, test4, test5]
 
 main = do 
-  print $ jparse (show value5)
   runTestTT tests
 
 
