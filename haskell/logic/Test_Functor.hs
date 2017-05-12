@@ -2,6 +2,7 @@ module Test_Functor
   ( test_Functor
   ) where
 
+import Data.Functor ((<$>)) -- for older versions of GHC
 import Test.HUnit
 import Test_data
 import FirstOrder

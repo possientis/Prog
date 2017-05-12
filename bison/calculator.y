@@ -1,6 +1,7 @@
 %{
+/* grammar where operator precedence and left associativity are implicit */
 #include <stdio.h>
-/* grammar where operator precedence and left associativity are explicit */
+
 extern int yylex(void);
 extern int yyerror(const char*);
 extern FILE *yyin;
@@ -8,32 +9,32 @@ extern void yyset_in(FILE*);
 
 %}
 
-%left '+' '-'       /* left associative and at the lowest precedence level */
-%left '*' '/'       /* left associative and at the next precedence level */
-%nonassoc UMINUS    /* 'UMINUS' pseudo token for unary minus, has no associativity
-                        and stands at the highest precedence level */
 %token NAME NUMBER
 
 %%
 
 statement:  NAME '=' expression
-    |       expression            { printf("= %d\n", $1); } 
+    |       expression              { printf("= %d\n", $1); } 
     ;
          
 
-expression: expression '+' expression { $$ = $1 + $3; } 
-    |       expression '-' expression { $$ = $1 - $3; }
-    |       expression '*' expression { $$ = $1 * $3; }
-    |       expression '/' expression 
-                { if($3 == 0)
-                    yyerror("divide by zero");
-                  else
-                    $$ = $1 / $3;
-                } /* %prec tells bison to use precedence of UMINUS for rule */
-    |       '-' expression %prec UMINUS { $$ = -$2; } 
-    |       '(' expression ')'          { $$ = $2; }
-    |       NUMBER                      { $$ = $1; }
-    ;       
+expression: expression '+' mulexp   { $$ = $1 + $3; }
+    |       expression '-' mulexp   { $$ = $1 - $3; }
+    |       mulexp                  { $$ = $1; }
+    ;
+
+mulexp:     mulexp '*' primary      { $$ = $1* $3; }
+    |       mulexp '/' primary      { if($3 == 0)
+                                        yyerror("divide by zero");
+                                      else
+                                        $$ = $1 / $3;
+                                    }
+    |       primary                 { $$ = $1; }
+    ;
+
+primary:    '(' expression ')'      { $$ =  $2; }
+    |       '-' primary             { $$ = -$2; }
+    |       NUMBER                  { $$ =  $1; }
 
 %%
 

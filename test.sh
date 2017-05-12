@@ -142,6 +142,14 @@ then
   exit 1
 fi
 
+echo 'Testing sed ...'
+${HOME}/sed/test.sh >> test.log 2>&1
+if [ $? -ne 0 ]
+then
+  echo 'TESTING FAILED !!!'
+  exit 1
+fi
+
 echo 'Testing coq ...'
 ${HOME}/coq/test.sh >> test.log 2>&1
 if [ $? -ne 0 ]

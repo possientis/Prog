@@ -53,10 +53,6 @@
         
   ;;
   (define (insert! key value)
-;    (display "[DEBUG] : dictionary::insert! : key = ")
-;    (display key)(newline)
-;    (display "[DEBUG] : data = ")
-;    (display data)(newline)
     (let ((h (hash key)))
       (if (null? (vector-ref data h))         ; no existing entry for this hash value
         (vector-set! data h (link equal?)))   ; allocating linked list to entry h

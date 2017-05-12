@@ -20,14 +20,10 @@
 
 ; strict apply
 (define (strict-apply-eval-procedure proc args)
-;  (debug "[DEBUG]: strict-apply-eval-procedure: proc = ")
-;  (debug proc)(debug-newline)
   (let ((body (eval-procedure-body proc))
         (params (eval-procedure-parameters proc))
         (init-env (eval-procedure-environment proc)))
     (let ((extended-env ((init-env 'extended) params args)))
-      (debug "[DEBUG]: strict-apply-eval-procedure: body = ")
-      (debug body)(debug-newline)
       (strict-eval body extended-env))))
 
 ; analyze apply

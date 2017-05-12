@@ -11,7 +11,7 @@
 
 (do-run (strict-eval '(load "lazy.scm")))
 
-(display (do-run (strict-eval '(lazy?))))(newline)
+(display (do-run (analyze-eval '(lazy?))))(newline)
 
 
 (exit 0)

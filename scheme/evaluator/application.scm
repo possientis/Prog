@@ -14,11 +14,11 @@
 
 ; strict eval
 (define (strict-eval-application exp env)
-  (debug "[DEBUG]: strict-eval: exp = ")(debug exp)(debug-newline)
   (let ((operator (exp-operator exp))
         (operands (exp-operands exp)))
     (let ((proc (strict-eval operator env))
           (args (map (lambda (x) (strict-eval x env)) operands)))
+      (force-thunk args)              ; for strict evaluation within lazy scheme 
       (strict-apply proc args))))
 
 ; analyze
@@ -28,7 +28,9 @@
     (let ((proc (analyze operator))
           (args (map analyze operands)))
       (lambda (env)
-        (analyze-apply (proc env) (map (lambda (x) (x env)) args))))))
+        (let ((forced-args (map (lambda (x) (x env)) args)))
+          (force-thunk forced-args)   ; for analyze evaluation within lazy scheme
+          (analyze-apply (proc env) forced-args))))))
 
 ; lazy
 (define (lazy-eval-application exp env)
