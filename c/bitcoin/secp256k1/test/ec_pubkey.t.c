@@ -6,12 +6,14 @@
 
 static int test_ec_pubkey_parse();
 static int test_ec_pubkey_serialize(int);
+static int test_ec_pubkey_create();
 
 int test_ec_pubkey()
 {
   assert(test_ec_pubkey_parse() == 0);
   assert(test_ec_pubkey_serialize(SECP256K1_EC_COMPRESSED) == 0);
   assert(test_ec_pubkey_serialize(SECP256K1_EC_UNCOMPRESSED) == 0);
+  assert(test_ec_pubkey_create() == 0);
 
   return 0;
 
@@ -276,4 +278,65 @@ static int test_ec_pubkey_serialize(int flag)
   return 0;
 }
 
+static int test_ec_pubkey_create()
+{
+
+  secp256k1_pubkey pub, pub1;
+  int value;
+
+  // parsing public key used for comparison
+  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
+
+  fprintf(stderr,"\ntesting public key creation from private key...\n");
+
+  // NULL context
+  /* Segmentation fault 
+  callback_data.in = "pubkey_create.0";
+  callback_data.out = 0;
+  memset(&pub,0x00, 64);
+  value = secp256k1_ec_pubkey_create(NULL, &pub, priv_bytes1);
+  assert(value == 1);                   // creation succeeded
+  assert(callback_data.out == 0);
+  assert(memcmp(&pub, &pub1, 64) == 0); // checking correctness
+  */
+
+  // NULL output pointer
+  callback_data.in = "pubkey_create.1";
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_create(ctx, NULL, priv_bytes1);
+  assert(value == 0);                   // creation failed
+  assert(callback_data.out == 42);
+
+  // NULL input pointer
+  callback_data.in = "pubkey_create.2";
+  callback_data.out = 0;
+  memset(&pub,0x00, 64);
+  value = secp256k1_ec_pubkey_create(ctx, &pub, NULL);
+  assert(value == 0);                   // creation failed
+  assert(callback_data.out == 42);
+  assert(is_all_null(&pub,64));
+
+
+  // normal call
+  callback_data.in = "pubkey_create.0";
+  callback_data.out = 0;
+  memset(&pub,0x00, 64);
+  value = secp256k1_ec_pubkey_create(ctx, &pub, priv_bytes1);
+  assert(value == 1);                   // creation succeeded
+  assert(callback_data.out == 0);
+  assert(memcmp(&pub, &pub1, 64) == 0); // checking correctness
+
+  // normal call (invalid seckey)
+  callback_data.in = "pubkey_create.0";
+  callback_data.out = 0;
+  memset(&pub,0x00, 64);
+  value = secp256k1_ec_pubkey_create(ctx, &pub, order_bytes);
+  assert(value == 0);                   // creation failed
+  assert(callback_data.out == 0);
+  assert(is_all_null(&pub,64)); 
+
+
+
+  return 0;
+}
 

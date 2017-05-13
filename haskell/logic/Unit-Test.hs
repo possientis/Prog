@@ -2,12 +2,13 @@ import Test.HUnit
 import Test_Eq
 import Test_Show
 import Test_Functor
+import Test_Variable
 
 import System.Exit
 
 
 
-tests = TestList [ test_Eq, test_Show, test_Functor ]
+tests = TestList [ test_Eq, test_Show, test_Functor, test_Variable ]
 
 main = do
   counts <- runTestTT tests

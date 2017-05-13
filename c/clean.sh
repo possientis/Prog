@@ -10,11 +10,12 @@ rm -f log
 
 ./attribute/clean.sh
 ./bitcoin/clean.sh
-./tlpi/clean.sh
-./pragma/clean.sh
-./dlopen/clean.sh
-./library/clean.sh
-./hacking/clean.sh
 ./cpp/clean.sh
+./dlopen/clean.sh
+./hacking/clean.sh
+./gcov/clean.sh
+./library/clean.sh
+./pragma/clean.sh
+./tlpi/clean.sh
 
 cd ${DIR}

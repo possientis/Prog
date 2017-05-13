@@ -72,18 +72,29 @@ range (c:cs)  = (char c) <|> range cs
 (|||) :: Parser b a -> Parser b a' -> Parser b (Either a a')
 (|||) par1 par2 =  Left <$> par1 <|> Right <$> par2
 
+star  :: Parser b a -> Parser b [a]
+star p = return [] <|> plus p
+
 plus :: Parser b a -> Parser b [a]
-plus par = liftM (\x -> [x]) par <|>
-                 liftM (\(x,y) -> (x:y)) (par &&& (plus par))
+plus p = do { a <- p; as <- star p; return (a:as) }
 
-star :: Parser b [b] -> Parser b [[b]]
-star par = return [[]] <|> plus par
 
-plus' :: Parser b [b] -> Parser b [b]
+plus' :: Parser b [a] -> Parser b [a]
 plus' = liftM concat . plus
 
-star' :: Parser b [b] -> Parser b [b]
+star' :: Parser b [a] -> Parser b [a]
 star' = liftM concat . star
+
+-- TODO use these parsers to clean up existing code 
+sepby :: Parser b a -> Parser b a' -> Parser b [a]
+p `sepby` sep = return [] <|> (p `sepby1` sep)
+
+sepby1 :: Parser b a -> Parser b a' -> Parser b [a]
+p `sepby1` sep = do
+  a <- p
+  as <- star $ do { sep; p }
+  return (a:as)
+
 
 -- transforms a parser argument into a 'greedy' parser, 
 -- namely a parser which among ambiguous parsing results,
