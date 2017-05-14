@@ -9,9 +9,8 @@
     ((do-run expr)
      (force-thunk (lazy-eval 'expr)))))
 
-(do-run (strict-eval '(load "lazy.scm")))
-
-(display (do-run (analyze-eval '(lazy?))))(newline)
+(do-run (load "dictionary-test.scm"))
+(do-run (dictionary-test "frame3.scm" 'frame3))(newline)
 
 
 (exit 0)

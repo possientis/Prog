@@ -42,10 +42,7 @@ expression: expression '+' expression { $$ = $1 + $3; }
                 } /* %prec tells bison to use precedence of UMINUS for rule */
     |       '-' expression %prec UMINUS { $$ = -$2; } 
     |       '(' expression ')'          { $$ = $2; }
-    |       NUMBER                      { printf("number = %f\n", $1); 
-                                          $$ = $1; 
-                                          printf("number = %f\n", $$);
-                                        } 
+    |       NUMBER                      { $$ = $1; } 
     |       NAME                        { $$ = vbltable[$1]; }
     ;       
 
@@ -61,6 +58,7 @@ int main()
 
   while(!feof(yyin)){
     yyparse();
+    printf("returning from parse...\n");
   }
 
   return 0;

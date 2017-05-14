@@ -1,4 +1,7 @@
-remove debugs
+resolve bug test.scm (obviouly linked to hash table resizing: some side effect need to be forced under lazy evaluator)
+lazy-run frame-test.scm fails (when frame = frame3)
+restore frame3 in frame-test
+fix depend.sh
 resolve bug in frame3 (scm frame3-bug.scm (under frame3): wrong environment created)
 define primitives from language itself
 implement macros !!!!!

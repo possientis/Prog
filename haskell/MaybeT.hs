@@ -1,34 +1,19 @@
-{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, UndecidableInstances #-}
+import Control.Applicative
 import Control.Monad
-import Control.Monad.State
-import Control.Monad.Trans
 
-newtype MaybeT m a = MaybeT { runMaybeT :: m (Maybe a) }
+newtype MaybeT m a = MaybeT { run :: m (Maybe a) } 
 
-bindMT :: (Monad m) => MaybeT m a -> (a -> MaybeT m b) -> MaybeT m b
-bindMT k f = MaybeT $ do
-  unwrapped <- runMaybeT k
-  case unwrapped of 
-    Nothing -> return Nothing
-    Just y  -> runMaybeT (f y) 
+instance Monad m => Applicative (MaybeT m) where
+  pure  = return
+  (<*>) = ap
 
-returnMT :: (Monad m) => a -> MaybeT m a
-returnMT a = MaybeT $ return (Just a)
+instance Monad m => Functor (MaybeT m) where
+  fmap = liftM
 
-failMT :: (Monad m) => t -> MaybeT m a
-failMT _ = MaybeT $ return Nothing
-
-instance (Monad m) => Monad (MaybeT m) where
-  return = returnMT
-  (>>=) = bindMT
-  fail = failMT
-
-instance MonadTrans MaybeT where
-  lift m = MaybeT (Just `liftM` m)
-  
-instance (MonadIO m) => MonadIO (MaybeT m) where
-  liftIO m = lift (liftIO m)
-
-instance (MonadState s m) => MonadState s (MaybeT m) where
-  get = lift get
-  put k = lift (put k)
+instance Monad m => Monad (MaybeT m) where
+  return = MaybeT . return . Just   -- MaybeT . return . return is less readable
+  (>>=) k f = MaybeT $ do
+    a <- run k
+    case a of 
+      Nothing   -> return Nothing
+      Just a'   -> run $ f a'

