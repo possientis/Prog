@@ -6,7 +6,7 @@ HOME=/home/john/Prog/scheme/evaluator
 cd ${HOME}
 
 echo 'starting scheme evaluator unit test ...'
-./depend.sh
+#./depend.sh
 scm -b -f unit-test.scm
 
 cd ${DIR}
