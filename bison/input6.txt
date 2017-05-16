@@ -1,6 +1,6 @@
-a=10
-b=20
-c=30
-d=a+b+c
-d
+foo=10
+bar=20
+baz=30
+result = foo + bar * baz
+result
 $

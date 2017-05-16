@@ -25,8 +25,8 @@ gcc word_parser.tab.c lex.yy.c -ll; ./a.out < input1.txt; ./clean.sh
 echo
 
 echo "Testing calculator ..."
-flex calculator3.l; bison -d calculator3.y; 
-gcc calculator3.tab.c lex.yy.c -ll; ./a.out < input6.txt; ./clean.sh
+flex calculator4.l; bison -d calculator4.y; 
+gcc calculator4.tab.c table.c lex.yy.c -ll; ./a.out < input6.txt; ./clean.sh
 echo
 
 echo "Testing decimal number lexical analyser ..."

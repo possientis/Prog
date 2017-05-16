@@ -50,7 +50,7 @@
 (define-syntax add1!
   (lambda (x)
     (syntax-case x ()
-      ((_ var) (identifier? #'var)
+      ((_ var) (identifier? #'var)  ; guard impossible to have with syntax-rules
        #'(set! var (add1 var))))))
 
 

@@ -1,4 +1,6 @@
-resolve bug test.scm (obviouly linked to hash table resizing: some side effect need to be forced under lazy evaluator)
+lazy-run frame-test.scm fails when adding frame3 (which is odd because it seems
+to be exactly what test.scm (which works) was meant to address).
+
 lazy-run frame-test.scm fails (when frame = frame3)
 restore frame3 in frame-test
 fix depend.sh

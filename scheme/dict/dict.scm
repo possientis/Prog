@@ -54,13 +54,13 @@
   ;;
   (define (insert! key value)
     (let ((h (hash key)))
-      (if (null? (vector-ref data h))         ; no existing entry for this hash value
-        (vector-set! data h (link equal?)))   ; allocating linked list to entry h
+      (if (null? (vector-ref data h))        ; no existing entry for this hash value
+        (vector-set! data h (link equal?)))  ; allocating linked list to entry h
       (let ((link-list (vector-ref data h)))
-        (if (eq? #f ((link-list 'find) key))  ; key not currently in table
-          (set! num (+ 1 num)))               ; hence one more element in table
-        ((link-list 'insert!) key value)))    ; insert into linked list
-    (if mem-enabled? (increase!)))            ; allocates more space if required
+        (if (eq? #f ((link-list 'find) key)) ; key not currently in table
+          (set! num (+ 1 num)))              ; hence one more element in table
+        ((link-list 'insert!) key value)))   ; insert into linked list
+    (if mem-enabled? (increase!)))           ; allocates more space if required
   ;;
   ;;
   (define (delete! key)
@@ -122,6 +122,7 @@
           (set! mem-enabled? #f)    ; no more calls to increase! until set to #t
           (let ((new (make-vector (* 2 size)))
                 (elems (temp-vector)))  ; whole table as vector (linear time)
+            (if (defined? force-thunk) (force-thunk elems)) ; needed for lazy evaluator
             (set! data new)         ; new empty vector with double the size
             (vector-fill! data '()) ; initialization
             (set! size (* 2 size))  ;
@@ -144,6 +145,7 @@
           (set! mem-enabled? #f)    ; no calls to increase! until set to #t
           (let ((new (make-vector (/ size 2)))
                 (elems (temp-vector)))  ; whole table as vector (linear time)
+            (if (defined? force-thunk) (force-thunk elems)) ; needed for lazy evaluator
             (set! data new)         ; new empty vector with double the size
             (vector-fill! data '()) ; initialization
             (set! size (/ size 2))  ;

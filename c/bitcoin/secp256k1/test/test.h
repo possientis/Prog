@@ -33,6 +33,7 @@ extern const unsigned char *priv_bytes1;
 extern const unsigned char *nonce_bytes1;
 extern const unsigned char *order_bytes;
 extern const unsigned char *order_minus_one_bytes;
+extern const unsigned char *tweak_bytes;
 
 void default_callback(const char* message, void* data);
 int is_all_null(const void *ptr, size_t size);

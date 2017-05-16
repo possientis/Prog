@@ -7,6 +7,8 @@
 static int test_ec_pubkey_parse();
 static int test_ec_pubkey_serialize(int);
 static int test_ec_pubkey_create();
+static int test_ec_pubkey_tweak_add();
+
 
 int test_ec_pubkey()
 {
@@ -14,6 +16,7 @@ int test_ec_pubkey()
   assert(test_ec_pubkey_serialize(SECP256K1_EC_COMPRESSED) == 0);
   assert(test_ec_pubkey_serialize(SECP256K1_EC_UNCOMPRESSED) == 0);
   assert(test_ec_pubkey_create() == 0);
+  assert(test_ec_pubkey_tweak_add() == 0);
 
   return 0;
 
@@ -340,3 +343,39 @@ static int test_ec_pubkey_create()
   return 0;
 }
 
+static int test_ec_pubkey_tweak_add()
+{
+
+  int value;
+  secp256k1_pubkey pub, pub1, pub2;
+  unsigned char priv[32];
+
+  fprintf(stderr,"\ntesting pubkey_tweak_add...\n");
+
+  // creating pubkey to which tweak will be added
+  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
+  assert(value == 1);
+
+  // adding tweak to underlying private key
+  memcpy(priv, priv_bytes1, 32);
+  value = secp256k1_ec_privkey_tweak_add(ctx, priv, tweak_bytes);
+  assert(value == 1);
+
+  // creating pubkey corresponding to tweaked private key
+  value = secp256k1_ec_pubkey_create(ctx, &pub2, priv);
+  assert(value == 1);
+
+  // adding a tweak to a public key, returns a public key which 
+  // corresponds to the private key to which the tweak has been added
+
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_add.0"; 
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_add(ctx, &pub, tweak_bytes);
+  assert(value == 1);
+  assert(memcmp(&pub, &pub2, 64) == 0);
+
+
+
+  return 0;
+}
