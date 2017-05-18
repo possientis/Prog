@@ -6,11 +6,15 @@
 
 static int test_ec_seckey_verify();
 static int test_ec_privkey_tweak_add();
+static int test_ec_privkey_tweak_mul();
+
+static void times2(unsigned char* bytes, size_t size);
 
 int test_ec_seckey()
 {
   assert(test_ec_seckey_verify() == 0);
   assert(test_ec_privkey_tweak_add() == 0);
+  assert(test_ec_privkey_tweak_mul() == 0);
 
   return 0;
 }
@@ -162,3 +166,95 @@ static int test_ec_privkey_tweak_add()
 
   return 0;
 }
+
+static int test_ec_privkey_tweak_mul()
+{
+  fprintf(stderr,"\ntesting privkey_tweak_mul...\n");
+
+  int value;
+  unsigned char priv[32];
+  unsigned char tweak[32];
+  unsigned char check[32];
+
+  // NULL context (tweak of 1)
+  memcpy(priv, priv_bytes1, 32);
+  memset(tweak,0x00, 32);
+  tweak[31] = 0x01;                 // low order byte set to 1 (big endian)
+  callback_data.in = "privkey_tweak_mul.0";
+  callback_data.out = 0;
+  value = secp256k1_ec_privkey_tweak_mul(NULL,priv,tweak);
+  assert(value == 1);                
+  assert(callback_data.out == 0);              
+  assert(memcmp(priv, priv_bytes1, 32) == 0); // no impact
+
+  // NULL output pointer (tweak of 1)
+  memcpy(priv, priv_bytes1, 32);
+  memset(tweak,0x00, 32);
+  tweak[31] = 0x01;                 // low order byte set to 1 (big endian)
+  callback_data.in = "privkey_tweak_mul.1";
+  callback_data.out = 0;
+  value = secp256k1_ec_privkey_tweak_mul(ctx, NULL,tweak);
+  assert(value == 0);                
+  assert(callback_data.out == 42);              
+
+  // NULL input pointer (tweak of ...)
+  memcpy(priv, priv_bytes1, 32);
+  memset(tweak,0x00, 32);
+  tweak[31] = 0x01;                 // low order byte set to 1 (big endian)
+  callback_data.in = "privkey_tweak_mul.1";
+  callback_data.out = 0;
+  value = secp256k1_ec_privkey_tweak_mul(ctx, priv,NULL);
+  assert(value == 0);                
+  assert(callback_data.out == 42);              
+
+
+  // normal call (tweak of 1)
+  memcpy(priv, priv_bytes1, 32);
+  memset(tweak,0x00, 32);
+  tweak[31] = 0x01;                 // low order byte set to 1 (big endian)
+  callback_data.in = "privkey_tweak_mul.0";
+  callback_data.out = 0;
+  value = secp256k1_ec_privkey_tweak_mul(ctx,priv,tweak);
+  assert(value == 1);                
+  assert(callback_data.out == 0);              
+  assert(memcmp(priv, priv_bytes1, 32) == 0); // no impact
+
+  // normal call (tweak of 0)
+  memcpy(priv, priv_bytes1, 32);
+  memset(tweak,0x00, 32);
+  callback_data.in = "privkey_tweak_mul.0";
+  callback_data.out = 0;
+  value = secp256k1_ec_privkey_tweak_mul(ctx,priv,tweak);
+  assert(value == 0);                         // tweak failed                
+  assert(callback_data.out == 0);             // but no error 
+  assert(is_all_null(priv,32));               // output altered despite error 
+
+  // normal call (tweak of 2)
+  memcpy(priv, priv_bytes1, 32);
+  memset(tweak,0x00, 32);
+  memcpy(check, priv_bytes1, 32);
+  times2(check, 32);
+  tweak[31] = 0x02;                 // low order byte set to 2 (big endian)
+  callback_data.in = "privkey_tweak_mul.0";
+  callback_data.out = 0;
+  value = secp256k1_ec_privkey_tweak_mul(ctx,priv,tweak);
+  assert(value == 1);                
+  assert(callback_data.out == 0);              
+  assert(priv[0] == (0x1e << 1) + 1); 
+  assert(memcmp(priv,check,32) == 0);
+
+  return 0;
+}
+
+static void times2(unsigned char * bytes, size_t size){
+  int i;
+  for(i = 0; i < size; ++i){
+    bytes[i] = (bytes[i] << 1) % 256;
+    if(i < size -1){
+      if((bytes[i+1] << 1) > 256){
+        bytes[i] +=1;
+      }
+    }
+  }
+}
+

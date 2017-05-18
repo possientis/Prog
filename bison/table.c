@@ -29,6 +29,9 @@ struct symtab *symlook(const char* s)
   exit(1);
 }
 
-
+void addfunc(const char *name, double (*func)(double)){
+  struct symtab *sp = symlook(name);
+  sp->funcptr = func; 
+}
   
 

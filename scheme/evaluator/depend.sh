@@ -98,6 +98,12 @@ scm -b -f dict.scm                        > /dev/null
 ./analyze-run.scm dict.scm                > /dev/null
 ./lazy-run.scm dict.scm                   > /dev/null
 
+echo dorun
+scm -b -f dorun.scm                        > /dev/null               
+./strict-run.scm dorun.scm                 > /dev/null
+./analyze-run.scm dorun.scm                > /dev/null
+./lazy-run.scm dorun.scm                   > /dev/null
+
 echo environment1
 scm -b -f environment1.scm                > /dev/null               
 ./strict-run.scm environment1.scm         > /dev/null

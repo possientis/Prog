@@ -11,10 +11,11 @@ rm -f array
 rm -f customer.dat
 rm -f test
 
-./hello/clean.sh
-./extern/clean.sh
-./mul/clean.sh
 ./carry/clean.sh
 ./cpu/clean.sh
+./extern/clean.sh
+./hello/clean.sh
+./isa/clean.sh
+./mul/clean.sh
 
 cd ${DIR}

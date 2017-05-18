@@ -24,6 +24,7 @@
         ((named-let? exp)       (analyze-named-let exp))
         ((let*? exp)            (analyze-let* exp))
         ((letrec? exp)          (analyze-letrec exp))
+        ((dorun? exp)           (analyze-dorun exp env))
         ((application? exp)     (analyze-application exp))   
         (else  (error "Unknown expression type -- ANALYSE" exp))))
 

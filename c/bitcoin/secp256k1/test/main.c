@@ -41,39 +41,8 @@ int main()
   const secp256k1_nonce_function f2 = secp256k1_nonce_function_default;
 
 
-  fprintf(stderr,"\ntesting privkey_tweak_mul...\n");
   
-  // multiplying with tweak of 1
-  memcpy(nonce1, priv_bytes1, 32);
-  memset(nonce2,0x00, 32);
-  nonce2[31] = 0x01;
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
-  assert(value == 1);                // tweak succeeds
-  assert(callback_data.out == 0);              // no error
-  assert(memcmp(nonce1, priv_bytes1, 32) == 0); // no impact
 
-  // multiplying with tweak of 0
-  memcpy(nonce1, priv_bytes1, 32);
-  memset(nonce2,0x00, 32);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
-  assert(value == 0);                // tweak fails
-  assert(callback_data.out == 0);              // but no error
-
-  // multiplying with tweak of 2
-  memcpy(nonce1, priv_bytes1, 32);
-  memset(nonce2,0x00, 32);
-  nonce2[31] = 2;
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ec_privkey_tweak_mul(ctx,nonce1,nonce2);
-  assert(value == 1);                // tweak fails
-  assert(callback_data.out == 0);              // but no error
-  assert(nonce1[0] == (0x1e << 1) + 1);
- 
   fprintf(stderr,"\ntesting pubkey_tweak_mul...\n");
   // not doing much here, don't understand this function yet
   // multiplying tweak to public key -> pub2

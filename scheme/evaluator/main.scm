@@ -21,6 +21,7 @@
 (load "quote.scm")
 (load "self-evaluating.scm")
 (load "thunk.scm")
+(load "dorun.scm")
 (load "tagged-list.scm")
 (load "unspecified.scm")
 (load "variable.scm")

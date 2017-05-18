@@ -122,6 +122,9 @@
           (set! mem-enabled? #f)    ; no more calls to increase! until set to #t
           (let ((new (make-vector (* 2 size)))
                 (elems (temp-vector)))  ; whole table as vector (linear time)
+            (if (defined? force-thunk)
+              (display "[DEBUG]: increase!: force thunk is defined\n")
+              (display "[DEBUG]: increase!: force thunk is not defined\n"))
             (if (defined? force-thunk) (force-thunk elems)) ; needed for lazy evaluator
             (set! data new)         ; new empty vector with double the size
             (vector-fill! data '()) ; initialization
