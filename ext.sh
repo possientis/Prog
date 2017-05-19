@@ -30,7 +30,7 @@ filtered=$( \
   | grep -v "^new$" \
   | grep -v "^->$" \
   | grep -v "file:" \
-  | grep -v "deleted:" \
+  | grep -v 'deleted:' \
   | grep -v '.out' \
   | grep -v '.vim' \
   | grep -v '.txt' \
@@ -76,4 +76,6 @@ fi
 
 # returning the number of file extensions left
 echo "Total number of languages: $(echo "$extensions" | wc -l)"
+echo "$changed" | grep -v "deleted:"
+
 

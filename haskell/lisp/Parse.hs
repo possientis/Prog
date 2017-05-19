@@ -22,6 +22,19 @@ parseString = do
   char '"'
   return $ String x
 
+parseAtom :: Stream s m Char => ParsecT s u m LispVal
+parseAtom = do 
+  first <- letter <|> symbol
+  rest  <- many (letter <|> digit <|> symbol)
+  let atom = [first] ++ rest
+  return $ case atom of
+    "#t"      -> Bool True
+    "#f"      -> Bool False
+    otherwise -> Atom atom
+
+parseNumber :: Stream s m Char => ParsecT s u m LispVal
+parseNumber = (Number . read) <$> many1 digit
+
 
 readExpr :: Stream s Identity Char => s -> String
 readExpr input = case parse (spaces >> symbol) "lisp" input of 

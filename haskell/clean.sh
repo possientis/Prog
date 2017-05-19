@@ -10,6 +10,7 @@ rm -f test
 rm -f a.out
 
 ./bitcoin/clean.sh
+./lisp/clean.sh
 ./logic/clean.sh
 ./json/clean.sh
 ./types/clean.sh

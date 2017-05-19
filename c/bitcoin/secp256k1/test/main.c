@@ -13,10 +13,10 @@ int main()
   assert(test_macro() == 0);
   assert(test_context() == 0);
   assert(test_callback() == 0);
+  assert(test_ec_seckey() == 0);
   assert(test_ec_pubkey() == 0);
   assert(test_ecdsa_signature() == 0);
   assert(test_nonce_function() == 0);
-  assert(test_ec_seckey() == 0);
 
   secp256k1_pubkey pub;           // 64 bytes
   secp256k1_pubkey pub1;
@@ -39,18 +39,6 @@ int main()
   value = secp256k1_ecdsa_signature_parse_compact(ctx, &sig2, sig_bytes2);
   const secp256k1_nonce_function f1 = secp256k1_nonce_function_rfc6979;
   const secp256k1_nonce_function f2 = secp256k1_nonce_function_default;
-
-
-  
-
-  fprintf(stderr,"\ntesting pubkey_tweak_mul...\n");
-  // not doing much here, don't understand this function yet
-  // multiplying tweak to public key -> pub2
-  memcpy(&pub2, &pub1, 64);
-  callback_data.in = 0;             // make sure next error correctly sets it
-  callback_data.out = 0;
-  value = secp256k1_ec_pubkey_tweak_mul(ctx, &pub2, tweak_bytes);
-  assert(value == 1);
 
 
   fprintf(stderr,"\ntesting context_randomize...\n");

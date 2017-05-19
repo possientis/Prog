@@ -8,6 +8,7 @@ static int test_ec_pubkey_parse();
 static int test_ec_pubkey_serialize(int);
 static int test_ec_pubkey_create();
 static int test_ec_pubkey_tweak_add();
+static int test_ec_pubkey_tweak_mul();
 
 
 int test_ec_pubkey()
@@ -17,6 +18,7 @@ int test_ec_pubkey()
   assert(test_ec_pubkey_serialize(SECP256K1_EC_UNCOMPRESSED) == 0);
   assert(test_ec_pubkey_create() == 0);
   assert(test_ec_pubkey_tweak_add() == 0);
+  assert(test_ec_pubkey_tweak_mul() == 0);
 
   return 0;
 
@@ -367,15 +369,101 @@ static int test_ec_pubkey_tweak_add()
 
   // adding a tweak to a public key, returns a public key which 
   // corresponds to the private key to which the tweak has been added
+  
+  /*
+  // NULL context (segmentation fault)
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_add.0"; 
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_add(NULL, &pub, tweak_bytes);
+  assert(value == 1);
+  assert(memcmp(&pub, &pub2, 64) == 0);
+  */
 
+  // NULL output pointer
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_add.1"; 
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_add(ctx, NULL, tweak_bytes);
+  assert(value == 0);
+  assert(callback_data.out == 42);
+
+  // NULL input pointer
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_add.2"; 
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_add(ctx, &pub, NULL);
+  assert(value == 0);
+  assert(callback_data.out == 42);
+
+  // normal call
   memcpy(&pub, &pub1, 64);
   callback_data.in = "pubkey_tweak_add.0"; 
   callback_data.out = 0;
   value = secp256k1_ec_pubkey_tweak_add(ctx, &pub, tweak_bytes);
   assert(value == 1);
   assert(memcmp(&pub, &pub2, 64) == 0);
+  assert(callback_data.out == 0);
 
 
+  return 0;
+}
+
+static int test_ec_pubkey_tweak_mul()
+{
+  int value;
+  secp256k1_pubkey pub, pub1;
+  unsigned char tweak[32];
+
+  // parsing public key to be 'tweaked'
+  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
+
+  fprintf(stderr,"\ntesting pubkey_tweak_mul...\n");
+
+
+  /*
+  // NULL context (segmentation fault)
+  memset(&tweak, 0, 32);
+  tweak[31] = 0x01;
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_mul.0";
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_mul(NULL, &pub, tweak);
+  assert(value == 1);
+  assert(memcmp(&pub, &pub1, 64) == 0);
+  */
+
+  // NULL output pointer
+  memset(&tweak, 0, 32);
+  tweak[31] = 0x01;
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_mul.1";
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_mul(ctx, NULL, tweak);
+  assert(value == 0);
+  assert(callback_data.out == 42);
+
+  // NULL input pointer
+  memset(&tweak, 0, 32);
+  tweak[31] = 0x01;
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_mul.2";
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_mul(ctx, &pub, NULL);
+  assert(value == 0);
+  assert(callback_data.out == 42);
+
+
+  // normal call (not checking much though as tweak = 1)
+  memset(&tweak, 0, 32);
+  tweak[31] = 0x01;
+  memcpy(&pub, &pub1, 64);
+  callback_data.in = "pubkey_tweak_mul.0";
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_tweak_mul(ctx, &pub, tweak);
+  assert(value == 1);
+  assert(callback_data.out == 0);
+  assert(memcmp(&pub, &pub1, 64) == 0);
 
   return 0;
 }

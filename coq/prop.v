@@ -45,6 +45,18 @@ Axiom classic: LEM.
 
 Inductive inhabited (A:Type) : Prop := inhabits : A -> inhabited A.
 
-Axiom e_statement: forall (A:Type)(P:A->Prop),
+Axiom e_statement: forall {A:Type}(P:A->Prop),
   inhabited A -> {x:A | (exists x, P x) -> P x}.
 
+Definition e {A:Type}(i: inhabited A)(P:A-> Prop) : A :=
+  proj1_sig (e_statement P i).
+
+Definition e_spec {A:Type}(i:inhabited A)(P: A-> Prop) : 
+  (exists x, P x) -> P(e i P) := proj2_sig (e_statement P i).
+
+Definition axiom1 : Type := forall (A:Type)(P:A->Prop),
+  inhabited A -> {x:A | (exists x, P x) -> P x}.
+
+Definition id {a:Type}(x:a) : a := x.
+
+Check id.

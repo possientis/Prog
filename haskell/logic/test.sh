@@ -6,10 +6,10 @@ HOME=/home/john/Prog/haskell/logic
 cd ${HOME}
 echo
 
-echo "testing universal algebra of predicate logic"
+echo "testing logic"
 
-ghc -o a.out Unit-Test.hs; ./a.out; ./clean.sh
-
+./fopl/test.sh
+./lambda/test.sh
 
 cd ${DIR}
 echo '\ntest completed successfully\n'

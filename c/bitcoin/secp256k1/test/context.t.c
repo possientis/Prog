@@ -3,13 +3,22 @@
 #include "secp256k1.h"
 #include "test.h"
 
+static int test_context_create();
+static int test_context_clone();
+static int test_context_destroy();
+
+
 int test_context()
 {
+
+  assert(test_context_create() == 0);
+  assert(test_context_clone() == 0);
+  assert(test_context_destroy() == 0);
+
 
   secp256k1_context *clone;
   secp256k1_context *new;
 
-  fprintf(stderr, "\ntesting contexts...\n");
 
   assert(sizeof(new) == 8);
   
@@ -62,4 +71,23 @@ int test_context()
 
 }
 
+static int test_context_create()
+{
+  fprintf(stderr, "\ntesting creating contexts...\n");
 
+  return 0;
+}
+
+static int test_context_clone()
+{
+  fprintf(stderr, "\ntesting cloning contexts...\n");
+
+  return 0;
+}
+static int test_context_destroy()
+{
+
+  fprintf(stderr, "\ntesting destroying contexts...\n");
+
+  return 0;
+}

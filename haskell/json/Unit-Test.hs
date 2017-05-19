@@ -3,6 +3,8 @@ import JLexer
 import JParser
 import JValue
 
+import System.Exit
+
 value1 = JObject [JKeyVal ("foo",JNumber 1),   JKeyVal ("bar", JBool False)]
 value2 = JObject [JKeyVal ("foo",JNumber 3),   JKeyVal ("bar", JBool True)]
 value3 = JObject [JKeyVal ("foo",JNumber 4.5), JKeyVal ("bar", JBool True)]
@@ -18,7 +20,11 @@ test5 = TestCase $ assertEqual "test5" value5 $ jparse (show value5)
 tests = TestList [ test1, test2, test3, test4, test5]
 
 main = do 
-  runTestTT tests
+  counts <- runTestTT tests
+  if failures counts  /= 0
+    then exitWith $ ExitFailure 1
+    else exitWith $ ExitSuccess
+
 
 
 
