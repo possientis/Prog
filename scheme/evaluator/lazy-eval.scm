@@ -25,6 +25,7 @@
           ((let*? exp)            (lazy-eval-let* exp env))
           ((letrec? exp)          (lazy-eval-letrec exp env))
           ((dorun? exp)           (lazy-eval-dorun exp env))
+          ((define-syntax? exp)   (lazy-eval-define-syntax exp env))
           ((application? exp)     (lazy-eval-application exp env))
           (else  (error "Unknown expression type -- LAZY-EVAL" exp)))))
 

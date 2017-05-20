@@ -12,3 +12,7 @@ class Read a where
 -}
 
 -- parens :: ReadPrec a -> ReadPrec a
+
+
+instance (Read a) => Read (Tree a) where
+  readPrec = undefined

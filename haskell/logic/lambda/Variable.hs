@@ -4,12 +4,12 @@ module Variable
   ( var
   ) where
 
-import LambdaCalculus
+import Expression
 import Data.Set
 
-var :: (LambdaCalculus m, Ord v) => m v -> Set v 
-var (asType -> VariableType x)  = fromList [x]
-var (asType -> ApplyType p q)   = union (var p) (var q)
-var (asType -> LambdaType x p)  = insert x (var p)
+var :: (Ord v) => Expression v -> Set v 
+var (Variable x)  = fromList [x]
+var (Apply p q)   = union (var p) (var q)
+var (Lambda x p)  = insert x (var p)
 
 

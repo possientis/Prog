@@ -19,7 +19,7 @@ extern double vbltable[26];
               return NAME; 
             }
 
-\$          { printf("exiting...\n"); return 0;}
+\$          { return 0;}
 
 
 \n | 

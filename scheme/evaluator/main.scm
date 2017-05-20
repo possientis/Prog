@@ -22,6 +22,7 @@
 (load "self-evaluating.scm")
 (load "thunk.scm")
 (load "dorun.scm")
+(load "define-syntax.scm")
 (load "tagged-list.scm")
 (load "unspecified.scm")
 (load "variable.scm")

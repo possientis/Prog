@@ -68,17 +68,23 @@ scm -b -f debug.scm                       > /dev/null
 ./analyze-run.scm debug.scm               > /dev/null
 ./lazy-run.scm debug.scm                  > /dev/null
 
+echo defined
+scm -b -f defined.scm                     > /dev/null               
+./strict-run.scm defined.scm              > /dev/null
+./analyze-run.scm defined.scm             > /dev/null
+./lazy-run.scm defined.scm                > /dev/null
+
 echo defined-primitive
 scm -b -f defined-primitive.scm           > /dev/null               
 ./strict-run.scm defined-primitive.scm    > /dev/null
 ./analyze-run.scm defined-primitive.scm   > /dev/null
 ./lazy-run.scm defined-primitive.scm      > /dev/null
 
-echo defined
-scm -b -f defined.scm                     > /dev/null               
-./strict-run.scm defined.scm              > /dev/null
-./analyze-run.scm defined.scm             > /dev/null
-./lazy-run.scm defined.scm                > /dev/null
+echo define-syntax
+scm -b -f define-syntax.scm               > /dev/null               
+./strict-run.scm define-syntax.scm        > /dev/null
+./analyze-run.scm define-syntax.scm       > /dev/null
+./lazy-run.scm define-syntax.scm          > /dev/null
 
 echo definition
 scm -b -f definition.scm                  > /dev/null               

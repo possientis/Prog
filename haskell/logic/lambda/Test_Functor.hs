@@ -5,7 +5,6 @@ module Test_Functor
 import Data.Functor ((<$>)) -- for older versions of GHC
 import Test.HUnit
 import Test_data
-import LambdaCalculus
 
 test1   = TestCase $ assertEqual  "fmap.1"  (f1 <$> p1) q1
 test2   = TestCase $ assertEqual  "fmap.2"  (f1 <$> p2) q2

@@ -1,7 +1,7 @@
 %{
 
 #include <math.h>
-#include "calculator4.tab.h"
+#include "calculator6.tab.h"
 #include "table.h"
 
 %}
@@ -16,8 +16,12 @@
 
 [A-Za-z][A-Za-z0-9]*  { /* return symbol pointer */
 
-              yylval.symp = symlook(yytext);
+              struct symtab *sp = symlook(yytext);
+              
+              yylval.symp = sp;
+
               return NAME; 
+  
             }
 
 \$          { return 0;}

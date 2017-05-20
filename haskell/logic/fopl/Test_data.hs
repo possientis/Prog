@@ -10,12 +10,8 @@ module Test_data
 
 import Data.Set
 
-import FirstOrder
 import Formula            -- main implementation
-import GFormula           -- other implementation
 import V
-
-type TFormula = Formula    -- choose implementation
 
 s1 = "x:y"
 s2 = "!"
@@ -26,21 +22,21 @@ s6 = "z:y"
 s7 = "(z:x -> z:y)"
 s8 = "Az.(z:x -> z:y)"
 
-p1 = belong x y   :: TFormula V
-p2 = bot          :: TFormula V
+p1 = belong x y   :: Formula V
+p2 = bot          :: Formula V
 p3 = imply p1 p2
 p4 = forall x p1
-p5 = belong z x   :: TFormula V
-p6 = belong z y   :: TFormula V
+p5 = belong z x   :: Formula V
+p6 = belong z y   :: Formula V
 p7 = imply p5 p6
 p8 = forall z p7
 
-q1 = belong x' y' :: TFormula W
-q2 = bot          :: TFormula W
+q1 = belong x' y' :: Formula W
+q2 = bot          :: Formula W
 q3 = imply q1 q2
 q4 = forall x' q1
-q5 = belong z' x' :: TFormula W
-q6 = belong z' y' :: TFormula W
+q5 = belong z' x' :: Formula W
+q6 = belong z' y' :: Formula W
 q7 = imply q5 q6
 q8 = forall z' q7
 

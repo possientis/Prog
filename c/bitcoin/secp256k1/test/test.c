@@ -135,3 +135,12 @@ int test_setup(){
   return 0;
 }
 
+int test_cleanup(){
+
+  secp256k1_context_destroy(ctx);
+
+  return 0;
+}
+
+
+

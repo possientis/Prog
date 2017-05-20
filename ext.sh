@@ -76,6 +76,5 @@ fi
 
 # returning the number of file extensions left
 echo "Total number of languages: $(echo "$extensions" | wc -l)"
-echo "$changed" | grep -v "deleted:"
 
 

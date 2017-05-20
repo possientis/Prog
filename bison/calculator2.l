@@ -12,7 +12,7 @@
 
 [ \t]+      ;           /* ignore whitespace */
 
-\n          return 0;   /* logical EOF */
+\n          { return 0;   /* logical EOF */ }
 
 .           return yytext[0];
 %%

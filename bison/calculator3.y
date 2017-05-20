@@ -58,7 +58,6 @@ int main()
 
   while(!feof(yyin)){
     yyparse();
-    printf("returning from parse...\n");
   }
 
   return 0;

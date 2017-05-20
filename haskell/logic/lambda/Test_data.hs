@@ -10,12 +10,8 @@ module Test_data
 
 import Data.Set
 
-import LambdaCalculus
 import Expression               -- main implementation
-import GExpression              -- other implementation
 import V
-
-type TExpression = Expression   -- choose implementation
 
 s1 = "x"
 s2 = "y"
@@ -26,21 +22,21 @@ s6 = "Lx.Ly.y"
 s7 = "Lx.Ly.(x y)"
 s8 = "Lx.Ly.(x (x y))"
 
-p1 = variable x                 :: TExpression V
-p2 = variable y                 :: TExpression V
+p1 = variable x                 :: Expression V
+p2 = variable y                 :: Expression V
 p3 = apply p1 p2
 p4 = lambda x p1
-p5 = lambda x (lambda y p1)     :: TExpression V
-p6 = lambda x (lambda y p2)     :: TExpression V
+p5 = lambda x (lambda y p1)     :: Expression V
+p6 = lambda x (lambda y p2)     :: Expression V
 p7 = lambda x (lambda y p3) 
 p8 = lambda x (lambda y (apply p1 p3))
 
-q1 = variable x'                :: TExpression W
-q2 = variable y'                :: TExpression W
+q1 = variable x'                :: Expression W
+q2 = variable y'                :: Expression W
 q3 = apply q1 q2
 q4 = lambda x' q1
-q5 = lambda x' (lambda y' q1)   :: TExpression W
-q6 = lambda x' (lambda y' q2)   :: TExpression W
+q5 = lambda x' (lambda y' q1)   :: Expression W
+q6 = lambda x' (lambda y' q2)   :: Expression W
 q7 = lambda x' (lambda y' q3) 
 q8 = lambda x' (lambda y' (apply q1 q3))
 

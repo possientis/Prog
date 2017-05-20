@@ -44,6 +44,14 @@ expression: expression '+' expression { $$ = $1 + $3; }
     |       '(' expression ')'          { $$ = $2; }
     |       NUMBER                      { $$ = $1; } 
     |       NAME                        { $$ = $1->value; }
+    |       NAME  '(' expression ')'    {
+                  if($1->funcptr)  
+                    $$ = ($1->funcptr)($3);
+                  else {
+                    printf("%s not a function\n", $1->name);
+                    $$ = 0.0;
+                  }
+            }
     ;       
 
 %%
@@ -55,10 +63,12 @@ int main()
   printf("calculator is running...\n");
 
   yyset_in(stdin);
+  
+  addfunc("sqrt", sqrt);
+  addfunc("exp", exp);
+  addfunc("log", log);
 
-  while(!feof(yyin)){
-    yyparse();
-  }
+  yyparse();
 
   return 0;
 }

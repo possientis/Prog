@@ -2,6 +2,12 @@ section  .data
   mem8  db 0x00
   mem16 dw 0x0000
   mem32 dd 0x00000000
+  mem64 dq 0x0000000000000000
+
+  imm8  equ 0x11
+  imm16 equ 0x1122
+  imm32 equ 0x11223344
+  imm64 equ 0x1122334455667788
 
 section  .text
 global _start
@@ -308,6 +314,46 @@ _start:
   adc r15b, byte [mem8]
 
 
+; adc r8,i8
+
+  adc al, imm8
+  adc bl, imm8
+  adc cl, imm8
+  adc dl, imm8
+  adc dil, imm8
+  adc sil, imm8
+  adc bpl, imm8
+  adc spl, imm8
+  adc r8b, imm8
+  adc r9b, imm8
+  adc r10b, imm8
+  adc r11b, imm8
+  adc r12b, imm8
+  adc r13b, imm8
+  adc r14b, imm8
+  adc r15b, imm8
+
+
+; adc m8,i8
+
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+  adc byte [mem8], imm8
+
+
 ; adc r16,r16
 
   adc ax, ax
@@ -608,6 +654,46 @@ _start:
   adc r15w, word [mem16]
 
 
+; adc r16,i16
+
+  adc ax, imm16
+  adc bx, imm16
+  adc cx, imm16
+  adc dx, imm16
+  adc di, imm16
+  adc si, imm16
+  adc bp, imm16
+  adc sp, imm16
+  adc r8w, imm16
+  adc r9w, imm16
+  adc r10w, imm16
+  adc r11w, imm16
+  adc r12w, imm16
+  adc r13w, imm16
+  adc r14w, imm16
+  adc r15w, imm16
+
+
+; adc m16,i16
+
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+  adc word [mem16], imm16
+
+
 ; adc r32,r32
 
   adc eax, eax
@@ -906,6 +992,326 @@ _start:
   adc r13d, dword [mem32]
   adc r14d, dword [mem32]
   adc r15d, dword [mem32]
+
+
+; adc r32,i32
+
+  adc eax, imm32
+  adc ebx, imm32
+  adc ecx, imm32
+  adc edx, imm32
+  adc edi, imm32
+  adc esi, imm32
+  adc ebp, imm32
+  adc esp, imm32
+  adc r8d, imm32
+  adc r9d, imm32
+  adc r10d, imm32
+  adc r11d, imm32
+  adc r12d, imm32
+  adc r13d, imm32
+  adc r14d, imm32
+  adc r15d, imm32
+
+
+; adc r64,r64
+
+  adc rax, rax
+  adc rax, rbx
+  adc rax, rcx
+  adc rax, rdx
+  adc rax, rdi
+  adc rax, rsi
+  adc rax, rbp
+  adc rax, rsp
+  adc rax, r8
+  adc rax, r9
+  adc rax, r10
+  adc rax, r11
+  adc rax, r12
+  adc rax, r13
+  adc rax, r14
+  adc rax, r15
+  adc rbx, rax
+  adc rbx, rbx
+  adc rbx, rcx
+  adc rbx, rdx
+  adc rbx, rdi
+  adc rbx, rsi
+  adc rbx, rbp
+  adc rbx, rsp
+  adc rbx, r8
+  adc rbx, r9
+  adc rbx, r10
+  adc rbx, r11
+  adc rbx, r12
+  adc rbx, r13
+  adc rbx, r14
+  adc rbx, r15
+  adc rcx, rax
+  adc rcx, rbx
+  adc rcx, rcx
+  adc rcx, rdx
+  adc rcx, rdi
+  adc rcx, rsi
+  adc rcx, rbp
+  adc rcx, rsp
+  adc rcx, r8
+  adc rcx, r9
+  adc rcx, r10
+  adc rcx, r11
+  adc rcx, r12
+  adc rcx, r13
+  adc rcx, r14
+  adc rcx, r15
+  adc rdx, rax
+  adc rdx, rbx
+  adc rdx, rcx
+  adc rdx, rdx
+  adc rdx, rdi
+  adc rdx, rsi
+  adc rdx, rbp
+  adc rdx, rsp
+  adc rdx, r8
+  adc rdx, r9
+  adc rdx, r10
+  adc rdx, r11
+  adc rdx, r12
+  adc rdx, r13
+  adc rdx, r14
+  adc rdx, r15
+  adc rdi, rax
+  adc rdi, rbx
+  adc rdi, rcx
+  adc rdi, rdx
+  adc rdi, rdi
+  adc rdi, rsi
+  adc rdi, rbp
+  adc rdi, rsp
+  adc rdi, r8
+  adc rdi, r9
+  adc rdi, r10
+  adc rdi, r11
+  adc rdi, r12
+  adc rdi, r13
+  adc rdi, r14
+  adc rdi, r15
+  adc rsi, rax
+  adc rsi, rbx
+  adc rsi, rcx
+  adc rsi, rdx
+  adc rsi, rdi
+  adc rsi, rsi
+  adc rsi, rbp
+  adc rsi, rsp
+  adc rsi, r8
+  adc rsi, r9
+  adc rsi, r10
+  adc rsi, r11
+  adc rsi, r12
+  adc rsi, r13
+  adc rsi, r14
+  adc rsi, r15
+  adc rbp, rax
+  adc rbp, rbx
+  adc rbp, rcx
+  adc rbp, rdx
+  adc rbp, rdi
+  adc rbp, rsi
+  adc rbp, rbp
+  adc rbp, rsp
+  adc rbp, r8
+  adc rbp, r9
+  adc rbp, r10
+  adc rbp, r11
+  adc rbp, r12
+  adc rbp, r13
+  adc rbp, r14
+  adc rbp, r15
+  adc rsp, rax
+  adc rsp, rbx
+  adc rsp, rcx
+  adc rsp, rdx
+  adc rsp, rdi
+  adc rsp, rsi
+  adc rsp, rbp
+  adc rsp, rsp
+  adc rsp, r8
+  adc rsp, r9
+  adc rsp, r10
+  adc rsp, r11
+  adc rsp, r12
+  adc rsp, r13
+  adc rsp, r14
+  adc rsp, r15
+  adc r8, rax
+  adc r8, rbx
+  adc r8, rcx
+  adc r8, rdx
+  adc r8, rdi
+  adc r8, rsi
+  adc r8, rbp
+  adc r8, rsp
+  adc r8, r8
+  adc r8, r9
+  adc r8, r10
+  adc r8, r11
+  adc r8, r12
+  adc r8, r13
+  adc r8, r14
+  adc r8, r15
+  adc r9, rax
+  adc r9, rbx
+  adc r9, rcx
+  adc r9, rdx
+  adc r9, rdi
+  adc r9, rsi
+  adc r9, rbp
+  adc r9, rsp
+  adc r9, r8
+  adc r9, r9
+  adc r9, r10
+  adc r9, r11
+  adc r9, r12
+  adc r9, r13
+  adc r9, r14
+  adc r9, r15
+  adc r10, rax
+  adc r10, rbx
+  adc r10, rcx
+  adc r10, rdx
+  adc r10, rdi
+  adc r10, rsi
+  adc r10, rbp
+  adc r10, rsp
+  adc r10, r8
+  adc r10, r9
+  adc r10, r10
+  adc r10, r11
+  adc r10, r12
+  adc r10, r13
+  adc r10, r14
+  adc r10, r15
+  adc r11, rax
+  adc r11, rbx
+  adc r11, rcx
+  adc r11, rdx
+  adc r11, rdi
+  adc r11, rsi
+  adc r11, rbp
+  adc r11, rsp
+  adc r11, r8
+  adc r11, r9
+  adc r11, r10
+  adc r11, r11
+  adc r11, r12
+  adc r11, r13
+  adc r11, r14
+  adc r11, r15
+  adc r12, rax
+  adc r12, rbx
+  adc r12, rcx
+  adc r12, rdx
+  adc r12, rdi
+  adc r12, rsi
+  adc r12, rbp
+  adc r12, rsp
+  adc r12, r8
+  adc r12, r9
+  adc r12, r10
+  adc r12, r11
+  adc r12, r12
+  adc r12, r13
+  adc r12, r14
+  adc r12, r15
+  adc r13, rax
+  adc r13, rbx
+  adc r13, rcx
+  adc r13, rdx
+  adc r13, rdi
+  adc r13, rsi
+  adc r13, rbp
+  adc r13, rsp
+  adc r13, r8
+  adc r13, r9
+  adc r13, r10
+  adc r13, r11
+  adc r13, r12
+  adc r13, r13
+  adc r13, r14
+  adc r13, r15
+  adc r14, rax
+  adc r14, rbx
+  adc r14, rcx
+  adc r14, rdx
+  adc r14, rdi
+  adc r14, rsi
+  adc r14, rbp
+  adc r14, rsp
+  adc r14, r8
+  adc r14, r9
+  adc r14, r10
+  adc r14, r11
+  adc r14, r12
+  adc r14, r13
+  adc r14, r14
+  adc r14, r15
+  adc r15, rax
+  adc r15, rbx
+  adc r15, rcx
+  adc r15, rdx
+  adc r15, rdi
+  adc r15, rsi
+  adc r15, rbp
+  adc r15, rsp
+  adc r15, r8
+  adc r15, r9
+  adc r15, r10
+  adc r15, r11
+  adc r15, r12
+  adc r15, r13
+  adc r15, r14
+  adc r15, r15
+
+
+; adc m64,r64
+
+  adc qword [mem64], rax
+  adc qword [mem64], rbx
+  adc qword [mem64], rcx
+  adc qword [mem64], rdx
+  adc qword [mem64], rdi
+  adc qword [mem64], rsi
+  adc qword [mem64], rbp
+  adc qword [mem64], rsp
+  adc qword [mem64], r8
+  adc qword [mem64], r9
+  adc qword [mem64], r10
+  adc qword [mem64], r11
+  adc qword [mem64], r12
+  adc qword [mem64], r13
+  adc qword [mem64], r14
+  adc qword [mem64], r15
+
+
+; adc r64,m64
+
+  adc rax, qword [mem64]
+  adc rbx, qword [mem64]
+  adc rcx, qword [mem64]
+  adc rdx, qword [mem64]
+  adc rdi, qword [mem64]
+  adc rsi, qword [mem64]
+  adc rbp, qword [mem64]
+  adc rsp, qword [mem64]
+  adc r8, qword [mem64]
+  adc r9, qword [mem64]
+  adc r10, qword [mem64]
+  adc r11, qword [mem64]
+  adc r12, qword [mem64]
+  adc r13, qword [mem64]
+  adc r14, qword [mem64]
+  adc r15, qword [mem64]
 
   mov rax, 60
   mov rdi, 0

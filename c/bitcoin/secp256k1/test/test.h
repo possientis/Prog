@@ -38,6 +38,7 @@ extern const unsigned char *tweak_bytes;
 void default_callback(const char* message, void* data);
 int is_all_null(const void *ptr, size_t size);
 int test_setup();
+int test_cleanup();
 
 
 #endif

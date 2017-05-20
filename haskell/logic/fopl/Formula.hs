@@ -1,29 +1,42 @@
-module  Formula (Formula) where
+module  Formula 
+  ( Formula(..)
+  , belong
+  , bot
+  , imply
+  , forall
+  ) where
 
-import FirstOrder
 
 data Formula v  
   = Belong v v
   | Bot
   | Imply (Formula v) (Formula v)
   | Forall v (Formula v)
+  deriving (Eq, Ord)
 
-instance FirstOrder Formula where
-  belong  = Belong
-  bot     = Bot  
-  imply   = Imply
-  forall  = Forall
-  asType  (Belong x y)  = BelongType x y
-  asType  (Bot)         = BotType
-  asType  (Imply p q)   = ImplyType p q
-  asType  (Forall x p)  = ForallType x p 
+belong = Belong
+bot = Bot
+imply = Imply
+forall = Forall
 
-instance (Eq v) => Eq (Formula v) where
-  (==) = equalF
+fold :: (v -> v -> b) -> b -> (b -> b -> b) -> (v -> b -> b) -> Formula v -> b
+fold  fbelong fbot fimply fforall = f where
+  f (Belong x y)   = fbelong x y
+  f (Bot)         = fbot
+  f (Imply p q)   = fimply (f p) (f q)
+  f (Forall x p)  = fforall x (f p)
 
 instance (Show v) => Show (Formula v) where
-  show = showF
+  show = fold fbelong fbot fimply fforall where
+    fbelong x y = (show x) ++ ":" ++ (show y)
+    fbot        = "!"
+    fimply s t  = "(" ++ s ++ " -> " ++ t ++ ")"
+    fforall x s = "A" ++ (show x) ++ "." ++ s
 
 instance Functor Formula where
-  fmap = mapF
+  fmap f  = fold fbelong fbot fimply fforall where
+    fbelong x y = belong (f x) (f y)
+    fbot        = bot
+    fimply p q  = imply p q
+    fforall x p = forall (f x) p
 

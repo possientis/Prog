@@ -1,9 +1,0 @@
-#define verb is am are were was be being been do does did will would \
-        should can could has have had go went gone eat
-#define adverb very simply gently quietly calmly angrily
-#define preposition to from behind above below between
-#define conjunction if then and but or
-#define adjective their my your our his her its
-#define pronoun I you he she we they
-#define noun dog cat oat horse cow
-

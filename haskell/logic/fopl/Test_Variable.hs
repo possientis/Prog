@@ -6,7 +6,6 @@ import Test.HUnit
 import Data.Set
 
 import Test_data
-import FirstOrder
 import Variable
 
 test1 = TestCase $ assertEqual "test1" (var p1) v1 

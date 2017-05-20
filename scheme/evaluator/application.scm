@@ -18,7 +18,8 @@
         (operands (exp-operands exp)))
     (let ((proc (strict-eval operator env))
           (args (map (lambda (x) (strict-eval x env)) operands)))
-      (force-thunk args)              ; for strict evaluation within lazy scheme 
+;          (args (dorun (map (lambda (x) (strict-eval x env)) operands))))
+      (force-thunk args)              ; remove if dorun
       (strict-apply proc args))))
 
 ; analyze
@@ -29,7 +30,8 @@
           (args (map analyze operands)))
       (lambda (env)
         (let ((forced-args (map (lambda (x) (x env)) args)))
-          (force-thunk forced-args)   ; for analyze evaluation within lazy scheme
+;        (let ((forced-args (dorun (map (lambda (x) (x env)) args))))
+          (force-thunk forced-args)   ; remove if dorun
           (analyze-apply (proc env) forced-args))))))
 
 ; lazy

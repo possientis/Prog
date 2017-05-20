@@ -100,7 +100,7 @@ handle_connection(int sockfd, struct sockaddr_in *client_addr_ptr, int logfd) {
 
   ptr = strstr(request, " HTTP/"); // Search for valid-looking request.
   if(ptr == NULL) { // Then this isn't valid HTTP.
-    printf(" NOT HTTP!\n");
+    strcat(log_buffer, " NOT HTTP!\n");
   } else {
     *ptr = 0;   // Terminate the buffer at the end of the URL.
     ptr = NULL; // Set ptr to NULL (used to flag for an invalid request).
@@ -109,14 +109,13 @@ handle_connection(int sockfd, struct sockaddr_in *client_addr_ptr, int logfd) {
     if(strncmp(request, "HEAD ", 5) == 0) // HEAD request
       ptr = request+5; // ptr is the URL.
     if(ptr == NULL) { // Then this is not a recognized request.
-        printf("\tUNKNOWN REQUEST!\n");
+        strcat(log_buffer, "\tUNKNOWN REQUEST!\n");
     } else { // Valid request, with ptr pointing to the resource name
         if (ptr[strlen(ptr) - 1] == '/')    // For resources ending with '/',
           strcat(ptr, "index.html");        // add 'index.html' to the end.
           strcpy(resource, WEBROOT);        // Begin resource with web root path
           strcat(resource, ptr);            // and join it with resource path.
           fd = open(resource, O_RDONLY, 0); // Try to open the file.
-          printf("\tOpening \'%s\'\t", resource);
           if(fd == -1) {                    // If file is not found
             strcat(log_buffer, " 404 Not Found\n");
             send_string(sockfd, "HTTP/1.0 404 NOT FOUND\r\n");

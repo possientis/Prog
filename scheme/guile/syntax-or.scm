@@ -1,0 +1,26 @@
+(define-syntax or
+  (lambda (x)
+    (syntax-case x ()
+      ((_)   (syntax #f))
+      ((_ e) (syntax e))
+      ((_ e1 e2 ...)
+       (syntax (let ((t e1)) (if t t (or e2 ...))))))))
+
+(display "(or) = ")(display (or))(newline)
+(display "(or #f) = ")(display (or #f))(newline)
+(display "(or #t) = ")(display (or #t))(newline)
+(display "(or #t #t) = ")(display (or #t #t))(newline)
+(display "(or #t #f) = ")(display (or #t #f))(newline)
+(display "(or #f #t) = ")(display (or #f #t))(newline)
+(display "(or #f #f) = ")(display (or #f #f))(newline)
+(display "(or #t #t #t) = ")(display (or #t #t #t))(newline)
+(display "(or #t #t #f) = ")(display (or #t #t #f))(newline)
+(display "(or #t #f #t) = ")(display (or #t #f #t))(newline)
+(display "(or #t #f #f) = ")(display (or #t #f #f))(newline)
+(display "(or #f #t #t) = ")(display (or #f #t #t))(newline)
+(display "(or #f #t #f) = ")(display (or #f #t #f))(newline)
+(display "(or #f #f #t) = ")(display (or #f #f #t))(newline)
+(display "(or #f #f #f) = ")(display (or #f #f #f))(newline)
+
+
+(exit 0)

@@ -1,7 +1,7 @@
 (load "main.scm")
 (load "tools.scm")
 
-(set-debug #f)
+(set-debug #t)
 
 (define (unit-test)
   ;

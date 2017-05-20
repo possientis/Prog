@@ -25,6 +25,7 @@
           ((let*? exp)            (strict-eval-let* exp env))
           ((letrec? exp)          (strict-eval-letrec exp env))
           ((dorun? exp)           (strict-eval-dorun exp env))
+          ((define-syntax? exp)   (strict-eval-define-syntax exp env))
           ((application? exp)     (strict-eval-application exp env))
           (else  (error "Unknown expression type -- STRICT-EVAL" exp)))))
 

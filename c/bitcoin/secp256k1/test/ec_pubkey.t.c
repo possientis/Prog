@@ -9,6 +9,7 @@ static int test_ec_pubkey_serialize(int);
 static int test_ec_pubkey_create();
 static int test_ec_pubkey_tweak_add();
 static int test_ec_pubkey_tweak_mul();
+static int test_ec_pubkey_combine();
 
 
 int test_ec_pubkey()
@@ -19,6 +20,8 @@ int test_ec_pubkey()
   assert(test_ec_pubkey_create() == 0);
   assert(test_ec_pubkey_tweak_add() == 0);
   assert(test_ec_pubkey_tweak_mul() == 0);
+  assert(test_ec_pubkey_combine() == 0);
+
 
   return 0;
 
@@ -467,3 +470,29 @@ static int test_ec_pubkey_tweak_mul()
 
   return 0;
 }
+
+static int test_ec_pubkey_combine()
+{
+
+  int value;
+  secp256k1_pubkey pub, pub1, pub2;
+
+  fprintf(stderr,"\ntesting pubkey_combine...\n");
+
+  value = secp256k1_ec_pubkey_parse(ctx, &pub1, pubkey_bytes1, 33);
+
+  // not doing much here
+  memcpy(&pub2, &pub1, 64);
+  const secp256k1_pubkey* const list[2] = { &pub1, &pub2 };
+  callback_data.in = "pubkey_combine.0";
+  callback_data.out = 0;
+  value = secp256k1_ec_pubkey_combine(ctx, &pub, list, 2);
+  assert(value == 1);
+  assert(callback_data.out == 0);
+ 
+  return 0;
+}
+
+
+
+
