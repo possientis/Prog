@@ -54,9 +54,18 @@ Definition e {A:Type}(i: inhabited A)(P:A-> Prop) : A :=
 Definition e_spec {A:Type}(i:inhabited A)(P: A-> Prop) : 
   (exists x, P x) -> P(e i P) := proj2_sig (e_statement P i).
 
-Definition axiom1 : Type := forall (A:Type)(P:A->Prop),
+Definition type1 : Type := forall (A:Type)(P:A->Prop),
   inhabited A -> {x:A | (exists x, P x) -> P x}.
 
-Definition id {a:Type}(x:a) : a := x.
+Definition type2 : Type := forall (A:Type)(P:A->Prop),
+  (exists x, P x) -> {x:A | P x}.
 
-Check id.
+Proposition exist_inhabited : forall (A:Type)(P:A->Prop),
+  (exists x, P x) -> inhabited A.
+Proof.
+  intros A P H. elim H. clear H. intros x H. apply inhabits. exact x.
+Qed.
+
+
+
+

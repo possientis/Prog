@@ -6,7 +6,6 @@ cd ${HOME}
 
 rm -f *.o
 rm -f a.out
-./clone/clean.sh
 ./test/clean.sh
 
 cd ${DIR}

@@ -60,6 +60,7 @@ secp256k1_context* secp256k1_context_create(unsigned int flags) {
     ret->illegal_callback = default_illegal_callback;
     ret->error_callback = default_error_callback;
 
+    fprintf(stderr, "clone library is running...\n");
     if (EXPECT((flags & SECP256K1_FLAGS_TYPE_MASK) != SECP256K1_FLAGS_TYPE_CONTEXT, 0)) {
             secp256k1_callback_call(&ret->illegal_callback,
                                     "Invalid flags");

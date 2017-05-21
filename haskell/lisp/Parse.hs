@@ -15,10 +15,14 @@ symbol = oneOf "!#$%&|*+-/:<=>?@^_~"
 spaces :: Stream s m Char => ParsecT s u m ()
 spaces = skipMany1 space
 
+strChar :: Stream s m Char => ParsecT s u m Char
+strChar = noneOf "\\\"" <|> (char '\\' >> char '"')
+
+
 parseString :: Stream s m Char => ParsecT s u m LispVal
 parseString = do 
   char '"'
-  x <- many (noneOf "\"")
+  x <- many strChar
   char '"'
   return $ String x
 
@@ -35,11 +39,26 @@ parseAtom = do
 parseNumber :: Stream s m Char => ParsecT s u m LispVal
 parseNumber = (Number . read) <$> many1 digit
 
+{-
+parseNumber' :: Stream s m Char => ParsecT s u m LispVal
+parseNumber' = do 
+  s <- many1 digit
+  let n = read s
+  return $ Number n
 
-readExpr :: Stream s Identity Char => s -> String
-readExpr input = case parse (spaces >> symbol) "lisp" input of 
-  Left err  -> "No match: " ++ show err
-  Right val -> "Found value"
+parseNumber'' :: Stream s m Char => ParsecT s u m LispVal
+parseNumber'' = many1 digit >>= \s -> 
+  let n = read s in return $ Number n
+-}
+
+parseExpr :: Stream s m Char => ParsecT s u m LispVal
+parseExpr = parseAtom <|> parseString <|> parseNumber
+
+
+readExpr :: String -> String
+readExpr input = case parse parseExpr "lisp" input of
+  Left err    -> "No match: " ++ show err
+  Right val   -> "Found Value: " ++ show val
 
 
 main :: IO ()

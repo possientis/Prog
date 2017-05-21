@@ -24,6 +24,11 @@ flex word_lexer.l; bison -d word_parser.y;
 gcc word_parser.tab.c lex.yy.c -ll; ./a.out < words.txt; ./clean.sh
 echo
 
+echo "Testing decimal number lexical analyser ..."
+flex decimal.l; bison -d decimal.y; 
+gcc decimal.tab.c lex.yy.c -ll; ./a.out < decimal.txt; ./clean.sh
+echo
+
 echo "Testing calculator 1 ..."
 flex calculator1.l; bison -d calculator1.y; 
 gcc calculator1.tab.c lex.yy.c -ll; ./a.out < calc1.txt; ./clean.sh
@@ -54,13 +59,9 @@ flex calculator6.l; bison -d calculator6.y;
 gcc calculator6.tab.c table.c lex.yy.c -ll -lm; ./a.out < calc6.txt; ./clean.sh
 echo
 
-
-
-echo "Testing decimal number lexical analyser ..."
-flex decimal.l; bison -d decimal.y; 
-gcc decimal.tab.c lex.yy.c -ll; ./a.out < decimal.txt; ./clean.sh
-echo
-
+echo "Testing menu generator language 1 ..."
+flex MGL1.l; bison -d MGL1.y;
+gcc MGL1.tab.c lex.yy.c -ll; ./a.out < MGL1.txt; ./clean.sh
 
 
 
