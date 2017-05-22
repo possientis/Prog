@@ -78,10 +78,7 @@ echo                      >>  $out
 echo                      >>  $out
 echo "; $opcode m8,i8"    >>  $out
 echo                      >>  $out
-for i in ${r8[@]}
-do
-  echo "  ${opcode} byte [mem8], imm8"    >> $out
-done
+echo "  ${opcode} byte [mem8], imm8"    >> $out
 echo                      >>  $out
 
 
@@ -132,10 +129,7 @@ echo                      >>  $out
 echo                      >>  $out
 echo "; $opcode m16,i16"  >>  $out
 echo                      >>  $out
-for i in ${r16[@]}
-do
-  echo "  ${opcode} word [mem16], imm16"    >> $out
-done
+echo "  ${opcode} word [mem16], imm16"    >> $out
 echo                      >>  $out
 
 
@@ -181,6 +175,13 @@ for i in ${r32[@]}
 do
   echo "  ${opcode} $i, imm32"    >> $out
 done
+echo                      >>  $out
+
+# op m32,i32
+echo                      >>  $out
+echo "; $opcode m32,i32"  >>  $out
+echo                      >>  $out
+echo "  ${opcode} dword [mem32], imm32"    >> $out
 echo                      >>  $out
 
 
@@ -232,14 +233,12 @@ then
 fi
 
 
+
 echo "  mov rax, 60"      >>  $out
 echo "  mov rdi, 0"       >>  $out
 echo "  syscall"          >>  $out
 
-
-cat $out
-
-run=1
+run=0
 if [ $run -eq "1" ]
 then
   echo

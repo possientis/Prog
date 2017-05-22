@@ -337,21 +337,6 @@ _start:
 ; adc m8,i8
 
   adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
-  adc byte [mem8], imm8
 
 
 ; adc r16,r16
@@ -677,21 +662,6 @@ _start:
 ; adc m16,i16
 
   adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
-  adc word [mem16], imm16
 
 
 ; adc r32,r32
@@ -1012,6 +982,11 @@ _start:
   adc r13d, imm32
   adc r14d, imm32
   adc r15d, imm32
+
+
+; adc m32,i32
+
+  adc dword [mem32], imm32
 
 
 ; adc r64,r64

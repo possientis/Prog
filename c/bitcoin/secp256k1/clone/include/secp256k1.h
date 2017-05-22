@@ -159,6 +159,8 @@ typedef int (*secp256k1_nonce_function)(
 #define SECP256K1_EC_COMPRESSED (SECP256K1_FLAGS_TYPE_COMPRESSION | SECP256K1_FLAGS_BIT_COMPRESSION)
 #define SECP256K1_EC_UNCOMPRESSED (SECP256K1_FLAGS_TYPE_COMPRESSION)
 
+SECP256K1_API int secp256k1_check(void);
+
 /** Create a secp256k1 context object.
  *
  *  Returns: a newly created context object.

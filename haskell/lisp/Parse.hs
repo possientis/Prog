@@ -16,8 +16,9 @@ spaces :: Stream s m Char => ParsecT s u m ()
 spaces = skipMany1 space
 
 strChar :: Stream s m Char => ParsecT s u m Char
-strChar = noneOf "\\\"" <|> (char '\\' >> char '"')
-
+strChar = (noneOf "\\\"") <|> 
+          (char '\\' >> char '"') <|>
+          (char '\\' >> char '\\')
 
 parseString :: Stream s m Char => ParsecT s u m LispVal
 parseString = do 

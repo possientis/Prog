@@ -24,6 +24,9 @@ option=$(sh option.sh)
 # testing carry 
 ./carry/test.sh
 
+# testing isa
+./isa/test.sh
+
 cd ${DIR}
 echo
 echo "64 bits tests completed successfully"

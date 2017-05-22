@@ -12,12 +12,16 @@ extern void yyset_in(FILE*);
   char *string;   /* string buffer */
 }
 
-%token COMMAND ACTION IGNORE EXECUTE
+%token COMMAND ACTION IGNORE EXECUTE ITEM
 %token <string> QSTRING
 
 %%
-start:  COMMAND action
-     ;
+item:   ITEM command action
+      ;
+
+command: /* empty */
+       | COMMAND
+       ;
 
 action: ACTION IGNORE
       | ACTION EXECUTE QSTRING

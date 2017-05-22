@@ -1,5 +1,5 @@
 %{
-#include "MGL2.tab.h"
+#include "MGL3.tab.h"
 
 int lineno;
 int yylen;
@@ -29,6 +29,7 @@ action      { return ACTION; }
 execute     { return EXECUTE; }
 command     { return COMMAND; }
 ignore      { return IGNORE; }
+item        { return ITEM; }
 {nl}        { lineno++; }
 .           { return yytext[0]; }
 

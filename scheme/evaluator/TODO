@@ -1,3 +1,4 @@
+resolve bug in test-dorun.scm (with dorun in application.scm)
 understand why dorun in application.scm leads to unit-test failure
 decide whether to keep dummy form 'define-syntax' interpreter
 decide whether to keep form 'dorun' in interpreter

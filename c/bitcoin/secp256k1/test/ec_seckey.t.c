@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-#include "secp256k1.h"
+#include <secp256k1.h>
 #include "test.h"
 
 static int test_ec_seckey_verify();

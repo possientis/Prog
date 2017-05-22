@@ -1,0 +1,2 @@
+command action execute "/bin/sh"
+

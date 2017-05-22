@@ -37,6 +37,10 @@
 (cond (#f   (display "cond.11.3 "))
       (else (display "cond.11.0 ") (display "cond.11.1 ") (display "cond.11.2\n")))
 
+(cond (else (display "will be displayed\n")))
+(let ((else #f))
+  (cond (else (display "won't be displayed\n"))))
+
 
 (define-syntax cond2
   (lambda (x)
@@ -47,7 +51,7 @@
        (syntax (begin e1 e2 ...)))
       ((_ (e0 e1 e2 ...)) (syntax (if e0 (begin e1 e2 ...))))
       ((_ (e0 e1 e2 ...) c1 c2 ...)
-       (syntax (if e0 (begin e1 e2 ...) (cond c1 c2 ...)))))))
+       (syntax (if e0 (begin e1 e2 ...) (cond2 c1 c2 ...)))))))
 
 
 (newline)(newline)
@@ -74,6 +78,9 @@
         (else (display "cond2.11.0 ") (display "cond2.11.1 ") (display "cond2.11.2\n")))
 
 
+(cond2 (else (display "will be displayed\n")))
+(let ((else #f))
+  (cond2 (else (display "won't be displayed\n"))))
 
 
 

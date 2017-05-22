@@ -1,0 +1,3 @@
+item 
+command action execute "/bin/sh"
+

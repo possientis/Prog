@@ -334,6 +334,11 @@ _start:
   mov r15b, imm8
 
 
+; mov m8,i8
+
+  mov byte [mem8], imm8
+
+
 ; mov r16,r16
 
   mov ax, ax
@@ -654,6 +659,11 @@ _start:
   mov r15w, imm16
 
 
+; mov m16,i16
+
+  mov word [mem16], imm16
+
+
 ; mov r32,r32
 
   mov eax, eax
@@ -972,6 +982,11 @@ _start:
   mov r13d, imm32
   mov r14d, imm32
   mov r15d, imm32
+
+
+; mov m32,i32
+
+  mov dword [mem32], imm32
 
 
 ; mov r64,r64

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "secp256k1.h"
+#include <secp256k1.h>
 #include "test.h"
 
 int test_callback()
