@@ -8,7 +8,8 @@ cd ${HOME}
 echo
 echo "secp256k1 tests starting..."
 
-make; ./a.out; ./clean.sh
+cp Makefile.bak Makefile
+make; LD_LIBRARY_PATH=../clone/.libs ./a.out; ./clean.sh
 
 cd ${DIR}
 echo

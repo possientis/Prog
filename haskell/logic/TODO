@@ -1,1 +1,1 @@
-fopl: continue Test_SubFormula
+fopl: check p <= q -> var p <= var q

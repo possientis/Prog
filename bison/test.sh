@@ -74,6 +74,17 @@ flex MGL3.l; bison -d MGL3.y;
 gcc MGL3.tab.c lex.yy.c -ll; ./a.out < MGL3.txt; ./clean.sh
 echo
 
+echo "Testing menu generator language 4 ..."
+flex MGL4.l; bison -d MGL4.y;
+gcc MGL4.tab.c lex.yy.c -ll; ./a.out < MGL4.txt; ./clean.sh
+echo
+
+echo "Testing menu generator language 5 ..."
+flex MGL5.l; bison -d MGL5.y;
+gcc MGL5.tab.c lex.yy.c -ll; ./a.out < MGL5.txt; ./clean.sh
+echo
+
+
 
 
 cd ${DIR}

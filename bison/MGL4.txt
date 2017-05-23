@@ -1,0 +1,5 @@
+item command sh action execute "/bin/sh"
+item command bash action execute "/bin/bash"
+item action execute "/bin/ls"
+item action ignore
+

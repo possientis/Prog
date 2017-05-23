@@ -1,22 +1,26 @@
+module Identity
+  ( Id(..)
+  ) where
+ 
 import Control.Applicative
 import Control.Monad
 import Control.Monad.Trans
 
-newtype Identity a = Identity { runIdentity :: a }
+newtype Id a = Id { runIdentity :: a }
 
-instance Functor Identity where
+instance Functor Id where
   fmap = liftM
 
-instance Applicative Identity where
+instance Applicative Id where
   pure  = return
   (<*>) = ap
 
-instance Monad Identity where
-  return = Identity
+instance Monad Id where
+  return = Id
   (>>=) k f = f $ runIdentity k
 
 
-newtype IdentityT m a = IdentityT { run :: m (Identity a) }
+newtype IdentityT m a = IdentityT { run :: m (Id a) }
 
 instance Monad m => Functor (IdentityT m) where
   fmap = liftM
@@ -28,15 +32,12 @@ instance Monad m => Applicative (IdentityT m) where
 instance Monad m => Monad (IdentityT m) where
   return    = IdentityT . return . return 
   (>>=) k f = IdentityT $ do
-    Identity a <- run k
+    Id a <- run k
     run $ f a
 
 instance MonadTrans IdentityT where
-  lift = IdentityT . liftM Identity
+  lift = IdentityT . liftM Id
 
-IdentityT SomeMonad a -- SomeMonad a
-
-SomeMonadT Identity a -- Identity (SomeMonad a)
 
 
 

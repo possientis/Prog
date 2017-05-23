@@ -19,19 +19,19 @@ test9   = TestCase $ assertBool  "sub.9"  $ p1 <=: p1
 test10  = TestCase $ assertBool  "sub.10" $ not $ p1 <=: p2
 test11  = TestCase $ assertBool  "sub.11" $ p1 <=: p3
 test12  = TestCase $ assertBool  "sub.12" $ p1 <=: p4
-test13  = TestCase $ assertBool  "sub.13" $ not $ p1 <=: p5
+test13  = TestCase $ assertBool  "sub.13" $ p1 <=: p5
 test14  = TestCase $ assertBool  "sub.14" $ not $ p1 <=: p6
-test15  = TestCase $ assertBool  "sub.15" $ not $ p1 <=: p7
-test16  = TestCase $ assertBool  "sub.16" $ not $ p1 <=: p8
+test15  = TestCase $ assertBool  "sub.15" $ p1 <=: p7
+test16  = TestCase $ assertBool  "sub.16" $ p1 <=: p8
 
 test17  = TestCase $ assertBool  "sub.17" $ not $ p2 <=: p1
 test18  = TestCase $ assertBool  "sub.18" $ p2 <=: p2
 test19  = TestCase $ assertBool  "sub.19" $ p2 <=: p3
 test20  = TestCase $ assertBool  "sub.20" $ not $ p2 <=: p4
 test21  = TestCase $ assertBool  "sub.21" $ not $ p2 <=: p5
-test22  = TestCase $ assertBool  "sub.22" $ not $ p2 <=: p6
-test23  = TestCase $ assertBool  "sub.23" $ not $ p2 <=: p7
-test24  = TestCase $ assertBool  "sub.24" $ not $ p2 <=: p8
+test22  = TestCase $ assertBool  "sub.22" $ p2 <=: p6
+test23  = TestCase $ assertBool  "sub.23" $ p2 <=: p7
+test24  = TestCase $ assertBool  "sub.24" $ p2 <=: p8
 
 test25  = TestCase $ assertBool  "sub.25" $ not $ p3 <=: p1
 test26  = TestCase $ assertBool  "sub.26" $ not $ p3 <=: p2
@@ -39,8 +39,8 @@ test27  = TestCase $ assertBool  "sub.27" $ p3 <=: p3
 test28  = TestCase $ assertBool  "sub.28" $ not $ p3 <=: p4
 test29  = TestCase $ assertBool  "sub.29" $ not $ p3 <=: p5
 test30  = TestCase $ assertBool  "sub.30" $ not $ p3 <=: p6
-test31  = TestCase $ assertBool  "sub.31" $ not $ p3 <=: p7
-test32  = TestCase $ assertBool  "sub.32" $ not $ p3 <=: p8
+test31  = TestCase $ assertBool  "sub.31" $ p3 <=: p7
+test32  = TestCase $ assertBool  "sub.32" $ p3 <=: p8
 
 test33  = TestCase $ assertBool  "sub.33" $ not $ p4 <=: p1
 test34  = TestCase $ assertBool  "sub.34" $ not $ p4 <=: p2
@@ -57,8 +57,8 @@ test43  = TestCase $ assertBool  "sub.43" $ not $ p5 <=: p3
 test44  = TestCase $ assertBool  "sub.44" $ not $ p5 <=: p4
 test45  = TestCase $ assertBool  "sub.45" $ p5 <=: p5
 test46  = TestCase $ assertBool  "sub.46" $ not $ p5 <=: p6
-test47  = TestCase $ assertBool  "sub.47" $ p5 <=: p7
-test48  = TestCase $ assertBool  "sub.48" $ p5 <=: p8
+test47  = TestCase $ assertBool  "sub.47" $ not $ p5 <=: p7
+test48  = TestCase $ assertBool  "sub.48" $ not $ p5 <=: p8
 
 test49  = TestCase $ assertBool  "sub.49" $ not $ p6 <=: p1
 test50  = TestCase $ assertBool  "sub.50" $ not $ p6 <=: p2
@@ -66,8 +66,8 @@ test51  = TestCase $ assertBool  "sub.51" $ not $ p6 <=: p3
 test52  = TestCase $ assertBool  "sub.52" $ not $ p6 <=: p4
 test53  = TestCase $ assertBool  "sub.53" $ not $ p6 <=: p5
 test54  = TestCase $ assertBool  "sub.54" $ p6 <=: p6
-test55  = TestCase $ assertBool  "sub.55" $ p6 <=: p7
-test56  = TestCase $ assertBool  "sub.56" $ p6 <=: p8
+test55  = TestCase $ assertBool  "sub.55" $ not $ p6 <=: p7
+test56  = TestCase $ assertBool  "sub.56" $ not $ p6 <=: p8
 
 test57  = TestCase $ assertBool  "sub.57" $ not $ p7 <=: p1
 test58  = TestCase $ assertBool  "sub.58" $ not $ p7 <=: p2
@@ -76,7 +76,7 @@ test60  = TestCase $ assertBool  "sub.60" $ not $ p7 <=: p4
 test61  = TestCase $ assertBool  "sub.61" $ not $ p7 <=: p5
 test62  = TestCase $ assertBool  "sub.62" $ not $ p7 <=: p6
 test63  = TestCase $ assertBool  "sub.63" $ p7 <=: p7
-test64  = TestCase $ assertBool  "sub.64" $ p7 <=: p8
+test64  = TestCase $ assertBool  "sub.64" $ not $ p7 <=: p8
 
 test65  = TestCase $ assertBool  "sub.65" $ not $ p8 <=: p1
 test66  = TestCase $ assertBool  "sub.66" $ not $ p8 <=: p2

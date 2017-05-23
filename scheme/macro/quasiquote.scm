@@ -1,3 +1,5 @@
+; both scm and guile
+
 (newline)
 (display "quasiquotes:\n")
 (display (quasiquote (0 1 2)))(newline)                 ; (0,1,2)

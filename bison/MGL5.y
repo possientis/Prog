@@ -1,0 +1,72 @@
+%{
+#include <stdio.h>
+
+extern int yylex(void);
+extern int yyerror(const char*);
+extern FILE *yyin;
+extern void yyset_in(FILE*);
+
+%}
+
+%union {
+  char *string;   /* string buffer */
+}
+
+%token COMMAND ACTION IGNORE EXECUTE ITEM TITLE
+%token <string> QSTRING ID
+
+%%
+
+start: titles items
+
+items:              /* empty (required for recursive rules) */
+     | items item   /* left recursion better for bison */
+     ;
+
+item:   ITEM command action
+    ;
+
+command: /* empty */
+       | COMMAND ID
+       ;
+
+action: ACTION IGNORE
+      | ACTION EXECUTE QSTRING
+      ;
+
+titles: /* empty*/
+      | titles title
+      ;
+
+title:  TITLE QSTRING
+     ;
+
+%%
+
+int main()
+{
+
+  printf("MGL is running...\n");
+
+  yyset_in(stdin);
+
+  yyparse();
+
+  printf("parsing was successful...\n");
+
+  return 0;
+}
+
+int yyerror(const char *s)
+{
+  fprintf(stderr, "%s\n", s);
+  return 1;
+}
+
+
+
+
+
+
+
+

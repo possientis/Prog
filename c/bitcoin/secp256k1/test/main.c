@@ -9,7 +9,7 @@
 
 int main()
 {
-//  assert(secp256k1_check());
+  assert(secp256k1_check());
   assert(test_setup() == 0);
   assert(test_macro() == 0);
   assert(test_context() == 0);
