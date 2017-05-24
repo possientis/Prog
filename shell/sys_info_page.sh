@@ -22,10 +22,17 @@ _EOF_
 }
 
 report_home_space () {
-  cat <<- _EOF_
-          <H2>Home Space Utilization</H2>
-          <PRE>$(du -sh /home/john 2>/dev/null)</PRE>
+  if [[ $(id -u) -eq 0 ]]; then
+    cat <<- _EOF_
+          <H2>Home Space Utilizationo (All users)</H2>
+          <PRE>$(du -sh /home/* 2>/dev/null)</PRE>
 _EOF_
+  else
+    cat <<- _EOF_
+          <H2>Home Space Utilization ($USER)</H2>
+          <PRE>$(du -sh $HOME 2>/dev/null)</PRE>
+_EOF_
+  fi
   return 
 }
 

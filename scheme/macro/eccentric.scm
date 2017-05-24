@@ -210,8 +210,8 @@
 
 (nth-value (compute-n) (compute-values))
 
-=> (call-with-values (lambda () (compute-values))
-     (lambda all-values (list-ref all-values (compute-n))))
+; => (call-with-values (lambda () (compute-values))
+;      (lambda all-values (list-ref all-values (compute-n))))
 
 ; Sometimes it is difficult to understand why a pattern didn't match
 ; something you thought it should or why it did match something it

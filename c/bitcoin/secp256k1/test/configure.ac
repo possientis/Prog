@@ -6,7 +6,7 @@ AC_INIT([Test_secp256k1], [1.0], [john@right])
 AM_INIT_AUTOMAKE
 #LT_PREREQ([2.4])
 #LT_INIT([dlopen])
-#AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_SRCDIR([src/main.c])
 #AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -54,7 +54,9 @@ AM_PROG_CC_C_O
 #
 #
 #
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile
+                 src/Makefile])
+            
 #AC_CONFIG_FILES([Makefile
 #                 common/Makefile
                  include/Makefile

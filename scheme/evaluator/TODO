@@ -1,7 +1,5 @@
-resolve bug in test-dorun.scm (with dorun in application.scm)
-understand why dorun in application.scm leads to unit-test failure
-decide whether to keep dummy form 'define-syntax' interpreter
-decide whether to keep form 'dorun' in interpreter
+remove force-thunk from decrease! in dict.scm
+lazy-run unit-test failing on lazy test
 unit-test do run
 test.scm : force-thunk not defined: what do we do?
 lazy-run frame-test.scm fails when adding frame3 (which is odd because it seems

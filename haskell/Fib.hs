@@ -1,19 +1,21 @@
 import Identity
+import PMD
 
-type M = Id
+type M = Pmd
 
 my_fib :: Integer -> M Integer
 my_fib = my_fib_acc 0 1
 
 my_fib_acc :: Integer -> Integer -> Integer -> M Integer
-my_fib_acc  _   fn1 1     = return fn1
-my_fib_acc  fn2 _   0     = return fn2
-my_fib_acc  fn1 fn2 n_rem = do
-  val <- my_fib_acc fn1 (fn2 + fn1) (n_rem - 1)
-  return val  
+my_fib_acc  n0 _   0      = return n0
+my_fib_acc  _   n1 1      = return n1
+my_fib_acc  n0 n1 n       = do
+  val <- my_fib_acc n1 (n0 + n1) (n - 1)
+  Pmd (val, putStrLn (show n1))
 
 
 main = do
-  let n = my_fib 5
-  print $ runIdentity n
+  let (Pmd (f25,prt)) = my_fib 25
+  prt
+  putStrLn ("f25 is " ++ show f25)
   

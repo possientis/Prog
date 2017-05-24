@@ -73,7 +73,7 @@ Axiom set_ext : forall a b:set,
 (* empty set exists *)
 Axiom empty_set : forall x:set, ~belong x EMPTY.
 
-Proposition EMPTY_empty : empty(EMPTY).
+Proposition EMPTY_is_empty : empty(EMPTY).
 Proof.
   unfold empty. apply empty_set.
 Qed.
@@ -84,6 +84,46 @@ Proof.
   unfold subset. intros y Hyx. apply False_ind. apply (Hx y). exact Hyx.
   unfold subset. intros y Hye. apply False_ind. apply (empty_set y). exact Hye.
 Qed.
+
+Proposition empty_iff_EMPTY : forall x:set,
+  empty x <-> x = EMPTY.
+Proof.
+  intros x. split. apply empty_set_unique.
+  intros H. rewrite H. exact EMPTY_is_empty.
+Qed.
+
+Proposition empty_or_inhabited: forall x:set,
+  x = EMPTY \/ inhabited x.
+Proof.
+  intros x. cut (~ inhabited x \/ inhabited x). intro H. elim H.
+  clear H. intro H. left. apply empty_set_unique. apply not_not.
+  intro H'. apply H. apply empty_not_inhabited. exact H'.
+  clear H. intro H. right. exact H. apply LEM.
+Qed.
+
+Parameter UPair : set -> set -> set.
+Axiom UPair1 : forall y z:set, belong y (UPair y z).
+Axiom UPair2 : forall y z:set, belong z (UPair y z).
+Axiom UPairE : forall x y z:set, belong x (UPair y z) -> x = y \/ x = z.
+
+Lemma upair_subset: forall a b:set, subset (UPair a b) (UPair b a).
+Proof.
+  intros a b. unfold subset. intros x Hx. cut (x = a \/ x = b).
+  intros H'. elim H'. 
+  clear H'. intro H'. rewrite H'. apply UPair2.
+  clear H'. intro H'. rewrite H'. apply UPair1.
+  apply UPairE. exact Hx.
+Qed.
+
+
+Proposition upair_commute : forall a b:set, UPair a b = UPair b a.
+Proof.
+  intros a b. apply set_ext. apply upair_subset. apply upair_subset. 
+Qed.
+
+
+
+(*
 
 Axiom belong_induction : forall P:set->Prop,
   (forall X:set, (forall x, belong x X -> P x) -> P X) -> forall X:set, P X.
@@ -100,5 +140,6 @@ Proof.
   apply H. exact L. apply LEM.
 Qed.
 
+*)
 
 
