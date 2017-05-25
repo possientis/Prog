@@ -12,7 +12,7 @@ echo "testing logic"
 ./lambda/test.sh
 
 cd ${DIR}
-echo '\ntest completed successfully\n'
+echo '\nAll logic tests completed successfully\n'
 
 
 

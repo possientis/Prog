@@ -1,2 +1,3 @@
-continue with autotools in test or revert to bash
-reenable test
+redirect everything to stderr
+make sure outptut makes sense
+happy that both are running?

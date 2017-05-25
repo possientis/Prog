@@ -27,7 +27,6 @@ Qed.
 
 
 Parameter set:Type.
-Parameter EMPTY : set.
 Parameter belong: set -> set -> Prop.
 
 Definition empty(a:set): Prop := forall x:set, ~ belong x a.
@@ -71,6 +70,7 @@ Axiom set_ext : forall a b:set,
   subset a b -> subset b a -> a = b.
 
 (* empty set exists *)
+Parameter EMPTY : set.
 Axiom empty_set : forall x:set, ~belong x EMPTY.
 
 Proposition EMPTY_is_empty : empty(EMPTY).
@@ -102,16 +102,16 @@ Proof.
 Qed.
 
 Parameter UPair : set -> set -> set.
-Axiom UPair1 : forall y z:set, belong y (UPair y z).
-Axiom UPair2 : forall y z:set, belong z (UPair y z).
+Axiom UPairI1 : forall y z:set, belong y (UPair y z).
+Axiom UPairI2 : forall y z:set, belong z (UPair y z).
 Axiom UPairE : forall x y z:set, belong x (UPair y z) -> x = y \/ x = z.
 
 Lemma upair_subset: forall a b:set, subset (UPair a b) (UPair b a).
 Proof.
   intros a b. unfold subset. intros x Hx. cut (x = a \/ x = b).
   intros H'. elim H'. 
-  clear H'. intro H'. rewrite H'. apply UPair2.
-  clear H'. intro H'. rewrite H'. apply UPair1.
+  clear H'. intro H'. rewrite H'. apply UPairI2.
+  clear H'. intro H'. rewrite H'. apply UPairI1.
   apply UPairE. exact Hx.
 Qed.
 
@@ -120,6 +120,46 @@ Proposition upair_commute : forall a b:set, UPair a b = UPair b a.
 Proof.
   intros a b. apply set_ext. apply upair_subset. apply upair_subset. 
 Qed.
+
+Parameter Union : set -> set.
+Axiom UnionI : forall X x y: set, belong x y -> belong y X -> belong x (Union X).
+Axiom UnionE : forall X x: set, 
+  belong x (Union X) -> exists y:set, belong x y /\ belong y X.
+
+Parameter Power : set -> set.
+Axiom PowerI : forall x y:set, subset y x -> belong y (Power x).
+Axiom PowerE : forall x y:set, belong y (Power x) -> subset y x.
+
+Parameter Repl : (set -> set) -> set -> set.
+Axiom ReplI : forall (F:set->set)(X:set)(x:set),
+  belong x X -> belong (F x) (Repl F X). 
+Axiom ReplE : forall (F:set->set)(X:set)(y:set),
+  belong y (Repl F X) -> exists x:set, belong x X /\ y = (F x).
+
+
+(* Grothendieck Universes *)
+Parameter GU : set -> set.
+Axiom GUI : forall X:set, belong X (GU X).          (* GU X has element X *)
+
+Axiom GUTrans: forall X x y:set,
+  belong x y -> belong y (GU X) -> belong x (GU X). (* GU X is transitive set *)
+
+Axiom GUUpair : forall X y x:set,                   (* closure under pairing *)
+  belong x (GU X) -> belong y (GU X) -> belong (UPair x y) (GU X).
+
+Axiom GUUnion : forall X x:set,                     (* closure under union *)
+  belong x (GU X) -> belong (Union x) (GU X).    
+
+Axiom GUPower : forall X x:set,                     (* closure under power set op *)
+  belong x (GU X) -> belong (Power x) (GU X).    
+
+Axiom GURepl : forall (F:set -> set)(X x:set),
+  belong x (GU X) -> 
+  (forall z:set, belong z x -> belong (F z) (GU X)) ->
+  belong (Repl F x) (GU X).
+
+
+
 
 
 

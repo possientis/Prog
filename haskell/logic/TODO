@@ -1,1 +1,1 @@
-fopl: check p <= q -> var p <= var q
+fopl, lambda: sub (f p) = f[sub p] 

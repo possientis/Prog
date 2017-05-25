@@ -1,20 +1,21 @@
-screen main
-title "Main screen"
+#screen main
+#title "Main screen"
 #item "fruits" command fruits action menu fruits
 #item "grains" command grains action menu grains
-#item "quit" command quit action quit
-end main
-
+#item "quit" command exit action quit
+#end main
+#
 #screen fruit
 #title "Fruits"
 #item "grape" command grape action execute "/fruit/grape"
 #item "melon" command melon action execute "/fruit/melon"
 #item "main" command main action menu main
 #end fruits
-
+#
 #screen grains
 #title "Grains"
 #item "wheat" command wheat action execute "/grain/wheat"
 #item "barley" command barley action execute "/grain/barley"
 #item "main" command main action menu main
 #end grains
+

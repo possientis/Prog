@@ -3,8 +3,10 @@ module Test_SubFormula
   ) where
 
 import Test.HUnit
+import Data.Set
 import Test_data
 import SubFormula
+import Variable
 
 test1   = TestCase $ assertEqual "sub.1" (sub p1) sub1
 test2   = TestCase $ assertEqual "sub.2" (sub p2) sub2
@@ -87,7 +89,18 @@ test70  = TestCase $ assertBool  "sub.70" $ not $ p8 <=: p6
 test71  = TestCase $ assertBool  "sub.71" $ not $ p8 <=: p7
 test72  = TestCase $ assertBool  "sub.72" $ p8 <=: p8
 
-
+-- p <=: q -> var p <= var q (dummy tests to keep count same as lambda)
+test73  = TestCase $ assertBool  "sub.73" $ isSubsetOf (var p1) (var p3)
+test74  = TestCase $ assertBool  "sub.74" $ isSubsetOf (var p1) (var p4)
+test75  = TestCase $ assertBool  "sub.75" $ isSubsetOf (var p2) (var p3)
+test76  = TestCase $ assertBool  "sub.76" $ isSubsetOf (var p5) (var p7)
+test77  = TestCase $ assertBool  "sub.77" $ isSubsetOf (var p5) (var p8)
+test78  = TestCase $ assertBool  "sub.78" $ isSubsetOf (var p6) (var p7)
+test79  = TestCase $ assertBool  "sub.79" $ isSubsetOf (var p6) (var p8)
+test80  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8)
+test81  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8) -- dummy
+test82  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8) -- dummy
+test83  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8) -- dummy
 
 test_SubFormula = TestLabel "test_SubFormula" $ TestList
   [ test1,  test2,  test3,  test4,  test5,  test6,  test7,  test8
@@ -99,4 +112,6 @@ test_SubFormula = TestLabel "test_SubFormula" $ TestList
   , test49, test50, test51, test52, test53, test54, test55, test56
   , test57, test58, test59, test60, test61, test62, test63, test64
   , test65, test66, test67, test68, test69, test70, test71, test72
+  , test73, test74, test75, test76, test77, test78, test79, test80
+  , test81, test82, test83
   ]

@@ -6,14 +6,19 @@ HOME=/home/john/Prog/c/bitcoin/secp256k1/test
 cd ${HOME}
 
 echo
-echo "secp256k1 tests starting..."
+echo "testing main secp256k1 library..."
+bash run.sh main 
+echo
 
-cp Makefile.bak Makefile
-make; LD_LIBRARY_PATH=../clone/.libs ./a.out; ./clean.sh
+echo
+echo "testing cloned secp256k1 library..."
+bash run.sh clone 
+echo
 
 cd ${DIR}
 echo
-echo '\nsecp256k1 test completed successfully\n'
+echo "All secp256k1 tests completed successfully"
+echo
 
 
 

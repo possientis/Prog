@@ -2,7 +2,7 @@ import Control.Monad.State.Lazy
 import Data.Unique
 import Data.Maybe
 import Prelude hiding (id)
-import Control.Concurrent.STM.TVar
+import GHC.Conc.Sync
 
 type WorldM = StateT World IO
 
@@ -28,3 +28,11 @@ data WorldChange
   | RemoveObj Unique
 
 type ChangeBucket = TVar [ WorldChange ]
+
+
+mainLoop :: ChangeBucket -> WorldM ()
+mainLoop cB = 
+  -- do some stuff
+  -- it's probably fun
+  -- using your cheeky wee WorldM accessors
+  mainLoop cB -- recurse on shared variable

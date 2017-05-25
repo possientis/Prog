@@ -18,10 +18,9 @@ extern void yyset_in(FILE*);
 
 %%
 
-screens: /* empty */
+screens:
        | screens screen
        ;
-
 screen : screen_name screen_contents screen_terminator
        | screen_name screen_terminator
        ;
@@ -36,21 +35,26 @@ screen_terminator: END ID
 
 screen_contents: titles lines
 
-titles: /* empty*/
+titles:
       | titles title
       ;
 
 title:  TITLE QSTRING
      ;
 
-lines: /* empty */
+lines: ITEM
+
+/*
+lines: 
      | lines line
      ;
+
+line: ITEM
 
 line: ITEM QSTRING command ACTION action attribute 
     ;
 
-command: /* empty */
+command:
        | COMMAND ID
        ;
 
@@ -60,12 +64,11 @@ action: EXECUTE QSTRING
       | IGNORE
       ;
 
-
-
-attribute: /* empty*/
+attribute:
          | ATTRIBUTE VISIBLE
          | ATTRIBUTE INVISIBLE
          ;
+*/
 
 %%
 

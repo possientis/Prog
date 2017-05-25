@@ -9,7 +9,15 @@
 
 int main()
 {
+  printf("******************************************************************\n");
+#if CLONE
+  printf("*                   Testing cloned library                       *\n");
   assert(secp256k1_check());
+#else
+  printf("*                    Testing main library                        *\n");
+#endif
+  printf("******************************************************************\n");
+
   assert(test_setup() == 0);
   assert(test_macro() == 0);
   assert(test_context() == 0);
