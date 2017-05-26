@@ -121,7 +121,8 @@
         (begin
           (set! mem-enabled? #f)    ; no more calls to increase! until set to #t
           (let ((new (make-vector (* 2 size)))
-                (elems (if (defined? dorun) (dorun (temp-vector)) (temp-vector))))  ; whole table as vector (linear time)
+                ; dorun needs for lazy evaluator
+                (elems (if (defined? dorun) (dorun (temp-vector)) (temp-vector))))  
             (set! data new)         ; new empty vector with double the size
             (vector-fill! data '()) ; initialization
             (set! size (* 2 size))  ;
@@ -143,8 +144,8 @@
         (begin
           (set! mem-enabled? #f)    ; no calls to increase! until set to #t
           (let ((new (make-vector (/ size 2)))
-                (elems (temp-vector)))  ; whole table as vector (linear time)
-            (if (defined? force-thunk) (force-thunk elems)) ; needed for lazy evaluator
+                ; dorun needed for lazy evaluator
+                (elems (if (defined? dorun) (dorun (temp-vector)) (temp-vector))))  
             (set! data new)         ; new empty vector with double the size
             (vector-fill! data '()) ; initialization
             (set! size (/ size 2))  ;

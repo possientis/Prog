@@ -541,22 +541,22 @@ A second trick is to write a debugging template:
 
  (define-syntax bind-variables
    (syntax-rules ()
-     ((bind-variables () form . forms)
+     ((_ () form . forms)
       (begin form . forms))
 
-     ((bind-variables ((variable value0 value1 . more) . more-bindings) form . forms)
-      (syntax-error "bind-variables illegal binding" (variable value0 value1 . more)))
+     ((_ ((var val0 val1 . more) . more-bindings) form . forms)
+      (syntax-error "bind-variables illegal binding" (var val0 val1 . more)))
 
-     ((bind-variables ((variable value) . more-bindings) form . forms)
+     ((_ ((variable value) . more-bindings) form . forms)
       (let ((variable value)) (bind-variables more-bindings form . forms)))
 
-     ((bind-variables ((variable) . more-bindings) form . forms)
+     ((_ ((variable) . more-bindings) form . forms)
       (let ((variable #f)) (bind-variables more-bindings form . forms)))
 
-     ((bind-variables (variable . more-bindings) form . forms)
+     ((_ (variable . more-bindings) form . forms)
       (let ((variable #f)) (bind-variables more-bindings form . forms)))
 
-     ((bind-variables bindings form . forms)
+     ((_ bindings form . forms)
       (syntax-error "Bindings must be a list." bindings))))
 
 ; BIND-VARIABLES is much like LET*, but you are allowed to omit the

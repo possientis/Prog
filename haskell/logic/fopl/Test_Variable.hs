@@ -4,6 +4,7 @@ module Test_Variable
 
 import Test.HUnit
 import Data.Set
+import Data.Functor ((<$>))
 
 import Test_data
 import Variable

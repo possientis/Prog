@@ -11,22 +11,22 @@
 # define STR_(EXP) #EXP /* # is preprocesssor 'stringify operator' */
 
 #define DISPLAY_INT_MACRO(NAME) \
-  printf(#NAME" is defined and equal to %d\n", NAME)
+  fprintf(stderr, #NAME" is defined and equal to %d\n", NAME)
 
 #define DISPLAY_STR_MACRO(NAME) \
-  printf(#NAME" is defined and equal to %s\n", STR(NAME))
+  fprintf(stderr, #NAME" is defined and equal to %s\n", STR(NAME))
 
 #define MACRO_NOT_DEFINED(NAME) \
-  printf(#NAME" is not defined\n") 
+  fprintf(stderr, #NAME" is not defined\n") 
 
 #define MACRO_DEFINED(NAME) \
-  printf(#NAME" is defined\n") 
+  fprintf(stderr, #NAME" is defined\n") 
 
 
 int test_macro() 
 {
 
-  printf("\ntesting macros...\n");
+  fprintf(stderr, "\ntesting macros...\n");
 
 # if defined(SECP256K1_GNUC_PREREQ)
   MACRO_DEFINED(SECP256K1_GNUC_PREREQ);
