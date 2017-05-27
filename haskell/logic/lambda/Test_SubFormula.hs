@@ -5,6 +5,7 @@ module Test_SubFormula
 import Test.HUnit
 import Data.Set
 import Prelude hiding (map) -- conflict with Data.Set
+import Data.Functor ((<$>))
 import Test_data
 import SubFormula
 import Variable
