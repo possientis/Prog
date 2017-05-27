@@ -4,9 +4,11 @@ module Test_SubFormula
 
 import Test.HUnit
 import Data.Set
+import Prelude hiding (map) -- conflict with Data.Set
 import Test_data
 import SubFormula
 import Variable
+
 
 test1   = TestCase $ assertEqual "sub.1" (sub p1) sub1
 test2   = TestCase $ assertEqual "sub.2" (sub p2) sub2
@@ -89,7 +91,8 @@ test70  = TestCase $ assertBool  "sub.70" $ not $ p8 <=: p6
 test71  = TestCase $ assertBool  "sub.71" $ not $ p8 <=: p7
 test72  = TestCase $ assertBool  "sub.72" $ p8 <=: p8
 
--- p <=: q -> var p <= var q (dummy tests to keep count same as lambda)
+-- if p is a subformula of q, then the variables of p are a subset of those of q
+-- p <=: q -> var p <= var q
 test73  = TestCase $ assertBool  "sub.73" $ isSubsetOf (var p1) (var p3)
 test74  = TestCase $ assertBool  "sub.74" $ isSubsetOf (var p1) (var p4)
 test75  = TestCase $ assertBool  "sub.75" $ isSubsetOf (var p2) (var p3)
@@ -98,9 +101,20 @@ test77  = TestCase $ assertBool  "sub.77" $ isSubsetOf (var p5) (var p8)
 test78  = TestCase $ assertBool  "sub.78" $ isSubsetOf (var p6) (var p7)
 test79  = TestCase $ assertBool  "sub.79" $ isSubsetOf (var p6) (var p8)
 test80  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8)
-test81  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8) -- dummy
-test82  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8) -- dummy
-test83  = TestCase $ assertBool  "sub.80" $ isSubsetOf (var p7) (var p8) -- dummy
+test81  = TestCase $ assertBool  "sub.81" $ isSubsetOf (var p7) (var p8) -- dummy
+test82  = TestCase $ assertBool  "sub.82" $ isSubsetOf (var p7) (var p8) -- dummy
+test83  = TestCase $ assertBool  "sub.83" $ isSubsetOf (var p7) (var p8) -- dummy
+
+-- the subformulas of (f p) is the direct image by f of the subformulas of p
+-- sub (f p) = f[sub p] 
+test84  = TestCase $ assertEqual  "sub.84" (sub (f1<$>p1)) $ map (f1<$>) (sub p1)
+test85  = TestCase $ assertEqual  "sub.85" (sub (f1<$>p2)) $ map (f1<$>) (sub p2)
+test86  = TestCase $ assertEqual  "sub.86" (sub (f1<$>p3)) $ map (f1<$>) (sub p3)
+test87  = TestCase $ assertEqual  "sub.87" (sub (f1<$>p4)) $ map (f1<$>) (sub p4)
+test88  = TestCase $ assertEqual  "sub.88" (sub (f1<$>p5)) $ map (f1<$>) (sub p5)
+test89  = TestCase $ assertEqual  "sub.89" (sub (f1<$>p6)) $ map (f1<$>) (sub p6)
+test90  = TestCase $ assertEqual  "sub.90" (sub (f1<$>p7)) $ map (f1<$>) (sub p7)
+test91  = TestCase $ assertEqual  "sub.91" (sub (f1<$>p8)) $ map (f1<$>) (sub p8)
 
 test_SubFormula = TestLabel "test_SubFormula" $ TestList
   [ test1,  test2,  test3,  test4,  test5,  test6,  test7,  test8
@@ -113,5 +127,9 @@ test_SubFormula = TestLabel "test_SubFormula" $ TestList
   , test57, test58, test59, test60, test61, test62, test63, test64
   , test65, test66, test67, test68, test69, test70, test71, test72
   , test73, test74, test75, test76, test77, test78, test79, test80
-  , test81, test82, test83
+  , test81, test82, test83, test84, test85, test86, test87, test88
+  , test89, test90, test91
   ]
+
+
+

@@ -44,8 +44,4 @@ end         { return END; }
 .           { return yytext[0]; }
 %%
 
-int warning(const char *s, void* data)
-{
-  fprintf(stderr, "%s\n", s);
-  return 0;
-}
+

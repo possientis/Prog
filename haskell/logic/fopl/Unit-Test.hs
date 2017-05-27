@@ -4,6 +4,7 @@ import Test_Show
 import Test_Functor
 import Test_Variable
 import Test_SubFormula
+import Test_Substitution
 
 import System.Exit
 
@@ -11,6 +12,7 @@ import System.Exit
 
 tests = TestList 
   [ test_Eq, test_Show, test_Functor, test_Variable, test_SubFormula
+  , test_Substitution
   ]
 
 main = do

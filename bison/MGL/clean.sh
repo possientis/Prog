@@ -9,6 +9,7 @@ rm -f *.tab.h
 rm -f lex.yy.c
 rm -f *.o
 rm -f a.out
+rm -f screen.out
 
 cd ${DIR}
 

@@ -4,7 +4,6 @@
 extern int yylex(void);
 extern int yyerror(const char*);
 extern FILE *yyin;
-extern void yyset_in(FILE*);
 
 %}
 
@@ -42,14 +41,10 @@ titles:
 title:  TITLE QSTRING
      ;
 
-lines: ITEM
 
-/*
-lines: 
+lines: line 
      | lines line
      ;
-
-line: ITEM
 
 line: ITEM QSTRING command ACTION action attribute 
     ;
@@ -68,29 +63,8 @@ attribute:
          | ATTRIBUTE VISIBLE
          | ATTRIBUTE INVISIBLE
          ;
-*/
 
 %%
-
-int main()
-{
-
-  printf("MGL is running...\n");
-
-  yyset_in(stdin);
-
-  yyparse();
-
-  printf("parsing was successful...\n");
-
-  return 0;
-}
-
-int yyerror(const char *s)
-{
-  fprintf(stderr, "%s\n", s);
-  return 1;
-}
 
 
 

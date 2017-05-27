@@ -726,22 +726,21 @@ A second trick is to write a debugging template:
 ; 
  (define-syntax bind-variables1
    (syntax-rules ()
-     ((bind-variables1 () form . forms)
-      (begin form . forms))
+     ((_ () form . forms) (begin form . forms))
 
-     ((bind-variables1 ((variable value0 value1 . more) . more-bindings) form . forms)
-      (syntax-error "bind-variables illegal binding" (variable value0 value1 . more)))
+     ((_ ((var val0 val1 . more) . more-bindings) form . forms)
+      (syntax-error "bind-variables illegal binding" (var val0 val1 . more)))
 
-     ((bind-variables1 ((variable value) . more-bindings) form . forms)
-      (bind-variables1 more-bindings (let ((variable value)) form . forms)))
+     ((_ ((var val) . more-bindings) form . forms)
+      (bind-variables1 more-bindings (let ((var val)) form . forms)))
 
-     ((bind-variables1 ((variable) . more-bindings) form . forms)
-      (bind-variables1 more-bindings (let ((variable value)) form . forms)))
-
-     ((bind-variables1 (variable . more-bindings) form . forms)
+     ((_ ((variable) . more-bindings) form . forms)
       (bind-variables1 more-bindings (let ((variable #f)) form . forms)))
 
-     ((bind-variables1 bindings form . forms)
+     ((_ (variable . more-bindings) form . forms)
+      (bind-variables1 more-bindings (let ((variable #f)) form . forms)))
+
+     ((_ bindings form . forms)
       (syntax-error "Bindings must be a list." bindings))))
 
 
