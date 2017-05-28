@@ -38,11 +38,15 @@
 
 ; eval
 (define (strict-eval-sequence operands env)
+  (debug "[DEBUG]: strict-eval-sequence: operands = ")
+  (debug operands)(debug-newline)
   (if (null? operands)
     unspecified-value 
     (let ((first (strict-eval (car operands) env)))  ; side effects now
+      (debug "[DEBUG]: strict-eval-sequence: first = ")
+      (debug first)(debug-newline)
       (if (null? (cdr operands))
-        first
+        (force-thunk first)
         (begin
           (force-thunk first)  ; why do we need to add this line? yet we do ...
           (strict-eval-sequence (cdr operands) env))))))

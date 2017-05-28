@@ -144,8 +144,39 @@ Definition S (x:set) : set := union x (singleton x).
 Definition one : set := S O.
 Definition two : set := S one.
 
+Lemma unionl : forall (a b:set), subset a (union a b).
+Proof.
+  intros a b. unfold subset. intros x Hx. unfold union.
+  apply UnionI with (y:= a). exact Hx. apply UPairI1.
+Qed.
 
+Lemma unionr : forall (a b:set), subset b (union a b).
+Proof.
+  intros a b. unfold subset. intros x Hx. unfold union.
+  apply UnionI with (y:= b). exact Hx. apply UPairI2.
+Qed.
 
+Lemma subset_succ : forall (a:set), subset a (S a).
+Proof.
+  intros a. unfold S. apply unionl.
+Qed.
+
+Lemma belong_succ : forall (a:set), belong a (S a).
+Proof.
+  intros a. unfold S. unfold union.
+  apply UnionI with (y:= singleton a).
+  unfold singleton. apply UPairI1. apply UPairI2.
+Qed.
+
+Lemma inhabited_1 : inhabited one.
+Proof.
+  unfold inhabited. exists zero. apply belong_succ.
+Qed.
+
+Lemma inhabited_2 : inhabited two.
+Proof.
+  unfold inhabited. exists one. apply belong_succ.
+Qed.
 
 Parameter N : set.
 Axiom NI0 : belong O N.
@@ -262,4 +293,3 @@ Proof.
   intros L. elim L. clear L. intro L. exact L. clear L. intro L.
   apply H. exact L. apply LEM.
 Qed.
-

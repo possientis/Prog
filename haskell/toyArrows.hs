@@ -32,3 +32,17 @@ instance Category Morphism where
 instance Arrow Morphism where
   arr                           = Morphism
   (Morphism f) *** (Morphism g) = Morphism (\(x,y) -> (f x, g y))
+
+addA :: Arrow a => a b Int -> a b Int -> a b Int
+addA f g = proc x -> do
+  y <- f -< x
+  z <- g -< x
+  returnA -< y + z
+
+addA' :: Arrow a => a b Int -> a b Int -> a b Int
+addA' f g = arr (\x -> (x,x)) >>>
+  first f >>> arr (\(y,x) -> (x,y)) >>>
+  first g >>> arr (\(x,y) -> x + y)
+
+addA'' :: Arrow a => a b Int -> a b Int -> a b Int
+addA'' f g = f &&& g >>> arr (\(x,y) -> x + y)

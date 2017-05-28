@@ -17,6 +17,7 @@
 ;                 (display "[DEBUG]: try: running\n")
                  'done)))
       (lambda () 
+        (display "[DEBUG]: lazy? running\n")
         (set! **lazy?** #t)
         (try (unset-lazy)) 
         **lazy?**))))

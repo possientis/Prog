@@ -14,6 +14,26 @@ read -p "Enter a single item > "
 # is input a valid file name?
 if [[ $REPLY =~ ^[-[:alnum:]\._]+$ ]]; then
   echo "'$REPLY' is a valid filename."
+
+  if [[ -e $REPLY ]]; then
+    echo "And file '$REPLY' exists."
+  else
+    echo "However, file '$REPLY' does not exist."
+  fi
+
+  # is input a floating point number?
+  if [[ $REPLY =~ ^-?[[:digit:]]*\.[[:digit:]]+$ ]]; then
+    echo "'$REPLY' is a floating point number."
+  else
+    echo "'$REPLY' is not a floating point number."
+  fi
+
+  # is input an integer
+  if [[ $REPLY =~ ^-?[[:digit:]]+$ ]]; then
+    echo "'$REPLY' is an integer."
+  else
+    echo "'$REPLY' is not an integer."
+  fi
 else
   echo "The string '$REPLY' is not a valid file name"
 fi

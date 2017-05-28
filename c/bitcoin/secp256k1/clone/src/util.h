@@ -15,12 +15,19 @@
 #include <stdint.h>
 #include <stdio.h>
 
-typedef struct {
-    void (*fn)(const char *text, void* data);
-    const void* data;
+typedef struct 
+{
+
+  void (*fn)(const char *text, void* data);
+  const void* data;
+
 } secp256k1_callback;
 
-static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * const cb, const char * const text) {
+static SECP256K1_INLINE void 
+secp256k1_callback_call(
+  const secp256k1_callback * const cb, 
+  const char * const text) 
+{
     cb->fn(text, (void*)cb->data);
 }
 
@@ -68,12 +75,20 @@ static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * 
 #define VERIFY_SETUP(stmt)
 #endif
 
-static SECP256K1_INLINE void *checked_malloc(const secp256k1_callback* cb, size_t size) {
-    void *ret = malloc(size);
-    if (ret == NULL) {
-        secp256k1_callback_call(cb, "Out of memory");
-    }
-    return ret;
+static SECP256K1_INLINE void *
+checked_malloc(
+    
+  const secp256k1_callback* cb, 
+  size_t size) 
+
+{
+
+  void *ret = malloc(size);
+  if (ret == NULL) {
+    secp256k1_callback_call(cb, "Out of memory");
+  }
+    
+  return ret;
 }
 
 /* Macro for restrict, when available and not in a VERIFY build. */
@@ -107,6 +122,7 @@ static SECP256K1_INLINE void *checked_malloc(const secp256k1_callback* cb, size_
 # else
 #  define SECP256K1_GNUC_EXT
 # endif
+
 SECP256K1_GNUC_EXT typedef unsigned __int128 uint128_t;
 #endif
 
