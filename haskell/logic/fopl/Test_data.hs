@@ -2,7 +2,8 @@ module Test_data
   ( p1, p2, p3, p4, p5, p6, p7, p8
   , q1, q2, q3, q4, q5, q6, q7, q8
   , s1, s2, s3, s4, s5, s6, s7, s8
-  , v1, v2, v3, v4, v5, v6, v7, v8
+  , var1, var2, var3, var4, var5, var6, var7, var8
+  , free1, free2, free3, free4, free5, free6, free7, free8
   , sub1, sub2, sub3 , sub4, sub5, sub6, sub7, sub8
   , f1
   , x, y, z
@@ -41,14 +42,23 @@ q6 = belong z' y' :: Formula W
 q7 = imply q5 q6
 q8 = forall z' q7
 
-v1 = fromList [x,y]   :: Set V
-v2 = empty            :: Set V
-v3 = v1         
-v4 = v1
-v5 = fromList [x,z]   :: Set V 
-v6 = fromList [y,z]   :: Set V 
-v7 = fromList [x,y,z] :: Set V 
-v8 = v7
+var1 = fromList [x,y]   :: Set V
+var2 = empty            :: Set V
+var3 = var1         
+var4 = var1
+var5 = fromList [x,z]   :: Set V 
+var6 = fromList [y,z]   :: Set V 
+var7 = fromList [x,y,z] :: Set V 
+var8 = var7
+
+free1 = var1
+free2 = var2
+free3 = free1
+free4 = singleton y
+free5 = var5
+free6 = var6
+free7 = var7
+free8 = var1
 
 sub1 = singleton p1   :: Set (Formula V)
 sub2 = singleton p2   :: Set (Formula V)

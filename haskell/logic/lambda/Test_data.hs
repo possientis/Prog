@@ -2,8 +2,9 @@ module Test_data
   ( p1, p2, p3, p4, p5, p6, p7, p8
   , q1, q2, q3, q4, q5, q6, q7, q8
   , s1, s2, s3, s4, s5, s6, s7, s8
-  , v1, v2, v3, v4, v5, v6, v7, v8
-  , sub1, sub2, sub3 , sub4, sub5, sub6, sub7, sub8
+  , var1, var2, var3, var4, var5, var6, var7, var8
+  , free1, free2, free3, free4, free5, free6, free7, free8
+  , sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8
   , f1
   , x, y, z
   , x', y', z'
@@ -42,14 +43,24 @@ q7 = lambda x' (lambda y' q3)
 q8 = lambda x' (lambda y' (apply q1 q3))
 
 
-v1 = fromList [x]   :: Set V
-v2 = fromList [y]   :: Set V
-v3 = fromList [x,y] :: Set V         
-v4 = v1
-v5 = v3
-v6 = v3
-v7 = v3
-v8 = v7
+var1 = singleton x    :: Set V
+var2 = singleton y    :: Set V
+var3 = fromList [x,y] :: Set V         
+var4 = var1
+var5 = var3
+var6 = var3
+var7 = var3
+var8 = var7
+
+free1 = var1
+free2 = var2
+free3 = var3
+free4 = empty         :: Set V
+free5 = free4
+free6 = free4
+free7 = free4
+free8 = free4
+
 
 sub1 = singleton p1   :: Set (Formula V)
 sub2 = singleton p2   :: Set (Formula V)

@@ -178,6 +178,37 @@ Proof.
   unfold inhabited. exists one. apply belong_succ.
 Qed.
 
+Lemma belong_one: forall (a:set),
+  belong a one <-> a = O.
+Proof.
+  intros a. split. intros Ha. unfold one in Ha.
+  unfold S in Ha. unfold union in Ha.
+  apply UnionE in Ha. elim Ha.
+  clear Ha. intros x Hx. elim Hx.
+  clear Hx. intros Hx Hx'. apply UPairE in Hx'. elim Hx'.
+  clear Hx'. intro Hx'. apply False_ind. apply empty_set with (x:=a).
+  rewrite Hx' in Hx. unfold O in Hx. exact Hx.
+  clear Hx'. intro Hx'. rewrite Hx' in Hx. clear Hx'.
+  unfold singleton in Hx. apply UPairE in Hx. elim Hx.
+  clear Hx. intro Hx. exact Hx.
+  clear Hx. intro Hx. exact Hx.
+  intro Ha. rewrite Ha. apply belong_succ.
+Qed.
+
+
+Lemma subset_one: forall (a:set), 
+  subset a one -> a = O \/ a = one.
+Proof.
+  intros a Ha. cut (a = EMPTY \/ inhabited a). intros H. elim H. 
+  clear H. intros H. left. unfold O. exact H.
+  clear H. intros H. right.  apply set_ext. exact Ha.
+  unfold subset. intros x Hx. apply belong_one in Hx.
+  rewrite Hx. clear Hx x. unfold inhabited in H. elim H.
+  clear H. intros x Hx. cut (x = O). intros Hx'.
+  rewrite Hx' in Hx. exact Hx. apply belong_one. apply Ha. exact Hx.
+  apply empty_or_inhabited.
+Qed.
+  
 Parameter N : set.
 Axiom NI0 : belong O N.
 Axiom NIS : forall x:set, belong x N -> belong (S x) N.
@@ -293,3 +324,4 @@ Proof.
   intros L. elim L. clear L. intro L. exact L. clear L. intro L.
   apply H. exact L. apply LEM.
 Qed.
+
