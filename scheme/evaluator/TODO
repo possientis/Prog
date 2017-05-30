@@ -1,3 +1,5 @@
+understand while lazy-run of unit-test fails while test-lazy.scm rightly returns #f
+decide whether to keep lazy-eval-dorun simly as strict-eval
 resolve bug test-lazy.scm (see impact of 'display line in 'try) 
 lazy-run unit-test failing on lazy test
 should it be dorun or force-thunk in application.scm ?

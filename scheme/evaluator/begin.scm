@@ -38,13 +38,13 @@
 
 ; eval
 (define (strict-eval-sequence operands env)
-  (debug "[DEBUG]: strict-eval-sequence: operands = ")
-  (debug operands)(debug-newline)
+;  (debug "[DEBUG]: strict-eval-sequence: operands = ")
+;  (debug operands)(debug-newline)
   (if (null? operands)
     unspecified-value 
     (let ((first (strict-eval (car operands) env)))  ; side effects now
-      (debug "[DEBUG]: strict-eval-sequence: first = ")
-      (debug first)(debug-newline)
+;      (debug "[DEBUG]: strict-eval-sequence: first = ")
+;      (debug first)(debug-newline)
       (if (null? (cdr operands))
         (force-thunk first)
         (begin

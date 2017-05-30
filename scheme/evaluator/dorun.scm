@@ -30,6 +30,6 @@
 
 ; lazy eval
 (define (lazy-eval-dorun exp env)
-  (force-thunk (lazy-eval (dorun-expr exp) env)))
+  (strict-eval (dorun-expr exp) env))
 
 ))  ; include guard.
