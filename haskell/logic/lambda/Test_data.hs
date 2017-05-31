@@ -4,6 +4,7 @@ module Test_data
   , s1, s2, s3, s4, s5, s6, s7, s8
   , var1, var2, var3, var4, var5, var6, var7, var8
   , free1, free2, free3, free4, free5, free6, free7, free8
+  , bnd1, bnd2, bnd3, bnd4, bnd5, bnd6, bnd7, bnd8
   , sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8
   , f1
   , x, y, z
@@ -60,6 +61,16 @@ free5 = free4
 free6 = free4
 free7 = free4
 free8 = free4
+
+
+bnd1  = empty           :: Set V
+bnd2  = bnd1
+bnd3  = bnd1
+bnd4  = singleton x
+bnd5  = fromList [x,y]
+bnd6  = bnd5
+bnd7  = bnd5
+bnd8  = bnd5
 
 
 sub1 = singleton p1   :: Set (Formula V)

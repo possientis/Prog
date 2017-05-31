@@ -117,6 +117,21 @@ test89  = TestCase $ assertEqual  "sub.89" (sub (f1<$>p6)) $ map (f1<$>) (sub p6
 test90  = TestCase $ assertEqual  "sub.90" (sub (f1<$>p7)) $ map (f1<$>) (sub p7)
 test91  = TestCase $ assertEqual  "sub.91" (sub (f1<$>p8)) $ map (f1<$>) (sub p8)
 
+-- if p is a subformula of q, then the bound variables of p are a subset of 
+-- of the bound variables q, i.e. p <=: q -> bound p <= bound q
+test92  = TestCase $ assertBool  "sub.92"   $ isSubsetOf (bound p1) (bound p3)
+test93  = TestCase $ assertBool  "sub.93"   $ isSubsetOf (bound p1) (bound p4)
+test94  = TestCase $ assertBool  "sub.94"   $ isSubsetOf (bound p2) (bound p3)
+test95  = TestCase $ assertBool  "sub.95"   $ isSubsetOf (bound p5) (bound p7)
+test96  = TestCase $ assertBool  "sub.96"   $ isSubsetOf (bound p5) (bound p8)
+test97  = TestCase $ assertBool  "sub.97"   $ isSubsetOf (bound p6) (bound p7)
+test98  = TestCase $ assertBool  "sub.98"   $ isSubsetOf (bound p6) (bound p8)
+test99  = TestCase $ assertBool  "sub.99"   $ isSubsetOf (bound p7) (bound p8)
+test100 = TestCase $ assertBool  "sub.100"  $ isSubsetOf (bound p7) (bound p8) 
+test101 = TestCase $ assertBool  "sub.101"  $ isSubsetOf (bound p7) (bound p8) 
+test102 = TestCase $ assertBool  "sub.102"  $ isSubsetOf (bound p7) (bound p8)
+
+
 test_SubFormula = TestLabel "test_SubFormula" $ TestList
   [ test1,  test2,  test3,  test4,  test5,  test6,  test7,  test8
   , test9,  test10, test11, test12, test13, test14, test15, test16
@@ -129,7 +144,8 @@ test_SubFormula = TestLabel "test_SubFormula" $ TestList
   , test65, test66, test67, test68, test69, test70, test71, test72
   , test73, test74, test75, test76, test77, test78, test79, test80
   , test81, test82, test83, test84, test85, test86, test87, test88
-  , test89, test90, test91
+  , test89, test90, test91, test92, test93, test94, test95, test96
+  , test97, test98, test99, test100,test101,test102
   ]
 
 
