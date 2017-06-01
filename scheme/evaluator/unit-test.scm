@@ -555,7 +555,7 @@
   ; testing lazy evaluation
   (display "testing lazy evaluation...\n")
   (strict-eval '(load "lazy.scm"))
-  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.1")
+  (assert-equals              (dorun (strict-eval  '(lazy?)))   #f "lazy.1")
   (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.2")
   (assert-equals              (strict-eval  '(lazy?))   #f "lazy.3")
   (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.4")

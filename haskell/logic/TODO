@@ -1,1 +1,5 @@
-The validFor relation of (V -> W) x P(V)
+add f4 to fopl/Test_Valid
+add more tests to fopl/Test_Valid y <-: x and y <-> x
+add more complex formula to test validity on
+isValidFor for lambda
+

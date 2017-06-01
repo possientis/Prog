@@ -1,5 +1,3 @@
-{-# LANGUAGE ViewPatterns #-}
-
 module Variable
   ( var
   , free

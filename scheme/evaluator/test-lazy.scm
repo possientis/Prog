@@ -11,7 +11,9 @@
      (force-thunk (lazy-eval '(strict-eval 'expr))))))
 
 (run (load "lazy.scm"))
-(run (display (lazy?)))
+
+(display (force-thunk (lazy-eval '(strict-eval '(lazy?)))))(newline)
+
 
 
 (exit 0)
