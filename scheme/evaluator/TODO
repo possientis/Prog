@@ -1,10 +1,3 @@
-just change unit-test adding a dorun?
-undertand why test-lazy needs a 'dorun before strict-eval to duly return #f
-understand why lazy-run of unit-test fails while test-lazy.scm rightly returns #f
-decide whether to keep lazy-eval-dorun simly as strict-eval
-resolve bug test-lazy.scm (see impact of 'display line in 'try) 
-lazy-run unit-test failing on lazy test
-should it be dorun or force-thunk in application.scm ?
 unit-test do run
 test.scm : force-thunk not defined: what do we do?
 lazy-run frame-test.scm fails when adding frame3 (which is odd because it seems

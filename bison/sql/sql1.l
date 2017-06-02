@@ -129,6 +129,14 @@ WORK          { return WORK; }
 
       /* string */
 
+  int c = input();
+  unput(c); /* just peeking */
+  if(c != '\')
+    return STRING;
+  else
+    yymore();
+
+
 
 
 

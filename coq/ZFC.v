@@ -2,6 +2,13 @@ Require Import classical.
 
 Axiom LEM : forall p:Prop, ~p \/ p.
 
+
+Axiom skolem: forall {A:Type}{P:A->Prop},
+  (exists (x:A), P x) ->
+  (forall (x y:A), P x -> P y -> x = y) -> { x:A | P x }.
+
+
+
 Lemma LEM': forall p: Prop, p \/ ~p.
 Proof.
   intros p. cut (~p \/ p). intro H. elim H.
@@ -68,6 +75,30 @@ Qed.
 (* extensionality *)
 Axiom set_ext : forall a b:set, 
   subset a b -> subset b a -> a = b.
+
+
+Axiom emptyset_exists : exists x:set, empty x.
+
+Lemma emptyset_unique : forall x y:set,
+  empty x -> empty y -> x = y.
+Proof.
+  intros x y Hx Hy. apply set_ext. 
+  unfold subset. intros z Hz. unfold empty in Hx. 
+  apply False_ind. apply (Hx z). exact Hz.
+  unfold subset. intros z Hz. unfold empty in Hy.
+  apply False_ind. apply (Hy z). exact Hz.
+Qed.
+
+Definition O : set := proj1_sig (skolem emptyset_exists emptyset_unique).
+Proposition emptyset_empty : empty O.
+Proof.
+  exact (proj2_sig (skolem emptyset_exists emptyset_unique)). 
+Qed.
+
+
+
+
+(*
 
 (* empty set exists *)
 Parameter EMPTY : set.
@@ -324,4 +355,4 @@ Proof.
   intros L. elim L. clear L. intro L. exact L. clear L. intro L.
   apply H. exact L. apply LEM.
 Qed.
-
+*)

@@ -115,6 +115,7 @@
         (list 'string-append string-append)
         (list 'string->symbol string->symbol)
         (list 'symbol? symbol?)
+        (list 'vector? vector?)
         (list 'vector-fill! vector-fill!)
         (list 'vector-length vector-length)
         (list 'vector-ref vector-ref)

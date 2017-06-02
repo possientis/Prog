@@ -1,5 +1,5 @@
 module Test_data
-  ( p1, p2, p3, p4, p5, p6, p7, p8
+  ( p1, p2, p3, p4, p5, p6, p7, p8, p9
   , q1, q2, q3, q4, q5, q6, q7, q8
   , s1, s2, s3, s4, s5, s6, s7, s8
   , var1, var2, var3, var4, var5, var6, var7, var8
@@ -33,6 +33,8 @@ p5 = belong z x   :: Formula V
 p6 = belong z y   :: Formula V
 p7 = imply p5 p6
 p8 = forall z p7
+
+p9 = forall x $ forall y $ imply (forall z (belong z x)) (forall x (belong x y))
 
 q1 = belong x' y' :: Formula W
 q2 = bot          :: Formula W

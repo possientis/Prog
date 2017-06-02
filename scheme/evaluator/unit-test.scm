@@ -555,14 +555,30 @@
   ; testing lazy evaluation
   (display "testing lazy evaluation...\n")
   (strict-eval '(load "lazy.scm"))
-  (assert-equals              (dorun (strict-eval  '(lazy?)))   #f "lazy.1")
+  (assert-equals (dorun       (strict-eval  '(lazy?)))  #f "lazy.1")
   (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.2")
-  (assert-equals              (strict-eval  '(lazy?))   #f "lazy.3")
+  (assert-equals (dorun       (strict-eval  '(lazy?)))  #f "lazy.3")
   (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.4")
-  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.5")
+  (assert-equals (dorun       (analyze-eval '(lazy?)))  #f "lazy.5")
   (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.6")
-  (assert-equals              (analyze-eval '(lazy?))   #f "lazy.7")
+  (assert-equals (dorun       (analyze-eval '(lazy?)))  #f "lazy.7")
   (assert-equals (force-thunk (lazy-eval    '(lazy?)))  #t "lazy.8")
+
+  ; testing dorun
+  (display "testing dorun...\n")
+  (test-expression '(dorun 1) 1 "dorun.1")
+  (test-expression '(dorun 1.0) 1.0 "dorun.2")
+  (test-expression '(dorun #t) #t "dorun.3")
+  (test-expression '(dorun #f) #f "dorun.4")
+  (test-expression '(dorun #\a) #\a "dorun.5")
+  (test-expression '(dorun "abc") "abc" "dorun.6")
+  (test-expression '(dorun 'symbol) 'symbol "dorun.7")
+  (test-expression '(dorun #(1 2 3)) #(1 2 3) "dorun.8")
+  (test-expression '(dorun '(1 2 3)) '(1 2 3) "dorun.9")
+  (test-expression '(dorun +) (make-primitive-procedure +) "dorun.10")
+  (test-expression '(dorun (define x 0) (set! x 1) x) 1 "dorun.11")
+  (test-expression '(dorun (define x 5) x) 5 "dorun.12")
+
 
   ; higher level interpreters
   (display "testing higher order interpreter...\n")

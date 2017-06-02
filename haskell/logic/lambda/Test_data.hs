@@ -6,7 +6,7 @@ module Test_data
   , free1, free2, free3, free4, free5, free6, free7, free8
   , bnd1, bnd2, bnd3, bnd4, bnd5, bnd6, bnd7, bnd8
   , sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8
-  , f1
+  , f1, f2, f3, f4
   , x, y, z
   , x', y', z'
   ) where
@@ -88,4 +88,22 @@ f1 v  | v == x    = x'
       | v == z    = z'
       | otherwise = z'
 
+f2 :: V -> W
+f2 v  | v == x    = x'
+      | v == y    = x'
+      | v == z    = z'
+      | otherwise = z'
+
+f3 :: V -> W
+f3 v  | v == x    = x'
+      | v == y    = y'
+      | v == z    = x'
+      | otherwise = z'
+
+
+f4 :: V -> W
+f4 v  | v == x    = x'
+      | v == y    = y'
+      | v == z    = y'
+      | otherwise = z'
 

@@ -1,3 +1,5 @@
+import Cont -- own continuation monad
+
 add :: Int -> Int -> Int 
 add x y = x + y
 
@@ -21,6 +23,20 @@ pythagoras_cps x y = \k ->
   sq_cps y $ \y_sq ->
   add_cps x_sq y_sq $ k
 
+
+add_cont :: Int -> Int -> Cont r Int
+add_cont x y  = return $ add x y
+
+
+sq_cont :: Int -> Cont r Int
+sq_cont x = return $ sq x
+
+pythagoras_cont :: Int -> Int -> Cont r Int
+pythagoras_cont x y = do
+  sq_x <- sq_cont x
+  sq_y <- sq_cont y
+  add_cont sq_x sq_y
+
 {-
  - Lemma: pythagoras_cps x y = \k -> k (pythagoras x y)
  -
@@ -39,9 +55,13 @@ pythagoras_cps x y = \k ->
 thrice :: (a -> a) -> a -> a
 thrice f x = f (f (f x))
 
-
 thrice_cps :: (a -> (a -> r) -> r) -> a -> (a -> r) -> r
 thrice_cps f x k = (f x) $ \y -> (f y) $ \z -> (f z) $ k
+
+chainCPS :: ((a -> r) -> r) -> (a -> ((b -> r) -> r)) -> (b -> r) -> r
+chainCPS m f k = m (\x -> (f x) k)
+
+
 
 
 

@@ -1,5 +1,2 @@
-add f4 to fopl/Test_Valid
-add more tests to fopl/Test_Valid y <-: x and y <-> x
-add more complex formula to test validity on
-isValidFor for lambda
+lambda/Test_valid
 

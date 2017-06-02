@@ -11,6 +11,7 @@
         ((string? exp) #t)
         ((char? exp)  #t)
         ((boolean? exp) #t)
+        ((vector? exp) #t)
         (else #f)))
 
 ; strict eval
