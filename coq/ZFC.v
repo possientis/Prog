@@ -1,59 +1,12 @@
 Require Import classical.
 
-Axiom LEM : forall p:Prop, ~p \/ p.
-
-
-Axiom skolem: forall {A:Type}{P:A->Prop},
-  (exists (x:A), P x) ->
-  (forall (x y:A), P x -> P y -> x = y) -> { x:A | P x }.
-
-
-
-Lemma LEM': forall p: Prop, p \/ ~p.
-Proof.
-  intros p. cut (~p \/ p). intro H. elim H.
-  clear H. intro H. right. exact H.
-  clear H. intro H. left . exact H.
-  apply LEM.
-Qed.
-
-Lemma exist_all: forall (A:Type) (P:A->Prop),
-  ~(exists x:A, ~P x) -> (forall x:A, P x).
-Proof.
-  apply imp_or_to_ex_all. apply and_or_to_imp_or. apply lem_to_and_or.
-  unfold lem. intro p. apply LEM'.
-Qed.
-
-
-Lemma not_not : forall p:Prop, ~~p <-> p.
-Proof.
-  intros p. split. apply peirce_to_classic. apply imp_or_to_peirce.
-  apply and_or_to_imp_or. apply lem_to_and_or. unfold lem. exact LEM'.
-  apply L2.
-Qed.
-
+(************************************************************************)
+(*                       The universe of sets                           *)
+(************************************************************************)
 
 Parameter set:Type.
+
 Parameter belong: set -> set -> Prop.
-
-Definition empty(a:set): Prop := forall x:set, ~ belong x a.
-
-Definition inhabited(a:set) := exists x:set, belong x a.
-
-Proposition empty_not_inhabited : forall a:set,
-  inhabited a <-> ~ empty a.
-Proof.
-  intros a. split. 
-  intro Ha. unfold empty. intro Ha'. unfold inhabited in Ha. elim Ha.
-  clear Ha. intros x Hxa.  apply (Ha' x). exact Hxa.
-  intro Ha. unfold inhabited. unfold empty in Ha.
-  cut (~ (exists x:set, belong x a) \/ exists x:set, belong x a).
-  intros H. elim H. clear H. intros H. apply False_ind.
-  apply Ha. apply exist_all. intros H'. apply H. elim H'.
-  clear H'. intros x H'. exists x. apply not_not. exact H'.
-  intro H'. exact H'. apply LEM.
-Qed.
-
 
 Definition subset(a b:set) : Prop :=
   forall x:set, belong x a -> belong x b.
@@ -72,72 +25,142 @@ Proof.
 Qed.
 
 
-(* extensionality *)
-Axiom set_ext : forall a b:set, 
+(************************************************************************)
+(*                   The law of excluded middle                         *)
+(************************************************************************)
+
+Axiom law_excluded_middle : forall p:Prop, ~p \/ p.
+
+Lemma LEM': forall p: Prop, p \/ ~p.
+Proof.
+  intros p. cut (~p \/ p). intro H. elim H.
+  clear H. intro H. right. exact H.
+  clear H. intro H. left . exact H.
+  apply law_excluded_middle.
+Qed.
+
+Lemma exist_all: forall (A:Type) (P:A->Prop),
+  ~(exists x:A, ~P x) -> (forall x:A, P x).
+Proof.
+  apply imp_or_to_ex_all. apply and_or_to_imp_or. apply lem_to_and_or.
+  unfold lem. intro p. apply LEM'.
+Qed.
+
+
+Lemma not_not : forall p:Prop, ~~p <-> p.
+Proof.
+  intros p. split. apply peirce_to_classic. apply imp_or_to_peirce.
+  apply and_or_to_imp_or. apply lem_to_and_or. unfold lem. exact LEM'.
+  apply L2.
+Qed.
+
+
+(************************************************************************)
+(*                      The skolemization axiom                         *)
+(************************************************************************)
+
+Axiom skolem: forall {A:Type}{P:A->Prop},
+  (exists (x:A), P x) ->
+  (forall (x y:A), P x -> P y -> x = y) -> { x:A | P x }.
+
+
+(************************************************************************)
+(*                       The extensionality axiom                       *)
+(************************************************************************)
+
+Axiom extensionality : forall a b:set, 
   subset a b -> subset b a -> a = b.
 
 
-Axiom emptyset_exists : exists x:set, empty x.
 
-Lemma emptyset_unique : forall x y:set,
+(************************************************************************)
+(*                      Existence of the empty set                      *)
+(************************************************************************)
+
+Definition empty(a:set): Prop := forall x:set, ~ belong x a.
+
+Axiom empty_set_exists : exists x:set, empty x.
+
+Lemma empty_set_is_unique : forall x y:set,
   empty x -> empty y -> x = y.
 Proof.
-  intros x y Hx Hy. apply set_ext. 
+  intros x y Hx Hy. apply extensionality. 
   unfold subset. intros z Hz. unfold empty in Hx. 
   apply False_ind. apply (Hx z). exact Hz.
   unfold subset. intros z Hz. unfold empty in Hy.
   apply False_ind. apply (Hy z). exact Hz.
 Qed.
 
-Definition O : set := proj1_sig (skolem emptyset_exists emptyset_unique).
-Proposition emptyset_empty : empty O.
+Definition O : set := proj1_sig (skolem empty_set_exists empty_set_is_unique).
+
+Proposition empty_O : empty O.
 Proof.
-  exact (proj2_sig (skolem emptyset_exists emptyset_unique)). 
+  exact (proj2_sig (skolem empty_set_exists empty_set_is_unique)). 
+Qed.
+
+Proposition not_belong_x_O : forall x:set, ~belong x O.
+Proof.
+  exact empty_O.
+Qed.
+
+Proposition empty_x_is_O : forall x:set, empty x -> x = O.
+Proof.
+  intros x Hx. apply empty_set_is_unique. exact Hx. exact empty_O.
 Qed.
 
 
-
-
-(*
-
-(* empty set exists *)
-Parameter EMPTY : set.
-Axiom empty_set : forall x:set, ~belong x EMPTY.
-
-Proposition EMPTY_is_empty : empty(EMPTY).
+Proposition empty_iff_O : forall x:set,
+  empty x <-> x = O.
 Proof.
-  unfold empty. apply empty_set.
+  intros x. split. apply empty_x_is_O.
+  intros H. rewrite H. exact empty_O.
 Qed.
 
-Proposition empty_set_unique : forall x:set, empty x -> x = EMPTY.
+(************************************************************************)
+(*                          The pairing axiom                           *)
+(************************************************************************)
+
+Axiom pairing : forall a b:set, exists c:set,
+  forall x:set, belong x c <-> x = a \/ x = b. 
+
+Definition pair_relation(a b c:set) : Prop :=
+  forall x:set, belong x c <-> x = a \/ x = b. 
+
+Lemma pair_is_unique: forall a b:set, forall c d:set,
+  pair_relation a b c -> pair_relation a b d -> c = d.
 Proof.
-  intros x Hx. unfold empty in Hx. apply set_ext.
-  unfold subset. intros y Hyx. apply False_ind. apply (Hx y). exact Hyx.
-  unfold subset. intros y Hye. apply False_ind. apply (empty_set y). exact Hye.
+  intros a b c d Hc Hd. apply extensionality. 
+  unfold subset. intros x Hx. apply Hc in Hx. apply Hd in Hx. exact Hx.
+  unfold subset. intros x Hx. apply Hd in Hx. apply Hc in Hx. exact Hx.
 Qed.
 
-Proposition empty_iff_EMPTY : forall x:set,
-  empty x <-> x = EMPTY.
+Definition pair(a b:set) : set := 
+  proj1_sig (skolem (pairing a b) (pair_is_unique a b)).
+
+
+Proposition pair_is_pair : forall a b:set, 
+  forall x:set, belong x (pair a b) <-> x = a \/ x = b.
 Proof.
-  intros x. split. apply empty_set_unique.
-  intros H. rewrite H. exact EMPTY_is_empty.
+  intros a b. exact (proj2_sig (skolem (pairing a b) (pair_is_unique a b))).
 Qed.
 
-Proposition empty_or_inhabited: forall x:set,
-  x = EMPTY \/ inhabited x.
+Lemma UPairI1 : forall a b:set, belong a (pair a b).
 Proof.
-  intros x. cut (~ inhabited x \/ inhabited x). intro H. elim H.
-  clear H. intro H. left. apply empty_set_unique. apply not_not.
-  intro H'. apply H. apply empty_not_inhabited. exact H'.
-  clear H. intro H. right. exact H. apply LEM.
+  intros a b. apply pair_is_pair. left. reflexivity.
 Qed.
 
-Parameter UPair : set -> set -> set.
-Axiom UPairI1 : forall y z:set, belong y (UPair y z).
-Axiom UPairI2 : forall y z:set, belong z (UPair y z).
-Axiom UPairE : forall x y z:set, belong x (UPair y z) -> x = y \/ x = z.
 
-Lemma upair_subset: forall a b:set, subset (UPair a b) (UPair b a).
+Lemma UPairI2 : forall a b:set, belong b (pair a b).
+Proof.
+  intros a b. apply pair_is_pair. right. reflexivity.
+Qed.
+
+Lemma UPairE : forall x a b:set, belong x (pair a b) -> x = a \/ x = b.
+Proof.
+  intros x a b. apply pair_is_pair.
+Qed.
+
+Lemma upair_subset: forall a b:set, subset (pair a b) (pair b a).
 Proof.
   intros a b. unfold subset. intros x Hx. cut (x = a \/ x = b).
   intros H'. elim H'. 
@@ -146,7 +169,7 @@ Proof.
   apply UPairE. exact Hx.
 Qed.
 
-Definition singleton (x:set) : set := UPair x x.
+Definition singleton (x:set) : set := pair x x.
 
 Lemma singleton_belong: forall x y:set, belong x (singleton y) <-> x = y.
 Proof.
@@ -157,10 +180,12 @@ Proof.
 Qed.
 
 
-Proposition upair_commute : forall a b:set, UPair a b = UPair b a.
+Proposition upair_commute : forall a b:set, pair a b = pair b a.
 Proof.
-  intros a b. apply set_ext. apply upair_subset. apply upair_subset. 
+  intros a b. apply extensionality. apply upair_subset. apply upair_subset. 
 Qed.
+
+(*
 
 Parameter Union : set -> set.
 Axiom UnionI : forall X x y: set, belong x y -> belong y X -> belong x (Union X).
@@ -168,9 +193,7 @@ Axiom UnionE : forall X x: set,
   belong x (Union X) -> exists y:set, belong x y /\ belong y X.
 
 (* axiom of infinity *)
-Definition union (a b:set) : set := Union (UPair a b).
-Definition O : set := EMPTY.
-Definition zero : set := EMPTY.
+Definition union (a b:set) : set := Union (pair a b).
 Definition S (x:set) : set := union x (singleton x).
 Definition one : set := S O.
 Definition two : set := S one.
@@ -199,15 +222,6 @@ Proof.
   unfold singleton. apply UPairI1. apply UPairI2.
 Qed.
 
-Lemma inhabited_1 : inhabited one.
-Proof.
-  unfold inhabited. exists zero. apply belong_succ.
-Qed.
-
-Lemma inhabited_2 : inhabited two.
-Proof.
-  unfold inhabited. exists one. apply belong_succ.
-Qed.
 
 Lemma belong_one: forall (a:set),
   belong a one <-> a = O.
@@ -217,7 +231,7 @@ Proof.
   apply UnionE in Ha. elim Ha.
   clear Ha. intros x Hx. elim Hx.
   clear Hx. intros Hx Hx'. apply UPairE in Hx'. elim Hx'.
-  clear Hx'. intro Hx'. apply False_ind. apply empty_set with (x:=a).
+  clear Hx'. intro Hx'. apply False_ind. apply not_belong_x_O with (x:=a).
   rewrite Hx' in Hx. unfold O in Hx. exact Hx.
   clear Hx'. intro Hx'. rewrite Hx' in Hx. clear Hx'.
   unfold singleton in Hx. apply UPairE in Hx. elim Hx.
@@ -230,7 +244,7 @@ Qed.
 Lemma subset_one: forall (a:set), 
   subset a one -> a = O \/ a = one.
 Proof.
-  intros a Ha. cut (a = EMPTY \/ inhabited a). intros H. elim H. 
+  intros a Ha. cut (a = O \/ inhabited a). intros H. elim H. 
   clear H. intros H. left. unfold O. exact H.
   clear H. intros H. right.  apply set_ext. exact Ha.
   unfold subset. intros x Hx. apply belong_one in Hx.
@@ -266,7 +280,7 @@ Axiom GUTrans: forall X x y:set,
   belong x y -> belong y (GU X) -> belong x (GU X). (* GU X is transitive set *)
 
 Axiom GUUpair : forall X x y:set,                   (* closure under pairing *)
-  belong x (GU X) -> belong y (GU X) -> belong (UPair x y) (GU X).
+  belong x (GU X) -> belong y (GU X) -> belong (pair x y) (GU X).
 
 Axiom GUUnion : forall X x:set,                     (* closure under union *)
   belong x (GU X) -> belong (Union x) (GU X).    
@@ -288,7 +302,7 @@ Proof.
 Qed.
 
 Definition pairClosed (X:set) : Prop :=
-  forall (x y :set),  belong x X -> belong y X -> belong (UPair x y) X.
+  forall (x y :set),  belong x X -> belong y X -> belong (pair x y) X.
 
 Lemma GUPairClosed: forall X:set, pairClosed (GU X).
 Proof.
@@ -355,4 +369,5 @@ Proof.
   intros L. elim L. clear L. intro L. exact L. clear L. intro L.
   apply H. exact L. apply LEM.
 Qed.
+
 *)

@@ -1,5 +1,5 @@
 module Test_data
-  ( p1, p2, p3, p4, p5, p6, p7, p8
+  ( p1, p2, p3, p4, p5, p6, p7, p8, p9
   , q1, q2, q3, q4, q5, q6, q7, q8
   , s1, s2, s3, s4, s5, s6, s7, s8
   , var1, var2, var3, var4, var5, var6, var7, var8
@@ -33,6 +33,11 @@ p5 = lambda x (lambda y p1)     :: Formula V
 p6 = lambda x (lambda y p2)     :: Formula V
 p7 = lambda x (lambda y p3) 
 p8 = lambda x (lambda y (apply p1 p3))
+
+p9 = lambda x $ lambda y $ apply 
+  (lambda z (apply (variable z) (variable x))) 
+  (lambda x (apply (variable x) (variable y))) 
+
 
 q1 = variable x'                :: Formula W
 q2 = variable y'                :: Formula W

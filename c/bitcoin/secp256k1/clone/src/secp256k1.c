@@ -30,7 +30,7 @@ default_illegal_callback_fn(
   const char* str, 
   void* data) 
 {
-  (void)data;
+  (void) data;
   fprintf(stderr, "[libsecp256k1] illegal argument: %s\n", str);
   abort();
 }

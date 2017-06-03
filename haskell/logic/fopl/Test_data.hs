@@ -34,7 +34,9 @@ p6 = belong z y   :: Formula V
 p7 = imply p5 p6
 p8 = forall z p7
 
-p9 = forall x $ forall y $ imply (forall z (belong z x)) (forall x (belong x y))
+p9 = forall x $ forall y $ imply 
+  (forall z (belong z x)) 
+  (forall x (belong x y))
 
 q1 = belong x' y' :: Formula W
 q2 = bot          :: Formula W

@@ -3,10 +3,14 @@ module Test_Valid
   ) where
 
 import Test.HUnit
+import Prelude as P
+import Data.Set as S
+
 
 import Test_data
 import Valid
 import Substitution
+
 
 -- f1: V -> W is injective on (var pi) for all i=1,..,8
 test1   = TestCase  $ assertBool "test1"  $ isValidFor f1 p1
@@ -120,3 +124,8 @@ test_Valid = TestLabel "test_valid" $ TestList
   ]
 
 
+
+
+
+
+         

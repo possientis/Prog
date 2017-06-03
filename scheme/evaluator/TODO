@@ -1,5 +1,3 @@
-unit-test do run
-test.scm : force-thunk not defined: what do we do?
 lazy-run frame-test.scm fails when adding frame3 (which is odd because it seems
 to be exactly what test.scm (which works) was meant to address).
 lazy-run frame-test.scm fails (when frame = frame3)
