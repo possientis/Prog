@@ -144,46 +144,96 @@ Proof.
   intros a b. exact (proj2_sig (skolem (pairing a b) (pair_is_unique a b))).
 Qed.
 
-Lemma UPairI1 : forall a b:set, belong a (pair a b).
+Lemma pair_left : forall a b:set, belong a (pair a b).
 Proof.
   intros a b. apply pair_is_pair. left. reflexivity.
 Qed.
 
 
-Lemma UPairI2 : forall a b:set, belong b (pair a b).
+Lemma pair_right : forall a b:set, belong b (pair a b).
 Proof.
   intros a b. apply pair_is_pair. right. reflexivity.
 Qed.
 
-Lemma UPairE : forall x a b:set, belong x (pair a b) -> x = a \/ x = b.
+Lemma pair_elim : forall x a b:set, belong x (pair a b) -> x = a \/ x = b.
 Proof.
   intros x a b. apply pair_is_pair.
 Qed.
 
-Lemma upair_subset: forall a b:set, subset (pair a b) (pair b a).
+Lemma pair_subset: forall a b:set, subset (pair a b) (pair b a).
 Proof.
   intros a b. unfold subset. intros x Hx. cut (x = a \/ x = b).
   intros H'. elim H'. 
-  clear H'. intro H'. rewrite H'. apply UPairI2.
-  clear H'. intro H'. rewrite H'. apply UPairI1.
-  apply UPairE. exact Hx.
+  clear H'. intro H'. rewrite H'. apply pair_right.
+  clear H'. intro H'. rewrite H'. apply pair_left.
+  apply pair_elim. exact Hx.
 Qed.
+
+
+Proposition pair_commute : forall a b:set, pair a b = pair b a.
+Proof.
+  intros a b. apply extensionality. apply pair_subset. apply pair_subset. 
+Qed.
+
+
+(************************************************************************)
+(*                          singleton sets                              *)
+(************************************************************************)
 
 Definition singleton (x:set) : set := pair x x.
 
 Lemma singleton_belong: forall x y:set, belong x (singleton y) <-> x = y.
 Proof.
   intros x y. split. intros Hxy. unfold singleton in Hxy.
-  apply UPairE in Hxy. elim Hxy.
+  apply pair_elim in Hxy. elim Hxy.
   clear Hxy. intro Hxy. exact Hxy. clear Hxy. intro Hxy. exact Hxy.
-  intros Exy. unfold singleton. rewrite Exy. apply UPairI1.
+  intros Exy. unfold singleton. rewrite Exy. apply pair_left.
 Qed.
 
-
-Proposition upair_commute : forall a b:set, pair a b = pair b a.
+Lemma singleton_injective : forall a b:set,
+  singleton a = singleton b -> a = b.
 Proof.
-  intros a b. apply extensionality. apply upair_subset. apply upair_subset. 
+  intros a b H. apply singleton_belong. rewrite <- H. apply pair_left.
 Qed.
+
+Lemma when_pair_is_singleton : forall a b c:set, 
+  pair a b = singleton c  -> a = b.
+Proof.
+  intros a b c H. cut (a = c /\ b = c). intros H'. elim H'.
+  clear H'. intros Eac Ebc. rewrite Eac, Ebc. reflexivity. split.
+  apply singleton_belong. rewrite <- H. apply pair_left.
+  apply singleton_belong. rewrite <- H. apply pair_right.
+Qed.
+
+
+
+(************************************************************************)
+(*                          ordered pair                                *)
+(************************************************************************)
+
+Definition ord_pair (a b:set) : set := pair (singleton a) (pair a b).
+
+(* auxiliary lemma, no real value by itself *)
+Lemma when_singleton_in_ordered_pair : forall a a' b':set,
+  belong (singleton a) (ord_pair a' b') -> a = a'.
+Proof.
+  intros a a' b' H. apply pair_elim in H. elim H.
+  clear H. exact (singleton_injective a a').
+  clear H. intros H. cut (belong a (pair a' b') /\ a' = b').
+  intros H'. elim H'. clear H'. intros H1 H2. apply pair_elim in H1. elim H1.
+  clear H1. intros H1. exact H1.
+  clear H1. intros H1. rewrite H2. exact H1. split.
+  rewrite <- H. apply singleton_belong. reflexivity.
+  apply when_pair_is_singleton with (c:=a). rewrite H. reflexivity.
+Qed.
+
+(*
+Proposition ord_pair_inj : forall a a' b b':set,
+  ord_pair a b = ord_pair a' b' -> a = a' /\ b = b'.
+Proof.
+
+Show.
+*)
 
 (*
 
@@ -201,13 +251,13 @@ Definition two : set := S one.
 Lemma unionl : forall (a b:set), subset a (union a b).
 Proof.
   intros a b. unfold subset. intros x Hx. unfold union.
-  apply UnionI with (y:= a). exact Hx. apply UPairI1.
+  apply UnionI with (y:= a). exact Hx. apply pair_left.
 Qed.
 
 Lemma unionr : forall (a b:set), subset b (union a b).
 Proof.
   intros a b. unfold subset. intros x Hx. unfold union.
-  apply UnionI with (y:= b). exact Hx. apply UPairI2.
+  apply UnionI with (y:= b). exact Hx. apply pair_right.
 Qed.
 
 Lemma subset_succ : forall (a:set), subset a (S a).
@@ -219,7 +269,7 @@ Lemma belong_succ : forall (a:set), belong a (S a).
 Proof.
   intros a. unfold S. unfold union.
   apply UnionI with (y:= singleton a).
-  unfold singleton. apply UPairI1. apply UPairI2.
+  unfold singleton. apply pair_left. apply pair_right.
 Qed.
 
 
@@ -230,11 +280,11 @@ Proof.
   unfold S in Ha. unfold union in Ha.
   apply UnionE in Ha. elim Ha.
   clear Ha. intros x Hx. elim Hx.
-  clear Hx. intros Hx Hx'. apply UPairE in Hx'. elim Hx'.
+  clear Hx. intros Hx Hx'. apply pair_elim in Hx'. elim Hx'.
   clear Hx'. intro Hx'. apply False_ind. apply not_belong_x_O with (x:=a).
   rewrite Hx' in Hx. unfold O in Hx. exact Hx.
   clear Hx'. intro Hx'. rewrite Hx' in Hx. clear Hx'.
-  unfold singleton in Hx. apply UPairE in Hx. elim Hx.
+  unfold singleton in Hx. apply pair_elim in Hx. elim Hx.
   clear Hx. intro Hx. exact Hx.
   clear Hx. intro Hx. exact Hx.
   intro Ha. rewrite Ha. apply belong_succ.

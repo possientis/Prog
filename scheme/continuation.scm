@@ -1,26 +1,36 @@
 (define the-continuation #f)
 
+;;; a 'continuation' is is an abstraction (some object)
+;;; which represents the state of a program flow (where
+;;; the meaning of 'state' excludes the heap, but includes
+;;; the stack). This object (the continuation) has a single
+;;; method 'run' which takes a single argument. Hence, in 
+;;; effect, a continuation can be viewed as a function which 
+;;; takes a single argument. Syntactically of course, we simply
+;;; call (my-continuation my-arg) in order to 'run' the 
+;;; continuation with argument 'my-arg'.
+
+;;; (call-with-current-continuation proc)
+
+;;; This is clearly a scheme function call. 
+;;; 
+
 (define (test)
-  (let ((i 0))
-;    (display "running just before 'call-with-current-continuation\n")
-    (define ret (call-with-current-continuation
+  (let ((i 0) (ret #f))
+    (set! ret (call-with-current-continuation
       (lambda (k)
-        (display "running just before saving continuation\n")
-        (set! the-continuation k)
-        (display "running just after saving continuation\n"))))
-    (display "running just after 'call-with-current-continuation: ret = ")
-    (display ret)(newline)
+        (set! the-continuation k))))
+    ; continuation starts here
     (set! i (+ i 1))
     i))
 
-(display "calling (test) ...\n")
-(display (test))(newline)
-(newline)
-(display "calling (the-continuation 0) 4 times ...\n")
-(display (the-continuation 12))(newline)  ;  
-(display (the-continuation 15))(newline)  ; not sure what the argument does
-(display (the-continuation 19))(newline)  ; not sure what the argument does
-(display (the-continuation -23))(newline)  ; not sure what the argument does
+
+(test)
+(newline)(newline)
+(the-continuation 0)
+(newline)(newline)
+(the-continuation "abc")
+
 
 (exit 0)
 
