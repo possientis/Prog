@@ -227,20 +227,67 @@ Proof.
   apply when_pair_is_singleton with (c:=a). rewrite H. reflexivity.
 Qed.
 
-(*
-Proposition ord_pair_inj : forall a a' b b':set,
+(* auxiliary lemma, no real value by itself *)
+Lemma when_pair_in_ordered_pair : forall a b a' b':set,
+  belong (pair a b) (ord_pair a' b')  -> a = b \/ pair a b = pair a' b'.
+Proof.
+  intros a b a' b' H. apply pair_elim in H. elim H.
+  clear H. intros H. left. apply when_pair_is_singleton with (c:= a'). exact H.
+  clear H. intros H. right. exact H.
+Qed.
+
+
+Proposition ordered_pair_left : forall a b a' b':set,
+  ord_pair a b = ord_pair a' b' -> a = a'.
+Proof.
+  intros a b a' b' H. apply when_singleton_in_ordered_pair with (b':=b'). 
+  rewrite <- H. apply pair_left.
+Qed.
+
+
+Proposition ordered_pair_right : forall a b a' b':set,
+  ord_pair a b = ord_pair a' b' -> b = b'.
+Proof.
+  intros a b a' b' H. 
+  cut (a = a'). intros Ha.
+  cut (a = b \/ pair a b = pair a' b'). intros H1.
+  cut (a' = b'\/ pair a' b' = pair a b). intros H2. elim H1. 
+  clear H1. intro H1. elim H2.
+  clear H2. intro H2. rewrite <- H1, <- H2. exact Ha.
+  clear H2. intro H2. rewrite <- H1, Ha. 
+  apply when_pair_is_singleton with (c:=a). rewrite <- H1 in H2. exact H2.
+  clear H1. intro H1. clear H2.
+  cut (b = a' \/ b = b'). intro H2.
+  cut (b' = a \/ b' = b). intro H3. elim H2.
+  clear H2. intro H2. elim H3.
+  clear H3. intro H3. rewrite H2, H3, Ha. reflexivity.
+  clear H3. intro H3. rewrite H3. reflexivity.
+  clear H2. intro H2. exact H2. 
+  apply pair_elim. rewrite H1. apply pair_right.
+  apply pair_elim. rewrite <- H1. apply pair_right.
+  apply when_pair_in_ordered_pair. rewrite H. apply pair_right.
+  apply when_pair_in_ordered_pair. rewrite <- H. apply pair_right.
+  apply ordered_pair_left with (b:=b)(b':=b'). exact H.
+Qed.
+ 
+
+Proposition ordered_pair_injective: forall a b a' b':set,
   ord_pair a b = ord_pair a' b' -> a = a' /\ b = b'.
 Proof.
+  intros a b a' b' H. split. 
+  apply ordered_pair_left with (b:=b)(b':=b'). exact H.
+  apply ordered_pair_right with (a:=a)(a':=a'). exact H.
+Qed.
+
 
 Show.
-*)
 
 (*
 
 Parameter Union : set -> set.
 Axiom UnionI : forall X x y: set, belong x y -> belong y X -> belong x (Union X).
-Axiom UnionE : forall X x: set, 
-  belong x (Union X) -> exists y:set, belong x y /\ belong y X.
+  Axiom UnionE : forall X x: set, 
+    belong x (Union X) -> exists y:set, belong x y /\ belong y X.
 
 (* axiom of infinity *)
 Definition union (a b:set) : set := Union (pair a b).
