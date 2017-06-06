@@ -4,6 +4,7 @@ module Parse
 
 import Text.ParserCombinators.Parsec hiding (spaces)
 import Control.Monad
+import Numeric
 
 import LispVal
 
@@ -14,16 +15,45 @@ symbol = oneOf "!$%&|*+-/:<=?>@^_~#"
 spaces :: Parser ()
 spaces = skipMany1 space
 
-parseEscapedChar :: Parser Char
-parseEscapedChar = do
+hexChar :: Parser Char
+hexChar = digit <|> oneOf "abcdefABCDEF"
+
+hexNumber :: Parser Integer
+hexNumber = do
+  char '#'
+  char 'x'
+  s <- many1 hexChar 
+  let list = readHex s
+  return $ (fst . head) list
+
+octChar :: Parser Char
+octChar = oneOf "01234567"
+
+binChar :: Parser Char
+binChar = char '0' <|> char '1'
+
+decChar :: Parser Char
+decChar = digit
+
+escaped :: Parser Char
+escaped = do
   char '\\'
-  c <- char '"' <|> char '\\'
-  return c
+  c <-  char '"' 
+    <|> char '\\' 
+    <|> char 'n'
+    <|> char 't'
+    <|> char 'r'
+  return $ case c of
+    '"'   ->  '"'
+    '\\'  ->  '\\'
+    'n'   ->  '\n'
+    't'   ->  '\t'
+    'r'   ->  '\r'
 
 parseString :: Parser LispVal
 parseString = do
   char '"'
-  x <- many (noneOf "\"\\" <|> parseEscapedChar)
+  x <- many (noneOf "\"\\" <|> escaped)
   char '"'
   return $ String x 
 
@@ -38,11 +68,12 @@ parseAtom = do
     "#f"      -> Bool False
     otherwise -> Atom atom
 
+
 parseNumber :: Parser LispVal
-parseNumber = liftM (Number . read) $ many1 digit
+parseNumber = liftM Number hexNumber
 
 parseExpr :: Parser LispVal
-parseExpr = parseAtom <|> parseString <|> parseNumber
+parseExpr = parseNumber <|> parseAtom <|> parseString
 
 readExpr :: String -> String
 readExpr input = case parse parseExpr "lisp" input of

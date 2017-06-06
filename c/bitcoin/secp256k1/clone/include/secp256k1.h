@@ -84,12 +84,12 @@ typedef struct {
  * the message, the algorithm, the key and the attempt.
  */
 typedef int (*secp256k1_nonce_function)(
-    unsigned char *nonce32,
-    const unsigned char *msg32,
-    const unsigned char *key32,
-    const unsigned char *algo16,
-    void *data,
-    unsigned int attempt
+    unsigned char         *nonce32,
+    const unsigned char   *msg32,
+    const unsigned char   *key32,
+    const unsigned char   *algo16,
+    void                  *data,
+    unsigned int          attempt
 );
 
 # if !defined(SECP256K1_GNUC_PREREQ)
@@ -159,9 +159,8 @@ typedef int (*secp256k1_nonce_function)(
 #define SECP256K1_EC_COMPRESSED (SECP256K1_FLAGS_TYPE_COMPRESSION | SECP256K1_FLAGS_BIT_COMPRESSION)
 #define SECP256K1_EC_UNCOMPRESSED (SECP256K1_FLAGS_TYPE_COMPRESSION)
 
+
 SECP256K1_API int secp256k1_check(void);
-
-
 
 
 /** Create a secp256k1 context object.

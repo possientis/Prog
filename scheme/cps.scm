@@ -54,7 +54,7 @@
 
 (define (go& n a k)
   (=& 0 n (lambda (b)
-            (if 
+            (if b 
               (k a)
               (-& n 1 (lambda (nm1)
                         (*& n a (lambda (nta)
@@ -62,8 +62,53 @@
 
 (factorial2& 5 display)(newline)
 
+(newline)
+; assume we only have cps functions, then we can recover a standard function
+(define (factorial3 x)
+  (factorial& x (lambda (x) x)))
+
+(display (factorial3 5))(newline) ; 120
+
+;;; ret = 120. But why???
+;;; call-with-current-continuation has a single argument.
+;;; This argument is a procedure, with a single continuation argument
+;;; Now that we know about cps-functions, we are familiar with functions
+;;; expecting continuations as argument: the last argument of a cps function
+;;; is always a continuation (a procedure which takes a single argument).
+;;; So for example:
+
+;;; (lambda (k) (factorial& 5 k))
+;;; (lambda (k) (+& 5 7))
+
+;;; These functions take a single argument which are continuations.
+;;; These functions are ideally suited to be passed to the function
+;;; call-with-current-continuation.
+
+;;; Semantics: call-with-current-continuation calls the function passed as 
+;;; argument *with* the current continuation as argument.
+;;; Let us denote k0 the current continuation. k0 is a procedure 
+;;; which takes an argument x and then defines 'ret' as x, and 
+;;; then keeps going, as per the source code of this file.
+
+;;; (call-with-current-continuation 
+;;;   (lambda (k) (factorial& 5 k)))
+;;; ->
+;;; (factorial& 5 k0)
+;;; ->
+;;; (k0 (factorial 5))
+;;; ->
+;;; so k0 defines 'ret' as 120 etc...
+;;; ->
+;;; effectively call-with-current-continuation returns the value passed to k0
 
 
+(define ret 
+  (call-with-current-continuation 
+    (lambda (k) (factorial& 5 k))))
+
+(display ret)(newline)
+
+(display (call-with-current-continuation (lambda (k) (+& 5 7 k))))(newline) ; 12
 
 
 

@@ -13,5 +13,6 @@ rm -f lib/*.glob
 rm -f lib/*.vo
 
 ./set/clean.sh
+./zf/clean.sh
 
 cd ${DIR}

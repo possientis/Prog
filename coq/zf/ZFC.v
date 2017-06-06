@@ -1,35 +1,15 @@
 Require Import classical.
 
-(************************************************************************)
-(*                       The universe of sets                           *)
-(************************************************************************)
-
-Parameter set:Type.
-
-Parameter belong: set -> set -> Prop.
-
-Definition subset(a b:set) : Prop :=
-  forall x:set, belong x a -> belong x b.
-
-Proposition subset_refl : forall a:set, subset a a.
-Proof.
-  intros a. unfold subset. intros x H. exact H.
-Qed.
-
-Proposition subset_trans: forall a b c:set, 
-  subset a b -> subset b c -> subset a c.
-Proof.
-  intros a b c Hab Hbc. unfold subset. intros x Hxa.
-  unfold subset in Hab. unfold subset in Hbc.
-  apply Hbc. apply Hab. exact Hxa.
-Qed.
+Require Import Axiom_LEM.
+Require Import Axiom_Skolem.
+Require Import set.
+Require Import belong.
+Require Import Axiom_Empty_Set.
+Require Import subset.
+Require Import Axiom_Extensionality.
+Require Import empty.
 
 
-(************************************************************************)
-(*                   The law of excluded middle                         *)
-(************************************************************************)
-
-Axiom law_excluded_middle : forall p:Prop, ~p \/ p.
 
 Lemma LEM': forall p: Prop, p \/ ~p.
 Proof.
@@ -55,66 +35,6 @@ Proof.
 Qed.
 
 
-(************************************************************************)
-(*                      The skolemization axiom                         *)
-(************************************************************************)
-
-Axiom skolem: forall {A:Type}{P:A->Prop},
-  (exists (x:A), P x) ->
-  (forall (x y:A), P x -> P y -> x = y) -> { x:A | P x }.
-
-
-(************************************************************************)
-(*                       The extensionality axiom                       *)
-(************************************************************************)
-
-Axiom extensionality : forall a b:set, 
-  subset a b -> subset b a -> a = b.
-
-
-
-(************************************************************************)
-(*                      Existence of the empty set                      *)
-(************************************************************************)
-
-Definition empty(a:set): Prop := forall x:set, ~ belong x a.
-
-Axiom empty_set_exists : exists x:set, empty x.
-
-Lemma empty_set_is_unique : forall x y:set,
-  empty x -> empty y -> x = y.
-Proof.
-  intros x y Hx Hy. apply extensionality. 
-  unfold subset. intros z Hz. unfold empty in Hx. 
-  apply False_ind. apply (Hx z). exact Hz.
-  unfold subset. intros z Hz. unfold empty in Hy.
-  apply False_ind. apply (Hy z). exact Hz.
-Qed.
-
-Definition O : set := proj1_sig (skolem empty_set_exists empty_set_is_unique).
-
-Proposition empty_O : empty O.
-Proof.
-  exact (proj2_sig (skolem empty_set_exists empty_set_is_unique)). 
-Qed.
-
-Proposition not_belong_x_O : forall x:set, ~belong x O.
-Proof.
-  exact empty_O.
-Qed.
-
-Proposition empty_x_is_O : forall x:set, empty x -> x = O.
-Proof.
-  intros x Hx. apply empty_set_is_unique. exact Hx. exact empty_O.
-Qed.
-
-
-Proposition empty_iff_O : forall x:set,
-  empty x <-> x = O.
-Proof.
-  intros x. split. apply empty_x_is_O.
-  intros H. rewrite H. exact empty_O.
-Qed.
 
 (************************************************************************)
 (*                          The pairing axiom                           *)
@@ -279,8 +199,6 @@ Proof.
   apply ordered_pair_right with (a:=a)(a':=a'). exact H.
 Qed.
 
-
-Show.
 
 (*
 
