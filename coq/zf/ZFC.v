@@ -1,14 +1,16 @@
 Require Import classical.
 
 Require Import Axiom_LEM.
-Require Import Axiom_Skolem.
 Require Import set.
+Require Import Axiom_Skolem.
 Require Import belong.
 Require Import Axiom_Empty_Set.
+Require Import Axiom_Pairing.
 Require Import subset.
 Require Import Axiom_Extensionality.
 Require Import empty.
-
+Require Import pair.
+Require Import singleton.
 
 
 Lemma LEM': forall p: Prop, p \/ ~p.
@@ -26,178 +28,6 @@ Proof.
   unfold lem. intro p. apply LEM'.
 Qed.
 
-
-Lemma not_not : forall p:Prop, ~~p <-> p.
-Proof.
-  intros p. split. apply peirce_to_classic. apply imp_or_to_peirce.
-  apply and_or_to_imp_or. apply lem_to_and_or. unfold lem. exact LEM'.
-  apply L2.
-Qed.
-
-
-
-(************************************************************************)
-(*                          The pairing axiom                           *)
-(************************************************************************)
-
-Axiom pairing : forall a b:set, exists c:set,
-  forall x:set, belong x c <-> x = a \/ x = b. 
-
-Definition pair_relation(a b c:set) : Prop :=
-  forall x:set, belong x c <-> x = a \/ x = b. 
-
-Lemma pair_is_unique: forall a b:set, forall c d:set,
-  pair_relation a b c -> pair_relation a b d -> c = d.
-Proof.
-  intros a b c d Hc Hd. apply extensionality. 
-  unfold subset. intros x Hx. apply Hc in Hx. apply Hd in Hx. exact Hx.
-  unfold subset. intros x Hx. apply Hd in Hx. apply Hc in Hx. exact Hx.
-Qed.
-
-Definition pair(a b:set) : set := 
-  proj1_sig (skolem (pairing a b) (pair_is_unique a b)).
-
-
-Proposition pair_is_pair : forall a b:set, 
-  forall x:set, belong x (pair a b) <-> x = a \/ x = b.
-Proof.
-  intros a b. exact (proj2_sig (skolem (pairing a b) (pair_is_unique a b))).
-Qed.
-
-Lemma pair_left : forall a b:set, belong a (pair a b).
-Proof.
-  intros a b. apply pair_is_pair. left. reflexivity.
-Qed.
-
-
-Lemma pair_right : forall a b:set, belong b (pair a b).
-Proof.
-  intros a b. apply pair_is_pair. right. reflexivity.
-Qed.
-
-Lemma pair_elim : forall x a b:set, belong x (pair a b) -> x = a \/ x = b.
-Proof.
-  intros x a b. apply pair_is_pair.
-Qed.
-
-Lemma pair_subset: forall a b:set, subset (pair a b) (pair b a).
-Proof.
-  intros a b. unfold subset. intros x Hx. cut (x = a \/ x = b).
-  intros H'. elim H'. 
-  clear H'. intro H'. rewrite H'. apply pair_right.
-  clear H'. intro H'. rewrite H'. apply pair_left.
-  apply pair_elim. exact Hx.
-Qed.
-
-
-Proposition pair_commute : forall a b:set, pair a b = pair b a.
-Proof.
-  intros a b. apply extensionality. apply pair_subset. apply pair_subset. 
-Qed.
-
-
-(************************************************************************)
-(*                          singleton sets                              *)
-(************************************************************************)
-
-Definition singleton (x:set) : set := pair x x.
-
-Lemma singleton_belong: forall x y:set, belong x (singleton y) <-> x = y.
-Proof.
-  intros x y. split. intros Hxy. unfold singleton in Hxy.
-  apply pair_elim in Hxy. elim Hxy.
-  clear Hxy. intro Hxy. exact Hxy. clear Hxy. intro Hxy. exact Hxy.
-  intros Exy. unfold singleton. rewrite Exy. apply pair_left.
-Qed.
-
-Lemma singleton_injective : forall a b:set,
-  singleton a = singleton b -> a = b.
-Proof.
-  intros a b H. apply singleton_belong. rewrite <- H. apply pair_left.
-Qed.
-
-Lemma when_pair_is_singleton : forall a b c:set, 
-  pair a b = singleton c  -> a = b.
-Proof.
-  intros a b c H. cut (a = c /\ b = c). intros H'. elim H'.
-  clear H'. intros Eac Ebc. rewrite Eac, Ebc. reflexivity. split.
-  apply singleton_belong. rewrite <- H. apply pair_left.
-  apply singleton_belong. rewrite <- H. apply pair_right.
-Qed.
-
-
-
-(************************************************************************)
-(*                          ordered pair                                *)
-(************************************************************************)
-
-Definition ord_pair (a b:set) : set := pair (singleton a) (pair a b).
-
-(* auxiliary lemma, no real value by itself *)
-Lemma when_singleton_in_ordered_pair : forall a a' b':set,
-  belong (singleton a) (ord_pair a' b') -> a = a'.
-Proof.
-  intros a a' b' H. apply pair_elim in H. elim H.
-  clear H. exact (singleton_injective a a').
-  clear H. intros H. cut (belong a (pair a' b') /\ a' = b').
-  intros H'. elim H'. clear H'. intros H1 H2. apply pair_elim in H1. elim H1.
-  clear H1. intros H1. exact H1.
-  clear H1. intros H1. rewrite H2. exact H1. split.
-  rewrite <- H. apply singleton_belong. reflexivity.
-  apply when_pair_is_singleton with (c:=a). rewrite H. reflexivity.
-Qed.
-
-(* auxiliary lemma, no real value by itself *)
-Lemma when_pair_in_ordered_pair : forall a b a' b':set,
-  belong (pair a b) (ord_pair a' b')  -> a = b \/ pair a b = pair a' b'.
-Proof.
-  intros a b a' b' H. apply pair_elim in H. elim H.
-  clear H. intros H. left. apply when_pair_is_singleton with (c:= a'). exact H.
-  clear H. intros H. right. exact H.
-Qed.
-
-
-Proposition ordered_pair_left : forall a b a' b':set,
-  ord_pair a b = ord_pair a' b' -> a = a'.
-Proof.
-  intros a b a' b' H. apply when_singleton_in_ordered_pair with (b':=b'). 
-  rewrite <- H. apply pair_left.
-Qed.
-
-
-Proposition ordered_pair_right : forall a b a' b':set,
-  ord_pair a b = ord_pair a' b' -> b = b'.
-Proof.
-  intros a b a' b' H. 
-  cut (a = a'). intros Ha.
-  cut (a = b \/ pair a b = pair a' b'). intros H1.
-  cut (a' = b'\/ pair a' b' = pair a b). intros H2. elim H1. 
-  clear H1. intro H1. elim H2.
-  clear H2. intro H2. rewrite <- H1, <- H2. exact Ha.
-  clear H2. intro H2. rewrite <- H1, Ha. 
-  apply when_pair_is_singleton with (c:=a). rewrite <- H1 in H2. exact H2.
-  clear H1. intro H1. clear H2.
-  cut (b = a' \/ b = b'). intro H2.
-  cut (b' = a \/ b' = b). intro H3. elim H2.
-  clear H2. intro H2. elim H3.
-  clear H3. intro H3. rewrite H2, H3, Ha. reflexivity.
-  clear H3. intro H3. rewrite H3. reflexivity.
-  clear H2. intro H2. exact H2. 
-  apply pair_elim. rewrite H1. apply pair_right.
-  apply pair_elim. rewrite <- H1. apply pair_right.
-  apply when_pair_in_ordered_pair. rewrite H. apply pair_right.
-  apply when_pair_in_ordered_pair. rewrite <- H. apply pair_right.
-  apply ordered_pair_left with (b:=b)(b':=b'). exact H.
-Qed.
- 
-
-Proposition ordered_pair_injective: forall a b a' b':set,
-  ord_pair a b = ord_pair a' b' -> a = a' /\ b = b'.
-Proof.
-  intros a b a' b' H. split. 
-  apply ordered_pair_left with (b:=b)(b':=b'). exact H.
-  apply ordered_pair_right with (a:=a)(a':=a'). exact H.
-Qed.
 
 
 (*

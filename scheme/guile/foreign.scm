@@ -1,6 +1,5 @@
 (use-modules (system foreign))
 
-
 (display int8)(newline)   ; 4
 (display uint8)(newline)  ; 4
 (display uint16)(newline) ; 5

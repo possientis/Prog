@@ -26,10 +26,17 @@
 
 
 (test)
-(newline)(newline)
 (the-continuation 0)
-(newline)(newline)
 (the-continuation "abc")
+
+
+(define (f k)
+  (k 2)
+  3)
+
+(display (f (lambda (x) x)))(newline)                 ; 3
+(display (call-with-current-continuation f))(newline) ; 2
+
 
 
 (exit 0)

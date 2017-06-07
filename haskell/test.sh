@@ -9,6 +9,7 @@ cd ${HOME}
 ./json/test.sh
 ./logic/test.sh
 ./types/test.sh
+./lisp/test.sh
 
 cd ${DIR}
 echo '\nAll haskell tests completed successfully\n'

@@ -1,5 +1,7 @@
 module Parse
-  ( readExpr
+  ( check
+  , readExpr
+  , symbol
   ) where
 
 import Text.ParserCombinators.Parsec hiding (spaces)
@@ -79,6 +81,11 @@ readExpr :: String -> String
 readExpr input = case parse parseExpr "lisp" input of
   Left err    -> "No match: " ++ show err
   Right val   -> "Found Value: " ++ show val
+
+check :: Parser a -> String -> Maybe a
+check parser input = case parse parser "lisp" input of
+  Left err    -> Nothing
+  Right val   -> Just val
 
 
 

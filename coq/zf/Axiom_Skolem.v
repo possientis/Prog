@@ -1,10 +1,11 @@
+Require Import set.
 
 (************************************************************************)
 (*                      The skolemization axiom                         *)
 (************************************************************************)
 
-Axiom skolem: forall {A:Type} {P:A->Prop},
-  (exists (x:A), P x) ->
-  (forall (x y:A), P x -> P y -> x = y) -> { x:A | P x }.
+Axiom skolem: forall {P:set->Prop},
+  (exists (x:set), P x) ->
+  (forall (x y:set), P x -> P y -> x = y) -> { x:set | P x }.
 
 

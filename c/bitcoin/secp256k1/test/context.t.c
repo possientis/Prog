@@ -32,11 +32,17 @@ static int test_context_create(int flag)
 
   switch(flag) {
     case SECP256K1_CONTEXT_NONE:
-      str = "(None)"; break;
+      str = "(None)"; 
+      fprintf(stderr, "flag is NONE: %d\n", flag);
+      break;
     case SECP256K1_CONTEXT_SIGN: 
-      str = "(Sign)"; break;
+      str = "(Sign)"; 
+      fprintf(stderr, "flag is SIGN: %d\n", flag);
+      break;
     case SECP256K1_CONTEXT_VERIFY:
-      str = "(Verify)"; break;
+      str = "(Verify)"; 
+      fprintf(stderr, "flag is VERIFY: %d\n", flag);
+      break;
     default:
       assert(0);
   }

@@ -8,7 +8,7 @@ echo
 
 echo "testing universal algebra of predicate logic"
 
-ghc -o a.out Unit-Test.hs; ./a.out;./clean.sh
+ghc -o a.out Unit-Test.hs; ./a.out; ./clean.sh
 
 
 cd ${DIR}
