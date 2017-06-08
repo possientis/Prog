@@ -4,6 +4,7 @@ all:	Axiom_LEM.vo \
 			belong.vo \
 			Axiom_Empty_Set.vo \
 			Axiom_Pairing.vo \
+			Axiom_Union.vo \
 			subset.vo	\
 			Axiom_Extensionality.vo \
 			empty.vo \
@@ -28,6 +29,9 @@ Axiom_Empty_Set.vo: Axiom_Empty_Set.v set.vo belong.vo
 
 Axiom_Pairing.vo: Axiom_Pairing.v set.vo belong.vo
 	coqc Axiom_Pairing.v
+
+Axiom_Union.vo: Axiom_Union.v set.vo belong.vo
+	coqc Axiom_Union.v
 
 subset.vo: subset.v belong.vo set.vo 
 	coqc subset.v

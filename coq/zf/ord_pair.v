@@ -8,7 +8,7 @@ Require Import singleton.
 (************************************************************************)
 
 (* (a,b) is defined as the pair {{a},{a,b}} *)
-Definition ord_pair (a b:set) : set := pair (singleton a) (pair a b).
+Definition ord_pair (a b:set) : set := { (singleton a), {a,b} }.
 
 (* auxiliary lemma, no real value by itself *)
 Lemma when_singleton_in_ord_pair : forall a a' b':set,
@@ -16,7 +16,7 @@ Lemma when_singleton_in_ord_pair : forall a a' b':set,
 Proof.
   intros a a' b' H. apply pair_elim in H. elim H.
   clear H. exact (singleton_injective a a').
-  clear H. intros H. cut (belong a (pair a' b') /\ a' = b').
+  clear H. intros H. cut (belong a {a',b'} /\ a' = b').
   intros H'. elim H'. clear H'. intros H1 H2. apply pair_elim in H1. elim H1.
   clear H1. intros H1. exact H1.
   clear H1. intros H1. rewrite H2. exact H1. split.
@@ -26,7 +26,7 @@ Qed.
 
 (* auxiliary lemma, no real value by itself *)
 Lemma when_pair_in_ord_pair : forall a b a' b':set,
-  belong (pair a b) (ord_pair a' b')  -> a = b \/ pair a b = pair a' b'.
+  belong {a,b} (ord_pair a' b')  -> a = b \/ {a,b} = {a',b'}.
 Proof.
   intros a b a' b' H. apply pair_elim in H. elim H.
   clear H. intros H. left. apply when_pair_is_singleton with (c:= a'). exact H.
@@ -47,8 +47,8 @@ Proposition ord_pair_right : forall a b a' b':set,
 Proof.
   intros a b a' b' H. 
   cut (a = a'). intros Ha.
-  cut (a = b \/ pair a b = pair a' b'). intros H1.
-  cut (a' = b'\/ pair a' b' = pair a b). intros H2. elim H1. 
+  cut (a = b \/ {a,b} = {a',b'}). intros H1.
+  cut (a' = b'\/ {a',b'} = {a,b}). intros H2. elim H1. 
   clear H1. intro H1. elim H2.
   clear H2. intro H2. rewrite <- H1, <- H2. exact Ha.
   clear H2. intro H2. rewrite <- H1, Ha. 

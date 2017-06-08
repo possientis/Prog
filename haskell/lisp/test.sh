@@ -8,7 +8,7 @@ echo
 
 echo "testing scheme interpreter"
 
-ghc -o a.out Unit-Test.hs; ./a.out; # ./clean.sh
+ghc -o a.out Unit-Test.hs; ./a.out; ./clean.sh
 
 
 cd ${DIR}

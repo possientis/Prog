@@ -2,6 +2,7 @@ module AlphaEquiv
   ( alphaEq
   ) where
 
+import Data.Functor ((<$>))
 import Data.Set
 import Formula
 import Variable
@@ -13,7 +14,7 @@ alphaEq (Bot) (Bot)                 = True
 alphaEq (Imply p q) (Imply p' q')   = alphaEq p p' && alphaEq q q'
 alphaEq (Forall x p) (Forall x' p') = if (x == x') 
   then  alphaEq p p'
-  else not $ member x' (free p) && alphaEq ((x<->x')<$>p) p'
+  else (not $ member x' $ free p) && alphaEq ((x<->x')<$>p) p'
 alphaEq _ _                         = False
 
 

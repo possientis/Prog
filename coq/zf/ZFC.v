@@ -32,10 +32,6 @@ Qed.
 
 (*
 
-Parameter Union : set -> set.
-Axiom UnionI : forall X x y: set, belong x y -> belong y X -> belong x (Union X).
-  Axiom UnionE : forall X x: set, 
-    belong x (Union X) -> exists y:set, belong x y /\ belong y X.
 
 (* axiom of infinity *)
 Definition union (a b:set) : set := Union (pair a b).

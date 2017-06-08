@@ -11,36 +11,58 @@ extern "C" {
  *
  * 1. Context pointers go first, followed by output arguments, combined
  *    output/input arguments, and finally input-only arguments.
- * 2. Array lengths always immediately the follow the argument whose length
+ *
+ * 2. Array lengths always immediately follow the argument whose length
  *    they describe, even if this violates rule 1.
- * 3. Within the OUT/OUTIN/IN groups, pointers to data that is typically generated
- *    later go first. This means: signatures, public nonces, private nonces,
- *    messages, public keys, secret keys, tweaks.
- * 4. Arguments that are not data pointers go last, from more complex to less
- *    complex: function pointers, algorithm names, messages, void pointers,
- *    counts, flags, booleans.
- * 5. Opaque data pointers follow the function pointer they are to be passed to.
+ *
+ * 3. Within the OUT/OUTIN/IN groups, pointers to data that is typically 
+ *    generated later go first. This means: 
+ *      signatures, 
+ *      public nonces, 
+ *      private nonces, 
+ *      messages, 
+ *      public keys, 
+ *      secret keys, 
+ *      tweaks.
+ *
+ * 4. Arguments that are not data pointers go last, from more complex to
+ *    less complex: function pointers, algorithm names, messages, void 
+ *    pointers, counts, flags, booleans.
+ *
+ * 5. Opaque data pointers follow the function pointer they are to be 
+ *    passed to.
  */
 
-/** Opaque data structure that holds context information (precomputed tables etc.).
+
+/** Opaque data structure that holds context information 
+ *  (e.g. precomputed tables etc.)
  *
- *  The purpose of context structures is to cache large precomputed data tables
- *  that are expensive to construct, and also to maintain the randomization data
- *  for blinding.
+ *  The purpose of context structures is to cache large precomputed data 
+ *  tables that are expensive to construct, and also to maintain the 
+ *  randomization data for blinding.
  *
- *  Do not create a new context object for each operation, as construction is
- *  far slower than all other API calls (~100 times slower than an ECDSA
- *  verification).
+ *  Do not create a new context object for each operation, as construction 
+ *  is far slower than all other API calls (~100 times slower than an 
+ *  ECDSA verification).
  *
  *  A constructed context can safely be used from multiple threads
  *  simultaneously, but API call that take a non-const pointer to a context
  *  need exclusive access to it. In particular this is the case for
  *  secp256k1_context_destroy and secp256k1_context_randomize.
  *
- *  Regarding randomization, either do it once at creation time (in which case
- *  you do not need any locking for the other calls), or use a read-write lock.
+ *  Regarding randomization, either do it once at creation time (in which 
+ *  case you do not need any locking for the other calls), or use a read-
+ *  write lock.
  */
-typedef struct secp256k1_context_struct secp256k1_context;
+
+typedef struct secp256k1_context_struct 
+
+/************************************************************************/
+secp256k1_context
+/************************************************************************/
+;
+
+
 
 /** Opaque data structure that holds a parsed and valid public key.
  *
@@ -50,9 +72,18 @@ typedef struct secp256k1_context_struct secp256k1_context;
  *  If you need to convert to a format suitable for storage, transmission, or
  *  comparison, use secp256k1_ec_pubkey_serialize and secp256k1_ec_pubkey_parse.
  */
-typedef struct {
+
+typedef struct 
+{
     unsigned char data[64];
-} secp256k1_pubkey;
+} 
+
+/************************************************************************/
+secp256k1_pubkey
+/************************************************************************/
+;
+
+/* TODO */
 
 /** Opaque data structured that holds a parsed ECDSA signature.
  *

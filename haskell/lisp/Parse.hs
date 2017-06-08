@@ -1,6 +1,9 @@
 module Parse
   ( check
+  , hexChar
+  , hexNumber
   , readExpr
+  , spaces
   , symbol
   ) where
 
