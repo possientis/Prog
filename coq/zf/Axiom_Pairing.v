@@ -6,4 +6,4 @@ Require Import belong.
 (************************************************************************)
 
 Axiom pairing : forall a b:set, exists c:set,
-  forall x:set, belong x c <-> x = a \/ x = b. 
+  forall x:set, x:c <-> x = a \/ x = b. 

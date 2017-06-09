@@ -8,11 +8,11 @@ Require Import pair.
 
 
 (* binary relation expressing the fact that Ua = b *)
-Definition union_relation (a b:set) : Prop :=
-  forall x:set, belong x b <-> exists y:set, belong x y /\ belong y a.
+Definition is_union (a b:set) : Prop :=
+  forall x:set, x:b <-> exists y:set, x:y /\ y:a.
 
 Lemma union_is_unique : forall a:set, forall b c:set,
-  union_relation a b -> union_relation a c -> b = c.
+  is_union a b -> is_union a c -> b = c.
 Proof.
   intros a b c Hab Hac. apply extensionality.
   unfold subset. intros x Hx. apply Hab in Hx. apply Hac in Hx. exact Hx.
@@ -28,20 +28,20 @@ Definition U (a:set) : set :=
 
 (* U a is U a *)
 Proposition union_is_union : forall a:set,
-  forall x:set, belong x (U a) <-> exists y:set, belong x y /\ belong y a.
+  forall x:set, x:(U a) <-> exists y:set, x:y /\ y:a.
 Proof.
   intros a. exact (proj2_sig (skolem (union_axiom a) (union_is_unique a))).
 Qed.
 
 Proposition union_intro : forall a x y:set,
-  belong x y -> belong y a  -> belong x (U a).
+  x:y -> y:a  -> x:(U a).
 Proof.
   intros a x y Hxy Hya. apply union_is_union. 
   exists y. split. exact Hxy. exact Hya.
 Qed.
 
 Proposition union_elim : forall a x:set,
-  belong x (U a) -> exists y:set, belong x y /\ belong y a.
+  x:(U a) -> exists y:set, x:y /\ y:a.
 Proof.
   intros a x H. apply union_is_union. exact H.
 Qed.

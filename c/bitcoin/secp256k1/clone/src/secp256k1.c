@@ -25,6 +25,45 @@
     } \
 } while(0)
 
+
+/* trick to convert value of a macro into a string constant */
+# define STR(EXP) "\'"STR_(EXP)"\'" 
+# define STR_(EXP) #EXP /* # is preprocesssor 'stringify operator' */
+
+#define DISPLAY_INT_MACRO(NAME) \
+  fprintf(stderr, #NAME" is defined and equal to %d\n", NAME)
+
+#define DISPLAY_STR_MACRO(NAME) \
+  fprintf(stderr, #NAME" is defined and equal to %s\n", STR(NAME))
+
+
+int 
+
+/************************************************************************/
+secp256k1_check
+/************************************************************************/
+
+(
+
+void
+
+)
+
+{ 
+  
+  DISPLAY_INT_MACRO(SECP256K1_GNUC_PREREQ(6,2));
+  DISPLAY_INT_MACRO(SECP256K1_GNUC_PREREQ(6,3));
+  DISPLAY_INT_MACRO(SECP256K1_GNUC_PREREQ(6,4));
+  DISPLAY_STR_MACRO(SECP256K1_INLINE);
+  DISPLAY_STR_MACRO(SECP256K1_API);
+  DISPLAY_STR_MACRO(SECP256K1_WARN_UNUSED_RESULT);
+  
+  return 1; 
+
+}
+
+
+
 static void 
 
 /************************************************************************/
@@ -97,14 +136,6 @@ struct secp256k1_context_struct
 
 };
 
-
-int 
-
-/************************************************************************/
-secp256k1_check(void)
-/************************************************************************/
-
-{ return 1; }
 
 
 

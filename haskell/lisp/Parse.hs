@@ -1,7 +1,11 @@
 module Parse
-  ( check
+  ( binChar 
+  , binNumber
+  , check
   , hexChar
   , hexNumber
+  , octChar
+  , octNumber
   , readExpr
   , spaces
   , symbol
@@ -23,14 +27,6 @@ spaces = skipMany1 space
 hexChar :: Parser Char
 hexChar = digit <|> oneOf "abcdefABCDEF"
 
-hexNumber :: Parser Integer
-hexNumber = do
-  char '#'
-  char 'x'
-  s <- many1 hexChar 
-  let list = readHex s
-  return $ (fst . head) list
-
 octChar :: Parser Char
 octChar = oneOf "01234567"
 
@@ -39,6 +35,40 @@ binChar = char '0' <|> char '1'
 
 decChar :: Parser Char
 decChar = digit
+
+hexNumber :: Parser Integer
+hexNumber = do
+  char '#'
+  char 'x'
+  s <- many1 hexChar 
+  let list = readHex s
+  return $ (fst . head) list
+
+octNumber :: Parser Integer
+octNumber = do
+  char '#'
+  char 'o'
+  s <- many1 octChar 
+  let list = readOct s
+  return $ (fst . head) list
+
+
+readBinary :: String -> Integer
+readBinary [] = error "readBinary: no number to read"
+readBinary xs = go xs 0 where
+  go [] acc     = acc
+  go (x:xs) acc = case x of 
+    '0'       -> go xs (2*acc)
+    '1'       -> go xs (2*acc + 1)
+    otherwise -> error "readBinary: illegal character"
+
+binNumber :: Parser Integer
+binNumber = do
+  char '#'
+  char 'b'
+  s <- many1 binChar 
+  return $ readBinary s
+
 
 escaped :: Parser Char
 escaped = do

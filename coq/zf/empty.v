@@ -7,16 +7,14 @@ Require Import Axiom_Empty_Set.
 
 
 
-Definition empty(a:set): Prop := forall x:set, ~ belong x a.
+Definition empty(a:set): Prop := forall x:set, ~x:a.
 
-Lemma empty_set_is_unique : forall x y:set,
-  empty x -> empty y -> x = y.
+Lemma empty_set_is_unique : forall a b:set,
+  empty a -> empty b -> a = b.
 Proof.
-  intros x y Hx Hy. apply extensionality. 
-  unfold subset. intros z Hz. unfold empty in Hx. 
-  apply False_ind. apply (Hx z). exact Hz.
-  unfold subset. intros z Hz. unfold empty in Hy.
-  apply False_ind. apply (Hy z). exact Hz.
+  intros a b Ha Hb. apply extensionality.
+  unfold subset. intros x Hx. apply Ha in Hx. apply False_ind. exact Hx.
+  unfold subset. intros x Hx. apply Hb in Hx. apply False_ind. exact Hx.
 Qed.
 
 (* We have an axiom which guarantees the existence of an empty set, while
@@ -32,5 +30,4 @@ Proposition empty_O : empty O.
 Proof.
   exact (proj2_sig (skolem empty_set_exists empty_set_is_unique)). 
 Qed.
-
 

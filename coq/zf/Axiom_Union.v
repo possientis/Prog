@@ -6,6 +6,6 @@ Require Import belong.
 (************************************************************************)
 
 Axiom union_axiom : forall a:set, exists b:set,
-  forall x:set, belong x b <-> exists y:set, belong x y /\ belong y a.
+  forall x:set, x:b <-> exists y:set, x:y /\ y:a.
 
 

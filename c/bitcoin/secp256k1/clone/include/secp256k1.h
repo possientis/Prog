@@ -83,7 +83,6 @@ secp256k1_pubkey
 /************************************************************************/
 ;
 
-/* TODO */
 
 /** Opaque data structured that holds a parsed ECDSA signature.
  *
@@ -94,9 +93,18 @@ secp256k1_pubkey
  *  comparison, use the secp256k1_ecdsa_signature_serialize_* and
  *  secp256k1_ecdsa_signature_serialize_* functions.
  */
-typedef struct {
+
+typedef struct 
+{
     unsigned char data[64];
-} secp256k1_ecdsa_signature;
+} 
+
+/************************************************************************/
+secp256k1_ecdsa_signature
+/************************************************************************/
+;
+
+
 
 /** A pointer to a function to deterministically generate a nonce.
  *
@@ -114,14 +122,30 @@ typedef struct {
  * Except for test cases, this function should compute some cryptographic hash of
  * the message, the algorithm, the key and the attempt.
  */
-typedef int (*secp256k1_nonce_function)(
+
+typedef int 
+
+(
+
+/************************************************************************/
+*secp256k1_nonce_function
+/************************************************************************/
+)
+
+(
+
     unsigned char         *nonce32,
     const unsigned char   *msg32,
     const unsigned char   *key32,
     const unsigned char   *algo16,
     void                  *data,
     unsigned int          attempt
+
 );
+
+/************************************************************************/
+/* SECP256k1_GNUC_PREREQ                                                */ 
+/************************************************************************/
 
 # if !defined(SECP256K1_GNUC_PREREQ)
 #  if defined(__GNUC__)&&defined(__GNUC_MINOR__)
@@ -132,18 +156,34 @@ typedef int (*secp256k1_nonce_function)(
 #  endif
 # endif
 
+/************************************************************************/
+/* SECP256k1_INLINE                                                     */ 
+/************************************************************************/
 # if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
-#  if SECP256K1_GNUC_PREREQ(2,7)
-#   define SECP256K1_INLINE __inline__
-#  elif (defined(_MSC_VER))
+
+# if SECP256K1_GNUC_PREREQ(2,7)
+
+#       define SECP256K1_INLINE __inline__
+
+#   elif (defined(_MSC_VER))
+
 #   define SECP256K1_INLINE __inline
+
 #  else
+
 #   define SECP256K1_INLINE
+
 #  endif
+
 # else
+
 #  define SECP256K1_INLINE inline
+
 # endif
 
+/************************************************************************/
+/* SECP256k1_API                                                        */ 
+/************************************************************************/
 #ifndef SECP256K1_API
 # if defined(_WIN32)
 #  ifdef SECP256K1_BUILD
@@ -158,14 +198,24 @@ typedef int (*secp256k1_nonce_function)(
 # endif
 #endif
 
-/**Warning attributes
-  * NONNULL is not used if SECP256K1_BUILD is set to avoid the compiler optimizing out
-  * some paranoid null checks. */
+
+/************************************************************************/
+/* SECP256k1_WARN_UNUSED_RESULT                                         */ 
+/************************************************************************/
 # if defined(__GNUC__) && SECP256K1_GNUC_PREREQ(3, 4)
 #  define SECP256K1_WARN_UNUSED_RESULT __attribute__ ((__warn_unused_result__))
 # else
 #  define SECP256K1_WARN_UNUSED_RESULT
 # endif
+
+
+/**Warning attributes
+  * NONNULL is not used if SECP256K1_BUILD is set to avoid the compiler 
+  * optimizing out some paranoid null checks. 
+  */
+/************************************************************************/
+/* SECP256k1_ARG_NONNULL                                         */ 
+/************************************************************************/
 # if !defined(SECP256K1_BUILD) && defined(__GNUC__) && SECP256K1_GNUC_PREREQ(3, 4)
 #  define SECP256K1_ARG_NONNULL(_x)  __attribute__ ((__nonnull__(_x)))
 # else

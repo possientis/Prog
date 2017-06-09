@@ -8,7 +8,9 @@ Require Import pair.
 
 Definition singleton (x:set) : set := {x,x}.
 
-Proposition singleton_belong: forall x y:set, belong x (singleton y) <-> x = y.
+Notation "{ a }" := (singleton a) : core_scope.
+
+Proposition singleton_belong: forall x y:set, x:(singleton y) <-> x = y.
 Proof.
   intros x y. split. intros Hxy. unfold singleton in Hxy.
   apply pair_elim in Hxy. elim Hxy.

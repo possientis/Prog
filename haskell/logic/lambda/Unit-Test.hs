@@ -7,6 +7,7 @@ import Test_SubFormula
 import Test_Substitution
 import Test_Valid
 import Test_Admissible
+import Test_AlphaEquiv
 
 import System.Exit
 
@@ -14,7 +15,7 @@ import System.Exit
 
 tests = TestList 
   [ test_Eq, test_Functor, test_Show, test_Variable, test_SubFormula
-  , test_Substitution, test_Valid, test_Admissible
+  , test_Substitution, test_Valid, test_Admissible, test_AlphaEquiv
   ]
 
 main = do

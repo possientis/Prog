@@ -10,7 +10,8 @@ all:	Axiom_LEM.vo \
 			empty.vo \
 			pair.vo	\
 			singleton.vo \
-			ord_pair.vo
+			ord_pair.vo \
+			union.vo
 			
 Axiom_LEM.vo: Axiom_LEM.v
 	coqc Axiom_LEM.v
@@ -52,5 +53,11 @@ singleton.vo: singleton.v set.vo belong.vo pair.vo
 
 ord_pair.vo: ord_pair.v set.vo belong.vo pair.vo singleton.vo
 	coqc ord_pair.v
+
+union.vo: union.v set.vo Axiom_Skolem.vo belong.vo Axiom_Union.vo subset.vo \
+					Axiom_Extensionality.vo pair.vo
+	coqc union.v
+
+
 
 

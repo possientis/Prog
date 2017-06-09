@@ -4,10 +4,12 @@ module Test_AlphaEquiv
 
 import Test.HUnit
 
+import Data.Functor ((<$>))
 import Test_data
 import AlphaEquiv
 import Formula
 import V
+import Substitution
 
 test1   = TestCase  $ assertBool "test1"  $ alphaEq p1 p1
 test2   = TestCase  $ assertBool "test2"  $ alphaEq p2 p2
@@ -47,8 +49,8 @@ test31  = TestCase  $ assertBool "test31" $ not $ alphaEq p3 $ p7
 test32  = TestCase  $ assertBool "test32" $ not $ alphaEq p3 $ p8
 
 test33  = TestCase  $ assertBool "test33" $ not $ alphaEq p4 $ p1
-test34  = TestCase  $ assertBool "test34" $ not $ alphaEq p4 $ p1
-test35  = TestCase  $ assertBool "test35" $ not $ alphaEq p4 $ p1
+test34  = TestCase  $ assertBool "test34" $ not $ alphaEq p4 $ p2
+test35  = TestCase  $ assertBool "test35" $ not $ alphaEq p4 $ p3
 test36  = TestCase  $ assertBool "test36" $ alphaEq p4 $ forall z (belong z y)
 test37  = TestCase  $ assertBool "test37" $ not $ alphaEq p4 $ p5
 test38  = TestCase  $ assertBool "test38" $ not $ alphaEq p4 $ p6
@@ -93,16 +95,56 @@ test71  = TestCase  $ assertBool "test71" $ not $ alphaEq p8 $ p7
 test72  = TestCase  $ assertBool "test72" $       alphaEq p8 $ phi0 
 
 
-phi1 = forall x $ forall y $ imply (forall y $ belong y x)(forall x $ belong x y)
-phi2 = forall x $ forall y $ imply (forall y $ belong y x)(forall z $ belong z y)
-phi3 = forall x $ forall t $ imply (forall y $ belong y x)(forall z $ belong z t)
-phi4 = forall z $ forall y $ imply (forall x $ belong x z)(forall x $ belong x y)
+phi1  = forall x $ forall y $ imply (forall y $ belong y x)(forall x $ belong x y)
+phi2  = forall x $ forall y $ imply (forall y $ belong y x)(forall z $ belong z y)
+phi3  = forall x $ forall t $ imply (forall y $ belong y x)(forall z $ belong z t)
+phi4  = forall z $ forall y $ imply (forall x $ belong x z)(forall x $ belong x y)
+phi5  = (x<->y) <$> p9
+phi6  = (x<->z) <$> p9
+phi7  = (y<->z) <$> p9
+phi8  = (x<->y) <$> phi1
+phi9  = (x<->z) <$> phi1
+phi10 = (y<->z) <$> phi1
+phi11 = (x<->y) <$> phi2
+phi12 = (x<->z) <$> phi2
+phi13 = (y<->z) <$> phi2
+phi14 = (x<->y) <$> phi3
+phi15 = (x<->z) <$> phi3
+phi16 = (y<->z) <$> phi3
+phi17 = (x<->y) <$> phi4
+phi18 = (x<->z) <$> phi4
+phi19 = (y<->z) <$> phi4
+phi20 = (x<-:z) <$> p9
+phi21 = (y<-:x) <$> p9
+phi22 = (x<-:y) <$> p9
+phi23 = (z<-:x) <$> p9
+
+
 
 test73  = TestCase  $ assertBool "test73" $       alphaEq p9 $ p9 
 test74  = TestCase  $ assertBool "test74" $       alphaEq p9 $ phi1 
 test75  = TestCase  $ assertBool "test75" $       alphaEq p9 $ phi2 
 test76  = TestCase  $ assertBool "test76" $       alphaEq p9 $ phi3 
 test77  = TestCase  $ assertBool "test77" $       alphaEq p9 $ phi4 
+test78  = TestCase  $ assertBool "test78" $       alphaEq p9 $ phi5 
+test79  = TestCase  $ assertBool "test79" $       alphaEq p9 $ phi6 
+test80  = TestCase  $ assertBool "test80" $       alphaEq p9 $ phi7 
+test81  = TestCase  $ assertBool "test81" $       alphaEq p9 $ phi8 
+test82  = TestCase  $ assertBool "test82" $       alphaEq p9 $ phi9 
+test83  = TestCase  $ assertBool "test83" $       alphaEq p9 $ phi10 
+test84  = TestCase  $ assertBool "test84" $       alphaEq p9 $ phi11 
+test85  = TestCase  $ assertBool "test85" $       alphaEq p9 $ phi12 
+test86  = TestCase  $ assertBool "test86" $       alphaEq p9 $ phi13 
+test87  = TestCase  $ assertBool "test87" $       alphaEq p9 $ phi14 
+test88  = TestCase  $ assertBool "test88" $       alphaEq p9 $ phi15
+test89  = TestCase  $ assertBool "test89" $       alphaEq p9 $ phi16
+test90  = TestCase  $ assertBool "test90" $       alphaEq p9 $ phi17
+test91  = TestCase  $ assertBool "test91" $       alphaEq p9 $ phi18
+test92  = TestCase  $ assertBool "test92" $       alphaEq p9 $ phi19
+test93  = TestCase  $ assertBool "test93" $ not $ alphaEq p9 $ phi20
+test94  = TestCase  $ assertBool "test94" $ not $ alphaEq p9 $ phi21
+test95  = TestCase  $ assertBool "test95" $ not $ alphaEq p9 $ phi22
+test96  = TestCase  $ assertBool "test96" $ not $ alphaEq p9 $ phi23
 
 test_AlphaEquiv = TestLabel "test_valid" $ TestList
   [ test1,  test2,  test3,  test4,  test5,  test6,  test7,  test8
@@ -114,7 +156,9 @@ test_AlphaEquiv = TestLabel "test_valid" $ TestList
   , test49, test50, test51, test52, test53, test54, test55, test56
   , test57, test58, test59, test60, test61, test62, test63, test64
   , test65, test66, test67, test68, test69, test70, test71, test72
-  , test73, test74, test75, test76, test77
+  , test73, test74, test75, test76, test77, test78, test79, test80
+  , test81, test82, test83, test84, test85, test86, test87, test88
+  , test89, test90, test91, test92, test93, test94, test95, test96
   ]
 
 
