@@ -7,11 +7,13 @@ all:	Axiom_LEM.vo \
 			Axiom_Union.vo \
 			subset.vo	\
 			Axiom_Extensionality.vo \
+			Axiom_Power_Set.vo \
 			empty.vo \
 			pair.vo	\
 			singleton.vo \
 			ord_pair.vo \
-			union.vo
+			union.vo \
+			power.vo
 			
 Axiom_LEM.vo: Axiom_LEM.v
 	coqc Axiom_LEM.v
@@ -37,8 +39,11 @@ Axiom_Union.vo: Axiom_Union.v set.vo belong.vo
 subset.vo: subset.v belong.vo set.vo 
 	coqc subset.v
 
-Axiom_Extensionality.vo: Axiom_Extensionality.v subset.vo set.vo
+Axiom_Extensionality.vo: Axiom_Extensionality.v set.vo subset.vo
 	coqc Axiom_Extensionality.v
+
+Axiom_Power_Set.vo: Axiom_Power_Set.v set.vo belong.vo set.vo
+	coqc Axiom_Power_Set.v
 
 empty.vo: empty.v set.vo belong.vo subset.vo Axiom_Extensionality.vo \
  					Axiom_Skolem.vo Axiom_Empty_Set.vo
@@ -55,8 +60,12 @@ ord_pair.vo: ord_pair.v set.vo belong.vo pair.vo singleton.vo
 	coqc ord_pair.v
 
 union.vo: union.v set.vo Axiom_Skolem.vo belong.vo Axiom_Union.vo subset.vo \
-					Axiom_Extensionality.vo pair.vo
+	Axiom_Extensionality.vo pair.vo
 	coqc union.v
+
+power.vo: power.v set.vo Axiom_Skolem.vo belong.vo subset.vo \
+	Axiom_Power_Set.vo Axiom_Extensionality.vo
+	coqc power.v
 
 
 

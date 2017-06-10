@@ -6,6 +6,7 @@ module Test_Parse
 import Text.ParserCombinators.Parsec hiding (spaces)
 import Test.HUnit
 import Parse
+import LispVal
 
 test1   = TestCase  $ assertEqual "test1"   (check symbol "!abc")   (Just '!') 
 test2   = TestCase  $ assertEqual "test2"   (check symbol "$abc")   (Just '$') 
@@ -165,8 +166,51 @@ test144 = TestCase  $ assertEqual "test144" (check binChar "Bxxx")  (Nothing)
 parser4 = binNumber
 test145 = TestCase  $ assertEqual "test145" (check parser4 "#b0xxx")(Just 0) 
 test146 = TestCase  $ assertEqual "test146" (check parser4 "#b1xxx")(Just 1) 
-test147 = TestCase  $ assertEqual "test146" (check parser4 "#b10xx")(Just 2) 
-test148 = TestCase  $ assertEqual "test146" (check parser4 "#b11xx")(Just 3) 
+test147 = TestCase  $ assertEqual "test147" (check parser4 "#b10xx")(Just 2) 
+test148 = TestCase  $ assertEqual "test148" (check parser4 "#b11xx")(Just 3) 
+test149 = TestCase  $ assertEqual "test149" (check parser4 "#b100x")(Just 4) 
+test150 = TestCase  $ assertEqual "test150" (check parser4 "#b101x")(Just 5) 
+test151 = TestCase  $ assertEqual "test151" (check parser4 "#b110x")(Just 6) 
+test152 = TestCase  $ assertEqual "test152" (check parser4 "#b111x")(Just 7) 
+test153 = TestCase  $ assertEqual "test153" (check parser4 "#b11110111x")(Just 247) 
+test154 = TestCase  $ assertEqual "test154" (check parser4 "#b2xxx")(Nothing) 
+test155 = TestCase  $ assertEqual "test155" (check parser4 "#111xx")(Nothing) 
+test156 = TestCase  $ assertEqual "test156" (check parser4 "b111xx")(Nothing) 
+test157 = TestCase  $ assertEqual "test157" (check parser4 "111bxx")(Nothing) 
+test158 = TestCase  $ assertEqual "test158" (check parser4 "b#111x")(Nothing) 
+test159 = TestCase  $ assertEqual "test159" (check parser4 "#bxxxx")(Nothing) 
+test160 = TestCase  $ assertEqual "test160" (check parser4 "#01xxx")(Nothing) 
+
+
+parser5 = decNumber
+test161 = TestCase  $ assertEqual "test161" (check parser5 "#d0xxx")(Just 0) 
+test162 = TestCase  $ assertEqual "test162" (check parser5 "#d34xx")(Just 34) 
+test163 = TestCase  $ assertEqual "test163" (check parser5 "#d567x")(Just 567) 
+test164 = TestCase  $ assertEqual "test164" (check parser5 "#d4356")(Just 4356) 
+test165 = TestCase  $ assertEqual "test165" (check parser5 "0xxxxx")(Just 0) 
+test166 = TestCase  $ assertEqual "test166" (check parser5 "1xxxxx")(Just 1) 
+test167 = TestCase  $ assertEqual "test167" (check parser5 "2xxxxx")(Just 2) 
+test168 = TestCase  $ assertEqual "test168" (check parser5 "45678x")(Just 45678) 
+test169 = TestCase  $ assertEqual "test169" (check parser5 "#d0001")(Just 1) 
+test170 = TestCase  $ assertEqual "test170" (check parser5 "00023" )(Just 23) 
+test171 = TestCase  $ assertEqual "test171" (check parser5 "d12xxx")(Nothing) 
+test172 = TestCase  $ assertEqual "test172" (check parser5 "d#23xx")(Nothing) 
+test173 = TestCase  $ assertEqual "test173" (check parser5 "x12333")(Nothing) 
+test174 = TestCase  $ assertEqual "test174" (check parser5 "")      (Nothing) 
+test175 = TestCase  $ assertEqual "test175" (check parser5 "-23300")(Nothing) 
+test176 = TestCase  $ assertEqual "test176" (check parser5 "#dxxxx")(Nothing) 
+
+
+parser6 = parseNumber
+num = Just . Number
+test177 = TestCase  $ assertEqual "test177" (check parser6 "0xxx")  (num 0) 
+test178 = TestCase  $ assertEqual "test178" (check parser6 "#d0x")  (num 0) 
+test179 = TestCase  $ assertEqual "test179" (check parser6 "#x0x")  (num 0) 
+test180 = TestCase  $ assertEqual "test180" (check parser6 "#o0x")  (num 0) 
+test181 = TestCase  $ assertEqual "test181" (check parser6 "#b0x")  (num 0) 
+test182 = TestCase  $ assertEqual "test182" (check parser6 "000x")  (num 0) 
+test183 = TestCase  $ assertEqual "test183" (check parser6 "#x00")  (num 0) 
+test184 = TestCase  $ assertEqual "test184" (check parser6 "#b00")  (num 0) 
 
 
 test_Parse = TestLabel "test_Parse" $ TestList
@@ -188,6 +232,11 @@ test_Parse = TestLabel "test_Parse" $ TestList
   , test121,test122,test123,test124,test125,test126,test127,test128
   , test129,test130,test131,test132,test133,test134,test135,test136
   , test137,test138,test139,test140,test141,test142,test143,test144
-  , test145,test146,test147,test148
+  , test145,test146,test147,test148,test149,test150,test151,test152
+  , test153,test154,test155,test156,test157,test158,test159,test160
+  , test161,test162,test163,test164,test165,test166,test167,test168
+  , test169,test170,test171,test172,test173,test174,test175,test176
+{-  , test177,test178,test179,test180,test181,test182,test183,test184
+ -}
   ]
 

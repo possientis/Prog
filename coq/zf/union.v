@@ -49,5 +49,25 @@ Qed.
 (* We are now defining the binary union operator on sets *)
 Definition union (a b:set) : set := U {a,b}.
 
+Proposition union_left : forall a b:set, subset a (union a b).
+Proof.
+  intros a b. unfold subset. intros x Hx. unfold union.
+  apply union_intro with (y:= a). exact Hx. apply pair_left.
+Qed.
 
+Proposition union_right : forall a b:set, subset b (union a b).
+Proof.
+  intros a b. unfold subset. intros x Hx. unfold union.
+  apply union_intro with (y:= b). exact Hx. apply pair_right.
+Qed.
+
+Lemma union_elim2 : forall a b x:set,
+  x:(union a b) -> x:a \/ x:b.
+Proof.
+  intros a b x Hx. apply union_elim in Hx. elim Hx. 
+  clear Hx. intros y H. elim H.
+  clear H. intros Hx Hy. apply pair_elim in Hy. elim Hy.
+  clear Hy. intro Hy. left. rewrite <- Hy. exact Hx.
+  clear Hy. intro Hy. right. rewrite <- Hy. exact Hx.
+Qed.
 

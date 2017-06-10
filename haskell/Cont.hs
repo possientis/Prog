@@ -1,6 +1,7 @@
 module Cont
   ( Cont
   , cont
+  , runCont
   ) where
 
 import Control.Applicative

@@ -8,6 +8,7 @@ import Formula
 import Variable
 import Substitution
 
+
 alphaEq :: (Eq v, Ord v) => Formula v -> Formula v -> Bool
 alphaEq (Belong x y) (Belong x' y') = (x == x') && (y == y')
 alphaEq (Bot) (Bot)                 = True
@@ -16,5 +17,27 @@ alphaEq (Forall x p) (Forall x' p') = if (x == x')
   then  alphaEq p p'
   else (not $ member x' $ free p) && alphaEq ((x<->x')<$>p) p'
 alphaEq _ _                         = False
+
+
+
+
+
+{-
+equalVar :: (Eq v, Ord v) => [(v,v)] -> v -> v -> Bool
+equalVar [] x y             = (x == y)
+equalVar ((x,y):bound) z w  = (x == z && y == w) 
+                           || (x /= z && y /= w && equalVar bound z w) 
+
+equal' :: (Eq v, Ord v) => [(v,v)] -> Formula v -> Formula v -> Bool
+equal' bound (Belong x1 y1) (Belong x2 y2)  = (equalVar bound x1 x2 && equalVar bound y1 y2)
+equal' bound (Bot) (Bot)                    = True
+equal' bound (Imply u1 v1) (Imply u2 v2)    = equal' bound u1 u2 && equal' bound v1 v2
+equal' bound (Forall x u) (Forall y v)      = equal' ((x,y):bound) u v
+equal' _ _ _                                = False
+
+equal :: (Eq v, Ord v) => Formula v -> Formula v -> Bool
+equal e1 e2 = equal' [] e1 e2
+-}
+
 
 

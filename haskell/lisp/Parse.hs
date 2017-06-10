@@ -2,10 +2,12 @@ module Parse
   ( binChar 
   , binNumber
   , check
+  , decNumber
   , hexChar
   , hexNumber
   , octChar
   , octNumber
+  , parseNumber
   , readExpr
   , spaces
   , symbol
@@ -33,9 +35,6 @@ octChar = oneOf "01234567"
 binChar :: Parser Char
 binChar = char '0' <|> char '1'
 
-decChar :: Parser Char
-decChar = digit
-
 hexNumber :: Parser Integer
 hexNumber = do
   char '#'
@@ -51,7 +50,6 @@ octNumber = do
   s <- many1 octChar 
   let list = readOct s
   return $ (fst . head) list
-
 
 readBinary :: String -> Integer
 readBinary [] = error "readBinary: no number to read"
@@ -69,6 +67,20 @@ binNumber = do
   s <- many1 binChar 
   return $ readBinary s
 
+decNumber :: Parser Integer
+decNumber = 
+  ( do
+      char '#'
+      char 'd'
+      s <- many1 digit
+      return $ read s
+  ) <|>
+  ( do
+      s <- many1 digit
+      return $ read s
+  )
+
+  
 
 escaped :: Parser Char
 escaped = do
@@ -105,7 +117,7 @@ parseAtom = do
 
 
 parseNumber :: Parser LispVal
-parseNumber = liftM Number hexNumber
+parseNumber = liftM Number (hexNumber <|> octNumber <|> binNumber <|> decNumber)
 
 parseExpr :: Parser LispVal
 parseExpr = parseNumber <|> parseAtom <|> parseString

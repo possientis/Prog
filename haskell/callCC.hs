@@ -1,5 +1,6 @@
 -- callCC is call-with-current-continuation
 import Cont -- homemade continuation monad
+import Control.Monad (when)
 
 -- without callCC
 sq :: Int -> Cont r Int
@@ -8,6 +9,29 @@ sq  n = return (n ^ 2)
 --with callCC
 sqCCC :: Int -> Cont r Int
 sqCCC n = callCC $ \k -> k (n ^ 2)
+
+foo :: Int -> Cont r String
+foo x = callCC $ \k -> do
+  let y = x ^ 2 + 3
+  when (y > 20) $ k "over twenty"
+  return (show $ y - 4) 
+
+bar :: Char -> String -> Cont r Int
+bar c s = do
+  msg <- callCC $ \k -> do 
+    let s' = c:s
+    when (s' == "hello") $ k "They say hello."
+    let s'' = show s'
+    return ("They appear to be saying " ++ s'')
+  return (length msg)
+
+
+quux :: Cont r Int
+quux = callCC $ \k -> do
+  let n = 5
+  k n
+  return 25 -- useless line
+
 
 -- Naive reasoning to try and make sense of callCC:
 --
@@ -46,6 +70,9 @@ sqCCC n = callCC $ \k -> k (n ^ 2)
 
 
 callCC :: ((a -> Cont r b) -> Cont r a) -> Cont r a
-callCC f = undefined      
+callCC f = cont $ \h -> runCont (f (\a -> cont $ \_ -> h a)) h 
+
+
+
 
 

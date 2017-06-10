@@ -84,7 +84,7 @@ test62  = TestCase  $ assertBool "test62" $ not $ alphaEq p7 $ p6
 test63  = TestCase  $ assertBool "test63" $ not $ alphaEq p7 $ imply p6 p5
 test64  = TestCase  $ assertBool "test64" $ not $ alphaEq p7 $ p8
 
-phi0 = forall t $ imply (belong t x) (belong t y)
+phi0    = forall t  $ imply (belong t x) (belong t y)
 test65  = TestCase  $ assertBool "test65" $ not $ alphaEq p8 $ p1
 test66  = TestCase  $ assertBool "test66" $ not $ alphaEq p8 $ p2
 test67  = TestCase  $ assertBool "test67" $ not $ alphaEq p8 $ p3
@@ -92,7 +92,7 @@ test68  = TestCase  $ assertBool "test68" $ not $ alphaEq p8 $ p4
 test69  = TestCase  $ assertBool "test69" $ not $ alphaEq p8 $ p5
 test70  = TestCase  $ assertBool "test70" $ not $ alphaEq p8 $ p6
 test71  = TestCase  $ assertBool "test71" $ not $ alphaEq p8 $ p7
-test72  = TestCase  $ assertBool "test72" $       alphaEq p8 $ phi0 
+test72  = TestCase  $ assertBool "test72"       $  alphaEq p8 $ phi0 
 
 
 phi1  = forall x $ forall y $ imply (forall y $ belong y x)(forall x $ belong x y)

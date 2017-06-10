@@ -32,24 +32,17 @@ Qed.
 
 (*
 
+Parameter Power : set -> set.
+Axiom PowerI : forall x y:set, subset y x -> belong y (Power x).
+Axiom PowerE : forall x y:set, belong y (Power x) -> subset y x.
+
+
 
 (* axiom of infinity *)
 Definition union (a b:set) : set := Union (pair a b).
 Definition S (x:set) : set := union x (singleton x).
 Definition one : set := S O.
 Definition two : set := S one.
-
-Lemma unionl : forall (a b:set), subset a (union a b).
-Proof.
-  intros a b. unfold subset. intros x Hx. unfold union.
-  apply UnionI with (y:= a). exact Hx. apply pair_left.
-Qed.
-
-Lemma unionr : forall (a b:set), subset b (union a b).
-Proof.
-  intros a b. unfold subset. intros x Hx. unfold union.
-  apply UnionI with (y:= b). exact Hx. apply pair_right.
-Qed.
 
 Lemma subset_succ : forall (a:set), subset a (S a).
 Proof.
@@ -101,10 +94,6 @@ Axiom NIS : forall x:set, belong x N -> belong (S x) N.
 Axiom NMin : forall M:set,
   belong O M -> (forall x:set, belong x M -> belong (S x) M) -> subset N M.
 
-
-Parameter Power : set -> set.
-Axiom PowerI : forall x y:set, subset y x -> belong y (Power x).
-Axiom PowerE : forall x y:set, belong y (Power x) -> subset y x.
 
 Parameter Repl : (set -> set) -> set -> set.
 Axiom ReplI : forall (F:set->set)(X:set)(x:set),
