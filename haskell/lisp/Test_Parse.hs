@@ -84,7 +84,7 @@ test70  = TestCase  $ assertEqual "test70"  (check hexChar "0xxx")  (Just '0')
 test71  = TestCase  $ assertEqual "test71"  (check hexChar "gxxx")  (Nothing) 
 test72  = TestCase  $ assertEqual "test72"  (check hexChar "Gxxx")  (Nothing) 
 
-parser2 = hexNumber
+parser2 = char '#' >> hexNumber
 test73  = TestCase  $ assertEqual "test73"  (check parser2 "#x0")   (Just 0) 
 test74  = TestCase  $ assertEqual "test74"  (check parser2 "#x1x")  (Just 1) 
 test75  = TestCase  $ assertEqual "test75"  (check parser2 "#x2xx") (Just 2) 
@@ -128,7 +128,7 @@ test110 = TestCase  $ assertEqual "test110" (check octChar "xxxx")  (Nothing)
 test111 = TestCase  $ assertEqual "test111" (check octChar "oxxx")  (Nothing) 
 test112 = TestCase  $ assertEqual "test112" (check octChar "Oxxx")  (Nothing) 
 
-parser3 = octNumber
+parser3 = char '#' >> octNumber
 test113 = TestCase  $ assertEqual "test113" (check parser3 "#o0")   (Just 0) 
 test114 = TestCase  $ assertEqual "test114" (check parser3 "#o1x")  (Just 1) 
 test115 = TestCase  $ assertEqual "test115" (check parser3 "#o2xx") (Just 2) 
@@ -163,7 +163,7 @@ test142 = TestCase  $ assertEqual "test142" (check binChar "7xxx")  (Nothing)
 test143 = TestCase  $ assertEqual "test143" (check binChar "axxx")  (Nothing) 
 test144 = TestCase  $ assertEqual "test144" (check binChar "Bxxx")  (Nothing) 
 
-parser4 = binNumber
+parser4 = char '#' >> binNumber
 test145 = TestCase  $ assertEqual "test145" (check parser4 "#b0xxx")(Just 0) 
 test146 = TestCase  $ assertEqual "test146" (check parser4 "#b1xxx")(Just 1) 
 test147 = TestCase  $ assertEqual "test147" (check parser4 "#b10xx")(Just 2) 
@@ -182,17 +182,17 @@ test159 = TestCase  $ assertEqual "test159" (check parser4 "#bxxxx")(Nothing)
 test160 = TestCase  $ assertEqual "test160" (check parser4 "#01xxx")(Nothing) 
 
 
-parser5 = decNumber
+parser5 = char '#' >> decNumber
 test161 = TestCase  $ assertEqual "test161" (check parser5 "#d0xxx")(Just 0) 
 test162 = TestCase  $ assertEqual "test162" (check parser5 "#d34xx")(Just 34) 
 test163 = TestCase  $ assertEqual "test163" (check parser5 "#d567x")(Just 567) 
 test164 = TestCase  $ assertEqual "test164" (check parser5 "#d4356")(Just 4356) 
-test165 = TestCase  $ assertEqual "test165" (check parser5 "0xxxxx")(Just 0) 
-test166 = TestCase  $ assertEqual "test166" (check parser5 "1xxxxx")(Just 1) 
-test167 = TestCase  $ assertEqual "test167" (check parser5 "2xxxxx")(Just 2) 
-test168 = TestCase  $ assertEqual "test168" (check parser5 "45678x")(Just 45678) 
+test165 = TestCase  $ assertEqual "test165" (check parser5 "#d0xxx")(Just 0) 
+test166 = TestCase  $ assertEqual "test166" (check parser5 "#d1xxx")(Just 1) 
+test167 = TestCase  $ assertEqual "test167" (check parser5 "#d2xxx")(Just 2) 
+test168 = TestCase  $ assertEqual "test168" (check parser5 "#d4567")(Just 4567) 
 test169 = TestCase  $ assertEqual "test169" (check parser5 "#d0001")(Just 1) 
-test170 = TestCase  $ assertEqual "test170" (check parser5 "00023" )(Just 23) 
+test170 = TestCase  $ assertEqual "test170" (check parser5 "#d023" )(Just 23) 
 test171 = TestCase  $ assertEqual "test171" (check parser5 "d12xxx")(Nothing) 
 test172 = TestCase  $ assertEqual "test172" (check parser5 "d#23xx")(Nothing) 
 test173 = TestCase  $ assertEqual "test173" (check parser5 "x12333")(Nothing) 
@@ -236,7 +236,6 @@ test_Parse = TestLabel "test_Parse" $ TestList
   , test153,test154,test155,test156,test157,test158,test159,test160
   , test161,test162,test163,test164,test165,test166,test167,test168
   , test169,test170,test171,test172,test173,test174,test175,test176
-{-  , test177,test178,test179,test180,test181,test182,test183,test184
- -}
+  , test177,test178,test179,test180,test181,test182,test183,test184
   ]
 

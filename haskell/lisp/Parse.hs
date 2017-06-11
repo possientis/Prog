@@ -36,8 +36,7 @@ binChar :: Parser Char
 binChar = char '0' <|> char '1'
 
 hexNumber :: Parser Integer
-hexNumber = do
-  char '#'
+hexNumber = do 
   char 'x'
   s <- many1 hexChar 
   let list = readHex s
@@ -45,7 +44,6 @@ hexNumber = do
 
 octNumber :: Parser Integer
 octNumber = do
-  char '#'
   char 'o'
   s <- many1 octChar 
   let list = readOct s
@@ -62,7 +60,6 @@ readBinary xs = go xs 0 where
 
 binNumber :: Parser Integer
 binNumber = do
-  char '#'
   char 'b'
   s <- many1 binChar 
   return $ readBinary s
@@ -70,17 +67,14 @@ binNumber = do
 decNumber :: Parser Integer
 decNumber = 
   ( do
-      char '#'
       char 'd'
       s <- many1 digit
       return $ read s
-  ) <|>
-  ( do
-      s <- many1 digit
-      return $ read s
-  )
+  ) 
 
-  
+number :: Parser Integer
+number = liftM read $ many1 digit
+
 
 escaped :: Parser Char
 escaped = do
@@ -117,7 +111,12 @@ parseAtom = do
 
 
 parseNumber :: Parser LispVal
-parseNumber = liftM Number (hexNumber <|> octNumber <|> binNumber <|> decNumber)
+parseNumber = liftM Number $ number <|> ( char '#' >> 
+    ( decNumber 
+  <|> octNumber 
+  <|> binNumber
+  <|> hexNumber
+    ))
 
 parseExpr :: Parser LispVal
 parseExpr = parseNumber <|> parseAtom <|> parseString

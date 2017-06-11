@@ -8,7 +8,6 @@ Require Import belong.
 Definition subset(a b:set) : Prop :=
   forall x:set, x:a -> x:b.
 
-
 Proposition subset_refl : forall a:set, subset a a.
 Proof.
   intros a. unfold subset. intros x H. exact H.

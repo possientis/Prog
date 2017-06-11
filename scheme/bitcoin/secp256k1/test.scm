@@ -3,7 +3,6 @@
 (define ctx1 (context-create %context-verify)) 
 (define ctx2 (context-create %context-sign)) 
 (define ctx3 (context-create %context-none)) 
-
 (define ctx4 (context-clone ctx1))
 
 
@@ -16,6 +15,5 @@
 (context-destroy ctx2)
 (context-destroy ctx3)
 (context-destroy ctx4)
-
 
 

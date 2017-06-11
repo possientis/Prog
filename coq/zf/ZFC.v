@@ -32,48 +32,7 @@ Qed.
 
 (*
 
-Parameter Power : set -> set.
-Axiom PowerI : forall x y:set, subset y x -> belong y (Power x).
-Axiom PowerE : forall x y:set, belong y (Power x) -> subset y x.
-
-
-
 (* axiom of infinity *)
-Definition union (a b:set) : set := Union (pair a b).
-Definition S (x:set) : set := union x (singleton x).
-Definition one : set := S O.
-Definition two : set := S one.
-
-Lemma subset_succ : forall (a:set), subset a (S a).
-Proof.
-  intros a. unfold S. apply unionl.
-Qed.
-
-Lemma belong_succ : forall (a:set), belong a (S a).
-Proof.
-  intros a. unfold S. unfold union.
-  apply UnionI with (y:= singleton a).
-  unfold singleton. apply pair_left. apply pair_right.
-Qed.
-
-
-Lemma belong_one: forall (a:set),
-  belong a one <-> a = O.
-Proof.
-  intros a. split. intros Ha. unfold one in Ha.
-  unfold S in Ha. unfold union in Ha.
-  apply UnionE in Ha. elim Ha.
-  clear Ha. intros x Hx. elim Hx.
-  clear Hx. intros Hx Hx'. apply pair_elim in Hx'. elim Hx'.
-  clear Hx'. intro Hx'. apply False_ind. apply not_belong_x_O with (x:=a).
-  rewrite Hx' in Hx. unfold O in Hx. exact Hx.
-  clear Hx'. intro Hx'. rewrite Hx' in Hx. clear Hx'.
-  unfold singleton in Hx. apply pair_elim in Hx. elim Hx.
-  clear Hx. intro Hx. exact Hx.
-  clear Hx. intro Hx. exact Hx.
-  intro Ha. rewrite Ha. apply belong_succ.
-Qed.
-
 
 Lemma subset_one: forall (a:set), 
   subset a one -> a = O \/ a = one.

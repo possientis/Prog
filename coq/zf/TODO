@@ -1,1 +1,4 @@
-reduce ZFC
+O\/a = a
+succ O = {0}
+a <= {b} <-> a = O \/ a = {b} 
+successor.v

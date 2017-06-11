@@ -2,6 +2,8 @@
 import Cont -- homemade continuation monad
 import Control.Monad (when)
 
+
+
 -- without callCC
 sq :: Int -> Cont r Int
 sq  n = return (n ^ 2)
@@ -71,7 +73,6 @@ quux = callCC $ \k -> do
 
 callCC :: ((a -> Cont r b) -> Cont r a) -> Cont r a
 callCC f = cont $ \h -> runCont (f (\a -> cont $ \_ -> h a)) h 
-
 
 
 

@@ -143,102 +143,191 @@ typedef int
 
 );
 
+
+
 /************************************************************************/
 /* SECP256k1_GNUC_PREREQ                                                */ 
 /************************************************************************/
 
 # if !defined(SECP256K1_GNUC_PREREQ)
-#  if defined(__GNUC__)&&defined(__GNUC_MINOR__)
-#   define SECP256K1_GNUC_PREREQ(_maj,_min) \
- ((__GNUC__<<16)+__GNUC_MINOR__>=((_maj)<<16)+(_min))
-#  else
-#   define SECP256K1_GNUC_PREREQ(_maj,_min) 0
-#  endif
+#     if defined(__GNUC__)&&defined(__GNUC_MINOR__)
+#         define SECP256K1_GNUC_PREREQ(_maj,_min) \
+              ((__GNUC__<<16)+__GNUC_MINOR__>=((_maj)<<16)+(_min))
+#     else
+#         define SECP256K1_GNUC_PREREQ(_maj,_min) 0
+#     endif
 # endif
+
+
 
 /************************************************************************/
 /* SECP256k1_INLINE                                                     */ 
 /************************************************************************/
+
 # if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
-
-# if SECP256K1_GNUC_PREREQ(2,7)
-
-#       define SECP256K1_INLINE __inline__
-
-#   elif (defined(_MSC_VER))
-
-#   define SECP256K1_INLINE __inline
-
-#  else
-
-#   define SECP256K1_INLINE
-
-#  endif
-
+#     if SECP256K1_GNUC_PREREQ(2,7)
+#         define SECP256K1_INLINE __inline__
+#     elif (defined(_MSC_VER))
+#         define SECP256K1_INLINE __inline
+#     else
+#         define SECP256K1_INLINE
+#     endif
 # else
-
-#  define SECP256K1_INLINE inline
-
+#     define SECP256K1_INLINE inline
 # endif
+
+
 
 /************************************************************************/
 /* SECP256k1_API                                                        */ 
 /************************************************************************/
-#ifndef SECP256K1_API
-# if defined(_WIN32)
-#  ifdef SECP256K1_BUILD
-#   define SECP256K1_API __declspec(dllexport)
-#  else
-#   define SECP256K1_API
-#  endif
-# elif defined(__GNUC__) && defined(SECP256K1_BUILD)
-#  define SECP256K1_API __attribute__ ((visibility ("default")))
-# else
-#  define SECP256K1_API
-# endif
+
+# ifndef SECP256K1_API
+#     if defined(_WIN32)
+#         ifdef SECP256K1_BUILD
+#             define SECP256K1_API __declspec(dllexport)
+#         else
+#             define SECP256K1_API
+#         endif
+#     elif defined(__GNUC__) && defined(SECP256K1_BUILD)
+#         define SECP256K1_API __attribute__ ((visibility ("default")))
+#     else
+#         define SECP256K1_API
+#     endif
 #endif
+
 
 
 /************************************************************************/
 /* SECP256k1_WARN_UNUSED_RESULT                                         */ 
 /************************************************************************/
+
 # if defined(__GNUC__) && SECP256K1_GNUC_PREREQ(3, 4)
-#  define SECP256K1_WARN_UNUSED_RESULT __attribute__ ((__warn_unused_result__))
+#     define SECP256K1_WARN_UNUSED_RESULT \
+          __attribute__ ((__warn_unused_result__))
 # else
-#  define SECP256K1_WARN_UNUSED_RESULT
+#     define SECP256K1_WARN_UNUSED_RESULT
 # endif
 
+
+/************************************************************************/
+/* SECP256k1_ARG_NONNULL                                                */ 
+/************************************************************************/
 
 /**Warning attributes
   * NONNULL is not used if SECP256K1_BUILD is set to avoid the compiler 
   * optimizing out some paranoid null checks. 
   */
-/************************************************************************/
-/* SECP256k1_ARG_NONNULL                                         */ 
-/************************************************************************/
-# if !defined(SECP256K1_BUILD) && defined(__GNUC__) && SECP256K1_GNUC_PREREQ(3, 4)
-#  define SECP256K1_ARG_NONNULL(_x)  __attribute__ ((__nonnull__(_x)))
+
+# if !defined(SECP256K1_BUILD) && defined(__GNUC__) \
+    && SECP256K1_GNUC_PREREQ(3, 4)
+#     define SECP256K1_ARG_NONNULL(_x)  __attribute__ ((__nonnull__(_x)))
 # else
-#  define SECP256K1_ARG_NONNULL(_x)
+#     define SECP256K1_ARG_NONNULL(_x)
 # endif
 
-/** All flags' lower 8 bits indicate what they're for. Do not use directly. */
-#define SECP256K1_FLAGS_TYPE_MASK ((1 << 8) - 1)
-#define SECP256K1_FLAGS_TYPE_CONTEXT (1 << 0)
-#define SECP256K1_FLAGS_TYPE_COMPRESSION (1 << 1)
-/** The higher bits contain the actual data. Do not use directly. */
-#define SECP256K1_FLAGS_BIT_CONTEXT_VERIFY (1 << 8)
-#define SECP256K1_FLAGS_BIT_CONTEXT_SIGN (1 << 9)
-#define SECP256K1_FLAGS_BIT_COMPRESSION (1 << 8)
 
-/** Flags to pass to secp256k1_context_create. */
-#define SECP256K1_CONTEXT_VERIFY (SECP256K1_FLAGS_TYPE_CONTEXT | SECP256K1_FLAGS_BIT_CONTEXT_VERIFY)
-#define SECP256K1_CONTEXT_SIGN (SECP256K1_FLAGS_TYPE_CONTEXT | SECP256K1_FLAGS_BIT_CONTEXT_SIGN)
-#define SECP256K1_CONTEXT_NONE (SECP256K1_FLAGS_TYPE_CONTEXT)
+/* All flags' lower 8 bits indicate what they're for. Do not use directly. */
+/************************************************************************/
+/* SECP256k1_FLAGS_TYPE_MASK                                            */ 
+/************************************************************************/
 
-/** Flag to pass to secp256k1_ec_pubkey_serialize and secp256k1_ec_privkey_export. */
-#define SECP256K1_EC_COMPRESSED (SECP256K1_FLAGS_TYPE_COMPRESSION | SECP256K1_FLAGS_BIT_COMPRESSION)
-#define SECP256K1_EC_UNCOMPRESSED (SECP256K1_FLAGS_TYPE_COMPRESSION)
+#define SECP256K1_FLAGS_TYPE_MASK ((1 << 8) - 1)      /* 255 */
+
+
+
+/************************************************************************/
+/* SECP256k1_FLAGS_TYPE_CONTEXT                                         */ 
+/************************************************************************/
+
+#define SECP256K1_FLAGS_TYPE_CONTEXT (1 << 0)         /* 1 */
+
+
+
+/************************************************************************/
+/* SECP256k1_FLAGS_TYPE_COMPRESSION                                     */ 
+/************************************************************************/
+
+#define SECP256K1_FLAGS_TYPE_COMPRESSION (1 << 1)     /* 2  */
+
+
+
+/* The higher bits contain the actual data. Do not use directly. */
+/************************************************************************/
+/* SECP256k1_FLAGS_BIT_CONTEXT_VERIFY                                   */ 
+/************************************************************************/
+
+#define SECP256K1_FLAGS_BIT_CONTEXT_VERIFY (1 << 8)   /* 256 */
+
+
+
+/************************************************************************/
+/* SECP256k1_FLAGS_BIT_CONTEXT_SIGN                                     */ 
+/************************************************************************/
+
+#define SECP256K1_FLAGS_BIT_CONTEXT_SIGN (1 << 9)     /* 512 */
+
+
+
+/************************************************************************/
+/* SECP256k1_FLAGS_BIT_COMPRESSION                                      */ 
+/************************************************************************/
+
+#define SECP256K1_FLAGS_BIT_COMPRESSION (1 << 8)      /* 256 */
+
+
+
+
+/* Flags to pass to secp256k1_context_create. */
+
+/************************************************************************/
+/* SECP256k1_CONTEXT_VERIFY                                             */ 
+/************************************************************************/
+
+#define SECP256K1_CONTEXT_VERIFY  ( SECP256K1_FLAGS_TYPE_CONTEXT \
+                                  | SECP256K1_FLAGS_BIT_CONTEXT_VERIFY \
+                                  )                    /* 257 */
+
+
+
+/************************************************************************/
+/* SECP256k1_CONTEXT_SIGN                                               */ 
+/************************************************************************/
+
+#define SECP256K1_CONTEXT_SIGN    ( SECP256K1_FLAGS_TYPE_CONTEXT \
+                                  | SECP256K1_FLAGS_BIT_CONTEXT_SIGN \
+                                  )                   /* 513 */
+
+
+
+/************************************************************************/
+/* SECP256k1_CONTEXT_NONE                                               */ 
+/************************************************************************/
+
+#define SECP256K1_CONTEXT_NONE    ( SECP256K1_FLAGS_TYPE_CONTEXT \
+                                  )                   /* 1 */ 
+
+
+
+
+/* Flag to pass to secp256k1_ec_pubkey_serialize */
+
+/************************************************************************/
+/* SECP256k1_EC_COMPRESSED                                              */ 
+/************************************************************************/
+
+#define SECP256K1_EC_COMPRESSED   ( SECP256K1_FLAGS_TYPE_COMPRESSION \
+                                  | SECP256K1_FLAGS_BIT_COMPRESSION \
+                                  )                   /* 258 */ 
+
+
+
+/************************************************************************/
+/* SECP256k1_EC_UNCOMPRESSED                                              */ 
+/************************************************************************/
+
+#define SECP256K1_EC_UNCOMPRESSED ( SECP256K1_FLAGS_TYPE_COMPRESSION \
+                                  )                   /* 2  */
 
 
 SECP256K1_API int secp256k1_check(void);

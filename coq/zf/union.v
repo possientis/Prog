@@ -61,13 +61,30 @@ Proof.
   apply union_intro with (y:= b). exact Hx. apply pair_right.
 Qed.
 
-Lemma union_elim2 : forall a b x:set,
-  x:(union a b) -> x:a \/ x:b.
+Proposition union_elim2 : forall a b x:set,
+  x:(union a b) <-> x:a \/ x:b.
 Proof.
-  intros a b x Hx. apply union_elim in Hx. elim Hx. 
+  intros a b x. split.
+  intro Hx. apply union_elim in Hx. elim Hx. 
   clear Hx. intros y H. elim H.
   clear H. intros Hx Hy. apply pair_elim in Hy. elim Hy.
   clear Hy. intro Hy. left. rewrite <- Hy. exact Hx.
-  clear Hy. intro Hy. right. rewrite <- Hy. exact Hx.
+  clear Hy. intro Hy. right. rewrite <- Hy. exact Hx. 
+  intros H. elim H. 
+  clear H. intros Hx. apply union_left. exact Hx.
+  clear H. intros Hx. apply union_right. exact Hx.
+Qed.
+
+Proposition union_comm : forall a b:set, union a b = union b a.
+Proof.
+  intros a b. apply extensionality. 
+  unfold subset. intros x Hx. apply union_elim2.
+  apply union_elim2 in Hx. elim Hx.
+  clear Hx. intro Hx. right. exact Hx.
+  clear Hx. intro Hx. left. exact Hx.
+  unfold subset. intros x Hx. apply union_elim2.
+  apply union_elim2 in Hx. elim Hx.
+  clear Hx. intro Hx. right. exact Hx.
+  clear Hx. intro Hx. left. exact Hx.
 Qed.
 
