@@ -10,6 +10,8 @@ echo
 
 echo "testing the universal algebra of predicate logic..."
 
+mv logic.pdf logic.bak
+
 pdflatex -halt-on-error logic > /dev/null
 pdflatex -halt-on-error logic > /dev/null
 
@@ -17,6 +19,8 @@ pdflatex -halt-on-error logic > /dev/null
 pdflatex -halt-on-error logic 
 
 ./clean.sh
+
+mv logic.bak logic.pdf
 
 echo
 cd ${DIR}
