@@ -1,7 +1,9 @@
 module Test_data
-  ( p1, p2, p3, p4, p5, p6, p7, p8, p9
-  , q1, q2, q3, q4, q5, q6, q7, q8
-  , s1, s2, s3, s4, s5, s6, s7, s8
+  ( p1,   p2,   p3,   p4,   p5,   p6,   p7,   p8,   p9
+  , q1,   q2,   q3,   q4,   q5,   q6,   q7,   q8
+  , s1,   s2,   s3,   s4,   s5,   s6,   s7,   s8,   s9
+  , s1',  s2',  s3',  s4',  s5',  s6',  s7',  s8',  s9'
+  , t1,   t2,   t3,   t4,   t5,   t6,   t7,   t8,   t9
   , var1, var2, var3, var4, var5, var6, var7, var8
   , free1, free2, free3, free4, free5, free6, free7, free8
   , bnd1, bnd2, bnd3, bnd4, bnd5, bnd6, bnd7, bnd8
@@ -15,6 +17,7 @@ import Data.Set
 
 import Formula            -- main implementation
 import V
+import Bar
 
 s1 = "x:y"
 s2 = "!"
@@ -24,6 +27,18 @@ s5 = "z:x"
 s6 = "z:y"
 s7 = "(z:x -> z:y)"
 s8 = "Az.(z:x -> z:y)"
+s9 = "Ax.Ay.(Az.z:x -> Ax.x:y)"
+
+-- minimal transform representations
+s1'= s1
+s2'= s2
+s3'= s3
+s4'= "A0.0:y"
+s5'= s5
+s6'= s6
+s7'= s7
+s8'= "A0.(0:x -> 0:y)"
+s9'= "A2.A1.(A0.0:2 -> A0.0:1)"
 
 p1 = belong x y   :: Formula V
 p2 = bot          :: Formula V
@@ -46,6 +61,22 @@ q5 = belong z' x' :: Formula W
 q6 = belong z' y' :: Formula W
 q7 = imply q5 q6
 q8 = forall z' q7
+
+t1 = belong (left x) (left y) :: Formula (Bar V)
+t2 = bot                      :: Formula (Bar V)
+t3 = imply t1 t2
+t4 = forall (right 0) $ belong (right 0) (left y)
+t5 = belong (left z) (left x)
+t6 = belong (left z) (left y)
+t7 = imply t5 t6
+t8 = forall (right 0) $ imply 
+  (belong (right 0) (left x)) 
+  (belong (right 0) (left y))  
+
+t9 = forall (right 2) $ forall (right 1) $ imply
+  (forall (right 0) $ belong (right 0) (right 2))
+  (forall (right 0) $ belong (right 0) (right 1))
+
 
 var1 = fromList [x,y]   :: Set V
 var2 = empty            :: Set V

@@ -239,33 +239,143 @@ test206 = TestCase  $ assertEqual "test206" (check parser6 "#b011") (num 3)
 test207 = TestCase  $ assertEqual "test207" (check parser6 "#x3xx") (num 3) 
 test208 = TestCase  $ assertEqual "test208" (check parser6 "#x03x") (num 3) 
 
-test209 = TestCase  $ assertEqual "test209" (check parser6 "6xxxx") (num 6) 
-test210 = TestCase  $ assertEqual "test210" (check parser6 "#o6xx") (num 6) 
-test211 = TestCase  $ assertEqual "test211" (check parser6 "#d6xx") (num 6) 
-test212 = TestCase  $ assertEqual "test212" (check parser6 "#d06x") (num 6) 
-test213 = TestCase  $ assertEqual "test213" (check parser6 "#b110") (num 6) 
-test214 = TestCase  $ assertEqual "test214" (check parser6 "#b0110")(num 6) 
-test215 = TestCase  $ assertEqual "test215" (check parser6 "#x6xx") (num 6) 
-test216 = TestCase  $ assertEqual "test216" (check parser6 "#x06x") (num 6) 
+test209 = TestCase  $ assertEqual "test209" (check parser6 "4xxxx") (num 4) 
+test210 = TestCase  $ assertEqual "test210" (check parser6 "#o4xx") (num 4) 
+test211 = TestCase  $ assertEqual "test211" (check parser6 "#d4xx") (num 4) 
+test212 = TestCase  $ assertEqual "test212" (check parser6 "#d04x") (num 4) 
+test213 = TestCase  $ assertEqual "test213" (check parser6 "#b100") (num 4) 
+test214 = TestCase  $ assertEqual "test214" (check parser6 "#b0100")(num 4) 
+test215 = TestCase  $ assertEqual "test215" (check parser6 "#x4xx") (num 4) 
+test216 = TestCase  $ assertEqual "test216" (check parser6 "#x04x") (num 4) 
 
-test217 = TestCase  $ assertEqual "test217" (check parser6 "7xxxx") (num 7) 
-test218 = TestCase  $ assertEqual "test218" (check parser6 "#o7xx") (num 7) 
-test219 = TestCase  $ assertEqual "test219" (check parser6 "#d7xx") (num 7) 
-test220 = TestCase  $ assertEqual "test220" (check parser6 "#d07x") (num 7) 
-test221 = TestCase  $ assertEqual "test221" (check parser6 "#b111") (num 7) 
-test222 = TestCase  $ assertEqual "test222" (check parser6 "#b0111")(num 7) 
-test223 = TestCase  $ assertEqual "test223" (check parser6 "#x7xx") (num 7) 
-test224 = TestCase  $ assertEqual "test224" (check parser6 "#x07x") (num 7) 
+test217 = TestCase  $ assertEqual "test217" (check parser6 "5xxxx") (num 5) 
+test218 = TestCase  $ assertEqual "test218" (check parser6 "#o5xx") (num 5) 
+test219 = TestCase  $ assertEqual "test219" (check parser6 "#d5xx") (num 5) 
+test220 = TestCase  $ assertEqual "test220" (check parser6 "#d05x") (num 5) 
+test221 = TestCase  $ assertEqual "test221" (check parser6 "#b101") (num 5) 
+test222 = TestCase  $ assertEqual "test222" (check parser6 "#b0101")(num 5) 
+test223 = TestCase  $ assertEqual "test223" (check parser6 "#x5xx") (num 5) 
+test224 = TestCase  $ assertEqual "test224" (check parser6 "#x05x") (num 5) 
 
-test225 = TestCase  $ assertEqual "test225" (check parser6 "8xxxx")   (num 8) 
-test226 = TestCase  $ assertEqual "test226" (check parser6 "#o10x")   (num 8) 
-test227 = TestCase  $ assertEqual "test227" (check parser6 "#d8xx")   (num 8) 
-test228 = TestCase  $ assertEqual "test228" (check parser6 "#d08x")   (num 8) 
-test229 = TestCase  $ assertEqual "test229" (check parser6 "#b1000")  (num 8) 
-test230 = TestCase  $ assertEqual "test230" (check parser6 "#b01000") (num 8) 
-test231 = TestCase  $ assertEqual "test231" (check parser6 "#x8xx")   (num 8) 
-test232 = TestCase  $ assertEqual "test232" (check parser6 "#x08x")   (num 8) 
+test225 = TestCase  $ assertEqual "test225" (check parser6 "6xxxx") (num 6) 
+test226 = TestCase  $ assertEqual "test226" (check parser6 "#o6x")  (num 6) 
+test227 = TestCase  $ assertEqual "test227" (check parser6 "#d6xx") (num 6) 
+test228 = TestCase  $ assertEqual "test228" (check parser6 "#d06x") (num 6) 
+test229 = TestCase  $ assertEqual "test229" (check parser6 "#b110") (num 6) 
+test230 = TestCase  $ assertEqual "test230" (check parser6 "#b0110")(num 6) 
+test231 = TestCase  $ assertEqual "test231" (check parser6 "#x6xx") (num 6) 
+test232 = TestCase  $ assertEqual "test232" (check parser6 "#x06x") (num 6) 
 
+test233 = TestCase  $ assertEqual "test233" (check parser6 "7xxxx") (num 7) 
+test234 = TestCase  $ assertEqual "test234" (check parser6 "#o7x")  (num 7) 
+test235 = TestCase  $ assertEqual "test235" (check parser6 "#d7xx") (num 7) 
+test236 = TestCase  $ assertEqual "test236" (check parser6 "#d07x") (num 7) 
+test237 = TestCase  $ assertEqual "test237" (check parser6 "#b111") (num 7) 
+test238 = TestCase  $ assertEqual "test238" (check parser6 "#b0111")(num 7) 
+test239 = TestCase  $ assertEqual "test239" (check parser6 "#x7xx") (num 7) 
+test240 = TestCase  $ assertEqual "test240" (check parser6 "#x07x") (num 7) 
+
+test241 = TestCase  $ assertEqual "test241" (check parser6 "8xxxx")   (num 8) 
+test242 = TestCase  $ assertEqual "test242" (check parser6 "#o10x")   (num 8) 
+test243 = TestCase  $ assertEqual "test243" (check parser6 "#d8xx")   (num 8) 
+test244 = TestCase  $ assertEqual "test244" (check parser6 "#d08x")   (num 8) 
+test245 = TestCase  $ assertEqual "test245" (check parser6 "#b1000")  (num 8) 
+test246 = TestCase  $ assertEqual "test246" (check parser6 "#b01000") (num 8) 
+test247 = TestCase  $ assertEqual "test247" (check parser6 "#x8xx")   (num 8) 
+test248 = TestCase  $ assertEqual "test248" (check parser6 "#x08x")   (num 8) 
+
+test249 = TestCase  $ assertEqual "test249" (check parser6 "9xxxx")   (num 9) 
+test250 = TestCase  $ assertEqual "test250" (check parser6 "#o11x")   (num 9) 
+test251 = TestCase  $ assertEqual "test251" (check parser6 "#d9xx")   (num 9) 
+test252 = TestCase  $ assertEqual "test252" (check parser6 "#d09x")   (num 9) 
+test253 = TestCase  $ assertEqual "test253" (check parser6 "#b1001")  (num 9) 
+test254 = TestCase  $ assertEqual "test254" (check parser6 "#b01001") (num 9) 
+test255 = TestCase  $ assertEqual "test255" (check parser6 "#x9xx")   (num 9) 
+test256 = TestCase  $ assertEqual "test256" (check parser6 "#x09x")   (num 9) 
+
+test257 = TestCase  $ assertEqual "test257" (check parser6 "10xxx")   (num 10) 
+test258 = TestCase  $ assertEqual "test258" (check parser6 "#o12x")   (num 10) 
+test259 = TestCase  $ assertEqual "test259" (check parser6 "#d10x")   (num 10) 
+test260 = TestCase  $ assertEqual "test260" (check parser6 "#d010x")  (num 10) 
+test261 = TestCase  $ assertEqual "test261" (check parser6 "#b1010")  (num 10) 
+test262 = TestCase  $ assertEqual "test262" (check parser6 "#b01010") (num 10) 
+test263 = TestCase  $ assertEqual "test263" (check parser6 "#xaxx")   (num 10) 
+test264 = TestCase  $ assertEqual "test264" (check parser6 "#x0Ax")   (num 10) 
+
+test265 = TestCase  $ assertEqual "test265" (check parser6 "11xxx")   (num 11) 
+test266 = TestCase  $ assertEqual "test266" (check parser6 "#o13x")   (num 11) 
+test267 = TestCase  $ assertEqual "test267" (check parser6 "#d11x")   (num 11) 
+test268 = TestCase  $ assertEqual "test268" (check parser6 "#d011x")  (num 11) 
+test269 = TestCase  $ assertEqual "test269" (check parser6 "#b1011")  (num 11) 
+test270 = TestCase  $ assertEqual "test270" (check parser6 "#b01011") (num 11) 
+test271 = TestCase  $ assertEqual "test271" (check parser6 "#xbxx")   (num 11) 
+test272 = TestCase  $ assertEqual "test272" (check parser6 "#x0Bx")   (num 11) 
+
+test273 = TestCase  $ assertEqual "test273" (check parser6 "12xxx")   (num 12) 
+test274 = TestCase  $ assertEqual "test274" (check parser6 "#o14x")   (num 12) 
+test275 = TestCase  $ assertEqual "test275" (check parser6 "#d12x")   (num 12) 
+test276 = TestCase  $ assertEqual "test276" (check parser6 "#d012x")  (num 12) 
+test277 = TestCase  $ assertEqual "test277" (check parser6 "#b1100")  (num 12) 
+test278 = TestCase  $ assertEqual "test278" (check parser6 "#b01100") (num 12) 
+test279 = TestCase  $ assertEqual "test279" (check parser6 "#xCxx")   (num 12) 
+test280 = TestCase  $ assertEqual "test280" (check parser6 "#x0cx")   (num 12) 
+
+test281 = TestCase  $ assertEqual "test281" (check parser6 "13xxx")   (num 13) 
+test282 = TestCase  $ assertEqual "test282" (check parser6 "#o15x")   (num 13) 
+test283 = TestCase  $ assertEqual "test283" (check parser6 "#d13x")   (num 13) 
+test284 = TestCase  $ assertEqual "test284" (check parser6 "#d013x")  (num 13) 
+test285 = TestCase  $ assertEqual "test285" (check parser6 "#b1101")  (num 13) 
+test286 = TestCase  $ assertEqual "test286" (check parser6 "#b01101") (num 13) 
+test287 = TestCase  $ assertEqual "test287" (check parser6 "#xDxx")   (num 13) 
+test288 = TestCase  $ assertEqual "test288" (check parser6 "#x0dx")   (num 13) 
+
+test289 = TestCase  $ assertEqual "test289" (check parser6 "14xxx")   (num 14) 
+test290 = TestCase  $ assertEqual "test290" (check parser6 "#o16x")   (num 14) 
+test291 = TestCase  $ assertEqual "test291" (check parser6 "#d14x")   (num 14) 
+test292 = TestCase  $ assertEqual "test292" (check parser6 "#d014x")  (num 14) 
+test293 = TestCase  $ assertEqual "test293" (check parser6 "#b1110")  (num 14) 
+test294 = TestCase  $ assertEqual "test294" (check parser6 "#b01110") (num 14) 
+test295 = TestCase  $ assertEqual "test295" (check parser6 "#xexx")   (num 14) 
+test296 = TestCase  $ assertEqual "test296" (check parser6 "#x0Ex")   (num 14) 
+
+test297 = TestCase  $ assertEqual "test297" (check parser6 "15xxx")   (num 15) 
+test298 = TestCase  $ assertEqual "test298" (check parser6 "#o17x")   (num 15) 
+test299 = TestCase  $ assertEqual "test299" (check parser6 "#d15x")   (num 15) 
+test300 = TestCase  $ assertEqual "test300" (check parser6 "#d015x")  (num 15) 
+test301 = TestCase  $ assertEqual "test301" (check parser6 "#b1111")  (num 15) 
+test302 = TestCase  $ assertEqual "test302" (check parser6 "#b01111") (num 15) 
+test303 = TestCase  $ assertEqual "test303" (check parser6 "#xfxx")   (num 15) 
+test304 = TestCase  $ assertEqual "test304" (check parser6 "#x0Fx")   (num 15) 
+
+test305 = TestCase  $ assertEqual "test305" (check parser6 "16xxx")   (num 16) 
+test306 = TestCase  $ assertEqual "test306" (check parser6 "#o20x")   (num 16) 
+test307 = TestCase  $ assertEqual "test307" (check parser6 "#d16x")   (num 16) 
+test308 = TestCase  $ assertEqual "test308" (check parser6 "#d016x")  (num 16) 
+test309 = TestCase  $ assertEqual "test309" (check parser6 "#b10000") (num 16) 
+test310 = TestCase  $ assertEqual "test310" (check parser6 "#b010000")(num 16) 
+test311 = TestCase  $ assertEqual "test311" (check parser6 "#x10xx")  (num 16) 
+test312 = TestCase  $ assertEqual "test312" (check parser6 "#x010x")  (num 16) 
+
+
+test313 = TestCase  $ assertEqual "test313" (check parser6 "29xxx")   (num 29) 
+test314 = TestCase  $ assertEqual "test314" (check parser6 "#o35x")   (num 29) 
+test315 = TestCase  $ assertEqual "test315" (check parser6 "#d29x")   (num 29) 
+test316 = TestCase  $ assertEqual "test316" (check parser6 "#d029x")  (num 29) 
+test317 = TestCase  $ assertEqual "test317" (check parser6 "#b11101") (num 29) 
+test318 = TestCase  $ assertEqual "test318" (check parser6 "#b011101")(num 29) 
+test319 = TestCase  $ assertEqual "test319" (check parser6 "#x1dxx")  (num 29) 
+test320 = TestCase  $ assertEqual "test320" (check parser6 "#x01dx")  (num 29) 
+
+binStr1 = "#b10100110110110101xxxx"
+binStr2 = "#b00010100110110110101xxxx"
+test321 = TestCase  $ assertEqual "test321" (check parser6 "85429xxx")(num 85429) 
+test322 = TestCase  $ assertEqual "test322" (check parser6 "#o246665")(num 85429) 
+test323 = TestCase  $ assertEqual "test323" (check parser6 "#d85429x")(num 85429) 
+test324 = TestCase  $ assertEqual "test324" (check parser6 "#d085429")(num 85429) 
+test325 = TestCase  $ assertEqual "test325" (check parser6 binStr1)   (num 85429) 
+test326 = TestCase  $ assertEqual "test326" (check parser6 binStr2)   (num 85429) 
+test327 = TestCase  $ assertEqual "test327" (check parser6 "#x14db5x")(num 85429) 
+test328 = TestCase  $ assertEqual "test328" (check parser6 "#x014db5")(num 85429) 
 
 test_Parse = TestLabel "test_Parse" $ TestList
   [ test1,  test2,  test3,  test4,  test5,  test6,  test7,  test8
@@ -297,5 +407,17 @@ test_Parse = TestLabel "test_Parse" $ TestList
   , test209,test210,test211,test212,test213,test214,test215,test216
   , test217,test218,test219,test220,test221,test222,test223,test224
   , test225,test226,test227,test228,test229,test230,test231,test232
+  , test233,test234,test235,test236,test237,test238,test239,test240
+  , test241,test242,test243,test244,test245,test246,test247,test248
+  , test249,test250,test251,test252,test253,test254,test255,test256
+  , test257,test258,test259,test260,test261,test262,test263,test264
+  , test265,test266,test267,test268,test269,test270,test271,test272
+  , test273,test274,test275,test276,test277,test278,test279,test280
+  , test281,test282,test283,test284,test285,test286,test287,test288
+  , test289,test290,test291,test292,test293,test294,test295,test296
+  , test297,test298,test299,test300,test301,test302,test303,test304
+  , test305,test306,test307,test308,test309,test310,test311,test312
+  , test313,test314,test315,test316,test317,test318,test319,test320
+  , test321,test322,test323,test324,test325,test326,test327,test328
   ]
 

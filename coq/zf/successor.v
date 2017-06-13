@@ -27,6 +27,11 @@ Proof.
   intro Ha. rewrite Ha. apply belong_a_succ_a.
 Qed.
 
+Proposition succ_O : succ O = singleton O.
+Proof.
+  unfold succ. rewrite union_O_a. reflexivity.
+Qed. 
+
 Proposition subset_succ_O: forall a:set,
   subset a (succ O) <-> a = O \/ a = succ O.
 Proof.
@@ -34,4 +39,3 @@ Proof.
   intros Ha.
 
 Show.
-

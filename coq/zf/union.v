@@ -4,6 +4,7 @@ Require Import belong.
 Require Import Axiom_Union.
 Require Import subset.
 Require Import Axiom_Extensionality.
+Require Import empty.
 Require Import pair.
 
 
@@ -87,4 +88,14 @@ Proof.
   clear Hx. intro Hx. right. exact Hx.
   clear Hx. intro Hx. left. exact Hx.
 Qed.
+
+Proposition union_O_a : forall a:set, union O a = a.
+Proof.
+  intros a. apply extensionality.
+  unfold subset. intros x Hx. apply union_elim2 in Hx. elim Hx.
+  clear Hx. intro Hx. apply False_ind. apply empty_O in Hx. exact Hx.
+  clear Hx. intro Hx. exact Hx.
+  apply union_right.
+Qed.
+
 

@@ -1,5 +1,8 @@
 Require Import set.
 Require Import belong.
+Require Import subset.
+Require Import Axiom_Extensionality.
+Require Import empty.
 Require Import pair.
 
 (************************************************************************)
@@ -7,8 +10,6 @@ Require Import pair.
 (************************************************************************)
 
 Definition singleton (x:set) : set := {x,x}.
-
-Notation "{ a }" := (singleton a) : core_scope.
 
 Proposition singleton_belong: forall x y:set, x:(singleton y) <-> x = y.
 Proof.
@@ -34,4 +35,18 @@ Proof.
   apply singleton_belong. rewrite <- H. apply pair_right.
 Qed.
 
+(*
+Proposition when_subset_singleton : forall a b:set,
+  subset a (singleton b) <-> a = O \/ a = singleton b.
+Proof.
+  intros a b. split.
+  intro H. cut (~ a = O \/ a = O). intro H'. elim H'. 
+  clear H'. intro H'. right. apply extensionality. exact H.
+  unfold subset. intros x Hx. cut (exists y:set, y:a). intro Hy. 
+  elim Hy. clear Hy. intros y Hy. apply singleton_belong in Hx.
+  rewrite Hx. clear Hx. cut (y = b). intro Eyb. rewrite <- Eyb. exact Hy.
+  apply singleton_belong. apply H. exact Hy.
 
+Show.
+
+*)

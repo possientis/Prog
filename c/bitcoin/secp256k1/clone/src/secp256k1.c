@@ -18,24 +18,6 @@
 #include "eckey_impl.h"
 #include "hash_impl.h"
 
-#define ARG_CHECK(cond) do { \
-    if (EXPECT(!(cond), 0)) { \
-        secp256k1_callback_call(&ctx->illegal_callback, #cond); \
-        return 0; \
-    } \
-} while(0)
-
-
-/* trick to convert value of a macro into a string constant */
-# define STR(EXP) "\'"STR_(EXP)"\'" 
-# define STR_(EXP) #EXP /* # is preprocesssor 'stringify operator' */
-
-#define DISPLAY_INT_MACRO(NAME) \
-  fprintf(stderr, #NAME" is defined and equal to %d\n", NAME)
-
-#define DISPLAY_STR_MACRO(NAME) \
-  fprintf(stderr, #NAME" is defined and equal to %s\n", STR(NAME))
-
 
 int 
 
@@ -132,6 +114,7 @@ default_error_callback
 /************************************************************************/
 
   = { default_error_callback_fn, NULL };
+
 
 
 /************************************************************************/

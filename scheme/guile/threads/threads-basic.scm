@@ -27,35 +27,33 @@
 (display (thread? new-thread))(newline) ; #t , eventhough thread as terminated
 (display "number of running threads: ")(display (length (all-threads)))(newline)
 
+;;; thread will loop for ever
 (define t1 (call-with-new-thread
              (lambda ()
-               (yield)
-               (display "thread1:A\n")
-               (yield)
-               (display "thread1:B\n")
-               (yield)
-               (display "thread1:C\n"))))
+               (let loop ((i 0))
+                 (display "i = ")(display i)(newline)
+                 (loop (+ 1 i))))))
 
-(define t2 (call-with-new-thread
-             (lambda ()
-               (display "thread2:A\n")
-               (yield)
-               (display "thread2:B\n")
-               (yield)
-               (display "thread2:C\n"))))
+(if (not (thread-exited? t1))
+  (display "thread t1 is currently stuck in an infinite loop...\n"))
 
-(define t3 (call-with-new-thread
-             (lambda ()
-               (display "thread3:A\n")
-               (yield)
-               (display "thread3:B\n")
-               (yield)
-               (display "thread3:C\n"))))
+(display "setting up thread t1's clean up procedure...\n")
 
+(set-thread-cleanup! t1 (lambda () (display "\nOk ok, I am exiting now...\n")))
+
+
+(let loop ((i 0))
+  (if (< i 10000)
+    (loop (+ i 1))))
+
+(display "\ncancelling thread t1 now...\n")
+
+(cancel-thread t1)
 
 (join-thread t1)
-(join-thread t2)
-(join-thread t3)
+
+(if (thread-exited? t1)
+  (display "thread t1 has now exited...\n"))
 
 (display "All threads have exited\n")
 

@@ -1,7 +1,9 @@
 module Test_data
-  ( p1, p2, p3, p4, p5, p6, p7, p8, p9
-  , q1, q2, q3, q4, q5, q6, q7, q8
-  , s1, s2, s3, s4, s5, s6, s7, s8
+  ( p1,   p2,   p3,   p4,   p5,   p6,   p7,   p8,   p9
+  , q1,   q2,   q3,   q4,   q5,   q6,   q7,   q8
+  , s1,   s2,   s3,   s4,   s5,   s6,   s7,   s8,   s9 
+  , s1',  s2',  s3',  s4',  s5',  s6',  s7',  s8',  s9'
+  , t1,   t2,   t3,   t4,   t5,   t6,   t7,   t8,   t9
   , var1, var2, var3, var4, var5, var6, var7, var8
   , free1, free2, free3, free4, free5, free6, free7, free8
   , bnd1, bnd2, bnd3, bnd4, bnd5, bnd6, bnd7, bnd8
@@ -15,6 +17,7 @@ import Data.Set
 
 import Formula               -- main implementation
 import V
+import Bar
 
 s1 = "x"
 s2 = "y"
@@ -24,6 +27,33 @@ s5 = "Lx.Ly.x"
 s6 = "Lx.Ly.y"
 s7 = "Lx.Ly.(x y)"
 s8 = "Lx.Ly.(x (x y))"
+s9 = "Lx.Ly.(Lz.(z x) Lx.(x y))"
+
+t1 = variable (left x)
+t2 = variable (left y)
+t3 = apply t1 t2
+t4 = lambda (right 0) $ variable (right 0)
+t5 = lambda (right 1) $ lambda (right 0) $ variable (right 1)
+t6 = lambda (right 0) $ lambda (right 0) $ variable (right 0)
+t7 = lambda (right 1) $ lambda (right 0) $ apply
+  (variable (right 1)) (variable (right 0))
+t8 = lambda (right 1) $ lambda (right 0) $ apply (variable (right 1)) $
+  apply (variable (right 1)) (variable (right 0))
+t9 = lambda (right 2) $ lambda (right 1) $ apply
+  (lambda (right 0) $ apply (variable (right 0)) (variable (right 2)))
+  (lambda (right 0) $ apply (variable (right 0)) (variable (right 1)))
+
+-- minimal transform representations
+s1'= s1
+s2'= s2
+s3'= s3
+s4'= "L0.0"
+s5'= "L1.L0.1"
+s6'= "L0.L0.0"
+s7'= "L1.L0.(1 0)"
+s8'= "L1.L0.(1 (1 0))"
+s9'= "L2.L1.(L0.(0 2) L0.(0 1))"
+
 
 p1 = variable x                 :: Formula V
 p2 = variable y                 :: Formula V
@@ -47,6 +77,8 @@ q5 = lambda x' (lambda y' q1)   :: Formula W
 q6 = lambda x' (lambda y' q2)   :: Formula W
 q7 = lambda x' (lambda y' q3) 
 q8 = lambda x' (lambda y' (apply q1 q3))
+
+
 
 
 var1 = singleton x    :: Set V

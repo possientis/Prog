@@ -1,4 +1,3 @@
-O\/a = a
-succ O = {0}
+singleton.v: when_subset_singleton
 a <= {b} <-> a = O \/ a = {b} 
 successor.v

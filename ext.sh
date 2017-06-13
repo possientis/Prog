@@ -35,6 +35,7 @@ filtered=$( \
   | grep -v '.vim' \
   | grep -v '.txt' \
   | grep -v '.pdf' \
+  | grep -v '.so' \
   | grep -v '.gdbinit' \
   | grep -v '.vimrc' \
   | grep -v '.dircolors' \
