@@ -31,3 +31,12 @@ Proof.
   exact (proj2_sig (skolem empty_set_exists empty_set_is_unique)). 
 Qed.
 
+Proposition empty_a_O : forall a:set,
+  empty a <-> a = O.
+Proof.
+  intros a. split.
+  intro Ha. apply empty_set_is_unique. exact Ha. apply empty_O.
+  intro Ha. rewrite Ha. apply empty_O.
+Qed.
+
+

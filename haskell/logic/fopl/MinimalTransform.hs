@@ -2,6 +2,8 @@ module MinimalTransform
   ( minTrans
   ) where
 
+import Data.Functor
+
 import Bar
 import Formula
 import Substitution

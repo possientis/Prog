@@ -15,136 +15,217 @@
 #include <stdint.h>
 #include <stdio.h>
 
+
+
+
+
 typedef struct 
 {
 
-  void (*fn)(const char *text, void* data);
-  const void* data;
+  void (*fn)(const char *text, void *data);
+  const void                        *data;
 
-} secp256k1_callback;
+} 
+
+/************************************************************************/
+secp256k1_callback
+/************************************************************************/
+
+;
+
+
 
 static SECP256K1_INLINE void 
-secp256k1_callback_call(
-  const secp256k1_callback * const cb, 
-  const char * const text) 
+
+/************************************************************************/
+secp256k1_callback_call
+/************************************************************************/
+
+(
+ 
+  const secp256k1_callback  * const cb, 
+  const char                * const text
+
+) 
+
 {
-    cb->fn(text, (void*)cb->data);
+    cb->fn(text, (void*) cb->data);
 }
 
 /************************************************************************/
-#define ARG_CHECK(cond) do { \
-    if (EXPECT(!(cond), 0)) { \
-        secp256k1_callback_call(&ctx->illegal_callback, #cond); \
-        return 0; \
-    } \
-} while(0)
-
-
-/* trick to convert value of a macro into a string constant */
-# define STR(EXP) "\'"STR_(EXP)"\'" 
-# define STR_(EXP) #EXP /* # is preprocesssor 'stringify operator' */
-
-#define DISPLAY_INT_MACRO(NAME) \
-  fprintf(stderr, #NAME" is defined and equal to %d\n", NAME)
-
-#define DISPLAY_STR_MACRO(NAME) \
-  fprintf(stderr, #NAME" is defined and equal to %s\n", STR(NAME))
+/* ARG_CHECK                                                            */
 /************************************************************************/
 
+# define ARG_CHECK(cond) do { \
+      if (EXPECT(!(cond), 0)) { \
+          secp256k1_callback_call(&ctx->illegal_callback, #cond); \
+          return 0; \
+      } \
+  } while(0)
 
-#ifdef DETERMINISTIC
-#define TEST_FAILURE(msg) do { \
-    fprintf(stderr, "%s\n", msg); \
-    abort(); \
-} while(0);
-#else
-#define TEST_FAILURE(msg) do { \
-    fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, msg); \
-    abort(); \
-} while(0)
-#endif
 
-#ifdef HAVE_BUILTIN_EXPECT
-#define EXPECT(x,c) __builtin_expect((x),(c))
-#else
-#define EXPECT(x,c) (x)
-#endif
+/************************************************************************/
+/* STR                                                                  */
+/************************************************************************/
+/* trick to convert value of a macro into a string constant   */
+/* using the 'stringify' operator '#' of the C  preprocesssor */
 
-#ifdef DETERMINISTIC
-#define CHECK(cond) do { \
-    if (EXPECT(!(cond), 0)) { \
-        TEST_FAILURE("test condition failed"); \
-    } \
-} while(0)
-#else
-#define CHECK(cond) do { \
-    if (EXPECT(!(cond), 0)) { \
-        TEST_FAILURE("test condition failed: " #cond); \
-    } \
-} while(0)
-#endif
+# define STR(EXP) "\'"STR_(EXP)"\'" 
+# define STR_(EXP) #EXP 
 
+
+/************************************************************************/
+/* DISPLAY_INT_MACRO                                                    */
+/************************************************************************/
+
+# define DISPLAY_INT_MACRO(NAME) \
+      fprintf(stderr, #NAME" is defined and equal to %d\n", NAME)
+
+
+
+/************************************************************************/
+/* DISPLAY_STR_MACRO                                                    */
+/************************************************************************/
+
+# define DISPLAY_STR_MACRO(NAME) \
+      fprintf(stderr, #NAME" is defined and equal to %s\n", STR(NAME))
+
+
+/************************************************************************/
+/* TEST_FAILURE                                                         */
+/************************************************************************/
+
+# ifdef DETERMINISTIC
+#     define TEST_FAILURE(msg) do { \
+          fprintf(stderr, "%s\n", msg); \
+              abort(); \
+      } while(0);
+# else
+#     define TEST_FAILURE(msg) do { \
+          fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, msg); \
+          abort(); \
+      } while(0)
+# endif
+
+/************************************************************************/
+/* EXPECT                                                               */
+/************************************************************************/
+
+# ifdef HAVE_BUILTIN_EXPECT
+#     define EXPECT(x,c) __builtin_expect((x),(c))
+# else
+#     define EXPECT(x,c) (x)
+# endif
+
+
+
+/************************************************************************/
+/* CHECK                                                               */
+/************************************************************************/
+
+# ifdef DETERMINISTIC
+#     define CHECK(cond) do { \
+          if (EXPECT(!(cond), 0)) { \
+              TEST_FAILURE("test condition failed"); \
+          } \
+      } while(0)
+# else
+#     define CHECK(cond) do { \
+          if (EXPECT(!(cond), 0)) { \
+              TEST_FAILURE("test condition failed: " #cond); \
+          } \
+      } while(0)
+# endif
+
+/************************************************************************/
+/* VERIFY_CHECK, VERIFY_SETUP                                           */
+/************************************************************************/
 /* Like assert(), but when VERIFY is defined, and side-effect safe. */
-#if defined(COVERAGE)
-#define VERIFY_CHECK(check)
-#define VERIFY_SETUP(stmt)
-#elif defined(VERIFY)
-#define VERIFY_CHECK CHECK
-#define VERIFY_SETUP(stmt) do { stmt; } while(0)
-#else
-#define VERIFY_CHECK(cond) do { (void)(cond); } while(0)
-#define VERIFY_SETUP(stmt)
-#endif
 
-static SECP256K1_INLINE void *
-checked_malloc(
+# if defined(COVERAGE)
+#     define VERIFY_CHECK(check)
+#     define VERIFY_SETUP(stmt)
+# elif defined(VERIFY)
+#     define VERIFY_CHECK CHECK
+#     define VERIFY_SETUP(stmt) do { stmt; } while(0)
+# else
+#     define VERIFY_CHECK(cond) do { (void)(cond); } while(0)
+#     define VERIFY_SETUP(stmt)
+# endif
+
+
+static SECP256K1_INLINE void*
+
+/************************************************************************/
+checked_malloc
+/************************************************************************/
+
+(
     
-  const secp256k1_callback* cb, 
-  size_t size) 
+  const secp256k1_callback    *cb, 
+  size_t                      size
+  
+) 
 
 {
 
   void *ret = malloc(size);
-  if (ret == NULL) {
+
+  if (ret == NULL) 
+  {
     secp256k1_callback_call(cb, "Out of memory");
   }
     
   return ret;
 }
 
+/************************************************************************/
+/* SECP256K1_RESTRICT                                                   */
+/************************************************************************/
 /* Macro for restrict, when available and not in a VERIFY build. */
-#if defined(SECP256K1_BUILD) && defined(VERIFY)
-# define SECP256K1_RESTRICT
-#else
-# if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
-#  if SECP256K1_GNUC_PREREQ(3,0)
-#   define SECP256K1_RESTRICT __restrict__
-#  elif (defined(_MSC_VER) && _MSC_VER >= 1400)
-#   define SECP256K1_RESTRICT __restrict
-#  else
-#   define SECP256K1_RESTRICT
-#  endif
+
+# if defined(SECP256K1_BUILD) && defined(VERIFY)
+#     define SECP256K1_RESTRICT
 # else
-#  define SECP256K1_RESTRICT restrict
+#     if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
+#         if SECP256K1_GNUC_PREREQ(3,0)
+#             define SECP256K1_RESTRICT __restrict__
+#         elif (defined(_MSC_VER) && _MSC_VER >= 1400)
+#             define SECP256K1_RESTRICT __restrict
+#         else
+#             define SECP256K1_RESTRICT
+#         endif
+#     else
+#         define SECP256K1_RESTRICT restrict
+#     endif
 # endif
-#endif
 
-#if defined(_WIN32)
-# define I64FORMAT "I64d"
-# define I64uFORMAT "I64u"
-#else
-# define I64FORMAT "lld"
-# define I64uFORMAT "llu"
-#endif
 
-#if defined(HAVE___INT128)
-# if defined(__GNUC__)
-#  define SECP256K1_GNUC_EXT __extension__
+/************************************************************************/
+/* I64FORMAT, I64uFORMAT                                                */
+/************************************************************************/
+
+# if defined(_WIN32)
+#     define I64FORMAT "I64d"
+#     define I64uFORMAT "I64u"
 # else
-#  define SECP256K1_GNUC_EXT
+#     define I64FORMAT "lld"
+#     define I64uFORMAT "llu"
+# endif
+
+/************************************************************************/
+/* SECP256K1_GNUC_EXT                                                   */
+/************************************************************************/
+
+# if defined(HAVE___INT128)
+#     if defined(__GNUC__)
+#         define SECP256K1_GNUC_EXT __extension__
+#     else
+#         define SECP256K1_GNUC_EXT
+#     endif
 # endif
 
 SECP256K1_GNUC_EXT typedef unsigned __int128 uint128_t;
-#endif
 
-#endif
+/* include guard */
+# endif

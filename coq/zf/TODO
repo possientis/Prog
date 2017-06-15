@@ -1,3 +1,4 @@
+lem.v / classical.v
 singleton.v: when_subset_singleton
 a <= {b} <-> a = O \/ a = {b} 
 successor.v

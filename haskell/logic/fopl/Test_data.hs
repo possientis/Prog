@@ -75,7 +75,7 @@ t8 = forall (right 0) $ imply
 
 t9 = forall (right 2) $ forall (right 1) $ imply
   (forall (right 0) $ belong (right 0) (right 2))
-  (forall (right 0) $ belong (right 0) (right 1))
+  (forall (right 0) $ belong (right 0) (right 1)) :: Formula (Bar V)
 
 
 var1 = fromList [x,y]   :: Set V

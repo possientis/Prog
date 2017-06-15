@@ -28,6 +28,39 @@
 
 
 (display %foreign-int-ptr)(newline)
+(display (pointer? %foreign-int-ptr))(newline)
+(display (null-pointer? %foreign-int-ptr))(newline)
+
+(define x 456)
+(define ptr1 (scm->pointer x))
+(display ptr1)(newline)
+(define y (pointer->scm ptr1))
+(display y)(newline)  ; 456
+
+(define bytes1 (pointer->bytevector %foreign-int-ptr 4))
+
+(display bytes1)(newline)
+
+(define ptr2 (bytevector->pointer bytes1)) 
+
+(display ptr2)(newline)
+(display (equal? ptr2 %foreign-int-ptr))(newline)
+
+;;; feels like pointer->pointer *ptr must be a pointer itself
+(display (dereference-pointer ptr2))(newline)
+
+(define ptr3 (string->pointer "hello"))
+(define bytes2 (pointer->bytevector ptr3 6))
+(display bytes2)(newline) 
+(display (pointer->string ptr3))(newline)
+
+
+
+
+
+
+
+
 
 
 

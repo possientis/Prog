@@ -8,6 +8,7 @@ data LispVal  = Atom String
               | Number Integer
               | String String
               | Bool Bool
+              | Char Char
               deriving (Show, Eq)
 
 

@@ -377,6 +377,64 @@ test326 = TestCase  $ assertEqual "test326" (check parser6 binStr2)   (num 85429
 test327 = TestCase  $ assertEqual "test327" (check parser6 "#x14db5x")(num 85429) 
 test328 = TestCase  $ assertEqual "test328" (check parser6 "#x014db5")(num 85429) 
 
+
+parser7 = parseChar
+ch = Just . Char
+test329 = TestCase  $ assertEqual "test329" (check parser7 "#\\axxxx")(ch 'a') 
+test330 = TestCase  $ assertEqual "test330" (check parser7 "#\\bxxxx")(ch 'b') 
+test331 = TestCase  $ assertEqual "test331" (check parser7 "#\\cxxxx")(ch 'c') 
+test332 = TestCase  $ assertEqual "test332" (check parser7 "#\\dxxxx")(ch 'd') 
+test333 = TestCase  $ assertEqual "test333" (check parser7 "#\\exxxx")(ch 'e') 
+test334 = TestCase  $ assertEqual "test334" (check parser7 "#\\fxxxx")(ch 'f') 
+test335 = TestCase  $ assertEqual "test335" (check parser7 "#\\gxxxx")(ch 'g') 
+test336 = TestCase  $ assertEqual "test336" (check parser7 "#\\hxxxx")(ch 'h') 
+test337 = TestCase  $ assertEqual "test337" (check parser7 "#\\ixxxx")(ch 'i') 
+test338 = TestCase  $ assertEqual "test338" (check parser7 "#\\jxxxx")(ch 'j') 
+test339 = TestCase  $ assertEqual "test339" (check parser7 "#\\kxxxx")(ch 'k') 
+test340 = TestCase  $ assertEqual "test340" (check parser7 "#\\lxxxx")(ch 'l') 
+test341 = TestCase  $ assertEqual "test341" (check parser7 "#\\mxxxx")(ch 'm') 
+test342 = TestCase  $ assertEqual "test342" (check parser7 "#\\nxxxx")(ch 'n') 
+test343 = TestCase  $ assertEqual "test343" (check parser7 "#\\oxxxx")(ch 'o') 
+test344 = TestCase  $ assertEqual "test344" (check parser7 "#\\pxxxx")(ch 'p') 
+test345 = TestCase  $ assertEqual "test345" (check parser7 "#\\qxxxx")(ch 'q') 
+test346 = TestCase  $ assertEqual "test346" (check parser7 "#\\rxxxx")(ch 'r') 
+test347 = TestCase  $ assertEqual "test347" (check parser7 "#\\sxxxx")(ch 's') 
+test348 = TestCase  $ assertEqual "test348" (check parser7 "#\\txxxx")(ch 't') 
+test349 = TestCase  $ assertEqual "test349" (check parser7 "#\\uxxxx")(ch 'u') 
+test350 = TestCase  $ assertEqual "test350" (check parser7 "#\\vxxxx")(ch 'v') 
+test351 = TestCase  $ assertEqual "test351" (check parser7 "#\\wxxxx")(ch 'w') 
+test352 = TestCase  $ assertEqual "test352" (check parser7 "#\\xxxxx")(ch 'x') 
+test353 = TestCase  $ assertEqual "test353" (check parser7 "#\\yxxxx")(ch 'y') 
+test354 = TestCase  $ assertEqual "test354" (check parser7 "#\\zxxxx")(ch 'z') 
+test355 = TestCase  $ assertEqual "test355" (check parser7 "#\\Axxxx")(ch 'A') 
+test356 = TestCase  $ assertEqual "test356" (check parser7 "#\\Bxxxx")(ch 'B') 
+test357 = TestCase  $ assertEqual "test357" (check parser7 "#\\Cxxxx")(ch 'C') 
+test358 = TestCase  $ assertEqual "test358" (check parser7 "#\\Dxxxx")(ch 'D') 
+test359 = TestCase  $ assertEqual "test359" (check parser7 "#\\Exxxx")(ch 'E') 
+test360 = TestCase  $ assertEqual "test360" (check parser7 "#\\Fxxxx")(ch 'F') 
+test361 = TestCase  $ assertEqual "test361" (check parser7 "#\\Gxxxx")(ch 'G') 
+test362 = TestCase  $ assertEqual "test362" (check parser7 "#\\Hxxxx")(ch 'H') 
+test363 = TestCase  $ assertEqual "test363" (check parser7 "#\\Ixxxx")(ch 'I') 
+test364 = TestCase  $ assertEqual "test364" (check parser7 "#\\Jxxxx")(ch 'J') 
+test365 = TestCase  $ assertEqual "test365" (check parser7 "#\\Kxxxx")(ch 'K') 
+test366 = TestCase  $ assertEqual "test366" (check parser7 "#\\Lxxxx")(ch 'L') 
+test367 = TestCase  $ assertEqual "test367" (check parser7 "#\\Mxxxx")(ch 'M') 
+test368 = TestCase  $ assertEqual "test368" (check parser7 "#\\Nxxxx")(ch 'N') 
+test369 = TestCase  $ assertEqual "test369" (check parser7 "#\\Oxxxx")(ch 'O') 
+test370 = TestCase  $ assertEqual "test370" (check parser7 "#\\Pxxxx")(ch 'P') 
+test371 = TestCase  $ assertEqual "test371" (check parser7 "#\\Qxxxx")(ch 'Q') 
+test372 = TestCase  $ assertEqual "test372" (check parser7 "#\\Rxxxx")(ch 'R') 
+test373 = TestCase  $ assertEqual "test373" (check parser7 "#\\Sxxxx")(ch 'S') 
+test374 = TestCase  $ assertEqual "test374" (check parser7 "#\\Txxxx")(ch 'T') 
+test375 = TestCase  $ assertEqual "test375" (check parser7 "#\\Uxxxx")(ch 'U') 
+test376 = TestCase  $ assertEqual "test376" (check parser7 "#\\Vxxxx")(ch 'V') 
+
+test377 = TestCase  $ assertEqual "test377" (check parser7 "#\\Wxxxx")(ch 'W') 
+test378 = TestCase  $ assertEqual "test378" (check parser7 "#\\Xxxxx")(ch 'X') 
+test379 = TestCase  $ assertEqual "test379" (check parser7 "#\\Yxxxx")(ch 'Y') 
+test380 = TestCase  $ assertEqual "test380" (check parser7 "#\\Zxxxx")(ch 'Z') 
+
+
 test_Parse = TestLabel "test_Parse" $ TestList
   [ test1,  test2,  test3,  test4,  test5,  test6,  test7,  test8
   , test9,  test10, test11, test12, test13, test14, test15, test16
@@ -419,5 +477,12 @@ test_Parse = TestLabel "test_Parse" $ TestList
   , test305,test306,test307,test308,test309,test310,test311,test312
   , test313,test314,test315,test316,test317,test318,test319,test320
   , test321,test322,test323,test324,test325,test326,test327,test328
+  , test329,test330,test331,test332,test333,test334,test335,test336
+  , test337,test338,test339,test340,test341,test342,test343,test344
+  , test345,test346,test347,test348,test349,test350,test351,test352
+  , test353,test354,test355,test356,test357,test358,test359,test360
+  , test361,test362,test363,test364,test365,test366,test367,test368
+  , test369,test370,test371,test372,test373,test374,test375,test376
+  , test377,test378,test379,test380
   ]
 

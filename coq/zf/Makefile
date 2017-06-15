@@ -1,4 +1,5 @@
-all:	Axiom_LEM.vo \
+all:	logic.vo \
+			Axiom_LEM.vo \
 			set.vo \
 			Axiom_Skolem.vo \
 			belong.vo \
@@ -14,6 +15,9 @@ all:	Axiom_LEM.vo \
 			ord_pair.vo \
 			union.vo \
 			power.vo
+
+logic.vo: logic.v
+	coqc logic.v
 			
 Axiom_LEM.vo: Axiom_LEM.v
 	coqc Axiom_LEM.v

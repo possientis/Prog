@@ -1,6 +1,7 @@
 
 module Bar
   ( Bar
+  , isInt
   , left
   , right
   ) where
@@ -12,6 +13,10 @@ left x = Bar (Left x)
 
 right :: Int -> Bar v
 right n = Bar (Right n)
+
+isInt :: Bar v -> Bool
+isInt (Bar (Left _))  = False
+isInt (Bar (Right _)) = True
 
 instance (Show v) => Show (Bar v) where
   show (Bar (Left x))   = show x

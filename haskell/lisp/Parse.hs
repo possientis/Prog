@@ -7,6 +7,7 @@ module Parse
   , hexNumber
   , octChar
   , octNumber
+  , parseChar
   , parseNumber
   , readExpr
   , spaces
@@ -91,6 +92,19 @@ escaped = do
     't'   ->  '\t'
     'r'   ->  '\r'
 
+simpleChar :: Parser Char
+simpleChar = do
+  try $ char '#' >> char '\\'
+  s <- oneOf "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    <|> digit
+    <|> symbol
+  return s
+
+
+parseChar :: Parser LispVal
+parseChar = liftM Char simpleChar
+  
+
 parseString :: Parser LispVal
 parseString = do
   char '"'
@@ -120,7 +134,7 @@ parseNumber = liftM Number $
     )
 
 parseExpr :: Parser LispVal
-parseExpr = parseNumber <|> parseAtom <|> parseString
+parseExpr = parseNumber <|> parseAtom <|> parseString <|> parseChar
 
 readExpr :: String -> String
 readExpr input = case parse parseExpr "lisp" input of
