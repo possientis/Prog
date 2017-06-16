@@ -1,3 +1,4 @@
+Require Import lem.
 Require Import set.
 Require Import belong.
 Require Import subset.
@@ -38,5 +39,16 @@ Proof.
   intro Ha. apply empty_set_is_unique. exact Ha. apply empty_O.
   intro Ha. rewrite Ha. apply empty_O.
 Qed.
+
+(*
+Proposition not_empty : forall a:set,
+  ~ empty a <-> exists x:set, x:a.
+Proof.
+  intro a. split.
+  intro H. unfold empty in H.
+
+Show.
+
+*)
 
 

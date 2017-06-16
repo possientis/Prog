@@ -43,7 +43,7 @@
 
   <target name="cc" depends="includes">
     <exec 
-      executable="g++" failonerror="true" newenvironment="false" timeout="1000">
+      executable="g++" failonerror="true" newenvironment="false" timeout="2000">
       <arg value="src/c++/org_example_antbook_cpu_CpuInfo.cpp" />
       <arg value="-c" />
       <arg value="-I${generated.dir}" />

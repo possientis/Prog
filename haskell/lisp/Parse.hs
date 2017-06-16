@@ -14,8 +14,9 @@ module Parse
   , symbol
   ) where
 
-import Text.ParserCombinators.Parsec hiding (spaces)
+import Data.Char
 import Control.Monad
+import Text.ParserCombinators.Parsec hiding (spaces)
 import Numeric
 
 import LispVal
@@ -98,11 +99,19 @@ simpleChar = do
   s <- oneOf "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     <|> digit
     <|> symbol
+    <|> oneOf "`'\"();\\,."
   return s
+
+octalChar :: Parser Char
+octalChar = do
+  try $ char '#' >> char '\\'
+  s <- many1 octChar 
+  let list = readOct s
+  return $ intToDigit $ (fst . head) list
 
 
 parseChar :: Parser LispVal
-parseChar = liftM Char simpleChar
+parseChar = liftM Char (simpleChar <|> octalChar)
   
 
 parseString :: Parser LispVal

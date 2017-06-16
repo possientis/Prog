@@ -34,6 +34,12 @@ extern "C" {
  */
 
 
+typedef struct secp256k1_context_struct 
+
+/************************************************************************/
+secp256k1_context
+/************************************************************************/
+
 /** Opaque data structure that holds context information 
  *  (e.g. precomputed tables etc.)
  *
@@ -54,12 +60,6 @@ extern "C" {
  *  case you do not need any locking for the other calls), or use a read-
  *  write lock.
  */
-
-typedef struct secp256k1_context_struct 
-
-/************************************************************************/
-secp256k1_context
-/************************************************************************/
 
 ;
 

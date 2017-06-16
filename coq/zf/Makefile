@@ -1,5 +1,6 @@
 all:	logic.vo \
 			Axiom_LEM.vo \
+			lem.vo \
 			set.vo \
 			Axiom_Skolem.vo \
 			belong.vo \
@@ -21,6 +22,9 @@ logic.vo: logic.v
 			
 Axiom_LEM.vo: Axiom_LEM.v
 	coqc Axiom_LEM.v
+
+lem.vo: lem.v Axiom_LEM.vo logic.vo
+	coqc lem.v
 
 set.vo: set.v
 	coqc set.v

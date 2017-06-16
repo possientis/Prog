@@ -3,6 +3,8 @@
 int foreign_int = 45;
 
 
+
+
 typedef struct {
   const char* name;
 } bottle_t;

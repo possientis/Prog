@@ -1,13 +1,23 @@
 (use-modules (ice-9 threads))
 
-(define mutex (make-mutex))
-(define mutex2 (make-mutex 'recursive))
-(define mutex3 (make-recursive-mutex))
+(define stdout-mutex (make-mutex))
 
-(display (mutex? mutex))(newline)
-(display (mutex? mutex2))(newline)
-(display (mutex? mutex3))(newline)
 
+(define turn 1)                   ; shared mutable state
+(define turn-mutex (make-mutex))  ; needed to protect shared mutable state
+
+(define (next)
+  (lock-mutex turn-mutex)
+  (if (= turn 3)
+    (set! turn 1)
+    (set! turn (+ 1 turn)))
+  (unlock-mutex turn-mutex))
+
+(define (read-turn)
+  (lock-mutex turn-mutex)
+  (let ((t turn))
+    (unlock-mutex turn-mutex)
+    t))
 
 (define (waste time)
   (let loop ((i 0))
@@ -15,48 +25,24 @@
       (loop (+ i 1)))))
 
 (define (report num i)
-  (lock-mutex mutex)      ; blocks until mutex acquired
+  (lock-mutex stdout-mutex)      ; blocks until mutex acquired
   (display "thread n. ")
   (display num)
   (display ": i = ")
   (display i)
-  (display ": myprogress = ")
-  (display (my-progress num))
-  (display ": progress = ")
-  (display progress)
-  (display ": max-progress = ")
-  (display (max-progress))
   (newline)
-  (unlock-mutex mutex))
+  (unlock-mutex stdout-mutex))
  
-(define progress (list 0 0 0))
-
-(define (my-progress i)
-  (cond ((eq? i 1) (car progress))
-        ((eq? i 2) (cadr progress))
-        ((eq? i 3) (caddr progress))
-        (else error "my-progress: illegal index")))
-
-(define (inc-progress i)
-  (cond ((eq? i 1) (set-car! progress (+ 1 (car progress))))
-        ((eq? i 2) (set-car! (cdr progress) (+ 1 (cadr progress))))
-        ((eq? i 3) (set-car! (cddr progress) (+ 1 (caddr progress))))
-        (else error "my-progress: illegal index")))
-
-
-(define (max-progress)
-  (apply max progress))
-
+(define proceed-mutex (make-mutex))
 
 (define (proc args)
   (let ((num (car args)))
     (let loop ((i 0))
-      (if (>= (my-progress num) (+ 1 (max-progress)))
-        (begin 
-          (yield)
-          (loop i)))
+      (lock-mutex proceed-mutex)
       (report num i)
-      (inc-progress num)
+      (next)
+      (unlock-mutex proceed-mutex)
+      (yield)
       (loop (+ i 1)))))
 
 

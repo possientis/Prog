@@ -1,4 +1,5 @@
-lem.v / classical.v
+lem.v not forall <-> exists
+empty.v (not_empty)
 singleton.v: when_subset_singleton
 a <= {b} <-> a = O \/ a = {b} 
 successor.v

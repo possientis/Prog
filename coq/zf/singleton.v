@@ -48,5 +48,4 @@ Proof.
   apply singleton_belong. apply H. exact Hy.
 
 Show.
-
 *)

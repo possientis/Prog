@@ -1,7 +1,7 @@
 (* No axiom is being used in this module *)
 
 (* This is the reverse of Peirce law which is not very interesting *)
-Proposition Peirce_reverse : forall P Q: Prop, P->(P->Q)->P.
+Proposition peirce_reverse : forall P Q: Prop, P->(P->Q)->P.
 Proof.
   intros P Q Hp; intro Hpq; exact Hp.
 Qed.
