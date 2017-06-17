@@ -29,20 +29,6 @@ s7 = "Lx.Ly.(x y)"
 s8 = "Lx.Ly.(x (x y))"
 s9 = "Lx.Ly.(Lz.(z x) Lx.(x y))"
 
-t1 = variable (left x)
-t2 = variable (left y)
-t3 = apply t1 t2
-t4 = lambda (right 0) $ variable (right 0)
-t5 = lambda (right 1) $ lambda (right 0) $ variable (right 1)
-t6 = lambda (right 0) $ lambda (right 0) $ variable (right 0)
-t7 = lambda (right 1) $ lambda (right 0) $ apply
-  (variable (right 1)) (variable (right 0))
-t8 = lambda (right 1) $ lambda (right 0) $ apply (variable (right 1)) $
-  apply (variable (right 1)) (variable (right 0))
-t9 = lambda (right 2) $ lambda (right 1) $ apply
-  (lambda (right 0) $ apply (variable (right 0)) (variable (right 2)))
-  (lambda (right 0) $ apply (variable (right 0)) (variable (right 1)))
-
 -- minimal transform representations
 s1'= s1
 s2'= s2
@@ -77,6 +63,22 @@ q5 = lambda x' (lambda y' q1)   :: Formula W
 q6 = lambda x' (lambda y' q2)   :: Formula W
 q7 = lambda x' (lambda y' q3) 
 q8 = lambda x' (lambda y' (apply q1 q3))
+
+t1 = variable (left x)          :: Formula (Bar V)
+t2 = variable (left y)          :: Formula (Bar V)
+t3 = apply t1 t2
+t4 = lambda (right 0) $ variable (right 0)                    :: Formula (Bar V)
+t5 = lambda (right 1) $ lambda (right 0) $ variable (right 1) :: Formula (Bar V)
+t6 = lambda (right 0) $ lambda (right 0) $ variable (right 0) :: Formula (Bar V)
+t7 = lambda (right 1) $ lambda (right 0) $ apply
+  (variable (right 1)) (variable (right 0))                   :: Formula (Bar V)
+t8 = lambda (right 1) $ lambda (right 0) $ apply (variable (right 1)) $
+  apply (variable (right 1)) (variable (right 0))             :: Formula (Bar V)
+
+t9 = lambda (right 2) $ lambda (right 1) $ apply
+  (lambda (right 0) $ apply (variable (right 0)) (variable (right 2)))
+  (lambda (right 0) $ apply (variable (right 0)) (variable (right 1))) 
+  :: Formula (Bar V)
 
 
 

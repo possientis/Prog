@@ -102,16 +102,18 @@ simpleChar = do
     <|> oneOf "`'\"();\\,."
   return s
 
+-- parses characters in octal representation #\ddd
 octalChar :: Parser Char
 octalChar = do
-  try $ char '#' >> char '\\'
-  s <- many1 octChar 
-  let list = readOct s
-  return $ intToDigit $ (fst . head) list
+  try $ char '#' >> char '\\' >> octChar >>= \c -> do
+  s <- many1 octChar  -- at least 2 digits for octal representation of char
+  let list = readOct (c:s)
+  return $ chr $ (fst . head) list
 
 
+-- need to try and parse octal representation #\000 before #\0 etc
 parseChar :: Parser LispVal
-parseChar = liftM Char (simpleChar <|> octalChar)
+parseChar = liftM Char (octalChar <|> simpleChar)
   
 
 parseString :: Parser LispVal

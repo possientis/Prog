@@ -481,7 +481,41 @@ test422 = TestCase  $ assertEqual "test422" (check parser7 "\\#axxxx")(Nothing)
 test423 = TestCase  $ assertEqual "test423" (check parser7 "\'a\'xxx")(Nothing) 
 test424 = TestCase  $ assertEqual "test424" (check parser7 "\"a\"xxx")(Nothing) 
 
+test425 = TestCase  $ assertEqual "test425" (check parser7 "#\\000xx")(ch '\NUL') 
+test426 = TestCase  $ assertEqual "test426" (check parser7 "#\\001xx")(ch '\SOH') 
+test427 = TestCase  $ assertEqual "test427" (check parser7 "#\\002xx")(ch '\STX') 
+test428 = TestCase  $ assertEqual "test428" (check parser7 "#\\003xx")(ch '\ETX') 
+test429 = TestCase  $ assertEqual "test429" (check parser7 "#\\004xx")(ch '\EOT') 
+test430 = TestCase  $ assertEqual "test430" (check parser7 "#\\005xx")(ch '\ENQ') 
+test431 = TestCase  $ assertEqual "test431" (check parser7 "#\\006xx")(ch '\ACK') 
+test432 = TestCase  $ assertEqual "test432" (check parser7 "#\\007xx")(ch '\BEL') 
 
+test433 = TestCase  $ assertEqual "test433" (check parser7 "#\\010xx")(ch '\BS') 
+test434 = TestCase  $ assertEqual "test434" (check parser7 "#\\011xx")(ch '\HT') 
+test435 = TestCase  $ assertEqual "test435" (check parser7 "#\\012xx")(ch '\LF') 
+test436 = TestCase  $ assertEqual "test436" (check parser7 "#\\013xx")(ch '\VT') 
+test437 = TestCase  $ assertEqual "test437" (check parser7 "#\\014xx")(ch '\FF') 
+test438 = TestCase  $ assertEqual "test438" (check parser7 "#\\015xx")(ch '\CR') 
+test439 = TestCase  $ assertEqual "test439" (check parser7 "#\\016xx")(ch '\SO') 
+test440 = TestCase  $ assertEqual "test440" (check parser7 "#\\017xx")(ch '\SI') 
+
+test441 = TestCase  $ assertEqual "test441" (check parser7 "#\\020xx")(ch '\DLE') 
+test442 = TestCase  $ assertEqual "test442" (check parser7 "#\\021xx")(ch '\DC1') 
+test443 = TestCase  $ assertEqual "test443" (check parser7 "#\\022xx")(ch '\DC2') 
+test444 = TestCase  $ assertEqual "test444" (check parser7 "#\\023xx")(ch '\DC3') 
+test445 = TestCase  $ assertEqual "test445" (check parser7 "#\\024xx")(ch '\DC4') 
+test446 = TestCase  $ assertEqual "test446" (check parser7 "#\\025xx")(ch '\NAK') 
+test447 = TestCase  $ assertEqual "test447" (check parser7 "#\\026xx")(ch '\SYN') 
+test448 = TestCase  $ assertEqual "test448" (check parser7 "#\\027xx")(ch '\ETB') 
+
+test449 = TestCase  $ assertEqual "test449" (check parser7 "#\\030xx")(ch '\CAN') 
+test450 = TestCase  $ assertEqual "test450" (check parser7 "#\\031xx")(ch '\EM') 
+test451 = TestCase  $ assertEqual "test451" (check parser7 "#\\032xx")(ch '\SUB') 
+test452 = TestCase  $ assertEqual "test452" (check parser7 "#\\033xx")(ch '\ESC') 
+test453 = TestCase  $ assertEqual "test453" (check parser7 "#\\034xx")(ch '\FS') 
+test454 = TestCase  $ assertEqual "test454" (check parser7 "#\\035xx")(ch '\GS') 
+test455 = TestCase  $ assertEqual "test455" (check parser7 "#\\036xx")(ch '\RS') 
+test456 = TestCase  $ assertEqual "test456" (check parser7 "#\\037xx")(ch '\US') 
 
 test_Parse = TestLabel "test_Parse" $ TestList
   [ test1,  test2,  test3,  test4,  test5,  test6,  test7,  test8
@@ -537,5 +571,9 @@ test_Parse = TestLabel "test_Parse" $ TestList
   , test401,test402,test403,test404,test405,test406,test407,test408
   , test409,test410,test411,test412,test413,test414,test415,test416
   , test417,test418,test419,test420,test421,test422,test423,test424
+  , test425,test426,test427,test428,test429,test430,test431,test432
+  , test433,test434,test435,test436,test437,test438,test439,test440
+  , test441,test442,test443,test444,test445,test446,test447,test448
+  , test449,test450,test451,test452,test453,test454,test455,test456
   ]
 

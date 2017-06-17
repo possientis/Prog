@@ -1,0 +1,22 @@
+
+\begin{defin}\label{logic:def:generating:function}
+  We call {\em generating function} any map 
+  $F:{\cal P}(U)\rightarrow{\cal P}(U)$ with:
+  \[
+    X\subseteq Y\ \Rightarrow F(X)\subseteq F(Y)
+  \]
+for all $X,Y\in{\cal P}(U)$, where $U$ is an arbitrary set,
+called a {\em universe}.
+\end{defin}
+
+\begin{defin}\label{logic:def:genfun:closed:consistent}
+  Let $F:{\cal P}(U)\rightarrow{\cal P}(U)$ be a generating function and 
+  $X\subseteq U$.
+  \begin{eqnarray*}
+    (i)&&\mbox{We say that $X$ is {\em $F$-closed} \ifand\ $F(X)\subseteq X$}\\
+    (ii)&&\mbox{We say that $X$ is {\em $F$-consistent} \ifand\ 
+    $X\subseteq F(X)$}\\
+    (iii)&&\mbox{We say that $X$ is a {\em fixed point of $F$} \ifand\ 
+    $F(X)=X$}
+  \end{eqnarray*}
+\end{defin}
