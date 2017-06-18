@@ -1,11 +1,11 @@
 module Parse
-  ( binChar 
+  ( binDigit 
   , binNumber
   , check
   , decNumber
-  , hexChar
+  , hexDigit
   , hexNumber
-  , octChar
+  , octDigit
   , octNumber
   , parseChar
   , parseNumber
@@ -28,26 +28,20 @@ symbol = oneOf "!$%&|*+-/:<=?>@^_~#"
 spaces :: Parser ()
 spaces = skipMany1 space
 
-hexChar :: Parser Char
-hexChar = digit <|> oneOf "abcdefABCDEF"
-
-octChar :: Parser Char
-octChar = oneOf "01234567"
-
-binChar :: Parser Char
-binChar = char '0' <|> char '1'
+binDigit :: Parser Char
+binDigit = char '0' <|> char '1'
 
 hexNumber :: Parser Integer
 hexNumber = do 
   try $ char '#' >> char 'x'
-  s <- many1 hexChar 
+  s <- many1 hexDigit 
   let list = readHex s
   return $ (fst . head) list
 
 octNumber :: Parser Integer
 octNumber = do
   try $ char '#' >> char 'o'
-  s <- many1 octChar 
+  s <- many1 octDigit 
   let list = readOct s
   return $ (fst . head) list
 
@@ -63,7 +57,7 @@ readBinary xs = go xs 0 where
 binNumber :: Parser Integer
 binNumber = do
   try $ char '#' >> char 'b'
-  s <- many1 binChar 
+  s <- many1 binDigit 
   return $ readBinary s
 
 decNumber :: Parser Integer
@@ -103,17 +97,26 @@ simpleChar = do
   return s
 
 -- parses characters in octal representation #\ddd
-octalChar :: Parser Char
-octalChar = do
-  try $ char '#' >> char '\\' >> octChar >>= \c -> do
-  s <- many1 octChar  -- at least 2 digits for octal representation of char
+octChar :: Parser Char
+octChar = do
+  try $ char '#' >> char '\\' >> octDigit >>= \c -> do
+  s <- many1 octDigit  -- at least 2 digits for octal representation of char
   let list = readOct (c:s)
+  return $ chr $ (fst . head) list
+
+
+-- parses characters in hexadecimal representation #\xdddd
+hexChar :: Parser Char
+hexChar = do
+  try $ char '#' >> char '\\' >> char 'x'
+  s <- many1 hexDigit  -- at least 2 digits for octal representation of char
+  let list = readHex s
   return $ chr $ (fst . head) list
 
 
 -- need to try and parse octal representation #\000 before #\0 etc
 parseChar :: Parser LispVal
-parseChar = liftM Char (octalChar <|> simpleChar)
+parseChar = liftM Char (octChar <|> simpleChar <|> hexChar)
   
 
 parseString :: Parser LispVal

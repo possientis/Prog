@@ -21,7 +21,7 @@ forall = Forall
 
 fold :: (v -> v -> b) -> b -> (b -> b -> b) -> (v -> b -> b) -> Formula v -> b
 fold  fbelong fbot fimply fforall = f where
-  f (Belong x y)   = fbelong x y
+  f (Belong x y)  = fbelong x y
   f (Bot)         = fbot
   f (Imply p q)   = fimply (f p) (f q)
   f (Forall x p)  = fforall x (f p)

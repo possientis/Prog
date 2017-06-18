@@ -1,4 +1,3 @@
-
 \begin{defin}\label{logic:def:generating:function}
   We call {\em generating function} any map 
   $F:{\cal P}(U)\rightarrow{\cal P}(U)$ with:
@@ -20,3 +19,70 @@ called a {\em universe}.
     $F(X)=X$}
   \end{eqnarray*}
 \end{defin}
+
+\begin{prop}\label{logic:prop:genfun:closed:direct:image}
+  Let $F:{\cal P}(U)\rightarrow{\cal P}(U)$ be a generating function and 
+  $X\subseteq U$. if $X$ is $F$-closed, then so is $F(X)$. If $X$ is 
+  $F$-consistent, then so is $F(X)$.
+\end{prop}
+\begin{proof}
+  Suppose $X\subseteq U$ is $F$-closed. Then we have $F(X)\subseteq X$.
+  Since $F$ is a generating function we obtain $F(F(X))\subseteq F(X)$.
+  Hence we see that $F(X)$ is $F$-closed. Likewise, if $X$ is $F$-consistent
+  then $X\subseteq F(X)$ and consequently $F(X)\subseteq F(F(X))$ and $F(X)$
+  is therefore $F$-consistent.
+\end{proof}
+
+\begin{prop}\label{logic:prop:genfun:closed:intersect}
+  Let $F:{\cal P}(U)\rightarrow{\cal P}(U)$ be a generating function and 
+  ${\cal A}\subseteq{\cal P}(U)$ be a set of $F$-closed subsets of $U$. 
+  Then $\cap A$ is itself $F$-closed.
+\end{prop}
+\begin{proof}
+  Recall that $\cap{\cal A}$ is the subset of $U$ defined by 
+  $\cap{\cal A}=\{x\in U\ ,\ \forall X\in{\cal A}\ ,\ x\in X\}$. This set is
+  well-defined even when ${\cal A}=\emptyset$. So we assume that $X$ is 
+  $F$-closed for all $X\in{\cal A}$ and we need to show that 
+  $F(\cap{\cal A})\subseteq\cap{\cal A}$. In other words, given 
+  $x\in F(\cap{\cal A})$ and $X\in{\cal A}$, we need to show that $x\in X$.
+  Hence it is sufficient to prove the inclusion $F(\cap{\cal A})\subseteq X$
+  for all $X\in{\cal A}$. So let $X\in{\cal A}$. We have 
+  $\cap{\cal A}\subseteq X$ and since $F$ is a generating function we obtain
+  $F(\cap{\cal A})\subseteq F(X)$. However since $X$ is $F$-closed, we also 
+  have $F(X)\subseteq X$. We conclude that $F(\cap{\cal A})\subseteq X$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:genfun:consistent:union}
+  Let $F:{\cal P}(U)\rightarrow{\cal P}(U)$ be a generating function and 
+  ${\cal A}\subseteq{\cal P}(U)$ be a set of $F$-consistent subsets of $U$. 
+  Then $\cup A$ is itself $F$-consistent.
+\end{prop}
+\begin{proof}
+  Recall that $\cup{\cal A}$ is the subset of $U$ defined by 
+  $\cup{\cal A}=\{x| \exists X\in{\cal A}\ ,\ x\in X\}$. 
+  So we assume that $X$ is $F$-consistent for all $X\in{\cal A}$ 
+  and we need to show that $\cup{\cal A}\subseteq F(\cup{\cal A})$. 
+  In other words, given $X\in{\cal A}$ and $x\in X$, we need to show that 
+  $x\in F(\cup{\cal A})$. Hence it is sufficient to prove the inclusion 
+  $X\subseteq F(\cup{\cal A})$ for all $X\in{\cal A}$. So let $X\in{\cal A}$. 
+  We have $X\subseteq\cup{\cal A}$ and since $F$ is a generating function we obtain
+  $F(X)\subseteq F(\cup{\cal A})$. However since $X$ is $F$-consistent, we also 
+  have $X\subseteq F(X)$. We conclude that $X\subseteq F(\cup{\cal A})$
+  as requested.
+\end{proof}
+
+\begin{defin}\label{logic:prop:genfun:mu}
+  Let $F:{\cal P}(U)\rightarrow{\cal P}(U)$ be a generating function and 
+  ${\cal A}$ be the set of all $F$-closed subsets of $U$. We define 
+  $\mu F=\cap{\cal A}$.
+\end{defin}
+
+
+\begin{defin}\label{logic:prop:genfun:nu}
+  Let $F:{\cal P}(U)\rightarrow{\cal P}(U)$ be a generating function and 
+  ${\cal A}$ be the set of all $F$-consistent subsets of $U$. We define 
+  $\nu F=\cup{\cal A}$.
+\end{defin}
+
+
+
