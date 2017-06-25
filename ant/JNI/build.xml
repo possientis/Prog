@@ -43,7 +43,7 @@
 
   <target name="cc" depends="includes">
     <exec 
-      executable="g++" failonerror="true" newenvironment="false" timeout="2000">
+      executable="g++" failonerror="true" newenvironment="false" timeout="5000">
       <arg value="src/c++/org_example_antbook_cpu_CpuInfo.cpp" />
       <arg value="-c" />
       <arg value="-I${generated.dir}" />
@@ -51,7 +51,7 @@
       <arg value="-I${imported.dir}/linux" />
     </exec>
     <exec
-      executable="mv" failonerror="true" newenvironment="false" timeout="1000">
+      executable="mv" failonerror="true" newenvironment="false" timeout="5000">
       <arg value="org_example_antbook_cpu_CpuInfo.o" />
       <arg value="${obj.dir}/org_example_antbook_cpu_CpuInfo.o" />
     </exec>

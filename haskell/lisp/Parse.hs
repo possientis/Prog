@@ -93,7 +93,7 @@ simpleChar = do
   s <- oneOf "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     <|> digit
     <|> symbol
-    <|> oneOf "`'\"();\\,."
+    <|> oneOf "`'\"();\\,.[]{}"
   return s
 
 -- parses characters in octal representation #\ddd

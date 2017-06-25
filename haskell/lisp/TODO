@@ -1,1 +1,1 @@
-test octChar (#\150 + )
+implement #\xdddd literals for char
