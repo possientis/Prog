@@ -15,8 +15,8 @@ set cursorline
 set hlsearch
 set incsearch
 set showcmd
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 set expandtab
 set laststatus=2
 set t_Co=256
