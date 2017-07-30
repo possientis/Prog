@@ -25,3 +25,7 @@ set nocp                  " no vi compatibility mode
 " will conflict with verilog, beware !!
 au BufRead,BufNewFile *.v set filetype=coq  
 au! Syntax coq source /usr/share/vim/vim80/syntax/coq.vim
+
+au BufRead,BufNewFile *.agda set filetype=agda
+au! Syntax agda source /usr/share/vim/vim80/syntax/agda.vim
+

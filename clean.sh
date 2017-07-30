@@ -2,6 +2,7 @@
 
 rm -f test.log
 
+./agda/clean.sh
 ./assembly/clean.sh
 ./c/clean.sh
 ./make/clean.sh
