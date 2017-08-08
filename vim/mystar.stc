@@ -1,0 +1,9 @@
+600000 "My Star"
+{
+  RA 24.406489
+  Dec -9.404052
+  SpectralType "Q"
+  Mass 1.09
+  AbsMag 1.29
+  Distance 124.729260
+}

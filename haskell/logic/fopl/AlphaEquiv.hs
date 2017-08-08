@@ -7,7 +7,7 @@ import Data.Set
 import Formula
 import Variable
 import Substitution
-
+import Data.List
 
 alphaEq :: (Eq v, Ord v) => Formula v -> Formula v -> Bool
 alphaEq (Belong x y) (Belong x' y') = (x == x') && (y == y')
@@ -19,7 +19,29 @@ alphaEq (Forall x p) (Forall x' p') = if (x == x')
 alphaEq _ _                         = False
 
 
+{-
+alphaEq :: (Eq v, Ord v) => Formula v -> Formula v -> Bool
+alphaEq p q = equal' ([],p) ([],q)
 
+equal' :: (Eq v, Ord v) =>  ([v], Formula v) -> ([v], Formula v) -> Bool
+equal' (xs, Belong x1 x2) (ys, Belong y1 y2) 
+    =   equalVar (xs,x1) (ys,y1) 
+    &&  equalVar (xs,x2) (ys,y2)
+equal' (xs, Bot) (ys, Bot) = True
+equal' (xs, Imply p q) (ys, Imply p' q')     
+    =   equal' (xs,p) (ys, p') 
+    &&  equal' (xs,q) (ys,q')
+equal' (xs, Forall x p) (ys, Forall y p') 
+    = equal' (x:xs,p) (y:ys,p')
+equal' _ _ = False
+ 
+equalVar :: (Eq v, Ord v) => ([v],v) -> ([v],v) -> Bool
+equalVar (xs,x) (ys,y) = case (elemIndex x xs, elemIndex y ys) of
+    (Just i, Just j)    -> (i == j)
+    (Nothing, Nothing)  -> (x == y)
+    _                   -> False
+
+-}
 
 
 {-

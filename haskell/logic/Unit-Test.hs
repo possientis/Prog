@@ -13,7 +13,6 @@ import Test_MinimalTransform
 import System.Exit
 
 
-
 tests = TestList 
   [ test_Eq, test_Show, test_Functor, test_Variable, test_SubFormula
   , test_Substitution, test_Valid, test_Admissible, test_AlphaEquiv
