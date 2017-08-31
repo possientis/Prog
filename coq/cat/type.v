@@ -18,8 +18,11 @@ Definition compose (f g: Arrow) : option Arrow :=
         | arrow a b f' => 
             match g with
                 | arrow b' c g' =>
-
+                    match Type_eq_dec b b' with
+                        | p : {b = b'}    => None
+                        | q : {b <> b'}   => None
                     end
+
             end
     end.
     
