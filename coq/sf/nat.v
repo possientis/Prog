@@ -1,3 +1,4 @@
+
 Module Playground1.
 
 Inductive nat : Type :=
@@ -171,8 +172,100 @@ Compute ltb 23 24.
 Compute ltb 24 24.
 Compute ltb 25 24.
 
+Theorem plus_0_n : forall n:nat, 0 + n = n.
+Proof.
+    intros n. simpl. reflexivity.
+Qed.
+
+Theorem plus_0_n' : forall n:nat, 0 + n = n.
+Proof.
+    intros n. reflexivity.
+Qed.
+
+Theorem plus_1_n : forall n:nat, 1 + n = S n.
+Proof.
+    intros n. reflexivity.
+Qed.
+
+Theorem mult_0_n : forall n:nat, 0 * n = 0.
+Proof.
+    intros n. reflexivity.
+Qed.
+
+Theorem plus_n_0 : forall n:nat, n + 0 = n.
+Proof.
+    intros n. elim n.
+    clear n. reflexivity.
+    clear n. intros n H. simpl. rewrite H. reflexivity.
+Qed.
+
+Theorem mult_1_n : forall n:nat, 1 * n = n.
+Proof.
+    intros n. simpl. apply plus_n_0.
+Qed.
+
+Theorem plus_id_example: forall n m:nat, 
+    n = m -> n + n = m + m.
+Proof.
+    intros n m H. rewrite H. reflexivity.
+Qed.
+
+Theorem plus_id_exercise: forall n m o: nat,
+   n = m -> m = o -> n + m = m + o.
+Proof.
+    intros n m o H1 H2. rewrite H1. rewrite <- H2. reflexivity.
+Qed.
+
+Theorem plus_comm : forall n m:nat, 
+    n + m = m + n.
+Proof.
+Admitted.  (* useful when writing bigger proofs *)
+
+Theorem mult_0_plus : forall n m:nat,
+    (0 + n) * m = n * m.
+Proof.
+    intros n m. rewrite plus_0_n. reflexivity.
+Qed.
+
+Theorem mult_S_1 : forall n m:nat,
+    m = S n -> m * (1 + n) = m * m.
+Proof.
+    intros n m H. simpl. rewrite <- H. reflexivity.
+Qed.
+
+Theorem plus_1_neq_0 : forall n:nat,
+    beq_nat (n + 1) 0 = false.
+Proof.
+    intros n. elim n.
+    clear n. simpl. reflexivity.
+    clear n. intros n H. simpl. reflexivity.
+Qed.
+
+Theorem plus_1_neq_0' : forall n:nat,
+    beq_nat (n + 1) 0 = false.
+Proof.
+    (* 'as' clause to name variables of constructors    *)
+    (*  of inductive type. 0 is a nullary constructor   *)
+    intros n. destruct n as [|n].   (* we don't need induction here *)
+    - reflexivity.          (* you can skip 'simpl' *) (* using bullet for clarity *)
+    - reflexivity.          (* you can skip 'simpl' *) (* using bullet for clarity *)
+Qed.
+
+Theorem plus_1_neq_0'' : forall n:nat,
+    beq_nat (n + 1) 0 = false.
+Proof.
+    intros [|n].           (* shortcut for intros n. destruct n as [|n]. *) 
+    - reflexivity.
+    - reflexivity.
+Qed.
 
 
-
+Theorem zero_nbeq_plus_1 : forall n:nat,
+    beq_nat 0 (n + 1) = false.
+Proof.
+    intros [|n].
+    - reflexivity.
+    - reflexivity.
+Qed.
 
 

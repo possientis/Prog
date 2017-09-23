@@ -40,3 +40,102 @@ Check true.
 Check negb true.
 Check negb.
 
+Theorem negb_involutive : forall b:bool,
+    negb (negb b) = b.
+Proof.
+    intros b. destruct b.
+    - reflexivity.
+    - reflexivity.
+Qed.
+
+
+Theorem andb_comm : forall b c:bool,
+    andb b c = andb c b.
+Proof.
+    intros b c. destruct b.
+    - destruct c. 
+        + reflexivity. 
+        + reflexivity.
+    - destruct c. 
+        + reflexivity. 
+        + reflexivity.
+Qed.
+
+
+Theorem andb_comm' : forall b c:bool,
+    andb b c = andb c b.
+Proof.
+    intros b c. destruct b.
+    { destruct c.
+        { reflexivity. }
+        { reflexivity. } 
+    } 
+    { destruct c.
+        { reflexivity. }
+        { reflexivity. }
+    }
+Qed.
+
+
+Theorem andb3_exch : forall b c d:bool,
+    andb (andb b c) d = andb (andb b d) c.
+Proof.
+    intros b c d. destruct b.
+    - destruct c.
+        { destruct d.
+            - reflexivity.
+            - reflexivity. }
+        { destruct d.
+            - reflexivity.
+            - reflexivity. }
+    - destruct c.
+        { destruct d.
+            - reflexivity.
+            - reflexivity. }
+        { destruct d.
+            - reflexivity.
+            - reflexivity. }
+Qed.
+
+Theorem andb_comm'' : forall b c: bool,
+    andb b c = andb c b.
+Proof.
+    intros [][].
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+Qed.
+
+Theorem andb_true_elim2 : forall b c:bool,
+    andb b c = true -> c = true.
+Proof.
+    intros b c H. destruct b.
+    - exact H.
+    - simpl in H. destruct c.
+        + reflexivity.
+        + exact H.
+Qed.
+
+Definition Id (f:bool->bool) : Prop :=
+    forall x:bool, f x = x.
+
+
+Theorem id_applied_twice : forall f:bool->bool,
+    Id f -> forall b:bool, f (f b) = b.
+Proof. 
+    intros f H b. unfold Id in H. rewrite H. apply H.
+Qed.
+
+
+Theorem andb_eq_orb : forall b c:bool,
+    andb b c = orb b c -> b = c.
+Proof.
+    intros [] [].
+    - reflexivity.
+    - intros H. simpl in H. rewrite H. reflexivity.
+    - intros H. simpl in H. rewrite H. reflexivity.
+    - reflexivity.
+Qed.
+
+
