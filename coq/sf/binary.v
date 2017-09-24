@@ -1,35 +1,35 @@
-Require Import Arith.
-
 Inductive bin : Type :=
     | B : bin
-    | O : bin -> bin (* twice the binary number *)
+    | Q : bin -> bin (* twice the binary number *)
     | I : bin -> bin (* twice the binaty number + 1 *) 
     .
 
 Fixpoint incr (n:bin) : bin :=
     match n with
         | B     => I B
-        | O p   => I p
-        | I p   => O (incr p)
+        | Q p   => I p
+        | I p   => Q (incr p)
     end.
 
 
 Fixpoint bin_to_nat (n:bin) : nat := 
     match n with
         | B     =>      0
-        | O p   =>      2 * bin_to_nat p
+        | Q p   =>      2 * bin_to_nat p
         | I p   => S (  2 * bin_to_nat p )
     end.
 
+(*
 Compute bin_to_nat B.                   (* 0 *)
 Compute bin_to_nat (I B).               (* 1 *)
-Compute bin_to_nat (O (I B)).           (* 2 *)
+Compute bin_to_nat (Q (I B)).           (* 2 *)
 Compute bin_to_nat (I (I B)).           (* 3 *)
-Compute bin_to_nat (O (O (I B))).       (* 4 *)
-Compute bin_to_nat (I (O (I B))).       (* 5 *)
-Compute bin_to_nat (O (I (I B))).       (* 6 *)
+Compute bin_to_nat (Q (Q (I B))).       (* 4 *)
+Compute bin_to_nat (I (Q (I B))).       (* 5 *)
+Compute bin_to_nat (Q (I (I B))).       (* 6 *)
 Compute bin_to_nat (I (I (I B))).       (* 7 *)
-Compute bin_to_nat (O (O (O (I B)))).   (* 8 *)
+Compute bin_to_nat (Q (Q (Q (I B)))).   (* 8 *)
+*)
 
 Theorem test_bin_incr1 : forall n:bin,
     bin_to_nat (incr n) = S (bin_to_nat n).
@@ -48,10 +48,12 @@ Fixpoint nat_to_bin (n:nat) : bin :=
         | S p   => incr (nat_to_bin p)
     end.
 
+(*
 Compute nat_to_bin 0.                   (* B *)
 Compute nat_to_bin 1.                   (* I B *)
-Compute nat_to_bin 2.                   (* O (I B) *)
+Compute nat_to_bin 2.                   (* Q (I B) *)
 Compute nat_to_bin 3.                   (* I (I B) *)
+*)
 
 
 Theorem test_bin_incr2 : forall n:nat,
@@ -62,7 +64,7 @@ Proof.
     - reflexivity.
 Qed.
 
-
+(* beware about going the other way *)
 Theorem test_nat_to_nat : forall n:nat,
     bin_to_nat (nat_to_bin n) = n.
 Proof.
@@ -72,11 +74,5 @@ Proof.
 Qed.
 
 
-Theorem test_bin_to_bin : forall n:bin,
-    nat_to_bin (bin_to_nat n) = n.
-Proof.
-    intros n. elim n.
-    - clear n. reflexivity.
-    - clear n. intros. Admitted.
 
 

@@ -9,6 +9,7 @@ echo "testing coq..."
 
 ./set/test.sh
 ./zf/test.sh
+./sf/test.sh
 
 echo
 echo "testing sort..."

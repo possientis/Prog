@@ -36,9 +36,11 @@ Infix "||" := orb.
 Example test_orb5 : false || false || true = true.
 Proof. simpl. reflexivity. Qed. 
 
+(*
 Check true.
 Check negb true.
 Check negb.
+*)
 
 Theorem negb_involutive : forall b:bool,
     negb (negb b) = b.
