@@ -150,9 +150,9 @@ Fixpoint eqb (n m:nat) : bool :=
     end.
 
 (*
-Compute beq_nat 0 0.
-Compute beq_nat 43 12.
-Compute beq_nat 56 56.
+Compute eqb 0 0.
+Compute eqb 43 12.
+Compute eqb 56 56.
 *)
 
 Fixpoint leb (n m:nat) : bool :=
@@ -279,4 +279,10 @@ Proof.
     - reflexivity.
 Qed.
 
+Theorem eqb_n_n : forall n:nat, eqb n n = true.
+Proof.
+    induction n as [|n H].
+    - reflexivity.
+    - simpl. exact H.
+Qed.
 
