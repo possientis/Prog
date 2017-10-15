@@ -140,4 +140,12 @@ Proof.
     - reflexivity.
 Qed.
 
+Theorem lem_bool : forall b:bool, b = true \/ b = false.
+Proof.
+    destruct b.
+        - left. reflexivity.
+        - right. reflexivity.
+Qed.
+
+
 

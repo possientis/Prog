@@ -279,7 +279,7 @@ Proof.
     - reflexivity.
 Qed.
 
-Theorem eqb_n_n : forall n:nat, eqb n n = true.
+Theorem eqb_refl : forall n:nat, eqb n n = true.
 Proof.
     induction n as [|n H].
     - reflexivity.

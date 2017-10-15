@@ -1,7 +1,9 @@
+Require Import Nat.
 Require Import nat.
 Require Import bool.
+Require Import induction.
 
-Module NATLIST.
+(*  Module NATLIST. *)
 
 Inductive natprod : Type :=
     | pair : nat -> nat -> natprod
@@ -320,9 +322,181 @@ Theorem bag_theorem : forall (v:nat) (s:bag),
 Proof.
     (* induction hypothesis is not needed, destruct works just as well *)
     destruct s as [|x xs].
-    - simpl. rewrite eqb_n_n. reflexivity.
-    - simpl. rewrite eqb_n_n. reflexivity.
+    - simpl. rewrite eqb_refl. reflexivity.
+    - simpl. rewrite eqb_refl. reflexivity.
 Qed.
 
 
+Theorem nil_app : forall l:natlist , [] ++ l = l.
+Proof. reflexivity. Qed.
 
+Theorem app_nil : forall l:natlist , l ++ [] = l.
+Proof.
+    induction l as [|x xs H].
+    - reflexivity.
+    - simpl. rewrite H. reflexivity.
+Qed.
+
+Theorem tl_length_pred : forall l:natlist,
+    pred (length l) = length (tl l).
+Proof.
+    destruct l as [| x xs].
+    - reflexivity.
+    - reflexivity.
+Qed.
+
+Theorem app_assoc : forall l k m : natlist,
+   (l ++ k) ++ m = l ++ (k ++ m).
+Proof.
+    induction l as [| x xs H].
+    - reflexivity.
+    - simpl. intros k m. rewrite H. reflexivity. 
+Qed.
+
+Fixpoint rev (l:natlist) : natlist :=
+    match l with 
+        | nil       => nil
+        | x::xs     => rev xs ++ [x] 
+    end.
+
+Example test_rev1 : rev [1,2,3] = [3,2,1].
+Proof. reflexivity. Qed.
+
+Example test_rev2 : rev [] = [].
+Proof. reflexivity. Qed.
+
+
+Theorem app_length : forall l k:natlist,
+    length (l ++ k) = length l + length k.
+Proof.
+    induction l as [| x xs H].
+    - reflexivity.
+    - intro k. simpl. rewrite H. reflexivity.
+Qed.
+
+Theorem rev_length : forall l:natlist,
+    length (rev l) = length l.
+Proof.
+    induction l as [| x xs H].
+    - reflexivity.
+    - simpl. rewrite app_length. rewrite H. simpl. apply plus_comm.
+Qed.
+
+(*
+SearchAbout plus.
+*)
+
+Theorem rev_app : forall l k:natlist,
+    rev (l ++ k) = rev k ++ rev l.
+Proof.
+    induction l as [| x xs H].
+    - intro k. simpl. rewrite app_nil. reflexivity.
+    - intro k. simpl. rewrite H. apply app_assoc. 
+Qed.
+
+Theorem rev_involutive : forall l:natlist,
+    rev (rev l) = l.
+Proof.
+    induction l as [|x xs H].
+    - reflexivity.
+    - simpl. rewrite rev_app. simpl. rewrite H. reflexivity.
+Qed.
+
+Theorem app_assoc4 : forall k l m n:natlist,
+    k ++ (l ++ (m ++ n)) = ((k ++ l) ++ m) ++ n.
+Proof.
+    intros k l m n. 
+    assert ((k ++ l) ++ (m ++ n) = k ++ (l ++ (m ++ n))) as H. { apply app_assoc. }
+    assert (((k ++ l) ++ m) ++ n = (k ++ l) ++ (m ++ n)) as H'. {apply app_assoc. }
+    rewrite H'. rewrite H. reflexivity.
+Qed.
+
+Lemma nonzeros_app : forall k l:natlist,
+    nonzeros (k ++ l) = nonzeros k ++ nonzeros l.
+Proof.
+    induction k as [| x xs H].
+    - reflexivity.
+    - intro l. destruct x as [|x].
+        + simpl. apply H.
+        + simpl. rewrite H. reflexivity.
+Qed.
+
+
+Fixpoint beq_natlist (k l:natlist) : bool :=
+    match k with
+        | nil   =>  match l with
+                        | nil       => true
+                        | _::_      => false
+                    end
+        | x::xs =>  match l with
+                        | nil       => false
+                        | y::ys     => eqb x y && beq_natlist xs ys
+                    end
+    end.
+
+Example test_beq_natlist1 : beq_natlist [] [] = true.
+Proof. reflexivity. Qed.
+
+Example test_beq_natlist2 : beq_natlist [1,2,3] [1,2,3] = true.
+Proof. reflexivity. Qed.
+
+Example test_beq_natlist3 : beq_natlist [1,2,3] [1,2,4] = false.
+Proof. reflexivity. Qed.
+
+Theorem beq_natlist_refl : forall l:natlist, beq_natlist l l = true.
+Proof.
+    induction l as [|x xs H].
+    - reflexivity.
+    - simpl. rewrite eqb_refl. simpl. exact H.
+Qed.
+
+Theorem count_member_nonzero : forall s:bag,
+    leb 1 (count 1 (1::s))  = true.
+Proof.
+    destruct s as [|x xs H]. (* no need for induction hypothesis *)
+    - reflexivity.
+    - reflexivity.
+Qed.
+
+
+Theorem leb_n_Sn : forall n:nat, leb n (S n) = true.
+Proof.
+    induction n as [|n H].
+    - reflexivity.
+    - simpl. exact H.
+Qed.
+
+Theorem remove_decreases_count : forall s:bag,
+    leb (count 0 (remove_one 0 s)) (count 0 s) = true.
+Proof.
+    induction s as [| x xs H].
+    - reflexivity.
+    - destruct x as [|x]. 
+        + simpl. apply leb_n_Sn.
+        + simpl. exact H.
+Qed.
+
+
+Theorem count_sum : forall s1 s2:bag, forall n:nat,
+    count n (sum s1 s2) = count n s1 + count n s2.
+Proof.
+    induction s1 as [| x s1 H].
+    - reflexivity.
+    - intros s2 n. 
+        assert (eqb n x = true \/ eqb n x = false) as E. { apply lem_bool. }
+        destruct E as [H'|H'].
+            + simpl. rewrite H'. simpl. rewrite H. reflexivity.
+            + simpl. rewrite H'. apply H.
+Qed.
+
+Theorem rev_injective : forall l k:natlist,
+    rev l = rev k -> l = k.
+Proof.
+    intros l k H. 
+    assert (rev (rev l) = rev (rev k)) as H'. { rewrite H. reflexivity. }
+    assert (rev (rev l) = l) as H1. {apply rev_involutive. }
+    assert (rev (rev k) = k) as H2. {apply rev_involutive. }
+    rewrite <- H1. rewrite <- H2. exact H'.
+Qed.
+
+(* End NATLIST. *)

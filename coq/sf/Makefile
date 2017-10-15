@@ -1,7 +1,8 @@
 all:	bool.vo \
 		nat.vo \
 		binary.vo \
-		induction.vo
+		induction.vo \
+		list.vo
 
 
 bool.vo: bool.v
@@ -15,5 +16,8 @@ binary.vo: binary.v
 
 induction.vo: induction.v bool.vo nat.vo binary.vo
 	coqc induction.v
+
+list.vo: list.v nat.vo bool.vo induction.vo
+	coqc list.v
 
 
