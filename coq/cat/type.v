@@ -18,9 +18,9 @@ Definition compose (f g: Arrow) : option Arrow :=
         | arrow a b f' => 
             match g with
                 | arrow b' c g' =>
-                    match Type_eq_dec b b' with
-                        | p : {b = b'}    => None
-                        | q : {b <> b'}   => None
+                    match Type_eqb b b' with
+                        | true      =>  Some (arrow a c (fun x => g' (f' x))) 
+                        | false     =>  None 
                     end
 
             end

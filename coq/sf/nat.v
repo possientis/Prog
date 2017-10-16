@@ -286,3 +286,26 @@ Proof.
     - simpl. exact H.
 Qed.
 
+
+
+Lemma true_not_false : true <> false.
+Proof.
+    intro H. discriminate H.
+Qed.
+
+Theorem eqb_semantics : forall n m:nat,
+    n = m <-> eqb n m = true.
+Proof.
+ intros n m. split.
+ - intros H. rewrite H. apply eqb_refl.
+ - generalize m. clear m. induction n as [|n H]. 
+    + destruct m.
+        { intros H. reflexivity. }
+        { simpl. intros H. discriminate H. }
+    + destruct m.
+        { simpl. intros H'. discriminate H'. }
+        { simpl. intros H'. 
+          assert (n = m) as H''. { apply H. exact H'. }
+          rewrite H''. reflexivity. }
+Qed.
+        

@@ -1,4 +1,4 @@
-Record Category {A:Type} : Type := category
+Record Category (A:Type) : Type := category
     {   source : A -> A
     ;   target : A -> A
     ;   product: A -> A -> option A
@@ -24,5 +24,16 @@ Record Category {A:Type} : Type := category
             product f g = Some fg -> 
             product g h = Some gh -> 
             product fg h = product f gh
+    ;   eq_dec : forall f g: A, {f = g} + {f <> g} 
     }
     .
+
+Definition eqb {A:Type}(X:Category A)(x y:A):bool.
+Proof.
+    assert ({x = y} + {x <> y}). { apply (eq_dec A X). }
+    destruct H.
+        + exact true.
+        + exact false.
+Qed.
+
+
