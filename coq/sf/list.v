@@ -1,4 +1,4 @@
-Require Import Nat.
+Require Import Arith.
 Require Import nat.
 Require Import bool.
 Require Import induction.
