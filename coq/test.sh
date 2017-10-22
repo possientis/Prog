@@ -10,6 +10,7 @@ echo "testing coq..."
 ./set/test.sh
 ./zf/test.sh
 ./sf/test.sh
+./cat/test.sh
 
 echo
 echo "testing sort..."

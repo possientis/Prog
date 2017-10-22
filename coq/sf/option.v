@@ -1,6 +1,6 @@
 Require Import nat.
 Require Import bool.
-Require Import list.
+Require Import natlist.
 
 
 Inductive natoption : Type :=
