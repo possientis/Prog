@@ -18,18 +18,18 @@ Record Category (A:Type) : Type := category
     .
 
 (* implicit type argument *)
-Arguments category  {A}.
-Arguments source    {A}.
-Arguments target    {A}.
-Arguments compose   {A}.
-Arguments proof_ss  {A}.
-Arguments proof_ts  {A}.
-Arguments proof_tt  {A}.
-Arguments proof_st  {A}.
-Arguments proof_dom {A}.
-Arguments proof_src {A}.
-Arguments proof_tgt {A}.
-Arguments proof_idl {A}.
-Arguments proof_idr {A}.
-Arguments proof_asc {A}.
+Arguments category  {A} _ _ _ _ _ _ _ _ _ _ _ _ _ .
+Arguments source    {A} _ _.
+Arguments target    {A} _ _.
+Arguments compose   {A} _ _ _.
+Arguments proof_ss  {A} _ _.
+Arguments proof_ts  {A} _ _.
+Arguments proof_tt  {A} _ _.
+Arguments proof_st  {A} _ _.
+Arguments proof_dom {A} _ _ _.
+Arguments proof_src {A} _ _ _ _ _.
+Arguments proof_tgt {A} _ _ _ _ _.
+Arguments proof_idl {A} _ _ _ _.
+Arguments proof_idr {A} _ _ _ _.
+Arguments proof_asc {A} _ _ _ _ _ _ _ _.
 

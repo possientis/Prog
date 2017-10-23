@@ -110,7 +110,7 @@ Fixpoint app (a:Type) (k l: list a) : list a :=
     | x::xs     => x :: (app a xs l)
     end.  
      
-Arguments app {a}. (* type argument declared as implicit *)
+Arguments app {a} _ _. (* type argument declared as implicit *)
 
 Notation "l ++ k" := (app l k) (at level 60, right associativity). 
 
@@ -139,7 +139,7 @@ Fixpoint rev (a:Type) (l:list a) : list a :=
     |   x :: xs     => (rev a xs) ++ [x]
     end.
 
-Arguments rev {a}.
+Arguments rev {a} _.
 
 Example test_rev1 : forall a:Type, rev [] = ([]:list a). 
 Proof. reflexivity. Qed.
@@ -153,7 +153,7 @@ Fixpoint length (a:Type) (l:list a) : nat :=
     | (_::xs)   => S (length a xs)
     end.
         
-Arguments length {a}.
+Arguments length {a} _.
 
 Example test_length1 : forall a:Type, length ([]:list a) = 0.
 Proof. reflexivity. Qed.

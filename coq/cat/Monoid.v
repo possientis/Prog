@@ -11,12 +11,12 @@ Record Monoid (A:Type) : Type := monoid
     .
 
 (* implicit type argument *)
-Arguments monoid    {A}.
-Arguments identity  {A}.
-Arguments product   {A}.
-Arguments proof_idl {A}.
-Arguments proof_idr {A}.
-Arguments proof_asc {A}.
+Arguments monoid    {A} _ _ _ _ _.
+Arguments identity  {A} _.
+Arguments product   {A} _ _ _.
+Arguments proof_idl {A} _ _.
+Arguments proof_idr {A} _ _.
+Arguments proof_asc {A} _ _ _ _.
 
 
 

@@ -8,7 +8,7 @@ Require Import Monoid.
 
 Definition source_  (A:Type) (m:Monoid A) (x:A) : A := identity m.
 
-Arguments source_ {A}. (* type argument is inferred *)
+Arguments source_ {A} _ _. (* type argument is inferred *)
 
 
 
@@ -16,7 +16,7 @@ Arguments source_ {A}. (* type argument is inferred *)
 
 Definition target_  (A:Type) (m:Monoid A) (x:A) : A := identity m.
 
-Arguments target_ {A}. (* type argument is inferred *)
+Arguments target_ {A} _ _. (* type argument is inferred *)
 
 
 
@@ -25,7 +25,7 @@ Arguments target_ {A}. (* type argument is inferred *)
 Definition compose_ (A:Type) (m:Monoid A) (x y: A) : option A := 
     Some (product m x y).
 
-Arguments compose_ {A}. (* type argument is inferred *)
+Arguments compose_ {A} _ _ _. (* type argument is inferred *)
 
 
 
@@ -144,6 +144,6 @@ Definition toCategory (A:Type) (m:Monoid A) : Category A := category
     (proof_idr_ A m)
     (proof_asc_ A m).
 
-Arguments toCategory {A}.
+Arguments toCategory {A} _.
 
 
