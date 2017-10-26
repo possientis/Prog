@@ -1,6 +1,6 @@
 Require Import nat.
 Require Import bool.
-Require Import option.
+Require Import natoption.
 
 Inductive key : Type :=
     | Key : nat -> key
@@ -23,16 +23,16 @@ Proof.
     destruct k as [n]. simpl. apply eqb_refl.
 Qed.
 
-Inductive dict : Type :=
-    | empty : dict
-    | record : key -> nat -> dict -> dict
+Inductive natdict : Type :=
+    | empty : natdict
+    | record : key -> nat -> natdict -> natdict
     .
 
 
-Definition update (d: dict) (k: key) (n:nat) : dict :=
+Definition update (d: natdict) (k: key) (n:nat) : natdict :=
     record k n d.
 
-Fixpoint find (k:key) (d: dict) : natoption := 
+Fixpoint find (k:key) (d: natdict) : natoption := 
     match d with
     | empty     => None
     | record k' n d'    => if eqb_key k k'
@@ -40,7 +40,7 @@ Fixpoint find (k:key) (d: dict) : natoption :=
         else find k d'
     end.
        
-Theorem update_eq : forall (d:dict) (k:key) (n:nat),
+Theorem update_eq : forall (d:natdict) (k:key) (n:nat),
     find k (update d k n) = Some n.
 Proof. intros d k n. simpl. rewrite eqb_key_refl. reflexivity. Qed.
 
@@ -54,7 +54,7 @@ Proof.
       rewrite H'. reflexivity.
 Qed.
 
-Theorem update_neq : forall (d:dict) (k l:key) (n:nat),
+Theorem update_neq : forall (d:natdict) (k l:key) (n:nat),
     eqb_key k l = false -> find k (update d l n) = find k d.
 Proof. intros d k l n H. simpl. rewrite H. reflexivity. Qed.
 

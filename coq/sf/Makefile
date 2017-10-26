@@ -5,8 +5,10 @@ all:	bool.vo \
 		natprod.vo \
 		natlist.vo \
 		natoption.vo \
+		natdict.vo \
 		list.vo \
-		option.vo
+		option.vo \
+		higher_order.vo
 
 
 bool.vo: bool.v
@@ -30,8 +32,14 @@ natlist.vo: natlist.v nat.vo bool.vo induction.vo
 natoption.vo: natoption.v nat.vo bool.vo natlist.vo 
 	coqc natoption.v
 
+natdict.vo: natdict.v nat.vo bool.vo natoption.vo
+	coqc natdict.v
+
 list.vo : list.v bool.vo
 	coqc list.v
 
 option.vo : option.v list.vo nat.vo bool.vo
 	coqc option.v
+
+higher_order.vo : higher_order.v list.vo bool.vo nat.vo
+	coqc higher_order.v
