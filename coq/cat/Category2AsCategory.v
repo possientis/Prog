@@ -45,9 +45,68 @@ Definition proof_dom_ (Obj Mor:Type) (c:Category2 Obj Mor) : forall f g: Mor,
 Proof.
     unfold source_, target_, compose_. split.
     - intros H. apply (proof_dom2 c). apply (id_injective c). exact H.
-    - intros H. assert (cod c f = dom c g) as H'. { apply (proof_dom2 c). exact H. }
+    - intros H. assert (cod c f = dom c g) as H'. 
+      { apply (proof_dom2 c). exact H. }
       rewrite H'. reflexivity.
 Qed.
+
+Definition proof_src_ (Obj Mor:Type) (c:Category2 Obj Mor) : forall f g h: Mor,
+    compose_ c f g = Some h -> source_ c h = source_ c f.
+Proof.
+    intros f g h H. unfold source_. unfold compose_ in H. 
+    apply (proof_src2 c) in H. rewrite H. reflexivity.
+Qed.
+
+Definition proof_tgt_ (Obj Mor:Type) (c:Category2 Obj Mor) : forall f g h: Mor,
+    compose_ c f g = Some h -> target_ c h = target_ c g.
+Proof.
+    intros f g h H. unfold target_. unfold compose_ in H. 
+    apply (proof_tgt2 c) in H. rewrite H. reflexivity.
+Qed.
+
+Definition proof_idl_ (Obj Mor:Type) (c:Category2 Obj Mor) : forall a f: Mor,
+    a = source_ c f -> compose_ c a f = Some f.
+Proof.
+    intros a f H. unfold compose_. unfold source_ in H. rewrite H.
+    apply (proof_idl2 c). reflexivity.
+Qed.
+
+
+Definition proof_idr_ (Obj Mor:Type) (c:Category2 Obj Mor) : forall a f: Mor,
+    a = target_ c f -> compose_ c f a = Some f.
+Proof.
+    intros a f H. unfold compose_. unfold target_ in H. rewrite H.
+    apply (proof_idr2 c). reflexivity.
+Qed.
+
+
+Definition proof_asc_ (Obj Mor:Type)(c:Category2 Obj Mor):forall f g h fg gh:Mor,
+    compose_ c f g = Some fg -> 
+    compose_ c g h = Some gh -> 
+    compose_ c f gh = compose_ c fg h.
+Proof. unfold compose_. exact (proof_asc2 c). Qed.
+
+
+Definition toCategory (Obj Mor:Type)(c:Category2 Obj Mor):Category Mor := category
+    (source_            c)
+    (target_            c)
+    (compose_           c)
+    (proof_ss_  Obj Mor c)
+    (proof_ts_  Obj Mor c)
+    (proof_tt_  Obj Mor c)
+    (proof_st_  Obj Mor c)
+    (proof_dom_ Obj Mor c)
+    (proof_src_ Obj Mor c)
+    (proof_tgt_ Obj Mor c)
+    (proof_idl_ Obj Mor c)
+    (proof_idr_ Obj Mor c)
+    (proof_asc_ Obj Mor c) .
+
+Arguments toCategory {Obj} {Mor} _.
+
+
+
+
 
 
 

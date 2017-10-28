@@ -8,7 +8,10 @@ all:	bool.vo \
 		natdict.vo \
 		list.vo \
 		option.vo \
-		higher_order.vo
+		higher_order.vo \
+		fmap.vo \
+		fold.vo \
+		const.vo
 
 
 bool.vo: bool.v
@@ -43,3 +46,15 @@ option.vo : option.v list.vo nat.vo bool.vo
 
 higher_order.vo : higher_order.v list.vo bool.vo nat.vo
 	coqc higher_order.v
+
+fmap.vo : fmap.v nat.vo bool.vo list.vo
+	coqc fmap.v	
+
+fold.vo : fold.v list.vo bool.vo
+	coqc fold.v
+
+const.vo : const.v higher_order.vo
+	coqc const.v
+
+
+

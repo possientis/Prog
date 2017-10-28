@@ -2,10 +2,11 @@
 
 module  Reader
     (   Reader      (..)
+    ,   asks
     )   where
 
 import Control.Monad
-import Control.Monad.Reader.Class
+import Control.Monad.Reader.Class hiding (asks)
 
 newtype Reader r a = Reader { runReader :: r -> a } 
 
@@ -27,7 +28,6 @@ instance MonadReader r (Reader r) where
     ask = Reader id
     local f m = Reader (runReader m . f)
 
-
-reader :: (r -> a) -> Reader r a
-reader =  Reader
+asks :: (r -> a) -> Reader r a
+asks = Reader
 
