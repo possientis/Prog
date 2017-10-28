@@ -11,13 +11,13 @@ Record Category2 (Obj Mor:Type) : Type := category
     ; proof_idl : forall (a:Obj) (f:Mor), a = dom f -> compose2 (id a) f = Some f
     ; proof_idr : forall (a:Obj) (f:Mor), a = cod f -> compose2 f (id a) = Some f
     ; proof_asc : forall f g h fg gh: Mor,    compose2 f g = Some fg ->
-                                                compose2 g h = Some gh ->
-                                                compose2 f gh = compose2 fg h
+                                              compose2 g h = Some gh ->
+                                              compose2 f gh = compose2 fg h
     }
     .
 
 (* implicit type argument *)
-Arguments category {Obj} {Mor} _ _ _ _ _ _ _ _ _ _.
+Arguments category {Obj} {Mor} _ _ _ _ _ _ _ _ _ _ _ _.
 Arguments dom {Obj} {Mor} _ _.
 Arguments cod {Obj} {Mor} _ _.
 Arguments compose2 {Obj} {Mor} _ _ _.
@@ -25,6 +25,7 @@ Arguments id {Obj} {Mor} _ _.
 Arguments proof_sid {Obj} {Mor} _ _.
 Arguments proof_tid {Obj} {Mor} _ _.
 Arguments proof_dom2 {Obj} {Mor} _ _ _.
+
 
 
 Lemma id_injective (Obj Mor:Type) (c:Category2 Obj Mor) : forall a b: Obj,
