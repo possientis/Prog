@@ -63,4 +63,14 @@ Proof. reflexivity. Qed.
 Example test_hd_error3 : hd_error [5,4,3] = Some 5.
 Proof. reflexivity. Qed.
 
+Theorem nth_domain : forall (a:Type) (l:list a) (n:nat),
+    length l = n -> nth l n = None.
+Proof.
+    induction l as [| x xs H].
+    - reflexivity. 
+    - intros n H'. destruct n. 
+        + simpl in H'. discriminate H'.
+        + simpl in H'. simpl. apply H. injection H'.
+          clear H'. intro H'. exact H'.
+Qed.
 

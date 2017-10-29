@@ -20,7 +20,7 @@ newtype Comp a = Comp { unComp :: VM a }
                 ,   MonadState Stack
                 )
 
-data Instr = Push Int | Pop | Puts
+data Instr = Push Int | Pop | Puts | Add
 
 -- modify :: MonadState s m => (s -> s) -> m ()
 -- gets   :: MonadState s m => (s -> a) -> m a
@@ -33,6 +33,10 @@ evalInstr instr = case instr of
     Puts    ->  do
         tos <- gets head
         tell [tos]
+    Add     -> do
+        x   <- gets (head . tail)
+        y   <- gets head
+        modify (x+y:) 
 
 -- ask      :: MonadReader r m => m r
 -- local    :: MonadReader r m => (r -> r) -> m a -> m a
@@ -48,6 +52,22 @@ eval = do
 -- execWriterT :: (Monad m) => WriterT w m a -> m w 
 -- evalState   :: State s a -> s -> a
 execVM :: Program -> Output
-execVM is = evalState (execWriterT (runReaderT (unComp eval) is )) []
+execVM = flip evalState [] . execWriterT . runReaderT (unComp eval)
+
+
+program :: Program
+program =   [   Push 42
+            ,   Push 27
+            ,   Add
+            ,   Puts 
+            ,   Pop
+            ,   Puts
+            ,   Pop
+            ,   Puts
+            ,   Pop
+            ]
+
+main :: IO ()
+main = mapM_ print $ execVM program
 
 

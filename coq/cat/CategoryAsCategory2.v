@@ -37,7 +37,6 @@ Definition proof_sid_ (A:Type) (c:Category A) : forall a:Obj c,
 Proof.
     intros a. destruct a. simpl. unfold dom_. unfold toObject.
 
-
 Show.
 
 
