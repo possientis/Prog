@@ -11,7 +11,8 @@ all:	bool.vo \
 		higher_order.vo \
 		fmap.vo \
 		fold.vo \
-		const.vo
+		const.vo \
+		church.vo
 
 
 bool.vo: bool.v
@@ -55,6 +56,11 @@ fold.vo : fold.v list.vo bool.vo
 
 const.vo : const.v higher_order.vo
 	coqc const.v
+
+church.vo : church.v
+	coqc church.v
+
+
 
 
 

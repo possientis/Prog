@@ -85,4 +85,34 @@ Proof. reflexivity. Qed.
 
 
 Definition exp (n m: nat) : nat :=
- fun (a:Type) (f:a -> a) (x:a) => 
+    fun (a:Type) (f: a -> a) (x:a) => m (a -> a) (fun g => n a g) f x.
+
+Example test_exp1 : exp two two = four.
+Proof. reflexivity. Qed.
+
+Example test_exp2 : exp zero zero = one.
+Proof. reflexivity. Qed.
+
+Example test_exp3 : exp zero one = zero.
+Proof. reflexivity. Qed.
+
+Example test_exp4 : exp one zero = one.
+Proof. reflexivity. Qed.
+
+Example test_exp5 : exp one one = one.
+Proof. reflexivity. Qed.
+
+Example test_exp6 : exp one two = one.
+Proof. reflexivity. Qed.
+
+Example test_exp7 : exp two one = two.
+Proof. reflexivity. Qed.
+
+Example test_exp8 : exp two three = plus four four.
+Proof. reflexivity. Qed.
+
+Example test_exp9 : exp three two = plus one (plus four four).
+Proof. reflexivity. Qed.
+
+
+
