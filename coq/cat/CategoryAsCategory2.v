@@ -1,3 +1,4 @@
+Require Import Axiom_ProofIrrelevance.
 Require Import Category2.
 Require Import Category.
 
@@ -36,6 +37,12 @@ Definition proof_sid_ (A:Type) (c:Category A) : forall a:Obj c,
     dom_ c (id_ c a) = a.
 Proof.
     intros a. destruct a. simpl. unfold dom_. unfold toObject.
+    assert ((source c x = x) = (source c (source c x) = source c x)).
+    { apply test_prop. split. 
+        - intros H. rewrite e. exact H.
+        - intros H. exact e. }
+      
+(*    rewrite proof_irrelevance with (P:= source c (source c x) = (source c x)) (p1:=e) (p2:=proof_ss c x). *)
 
 Show.
 

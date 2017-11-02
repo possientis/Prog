@@ -17,9 +17,10 @@ foldl' op acc (x:xs)  = let new = op acc x  -- will force evaluation using seq
 
 
 -- seriously quicker with strict evaluation (foldl')
--- even with -O2 compile option
+-- interestingly the -O2 compiler option does not seem
+-- remove inefficiency of foldl
 main :: IO ()
 main = do
-  putStrLn $ show $ foldl' (+) 0 [1..5000000]
+  putStrLn $ show $ foldl (+) 0 [1..5000000]
 
 
