@@ -308,4 +308,19 @@ Proof.
           assert (n = m) as H''. { apply H. exact H'. }
           rewrite H''. reflexivity. }
 Qed.
+
+
+Theorem eqb_semantics' : forall (n m: nat),
+    n = m <-> eqb n m = true.
+Proof.
+    split.
+    - intros H. rewrite H. apply eqb_refl. 
+    - generalize m. clear m. induction n as [| n H].
+        + destruct m. 
+            { intros. reflexivity. }
+            { simpl. intros H. inversion H. }
+        + destruct m.
+            { simpl. intros H'. inversion H'. }
+            { simpl. intros H'. apply H in H'. rewrite H'. reflexivity. }
+Qed.
         

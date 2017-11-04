@@ -1,0 +1,27 @@
+-- 1. avoid String
+-- 2. use fmap instead of map
+-- 3. use Foldable and Traversable instead of the Control.Monad 
+--    and Data.List versions of traversals
+-- 4. avoid partial functions like 'head' and 'read' or use their
+--    total variants.
+-- 5. avoid exceptions, use ExceptT or Either instead
+-- 6. avoid boolean blind function
+--
+--
+-- what you probably need
+--
+-- 1.   async
+-- 2.   bytestring
+-- 3.   containers
+-- 4.   mtl
+-- 5.   stm
+-- 6.   text
+-- 7.   transformers
+-- 8.   unordered-containers
+-- 9.   vector
+-- 10.  filepath
+-- 11.  directory
+-- 12.  process
+-- 13.  unix
+-- 14.  deepseq
+-- 15.  optparse-applicative

@@ -13,7 +13,9 @@ all:	bool.vo \
 		fold.vo \
 		const.vo \
 		church.vo \
-		apply.vo
+		apply.vo \
+		inversion.vo \
+		tactic_hyp.vo
 
 
 bool.vo: bool.v
@@ -40,7 +42,7 @@ natoption.vo: natoption.v nat.vo bool.vo natlist.vo
 natdict.vo: natdict.v nat.vo bool.vo natoption.vo
 	coqc natdict.v
 
-list.vo : list.v bool.vo
+list.vo : list.v bool.vo induction.vo
 	coqc list.v
 
 option.vo : option.v list.vo nat.vo bool.vo
@@ -64,7 +66,9 @@ church.vo : church.v
 apply.vo : apply.v list.vo nat.vo bool.vo
 	coqc apply.v
 
+inversion.vo : inversion.v list.vo nat.vo bool.vo
+	coqc inversion.v	
 
-
-
+tactic_hyp.vo : tactic_hyp.v nat.vo bool.vo induction.vo
+	coqc tactic_hyp.v
 

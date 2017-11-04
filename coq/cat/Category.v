@@ -34,16 +34,5 @@ Arguments proof_idr {A} _ _ _ _.
 Arguments proof_asc {A} _ _ _ _ _ _ _ _.
 
 
-Definition Obj (A:Type) (c: Category A) : Type := { a:A | source c a = a }. 
-
-Arguments Obj {A} _.
-
-
-Definition toObject (A:Type) (c:Category A) (a:A) : source c a = a -> Obj c :=
-    exist (fun x => source c x = x) a.
-
-Arguments toObject {A} {c} {a} _.
-
-
 
 

@@ -1,4 +1,5 @@
 Require Import bool.
+Require Import induction.
 
 Inductive list (a:Type) : Type :=
     | nil  : list a
@@ -197,6 +198,39 @@ Proof.
     - reflexivity.
     - simpl. rewrite rev_app_distr. simpl. rewrite H. reflexivity.
 Qed.
+
+(* we are not using app_length, exercise *)
+Theorem app_length_cons : forall (a:Type) (l k:list a) (x:a) (n:nat),
+    length (l ++ (x :: k)) = n -> S (length (l ++ k)) = n.
+Proof.
+    intros a l. induction l as [|y ys H].
+    - intros k x n. simpl. intros H. exact H.
+    - intros k x n. simpl. destruct n.
+        + intros H'. inversion H'.
+        + intros H'. inversion H' as [H1]. clear H'.
+            rewrite H1. apply H in H1. rewrite H1. reflexivity.
+Qed.
+
+(* we are not using app_length, exercise *)
+Theorem app_length_twice : forall (a:Type) (n:nat) (l:list a),
+    length l = n -> length (l ++ l) = n + n.
+Proof.
+    intros a n l. generalize n. clear n. induction l as [|x xs H].
+    - destruct n.
+        + intros. reflexivity.
+        + intros H. inversion H.
+    - destruct n.
+        + intros H'. inversion H'.
+        + intros H'. inversion H' as [H1]. clear H'.
+            simpl. rewrite H1. rewrite (plus_comm n (S n)).
+            simpl. apply H in H1. 
+            assert ( S (length (xs ++ xs)) = length (xs ++ x :: xs)) as H'.
+                { apply app_length_cons with (x:=x). reflexivity. }
+            rewrite <- H'. rewrite H1. reflexivity.
+Qed.
+
+
+
 
 
 

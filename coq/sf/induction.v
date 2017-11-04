@@ -267,3 +267,19 @@ Proof.
     - apply plus_assoc.
 Qed.
 
+
+
+Theorem double_injective : forall (n m:nat),
+    double n = double m -> n = m.
+Proof.
+    induction n as [|n H].
+    - intros m H. destruct m as [|m].
+        + reflexivity.
+        + simpl in H. inversion H.
+    - intros m H'. destruct m as [|m].
+        + simpl in H'. inversion H'.
+        + simpl in H'. inversion H' as [H1]. clear H'.
+            apply H in H1. rewrite H1. reflexivity.
+Qed.
+
+

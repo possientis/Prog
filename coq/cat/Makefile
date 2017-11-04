@@ -5,7 +5,6 @@ all:	Category.vo \
 		natAsMonoid.vo	\
 		natAsCategory.vo \
 		Category2AsCategory.vo \
-		Axiom_ProofIrrelevance.vo
 		
 Category.vo : Category.v
 	coqc Category.v
@@ -28,5 +27,3 @@ natAsCategory.vo : natAsCategory.v Category.vo natAsMonoid.vo MonoidAsCategory.v
 Category2AsCategory.vo : Category2AsCategory.v Category2.vo Category.v
 	coqc Category2AsCategory.v
 
-Axiom_ProofIrrelevance.vo : Axiom_ProofIrrelevance.v
-	coqc Axiom_ProofIrrelevance.v
