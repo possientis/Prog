@@ -282,4 +282,26 @@ Proof.
             apply H in H1. rewrite H1. reflexivity.
 Qed.
 
+Theorem double_induction : forall (P: nat -> nat -> Prop),
+    P 0 0 ->
+    (forall m, P m 0 -> P (S m) 0) ->
+    (forall n, P 0 n -> P 0 (S n)) ->
+    (forall m n, P m n -> P (S m) (S n)) ->
+    forall m n, P m n.
+Proof.
+    intros P H0 H1 H2 H3. induction m as [| m H].
+    - induction n as [| n H].
+        + exact H0.
+        + apply H2. exact H.
+    - destruct n.
+        + assert (forall q, P q 0).
+            { induction q as [|q H'].
+                - exact H0.
+                - apply H1. exact H'.
+            } 
+            apply H4.
+        + apply H3. apply H.
+Qed.
+            
+
 

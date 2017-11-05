@@ -33,6 +33,11 @@ Arguments proof_idl {A} _ _ _ _.
 Arguments proof_idr {A} _ _ _ _.
 Arguments proof_asc {A} _ _ _ _ _ _ _ _.
 
+Axiom Axiom_Category_equal : forall (A:Type) (c c':Category A),
+    (forall f:A, source c f = source c' f) ->
+    (forall f:A, target c f = target c' f) ->
+    (forall f g:A, compose c f g = compose c' f g) -> c = c'. 
+
 
 
 

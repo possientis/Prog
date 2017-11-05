@@ -1,40 +1,55 @@
-import Data.Monoid
-import Data.Foldable
-import Data.Traversable
+{-# LANGUAGE NoImplicitPrelude #-}
 
+import Data.Functor
+import Data.Foldable
+import Data.Monoid
 
 import Control.Applicative
-import Control.Monad.Identity (runIdentity)
-import Prelude hiding (mapM_, foldr)
+
+class (Functor t, Foldable t) => Traversable t where
+    traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
 
 
-data Tree a = Node a [Tree a] deriving (Show)
+newtype Identity a = Identity a
 
+instance Functor Identity where
+    fmap f (Identity x) = Identity (f x)
+
+instance Applicative Identity where
+    pure  = Identity
+    Identity f <*> Identity x = Identity (f x)
+
+newtype Compose f g a = Compose (f (g a))
+
+instance (Functor f, Functor g) => Functor (Compose f g) where
+    fmap f (Compose x) = Compose (fmap (fmap f) x)
+
+instance (Applicative f, Applicative g) => Applicative (Compose f g) where
+    pure x = Compose (pure (pure x))
+    Compose f <*> Compose x = Compose (fmap (<*>) f <*> x)
+
+
+data Tree a = Empty | Leaf a | Node (Tree a) a (Tree a)
 
 instance Functor Tree where
-    fmap f (Node x ts) = Node (f x) (fmap (fmap f) ts)
+    fmap f Empty    = Empty 
+    fmap f (Leaf x) = Leaf (f x)
+    fmap f (Node l x r) = Node (fmap f l) (f x) (fmap f r)
 
 instance Foldable Tree where
-    foldMap f (Node x ts) = f x `mappend` foldMap (foldMap f) ts
+    foldMap f Empty         = mempty
+    foldMap f (Leaf x)      = f x
+    foldMap f (Node l x r)  = foldMap f l `mappend` f x `mappend` foldMap f r
 
 instance Traversable Tree where
-    traverse f (Node x ts) = Node <$> f x <*> traverse (traverse f) ts
+    traverse f Empty        = pure Empty 
+    traverse f (Leaf x)     = pure Leaf <*> f x  
+    traverse f (Node l x r) = pure Node <*> traverse f l <*> f x <*> traverse f r 
+    
 
 
-tree :: Tree Integer
-tree = Node 1 [Node 1 [], Node 2 [], Node 3 []]
 
 
-example1 :: IO ()
-example1 = mapM_ print tree
 
-example2 :: Integer
-example2 = foldr (+) 0 tree
-
-example3 :: Maybe (Tree Integer)
-example3 = traverse (\x -> if x > 2 then Just x else Nothing) tree
-
-example4 :: Tree Integer
-example4 = runIdentity $ traverse (\x -> pure (x + 1)) tree
 
 

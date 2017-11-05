@@ -5,6 +5,7 @@ all:	Category.vo \
 		natAsMonoid.vo	\
 		natAsCategory.vo \
 		Category2AsCategory.vo \
+		CategoryAsCategory2.vo
 		
 Category.vo : Category.v
 	coqc Category.v
@@ -26,4 +27,12 @@ natAsCategory.vo : natAsCategory.v Category.vo natAsMonoid.vo MonoidAsCategory.v
 
 Category2AsCategory.vo : Category2AsCategory.v Category2.vo Category.v
 	coqc Category2AsCategory.v
+
+CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
+							Category2.vo \
+							Category.vo \
+						   	Category2AsCategory.vo
+	coqc CategoryAsCategory2.v	
+
+
 

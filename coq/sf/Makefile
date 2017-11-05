@@ -8,6 +8,7 @@ all:	bool.vo \
 		natdict.vo \
 		list.vo \
 		option.vo \
+		prod.vo \
 		higher_order.vo \
 		fmap.vo \
 		fold.vo \
@@ -15,7 +16,8 @@ all:	bool.vo \
 		church.vo \
 		apply.vo \
 		inversion.vo \
-		tactic_hyp.vo
+		tactic_hyp.vo \
+		unfold.vo
 
 
 bool.vo: bool.v
@@ -48,6 +50,9 @@ list.vo : list.v bool.vo induction.vo
 option.vo : option.v list.vo nat.vo bool.vo
 	coqc option.v
 
+prod.vo : prod.v list.vo
+	coqc prod.v
+
 higher_order.vo : higher_order.v list.vo bool.vo nat.vo
 	coqc higher_order.v
 
@@ -72,3 +77,5 @@ inversion.vo : inversion.v list.vo nat.vo bool.vo
 tactic_hyp.vo : tactic_hyp.v nat.vo bool.vo induction.vo
 	coqc tactic_hyp.v
 
+unfold.vo : unfold.v induction.vo
+	coqc unfold.v

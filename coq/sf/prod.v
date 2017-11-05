@@ -82,3 +82,15 @@ Proof.
     - destruct x as [u v]. simpl. rewrite H. reflexivity.
 Qed.
 
+Theorem combine_split' : 
+    forall (a b:Type) (l:list (prod a b)) (l1: list a) (l2:list b),
+    split l = (l1,l2) -> combine l1 l2 = l.
+Proof.
+    intros a b l l1 l2 H.
+    assert (l1 = fst (split l)) as H1. { rewrite H. reflexivity. }
+    assert (l2 = snd (split l)) as H2. { rewrite H. reflexivity. }
+    rewrite H1, H2. apply combine_split.
+Qed.
+
+
+
