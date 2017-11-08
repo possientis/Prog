@@ -17,7 +17,8 @@ all:	bool.vo \
 		apply.vo \
 		inversion.vo \
 		tactic_hyp.vo \
-		unfold.vo
+		unfold.vo \
+		destruct.vo
 
 
 bool.vo: bool.v
@@ -79,3 +80,6 @@ tactic_hyp.vo : tactic_hyp.v nat.vo bool.vo induction.vo
 
 unfold.vo : unfold.v induction.vo
 	coqc unfold.v
+
+destruct.vo : destruct.v nat.vo bool.vo
+	coqc destruct.v

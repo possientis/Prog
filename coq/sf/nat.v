@@ -324,3 +324,29 @@ Proof.
             { simpl. intros H'. apply H in H'. rewrite H'. reflexivity. }
 Qed.
         
+
+Theorem eqb_sym : forall (n m:nat),
+    eqb n m = eqb m n.
+Proof.
+    induction n as [|n H].
+    - destruct m. 
+        + reflexivity.
+        + reflexivity.
+    - destruct m.
+        + reflexivity. 
+        + apply H.
+Qed.
+
+Theorem eqb_trans : forall (n m p:nat),
+    eqb n m = true -> eqb m p = true -> eqb n p = true.
+Proof.
+   intros n m p Hnm Hmp. 
+   apply eqb_semantics. 
+   apply eqb_semantics in Hnm.
+   apply eqb_semantics in Hmp.
+   apply eq_trans with (y:=m).
+   exact Hnm.
+   exact Hmp.
+Qed.
+
+

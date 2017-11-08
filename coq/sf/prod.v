@@ -92,5 +92,18 @@ Proof.
     rewrite H1, H2. apply combine_split.
 Qed.
 
+Theorem split_combine : forall (a:Type) (l k:list a),
+    length l = length k -> split (combine l k) = (l,k).
+Proof.
+    induction l as [|x xs H].
+    - destruct k. 
+        + intros. reflexivity.
+        + simpl. intros H0. inversion H0.
+    - induction k as [|y ys H'].
+        + simpl. intros H0. inversion H0.
+        + simpl. intros H0. rewrite (H ys). simpl. reflexivity.
+            inversion H0. reflexivity.
+Qed.
+
 
 

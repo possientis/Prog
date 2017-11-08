@@ -75,8 +75,15 @@ Proof. reflexivity. Qed.
 Example test_partition2 : partition (fun x => false) [5,9,0] = ([],[5,9,0]).
 Proof. reflexivity. Qed.
 
+(*
+Theorem filter_exercise : forall (a:Type) (test: a -> bool) (x:a) (l k:list a),
+    filter test l = x :: k -> test x = true.
+Proof.
+    induction l as [|y ys H].
+    - intros k H. inversion H.
+    - 
 
-
-
+Show.
+*)
 
 

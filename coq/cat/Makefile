@@ -1,8 +1,10 @@
 all:	Category.vo \
 		Category2.vo \
 		Monoid.vo	\
+		Preorder.vo \
 		MonoidAsCategory.vo \
 		natAsMonoid.vo	\
+		natAsPreorder.vo\
 		natAsCategory.vo \
 		Category2AsCategory.vo \
 		CategoryAsCategory2.vo
@@ -16,11 +18,17 @@ Category2.vo : Category2.v
 Monoid.vo : Monoid.v
 	coqc Monoid.v
 
+Preorder.vo : Preorder.v
+	coqc Preorder.v
+
 MonoidAsCategory.vo: MonoidAsCategory.v Monoid.vo Category.vo
 	coqc MonoidAsCategory.v
 
 natAsMonoid.vo : natAsMonoid.v Monoid.vo
 	coqc natAsMonoid.v
+
+natAsPreorder.vo : natAsPreorder.v Preorder.vo
+	coqc natAsPreorder.v
 
 natAsCategory.vo : natAsCategory.v Category.vo natAsMonoid.vo MonoidAsCategory.vo 
 	coqc natAsCategory.v

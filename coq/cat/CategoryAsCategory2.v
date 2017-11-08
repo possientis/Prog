@@ -10,7 +10,7 @@ Inductive Obj (A:Type) (c: Category A) : Type :=
     obj : forall a:A, source c a = a -> Obj A c.
 
 Arguments Obj {A} _.
-Arguments obj {A} {c}.
+Arguments obj {A} {c} _ _.
 
 Definition mor (A:Type) (c: Category A) (x: Obj c) : A :=
     match x with
