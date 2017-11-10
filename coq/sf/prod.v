@@ -4,7 +4,7 @@ Inductive prod (a b:Type) : Type :=
     | pair : a -> b -> prod a b
     .
 
-Arguments pair {a} {b}. (* type arguments are inferred *)
+Arguments pair {a} {b} _ _. (* type arguments are inferred *)
 
 
 Notation "( x , y )" := (pair x y).
@@ -24,7 +24,7 @@ Definition fst (a b:Type) (p : prod a b ) : a :=
     | (x,y)     => x
     end.
 
-Arguments fst {a} {b}.
+Arguments fst {a} {b} _.
 
 Example test_fst : fst (0,true) = 0.
 Proof. reflexivity. Qed.
@@ -34,7 +34,7 @@ Definition snd (a b:Type) (p: prod a b) : b :=
     | (x,y)     => y
     end.
 
-Arguments snd {a} {b}.
+Arguments snd {a} {b} _.
 
 Example test_snd : snd (0,true) = true.
 Proof. reflexivity. Qed.
@@ -51,7 +51,7 @@ Fixpoint combine (a b: Type) (l : list a) (k: list b) : list (prod a b) :=
         end
     end.
 
-Arguments combine {a} {b}.
+Arguments combine {a} {b} _ _.
 
 
 Example test_combine : combine [1,2,3] [true,false] = [(1,true),(2,false)].
@@ -66,7 +66,7 @@ Fixpoint split (a b:Type) (l : list (prod a b)) : prod (list a) (list b) :=
     | (u,v)::xs     => (u :: fst (split a b xs), v :: snd (split a b xs))
     end.
 
-Arguments split {a} {b}.
+Arguments split {a} {b} _.
 
 Example test_split : split [(1,false),(2,true)] = ([1,2],[false,true]).
 Proof. reflexivity. Qed.

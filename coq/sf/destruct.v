@@ -37,7 +37,7 @@ Qed.
 Theorem bool_fn_applied_thrice : forall (f:bool -> bool) (b:bool),
     f (f (f b)) = f b.
 Proof.
-    destruct b, (f true) eqn:H1, (f false) eqn:H2.
+    intros f. destruct b, (f true) eqn:H1, (f false) eqn:H2.
     -  rewrite H1, H1. reflexivity.
     -  rewrite H1, H1. reflexivity.
     -  exact H1.
