@@ -75,15 +75,74 @@ Proof. reflexivity. Qed.
 Example test_partition2 : partition (fun x => false) [5,9,0] = ([],[5,9,0]).
 Proof. reflexivity. Qed.
 
-(*
 Theorem filter_exercise : forall (a:Type) (test: a -> bool) (x:a) (l k:list a),
     filter test l = x :: k -> test x = true.
 Proof.
     induction l as [|y ys H].
     - intros k H. inversion H.
-    - 
+    - intros k H0. destruct (test y) eqn:H'.
+        + simpl in H0. rewrite H' in H0. inversion H0 as [H1].
+            rewrite H1 in H'. exact H'.
+        + simpl in H0. rewrite H' in H0. apply (H k). exact H0. 
+Qed.
 
-Show.
-*)
 
+Fixpoint forallb (a:Type) (test: a -> bool) (l:list a) : bool :=
+    match l with
+    | []        =>  true
+    | x :: xs   =>  if test x then forallb a test xs else false 
+    end.
+
+Arguments forallb {a} _ _.
+
+Example test_forallb1 : forallb oddb [1,3,5,7,9] = true.
+Proof. reflexivity. Qed.
+
+Example test_forallb2 : forallb negb [false,false] = true.
+Proof. reflexivity. Qed.
+
+Example test_forallb3 : forallb evenb [0,2,4,5] = false.
+Proof. reflexivity. Qed.
+
+Example test_forallb4 : forallb (eqb 5) [] = true.
+Proof. reflexivity. Qed.
+
+Fixpoint existb (a:Type) (test: a -> bool) (l:list a) : bool :=
+    match l with
+    | []        =>  false
+    | x :: xs   =>  if test x then true else existb a test xs
+    end.
+
+Arguments existb {a} _ _.
+
+Example test_existb1 : existb (eqb 5) [0,2,3,6] = false.
+Proof. reflexivity. Qed.
+
+
+Example test_existb2 : existb (andb true) [false,true,false] = true.
+Proof. reflexivity. Qed.
+
+Example test_existb3 : existb oddb [1,0,0,0,3] = true.
+Proof. reflexivity. Qed.
+
+Example test_existb4 : existb evenb [] = false.
+Proof. reflexivity. Qed.
+
+Definition existb' (a:Type) (test: a -> bool) (l:list a) : bool :=
+    negb (forallb (fun x => negb (test x)) l).
+
+Arguments existb' {a} _ _.
+
+Theorem existb_existb' : forall (a:Type) (test: a -> bool) (l:list a),
+    existb test l = existb' test l.
+Proof.
+    intros a test l. induction l as [|x xs H].  
+    - reflexivity.
+    - destruct (test x) eqn:H'.  
+        + unfold existb, existb', forallb, negb. rewrite H'. reflexivity.
+        + unfold existb. rewrite H'. fold (existb test xs).
+            unfold existb'. unfold forallb. rewrite H'. simpl.
+            fold (forallb (fun x => negb (test x)) xs).
+            fold (existb' test xs). exact H.
+Qed.
 

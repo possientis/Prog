@@ -222,7 +222,7 @@ syn region coqProofEnder contained contains=coqIdent matchgroup=coqProofDelim st
 syn keyword coqTactic    contained absurd apply assert assumption auto firstorder
 syn keyword coqTactic    contained case[_eq] change clear[body] cofix cbv lazy compare compute congruence constructor contradiction cut[rewrite]
 syn keyword coqTactic    contained decide decompose dependant destruct discriminate double
-syn keyword coqTactic    contained eapply eassumption eauto econstructor elim[type] equality evar exact eexact exists
+syn keyword coqTactic    contained eapply eassumption eauto econstructor elim[type] equality evar exact eexact exists exfalso
 syn keyword coqTactic    contained field fix f_equal fold fourier functional generalize hnf
 syn keyword coqTactic    contained idtac induction injection instantiate intro[s] intuition inversion[_clear]
 syn keyword coqTactic    contained lapply left move now omega pattern pose proof quote

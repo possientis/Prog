@@ -1,0 +1,62 @@
+Example and_exercise1 : forall (n m:nat), 
+    n + m = 0 -> n = 0 /\ m = 0.
+Proof.
+    intros n m H. destruct n, m.
+    - split.
+        + reflexivity.
+        + reflexivity.
+    - inversion H.
+    - inversion H.
+    - inversion H.
+Qed.
+
+Example and_exercise2 : forall (n m:nat),
+    n = 0 /\ m = 0 -> n + m = 0.
+Proof.
+    intros n m H. destruct H as [H1 H2].
+    rewrite H1, H2. reflexivity.
+Qed.
+
+Example and_exercise3 : forall (n m:nat),
+    n = 0 /\ m = 0 -> n + m = 0.
+Proof.
+    intros n m [H1 H2]. rewrite H1,H2. reflexivity.
+Qed.
+
+
+Example and_exercise4 : forall (n m:nat),
+    n + m = 0 -> n * m = 0.
+Proof.
+    intros n m H. assert (H': n = 0 /\ m = 0).
+    { apply and_exercise1. exact H. }
+    destruct H' as [H1 H2]. rewrite H1. reflexivity.
+Qed.
+
+
+Lemma proj1 : forall (P Q: Prop),
+    P /\ Q -> P.
+Proof. intros P Q [H1 H2]. exact H1. Qed.
+
+Lemma proj2 : forall (P Q: Prop),
+    P /\ Q -> Q.
+Proof. intros P Q [H1 H2]. exact H2. Qed.
+
+
+Theorem and_comm : forall (P Q:Prop),
+    P /\ Q -> Q /\ P.
+Proof.
+    intros P Q [H1 H2]. split.
+    - exact H2.
+    - exact H1.
+Qed.
+
+Theorem and_assoc : forall (P Q R:Prop),
+    P /\ (Q /\ R) -> (P /\ Q) /\ R.
+Proof.
+    intros P Q R [H1 [H2 H3]]. split.
+    - split.
+        + exact H1.
+        + exact H2.
+    - exact H3.
+Qed.
+

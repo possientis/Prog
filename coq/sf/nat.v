@@ -7,14 +7,15 @@ Inductive nat : Type :=
     | S : nat -> nat
     .
 
+
+End Playground1.
+
 Definition pred (n:nat) : nat :=
     match n with    
         | O     => O
         | S p   => p
     end.
 
-
-End Playground1.
 
 (* using nat from standard lib *)
 
