@@ -22,7 +22,10 @@ all:	bool.vo \
 		and.vo \
 		or.vo \
 		not.vo \
-		iff.vo
+		iff.vo \
+		setoid.vo \
+		exists.vo \
+		In.vo
 
 
 bool.vo: bool.v
@@ -99,3 +102,12 @@ not.vo : not.v
 
 iff.vo : iff.v
 	coqc iff.v
+
+setoid.vo : setoid.v or.vo
+	coqc setoid.v
+
+exists.vo : exists.v not.vo
+	coqc exists.v
+
+In.vo : In.v list.vo fmap.vo
+	coqc In.v

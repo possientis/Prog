@@ -24,3 +24,35 @@ Proof.
 Qed.
 
 
+Theorem iff_refl : forall (P:Prop),
+    P <-> P.
+Proof. 
+    intros P. split.
+    - intros H. exact H.
+    - intros H. exact H.
+Qed.
+
+Theorem iff_trans : forall (P Q R:Prop),
+    (P <-> Q) -> (Q <-> R) -> (P <-> R).
+Proof.
+    intros P Q R [Hpq Hqp] [Hqr Hrq]. split.
+    - intro Hp. apply Hqr. apply Hpq. exact Hp.
+    - intro Hr. apply Hqp. apply Hrq. exact Hr.
+Qed.
+
+
+Theorem or_distributes_over_and : forall (P Q R:Prop),
+    P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R).
+Proof.
+    intros P Q R. split. 
+    - intros [Hp|[Hq Hr]].
+        + split. { left. exact Hp. } { left. exact Hp. }
+        + split. { right. exact Hq. } { right. exact Hr. }
+    - intros [[H1|Hq] [H2|Hr]].
+        + left. exact H1.
+        + left. exact H1.
+        + left. exact H2. 
+        + right. split. { exact Hq. } { exact Hr. }
+Qed.
+
+

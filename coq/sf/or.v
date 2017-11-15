@@ -46,5 +46,26 @@ Proof.
 Qed.
 
 
+Lemma mult_0 : forall (n m:nat),
+    n * m = 0 <-> n = 0 \/ m = 0.
+Proof.
+    split. 
+    - apply mult_eq_0.
+    - apply or_exercise1.
+Qed.
+
+Lemma or_assoc : forall (P Q R:Prop),
+    P \/ (Q \/ R) <-> (P \/ Q) \/ R.
+Proof.
+    intros P Q R. split.
+    - intros [Hp | [Hq | Hr]].
+        + left. left. exact Hp.
+        + left. right. exact Hq.
+        + right. exact Hr.
+    - intros [[Hp|Hq]|Hr]. 
+        + left. exact Hp.
+        + right. left. exact Hq.
+        + right. right. exact Hr.
+Qed.
 
 
