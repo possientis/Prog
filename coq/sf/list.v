@@ -230,6 +230,33 @@ Proof.
 Qed.
 
 
+Fixpoint rev_append (a:Type) (l acc:list a) : list a :=
+    match l with 
+    | []        => acc
+    | x :: xs   => rev_append a xs (x :: acc) 
+    end.
+
+Arguments rev_append {a} _ _.
+
+(* tr for tail-recursive *)
+Definition tr_rev (a:Type) (l: list a) : list a := rev_append l []. 
+
+
+Arguments tr_rev {a} _.
+
+
+(*
+Lemma tr_rev_correct : forall (a:Type) (l:list a),
+    tr_rev l = rev l.
+Proof.
+    intros a l. induction l as [|x xs H].
+    - reflexivity.
+    - simpl.
+
+Show.
+
+*)
+
 
 
 

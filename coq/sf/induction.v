@@ -304,4 +304,22 @@ Proof.
 Qed.
             
 
+Lemma plus_comm3 : forall (n m p:nat),
+    n + (m + p) = (p + m) + n.
+Proof.
+    intros n m p.
+    rewrite plus_comm.
+    assert (H : m + p = p + m). { rewrite plus_comm. reflexivity. }
+    rewrite H. reflexivity.
+Qed.
+    
+
+Lemma plus_comm3' : forall (n m p:nat),
+    n + (m + p) = (p + m) + n.
+Proof.
+    intros n m p. rewrite plus_comm. rewrite (plus_comm m). reflexivity.
+Qed.
+
+
+
 

@@ -1,27 +1,27 @@
-import Data.Typeable
-import Control.Exception
+import Control.Monad.Catch
+import Prelude hiding (pure)
+
 
 data MyException = MyException
-    deriving (Show, Typeable)
+    deriving (Show)
+
 
 instance Exception MyException
 
 
-evil :: [Int]
-evil = [throw MyException]
+example :: MonadCatch m => Int -> Int -> m Int
+example x y | y == 0    = throwM MyException
+            | otherwise = return $ x `div` y
 
 
-example1 :: Int
-example1 = head evil
+pure :: MonadCatch m => m (Either MyException Int)
+pure = do
+    a <- try (example 1 2)
+    b <- try (example 15 0)
+    return (a >> b)
 
-example2 :: Int
-example2 = length evil
 
 main :: IO ()
 main = do
-    a <- try (evaluate example1) :: IO (Either MyException Int) 
-    print a
-
-    b <- try (evaluate example2) :: IO (Either MyException Int)
-    print b
-
+    x <- pure
+    putStrLn $ show x
