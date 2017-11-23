@@ -320,6 +320,10 @@ Proof.
     intros n m p. rewrite plus_comm. rewrite (plus_comm m). reflexivity.
 Qed.
 
-
-
+Theorem evenb_double : forall (k:nat), evenb (double k) = true.
+Proof.
+    induction k as [|k H].
+    - reflexivity.
+    - simpl. exact H.
+Qed.
 

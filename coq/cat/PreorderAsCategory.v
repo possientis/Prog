@@ -43,19 +43,48 @@ Qed.
 
 Arguments trans {A} {p} {x} {y} {y'} {z} _ _ _.
 
-Definition compose_ (A:Type) (p:Preorder A) (f g : Mor p) : option (Mor p) :=
+Definition compose_ (A:Type) (p:Preorder A) (f g: Mor p) : option (Mor p) :=
     match f with
     | mor x y pxy   =>
         match g with
         | mor y' z pyz  =>
             match eq_bool y y' as b return eq_bool y y' = b -> option (Mor p) with 
             | true  => fun pr => Some (mor x z (trans pr pxy pyz)) 
-            | False => fun _  => None
+            | false => fun _  => None
             end (eq_refl (eq_bool y y'))
         end
     end.
 
 Arguments compose_ {A} {p} _ _.
+
+Definition inner (A:Type) (p:Preorder A) (y y':A) (b:bool) 
+    (q:eq_bool y y' = b)(f: eq_bool y y' = true -> Mor p):option (Mor p) :=
+        match b as b1 return eq_bool y y' = b1 -> option (Mor p) with
+        | true  => fun pr   => Some (f pr)
+        | false => fun _    => None
+        end q.  
+
+Definition compose2 (A:Type) (p:Preorder A) (f g: Mor p) : option (Mor p) :=
+    match f with
+    | mor x y pxy   =>
+        match g with
+        | mor y' z pyz  => 
+            inner A p y y' (eq_bool y y') (eq_refl (eq_bool y y'))
+                (fun pr => mor x z (trans pr pxy pyz)) 
+        end
+    end.
+
+Arguments compose2 {A} {p} _ _.
+
+Lemma check_compose : forall (A:Type) (p:Preorder A) (f g:Mor p),
+    compose_ f g = compose2 f g.
+Proof. intros A p f g. reflexivity. Qed.
+
+Lemma inner_None : forall (A:Type) (p:Preorder A) (y:A) 
+    (f:eq_bool y y = true -> Mor p), 
+    inner A p y y true (eq_bool_correct' A y y (eq_refl y)) f <> None.
+Proof. intros A p y f. unfold inner. intros H. inversion H. Qed.
+
 
 Definition proof_ss_ (A:Type) (p:Preorder A) : forall (f:Mor p),
    source_ (source_ f) = source_ f. 
@@ -75,16 +104,12 @@ Definition proof_st_ (A:Type) (p:Preorder A) : forall (f:Mor p),
    source_ (target_ f) = target_ f. 
 Proof. intros f. destruct f as [x y pxy]. reflexivity. Qed.
 
-(*
 Definition proof_dom_ (A:Type) (p:Preorder A) : forall (f g:Mor p),
     target_ f = source_ g <-> compose_ f g <> None.
 Proof.
     intros f g. destruct f as [x y pxy]. destruct g as [y' z pyz].
-    simpl. 
-
+    simpl. split.
+    - intros H. inversion H. apply inner_None.
 
 Show.
-
-*)
-
 

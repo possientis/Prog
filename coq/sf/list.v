@@ -244,18 +244,46 @@ Definition tr_rev (a:Type) (l: list a) : list a := rev_append l [].
 
 Arguments tr_rev {a} _.
 
+Lemma app_cons : forall (a:Type) (l k:list a) (x:a),
+    (x :: l) ++ k = x :: (l ++ k).
+Proof. reflexivity. Qed.
 
-(*
+Lemma rev_append_assoc : forall (a:Type) (l k m: list a),
+    rev_append l k ++ m = rev_append l (k ++ m).
+Proof.
+    induction l as [|x xs H].
+    - reflexivity.
+    - intros k m. simpl. rewrite H. rewrite app_cons. reflexivity.
+Qed.
+
+Theorem tr_rev_cons : forall (a:Type) (l:list a) (x:a),
+    tr_rev (x :: l) = tr_rev l ++ [x].
+Proof.
+    induction l as [|y xs H].
+    - intros x. reflexivity.
+    - intros x. unfold tr_rev. simpl. unfold tr_rev in H. 
+        rewrite rev_append_assoc. simpl. reflexivity.
+Qed.
+
+
+Theorem tr_rev_app_distr : forall (a:Type) (l k: list a),
+    tr_rev (l ++ k) = tr_rev k ++ tr_rev l.
+Proof.
+    induction l as [|x xs H].
+    - intros k. unfold tr_rev. simpl. symmetry. apply app_nil_r.
+    - intros k. rewrite app_cons. rewrite tr_rev_cons, tr_rev_cons.
+        rewrite H. rewrite app_assoc. reflexivity.
+Qed.
+
+
 Lemma tr_rev_correct : forall (a:Type) (l:list a),
     tr_rev l = rev l.
 Proof.
     intros a l. induction l as [|x xs H].
     - reflexivity.
-    - simpl.
+    - simpl. rewrite tr_rev_cons. rewrite H. reflexivity.
+Qed.
 
-Show.
-
-*)
 
 
 
