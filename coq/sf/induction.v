@@ -327,3 +327,53 @@ Proof.
     - simpl. exact H.
 Qed.
 
+Lemma evenb_negb_gen : forall (n:nat),
+(forall b:bool, evenb n = b -> evenb (S n) = negb b) /\
+(forall b:bool, evenb (S n) = b -> evenb n = negb b).
+Proof.
+    induction n as [|n [H1 H2]].
+    - split. 
+        + intros b H'. rewrite <- H'. reflexivity.
+        + intros b H'. rewrite <- H'. reflexivity.
+    - split.
+        + intros b H'. apply H2. exact H'.
+        + intros b H'. apply H1. exact H'.
+Qed.
+
+
+Lemma evenb_negb : forall (n:nat) (b:bool),
+    evenb n = b -> evenb (S n) = negb b.
+Proof.
+    intros n b. assert (
+    (forall b:bool, evenb n = b -> evenb (S n) = negb b) /\
+    (forall b:bool, evenb (S n) = b -> evenb n = negb b) ) as [H1 H2]. 
+        { apply evenb_negb_gen. }
+    apply H1.
+Qed.
+
+
+Theorem evenb_double_conv : forall (n:nat), 
+    exists k, n = if evenb n 
+        then double k
+        else S (double k).
+Proof.
+    induction n as [|n H].
+    - exists 0. reflexivity.
+    - destruct (evenb n) eqn: H'. 
+        + destruct H as [k H]. exists k. 
+            apply evenb_negb in H'. rewrite H'. rewrite H. reflexivity.
+        + destruct H as [k H]. exists (S k).
+            apply evenb_negb in H'. rewrite H'. simpl. rewrite H. reflexivity.
+Qed.
+
+Theorem even_bool_prop : forall (n:nat),
+    evenb n = true <-> exists k, n = double k.
+Proof.
+    intros n. split.
+    - intros H. assert ( exists k, n = if evenb n 
+        then double k
+        else S (double k) ) as [k H']. { apply evenb_double_conv. }
+            rewrite H in H'. exists k. exact H'.
+    - intros [k H]. rewrite H. apply evenb_double.
+Qed.
+

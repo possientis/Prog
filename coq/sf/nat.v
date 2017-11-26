@@ -350,6 +350,15 @@ Proof.
    exact Hmp.
 Qed.
 
+Theorem eqb_false_iff : forall (n m:nat),
+    eqb n m = false <-> n <> m.
+Proof.
+    intros n m. split.
+    - intros H H'. rewrite H' in H. rewrite eqb_refl in H. inversion H.
+    - intros H. destruct (eqb n m) eqn: Enm. 
+        + apply eqb_semantics in Enm. exfalso. apply H. exact Enm.
+        + reflexivity.
+Qed.
 
 
 

@@ -43,6 +43,42 @@ Qed.
 
 Arguments trans {A} {p} {x} {y} {y'} {z} _ _ _.
 
+Definition trans' (A:Type) (p:Preorder A) (x y y' z:A) 
+    (pxy : rel p x y) (pyz : rel p y' z) : option (rel p x z) :=
+        match eq_bool y y' as b return eq_bool y y' = b -> option (rel p x z) with
+        | true  => fun pr => Some (trans pr pxy pyz)
+        | false => fun _  => None
+        end (eq_refl (eq_bool y y')).
+
+Definition trans2 (A:Type) (p:Preorder A) (x y y' z:A) 
+    (pxy: rel p x y) (pyz: rel p y' z) (b:bool) (q: eq_bool y y' = b) := 
+        match b as b1 return eq_bool y y' = b1 -> option (rel p x z) with
+        | true  => fun pr => Some (trans pr pxy pyz)
+        | false => fun _  => None
+        end q.
+
+Lemma trans_trans : forall (A:Type) (p:Preorder A) (x y y' z:A)
+    (pxy: rel p x y) (pyz: rel p y' z),
+        trans' A p x y y' z pxy pyz = trans2 A p x y y' z pxy pyz 
+            (eq_bool y y') (eq_refl (eq_bool y y')).
+Proof. reflexivity. Qed.
+
+Lemma trans2_none : forall (A:Type) (p:Preorder A) (x y z:A)
+    (pxy: rel p x y) (pyz: rel p y z) (q: eq_bool y y = true),
+        trans2 A p x y y z pxy pyz true q <> None.
+Proof.
+    intros A p x y z pxy pyz q. simpl. intros H. inversion H. 
+Qed.
+
+Lemma trans2_none': forall (A:Type) (p:Preorder A) (x y y' z:A)
+    (pxy: rel p x y) (pyz: rel p y' z) (q: eq_bool y y' = true),
+        y = y' -> trans2 A p x y y' z pxy pyz true q <> None.
+Proof.
+    intros A p x y y' z pxy pyz q H.
+
+Show.
+
+(*
 Definition compose_ (A:Type) (p:Preorder A) (f g: Mor p) : option (Mor p) :=
     match f with
     | mor x y pxy   =>
@@ -56,36 +92,22 @@ Definition compose_ (A:Type) (p:Preorder A) (f g: Mor p) : option (Mor p) :=
     end.
 
 Arguments compose_ {A} {p} _ _.
-
-Definition inner (A:Type) (p:Preorder A) (y y':A) (b:bool) 
-    (q:eq_bool y y' = b)(f: eq_bool y y' = true -> Mor p):option (Mor p) :=
-        match b as b1 return eq_bool y y' = b1 -> option (Mor p) with
-        | true  => fun pr   => Some (f pr)
-        | false => fun _    => None
-        end q.  
-
-Definition compose2 (A:Type) (p:Preorder A) (f g: Mor p) : option (Mor p) :=
-    match f with
-    | mor x y pxy   =>
-        match g with
-        | mor y' z pyz  => 
-            inner A p y y' (eq_bool y y') (eq_refl (eq_bool y y'))
-                (fun pr => mor x z (trans pr pxy pyz)) 
-        end
-    end.
-
-Arguments compose2 {A} {p} _ _.
-
-Lemma check_compose : forall (A:Type) (p:Preorder A) (f g:Mor p),
-    compose_ f g = compose2 f g.
+*)
+(*
+Lemma compose_compose2 : forall (A:Type) (p:Preorder A) (f g:Mor p),
+    compose_ f g = compose2_ f g.
 Proof. intros A p f g. reflexivity. Qed.
 
-Lemma inner_None : forall (A:Type) (p:Preorder A) (y:A) 
-    (f:eq_bool y y = true -> Mor p), 
-    inner A p y y true (eq_bool_correct' A y y (eq_refl y)) f <> None.
-Proof. intros A p y f. unfold inner. intros H. inversion H. Qed.
+Definition proof_dom2_ (A:Type) (p:Preorder A) : forall (f g:Mor p),
+    target_ f = source_ g <-> compose2_ f g <> None.
+Proof.
+    intros f g. destruct f as [x y pxy]. destruct g as [y' z pyz].
+    simpl. split.
+    - intros H. inversion H as [H1].
 
-
+Show.
+*)
+(*
 Definition proof_ss_ (A:Type) (p:Preorder A) : forall (f:Mor p),
    source_ (source_ f) = source_ f. 
 Proof. intros f. destruct f as [x y pxy]. reflexivity. Qed.
@@ -103,13 +125,15 @@ Proof. intros f. destruct f as [x y pxy]. reflexivity. Qed.
 Definition proof_st_ (A:Type) (p:Preorder A) : forall (f:Mor p),
    source_ (target_ f) = target_ f. 
 Proof. intros f. destruct f as [x y pxy]. reflexivity. Qed.
+*)
 
+(*
 Definition proof_dom_ (A:Type) (p:Preorder A) : forall (f g:Mor p),
     target_ f = source_ g <-> compose_ f g <> None.
 Proof.
     intros f g. destruct f as [x y pxy]. destruct g as [y' z pyz].
     simpl. split.
-    - intros H. inversion H. apply inner_None.
+    - intros H. inversion H.
 
 Show.
-
+*)

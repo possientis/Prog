@@ -1,5 +1,6 @@
 Require Import bool.
 Require Import induction.
+Require Import Setoid.
 
 Inductive list (a:Type) : Type :=
     | nil  : list a
@@ -283,6 +284,53 @@ Proof.
     - reflexivity.
     - simpl. rewrite tr_rev_cons. rewrite H. reflexivity.
 Qed.
+
+Fixpoint eqb_list (a:Type)(eqb: a -> a -> bool) (l k:list a) : bool :=
+    match l with 
+    | []        =>
+        match k with
+        | []        => true
+        | _ :: _    => false
+        end
+    | x :: xs   =>
+        match k with
+        | []        => false
+        | y :: ys   => eqb x y && eqb_list a eqb xs ys
+        end 
+    end.
+
+Arguments eqb_list {a} _ _ _.
+
+Lemma eqb_list_true_iff : forall (a:Type) (eqb: a -> a -> bool),
+    (forall x y, eqb x y = true <-> x = y) ->
+    (forall l k, eqb_list eqb l k = true <-> l = k).
+Proof.
+    intros a eqb H. split.
+    - generalize k. clear k. induction l as [|x xs IH].
+        + intros [|y ys].
+            { intros. reflexivity. }
+            { intros H'. inversion H'. }
+        + intros [|y ys].
+            { intros H'. inversion H'. }
+            { intros H'. simpl in H'. rewrite andb_true_iff in H'. 
+                destruct H' as [H1 H2]. destruct (H x y) as [H' H''].
+                apply H' in H1. rewrite H1. 
+                assert (xs = ys) as E. { apply IH. exact H2. }
+                rewrite E. reflexivity. }
+    - generalize k. clear k. induction l as [|x xs IH].
+        + intros [|y ys].
+            { intros. reflexivity. }
+            { intros H'. inversion H'. }
+        + intros [|y ys].
+            { intros H'. inversion H'. }
+            { intros H'. inversion H'. simpl. apply andb_true_iff. split.
+                { apply H. reflexivity. }
+                { rewrite <- H2. apply IH. reflexivity. } } 
+Qed.
+
+
+
+
 
 
 

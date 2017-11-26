@@ -146,3 +146,32 @@ Proof.
             fold (existb' test xs). exact H.
 Qed.
 
+
+Fixpoint All (a:Type) (test: a -> Prop) (l: list a) : Prop :=
+    match l with 
+    | []        => True
+    | x :: xs   => test x /\ All a test xs
+    end.
+
+Arguments All {a} _ _.
+
+Theorem forallb_true_iff : forall (a:Type) (test: a -> bool) (l:list a),
+    forallb test l = true <-> All (fun x => test x = true) l.
+Proof.
+    intros a test l. split.
+    - induction l as [|x xs H].
+        + intros. apply I.
+        + intros H'. split.
+            { destruct (test x) eqn: Tx.
+                { reflexivity. }
+                { simpl in H'. rewrite Tx in H'. inversion H'. } }
+            { apply H. destruct (test x) eqn: Tx. 
+                { simpl in H'. rewrite Tx in H'. exact H'. }
+                { simpl in H'. rewrite Tx in H'. inversion H'. } }
+    - induction l as [|x xs H].
+        + intros. reflexivity.
+        + intros [H1 H2]. simpl. rewrite H1. apply H. exact H2.
+Qed.
+
+
+

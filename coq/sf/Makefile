@@ -26,7 +26,8 @@ all:	bool.vo \
 		setoid.vo \
 		exists.vo \
 		In.vo \
-		equal.vo
+		equal.vo \
+		reflection.vo
 
 
 bool.vo: bool.v
@@ -116,4 +117,6 @@ In.vo : In.v list.vo fmap.vo nat.vo bool.vo induction.vo
 equal.vo : equal.v induction.vo
 	coqc equal.v	
 
+reflection.vo : reflection.v nat.vo bool.vo induction.vo
+	coqc reflection.v
 

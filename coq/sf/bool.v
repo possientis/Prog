@@ -148,4 +148,41 @@ Proof.
 Qed.
 
 
+Lemma andb_true_iff : forall b c:bool,
+    b && c = true <-> b = true /\ c = true.
+Proof.
+    intros b c. split.
+    - intros H. split. 
+        + destruct b eqn: H'.
+            { reflexivity. }
+            { inversion H. }
+        + destruct c eqn: H'.
+            { reflexivity. }
+            { rewrite andb_comm in H. inversion H. }
+    - intros [H1 H2]. rewrite H1, H2. reflexivity.
+Qed.
+
+Lemma orb_comm : forall b c: bool,
+    orb b c = orb c b.
+Proof.
+    destruct b, c.    
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+Qed.
+
+
+
+Lemma orb_true_iff : forall b c:bool,
+    b || c = true <-> b = true \/ c = true.
+Proof.
+    intros b c. split.
+    - intros H. destruct b eqn: H'.
+        + left. reflexivity.
+        + right. exact H.
+    - intros [H|H].
+        + rewrite H. reflexivity.
+        + rewrite H. rewrite orb_comm. reflexivity.
+Qed.
 
