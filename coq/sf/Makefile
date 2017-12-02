@@ -27,7 +27,9 @@ all:	bool.vo \
 		exists.vo \
 		In.vo \
 		equal.vo \
-		reflection.vo
+		reflection.vo \
+		logic.vo \
+		inductive_prop.vo
 
 
 bool.vo: bool.v
@@ -120,3 +122,8 @@ equal.vo : equal.v induction.vo
 reflection.vo : reflection.v nat.vo bool.vo induction.vo
 	coqc reflection.v
 
+logic.vo : logic.v not.vo
+	coqc logic.v
+
+inductive_prop.vo : inductive_prop.v
+	coqc inductive_prop.v
