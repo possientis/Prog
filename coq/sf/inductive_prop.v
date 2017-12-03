@@ -89,12 +89,6 @@ Theorem SSSSeven_even : forall (n:nat),
     ev (S (S (S (S n)))) -> ev n.
 Proof. intros n H. inversion H as [|n' [|n'' H'']]. exact H''. Qed.
 
-Theorem even5_nonsense : ev 5 -> 2 + 2 = 9.
-Proof. 
-    intros H. inversion H as [|n H']. inversion H' as [|n' H2]. 
-    inversion H2. inversion H0.
-Qed.
-
 Theorem ev_even_fail : forall (n:nat),
     ev n -> exists k, n = double k.
 Proof.
