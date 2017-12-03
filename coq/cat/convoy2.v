@@ -59,7 +59,6 @@ Definition to_proof3 (A:Type) (x y:A) : option (x = y) :=
 Arguments to_proof3 {A} _ _.
 
 
-(* need to go the other way *)
 Lemma Correctness2 : forall (A:Type) (x:A) (b:bool) (p:eq_bool x x = b),
     to_proof2 b p <> None.
 Proof.
@@ -68,9 +67,15 @@ Proof.
     - exfalso. rewrite (eq_bool_x_x A x) in p. inversion p.
 Qed.
 
+Lemma Correctness2' : forall (A:Type) (x y:A) (b:bool) (p:eq_bool x y = b),
+    to_proof2 b p <> None -> x = y.
+Proof.
+    intros A x y b p H. destruct b eqn:H'. 
+    - apply eq_bool_correct. exact p.
+    - simpl in H. exfalso. apply H. reflexivity.
+Qed.
 
- 
-(*
+
 Lemma Correctness1 : forall (A:Type) (x y:A),
     x = y -> to_proof3 x y <> None.
 Proof.
@@ -84,11 +89,10 @@ Lemma Correctness3 : forall (A:Type) (x y:A),
 Proof.
     intros A x y. split. 
     - exact (Correctness1 A x y).
-    - intros H. unfold to_proof3 in H.
+    - unfold to_proof3. 
+        exact (Correctness2' A x y (eq_bool x y) (eq_refl (eq_bool x y))).
+Qed.
 
-
-Show.
-*)
 
 (*
 Definition proof3 (A:Type) (x y y' z:A)

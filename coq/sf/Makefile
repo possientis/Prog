@@ -125,5 +125,5 @@ reflection.vo : reflection.v nat.vo bool.vo induction.vo
 logic.vo : logic.v not.vo
 	coqc logic.v
 
-inductive_prop.vo : inductive_prop.v
+inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 	coqc inductive_prop.v
