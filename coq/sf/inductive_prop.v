@@ -91,9 +91,9 @@ Proof. intros n H. inversion H as [|n' [|n'' H'']]. exact H''. Qed.
 
 Theorem even5_nonsense : ev 5 -> 2 + 2 = 9.
 Proof. 
-    intros H. inversion H as [|n H']. inversion H' as [|n' H1]. inversion H1.
+    intros H. inversion H as [|n H']. inversion H' as [|n' H2]. 
+    inversion H2. inversion H0.
 Qed.
-
 
 Theorem ev_even_fail : forall (n:nat),
     ev n -> exists k, n = double k.
@@ -150,7 +150,7 @@ Proof.
             { exact ev'_2. }
             { exact H2. }
 Qed.
-             
+
 (*
 Theorem ev_ev__ev: forall (n m:nat),
     ev (n + m) -> ev n -> ev m.
