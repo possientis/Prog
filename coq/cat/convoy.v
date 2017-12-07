@@ -86,7 +86,7 @@ Definition test3 (x y:A) (b:bool) (p:eq_bool x y = b) : option (x = y) :=
     | false     => fun _    => None
     end p.
 
-(* The hope is the proving correctness properties with test3 will be easier *)
+(* The hope is that proving correctness properties with test3 will be easier *)
 
 (* Of course, the function test3 still has a relation to our initial test2 *)
 

@@ -71,13 +71,13 @@ Proof.
 Qed.
 
 
-Theorem evSS_ev : forall (n:nat),
+Theorem evSS_ev_fail : forall (n:nat),
     ev (S (S n)) -> ev n.
 Proof.
     intros n H. destruct H as [|n' H'].
     Abort.
 
-Theorem evSS_ev' : forall (n:nat),
+Theorem evSS_ev : forall (n:nat),
     ev (S (S n)) -> ev n.
 Proof. intros n H. inversion H as [|n' H']. exact H'. Qed.
 
@@ -145,10 +145,25 @@ Proof.
             { exact H2. }
 Qed.
 
-(*
 Theorem ev_ev__ev: forall (n m:nat),
     ev (n + m) -> ev n -> ev m.
 Proof.
+    intros n m Hnm Hn. generalize Hnm. clear Hnm. generalize m. clear m.
+    induction Hn as [|n H H'].
+    - intros m Hm. exact Hm.
+    - simpl. intros m H0. apply H'. apply evSS_ev. exact H0.
+Qed.
+
+(*
+Theorem ev_plus_plus : forall (n m p:nat),
+    ev (n + m) -> ev (n + p) -> ev (m + p).
+Proof.
+    intros n m p Hnm Hnp.
+    assert (ev ((n + m) + (n + p))) as H. 
+        { apply ev_sum. exact Hnm. exact Hnp. }
+    apply ev_even in H. destruct H as [k H].
+    apply ev_even_iff. exists (k - n). rewrite double_plus.
+    rewrite double_plus in H.
 
 
 Show.
