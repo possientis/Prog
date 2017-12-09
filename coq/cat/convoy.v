@@ -201,19 +201,4 @@ Proof.
 Qed.
 
 
-Definition has_boolean_func (a:Type) : Prop := 
-    exists (f: a -> a -> bool), 
-        forall (x y:a), x = y <-> f x y = true. 
-
-Definition has_proof_func (a:Type) : Prop := 
-    exists (f: forall (x y:a), option (x = y)),
-        forall (x y:a), x = y <-> f x y <> None.
-
-Theorem boolean_proof_iff : forall (a:Type),
-    has_boolean_func a <-> has_proof_func a.
-Proof.
-
-Show.
-
-
 

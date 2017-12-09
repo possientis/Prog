@@ -3,6 +3,8 @@ Require Import bool.
 Require Import not.
 Require Import induction.
 
+Require Import Arith.
+
 Inductive ev : nat -> Prop :=
     | ev_0  : ev 0
     | ev_SS : forall (n:nat), ev n -> ev (S (S n))
@@ -159,13 +161,7 @@ Theorem ev_plus_plus : forall (n m p:nat),
     ev (n + m) -> ev (n + p) -> ev (m + p).
 Proof.
     intros n m p Hnm Hnp.
-    assert (ev ((n + m) + (n + p))) as H. 
-        { apply ev_sum. exact Hnm. exact Hnp. }
-    apply ev_even in H. destruct H as [k H].
-    apply ev_even_iff. exists (k - n). rewrite double_plus.
-    rewrite double_plus in H.
 
 
 Show.
 *)
-

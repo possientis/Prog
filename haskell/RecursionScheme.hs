@@ -20,6 +20,9 @@ data ExpF a
 
 type instance Base Exp = ExpF
  
- -- TODO
-
+-- project is unknown :(
+instance Foldable Exp where
+    project (Var a) = VarF a
+    project (App a b) = AppF a b
+    project (Lam a b) = LamF a b
 
