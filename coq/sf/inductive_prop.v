@@ -3,8 +3,6 @@ Require Import bool.
 Require Import not.
 Require Import induction.
 
-Require Import Arith.
-
 Inductive ev : nat -> Prop :=
     | ev_0  : ev 0
     | ev_SS : forall (n:nat), ev n -> ev (S (S n))

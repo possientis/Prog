@@ -49,7 +49,7 @@ Definition test1 (x y:A) : option (x = y) :=
 Definition test2 (x y:A) : option (x = y) :=
     match eq_bool x y as b return eq_bool x y = b -> option (x = y) with
     | true      => fun p    => Some (to_proof x y p)
-    | fasle     => fun _    => None
+    | false     => fun _    => None
     end (eq_refl (eq_bool x y)). 
 
 

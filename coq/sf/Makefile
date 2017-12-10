@@ -29,7 +29,8 @@ all:	bool.vo \
 		equal.vo \
 		reflection.vo \
 		logic.vo \
-		inductive_prop.vo
+		inductive_prop.vo \
+		le.vo
 
 
 bool.vo: bool.v
@@ -127,3 +128,6 @@ logic.vo : logic.v not.vo
 
 inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 	coqc inductive_prop.v
+
+le.vo : le.v inductive_prop.vo
+	coqc le.v

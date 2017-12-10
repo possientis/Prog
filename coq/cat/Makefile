@@ -7,7 +7,9 @@ all:	Category.vo \
 		natAsPreorder.vo\
 		natAsCategory.vo \
 		Category2AsCategory.vo \
-		CategoryAsCategory2.vo
+		CategoryAsCategory2.vo \
+		ConvoyPattern.vo \
+		DecidableEq.vo
 		
 Category.vo : Category.v
 	coqc Category.v
@@ -41,6 +43,13 @@ CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
 							Category.vo \
 						   	Category2AsCategory.vo
 	coqc CategoryAsCategory2.v	
+
+ConvoyPattern.vo : ConvoyPattern.v
+	coqc ConvoyPattern.v
+
+DecidableEq.vo : DecidableEq.v
+	coqc DecidableEq.v
+
 
 
 

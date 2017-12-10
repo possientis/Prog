@@ -23,6 +23,26 @@ int main() {
     printf("ux = %u:\t", ux);
     show_bytes((byte_pointer) &ux, sizeof(unsigned));
 
+    /* Beware: converting from short signed int to unsigned int */
+    unsigned uy = sx;  
+    unsigned uz = (unsigned) (int) sx; /* C standard: uy = uz */
+    unsigned ut = (unsigned) (unsigned short) sx;
+
+    /* c7 cf ff ff on little endian machine */
+    printf("uy = %u:\t", uy);
+    show_bytes((byte_pointer) &uy, sizeof(unsigned));
+
+    /* c7 cf ff ff on little endian machine */
+    printf("uz = %u:\t", uz);
+    show_bytes((byte_pointer) &uz, sizeof(unsigned));
+
+    /* c7 cf 00 00 on little endian machine */
+    printf("ut = %u:\t", ut);
+    show_bytes((byte_pointer) &ut, sizeof(unsigned));
+
+
+     
+
     return 0;
 }
 
