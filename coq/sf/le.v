@@ -16,9 +16,6 @@ Proof. apply le_n. Qed.
 Example test_le2 : 3 <= 6.
 Proof. apply le_S, le_S, le_S, le_n. Qed. 
 
-Example test_le3 : (2 <= 1) -> 2 + 2 = 5.
-Proof. intros H. inversion H as [|n m]. inversion H0. Qed.
-
 Definition lt (n m:nat) : Prop := le (S n) m.
 
 End LEMODULE.
