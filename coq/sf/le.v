@@ -81,12 +81,13 @@ Qed.
 Theorem Sn_le_Sm__n_le_m : forall (n m:nat),
     S n <= S m -> n <= m.
 Proof.
-    intros n m H. inversion H as [H0|p].
+    intros n m H. inversion H as [H0|p H1].
     - apply le_n.
     - apply le_trans with (m := S n).
-        + apply le_S, le_n.
-        + exact H0.
+      +  apply le_S, le_n.
+      +  exact H0.
 Qed.
+        
 
 Theorem le_plus_l : forall (n m: nat), n <= n + m.
 Proof.
@@ -150,12 +151,4 @@ Proof.
     - exact (leb_complete n m).
     - exact (leb_correct n m).
 Qed.
-
-
-
-
-
-
-
-
 
