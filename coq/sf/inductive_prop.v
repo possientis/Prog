@@ -154,7 +154,7 @@ Proof.
     - simpl. intros m H0. apply H'. apply evSS_ev. exact H0.
 Qed.
 
-(*
+(* too much hassle right now 
 Theorem ev_plus_plus : forall (n m p:nat),
     ev (n + m) -> ev (n + p) -> ev (m + p).
 Proof.
@@ -163,3 +163,23 @@ Proof.
 
 Show.
 *)
+
+
+Inductive R : nat -> nat -> nat -> Prop :=
+    | c1 : R 0 0 0 
+    | c2 : forall (n m p:nat), R n m p -> R (S n) m (S p)
+    | c3 : forall (n m p:nat), R n m p -> R n (S m) (S p)
+    | c4 : forall (n m p:nat), R (S n) (S m) (S (S p)) -> R n m p
+    | c5 : forall (n m p:nat), R n m p -> R m n p
+    .
+
+Lemma R_1_1_2 : R 1 1 2.
+Proof. apply c3, c2, c1. Qed.
+
+(*
+Theorem R_equiv_plus : forall (n m p:nat), R n m p <-> n + m = p.
+Proof.
+
+Show.
+*)
+

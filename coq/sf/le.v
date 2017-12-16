@@ -1,4 +1,6 @@
 Require Import inductive_prop.
+Require Import Arith.
+
 
 Module LEMODULE.
 
@@ -76,12 +78,84 @@ Proof.
     - apply le_S. exact H'.
 Qed.
 
-(*
 Theorem Sn_le_Sm__n_le_m : forall (n m:nat),
     S n <= S m -> n <= m.
 Proof.
+    intros n m H. inversion H as [H0|p].
+    - apply le_n.
+    - apply le_trans with (m := S n).
+        + apply le_S, le_n.
+        + exact H0.
+Qed.
+
+Theorem le_plus_l : forall (n m: nat), n <= n + m.
+Proof.
+    intros n m. induction m as [|m H].
+    - rewrite <- plus_n_O. apply le_n.
+    - rewrite <- plus_n_Sm. apply le_S. exact H.
+Qed.
+
+Theorem plus_lt : forall (n m p:nat),
+    n + m < p -> n < p /\ m < p.
+Proof.
+    intros n m p H. unfold lt in H. split.
+    - unfold lt. apply le_trans with (m := S (n + m)).
+        + rewrite <- plus_Sn_m. apply le_plus_l.
+        + exact H.
+    - unfold lt. apply le_trans with (m := S (n + m)).
+        + rewrite plus_comm. rewrite <- plus_Sn_m. apply le_plus_l.
+        + exact H.
+Qed.
 
 
-Show.
-*)
+Theorem lt_S :  forall (n m:nat), n < m -> n < S m.
+Proof.
+    intros n m. unfold lt. intros H. apply le_S. exact H.
+Qed.
+
+
+Theorem leb_complete : forall (n m:nat),
+    leb n m = true -> n <= m.
+Proof.
+    induction n as [|n H].
+    - intros. apply le_0_n.
+    - induction m as[|m H'].
+        + simpl. intros H'. inversion H'.
+        + simpl. intros H0. apply n_le_m__Sn_le_Sm. apply H. exact H0.
+Qed.
+
+Theorem leb_correct : forall (n m:nat),
+    n <= m-> leb n m = true.
+Proof.
+    intros n m. generalize n. clear n. induction m as [|m H].
+    - intros n H. inversion H. reflexivity.
+    - induction n as [|n H'].
+        + intros H'. reflexivity.
+        + intros H0. simpl. apply Sn_le_Sm__n_le_m in H0. 
+            apply H. exact H0.
+Qed.
+
+Theorem leb_trans : forall (n m p:nat),
+    leb n m = true -> leb m p = true -> leb n p = true.
+Proof.
+    intros n m p Hnm Hmp. apply leb_correct. apply le_trans with (m:=m).
+    - apply leb_complete. exact Hnm.
+    - apply leb_complete. exact Hmp.
+Qed.
+
+Theorem leb_iff : forall (n m:nat),
+    leb n m = true <-> n <= m.
+Proof. 
+    intros n m. split.
+    - exact (leb_complete n m).
+    - exact (leb_correct n m).
+Qed.
+
+
+
+
+
+
+
+
 

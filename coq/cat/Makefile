@@ -2,6 +2,7 @@ all:	Category.vo \
 		Category2.vo \
 		Monoid.vo	\
 		Preorder.vo \
+		Axiom_ProofIrrelevance.vo \
 		MonoidAsCategory.vo \
 		natAsMonoid.vo	\
 		natAsPreorder.vo\
@@ -22,6 +23,9 @@ Monoid.vo : Monoid.v
 
 Preorder.vo : Preorder.v
 	coqc Preorder.v
+
+Axiom_ProofIrrelevance.vo : Axiom_ProofIrrelevance.v
+	coqc Axiom_ProofIrrelevance.v
 
 MonoidAsCategory.vo: MonoidAsCategory.v Monoid.vo Category.vo
 	coqc MonoidAsCategory.v
