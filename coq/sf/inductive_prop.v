@@ -176,10 +176,24 @@ Inductive R : nat -> nat -> nat -> Prop :=
 Lemma R_1_1_2 : R 1 1 2.
 Proof. apply c3, c2, c1. Qed.
 
-(*
+
+Lemma R_n_Sm : forall (n m p:nat), R n (S m) p -> R (S n) m p.
+Proof. intros n m p H. apply c4, c2, c2. exact H. Qed.
+
+
 Theorem R_equiv_plus : forall (n m p:nat), R n m p <-> n + m = p.
 Proof.
-
-Show.
-*)
+    intros n m p. split.
+    - intros H. induction H as [|n m p H IH|n m p H IH|n m p H IH|n m p H IH].
+        + reflexivity.
+        + simpl. rewrite IH. reflexivity.
+        + rewrite plus_n_Sm. rewrite IH. reflexivity.
+        + simpl in IH. rewrite plus_n_Sm in IH. inversion IH. reflexivity.
+        + rewrite plus_comm. exact IH.
+    - generalize m, p. clear m p. induction n as [|n H].
+        + intros m p. simpl. intros H. rewrite H. clear H m. induction p as [|p H].
+            { apply c1. }
+            { apply c3. exact H. }
+        + intros m p H'. apply R_n_Sm. apply H. rewrite plus_n_Sm. exact H'.
+Qed.
 

@@ -10,7 +10,8 @@ all:	Category.vo \
 		Category2AsCategory.vo \
 		CategoryAsCategory2.vo \
 		ConvoyPattern.vo \
-		DecidableEq.vo
+		DecidableEq.vo \
+		Rewrite.vo
 		
 Category.vo : Category.v
 	coqc Category.v
@@ -54,6 +55,7 @@ ConvoyPattern.vo : ConvoyPattern.v
 DecidableEq.vo : DecidableEq.v
 	coqc DecidableEq.v
 
-
+Rewrite.vo : Rewrite.v
+	coqc Rewrite.v
 
 

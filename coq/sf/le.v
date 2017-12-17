@@ -85,7 +85,7 @@ Proof.
     - apply le_n.
     - apply le_trans with (m := S n).
       +  apply le_S, le_n.
-      +  exact H0.
+      +  auto. 
 Qed.
         
 

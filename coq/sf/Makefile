@@ -30,7 +30,8 @@ all:	bool.vo \
 		reflection.vo \
 		logic.vo \
 		inductive_prop.vo \
-		le.vo
+		le.vo \
+		subseq.vo
 
 
 bool.vo: bool.v
@@ -131,3 +132,7 @@ inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 
 le.vo : le.v inductive_prop.vo
 	coqc le.v
+
+subseq.vo : subseq.v list.vo
+	coqc subseq.v	
+

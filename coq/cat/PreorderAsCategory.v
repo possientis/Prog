@@ -23,6 +23,8 @@ Inductive Mor (A:Type) (p:Preorder A) : Type :=
 Arguments Mor {A} _.
 Arguments mor {A} {p} _ _ _.
 
+
+(*
 Lemma eq_Mor : forall (A:Type) (p:Preorder A) (x x' y y':A), 
     forall (p1: rel p x y) (p2: rel p x' y'), 
     x = x' -> y = y' -> mor x y p1 = mor x' y' p2.
@@ -32,7 +34,7 @@ Proof.
 
 
 Show.
-
+*)
 
 
 (*
