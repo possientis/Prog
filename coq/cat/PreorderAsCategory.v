@@ -24,20 +24,19 @@ Arguments Mor {A} _.
 Arguments mor {A} {p} _ _ _.
 
 
-(*
 Lemma eq_Mor : forall (A:Type) (p:Preorder A) (x x' y y':A), 
     forall (p1: rel p x y) (p2: rel p x' y'), 
     x = x' -> y = y' -> mor x y p1 = mor x' y' p2.
 Proof.
-    intros A p x x' y y' p1 p2 Exx Eyy. 
-    assert (rel p x y = rel p x' y') as H. { apply eq_rel. exact Exx. exact Eyy. } 
+    intros A p x x' y y' p1 p2 Exx Eyy. revert p1.
+    rewrite Exx, Eyy. intros p1. rewrite (proof_irrelevance _ p1 p2).
+    reflexivity.
+Qed.
+
+Arguments eq_Mor {A} {p} _ _ _ _ _ _.
 
 
-Show.
-*)
 
-
-(*
 Definition source_ (A:Type) (p:Preorder A) (f : Mor p) : Mor p :=
     match f with
     | mor x _ _     => mor x x (proof_refl p x)
@@ -136,14 +135,53 @@ Proof.
     - unfold compose_ in H. rewrite E in H. inversion H.
 Qed.
 
-Definition proof_idl (A:Type) (p:Preorder A) : forall (a f:Mor p),
+Definition proof_idl_ (A:Type) (p:Preorder A) : forall (a f:Mor p),
     a = source_ f -> compose_ a f = Some f.
 Proof.
     intros a f H. destruct a as [x x' pxx]. destruct f as [x'' y pxy].
     simpl in H. inversion H. destruct (eq_proof x' x'') eqn:E.
     - unfold compose_. rewrite E. 
+        rewrite (eq_Mor x x'' y y (trans e pxx pxy) pxy).
+            + reflexivity.
+            + exact H1.
+            + reflexivity.
+    - apply eq_proof_correct in H2. exfalso. apply H2. exact E.
+Qed.
+    
+
+Definition proof_idr_ (A:Type) (p:Preorder A) : forall (a f:Mor p),
+    a = target_ f -> compose_ f a = Some f.
+Proof.
+    intros a f H. destruct f as [x y pxy]. destruct a as [y' y'' pyy].
+    simpl in H. inversion H. destruct (eq_proof y y') eqn:E.
+    - unfold compose_. rewrite E. 
+        rewrite (eq_Mor x x y'' y (trans e pxy pyy) pxy).
+            + reflexivity.
+            + reflexivity.
+            + exact H2.
+    - symmetry in H1. apply eq_proof_correct in H1. exfalso. apply H1. exact E.
+Qed.
+
+(*
+Definition proof_asc_ (A:Type) (p:Preorder A) : forall (f g h fg gh:Mor p),
+    compose_ f g = Some fg -> compose_ g h = Some gh -> 
+    compose_ f gh = compose_ fg h.
+Proof.
+    intros f g h fg gh Efg Egh.
+    destruct f as [x y pxy]. destruct g as [y' z pyz]. destruct h as [z' t pzt].
+    destruct (eq_proof y y') eqn:Eyy, (eq_proof z z') eqn:Ezz.
+    - unfold compose_ in Efg, Egh. rewrite Eyy in Efg. rewrite Ezz in Egh.
+        inversion Efg as [H1]. inversion Egh as [H2].
+        unfold compose_. rewrite Eyy, Ezz.
+        rewrite (eq_Mor x x t t 
+            (trans e pxy (trans e0 pyz pzt))
+            (trans e0 (trans e pxy pyz) pzt)).
+            + reflexivity.
+            + reflexivity.
+            + reflexivity.
+    - TODO
+*)
 
 
 Show.
 
-*)

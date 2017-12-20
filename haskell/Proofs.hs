@@ -1,5 +1,8 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE ExplicitForAll #-}
+{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE DataKinds #-}
 
 data Z
 data S n
@@ -25,7 +28,23 @@ add (Succ m) n = Succ (add m n)
 cong :: Eql a b -> Eql (f a) (f b)
 cong Refl = Refl
 
--- TODO
+plus_suc :: forall n. SNat n -> Eql (Add Z (S n)) (S n)
+plus_suc Zero       = Refl
+plus_suc (Succ n)   = cong (plus_suc n)
+
+
+plus_zero :: forall n. SNat n -> Eql (Add Z n) n
+plus_zero Zero = Refl
+plus_zero (Succ n) = cong (plus_zero n)
+
+-- need TypeOperators
+data a :=: b where
+    Refl' :: a :=: a
+
+cong' :: a :=: b -> (f a) :=: (f b)
+cong' Refl' = Refl'
+
+
 
 
 

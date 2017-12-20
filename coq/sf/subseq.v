@@ -30,11 +30,37 @@ Proof.
     - simpl. apply extend_sub. apply IH.
 Qed.
 
-(*
 Theorem subseq_trans : forall (l k m: list a),
     subseq l k -> subseq k m -> subseq l m.
 Proof.
+    intros l k m Hlk. revert m.
+    induction Hlk as [l|l k x H IH|l k x H IH].
+    - intros. apply nil_sub.
+    - intros m Hkm. set (k' := x::k). fold k' in Hkm.
+        assert (k' = x::k) as Hk. { auto. }
+        generalize Hk, IH, H.
+        induction Hkm as [r|r m y H' IH'|r m y H' IH'].
+        + inversion Hk.
+        + intros H0 H1 H2. inversion H0. apply cons_sub.
+            apply H1. rewrite <- H5. exact H'.
+        + intros H0 H1 H2. apply extend_sub. apply IH'.
+            { exact Hk. }
+            { exact Hk. }
+            { exact H1. }
+            { exact H2. }
+    - intros m Hkm. set (k' := x::k). fold k' in Hkm.
+        assert (k' = x::k) as Hk. { auto. }
+        generalize Hk, IH, H.
+        induction Hkm as [r|r m y H' IH'|r m y H' IH'].
+        + inversion Hk.
+        + intros H0 H1 H2. inversion Hk as [H3].
+            apply extend_sub. apply H1. rewrite <- H4. exact H'.
+        + intros H0 H1 H2. apply extend_sub. apply IH'.
+            { exact Hk. }
+            { exact Hk. }
+            { exact H1. }
+            { exact H2. }
+Qed.
 
-Show.
-*)
+
 
