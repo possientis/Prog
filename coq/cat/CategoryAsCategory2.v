@@ -1,5 +1,6 @@
-Require Import Category2.
 Require Import Category.
+Require Import Eq_Category.
+Require Import Category2.
 Require Import Category2AsCategory.
 
 
@@ -147,7 +148,7 @@ Arguments toCategory2 {A} _.
 Theorem CatCat : forall (A:Type) (c:Category A),
     toCategory (toCategory2 c) = c.
 Proof.
-    intros A c. apply Axiom_Category_equal.
+    intros A c. apply eq_Category.
     - intros f. reflexivity.
     - intros f. reflexivity.
     - intros f g. reflexivity.
