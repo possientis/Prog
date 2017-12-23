@@ -33,7 +33,7 @@ Proof.
     reflexivity.
 Qed.
 
-Arguments eq_Mor {A} {p} _ _ _ _ _ _.
+Arguments eq_Mor {A} {p} _ _ _ _ _ _ _ _.
 
 
 
