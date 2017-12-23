@@ -31,7 +31,8 @@ all:	bool.vo \
 		logic.vo \
 		inductive_prop.vo \
 		le.vo \
-		subseq.vo
+		subseq.vo \
+		regex.vo
 
 
 bool.vo: bool.v
@@ -136,3 +137,5 @@ le.vo : le.v inductive_prop.vo
 subseq.vo : subseq.v list.vo
 	coqc subseq.v	
 
+regex.vo : regex.v list.vo
+	coqc regex.v

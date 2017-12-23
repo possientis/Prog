@@ -11,7 +11,9 @@ all:	Category.vo \
 		CategoryAsCategory2.vo \
 		ConvoyPattern.vo \
 		DecidableEq.vo \
-		Rewrite.vo
+		Rewrite.vo \
+		PreorderAsCategory.vo \
+		natPreorderAsCategory.vo
 		
 Category.vo : Category.v
 	coqc Category.v
@@ -58,4 +60,10 @@ DecidableEq.vo : DecidableEq.v
 Rewrite.vo : Rewrite.v
 	coqc Rewrite.v
 
+PreorderAsCategory.vo : PreorderAsCategory.v Category.vo Preorder.vo \
+						Axiom_ProofIrrelevance.vo
+	coqc PreorderAsCategory.v
 
+natPreorderAsCategory.vo : 	natPreorderAsCategory.v Category.vo \
+							PreorderAsCategory.vo natAsPreorder.vo	
+	coqc natPreorderAsCategory.v

@@ -39,5 +39,15 @@ Axiom Axiom_Category_equal : forall (A:Type) (c c':Category A),
     (forall f g:A, compose c f g = compose c' f g) -> c = c'. 
 
 
+(*
+Lemma eq_Category : forall (A:Type) (c c':Category A),
+    (forall f:A, source c f = source c' f) ->
+    (forall f:A, target c f = target c' f) ->
+    (forall f g:A, compose c f g = compose c' f g) -> c = c'. 
+Proof.
+
+Show.
+*)
+
 
 

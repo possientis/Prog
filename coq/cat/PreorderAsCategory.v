@@ -162,7 +162,6 @@ Proof.
     - symmetry in H1. apply eq_proof_correct in H1. exfalso. apply H1. exact E.
 Qed.
 
-(*
 Definition proof_asc_ (A:Type) (p:Preorder A) : forall (f g h fg gh:Mor p),
     compose_ f g = Some fg -> compose_ g h = Some gh -> 
     compose_ f gh = compose_ fg h.
@@ -179,9 +178,25 @@ Proof.
             + reflexivity.
             + reflexivity.
             + reflexivity.
-    - TODO
-*)
+    - unfold compose_ in Egh. rewrite Ezz in Egh. inversion Egh.
+    - unfold compose_ in Efg. rewrite Eyy in Efg. inversion Efg.
+    - unfold compose_ in Efg. rewrite Eyy in Efg. inversion Efg.
+Qed.
+   
+Definition toCategory (A:Type) (p:Preorder A) : Category (Mor p) := category
+    (source_       )
+    (target_       )
+    (compose_      )
+    (proof_ss_  A p)
+    (proof_ts_  A p)
+    (proof_tt_  A p)
+    (proof_st_  A p)
+    (proof_dom_ A p)
+    (proof_src_ A p)
+    (proof_tgt_ A p)
+    (proof_idl_ A p)
+    (proof_idr_ A p)
+    (proof_asc_ A p) .
 
-
-Show.
+Arguments toCategory {A} _.
 
