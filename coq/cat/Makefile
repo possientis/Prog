@@ -5,6 +5,7 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Category2.vo \
 		Category2AsCategory.vo \
 		CategoryAsCategory2.vo \
+		Iso_CatCat2.vo \
 		Monoid.vo	\
 		Preorder.vo \
 		MonoidAsCategory.vo \
@@ -50,11 +51,17 @@ Category2AsCategory.vo :	Category2AsCategory.v \
 
 CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
 							Category.vo \
-							Eq_Category.vo \
 							Category2.vo \
-							Category2AsCategory.vo
+							Axiom_ProofIrrelevance.vo
 	coqc CategoryAsCategory2.v	
 
+Iso_CatCat2.vo :			Iso_CatCat2.v \
+							Category.vo \
+							Eq_Category.vo \
+							Category2.vo \
+							CategoryAsCategory2.vo \
+							Category2AsCategory.vo
+	coqc Iso_CatCat2.v
 
 Monoid.vo : 				Monoid.v
 	coqc Monoid.v

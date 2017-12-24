@@ -1,7 +1,6 @@
+Require Import Axiom_ProofIrrelevance.
 Require Import Category.
-Require Import Eq_Category.
 Require Import Category2.
-Require Import Category2AsCategory.
 
 
 
@@ -31,10 +30,13 @@ Proof.
 Qed.
 
 
-(* cheating ... can't get proof irrelevance to work *)
-Axiom Axiom_Obj_equal : forall (A:Type) (c: Category A) (x y: Obj c),
+Lemma eq_Obj : forall (A:Type) (c:Category A) (x y: Obj c),
     mor x = mor y -> x = y.
-
+Proof.
+    intros A c x y H. destruct x as [x' px], y as [y' py]. simpl in H. 
+    revert px. rewrite H. intros px. rewrite (proof_irrelevance _ px py).
+    reflexivity.
+Qed.
 
 
 Definition toObject (A:Type) (c:Category A) (a:A) : source c a = a -> Obj c := 
@@ -72,13 +74,13 @@ Arguments id_ {A} _ _.
 
 Definition proof_sid_ (A:Type) (c:Category A) : forall a:Obj c, 
     dom_ c (id_ c a) = a.
-Proof. intros a. destruct a. apply Axiom_Obj_equal. simpl. exact e. Qed.
+Proof. intros a. destruct a. apply eq_Obj. simpl. exact e. Qed.
 
 Definition proof_tid_ (A:Type) (c:Category A) : forall a:Obj c, 
     cod_ c (id_ c a) = a.
 Proof.
     intros a. destruct a as [a p].
-    apply Axiom_Obj_equal. simpl.
+    apply eq_Obj. simpl.
     assert (target c (source c a) = target c a) as H . { rewrite p. reflexivity. }
     rewrite (proof_ts c a) in H. rewrite <- H. exact p.
 Qed.
@@ -88,21 +90,21 @@ Definition proof_dom2_ (A:Type) (c:Category A) : forall f g: A,
 Proof.
     intros f g. split. 
     - intros H. apply (proof_dom c). apply Obj_inversion in H. exact H.
-    - intros H. apply Axiom_Obj_equal. simpl. apply (proof_dom c). exact H.
+    - intros H. apply eq_Obj. simpl. apply (proof_dom c). exact H.
 Qed.
 
 Definition proof_src2_ (A:Type) (c:Category A) : forall f g h: A,
     compose2_ c f g = Some h -> dom_ c h = dom_ c f.
 Proof.
     intros f g h H.
-    apply Axiom_Obj_equal. apply (proof_src c) with (g:=g). exact H.
+    apply eq_Obj. apply (proof_src c) with (g:=g). exact H.
 Qed.
 
 Definition proof_tgt2_ (A:Type) (c:Category A) : forall f g h: A,
     compose2_ c f g = Some h -> cod_ c h = cod_ c g.
 Proof.
     intros f g h H.
-    apply Axiom_Obj_equal. apply (proof_tgt c) with (f:=f). exact H.
+    apply eq_Obj. apply (proof_tgt c) with (f:=f). exact H.
 Qed.
 
 Definition proof_idl2_ (A:Type) (c:Category A) : forall (a:Obj c) (f:A),
@@ -144,16 +146,6 @@ Definition toCategory2 (A:Type) (c:Category A) : Category2 (Obj c) A := category
     (proof_asc2_    A   c). 
 
 Arguments toCategory2 {A} _.
-
-Theorem CatCat : forall (A:Type) (c:Category A),
-    toCategory (toCategory2 c) = c.
-Proof.
-    intros A c. apply eq_Category.
-    - intros f. reflexivity.
-    - intros f. reflexivity.
-    - intros f g. reflexivity.
-Qed.
-
 
 
 

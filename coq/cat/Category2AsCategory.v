@@ -104,10 +104,3 @@ Definition toCategory (Obj Mor:Type)(c:Category2 Obj Mor):Category Mor := catego
 
 Arguments toCategory {Obj} {Mor} _.
 
-
-
-
-
-
-
-
