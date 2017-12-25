@@ -1,6 +1,7 @@
 Require Import list.
 Require Import fold.
 Require Import In.
+Require Import bool.
 
 Inductive regex (a:Type) : Type :=
 | EmptySet  : regex a
@@ -169,6 +170,56 @@ Proof.
     - rewrite In_app_iff. intros [H|H].
         + apply IH1. exact H.
         + apply IH2. exact H. 
+Qed.
+
+
+Fixpoint regex_not_empty (a:Type) (r:regex a) : bool :=
+    match r with
+    | EmptySet      => false
+    | EmptyStr      => true
+    | Char x        => true
+    | App r1 r2     => regex_not_empty a r1 && regex_not_empty a r2 
+    | Union r1 r2   => regex_not_empty a r1 || regex_not_empty a r2 
+    | Star r1       => true
+    end.
+
+Arguments regex_not_empty {a} _.
+
+Lemma regex_not_empty_correct : forall (a:Type) (r:regex a),
+    (exists s, s =~ r) <-> regex_not_empty r = true.
+Proof.
+    intros a r. split.
+    - intros [s H]. induction H as 
+        [    
+        |c
+        |s1 s2 r1 r2 H1 IH1 H2 IH2
+        |s1 r1 r2 H1 IH1
+        |s2 r1 r2 H2 IH2
+        |r1
+        |s1 s2 r1 H1 IH1 H2 IH2
+        ]
+        . 
+        + reflexivity.
+        + reflexivity.
+        + simpl. rewrite IH1, IH2. reflexivity.
+        + simpl. rewrite IH1. reflexivity. 
+        + simpl. rewrite IH2. rewrite orb_comm. reflexivity.
+        + reflexivity.
+        + reflexivity.
+    - induction r as [| |c|r1 IH1 r2 IH2|r1 IH1 r2 IH2|r1 IH]. 
+        + intros H. inversion H.
+        + intros. exists []. apply MEmpty.
+        + intros. exists [c]. apply MChar.
+        + intros H. simpl in H. rewrite andb_true_iff in H. destruct H as [H1 H2].
+            apply IH1 in H1. apply IH2 in H2.
+            destruct H1 as [s1 H1]. destruct H2 as [s2 H2].
+            exists (s1 ++ s2). apply MApp. { exact H1. } { exact H2. }
+        + intros H. simpl in H. rewrite orb_true_iff in H. destruct H as [H1|H2].
+            { apply IH1 in H1. destruct H1 as [s1 H1]. exists s1.
+                apply MUnionL. exact H1. }
+            { apply IH2 in H2. destruct H2 as [s2 H2]. exists s2.
+                apply MUnionR. exact H2. }
+        + intros. exists []. apply MStar0.
 Qed.
 
 

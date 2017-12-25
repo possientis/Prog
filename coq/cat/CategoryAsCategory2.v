@@ -4,7 +4,7 @@ Require Import Category2.
 
 
 
-(* given a category we define the data necessary to create a category2 *)
+(* given a category we define the data necessary to create a Category2 *)
 
 Inductive Obj (A:Type) (c: Category A) : Type := 
     obj : forall a:A, source c a = a -> Obj A c.

@@ -3,8 +3,11 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Category.vo \
 		Eq_Category.vo \
 		Category2.vo \
-		Category2AsCategory.vo \
+		Category3.vo \
 		CategoryAsCategory2.vo \
+		CategoryAsCategory3.vo \
+		Category2AsCategory.vo \
+		Category3AsCategory.vo \
 		Iso_CatCat2.vo \
 		Monoid.vo	\
 		Preorder.vo \
@@ -43,10 +46,8 @@ Category2.vo : 				Category2.v
 	coqc Category2.v
 
 
-Category2AsCategory.vo :	Category2AsCategory.v \
-							Category2.vo \
-							Category.v
-	coqc Category2AsCategory.v
+Category3.vo : 				Category3.v
+	coqc Category3.v
 
 
 CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
@@ -54,6 +55,25 @@ CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
 							Category2.vo \
 							Axiom_ProofIrrelevance.vo
 	coqc CategoryAsCategory2.v	
+
+
+CategoryAsCategory3.vo : 	CategoryAsCategory3.v \
+							Category.vo \
+							Category3.vo
+	coqc CategoryAsCategory3.v	
+
+
+Category2AsCategory.vo :	Category2AsCategory.v \
+							Category2.vo \
+							Category.v
+	coqc Category2AsCategory.v
+
+
+Category3AsCategory.vo :	Category3AsCategory.v \
+							Category3.vo \
+							Category.v
+	coqc Category3AsCategory.v
+
 
 Iso_CatCat2.vo :			Iso_CatCat2.v \
 							Category.vo \
