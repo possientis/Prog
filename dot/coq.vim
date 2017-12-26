@@ -226,10 +226,10 @@ syn keyword coqTactic    contained eapply eassumption eauto econstructor elim[ty
 syn keyword coqTactic    contained field fix f_equal fold fourier functional generalize hnf
 syn keyword coqTactic    contained idtac induction injection instantiate intro[s] intuition inversion[_clear]
 syn keyword coqTactic    contained lapply left move now omega pattern pose proof quote
-syn keyword coqTactic    contained red refine reflexivity rename replace revert rewrite right ring
+syn keyword coqTactic    contained red refine reflexivity remember rename replace revert rewrite right ring
 syn keyword coqTactic    contained set simpl[e] simplify_eq split subst stepl stepr symmetry
 syn keyword coqTactic    contained tauto transitivity trivial unfold vm_compute
-syn keyword coqTacticKwd contained as at by in using with into after until
+syn keyword coqTacticKwd contained as at by in using with into after until eqn
 
   " The following is just to help other plugins to detect via syntax groups that we are inside a proof
 syn keyword coqProofKwd         contained else end exists exists2 forall fun if in match let struct then where with

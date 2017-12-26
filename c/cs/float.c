@@ -35,6 +35,35 @@ int D(float f) {
     return f == (float) (double) f;
 }
 
+/* minus operator only switches the sign bit: there is
+ * no rounding and no overflow ever. This should return 1.
+ */
+
+int E(float f) {
+    return f == -(-f);
+}
+
+/* surely, this has got to be 1 */
+int F() {
+    return 1.0/2 == 1/2.0;
+}
+
+
+/* floating representations always works well with 
+ * comparisons, unlike signed and unsigned comparisons
+ * which may be conter-intuitive due to overflow.
+ * This should return 1
+ */
+
+int G(double d) {
+    return d * d >= 0;
+}
+
+
+/* see counter-example */
+int H(float f, double d) {
+    return (f + d) - f == d;
+}
 
 int main() {
 
@@ -61,6 +90,22 @@ int main() {
         assert(D(f) == 1);
         count += 1;
     }
+
+    for(f = -2.0e9; f < 2.0e9; f+=1.0e2) {
+        assert(E(f) == 1);
+        count += 1;
+    }
+
+    assert (F() == 1);
+
+    for(d = -2.0e270; d < 2.0e270; d+=1.0e263) {
+        assert(G(d) == 1);
+        count += 1;
+    }
+
+    d = 1.0;
+    f = 1.0e20;
+    printf("H(f,d) = %d\n", H(f,d)); /* H(f,d) = 0 */
 
 
     printf("Number of checks carried out: 0x%lx\n",count);

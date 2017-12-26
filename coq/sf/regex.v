@@ -223,4 +223,33 @@ Proof.
 Qed.
 
 
+Lemma star_app : forall (a:Type) (s1 s2:list a) (r:regex a),
+    s1 =~ Star r -> s2 =~ Star r -> s1 ++ s2 =~ Star r.
+Proof.
+    intros a s1 s2 r H1. remember (Star r) as r' eqn:H'.
+    revert s2 H'. revert r. induction H1 as
+        [   
+        | c
+        | s1 s2 r1 r2 H1 IH1 H2 IH2
+        | s1 r1 r2 H1 IH1
+        | s1 r1 r2 H2 IH2
+        | r1
+        | s1 s2 r1 H1 IH1 H2 IH2
+        ]
+        .
+    - intros r s2 H. inversion H.
+    - intros r s2 H. inversion H.
+    - intros r s3 H. inversion H. 
+    - intros r s2 H. inversion H.
+    - intros r s2 H. inversion H.
+    - intros r s2 H H'. exact H'.
+    - intros r s3 H H'. rewrite <- app_assoc. apply MStarApp.
+        + exact H1.
+        + apply (IH2 r). 
+            { exact H. }
+            { exact H'. }
+Qed.
+
+
+
 
