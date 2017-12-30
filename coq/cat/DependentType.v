@@ -1,22 +1,37 @@
+(* needed for second solution *)
+Require Import Coq.Logic.JMeq.
+
 Inductive test : Type :=
 | make : forall (a:Type), a -> test
 .
 
-Definition x:test := make nat 0.
-Definition y:test := make nat 0.
+ 
+(* first solution: use a cast function *)
 
-Example eq_x_y : x = y.
-Proof. reflexivity. Qed.
+Definition cast (a b:Type) (p: a = b) (x:a) : b :=
+    match p in _ = T return T with
+    | eq_refl   => x
+    end.
+
+Arguments cast {a} {b} _ _.
+
+Lemma ex : forall (a b:Type) (x:a) (y:b) (p:a = b),
+    cast p x = y -> make a x = make b y.
+Proof.
+    destruct p. intros p. simpl in p. rewrite p. reflexivity.
+Qed.
+
+(* second solution: heterogenous equality *)
+
+Infix "==" := JMeq (at level 70, no associativity).
+
+Lemma ex' : forall (a b:Type) (x:a) (y:b),
+    a = b -> x == y -> make a x = make b y.
+Proof.
+    intros a b x y H0 H1. rewrite H1. reflexivity.
+Qed.
 
 
-Definition f (n:nat) : test := make nat n.
-Definition g (n:nat) : test := make nat n.
-
-Example eq_fn_fm : forall (n m:nat),
-    n = m -> f n = f m.
-Proof. intros n m H. rewrite H. reflexivity. Qed.
 
 
-Definition make' (a:Type) : a -> test :=
-    fun x => make a x.
 

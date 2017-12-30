@@ -3,6 +3,9 @@ Require Import fold.
 Require Import In.
 Require Import bool.
 
+(* alllows omega tactic which simplifies proofs with nat *)
+Require Import Coq.omega.Omega.
+
 Inductive regex (a:Type) : Type :=
 | EmptySet  : regex a
 | EmptyStr  : regex a
@@ -100,17 +103,6 @@ Proof.
     intros a s r1 r2 [H|H].
     - apply MUnionL. exact H.
     - apply MUnionR. exact H.
-Qed.
-
-Lemma MStar' : forall (a:Type) (xss:list (list a)) (r:regex a),
-    (forall xs, In xs xss -> xs =~ r) -> foldr app [] xss =~ Star r.
-Proof.
-    intros a xss. induction xss as [|xs xss H].
-    - intros r H'. apply MStar0.
-    - intros r H'. apply MStarApp.
-        + apply H'. left. reflexivity.
-        + fold (foldr app [] xss). apply H. intros ys H0. apply H'.
-            right. exact H0.
 Qed.
 
 Lemma regex_of_list_correct : forall (a:Type) (s1 s2:list a),
@@ -249,6 +241,102 @@ Proof.
             { exact H. }
             { exact H'. }
 Qed.
+
+Lemma MStar' : forall (a:Type) (xss:list (list a)) (r:regex a),
+    (forall xs, In xs xss -> xs =~ r) -> foldr app [] xss =~ Star r.
+Proof.
+    intros a xss. induction xss as [|xs xss H].
+    - intros r H'. apply MStar0.
+    - intros r H'. apply MStarApp.
+        + apply H'. left. reflexivity.
+        + fold (foldr app [] xss). apply H. intros ys H0. apply H'.
+            right. exact H0.
+Qed.
+
+
+Lemma MStar'' : forall (a:Type) (s:list a) (r:regex a),
+    s =~ Star r -> exists xss:list (list a), 
+        s = foldr app [] xss /\ forall xs, In xs xss -> xs =~ r.
+Proof.
+    intros a s r H. remember (Star r) as r' eqn:H'. revert r H'. 
+    induction H as
+        [   
+        | c
+        | s1 s2 r1 r2 H1 IH1 H2 IH2
+        | s1 r1 r2 H1 IH1
+        | s1 r1 r2 H2 IH2
+        | r1
+        | s1 s2 r1 H1 IH1 H2 IH2
+        ]
+        .
+    - intros r H. inversion H.
+    - intros r H. inversion H.
+    - intros r H. inversion H.
+    - intros r H. inversion H.
+    - intros r H. inversion H.
+    - intros r H. exists []. split.
+        + reflexivity.
+        + intros xs H'. inversion H'.
+    - intros r H. inversion H as [H3]. apply (IH2 r) in H. clear IH2 IH1.
+        destruct H as [xss H]. exists (s1 :: xss). destruct H as [H4 H5]. split.
+        + simpl. rewrite H4. reflexivity.
+        + intros xs. intros [H6|H6].
+            { rewrite <- H6, <- H3. exact H1. }
+            { apply H5. exact H6. }
+Qed.        
+
+
+Fixpoint pumpN (a:Type) (r:regex a) : nat :=
+    match r with
+    | EmptySet      => 0
+    | EmptyStr      => 1
+    | Char _        => 2
+    | App r1 r2     => pumpN a r1 + pumpN a r2
+    | Union r1 r2   => pumpN a r1 + pumpN a r2
+    | Star _        => 1
+    end.
+
+Arguments pumpN {a} _.
+
+Fixpoint napp (a:Type) (n:nat) (l:list a) : list a :=
+    match n with
+    | 0     => []
+    | S p   => l ++ napp a p l
+    end.
+
+Arguments napp {a} _ _.
+
+(*
+Lemma pumping : forall (a:Type) (r:regex a) (s:list a),
+    s =~ r -> pumpN r <= length s -> exists (s1 s2 s3:list a), 
+        s = s1 ++ s2 ++ s3 /\ s2 <> [] /\
+            forall (m:nat), s1 ++ napp m s2 ++ s3 =~ r.
+Proof.
+    intros a r s H.
+    induction H as
+        [   
+        | c
+        | s1 s2 r1 r2 H1 IH1 H2 IH2
+        | s1 r1 r2 H1 IH1
+        | s1 r1 r2 H2 IH2
+        | r1
+        | s1 s2 r1 H1 IH1 H2 IH2
+        ]
+        .
+    - intros H'. inversion H'.
+    - intros H'. inversion H' as [|m H1 H2]. inversion H1.
+    - simpl. intros H'. rewrite app_length in H'.
+
+
+Show.
+
+*)
+
+
+
+
+
+
 
 
 

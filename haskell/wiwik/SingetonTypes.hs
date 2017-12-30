@@ -1,6 +1,7 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE PolyKinds #-}
@@ -76,14 +77,10 @@ x9 :: Sing 'False
 x9 =  SFalse
 
 data Fin (n :: Nat) where
-    FZ :: Fin Z
+    FZ :: Fin (S n)
     FS :: Fin n -> Fin (S n)
 
-x10 :: Fin Z
-x10 = FZ
 
-x11 :: Fin (S Z)
-x11 = FS x10
 
 data Vec a n where
     Nil  :: Vec a Z
@@ -99,8 +96,9 @@ instance SingI Z where
 instance SingI n => SingI (S n) where
     sing = SS sing
 
-type SNat  (k :: Nat)  = Sing k
-type SBool (k :: Bool) = Sing k
+type SNat   (k :: Nat)              = Sing k
+type SBool  (k :: Bool)             = Sing k
+type SMaybe (b :: a) (k :: Maybe a) = Sing k
 
 deriving instance Show Nat
 deriving instance Show (SNat a)
@@ -108,11 +106,49 @@ deriving instance Show (SBool a)
 deriving instance Show (Fin a)
 deriving instance Show a => Show (Vec a n)
 
--- TODO
+type family (m :: Nat) :+ (n :: Nat) :: Nat where
+    Z   :+ n    = n
+    S m :+ n    = S (m :+ n)
 
+size :: Vec a n -> SNat n
+size Nil            = SZ
+size (Cons x xs)    = SS (size xs)
 
+forget :: SNat n -> Nat
+forget SZ       = Z
+forget (SS n)   = S (forget n)
 
+natToInt :: Integral n => Nat -> n
+natToInt Z      = 0
+natToInt (S n)  = natToInt n + 1
 
+intToNat :: Integral n => n -> Nat
+intToNat 0  = Z
+intToNat n  = S $ intToNat (n - 1)     
+
+sNatToInt :: Num n => SNat x -> n
+sNatToInt SZ        = 0
+sNatToInt (SS n)    = sNatToInt n + 1
+
+index :: Fin n -> Vec a n -> a
+index FZ (Cons x _)         = x
+index (FS n) (Cons _ xs)    = index n xs
+
+test1 :: Fin (S (S (S Z)))
+test1 = FS (FS FZ)
+
+test2 :: Int
+test2 = index FZ (1 `Cons` (2 `Cons` Nil))
+
+test3 :: Sing ('Just ('S ('S Z)))
+test3 = SJust (SS (SS SZ))
+
+test4 :: Sing ('S ('S Z))
+test4 = SS (SS SZ)
+
+-- polymorphic constructor SingI
+test5 :: Sing ('S ('S Z))
+test5 = sing
 
 
 

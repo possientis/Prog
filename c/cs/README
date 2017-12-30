@@ -1,0 +1,3 @@
+gcc -S myfile.c                 (-> myfile.s , assembly code in at&t format ) 
+objdump -d myfile.o             (disassemble at&t format)
+objdump -d -M intel myfile.o    (disassamble intel format)

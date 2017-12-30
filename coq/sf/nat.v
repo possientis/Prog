@@ -1,4 +1,5 @@
 Require Import bool.
+Require Import Arith.
 
 Module Playground1.
 
@@ -361,4 +362,14 @@ Proof.
 Qed.
 
 
+(*
+Lemma sum_leq_sum : forall (n m p q:nat),
+    n + m <= p + q -> n <= p \/ m <= q.
+Proof.
+    intros n m p q H. 
+    assert ({n <= p} + {p < n}) as [H0|H0]. {apply le_lt_dec. }
+
+
+Show.
+*)
 

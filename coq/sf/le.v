@@ -152,3 +152,7 @@ Proof.
     - exact (leb_correct n m).
 Qed.
 
+
+Theorem le_total : forall (n m:nat), {n <= m} + {m < n}. 
+Proof. apply le_lt_dec. Qed.
+
