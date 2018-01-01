@@ -13,6 +13,7 @@ Definition cast (a b:Type) (p: a = b) (x:a) : b :=
     | eq_refl   => x
     end.
 
+
 Arguments cast {a} {b} _ _.
 
 Lemma ex : forall (a b:Type) (x:a) (y:b) (p:a = b),
@@ -32,6 +33,10 @@ Proof.
 Qed.
 
 
+Definition toOption (a b:Type) (p:a = b) : option a = option b.
+Proof. rewrite p. reflexivity. Qed.
+
+Arguments toOption {a} {b} _.
 
 
 

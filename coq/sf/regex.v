@@ -1,3 +1,4 @@
+Require Import nat.
 Require Import list.
 Require Import fold.
 Require Import In.
@@ -308,9 +309,12 @@ Arguments napp {a} _ _.
 
 (*
 Lemma pumping : forall (a:Type) (r:regex a) (s:list a),
-    s =~ r -> pumpN r <= length s -> exists (s1 s2 s3:list a), 
-        s = s1 ++ s2 ++ s3 /\ s2 <> [] /\
-            forall (m:nat), s1 ++ napp m s2 ++ s3 =~ r.
+    s =~ r -> 
+    pumpN r <= length s -> 
+    exists (s1 s2 s3:list a), 
+        s = s1 ++ s2 ++ s3                          /\ 
+        s2 <> []                                    /\
+        forall (m:nat), s1 ++ napp m s2 ++ s3 =~ r  .
 Proof.
     intros a r s H.
     induction H as
@@ -326,14 +330,62 @@ Proof.
     - intros H'. inversion H'.
     - intros H'. inversion H' as [|m H1 H2]. inversion H1.
     - simpl. intros H'. rewrite app_length in H'.
+        apply sum_leq_sum in H' as [H3|H3].
+        + apply IH1 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH1 IH2.
+        exists s3. exists s4. exists (s5 ++ s2). split.
+        { rewrite H4. rewrite <- app_assoc, <- app_assoc. reflexivity. }
+        { split. 
+            { exact H5. }
+            { intros m. rewrite app_assoc, app_assoc. apply MApp.
+                { rewrite <- app_assoc. apply H6. }
+                { exact H2. }
+            }
+        }
+        + apply IH2 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH1 IH2.
+            exists (s1 ++ s3). exists s4. exists s5. split.
+            { rewrite H4. rewrite <- app_assoc. reflexivity. }
+            { split.
+                { exact H5. }
+                { intros m.  rewrite <- app_assoc. apply MApp.
+                    { exact H1. }
+                    { apply H6. }
+                }
+            }
+    - simpl. intros H'. assert (pumpN r1 <= length s1) as H3.
+        { apply le_trans with (m:= pumpN r1 + pumpN r2).
+            { apply Nat.le_add_r. }
+            { exact H'. } }
+                
+        apply IH1 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH1.
+        exists s3. exists s4. exists s5. split.
+        { exact H4. }
+        { split.
+            { exact H5. }
+            { intros m. apply MUnionL. apply H6. }
+        }
+    - simpl. intros H'. rewrite plus_comm in H'. 
+        assert (pumpN r2 <= length s1) as H3.
+        { apply le_trans with (m:= pumpN r2 + pumpN r1).
+            { apply Nat.le_add_r. }
+            { exact H'. } }
+        apply IH2 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH2.
+        exists s3. exists s4. exists s5. split.
+        { exact H4. }
+        { split.
+            { exact H5. }
+            { intros m. apply MUnionR. apply H6. }
+        }
+    - intros H'. inversion H'.
+    - simpl. intros H'. simpl in IH2. rewrite app_length in H'. 
+        destruct (length s2) eqn:H3.
+        + exists []. exists s1. exists []. split.
+            {
+                    
 
 
 Show.
 
 *)
-
-
-
 
 
 

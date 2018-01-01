@@ -6,5 +6,6 @@ cd ${HOME}
 
 rm -f a.out
 rm -f *.o
+rm -f *.s
 
 cd ${DIR}

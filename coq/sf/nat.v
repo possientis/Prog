@@ -362,14 +362,22 @@ Proof.
 Qed.
 
 
-(*
 Lemma sum_leq_sum : forall (n m p q:nat),
     n + m <= p + q -> n <= p \/ m <= q.
 Proof.
     intros n m p q H. 
     assert ({n <= p} + {p < n}) as [H0|H0]. {apply le_lt_dec. }
+    - left. exact H0.
+    - assert ({m <= q} + {q < m}) as [H1|H1]. {apply le_lt_dec. }
+        + right. exact H1.
+        + exfalso. assert (p + q < n + m) as H2. apply plus_lt_compat.
+            { exact H0. } { exact H1. } 
+            unfold lt in H2. assert ( S (p + q) <= p + q ) as H3.
+            { apply le_trans with (m:=n+m). 
+                { exact H2. }
+                { exact H. } }
+            apply (Nat.nle_succ_diag_l (p + q)). exact H3.
+Qed.
 
 
-Show.
-*)
 
