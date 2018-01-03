@@ -1,7 +1,7 @@
 Require Import Category.
 Require Import Category3.
 
-(* given a category we define the data necessary to create a Category3 *)
+(* given a Category we define the data necessary to create a Category3 *)
 
 Definition A3_ (A:Type) (c:Category A) : Type := A.
 Arguments A3_ {A} _.

@@ -329,7 +329,15 @@ Proof.
 Qed.
 
 
-
+Lemma length_0_iff_nil : forall (a:Type) (l:list a),
+    length l = 0 <-> l = nil.
+Proof.
+    intros a l. split.
+    - destruct l as [|x xs].
+        + intros. reflexivity.
+        + intros H. inversion H.
+    - intros H. rewrite H. reflexivity.
+Qed.
 
 
 

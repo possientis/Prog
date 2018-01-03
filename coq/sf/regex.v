@@ -3,6 +3,7 @@ Require Import list.
 Require Import fold.
 Require Import In.
 Require Import bool.
+Require Import le.
 
 (* alllows omega tactic which simplifies proofs with nat *)
 Require Import Coq.omega.Omega.
@@ -307,7 +308,18 @@ Fixpoint napp (a:Type) (n:nat) (l:list a) : list a :=
 
 Arguments napp {a} _ _.
 
-(*
+
+Lemma Star_napp : forall (a:Type) (s:list a) (r:regex a),
+    s =~ r -> forall (n:nat), napp n s =~ Star r.
+Proof.
+    intros a s r H n. induction n as [|n IH].
+    - simpl. apply MStar0.
+    - simpl. apply MStarApp.
+        + exact H.
+        + exact IH.
+Qed.
+
+
 Lemma pumping : forall (a:Type) (r:regex a) (s:list a),
     s =~ r -> 
     pumpN r <= length s -> 
@@ -354,7 +366,8 @@ Proof.
     - simpl. intros H'. assert (pumpN r1 <= length s1) as H3.
         { apply le_trans with (m:= pumpN r1 + pumpN r2).
             { apply Nat.le_add_r. }
-            { exact H'. } }
+            { exact H'. } 
+        }
                 
         apply IH1 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH1.
         exists s3. exists s4. exists s5. split.
@@ -367,7 +380,8 @@ Proof.
         assert (pumpN r2 <= length s1) as H3.
         { apply le_trans with (m:= pumpN r2 + pumpN r1).
             { apply Nat.le_add_r. }
-            { exact H'. } }
+            { exact H'. } 
+        }
         apply IH2 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH2.
         exists s3. exists s4. exists s5. split.
         { exact H4. }
@@ -379,13 +393,27 @@ Proof.
     - simpl. intros H'. simpl in IH2. rewrite app_length in H'. 
         destruct (length s2) eqn:H3.
         + exists []. exists s1. exists []. split.
-            {
+            { rewrite length_0_iff_nil in H3. rewrite H3. reflexivity. }
+            { split.
+                { intros H. rewrite <- length_0_iff_nil in H. rewrite H in H'.
+                    inversion H'. }
+                { intros m. simpl. rewrite app_nil_r. apply Star_napp. exact H1. }
+            }
+        + assert (1 <= S n) as H. { apply n_le_m__Sn_le_Sm, le_0_n. }
+            apply IH2 in H as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH2 IH1.
+                exists (s1 ++ s3). exists s4. exists s5. split.
+                    { rewrite <- app_assoc, H4. reflexivity. }
+                    { split.
+                        { exact H5. }
+                        { intros m. rewrite <- app_assoc. apply MStarApp.
+                            { exact H1. }
+                            { apply H6. }
+                        }
+                     }
+Qed.
                     
 
 
-Show.
-
-*)
 
 
 

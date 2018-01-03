@@ -137,5 +137,5 @@ le.vo : le.v inductive_prop.vo
 subseq.vo : subseq.v list.vo
 	coqc subseq.v	
 
-regex.vo : regex.v list.vo fold.vo In.vo bool.vo
+regex.vo : regex.v list.vo fold.vo In.vo bool.vo le.vo
 	coqc regex.v

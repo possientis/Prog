@@ -11,6 +11,8 @@ all: 	Axiom_ProofIrrelevance.vo \
 		CategoryAsCategory3.vo \
 		Category2AsCategory.vo \
 		Category3AsCategory.vo \
+		Category4AsCategory2.vo \
+		Category2AsCategory4.vo \
 		Iso_CatCat2.vo \
 		Iso_CatCat3.vo \
 		Monoid.vo	\
@@ -78,14 +80,25 @@ CategoryAsCategory3.vo : 	CategoryAsCategory3.v \
 
 Category2AsCategory.vo :	Category2AsCategory.v \
 							Category2.vo \
-							Category.v
+							Category.vo
 	coqc Category2AsCategory.v
 
 
 Category3AsCategory.vo :	Category3AsCategory.v \
 							Category3.vo \
-							Category.v
+							Category.vo
 	coqc Category3AsCategory.v
+
+
+Category4AsCategory2.vo :	Category4AsCategory2.v \
+							Category4.vo \
+							Category2.vo
+	coqc Category4AsCategory2.v
+
+Category2AsCategory4.vo :	Category2AsCategory4.v \
+							Category4.vo \
+							Category2.vo
+	coqc Category4AsCategory2.v
 
 
 Iso_CatCat2.vo :			Iso_CatCat2.v \
