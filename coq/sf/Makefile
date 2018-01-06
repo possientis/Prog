@@ -122,7 +122,8 @@ In.vo : In.v list.vo fmap.vo nat.vo bool.vo induction.vo
 equal.vo : equal.v induction.vo
 	coqc equal.v	
 
-reflection.vo : reflection.v nat.vo bool.vo induction.vo
+reflection.vo : reflection.v nat.vo bool.vo list.vo In.vo \
+				higher_order.vo induction.vo
 	coqc reflection.v
 
 logic.vo : logic.v not.vo

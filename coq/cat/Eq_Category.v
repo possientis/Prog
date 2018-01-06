@@ -11,8 +11,8 @@ Proof.
     destruct c1 as [s1 t1 cmp1 pss1 pts1 ptt1 pst1 pd1 ps1 pt1 pl1 pr1 pa1].
     destruct c2 as [s2 t2 cmp2 pss2 pts2 ptt2 pst2 pd2 ps2 pt2 pl2 pr2 pa2].
     simpl in Hs. simpl in Ht. simpl in Hc.
-    apply extensionality in Hs.
-    apply extensionality in Ht.
+    apply extensionality  in Hs.
+    apply extensionality  in Ht.
     apply extensionality2 in Hc.
     revert pss1 pts1 ptt1 pst1 pd1 ps1 pt1 pl1 pr1 pa1.
     rewrite Hs, Ht, Hc.
