@@ -1,5 +1,7 @@
 Require Import inductive_prop.
-Require Import Arith.
+Require Import induction.
+Require Import nat.
+Require Import bool.
 
 
 Module LEMODULE.
@@ -93,7 +95,7 @@ Theorem le_plus_l : forall (n m: nat), n <= n + m.
 Proof.
     intros n m. induction m as [|m H].
     - rewrite <- plus_n_O. apply le_n.
-    - rewrite <- plus_n_Sm. apply le_S. exact H.
+    - rewrite plus_n_Sm. apply le_S. exact H.
 Qed.
 
 Theorem plus_lt : forall (n m p:nat),
@@ -152,7 +154,59 @@ Proof.
     - exact (leb_correct n m).
 Qed.
 
+Lemma le_n_0 : forall (n:nat), n <= 0 -> n = 0.
+Proof. intros n H. inversion H. reflexivity. Qed.
 
+Lemma not_le_Sm_n : forall (n m:nat), n <= m -> ~(S m <= n).
+Proof.
+  intros n m. revert n. induction m as [|m IH]. 
+  - intros n H H'. apply le_n_0 in H. rewrite H in H'. inversion H'.
+  - intros n H H'. remember (S m) as q eqn:H0. destruct H as [|p].
+    + apply (IH n). 
+      { apply Sn_le_Sm__n_le_m. rewrite <- H0. exact H'. }
+      { apply le_n. }
+    + apply (IH n). 
+      { inversion H0 as [H2]. rewrite H2 in H. exact H. }
+      { apply le_trans with (m:=S (S p)).
+        { apply le_S, le_n. }
+        { exact H'. }
+      }
+Qed.
+
+Lemma not_le_Sn_n : forall (n:nat), ~(S n <= n).
+Proof. intro n. apply not_le_Sm_n. apply le_n. Qed.
+
+
+Theorem le_anti_symmetric : forall (n m:nat),
+  n <= m -> m <= n -> n = m.
+Proof.
+  intros n m H. destruct H as [|p H].
+  - intros _. reflexivity.
+  - intros H'. exfalso. apply (not_le_Sn_n p).
+    apply le_trans with (m:=n).
+      + exact H'.
+      + exact H.
+Qed.
+
+(*
 Theorem le_total : forall (n m:nat), {n <= m} + {m < n}. 
 Proof. apply le_lt_dec. Qed.
+
+Lemma sum_leq_sum : forall (n m p q:nat),
+    n + m <= p + q -> n <= p \/ m <= q.
+Proof.
+    intros n m p q H. 
+    assert ({n <= p} + {p < n}) as [H0|H0]. {apply le_lt_dec. }
+    - left. exact H0.
+    - assert ({m <= q} + {q < m}) as [H1|H1]. {apply le_lt_dec. }
+        + right. exact H1.
+        + exfalso. assert (p + q < n + m) as H2. apply plus_lt_compat.
+            { exact H0. } { exact H1. } 
+            unfold lt in H2. assert ( S (p + q) <= p + q ) as H3.
+            { apply le_trans with (m:=n+m). 
+                { exact H2. }
+                { exact H. } }
+            apply (not_le_Sn_n (p + q)). exact H3.
+Qed.
+*)
 

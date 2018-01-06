@@ -132,7 +132,7 @@ logic.vo : logic.v not.vo
 inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 	coqc inductive_prop.v
 
-le.vo : le.v inductive_prop.vo
+le.vo : le.v inductive_prop.vo induction.vo nat.vo bool.vo
 	coqc le.v
 
 subseq.vo : subseq.v list.vo
