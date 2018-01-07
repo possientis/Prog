@@ -32,7 +32,8 @@ all:	bool.vo \
 		inductive_prop.vo \
 		le.vo \
 		subseq.vo \
-		regex.vo
+		regex.vo \
+		palindrome.vo
 
 
 bool.vo: bool.v
@@ -140,3 +141,8 @@ subseq.vo : subseq.v list.vo
 
 regex.vo : regex.v list.vo fold.vo In.vo bool.vo le.vo
 	coqc regex.v
+
+palindrome.vo : palindrome.v list.vo
+	coqc palindrome.v
+
+
