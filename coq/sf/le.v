@@ -188,9 +188,64 @@ Proof.
       + exact H.
 Qed.
 
-(*
-Theorem le_total : forall (n m:nat), {n <= m} + {m < n}. 
-Proof. apply le_lt_dec. Qed.
+
+Theorem n_lt_m__Sn_lt_Sm : forall (n m:nat), n < m -> S n < S m.
+Proof.
+    intros n m H. unfold lt in H. unfold lt. apply n_le_m__Sn_le_Sm. exact H.
+Qed.
+
+Theorem Sn_lt_Sm__n_lt_m : forall (n m:nat), S n < S m -> n < m.
+Proof.
+    intros n m H. unfold lt in H. unfold lt. apply Sn_le_Sm__n_le_m. exact H.
+Qed.
+
+Theorem le_lt_dec : forall (n m:nat), {n <= m} + {m < n}. 
+Proof.
+    intros n. induction n as [|n IH].
+    - left. apply le_0_n.
+    - intros m. revert IH. revert n. induction m as [|m IH].
+        + intros n _. right. unfold lt. apply n_le_m__Sn_le_Sm. apply le_0_n.
+        + intros n H. destruct (H m) as [H'|H'].
+            { left. apply n_le_m__Sn_le_Sm. exact H'. }
+            { right. apply n_lt_m__Sn_lt_Sm. exact H'. }
+Qed.
+
+
+Lemma plus_le_compat_l : forall (n m p:nat),
+    m <= p -> n + m <= n + p.
+Proof.
+    intros p. induction p as [|p IH].
+    - intros m p H. exact H.
+    - intros n m H. simpl. apply n_le_m__Sn_le_Sm. apply IH. exact H.
+Qed.
+
+Lemma plus_lt_compat_l : forall (n m p:nat),
+    m < p -> n + m < n + p.
+Proof.
+    intros n m p H. unfold lt in H. unfold lt.
+    rewrite <- plus_n_Sm. apply plus_le_compat_l. exact H.
+Qed.
+
+Theorem plus_le_compat : forall (n m n' m':nat),
+    n <= n' -> m <= m' -> n + m <= n' + m'.
+Proof.
+    intros n m n' m' Hn Hm. apply le_trans with (m:=n + m').
+    - apply plus_le_compat_l. exact Hm.
+    - rewrite (plus_comm n m'), (plus_comm n' m'). apply plus_le_compat_l. exact Hn.
+Qed.
+
+Theorem plus_lt_compat : forall (n m n' m':nat),
+    n < n' -> m < m' -> n + m < n' + m'.
+Proof.
+    intros n m n' m' Hn Hm. unfold lt in Hn. unfold lt in Hm. unfold lt.
+    rewrite <- plus_n_Sm. apply le_trans with (m:=S n + S m).
+    - rewrite (plus_comm n (S m)). rewrite (plus_comm (S n) (S m)).
+        apply plus_le_compat_l. apply le_S, le_n.
+    - apply plus_le_compat.
+        + exact Hn.
+        + exact Hm.
+Qed.
+
 
 Lemma sum_leq_sum : forall (n m p q:nat),
     n + m <= p + q -> n <= p \/ m <= q.
@@ -208,5 +263,3 @@ Proof.
                 { exact H. } }
             apply (not_le_Sn_n (p + q)). exact H3.
 Qed.
-*)
-

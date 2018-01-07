@@ -12,8 +12,8 @@ Theorem ToCatToCat3 : forall (A:Type) (c:Category A),
     toCategory (toCategory3 c) = c.
 Proof. 
     intros A c. apply eq_Category.
-    -intros f. reflexivity.
-    -intros f. reflexivity.
+    - intros f.   reflexivity.
+    - intros f.   reflexivity.
     - intros f g. reflexivity.
 Qed.
 

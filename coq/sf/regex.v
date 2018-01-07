@@ -319,7 +319,6 @@ Proof.
         + exact IH.
 Qed.
 
-(*
 
 Lemma pumping : forall (a:Type) (r:regex a) (s:list a),
     s =~ r -> 
@@ -413,7 +412,6 @@ Proof.
                      }
 Qed.
                     
-*)
 
 
 

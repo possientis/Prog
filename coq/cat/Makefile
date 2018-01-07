@@ -8,6 +8,8 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Category3.vo \
 		Eq_Category3.vo \
 		Category4.vo \
+		Eq_Category4.vo \
+		Category5.vo \
 		CategoryAsCategory2.vo \
 		Category2AsCategory.vo \
 		CategoryAsCategory3.vo \
@@ -16,6 +18,7 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Category4AsCategory2.vo \
 		Iso_CatCat2.vo \
 		Iso_CatCat3.vo \
+		Iso_Cat2Cat4.vo \
 		Monoid.vo	\
 		Preorder.vo \
 		MonoidAsCategory.vo \
@@ -73,6 +76,18 @@ Eq_Category3.vo :			Eq_Category3.v \
 Category4.vo : 				Category4.v
 	coqc Category4.v
 
+Eq_Category4.vo :			Eq_Category4.v \
+							Axiom_Extensionality.vo \
+							Axiom_ProofIrrelevance.vo \
+							Cast.vo \
+				 			Category4.vo
+	coqc Eq_Category4.v
+
+
+Category5.vo : 				Category5.v
+	coqc Category5.v
+
+
 CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
 							Category.vo \
 							Category2.vo \
@@ -129,6 +144,18 @@ Iso_CatCat3.vo :			Iso_CatCat3.v \
 							CategoryAsCategory3.vo \
 							Category3AsCategory.vo
 	coqc Iso_CatCat3.v
+
+
+Iso_Cat2Cat4.vo :			Iso_Cat2Cat4.v \
+							Axiom_ProofIrrelevance.vo \
+							Cast.vo \
+							Category2.vo \
+							Eq_Category2.vo \
+							Category4.vo \
+							Eq_Category4.vo \
+							Category2AsCategory4.vo \
+							Category4AsCategory2.vo
+	coqc Iso_Cat2Cat4.v
 
 
 Monoid.vo : 				Monoid.v
