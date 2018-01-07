@@ -365,7 +365,7 @@ Proof.
             }
     - simpl. intros H'. assert (pumpN r1 <= length s1) as H3.
         { apply le_trans with (m:= pumpN r1 + pumpN r2).
-            { apply Nat.le_add_r. }
+            {  apply le_plus_l. }
             { exact H'. } 
         }
                 
@@ -379,7 +379,7 @@ Proof.
     - simpl. intros H'. rewrite plus_comm in H'. 
         assert (pumpN r2 <= length s1) as H3.
         { apply le_trans with (m:= pumpN r2 + pumpN r1).
-            { apply Nat.le_add_r. }
+            { apply le_plus_l. }
             { exact H'. } 
         }
         apply IH2 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH2.
@@ -412,11 +412,3 @@ Proof.
                      }
 Qed.
                     
-
-
-
-
-
-
-
-
