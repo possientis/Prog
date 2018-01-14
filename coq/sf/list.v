@@ -339,6 +339,96 @@ Proof.
     - intros H. rewrite H. reflexivity.
 Qed.
 
+Lemma l_not_cons_l : forall (a:Type) (l:list a) (x:a),
+    ~ (l = x :: l).
+Proof.
+    intros a l. induction l as [|x xs IH].
+    - intros x H. inversion H.
+    - intros y H. inversion H. apply (IH y). exact H2.
+Qed.
+
+Lemma l_not_l_app : forall (a:Type) (l:list a) (x:a),
+    ~ (l = l ++ [x]).
+Proof.
+    intros a l x H. remember (rev l) as l' eqn:H'.
+    assert (l' = x :: l') as H0.
+    { rewrite H'. rewrite H at 1. rewrite rev_app_distr. reflexivity. }
+    revert H0. apply l_not_cons_l.
+Qed.
+
+Lemma list_3_cases : forall (a:Type) (l:list a), 
+    l = []                              \/
+    (exists x, l = [x])                 \/
+    (exists x y k, l = x :: k ++ [y])   .
+Proof.
+    intros a l. induction l as [|x xs [IH|[[y IH]|[x' [y [k IH]]]]]].
+    - left. reflexivity.
+    - right. left. exists x. rewrite IH. reflexivity.
+    - right. right. exists x, y, []. rewrite IH. reflexivity.
+    - right. right. exists x, y, (x' :: k). rewrite IH. 
+        rewrite app_cons. reflexivity.
+Qed.
+
+Lemma app_cons' : forall (a:Type) (l k:list a) (x:a),
+    l ++ x :: k = (l ++ [x]) ++ k.
+Proof.
+    intros a l. induction l as [|x xs IH].
+    - intros k x. reflexivity.
+    - intros k y. rewrite app_cons, app_cons, app_cons.
+        rewrite <- (IH k y). reflexivity.
+Qed.
+
+Lemma app_injective_l : forall (a:Type) (l k m:list a),
+    k ++ l = m ++ l -> k = m.
+Proof.
+    intros a l. induction l as [|x xs IH].
+    - intros k m H. rewrite app_nil_r in H. rewrite app_nil_r in H. exact H.
+    - intros k m H.
+      rewrite (app_cons' a k xs x) in H. 
+      rewrite (app_cons' a m xs x) in H. 
+      apply IH in H.
+      assert (rev (k ++ [x])  = rev (m ++ [x])) as H'.
+      { rewrite H. reflexivity. }
+      rewrite rev_app_distr in H'.
+      rewrite rev_app_distr in H'.
+      simpl in H'. inversion H' as [H0].
+      rewrite <- (rev_involutive a k).
+      rewrite <- (rev_involutive a m).
+      rewrite H0. reflexivity.
+Qed.
+
+Lemma app_injective_r : forall (a:Type) (l k m:list a),
+    l ++ k = l ++ m -> k = m.
+Proof.
+    intros a l. induction l as [|x xs IH].
+    - intros k m H. exact H.
+    - intros k m H. rewrite app_cons in H. rewrite app_cons in H.
+        inversion H as [H']. apply IH. exact H'.
+Qed.
+
+
+Lemma rev_list_3_cases : forall (a:Type) (l:list a), l = rev l -> 
+    l = []                                          \/ 
+    (exists x, l = [x])                             \/
+    (exists x k, l = x :: k ++ [x] /\ k = rev k)    .
+Proof.
+    intros a l H. 
+    assert (l = [] \/ (exists x,l = [x]) \/ 
+        (exists x y k, l = x :: k ++ [y])) as [H'|[[x H']|[x [y [k H']]]]]. 
+        { apply list_3_cases. }
+    - left. exact H'.
+    - right. left. exists x. exact H'.
+    - right. right. exists x, k.
+        rewrite H' in H at 2. simpl in H. rewrite rev_app_distr in H.
+        simpl in H. rewrite H' in H. inversion H as [H0]. split.
+        + rewrite H', H0. reflexivity.
+        + apply app_injective_l with (l:=[y]). exact H1. 
+Qed.
+        
+
+
+
+
 
 
 

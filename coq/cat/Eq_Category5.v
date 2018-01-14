@@ -2,6 +2,7 @@ Require Import Axiom_Extensionality.
 Require Import Axiom_ProofIrrelevance.
 Require Import Cast.
 Require Import Category5.
+Require Import Setoid.
  
 
 Lemma eq_Category5 : forall (C C':Category5) (p:Obj C = Obj C'),
@@ -18,6 +19,34 @@ Proof.
     revert Hc Hi. revert cmp1 i1. revert q. revert Hom1.
     rewrite p.
     intros Hom1 q. simpl in q.
-    intros cmp1 i1 Hc Hi. simpl in Hc. simpl in Hi.
-
-Show.
+    assert (Hom1 = Hom2) as H. { apply extensionality2. exact q. }
+    revert q. rewrite H. clear H. simpl. intros q. 
+    assert (forall a b, q a b = eq_refl) as Hq. 
+        { intros a b. apply proof_irrelevance. }
+    intros cmp1 i1 Hc Hi. 
+    assert (i1 = i2) as Hi'.
+        { apply extensionality. intros a. rewrite <- (Hi a).
+            rewrite (proof_irrelevance _ (q a a) eq_refl).
+            reflexivity.
+        }
+    rewrite Hi'.
+    assert (cmp1 = cmp2) as Hc'.
+    { apply extensionality3. intros a b c. 
+      apply extensionality2. intros f g.
+      assert (cast (q a b) f = f) as Hf.
+        { rewrite (proof_irrelevance _ (q a b) eq_refl). reflexivity. }
+      assert (cast (q b c) g = g) as Hg.
+        { rewrite (proof_irrelevance _ (q b c) eq_refl). reflexivity. }
+        rewrite <- Hf at 2. (* need 'Setoid' for some reason *)
+        rewrite <- Hg at 2. 
+        rewrite <- (Hc a b c).
+        rewrite (proof_irrelevance _ (q a c) eq_refl). reflexivity.
+    }
+    rewrite Hc'.
+    intros pl1 pr1 pa1.
+    rewrite (proof_irrelevance _ pl1 pl2).
+    rewrite (proof_irrelevance _ pr1 pr2).
+    rewrite (proof_irrelevance _ pa1 pa2).
+    reflexivity.
+Qed.
+        

@@ -28,13 +28,11 @@ Qed.
 (*
 Theorem pal_converse : forall (a:Type) (l:list a), l = rev l -> pal l.
 Proof.
-    intros a l. induction l as [|x xs IH].
-    - intros _. apply pal_empty.
-    - simpl. remember (rev xs) as l eqn:H.
-        revert x. revert IH H. revert xs. induction l as [|y ys IH].
-        + intros xs _ _ x H. rewrite H. apply pal_sing.
-        + intros xs H0 H1 x H2. rewrite app_cons in H2.
-            inversion H2. rewrite <- H3 at 1. rewrite <- H4. apply IH.
-            { intros H5. remember (length xs) as n eqn:H6.
+    intros a l. remember (length l) as n eqn:H.
+    assert (length l <= n) as H'. { rewrite H. apply le_n. }
+    clear H. revert H'. revert l. induction n as [|n IH].
+    - intros l H1 H2. inversion H1. apply length_0_iff_nil in H0.
+        rewrite H0. apply pal_empty.
+    - intros l H1 H2.
 Show.
 *)

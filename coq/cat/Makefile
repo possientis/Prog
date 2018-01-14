@@ -10,6 +10,7 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Category4.vo \
 		Eq_Category4.vo \
 		Category5.vo \
+		Eq_Category5.vo \
 		CategoryAsCategory2.vo \
 		Category2AsCategory.vo \
 		CategoryAsCategory3.vo \
@@ -86,6 +87,13 @@ Eq_Category4.vo :			Eq_Category4.v \
 
 Category5.vo : 				Category5.v
 	coqc Category5.v
+
+Eq_Category5.vo :			Eq_Category5.v \
+							Axiom_Extensionality.vo \
+							Axiom_ProofIrrelevance.vo \
+							Cast.vo \
+				 			Category5.vo
+	coqc Eq_Category5.v
 
 
 CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
