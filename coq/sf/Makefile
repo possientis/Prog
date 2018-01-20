@@ -33,7 +33,8 @@ all:	bool.vo \
 		le.vo \
 		subseq.vo \
 		regex.vo \
-		palindrome.vo
+		palindrome.vo \
+		merge.vo
 
 
 bool.vo: bool.v
@@ -69,7 +70,7 @@ option.vo : option.v list.vo nat.vo bool.vo
 prod.vo : prod.v list.vo
 	coqc prod.v
 
-higher_order.vo : higher_order.v list.vo bool.vo nat.vo
+higher_order.vo : higher_order.v list.vo bool.vo nat.vo In.vo
 	coqc higher_order.v
 
 fmap.vo : fmap.v nat.vo bool.vo list.vo
@@ -142,7 +143,8 @@ subseq.vo : subseq.v list.vo
 regex.vo : regex.v list.vo fold.vo In.vo bool.vo le.vo
 	coqc regex.v
 
-palindrome.vo : palindrome.v list.vo
+palindrome.vo : palindrome.v list.vo nat.vo le.vo
 	coqc palindrome.v
 
-
+merge.vo : merge.v list.vo bool.vo In.vo higher_order.vo
+	coqc merge.v

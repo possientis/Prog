@@ -1,3 +1,5 @@
+Require Import Option.
+
 Record Category4 : Type := category4
     { Obj4      : Type
     ; Mor4      : Type  
@@ -18,4 +20,20 @@ Record Category4 : Type := category4
     }
     .
 
+Lemma Dom4 : forall (C:Category4) (f g:Mor4 C),
+    cod4 C f = dom4 C g -> compose4 C f g <> None.
+Proof.
+    intros C f g H. apply (proof_dom4 C). exact H.
+Qed.
+
+Arguments Dom4 {C} _ _ _ _.
+ 
+Definition compose4' (C:Category4)(f g:Mor4 C)(p:cod4 C f = dom4 C g): Mor4 C :=
+    fromOption (compose4 C f g) (Dom4 f g p). 
+
+Lemma compose4'_correct:forall (C:Category4)(f g:Mor4 C)(p:cod4 C f = dom4 C g),
+    compose4 C f g = Some (compose4' C f g p).
+Proof.
+    intros C f g p. unfold compose4'. apply fromOption_correct.
+Qed.
 
