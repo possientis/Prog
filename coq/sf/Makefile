@@ -26,6 +26,7 @@ all:	bool.vo \
 		setoid.vo \
 		exists.vo \
 		In.vo \
+		filter.vo \
 		equal.vo \
 		reflection.vo \
 		logic.vo \
@@ -70,7 +71,8 @@ option.vo : option.v list.vo nat.vo bool.vo
 prod.vo : prod.v list.vo
 	coqc prod.v
 
-higher_order.vo : higher_order.v list.vo bool.vo nat.vo In.vo
+
+higher_order.vo : higher_order.v list.vo bool.vo nat.vo In.vo filter.vo
 	coqc higher_order.v
 
 fmap.vo : fmap.v nat.vo bool.vo list.vo
@@ -121,11 +123,14 @@ exists.vo : exists.v not.vo
 In.vo : In.v list.vo fmap.vo nat.vo bool.vo induction.vo
 	coqc In.v
 
+filter.vo : filter.v bool.vo list.vo In.vo
+	coqc filter.v
+
 equal.vo : equal.v induction.vo
 	coqc equal.v	
 
 reflection.vo : reflection.v nat.vo bool.vo list.vo In.vo \
-				higher_order.vo induction.vo
+				filter.vo induction.vo
 	coqc reflection.v
 
 logic.vo : logic.v not.vo
@@ -137,7 +142,7 @@ inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 le.vo : le.v inductive_prop.vo induction.vo nat.vo bool.vo
 	coqc le.v
 
-subseq.vo : subseq.v list.vo
+subseq.vo : subseq.v bool.vo list.vo le.vo filter.vo
 	coqc subseq.v	
 
 regex.vo : regex.v list.vo fold.vo In.vo bool.vo le.vo

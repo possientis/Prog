@@ -177,7 +177,7 @@ Lemma not_le_Sn_n : forall (n:nat), ~(S n <= n).
 Proof. intro n. apply not_le_Sm_n. apply le_n. Qed.
 
 
-Theorem le_anti_symmetric : forall (n m:nat),
+Theorem le_antisym : forall (n m:nat),
   n <= m -> m <= n -> n = m.
 Proof.
   intros n m H. destruct H as [|p H].

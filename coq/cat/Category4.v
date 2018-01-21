@@ -20,20 +20,39 @@ Record Category4 : Type := category4
     }
     .
 
-Lemma Dom4 : forall (C:Category4) (f g:Mor4 C),
+(* proof_dom4 is an equivalence, we need implication (function) -> *)
+Lemma proof_dom4' : forall (C:Category4) (f g:Mor4 C),
     cod4 C f = dom4 C g -> compose4 C f g <> None.
 Proof.
     intros C f g H. apply (proof_dom4 C). exact H.
 Qed.
 
-Arguments Dom4 {C} _ _ _ _.
+Arguments proof_dom4' {C} _ _ _ _.
  
 Definition compose4' (C:Category4)(f g:Mor4 C)(p:cod4 C f = dom4 C g): Mor4 C :=
-    fromOption (compose4 C f g) (Dom4 f g p). 
+    fromOption (compose4 C f g) (proof_dom4' f g p). 
+
+Arguments compose4' {C} _ _ _.
 
 Lemma compose4'_correct:forall (C:Category4)(f g:Mor4 C)(p:cod4 C f = dom4 C g),
-    compose4 C f g = Some (compose4' C f g p).
+    compose4 C f g = Some (compose4' f g p).
 Proof.
     intros C f g p. unfold compose4'. apply fromOption_correct.
 Qed.
+
+Lemma compose4'_dom:forall (C:Category4)(f g:Mor4 C)(p:cod4 C f = dom4 C g),
+    dom4 C (compose4' f g p) = dom4 C f.
+Proof.
+    intros C f g p. apply (proof_src4 C f g (compose4' f g p)). 
+    apply compose4'_correct.
+Qed.
+    
+Lemma compose4'_cod:forall (C:Category4)(f g:Mor4 C)(p:cod4 C f = dom4 C g),
+    cod4 C (compose4' f g p) = cod4 C g.
+Proof.
+    intros C f g p. apply (proof_tgt4 C f g (compose4' f g p)). 
+    apply compose4'_correct.
+Qed.
+ 
+
 

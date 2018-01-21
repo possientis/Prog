@@ -161,6 +161,32 @@ done:
 .L23:
 	ret
 */
+
+int rfact(int n) {
+    int result;
+    if(n <= 1) 
+        result = 1;
+    else
+        result = n*rfact(n - 1);
+    return result;
+}
+    
+/*
+	movl	$1, %eax                # eax = 1 
+	cmpl	$1, %edi                # compare n with 1 
+	jle	.L34                        # if n <= 1 goto .L34
+	pushq	%rbx                    # save rbx          (callee save)
+	movl	%edi, %ebx              # ebx = n
+	leal	-1(%rdi), %edi          # n = n - 1
+	call	rfact                   # call rfact
+	imull	%ebx, %eax              # eax = eax * n
+	popq	%rbx                    # restore rbx       (callee save)
+	.cfi_restore 3
+	.cfi_def_cfa_offset 8
+.L34:
+	rep ret
+*/
+	
 	
 int main() {
 
@@ -182,6 +208,10 @@ int main() {
 
     for(n = 1; n < 18; ++n) {
         printf("%d! = %d\n", n, fact_while_goto(n));
+    }
+
+    for(n = 1; n < 18; ++n) {
+        printf("%d! = %d\n", n, rfact(n));
     }
 
     return 0;

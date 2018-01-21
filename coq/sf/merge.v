@@ -1,7 +1,7 @@
 Require Import bool.
 Require Import list.
 Require Import In.
-Require Import higher_order.
+Require Import filter.
 
 (* merge k m l  == 'l is an in order merge of k and m' *)
 Inductive merge (a:Type) : list a -> list a -> list a -> Prop :=
@@ -15,7 +15,6 @@ Inductive merge (a:Type) : list a -> list a -> list a -> Prop :=
 
 Arguments merge {a} _ _ _.
 
-(*
 Theorem filter_merge : forall (a:Type) (test:a -> bool) (k m l:list a),
     (forall x, In x k -> test x = true) ->
     (forall x, In x m -> test x = false) ->
@@ -24,8 +23,8 @@ Theorem filter_merge : forall (a:Type) (test:a -> bool) (k m l:list a),
 Proof.
     intros a test k m l Hk Hm H. revert Hk Hm.
     induction H as [l|l|k m l x H IH|k m l x H IH].
-    - intros H0 H. clear H0. apply filter_false. exact H.
-    - intros H H0. clear H0. apply filter_true. exact H.
+    - intros H0 H. clear H0. apply filter_of_false. exact H.
+    - intros H H0. clear H0. apply filter_of_true. exact H.
     - intros H1 H2. assert (test x = true) as Hx. { apply H1. left. reflexivity. }
         simpl. rewrite Hx. assert (filter test l = k) as H0.
             { apply IH.
@@ -33,7 +32,11 @@ Proof.
                 + exact H2.
             }
         rewrite H0. reflexivity.
-    -
+    - intros H1 H2. assert (test x = false) as Hx. { apply H2. left. reflexivity. }
+        simpl. rewrite Hx. apply IH.
+            + exact H1.
+            + intros y H'. apply H2. right. exact H'.
+Qed.
     
-Show.
-*)
+
+

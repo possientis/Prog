@@ -15,6 +15,7 @@ rm -f a.out
 ./json/clean.sh
 ./parconc/clean.sh
 ./types/clean.sh
+./wiwik/clean.sh
 
 
 cd ${DIR}

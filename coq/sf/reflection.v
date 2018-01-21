@@ -2,7 +2,7 @@ Require Import nat.
 Require Import bool.
 Require Import list.
 Require Import In.
-Require Import higher_order.
+Require Import filter.
 Require Import induction.
 
 (* direct proof *)
