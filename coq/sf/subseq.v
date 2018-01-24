@@ -1,6 +1,7 @@
 Require Import bool.
 Require Import list.
 Require Import le.
+Require Import In.
 Require Import filter.
 
 Inductive subseq (a:Type) : list a -> list a -> Prop :=
@@ -111,7 +112,6 @@ Qed.
    'test' everywhere, and it is the longest such subsequence.
 *)
 
-(*
 Theorem filter_subseq : forall (a:Type) (test:a -> bool) (l:list a),
     subseq (filter test l) l                                /\
     (forall x, In x (filter test l) -> test x = true)       /\
@@ -120,8 +120,23 @@ Theorem filter_subseq : forall (a:Type) (test:a -> bool) (l:list a),
         (forall x, In x k -> test x = true) ->
         length k <= length (filter test l)).
 Proof.
+    intros a test l. split.
+    - apply filter_is_subseq.
+    - split.
+        + apply filter_all_true.
+        + intros k H. induction H as [l IH|l k x H IH|l k x H IH]. 
+            { intros _. apply le_0_n. }
+            { intros H'. assert (test x = true) as Hx.
+                { apply H'. left. reflexivity. }
+                simpl. rewrite Hx. simpl. apply n_le_m__Sn_le_Sm.
+                    apply IH. intros y H0. apply H'. right. exact H0. 
+            }
+            { intros H'. destruct (test x) eqn:Hx.
+                { simpl. rewrite Hx. simpl. apply le_S. apply IH. exact H'. }
+                { simpl. rewrite Hx. apply IH. exact H'. }
+            }
+Qed.
+    
    
 
 
-Show.
-*)

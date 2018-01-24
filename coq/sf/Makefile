@@ -7,10 +7,13 @@ all:	bool.vo \
 		natoption.vo \
 		natdict.vo \
 		list.vo \
+		test_list.vo \
 		option.vo \
 		prod.vo \
 		higher_order.vo \
 		fmap.vo \
+		disjoint.vo \
+		test_disjoint.vo \
 		fold.vo \
 		const.vo \
 		church.vo \
@@ -26,6 +29,7 @@ all:	bool.vo \
 		setoid.vo \
 		exists.vo \
 		In.vo \
+		test_In.vo \
 		filter.vo \
 		equal.vo \
 		reflection.vo \
@@ -65,6 +69,9 @@ natdict.vo: natdict.v nat.vo bool.vo natoption.vo
 list.vo : list.v bool.vo induction.vo
 	coqc list.v
 
+test_list.vo : test_list.v list.vo
+	coqc test_list.v
+
 option.vo : option.v list.vo nat.vo bool.vo
 	coqc option.v
 
@@ -77,6 +84,12 @@ higher_order.vo : higher_order.v list.vo bool.vo nat.vo In.vo filter.vo
 
 fmap.vo : fmap.v nat.vo bool.vo list.vo
 	coqc fmap.v	
+
+disjoint.vo : disjoint.v list.vo In.vo
+	coqc disjoint.v
+
+test_disjoint.vo : test_disjoint.v list.vo In.vo disjoint.vo
+	coqc test_disjoint.v
 
 fold.vo : fold.v list.vo bool.vo
 	coqc fold.v
@@ -120,8 +133,11 @@ setoid.vo : setoid.v or.vo
 exists.vo : exists.v not.vo
 	coqc exists.v
 
-In.vo : In.v list.vo fmap.vo nat.vo bool.vo induction.vo
+In.vo : In.v list.vo fmap.vo 
 	coqc In.v
+
+test_In.vo : test_In.v In.vo list.vo fmap.vo nat.vo bool.vo induction.vo
+	coqc test_In.v
 
 filter.vo : filter.v bool.vo list.vo In.vo
 	coqc filter.v
@@ -142,7 +158,7 @@ inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 le.vo : le.v inductive_prop.vo induction.vo nat.vo bool.vo
 	coqc le.v
 
-subseq.vo : subseq.v bool.vo list.vo le.vo filter.vo
+subseq.vo : subseq.v bool.vo list.vo le.vo In.vo filter.vo
 	coqc subseq.v	
 
 regex.vo : regex.v list.vo fold.vo In.vo bool.vo le.vo

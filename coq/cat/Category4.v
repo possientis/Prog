@@ -54,5 +54,24 @@ Proof.
     apply compose4'_correct.
 Qed.
  
+Lemma compose4'_idl:forall (C:Category4)(a:Obj4 C)(f:Mor4 C),
+    forall (p:cod4 C (id4 C a) = dom4 C f), compose4' (id4 C a) f p = f.
+Proof.
+    intros C a f p. unfold compose4'. assert (a = dom4 C f) as q.
+    { rewrite (proof_tid4 C a) in p. exact p. } 
+    remember (proof_dom4' (id4 C a) f p) as r eqn:H. clear H.
+    revert r. rewrite (proof_idl4 C a f q).
+    intros r. symmetry. apply fromOption_Some.
+Qed.
 
+Lemma compose4'_idr:forall (C:Category4)(a:Obj4 C)(f:Mor4 C),
+    forall (p:cod4 C f = dom4 C (id4 C a)), compose4' f (id4 C a) p = f.
+
+Proof.
+    intros C a f p. unfold compose4'. assert (cod4 C f = a) as q.
+    { rewrite (proof_sid4 C a) in p. exact p. } 
+    remember (proof_dom4' f (id4 C a) p) as r eqn:H. clear H.
+    revert r. symmetry in q. rewrite (proof_idr4 C a f q).
+    intros r. symmetry. apply fromOption_Some.
+Qed.
 

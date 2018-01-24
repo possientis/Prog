@@ -1,3 +1,5 @@
+Require Import Axiom_ProofIrrelevance.
+Require Import Option.
 Require Import Category4.
 Require Import Category5.
 
@@ -24,6 +26,17 @@ Definition toMor4 (C:Category4) (a b:Obj5_ C) (f:Hom5_ a b) : Mor4 C :=
     end.
 
 Arguments toMor4 {C} {a} {b} _.
+
+Lemma Hom5ToMor4 : forall (C:Category4) (a b:Obj5_ C) (f:Hom5_ a b),
+    forall (p:dom4 C (toMor4 f) = a) (q:cod4 C (toMor4 f) = b), 
+        hom5_ (toMor4 f) p q = f.
+Proof.
+    intros C a b f p q. destruct f as [f' F1 F2]. simpl.
+    rewrite (proof_irrelevance _ p F1).
+    rewrite (proof_irrelevance _ q F2).
+    reflexivity.
+Qed.
+
 
 Lemma toMor4_dom : forall (C:Category4) (a b:Obj5_ C) (f:Hom5_ a b),
     dom4 C (toMor4 f) = a.
@@ -98,13 +111,49 @@ Definition id5_ (C:Category4) (a:Obj5_ C) : Hom5_ a a :=
 
 Arguments id5_ {C} _.
 
-(*
+Lemma comp_idl : forall (C:Category4) (a b:Obj5_ C) (f:Hom5_ a b),
+    comp (id5_ a) f = toMor4 f.
+Proof. intros C a b f. unfold comp, id5_, id. apply compose4'_idl. Qed.
+
+Lemma comp_idr : forall (C:Category4) (a b:Obj5_ C) (f:Hom5_ a b),
+    comp f (id5_ b) = toMor4 f.
+Proof. intros C a b f. unfold comp, id5_, id. apply compose4'_idr. Qed.
+
 Definition proof_idl5_ (C:Category4) : forall (a b:Obj5_ C)(f:Hom5_ a b),
     compose5_ (id5_ a) f = f. 
 Proof.
     intros a b f. unfold compose5_.
+    remember (comp_dom (id5_ a) f) as p eqn:Hp.
+    remember (comp_cod (id5_ a) f) as q eqn:Hq.
+    clear Hp Hq. revert p q. rewrite comp_idl.
+    intros p q. apply Hom5ToMor4.
+Qed.
+
+Definition proof_idr5_ (C:Category4) : forall (a b:Obj5_ C)(f:Hom5_ a b),
+    compose5_ f (id5_ b) = f. 
+Proof.
+    intros a b f. unfold compose5_.
+    remember (comp_dom f (id5_ b)) as p eqn:Hp.
+    remember (comp_cod f (id5_ b)) as q eqn:Hq.
+    clear Hp Hq. revert p q. rewrite comp_idr.
+    intros p q. apply Hom5ToMor4.
+Qed.
+
+(*
+Definition proof_asc5_ (C:Category4) : forall (a b c d:Obj5_ C),
+    forall (f:Hom5_ a b) (g:Hom5_ b c) (h:Hom5_ c d),
+        compose5_ (compose5_ f g) h = compose5_ f (compose5_ g h).
+Proof.
+    intros a b c d f g h. unfold compose5_.
+    remember (comp_dom f g) as p eqn:Hp.
+    remember (comp_cod f g) as q eqn:Hq.
+    remember (comp_dom g h) as r eqn:Hr.
+    remember (comp_cod g h) as s eqn:Hs.
+    remember (comp_dom (hom5_ (comp f g) p q) h) as P eqn:HP.
+    remember (comp_cod (hom5_ (comp f g) p q) h) as Q eqn:HQ.
+    remember (comp_dom f (hom5_ (comp g h) r s)) as R eqn:HR.
+    remember (comp_cod f (hom5_ (comp g h) r s)) as S eqn:HS.
+    clear Hp Hq Hr Hs HP HQ HR HS.
+    revert P Q R S.
 Show.
 *)
-
-
-

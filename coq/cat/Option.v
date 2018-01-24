@@ -37,6 +37,15 @@ Proof.
     clear H. destruct z as [y H']. simpl. rewrite H'. reflexivity. 
 Qed.
 
+Lemma fromOption_Some : forall (a:Type) (x:a) (r: Some x <> None),
+    x = fromOption (Some x) r.
+Proof.
+    intros a x r. assert (Some x = Some (fromOption (Some x) r)) as H.
+    { apply fromOption_correct. } 
+    inversion H as [H']. exact H'.
+Qed.
+
+
     
 
 
