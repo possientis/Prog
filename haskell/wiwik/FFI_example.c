@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int example(int a,int b) 
 {
     return a + b;
@@ -31,3 +33,12 @@ void qsort(int *xs, int beg, int end)
         qsort(xs,r,end);
     }
 }
+
+void invoke(void *fn(int))
+{
+    int n = 42;
+    printf("inside of C, now we'll call Haskell\n");
+    fn(n);
+    printf("back in side of C again\n");
+}
+    

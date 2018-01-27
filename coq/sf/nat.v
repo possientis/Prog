@@ -125,11 +125,7 @@ Notation "x + y" := (plus x y) (at level 50, left associativity).
 (*
 Compute 5 + 3 + 2 + 15.
 *)
-
-Notation "x - y" := (minus x y) (at level 50, left associativity).
-
-(*
-Compute 10 - 2 - 4.
+Notation "x - y" := (minus x y) (at level 50, left associativity).  (* Compute 10 - 2 - 4.
 *)
 
 Notation "x * y" := (mult x y) (at level 40, left associativity).

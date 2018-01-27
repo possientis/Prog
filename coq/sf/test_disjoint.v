@@ -42,3 +42,20 @@ Proof.
 Qed.
 
 
+Example test_nostutter1 : nostutter [3,1,4,1,5,6].
+Proof.
+    apply nostutter_double.
+    - apply nostutter_double.
+        + apply nostutter_double.
+            { apply nostutter_double.
+                { apply nostutter_double.
+                    { apply nostutter_single. }
+                    { intros H. inversion H. }
+                }
+                { intros H. inversion H. }
+            }
+            { intros H. inversion H. }
+        + intros H. inversion H.
+    - intros H. inversion H.
+Qed.
+
