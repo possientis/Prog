@@ -30,19 +30,19 @@ Proof. reflexivity. Qed.
 Example test_nth2 : nth [] 1 = None.
 Proof. reflexivity. Qed.
 
-Example test_nth3 : nth [23] 0 = Some 23.
+Example test_nth3 : nth [12] 0 = Some 12.
 Proof. reflexivity. Qed.
 
-Example test_nth4 : nth [23] 1 = None.
+Example test_nth4 : nth [12] 1 = None.
 Proof. reflexivity. Qed.
 
-Example test_nth5 : nth [23,65] 0 = Some 23.
+Example test_nth5 : nth [12,8] 0 = Some 12.
 Proof. reflexivity. Qed.
 
-Example test_nth6 : nth [23,65] 1 = Some 65.
+Example test_nth6 : nth [12,3] 1 = Some 3.
 Proof. reflexivity. Qed.
 
-Example test_nth7 : nth [23,65] 2 = None.
+Example test_nth7 : nth [12,3] 2 = None.
 Proof. reflexivity. Qed.
 
 Theorem nth_nth' : forall (l:natlist) (n:nat),
@@ -61,11 +61,11 @@ Definition option_elim (default:nat) (o:natoption) : nat :=
         | Some x    => x
     end.
 
-Example test_optione_elim1 : option_elim 42 None = 42.
+Example test_optione_elim1 : option_elim 12 None = 12.
 Proof. reflexivity. Qed.
 
 
-Example test_optione_elim2 : option_elim 42 (Some 23) = 23.
+Example test_optione_elim2 : option_elim 3 (Some 5) = 5.
 Proof. reflexivity. Qed.
 
 Definition hd_error (l:natlist) : natoption :=

@@ -1,5 +1,5 @@
 Require Import bool.
-Require Import induction.
+Require Import nat.
 Require Import Setoid.
 
 Inductive list (a:Type) : Type :=

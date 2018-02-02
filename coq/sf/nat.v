@@ -1,39 +1,43 @@
 Require Import bool.
-Require Import Arith.
 
-Module Playground1.
 
 Inductive nat : Type :=
     | O : nat
     | S : nat -> nat
     .
 
-
-End Playground1.
+Notation "0" := (O).
+Notation "1" := (S 0).
+Notation "2" := (S 1).
+Notation "3" := (S 2).
+Notation "4" := (S 3).
+Notation "5" := (S 4).
+Notation "6" := (S 5).
+Notation "7" := (S 6).
+Notation "8" := (S 7).
+Notation "9" := (S 8).
+Notation "10" := (S 9).
+Notation "11" := (S 10).
+Notation "12" := (S 11).
+Notation "13" := (S 12).
+Notation "14" := (S 13).
+Notation "15" := (S 14).
+Notation "16" := (S 15).
+Notation "17" := (S 16).
+Notation "18" := (S 17).
+Notation "19" := (S 18).
+Notation "20" := (S 19).
+Notation "21" := (S 20).
+Notation "22" := (S 21).
+Notation "23" := (S 22).
+Notation "24" := (S 23).
+Notation "25" := (S 24).
 
 Definition pred (n:nat) : nat :=
     match n with    
         | O     => O
         | S p   => p
     end.
-
-
-(* using nat from standard lib *)
-
-Definition minustwo (n:nat) : nat :=
-    match n with
-        | O         => O
-        | S O       => O
-        | S (S p)   => p
-    end.
-
-(*
-Check S (S (S (S O))).
-Compute minustwo 4.
-Check S.
-Check Playground1.pred.
-Check minustwo.
-*)
 
 Fixpoint evenb (n:nat) : bool :=
     match n with 
@@ -43,27 +47,6 @@ Fixpoint evenb (n:nat) : bool :=
     end.
 
 Definition oddb (n:nat) : bool := negb (evenb n).
-
-Example test_evenb0: evenb 0 = true.
-Proof. simpl. reflexivity. Qed.
-
-Example test_evenb1: evenb 1 = false.
-Proof. simpl. reflexivity. Qed.
-
-Example test_evenb2: evenb 2 = true.
-Proof. simpl. reflexivity. Qed.
-
-
-Example test_oddb0: oddb 0 = false.
-Proof. simpl. reflexivity. Qed.
-
-Example test_oddb1: oddb 1 = true.
-Proof. simpl. reflexivity. Qed.
-
-Example test_oddb2: oddb 2 = false.
-Proof. simpl. reflexivity. Qed.
-
-Module Playground2.
 
 Fixpoint plus (n:nat)(m:nat) : nat :=
     match n with 
@@ -77,15 +60,6 @@ Fixpoint mult (n m:nat) : nat :=
         | S p   => plus m (mult p m)
     end.
 
-(*
-Compute plus 3 2.
-Compute plus 1540 3000. (* stack overflow pretty soon *)
-*)
-
-Example test_mult1: mult 3 3 = 9.
-Proof. simpl. reflexivity. Qed.
-
-
 Fixpoint minus (n m:nat) : nat :=
     match n,m with
         | O   , _   => O
@@ -93,20 +67,11 @@ Fixpoint minus (n m:nat) : nat :=
         | S p , S q => minus p q
     end.
 
-Example test_minus1: minus 10 3 = 7.
-Proof. simpl. reflexivity. Qed.
-
-
-End Playground2.
-
 Fixpoint exp (base power : nat) : nat :=
     match power with
         | O     => S O
         | S p   => mult base (exp base p)
     end.
-
-Example test_exp1: exp 3 4 = 81.
-Proof. simpl. reflexivity. Qed.
 
 
 Fixpoint fact (n:nat) : nat :=
@@ -116,24 +81,11 @@ Fixpoint fact (n:nat) : nat :=
     end.
 
 
-Example test_fact1: fact 5 = 120.
-Proof. simpl. reflexivity. Qed.
-
-
 Notation "x + y" := (plus x y) (at level 50, left associativity).
 
-(*
-Compute 5 + 3 + 2 + 15.
-*)
-Notation "x - y" := (minus x y) (at level 50, left associativity).  (* Compute 10 - 2 - 4.
-*)
+Notation "x - y" := (minus x y) (at level 50, left associativity).  
 
 Notation "x * y" := (mult x y) (at level 40, left associativity).
-
-(*
-Compute 10 + 3 * 4.
-Check plus 4 3.
-*)
 
 Fixpoint eqb (n m:nat) : bool := 
     match n with
@@ -147,12 +99,6 @@ Fixpoint eqb (n m:nat) : bool :=
                     end
     end.
 
-(*
-Compute eqb 0 0.
-Compute eqb 43 12.
-Compute eqb 56 56.
-*)
-
 Fixpoint leb (n m:nat) : bool :=
     match n with
         | O     =>  true
@@ -162,87 +108,56 @@ Fixpoint leb (n m:nat) : bool :=
                     end
     end.
 
-(*
-Compute leb 23 24.
-Compute leb 24 24.
-Compute leb 25 24.
-*)
-
 Definition ltb (n m:nat) : bool :=
     andb (leb n m) (negb (eqb n m)).    
 
-
-
-(*
-Compute ltb 23 24.
-Compute ltb 24 24.
-Compute ltb 25 24.
-*)
-
-Theorem plus_0_n : forall n:nat, 0 + n = n.
+Lemma plus_0_n : forall n:nat, 0 + n = n.
 Proof.
     intros n. simpl. reflexivity.
 Qed.
 
-Theorem plus_0_n' : forall n:nat, 0 + n = n.
+Lemma plus_1_n : forall n:nat, 1 + n = S n.
 Proof.
     intros n. reflexivity.
 Qed.
 
-Theorem plus_1_n : forall n:nat, 1 + n = S n.
+Lemma mult_0_n : forall n:nat, 0 * n = 0.
 Proof.
     intros n. reflexivity.
 Qed.
 
-Theorem mult_0_n : forall n:nat, 0 * n = 0.
-Proof.
-    intros n. reflexivity.
-Qed.
-
-Theorem plus_n_0 : forall n:nat, n + 0 = n.
+Lemma plus_n_0 : forall n:nat, n + 0 = n.
 Proof.
     intros n. elim n.
     clear n. reflexivity.
     clear n. intros n H. simpl. rewrite H. reflexivity.
 Qed.
 
-Theorem mult_1_n : forall n:nat, 1 * n = n.
+Lemma mult_n_0 :forall (n:nat), n * 0 = 0.
+Proof.
+    intros n. induction n as [|n IH].
+    - reflexivity.
+    - simpl. rewrite IH. reflexivity.
+Qed.
+
+Lemma mult_1_n : forall n:nat, 1 * n = n.
 Proof.
     intros n. simpl. apply plus_n_0.
 Qed.
 
-Theorem plus_id_example: forall n m:nat, 
-    n = m -> n + n = m + m.
-Proof.
-    intros n m H. rewrite H. reflexivity.
-Qed.
-
-Theorem plus_id_exercise: forall n m o: nat,
-   n = m -> m = o -> n + m = m + o.
-Proof.
-    intros n m o H1 H2. rewrite H1. rewrite <- H2. reflexivity.
-Qed.
-
-(*
-Theorem plus_comm : forall n m:nat, 
-    n + m = m + n.
-Proof.
-Admitted.  (* useful when writing bigger proofs *)
-*)
-
-Theorem mult_0_plus : forall n m:nat,
+Lemma mult_0_plus : forall n m:nat,
     (0 + n) * m = n * m.
 Proof.
     intros n m. rewrite plus_0_n. reflexivity.
 Qed.
 
-Theorem mult_S_1 : forall n m:nat,
+Lemma  mult_S_1 : forall n m:nat,
     m = S n -> m * (1 + n) = m * m.
 Proof.
     intros n m H. simpl. rewrite <- H. reflexivity.
 Qed.
 
-Theorem plus_1_neq_0 : forall n:nat,
+Lemma plus_1_neq_0 : forall n:nat,
     eqb (n + 1) 0 = false.
 Proof.
     intros n. elim n.
@@ -250,26 +165,7 @@ Proof.
     clear n. intros n H. simpl. reflexivity.
 Qed.
 
-Theorem plus_1_neq_0' : forall n:nat,
-    eqb (n + 1) 0 = false.
-Proof.
-    (* 'as' clause to name variables of constructors    *)
-    (*  of inductive type. 0 is a nullary constructor   *)
-    intros n. destruct n as [|n].   (* we don't need induction here *)
-    - reflexivity.          (* you can skip 'simpl' *) (* using bullet for clarity *)
-    - reflexivity.          (* you can skip 'simpl' *) (* using bullet for clarity *)
-Qed.
-
-Theorem plus_1_neq_0'' : forall n:nat,
-    eqb (n + 1) 0 = false.
-Proof.
-    intros [|n].           (* shortcut for intros n. destruct n as [|n]. *) 
-    - reflexivity.
-    - reflexivity.
-Qed.
-
-
-Theorem zero_nbeq_plus_1 : forall n:nat,
+Lemma zero_nbeq_plus_1 : forall n:nat,
     eqb 0 (n + 1) = false.
 Proof.
     intros [|n].
@@ -277,13 +173,38 @@ Proof.
     - reflexivity.
 Qed.
 
-Theorem eqb_refl : forall n:nat, eqb n n = true.
+Lemma plus_n_Sm : forall n m:nat, n + S m = S (n + m).
+Proof.
+    induction n.
+    - reflexivity. 
+    - intros m. simpl. rewrite IHn. reflexivity. 
+Qed.
+
+
+Lemma plus_Sn_m: forall n m:nat, S n + m = S (n + m).
+Proof. intros n m. reflexivity. Qed.
+
+Theorem plus_comm : forall n m:nat, n + m = m + n.
+Proof.
+    induction n as [|n IH]. 
+    - intros m. symmetry. apply plus_n_0.
+    - intros m. rewrite plus_n_Sm. simpl. rewrite IH. reflexivity.
+Qed.
+
+Theorem plus_assoc : forall n m p:nat, (n + m) + p = n + (m + p).
+Proof.
+    induction n as [|n H].
+    - reflexivity.
+    - intros m p. simpl. rewrite H. reflexivity.
+Qed.
+
+
+Lemma eqb_refl : forall n:nat, eqb n n = true.
 Proof.
     induction n as [|n H].
     - reflexivity.
     - simpl. exact H.
 Qed.
-
 
 
 Lemma true_not_false : true <> false.
@@ -363,5 +284,136 @@ Proof.
   - intros H. inversion H.
   - intros H. inversion H as [H']. apply IH. exact H'.
 Qed.
+
+
+Theorem mult_0_plus_n : forall n m:nat, (0 + n) * m = n * m.
+Proof.
+    reflexivity.
+Qed.
+
+Theorem mult_n_plus_0 : forall n m:nat, (n + 0) * m = n * m.
+Proof.
+    intros n m. assert (H: n + 0 = n). (* assert (n + 0 = n) as H *)
+    - clear m. induction n. 
+        + reflexivity.
+        + simpl. rewrite IHn. reflexivity.
+    - rewrite H. reflexivity.
+Qed.
+
+Theorem plus_rearrange : forall n m p q:nat, 
+    (n + m) + (p + q) = (m + n) + (p + q).
+Proof.
+    intros n m p q. assert (n + m = m + n) as H.
+    - apply plus_comm.
+    - rewrite H. reflexivity.
+Qed.
+
+
+Theorem plus_swap : forall n m p:nat,
+    n + (m + p) = m + (n + p).
+Proof.
+    intros n m p. assert (n + (m + p) = (n + m) + p) as H.
+    - rewrite plus_assoc. reflexivity.
+    - assert (m + (n + p) = (m + n) + p) as H'.
+    + rewrite plus_assoc. reflexivity.
+    + rewrite H, H'.  assert (n + m = m + n) as H''. 
+    { apply plus_comm. }
+    { rewrite H''. reflexivity. }
+Qed.
+
+Theorem mult_distrib_left : forall n m p:nat,
+    n * (m + p) = n * m + n * p.
+Proof.
+    induction n as [|n H].
+    - reflexivity.
+    - intros m p. simpl. rewrite H. clear H.
+        assert (m + p + (n * m + n * p) = m + (p + (n * m + n * p))) as H.
+        { rewrite plus_assoc. reflexivity. }
+        rewrite H. clear H.
+        assert (p + (n * m + n * p) = (p + n * m) + n * p) as H.
+        { rewrite plus_assoc. reflexivity. }
+        rewrite H. clear H.
+        assert (m + n * m + (p + n * p) = m + (n * m + (p + n * p))) as H.
+        { apply plus_assoc. }
+        rewrite H. clear H.
+        assert (n * m + (p + n * p) = (n * m + p) + n * p) as H.
+        { rewrite plus_assoc. reflexivity. }
+        rewrite H. clear H.
+        assert (p + n * m = n * m + p) as H.
+        { apply plus_comm. }
+        rewrite H. clear H. reflexivity.
+Qed.
+
+Theorem mult_n_1 : forall n:nat, n * 1 = n.
+Proof.
+    induction n as [|n H].
+    - reflexivity.
+    - simpl. rewrite H. reflexivity.
+Qed.
+
+
+Theorem mult_comm : forall n m: nat, n * m = m * n.
+Proof.
+    induction n as [|n H].
+    - intros m. simpl. rewrite mult_n_0. reflexivity. 
+    - intros m. simpl. rewrite H. clear H.
+    assert (m + m * n = m * 1 + m * n) as H.
+    { rewrite mult_n_1. reflexivity. }
+    rewrite H. clear H. 
+    rewrite <- mult_distrib_left. rewrite plus_1_n. reflexivity.
+Qed.
+
+Theorem leb_refl : forall n:nat, leb n n = true.
+Proof.
+    induction n as [|n H].
+    - reflexivity.
+    - simpl. exact H.
+Qed.
+
+Theorem zero_neqb_S : forall n:nat, eqb 0 (S n) = false.
+Proof.
+    reflexivity.
+Qed.
+
+
+Theorem andb_false_r : forall b:bool, andb b false = false.
+Proof.
+    destruct b.
+    - reflexivity.
+    - reflexivity.
+Qed.
+
+Theorem plus_leb_compat_left : forall n m p:nat, 
+    leb n m = true -> leb (p + n) (p + m) = true.
+Proof.
+    induction p as [|p H].
+    - simpl. intro H. exact H.
+    - intros H'. simpl. apply H. exact H'.
+Qed.
+
+Theorem S_neqb_0: forall n:nat, eqb (S n) 0 = false.
+Proof.
+    reflexivity.
+Qed.
+
+Theorem mult_distrib_right : forall n m p:nat,
+    (n + m) * p = n * p + m * p.
+Proof.
+    intros n m p. 
+    assert ((n + m) * p = p * (n + m)) as H1. { apply mult_comm. }
+    assert (n * p = p * n) as H2. {apply mult_comm. }
+    assert (m * p = p * m) as H3. {apply mult_comm. }
+    rewrite H1, H2, H3. apply mult_distrib_left.
+Qed.
+
+Theorem mult_assoc : forall n m p:nat, (n * m) * p = n * (m * p).
+Proof.
+    induction n as [|n H].
+    - reflexivity.
+    - intros m p. simpl. rewrite <- H. apply mult_distrib_right.
+Qed.
+
+
+
 
 

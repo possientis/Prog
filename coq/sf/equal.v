@@ -1,4 +1,4 @@
-Require Import induction.
+Require Import nat.
 
 Example function_equality_ex1 : plus 3 = plus (pred 4).
 Proof. reflexivity. Qed.

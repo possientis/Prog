@@ -22,8 +22,18 @@ long simple_l(long *xp, long y)
 */
 
 
+long gval1 = 567;
+long gval2 = 763;
 
+long simple_call_l()
+{
+    long z = simple_l(&gval1,12L);
+    return z + gval2;
+} 
 	
-
+int main() {
+    simple_call_l();
+    return 0;
+}
 
 	

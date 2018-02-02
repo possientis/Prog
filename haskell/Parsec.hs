@@ -1,0 +1,38 @@
+import Text.Parsec
+import Text.Parsec.String
+
+
+data Expr
+    = Var Char
+    | Lam Char Expr
+    | App Expr Expr 
+    deriving Show
+
+
+lam :: Parser Expr
+lam = do
+    char '\\'
+    n <- letter
+    string "->"
+    e <- expr
+    return $ Lam n e
+
+app :: Parser Expr
+app = do
+    apps <- many1 term
+    return $ foldl1 App apps
+
+var :: Parser Expr
+var = do
+    n <- letter
+    return $ Var n
+
+parens :: Parser Expr -> Parser Expr
+parens p = do
+    char '('
+    e <- p
+    char ')'
+    return e
+
+--TODO
+    

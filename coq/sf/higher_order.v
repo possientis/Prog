@@ -1,6 +1,6 @@
-Require Import list.
 Require Import bool.
 Require Import nat.
+Require Import list.
 Require Import In.
 Require Import list.
 Require Import filter.
@@ -36,8 +36,10 @@ Proof. reflexivity. Qed.
 Example test_countoddnumbers'3 : countoddnumbers' [] = 0.
 Proof. reflexivity. Qed.
 
+(*
 Example test_anonymous_fun' : doit3times (fun n => n * n) 2 = 256.
 Proof. reflexivity. Qed.
+*)
 
 Example test_filter2' : filter (fun l => eqb (length l) 1)
     [[1,2],[3],[4],[5,6,7],[],[8]] = [[3],[4],[8]].
@@ -52,7 +54,7 @@ Example test_filter_even_gt7_1 :
 Proof. reflexivity. Qed.
 
 Example test_filter_even_gt7_2:
-    filter_even_gt7 [5,2,6,19,129] = [].
+    filter_even_gt7 [5,2,6,11,9] = [].
 Proof. reflexivity. Qed.
     
 Definition partition (a:Type)(test: a -> bool)(l:list a):prod (list a)(list a) :=

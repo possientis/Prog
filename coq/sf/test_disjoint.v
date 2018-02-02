@@ -59,3 +59,19 @@ Proof.
     - intros H. inversion H.
 Qed.
 
+
+Example test_nostutter2 : nostutter (@nil nat).
+Proof. apply nostutter_nil. Qed.
+
+
+Example test_nostutter3 : nostutter [5].
+Proof. apply nostutter_single. Qed.
+
+Example test_nostutter4 : ~ nostutter [3,1,1,4].
+Proof.
+    intros H. inversion H as [x|x|x y l H0 H1 H2].
+    inversion H0 as [z|z|z t k H6 H7 H8].
+    apply H7. reflexivity.
+Qed.
+
+

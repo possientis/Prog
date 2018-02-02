@@ -1,3 +1,4 @@
+Require Import nat.
 Require Import list.
 
 (*

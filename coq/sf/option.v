@@ -1,6 +1,6 @@
-Require Import list.
-Require Import nat.
 Require Import bool.
+Require Import nat.
+Require Import list.
 
 Inductive option (a:Type) : Type :=
     | Some : a -> option a
@@ -35,13 +35,13 @@ Proof. reflexivity. Qed.
 Example test_nth4 : nth [23] 1 = None.
 Proof. reflexivity. Qed.
 
-Example test_nth5 : nth [23,65] 0 = Some 23.
+Example test_nth5 : nth [23,25] 0 = Some 23.
 Proof. reflexivity. Qed.
 
-Example test_nth6 : nth [23,65] 1 = Some 65.
+Example test_nth6 : nth [23,25] 1 = Some 25.
 Proof. reflexivity. Qed.
 
-Example test_nth7 : nth [23,65] 2 = None.
+Example test_nth7 : nth [23,25] 2 = None.
 Proof. reflexivity. Qed.
 
 Definition hd_error (a:Type)(l:list a) : option a :=

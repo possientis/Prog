@@ -85,5 +85,16 @@ Proof.
             { apply H. exact H2. exact H'. }
 Qed.
 
+Lemma In_split : forall (a:Type)(x:a)(l:list a), 
+    In x l -> exists k m, l = k ++ x :: m.
+Proof.
+    intros a x l. induction l as [|y xs IH].
+    - intros H. inversion H.
+    - intros [H|H].
+        + exists [], xs. simpl. rewrite H. reflexivity.
+        + apply IH in H. clear IH. destruct H as [k [m H]].
+            exists (y :: k), m. rewrite H. rewrite app_cons. reflexivity.
+Qed.
+
 
 

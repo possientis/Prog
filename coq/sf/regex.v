@@ -1,12 +1,10 @@
-Require Import nat.
-Require Import list.
-Require Import fold.
-Require Import In.
 Require Import bool.
+Require Import nat.
 Require Import le.
+Require Import list.
+Require Import In.
+Require Import fold.
 
-(* alllows omega tactic which simplifies proofs with nat *)
-Require Import Coq.omega.Omega.
 
 Inductive regex (a:Type) : Type :=
 | EmptySet  : regex a
@@ -340,7 +338,7 @@ Proof.
         ]
         .
     - intros H'. inversion H'.
-    - intros H'. inversion H' as [|m H1 H2]. inversion H1.
+    - intros H'. inversion H' as [|m p H1 H2]. inversion H1.
     - simpl. intros H'. rewrite app_length in H'.
         apply sum_leq_sum in H' as [H3|H3].
         + apply IH1 in H3 as [s3 [s4 [s5 [H4 [H5 H6]]]]]. clear IH1 IH2.
@@ -411,4 +409,3 @@ Proof.
                         }
                      }
 Qed.
-                    

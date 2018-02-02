@@ -1,10 +1,9 @@
+Require Import bool.
+Require Import nat.
+
 Require Import inductive_prop.
 Require Import induction.
-Require Import nat.
-Require Import bool.
 
-
-Module LEMODULE.
 
 Inductive le : nat -> nat -> Prop :=
 | le_n : forall (n:nat), le n n
@@ -13,57 +12,28 @@ Inductive le : nat -> nat -> Prop :=
 
 Notation "n <= m" := (le n m).
 
-
-Example test_le1 : 3 <= 3.
-Proof. apply le_n. Qed.
-
-Example test_le2 : 3 <= 6.
-Proof. apply le_S, le_S, le_S, le_n. Qed. 
-
 Definition lt (n m:nat) : Prop := le (S n) m.
 
-End LEMODULE.
+Notation "n < m" := (lt n m).
+
+Lemma le_refl : forall (n:nat), n <= n.
+Proof. intros n. apply le_n. Qed.
 
 
-
-Inductive square_of : nat -> nat -> Prop :=
-| sq : forall (n:nat), square_of n (n * n)
-.
-
-Inductive next_nat : nat -> nat -> Prop :=
-| nn : forall (n:nat), next_nat n (S n)
-.
-
-Inductive next_even : nat -> nat -> Prop :=
-| ne_1 : forall (n:nat), ev (S n) -> next_even n (S n)
-| ne_2 : forall (n:nat), ev (S (S n)) -> next_even n (S (S n))
-.
-
-
-Inductive total_rel : nat -> nat -> Prop :=
-| tr : forall (n m:nat), total_rel n m
-.
-
-Example test_total_rel1 : forall (n m:nat), total_rel n m.
-Proof. intros n m. apply tr. Qed.
-
-Inductive empty_rel : nat -> nat -> Prop := .
-
-Example test_empty_rel : forall (n m:nat), ~ (empty_rel n m).
-Proof. intros n m H. inversion H. Qed.
-
-
-(* induction on proofs *)
 Lemma le_trans : forall (n m p:nat), 
     n <= m -> m <= p -> n <= p.
 Proof.
-    intros n m p H. generalize p. clear p.
-    induction H as [n'|n' H0 H'].
+    intros n m p H. revert p. induction H as [n|n m H IH].
     - intros p H'. exact H'.
-    - intros p H1. induction H1 as [p'| p' H2 H3].
-        + apply H'. apply le_S, le_n.
-        + apply le_S. exact H3.
+    - intros p H'. remember (S m) as m' eqn:H0. revert H0 IH H.
+        revert n m. induction H' as [p|m' p H' IH'].  
+        + intros n m Hp IH Hnm. apply IH. rewrite Hp. apply le_S, le_n.
+        + intros n m Hm IH Hnm. apply le_S. apply (IH' n m).
+            { exact Hm. }
+            { exact IH. }
+            { exact Hnm. } 
 Qed.
+
 
 Lemma le_0_n : forall (n:nat), 0 <= n.
 Proof. 
@@ -72,15 +42,17 @@ Proof.
     - apply le_S. exact H.
 Qed.
 
-Theorem n_le_m__Sn_le_Sm : forall (n m:nat),
+
+Lemma n_le_m__Sn_le_Sm : forall (n m:nat),
     n <= m -> S n <= S m.
 Proof.
-    intros n m H. induction H as [n'|n' m H'].
+    intros n m H. induction H as [n|n m H IH].
     - apply le_n.
-    - apply le_S. exact H'.
+    - apply le_S. exact IH.
 Qed.
 
-Theorem Sn_le_Sm__n_le_m : forall (n m:nat),
+
+Lemma Sn_le_Sm__n_le_m : forall (n m:nat),
     S n <= S m -> n <= m.
 Proof.
     intros n m H. inversion H as [H0|p H1].
@@ -91,14 +63,14 @@ Proof.
 Qed.
         
 
-Theorem le_plus_l : forall (n m: nat), n <= n + m.
+Lemma le_plus_l : forall (n m: nat), n <= n + m.
 Proof.
     intros n m. induction m as [|m H].
-    - rewrite <- plus_n_O. apply le_n.
+    - rewrite plus_n_0. apply le_n.
     - rewrite plus_n_Sm. apply le_S. exact H.
 Qed.
 
-Theorem plus_lt : forall (n m p:nat),
+Lemma plus_lt : forall (n m p:nat),
     n + m < p -> n < p /\ m < p.
 Proof.
     intros n m p H. unfold lt in H. split.
@@ -111,13 +83,13 @@ Proof.
 Qed.
 
 
-Theorem lt_S :  forall (n m:nat), n < m -> n < S m.
+Lemma lt_S :  forall (n m:nat), n < m -> n < S m.
 Proof.
     intros n m. unfold lt. intros H. apply le_S. exact H.
 Qed.
 
 
-Theorem leb_complete : forall (n m:nat),
+Lemma leb_complete : forall (n m:nat),
     leb n m = true -> n <= m.
 Proof.
     induction n as [|n H].
@@ -127,7 +99,7 @@ Proof.
         + simpl. intros H0. apply n_le_m__Sn_le_Sm. apply H. exact H0.
 Qed.
 
-Theorem leb_correct : forall (n m:nat),
+Lemma leb_correct : forall (n m:nat),
     n <= m-> leb n m = true.
 Proof.
     intros n m. generalize n. clear n. induction m as [|m H].
@@ -138,7 +110,7 @@ Proof.
             apply H. exact H0.
 Qed.
 
-Theorem leb_trans : forall (n m p:nat),
+Lemma leb_trans : forall (n m p:nat),
     leb n m = true -> leb m p = true -> leb n p = true.
 Proof.
     intros n m p Hnm Hmp. apply leb_correct. apply le_trans with (m:=m).
@@ -146,7 +118,7 @@ Proof.
     - apply leb_complete. exact Hmp.
 Qed.
 
-Theorem leb_iff : forall (n m:nat),
+Lemma leb_iff : forall (n m:nat),
     leb n m = true <-> n <= m.
 Proof. 
     intros n m. split.
@@ -161,13 +133,13 @@ Lemma not_le_Sm_n : forall (n m:nat), n <= m -> ~(S m <= n).
 Proof.
   intros n m. revert n. induction m as [|m IH]. 
   - intros n H H'. apply le_n_0 in H. rewrite H in H'. inversion H'.
-  - intros n H H'. remember (S m) as q eqn:H0. destruct H as [|p].
+  - intros n H H'. remember (S m) as q eqn:H0. destruct H as [|p n].
     + apply (IH n). 
       { apply Sn_le_Sm__n_le_m. rewrite <- H0. exact H'. }
       { apply le_n. }
-    + apply (IH n). 
+    + apply (IH p). 
       { inversion H0 as [H2]. rewrite H2 in H. exact H. }
-      { apply le_trans with (m:=S (S p)).
+      { apply le_trans with (m:=S (S n)).
         { apply le_S, le_n. }
         { exact H'. }
       }
@@ -177,10 +149,10 @@ Lemma not_le_Sn_n : forall (n:nat), ~(S n <= n).
 Proof. intro n. apply not_le_Sm_n. apply le_n. Qed.
 
 
-Theorem le_antisym : forall (n m:nat),
+Lemma le_antisym : forall (n m:nat),
   n <= m -> m <= n -> n = m.
 Proof.
-  intros n m H. destruct H as [|p H].
+  intros n m H. destruct H as [|n p H IH].
   - intros _. reflexivity.
   - intros H'. exfalso. apply (not_le_Sn_n p).
     apply le_trans with (m:=n).
@@ -189,17 +161,17 @@ Proof.
 Qed.
 
 
-Theorem n_lt_m__Sn_lt_Sm : forall (n m:nat), n < m -> S n < S m.
+Lemma n_lt_m__Sn_lt_Sm : forall (n m:nat), n < m -> S n < S m.
 Proof.
     intros n m H. unfold lt in H. unfold lt. apply n_le_m__Sn_le_Sm. exact H.
 Qed.
 
-Theorem Sn_lt_Sm__n_lt_m : forall (n m:nat), S n < S m -> n < m.
+Lemma Sn_lt_Sm__n_lt_m : forall (n m:nat), S n < S m -> n < m.
 Proof.
     intros n m H. unfold lt in H. unfold lt. apply Sn_le_Sm__n_le_m. exact H.
 Qed.
 
-Theorem le_lt_dec : forall (n m:nat), {n <= m} + {m < n}. 
+Lemma le_lt_dec : forall (n m:nat), {n <= m} + {m < n}. 
 Proof.
     intros n. induction n as [|n IH].
     - left. apply le_0_n.
@@ -226,7 +198,7 @@ Proof.
     rewrite <- plus_n_Sm. apply plus_le_compat_l. exact H.
 Qed.
 
-Theorem plus_le_compat : forall (n m n' m':nat),
+Lemma plus_le_compat : forall (n m n' m':nat),
     n <= n' -> m <= m' -> n + m <= n' + m'.
 Proof.
     intros n m n' m' Hn Hm. apply le_trans with (m:=n + m').
@@ -234,7 +206,7 @@ Proof.
     - rewrite (plus_comm n m'), (plus_comm n' m'). apply plus_le_compat_l. exact Hn.
 Qed.
 
-Theorem plus_lt_compat : forall (n m n' m':nat),
+Lemma plus_lt_compat : forall (n m n' m':nat),
     n < n' -> m < m' -> n + m < n' + m'.
 Proof.
     intros n m n' m' Hn Hm. unfold lt in Hn. unfold lt in Hm. unfold lt.

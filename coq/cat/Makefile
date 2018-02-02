@@ -18,6 +18,7 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Category3AsCategory.vo \
 		Category2AsCategory4.vo \
 		Category4AsCategory2.vo \
+		Category4AsCategory5.vo \
 		Iso_CatCat2.vo \
 		Iso_CatCat3.vo \
 		Iso_Cat2Cat4.vo \
@@ -136,6 +137,14 @@ Category4AsCategory2.vo :	Category4AsCategory2.v \
 							Category4.vo \
 							Category2.vo
 	coqc Category4AsCategory2.v
+
+
+Category4AsCategory5.vo :	Category4AsCategory5.v \
+							Axiom_ProofIrrelevance.vo \
+							Option.vo \
+							Category4.vo \
+							Category5.vo
+	coqc Category4AsCategory5.v
 
 
 Iso_CatCat2.vo :			Iso_CatCat2.v \

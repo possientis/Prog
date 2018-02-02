@@ -1,4 +1,5 @@
 Require Import Option.
+Require Import Axiom_ProofIrrelevance.
 
 Record Category4 : Type := category4
     { Obj4      : Type
@@ -40,6 +41,19 @@ Proof.
     intros C f g p. unfold compose4'. apply fromOption_correct.
 Qed.
 
+Lemma compose4'_equal:forall (C:Category4)(f g f' g':Mor4 C),
+    forall (p:cod4 C f = dom4 C g)(p':cod4 C f' = dom4 C g'),
+    compose4 C f g = compose4 C f' g' -> compose4' f g p = compose4' f' g' p'.
+Proof.
+    intros C f g f' g' p p' H. unfold compose4'.
+    remember (proof_dom4' f g p) as P eqn:H1.
+    remember (proof_dom4' f' g' p') as P' eqn:H2.
+    clear H1 H2. clear p p'. revert P P'. rewrite H.
+    intros P P'. rewrite (proof_irrelevance _ P P').
+    reflexivity.
+Qed.
+     
+
 Lemma compose4'_dom:forall (C:Category4)(f g:Mor4 C)(p:cod4 C f = dom4 C g),
     dom4 C (compose4' f g p) = dom4 C f.
 Proof.
@@ -73,5 +87,19 @@ Proof.
     remember (proof_dom4' f (id4 C a) p) as r eqn:H. clear H.
     revert r. symmetry in q. rewrite (proof_idr4 C a f q).
     intros r. symmetry. apply fromOption_Some.
+Qed.
+
+Lemma compose4'_asc:forall (C:Category4)(f g h:Mor4 C),
+    forall (p:cod4 C f = dom4 C g) (q:cod4 C g = dom4 C h),
+    forall (P:cod4 C (compose4' f g p) = dom4 C h),
+    forall (Q:cod4 C f = dom4 C (compose4' g h q)),
+    compose4' (compose4' f g p) h P = compose4' f (compose4' g h q) Q.
+Proof.
+    intros C f g h p q P Q.
+    remember (compose4' f g p) as fg eqn:H1.
+    remember (compose4' g h q) as gh eqn:H2.
+    apply compose4'_equal. symmetry. apply (proof_asc4 _ _ g).
+    - rewrite H1. apply compose4'_correct.
+    - rewrite H2. apply compose4'_correct. 
 Qed.
 

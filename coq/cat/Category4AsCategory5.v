@@ -27,6 +27,16 @@ Definition toMor4 (C:Category4) (a b:Obj5_ C) (f:Hom5_ a b) : Mor4 C :=
 
 Arguments toMor4 {C} {a} {b} _.
 
+Lemma hom5_equal : forall (C:Category4) (f f':Mor4 C) (a b:Obj5_ C), 
+    forall (p:dom4 C f = a)(q:cod4 C f = b)(p':dom4 C f' = a) (q':cod4 C f' = b),
+    f = f' -> hom5_ f p q = hom5_ f' p' q'.
+Proof.
+    intros C f f' a b p q p' q' H. revert p q p' q'. rewrite H. intros p q p' q'.
+    rewrite (proof_irrelevance _ p p').
+    rewrite (proof_irrelevance _ q q').
+    reflexivity.
+Qed.
+
 Lemma Hom5ToMor4 : forall (C:Category4) (a b:Obj5_ C) (f:Hom5_ a b),
     forall (p:dom4 C (toMor4 f) = a) (q:cod4 C (toMor4 f) = b), 
         hom5_ (toMor4 f) p q = f.
@@ -125,7 +135,8 @@ Proof.
     intros a b f. unfold compose5_.
     remember (comp_dom (id5_ a) f) as p eqn:Hp.
     remember (comp_cod (id5_ a) f) as q eqn:Hq.
-    clear Hp Hq. revert p q. rewrite comp_idl.
+    clear Hp Hq. revert p q. 
+    rewrite comp_idl.
     intros p q. apply Hom5ToMor4.
 Qed.
 
@@ -139,7 +150,6 @@ Proof.
     intros p q. apply Hom5ToMor4.
 Qed.
 
-(*
 Definition proof_asc5_ (C:Category4) : forall (a b c d:Obj5_ C),
     forall (f:Hom5_ a b) (g:Hom5_ b c) (h:Hom5_ c d),
         compose5_ (compose5_ f g) h = compose5_ f (compose5_ g h).
@@ -153,7 +163,19 @@ Proof.
     remember (comp_cod (hom5_ (comp f g) p q) h) as Q eqn:HQ.
     remember (comp_dom f (hom5_ (comp g h) r s)) as R eqn:HR.
     remember (comp_cod f (hom5_ (comp g h) r s)) as S eqn:HS.
-    clear Hp Hq Hr Hs HP HQ HR HS.
-    revert P Q R S.
-Show.
-*)
+    clear Hp Hq Hr Hs HP HQ HR HS. apply hom5_equal.
+    clear P Q R S. unfold comp. simpl. apply compose4'_asc.
+Qed.
+
+
+
+Definition toCategory5 (C:Category4) : Category5 := category5
+    (Obj5_              C)
+    (@Hom5_             C)
+    (@compose5_         C)
+    (@id5_              C)
+    (proof_idl5_        C)
+    (proof_idr5_        C)
+    (proof_asc5_        C) .
+
+

@@ -1,5 +1,6 @@
-Require Import list.
+Require Import nat.
 Require Import bool.
+Require Import list.
 Require Import fmap.
 
 Fixpoint foldr (a b:Type) (f:a -> b -> b) (z:b) (l:list a) : b :=

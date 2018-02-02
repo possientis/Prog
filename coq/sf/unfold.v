@@ -1,4 +1,4 @@
-Require Import induction.
+Require Import nat.
 
 Definition square (n:nat) : nat := n * n.
 

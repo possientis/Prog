@@ -11,11 +11,11 @@ Definition eqb_key k1 k2 : bool :=
         | Key n1, Key n2    => eqb n1 n2
     end.
 
-Example eqb_key1 : eqb_key (Key 23) (Key 23) = true.
+Example eqb_key1 : eqb_key (Key 12) (Key 12) = true.
 Proof. reflexivity. Qed.
 
 
-Example eqb_key2 : eqb_key (Key 23) (Key 24) = false.
+Example eqb_key2 : eqb_key (Key 9) (Key 10) = false.
 Proof. reflexivity. Qed.
 
 Theorem eqb_key_refl : forall k:key, eqb_key k k = true.

@@ -5,7 +5,7 @@ Example or_exercise1 : forall (n m:nat),
 Proof.
     intros n m [H1|H2].
     - rewrite H1. reflexivity.
-    - rewrite H2. symmetry. apply mult_n_O. 
+    - rewrite H2. apply mult_n_0. 
 Qed.
 
 
