@@ -34,5 +34,22 @@ parens p = do
     char ')'
     return e
 
---TODO
+term :: Parser Expr
+term = var <|> parens expr
+
+expr :: Parser Expr
+expr = lam <|> app
+
+decl :: Parser Expr 
+decl = do
+    e <- expr
+    eof
+    return e
+
+
+test :: IO ()
+test = parseTest decl "\\y->y(\\x->x)y"
+
+main :: IO ()
+main = test >>= print
     
