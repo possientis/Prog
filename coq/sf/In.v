@@ -97,4 +97,20 @@ Proof.
 Qed.
 
 
+Lemma In_Decidable : forall (a:Type), (forall (x y:a), (x = y) \/ (x <> y)) -> 
+    forall (x:a) (l:list a), In x l \/ ~In x l.
+Proof.
+    intros a EqDec x l. induction l as [|y xs [IH|IH]]. 
+    - right. intros H. inversion H.
+    - left. right. exact IH.
+    - destruct (EqDec x y) as [E|E].
+        + left. left. rewrite E. reflexivity.
+        + right. intros [H|H].
+            { apply E. rewrite H. reflexivity. }
+            { apply IH. exact H. }
+Qed.
+
+
+
+
 

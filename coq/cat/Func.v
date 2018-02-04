@@ -1,6 +1,14 @@
 Require Import Axiom_Extensionality.
+Require Import Axiom_PropEqual.
 
 Definition Relation (a b:Type) : Type := a -> b -> Prop.
+
+Lemma eqRelation : forall (a b:Type) (r s:Relation a b),
+    (forall x y, r x y <-> s x y) -> r = s.
+Proof.
+    intros a b r s H. apply extensionality2. intros x y.
+    apply eqProp. apply H. apply H.
+Qed.
 
 Definition Total (a b:Type) (r:Relation a b) : Prop :=
     forall (x:a), exists (y:b), r x y.
@@ -17,6 +25,34 @@ Inductive Func (a b:Type) : Type :=
 
 Arguments func {a} {b} _ _ _.
 
+Notation "a ==> b" := (Func a b) (at level 60, right associativity).
+
+Definition rel (a b:Type) (f:a ==> b) : Relation a b :=
+    match f with
+    | func r _ _ => r
+    end.
+
+Arguments rel {a} {b} _.
+
+Lemma Func_exists : forall (a b:Type) (f:a ==> b) (x:a), 
+    exists y, (rel f) x y. 
+Proof.
+    intros a b [r fTot fFunc] x. destruct (fTot x) as [y Hy].
+    exists y. exact Hy.
+Qed.
+
+Arguments Func_exists {a} {b} _ _.
+
+Lemma Func_unique : forall (a b:Type) (f:a ==> b) (x:a) (y y':b),
+    (rel f) x y -> (rel f) x y' -> y = y'.
+Proof.
+
+Show.
+
+
+
+
+(*
 Definition toRel (a b:Type) (f:a -> b): Relation a b :=
     fun (x:a) (y:b) => f x = y.
 
@@ -39,9 +75,8 @@ Qed.
 
 Arguments toRelFunctional {a} {b} _.
 
-Notation "a => b" := (Func a b) (at level 60, right associativity).
 
-Definition toFunc (a b:Type) (f:a -> b) : a => b :=
+Definition toFunc (a b:Type) (f:a -> b) : a ==> b :=
     func (toRel f) (toRelTotal f) (toRelFunctional f).
 
 Arguments toFunc {a} {b} _.
@@ -55,5 +90,56 @@ Proof.
     unfold toRel in H0. exact H0.
 Qed.
 
+Definition toRelComp (a b c:Type) (f:a ==> b) (g:b ==> c) : Relation a c :=
+    match f with
+      func r _ _  =>  
+        match g with
+          func s _ _  => 
+            fun (x:a) => 
+              fun (z:c) => 
+                exists (y:b), r x y /\ s y z 
+        end
+    end.
+
+Arguments toRelComp {a} {b} {c} _ _.
+
+Lemma toRelCompTotal : forall (a b c:Type) (f:a ==> b) (g:b ==> c),
+    Total(toRelComp f g).
+Proof.
+    intros a b c [r fTot fFunc] [s gTot gFunc]. unfold Total. intros x. 
+    unfold toRelComp. destruct (fTot x) as [y Hy]. destruct (gTot y) as [z Hz].
+    exists z, y. split.
+    - exact Hy.
+    - exact Hz.
+Qed.
+
+Arguments toRelCompTotal {a} {b} {c} _ _.
+
+Lemma toRelCompFunctional : forall (a b c:Type) (f:a ==> b) (g:b ==> c),
+    Functional(toRelComp f g).
+Proof.
+    intros a b c [r fTot fFunc] [s gTot gFunc]. unfold Functional.
+    intros x z z'. unfold toRelComp. intros [y [Hy Hz]] [y' [Hy' Hz']].
+    assert (y = y') as E. { apply (fFunc x y y' Hy Hy'). }
+    apply (gFunc y z z' Hz). rewrite E. exact Hz'. 
+Qed.
+
+Arguments toRelCompFunctional {a} {b} {c} _ _.
+
+Definition composeFunc (a b c:Type) (f:a ==> b) (g:b ==> c) : a ==> c :=
+    func (toRelComp f g) (toRelCompTotal f g) (toRelCompFunctional f g).
+
+Arguments composeFunc {a} {b} {c} _ _.
 
 
+Notation "f ; g" := (composeFunc f g) (at level 40, left associativity).
+
+(*
+Lemma composeFunc_assoc:forall (a b c d:Type)(f:a ==> b)(g:b ==> c)(h: c ==> d),
+    f;g;h = f;(g;h).
+Proof.
+    intros a b c d f g h.
+
+Show.
+*)
+*)
