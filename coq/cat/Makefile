@@ -1,6 +1,7 @@
 all: 	Axiom_ProofIrrelevance.vo \
 		Axiom_Extensionality.vo \
 		Axiom_PropEqual.vo \
+		Axiom_Skolem.vo \
 		Cast.vo \
 		Option.vo \
 		Category.vo \
@@ -46,6 +47,9 @@ Axiom_Extensionality.vo : 	Axiom_Extensionality.v
 
 Axiom_PropEqual.vo : Axiom_PropEqual.v
 	coqc Axiom_PropEqual.v
+
+Axiom_Skolem.vo : Axiom_Skolem.v
+	coqc Axiom_Skolem.v
 
 Cast.vo : Cast.v
 	coqc Cast.v

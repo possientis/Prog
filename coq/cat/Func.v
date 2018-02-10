@@ -1,5 +1,7 @@
 Require Import Axiom_Extensionality.
 Require Import Axiom_PropEqual.
+Require Import Axiom_Skolem.
+Require Import Axiom_ProofIrrelevance.
 
 Definition Relation (a b:Type) : Type := a -> b -> Prop.
 
@@ -34,6 +36,16 @@ Definition rel (a b:Type) (f:a ==> b) : Relation a b :=
 
 Arguments rel {a} {b} _.
 
+Lemma eqFunc : forall (a b:Type) (f g:a ==> b), rel f = rel g -> f = g.
+Proof.
+    intros a b f g H. destruct f as [r fTot fFunc]. destruct g as [s gTot gFunc].
+    simpl in H. revert gTot gFunc fTot fFunc. rewrite H. clear H r.
+    intros gTot gFunc fTot fFunc.
+    rewrite (proof_irrelevance _ gTot fTot).
+    rewrite (proof_irrelevance _ gFunc fFunc).
+    reflexivity.
+Qed.
+
 Lemma Func_exists : forall (a b:Type) (f:a ==> b) (x:a), 
     exists y, (rel f) x y. 
 Proof.
@@ -46,13 +58,44 @@ Arguments Func_exists {a} {b} _ _.
 Lemma Func_unique : forall (a b:Type) (f:a ==> b) (x:a) (y y':b),
     (rel f) x y -> (rel f) x y' -> y = y'.
 Proof.
+    intros a b [r fTot fFunc] x y y' Hy Hy'. simpl in Hy, Hy'.
+    apply (fFunc x). exact Hy. exact Hy'.
+Qed.
 
-Show.
+Arguments Func_unique {a} {b} _ _ _ _ _ _.
+
+Definition Func_app (a b:Type) (f:a ==> b) (x:a) : b :=
+    proj1_sig (skolem ((rel f) x) (Func_exists f x) (Func_unique f x)).
 
 
+Arguments Func_app {a} {b} _ _.
 
+ 
+Definition fromFunc (a b:Type) (f:a ==> b) : a -> b :=
+    fun (x:a) => Func_app f x.
 
-(*
+Arguments fromFunc {a} {b} _ _.
+
+Lemma fromFunc_correct : forall (a b:Type) (f:a ==> b) (x:a),
+    (rel f) x ((fromFunc f) x).
+Proof.
+    intros a b [r fTot fFunc] x. simpl. unfold fromFunc, Func_app.
+    remember (skolem (rel (func r fTot fFunc) x)
+              (Func_exists (func r fTot fFunc) x)
+              (Func_unique (func r fTot fFunc) x)) as sk eqn:H.
+    exact (proj2_sig sk).
+Qed.
+
+Lemma fromFunc_eval : forall (a b:Type) (f:a ==> b) (x:a) (y:b),
+    y = fromFunc f x <-> rel f x y.
+Proof.
+    intros a b f x y. split.
+    - intros H. rewrite H. apply fromFunc_correct.
+    - intros H. apply (Func_unique f x).
+        + exact H.
+        + apply fromFunc_correct.
+Qed.
+
 Definition toRel (a b:Type) (f:a -> b): Relation a b :=
     fun (x:a) (y:b) => f x = y.
 
@@ -81,6 +124,34 @@ Definition toFunc (a b:Type) (f:a -> b) : a ==> b :=
 
 Arguments toFunc {a} {b} _.
 
+Lemma relToFunc : forall (a b:Type) (f:a -> b) (x:a) (y:b),
+    rel (toFunc f) x y = (f x = y).
+Proof.
+    intros a b f x y. unfold toFunc. simpl. unfold toRel. reflexivity.
+Qed.
+
+Lemma fromTo : forall (a b:Type) (f:a -> b), fromFunc (toFunc f) = f.
+Proof.
+    intros a b f. apply extensionality. intros x.
+    apply (Func_unique (toFunc f) x).
+    rewrite relToFunc. apply fromFunc_eval.
+    - simpl. unfold toRel. reflexivity.
+    - simpl. unfold toRel. reflexivity.
+Qed.
+
+(*
+Lemma toFrom : forall (a b:Type) (f:a ==> b), toFunc (fromFunc f) = f.
+Proof.
+    intros a b f. apply eqFunc. apply eqRelation. intros x y. split.
+    - intros H. rewrite relToFunc in H. symmetry in H.
+        apply fromFunc_eval. exact H.
+    -
+
+Show.
+*)
+
+(*
+
 Lemma toFuncEmbedding : forall (a b:Type)(f g:a -> b),
     toFunc f = toFunc g -> f = g.
 Proof.
@@ -89,6 +160,7 @@ Proof.
     { rewrite H'. unfold toRel. reflexivity. }
     unfold toRel in H0. exact H0.
 Qed.
+
 
 Definition toRelComp (a b c:Type) (f:a ==> b) (g:b ==> c) : Relation a c :=
     match f with

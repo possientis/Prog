@@ -43,8 +43,19 @@ Proof.
                         { right. exact H1. }
                 }
 Qed.
-            
 
+(*
+Lemma temp : forall (a:Type) (l k:list a) (x:a),
+    In x k -> length l = length k -> (forall u, In u l -> In u k) -> 
+    repeats (x :: l).
+Proof.
+
+
+Show.
+*)
+           
+
+ (*
 Theorem pigeon_hole : forall (a:Type) (l k:list a),
     (forall x, In x l -> In x k) ->
     length k < length l ->
@@ -52,7 +63,16 @@ Theorem pigeon_hole : forall (a:Type) (l k:list a),
 Proof.
     intros a l. induction l as [|x xs IHl].
     - intros k H H'. inversion H'.
-    - intros k. induction k as [|y ks IHk].
-        +
+    - intros k. revert IHl. revert xs x. induction k as [|y ys IHk].
+        + intros xs x IHl H. assert (In x []) as H'.
+            { apply H. left. reflexivity. }
+            inversion H'.
+        + intros xs x H H' L. assert (In x (y::ys)) as H0.
+            { apply H'. left. reflexivity. }
+            destruct H0 as [H0|H0].
+                { 
 Show.
+*)
+
+
 
