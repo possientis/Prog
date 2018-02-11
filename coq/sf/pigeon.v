@@ -2,13 +2,7 @@ Require Import nat.
 Require Import le.
 Require Import list.
 Require Import In.
-
-Inductive repeats (a:Type): list a -> Prop :=
-| repeat_In   : forall (x:a) (xs:list a), In x xs -> repeats a (x :: xs)
-| repeat_cons : forall (x:a) (xs:list a), repeats a xs -> repeats a (x :: xs)
-.
-
-Arguments repeats {a} _.
+Require Import disjoint.
 
 Theorem pigeon_hole_with_LEM : forall (a:Type)(l k:list a),
     (forall (x y:a), x = y \/ x <> y) ->

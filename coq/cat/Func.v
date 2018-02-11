@@ -47,7 +47,7 @@ Proof.
 Qed.
 
 Lemma Func_exists : forall (a b:Type) (f:a ==> b) (x:a), 
-    exists y, (rel f) x y. 
+    exists y, rel f x y. 
 Proof.
     intros a b [r fTot fFunc] x. destruct (fTot x) as [y Hy].
     exists y. exact Hy.
@@ -56,7 +56,7 @@ Qed.
 Arguments Func_exists {a} {b} _ _.
 
 Lemma Func_unique : forall (a b:Type) (f:a ==> b) (x:a) (y y':b),
-    (rel f) x y -> (rel f) x y' -> y = y'.
+    rel f x y -> rel f x y' -> y = y'.
 Proof.
     intros a b [r fTot fFunc] x y y' Hy Hy'. simpl in Hy, Hy'.
     apply (fFunc x). exact Hy. exact Hy'.
@@ -65,7 +65,7 @@ Qed.
 Arguments Func_unique {a} {b} _ _ _ _ _ _.
 
 Definition Func_app (a b:Type) (f:a ==> b) (x:a) : b :=
-    proj1_sig (skolem ((rel f) x) (Func_exists f x) (Func_unique f x)).
+    proj1_sig (skolem (rel f x) (Func_exists f x) (Func_unique f x)).
 
 
 Arguments Func_app {a} {b} _ _.
@@ -77,7 +77,7 @@ Definition fromFunc (a b:Type) (f:a ==> b) : a -> b :=
 Arguments fromFunc {a} {b} _ _.
 
 Lemma fromFunc_correct : forall (a b:Type) (f:a ==> b) (x:a),
-    (rel f) x ((fromFunc f) x).
+    rel f x (fromFunc f x).
 Proof.
     intros a b [r fTot fFunc] x. simpl. unfold fromFunc, Func_app.
     remember (skolem (rel (func r fTot fFunc) x)
@@ -139,28 +139,35 @@ Proof.
     - simpl. unfold toRel. reflexivity.
 Qed.
 
-(*
 Lemma toFrom : forall (a b:Type) (f:a ==> b), toFunc (fromFunc f) = f.
 Proof.
     intros a b f. apply eqFunc. apply eqRelation. intros x y. split.
     - intros H. rewrite relToFunc in H. symmetry in H.
         apply fromFunc_eval. exact H.
-    -
-
-Show.
-*)
-
-(*
-
-Lemma toFuncEmbedding : forall (a b:Type)(f g:a -> b),
-    toFunc f = toFunc g -> f = g.
-Proof.
-    intros a b f g H. apply extensionality. intros x.
-    inversion H as [H']. clear H. assert (toRel f x (g x)) as H0.
-    { rewrite H'. unfold toRel. reflexivity. }
-    unfold toRel in H0. exact H0.
+    - intros H. rewrite relToFunc. symmetry. apply fromFunc_eval. exact H.
 Qed.
 
+
+Corollary toFuncEmbedding : forall (a b:Type) (f g:a -> b),
+    toFunc f = toFunc g -> f = g.
+Proof.
+    intros a b f g H. assert (fromFunc (toFunc f) = fromFunc (toFunc g)) as H'.
+    { rewrite H. reflexivity. }
+    rewrite fromTo in H'. rewrite fromTo in H'. exact H'.
+Qed.
+
+Corollary fromFuncEmbedding : forall (a b:Type) (f g:a ==> b), 
+    fromFunc f = fromFunc g -> f = g.
+Proof.
+    intros a b f g H. assert (toFunc (fromFunc f) = toFunc (fromFunc g)) as H'.
+    { rewrite H. reflexivity. }
+    rewrite toFrom in H'. rewrite toFrom in H'. exact H'.
+Qed.
+
+(* With the skolem axiom, we have a bijection between a ==> b and a -> b.
+   Hence we could define function composition by transporting argument
+   into the type a -> b. We attempt here to define it directly
+*)
 
 Definition toRelComp (a b c:Type) (f:a ==> b) (g:b ==> c) : Relation a c :=
     match f with
@@ -206,12 +213,61 @@ Arguments composeFunc {a} {b} {c} _ _.
 
 Notation "f ; g" := (composeFunc f g) (at level 40, left associativity).
 
+(* we need to check our 'direct' definition coincides what we expect *)
+
+Lemma composeFunc_correct : forall (a b c:Type) (f:a ==> b) (g:b ==> c) (x:a),
+    fromFunc (f ; g) x = fromFunc g (fromFunc f x).
+Proof.
+    intros a b c f g x. symmetry. apply fromFunc_eval.
+    destruct f as [r fTot fFunc] eqn:Hf. destruct g as [s gTot gFunc] eqn:Hg.
+    simpl. rewrite <- Hf. rewrite <- Hg. exists (fromFunc f x). split.
+    - assert (r = rel f) as Hr. { rewrite Hf. reflexivity. } 
+        rewrite Hr. apply fromFunc_correct. 
+    - remember (fromFunc f x) as y eqn:Hy.
+        assert (s = rel g) as Hs. { rewrite Hg. reflexivity. }
+        rewrite Hs. apply fromFunc_correct. 
+Qed.
+
+Definition compose (a b c:Type) (f:a -> b) (g:b -> c) : a -> c :=
+    fun (x:a) => g (f x).
+
+Arguments compose {a} {b} {c} _ _.
+
+Notation "g @ f" := (compose f g) (at level 60, right associativity).
+
+Definition id (a:Type) : a-> a := fun (x:a) => x.
+
+Arguments id {a} _.
+
+Definition idFunc (a:Type) : a ==> a := toFunc id.
+
+Lemma fromFunc_compose : forall (a b c:Type) (f:a ==> b) (g:b ==> c),
+    fromFunc (f ; g) = fromFunc g @ fromFunc f.
+Proof.
+    intros a b c f g. apply extensionality. intros x. unfold compose.
+    apply composeFunc_correct.
+Qed.
+
+Lemma fromFunc_id : forall (a:Type), fromFunc (idFunc a) = id.
+Proof. intros a. unfold idFunc. apply fromTo. Qed.
+
+
+Lemma toFunc_compose : forall (a b c:Type) (f:a -> b) (g:b -> c),
+    toFunc (g @ f) = toFunc f ; toFunc g.
+Proof.
+    intros a b c f g.
+
+Show.
+
+
+
 (*
+(* this leads to an easy proof of associativity *)
+
 Lemma composeFunc_assoc:forall (a b c d:Type)(f:a ==> b)(g:b ==> c)(h: c ==> d),
     f;g;h = f;(g;h).
 Proof.
     intros a b c d f g h.
 
 Show.
-*)
 *)

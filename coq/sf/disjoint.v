@@ -60,4 +60,45 @@ Inductive nostutter (a:Type) : list a -> Prop :=
 
 Arguments nostutter {a} _.
 
+Inductive repeats (a:Type): list a -> Prop :=
+| repeat_In   : forall (x:a) (xs:list a), In x xs -> repeats a (x :: xs)
+| repeat_cons : forall (x:a) (xs:list a), repeats a xs -> repeats a (x :: xs)
+.
+
+Arguments repeats {a} _.
+
+Theorem nodup_iff_not_repeats : forall (a:Type) (l:list a),
+    nodup l <-> ~ repeats l.
+Proof.
+    intros a l. split.
+    - intros H. induction H as [|l x H1 IH1 H2].
+        + intros H. inversion H.
+        + intros H'. remember (x :: l) as k eqn:Hk.
+        revert Hk H2 IH1. induction H' as [y xs H2|y xs H2 IH2].
+        { intros H3 H4 H5. apply H4. inversion H3 as [H6].
+            rewrite H6 in H2. rewrite H in H2. exact H2. 
+        }
+        { intros H3 H4 H5. apply H5. inversion H3 as [H6].
+            rewrite H in H2. exact H2.
+        }
+    - induction l as [|x xs IH]. 
+        + intros _. apply nodup_nil.
+        + intros H. apply nodup_cons.
+            { apply IH. intros H'. apply H. apply repeat_cons. exact H'. }
+            { intros H'. apply H. apply repeat_In. exact H'. }
+Qed.
+
+(*
+Theorem repeats_iff_not_nodup : forall (a:Type) (l:list a),
+    repeats l <-> ~ nodup l.
+Proof.
+    intros a l. split.
+    - intros H. induction H as [x xs H|x xs H IH].
+        + intros H'. remember (x :: xs) as l eqn:Hl.
+            revert H Hl. induction H' as [|l y H1 IH1 H2].
+            { intros H1 H2. inversion H2. }
+            { intros H3 H4.
+
+Show.
+*)
 
