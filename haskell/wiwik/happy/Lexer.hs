@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -fno-warn-unused-binds -fno-warn-missing-signatures #-}
 {-# LANGUAGE CPP #-}
-{-# LINE 2 "Lexer.x" #-}
+{-# LINE 1 "Lexer.x" #-}
 
-{-# OPTIONS_GHC -w #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Lexer (
     Token(..),
@@ -10,6 +10,8 @@ module Lexer (
 ) where
 
 import Syntax
+import Control.Monad.Except
+
 
 #if __GLASGOW_HASKELL__ >= 603
 #include "ghcconfig.h"
@@ -586,8 +588,17 @@ data Token
   | TokenEOF
   deriving (Eq,Show)
 
-scanTokens :: String -> [Token]
-scanTokens = alexScanTokens
+scanTokens :: String -> Except String [Token]
+scanTokens str = go ('\n',[],str) where
+    go inp@(_,_bs,str) =
+        case alexScan inp 0 of
+            AlexEOF -> return []
+            AlexError _ -> throwError "Invalid lexeme."
+            AlexSkip inp' len   -> go inp'
+            AlexToken inp' len act -> do
+                res <- go inp'
+                let rest = act (take len str)
+                return (rest : res)
 
 
 alex_action_3 =  \s -> TokenLet 

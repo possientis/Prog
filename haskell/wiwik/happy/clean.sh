@@ -1,15 +1,12 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/haskell/wiwik
+HOME=/home/john/Prog/haskell/wiwik/happy
 cd ${HOME}
 
 rm -f *.hi
 rm -f *.o
 rm -f a.out
-rm -f *_stub.h
 rm -f *.s
-
-./happy/clean.sh
 
 cd ${DIR}

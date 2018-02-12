@@ -1,6 +1,9 @@
 {-# OPTIONS_GHC -w #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module Parser (
     parseExpr,
+    parseTokens,
 ) where
 
 import Lexer
@@ -332,7 +335,18 @@ expr tks = happySomeParser where
 happySeq = happyDontSeq
 
 
+parseError :: [Token] -> Except String a
+parseError (l:ls) = throwError (show l)
+parseError [] = throwError "Unexpected end of input"
 
+
+parseExpr :: String -> Either String Expr
+parseExpr input = runExcept $ do
+    tokenStream <- scanTokens input
+    expr tokenStream
+
+parseTokens :: String -> Either String [Token]
+parseTokens = runExcept . scanTokens
 {-# LINE 1 "templates/GenericTemplate.hs" #-}
 {-# LINE 1 "templates/GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}

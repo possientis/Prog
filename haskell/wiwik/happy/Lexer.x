@@ -1,6 +1,5 @@
--- **Begin Haskell Syntax**
 {
-{-# OPTIONS_GHC -w #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Lexer (
     Token(..),
@@ -8,10 +7,10 @@ module Lexer (
 ) where
 
 import Syntax
-}
--- **End Haskell Syntax**
+import Control.Monad.Except
 
--- **Begin Alex Syntax**
+}
+
 %wrapper "basic"
 
 $digit = 0-9
@@ -23,6 +22,7 @@ tokens :-
     -- whitespace insensitive
     $eol                            ;
     $white+                         ;
+
     -- comments
     "#".*                           ;
 
@@ -62,7 +62,16 @@ data Token
   | TokenEOF
   deriving (Eq,Show)
 
-scanTokens :: String -> [Token]
-scanTokens = alexScanTokens
+scanTokens :: String -> Except String [Token]
+scanTokens str = go ('\n',[],str) where
+    go inp@(_,_bs,str) =
+        case alexScan inp 0 of
+            AlexEOF -> return []
+            AlexError _ -> throwError "Invalid lexeme."
+            AlexSkip inp' len   -> go inp'
+            AlexToken inp' len act -> do
+                res <- go inp'
+                let rest = act (take len str)
+                return (rest : res)
 
 }

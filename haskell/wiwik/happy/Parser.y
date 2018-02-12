@@ -1,15 +1,27 @@
 {
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module Parser (
     parseExpr,
+    parseTokens,
 ) where
 
 import Lexer
 import Syntax
 import Control.Monad.Except
 }
+
+-- EntryPoint
+%name expr
+
 -- Lexer structure 
 %tokentype { Token }
 
+-- Parser monad
+%monad { Except String } { (>>=) } { return }
+%error { parseError }
+
+-- Token names
 %token
     let     { TokenLet }
     true    { TokenTrue }
@@ -26,12 +38,6 @@ import Control.Monad.Except
     '('     { TokenLParen }
     ')'     { TokenRParen }
 
--- Parser monad
-%monad { Except String } { (>>=) } { return }
-%error { parseError }
-
--- EntryPoint
-%name expr
 
 -- Operators
 %left '+' '-'
@@ -56,4 +62,19 @@ Atom : '(' Expr ')'                 { $2 }
      | true                         { Lit (LBool True) }
      | false                        { Lit (LBool False) }
 
+{
 
+parseError :: [Token] -> Except String a
+parseError (l:ls) = throwError (show l)
+parseError [] = throwError "Unexpected end of input"
+
+
+parseExpr :: String -> Either String Expr
+parseExpr input = runExcept $ do
+    tokenStream <- scanTokens input
+    expr tokenStream
+
+parseTokens :: String -> Either String [Token]
+parseTokens = runExcept . scanTokens
+
+}

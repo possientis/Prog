@@ -18,3 +18,4 @@ data Lit
 data Binop = Add | Sub | Mul | Eql
     deriving (Eq, Ord, Show)
 
+
