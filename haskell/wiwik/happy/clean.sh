@@ -6,7 +6,9 @@ cd ${HOME}
 
 rm -f *.hi
 rm -f *.o
+
+rm -f Lexer.hs
+rm -f Parser.hs
 rm -f a.out
-rm -f *.s
 
 cd ${DIR}

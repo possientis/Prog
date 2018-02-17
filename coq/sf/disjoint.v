@@ -88,17 +88,21 @@ Proof.
             { intros H'. apply H. apply repeat_In. exact H'. }
 Qed.
 
+
+
 (*
 Theorem repeats_iff_not_nodup : forall (a:Type) (l:list a),
     repeats l <-> ~ nodup l.
 Proof.
     intros a l. split.
-    - intros H. induction H as [x xs H|x xs H IH].
-        + intros H'. remember (x :: xs) as l eqn:Hl.
-            revert H Hl. induction H' as [|l y H1 IH1 H2].
-            { intros H1 H2. inversion H2. }
-            { intros H3 H4.
+    - intros H1 H2. revert H1. apply nodup_iff_not_repeats. exact H2. 
+    - induction l as [|x xs IH].
+        + intros H. exfalso. apply H. apply nodup_nil.
+        + intro H. assert (nodup xs -> ~In x xs -> False) as H0.
+            { intros H1 H2. apply H. apply nodup_cons.
+                { exact H1. }
+                { exact H2. }
+            }
 
 Show.
 *)
-

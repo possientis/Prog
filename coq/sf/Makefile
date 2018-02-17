@@ -40,7 +40,9 @@ all:	bool.vo \
 		subseq.vo \
 		regex.vo \
 		palindrome.vo \
-		merge.vo
+		merge.vo \
+		dictionary.vo \
+		test_dictionary.vo
 
 
 bool.vo: bool.v
@@ -173,3 +175,9 @@ palindrome.vo : palindrome.v list.vo nat.vo le.vo
 
 merge.vo : merge.v list.vo bool.vo In.vo higher_order.vo
 	coqc merge.v
+
+dictionary.vo : dictionary.v nat.vo bool.vo
+	coqc dictionary.v
+
+test_dictionary.vo : test_dictionary.v dictionary.vo bool.vo nat.vo
+	coqc test_dictionary.v

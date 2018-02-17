@@ -34,7 +34,9 @@ all: 	Axiom_ProofIrrelevance.vo \
 		DecidableEq.vo \
 		Rewrite.vo \
 		PreorderAsCategory.vo \
-		natPreorderAsCategory.vo
+		natPreorderAsCategory.vo \
+		Func.vo \
+		Func_Skolem.vo
 
 
 
@@ -242,3 +244,18 @@ natPreorderAsCategory.vo : 	natPreorderAsCategory.v \
 							PreorderAsCategory.vo \
 							natAsPreorder.vo	
 	coqc natPreorderAsCategory.v
+
+
+
+Func.vo :					Func.v \
+							Axiom_Extensionality.vo \
+							Axiom_PropEqual.vo
+	coqc Func.v
+
+
+
+Func_Skolem.vo :			Func_Skolem.v \
+							Axiom_Extensionality.vo \
+							Axiom_Skolem.vo \
+							Axiom_ProofIrrelevance.vo
+	coqc Func_Skolem.v
