@@ -35,13 +35,13 @@ Definition TotalMap (a:Type) : Type := Key -> a.
 
 Definition t_empty (a:Type) (v:a) : TotalMap a := fun _ => v.
 
-Arguments t_empty {a} _.
+Arguments t_empty {a} _ _.
 
 
 Definition t_update (a:Type) (m:TotalMap a) (k:Key) (v:a) :=
     fun k' => if beq_Key k k' then v else m k'.
 
-Arguments t_update {a} _ _ _.
+Arguments t_update {a} _ _ _ _.
 
 
 
