@@ -188,4 +188,44 @@ Qed.
 Definition idFunc (a:Type) : a ==> a :=
     func (idRel a) (idRelTotal a) (idRelFunctional a).
 
+Definition compose (a b c:Type) (f:a -> b) (g:b -> c) : a -> c :=
+    fun (x:a) => g (f x).
+
+Arguments compose {a} {b} {c} _ _.
+
+Notation "g @ f" := (compose f g) (at level 60, right associativity).
+
+Lemma compose_assoc : forall (a b c d:Type) (f:a -> b) (g:b-> c) (h:c -> d),
+    h @ g @ f = (h @ g) @ f.
+Proof.
+    intros a b c d f g h. apply extensionality. intros x. reflexivity.
+Qed.
+
+Definition id (a:Type) : a-> a := fun (x:a) => x.
+
+Arguments id {a} _.
+
+
+Lemma toFunc_compose : forall (a b c:Type) (f:a -> b) (g:b -> c),
+    toFunc (g @ f) = toFunc f ; toFunc g.
+Proof.
+    intros a b c f g. apply eqFunc. unfold compose, composeFunc. simpl.
+    apply eqRelation. unfold toRel. intros x z. split.
+    - intros H. exists (f x). split.
+        + reflexivity.
+        + exact H.
+    - intros [y [H1 H2]]. rewrite H1. exact H2.
+Qed.
+
+
+Lemma toFunc_id : forall (a:Type), toFunc (id) = idFunc a.
+Proof.
+    intros a. apply eqFunc2. intros x y. simpl. unfold idRel, toRel, id. split.
+    - intros H. symmetry. exact H.
+    - intros H. symmetry. exact H.
+Qed.
+
+
+
+
 

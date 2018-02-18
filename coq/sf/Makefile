@@ -1,4 +1,5 @@
-all:	bool.vo \
+all:	Axiom_Extensionality.vo \
+		bool.vo \
 		test_bool.vo \
 		nat.vo \
 		binary.vo \
@@ -44,6 +45,8 @@ all:	bool.vo \
 		dictionary.vo \
 		test_dictionary.vo
 
+Axiom_Extensionality.vo : Axiom_Extensionality.v
+	coqc Axiom_Extensionality.v
 
 bool.vo: bool.v
 	coqc bool.v

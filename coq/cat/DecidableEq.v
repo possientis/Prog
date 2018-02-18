@@ -103,6 +103,52 @@ Proof.
     - apply has_proof_has_bool.
 Qed.
 
-Definition HasDecidableEq (a:Type) : Prop := has_proof a.
+(* HasDecidableEq a is not a Prop *)
+Definition HasDecidableEq (a:Type) : Type :=
+    forall (x y:a), {x = y} + {x <> y}.
+
+(* this allows us to perform case analysis *)
+Definition to_func (a:Type) (p:HasDecidableEq a) (x y:a) : bool :=
+    match p x y with
+    | left _    => true
+    | right _   => false
+    end.
+     
+(* If we attempt to use a 'Prop' version of HasDecidableEq *) 
+Definition HasDecidableEq' (a:Type) : Prop :=
+    forall (x y:a), x = y \/ x <> y.
+
+(* Then we cannot perform a case analysis:
+Incorrect elimination of "p x y" in the inductive type "or":
+the return type has sort "Set" while it should be "Prop".
+Elimination of an inductive object of sort Prop
+is not allowed on a predicate in sort Set
+because proofs can be eliminated only to build proofs.
+
+Definition to_func' (a:Type) (p:HasDecidableEq' a) (x y:a) : bool :=
+    match p x y with
+    | or_introl _   => true
+    | or_intror _   => false
+    end.
+*)
+
+
+
+Lemma had_dec_has_bool : forall (a:Type),
+    HasDecidableEq a -> has_bool a.
+Proof.
+    intros a H. unfold has_bool. exists (to_func a H).
+    unfold bool_correct. intros x y. split.
+    - intros E. unfold to_func. destruct (H x y) as [H'|H'].  
+        + reflexivity.
+        + exfalso. apply H'. exact E.
+    - intros H'. unfold to_func in H'. destruct (H x y) as [H0|H0].
+        + exact H0.
+        + inversion H'.
+Qed.
+
+
+
+
 
 
