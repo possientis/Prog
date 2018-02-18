@@ -33,7 +33,7 @@ Definition rel (a b:Type) (f:a ==> b) : Relation a b :=
     | func r _ _ => r
     end.
 
-Arguments rel {a} {b} _.
+Arguments rel {a} {b} _ _ _.
 
 Lemma eqFunc : forall (a b:Type) (f g:a ==> b), rel f = rel g -> f = g.
 Proof.
@@ -77,7 +77,7 @@ Arguments Func_unique {a} {b} _ _ _ _ _ _.
 Definition toRel (a b:Type) (f:a -> b): Relation a b :=
     fun (x:a) (y:b) => f x = y.
 
-Arguments toRel {a} {b} _.
+Arguments toRel {a} {b} _ _ _.
 
 Lemma toRelTotal : forall (a b:Type) (f:a -> b), Total (toRel f).
 Proof.
@@ -85,7 +85,7 @@ Proof.
     exists (f x). reflexivity.
 Qed.
 
-Arguments toRelTotal {a} {b} _.
+Arguments toRelTotal {a} {b} _ _.
 
 Lemma toRelFunctional : forall (a b:Type) (f:a -> b), Functional (toRel f).
 Proof.
@@ -94,7 +94,7 @@ Proof.
     reflexivity.
 Qed.
 
-Arguments toRelFunctional {a} {b} _.
+Arguments toRelFunctional {a} {b} _ _ _ _ _ _.
 
 
 Definition toFunc (a b:Type) (f:a -> b) : a ==> b :=
@@ -119,7 +119,7 @@ Definition toRelComp (a b c:Type) (f:a ==> b) (g:b ==> c) : Relation a c :=
         end
     end.
 
-Arguments toRelComp {a} {b} {c} _ _.
+Arguments toRelComp {a} {b} {c} _ _ _ _.
 
 Lemma toRelCompTotal : forall (a b c:Type) (f:a ==> b) (g:b ==> c),
     Total(toRelComp f g).
@@ -131,7 +131,7 @@ Proof.
     - exact Hz.
 Qed.
 
-Arguments toRelCompTotal {a} {b} {c} _ _.
+Arguments toRelCompTotal {a} {b} {c} _ _ _.
 
 Lemma toRelCompFunctional : forall (a b c:Type) (f:a ==> b) (g:b ==> c),
     Functional(toRelComp f g).
@@ -142,7 +142,7 @@ Proof.
     apply (gFunc y z z' Hz). rewrite E. exact Hz'. 
 Qed.
 
-Arguments toRelCompFunctional {a} {b} {c} _ _.
+Arguments toRelCompFunctional {a} {b} {c} _ _ _ _ _ _ _.
 
 Definition composeFunc (a b c:Type) (f:a ==> b) (g:b ==> c) : a ==> c :=
     func (toRelComp f g) (toRelCompTotal f g) (toRelCompFunctional f g).
@@ -191,7 +191,7 @@ Definition idFunc (a:Type) : a ==> a :=
 Definition compose (a b c:Type) (f:a -> b) (g:b -> c) : a -> c :=
     fun (x:a) => g (f x).
 
-Arguments compose {a} {b} {c} _ _.
+Arguments compose {a} {b} {c} _ _ _.
 
 Notation "g @ f" := (compose f g) (at level 60, right associativity).
 
