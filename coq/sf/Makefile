@@ -25,6 +25,7 @@ all:	Axiom_Extensionality.vo \
 		unfold.vo \
 		destruct.vo \
 		and.vo \
+		test_and.vo \
 		or.vo \
 		not.vo \
 		iff.vo \
@@ -37,6 +38,7 @@ all:	Axiom_Extensionality.vo \
 		reflection.vo \
 		logic.vo \
 		inductive_prop.vo \
+		test_inductive_prop.vo \
 		le.vo \
 		subseq.vo \
 		regex.vo \
@@ -127,6 +129,9 @@ destruct.vo : destruct.v nat.vo bool.vo
 and.vo : and.v
 	coqc and.v
 
+test_and.vo : test_and.v
+	coqc test_and.v
+
 or.vo : or.v nat.vo
 	coqc or.v
 
@@ -163,6 +168,9 @@ logic.vo : logic.v not.vo
 
 inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 	coqc inductive_prop.v
+
+test_inductive_prop.vo : test_inductive_prop.v nat.vo bool.vo induction.vo
+	coqc test_inductive_prop.v
 
 le.vo : le.v inductive_prop.vo induction.vo nat.vo bool.vo
 	coqc le.v
