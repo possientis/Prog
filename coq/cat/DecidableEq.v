@@ -82,7 +82,7 @@ Definition to_neq_proof (a:Type) (f:bool_func a) (x y:a) (p:f x y = false) :
     bool_correct f -> x <> y.
 Proof. intros H E. apply H in E. rewrite p in E. inversion E. Qed.
 
-Arguments to_neq_proof {a} {f} {x} {y} _ _.
+Arguments to_neq_proof {a} {f} {x} {y} _ _ _.
 
 Definition to_proof_func (a:Type) (f:bool_func a) (p:bool_correct f) (x y:a) :
     option (x = y) :=
