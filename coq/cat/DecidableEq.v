@@ -100,6 +100,10 @@ Definition to_lem_func (a:Type) (f:bool_func a) (p:bool_correct f) (x y:a) :
     | false     => fun q    => right (to_neq_proof q p)
     end (eq_refl (f x y)).
 
+
+
+
+
 Arguments to_lem_func {a} {f} _ _ _.
 
 Definition to_proof_gen (a:Type) (f:bool_func a) (p:bool_correct f)

@@ -1,4 +1,8 @@
 all:	Axiom_Extensionality.vo \
+		ex.vo \
+		test_ex.vo \
+		True.vo \
+		False.vo \
 		bool.vo \
 		test_bool.vo \
 		nat.vo \
@@ -27,6 +31,7 @@ all:	Axiom_Extensionality.vo \
 		and.vo \
 		test_and.vo \
 		or.vo \
+		test_or.vo \
 		not.vo \
 		iff.vo \
 		setoid.vo \
@@ -45,10 +50,24 @@ all:	Axiom_Extensionality.vo \
 		palindrome.vo \
 		merge.vo \
 		dictionary.vo \
-		test_dictionary.vo
+		test_dictionary.vo \
+		my_equality.vo \
+		nat_ind.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
+
+ex.vo : ex.v
+	coqc ex.v
+
+test_ex.vo : test_ex.v nat.vo inductive_prop.vo
+	coqc test_ex.v
+
+True.vo : True.v
+	coqc True.v
+
+False.vo : False.v
+	coqc False.v
 
 bool.vo: bool.v
 	coqc bool.v
@@ -135,6 +154,9 @@ test_and.vo : test_and.v
 or.vo : or.v nat.vo
 	coqc or.v
 
+test_or.vo : test_or.v
+	coqc test_or.v
+
 not.vo : not.v
 	coqc not.v
 
@@ -192,3 +214,9 @@ dictionary.vo : dictionary.v nat.vo bool.vo
 
 test_dictionary.vo : test_dictionary.v dictionary.vo bool.vo nat.vo
 	coqc test_dictionary.v
+
+my_equality.vo : my_equality.v nat.vo list.vo
+	coqc my_equality.v
+
+nat_ind.vo : nat_ind.v nat.vo
+	coqc nat_ind.v

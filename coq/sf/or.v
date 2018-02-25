@@ -1,14 +1,21 @@
-Require Import nat.
+(*
+Inductive or(P Q:Prop) : Prop :=
+| or_introl : P -> or P Q
+| or_intror : Q -> or P Q
+.
 
+Notation "P \/ Q" := (or P Q).
+*)
 
-Lemma or_introl' : forall (P Q:Prop),
+(*
+Lemma or_introl : forall (P Q:Prop),
     P -> P \/ Q.
 Proof. intros P Q H. left. exact H. Qed.
 
-Lemma or_intror' : forall (P Q:Prop),
+Lemma or_intror : forall (P Q:Prop),
     Q -> P \/ Q.
 Proof. intros P Q H. right. exact H. Qed.
-
+*)
 
 Lemma or_comm : forall (P Q:Prop),
     P \/ Q -> Q \/ P.
