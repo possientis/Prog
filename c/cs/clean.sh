@@ -9,6 +9,7 @@ mv pushtest.s pushtest.ss
 rm -f a.out
 rm -f *.o
 rm -f *.s
+rm -f gmon.out
 
 mv pushtest.ss pushtest.s
 

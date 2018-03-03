@@ -133,6 +133,7 @@ Proof.
     clear n. intros n H. simpl. rewrite H. reflexivity.
 Qed.
 
+
 Lemma mult_n_0 :forall (n:nat), n * 0 = 0.
 Proof.
     intros n. induction n as [|n IH].

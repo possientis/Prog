@@ -35,13 +35,18 @@ int main()
     int N = 4;
     double a[5] = {1.0,-2.5,-1.0,3.0,1.0};
     double x = 2.0;
+    double sum = 0.0;
 
     printf("poly1(x) = %lf\n", poly1(a,x,N));
     printf("poly2(x) = %lf\n", poly2(a,x,N));
 
     int i;
-    for(i = 0; i < 10000000; ++i)
-        poly2(a,x,N);
+    for(i = 0; i < 10000000; ++i){
+        sum += poly2(a,x,N);
+        sum += poly1(a,x,N);
+    }
+
+    printf("sum = %lf\n",sum);
 
     return 0;
 }

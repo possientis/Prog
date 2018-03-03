@@ -9,10 +9,17 @@ Fixpoint nat_ind' (n:nat): forall (P:nat -> Prop),
                 | 0     => H0
                 | S p   => IH p (nat_ind' p P H0 IH)
                 end. 
-
+(*
 Definition nat_ind : forall (P:nat -> Prop),
     P 0 -> (forall n, P n -> P (S n)) -> forall n, P n :=
     fun P H0 IH n => nat_ind' n P H0 IH.
+*)
+
+(*
+Print nat_ind.
+*)
+
+
 
 
 
