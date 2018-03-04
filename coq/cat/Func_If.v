@@ -24,7 +24,7 @@ Proof.
 Qed.
 
 
-Arguments ifRelFunctional {a} {b} _ _ _.
+Arguments ifRelFunctional {a} {b} _ _ _ _ _ _ _ _.
 
 
 Lemma ifRelTotal : forall (a b:Type) (p:Prop) (f g:a ==> b),
@@ -41,7 +41,7 @@ Proof.
             + exact Hy.
 Qed.
 
-Arguments ifRelTotal {a} {b} _ _ _ _.
+Arguments ifRelTotal {a} {b} _ _ _ _ _.
 
 
 (* not that useful but good to know. Only applies if type a is not empty*)
