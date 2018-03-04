@@ -53,7 +53,8 @@ all:	Axiom_Extensionality.vo \
 		test_dictionary.vo \
 		my_equality.vo \
 		nat_ind.vo \
-		test_nat_ind.vo
+		test_nat_ind.vo \
+		polymorphism.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -225,4 +226,6 @@ nat_ind.vo : nat_ind.v nat.vo
 test_nat_ind.vo : test_nat_ind.v nat_ind.vo nat.vo
 	coqc test_nat_ind.v
 
+polymorphism.vo : polymorphism.v
+	coqc polymorphism.v
 

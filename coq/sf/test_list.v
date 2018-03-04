@@ -151,4 +151,9 @@ Proof.
     - simpl. rewrite tr_rev_cons. rewrite H. reflexivity.
 Qed.
 
+(*
+Check list_ind.
+*)
+
+
 

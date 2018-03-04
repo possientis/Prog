@@ -28,9 +28,23 @@ Definition test' (x y:A) : {x = y} + {x <> y} :=
     end.
 
 
-Lemma same_test : forall (x y:A), test x y = test' x y.
-Proof.
-    intros x y. destruct (eq_bool x y) eqn:H.
-    - unfold test. 
+(* functions such as test and test' are always 'correct' *)
+Definition correct (f:forall (x y:A), {x = y} + {x <> y}) : Prop := 
+    forall (x y:A),
+        ( (exists p, f x y = left p ) <-> x = y ) /\
+        ( (exists p, f x y = right p) <-> x <> y) . 
 
-Show.
+Lemma always_correct : forall (f:forall (x y:A), {x = y} + {x <> y}), correct f.
+Proof.
+    intros f. unfold correct. intros x y. split.
+    - split.
+        + intros [H _]. exact H.
+        + intros H. destruct (f x y) as [H'|H']. 
+            { exists H'. reflexivity. }
+            { exfalso. apply H'. exact H. }
+    - split.
+        + intros [H _]. exact H.
+        + intros H. destruct (f x y) as [H'|H'].
+            { exfalso. apply H. exact H'. }
+            { exists H'. reflexivity. }
+Qed.

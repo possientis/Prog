@@ -10,6 +10,7 @@ rm -f a.out
 rm -f *.o
 rm -f *.s
 rm -f gmon.out
+rm -f log
 
 mv pushtest.ss pushtest.s
 

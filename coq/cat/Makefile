@@ -36,7 +36,8 @@ all: 	Axiom_ProofIrrelevance.vo \
 		PreorderAsCategory.vo \
 		natPreorderAsCategory.vo \
 		Func.vo \
-		Func_Skolem.vo
+		Func_Skolem.vo \
+		Func_If.vo
 
 
 
@@ -259,3 +260,13 @@ Func_Skolem.vo :			Func_Skolem.v \
 							Axiom_Skolem.vo \
 							Axiom_ProofIrrelevance.vo
 	coqc Func_Skolem.v
+
+
+Func_If.vo :				Func_If.v \
+							Func.vo
+
+	coqc Func_If.v
+
+
+
+
