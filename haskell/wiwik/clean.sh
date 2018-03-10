@@ -9,6 +9,8 @@ rm -f *.o
 rm -f a.out
 rm -f *_stub.h
 rm -f *.s
+rm -f hello.dump-*
+rm -f hello
 
 ./happy/clean.sh
 

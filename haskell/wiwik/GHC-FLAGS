@@ -1,0 +1,22 @@
+-ddump-parsed           Frontend AST.
+-ddump-rn               Output of the rename pass.
+-ddump-tc               Output of the typechecker.
+-ddump-splices          Output of TemplateHaskell splices.
+-ddump-types            Typed AST representation.
+-ddump-deriv            Output of deriving instances.
+-ddump-ds               Output of the desugar pass.
+-ddump-spec             Output of specialisation pass.
+-ddump-rules            Output of applying rewrite rules.
+-ddump-vect             Output results of vectorize pass.
+-ddump-simpl            Ouptut of the SimplCore pass.
+-ddump-inlinings        Output of the inliner.
+-ddump-cse              Output of the common subexpression elimination pass.
+-ddump-prep             The CorePrep pass.
+-ddump-stg              The resulting STG.
+-ddump-cmm              The resulting Cmm.
+-ddump-opt-cmm          The resulting Cmm optimization pass.
+-ddump-asm              The final assembly generated.
+-ddump-llvm             The final LLVM IR generated.
+
+-ddump-to-file          dump is to file...
+

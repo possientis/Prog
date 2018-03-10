@@ -207,7 +207,9 @@ Lemma test2 : ev_plus2 = ev_plus2'.
 Proof. reflexivity. Qed.
 
 
-
+(*
+Check ev_ind.
+*)
 
 
 
