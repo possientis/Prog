@@ -9,7 +9,7 @@ Inductive clos (a:Type) (r:relation a) : relation a :=
 | rt_trans: forall x y z, clos a r x y -> clos a r y z -> clos a r x z
 .
 
-Arguments clos {a} _.
+Arguments clos {a} _ _ _.
 
 Inductive next : relation nat := nextS : forall n, next n (S n).
 

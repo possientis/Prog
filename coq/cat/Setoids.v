@@ -18,7 +18,7 @@ Record Map (a b:Setoid) : Type := hom
     }
     .
 
-Arguments apply {a} {b} _.
+Arguments apply {a} {b} _ _.
 
 
 Definition eq_Map (a b:Setoid) (f g:Map a b) : Prop :=
@@ -32,7 +32,7 @@ Proof.
     intros a b [f H]. unfold eq_Map. simpl. intros x. apply (refl b).
 Qed.
 
-Arguments eq_Map_refl {a} {b} _.
+Arguments eq_Map_refl {a} {b} _ _.
 
 Lemma eq_Map_sym : forall (a b:Setoid) (f g:Map a b), eq_Map f g -> eq_Map g f.
 Proof.
@@ -40,7 +40,7 @@ Proof.
     intros H. intros x. apply (sym b). apply H.
 Qed.
 
-Arguments eq_Map_sym {a} {b} _ _ _.
+Arguments eq_Map_sym {a} {b} _ _ _ _.
 
 
 Lemma eq_Map_trans : forall (a b:Setoid) (f g h:Map a b), 
@@ -52,7 +52,7 @@ Proof.
     - apply Egh.
 Qed.
 
-Arguments eq_Map_trans {a} {b} _ _ _ _ _.
+Arguments eq_Map_trans {a} {b} _ _ _ _ _ _.
 
 
 Definition Hom (a b:Setoid) : Setoid := setoid 
