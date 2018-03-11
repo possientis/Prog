@@ -1,5 +1,5 @@
 main :: IO ()
-main = putStrLn "Hello world!"
+main = putStrLn $ "Hello world!: " ++ show (func 6)
 
 
 func :: Int -> Int

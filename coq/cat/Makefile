@@ -37,7 +37,9 @@ all: 	Axiom_ProofIrrelevance.vo \
 		natPreorderAsCategory.vo \
 		Func.vo \
 		Func_Skolem.vo \
-		Func_If.vo
+		Func_If.vo \
+		Leibniz.vo \
+		Setoids.vo
 
 
 
@@ -264,9 +266,10 @@ Func_Skolem.vo :			Func_Skolem.v \
 
 Func_If.vo :				Func_If.v \
 							Func.vo
-
 	coqc Func_If.v
 
+Leibniz.vo :				Leibniz.v
+	coqc Leibniz.v
 
-
-
+Setoids.vo :				Setoids.v
+	coqc Setoids.v

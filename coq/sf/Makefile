@@ -54,7 +54,8 @@ all:	Axiom_Extensionality.vo \
 		my_equality.vo \
 		nat_ind.vo \
 		test_nat_ind.vo \
-		polymorphism.vo
+		polymorphism.vo \
+		closure.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -228,4 +229,7 @@ test_nat_ind.vo : test_nat_ind.v nat_ind.vo nat.vo
 
 polymorphism.vo : polymorphism.v
 	coqc polymorphism.v
+
+closure.vo : closure.v nat.vo le.vo
+	coqc closure.v
 

@@ -2,12 +2,11 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/coq/sf
+HOME=/home/john/Prog/coq/sf/Imp
 cd ${HOME}
 echo
-echo "testing software foundations..."
+echo "testing Imp ..."
 
-./Imp/test.sh
 make; ./clean.sh
 
 cd ${DIR}

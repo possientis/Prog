@@ -1,6 +1,12 @@
-#include "code.h"
+/* main.c */
 
-int main() {
+void swap();
 
-    return sum(1,3);
+int buf[2] = {1,2};
+
+int main () 
+{
+    swap();
+    return 0;
 }
+
