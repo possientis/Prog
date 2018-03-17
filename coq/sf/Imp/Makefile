@@ -3,7 +3,8 @@ all :   bool.vo \
 		syntax.vo \
 		eval.vo \
 		test_eval.vo \
-		optimize.vo
+		optimize.vo \
+		test_optimize.vo
 
 bool.vo : bool.v
 	coqc bool.v
@@ -23,3 +24,6 @@ test_eval.vo : test_eval.v syntax.vo eval.vo bool.vo nat.vo
 
 optimize.vo : optimize.v nat.vo syntax.vo
 	coqc optimize.v
+
+test_optimize.vo : test_optimize.v nat.vo syntax.vo eval.vo optimize.vo
+	coqc test_optimize.v
