@@ -22,7 +22,7 @@ Arguments hom {a} {b} _ _.
 
 Arguments func {a} {b} _ _.
 
-Arguments compat {a} {b} _ _.
+Arguments compat {a} {b} _ _ _ _.
 
 Definition eq_Hom (a b:Setoid) (f g:Hom a b) : Prop :=
     forall (x:elems a), equal b (func f x) (func g x).  
