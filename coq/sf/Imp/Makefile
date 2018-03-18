@@ -4,7 +4,9 @@ all :   bool.vo \
 		eval.vo \
 		test_eval.vo \
 		optimize.vo \
-		test_optimize.vo
+		test_optimize.vo \
+		try_evalR.vo \
+		evalR.vo
 
 bool.vo : bool.v
 	coqc bool.v
@@ -27,3 +29,9 @@ optimize.vo : optimize.v nat.vo syntax.vo
 
 test_optimize.vo : test_optimize.v nat.vo syntax.vo eval.vo optimize.vo
 	coqc test_optimize.v
+
+try_evalR.vo : try_evalR.v nat.vo syntax.vo
+	coqc try_evalR.v
+
+evalR.vo : evalR.v nat.vo syntax.vo
+	coqc evalR.v

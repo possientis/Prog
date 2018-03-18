@@ -21,3 +21,5 @@ Fixpoint beval (b:bexp) : bool :=
     | BNot b1       => negb (beval b1)
     | BAnd b1 b2    => andb (beval b1) (beval b2)
     end.
+
+

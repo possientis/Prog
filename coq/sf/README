@@ -1,0 +1,8 @@
+tactics to practice
+
+subst x
+subst
+rename x into y
+assumption
+contradiction
+construtor
