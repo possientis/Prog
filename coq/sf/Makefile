@@ -56,7 +56,15 @@ all:	Axiom_Extensionality.vo \
 		test_nat_ind.vo \
 		polymorphism.vo \
 		closure.vo \
-		omega.vo
+		omega.vo \
+		syntax.vo \
+		eval.vo \
+		test_eval.vo \
+		optimize.vo \
+		test_optimize.vo \
+		evalR.vo \
+		try_evalR.vo \
+		state.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -236,3 +244,28 @@ closure.vo : closure.v nat.vo le.vo
 
 omega.vo : omega.v
 	coqc omega.v
+
+syntax.vo : syntax.v nat.vo dictionary.vo
+	coqc syntax.v
+
+eval.vo : eval.v bool.vo nat.vo syntax.vo state.vo
+	coqc eval.v
+
+test_eval.vo : test_eval.v bool.vo nat.vo syntax.vo eval.vo
+	coqc test_eval.v
+
+optimize.vo : optimize.v nat.vo syntax.vo
+	coqc optimize.v
+
+test_optimize.vo : test_optimize.v bool.vo nat.vo syntax.vo eval.vo \
+	optimize.vo state.vo
+	coqc test_optimize.v
+
+evalR.vo : evalR.v nat.vo bool.vo syntax.vo eval.vo
+	coqc evalR.v
+
+try_evalR.vo : try_evalR.v nat.vo syntax.vo
+	coqc try_evalR.v
+
+state.vo : state.v dictionary.vo nat.vo
+	coqc state.v

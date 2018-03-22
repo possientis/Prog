@@ -7,7 +7,6 @@ cd ${HOME}
 echo
 echo "testing software foundations..."
 
-./Imp/test.sh
 make; ./clean.sh
 
 cd ${DIR}

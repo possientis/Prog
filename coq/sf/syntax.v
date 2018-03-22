@@ -1,7 +1,9 @@
 Require Import nat.
+Require Import dictionary.
 
 Inductive aexp : Type :=
 | ANum   : nat -> aexp
+| AKey   : Key -> aexp
 | APlus  : aexp -> aexp -> aexp
 | AMinus : aexp -> aexp -> aexp
 | AMult  : aexp -> aexp -> aexp

@@ -3,14 +3,17 @@ Require Import nat.
 Require Import syntax.
 Require Import eval.
 Require Import optimize.
+Require Import state.
 
+(*
 
-Theorem optimize_0plus_sound : forall (a:aexp), 
-    aeval (optimize_0plus a) = aeval a.
+Theorem optimize_0plus_sound : forall (a:aexp) (env:State), 
+    aeval env (optimize_0plus a) = aeval env a.
 Proof.
-    intros a. induction a as [n|a1 IH1 a2 IH2|a1 IH1 a2 IH2|a1 IH1 a2 IH2]. 
+    intros a. induction a as [n|k|a1 IH1 a2 IH2|a1 IH1 a2 IH2|a1 IH1 a2 IH2]. 
     - reflexivity.
-    - simpl. destruct a1 as [[|n]|b1 b2|b1 b2|b1 b2].
+    - reflexivity.
+    - simpl. intros env. destruct a1 as [[|n]|[n]|b1 b2|b1 b2|b1 b2].
         + simpl. rewrite IH2. reflexivity.
         + simpl. rewrite IH2. reflexivity.
         + simpl. simpl in IH1. rewrite IH1. rewrite IH2. reflexivity.
@@ -18,10 +21,12 @@ Proof.
         + simpl. simpl in IH1. rewrite IH1. rewrite IH2. reflexivity.
     - simpl. rewrite IH1, IH2. reflexivity.
     - simpl. rewrite IH1, IH2. reflexivity. 
+   
 Qed.
-    
+*)  
 
 
+(*
 Theorem optimize_0plus_sound2 : forall (a:aexp), 
     aeval (optimize_0plus a) = aeval a.
 Proof.
@@ -52,4 +57,4 @@ Proof.
     - simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
-
+*)

@@ -2,6 +2,7 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Axiom_Extensionality.vo \
 		Axiom_PropEqual.vo \
 		Axiom_Skolem.vo \
+		Eq.vo \
 		Cast.vo \
 		Option.vo \
 		Category.vo \
@@ -14,6 +15,7 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Eq_Category4.vo \
 		Category5.vo \
 		Eq_Category5.vo \
+		Category6.vo \
 		CategoryAsCategory2.vo \
 		Category2AsCategory.vo \
 		CategoryAsCategory3.vo \
@@ -55,6 +57,9 @@ Axiom_PropEqual.vo : Axiom_PropEqual.v
 
 Axiom_Skolem.vo : Axiom_Skolem.v
 	coqc Axiom_Skolem.v
+
+Eq.vo : Eq.v
+	coqc Eq.v
 
 Cast.vo : Cast.v
 	coqc Cast.v
@@ -113,6 +118,8 @@ Eq_Category5.vo :			Eq_Category5.v \
 				 			Category5.vo
 	coqc Eq_Category5.v
 
+Category6.vo :				Category6.v Eq.vo
+	coqc Category6.v
 
 CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
 							Category.vo \
@@ -271,5 +278,5 @@ Func_If.vo :				Func_If.v \
 Leibniz.vo :				Leibniz.v
 	coqc Leibniz.v
 
-Setoids.vo :				Setoids.v
+Setoids.vo :				Setoids.v Eq.vo
 	coqc Setoids.v

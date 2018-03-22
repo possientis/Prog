@@ -3,6 +3,7 @@ Require Import bool.
 Require Import syntax.
 Require Import eval.
 
+(*
 
 Reserved Notation "e 'a=>' n" (at level 90, no associativity).
 
@@ -78,4 +79,4 @@ Proof.
         intros; subst; simpl; constructor; try apply aeval_iff_aevalR; 
         try reflexivity; try apply H1; try apply H2; reflexivity.
 Qed.
-
+*)

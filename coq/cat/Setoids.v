@@ -1,19 +1,16 @@
+Require Import Eq.
+
 Record Setoid : Type := setoid 
-    { elems : Type
-    ; equal : elems -> elems -> Prop
-    ; refl  : forall (x:elems), equal x x
-    ; sym   : forall (x y:elems), equal x y -> equal y x
-    ; trans : forall (x y z:elems), equal x y -> equal y z -> equal x z
+    { elems     : Type
+    ; eqElems   : Eq elems
     }
     .
 
-Arguments equal {s} _ _.
-Arguments refl {s} {x}.
-Arguments sym {s} {x} {y} _.
-Arguments trans {s} {x} {y} {z} _ _. 
+Arguments eqElems {s}.
 
-Notation "x == y" := (equal x y) (at level 90, no associativity).
+Notation "x === y" := (eq eqElems x y) (at level 90, no associativity).
 
+(*
 (* every type induces a setoid with usual leibniz equality *)
 Definition toSetoid (a:Type) : Setoid :=
     setoid a eq (@eq_refl a) (@eq_sym a) (@eq_trans a).
@@ -124,3 +121,4 @@ Proof.
     intros a b [f Hf]. unfold compose, id, eq_Hom, id_func. simpl. intros x.
     apply Hf. apply refl.  
 Qed.
+*)
