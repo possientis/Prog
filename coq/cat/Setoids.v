@@ -1,4 +1,7 @@
 Require Import Eq.
+Require Category6.
+
+Module Cat := Category6.
 
 Record Setoid : Type := setoid 
     { elems     : Type
@@ -8,29 +11,25 @@ Record Setoid : Type := setoid
 
 Arguments eqElems {s}.
 
-Notation "x === y" := (eq eqElems x y) (at level 90, no associativity).
+Notation "x === y" := (equal eqElems x y) (at level 90, no associativity).
 
-(*
 (* every type induces a setoid with usual leibniz equality *)
-Definition toSetoid (a:Type) : Setoid :=
-    setoid a eq (@eq_refl a) (@eq_sym a) (@eq_trans a).
-
+Definition toSetoid (a:Type) : Setoid := setoid a defEq.
 
 (* a map between setoids is a normal function which preserves equality *)
 (* We are here defining a new type for maps between setoids.           *)
 Record Hom (a b:Setoid) : Type := hom
     { func    : elems a -> elems b
-    ; compat  : forall (x y:elems a), x == y -> func x == func y
+    ; compat  : forall (x y:elems a), x === y -> func x === func y
     }
     .
-
 Arguments hom {a} {b} _ _.
 Arguments func {a} {b} _ _.
 Arguments compat {a} {b} _ _ _ _.
 
 
 Definition eq_Hom (a b:Setoid) (f g:Hom a b) : Prop :=
-    forall (x:elems a), func f x == func g x.  
+    forall (x:elems a), func f x === func g x.  
 
 Arguments eq_Hom {a} {b} _ _.
 
@@ -61,17 +60,25 @@ Qed.
 
 Arguments eq_Hom_trans {a} {b} _ _ _ _ _ _.
 
+Definition eqHomSetoid (a b:Setoid) : Eq (Hom a b) := equality
+    eq_Hom eq_Hom_refl eq_Hom_sym eq_Hom_trans.
+
 Definition HomSet (a b:Setoid) : Setoid := setoid 
-    (Hom a b)(@eq_Hom a b)(@eq_Hom_refl a b)(@eq_Hom_sym a b)(@eq_Hom_trans a b).
+    (Hom a b) (eqHomSetoid a b).
+
+
+Definition embed (a b:Setoid) (f:Hom a b) : elems (HomSet a b) := f.
+
+Arguments embed {a} {b} _.
 
 Definition id_func (a:Setoid) (x:elems a) : elems a := x.
  
 Arguments id_func {a} _.
 
 Lemma id_compat : forall (a:Setoid) (x y:elems a), 
-    x == y -> id_func x == id_func y.
+    x === y -> id_func x === id_func y.
 Proof. 
-    intros [a eq refl sym trans] x y. simpl. unfold id_func. intros H. exact H. 
+    intros a x y. simpl. unfold id_func. intros H. exact H. 
 Qed.
 
 Arguments id_compat {a} _ _ _.
@@ -84,8 +91,9 @@ Definition compose_func (a b c:Setoid)(g:Hom b c)(f:Hom a b)(x:elems a):elems c 
 
 Arguments compose_func {a} {b} {c} _ _ _.
 
+
 Lemma compose_compat : forall (a b c:Setoid) (g:Hom b c) (f:Hom a b) (x y:elems a),
-    x == y -> compose_func g f x ==  compose_func g f y.
+    x === y -> compose_func g f x ===  compose_func g f y.
 Proof.
     intros a b c [g Hg] [f Hf] x y E. unfold compose_func. simpl.
     apply Hg, Hf. exact E.
@@ -98,27 +106,48 @@ Definition compose (a b c:Setoid)(g:Hom b c)(f:Hom a b):Hom a c := hom
 
 Arguments compose {a} {b} {c} _ _.
 
-Notation "g @ f" := (compose g f) (at level 60, right associativity).
+Notation "g # f" := (compose g f) (at level 60, right associativity).
 
-Notation "f === g" := (eq_Hom f g) (at level 90, no associativity).
+Notation "f =~ g" := (embed f === embed g) (at level 90, no associativity).
 
-Lemma compose_assoc : forall (a b c d:Setoid) (h:Hom c d) (g:Hom b c) (f:Hom a b),
-    (h @ g) @ f === (h @ g) @ f.
+Lemma compose_assoc : forall (a b c d:Setoid)(f:Hom a b)(g:Hom b c)(h:Hom c d),
+    (h # g) # f =~ (h # g) # f.
 Proof.
-    intros a b c d [h Hh] [g Hg] [f Hf]. unfold compose, eq_Hom. simpl. intros x.
+    intros a b c d [f Hf] [g Hg] [h Hh]. unfold compose, eq_Hom. simpl. intros x.
     apply Hh, Hg, Hf. apply refl.  
 Qed.
 
-
-Lemma id_left : forall (a b:Setoid) (f:Hom a b), (id b) @ f === f.
+Lemma id_left : forall (a b:Setoid) (f:Hom a b), (id b) # f =~ f.
 Proof.
     intros a b [f Hf]. unfold compose, id, eq_Hom, id_func. simpl. intros x.
     apply Hf. apply refl.  
 Qed.
 
-Lemma id_right : forall (a b:Setoid) (f:Hom a b), f @ (id a) === f.
+Lemma id_right : forall (a b:Setoid) (f:Hom a b), f # (id a) =~ f.
 Proof.
     intros a b [f Hf]. unfold compose, id, eq_Hom, id_func. simpl. intros x.
     apply Hf. apply refl.  
 Qed.
+
+(*
+Lemma composition_is_compat : forall (a b c:Setoid)(f f':Hom a b)(g g':Hom b c),
+    f =~ f' -> g =~ g' -> g # f =~ g' # f'.
+Proof.
+    intros a b c f f' g g' Ef Eg. 
+    unfold embed. simpl. unfold eq_Hom. intros x. 
+    simpl in Eg. unfold eq_Hom in Eg. unfold embed in Eg.
+    simpl in Ef. unfold eq_Hom in Ef. unfold embed in Ef.
+    unfold compose. simpl. unfold compose_func. 
+    assert (func f x === func f' x) as E. { apply Ef. }
+    
+
+Show.
 *)
+
+(*
+
+Definition setoidsAsCategory : Cat.Category := Cat.category 
+    Setoid Hom (@compose) id eqHomSetoid id_left id_right compose_assoc.
+
+*)
+

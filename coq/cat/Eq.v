@@ -1,14 +1,22 @@
 Record Eq (a:Type) : Type := equality 
-    { eq    : a -> a -> Prop
-    ; refl  : forall (x:a), eq x x
-    ; sym   : forall (x y:a), eq x y -> eq y x
-    ; trans : forall (x y z:a), eq x y -> eq y z -> eq x z
+    { equal : a -> a -> Prop
+    ; refl  : forall (x:a), equal x x
+    ; sym   : forall (x y:a), equal x y -> equal y x
+    ; trans : forall (x y z:a), equal x y -> equal y z -> equal x z
     }
     . 
 
-Arguments eq {a} _ _ _.
+Arguments equal {a} _ _ _.
+Arguments equality {a} _ _ _ _.
 
+(* default equality for any type *)
+Definition defEq (a:Type) : Eq a := equality
+    (@eq a)
+    (@eq_refl a)
+    (@eq_sym a)
+    (@eq_trans a).
 
+Arguments defEq {a}.
 
 
 
