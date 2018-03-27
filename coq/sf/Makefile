@@ -64,7 +64,8 @@ all:	Axiom_Extensionality.vo \
 		test_optimize.vo \
 		evalR.vo \
 		try_evalR.vo \
-		state.vo
+		state.vo \
+		Imp_code.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -269,3 +270,6 @@ try_evalR.vo : try_evalR.v nat.vo syntax.vo
 
 state.vo : state.v dictionary.vo nat.vo
 	coqc state.v
+
+Imp_code.vo : Imp_code.v nat.vo syntax.vo state.vo
+	coqc Imp_code.v

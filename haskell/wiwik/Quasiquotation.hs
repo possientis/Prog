@@ -1,8 +1,14 @@
 {-# LANGUAGE TemplateHaskell #-}
 
+module  Quasiquotation
+    (   Expr (..)
+    ,   calc
+    )   where
+
 import Control.Monad.Identity
 
 import Language.Haskell.TH.Syntax
+import Language.Haskell.TH.Quote
 
 import Text.Parsec
 import Text.Parsec.String (Parser)
@@ -36,4 +42,80 @@ parens = Tok.parens lexer
 
 reserved :: String -> Parser ()
 reserved = Tok.reserved lexer
+
+semiSep :: Parser a -> Parser [a]
+semiSep = Tok.semiSep lexer
+
+reservedOp :: String -> Parser ()
+reservedOp = Tok.reservedOp lexer
+
+prefixOp :: String -> (a -> a) -> Op a
+prefixOp x f = Ex.Prefix (reservedOp x >> return f)
+
+table :: [[Op Expr]]
+table = [   
+            [ prefixOp "succ" Succ
+            , prefixOp "pred" Pred
+            ]
+        ]
+
+expr :: Parser Expr
+expr = Ex.buildExpressionParser table factor
+
+
+true :: Parser Expr
+true = reserved "true" >> return Tr
+
+false :: Parser Expr
+false = reserved "false" >> return Fl
+
+zero :: Parser Expr
+zero = reservedOp "0" >> return Zero
+
+factor :: Parser Expr
+factor   =  true
+        <|> false
+        <|> zero
+        <|> parens expr
+
+
+contents :: Parser a -> Parser a
+contents p = do
+    Tok.whiteSpace lexer
+    r <- p
+    eof
+    return r
+
+toplevel :: Parser [Expr]
+toplevel = semiSep expr
+
+
+parseExpr :: String -> Either ParseError Expr
+parseExpr s = parse (contents expr) "<stdin>" s
+
+
+
+parseToplevel :: String -> Either ParseError [Expr]
+parseToplevel s = parse (contents toplevel) "<stdin>" s
+
+
+calcExpr :: String -> Q Exp
+calcExpr str = do
+    filename <- loc_filename `fmap` location
+    case parse (contents expr) filename str of 
+        Left err -> error (show err)
+        Right tag -> [| tag |]
+
+calc :: QuasiQuoter 
+calc = QuasiQuoter calcExpr err err err
+    where err = error "Only defined for values"
+
+
+
+
+
+
+
+    
+
 

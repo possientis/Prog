@@ -129,6 +129,15 @@ Proof.
     apply Hf. apply refl.  
 Qed.
 
+Definition compatible (a:Setoid) (P:elems a -> Prop) : Prop :=
+    forall (x y:elems a), x === y -> P x -> P y.
+
+Arguments compatible {a} _.
+
+Lemma rewriteSetoid : forall (a:Setoid) (P:elems a -> Prop),
+    forall (x y:elems a), compatible P -> x === y -> P x -> P y.
+Proof. intros a P x y H. apply H. Qed.
+
 (*
 Lemma composition_is_compat : forall (a b c:Setoid)(f f':Hom a b)(g g':Hom b c),
     f =~ f' -> g =~ g' -> g # f =~ g' # f'.
@@ -139,11 +148,13 @@ Proof.
     simpl in Ef. unfold eq_Hom in Ef. unfold embed in Ef.
     unfold compose. simpl. unfold compose_func. 
     assert (func f x === func f' x) as E. { apply Ef. }
-    
+    assert (func g (func f x) === func g (func f' x)) as H.
+        { apply (compat g). exact E. }
 
+
+         
 Show.
 *)
-
 (*
 
 Definition setoidsAsCategory : Cat.Category := Cat.category 

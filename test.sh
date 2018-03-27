@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 HOME=/home/john/Prog
 PATTERNS=${HOME}/polyglot/DesignPatterns
@@ -6,173 +6,37 @@ BITCOIN=${HOME}/polyglot/Bitcoin
 
 echo 'Testing log file\n' > test.log
 
-echo 'Testing c ...'
-${HOME}/c/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
+function testing () {
+    echo "Testing $1 ..."
+    ${HOME}/${1}/test.sh >> test.log 2>&1
+    if [ $? -ne 0 ]
+    then
+        echo 'TESTING FAILED'
+        exit 1
+    fi
+}
 
-echo 'Testing assembly ...'
-${HOME}/assembly/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing make ...'
-${HOME}/make/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing c++ ...'
-${HOME}/c++/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing java ...'
-${HOME}/java/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing ant ...'
-${HOME}/ant/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing maven ...'
-${HOME}/maven/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing gradle ...'
-${HOME}/gradle/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing c# ...'
-${HOME}/c#/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing haskell ...'
-${HOME}/haskell/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing scheme ...'
-${HOME}/scheme/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing python ...'
-${HOME}/python/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing ruby ...'
-${HOME}/ruby/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing javascript ...'
-${HOME}/javascript/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing php ...'
-${HOME}/php/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing scala ...'
-${HOME}/scala/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing clojure ...'
-${HOME}/clojure/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing sed ...'
-${HOME}/sed/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing coq ...'
-${HOME}/coq/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing tex ...'
-${HOME}/tex/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
-
-echo 'Testing bison ...'
-${HOME}/bison/test.sh >> test.log 2>&1
-if [ $? -ne 0 ]
-then
-  echo 'TESTING FAILED !!!'
-  exit 1
-fi
+testing c
+testing assembly
+testing make
+testing c++
+testing java
+testing ant
+testing maven
+testing gradle
+testing c#
+testing haskell
+testing scheme
+testing python
+testing ruby
+testing javascript
+testing php
+testing scala
+testing clojure
+testing sed
+testing coq
+testing tex
+testing bison
 
 echo 'Testing number ...'
 ${BITCOIN}/Number/test.sh >> test.log  2>&1
