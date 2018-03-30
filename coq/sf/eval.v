@@ -52,3 +52,14 @@ Inductive ceval : com -> State -> State -> Prop :=
                 ceval (WHILE b DO c END) e' e'' -> 
                 ceval (WHILE b DO c END) e  e''
 .
+
+(*
+Theorem ceval_deterministic: forall (c:com) (e e1 e2:State),
+    ceval c e e1 -> ceval c e e2 -> e1 = e2.
+Proof.
+    intros c e e1 e2 H. revert e2. induction H.
+    - intros e1 H. inversion H. reflexivity.
+    -
+
+Show.
+*)

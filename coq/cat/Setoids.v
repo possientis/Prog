@@ -13,6 +13,18 @@ Arguments eqElems {s}.
 
 Notation "x === y" := (equal eqElems x y) (at level 90, no associativity).
 
+Lemma set_relf  : forall (a:Setoid) (x:elems a), 
+    x === x.
+Proof. intros a x. apply refl. Qed.
+
+Lemma set_sym   : forall (a:Setoid) (x y:elems a), 
+    x === y -> y === x.
+Proof. intros a x y. apply sym. Qed.
+
+Lemma set_trans : forall (a:Setoid) (x y z:elems a), 
+    x === y -> y === z -> x === z.
+Proof. intros a x y z. apply trans. Qed.
+
 (* every type induces a setoid with usual leibniz equality *)
 Definition toSetoid (a:Type) : Setoid := setoid a defEq.
 
@@ -138,7 +150,6 @@ Lemma rewriteSetoid : forall (a:Setoid) (P:elems a -> Prop),
     forall (x y:elems a), compatible P -> x === y -> P x -> P y.
 Proof. intros a P x y H. apply H. Qed.
 
-(*
 Lemma composition_is_compat : forall (a b c:Setoid)(f f':Hom a b)(g g':Hom b c),
     f =~ f' -> g =~ g' -> g # f =~ g' # f'.
 Proof.
@@ -150,15 +161,33 @@ Proof.
     assert (func f x === func f' x) as E. { apply Ef. }
     assert (func g (func f x) === func g (func f' x)) as H.
         { apply (compat g). exact E. }
+    apply set_trans with (y:=func g (func f' x)).
+    -  exact H.
+    -  apply Eg.
+Qed.
 
-
-         
-Show.
-*)
-(*
 
 Definition setoidsAsCategory : Cat.Category := Cat.category 
-    Setoid Hom (@compose) id eqHomSetoid id_left id_right compose_assoc.
+    Setoid 
+    Hom 
+    (@compose) 
+    id 
+    eqHomSetoid 
+    id_left 
+    id_right
+    compose_assoc
+    composition_is_compat.
 
-*)
+
+
+
+
+
+
+
+
+
+
+    
+
 

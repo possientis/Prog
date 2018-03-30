@@ -37,7 +37,6 @@ Proof.
         + apply E_Ass. reflexivity.
 Qed.
 
-(*
 Theorem test_ceval2 : ceval pup_to_n 
     (t_update emptyState x 3)
     (t_update
@@ -61,10 +60,30 @@ Proof.
     remember (t_update e6 x 0) as e7 eqn:E7. 
     apply E_Seq with (e':=e1).
         - rewrite E1. apply E_Ass. reflexivity.
-        - apply E_WhileLoop with (e':=e2).
-            + rewrite E1. rewrite E0. reflexivity.  
-            +
-            
+        - apply E_WhileLoop with (e':=e3).
+            + rewrite E1, E0. reflexivity.  
+            + apply E_Seq with (e':=e2). 
+                { rewrite E2. apply E_Ass. 
+                    rewrite E1, E0. reflexivity. }
+                { rewrite E3. apply E_Ass. 
+                    rewrite E2, E1, E0. reflexivity. }  
+            + apply E_WhileLoop with (e':=e5).
+                { rewrite E3, E2, E1, E0. reflexivity. }
+                { rewrite E5. apply E_Seq with (e':=e4).
+                    { rewrite E4. apply E_Ass. 
+                        rewrite E3, E2, E1, E0. reflexivity. }
+                    { apply E_Ass. 
+                        rewrite E4, E3, E2, E1, E0. reflexivity. } }
+                { apply E_WhileLoop with (e':=e7).
+                    { rewrite E5, E4, E3, E2, E1, E0. reflexivity. }
+                    { apply E_Seq with (e':=e6).
+                        { rewrite E6. apply E_Ass. 
+                            rewrite E5, E4, E3, E2, E1, E0. reflexivity. }
+                        { rewrite E7. apply E_Ass.
+                            rewrite E6, E5, E4, E3, E2, E1, E0. reflexivity. } }
+                    { apply E_WhileEnd.
+                        rewrite E7, E6, E5, E4, E3, E2, E1, E0. reflexivity. }}
+Qed. 
 
-Show.
-*)
+
+

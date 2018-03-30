@@ -44,6 +44,10 @@ ex6 :: IO [Dec]
 ex6 = runQ f
 -- [FunD f [Clause [TupP [VarP a_0,VarP b_1]] (NormalB (VarE a_0)) []]]
 
+my_id :: a -> a
+my_id x = $( [| x |] )
 
+main :: IO ()
+main = putStrLn $ my_id "Hello, world!"
 
 

@@ -23,4 +23,20 @@ pid_t Fork(void)
     return pid;
 }
 
+char* Fgets(char* s, int size, FILE * stream) {
+
+    char* out;
+    
+    out = fgets(s,size,stream);
+
+    if (out == NULL) {
+        if (!feof(stream)) {
+            unix_error("Fgets error");
+        }
+    }
+
+    return out;
+}
+
+
 

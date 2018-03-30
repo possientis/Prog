@@ -12,6 +12,7 @@ rm -f *_stub.h
 rm -f *.s
 rm -f hello.dump-*
 rm -f hello
+rm -f *.dyn_*
 
 ./happy/clean.sh
 
