@@ -53,13 +53,48 @@ Inductive ceval : com -> State -> State -> Prop :=
                 ceval (WHILE b DO c END) e  e''
 .
 
-(*
 Theorem ceval_deterministic: forall (c:com) (e e1 e2:State),
     ceval c e e1 -> ceval c e e2 -> e1 = e2.
 Proof.
-    intros c e e1 e2 H. revert e2. induction H.
-    - intros e1 H. inversion H. reflexivity.
-    -
+    intros c e e1 e2 H. revert e2. 
+    induction H as 
+        [e
+        |e a n x Ha
+        |e e' e'' c1 c2 H1 IH1 H2 IH2
+        |e e' b c1 c2 Hb H1 IH1
+        |e e' b c1 c2 Hb H1 IH1
+        |e b c1 Hb
+        |e e1 e2 b c1 Hb H1 IH1 H2 IH2
+        ].
+    - intros e' H. inversion H. reflexivity.
+    - intros e' H. inversion H. subst. reflexivity.
+    - intros e2 H. inversion H. subst.
+        apply IH2. assert (e' = e'0) as H0.
+            { apply IH1. assumption. }
+        subst. assumption.
+    - intros e1 H. inversion H.
+        + subst. apply IH1. assumption.
+        + assert (true = false) as E. 
+            { rewrite <- Hb. assumption. }
+            inversion E.
+    - intros e1 H. inversion H.
+        + assert (true = false) as E.
+            { rewrite <- Hb. symmetry. assumption. }
+            inversion E.
+        + subst. apply IH1. assumption.
+    - intros e' H. inversion H.
+        + reflexivity.
+        + assert (true = false) as E.
+            { rewrite <- Hb. symmetry. assumption. } 
+          inversion E.
+    - intros e'' H. inversion H.
+        + assert (true = false) as E.
+            { rewrite <- Hb. subst. assumption. }
+          inversion E.
+        + subst. apply IH2. assert (e1 = e'). (* bad! we using e' *)
+            { apply IH1. assumption. }
+          subst. assumption.
+Qed.
 
-Show.
-*)
+
+

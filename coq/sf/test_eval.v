@@ -86,4 +86,31 @@ Proof.
 Qed. 
 
 
+Theorem test_ceval3 : forall (e e':State) (n:nat),
+    e x = n -> ceval Add2_x e e' -> e' x = n + 2.
+Proof.
+    intros e e' n H0 H1. unfold Add2_x in H1. inversion H1. subst. simpl.
+    unfold t_update. reflexivity.
+Qed.
+
+
+Theorem test_ceval4 : forall (e e':State) (n m:nat),
+    e x = n -> e y = m -> ceval Mult_x_y_z e e' -> e' z = n*m.
+Proof.
+    intros e e' n m Hx Hy H. unfold Mult_x_y_z in H. inversion H. subst.
+    simpl. unfold t_update. reflexivity.
+Qed.
+
+(* infinite loop never stop *)
+(*
+Theorem test_ceval5 : forall (e e':State), ~ceval loop e e'.
+Proof.
+    intros e e' H. unfold loop in H. inversion H.
+    - subst. simpl in H4. inversion H4.
+    - subst.
+
+Show.
+*)
+
+
 

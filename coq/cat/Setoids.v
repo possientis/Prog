@@ -30,7 +30,7 @@ Definition toSetoid (a:Type) : Setoid := setoid a defEq.
 
 (* a map between setoids is a normal function which preserves equality *)
 (* We are here defining a new type for maps between setoids.           *)
-Record Hom (a b:Setoid) : Type := hom
+Record Hom_ (a b:Setoid) : Type := hom
     { func    : elems a -> elems b
     ; compat  : forall (x y:elems a), x === y -> func x === func y
     }
@@ -40,19 +40,19 @@ Arguments func {a} {b} _ _.
 Arguments compat {a} {b} _ _ _ _.
 
 
-Definition eq_Hom (a b:Setoid) (f g:Hom a b) : Prop :=
+Definition eq_Hom (a b:Setoid) (f g:Hom_ a b) : Prop :=
     forall (x:elems a), func f x === func g x.  
 
 Arguments eq_Hom {a} {b} _ _.
 
-Lemma eq_Hom_refl : forall (a b:Setoid) (f:Hom a b), eq_Hom f f.
+Lemma eq_Hom_refl : forall (a b:Setoid) (f:Hom_ a b), eq_Hom f f.
 Proof.
     intros a b [f H]. unfold eq_Hom. simpl. intros x. apply refl.
 Qed.
 
 Arguments eq_Hom_refl {a} {b} _ _.
 
-Lemma eq_Hom_sym : forall (a b:Setoid) (f g:Hom a b), eq_Hom f g -> eq_Hom g f.
+Lemma eq_Hom_sym : forall (a b:Setoid) (f g:Hom_ a b), eq_Hom f g -> eq_Hom g f.
 Proof.
     intros a b [f Hf] [g Hg]. unfold eq_Hom. simpl. 
     intros H. intros x. apply sym. apply H.
@@ -61,7 +61,7 @@ Qed.
 Arguments eq_Hom_sym {a} {b} _ _ _ _.
 
 
-Lemma eq_Hom_trans : forall (a b:Setoid) (f g h:Hom a b), 
+Lemma eq_Hom_trans : forall (a b:Setoid) (f g h:Hom_ a b), 
     eq_Hom f g -> eq_Hom g h -> eq_Hom f h.
 Proof.
     intros a b [f Hf] [g Hg] [h Hh]. unfold eq_Hom. simpl.
@@ -72,16 +72,45 @@ Qed.
 
 Arguments eq_Hom_trans {a} {b} _ _ _ _ _ _.
 
-Definition eqHomSetoid (a b:Setoid) : Eq (Hom a b) := equality
+Definition eqHomSetoid (a b:Setoid) : Eq (Hom_ a b) := equality
     eq_Hom eq_Hom_refl eq_Hom_sym eq_Hom_trans.
 
-Definition HomSet (a b:Setoid) : Setoid := setoid 
-    (Hom a b) (eqHomSetoid a b).
+Definition Hom (a b:Setoid) : Setoid := setoid 
+    (Hom_ a b) (eqHomSetoid a b).
+
+Notation "a ==> b" := (Hom a b) (at level 60, right associativity).
+
+Definition prod_ (a b:Setoid) : Type := (elems a * elems b).
+
+Definition prod_eq (a b:Setoid) : Eq (prod_ a b) := prodEq eqElems eqElems. 
+
+Definition prod (a b:Setoid) : Setoid := setoid (prod_ a b) (prod_eq a b).
 
 
-Definition embed (a b:Setoid) (f:Hom a b) : elems (HomSet a b) := f.
+Definition apply_ (a b:Setoid) : elems (prod (a ==> b) a) -> elems b :=
+    fun arg => match arg with
+               | (f,x)  => func f x
+               end.
 
-Arguments embed {a} {b} _.
+Arguments apply_ {a} {b} _.
+
+Lemma apply_compat : forall (a b:Setoid) (y y':elems (prod (a ==> b) a)),
+    y === y' -> apply_ y === apply_ y'.
+Proof.
+    intros a b [f x] [f' x'] [H1 H2]. 
+    simpl. simpl in H1. simpl in H2.
+    assert (func f x === func f x') as H.
+    { apply compat. exact H2. }
+    apply set_trans with (y:= func f x').
+        - exact H.
+        - apply H1.
+Qed.
+
+Arguments apply_compat {a} {b}.
+
+Definition apply (a b:Setoid) : elems ((prod (a ==> b) a) ==> b) := 
+    hom apply_ apply_compat.
+    
 
 Definition id_func (a:Setoid) (x:elems a) : elems a := x.
  
@@ -95,15 +124,15 @@ Qed.
 
 Arguments id_compat {a} _ _ _.
 
-Definition id (a:Setoid) : Hom a a := hom id_func id_compat. 
+Definition id (a:Setoid) : elems (Hom a a) := hom id_func id_compat. 
 
-
+(*
 Definition compose_func (a b c:Setoid)(g:Hom b c)(f:Hom a b)(x:elems a):elems c :=
     func g (func f x).
 
 Arguments compose_func {a} {b} {c} _ _ _.
-
-
+*)
+(*
 Lemma compose_compat : forall (a b c:Setoid) (g:Hom b c) (f:Hom a b) (x y:elems a),
     x === y -> compose_func g f x ===  compose_func g f y.
 Proof.
@@ -177,7 +206,7 @@ Definition setoidsAsCategory : Cat.Category := Cat.category
     id_right
     compose_assoc
     composition_is_compat.
-
+*)
 
 
 

@@ -252,7 +252,7 @@ syntax.vo : syntax.v nat.vo dictionary.vo
 eval.vo : eval.v bool.vo nat.vo syntax.vo state.vo
 	coqc eval.v
 
-test_eval.vo : test_eval.v bool.vo nat.vo syntax.vo eval.vo Imp_code.vo
+test_eval.vo : test_eval.v bool.vo nat.vo syntax.vo eval.vo Imp_code.vo state.vo
 	coqc test_eval.v
 
 optimize.vo : optimize.v nat.vo syntax.vo
