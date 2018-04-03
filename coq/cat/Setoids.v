@@ -80,7 +80,9 @@ Definition Hom (a b:Setoid) : Setoid := setoid
 
 Notation "a ==> b" := (Hom a b) (at level 60, right associativity).
 
-Definition prod_ (a b:Setoid) : Type := (elems a * elems b).
+Open Scope type_scope.
+
+Definition prod_ (a b:Setoid) : Type := elems a * elems b.
 
 Definition prod_eq (a b:Setoid) : Eq (prod_ a b) := prodEq eqElems eqElems. 
 
@@ -106,7 +108,7 @@ Proof.
         - apply H1.
 Qed.
 
-Arguments apply_compat {a} {b}.
+Arguments apply_compat {a} {b} _ _ _.
 
 Definition apply (a b:Setoid) : elems ((prod (a ==> b) a) ==> b) := 
     hom apply_ apply_compat.
