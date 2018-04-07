@@ -102,15 +102,30 @@ Proof.
 Qed.
 
 (* infinite loop never stop *)
-(*
 Theorem test_ceval5 : forall (e e':State), ~ceval loop e e'.
 Proof.
-    intros e e' H. unfold loop in H. inversion H.
-    - subst. simpl in H4. inversion H4.
-    - subst.
+    intros e e' H. unfold loop in H.
+    remember (WHILE BTrue DO SKIP END) as c eqn:Hc. revert Hc. 
+    induction H as
+        [e
+        |e a n x H0
+        |e e' e'' c1 c2 H1 IH1 H2 IH2
+        |e e' b c1 c2 H0 H1 IH1
+        |e e' b c1 c2 H0 H1 IH1
+        |e b c H0
+        |e e' e'' b c H0 H1 IH1 H2 IH2
+        ].
+    - intros H'. inversion H'.
+    - intros H'. inversion H'.
+    - intros H'. inversion H'.
+    - intros H'. inversion H'.
+    - intros H'. inversion H'.
+    - intros H'. inversion H'. subst. assert (true = false) as E.
+        { assumption. } inversion E.
+    - intros H'. apply IH2. exact H'.
+Qed.
 
-Show.
-*)
+
 
 
 

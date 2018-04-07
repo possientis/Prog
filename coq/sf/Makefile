@@ -246,7 +246,7 @@ closure.vo : closure.v nat.vo le.vo
 omega.vo : omega.v
 	coqc omega.v
 
-syntax.vo : syntax.v nat.vo dictionary.vo
+syntax.vo : syntax.v bool.vo nat.vo dictionary.vo
 	coqc syntax.v
 
 eval.vo : eval.v bool.vo nat.vo syntax.vo state.vo

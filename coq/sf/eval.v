@@ -96,5 +96,22 @@ Proof.
           subst. assumption.
 Qed.
 
-
-
+Theorem no_whiles_terminating : forall (c:com) (e:State),
+    no_whilesR c -> exists (e':State), ceval c e e'. 
+Proof.
+    intros c e H. revert e. 
+    induction H as [|k a|c1 c2 H1 IH1 H2 IH2|b c1 c2 H1 IH1 H2 IH2]. 
+    - intros e. exists e. constructor.
+    - intros e. exists (t_update e k (aeval e a)). constructor. reflexivity.
+    - intros e. destruct (IH1 e) as [e1 E1]. destruct (IH2 e1) as [e2 E2].
+        exists e2. apply E_Seq with (e':=e1).
+        + assumption.
+        + assumption.
+    - intros e. destruct (beval e b) eqn:Eb.
+        + destruct (IH1 e) as [e' H']. exists e'. apply E_IfTrue.
+            { assumption. }
+            { assumption. }
+        + destruct (IH2 e) as [e' H']. exists e'. apply E_IfFalse.
+            { assumption. }
+            { assumption. }
+Qed.

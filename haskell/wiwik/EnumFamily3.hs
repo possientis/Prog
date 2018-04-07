@@ -5,7 +5,8 @@
 
 
 
-
+import GHC.TypeLits
+import Data.Type.Pretty
 import Data.Singletons.TH
 
 $(promote [d|
