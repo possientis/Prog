@@ -1,7 +1,4 @@
 Require Import Eq.
-Require Category6.
-
-Module Cat := Category6.
 
 Record Setoid : Type := setoid 
     { elems     : Type
@@ -20,7 +17,7 @@ Definition toSetoid (a:Type) : Setoid := setoid a defEq.
 
 (* a map between setoids is a normal function which preserves equality *)
 (* We are here defining a new type for maps between setoids.           *)
-Record Hom_ (a b:Setoid) : Type := hom
+Record Map_ (a b:Setoid) : Type := hom
     { apply   : elems a -> elems b
     ; compat  : forall (x y:elems a), x == y -> apply x == apply y
     }
@@ -29,45 +26,46 @@ Arguments hom {a} {b} _ _.
 Arguments apply {a} {b} _ _.
 Arguments compat {a} {b} _ _ _ _.
 
-Definition HomEq_ (a b:Setoid) (f g:Hom_ a b) : Prop :=
+Definition MapEq_ (a b:Setoid) (f g:Map_ a b) : Prop :=
     forall (x:elems a), apply f x == apply g x.  
 
-Arguments HomEq_ {a} {b} _ _.
+Arguments MapEq_ {a} {b} _ _.
 
-Lemma HomEq_refl : forall (a b:Setoid) (f:Hom_ a b), HomEq_ f f.
+Lemma MapEq_refl : forall (a b:Setoid) (f:Map_ a b), MapEq_ f f.
 Proof.
-    intros a b [f H]. unfold HomEq_. simpl. intros x. apply refl.
+    intros a b [f H]. unfold MapEq_. simpl. intros x. apply refl.
 Qed.
 
-Arguments HomEq_refl {a} {b} _ _.
+Arguments MapEq_refl {a} {b} _ _.
 
-Lemma HomEq_sym : forall (a b:Setoid) (f g:Hom_ a b), HomEq_ f g -> HomEq_ g f.
+Lemma MapEq_sym : forall (a b:Setoid) (f g:Map_ a b), MapEq_ f g -> MapEq_ g f.
 Proof.
-    intros a b [f Hf] [g Hg]. unfold HomEq_. simpl. 
+    intros a b [f Hf] [g Hg]. unfold MapEq_. simpl. 
     intros H. intros x. apply sym. apply H.
 Qed.
 
-Arguments HomEq_sym {a} {b} _ _ _ _.
+Arguments MapEq_sym {a} {b} _ _ _ _.
 
 
-Lemma HomEq_trans : forall (a b:Setoid) (f g h:Hom_ a b), 
-    HomEq_ f g -> HomEq_ g h -> HomEq_ f h.
+Lemma MapEq_trans : forall (a b:Setoid) (f g h:Map_ a b), 
+    MapEq_ f g -> MapEq_ g h -> MapEq_ f h.
 Proof.
-    intros a b [f Hf] [g Hg] [h Hh]. unfold HomEq_. simpl.
+    intros a b [f Hf] [g Hg] [h Hh]. unfold MapEq_. simpl.
     intros Efg Egh x. apply @trans with (y:= g x).
     - apply Efg.
     - apply Egh.
 Qed.
 
-Arguments HomEq_trans {a} {b} _ _ _ _ _ _.
+Arguments MapEq_trans {a} {b} _ _ _ _ _ _.
 
-Definition HomEq (a b:Setoid) : Eq (Hom_ a b) := equality
-    HomEq_ HomEq_refl HomEq_sym HomEq_trans.
+Definition MapEq (a b:Setoid) : Eq (Map_ a b) := equality
+    MapEq_ MapEq_refl MapEq_sym MapEq_trans.
 
-Definition Hom (a b:Setoid) : Setoid := setoid 
-    (Hom_ a b) (HomEq a b).
+Definition Map (a b:Setoid) : Setoid := setoid 
+    (Map_ a b) (MapEq a b).
 
-Notation "a ~> b" := (elems (Hom a b))(at level 60, right associativity) : setoid.
+Notation "a ~> b" := (elems (Map a b))(at level 60, right associativity) : setoid.
+Notation "a ==> b" := (Map a b) (at level 60, right associativity) : setoid.
 
 Definition id_ (a:Setoid) (x:elems a) : elems a := x.
  
@@ -109,21 +107,21 @@ Notation "g # f" := (compose g f) (at level 60, right associativity).
 Lemma compose_assoc : forall (a b c d:Setoid)(f:a ~> b)(g:b ~> c)(h:c ~> d),
     (h # g) # f == (h # g) # f.
 Proof.
-    intros a b c d [f Hf] [g Hg] [h Hh]. unfold compose, HomEq. simpl. intros x.
+    intros a b c d [f Hf] [g Hg] [h Hh]. unfold compose, MapEq. simpl. intros x.
     apply Hh, Hg, Hf. apply refl.  
 Qed.
 
 
 Lemma id_left : forall (a b:Setoid) (f:a ~> b), (id b) # f == f.
 Proof.
-    intros a b [f Hf]. unfold compose, id, HomEq, id_. simpl. intros x.
+    intros a b [f Hf]. unfold compose, id, MapEq, id_. simpl. intros x.
     apply Hf. apply refl.  
 Qed.
 
 
 Lemma id_right : forall (a b:Setoid) (f:a ~> b), f # (id a) == f.
 Proof.
-    intros a b [f Hf]. unfold compose, id, HomEq, id_. simpl. intros x.
+    intros a b [f Hf]. unfold compose, id, MapEq, id_. simpl. intros x.
     apply Hf. apply refl.  
 Qed.
 
@@ -132,9 +130,9 @@ Lemma composition_is_compat : forall (a b c:Setoid)(f f':a ~> b)(g g':b ~> c),
     f == f' -> g == g' -> g # f == g' # f'.
 Proof.
     intros a b c f f' g g' Ef Eg. 
-    simpl. unfold HomEq. intros x. 
-    simpl in Eg. unfold HomEq in Eg.
-    simpl in Ef. unfold HomEq in Ef.
+    simpl. unfold MapEq. intros x. 
+    simpl in Eg. unfold MapEq in Eg.
+    simpl in Ef. unfold MapEq in Ef.
     unfold compose. simpl. unfold compose_. 
     assert (apply f x == apply f' x) as E. { apply Ef. }
     assert (apply g (apply f x) == apply g (apply f' x)) as H.
@@ -144,14 +142,15 @@ Proof.
     -  apply Eg.
 Qed.
 
+(*
 Definition setoidsAsCategory : Cat.Category := Cat.category 
     Setoid 
     (fun x y => x ~> y)
     (@compose) 
     id 
-    HomEq
+    MapEq
     id_left 
     id_right
     compose_assoc
     composition_is_compat.
-
+*)

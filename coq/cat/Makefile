@@ -118,7 +118,7 @@ Eq_Category5.vo :			Eq_Category5.v \
 				 			Category5.vo
 	coqc Eq_Category5.v
 
-Category6.vo :				Category6.v Eq.vo
+Category6.vo :				Category6.v Eq.vo Setoids.vo
 	coqc Category6.v
 
 CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
