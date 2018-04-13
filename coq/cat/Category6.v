@@ -21,7 +21,6 @@ Record Category : Type := category
     }
     .
 
-Notation "a :-> b" := (elems (Hom a b))(at level 60, right associativity) : categ.
 
 Arguments Hom {c} _ _.
 Arguments compose {c} {a} {b} {c0}.
@@ -31,21 +30,33 @@ Arguments proof_idr {c} {a} {b} _.
 Arguments proof_assoc {c} {a} {b} {c0} {d} _ _ _.
 
 
-Notation "g @ f" := (apply (apply compose g) f) (at level 60, right associativity). 
+Notation "g @ f" := (apply (apply compose g) f) (at level 60, right associativity) :
+categ.
 
+Notation "a :-> b" := (elems (Hom a b))(at level 60, right associativity) : categ.
 
-(*
-Lemma id_left : forall (C:Category) (a b:Obj C) (f:Hom a b), (id b) @ f == f.
+Open Scope categ.
+
+Lemma id_left : forall (C:Category) (a b:Obj C) (f:a :-> b), (id b) @ f == f.
 Proof. intros C a b f. apply proof_idl. Qed.
 
-Lemma id_right : forall (C:Category) (a b:Obj C) (f:Hom a b), f @ (id a) == f.
+Lemma id_right : forall (C:Category) (a b:Obj C) (f:a :-> b), f @ (id a) == f.
 Proof. intros C a b f. apply proof_idr. Qed.
 
-Lemma assoc : forall (C:Category)(a b c d:Obj C)(f:Hom a b)(g:Hom b c)(h:Hom c d), 
+Lemma assoc : forall (C:Category)(a b c d:Obj C)(f:a :-> b)(g:b :-> c)(h:c :-> d), 
     h @ (g @ f) == (h @ g) @ f.
 Proof. intros C a b c d f g h. apply proof_assoc. Qed.
 
-Lemma compat : forall (C:Category)(a b c:Obj C)(f f':Hom a b)(g g':Hom b c),
+Lemma compat : forall (C:Category)(a b c:Obj C)(f f':a :-> b)(g g':b :-> c),
     f == f' -> g == g' -> g @ f == g' @ f'.
-Proof. intros C a b c f f' g g'. apply proof_compat. Qed.
-*)
+Proof. 
+  intros C a b c f f' g g' Hf Hg. 
+  assert (g @ f == g @ f'). { apply compat. assumption. }
+  apply trans with (y:= g @ f').
+    - assumption.
+    - apply (compat compose). assumption.
+Qed.
+
+
+
+

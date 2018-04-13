@@ -15,6 +15,10 @@ Open Scope setoid.
 (* every type induces a setoid with usual leibniz equality *)
 Definition toSetoid (a:Type) : Setoid := setoid a defEq.
 
+(* well, not quite, we have a universe inconsistency if we try this
+Definition Setoid_ := toSetoid Setoid.
+*)
+
 (* a map between setoids is a normal function which preserves equality *)
 (* We are here defining a new type for maps between setoids.           *)
 Record Map_ (a b:Setoid) : Type := hom
@@ -142,15 +146,4 @@ Proof.
     -  apply Eg.
 Qed.
 
-(*
-Definition setoidsAsCategory : Cat.Category := Cat.category 
-    Setoid 
-    (fun x y => x ~> y)
-    (@compose) 
-    id 
-    MapEq
-    id_left 
-    id_right
-    compose_assoc
-    composition_is_compat.
-*)
+

@@ -66,9 +66,12 @@ all:	Axiom_Extensionality.vo \
 		try_evalR.vo \
 		state.vo \
 		Imp_code.vo \
+		ISA.vo \
 		compile.vo \
 		execute.vo \
-		test_execute.vo
+		test_execute.vo \
+		test_compile.vo \
+		equiv.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -277,12 +280,22 @@ state.vo : state.v dictionary.vo nat.vo
 Imp_code.vo : Imp_code.v nat.vo syntax.vo state.vo
 	coqc Imp_code.v
 
-compile.vo : compile.v nat.vo dictionary.vo
+ISA.vo : ISA.v nat.vo dictionary.vo
+	coqc ISA.v	
+
+compile.vo : compile.v nat.vo list.vo dictionary.vo syntax.vo state.vo \
+	execute.vo eval.vo ISA.vo
 	coqc compile.v
 
-execute.vo : execute.v nat.vo list.vo dictionary.vo state.vo compile.vo
+execute.vo : execute.v nat.vo list.vo dictionary.vo state.vo ISA.vo
 	coqc execute.v
 
 test_execute.vo : test_execute.v nat.vo list.vo dictionary.vo state.vo \
-	compile.vo execute.vo
+	compile.vo execute.vo ISA.vo
 	coqc test_execute.v
+
+test_compile.vo : test_compile.v nat.vo list.vo syntax.vo state.vo compile.vo
+	coqc test_compile.v
+
+equiv.vo : equiv.v syntax.vo eval.vo state.vo
+	coqc equiv.v
