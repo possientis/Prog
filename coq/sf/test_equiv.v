@@ -1,7 +1,9 @@
+Require Import bool.
 Require Import nat.
 Require Import dictionary.
 Require Import state.
 Require Import syntax.
+Require Import eval.
 Require Import equiv.
 
 
@@ -19,5 +21,33 @@ Definition prog_b : com :=
   FI;;
   x ::= AMinus (AKey x) (ANum 1) ;;
   y ::= ANum 0.
+
+Definition prog_c : com :=
+    SKIP.
+
+Definition prog_d : com :=
+    WHILE BNot (BEq (AKey x) (ANum 0)) DO
+        x ::= APlus (AMult (AKey x) (AKey y)) (ANum 1)
+    END.
+ 
+Definition prog_e : com :=
+    y ::= ANum 0.
+
+Definition prog_g : com :=
+    WHILE BTrue DO
+        SKIP
+    END.
+
+
+Definition prog_h : com :=
+    WHILE BNot (BEq (AKey x) (AKey x)) DO
+        x ::= APlus (AKey x) (ANum 1)
+    END.
+
+Theorem test_equiv1 : aequiv (AMinus (AKey x) (AKey x)) (ANum 0).
+Proof. intros e. simpl. apply minus_n_n. Qed.
+
+Theorem test_equiv2 : bequiv (BEq (AMinus (AKey x) (AKey x)) (ANum 0)) BTrue.
+Proof. intros e. simpl. rewrite minus_n_n. reflexivity. Qed.
 
 

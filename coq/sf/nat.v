@@ -449,6 +449,12 @@ Proof.
     - right. reflexivity.
 Qed.
 
+Lemma minus_n_n : forall (n:nat), n - n = 0.
+Proof.
+    intros n. induction n as [|n IH].
+    - reflexivity.
+    - simpl. rewrite IH. reflexivity.
+Qed.
 
 
 

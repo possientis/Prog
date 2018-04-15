@@ -71,7 +71,8 @@ all:	Axiom_Extensionality.vo \
 		execute.vo \
 		test_execute.vo \
 		test_compile.vo \
-		equiv.vo
+		equiv.vo \
+		test_equiv.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -299,3 +300,7 @@ test_compile.vo : test_compile.v nat.vo list.vo syntax.vo state.vo compile.vo
 
 equiv.vo : equiv.v syntax.vo eval.vo state.vo
 	coqc equiv.v
+
+test_equiv.vo : test_equiv.v bool.vo nat.vo dictionary.vo state.vo syntax.vo \
+	eval.vo equiv.vo
+	coqc test_equiv.v
