@@ -95,7 +95,7 @@ Inductive Hom (C:Category) (a b:Obj C) : Type :=
 .
 
 Arguments Hom {C} _ _.
-Arguments hom {C} {a} {b} _ _.
+Arguments hom {C} {a} {b} _ _ _.
 
 (* converting an instance of homset to an arrow *)
 Definition i (C:Category) (a b:Obj C) (f:Hom a b) : Arr C :=
