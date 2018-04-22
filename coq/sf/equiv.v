@@ -1,4 +1,5 @@
 Require Import bool.
+Require Import nat. 
 Require Import syntax.
 Require Import eval.
 Require Import dictionary.
@@ -103,5 +104,116 @@ Proof.
         + rewrite (H e) in H2. inversion H2.
     - intros H'. inversion H'. subst. constructor. apply H.
 Qed.
+
+Lemma while_true_nonterm : forall (b:bexp) (c:com) (e e':State),
+    bequiv b BTrue -> ~(ceval (WHILE b DO c END) e e').
+Proof.
+    intros b c e e' H H'. remember (WHILE b DO c END) as c' eqn:H0.
+    revert H0. induction H'.
+    - intros H1. inversion H1.
+    - intros H1. inversion H1.
+    - intros H1. inversion H1.
+    - intros H1. inversion H1.
+    - intros H1. inversion H1.
+    - intros H1. inversion H1. subst. unfold bequiv in H. simpl in H.
+        rewrite (H e) in H0. inversion H0.
+    - assumption.
+Qed.
+
+
+Theorem while_true : forall (b:bexp) (c:com),
+    bequiv b BTrue -> cequiv (WHILE b DO c END) (WHILE BTrue DO SKIP END).
+Proof.
+    intros b c H e e'. split.
+    - intros H'. exfalso. apply while_true_nonterm with (b)(c)(e)(e').
+        + assumption.
+        + assumption.
+    - intros H'. exfalso. apply while_true_nonterm with (BTrue)(SKIP)(e)(e').
+        + unfold bequiv. reflexivity.
+        + assumption.
+Qed.
+
+Theorem seq_assoc : forall (c1 c2 c3:com),
+    cequiv ((c1;;c2);;c3) (c1;;(c2;;c3)).
+Proof.
+    intros c1 c2 c3 e e'. split.
+    - intros H. inversion H. subst. inversion H2. subst.
+        apply E_Seq with e'1.
+            + assumption.
+            + apply E_Seq with e'0.
+                { assumption. }
+                { assumption. }
+    - intros H. inversion H. subst. inversion H5. subst. apply E_Seq with e'1.
+        + apply E_Seq with e'0.
+            { assumption. }
+            { assumption. }
+        + assumption.
+Qed.
+
+
+Theorem identity_assignement : forall (k:Key),
+    cequiv (k ::= AKey k) SKIP.
+Proof.
+    intros k e e'. split.
+    - intros H. inversion H; subst. simpl. simpl in H.
+        remember (t_update e k (e k)) as e' eqn:E.
+        assert (e' = e) as H'.
+            { rewrite E. apply t_update_same. }
+        rewrite H'. constructor.
+    - intros H. inversion H; subst. remember e' as e eqn:E. 
+        rewrite E at 2.
+        rewrite <- t_update_same with (_)(e')(k).
+        rewrite <- E. constructor. reflexivity.
+Qed.
+
+Theorem aequiv_assignment : forall (k:Key) (a:aexp),
+    aequiv (AKey k) a -> cequiv SKIP (k ::= a).
+Proof.
+    intros k a H e e'. unfold aequiv in H. split.
+    - intros H'. inversion H'; subst.
+        remember e' as e eqn:E. rewrite E at 2.
+        assert (e' = t_update e k (aeval e a)) as H0.
+            { rewrite <- H. simpl. rewrite t_update_same. symmetry. assumption. }
+        rewrite H0. constructor. reflexivity.
+    - intros H'. inversion H'; subst. rewrite <- H. simpl. 
+        rewrite t_update_same. constructor.
+Qed.
+    
+Lemma refl_aequiv : forall (a:aexp), aequiv a a.
+Proof. intros a e. reflexivity. Qed.
+
+Lemma sym_aequiv : forall (a b:aexp), aequiv a b -> aequiv b a.
+Proof. intros a b H e. symmetry. apply H. Qed.
+
+Lemma trans_aequiv : forall (a b c:aexp), aequiv a b -> aequiv b c -> aequiv a c.
+Proof.
+    intros a b c Eab Ebc e. apply eq_trans with (aeval e b).
+    - apply Eab.
+    - apply Ebc.
+Qed.
+
+Lemma relf_bequiv : forall (b:bexp), bequiv b b.
+Proof. intros b e. reflexivity. Qed.
+
+Lemma sym_bequiv : forall (a b:bexp), bequiv a b -> bequiv b a.
+Proof. intros a b H e. symmetry. apply H. Qed.
+
+Lemma trans_bequiv : forall (a b c:bexp), bequiv a b -> bequiv b c -> bequiv a c.
+Proof.
+    intros a b c Eab Ebc e. apply eq_trans with (beval e b).
+    - apply Eab.
+    - apply Ebc.
+Qed.
+
+(*
+Lemma refl_cequiv : forall (c:com), cequiv c c.
+Proof.
+
+Show.
+*)
+
+
+
+
 
 

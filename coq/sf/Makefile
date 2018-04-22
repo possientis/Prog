@@ -298,7 +298,7 @@ test_execute.vo : test_execute.v nat.vo list.vo dictionary.vo state.vo \
 test_compile.vo : test_compile.v nat.vo list.vo syntax.vo state.vo compile.vo
 	coqc test_compile.v
 
-equiv.vo : equiv.v syntax.vo eval.vo state.vo
+equiv.vo : equiv.v bool.vo nat.vo syntax.vo eval.vo dictionary.vo state.vo
 	coqc equiv.v
 
 test_equiv.vo : test_equiv.v bool.vo nat.vo dictionary.vo state.vo syntax.vo \

@@ -1,6 +1,5 @@
 Require Import Setoids.
 
-
 Record Category : Type :=
   { Arrows_     : Setoid
   ; source_     : Arrows_ ~> Arrows_
@@ -17,10 +16,10 @@ Record Category : Type :=
       apply source_ (apply target_ f) == apply target_ f
   ; proof_src_  : forall(f g:elems Arrows_),
       forall (p: apply target_ f == apply source_ g),
-      apply source_ (compose_ g f p) = apply source_ f 
+      apply source_ (compose_ g f p) == apply source_ f 
   ; proof_tgt_  : forall(f g:elems Arrows_), 
       forall (p: apply target_ f == apply source_ g),
-      apply target_ (compose_ g f p) = apply target_ g
+      apply target_ (compose_ g f p) == apply target_ g
   ; proof_idl_  : forall(f b:elems Arrows_), 
       forall (p: apply target_ f == apply source_ b),
       b == apply target_ f -> compose_ b f p == f
@@ -103,17 +102,103 @@ Definition i (C:Category) (a b:Obj C) (f:Hom a b) : Arr C :=
     | hom f _ _ => f
     end. 
 
+Arguments i {C} {a} {b} _.
+
 Lemma source_of_identity : forall (C:Category) (a:Obj C), source (arr a) == arr a.
 Proof. intros C [a H]. simpl. assumption. Qed.
-(*
+
 Lemma target_of_identity : forall (C:Category) (a:Obj C), target (arr a) == arr a.
 Proof. intros C [a H]. simpl.
+    assert (target (source a) == source a) as H'. { apply proof_ts_. }
+    assert (target a == target (source a)) as H''.  
+        { apply compat. apply sym. assumption. }
+    apply trans with (target (source a)).
+        - assumption.
+        - apply trans with (source a).
+            + assumption.
+            + assumption.
+Qed.
 
-Show.
-*)
+Arguments source_of_identity {C} _.
+Arguments target_of_identity {C} _.
 
-(*
 (* identity arrow associated with an object *)
 Definition id (C:Category) (a:Obj C) : Hom a a :=
-*)
+    hom (arr a) (source_of_identity a) (target_of_identity a).
+
+Arguments id {C} _.
+
+Lemma compose_defined : forall (C:Category) (a b c:Obj C) (g:Hom b c) (f:Hom a b),
+    target (i f) == source (i g).
+Proof.
+    intros C [a Ha] [b Hb] [c Hc] [g Ag Bg] [f Af Bf]. 
+    simpl. simpl in Bf. simpl in Ag. apply trans with b.
+        - assumption.
+        - apply sym. assumption.
+Qed.
+
+Arguments compose_defined {C} {a} {b} {c} _ _.
+
+Definition compose_arrow (C:Category)(a b c:Obj C)(g:Hom b c)(f:Hom a b): Arr C :=
+    compose_ C (i g) (i f) (compose_defined g f). 
+
+Arguments compose_arrow {C} {a} {b} {c} _ _.
+
+Lemma compose_source : forall (C:Category)(a b c:Obj C)(g:Hom b c)(f:Hom a b),
+    source (compose_arrow g f) == arr a. 
+Proof. 
+    intros C [a Ha] [b Hb] [c Hc] [g Ag Bg] [f Af Bf].
+    simpl. unfold compose_arrow. simpl. unfold source.
+    simpl in Af. apply trans with (source f).
+    - apply (proof_src_ C f g).
+    - assumption.
+Qed.
+
+Arguments compose_source {C} {a} {b} {c} _ _.
+
+Lemma compose_target : forall (C:Category)(a b c:Obj C)(g:Hom b c)(f:Hom a b),
+    target (compose_arrow g f) == arr c. 
+Proof. 
+    intros C [a Ha] [b Hb] [c Hc] [g Ag Bg] [f Af Bf].
+    simpl. unfold compose_arrow. simpl. unfold target.
+    simpl in Bg. apply trans with (target g).
+    - apply (proof_tgt_ C f g).
+    - assumption.
+Qed.
+
+Arguments compose_target {C} {a} {b} {c} _ _.
+
+Definition compose (C:Category) (a b c:Obj C) (g:Hom b c) (f:Hom a b) : Hom a c :=
+    hom (compose_arrow g f) (compose_source g f) (compose_target g f). 
+
+Arguments compose {C} {a} {b} {c} _ _.
+
+Notation "g # f" := (compose g f) (at level 60, right associativity) : categ. 
+
+Open Scope categ.
+
+Theorem compose_assoc : forall (C:Category)(a b c d:Obj C),
+    forall (f:Hom a b) (g:Hom b c) (h:Hom c d),
+        i (h # (g # f)) == i ((h # g) # f).
+Proof.
+    intros C [a Ha] [b Hb] [c Hc] [d Hd] [f Af Bf] [g Ag Bg] [h Ah Bh].
+    unfold compose, compose_arrow. simpl. apply proof_asc_.
+Qed.
+
+Theorem id_left : forall (C:Category) (a b:Obj C) (f: Hom a b),
+    i (id b # f) == i f.
+Proof.
+    intros C [a Ha] [b Hb] [f Af Bf]. unfold compose, compose_arrow. simpl.
+    apply proof_idl_. apply sym. assumption.
+Qed.
+
+
+Theorem id_right : forall (C:Category) (a b:Obj C) (f: Hom a b),
+    i (f # id a) == i f.
+Proof.
+    intros C [a Ha] [b Hb] [f Af Bf]. unfold compose, compose_arrow. simpl.
+    apply proof_idr_. apply sym. assumption.
+Qed.
+
+
 

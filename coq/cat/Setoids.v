@@ -105,7 +105,7 @@ Definition compose (a b c:Setoid)(g:b ~> c)(f:a ~> b):a ~> c := hom
 Arguments compose {a} {b} {c} _ _.
 
 
-Notation "g # f" := (compose g f) (at level 60, right associativity).
+Notation "g # f" := (compose g f) (at level 60, right associativity) : setoid.
 
 
 Lemma compose_assoc : forall (a b c d:Setoid)(f:a ~> b)(g:b ~> c)(h:c ~> d),
@@ -146,4 +146,12 @@ Proof.
     -  apply Eg.
 Qed.
 
+Lemma refl : forall (a:Setoid) (x:elems a), x == x.
+Proof. intros a x. apply refl. Qed. 
+
+Lemma sym : forall (a:Setoid) (x y:elems a), x == y -> y == x.
+Proof. intros a x y. apply sym. Qed.
+
+Lemma trans : forall (a:Setoid) (x y z:elems a), x == y -> y == z -> x == z.
+Proof. intros a x y z. apply trans. Qed.
 
