@@ -1,5 +1,20 @@
 Require Import Setoids.
 
+(* The internals of a category are not readable, however the hope 
+   is to provide a highly intuitive API to categorical notions.
+   A category is defined as a base Setoid 'Arrows_' (i.e. a type 
+   with equality) which represents the class of all arrows of the 
+   category. On 'Arrows_' are defined two unary operations 'source_'
+   and 'target_' as well as a partial binary operation 'compose_'.
+   The objects of the category are not given by additional data, but
+   are simply identified with identity arrows. An object of the  
+   category is simply any arrow whose 'source_' is itself, (in
+   which case its target is also itself). The main advantage of
+   identifying objects with identity arrows, is that we do not 
+   need to provide a seperate equality primitive for objects.
+*)
+     
+
 Record Category : Type :=
   { Arrows_     : Setoid
   ; source_     : Arrows_ ~> Arrows_
@@ -36,7 +51,7 @@ Record Category : Type :=
   ; proof_compat : forall (f f' g g':elems Arrows_),
       forall (p_gf : apply target_ f  == apply source_ g),
       forall (p_gf': apply target_ f' == apply source_ g'),
-      f == f' -> g == g' -> compose_ g f p_gf = compose_ g' f' p_gf'
+      f == f' -> g == g' -> compose_ g f p_gf == compose_ g' f' p_gf'
   }
   .
 
@@ -49,6 +64,14 @@ Definition target (C:Category) (f:Arr C) : Arr C := apply (target_ C) f.
 
 Arguments source {C} _.
 Arguments target {C} _.
+
+Theorem source_compat : forall (C:Category) (f g:Arr C),
+    f == g -> source f == source g.
+Proof. intros C f g H. apply compat. assumption. Qed.
+
+Theorem target_compat : forall (C:Category) (f g:Arr C),
+    f == g -> target f == target g.
+Proof. intros C f g H. apply compat. assumption. Qed.
 
 (* objects of a category *)
 Inductive Obj(C:Category) : Type :=
@@ -64,6 +87,16 @@ Definition arr (C:Category) (a:Obj C) : Arr C :=
     end.
 
 Arguments arr {C} _.
+
+(* We could be asking ourselves whether 'arr' is an embedding
+   from the class 'Obj C' to the class 'Arr C'. However, we do
+   not have an equality notion on objects, other than that
+   induced by 'arr' itself: two objects a and b are deemed
+   equal, if and only if they are equal when viewed as arrows:
+            a ~ b <-> arr a == arr b
+   We are not defining this notion of equality explicitly to
+   remind ourselves that equality is only defined on arrows.
+*)
 
 (* the source of an arrow is an object *)
 Lemma source_is_object : forall (C:Category) (f:Arr C), 
@@ -88,6 +121,14 @@ Definition tgt (C:Category) (f:Arr C) : Obj C :=
 Arguments src {C} _.
 Arguments tgt {C} _.
 
+Lemma src_compat : forall (C:Category) (f g:Arr C), 
+    f == g -> arr (src f) == arr (src g).
+Proof. intros C f g H. apply source_compat. assumption. Qed.
+
+Lemma tgt_compat : forall (C:Category) (f g:Arr C), 
+    f == g -> arr (tgt f) == arr (tgt g).
+Proof. intros C f g H. apply target_compat. assumption. Qed.
+
 (* homset defined as a type *)
 Inductive Hom (C:Category) (a b:Obj C) : Type :=
 | hom : forall (f:Arr C), (source f == arr a) -> (target f == arr b) -> Hom C a b
@@ -96,6 +137,11 @@ Inductive Hom (C:Category) (a b:Obj C) : Type :=
 Arguments Hom {C} _ _.
 Arguments hom {C} {a} {b} _ _ _.
 
+(* can't see a way to prove this *)
+Axiom Hom_compat : forall (C:Category) (a a' b b':Obj C),
+    arr a == arr a' -> arr b == arr b' -> Hom a b = Hom a' b'.
+
+
 (* converting an instance of homset to an arrow *)
 Definition i (C:Category) (a b:Obj C) (f:Hom a b) : Arr C :=
     match f with
@@ -103,6 +149,18 @@ Definition i (C:Category) (a b:Obj C) (f:Hom a b) : Arr C :=
     end. 
 
 Arguments i {C} {a} {b} _.
+
+(* We could be asking ourselves whether 'i' is an embedding
+   from the type 'Hom a b' to the class 'Arr C'. However, we 
+   do not have an equality notion on elements of Hom a b, other 
+   than that induced by 'i' itself: two elements of Hom a b are
+   deemed equal, if and only if they are equal when viewed as 
+   as elements of arrows:
+            f ~ g  <-> i f == i g
+   We are not defining this notion of equality explicitly to
+   remind ourselves that equality is only defined on arrows.
+*)
+
 
 Lemma source_of_identity : forall (C:Category) (a:Obj C), source (arr a) == arr a.
 Proof. intros C [a H]. simpl. assumption. Qed.
@@ -128,6 +186,12 @@ Definition id (C:Category) (a:Obj C) : Hom a a :=
 
 Arguments id {C} _.
 
+Lemma id_compat : forall (C:Category) (a b:Obj C),
+    arr a == arr b ->  i (id a) == i (id b).
+Proof. intros C [a Ha] [b Hb] H. assumption. Qed.
+
+
+(* needed to construct composition of arrows *)
 Lemma compose_defined : forall (C:Category) (a b c:Obj C) (g:Hom b c) (f:Hom a b),
     target (i f) == source (i g).
 Proof.
@@ -139,11 +203,13 @@ Qed.
 
 Arguments compose_defined {C} {a} {b} {c} _ _.
 
+(* composition of arrows *)
 Definition compose_arrow (C:Category)(a b c:Obj C)(g:Hom b c)(f:Hom a b): Arr C :=
     compose_ C (i g) (i f) (compose_defined g f). 
 
 Arguments compose_arrow {C} {a} {b} {c} _ _.
 
+(* we want composition of arrows to be typed, so proving its source *)
 Lemma compose_source : forall (C:Category)(a b c:Obj C)(g:Hom b c)(f:Hom a b),
     source (compose_arrow g f) == arr a. 
 Proof. 
@@ -156,6 +222,7 @@ Qed.
 
 Arguments compose_source {C} {a} {b} {c} _ _.
 
+(* we want composition of arrows to be typed, so proving its target *)
 Lemma compose_target : forall (C:Category)(a b c:Obj C)(g:Hom b c)(f:Hom a b),
     target (compose_arrow g f) == arr c. 
 Proof. 
@@ -168,15 +235,25 @@ Qed.
 
 Arguments compose_target {C} {a} {b} {c} _ _.
 
+(* we can now defined composition as a typed operation which is total *)
 Definition compose (C:Category) (a b c:Obj C) (g:Hom b c) (f:Hom a b) : Hom a c :=
     hom (compose_arrow g f) (compose_source g f) (compose_target g f). 
 
 Arguments compose {C} {a} {b} {c} _ _.
 
+(* syntactic sugar *)
 Notation "g # f" := (compose g f) (at level 60, right associativity) : categ. 
 
 Open Scope categ.
 
+Lemma compose_compat:forall(C:Category)(a b c:Obj C)(f f':Hom a b)(g g':Hom b c),
+    i f == i f' -> i g == i g' -> i (g # f) == i (g' # f').
+Proof.
+    intros C [a Ha] [b Hb] [c Hc] [f Af Bf] [f' Af' Bf'] [g Ag Bg] [g' Ag' Bg']. 
+    simpl. unfold compose_arrow. apply proof_compat.
+Qed.
+
+(* composition is associative *)
 Theorem compose_assoc : forall (C:Category)(a b c d:Obj C),
     forall (f:Hom a b) (g:Hom b c) (h:Hom c d),
         i (h # (g # f)) == i ((h # g) # f).
@@ -185,6 +262,7 @@ Proof.
     unfold compose, compose_arrow. simpl. apply proof_asc_.
 Qed.
 
+(* identity to the left *)
 Theorem id_left : forall (C:Category) (a b:Obj C) (f: Hom a b),
     i (id b # f) == i f.
 Proof.
@@ -192,13 +270,12 @@ Proof.
     apply proof_idl_. apply sym. assumption.
 Qed.
 
-
+(* identity to the right *)
 Theorem id_right : forall (C:Category) (a b:Obj C) (f: Hom a b),
     i (f # id a) == i f.
 Proof.
     intros C [a Ha] [b Hb] [f Af Bf]. unfold compose, compose_arrow. simpl.
     apply proof_idr_. apply sym. assumption.
 Qed.
-
 
 

@@ -1,7 +1,8 @@
-Require Import Category6.
+Require Import Setoids.
+Require Import Category7.
 
 Record Functor (C D:Category) : Type := functor
-    { F0 : Obj C -> Obj D
-    ; F1 : forall (a b:Obj C), Hom a b -> Hom (F0 a) (F0 b)
+    { Func          : Arr C -> Arr D
+    ; Func_compat   : forall (f g:Arr C), f == g -> Func f == Func g
     }
     .

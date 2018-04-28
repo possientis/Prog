@@ -86,6 +86,67 @@ void mm_free(void *bp)
 
 static void *coalesce(void *bp)
 {
+    size_t prev_alloc = GET_ALLOC(FTRP(PREV_BLK(bp)));
+    size_t next_alloc = GET_ALLOC(HDRP(NEXT_BLK(bp)));
+    size_t size       = GET_SIZE(HDRP(bp));
+
+    if(prev_alloc && next_alloc) {          /* case 1 */
+        return bp;
+    }
+
+    else if (prev_alloc && !next_alloc) {   /* case 2 */
+        size += GET_SIZE(HDRP(NEXT_BLK(bp)));
+        PUT(HDRP(bp),PACK(size,0));
+        PUT(FTRP(bp),PACK(size,0));
+    }
+
+    else if (!prev_alloc && next_alloc) {   /* case 3 */
+        size += GET_SIZE(HDRP(PREV_BLK(bp)));
+        PUT(FTRP(bp), PACK(size,0));
+        PUT(HDRP(PREV_BLK(bp)), PACK(size,0));
+        bp = PREV_BLK(bp);
+    }
+    
+    else {                                  /* case 4 */
+        size += GET_SIZE(HDRP(PREV_BLK(bp))) 
+              + GET_SIZE(FTRP(NEXT_BLK(bp)));
+        PUT(HDRP(PREV_BLK(bp)),PACK(size,0));
+        PUT(FTRP(NEXT_BLK(bp)),PACK(size,0));
+        bp = PREV_BLK(bp);
+    }
+
+    return bp;
 
 }
 
+
+void *mm_malloc(size_t size)
+{
+    size_t asize;           /* adjusted block size */
+    size_t extendsize;      /* amount to extend heap if no fit */
+    char *bp;
+
+    /* ignore spurious requests */
+    if(size == 0)
+        return NULL;
+
+    /* adjust block size tp include overhead and alignment requirements */
+    if(size <= DSIZE)
+        asize = 2*DSIZE;
+    else
+        asize = DSIZE * ((size + (DSIZE) + (DSIZE-1)) / DSIZE);
+
+    /* search the free list for a fit */
+    if((bp = find_fit(asize)) != NULL) {
+        place(bp,asize);
+        return bp;
+    }
+
+
+    /* no fit found. get more memory and place the block */
+    extendsize = MAX(asize,CHUNKSIZE);
+    if((bp = extend_heap(extendsize/WSIZE)) == NULL)
+        return NULL;
+    place(bp, asize);
+    return bp;
+}

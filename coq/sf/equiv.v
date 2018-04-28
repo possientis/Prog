@@ -205,12 +205,43 @@ Proof.
     - apply Ebc.
 Qed.
 
-(*
 Lemma refl_cequiv : forall (c:com), cequiv c c.
-Proof.
+Proof. intros c e e'. reflexivity. Qed.
 
-Show.
-*)
+Lemma sym_cequiv : forall (c d:com), cequiv c d -> cequiv d c.
+Proof. intros c d H e e'. symmetry. apply H. Qed.
+
+Lemma trans_cequiv : forall (b c d:com), cequiv b c -> cequiv c d -> cequiv b d.
+Proof.
+    intros b c d Ebc Ecd e e'.
+    destruct (Ecd e e') as [H1 H2]. 
+    destruct (Ebc e e') as [H3 H4].
+    split.
+    - intros H. apply H1, H3, H. 
+    - intros H. apply H4, H2, H.
+Qed.
+
+Lemma CAss_congruence : forall (k:Key) (a a':aexp),
+    aequiv a a' -> cequiv (k ::= a) (k ::= a').
+Proof.
+    intros k a a' H e e'. split.
+    - intros H'. inversion H'; subst. constructor. symmetry. apply H.
+    - intros H'. inversion H'; subst. constructor. apply H.
+Qed.
+
+Lemma CSeq_congruence : forall (c1 c1' c2 c2':com),
+    cequiv c1 c1' -> cequiv c2 c2' -> cequiv (c1;;c2) (c1';;c2').
+Proof.
+    intros c1 c1' c2 c2' H1 H2 e e'. split.
+    - intros H. inversion H. subst. apply E_Seq with e'0.
+        + apply H1. assumption.
+        + apply H2. assumption.
+    - intros H. inversion H; subst. apply E_Seq with e'0.
+        + apply H1. assumption.
+        + apply H2. assumption.
+Qed.
+
+
 
 
 

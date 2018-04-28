@@ -6,7 +6,7 @@ module  Syntax
     )   where
 
 
-data Info = Info | DummyInfo
+data Info = Info | DummyInfo deriving (Eq,Show)
 
 dummyInfo :: Info
 dummyInfo = DummyInfo
@@ -19,7 +19,7 @@ data Term
     | TmSucc    Info Term
     | TmPred    Info Term
     | TmIsZero  Info Term
-
+    deriving (Eq, Show) 
 
 isNumerical :: Term -> Bool
 isNumerical (TmZero _)      = True

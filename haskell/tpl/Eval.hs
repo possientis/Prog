@@ -29,3 +29,30 @@ eval1 (TmPred fi t1)                =
         Left e                      -> Left e
         Right t1'                   -> Right $ TmPred fi t1' 
 
+eval1 (TmIsZero _ (TmZero _))       = Right $ TmTrue dummyInfo
+
+eval1 (TmIsZero _ (TmSucc _ nv1))
+    | isNumerical nv1               = Right $ TmFalse dummyInfo
+
+eval1 (TmIsZero fi t1)              =
+    case eval1 t1 of
+        Left e                      -> Left e
+        Right t1'                   -> Right $ TmIsZero fi t1'
+eval1 _                             = Left NoRuleApplies
+
+
+eval :: Term -> Term
+eval t = case eval1 t of
+    Left _      -> t
+    Right t'    -> eval t'
+
+ex1 = eval (TmPred dummyInfo (TmSucc dummyInfo (TmZero dummyInfo)))
+
+
+
+
+
+
+
+
+
