@@ -5,6 +5,7 @@ HOME=/home/john/Prog/c/cs
 cd ${HOME}
 
 ./syscall/clean.sh
+./rio/clean.sh
 
 mv pushtest.s pushtest.ss
 

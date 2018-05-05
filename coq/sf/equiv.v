@@ -192,7 +192,7 @@ Proof.
     - apply Ebc.
 Qed.
 
-Lemma relf_bequiv : forall (b:bexp), bequiv b b.
+Lemma refl_bequiv : forall (b:bexp), bequiv b b.
 Proof. intros b e. reflexivity. Qed.
 
 Lemma sym_bequiv : forall (a b:bexp), bequiv a b -> bequiv b a.
@@ -241,9 +241,55 @@ Proof.
         + apply H2. assumption.
 Qed.
 
+Lemma CIf_congruence : forall (b b':bexp) (c1 c1' c2 c2':com),
+    bequiv b b' -> cequiv c1 c1' -> cequiv c2 c2' -> 
+    cequiv (IFB b THEN c1 ELSE c2 FI) (IFB b' THEN c1' ELSE c2' FI).
+Proof.
+    intros b b' c1 c1' c2 c2' H H1 H2 e e'. split.
+    - intros H'. inversion H'; subst.
+        + apply E_IfTrue.
+            { rewrite <- H. assumption. }
+            { rewrite <- (H1 e). assumption. }
+        + apply E_IfFalse.
+            { rewrite <- H. assumption. }
+            { rewrite <- (H2 e). assumption. }
+    - intros H'. inversion H'; subst.
+        + apply E_IfTrue.
+            { rewrite H. assumption. }
+            { rewrite (H1 e). assumption. }
+        + apply E_IfFalse.
+            { rewrite H. assumption. }
+            { rewrite (H2 e). assumption. }
+Qed.
 
-
-
+Lemma CWhile_congruence : forall (b b':bexp) (c1 c1':com),
+    bequiv b b'-> cequiv c1 c1' -> 
+    cequiv (WHILE b DO c1 END) (WHILE b' DO c1' END).
+Proof.
+    intros b b' c1 c1' H H1 e e'. split.
+    - intros H'. remember (WHILE b DO c1 END) as c eqn:E.
+        revert E H H1. induction H'; try (intros H0; inversion H0).
+        + subst. intros Hb H1. apply E_WhileEnd. rewrite <- Hb. assumption.
+        + subst. intros Hb H1. apply E_WhileLoop with e'.
+            { rewrite <- Hb. assumption. }
+            { rewrite <- (H1 e). assumption. }
+            { apply IHH'2.
+                { reflexivity. }
+                { assumption. }
+                { assumption. } 
+            }
+    - intros H'. remember (WHILE b' DO c1' END) as c' eqn:E'.
+        revert E' H H1. induction H'; try (intros H0; inversion H0).
+        + subst. intros Hb H1. apply E_WhileEnd. rewrite Hb. assumption.
+        + subst. intros Hb H1. apply E_WhileLoop with e'. 
+            { rewrite Hb. assumption. }
+            { rewrite (H1 e). assumption. }
+            { apply IHH'2.
+                { reflexivity. }
+                { assumption. }
+                { assumption. }
+            }
+Qed.
 
 
 

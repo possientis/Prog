@@ -51,3 +51,30 @@ Theorem test_equiv2 : bequiv (BEq (AMinus (AKey x) (AKey x)) (ANum 0)) BTrue.
 Proof. intros e. simpl. rewrite minus_n_n. reflexivity. Qed.
 
 
+Example test_congruence1 : cequiv
+    (x ::= ANum 0;;
+     IFB (BEq (AKey x) (ANum 0))
+     THEN
+        y ::= ANum 0
+     ELSE
+        y ::= ANum 17
+     FI)
+
+     (x ::= ANum 0;;
+      IFB (BEq (AKey x) (ANum 0))
+      THEN
+        y ::= AMinus (AKey x) (AKey x)
+      ELSE
+        y ::= ANum 17
+      FI).
+Proof.
+    apply CSeq_congruence. 
+    - apply refl_cequiv.
+    - apply CIf_congruence.
+        + apply refl_bequiv.
+        + apply CAss_congruence.
+            { apply sym_aequiv. apply test_equiv1. }
+        + apply refl_cequiv.
+Qed.
+            
+
