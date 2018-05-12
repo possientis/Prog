@@ -5,4 +5,4 @@ subst
 rename x into y
 assumption
 contradiction
-construtor
+constructor

@@ -6,6 +6,7 @@ cd ${HOME}
 
 ./syscall/clean.sh
 ./rio/clean.sh
+./network/clean.sh
 
 mv pushtest.s pushtest.ss
 

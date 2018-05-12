@@ -43,7 +43,8 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Func_If.vo \
 		Leibniz.vo \
 		Setoids.vo \
-		Functor.vo
+		Functor.vo \
+		Opposit.vo
 
 
 
@@ -288,3 +289,9 @@ Setoids.vo :				Setoids.v Eq.vo
 
 Functor.vo :				Functor.v Setoids.vo Category7.vo
 	coqc Functor.v
+
+Opposit.vo :				Opposit.v Setoids.vo Category7.vo
+	coqc Opposit.v
+
+
+

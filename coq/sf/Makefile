@@ -307,7 +307,7 @@ test_equiv.vo : test_equiv.v bool.vo nat.vo dictionary.vo state.vo syntax.vo \
 	eval.vo equiv.vo
 	coqc test_equiv.v
 
-transform.vo : transform.v nat.vo syntax.vo equiv.vo
+transform.vo : transform.v bool.vo nat.vo syntax.vo eval.vo state.vo equiv.vo
 	coqc transform.v
 
 test_transform.vo : test_transform.v transform.vo nat.vo syntax.vo state.vo

@@ -15,7 +15,7 @@ Require Import Setoids.
 *)
      
 
-Record Category : Type :=
+Record Category : Type := category
   { Arrows_     : Setoid
   ; source_     : Arrows_ ~> Arrows_
   ; target_     : Arrows_ ~> Arrows_
@@ -48,7 +48,7 @@ Record Category : Type :=
       forall (p_hg_f: apply target_ f == apply source_ (compose_ h g p_hg)),
       compose_ h (compose_ g f p_gf) p_h_gf ==
       compose_ (compose_ h g p_hg) f p_hg_f
-  ; proof_compat : forall (f f' g g':elems Arrows_),
+  ; proof_compat_ : forall (f f' g g':elems Arrows_),
       forall (p_gf : apply target_ f  == apply source_ g),
       forall (p_gf': apply target_ f' == apply source_ g'),
       f == f' -> g == g' -> compose_ g f p_gf == compose_ g' f' p_gf'
@@ -250,7 +250,7 @@ Lemma compose_compat:forall(C:Category)(a b c:Obj C)(f f':Hom a b)(g g':Hom b c)
     i f == i f' -> i g == i g' -> i (g # f) == i (g' # f').
 Proof.
     intros C [a Ha] [b Hb] [c Hc] [f Af Bf] [f' Af' Bf'] [g Ag Bg] [g' Ag' Bg']. 
-    simpl. unfold compose_arrow. apply proof_compat.
+    simpl. unfold compose_arrow. apply proof_compat_.
 Qed.
 
 (* composition is associative *)
