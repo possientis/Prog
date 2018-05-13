@@ -6,3 +6,5 @@ rename x into y
 assumption
 contradiction
 constructor
+
+replace x with y [by (...)] .

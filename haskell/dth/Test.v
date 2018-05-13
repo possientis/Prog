@@ -63,17 +63,10 @@ Arguments cast {a} {b} _ _.
 Definition toVec (a:Type) (n m:Nat) (p:n = m) (x:Vec a n) : Vec a m :=
     cast (Vec_Same a n m p) x.
 
-(*
-Fixpoint append (a:Type)(n m:Nat)(xs:Vec a n)(ys:Vec a m):Vec a (plus n m) :=
-    match xs in Vec a' n' return Vec a' (plus n' m) with 
-    | VNil a            => match ys in Vec _ m' return Vec a' (plus n' m') with
-                           | ys'    => ys'
-                           end
-
-    | VCons a p x xs'   => VCons a (plus p m) x (append a p m xs' ys)
-    end.
-*)
+Lemma plus_0_n : forall (n:Nat), n = plus Zero n.
+Proof. intros n. induction n; reflexivity. Qed.
 
 
-
+Arguments VNil {a}.
+Arguments VCons {a} {n} _ _.
 

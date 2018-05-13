@@ -74,7 +74,8 @@ all:	Axiom_Extensionality.vo \
 		equiv.vo \
 		test_equiv.vo \
 		transform.vo \
-		test_transform.vo
+		test_transform.vo \
+		soundness.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -313,5 +314,6 @@ transform.vo : transform.v bool.vo nat.vo syntax.vo eval.vo state.vo equiv.vo
 test_transform.vo : test_transform.v transform.vo nat.vo syntax.vo state.vo
 	coqc test_transform.v
 
-
-
+soundness.vo : soundness.v bool.vo nat.vo syntax.vo eval.vo state.vo \
+	dictionary.vo equiv.vo transform.vo
+	coqc soundness.v
