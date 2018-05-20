@@ -1,7 +1,7 @@
 Require Import nat.
 Require Import syntax.
 Require Import state.
-Require Import transform.
+Require Import fold_constants.
 
 
 Example fold_aexp1 : fold_constants_aexp

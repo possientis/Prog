@@ -11,7 +11,10 @@ Inductive Vec (a:Type) : nat -> Type :=
 | cons : forall (x:a) (n:nat), Vec a n -> Vec a (S n)
 .
 
-
+(*
 Check Vec.
 Check nil.
 Check cons.
+*)
+
+

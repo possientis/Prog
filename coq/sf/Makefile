@@ -61,7 +61,7 @@ all:	Axiom_Extensionality.vo \
 		eval.vo \
 		test_eval.vo \
 		optimize.vo \
-		test_optimize.vo \
+		optimize_sound.vo \
 		evalR.vo \
 		try_evalR.vo \
 		state.vo \
@@ -74,8 +74,9 @@ all:	Axiom_Extensionality.vo \
 		equiv.vo \
 		test_equiv.vo \
 		transform.vo \
-		test_transform.vo \
-		soundness.vo
+		fold_constants.vo \
+		test_fold_constants.vo \
+		fold_constants_sound.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -268,9 +269,9 @@ test_eval.vo : test_eval.v bool.vo nat.vo syntax.vo eval.vo Imp_code.vo state.vo
 optimize.vo : optimize.v nat.vo syntax.vo
 	coqc optimize.v
 
-test_optimize.vo : test_optimize.v bool.vo nat.vo syntax.vo eval.vo \
+optimize_sound.vo : optimize_sound.v bool.vo nat.vo syntax.vo eval.vo \
 	optimize.vo state.vo
-	coqc test_optimize.v
+	coqc optimize_sound.v
 
 evalR.vo : evalR.v nat.vo bool.vo syntax.vo eval.vo
 	coqc evalR.v
@@ -311,9 +312,13 @@ test_equiv.vo : test_equiv.v bool.vo nat.vo dictionary.vo state.vo syntax.vo \
 transform.vo : transform.v bool.vo nat.vo syntax.vo eval.vo state.vo equiv.vo
 	coqc transform.v
 
-test_transform.vo : test_transform.v transform.vo nat.vo syntax.vo state.vo
-	coqc test_transform.v
-
-soundness.vo : soundness.v bool.vo nat.vo syntax.vo eval.vo state.vo \
+fold_constants.vo : fold_constants.v bool.vo nat.vo syntax.vo eval.vo state.vo \
 	dictionary.vo equiv.vo transform.vo
-	coqc soundness.v
+	coqc fold_constants.v
+
+test_fold_constants.vo : test_fold_constants.v transform.vo nat.vo syntax.vo state.vo
+	coqc test_fold_constants.v
+
+fold_constants_sound.vo : fold_constants_sound.v bool.vo nat.vo syntax.vo \
+	eval.vo state.vo dictionary.vo equiv.vo transform.vo
+	coqc fold_constants_sound.v
