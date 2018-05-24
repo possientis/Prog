@@ -1,6 +1,7 @@
 Require Import Axiom_Extensionality.
 Require Import Axiom_ProofIrrelevance.
 Require Import Cast.
+Require Import JMEq.
 Require Import Category4.
 
 Lemma eq_Category4:forall (c c':Category4),

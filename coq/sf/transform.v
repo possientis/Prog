@@ -16,3 +16,27 @@ Definition ctrans_sound (ctrans:com -> com) : Prop :=
     forall (c:com), cequiv c (ctrans c).
 
 
+Fixpoint ctrans (fa:aexp -> aexp)(fb:bexp -> bexp)(c:com) : com :=
+    match c with
+    | SKIP          => SKIP
+    | k ::= a       => k ::= (fa a)
+    | c1 ;; c2      => (ctrans fa fb c1) ;; (ctrans fa fb c2)
+    | CIf b c1 c2   => match (fb b) with
+                       | BTrue      => ctrans fa fb c1
+                       | BFalse     => ctrans fa fb c2
+                       | b'         => CIf b' (ctrans fa fb c1)
+                                              (ctrans fa fb c2)
+                       end
+    | CWhile b c1   => match (fb b) with
+                       | BTrue      => CWhile BTrue SKIP (* oo-loop all the same *)
+                       | BFalse     => SKIP
+                       | b'         => CWhile b' (ctrans fa fb c1)
+                       end
+    end.
+
+
+
+
+
+
+

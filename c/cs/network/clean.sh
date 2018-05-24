@@ -10,4 +10,7 @@ rm -f *.s
 rm -f gmon.out
 rm -f log
 
+rm -f server
+rm -f client
+
 cd ${DIR}

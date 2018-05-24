@@ -3,7 +3,9 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Axiom_PropEqual.vo \
 		Axiom_Skolem.vo \
 		Eq.vo \
+		EqProd.vo \
 		Cast.vo \
+		JMEq.vo \
 		Option.vo \
 		Category.vo \
 		Eq_Category.vo \
@@ -64,8 +66,14 @@ Axiom_Skolem.vo : Axiom_Skolem.v
 Eq.vo : Eq.v
 	coqc Eq.v
 
+EqProd.vo : EqProd.v Eq.vo
+	coqc EqProd.v
+
 Cast.vo : Cast.v
 	coqc Cast.v
+
+JMEq.vo : JMEq.v Cast.vo
+	coqc JMEq.v
 
 Option.vo : Option.v
 	coqc Option.v
@@ -97,6 +105,7 @@ Eq_Category3.vo :			Eq_Category3.v \
 							Axiom_Extensionality.vo \
 							Axiom_ProofIrrelevance.vo \
 							Cast.vo \
+							JMEq.vo \
 				 			Category3.vo
 	coqc Eq_Category3.v
 
@@ -107,6 +116,7 @@ Eq_Category4.vo :			Eq_Category4.v \
 							Axiom_Extensionality.vo \
 							Axiom_ProofIrrelevance.vo \
 							Cast.vo \
+							JMEq.vo \
 				 			Category4.vo
 	coqc Eq_Category4.v
 
@@ -184,6 +194,7 @@ Iso_CatCat2.vo :			Iso_CatCat2.v \
 Iso_CatCat3.vo :			Iso_CatCat3.v \
 							Axiom_ProofIrrelevance.vo \
 							Cast.vo \
+							JMEq.vo \
 							Category.vo \
 							Eq_Category.vo \
 							Category3.vo \
@@ -196,6 +207,7 @@ Iso_CatCat3.vo :			Iso_CatCat3.v \
 Iso_Cat2Cat4.vo :			Iso_Cat2Cat4.v \
 							Axiom_ProofIrrelevance.vo \
 							Cast.vo \
+							JMEq.vo \
 							Category2.vo \
 							Eq_Category2.vo \
 							Category4.vo \

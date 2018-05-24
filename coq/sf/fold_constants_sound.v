@@ -18,7 +18,7 @@ Proof.
 Qed.
 
 
-Theorem fold_constants_bexp_sound :btrans_sound fold_constants_bexp.
+Theorem fold_constants_bexp_sound : btrans_sound fold_constants_bexp.
 Proof.
     intros b e. induction b; try (reflexivity); 
     try (
@@ -50,7 +50,7 @@ Proof.
             try ( rewrite IHb1, IHb2; reflexivity ).
 Qed.
  
-Theorem fold_constants_com_sound': ctrans_sound fold_constants_com.
+Theorem fold_constants_com_sound: ctrans_sound fold_constants_com.
 Proof.
     unfold ctrans_sound. intros c. induction c; simpl.
     - apply refl_cequiv.

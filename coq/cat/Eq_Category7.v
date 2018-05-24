@@ -17,7 +17,6 @@ Definition fwArr (C D:Category) (p:Arr C = Arr D) (f:Arr C) : Arr D :=
 Definition bwArr (C D:Category) (p:Arr C = Arr D) (f:Arr D) : Arr C :=
     cast (Arr D) (Arr C) (switch C D p) f. 
 
-(* Equality on C and D should coincide, Arr C = Arr D as type not enough *)
 
 (*
 Lemma fwdArrCompat : forall (C D:Category) (p:Arr C = Arr D) (f g:Arr C),
@@ -29,7 +28,6 @@ Proof.
 Show.
 *)
 
-(*
 Definition equalCat (C D:Category) : Prop :=
     (Arr C = Arr D) /\
     (forall (p:Arr C = Arr D) (f:Arr C), 
@@ -61,7 +59,7 @@ Proof.
                 assert (q = r) as E. { apply proof_irrelevance. }
                 rewrite E. apply refl. }
 Qed.
-
+(*
 Lemma symCat : forall (C D:Category), equalCat C D -> equalCat D C.
 Proof.
     intros C D [eqDC [eqSRC [eqTGT eqCMP]]]. split.

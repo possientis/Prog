@@ -21,3 +21,25 @@ Fixpoint optimize_0plus_bexp (b:bexp) : bexp :=
     | BNot b1       => BNot (optimize_0plus_bexp b1)
     | BAnd b1 b2    => BAnd (optimize_0plus_bexp b1) (optimize_0plus_bexp b2)
     end.
+
+
+Fixpoint optimize_0plus_com (c:com) : com :=
+    match c with
+    | SKIP          => SKIP
+    | k ::= a       => k ::= (optimize_0plus_aexp a)
+    | c1 ;; c2      => (optimize_0plus_com c1) ;; (optimize_0plus_com c2)
+    | CIf b c1 c2   => match (optimize_0plus_bexp b) with
+                       | BTrue      => optimize_0plus_com c1
+                       | BFalse     => optimize_0plus_com c2
+                       | b'         => CIf b' (optimize_0plus_com c1)
+                                              (optimize_0plus_com c2)
+                       end
+    | CWhile b c1   => match (optimize_0plus_bexp b) with
+                       | BTrue      => CWhile BTrue SKIP (* oo-loop all the same *)
+                       | BFalse     => SKIP
+                       | b'         => CWhile b' (optimize_0plus_com c1)
+                       end
+    end.
+
+
+

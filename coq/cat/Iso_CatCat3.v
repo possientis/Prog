@@ -1,5 +1,6 @@
 Require Import Axiom_ProofIrrelevance.
 Require Import Cast.
+Require Import JMEq.
 Require Import Category.
 Require Import Eq_Category.
 Require Import Category3.
