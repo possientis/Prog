@@ -77,6 +77,12 @@ Fixpoint fold_constants_com (c:com) : com :=
                        end
     end.
 
-
-
+Lemma fold_constants_is_ctrans : forall (c:com),
+    fold_constants_com c = ctrans fold_constants_aexp fold_constants_bexp c.
+Proof.
+    intros c. induction c; 
+    try (reflexivity); 
+    try (simpl; rewrite <- IHc; reflexivity);
+    try (simpl; rewrite <- IHc1, IHc2; reflexivity).
+Qed.
 

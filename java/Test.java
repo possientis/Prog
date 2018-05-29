@@ -1,15 +1,37 @@
-import java.util.concurrent.*;
+class Test {
 
-public class Test {
+    public static void main(String[] args){
+        System.out.println("main is running");
 
-  public static void main(String[] args) {
-    int total = 0;
+        A a = new A();
+        B b = new B();
 
-    for(int i = 0; i < 10 ; ++i){
-      final int j = i;
-      (new Thread(()-> {
-        System.out.println(j+ ":" + total);})).start();
+        Pair p = new Pair(a,b);
+        Pair q = p.setfst(b);
+    }
+}
+class A extends Object { 
+    A () { super(); }
+}
+
+class B extends Object {
+    B () { super(); }
+}
+
+
+class Pair extends Object {
+    Object fst;
+    Object snd;
+
+    // Constructor
+    Pair(Object fst, Object snd) {
+        super(); 
+        this.fst = fst;
+        this.snd = snd;
     }
 
-  }
+    // method definition
+    Pair setfst(Object newfst) {
+        return new Pair(newfst, this.snd);
+    }
 }

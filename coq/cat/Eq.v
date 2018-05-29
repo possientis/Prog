@@ -1,3 +1,8 @@
+Require Import Axiom_ProofIrrelevance.
+Require Import Axiom_Extensionality.
+Require Import Axiom_PropEqual. 
+
+
 Record Eq (a:Type) : Type := equality 
     { equal : a -> a -> Prop
     ; refl  : forall (x:a), equal x x
@@ -19,9 +24,7 @@ Definition defEq (a:Type) : Eq a := equality
 Arguments defEq {a}.
 
 (* when are two equality implementations equal ? *)
-
-
-Definition equalEq (a:Type) (eq1:Eq a) (eq2:Eq a) : Prop :=
+Definition equalEq (a:Type) (eq1 eq2:Eq a) : Prop :=
     forall (x y:a), equal eq1 x y <-> equal eq2 x y.
 
 Arguments equalEq {a} _ _.
@@ -48,7 +51,20 @@ Definition eqEq (a:Type) : Eq (Eq a) := equality
     (@transEq   a).
 
 
-
+Lemma equalEq_is_default : forall (a:Type) (eq1 eq2:Eq a),
+    equalEq eq1 eq2 -> eq1 = eq2.
+Proof.
+    intros a [eq1 r1 s1 t1] [eq2 r2 s2 t2] H. unfold equalEq in H. simpl in H.
+    assert (eq1 = eq2) as E.
+    { apply extensionality2. intros x y. apply eqProp; apply H. }
+    clear H. revert r1 s1 t1 r2 s2 t2. rewrite E. 
+    clear E eq1. rename eq2 into eq.
+    intros r1 s1 t1 r2 s2 t2.
+    assert (r1 = r2) as R. { apply proof_irrelevance. }
+    assert (s1 = s2) as S. { apply proof_irrelevance. }
+    assert (t1 = t2) as T. { apply proof_irrelevance. }
+    rewrite R, S, T. reflexivity.
+Qed.
 
 
 

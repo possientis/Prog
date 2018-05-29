@@ -109,7 +109,7 @@ Eq_Category3.vo :			Eq_Category3.v \
 				 			Category3.vo
 	coqc Eq_Category3.v
 
-Category4.vo : 				Category4.v
+Category4.vo : 				Category4.v Option.vo Axiom_ProofIrrelevance.vo
 	coqc Category4.v
 
 Eq_Category4.vo :			Eq_Category4.v \
@@ -277,7 +277,8 @@ natPreorderAsCategory.vo : 	natPreorderAsCategory.v \
 
 Func.vo :					Func.v \
 							Axiom_Extensionality.vo \
-							Axiom_PropEqual.vo
+							Axiom_PropEqual.vo \
+							Axiom_ProofIrrelevance.vo
 	coqc Func.v
 
 

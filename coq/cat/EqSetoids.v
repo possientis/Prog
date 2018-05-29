@@ -7,9 +7,12 @@ Definition Equalities (a:Type) : Setoid := setoid
 
 
 
+
 (*
 Definition equalSet (x y:Setoid) : Prop :=
     (elems x = elems y)/\(equalEq (eqElems x) (eqElems y)).
 *)
+
+
 
 

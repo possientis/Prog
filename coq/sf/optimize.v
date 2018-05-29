@@ -1,5 +1,6 @@
 Require Import nat.
 Require Import syntax.
+Require Import transform.
 
 Fixpoint optimize_0plus_aexp (a:aexp) : aexp :=
     match a with 
@@ -41,5 +42,13 @@ Fixpoint optimize_0plus_com (c:com) : com :=
                        end
     end.
 
+Lemma optimize_0plus_is_ctrans : forall (c:com),
+    optimize_0plus_com c = ctrans optimize_0plus_aexp optimize_0plus_bexp c.
+Proof.
+    intros c. induction c; 
+    try (reflexivity);
+    try (simpl; rewrite <- IHc; reflexivity);
+    try (simpl; rewrite <- IHc1, IHc2; reflexivity).
+Qed.
 
 

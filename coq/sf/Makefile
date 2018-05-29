@@ -266,13 +266,6 @@ eval.vo : eval.v bool.vo nat.vo syntax.vo state.vo
 test_eval.vo : test_eval.v bool.vo nat.vo syntax.vo eval.vo Imp_code.vo state.vo
 	coqc test_eval.v
 
-optimize.vo : optimize.v nat.vo syntax.vo
-	coqc optimize.v
-
-optimize_sound.vo : optimize_sound.v bool.vo nat.vo syntax.vo eval.vo \
-	optimize.vo state.vo
-	coqc optimize_sound.v
-
 evalR.vo : evalR.v nat.vo bool.vo syntax.vo eval.vo
 	coqc evalR.v
 
@@ -322,3 +315,12 @@ test_fold_constants.vo : test_fold_constants.v transform.vo nat.vo syntax.vo sta
 fold_constants_sound.vo : fold_constants_sound.v bool.vo nat.vo syntax.vo \
 	eval.vo state.vo dictionary.vo equiv.vo transform.vo
 	coqc fold_constants_sound.v
+
+optimize.vo : optimize.v nat.vo syntax.vo transform.vo
+	coqc optimize.v
+
+optimize_sound.vo : optimize_sound.v bool.vo nat.vo syntax.vo eval.vo \
+	optimize.vo state.vo dictionary.vo equiv.vo transform.vo
+	coqc optimize_sound.v
+
+
