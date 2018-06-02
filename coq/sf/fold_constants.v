@@ -58,31 +58,17 @@ Fixpoint fold_constants_bexp (b:bexp) : bexp :=
         end
     end.
 
+Definition fold_constants_com := ctrans fold_constants_aexp fold_constants_bexp.
 
-Fixpoint fold_constants_com (c:com) : com :=
-    match c with
-    | SKIP          => SKIP
-    | k ::= a       => k ::= (fold_constants_aexp a)
-    | c1 ;; c2      => (fold_constants_com c1) ;; (fold_constants_com c2)
-    | CIf b c1 c2   => match (fold_constants_bexp b) with
-                       | BTrue      => fold_constants_com c1
-                       | BFalse     => fold_constants_com c2
-                       | b'         => CIf b' (fold_constants_com c1) 
-                                              (fold_constants_com c2)
-                       end
-    | CWhile b c1   => match (fold_constants_bexp b) with
-                       | BTrue     => CWhile BTrue SKIP  (* oo-loop all the same*)
-                       | BFalse    => SKIP
-                       | b'        => CWhile b' (fold_constants_com c1)
-                       end
-    end.
-
-Lemma fold_constants_is_ctrans : forall (c:com),
-    fold_constants_com c = ctrans fold_constants_aexp fold_constants_bexp c.
+Lemma fold_constants_bexp_is_btrans : forall (b:bexp),
+    fold_constants_bexp b = btrans fold_constants_aexp b.
 Proof.
-    intros c. induction c; 
-    try (reflexivity); 
-    try (simpl; rewrite <- IHc; reflexivity);
-    try (simpl; rewrite <- IHc1, IHc2; reflexivity).
+    intros b. induction b; try (reflexivity). 
+    - simpl. rewrite IHb. reflexivity.
+    - simpl. rewrite IHb1, IHb2. reflexivity.
 Qed.
+
+
+
+
 

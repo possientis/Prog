@@ -313,7 +313,7 @@ test_fold_constants.vo : test_fold_constants.v transform.vo nat.vo syntax.vo sta
 	coqc test_fold_constants.v
 
 fold_constants_sound.vo : fold_constants_sound.v bool.vo nat.vo syntax.vo \
-	eval.vo state.vo dictionary.vo equiv.vo transform.vo
+	eval.vo state.vo dictionary.vo equiv.vo transform.vo fold_constants.vo
 	coqc fold_constants_sound.v
 
 optimize.vo : optimize.v nat.vo syntax.vo transform.vo

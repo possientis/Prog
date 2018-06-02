@@ -4,12 +4,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/wait.h>
 
 #include "connect.h"
 #include "rio.h"
 
 #define MAXLINE 1024
 #define MAXBUF  8192
+
+extern char **environ;
 
 void doit(int fd);
 void read_requesthdrs (rio_t *rp);
@@ -26,7 +31,7 @@ clienterror
 
 int 
 parse_uri
-    ( char *uri
+    ( const char *uri
     , char *filename
     , char *cgiargs
     );
@@ -192,16 +197,46 @@ clienterror
 
 void read_requesthdrs (rio_t *rp)
 {
+    char buf[MAXLINE];
+    rio_readlineb(rp, buf, MAXLINE);
+    while(strcmp(buf,"\r\n")) {
+        rio_readlineb(rp, buf, MAXLINE);
+        printf("%s", buf);
+    }
+    return;
 }
 
 int 
 parse_uri
-    ( char *uri
+    ( const char *uri
     , char *filename
     , char *cgiargs
     )
 {
-    return 0;
+    char *ptr;
+
+    if(!strstr(uri,"cgi-bin")) { /* static content */
+        strcpy(cgiargs,"");
+        strcpy(filename,".");
+        strcat(filename,uri);
+        if(uri[strlen(uri)-1] == '/')
+            strcat(filename, "home.html");
+        return 1;
+    }
+    else { /* dynamic content */
+        ptr = index(uri,'?');
+        if (ptr) {
+            strcpy(cgiargs,ptr+1);
+            *ptr = '\0';
+        }
+        else {
+            strcpy(cgiargs,"");
+        }
+
+        strcpy(filename, ".");
+        strcat(filename, uri);
+        return 0;
+    }
 }
 
 
@@ -212,6 +247,28 @@ serve_static
     , int filesize
     )
 {
+    int srcfd;
+    char *srcp, filetype[MAXLINE], buf[MAXBUF];
+
+    /* send response headers to client */
+    get_filetype(filename, filetype);
+    sprintf(buf,"HTTP/1.0 200 OK\r\n");
+    sprintf(buf,"%sServer: Tiny Web Server\r\n", buf);
+    sprintf(buf,"%sContent-length: %d\r\n", buf, filesize);
+    sprintf(buf,"%sContent-type: %s\r\n\r\n", buf, filetype);
+    rio_writen(fd, buf, strlen(buf));
+
+    /* send response body to client */
+    srcfd = open(filename, O_RDONLY, 0);
+    if ((srcp = mmap(0, filesize, PROT_READ, MAP_PRIVATE, srcfd, 0)) 
+            == MAP_FAILED) {
+        fprintf(stderr, "fatal map error\n");
+        exit(1);
+    }
+    close(srcfd);
+    rio_writen(fd,srcp,filesize);
+    munmap(srcp,filesize);
+
 }
 
 void
@@ -221,6 +278,22 @@ serve_dynamic
     , const char *cgiargs
     )
 {
+    char buf[MAXLINE], *emptylist[] = { NULL };
+
+    /* return first part of http response */
+    sprintf(buf, "HTTP/1.0 200 OK\r\n");
+    rio_writen(fd, buf, strlen(buf));
+    sprintf(buf, "Server: Tiny Web Server\r\n");
+    rio_writen(fd, buf, strlen(buf));
+
+    if (fork() == 0) { /* child */
+        /* real server would set all CGI vars here */
+        setenv("QUERY_STRING", cgiargs, 1);
+        dup2(fd, STDOUT_FILENO); /* redirect stdout to client */
+        execve(filename, emptylist, environ); /* run cgi program */
+    }
+
+    wait(NULL);
 }
 
 void
@@ -229,6 +302,14 @@ get_filetype
     , char *filetype
     )
 {
-}
+    if (strstr(filename, ".html"))
+        strcpy(filetype, "text/html");
+    else if (strstr(filename, ".gif"))
+       strcpy(filetype, "image/gif");
+    else if (strstr(filename, ".jpg"))
+       strcpy(filetype, "image/jpeg");
+    else
+       strcpy(filetype, "text/plain");
+} 
 
 

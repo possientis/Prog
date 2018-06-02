@@ -11,6 +11,7 @@ echo "testing coq..."
 ./zf/test.sh
 ./sf/test.sh
 ./cat/test.sh
+./hott/test.sh
 
 echo
 echo "testing sort..."

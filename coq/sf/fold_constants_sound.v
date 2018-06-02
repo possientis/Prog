@@ -51,50 +51,11 @@ Proof.
 Qed.
  
 Theorem fold_constants_com_sound: ctrans_sound fold_constants_com.
-Proof.
-    unfold ctrans_sound. intros c. induction c; simpl.
-    - apply refl_cequiv.
-    - apply CAss_congruence. apply fold_constants_aexp_sound.
-    - apply CSeq_congruence; assumption.
-    - destruct (fold_constants_bexp b) eqn:E. 
-        + apply trans_cequiv with c1.
-            { apply if_true. rewrite <- E. apply (fold_constants_bexp_sound). }
-            { assumption. }
-        + apply trans_cequiv with c2.
-            { apply if_false. rewrite <- E. apply (fold_constants_bexp_sound). }
-            { assumption. }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (fold_constants_bexp b).
-                { apply fold_constants_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (fold_constants_bexp b).
-                { apply fold_constants_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (fold_constants_bexp b).
-                { apply fold_constants_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (fold_constants_bexp b).
-                { apply fold_constants_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-    - destruct (fold_constants_bexp b) eqn:E.             
-        + apply while_true. rewrite <- E. apply fold_constants_bexp_sound.
-        + apply while_false. rewrite <- E. apply fold_constants_bexp_sound.
-        + apply CWhile_congruence.
-            { rewrite <- E. apply fold_constants_bexp_sound. }
-            { assumption. }
-        + apply CWhile_congruence.
-            { rewrite <- E. apply fold_constants_bexp_sound. }
-            { assumption. }
-        + apply CWhile_congruence.
-            { rewrite <- E. apply fold_constants_bexp_sound. }
-            { assumption. }
-        + apply CWhile_congruence.
-            { rewrite <- E. apply fold_constants_bexp_sound. }
-            { assumption. }
+Proof. 
+    apply ctrans_is_sound.
+    - apply fold_constants_aexp_sound.
+    - apply fold_constants_bexp_sound.
 Qed.
-                    
+    
 
 

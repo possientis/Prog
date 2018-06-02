@@ -16,6 +16,38 @@ Definition ctrans_sound (ctrans:com -> com) : Prop :=
     forall (c:com), cequiv c (ctrans c).
 
 
+Fixpoint btrans (fa:aexp -> aexp) (b:bexp) : bexp :=
+    match b with
+    | BTrue         => BTrue
+    | BFalse        => BFalse
+    | BEq a1 a2     =>
+        match (fa a1, fa a2) with
+        | (ANum n1, ANum n2)        => if eqb n1 n2 then BTrue else BFalse
+        | (a1', a2')                => BEq a1' a2'
+        end
+    | BLe a1 a2     =>
+        match (fa a1, fa a2) with
+        | (ANum n1, ANum n2)        => if leb n1 n2 then BTrue else BFalse
+        | (a1', a2')                => BLe a1' a2'
+        end
+    | BNot b1       =>
+        match (btrans fa b1) with
+        | BTrue     => BFalse
+        | BFalse    => BTrue
+        | b1'       => BNot b1'
+        end
+    | BAnd b1 b2    =>
+        match (btrans fa b1, btrans fa b2) with
+        | (BTrue, BTrue)    => BTrue
+        | (BTrue, BFalse)   => BFalse
+        | (BFalse, BTrue)   => BFalse
+        | (BFalse, BFalse)  => BFalse
+        | (b1', b2')        => BAnd b1' b2'
+        end
+    end.
+
+ 
+
 Fixpoint ctrans (fa:aexp -> aexp)(fb:bexp -> bexp)(c:com) : com :=
     match c with
     | SKIP          => SKIP
@@ -33,6 +65,9 @@ Fixpoint ctrans (fa:aexp -> aexp)(fb:bexp -> bexp)(c:com) : com :=
                        | b'         => CWhile b' (ctrans fa fb c1)
                        end
     end.
+
+
+
 
 
 Theorem ctrans_is_sound : forall (fa:aexp -> aexp) (fb:bexp -> bexp), 
@@ -60,7 +95,6 @@ Proof.
         + apply while_true. rewrite <- E. apply Hb.
         + apply while_false. rewrite <- E. apply Hb.
 Qed.
-
 
 
 

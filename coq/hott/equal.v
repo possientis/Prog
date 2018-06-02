@@ -1,7 +1,4 @@
-Inductive set : Type :=
-| mkset : forall (a:Type) (f:a -> set), set
-.
-
+Require Import set.
 
 Definition setEq (x y:set) : Prop :=
     match x with 
@@ -32,3 +29,5 @@ Proof.
     - intros z. destruct (H4 z) as [z' K]. destruct (H2 z') as [z'' L].
       exists z''. rewrite K. assumption.
 Qed.
+
+

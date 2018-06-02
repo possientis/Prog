@@ -44,49 +44,7 @@ Qed.
 
 Theorem optimize_0plus_com_sound: ctrans_sound optimize_0plus_com.
 Proof.
-    unfold ctrans_sound. intros c. induction c; simpl.
-    - apply refl_cequiv.
-    - apply CAss_congruence. apply optimize_0plus_aexp_sound.
-    - apply CSeq_congruence; assumption.
-    - destruct (optimize_0plus_bexp b) eqn:E. 
-        + apply trans_cequiv with c1.
-            { apply if_true. rewrite <- E. apply (optimize_0plus_bexp_sound). }
-            { assumption. }
-        + apply trans_cequiv with c2.
-            { apply if_false. rewrite <- E. apply (optimize_0plus_bexp_sound). }
-            { assumption. }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (optimize_0plus_bexp b).
-                { apply optimize_0plus_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (optimize_0plus_bexp b).
-                { apply optimize_0plus_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (optimize_0plus_bexp b).
-                { apply optimize_0plus_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-        + apply CIf_congruence; try (assumption).
-            { apply trans_bequiv with (optimize_0plus_bexp b).
-                { apply optimize_0plus_bexp_sound. }
-                { rewrite E. apply refl_bequiv. } }
-    - destruct (optimize_0plus_bexp b) eqn:E.             
-        + apply while_true. rewrite <- E. apply optimize_0plus_bexp_sound.
-        + apply while_false. rewrite <- E. apply optimize_0plus_bexp_sound.
-        + apply CWhile_congruence.
-            { rewrite <- E. apply optimize_0plus_bexp_sound. }
-            { assumption. }
-        + apply CWhile_congruence.
-            { rewrite <- E. apply optimize_0plus_bexp_sound. }
-            { assumption. }
-        + apply CWhile_congruence.
-            { rewrite <- E. apply optimize_0plus_bexp_sound. }
-            { assumption. }
-        + apply CWhile_congruence.
-            { rewrite <- E. apply optimize_0plus_bexp_sound. }
-            { assumption. }
+    apply ctrans_is_sound.
+    - apply optimize_0plus_aexp_sound.
+    - apply optimize_0plus_bexp_sound.
 Qed.
-
-
-
