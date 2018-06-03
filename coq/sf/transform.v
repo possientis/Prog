@@ -97,6 +97,23 @@ Proof.
 Qed.
 
 
+(*
+Theorem btrans_is_sound : forall (fa:aexp -> aexp), 
+    atrans_sound fa -> btrans_sound (btrans fa).
+Proof.
+    intros fa Ha b e. induction b; 
+    try (reflexivity).
+    - simpl; rename a into a1; rename a0 into a2;
+      destruct (fa a1) eqn:E1, (fa a2) eqn:E2;
+      try (rewrite <- E1, <- E2, (Ha a1), (Ha a2); reflexivity).
+      rewrite (Ha a1), (Ha a2), E1, E2; simpl; destruct (eqb n n0); reflexivity.
+    -
+
+Show.
+*)
+
+
+
 
 
 

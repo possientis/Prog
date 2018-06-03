@@ -31,3 +31,6 @@ Proof.
 Qed.
 
 
+Notation "x == y" := (setEq x y) (at level 60, no associativity).
+
+

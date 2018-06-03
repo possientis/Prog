@@ -24,7 +24,7 @@ Proof.
     - simpl. intros env. rewrite IH1, IH2. reflexivity. 
 Qed.
 
-
+(*
 Theorem optimize_0plus_bexp_sound : btrans_sound optimize_0plus_bexp.
 Proof.
     unfold btrans_sound, bequiv.
@@ -48,3 +48,4 @@ Proof.
     - apply optimize_0plus_aexp_sound.
     - apply optimize_0plus_bexp_sound.
 Qed.
+*)

@@ -1,8 +1,10 @@
 {-# Language DeriveFoldable #-}
 {-# Language GeneralizedNewtypeDeriving #-}
 
+import Prelude hiding (reverse)
 import Data.Monoid ((<>), mempty)
-import Data.Foldable (toList, length)
+import Data.Foldable (toList, length, traverse_, for_)
+
 
 data Tree a = Leaf | Node (Tree a) a (Tree a)
 
@@ -69,6 +71,23 @@ instance Monoid Plus where
     mempty = 0
     mappend = (+)
 
+newtype Dual a = Dual { getDual :: a }
+
+instance Monoid m => Monoid (Dual m) where
+    mempty = Dual mempty
+    mappend (Dual x) (Dual y) = Dual (mappend y x)
+
+newtype Reverse t a = Reverse { getReverse :: t a }
+
+instance Foldable t => Foldable (Reverse t) where
+    foldMap f = getDual . foldMap (Dual . f) . getReverse
+
+
+reverse :: [a] -> [a]
+reverse = toList . Reverse
+
+
+
 main :: IO ()
 main = do
     print $ foldMap (\x -> [x]) myTree 
@@ -91,6 +110,14 @@ main = do
     print $ length myInorder
     print $ length myPreorder
     print $ length myPostorder
+    print $ foldMap (\x -> [x]) $ Reverse myTree
+    print $ reverse "hello"
+    print $ toList [7,2,3]
+    print $ toList (Right 'a')
+    print $ (toList (Left "foo") :: [Char])
+    print $ toList (3, True)    
+    traverse_ print myTree
+    for_ myTree print
 
 
                 

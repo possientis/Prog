@@ -18,6 +18,7 @@ Proof.
 Qed.
 
 
+(*
 Theorem fold_constants_bexp_sound : btrans_sound fold_constants_bexp.
 Proof.
     intros b e. induction b; try (reflexivity); 
@@ -56,6 +57,6 @@ Proof.
     - apply fold_constants_aexp_sound.
     - apply fold_constants_bexp_sound.
 Qed.
-    
+*)    
 
 

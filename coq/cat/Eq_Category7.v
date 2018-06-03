@@ -1,71 +1,26 @@
-Require Import Axiom_ProofIrrelevance.
+Require Import Cast.
 Require Import Setoids.
+Require Import EqSetoids.
 Require Import Category7.
-Require Import Eq.
-
-Definition cast (a b:Type) (p: a = b) (x:a) : b :=
-    match p in _ = T return T with
-    | eq_refl   => x
-    end.
-
-Lemma switch : forall (C D:Category), Arr C = Arr D -> Arr D = Arr C.
-Proof. intros C D H. symmetry. assumption. Qed.
-
-Definition fwArr (C D:Category) (p:Arr C = Arr D) (f:Arr C) : Arr D :=
-    cast (Arr C) (Arr D) p f.
-
-Definition bwArr (C D:Category) (p:Arr C = Arr D) (f:Arr D) : Arr C :=
-    cast (Arr D) (Arr C) (switch C D p) f. 
 
 
-(*
-Lemma fwdArrCompat : forall (C D:Category) (p:Arr C = Arr D) (f g:Arr C),
-    f == g -> fwArr C D p f == fwArr C D p g.
-Proof.
-    intros C D p f g H. unfold fwArr, cast. revert H. revert f. revert g.
-    generalize p. unfold equal, eqElems.
+Definition fw (C D:Category) (p:Arr C = Arr D) (f:Arr C) : Arr D := cast p f.
+Definition bw (C D:Category) (p:Arr C = Arr D) (g:Arr D) : Arr C := cast' p g.
 
-Show.
-*)
+Arguments fw {C} {D} _ _.
+Arguments bw {C} {D} _ _.
 
-Definition equalCat (C D:Category) : Prop :=
-    (Arr C = Arr D) /\
-    (forall (p:Arr C = Arr D) (f:Arr C), 
-        fwArr C D p (source f) == source (fwArr C D p f)) /\
-    (forall (p:Arr C = Arr D) (f:Arr C),
-        fwArr C D p (target f) == target (fwArr C D p f)) /\
-    (forall (p:Arr C = Arr D) (g f:Arr C) (q:target f == source g),
-     forall (r:target (fwArr C D p f) ==  source (fwArr C D p g)),
-        fwArr C D p (compose_ C g f q) == 
-        compose_ D (fwArr C D p g) (fwArr C D p f) r).
+Lemma bwfw : forall (C D:Category) (p q:Arr C = Arr D) (f:Arr C), 
+    bw p (fw q f) = f.
+Proof. intros a b p q x. apply cast_inv_left. Qed.
 
+Lemma fwbw : forall (C D:Category) (p q:Arr C = Arr D) (g:Arr D),
+   fw p (bw q g) = g. 
+Proof. intros a b p q y. apply cast_inv_right. Qed.
 
-Lemma reflCat : forall (C:Category), equalCat C C.
-Proof. 
-    intros C. split.
-    - reflexivity.
-    - split.
-        + intros p f. unfold fwArr, source, cast.
-            assert (p = eq_refl) as H. { apply proof_irrelevance. }    
-            rewrite H. apply refl.
-        + split. 
-            { intros p f. unfold fwArr, source, cast.
-                assert (p = eq_refl) as H. { apply proof_irrelevance. }    
-                rewrite H. apply refl. }
-            { intros p g f q r. unfold fwArr, compose, cast.
-                assert (p = eq_refl) as H. { apply proof_irrelevance. }    
-                revert q. revert r. rewrite H. 
-                intros r. simpl in r. intros q.
-                assert (q = r) as E. { apply proof_irrelevance. }
-                rewrite E. apply refl. }
-Qed.
-(*
-Lemma symCat : forall (C D:Category), equalCat C D -> equalCat D C.
-Proof.
-    intros C D [eqDC [eqSRC [eqTGT eqCMP]]]. split.
-    - symmetry. assumption.
-    - split.
-        + intros p f.
+Lemma sameArr : forall (C D:Category) (p:Arr C = Arr D),
+    (forall (f g:Arr C), f == g -> fw p f == fw p g) ->
+    (forall (f g:Arr D), f == g -> bw p f == bw p g) ->
+    Arrows_ C = Arrows_ D. 
+Proof. intros C D p Hf Hb. apply sameSetoid with p; assumption. Qed.
 
-Show.
-*)
