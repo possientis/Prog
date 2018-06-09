@@ -28,10 +28,13 @@ Definition haveSameEq (C D:Category) : Prop := forall (p:Arr C = Arr D),
 Lemma same_Arrows_ : forall (C D:Category), 
     Arr C = Arr D -> haveSameEq C D -> Arrows_ C = Arrows_ D.
 Proof.
-    intros C D p [Hf Hb]. apply sameSetoid with p.
+    intros C D p H. destruct (H p) as [Hf Hb].
+    apply sameSetoid with p.
     - apply Hf.
     - apply Hb.
 Qed.
+
+
 
 Lemma same_Arrows_' : forall (C D:Category),
     Arrows_ C = Arrows_ D -> (Arr C = Arr D) /\ haveSameEq C D.
@@ -54,6 +57,3 @@ Qed.
 Definition haveSameSource (C D:Category) : Prop := forall (p:Arr C = Arr D),
     forall (f: Arr C), fw p (source f) == source (fw p f).
  
-
-
-
