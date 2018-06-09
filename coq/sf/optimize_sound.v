@@ -24,23 +24,8 @@ Proof.
     - simpl. intros env. rewrite IH1, IH2. reflexivity. 
 Qed.
 
-(*
 Theorem optimize_0plus_bexp_sound : btrans_sound optimize_0plus_bexp.
-Proof.
-    unfold btrans_sound, bequiv.
-    intros b. induction b as [| |a1 a2|a1 a2|b1 IH1|b1 IH1 b2 IH2].
-    - reflexivity.
-    - reflexivity.
-    - simpl. intros env. 
-        rewrite (optimize_0plus_aexp_sound a1), (optimize_0plus_aexp_sound a2).
-        reflexivity.
-    - simpl. intros env.
-        rewrite (optimize_0plus_aexp_sound a1), (optimize_0plus_aexp_sound a2).
-        reflexivity.
-    - simpl. intros env. rewrite IH1. reflexivity.
-    - simpl. intros env. rewrite IH1, IH2. reflexivity.
-Qed.
-
+Proof. apply btrans_is_sound. apply optimize_0plus_aexp_sound. Qed.
 
 Theorem optimize_0plus_com_sound: ctrans_sound optimize_0plus_com.
 Proof.
@@ -48,4 +33,4 @@ Proof.
     - apply optimize_0plus_aexp_sound.
     - apply optimize_0plus_bexp_sound.
 Qed.
-*)
+

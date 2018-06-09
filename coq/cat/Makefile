@@ -19,6 +19,7 @@ all: 	Axiom_ProofIrrelevance.vo \
 		Eq_Category5.vo \
 		Category6.vo \
 		Category7.vo \
+		Eq_Category7.vo \
 		CategoryAsCategory2.vo \
 		Category2AsCategory.vo \
 		CategoryAsCategory3.vo \
@@ -137,6 +138,15 @@ Category6.vo :				Category6.v Eq.vo Setoids.vo
 
 Category7.vo :				Category7.v Setoids.vo
 	coqc Category7.v
+
+Eq_Category7.vo :			Eq_Category7.v \
+							Category7.vo \
+							Axiom_ProofIrrelevance.vo \
+							Cast.vo \
+							Eq.vo \
+							Setoids.vo \
+							EqSetoids.vo 
+	coqc Eq_Category7.v
 
 CategoryAsCategory2.vo : 	CategoryAsCategory2.v \
 							Category.vo \

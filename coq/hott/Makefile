@@ -2,7 +2,8 @@ all: 	set.vo \
 		equal.vo \
 		empty.vo \
 		singleton.vo \
-		belong.vo
+		belong.vo \
+		subset.vo
 
 
 set.vo : set.v
@@ -19,4 +20,7 @@ singleton.vo : singleton.v set.vo empty.vo
 
 belong.vo : belong.v set.vo equal.vo
 	coqc belong.v
+
+subset.vo : subset.v set.vo equal.vo belong.vo	
+	coqc subset.v
 

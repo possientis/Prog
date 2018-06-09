@@ -316,7 +316,7 @@ fold_constants_sound.vo : fold_constants_sound.v bool.vo nat.vo syntax.vo \
 	eval.vo state.vo dictionary.vo equiv.vo transform.vo fold_constants.vo
 	coqc fold_constants_sound.v
 
-optimize.vo : optimize.v nat.vo syntax.vo transform.vo
+optimize.vo : optimize.v nat.vo syntax.vo transform.vo fold_constants.vo
 	coqc optimize.v
 
 optimize_sound.vo : optimize_sound.v bool.vo nat.vo syntax.vo eval.vo \

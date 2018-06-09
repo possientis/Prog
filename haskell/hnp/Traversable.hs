@@ -1,3 +1,6 @@
+{-# Language StandaloneDeriving #-}
+{-# Language DeriveTraversable #-}
+
 import Data.Traversable
 import Data.Monoid ((<>), mempty)
 
@@ -16,10 +19,25 @@ instance Foldable Tree where
     foldMap f (Node l v r) = foldMap f l <> f v <> foldMap f r
 
 
-instance Traversable Tree where
-    traverse f Leaf = pure Leaf
-    traverse f (Node l v r) = Node <$> (traverse f l) <*> (f v) <*> (traverse f r)
+--deriving instance Traversable Tree
 
+
+instance Traversable Tree where
+    sequenceA Leaf = pure Leaf
+    sequenceA (Node l v r) = Node <$> sequenceA l <*> v <*> sequenceA r
+
+{-
+
+class (Functor t, Foldable t) => Traversable t where
+{-# MINIMAL traverse | sequenceA #-}
+
+traverse :: Applicative f => (a -> f b) -> t a -> f (t b) 
+traverse f = sequenceA . fmap f
+
+sequenceA :: Applicative f => t (f a) -> f (t a)
+sequenceA = traverse id
+
+-}
 
 main :: IO ()
 main = do

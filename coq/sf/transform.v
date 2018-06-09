@@ -15,7 +15,6 @@ Definition btrans_sound (btrans:bexp -> bexp) : Prop :=
 Definition ctrans_sound (ctrans:com -> com) : Prop :=
     forall (c:com), cequiv c (ctrans c).
 
-
 Fixpoint btrans (fa:aexp -> aexp) (b:bexp) : bexp :=
     match b with
     | BTrue         => BTrue
@@ -46,8 +45,6 @@ Fixpoint btrans (fa:aexp -> aexp) (b:bexp) : bexp :=
         end
     end.
 
- 
-
 Fixpoint ctrans (fa:aexp -> aexp)(fb:bexp -> bexp)(c:com) : com :=
     match c with
     | SKIP          => SKIP
@@ -65,10 +62,6 @@ Fixpoint ctrans (fa:aexp -> aexp)(fb:bexp -> bexp)(c:com) : com :=
                        | b'         => CWhile b' (ctrans fa fb c1)
                        end
     end.
-
-
-
-
 
 Theorem ctrans_is_sound : forall (fa:aexp -> aexp) (fb:bexp -> bexp), 
     atrans_sound fa -> btrans_sound fb -> ctrans_sound (ctrans fa fb).
@@ -96,8 +89,6 @@ Proof.
         + apply while_false. rewrite <- E. apply Hb.
 Qed.
 
-
-(*
 Theorem btrans_is_sound : forall (fa:aexp -> aexp), 
     atrans_sound fa -> btrans_sound (btrans fa).
 Proof.
@@ -107,14 +98,13 @@ Proof.
       destruct (fa a1) eqn:E1, (fa a2) eqn:E2;
       try (rewrite <- E1, <- E2, (Ha a1), (Ha a2); reflexivity).
       rewrite (Ha a1), (Ha a2), E1, E2; simpl; destruct (eqb n n0); reflexivity.
-    -
-
-Show.
-*)
-
-
-
-
-
+    - simpl; rename a into a1; rename a0 into a2;
+      destruct (fa a1) eqn:E1, (fa a2) eqn:E2;
+      try (rewrite <- E1, <- E2, (Ha a1), (Ha a2); reflexivity).
+      rewrite (Ha a1), (Ha a2), E1, E2; simpl; destruct (leb n n0); reflexivity.
+    - simpl. destruct (btrans fa b); rewrite IHb; reflexivity.
+    - simpl. destruct (btrans fa b1), (btrans fa b2); rewrite IHb1, IHb2;
+        reflexivity.
+Qed.
 
 
