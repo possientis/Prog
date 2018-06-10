@@ -89,6 +89,7 @@ Proof.
         + apply while_false. rewrite <- E. apply Hb.
 Qed.
 
+
 Theorem btrans_is_sound : forall (fa:aexp -> aexp), 
     atrans_sound fa -> btrans_sound (btrans fa).
 Proof.
@@ -105,6 +106,16 @@ Proof.
     - simpl. destruct (btrans fa b); rewrite IHb; reflexivity.
     - simpl. destruct (btrans fa b1), (btrans fa b2); rewrite IHb1, IHb2;
         reflexivity.
+Qed.
+
+
+Lemma compose_aexp_sound : forall (f g:aexp -> aexp),
+    atrans_sound f -> atrans_sound g -> atrans_sound (fun x => g (f x)).
+Proof.
+    intros f g Hf Hg. unfold atrans_sound, aequiv. intros a e.
+    apply eq_trans with (aeval e (f a)).
+    - apply Hf.
+    - apply Hg.
 Qed.
 
 

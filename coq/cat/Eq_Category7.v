@@ -34,8 +34,6 @@ Proof.
     - apply Hb.
 Qed.
 
-
-
 Lemma same_Arrows_' : forall (C D:Category),
     Arrows_ C = Arrows_ D -> (Arr C = Arr D) /\ haveSameEq C D.
 Proof. 
@@ -57,3 +55,34 @@ Qed.
 Definition haveSameSource (C D:Category) : Prop := forall (p:Arr C = Arr D),
     forall (f: Arr C), fw p (source f) == source (fw p f).
  
+
+Definition haveSameTarget (C D:Category) : Prop := forall (p:Arr C = Arr D),
+    forall (f: Arr C), fw p (target f) == target (fw p f).
+
+Lemma fw' : forall (C D:Category) (p:Arr C = Arr D) (f g:Arr C),
+    haveSameEq C D ->
+    haveSameSource C D -> 
+    haveSameTarget C D ->
+    target f == source g -> target (fw p f) == source (fw p g).
+Proof.
+    intros C D p f g E S T H. destruct (E p) as [Ef Eb]. clear E.
+    apply trans with (fw p (target f)).
+    - apply sym. apply T.
+    - apply trans with (fw p (source g)).
+        + apply Ef. assumption.
+        + apply S.
+Qed.       
+
+Arguments fw' {C} {D} _ _ _ _ _ _ _.
+
+Definition haveSameCompose (C D:Category) : Prop := 
+    forall (p:Arr C = Arr D),
+    forall (E:haveSameEq C D),
+    forall (S:haveSameSource C D),
+    forall (T:haveSameTarget C D),
+    forall (f g:Arr C),
+    forall (H:target f == source g),
+        fw p (compose g f H) = compose (fw p g) (fw p f) (fw' p f g E S T H). 
+
+
+

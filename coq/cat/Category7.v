@@ -59,11 +59,17 @@ Record Category : Type := category
 Definition Arr (C:Category) : Type := elems (Arrows_ C).
 
 (* source and target of an arrow, viewed as arrows *)
-Definition source (C:Category) (f:Arr C) : Arr C := apply (source_ C) f.
-Definition target (C:Category) (f:Arr C) : Arr C := apply (target_ C) f.
+Definition source  (C:Category) (f:Arr C) : Arr C := apply (source_ C) f.
+Definition target  (C:Category) (f:Arr C) : Arr C := apply (target_ C) f.
 
 Arguments source {C} _.
 Arguments target {C} _.
+
+Definition compose (C:Category) (g f:Arr C) (p:target f == source g) : Arr C :=
+    compose_ C g f p.
+
+Arguments compose {C} _ _ _.
+
 
 Theorem source_compat : forall (C:Category) (f g:Arr C),
     f == g -> source f == source g.
@@ -236,13 +242,13 @@ Qed.
 Arguments compose_target {C} {a} {b} {c} _ _.
 
 (* we can now defined composition as a typed operation which is total *)
-Definition compose (C:Category) (a b c:Obj C) (g:Hom b c) (f:Hom a b) : Hom a c :=
+Definition compose' (C:Category) (a b c:Obj C) (g:Hom b c) (f:Hom a b) : Hom a c :=
     hom (compose_arrow g f) (compose_source g f) (compose_target g f). 
 
-Arguments compose {C} {a} {b} {c} _ _.
+Arguments compose' {C} {a} {b} {c} _ _.
 
 (* syntactic sugar *)
-Notation "g # f" := (compose g f) (at level 60, right associativity) : categ. 
+Notation "g # f" := (compose' g f) (at level 60, right associativity) : categ. 
 
 Open Scope categ.
 

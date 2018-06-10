@@ -7,6 +7,8 @@ Require Import dictionary.
 Require Import equiv.
 Require Import transform.
 Require Import optimize.
+Require Import fold_constants.
+Require Import fold_constants_sound.
 
 Theorem optimize_0plus_aexp_sound : atrans_sound optimize_0plus_aexp.
 Proof. 
@@ -33,4 +35,23 @@ Proof.
     - apply optimize_0plus_aexp_sound.
     - apply optimize_0plus_bexp_sound.
 Qed.
+
+Theorem optimize_aexp_sound : atrans_sound optimize_aexp.
+Proof.
+    apply (compose_aexp_sound fold_constants_aexp).
+    - apply fold_constants_aexp_sound.
+    - apply optimize_0plus_aexp_sound.
+Qed.
+
+Theorem optimize_bexp_sound : btrans_sound optimize_bexp.
+Proof. apply btrans_is_sound. apply optimize_aexp_sound. Qed.
+
+Theorem optimize_com_sound : ctrans_sound optimize_com.
+Proof. 
+    apply ctrans_is_sound.
+    - apply optimize_aexp_sound.
+    - apply optimize_bexp_sound.
+Qed.
+
+
 
