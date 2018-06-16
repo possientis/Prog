@@ -21,10 +21,66 @@ Lemma fwbw : forall (C D:Category) (p q:Arr C = Arr D) (g:Arr D),
    fw p (bw q g) = g. 
 Proof. intros a b p q y. apply cast_inv_right. Qed.
 
+Lemma fw_is_bw : forall (C D:Category)(p:Arr C = Arr D)(q:Arr D = Arr C)(f:Arr C),
+    fw p f = bw q f.
+Proof.
+    intros C D p q f. revert f q. generalize p. unfold Arr in p. 
+    unfold fw, bw, cast, cast', eq_sym, cast, Arr. rewrite <- p. clear p.
+    intros p f q. 
+    assert (p = eq_refl) as P. { apply proof_irrelevance. }
+    assert (q = eq_refl) as Q. { apply proof_irrelevance. }
+    rewrite P, Q. reflexivity.
+Qed.
+
+Lemma bw_is_fw : forall (C D:Category)(p:Arr C = Arr D)(q:Arr D = Arr C)(f:Arr D),
+    bw p f = fw q f.
+Proof.
+    intros C D p q f. revert f q. generalize p. unfold Arr in p. 
+    unfold fw, bw, cast, cast', eq_sym, cast, Arr. rewrite <- p. clear p.
+    intros p f q. 
+    assert (p = eq_refl) as P. { apply proof_irrelevance. }
+    assert (q = eq_refl) as Q. { apply proof_irrelevance. }
+    rewrite P, Q. reflexivity.
+Qed.
+ 
+
+
 Definition haveSameEq (C D:Category) : Prop := forall (p:Arr C = Arr D),
     (forall (f g:Arr C), f == g -> fw p f == fw p g) /\
     (forall (f g:Arr D), f == g -> bw p f == bw p g).
 
+Lemma haveSameEq_refl : forall (C:Category), haveSameEq C C.
+Proof. 
+    intros C p. split; intros f g H.
+    - unfold fw, cast. 
+        assert (p = eq_refl) as P. { apply proof_irrelevance. }
+        rewrite P. assumption.
+    - unfold bw, cast. 
+        assert (p = eq_refl) as P. { apply proof_irrelevance. }
+        rewrite P. assumption.
+Qed.
+
+
+Lemma haveSameEq_sym : forall (C D:Category), haveSameEq C D -> haveSameEq D C.
+Proof.
+    intros C D H p. 
+    assert (Arr C = Arr D) as q. { symmetry. assumption. }
+    destruct (H q) as [Hf Hb].
+    split; intros f g E. 
+     - assert (fw p f = bw q f) as F. { apply fw_is_bw. }
+       assert (fw p g = bw q g) as G. { apply fw_is_bw. }
+       rewrite F, G. apply Hb. assumption.
+     - assert (bw p f = fw q f) as F. { apply bw_is_fw. }
+       assert (bw p g = fw q g) as G. { apply bw_is_fw. }
+       rewrite F, G. apply Hf. assumption.
+Qed.
+      
+
+
+
+
+
+(*
 Lemma same_Arrows_ : forall (C D:Category), 
     Arr C = Arr D -> haveSameEq C D -> Arrows_ C = Arrows_ D.
 Proof.
@@ -84,5 +140,13 @@ Definition haveSameCompose (C D:Category) : Prop :=
     forall (H:target f == source g),
         fw p (compose g f H) = compose (fw p g) (fw p f) (fw' p f g E S T H). 
 
+
+Definition catEq (C D:Category) : Prop :=
+    Arr C = Arr D       /\
+    haveSameEq C D      /\
+    haveSameSource C D  /\
+    haveSameTarget C D  /\
+    haveSameCompose C D.
+*)
 
 

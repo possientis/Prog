@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #include "rio.h"
 #include "connect.h"
+
+#define MAXLINE 8192
 
 
 typedef struct {        /* represents a pool of connected descriptors */
@@ -101,4 +104,31 @@ void add_client(int connfd, pool *p)
 
 void check_clients(pool *p)
 {
+    int i, connfd, n;
+    char buf[MAXLINE];
+    rio_t rio;
+
+    for (i = 0; (i <= p->maxi) && (p->nready > 0); i++) {
+        connfd = p->clientfd[i];
+        rio = p->clientrio[i];
+
+       /* if the descriptor is ready, echo a text line from it */
+        if ((connfd > 0) && (FD_ISSET(connfd, &p->ready_set))) {
+            p->nready--;
+            if ((n = rio_readlineb(&rio, buf, MAXLINE)) != 0) {
+                byte_cnt +=n;
+                printf("Server received %d (%d total) bytes on fd %d\n",
+                        n, byte_cnt, connfd);
+                rio_writen(connfd, buf, n);
+            }
+
+            /* eof detected, remove descriptor from pool */
+            else {
+                close(connfd);
+                FD_CLR(connfd,&p->read_set);
+                p->clientfd[i] = -1;
+            }
+        }
+    }
 }
+
