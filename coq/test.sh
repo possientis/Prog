@@ -12,6 +12,7 @@ echo "testing coq..."
 ./sf/test.sh
 ./cat/test.sh
 ./hott/test.sh
+./systemF/test.sh
 
 echo
 echo "testing sort..."

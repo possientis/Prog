@@ -18,7 +18,6 @@ Fixpoint subst_aexp (k:Key)(u:aexp)(a:aexp) : aexp :=
 Definition subst_equiv_property := forall (k1 k2:Key) (a1 a2:aexp),
     cequiv (k1 ::= a1 ;; k2 ::= a2) (k1 ::= a1 ;; k2 ::= subst_aexp k1 a1 a2).
 
-
 Theorem subst_inequiv : ~subst_equiv_property.
 Proof.
     unfold subst_equiv_property. intros H.
@@ -72,11 +71,41 @@ Inductive var_not_used_in_aexp (k:Key) : aexp -> Prop :=
     var_not_used_in_aexp k (AMult a1 a2)
 .
 
-(*
+
 Lemma aeval_weakening : forall (k:Key) (e:State) (a:aexp) (n:nat),
     var_not_used_in_aexp k a -> aeval (t_update e k n) a = aeval e a.
 Proof.
+    intros k e a n H. revert e n. 
+    induction H as  [ m
+                    |k'
+                    |a1 a2 H1 IH1 H2 IH2
+                    |a1 a2 H1 IH1 H2 IH2
+                    |a1 a2 H1 IH1 H2 IH2
+                    ]; 
+    intros e n; simpl.
+    - reflexivity. 
+    - apply t_update_neq. assumption. 
+    - rewrite (IH1 e n), (IH2 e n). reflexivity.
+    - rewrite (IH1 e n), (IH2 e n). reflexivity.
+    - rewrite (IH1 e n), (IH2 e n). reflexivity.
+Qed.
 
-
+(*
+Lemma subst_equivalence : forall (k1 k2:Key) (a1 a2:aexp),
+    var_not_used_in_aexp k1 a1 -> 
+    cequiv (k1 ::= a1 ;; k2 ::= a2) (k1 ::= a1 ;; k2 ::= subst_aexp k1 a1 a2).
+Proof.
+    intros k1 k2 a1 a2 H. revert k2 a2.
+    induction H as  [ m
+                    |k'
+                    |a1 a1' H1 IH1 H2 IH2
+                    |a1 a1' H1 IH1 H2 IH2
+                    |a1 a1' H1 IH1 H2 IH2
+                    ];
+    intros k a2; simpl; induction a2; simpl.
+    - apply refl_cequiv.
+    - destruct (beq_Key k1 k0) eqn:E. 
+        + apply beq_Key_true_iff in E. rewrite <- E.
+ 
 Show.
 *)
