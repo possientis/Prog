@@ -1,3 +1,4 @@
+Require Import bool.
 Require Import nat.
 Require Import syntax.
 Require Import eval.
@@ -105,7 +106,11 @@ Proof.
     intros k a2; simpl; induction a2; simpl.
     - apply refl_cequiv.
     - destruct (beq_Key k1 k0) eqn:E. 
-        + apply beq_Key_true_iff in E. rewrite <- E.
- 
+        + apply beq_Key_true_iff in E. rewrite <- E. apply CSeq_Assign.
+        + apply refl_cequiv.
+         
+    -
 Show.
-*)
+
+*) 
+

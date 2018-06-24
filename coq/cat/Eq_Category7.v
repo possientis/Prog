@@ -43,16 +43,34 @@ Proof.
     rewrite P, Q. reflexivity.
 Qed.
 
-(*   HERE <---------------------------------------------------
 Lemma fw_compose : forall (C D E:Category), 
     forall (p:Arr C = Arr D) (q:Arr D = Arr E) (r:Arr C = Arr E),
     forall (f:Arr C), fw q (fw p f) = fw r f.
 Proof.
+    intros C D E p. generalize p. unfold Arr in p.
+    unfold fw, cast, Arr. rewrite <- p. clear p D.
+    intros p q. generalize q. rewrite <- q. clear q E.
+    intros q r f.
+    assert (p = eq_refl) as P. { apply proof_irrelevance. }
+    assert (q = eq_refl) as Q. { apply proof_irrelevance. }
+    assert (r = eq_refl) as R. { apply proof_irrelevance. }
+    rewrite P, Q, R. reflexivity.
+Qed.
 
-Show.
-*)
- 
-(*
+Lemma bw_compose : forall (C D E:Category),
+    forall (p:Arr C = Arr D) (q:Arr D = Arr E) (r:Arr C = Arr E),
+    forall (f:Arr E), bw p (bw q f) = bw r f.
+Proof.
+    intros C D E p. generalize p. unfold Arr in p.
+    unfold bw, cast, Arr, cast', cast, eq_sym. rewrite <- p. clear p D.
+    intros p q. generalize q. rewrite <- q. clear q E.
+    intros q r f.
+    assert (p = eq_refl) as P. { apply proof_irrelevance. }
+    assert (q = eq_refl) as Q. { apply proof_irrelevance. }
+    assert (r = eq_refl) as R. { apply proof_irrelevance. }
+    rewrite P, Q, R. reflexivity.
+Qed.
+
 
 Definition haveSameEq (C D:Category) : Prop := 
     Arr C = Arr D /\
@@ -97,46 +115,183 @@ Proof.
     split.
     - apply eq_trans with (Arr D); assumption.
     - intros pCE. split; intros f g H.
-        +
+        + assert (fw pDE (fw pCD f) = fw pCE f) as Hf. { apply fw_compose. }
+          assert (fw pDE (fw pCD g) = fw pCE g) as Hg. { apply fw_compose. }
+          rewrite <- Hf, <- Hg. apply HfDE. apply HfCD. assumption.
+        + assert (bw pCD (bw pDE f) = bw pCE f) as Hf. { apply bw_compose. }
+          assert (bw pCD (bw pDE g) = bw pCE g) as Hg. { apply bw_compose. }
+          rewrite <- Hf, <- Hg. apply HbCD. apply HbDE. assumption.
+Qed.
 
-Show.
-      
-*)
-(*
 Lemma same_Arrows_ : forall (C D:Category), 
-    Arr C = Arr D -> haveSameEq C D -> Arrows_ C = Arrows_ D.
+    haveSameEq C D -> Arrows_ C = Arrows_ D.
 Proof.
-    intros C D p H. destruct (H p) as [Hf Hb].
+    intros C D. unfold haveSameEq. intros [p H].
+    destruct (H p) as [Hf Hb].
     apply sameSetoid with p.
     - apply Hf.
     - apply Hb.
 Qed.
 
+
 Lemma same_Arrows_' : forall (C D:Category),
-    Arrows_ C = Arrows_ D -> (Arr C = Arr D) /\ haveSameEq C D.
+    Arrows_ C = Arrows_ D -> haveSameEq C D.
 Proof. 
-    intros C D H. split.
-    - unfold Arr. rewrite H. reflexivity.
-    - intros p. split. 
-        + intros f g E. unfold fw. unfold Arr in p. revert p.
-          revert E. revert f g. unfold cast. rewrite <- H.
-          intros f g E p. assert (p = eq_refl) as P.
-            { apply proof_irrelevance. }
-          rewrite P. assumption.
-        + intros f g E. unfold bw. unfold Arr in p. revert p.
-          revert E. revert f g. unfold cast', cast, eq_sym, Arr.
-          rewrite <- H. intros f g E p. assert (p = eq_refl) as P.
-            { apply proof_irrelevance. }
-          rewrite P. assumption.
+    intros C D H. unfold haveSameEq, Arr, fw, bw, cast, cast', cast, eq_sym, Arr.
+    rewrite <- H. clear H D. split.
+    - reflexivity.
+    - intros p. assert (p = eq_refl) as P. { apply proof_irrelevance. }
+      rewrite P. split; intros f g H; assumption.
 Qed.
 
-Definition haveSameSource (C D:Category) : Prop := forall (p:Arr C = Arr D),
-    forall (f: Arr C), fw p (source f) == source (fw p f).
- 
 
-Definition haveSameTarget (C D:Category) : Prop := forall (p:Arr C = Arr D),
+Definition haveSameSource (C D:Category) : Prop := 
+    haveSameEq C D /\
+    forall (p:Arr C = Arr D),
+    forall (f: Arr C), fw p (source f) == source (fw p f).
+
+Lemma haveSameSourcefwbw : forall (C D:Category), 
+    haveSameEq C D -> forall (p:Arr C = Arr D),
+    (forall (f:Arr C), fw p (source f) == source (fw p f)) ->
+    (forall (f:Arr D), bw p (source f) == source (bw p f)). 
+Proof.
+    intros C D. unfold haveSameEq. intros [p H].
+    destruct (H p) as [Hf Hb]. clear H. intros q.
+    assert (p = q) as E. { apply proof_irrelevance. }
+    rewrite <- E. clear E q. intros H f. apply sym. 
+    assert (source (bw p f) = bw p (fw p (source (bw p f)))) as E.
+    { symmetry. apply bwfw. }
+    rewrite E. apply Hb. clear E.
+    assert (fw p (bw p f) = f) as E. { apply fwbw. }
+    remember (bw p f) as g eqn:Hg. rewrite <- E. rewrite Hg.
+    apply H.
+Qed.
+
+Lemma haveSameSourcebwfw : forall (C D:Category), 
+    haveSameEq C D -> forall (p:Arr C = Arr D),
+    (forall (f:Arr D), bw p (source f) == source (bw p f)) ->
+    (forall (f:Arr C), fw p (source f) == source (fw p f)). 
+Proof.
+    intros C D. unfold haveSameEq. intros [p H].
+    destruct (H p) as [Hf Hb]. clear H. intros q.
+    assert (p = q) as E. { apply proof_irrelevance. }
+    rewrite <- E. clear E q. intros H f. apply sym.  
+    assert (source (fw p f) = fw p (bw p (source (fw p f)))) as E.
+    { symmetry. apply fwbw. }
+    rewrite E. apply Hf. clear E.
+    assert (bw p (fw p f) = f) as E. { apply bwfw. }
+    remember (fw p f) as g eqn:Hg. rewrite <- E. rewrite Hg.
+    apply H.
+Qed.
+
+
+
+Definition haveSameTarget (C D:Category) : Prop := 
+    haveSameEq C D /\
+    forall (p:Arr C = Arr D),
     forall (f: Arr C), fw p (target f) == target (fw p f).
 
+Lemma haveSameTargetfwbw : forall (C D:Category), 
+    haveSameEq C D -> forall (p:Arr C = Arr D),
+    (forall (f:Arr C), fw p (target f) == target (fw p f)) ->
+    (forall (f:Arr D), bw p (target f) == target (bw p f)). 
+Proof.
+    intros C D. unfold haveSameEq. intros [p H].
+    destruct (H p) as [Hf Hb]. clear H. intros q.
+    assert (p = q) as E. { apply proof_irrelevance. }
+    rewrite <- E. clear E q. intros H f. apply sym. 
+    assert (target (bw p f) = bw p (fw p (target (bw p f)))) as E.
+    { symmetry. apply bwfw. }
+    rewrite E. apply Hb. clear E.
+    assert (fw p (bw p f) = f) as E. { apply fwbw. }
+    remember (bw p f) as g eqn:Hg. rewrite <- E. rewrite Hg.
+    apply H.
+Qed.
+
+Lemma haveSameTargetbwfw : forall (C D:Category), 
+    haveSameEq C D -> forall (p:Arr C = Arr D),
+    (forall (f:Arr D), bw p (target f) == target (bw p f)) ->
+    (forall (f:Arr C), fw p (target f) == target (fw p f)). 
+Proof.
+    intros C D. unfold haveSameEq. intros [p H].
+    destruct (H p) as [Hf Hb]. clear H. intros q.
+    assert (p = q) as E. { apply proof_irrelevance. }
+    rewrite <- E. clear E q. intros H f. apply sym.  
+    assert (target (fw p f) = fw p (bw p (target (fw p f)))) as E.
+    { symmetry. apply fwbw. }
+    rewrite E. apply Hf. clear E.
+    assert (bw p (fw p f) = f) as E. { apply bwfw. }
+    remember (fw p f) as g eqn:Hg. rewrite <- E. rewrite Hg.
+    apply H.
+Qed.
+
+
+ 
+
+Lemma haveSameSource_refl : forall (C:Category), haveSameSource C C.
+Proof. 
+    intros C. unfold haveSameSource. split.
+    - apply haveSameEq_refl.
+    - intros p. assert (p = eq_refl) as P. { apply proof_irrelevance. }
+        rewrite P. intros f. apply refl.
+Qed.
+
+
+Lemma haveSameTarget_refl : forall (C:Category), haveSameTarget C C.
+Proof. 
+    intros C. unfold haveSameTarget. split.
+    - apply haveSameEq_refl.
+    - intros p. assert (p = eq_refl) as P. { apply proof_irrelevance. }
+        rewrite P. intros f. apply refl.
+Qed.
+
+
+
+Lemma haveSameSource_sym : forall (C D:Category), 
+    haveSameSource C D -> haveSameSource D C.
+Proof.
+    intros C D. unfold haveSameSource. intros [H' H].
+    unfold haveSameEq in H'. destruct H' as [p H''].
+    destruct (H'' p) as [Hf Hb]. split.
+    - apply haveSameEq_sym. unfold haveSameEq. split; assumption.
+    - intros q f.
+      assert (fw q f = bw p f) as H1. { apply fw_is_bw. }
+      assert (fw q (source f) = bw p (source f)) as H2. { apply fw_is_bw. }
+      rewrite H1, H2. apply haveSameSourcefwbw.
+          + unfold haveSameEq. split; assumption.
+          + apply H.
+Qed.
+ 
+Lemma haveSameTarget_sym : forall (C D:Category), 
+    haveSameTarget C D -> haveSameTarget D C.
+Proof.
+    intros C D. unfold haveSameTarget. intros [H' H].
+    unfold haveSameEq in H'. destruct H' as [p H''].
+    destruct (H'' p) as [Hf Hb]. split.
+    - apply haveSameEq_sym. unfold haveSameEq. split; assumption.
+    - intros q f.
+      assert (fw q f = bw p f) as H1. { apply fw_is_bw. }
+      assert (fw q (target f) = bw p (target f)) as H2. { apply fw_is_bw. }
+      rewrite H1, H2. apply haveSameTargetfwbw.
+          + unfold haveSameEq. split; assumption.
+          + apply H.
+Qed.
+
+(*
+Lemma haveSameSource_trans : forall (C D E:Category),
+    haveSameSource C D -> haveSameSource D E -> haveSameSource C E.
+Proof.
+    intros C D E. unfold haveSameSource. 
+    intros [pCD HCD] [pDE HDE]. split.
+    - apply haveSameEq_trans with D; assumption.
+    - intros pCE f.
+
+
+Show.
+*) 
+
+
+(*
 Lemma fw' : forall (C D:Category) (p:Arr C = Arr D) (f g:Arr C),
     haveSameEq C D ->
     haveSameSource C D -> 

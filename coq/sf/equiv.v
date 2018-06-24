@@ -292,6 +292,51 @@ Proof.
 Qed.
 
 
+Lemma CSeq_Assign : forall (k1 k2:Key) (n:nat),
+    cequiv (k1 ::= ANum n ;; k2 ::= AKey k1) (k1 ::= ANum n ;; k2 ::= ANum n).
+Proof.
+    intros k1 k2 n e e'. split.
+    - remember (k1 ::= ANum n) as c1 eqn:E1.
+      remember (k2 ::= AKey k1) as c2 eqn:E2.
+      remember (c1 ;; c2) as c eqn:E. intros H. revert c1 c2 E1 E2 E. 
+      induction H; intros c3 c4 E1 E2 E; inversion E; subst.
+        + clear E IHceval1 IHceval2. apply E_Seq with e'.
+            { assumption. }
+            { assert (e' = t_update e k1 n) as H1.
+              apply (ceval_deterministic (k1 ::= ANum n) e). 
+                { assumption. }
+                { constructor. reflexivity. }
+                { assert (e'' = t_update e' k2 n) as H2.
+                    { apply (ceval_deterministic (k2 ::= AKey k1) e').
+                        { assumption. }
+                        { constructor. rewrite H1. simpl. apply t_update_eq. }
+                    }
+                  rewrite H2. constructor. rewrite H1. reflexivity.
+                }
+            }
+    - remember (k1 ::= ANum n) as c1 eqn:E1.
+      remember (k2 ::= ANum n) as c2 eqn:E2.
+      remember (c1 ;; c2) as c eqn:E. intros H. revert c1 c2 E1 E2 E. 
+      induction H; intros c3 c4 E1 E2 E; inversion E; subst.
+        + clear E IHceval1 IHceval2. apply E_Seq with e'.
+            { assumption. }
+            { assert (e' = t_update e k1 n) as H1.
+                apply (ceval_deterministic (k1 ::= ANum n) e).
+                    { assumption. }
+                    { constructor. reflexivity. }
+                    { assert (e'' = t_update e' k2 n) as H2.
+                        { apply (ceval_deterministic (k2 ::= ANum n) e').
+                            { assumption. }
+                            { constructor. reflexivity. }
+                        }
+                        rewrite H2. constructor. rewrite H1. 
+                        simpl. apply t_update_eq.
+                    }
+            }
+Qed.
+               
+ 
+
 
 
 

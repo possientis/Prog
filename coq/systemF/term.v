@@ -1,3 +1,4 @@
+Require Import Arith.
 Require Import type.
 
 Inductive Var : Type :=
@@ -12,6 +13,11 @@ Inductive Term : Type :=
 | TAbsTerm: TVar -> Term -> Term
 | TAppTerm: Term -> FType -> Term
 .
+
+Definition varEqual (x x':Var) : bool :=
+    match x, x' with
+    | (var x T), (var x' T') => (beq_nat x x') && (FTypeEqual T T')
+    end.
 
 
 

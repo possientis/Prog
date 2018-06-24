@@ -1,10 +1,10 @@
 Require Import term.
 
-Definition isValue (t:Term) : bool :=
+Definition value (t:Term) : Prop :=
     match t with
-    | VarTerm _     => false
-    | AbsTerm _ _   => true
-    | AppTerm _ _   => false
-    | TAbsTerm _ _  => true
-    | TAppTerm _ _  => false
+    | VarTerm _     => False
+    | AbsTerm _ _   => True
+    | AppTerm _ _   => False
+    | TAbsTerm _ _  => True
+    | TAppTerm _ _  => False
     end.

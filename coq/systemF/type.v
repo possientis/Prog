@@ -1,3 +1,5 @@
+Require Import Arith.
+
 Inductive TVar : Type :=
 | tvar : nat -> TVar
 .
@@ -7,3 +9,29 @@ Inductive FType : Type :=
 | FunType : FType -> FType -> FType
 | UniType : TVar -> FType -> FType
 .
+
+Definition tvarEqual (X Y:TVar) : bool :=
+    match X, Y with
+    | (tvar x), (tvar y)    => if (beq_nat x y) then true else false
+    end.
+
+Fixpoint FTypeEqual (T T':FType) : bool :=
+    match T with
+    | VarType X     => match T' with 
+                       | VarType Y      => tvarEqual X Y
+                       | _              => false
+                       end
+    | FunType T1 T2 => match T' with
+                       | FunType S1 S2  => (FTypeEqual T1 S1) && (FTypeEqual T2 S2)
+                       | _              => false
+                       end
+    | UniType X T1  => match T' with (* equality stricter than alpha equivalence *)
+                       | UniType Y S1   => (tvarEqual X Y) && (FTypeEqual T1 S1)
+                       | _              => false
+                       end
+    end.
+
+
+
+
+
