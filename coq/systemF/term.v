@@ -16,7 +16,7 @@ Inductive Term : Type :=
 
 Definition varEqual (x x':Var) : bool :=
     match x, x' with
-    | (var x T), (var x' T') => (beq_nat x x') && (FTypeEqual T T')
+    | (var x T), (var x' T') => andb (beq_nat x x') (FTypeEqual T T')
     end.
 
 
