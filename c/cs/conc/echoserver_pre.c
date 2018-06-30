@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <netdb.h>
 #include <pthread.h>
 
+#include "echo_cnt.h"
 #include "connect.h"
 #include "sbuf.h"
 
@@ -39,13 +41,24 @@ int main(int argc, char **argv)
         pthread_create(&tid, NULL, thread, NULL);
 
     while (1) {
+        printf("server awaiting new connection on port %d\n", port);
         connfd = accept(listenfd, (SA *) &clientaddr, &clientlen);
+        printf("new client connection established, waiting for slot...\n");
         sbuf_insert(&sbuf, connfd); /* insert connfd in buffer */
+        printf("client has been place in a queue\n");
     }
 }
 
 
 void *thread(void *vargp)
 {
-    return NULL;
+    pthread_detach(pthread_self());
+    while (1) {
+        int connfd = sbuf_remove(&sbuf);    /* remove connfd from buffer */
+        echo_cnt(connfd);
+        close(connfd);
+    }
 }
+
+
+

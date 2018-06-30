@@ -277,47 +277,94 @@ Proof.
           + apply H.
 Qed.
 
-(*
+
 Lemma haveSameSource_trans : forall (C D E:Category),
     haveSameSource C D -> haveSameSource D E -> haveSameSource C E.
 Proof.
     intros C D E. unfold haveSameSource. 
-    intros [pCD HCD] [pDE HDE]. split.
+    intros [pCD HCD] [pDE HDE]. generalize pCD, pDE.
+    unfold haveSameEq in pCD. 
+    destruct pCD as [qCD ECD]. destruct (ECD qCD) as [ECDf ECDb]. clear ECD.
+    rename qCD into pCD. intros qCD.
+    unfold haveSameEq in pDE. 
+    destruct pDE as [qDE EDE]. destruct (EDE qDE) as [EDEf EDEb]. clear EDE.
+    rename qDE into pDE. intros qDE.
+    split. 
     - apply haveSameEq_trans with D; assumption.
     - intros pCE f.
+      assert (fw pDE (fw pCD (source f)) = fw pCE (source f)) as H1.
+      { apply fw_compose. }
+      assert (fw pDE (fw pCD f) = fw pCE f) as H2.
+      { apply fw_compose. } 
+      rewrite <- H1, <- H2. 
+      apply trans with (fw pDE (source (fw pCD f))).
+      + apply EDEf. apply HCD.
+      + apply HDE.
+Qed.
 
 
-Show.
-*) 
 
-
-(*
 Lemma fw' : forall (C D:Category) (p:Arr C = Arr D) (f g:Arr C),
-    haveSameEq C D ->
     haveSameSource C D -> 
     haveSameTarget C D ->
     target f == source g -> target (fw p f) == source (fw p g).
 Proof.
-    intros C D p f g E S T H. destruct (E p) as [Ef Eb]. clear E.
-    apply trans with (fw p (target f)).
-    - apply sym. apply T.
-    - apply trans with (fw p (source g)).
-        + apply Ef. assumption.
-        + apply S.
-Qed.       
+    intros C D p f g. unfold haveSameSource, haveSameTarget.
+    intros [H H1] [_ H2]. unfold haveSameEq in H.
+    destruct H as [_ E]. destruct (E p) as [Hf Hb]. clear E.
+    intros H. apply trans with (fw p (source g)).
+    - apply trans with (fw p (target f)).
+        + apply sym. apply H2.
+        + apply Hf. assumption.
+    - apply H1.
+Qed.
 
-Arguments fw' {C} {D} _ _ _ _ _ _ _.
+Arguments fw' {C} {D} _ _ _ _ _ _.
+
+Lemma bw' : forall (C D:Category) (p:Arr C = Arr D) (f g:Arr D),
+    haveSameSource C D ->
+    haveSameTarget C D ->
+    target f == source g -> target (bw p f) == source (bw p g).
+Proof.
+    intros C D p f g. unfold haveSameSource, haveSameTarget.
+    intros [H H1] [_ H2]. generalize H. intros H'.
+    unfold haveSameEq in H.
+    destruct H as [_ E]. destruct (E p) as [Hf Hb]. clear E.
+    intros H. apply trans with (bw p (source g)).
+    - apply trans with (bw p (target f)).
+        + apply sym. apply haveSameTargetfwbw.
+            { assumption. }
+            { apply H2. }
+        + apply Hb. assumption.
+    - apply haveSameSourcefwbw.
+        + assumption.
+        + apply H1.
+Qed.
+
+Arguments bw' {C} {D} _ _ _ _ _ _.
 
 Definition haveSameCompose (C D:Category) : Prop := 
     forall (p:Arr C = Arr D),
-    forall (E:haveSameEq C D),
     forall (S:haveSameSource C D),
     forall (T:haveSameTarget C D),
     forall (f g:Arr C),
     forall (H:target f == source g),
-        fw p (compose g f H) = compose (fw p g) (fw p f) (fw' p f g E S T H). 
+        fw p (compose g f H) == compose (fw p g) (fw p f) (fw' p f g S T H). 
+
+(*
+Lemma haveSameComposefwbw : forall (C D:Category) (p:Arr C = Arr D),
+    forall (S:haveSameSource C D) (T:haveSameTarget C D),
+    (forall (f g:Arr C) (H:target f == source g),
+        fw p (compose g f H) == compose (fw p g) (fw p f) (fw' p f g S T H)) -> 
+    (forall (f g:Arr D) (H:target f == source g),
+        bw p (compose g f H) == compose (bw p g) (bw p f) (bw' p f g S T H)).
+Proof.
+
+Show.
+*)
 
 
+(*
 Definition catEq (C D:Category) : Prop :=
     Arr C = Arr D       /\
     haveSameEq C D      /\

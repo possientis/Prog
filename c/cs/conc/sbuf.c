@@ -4,8 +4,8 @@
 #include "sbuf.h"
 
 
-void P(sem_t *s) { sem_wait(s); }
-void V(sem_t *s) { sem_post(s); }
+static void P(sem_t *s) { sem_wait(s); }
+static void V(sem_t *s) { sem_post(s); }
 
 /* create an empty, bounded, shared FIFO buffer with n slots */
 void sbuf_init(sbuf_t *sp, int n)

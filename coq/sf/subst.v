@@ -91,7 +91,7 @@ Proof.
     - rewrite (IH1 e n), (IH2 e n). reflexivity.
 Qed.
 
-(*
+(* Induction on proof that k1 not used in a1 : seems laborious
 Lemma subst_equivalence : forall (k1 k2:Key) (a1 a2:aexp),
     var_not_used_in_aexp k1 a1 -> 
     cequiv (k1 ::= a1 ;; k2 ::= a2) (k1 ::= a1 ;; k2 ::= subst_aexp k1 a1 a2).
@@ -114,3 +114,21 @@ Show.
 
 *) 
 
+(*
+Lemma subst_equivalence : forall (k1 k2:Key) (a1 a2:aexp),
+    var_not_used_in_aexp k1 a1 -> 
+    cequiv (k1 ::= a1 ;; k2 ::= a2) (k1 ::= a1 ;; k2 ::= subst_aexp k1 a1 a2).
+Proof.
+    intros k1 k2 a1 a2 H. revert k1 k2 a1 H. 
+    induction a2; intros k1 k2 a1 H; simpl.
+    - apply refl_cequiv.
+    - destruct (beq_Key k1 k) eqn:K.
+        + rewrite beq_Key_true_iff in K. rewrite <- K. clear K k. revert k2.
+          induction H; intros k2.
+          { apply CSeq_Assign_Num. }
+          { rename k' into k.
+          
+
+
+Show.
+*)
