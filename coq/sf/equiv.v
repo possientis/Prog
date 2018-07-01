@@ -335,7 +335,7 @@ Proof.
             }
 Qed.
                
-(*
+
 Lemma CSeq_Assign_Key : forall (k1 k2 k:Key),
     cequiv (k1 ::= AKey k ;; k2 ::= AKey k1) (k1 ::= AKey k ;; k2 ::= AKey k).
 Proof.
@@ -351,21 +351,14 @@ Proof.
                     { assumption.  }
                     { constructor. reflexivity. }
                 }
-                { assert (e'' = t_update e' k2 (aeval e' (AKey k1))) as H2.
-                    { apply (ceval_deterministic (k2 ::= AKey k1) e').
-                        { assumption. }
-                        { constructor. reflexivity. }
-                    }
-                  rewrite H2. constructor. rewrite H1. simpl.
-                  rewrite (t_update_eq nat e k1 (e k)).  
-                  destruct (beq_Key k1 k) eqn:K.
-                    { rewrite beq_Key_true_iff in K. rewrite K. 
-                      apply t_update_eq.
-                    }
-                    { rewrite beq_Key_false_iff in K.
-                        apply t_update_neq. assumption.
-                    }
+              assert (e'' = t_update e' k2 (aeval e' (AKey k1))) as H2.
+                { apply (ceval_deterministic (k2 ::= AKey k1) e').
+                    { assumption. }
+                    { constructor. reflexivity. }
                 }
+              rewrite H2. constructor. rewrite H1. simpl.
+              rewrite (t_update_eq nat e k1 (e k)).  
+              apply t_update_irrel.
             }
     - remember (k1 ::= AKey k) as c1 eqn:E1.
       remember (k2 ::= AKey k) as c2 eqn:E2.
@@ -377,8 +370,14 @@ Proof.
                 { apply (ceval_deterministic (k1 ::= AKey k) e).
                     { assumption. }
                     { constructor. reflexivity. }
-                 } 
-
-Show.
-*)
-
+                } 
+              assert (e'' = t_update e' k2 (e' k)) as H2.
+                { apply (ceval_deterministic (k2 ::= AKey k) e').
+                    { assumption. }
+                    { constructor. reflexivity. }
+                }
+              rewrite H2. constructor. rewrite H1. simpl.
+              rewrite (t_update_eq nat e k1 (e k)). symmetry.
+              apply t_update_irrel.
+            }
+Qed.

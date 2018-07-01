@@ -114,7 +114,8 @@ Show.
 
 *) 
 
-(*
+(* k1 = a ; k2 = k1 equivalent to k1 = a ; k2 = a when k1 not in a 
+
 Lemma subst_equivalence : forall (k1 k2:Key) (a1 a2:aexp),
     var_not_used_in_aexp k1 a1 -> 
     cequiv (k1 ::= a1 ;; k2 ::= a2) (k1 ::= a1 ;; k2 ::= subst_aexp k1 a1 a2).
@@ -126,7 +127,8 @@ Proof.
         + rewrite beq_Key_true_iff in K. rewrite <- K. clear K k. revert k2.
           induction H; intros k2.
           { apply CSeq_Assign_Num. }
-          { rename k' into k.
+          { rename k' into k. apply CSeq_Assign_Key. }
+          {
           
 
 

@@ -57,12 +57,23 @@ Proof.
 Qed.
 
 Lemma t_update_neq : forall (a:Type) (m:TotalMap a) (k1 k2:Key) (v:a),
-    k1 <> k2 -> (t_update m k1 v) k2 = m k2.
+    k1 <> k2 -> t_update m k1 v k2 = m k2.
 Proof.
     intros a m k1 k2 v H. unfold t_update. 
     assert (beq_Key k1 k2 = false) as H'. { apply beq_Key_false_iff. exact H. }  
     rewrite H'. reflexivity.
 Qed.
+
+Lemma t_update_irrel : forall (a:Type) (m:TotalMap a) (k1 k2:Key),
+    t_update m k1 (m k2) k2 = m k2.
+Proof.
+    intros a m k1 k2. destruct (beq_Key k1 k2) eqn:E.
+    - rewrite beq_Key_true_iff in E. rewrite E. apply t_update_eq.
+    - rewrite beq_Key_false_iff in E. apply t_update_neq. assumption. 
+Qed.
+
+
+
 
 Lemma t_update_shadow : forall (a:Type) (m:TotalMap a) (k:Key) (v1 v2:a),
     t_update (t_update m k v1) k v2 = t_update m k v2.
@@ -153,10 +164,6 @@ Lemma update_permute : forall (a:Type) (m:PartialMap a) (k1 k2:Key) (v1 v2:a),
 Proof.
     intros a m k1 k2 v1 v2 H. unfold update. apply t_update_permute. exact H.
 Qed.
-
-
-
-
 
 
 
