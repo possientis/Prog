@@ -156,7 +156,7 @@ Proof.
     intros k1 k2 a1 a2 H. revert k1 k2 a1 H. 
     induction a2; intros k1 k2 a1 H; simpl.
     - apply refl_cequiv.
-    - destruct (beq_Key k1 k) eqn:K; try (apply refl_cequiv)
+    - destruct (beq_Key k1 k) eqn:K; try (apply refl_cequiv).
         + rewrite beq_Key_true_iff in K. rewrite <- K. clear K k. revert k2.
           induction H; intros k2.
           { apply CSeq_Assign. constructor. }
