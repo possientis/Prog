@@ -78,7 +78,9 @@ all:	Axiom_Extensionality.vo \
 		test_fold_constants.vo \
 		fold_constants_sound.vo \
 		subst.vo \
-		test_subst.vo
+		test_subst.vo \
+		hsyntax.vo \
+		heval.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -332,3 +334,10 @@ subst.vo : subst.v bool.vo nat.vo syntax.vo eval.vo dictionary.vo equiv.vo \
 
 test_subst.vo : test_subst.v nat.vo subst.vo syntax.vo state.vo
 	coqc test_subst.v
+
+
+hsyntax.vo : hsyntax.v bool.vo nat.vo dictionary.vo
+	coqc hsyntax.v
+
+heval.vo : heval.v nat.vo hsyntax.vo state.vo dictionary.vo
+	coqc heval.v

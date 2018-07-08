@@ -4,6 +4,8 @@ Require Import syntax.
 Require Import eval.
 Require Import dictionary.
 Require Import state.
+Require Import test_eval.
+Require Import Imp_code.
 
 
 Definition aequiv (a1 a2:aexp) : Prop :=
@@ -292,49 +294,7 @@ Proof.
 Qed.
 
 
-Lemma CSeq_Assign_Num : forall (k1 k2:Key) (n:nat),
-    cequiv (k1 ::= ANum n ;; k2 ::= AKey k1) (k1 ::= ANum n ;; k2 ::= ANum n).
-Proof.
-    intros k1 k2 n e e'. split.
-    - remember (k1 ::= ANum n) as c1 eqn:E1.
-      remember (k2 ::= AKey k1) as c2 eqn:E2.
-      remember (c1 ;; c2) as c eqn:E. intros H. revert c1 c2 E1 E2 E. 
-      induction H; intros c3 c4 E1 E2 E; inversion E; subst.
-        + clear E IHceval1 IHceval2. apply E_Seq with e'.
-            { assumption. }
-            { assert (e' = t_update e k1 n) as H1.
-              apply (ceval_deterministic (k1 ::= ANum n) e). 
-                { assumption. }
-                { constructor. reflexivity. }
-                { assert (e'' = t_update e' k2 n) as H2.
-                    { apply (ceval_deterministic (k2 ::= AKey k1) e').
-                        { assumption. }
-                        { constructor. rewrite H1. simpl. apply t_update_eq. }
-                    }
-                  rewrite H2. constructor. rewrite H1. reflexivity.
-                }
-            }
-    - remember (k1 ::= ANum n) as c1 eqn:E1.
-      remember (k2 ::= ANum n) as c2 eqn:E2.
-      remember (c1 ;; c2) as c eqn:E. intros H. revert c1 c2 E1 E2 E. 
-      induction H; intros c3 c4 E1 E2 E; inversion E; subst.
-        + clear E IHceval1 IHceval2. apply E_Seq with e'.
-            { assumption. }
-            { assert (e' = t_update e k1 n) as H1.
-                apply (ceval_deterministic (k1 ::= ANum n) e).
-                    { assumption. }
-                    { constructor. reflexivity. }
-                    { assert (e'' = t_update e' k2 n) as H2.
-                        { apply (ceval_deterministic (k2 ::= ANum n) e').
-                            { assumption. }
-                            { constructor. reflexivity. }
-                        }
-                        rewrite H2. constructor. rewrite H1. 
-                        simpl. apply t_update_eq.
-                    }
-            }
-Qed.
-               
+              
 
 Lemma CSeq_Assign_Key : forall (k1 k2 k:Key),
     cequiv (k1 ::= AKey k ;; k2 ::= AKey k1) (k1 ::= AKey k ;; k2 ::= AKey k).
@@ -381,3 +341,63 @@ Proof.
               apply t_update_irrel.
             }
 Qed.
+
+
+
+Definition bind (e:State) (k:Key) (a:aexp) : State :=
+    t_update e k (aeval e a).
+
+
+Lemma equiv_bind : forall (k1 k2:Key) (a1 a2 a2':aexp),
+    (forall (e:State), aeval (bind e k1 a1) a2 = aeval (bind e k1 a1) a2') ->
+    cequiv (k1 ::= a1 ;; k2 ::= a2) (k1 ::= a1 ;; k2 ::= a2').
+Proof.
+    intros k1 k2 a1 a2 a2' H e e'. split.
+    -   remember (k1 ::= a1) as c1 eqn:E1.
+        remember (k2 ::= a2) as c2 eqn:E2.
+        remember (c1 ;; c2)  as c  eqn:E.
+        intros H'. revert c1 c2 E1 E2 E. 
+        destruct H'; intros c3 c4 E1 E2 E; inversion E; subst; clear E.
+        + apply E_Seq with e'.
+            { assumption. }
+            { assert (e' = bind e k1 a1) as H1.
+                { apply (ceval_deterministic (k1 ::= a1) e).
+                    { assumption. }
+                    { constructor. reflexivity. }
+                }
+              assert (e'' = t_update e' k2 (aeval e' a2)) as H2.
+                { apply (ceval_deterministic (k2 ::= a2) e').
+                    { assumption. }
+                    { constructor. reflexivity. }
+                }
+              rewrite H2. constructor. symmetry. rewrite H1. apply H.
+            }
+    -   remember (k1 ::= a1) as c1 eqn:E1.
+        remember (k2 ::= a2') as c2 eqn:E2.
+        remember (c1 ;; c2)  as c  eqn:E.
+        intros H'. revert c1 c2 E1 E2 E. 
+        destruct H'; intros c3 c4 E1 E2 E; inversion E; subst; clear E.
+        + apply E_Seq with e'.
+            { assumption. }
+            { assert (e' = bind e k1 a1) as H1.
+                { apply (ceval_deterministic (k1 ::= a1) e).
+                    { assumption. }
+                    { constructor. reflexivity. }
+                }
+              assert (e'' = t_update e' k2 (aeval e' a2')) as H2.
+                { apply (ceval_deterministic (k2 ::= a2') e').
+                    { assumption. }
+                    { constructor. reflexivity. }
+                }
+              rewrite H2. constructor. rewrite H1. apply H.
+            }
+Qed.
+
+Theorem inf_loop_not_skip : ~ cequiv loop SKIP.
+Proof.
+    intros H. unfold cequiv in H. remember emptyState as e eqn:E.   
+    destruct (H e e) as [_ H0].
+    apply (test_ceval5 e e), H0. constructor.
+Qed.
+
+

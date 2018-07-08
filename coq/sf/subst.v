@@ -114,7 +114,40 @@ Show.
 
 *) 
 
-(* k1 = a ; k2 = k1 equivalent to k1 = a ; k2 = a when k1 not in a 
+
+Lemma bind_aeval : forall (e:State) (k:Key) (a:aexp),
+    var_not_used_in_aexp k a -> aeval (bind e k a) a = aeval e a.
+Proof. intros e k a H. apply aeval_weakening. assumption. Qed.
+
+    
+
+
+
+Lemma CSeq_Assign : forall (k1 k2:Key) (a:aexp),
+    var_not_used_in_aexp k1 a ->
+    cequiv (k1 ::= a ;; k2 ::= AKey k1) (k1 ::= a ;; k2 ::= a).
+Proof.
+    intros k1 k2 a H. apply equiv_bind. intros e. simpl.
+    unfold bind. rewrite t_update_eq. symmetry. 
+    apply bind_aeval. assumption.
+Qed.
+
+
+Lemma subst_aeval : forall (e:State) (k:Key) (a b:aexp),
+    var_not_used_in_aexp k b -> 
+    aeval (bind e k b) (subst_aexp k b a) = aeval (bind e k b) a.
+Proof.
+    intros e k a b H. induction a; simpl; try (reflexivity).
+    - destruct (beq_Key k k0) eqn:E.
+        + rewrite bind_aeval. rewrite beq_Key_true_iff in E. rewrite <- E.
+            unfold bind. rewrite t_update_eq. reflexivity. assumption.
+        + reflexivity.
+    - rewrite IHa1, IHa2. reflexivity.
+    - rewrite IHa1, IHa2. reflexivity.
+    - rewrite IHa1, IHa2. reflexivity.
+Qed.
+
+
 
 Lemma subst_equivalence : forall (k1 k2:Key) (a1 a2:aexp),
     var_not_used_in_aexp k1 a1 -> 
@@ -123,14 +156,21 @@ Proof.
     intros k1 k2 a1 a2 H. revert k1 k2 a1 H. 
     induction a2; intros k1 k2 a1 H; simpl.
     - apply refl_cequiv.
-    - destruct (beq_Key k1 k) eqn:K.
+    - destruct (beq_Key k1 k) eqn:K; try (apply refl_cequiv)
         + rewrite beq_Key_true_iff in K. rewrite <- K. clear K k. revert k2.
           induction H; intros k2.
-          { apply CSeq_Assign_Num. }
-          { rename k' into k. apply CSeq_Assign_Key. }
-          {
-          
+          { apply CSeq_Assign. constructor. }
+          { rename k' into k. apply CSeq_Assign. constructor. assumption. }
+          { apply CSeq_Assign. constructor; assumption. }
+          { apply CSeq_Assign. constructor; assumption. }
+          { apply CSeq_Assign. constructor; assumption. }
+    - apply equiv_bind. intros e. simpl. 
+      rewrite subst_aeval, subst_aeval. reflexivity. assumption. assumption.
+    - apply equiv_bind. intros e. simpl. 
+      rewrite subst_aeval, subst_aeval. reflexivity. assumption. assumption.
+    - apply equiv_bind. intros e. simpl. 
+      rewrite subst_aeval, subst_aeval. reflexivity. assumption. assumption.
+Qed.          
 
 
-Show.
-*)
+

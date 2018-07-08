@@ -302,6 +302,30 @@ Proof.
       + apply HDE.
 Qed.
 
+Lemma haveSameTarget_trans : forall (C D E:Category),
+    haveSameTarget C D -> haveSameTarget D E -> haveSameTarget C E.
+Proof.
+    intros C D E. unfold haveSameTarget. 
+    intros [pCD HCD] [pDE HDE]. generalize pCD, pDE.
+    unfold haveSameEq in pCD. 
+    destruct pCD as [qCD ECD]. destruct (ECD qCD) as [ECDf ECDb]. clear ECD.
+    rename qCD into pCD. intros qCD.
+    unfold haveSameEq in pDE. 
+    destruct pDE as [qDE EDE]. destruct (EDE qDE) as [EDEf EDEb]. clear EDE.
+    rename qDE into pDE. intros qDE.
+    split. 
+    - apply haveSameEq_trans with D; assumption.
+    - intros pCE f.
+      assert (fw pDE (fw pCD (target f)) = fw pCE (target f)) as H1.
+      { apply fw_compose. }
+      assert (fw pDE (fw pCD f) = fw pCE f) as H2.
+      { apply fw_compose. } 
+      rewrite <- H1, <- H2. 
+      apply trans with (fw pDE (target (fw pCD f))).
+      + apply EDEf. apply HCD.
+      + apply HDE.
+Qed.
+
 
 
 Lemma fw' : forall (C D:Category) (p:Arr C = Arr D) (f g:Arr C),
@@ -344,12 +368,15 @@ Qed.
 Arguments bw' {C} {D} _ _ _ _ _ _.
 
 Definition haveSameCompose (C D:Category) : Prop := 
+    haveSameSource C D /\
+    haveSameTarget C D /\
     forall (p:Arr C = Arr D),
     forall (S:haveSameSource C D),
     forall (T:haveSameTarget C D),
     forall (f g:Arr C),
     forall (H:target f == source g),
-        fw p (compose g f H) == compose (fw p g) (fw p f) (fw' p f g S T H). 
+    forall (H': target (fw p f) == source (fw p g)),
+        fw p (compose g f H) == compose (fw p g) (fw p f) H'. 
 
 (*
 Lemma haveSameComposefwbw : forall (C D:Category) (p:Arr C = Arr D),
@@ -359,9 +386,124 @@ Lemma haveSameComposefwbw : forall (C D:Category) (p:Arr C = Arr D),
     (forall (f g:Arr D) (H:target f == source g),
         bw p (compose g f H) == compose (bw p g) (bw p f) (bw' p f g S T H)).
 Proof.
+    intros C D p S T. 
+    generalize S. intros S'. 
+    assert (S = S') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
+    destruct S' as [[q H] S']. clear q. destruct (H p) as [Hf Hb]. clear H.
+    generalize T. intros T'.
+    assert (T = T') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
+    destruct T' as [[q H] T']. clear q H.
+    intros H0 f g H.  
+    assert (bw p (fw p (compose (bw p g) (bw p f) (bw' p f g S T H))) 
+        = compose (bw p g) (bw p f) (bw' p f g S T H)) as E. 
+        { apply bwfw. } 
+    rewrite <- E. apply Hb. apply sym.
+    remember (bw' p f g S T H) as H'. clear HeqH'.
+    remember (bw p f) as f' eqn:Ef.
+    remember (bw p g) as g' eqn:Eg.
+    assert (fw p f' = f) as Kf. { rewrite Ef. apply fwbw. }
+    assert (fw p g' = g) as Kg. { rewrite Eg. apply fwbw. }
+    revert H. rewrite <- Kf, <- Kg. intros H.
+    assert (H = fw' p f' g' S T H') as P. {apply proof_irrelevance. }
+    rewrite P. apply H0.
+Qed.
 
+
+Lemma haveSameComposebwfw : forall (C D:Category) (p:Arr C = Arr D),
+    forall (S:haveSameSource C D) (T:haveSameTarget C D),
+    (forall (f g:Arr D) (H:target f == source g),
+        bw p (compose g f H) == compose (bw p g) (bw p f) (bw' p f g S T H))->
+    (forall (f g:Arr C) (H:target f == source g),
+        fw p (compose g f H) == compose (fw p g) (fw p f) (fw' p f g S T H)). 
+Proof.
+    intros C D p S T. 
+    generalize S. intros S'. 
+    assert (S = S') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
+    destruct S' as [[q H] S']. clear q. destruct (H p) as [Hf Hb]. clear H.
+    generalize T. intros T'.
+    assert (T = T') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
+    destruct T' as [[q H] T']. clear q H.
+    intros H0 f g H.  
+    assert (fw p (bw p (compose (fw p g) (fw p f) (fw' p f g S T H))) 
+        = compose (fw p g) (fw p f) (fw' p f g S T H)) as E. 
+        { apply fwbw. } 
+    rewrite <- E. apply Hf. apply sym.
+    remember (fw' p f g S T H) as H'. clear HeqH'.
+    remember (fw p f) as f' eqn:Ef.
+    remember (fw p g) as g' eqn:Eg.
+    assert (bw p f' = f) as Kf. { rewrite Ef. apply bwfw. }
+    assert (bw p g' = g) as Kg. { rewrite Eg. apply bwfw. }
+    revert H. rewrite <- Kf, <- Kg. intros H.
+    assert (H = bw' p f' g' S T H') as P. {apply proof_irrelevance. }
+    rewrite P. apply H0.
+Qed.
+
+Lemma haveSameCompose_refl: forall (C:Category), haveSameCompose C C.
+Proof.
+    intros C. unfold haveSameCompose. split.
+    - apply haveSameSource_refl.
+    - split.
+        + apply haveSameTarget_refl.
+        + intros p S T f g H. 
+        assert (p = eq_refl) as P. {apply proof_irrelevance. }
+        rewrite P. simpl.
+        assert (H = fw' eq_refl f g S T H) as P'. { apply proof_irrelevance. }
+        rewrite <- P'. apply refl.
+Qed.
+
+Lemma haveSameCompose_sym: forall (C D:Category),
+    haveSameCompose C D -> haveSameCompose D C.
+Proof.
+    intros C D. unfold haveSameCompose. intros [S [T H]]. split.
+    - apply haveSameSource_sym. assumption.
+    - split.
+        + apply haveSameTarget_sym. assumption.
+        + intros p' S' T' f' g' H'. generalize S. intros S0.
+          destruct S0 as [S1 S2]. destruct S1 as [p S3].
+          clear S2 S3.
+          assert (fw p' (compose g' f' H') = bw p (compose g' f' H')) as E.
+            { apply fw_is_bw. } 
+          rewrite E. clear E.
+          assert (fw p' f' = bw p f') as E1. { apply fw_is_bw. }
+          assert (fw p' g' = bw p g') as E2. { apply fw_is_bw. }
+          remember (fw' p' f' g' S' T' H') as K. clear HeqK. revert K.
+          rewrite E1, E2. intros K.
+          assert (K = bw' p f' g' S T H') as E. { apply proof_irrelevance. }
+          rewrite E. clear E E1 E2.
+          apply haveSameComposefwbw. apply H.
+Qed.
+
+
+
+Lemma haveSameCompose_trans: forall (C D E:Category),
+    haveSameCompose C D -> haveSameCompose D E -> haveSameCompose C E.
+Proof.
+    intros C D E. unfold haveSameCompose. 
+    intros [sCD [tCD hCD]] [sDE [tDE hDE]].
+    generalize sCD. intros [[pCD eCD] _].
+    generalize sDE. intros [[pDE eDE] _].
+    destruct (eCD pCD) as [fCD bCD]. clear eCD.
+    destruct (eDE pDE) as [fDE bDE]. clear eDE.
+    split.
+    - apply haveSameSource_trans with D; assumption.
+    - split.
+        + apply haveSameTarget_trans with D; assumption.
+        + intros pCE sCE tCE f g H.
+          remember (fw' pCE f g sCE tCE H) as H'. clear HeqH'. revert H'.
+          assert (fw pDE (fw pCD f) = fw pCE f) as Ef. 
+            { apply fw_compose. }
+          assert (fw pDE (fw pCD g) = fw pCE g) as Eg. 
+            { apply fw_compose. }
+          assert (fw pDE (fw pCD (compose g f H)) = fw pCE (compose g f H)) as Ec.
+            { apply fw_compose. }
+          rewrite <- Ec, <- Ef, <- Eg. intros H'.
+          apply trans with 
+            (fw pDE (compose (fw pCD g) (fw pCD f) (fw' pCD f g sCD tCD H))).
+            { apply fDE. apply hCD. }
+            { 
 Show.
 *)
+
 
 
 (*
