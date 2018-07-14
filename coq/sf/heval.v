@@ -48,6 +48,12 @@ Example havoc_test2 : ceval (SKIP ;; HAVOC z) emptyState (t_update emptyState z 
 Proof. apply E_Seq with emptyState; constructor. Qed.
 
 
-
+Lemma ceval_havoc: forall (k:Key) (e e':State),
+    ceval (HAVOC k) e e' -> exists n, e' = t_update e k n. 
+Proof.
+    intros k e e' H. remember (HAVOC k) as c eqn:C. revert C.
+    destruct H; intros H'; inversion H'; subst.
+    exists n. reflexivity.
+Qed.
 
 

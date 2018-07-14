@@ -378,65 +378,75 @@ Definition haveSameCompose (C D:Category) : Prop :=
     forall (H': target (fw p f) == source (fw p g)),
         fw p (compose g f H) == compose (fw p g) (fw p f) H'. 
 
-(*
-Lemma haveSameComposefwbw : forall (C D:Category) (p:Arr C = Arr D),
-    forall (S:haveSameSource C D) (T:haveSameTarget C D),
-    (forall (f g:Arr C) (H:target f == source g),
-        fw p (compose g f H) == compose (fw p g) (fw p f) (fw' p f g S T H)) -> 
-    (forall (f g:Arr D) (H:target f == source g),
-        bw p (compose g f H) == compose (bw p g) (bw p f) (bw' p f g S T H)).
+
+Lemma haveSameComposefwbw : forall (C D:Category),
+    forall (p:Arr C = Arr D),
+    forall (S:haveSameSource C D),
+    forall (T:haveSameTarget C D),
+        (forall (f g:Arr C),
+         forall (H :target f == source g),
+         forall (H': target (fw p f) == source (fw p g)),
+         fw p (compose g f H) == compose (fw p g) (fw p f) H'
+        )   
+        -> 
+        (forall (f g:Arr D),
+         forall (H :target f == source g),
+         forall (H':target (bw p f) == source (bw p g)),
+         bw p (compose g f H) == compose (bw p g) (bw p f) H'
+        ).
 Proof.
     intros C D p S T. 
     generalize S. intros S'. 
-    assert (S = S') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
     destruct S' as [[q H] S']. clear q. destruct (H p) as [Hf Hb]. clear H.
     generalize T. intros T'.
-    assert (T = T') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
     destruct T' as [[q H] T']. clear q H.
-    intros H0 f g H.  
-    assert (bw p (fw p (compose (bw p g) (bw p f) (bw' p f g S T H))) 
-        = compose (bw p g) (bw p f) (bw' p f g S T H)) as E. 
+    intros H0 f g H H'.  
+    assert  ( bw p (fw p (compose (bw p g) (bw p f) H')) 
+            = compose (bw p g) (bw p f) H'
+            ) as E. 
         { apply bwfw. } 
     rewrite <- E. apply Hb. apply sym.
-    remember (bw' p f g S T H) as H'. clear HeqH'.
     remember (bw p f) as f' eqn:Ef.
     remember (bw p g) as g' eqn:Eg.
     assert (fw p f' = f) as Kf. { rewrite Ef. apply fwbw. }
     assert (fw p g' = g) as Kg. { rewrite Eg. apply fwbw. }
-    revert H. rewrite <- Kf, <- Kg. intros H.
-    assert (H = fw' p f' g' S T H') as P. {apply proof_irrelevance. }
-    rewrite P. apply H0.
+    revert H. rewrite <- Kf, <- Kg. intros H. apply H0.
 Qed.
 
-
-Lemma haveSameComposebwfw : forall (C D:Category) (p:Arr C = Arr D),
-    forall (S:haveSameSource C D) (T:haveSameTarget C D),
-    (forall (f g:Arr D) (H:target f == source g),
-        bw p (compose g f H) == compose (bw p g) (bw p f) (bw' p f g S T H))->
-    (forall (f g:Arr C) (H:target f == source g),
-        fw p (compose g f H) == compose (fw p g) (fw p f) (fw' p f g S T H)). 
+Lemma haveSameComposebwfw : forall (C D:Category),
+    forall (p:Arr C = Arr D),
+    forall (S:haveSameSource C D),
+    forall (T:haveSameTarget C D),
+        (forall (f g:Arr D),
+         forall (H :target f == source g),
+         forall (H':target (bw p f) == source (bw p g)),
+         bw p (compose g f H) == compose (bw p g) (bw p f) H'
+        )   
+        ->
+        (forall (f g:Arr C),
+         forall (H :target f == source g),
+         forall (H':target (fw p f) == source (fw p g)),
+         fw p (compose g f H) == compose (fw p g) (fw p f) H'
+        ). 
 Proof.
     intros C D p S T. 
     generalize S. intros S'. 
-    assert (S = S') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
     destruct S' as [[q H] S']. clear q. destruct (H p) as [Hf Hb]. clear H.
     generalize T. intros T'.
-    assert (T = T') as E. { apply proof_irrelevance. } rewrite <- E. clear E.
     destruct T' as [[q H] T']. clear q H.
-    intros H0 f g H.  
-    assert (fw p (bw p (compose (fw p g) (fw p f) (fw' p f g S T H))) 
-        = compose (fw p g) (fw p f) (fw' p f g S T H)) as E. 
+    intros H0 f g H H'.  
+    assert  ( fw p (bw p (compose (fw p g) (fw p f) H')) 
+            = compose (fw p g) (fw p f) H'
+            ) as E. 
         { apply fwbw. } 
     rewrite <- E. apply Hf. apply sym.
-    remember (fw' p f g S T H) as H'. clear HeqH'.
     remember (fw p f) as f' eqn:Ef.
     remember (fw p g) as g' eqn:Eg.
     assert (bw p f' = f) as Kf. { rewrite Ef. apply bwfw. }
     assert (bw p g' = g) as Kg. { rewrite Eg. apply bwfw. }
-    revert H. rewrite <- Kf, <- Kg. intros H.
-    assert (H = bw' p f' g' S T H') as P. {apply proof_irrelevance. }
-    rewrite P. apply H0.
+    revert H. rewrite <- Kf, <- Kg. intros H. apply H0.
 Qed.
+
 
 Lemma haveSameCompose_refl: forall (C:Category), haveSameCompose C C.
 Proof.
@@ -445,11 +455,13 @@ Proof.
     - split.
         + apply haveSameTarget_refl.
         + intros p S T f g H. 
-        assert (p = eq_refl) as P. {apply proof_irrelevance. }
-        rewrite P. simpl.
-        assert (H = fw' eq_refl f g S T H) as P'. { apply proof_irrelevance. }
-        rewrite <- P'. apply refl.
+          assert (p = eq_refl) as P. {apply proof_irrelevance. }
+          rewrite P. simpl. intros H'.
+          assert (H' = H) as P'. { apply proof_irrelevance. }
+          rewrite P'. apply refl.
 Qed.
+
+
 
 Lemma haveSameCompose_sym: forall (C D:Category),
     haveSameCompose C D -> haveSameCompose D C.
@@ -459,20 +471,24 @@ Proof.
     - split.
         + apply haveSameTarget_sym. assumption.
         + intros p' S' T' f' g' H'. generalize S. intros S0.
-          destruct S0 as [S1 S2]. destruct S1 as [p S3].
-          clear S2 S3.
+          destruct S0 as [S1 _]. destruct S1 as [p _].
           assert (fw p' (compose g' f' H') = bw p (compose g' f' H')) as E.
             { apply fw_is_bw. } 
           rewrite E. clear E.
           assert (fw p' f' = bw p f') as E1. { apply fw_is_bw. }
           assert (fw p' g' = bw p g') as E2. { apply fw_is_bw. }
           remember (fw' p' f' g' S' T' H') as K. clear HeqK. revert K.
-          rewrite E1, E2. intros K.
-          assert (K = bw' p f' g' S T H') as E. { apply proof_irrelevance. }
-          rewrite E. clear E E1 E2.
-          apply haveSameComposefwbw. apply H.
+          rewrite E1, E2. intros K K'.
+          assert (K' = K) as E. { apply proof_irrelevance. }
+          rewrite E. clear E E1 E2 K'.
+          apply haveSameComposefwbw.
+            { assumption. }
+            { assumption. }
+            { apply H.
+                { assumption. }
+                { assumption. }
+            }
 Qed.
-
 
 
 Lemma haveSameCompose_trans: forall (C D E:Category),
@@ -496,23 +512,28 @@ Proof.
             { apply fw_compose. }
           assert (fw pDE (fw pCD (compose g f H)) = fw pCE (compose g f H)) as Ec.
             { apply fw_compose. }
-          rewrite <- Ec, <- Ef, <- Eg. intros H'.
-          apply trans with 
-            (fw pDE (compose (fw pCD g) (fw pCD f) (fw' pCD f g sCD tCD H))).
-            { apply fDE. apply hCD. }
-            { 
-Show.
-*)
+          rewrite <- Ec, <- Ef, <- Eg. intros _ H'.
+          remember (fw' pCD f g sCD tCD H) as H0 eqn:H1. clear H1.
+          apply trans with (fw pDE (compose (fw pCD g) (fw pCD f) H0)).
+          { apply fDE. apply hCD; assumption. }
+          { apply hDE; assumption. }
+Qed.
+
+Definition catEq (C D:Category) : Prop := haveSameCompose C D.
 
 
+Lemma catEq_refl : forall (C:Category), catEq C C.
+Proof. intros C. apply haveSameCompose_refl. Qed.
 
-(*
-Definition catEq (C D:Category) : Prop :=
-    Arr C = Arr D       /\
-    haveSameEq C D      /\
-    haveSameSource C D  /\
-    haveSameTarget C D  /\
-    haveSameCompose C D.
+
+Lemma catEq_sym : forall (C D:Category), catEq C D -> catEq D C.
+Proof. intros C D H. apply haveSameCompose_sym. assumption. Qed.
+
+Lemma catEq_trans : forall (C D E:Category), catEq C D -> catEq D E -> catEq C E.
+Proof. intros C D E hCD hDE. apply haveSameCompose_trans with D; assumption. Qed.
+
+(* This creates a universe inconsistency
+Definition CatSetoid : Setoid := setoid Category catEq.
 *)
 
 

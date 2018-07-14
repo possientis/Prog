@@ -1,5 +1,6 @@
 Require Import Setoids.
 Require Import Category7.
+Require Import Eq_Category7.
 
 Open Scope setoid.
 
@@ -79,6 +80,15 @@ Definition Op (C:Category) : Category := category
     .
     
 (* However, we are able to check this definition satifies the right properties *)
+
+(*
+Theorem Op_involutive : forall (C:Category), catEq C (Op (Op C)).
+Proof.
+    intros C. unfold catEq, haveSameCompose.
+
+
+Show.
+*)
 
 
         

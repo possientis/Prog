@@ -1,5 +1,7 @@
 {-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE FlexibleInstances #-}
 
+import Prelude hiding (lookup)
 import Control.Monad
 import Control.Monad.State
 import Data.Map.Strict
@@ -20,12 +22,49 @@ instance Functor f => Monad (Free f) where
 
 newtype Var = Var { unVar :: Int } deriving (Eq, Ord)
 
+instance Show Var where
+    show (Var 0) = "x"
+    show (Var 1) = "y"
+    show (Var 2) = "z"
+    show (Var 3) = "t"
+    show (Var 4) = "u"
+    show (Var 5) = "v"
+    show (Var n) = "x" ++ show (n - 6)
+
+x = Var 0
+y = Var 1
+z = Var 2
+t = Var 3
+u = Var 4
+v = Var 5
+
+
+type Env = Map Var Int
+
 data AExp
     = ANum Int
     | AVar Var
     | APlus AExp AExp
     | AMinus AExp AExp
     | AMult AExp AExp
+
+aeval :: Env -> AExp -> Int
+aeval e (ANum n) = n
+aeval e (APlus  a1 a2)  = aeval e a1 + aeval e a2
+aeval e (AMinus a1 a2)  = aeval e a1 - aeval e a2
+aeval e (AMult  a1 a2)  = aeval e a1 * aeval e a2
+aeval e (AVar x)        = case lookup x e of 
+    Nothing     -> error "Unbound variable"
+    (Just v)    -> v 
+
+
+instance Show AExp where
+    show (ANum n)       = show n
+    show (AVar v)       = show v 
+    show (APlus a1 a2)  = "(" ++ show a1 ++ "+" ++ show a2 ++ ")" 
+    show (AMinus a1 a2) = "(" ++ show a1 ++ "-" ++ show a2 ++ ")" 
+    show (AMult a1 a2)  = "(" ++ show a1 ++ "*" ++ show a2 ++ ")" 
+
 
 data BExp
     = BTrue
@@ -35,6 +74,23 @@ data BExp
     | BNot BExp
     | BAnd BExp BExp
 
+
+instance Show BExp where
+    show BTrue          = "#t"
+    show BFalse         = "#f"
+    show (BEq a1 a2)    = "(" ++ show a1 ++ "==" ++ show a2 ++ ")" 
+    show (BLe a1 a2)    = "(" ++ show a1 ++ "<=" ++ show a2 ++ ")" 
+    show (BNot b)       = "¬" ++ show b
+    show (BAnd b1 b2)   = "(" ++ show b1 ++ "&&" ++ show b2 ++ ")"
+
+beval :: Env -> BExp -> Bool
+beval e BTrue           = True
+beval e BFalse          = False
+beval e (BEq a1 a2)     = aeval e a1 == aeval e a2
+beval e (BLe a1 a2)     = aeval e a1 <= aeval e a2
+beval e (BNot b)        = not $ beval e b
+beval e (BAnd b1 b2)    = beval e b1 && beval e b2
+
 data Com
     = CSkip
     | CAss Var AExp
@@ -42,30 +98,51 @@ data Com
     | CIf BExp Com Com
     | CWhile BExp Com
 
+-- something is wrong
 data ComF a
     = FSkip a
     | FAss Var AExp a
-    | FIf BExp Com Com a
-    | FWhile BExp Com a
+    | FSeq a a
+    | FIf BExp a a
+    | FWhile BExp a
     deriving Functor
 
 type Command = Free ComF
 
-
 compile :: Com -> Command ()
-compile CSkip = Pure ()
-compile (CAss x a) = Free $ FAss x a (Pure ())
--- TODO
+compile CSkip           = Free $ FSkip (Pure ())
+compile (CAss x a)      = Free $ FAss x a (Pure ()) 
+compile (CSeq c1 c2)    = Free $ FSeq (compile c1) (compile c2)
+compile (CIf b c1 c2)   = Free $ FIf b (compile c1) (compile c2)
+compile (CWhile b c)    = Free $ FWhile b (compile c)
 
 
-type Dict = Map Var Int
+instance Show (Command ()) where
+    show (Pure ())              = ""
+    show (Free (FSkip c))       = "SKIP;" ++ show c
+    show (Free (FAss x a c))    = show x  ++ ":=" ++ show a ++ ";" ++ show c 
+    show (Free (FSeq c1 c2))    = show c1 ++ ";" ++ show c2
+    show (Free (FIf b c1 c2))   = "IF"    ++ show b 
+                                          ++ "THEN" 
+                                          ++ show c1
+                                          ++ "ELSE" 
+                                          ++ show c2
+                                          ++ "FI"
+    show (Free (FWhile b c))    = "WHILE" ++ show b
+                                          ++ "DO"
+                                          ++ show c
+                                          ++ "END"
 
-aeval :: Dict -> AExp -> Int
-aeval e a = undefined 
+{-
 
-beval :: Dict -> BExp -> Bool
-beval e b = undefined
-
+interpret :: Command a -> State Dict a
+interpret (Pure a)                  = return a
+interpret (Free (FSkip next))       = interpret next
+interpret (Free (FAss x a next))    = do
+    e <- get
+    put $ insert x (aeval e a) e
+    interpret next
+-}
 
 
 

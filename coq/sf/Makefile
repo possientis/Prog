@@ -80,7 +80,8 @@ all:	Axiom_Extensionality.vo \
 		subst.vo \
 		test_subst.vo \
 		hsyntax.vo \
-		heval.vo
+		heval.vo \
+		hequiv.vo
 
 Axiom_Extensionality.vo : Axiom_Extensionality.v
 	coqc Axiom_Extensionality.v
@@ -341,3 +342,6 @@ hsyntax.vo : hsyntax.v bool.vo nat.vo dictionary.vo
 
 heval.vo : heval.v nat.vo hsyntax.vo state.vo dictionary.vo
 	coqc heval.v
+
+hequiv.vo : hequiv.v bool.vo nat.vo hsyntax.vo heval.vo dictionary.vo state.vo
+	coqc hequiv.v
