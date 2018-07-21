@@ -1,6 +1,9 @@
+Require Import Axiom_ProofIrrelevance.
 Require Import Setoids.
 Require Import Category7.
 Require Import Eq_Category7.
+Require Import Cast.
+Require Import Eq.
 
 Open Scope setoid.
 
@@ -81,16 +84,63 @@ Definition Op (C:Category) : Category := category
     
 (* However, we are able to check this definition satifies the right properties *)
 
-(*
-Theorem Op_involutive : forall (C:Category), catEq C (Op (Op C)).
+Lemma OpOp_Arr : forall (C:Category), Arr (Op (Op C)) = Arr C.
+Proof. intros C. reflexivity. Qed.
+
+
+Lemma OpOp_haveSameEq : forall (C:Category), haveSameEq (Op (Op C)) C.
 Proof.
-    intros C. unfold catEq, haveSameCompose.
+    intros C. unfold haveSameEq. split.
+    - reflexivity.
+    - intros p. split.
+        + intros f g H.
+          unfold Arr, Op, Op_Arrows_ in p. simpl in p.
+          assert (p = eq_refl) as P. { apply proof_irrelevance. }
+          rewrite P. assumption.
+        + intros f g H. 
+          unfold Arr, Op, Op_Arrows_ in p. simpl in p.
+          assert (p = eq_refl) as P. { apply proof_irrelevance. }
+          rewrite P. unfold bw, cast', eq_sym, cast. assumption.
+Qed.
+
+Lemma OpOp_Arrows_ : forall (C:Category), Arrows_ (Op (Op C)) = Arrows_ C.
+Proof. intros C. apply same_Arrows_. apply OpOp_haveSameEq. Qed.
+
+Lemma OpOp_haveSameSource : forall (C:Category), haveSameSource (Op (Op C)) C.
+Proof.
+    intros C. unfold haveSameSource. split.
+    - apply OpOp_haveSameEq.
+    - intros p f. unfold Arr, Op, Op_Arrows_ in p. simpl in p.
+      assert (p = eq_refl) as P. { apply proof_irrelevance. }
+      rewrite P. simpl. apply refl.
+Qed.
+
+Lemma OpOp_haveSameTarget : forall (C:Category), haveSameTarget (Op (Op C)) C.
+Proof.
+    intros C. unfold haveSameTarget. split.
+    - apply OpOp_haveSameEq.
+    - intros p f. unfold Arr, Op, Op_Arrows_ in p. simpl in p.
+      assert (p = eq_refl) as P. { apply proof_irrelevance. }
+      rewrite P. simpl. apply refl.
+Qed.
 
 
-Show.
-*)
+Lemma OpOp_haveSameCompose : forall (C:Category), haveSameCompose (Op (Op C)) C.
+Proof.
+    intros C. unfold haveSameCompose. split.
+    - apply OpOp_haveSameSource.
+    - split.
+        + apply OpOp_haveSameTarget.
+        + intros p S T f g H H'.
+          unfold Arr, Op, Op_Arrows_ in p. simpl in p.
+          assert (p = eq_refl) as P. { apply proof_irrelevance. }
+          revert H'. rewrite P. simpl. intros H'.
+          unfold Op_compose_, compose.
+          assert (Op_define_ C f g (Op_define_ (Op C) g f H) = H') as E.
+            { apply proof_irrelevance. }
+          rewrite E. apply refl.
+Qed.
 
-
-        
-
+Theorem Op_involutive : forall (C:Category), catEq (Op (Op C)) C.
+Proof. intros C. unfold catEq. apply OpOp_haveSameCompose. Qed.
 

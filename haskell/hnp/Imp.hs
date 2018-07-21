@@ -5,6 +5,7 @@ import Prelude hiding (lookup)
 import Control.Monad
 import Control.Monad.State
 import Data.Map.Strict
+import Data.Default
 
 data Free f a = Pure a | Free (f (Free f a))
 
@@ -97,8 +98,20 @@ data Com
     | CSeq Com Com
     | CIf BExp Com Com
     | CWhile BExp Com
+    deriving Show
 
--- something is wrong
+skip = CSkip
+
+infix 8 $:=$
+($:=$) :: Var -> AExp -> Com
+($:=$) x a = CAss x a
+
+infixr 2 $>>$
+($>>$) :: Com -> Com -> Com
+($>>$) c1 c2 = CSeq c1 c2
+ifb = CIf
+while = CWhile
+
 data ComF a
     = FSkip a
     | FAss Var AExp a
@@ -118,32 +131,59 @@ compile (CWhile b c)    = Free $ FWhile b (compile c)
 
 
 instance Show (Command ()) where
-    show (Pure ())              = ""
-    show (Free (FSkip c))       = "SKIP;" ++ show c
-    show (Free (FAss x a c))    = show x  ++ ":=" ++ show a ++ ";" ++ show c 
-    show (Free (FSeq c1 c2))    = show c1 ++ ";" ++ show c2
-    show (Free (FIf b c1 c2))   = "IF"    ++ show b 
-                                          ++ "THEN" 
-                                          ++ show c1
-                                          ++ "ELSE" 
-                                          ++ show c2
-                                          ++ "FI"
-    show (Free (FWhile b c))    = "WHILE" ++ show b
-                                          ++ "DO"
-                                          ++ show c
-                                          ++ "END"
+    show (Pure ())              = "NOP"
+    show (Free (FSkip c))       = "SKIP;"   ++ show c
+    show (Free (FAss x a c))    = show x    ++ ":=" ++ show a ++ ";" ++ show c 
+    show (Free (FSeq c1 c2))    = show c1   ++ ";" ++ show c2
+    show (Free (FIf b c1 c2))   = "IF "     ++ show b 
+                                            ++ " THEN " 
+                                            ++ show c1
+                                            ++ " ELSE " 
+                                            ++ show c2
+                                            ++ " FI"
+    show (Free (FWhile b c))    = "WHILE "  ++ show b
+                                            ++ " DO "
+                                            ++ show c
+                                            ++ " END"
+fact :: Com
+fact =  z $:=$ (AVar x) $>>$
+        y $:=$ (ANum 1) $>>$ (
+        while (BNot (BEq (AVar z) (ANum 0))) $
+            y $:=$ AMult (AVar y) (AVar z) $>>$
+            z $:=$ AMinus (AVar z) (ANum 1)
+        )
 
-{-
 
-interpret :: Command a -> State Dict a
+
+
+
+interpret :: (Default a) => Command a -> State Env a
 interpret (Pure a)                  = return a
 interpret (Free (FSkip next))       = interpret next
 interpret (Free (FAss x a next))    = do
     e <- get
     put $ insert x (aeval e a) e
     interpret next
--}
+interpret (Free (FSeq c1 c2))       = interpret c1 >> interpret c2
+interpret (Free (FIf b c1 c2))      = do
+    e <- get
+    if (beval e b)
+        then interpret c1
+        else interpret c2
+interpret w@(Free (FWhile b c))       = do
+    e <- get
+    if (beval e b)
+        then interpret c >> interpret w
+        else return def 
 
+env0 :: Env
+env0 = insert x 5 empty 
 
+run :: Command () -> Env
+run c = let (_,e) = runState (interpret c) env0 in e
+
+main :: IO ()
+main = do
+    print $ run $ compile fact
 
 

@@ -536,4 +536,31 @@ Proof. intros C D E hCD hDE. apply haveSameCompose_trans with D; assumption. Qed
 Definition CatSetoid : Setoid := setoid Category catEq.
 *)
 
+Lemma catEq_Cmp : forall (C D:Category), catEq C D -> haveSameCompose C D.
+Proof. intros C D H. unfold catEq in H. assumption. Qed.
+
+Lemma catEq_Src : forall (C D:Category), catEq C D -> haveSameSource C D.
+Proof. 
+    intros C D H. unfold catEq in H. unfold haveSameCompose in H.
+    destruct H as [H0 _]. assumption.
+Qed.
+
+Lemma catEq_Tgt : forall (C D:Category), catEq C D -> haveSameTarget C D.
+Proof. 
+    intros C D H. unfold catEq in H. unfold haveSameCompose in H.
+    destruct H as [_ [H0 _]]. assumption.
+Qed.
+
+Lemma catEq_Eq : forall (C D:Category), catEq C D -> haveSameEq C D.
+Proof.
+    intros C D H. apply catEq_Src in H. unfold haveSameSource in H.
+    destruct H as [H0 _]. assumption.
+Qed.
+
+Lemma catEq_Arr : forall (C D:Category), catEq C D -> Arr C = Arr D.
+Proof. 
+    intros C D H. apply catEq_Eq in H. unfold haveSameEq in H.
+    destruct H as [H0 _]. assumption.
+Qed.
+
 

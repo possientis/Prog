@@ -1,5 +1,6 @@
 Require Import Setoids.
 Require Import Category7.
+Require Import Eq_Category7.
 
 Record Functor (C D:Category) : Type := functor
     { Func_         : Arr C -> Arr D
@@ -85,12 +86,13 @@ Proof.
     unfold compose_arrow. simpl. apply Func_compose_.
 Qed.
 
+(* really ?
+Theorem Functor_compat : forall (C C' D D':Category),
+    catEq C C' -> catEq D D' -> Functor C D = Functor C' D'.
+Proof.
+    intros C C' D D' Ec Ed. simpl.
 
 
-
-
-
-
-
-
+Show.
+*)
 

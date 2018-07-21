@@ -63,6 +63,21 @@ Proof.
             } 
 Qed.
 
+
+Lemma pCopy_x_eq_y : forall (e e':State), 
+    ceval pCopy e e' -> e' x = e' y.
+Proof.
+    intros e e' H. remember pCopy as c eqn:C. revert C. 
+    destruct H; intros H'; inversion H'; subst. symmetry. 
+    assert (e'' y = aeval e' (AKey x)) as E.
+        { apply ceval_assign. assumption. }
+    rewrite E. simpl.
+    apply (ceval_assign' y x (AKey x)).
+    - assumption.
+    - intro H1. inversion H1.
+Qed.
+
+
 (*
 Theorem not_cequiv_pXY_pCopy : ~cequiv pXY pCopy.
 Proof.
@@ -77,5 +92,6 @@ Proof.
             { rewrite E2. constructor. }
         }
     apply H in H1. clear H. rename H1 into H.
+    apply pCopy_x_eq_y in H.
 Show.
 *)

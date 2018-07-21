@@ -56,4 +56,17 @@ Proof.
     exists n. reflexivity.
 Qed.
 
+Lemma ceval_assign: forall (k:Key) (a:aexp) (e e':State),
+    ceval (k ::= a) e e' -> e' k = aeval e a.
+Proof.
+    intros k a e e' H. remember (k ::= a) as c eqn:C. revert C.
+    destruct H; intros H'; inversion H'; subst; apply t_update_eq.
+Qed.
 
+Lemma ceval_assign': forall (k k':Key) (a:aexp) (e e':State),
+    ceval (k ::= a) e e' -> k <> k' -> e k' = e' k'.
+Proof.
+    intros k k' a e e' H H'. remember (k ::= a) as c eqn:C. revert C.
+    destruct H; intros E; inversion E; subst. symmetry.
+    apply t_update_neq. assumption.
+Qed.
