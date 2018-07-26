@@ -156,6 +156,11 @@ Definition i (C:Category) (a b:Obj C) (f:Hom a b) : Arr C :=
 
 Arguments i {C} {a} {b} _.
 
+(* TODO
+Definition j (C:Catgeory) (f:Arr C) : Hom (src f) (tgt f) :=
+    hom
+*)
+
 (* We could be asking ourselves whether 'i' is an embedding
    from the type 'Hom a b' to the class 'Arr C'. However, we 
    do not have an equality notion on elements of Hom a b, other 
@@ -166,6 +171,8 @@ Arguments i {C} {a} {b} _.
    We are not defining this notion of equality explicitly to
    remind ourselves that equality is only defined on arrows.
 *)
+
+
 
 
 Lemma source_of_identity : forall (C:Category) (a:Obj C), source (arr a) == arr a.
@@ -283,5 +290,7 @@ Proof.
     intros C [a Ha] [b Hb] [f Af Bf]. unfold compose, compose_arrow. simpl.
     apply proof_idr_. apply sym. assumption.
 Qed.
+
+
 
 
