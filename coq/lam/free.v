@@ -3,11 +3,12 @@ Import ListNotations.
 
 Require Import eq.
 Require Import incl.
-Require Import remove.
 Require Import term.
 Require Import var.
-Require Import injective.
-Require Import vsubst.
+Require Import inj_on_list.
+Require Import inj_on_term.
+Require Import remove.
+Require Import vmap.
 
 
 
@@ -39,8 +40,8 @@ Proof.
 Qed.
 
 (* The free variables of 'f t' are images by 'f' of free variables of 't'   *)
-Lemma free_vsubst : forall (v w:Type) (p:Eq v) (q:Eq w) (f:v -> w) (t:P v),
-    incl (Fr q (vsubst f t)) (map f (Fr p t)).
+Lemma free_vmap : forall (v w:Type) (p:Eq v) (q:Eq w) (f:v -> w) (t:P v),
+    incl (Fr q (vmap f t)) (map f (Fr p t)).
 Proof.
     intros v w p q f t. induction t; simpl.
     - apply incl_refl.
@@ -53,8 +54,8 @@ Qed.
 
 (* if f is injective on the term t, then the free variables of 'f t'        *)
 (* are exactly the images by f of the free variables of 't'                 *) 
-Lemma free_vsubst_inj : forall (v w:Type) (p:Eq v) (q:Eq w) (f:v -> w) (t:P v),
-    injective_on_term t f -> Fr q (vsubst f t) = map f (Fr p t).
+Lemma free_vmap_inj : forall (v w:Type) (p:Eq v) (q:Eq w) (f:v -> w) (t:P v),
+    injective_on_term t f -> Fr q (vmap f t) = map f (Fr p t).
 Proof.
     intros v w p q f t. 
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; intros H.

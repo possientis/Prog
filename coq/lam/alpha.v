@@ -2,9 +2,15 @@ Require Import List.
 Import ListNotations.
 
 Require Import eq.
+Require Import injective.
+Require Import map.
 Require Import term.
+Require Import inj_on_list.
+Require Import permute.
+Require Import inj_on_term.
+Require Import remove.
 Require Import free.
-Require Import vsubst.
+Require Import vmap.
 
 
 
@@ -37,7 +43,8 @@ Inductive alpha (v:Type) (p:Eq v) : P v -> P v -> Prop :=
 
 Arguments alpha {v} _ _ _.
 
-(*
+(* alpha-equivalent terms have the same free variables *)
+(* In fact, this equality holds as lists, not just as set *)
 Lemma alpha_free : forall (v:Type) (p:Eq v) (t t':P v),
     alpha p t t' -> Fr p t = Fr p t'.
 Proof.
@@ -51,7 +58,40 @@ Proof.
     - simpl.
         assert (Fr p t1 = Fr p t1') as E1. { assumption. }
         rewrite E1. reflexivity.
-    - simpl.
+    - simpl. assert (Fr p t1' = Fr p (swap p x y t1)) as E. { assumption. }
+      rewrite E. unfold swap. rewrite (free_vmap_inj v v p p).
+      remember (permute p x y) as f eqn:F.
+      assert (f x = y) as Fx. { rewrite F. apply permute_x. }
+      rewrite <- Fx. rewrite (remove_inj2 v v p p).
+        + symmetry. apply map_invariant. 
+            { intros u Hu. rewrite F. apply permute_not_xy.
+                { intros H'. rewrite H' in Hu. revert Hu. apply remove_In. }
+                { intros H'. rewrite H' in Hu. apply H0.
+                    apply (remove_incl v p x). assumption.
+                }
+            }
+        + apply inj_is_inj_on_list. rewrite F. apply permute_injective.
+        + apply inj_is_inj_on_list. apply permute_injective.
+Qed.
+
+(*
+Lemma alpha_injective : forall (v w:Type) (p:Eq v) (q:Eq w) (t t':P v) (f:v -> w),
+    injective f -> alpha p t t' -> alpha q (vmap f t) (vmap f t').
+Proof.
+    intros v w p q t t' f I H. induction H; simpl.
+    - constructor.
+    - constructor; assumption.
+    - constructor; assumption.
+    - constructor.
+        + intros H'. apply H. apply I. assumption.
+        + rewrite (free_vmap_inj v w p q).
+            { apply injective_not_in.
+                { apply inj_is_inj_on_list. assumption. }
+                { assumption. }
+            }
+            { apply inj_is_inj_on_list. assumption. }
+        +
+
 Show.
 *)
 
@@ -77,8 +117,22 @@ Proof.
     - constructor; assumption.
     - constructor.
         + intros E. apply H. symmetry. assumption.
+        + assert (Fr p t1' = Fr p (swap p x y t1)) as H'.
+            { apply alpha_free. assumption. }
+          rewrite H'. clear H'. unfold swap.
+          remember (permute p x y) as f eqn:F.
+          assert (Fr p (vmap f t1) = map f (Fr p t1)) as H'.
+            { apply free_vmap_inj. apply inj_is_inj_on_list. 
+              rewrite F. apply permute_injective.
+            }
+          rewrite H'. clear H'.
+          assert (f y = x) as H'.
+            { rewrite F. apply permute_y. }
+          rewrite <- H'. clear H'.
+          apply injective_not_in.
+            { apply inj_is_inj_on_list. rewrite F. apply permute_injective. }
+            { assumption. }
         +
-
 Show.
 *)
 

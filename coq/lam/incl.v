@@ -1,9 +1,6 @@
 Require Import List.
 Import ListNotations.
 
-Require Import eq.
-
-
 Lemma incl_app2 : forall (v:Type) (l1 l1' l2 l2':list v),
     incl l1 l1' -> incl l2 l2' -> incl (l1 ++ l2) (l1' ++ l2').
 Proof.

@@ -3,7 +3,7 @@ Import ListNotations.
 
 Require Import eq.
 Require Import incl.
-Require Import injective.
+Require Import inj_on_list.
 
 
 
