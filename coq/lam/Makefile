@@ -12,6 +12,7 @@ all:	    eq.vo \
 			inj_on_term.vo \
 			remove.vo \
 			vmap.vo \
+			swap.vo \
 			free.vo \
 			alpha.vo
 
@@ -57,9 +58,13 @@ remove.vo:		remove.v eq.vo incl.vo inj_on_list.vo
 vmap.vo: 		vmap.v eq.vo identity.vo term.vo permute.vo
 	coqc vmap.v
 
-free.vo:		free.v eq.vo incl.vo term.vo var.vo \
-				inj_on_list.vo inj_on_term.vo \
-				remove.vo vmap.vo 
+swap.vo:		swap.v eq.vo composition.vo injective.vo \
+				term.vo permute.vo vmap.vo
+	coqc swap.v
+
+free.vo:		free.v eq.vo injective.vo incl.vo term.vo var.vo \
+				inj_on_list.vo permute.vo inj_on_term.vo \
+				remove.vo vmap.vo swap.vo
 	coqc free.v
 
 alpha.vo : 		alpha.v eq.vo injective.vo map.vo \

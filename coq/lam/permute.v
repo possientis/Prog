@@ -62,3 +62,55 @@ Proof.
 Qed.
 
 
+Lemma permute_comp : forall (v w:Type) (p:Eq v) (q:Eq w) (x y u:v) (f:v -> w),
+    injective f -> f (permute p x y u) = permute q (f x) (f y) (f u).
+Proof.
+    intros v w p q x y u f I. unfold permute.
+    destruct    (p u x) as [Hux|Hux], 
+                (p u y) as [Huy|Huy],
+                (q (f u) (f x)) as [Gux|Gux],
+                (q (f u) (f y)) as [Guy|Guy];
+    subst;
+    try (reflexivity).
+    - exfalso. apply Gux. reflexivity.
+    - exfalso. apply Gux. reflexivity.
+    - symmetry. assumption.
+    - symmetry. assumption.
+    - exfalso. apply Guy. reflexivity.
+    - assumption.
+    - exfalso. apply Hux. apply I. assumption.
+    - exfalso. apply Huy. apply I. assumption.
+Qed.
+
+Lemma permute_commute : forall (v:Type) (p:Eq v) (x y u:v),
+    permute p x y u = permute p y x u.
+Proof.
+    intros v p x y u. unfold permute.
+    destruct (p u x) as [Hx|Hx], (p u y) as [Hy|Hy]; 
+    try (reflexivity).
+    rewrite <- Hx, <- Hy. reflexivity.
+Qed.
+
+
+Lemma permute_involution : forall (v:Type) (p:Eq v) (x y u:v),
+    permute p x y (permute p x y u) = u.
+Proof.
+    intros v p x y u. unfold permute.
+    destruct (p u x) as [Hx|Hx] eqn:Px, (p u y) as [Hy|Hy] eqn:Py;
+    try (rewrite Px); try (rewrite Py);
+    destruct    (p y x) as [Hyx|Hyx], 
+                (p x y) as [Hxy|Hxy],
+                (p x x) as [Hxx|Hxx],
+                (p y y) as [Hyy|Hyy];
+    subst; try (reflexivity).
+    - exfalso. apply Hyy. reflexivity.
+    - exfalso. apply Hyy. reflexivity.
+    - exfalso. apply Hxx. reflexivity.
+    - exfalso. apply Hxx. reflexivity.
+Qed.
+
+    
+
+
+
+

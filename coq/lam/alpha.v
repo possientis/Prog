@@ -11,6 +11,7 @@ Require Import inj_on_term.
 Require Import remove.
 Require Import free.
 Require Import vmap.
+Require Import swap.
 
 
 
@@ -74,7 +75,7 @@ Proof.
         + apply inj_is_inj_on_list. apply permute_injective.
 Qed.
 
-(*
+
 Lemma alpha_injective : forall (v w:Type) (p:Eq v) (q:Eq w) (t t':P v) (f:v -> w),
     injective f -> alpha p t t' -> alpha q (vmap f t) (vmap f t').
 Proof.
@@ -90,13 +91,12 @@ Proof.
                 { assumption. }
             }
             { apply inj_is_inj_on_list. assumption. }
-        +
+        + rewrite <- (swap_inj v w p q); assumption.
+Qed.
 
-Show.
-*)
 
-(*
-Lemma alpha_refl: forall (v:Type) (p:Eq v) (t:P v), alpha p t t.
+
+Lemma alpha_refl : forall (v:Type) (p:Eq v) (t:P v), alpha p t t.
 Proof.
     intros v p t.
     induction t.
@@ -104,10 +104,10 @@ Proof.
     - constructor; assumption.
     - constructor; assumption.
 Qed.
-*)
 
-(*
-Lemma alpha_sym: forall (v:Type) (p:Eq v) (t t':P v), 
+
+
+Lemma alpha_sym : forall (v:Type) (p:Eq v) (t t':P v), 
     alpha p t t' -> alpha p t' t.
 Proof.
     intros v p t t' H. 
@@ -132,8 +132,175 @@ Proof.
           apply injective_not_in.
             { apply inj_is_inj_on_list. rewrite F. apply permute_injective. }
             { assumption. }
-        +
+        + rewrite swap_commute. rewrite <- (swap_involution v p x y t1).
+          apply (alpha_injective v v p p).
+            { apply permute_injective. }
+            { assumption. }
+Qed.
+
+
+Lemma alpha_swap : forall (v:Type) (p:Eq v) (x y:v) (t t':P v),
+    alpha p t (swap p x y t') <-> alpha p (swap p x y t) t'.
+Proof.
+    intros v p x y t t'. split; intros H.
+    - rewrite <- (swap_involution v p x y t').
+      apply (alpha_injective v v p p).
+      + apply permute_injective.
+      + assumption. 
+    - rewrite <- (swap_involution v p x y t).
+      apply (alpha_injective v v p p).
+      + apply permute_injective.
+      + assumption. 
+Qed.
+
+Lemma alpha_not_free_swap : forall (v:Type) (p:Eq v) (x y:v) (t t':P v),
+    alpha p (swap p x y t) t' -> ( ~In y (Fr p t) <-> ~In x (Fr p t')). 
+Proof.
+    intros v p x y t t' H. split; intros H'.
+    - rewrite (alpha_free v p t' (swap p x y t)).
+        + unfold swap. rewrite (free_vmap_inj v v p p).
+            { remember (permute p x y) as f eqn:F. 
+              assert (x = f y) as X.
+                { symmetry. rewrite F. apply permute_y. }
+              rewrite X. apply injective_not_in.
+                  { apply inj_is_inj_on_list.
+                    rewrite F. apply permute_injective.
+                  }
+                  { assumption. }
+            }
+            { apply inj_is_inj_on_list. apply permute_injective. }
+        + apply alpha_sym. assumption.
+    - apply alpha_swap in H.
+      rewrite (alpha_free v p t (swap p x y t')).
+        + unfold swap. rewrite (free_vmap_inj v v p p).
+            { remember (permute p x y) as f eqn:F. 
+              assert (y = f x) as Y.
+                { symmetry. rewrite F. apply permute_x. }
+              
+              rewrite Y. apply injective_not_in.
+                  { apply inj_is_inj_on_list.
+                    rewrite F. apply permute_injective.
+                  }
+                  { assumption. }
+            }
+            { apply inj_is_inj_on_list. apply permute_injective. }
+        + assumption.
+Qed.
+
+(*
+Lemma alpha_tran_ : forall (v:Type) (p:Eq v) (t t': P v),
+    alpha p t t' -> (forall (s:P v), alpha p t s <-> alpha p t' s).
+Proof.
+    intros v p t t' H.
+    induction H; intros s.
+    - split; intros H'; assumption.
+    - split; intros H'; inversion H'; constructor; subst.
+        + apply IHalpha1. assumption.
+        + apply IHalpha2. assumption.
+        + apply IHalpha1. assumption.
+        + apply IHalpha2. assumption.
+    - split; intros H'; inversion H'; constructor; subst.
+        + apply IHalpha. assumption.
+        + assumption.
+        + assert (Fr p t1' = Fr p t1) as F.
+            { apply alpha_free. apply IHalpha. apply alpha_refl. }
+          rewrite F. assumption.
+        + apply alpha_swap. apply alpha_sym. apply IHalpha.  
+          apply alpha_sym. apply alpha_swap. assumption.
+        + apply IHalpha. assumption.
+        + assumption.
+        + assert (Fr p t1 = Fr p t1') as F.
+            { apply alpha_free. apply IHalpha. apply alpha_refl. }
+          rewrite F. assumption.
+        + apply alpha_swap. apply alpha_sym. apply IHalpha.  
+          apply alpha_sym. apply alpha_swap. assumption.
+       - split; intros H'; inversion H'; subst.
+            + constructor.
+                { intros E. apply H. symmetry. assumption. }
+                { apply (alpha_not_free_swap v p x y t1 t1').
+                    { apply IHalpha. apply alpha_refl. }
+                    { assumption. }
+                }
+                { apply alpha_swap. apply alpha_sym. apply IHalpha.
+                  rewrite (swap_commute v p y x). 
+                  apply (alpha_injective v v p p).
+                    { apply permute_injective. }
+                    { assumption. }
+                }
+            + destruct (p y y0) as [Hy0|Hy0]; subst.
+                { constructor. apply IHalpha. apply alpha_sym. assumption. }
+                { constructor.
+                    { assumption. }
+                    { rewrite (alpha_free v p t1' (swap p x y t1)). 
+                        { rewrite free_permute.
+                          rewrite <- (permute_not_xy v p x y y0).
+                            { apply injective_not_in.
+                                { apply inj_is_inj_on_list.
+                                  apply permute_injective.
+                                }
+                                { assumption. }
+                            }
+                            { intros E. apply H4. symmetry. assumption. }
+                            { intros E. apply Hy0. symmetry. assumption. }
+                        }
+                        { assumption. }
+                    }
+                    { apply alpha_swap. apply alpha_sym.
+                      apply IHalpha. apply alpha_swap.
+                      apply alpha_sym.
 Show.
 *)
+
+
+(*
+Lemma alpha_tran : forall (v:Type) (p:Eq v) (t1 t2 t3:P v),
+    alpha p t1 t2 -> alpha p t2 t3 -> alpha p t1 t3.
+Proof.
+    intros v p t1 t2 t3 H12. revert t3.
+*)
+(*
+    induction H12; intros t3 H23.
+    - assumption.
+    - inversion H23. subst. constructor.
+        + apply IHalpha1. assumption.
+        + apply IHalpha2. assumption.
+    - inversion H23; subst.
+        + constructor. apply IHalpha. assumption.
+        + constructor.
+            { assumption. }
+            { assert (Fr p t1 = Fr p t1') as F. 
+                { apply alpha_free. apply IHalpha. apply alpha_refl. }
+                { rewrite F. assumption. }
+            }
+            { rewrite <- (swap_involution v p x y t1'0).
+              apply (alpha_injective v v p p).
+                { apply permute_injective. }
+                { apply alpha_sym. apply IHalpha.
+                  rewrite <- (swap_involution v p x y t1').
+                  apply (alpha_injective v v p p).
+                    { apply permute_injective. }
+                    { apply alpha_sym. assumption. }
+                }
+            }
+    - 
+*)
+(*        
+        
+      remember (Lam y t1') as t3' eqn:T3. 
+      revert T3.
+      revert IHalpha.
+      revert H12.
+      revert H0.
+      revert H.
+      revert t1.
+      revert t1'.
+      induction H23; intros s0 s1 Exy Hy A0 IH H'; inversion H'; subst.
+        + constructor.
+            { assumption. }
+            { assumption. }
+            {
+*)      
+
+
 
 

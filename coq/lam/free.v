@@ -2,13 +2,16 @@ Require Import List.
 Import ListNotations.
 
 Require Import eq.
+Require Import injective.
 Require Import incl.
 Require Import term.
 Require Import var.
 Require Import inj_on_list.
+Require Import permute.
 Require Import inj_on_term.
 Require Import remove.
 Require Import vmap.
+Require Import swap.
 
 
 
@@ -74,4 +77,12 @@ Proof.
         }
 Qed.
 
+
+Lemma free_permute : forall (v:Type) (p:Eq v) (x y:v) (t:P v),
+    Fr p (swap p x y t) = map (permute p x y) (Fr p t).
+Proof.
+    intros v p x y t. unfold swap.
+    apply free_vmap_inj.
+    apply inj_is_inj_on_list. apply permute_injective.
+Qed.
 
