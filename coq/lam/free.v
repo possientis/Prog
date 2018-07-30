@@ -86,3 +86,21 @@ Proof.
     apply inj_is_inj_on_list. apply permute_injective.
 Qed.
 
+
+Lemma free_swap : forall (v:Type) (p:Eq v) (x y:v) (t:P v),
+   ~In y (Fr p t)  <-> ~In x (Fr p (swap p x y t)).
+Proof.
+    intros v p x y t. split; intros H.
+    - rewrite free_permute. rewrite <- (permute_y v p x y) at 1.
+      apply injective_not_in.
+      + apply inj_is_inj_on_list. apply permute_injective.
+      + assumption.
+    - rewrite <- (swap_involution v p x y t). rewrite free_permute.
+      rewrite <- (permute_x v p x y) at 1. 
+      apply injective_not_in.
+      + apply inj_is_inj_on_list. apply permute_injective.
+      + assumption.
+Qed.
+
+
+

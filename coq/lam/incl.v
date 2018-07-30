@@ -18,6 +18,17 @@ Proof.
 Qed.
 
 
+Lemma incl_map : forall (v w:Type) (f:v -> w) (l:list v) (x:v),
+    In x l -> In (f x) (map f l).
+Proof.
+    intros v w f l. induction l as [|a l IH]; intros x.
+    - intros H. inversion H.
+    - intros [H|H]; simpl.
+        + left. rewrite H. reflexivity.
+        + right. apply IH. assumption.
+Qed.
+
+
 
 
 
