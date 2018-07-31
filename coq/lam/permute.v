@@ -1,4 +1,5 @@
 Require Import eq.
+Require Import utils.
 Require Import injective.
 
 (* defines a map v -> v which permutes x and y                      *)
@@ -92,11 +93,11 @@ Proof.
 Qed.
 
 
-Lemma permute_involution : forall (v:Type) (p:Eq v) (x y u:v),
-    permute p x y (permute p x y u) = u.
+Lemma permute_involution : forall (v:Type) (p:Eq v) (x y z:v),
+    permute p x y (permute p x y z) = z.
 Proof.
-    intros v p x y u. unfold permute.
-    destruct (p u x) as [Hx|Hx] eqn:Px, (p u y) as [Hy|Hy] eqn:Py;
+    intros v p x y z. unfold permute.
+    destruct (p z x) as [Hx|Hx] eqn:Px, (p z y) as [Hy|Hy] eqn:Py;
     try (rewrite Px); try (rewrite Py);
     destruct    (p y x) as [Hyx|Hyx], 
                 (p x y) as [Hxy|Hxy],
@@ -107,6 +108,30 @@ Proof.
     - exfalso. apply Hyy. reflexivity.
     - exfalso. apply Hxx. reflexivity.
     - exfalso. apply Hxx. reflexivity.
+Qed.
+
+Lemma permute_thrice : forall (v:Type) (p:Eq v) (x y z u:v),
+    x <> y  ->
+    x <> z  ->
+    y <> z  ->
+    permute p x y (permute p y z (permute p x y u)) = permute p x z u.
+Proof.  
+    intros v p x y z u Hxy Hxz Hyz.
+    unfold permute at 3. destruct (p u x) as [Hux|Hux].
+    - rewrite permute_x. rewrite Hux. rewrite permute_x. apply permute_not_xy.
+        + apply neq_sym. assumption.
+        + apply neq_sym. assumption.
+    - destruct (p u y) as [Huy|Huy] eqn:Puy.
+        + rewrite (permute_not_xy v p y z x); try (assumption).
+            { rewrite permute_x, Huy. symmetry. apply permute_not_xy.
+                { apply neq_sym. assumption. }
+                { assumption. }
+            }
+        + unfold permute at 2. rewrite Puy. destruct (p u z) as [Huz|Huz]. 
+            { rewrite permute_y, Huz, permute_y. reflexivity. }
+            { rewrite permute_not_xy; try (assumption).
+              rewrite permute_not_xy; try (assumption). reflexivity.
+            }
 Qed.
 
     

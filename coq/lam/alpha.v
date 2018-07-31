@@ -19,14 +19,12 @@ Require Import swap.
 Require Import free.
 Require Import adpair.
 
-
-
-(* This inductive predicate defines alpha-equivalence           *)
-(* There are four ways of establishing alpha-equivalence        *)
+(* This inductive predicate defines alpha-equivalence.          *)
+(* There are four ways of establishing alpha-equivalence:       *)
 (* 1. Given a variable x:v, we always have x ~ x.               *)
 (* 2. t1 ~ t1' and t2 ~ t2' implies t1 t2 ~ t1' t2'             *)
 (* 3. t1 ~ t1' implies Lam x t1 ~ Lam x t1'                     *)
-(* 4. The final and most interesting way relies on swap         *)
+(* 4. The final and most interesting way relies on [x:y]:       *)
 (* In order to establish the equivalence Lam x t1 ~ Lam y t1'   *)
 (* in the case when x <> y, we need to ensure that y is not     *)
 (* a free variable of t1, and furthermore that t1' ~ t1[x:y]    *)
@@ -34,24 +32,66 @@ Require Import adpair.
 (* exchanged for one another. Note that we cannot do away with  *)
 (* the third constructor (by removing condition x <> y in 4.)   *)
 (* Lam x (Var x) ~ Lam x (Var x) cannot be proven simply by     *)
-(* taking x = y in a variant of 4. because of the requirement   *)
-(* that y be not a free variable of t1.                         *)
+(* taking x = y in 4. because of the requirement that y not     *)
+(* be a free variable of t1.                         *)
+(*                                                              *)
+(* The definition presented here relies on the permutation      *)
+(* function [x:y] (which permutes x and y while leaving         *)
+(* everything else unchanged). This choice has two benefits:    *)
+(* firstly, [x:y] is an injective function (in fact it is a     *)
+(* bijection with itself as inverse), which is not the case     *)
+(* of [y/x] (which simply replaces x by y). This property       *)
+(* facilitates many of the formal developments. Secondly,       *)
+(* the choice of [x:y] leads to the condition 'y not a free     *)
+(* variable of t1', whereas [y/x] would require the condition   *)
+(* 'y not a variable of t1' or 'y be a variable which can be    *)
+(* substituted for x in t1 without variable capture', and       *)
+(* these conditions make it compulsory to have an infinite      *)
+(* supply of variables. In the extreme case when the variable   *)
+(* type v has only two instances x and y, the usual approach    *)
+(* based on [y/x] makes it impossible to prove the alpha-equi   *)
+(* valence of 'Lam x (Lam y (x y))' and 'Lam y (Lam x (y x))':  *)
+(* When faced with Lam y (x y), the only variable which we      *)
+(* can substitute for x is the variable y, but this would       *)
+(* lead to variable capture, whereas using the permutation      *)
+(* [x:y] (note that y is not free in Lam y (x y)), we obtain    *)
+(* Lam x (y x) very naturally. So the definition below allows   *)
+(* for the development of the theory with finite variable types *)
+
+(* The alpha-equivalence t ~ t' is expressed as -alpha p t t'-  *)
+(* which requires an additional argument 'p', namely a proof    *)
+(* that the variable type v has decidable equality. This 'p'    *)
+(* is needed because it is required by the notion of free       *)
+(* variable on which alpha-equivalence relies. The argument p   *)
+(* cannot be made implicit, because it cannot be inferred by    *)
+(* the knowledge of terms t and t' (unlike v which can be       *)
+(* inferred). Hence we have stuck having to write alpha p t t'  *)
+(* rather than just alpha t t'                                  *)
 
 Inductive alpha (v:Type) (p:Eq v) : P v -> P v -> Prop :=
 | AVar  : forall (x:v), alpha v p (Var x) (Var x)
+
 | AApp  : forall (t1 t1' t2 t2':P v), 
-    alpha v p t1 t1' -> alpha v p t2 t2' -> alpha v p (App t1 t2) (App t1' t2')
+    alpha v p t1 t1' -> 
+    alpha v p t2 t2' -> 
+    alpha v p (App t1 t2) (App t1' t2')
+
 | ALam1 :forall (x:v) (t1 t1':P v), 
-    alpha v p t1 t1' -> alpha v p (Lam x t1) (Lam x t1') 
+    alpha v p t1 t1' -> 
+    alpha v p (Lam x t1) (Lam x t1') 
+
 | ALam2 : forall (x y:v) (t1 t1':P v),
-    x <> y -> ~In y (Fr p t1) -> alpha v p t1' (swap p x y t1) ->
-    alpha v p (Lam x t1) (Lam y t1')
+    x <> y -> 
+    ~In y (Fr p t1) ->                  (* y not free in t1     *) 
+    alpha v p t1' (swap p x y t1) ->    (* t1' ~ t1[x:y]        *)
+    alpha v p (Lam x t1) (Lam y t1')    (* Lam x t1 ~ Lam y t1' *)
 .
 
 Arguments alpha {v} _ _ _.
 
-(* alpha-equivalent terms have the same free variables *)
-(* In fact, this equality holds as lists, not just as set *)
+(* alpha-equivalent terms have the same free variables.         *)
+(* In fact, this equality holds as lists, not just as sets.     *)
+
 Lemma alpha_free : forall (v:Type) (p:Eq v) (t t':P v),
     alpha p t t' -> Fr p t = Fr p t'.
 Proof.
@@ -81,10 +121,13 @@ Proof.
         + apply inj_is_inj_on_list. apply permute_injective.
 Qed.
 
-(* two alpha-equivalent terms are still alpha-equivalent after      *)
-(* injective variable renaming                                      *)
-Lemma alpha_injective : forall (v w:Type) (p:Eq v) (q:Eq w) (t t':P v) (f:v -> w),
-    injective f -> alpha p t t' -> alpha q (vmap f t) (vmap f t').
+(* two alpha-equivalent terms are still alpha-equivalent after  *)
+(* injective variable renaming                                  *)
+
+Lemma alpha_injective: forall (v w:Type) (p:Eq v) (q:Eq w) (t t':P v) (f:v -> w),
+    injective f ->                      
+    alpha p t t' ->                     (* t ~ t'               *)          
+    alpha q (vmap f t) (vmap f t').     (* f t ~ f t'           *)
 Proof.
     intros v w p q t t' f I H. induction H; simpl.
     - constructor.
@@ -102,7 +145,8 @@ Proof.
 Qed.
 
 
-(* alpha-equivalence is a reflexive relation *)
+(* alpha-equivalence is a reflexive relation                    *)
+
 Lemma alpha_refl : forall (v:Type) (p:Eq v) (t:P v), alpha p t t.
 Proof.
     intros v p t.
@@ -113,7 +157,8 @@ Proof.
 Qed.
 
 
-(* alpha-equivalence is a symmetric relation *)
+(* alpha-equivalence is a symmetric relation                    *)
+
 Lemma alpha_sym : forall (v:Type) (p:Eq v) (t t':P v), 
     alpha p t t' -> alpha p t' t.
 Proof.
@@ -145,11 +190,12 @@ Proof.
             { assumption. }
 Qed.
 
-(* Technical lemma: this is motivated and constitues a generalization of    *)
-(* t ~ t'[x:y]  <=>   t[x:y] ~ t'                                           *)
-(* We are now stating that:                                                 *)
-(* t ~ f t'     <=>   g t ~  t'                                             *)
-(* provided f and g are inverses of each other.                             *) 
+(* This is motivated and constitues a generalization of:        *)
+(* t ~ t'[x:y]  <=>   t[x:y] ~ t'                               *)
+(* We are now stating that:                                     *)
+(* t ~ f t'     <=>   g t ~  t'                                 *)
+(* provided f and g are inverses of each other.                 *) 
+
 Lemma alpha_swap_gen : forall (v:Type) (p:Eq v) (t t':P v) (f g:v -> v),
     (forall x, g (f x) = x) -> 
     (forall x, f (g x) = x) ->
@@ -168,7 +214,8 @@ Proof.
         + intros x _. symmetry. apply FG.
 Qed.
 
-(* Technical lemma: apply alpha_swap_gen to (permute p x y) *)
+(* We apply the previous lemma to the permutation [x:y]         *)
+
 Lemma alpha_swap : forall (v:Type) (p:Eq v) (x y:v) (t t':P v),
     alpha p t (swap p x y t') <-> alpha p (swap p x y t) t'.
 Proof.
@@ -176,17 +223,23 @@ Proof.
     intros z; apply permute_involution.
 Qed.
 
-(* Technical lemma: simple convenience wrapper *)
+(* Simple convenience wrapper                                   *)
+
 Lemma alpha_swap_gen' : forall (v:Type) (p:Eq v) (t t' s:P v) (f g:v -> v),
     adpair p s f g -> 
     alpha p t (vmap f t') <-> alpha p (vmap g t) t'.
-Proof. intros v p t t' s f g [GF FG _]. apply alpha_swap_gen; assumption. Qed.
+Proof. 
+    intros v p t t' s f g [GF FG _]. 
+    apply alpha_swap_gen; assumption. 
+Qed.
 
 
-(* Technical lemma: if t[x:y] ~ t' then x is not a free variable of t'  *)
-(* if and only if y is not a free variable of t.                        *)
+(* If t[x:y] ~ t' then x is not a free variable of t'           *)
+(* if and only if y is not a free variable of t.                *)
+
 Lemma alpha_free_swap : forall (v:Type) (p:Eq v) (x y:v) (t t':P v),
-    alpha p (swap p x y t) t' -> ( ~In y (Fr p t) <-> ~In x (Fr p t')). 
+    alpha p (swap p x y t) t' -> 
+    ~In y (Fr p t) <-> ~In x (Fr p t'). 
 Proof.
     intros v p x y t t' H. split; intros H'.
     - rewrite (alpha_free v p t' (swap p x y t)).
@@ -197,7 +250,26 @@ Proof.
         + assumption.
 Qed.
 
-(*
+(* This is a very difficult technical lemma, needed to prove    *)
+(* that the alpha-equivalence relation is transitive.           *)
+(* Whenever a function f : v -> v is such that f is injective   *)
+(* and f does not change the free variables of a term t, we can *)
+(* easily believe that 'f t' should be alpha-equivalent to t    *)
+(* i.e. f t ~ t. We have used stronger assumptions here by      *)
+(* assuming that f has an inverse g (so the pair (f,g) is an    *)
+(* 'admissible pair for t'. Furthermore, the lemma proves       *)
+(* a conclusion which is stronger than t ~ f t, namely that     *)
+(* s ~ t => s ~ f t. This distinction will prove important      *)
+(* when establishing the transitivity of alpha-equivalence.     *)
+(* This lemma is only needed in the particular case when        *)
+(* f = [x:y] = g, i.e. we need the implication:                 *)
+(* s ~ t => s ~ t[x:y]                                          *)
+(* whenever it is the case that x,y are not free in t           *)
+(* However, like very often in induction proofs, it is          *)
+(* necessary to strengthen the induction hypothesis, with       *)
+(* general f and g, rather than [x:y]                           *)
+
+
 Lemma alpha_adpair : forall (v:Type) (p:Eq v) (f g:v -> v) (t s:P v),
     adpair p t f g -> alpha p s t -> alpha p s (vmap f t).
 Proof.
@@ -339,32 +411,76 @@ Proof.
                     rewrite permute_involution, permute_involution, GF.
                     reflexivity.
                   }
-                  { intros u Hu. unfold comp.
- 
-Show.
-*)
+                  { intros u Hu. unfold comp. assert (u <> x) as Hux.
+                      { intros Hux. rewrite Hux in Hu. revert Hu.
+                        apply free_swap. assumption.
+                      }
+                    apply adpair_sym in A. generalize A. intros [_ _ FR].
+                    destruct (p u y) as [Huy|Huy].
+                        { rewrite Huy, permute_y, permute_x, Z. apply GF. }
+                        { rewrite permute_not_xy.
+                            { rewrite permute_not_xy; try (assumption).
+                                { apply FR. simpl. apply remove_In2.
+                                    { apply neq_sym. assumption. }
+                                    { rewrite (alpha_free v p t1' (swap p x y t1));
+                                      assumption.
+                                    }
+                                }
+                            } 
+                            { rewrite permute_not_xy; assumption. }
+                            { rewrite permute_not_xy; try (assumption).
+                                { intros Huz. apply Huy. rewrite Huz.
+                                  symmetry. rewrite <- (GF y), <- Z.
+                                  apply FR. simpl. apply remove_In2.
+                                    { apply neq_sym. rewrite <- Huz. assumption. }
+                                    { rewrite (alpha_free v p t1' (swap p x y t1)).
+                                        { rewrite <- Huz. assumption. }
+                                        { assumption. }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+Qed.
 
-(*
-Lemma alpha_permute_not_free : forall (v:Type) (p:Eq v) (x y:v) (t s:P v),
-    ~In x (Fr p t) -> ~In y (Fr p t) -> alpha p s t -> alpha p s (swap p x y t).
+                            
+
+(* Applying previous lemma in case when f = [x:y] = g, also     *)
+(* establishing equivalence rather than mere implication.       *)
+
+Lemma alpha_adpair_swap : forall (v:Type) (p:Eq v) (x y:v) (t s:P v),
+    ~In x (Fr p t)  ->                      
+    ~In y (Fr p t)  ->                      
+    alpha p s t <-> alpha p s (swap p x y t).   
 Proof.
-    intros v p x y t s Hx Hy H. revert x y Hx Hy.
-    induction H; simpl; intros x' y' Hx Hy.
-    - unfold swap. simpl. rewrite permute_not_xy. 
+    intros v p x y t s Fx Fy. split; intro H; unfold swap.
+    - apply alpha_adpair with (permute p x y).
         + constructor.
-        + intros Gx. apply Hx. left. assumption.
-        + intros Gy. apply Hy. left. assumption.
-    - unfold swap. simpl. constructor.   
-        + apply IHalpha1.
-            { intros Gx. apply Hx. apply in_or_app. left. assumption. }
-            { intros Gy. apply Hy. apply in_or_app. left. assumption. }
-        + apply IHalpha2. 
-            { intros Gx. apply Hx. apply in_or_app. right. assumption. }
-            { intros Gy. apply Hy. apply in_or_app. right. assumption. }
-    - unfold swap. simpl.
+            { intros z. apply permute_involution. }
+            { intros z. apply permute_involution. }
+            { intros z Hz. apply permute_not_xy.
+                { intros Hzx. apply Fx. rewrite <- Hzx. assumption. }
+                { intros Hzy. apply Fy. rewrite <- Hzy. assumption. }
+            }
+        + assumption.
+    - rewrite <- (swap_involution v p x y t). unfold swap at 1.
+      apply alpha_adpair with (permute p x y).
+        + constructor.
+            { intros z. apply permute_involution. }
+            { intros z. apply permute_involution. }
+            { intros z Hz. apply permute_not_xy.
+                { intros Hzx. revert Hz. rewrite Hzx. 
+                  apply free_swap. assumption.
+                }
+                { intros Hzy. revert Hz. rewrite Hzy. rewrite swap_commute.
+                  apply free_swap. assumption.
+                }
+            }  
+        + assumption.
+Qed.
 
-Show.
-*)
 
 
 (*
@@ -397,7 +513,7 @@ Proof.
        - split; intros H'; inversion H'; subst.
             + constructor.
                 { intros E. apply H. symmetry. assumption. }
-                { apply (alpha_not_free_swap v p x y t1 t1').
+                { apply (alpha_free_swap v p x y t1 t1').
                     { apply IHalpha. apply alpha_refl. }
                     { assumption. }
                 }
@@ -407,13 +523,13 @@ Proof.
                     { apply permute_injective. }
                     { assumption. }
                 }
-            + destruct (p y y0) as [Hy0|Hy0]; subst.
+            + rename y0 into z. destruct (p y z) as [Hyz|Hyz]; subst.
                 { constructor. apply IHalpha. apply alpha_sym. assumption. }
                 { constructor.
                     { assumption. }
                     { rewrite (alpha_free v p t1' (swap p x y t1)). 
                         { rewrite free_permute.
-                          rewrite <- (permute_not_xy v p x y y0).
+                          rewrite <- (permute_not_xy v p x y z).
                             { apply injective_not_in.
                                 { apply inj_is_inj_on_list.
                                   apply permute_injective.
@@ -421,14 +537,43 @@ Proof.
                                 { assumption. }
                             }
                             { intros E. apply H4. symmetry. assumption. }
-                            { intros E. apply Hy0. symmetry. assumption. }
+                            { intros E. apply Hyz. symmetry. assumption. }
                         }
                         { assumption. }
                     }
-                    { rename y0 into z. rename t1'0 into t0. rename t1' into t2. 
-Show.
-*)
+                    { rename t1'0 into t0. rename t1' into t2. 
+                      apply alpha_swap. apply alpha_sym.
+                      apply IHalpha. apply alpha_swap.
+                      apply alpha_sym. apply (alpha_adpair_swap v p x y).
+                        { rewrite <- (permute_not_xy v p y z x) at 1.
+                            { rewrite free_permute. 
+                              apply injective_not_in. 
+                                { apply inj_is_inj_on_list. 
+                                  apply permute_injective.
+                                }
+                                { apply free_swap. assumption. } 
+                            }
+                            { assumption. } 
+                            { assumption. }
+                        }
+                        { apply free_swap.
+                          rewrite <- (permute_not_xy v p x y z) at 1.
+                            { rewrite free_permute. 
+                              apply injective_not_in.
+                                { apply inj_is_inj_on_list. 
+                                  apply permute_injective. 
+                                } 
+                                { assumption. }
+                            }
+                            { apply neq_sym. assumption. }
+                            { apply neq_sym. assumption. }
+                        }
+                        {
+                             
 
+Show.
+
+*)
 
 (*
 Lemma alpha_tran : forall (v:Type) (p:Eq v) (t1 t2 t3:P v),

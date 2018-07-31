@@ -57,7 +57,7 @@ inj_on_list.vo:	inj_on_list.v \
 	coqc inj_on_list.v
 
 permute.vo:		permute.v \
-				eq.vo injective.vo
+				eq.vo utils.vo injective.vo
 	coqc permute.v
 
 inj_on_term.vo:	inj_on_term.v \

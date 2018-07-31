@@ -58,7 +58,9 @@ Qed.
 
 Lemma injective_not_in : forall (v w:Type) (f:v -> w),
     forall (x:v) (l:list v),
-    injective_on_list (x :: l) f -> ~In x l -> ~In (f x) (map f l).
+    injective_on_list (x :: l) f -> 
+    ~In x l -> 
+    ~In (f x) (map f l).
 Proof.
     intros v w f x l. revert x. 
     induction l as [|a l IH]; simpl; intros x H.
