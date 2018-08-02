@@ -42,3 +42,12 @@ Proof.
     - intros u Hu. apply permute_involution.
 Qed.
 
+Lemma swap_thrice : forall (v:Type) (p:Eq v) (x y z:v) (t:P v),
+    x <> z  ->
+    y <> z  ->
+    swap p x y (swap p y z (swap p x y t)) = swap p x z t.
+Proof.
+    intros v p x y z t Hxz Hyz. unfold swap.
+    rewrite <- vmap_comp, <- vmap_comp. apply vmap_eq.
+    intros u _. unfold comp. apply permute_thrice; assumption.
+Qed.

@@ -65,7 +65,7 @@ Require Import adpair.
 (* variable on which alpha-equivalence relies. The argument p   *)
 (* cannot be made implicit, because it cannot be inferred by    *)
 (* the knowledge of terms t and t' (unlike v which can be       *)
-(* inferred). Hence we have stuck having to write alpha p t t'  *)
+(* inferred). Hence we are stuck having to write alpha p t t'   *)
 (* rather than just alpha t t'                                  *)
 
 Inductive alpha (v:Type) (p:Eq v) : P v -> P v -> Prop :=
@@ -124,7 +124,7 @@ Qed.
 (* two alpha-equivalent terms are still alpha-equivalent after  *)
 (* injective variable renaming                                  *)
 
-Lemma alpha_injective: forall (v w:Type) (p:Eq v) (q:Eq w) (t t':P v) (f:v -> w),
+Lemma alpha_injective : forall (v w:Type) (p:Eq v) (q:Eq w) (t t':P v) (f:v -> w),
     injective f ->                      
     alpha p t t' ->                     (* t ~ t'               *)          
     alpha q (vmap f t) (vmap f t').     (* f t ~ f t'           *)
@@ -142,6 +142,20 @@ Proof.
             }
             { apply inj_is_inj_on_list. assumption. }
         + rewrite <- (swap_inj v w p q); assumption.
+Qed.
+
+(* A simple application of the previous lemma                   *)
+Lemma alpha_injective_swap : forall (v:Type) (p:Eq v) (x y:v) (t t':P v),
+    alpha p t t' <-> alpha p (swap p x y t) (swap p x y t').
+Proof.
+    intros v p x y t t'. split; intros H.
+    - unfold swap. apply alpha_injective with p.
+        + apply permute_injective.
+        + assumption.
+    - rewrite <- (swap_involution v p x y t), <- (swap_involution v p x y t').
+        + unfold swap at 1. unfold swap at 2. apply alpha_injective with p.
+            { apply permute_injective. }
+            { assumption. }
 Qed.
 
 
@@ -184,13 +198,15 @@ Proof.
           apply injective_not_in.
             { apply inj_is_inj_on_list. rewrite F. apply permute_injective. }
             { assumption. }
-        + rewrite swap_commute. rewrite <- (swap_involution v p x y t1).
+        + rewrite swap_commute. 
+          rewrite <- (swap_involution v p x y t1).
           apply (alpha_injective v v p p).
             { apply permute_injective. }
             { assumption. }
 Qed.
 
-(* This is motivated and constitues a generalization of:        *)
+
+(* This is motivated by and constitues a generalization of:     *)
 (* t ~ t'[x:y]  <=>   t[x:y] ~ t'                               *)
 (* We are now stating that:                                     *)
 (* t ~ f t'     <=>   g t ~  t'                                 *)
@@ -398,7 +414,8 @@ Proof.
               generalize A; intros [GF FG _]. 
                 { apply GF. }
                 { apply FG. }
-                { apply alpha_sym. rewrite <- (swap_involution v p x y t1). 
+                { apply alpha_sym. 
+                  rewrite <- (swap_involution v p x y t1). 
                   unfold swap at 1. rewrite <- vmap_comp. 
                   unfold swap at 1. rewrite <- vmap_comp.
                   apply IHalpha with ((permute p x y); (permute p x z; f)).
@@ -445,7 +462,8 @@ Proof.
             }
 Qed.
 
-                            
+
+                           
 
 (* Applying previous lemma in case when f = [x:y] = g, also     *)
 (* establishing equivalence rather than mere implication.       *)
@@ -482,12 +500,17 @@ Proof.
 Qed.
 
 
+(* Attempting to prove the transitivity of alpha-equivalence    *)
+(* directly leads to the common problem of having an induction  *)
+(* hypothesis which is too weak to successfully complete an     *)
+(* induction proof. So we focus on the stronger result below.   *)
+(* The proof fundamentally relies on the alpha_adpair_swap      *)
+(* lemma, which itself relies on alpha_adpair.                  *)
 
-(*
-Lemma alpha_tran_ : forall (v:Type) (p:Eq v) (t t': P v),
-    alpha p t t' -> (forall (s:P v), alpha p t s <-> alpha p t' s).
+Lemma alpha_tran_ : forall (v:Type) (p:Eq v) (t t' s: P v),
+    alpha p t t' -> alpha p t s <-> alpha p t' s.
 Proof.
-    intros v p t t' H.
+    intros v p t t' s H. revert s.
     induction H; intros s.
     - split; intros H'; assumption.
     - split; intros H'; inversion H'; constructor; subst.
@@ -510,120 +533,115 @@ Proof.
           rewrite F. assumption.
         + apply alpha_swap. apply alpha_sym. apply IHalpha.  
           apply alpha_sym. apply alpha_swap. assumption.
-       - split; intros H'; inversion H'; subst.
-            + constructor.
-                { intros E. apply H. symmetry. assumption. }
-                { apply (alpha_free_swap v p x y t1 t1').
-                    { apply IHalpha. apply alpha_refl. }
-                    { assumption. }
-                }
-                { apply alpha_swap. apply alpha_sym. apply IHalpha.
-                  rewrite (swap_commute v p y x). 
-                  apply (alpha_injective v v p p).
-                    { apply permute_injective. }
-                    { assumption. }
-                }
-            + rename y0 into z. destruct (p y z) as [Hyz|Hyz]; subst.
-                { constructor. apply IHalpha. apply alpha_sym. assumption. }
-                { constructor.
-                    { assumption. }
-                    { rewrite (alpha_free v p t1' (swap p x y t1)). 
-                        { rewrite free_permute.
-                          rewrite <- (permute_not_xy v p x y z).
-                            { apply injective_not_in.
-                                { apply inj_is_inj_on_list.
-                                  apply permute_injective.
-                                }
-                                { assumption. }
+    - split; intros H'; inversion H'; subst.
+        + constructor.
+            { intros E. apply H. symmetry. assumption. }
+            { apply (alpha_free_swap v p x y t1 t1').
+                { apply IHalpha. apply alpha_refl. }
+                { assumption. }
+            }
+            { apply alpha_swap. apply alpha_sym. apply IHalpha.
+              rewrite (swap_commute v p y x). 
+              apply (alpha_injective v v p p).
+                { apply permute_injective. }
+                { assumption. }
+            }
+
+        + rename y0 into z. destruct (p y z) as [Hyz|Hyz]; subst.
+            { constructor. apply IHalpha. apply alpha_sym. assumption. }
+            { constructor.
+                { assumption. }
+                { rewrite (alpha_free v p t1' (swap p x y t1)). 
+                    { rewrite free_permute.
+                      rewrite <- (permute_not_xy v p x y z).
+                        { apply injective_not_in.
+                            { apply inj_is_inj_on_list.
+                              apply permute_injective.
                             }
-                            { intros E. apply H4. symmetry. assumption. }
-                            { intros E. apply Hyz. symmetry. assumption. }
-                        }
-                        { assumption. }
-                    }
-                    { rename t1'0 into t0. rename t1' into t2. 
-                      apply alpha_swap. apply alpha_sym.
-                      apply IHalpha. apply alpha_swap.
-                      apply alpha_sym. apply (alpha_adpair_swap v p x y).
-                        { rewrite <- (permute_not_xy v p y z x) at 1.
-                            { rewrite free_permute. 
-                              apply injective_not_in. 
-                                { apply inj_is_inj_on_list. 
-                                  apply permute_injective.
-                                }
-                                { apply free_swap. assumption. } 
-                            }
-                            { assumption. } 
                             { assumption. }
                         }
-                        { apply free_swap.
-                          rewrite <- (permute_not_xy v p x y z) at 1.
-                            { rewrite free_permute. 
-                              apply injective_not_in.
-                                { apply inj_is_inj_on_list. 
-                                  apply permute_injective. 
-                                } 
-                                { assumption. }
+                        { intros E. apply H4. symmetry. assumption. }
+                        { intros E. apply Hyz. symmetry. assumption. }
+                    }
+                    { assumption. }
+                }
+                { rename t1'0 into t0. rename t1' into t2. 
+                  apply alpha_swap. apply alpha_sym.
+                  apply IHalpha. apply alpha_swap.
+                  apply alpha_sym. apply (alpha_adpair_swap v p x y).
+                    { rewrite <- (permute_not_xy v p y z x) at 1.
+                        { rewrite free_permute. 
+                          apply injective_not_in. 
+                            { apply inj_is_inj_on_list. 
+                              apply permute_injective.
                             }
-                            { apply neq_sym. assumption. }
-                            { apply neq_sym. assumption. }
+                            { apply free_swap. assumption. } 
                         }
-                        {
-                             
+                        { assumption. } 
+                        { assumption. }
+                    }
+                    { apply free_swap.
+                      rewrite <- (permute_not_xy v p x y z) at 1.
+                        { rewrite free_permute. 
+                          apply injective_not_in.
+                            { apply inj_is_inj_on_list. 
+                              apply permute_injective. 
+                            } 
+                            { assumption. }
+                        }
+                        { apply neq_sym. assumption. }
+                        { apply neq_sym. assumption. }
+                    }
+                    { rewrite swap_thrice; assumption. }
+                }         
+            }
+        + constructor; try (assumption).
+          apply alpha_sym. apply IHalpha. assumption.
+        + rename y0 into z. destruct (p x z) as [Hxz|Hxz]; subst.
+            { constructor. rewrite <- (swap_involution v p z y t1).
+              apply alpha_swap, IHalpha, alpha_sym, alpha_swap.
+              rewrite swap_commute. assumption.
+            }
+            { constructor.
+                { assumption. }
+                { apply alpha_swap in H1.
+                  rewrite <- (alpha_free v p (swap p x y t1') t1).
+                    { rewrite free_permute.
+                      rewrite <- (permute_not_xy v p x y z).
+                        { apply injective_not_in.
+                            { apply inj_is_inj_on_list, permute_injective. }
+                            { assumption. }
+                        }
+                        { apply neq_sym. assumption. }
+                        { apply neq_sym. assumption. }
+                    }
+                   assumption.
+                }
+                { rename t1'0 into t0. rename t1' into t2. 
+                  apply alpha_swap. rewrite swap_commute.
+                  apply (alpha_injective_swap v p x y).
+                  apply alpha_sym, IHalpha, alpha_sym.
+                  apply (alpha_adpair_swap v p z x).
+                    { assumption. }
+                    { rewrite (alpha_free v p t2 (swap p x y t1)).
+                        { apply (free_swap v p x y). assumption. }
+                        { assumption. }
+                    }
+                    { apply alpha_swap. rewrite swap_thrice.
+                        { apply alpha_swap. rewrite swap_commute. assumption. }
+                        { apply neq_sym. assumption. }
+                        { assumption. }
+                    }
+                }
+            }  
+Qed.
 
-Show.
-
-*)
-
-(*
+(* The alpha-equivalence relation is transitive                 *)
 Lemma alpha_tran : forall (v:Type) (p:Eq v) (t1 t2 t3:P v),
     alpha p t1 t2 -> alpha p t2 t3 -> alpha p t1 t3.
 Proof.
-    intros v p t1 t2 t3 H12. revert t3.
-*)
-(*
-    induction H12; intros t3 H23.
-    - assumption.
-    - inversion H23. subst. constructor.
-        + apply IHalpha1. assumption.
-        + apply IHalpha2. assumption.
-    - inversion H23; subst.
-        + constructor. apply IHalpha. assumption.
-        + constructor.
-            { assumption. }
-            { assert (Fr p t1 = Fr p t1') as F. 
-                { apply alpha_free. apply IHalpha. apply alpha_refl. }
-                { rewrite F. assumption. }
-            }
-            { rewrite <- (swap_involution v p x y t1'0).
-              apply (alpha_injective v v p p).
-                { apply permute_injective. }
-                { apply alpha_sym. apply IHalpha.
-                  rewrite <- (swap_involution v p x y t1').
-                  apply (alpha_injective v v p p).
-                    { apply permute_injective. }
-                    { apply alpha_sym. assumption. }
-                }
-            }
-    - 
-*)
-(*        
-        
-      remember (Lam y t1') as t3' eqn:T3. 
-      revert T3.
-      revert IHalpha.
-      revert H12.
-      revert H0.
-      revert H.
-      revert t1.
-      revert t1'.
-      induction H23; intros s0 s1 Exy Hy A0 IH H'; inversion H'; subst.
-        + constructor.
-            { assumption. }
-            { assumption. }
-            {
-*)      
-
-
+    intros v p t1 t2 t3 H12 H23. 
+    apply (alpha_tran_ v p t1 t2 t3); assumption.
+Qed.
 
 
