@@ -2,6 +2,8 @@ all:	    eq.vo \
 			utils.vo \
 			identity.vo \
 			composition.vo \
+			index.vo \
+			vequal.vo \
 			injective.vo \
 			map.vo \
 			incl.vo \
@@ -16,7 +18,8 @@ all:	    eq.vo \
 			swap.vo \
 			free.vo \
 			adpair.vo \
-			alpha.vo
+			alpha.vo \
+			alpha2.vo
 
 eq.vo:			eq.v
 	coqc eq.v
@@ -29,6 +32,12 @@ identity.vo:	identity.v
 
 composition.vo: composition.v
 	coqc composition.v
+
+index.vo: 		index.v eq.vo
+	coqc index.v
+
+vequal.vo:		vequal.v eq.vo index.vo
+	coqc vequal.v
 
 injective.vo:	injective.v \
 				composition.vo
@@ -93,6 +102,7 @@ alpha.vo : 		alpha.v \
 				remove.vo free.vo vmap.vo
 	coqc alpha.v
 
-
+alpha2.vo :	alpha2.v eq.vo term.vo vequal.vo
+	coqc alpha2.v
 
 
