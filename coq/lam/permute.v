@@ -13,7 +13,7 @@ Definition permute (v:Type) (p:Eq v) (x y:v) (u:v) : v :=
         end
      end.
 
-Arguments permute {v} _ _ _.
+Arguments permute {v} _ _ _ _.
 
 Lemma permute_x : forall (v:Type) (p:Eq v) (x y:v), permute p x y x = y.
 Proof.
