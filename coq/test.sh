@@ -14,6 +14,7 @@ echo "testing coq..."
 ./hott/test.sh
 ./systemF/test.sh
 ./lam/test.sh
+./cpdt/test.sh
 
 echo
 echo "testing sort..."

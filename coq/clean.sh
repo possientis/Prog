@@ -19,5 +19,6 @@ rm -f lib/*.vo
 ./hott/clean.sh
 ./systemF/clean.sh
 ./lam/clean.sh
+./cpdt/clean.sh
 
 cd ${DIR}
