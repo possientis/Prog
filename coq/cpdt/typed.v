@@ -37,7 +37,7 @@ Definition tbinopDenote (t1 t2 t:type) (b:tbinop t1 t2 t)
         | TLt      => blt_nat
         end.
 
-Arguments tbinopDenote {t1} {t2} {t} _.
+Arguments tbinopDenote {t1} {t2} {t} _ _ _.
 
 Fixpoint texpDenote (t:type) (e:texp t) : typeDenote t :=
     match e with
@@ -70,15 +70,15 @@ Arguments TCons {s1} {s2} {s3} _ _.
 Fixpoint vstack (ts:tstack) : Set :=
     match ts with 
     | nil       => unit
-    | t :: ts'  => typeDenote t * vstack ts'
+    | t :: ts'  => prod (typeDenote t) (vstack ts')
     end.
 
 Definition tinstrDenote (s1 s2:tstack) (i:tinstr s1 s2) 
     : vstack s1 -> vstack s2 :=
     match i with
-    | TiNConst _ n => fun s => (n,s)
-    | TiBConst _ b => fun s => (b,s)
-    | TiBinop _ b  => fun s =>
+    | TiNConst _ n        => fun s => (n,s)
+    | TiBConst _ b        => fun s => (b,s)
+    | @TiBinop _ _ _ _ b  => fun s =>
         let '(v1, (v2, s')) := s in 
             ((tbinopDenote b) v1 v2, s')
     end.
