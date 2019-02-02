@@ -7,8 +7,7 @@ cd ${HOME}
 echo
 echo "testing cpdt..."
 
-make 
-./clean.sh
+make; ./clean.sh
 
 cd ${DIR}
 echo '\ntest completed successfully\n'
