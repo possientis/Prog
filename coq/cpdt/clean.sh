@@ -4,8 +4,9 @@ DIR=`pwd`
 HOME=/home/john/Prog/coq/cpdt
 cd ${HOME}
 
-rm -f ./{*,.*}.{aux,glob,vo}
-rm -f */{*,.*}.{aux,glob,vo}
+rm -f Main
+rm -f ./{*,.*}.{aux,glob,vo,o,hi}
+rm -f */{*,.*}.{aux,glob,vo,o,hi}
 
 
 cd ${DIR}

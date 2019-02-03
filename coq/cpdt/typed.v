@@ -93,3 +93,53 @@ Fixpoint tprogDenote (s1 s2:tstack) (p:tprog s1 s2)
     end. 
 
 Arguments tprogDenote {s1} {s2} _ _.
+
+Fixpoint tconcat (t1 t2 t3:tstack) (p:tprog t1 t2) 
+    : tprog t2 t3 -> tprog t1 t3 :=
+    match p with
+    | TNil _               => fun q => q
+    | @TCons s1 s2 s3 i p' => fun q => TCons i (tconcat s2 s3 _ p' q)
+    end.    
+
+Arguments tconcat {t1} {t2} {t3} _ _.
+
+Fixpoint tcompile (t:type) (e:texp t) (ts:tstack) : tprog ts (t :: ts) :=
+    match e with
+    | TNConst n             => TCons (TiNConst _ n) (TNil _)
+    | TBConst b             => TCons (TiBConst _ b) (TNil _)
+    | @TBinop _ _ _ b e1 e2 => tconcat (tcompile _ e2 _) 
+        (tconcat (tcompile _ e1 _) (TCons (TiBinop _ b) (TNil _)))
+    end. 
+
+Arguments tcompile {t} _ _.
+
+
+Lemma tconcat_correct: 
+    forall (t1 t2 t3:tstack) (p:tprog t1 t2) (q:tprog t2 t3) (s:vstack t1),
+    tprogDenote (tconcat p q) s = tprogDenote q (tprogDenote p s).
+Proof.
+    intros t1 t2 t3 p q. induction p as [t|s1 s2 s3 i r IH]; intros s; simpl.
+    - reflexivity.
+    - rewrite IH. reflexivity.
+Qed.
+
+
+
+Lemma tcompile_correct': forall (t:type) (e:texp t)(ts:tstack)(s:vstack ts),
+    tprogDenote (tcompile e ts) s = (texpDenote e, s).
+Proof.
+    intros t e. induction e as [n|b|t1 t2 t3 b e1 H1 e2 H2]; intros ts s; simpl.
+    - reflexivity.
+    - reflexivity.
+    - rewrite tconcat_correct. rewrite H2.
+      rewrite tconcat_correct. rewrite H1.
+      reflexivity.
+Qed.
+
+Theorem tcompile_correct: forall (t:type) (e:texp t),
+    tprogDenote (tcompile e nil) tt = (texpDenote e, tt).
+Proof.
+    intros t e. apply tcompile_correct'.
+Qed.
+
+
