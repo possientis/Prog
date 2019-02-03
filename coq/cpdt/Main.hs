@@ -1,6 +1,5 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ExistentialQuantification #-}
 
 module Main (main) where
     
@@ -13,19 +12,26 @@ main = hspec $ do
         sequence_ tests
 
 tests :: [Spec]
-tests  = [ test1
-         , test2
-         , test3
-         , test4
-         , test5
-         , test6
-         , test7
-         , test8
-         , test9
-         , test10
-         ]
+tests  = map test $ zip items [1..10] 
 
-exp1  = NConst 42 
+data Item = 
+    forall t. (Eq (TypeDenote t) , Show (TypeDenote t)) =>
+    Item (Exp t, TypeDenote t)
+
+items ::[Item]
+items = [ item1
+        , item2
+        , item3
+        , item4
+        , item5
+        , item6
+        , item7
+        , item8
+        , item9
+        , item10
+        ] 
+
+exp1  = NConst 42
 exp2  = BConst True
 exp3  = BConst False
 exp4  = Binop Times (Binop Plus (NConst 2) (NConst 3)) (NConst 7)
@@ -36,51 +42,21 @@ exp8  = Binop EqB   (Binop EqN  (NConst 2) (NConst 3)) (BConst True)
 exp9  = Binop Lt    (Binop Plus (NConst 2) (NConst 3)) (NConst 5)
 exp10 = Binop Lt    (Binop Plus (NConst 2) (NConst 3)) (NConst 6)
 
-test1 :: Spec
-test1 =  it "Testing expression 1" $ do
-    eval exp1 `shouldBe` 42 
+item1  = Item (exp1,  42)
+item2  = Item (exp2,  True)
+item3  = Item (exp3,  False)
+item4  = Item (exp4,  35)
+item5  = Item (exp5,  False)
+item6  = Item (exp6,  True)
+item7  = Item (exp7,  True)
+item8  = Item (exp8,  False)
+item9  = Item (exp9,  False)
+item10 = Item (exp10, True)
 
-test2 :: Spec
-test2 =  it "Testing expression 2" $ do
-    eval exp2 `shouldBe` True
 
-test3 :: Spec
-test3 =  it "Testing expression 3" $ do
-    eval exp3 `shouldBe` False
-
-test4 :: Spec
-test4 =  it "Testing expression 4" $ do
-    eval exp4 `shouldBe` 35
-
-test5 :: Spec
-test5 =  it "Testing expression 5" $ do
-    eval exp5 `shouldBe` False
-
-test6 :: Spec
-test6 =  it "Testing expression 6" $ do
-    eval exp6 `shouldBe` True
-
-test7 :: Spec
-test7 =  it "Testing expression 7" $ do
-    eval exp7 `shouldBe` True
-
-test8 :: Spec
-test8 =  it "Testing expression 8" $ do
-    eval exp8 `shouldBe` False
-
-test9 :: Spec
-test9 =  it "Testing expression 9" $ do
-    eval exp9 `shouldBe` False
-
-test10 :: Spec
-test10 =  it "Testing expression 10" $ do
-    eval exp10 `shouldBe` True
-
-{- TypeDenote t is not an instance of Eq
-test :: (Exp t, TypeDenote t, Int) -> Spec
-test (e,v,n) = it ("Testing expresion  " ++ show n) $ do
+test :: (Item, Int) -> Spec
+test (Item (e,v),n) = it ("Testing expresion  " ++ show n) $ do
     eval e `shouldBe` v  
--}
 
 
 
