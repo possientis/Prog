@@ -14,8 +14,7 @@ main = hspec $ do
 tests :: [Spec]
 tests  = map test $ zip items [1..10] 
 
-data Item = 
-    forall t. (Eq (TypeDenote t) , Show (TypeDenote t)) =>
+data Item = forall t . (Eq (TypeDenote t), Show (TypeDenote t)) => 
     Item (Exp t, TypeDenote t)
 
 items ::[Item]
