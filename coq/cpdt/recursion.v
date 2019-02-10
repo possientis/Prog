@@ -1,5 +1,6 @@
+(*
 Check nat_rect.
-
+*)
 
 Fixpoint nat_rect' 
     (P:nat -> Type) 
@@ -57,8 +58,10 @@ Qed.
 Definition nat_ind' (P:nat -> Prop) := nat_rect' P. 
 Definition nat_rec' (P:nat -> Set)  := nat_rect' P.
 
+(*
 Check nat_ind'.
 Check nat_rec'.
+*)
 
 Lemma plus_n_0' : forall (n:nat), plus n 0 = n.
 Proof.

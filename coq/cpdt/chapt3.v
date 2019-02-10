@@ -9,7 +9,9 @@ Proof. intros x. destruct x. reflexivity. Qed.
 
 Inductive Empty_set : Set :=.
 
+(*
 Check Empty_set_ind.
+*)
 
 Lemma the_sky_is_falling : forall (x:Empty_set), 2 + 2 = 5.
 Proof. intros x. destruct x. Qed.
@@ -29,7 +31,9 @@ Proof. intros b. destruct b; reflexivity. Qed.
 Lemma negb_ineq : forall (b:bool), negb b <> b.
 Proof. destruct b; discriminate. Qed.
 
+(*
 Check bool_ind.
+*)
 
 Inductive nat : Set :=
 | O : nat
