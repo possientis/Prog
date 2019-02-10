@@ -6,8 +6,8 @@ with oList (a:Set) : Set :=
 .
 
 Arguments Nil {a}.
-Arguments ECons {a}.
-Arguments OCons {a}.
+Arguments ECons {a} _ _.
+Arguments OCons {a} _ _.
 
 Fixpoint eLength (a:Set) (xs:eList a) : nat :=
     match xs with
@@ -20,8 +20,8 @@ with oLength (a:Set) (xs:oList a) : nat :=
     end
 .
 
-Arguments eLength {a}.
-Arguments oLength {a}.
+Arguments eLength {a} _.
+Arguments oLength {a} _.
 
 Fixpoint eeAppend (a:Set) (xs ys:eList a) : eList a :=
     match xs with
@@ -45,10 +45,10 @@ with eoAppend (a:Set) (xs:eList a) (ys:oList a) : oList a :=
     end
 .
 
-Arguments eeAppend {a}.
-Arguments eoAppend {a}.
-Arguments oeAppend {a}.
-Arguments ooAppend {a}.
+Arguments eeAppend {a} _ _.
+Arguments eoAppend {a} _ _.
+Arguments oeAppend {a} _ _.
+Arguments ooAppend {a} _ _.
 
 (* generate mutual induction scheme *)
 Scheme eList_mut := Induction for eList Sort Prop
