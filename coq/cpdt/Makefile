@@ -1,6 +1,7 @@
 all:	utils_nat.vo \
 		untyped.vo \
 		typed.vo \
+		mutual_ind.vo \
 		test_untyped.vo \
 		test_typed.vo
 	
@@ -12,6 +13,9 @@ untyped.vo : untyped.v
 
 typed.vo : typed.v
 	coqc typed.v -R Utils Utils
+
+mutual_ind.vo : mutual_ind.v
+	coqc mutual_ind.v
 
 test_untyped.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
