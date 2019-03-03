@@ -2,7 +2,8 @@ all:	utils_nat.vo \
 		untyped.vo \
 		typed.vo \
 		chapt3.vo \
-		mutual_ind.vo \
+		mutual.vo \
+		nested.vo \
 		reflexive.vo \
 		recursion.vo \
 		test_untyped.vo \
@@ -20,8 +21,11 @@ typed.vo : typed.v
 chapt3.vo : chapt3.v
 	coqc chapt3.v
 
-mutual_ind.vo : mutual_ind.v
-	coqc mutual_ind.v
+mutual.vo : mutual.v
+	coqc mutual.v
+
+nested.vo : nested.v
+	coqc nested.v
 
 reflexive.vo : reflexive.v
 	coqc reflexive.v

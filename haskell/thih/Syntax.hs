@@ -1,3 +1,22 @@
+module  Syntax 
+    (   Type    (..)
+    ,   Tyvar
+    ,   enumId
+    ,   tUnit
+    ,   tChar
+    ,   tInt
+    ,   tInteger
+    ,   tFloat
+    ,   tDouble
+    ,   tList
+    ,   tArrow
+    ,   tTuple2
+    ,   tString 
+    ,   list 
+    ,   pair
+    ,   fn
+    )   where
+
 type Id = String
 
 enumId :: Int -> Id
