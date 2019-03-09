@@ -1,6 +1,9 @@
 module  Syntax 
     (   Type    (..)
-    ,   Tyvar
+    ,   Kind    (..)
+    ,   Tyvar   (..)
+    ,   HasKind (..)
+    ,   Id
     ,   enumId
     ,   tUnit
     ,   tChar

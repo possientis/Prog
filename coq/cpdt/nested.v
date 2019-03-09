@@ -216,36 +216,63 @@ Fixpoint fold (a b:Set) (f : a -> list b -> b) (t:tree a) : b :=
 
 Arguments fold {a} {b} _ _.
 
+(* Once again, we were not able to define fold in the obvious way with map    *)
+(* The odds are this will make proofs very difficult to perform               *)
+(* So we should probably spend time proving that the obvious holds            *)
 
-(*
+Lemma fold_check1 : forall (a b:Set)(f:a -> list b -> b)(x:a), 
+    fold f (Node x nil) = f x nil.
+Proof. reflexivity. Qed.
+
+Lemma fold_check2 : 
+    forall (a b:Set) (f:a -> list b -> b) (x:a) (ts:list (tree a)),
+    fold f (Node x ts) = f x (map (fold f) ts).
+Proof.
+    intros a b f x ts. induction ts as [|t ts' IH].
+    - reflexivity.
+    - simpl. remember (
+        fix map (ts : list (tree a)) : list b :=
+            match ts with
+            | nil => nil
+            | t :: ts => fold f t :: map ts
+            end) as g eqn:Eg.
+      assert (forall (ts:list (tree a)), g ts = map (fold f) ts) as Hg.
+      { induction ts as [|t' ls H].
+        - rewrite Eg. reflexivity.
+        - rewrite Eg. simpl. rewrite <- Eg. rewrite H. reflexivity.
+      }
+      rewrite Hg. reflexivity.
+Qed.
 
 Definition fmap_callback (a b:Set) (f:a -> b) : a -> list (tree b) -> tree b :=
     fun (x:a) (ts : list (tree b)) => Node (f x) ts.
 
 Arguments fmap_callback {a} {b} _ _ _.
 
-(* We are going to need the induction principle
-Fixpoint tree_nested_ind (a:Set) (P:tree a -> Prop)
-    (p:forall (x:a) (ts:list (tree a)), All P ts -> P (Node x ts))
-    (t:tree a) : P t :=
-        match t with
-        | Node x ts     => p x ts 
-            ((fix all (ts':list (tree a)) : All P ts' :=
-                match ts' with
-                | nil       => I
-                | cons t ts => conj (tree_nested_ind a P p t) (all ts)
-                end) ts)
-        end.
-*)
-
 (* fmap is just an example of fold *)
 Lemma fmap_is_a_fold : forall (a b:Set) (f:a -> b) (t:tree a), 
     fmap f t = fold (fmap_callback f) t.
-Proof. intros a b f t.
-       apply (tree_nested_ind a (fun (t:tree a) =>
-            fmap f t = fold (fmap_callback f) t)).
-       intros x. induction ts as [|t' ts' IH].
-       - simpl. unfold fmap_callback. intros. reflexivity.
-       - intros H. destruct H as [H1 H2]. apply IH in H2.
-Show.
+Proof.
+    intros a b f. apply tree_nested_ind2; intros x.
+    - unfold fmap_callback. reflexivity.
+    - intros t ts H1 H2. rewrite fold_check2. unfold fmap_callback at 1.
+      rewrite fmap_check2. simpl. rewrite <- H1.
+      rewrite fmap_check2 in H2. rewrite fold_check2 in H2. 
+      unfold fmap_callback in H2 at 1.
+      injection H2. intros H. rewrite <- H. reflexivity.
+Qed.
+
+
+Fixpoint sum (ls:list nat) : nat :=
+    match ls with
+    | nil       => 0
+    | n :: ns   => plus n (sum ns)
+    end.
+
+(*
+Fixpoint tree_size (a:Set) (t:tree a) : nat :=
+    match t with
+    | Node _ ts     => S (sum (map (tree_size a) ts))
+    end.
 *)
+
