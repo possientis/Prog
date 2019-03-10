@@ -204,7 +204,7 @@ Fixpoint fold (a b:Set) (f:a -> list b -> b) (t:tree a) {struct t} : b :=
                                                                               *)
 
 (* Another case when nested induction saves the day                           *)
-Fixpoint fold (a b:Set) (f : a -> list b -> b) (t:tree a) : b :=
+Fixpoint fold (a b:Set) (f:a -> list b -> b) (t:tree a) : b :=
     match t with 
     | Node x ts     => f x 
         ((fix map (ts': list (tree a)) : list b :=
