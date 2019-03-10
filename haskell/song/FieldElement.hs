@@ -1,15 +1,23 @@
 module  FieldElement
-    (   FieldElement    (..)
+    (   FieldElement
+    ,   field
+    ,   pow
+    ,   inv
     )   where
 
+
 data FieldElement = FieldElement
-    { num   :: Integer
-    , prime :: Integer
+    { _num   :: Integer
+    , _prime :: Integer
     } deriving (Eq)
 
+field :: Integer -> Integer -> FieldElement
+field x p
+    | p <= 1     = error "field: p should be a prime number"
+    | otherwise  = FieldElement (x `mod` p) p
+
 instance Show FieldElement where
-    show (FieldElement x p) 
-        = "FieldElement_" ++ (show p) ++ "(" ++ (show $ x `mod` p) ++ ")"
+    show (FieldElement x p) = "(" ++ (show $ x `mod` p) ++ "::F_" ++ show p ++ ")"
 
 
 instance Num FieldElement where
@@ -24,6 +32,29 @@ instance Num FieldElement where
     fromInteger _   = error "fromInteger: Should not be used for FieldElement"
     negate (FieldElement x p) = FieldElement ((-x) `mod` p) p
     
+
+pow :: FieldElement -> Integer -> FieldElement
+pow f@(FieldElement _ p) n
+    | n < 0     = error "pow: Function not implemented for negative exponent"
+    | n == 0    = FieldElement 1 p
+    | even n    = pow (f*f) (n `div` 2)
+    | odd  n    = f * pow (f*f) (n `div` 2)
+    | otherwise = error "pow: This should never happen"
+
+inv :: FieldElement -> FieldElement
+inv f@(FieldElement x p)
+    | x `mod` p == 0    = error "inv: Zero has no inverse"
+    | otherwise         = pow f (p-2)
+
+instance Fractional FieldElement where
+    (/) f1@(FieldElement _ p) f2@(FieldElement y q)
+        | p /= q         = error "(/) : Type mismatch in FieldElement"
+        | y `mod` p == 0 = error "(/) : Division by zero"
+        | otherwise      = f1 * inv f2
+    recip = inv
+    fromRational _       = error "fromRational: do not use for FieldElement"
+
+
 
 
 

@@ -1,10 +1,12 @@
 module  Subst
     (   Subst
+    ,   Types   (..)
     ,   nullSubst
     ,   merge
     ,   (@@)
     ,   (+->)
     ,   mgu
+    ,   match
     )   where
 
 import Syntax
@@ -76,4 +78,13 @@ varBind u t
     | otherwise         = return (u +-> t)
 
 
-
+match :: Monad m => Type -> Type -> m Subst
+match (TAp l r ) (TAp l' r')    = do
+    sl <- match l l'
+    sr <- match r r'
+    merge sl sr 
+match (TVar u) t
+    | kind u == kind t          = return (u +-> t)
+match (TCon tc1) (TCon tc2)
+    | tc1 == tc2                = return nullSubst
+match _ _                       = fail "match: types do not match"
