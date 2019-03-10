@@ -57,6 +57,16 @@ Fixpoint All (a:Set) (P:a -> Prop) (xs:list a) : Prop :=
 
 Arguments All {a} _ _.
 
+Lemma All_map : forall (a b:Set) (f g:a -> b) (xs: list a),
+    All (fun x => f x = g x) xs -> map f xs = map g xs.
+Proof.
+    intros a b f g xs. induction xs as [| x xs IH].
+    - reflexivity.
+    - intros [H1 H2]. simpl. rewrite H1. apply IH in H2. rewrite H2. reflexivity.
+Qed.
+
+
+
 (* instead of mutually inductive definition, we shall used nested induction   *)
 Fixpoint tree_nested_ind (a:Set) (P:tree a -> Prop)
     (p:forall (x:a) (ts:list (tree a)), All P ts -> P (Node x ts))
@@ -110,11 +120,25 @@ Definition fold' (a b:Set) (f:a -> list b -> b): tree a -> b :=
 
 Arguments fold' {a} {b} _ _.
 
+
+(* The second induction principle is too weak, so we use first instead        *)
 Lemma fold_equal : forall (a b:Set) (f:a -> list b -> b) (t:tree a), 
     fold f t = fold' f t.
 Proof. 
-    intros a b f. apply tree_nested_ind2.
-    - reflexivity.
-    - intros x t ts H1 H2. simpl.
+    intros a b f. apply tree_nested_ind. intros x ts IH. simpl.
+    apply All_map in IH. rewrite IH. reflexivity.
+Qed.
 
-Show.
+Definition fmap_callback (a b:Set) (f:a -> b) : a -> list (tree b) -> tree b :=
+    fun (x:a) (ts : list (tree b)) => Node (f x) ts.
+
+Arguments fmap_callback {a} {b} _ _ _.
+
+Lemma fmap_is_a_fold : forall (a b:Set) (f:a -> b) (t:tree a), 
+    fmap f t = fold (fmap_callback f) t.
+Proof.
+    intros a b f. apply tree_nested_ind. intros x ts IH. simpl.
+    unfold fmap_callback at 1. apply All_map in IH. rewrite <- IH.
+    reflexivity.
+Qed.
+

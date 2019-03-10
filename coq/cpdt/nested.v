@@ -3,34 +3,52 @@ Require Import List.
 (* We are using the type we are defining as the argument of parameterized     *)
 (* type family: this is an example of 'nested inductive type'                 *)
 
-
 Inductive tree (a:Set) : Set :=
 | Node : a -> list (tree a) -> tree a
 .
 
 Arguments Node {a} _ _.
 
-(* Incidentally, does the node of a 'tree a' have possibly infinitely many    *)
-(* branches ? This would certainly be the case in haskell. In coq, can't do:  *)
+(* This inductive type is too complicated for coq. The default recursive      *)
+(* principle is not useful.                                                   *)
 (*                                                                            *)
-(* Fixpoint from (n:nat) : list nat := cons n (from (S n)).                   *)
-(*                                                                            *)
-(* can coq 'list' ever be infinite? Need to understand co-inductive types     *)
-
-
-(* useless default generic recursion principle                                *)
 (* Check tree_rect.                                                           *)
+(*                                                                            *)
+(* So we need to write our own induction principle. We shall need             *)
 
-Fixpoint All (a:Set) (P:a -> Prop) (xs:list a) : Prop :=
+Fixpoint All' (a:Set) (P:a -> Prop) (xs:list a) : Prop :=
     match xs with
     | nil       => True
-    | cons x xs => P x /\ All a P xs
+    | x :: xs   => P x /\ All' a P xs
     end. 
 
+Arguments All' {a} _ _.
+
+(* Let us define All in a slightly different way.                             *)
+
+Definition All (a:Set) (P:a -> Prop) : list a -> Prop :=
+    fix g (xs:list a) : Prop :=
+        match xs with
+        | nil       => True
+        | x :: xs   => P x /\ g xs
+        end.  
 
 Arguments All {a} _ _.
 
+Lemma All_same : forall (a:Set) (P:a -> Prop) (xs:list a), 
+    All P xs <-> All' P xs.
+Proof.
+    intros a P. induction xs as [|x xs IH].
+    - reflexivity.
+    - destruct IH as [H1 H2]. split; simpl; 
+      intros [H3 H4]; split; try (assumption).
+        + apply H1. assumption.
+        + apply H2. assumption.
+Qed.
+
+
 (* This definition should be fine but is rejected by Coq                      *)
+(* Whether we use All or All' in the below makes no difference                *)
 
 (*
    "Recursive call to tree_nest_ind has principal argument equal to 
@@ -53,7 +71,6 @@ with all (a:Set) (P:tree a -> Prop)
              end
 .
                                                                               *)
-
 (* instead of mutually inductive definition, we shall used nested induction   *)
 Fixpoint tree_nested_ind (a:Set) (P:tree a -> Prop)
     (p:forall (x:a) (ts:list (tree a)), All P ts -> P (Node x ts))
@@ -67,6 +84,8 @@ Fixpoint tree_nested_ind (a:Set) (P:tree a -> Prop)
                 end) ts)
         end.
 
+
+(*
 (* This second induction principle can be established from the first          *)
 Definition tree_nested_ind2 (a:Set) (P:tree a-> Prop)
     (pnil: forall (x:a), P (Node x nil))
@@ -275,4 +294,4 @@ Fixpoint tree_size (a:Set) (t:tree a) : nat :=
     | Node _ ts     => S (sum (map (tree_size a) ts))
     end.
 *)
-
+*)
