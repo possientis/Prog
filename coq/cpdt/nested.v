@@ -71,6 +71,9 @@ with all (a:Set) (P:tree a -> Prop)
              end
 .
                                                                               *)
+
+
+
 (* instead of mutually inductive definition, we shall used nested induction   *)
 Fixpoint tree_nested_ind (a:Set) (P:tree a -> Prop)
     (p:forall (x:a) (ts:list (tree a)), All P ts -> P (Node x ts))
@@ -85,182 +88,126 @@ Fixpoint tree_nested_ind (a:Set) (P:tree a -> Prop)
         end.
 
 
-(*
-(* This second induction principle can be established from the first          *)
-Definition tree_nested_ind2 (a:Set) (P:tree a-> Prop)
-    (pnil: forall (x:a), P (Node x nil))
-    (pcons: forall (x:a) (t:tree a) (ts:list (tree a)), 
-        P t -> P (Node x ts) -> P (Node x (t :: ts)))
-    (t:tree a) : P t.
-Proof.
-    apply tree_nested_ind. intros x. induction ts as [|t' ts IH].
-    - intros. apply pnil.
-    - intros [H0 H1]. apply pcons.
-        + assumption.
-        + apply IH. assumption.
-Qed.
-
-
 (* This has nothing to do with 'tree a' but since 'tree a' contains a list... *)
-Fixpoint map (a b:Set) (f:a -> b) (xs:list a) : list b :=
+Fixpoint map' (a b:Set) (f:a -> b) (xs:list a) : list b :=
     match xs with
     | nil       => nil
-    | cons x xs => cons (f x) (map a b f xs)
+    | x :: xs =>  f x :: map' a b f xs
     end.
+
+Arguments map' {a} {b} _ _.
+
+(* Once again, let us try and provide a slightly different definition for map *)
+
+Definition map (a b:Set) (f:a -> b) : list a -> list b :=
+    fix g (xs:list a) : list b := 
+        match xs with
+        | nil       => nil
+        | x :: xs   => f x :: g xs
+        end.
 
 Arguments map {a} {b} _ _.
 
-(* This 'map'-based solution fails despite looking very legitimate            *)
 
-(*
-Fixpoint fmap (a b:Set) (f:a -> b) (t:tree a) {struct t} : tree b :=
-    match t with
-    | Node x ts     => Node (f x) (map (fmap a b f) ts)
-    end. 
-                                                                              *)
+Lemma map_same : forall (a b:Set) (f:a -> b) (xs:list a),
+    map f xs = map' f xs.
+Proof.
+    intros a b f. induction xs as [|x xs IH].
+    - reflexivity.
+    - simpl. rewrite IH. reflexivity.
+Qed.
 
-
-(* Another case when nested induction saves the day. however in practice,     *)
-(* this definition seems like a nightmare to handle proofs (at least given    *)
-(* current skills). We would like the following equality to hold:             *) 
-(*                                                                            *)
-(* fmap f (Node x ts) = Node (f x) (map (fmap f) ts)                          *)
-(*                                                                            *)
-(* to hold.                                                                   *)
+(* We define All and All' without visible benefit. We shall now see that      *)
+(* defining map instead of map' bring a significant benefit, namely the       *)
+(* following definition of fmap succeeds for map but fails for map':          *)
 
 Fixpoint fmap (a b:Set) (f:a -> b) (t:tree a) : tree b :=
     match t with
-    | Node x ts     => Node (f x) 
-        ((fix map (ts':list (tree a)) : list (tree b) :=
-            match ts' with
-            | nil       => nil
-            | cons t ts => cons (fmap a b f t) (map ts)
-            end) ts)  
-
+    | Node x ts  => Node (f x) (map (fmap a b f) ts)
     end.
 
 Arguments fmap {a} {b} _ _. 
 
 
-(* Checking the obvious does work well though                                 *)
-Lemma fmap_check1 : forall (a b:Set) (f:a -> b) (x:a), 
-    fmap f (Node x nil) = Node (f x) nil.
-Proof. intros  a b f x. reflexivity. Qed.
-
-(* However, proving the equality:                                             *)
-(*                                                                            *)
-(* fmap f (Node x ts) = Node (f x) (map (fmap f) ts)                          *)
-(*                                                                            *)
-(* appears to be difficult. One successful way is via an indirect route       *)
-
-(* let us implement a value accessor                                          *)
-Definition tree_val (a:Set) (t:tree a) : a :=
+(* This is a lot nicer than defining fmap with nested recursion as follows:   *)
+Fixpoint fmap' (a b:Set) (f:a -> b) (t:tree a) : tree b :=
     match t with
-    | Node x _  => x
-    end.
-
-Arguments tree_val {a} _.
-
-(* as well as a list accessor                                                 *)
-Definition tree_list (a:Set) (t:tree a) : list (tree a) :=
-    match t with
-    | Node _ ts     => ts
-    end.
-
-Arguments tree_list {a} _.
-
-(* If two trees have same values and list, then they are the same tree        *)
-Lemma tree_equal : forall (a:Set) (t1 t2: tree a), 
-    tree_val t1 = tree_val t2 -> 
-    tree_list t1 = tree_list t2 -> 
-    t1 = t2.
-Proof.
-    intros a t1 t2 H1 H2. destruct t1, t2.
-    simpl in H1. simpl in H2. subst. reflexivity.
-Qed.
-
-(* So we prove that fmap behaves the way we expect at the 'list' level...     *)
-
-Lemma tree_list_fmap : forall (a b:Set) (f:a -> b) (t:tree a),
-    tree_list (fmap f t) = map (fmap f) (tree_list t).
-Proof.
-    intros a b f. apply tree_nested_ind2.
-    - intros x. reflexivity.
-    - intros x t ts H0 H1. simpl. unfold map.
-        fold (map (fmap f) ts).
-        remember (
-            fix map (ts : list (tree a)) : list (tree b) :=
-               match ts with
-               | nil => nil
-               | t :: ts => fmap f t :: map ts
-               end) as g eqn:Hg. 
-        assert (forall (ts:list (tree a)), g ts = map (fmap f) ts) as E.
-        + clear t ts H1 H0. induction ts as [| t ts IH].
-            { rewrite Hg. reflexivity. }
-            { rewrite Hg, <- Hg, IH. reflexivity. }
-        + rewrite E. reflexivity.
-Qed.
-
-(* So we can now obtain what we want                                          *)
-
-Lemma fmap_check2 : forall (a b:Set) (f:a -> b) (x:a) (ts:list (tree a)),
-    fmap f (Node x ts) = Node (f x) (map (fmap f) ts).
-Proof.
-    intros a b f x ts. apply tree_equal.
-    - reflexivity.
-    - rewrite tree_list_fmap. simpl. reflexivity.
-Qed.
-
-
-
-(* Another failure, leading to the need for nested recursion                  *)
-
-(*
-Fixpoint fold (a b:Set) (f:a -> list b -> b) (t:tree a) {struct t} : b :=
-    match t with 
-    | Node x ts     => f x (map (fold a b f) ts)
-    end.
-                                                                              *)
-
-(* Another case when nested induction saves the day                           *)
-Fixpoint fold (a b:Set) (f:a -> list b -> b) (t:tree a) : b :=
-    match t with 
-    | Node x ts     => f x 
-        ((fix map (ts': list (tree a)) : list b :=
+    | Node x ts     => Node (f x) 
+        ((fix g (ts':list (tree a)) : list (tree b) :=
             match ts' with
             | nil       => nil
-            | cons t ts => cons (fold a b f t) (map ts)
-            end) ts) 
+            | cons t ts => cons (fmap' a b f t) (g ts)
+            end) ts)  
+
     end.
+
+Arguments fmap' {a} {b} _ _. 
+
+(* We want to check that fmap and fmap's are the same things and the only     *)
+(* realistic tool for this is our induction principle. However, our induction *)
+(* formula will be 'All (fun t => fmap f t = fmap' f t) ts', i.e. the two     *)
+(* functions (fmap f) and (fmap' f) coincide on ts. We need to be able to     *)
+(* conclude that: map (fmap f) ts = map (fmap' f) ts                          *)
+
+Lemma All_map : forall (a b:Set) (f g:a -> b) (xs: list a),
+    All (fun x => f x = g x) xs -> map f xs = map g xs.
+Proof.
+    intros a b f g xs. induction xs as [| x xs IH].
+    - reflexivity.
+    - intros [H1 H2]. simpl. rewrite H1. apply IH in H2. rewrite H2. reflexivity.
+Qed.
+
+Lemma fmap_same: forall (a b:Set) (f:a -> b) (t:tree a), 
+    fmap f t = fmap' f t.
+Proof.
+    intros a b f. apply tree_nested_ind. intros x ts IH. simpl.
+    fold (map (fmap' f) ts). apply All_map in IH. rewrite IH. reflexivity.
+Qed.
+
+(* Another definition which succeeds with map but fails with map'             *)
+Fixpoint fold' (a b:Set) (f:a -> list b -> b) (t:tree a) : b :=
+    match t with 
+    | Node x ts     => f x (map (fold' a b f) ts)
+    end.
+
+Arguments fold' {a} {b} _ _.
+
+(* However, in the spirit of All vs All' and map vs map' we should define     *)
+Definition fold (a b:Set) (f:a -> list b -> b): tree a -> b :=
+    fix g (t:tree a) : b :=
+        match t with
+        | Node x ts => f x (map g ts)
+        end.
 
 Arguments fold {a} {b} _ _.
 
-(* Once again, we were not able to define fold in the obvious way with map    *)
-(* The odds are this will make proofs very difficult to perform               *)
-(* So we should probably spend time proving that the obvious holds            *)
+Lemma fold_same : forall (a b:Set) (f:a -> list b -> b) (t:tree a), 
+    fold f t = fold' f t.
+Proof. 
+    intros a b f. apply tree_nested_ind. intros x ts IH. simpl.
+    apply All_map in IH. rewrite IH. reflexivity.
+Qed.
 
-Lemma fold_check1 : forall (a b:Set)(f:a -> list b -> b)(x:a), 
-    fold f (Node x nil) = f x nil.
-Proof. reflexivity. Qed.
 
-Lemma fold_check2 : 
-    forall (a b:Set) (f:a -> list b -> b) (x:a) (ts:list (tree a)),
-    fold f (Node x ts) = f x (map (fold f) ts).
-Proof.
-    intros a b f x ts. induction ts as [|t ts' IH].
-    - reflexivity.
-    - simpl. remember (
-        fix map (ts : list (tree a)) : list b :=
-            match ts with
-            | nil => nil
-            | t :: ts => fold f t :: map ts
-            end) as g eqn:Eg.
-      assert (forall (ts:list (tree a)), g ts = map (fold f) ts) as Hg.
-      { induction ts as [|t' ls H].
-        - rewrite Eg. reflexivity.
-        - rewrite Eg. simpl. rewrite <- Eg. rewrite H. reflexivity.
-      }
-      rewrite Hg. reflexivity.
+(* We could have defined fold using nested recursion                          *)
+Fixpoint fold'' (a b:Set) (f:a -> list b -> b) (t:tree a) : b :=
+    match t with 
+    | Node x ts     => f x 
+        ((fix g (ts': list (tree a)) : list b :=
+            match ts' with
+            | nil       => nil
+            | t :: ts => cons (fold'' a b f t) (g ts)
+            end) ts) 
+    end.
+
+Arguments fold'' {a} {b} _ _.
+
+Lemma fold_same' : forall (a b:Set) (f:a -> list b -> b) (t:tree a), 
+    fold f t = fold'' f t.
+Proof. 
+    intros a b f. apply tree_nested_ind. intros x ts IH. simpl.
+    fold (map (fold'' f) ts). apply All_map in IH. rewrite IH.
+    reflexivity.
 Qed.
 
 Definition fmap_callback (a b:Set) (f:a -> b) : a -> list (tree b) -> tree b :=
@@ -268,19 +215,13 @@ Definition fmap_callback (a b:Set) (f:a -> b) : a -> list (tree b) -> tree b :=
 
 Arguments fmap_callback {a} {b} _ _ _.
 
-(* fmap is just an example of fold *)
 Lemma fmap_is_a_fold : forall (a b:Set) (f:a -> b) (t:tree a), 
     fmap f t = fold (fmap_callback f) t.
 Proof.
-    intros a b f. apply tree_nested_ind2; intros x.
-    - unfold fmap_callback. reflexivity.
-    - intros t ts H1 H2. rewrite fold_check2. unfold fmap_callback at 1.
-      rewrite fmap_check2. simpl. rewrite <- H1.
-      rewrite fmap_check2 in H2. rewrite fold_check2 in H2. 
-      unfold fmap_callback in H2 at 1.
-      injection H2. intros H. rewrite <- H. reflexivity.
+    intros a b f. apply tree_nested_ind. intros x ts IH. simpl.
+    unfold fmap_callback at 1. apply All_map in IH. rewrite <- IH.
+    reflexivity.
 Qed.
-
 
 Fixpoint sum (ls:list nat) : nat :=
     match ls with
@@ -294,4 +235,4 @@ Fixpoint tree_size (a:Set) (t:tree a) : nat :=
     | Node _ ts     => S (sum (map (tree_size a) ts))
     end.
 *)
-*)
+
