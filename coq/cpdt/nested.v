@@ -1,4 +1,5 @@
 Require Import List.
+Require Import Arith.
 
 (* We are using the type we are defining as the argument of parameterized     *)
 (* type family: this is an example of 'nested inductive type'                 *)
@@ -229,10 +230,69 @@ Fixpoint sum (ls:list nat) : nat :=
     | n :: ns   => plus n (sum ns)
     end.
 
-(*
-Fixpoint tree_size (a:Set) (t:tree a) : nat :=
+
+(* Another definition which succeeds with map but fails with map'             *)
+Fixpoint tree_size' (a:Set) (t:tree a) : nat :=
     match t with
-    | Node _ ts     => S (sum (map (tree_size a) ts))
+    | Node _ ts     => S (sum (map (tree_size' a) ts))
     end.
-*)
+
+Arguments tree_size' {a} _.
+
+(* Another definition which succeeds with map but fails with map'             *)
+Definition tree_size (a:Set) : tree a -> nat :=
+    fix g (t:tree a) : nat :=
+        match t with
+        | Node _ ts => S (sum (map g ts))
+        end.
+
+Arguments tree_size {a} _.
+
+Lemma tree_size_same : forall (a:Set) (t:tree a),
+    tree_size t = tree_size' t.
+Proof.
+    intros a. apply tree_nested_ind. intros x ts IH. simpl.
+    apply All_map in IH. rewrite IH. reflexivity.
+Qed.
+
+(* Some notion is tree splicing. The point is that preserves sizes            *)
+Fixpoint tree_splice' (a:Set) (t1 t2:tree a) : tree a :=
+    match t2 with
+    | Node x nil        => Node x (t1 :: nil)
+    | Node x (t :: ts)  => Node x (tree_splice' a t1 t :: ts)
+    end.
+
+Arguments tree_splice' {a} _ _.
+
+(* In the same spirit                                                         *)
+Definition tree_splice (a:Set) (t1:tree a) : tree a -> tree a :=
+    fix g (t:tree a) : tree a :=
+        match t with
+        | Node x nil        => Node x (t1 :: nil)
+        | Node x (t :: ts)  => Node x (g t :: ts)
+        end.
+
+Arguments tree_splice {a} _ _.
+
+Lemma tree_splice_same : forall (a:Set) (t1 t2:tree a),
+    tree_splice t1 t2 = tree_splice' t1 t2.
+Proof.
+    intros a t1. apply tree_nested_ind. intros x ts. destruct ts as [|t ts].
+    - reflexivity.
+    - intros [H1 H2]. simpl. rewrite H1. reflexivity.
+Qed.
+
+
+Theorem tree_size_splice: forall (a:Set) (t1 t2:tree a), 
+    tree_size (tree_splice t1 t2) = plus (tree_size t1) (tree_size t2).
+Proof.
+    intros a t1. apply tree_nested_ind. intros x ts. destruct ts.
+    - intros. simpl. apply plus_n_Sm.
+    - intros [H1 H2]. simpl. rewrite H1. rewrite <- plus_n_Sm.
+      rewrite plus_assoc. reflexivity.
+Qed.
+
+
+
+
 
