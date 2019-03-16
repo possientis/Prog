@@ -5,12 +5,21 @@ module  TypeClass
     ,   matchPred
     ,   Inst
     ,   Class
+    ,   ClassEnv (..)
+    ,   super
+    ,   insts
+    ,   defined
+    ,   modify
+    ,   initialEnv
+    ,   (<:>)
+    ,   addClass
     )   where
 
 import Subst
 import Syntax
 
 import Data.List
+import Data.Maybe
 
 data Pred = IsIn Id Type deriving Eq
 
@@ -18,7 +27,7 @@ data Qual t = [Pred] :=> t deriving Eq
 
 -- a -> Int
 t1 :: Type
-t1 = TVar (Tyvar "a" Star) `fn` tInt
+t1 =  TVar (Tyvar "a" Star) `fn` tInt
 
 -- (Num a) => a -> Int
 q1 :: Qual Type
@@ -70,4 +79,42 @@ ord = ( ["Eq"]
       )
 
 
+data ClassEnv = ClassEnv 
+    { classes  :: Id -> Maybe Class
+    , defaults :: [Type]
+    }
+
+super :: ClassEnv -> Id -> [Id]
+super ce i = case classes ce i of 
+    Just (is,_) -> is
+    Nothing -> error "super: argument is not a class identifier"
+
+insts :: ClassEnv -> Id -> [Inst]
+insts ce i = case classes ce i of 
+    Just (_,its) -> its
+    Nothing -> error "insts: argument is not a class identifier"
+
+defined :: Maybe a -> Bool
+defined = isJust
+
+modify :: ClassEnv -> Id -> Class -> ClassEnv
+modify ce i c = ce { classes = \j -> if i == j then Just c else classes ce j }
+
+initialEnv :: ClassEnv
+initialEnv =  ClassEnv 
+    { classes = const Nothing
+    , defaults = [tInteger, tDouble] 
+    }
+
+type EnvTransformer = ClassEnv -> Maybe ClassEnv
+
+infixr 5 <:>
+(<:>) :: EnvTransformer -> EnvTransformer -> EnvTransformer
+(f <:> g) ce = do { ce' <- f ce ; g ce' }
+
+addClass :: Id -> [Id] -> EnvTransformer
+addClass i is ce
+    | defined (classes ce i)              = Nothing -- class is already defined 
+    | any (not . defined . classes ce) is = Nothing -- one superclass not defined
+    | otherwise                           = Just $ modify ce i (is,[])
 
