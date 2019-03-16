@@ -1,10 +1,10 @@
 Definition peirce                 := forall P Q:Prop, ((P->Q)->P)->P.
-Definition classic                := forall P:Prop, ~~P->P.
-Definition lem                    := forall P:Prop, P\/~P.
-Definition and_to_or              := forall P Q:Prop, ~(~P/\~Q)->P\/Q.
-Definition imp_to_or              := forall P Q:Prop, (P->Q)->(~P\/Q).
-Definition ex_to_all              := forall (A:Type) (P: A->Prop), 
-                              ~(exists x:A, ~P x) -> (forall x:A, P x).
+Definition classic                := forall P:Prop, ~~P -> P.
+Definition lem                    := forall P:Prop, P \/ ~P.
+Definition and_to_or              := forall P Q:Prop, ~(~P /\ ~Q) -> P \/ Q.
+Definition imp_to_or              := forall P Q:Prop, (P -> Q) -> (~P \/ Q).
+Definition ex_to_all              := forall (A:Type) (P: A -> Prop), 
+    ~(exists x:A, ~P x) -> (forall x:A, P x).
 
 (* these six propositions are equivalent. Before we engage in the proof
 of this equivalence, we shall clarify a few results, which do hold outside
@@ -16,11 +16,18 @@ Proof.
   intros P Q Hp; intro Hpq; exact Hp.
 Qed.
 
+Lemma L1' : forall P Q: Prop, P->((P->Q)->P).
+Proof. tauto. Qed.
+
 (* this is the reverse of classic *)
 Lemma L2 : forall P:Prop, P->~~P.
 Proof.
   intros P Hp; intro H; apply H; exact Hp.
 Qed.
+
+Lemma L2' : forall P:Prop, P->~~P.
+Proof. tauto. Qed.
+
 
 (* this is the reverse of and_to_or *)
 Lemma L3 : forall P Q:Prop, P\/Q->~(~P/\~Q).
@@ -30,6 +37,10 @@ Proof.
   intro Hq; apply Hnq; exact Hq.
 Qed.
 
+Lemma L3' : forall P Q:Prop, P\/Q->~(~P/\~Q).
+Proof. tauto. Qed.
+
+
 (* this is the reverse of imp_to_or *)
 Lemma L4 : forall P Q: Prop, (~P\/Q)->(P->Q).
 Proof.
@@ -38,6 +49,10 @@ Proof.
   intro Hq; exact Hq.
 Qed.
 
+Lemma L4' : forall P Q: Prop, (~P\/Q)->(P->Q).
+Proof. tauto. Qed.
+
+(* This is not propositional logic: can't use 'tauto' *)
 Lemma L5 : forall (A:Type) (P: A->Prop),
   (forall x:A, P x) -> ~(exists x:A, ~P x).
 Proof. 
@@ -45,7 +60,8 @@ Proof.
 Qed.
 
 
-Theorem peirce_to_classic : peirce->classic.
+(* This is not propositionat *)
+Theorem peirce_to_classic : peirce -> classic.
 Proof.
   unfold peirce. unfold classic.
   intro H. intro P. intro H'.
@@ -54,7 +70,15 @@ Proof.
   intro H1. apply False_ind. apply H'. exact H1.
 Qed.
 
-Theorem classic_to_lem : classic->lem.
+Theorem peirce_to_classic' : peirce -> classic.
+Proof.
+  unfold peirce. unfold classic. intuition. 
+  apply H with False. intros H'. exfalso. apply H0.
+  assumption.
+Qed.
+
+
+Theorem classic_to_lem : classic -> lem.
 Proof.
   unfold classic. unfold lem.
   intro H. intro P. apply H with (P:=P\/~P).
@@ -63,6 +87,8 @@ Proof.
   left; exact Hp. intro H1. apply H'. right; exact H1.
 Qed.
 
+
+(*
 Theorem lem_to_and_or : lem->and_to_or.
 Proof.
   unfold lem. unfold and_to_or.
@@ -111,4 +137,4 @@ Proof.
   apply H'. intro Hp. apply False_ind. apply H1. exact Hp.
   intro Hp; exact Hp. apply H. intro Hp; exact Hp.
 Qed.
-
+*)

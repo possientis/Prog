@@ -6,7 +6,7 @@ all:	utils_nat.vo \
 		nested.vo \
 		reflexive.vo \
 		recursion.vo \
-		discriminate.vo \
+		tactic.vo \
 		test_untyped.vo \
 		test_typed.vo
 	
@@ -34,8 +34,8 @@ reflexive.vo : reflexive.v
 recursion.vo : recursion.v
 	coqc recursion.v
 
-discriminate.vo : discriminate.v
-	coqc discriminate.v
+tactic.vo : tactic.v
+	coqc tactic.v
 
 test_untyped.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
