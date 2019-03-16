@@ -13,7 +13,6 @@ b  = field 6 13
 one :: FieldElement 
 one = field 1 13
 
-
 main :: IO ()
 main = do
     putStrLn $ "a = " ++ show a
