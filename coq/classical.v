@@ -59,6 +59,11 @@ Proof.
   intros A P H H'. elim H'. intros a Ha. apply Ha. apply H. 
 Qed.
 
+Lemma L5' : forall (A:Type) (P: A->Prop),
+  (forall x:A, P x) -> ~(exists x:A, ~P x).
+Proof.  firstorder. Qed.
+ 
+
 
 (* This is not propositionat *)
 Theorem peirce_to_classic : peirce -> classic.
@@ -72,11 +77,15 @@ Qed.
 
 Theorem peirce_to_classic' : peirce -> classic.
 Proof.
-  unfold peirce. unfold classic. intuition. 
-  apply H with False. intros H'. exfalso. apply H0.
-  assumption.
+  unfold peirce. unfold classic. intuition.
+  apply H with False. intros H1. exfalso. apply H0. assumption.
 Qed.
 
+Theorem peirce_to_classic'' : peirce -> classic.
+Proof.
+  unfold peirce. unfold classic. firstorder.
+  apply H with False. intros H1. exfalso. apply H0. assumption.
+Qed.
 
 Theorem classic_to_lem : classic -> lem.
 Proof.
@@ -87,9 +96,26 @@ Proof.
   left; exact Hp. intro H1. apply H'. right; exact H1.
 Qed.
 
+Theorem classic_to_lem' : classic -> lem.
+Proof.
+  unfold classic. unfold lem. firstorder. 
+  apply H. intros H0.
+  apply H0. right. intros H1. apply H0. left. assumption.
+Qed.
 
-(*
-Theorem lem_to_and_or : lem->and_to_or.
+(* firstorder tactic did not bring anything *)
+Theorem classic_to_lem'' : classic -> lem.
+Proof.
+  unfold classic. unfold lem. intros H P.
+  apply H. intros H0.
+  apply H0. right. intros H1. apply H0. left. assumption.
+Qed.
+
+
+
+
+
+Theorem lem_to_and_or : lem -> and_to_or.
 Proof.
   unfold lem. unfold and_to_or.
   intro ExM. intros P Q. intro H. cut ((P\/Q) \/~(P\/Q)).
@@ -99,7 +125,7 @@ Proof.
 Qed.
 
 
-Theorem and_or_to_imp_or : and_to_or->imp_to_or.
+Theorem and_or_to_imp_or : and_to_or -> imp_to_or.
 Proof.
   unfold and_to_or. unfold imp_to_or.
   intro H. intros P Q. intro Hpq. cut(P\/~P). intro H1.
@@ -108,7 +134,7 @@ Proof.
   intros H4 H5. apply H5; exact H4.
 Qed.
 
-Theorem imp_or_to_ex_all : imp_to_or->ex_to_all.
+Theorem imp_or_to_ex_all : imp_to_or -> ex_to_all.
 Proof.
   unfold imp_to_or, ex_to_all. intros H A P H' a.
   cut(~P a\/P a). intro Hex. elim Hex. intro Hna.
@@ -119,7 +145,7 @@ Qed.
 
 (* rather than showing ex_to_all->peirce to close the loop,
 we go for a more natural result, ex_to_all->classic *)
-Theorem ex_all_to_classic :  ex_to_all->classic.
+Theorem ex_all_to_classic :  ex_to_all -> classic.
 Proof.
   unfold ex_to_all, classic. intros A P H.
   pose (Q := (fun (x:Prop) => P)).
@@ -130,11 +156,11 @@ Qed.
  
 
 (* we now close the loop *)
-Theorem imp_or_to_peirce : imp_to_or->peirce.
+Theorem imp_or_to_peirce : imp_to_or -> peirce.
 Proof.
   unfold imp_to_or. unfold peirce. intro H. intros P Q.
   intro H'. cut (~P\/P). intro H0. elim H0. intro H1.
   apply H'. intro Hp. apply False_ind. apply H1. exact Hp.
   intro Hp; exact Hp. apply H. intro Hp; exact Hp.
 Qed.
-*)
+

@@ -1,5 +1,6 @@
 module  TypeClass
     (   q1
+    ,   main
     ,   ord
     ,   mguPred
     ,   matchPred
@@ -13,6 +14,8 @@ module  TypeClass
     ,   initialEnv
     ,   (<:>)
     ,   addClass
+    ,   addPreludeClasses
+    ,   addInst
     )   where
 
 import Subst
@@ -118,3 +121,59 @@ addClass i is ce
     | any (not . defined . classes ce) is = Nothing -- one superclass not defined
     | otherwise                           = Just $ modify ce i (is,[])
 
+addPreludeClasses :: EnvTransformer
+addPreludeClasses = addCoreClasses <:> addNumClasses
+
+
+addCoreClasses :: EnvTransformer
+addCoreClasses  =  addClass "Eq"            []
+               <:> addClass "Ord"           ["Eq"]
+               <:> addClass "Show"          []
+               <:> addClass "Read"          []
+               <:> addClass "Bounded"       []  
+               <:> addClass "Enum"          []
+               <:> addClass "Functor"       []
+               <:> addClass "Applicative"   ["Functor"]
+               <:> addClass "Monad"         ["Applicative"]
+             
+addNumClasses :: EnvTransformer
+addNumClasses   =  addClass "Num"           ["Eq","Show"]
+               <:> addClass "Real"          ["Num","Ord"]
+               <:> addClass "Fractional"    ["Num"]
+               <:> addClass "Integral"      ["Real","Enum"]
+               <:> addClass "RealFrac"      ["Real", "Fractional"]
+               <:> addClass "Floating"      ["Fractional"]
+               <:> addClass "RealFloat"     ["RealFrac","Floating"] 
+
+addInst :: [Pred] -> Pred -> EnvTransformer
+addInst ps p@(IsIn i _) ce
+    | not (defined (classes ce i))  = Nothing -- no class for instance
+    | any (overlap p) qs            = Nothing -- overlapping instance
+    | otherwise                     = Just $ modify ce i c
+    where
+    its = insts ce i
+    qs  = [q | (_ :=> q) <- its]
+    c   = (super ce i, (ps :=> p) : its)
+
+overlap :: Pred -> Pred -> Bool
+overlap p q = defined (mguPred p q)
+
+
+exampleInsts :: EnvTransformer
+exampleInsts    =  addPreludeClasses
+               <:> addInst [] (IsIn "Ord" tUnit) 
+               <:> addInst [] (IsIn "Ord" tChar)
+               <:> addInst [] (IsIn "Ord" tInt)
+--             This would create an overlapping instance
+--             <:> addInst [] (IsIn "Ord" (pair tInt tInt))
+               <:> addInst [IsIn "Ord" (TVar (Tyvar "a" Star))
+                           ,IsIn "Ord" (TVar (Tyvar "b" Star))
+                           ]  (IsIn "Ord" 
+                                (pair (TVar (Tyvar "a" Star)) 
+                                      (TVar (Tyvar "b" Star))))
+                                          
+
+main :: IO ()
+main = case exampleInsts initialEnv of
+    Nothing -> putStrLn "failed"
+    Just _  -> putStrLn "succeeded"
