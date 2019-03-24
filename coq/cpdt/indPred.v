@@ -43,3 +43,42 @@ Proof. intros H. inversion H. Qed.
 Lemma even_3_contra : ~ even 3.
 Proof. intros H. inversion H as [H0|n H2 H3]. inversion H2. Qed.
 
+
+Lemma even_plus : forall (n m:nat), even n -> even m -> even (n + m).
+Proof.
+    intros n m Hn. revert m. induction Hn as [|n H IH].
+    - auto.
+    - intros m Hm. simpl. rewrite plus_n_Sm, plus_n_Sm. 
+      apply IH. constructor. assumption.
+Qed.
+
+Lemma even_twice : forall (n:nat), even (n + n).
+Proof.
+    induction n as [|n IH]; simpl.
+    - constructor.
+    - rewrite <- plus_n_Sm. constructor. assumption.
+Qed.
+
+Lemma even_back : forall (n:nat), even (S (S n)) -> even n.
+Proof.
+    intros n H. remember (S (S n)) as m eqn:E in H.
+    revert E. revert n. destruct H as [|n H IH].
+    - intros n H. inversion H.
+    - intros m H'. inversion H'. subst. assumption. 
+Qed.
+
+
+Lemma even_succ_contra : forall (n:nat), even n -> ~ even (S n).
+Proof.
+    intros n. induction n as [|n IH].
+    - intros H1 H2. inversion H2.
+    - intros H1 H2. apply even_back in H2. apply IH; assumption.
+Qed.
+
+
+
+Lemma even_contra : forall (n:nat), ~ even (S (n + n)).
+Proof.
+    intros n. apply even_succ_contra, even_twice.
+Qed.
+
