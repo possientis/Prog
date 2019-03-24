@@ -7,6 +7,14 @@ Definition imp_to_or              := forall P Q:Prop, (P -> Q) -> (~P \/ Q).
 Definition ex_to_all              := forall (A:Type) (P: A -> Prop), 
     ~(exists x:A, ~P x) -> (forall x:A, P x).
 
+Inductive isZero : nat -> Prop :=
+| IsZero : isZero 0
+.
+
+Inductive Even : nat -> Prop :=
+| EvenO  : Even 0
+| EvenSS : forall (n:nat), Even n -> Even (S (S n))
+.
 
 (* discriminate tactic*)
 Lemma true_neq_false1 : true <> false.
@@ -128,4 +136,18 @@ Lemma remember1 : 1 + 1 = 2.
     remember 1 as x eqn:E.
     rewrite E. reflexivity.
 Qed.
+
+(* inversion tactic *)
+Lemma not_isZero_1 : ~ isZero 1.
+Proof. intros H. inversion H. Qed.
+
+
+(* tactic auto *)
+Hint Constructors Even.
+
+Lemma Even_4 : Even 4.
+Proof. auto. Qed.
+
+
+
 

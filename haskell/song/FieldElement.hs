@@ -1,7 +1,6 @@
 module  FieldElement
     (   FieldElement
     ,   field
-    ,   pow
     ,   inv
     )   where
 
@@ -32,14 +31,6 @@ instance Num FieldElement where
     fromInteger _   = error "fromInteger: Should not be used for FieldElement"
     negate (FieldElement x p) = FieldElement ((-x) `mod` p) p
     
-
-pow :: FieldElement -> Integer -> FieldElement
-pow f@(FieldElement _ p) n
-    | n < 0     = error "pow: Function not implemented for negative exponent"
-    | n == 0    = FieldElement 1 p
-    | even n    = pow (f*f) (n `div` 2)
-    | odd  n    = f * pow (f*f) (n `div` 2)
-    | otherwise = error "pow: This should never happen"
 
 inv :: FieldElement -> FieldElement
 inv f@(FieldElement x p)

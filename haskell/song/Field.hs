@@ -1,69 +1,33 @@
-{-# LANGUAGE FlexibleInstances      #-}
-{-# LANGUAGE UndecidableInstances   #-}
-{-# LANGUAGE ScopedTypeVariables    #-}
-
 module  Field
     (   Field (..)
+    ,   (-)
+    ,   (/)
+    ,   pow
     )   where
 
-import Prelude (Integer, undefined)
-import qualified Prelude as P 
+import Prelude hiding ((+),(-),(*),(/))
 
-data Proxy a = Proxy
-
-class HasPrime a where
-    prime :: Proxy a -> Integer
-
-class IsInteger a where
-    toInteger   :: a -> Integer
-    fromInteger :: Integer -> a 
-
-class Field a where
+class (Eq a) => Field a where
     (+)    :: a -> a -> a
     (*)    :: a -> a -> a
-    (/)    :: a -> a -> a
-    inv    :: a -> a
     neg    :: a -> a
-    pow    :: a -> Integer -> a
+    inv    :: a -> a
     zero   :: a
     one    :: a 
 
-instance (HasPrime a, IsInteger a) => Field a  where
-    (+)  = fieldAdd
-    (*)  = fieldMul
-    (/)  = fieldDiv
-    inv  = fieldInv
-    neg  = fieldNeg
-    pow  = fieldPow
-    zero = fromInteger 0
-    one  = fromInteger 1
+(-) :: (Field a) => a -> a -> a
+(-) x y = x + neg y
 
+(/) :: (Field a) => a -> a -> a
+(/) x y 
+    | y == zero = error "Field division by zero"
+    | otherwise = x * inv y
 
-fieldAdd :: forall a. (HasPrime a, IsInteger a) => a -> a -> a
-fieldAdd n m = fromInteger (x P.+ y `P.mod` p)
-    where
-    p = prime (Proxy :: Proxy a)
-    x = toInteger n
-    y = toInteger m
-
-fieldMul :: forall a . (HasPrime a, IsInteger a) => a -> a -> a
-fieldMul n m = fromInteger (x P.* y `P.mod` p)
-    where
-    p = prime (Proxy :: Proxy a)
-    x = toInteger n
-    y = toInteger m
-
-fieldDiv :: (HasPrime a, IsInteger a) => a -> a -> a
-fieldDiv = undefined
-
-fieldInv :: (HasPrime a, IsInteger a) => a -> a
-fieldInv = undefined
-
-fieldNeg :: (HasPrime a, IsInteger a) => a -> a
-fieldNeg = undefined
-
-fieldPow :: (HasPrime a, IsInteger a) => a -> Integer -> a
-fieldPow = undefined
-
-
+pow :: (Field a) => a -> Integer -> a 
+pow x n
+    | n == 0    = one
+    | n < 0     = inv $ pow x (-n)
+    | even n    =     pow (x * x) (n `div` 2)
+    | odd  n    = x * pow (x * x) (n `div` 2) 
+    | otherwise = error "pow: this error should never happen"
 

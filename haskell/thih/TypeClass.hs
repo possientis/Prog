@@ -16,6 +16,9 @@ module  TypeClass
     ,   addClass
     ,   addPreludeClasses
     ,   addInst
+    ,   bySuper
+    ,   byInst
+    ,   entail
     )   where
 
 import Subst
@@ -23,6 +26,7 @@ import Syntax
 
 import Data.List
 import Data.Maybe
+import Control.Monad (msum)
 
 data Pred = IsIn Id Type deriving Eq
 
@@ -172,8 +176,47 @@ exampleInsts    =  addPreludeClasses
                                 (pair (TVar (Tyvar "a" Star)) 
                                       (TVar (Tyvar "b" Star))))
                                           
+exampleCE :: Maybe ClassEnv
+exampleCE = exampleInsts initialEnv
+
+
+-- If a type t is an instance of class i, it must be an instance of
+-- any super class of i , and any super class of any super class of i ...
+-- So from a class environment and a predicate, we deduce many other 
+-- predicates. The super class hierarchy is restricted to being acyclic
+-- so bySuper ce p will always be finite.
+
+bySuper :: ClassEnv -> Pred -> [Pred]
+bySuper ce p@(IsIn i t) = p : concat [bySuper ce (IsIn i' t) | i' <- super ce i]
+
+
+-- Given a class environment ce and knowledge of a predicate telling us that
+-- 'type t is an instance of class i', we may deduce other predicates: 
+-- 'insts ce i' gives us the list of all instances declarations of the class
+-- i in the environment ce. We go through this list of declarations. For
+-- each declaration p :=> h we look if the declaration head 'h' matches
+-- our predicate (so the predicate holds because of such declaration 
+-- and only because of such declaration as haskell prevents overlapping
+-- instances. When we find a matching head, we obtain the corresponding
+-- substitution which we apply to all the constraints, which are the 
+-- predicates which can be inferred
+byInst :: ClassEnv -> Pred -> Maybe [Pred]
+byInst ce p@(IsIn i _) = msum [tryInst it | it <- insts ce i]
+    where tryInst (ps :=> h) = do 
+            u <- matchPred h p
+            Just (map (apply u) ps)
+
+-- entail ce ps p will be True, if and only if the predicate p will
+-- hold whenever all the predicates ps are satisfied:
+
+entail :: ClassEnv -> [Pred] -> Pred -> Bool
+entail ce ps p = any (p `elem`) (map (bySuper ce) ps) || 
+    case byInst ce p of
+        Nothing -> False
+        Just qs -> all (entail ce ps) qs
+
 
 main :: IO ()
-main = case exampleInsts initialEnv of
+main = case exampleCE of
     Nothing -> putStrLn "failed"
     Just _  -> putStrLn "succeeded"
