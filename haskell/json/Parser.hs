@@ -16,8 +16,9 @@ module Parser
   , (|||)
   ) where
 
-import Control.Applicative
 import Control.Monad
+import Control.Monad.Fail
+import Control.Applicative
 
 -- attempting to unite the operations of lexical analysis and parsing 
 -- of token streams into a single monad. So typically the variable type
@@ -45,6 +46,9 @@ instance Alternative (Parser b) where
 instance MonadPlus (Parser b) where
   mzero = Parser (\cs -> [])        -- no parse, not to be confused with return []
   mplus p q = Parser (\cs -> run p cs ++ run q cs)
+
+instance MonadFail (Parser b) where
+    fail s = error s
 
 sat :: (b -> Bool) -> Parser b [b]
 sat pred = Parser f where
