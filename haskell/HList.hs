@@ -1,8 +1,13 @@
-{-# LANGUAGE GADTs              #-}
-{-# LANGUAGE DataKinds          #-}
-{-# LANGUAGE TypeFamilies       #-}
-{-# LANGUAGE TypeOperators      #-}
-{-# LANGUAGE KindSignatures     #-}
+{-# LANGUAGE GADTs                  #-}
+{-# LANGUAGE DataKinds              #-}
+{-# LANGUAGE PolyKinds              #-}
+{-# LANGUAGE RankNTypes             #-}
+{-# LANGUAGE TypeFamilies           #-}
+{-# LANGUAGE TypeOperators          #-}
+{-# LANGUAGE KindSignatures         #-}
+{-# LANGUAGE ConstraintKinds        #-}
+{-# LANGUAGE TypeApplications       #-}
+{-# LANGUAGE ScopedTypeVariables    #-}
 
 import Data.Constraint
 
@@ -73,5 +78,16 @@ mapToDb (a :> as) = toDb a :> mapToDb as
 dbChris :: HList (MapDbType User)
 dbChris = mapToDb chris
 
+
+type family Map (f :: a -> b) (xs :: [a]) :: [b] where
+    Map _ '[]      = '[]
+    Map f (x : xs) = f x : Map f xs
+
+{-
+hMap :: forall (c :: * -> Constraint) (f :: * -> *) (as :: [*]) .
+    All c as => (forall a . c a => a -> f a) -> HList as -> HList (Map f as)
+hMap g []       = []
+hMap g (x :> xs) = g x :> hMap @c @f g xs
+-}
 
 
