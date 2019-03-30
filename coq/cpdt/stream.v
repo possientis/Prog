@@ -6,18 +6,20 @@ CoInductive Stream (a:Type) : Type :=
 
 Arguments Cons {a} _ _.
 
+Definition head (a:Type) (s:Stream a) : a :=
+    match s with
+    | Cons x _  => x
+    end.
 
-CoFixpoint zeroes : Stream nat := Cons 0 zeroes.
+Arguments head {a} _.
 
-CoFixpoint from (n:nat) : Stream nat := Cons n (from (S n)).
 
-Definition nats : Stream nat := from 0.
+Definition tail (a:Type) (s:Stream a) : Stream a :=
+    match s with
+    | Cons _ t  => t
+    end.
 
-CoFixpoint trues_falses : Stream bool := Cons true falses_trues
-with falses_trues : Stream bool := Cons false trues_falses.
-
-CoFixpoint trues_falses' : Stream bool := Cons true (Cons false trues_falses').
-
+Arguments tail {a} _.
 
 Fixpoint take (a:Type) (n:nat) (s:Stream a) : list a :=
     match n with
@@ -30,17 +32,7 @@ Fixpoint take (a:Type) (n:nat) (s:Stream a) : list a :=
 
 Arguments take {a} _ _.
 
-Example take_test1 : take 5 zeroes = 0::0::0::0::0::nil.
-Proof. reflexivity. Qed.
-
-
-Example take_test2 : take 6 nats = 0::1::2::3::4::5::nil.
-Proof. reflexivity. Qed.
-
-
-Example take_test3 : take 3 trues_falses = true::false::true::nil.
-Proof. reflexivity. Qed.
-
+(* our experience of induction suggests this may not be the best *)
 CoFixpoint map' (a b:Type) (f:a -> b) (s:Stream a) : Stream b :=
     match s with
     | Cons h t  => Cons (f h) (map' a b f t)
@@ -48,6 +40,7 @@ CoFixpoint map' (a b:Type) (f:a -> b) (s:Stream a) : Stream b :=
 
 Arguments map' {a} {b} _ _.
 
+(* our experience of induction suggests this could be better *)
 Definition map (a b:Type) (f:a -> b) : Stream a -> Stream b :=
     cofix g (s:Stream a) : Stream b :=
         match s with
@@ -56,11 +49,88 @@ Definition map (a b:Type) (f:a -> b) : Stream a -> Stream b :=
 
 Arguments map {a} {b} _ _.
 
+CoFixpoint zeroes : Stream nat := Cons 0 zeroes.
+
+CoFixpoint from (n:nat) : Stream nat := Cons n (from (S n)).
+
+Definition nats : Stream nat := from 0.
+
+CoFixpoint ones : Stream nat := Cons 1 ones.
+Definition ones': Stream nat := map S zeroes.
+
+Example take_test1 : take 5 zeroes = 0::0::0::0::0::nil.
+Proof. reflexivity. Qed.
+
+
+Example take_test2 : take 6 nats = 0::1::2::3::4::5::nil.
+Proof. reflexivity. Qed.
+
+
+
+
+CoFixpoint interleave (a:Type) (s1 s2:Stream a) : Stream a :=
+    match s1, s2 with
+    | Cons h1 t1, Cons h2 t2    => Cons h1 (Cons h2 (interleave a t1 t2))
+    end.
+
+Arguments interleave {a} _ _.
+
+(* unguarded recursive call 
+CoFixpoint bizarre (a b:Type) (f:a -> b) (s:Stream a) : Stream b :=
+    match s with
+    | Cons h t => interleave (Cons (f h) (bizarre a b f t)) (Cons (f h) (bizarre a b f t))
+    end.
+*)
+
+(* unguarded recursive call 
+CoFixpoint bad : Stream nat := tail (Cons 0 bad).
+*)
+
+
+
+CoInductive stream_eq (a:Type) : Stream a -> Stream a -> Prop :=
+| Stream_eq : forall (x:a) (t1 t2:Stream a), 
+    stream_eq a t1 t2 -> stream_eq a (Cons x t1) (Cons x t2).
+
+(* Sure you can define this but useless, cannot construct a proof *)
+Inductive stream_eq' (a:Type) : Stream a -> Stream a -> Prop :=
+| Stream_eq' : forall (x:a) (t1 t2:Stream a),
+    stream_eq' a t1 t2 -> stream_eq' a (Cons x t1) (Cons x t2).
+
+Arguments stream_eq  {a} _ _.
+Arguments stream_eq' {a} _ _.
+
+
+(* not quite the same as 'id' *)
+Definition frob (a:Type) (s:Stream a) : Stream a :=
+    match s with
+    | Cons h t  => Cons h t
+    end.
+
+Arguments frob {a} _.
+
+(* seems pointless and yet ... *)
+Lemma frob_same : forall (a:Type) (s:Stream a), s = frob s.
+Proof. intros a [h t]. reflexivity. Qed.
+
+
+Lemma ones_same : stream_eq ones ones'.
+Proof. 
+    cofix. 
+    rewrite (frob_same nat ones).
+    rewrite (frob_same nat ones').
+    simpl. constructor. assumption.
+Qed.
+
 (*
-Lemma map_same : forall (a b:Type) (f:a -> b) (s:Stream a), map f s = map' f s.
+Lemma map_same : forall (a b:Type) (f:a -> b) (s:Stream a), stream_eq (map f s) (map' f s).
 Proof.
-    intros a b f [h t]. simpl.
+    intros a b f. intros [h t]. cofix.
+    rewrite frob_same at 1. 
+    rewrite frob_same. 
+    simpl. constructor.
 
 Show.
 *)
+
 

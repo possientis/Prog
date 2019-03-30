@@ -6,6 +6,7 @@ module  TypeClass
     ,   matchPred
     ,   Inst
     ,   Class
+    ,   Qual
     ,   ClassEnv (..)
     ,   super
     ,   insts
@@ -19,6 +20,10 @@ module  TypeClass
     ,   bySuper
     ,   byInst
     ,   entail
+    ,   inHnf
+    ,   toHnfs
+    ,   simplify
+    ,   reduce
     )   where
 
 import Subst
@@ -215,6 +220,37 @@ entail ce ps p = any (p `elem`) (map (bySuper ce) ps) ||
         Nothing -> False
         Just qs -> all (entail ce ps) qs
 
+inHnf :: Pred -> Bool
+inHnf (IsIn _ t) = hnf t where
+    hnf (TVar   _) = True
+    hnf (TCon   _) = False
+    hnf (TAp t' _) = hnf t'
+    hnf (TGen   _) = error "inHnf: not implemented for TGen"
+
+toHnf :: Monad m => ClassEnv -> Pred -> m [Pred]
+toHnf ce p
+    | inHnf p   = return [p]
+    | otherwise = case byInst ce p of
+        Nothing -> fail "context redution"
+        Just ps -> toHnfs ce ps 
+
+
+toHnfs  :: Monad m => ClassEnv -> [Pred] -> m [Pred]
+toHnfs ce ps = do
+    pss <- mapM (toHnf ce) ps
+    return $ concat pss
+  
+simplify :: ClassEnv -> [Pred] -> [Pred]
+simplify ce = go [] where
+    go rs []        = rs
+    go rs (p:ps) 
+        | entail ce (rs ++ ps) p    = go rs ps
+        | otherwise                 = go (p:rs) ps
+
+reduce :: Monad m => ClassEnv -> [Pred] -> m [Pred]
+reduce ce ps = do
+    qs <- toHnfs ce ps
+    return $ simplify ce qs
 
 main :: IO ()
 main = case exampleCE of
