@@ -6,8 +6,8 @@ import Prelude as P
 import Test.QuickCheck
 
 import Field
-import IsInteger
 import HasPrime
+import IsInteger
 import PrimeField
 
 newtype F13 = F13 { unF13 :: Integer }
@@ -31,8 +31,8 @@ instance Field F13 where
     one  = fieldOne
 
 instance Arbitrary F13 where
-    arbitrary = (F13 . (`mod` 13)) <$> arbitrary
+    arbitrary = fieldArbitrary
 
 instance Eq F13 where 
-    (==) (F13 x) (F13 y) = (x P.- y) `mod` 13 == 0
+    (==) = fieldEq
 
