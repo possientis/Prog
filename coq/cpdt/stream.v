@@ -113,24 +113,36 @@ Arguments frob {a} _.
 Lemma frob_same : forall (a:Type) (s:Stream a), s = frob s.
 Proof. intros a [h t]. reflexivity. Qed.
 
+Arguments frob_same {a} _.
 
 Lemma ones_same : stream_eq ones ones'.
 Proof. 
     cofix. 
-    rewrite (frob_same nat ones).
-    rewrite (frob_same nat ones').
+    rewrite (frob_same ones).
+    rewrite (frob_same ones').
     simpl. constructor. assumption.
 Qed.
 
-(*
+
 Lemma map_same : forall (a b:Type) (f:a -> b) (s:Stream a), stream_eq (map f s) (map' f s).
 Proof.
-    intros a b f. intros [h t]. cofix.
-    rewrite frob_same at 1. 
-    rewrite frob_same. 
-    simpl. constructor.
+    intros a b f. cofix. intros [h t].
+    rewrite (frob_same (map  f (Cons h t))).
+    rewrite (frob_same (map' f (Cons h t))).
+    simpl. constructor. apply map_same.
+Qed.
+
+
+Lemma stream_eq_coind : forall (a:Type) (R:Stream a -> Stream a -> Prop),
+    (forall (s1 s2:Stream a), R s1 s2 -> head s1 = head s2)     ->
+    (forall (s1 s2:Stream a), R s1 s2 -> R (tail s1) (tail s2)) ->
+    (forall (s1 s2:Stream a), R s1 s2 -> stream_eq s1 s2).
+Proof.
+    intros a R Hhead Htail. cofix. intros [h1 t1] [h2 t2] H.
+
 
 Show.
-*)
+
+
 
 

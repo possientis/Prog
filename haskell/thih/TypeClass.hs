@@ -6,7 +6,7 @@ module  TypeClass
     ,   matchPred
     ,   Inst
     ,   Class
-    ,   Qual
+    ,   Qual     (..)
     ,   ClassEnv (..)
     ,   super
     ,   insts

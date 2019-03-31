@@ -1,6 +1,7 @@
 module  Scheme
     (   Scheme 
     ,   quantify
+    ,   toScheme
     )   where
 
 import Subst
@@ -21,3 +22,6 @@ quantify vs qt = Forall ks (apply s qt)
             ks  = map kind vs'
             s   = zip vs' (map TGen [0..]) 
 
+
+toScheme :: Type -> Scheme
+toScheme t = Forall [] ([] :=> t)

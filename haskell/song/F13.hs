@@ -2,12 +2,15 @@ module  F13
     (   F13 (..)
     )   where
 
+import Prelude as P
+import Test.QuickCheck
+
 import Field
 import IsInteger
 import HasPrime
 import PrimeField
 
-newtype F13 = F13 { unF13 :: Integer} deriving (Eq)
+newtype F13 = F13 { unF13 :: Integer }
 
 instance Show F13 where
     show = show . unF13
@@ -27,5 +30,9 @@ instance Field F13 where
     zero = fieldZero
     one  = fieldOne
 
-    
+instance Arbitrary F13 where
+    arbitrary = (F13 . (`mod` 13)) <$> arbitrary
+
+instance Eq F13 where 
+    (==) (F13 x) (F13 y) = (x P.- y) `mod` 13 == 0
 
