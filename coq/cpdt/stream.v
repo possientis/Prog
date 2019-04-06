@@ -94,6 +94,16 @@ CoInductive stream_eq (a:Type) : Stream a -> Stream a -> Prop :=
 
 Arguments stream_eq  {a} _ _.
 
+Lemma stream_eq_basic : forall (a:Type) (s1 s2:Stream a), 
+    head s1 = head s2               -> 
+    stream_eq (tail s1) (tail s2)   -> 
+    stream_eq s1 s2.
+Proof.
+    intros a [h1 t1] [h2 t2]. simpl. intros Head Tail.
+    rewrite Head. constructor. assumption.
+Qed.
+
+
 Lemma stream_eq_coind : forall (a:Type) (R:Stream a -> Stream a -> Prop),
     (forall (s1 s2:Stream a), R s1 s2 -> head s1 = head s2)     ->
     (forall (s1 s2:Stream a), R s1 s2 -> R (tail s1) (tail s2)) ->
@@ -107,6 +117,7 @@ Proof.
     apply Htail in H. simpl in H. 
     assumption.
 Qed.
+
 
 (* direct proof *)
 Lemma stream_eq_refl : forall (a:Type) (s:Stream a), stream_eq s s.
@@ -124,8 +135,18 @@ Proof.
     - reflexivity.
 Qed.
 
-(* proof using coinduction principle *)
+(* direct proof *)
 Lemma stream_eq_sym : forall (a:Type) (s1 s2:Stream a), 
+    stream_eq s1 s2 -> stream_eq s2 s1.
+Proof.
+    intros a. cofix. intros s1 s2 H. destruct H.
+    constructor. apply stream_eq_sym. Guarded. 
+    assumption.
+Qed.
+
+
+(* proof using coinduction principle *)
+Lemma stream_eq_sym' : forall (a:Type) (s1 s2:Stream a), 
     stream_eq s1 s2 -> stream_eq s2 s1.
 Proof.
     intros a s1 s2 H. apply (stream_eq_coind a (fun x y => stream_eq y x)).
@@ -134,8 +155,38 @@ Proof.
     - assumption.
 Qed.
 
+(* direct proof *)
+Lemma stream_eq_trans : forall (a:Type) (s1 s2 s3:Stream a),
+    stream_eq s1 s2 -> stream_eq s2 s3 -> stream_eq s1 s3.
+Proof.
+    intros a. cofix. intros s1 s2 s3 H12. revert s3. 
+    destruct H12. intros s3 H23. 
+    remember (Cons x t2) as s2 eqn:E in H23. revert E.
+    destruct H23. intros H. inversion H. subst.
+    constructor.
+    apply stream_eq_trans with t2; assumption.
+Qed.
 
-(*
+(* proof using coinduction principle *)
+Lemma stream_eq_trans' : forall (a:Type) (s1 s2 s3:Stream a),
+    stream_eq s1 s2 -> stream_eq s2 s3 -> stream_eq s1 s3.
+Proof.
+   intros a s1 s2 s3 H12 H23. 
+   apply (stream_eq_coind a 
+    (fun x z => exists y, stream_eq x y /\ stream_eq y z)).
+    - clear s1 s2 s3 H12 H23. intros s1 s3 [s2 [H12 H23]].
+      revert s3 H23. destruct H12. intros s3 H23.
+      remember (Cons x t2) as s2 eqn:E in H23. revert E.
+      destruct H23. intros H. inversion H. subst.
+      reflexivity.
+    - clear s1 s2 s3 H12 H23. intros s1 s3 [s2 [H12 H23]].
+      exists (tail s2). split.
+      + destruct H12. assumption.
+      + destruct H23. assumption.
+    - exists s2. split; assumption.
+Qed.
+
+
 (* not quite the same as 'id' *)
 Definition frob (a:Type) (s:Stream a) : Stream a :=
     match s with
@@ -150,6 +201,7 @@ Proof. intros a [h t]. reflexivity. Qed.
 
 Arguments frob_same {a} _.
 
+(* direct proof *)
 Lemma ones_same : stream_eq ones ones'.
 Proof. 
     cofix. 
@@ -158,6 +210,10 @@ Proof.
     simpl. constructor. assumption.
 Qed.
 
+(* proof using coinduction principle *)
+
+
+(*
 
 Lemma map_same : forall (a b:Type) (f:a -> b) (s:Stream a), stream_eq (map f s) (map' f s).
 Proof.
