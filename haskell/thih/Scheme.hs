@@ -1,5 +1,5 @@
 module  Scheme
-    (   Scheme 
+    (   Scheme      (..)
     ,   quantify
     ,   toScheme
     )   where

@@ -5,6 +5,7 @@ module  TypeClass
     ,   mguPred
     ,   matchPred
     ,   Inst
+    ,   Pred    (..)
     ,   Class
     ,   Qual     (..)
     ,   ClassEnv (..)

@@ -92,15 +92,50 @@ CoInductive stream_eq (a:Type) : Stream a -> Stream a -> Prop :=
 | Stream_eq : forall (x:a) (t1 t2:Stream a), 
     stream_eq a t1 t2 -> stream_eq a (Cons x t1) (Cons x t2).
 
-(* Sure you can define this but useless, cannot construct a proof *)
-Inductive stream_eq' (a:Type) : Stream a -> Stream a -> Prop :=
-| Stream_eq' : forall (x:a) (t1 t2:Stream a),
-    stream_eq' a t1 t2 -> stream_eq' a (Cons x t1) (Cons x t2).
-
 Arguments stream_eq  {a} _ _.
-Arguments stream_eq' {a} _ _.
+
+Lemma stream_eq_coind : forall (a:Type) (R:Stream a -> Stream a -> Prop),
+    (forall (s1 s2:Stream a), R s1 s2 -> head s1 = head s2)     ->
+    (forall (s1 s2:Stream a), R s1 s2 -> R (tail s1) (tail s2)) ->
+    (forall (s1 s2:Stream a), R s1 s2 -> stream_eq s1 s2).
+Proof.
+    intros a R Hhead Htail. cofix. intros [h1 t1] [h2 t2] H.
+    generalize H. intro H'. 
+    apply Hhead in H'. simpl in H'. 
+    rewrite H'. constructor. 
+    apply stream_eq_coind. 
+    apply Htail in H. simpl in H. 
+    assumption.
+Qed.
+
+(* direct proof *)
+Lemma stream_eq_refl : forall (a:Type) (s:Stream a), stream_eq s s.
+Proof.
+    intros a. cofix. intros [h t]. 
+    constructor. apply stream_eq_refl.
+Qed.
+
+(* proof using coinduction principle *)
+Lemma stream_eq_refl' : forall (a:Type) (s:Stream a), stream_eq s s.
+Proof.
+    intros a s. apply (stream_eq_coind a (fun x y => x = y)).
+    - clear s. intros s1 s2 H. rewrite H. reflexivity.
+    - clear s. intros s1 s2 H. rewrite H. reflexivity.
+    - reflexivity.
+Qed.
+
+(* proof using coinduction principle *)
+Lemma stream_eq_sym : forall (a:Type) (s1 s2:Stream a), 
+    stream_eq s1 s2 -> stream_eq s2 s1.
+Proof.
+    intros a s1 s2 H. apply (stream_eq_coind a (fun x y => stream_eq y x)).
+    - clear s1 s2 H. intros s1 s2 H. destruct H. reflexivity.
+    - clear s1 s2 H. intros s1 s2 H. destruct H. assumption.
+    - assumption.
+Qed.
 
 
+(*
 (* not quite the same as 'id' *)
 Definition frob (a:Type) (s:Stream a) : Stream a :=
     match s with
@@ -133,16 +168,14 @@ Proof.
 Qed.
 
 
-Lemma stream_eq_coind : forall (a:Type) (R:Stream a -> Stream a -> Prop),
-    (forall (s1 s2:Stream a), R s1 s2 -> head s1 = head s2)     ->
-    (forall (s1 s2:Stream a), R s1 s2 -> R (tail s1) (tail s2)) ->
-    (forall (s1 s2:Stream a), R s1 s2 -> stream_eq s1 s2).
+
+(* we apply this coinduction principle *)
+
+Lemma ones_same' : stream_eq ones ones'.
 Proof.
-    intros a R Hhead Htail. cofix. intros [h1 t1] [h2 t2] H.
+
 
 
 Show.
 
-
-
-
+*)
