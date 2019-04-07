@@ -1,13 +1,16 @@
-r :: Double
-r = -29.953087149481938
+{-# LANGUAGE DataKinds  #-}
 
-k :: Integer
-k = 9
+import Prelude hiding ((+))
+import Modular
+import Field
+
+x :: Mod 13
+x =  Mod 6
+
+y :: Mod 13
+y =  Mod 7
 
 main :: IO ()
 main = do
-    let x = r ^ k
-    let y =  1 / ((1 / r) ^ k)
-    let d = abs (x - y)
-    putStrLn $ "|x - y| = " ++ show d
+    print $ x + y
 

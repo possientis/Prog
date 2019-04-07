@@ -16,7 +16,7 @@ instance Show F13 where
     show = show . unF13
 
 instance HasPrime F13 where
-    prime _ = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+    prime _ = 13 
 
 instance IsInteger F13 where
     toInteger   = unF13
