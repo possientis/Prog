@@ -2,9 +2,7 @@ module  Main
     (   main
     )   where
 
-import Test.QuickCheck
+import qualified Test.Main as T
 
 main :: IO ()
-main = do
-    ls <- generate $ vectorOf 20 arbitrary :: IO [Int]
-    print ls
+main = T.main

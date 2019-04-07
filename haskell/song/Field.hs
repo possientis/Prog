@@ -5,8 +5,7 @@ module  Field
     ,   pow
     )   where
 
-import           Prelude hiding   ((+),(-),(*),(/))
-import qualified Prelude as P     ((+),(*),(/))
+import Prelude hiding   ((+),(-),(*),(/))
 
 class (Eq a) => Field a where
     (+)    :: a -> a -> a
@@ -31,12 +30,4 @@ pow x n
     | even n    =     pow (x * x) (n `div` 2)
     | odd  n    = x * pow (x * x) (n `div` 2) 
     | otherwise = error "pow: this error should never happen"
-
-instance Field Double where
-    (+)  = (P.+)
-    (*)  = (P.*)
-    neg  = negate
-    inv  = (1 P./)
-    zero = 0
-    one  = 1
 

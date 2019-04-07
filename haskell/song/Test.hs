@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds  #-}
 
 import Prelude hiding ((+))
+
 import Modular
 import Field
 

@@ -4,7 +4,6 @@ module  Fp
 
 -- Prime field underling the elliptic curve seck256k1
 
-import Prelude as P
 import Test.QuickCheck
 
 import Field

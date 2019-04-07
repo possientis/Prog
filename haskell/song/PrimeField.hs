@@ -11,7 +11,7 @@ module  PrimeField
     ,   fieldArbitrary
     )   where
 
-import Prelude      hiding (fromInteger, toInteger)
+import Prelude          hiding (fromInteger, toInteger)
 import Data.Proxy
 import Test.QuickCheck
 

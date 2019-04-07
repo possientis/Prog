@@ -2,7 +2,6 @@ module  F13
     (   F13 (..)
     )   where
 
-import Prelude as P
 import Test.QuickCheck
 
 import Field
@@ -16,7 +15,7 @@ instance Show F13 where
     show = show . unF13
 
 instance HasPrime F13 where
-    prime _ = 13 
+    prime _ = 13
 
 instance IsInteger F13 where
     toInteger   = unF13

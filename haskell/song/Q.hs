@@ -4,12 +4,11 @@ module  Q
     (   Q (..)
     )   where
 
-import           Prelude hiding   ((+),(-),(*),(/))
-import qualified Prelude as P     ((+),(*),(/))
-import           Test.QuickCheck
+import Prelude hiding   ((+),(-),(*),(/))
+import Prelude as P     ((+),(*),(/))
+import Test.QuickCheck
 
-
-import           Field
+import Field
 
 newtype Q = Q { unQ :: Rational } deriving (Eq, Num, Fractional) 
 

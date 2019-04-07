@@ -9,6 +9,7 @@ rm -f *.o
 rm -f test
 rm -f a.out
 
+./song/clean.sh
 ./bitcoin/clean.sh
 ./lisp/clean.sh
 ./logic/clean.sh

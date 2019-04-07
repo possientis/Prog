@@ -6,6 +6,7 @@ DIR=`pwd`
 HOME=/home/john/Prog/haskell
 cd ${HOME}
 
+./song/test.sh
 ./json/test.sh
 ./logic/test.sh
 ./types/test.sh

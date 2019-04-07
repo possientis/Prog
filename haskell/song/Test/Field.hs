@@ -2,6 +2,7 @@
 
 module  Test.Field
     (   fieldTests
+    ,   testPrime
     )   where
 
 import qualified Prelude        as P    ((+))
@@ -11,6 +12,11 @@ import           Test.Hspec
 import           Test.QuickCheck
 
 import           Field
+import           HasPrime
+
+testPrime :: forall a . (HasPrime a) => Proxy a -> Integer -> Spec
+testPrime _ p = it ("checked underlying prime is correct") $ 
+    prime (Proxy :: Proxy a) `shouldBe` p
 
 fieldTests :: forall a. (Field a, Show a, Arbitrary a) => [Proxy a -> Spec]
 fieldTests =
