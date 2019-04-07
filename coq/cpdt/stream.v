@@ -86,7 +86,20 @@ CoFixpoint bizarre (a b:Type) (f:a -> b) (s:Stream a) : Stream b :=
 CoFixpoint bad : Stream nat := tail (Cons 0 bad).
 *)
 
+(* not quite the same as 'id': this function appears to be 
+   very useful when writing some coinductive proofs         *)
+Definition frob (a:Type) (s:Stream a) : Stream a :=
+    match s with
+    | Cons h t  => Cons h t
+    end.
 
+Arguments frob {a} _.
+
+(* seems pointless and yet very useful *)
+Lemma frob_same : forall (a:Type) (s:Stream a), s = frob s.
+Proof. intros a [h t]. reflexivity. Qed.
+
+Arguments frob_same {a} _.
 
 CoInductive stream_eq (a:Type) : Stream a -> Stream a -> Prop :=
 | Stream_eq : forall (x:a) (t1 t2:Stream a), 
@@ -104,7 +117,7 @@ Proof.
     rewrite Head. constructor. assumption.
 Qed.
 
-
+(* coinductive principle for stream_eq *)
 Lemma stream_eq_coind : forall (a:Type) (R:Stream a -> Stream a -> Prop),
     (forall (s1 s2:Stream a), R s1 s2 -> head s1 = head s2)     ->
     (forall (s1 s2:Stream a), R s1 s2 -> R (tail s1) (tail s2)) ->
@@ -119,15 +132,14 @@ Proof.
     assumption.
 Qed.
 
-
-(* direct proof *)
+(* direct proof, using cofix tactic *)
 Lemma stream_eq_refl : forall (a:Type) (s:Stream a), stream_eq s s.
 Proof.
     intros a. cofix. intros [h t]. 
     constructor. apply stream_eq_refl.
 Qed.
 
-(* proof using coinduction principle *)
+(* proof using coinduction principle, not using cofix tactic *)
 Lemma stream_eq_refl' : forall (a:Type) (s:Stream a), stream_eq s s.
 Proof.
     intros a s. apply (stream_eq_coind a (fun x y => x = y)).
@@ -136,7 +148,7 @@ Proof.
     - reflexivity.
 Qed.
 
-(* direct proof *)
+(* direct proof, so using cofix tactic *)
 Lemma stream_eq_sym : forall (a:Type) (s1 s2:Stream a), 
     stream_eq s1 s2 -> stream_eq s2 s1.
 Proof.
@@ -145,8 +157,7 @@ Proof.
     assumption.
 Qed.
 
-
-(* proof using coinduction principle *)
+(* proof using coinduction principle, not using cofix tactic*)
 Lemma stream_eq_sym' : forall (a:Type) (s1 s2:Stream a), 
     stream_eq s1 s2 -> stream_eq s2 s1.
 Proof.
@@ -156,7 +167,7 @@ Proof.
     - assumption.
 Qed.
 
-(* direct proof *)
+(* direct proof, so using cofix tactic *)
 Lemma stream_eq_trans : forall (a:Type) (s1 s2 s3:Stream a),
     stream_eq s1 s2 -> stream_eq s2 s3 -> stream_eq s1 s3.
 Proof.
@@ -168,7 +179,7 @@ Proof.
     apply stream_eq_trans with t2; assumption.
 Qed.
 
-(* proof using coinduction principle *)
+(* proof using coinduction principle, not using cofix tactic *)
 Lemma stream_eq_trans' : forall (a:Type) (s1 s2 s3:Stream a),
     stream_eq s1 s2 -> stream_eq s2 s3 -> stream_eq s1 s3.
 Proof.
@@ -187,22 +198,22 @@ Proof.
     - exists s2. split; assumption.
 Qed.
 
+(* predicate needed for using coinduction principle of stream_eq *)
+CoInductive is_ones : Stream nat ->  Prop :=
+| IsOnes : forall (s:Stream nat), is_ones s -> is_ones (Cons 1 s)
+.
 
-(* not quite the same as 'id' *)
-Definition frob (a:Type) (s:Stream a) : Stream a :=
-    match s with
-    | Cons h t  => Cons h t
-    end.
+Lemma ones_are_ones : is_ones ones.
+Proof.
+    cofix. rewrite frob_same. simpl. constructor. assumption. 
+Qed.
 
-Arguments frob {a} _.
+Lemma ones_are_ones' : is_ones ones'.
+Proof.
+    cofix. rewrite frob_same. simpl. constructor. assumption. 
+Qed.
 
-(* seems pointless and yet ... *)
-Lemma frob_same : forall (a:Type) (s:Stream a), s = frob s.
-Proof. intros a [h t]. reflexivity. Qed.
-
-Arguments frob_same {a} _.
-
-(* direct proof *)
+(* direct proof, so using cofix tactic *)
 Lemma ones_same : stream_eq ones ones'.
 Proof. 
     cofix. 
@@ -211,28 +222,29 @@ Proof.
     simpl. constructor. assumption.
 Qed.
 
-CoInductive is_ones : Stream nat ->  Prop :=
-| IsOnes : forall (s:Stream nat), is_ones s -> is_ones (Cons 1 s)
-.
-
-
-Lemma ones_is_ones : is_ones ones.
-Proof.
-    cofix. rewrite frob_same. simpl. constructor. assumption. 
-Qed.
-
-(*
+(* proof using coinduction principle, so not using cofix tactic *)
 Lemma ones_same' : stream_eq ones ones'.
 Proof.
     apply (stream_eq_coind nat (fun x y => is_ones x /\ is_ones y)).
-        
+    - intros s1 s2 [H1 H2]. destruct H1, H2. reflexivity.
+    - intros s1 s2 [H1 H2]. destruct H1, H2. split; assumption.
+    - split.
+        + apply ones_are_ones.
+        + apply ones_are_ones'.
+Qed.        
 
-Show.
-*)
+(* actually we can do even simpler: syntactic equality between streams useful *)
+Lemma ones_same'' : stream_eq ones ones'.
+Proof.
+    apply (stream_eq_coind nat (fun x y => x = ones /\ y = ones')).
+    - intros s1 s2 [H1 H2]. rewrite H1, H2. reflexivity.
+    - intros s1 s2 [H1 H2]. rewrite H1, H2. split; reflexivity.
+    - split; reflexivity.
+Qed.
 
-(*
-
-Lemma map_same : forall (a b:Type) (f:a -> b) (s:Stream a), stream_eq (map f s) (map' f s).
+(* direct proof, so using cofix tactic *)
+Lemma map_same : forall (a b:Type) (f:a -> b) (s:Stream a), 
+    stream_eq (map f s) (map' f s).
 Proof.
     intros a b f. cofix. intros [h t].
     rewrite (frob_same (map  f (Cons h t))).
@@ -240,15 +252,15 @@ Proof.
     simpl. constructor. apply map_same.
 Qed.
 
-
-
-(* we apply this coinduction principle *)
-
-Lemma ones_same' : stream_eq ones ones'.
+(* proof using coinduction principle: syntactic equality between streams useful *)
+Lemma map_same' : forall (a b:Type) (f:a -> b) (s:Stream a), 
+    stream_eq (map f s) (map' f s).
 Proof.
+    intros a b f s. 
+    apply (stream_eq_coind b (fun x y => exists s, x = map f s /\ y = map' f s)).
+    - clear s. intros s1 s2 [s [H1 H2]]. rewrite H1, H2. destruct s. reflexivity.
+    - clear s. intros s1 s2 [s [H1 H2]]. rewrite H1, H2. destruct s.
+      exists s. split; reflexivity.
+    - exists s. split; reflexivity.
+Qed.
 
-
-
-Show.
-
-*)
