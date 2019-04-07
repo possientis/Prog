@@ -4,12 +4,12 @@ module  Test.Main
 
 import Test.Hspec
 
-import Test.R
+import Test.Q
 import Test.Fp
 import Test.F13
 
 main :: IO ()
 main = hspec $ do
-    specF13
+    specQ
     specFp
-    specR
+    specF13

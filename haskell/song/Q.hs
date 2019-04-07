@@ -1,7 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
-module  R
-    (   R (..)
+module  Q
+    (   Q (..)
     )   where
 
 import           Prelude hiding   ((+),(-),(*),(/))
@@ -11,15 +11,12 @@ import           Test.QuickCheck
 
 import           Field
 
-eps :: Double
-eps = 0.000001
+newtype Q = Q { unQ :: Rational } deriving (Eq, Num, Fractional) 
 
-newtype R = R { unR :: Double } deriving (Num, Fractional) 
+instance Show Q where
+    show = show . unQ
 
-instance Show R where
-    show = show . unR
-
-instance Field R where
+instance Field Q where
     (+)  = (P.+)
     (*)  = (P.*)
     neg  = negate
@@ -27,9 +24,6 @@ instance Field R where
     zero = 0
     one  = 1
 
-instance Arbitrary R where
-    arbitrary = R <$> arbitrary
-
-instance Eq R where
-    (==) (R x) (R y) = abs (x - y) < eps
+instance Arbitrary Q where
+    arbitrary = Q <$> arbitrary
 

@@ -1,6 +1,7 @@
 module  Pattern
     (   Pat     (..)
     ,   tiPat
+    ,   tiPats
     )   where
 
 import TI

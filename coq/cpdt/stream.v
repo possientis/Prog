@@ -94,6 +94,7 @@ CoInductive stream_eq (a:Type) : Stream a -> Stream a -> Prop :=
 
 Arguments stream_eq  {a} _ _.
 
+(* true but seemingly not useful, leading to non-guarded proofs *)
 Lemma stream_eq_basic : forall (a:Type) (s1 s2:Stream a), 
     head s1 = head s2               -> 
     stream_eq (tail s1) (tail s2)   -> 
@@ -210,8 +211,24 @@ Proof.
     simpl. constructor. assumption.
 Qed.
 
-(* proof using coinduction principle *)
+CoInductive is_ones : Stream nat ->  Prop :=
+| IsOnes : forall (s:Stream nat), is_ones s -> is_ones (Cons 1 s)
+.
 
+
+Lemma ones_is_ones : is_ones ones.
+Proof.
+    cofix. rewrite frob_same. simpl. constructor. assumption. 
+Qed.
+
+(*
+Lemma ones_same' : stream_eq ones ones'.
+Proof.
+    apply (stream_eq_coind nat (fun x y => is_ones x /\ is_ones y)).
+        
+
+Show.
+*)
 
 (*
 
