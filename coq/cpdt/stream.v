@@ -1,4 +1,5 @@
 Require Import List.
+Require Import Arith.
 
 CoInductive Stream (a:Type) : Type :=
 | Cons : a -> Stream a -> Stream a
@@ -262,5 +263,50 @@ Proof.
     - clear s. intros s1 s2 [s [H1 H2]]. rewrite H1, H2. destruct s.
       exists s. split; reflexivity.
     - exists s. split; reflexivity.
+Qed.
+
+(* direct proof, so using cofix tactic *)
+Theorem stream_eq_loop : forall (a:Type) (s1 s2:Stream a),
+    head s1 = head s2 -> tail s1 = s1 -> tail s2 = s2 -> stream_eq s1 s2.
+Proof.
+    intros a. cofix. intros [h1 t1] [h2 t2] H T1 T2.
+    simpl in H. rewrite <- H. constructor.
+    simpl in T1, T2. apply stream_eq_loop.
+    + rewrite T1, T2. assumption.
+    + rewrite T1. assumption.
+    + rewrite T2. assumption.
+Qed.
+
+(* proof using coinduction principle,so not using confix tactic *)
+Theorem stream_eq_loop' : forall (a:Type) (s1 s2:Stream a),
+    head s1 = head s2 -> tail s1 = s1 -> tail s2 = s2 -> stream_eq s1 s2.
+Proof.
+    intros a s1 s2 H T1 T2. apply (stream_eq_coind a (fun x y => x = s1 /\ y = s2)).
+    - intros x y [Hx Hy]. subst. assumption.
+    - intros x y [Hx Hy]. subst. split; assumption.
+    - split; reflexivity.
+Qed.
+
+CoFixpoint fact_slow' (n:nat) : Stream nat := Cons (fact n) (fact_slow' (S n)).
+Definition fact_slow := fact_slow' 1.
+
+
+CoFixpoint fact_iter' (cur acc:nat) : Stream nat := Cons acc (fact_iter' (S cur) (acc * cur)).
+Definition fact_iter := fact_iter' 2 1.
+
+
+Eval simpl in (take 5 fact_slow).
+Eval simpl in (take 5 fact_iter).
+
+Lemma fact_basic: forall (n:nat), fact (S n) = (S n) * fact n.
+Proof.
+    induction n as [|n IH].
+    - reflexivity.
+    - unfold fact at 1. fold (fact (S n)). reflexivity.
+Qed.
+
+Lemma fact_def : forall (x n:nat), fact_iter' x (fact n * S n) = fact_iter' x (fact (S n)).
+Proof.
+    intros x n. rewrite mult_comm. rewrite <- fact_basic. reflexivity.
 Qed.
 

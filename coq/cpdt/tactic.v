@@ -1,3 +1,5 @@
+Require Import Arith.
+
 (* some useful bindings *)
 Definition peirce                 := forall P Q:Prop, ((P->Q)->P)->P.
 Definition classic                := forall P:Prop, ~~P -> P.
@@ -147,5 +149,13 @@ Hint Constructors Even.
 
 Lemma Even_4 : Even 4.
 Proof. auto. Qed.
+
+(* tactic ring*)
+Lemma fact_basic: forall (n:nat), (S n) * fact n = fact (S n).
+Proof.
+    induction n as [|n IH].
+    - reflexivity.
+    - simpl. ring.
+Qed.
 
 
