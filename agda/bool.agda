@@ -1,5 +1,7 @@
 module bool where
 
+open import id
+
 data 𝔹 : Set where
   tt : 𝔹
   ff : 𝔹
@@ -29,5 +31,16 @@ ff || y = y
 if_then_else_ : ∀ {ℓ} {a : Set ℓ} → 𝔹 → a → a → a
 if tt then x else y = x
 if ff then x else y = y
+
+¬-involutive : (b : 𝔹) → ¬ ¬ b ≡ b
+¬-involutive tt = refl tt
+¬-involutive ff = refl ff
+
+&&-diag : {b : 𝔹} → b && b ≡ b
+&&-diag {tt} = refl _
+&&-diag {ff} = refl _
+
+
+
 
 

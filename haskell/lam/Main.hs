@@ -4,10 +4,10 @@ module  Main
 
 import Test.QuickCheck
 
---import Syntax
-import Variable
+import Syntax
+--import Variable
 
 
 main :: IO ()
 main = do
-   sample (arbitrary :: Gen Var)
+   sample (arbitrary :: Gen Term)
