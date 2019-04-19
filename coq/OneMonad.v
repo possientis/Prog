@@ -44,12 +44,50 @@ Inductive Const (b a: Type) : Type :=
 
 Fail Inductive FixF f := fixF : f (FixF f) -> FixF f.
 
-Inductive Ext Shape (Pos:Shape -> Type) a :=
-| ext : forall s, (Pos s -> a) -> Ext Shape Pos a
+Inductive Ext (Shape : Type) (Pos:Shape -> Type) a :=
+| ext : forall (s : Shape), (Pos s -> a) -> Ext Shape Pos a
 .
 
 Arguments ext {Shape} {Pos} {a} _ _.
 
+Definition absurd (a:Type) : Void -> a :=
+    fun p => match p with end.
+
 Definition ShapeOne := unit.
 Definition PosOne (s:ShapeOne) := Void.
 Definition ExtOne a := Ext ShapeOne PosOne a.
+
+Definition toOne (a:Type) (e:ExtOne a) : One a := tt.
+
+Arguments toOne {a} _.
+
+Definition fromOne (a:Type) (z:One a) : ExtOne a :=
+    ext tt (absurd a).
+
+Arguments fromOne {a} _.
+
+Lemma toFromOne : forall (a:Type) (z:One a), toOne (fromOne z) = z.
+Proof.
+    intros a z. destruct z. unfold toOne. reflexivity.
+Qed.
+
+Axiom extensionality : forall (a b:Type) (f g:a -> b),
+    (forall (x:a), f x = g x) -> f = g.
+
+Arguments extensionality {a} {b} _ _ _.
+
+Lemma absurd_unique : forall (a:Type) (f:Void -> a), f = absurd a.
+Proof.
+    intros a f. apply extensionality. intros x. inversion x.
+Qed.
+
+
+Lemma fromToOne : forall (a:Type) (e:ExtOne a), fromOne (toOne e) = e.
+Proof.
+    intros a [s pos]. unfold PosOne in pos. unfold ShapeOne in s. destruct s.
+    unfold toOne. unfold fromOne. rewrite (absurd_unique a pos). 
+    reflexivity.
+Qed.
+
+
+

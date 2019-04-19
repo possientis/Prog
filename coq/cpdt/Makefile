@@ -7,6 +7,7 @@ all:	utils_nat.vo \
 		reflexive.vo \
 		recursion.vo \
 		tactic.vo \
+		stream.vo \
 		test_untyped.vo \
 		test_typed.vo
 	
@@ -36,6 +37,9 @@ recursion.vo : recursion.v
 
 tactic.vo : tactic.v
 	coqc tactic.v
+
+stream.vo : stream.v
+	coqc stream.v
 
 test_untyped.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

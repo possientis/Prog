@@ -66,9 +66,6 @@ Proof. reflexivity. Qed.
 Example take_test2 : take 6 nats = 0::1::2::3::4::5::nil.
 Proof. reflexivity. Qed.
 
-
-
-
 CoFixpoint interleave (a:Type) (s1 s2:Stream a) : Stream a :=
     match s1, s2 with
     | Cons h1 t1, Cons h2 t2    => Cons h1 (Cons h2 (interleave a t1 t2))
@@ -76,16 +73,16 @@ CoFixpoint interleave (a:Type) (s1 s2:Stream a) : Stream a :=
 
 Arguments interleave {a} _ _.
 
-(* unguarded recursive call 
-CoFixpoint bizarre (a b:Type) (f:a -> b) (s:Stream a) : Stream b :=
+(* unguarded recursive call *)
+Fail CoFixpoint bizarre (a b:Type) (f:a -> b) (s:Stream a) : Stream b :=
     match s with
     | Cons h t => interleave (Cons (f h) (bizarre a b f t)) (Cons (f h) (bizarre a b f t))
     end.
-*)
 
-(* unguarded recursive call 
-CoFixpoint bad : Stream nat := tail (Cons 0 bad).
-*)
+
+(* unguarded recursive call  *)
+Fail CoFixpoint bad : Stream nat := tail (Cons 0 bad).
+
 
 (* not quite the same as 'id': this function appears to be 
    very useful when writing some coinductive proofs         *)
@@ -133,6 +130,8 @@ Proof.
     assumption.
 Qed.
 
+Arguments stream_eq_coind {a} _ _ _.
+
 (* direct proof, using cofix tactic *)
 Lemma stream_eq_refl : forall (a:Type) (s:Stream a), stream_eq s s.
 Proof.
@@ -143,7 +142,7 @@ Qed.
 (* proof using coinduction principle, not using cofix tactic *)
 Lemma stream_eq_refl' : forall (a:Type) (s:Stream a), stream_eq s s.
 Proof.
-    intros a s. apply (stream_eq_coind a (fun x y => x = y)).
+    intros a s. apply (stream_eq_coind (fun x y => x = y)).
     - clear s. intros s1 s2 H. rewrite H. reflexivity.
     - clear s. intros s1 s2 H. rewrite H. reflexivity.
     - reflexivity.
@@ -162,7 +161,7 @@ Qed.
 Lemma stream_eq_sym' : forall (a:Type) (s1 s2:Stream a), 
     stream_eq s1 s2 -> stream_eq s2 s1.
 Proof.
-    intros a s1 s2 H. apply (stream_eq_coind a (fun x y => stream_eq y x)).
+    intros a s1 s2 H. apply (stream_eq_coind (fun x y => stream_eq y x)).
     - clear s1 s2 H. intros s1 s2 H. destruct H. reflexivity.
     - clear s1 s2 H. intros s1 s2 H. destruct H. assumption.
     - assumption.
@@ -185,7 +184,7 @@ Lemma stream_eq_trans' : forall (a:Type) (s1 s2 s3:Stream a),
     stream_eq s1 s2 -> stream_eq s2 s3 -> stream_eq s1 s3.
 Proof.
    intros a s1 s2 s3 H12 H23. 
-   apply (stream_eq_coind a 
+   apply (stream_eq_coind 
     (fun x z => exists y, stream_eq x y /\ stream_eq y z)).
     - clear s1 s2 s3 H12 H23. intros s1 s3 [s2 [H12 H23]].
       revert s3 H23. destruct H12. intros s3 H23.
@@ -226,7 +225,7 @@ Qed.
 (* proof using coinduction principle, so not using cofix tactic *)
 Lemma ones_same' : stream_eq ones ones'.
 Proof.
-    apply (stream_eq_coind nat (fun x y => is_ones x /\ is_ones y)).
+    apply (stream_eq_coind (fun x y => is_ones x /\ is_ones y)).
     - intros s1 s2 [H1 H2]. destruct H1, H2. reflexivity.
     - intros s1 s2 [H1 H2]. destruct H1, H2. split; assumption.
     - split.
@@ -237,7 +236,7 @@ Qed.
 (* actually we can do even simpler: syntactic equality between streams useful *)
 Lemma ones_same'' : stream_eq ones ones'.
 Proof.
-    apply (stream_eq_coind nat (fun x y => x = ones /\ y = ones')).
+    apply (stream_eq_coind (fun x y => x = ones /\ y = ones')).
     - intros s1 s2 [H1 H2]. rewrite H1, H2. reflexivity.
     - intros s1 s2 [H1 H2]. rewrite H1, H2. split; reflexivity.
     - split; reflexivity.
@@ -258,7 +257,7 @@ Lemma map_same' : forall (a b:Type) (f:a -> b) (s:Stream a),
     stream_eq (map f s) (map' f s).
 Proof.
     intros a b f s. 
-    apply (stream_eq_coind b (fun x y => exists s, x = map f s /\ y = map' f s)).
+    apply (stream_eq_coind (fun x y => exists s, x = map f s /\ y = map' f s)).
     - clear s. intros s1 s2 [s [H1 H2]]. rewrite H1, H2. destruct s. reflexivity.
     - clear s. intros s1 s2 [s [H1 H2]]. rewrite H1, H2. destruct s.
       exists s. split; reflexivity.
@@ -281,7 +280,7 @@ Qed.
 Theorem stream_eq_loop' : forall (a:Type) (s1 s2:Stream a),
     head s1 = head s2 -> tail s1 = s1 -> tail s2 = s2 -> stream_eq s1 s2.
 Proof.
-    intros a s1 s2 H T1 T2. apply (stream_eq_coind a (fun x y => x = s1 /\ y = s2)).
+    intros a s1 s2 H T1 T2. apply (stream_eq_coind (fun x y => x = s1 /\ y = s2)).
     - intros x y [Hx Hy]. subst. assumption.
     - intros x y [Hx Hy]. subst. split; assumption.
     - split; reflexivity.
@@ -290,13 +289,13 @@ Qed.
 CoFixpoint fact_slow' (n:nat) : Stream nat := Cons (fact n) (fact_slow' (S n)).
 Definition fact_slow := fact_slow' 1.
 
-
 CoFixpoint fact_iter' (cur acc:nat) : Stream nat := Cons acc (fact_iter' (S cur) (acc * cur)).
 Definition fact_iter := fact_iter' 2 1.
 
-
+(*
 Eval simpl in (take 5 fact_slow).
 Eval simpl in (take 5 fact_iter).
+*)
 
 Lemma fact_basic: forall (n:nat), fact (S n) = (S n) * fact n.
 Proof.
@@ -308,5 +307,43 @@ Qed.
 Lemma fact_def : forall (x n:nat), fact_iter' x (fact n * S n) = fact_iter' x (fact (S n)).
 Proof.
     intros x n. rewrite mult_comm. rewrite <- fact_basic. reflexivity.
+Qed.
+
+Lemma fact_eq' : forall (n:nat), stream_eq (fact_iter' (S n) (fact n)) (fact_slow' n).
+Proof.
+    intros n. apply (stream_eq_coind (fun x y => exists n, 
+        x = fact_iter' (S n) (fact n) /\ y = fact_slow' n)).
+    - clear n. intros x y [n [H1 H2]]. rewrite H1, H2. reflexivity.
+    - clear n. intros x y [n [H1 H2]]. exists (S n). split.
+        + rewrite H1. simpl. 
+          assert (fact n * S n = fact n + n * fact n) as E. { ring. }
+          rewrite E. reflexivity.
+        + rewrite H2. reflexivity.
+    - exists n. split; reflexivity.
+Qed.
+
+Theorem fact_eq : stream_eq fact_iter fact_slow.
+Proof. apply fact_eq'. Qed.
+
+Theorem stream_eq_onequant : forall (a b:Type) (f g: a -> Stream b),
+    (forall (x:a), head (f x) = head (g x)) ->
+    (forall (x:a), exists (y:a), tail (f x) = f y /\ tail (g x) = g y) ->
+    (forall (x:a), stream_eq (f x) (g x)).
+Proof.
+    intros a b f g H T x. apply (stream_eq_coind (fun s1 s2 =>
+        exists y, s1 = f y /\ s2 = g y)).
+    - clear x. intros s1 s2 [x [H1 H2]]. subst. apply H.
+    - clear x. intros s1 s2 [x [H1 H2]]. subst. apply T.
+    - exists x. split; reflexivity.
+Qed.
+
+Lemma fact_eq'' : forall (n:nat), stream_eq (fact_iter' (S n) (fact n)) (fact_slow' n).
+Proof.
+    apply stream_eq_onequant.
+    - intros x. reflexivity.
+    - intros x. exists (S x). split.
+        + simpl. assert (fact x * S x = fact x + x * fact x) as E. { ring. }
+          rewrite E. reflexivity.
+        + reflexivity.
 Qed.
 
