@@ -56,13 +56,14 @@ CoInductive evalCmd : Env -> Cmd -> Env -> Prop :=
 Theorem evalCmd_coind : forall (R:Env -> Cmd -> Env -> Prop),
     (forall (e1 e2:Env) (e:Exp) (v:Var), 
         R e1 (CAssign v e) e2 -> e2 = update e1 v (evalExp e1 e))    ->
-    (forall (e1 e2 e3:Env) (c1 c2:Cmd),
+    (forall (e1 e3:Env) (c1 c2:Cmd),
         R e1 (CSeq c1 c2) e3 -> exists e2, R e1 c1 e2 /\ R e2 c2 e3) -> 
-    (forall (e1 e2 e3:Env) (e:Exp) (c:Cmd),
+    (forall (e1 e3:Env) (e:Exp) (c:Cmd),
         R e1 (CWhile e c) e3 -> (evalExp e1 e = 0 /\ e3 = e1) \/ 
         (exists (e2:Env), 
             evalExp e1 e <> 0 /\ R e1 c e2 /\ R e2 (CWhile e c) e3)) ->
     (forall (e1 e2:Env) (c:Cmd), R e1 c e2 -> evalCmd e1 c e2).
 Proof.
+    intros R. intros H1.
 
 Show.
