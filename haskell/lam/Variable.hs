@@ -40,7 +40,7 @@ instance Show Var where
 
 instance Arbitrary Var where
     arbitrary = do
-        num <- elements [0..30] :: Gen Integer
+        num <- elements [20..25] :: Gen Integer
         return $ Var num
 
 a :: Var

@@ -96,7 +96,10 @@ Proof.
     intros env. induction e as [n|v|e1 IH1 e2 IH2].
     - reflexivity.
     - reflexivity.
-    - 
-
-
-Show.
+    - destruct e1 as [n1|v1|e1' e2']. 
+        + destruct n1 as [|n1].
+            { simpl. assumption. }
+            { simpl. rewrite IH2. reflexivity. }
+        + simpl. rewrite IH2. reflexivity.
+        + simpl in IH1. simpl. rewrite IH1, IH2. reflexivity. 
+Qed.

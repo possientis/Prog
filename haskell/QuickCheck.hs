@@ -1,6 +1,12 @@
 import Test.QuickCheck
+import Test.QuickCheck.Instances ()
+import Data.ByteString.Base64 
+import Data.ByteString as B
 
 
+main :: IO ()
+main = do
+    quickCheck prop_sizeRatio
 
 myList :: Arbitrary a => Gen [a]
 myList = oneof
@@ -23,10 +29,8 @@ flexList = sized $ \n ->
         , (n, (:) <$> arbitrary <*> flexList)
         ]
 
-main :: IO ()
-main = do
-    sample $ (flexList :: Gen [Int])
-
-
+prop_sizeRatio :: ByteString -> Bool
+prop_sizeRatio bs = B.length (encode bs) 
+    == 4 * ceiling (fromIntegral (B.length bs) / 3 :: Double)
 
 

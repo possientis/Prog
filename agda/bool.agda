@@ -40,6 +40,18 @@ if ff then x else y = y
 &&-diag {tt} = refl _
 &&-diag {ff} = refl _
 
+||-is-false : {b1 b2 : 𝔹} → b1 || b2 ≡ ff → b1 ≡ ff
+||-is-false {ff} {ff} p = refl ff
+
+if-then-else-same : ∀ {ℓ} {X : Set ℓ} (x : X) (b : 𝔹) → if b then x else x ≡ x
+if-then-else-same x tt = refl x
+if-then-else-same x ff = refl x
+
+data 𝕆 : Set where
+
+𝔹-contra : ff ≡ tt → 𝕆
+𝔹-contra ()
+
 
 
 

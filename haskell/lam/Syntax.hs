@@ -34,8 +34,8 @@ instance (Show  a) => Show (Term_ a) where
 -- TODO : something better than this
 instance (Arbitrary a) => Arbitrary (Term_ a) where
     arbitrary = frequency 
-        [ (1, Var <$> arbitrary)
-        , (1, Lam <$> arbitrary <*> arbitrary)
-        , (1, App <$> arbitrary <*> arbitrary)
+        [ (4, Var <$> arbitrary)
+        , (8, Lam <$> arbitrary <*> arbitrary)
+        , (3, App <$> arbitrary <*> arbitrary)
         ]
 
