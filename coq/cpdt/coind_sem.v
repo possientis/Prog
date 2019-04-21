@@ -103,3 +103,45 @@ Proof.
         + simpl. rewrite IH2. reflexivity.
         + simpl in IH1. simpl. rewrite IH1, IH2. reflexivity. 
 Qed.
+
+
+Lemma optCmd_correct1 : forall (e1 e2:Env) (c:Cmd),
+    evalCmd e1 c e2 -> evalCmd e1 (optCmd c) e2.
+Proof.
+    intros e1 e2 c H.
+    apply (evalCmd_coind (fun e1 c' e2 => 
+        exists c, c' = optCmd c /\ evalCmd e1 c e2)). 
+    - clear e1 e2 c H. intros e1 e2 e v [c [H1 H2]]. revert e v H1.
+      destruct H2.
+        + intros e' v' H. simpl in H. inversion H. subst.
+          rewrite optExp_correct. reflexivity.
+        + intros e v H. simpl in H. inversion H.
+        + intros e' v H'. simpl in H'. inversion H'.
+        + intros e' v H'. simpl in H'. inversion H'.
+    - clear e1 e2 c H. intros e1 e3 c1 c2 [c [H1 H2]].
+      revert c1 c2 H1. destruct H2.
+        + intros c1 c2 H. simpl in H. inversion H.
+        + intros c3 c4 H. simpl in H. inversion H. subst.
+          exists e2. split.
+            { exists c1. split. { reflexivity. } { assumption. } }
+            { exists c2. split. { reflexivity. } { assumption. } }
+        + intros c1 c2 H'. simpl in H'. inversion H'.
+        + intros c1 c2 H'. simpl in H'. inversion H'.
+    - clear e1 e2 c H. intros e1 e3 e c [c' [H1 H2]].
+      revert e c H1. destruct H2.     
+        + intros e' c H. simpl in H. inversion H.
+        + intros e c H. simpl in H. inversion H.
+        + intros e' c' H'. simpl in H'. inversion H'. subst.
+          left. split. 
+            { rewrite optExp_correct. assumption. }
+            { reflexivity. }
+        + intros e' c' H'. simpl in H'. inversion H'. subst. right.
+          exists e2. split.
+            { rewrite optExp_correct. assumption. }
+            { split.
+                { exists c. split. { reflexivity. } { assumption. }}
+                { exists (CWhile e c). split. { reflexivity. } { assumption. }}}
+    - exists c. split. 
+        + reflexivity.
+        + assumption.
+Qed.
