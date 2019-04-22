@@ -26,4 +26,29 @@ succ x + y = succ (x + y)
 
 +comm : (n m : ℕ) → n + m ≡ m + n
 +comm zero m     = ≡-sym (+-n+O m)
-+comm (succ n) m = ≡-sym {!!}
++comm (succ n) m = ≡-trans (ap succ (+comm n m)) (≡-sym (+-n+succ m n))
+
+infix 5 _+_
+infix 6 _*_
+
+_*_ : ℕ → ℕ → ℕ
+zero * m = 0
+succ n * m = m + n * m
+
+*-distribr : (n m p : ℕ) → (n + m) * p ≡ n * p + m * p
+*-distribr zero m p     = refl (m * p)
+*-distribr (succ n) m p = ≡-trans
+  (ap (λ x → p + x) (*-distribr n m p))
+  (≡-sym (+-assoc p (n * p) (m * p)))
+
+*-n*0 : (n : ℕ) → n * 0 ≡ 0
+*-n*0 zero     = refl 0
+*-n*0 (succ n) = *-n*0 n
+
+
+*-comm : (n m : ℕ) → n * m ≡ m * n
+*-comm zero m     = ≡-sym (*-n*0 m)
+*-comm (succ n) m = {!!}
+
+
+

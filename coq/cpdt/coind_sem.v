@@ -145,3 +145,45 @@ Proof.
         + reflexivity.
         + assumption.
 Qed.
+
+Lemma optCmd_correct2 : forall (e1 e2:Env) (c:Cmd),
+    evalCmd e1 (optCmd c) e2 -> evalCmd e1 c e2.
+Proof.
+    apply (evalCmd_coind (fun e1 c e2 => evalCmd e1 (optCmd c) e2)).
+    -  intros e1 e2 e v H. simpl in H.
+       remember (CAssign v (optExp e)) as c' eqn:E. 
+       revert e v E. destruct H.
+        + intros e' v' H. inversion H. subst. clear H.
+          rewrite optExp_correct. reflexivity.
+        + intros e v H'. inversion H'.
+        + intros e' v H'. inversion H'.
+        + intros e' v H'. inversion H'.
+    - intros e1 e3 c1 c2 H. simpl in H.
+      remember (CSeq (optCmd c1) (optCmd c2)) as c' eqn:E.
+      revert c1 c2 E. destruct H.
+        + intros c1 c2 H. inversion H.
+        + intros c1' c2' H'. inversion H'. subst. clear H'. exists e2. split; assumption.
+        + intros c1 c2 H'. inversion H'.
+        + intros c1 c2 H'. inversion H'.
+    - intros e1 e3 e c H. simpl in H.
+      remember (CWhile (optExp e) (optCmd c)) as c' eqn:E.
+      revert e c E. destruct H.
+        + intros e' c H. inversion H.
+        + intros e c H'. inversion H'.
+        + intros e' c' H'. inversion H'. subst. clear H'. left. split.
+            { rewrite optExp_correct in H. assumption. }
+            { reflexivity. }
+        + intros e' c' H'. inversion H'. subst. clear H'. right. exists e2. split.
+            { rewrite optExp_correct in H. assumption. }
+            { split; assumption. }
+Qed.
+
+Theorem optCmd_correct : forall (e1 e2:Env) (c:Cmd), 
+    evalCmd e1 (optCmd c) e2 <-> evalCmd e1 c e2.
+Proof. 
+    intros e1 e2 c. split.
+    - apply optCmd_correct2.
+    - apply optCmd_correct1.
+Qed.
+
+

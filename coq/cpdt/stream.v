@@ -1,9 +1,11 @@
 Require Import List.
 Require Import Arith.
 
+
 CoInductive Stream (a:Type) : Type :=
 | Cons : a -> Stream a -> Stream a
 .
+
 
 Arguments Cons {a} _ _.
 
@@ -32,6 +34,7 @@ Fixpoint take (a:Type) (n:nat) (s:Stream a) : list a :=
     end.
 
 Arguments take {a} _ _.
+
 
 (* our experience of induction suggests this may not be the best *)
 CoFixpoint map' (a b:Type) (f:a -> b) (s:Stream a) : Stream b :=
@@ -153,7 +156,7 @@ Lemma stream_eq_sym : forall (a:Type) (s1 s2:Stream a),
     stream_eq s1 s2 -> stream_eq s2 s1.
 Proof.
     intros a. cofix. intros s1 s2 H. destruct H.
-    constructor. apply stream_eq_sym. Guarded. 
+    constructor. apply stream_eq_sym.
     assumption.
 Qed.
 
@@ -202,6 +205,8 @@ Qed.
 CoInductive is_ones : Stream nat ->  Prop :=
 | IsOnes : forall (s:Stream nat), is_ones s -> is_ones (Cons 1 s)
 .
+
+
 
 Lemma ones_are_ones : is_ones ones.
 Proof.

@@ -21,5 +21,6 @@ rm -f lib/*.vo
 ./lam/clean.sh
 ./cpdt/clean.sh
 ./grin/clean.sh
+./logic/clean.sh
 
 cd ${DIR}

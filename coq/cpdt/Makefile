@@ -8,6 +8,7 @@ all:	utils_nat.vo \
 		recursion.vo \
 		tactic.vo \
 		stream.vo \
+		coind_sem.vo \
 		test_untyped.vo \
 		test_typed.vo
 	
@@ -40,6 +41,9 @@ tactic.vo : tactic.v
 
 stream.vo : stream.v
 	coqc stream.v
+
+coind_sem.vo : coind_sem.v
+	coqc coind_sem.v
 
 test_untyped.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
