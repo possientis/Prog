@@ -1,10 +1,10 @@
-all:	    T.vo \
-			P.vo
+all:	    T \
+			P
 
-T.vo:			T.v
-	coqc T.v
+T:			Lam/T.v
+			coqc Lam/T.v -R Lam Lam
 
-P.vo:			P.v	
-	coqc P.v
+P:			Fol/P.v	
+			coqc Fol/P.v -R Fol Fol
 
 

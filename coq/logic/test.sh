@@ -7,7 +7,10 @@ cd ${HOME}
 echo
 echo "testing logic formalization..."
 
-make; ./clean.sh
+ghc Main.hs
+./Main
+make
+./clean.sh
 
 cd ${DIR}
 echo '\ntest completed successfully\n'

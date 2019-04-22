@@ -1,11 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 DIR=`pwd`
 HOME=/home/john/Prog/coq/logic
 cd ${HOME}
 
-rm -f .*.aux
-rm -f *.glob
-rm -f *.vo
+rm -f Main
+rm -f ./{*,.*}.{aux,glob,vo,o,hi}
+rm -f */{*,.*}.{aux,glob,vo,o,hi}
+rm -f */*/{*,.*}.{aux,glob,vo,o,hi}
 
 cd ${DIR}

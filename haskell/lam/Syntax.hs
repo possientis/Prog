@@ -28,8 +28,8 @@ data Term_ a
 -- TODO : proper parsing and pretty printing 
 instance (Show  a) => Show (Term_ a) where
     show (Var v)    = show v
-    show (Lam v t)  = "(\\" ++ show v ++ " -> " ++ show t ++ ")"
     show (App t s)  = "("   ++ show t ++ " "    ++ show s ++ ")"
+    show (Lam v t)  = "(\\" ++ show v ++ " -> " ++ show t ++ ")"
 
 -- TODO : something better than this
 instance (Arbitrary a) => Arbitrary (Term_ a) where
