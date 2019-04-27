@@ -1,6 +1,7 @@
 module nat where
 
 open import id
+open import bool
 
 data ℕ : Set where
   zero : ℕ
@@ -24,9 +25,9 @@ succ x + y = succ (x + y)
 +-n+succ zero m     = refl (succ m)
 +-n+succ (succ n) m = ap succ (+-n+succ n m)
 
-+comm : (n m : ℕ) → n + m ≡ m + n
-+comm zero m     = ≡-sym (+-n+O m)
-+comm (succ n) m = ≡-trans (ap succ (+comm n m)) (≡-sym (+-n+succ m n))
++-comm : (n m : ℕ) → n + m ≡ m + n
++-comm zero m     = ≡-sym (+-n+O m)
++-comm (succ n) m = ≡-trans (ap succ (+-comm n m)) (≡-sym (+-n+succ m n))
 
 infix 5 _+_
 infix 6 _*_
@@ -45,10 +46,35 @@ succ n * m = m + n * m
 *-n*0 zero     = refl 0
 *-n*0 (succ n) = *-n*0 n
 
+*-n*succ : (n m : ℕ) → n * succ m ≡ n + n * m
+*-n*succ zero m     = refl 0
+*-n*succ (succ n) m = ap succ
+  (≡-trans
+    (≡-trans
+      (≡-trans
+        (ap (λ x → m + x) (*-n*succ n m))
+        (≡-sym (+-assoc m n (n * m))))
+      (ap (λ x → x + n * m) (+-comm m n)))
+     (+-assoc n m (n * m)))
+
 
 *-comm : (n m : ℕ) → n * m ≡ m * n
 *-comm zero m     = ≡-sym (*-n*0 m)
-*-comm (succ n) m = {!!}
+*-comm (succ n) m = ≡-sym
+  (≡-trans
+    (*-n*succ m n)
+    (ap (λ x → m + x) (≡-sym (*-comm n m)))) 
 
 
+*-assoc : (n m p : ℕ) → (n * m) * p ≡ n * (m * p)
+*-assoc zero m p     = refl 0
+*-assoc (succ n) m p = ≡-trans
+  (*-distribr m (n * m) p)
+  (ap (λ x → m * p + x) (*-assoc n m p))
+
+_<_ : ℕ → ℕ → 𝔹
+0 < 0           = ff
+succ _ < 0      = ff
+0 < succ _      = tt
+succ x < succ y = x < y
 

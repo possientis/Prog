@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveFunctor #-}
+
 module  Lam.Haskell.T
     (   T   (..)
     )   where
@@ -8,6 +10,7 @@ data T v
     = Var v
     | App (T v) (T v)
     | Lam v (T v)
+    deriving (Functor, Eq)
 
 -- TODO : proper parsing and pretty printing 
 instance (Show v) => Show (T v) where
@@ -22,4 +25,5 @@ instance (Arbitrary v) => Arbitrary (T v) where
         , (3, App <$> arbitrary <*> arbitrary)
         , (8, Lam <$> arbitrary <*> arbitrary)
         ]
+
 

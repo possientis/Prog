@@ -1,17 +1,13 @@
-module  Main
-    (   main
-    )   where
+module  Main (main)   where
 
-import Test.QuickCheck
+import Test.Hspec
 
-import Fol.Haskell.P
-import Lam.Haskell.T
-import Haskell.Variable
+import Fol.Haskell.Test as Fol
+import Lam.Haskell.Test as Lam
 
 main :: IO ()
-main = do
-    putStrLn "\nFirst order logic:"
-    sample $ (arbitrary :: Gen (P Var))
-    putStrLn "\nSimple lambda calculus"
-    sample $ (arbitrary :: Gen (T Var))
+main = hspec $ do
+    Fol.test
+    Lam.test
+   
     

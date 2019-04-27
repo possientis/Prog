@@ -9,6 +9,9 @@ echo "testing logic formalization..."
 
 ghc Main.hs
 ./Main
+
+echo
+echo "Testing coq formalization..."
 make
 ./clean.sh
 

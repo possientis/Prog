@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveFunctor #-}
+
 module  Fol.Haskell.P
     (   P   (..)
     )   where
@@ -9,6 +11,8 @@ data P v
     | Elem v v 
     | Imp (P v) (P v)
     | All v (P v)
+    deriving (Functor, Eq)
+
 
 
 -- TODO : proper parsing and pretty printing 

@@ -9,6 +9,7 @@ all:	utils_nat.vo \
 		tactic.vo \
 		stream.vo \
 		coind_sem.vo \
+		dependent.vo \
 		test_untyped.vo \
 		test_typed.vo
 	
@@ -44,6 +45,9 @@ stream.vo : stream.v
 
 coind_sem.vo : coind_sem.v
 	coqc coind_sem.v
+
+dependent.vo : dependent.v
+	coqc dependent.v
 
 test_untyped.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

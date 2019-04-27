@@ -1,12 +1,24 @@
+{-# LANGUAGE DeriveGeneric      #-}
+{-# LANGUAGE FlexibleInstances  #-}
+
 module  Haskell.Variable
     (   Var
     ,   a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    ,   main
     )   where
 
+import GHC.Generics
 import Test.QuickCheck
 
+main :: IO ()
+main = do
+    sample (arbitrary :: Gen (Var -> Var))
+
+mainVars ::[Var]
+mainVars = [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]
+
 newtype Var = Var { unVar :: Integer}
-    deriving (Eq,Ord)
+    deriving (Eq,Ord,Generic)
 
 instance Show Var where
     show vv
@@ -42,6 +54,15 @@ instance Arbitrary Var where
     arbitrary = do
         num <- elements [20..25] :: Gen Integer
         return $ Var num
+
+instance CoArbitrary Var where
+    coarbitrary = genericCoarbitrary
+
+toList :: (Var -> Var) -> [(Var,Var)]
+toList fun = map (\var -> (var, fun var)) mainVars
+
+instance Show (Var -> Var) where
+    show = show . toList
 
 a :: Var
 b :: Var 
