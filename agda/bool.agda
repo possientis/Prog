@@ -52,6 +52,8 @@ data 𝕆 : Set where
 𝔹-contra : ff ≡ tt → 𝕆
 𝔹-contra ()
 
+𝔹-contra' : ∀ {ℓ} → ff ≡ tt → {P : Set ℓ} → P
+𝔹-contra' ()
 
 
 

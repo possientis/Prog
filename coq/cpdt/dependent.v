@@ -115,6 +115,78 @@ Proof. reflexivity. Qed.
 Lemma pred_strong5_test2 : pred_strong5 n2 = 1.
 Proof. reflexivity. Qed.
 
+(*
+Extraction pred_strong5.
+pred_strong5 :: Nat -> Nat
+pred_strong5 n = case n of 
+    O   -> error "absurd case"
+    S n -> n
+*)
+
+Definition pred_strong6 (n : {n : nat | 0 < n}) : {m : nat | S m = proj1_sig n} :=
+    match n return {m : nat | S m = proj1_sig n} with
+    | exist _  0 p      => match zltz p with end
+    | exist _ (S m) _   => exist _ m (eq_refl _)
+    end. 
+
+(*
+Compute (pred_strong6 (exist _ 2 zero_lt_two)).
+    = exist (fun m : nat => S m = proj1_sig (exist (lt 0) 2 zero_lt_two)) 1 eq_refl
+                  : {m : nat | S m = proj1_sig (exist (lt 0) 2 zero_lt_two)}
+*)
+
+(*
+Extraction pred_strong6.
+pred_strong6 :: Nat -> Nat
+pred_strong6 n = case n of 
+    O   -> error "absurd case"
+    S n -> n
+*)
+
+
+
+Definition pred_strong7 : forall (n:nat), 0 < n -> {m:nat|n = S m}.
+Proof.
+    intros n p. destruct n.
+    - apply False_rec. inversion p. 
+    - exact (exist _ n eq_refl).
+Qed. (* 'Qed' will hide the details of the 'proof' and make things 'opaque' *)
+
+(*
+Print pred_strong7.
+*)
+
+(* Despite opacity, can still manage to check things, but not as simple *)
+Lemma pred_strong7_test : proj1_sig (pred_strong7 2 zero_lt_two) = 1.
+Proof. 
+    remember (pred_strong7 2 zero_lt_two) as x eqn:E. 
+    destruct x as [n H]. simpl. inversion H.
+    reflexivity.
+Qed. 
+
+(*
+Extraction pred_strong7.
+Warning: The extraction is currently set to bypass opacity, the following
+opaque constant bodies have been accessed : pred_strong7.
+     [extraction-opaque-accessed,extraction]
+pred_strong7 :: Nat -> Nat
+pred_strong7 n = case n of 
+    O       -> false_rec
+    S n     -> n
+*)
+
+Definition pred_strong8 : forall (n:nat), 0 < n -> {m:nat|n = S m}.
+Proof.
+    intros n p. destruct n.
+    - apply False_rec. inversion p. 
+    - exact (exist _ n eq_refl).
+Defined. (* use 'Defined' rather than 'Qed' *)
+
+
+(* Without opacity, checking is trivial *) 
+Lemma pred_strong8_test : proj1_sig (pred_strong8 2 zero_lt_two) = 1.
+Proof. reflexivity. Qed.
+
 
 
 

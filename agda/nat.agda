@@ -78,3 +78,24 @@ succ _ < 0      = ff
 0 < succ _      = tt
 succ x < succ y = x < y
 
+<-trans : {n m p : ℕ} → n < m ≡ tt → m < p ≡ tt → n < p ≡ tt
+<-trans {zero} {succ m} {succ p} p1 p2   = refl tt
+<-trans {succ n} {succ m} {succ p} p1 p2 = <-trans {n} {m} {p} p1 p2
+
+<-0 : {n : ℕ} → n < 0 ≡ ff
+<-0 {zero}   = refl ff
+<-0 {succ n} = refl ff
+
+_=ℕ_ : ℕ → ℕ → 𝔹
+zero =ℕ zero     = tt
+zero =ℕ succ m   = ff
+succ n =ℕ zero   = ff
+succ n =ℕ succ m = n =ℕ m
+
+=ℕ-refl : (n : ℕ) → (n =ℕ n) ≡ tt
+=ℕ-refl zero     = refl tt
+=ℕ-refl (succ n) = =ℕ-refl n
+
+
+
+
