@@ -95,7 +95,3 @@ succ n =ℕ succ m = n =ℕ m
 =ℕ-refl : (n : ℕ) → (n =ℕ n) ≡ tt
 =ℕ-refl zero     = refl tt
 =ℕ-refl (succ n) = =ℕ-refl n
-
-
-
-

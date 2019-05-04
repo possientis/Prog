@@ -2,6 +2,9 @@
 (* The type P v is the set of set theoretic first order         *)
 (* propositions with variables in v.                            *)
 
+Require Import identity.
+Require Import composition.
+Require Import extensionality.
 
 Inductive P (v:Type) : Type :=
 | Bot  : P v                        (* bottom                   *)
@@ -15,4 +18,22 @@ Arguments Elem {v} _ _.
 Arguments Imp  {v} _ _.
 Arguments All  {v} _ _.
 
+Fixpoint fmap (v w:Type) (f:v -> w) (p:P v) : P w :=
+    match p with
+    | Bot       => Bot
+    | Elem x y  => Elem (f x) (f y)
+    | Imp p1 p2 => Imp (fmap v w f p1) (fmap v w f p2)
+    | All x p1  => All (f x) (fmap v w f p1)
+    end.
 
+Arguments fmap {v} {w} _ _.
+
+Lemma fmap_id : forall (v:Type), fmap id = @id (P v).
+Proof.
+    intros v. apply extensionality.
+    induction x as [|x y|p1 IH1 p2 IH2|x p1 IH1]; simpl.
+    - reflexivity.
+    - reflexivity.
+    - rewrite IH1, IH2. reflexivity.
+    - rewrite IH1. reflexivity.
+Qed.
