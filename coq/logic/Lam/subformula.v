@@ -1,5 +1,6 @@
 Require Import List.
 Require Import Lam.T.
+Require Import Lam.order.
 
 (* Defines the 'list' of sub-terms of a given term. We do not have sets here,   *)
 (* so using lists instead being understood that the order is irrelevant as      *) 
@@ -16,10 +17,10 @@ Fixpoint Sub (v:Type) (t:T v) : list (T v) :=
 Arguments Sub {v} _.
 
 (* t is a sub-term of s if it belongs to the list of sub-terms of s             *)
-Notation "t <= s" := (In t (Sub s)).
+Notation "t <<= s" := (In t (Sub s)) (at level 50).
    
 (* Being a 'sub-term of' is reflexive relation                                  *)
-Lemma Sub_refl : forall (v:Type) (t:T v), t <= t.
+Lemma Sub_refl : forall (v:Type) (t:T v), t <<= t.
 Proof.
     intros v.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; left; reflexivity.
@@ -27,7 +28,7 @@ Qed.
 
 (* This lemma will allow us to get transitivity                                 *)
 Lemma Sub_incl : forall (v:Type) (t1 t2:T v),
-    incl (Sub t1) (Sub t2) <-> t1 <= t2.
+    incl (Sub t1) (Sub t2) <-> t1 <<= t2.
 Proof.
     intros v t1 t2. split.
     - intros H.  apply H. apply Sub_refl. 
@@ -47,10 +48,27 @@ Proof.
             { intros H'. right. apply IH1 with t1; assumption. }
 Qed.
 
-(* transitivity follows from Sub_incl and transitity of incl                    *)
+(* transitivity follows from Lemma Sub_incl and transitity of incl              *)
 Lemma Sub_tran : forall (v:Type) (r s t: T v),
-    r <= s -> s <= t -> r <= t.
+    r <<= s -> s <<= t -> r <<= t.
 Proof.
     intros v r s t Hrs Hst. apply Sub_incl. 
     apply incl_tran with (Sub s); apply Sub_incl; assumption.
 Qed.
+
+(*
+Lemma ord_monotone : forall (v:Type) (t1 t2:T v),
+    t1 <<= t2  -> ord t1 <= ord t2.
+Proof. 
+    intros v t1 t2. revert t1. 
+    induction t2 as [x|t2 IH2 t2' IH2'|x t1' IH1].
+    - simpl. intros t1 [H|H].
+        + subst. apply le_n.
+        + exfalso. assumption.
+    - simpl. intros t1 [H|H].
+        + subst. apply le_n.
+        +
+
+
+Show.
+*)

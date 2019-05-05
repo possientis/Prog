@@ -11,6 +11,7 @@ all:	utils_nat.vo \
 		coind_sem.vo \
 		dependent.vo \
 		sumbool.vo \
+		refine.vo \
 		test_untyped.vo \
 		test_typed.vo
 	
@@ -52,6 +53,9 @@ dependent.vo : dependent.v
 
 sumbool.vo : sumbool.v
 	coqc sumbool.v
+
+refine.vo : refine.v
+	coqc refine.v
 
 test_untyped.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

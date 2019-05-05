@@ -56,7 +56,7 @@ Extraction eq_nat_dec.
 
 
 Definition eq_nat_dec' : forall (n m:nat), {n = m} + {n <> m}.
-(* you don't need the word 'Proof' it seems                 *)
+(* you don't need the word 'Proof' it seems                                     *)
     refine (fix f (n m:nat) : {n = m} + {n <> m} :=
         match n,m with
         | 0,0           => Yes
@@ -65,35 +65,4 @@ Definition eq_nat_dec' : forall (n m:nat), {n = m} + {n <> m}.
         end); congruence.
 Defined.
 
-
-(* same without the syntactic sugar *)
-Definition eq_nat_dec'' : forall (n m:nat), {n = m} + {n <> m}.
-    refine (fix f (n m:nat) : {n = m} + {n <> m} :=
-        match n,m with
-        | 0,0           => left _
-        | S n, S m      => if f n m then left _ else right _
-        | _, _          => right _
-        end); congruence.
-Defined.
-
-(*
-Print eq_nat_dec''.
-*)
-
-(*
-Definition eq_nat_dec4 : forall (n m:nat), {n = m} + {n <> m}.
-    refine 
-        (fix f (n m:nat) : {n = m} + {n <> m} :=
-            match n as n' return {n' = m} + {n' <> m} with
-            | 0     =>
-                match m as m' return {0 = m'} + {0 <> m'} with
-                | 0     => left (eq_refl 0)
-                | S m   => right _
-                end
-            | S n   => _
-            end
-        ).
-
-Show.
-*)
 

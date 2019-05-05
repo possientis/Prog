@@ -176,6 +176,12 @@ Definition refine_test : forall (n m:nat), {n = m} + {n <> m}.
     - congruence.
 Defined.  (* rather than 'Qed' so proof term is not opaque  *)
 
+(* decide tactic *)
+Definition decide_test : forall (n m:nat), {n = m} + {n <> m}.
+    decide equality.
+Defined.
 
-
+(*
+Print decide_test.
+*)
 

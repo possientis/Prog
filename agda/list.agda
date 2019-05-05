@@ -2,6 +2,8 @@ module list where
 
 open import nat
 open import bool
+open import maybe
+open import id
 
 data 𝕃 {ℓ} (a : Set ℓ) : Set ℓ where
   []  : 𝕃 a
@@ -30,3 +32,38 @@ filter p (x ∷ xs) = let ys = filter p xs in if p x then x ∷ ys else ys
 
 remove : ∀ {ℓ} {a : Set ℓ} (eq : a → a → 𝔹) (x : a) → 𝕃 a → 𝕃 a
 remove eq a xs = filter (λ x → ¬ eq a x) xs
+
+nth : ∀ {ℓ} {a : Set ℓ} → ℕ → 𝕃 a → maybe a
+nth _ []              = nothing
+nth zero (x ∷ _)      = just x
+nth (succ n) (_ ∷ xs) = nth n xs
+
+-- inefficient
+sreverse : ∀ {ℓ} {a : Set ℓ} → 𝕃 a → 𝕃 a
+sreverse []       = []
+sreverse (x ∷ xs) = sreverse xs ++ (x ∷ [])
+
+reverse-go : ∀ {ℓ} {a : Set ℓ} → 𝕃 a → 𝕃 a → 𝕃 a
+reverse-go acc []       = acc
+reverse-go acc (x ∷ xs) = reverse-go (x ∷ acc) xs
+
+reverse : ∀ {ℓ} {a : Set ℓ} → 𝕃 a → 𝕃 a
+reverse xs = reverse-go [] xs
+
+{-
+reverse_same : ∀ {ℓ} {a : Set ℓ} (xs : 𝕃 a) → sreverse xs ≡ reverse xs
+reverse [] same     = refl []
+reverse x ∷ xs same = {!!}
+-}
+
+length-++ : ∀ {ℓ} {a : Set ℓ} (xs ys : 𝕃 a) →
+  length (xs ++ ys) ≡ length xs + length ys
+  
+length-++ [] ys       = refl (length ys)
+length-++ (x ∷ xs) ys = ap succ (length-++ xs ys)
+
+++-assoc : ∀ {ℓ} {a : Set ℓ} (xs ys zs : 𝕃 a) → (xs ++ ys) ++ zs ≡ xs ++ (ys ++ zs)
+++-assoc [] ys zs       = refl (ys ++ zs)
+++-assoc (x ∷ xs) ys zs = ap (λ ls → x ∷ ls) (++-assoc xs ys zs)
+
+
