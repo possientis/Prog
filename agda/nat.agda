@@ -95,3 +95,32 @@ succ n =ℕ succ m = n =ℕ m
 =ℕ-refl : (n : ℕ) → (n =ℕ n) ≡ tt
 =ℕ-refl zero     = refl tt
 =ℕ-refl (succ n) = =ℕ-refl n
+
+=ℕ-sym : (n m : ℕ) → (n =ℕ m) ≡ tt → (m =ℕ n) ≡ tt
+=ℕ-sym zero zero p         = refl tt
+=ℕ-sym (succ n) (succ m) p = =ℕ-sym n m p
+
+=ℕ-trans : (n m p : ℕ) → (n =ℕ m ≡ tt) → (m =ℕ p ≡ tt) → (n =ℕ p ≡ tt)
+=ℕ-trans zero zero zero q_nm q_mp = refl tt
+=ℕ-trans (succ n) (succ m) (succ p) q_nm q_mp = =ℕ-trans n m p q_nm q_mp
+
+=ℕ-to-≡ : (n m : ℕ) → (n =ℕ m ≡ tt) → n ≡ m
+=ℕ-to-≡ zero zero p = refl zero
+=ℕ-to-≡ (succ n) (succ m) p = ap succ (=ℕ-to-≡ n m p)
+
+=ℕ-from-≡ : (n m : ℕ) → (n ≡ m) → (n =ℕ m ≡ tt)
+=ℕ-from-≡ n m p = ≡-trans (≡-sym (ap (λ x → n =ℕ x) p)) (=ℕ-refl n)
+
+is-even : ℕ → 𝔹
+is-odd  : ℕ → 𝔹
+is-even zero = tt
+is-even (succ n) = is-odd n
+is-odd zero = ff
+is-odd (succ n) = is-even n
+
+even-not-odd : (n : ℕ) → is-even n ≡ ¬(is-odd n)
+even-not-odd zero = refl tt
+even-not-odd (succ n) = ≡-sym
+  (≡-trans
+    (ap ¬_ (even-not-odd n))
+    (¬-involutive (is-odd n))) 

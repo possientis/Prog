@@ -1,4 +1,4 @@
-(* we are running out operator symbols. Using ';' for composition in the *)
+(* we are running out of operator symbols. Using ';' for composition in the *)
 (* usual sense of '.', so 'g ; f' means f is applied first               *)
 
 Definition comp (v w u:Type) (g:w -> u) (f:v -> w) (x:v) : u := g (f x).

@@ -10,6 +10,7 @@ all:	utils_nat.vo \
 		stream.vo \
 		coind_sem.vo \
 		dependent.vo \
+		sumbool.vo \
 		test_untyped.vo \
 		test_typed.vo
 	
@@ -48,6 +49,9 @@ coind_sem.vo : coind_sem.v
 
 dependent.vo : dependent.v
 	coqc dependent.v
+
+sumbool.vo : sumbool.v
+	coqc sumbool.v
 
 test_untyped.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

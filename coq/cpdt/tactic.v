@@ -30,7 +30,7 @@ Proof. intros H. change (toProp  false). rewrite <- H. simpl. exact I. Qed.
 
 (* congruence tactic *)
 Lemma true_neq_false3 : true <> false.
-Proof. intros H. congruence. Qed.
+Proof. congruence. Qed.
 
 (* injection tactic *)
 Lemma S_inj1 : forall (n m:nat), S n = S m -> n = m.
@@ -157,5 +157,25 @@ Proof.
     - reflexivity.
     - simpl. ring.
 Qed.
+
+
+(* refine tactic *)
+Definition refine_test : forall (n m:nat), {n = m} + {n <> m}.
+    refine (fix f (n m:nat) : {n = m} + {n <> m} :=
+        match n,m with
+        | 0,0       => left _                             (* leaving a hole *)
+        | S n, S m  => if f n m then left _ else right _  (* two more holes *)
+        | _, _      => right _                            (* one last hole  *) 
+        end).
+    (* getting 5 goals though, not four, probably a good reason to this *)
+    (* could factorize with a single 'congruence'                       *)
+    - reflexivity.
+    - congruence.
+    - congruence.
+    - congruence.
+    - congruence.
+Defined.  (* rather than 'Qed' so proof term is not opaque  *)
+
+
 
 

@@ -1,5 +1,7 @@
 Extraction Language Haskell.
 
+Require Import Tactics.   (* Program Definition ... *)
+
 (*
 Print Nat.pred.
 
@@ -187,7 +189,25 @@ Defined. (* use 'Defined' rather than 'Qed' *)
 Lemma pred_strong8_test : proj1_sig (pred_strong8 2 zero_lt_two) = 1.
 Proof. reflexivity. Qed.
 
+(*
+(* no error but name pred_strong9 not in environment... *)
+Program Definition pred_strong9 (n:nat) (_:0 < n) : {m:nat|n = S m} :=
+    match n with
+    | 0     => _
+    | S n   => n
+    end.
+*)
 
+(* The above was a lot simpler than this *)
+Definition pred_strong10 (n:nat) (p:0 < n) : {m:nat|n = S m} :=
+    (match n return (0 < n) -> {m:nat|n = S m} with
+    | 0     => (fun q  => match zltz q with end)
+    | S m   => (fun q  => exist _ m (eq_refl _))
+    end) p.
+
+
+Lemma pred_strong10_test : proj1_sig (pred_strong10 2 zero_lt_two) = 1.
+Proof. reflexivity. Qed.
 
 
 
