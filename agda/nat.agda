@@ -124,3 +124,23 @@ even-not-odd (succ n) = ≡-sym
   (≡-trans
     (ap ¬_ (even-not-odd n))
     (¬-involutive (is-odd n))) 
+
+data _≤_ : ℕ → ℕ → Set where
+  le-n : (n : ℕ)   → n ≤ n
+  le-s : {n m : ℕ} → n ≤ m → n ≤ succ m 
+
+infixr 4 _≤_
+
+≤-refl : (n : ℕ) → n ≤ n
+≤-refl n = le-n n
+
+≤-trans : {n m p : ℕ} → n ≤ m → m ≤ p → n ≤ p
+≤-trans p (le-n n) = p
+≤-trans p (le-s q) = le-s (≤-trans p q)
+
+
+
+
+
+
+

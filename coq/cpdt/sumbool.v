@@ -1,5 +1,7 @@
 Extraction Language Haskell.
 
+Require Import List.
+
 (*
 Print sumbool.
 Inductive sumbool (A B : Prop) : Set :=
@@ -65,4 +67,19 @@ Definition eq_nat_dec' : forall (n m:nat), {n = m} + {n <> m}.
         end); congruence.
 Defined.
 
+Definition Eq (v:Type) := forall (x y:v), {x = y} + {x <> y}.
 
+(* if equality on v is decidable, then list membership is also decidable        *)
+Lemma In_dec : forall (v:Type), 
+    Eq v -> forall (x:v) (xs:list v), {In x xs} + {~In x xs}. 
+Proof.
+    intros v p x. induction xs as [|y xs IH].
+    - right. intros H. inversion H.
+    - destruct (p x y) as [H|H]. 
+        + subst. left. left. reflexivity.
+        + destruct IH as [H'|H'].
+            { left. right. assumption. }
+            { right. intros [H0|H0]. 
+                { apply H. symmetry. assumption. }
+                { apply H'. assumption. } }
+Qed.

@@ -1,9 +1,12 @@
+Require Import Le.
 Require Import List.
+
+Require Import max.
 Require Import Lam.T.
 Require Import Lam.order.
 
 (* Defines the 'list' of sub-terms of a given term. We do not have sets here,   *)
-(* so using lists instead being understood that the order is irrelevant as      *) 
+(* so using lists instead, being understood that the order is irrelevant as     *) 
 (* are duplicate entries. Hopefully results which are true for sets can be      *)
 (* extended for lists as is.                                                    *)
 
@@ -48,15 +51,16 @@ Proof.
             { intros H'. right. apply IH1 with t1; assumption. }
 Qed.
 
-(* transitivity follows from Lemma Sub_incl and transitity of incl              *)
-Lemma Sub_tran : forall (v:Type) (r s t: T v),
+(* Transitivity follows from Lemma Sub_incl and transitity of incl              *)
+Lemma Sub_tran : forall (v:Type) (r s t:T v),
     r <<= s -> s <<= t -> r <<= t.
 Proof.
     intros v r s t Hrs Hst. apply Sub_incl. 
     apply incl_tran with (Sub s); apply Sub_incl; assumption.
 Qed.
 
-(*
+
+(* This lemma will allow us to get anti-symmetry                                *) 
 Lemma ord_monotone : forall (v:Type) (t1 t2:T v),
     t1 <<= t2  -> ord t1 <= ord t2.
 Proof. 
@@ -67,7 +71,32 @@ Proof.
         + exfalso. assumption.
     - simpl. intros t1 [H|H].
         + subst. apply le_n.
-        +
+        + apply in_app_or in H. destruct H as [H|H].
+            { apply le_trans with (ord t2).
+                { apply IH2. assumption. }
+                { apply le_S. apply n_le_max. }}
+            { apply le_trans with (ord t2').
+                { apply IH2'. assumption. }
+                { apply le_S. apply m_le_max. }}
+    - simpl. intros t1 [H|H].
+        + subst. apply le_n.
+        + apply le_S, IH1. assumption.
+Qed.
+
+(*
+Lemma Sub_anti : forall (v:Type) (t1 t2:T v),
+    t1 <<= t2 -> t2 <<= t1 -> t1 = t2.
+Proof.
+    intros v t1 t2. revert t1. 
+    induction t2 as [x|t2 IH2 t2' IH2'|x t1' IH1].
+    - simpl. intros t1 [H|H]. 
+        + subst. tauto.
+        + exfalso. assumption.
+    - simpl. intros t1 [H|H].
+        + subst. tauto.
+        + intros H'. exfalso. apply in_app_or in H. destruct H as [H|H].
+            { apply ord_monotone in H. apply ord_monotone in H'. 
+              simpl in H'.
 
 
 Show.

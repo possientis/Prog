@@ -2,7 +2,7 @@ Require Import List.
 Require Import Fol.P.
 
 (* Defines the 'list' of sub-formulas of a given formula. We do not have        *)
-(* sets here, so using lists instead being understood that the order is         *)
+(* sets here, so using lists instead, being understood that the order is        *)
 (* irrelevant as are duplicate entries. Hopefully results which are true        *)
 (* for sets can be extended for lists as is.                                    *)
 
@@ -52,7 +52,7 @@ Proof.
 Qed.
 
 (* transitivity follows from Sub_incl and transitity of incl                    *)
-Lemma Sub_tran : forall (v:Type) (p q r: P v),
+Lemma Sub_tran : forall (v:Type) (p q r:P v),
     p <= q -> q <= r -> p <= r.
 Proof.
     intros v p q r Hpq Hqr. apply Sub_incl. 
