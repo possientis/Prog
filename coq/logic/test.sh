@@ -7,7 +7,7 @@ cd ${HOME}
 echo
 echo "testing logic formalization..."
 
-ghc Main.hs
+ghc -O2 Main.hs
 ./Main
 
 echo

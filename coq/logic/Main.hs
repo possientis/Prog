@@ -2,12 +2,12 @@ module  Main (main)   where
 
 import Test.Hspec
 
-import Fol.Haskell.Test as Fol
-import Lam.Haskell.Test as Lam
+import Fol.Haskell.Test.Main
+import Lam.Haskell.Test.Main
 
 main :: IO ()
 main = hspec $ do
-    Fol.test
-    Lam.test
+    describe "Testing Haskell for Fol..." $ specFol
+    describe "Testing Haskell for Lam..." $ specLam
    
     

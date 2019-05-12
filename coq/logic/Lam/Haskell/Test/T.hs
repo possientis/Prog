@@ -1,35 +1,32 @@
-module  Fol.Haskell.Test
-    (   test
+module  Lam.Haskell.Test.T
+    (   specT
     )   where
 
 import Test.Hspec
 import Test.QuickCheck
 
-import Fol.Haskell.P
+import Lam.Haskell.T
 import Haskell.Variable  (Var)
 
-test :: Spec
-test = describe "Testing Haskell for Fol..." $ 
-    sequence_ tests
+specT :: Spec
+specT = describe "Testing functor laws for T..." $
+    sequence_ specsT
 
-tests :: [Spec]
-tests =  [testFunctorIdLaw
-         ,testFunctorCompLaw 
-         ]
-
+specsT :: [Spec]
+specsT =  [testFunctorIdLaw
+          ,testFunctorCompLaw
+          ]
 
 testFunctorIdLaw :: Spec
 testFunctorIdLaw = it "Checked functor identity law" $
     property $ propFunctorIdLaw
 
-
 testFunctorCompLaw :: Spec
 testFunctorCompLaw = it "Checked functor composition law" $
     property $ propFunctorCompLaw
 
-propFunctorIdLaw :: P Var -> Bool
-propFunctorIdLaw p = fmap id p == p 
+propFunctorIdLaw :: T Var -> Bool
+propFunctorIdLaw t = fmap id t == t 
 
-propFunctorCompLaw :: (Var -> Var) -> (Var -> Var) -> P Var -> Bool
+propFunctorCompLaw :: (Var -> Var) -> (Var -> Var) -> T Var -> Bool
 propFunctorCompLaw g f p = fmap (g . f) p == (fmap g . fmap f) p
-

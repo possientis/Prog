@@ -67,3 +67,16 @@ length-++ (x ∷ xs) ys = ap succ (length-++ xs ys)
 ++-assoc (x ∷ xs) ys zs = ap (λ ls → x ∷ ls) (++-assoc xs ys zs)
 
 
+length-filter : ∀ {ℓ} {a : Set ℓ} (p : a → 𝔹) (xs : 𝕃 a) →
+  length (filter p xs) ≤ length xs
+length-filter p []       = le-n 0
+length-filter p (x ∷ xs) with (p x)
+length-filter p (x ∷ xs) | tt = le-n-s (length-filter p xs)
+length-filter p (x ∷ xs) | ff = le-s (length-filter p xs)
+
+filter-idempotent : ∀ {ℓ} {a : Set ℓ} (p : a → 𝔹) (xs : 𝕃 a) →
+  (filter p (filter p xs)) ≡ filter p xs
+filter-idempotent p []       = refl []
+filter-idempotent p (x ∷ xs) with (p x)
+filter-idempotent p (x ∷ xs) | tt = {!!}
+filter-idempotent p (x ∷ xs) | ff = {!!}

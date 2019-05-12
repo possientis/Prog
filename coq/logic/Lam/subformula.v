@@ -1,7 +1,9 @@
 Require Import Le.
 Require Import List.
 
+Require Import le.
 Require Import max.
+Require Import composition.
 Require Import Lam.T.
 Require Import Lam.order.
 
@@ -65,39 +67,77 @@ Lemma ord_monotone : forall (v:Type) (t1 t2:T v),
     t1 <<= t2  -> ord t1 <= ord t2.
 Proof. 
     intros v t1 t2. revert t1. 
-    induction t2 as [x|t2 IH2 t2' IH2'|x t1' IH1].
-    - simpl. intros t1 [H|H].
-        + subst. apply le_n.
-        + exfalso. assumption.
-    - simpl. intros t1 [H|H].
-        + subst. apply le_n.
-        + apply in_app_or in H. destruct H as [H|H].
-            { apply le_trans with (ord t2).
-                { apply IH2. assumption. }
-                { apply le_S. apply n_le_max. }}
-            { apply le_trans with (ord t2').
-                { apply IH2'. assumption. }
-                { apply le_S. apply m_le_max. }}
-    - simpl. intros t1 [H|H].
-        + subst. apply le_n.
-        + apply le_S, IH1. assumption.
+    induction t2 as [x|t2 IH2 t2' IH2'|x t1' IH1];
+    simpl; intros t1 [H|H].
+    - subst. apply le_n.
+    - exfalso. assumption.
+    - subst. apply le_n.
+    - apply in_app_or in H. destruct H as [H|H].
+        { apply le_trans with (ord t2).
+            { apply IH2. assumption. }
+            { apply le_S. apply n_le_max. }}
+        { apply le_trans with (ord t2').
+            { apply IH2'. assumption. }
+            { apply le_S. apply m_le_max. }}
+    - subst. apply le_n.
+    - apply le_S, IH1. assumption.
 Qed.
 
-(*
+(* Anti-symmentry follows from Lemma ord_monotone                               *)
 Lemma Sub_anti : forall (v:Type) (t1 t2:T v),
     t1 <<= t2 -> t2 <<= t1 -> t1 = t2.
 Proof.
     intros v t1 t2. revert t1. 
-    induction t2 as [x|t2 IH2 t2' IH2'|x t1' IH1].
-    - simpl. intros t1 [H|H]. 
-        + subst. tauto.
-        + exfalso. assumption.
-    - simpl. intros t1 [H|H].
-        + subst. tauto.
-        + intros H'. exfalso. apply in_app_or in H. destruct H as [H|H].
-            { apply ord_monotone in H. apply ord_monotone in H'. 
-              simpl in H'.
+    induction t2 as [x|t2 IH2 t2' IH2'|x t1' IH1]; 
+    simpl; intros t1 [H|H].
+    - subst. tauto.
+    - exfalso. assumption.
+    - subst. tauto.
+    - intros H'. exfalso. apply in_app_or in H. destruct H as [H|H];
+      apply ord_monotone in H; apply ord_monotone in H'; 
+      simpl in H'; apply not_le_Sn_n with (ord t1).
+        { apply le_trans with (S (ord t2)).
+            { apply le_n_S. assumption. }
+            { apply le_trans with (S (max (ord t2) (ord t2'))).
+                { apply le_n_S. apply n_le_max. }
+                { assumption. }
+            }
+        }
+        { apply le_trans with (S (ord t2')).
+            { apply le_n_S. assumption. }
+            { apply le_trans with (S (max (ord t2) (ord t2'))).
+                { apply le_n_S. apply m_le_max. }
+                { assumption. }
+            }
+        }
+    - subst. tauto. 
+    - intros H'. exfalso.
+      apply ord_monotone in H. apply ord_monotone in H'.
+      simpl in H'. apply not_le_Sn_n with (ord t1).
+      apply le_trans with (S (ord t1')).
+        { apply le_n_S. assumption. }
+        { assumption. }
+Qed.
+
+(* A set theoretic formulation of the same result is Sub (f t) = f (Sub t)      *)
+(* with the customary abuse of notations, whereby 'f t' denotes the function    *)
+(* f acting on the term t (formally fmap f t), Sub (f t) is simply the function *)
+(* Sub applied to the term (f t), and 'f (Sub t)' denotes the direct image of   *)
+(* the set (Sub t) (a list for us) by function f acting on terms (so fmap f).   *) 
+(* The direct image is expressed by 'map'. In heuristic terms, the following    *)
+(* lemma expresses the fact that sub-terms of 'fmap f t' are the images of the  *)
+(* sub-terms of t by (fmap f).                                                  *)
+
+(* We could have a point-free version of this lemma                             *)
+Lemma Sub_fmap : forall (v w:Type) (f:v -> w) (t:T v),
+    Sub (fmap f t) = map (fmap f) (Sub t).
+Proof.
+    intros v w f.
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl.
+    - reflexivity.
+    - rewrite IH1, IH2, map_app. reflexivity.
+    - rewrite IH1. reflexivity.
+Qed.
 
 
-Show.
-*)
+

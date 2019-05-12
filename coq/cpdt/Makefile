@@ -1,4 +1,4 @@
-all:	utils_nat.vo \
+all:	Utils/nat.vo \
 		untyped.vo \
 		typed.vo \
 		chapt3.vo \
@@ -11,11 +11,13 @@ all:	utils_nat.vo \
 		coind_sem.vo \
 		dependent.vo \
 		sumbool.vo \
+		maybe.vo \
+		sumor.vo \
 		refine.vo \
-		test_untyped.vo \
-		test_typed.vo
+		Test/untyped_t.vo \
+		Test/typed_t.vo
 	
-utils_nat.vo : Utils/nat.v
+Utils/nat.vo : Utils/nat.v
 	coqc Utils/nat.v -R Utils Utils
 
 untyped.vo : untyped.v
@@ -54,13 +56,19 @@ dependent.vo : dependent.v
 sumbool.vo : sumbool.v
 	coqc sumbool.v
 
+maybe.vo : maybe.v
+	coqc maybe.v
+
+sumor.vo : sumor.v
+	coqc sumor.v
+
 refine.vo : refine.v
 	coqc refine.v
 
-test_untyped.vo : Test/untyped_t.v untyped.vo
+Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
 
-test_typed.vo : Test/typed_t.v typed.vo
+Test/typed_t.vo : Test/typed_t.v typed.vo
 	coqc Test/typed_t.v -R Utils Utils
 
 

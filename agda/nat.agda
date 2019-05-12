@@ -138,9 +138,10 @@ infixr 4 _≤_
 ≤-trans p (le-n n) = p
 ≤-trans p (le-s q) = le-s (≤-trans p q)
 
+le-n-s : {n m : ℕ} → n ≤ m → succ n ≤ succ m
+le-n-s (le-n n) = le-n (succ n)
+le-n-s (le-s p) = le-s (le-n-s p)
 
-
-
-
-
-
+le-s-n : {n m : ℕ} → succ n ≤ succ m → n ≤ m
+le-s-n {n} {.n} (le-n .(succ n)) = le-n n
+le-s-n {n} {m} (le-s p) = ≤-trans (le-s (le-n n)) p

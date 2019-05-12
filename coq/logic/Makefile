@@ -1,6 +1,7 @@
 all:	   	extensionality.vo \
 			identity.vo \
    			composition.vo \
+			le.vo \
 			max.vo \
 			Lam/T.vo \
 			Fol/P.vo \
@@ -17,6 +18,9 @@ identity.vo : identity.v
 
 composition.vo : composition.v
 	coqc composition.v
+
+le.vo : le.v
+	coqc le.v
 
 max.vo : max.v
 	coqc max.v
