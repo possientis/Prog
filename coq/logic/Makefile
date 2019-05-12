@@ -3,6 +3,7 @@ all:	   	Extensionality.vo \
    			Composition.vo \
 			Leq.vo \
 			Max.vo \
+			Eq.vo \
 			Lam/T.vo \
 			Fol/P.vo \
 			Lam/Order.vo \
@@ -24,6 +25,9 @@ Leq.vo : Leq.v
 
 Max.vo : Max.v
 	coqc Max.v
+
+Eq.vo : Eq.v
+	coqc Eq.v
 
 Lam/T.vo:   Lam/T.v Extensionality.vo Identity.vo Composition.vo
 	coqc Lam/T.v -R Lam Lam

@@ -1,6 +1,7 @@
 Require Import Le.
 Require Import List.
 
+Require Import Eq.
 Require Import Leq.
 Require Import Max.
 Require Import Lam.T.
@@ -139,4 +140,19 @@ Proof.
 Qed.
 
 
+(* We defined (s <<= t) in Haskell as a function:                               *)
+(* (<<=) :: (Eq v) => T v -> T v -> Bool                                        *)
+(* Hence we expect that (s <<= t) is a decidable propostion in coq, provided    *)
+(* the type v has decidable equality.                                           *)
 
+(*
+Lemma Sub_decidable : forall (v:Type), Eq v ->
+   forall (s t:T v), {s <<= t} + {~ s <<= t}.
+Proof.
+    intros v eq s t. revert s.
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1].
+    
+
+Show.
+
+*)
