@@ -1,45 +1,45 @@
-all:	   	extensionality.vo \
-			identity.vo \
-   			composition.vo \
-			le.vo \
-			max.vo \
+all:	   	Extensionality.vo \
+			Identity.vo \
+   			Composition.vo \
+			Leq.vo \
+			Max.vo \
 			Lam/T.vo \
 			Fol/P.vo \
-			Lam/order.vo \
-			Fol/order.vo \
-			Lam/subformula.vo \
-			Fol/subformula.vo
+			Lam/Order.vo \
+			Fol/Order.vo \
+			Lam/Subformula.vo \
+			Fol/Subformula.vo
 
-extensionality.vo : extensionality.v
-	coqc extensionality.v
+Extensionality.vo : Extensionality.v
+	coqc Extensionality.v
 
-identity.vo : identity.v
-	coqc identity.v
+Identity.vo : Identity.v
+	coqc Identity.v
 
-composition.vo : composition.v
-	coqc composition.v
+Composition.vo : Composition.v
+	coqc Composition.v
 
-le.vo : le.v
-	coqc le.v
+Leq.vo : Leq.v
+	coqc Leq.v
 
-max.vo : max.v
-	coqc max.v
+Max.vo : Max.v
+	coqc Max.v
 
-Lam/T.vo:   Lam/T.v extensionality.vo identity.vo composition.vo
+Lam/T.vo:   Lam/T.v Extensionality.vo Identity.vo Composition.vo
 	coqc Lam/T.v -R Lam Lam
 
-Fol/P.vo:	Fol/P.v	extensionality.vo identity.vo composition.vo
+Fol/P.vo:	Fol/P.v	Extensionality.vo Identity.vo Composition.vo
 	coqc Fol/P.v -R Fol Fol
 
-Lam/order.vo : Lam/order.v
-	coqc Lam/order.v -R Lam Lam
+Lam/Order.vo : Lam/Order.v
+	coqc Lam/Order.v -R Lam Lam
 
-Fol/order.vo : Fol/order.v
-	coqc Fol/order.v -R Fol Fol
+Fol/Order.vo : Fol/Order.v
+	coqc Fol/Order.v -R Fol Fol
 
-Lam/subformula.vo : Lam/subformula.v Lam/T.vo
-	coqc Lam/subformula.v -R Lam Lam
+Lam/Subformula.vo : Lam/Subformula.v Lam/T.vo
+	coqc Lam/Subformula.v -R Lam Lam
 
-Fol/subformula.vo : Fol/subformula.v Fol/P.vo
-	coqc Fol/subformula.v -R Fol Fol
+Fol/Subformula.vo : Fol/Subformula.v Fol/P.vo
+	coqc Fol/Subformula.v -R Fol Fol
 

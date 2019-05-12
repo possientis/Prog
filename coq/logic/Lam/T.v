@@ -1,9 +1,9 @@
 (* The type 'v' represents the set of variables symbols.        *)
 (* The type T v is the set of lambda terms with variables in v. *)
 
-Require Import identity.
-Require Import composition.
-Require Import extensionality.
+Require Import Identity.
+Require Import Composition.
+Require Import Extensionality.
 
 Inductive T (v:Type) : Type :=
 | Var : v -> T v                    (* variable                 *)
@@ -33,7 +33,7 @@ Proof.
     - rewrite IH1. reflexivity.
 Qed.
 
-Open Scope composition.  (* for notation ';' *)
+Open Scope Composition.  (* for notation ';' *)
 
 Lemma fmap_comp : forall (v w u:Type) (f:v -> w) (g:w -> u),
     fmap (g ; f) = fmap g ; fmap f.

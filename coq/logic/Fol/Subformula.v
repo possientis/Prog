@@ -1,10 +1,10 @@
 Require Import Le.
 Require Import List.
 
-Require Import le.
-Require Import max.
+Require Import Leq.
+Require Import Max.
 Require Import Fol.P.
-Require Import Fol.order.
+Require Import Fol.Order.
 
 (* Defines the 'list' of sub-formulas of a given formula. We do not have        *)
 (* sets here, so using lists instead, being understood that the order is        *)

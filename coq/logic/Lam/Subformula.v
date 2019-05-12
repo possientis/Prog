@@ -1,11 +1,10 @@
 Require Import Le.
 Require Import List.
 
-Require Import le.
-Require Import max.
-Require Import composition.
+Require Import Leq.
+Require Import Max.
 Require Import Lam.T.
-Require Import Lam.order.
+Require Import Lam.Order.
 
 (* Defines the 'list' of sub-terms of a given term. We do not have sets here,   *)
 (* so using lists instead, being understood that the order is irrelevant as     *) 

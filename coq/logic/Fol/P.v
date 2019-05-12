@@ -2,9 +2,9 @@
 (* The type P v is the set of set theoretic first order         *)
 (* propositions with variables in v.                            *)
 
-Require Import identity.
-Require Import composition.
-Require Import extensionality.
+Require Import Identity.
+Require Import Composition.
+Require Import Extensionality.
 
 Inductive P (v:Type) : Type :=
 | Bot  : P v                        (* bottom                   *)
@@ -38,7 +38,7 @@ Proof.
     - rewrite IH1. reflexivity.
 Qed.
 
-Open Scope composition.  (* for notation ';' *)
+Open Scope Composition.  (* for notation ';' *)
 
 Lemma fmap_comp : forall (v w u:Type) (f:v -> w) (g:w -> u),
     fmap (g ; f) = fmap g ; fmap f.
