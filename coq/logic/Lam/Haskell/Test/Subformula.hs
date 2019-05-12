@@ -7,6 +7,7 @@ import Test.QuickCheck
 
 
 import Lam.Haskell.T
+import Lam.Haskell.Order
 import Lam.Haskell.Subformula
 import Haskell.Variable (Var)
 
@@ -15,10 +16,13 @@ specSubformula = describe "Testing properties of subformula order (<<=)..." $
     sequence_ specsSubformula
 
 specsSubformula :: [Spec]
-specsSubformula = [ testReflexivity
-                  , testAntiSymmetry
-                  , testTransitivity
-                  ]
+specsSubformula  = [ testReflexivity
+                   , testAntiSymmetry
+                   , testTransitivity
+                   , testSubInclusion
+                   , testOrderMonotone
+                   , testSubFmap
+                   ]
 
 testReflexivity :: Spec
 testReflexivity = it "Checked (<<=) is reflexive" $ 
@@ -32,6 +36,18 @@ testTransitivity :: Spec
 testTransitivity = it "Checked (<<=) is transitive" $
     property $ propTransitivity
 
+testSubInclusion :: Spec
+testSubInclusion = it "Checked (<<=) inclusion property" $
+    property $ propSubInclusion
+
+testOrderMonotone :: Spec
+testOrderMonotone = it "Checked (<<=) monotone order property" $ 
+    property $ propOrderMonotone
+
+testSubFmap :: Spec
+testSubFmap = it "Checked (<<=) fmap property" $
+    property $ propSubFmap
+
 propReflexivity :: T Var -> Bool
 propReflexivity t = t <<= t
 
@@ -41,4 +57,12 @@ propAntiSymmetry s t = not (s <<= t) || not (t <<= s) ||  (s == t)
 propTransitivity :: T Var -> T Var -> T Var -> Bool
 propTransitivity r s t = not (r <<= s) || not (s <<= t) || (r <<= t) 
          
+propSubInclusion :: T Var -> T Var -> Bool
+propSubInclusion s t = incl (sub s) (sub t) == (s <<= t) where
+    incl xs ys = and $ map (\x -> x `elem` ys) xs 
 
+propOrderMonotone :: T Var -> T Var -> Bool
+propOrderMonotone s t = not (s <<= t) || (ord s <= ord t)
+
+propSubFmap :: (Var -> Var) -> T Var -> Bool
+propSubFmap f t = sub (fmap f t) == map (fmap f) (sub t)
