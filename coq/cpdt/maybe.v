@@ -33,4 +33,42 @@ Proof. reflexivity. Qed.
 Compute (maybe 0 (pred_strong 10)).
 *)
 
+Notation "{{ x | P }}" := (Maybe (fun x => P)).
+Notation "??"          := (Nothing).
+Notation "[| x |]"     := (@Just _ _ x _).
+
+
+Definition pred_strong' (n:nat) : {{m|S m = n}} :=
+    match n return {{m | S m = n}} with  
+    | 0     => ??
+    | S n'   => @Just _ _ n' (eq_refl (S n')) 
+    end.
+
+
+Notation "x <- e1 ; e2" := (match e1 with 
+                            | Nothing       => Nothing
+                            | @Just _ _ x _ => e2
+                            end)
+(right associativity, at level 60).
+
+
+Definition doublePred : forall (n1 n2:nat),  
+    {{ p | n1 = S (fst p) /\ n2 = S (snd p) }}.
+    refine (fun n1 n2 => 
+        m1 <- pred_strong n1;
+        m2 <- pred_strong n2;
+        [|(m1,m2)|]). 
+    split.
+    - simpl. symmetry. assumption.
+    - simpl. symmetry. assumption.
+Defined.
+
+(*
+Print doublePred.
+*)
+
+
+
+
+
 
