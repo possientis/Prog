@@ -1,14 +1,14 @@
 #!/bin/bash
 
-HOME=/home/john/Prog
-PATTERNS=${HOME}/polyglot/DesignPatterns
-BITCOIN=${HOME}/polyglot/Bitcoin
+PROG=/home/john/Prog
+PATTERNS=${PROG}/polyglot/DesignPatterns
+BITCOIN=${PROG}/polyglot/Bitcoin
 
 echo 'Testing log file\n' > test.log
 
 function testing () {
     echo "Testing $1 ..."
-    ${HOME}/${1}/test.sh >> test.log 2>&1
+    ${PROG}/${1}/test.sh >> test.log 2>&1
     if [ $? -ne 0 ]
     then
         echo 'TESTING FAILED'
@@ -26,6 +26,7 @@ testing maven
 testing gradle
 testing c#
 testing haskell
+testing agda
 testing scheme
 testing python
 testing ruby
