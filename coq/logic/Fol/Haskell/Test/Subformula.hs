@@ -52,11 +52,25 @@ propReflexivity :: P Var -> Bool
 propReflexivity p = p <<= p
 
 propAntiSymmetry :: P Var -> P Var -> Bool
-propAntiSymmetry p q = not (p <<= q) || not (q <<= p) ||  (p == q)
+propAntiSymmetry p q = propAntiSymmetry_naive p q && propAntiSymmetry_real q
+
+propAntiSymmetry_naive :: P Var -> P Var -> Bool
+propAntiSymmetry_naive  p q = not (p <<= q) || not (q <<= p) ||  (p == q)
+
+propAntiSymmetry_real :: P Var -> Bool
+propAntiSymmetry_real q = all f (sub q) where
+    f p = not (q <<= p) || (p == q)
 
 propTransitivity :: P Var -> P Var -> P Var -> Bool
-propTransitivity p q r = not (p <<= q) || not (q <<= r) || (p <<= r) 
+propTransitivity p q r = propTransitivity_naive p q r && propTransitivity_real r
+
+propTransitivity_naive :: P Var -> P Var -> P Var -> Bool
+propTransitivity_naive p q r = not (p <<= q) || not (q <<= r) || (p <<= r) 
  
+propTransitivity_real :: P Var -> Bool
+propTransitivity_real r = all f (sub r) where
+    f q = all (<<= r) (sub q)
+
 propSubInclusion :: P Var -> P Var -> Bool
 propSubInclusion p q = incl (sub p) (sub q) == (p <<= q) where
     incl xs ys = and $ map (\x -> x `elem` ys) xs 

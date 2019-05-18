@@ -144,15 +144,41 @@ Qed.
 (* (<<=) :: (Eq v) => T v -> T v -> Bool                                        *)
 (* Hence we expect that (s <<= t) is a decidable propostion in coq, provided    *)
 (* the type v has decidable equality.                                           *)
-
-(*
 Lemma Sub_decidable : forall (v:Type), Eq v ->
    forall (s t:T v), {s <<= t} + {~ s <<= t}.
 Proof.
-    intros v eq s t. revert s.
+    intros v eq s t. revert s. revert t. 
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1].
-    
+    - destruct s as [y|s1 s2|y s1].
+        + destruct (eq x y) as [E|E].
+            { subst. left. apply Sub_refl. }
+            { right. intros H. apply E. destruct H as [H|H].
+                { inversion H. reflexivity. }
+                { inversion H. }
+            }
+        + right. intros H. destruct H as [H|H]; inversion H.
+        + right. intros H. destruct H as [H|H]; inversion H.
+    - intros s.  destruct (eq_decidable eq s (App t1 t2)) as [E|E].
+        + subst. left. apply Sub_refl.
+        + destruct (IH1 s) as [E1|E1], (IH2 s) as [E2|E2].
+            { left. right. apply in_or_app. left.  assumption. }
+            { left. right. apply in_or_app. left.  assumption. }
+            { left. right. apply in_or_app. right. assumption. }
+            { right. intros H. destruct H as [H|H]. 
+                { subst. apply E. reflexivity. }
+                { apply in_app_or in H. destruct H as [H|H].
+                    { apply E1. assumption. }
+                    { apply E2. assumption. }
+                }
+            }
+    - intros s. destruct (eq_decidable eq s (Lam x t1)) as [E|E].
+        + subst. left. apply Sub_refl.
+        + destruct (IH1 s) as [E1|E1].
+            { left. right. assumption. }
+            { right. intros H. destruct H as [H|H].
+                { subst. apply E. reflexivity. }
+                { apply E1. assumption. }
+            }
+Qed.
 
-Show.
 
-*)

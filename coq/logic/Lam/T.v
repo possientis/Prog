@@ -1,6 +1,7 @@
 (* The type 'v' represents the set of variables symbols.        *)
 (* The type T v is the set of lambda terms with variables in v. *)
 
+Require Import Eq.
 Require Import Identity.
 Require Import Composition.
 Require Import Extensionality.
@@ -44,4 +45,36 @@ Proof.
     - rewrite IH1, IH2. reflexivity.
     - rewrite IH1. reflexivity.
 Qed.
+
+(* If equality on v is decidable, then so is equality on T v                    *) 
+(* It would seem that the 'right. intros H. inversion H' fragment could be      *)
+(* factorized in the below proof, but attempting to do so creates a problem,    *)
+(* as the fragment does not fail in branches where it should not be used.       *)
+Lemma eq_decidable : forall (v:Type), Eq v -> Eq (T v).
+Proof.
+    intros v eq s t. revert s t.
+    induction s as [x|s1 IH1 s2 IH2|x s1 IH1];
+    destruct t as [y|t1 t2|y t1].
+    - destruct (eq x y) as [E|E].
+        + subst. left. reflexivity.
+        + right. intros H. inversion H. subst. apply E. reflexivity.
+    - right. intros H. inversion H.
+    - right. intros H. inversion H.
+    - right. intros H. inversion H.
+    - destruct (IH1 t1) as [E1|E1], (IH2 t2) as [E2|E2].
+        + subst. left. reflexivity.
+        + right. intros H. inversion H. subst. apply E2. reflexivity.
+        + right. intros H. inversion H. subst. apply E1. reflexivity.
+        + right. intros H. inversion H. subst. apply E1. reflexivity.
+    - right. intros H. inversion H.
+    - right. intros H. inversion H.
+    - right. intros H. inversion H.
+    - destruct (eq x y) as [E|E], (IH1 t1) as [E1|E1].
+        + subst. left. reflexivity.
+        + right. intros H. inversion H. subst. apply E1. reflexivity.
+        + right. intros H. inversion H. subst. apply E.  reflexivity.
+        + right. intros H. inversion H. subst. apply E.  reflexivity.
+Qed.
+
+Arguments eq_decidable {v} _.
 

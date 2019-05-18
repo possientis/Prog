@@ -52,10 +52,25 @@ propReflexivity :: T Var -> Bool
 propReflexivity t = t <<= t
 
 propAntiSymmetry :: T Var -> T Var -> Bool
-propAntiSymmetry s t = not (s <<= t) || not (t <<= s) ||  (s == t)
+propAntiSymmetry s t = propAntiSymmetry_naive s t && propAntiSymmetry_real t
+
+propAntiSymmetry_naive :: T Var -> T Var -> Bool
+propAntiSymmetry_naive s t = not (s <<= t) || not (t <<= s) ||  (s == t)
+
+propAntiSymmetry_real :: T Var -> Bool
+propAntiSymmetry_real t = all f (sub t) where
+    f s = not (t <<= s) || (s == t)
 
 propTransitivity :: T Var -> T Var -> T Var -> Bool
-propTransitivity r s t = not (r <<= s) || not (s <<= t) || (r <<= t) 
+propTransitivity r s t = propTransitivity_naive r s t && propTransitivity_real t
+
+propTransitivity_naive :: T Var -> T Var -> T Var -> Bool
+propTransitivity_naive r s t = not (r <<= s) || not (s <<= t) || (r <<= t) 
+
+propTransitivity_real :: T Var -> Bool
+propTransitivity_real t = all f (sub t) where
+    f s = all (<<= t) (sub s)
+
          
 propSubInclusion :: T Var -> T Var -> Bool
 propSubInclusion s t = incl (sub s) (sub t) == (s <<= t) where

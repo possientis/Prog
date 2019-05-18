@@ -1,6 +1,7 @@
 Require Import Le.
 Require Import List.
 
+Require Import Eq.
 Require Import Leq.
 Require Import Max.
 Require Import Fol.P.
@@ -148,3 +149,57 @@ Proof.
     - rewrite IH1, IH2, map_app. reflexivity.
     - rewrite IH1. reflexivity.
 Qed.
+
+
+(* We defined (p <<= q) in Haskell as a function:                               *)
+(* (<<=) :: (Eq v) => P v -> P v -> Bool                                        *)
+(* Hence we expect that (p <<= q) is a decidable propostion in coq, provided    *)
+(* the type v has decidable equality.                                           *)
+Lemma Sub_decidable : forall (v:Type), Eq v ->
+   forall (p q:P v), {p <<= q} + {~ p <<= q}.
+Proof.
+    intros v eq p q. revert p. revert q.
+    induction q as [|x y|q1 IH1 q2 IH2|x q1 IH1].
+    - destruct p as [|x' y'|p1 p2|x' p1].
+        + left. apply Sub_refl.
+        + right. intros H. destruct H as [H|H]; inversion H.
+        + right. intros H. destruct H as [H|H]; inversion H.
+        + right. intros H. destruct H as [H|H]; inversion H.
+    - destruct p as [|x' y'|p1 p2|x' p1].
+        + right. intros H. destruct H as [H|H]; inversion H.
+        + destruct (eq x x') as [Ex|Ex], (eq y y') as [Ey|Ey].
+            { subst. left. apply Sub_refl. }
+            { right. intros H. destruct H as [H|H]; inversion H.
+              subst. apply Ey. reflexivity.
+            }
+            { right. intros H. destruct H as [H|H]; inversion H.
+              inversion H. subst. apply Ex. reflexivity.
+            }
+            { right. intros H. destruct H as [H|H]; inversion H.
+              inversion H. subst. apply Ex. reflexivity.
+            }
+        + right. intros H. destruct H as [H|H]; inversion H.
+        + right. intros H. destruct H as [H|H]; inversion H.
+    - intros p. destruct (eq_decidable eq p (Imp q1 q2)) as [E|E].
+        + subst. left. apply Sub_refl.
+        + destruct (IH1 p) as [E1|E1], (IH2 p) as [E2|E2].
+            { left. right. apply in_or_app. left.  assumption. }
+            { left. right. apply in_or_app. left.  assumption. }
+            { left. right. apply in_or_app. right. assumption. }
+            { right. intros H. destruct H as [H|H]. 
+                { subst. apply E. reflexivity. }
+                { apply in_app_or in H. destruct H as [H|H].
+                    { apply E1. assumption. }
+                    { apply E2. assumption. }
+                }
+            }
+    - intros p. destruct (eq_decidable eq p (All x q1)) as [E|E].
+        + subst. left. apply Sub_refl.
+        + destruct (IH1 p) as [E1|E1].
+            { left. right. assumption. }
+            { right. intros H. destruct H as [H|H].
+                { subst. apply E. reflexivity. }
+                { apply E1. assumption. }
+            }
+Qed.
+
