@@ -1,8 +1,23 @@
 -- Parsec with error messages
 module  Parsec2 
     (   Parser  
+    ,   (<|>)
+    ,   char
+    ,   digit
+    ,   identifier
+    ,   letter
+    ,   many1
+    ,   parse
     ,   satisfy
+    ,   string
+    ,   try
     )   where
+
+import Data.Char
+import Control.Monad
+
+import Prelude hiding (exp)
+
 {-
 The restriction to LL(1) makes it much easier for us to generate good error
 messages. First of all, the error message should include the position of an error.
@@ -13,6 +28,10 @@ newtype Parser a = Parser { run :: State -> Consumed a }
 
 data State = State String Pos
     deriving Show
+
+parse :: Parser a -> String -> Consumed a
+parse p s = run p (State s 0)
+
 
 type Pos = Integer  -- TODO
 nextPos :: Pos -> Char -> Pos
@@ -43,6 +62,25 @@ error that would have occurred if this successful alternative wasn’t taken.
 data Reply a = Ok a State Message | Error Message
     deriving Show
 
+instance Functor Reply where
+    fmap _ (Error msg)  = Error msg
+    fmap f (Ok x s msg) = Ok (f x) s msg 
+
+instance Functor Consumed where
+    fmap f (Consumed r) = Consumed (fmap f r)
+    fmap f (Empty r)    = Empty (fmap f r)
+
+instance Functor Parser where
+    fmap f p = Parser $ fmap f . run p
+
+instance Applicative Parser where
+    pure  = return
+    (<*>) = ap
+
+instance Monad Parser where
+    return = return_
+    (>>=)  = bind_
+
 {-
 The return parser attaches an empty message to the parser reply.
 -}
@@ -52,6 +90,19 @@ return_ x = Parser $ \state@(State _ pos) ->
     Empty (Ok x state (Message pos "" []))
 
 
+bind_ :: Parser a -> (a -> Parser b) -> Parser b
+bind_ p f = Parser $ \state -> case (run p state) of
+    Empty reply1 -> case reply1 of
+        Ok x state' _   -> run (f x) state'   
+        Error msg       -> Empty (Error msg)
+    Consumed reply1     -> Consumed (
+        case reply1 of
+            Ok x state' _ -> 
+                case run (f x) state' of
+                    Consumed reply2 -> reply2
+                    Empty reply2    -> reply2 
+            Error msg     -> Error msg
+        )
 {-
 The implementation of the satisfy parser changes more. It updates the parse
 position if it succeeds and returns an error message with the current position
@@ -97,5 +148,62 @@ propagate its error messages into the Ok reply.
     consumed                -> consumed 
 
 
+mergeOk :: a -> State -> Message -> Message -> Consumed a
+mergeOk x inp msg1 msg2 = Empty (Ok x inp (merge msg1 msg2))
 
+mergeError :: Message -> Message -> Consumed a
+mergeError msg1 msg2 = Empty (Error (merge msg1 msg2))
+
+merge :: Message -> Message -> Message
+merge (Message pos inp exp1) (Message _ _ exp2) = Message pos inp (exp1 ++ exp2) 
+
+
+{-
+The parser (p <?> msg) behaves like parser p but when it fails without consum-
+ing input, it sets the expected productions to msg. It is important that it only
+does so when no input is consumed since otherwise it wouldn’t be something
+that is expected after all:
+-}
+
+(<?>) :: Parser a -> String -> Parser a
+(<?>) p exp = Parser $ \state -> case (run p state) of
+    Empty (Error msg)   -> Empty (Error (expect msg exp))
+    Empty (Ok x st msg) -> Empty (Ok x st (expect msg exp))
+    other               -> other
+
+expect :: Message -> String -> Message
+expect (Message pos inp _) exp = Message pos inp [exp]
+
+char :: Char -> Parser Char
+char c = satisfy (==c) <?> (show c)
+
+letter :: Parser Char
+letter = satisfy isAlpha <?> "letter"
+
+digit :: Parser Char
+digit = satisfy isDigit <?> "digit"
+
+
+
+string :: String -> Parser ()
+string ""     = return ()
+string (c:cs) = do { _ <- char c; string cs } 
+
+many1 :: Parser a -> Parser [a]
+many1 p = do
+    x  <- p
+    xs <- many1 p <|> return []
+    return (x:xs)
+
+identifier :: Parser String
+identifier = do 
+    c  <- letter
+    cs <- many1 (letter <|> digit <|> char '_')
+    return (c:cs)
+
+
+try :: Parser a -> Parser a
+try p = Parser $ \input -> case (run p input) of
+    Consumed (Error msg)  -> Empty (Error msg)
+    other                 -> other
 

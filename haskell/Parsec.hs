@@ -70,10 +70,9 @@ combinator.
 
 bind_ :: Parser a -> (a -> Parser b) -> Parser b
 bind_ p f = Parser $ \input -> case (run p input) of
-    Empty reply1 -> 
-        case reply1 of
-            Ok x rest   -> run (f x) rest
-            Error       -> Empty Error
+    Empty reply1 -> case reply1 of
+        Ok x rest   -> run (f x) rest
+        Error       -> Empty Error
     Consumed reply1 -> Consumed (
         case reply1 of 
             Ok x rest -> 

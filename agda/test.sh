@@ -6,7 +6,7 @@ DIR=`pwd`
 HOME1=/home/john/Prog/agda  # changing 'HOME' is a bad idea
 cd ${HOME1}
 
-agda --compile hello-world.agda > /dev/null
+agda --compile hello-world.agda
 ./hello-world
 ./clean.sh
 
