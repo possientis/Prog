@@ -14,6 +14,7 @@ all:	Utils/nat.vo \
 		maybe.vo \
 		sumor.vo \
 		refine.vo \
+		type_check.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo
 	
@@ -64,6 +65,9 @@ sumor.vo : sumor.v
 
 refine.vo : refine.v
 	coqc refine.v
+
+type_check.vo : type_check.v
+	coqc type_check.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
