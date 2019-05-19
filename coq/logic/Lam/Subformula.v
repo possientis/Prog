@@ -21,8 +21,12 @@ Fixpoint Sub (v:Type) (t:T v) : list (T v) :=
 
 Arguments Sub {v} _.
 
+Definition isSubFormulaOf (v:Type) (s t:T v) : Prop := In t (Sub s).
+Arguments isSubFormulaOf {v} _ _.
+
+
 (* t is a sub-term of s if it belongs to the list of sub-terms of s             *)
-Notation "t <<= s" := (In t (Sub s)) (at level 50).
+Notation "t <<= s" := (isSubFormulaOf s t) (at level 50).
    
 (* Being a 'sub-term of' is reflexive relation                                  *)
 Lemma Sub_refl : forall (v:Type) (t:T v), t <<= t.
@@ -30,6 +34,7 @@ Proof.
     intros v.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; left; reflexivity.
 Qed.
+
 
 (* This lemma will allow us to get transitivity                                 *)
 Lemma Sub_incl : forall (v:Type) (t1 t2:T v),

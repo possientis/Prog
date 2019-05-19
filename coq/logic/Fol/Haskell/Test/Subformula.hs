@@ -11,6 +11,9 @@ import Fol.Haskell.Order
 import Fol.Haskell.Subformula
 import Haskell.Variable (Var)
 
+incl :: (Eq a) => [a] -> [a] -> Bool
+incl xs ys = all (`elem` ys) xs
+
 specSubformula :: Spec
 specSubformula = describe "Testing properties of subformula order (<<=)..." $
     sequence_ specsSubformula
@@ -72,11 +75,29 @@ propTransitivity_real r = all f (sub r) where
     f q = all (<<= r) (sub q)
 
 propSubInclusion :: P Var -> P Var -> Bool
-propSubInclusion p q = incl (sub p) (sub q) == (p <<= q) where
-    incl xs ys = and $ map (\x -> x `elem` ys) xs 
+propSubInclusion p q =  propSubInclusion_naive p q 
+                     && propSubInclusion_real1 q
+                     && propSubInclusion_real2 q
+
+propSubInclusion_naive :: P Var -> P Var -> Bool
+propSubInclusion_naive p q = incl (sub p) (sub q) == (p <<= q)
+
+propSubInclusion_real1 :: P Var -> Bool
+propSubInclusion_real1 q = all f (sub q) where
+    f p = incl (sub p) (sub q) 
+         
+propSubInclusion_real2 :: P Var -> Bool
+propSubInclusion_real2 q = all (<<= q) (sub q) where 
 
 propOrderMonotone :: P Var -> P Var -> Bool
-propOrderMonotone p q = not (p <<= q) || (ord p <= ord q)
+propOrderMonotone p q = propOrderMonotone_naive p q && propOrderMonotone_real q
+
+propOrderMonotone_naive :: P Var -> P Var -> Bool
+propOrderMonotone_naive p q = not (p <<= q) || (ord p <= ord q)
+
+propOrderMonotone_real :: P Var -> Bool
+propOrderMonotone_real q = all f (sub q) where
+    f p = (ord p <= ord q)
 
 propSubFmap :: (Var -> Var) -> P Var -> Bool
 propSubFmap f p = sub (fmap f p) == map (fmap f) (sub p)
