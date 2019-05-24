@@ -77,7 +77,9 @@ length-filter p (x ∷ xs) | ff = le-s (length-filter p xs)
 filter-idempotent : ∀ {ℓ} {a : Set ℓ} (p : a → 𝔹) (xs : 𝕃 a) →
   (filter p (filter p xs)) ≡ filter p xs
 filter-idempotent p []            = refl []
-filter-idempotent p (x ∷ xs) with keep (p x)
+filter-idempotent p (x ∷ xs) with (p x)
 filter-idempotent p (x ∷ xs) | tt = {!!}
+filter-idempotent p (x ∷ xs) | ff = {!!}
+
 
 
