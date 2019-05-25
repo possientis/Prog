@@ -2,24 +2,35 @@
 Definition Rel (a:Type) : Type := (a -> a -> Prop).
 
 (* Reflexive predicate on Rel a                                                 *)
-Definition isRefl (a:Type) (r:Rel a) : Prop := forall (x:a), 
+Definition reflexive (a:Type) (r:Rel a) : Prop := forall (x:a), 
     r x x.
 
-Arguments isRefl {a} _.
+Arguments reflexive {a} _.
 
 (* Symmetric predicate on Rel a                                                 *)
-Definition isSym (a:Type) (r:Rel a) : Prop := forall (x y:a), 
+Definition symmetric (a:Type) (r:Rel a) : Prop := forall (x y:a), 
     r x y -> r y x.
 
-Arguments isSym {a} _.
+Arguments symmetric {a} _.
 
 (* Transitive predicate on Rel a                                                *)
-Definition isTran (a:Type) (r:Rel a) : Prop := forall (x y z:a), 
+Definition transitive (a:Type) (r:Rel a) : Prop := forall (x y z:a), 
     r x y -> r y z -> r x z.
 
-Arguments isTran {a} _.
+Arguments transitive {a} _.
+
+Definition antisymmetric (a:Type) (r:Rel a) : Prop := forall (x y:a),
+    r x y -> r y x -> x = y.
+
+Arguments antisymmetric {a} _.
 
 (* Equivalence predicate on Rel a                                               *)
-Definition isEquiv (a:Type) (r:Rel a) : Prop := isRefl r /\ isSym r /\ isTran r.
+Definition equivalence (a:Type) (r:Rel a) : Prop := 
+    reflexive r /\ symmetric r /\ transitive r.
 
-Arguments isEquiv {a} _.
+Arguments equivalence {a} _.
+
+Definition partial_order (a:Type) (r:Rel a) : Prop :=
+    reflexive r /\ antisymmetric r /\ transitive r.
+
+Arguments partial_order {a} _.

@@ -70,6 +70,14 @@ Definition eq_type_dec'' (t t':type) : {t = t'} + {t <> t'} :=
 Print eq_type_dec''.
 *)
 
+(* Hoping to turn 'Typ' into a monad - ish                                      *)
+Definition Typ (e:exp) : Type := option {t:type | hasType e t}.
+
+Definition return_ (e:exp) (t:type) (p:hasType e t) : Typ e := 
+    Some (exist _ t p).
+
+
+
 (* define monadic structure of returned type and relevant do notation
 Definition typeCheck (e:exp) : option {t:type |hasType e t}.
 
