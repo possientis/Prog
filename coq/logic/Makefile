@@ -12,7 +12,9 @@ all:	   	Extensionality.vo \
 			Lam/Subformula.vo \
 			Fol/Subformula.vo \
 			Lam/Congruence.vo \
-			Fol/Congruence.vo
+			Fol/Congruence.vo \
+			Lam/Variable.vo \
+			Fol/Variable.vo
 
 Extensionality.vo : Extensionality.v
 	coqc Extensionality.v
@@ -47,12 +49,13 @@ Lam/Order.vo : Lam/Order.v Lam/T.vo
 Fol/Order.vo : Fol/Order.v Fol/P.vo
 	coqc Fol/Order.v -R Fol Fol
 
-Lam/Subformula.vo : Lam/Subformula.v \
+Lam/Subformula.vo :	Lam/Subformula.v \
 					Eq.vo \
 					Leq.vo \
 					Max.vo \
 					Lam/T.vo \
-					Lam/Order.vo
+					Lam/Order.vo \
+					Lam/Variable.vo
 	coqc Lam/Subformula.v -R Lam Lam
 
 Fol/Subformula.vo : Fol/Subformula.v \
@@ -60,7 +63,8 @@ Fol/Subformula.vo : Fol/Subformula.v \
 					Leq.vo \
 					Max.vo \
 					Fol/P.vo \
-					Fol/Order.vo
+					Fol/Order.vo \
+					Fol/Variable.vo
 	coqc Fol/Subformula.v -R Fol Fol
 
 Lam/Congruence.vo : Lam/Congruence.v \
@@ -73,3 +77,10 @@ Fol/Congruence.vo : Fol/Congruence.v \
 					Fol/P.vo
 	coqc Fol/Congruence.v -R Fol Fol
 
+Lam/Variable.vo :	Lam/Variable.v \
+					Lam/T.vo
+	coqc Lam/Variable.v -R Lam Lam 
+					
+Fol/Variable.vo :	Fol/Variable.v \
+					Fol/P.vo
+	coqc Fol/Variable.v -R Fol Fol

@@ -6,6 +6,7 @@ Require Import Leq.
 Require Import Max.
 Require Import Fol.P.
 Require Import Fol.Order.
+Require Import Fol.Variable.
 
 (* Defines the 'list' of sub-formulas of a given formula. We do not have        *)
 (* sets here, so using lists instead, being understood that the order is        *)
@@ -203,5 +204,27 @@ Proof.
                 { subst. apply E. reflexivity. }
                 { apply E1. assumption. }
             }
+Qed.
+
+
+Lemma Sub_var : forall (v:Type) (p q:P v),
+    p <<= q -> incl (var p) (var q).
+Proof.
+    intros v p q. revert q p. 
+    induction q as [|x y|p1 IH1 p2 IH2|x p1 IH1]; intros p [H|H].
+    - subst. apply incl_refl.
+    - inversion H.
+    - subst. apply incl_refl.
+    - inversion H.
+    - subst. apply incl_refl. 
+    - apply in_app_or in H. destruct H as [H|H].
+        + apply incl_tran with (var p1).
+            { apply IH1. assumption. }
+            { apply incl_appl, incl_refl. }
+        + apply incl_tran with (var p2).
+            { apply IH2. assumption. }
+            { apply incl_appr, incl_refl. }
+    - subst. apply incl_refl.
+    - apply incl_tl, IH1. assumption. 
 Qed.
 

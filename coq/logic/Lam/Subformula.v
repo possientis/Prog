@@ -6,6 +6,7 @@ Require Import Leq.
 Require Import Max.
 Require Import Lam.T.
 Require Import Lam.Order.
+Require Import Lam.Variable.
 
 (* Defines the 'list' of sub-terms of a given term. We do not have sets here,   *)
 (* so using lists instead, being understood that the order is irrelevant as     *) 
@@ -187,4 +188,22 @@ Proof.
 Qed.
 
 
+Lemma Sub_var : forall (v:Type) (s t:T v),
+    s <<= t -> incl (var s) (var t).
+Proof.
+    intros v s t. revert t s. 
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros s [H|H].
+    - subst. apply incl_refl.
+    - inversion H.
+    - subst. apply incl_refl.
+    - apply in_app_or in H. destruct H as [H|H].
+        + apply incl_tran with (var t1).
+            { apply IH1. assumption. }
+            { apply incl_appl, incl_refl. }
+        + apply incl_tran with (var t2).
+            { apply IH2. assumption. }
+            { apply incl_appr, incl_refl. }
+    - subst. apply incl_refl.
+    - apply incl_tl, IH1. assumption. 
+Qed.
 
