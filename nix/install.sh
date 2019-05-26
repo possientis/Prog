@@ -24,13 +24,13 @@ cleanup ()
     rm -rf $tmpDir
 }
 
-# trap cleanup EXIT INT QUIT TERM
+trap cleanup EXIT INT QUIT TERM
 
 
-hash1=7ce46548509837d4bc8d01b63973f8fb8972fbbe8ba6a9b5e929cf5954c3d85e
-hash2=b055b9ac5e65d43cb6b1d1fe99eb106371a6b5782c3522209a73f473dc7b8779
-hash3=1d5c5ede3d7be3963f34f6b51a7b37b3ce3adc5ce623f2a50c11501b9c95bd4e
-hash4=2286e52c2047fcc23ac0dec030eb1f69da1be2983b0defd744b1acbe285db1f7
+hash1="7ce46548509837d4bc8d01b63973f8fb8972fbbe8ba6a9b5e929cf5954c3d85e"
+hash2="b055b9ac5e65d43cb6b1d1fe99eb106371a6b5782c3522209a73f473dc7b8779"
+hash3="1d5c5ede3d7be3963f34f6b51a7b37b3ce3adc5ce623f2a50c11501b9c95bd4e"
+hash4="2286e52c2047fcc23ac0dec030eb1f69da1be2983b0defd744b1acbe285db1f7"
 
 case "$(uname -s).$(uname -m)" in
     Linux.x86_64)  system=x86_64-linux;  hash=$hash1;;
@@ -44,15 +44,19 @@ esac
 url="https://nixos.org/releases/nix/nix-2.2.2/nix-2.2.2-$system.tar.bz2"
 tarball="$tmpDir/$(basename "$tmpDir/nix-2.2.2-$system.tar.bz2")"
 
-require_util() 
+installed ()
 {
-    type "$1" > /dev/null 2>&1 || command -v "$1" > /dev/null 2>&1 ||
-        oops "you do not have '$1' installed, which I need to $2"
+    type "$1" > /dev/null 2>&1
 }
 
-require_util curl "download the binary tarball"
+require_util() 
+{
+    installed "$1" || oops "you do not have '$1' installed, which I need to $2"
+}
+
+require_util curl  "download the binary tarball"
 require_util bzcat "decompress the binary tarball"
-require_util tar "unpack the binary tarball"
+require_util tar   "unpack the binary tarball"
 
 echo "downloading Nix 2.2.2 binary tarball for $system"
 echo "from: '$url'"
@@ -61,6 +65,23 @@ curl -L $url -o $tarball || oops "failed to download '$url'"
 
 # We decided to use 'curl' but 'wget' could have been used too
 # wget $url -P $tmpDir || oops "failed to download '$url'"
+
+if installed sha256sum; then
+    check="$(sha256sum -b ${tarball} | cut -c1-64)"
+elif installed shasum; then
+    check="$(shasum -a 256 -b ${tarball} | cut -c1-64)"
+elif installed openssl; then
+    check="$(openssl dgst -r -sha256 ${tarball} | cut -c1-64)"
+else
+    oops "Expecting one of 'sha256sum', 'shasum' or 'openssl' to be installed"
+fi
+
+if [ "$hash" != "$check" ]; then
+    oops "SHA-256 hash mismatch in ${url}: got ${check}, expecting ${hash}"
+fi
+
+
+
 
 
 
