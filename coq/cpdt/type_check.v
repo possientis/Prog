@@ -77,9 +77,71 @@ Definition return_ (e:exp) (t:type) (p:hasType e t) : Typ e :=
     Some (exist _ t p).
 
 
+(* TODO: implement monad instance for 'option' and improve syntax               *)
+Definition typeCheck : forall (e:exp), option {t:type | hasType e t}.
+    refine (fix F (e:exp) : option {t:type | hasType e t} :=
+        match e as e' return option {t:type | hasType e' t} with
+        | Nat _      => Some (exist _ TNat (HtNat _))
+        | Bool _     => Some (exist _ TBool (HtBool _))
+        | Plus e1 e2 => 
+            match (F e1) with 
+            | None  => None
+            | Some (exist _ t1 p1) => 
+                match (F e2) with
+                | None  => None
+                | Some (exist _ t2 p2) =>
+                    match eq_type_dec t1 TNat with
+                    | right _   => None
+                    | left  N1  =>
+                        match eq_type_dec t2 TNat with
+                        | right _   => None
+                        | left N2   => Some (exist _ TNat (HtPlus _ _ _ _))
+                        end 
+                    end
 
-(* define monadic structure of returned type and relevant do notation
-Definition typeCheck (e:exp) : option {t:type |hasType e t}.
+                end
+            end
+        | And e1 e2  => 
+            match (F e1) with 
+            | None  => None
+            | Some (exist _ t1 p1)  =>
+                match (F e2) with
+                | None  => None
+                | Some (exist _ t2 p2)  =>
+                    match eq_type_dec t1 TBool with
+                    | right _   => None
+                    | left B1   =>
+                        match eq_type_dec t2 TBool with
+                        | right _   => None
+                        | left B2   => Some (exist _ TBool (HtAnd _ _ _ _))
+                        end
+                    end
+                end
+            end
+        end).
+    - simpl in p1. subst. assumption.
+    - simpl in p2. subst. assumption. 
+    - simpl in p1. subst. assumption.
+    - simpl in p2. subst. assumption.
+Defined.
 
-Show.
+(*
+Print typeCheck.
 *)
+
+Definition maybe (e:exp) (r:option {t:type | hasType e t}) : option type :=
+    match r with
+    | None                  => None
+    | Some (exist _ t _)    => Some t  
+    end.
+
+Arguments maybe {e} _.
+
+(*
+Compute maybe (typeCheck (Nat 5)).
+Compute maybe (typeCheck (Bool true)).
+Compute maybe (typeCheck (Plus (Nat 5) (Plus (Nat 6) (Nat 0)))).
+Compute maybe (typeCheck (And (Bool true) (Bool false))).
+Compute maybe (typeCheck (Plus (Bool true) (Nat 5))).
+*)
+
