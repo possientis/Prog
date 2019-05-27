@@ -2,8 +2,8 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/gradle/wrapper
-cd ${HOME}
+TEMP=/home/john/Prog/gradle/wrapper
+cd ${TEMP}
 
 gradle wrapper
 ./clean.sh
