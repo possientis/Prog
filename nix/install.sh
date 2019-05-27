@@ -16,7 +16,12 @@ oops ()
 dirPat="nix-binary-tarball-unpack.XXXXXXXXXX"
 dirErr="Can't create temporary directory for downloading the Nix binary tarball"
 
-tmpDir="$(mktemp -d -t $dirPat || oops $dirErr)"
+
+# restore this line for real
+# tmpDir="$(mktemp -d -t $dirPat || oops $dirErr)"
+
+# avoid new file download
+tmpDir="/tmp/nix-binary-tarball-unpack.GNmrwMEdVQ"
 
 cleanup ()
 {
@@ -24,7 +29,8 @@ cleanup ()
     rm -rf $tmpDir
 }
 
-trap cleanup EXIT INT QUIT TERM
+# don't clean up so we keep the cached dowload
+# trap cleanup EXIT INT QUIT TERM
 
 
 hash1="7ce46548509837d4bc8d01b63973f8fb8972fbbe8ba6a9b5e929cf5954c3d85e"
@@ -61,27 +67,49 @@ require_util tar   "unpack the binary tarball"
 echo "downloading Nix 2.2.2 binary tarball for $system"
 echo "from: '$url'"
 echo "to: '$tmpDir'"
-curl -L $url -o $tarball || oops "failed to download '$url'"
+
+# don't actually download file, we have it cached
+# curl -L $url -o $tarball || oops "failed to download '$url'"
 
 # We decided to use 'curl' but 'wget' could have been used too
 # wget $url -P $tmpDir || oops "failed to download '$url'"
 
-if installed sha256sum; then
-    check="$(sha256sum -b ${tarball} | cut -c1-64)"
-elif installed shasum; then
-    check="$(shasum -a 256 -b ${tarball} | cut -c1-64)"
-elif installed openssl; then
-    check="$(openssl dgst -r -sha256 ${tarball} | cut -c1-64)"
+check_hash ()
+{
+    echo "checking hash of downloaded tarball"
+    if installed sha256sum; then
+        check="$(sha256sum -b ${tarball} | cut -c1-64)"
+    elif installed shasum; then
+        check="$(shasum -a 256 -b ${tarball} | cut -c1-64)"
+    elif installed openssl; then
+        check="$(openssl dgst -r -sha256 ${tarball} | cut -c1-64)"
+    else
+        oops "Expecting one of 'sha256sum', 'shasum' or 'openssl' to be installed"
+    fi
+
+    if [ "$hash" != "$check" ]; then
+        oops "SHA-256 hash mismatch in ${url}: got ${check}, expecting ${hash}"
+    else
+        echo "hash was successfully checked"
+    fi
+}
+
+check_hash
+
+unpack="${tmpDir}/unpack"
+
+# already cached
+# mkdir -p "${unpack}"
+# < "$tarball" bzcat | tar -xf - -C "$unpack" || oops "failed to unpack '$url'"
+
+echo "finding additional script file"
+script=$(echo "$unpack"/*/install)
+echo ${script}
+
+if [ -e "$script" ]; then
+    echo "additional script file does exist"
 else
-    oops "Expecting one of 'sha256sum', 'shasum' or 'openssl' to be installed"
+    oops "additional script file is missing"
 fi
-
-if [ "$hash" != "$check" ]; then
-    oops "SHA-256 hash mismatch in ${url}: got ${check}, expecting ${hash}"
-fi
-
-
-
-
 
 

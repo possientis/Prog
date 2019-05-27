@@ -16,3 +16,12 @@ infixr 4 _≡_
 
 ap : ∀ {ℓ} {ℓ'} {X : Set ℓ} {Y : Set ℓ'} {x y : X} (f : X → Y) → x ≡ y → f x ≡ f y
 ap f (refl x) = refl (f x) 
+
+data Singleton {ℓ} {X : Set ℓ} (x : X) : Set ℓ where
+  _with≡_ : (y : X) → x ≡ y → Singleton x
+
+
+inspect : ∀ {ℓ} {X : Set ℓ} (x : X) → Singleton x
+inspect x = x with≡ (refl x)
+
+
