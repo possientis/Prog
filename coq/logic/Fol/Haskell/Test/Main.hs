@@ -5,10 +5,12 @@ module  Fol.Haskell.Test.Main
 import Test.Hspec
 
 import Fol.Haskell.Test.P
+import Fol.Haskell.Test.Variable
 import Fol.Haskell.Test.Subformula
 
 specFol :: Spec
 specFol = sequence_
     [ specP
     , specSubformula
+    , specVariable
     ]

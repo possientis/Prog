@@ -5,11 +5,12 @@ module  Lam.Haskell.Test.Subformula
 import Test.Hspec
 import Test.QuickCheck
 
+import Haskell.Variable (Var)
 
 import Lam.Haskell.T
 import Lam.Haskell.Order
 import Lam.Haskell.Subformula
-import Haskell.Variable (Var)
+import Lam.Haskell.Variable
 
 incl :: (Eq a) => [a] -> [a] -> Bool
 incl xs ys = all (`elem` ys) xs
@@ -25,6 +26,7 @@ specsSubformula  = [ testReflexivity
                    , testSubInclusion
                    , testOrderMonotone
                    , testSubFmap
+                   , testSubVar
                    ]
 
 testReflexivity :: Spec
@@ -50,6 +52,10 @@ testOrderMonotone = it "Checked (<<=) monotone order property" $
 testSubFmap :: Spec
 testSubFmap = it "Checked (<<=) fmap property" $
     property $ propSubFmap
+
+testSubVar :: Spec
+testSubVar = it "Checked (<<=) var inclusion property" $
+    property $ propSubVar
 
 propReflexivity :: T Var -> Bool
 propReflexivity t = t <<= t
@@ -101,4 +107,17 @@ propOrderMonotone_real t = all f (sub t) where
 
 propSubFmap :: (Var -> Var) -> T Var -> Bool
 propSubFmap f t = sub (fmap f t) == map (fmap f) (sub t)
+
+propSubVar :: T Var -> T Var -> Bool
+propSubVar s t =  propSubVar_naive s t
+               && propSubVar_real t
+
+propSubVar_naive :: T Var -> T Var -> Bool
+propSubVar_naive s t = not (s <<= t) || incl (var s) (var t) 
+
+propSubVar_real :: T Var -> Bool
+propSubVar_real t = all f (sub t) where
+    f s = incl (var s) (var t)
+
+
 
