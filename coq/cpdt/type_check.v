@@ -1,3 +1,5 @@
+Require Import option.
+
 Inductive exp : Set :=
 | Nat  : nat  -> exp
 | Bool : bool -> exp

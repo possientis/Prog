@@ -15,8 +15,10 @@ all:	Utils/nat.vo \
 		sumor.vo \
 		refine.vo \
 		type_check.vo \
+		option.vo \
 		Test/untyped_t.vo \
-		Test/typed_t.vo
+		Test/typed_t.vo \
+		Test/option_t.vo
 	
 Utils/nat.vo : Utils/nat.v
 	coqc Utils/nat.v -R Utils Utils
@@ -66,13 +68,20 @@ sumor.vo : sumor.v
 refine.vo : refine.v
 	coqc refine.v
 
-type_check.vo : type_check.v
+type_check.vo : type_check.v option.vo
 	coqc type_check.v
+
+option.vo : option.v
+	coqc option.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
 
 Test/typed_t.vo : Test/typed_t.v typed.vo
 	coqc Test/typed_t.v -R Utils Utils
+
+Test/option_t.vo : Test/option_t.v option.vo
+	coqc Test/option_t.v
+
 
 
