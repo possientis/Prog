@@ -78,7 +78,16 @@ filter-idempotent : ∀ {ℓ} {a : Set ℓ} (p : a → 𝔹) (xs : 𝕃 a) →
   (filter p (filter p xs)) ≡ filter p xs
 filter-idempotent p []            = refl []
 filter-idempotent p (x ∷ xs) with inspect (p x)
-filter-idempotent p (x ∷ xs) | tt with≡ eq = {!!}
+filter-idempotent p (x ∷ xs) | tt with≡ eq =
+  ≡-trans -- should be using rewrite, but don't understand it
+    (ap (λ b → filter p (if b then x ∷ filter p xs else filter p xs)) eq)
+    (≡-trans
+      (ap (λ b → if b then x ∷ filter p (filter p xs) else filter p (filter p xs)) eq)
+      (≡-sym
+        (≡-trans
+          (ap (λ b → if b then x ∷ filter p xs else filter p xs) eq)
+          (ap (λ l → x ∷ l)
+            (≡-sym (filter-idempotent p xs))))))
 filter-idempotent p (x ∷ xs) | ff with≡ eq = {!!}
 
 

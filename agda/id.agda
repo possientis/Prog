@@ -24,4 +24,6 @@ data Singleton {ℓ} {X : Set ℓ} (x : X) : Set ℓ where
 inspect : ∀ {ℓ} {X : Set ℓ} (x : X) → Singleton x
 inspect x = x with≡ (refl x)
 
+{-# BUILTIN EQUALITY _≡_ #-}
+
 
