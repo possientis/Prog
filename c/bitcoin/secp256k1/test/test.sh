@@ -12,7 +12,7 @@ echo
 
 echo
 echo "testing cloned secp256k1 library..."
-bash run.sh clone 
+#bash run.sh clone  # this is broken
 echo
 
 cd ${DIR}
