@@ -1,3 +1,4 @@
+set -e
 if [ -z "$1" ]; then
   echo "usage ./$0 [ main | clone ]"
   exit 1
