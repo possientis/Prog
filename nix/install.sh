@@ -21,7 +21,7 @@ dirErr="Can't create temporary directory for downloading the Nix binary tarball"
 # tmpDir="$(mktemp -d -t $dirPat || oops $dirErr)"
 
 # avoid new file download
-tmpDir="/tmp/nix-binary-tarball-unpack.GNmrwMEdVQ"
+tmpDir="/tmp/nix-binary-tarball-unpack.46oIt0Ly37"
 
 cleanup ()
 {
@@ -111,5 +111,73 @@ if [ -e "$script" ]; then
 else
     oops "additional script file is missing"
 fi
+
+set -e
+dest="/nix"
+self="/tmp/nix-binary-tarball-unpack.46oIt0Ly37/unpack/nix-2.2.2-x86_64-linux"
+nix="/nix/store/hbhdjn5ik3byg642d1m11k3k3s0kn3py-nix-2.2.2"
+cacert="/nix/store/rikxx4wdaj7b4qp1lizzmn7884hh537k-nss-cacert-3.42"
+
+if ! [ -e "$self/.reginfo" ]; then
+    echo "$0: incomplete installer (.reginfo is missing)"
+    exit 1
+fi
+
+if [ -z "$USER" ]; then
+    echo "$0: \$USER is not set"
+    exit 1
+fi
+
+
+if [ -z "$HOME" ]; then
+    echo "$0: \$HOME is not set"
+    exit 1
+fi
+
+if [ "$(uname -s)" = "Linux" ] && [ -e /run/systemd/system ]; then
+    echo "Note: a multi-user installation is possible."
+    echo "See https://nixos.org/nix/manual/#sect-multi-user-installation"
+fi
+
+echo "performing a single-user installation of Nix..."
+
+
+mkdir -p $dest/store
+
+printf "copying Nix to %s..." "${dest}/store"
+for i in $(cd "$self/store" >/dev/null && echo ./*); do
+    printf "." >&2
+    i_tmp="$dest/store/$i.$$"
+    if [ -e "$i_tmp" ]; then
+        rm -rf "$i_tmp"
+    fi
+    if ! [ -e "$dest/store/$i" ]; then
+        cp -Rp "$self/store/$i" "$i_tmp"
+        chmod -R a-w "$i_tmp"
+        chmod +w "$i_tmp"
+        mv "$i_tmp" "$dest/store/$i"
+        chmod -w "$dest/store/$i"
+    fi
+done
+echo ""
+
+echo "initialising Nix database..."
+if ! $nix/bin/nix-store --init; then
+    echo "$0: failed to initialize the Nix database"
+    exit 1
+fi
+
+if ! "$nix/bin/nix-store" --load-db < "$self/.reginfo"; then
+    echo "$0: unable to register valid paths"
+    exit 1
+fi
+
+. "$nix/etc/profile.d/nix.sh"
+
+if ! "$nix/bin/nix-env" -i "$nix"; then
+    echo "$0: unable to install Nix into your default profile"
+    exit 1
+fi
+
 
 
