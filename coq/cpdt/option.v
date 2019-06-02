@@ -15,7 +15,10 @@ Definition bind (a b:Type) (k:option a) (f:a -> option b) : option b :=
 Arguments bind {a} {b} _ _.
 
 Definition guard (b:bool) : option unit :=
-    if b then Some tt else None.
+    match b with
+    | true      => Some tt
+    | false     => None
+    end.
 
 Notation "k >>= f" := (bind k f) (at level 50, left associativity).
 

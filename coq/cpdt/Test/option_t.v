@@ -58,7 +58,7 @@ Proof. reflexivity. Qed.
 
 Fixpoint even (n:nat) : bool :=
     match n with
-    | 0     => false
+    | 0     => true
     | S n   =>
         match n with
         | 0     => false
@@ -66,13 +66,31 @@ Fixpoint even (n:nat) : bool :=
         end
     end.
 
-(*       
+(* testing guards *)     
 Definition func5 (x y:option nat) : option nat :=
     n <- x ;
     m <- y ;
-    guard (even n) ;
+    _ <- guard (even n);
+    _ <- guard (even m);
     ret (n + m).
-*)
 
+Lemma test5 : func5 None None = None.
+Proof. reflexivity. Qed.
 
+Lemma test6 : func5 None (Some 4) = None.
+Proof. reflexivity. Qed.
 
+Lemma test7 : func5 (Some 4) None = None.
+Proof. reflexivity. Qed.
+
+Lemma test8 : func5 (Some 3) (Some 5) = None.
+Proof. reflexivity. Qed.
+
+Lemma test9 : func5 (Some 4) (Some 5) = None.
+Proof. reflexivity. Qed.
+
+Lemma test10 : func5 (Some 3) (Some 6) = None.
+Proof. reflexivity. Qed.
+
+Lemma test11 : func5 (Some 4) (Some 6) = (Some 10). (* both even *)
+Proof. reflexivity. Qed.

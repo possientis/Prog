@@ -155,7 +155,9 @@ Definition isNat (e:exp)(t' : {t:type | hasType e t}) : bool :=
         end
     end.
 
-(* TODO
+Arguments isNat {e} _.
+
+(*
 Definition typeCheck' : forall (e:exp), option {t:type | hasType e t}.
     refine (fix F (e:exp) : option {t:type | hasType e t} :=
         match e as e' return option {t:type | hasType e' t} with
@@ -164,7 +166,9 @@ Definition typeCheck' : forall (e:exp), option {t:type | hasType e t}.
         | Plus e1 e2 => 
             t1 <- F e1 ;
             t2 <- F e2 ;
-            _
+            _  <- guard (isNat t1) ; 
+            _  <- guard (isNat t2) ;
+            Some (exist _ TNat (HtPlus _ _ _ _))
         | And e1 e2  => _
         end). 
 

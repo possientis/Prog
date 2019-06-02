@@ -1,2 +1,2 @@
-can we make guard to work?
+need a new 'guard' function which actually returns a proof.
 finish typeCheck'
