@@ -24,3 +24,33 @@ Proof.
     - rewrite IH1. reflexivity.
 Qed.
 
+(* If two functions f g coincide on the variables of a term t, then the terms   *)
+(* fmap f t and fmap g t are equal, and conversely.                             *)
+Lemma var_support : forall (v w:Type) (f g:v -> w) (t:T v),
+    (forall (x:v), In x (var t) -> f x = g x) <-> fmap f t = fmap g t.
+Proof.
+    intros v w f g. 
+    induction t as [x|t1 [IH1 IH1'] t2 [IH2 IH2']|x t1 [IH1 IH1']]; simpl; split.
+    - intros H. rewrite H.
+        + reflexivity.
+        + left. reflexivity.
+    - intros H. inversion H as [H']. clear H. intros y [H|H].
+        + subst. assumption.
+        + exfalso. assumption.
+    - intros H. rewrite IH1, IH2.
+        + reflexivity.
+        + intros x H'. apply H. apply in_or_app. right. assumption.
+        + intros x H'. apply H. apply in_or_app. left.  assumption.
+    - intros H. inversion H. intros x H'. apply in_app_or in H'.
+      destruct H' as [H'|H']. 
+        + apply IH1'; assumption.
+        + apply IH2'; assumption.
+    - intros H. rewrite IH1.
+        + rewrite (H x). { reflexivity. } { left. reflexivity. }
+        + intros y H'.  apply H. right. assumption.
+    - intros H. inversion H. intros y [H'|H'].
+        + subst. assumption.
+        + apply IH1'; assumption.
+Qed.
+
+
