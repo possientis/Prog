@@ -145,3 +145,7 @@ le-n-s (le-s p) = le-s (le-n-s p)
 le-s-n : {n m : ℕ} → succ n ≤ succ m → n ≤ m
 le-s-n {n} {.n} (le-n .(succ n)) = le-n n
 le-s-n {n} {m} (le-s p) = ≤-trans (le-s (le-n n)) p
+
+pred : (n : ℕ) → ℕ
+pred zero     = 0
+pred (succ n) = n
