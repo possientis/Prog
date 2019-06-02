@@ -56,9 +56,23 @@ Proof. reflexivity. Qed.
 Lemma test4 : test func4.
 Proof. reflexivity. Qed.
 
+Fixpoint even (n:nat) : bool :=
+    match n with
+    | 0     => false
+    | S n   =>
+        match n with
+        | 0     => false
+        | S n   => even n
+        end
+    end.
 
-
-
+(*       
+Definition func5 (x y:option nat) : option nat :=
+    n <- x ;
+    m <- y ;
+    guard (even n) ;
+    ret (n + m).
+*)
 
 
 

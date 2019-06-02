@@ -79,7 +79,6 @@ Definition return_ (e:exp) (t:type) (p:hasType e t) : Typ e :=
     Some (exist _ t p).
 
 
-(* TODO: implement monad instance for 'option' and improve syntax               *)
 Definition typeCheck : forall (e:exp), option {t:type | hasType e t}.
     refine (fix F (e:exp) : option {t:type | hasType e t} :=
         match e as e' return option {t:type | hasType e' t} with
@@ -93,11 +92,11 @@ Definition typeCheck : forall (e:exp), option {t:type | hasType e t}.
                 | None  => None
                 | Some (exist _ t2 p2) =>
                     match eq_type_dec t1 TNat with
-                    | right _   => None
-                    | left  N1  =>
+                    | right _  => None
+                    | left  _  =>
                         match eq_type_dec t2 TNat with
-                        | right _   => None
-                        | left N2   => Some (exist _ TNat (HtPlus _ _ _ _))
+                        | right _  => None
+                        | left _   => Some (exist _ TNat (HtPlus _ _ _ _))
                         end 
                     end
 
@@ -111,11 +110,11 @@ Definition typeCheck : forall (e:exp), option {t:type | hasType e t}.
                 | None  => None
                 | Some (exist _ t2 p2)  =>
                     match eq_type_dec t1 TBool with
-                    | right _   => None
-                    | left B1   =>
+                    | right _  => None
+                    | left _   =>
                         match eq_type_dec t2 TBool with
-                        | right _   => None
-                        | left B2   => Some (exist _ TBool (HtAnd _ _ _ _))
+                        | right _  => None
+                        | left _   => Some (exist _ TBool (HtAnd _ _ _ _))
                         end
                     end
                 end
@@ -147,3 +146,27 @@ Compute maybe (typeCheck (And (Bool true) (Bool false))).
 Compute maybe (typeCheck (Plus (Bool true) (Nat 5))).
 *)
 
+Definition isNat (e:exp)(t' : {t:type | hasType e t}) : bool :=
+    match t' with
+    | exist _ t _   =>
+        match eq_type_dec t TNat with
+        | right _   => false
+        | left  _   => true
+        end
+    end.
+
+(* TODO
+Definition typeCheck' : forall (e:exp), option {t:type | hasType e t}.
+    refine (fix F (e:exp) : option {t:type | hasType e t} :=
+        match e as e' return option {t:type | hasType e' t} with
+        | Nat _      => Some (exist _ TNat (HtNat _))
+        | Bool _     => Some (exist _ TBool (HtBool _))
+        | Plus e1 e2 => 
+            t1 <- F e1 ;
+            t2 <- F e2 ;
+            _
+        | And e1 e2  => _
+        end). 
+
+Show.
+*)
