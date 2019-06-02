@@ -26,3 +26,37 @@ Proof.
     - rewrite IH1. reflexivity.
 Qed.
 
+(* If two functions f g coincide on the variables of a formula p, then the      *)
+(* formulas fmap f t and fmap g t are equal, and conversely.                    *)
+Lemma var_support : forall (v w:Type) (f g:v -> w) (p:P v),
+    (forall (x:v), In x (var p) -> f x = g x) <-> fmap f p = fmap g p.
+Proof.
+    intros v w f g. 
+    induction p as [|x y|p1 [IH1 IH1'] p2 [IH2 IH2']|x p1 [IH1 IH1']]; 
+    simpl; split.
+    - intros. reflexivity.
+    - intros. exfalso. assumption.
+    - intros H. rewrite (H x), (H y).
+        + reflexivity.
+        + right. left. reflexivity.
+        + left. reflexivity.
+    - intros H. inversion H. intros z [H'|[H'|H']].
+        + subst. assumption.
+        + subst. assumption.
+        + exfalso. assumption.
+    - intros H. rewrite IH1, IH2.
+        + reflexivity.
+        + intros x H'. apply H. apply in_or_app. right. assumption.
+        + intros x H'. apply H. apply in_or_app. left.  assumption.
+    - intros H. inversion H. intros x H'. apply in_app_or in H'.
+      destruct H' as [H'|H']. 
+        + apply IH1'; assumption.
+        + apply IH2'; assumption.
+    - intros H. rewrite IH1.
+        + rewrite (H x). { reflexivity. } { left. reflexivity. }
+        + intros y H'.  apply H. right. assumption.
+    - intros H. inversion H. intros y [H'|H'].
+        + subst. assumption.
+        + apply IH1'; assumption.
+Qed.
+ 
