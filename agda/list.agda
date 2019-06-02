@@ -88,7 +88,21 @@ filter-idempotent p (x ∷ xs) | tt with≡ eq =
           (ap (λ b → if b then x ∷ filter p xs else filter p xs) eq)
           (ap (λ l → x ∷ l)
             (≡-sym (filter-idempotent p xs))))))
-filter-idempotent p (x ∷ xs) | ff with≡ eq = {!!}
+filter-idempotent p (x ∷ xs) | ff with≡ eq = ≡-trans
+  ((ap (λ b → filter p (if b then x ∷ filter p xs else filter p xs)) eq ))
+    (≡-sym
+      (≡-trans
+        ((ap (λ b → if b then x ∷ filter p xs else filter p xs) eq))
+          (≡-sym (filter-idempotent p xs))))
 
+length-reverse-go : ∀ {ℓ} {a : Set ℓ} (acc xs : 𝕃 a) →
+  length (reverse-go acc xs) ≡ length acc + length xs
+length-reverse-go acc []       = ≡-sym (+-n+O (length acc))
+length-reverse-go acc (x ∷ xs) = ≡-trans
+  (length-reverse-go (x ∷ acc) xs)
+  (≡-sym (+-n+succ (length acc) (length xs)))
+
+length-reverse : ∀ {ℓ} {a : Set ℓ} (xs : 𝕃 a) → length (reverse xs) ≡ length xs
+length-reverse xs = length-reverse-go [] xs
 
 
