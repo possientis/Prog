@@ -1,2 +1,2 @@
-need a new 'guard' function which actually returns a proof.
-finish typeCheck'
+make typeCheck' 'coerceable' so we can unfold.
+finish correctness proof typeCheck.

@@ -130,22 +130,6 @@ Defined.
 Print typeCheck.
 *)
 
-Definition maybe (e:exp) (r:option {t:type | hasType e t}) : option type :=
-    match r with
-    | None                  => None
-    | Some (exist _ t _)    => Some t  
-    end.
-
-Arguments maybe {e} _.
-
-(*
-Compute maybe (typeCheck (Nat 5)).
-Compute maybe (typeCheck (Bool true)).
-Compute maybe (typeCheck (Plus (Nat 5) (Plus (Nat 6) (Nat 0)))).
-Compute maybe (typeCheck (And (Bool true) (Bool false))).
-Compute maybe (typeCheck (Plus (Bool true) (Nat 5))).
-*)
-
 Definition isNat (e:exp)(t' : {t:type | hasType e t}) : bool :=
     match t' with
     | exist _ t _   =>
@@ -157,7 +141,35 @@ Definition isNat (e:exp)(t' : {t:type | hasType e t}) : bool :=
 
 Arguments isNat {e} _.
 
-(*
+
+Lemma isNatHasTypeNat : forall (e:exp) (t' : {t:type | hasType e t}),
+    isNat t' = true -> hasType e TNat.
+Proof.
+    intros e [t p]. simpl. destruct (eq_type_dec t) as [H|H].
+    - rewrite H in p. intros. assumption.
+    - intros H'. inversion H'.
+Qed.
+
+Definition isBool (e:exp)(t' : {t:type | hasType e t}) : bool :=
+    match t' with
+    | exist _ t _   =>
+        match eq_type_dec t TBool with
+        | right _   => false
+        | left  _   => true
+        end
+    end.
+
+Arguments isBool {e} _.
+
+Lemma isBoolHasTypeBool : forall (e:exp) (t' : {t:type | hasType e t}),
+    isBool t' = true -> hasType e TBool.
+Proof.
+    intros e [t p]. simpl. destruct (eq_type_dec t) as [H|H].
+    - rewrite H in p. intros. assumption.
+    - intros H'. inversion H'.
+Qed.
+
+(* This is a lot more readable than the initial typeCheck implementation        *)
 Definition typeCheck' : forall (e:exp), option {t:type | hasType e t}.
     refine (fix F (e:exp) : option {t:type | hasType e t} :=
         match e as e' return option {t:type | hasType e' t} with
@@ -166,11 +178,46 @@ Definition typeCheck' : forall (e:exp), option {t:type | hasType e t}.
         | Plus e1 e2 => 
             t1 <- F e1 ;
             t2 <- F e2 ;
-            _  <- guard (isNat t1) ; 
-            _  <- guard (isNat t2) ;
+            p1  <- guard (isNat t1) ; 
+            p2  <- guard (isNat t2) ;
             Some (exist _ TNat (HtPlus _ _ _ _))
-        | And e1 e2  => _
+        | And e1 e2  =>
+            t1 <- F e1 ;
+            t2 <- F e2 ;
+            p1 <- guard (isBool t1) ;
+            p2 <- guard (isBool t2) ;
+            Some (exist _ TBool (HtAnd _ _ _ _))
         end). 
+    - apply isNatHasTypeNat   with t1. assumption.
+    - apply isNatHasTypeNat   with t2. assumption.
+    - apply isBoolHasTypeBool with t1. assumption.
+    - apply isBoolHasTypeBool with t2. assumption.
+Qed.
+
+(* Throws away the proof element                                                *)
+Definition typeOf (e:exp) (t':{t:type | hasType e t}) : type :=
+    match t' with
+    | exist _ t _  => t
+    end.
+
+Arguments typeOf {e} _.
+
+(*
+Compute typeOf <$> (typeCheck (Nat 5)).
+Compute typeOf <$> (typeCheck (Bool true)).
+Compute typeOf <$> (typeCheck (Plus (Nat 5) (Plus (Nat 6) (Nat 0)))).
+Compute typeOf <$> (typeCheck (And (Bool true) (Bool false))).
+Compute typeOf <$> (typeCheck (Plus (Bool true) (Nat 5))).
+*)
+
+
+(*
+Lemma typeCheck_correct : forall (e:exp),
+    typeOf <$> typeCheck e = typeOf <$> typeCheck' e.
+Proof.    
+    induction e as [n|b|e1 IH1 e2 IH2|e1 IH1 e2 IH2].
+    - simpl. unfold typeCheck'.
+
 
 Show.
 *)

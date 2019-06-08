@@ -14,12 +14,6 @@ Definition bind (a b:Type) (k:option a) (f:a -> option b) : option b :=
 
 Arguments bind {a} {b} _ _.
 
-Definition guard (b:bool) : option unit :=
-    match b with
-    | true      => Some tt
-    | false     => None
-    end.
-
 Notation "k >>= f" := (bind k f) (at level 50, left associativity).
 
 Notation "x <- k ; k'" := (k >>= (fun x => k')) 
@@ -31,5 +25,19 @@ Arguments ap {a} {b} _ _.
 
 Notation "f $ x" := (ap f x) (at level 60).
 
-(* TODO: define guard : bool -> option unit *)
-Definition a : unit := tt.
+Definition guard (b:bool) : option (b = true) :=
+    match b return option (b = true) with
+    | true  => Some eq_refl
+    | false => None
+    end.
+
+Definition fmap (a b:Type) (f:a -> b) (x:option a) : option b :=
+    match x with
+    | None      => None
+    | Some x    => Some (f x)
+    end.
+Arguments fmap {a} {b} _ _.
+
+Notation "f <$> x" := (fmap f x) (at level 60).
+
+
