@@ -1,4 +1,8 @@
+Require Import List.
+
 Require Import Eq.
+Require Import Replace.
+Require Import Coincide.
 Require Import Injective.
 Require Import Composition.
 Require Import Extensionality.
@@ -40,5 +44,21 @@ Proof.
         + destruct (q (f u) (f y)) as [Fuy|Fuy].
             { exfalso. apply Huy. apply I. assumption. }
             { reflexivity. }
+Qed.
+
+
+Lemma permute_replace : forall (v:Type) (p:Eq v) (x y:v) (xs: list v),
+    ~(In y xs) -> coincide xs (replace p x y) (permute p x y).
+Proof.
+    intros v p x y xs H. unfold coincide. intros u H'.
+    destruct    (p u x) as [Hux|Hux] eqn:Eux, 
+                (p u y) as [Huy|Huy] eqn:Euy; 
+    subst; unfold permute, replace.
+    - exfalso. apply H. assumption.
+    - destruct (p x x) as [Hxx|Hxx].
+        + reflexivity.
+        + destruct (p x y); reflexivity. 
+    - exfalso. apply H. assumption.
+    - rewrite Eux, Euy. reflexivity.
 Qed.
 

@@ -1,5 +1,8 @@
 Require Import List.
 
+Require Import Eq.
+Require Import Permute.
+Require Import Replace.
 Require Import Coincide.
 Require Import Fol.P.
 
@@ -60,4 +63,10 @@ Proof.
         + subst. assumption.
         + apply IH1'; assumption.
 Qed.
- 
+
+Lemma var_permute_replace : forall (v:Type) (e:Eq v) (x y:v) (p:P v),
+    ~(In y (var p)) -> fmap (replace e x y) p = fmap (permute e x y) p.
+Proof.
+    intros v e x y t H. apply var_support, permute_replace. assumption.
+Qed.
+

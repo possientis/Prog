@@ -47,7 +47,13 @@ Relation.vo : Relation.v
 Replace.vo : Replace.v Eq.vo
 	coqc Replace.v
 
-Permute.vo : Permute.v Eq.vo Injective.vo Composition.vo Extensionality.vo
+Permute.vo : 		Permute.v \
+					Eq.vo \
+					Replace.vo \
+					Coincide.vo \
+					Injective.vo \
+					Composition.vo \
+					Extensionality.vo
 	coqc Permute.v
 
 Injective.vo : Injective.v Composition.vo
@@ -94,11 +100,17 @@ Fol/Congruence.vo : Fol/Congruence.v \
 	coqc Fol/Congruence.v -R Fol Fol
 
 Lam/Variable.vo :	Lam/Variable.v \
+					Eq.vo \
+					Permute.vo \
+					Replace.vo \
 					Coincide.vo \
 					Lam/T.vo
 	coqc Lam/Variable.v -R Lam Lam 
 					
 Fol/Variable.vo :	Fol/Variable.v \
+					Eq.vo \
+					Permute.vo \
+					Replace.vo \
 					Coincide.vo \
 					Fol/P.vo
 	coqc Fol/Variable.v -R Fol Fol

@@ -1,1 +1,7 @@
-proposition 35
+replace (p:Eq v) by (e:Eq v)
+define permute and replace in Haskell
+permute_comp in haskell
+permute_replace in haskell
+{Lam,Fol}/var_permute_replace in Haskell
+prop 37
+
