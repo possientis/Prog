@@ -192,7 +192,7 @@ Definition typeCheck' : forall (e:exp), option {t:type | hasType e t}.
     - apply isNatHasTypeNat   with t2. assumption.
     - apply isBoolHasTypeBool with t1. assumption.
     - apply isBoolHasTypeBool with t2. assumption.
-Qed.
+Defined. (* not 'Qed' which would make function opaque                          *)
 
 (* Throws away the proof element                                                *)
 Definition typeOf (e:exp) (t':{t:type | hasType e t}) : type :=
@@ -210,14 +210,14 @@ Compute typeOf <$> (typeCheck (And (Bool true) (Bool false))).
 Compute typeOf <$> (typeCheck (Plus (Bool true) (Nat 5))).
 *)
 
-
 (*
+(* It is all very nice to define typeCheck with 'do' notations, but correct?    *)
 Lemma typeCheck_correct : forall (e:exp),
     typeOf <$> typeCheck e = typeOf <$> typeCheck' e.
 Proof.    
     induction e as [n|b|e1 IH1 e2 IH2|e1 IH1 e2 IH2].
-    - simpl. unfold typeCheck'.
-
-
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+    -    
 Show.
 *)

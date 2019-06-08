@@ -1,2 +1,1 @@
-make typeCheck' 'coerceable' so we can unfold.
-finish correctness proof typeCheck.
+correctness proof typeCheck.
