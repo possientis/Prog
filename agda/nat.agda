@@ -2,6 +2,7 @@ module nat where
 
 open import id
 open import bool
+open import void
 
 data ℕ : Set where
   zero : ℕ
@@ -127,14 +128,27 @@ n < m = succ n ≤ m
 ≤-trans p (le-n n) = p
 ≤-trans p (le-s q) = le-s (≤-trans p q)
 
-le-n-s : {n m : ℕ} → n ≤ m → succ n ≤ succ m
-le-n-s (le-n n) = le-n (succ n)
-le-n-s (le-s p) = le-s (le-n-s p)
+≤-n-s : {n m : ℕ} → n ≤ m → succ n ≤ succ m
+≤-n-s (le-n n) = le-n (succ n)
+≤-n-s (le-s p) = le-s (≤-n-s p)
 
-le-s-n : {n m : ℕ} → succ n ≤ succ m → n ≤ m
-le-s-n {n} {.n} (le-n .(succ n)) = le-n n
-le-s-n {n} {m} (le-s p) = ≤-trans (le-s (le-n n)) p
+≤-s-n : {n m : ℕ} → succ n ≤ succ m → n ≤ m
+≤-s-n {n} {.n} (le-n .(succ n)) = le-n n
+≤-s-n {n} {m} (le-s p)          = ≤-trans (le-s (le-n n)) p
 
 pred : (n : ℕ) → ℕ
 pred zero     = 0
 pred (succ n) = n
+
+<-n-s : {n m : ℕ} → n < m → succ n < succ m
+<-n-s p = ≤-n-s p 
+
+<-s-n : {n m : ℕ} -> succ n < succ m -> n < m
+<-s-n p = ≤-s-n p
+
+<-irrefl : {n : ℕ} → (n < n) -> 𝕆
+<-irrefl {succ n} p = <-irrefl (<-s-n p) 
+
+-- This is a weak result
+<-trans : {n m p : ℕ} → n < m → m < p → n < p
+<-trans {n} {m} {p} pnm qmp = ≤-trans pnm (≤-trans (le-s (le-n m)) qmp)

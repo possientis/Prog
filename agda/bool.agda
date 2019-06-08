@@ -1,6 +1,7 @@
 module bool where
 
 open import id
+open import void
 
 data 𝔹 : Set where
   tt : 𝔹
@@ -46,8 +47,6 @@ if ff then x else y = y
 if-then-else-same : ∀ {ℓ} {X : Set ℓ} (x : X) (b : 𝔹) → if b then x else x ≡ x
 if-then-else-same x tt = refl x
 if-then-else-same x ff = refl x
-
-data 𝕆 : Set where
 
 𝔹-contra : ff ≡ tt → 𝕆
 𝔹-contra ()

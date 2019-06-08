@@ -71,7 +71,7 @@ length-filter : ∀ {ℓ} {a : Set ℓ} (p : a → 𝔹) (xs : 𝕃 a) →
   length (filter p xs) ≤ length xs
 length-filter p []       = le-n 0
 length-filter p (x ∷ xs) with (p x)
-length-filter p (x ∷ xs) | tt = le-n-s (length-filter p xs)
+length-filter p (x ∷ xs) | tt = ≤-n-s (length-filter p xs)
 length-filter p (x ∷ xs) | ff = le-s (length-filter p xs)
 
 filter-idempotent : ∀ {ℓ} {a : Set ℓ} (p : a → 𝔹) (xs : 𝕃 a) →

@@ -57,6 +57,6 @@ concat (xs ∷ xss) = xs ++ concat xss
 
 nth : ∀ {ℓ} {a : Set ℓ} {n : ℕ} → (m : ℕ) -> (m < n) → 𝕍 a n → a
 nth zero p (x ∷ xs)     = x
-nth (succ m) p (x ∷ xs) = nth m {!!} xs 
+nth (succ m) p (x ∷ xs) = nth m (<-s-n p) xs 
 
 
