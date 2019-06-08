@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import Coincide.
 Require Import Lam.T.
 
 (* We do not have sets: the variables of a term are a list, not a set.          *)
@@ -27,9 +28,9 @@ Qed.
 (* If two functions f g coincide on the variables of a term t, then the terms   *)
 (* fmap f t and fmap g t are equal, and conversely.                             *)
 Lemma var_support : forall (v w:Type) (f g:v -> w) (t:T v),
-    (forall (x:v), In x (var t) -> f x = g x) <-> fmap f t = fmap g t.
+    coincide (var t) f g  <-> fmap f t = fmap g t.
 Proof.
-    intros v w f g. 
+    intros v w f g. unfold coincide. 
     induction t as [x|t1 [IH1 IH1'] t2 [IH2 IH2']|x t1 [IH1 IH1']]; simpl; split.
     - intros H. rewrite H.
         + reflexivity.
@@ -52,5 +53,3 @@ Proof.
         + subst. assumption.
         + apply IH1'; assumption.
 Qed.
-
-

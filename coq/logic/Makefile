@@ -1,10 +1,14 @@
 all:	   	Extensionality.vo \
 			Identity.vo \
    			Composition.vo \
+			Coincide.vo \
 			Leq.vo \
 			Max.vo \
 			Eq.vo \
 			Relation.vo \
+			Replace.vo \
+			Permute.vo \
+			Injective.vo \
 			Lam/T.vo \
 			Fol/P.vo \
 			Lam/Order.vo \
@@ -25,6 +29,9 @@ Identity.vo : Identity.v
 Composition.vo : Composition.v
 	coqc Composition.v
 
+Coincide.vo : Coincide.v
+	coqc Coincide.v
+
 Leq.vo : Leq.v
 	coqc Leq.v
 
@@ -36,6 +43,15 @@ Eq.vo : Eq.v
 
 Relation.vo : Relation.v
 	coqc Relation.v
+
+Replace.vo : Replace.v Eq.vo
+	coqc Replace.v
+
+Permute.vo : Permute.v Eq.vo Injective.vo Composition.vo Extensionality.vo
+	coqc Permute.v
+
+Injective.vo : Injective.v Composition.vo
+	coqc Injective.v
 
 Lam/T.vo:   Lam/T.v Eq.vo Extensionality.vo Identity.vo Composition.vo
 	coqc Lam/T.v -R Lam Lam
@@ -78,9 +94,11 @@ Fol/Congruence.vo : Fol/Congruence.v \
 	coqc Fol/Congruence.v -R Fol Fol
 
 Lam/Variable.vo :	Lam/Variable.v \
+					Coincide.vo \
 					Lam/T.vo
 	coqc Lam/Variable.v -R Lam Lam 
 					
 Fol/Variable.vo :	Fol/Variable.v \
+					Coincide.vo \
 					Fol/P.vo
 	coqc Fol/Variable.v -R Fol Fol

@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import Coincide.
 Require Import Fol.P.
 
 (* We do not have sets: the variables of a formula are a list, not a set.       *)
@@ -29,9 +30,9 @@ Qed.
 (* If two functions f g coincide on the variables of a formula p, then the      *)
 (* formulas fmap f t and fmap g t are equal, and conversely.                    *)
 Lemma var_support : forall (v w:Type) (f g:v -> w) (p:P v),
-    (forall (x:v), In x (var p) -> f x = g x) <-> fmap f p = fmap g p.
+    coincide (var p) f g  <-> fmap f p = fmap g p.
 Proof.
-    intros v w f g. 
+    intros v w f g. unfold coincide. 
     induction p as [|x y|p1 [IH1 IH1'] p2 [IH2 IH2']|x p1 [IH1 IH1']]; 
     simpl; split.
     - intros. reflexivity.
