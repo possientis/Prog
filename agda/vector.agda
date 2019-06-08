@@ -5,7 +5,7 @@ open import nat
 open import id
 
 -- Agda does not support overloading of functions
-open import list hiding (_++_;length;map)
+open import list hiding (_++_;length;map;concat;nth)
 
 {- Agda supports overloading of data constructors -}
 data 𝕍 {ℓ} (a : Set ℓ) : ℕ → Set ℓ where
@@ -47,8 +47,16 @@ map f (x ∷ xs) = f x ∷ map f xs
 head : ∀ {ℓ} {a : Set ℓ} {n : ℕ} → 𝕍 a (succ n) → a
 head (x ∷ xs) = x
 
+tail : ∀ {ℓ} {a : Set ℓ} {n : ℕ} → 𝕍 a n → 𝕍 a (pred n)
+tail []       = []
+tail (x ∷ xs) = xs
 
+concat : ∀ {ℓ} {a : Set ℓ} {n m : ℕ}  → 𝕍 (𝕍 a n) m → 𝕍 a (m * n)
+concat []           = []
+concat (xs ∷ xss) = xs ++ concat xss
 
-
+nth : ∀ {ℓ} {a : Set ℓ} {n : ℕ} → (m : ℕ) -> (m < n) → 𝕍 a n → a
+nth zero p (x ∷ xs)     = x
+nth (succ m) p (x ∷ xs) = nth m {!!} xs 
 
 

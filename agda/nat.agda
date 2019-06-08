@@ -72,20 +72,6 @@ succ n * m = m + n * m
   (*-distribr m (n * m) p)
   (ap (λ x → m * p + x) (*-assoc n m p))
 
-_<_ : ℕ → ℕ → 𝔹
-0 < 0           = ff
-succ _ < 0      = ff
-0 < succ _      = tt
-succ x < succ y = x < y
-
-<-trans : {n m p : ℕ} → n < m ≡ tt → m < p ≡ tt → n < p ≡ tt
-<-trans {zero} {succ m} {succ p} p1 p2   = refl tt
-<-trans {succ n} {succ m} {succ p} p1 p2 = <-trans {n} {m} {p} p1 p2
-
-<-0 : {n : ℕ} → n < 0 ≡ ff
-<-0 {zero}   = refl ff
-<-0 {succ n} = refl ff
-
 _=ℕ_ : ℕ → ℕ → 𝔹
 zero =ℕ zero     = tt
 zero =ℕ succ m   = ff
@@ -130,6 +116,9 @@ data _≤_ : ℕ → ℕ → Set where
   le-s : {n m : ℕ} → n ≤ m → n ≤ succ m 
 
 infixr 4 _≤_
+
+_<_ : ℕ → ℕ → Set
+n < m = succ n ≤ m
 
 ≤-refl : (n : ℕ) → n ≤ n
 ≤-refl n = le-n n

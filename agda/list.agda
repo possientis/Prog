@@ -106,3 +106,7 @@ length-reverse : ∀ {ℓ} {a : Set ℓ} (xs : 𝕃 a) → length (reverse xs) �
 length-reverse xs = length-reverse-go [] xs
 
 
+concat : ∀ {ℓ} {a : Set ℓ} (xss : 𝕃 (𝕃 a)) → 𝕃 a
+concat []           = []
+concat (xs ∷ xss)   = xs ++ concat xss
+
