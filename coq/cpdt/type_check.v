@@ -208,6 +208,33 @@ Compute typeOf <$> (typeCheck (Bool true)).
 Compute typeOf <$> (typeCheck (Plus (Nat 5) (Plus (Nat 6) (Nat 0)))).
 Compute typeOf <$> (typeCheck (And (Bool true) (Bool false))).
 Compute typeOf <$> (typeCheck (Plus (Bool true) (Nat 5))).
+Compute typeOf <$> (typeCheck' (Nat 5)).
+Compute typeOf <$> (typeCheck' (Bool true)).
+Compute typeOf <$> (typeCheck' (Plus (Nat 5) (Plus (Nat 6) (Nat 0)))).
+Compute typeOf <$> (typeCheck' (And (Bool true) (Bool false))).
+Compute typeOf <$> (typeCheck' (Plus (Bool true) (Nat 5))).
+*)
+
+Lemma hasType_unique : forall (e:exp) (t t':type),
+    hasType e t -> hasType e t' -> t = t'.
+Proof.
+    destruct e as [n|b|e1 e2|e1i e2]; 
+    intros t t' H H'; 
+    inversion H; inversion H'; 
+    reflexivity.
+Qed.
+
+(*
+Lemma typeCheck_correct1 : forall (e:exp) (t:type),
+    hasType e t -> typeOf <$> typeCheck e = Some t.
+Proof.
+    intros e t H. destruct (typeCheck e) as [|t' H'] eqn:G.
+    - destruct s as [t' H']. simpl.
+      assert (t = t') as E. { apply hasType_unique with e; assumption. }
+      rewrite E. reflexivity.
+    -
+
+Show.
 *)
 
 (*
