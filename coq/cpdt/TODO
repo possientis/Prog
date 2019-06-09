@@ -1,1 +1,2 @@
 typeCheck correctness
+design new typeCheck function where correctness is internal to type system

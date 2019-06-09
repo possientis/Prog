@@ -78,7 +78,12 @@ Definition Typ (e:exp) : Type := option {t:type | hasType e t}.
 Definition return_ (e:exp) (t:type) (p:hasType e t) : Typ e := 
     Some (exist _ t p).
 
-
+(* This signature looks very good in that it seems to guarantee correctness     *)
+(* since if it returns a type t, this type will be accompanied by a proof of    *)
+(* hasType e t. Unfortunately, this is only half of a correctness proof:        *)
+(* We have to guarantee that if hasType e t holds, typeCheck is not None        *)
+(* Proving correctness and reasoning about typeCheck appears to be difficult    *)
+(* It would be better to design a new signature which ensures correctness       *)
 Definition typeCheck : forall (e:exp), option {t:type | hasType e t}.
     refine (fix F (e:exp) : option {t:type | hasType e t} :=
         match e as e' return option {t:type | hasType e' t} with
@@ -224,8 +229,27 @@ Proof.
     reflexivity.
 Qed.
 
-(*
+(* This correctness result is pretty much guaranteed by the type system         *)
 Lemma typeCheck_correct1 : forall (e:exp) (t:type),
+    typeOf <$> typeCheck e = Some t -> hasType e t.
+Proof.
+    intros e t H. destruct (typeCheck e) as [[t' H']|];
+    simpl in H; inversion H. subst. assumption.
+Qed.
+
+(* Identical proof, all coming from the type signature of typeCheck             *)
+Lemma typeCheck_correct1' : forall (e:exp) (t:type),
+    typeOf <$> typeCheck' e = Some t -> hasType e t.
+Proof.
+    intros e t H. destruct (typeCheck' e) as [[t' H']|];
+    simpl in H; inversion H. subst. assumption.
+Qed.
+
+
+
+
+(*
+Lemma typeCheck_correct2 : forall (e:exp) (t:type),
     hasType e t -> typeOf <$> typeCheck e = Some t.
 Proof.
     intros e t H. destruct (typeCheck e) as [|t' H'] eqn:G.
