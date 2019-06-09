@@ -5,6 +5,8 @@ module  Lam.Haskell.Test.Variable
 import Test.Hspec
 import Test.QuickCheck
 
+import Haskell.Permute
+import Haskell.Replace
 import Haskell.Variable (Var)
 
 import Lam.Haskell.T
@@ -17,6 +19,7 @@ specVariable = describe "Testing properties of var..." $
 specsVariable :: [Spec]
 specsVariable  = [ testVarFmap
                  , testVarSupport
+                 , testVarPermuteReplace
                  ]
 
 testVarFmap :: Spec
@@ -26,6 +29,10 @@ testVarFmap = it "Checked var fmap property" $
 testVarSupport :: Spec
 testVarSupport = it "Checked var support property" $ 
     property $ propVarSupport
+
+testVarPermuteReplace :: Spec
+testVarPermuteReplace = it "Checked var permute-replace property" $
+    property $ propVarPermuteReplace
 
 propVarFmap :: (Var -> Var) ->  T Var -> Bool
 propVarFmap f t = var (fmap f t) == map f (var t)
@@ -39,3 +46,6 @@ propVarSupport_naive f g t =
     ((fmap f t) == (fmap g t) && all (\x -> f x == g x) (var t)) ||
     ((fmap f t) /= (fmap g t) && any (\x -> f x /= g x) (var t)) 
 
+propVarPermuteReplace :: Var -> Var -> T Var -> Bool
+propVarPermuteReplace x y t = y `elem` var t || 
+    fmap (y <-: x) t == fmap (x <-> y) t

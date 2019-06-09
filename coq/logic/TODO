@@ -1,4 +1,2 @@
-permute_replace in haskell
-{Lam,Fol}/var_permute_replace in Haskell
+Replace: replace_trans
 prop 37
-

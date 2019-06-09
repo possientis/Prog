@@ -44,7 +44,7 @@ Eq.vo : Eq.v
 Relation.vo : Relation.v
 	coqc Relation.v
 
-Replace.vo : Replace.v Eq.vo
+Replace.vo : Replace.v Eq.vo Coincide.vo Composition.vo
 	coqc Replace.v
 
 Permute.vo : 		Permute.v \

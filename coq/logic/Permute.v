@@ -47,10 +47,10 @@ Proof.
 Qed.
 
 
-Lemma permute_replace : forall (v:Type) (e:Eq v) (x y:v) (xs: list v),
-    ~(In y xs) -> coincide xs (replace e x y) (permute e x y).
+Lemma permute_replace : forall (v:Type) (e:Eq v) (x y:v) (ys: list v),
+    ~(In y ys) -> coincide ys (replace e x y) (permute e x y).
 Proof.
-    intros v e x y xs H. unfold coincide. intros u H'.
+    intros v e x y ys H. unfold coincide. intros u H'.
     destruct    (e u x) as [Hux|Hux] eqn:Eux, 
                 (e u y) as [Huy|Huy] eqn:Euy; 
     subst; unfold permute, replace.
