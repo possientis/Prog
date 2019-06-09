@@ -59,4 +59,10 @@ nth : ∀ {ℓ} {a : Set ℓ} {n : ℕ} → (m : ℕ) -> (m < n) → 𝕍 a n �
 nth zero p (x ∷ xs)     = x
 nth (succ m) p (x ∷ xs) = nth m (<-s-n p) xs 
 
+repeat : ∀{ℓ} {a : Set ℓ} → (x : a) → (n : ℕ) → 𝕍 a n
+repeat x zero     = []
+repeat x (succ n) = x ∷ repeat x n
+
+
+
 

@@ -26,4 +26,7 @@ inspect x = x with≡ (refl x)
 
 {-# BUILTIN EQUALITY _≡_ #-}
 
+data _+_ {ℓ} : Set ℓ → Set ℓ -> Set ℓ where
+  left  : {a b : Set ℓ} → (x : a) → a + b
+  right : {a b : Set ℓ} → (x : b) → a + b
 

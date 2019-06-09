@@ -3,6 +3,7 @@ module nat where
 open import id
 open import bool
 open import void
+open import relations
 
 data ℕ : Set where
   zero : ℕ
@@ -152,3 +153,6 @@ pred (succ n) = n
 -- This is a weak result
 <-trans : {n m p : ℕ} → n < m → m < p → n < p
 <-trans {n} {m} {p} pnm qmp = ≤-trans pnm (≤-trans (le-s (le-n m)) qmp)
+
+≤-transitive2 : transitive _≤_
+≤-transitive2 = ≤-trans

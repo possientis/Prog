@@ -1,1 +1,1 @@
-book: repeat
+define 'total' in relation using type 'a + b' of id.agda
