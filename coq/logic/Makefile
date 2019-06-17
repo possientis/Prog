@@ -120,6 +120,7 @@ Lam/Variable.vo :	Lam/Variable.v \
 					Permute.vo \
 					Replace.vo \
 					Coincide.vo \
+					Composition.vo \
 					Lam/T.vo
 	coqc Lam/Variable.v -R Lam Lam 
 					
@@ -128,5 +129,6 @@ Fol/Variable.vo :	Fol/Variable.v \
 					Permute.vo \
 					Replace.vo \
 					Coincide.vo \
+					Composition.vo \
 					Fol/P.vo
 	coqc Fol/Variable.v -R Fol Fol

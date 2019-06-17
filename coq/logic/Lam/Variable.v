@@ -4,6 +4,7 @@ Require Import Eq.
 Require Import Permute.
 Require Import Replace.
 Require Import Coincide.
+Require Import Composition.
 Require Import Lam.T.
 
 (* We do not have sets: the variables of a term are a list, not a set.          *)
@@ -63,5 +64,16 @@ Proof.
     intros v e x y t H. apply var_support, permute_replace. assumption.
 Qed.
 
-
-
+Lemma var_replace_trans : forall (v:Type) (e:Eq v) (x y z:v) (t:T v),
+    ~(In y (var t)) -> fmap (replace e y z) (fmap (replace e x y) t) 
+                     = fmap (replace e x z) t.
+Proof.
+    intros v e x y z t H. 
+    remember (replace e y z) as g eqn:Eg. 
+    remember (replace e x y) as f eqn:Ef. 
+    fold ((fmap g ; fmap f) t). rewrite <- fmap_comp. 
+    apply var_support.
+    rewrite Eg, Ef. apply replace_trans.
+    assumption. 
+Qed.
+    
