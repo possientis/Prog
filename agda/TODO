@@ -1,1 +1,1 @@
-implement bst-lookup
+bst.agda : add antisymmetry and prove commutativity of 'min'
