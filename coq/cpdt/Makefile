@@ -16,6 +16,7 @@ all:	Utils/nat.vo \
 		refine.vo \
 		type_check.vo \
 		option.vo \
+		merge_sort.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
 		Test/option_t.vo
@@ -73,6 +74,9 @@ type_check.vo : type_check.v option.vo
 
 option.vo : option.v
 	coqc option.v
+
+merge_sort.vo : merge_sort.v
+	coqc merge_sort.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

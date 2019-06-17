@@ -245,21 +245,20 @@ Proof.
     simpl in H; inversion H. subst. assumption.
 Qed.
 
-
-
-
 (*
 Lemma typeCheck_correct2 : forall (e:exp) (t:type),
     hasType e t -> typeOf <$> typeCheck e = Some t.
 Proof.
-    intros e t H. destruct (typeCheck e) as [|t' H'] eqn:G.
-    - destruct s as [t' H']. simpl.
-      assert (t = t') as E. { apply hasType_unique with e; assumption. }
-      rewrite E. reflexivity.
-    -
+    intros e t H. induction H as [n|b|e1 e2 H1 IH1 H2 IH2|e1 e2 H1 IH1 H2 IH2].
+    - reflexivity.
+    - reflexivity.
+    - simpl. destruct (typeCheck e1) as [|t1 p1] eqn:E1, (typeCheck e2) as [|t2 p2] eqn:E2.
+        + simpl in IH1. inversion IH1. subst.
 
 Show.
 *)
+
+
 
 (*
 (* It is all very nice to define typeCheck with 'do' notations, but correct?    *)
