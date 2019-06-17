@@ -33,9 +33,10 @@ type family (+) (n :: Nat) (m :: Nat) where
     Zero  + m = m
     Suc n + m = Suc (n + m)
 
-type family (*) (n :: Nat) (m :: Nat) where
-    Zero  * m = Zero
-    Suc n * m = m + (n * m)
+-- using '*' will break in 8.6.4 
+type family (<*>) (n :: Nat) (m :: Nat) where
+    Zero  <*> m = Zero
+    Suc n <*> m = m + (n <*> m)
 
 (++) :: Vec a n -> Vec a m -> Vec a (n + m)
 (++) Nil ys       = ys
@@ -55,7 +56,7 @@ head (x :> xs) = x
 tail :: Vec a (Suc n) -> Vec a n
 tail (x :> xs) = xs
 
-concat :: Vec (Vec a m) n -> Vec a (n * m)
+concat :: Vec (Vec a m) n -> Vec a (n <*> m)
 concat Nil         = Nil
 concat (xs :> xss) = xs ++ concat xss
 

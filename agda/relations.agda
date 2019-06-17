@@ -16,3 +16,4 @@ total = ∀ (x y : a) → (x ≤ y) + (y ≤ x)
 
 decidable : Set (ℓ ⊔ ℓ')
 decidable = ∀ (x y : a) → (x ≤ y) + ¬(x ≤ y)
+

@@ -1,1 +1,1 @@
-bst.agda relations.agda, try to express the fact that type a has decicable equality
+implement bst-lookup
