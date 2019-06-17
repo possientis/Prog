@@ -46,8 +46,10 @@ Relation.vo : 		Relation.v
 
 Replace.vo : 		Replace.v \
 					Eq.vo \
+					Identity.vo \
 					Coincide.vo \
-					Composition.vo
+					Composition.vo \
+					Extensionality.vo
 	coqc Replace.v
 
 Permute.vo : 		Permute.v \
