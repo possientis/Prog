@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Eq.
+Require Import Map.
 Require Import Permute.
 Require Import Replace.
 Require Import Coincide.
@@ -77,3 +78,16 @@ Proof.
     assumption. 
 Qed.
     
+
+Lemma var_replace_remove : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
+    x <> y -> ~(In x (var (fmap (replace e x y) t))).
+Proof.
+    intros v e x y t E H. rewrite var_fmap in H.
+    apply mapIn in H. destruct H as [u [H1 H2]].
+    destruct (e u x) as [H'|H'].
+    - subst. rewrite replace_x in H2. apply E. assumption.
+    - rewrite replace_not_x in H2.
+        + apply H'. symmetry. assumption.
+        + assumption.
+Qed.
+

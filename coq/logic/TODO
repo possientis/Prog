@@ -1,3 +1,2 @@
-var_replace_trans for Fol.
-var_replace_trans for Haskell Lam & Fol
-prop 38
+{Lam,Fol}/var_replace_remove for haskell
+Definition 25 page 80.

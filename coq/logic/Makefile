@@ -4,6 +4,7 @@ all:	   			Extensionality.vo \
 					Coincide.vo \
 					Leq.vo \
 					Max.vo \
+					Map.vo \
 					Eq.vo \
 					Relation.vo \
 					Replace.vo \
@@ -37,6 +38,9 @@ Leq.vo : 			Leq.v
 
 Max.vo : 			Max.v
 	coqc Max.v
+
+Map.vo : 			Map.v
+	coqc Map.v
 
 Eq.vo : 			Eq.v
 	coqc Eq.v
@@ -117,6 +121,7 @@ Fol/Congruence.vo : Fol/Congruence.v \
 
 Lam/Variable.vo :	Lam/Variable.v \
 					Eq.vo \
+					Map.vo \
 					Permute.vo \
 					Replace.vo \
 					Coincide.vo \
@@ -126,6 +131,7 @@ Lam/Variable.vo :	Lam/Variable.v \
 					
 Fol/Variable.vo :	Fol/Variable.v \
 					Eq.vo \
+					Map.vo \
 					Permute.vo \
 					Replace.vo \
 					Coincide.vo \

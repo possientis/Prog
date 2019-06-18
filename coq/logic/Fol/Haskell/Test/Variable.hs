@@ -20,6 +20,7 @@ specsVariable :: [Spec]
 specsVariable  = [ testVarFmap
                  , testVarSupport
                  , testVarPermuteReplace
+                 , testVarReplaceTrans
                  ]
 
 testVarFmap :: Spec
@@ -33,6 +34,10 @@ testVarSupport = it "Checked var support property" $
 testVarPermuteReplace :: Spec
 testVarPermuteReplace = it "Checked var permute-replace property" $
     property $ propVarPermuteReplace
+
+testVarReplaceTrans :: Spec
+testVarReplaceTrans = it "Checked var replace-trans property" $ 
+    property $ propVarReplaceTrans
 
 propVarFmap :: (Var -> Var) ->  P Var -> Bool
 propVarFmap f p = var (fmap f p) == map f (var p)
@@ -50,3 +55,11 @@ propVarSupport_naive f g p =
 propVarPermuteReplace :: Var -> Var -> P Var -> Bool
 propVarPermuteReplace x y p = y `elem` var p || 
     fmap (y <-: x) p == fmap (x <-> y) p
+
+
+propVarReplaceTrans :: Var -> Var -> Var -> P Var -> Bool
+propVarReplaceTrans x y z p = y `elem` var p ||
+    fmap (z <-: y) (fmap (y <-: x) p) == fmap (z <-: x) p
+
+
+
