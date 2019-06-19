@@ -19,7 +19,9 @@ all:	   			Extensionality.vo \
 					Lam/Congruence.vo \
 					Fol/Congruence.vo \
 					Lam/Variable.vo \
-					Fol/Variable.vo
+					Fol/Variable.vo \
+					Lam/Free.vo \
+					Fol/Free.vo
 
 Extensionality.vo : Extensionality.v
 	coqc Extensionality.v
@@ -138,3 +140,15 @@ Fol/Variable.vo :	Fol/Variable.v \
 					Composition.vo \
 					Fol/P.vo
 	coqc Fol/Variable.v -R Fol Fol
+
+Lam/Free.vo :		Lam/Free.v \
+					Eq.vo \
+					Lam/T.vo
+	coqc Lam/Free.v -R Lam Lam
+
+Fol/Free.vo :		Fol/Free.v \
+					Eq.vo \
+					Fol/P.vo
+	coqc Fol/Free.v -R Fol Fol
+
+
