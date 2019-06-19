@@ -10,6 +10,7 @@ all:	   			Extensionality.vo \
 					Replace.vo \
 					Permute.vo \
 					Injective.vo \
+					Remove.vo \
 					Lam/T.vo \
 					Fol/P.vo \
 					Lam/Order.vo \
@@ -70,6 +71,10 @@ Permute.vo : 		Permute.v \
 Injective.vo : 		Injective.v \
 					Composition.vo
 	coqc Injective.v
+
+Remove.vo :			Remove.v \
+					Eq.vo
+	coqc Remove.v
 
 Lam/T.vo:   		Lam/T.v \
 					Eq.vo \

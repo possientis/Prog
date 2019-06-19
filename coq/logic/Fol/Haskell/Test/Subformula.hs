@@ -5,15 +5,13 @@ module  Fol.Haskell.Test.Subformula
 import Test.Hspec
 import Test.QuickCheck
 
+import Haskell.Include
 import Haskell.Variable (Var)
 
 import Fol.Haskell.P
 import Fol.Haskell.Order
 import Fol.Haskell.Subformula
 import Fol.Haskell.Variable
-
-incl :: (Eq a) => [a] -> [a] -> Bool
-incl xs ys = all (`elem` ys) xs
 
 specSubformula :: Spec
 specSubformula = describe "Testing properties of subformula order (<<=)..." $

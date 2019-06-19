@@ -1,1 +1,3 @@
-prop 40
+Haskell test for Remove
+Haskell test for {Lam,Fol} free_fmap.
+prop 41
