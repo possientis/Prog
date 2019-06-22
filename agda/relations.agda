@@ -11,6 +11,9 @@ reflexive = ∀ (x : a) → x ≤ x
 transitive : Set (ℓ ⊔ ℓ')
 transitive = ∀ {x y z : a} → x ≤ y → y ≤ z → x ≤ z
 
+antisymmetric : Set (ℓ ⊔ ℓ')
+antisymmetric = ∀ {x y : a} → x ≤ y → y ≤ x → x ≡ y
+
 total : Set (ℓ ⊔ ℓ')
 total = ∀ (x y : a) → (x ≤ y) + (y ≤ x)
 

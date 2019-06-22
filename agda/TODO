@@ -1,1 +1,2 @@
-bst.agda : add antisymmetry and prove commutativity of 'min'
+resolve universe paradox in bst.agda
+bst.agda

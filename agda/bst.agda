@@ -1,6 +1,8 @@
 open import id
 open import maybe
+open import min-max
 open import relations
+
 
 
 module bst {ℓ ℓ'} {a : Set ℓ}
@@ -27,36 +29,9 @@ bst-lookup d (bst-node d' tl tr _ _) | right p with ≤-decidable d d'
 bst-lookup d (bst-node d' tl tr _ _) | right p | left  q = bst-lookup d tl
 bst-lookup d (bst-node d' tl tr _ _) | right p | right q = bst-lookup d tr
 
-min : a -> a -> a
-min x y with ≤-total x y
-min x y | left  p = x
-min x y | right p = y
+bst-insert :{l u : a} → (d : a) → bst l u → bst (min d l) (max d u)
+bst-insert d t = ?
 
-min-x-y-≤-y : (x y : a) → min x y ≤ y
-min-x-y-≤-y x y with ≤-total x y 
-min-x-y-≤-y x y | left  p = p
-min-x-y-≤-y x y | right p = ≤-reflexive y
-
-
-min-x-y-≤-x : (x y : a) → min x y ≤ x
-min-x-y-≤-x x y with ≤-total x y 
-min-x-y-≤-x x y | left  p = ≤-reflexive x
-min-x-y-≤-x x y | right p = p
-
-min-glb : (x y z : a) → z ≤ x → z ≤ y → z ≤ min x y
-min-glb x y z p q  with ≤-total x y 
-min-glb x y z p q | left  r = p
-min-glb x y z p q | right r = q
-
-min-comm : (x y : a) → min x y ≡ min y x
-min-comm x y with ≤-total x y
-min-comm x y | left  p = {!!}
-min-comm x y | right p = {!!}
-
-
-
-
---bst-insert :{l u : a} → (d : a) → bst l u → bst (min d l) (max d u)
 
 
 
