@@ -9,6 +9,7 @@ cd ${HOME}
 ./song/test.sh
 ./json/test.sh
 ./logic/test.sh
+./logic2/test.sh
 ./types/test.sh
 ./lisp/test.sh
 

@@ -1,0 +1,16 @@
+module  Test.Fol.Main
+    (   specFol
+    )   where
+
+import Test.Hspec
+
+import Test.Fol.P
+import Test.Fol.Variable
+import Test.Fol.Subformula
+
+specFol :: Spec
+specFol = sequence_
+    [ specP
+    , specSubformula
+    , specVariable
+    ]

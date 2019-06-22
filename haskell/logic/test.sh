@@ -2,17 +2,17 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/haskell/logic
+HOME=/home/john/Prog/haskell/logic/
 cd ${HOME}
 echo
+echo "testing logic Haskell formalization..."
 
-echo "testing logic"
-
-./fopl/test.sh
-./lambda/test.sh
+ghc -O2 Main.hs
+./Main
+./clean.sh
 
 cd ${DIR}
-echo '\nAll logic tests completed successfully\n'
+echo '\ntest completed successfully\n'
 
 
 

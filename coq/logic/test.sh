@@ -5,13 +5,9 @@ DIR=`pwd`
 HOME=/home/john/Prog/coq/logic
 cd ${HOME}
 echo
-echo "testing logic formalization..."
+echo "testing logic..."
 
-ghc -O2 Main.hs
-./Main
-
-echo
-echo "Testing coq formalization..."
+echo "testing logic Coq formalization..."
 make
 ./clean.sh
 

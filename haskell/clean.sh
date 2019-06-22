@@ -13,6 +13,7 @@ rm -f a.out
 ./bitcoin/clean.sh
 ./lisp/clean.sh
 ./logic/clean.sh
+./logic2/clean.sh
 ./json/clean.sh
 ./parconc/clean.sh
 ./types/clean.sh

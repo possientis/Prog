@@ -1,15 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 DIR=`pwd`
-HOME=/home/john/Prog/haskell/logic
+HOME=/home/john/Prog/haskell/logic/
 cd ${HOME}
 
-rm -f *.hi
-rm -f *.o
-rm -f a.out
-
-./fopl/clean.sh
-./lambda/clean.sh
-
+rm -f Main
+rm -f ./{*,.*}.{o,hi}
+rm -f */{*,.*}.{o,hi}
+rm -f */*/{*,.*}.{o,hi}
+rm -f */*/*/{*,.*}.{o,hi}
 
 cd ${DIR}
