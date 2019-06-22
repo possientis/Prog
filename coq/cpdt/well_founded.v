@@ -66,20 +66,24 @@ Inductive Acc (A : Type) (R : A -> A -> Prop) (x : A) : Prop :=
                      function_scope]
 *)
 
-CoInductive infiniteDecreasingChain (a:Type) (R:a -> a -> Prop) : 
-    Stream a -> Prop :=
-| ChainCons : forall (x y:a) (s:Stream a)
-            , infiniteDecreasingChain a R (Cons y s) 
-           -> R y x 
-           -> infiniteDecreasingChain a R (Cons x (Cons y s)).
+CoInductive oo_chain (a:Type) (R:a -> a -> Prop) : Stream a -> Prop :=
+| oo_Cons : forall (x y:a) (s:Stream a), 
+    oo_chain a R (Cons y s) -> R y x -> oo_chain a R (Cons x (Cons y s)).
 
-Arguments infiniteDecreasingChain {a} _ _.
+Arguments oo_chain {a} _ _.
 
-(*
-Lemma noBadChain : forall (a:Type) (R:a -> a -> Prop) (x:a),
-    Acc R x -> forall (s:Stream a), ~infiniteDecreasingChain R (Cons x s).
+(* If x is accessible, it cannot be the start of an infinite descending chain.  *)
+Lemma no_oo_chain : forall (a:Type) (R:a -> a -> Prop) (x:a),
+    Acc R x -> forall (s:Stream a), ~oo_chain R (Cons x s).
 Proof.
+    intros a R x H. induction H as [x H IH]. intros [y s].
+    intros H'. revert H IH. 
+    remember (Cons x (Cons y s)) as s' eqn:E. revert x y s E.
+    destruct H'.
+    intros x' y' s' H0. inversion H0. subst.
+    rename x' into x. rename y' into y. rename s' into s.
+    intros H1 H2. apply (H2 y) with s in H.
+    apply H. assumption.
+Qed.
 
-Show.
-*)
 
