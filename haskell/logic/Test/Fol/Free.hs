@@ -27,4 +27,4 @@ testFreeFmap = it "Checked free fmap property" $
 
 
 propFreeFmap :: (Var -> Var) -> P Var -> Bool
-propFreeFmap f t = incl (free (fmap f t)) (map f (free t))
+propFreeFmap f p = incl (free (fmap f p)) (map f (free p))

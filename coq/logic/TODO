@@ -1,1 +1,4 @@
-prop 41
+Add remove_inj and remove_inj2
+Lam/free_fmap
+Fol/free_fmap
+Haskell tests free_fmap (Lam,Fol)

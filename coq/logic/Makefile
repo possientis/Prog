@@ -148,12 +148,18 @@ Fol/Variable.vo :	Fol/Variable.v \
 
 Lam/Free.vo :		Lam/Free.v \
 					Eq.vo \
-					Lam/T.vo
+					Remove.vo \
+					Injective.vo \
+					Lam/T.vo \
+					Lam/Variable.vo
 	coqc Lam/Free.v -R Lam Lam
 
 Fol/Free.vo :		Fol/Free.v \
 					Eq.vo \
-					Fol/P.vo
+					Remove.vo \
+					Injective.vo \
+					Fol/P.vo \
+					Fol/Variable.vo
 	coqc Fol/Free.v -R Fol Fol
 
 

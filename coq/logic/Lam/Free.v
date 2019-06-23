@@ -3,7 +3,10 @@ Import ListNotations.
 
 Require Import Eq.
 Require Import Remove.
+Require Import Injective.
+
 Require Import Lam.T.
+Require Import Lam.Variable.
 
 (* Returns the list of free variables (with possible duplication) in a term     *)
 (* When facing a lambda abstraction, we need to be able to remove a variable    *)
@@ -35,5 +38,20 @@ Proof.
             { apply incl_refl. }
 Qed.
 
+(*
+Lemma free_injective : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
+    injective_on (var t) f -> free e' (fmap f t) = map f (free e t).
+Proof.
+    intros v w e e' f.
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; intros H.
+    - reflexivity.
+    - rewrite map_app, IH1, IH2.
+        + reflexivity.
+        + apply injective_on_appr with (var t1). assumption.
+        + apply injective_on_appl with (var t2). assumption.
+    - rewrite IH1.
+
+Show.
+*)
 
 

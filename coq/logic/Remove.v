@@ -41,10 +41,10 @@ Proof.
             }
 Qed.
 
-Lemma remove_map : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (x:v) (l:list v),
-    incl (remove e' (f x) (map f l)) (map f (remove e x l)).
+Lemma remove_map : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v) (xs:list v),
+    incl (remove e' (f x) (map f xs)) (map f (remove e x xs)).
 Proof.
-    intros v w e e' f x l. induction l as [|a l IH]; simpl.
+    intros v w e e' f x xs. induction xs as [|a xs IH]; simpl.
     - apply incl_refl.
     - destruct (e x a) as [P|P].
         + destruct (e' (f x) (f a)) as [Q|Q].
