@@ -117,4 +117,29 @@ Proof.
     - intros l H. constructor. intros l' H'. apply IH.
       unfold lengthOrder in H'. unfold lt in H'.
       apply le_S_n. apply le_trans with (length l); assumption.  
-Qed.
+Defined. (* not opaque *)
+
+Lemma lengthOrder_wf : forall (a:Type), well_founded (@lengthOrder a). 
+Proof.
+    intros a. unfold well_founded. intros l. 
+    apply lengthOrder_wf' with (length l). 
+    apply le_n.
+Defined. (* not opaque *)
+
+(*
+Lemma split_wf : forall (a:Type) (n:nat) (l:list a),
+    2 <= length l <= n -> 
+        let (l1,l2) := split l in 
+            lengthOrder l1 l /\ lengthOrder l2 l.
+Proof.
+    intros a n l. revert n. 
+    induction l as [|x l IH].
+    - intros n [H1 H2]. inversion H1.
+    - revert x IH. 
+      induction l as [| y l IH'].
+        + intros x IH n [H1 H2]. 
+          simpl in H1. apply le_S_n in H1. inversion H1. 
+        + intros x IH n [H1 H2].
+          unfold split. fold (split l).
+Show.
+*)
