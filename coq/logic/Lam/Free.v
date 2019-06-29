@@ -3,6 +3,7 @@ Import ListNotations.
 
 Require Import Eq.
 Require Import Remove.
+Require Import Include.
 Require Import Injective.
 
 Require Import Lam.T.
@@ -39,7 +40,20 @@ Proof.
 Qed.
 
 (*
-Lemma free_injective : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
+Lemma free_var : forall (v:Type) (e:Eq v) (t:T v), 
+    incl (free e t) (var t).
+Proof.
+    intros v e.
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl.
+    - apply incl_refl.
+    - apply incl_app2; assumption.
+    -
+
+Show.
+*)
+
+(*
+Lemma free_inj : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
     injective_on (var t) f -> free e' (fmap f t) = map f (free e t).
 Proof.
     intros v w e e' f.

@@ -1,6 +1,8 @@
 Require Import List.
 
+Require Import Include.
 Require Import Composition.
+
 
 Definition injective (v w:Type) (f:v -> w) : Prop :=
     forall (x y:v), f x = f y -> x = y.
@@ -51,5 +53,38 @@ Proof.
     - assumption.
 Qed.
 
+Lemma injective_incl : forall (v w:Type) (xs ys:list v) (f:v -> w),
+    incl xs ys -> injective_on ys f -> injective_on xs f.
+Proof.
+    intros v w xs ys f H0 H1 x y Hx Hy H. apply H1.
+    - apply H0. assumption.
+    - apply H0. assumption.
+    - assumption.
+Qed.
+
+
+Lemma injective_on_not_in : forall (v w:Type) (f:v -> w),
+    forall (x:v) (xs:list v),
+    injective_on (x :: xs) f -> 
+    ~In x xs -> 
+    ~In (f x) (map f xs).
+Proof.
+    intros v w f x xs. revert x. 
+    induction xs as [|a xs IH]; simpl; intros x H.
+    - intros H0 H1. assumption.
+    - intros Hp [Hq|Hq].
+        { apply Hp. left. apply H.
+            { right. left. reflexivity. }
+            { left. reflexivity. }
+            { assumption. }
+        }
+        { revert Hq. apply IH.
+            { apply injective_incl with (x :: a :: xs).
+                { apply incl_cons2. apply incl_tl. apply incl_refl. }
+                { assumption. }
+            }
+            { intros H'. apply Hp. right. assumption. }
+        }
+Qed.
 
 

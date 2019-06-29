@@ -11,6 +11,7 @@ all:	   			Extensionality.vo \
 					Permute.vo \
 					Injective.vo \
 					Remove.vo \
+					Include.vo \
 					Lam/T.vo \
 					Fol/P.vo \
 					Lam/Order.vo \
@@ -69,12 +70,17 @@ Permute.vo : 		Permute.v \
 	coqc Permute.v
 
 Injective.vo : 		Injective.v \
-					Composition.vo
+					Composition.vo \
+					Include.vo
 	coqc Injective.v
 
 Remove.vo :			Remove.v \
-					Eq.vo
+					Eq.vo \
+					Injective.vo
 	coqc Remove.v
+
+Include.vo :		Include.v 
+	coqc Include.v
 
 Lam/T.vo:   		Lam/T.v \
 					Eq.vo \
@@ -149,6 +155,7 @@ Fol/Variable.vo :	Fol/Variable.v \
 Lam/Free.vo :		Lam/Free.v \
 					Eq.vo \
 					Remove.vo \
+					Include.vo \
 					Injective.vo \
 					Lam/T.vo \
 					Lam/Variable.vo
@@ -157,6 +164,7 @@ Lam/Free.vo :		Lam/Free.v \
 Fol/Free.vo :		Fol/Free.v \
 					Eq.vo \
 					Remove.vo \
+					Include.vo \
 					Injective.vo \
 					Fol/P.vo \
 					Fol/Variable.vo
