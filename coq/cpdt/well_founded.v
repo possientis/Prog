@@ -1,4 +1,5 @@
 Require Import List.
+Require Import Arith.Le.
 
 Require Import stream.
 
@@ -40,11 +41,12 @@ Fail Fixpoint mergeSort (a:Type) (le:a -> a -> bool) (xs : list a) : list a :=
     | _         => let (l1, l2) := split xs in
         merge le (mergeSort a le l1) (mergeSort a le l2)
     end.
-(*
-Print well_founded.
-*)
+
+(* A relation is well-founded iff every point is accessible                     *)
 
 (*
+Print well_founded.
+
 fun (A : Type) (R : A -> A -> Prop) => forall a : A, Acc R a
      : forall A : Type, (A -> A -> Prop) -> Prop
 *)
@@ -53,9 +55,7 @@ fun (A : Type) (R : A -> A -> Prop) => forall a : A, Acc R a
 
 (*
 Print Acc.
-*)
 
-(*
 Inductive Acc (A : Type) (R : A -> A -> Prop) (x : A) : Prop :=
     Acc_intro : (forall y : A, R y x -> Acc R y) -> Acc R x
 
@@ -66,13 +66,17 @@ Inductive Acc (A : Type) (R : A -> A -> Prop) (x : A) : Prop :=
                      function_scope]
 *)
 
+(* If you have an infinite descending chain starting with y and y happens to be *)
+(* less than x, then you have an infinite descending chain starting with x      *)
+(* This type needs to be coinductive, it would be void as an inductive type     *)
 CoInductive oo_chain (a:Type) (R:a -> a -> Prop) : Stream a -> Prop :=
 | oo_Cons : forall (x y:a) (s:Stream a), 
     oo_chain a R (Cons y s) -> R y x -> oo_chain a R (Cons x (Cons y s)).
 
 Arguments oo_chain {a} _ _.
 
-(* If x is accessible, it cannot be the start of an infinite descending chain.  *)
+(* The accessible points are minimal elements or points which have nothing      *)
+(* underneath but accesible points. So an accessible point cannot start a chain *)
 Lemma no_oo_chain : forall (a:Type) (R:a -> a -> Prop) (x:a),
     Acc R x -> forall (s:Stream a), ~oo_chain R (Cons x s).
 Proof.
@@ -86,4 +90,31 @@ Proof.
     apply H. assumption.
 Qed.
 
+(*
+Check Fix.
+Fix
+     : forall (A : Type) (R : A -> A -> Prop),
+       well_founded R ->
+       forall P : A -> Type,
+       (forall x : A, (forall y : A, R y x -> P y) -> P x) ->
+       forall x : A, P x
+*)
 
+Definition lengthOrder (a:Type) (l1 l2 : list a) : Prop :=
+    length l1 < length l2.
+
+
+Arguments lengthOrder {a} _ _.
+
+
+Lemma lengthOrder_wf' : forall (a:Type) (n:nat) (l:list a), 
+    length l <= n -> Acc lengthOrder l.
+Proof.
+    intros a. induction n as [|n IH].
+    - intros l. destruct l as [|x l].
+        +  intros _. constructor. intros l H. inversion H.
+        +  intros H. inversion H.
+    - intros l H. constructor. intros l' H'. apply IH.
+      unfold lengthOrder in H'. unfold lt in H'.
+      apply le_S_n. apply le_trans with (length l); assumption.  
+Qed.
