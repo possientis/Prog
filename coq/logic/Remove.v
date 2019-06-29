@@ -1,8 +1,9 @@
 Require Import List.  
 Require Import Eq.
+Require Import Include.
 Require Import Injective.
 
-Lemma remove_In2 : forall (v:Type) (e:Eq v) (x y:v) (l:list v),
+Lemma remove_still : forall (v:Type) (e:Eq v) (x y:v) (l:list v),
     x <> y -> In y l -> In y (remove e x l).
 Proof.
     intros v e x y l. induction l as [|a l IH].
@@ -28,7 +29,7 @@ Proof.
     - destruct (e x a) eqn:E.
         + apply IH. intros y Hy. apply H. right. assumption.
         + intros y Hy. destruct (e y a) as [H1|H2].
-            { apply remove_In2. 
+            { apply remove_still. 
                 { rewrite H1. assumption. }
                 { apply H. left. symmetry. assumption. }
             }
@@ -104,7 +105,7 @@ Proof.
             { rewrite IH.
                 { reflexivity. }
                 { assumption. }
-                { apply injective_incl with (a :: xs).
+                { apply injective_on_incl with (a :: xs).
                     { apply incl_tl. apply incl_refl. }
                     { assumption. } 
                 }
@@ -128,5 +129,15 @@ Proof.
     - exfalso. apply Hq. reflexivity.
     - exfalso. apply Hp. reflexivity.
     - inversion E. reflexivity.
+Qed.
+
+Lemma remove_incl : forall (v:Type) (e:Eq v) (x:v) (xs:list v), 
+    incl (remove e x xs) xs. 
+Proof.
+    intros v e x xs. induction xs as [|a xs IH]; simpl.
+    - apply incl_refl.
+    - destruct (e x a) as [H|H].
+        + apply incl_tl. assumption.
+        + apply incl_cons2. assumption.
 Qed.
 

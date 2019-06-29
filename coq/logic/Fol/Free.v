@@ -3,7 +3,11 @@ Import ListNotations.
 
 Require Import Eq.
 Require Import Remove.
+Require Import Include.
+Require Import Injective.
+
 Require Import Fol.P.
+Require Import Fol.Variable.
 
 (* Returns the list of free variables (with possible duplication) in a term     *)
 (* When facing a forall quantification, we need to be able to remove a variable *)
@@ -37,4 +41,39 @@ Proof.
             { apply remove_map. }
             { apply incl_refl. }
 Qed.
+
+(* A free variable is a variable                                                *)
+Lemma free_var : forall (v:Type) (e:Eq v) (p:P v), 
+    incl (free e p) (var p).
+Proof.
+    intros v e.
+    induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1]; simpl.
+    - apply incl_refl.
+    - apply incl_refl.
+    - apply incl_app2; assumption.
+    - apply incl_tran with (free e p1).
+        + apply remove_incl.
+        + apply incl_tl. assumption.
+Qed.
+
+
+Lemma free_inj : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p:P v),
+    injective_on (var p) f -> free e' (fmap f p) = map f (free e p).
+Proof.
+    intros v w e e' f.
+    induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1]; simpl; intros H.
+    - reflexivity.
+    - reflexivity.
+    - rewrite map_app, IH1, IH2.
+        + reflexivity.
+        + apply injective_on_appr with (var p1). assumption.
+        + apply injective_on_appl with (var p2). assumption.
+    - rewrite IH1. apply remove_inj2. apply injective_on_incl with (x :: var p1).
+        + apply incl_cons.
+            { left. reflexivity. }
+            { apply incl_tl, free_var. }
+        + assumption.
+        + apply injective_on_cons with x. assumption.
+Qed.
+
 

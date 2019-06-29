@@ -15,15 +15,15 @@ specRemove = describe "Testing properties for remove..." $
     sequence_ specsRemove
 
 specsRemove :: [Spec]
-specsRemove  = [ testRemoveIn2
+specsRemove  = [ testRemoveStill
                , testRemoveMon
                , testRemoveMap
                ]
 
 
-testRemoveIn2 :: Spec
-testRemoveIn2 = it "Checked remove vs elem property" $
-    property $ propRemoveIn2
+testRemoveStill :: Spec
+testRemoveStill = it "Checked remove vs elem property" $
+    property $ propRemoveStill
 
 testRemoveMon :: Spec
 testRemoveMon = it "Checked remove monotone property" $
@@ -33,8 +33,8 @@ testRemoveMap :: Spec
 testRemoveMap = it "Checked remove map property" $ 
     property $ propRemoveMap
 
-propRemoveIn2 :: Var -> Var -> [Var] -> Bool
-propRemoveIn2 x y xs = x == y || y `notElem` xs || y `elem` (remove x xs) 
+propRemoveStill :: Var -> Var -> [Var] -> Bool
+propRemoveStill x y xs = x == y || y `notElem` xs || y `elem` (remove x xs) 
 
 
 propRemoveMon :: Var -> [Var] -> [Var] -> Bool

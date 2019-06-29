@@ -76,6 +76,7 @@ Injective.vo : 		Injective.v \
 
 Remove.vo :			Remove.v \
 					Eq.vo \
+					Include.vo \
 					Injective.vo
 	coqc Remove.v
 

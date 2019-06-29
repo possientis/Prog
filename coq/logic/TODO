@@ -1,7 +1,2 @@
-add remove_incl
-Lam/free_var
-Fol/free_var
-Hask/free_var
-Lam/free_inj
-Fol/free_inj
 Hask/free_inj
+prop42

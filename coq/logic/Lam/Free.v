@@ -39,7 +39,7 @@ Proof.
             { apply incl_refl. }
 Qed.
 
-(*
+(* A free variable is a variable                                                *)
 Lemma free_var : forall (v:Type) (e:Eq v) (t:T v), 
     incl (free e t) (var t).
 Proof.
@@ -47,12 +47,11 @@ Proof.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl.
     - apply incl_refl.
     - apply incl_app2; assumption.
-    -
+    - apply incl_tran with (free e t1).
+        + apply remove_incl.
+        + apply incl_tl. assumption.
+Qed.
 
-Show.
-*)
-
-(*
 Lemma free_inj : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
     injective_on (var t) f -> free e' (fmap f t) = map f (free e t).
 Proof.
@@ -63,9 +62,13 @@ Proof.
         + reflexivity.
         + apply injective_on_appr with (var t1). assumption.
         + apply injective_on_appl with (var t2). assumption.
-    - rewrite IH1.
+    - rewrite IH1. apply remove_inj2. apply injective_on_incl with (x :: var t1).
+        + apply incl_cons.
+            { left. reflexivity. }
+            { apply incl_tl, free_var. }
+        + assumption.
+        + apply injective_on_cons with x. assumption.
+Qed.
 
-Show.
-*)
 
 

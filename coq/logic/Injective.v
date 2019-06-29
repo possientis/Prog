@@ -53,7 +53,7 @@ Proof.
     - assumption.
 Qed.
 
-Lemma injective_incl : forall (v w:Type) (xs ys:list v) (f:v -> w),
+Lemma injective_on_incl : forall (v w:Type) (xs ys:list v) (f:v -> w),
     incl xs ys -> injective_on ys f -> injective_on xs f.
 Proof.
     intros v w xs ys f H0 H1 x y Hx Hy H. apply H1.
@@ -79,7 +79,7 @@ Proof.
             { assumption. }
         }
         { revert Hq. apply IH.
-            { apply injective_incl with (x :: a :: xs).
+            { apply injective_on_incl with (x :: a :: xs).
                 { apply incl_cons2. apply incl_tl. apply incl_refl. }
                 { assumption. }
             }
