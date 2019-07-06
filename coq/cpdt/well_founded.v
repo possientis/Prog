@@ -128,18 +128,22 @@ Defined. (* not opaque *)
 
 (*
 Lemma split_wf : forall (a:Type) (n:nat) (l:list a),
-    2 <= length l <= n -> 
-        let (l1,l2) := split l in 
+    2 <= length l <= n ->
+        let (l1,l2) := split l in
             lengthOrder l1 l /\ lengthOrder l2 l.
 Proof.
-    intros a n l. revert n. 
-    induction l as [|x l IH].
-    - intros n [H1 H2]. inversion H1.
-    - revert x IH. 
-      induction l as [| y l IH'].
-        + intros x IH n [H1 H2]. 
-          simpl in H1. apply le_S_n in H1. inversion H1. 
-        + intros x IH n [H1 H2].
-          unfold split. fold (split l).
+   intros a n. induction n as [|n IH]; intros l H. 
+   - destruct H as [H1 H2]. assert (2 <= 0) as H.
+        { apply le_trans with (length l); assumption. }
+        inversion H.
+   - remember (split l) as e eqn:E. destruct e as (l1,l2).
+     destruct l as [|x l].
+        + destruct H as [H _]. inversion H.
+        + destruct l as [|y l].
+            { destruct H as [H _]. apply le_S_n in H. inversion H. }
+            { simpl in E.
+              remember (split l) as e eqn:F.
+              destruct e as (m1,m2).
+              inversion E. subst. clear E.
 Show.
 *)
