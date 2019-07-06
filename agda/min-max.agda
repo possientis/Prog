@@ -39,15 +39,15 @@ x-≤-max-x-y x y with ≤-total x y
 x-≤-max-x-y x y | left  p = p
 x-≤-max-x-y x y | right p = ≤-reflexive x
 
-min-glb : (x y z : a) → z ≤ x → z ≤ y → z ≤ min x y
-min-glb x y z p q  with ≤-total x y 
-min-glb x y z p q | left  r = p
-min-glb x y z p q | right r = q
+min-glb : {x y z : a} → z ≤ x → z ≤ y → z ≤ min x y
+min-glb {x} {y} {z} p q  with ≤-total x y 
+min-glb {x} {y} {z} p q | left  r = p
+min-glb {x} {y} {z} p q | right r = q
 
-max-lub : (x y z : a) → x ≤ z → y ≤ z → max x y ≤ z
-max-lub x y z p q with ≤-total x y
-max-lub x y z p q | left  r = q
-max-lub x y z p q | right r = p
+max-lub : {x y z : a} → x ≤ z → y ≤ z → max x y ≤ z
+max-lub {x} {y} {z} p q with ≤-total x y
+max-lub {x} {y} {z} p q | left  r = q
+max-lub {x} {y} {z} p q | right r = p
 
 min-comm : (x y : a) → min x y ≡ min y x
 min-comm x y with ≤-total x y

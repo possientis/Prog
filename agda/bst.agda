@@ -17,38 +17,53 @@ open import maybe
 open import min-max _≤_ ≤-refl ≤-anti ≤-total
 
 data bst : a → a → Set (ℓ ⊔ ℓ') where
-  bst-leaf : ∀ {l u : a} → l ≤ u → bst l u
-  bst-node : ∀ {l l' u u' : a}
-    (d : a) → bst l' d → bst d u' → l ≤ l' → u' ≤ u → bst l u
+  bst-leaf  : ∀ {l u : a} → l ≤ u → bst l u
+  bst-node  : ∀ {l u : a}
+    (d : a) → bst l d → bst d u → bst l u
+  bst-left  : ∀ {l l' u : a} → l ≤ l' → bst l' u  → bst l u  -- left cast
+  bst-right : ∀ {l u u' : a} → u' ≤ u → bst l  u' → bst l u  -- right cast 
 
 bst-lookup : {l u : a} → a → bst l u → maybe a
-bst-lookup d (bst-leaf x)            = nothing
-bst-lookup d (bst-node d' tl tr _ _) with ≡-dec d d' 
-bst-lookup d (bst-node d' tl tr _ _) | left  p = just d
-bst-lookup d (bst-node d' tl tr _ _) | right p with ≤-dec d d' 
-bst-lookup d (bst-node d' tl tr _ _) | right p | left  q = bst-lookup d tl
-bst-lookup d (bst-node d' tl tr _ _) | right p | right q = bst-lookup d tr
+bst-lookup {l} {u} d (bst-leaf p)       = nothing
+bst-lookup {l} {u} d (bst-node e tl tr) with ≡-dec d e 
+bst-lookup {l} {u} d (bst-node e tl tr) | left  p = just d
+bst-lookup {l} {u} d (bst-node e tl tr) | right p with ≤-dec d e 
+bst-lookup {l} {u} d (bst-node e tl tr) | right p | left  q = bst-lookup d tl
+bst-lookup {l} {u} d (bst-node e tl tr) | right p | right q = bst-lookup d tr
+bst-lookup {l} {u} d (bst-left p t)     = bst-lookup d t
+bst-lookup {l} {u} d (bst-right p t)    = bst-lookup d t
+
+bst-order : ∀ {l u : a } → bst l u → l ≤ u
+bst-order {l} {u} (bst-leaf p)       = p
+bst-order {l} {u} (bst-node d tl tr) = ≤-trans (bst-order tl) (bst-order tr)
+bst-order {l} {u} (bst-left p t)     = ≤-trans p (bst-order t)
+bst-order {l} {u} (bst-right p t)    = ≤-trans (bst-order t) p
 
 
 bst-insert :{l u : a} → (d : a) → bst l u → bst (min d l) (max d u)
 bst-insert {l} {u} d (bst-leaf p) with ≤-total d l
-bst-insert {l} {u} d (bst-leaf p) | left  q with ≤-total d u
-bst-insert {_} {u} d (bst-leaf p) | left  q | left r  =
-  bst-node d (bst-leaf (≤-refl d)) (bst-leaf r) (≤-refl d) (≤-refl u)
-bst-insert {_} {_} d (bst-leaf p) | left  q | right r =
-  bst-node d (bst-leaf (≤-refl d)) (bst-leaf (≤-refl d)) (≤-refl d) (≤-refl d)
-bst-insert {_} {u} d (bst-leaf p) | right q with ≤-total d u
+bst-insert {l} {u} d (bst-leaf p) | left q  with ≤-total d u 
+bst-insert {l} {u} d (bst-leaf p) | left q | left  r =
+  bst-node d (bst-leaf (≤-refl d)) (bst-leaf r)
+bst-insert {l} {u} d (bst-leaf p) | left q | right r =
+  bst-node d (bst-leaf (≤-refl d)) (bst-leaf (≤-refl d)) 
+bst-insert {l} {u} d (bst-leaf p) | right q with ≤-total d u 
 bst-insert {l} {u} d (bst-leaf p) | right q | left  r =
-  bst-node d (bst-leaf q) (bst-leaf r) (≤-refl l) (≤-refl u)
-bst-insert {l} {_} d (bst-leaf p) | right q | right r =
-  bst-node d (bst-leaf q) (bst-leaf (≤-refl d)) (≤-refl l) (≤-refl d)
-bst-insert {l} {u} d (bst-node e tl tr p q) with ≤-total d l
-bst-insert {l} {u} d (bst-node e tl tr pl pr) | left p  with ≤-total d u
-bst-insert {l} {u} d (bst-node e tl tr pl pr) | left p | left  q =
-  bst-node e {!!} tr {!!} pr
-bst-insert {l} {u} d (bst-node e tl tr pl pr) | left p | right q = {!!}
-bst-insert {l} {u} d (bst-node e tl tr pl pr) | right p = {!!}
-
+  bst-node d (bst-leaf q) (bst-leaf r)
+bst-insert {l} {u} d (bst-leaf p) | right q | right r =
+  bst-node d (bst-leaf q) (bst-leaf (≤-refl d))
+bst-insert {l} {u} d (bst-node e tl tr) with ≤-total d l  
+bst-insert {l} {u} d (bst-node e tl tr) | left  p with ≤-total d u 
+bst-insert {l} {u} d (bst-node e tl tr) | left p | left  q =
+  bst-node e
+    (bst-left (min-glb (≤-refl d) p)  
+      (bst-right (max-lub (≤-trans p (bst-order tl)) (≤-refl e))
+        (bst-insert d tl)))
+    tr
+bst-insert {l} {u} d (bst-node e tl tr) | left p | right q = {!!}
+bst-insert {l} {u} d (bst-node e tl tr) | right p = {!!}
+bst-insert {l} {u} d (bst-left p t)     = {!!}
+bst-insert {l} {u} d (bst-right p t)    = {!!}
 
 
 

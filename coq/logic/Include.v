@@ -1,10 +1,10 @@
 Require Import List.
 Import ListNotations.
 
-Lemma incl_cons2 : forall (v:Type) (l l':list v) (a:v),
-    incl l l' -> incl (a :: l) (a :: l').
+Lemma incl_cons2 : forall (v:Type) (xs ys:list v) (a:v),
+    incl xs ys -> incl (a :: xs) (a :: ys).
 Proof.
-    intros v l l' a H. apply incl_cons.
+    intros v xs ys a H. apply incl_cons.
     - left. reflexivity.
     - apply incl_tl. assumption.
 Qed.
