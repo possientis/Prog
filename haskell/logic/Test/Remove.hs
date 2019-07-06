@@ -7,6 +7,7 @@ import  Test.QuickCheck
 
 import Remove
 import Include
+import Injective
 import Variable (Var)
 
 
@@ -18,6 +19,10 @@ specsRemove :: [Spec]
 specsRemove  = [ testRemoveStill
                , testRemoveMon
                , testRemoveMap
+               , testRemoveXNotIn
+               , testRemoveInj
+               , testRemoveInj2
+               , testRemoveIncl
                ]
 
 
@@ -33,6 +38,22 @@ testRemoveMap :: Spec
 testRemoveMap = it "Checked remove map property" $ 
     property $ propRemoveMap
 
+testRemoveXNotIn :: Spec
+testRemoveXNotIn = it "Checked remove 'not in' property" $ 
+    property $ propRemoveXNotIn
+
+testRemoveInj :: Spec
+testRemoveInj = it "Checked remove first injective property" $ 
+    property $ propRemoveInj
+
+testRemoveInj2 :: Spec
+testRemoveInj2 = it "Checked remove second injective property" $ 
+    property $ propRemoveInj2
+
+testRemoveIncl :: Spec
+testRemoveIncl = it "Checked remove inclusion property" $ 
+    property $ propRemoveIncl
+
 propRemoveStill :: Var -> Var -> [Var] -> Bool
 propRemoveStill x y xs = x == y || y `notElem` xs || y `elem` (remove x xs) 
 
@@ -44,5 +65,18 @@ propRemoveMon x xs ys = not (incl xs ys) || incl (remove x xs) (remove x ys)
 propRemoveMap :: (Var -> Var) -> Var -> [Var] -> Bool
 propRemoveMap f x xs = incl (remove (f x) (map f xs)) (map f (remove x xs)) 
 
+propRemoveXNotIn :: Var -> [Var] -> Bool
+propRemoveXNotIn x xs = x `elem` xs || remove x xs == xs
+
+propRemoveInj :: (Var -> Var) -> Var -> [Var] -> Bool
+propRemoveInj f x xs = x `notElem` xs || (not $ injective_on xs f) ||
+    remove (f x) (map f xs) == map f (remove x xs)
+
+propRemoveInj2 :: (Var -> Var) -> Var -> [Var] -> Bool
+propRemoveInj2 f x xs = (not $ injective_on (x:xs) f) ||
+    remove (f x) (map f xs) == map f (remove x xs)
+
+propRemoveIncl :: Var -> [Var] -> Bool
+propRemoveIncl x xs = incl (remove x xs) xs
 
 

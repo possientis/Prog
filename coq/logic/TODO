@@ -1,3 +1,2 @@
-Hask/remove: more tests
-Hask/free_inj
-prop42
+prop42_x_not_in_free
+prop42_x_in_free
