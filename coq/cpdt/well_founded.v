@@ -127,8 +127,8 @@ Proof.
     apply le_n.
 Defined. (* not opaque *)
 
-(*
-Lemma split_wf' : forall (a:Type) (n:nat) (l:list a),
+
+Lemma split_wf1_ : forall (a:Type) (n:nat) (l:list a),
     length l <= n ->
         forall (l1 l2:list a), (l1,l2) = split l -> 
             length l1 <= length l /\ length l2 <= length l.
@@ -136,34 +136,54 @@ Proof.
     intros a. induction n as [|n IH]; intros l H l1 l2 H'.
     - inversion H as [E|E]. apply length_zero_iff_nil in E. subst. 
       inversion H'. split; apply le_n.
-    -
-
-
-Show.
-*)
-
-(*
-Lemma split_wf : forall (a:Type) (n:nat) (l:list a),
-    2 <= length l <= n ->
-        let (l1,l2) := split l in
-            lengthOrder l1 l /\ lengthOrder l2 l.
-Proof.
-   intros a n. induction n as [|n IH]; intros l H. 
-   - destruct H as [H1 H2]. assert (2 <= 0) as H.
-        { apply le_trans with (length l); assumption. }
-        inversion H.
-   - remember (split l) as e eqn:E. destruct e as (l1,l2).
-     destruct l as [|x l].
-        + destruct H as [H _]. inversion H.
+    - destruct l as [|x l].
+        + inversion H'. split; apply le_n.
         + destruct l as [|y l].
-            { destruct H as [H _]. apply le_S_n in H. inversion H. }
-            { simpl in E.
-              remember (split l) as e eqn:F.
-              destruct e as (m1,m2).
-              inversion E. subst. clear E.
-              assert (2 <= length l <= n).
-                { split.
-                    {
-Show.
-*)
+            { inversion H'. split.
+                { apply le_n. }
+                { apply le_S, le_n. }
+            }
+            { inversion H' as [H0]. simpl in H. apply le_S_n in H.
+                assert (length l <= n) as L.
+                    { apply le_trans with (S (length l)).
+                        { apply le_S, le_n. }
+                        { assumption. }
+                    }
+                remember (split l) as e eqn:E.
+                destruct e as (m1,m2).
+                remember (IH l L m1 m2 E) as IH' eqn:C. clear C.
+                destruct IH' as [IH1 IH2].
+                inversion H0. split; 
+                simpl; apply le_n_S; apply le_trans with (length l).
+                    { assumption. }
+                    { apply le_S, le_n. }
+                    { assumption. }
+                    { apply le_S, le_n. }
+            }
+Qed.
 
+Lemma split_wf2_ : forall (a:Type) (l l1 l2:list a), (l1,l2) = split l -> 
+    length l1 <= length l /\ length l2 <= length l.
+Proof.
+    intros a l l1 l2 H. apply split_wf1_ with (length l).
+    - apply le_n.
+    - assumption.
+Qed.
+
+Lemma split_wf : forall (a:Type) (l l1 l2:list a), (l1,l2) = split l ->
+    2 <= length l -> lengthOrder l1 l /\ lengthOrder l2 l.
+Proof.
+    intros a l l1 l2 H1 H2.  
+    destruct l as [|x l].
+    - inversion H2.
+    - destruct l as [|y l].
+        +  simpl in H2. apply le_S_n in H2. inversion H2. 
+        + clear H2. simpl in H1.
+          remember (split l) as e eqn:E. 
+          destruct e as (m1,m2). 
+          remember (split_wf2_ a l m1 m2 E) as H0 eqn:C. clear C.
+          destruct H0.
+          inversion H1. split;
+          unfold lengthOrder; simpl; unfold lt;
+          apply le_n_S, le_n_S; assumption.
+Qed.
