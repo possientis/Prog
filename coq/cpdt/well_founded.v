@@ -1,5 +1,6 @@
 Require Import List.
 Require Import Arith.Le.
+Require Import Arith.Lt.
 
 Require Import stream.
 
@@ -127,6 +128,21 @@ Proof.
 Defined. (* not opaque *)
 
 (*
+Lemma split_wf' : forall (a:Type) (n:nat) (l:list a),
+    length l <= n ->
+        forall (l1 l2:list a), (l1,l2) = split l -> 
+            length l1 <= length l /\ length l2 <= length l.
+Proof.
+    intros a. induction n as [|n IH]; intros l H l1 l2 H'.
+    - inversion H as [E|E]. apply length_zero_iff_nil in E. subst. 
+      inversion H'. split; apply le_n.
+    -
+
+
+Show.
+*)
+
+(*
 Lemma split_wf : forall (a:Type) (n:nat) (l:list a),
     2 <= length l <= n ->
         let (l1,l2) := split l in
@@ -145,5 +161,9 @@ Proof.
               remember (split l) as e eqn:F.
               destruct e as (m1,m2).
               inversion E. subst. clear E.
+              assert (2 <= length l <= n).
+                { split.
+                    {
 Show.
 *)
+
