@@ -20,8 +20,8 @@ data bst : a → a → Set (ℓ ⊔ ℓ') where
   bst-leaf  : ∀ {l u : a} → l ≤ u → bst l u
   bst-node  : ∀ {l u : a}
     (d : a) → bst l d → bst d u → bst l u
-  bst-left  : ∀ {l l' u : a} → l ≤ l' → bst l' u  → bst l u  -- left cast
-  bst-right : ∀ {l u u' : a} → u' ≤ u → bst l  u' → bst l u  -- right cast 
+  bst-cast  : ∀ {l l' u u' : a} → l ≤ l' → u' ≤ u → bst l' u'  → bst l u
+
 
 bst-lookup : {l u : a} → a → bst l u → maybe a
 bst-lookup {l} {u} d (bst-leaf p)       = nothing
@@ -30,41 +30,52 @@ bst-lookup {l} {u} d (bst-node e tl tr) | left  p = just d
 bst-lookup {l} {u} d (bst-node e tl tr) | right p with ≤-dec d e 
 bst-lookup {l} {u} d (bst-node e tl tr) | right p | left  q = bst-lookup d tl
 bst-lookup {l} {u} d (bst-node e tl tr) | right p | right q = bst-lookup d tr
-bst-lookup {l} {u} d (bst-left p t)     = bst-lookup d t
-bst-lookup {l} {u} d (bst-right p t)    = bst-lookup d t
+bst-lookup {l} {u} d (bst-cast p q t) = bst-lookup d t
+
 
 bst-order : ∀ {l u : a } → bst l u → l ≤ u
 bst-order {l} {u} (bst-leaf p)       = p
 bst-order {l} {u} (bst-node d tl tr) = ≤-trans (bst-order tl) (bst-order tr)
-bst-order {l} {u} (bst-left p t)     = ≤-trans p (bst-order t)
-bst-order {l} {u} (bst-right p t)    = ≤-trans (bst-order t) p
+bst-order {l} {u} (bst-cast p q t)   = ≤-trans p ( ≤-trans (bst-order t) q)
 
 
 bst-insert :{l u : a} → (d : a) → bst l u → bst (min d l) (max d u)
 bst-insert {l} {u} d (bst-leaf p) with ≤-total d l
-bst-insert {l} {u} d (bst-leaf p) | left q  with ≤-total d u 
+bst-insert {l} {u} d (bst-leaf p) | left q  with ≤-total d u
 bst-insert {l} {u} d (bst-leaf p) | left q | left  r =
   bst-node d (bst-leaf (≤-refl d)) (bst-leaf r)
 bst-insert {l} {u} d (bst-leaf p) | left q | right r =
-  bst-node d (bst-leaf (≤-refl d)) (bst-leaf (≤-refl d)) 
-bst-insert {l} {u} d (bst-leaf p) | right q with ≤-total d u 
+  bst-node d (bst-leaf (≤-refl d)) (bst-leaf (≤-refl d))
+bst-insert {l} {u} d (bst-leaf p) | right q with ≤-total d u
 bst-insert {l} {u} d (bst-leaf p) | right q | left  r =
   bst-node d (bst-leaf q) (bst-leaf r)
 bst-insert {l} {u} d (bst-leaf p) | right q | right r =
   bst-node d (bst-leaf q) (bst-leaf (≤-refl d))
-bst-insert {l} {u} d (bst-node e tl tr) with ≤-total d l  
-bst-insert {l} {u} d (bst-node e tl tr) | left  p with ≤-total d u 
+bst-insert {l} {u} d (bst-node e tl tr) with ≤-total d l
+bst-insert {l} {u} d (bst-node e tl tr) | left  p with ≤-total d u
 bst-insert {l} {u} d (bst-node e tl tr) | left p | left  q =
   bst-node e
-    (bst-left (min-glb (≤-refl d) p)  
-      (bst-right (max-lub (≤-trans p (bst-order tl)) (≤-refl e))
-        (bst-insert d tl)))
+    (bst-cast
+      (min-glb (≤-refl d) p)
+      (max-lub (≤-trans p (bst-order tl)) (≤-refl e))
+      (bst-insert d tl))
     tr
-bst-insert {l} {u} d (bst-node e tl tr) | left p | right q = {!!}
-bst-insert {l} {u} d (bst-node e tl tr) | right p = {!!}
-bst-insert {l} {u} d (bst-left p t)     = {!!}
-bst-insert {l} {u} d (bst-right p t)    = {!!}
-
+bst-insert {l} {u} d (bst-node e tl tr) | left p | right q =
+  bst-node d
+    (bst-cast p (≤-trans (bst-order tr) q) tl)
+    (bst-cast (≤-trans p (bst-order tl)) q tr)
+bst-insert {l} {u} d (bst-node e tl tr) | right p with ≤-total d u
+bst-insert {l} {u} d (bst-node e tl tr) | right p | left  q  with ≤-total d e
+bst-insert {l} {u} d (bst-node e tl tr) | right p | left q | left  r =
+  bst-node e
+    (bst-cast
+      (min-glb p (≤-refl l))
+      (max-lub r (≤-refl e))
+      (bst-insert d tl))
+    tr
+bst-insert {l} {u} d (bst-node e tl tr) | right p | left q | right r = {!!}
+bst-insert {l} {u} d (bst-node e tl tr) | right p | right q = {!!}
+bst-insert {l} {u} d (bst-cast p q t)    = {!!}
 
 
 
