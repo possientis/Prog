@@ -5,6 +5,7 @@ Require Import Eq.
 Require Import Remove.
 Require Import Replace.
 Require Import Include.
+Require Import Coincide.
 Require Import Injective.
 
 Require Import Lam.T.
@@ -71,7 +72,7 @@ Proof.
         + apply injective_on_cons with x. assumption.
 Qed.
 
-(*
+
 Lemma free_replace1 : forall (v:Type) (e:Eq v) (t:T v) (x y:v), 
     ~In y (var t)    -> 
     ~In x (free e t) -> 
@@ -79,8 +80,11 @@ Lemma free_replace1 : forall (v:Type) (e:Eq v) (t:T v) (x y:v),
 Proof.
     intros v e t x y Hy Hx. 
     rewrite (free_inj v v e e).
-    -
+    - rewrite <- map_id. apply coincide_map. unfold coincide.
+      intros u H. rewrite replace_not_x.
+        + reflexivity.
+        + intros E. subst. apply Hx, H.
+    - apply replace_inj. assumption.
+Qed.
 
-Show.
-*)
 

@@ -3,7 +3,9 @@ Import ListNotations.
 
 Require Import Eq.
 Require Import Remove.
+Require Import Replace.
 Require Import Include.
+Require Import Coincide.
 Require Import Injective.
 
 Require Import Fol.P.
@@ -74,6 +76,20 @@ Proof.
             { apply incl_tl, free_var. }
         + assumption.
         + apply injective_on_cons with x. assumption.
+Qed.
+
+Lemma free_replace1 : forall (v:Type) (e:Eq v) (p:P v) (x y:v), 
+    ~In y (var p)    -> 
+    ~In x (free e p) -> 
+    free e (fmap (replace e x y) p) = free e p.
+Proof.
+    intros v e p x y Hy Hx. 
+    rewrite (free_inj v v e e).
+    - rewrite <- map_id. apply coincide_map. unfold coincide.
+      intros u H. rewrite replace_not_x.
+        + reflexivity.
+        + intros E. subst. apply Hx, H.
+    - apply replace_inj. assumption.
 Qed.
 
 

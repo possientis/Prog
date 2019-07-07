@@ -8,6 +8,7 @@ import Test.Permute
 import Test.Replace
 import Test.Include
 import Test.Remove
+import Test.Coincide
 import Test.Injective
 
 specHask :: Spec
@@ -17,4 +18,5 @@ specHask = sequence_
     , specInclude
     , specRemove
     , specInjective
+    , specCoincide
     ]

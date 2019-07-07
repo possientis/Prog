@@ -159,6 +159,7 @@ Lam/Free.vo :		Lam/Free.v \
 					Remove.vo \
 					Replace.vo \
 					Include.vo \
+					Coincide.vo \
 					Injective.vo \
 					Lam/T.vo \
 					Lam/Variable.vo
@@ -169,6 +170,7 @@ Fol/Free.vo :		Fol/Free.v \
 					Remove.vo \
 					Replace.vo \
 					Include.vo \
+					Coincide.vo \
 					Injective.vo \
 					Fol/P.vo \
 					Fol/Variable.vo

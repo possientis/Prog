@@ -8,6 +8,7 @@ import Test.QuickCheck
 
 import Include
 import Injective
+import Replace
 import Variable (Var)
 
 import Fol.P
@@ -22,6 +23,7 @@ specsFree :: [Spec]
 specsFree  = [ testFreeFmap
              , testFreeVar
              , testFreeInj
+             , testFreeReplace1
              ]
 
 
@@ -37,6 +39,10 @@ testFreeInj :: Spec
 testFreeInj = it "Checked free variables injective property" $ 
     property $ propFreeInj
 
+testFreeReplace1 :: Spec
+testFreeReplace1 = it "Checked free first replace property" $ 
+    property $ propFreeReplace1
+
 propFreeFmap :: (Var -> Var) -> P Var -> Bool
 propFreeFmap f p = incl (free (fmap f p)) (map f (free p))
 
@@ -47,3 +53,6 @@ propFreeInj :: (Var -> Var) -> P Var -> Bool
 propFreeInj f p = (not $ injective_on (var p) f) || 
     free (fmap f p) == map f (free p)
 
+propFreeReplace1 :: P Var -> Var -> Var -> Bool
+propFreeReplace1 p x y = y `elem` var p || x `elem` free p ||
+    free (fmap (y <-: x) p) == free p
