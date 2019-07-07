@@ -73,9 +73,38 @@ bst-insert {l} {u} d (bst-node e tl tr) | right p | left q | left  r =
       (max-lub r (≤-refl e))
       (bst-insert d tl))
     tr
-bst-insert {l} {u} d (bst-node e tl tr) | right p | left q | right r = {!!}
-bst-insert {l} {u} d (bst-node e tl tr) | right p | right q = {!!}
-bst-insert {l} {u} d (bst-cast p q t)    = {!!}
+bst-insert {l} {u} d (bst-node e tl tr) | right p | left q | right r =
+  bst-node e
+    tl
+    (bst-cast
+      (min-glb r (≤-refl e))
+      (max-lub q (≤-refl u))
+      (bst-insert d tr))
+bst-insert {l} {u} d (bst-node e tl tr) | right p | right q =
+  bst-node e tl (bst-node d (bst-cast (≤-refl e) q tr) (bst-leaf (≤-refl d)))
+bst-insert {l} {u} d (bst-cast pl pu t) with ≤-total d l
+bst-insert {l} {u} d (bst-cast pl pu t) | left  p with ≤-total d u 
+bst-insert {l} {u} d (bst-cast pl pu t) | left p | left  q = 
+  bst-cast
+    (min-glb (≤-refl d) (≤-trans p pl))
+    (max-lub q pu)
+    (bst-insert d t)
+bst-insert {l} {u} d (bst-cast pl pu t) | left p | right q = 
+  bst-cast
+    (min-glb (≤-refl d) (≤-trans p pl))
+    (max-lub (≤-refl d) (≤-trans pu q))
+    (bst-insert d t)
+bst-insert {l} {u} d (bst-cast pl pu t) | right p with ≤-total d u 
+bst-insert {l} {u} d (bst-cast pl pu t) | right p | left  q =
+  bst-cast
+    (min-glb p pl)
+    (max-lub q pu)
+    (bst-insert d t)
+bst-insert {l} {u} d (bst-cast pl pu t) | right p | right q =
+  bst-cast
+    (min-glb p pl)
+    (max-lub (≤-refl d) (≤-trans pu q))
+    (bst-insert d t)
 
 
 
