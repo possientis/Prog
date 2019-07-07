@@ -2,6 +2,7 @@ Require Import List.
 
 Require Import Eq.
 Require Import Identity.
+Require Import Injective.
 Require Import Coincide.
 Require Import Composition.
 Require Import Extensionality. 
@@ -76,4 +77,22 @@ Proof.
           + assumption.
 Qed.
 
+Lemma replace_inj : forall (v:Type) (e:Eq v) (x y:v) (ys:list v),
+    ~In y ys -> injective_on ys (replace e x y).
+Proof.
+    intros v e x y ys Hy s t Hs Ht H.
+    destruct (e s x) as [Hsx|Hsx], (e t x) as [Htx|Htx]; subst.
+    - reflexivity.
+    - rewrite replace_x in H. 
+      rewrite replace_not_x in H.
+        + subst. exfalso. apply Hy, Ht.
+        + assumption.
+    - rewrite replace_x in H. 
+      rewrite replace_not_x in H.
+        + subst. exfalso. apply Hy, Hs.
+        + assumption.
+    - rewrite replace_not_x in H.
+        + rewrite replace_not_x in H; assumption.
+        + assumption.
+Qed.
 

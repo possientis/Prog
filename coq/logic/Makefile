@@ -55,6 +55,7 @@ Relation.vo : 		Relation.v
 Replace.vo : 		Replace.v \
 					Eq.vo \
 					Identity.vo \
+					Injective.vo \
 					Coincide.vo \
 					Composition.vo \
 					Extensionality.vo
@@ -156,6 +157,7 @@ Fol/Variable.vo :	Fol/Variable.v \
 Lam/Free.vo :		Lam/Free.v \
 					Eq.vo \
 					Remove.vo \
+					Replace.vo \
 					Include.vo \
 					Injective.vo \
 					Lam/T.vo \
@@ -165,6 +167,7 @@ Lam/Free.vo :		Lam/Free.v \
 Fol/Free.vo :		Fol/Free.v \
 					Eq.vo \
 					Remove.vo \
+					Replace.vo \
 					Include.vo \
 					Injective.vo \
 					Fol/P.vo \
