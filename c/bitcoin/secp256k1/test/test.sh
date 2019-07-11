@@ -7,12 +7,12 @@ cd ${HOME}
 
 echo
 echo "testing main secp256k1 library..."
-bash run.sh main 
+bash run.sh main
 echo
 
 echo
 echo "testing cloned secp256k1 library..."
-#bash run.sh clone  # this is broken
+# bash run.sh clone # broken
 echo
 
 cd ${DIR}

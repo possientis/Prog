@@ -5,10 +5,10 @@ if [ -z "$1" ]; then
 fi
 
 if [ "$1" == "main" ]; then
-  LDFLAGS=""
-  CPPFLAGS=""
+  LDFLAGS="-L/home/john/Libs/secp256k1/.libs"
+  CPPFLAGS="-I/home/john/Libs/secp256k1/include"
   CLONE=0
-  LD_LIBRARY_PATH=""
+  LD_LIBRARY_PATH="/home/john/Libs/secp256k1/.libs"
 elif [ "$1" == "clone" ]; then
   LDFLAGS="-L/home/john/Prog/c/bitcoin/secp256k1/clone/.libs"
   CPPFLAGS="-I/home/john/Prog/c/bitcoin/secp256k1/clone/include"
