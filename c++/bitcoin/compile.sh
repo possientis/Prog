@@ -1,5 +1,5 @@
 #!/bin/sh
 
-g++ -std=c++14 "$@" $(pkg-config --libs libbitcoin) 
+g++ -L/home/john/Libs/secp256k1/.libs -std=c++14 "$@" $(pkg-config --libs libbitcoin) 
 
 
