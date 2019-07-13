@@ -2,6 +2,7 @@ Require Import List.
 Import ListNotations.
 
 Require Import Eq.
+Require Import Map.
 Require Import Remove.
 Require Import Replace.
 Require Import Include.
@@ -86,5 +87,42 @@ Proof.
         + intros E. subst. apply Hx, H.
     - apply replace_inj. assumption.
 Qed.
+
+(*
+Lemma free_replace2 : forall (v:Type) (e:Eq v) (t:T v) (x y:v),
+    ~In y (var t)    ->
+     In x (free e t) -> 
+     forall (z:v), 
+        In z (free e (fmap (replace e x y) t)) <-> 
+        (z = y) \/ (In z (free e t) /\ (z <> x)). 
+Proof.
+    intros v e t x y Hy Hx z. rewrite (free_inj v v e e). split.
+    - intros H. destruct (e z y) as [Hzy|Hzy]. 
+        + left. assumption.
+        + right. apply mapIn in H. destruct H as [u [H1 H2]]. split.
+            { destruct (e u x) as [Hux|Hux].
+                { rewrite Hux, replace_x in H2. exfalso.
+                  apply Hzy. assumption.
+                }
+                { rewrite replace_not_x in H2.
+                    { rewrite H2. assumption. }
+                    { assumption. }
+                }
+            }
+            { intros Hzx. rewrite Hzx in H2.
+              destruct (e u x) as [Hux|Hux].
+                { rewrite Hux, replace_x, <- Hzx in H2.
+                  apply Hzy. assumption.
+                }
+                { rewrite replace_not_x in H2.
+                    { apply Hux. symmetry. assumption. }
+                    { assumption. }
+                }
+            }
+    -
+
+Show.
+*)
+
 
 

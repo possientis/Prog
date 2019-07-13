@@ -156,6 +156,7 @@ Fol/Variable.vo :	Fol/Variable.v \
 
 Lam/Free.vo :		Lam/Free.v \
 					Eq.vo \
+					Map.vo \
 					Remove.vo \
 					Replace.vo \
 					Include.vo \
@@ -167,6 +168,7 @@ Lam/Free.vo :		Lam/Free.v \
 
 Fol/Free.vo :		Fol/Free.v \
 					Eq.vo \
+					Map.vo \
 					Remove.vo \
 					Replace.vo \
 					Include.vo \

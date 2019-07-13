@@ -1,1 +1,3 @@
-prop42_x_in_free
+Lam/Free : free_replace2
+Fol/Free : free_replace2
+Hask     : free_replace2
