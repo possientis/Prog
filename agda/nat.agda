@@ -1,6 +1,6 @@
 module nat where
 
-open import id
+open import id    hiding (_+_)
 open import bool
 open import void
 open import relations
@@ -14,6 +14,9 @@ data ℕ : Set where
 _+_ : ℕ → ℕ → ℕ
 zero   + y = y
 succ x + y = succ (x + y)
+
+succ-not-0 : (n : ℕ) → ¬ (succ n ≡ 0)
+succ-not-0 n ()
 
 +-n+O : (n : ℕ)→ n + 0 ≡ n
 +-n+O zero     = refl 0
@@ -105,13 +108,6 @@ is-even zero = tt
 is-even (succ n) = is-odd n
 is-odd zero = ff
 is-odd (succ n) = is-even n
-
-even-not-odd : (n : ℕ) → is-even n ≡ ¬(is-odd n)
-even-not-odd zero = refl tt
-even-not-odd (succ n) = ≡-sym
-  (≡-trans
-    (ap ¬_ (even-not-odd n))
-    (¬-involutive (is-odd n))) 
 
 data _≤_ : ℕ → ℕ → Set where
   le-n : (n : ℕ)   → n ≤ n
