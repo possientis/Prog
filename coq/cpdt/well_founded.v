@@ -187,3 +187,34 @@ Proof.
           unfold lengthOrder; simpl; unfold lt;
           apply le_n_S, le_n_S; assumption.
 Qed.
+
+(*
+Check Fix.
+Fix : forall (A : Type) (R : A -> A -> Prop),
+    well_founded R ->
+    forall P : A -> Type, (forall x : A, (forall y : A, R y x -> P y) -> P x) ->
+    forall x : A, P x
+*)
+
+
+(*
+Definition mergeSort (a:Type) (le:a -> a -> bool) : list a -> list a.
+    refine (Fix (@lengthOrder_wf a) (fun _ => list a)
+    (fun (xs:list a) =>
+       fun (mergeSort : forall (ys:list a), lengthOrder ys xs -> list a) =>
+            match xs with
+            | nil       => nil
+            | x :: ys   =>
+                match ys with
+                | nil       => x :: nil
+                | y :: zs   => 
+                    match (split zs) with
+                    | (l1, l2)  => merge le (mergeSort (x :: l1) _) (mergeSort (y :: l2) _) 
+                    end
+                end
+            end) 
+
+).
+
+Show.
+*)
