@@ -1,4 +1,5 @@
 open import id
+open import sum
 open import relations
 
 module min-max {ℓ ℓ'} {a : Set ℓ}

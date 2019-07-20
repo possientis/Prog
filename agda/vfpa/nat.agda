@@ -1,6 +1,6 @@
 module nat where
 
-open import id    hiding (_+_)
+open import id
 open import bool
 open import void
 open import relations

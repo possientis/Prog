@@ -4,6 +4,7 @@ open import Agda.Primitive
 
 open import id
 open import void
+open import sum
 
 reflexive : Set (ℓ ⊔ ℓ')
 reflexive = ∀ (x : a) → x ≤ x

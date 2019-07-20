@@ -1,9 +1,10 @@
 module list where
 
+open import id
 open import nat
 open import bool
+open import void
 open import maybe
-open import id
 
 data 𝕃 {ℓ} (a : Set ℓ) : Set ℓ where
   []  : 𝕃 a
@@ -31,7 +32,7 @@ filter p (x ∷ xs) = let ys = filter p xs in if p x then x ∷ ys else ys
 
 
 remove : ∀ {ℓ} {a : Set ℓ} (eq : a → a → 𝔹) (x : a) → 𝕃 a → 𝕃 a
-remove eq a xs = filter (λ x → ¬ eq a x) xs
+remove eq a xs = filter (λ x → not (eq a x)) xs
 
 nth : ∀ {ℓ} {a : Set ℓ} → ℕ → 𝕃 a → maybe a
 nth _ []              = nothing

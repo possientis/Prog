@@ -23,6 +23,10 @@ _||_ : 𝔹 → 𝔹 → 𝔹
 tt || y = tt
 ff || y = y
 
+not : 𝔹 → 𝔹
+not tt = ff
+not ff = tt
+
 if_then_else_ : ∀ {ℓ} {a : Set ℓ} → 𝔹 → a → a → a
 if tt then x else y = x
 if ff then x else y = y
