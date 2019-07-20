@@ -24,6 +24,7 @@ specsFree  = [ testFreeFmap
              , testFreeVar
              , testFreeInj
              , testFreeReplace1
+             , testFreeReplace2
              ]
 
 
@@ -43,6 +44,10 @@ testFreeReplace1 :: Spec
 testFreeReplace1 = it "Checked free first replace property" $ 
     property $ propFreeReplace1
 
+testFreeReplace2 :: Spec
+testFreeReplace2 = it "Checked free second replace property" $ 
+    property $ propFreeReplace2
+
 propFreeFmap :: (Var -> Var) -> P Var -> Bool
 propFreeFmap f p = incl (free (fmap f p)) (map f (free p))
 
@@ -56,3 +61,7 @@ propFreeInj f p = (not $ injective_on (var p) f) ||
 propFreeReplace1 :: P Var -> Var -> Var -> Bool
 propFreeReplace1 p x y = y `elem` var p || x `elem` free p ||
     free (fmap (y <-: x) p) == free p
+
+propFreeReplace2 :: P Var -> Var -> Var -> Var -> Bool
+propFreeReplace2 p x y z = y `elem` var p || (not $ x `elem` free p) ||
+    (z `elem` free (fmap (y <-: x) p)) == (z == y || (z `elem` free p && z /= x))

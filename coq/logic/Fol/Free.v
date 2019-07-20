@@ -2,6 +2,7 @@ Require Import List.
 Import ListNotations.
 
 Require Import Eq.
+Require Import Map.
 Require Import Remove.
 Require Import Replace.
 Require Import Include.
@@ -89,6 +90,49 @@ Proof.
       intros u H. rewrite replace_not_x.
         + reflexivity.
         + intros E. subst. apply Hx, H.
+    - apply replace_inj. assumption.
+Qed.
+
+Lemma free_replace2 : forall (v:Type) (e:Eq v) (p:P v) (x y:v),
+    ~In y (var p)    ->
+     In x (free e p) -> 
+     forall (z:v), 
+        In z (free e (fmap (replace e x y) p)) <-> 
+        (z = y) \/ (In z (free e p) /\ (z <> x)). 
+Proof.
+    intros v e p x y Hy Hx z. rewrite (free_inj v v e e). split.
+    - intros H. destruct (e z y) as [Hzy|Hzy]. 
+        + left. assumption.
+        + right. apply mapIn in H. destruct H as [u [H1 H2]]. split.
+            { destruct (e u x) as [Hux|Hux].
+                { rewrite Hux, replace_x in H2. exfalso.
+                  apply Hzy. assumption.
+                }
+                { rewrite replace_not_x in H2.
+                    { rewrite H2. assumption. }
+                    { assumption. }
+                }
+            }
+            { intros Hzx. rewrite Hzx in H2.
+              destruct (e u x) as [Hux|Hux].
+                { rewrite Hux, replace_x, <- Hzx in H2.
+                  apply Hzy. assumption.
+                }
+                { rewrite replace_not_x in H2.
+                    { apply Hux. symmetry. assumption. }
+                    { assumption. }
+                }
+            }
+    - intros [H|[H1 H2]]; apply mapIn.
+        + exists x. split.
+            { assumption. }
+            { rewrite replace_x. assumption. }
+        + exists z. split.
+            { assumption. }
+            { rewrite replace_not_x.
+                { reflexivity. }
+                { assumption. }
+            }
     - apply replace_inj. assumption.
 Qed.
 

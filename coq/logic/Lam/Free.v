@@ -88,7 +88,7 @@ Proof.
     - apply replace_inj. assumption.
 Qed.
 
-(*
+(* We lack set theoretic notations to express this result nicely                *)
 Lemma free_replace2 : forall (v:Type) (e:Eq v) (t:T v) (x y:v),
     ~In y (var t)    ->
      In x (free e t) -> 
@@ -119,10 +119,19 @@ Proof.
                     { assumption. }
                 }
             }
-    -
+    - intros [H|[H1 H2]]; apply mapIn.
+        + exists x. split.
+            { assumption. }
+            { rewrite replace_x. assumption. }
+        + exists z. split.
+            { assumption. }
+            { rewrite replace_not_x.
+                { reflexivity. }
+                { assumption. }
+            }
+    - apply replace_inj. assumption.
+Qed.
 
-Show.
-*)
 
 
 
