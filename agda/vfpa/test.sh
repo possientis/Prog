@@ -5,6 +5,8 @@ set -e
 DIR=`pwd`
 HOME1=/home/john/Prog/agda/vfpa  # changing 'HOME' is a bad idea
 cd ${HOME1}
+echo
+echo "testing vfpa..."
 
 agda void.agda
 agda maybe.agda
@@ -20,6 +22,7 @@ agda min-max.agda
 agda list.agda
 agda vector.agda
 agda bst.agda
+agda sigma.agda
 
 ./clean.sh
 
