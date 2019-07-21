@@ -13,6 +13,9 @@ agda bool.agda
 agda sum.agda
 agda relations.agda
 agda nat.agda
+agda square.agda
+agda rewrite-test.agda
+agda with-abstraction.agda
 agda min-max.agda
 agda list.agda
 agda vector.agda

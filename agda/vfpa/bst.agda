@@ -1,4 +1,5 @@
 open import id
+open import sum
 open import relations
 
 module bst {ℓ ℓ'} {a : Set ℓ}
