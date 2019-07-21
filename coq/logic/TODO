@@ -1,1 +1,5 @@
-prop 45
+remove_charac
+Hask: remove_charac
+Lam: bnd_free
+Fol: bnd_free
+Hask: bnd_free

@@ -141,3 +141,23 @@ Proof.
         + apply incl_cons2. assumption.
 Qed.
 
+(*
+Lemma remove_charac : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
+    forall (z:v), In z (remove e x xs) <-> In z xs /\ x <> z.
+Proof.
+    intros v e x. induction xs as [|y ys IH]; simpl; intros z.
+    - split; intros H.
+        + exfalso. assumption.
+        + destruct H as [H _]. assumption.
+    - split; intros H.
+        + destruct (e x y) as [E|E].
+            { subst. apply IH in H. split.
+                { right. destruct H as [H _]. assumption. }
+                { destruct H as [_ H]. assumption. }
+            }
+            {
+
+Show. 
+*)
+
+
