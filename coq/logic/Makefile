@@ -23,7 +23,9 @@ all:	   			Extensionality.vo \
 					Lam/Variable.vo \
 					Fol/Variable.vo \
 					Lam/Free.vo \
-					Fol/Free.vo
+					Fol/Free.vo \
+					Lam/Bound.vo \
+					Fol/Bound.vo
 
 Extensionality.vo : Extensionality.v
 	coqc Extensionality.v
@@ -161,9 +163,11 @@ Lam/Free.vo :		Lam/Free.v \
 					Replace.vo \
 					Include.vo \
 					Coincide.vo \
+					Relation.vo \
 					Injective.vo \
 					Lam/T.vo \
-					Lam/Variable.vo
+					Lam/Variable.vo \
+					Lam/Congruence.vo
 	coqc Lam/Free.v -R Lam Lam
 
 Fol/Free.vo :		Fol/Free.v \
@@ -173,9 +177,17 @@ Fol/Free.vo :		Fol/Free.v \
 					Replace.vo \
 					Include.vo \
 					Coincide.vo \
+					Relation.vo \
 					Injective.vo \
 					Fol/P.vo \
-					Fol/Variable.vo
+					Fol/Variable.vo \
+					Fol/Congruence.vo
 	coqc Fol/Free.v -R Fol Fol
 
+Lam/Bound.vo :		Lam/Bound.v \
+					Lam/T.vo
+	coqc Lam/Bound.v -R Lam Lam
 
+Fol/Bound.vo :		Fol/Bound.v \
+					Fol/P.vo
+	coqc Fol/Bound.v -R Fol Fol

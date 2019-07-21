@@ -7,10 +7,12 @@ Require Import Remove.
 Require Import Replace.
 Require Import Include.
 Require Import Coincide.
+Require Import Relation.
 Require Import Injective.
 
 Require Import Fol.P.
 Require Import Fol.Variable.
+Require Import Fol.Congruence.
 
 (* Returns the list of free variables (with possible duplication) in a term     *)
 (* When facing a forall quantification, we need to be able to remove a variable *)
@@ -134,6 +136,21 @@ Proof.
                 { assumption. }
             }
     - apply replace_inj. assumption.
+Qed.
+
+Lemma free_congruence : forall (v:Type) (e:Eq v), 
+    congruence (fun (p q:P v) => free e p = free e q).
+Proof.
+    intros v e. split.
+    - split.
+        + intros p. reflexivity.
+        + split.
+            { intros p q H. symmetry. assumption. }
+            { intros p q r Hpq Hqr. 
+              apply eq_trans with (free e q); assumption. }
+    - split.
+        + intros p1 p2 q1 q2 H1 H2. simpl. rewrite H1, H2. reflexivity.
+        + intros x p1 q1 H1. simpl. rewrite H1. reflexivity.
 Qed.
 
 

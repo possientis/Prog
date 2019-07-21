@@ -7,10 +7,12 @@ Require Import Remove.
 Require Import Replace.
 Require Import Include.
 Require Import Coincide.
+Require Import Relation.
 Require Import Injective.
 
 Require Import Lam.T.
 Require Import Lam.Variable.
+Require Import Lam.Congruence.
 
 (* Returns the list of free variables (with possible duplication) in a term     *)
 (* When facing a lambda abstraction, we need to be able to remove a variable    *)
@@ -132,6 +134,19 @@ Proof.
     - apply replace_inj. assumption.
 Qed.
 
-
+Lemma free_congruence : forall (v:Type) (e:Eq v), 
+    congruence (fun (s t:T v) => free e s = free e t).
+Proof.
+    intros v e. split.
+    - split.
+        + intros t. reflexivity.
+        + split.
+            { intros s t H. symmetry. assumption. }
+            { intros r s t Hrs Hst. 
+              apply eq_trans with (free e s); assumption. }
+    - split.
+        + intros s1 s2 t1 t2 H1 H2. simpl. rewrite H1, H2. reflexivity.
+        + intros x s1 t1 H1. simpl. rewrite H1. reflexivity.
+Qed.
 
 
