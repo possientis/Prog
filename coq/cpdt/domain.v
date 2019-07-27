@@ -1,3 +1,6 @@
+Require Import Nat.
+Require Import Max.
+
 Definition monotone (a:Type) (f:nat -> option a) : Prop :=
     forall (n:nat) (v:a), f n = Some v -> 
     forall (m:nat), n <= m -> f m = Some v.
@@ -78,9 +81,45 @@ Arguments bind {a} {b} _ _.
 
 Notation "k >>= g" := (bind k g) (at level 50).
 
+
+Lemma run_bind : forall (a b:Type) (k:Computation a) (h:a -> Computation b),
+    forall (x:a) (y:b), run k x -> run (h x) y -> run (k >>= h) y.
+Proof.
+    intros a b [f p] h x y [n Hx] [m Hy].
+    destruct (h x) as [g q] eqn:H.
+    unfold runTo in Hx. simpl in Hx.
+    unfold runTo in Hy. simpl in Hy.
+    unfold monotone in p. unfold monotone in q.
+    unfold run. unfold runTo.
+    exists (max n m). unfold bind. simpl.
+    assert (f (max n m) = Some x) as E. 
+        { apply p with n. assumption. apply n_le_max. }
+    rewrite E, H. simpl. apply q with m. 
+        - assumption.
+        - apply m_le_max.
+Qed.
+
+Definition ceq (a:Type) (k1 k2:Computation a) : Prop :=
+    forall (n:nat), proj1_sig k1 n = proj1_sig k2 n.
+
+Arguments ceq {a} _ _.
+
+Notation "x == y" := (ceq x y) (at level 50).
+
+Lemma ceq_refl : forall (a:Type) (x:Computation a), x == x.
+Proof.
+    intros a [f p] n. simpl. reflexivity.
+Qed.
+
+Lemma ceq_sym  : forall (a:Type) (x y:Computation a), 
+    x == y -> y == x.
+Proof.
+    intros a [f p] [g q] H n. simpl. symmetry. apply H.
+Qed.
+
 (*
-Lemma run_bind : forall (a b:Type) (k:Computation a) (g:a -> Computation b),
-    forall (x:a) (y:b), run k x -> run (g x) y -> run (k >>= g) y.
+Lemma ceq_trans : forall (a:Type) (x y z:Computation a),
+    x == y -> y == z -> x == z.
 Proof.
 
 

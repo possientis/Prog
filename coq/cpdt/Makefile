@@ -17,6 +17,7 @@ all:	Utils/nat.vo \
 		type_check.vo \
 		option.vo \
 		well_founded.vo \
+		Max.vo \
 		domain.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
@@ -79,7 +80,10 @@ option.vo : option.v
 well_founded.vo : well_founded.v stream.vo
 	coqc well_founded.v
 
-domain.vo : domain.v
+Max.vo : Max.v
+	coqc Max.v
+
+domain.vo : domain.v Max.vo
 	coqc domain.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
