@@ -3,7 +3,7 @@ open import sum
 open import relations
 
 module bst {ℓ ℓ'} {a : Set ℓ}
-  (_≤_ : a → a → Set ℓ')
+  (_≤_     : a → a → Set ℓ')
   (≤-refl  : reflexive _≤_)
   (≤-anti  : antisymmetric _≤_)
   (≤-trans : transitive _≤_)
