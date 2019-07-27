@@ -114,6 +114,7 @@ Lam/Subformula.vo :	Lam/Subformula.v \
 					Max.vo \
 					Lam/T.vo \
 					Lam/Order.vo \
+					Lam/Bound.vo \
 					Lam/Variable.vo
 	coqc Lam/Subformula.v -R Lam Lam
 
@@ -123,6 +124,7 @@ Fol/Subformula.vo : Fol/Subformula.v \
 					Max.vo \
 					Fol/P.vo \
 					Fol/Order.vo \
+					Fol/Bound.vo \
 					Fol/Variable.vo
 	coqc Fol/Subformula.v -R Fol Fol
 
@@ -188,12 +190,16 @@ Lam/Bound.vo :		Lam/Bound.v \
 					Eq.vo \
 					Remove.vo \
 					Include.vo \
-					Lam/T.vo
+					Lam/T.vo \
+					Lam/Free.vo \
+					Lam/Variable.vo
 	coqc Lam/Bound.v -R Lam Lam
 
 Fol/Bound.vo :		Fol/Bound.v \
 					Eq.vo \
 					Remove.vo \
 					Include.vo \
-					Fol/P.vo
+					Fol/P.vo \
+					Fol/Free.vo \
+					Fol/Variable.vo
 	coqc Fol/Bound.v -R Fol Fol

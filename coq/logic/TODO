@@ -1,4 +1,3 @@
-Hask: bnd_var
-Lam: bnd_free
-Fol: bnd_free
-Hask: bnd_free
+Fol/Sub_bnd
+Hask/Sub_bnd
+prop 47

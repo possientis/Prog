@@ -16,7 +16,6 @@ Fixpoint bnd (v:Type) (t:T v) : list v :=
     | Lam x t1  => x :: bnd v t1
     end.
 
-
 Arguments bnd {v} _.
 
 Lemma bnd_var : forall (v:Type) (t:T v), incl (bnd t) (var t).
@@ -28,8 +27,6 @@ Proof.
     - apply incl_cons2. assumption.
 Qed.
 
-
-(*
 Lemma bnd_free : forall (v:Type) (e:Eq v) (t:T v) (z:v),
     In z (var t) <-> In z (free e t) \/ In z (bnd t).
 Proof.
@@ -54,7 +51,9 @@ Proof.
                 }
                 { right. right. assumption. } 
             } 
-    -
+    - intros [H|H].
+        + apply (free_var v e). assumption.
+        + apply bnd_var. assumption.
+Qed.
 
-Show.
-*)
+

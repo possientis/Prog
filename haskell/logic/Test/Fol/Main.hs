@@ -5,9 +5,10 @@ module  Test.Fol.Main
 import Test.Hspec
 
 import Test.Fol.P
+import Test.Fol.Free
+import Test.Fol.Bound
 import Test.Fol.Variable
 import Test.Fol.Subformula
-import Test.Fol.Free
 
 specFol :: Spec
 specFol = sequence_
@@ -15,4 +16,5 @@ specFol = sequence_
     , specSubformula
     , specVariable
     , specFree
+    , specBound
     ]
