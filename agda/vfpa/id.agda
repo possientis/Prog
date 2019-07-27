@@ -28,4 +28,7 @@ inspect x = x with≡ (refl x)
 
 {-# BUILTIN EQUALITY _≡_ #-}
 
+cast : ∀ {ℓ} {a b : Set ℓ} → (a ≡ b) → a → b
+cast (refl b) x = x
+
 

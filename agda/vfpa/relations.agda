@@ -16,8 +16,8 @@ antisymmetric : Set (ℓ ⊔ ℓ')
 antisymmetric = ∀ {x y : a} → x ≤ y → y ≤ x → x ≡ y
 
 total : Set (ℓ ⊔ ℓ')
-total = ∀ (x y : a) → (x ≤ y) + (y ≤ x)
+total = ∀ (x y : a) → (x ≤ y) ∨ (y ≤ x)
 
 decidable : Set (ℓ ⊔ ℓ')
-decidable = ∀ (x y : a) → (x ≤ y) + ¬(x ≤ y)
+decidable = ∀ (x y : a) → (x ≤ y) ∨ ¬(x ≤ y)
 
