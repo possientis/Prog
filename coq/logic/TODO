@@ -1,5 +1,4 @@
-remove_charac
-Hask: remove_charac
+Hask: bnd_var
 Lam: bnd_free
 Fol: bnd_free
 Hask: bnd_free

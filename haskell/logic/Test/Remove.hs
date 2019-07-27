@@ -23,6 +23,7 @@ specsRemove  = [ testRemoveStill
                , testRemoveInj
                , testRemoveInj2
                , testRemoveIncl
+               , testRemoveCharac
                ]
 
 
@@ -54,6 +55,10 @@ testRemoveIncl :: Spec
 testRemoveIncl = it "Checked remove inclusion property" $ 
     property $ propRemoveIncl
 
+testRemoveCharac :: Spec
+testRemoveCharac = it "Checked remove characterization property" $ 
+    property $ propRemoveCharac
+
 propRemoveStill :: Var -> Var -> [Var] -> Bool
 propRemoveStill x y xs = x == y || y `notElem` xs || y `elem` (remove x xs) 
 
@@ -79,4 +84,5 @@ propRemoveInj2 f x xs = (not $ injective_on (x:xs) f) ||
 propRemoveIncl :: Var -> [Var] -> Bool
 propRemoveIncl x xs = incl (remove x xs) xs
 
-
+propRemoveCharac :: Var -> [Var] -> Var -> Bool
+propRemoveCharac x xs z = (z `elem` remove x xs) == ((z `elem` xs) && (x /= z))

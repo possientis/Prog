@@ -185,9 +185,15 @@ Fol/Free.vo :		Fol/Free.v \
 	coqc Fol/Free.v -R Fol Fol
 
 Lam/Bound.vo :		Lam/Bound.v \
+					Eq.vo \
+					Remove.vo \
+					Include.vo \
 					Lam/T.vo
 	coqc Lam/Bound.v -R Lam Lam
 
 Fol/Bound.vo :		Fol/Bound.v \
+					Eq.vo \
+					Remove.vo \
+					Include.vo \
 					Fol/P.vo
 	coqc Fol/Bound.v -R Fol Fol

@@ -2,6 +2,8 @@ Require Import List.
 Import ListNotations.
 
 Require Import Eq.
+Require Import Remove.
+Require Import Include.
 
 Require Import Lam.T.
 Require Import Lam.Free.
@@ -16,6 +18,16 @@ Fixpoint bnd (v:Type) (t:T v) : list v :=
 
 
 Arguments bnd {v} _.
+
+Lemma bnd_var : forall (v:Type) (t:T v), incl (bnd t) (var t).
+Proof.
+    intros v.
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl.
+    - intros z H. inversion H.
+    - apply incl_app2; assumption.
+    - apply incl_cons2. assumption.
+Qed.
+
 
 (*
 Lemma bnd_free : forall (v:Type) (e:Eq v) (t:T v) (z:v),
@@ -38,9 +50,11 @@ Proof.
             { apply IH1 in H. destruct H as [H|H].
                 { destruct (e x z) as [E|E].
                     { right. simpl. left. assumption. }
-                    { left.  simpl.
-   
-
+                    { left.  simpl. apply remove_charac. split; assumption. }
+                }
+                { right. right. assumption. } 
+            } 
+    -
 
 Show.
 *)
