@@ -79,7 +79,7 @@ Defined.
 Arguments bind {a} {b} _ _.
 
 
-Notation "k >>= g" := (bind k g) (at level 50).
+Notation "k >>= g" := (bind k g) (at level 50, left associativity).
 
 
 Lemma run_bind : forall (a b:Type) (k:Computation a) (h:a -> Computation b),
@@ -104,7 +104,7 @@ Definition ceq (a:Type) (k1 k2:Computation a) : Prop :=
 
 Arguments ceq {a} _ _.
 
-Notation "x == y" := (ceq x y) (at level 50).
+Notation "x == y" := (ceq x y) (at level 90).
 
 Lemma ceq_refl : forall (a:Type) (x:Computation a), x == x.
 Proof.
@@ -117,13 +117,32 @@ Proof.
     intros a [f p] [g q] H n. simpl. symmetry. apply H.
 Qed.
 
-(*
 Lemma ceq_trans : forall (a:Type) (x y z:Computation a),
     x == y -> y == z -> x == z.
 Proof.
+    intros a [f p] [g q] [h r] Hxy Hyz n. simpl.
+    apply eq_trans with (g n).
+    - apply Hxy.
+    - apply Hyz.
+Qed.
 
+(* Checking monad laws                                                          *)
+Lemma left_identity : forall (a b:Type) (x:a) (h:a -> Computation b),
+    (pure x) >>= h == h x.
+Proof. intros a b x h n. reflexivity. Qed.
 
-Show.
-*)
+Lemma right_identity : forall (a:Type) (k:Computation a), 
+    k >>= pure == k.
+Proof. intros a [f p] n. simpl. destruct (f n) as [v|]; reflexivity. Qed. 
+
+Lemma associativity : forall (a b c:Type), 
+    forall (k:Computation a) (f:a -> Computation b) (g:b -> Computation c),
+    k >>= f >>= g == k >>= (fun (x:a) => (f x) >>= g).
+Proof.
+    intros a b c [k p] f g n. simpl. destruct (k n) as [v|]; reflexivity.
+Qed.
+
+Definition leq (a:Type) (x y:option a) : Prop :=
+    forall (v:a), x = Some v -> y = Some v.
 
 
