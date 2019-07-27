@@ -69,4 +69,12 @@ type T13 = '(:)                 -- kind * -> [*] -> [*]
 type T14 = Int : T12            -- kind [*]
 type T15 = String : T14         -- kind [*]
 
+type T16 =  [Bool]              -- kind *
+type T17 = '[Bool]              -- kind [*]
 
+type T18 = '[ 'True ]           -- kind [Bool]
+--type T19 = '['True]           -- parse error, beware !
+
+type T20 = '(2,"tuple")         -- kind (Nat,Symbol)
+
+    
