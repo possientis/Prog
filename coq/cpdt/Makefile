@@ -1,4 +1,6 @@
 all:	Utils/nat.vo \
+		extensionality.vo \
+		irrelevance.vo \
 		untyped.vo \
 		typed.vo \
 		chapt3.vo \
@@ -25,6 +27,12 @@ all:	Utils/nat.vo \
 	
 Utils/nat.vo : Utils/nat.v
 	coqc Utils/nat.v -R Utils Utils
+
+extensionality.vo : extensionality.v
+	coqc extensionality.v
+
+irrelevance.vo : irrelevance.v
+	coqc irrelevance.v
 
 untyped.vo : untyped.v
 	coqc untyped.v
@@ -83,7 +91,7 @@ well_founded.vo : well_founded.v stream.vo
 Max.vo : Max.v
 	coqc Max.v
 
-domain.vo : domain.v Max.vo
+domain.vo : domain.v Max.vo extensionality.vo irrelevance.vo
 	coqc domain.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo

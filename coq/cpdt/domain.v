@@ -1,5 +1,8 @@
+Require Import extensionality.
+Require Import irrelevance.
 Require Import Nat.
 Require Import Max.
+
 
 Definition monotone (a:Type) (f:nat -> option a) : Prop :=
     forall (n:nat) (v:a), f n = Some v -> 
@@ -203,4 +206,57 @@ Qed.
 
 Definition cle (a:Type) (x y:Computation a) : Prop :=
     forall (n:nat), ole (proj1_sig x n) (proj1_sig y n).
+
+Arguments cle {a} _ _.
+
+
+Lemma cle_refl : forall (a:Type) (x:Computation a), cle x x.
+Proof. intros a [f p] n. apply ole_refl. Qed.
+
+(* Assuming extensionality and proof irrelevance                                *)
+Lemma cle_anti : forall (a:Type) (x y:Computation a),
+    cle x y -> cle y x -> x = y.
+Proof.
+    unfold cle. intros a [f p] [g q]. simpl. intros H1 H2.
+    assert (f = g) as H.
+        { apply extensionality. intros n. apply ole_anti.
+          - apply H1. 
+          - apply H2.
+        }
+    clear H1 H2. revert p q. subst. intros p q.
+    assert (p = q) as H. { apply irrelevance. } subst.
+    reflexivity.
+Qed.
+
+Lemma cle_trans : forall (a:Type) (x y z:Computation a), 
+    cle x y -> cle y z -> cle x z.
+Proof.
+    unfold cle. intros a [f p] [g q] [h r]. simpl. intros H1 H2 n.
+    apply ole_trans with (g n).
+        - apply H1.
+        - apply H2.
+Qed.
+
+Definition cle' (a:Type) (x y:Computation a) : Prop :=
+    forall (n:nat) (v:a), runTo x n v -> runTo y n v.
+
+Arguments cle' {a} _ _.
+ 
+Lemma cle_equivalence: forall (a:Type) (x y:Computation a),
+    cle x y <-> cle' x y.
+Proof.
+    unfold cle, cle', ole, runTo. intros a x y. split; intros H; assumption.
+Qed.
+
+
+(* partial order on arrows 'a -> Computation b'                                 *)
+
+Definition cfle (a b:Type) (f g:a -> Computation b) : Prop :=
+    forall (x:a), cle (f x) (g x).
+
+Arguments cfle {a} {b} _ _.
+
+
+
+
 
