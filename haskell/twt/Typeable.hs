@@ -1,3 +1,7 @@
+{-# LANGUAGE TypeApplications       #-}
+{-# LANGUAGE ScopedTypeVariables    #-}
+{-# LANGUAGE AllowAmbiguousTypes    #-}
+
 import Data.Proxy
 import Data.Typeable
 
@@ -17,9 +21,15 @@ x3 :: TypeRep
 x3 = typeRep (Proxy :: Proxy [Int -> Double])
 
 
+typeName :: forall a . Typeable a => String
+typeName = show . typeRep $ Proxy @a
 
 main :: IO ()
 main = do
     putStrLn $ "typeRep for Int: "                  ++ show x1
     putStrLn $ "typeRep for Double: "               ++ show x2
     putStrLn $ "typeRep for [Int -> Double]: "      ++ show x3
+    putStrLn $ typeName @Int
+    putStrLn $ typeName @Double
+    putStrLn $ typeName @[Int -> Double]
+
