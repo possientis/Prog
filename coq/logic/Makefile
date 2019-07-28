@@ -25,7 +25,9 @@ all:	   			Extensionality.vo \
 					Lam/Free.vo \
 					Fol/Free.vo \
 					Lam/Bound.vo \
-					Fol/Bound.vo
+					Fol/Bound.vo \
+					Lam/Valid.vo \
+					Fol/Valid.vo
 
 Extensionality.vo : Extensionality.v
 	coqc Extensionality.v
@@ -203,3 +205,19 @@ Fol/Bound.vo :		Fol/Bound.v \
 					Fol/Free.vo \
 					Fol/Variable.vo
 	coqc Fol/Bound.v -R Fol Fol
+
+Lam/Valid.vo :		Lam/Valid.v \
+					Eq.vo \
+					Lam/T.vo \
+					Lam/Free.vo \
+					Lam/Subformula.vo
+	coqc Lam/Valid.v -R Lam Lam
+
+Fol/Valid.vo :		Fol/Valid.v \
+					Eq.vo \
+					Fol/P.vo \
+					Fol/Free.vo \
+					Fol/Subformula.vo
+	coqc Fol/Valid.v -R Fol Fol
+
+
