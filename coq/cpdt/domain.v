@@ -142,7 +142,65 @@ Proof.
     intros a b c [k p] f g n. simpl. destruct (k n) as [v|]; reflexivity.
 Qed.
 
-Definition leq (a:Type) (x y:option a) : Prop :=
+(* parial order on 'option a'                                                   *)
+Definition ole (a:Type) (x y:option a) : Prop :=
     forall (v:a), x = Some v -> y = Some v.
 
+Arguments ole {a} _ _.
+
+Lemma ole_refl : forall (a:Type) (x:option a), ole x x.
+Proof. intros a x v H. assumption. Qed.
+
+Lemma ole_anti : forall (a:Type) (x y:option a),
+    ole x y -> ole y x -> x = y.
+Proof.
+    unfold ole. intros a x y Hxy Hyx. destruct x as [v|], y as [w|].
+        - apply Hyx. reflexivity.
+        - symmetry. apply Hxy. reflexivity.
+        - apply Hyx. reflexivity.
+        - reflexivity.
+Qed.
+
+Lemma ole_trans : forall (a:Type) (x y z:option a),
+    ole x y -> ole y z -> ole x z.
+Proof.
+    unfold ole. intros a x y z Hxy Hyz v H.
+    apply Hyz, Hxy. assumption.
+Qed.
+
+Definition ole' (a:Type) (x y:option a) : Prop :=
+    match x with
+    | None          => True
+    | Some v        =>
+        match y with
+        | None      => False
+        | Some w    => v = w
+        end
+    end.
+
+Arguments ole' {a} _ _.
+
+Lemma ole_equivalence : forall (a:Type) (x y:option a),
+    ole x y <-> ole' x y.
+Proof.
+    intros a x y. unfold ole, ole'. destruct x as [v|], y as [w|]; split.    
+    - intros H. assert (Some w = Some v) as E.
+        { apply H. reflexivity. }
+        inversion E. reflexivity.
+    - intros H1. subst. intros v H. assumption.
+    - intros H. assert (None = Some v) as E.
+        { apply H. reflexivity. }
+        inversion E.
+    - intros H1. exfalso. assumption.
+    - intros H. apply I.
+    - intros H1 v H2. inversion H2.
+    - intros H. apply I.
+    - intros H1 v H2. assumption.
+Qed.
+
+
+(* partial order on 'Computation a'                                             *)
+
+Definition cle (a:Type) (x y:Computation a) : Prop :=
+    forall (n:nat), ole (proj1_sig x n) (proj1_sig y n).
 
