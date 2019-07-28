@@ -6,6 +6,7 @@ Require Import Leq.
 Require Import Max.
 Require Import Fol.P.
 Require Import Fol.Order.
+Require Import Fol.Bound.
 Require Import Fol.Variable.
 
 (* Defines the 'list' of sub-formulas of a given formula. We do not have        *)
@@ -227,4 +228,28 @@ Proof.
     - subst. apply incl_refl.
     - apply incl_tl, IH1. assumption. 
 Qed.
+
+
+Lemma Sub_bnd : forall (v:Type) (p q:P v),
+    p <<= q -> incl (bnd p) (bnd q).
+Proof.
+    intros v p q. revert q p. 
+    induction q as [|x y|q1 IH1 q2 IH2|x q1 IH1]; intros p [H|H].
+    - subst. apply incl_refl.
+    - inversion H.
+    - subst. apply incl_refl.
+    - inversion H.
+    - subst. apply incl_refl.
+    - apply in_app_or in H. destruct H as [H|H].
+        + apply incl_tran with (bnd q1).
+            { apply IH1. assumption. }
+            { apply incl_appl, incl_refl. }
+        + apply incl_tran with (bnd q2).
+            { apply IH2. assumption. }
+            { apply incl_appr, incl_refl. }
+    - subst. apply incl_refl.
+    - apply incl_tl, IH1. assumption. 
+Qed.
+
+
 

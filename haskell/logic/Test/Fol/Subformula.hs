@@ -10,8 +10,9 @@ import Variable (Var)
 
 import Fol.P
 import Fol.Order
-import Fol.Subformula
+import Fol.Bound
 import Fol.Variable
+import Fol.Subformula
 
 specSubformula :: Spec
 specSubformula = describe "Testing properties of subformula order (<<=)..." $
@@ -25,6 +26,7 @@ specsSubformula  = [ testReflexivity
                    , testOrderMonotone
                    , testSubFmap
                    , testSubVar
+                   , testSubBound
                    ]
 
 testReflexivity :: Spec
@@ -54,6 +56,10 @@ testSubFmap = it "Checked (<<=) fmap property" $
 testSubVar :: Spec
 testSubVar = it "Checked (<<=) var inclusion property" $
     property $ propSubVar
+
+testSubBound :: Spec
+testSubBound = it "Checked (<<=) bnd inclusion property" $
+    property $ propSubBound
 
 propReflexivity :: P Var -> Bool
 propReflexivity p = p <<= p
@@ -117,4 +123,5 @@ propSubVar_real :: P Var -> Bool
 propSubVar_real q = all f (sub q) where
     f p = incl (var p) (var q)
 
-
+propSubBound :: P Var -> P Var -> Bool
+propSubBound p q = not (p <<= q) || incl (bnd p) (bnd q)

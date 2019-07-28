@@ -20,6 +20,7 @@ specBound = describe "Testing properties of bnd..." $
 specsBound :: [Spec]
 specsBound  = [ testBoundVar
               , testBoundFree
+              , testBoundFmap
               ]
 
 testBoundVar :: Spec
@@ -30,8 +31,15 @@ testBoundFree :: Spec
 testBoundFree = it "Checked all variables are free or bound" $ 
     property $ propBoundFree
 
+testBoundFmap :: Spec
+testBoundFmap = it "Checked bnd fmap property" $
+    property $ propBoundFmap
+
 propBoundVar :: P Var -> Bool
 propBoundVar p = incl (bnd p) (var p)
 
 propBoundFree :: P Var -> Var -> Bool 
 propBoundFree p z = (z `elem` var p) == ((z `elem` free p) || (z `elem` bnd p))
+
+propBoundFmap :: (Var -> Var) -> P Var -> Bool
+propBoundFmap f p = bnd (fmap f p) == map f (bnd p)

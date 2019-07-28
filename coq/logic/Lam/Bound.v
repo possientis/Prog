@@ -56,4 +56,12 @@ Proof.
         + apply bnd_var. assumption.
 Qed.
 
-
+Lemma bnd_fmap : forall (v w:Type) (f:v -> w) (t:T v),
+    bnd (fmap f t) = map f (bnd t).
+Proof.
+    intros v w f.
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl.
+    - reflexivity.
+    - rewrite map_app, IH1, IH2. reflexivity.
+    - rewrite IH1. reflexivity.
+Qed.
