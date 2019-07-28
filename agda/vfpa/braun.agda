@@ -10,6 +10,7 @@ module braun {ℓ ℓ'} {a : Set ℓ}
 open import id
 open import nat
 open import sum
+open import maybe
 
 data braun-tree : (n : ℕ) → Set ℓ where
   bt-empty    : braun-tree 0
@@ -57,10 +58,6 @@ join-correct-eq : {n : ℕ} →
   (x : a) → (tl tr : braun-tree n) →
     join (left _) x tl tr ≡ bt-node-eq x tl tr
 join-correct-eq {n} x tl tr = refl _
+ 
 
-
-join-correct-neq : {n : ℕ} →
-  (x : a) → (tl : braun-tree (succ n)) → (tr : braun-tree n) →
-    join (right _) x tl tr ≡ bt-node-neq x tl tr
-join-correct-neq {n} x tl tr = {!!}
 
