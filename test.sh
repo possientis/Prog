@@ -27,6 +27,7 @@ testing gradle
 testing c#
 testing haskell
 testing agda
+testing idris
 testing scheme
 testing python
 testing ruby
