@@ -7,6 +7,7 @@ import Test.Hspec
 import Test.Fol.P
 import Test.Fol.Free
 import Test.Fol.Bound
+import Test.Fol.Valid
 import Test.Fol.Variable
 import Test.Fol.Subformula
 
@@ -17,4 +18,5 @@ specFol = sequence_
     , specVariable
     , specFree
     , specBound
+    , specValid
     ]

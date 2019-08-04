@@ -7,6 +7,7 @@ import Test.Hspec
 import Test.Lam.T
 import Test.Lam.Free
 import Test.Lam.Bound
+import Test.Lam.Valid
 import Test.Lam.Variable
 import Test.Lam.Subformula
 
@@ -17,4 +18,5 @@ specLam = sequence_
     , specVariable
     , specFree
     , specBound
+    , specValid
     ]

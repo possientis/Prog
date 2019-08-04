@@ -1,2 +1,4 @@
-Hask/valid_sub
-prop 49
+Lam:valid_free
+Fol:valid_free
+Hask:valid_free
+prop 50

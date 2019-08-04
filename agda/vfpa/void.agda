@@ -6,3 +6,6 @@ data 𝕆 : Set where
 ¬ a = a → 𝕆
 
 infixr 70 ¬_
+
+data ⊤ : Set where
+  triv : ⊤

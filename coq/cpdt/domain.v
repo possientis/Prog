@@ -256,6 +256,52 @@ Definition cfle (a b:Type) (f g:a -> Computation b) : Prop :=
 
 Arguments cfle {a} {b} _ _.
 
+Lemma cfle_refl : forall (a b:Type) (f:a -> Computation b), cfle f f.
+Proof.
+    unfold cfle. intros a b f x. apply cle_refl.
+Qed.
+
+Lemma cfle_anti : forall (a b:Type) (f g:a -> Computation b),
+    cfle f g -> cfle g f -> f = g.
+Proof.
+    unfold cfle. intros a b f g H1 H2. apply extensionality.
+    intros x. apply cle_anti.
+        - apply H1.
+        - apply H2.
+Qed.
+
+Lemma cfle_trans : forall (a b:Type) (f g h:a -> Computation b),
+    cfle f g -> cfle g h -> cfle f h.
+Proof.
+    unfold cfle. intros a b f g h H1 H2 x.
+    apply cle_trans with (g x).
+        - apply H1.
+        - apply H2.
+Qed.
+
+Definition continuous (a b: Type)(F:(a -> Computation b)->(a -> Computation b)):=
+        forall (f g:a -> Computation b), cfle f g -> cfle (F f) (F g).
+
+Arguments continuous {a} {b} _.
+
+(*
+Definition Fix (a b:Type)(F:(a -> Computation b)->(a -> Computation b))
+    (p:continuous F) : a -> Computation b.
+    refine 
+        (fun (x:a) => 
+            exist 
+                monotone 
+                (fun  (n:nat) => _)
+                _
+        ).
+Show.
+*)
+
+
+
+
+
+
 
 
 

@@ -23,6 +23,7 @@ agda list.agda
 agda vector.agda
 agda bst.agda
 agda sigma.agda
+agda z.agda
 
 ./clean.sh
 
