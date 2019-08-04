@@ -245,8 +245,6 @@ EXEC 01;31  # Unix
 .mkd 32
 
 # Source text
-.agda 32
-.idr 32
 .asm 32
 .h 32
 .hpp 32
@@ -270,6 +268,10 @@ EXEC 01;31  # Unix
 .py 32
 .rb 32
 .hs 32
+.agda 32
+.idr 32
+.sml 32
+.v 32
 .php 32
 .htm 32
 .html 32
@@ -282,7 +284,6 @@ EXEC 01;31  # Unix
 .sass 32
 .scala 32
 .scm 32
-.v 32
 .scss 32
 .less 32
 .js 32
