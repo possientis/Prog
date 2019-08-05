@@ -23,9 +23,9 @@ Proof.
     - intros H. apply H. apply Sub_refl.
 Qed.
 
+(*
 (* We cannot follow set theoretic proof as this is a stronger result, due to    *)
 (* the order being preserved in lists. Structural induction on t                *)
-(*
 Lemma valid_free : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
     valid e e' f t <-> forall (s:T v), s <<= t -> free e' (fmap f s) = map f (free e s).
 Proof.
@@ -34,8 +34,39 @@ Proof.
         + destruct H' as [H'|H'].
             { subst. reflexivity. }
             { inversion H'. }
-        + unfold isSubFormulaOf in H'. simpl in H'.
-        
+        + destruct H' as [H'|H'].
+            { subst. simpl. rewrite map_app. rewrite IH1, IH2.
+                { reflexivity. }
+                { apply valid_sub with (App t1 t2).
+                    { assumption. }
+                    { right. apply in_or_app. right. apply Sub_refl. }
+                }
+                { apply Sub_refl. }
+                { apply valid_sub with (App t1 t2). 
+                    { assumption. }
+                    { right. apply in_or_app. left. apply Sub_refl. }
+                }
+                { apply Sub_refl. }
+            }
+            { apply in_app_or in H'. destruct H' as [H'|H'].
+                { apply IH1.
+                    { apply valid_sub with (App t1 t2).
+                        { assumption. }
+                        { right. apply in_or_app. left. apply Sub_refl. }
+                    }
+                    { assumption. }
+                }
+                { apply IH2.
+                    { apply valid_sub with (App t1 t2).
+                        { assumption. }
+                        { right. apply in_or_app. right. apply Sub_refl. }
+                    }
+                    { assumption. }
+                }
+            }
+        + destruct H' as [H'|H'].
+            { subst. simpl. rewrite IH1.
+
 
 Show.
 *)

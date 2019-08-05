@@ -34,3 +34,17 @@ g (LitBool_ b)  = LitBool b
 g (Add_ e1 e2)  = Add (g e1) (g e2)
 g (Not_ e1)     = Not (g e1)
 g (If_ b1 e1 e2)= If (g b1) (g e1) (g e2)
+
+eval :: Expr a -> a
+eval (LitInt n)     = n
+eval (LitBool b)    = b
+eval (Add e1 e2)    = eval e1 + eval e2
+eval (Not e1)       = not $ eval e1
+eval (If b1 e1 e2)  = if eval b1 then eval e1 else eval e2
+
+x1 :: Expr Int
+x1 = If (LitBool False) (LitInt 1) (Add (LitInt 5) (LitInt 13))
+
+x2 :: Expr Bool
+x2 = Not (LitBool True)
+

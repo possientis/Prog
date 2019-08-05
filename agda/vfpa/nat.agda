@@ -1,6 +1,7 @@
 module nat where
 
 open import id
+open import sum
 open import bool
 open import void
 open import relations
@@ -77,37 +78,16 @@ succ n * m = m + n * m
   (*-distribr m (n * m) p)
   (ap (λ x → m * p + x) (*-assoc n m p))
 
-_=ℕ_ : ℕ → ℕ → 𝔹
-zero =ℕ zero     = tt
-zero =ℕ succ m   = ff
-succ n =ℕ zero   = ff
-succ n =ℕ succ m = n =ℕ m
-
-=ℕ-refl : (n : ℕ) → (n =ℕ n) ≡ tt
-=ℕ-refl zero     = refl tt
-=ℕ-refl (succ n) = =ℕ-refl n
-
-=ℕ-sym : (n m : ℕ) → (n =ℕ m) ≡ tt → (m =ℕ n) ≡ tt
-=ℕ-sym zero zero p         = refl tt
-=ℕ-sym (succ n) (succ m) p = =ℕ-sym n m p
-
-=ℕ-trans : (n m p : ℕ) → (n =ℕ m ≡ tt) → (m =ℕ p ≡ tt) → (n =ℕ p ≡ tt)
-=ℕ-trans zero zero zero q_nm q_mp = refl tt
-=ℕ-trans (succ n) (succ m) (succ p) q_nm q_mp = =ℕ-trans n m p q_nm q_mp
-
-=ℕ-to-≡ : (n m : ℕ) → (n =ℕ m ≡ tt) → n ≡ m
-=ℕ-to-≡ zero zero p = refl zero
-=ℕ-to-≡ (succ n) (succ m) p = ap succ (=ℕ-to-≡ n m p)
-
-=ℕ-from-≡ : (n m : ℕ) → (n ≡ m) → (n =ℕ m ≡ tt)
-=ℕ-from-≡ n m p = ≡-trans (≡-sym (ap (λ x → n =ℕ x) p)) (=ℕ-refl n)
-
 is-even : ℕ → 𝔹
 is-odd  : ℕ → 𝔹
 is-even zero = tt
 is-even (succ n) = is-odd n
 is-odd zero = ff
 is-odd (succ n) = is-even n
+
+pred : (n : ℕ) → ℕ
+pred zero     = 0
+pred (succ n) = n
 
 data _≤_ : ℕ → ℕ → Set where
   le-n : (n : ℕ)   → n ≤ n
@@ -133,10 +113,6 @@ n < m = succ n ≤ m
 ≤-s-n {n} {.n} (le-n .(succ n)) = le-n n
 ≤-s-n {n} {m} (le-s p)          = ≤-trans (le-s (le-n n)) p
 
-pred : (n : ℕ) → ℕ
-pred zero     = 0
-pred (succ n) = n
-
 <-n-s : {n m : ℕ} → n < m → succ n < succ m
 <-n-s p = ≤-n-s p 
 
@@ -152,3 +128,10 @@ pred (succ n) = n
 
 ≤-transitive2 : transitive _≤_
 ≤-transitive2 = ≤-trans
+
+{-
+ℕ-trichotomy : (n m : ℕ) → (n < m) ∨ (n ≡ m) ∨ (m < n)
+ℕ-trichotomy zero zero     = left ( right (refl 0))
+ℕ-trichotomy zero (succ m) = left (left (≤-n-s {!!}))
+ℕ-trichotomy (succ n) m = {!!} 
+-}

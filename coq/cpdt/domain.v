@@ -3,13 +3,94 @@ Require Import irrelevance.
 Require Import Nat.
 Require Import Max.
 
+(********************************************************************************)
+(************************* parial order on 'option a' ***************************)
+(********************************************************************************)
 
+Definition ole (a:Type) (x y:option a) : Prop :=
+    forall (v:a), x = Some v -> y = Some v.
+
+Arguments ole {a} _ _.
+
+Lemma ole_refl : forall (a:Type) (x:option a), ole x x.
+Proof. intros a x v H. assumption. Qed.
+
+Lemma ole_anti : forall (a:Type) (x y:option a),
+    ole x y -> ole y x -> x = y.
+Proof.
+    unfold ole. intros a x y Hxy Hyx. destruct x as [v|], y as [w|].
+        - apply Hyx. reflexivity.
+        - symmetry. apply Hxy. reflexivity.
+        - apply Hyx. reflexivity.
+        - reflexivity.
+Qed.
+
+Lemma ole_trans : forall (a:Type) (x y z:option a),
+    ole x y -> ole y z -> ole x z.
+Proof.
+    unfold ole. intros a x y z Hxy Hyz v H.
+    apply Hyz, Hxy. assumption.
+Qed.
+
+Definition ole' (a:Type) (x y:option a) : Prop :=
+    match x with
+    | None          => True
+    | Some v        =>
+        match y with
+        | None      => False
+        | Some w    => v = w
+        end
+    end.
+
+Arguments ole' {a} _ _.
+
+Lemma ole_equivalence : forall (a:Type) (x y:option a),
+    ole x y <-> ole' x y.
+Proof.
+    intros a x y. unfold ole, ole'. destruct x as [v|], y as [w|]; split.    
+    - intros H. assert (Some w = Some v) as E.
+        { apply H. reflexivity. }
+        inversion E. reflexivity.
+    - intros H1. subst. intros v H. assumption.
+    - intros H. assert (None = Some v) as E.
+        { apply H. reflexivity. }
+        inversion E.
+    - intros H1. exfalso. assumption.
+    - intros H. apply I.
+    - intros H1 v H2. inversion H2.
+    - intros H. apply I.
+    - intros H1 v H2. assumption.
+Qed.
+
+
+(********************************************************************************)
+(******************************* monotone maps **********************************)
+(********************************************************************************)
+
+(* Bad definition from cpdt                                                     *)
 Definition monotone (a:Type) (f:nat -> option a) : Prop :=
     forall (n:nat) (v:a), f n = Some v -> 
     forall (m:nat), n <= m -> f m = Some v.
 
 Arguments monotone {a} _.
 
+
+(* Checking bad definition makes sense                                          *)
+Lemma monotone_check : forall (a:Type) (f:nat -> option a),
+    monotone f <-> forall (n m:nat), n <= m -> ole (f n) (f m).
+Proof.
+    intros a f. split; unfold monotone, ole; intros H.
+    - intros n m H1 v H2. apply H with n; assumption.
+    - intros n v H1 m H2. apply H with n; assumption.
+Qed.
+
+
+(********************************************************************************)
+(******************************** computations **********************************)
+(********************************************************************************)
+
+
+(* A computation is a monotone map                                              *)
 Definition Computation (a:Type) : Type := { f:nat -> option a | monotone f }.
 
 
@@ -25,35 +106,59 @@ Definition run (a:Type) (k:Computation a) (v:a) : Prop :=
 
 Arguments run {a} _ _.
 
-(* We are defining a value with coq tactics. This makes a lot of sense because  *)
-(* the value we are defining is essentially a tuple where the second coordinate *)
-(* is a proof, so using tactics makes a lot of sense. Note that this proof is   *)
-(* not opaque ('Defined' rather than 'Qed'). Alternatively, we could have       *)
-(* defined the proof separately as some sort of lemma and defined the value     *)
-(* 'bot' in the usual direct way by referring to this lemma                     *)
-Definition bot (a:Type) : Computation a.
+(* We are defining a value with coq tactics. This value is essentially a tuple  *)
+(* where the second coordinate is a proof, so using tactics appears to be       *)
+(* making sense. Note that this proof is not opaque ('Defined' rather than      *)
+(* 'Qed'). Alternatively, we could have defined the proof separately as some    *)
+(* sort of lemma and defined the value 'bot' in the usual direct way by         *)
+(* referring to this lemma                                                      *)
+
+Definition bot' (a:Type) : Computation a.
     unfold Computation. exists (fun (_:nat) => None).
     unfold monotone. intros n v H. inversion H.
 Defined.
 
-Arguments bot {a}.
+Arguments bot' {a}.
+
+
+Definition botf (a:Type) : nat -> option a := fun (n:nat) => None.
+
+Arguments botf {a} _.
+
+Lemma botp : forall (a:Type), monotone (@botf a).
+Proof.
+    unfold monotone, botf. intros a n v H. inversion H.
+Qed.
+
+Arguments botp {a}.
+
+(* A lot better I think, details of proof decoupled from computation logic      *)
+Definition bot (a:Type) : Computation a :=
+    exist monotone botf botp.
+
+(********************************************************************************)
+(**************************** computation as monad ******************************)
+(********************************************************************************)
 
 (* 'return' is a keyword in coq, so using 'pure' instead                        *)
-Definition pure (a:Type) : a -> Computation a.
+Definition pure' (a:Type) : a -> Computation a.
     intros v. 
     unfold Computation. exists (fun (_:nat) => Some v).
     unfold monotone. intros n w H. inversion H. subst.
     intros m H'. reflexivity.
 Defined.
 
-Arguments pure {a} _.
+Arguments pure' {a} _.
 
+(*
+(* Checking 'pure' has the intended semantics                                   *)
 Lemma run_pure : forall (a:Type) (v:a), run (pure v) v. 
 Proof.
     intros a v. unfold run. exists 0. reflexivity.
 Qed.
 
-Definition bind(a b:Type)(k:Computation a)(g:a -> Computation b):Computation b.
+(* Totally useless definition. computation logic and proofs are coupled         *)
+Definition bind'(a b:Type)(k:Computation a)(g:a -> Computation b):Computation b.
     unfold Computation. 
     remember (fun (n:nat) =>
         match proj1_sig k n with
@@ -79,7 +184,9 @@ Definition bind(a b:Type)(k:Computation a)(g:a -> Computation b):Computation b.
         - inversion H.
 Defined.
 
-Arguments bind {a} {b} _ _.
+
+Arguments bind' {a} {b} _ _.
+
 
 
 Notation "k >>= g" := (bind k g) (at level 50, left associativity).
@@ -143,62 +250,6 @@ Lemma associativity : forall (a b c:Type),
     k >>= f >>= g == k >>= (fun (x:a) => (f x) >>= g).
 Proof.
     intros a b c [k p] f g n. simpl. destruct (k n) as [v|]; reflexivity.
-Qed.
-
-(* parial order on 'option a'                                                   *)
-Definition ole (a:Type) (x y:option a) : Prop :=
-    forall (v:a), x = Some v -> y = Some v.
-
-Arguments ole {a} _ _.
-
-Lemma ole_refl : forall (a:Type) (x:option a), ole x x.
-Proof. intros a x v H. assumption. Qed.
-
-Lemma ole_anti : forall (a:Type) (x y:option a),
-    ole x y -> ole y x -> x = y.
-Proof.
-    unfold ole. intros a x y Hxy Hyx. destruct x as [v|], y as [w|].
-        - apply Hyx. reflexivity.
-        - symmetry. apply Hxy. reflexivity.
-        - apply Hyx. reflexivity.
-        - reflexivity.
-Qed.
-
-Lemma ole_trans : forall (a:Type) (x y z:option a),
-    ole x y -> ole y z -> ole x z.
-Proof.
-    unfold ole. intros a x y z Hxy Hyz v H.
-    apply Hyz, Hxy. assumption.
-Qed.
-
-Definition ole' (a:Type) (x y:option a) : Prop :=
-    match x with
-    | None          => True
-    | Some v        =>
-        match y with
-        | None      => False
-        | Some w    => v = w
-        end
-    end.
-
-Arguments ole' {a} _ _.
-
-Lemma ole_equivalence : forall (a:Type) (x y:option a),
-    ole x y <-> ole' x y.
-Proof.
-    intros a x y. unfold ole, ole'. destruct x as [v|], y as [w|]; split.    
-    - intros H. assert (Some w = Some v) as E.
-        { apply H. reflexivity. }
-        inversion E. reflexivity.
-    - intros H1. subst. intros v H. assumption.
-    - intros H. assert (None = Some v) as E.
-        { apply H. reflexivity. }
-        inversion E.
-    - intros H1. exfalso. assumption.
-    - intros H. apply I.
-    - intros H1 v H2. inversion H2.
-    - intros H. apply I.
-    - intros H1 v H2. assumption.
 Qed.
 
 
@@ -284,14 +335,14 @@ Definition continuous (a b: Type)(F:(a -> Computation b)->(a -> Computation b)):
 
 Arguments continuous {a} {b} _.
 
-(*
+
 Definition Fix (a b:Type)(F:(a -> Computation b)->(a -> Computation b))
     (p:continuous F) : a -> Computation b.
     refine 
         (fun (x:a) => 
             exist 
                 monotone 
-                (fun  (n:nat) => _)
+                (fix f (n : nat) : option b := _)
                 _
         ).
 Show.

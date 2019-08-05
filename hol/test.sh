@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e 
+DIR=`pwd`
+HOME=/home/john/Prog/hol
+cd ${HOME}
+echo
+echo "testing hol..."
+
+Holmake testTheory.uo
+./clean.sh
+
+cd ${DIR}
+echo '\nAll hol tests completed successfully\n'
+
+
+
+

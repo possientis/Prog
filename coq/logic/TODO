@@ -1,3 +1,4 @@
+need: remove (f x) (map f xs) = map f (remove x xs) for weak assumptions
 Lam:valid_free
 Fol:valid_free
 Hask:valid_free
