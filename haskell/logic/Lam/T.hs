@@ -25,5 +25,3 @@ instance (Arbitrary v) => Arbitrary (T v) where
         , (3, App <$> arbitrary <*> arbitrary)
         , (8, Lam <$> arbitrary <*> arbitrary)
         ]
-
-
