@@ -1,8 +1,10 @@
 module z where
 
 import nat
+open import id
 open import bool
 open import void
+open import sum
 
 ℕ = nat.ℕ
 
@@ -44,7 +46,14 @@ mkℤ (nat.succ n) tt + mkℤ (nat.succ m) tt = mkℤ (succ n nat.+ succ m) tt
 mkℤ (nat.succ n) tt + mkℤ (nat.succ m) ff = {!!}
 mkℤ (nat.succ n) ff + mkℤ (nat.succ m) tt = {!!}
 mkℤ (nat.succ n) ff + mkℤ (nat.succ m) ff = mkℤ (succ n nat.+ succ m) ff
-
-diffℤ : ℕ → ℕ → ℤ
-diffℤ n m = {!!}
 -}
+
+-- diffℤ n m = m - n
+{-
+diffℤ : ℕ → ℕ → ℤ
+diffℤ n m with nat.ℕ-trichotomy n m
+diffℤ n m | left (left p)  = mkℤ {!!} {!!}
+diffℤ n m | left (right p) = 0ℤ
+diffℤ n m | right p        = {!!}
+-}
+

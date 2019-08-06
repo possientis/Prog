@@ -95,8 +95,6 @@ data _≤_ : ℕ → ℕ → Set where
 
 infixr 4 _≤_
 
-_<_ : ℕ → ℕ → Set
-n < m = succ n ≤ m
 
 ≤-refl : (n : ℕ) → n ≤ n
 ≤-refl n = le-n n
@@ -112,6 +110,15 @@ n < m = succ n ≤ m
 ≤-s-n : {n m : ℕ} → succ n ≤ succ m → n ≤ m
 ≤-s-n {n} {.n} (le-n .(succ n)) = le-n n
 ≤-s-n {n} {m} (le-s p)          = ≤-trans (le-s (le-n n)) p
+
+≤-0-n : (n : ℕ) → 0 ≤ n
+≤-0-n zero     = le-n 0
+≤-0-n (succ n) = le-s (≤-0-n n)
+
+_<_ : ℕ → ℕ → Set
+n < m = succ n ≤ m
+
+infixr 4 _<_
 
 <-n-s : {n m : ℕ} → n < m → succ n < succ m
 <-n-s p = ≤-n-s p 
@@ -129,9 +136,16 @@ n < m = succ n ≤ m
 ≤-transitive2 : transitive _≤_
 ≤-transitive2 = ≤-trans
 
-{-
 ℕ-trichotomy : (n m : ℕ) → (n < m) ∨ (n ≡ m) ∨ (m < n)
-ℕ-trichotomy zero zero     = left ( right (refl 0))
-ℕ-trichotomy zero (succ m) = left (left (≤-n-s {!!}))
-ℕ-trichotomy (succ n) m = {!!} 
--}
+ℕ-trichotomy zero zero      = left ( right (refl 0))
+ℕ-trichotomy zero (succ m)  = left (left (≤-n-s (≤-0-n m)))
+ℕ-trichotomy (succ n) zero  = right (≤-n-s (≤-0-n n))
+ℕ-trichotomy (succ n) (succ m) with ℕ-trichotomy n m
+ℕ-trichotomy (succ n) (succ m) | left (left p)  = left (left (≤-n-s p))
+ℕ-trichotomy (succ n) (succ m) | left (right p) = left (right (ap succ p))
+ℕ-trichotomy (succ n) (succ m) | right p        = right (≤-n-s p)
+
+-- diffℕ n m = m - n
+diffℕ : {n m : ℕ} → (n ≤ m) → ℕ
+diffℕ {zero}   {m} _      = m
+diffℕ {succ n} {succ m} p = diffℕ (≤-s-n p)

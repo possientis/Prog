@@ -121,7 +121,7 @@ Defined.
 Arguments bot' {a}.
 
 
-Definition botf (a:Type) : nat -> option a := fun (n:nat) => None.
+Definition botf (a:Type) (n:nat) : option a := None.
 
 Arguments botf {a} _.
 
@@ -135,6 +135,9 @@ Arguments botp {a}.
 (* A lot better I think, details of proof decoupled from computation logic      *)
 Definition bot (a:Type) : Computation a :=
     exist monotone botf botp.
+
+
+
 
 (********************************************************************************)
 (**************************** computation as monad ******************************)
@@ -150,14 +153,34 @@ Defined.
 
 Arguments pure' {a} _.
 
-(*
+(* computation is made explicit                                                 *)
+Definition puref (a:Type)(x:a)(n:nat) : option a := Some x.
+
+Arguments puref {a} _ _.
+
+(* statement of what it is we are proving is also clear                         *)
+Lemma purep : forall (a:Type) (x:a), monotone (puref x).
+Proof.
+    unfold monotone, puref. intros a x n v H m H'. 
+    inversion H. subst. reflexivity.
+Qed.
+
+Arguments purep {a} _.
+
+(* wrapping up in a single function, no complexity here                         *)
+Definition pure (a:Type)(x:a) : Computation a :=
+    exist monotone (puref x) (purep x).
+
+Arguments pure {a} _.
+
 (* Checking 'pure' has the intended semantics                                   *)
 Lemma run_pure : forall (a:Type) (v:a), run (pure v) v. 
 Proof.
     intros a v. unfold run. exists 0. reflexivity.
 Qed.
 
-(* Totally useless definition. computation logic and proofs are coupled         *)
+
+(* Totally useless definition. computation logic and proof are coupled          *)
 Definition bind'(a b:Type)(k:Computation a)(g:a -> Computation b):Computation b.
     unfold Computation. 
     remember (fun (n:nat) =>
@@ -187,11 +210,55 @@ Defined.
 
 Arguments bind' {a} {b} _ _.
 
+(* computation logic of bind is plainly visible                                 *) 
+Definition bindf 
+    (a b:Type)
+    (k:Computation a)
+    (g:a -> Computation b)
+    (n:nat)
+    :option b :=
+    match k with                    (* unpack computation k             *) 
+    | exist _ f _ =>
+        match (f n) with            (* result of f after n cycles       *) 
+        | None   => None            (* first computation fails          *)
+        | Some v =>                 (* first computation returns value  *)
+            match (g v) with        (* unpack second computation        *)
+            | exist _ h _ => h n    (* returns result after n cycles    *)
+            end
+        end
+    end.
 
+Arguments bindf {a} {b} _ _ _.
+
+(* what we are proving is clear                                                 *)
+Lemma bindp : forall (a b:Type) (k:Computation a) (g:a -> Computation b),
+    monotone (bindf k g).
+Proof.
+    unfold monotone, bindf. intros a b [f p] g n v H m H'.
+    destruct (f n) as [x|] eqn:E.
+    - unfold monotone in p. rewrite (p n x).
+        + destruct (g x) as [h q]. unfold monotone in q. 
+          apply q with n; assumption.
+        + assumption.
+        + assumption.
+    - inversion H.
+Qed.
+
+Arguments bindp {a} {b} _ _.
+
+(* packing adds no complexity                                                   *)
+Definition bind 
+    (a b:Type) 
+    (k:Computation a) 
+    (g:a -> Computation b) 
+    : Computation b 
+    := exist monotone (bindf k g) (bindp k g).
+
+Arguments bind {a} {b}.
 
 Notation "k >>= g" := (bind k g) (at level 50, left associativity).
 
-
+(* checkingbind has the intended semantics                                      *)
 Lemma run_bind : forall (a b:Type) (k:Computation a) (h:a -> Computation b),
     forall (x:a) (y:b), run k x -> run (h x) y -> run (k >>= h) y.
 Proof.
@@ -209,6 +276,7 @@ Proof.
         - apply m_le_max.
 Qed.
 
+(*
 Definition ceq (a:Type) (k1 k2:Computation a) : Prop :=
     forall (n:nat), proj1_sig k1 n = proj1_sig k2 n.
 

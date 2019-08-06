@@ -41,9 +41,11 @@ instance Formula P where
     sub     = P.sub
     ord     = P.ord
 
+-- 'is a subformula of' relation
 (<<=) :: (Formula f, Eq (f v)) => f v -> f v -> Bool
 (<<=) s t = s `elem` sub t
 
+-- 'is valid substitution for' relation
 valid :: (Formula f, Eq v, Eq w) => (v -> w) -> f v -> Bool
 valid f t = all cond xs where
     cond (s,x) = (f x) `elem` free (fmap f s) 
