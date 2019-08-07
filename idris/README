@@ -1,0 +1,35 @@
+An idris repl needs to be running in a separate terminal
+
+`\r` reload file
+
+`\t` show type
+
+`\d` Create an initial clause for a type declaration.
+
+`\b` Same as \d but for an initial typeclass method impl.
+
+`\md` Same as \d but for a proof clause
+
+`\c` case split
+
+`\mc` make case
+
+`\w` add with clause
+
+`\e` evaluate expression
+
+`\l` make lemma
+
+`\m` add missing clause
+
+`\f` refine item
+
+`\o` obvious proof search
+
+`\p` proof search
+
+`\i` open idris response window
+
+`\h` show documentation
+
+

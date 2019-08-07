@@ -18,7 +18,7 @@ specRemove = describe "Testing properties for remove..." $
 specsRemove :: [Spec]
 specsRemove  = [ testRemoveStill
                , testRemoveMon
-               , testRemoveMap
+               , testRemoveMapIncl
                , testRemoveXNotIn
                , testRemoveInj
                , testRemoveInj2
@@ -35,9 +35,9 @@ testRemoveMon :: Spec
 testRemoveMon = it "Checked remove monotone property" $
     property $ propRemoveMon
 
-testRemoveMap :: Spec
-testRemoveMap = it "Checked remove map property" $ 
-    property $ propRemoveMap
+testRemoveMapIncl :: Spec
+testRemoveMapIncl = it "Checked remove map inclusion property" $ 
+    property $ propRemoveMapIncl
 
 testRemoveXNotIn :: Spec
 testRemoveXNotIn = it "Checked remove 'not in' property" $ 
@@ -67,8 +67,8 @@ propRemoveMon :: Var -> [Var] -> [Var] -> Bool
 propRemoveMon x xs ys = not (incl xs ys) || incl (remove x xs) (remove x ys) 
 
 
-propRemoveMap :: (Var -> Var) -> Var -> [Var] -> Bool
-propRemoveMap f x xs = incl (remove (f x) (map f xs)) (map f (remove x xs)) 
+propRemoveMapIncl :: (Var -> Var) -> Var -> [Var] -> Bool
+propRemoveMapIncl f x xs = incl (remove (f x) (map f xs)) (map f (remove x xs)) 
 
 propRemoveXNotIn :: Var -> [Var] -> Bool
 propRemoveXNotIn x xs = x `elem` xs || remove x xs == xs

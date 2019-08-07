@@ -145,7 +145,11 @@ infixr 4 _<_
 ℕ-trichotomy (succ n) (succ m) | left (right p) = left (right (ap succ p))
 ℕ-trichotomy (succ n) (succ m) | right p        = right (≤-n-s p)
 
--- diffℕ n m = m - n
-diffℕ : {n m : ℕ} → (n ≤ m) → ℕ
-diffℕ {zero}   {m} _      = m
+-- diffℕ n m = n - m
+diffℕ : {n m : ℕ} → (m ≤ n) → ℕ
+diffℕ {n} {zero} _        = n
 diffℕ {succ n} {succ m} p = diffℕ (≤-s-n p)
+
+diffℕ-pos : (n m : ℕ) -> (p : m ≤ n) -> (q : m < n) → diffℕ p ≡ succ (diffℕ q)
+diffℕ-pos (succ n) zero p q     = refl (succ n)
+diffℕ-pos (succ n) (succ m) p q = diffℕ-pos n m (≤-s-n p) (<-s-n q)

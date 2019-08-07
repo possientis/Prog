@@ -16,30 +16,30 @@ function testing () {
     fi
 }
 
-#testing c
-#testing assembly
-#testing make
-#testing c++
-#testing java
-#testing ant
-#testing maven
-#testing gradle
-#testing c#
-#testing haskell
-#testing agda
-#testing idris
-#testing scheme
-#testing python
-#testing ruby
-#testing javascript
-#testing php
-#testing scala
-#testing clojure
-#testing sed
-#testing coq
+testing c
+testing assembly
+testing make
+testing c++
+testing java
+testing ant
+testing maven
+testing gradle
+testing c#
+testing haskell
+testing agda
+testing idris
+testing scheme
+testing python
+testing ruby
+testing javascript
+testing php
+testing scala
+testing clojure
+testing sed
+testing coq
 testing hol
-#testing tex
-#testing bison
+testing tex
+testing bison
 
 echo 'Testing number ...'
 ${BITCOIN}/Number/test.sh >> test.log  2>&1

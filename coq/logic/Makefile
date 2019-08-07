@@ -208,6 +208,7 @@ Fol/Bound.vo :		Fol/Bound.v \
 
 Lam/Valid.vo :		Lam/Valid.v \
 					Eq.vo \
+					Remove.vo \
 					Lam/T.vo \
 					Lam/Free.vo \
 					Lam/Subformula.vo
@@ -215,6 +216,7 @@ Lam/Valid.vo :		Lam/Valid.v \
 
 Fol/Valid.vo :		Fol/Valid.v \
 					Eq.vo \
+					Remove.vo \
 					Fol/P.vo \
 					Fol/Free.vo \
 					Fol/Subformula.vo

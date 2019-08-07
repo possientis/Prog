@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Eq.
+Require Import Remove.
 
 Require Import Lam.T.
 Require Import Lam.Free.
@@ -66,6 +67,12 @@ Proof.
             }
         + destruct H' as [H'|H'].
             { subst. simpl. rewrite IH1.
+                { apply remove_map. intros y H1 H2 H3.
+                    assert (~In (f x) (free e' (Lam (f x) (fmap f t1)))) as Ex.
+                        { simpl. apply remove_x_gone. }
+                    assert (In (f y) (free e' (Lam (f x) (fmap f t1)))) as Ey. 
+                        { unfold valid in H. apply (H (Lam x t1) y). 
+            
 
 
 Show.

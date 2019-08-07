@@ -6,5 +6,6 @@ cd ${HOME}
 
 rm -f Hello
 rm -f *.ibc
+rm -f *.idr~
 
 cd ${DIR}

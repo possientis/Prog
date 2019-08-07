@@ -40,7 +40,7 @@ Proof.
     - apply incl_tran with (remove e' (f x) (map f (free e t1))). 
         + apply remove_mon, IH1.
         + apply incl_tran with (map f (remove e x (free e t1))).
-            { apply remove_map. }
+            { apply remove_map_incl. }
             { apply incl_refl. }
 Qed.
 

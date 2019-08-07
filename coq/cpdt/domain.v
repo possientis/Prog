@@ -4,7 +4,7 @@ Require Import Nat.
 Require Import Max.
 
 (********************************************************************************)
-(************************* parial order on 'option a' ***************************)
+(************************* Parial Order on 'option a' ***************************)
 (********************************************************************************)
 
 Definition ole (a:Type) (x y:option a) : Prop :=
@@ -64,7 +64,7 @@ Qed.
 
 
 (********************************************************************************)
-(******************************* monotone maps **********************************)
+(******************************* Monotone Maps **********************************)
 (********************************************************************************)
 
 (* Bad definition from cpdt                                                     *)
@@ -86,7 +86,7 @@ Qed.
 
 
 (********************************************************************************)
-(******************************** computations **********************************)
+(******************************** Computations **********************************)
 (********************************************************************************)
 
 
@@ -136,11 +136,42 @@ Arguments botp {a}.
 Definition bot (a:Type) : Computation a :=
     exist monotone botf botp.
 
+Arguments bot {a}.
 
+(********************************************************************************)
+(************************ Equality between Computations *************************)
+(********************************************************************************)
+
+Definition ceq (a:Type) (k1 k2:Computation a) : Prop :=
+    forall (n:nat), proj1_sig k1 n = proj1_sig k2 n.
+
+Arguments ceq {a} _ _.
+
+Notation "x == y" := (ceq x y) (at level 90).
+
+Lemma ceq_refl : forall (a:Type) (x:Computation a), x == x.
+Proof.
+    intros a [f p] n. simpl. reflexivity.
+Qed.
+
+Lemma ceq_sym  : forall (a:Type) (x y:Computation a), 
+    x == y -> y == x.
+Proof.
+    intros a [f p] [g q] H n. simpl. symmetry. apply H.
+Qed.
+
+Lemma ceq_trans : forall (a:Type) (x y z:Computation a),
+    x == y -> y == z -> x == z.
+Proof.
+    intros a [f p] [g q] [h r] Hxy Hyz n. simpl.
+    apply eq_trans with (g n).
+    - apply Hxy.
+    - apply Hyz.
+Qed.
 
 
 (********************************************************************************)
-(**************************** computation as monad ******************************)
+(**************************** Computation as Monad ******************************)
 (********************************************************************************)
 
 (* 'return' is a keyword in coq, so using 'pure' instead                        *)
@@ -247,18 +278,14 @@ Qed.
 Arguments bindp {a} {b} _ _.
 
 (* packing adds no complexity                                                   *)
-Definition bind 
-    (a b:Type) 
-    (k:Computation a) 
-    (g:a -> Computation b) 
-    : Computation b 
-    := exist monotone (bindf k g) (bindp k g).
+Definition bind (a b:Type) (k:Computation a) (g:a -> Computation b) 
+    : Computation b := exist monotone (bindf k g) (bindp k g).
 
 Arguments bind {a} {b}.
 
 Notation "k >>= g" := (bind k g) (at level 50, left associativity).
 
-(* checkingbind has the intended semantics                                      *)
+(* checking bind has the intended semantics                                      *)
 Lemma run_bind : forall (a b:Type) (k:Computation a) (h:a -> Computation b),
     forall (x:a) (y:b), run k x -> run (h x) y -> run (k >>= h) y.
 Proof.
@@ -276,52 +303,35 @@ Proof.
         - apply m_le_max.
 Qed.
 
-(*
-Definition ceq (a:Type) (k1 k2:Computation a) : Prop :=
-    forall (n:nat), proj1_sig k1 n = proj1_sig k2 n.
 
-Arguments ceq {a} _ _.
+(********************************************************************************)
+(************************** Checking Monad Laws *********************************)
+(********************************************************************************)
 
-Notation "x == y" := (ceq x y) (at level 90).
-
-Lemma ceq_refl : forall (a:Type) (x:Computation a), x == x.
-Proof.
-    intros a [f p] n. simpl. reflexivity.
-Qed.
-
-Lemma ceq_sym  : forall (a:Type) (x y:Computation a), 
-    x == y -> y == x.
-Proof.
-    intros a [f p] [g q] H n. simpl. symmetry. apply H.
-Qed.
-
-Lemma ceq_trans : forall (a:Type) (x y z:Computation a),
-    x == y -> y == z -> x == z.
-Proof.
-    intros a [f p] [g q] [h r] Hxy Hyz n. simpl.
-    apply eq_trans with (g n).
-    - apply Hxy.
-    - apply Hyz.
-Qed.
-
-(* Checking monad laws                                                          *)
 Lemma left_identity : forall (a b:Type) (x:a) (h:a -> Computation b),
     (pure x) >>= h == h x.
-Proof. intros a b x h n. reflexivity. Qed.
+Proof. intros a b x h n. simpl. destruct (h x) as [f p]. reflexivity. Qed. 
+
+
 
 Lemma right_identity : forall (a:Type) (k:Computation a), 
     k >>= pure == k.
 Proof. intros a [f p] n. simpl. destruct (f n) as [v|]; reflexivity. Qed. 
 
+
 Lemma associativity : forall (a b c:Type), 
     forall (k:Computation a) (f:a -> Computation b) (g:b -> Computation c),
     k >>= f >>= g == k >>= (fun (x:a) => (f x) >>= g).
 Proof.
-    intros a b c [k p] f g n. simpl. destruct (k n) as [v|]; reflexivity.
+    intros a b c [k p] f g n. simpl. destruct (k n) as [v|].
+    - destruct (f v) as [h q]. reflexivity.
+    - reflexivity.
 Qed.
 
 
-(* partial order on 'Computation a'                                             *)
+(********************************************************************************)
+(********************** Partial Order on Computations  **************************)
+(********************************************************************************)
 
 Definition cle (a:Type) (x y:Computation a) : Prop :=
     forall (n:nat), ole (proj1_sig x n) (proj1_sig y n).
@@ -368,7 +378,9 @@ Proof.
 Qed.
 
 
-(* partial order on arrows 'a -> Computation b'                                 *)
+(********************************************************************************)
+(************** Partial Order on Arrows 'a -> Computation b'  *******************)
+(********************************************************************************)
 
 Definition cfle (a b:Type) (f g:a -> Computation b) : Prop :=
     forall (x:a), cle (f x) (g x).
@@ -398,25 +410,51 @@ Proof.
         - apply H2.
 Qed.
 
+(********************************************************************************)
+(************************* Continuous Function on Arrows  ***********************)
+(********************************************************************************)
+
 Definition continuous (a b: Type)(F:(a -> Computation b)->(a -> Computation b)):=
         forall (f g:a -> Computation b), cfle f g -> cfle (F f) (F g).
 
 Arguments continuous {a} {b} _.
 
+Definition Operator (a b:Type) : Type := 
+    {F: (a -> Computation b) -> (a -> Computation b) | continuous F}.
 
-Definition Fix (a b:Type)(F:(a -> Computation b)->(a -> Computation b))
-    (p:continuous F) : a -> Computation b.
-    refine 
-        (fun (x:a) => 
-            exist 
-                monotone 
-                (fix f (n : nat) : option b := _)
-                _
-        ).
+
+(********************************************************************************)
+(************************ The Fixed Point of an Operator  ***********************)
+(********************************************************************************)
+
+Definition init (a b:Type) : a -> Computation b := (fun x => bot).
+
+Arguments init {a} {b}.
+
+
+Fixpoint iter (a b:Type) (F:Operator a b) (n:nat) : a -> Computation b :=
+    match n with
+    | 0     => init
+    | S n   => proj1_sig F (iter a b F n)
+    end.
+
+Arguments iter {a} {b}.
+
+Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
+    proj1_sig (iter F n x) n.  
+
+Arguments Fixf {a} {b}.
+
+(*
+Lemma Fixp : forall (a b:Type) (F:Operator a b) (x:a), monotone (Fixf F x).
+Proof.
+
 Show.
 *)
 
-
+(*
+Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
+*)
 
 
 

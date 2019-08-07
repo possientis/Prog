@@ -42,7 +42,7 @@ Proof.
             }
 Qed.
 
-Lemma remove_map : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v) (xs:list v),
+Lemma remove_map_incl:forall(v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
     incl (remove e' (f x) (map f xs)) (map f (remove e x xs)).
 Proof.
     intros v w e e' f x xs. induction xs as [|a xs IH]; simpl.
@@ -59,6 +59,19 @@ Proof.
             }
 Qed.
 
+Lemma remove_x_gone: forall (v:Type) (e:Eq v) (x:v) (xs:list v),
+    ~In x (remove e x xs).
+Proof.
+    intros v e x. induction xs as [|a xs IH]; simpl.
+    - intros H. assumption.
+    - destruct (e x a) as [Hp|Hp].
+        + subst. assumption.
+        + intros [H'|H'].
+            { subst. apply Hp. reflexivity. }
+            { apply IH. assumption. }
+Qed.
+
+
 Lemma remove_x_not_in : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
     ~In x xs -> remove e x xs = xs.
 Proof.
@@ -71,6 +84,34 @@ Proof.
             { intros H'. apply H. right. assumption. }
 Qed.
 
+Lemma remove_map : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
+    (forall (y:v), x <> y -> In y xs -> f x <> f y) ->
+    remove e' (f x) (map f xs) = map f (remove e x xs).
+Proof.
+   intros v w e e' f x xs H. 
+   induction xs as [|a xs IH]; simpl. 
+   - reflexivity.
+   - destruct (e' (f x) (f a)) as [Hq|Hq].
+        + subst. destruct (e x a) as [Hp|Hp].
+            { subst. apply IH. intros y H1 H2. apply H.
+                { assumption. }
+                { right. assumption. }
+            }
+            { exfalso. apply H with a. 
+                { assumption. }
+                { left. reflexivity. }
+                { assumption. }
+            }
+        + destruct (e x a) as [Hp|Hp].
+            { subst. exfalso. apply Hq. reflexivity. }
+            { simpl. rewrite IH.
+                { reflexivity. }
+                { intros y H1 H2. apply H.
+                    { assumption. }
+                    { right. assumption. }
+                }
+            }
+Qed.
 
 
 Lemma remove_inj : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
@@ -78,57 +119,19 @@ Lemma remove_inj : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
     injective_on xs f -> 
     remove e' (f x) (map f xs) = map f (remove e x xs).
 Proof.
-    intros v w e e' f x xs. revert x.
-    induction xs as [|a xs IH]; simpl; intros x Hx H.
-    - reflexivity.
-    - destruct (e' (f x) (f a)) as [Hq|Hq], (e x a) as [Hp|Hp].
-        + destruct (in_dec e x xs) as [Hl|Hl].
-            { apply IH.
-                { assumption. }
-                { apply injective_on_cons with a. assumption. }
-            }
-            { assert (remove e x xs = xs) as P. 
-                { apply remove_x_not_in. assumption. }
-                rewrite P.
-                apply remove_x_not_in.
-                apply injective_on_not_in.
-                    { rewrite Hp. assumption. }
-                    { assumption. }
-            }
-        + exfalso. apply Hp. apply H.
-            { assumption. }
-            { left. reflexivity. }
-            { assumption. }
-        + exfalso. apply Hq. rewrite Hp. reflexivity.
-        + simpl. destruct Hx as [Hx|Hx].
-            { exfalso. apply Hp. symmetry. assumption. }
-            { rewrite IH.
-                { reflexivity. }
-                { assumption. }
-                { apply injective_on_incl with (a :: xs).
-                    { apply incl_tl. apply incl_refl. }
-                    { assumption. } 
-                }
-            }
+    intros v w e e' f x xs H1 H2. apply remove_map.
+    intros y H3 H4 H5. apply H3, H2; assumption.
 Qed.
 
 Lemma remove_inj2 : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
     injective_on (x :: xs) f -> 
     remove e' (f x) (map f xs) = map f (remove e x xs).
 Proof.
-    intros v w e e' f x xs H.
-    assert 
-        (remove e' (f x) (map f (x :: xs)) = map f (remove e x (x :: xs))) as E.
-        { apply remove_inj.
-            - left. reflexivity.
-            - assumption.
-        }
-    simpl in E.
-    destruct (e x x) as [Hp|Hp], (e' (f x) (f x)) as [Hq|Hq].
+    intros v w e e' f x xs H1. apply remove_map.
+    intros y H2 H3 H4. apply H2, H1.
+    - left. reflexivity.
+    - right. assumption.
     - assumption.
-    - exfalso. apply Hq. reflexivity.
-    - exfalso. apply Hp. reflexivity.
-    - inversion E. reflexivity.
 Qed.
 
 Lemma remove_incl : forall (v:Type) (e:Eq v) (x:v) (xs:list v), 
@@ -165,6 +168,3 @@ Proof.
             { subst. left. reflexivity. }
             { right. apply IH. split; assumption. }
 Qed.
-
-
-
