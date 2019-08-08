@@ -19,7 +19,9 @@ specsRemove :: [Spec]
 specsRemove  = [ testRemoveStill
                , testRemoveMon
                , testRemoveMapIncl
+               , testRemoveXGone
                , testRemoveXNotIn
+               , testRemoveMap
                , testRemoveInj
                , testRemoveInj2
                , testRemoveIncl
@@ -39,9 +41,17 @@ testRemoveMapIncl :: Spec
 testRemoveMapIncl = it "Checked remove map inclusion property" $ 
     property $ propRemoveMapIncl
 
+testRemoveXGone :: Spec
+testRemoveXGone = it "Checked remove 'x gone' property" $ 
+    property $ propRemoveXGone
+
 testRemoveXNotIn :: Spec
 testRemoveXNotIn = it "Checked remove 'not in' property" $ 
     property $ propRemoveXNotIn
+
+testRemoveMap :: Spec
+testRemoveMap = it "Checked remove map property" $ 
+    property $ propRemoveMap
 
 testRemoveInj :: Spec
 testRemoveInj = it "Checked remove first injective property" $ 
@@ -70,8 +80,19 @@ propRemoveMon x xs ys = not (incl xs ys) || incl (remove x xs) (remove x ys)
 propRemoveMapIncl :: (Var -> Var) -> Var -> [Var] -> Bool
 propRemoveMapIncl f x xs = incl (remove (f x) (map f xs)) (map f (remove x xs)) 
 
+propRemoveXGone :: Var -> [Var] -> Bool
+propRemoveXGone x xs = x `notElem` remove x xs
+
 propRemoveXNotIn :: Var -> [Var] -> Bool
 propRemoveXNotIn x xs = x `elem` xs || remove x xs == xs
+
+propRemoveMap :: (Var -> Var) -> Var -> [Var] -> Bool
+propRemoveMap f x xs = (not $ all p xs) || 
+    remove (f x) (map f xs) == map f (remove x xs) 
+        where
+        p :: Var -> Bool
+        p y = x == y || f x /= f y
+
 
 propRemoveInj :: (Var -> Var) -> Var -> [Var] -> Bool
 propRemoveInj f x xs = x `notElem` xs || (not $ injective_on xs f) ||

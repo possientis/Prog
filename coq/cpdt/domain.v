@@ -85,6 +85,7 @@ Proof.
 Qed.
 
 
+
 (********************************************************************************)
 (******************************** Computations **********************************)
 (********************************************************************************)
@@ -440,21 +441,41 @@ Fixpoint iter (a b:Type) (F:Operator a b) (n:nat) : a -> Computation b :=
 
 Arguments iter {a} {b}.
 
+
+Lemma iter_increasing_ : forall (a b:Type) (F:Operator a b) (n:nat),
+    cfle (iter F n) (iter F (S n)).
+Proof.
+    intros a b F. induction n as [|n IH].
+    - simpl. unfold init, cfle, bot, cle, ole, botf. simpl.
+      intros x n v H. inversion H.
+    - simpl. destruct F as [F p]. simpl. apply p. assumption.
+Qed.
+
+Lemma iter_increasing : forall (a b:Type) (F:Operator a b) (n m:nat),
+    n <= m -> cfle (iter F n) (iter F m).
+Proof.
+    intros a b F n m H. induction H as [|m H IH].
+    - apply cfle_refl.
+    - apply cfle_trans with (iter F m).
+        + assumption.
+        + apply iter_increasing_.
+Qed.
+
+
+
 Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
     proj1_sig (iter F n x) n.  
 
 Arguments Fixf {a} {b}.
 
-(*
+
 Lemma Fixp : forall (a b:Type) (F:Operator a b) (x:a), monotone (Fixf F x).
 Proof.
-
-Show.
-*)
-
-(*
-Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
-*)
+    intros a b F x. apply monotone_check. intros n m H.
+    unfold Fixf. apply ole_trans with (proj1_sig (iter F n x) m).
+    - destruct (iter F n x) as [f p]. simpl. apply monotone_check; assumption.
+    - apply iter_increasing. assumption.
+Qed.
 
 
 

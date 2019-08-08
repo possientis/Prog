@@ -24,6 +24,17 @@ Proof.
     - intros H. apply H. apply Sub_refl.
 Qed.
 
+Lemma valid_var : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (x:v),
+    valid e e' f (Var x).
+Proof.
+    unfold valid. intros v w e e' f x s y H1 H2. destruct H1 as [H1|H1].
+    - subst. simpl. left. destruct H2 as [H2|H2].
+        + subst. reflexivity.
+        + inversion H2.
+    - inversion H1.
+Qed.
+
+
 (*
 (* We cannot follow set theoretic proof as this is a stronger result, due to    *)
 (* the order being preserved in lists. Structural induction on t                *)
@@ -72,8 +83,23 @@ Proof.
                         { simpl. apply remove_x_gone. }
                     assert (In (f y) (free e' (Lam (f x) (fmap f t1)))) as Ey. 
                         { unfold valid in H. apply (H (Lam x t1) y). 
-            
-
-
+                            { apply Sub_refl. }
+                            { simpl. apply remove_charac. split; assumption. }
+                        }
+                    rewrite <- H3 in Ey. apply Ex. assumption.  
+                }
+                apply (valid_sub v w e e' f (Lam x t1)).
+                    { assumption. }
+                    { right. apply Sub_refl. }
+                    { apply Sub_refl. }
+            }
+            { apply IH1.
+                { apply (valid_sub v w e e' f (Lam x t1)).
+                    { assumption. }
+                    { right. apply Sub_refl. }
+                }
+                { assumption. }
+            } 
+    - induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; intros H.
 Show.
 *)

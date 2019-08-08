@@ -1,5 +1,8 @@
-remove_x_gone
-hask: remove_x_gone
+Lam: valid_app
+Fol: valid_bot
+Fol: valid_elem
+Fol: valid_imp
+hask: valid_var valid_app valid_bot_valid_imp valid_elem... what to do?
 Lam:valid_free
 Fol:valid_free
 Hask:valid_free

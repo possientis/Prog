@@ -28,7 +28,7 @@ hask  = Category
     , cmp = (.) 
     }
 
-newtype SubHask (f :: Type -> Type) (a :: Type) (b :: Type) = SH (f a -> f b)
+newtype SubHask (f :: Type -> Type) (a :: Type) (b :: Type) = SH (a -> b)
 
 subCategory :: Category (SubHask f)
 subCategory = Category
@@ -82,12 +82,19 @@ maybe  = Functor
         Nothing -> Nothing
         Just x  -> Just (f x)
     }
-{-
-maybe' :: Functor MaybeF Hask (SubHask Maybe)
-maybe' = Functor
+
+maybe' :: Functor Maybe Hask (SubHask Maybe)
+maybe'  = Functor
     { fmap = \f -> SH $ \case
         Nothing -> Nothing
         Just x  -> Just (f x)
     }
--}
 
+newtype Diag a = Diag (a,a)
+
+{-
+diag :: Functor Diag Hask (Product Hask Hask)
+diag = Functor
+    { fmap = \f -> a
+    }
+-}
