@@ -65,10 +65,17 @@ mkℤ (nat.succ n) ff + mkℤ (nat.succ m) ff = mkℤ (succ n nat.+ succ m) ff
 
 {-
 +-assoc : (n m p : ℤ) → (n + m) + p ≡ n + (m + p)
-+-assoc (mkℤ nat.zero r) (mkℤ m s) (mkℤ p t) = refl _
-+-assoc (mkℤ (nat.succ n) r) (mkℤ nat.zero s) (mkℤ p t) = refl _
-+-assoc (mkℤ (nat.succ n) r) (mkℤ (nat.succ m) s) (mkℤ nat.zero t) = {!!}
-+-assoc (mkℤ (nat.succ n) r) (mkℤ (nat.succ m) s) (mkℤ (nat.succ p) t) = {!!}
++-assoc (mkℤ nat.zero triv) (mkℤ m s) (mkℤ p t) = refl _
++-assoc (mkℤ (nat.succ n) r) (mkℤ nat.zero triv) (mkℤ p t) = refl _
++-assoc (mkℤ (nat.succ n) r) (mkℤ (nat.succ m) s) (mkℤ nat.zero triv) =
+  ≡-trans
+    (≡-sym (ap (λ x → (mkℤ (nat.succ n) r + mkℤ (nat.succ m) s) + x) (refl 0ℤ)))
+    (+-n+0 _)
++-assoc (mkℤ (nat.succ n) tt) (mkℤ (nat.succ m) tt) (mkℤ (nat.succ p) tt) =
+  ap (λ x → mkℤ (nat.succ x) tt) (nat.+-assoc n (nat.succ m) (nat.succ p))
++-assoc (mkℤ (nat.succ n) tt) (mkℤ (nat.succ m) tt) (mkℤ (nat.succ p) ff) = {!!}
++-assoc (mkℤ (nat.succ n) tt) (mkℤ (nat.succ m) ff) (mkℤ (nat.succ p) t) = {!!}
++-assoc (mkℤ (nat.succ n) ff) (mkℤ (nat.succ m) s) (mkℤ (nat.succ p) t) = {!!}
 -}
 
 

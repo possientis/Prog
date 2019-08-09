@@ -16,7 +16,6 @@ import Test.Functor
 import Test.Variable
 import Test.Subformula
 
-
 specFormula :: forall f . (Test f) =>  Spec
 specFormula = sequence_
     [ specFunctor    @ f

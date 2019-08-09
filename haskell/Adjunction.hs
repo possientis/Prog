@@ -61,7 +61,6 @@ product c1 c2 = Category
 
 -- * Functor
 
-{-
 type family FunctorT (f :: Type -> Type) (t :: Type) :: Type
 
 data Functor (f :: Type -> Type) c1 c2 = Functor
@@ -69,12 +68,8 @@ data Functor (f :: Type -> Type) c1 c2 = Functor
             .  (FunctorT f x1 ~ x2, FunctorT f y1 ~ y2) 
             => c1 x1 y1 -> c2 x2 y2
     }
--}
 
-
-data Functor (f :: Type -> Type) c1 c2 = Functor
-    { fmap :: forall x y . c1 x y -> c2 (f x) (f y)
-    }
+type instance FunctorT Maybe a = Maybe a
 
 maybe :: Functor Maybe Hask Hask
 maybe  = Functor
@@ -92,9 +87,40 @@ maybe'  = Functor
 
 newtype Diag a = Diag (a,a)
 
-{-
+type instance FunctorT Diag a = (a,a)
+
 diag :: Functor Diag Hask (Product Hask Hask)
-diag = Functor
-    { fmap = \f -> a
+diag  = Functor
+    { fmap = \f -> Product f f 
     }
--}
+
+-- Functor - x b
+data Prod b a = Prod (a,b)
+
+type instance FunctorT (Prod b) a = (a,b)
+
+prod :: Functor (Prod b) Hask Hask
+prod  = Functor
+    { fmap = \f -> \(x,y) -> (f x, y)
+    } 
+
+-- Functor (b -> -)
+data Hom b a = Hom (b -> a)
+
+type instance FunctorT (Hom b) a = (b -> a)
+
+hom :: Functor (Hom b) Hask Hask
+hom  = Functor
+    { fmap = \f -> \g -> f . g
+    } 
+
+data Adjunction c1 c2 l r = Adjunction
+    { leftA  :: forall a b . c1 (l a) b -> c2 a (r b)
+    , rightA :: forall a b . c2 a (r b) -> c1 (l a) b
+    }
+
+curry :: Adjunction Hask Hask (Prod b) (Hom b) 
+curry  = Adjunction 
+    { leftA = undefined
+    , rightA = undefined
+    }

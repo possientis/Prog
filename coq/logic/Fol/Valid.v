@@ -23,3 +23,25 @@ Proof.
         + assumption.
     - intros H. apply H. apply Sub_refl.
 Qed.
+
+Lemma valid_bot : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w),
+    valid e e' f Bot.
+Proof.
+    unfold valid. intros v w e e' f s y H1 H2. destruct H1 as [H1|H1].
+    - subst. simpl. inversion H2.
+    - inversion H1.
+Qed.
+
+
+Lemma valid_elem : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (x y:v),
+    valid e e' f (Elem x y).
+Proof.
+    unfold valid. intros v w e e' f x y s z H1 H2. destruct H1 as [H1|H1].
+    - subst. simpl. destruct H2 as [H2|H2].
+        + subst. left. reflexivity.
+        + destruct H2 as [H2|H2].
+            { subst. right. left. reflexivity. }
+            { inversion H2. }
+    - inversion H1.
+Qed.
+

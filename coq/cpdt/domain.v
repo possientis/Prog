@@ -424,6 +424,14 @@ Definition Operator (a b:Type) : Type :=
     {F: (a -> Computation b) -> (a -> Computation b) | continuous F}.
 
 
+Definition ap (a b:Type) (F:Operator a b) (f:a -> Computation b)
+    : a -> Computation b := proj1_sig F f.
+
+Arguments ap {a} {b}.
+
+Notation "F $ f" :=(ap F f) (at level 60, right associativity).
+
+
 (********************************************************************************)
 (************************ The Fixed Point of an Operator  ***********************)
 (********************************************************************************)
@@ -436,7 +444,7 @@ Arguments init {a} {b}.
 Fixpoint iter (a b:Type) (F:Operator a b) (n:nat) : a -> Computation b :=
     match n with
     | 0     => init
-    | S n   => proj1_sig F (iter a b F n)
+    | S n   => F $ (iter a b F n)
     end.
 
 Arguments iter {a} {b}.
@@ -461,8 +469,6 @@ Proof.
         + apply iter_increasing_.
 Qed.
 
-
-
 Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
     proj1_sig (iter F n x) n.  
 
@@ -477,10 +483,20 @@ Proof.
     - apply iter_increasing. assumption.
 Qed.
 
+Arguments Fixp {a} {b}.
 
+Definition Fix (a b:Type) (F:Operator a b) (x:a) : Computation b :=
+    exist monotone (Fixf F x) (Fixp F x).
 
+Arguments Fix {a} {b}.
 
+(* checking Fix has the intended semantics  *)
 
-
-
-
+(*
+Theorem run_Fix : forall (a b:Type) (F:Operator a b) (x:a) (v:b),
+    run ((F $ (Fix F)) x) v -> run ((Fix F) x) v.
+Proof.
+    unfold run, runTo, ap, Fix. intros a b F x v [n H].
+    simpl. destruct F as [F p]. simpl in H. 
+Show.
+*)
