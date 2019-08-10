@@ -10,7 +10,6 @@ import Prelude hiding (Functor (..), product,maybe)
 
 import Data.Kind
 
-
 -- * categories
 
 data Category (c :: Type -> Type -> Type) = Category 
@@ -56,8 +55,6 @@ product c1 c2 = Category
     , tgt = \(Product f1 f2) -> Product (tgt c1 f1) (tgt c2 f2)
     , cmp = \(Product g1 g2) (Product f1 f2) -> Product (cmp c1 g1 f1)(cmp c2 g2 f2)
     }
-
-
 
 -- * Functor
 
@@ -121,6 +118,9 @@ data Adjunction c1 c2 l r = Adjunction
 
 curry :: Adjunction Hask Hask (Prod b) (Hom b) 
 curry  = Adjunction 
-    { leftA = undefined
-    , rightA = undefined
+    { leftA = \f -> \a -> Hom (\b -> f (Prod (a,b)))
+    , rightA = \f -> \(Prod (a,b)) -> let (Hom g) = f a in g b
     }
+
+
+

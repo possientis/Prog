@@ -19,5 +19,11 @@ instance Functor (R b) where
 instance Adjunction (L b) (R b) where
     to f a = R (\y -> f (L (a, y)))
     from f (L (a,b)) = g b where (R g) = f a 
+ 
+to' :: ([a] -> m) -> a -> m
+to' f x = f [x]
+
+from' :: (Monoid m) => (a -> m) -> [a] -> m
+from' f = mconcat . map f
 
 

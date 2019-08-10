@@ -34,6 +34,25 @@ Proof.
     - inversion H1.
 Qed.
 
+Lemma valid_app : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t1 t2:T v),
+    valid e e' f (App t1 t2) <-> valid e e' f t1 /\ valid e e' f t2.
+Proof.
+    intros v w e e' f t1 t2. split.
+    - intros H. split; apply (valid_sub v w e e' f (App t1 t2)). 
+        + assumption.
+        + right. apply in_or_app. left. apply Sub_refl.
+        + assumption.
+        + right. apply in_or_app. right. apply Sub_refl.
+    - intros [H1 H2] s x [H|H].
+        + subst. simpl. intros H.
+          apply in_or_app. apply in_app_or in H.
+          destruct H as [H|H]. 
+            { left.  revert H. apply H1. apply Sub_refl. }
+            { right. revert H. apply H2. apply Sub_refl. }
+        + apply in_app_or in H. destruct H as [H|H].
+            { apply H1. assumption. }
+            { apply H2. assumption. }
+Qed.
 
 (*
 (* We cannot follow set theoretic proof as this is a stronger result, due to    *)
@@ -101,5 +120,12 @@ Proof.
                 { assumption. }
             } 
     - induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; intros H.
+        + apply valid_var.
+        + apply valid_app. split.
+            { apply IH1. intros s H'. apply H. right. 
+              apply in_or_app. left. assumption. }
+            { apply IH2. intros s H'. apply H. right.
+              apply in_or_app. right. assumption. } 
+        +
 Show.
 *)

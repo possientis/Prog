@@ -1,4 +1,6 @@
-hask: valid_var valid_app valid_bot_valid_imp valid_elem... what to do?
+Lam:valid_lam
+Fol:valid_all
+Hask: valid_lam & valid_all
 Lam:valid_free
 Fol:valid_free
 Hask:valid_free

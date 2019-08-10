@@ -45,3 +45,25 @@ Proof.
     - inversion H1.
 Qed.
 
+Lemma valid_imp : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p1 p2:P v),
+    valid e e' f (Imp p1 p2) <-> valid e e' f p1 /\ valid e e' f p2.
+Proof.
+    intros v w e e' f p1 p2. split.
+    - intros H. split; apply (valid_sub v w e e' f (Imp p1 p2)). 
+        + assumption.
+        + right. apply in_or_app. left. apply Sub_refl.
+        + assumption.
+        + right. apply in_or_app. right. apply Sub_refl.
+    - intros [H1 H2] s x [H|H].
+        + subst. simpl. intros H.
+          apply in_or_app. apply in_app_or in H.
+          destruct H as [H|H]. 
+            { left.  revert H. apply H1. apply Sub_refl. }
+            { right. revert H. apply H2. apply Sub_refl. }
+        + apply in_app_or in H. destruct H as [H|H].
+            { apply H1. assumption. }
+            { apply H2. assumption. }
+Qed.
+
+
+

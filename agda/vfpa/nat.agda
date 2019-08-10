@@ -115,6 +115,10 @@ infixr 4 _≤_
 ≤-0-n zero     = le-n 0
 ≤-0-n (succ n) = le-s (≤-0-n n)
 
+≤-anti : {n m : ℕ} → n ≤ m → m ≤ n → n ≡ m
+≤-anti {zero} {zero} p q     = refl _
+≤-anti {succ n} {succ m} p q = ap succ (≤-anti (≤-s-n p) (≤-s-n q))
+
 _<_ : ℕ → ℕ → Set
 n < m = succ n ≤ m
 

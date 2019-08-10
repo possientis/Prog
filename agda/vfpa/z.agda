@@ -63,7 +63,23 @@ mkℤ (nat.succ n) ff + mkℤ (nat.succ m) ff = mkℤ (succ n nat.+ succ m) ff
 +-n+0 (mkℤ (nat.succ n) tt) = refl _
 +-n+0 (mkℤ (nat.succ n) ff) = refl _
 
-{-
+data _≤_ : ℤ → ℤ → Set where
+  le-0-0     : mkℤ 0 triv ≤ mkℤ 0 triv
+  le-0-pos   : (n : ℕ) → mkℤ 0 triv ≤ mkℤ (nat.succ n) tt
+  le-neg-0   : (n : ℕ) → mkℤ (nat.succ n) ff ≤ mkℤ 0 triv
+  le-neg-pos : (n m : ℕ) → mkℤ (nat.succ n) ff ≤ mkℤ (nat.succ m) tt
+  le-neg-neg : {n m : ℕ} → (m nat.≤ n) → mkℤ (nat.succ n) ff ≤  mkℤ (nat.succ m) ff
+  le-pos-pos : {n m : ℕ} → (n nat.≤ m) → mkℤ (nat.succ n) tt ≤  mkℤ (nat.succ m) tt
+
+infixr 4 _≤_
+
+≤-refl : (n : ℤ) → n ≤ n
+≤-refl (mkℤ nat.zero triv)   = le-0-0
+≤-refl (mkℤ (nat.succ n) tt) = le-pos-pos (nat.≤-refl n)
+≤-refl (mkℤ (nat.succ n) ff) = {!le-neg-neg (nat.≤-refl n)!}
+
+
+{- appears to be non-trivial
 +-assoc : (n m p : ℤ) → (n + m) + p ≡ n + (m + p)
 +-assoc (mkℤ nat.zero triv) (mkℤ m s) (mkℤ p t) = refl _
 +-assoc (mkℤ (nat.succ n) r) (mkℤ nat.zero triv) (mkℤ p t) = refl _
@@ -77,6 +93,5 @@ mkℤ (nat.succ n) ff + mkℤ (nat.succ m) ff = mkℤ (succ n nat.+ succ m) ff
 +-assoc (mkℤ (nat.succ n) tt) (mkℤ (nat.succ m) ff) (mkℤ (nat.succ p) t) = {!!}
 +-assoc (mkℤ (nat.succ n) ff) (mkℤ (nat.succ m) s) (mkℤ (nat.succ p) t) = {!!}
 -}
-
 
 
