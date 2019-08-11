@@ -1,5 +1,3 @@
-Lam:valid_lam
-Fol:valid_all
 Hask: valid_lam & valid_all
 Lam:valid_free
 Fol:valid_free

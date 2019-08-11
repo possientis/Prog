@@ -76,7 +76,38 @@ infixr 4 _≤_
 ≤-refl : (n : ℤ) → n ≤ n
 ≤-refl (mkℤ nat.zero triv)   = le-0-0
 ≤-refl (mkℤ (nat.succ n) tt) = le-pos-pos (nat.≤-refl n)
-≤-refl (mkℤ (nat.succ n) ff) = {!le-neg-neg (nat.≤-refl n)!}
+≤-refl (mkℤ (nat.succ n) ff) = le-neg-neg (nat.≤-refl n)
+
+≤-anti : {n m : ℤ} → n ≤ m → m ≤ n → n ≡ m
+≤-anti {mkℤ nat.zero triv} {mkℤ nat.zero triv} p q = refl _
+≤-anti {mkℤ nat.zero triv} {mkℤ (nat.succ m) tt} p ()
+≤-anti {mkℤ nat.zero triv} {mkℤ (nat.succ m) ff} () q
+≤-anti {mkℤ (nat.succ n) tt} {mkℤ nat.zero triv} () q
+≤-anti {mkℤ (nat.succ n) ff} {mkℤ nat.zero triv} p ()
+≤-anti {mkℤ (nat.succ n) tt} {mkℤ (nat.succ m) tt}
+  (le-pos-pos p) (le-pos-pos q) = ap (λ x → mkℤ (nat.succ x) tt) (nat.≤-anti p q)
+≤-anti {mkℤ (nat.succ n) ff} {mkℤ (nat.succ m) ff}
+  (le-neg-neg p) (le-neg-neg q) = ap (λ x → mkℤ (nat.succ x) ff) (nat.≤-anti q p)
+
+≤-trans : {n m p : ℤ} → n ≤ m → m ≤ p → n ≤ p
+≤-trans {mkℤ nat.zero triv} {mkℤ nat.zero triv} {mkℤ nat.zero triv} q r = le-0-0
+≤-trans {mkℤ nat.zero triv} {mkℤ nat.zero triv} {mkℤ (nat.succ p) tt} q r = le-0-pos p
+≤-trans {mkℤ nat.zero triv} {mkℤ (nat.succ m) tt} {mkℤ (nat.succ p) tt} q r =
+  le-0-pos p
+≤-trans {mkℤ (nat.succ n) tt} {mkℤ (nat.succ m) tt} {mkℤ (nat.succ p) tt}
+  (le-pos-pos q) (le-pos-pos r) = le-pos-pos (nat.≤-trans q r)
+≤-trans {mkℤ (nat.succ n) ff} {mkℤ nat.zero triv} {mkℤ nat.zero triv} q r =
+  le-neg-0 n
+≤-trans {mkℤ (nat.succ n) ff} {mkℤ nat.zero triv} {mkℤ (nat.succ p) tt} q r =
+  le-neg-pos n p
+≤-trans {mkℤ (nat.succ n) ff} {mkℤ (nat.succ m) tt} {mkℤ (nat.succ p) tt} q r =
+  le-neg-pos n p
+≤-trans {mkℤ (nat.succ n) ff} {mkℤ (nat.succ m) ff} {mkℤ nat.zero triv} q r =
+  le-neg-0 n
+≤-trans {mkℤ (nat.succ n) ff} {mkℤ (nat.succ m) ff} {mkℤ (nat.succ p) tt} q r =
+  le-neg-pos n p
+≤-trans {mkℤ (nat.succ n) ff} {mkℤ (nat.succ m) ff} {mkℤ (nat.succ p) ff}
+  (le-neg-neg q) (le-neg-neg r) = le-neg-neg (nat.≤-trans r q) 
 
 
 {- appears to be non-trivial

@@ -54,6 +54,38 @@ Proof.
             { apply H2. assumption. }
 Qed.
 
+
+Lemma valid_lam : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t1:T v) (x:v),
+    valid e e' f (Lam x t1) <->  
+    valid e e' f t1 /\  
+    forall (y:v), In y (free e (Lam x t1)) -> f x <> f y.
+Proof.
+    intros v w e e' f t1 x. split.
+    - intros H. split.
+        + apply (valid_sub v w e e' f (Lam x t1)). 
+            { assumption. }
+            { right. apply Sub_refl. }
+        + intros y H1 H2. 
+            assert (In (f y) (free e' (fmap f (Lam x t1)))) as H3.
+                { apply H.
+                    { apply Sub_refl. }
+                    { assumption. }
+                }
+            assert (~In (f x) (free e' (fmap f (Lam x t1)))) as H4.
+                { simpl. apply remove_x_gone. }
+            apply H4. rewrite H2. assumption.
+    - intros [H1 H2] s y H3 H4. destruct H3 as [H3|H3].
+        + subst. simpl. apply remove_charac. split.
+            { apply H1.
+                { apply Sub_refl. }
+                { simpl in H4. apply remove_charac in H4. 
+                  destruct H4. assumption.  
+                }
+            }
+            { apply H2. assumption. }
+        + apply H1; assumption.
+Qed.
+
 (*
 (* We cannot follow set theoretic proof as this is a stronger result, due to    *)
 (* the order being preserved in lists. Structural induction on t                *)

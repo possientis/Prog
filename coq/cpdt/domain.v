@@ -62,6 +62,37 @@ Proof.
     - intros H1 v H2. assumption.
 Qed.
 
+(********************************************************************************)
+(******************** Parial Order on 'a -> option b' ***************************)
+(********************************************************************************)
+
+Definition ofle (a b:Type) (f g:a -> option b): Prop :=
+    forall (x:a), ole (f x) (g x).
+
+Arguments ofle {a} {b}.
+
+Lemma ofle_refl : forall (a b:Type) (f:a -> option b), ofle f f.
+Proof.
+    intros a b f x. apply ole_refl.
+Qed.
+
+(* Assuming extensionality axiom                                                *)
+Lemma ofle_anti: forall (a b:Type) (f g:a -> option b),
+    ofle f g -> ofle g f -> f = g.
+Proof.
+    intros a b f g H1 H2. apply extensionality. 
+    intros x. apply ole_anti. apply H1. apply H2.
+Qed.
+
+Lemma ofle_trans : forall (a b:Type) (f g h:a -> option b), 
+    ofle f g -> ofle g h -> ofle f h.
+Proof.
+    intros a b f g h H1 H2 x.
+    apply ole_trans with (g x).
+    - apply H1.
+    - apply H2.
+Qed.
+
 
 (********************************************************************************)
 (******************************* Monotone Maps **********************************)
@@ -94,6 +125,9 @@ Qed.
 (* A computation is a monotone map                                              *)
 Definition Computation (a:Type) : Type := { f:nat -> option a | monotone f }.
 
+Definition eval (a:Type) (c:Computation a) (n:nat) : option a := proj1_sig c n.
+
+Arguments eval {a}.
 
 (* Expresses the fact that computation k yields value v for input n             *)
 Definition runTo (a:Type) (k:Computation a) (n:nat) (v:a) : Prop :=
@@ -416,9 +450,13 @@ Qed.
 (********************************************************************************)
 
 Definition continuous (a b: Type)(F:(a -> Computation b)->(a -> Computation b)):=
-        forall (f g:a -> Computation b), cfle f g -> cfle (F f) (F g).
+    forall (f g:a -> Computation b)(n:nat), 
+    ofle (fun x => eval (f x) n)        (fun x => eval (g x) n) -> 
+    ofle (fun x => eval ((F f) x) n)    (fun x => eval ((F g) x) n).
 
 Arguments continuous {a} {b} _.
+
+
 
 Definition Operator (a b:Type) : Type := 
     {F: (a -> Computation b) -> (a -> Computation b) | continuous F}.
@@ -430,6 +468,7 @@ Definition ap (a b:Type) (F:Operator a b) (f:a -> Computation b)
 Arguments ap {a} {b}.
 
 Notation "F $ f" :=(ap F f) (at level 60, right associativity).
+
 
 
 (********************************************************************************)
@@ -449,16 +488,18 @@ Fixpoint iter (a b:Type) (F:Operator a b) (n:nat) : a -> Computation b :=
 
 Arguments iter {a} {b}.
 
-
+(*
 Lemma iter_increasing_ : forall (a b:Type) (F:Operator a b) (n:nat),
     cfle (iter F n) (iter F (S n)).
 Proof.
     intros a b F. induction n as [|n IH].
-    - simpl. unfold init, cfle, bot, cle, ole, botf. simpl.
-      intros x n v H. inversion H.
-    - simpl. destruct F as [F p]. simpl. apply p. assumption.
-Qed.
+    - unfold cfle, iter, cle, init, ole, bot, ap, botf.
+      simpl. intros x n v H. inversion H.
+    -
+Show.
+*)
 
+(*
 Lemma iter_increasing : forall (a b:Type) (F:Operator a b) (n m:nat),
     n <= m -> cfle (iter F n) (iter F m).
 Proof.
@@ -468,13 +509,15 @@ Proof.
         + assumption.
         + apply iter_increasing_.
 Qed.
+*)
 
+(*
 Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
     proj1_sig (iter F n x) n.  
 
 Arguments Fixf {a} {b}.
-
-
+*)
+(*
 Lemma Fixp : forall (a b:Type) (F:Operator a b) (x:a), monotone (Fixf F x).
 Proof.
     intros a b F x. apply monotone_check. intros n m H.
@@ -499,4 +542,5 @@ Proof.
     unfold run, runTo, ap, Fix. intros a b F x v [n H].
     simpl. destruct F as [F p]. simpl in H. 
 Show.
+*)
 *)

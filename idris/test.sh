@@ -6,9 +6,14 @@ HOME=/home/john/Prog/idris
 cd ${HOME}
 echo
 echo "testing idris..."
+echo
 
-idris Hello.idr -o Hello
-./Hello
+echo "Hello world..."
+idris Hello.idr --check
+
+echo "Matrix..."
+idris Matrix.idr --check
+
 ./clean.sh
 
 cd ${DIR}
