@@ -17,6 +17,7 @@ specValid = describe "Testing non-polymorphic properties of valid..." $
 specsValid :: [Spec]
 specsValid  = [ testValidVar
               , testValidApp
+              , testValidLam
               ]
 
 testValidVar :: Spec
@@ -27,8 +28,16 @@ testValidApp :: Spec
 testValidApp = it "Checked valid app property" $ 
     property $ propValidApp
 
+testValidLam :: Spec
+testValidLam = it "Checked valid lam property" $ 
+    property $ propValidLam
+
 propValidVar :: (Var -> Var) -> Var -> Bool
 propValidVar f x = valid f (Var x) 
 
 propValidApp :: (Var -> Var) -> T Var -> T Var -> Bool
 propValidApp f t1 t2 = valid f (App t1 t2) == (valid f t1 && valid f t2)
+
+propValidLam :: (Var -> Var) -> T Var -> Var -> Bool
+propValidLam f t1 x = valid f (Lam x t1) == 
+   (valid f t1 && all ((/= f x) . f) (free $ Lam x t1))

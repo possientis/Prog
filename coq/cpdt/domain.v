@@ -62,37 +62,6 @@ Proof.
     - intros H1 v H2. assumption.
 Qed.
 
-(********************************************************************************)
-(******************** Parial Order on 'a -> option b' ***************************)
-(********************************************************************************)
-
-Definition ofle (a b:Type) (f g:a -> option b): Prop :=
-    forall (x:a), ole (f x) (g x).
-
-Arguments ofle {a} {b}.
-
-Lemma ofle_refl : forall (a b:Type) (f:a -> option b), ofle f f.
-Proof.
-    intros a b f x. apply ole_refl.
-Qed.
-
-(* Assuming extensionality axiom                                                *)
-Lemma ofle_anti: forall (a b:Type) (f g:a -> option b),
-    ofle f g -> ofle g f -> f = g.
-Proof.
-    intros a b f g H1 H2. apply extensionality. 
-    intros x. apply ole_anti. apply H1. apply H2.
-Qed.
-
-Lemma ofle_trans : forall (a b:Type) (f g h:a -> option b), 
-    ofle f g -> ofle g h -> ofle f h.
-Proof.
-    intros a b f g h H1 H2 x.
-    apply ole_trans with (g x).
-    - apply H1.
-    - apply H2.
-Qed.
-
 
 (********************************************************************************)
 (******************************* Monotone Maps **********************************)
@@ -369,7 +338,7 @@ Qed.
 (********************************************************************************)
 
 Definition cle (a:Type) (x y:Computation a) : Prop :=
-    forall (n:nat), ole (proj1_sig x n) (proj1_sig y n).
+    forall (n:nat), ole (eval x n) (eval y n).
 
 Arguments cle {a} _ _.
 
@@ -445,18 +414,45 @@ Proof.
         - apply H2.
 Qed.
 
+(* 'slice at n', just a preorder though                                         *)
+Definition cfle_n (a b:Type) (n:nat) (f g:a -> Computation b) : Prop :=
+    forall (x:a), ole (eval (f x) n) (eval (g x) n).
+
+Arguments cfle_n {a} {b}.
+    
+Lemma cfle_n_refl : forall (a b:Type) (n:nat) (f:a -> Computation b),
+    cfle_n n f f.
+Proof. intros a b n f x. apply ole_refl. Qed.
+
+
+Lemma cfle_n_trans : forall (a b:Type) (n:nat) (f g h:a -> Computation b),
+    cfle_n n f g -> cfle_n n g h -> cfle_n n f h.
+Proof.
+    intros a b n f g h H1 H2 x. apply ole_trans with (eval (g x) n).
+        - apply H1.
+        - apply H2.
+Qed.
+
+
+
 (********************************************************************************)
 (************************* Continuous Function on Arrows  ***********************)
 (********************************************************************************)
 
 Definition continuous (a b: Type)(F:(a -> Computation b)->(a -> Computation b)):=
     forall (f g:a -> Computation b)(n:nat), 
-    ofle (fun x => eval (f x) n)        (fun x => eval (g x) n) -> 
-    ofle (fun x => eval ((F f) x) n)    (fun x => eval ((F g) x) n).
+        cfle_n n f g  -> cfle_n n (F f) (F g). 
 
-Arguments continuous {a} {b} _.
+Arguments continuous {a} {b}.
 
+(* This is a stronger property than just being monotone wr to cfle              *)
 
+Lemma continuous_stronger : forall (a b:Type) 
+    (F:(a -> Computation b)->(a -> Computation b)), continuous F ->
+        forall (f g:a -> Computation b), cfle f g -> cfle (F f) (F g).
+Proof.
+    intros a b F C f g H x n. revert x. apply C. intros x. apply H. 
+Qed.
 
 Definition Operator (a b:Type) : Type := 
     {F: (a -> Computation b) -> (a -> Computation b) | continuous F}.
@@ -488,16 +484,17 @@ Fixpoint iter (a b:Type) (F:Operator a b) (n:nat) : a -> Computation b :=
 
 Arguments iter {a} {b}.
 
-(*
+
+
 Lemma iter_increasing_ : forall (a b:Type) (F:Operator a b) (n:nat),
     cfle (iter F n) (iter F (S n)).
 Proof.
-    intros a b F. induction n as [|n IH].
+    intros a b [F p]. induction n as [|n IH].
     - unfold cfle, iter, cle, init, ole, bot, ap, botf.
       simpl. intros x n v H. inversion H.
-    -
-Show.
-*)
+    - intros x m. simpl. revert x. apply p. intros x. apply IH.
+Qed.
+
 
 (*
 Lemma iter_increasing : forall (a b:Type) (F:Operator a b) (n m:nat),
@@ -509,15 +506,14 @@ Proof.
         + assumption.
         + apply iter_increasing_.
 Qed.
-*)
 
-(*
+
+
 Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
-    proj1_sig (iter F n x) n.  
+    eval (iter F n x) n.  
 
 Arguments Fixf {a} {b}.
-*)
-(*
+
 Lemma Fixp : forall (a b:Type) (F:Operator a b) (x:a), monotone (Fixf F x).
 Proof.
     intros a b F x. apply monotone_check. intros n m H.

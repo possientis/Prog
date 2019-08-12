@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Eq.
+Require Import Map.
 Require Import Remove.
 
 Require Import Fol.P.

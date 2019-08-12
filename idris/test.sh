@@ -14,6 +14,9 @@ idris Hello.idr --check
 echo "Matrix..."
 idris Matrix.idr --check
 
+echo "Tree..."
+idris Tree.idr --check
+
 ./clean.sh
 
 cd ${DIR}

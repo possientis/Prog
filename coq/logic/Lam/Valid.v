@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Eq.
+Require Import Map.
 Require Import Remove.
 
 Require Import Lam.T.
@@ -86,11 +87,11 @@ Proof.
         + apply H1; assumption.
 Qed.
 
-(*
-(* We cannot follow set theoretic proof as this is a stronger result, due to    *)
-(* the order being preserved in lists. Structural induction on t                *)
+(* We cannot follow set the theoretic proof as this is a stronger result,       *)
+(* due to the order being preserved in lists. Structural induction on t.        *)
 Lemma valid_free : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
-    valid e e' f t <-> forall (s:T v), s <<= t -> free e' (fmap f s) = map f (free e s).
+    valid e e' f t <-> forall (s:T v), s <<= t -> 
+        free e' (fmap f s) = map f (free e s).
 Proof.
     intros v w e e' f t. split.
     - induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; intros H s H'.
@@ -158,6 +159,23 @@ Proof.
               apply in_or_app. left. assumption. }
             { apply IH2. intros s H'. apply H. right.
               apply in_or_app. right. assumption. } 
-        +
-Show.
-*)
+        + apply valid_lam. split.
+            { apply IH1. intros s H'. apply H. apply Sub_tran with t1.
+                { assumption. }
+                { right. apply Sub_refl. }
+            }
+            { intros y H1 H2.
+              assert (~In (f x) (free e' (fmap f (Lam x t1)))) as Ex.
+                { simpl. apply remove_x_gone. }
+              assert (In (f y) (free e' (fmap f (Lam x t1)))) as Ey. 
+                { rewrite H.
+                    { apply mapIn. exists y. split.
+                        { assumption. }
+                        { reflexivity. }
+                    }
+                    { apply Sub_refl. }
+                }
+              rewrite <- H2 in Ey. apply Ex. assumption. 
+            }
+Qed.
+

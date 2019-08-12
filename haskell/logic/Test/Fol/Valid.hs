@@ -18,6 +18,7 @@ specsValid :: [Spec]
 specsValid  = [ testValidElem
               , testValidBot
               , testValidImp
+              , testValidAll
               ]
 
 testValidElem :: Spec
@@ -32,6 +33,10 @@ testValidImp :: Spec
 testValidImp = it "Checked valid imp property" $ 
     property $ propValidImp
 
+testValidAll :: Spec
+testValidAll = it "Checked valid all property" $ 
+    property $ propValidAll
+
 propValidElem :: (Var -> Var) -> Var -> Var -> Bool
 propValidElem f x y = valid f (Elem x y)
 
@@ -40,3 +45,8 @@ propValidBot f = valid f Bot
 
 propValidImp :: (Var -> Var) -> P Var -> P Var -> Bool
 propValidImp f p1 p2 = valid f (Imp p1 p2) == (valid f p1 && valid f p2)
+
+propValidAll :: (Var -> Var) -> P Var -> Var -> Bool
+propValidAll f p1 x = valid f (All x p1) == 
+   (valid f p1 && all ((/= f x) . f) (free $ All x p1))
+
