@@ -3,9 +3,11 @@ Require Import List.
 Require Import Eq.
 Require Import Map.
 Require Import Remove.
+Require Import Injective.
 
 Require Import Lam.T.
 Require Import Lam.Free.
+Require Import Lam.Variable.
 Require Import Lam.Subformula.
 
 Definition valid (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v) : Prop :=
@@ -87,7 +89,7 @@ Proof.
         + apply H1; assumption.
 Qed.
 
-(* We cannot follow set the theoretic proof as this is a stronger result,       *)
+(* We cannot follow the set theoretic proof as this is a stronger result,       *)
 (* due to the order being preserved in lists. Structural induction on t.        *)
 Lemma valid_free : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
     valid e e' f t <-> forall (s:T v), s <<= t -> 
@@ -177,5 +179,14 @@ Proof.
                 }
               rewrite <- H2 in Ey. apply Ex. assumption. 
             }
+Qed.
+
+Lemma valid_inj : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
+    injective_on (var t) f -> valid e e' f t.
+Proof.
+    intros v w e e' f t H. apply valid_free. intros s H'. apply free_inj.
+    apply injective_on_incl with (var t).
+    - apply Sub_var. assumption.
+    - assumption.
 Qed.
 

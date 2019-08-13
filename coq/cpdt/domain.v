@@ -496,7 +496,7 @@ Proof.
 Qed.
 
 
-(*
+
 Lemma iter_increasing : forall (a b:Type) (F:Operator a b) (n m:nat),
     n <= m -> cfle (iter F n) (iter F m).
 Proof.
@@ -514,6 +514,7 @@ Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
 
 Arguments Fixf {a} {b}.
 
+
 Lemma Fixp : forall (a b:Type) (F:Operator a b) (x:a), monotone (Fixf F x).
 Proof.
     intros a b F x. apply monotone_check. intros n m H.
@@ -523,6 +524,7 @@ Proof.
 Qed.
 
 Arguments Fixp {a} {b}.
+
 
 Definition Fix (a b:Type) (F:Operator a b) (x:a) : Computation b :=
     exist monotone (Fixf F x) (Fixp F x).
@@ -539,4 +541,4 @@ Proof.
     simpl. destruct F as [F p]. simpl in H. 
 Show.
 *)
-*)
+

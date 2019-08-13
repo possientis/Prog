@@ -210,8 +210,10 @@ Lam/Valid.vo :		Lam/Valid.v \
 					Eq.vo \
 					Map.vo \
 					Remove.vo \
+					Injective.vo \
 					Lam/T.vo \
 					Lam/Free.vo \
+					Lam/Variable.vo \
 					Lam/Subformula.vo
 	coqc Lam/Valid.v -R Lam Lam
 
@@ -219,8 +221,10 @@ Fol/Valid.vo :		Fol/Valid.v \
 					Eq.vo \
 					Map.vo \
 					Remove.vo \
+					Injective.vo \
 					Fol/P.vo \
 					Fol/Free.vo \
+					Fol/Variable.vo \
 					Fol/Subformula.vo
 	coqc Fol/Valid.v -R Fol Fol
 

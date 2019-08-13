@@ -21,13 +21,23 @@ specValid = describe "Testing properties of valid..." $
     sequence_ (specsValid @ f)
 
 specsValid :: forall f . (Test f) =>  [Spec]
-specsValid  = [ testValidSub @ f
+specsValid  = [ testValidSub    @ f
+              , testValidFree   @ f
               ]
 
 testValidSub :: forall f . (Test f) =>  Spec
 testValidSub = it "Checked valid subformula property" $
     property $ propValidSub @ f
 
+testValidFree :: forall f . (Test f) =>  Spec
+testValidFree = it "Checked valid free property" $
+    property $ propValidFree @ f
+
 propValidSub :: (Test f) =>  (Var -> Var) -> f Var -> Bool
 propValidSub f t = valid f t == all (valid f) (sub t)
+
+propValidFree :: (Test f) => (Var -> Var) -> f Var -> Bool
+propValidFree f t = valid f t == (all cond (sub t)) where
+    cond s = free (fmap f s) == map f (free s) 
+
 
