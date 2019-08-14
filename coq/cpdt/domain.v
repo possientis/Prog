@@ -531,6 +531,25 @@ Definition Fix (a b:Type) (F:Operator a b) (x:a) : Computation b :=
 
 Arguments Fix {a} {b}.
 
+(* key lemma                                                                    *)
+Lemma FFix_Fix : forall (a b:Type) (F:Operator a b) (x:a) (n:nat),
+    eval ((F $ (Fix F)) x) n = eval (iter F (S n) x) n.
+Proof.
+    intros a b F x n. 
+    destruct F as [F' p] eqn:E. rewrite <- E.
+    unfold continuous, cfle_n in p.
+    remember (Fix F) as f eqn:E1.
+    remember (iter F n) as g eqn:E2.
+    assert (eval (F' f x) n = eval ((F $ f) x) n) as E3. 
+        { unfold eval, ap. rewrite E. reflexivity. }
+    assert (eval (F' g x) n = eval (iter F (S n) x) n) as E4.
+        { unfold eval. rewrite E2. unfold iter, ap. rewrite E. reflexivity. }
+    assert (forall (x:a), eval (f x) n = eval (g x) n) as H.
+        { intros y. rewrite E1, E2. unfold Fix,Fixf, iter, eval. reflexivity. }
+    rewrite <- E3, <- E4.
+    apply ole_anti; apply p; intros y; rewrite H; apply ole_refl.
+Qed.
+
 (* checking Fix has the intended semantics  *)
 
 (*

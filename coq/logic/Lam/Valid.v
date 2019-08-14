@@ -190,3 +190,25 @@ Proof.
     - assumption.
 Qed.
 
+(*
+Lemma valid_charac : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
+    valid e e' f t <-> forall (t1:T v) (x y:v), 
+        (Lam x t1) <<= t -> In y (free e (Lam x t1)) -> f x <> f y.
+Proof.
+    intros v w e e' f t. split.
+    - intros H t1 x y H1 H2 H3.
+      assert (In (f y) (free e' (fmap f (Lam x t1)))) as H4.
+        { apply H; assumption. }
+      assert (~In (f x) (free e' (fmap f (Lam x t1)))) as H5.
+        { simpl. apply remove_x_gone. }
+      rewrite <- H3 in H4. apply H5. assumption.
+    - induction t as [z|t1' IH1 t2' IH2|z t1' IH1]; intros H.
+        + apply valid_var.
+        + apply valid_app. split.
+            { apply IH1. intros t1 x y H1. apply H. apply Sub_tran with t1'.
+                { assumption. }
+                { right.
+
+
+Show.
+*)

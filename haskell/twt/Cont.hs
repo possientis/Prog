@@ -5,6 +5,8 @@
 -- F : C -> Set 
 -- F a ~ Nat[C(a,-), F]
 
+import Control.Monad.Trans
+
 to :: a -> (forall r . (a -> r) -> r)
 to a f = f a
 
@@ -54,6 +56,27 @@ releaseStringCont = runCount $ do
     os      <- Cont withOS
     return $ os ++ "-" ++ show version ++ "-" ++ show date
 
+printString :: IO ()
+printString =
+    withVersionNumber $ \version ->
+        withTimestamp $ \date ->
+            withOS $ \os ->
+                putStrLn $ os ++ "-" ++ show version ++ "-" ++ show date
+
+liftCont :: (Monad m) => Cont a -> ContT m a 
+liftCont x = ContT $ return x
+
+printStringCont :: IO ()
+printStringCont = run $ do  -- ContT IO
+    version <- liftCont $ Cont withVersionNumber
+    date    <- liftCont $ Cont withTimestamp
+    os      <- liftCont $ Cont withOS
+    lift $ putStrLn $ os ++ "-" ++ show version ++ "-" ++ show date
+
+run :: ContT IO a -> IO a
+run x = runCount <$> runContT x
+--run = fmap runCount . runContT
+
 
 newtype ContT m a = ContT { runContT :: m (Cont a) }
     
@@ -78,11 +101,19 @@ instance (Monad m) => Monad (ContT m) where
         let y   = ca' f         -- ContT m b
         runContT y              -- m (Cont b)
         
+instance MonadTrans ContT where
+    lift x = ContT $ do
+        x' <- x                 -- a
+        let ca = pure x'        -- Cont a
+        return ca               -- m (Cont a)
+--  lift = ContT . (pure <$>)
 
 main :: IO ()
 main = do
     putStrLn releaseString
     putStrLn releaseStringCont
+    printString
+    printStringCont
 
 
 

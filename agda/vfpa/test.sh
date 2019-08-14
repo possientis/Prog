@@ -24,7 +24,6 @@ agda vector.agda
 agda bst.agda
 agda sigma.agda
 agda z.agda
-agda printf.agda
 
 ./clean.sh
 
