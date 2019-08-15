@@ -19,6 +19,7 @@ specsValid  = [ testValidElem
               , testValidBot
               , testValidImp
               , testValidAll
+              , testValidCharac
               ]
 
 testValidElem :: Spec
@@ -37,6 +38,10 @@ testValidAll :: Spec
 testValidAll = it "Checked valid all property" $ 
     property $ propValidAll
 
+testValidCharac :: Spec
+testValidCharac = it "Checked valid characterization property" $ 
+    property $ propValidCharac
+
 propValidElem :: (Var -> Var) -> Var -> Var -> Bool
 propValidElem f x y = valid f (Elem x y)
 
@@ -50,3 +55,8 @@ propValidAll :: (Var -> Var) -> P Var -> Var -> Bool
 propValidAll f p1 x = valid f (All x p1) == 
    (valid f p1 && all ((/= f x) . f) (free $ All x p1))
 
+propValidCharac :: (Var -> Var) -> P Var -> Bool
+propValidCharac f p = valid f p == all cond (sub p) where
+    cond :: P Var -> Bool
+    cond p'@(All x _) = all ((/= f x) . f) (free p')
+    cond _            = True

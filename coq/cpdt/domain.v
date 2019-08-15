@@ -100,7 +100,7 @@ Arguments eval {a}.
 
 (* Expresses the fact that computation k yields value v for input n             *)
 Definition runTo (a:Type) (k:Computation a) (n:nat) (v:a) : Prop :=
-    proj1_sig k n = Some v.
+    eval k n = Some v.
 
 Arguments runTo {a} _ _ _.
 
@@ -147,7 +147,7 @@ Arguments bot {a}.
 (********************************************************************************)
 
 Definition ceq (a:Type) (k1 k2:Computation a) : Prop :=
-    forall (n:nat), proj1_sig k1 n = proj1_sig k2 n.
+    forall (n:nat), eval k1 n = eval k2 n.
 
 Arguments ceq {a} _ _.
 
@@ -219,7 +219,7 @@ Qed.
 Definition bind'(a b:Type)(k:Computation a)(g:a -> Computation b):Computation b.
     unfold Computation. 
     remember (fun (n:nat) =>
-        match proj1_sig k n with
+        match eval k n with
         |   Some va => proj1_sig (g va) n
         |   None    => None
         end) as gf eqn:GF.
@@ -316,12 +316,9 @@ Lemma left_identity : forall (a b:Type) (x:a) (h:a -> Computation b),
     (pure x) >>= h == h x.
 Proof. intros a b x h n. simpl. destruct (h x) as [f p]. reflexivity. Qed. 
 
-
-
 Lemma right_identity : forall (a:Type) (k:Computation a), 
     k >>= pure == k.
 Proof. intros a [f p] n. simpl. destruct (f n) as [v|]; reflexivity. Qed. 
-
 
 Lemma associativity : forall (a b c:Type), 
     forall (k:Computation a) (f:a -> Computation b) (g:b -> Computation c),
@@ -332,7 +329,6 @@ Proof.
     - reflexivity.
 Qed.
 
-
 (********************************************************************************)
 (********************** Partial Order on Computations  **************************)
 (********************************************************************************)
@@ -341,7 +337,6 @@ Definition cle (a:Type) (x y:Computation a) : Prop :=
     forall (n:nat), ole (eval x n) (eval y n).
 
 Arguments cle {a} _ _.
-
 
 Lemma cle_refl : forall (a:Type) (x:Computation a), cle x x.
 Proof. intros a [f p] n. apply ole_refl. Qed.
@@ -433,8 +428,6 @@ Proof.
         - apply H2.
 Qed.
 
-
-
 (********************************************************************************)
 (************************* Continuous Function on Arrows  ***********************)
 (********************************************************************************)
@@ -465,8 +458,6 @@ Arguments ap {a} {b}.
 
 Notation "F $ f" :=(ap F f) (at level 60, right associativity).
 
-
-
 (********************************************************************************)
 (************************ The Fixed Point of an Operator  ***********************)
 (********************************************************************************)
@@ -474,7 +465,6 @@ Notation "F $ f" :=(ap F f) (at level 60, right associativity).
 Definition init (a b:Type) : a -> Computation b := (fun x => bot).
 
 Arguments init {a} {b}.
-
 
 Fixpoint iter (a b:Type) (F:Operator a b) (n:nat) : a -> Computation b :=
     match n with
@@ -484,8 +474,6 @@ Fixpoint iter (a b:Type) (F:Operator a b) (n:nat) : a -> Computation b :=
 
 Arguments iter {a} {b}.
 
-
-
 Lemma iter_increasing_ : forall (a b:Type) (F:Operator a b) (n:nat),
     cfle (iter F n) (iter F (S n)).
 Proof.
@@ -494,8 +482,6 @@ Proof.
       simpl. intros x n v H. inversion H.
     - intros x m. simpl. revert x. apply p. intros x. apply IH.
 Qed.
-
-
 
 Lemma iter_increasing : forall (a b:Type) (F:Operator a b) (n m:nat),
     n <= m -> cfle (iter F n) (iter F m).
@@ -507,13 +493,10 @@ Proof.
         + apply iter_increasing_.
 Qed.
 
-
-
 Definition Fixf (a b:Type) (F:Operator a b) (x:a) (n:nat) : option b :=
     eval (iter F n x) n.  
 
 Arguments Fixf {a} {b}.
-
 
 Lemma Fixp : forall (a b:Type) (F:Operator a b) (x:a), monotone (Fixf F x).
 Proof.
@@ -532,8 +515,8 @@ Definition Fix (a b:Type) (F:Operator a b) (x:a) : Computation b :=
 Arguments Fix {a} {b}.
 
 (* key lemma                                                                    *)
-Lemma FFix_Fix : forall (a b:Type) (F:Operator a b) (x:a) (n:nat),
-    eval ((F $ (Fix F)) x) n = eval (iter F (S n) x) n.
+Lemma FFix_iter : forall (a b:Type) (F:Operator a b) (x:a) (n:nat),
+    eval ((F $ Fix F) x) n = eval (iter F (S n) x) n.
 Proof.
     intros a b F x n. 
     destruct F as [F' p] eqn:E. rewrite <- E.
@@ -550,14 +533,36 @@ Proof.
     apply ole_anti; apply p; intros y; rewrite H; apply ole_refl.
 Qed.
 
-(* checking Fix has the intended semantics  *)
+(* If computation F (Fix F) terminates @x, so will computation Fix F @x         *)
+Lemma FFix_Fix : forall (a b:Type) (F:Operator a b) (x:a) (n:nat),
+    ole (eval ((F $ Fix F) x) n) (eval (Fix F x) (S n)).
+Proof.
+    intros a b F x n. apply ole_trans with (eval (iter F (S n) x) n).
+    - rewrite FFix_iter. apply ole_refl.
+    - assert (eval (Fix F x) (S n) = eval (iter F (S n) x) (S n)) as E.
+        { reflexivity. }
+      rewrite E. destruct (iter F (S n) x) as [f p]. simpl.
+      apply monotone_check. 
+        + assumption.
+        + apply le_S, le_n.
+Qed.
+
+(* If computation Fix F terminates @x, so will computation F (Fix F) @x         *)
+Lemma Fix_FFix : forall (a b:Type) (F:Operator a b) (x:a) (n:nat),
+    ole (eval (Fix F x) n) (eval ((F $ Fix F) x) n).
+Proof.
+    intros a b F x n. rewrite FFix_iter. apply iter_increasing_.
+Qed.
 
 (*
+(* checking Fix has the intended semantics  *)
+(* F (Fix F) terminates iff (Fix F) terminates, and both results equal          *)
 Theorem run_Fix : forall (a b:Type) (F:Operator a b) (x:a) (v:b),
-    run ((F $ (Fix F)) x) v -> run ((Fix F) x) v.
+    run ((F $ Fix F) x) v <-> run (Fix F x) v.
 Proof.
-    unfold run, runTo, ap, Fix. intros a b F x v [n H].
-    simpl. destruct F as [F p]. simpl in H. 
+    intros a b F x v. split; intros H.
+    -
+
 Show.
 *)
 

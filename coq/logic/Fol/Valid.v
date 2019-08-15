@@ -204,3 +204,38 @@ Proof.
     - assumption.
 Qed.
 
+
+Lemma valid_charac : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p:P v),
+    valid e e' f p <-> forall (p1:P v) (x y:v), 
+        (All x p1) <<= p -> In y (free e (All x p1)) -> f x <> f y.
+Proof.
+    intros v w e e' f t. split.
+    - intros H p1 x y H1 H2 H3.
+      assert (In (f y) (free e' (fmap f (All x p1)))) as H4.
+        { apply H; assumption. }
+      assert (~In (f x) (free e' (fmap f (All x p1)))) as H5.
+        { simpl. apply remove_x_gone. }
+      rewrite <- H3 in H4. apply H5. assumption.
+    - induction t as [|z z'|p1' IH1 p2' IH2|z p1' IH1]; intros H.
+        + apply valid_bot.
+        + apply valid_elem.
+        + apply valid_imp. split.
+            { apply IH1. intros p1 x y H1. apply H. apply Sub_tran with p1'.
+                { assumption. }
+                { right. apply in_or_app. left. apply Sub_refl. }
+            }
+            { apply IH2. intros p1 x y H1. apply H. apply Sub_tran with p2'.
+                { assumption. }
+                { right. apply in_or_app. right. apply Sub_refl. }
+            }
+        + apply valid_all. split.
+            { apply IH1. intros p1 x y H1. apply H. apply Sub_tran with p1'.
+                { assumption. }
+                { right. apply Sub_refl. }
+            }
+            { intros y H1. apply H with p1'.
+                { apply Sub_refl. }
+                { assumption. }
+            }
+Qed.
+

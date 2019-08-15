@@ -190,7 +190,7 @@ Proof.
     - assumption.
 Qed.
 
-(*
+
 Lemma valid_charac : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
     valid e e' f t <-> forall (t1:T v) (x y:v), 
         (Lam x t1) <<= t -> In y (free e (Lam x t1)) -> f x <> f y.
@@ -207,8 +207,20 @@ Proof.
         + apply valid_app. split.
             { apply IH1. intros t1 x y H1. apply H. apply Sub_tran with t1'.
                 { assumption. }
-                { right.
+                { right. apply in_or_app. left. apply Sub_refl. }
+            }
+            { apply IH2. intros t1 x y H1. apply H. apply Sub_tran with t2'.
+                { assumption. }
+                { right. apply in_or_app. right. apply Sub_refl. }
+            }
+        + apply valid_lam. split.
+            { apply IH1. intros t1 x y H1. apply H. apply Sub_tran with t1'.
+                { assumption. }
+                { right. apply Sub_refl. }
+            }
+            { intros y H1. apply H with t1'.
+                { apply Sub_refl. }
+                { assumption. }
+            }
+Qed.
 
-
-Show.
-*)
