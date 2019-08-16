@@ -3,7 +3,9 @@ Require Import List.
 Require Import Eq.
 Require Import Map.
 Require Import Remove.
+Require Import Replace.
 Require Import Injective.
+Require Import Composition.
 
 Require Import Fol.P.
 Require Import Fol.Free.
@@ -239,3 +241,8 @@ Proof.
             }
 Qed.
 
+Lemma valid_replace : forall (v:Type) (e:Eq v) (x y:v) (p:P v),
+    ~In y (var p) -> valid e e (replace e x y) p.
+Proof.
+    intros v e x y p H. apply valid_inj. apply replace_inj. assumption.
+Qed.

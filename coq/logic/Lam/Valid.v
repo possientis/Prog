@@ -3,7 +3,9 @@ Require Import List.
 Require Import Eq.
 Require Import Map.
 Require Import Remove.
+Require Import Replace.
 Require Import Injective.
+Require Import Composition.
 
 Require Import Lam.T.
 Require Import Lam.Free.
@@ -223,4 +225,32 @@ Proof.
                 { assumption. }
             }
 Qed.
+
+Lemma valid_replace : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
+    ~In y (var t) -> valid e e (replace e x y) t.
+Proof.
+    intros v e x y t H. apply valid_inj. apply replace_inj. assumption.
+Qed.
+
+(*
+Lemma valid_compose : forall (u v w:Type) (e:Eq u) (e':Eq v) (e'':Eq w),
+    forall (f:u -> v) (g:v -> w) (t:T u),
+    (valid e e' f t) /\ (valid e' e'' g (fmap f t)) <-> valid e e'' (g;f) t.
+Proof.
+    intros u v w e e' e'' f g t. split.
+    - intros [Hf Hg]. apply valid_free. intros s H.
+      rewrite fmap_comp. unfold comp. 
+      rewrite valid_free in Hg. rewrite Hg.
+      + rewrite valid_free in Hf. rewrite Hf.
+        { rewrite map_map. reflexivity. }
+        { assumption. }
+      + unfold isSubFormulaOf. rewrite Sub_fmap. apply mapIn.   
+        exists s. split.
+            { assumption. }
+            { reflexivity. }
+    -
+        
+Show.
+*)
+
 

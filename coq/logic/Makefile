@@ -210,7 +210,9 @@ Lam/Valid.vo :		Lam/Valid.v \
 					Eq.vo \
 					Map.vo \
 					Remove.vo \
+					Replace.vo \
 					Injective.vo \
+					Composition.vo \
 					Lam/T.vo \
 					Lam/Free.vo \
 					Lam/Variable.vo \
@@ -221,7 +223,9 @@ Fol/Valid.vo :		Fol/Valid.v \
 					Eq.vo \
 					Map.vo \
 					Remove.vo \
+					Replace.vo \
 					Injective.vo \
+					Composition.vo \
 					Fol/P.vo \
 					Fol/Free.vo \
 					Fol/Variable.vo \

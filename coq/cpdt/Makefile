@@ -21,6 +21,7 @@ all:	Utils/nat.vo \
 		well_founded.vo \
 		Max.vo \
 		domain.vo \
+		thunk.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
 		Test/option_t.vo
@@ -93,6 +94,9 @@ Max.vo : Max.v
 
 domain.vo : domain.v Max.vo extensionality.vo irrelevance.vo
 	coqc domain.v
+
+thunk.vo : thunk.v
+	coqc thunk.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

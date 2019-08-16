@@ -554,15 +554,15 @@ Proof.
     intros a b F x n. rewrite FFix_iter. apply iter_increasing_.
 Qed.
 
-(*
+
 (* checking Fix has the intended semantics  *)
 (* F (Fix F) terminates iff (Fix F) terminates, and both results equal          *)
 Theorem run_Fix : forall (a b:Type) (F:Operator a b) (x:a) (v:b),
     run ((F $ Fix F) x) v <-> run (Fix F x) v.
 Proof.
-    intros a b F x v. split; intros H.
-    -
+    intros a b F x v. split; unfold run, runTo; intros [n H].
+    - exists (S n). apply FFix_Fix. assumption.
+    - exists n. apply Fix_FFix. assumption.
+Qed.
 
-Show.
-*)
 
