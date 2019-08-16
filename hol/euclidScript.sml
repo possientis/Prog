@@ -1,4 +1,4 @@
-open HolKernel arithmeticTheory;
+open (* HolKernel *) arithmeticTheory;
 
 val _ = new_theory "euclid";
 
@@ -29,9 +29,55 @@ drop ();
 
 g `!x. 0 divides x = (x = 0)`;
 e (metis_tac [divides_def, MULT_CLAUSES]);
-
 val DIVIDES_ZERO = top_thm();
 drop ();
 
-DIVIDES_0; DIVIDES_ZERO;
+g `!x. x divides 1 = (x = 1)`;
+e (metis_tac [divides_def, MULT_CLAUSES, MULT_EQ_1]);
+val DIVIDES_ONE = top_thm();
+drop ();
+
+g `!x. x divides x`;
+e (metis_tac [divides_def, MULT_CLAUSES]);
+val DIVIDES_REFL = top_thm();
+drop ();
+
+g `!a b c. a divides b ∧ b divides c ⇒ a divides c`;
+e (metis_tac [divides_def, MULT_ASSOC]);
+val DIVIDES_TRANS = top_thm();
+drop ();
+
+g `!d a b. d divides a ∧ d divides b ⇒ d divides (a+b)`;
+e (metis_tac [divides_def, LEFT_ADD_DISTRIB]);
+
+DIVIDES_0; DIVIDES_ZERO; DIVIDES_ONE; DIVIDES_REFL; DIVIDES_TRANS;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
