@@ -1,8 +1,10 @@
 module reflect-list where
 
+open import id
 open import bool
 open import list
 open import level
+open import function
 
 data 𝕄 : Set -> Set ℓ₁ where
   Inj  : {a : Set} → 𝕃 a → 𝕄 a
@@ -26,18 +28,26 @@ is-empty (Map _ r)     = is-empty r
 is-empty (Cons _ _)    = ff
 is-empty Nil           = tt
 
-simplify : {a : Set} → 𝕄 a → 𝕄 a
-simplify (App (Inj xs) r2)     = if is-empty r2
-  then Inj xs
-  else App (Inj xs) r2
-simplify (App (App r1 r1') r2) = App r1 (App r1' r2)
-simplify (App (Map f r1) r2)   = if is-empty r2
-  then Map f r1
-  else App (Map f r1) r2
-simplify (App (Cons x r1) r2)  = Cons x (App r1 r2)
-simplify (App Nil r2)          = r2
-simplify (Inj xs)              = Inj xs
-simplify (Map x r) = {!!}
-simplify (Cons x r) = {!!}
-simplify Nil = {!!}
+{-
+is-empty-semantics1 : ∀ {a : Set} → (r : 𝕄 a) → is-empty r ≡ tt -> 𝕃⟦ r ⟧ ≡ []
+is-empty-semantics1 r p = {!!}
+-}
+
+-- one step transformation of redexes
+small-step : {a : Set} → 𝕄 a → 𝕄 a
+small-step (Inj xs)              = Inj xs    -- no reduction
+small-step  Nil                  = Nil       -- no reduction
+small-step (Cons x r)            = Cons x r  -- no reduction
+-- small-step 'App'
+small-step (App (Inj xs)     r2) = if is-empty r2 then Inj xs else App (Inj xs) r2
+small-step (App (App r1 r1') r2) = App r1 (App r1' r2)
+small-step (App (Map f r1)   r2) = if is-empty r2 then Map f r1 else App (Map f r1) r2
+small-step (App (Cons x r1)  r2) = Cons x (App r1 r2)
+small-step (App Nil          r2) = r2
+-- small-step 'Map'
+small-step (Map f (Inj xs))      = Inj (map f xs)
+small-step (Map f (App r1 r2))   = App (Map f r1) (Map f r2)
+small-step (Map f (Map g r))     = Map (f ∘ g) r
+small-step (Map f (Cons x r))    = Cons (f x) (Map f r)
+small-step (Map f Nil)           = Nil
 

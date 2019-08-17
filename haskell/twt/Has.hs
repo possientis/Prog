@@ -34,4 +34,14 @@ type MonoidAndEq a = (Monoid a, Eq a)
 class (Monoid a, Eq a) => MonoidEq a
 instance (Monoid a, Eq a) => MonoidEq a
 
-type Test = Has MonoidEq
+type HasMonoidEq = Has MonoidEq
+
+x1 :: HasMonoidEq
+x1 = Has ([3,5] :: [Int])
+
+x2 :: HasMonoidEq
+x2 = Has ([6,7,8] :: [Int]) 
+
+
+
+

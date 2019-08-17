@@ -29,6 +29,7 @@ CoInductive thunk_eq (a:Type) : Thunk a -> Thunk a -> Prop :=
 
 Arguments thunk_eq {a}.
 
+(* was useful when dealing with stream                                          *)
 Definition frob (a:Type) (t:Thunk a) : Thunk a :=
     match t with
     | Answer x  => Answer x
@@ -39,6 +40,43 @@ Arguments frob {a}.
 
 Lemma frob_same : forall (a:Type) (t:Thunk a), t = frob t.
 Proof. intros a. destruct t as [x|t]; reflexivity. Qed.
+
+Lemma thunk_eq_coind : forall (a:Type) (R:Thunk a -> Thunk a -> Prop),
+    (forall (x y:a), R (Answer x) (Answer y) -> x = y)           ->
+    (forall (t1 t2:Thunk a), R (Think t1) (Think t2) -> R t1 t2) ->
+    (forall (x:a)(t2:Thunk a), ~R (Answer x) (Think t2))         ->
+    (forall (y:a)(t1:Thunk a), ~R (Think t1) (Answer y))         ->
+    (forall (t1 t2:Thunk a), R t1 t2 -> thunk_eq t1 t2).
+Proof.
+    intros a R H1 H2 H3 H4. cofix. intros [x|t1] [y|t2] H.
+    - apply H1 in H. rewrite H. constructor. reflexivity.
+    - exfalso. apply (H3 x t2). assumption.
+    - exfalso. apply (H4 y t1). assumption.
+    - apply H2 in H. constructor. apply thunk_eq_coind. assumption.
+Qed.
+
+Arguments thunk_eq_coind {a}.
+
+(* direct proof, using cofix tactic                                             *)
+Lemma thunk_eq_refl : forall (a:Type) (t:Thunk a), thunk_eq t t.
+Proof.
+    intros a. cofix. intros [x|t].
+    - constructor. reflexivity.
+    - constructor. apply thunk_eq_refl.
+Qed.
+
+(* proof using coinduction principle                                            *)
+Lemma thunk_eq_refl' : forall (a:Type) (t:Thunk a), thunk_eq t t.
+Proof.
+    intros a t. apply (thunk_eq_coind (fun x y => x = y)).
+    - intros x y H.   inversion H. reflexivity.
+    - intros t1 t2 H. inversion H. reflexivity.
+    - intros x t2 H.  inversion H.
+    - intros y t1 H.  inversion H.
+    - reflexivity.
+Qed.
+
+
 
 
 

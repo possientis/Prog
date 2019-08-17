@@ -8,10 +8,12 @@ cd ${HOME1}
 echo
 echo "testing vfpa..."
 
+agda level.agda
 agda void.agda
 agda maybe.agda
 agda id.agda
 agda bool.agda
+agda function.agda
 agda sum.agda
 agda relations.agda
 agda nat.agda
@@ -24,6 +26,7 @@ agda vector.agda
 agda bst.agda
 agda sigma.agda
 agda z.agda
+agda reflect-list.agda
 
 ./clean.sh
 

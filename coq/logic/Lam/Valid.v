@@ -241,15 +241,31 @@ Proof.
     - intros [Hf Hg]. apply valid_free. intros s H.
       rewrite fmap_comp. unfold comp. 
       rewrite valid_free in Hg. rewrite Hg.
-      + rewrite valid_free in Hf. rewrite Hf.
-        { rewrite map_map. reflexivity. }
-        { assumption. }
-      + unfold isSubFormulaOf. rewrite Sub_fmap. apply mapIn.   
-        exists s. split.
+        + rewrite valid_free in Hf. rewrite Hf.
+            { rewrite map_map. reflexivity. }
+            { assumption. }
+        + unfold isSubFormulaOf. rewrite Sub_fmap. apply mapIn.   
+          exists s. split.
             { assumption. }
             { reflexivity. }
-    -
-        
+    - intros H. assert (valid e e' f t) as H'.
+        { revert H. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros H.
+            + apply valid_var.
+            + apply valid_app. apply valid_app in H. destruct H as [H1 H2]. split.
+                { apply IH1. assumption. }
+                { apply IH2. assumption. }
+            + apply valid_lam. apply valid_lam in H. destruct H as [H1 H2]. split. 
+                { apply IH1. assumption. }
+                { intros y H3 H4. apply (H2 y H3). 
+                  unfold comp. rewrite H4. reflexivity.
+                }
+        }
+      split.
+        + assumption.
+        + apply valid_free. intros s' H1. 
+          unfold isSubFormulaOf in H1. rewrite Sub_fmap in H1.
+          rewrite mapIn in H1. destruct H1 as [s [H1 H2]].
+          rewrite H2. remember (fmap_comp u v w f g) as H3.  
 Show.
 *)
 

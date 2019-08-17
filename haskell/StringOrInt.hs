@@ -21,6 +21,7 @@ instance GetStringOrInt 'True where
 
 main :: IO ()
 main = do
-    print $ getStringOrInt @ 'False
-    print $ getStringOrInt @ 'True
-
+    putStr "Input a boolean value: "
+    s <- getLine
+    let b = if s == "True" then True else False
+    return ()
