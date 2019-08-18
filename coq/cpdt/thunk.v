@@ -57,7 +57,7 @@ Qed.
 
 Arguments thunk_eq_coind {a}.
 
-(* direct proof, using cofix tactic                                             *)
+(* direct proof using cofix tactic                                              *)
 Lemma thunk_eq_refl : forall (a:Type) (t:Thunk a), thunk_eq t t.
 Proof.
     intros a. cofix. intros [x|t].
@@ -76,7 +76,57 @@ Proof.
     - reflexivity.
 Qed.
 
+(* direct proof using cofix tactic                                              *)
+Lemma thunk_eq_sym : forall (a:Type) (t1 t2:Thunk a),
+    thunk_eq t1 t2 -> thunk_eq t2 t1.
+Proof.
+    intros a. cofix. intros t1 t2 H. destruct H as [x y|t1 t2].
+    - constructor. symmetry. assumption.
+    - constructor. apply thunk_eq_sym. assumption.
+Qed.
+
+(* proof using coinduction principle                                            *)
+Lemma thunk_eq_sym' : forall (a:Type) (t1 t2:Thunk a),
+    thunk_eq t1 t2 -> thunk_eq t2 t1.
+Proof.
+    intros a t1 t2 H. apply (thunk_eq_coind (fun x y => thunk_eq y x)).
+    - clear t1 t2 H. intros x y. 
+      remember (Answer x) as t1 eqn:E1.
+      remember (Answer y) as t2 eqn:E2.
+      intros H. revert E1 E2. destruct H.
+      + intros H1 H2. inversion H1. inversion H2. subst. reflexivity.
+      + intros H1 H2. inversion H1. 
+    - clear t1 t2 H. intros t1 t2.
+      remember (Think t1) as t1' eqn:E1.
+      remember (Think t2) as t2' eqn:E2.
+      intros H. revert E1 E2. destruct H.
+      + intros H1 H2. inversion H1.
+      + intros H1 H2. inversion H1. inversion H2. subst. assumption.
+    - clear t1 t2 H. intros x t2.
+      remember (Answer x) as t1' eqn:E1.
+      remember (Think t2) as t2' eqn:E2.
+      intros H. revert E1 E2. destruct H.
+      + intros H1 H2. inversion H2.
+      + intros H1 H2. inversion H1.
+    - clear t1 t2 H. intros y t1.
+      remember (Think t1) as t1' eqn:E1.
+      remember (Answer y) as t2' eqn:E2.
+      intros H. revert E1 E2. destruct H.
+      + intros H1 H2. inversion H1.
+      + intros H1 H2. inversion H2.
+    - assumption.
+Qed.
 
 
-
-
+(* direct proof using cofix tactic                                              *)
+Lemma thunk_eq_trans : forall (a:Type) (t1 t2 t3:Thunk a),
+    thunk_eq t1 t2 -> thunk_eq t2 t3 -> thunk_eq t1 t3.
+Proof.
+    intros a. cofix. intros t1 t2 t3 H. revert t3. destruct H.
+    - subst. intros t3 H. assumption.
+    - intros t3. remember (Think t2) as t2' eqn:E. 
+      intros H'. revert E. destruct H'.
+        + intros H1. inversion H1.
+        + intros H1. inversion H1. subst. constructor.
+          apply thunk_eq_trans with t2; assumption.
+Qed.

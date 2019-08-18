@@ -48,6 +48,12 @@ if-then-else-same x ff = refl x
 𝔹-contra' : ∀ {ℓ} → ff ≡ tt → {P : Set ℓ} → P
 𝔹-contra' ()
 
+&&-left : ∀ (b1 b2 : 𝔹) → b1 && b2 ≡ tt → b1 ≡ tt
+&&-left tt _ _ = refl _
+
+&&-right : ∀ (b1 b2 : 𝔹) → b1 && b2 ≡ tt → b2 ≡ tt
+&&-right tt _ p = p
+
 
 
 

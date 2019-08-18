@@ -26,9 +26,19 @@ infixr 6 _++_
 ++[] []       = refl _
 ++[] (x ∷ xs) = ap ((λ l → x ∷ l)) (++[] xs)
 
+++-[]-left : ∀ {ℓ} → {a : Set ℓ} → (xs ys : 𝕃 a) → xs ++ ys ≡ [] → xs ≡ []
+++-[]-left [] _ _ = refl _
+
+++-[]-right : ∀ {ℓ} → {a : Set ℓ} → (xs ys : 𝕃 a) → xs ++ ys ≡ [] → ys ≡ []
+++-[]-right [] ys p = p
+
 map : ∀ {ℓ ℓ'} {a : Set ℓ} {b : Set ℓ'} → (a → b) → 𝕃 a → 𝕃 b
 map f []       = []
 map f (x ∷ xs) = f x ∷ map f xs
+
+map-[] : ∀ {ℓ ℓ'} → {a : Set ℓ} → {b : Set ℓ'} → (f : a -> b) → (xs : 𝕃 a) →
+  map f xs ≡ [] → xs ≡ []
+map-[] _ [] _ = refl _
 
 filter : ∀ {ℓ} {a : Set ℓ} → (a → 𝔹) → 𝕃 a → 𝕃 a
 filter p []       = []

@@ -246,3 +246,51 @@ Lemma valid_replace : forall (v:Type) (e:Eq v) (x y:v) (p:P v),
 Proof.
     intros v e x y p H. apply valid_inj. apply replace_inj. assumption.
 Qed.
+
+Lemma valid_compose : forall (u v w:Type) (e:Eq u) (e':Eq v) (e'':Eq w),
+    forall (f:u -> v) (g:v -> w) (q:P u),
+    (valid e e' f q) /\ (valid e' e'' g (fmap f q)) <-> valid e e'' (g;f) q.
+Proof.
+    intros u v w e e' e'' f g q. split.
+    - intros [Hf Hg]. apply valid_free. intros p H.
+      rewrite fmap_comp. unfold comp. 
+      rewrite valid_free in Hg. rewrite Hg.
+        + rewrite valid_free in Hf. rewrite Hf.
+            { rewrite map_map. reflexivity. }
+            { assumption. }
+        + unfold isSubFormulaOf. rewrite Sub_fmap. apply mapIn.   
+          exists p. split.
+            { assumption. }
+            { reflexivity. }
+    - intros H. assert (valid e e' f q) as H'.
+        { revert H. induction q as [|x y|p1 IH1 p2 IH2|x p1 IH1]; intros H.
+            + apply valid_bot.
+            + apply valid_elem.
+            + apply valid_imp. apply valid_imp in H. destruct H as [H1 H2]. split.
+                { apply IH1. assumption. }
+                { apply IH2. assumption. }
+            + apply valid_all. apply valid_all in H. destruct H as [H1 H2]. split. 
+                { apply IH1. assumption. }
+                { intros y H3 H4. apply (H2 y H3). 
+                  unfold comp. rewrite H4. reflexivity.
+                }
+        }
+      split.
+        + assumption.
+        + apply valid_free. intros p' H1. 
+          unfold isSubFormulaOf in H1. rewrite Sub_fmap in H1.
+          rewrite mapIn in H1. destruct H1 as [p [H1 H2]].
+          rewrite H2. fold (comp (fmap g) (fmap f) p). 
+          rewrite <- fmap_comp. rewrite valid_free in H. 
+          rewrite H.
+            { unfold comp. rewrite <- map_map. rewrite valid_free in H'. 
+              rewrite H'.
+                { reflexivity. }
+                { assumption. }
+            }
+            { assumption. }
+Qed.
+
+
+
+

@@ -232,7 +232,7 @@ Proof.
     intros v e x y t H. apply valid_inj. apply replace_inj. assumption.
 Qed.
 
-(*
+
 Lemma valid_compose : forall (u v w:Type) (e:Eq u) (e':Eq v) (e'':Eq w),
     forall (f:u -> v) (g:v -> w) (t:T u),
     (valid e e' f t) /\ (valid e' e'' g (fmap f t)) <-> valid e e'' (g;f) t.
@@ -265,8 +265,16 @@ Proof.
         + apply valid_free. intros s' H1. 
           unfold isSubFormulaOf in H1. rewrite Sub_fmap in H1.
           rewrite mapIn in H1. destruct H1 as [s [H1 H2]].
-          rewrite H2. remember (fmap_comp u v w f g) as H3.  
-Show.
-*)
+          rewrite H2. fold (comp (fmap g) (fmap f) s). 
+          rewrite <- fmap_comp. rewrite valid_free in H. 
+          rewrite H.
+            { unfold comp. rewrite <- map_map. rewrite valid_free in H'. 
+              rewrite H'.
+                { reflexivity. }
+                { assumption. }
+            }
+            { assumption. }
+Qed.
+
 
 
