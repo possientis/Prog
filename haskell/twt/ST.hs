@@ -1,3 +1,5 @@
+{-# LANGUAGE RankNTypes     #-}
+
 import Data.IORef
 import System.IO.Unsafe
 
@@ -38,3 +40,29 @@ modifySTRef :: STRef s a -> (a -> a) -> ST s ()
 modifySTRef ref f = do
     a <- readSTRef ref
     writeSTRef ref $ f a
+-- if runST is defined with signature :: ST s a -> a, then no type error below
+-- but why does this definition even typecheck. 
+-- unsafeRunST :: ST s a -> a
+-- runST       :: (forall s . ST s a) -> a
+-- These are two different types
+runST :: (forall s . ST s a) -> a
+runST = unsafeRunST
+
+-- :: forall s . ST s String, so can call runST on it
+safeExample :: ST s String
+safeExample = do
+    ref <- newSTRef "hello"
+    modifySTRef ref (++ " world")
+    readSTRef ref
+
+-- Cannot be expressed as :: forall s . (STRef s a), so calling runST will fail
+unsafeExample :: ST s (STRef s Bool)
+unsafeExample = newSTRef True
+
+main :: IO ()
+main = do
+    putStrLn $ runST safeExample
+    -- attempting to leak reference to STRef *out* of ST: type error
+--    b <- readIORef $ unSTRef $ runST unsafeExample
+--    print b
+

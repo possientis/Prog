@@ -25,3 +25,4 @@ main = do
   s <- getLine 
   let b = if s == "True" then True else False
   putStrLn $ show b $ getStringOrInt b
+
