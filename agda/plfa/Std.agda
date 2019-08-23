@@ -1,7 +1,7 @@
 open import Data.Nat using (ℕ ; zero; suc; _+_; _*_; _^_; _∸_)
 
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; trans)
+open Eq using (_≡_; refl; cong; trans; sym)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _∎)
 
 
@@ -65,3 +65,41 @@ data Total (n m : ℕ) : Set where
 ≤-total' {suc n} {suc m} | forward p  = forward (s≤s p)
 ≤-total' {suc n} {suc m} | flipped p  = flipped (s≤s p)
 
+*-dist-left : ∀ {n m p : ℕ} → n * (m + p) ≡ n * m + n * p
+*-dist-left {zero} {m} {p}  = refl
+*-dist-left {suc n} {m} {p} =
+  trans
+    (+-assoc m _ _)
+    (sym (trans
+      (+-assoc m _ _)
+      (cong (λ x → m + x)
+        (trans
+          (+-comm (n * m) _)
+          (trans
+            (+-assoc p _ _ )
+            (sym (cong (λ x → p + x)
+              (sym (trans
+                (+-comm (n * p) (n * m))
+                (sym (*-dist-left {n})))))))))))
+
+
+n-*-0 : ∀ {n : ℕ} → 0 ≡ n * 0
+n-*-0 {zero}  = refl
+n-*-0 {suc n} = n-*-0 {n}
+
+n-*-suc : ∀ {n m : ℕ} → n * suc m ≡ n + n * m
+n-*-suc {zero} {m}  = refl
+n-*-suc {suc n} {m} = cong suc
+  (sym (trans
+    (+-comm n _)
+    (trans
+      (+-assoc m _ _ )
+      (cong (λ x → m + x) (trans
+        (+-comm _ n)
+        (sym (n-*-suc {n} {m})))))))
+
+*-comm : ∀ {n m : ℕ} → n * m ≡ m * n
+*-comm {zero} {m}  = n-*-0 {m}
+*-comm {suc n} {m} = sym (trans
+  (n-*-suc {m} {n})
+  (cong (λ x → m + x) (*-comm {m} {n})))
