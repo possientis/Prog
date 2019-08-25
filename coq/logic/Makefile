@@ -211,6 +211,7 @@ Lam/Valid.vo :		Lam/Valid.v \
 					Map.vo \
 					Remove.vo \
 					Replace.vo \
+					Coincide.vo \
 					Injective.vo \
 					Composition.vo \
 					Lam/T.vo \
@@ -224,6 +225,7 @@ Fol/Valid.vo :		Fol/Valid.v \
 					Map.vo \
 					Remove.vo \
 					Replace.vo \
+					Coincide.vo \
 					Injective.vo \
 					Composition.vo \
 					Fol/P.vo \

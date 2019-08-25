@@ -4,6 +4,7 @@ Require Import Eq.
 Require Import Map.
 Require Import Remove.
 Require Import Replace.
+Require Import Coincide.
 Require Import Injective.
 Require Import Composition.
 
@@ -291,6 +292,23 @@ Proof.
             { assumption. }
 Qed.
 
+Lemma valid_fmap : forall (v w:Type) (e:Eq v) (e':Eq w) (f g:v -> w) (q:P v),
+    (fmap f q) = (fmap g q) -> valid e e' f q -> valid e e' g q.
+Proof.
+    intros v w e e' f g q H H' p x H1 H2. apply var_support in H.
+    assert (f x = g x) as H3.
+        { apply (coincide_incl v w f g (var q) (var p)).
+            { apply Sub_var. assumption. }
+            { assumption. }
+            { apply (free_var v e p). assumption. }
+        }
+    assert (fmap f p = fmap g p) as H4.
+        { apply var_support. apply coincide_incl with (var q).    
+            { apply Sub_var. assumption. }
+            { assumption. }
+        }
+    rewrite <- H3, <- H4. apply H'; assumption.
+Qed.
 
 
 

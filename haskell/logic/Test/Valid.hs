@@ -28,6 +28,7 @@ specsValid  = [ testValidSub        @ f
               , testValidInj        @ f
               , testValidReplace    @ f
               , testValidCompose    @ f 
+              , testValidFmap       @ f
               ]
 
 testValidSub :: forall f . (Test f) =>  Spec
@@ -50,6 +51,10 @@ testValidCompose :: forall f . (Test f) =>  Spec
 testValidCompose = it "Checked valid compose property" $
     property $ propValidCompose @ f
 
+testValidFmap :: forall f . (Test f) =>  Spec
+testValidFmap = it "Checked valid fmap property" $
+    property $ propValidFmap @ f
+
 propValidSub :: (Test f) =>  (Var -> Var) -> f Var -> Bool
 propValidSub f t = valid f t == all (valid f) (sub t)
 
@@ -66,3 +71,5 @@ propValidReplace x y t = y `elem` var t || valid (y <-: x) t
 propValidCompose :: (Test f) => (Var -> Var) -> (Var -> Var) -> f Var -> Bool
 propValidCompose f g t = ((valid f t) && (valid g $ fmap f t)) == valid (g . f) t
 
+propValidFmap :: (Test f) => (Var -> Var) -> (Var -> Var) -> f Var -> Bool
+propValidFmap f g t = (fmap f t) /= (fmap g t) || (not $ valid f t) || valid g t

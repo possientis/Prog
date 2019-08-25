@@ -21,3 +21,10 @@ Proof.
         + left. reflexivity.
 Qed.
 
+Lemma coincide_incl : forall (v w:Type) (f g:v -> w) (xs ys:list v),
+    incl ys xs -> coincide xs f g -> coincide ys f g.
+Proof.
+    intros v w f g xs ys H H' x H1. apply H in H1. apply H'. assumption.
+Qed.
+
+
