@@ -296,3 +296,10 @@ Proof.
     rewrite <- H3, <- H4. apply H'; assumption.
 Qed.
 
+(*
+Lemma valid_bnd : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
+    (exists (xs:list v), 
+        incl (bnd t) xs /\
+        injective_on xs f /\
+*)
+

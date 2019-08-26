@@ -84,13 +84,17 @@ Proof.
     - constructor. symmetry. assumption.
     - constructor. apply thunk_eq_sym. assumption.
 Qed.
-
+(*
 (* proof using coinduction principle                                            *)
 Lemma thunk_eq_sym' : forall (a:Type) (t1 t2:Thunk a),
     thunk_eq t1 t2 -> thunk_eq t2 t1.
 Proof.
     intros a t1 t2 H. apply (thunk_eq_coind (fun x y => thunk_eq y x)).
-    - clear t1 t2 H. intros x y. 
+    - clear t1 t2 H. intros x y H.
+
+Show.
+*)
+(*
       remember (Answer x) as t1 eqn:E1.
       remember (Answer y) as t2 eqn:E2.
       intros H. revert E1 E2. destruct H.
@@ -130,3 +134,27 @@ Proof.
         + intros H1. inversion H1. subst. constructor.
           apply thunk_eq_trans with t2; assumption.
 Qed.
+
+
+(* proof using coinduction principle                                            *)
+Lemma thunk_eq_trans' : forall (a:Type) (t1 t2 t3:Thunk a),
+    thunk_eq t1 t2 -> thunk_eq t2 t3 -> thunk_eq t1 t3.
+Proof.
+    intros a t1 t2 t3 H1 H2.
+    apply (thunk_eq_coind (fun x z => exists y, thunk_eq x y /\ thunk_eq y z)).
+    - clear H1 H2 t1 t2 t3. intros x y [t [H1 H2]].
+      revert H2. remember (Answer x) as t1 eqn:E1. revert E1. destruct H1.
+      + subst. intros H. inversion H. subst. clear H. intros H.
+        inversion H. assumption.
+      + intros H. inversion H.
+    - clear H1 H2 t1 t2 t3.
+      intros t1 t2 [t [H1 H2]].
+      remember (Think t1) as t1' eqn:E1.
+      remember (Think t2) as t2' eqn:E2.
+      revert E1 E2 H2. destruct H1. 
+      + intros H1. inversion H1.
+      + intros H2. inversion H2. subst. clear H2.
+
+
+Show.
+*)

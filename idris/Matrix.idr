@@ -30,6 +30,13 @@ createEmpties = replicate _ []
 createEmpties' : {n : Nat} -> Vect n (Vect 0 a)
 createEmpties' {n} = replicate n []
 
+Matrix : Nat -> Nat -> Type
+Matrix n m = Vect n (Vect m Double)
+
+testMatrix : Matrix 2 3
+testMatrix = [[0,0,0],[0,0,0]]
+
+
 main : IO ()
 main = do
   printLn $ addMatrix

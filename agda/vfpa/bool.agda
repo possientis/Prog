@@ -54,6 +54,9 @@ if-then-else-same x ff = refl x
 &&-right : ∀ (b1 b2 : 𝔹) → b1 && b2 ≡ tt → b2 ≡ tt
 &&-right tt _ p = p
 
+&&-and : ∀ {b1 b2 : 𝔹} → b1 ≡ tt → b2 ≡ tt → b1 && b2 ≡ tt
+&&-and (refl _) (refl _) = refl _
+
 
 
 

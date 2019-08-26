@@ -11,6 +11,7 @@ all:	   			Extensionality.vo \
 					Permute.vo \
 					Injective.vo \
 					Remove.vo \
+					Difference.vo \
 					Include.vo \
 					Lam/T.vo \
 					Fol/P.vo \
@@ -84,6 +85,10 @@ Remove.vo :			Remove.v \
 					Include.vo \
 					Injective.vo
 	coqc Remove.v
+
+Difference.vo :		Difference.v \
+					Eq.vo
+	coqc Difference.v
 
 Include.vo :		Include.v 
 	coqc Include.v

@@ -17,7 +17,11 @@ e (rw []);
 
 (* Another proof *)
 restart ();
-e (rw[divides_def] >> qexists_tac `0` >> rw []);
+e (
+    rw[divides_def] >> 
+    qexists_tac `0` >> 
+    rw []
+);
 
 (* Another proof *)
 restart ();
@@ -25,7 +29,6 @@ e (metis_tac [divides_def, MULT_CLAUSES]);
 
 (* bind lemma to name *)
 val DIVIDES_0 = top_thm();
-
 (* remove lemma from goal stack *)
 drop ();
 
@@ -33,28 +36,28 @@ drop ();
 g `!x. 0 divides x = (x = 0)`;
 (* Proof *)
 e (rw[divides_def]);
+
+(* automated proof *)
+restart ();
+e (metis_tac [divides_def, MULT_CLAUSES]);
+
 (* Qed *)
 val DIVIDES_ZERO = top_thm();
 drop ();
 
-(*
-(* automated proof *)
-restart ();
-e (metis_tac [divides_def, MULT_CLAUSES]);
-*)
 
 (* Lemma *)
 g `!x. x divides 1 = (x = 1)`;
 (* Proof *)
 e (rw [divides_def]);
+
+(* automated proof *)
+restart();
+e (metis_tac [divides_def, MULT_CLAUSES, MULT_EQ_1]);
+
 (* Qed *)
 val DIVIDES_ONE = top_thm();
 drop ();
-
-(*
-(* automated proof *)
-e (metis_tac [divides_def, MULT_CLAUSES, MULT_EQ_1]);
-*)
 
 (* Lemma *)
 g `!x. x divides x`;
@@ -62,14 +65,15 @@ g `!x. x divides x`;
 e (rw [divides_def]);
 e (qexists_tac `1`);
 e (rw [MULT_EQ_1]);
+
+(* automated proof *)
+restart();
+e (metis_tac [divides_def, MULT_CLAUSES]);
+
+
 (* Qed *)
 val DIVIDES_REFL = top_thm();
 drop ();
-
-(*
-(* automated proof *)
-e (metis_tac [divides_def, MULT_CLAUSES]);
-*)
 
 (* Lemma *)
 g `!a b c. a divides b ∧ b divides c ⇒ a divides c`;
@@ -77,14 +81,14 @@ g `!a b c. a divides b ∧ b divides c ⇒ a divides c`;
 e (rw [divides_def]);
 e (qexists_tac `k * k'`);
 e (rw [MULT_ASSOC]);
+
+(* automated proof *)
+restart();
+e (metis_tac [divides_def, MULT_ASSOC]);
+
 (* Qed *)
 val DIVIDES_TRANS = top_thm();
 drop ();
-
-(*
-(* automated proof *)
-e (metis_tac [divides_def, MULT_ASSOC]);
-*)
 
 (* Lemma *)
 g `!d a b. d divides a ∧ d divides b ⇒ d divides (a+b)`;
@@ -92,6 +96,8 @@ g `!d a b. d divides a ∧ d divides b ⇒ d divides (a+b)`;
 e (rw [divides_def]);
 e (qexists_tac `k + k'`);
 e (rw [LEFT_ADD_DISTRIB]);
+
+
 (* Qed *)
 val DIVIDES_ADD = top_thm();
 drop ();
@@ -106,15 +112,6 @@ e (rw [LEFT_SUB_DISTRIB]);
 (* Qed *)
 val DIVIDES_SUB = top_thm();
 drop ();
-
-(* proofs appear to be stuck in infinite loop
-g `!d a b. d divides a ∧ d divides b ⇒ d divides (a+b)`;
-e (metis_tac [divides_def, LEFT_ADD_DISTRIB]);
-
-
-g `!d a b. d divides a ∧ d divides b ⇒ d divides (a-b)`;
-e (metis_tac [divides_def, LEFT_SUB_DISTRIB]);
-*)
 
 g `!d a b. d divides a /\ d divides (a + b) ==> d divides b`;
 e (rw [divides_def]);
@@ -153,6 +150,36 @@ val DIVIDES_LE2 = store_thm(
     ``!m n. m divides n ⇒ m ≤ n ∨ (n = 0)``,
     rw [divides_def] >> rw []);
 
+
+g `!m n. 0 < m /\ m ≤ n ⇒ m divides (FACT n)`;
+
+e (
+    `!m p. 0 < m ⇒ m divides FACT (m + p)` 
+    suffices_by metis_tac[LESS_EQ_EXISTS]
+);
+
+e ( Induct_on `p`);
+
+e (rw[]);
+
+e (Cases_on `m`);
+
+e (metis_tac [DECIDE ``!x.~(x < x)``]);
+
+b(); (* go back *)
+
+e (fs[]);
+
+e (rw [FACT]);
+
+e (rw [divides_def]);
+
+e (qexists_tac `FACT n`);
+
+
+
+
+LESS_EQ_EXISTS;
 DIVIDES_0; 
 DIVIDES_ZERO; 
 DIVIDES_ONE; 

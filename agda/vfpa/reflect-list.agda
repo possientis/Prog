@@ -29,6 +29,27 @@ is-empty (Map _ r)     = is-empty r
 is-empty (Cons _ _)    = ff
 is-empty Nil           = tt
 
+data IsEmpty {a : Set} : 𝕄 a → Set where
+  EmptyInj : IsEmpty (Inj [])
+  EmptyApp : ∀ {r1 r2 : 𝕄 a} → IsEmpty r1 → IsEmpty r2 → IsEmpty (App r1 r2)
+  EmptyMap : ∀ {a' : Set} {f : a' → a} {r : 𝕄 a'} → IsEmpty r -> IsEmpty (Map f r )
+  EmptyNil : IsEmpty Nil
+
+IsEmpty-empty : ∀ {a : Set} → {r : 𝕄 a} → (IsEmpty r) → is-empty r ≡ tt
+IsEmpty-empty EmptyInj       = refl _
+IsEmpty-empty (EmptyApp p q) = &&-and (IsEmpty-empty p) (IsEmpty-empty q)
+IsEmpty-empty (EmptyMap p)   = IsEmpty-empty p
+IsEmpty-empty EmptyNil       = refl _
+
+{-
+empty-IsEmpty : ∀ {a : Set} → (r : 𝕄 a) → is-empty r ≡ tt → IsEmpty r
+empty-IsEmpty (Inj []) p    = EmptyInj
+empty-IsEmpty (App r1 r2) p with (is-empty r1 , is-empty r2)
+... | (b1, b2) = ?
+empty-IsEmpty (Map x r) p = {!!}
+empty-IsEmpty Nil p = {!!}
+-}
+
 -- If a term is deemed empty, then it denotes the empty list
 is-empty-empty : ∀ {a : Set} → (r : 𝕄 a) → is-empty r ≡ tt -> 𝕃⟦ r ⟧ ≡ []
 is-empty-empty (Inj []) _    = refl _
