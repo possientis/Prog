@@ -15,6 +15,7 @@ agda id.agda
 agda bool.agda
 agda function.agda
 agda sum.agda
+agda prod.agda
 agda relations.agda
 agda nat.agda
 agda square.agda

@@ -18,16 +18,7 @@ CoFixpoint bind (a b:Type) (k:Thunk a) (f:a -> Thunk b) : Thunk b :=
 
 Arguments bind {a} {b}.
 
-
 Notation "k >>= f" := (bind k f) (at level 50, left associativity).
-
-CoInductive thunk_eq (a:Type) : Thunk a -> Thunk a -> Prop :=
-| Answer_eq : forall (x y:a), x = y -> thunk_eq a (Answer x) (Answer y)
-| Think_eq  : forall (t1 t2:Thunk a), 
-    thunk_eq a t1 t2 -> thunk_eq a (Think t1) (Think t2)
-.
-
-Arguments thunk_eq {a}.
 
 (* was useful when dealing with stream                                          *)
 Definition frob (a:Type) (t:Thunk a) : Thunk a :=
@@ -40,6 +31,40 @@ Arguments frob {a}.
 
 Lemma frob_same : forall (a:Type) (t:Thunk a), t = frob t.
 Proof. intros a. destruct t as [x|t]; reflexivity. Qed.
+
+Arguments frob_same {a}.
+
+CoInductive thunk_eq (a:Type) : Thunk a -> Thunk a -> Prop :=
+| Answer_eq : forall (x y:a), x = y -> thunk_eq a (Answer x) (Answer y)
+| Think_eq  : forall (t1 t2:Thunk a), 
+    thunk_eq a t1 t2 -> thunk_eq a (Think t1) (Think t2)
+.
+
+Arguments thunk_eq {a}.
+
+Lemma thunk_eq_answer : forall (a:Type) (x y:a),
+    thunk_eq (Answer x) (Answer y) -> x = y.
+Proof.
+    intros a x y H. inversion H. assumption.
+Qed.
+
+Lemma thunk_eq_think : forall (a:Type) (t1 t2:Thunk a),
+    thunk_eq (Think t1) (Think t2) -> thunk_eq t1 t2.
+Proof.
+    intros a t1 t2 H. inversion H. assumption.
+Qed.
+
+Lemma thunk_eq_ans_thk : forall (a:Type) (x:a) (t:Thunk a),
+    ~thunk_eq (Answer x) (Think t).
+Proof.
+    intros a x t H. inversion H.
+Qed.
+
+Lemma thunk_eq_thk_ans : forall (a:Type) (x:a) (t:Thunk a),
+    ~thunk_eq (Think t) (Answer x).
+Proof.
+    intros a x t H. inversion H.
+Qed.
 
 Lemma thunk_eq_coind : forall (a:Type) (R:Thunk a -> Thunk a -> Prop),
     (forall (x y:a), R (Answer x) (Answer y) -> x = y)           ->
@@ -60,8 +85,7 @@ Arguments thunk_eq_coind {a}.
 (* direct proof using cofix tactic                                              *)
 Lemma thunk_eq_refl : forall (a:Type) (t:Thunk a), thunk_eq t t.
 Proof.
-    intros a. cofix. intros [x|t].
-    - constructor. reflexivity.
+    intros a. cofix. intros [x|t].  - constructor. reflexivity.
     - constructor. apply thunk_eq_refl.
 Qed.
 
@@ -84,43 +108,22 @@ Proof.
     - constructor. symmetry. assumption.
     - constructor. apply thunk_eq_sym. assumption.
 Qed.
-(*
+
 (* proof using coinduction principle                                            *)
 Lemma thunk_eq_sym' : forall (a:Type) (t1 t2:Thunk a),
     thunk_eq t1 t2 -> thunk_eq t2 t1.
 Proof.
     intros a t1 t2 H. apply (thunk_eq_coind (fun x y => thunk_eq y x)).
-    - clear t1 t2 H. intros x y H.
-
-Show.
-*)
-(*
-      remember (Answer x) as t1 eqn:E1.
-      remember (Answer y) as t2 eqn:E2.
-      intros H. revert E1 E2. destruct H.
-      + intros H1 H2. inversion H1. inversion H2. subst. reflexivity.
-      + intros H1 H2. inversion H1. 
-    - clear t1 t2 H. intros t1 t2.
-      remember (Think t1) as t1' eqn:E1.
-      remember (Think t2) as t2' eqn:E2.
-      intros H. revert E1 E2. destruct H.
-      + intros H1 H2. inversion H1.
-      + intros H1 H2. inversion H1. inversion H2. subst. assumption.
-    - clear t1 t2 H. intros x t2.
-      remember (Answer x) as t1' eqn:E1.
-      remember (Think t2) as t2' eqn:E2.
-      intros H. revert E1 E2. destruct H.
-      + intros H1 H2. inversion H2.
-      + intros H1 H2. inversion H1.
-    - clear t1 t2 H. intros y t1.
-      remember (Think t1) as t1' eqn:E1.
-      remember (Answer y) as t2' eqn:E2.
-      intros H. revert E1 E2. destruct H.
-      + intros H1 H2. inversion H1.
-      + intros H1 H2. inversion H2.
+    - clear t1 t2 H. 
+      intros x y H. symmetry. apply thunk_eq_answer. assumption.
+    - clear t1 t2 H. 
+      intros t1 t2 H. apply thunk_eq_think. assumption.
+    - clear t1 t2 H. 
+      intros x t. apply thunk_eq_thk_ans.
+    - clear t1 t2 H. 
+      intros x t. apply thunk_eq_ans_thk.
     - assumption.
 Qed.
-
 
 (* direct proof using cofix tactic                                              *)
 Lemma thunk_eq_trans : forall (a:Type) (t1 t2 t3:Thunk a),
@@ -135,25 +138,40 @@ Proof.
           apply thunk_eq_trans with t2; assumption.
 Qed.
 
-
 (* proof using coinduction principle                                            *)
 Lemma thunk_eq_trans' : forall (a:Type) (t1 t2 t3:Thunk a),
     thunk_eq t1 t2 -> thunk_eq t2 t3 -> thunk_eq t1 t3.
 Proof.
     intros a t1 t2 t3 H1 H2.
     apply (thunk_eq_coind (fun x z => exists y, thunk_eq x y /\ thunk_eq y z)).
-    - clear H1 H2 t1 t2 t3. intros x y [t [H1 H2]].
-      revert H2. remember (Answer x) as t1 eqn:E1. revert E1. destruct H1.
-      + subst. intros H. inversion H. subst. clear H. intros H.
-        inversion H. assumption.
-      + intros H. inversion H.
-    - clear H1 H2 t1 t2 t3.
-      intros t1 t2 [t [H1 H2]].
-      remember (Think t1) as t1' eqn:E1.
-      remember (Think t2) as t2' eqn:E2.
-      revert E1 E2 H2. destruct H1. 
-      + intros H1. inversion H1.
-      + intros H2. inversion H2. subst. clear H2.
+    - clear t1 t2 t3 H1 H2.
+      intros x y [[z|t] [H1 H2]].
+        + apply eq_trans with z; apply thunk_eq_answer; assumption.
+        + inversion H1.
+    - clear t1 t2 t3 H1 H2.
+      intros t1 t2 [[z|t] [H1 H2]].
+        + inversion H1.
+        + exists t. split; apply thunk_eq_think; assumption.
+    - clear t1 t2 t3 H1 H2.
+      intros x t2 [[y|t1] [H1 H2]]. 
+        + inversion H2.
+        + inversion H1.
+    - clear t1 t2 t3 H1 H2.
+      intros y t1 [[x|t2] [H1 H2]]. 
+        + inversion H1.
+        + inversion H2.
+    - exists t2. split; assumption.
+Qed.
+
+
+Notation "t1 == t2" := (thunk_eq t1 t2) (at level 90).
+
+(*
+Lemma left_identity : forall (a b:Type) (x:a) (f:a -> Thunk b),
+    (pure x) >>= f  ==  f x.
+Proof.
+    intros a b x f. unfold pure. destruct (f x) as [y|t] eqn:E.
+    - 
 
 
 Show.

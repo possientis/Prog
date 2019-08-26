@@ -1,2 +1,1 @@
-define product type
-reflect-list.agda
+reflect-list.agda: SmallStep

@@ -13,6 +13,7 @@ SchemaType SString   = String
 SchemaType SInt      = Int
 SchemaType (x .+. y) = (SchemaType x, SchemaType y)
 
+{- Using record syntax gives accessors for free
 data DataStore : Type where
   MkData : (schema : Schema) 
         -> (size : Nat) 
@@ -31,69 +32,84 @@ size (MkData _ size' _) = size'
 total
 items : (store : DataStore) -> Vect (size store) (SchemaType (schema store))
 items (MkData _ _ items') = items'
+-}
 
-{-
-data Command 
-  = Add String
-  | Get Integer
-  | Size
-  | Quit
-
-
+record DataStore where
+  constructor MkData
+  schema : Schema
+  size   : Nat
+  items  : Vect size (SchemaType schema)
 
 total
-addToStore : DataStore -> String -> DataStore
-addToStore (MkData size items) newItem = MkData _ (addToData items) where
-  addToData : Vect old String -> Vect (S old) String
-  addToData [] = [newItem]
-  addToData (x :: xs) = x :: addToData xs
+addToStore : (store: DataStore) 
+          -> (SchemaType (schema store)) 
+          -> DataStore
+
+addToStore (MkData schema size items) newItem = 
+  MkData schema _ (addToData items) where
+    addToData : Vect old     (SchemaType schema) 
+             -> Vect (S old) (SchemaType schema)
+    addToData []        = [newItem]
+    addToData (x :: xs) = x :: addToData xs
 
 total
-parseCommand : (cmd : String) -> (args : String) -> Maybe Command
-parseCommand "add" str = Just (Add (trim str))
-parseCommand "get" val =
-  let val' = trim val in
-      if (all isDigit (unpack val')) && val' /= ""
-        then Just (Get (cast val'))
-        else Nothing
-parseCommand "size" "" = Just Size
-parseCommand "quit" "" = Just Quit
-parseCommand _      _  = Nothing
-
-total
-parse : (input : String) -> Maybe Command
-parse input = 
-  case span (/= ' ') input of
-       (cmd,args) => parseCommand cmd args
-
-total
-getEntry : (pos : Integer) -> (store : DataStore) -> Maybe (String, DataStore)
+getEntry : (pos : Integer) 
+        -> (store : DataStore) 
+        -> Maybe (String, DataStore)
 getEntry pos store = 
   let store_items = items store in
       case integerToFin pos (size store) of
            Nothing  => Just ("Out of range\n", store)
            Just id  => 
               let entry = index id store_items in
-                  Just (entry ++ "\n", store)
+                  Just (?display entry, store)
+
+data Command : Schema -> Type where
+  Add  : SchemaType a -> Command a
+  Get  : Integer      -> Command a
+  Size :                 Command a
+  Quit :                 Command a  
 
 total
-processCommand : (cmd : Command) 
-              -> (store : DataStore) 
+parseCommand : (schema : Schema) 
+            -> (cmd : String) 
+            -> (args : String) 
+            -> Maybe (Command schema)
+parseCommand schema "add" str = Just (Add (?parseBySchema str))
+parseCommand _ "get" val =
+  let val' = trim val in
+      if (all isDigit (unpack val')) && val' /= ""
+        then Just (Get (cast val'))
+        else Nothing
+parseCommand _ "size" "" = Just Size
+parseCommand _ "quit" "" = Just Quit
+parseCommand _ _      _  = Nothing
+
+
+total
+parse : (schema : Schema) -> (input : String) -> Maybe (Command schema)
+parse schema input = 
+  case span (/= ' ') input of
+       (cmd,args) => parseCommand schema cmd (ltrim args)
+
+total
+processCommand : (store : DataStore) 
+              -> (cmd : Command (schema store)) 
               -> Maybe (String, DataStore)
-processCommand Quit _        = Nothing
-processCommand Size store    =
+processCommand _      Quit       = Nothing
+processCommand store  Size       =
   Just ("size: " ++ show (size store) ++ "\n", store)
-processCommand (Add x) store = 
+processCommand store  (Add x)    = 
   Just ("ID " ++ show (size store) ++ "\n", addToStore store x)
-processCommand (Get pos) store = getEntry pos store
+processCommand store  (Get pos)  = getEntry pos store
 
 total
 processInput : DataStore -> String -> Maybe (String, DataStore)
 processInput store inp =
-  case parse inp of
+  case parse (schema store) inp of
        Nothing    => Just ("Invalid command\n", store)
-       (Just cmd) => processCommand cmd store
+       (Just cmd) => processCommand store cmd
 
 main : IO ()
-main = replWith (MkData _ []) "Command: " processInput
--}
+main = replWith (MkData SString _ []) "Command: " processInput
+

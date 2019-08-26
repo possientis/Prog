@@ -3,6 +3,7 @@ module reflect-list where
 open import id
 open import bool
 open import list
+open import prod
 open import level
 open import function
 
@@ -41,14 +42,15 @@ IsEmpty-empty (EmptyApp p q) = &&-and (IsEmpty-empty p) (IsEmpty-empty q)
 IsEmpty-empty (EmptyMap p)   = IsEmpty-empty p
 IsEmpty-empty EmptyNil       = refl _
 
-{-
+
 empty-IsEmpty : ∀ {a : Set} → (r : 𝕄 a) → is-empty r ≡ tt → IsEmpty r
 empty-IsEmpty (Inj []) p    = EmptyInj
-empty-IsEmpty (App r1 r2) p with (is-empty r1 , is-empty r2)
-... | (b1, b2) = ?
-empty-IsEmpty (Map x r) p = {!!}
-empty-IsEmpty Nil p = {!!}
--}
+empty-IsEmpty (App r1 r2) p = EmptyApp
+  (empty-IsEmpty r1 (&&-left (is-empty r1) (is-empty r2) p))
+  (empty-IsEmpty r2 (&&-right (is-empty r1) (is-empty r2) p))
+empty-IsEmpty (Map x r) p   = EmptyMap (empty-IsEmpty r p)
+empty-IsEmpty Nil p         = EmptyNil
+
 
 -- If a term is deemed empty, then it denotes the empty list
 is-empty-empty : ∀ {a : Set} → (r : 𝕄 a) → is-empty r ≡ tt -> 𝕃⟦ r ⟧ ≡ []
@@ -88,4 +90,14 @@ small-step (Map f (App r1 r2))   = App (Map f r1) (Map f r2)
 small-step (Map f (Map g r))     = Map (f ∘ g) r
 small-step (Map f (Cons x r))    = Cons (f x) (Map f r)
 small-step (Map f Nil)           = Nil
+
+data SmallStep {a : Set} : 𝕄 a → 𝕄 a → Set where
+  SmallAppInj : {xs : 𝕃 a} {r : 𝕄 a}  → IsEmpty r
+                                       → SmallStep (App (Inj xs) r) (Inj xs)
+  SmallAppApp : {r1 r2 r3 : 𝕄 a}      → SmallStep
+                                           (App (App r1 r2) r3)
+                                           (App r1 (App r2 r3))
+  SmallAppMap : ∀ {a' : Set} {f : a' → a} {r1 : 𝕄 a'}{r2 : 𝕄 a}
+                                       → IsEmpty r2
+                                       → SmallStep (App (Map f r1) r2) (Map f r1)
 

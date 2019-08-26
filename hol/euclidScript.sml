@@ -164,17 +164,85 @@ e (rw[]);
 
 e (Cases_on `m`);
 
+(*
 e (metis_tac [DECIDE ``!x.~(x < x)``]);
+*)
 
-b(); (* go back *)
-
-e (fs[]);
+e (fs []);
 
 e (rw [FACT]);
 
-e (rw [divides_def]);
+e (rw [DIVIDES_LMUL, DIVIDES_REFL]);
 
-e (qexists_tac `FACT n`);
+e (rw [ADD_CLAUSES]);
+
+e (rw [FACT]);
+
+e (rw [DIVIDES_RMUL]);
+
+restart ();
+e (
+    `!m p. 0 < m ⇒ m divides FACT (m + p)` 
+    suffices_by metis_tac[LESS_EQ_EXISTS]   >>
+    Induct_on `p` >| [
+        rw [] >> Cases_on `m` >| [
+            fs [],
+            rw [FACT] >> rw [DIVIDES_LMUL, DIVIDES_REFL]
+        ],
+        rw [ADD_CLAUSES] >> rw [FACT] >> rw [DIVIDES_RMUL]
+    ]
+);
+
+restart ();
+e (
+    `!m p. 0 < m ⇒ m divides FACT (m + p)` 
+    suffices_by metis_tac[LESS_EQ_EXISTS]   >>
+    Induct_on `p` >| [
+        Cases_on `m` >| [
+            fs [],
+            rw [FACT] >> rw [DIVIDES_LMUL, DIVIDES_REFL]
+        ],
+        rw [ADD_CLAUSES] >> rw [FACT] >> rw [DIVIDES_RMUL]
+    ]
+);
+
+restart ();
+e (
+    `!m p. 0 < m ⇒ m divides FACT (m + p)` 
+    suffices_by metis_tac[LESS_EQ_EXISTS]   >>
+    Induct_on `p` >| [
+        Cases_on `m` >| [
+            fs [],
+            rw [FACT, DIVIDES_LMUL, DIVIDES_REFL]
+        ],
+        rw [ADD_CLAUSES, FACT, DIVIDES_RMUL]
+    ]
+);
+
+
+restart ();
+e (
+    `!m p. 0 < m ⇒ m divides FACT (m + p)` 
+    suffices_by metis_tac[LESS_EQ_EXISTS]   >>
+    Induct_on `p`                           >> 
+    rw [ADD_CLAUSES, FACT, DIVIDES_RMUL]    >>
+    (* base case only remains *)
+    Cases_on `m` >| [
+        fs [],
+        rw [FACT, DIVIDES_LMUL, DIVIDES_REFL]
+    ]
+);
+
+restart ();
+e (
+    `!m p. 0 < m ⇒ m divides FACT (m + p)` 
+    suffices_by metis_tac[LESS_EQ_EXISTS]   >>
+    Induct_on `p`                           >> 
+    rw [ADD_CLAUSES, FACT, DIVIDES_RMUL]    >>
+    (* base case only remains *)
+    Cases_on `m`                            >>
+    fs [FACT, DIVIDES_LMUL, DIVIDES_REFL]
+);
 
 
 
