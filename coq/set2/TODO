@@ -1,0 +1,9 @@
+continue with eset
+define single-step eval relation
+determinacy of single step: t->t' /\ t->t'' => t'=t''
+define multi-stop eval relation
+define normal forms (value)
+uniqueness of normal forms: t ->* u /\ t ->* u' , u,u' normal => u=u'
+termination of evaluation: forall t, exists t', t' normal and t ->* t'
+
+

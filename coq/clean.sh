@@ -13,6 +13,7 @@ rm -f lib/*.glob
 rm -f lib/*.vo
 
 ./set/clean.sh
+./set2/clean.sh
 ./zf/clean.sh
 ./sf/clean.sh
 ./cat/clean.sh

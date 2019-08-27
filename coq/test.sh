@@ -8,6 +8,7 @@ echo
 echo "testing coq..."
 
 ./set/test.sh
+./set2/test.sh
 ./zf/test.sh
 ./sf/test.sh
 ./cat/test.sh
