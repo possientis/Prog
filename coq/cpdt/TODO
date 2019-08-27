@@ -1,2 +1,2 @@
-thunk: prove monad laws
+thunk: prove monad laws: associativity
 

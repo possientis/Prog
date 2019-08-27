@@ -166,13 +166,25 @@ Qed.
 
 Notation "t1 == t2" := (thunk_eq t1 t2) (at level 90).
 
-(*
+
 Lemma left_identity : forall (a b:Type) (x:a) (f:a -> Thunk b),
     (pure x) >>= f  ==  f x.
 Proof.
-    intros a b x f. unfold pure. destruct (f x) as [y|t] eqn:E.
-    - 
+    intros a b x f. unfold pure. 
+    rewrite (frob_same (Answer x >>= f )). unfold bind. 
+    simpl. destruct (f x) as [y|t] eqn:E; constructor.
+    - reflexivity.
+    - apply thunk_eq_refl.
+Qed.
+
+Lemma right_identity : forall (a:Type) (t:Thunk a),
+    t >>= pure == t.
+Proof.
+    intros a. cofix. intros t. rewrite (frob_same (t >>= pure)). simpl.
+    destruct t as [x|t'] eqn:E.
+    - unfold pure. constructor. reflexivity.
+    - constructor. apply right_identity.
+Qed.
 
 
-Show.
-*)
+
