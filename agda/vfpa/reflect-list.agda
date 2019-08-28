@@ -92,12 +92,38 @@ small-step (Map f (Cons x r))    = Cons (f x) (Map f r)
 small-step (Map f Nil)           = Nil
 
 data SmallStep {a : Set} : 𝕄 a → 𝕄 a → Set where
-  SmallAppInj : {xs : 𝕃 a} {r : 𝕄 a}  → IsEmpty r
-                                       → SmallStep (App (Inj xs) r) (Inj xs)
-  SmallAppApp : {r1 r2 r3 : 𝕄 a}      → SmallStep
-                                           (App (App r1 r2) r3)
-                                           (App r1 (App r2 r3))
-  SmallAppMap : ∀ {a' : Set} {f : a' → a} {r1 : 𝕄 a'}{r2 : 𝕄 a}
-                                       → IsEmpty r2
-                                       → SmallStep (App (Map f r1) r2) (Map f r1)
+  SmallAppInj  : (xs : 𝕃 a) (r2 : 𝕄 a)
+               → IsEmpty r2
+               → SmallStep (App (Inj xs) r2) (Inj xs)
+  SmallAppApp  : (r1 r2 r3 : 𝕄 a)
+               → SmallStep (App (App r1 r2) r3) (App r1 (App r2 r3))
+  SmallAppMap  : ∀ {a' : Set} (f : a' → a) (r1 : 𝕄 a') (r2 : 𝕄 a)
+               → IsEmpty r2
+               → SmallStep (App (Map f r1) r2) (Map f r1)
+  SmallAppCons : {x : a} {r1 r2 : 𝕄 a}
+               → SmallStep (App (Cons x r1) r2) (Cons x (App r1 r2))
+  SmallAppNil  : {r2 : 𝕄 a} → SmallStep (App Nil r2) r2
+  SmallMapInj  : ∀ {a' : Set} {f : a' → a} {xs : 𝕃 a'}
+               →  SmallStep (Map f (Inj xs)) (Inj (map f xs))
+  SmallMapApp  : ∀ {a' : Set} {f : a' → a} {r1 r2 : 𝕄 a'}
+               →  SmallStep (Map f (App r1 r2)) (App (Map f r1) (Map f r2))
+  SmallMapMap  : ∀ {a' a'' : Set} {f : a' → a} {g : a'' → a'} {r1 : 𝕄 a''}
+               → SmallStep (Map f (Map g r1)) (Map (f ∘ g) r1)
+  SmallMapCons : ∀ {a' : Set} {f : a' → a} {x : a'} {r1 : 𝕄 a'}
+               → SmallStep (Map f (Cons x r1)) (Cons (f x) (Map f r1))
+  SmallMapNil  : ∀ {a' : Set} {f : a' → a} → SmallStep (Map f Nil) Nil
 
+{-
+Small-small : ∀ {a : Set} {r1 r2 : 𝕄 a} → SmallStep r1 r2 → small-step r1 ≡ r2
+Small-small (SmallAppInj xs r2 p) =
+  ap (λ b → if b then Inj xs else App (Inj xs) r2) (IsEmpty-empty p)
+Small-small (SmallAppApp r1 r2 r3) = refl _
+Small-small (SmallAppMap f r1 r2 p) = {!!}
+Small-small SmallAppCons = {!!}
+Small-small SmallAppNil = {!!}
+Small-small SmallMapInj = {!!}
+Small-small SmallMapApp = {!!}
+Small-small SmallMapMap = {!!}
+Small-small SmallMapCons = {!!}
+Small-small SmallMapNil = {!!}
+-}
