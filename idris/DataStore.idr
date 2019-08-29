@@ -52,6 +52,12 @@ addToStore (MkData schema size items) newItem =
     addToData []        = [newItem]
     addToData (x :: xs) = x :: addToData xs
 
+display : SchemaType schema -> String
+display {schema = SString} item    = item
+display {schema = SInt} item        = show item
+display {schema = (x .+. y)} (a, b) = display a ++ ", " ++ display b
+
+
 total
 getEntry : (pos : Integer) 
         -> (store : DataStore) 
@@ -62,7 +68,7 @@ getEntry pos store =
            Nothing  => Just ("Out of range\n", store)
            Just id  => 
               let entry = index id store_items in
-                  Just (?display entry, store)
+                  Just (display entry, store)
 
 data Command : Schema -> Type where
   Add  : SchemaType a -> Command a
@@ -70,12 +76,44 @@ data Command : Schema -> Type where
   Size :                 Command a
   Quit :                 Command a  
 
+parsePrefix : (schema : Schema) -> String -> Maybe (SchemaType schema, String)
+parsePrefix SString   input = getQuoted (unpack input)
+  where
+    getQuoted : List Char -> Maybe (String, String)
+    getQuoted ('"' :: xs) =
+      case span (/= '"') xs of
+           (quoted, '"' :: rest)  => Just (pack quoted, ltrim (pack rest))
+           _                      => Nothing
+    getQuoted _                   =  Nothing
+
+parsePrefix SInt      input = 
+  case span isDigit input of
+       ("" , rest) => Nothing
+       (num, rest) => Just (cast num, ltrim rest)
+parsePrefix (schemal .+. schemar) input =
+  case parsePrefix schemal input of
+       Nothing              => Nothing
+       Just (l_val, input') =>
+        case parsePrefix schemar input of
+             Nothing  => Nothing
+             Just (r_val, input'') => Just ((l_val, r_val), input'')
+
+parseBySchema : (schema : Schema) -> String -> Maybe (SchemaType schema)
+parseBySchema schema input = 
+  case parsePrefix schema input of
+       Just (res, "") => Just res
+       Just _         => Nothing
+       Nothing        => Nothing
+
 total
 parseCommand : (schema : Schema) 
             -> (cmd : String) 
             -> (args : String) 
             -> Maybe (Command schema)
-parseCommand schema "add" str = Just (Add (?parseBySchema str))
+parseCommand schema "add" str = 
+  case parseBySchema schema str of
+       Nothing  => Nothing
+       Just dat => Just (Add dat)
 parseCommand _ "get" val =
   let val' = trim val in
       if (all isDigit (unpack val')) && val' /= ""
@@ -111,5 +149,5 @@ processInput store inp =
        (Just cmd) => processCommand store cmd
 
 main : IO ()
-main = replWith (MkData SString _ []) "Command: " processInput
+main = replWith (MkData (SString .+. SString .+. SInt) _ []) "Command: " processInput
 
