@@ -7,10 +7,10 @@ module  Expr
 
 import Data.Generics
 
-data Expr = ELitInt   Integer
-          | EBinop    Binop   Expr Expr
-          | EAntiInt  String
-          | EAntiExpr String 
+data Expr = ELitInt  Integer
+          | EBinop   Binop   Expr Expr
+          | EAntiInt String
+          | EAntiExp String 
 
 data Binop = OpAdd | OpSub | OpMul | OpDiv
     deriving (Show, Typeable, Data)
