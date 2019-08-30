@@ -245,7 +245,51 @@ e (
 );
 
 
+restart ();
+e (Induct_on `n - m`);
 
+b();
+
+e (Induct_on `n - m` >> rw[]);
+e (`m = n` by rw[]);
+e (rw[]);
+e (`?k. m = SUC k` by (Cases_on `m` >> fs[]));
+e (fs [FACT, DIVIDES_LMUL, DIVIDES_REFL]);
+
+e (`0 < n` by rw[] >> `?k. n = SUC k` by (Cases_on `n` >> fs[]));
+e (rw[FACT,DIVIDES_RMUL]);
+val DIVIDES_FACT = top_thm();
+drop();
+
+g `~prime 0`;
+e (rw[prime_def]);
+e (rw[DIVIDES_0]);
+restart ();
+e (rw[prime_def,DIVIDES_0]);
+val NOT_PRIME_0 = top_thm();
+drop();
+
+g `~prime 1`;
+e (rw[prime_def]);
+val NOT_PRIME_1 = top_thm();
+drop();
+
+g `prime 2`;
+e (rw[prime_def]);
+(* How am I supposed to come up with this ? *)
+e (metis_tac [DIVIDES_LE, DIVIDES_ZERO, DECIDE ``2<>0``,
+    DECIDE ``x ≤ 2 ⇔ (x=0) ∨ (x=1) ∨ (x=2)``]);
+val PRIME_2 = top_thm();
+drop();
+
+
+g `!p. prime p ⇒ 0 < p`
+e (Cases);
+e (rw[NOT_PRIME_0]);
+restart();
+e(Cases >> rw[NOT_PRIME_0]);
+val PRIME_POS = top_thm();
+drop();
 
 LESS_EQ_EXISTS;
 DIVIDES_0; 
@@ -260,5 +304,9 @@ DIVIDES_LMUL;
 DIVIDES_RMUL;
 DIVIDES_LE;
 DIVIDES_LE2;
+DIVIDES_FACT;
+NOT_PRIME_0;
+PRIME_2;
+PRIME_POS;
 
 
