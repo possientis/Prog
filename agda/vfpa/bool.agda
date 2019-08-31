@@ -1,7 +1,9 @@
 module bool where
 
 open import id
+open import sum
 open import void
+
 
 data 𝔹 : Set where
   tt : 𝔹
@@ -57,6 +59,9 @@ if-then-else-same x ff = refl x
 &&-and : ∀ {b1 b2 : 𝔹} → b1 ≡ tt → b2 ≡ tt → b1 && b2 ≡ tt
 &&-and (refl _) (refl _) = refl _
 
-
-
+𝔹-dec : eq_decidable 𝔹
+𝔹-dec tt tt = left (refl _)
+𝔹-dec tt ff = right λ p → 𝔹-contra (≡-sym p)
+𝔹-dec ff tt = right 𝔹-contra
+𝔹-dec ff ff = left (refl _)
 

@@ -10,6 +10,7 @@ import Test.Include
 import Test.Remove
 import Test.Coincide
 import Test.Injective
+import Test.Intersect
 
 specHask :: Spec
 specHask = sequence_
@@ -19,4 +20,5 @@ specHask = sequence_
     , specRemove
     , specInjective
     , specCoincide
+    , specIntersect
     ]

@@ -1,3 +1,7 @@
+module  Parse
+    (   parseExpr
+    )   where
+
 import Text.ParserCombinators.Parsec
 
 import Expr
@@ -44,7 +48,7 @@ expr :: Parser Expr
 expr = term `chainl1` addop
 
 factor :: Parser Expr 
-factor = parens expr <|> integer <|> antiExp <|> antiInt
+factor = parens expr <|> integer <|> try antiExp <|> antiInt
 
 term :: Parser Expr
 term = factor `chainl1` mulop

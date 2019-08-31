@@ -11,6 +11,7 @@ data Expr = ELitInt  Integer
           | EBinop   Binop   Expr Expr
           | EAntiInt String
           | EAntiExp String 
+          deriving (Data, Show)
 
 data Binop = OpAdd | OpSub | OpMul | OpDiv
     deriving (Show, Typeable, Data)

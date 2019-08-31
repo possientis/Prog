@@ -186,5 +186,68 @@ Proof.
     - constructor. apply right_identity.
 Qed.
 
+Lemma associativity : forall (a b c:Type),
+    forall (t:Thunk a) (f:a -> Thunk b) (g:b -> Thunk c),
+    t >>= f >>= g == t >>= (fun (x:a) => (f x) >>= g).
+Proof.
+    intros a b c. cofix. intros t f g.
+    rewrite (frob_same (t >>= f >>= g)).
+    rewrite (frob_same (t >>= f)).
+    rewrite (frob_same (t >>= (fun (x:a) => (f x) >>= g))).
+    simpl. destruct t as [x|t1] eqn:E1.
+    - rewrite (frob_same (f x >>= g)). simpl.
+      destruct (f x) as [y|t2] eqn:E2.
+        + destruct (g y) as [z|t3] eqn:E3; apply thunk_eq_refl.
+        + apply thunk_eq_refl.
+    - constructor. apply associativity.
+Qed.
+
+
+CoFixpoint fact (n acc:nat) : Thunk nat :=
+    match n with
+    | 0     => Answer acc
+    | S n   => Think (fact n (S n * acc))
+    end.
+
+Fixpoint fact' (n acc:nat) : nat :=
+    match n with
+    | 0     => acc
+    | S n   => fact' n (S n * acc)
+    end.
+
+Fixpoint fact3 (n acc:nat) : Thunk nat :=
+    match n with
+    | 0     => Answer acc
+    | S n   => Think (fact3 n (S n * acc))
+    end.
+
+Inductive Eval (a:Type) : Thunk a -> a -> Prop :=
+| EvalAnswer : forall (x:a), Eval a (Answer x) x
+| EvalThink  : forall (t:Thunk a) (x:a), Eval a t x -> Eval a (Think t) x
+.
+
+Arguments Eval {a}.
+
+(* Cannot believe this is useful                                                *)
+Lemma eval_frob : forall (a:Type) (t:Thunk a) (x:a),
+    Eval (frob t) x -> Eval t x.
+Proof.
+    intros a t x. rewrite <- frob_same. intros H. assumption.
+Qed.
+
+Lemma eval_fact : Eval (fact 5 1) 120.
+Proof.
+    repeat (apply eval_frob; simpl; constructor).
+Qed.
+
+
+
+(*
+Compute (fact 5 1).
+Compute (fact' 5 1).
+Compute (fact3 5 1).
+*)
+
+
 
 

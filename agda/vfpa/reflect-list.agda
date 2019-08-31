@@ -1,6 +1,7 @@
 module reflect-list where
 
 open import id
+open import sum
 open import bool
 open import list
 open import prod
@@ -100,30 +101,45 @@ data SmallStep {a : Set} : 𝕄 a → 𝕄 a → Set where
   SmallAppMap  : ∀ {a' : Set} (f : a' → a) (r1 : 𝕄 a') (r2 : 𝕄 a)
                → IsEmpty r2
                → SmallStep (App (Map f r1) r2) (Map f r1)
-  SmallAppCons : {x : a} {r1 r2 : 𝕄 a}
+  SmallAppCons : (x : a) (r1 r2 : 𝕄 a)
                → SmallStep (App (Cons x r1) r2) (Cons x (App r1 r2))
-  SmallAppNil  : {r2 : 𝕄 a} → SmallStep (App Nil r2) r2
-  SmallMapInj  : ∀ {a' : Set} {f : a' → a} {xs : 𝕃 a'}
+  SmallAppNil  : (r2 : 𝕄 a) → SmallStep (App Nil r2) r2
+  SmallMapInj  : ∀ {a' : Set} (f : a' → a) (xs : 𝕃 a')
                →  SmallStep (Map f (Inj xs)) (Inj (map f xs))
-  SmallMapApp  : ∀ {a' : Set} {f : a' → a} {r1 r2 : 𝕄 a'}
+  SmallMapApp  : ∀ {a' : Set} (f : a' → a) (r1 r2 : 𝕄 a')
                →  SmallStep (Map f (App r1 r2)) (App (Map f r1) (Map f r2))
-  SmallMapMap  : ∀ {a' a'' : Set} {f : a' → a} {g : a'' → a'} {r1 : 𝕄 a''}
+  SmallMapMap  : ∀ {a' a'' : Set} (f : a' → a) (g : a'' → a') (r1 : 𝕄 a'')
                → SmallStep (Map f (Map g r1)) (Map (f ∘ g) r1)
-  SmallMapCons : ∀ {a' : Set} {f : a' → a} {x : a'} {r1 : 𝕄 a'}
+  SmallMapCons : ∀ {a' : Set} (f : a' → a) (x : a') (r1 : 𝕄 a')
                → SmallStep (Map f (Cons x r1)) (Cons (f x) (Map f r1))
-  SmallMapNil  : ∀ {a' : Set} {f : a' → a} → SmallStep (Map f Nil) Nil
+  SmallMapNil  : ∀ {a' : Set} (f : a' → a) → SmallStep (Map f Nil) Nil
+
+
+Small-small : ∀ {a : Set} {r1 r2 : 𝕄 a} → SmallStep r1 r2 → small-step r1 ≡ r2
+Small-small (SmallAppInj xs r2 p)   =
+  ap (λ b → if b then Inj xs else App (Inj xs) r2) (IsEmpty-empty p)
+Small-small (SmallAppApp r1 r2 r3)  = refl _
+Small-small (SmallAppMap f r1 r2 p) =
+  ap (λ b → if b then Map f r1 else App (Map f r1) r2) (IsEmpty-empty p)
+Small-small (SmallAppCons x r1 r2)  = refl _
+Small-small (SmallAppNil r2)        = refl _
+Small-small (SmallMapInj f xs)      = refl _
+Small-small (SmallMapApp f r1 r2)   = refl _
+Small-small (SmallMapMap f g r1)    = ap (λ h → Map h r1) (refl _)
+Small-small (SmallMapCons f x r1)   = refl _
+Small-small (SmallMapNil f)         = refl _
 
 {-
-Small-small : ∀ {a : Set} {r1 r2 : 𝕄 a} → SmallStep r1 r2 → small-step r1 ≡ r2
-Small-small (SmallAppInj xs r2 p) =
-  ap (λ b → if b then Inj xs else App (Inj xs) r2) (IsEmpty-empty p)
-Small-small (SmallAppApp r1 r2 r3) = refl _
-Small-small (SmallAppMap f r1 r2 p) = {!!}
-Small-small SmallAppCons = {!!}
-Small-small SmallAppNil = {!!}
-Small-small SmallMapInj = {!!}
-Small-small SmallMapApp = {!!}
-Small-small SmallMapMap = {!!}
-Small-small SmallMapCons = {!!}
-Small-small SmallMapNil = {!!}
+small-Small : ∀ {a : Set} (r1 r2 : 𝕄 a) → small-step r1 ≡ r2
+                                         → (r1 ≡ r2) ∨ SmallStep r1 r2
+small-Small (Inj x) r2 p              = left p
+small-Small (App (Inj x) r2) r3 p with 𝔹-dec (is-empty r2) tt
+... | q = {!!}
+small-Small (App (App r1 r4) r2) r3 p = {!!}
+small-Small (App (Map x r1) r2) r3 p = {!!}
+small-Small (App (Cons x r1) r2) r3 p = {!!}
+small-Small (App Nil r2) r3 p = {!!}
+small-Small (Map x r1) r2 p = {!!}
+small-Small (Cons x r1) r2 p = {!!}
+small-Small Nil r2 p = {!!} 
 -}
