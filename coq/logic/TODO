@@ -1,2 +1,3 @@
-hask : list diff char
-prop 57
+Fol: valid_bnd
+Hask:valid_bnd
+Def 28

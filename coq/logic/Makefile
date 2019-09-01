@@ -226,6 +226,7 @@ Lam/Valid.vo :		Lam/Valid.v \
 					Composition.vo \
 					Lam/T.vo \
 					Lam/Free.vo \
+					Lam/Bound.vo \
 					Lam/Variable.vo \
 					Lam/Subformula.vo
 	coqc Lam/Valid.v -R Lam Lam
@@ -240,6 +241,7 @@ Fol/Valid.vo :		Fol/Valid.v \
 					Composition.vo \
 					Fol/P.vo \
 					Fol/Free.vo \
+					Fol/Bound.vo \
 					Fol/Variable.vo \
 					Fol/Subformula.vo
 	coqc Fol/Valid.v -R Fol Fol

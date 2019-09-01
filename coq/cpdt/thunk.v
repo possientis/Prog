@@ -241,13 +241,21 @@ Proof.
 Qed.
 
 
-
 (*
 Compute (fact 5 1).
 Compute (fact' 5 1).
 Compute (fact3 5 1).
 *)
 
+Fail CoFixpoint fib (n:nat) : Thunk nat :=
+    match n with
+    | 0         => Answer 1
+    | 1         => Answer 1
+    | S (S n)   =>
+        fib (S n) >>= (fun n1 =>
+            fib n >>= (fun n2 =>
+            Answer (n1 + n2)))
+    end.
 
 
 

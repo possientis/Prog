@@ -10,6 +10,7 @@ Require Import Composition.
 
 Require Import Lam.T.
 Require Import Lam.Free.
+Require Import Lam.Bound.
 Require Import Lam.Variable.
 Require Import Lam.Subformula.
 
@@ -296,10 +297,24 @@ Proof.
     rewrite <- H3, <- H4. apply H'; assumption.
 Qed.
 
-(*
+
 Lemma valid_bnd : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
     (exists (xs:list v), 
         incl (bnd t) xs /\
         injective_on xs f /\
-*)
+        (forall (x y:v), In x xs -> In y (var t) -> ~In y xs -> f x <> f y))
+        -> valid e e' f t.
+Proof.
+    intros v w e e' f t [xs [H1 [H2 H3]]]. apply valid_charac.
+    intros t1 x y H4 H5. 
+    assert (In x xs) as H0. 
+        { apply H1. apply Sub_bnd in H4. apply H4. left. reflexivity. }
+    destruct (in_dec e y xs) as [H6|H6].
+    - intros H7. simpl in H5. apply remove_charac in H5.
+      destruct H5 as [_ H5]. apply H5. apply H2; assumption.
+    - apply H3.
+        + assumption.
+        + apply Sub_var in H4. apply H4. apply (free_var v e). assumption.
+        + assumption.
+Qed.
 

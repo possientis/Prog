@@ -283,14 +283,54 @@ val PRIME_2 = top_thm();
 drop();
 
 
+(***************************************************************************)
 g `!p. prime p ⇒ 0 < p`
 e (Cases);
 e (rw[NOT_PRIME_0]);
 restart();
 e(Cases >> rw[NOT_PRIME_0]);
+
 val PRIME_POS = top_thm();
 drop();
 
+
+g `!n.n ≠ 1 ⇒ ?p. prime p ∧ p divides n`;
+
+e (completeInduct_on `n`);
+e (rw []);
+e (Cases_on `prime n`);
+e (qexists_tac `n`);
+e (rw []);
+e (rw [DIVIDES_REFL]);
+
+e (`?x.x divides n ∧ x ≠ 1 ∧ x ≠ n` by metis_tac[prime_def]);
+e (`x < n ∨ (n = 0)` by metis_tac [DIVIDES_LE,LESS_OR_EQ]);
+e (metis_tac [DIVIDES_TRANS]);
+e (rw []);
+e (metis_tac [PRIME_2,DIVIDES_0]);
+val PRIME_FACTOR = top_thm();
+drop();
+
+g `!n. ?p. n < p ∧ prime p`;
+e (spose_not_then strip_assume_tac);
+
+val th = SPEC ``FACT n + 1`` PRIME_FACTOR;
+
+e (mp_tac (SPEC ``FACT n + 1`` PRIME_FACTOR));
+e (rw []);
+e (rw [FACT_LESS, DECIDE ``!x. ¬(x=0) = 0<x``]);
+e (rw [GSYM IMP_DISJ_THM]);
+e (metis_tac [DIVIDES_FACT, DIVIDES_ADDL, DIVIDES_ONE, 
+              NOT_PRIME_1, NOT_LESS, PRIME_POS]);
+
+val EUCLID top_thm();
+drop
+
+PRIME_POS;
+GSYM;
+IMP_DISJ_THM;
+FACT_LESS;
+LESS_OR_EQ;
 LESS_EQ_EXISTS;
 DIVIDES_0; 
 DIVIDES_ZERO; 
@@ -308,5 +348,6 @@ DIVIDES_FACT;
 NOT_PRIME_0;
 PRIME_2;
 PRIME_POS;
+PRIME_FACTOR;
 
 

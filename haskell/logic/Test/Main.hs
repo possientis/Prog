@@ -11,6 +11,7 @@ import Test.Remove
 import Test.Coincide
 import Test.Injective
 import Test.Intersect
+import Test.Difference
 
 specHask :: Spec
 specHask = sequence_
@@ -21,4 +22,5 @@ specHask = sequence_
     , specInjective
     , specCoincide
     , specIntersect
+    , specDifference
     ]

@@ -1,4 +1,5 @@
 all: 			set.vo \
+				nat.vo \
 				Exists.vo \
 				Order.vo \
 				subset.vo 
@@ -7,6 +8,9 @@ all: 			set.vo \
 
 set.vo : 		set.v
 	coqc set.v
+
+nat.vo :		nat.v
+	coqc nat.v
 
 Exists.vo : 	Exists.v \
 				set.vo
@@ -18,7 +22,9 @@ Order.vo :		Order.v \
 
 subset.vo :		subset.v \
 				set.vo \
-				Exists.vo	
+				nat.vo \
+				Exists.vo \
+				Order.vo
 	coqc subset.v
 
 

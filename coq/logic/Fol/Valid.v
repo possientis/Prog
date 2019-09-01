@@ -10,6 +10,7 @@ Require Import Composition.
 
 Require Import Fol.P.
 Require Import Fol.Free.
+Require Import Fol.Bound.
 Require Import Fol.Variable.
 Require Import Fol.Subformula.
 
