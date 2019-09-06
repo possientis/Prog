@@ -9,3 +9,7 @@ infixr 70 ¬_
 
 data ⊤ : Set where
   triv : ⊤
+
+
+absurd : ∀ {ℓ} {P : Set ℓ} → 𝕆 → P
+absurd ()

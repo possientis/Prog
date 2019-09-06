@@ -65,3 +65,7 @@ if-then-else-same x ff = refl x
 𝔹-dec ff tt = right 𝔹-contra
 𝔹-dec ff ff = left (refl _)
 
+not-tt-ff : (b : 𝔹) → ¬ (b ≡ tt) → b ≡ ff
+not-tt-ff tt p = absurd (p (refl _))
+not-tt-ff ff p = refl _
+

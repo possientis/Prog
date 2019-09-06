@@ -129,12 +129,21 @@ Small-small (SmallMapMap f g r1)    = ap (λ h → Map h r1) (refl _)
 Small-small (SmallMapCons f x r1)   = refl _
 Small-small (SmallMapNil f)         = refl _
 
+
 {-
 small-Small : ∀ {a : Set} (r1 r2 : 𝕄 a) → small-step r1 ≡ r2
                                          → (r1 ≡ r2) ∨ SmallStep r1 r2
-small-Small (Inj x) r2 p              = left p
-small-Small (App (Inj x) r2) r3 p with 𝔹-dec (is-empty r2) tt
-... | q = {!!}
+small-Small (Inj x) r2 p                 = left p
+small-Small (App (Inj xs) r2) r3 p with 𝔹-dec (is-empty r2) tt
+small-Small (App (Inj xs) r2) r3 p | left q  = right
+  (cast
+    (ap (λ r → SmallStep (App (Inj xs) r2) r)
+      (≡-trans (ap (λ b → if b then Inj xs else App (Inj xs) r2) (≡-sym q)) p))
+    (SmallAppInj xs r2 (empty-IsEmpty r2 q)))
+small-Small (App (Inj x) r2) r3 p | right q = left
+  (≡-trans
+    (ap (λ b → if b then Inj x else App (Inj x) r2)(≡-sym (not-tt-ff _ q)))
+    p)
 small-Small (App (App r1 r4) r2) r3 p = {!!}
 small-Small (App (Map x r1) r2) r3 p = {!!}
 small-Small (App (Cons x r1) r2) r3 p = {!!}
