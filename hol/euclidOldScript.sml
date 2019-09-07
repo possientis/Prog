@@ -283,13 +283,10 @@ val PRIME_2 = top_thm();
 drop();
 
 
-(***************************************************************************)
 g `!p. prime p ⇒ 0 < p`
 e (Cases);
 e (rw[NOT_PRIME_0]);
-restart();
-e(Cases >> rw[NOT_PRIME_0]);
-
+e (rw[]);
 val PRIME_POS = top_thm();
 drop();
 
@@ -322,11 +319,21 @@ e (rw [FACT_LESS, DECIDE ``!x. ¬(x=0) = 0<x``]);
 e (rw [GSYM IMP_DISJ_THM]);
 e (metis_tac [DIVIDES_FACT, DIVIDES_ADDL, DIVIDES_ONE, 
               NOT_PRIME_1, NOT_LESS, PRIME_POS]);
+restart ();
+e (CCONTR_TAC);
+e(`?n.!p. n < p ⇒ ~prime p` by metis_tac []);
+e(`~(FACT n + 1 = 1)` by rw[FACT_LESS, DECIDE ``~(x=0)=0<x``]);
+e(`?p.prime p ∧ p divides (FACT n + 1)` by metis_tac [PRIME_FACTOR]);
+e(`0 < p`                               by metis_tac [PRIME_POS]);
+e(`p ≤ n`                               by metis_tac [NOT_LESS]);
+e(`p divides FACT n`                    by metis_tac [DIVIDES_FACT]); 
+e(`p divides 1`                         by metis_tac [DIVIDES_ADDL]);
+e(`p = 1`                               by metis_tac [DIVIDES_ONE]);
+e(`~prime p`                            by metis_tac [NOT_PRIME_1]);
 
-val EUCLID top_thm();
-drop
+val EUCLID = top_thm();
+drop ()
 
-PRIME_POS;
 GSYM;
 IMP_DISJ_THM;
 FACT_LESS;
@@ -349,5 +356,6 @@ NOT_PRIME_0;
 PRIME_2;
 PRIME_POS;
 PRIME_FACTOR;
+EUCLID;
 
 

@@ -7,8 +7,10 @@ cd ${HOME}
 echo
 echo "testing hol..."
 
-Holmake testTheory.uo
-./clean.sh
+# Holmake testTheory.uo
+# ./clean.sh
+
+./euclid/test.sh
 
 cd ${DIR}
 echo '\nAll hol tests completed successfully\n'
