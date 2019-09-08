@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/hol
+HOME=/home/john/Prog/hol/parity
 cd ${HOME}
 
 rm -rf .hollogs
@@ -11,7 +11,5 @@ rm -f *Theory.*
 rm -f *.uo
 rm -f *.ui
 
-./euclid/clean.sh
-./parity/clean.sh
 
 cd ${DIR}

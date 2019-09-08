@@ -1,1 +1,4 @@
-subset_n_Sn
+subset:subset_n_Sn
+subset:exists_equal_ind.
+nat:weaken_r
+

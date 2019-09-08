@@ -21,24 +21,42 @@ Definition equal_n (n:nat) (x:set) (y:set) : Prop :=
     subset_n n y x /\ subset_n n x y.
 
 
+(*
 Lemma exists_equal_ind : forall (n m:nat) (xs ys:set), 
     (forall (xs ys:set), order xs + order ys <= n -> 
         (subset_n n xs ys) <-> (subset_n m xs ys))      ->
 order xs + order ys <= n                                ->
-Exists (fun (y:set) => equal_n n y xs) ys               ->
+Exists (fun (y:set) => equal_n n y xs) ys               <->
 Exists (fun (y:set) => equal_n m y xs) ys.
 Proof.
-    intros n m xs ys H H' I. revert H'. 
-    induction I as [x ys [H1 H2]|x ys H1 IH]; intros H'.
-    - apply ExistsH. unfold equal_n. split.
-        + apply H.
-            { admit. }
-            { assumption. }
-        + apply H.
-            { admit. }
-            { assumption. }
-    - apply ExistsT. apply IH. admit.
-Admitted.
+    intros n m xs ys H H'. split; intros I; revert H'.
+    - induction I as [x ys [H1 H2]|x ys H1 IH]; intros H'.
+        + apply ExistsH. unfold equal_n. split.
+            { apply H. 
+                { apply weaken_r with (order (Cons x ys)).
+                    { assumption. }
+                    { simpl.
+*)
+(*
+                { assumption. }
+            }
+            { apply H.
+                { admit. }
+                { assumption. }
+            }
+        + apply ExistsT. apply IH. admit.
+    - induction I as [x ys [H1 H2]|x ys H1 IH]; intros H'.
+        + apply ExistsH. unfold equal_n. split.
+            { apply H.
+                { admit. }
+                { assumption. }
+            }
+            { apply H.
+                { admit. }
+                { assumption. }
+            }
+        + apply ExistsT. apply IH. admit.
+*)
 
 (*
 Lemma subset_n_Sn : forall (n:nat) (xs ys:set),
@@ -69,14 +87,35 @@ Proof.
                             { assumption. }
                         }
                     }
-                    { apply ExistsT. apply exists_equal_ind with n.
+                    { apply ExistsT. apply (exists_equal_ind n m x ys).
                         { assumption. }
                         { admit. }
                         { assumption. }
                     }
                 }
             }
-        +
-
-Show.
+        + intros H'. destruct xs as [|x xs].
+            { apply I. }
+            { remember (S n) as m eqn:E. destruct H' as [H1 H2].
+              rewrite E. split.
+                { apply IH.
+                    { admit. }
+                    { assumption. }
+                }
+                { destruct H2 as [y ys [H2 H3]|y ys H2].
+                    { apply ExistsH. split.
+                        { apply IH.
+                            { admit. }
+                            { assumption. }
+                        }
+                        { apply IH.
+                            { admit. }
+                            { assumption . }
+                        }
+                    }
+                    { apply ExistsT.  apply (exists_equal_ind n m x ys).                   
+                        { assumption. }
+                        { admit. }
+                        { assumption. }
+Admitted.
 *)

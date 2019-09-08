@@ -14,22 +14,20 @@ import Test.Test
 
 import Formula
 import Replace
+import Include
 import Variable (Var)
 import Injective
 
 
 specValid :: forall f . (Test f) =>  Spec
-specValid = describe "Testing properties of valid..." $ 
-    sequence_ (specsValid @ f)
-
-specsValid :: forall f . (Test f) =>  [Spec]
-specsValid  = [ testValidSub        @ f
-              , testValidFree       @ f
-              , testValidInj        @ f
-              , testValidReplace    @ f
-              , testValidCompose    @ f 
-              , testValidFmap       @ f
-              ]
+specValid = describe "Testing properties of valid..." $ do 
+    testValidSub        @ f
+    testValidFree       @ f
+    testValidInj        @ f
+    testValidReplace    @ f
+    testValidCompose    @ f 
+    testValidFmap       @ f
+    testValidBound      @ f
 
 testValidSub :: forall f . (Test f) =>  Spec
 testValidSub = it "Checked valid subformula property" $
@@ -55,6 +53,10 @@ testValidFmap :: forall f . (Test f) =>  Spec
 testValidFmap = it "Checked valid fmap property" $
     property $ propValidFmap @ f
 
+testValidBound :: forall f . (Test f) =>  Spec
+testValidBound = it "Checked valid bound property" $
+    property $ propValidBound @ f
+
 propValidSub :: (Test f) =>  (Var -> Var) -> f Var -> Bool
 propValidSub f t = valid f t == all (valid f) (sub t)
 
@@ -73,3 +75,13 @@ propValidCompose f g t = ((valid f t) && (valid g $ fmap f t)) == valid (g . f) 
 
 propValidFmap :: (Test f) => (Var -> Var) -> (Var -> Var) -> f Var -> Bool
 propValidFmap f g t = (fmap f t) /= (fmap g t) || (not $ valid f t) || valid g t
+
+propValidBound :: (Test f) => (Var -> Var) -> f Var -> [Var] -> Bool
+propValidBound f t xs = valid f t
+                      || not (incl (bnd t) xs)
+                      || not (injective_on xs f)
+                      || any g [(x,y) | x <- xs, y <- var t, y `notElem` xs]  
+    where g (x,y) = f x == f y
+
+
+

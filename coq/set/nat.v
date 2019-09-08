@@ -13,3 +13,9 @@ Proof.
     - intros H. inversion H.
     - intros H. inversion H.
 Qed.
+
+
+Lemma weaken_r : forall (x y z n:nat),
+    (x + z <= n) -> (y <= z) -> x + y <= n.
+Proof.
+Admitted.
