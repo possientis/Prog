@@ -1,3 +1,5 @@
+Require Import irrelevance.
+
 CoInductive Comp (a:Type) : Type :=
 | Ret : a -> Comp a
 | Bnd : forall (a':Type), Comp a' -> (a' -> Comp a) -> Comp a
@@ -13,37 +15,46 @@ Definition cast (a b:Type) (p:a = b) (x:a) : b :=
 
 Arguments cast {a} {b}.
 
+Lemma cast_id : forall (a:Type) (p:a = a) (x:a), cast p x = x.
+Proof.
+    intros a p x. assert (p = eq_refl) as E. { apply irrelevance. }
+    rewrite E. simpl. reflexivity.
+Qed.
+
 Lemma Bnd_injective_type : 
-forall (a1 a2 a:Type) (c1:Comp a1) (c2:Comp a2) (f1:a1 -> Comp a) (f2:a2 -> Comp a),
+    forall (a1 a2 a:Type), 
+    forall (c1:Comp a1) (c2:Comp a2),
+    forall (f1:a1 -> Comp a) (f2:a2 -> Comp a),
     Bnd c1 f1 = Bnd c2 f2 -> a1 = a2.
 Proof. intros a1 a2 a c1 c2 f1 f2 H. inversion H. reflexivity. Qed.
 
-Lemma Bnd_injective_type1 : 
-forall (a1 a2 a:Type) (c1:Comp a1) (c2:Comp a2) (f1:a1 -> Comp a) (f2:a2 -> Comp a),
-    Bnd c1 f1 = Bnd c2 f2 -> Comp a1 = Comp a2.
-Proof.
-    intros a1 a2 a c1 c2 f1 f2 H. assert (a1 = a2) as E.
-        { apply (Bnd_injective_type a1 a2 a c1 c2 f1 f2). assumption. }
-    rewrite E. reflexivity.
-Qed.
+Lemma Comp_injective : forall (a b:Type), a = b -> Comp a = Comp b.
+Proof. intros a b H. rewrite H. reflexivity. Qed.
 
-Lemma Bnd_injective_type2 : 
-forall (a1 a2 a:Type) (c1:Comp a1) (c2:Comp a2) (f1:a1 -> Comp a) (f2:a2 -> Comp a),
-    Bnd c1 f1 = Bnd c2 f2 -> (a1 ->  Comp a) = (a2 -> Comp a).
-Proof.
-    intros a1 a2 a c1 c2 f1 f2 H. assert (a1 = a2) as E.
-        { apply (Bnd_injective_type a1 a2 a c1 c2 f1 f2). assumption. }
-    rewrite E. reflexivity.
-Qed.
+Arguments Comp_injective {a} {b}.
+
+Lemma Func_injective : forall (a b c:Type), 
+    a = b -> (a -> Comp c) = (b -> Comp c).
+Proof. intros a b c H. rewrite H. reflexivity. Qed.
+
+Arguments Func_injective {a} {b}.
+
 (*
-Lemma Bnd_injective_type1' : 
-forall (a1 a2 a:Type) (c1:Comp a1) (c2:Comp a2) (f1:a1 -> Comp a) (f2:a2 -> Comp a),
-forall (p:Bnd c1 f1 = Bnd c2 f2),
-    c2 = cast (Bnd_injective_type1 a1 a2 a c1 c2 f1 f2 p) c1.
+Lemma Bnd_injective_Comp : 
+    forall (a1 a2 a:Type),
+    forall (c1:Comp a1) (c2:Comp a2),
+    forall (f1:a1 -> Comp a) (f2:a2 -> Comp a),
+    Bnd c1 f1 = Bnd c2 f2 -> 
+    forall (q:Comp a1 = Comp a2), c2 = cast q c1.
 Proof.
-    intros a1 a2 a c1 c2 f1 f2 p. remember (Bnd_injective_type a1 a2 a c1 c2 f1 f2 p) as q eqn:E.
-    subst.
+    intros a1 a2 a c1 c2 f1 f2 H q. 
+    inversion H. subst. clear H2 H3. 
+    rename a into b. rename a2 into a.
+
+
+Show.
 *)
+
 (*
 Inductive Exec (a:Type) : Comp a -> a -> Prop :=
 | ExecRet : forall (x:a), Exec a (Ret x) x
