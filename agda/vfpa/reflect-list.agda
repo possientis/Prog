@@ -8,6 +8,7 @@ open import prod
 open import level
 open import function
 
+-- syntax of 'list' language
 data 𝕄 : Set -> Set ℓ₁ where
   Inj  : {a : Set} → 𝕃 a → 𝕄 a
   App  : {a : Set} → 𝕄 a → 𝕄 a → 𝕄 a
@@ -15,6 +16,7 @@ data 𝕄 : Set -> Set ℓ₁ where
   Cons : {a : Set} → a → 𝕄 a → 𝕄 a
   Nil  : {a : Set} → 𝕄 a
 
+-- list semantics of 'list' language
 𝕃⟦_⟧ : {a : Set} → 𝕄 a -> 𝕃 a
 𝕃⟦ Inj xs ⟧   = xs
 𝕃⟦ App r s ⟧  = 𝕃⟦ r ⟧ ++ 𝕃⟦ s ⟧
@@ -31,19 +33,21 @@ is-empty (Map _ r)     = is-empty r
 is-empty (Cons _ _)    = ff
 is-empty Nil           = tt
 
+-- predicate which expresses that a term is empty
 data IsEmpty {a : Set} : 𝕄 a → Set where
   EmptyInj : IsEmpty (Inj [])
   EmptyApp : ∀ {r1 r2 : 𝕄 a} → IsEmpty r1 → IsEmpty r2 → IsEmpty (App r1 r2)
   EmptyMap : ∀ {a' : Set} {f : a' → a} {r : 𝕄 a'} → IsEmpty r -> IsEmpty (Map f r )
   EmptyNil : IsEmpty Nil
 
+-- our predicate implies boolean function is true
 IsEmpty-empty : ∀ {a : Set} → {r : 𝕄 a} → (IsEmpty r) → is-empty r ≡ tt
 IsEmpty-empty EmptyInj       = refl _
 IsEmpty-empty (EmptyApp p q) = &&-and (IsEmpty-empty p) (IsEmpty-empty q)
 IsEmpty-empty (EmptyMap p)   = IsEmpty-empty p
 IsEmpty-empty EmptyNil       = refl _
 
-
+-- boolean function true implies our predicate
 empty-IsEmpty : ∀ {a : Set} → (r : 𝕄 a) → is-empty r ≡ tt → IsEmpty r
 empty-IsEmpty (Inj []) p    = EmptyInj
 empty-IsEmpty (App r1 r2) p = EmptyApp
@@ -74,7 +78,7 @@ empty-is-empty (App r1 r2) p =
 empty-is-empty (Map f r) p   = empty-is-empty r (map-[] _ _ p)
 empty-is-empty Nil p         = refl _
 
--- one step transformation of redexes
+-- one step transformation of redexes as a function
 small-step : {a : Set} → 𝕄 a → 𝕄 a
 small-step (Inj xs)              = Inj xs    -- no reduction
 small-step  Nil                  = Nil       -- no reduction
@@ -92,6 +96,7 @@ small-step (Map f (Map g r))     = Map (f ∘ g) r
 small-step (Map f (Cons x r))    = Cons (f x) (Map f r)
 small-step (Map f Nil)           = Nil
 
+-- one step transformation as a predicate
 data SmallStep {a : Set} : 𝕄 a → 𝕄 a → Set where
   SmallAppInj  : (xs : 𝕃 a) (r2 : 𝕄 a)
                → IsEmpty r2
@@ -114,7 +119,7 @@ data SmallStep {a : Set} : 𝕄 a → 𝕄 a → Set where
                → SmallStep (Map f (Cons x r1)) (Cons (f x) (Map f r1))
   SmallMapNil  : ∀ {a' : Set} (f : a' → a) → SmallStep (Map f Nil) Nil
 
-
+-- precicate implies function 
 Small-small : ∀ {a : Set} {r1 r2 : 𝕄 a} → SmallStep r1 r2 → small-step r1 ≡ r2
 Small-small (SmallAppInj xs r2 p)   =
   ap (λ b → if b then Inj xs else App (Inj xs) r2) (IsEmpty-empty p)
@@ -129,7 +134,7 @@ Small-small (SmallMapMap f g r1)    = ap (λ h → Map h r1) (refl _)
 Small-small (SmallMapCons f x r1)   = refl _
 Small-small (SmallMapNil f)         = refl _
 
-{-
+-- function implies no reduction or predicate
 small-Small
   : ∀ {a : Set} (r1 r2 : 𝕄 a)
   → small-step r1 ≡ r2
@@ -140,7 +145,9 @@ small-Small (App (Inj xs) r2) r3 p with 𝔹-dec (is-empty r2) tt
 small-Small (App (Inj xs) r2) r3 p | left q  = right
   (cast
     (ap (λ r → SmallStep (App (Inj xs) r2) r)
-      (≡-trans (ap (λ b → if b then Inj xs else App (Inj xs) r2) (≡-sym q)) p))
+      (≡-trans
+        (ap (λ b → if b then Inj xs else App (Inj xs) r2) (≡-sym q))
+        p))
     (SmallAppInj xs r2 (empty-IsEmpty r2 q)))
 small-Small (App (Inj x) r2) r3 p | right q = left
   (≡-trans
@@ -155,7 +162,9 @@ small-Small (App (Map f r1) r2) r3 p | left  q = right
   (cast
     (ap
       (λ r → SmallStep (App (Map f r1) r2) r)
-      (≡-trans (ap (λ b → if b then Map f r1 else App (Map f r1) r2) (≡-sym q)) p))
+      (≡-trans
+        (ap (λ b → if b then Map f r1 else App (Map f r1) r2) (≡-sym q))
+        p))
     (SmallAppMap f r1 r2 (empty-IsEmpty r2 q)))
 small-Small (App (Map f r1) r2) r3 p | right q = left
   (≡-trans
@@ -173,7 +182,25 @@ small-Small (App Nil r2) r3 p = right
   (cast
     (ap (λ r → SmallStep (App Nil r2) r) p)
     (SmallAppNil r2))
-small-Small (Map f r1) r2 p = {!!}
-small-Small (Cons x r1) r2 p = {!!}
-small-Small Nil r2 p = {!!} 
--}
+small-Small (Map f (Inj xs)) r2 p = right
+  (cast
+    (ap (λ r → SmallStep (Map f (Inj xs)) r) p)
+    (SmallMapInj f xs))
+small-Small (Map f (App r1 r2)) r3 p = right
+  (cast (ap (λ r → SmallStep (Map f (App r1 r2)) r) p)
+  (SmallMapApp f r1 r2))
+small-Small (Map f (Map g r1)) r2 p = right
+  (cast
+    (ap (λ r → SmallStep (Map f (Map g r1)) r) p)
+    (SmallMapMap f g r1))
+small-Small (Map f (Cons x r1)) r2 p = right
+  (cast
+    (ap (λ r → SmallStep (Map f (Cons x r1)) r) p)
+    (SmallMapCons f x r1))
+small-Small (Map f Nil) r2 p = right
+  (cast
+    (ap (λ r → SmallStep (Map f Nil) r) p)
+    (SmallMapNil f))
+small-Small (Cons x r1) r2 p = left p
+small-Small Nil r2 p = left p
+
