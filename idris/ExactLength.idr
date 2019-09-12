@@ -4,4 +4,6 @@ data Vect : Nat -> Type -> Type where
 
 
 exactLength : (len : Nat) -> (input : Vect n a) -> Maybe (Vect len a)
-exactLength len input = ?exactLength_rhs
+exactLength {n} len input = case n == len of
+  False => Nothing
+  True  => Just ?rest
