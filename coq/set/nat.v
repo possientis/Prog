@@ -1,3 +1,5 @@
+Require Import Arith.Le.
+
 Lemma le_0 : forall (n:nat), n <= 0 -> n = 0.
 Proof.
     intros [|n].
@@ -39,21 +41,44 @@ Proof.
     intros n m. rewrite max_sym. apply n_le_max.
 Qed.
 
+Lemma le_plus_l : forall (x y z:nat), x <= y -> z + x <= z + y.
+Proof.
+    intros x y. induction z as [|n IH]; intros H.
+    - assumption.
+    - simpl. apply le_n_S. apply IH. assumption.
+Qed.
+
+Lemma le_plus_r : forall (x y z:nat), x <= y -> x + z <= y + z.
+Proof.
+    intros x y. induction z as [|n IH]; intros H.
+    - rewrite <- plus_n_O, <- plus_n_O. assumption.
+    - rewrite <- plus_n_Sm, <- plus_n_Sm. apply le_n_S, IH. assumption.
+Qed.
+
 Lemma weaken_r : forall (x y z n:nat),
     (x + z <= n) -> (y <= z) -> x + y <= n.
 Proof.
-Admitted.
+    intros x y z n H1 H2.
+    apply le_trans with (x + z).
+    - apply le_plus_l. assumption.
+    - assumption.
+Qed.
 
 Lemma weaken_l : forall (x y z n:nat),
     (z + y <= n) -> (x <= z) -> x + y <= n.
 Proof.
-Admitted.
+    intros x y z n H1 H2.
+    apply le_trans with (z + y).
+    - apply le_plus_r. assumption.
+    - assumption.
+Qed.
 
 Lemma weaken_l' : forall (x y z n:nat),
     (z + y <= S n) -> (S x <= z) -> x + y <= n.
 Proof.
-Admitted.
-
-
-
+    intros x y z n H1 H2. apply le_S_n.
+    apply le_trans with (z + y). 
+    - apply (le_plus_r (S x) z y). assumption.
+    - assumption.
+Qed.
 

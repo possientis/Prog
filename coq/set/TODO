@@ -1,5 +1,2 @@
-subset:subset_n_Sn
-nat:weaken_r
-nat:weaken_l
-nat:weaken_l'
-
+define subset
+state subset_subset_n as in old

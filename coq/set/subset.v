@@ -23,8 +23,6 @@ Fixpoint subset_n (n:nat) : set -> set -> Prop :=
 Definition equal_n (n:nat) (x:set) (y:set) : Prop :=
     subset_n n y x /\ subset_n n x y.
 
-
-
 Lemma exists_equal_ind : forall (n m:nat) (xs ys:set), 
     (forall (xs ys:set), order xs + order ys <= n -> 
         (subset_n n xs ys) <-> (subset_n m xs ys))      ->
@@ -109,13 +107,26 @@ Proof.
                             { assumption. }
                         }
                         { apply IH.
-                            { admit. }
+                            { rewrite plus_comm. 
+                              apply weaken_l' with (order (Cons x xs)).
+                                { apply weaken_r with (order (Cons y ys)).
+                                    { rewrite E in H. assumption. }
+                                    { simpl. apply le_S. apply n_le_max. }
+                                }
+                                { simpl. apply le_n_S. apply n_le_max. }
+                            }
                             { assumption. }
                         }
                     }
                     { apply ExistsT. apply (exists_equal_ind n m x ys).
                         { assumption. }
-                        { admit. }
+                        { apply weaken_l' with (order (Cons x xs)).
+                            { apply weaken_r with (order (Cons y ys)).
+                                { rewrite E in H. assumption. }
+                                { simpl. apply le_S. apply m_le_max. }
+                            }
+                            { simpl. apply le_n_S. apply n_le_max. }
+                        }
                         { assumption. }
                     }
                 }
@@ -125,23 +136,48 @@ Proof.
             { remember (S n) as m eqn:E. destruct H' as [H1 H2].
               rewrite E. split.
                 { apply IH.
-                    { admit. }
+                    { apply weaken_l' with (order (Cons x xs)).
+                        { rewrite E in H. assumption. }
+                        { simpl. apply le_n_S. apply m_le_max. }
+                    }
                     { assumption. }
                 }
                 { destruct H2 as [y ys [H2 H3]|y ys H2].
                     { apply ExistsH. split.
                         { apply IH.
-                            { admit. }
+                            { apply weaken_l' with (order (Cons x xs)).
+                                { apply weaken_r with (order (Cons y ys)).
+                                    { rewrite E in H. assumption. }
+                                    { simpl. apply le_S. apply n_le_max. }
+                                }
+                                { simpl. apply le_n_S. apply n_le_max. }
+                            }
                             { assumption. }
                         }
                         { apply IH.
-                            { admit. }
+                            { rewrite plus_comm. 
+                              apply weaken_l' with (order (Cons x xs)).
+                                { apply weaken_r with (order (Cons y ys)).
+                                    { rewrite E in H. assumption. }
+                                    { simpl. apply le_S. apply n_le_max. }
+                                }
+                                { simpl. apply le_n_S. apply n_le_max. }
+                            }
                             { assumption . }
                         }
                     }
                     { apply ExistsT.  apply (exists_equal_ind n m x ys).                   
                         { assumption. }
-                        { admit. }
+                        { apply weaken_l' with (order (Cons x xs)).
+                            { apply weaken_r with (order (Cons y ys)).
+                                { rewrite E in H. assumption. }
+                                { simpl. apply le_S. apply m_le_max. }
+                            }
+                            { simpl. apply le_n_S. apply n_le_max. }
+                        }
                         { assumption. }
-Admitted.
+                    }
+                }
+            } 
+Qed.
 
