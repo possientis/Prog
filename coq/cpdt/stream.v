@@ -108,6 +108,14 @@ CoInductive stream_eq (a:Type) : Stream a -> Stream a -> Prop :=
 
 Arguments stream_eq  {a} _ _.
 
+Lemma stream_destruct : forall (a:Type) (x y:a) (t1 t2:Stream a),
+    stream_eq (Cons x t1) (Cons y t2) -> x = y /\ stream_eq t1 t2.
+Proof.
+    intros a x y t1 t2 H. inversion H. split.
+    - reflexivity.
+    - assumption.
+Qed.
+
 (* true but seemingly not useful, leading to non-guarded proofs *)
 Lemma stream_eq_basic : forall (a:Type) (s1 s2:Stream a), 
     head s1 = head s2               -> 

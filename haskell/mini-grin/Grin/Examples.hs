@@ -42,6 +42,7 @@ main =
   add $ m1 m2
 -}
 
+{-
 add :: Exp 'Prg
 add =
   Program
@@ -58,7 +59,7 @@ add =
     ]
 
 -- * Factorial
-
+-}
 {-
 prim_int_sub :: T_Int64 -> T_Int64 -> T_Int64
 prim_int_mul :: T_Int64 -> T_Int64 -> T_Int64
@@ -85,6 +86,7 @@ main =
   pure m2
 -}
 
+{-
 fact :: Exp 'Prg
 fact =
   Program
@@ -114,7 +116,7 @@ fact =
     ]
 
 -- * Sum simple
-
+-}
 {-
 prim_int_add :: T_Int64 -> T_Int64 -> T_Int64
 prim_int_sub :: T_Int64 -> T_Int64 -> T_Int64
@@ -187,6 +189,7 @@ eval e1 =
       pure e10
 -}
 
+{-
 sumSimple :: Exp 'Prg
 sumSimple =
   Program
@@ -260,3 +263,4 @@ sumSimple =
                 Pure (Var "e10")
           ]
     ]
+-}

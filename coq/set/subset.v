@@ -1,3 +1,6 @@
+Require Import Arith.Plus.
+Require Import Arith.PeanoNat.
+
 Require Import set.
 Require Import nat.
 Require Import Exists.
@@ -21,7 +24,7 @@ Definition equal_n (n:nat) (x:set) (y:set) : Prop :=
     subset_n n y x /\ subset_n n x y.
 
 
-(*
+
 Lemma exists_equal_ind : forall (n m:nat) (xs ys:set), 
     (forall (xs ys:set), order xs + order ys <= n -> 
         (subset_n n xs ys) <-> (subset_n m xs ys))      ->
@@ -35,30 +38,44 @@ Proof.
             { apply H. 
                 { apply weaken_r with (order (Cons x ys)).
                     { assumption. }
-                    { simpl.
-*)
-(*
+                    { simpl. apply le_S. apply n_le_max.
+                    }
+                }
                 { assumption. }
             }
             { apply H.
-                { admit. }
+                { rewrite plus_comm. apply weaken_r with (order (Cons x ys)).
+                    { assumption. }
+                    { simpl. apply le_S. apply n_le_max. }
+                }
                 { assumption. }
             }
-        + apply ExistsT. apply IH. admit.
+        + apply ExistsT. apply IH. apply weaken_r with (order (Cons x ys)).
+            { assumption. }
+            { simpl. apply le_S. apply m_le_max. }
     - induction I as [x ys [H1 H2]|x ys H1 IH]; intros H'.
         + apply ExistsH. unfold equal_n. split.
             { apply H.
-                { admit. }
+                { apply weaken_r with (order (Cons x ys)).
+                    { assumption. }
+                    { simpl. apply le_S. apply n_le_max. }
+                }
                 { assumption. }
             }
             { apply H.
-                { admit. }
+                { rewrite plus_comm. apply weaken_r with (order (Cons x ys)).
+                    { assumption. }
+                    { simpl. apply le_S. apply n_le_max. }
+                }
                 { assumption. }
             }
-        + apply ExistsT. apply IH. admit.
-*)
+        + apply ExistsT. apply IH. apply weaken_r with (order (Cons x ys)).
+            { assumption. }
+            { simpl. apply le_S. apply m_le_max. }
+Qed.
 
-(*
+
+
 Lemma subset_n_Sn : forall (n:nat) (xs ys:set),
     order xs + order ys <= n -> (subset_n n xs ys <-> subset_n (S n) xs ys).
 Proof.
@@ -73,13 +90,22 @@ Proof.
               rewrite E in H'. simpl in H'. destruct H' as [H1 H2].
               simpl. split.
                 { apply IH.
-                    { admit. }
+                    { apply weaken_l' with (order (Cons x xs)).
+                        { rewrite E in H. assumption. }
+                        { simpl. apply le_n_S. rewrite max_sym. apply n_le_max. }
+                    }
                     { assumption. } 
                 }
                 { destruct H2 as [y ys [H2 H3]|y ys H2].
                     { apply ExistsH. split.
                         { apply IH.
-                            { admit. }
+                            { apply weaken_l' with (order (Cons x xs)).
+                                {  apply weaken_r with (order (Cons y ys)).
+                                    { rewrite E in H. assumption. }
+                                    { simpl. apply le_S. apply n_le_max. }
+                                }
+                                { simpl. apply le_n_S. apply n_le_max. }
+                            }
                             { assumption. }
                         }
                         { apply IH.
@@ -118,4 +144,4 @@ Proof.
                         { admit. }
                         { assumption. }
 Admitted.
-*)
+

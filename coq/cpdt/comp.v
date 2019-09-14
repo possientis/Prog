@@ -1,5 +1,3 @@
-Require Import irrelevance.
-
 CoInductive Comp (a:Type) : Type :=
 | Ret : a -> Comp a
 | Bnd : forall (a':Type), Comp a' -> (a' -> Comp a) -> Comp a
@@ -8,52 +6,21 @@ CoInductive Comp (a:Type) : Type :=
 Arguments Ret {a}.
 Arguments Bnd {a} {a'}.
 
-Definition cast (a b:Type) (p:a = b) (x:a) : b :=
-    match p with
-    | eq_refl   => x
-    end.
+CoInductive comp_eq (a:Type) : Comp a -> Comp a -> Prop :=
+| Ret_eq : forall (x:a), comp_eq a (Ret x) (Ret x) 
+| Bnd_eq : forall (a':Type) (c1 c2:Comp a') (f g:a' -> Comp a), 
+    comp_eq a' c1 c2                        -> 
+    (forall (z:a'), comp_eq a (f z) (g z))  ->
+    comp_eq a (Bnd c1 f) (Bnd c2 g)
+.
 
-Arguments cast {a} {b}.
+Arguments comp_eq {a}.
 
-Lemma cast_id : forall (a:Type) (p:a = a) (x:a), cast p x = x.
+Lemma comp_eq_ret : forall (a:Type) (x y:a), comp_eq (Ret x) (Ret y) -> x = y.
 Proof.
-    intros a p x. assert (p = eq_refl) as E. { apply irrelevance. }
-    rewrite E. simpl. reflexivity.
+    intros a x y H. inversion H. reflexivity.
 Qed.
 
-Lemma Bnd_injective_type : 
-    forall (a1 a2 a:Type), 
-    forall (c1:Comp a1) (c2:Comp a2),
-    forall (f1:a1 -> Comp a) (f2:a2 -> Comp a),
-    Bnd c1 f1 = Bnd c2 f2 -> a1 = a2.
-Proof. intros a1 a2 a c1 c2 f1 f2 H. inversion H. reflexivity. Qed.
-
-Lemma Comp_injective : forall (a b:Type), a = b -> Comp a = Comp b.
-Proof. intros a b H. rewrite H. reflexivity. Qed.
-
-Arguments Comp_injective {a} {b}.
-
-Lemma Func_injective : forall (a b c:Type), 
-    a = b -> (a -> Comp c) = (b -> Comp c).
-Proof. intros a b c H. rewrite H. reflexivity. Qed.
-
-Arguments Func_injective {a} {b}.
-
-(*
-Lemma Bnd_injective_Comp : 
-    forall (a1 a2 a:Type),
-    forall (c1:Comp a1) (c2:Comp a2),
-    forall (f1:a1 -> Comp a) (f2:a2 -> Comp a),
-    Bnd c1 f1 = Bnd c2 f2 -> 
-    forall (q:Comp a1 = Comp a2), c2 = cast q c1.
-Proof.
-    intros a1 a2 a c1 c2 f1 f2 H q. 
-    inversion H. subst. clear H2 H3. 
-    rename a into b. rename a2 into a.
-
-
-Show.
-*)
 
 (*
 Inductive Exec (a:Type) : Comp a -> a -> Prop :=

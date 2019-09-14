@@ -29,7 +29,9 @@ all:	   			Extensionality.vo \
 					Lam/Bound.vo \
 					Fol/Bound.vo \
 					Lam/Valid.vo \
-					Fol/Valid.vo
+					Fol/Valid.vo \
+					Lam/Dmap.vo \
+					Fol/Dmap.vo
 
 Extensionality.vo : Extensionality.v
 	coqc Extensionality.v
@@ -246,4 +248,18 @@ Fol/Valid.vo :		Fol/Valid.v \
 					Fol/Subformula.vo
 	coqc Fol/Valid.v -R Fol Fol
 
+Lam/Dmap.vo :		Lam/Dmap.v \
+					Eq.vo \
+					Map.vo \
+					Identity.vo \
+					Extensionality.vo \
+					Lam/T.vo
+	coqc Lam/Dmap.v -R Lam Lam
 
+Fol/Dmap.vo :		Fol/Dmap.v \
+					Eq.vo \
+					Map.vo \
+					Identity.vo \
+					Extensionality.vo \
+					Fol/P.vo
+	coqc Fol/Dmap.v -R Fol Fol

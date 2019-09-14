@@ -1,5 +1,9 @@
-{-# OPTIONS_GHC -Wno-unused-matches #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving, LambdaCase, ConstraintKinds #-}
+{-# OPTIONS_GHC -Wno-unused-matches         #-}
+{-# LANGUAGE LambdaCase                     #-}
+{-# LANGUAGE ConstraintKinds                #-}
+{-# LANGUAGE OverloadedStrings              #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving     #-}
+
 module Tutorial.Chapter01.Exercise02 where
 
 import Data.Int
@@ -146,7 +150,7 @@ actual arguments to the call, it calls the corresponding system/OS function.
 -- loads the body of the main function and starts to evaluate that expression.
 interpreter :: InterpretExternal -> Program -> IO Value
 interpreter iext prog =
-    fst <$> runInterpreter (eval (SApp "main" []))
+    fst <$> runInterpreter (eval (SApp (Grin.NM "main") []))
   where
     runInterpreter :: (Monad m, MonadIO m, MonadFail m) => Definitional m a -> m (a, Store Address Node)
     runInterpreter (Definitional r) = do

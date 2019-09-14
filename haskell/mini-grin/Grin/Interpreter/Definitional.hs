@@ -181,7 +181,7 @@ instance (Applicative m, Monad m, MonadFail m) => Interpreter (DefinitionalT m) 
     a <- val2addr l
     v <- val2heapVal n
     DefinitionalT $ modify (Store.insert a v)
-
+{-
 evalDefinitional :: (Monad m, MonadFail m, MonadIO m) => Program -> m DVal
 evalDefinitional prog = do
   let ops = [ ("prim_int_add", prim_int_add)
@@ -219,3 +219,4 @@ tests = do
   print =<< (evalDefinitional $ gexpToExp $ Examples.add)
   print =<< (evalDefinitional $ gexpToExp $ Examples.fact)
   print =<< (evalDefinitional $ gexpToExp $ Examples.sumSimple)
+-}

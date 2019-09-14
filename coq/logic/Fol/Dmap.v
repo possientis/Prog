@@ -1,0 +1,53 @@
+Require Import List.
+Import ListNotations.
+
+Require Import Eq.
+Require Import Identity.
+Require Import Extensionality.
+
+Require Import Fol.P.
+
+Definition h_ (v w:Type) (e:Eq v) (f g:v -> w) (xs : list v) (x:v) : w :=
+    match in_dec e x xs with
+    | left _    => g x
+    | right _   => f x
+    end.
+
+Arguments h_ {v} {w}.
+
+Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (p:P v) (xs:list v) : P w :=
+    match p with
+    | Bot       => Bot
+    | Elem x y  => Elem (h_ e f g xs x) (h_ e f g xs y) 
+    | Imp p1 p2 => Imp (dmap_ v w e f g p1 xs) (dmap_ v w e f g p2 xs)
+    | All x p1  => All (g x) (dmap_ v w e f g p1 (x :: xs))
+    end.
+
+Arguments dmap_ {v} {w}.
+
+Definition dmap (v w:Type) (e:Eq v) (f g:v -> w) (p:P v) : P w :=
+    dmap_ e f g p [].
+
+Arguments dmap {v} {w}.
+
+Lemma dmap_id_ : forall (v:Type) (e:Eq v) (p:P v) (xs:list v),
+    dmap_ e id id p xs = p.
+Proof.
+    intros v e p.
+    induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1]; intros xs; simpl.
+    - reflexivity.
+    - unfold h_. 
+      destruct (in_dec e x xs) as [H1|H1], (in_dec e y xs) as [H2|H2];
+      reflexivity. 
+    - rewrite IH1, IH2. reflexivity.
+    - rewrite IH1. reflexivity.
+Qed.
+
+Lemma dmap_id : forall (v:Type) (e:Eq v), dmap e id id = @id (P v). 
+Proof.
+    intros v e. apply extensionality. intros x. 
+    unfold dmap. apply dmap_id_.
+Qed.
+
+
+

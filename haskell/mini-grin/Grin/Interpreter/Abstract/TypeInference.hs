@@ -25,7 +25,7 @@ import qualified Data.List as List (nub)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set; import Data.Set (Set)
 import qualified Grin.TypeEnv as Grin
-import qualified Grin.Examples as Examples
+--import qualified Grin.Examples as Examples
 
 import Grin.Interpreter.Abstract.Base
 import Grin.Interpreter.Abstract.Interpreter
