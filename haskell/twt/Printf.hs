@@ -36,5 +36,20 @@ instance (HasPrintf a, Show param) =>
     type Printf (param :<< a) = param -> Printf a
     format s _ param = format (s ++ show param) (Proxy @a)
 
+instance {-# OVERLAPPING #-} HasPrintf a =>
+    HasPrintf (String :<< a) where
+    type Printf (String :<< a) = String -> Printf a
+    format s _ param = format (s ++ param) (Proxy @a)
+
 -- kind! T2 = Int -> Bool -> String
 type T2 = Printf T1
+
+
+printf :: HasPrintf a => Proxy a -> Printf a
+printf = format ""
+
+main :: IO ()
+main = do
+    print $ printf (Proxy @ "test")
+    print $ printf (Proxy @(Int :<< " + " :<< Int :<< "= 3")) 1 2
+    print $ printf (Proxy @(String :<< " world!")) "hello"

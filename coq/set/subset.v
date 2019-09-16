@@ -6,6 +6,7 @@ Require Import nat.
 Require Import Exists.
 Require Import Order.
  
+(* This is based on the wrong notion of equality, but it may be fine in the end *)
 Fixpoint subset_n (n:nat) : set -> set -> Prop :=
     match n with
     | 0     => (fun _  _    => True)
@@ -20,6 +21,7 @@ Fixpoint subset_n (n:nat) : set -> set -> Prop :=
         end)
     end.
               
+(* This is the wrong definition of equality, but it may be fine in the end      *)
 Definition equal_n (n:nat) (x:set) (y:set) : Prop :=
     subset_n n y x /\ subset_n n x y.
 
@@ -181,3 +183,23 @@ Proof.
             } 
 Qed.
 
+Definition subset (xs ys:set) : Prop :=
+    let n := order xs + order ys in subset_n n xs ys.
+
+Lemma subset_charac : forall (n:nat) (xs ys:set),
+    order xs + order ys <= n -> (subset xs ys <-> subset_n n xs ys).
+Proof.
+    intros n xs ys H. remember (order xs + order ys) as m eqn:E. revert E. 
+    induction H as [|n H IH].
+    - intros H. unfold subset. rewrite <- H. split; intros H'; assumption.
+    - intros H1. split; intros H2.
+        + apply (subset_n_Sn n).
+            { rewrite <- H1. assumption. }
+            { apply IH; assumption. }
+        + apply IH.
+            { assumption. }
+            { apply subset_n_Sn. 
+                { rewrite <- H1. assumption. }
+                { assumption. }
+            }
+Qed.

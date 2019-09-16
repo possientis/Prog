@@ -1,6 +1,7 @@
 module reflect-list where
 
 open import id
+open import nat
 open import sum
 open import bool
 open import list
@@ -204,3 +205,32 @@ small-Small (Map f Nil) r2 p = right
 small-Small (Cons x r1) r2 p = left p
 small-Small Nil r2 p = left p
 
+superdev : {a : Set} → 𝕄 a → 𝕄 a
+superdev (Inj x)     = Inj x
+superdev (App r1 r2) = small-step (App (superdev r1) (superdev r2))
+superdev (Map f r1)  = small-step (Map f (superdev r1))
+superdev (Cons x r1) = small-step (Cons x (superdev r1))
+superdev Nil         = Nil
+
+simplify : {a : Set} → 𝕄 a → ℕ → 𝕄 a
+simplify r zero     = r
+simplify r (succ n) = superdev (simplify r n)
+
+{-
+-- small-step preserves semantics
+small-step-sound : ∀ {a : Set} → (r : 𝕄 a) → 𝕃⟦ small-step r ⟧ ≡ 𝕃⟦ r ⟧
+small-step-sound (Inj xs)          = refl _
+small-step-sound (App (Inj xs) r2) with 𝔹-dec (is-empty r2) tt
+small-step-sound (App (Inj xs) r2) | left p  =
+  ≡-trans
+    (ap (λ b → 𝕃⟦ if b then Inj xs else App (Inj xs) r2 ⟧) p)
+    (≡-sym (≡-trans (ap (λ l → xs ++ l) (is-empty-empty r2 p))(++[] xs)))
+small-step-sound (App (Inj x) r2) | right p = {!!}
+small-step-sound (App (App r1 r3) r2) = {!!}
+small-step-sound (App (Map x r1) r2) = {!!}
+small-step-sound (App (Cons x r1) r2) = {!!}
+small-step-sound (App Nil r2) = {!!}
+small-step-sound (Map x r) = {!!}
+small-step-sound (Cons x r) = {!!}
+small-step-sound Nil = {!!}
+-}
