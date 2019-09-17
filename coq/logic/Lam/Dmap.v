@@ -9,19 +9,22 @@ Require Import Extensionality.
 
 Require Import Lam.T.
 
+(* xs represents the list of variables which are deemed 'bound'                 *)
 Definition h_ (v w:Type) (e:Eq v) (f g:v -> w) (xs : list v) (x:v) : w :=
     match in_dec e x xs with
-    | left _    => g x
-    | right _   => f x
+    | left _    => g x          (* x is deemed bound    -> g x                  *)
+    | right _   => f x          (* x is deemed free     -> f x                  *)
     end.
 
 Arguments h_ {v} {w}.
 
+(* Notion of 'dual substitution of variable, but defined in terms of the list   *)
+(* xs of variables which are deemed bound, rather than free.                    *)
 Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (t:T v) (xs:list v) : T w :=
     match t with
     | Var x     => Var (h_ e f g xs x) 
     | App t1 t2 => App (dmap_ v w e f g t1 xs) (dmap_ v w e f g t2 xs)
-    | Lam x t1  => Lam (g x) (dmap_ v w e f g t1 (x :: xs))
+    | Lam x t1  => Lam (g x) (dmap_ v w e f g t1 (x :: xs))     (* x now bound  *)
     end.
 
 Arguments dmap_ {v} {w}.
@@ -47,25 +50,4 @@ Proof.
     unfold dmap. apply dmap_id_.
 Qed.
 
-(*
-Lemma dmap_comp_:forall(v w u:Type)(e:Eq v)(e':Eq w)(f g:v -> w)(f' g':w -> u),
-    forall (t:T v) (xs:list v),
-    dmap_ e (f' ; f) (g' ; g) t xs = dmap_ e' f' g' (dmap_ e f g t xs) (map g xs).
-Proof.
-    intros v w u e e' f g f' g' t.
-    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs;
-    unfold comp, dmap_, h_.
-    - destruct (in_dec e x xs) as [H|H].
-        + destruct (in_dec e' (g x) (map g xs)) as [H'|H'].
-            { reflexivity. }
-            { exfalso. apply H'. apply mapIn. exists x. split.
-                { assumption. }
-                { reflexivity. }
-            }
-        +  destruct (in_dec e' (f x) (map g xs)) as [H'|H'].
-            {
- 
-
-Show.
-*)
-
+(* There is no obvious result in relation to function composition               *)

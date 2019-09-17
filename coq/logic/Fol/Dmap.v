@@ -7,6 +7,7 @@ Require Import Extensionality.
 
 Require Import Fol.P.
 
+(* xs represents the list of variables which are deemed 'bound'                 *)
 Definition h_ (v w:Type) (e:Eq v) (f g:v -> w) (xs : list v) (x:v) : w :=
     match in_dec e x xs with
     | left _    => g x
@@ -15,12 +16,14 @@ Definition h_ (v w:Type) (e:Eq v) (f g:v -> w) (xs : list v) (x:v) : w :=
 
 Arguments h_ {v} {w}.
 
+(* Notion of 'dual substitution of variable, but defined in terms of the list   *)
+(* xs of variables which are deemed bound, rather than free.                    *)
 Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (p:P v) (xs:list v) : P w :=
     match p with
     | Bot       => Bot
     | Elem x y  => Elem (h_ e f g xs x) (h_ e f g xs y) 
     | Imp p1 p2 => Imp (dmap_ v w e f g p1 xs) (dmap_ v w e f g p2 xs)
-    | All x p1  => All (g x) (dmap_ v w e f g p1 (x :: xs))
+    | All x p1  => All (g x) (dmap_ v w e f g p1 (x :: xs))     (* x now bound  *)
     end.
 
 Arguments dmap_ {v} {w}.
@@ -49,5 +52,5 @@ Proof.
     unfold dmap. apply dmap_id_.
 Qed.
 
-
+(* There is no obvious result in relation to function composition               *)
 
