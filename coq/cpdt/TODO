@@ -1,2 +1,2 @@
-comp_eq properties ?
+comp_eq is transitive? if not change comp_eq ?
 prove monad laws

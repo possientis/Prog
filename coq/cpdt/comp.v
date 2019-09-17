@@ -6,12 +6,25 @@ CoInductive Comp (a:Type) : Type :=
 Arguments Ret {a}.
 Arguments Bnd {a} {a'}.
 
+(* Usual trick for coinductive type                                             *)
+Definition frob (a:Type) (c:Comp a) : Comp a :=
+    match c with
+    | Ret x     => Ret x
+    | Bnd c f   => Bnd c f
+    end.
+
+Arguments frob {a}.
+
+Lemma frob_same : forall (a:Type) (c:Comp a), c = frob c.
+Proof. intros a [x|a' c f]; reflexivity. Qed.
+
+(* Need to pick some good notion of equality with coinductive proofs            *)
 CoInductive comp_eq (a:Type) : Comp a -> Comp a -> Prop :=
 | Ret_eq : forall (x:a), comp_eq a (Ret x) (Ret x) 
-| Bnd_eq : forall (a':Type) (c1 c2:Comp a') (f g:a' -> Comp a), 
+| Bnd_eq : forall (a':Type) (c1 c2:Comp a') (f1 f2:a' -> Comp a), 
     comp_eq a' c1 c2                        -> 
-    (forall (z:a'), comp_eq a (f z) (g z))  ->
-    comp_eq a (Bnd c1 f) (Bnd c2 g)
+    (forall (z:a'), comp_eq a (f1 z) (f2 z))  ->
+    comp_eq a (Bnd c1 f1) (Bnd c2 f2)
 .
 
 Arguments comp_eq {a}.
@@ -21,6 +34,41 @@ Proof.
     intros a x y H. inversion H. reflexivity.
 Qed.
 
+Lemma comp_eq_refl : forall (a:Type) (c:Comp a), comp_eq c c.
+Proof.
+    cofix. intros a [x|a' c f].
+    - constructor.
+    - constructor.
+        + apply comp_eq_refl.
+        + intros z. apply comp_eq_refl.
+Qed.
+
+Lemma comp_eq_sym : forall (a:Type) (c1 c2:Comp a), 
+    comp_eq c1 c2 -> comp_eq c2 c1.
+Proof.
+    cofix. intros a c1 c2 H. 
+    destruct H as [|a' c1 c2 f1 f2 H1 H2].
+    - constructor.
+    - constructor. 
+        + apply comp_eq_sym. assumption.
+        + intros z. apply comp_eq_sym. apply H2.
+Qed.
+
+(*
+Lemma comp_eq_trans : forall (a:Type) (c1 c2 c3:Comp a),
+    comp_eq c1 c2 -> comp_eq c2 c3 -> comp_eq c1 c3.
+Proof.
+    cofix. intros a c1 c2 c3 H. revert c3.
+    destruct H as [|a' c1 c2 f1 f2 H1 H2].
+    - intros c3 H. assumption.
+    - intros c3 H3. remember (Bnd c2 f2) as c2' eqn:E. revert E.
+      destruct H3 as [|a'' c2' c3 f2' f3 H4 H5].
+        + intros H3. inversion H3.
+        + intros H3. 
+
+
+Show.
+*)
 
 (*
 Inductive Exec (a:Type) : Comp a -> a -> Prop :=
