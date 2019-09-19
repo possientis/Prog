@@ -216,7 +216,7 @@ simplify : {a : Set} → 𝕄 a → ℕ → 𝕄 a
 simplify r zero     = r
 simplify r (succ n) = superdev (simplify r n)
 
-{-
+
 -- small-step preserves semantics
 small-step-sound : ∀ {a : Set} → (r : 𝕄 a) → 𝕃⟦ small-step r ⟧ ≡ 𝕃⟦ r ⟧
 small-step-sound (Inj xs)          = refl _
@@ -225,12 +225,31 @@ small-step-sound (App (Inj xs) r2) | left p  =
   ≡-trans
     (ap (λ b → 𝕃⟦ if b then Inj xs else App (Inj xs) r2 ⟧) p)
     (≡-sym (≡-trans (ap (λ l → xs ++ l) (is-empty-empty r2 p))(++[] xs)))
-small-step-sound (App (Inj x) r2) | right p = {!!}
-small-step-sound (App (App r1 r3) r2) = {!!}
-small-step-sound (App (Map x r1) r2) = {!!}
-small-step-sound (App (Cons x r1) r2) = {!!}
-small-step-sound (App Nil r2) = {!!}
-small-step-sound (Map x r) = {!!}
-small-step-sound (Cons x r) = {!!}
-small-step-sound Nil = {!!}
--}
+small-step-sound (App (Inj xs) r2) | right p =
+  ≡-trans
+    (ap (λ b → 𝕃⟦ if b then Inj xs else App (Inj xs) r2 ⟧)
+      (not-tt-ff (is-empty r2) p))
+    (refl _)
+small-step-sound (App (App r1 r3) r2) = ≡-sym (++-assoc 𝕃⟦ r1 ⟧ 𝕃⟦ r3 ⟧ 𝕃⟦ r2 ⟧)
+small-step-sound (App (Map f r1) r2)  with 𝔹-dec (is-empty r2) tt
+small-step-sound (App (Map f r1) r2) | left p  =
+  ≡-trans
+    (ap (λ b → 𝕃⟦ if b then Map f r1 else App (Map f r1) r2 ⟧) p)
+    (≡-sym (≡-trans
+      (ap (λ l → map f 𝕃⟦ r1 ⟧ ++ l) (is-empty-empty r2 p))
+      (++[] (map f 𝕃⟦ r1 ⟧ ))))
+small-step-sound (App (Map f r1) r2) | right p =
+   ≡-trans
+     (ap (λ b → 𝕃⟦ if b then Map f r1 else App (Map f r1) r2 ⟧)
+       (not-tt-ff (is-empty r2) p))
+     (refl _)
+small-step-sound (App (Cons x r1) r2) = refl _
+small-step-sound (App Nil r2)         = refl _
+small-step-sound (Map f (Inj x))      = refl _
+small-step-sound (Map f (App r1 r2))  = ≡-sym (++-map f 𝕃⟦ r1 ⟧ 𝕃⟦ r2 ⟧)
+small-step-sound (Map f (Map g r1))   = ++-∘ g f 𝕃⟦ r1 ⟧
+small-step-sound (Map f (Cons x r1))  = refl _
+small-step-sound (Map f Nil)          = refl _
+small-step-sound (Cons x r)           = refl _
+small-step-sound Nil                  = refl _
+

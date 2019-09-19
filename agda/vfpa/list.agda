@@ -5,6 +5,7 @@ open import nat
 open import bool
 open import void
 open import maybe
+open import function
 
 data 𝕃 {ℓ} (a : Set ℓ) : Set ℓ where
   []  : 𝕃 a
@@ -81,6 +82,15 @@ length-++ (x ∷ xs) ys = ap succ (length-++ xs ys)
 ++-assoc [] ys zs       = refl (ys ++ zs)
 ++-assoc (x ∷ xs) ys zs = ap (λ ls → x ∷ ls) (++-assoc xs ys zs)
 
+++-∘ : ∀ {ℓ ℓ' ℓ''} {a : Set ℓ} {b : Set ℓ'} {c : Set ℓ''}
+  (f : a → b) (g : b → c)(xs : 𝕃 a) → map (g ∘ f) xs ≡ map g (map f xs)
+++-∘ f g []       = refl _
+++-∘ f g (x ∷ xs) = ap (λ l → (g ∘ f) x ∷ l) (++-∘ f g xs)
+
+++-map : ∀ {ℓ ℓ'} {a : Set ℓ} {b : Set ℓ'} (f : a -> b) (xs ys : 𝕃 a) →
+  map f (xs ++ ys) ≡ map f xs ++ map f ys
+++-map f [] ys       = refl _
+++-map f (x ∷ xs) ys = ap (λ l → f x ∷ l) (++-map f xs ys)
 
 length-filter : ∀ {ℓ} {a : Set ℓ} (p : a → 𝔹) (xs : 𝕃 a) →
   length (filter p xs) ≤ length xs
