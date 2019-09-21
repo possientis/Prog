@@ -1,3 +1,6 @@
+Require Import List.
+Import ListNotations.
+
 Inductive set : Type :=
 | Nil   : set
 | Cons  : set -> set -> set
@@ -18,3 +21,11 @@ Proof.
             }
             { right. intros H. inversion H. apply H1. assumption. }
 Qed.
+
+Fixpoint toList (xs : set) : list set :=
+    match xs with
+    | Nil       => []
+    | Cons x xs => x :: toList xs
+    end.
+
+

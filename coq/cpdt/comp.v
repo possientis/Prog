@@ -6,6 +6,13 @@ CoInductive Comp (a:Type) : Type :=
 Arguments Ret {a}.
 Arguments Bnd {a} {a'}.
 
+Lemma comp_dest_ret : forall (a:Type) (x y:a),
+    Ret x = Ret y -> x = y.
+Proof.
+    intros a x y H. inversion H. reflexivity.
+Qed.
+
+
 (* Usual trick for coinductive type                                             *)
 Definition frob (a:Type) (c:Comp a) : Comp a :=
     match c with
@@ -18,6 +25,8 @@ Arguments frob {a}.
 Lemma frob_same : forall (a:Type) (c:Comp a), c = frob c.
 Proof. intros a [x|a' c f]; reflexivity. Qed.
 
+
+
 (* Need to pick some good notion of equality with coinductive proofs            *)
 CoInductive comp_eq (a:Type) : Comp a -> Comp a -> Prop :=
 | Ret_eq : forall (x:a), comp_eq a (Ret x) (Ret x) 
@@ -28,6 +37,7 @@ CoInductive comp_eq (a:Type) : Comp a -> Comp a -> Prop :=
 .
 
 Arguments comp_eq {a}.
+
 
 Lemma comp_eq_ret : forall (a:Type) (x y:a), comp_eq (Ret x) (Ret y) -> x = y.
 Proof.
@@ -54,6 +64,7 @@ Proof.
         + intros z. apply comp_eq_sym. apply H2.
 Qed.
 
+
 (*
 Lemma comp_eq_trans : forall (a:Type) (c1 c2 c3:Comp a),
     comp_eq c1 c2 -> comp_eq c2 c3 -> comp_eq c1 c3.
@@ -61,14 +72,16 @@ Proof.
     cofix. intros a c1 c2 c3 H. revert c3.
     destruct H as [|a' c1 c2 f1 f2 H1 H2].
     - intros c3 H. assumption.
-    - intros c3 H3. remember (Bnd c2 f2) as c2' eqn:E. revert E.
+    - intros c3 H3.
+      remember (Bnd c2 f2) as c2' eqn:E. revert E.
       destruct H3 as [|a'' c2' c3 f2' f3 H4 H5].
         + intros H3. inversion H3.
-        + intros H3. 
-
+        +
+        + intros H3. inversion H3. subst. constructor. inversion H3.
 
 Show.
 *)
+
 
 (*
 Inductive Exec (a:Type) : Comp a -> a -> Prop :=

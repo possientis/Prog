@@ -2,7 +2,9 @@ all: 			set.vo \
 				nat.vo \
 				Exists.vo \
 				Order.vo \
-				subset.vo 
+				subset.vo \
+				Elem.vo \
+				Equal.vo
 
 
 
@@ -27,4 +29,12 @@ subset.vo :		subset.v \
 				Order.vo
 	coqc subset.v
 
+Elem.vo :		Elem.v \
+				set.vo \
+				subset.vo
+	coqc Elem.v
 
+Equal.vo :		Equal.v \
+				set.vo \
+				Elem.vo
+	coqc Equal.v

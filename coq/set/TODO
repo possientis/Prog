@@ -1,3 +1,2 @@
-define subset
-state subset_subset_n as in old
-resolve equality issue
+Elem:elem_subset
+extensionality

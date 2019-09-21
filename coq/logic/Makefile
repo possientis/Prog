@@ -31,7 +31,8 @@ all:	   			Extensionality.vo \
 					Lam/Valid.vo \
 					Fol/Valid.vo \
 					Lam/Dmap.vo \
-					Fol/Dmap.vo
+					Fol/Dmap.vo \
+					Lam/Subst.vo
 
 Extensionality.vo : Extensionality.v
 	coqc Extensionality.v
@@ -263,3 +264,9 @@ Fol/Dmap.vo :		Fol/Dmap.v \
 					Extensionality.vo \
 					Fol/P.vo
 	coqc Fol/Dmap.v -R Fol Fol
+
+Lam/Subst.vo :		Lam/Subst.v \
+					Eq.vo \
+					Lam/T.vo
+	coqc Lam/Subst.v -R Lam Lam
+

@@ -203,3 +203,7 @@ Proof.
                 { assumption. }
             }
 Qed.
+
+Notation "x <== y" := (subset x y) (at level 90) : set_scope.
+
+

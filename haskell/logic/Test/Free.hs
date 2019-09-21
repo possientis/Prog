@@ -18,17 +18,12 @@ import Variable (Var)
 import Injective
 
 specFree :: forall f . (Test f) => Spec
-specFree = describe "Testing properties of free..." $ 
-    sequence_ (specsFree @ f)
-
-specsFree :: forall f . (Test f) => [Spec]
-specsFree  = [ testFreeFmap         @ f
-             , testFreeVar          @ f
-             , testFreeInj          @ f 
-             , testFreeReplace1     @ f
-             , testFreeReplace2     @ f
-             ]
-
+specFree = describe "Testing properties of free..." $ do 
+    testFreeFmap        @ f
+    testFreeVar         @ f
+    testFreeInj         @ f 
+    testFreeReplace1    @ f
+    testFreeReplace2    @ f
 
 testFreeFmap :: forall f . (Test f) =>  Spec
 testFreeFmap = it "Checked free fmap property" $ 
