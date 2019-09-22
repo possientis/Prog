@@ -15,6 +15,38 @@ data Format
     | End
 
 
+data SFormat
+    = SNumber SFormat
+    | SStr    SFormat
+    | SChr    SFormat
+    | SDbl    SFormat
+    | SLit    String SFormat
+    | SEnd
+
+class KnownFormat (t :: Format) where
+    formatValue :: Proxy t -> SFormat
+
+instance KnownFormat fmt => KnownFormat ('Number fmt) where
+    formatValue _ = SNumber (formatValue (Proxy :: Proxy fmt))
+
+instance KnownFormat fmt => KnownFormat ('Str fmt) where
+    formatValue _ = SStr (formatValue (Proxy :: Proxy fmt)) 
+
+instance KnownFormat fmt => KnownFormat ('Chr fmt) where
+    formatValue _ = SChr (formatValue (Proxy :: Proxy fmt))
+
+instance KnownFormat fmt => KnownFormat ('Dbl fmt) where
+    formatValue _ = SDbl (formatValue (Proxy :: Proxy fmt))
+
+instance (KnownSymbol str, KnownFormat fmt) => KnownFormat ('Lit str fmt) where
+    formatValue _ = SLit 
+        (symbolVal (Proxy :: Proxy str)) 
+        (formatValue (Proxy :: Proxy fmt))
+
+instance KnownFormat 'End where
+    formatValue _ = SEnd
+
+
 type family PrintfType (t :: Format) :: Type where
     PrintfType ('Number fmt) = Int      -> PrintfType fmt
     PrintfType ('Str    fmt) = String   -> PrintfType fmt

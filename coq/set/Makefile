@@ -31,7 +31,8 @@ subset.vo :		subset.v \
 
 Elem.vo :		Elem.v \
 				set.vo \
-				subset.vo
+				subset.vo \
+				Order.vo
 	coqc Elem.v
 
 Equal.vo :		Equal.v \

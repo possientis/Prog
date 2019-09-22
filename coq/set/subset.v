@@ -206,4 +206,6 @@ Qed.
 
 Notation "x <== y" := (subset x y) (at level 90) : set_scope.
 
+Lemma subset_n_Nil : forall (x : set) (n:nat), subset_n n Nil x.
+Proof. intros x n. destruct n as [|n]; apply I. Qed.
 

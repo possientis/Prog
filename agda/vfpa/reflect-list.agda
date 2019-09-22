@@ -212,9 +212,9 @@ superdev (Map f r1)  = small-step (Map f (superdev r1))
 superdev (Cons x r1) = small-step (Cons x (superdev r1))
 superdev Nil         = Nil
 
-simplify : {a : Set} → 𝕄 a → ℕ → 𝕄 a
-simplify r zero     = r
-simplify r (succ n) = superdev (simplify r n)
+simplify : {a : Set} → ℕ → 𝕄 a → 𝕄 a
+simplify zero     r = r
+simplify (succ n) r = superdev (simplify n r)
 
 
 -- small-step preserves semantics
@@ -253,3 +253,29 @@ small-step-sound (Map f Nil)          = refl _
 small-step-sound (Cons x r)           = refl _
 small-step-sound Nil                  = refl _
 
+-- superdev preserves semantics
+superdev-sound : ∀ {a : Set} → (r : 𝕄 a) → 𝕃⟦ superdev r ⟧ ≡ 𝕃⟦ r ⟧
+superdev-sound (Inj xs)    = refl _
+superdev-sound (App r1 r2) = ≡-trans
+  (small-step-sound (App (superdev r1)(superdev r2)))
+  (≡-trans
+    (ap (λ l → l ++ 𝕃⟦ superdev r2 ⟧) (superdev-sound r1))
+    (ap (λ l → 𝕃⟦ r1 ⟧ ++ l) (superdev-sound r2)))
+superdev-sound (Map f r1)  = ≡-trans
+  (small-step-sound (Map f (superdev r1)))
+  (ap (map f) (superdev-sound r1))
+superdev-sound (Cons x r1) = ap (λ l → x ∷ l) (superdev-sound r1)
+superdev-sound Nil         = refl _
+
+-- simplify preserves semantics
+simplify-sound : ∀ {a : Set} → (n : ℕ) → (r : 𝕄 a) → 𝕃⟦ simplify n r ⟧ ≡ 𝕃⟦ r ⟧
+simplify-sound zero r     = refl _
+simplify-sound (succ n) r = ≡-trans
+  (superdev-sound (simplify n r))
+  (simplify-sound n r)
+
+{-
+application : ∀ {a : Set} → {b : Set} → (f : a → b) → (xs ys zs : 𝕃 a) →
+  map f ((xs ++ ys) ++ zs) ≡ map f xs ++ map f ys ++ map f zs
+application f xs ys zs = {!!} 
+-}

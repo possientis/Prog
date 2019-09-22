@@ -1,2 +1,5 @@
+subset: subset_n_trans
+subset: subset_n_cons
+subset: subset_n_refl
 Elem:elem_subset
 extensionality
