@@ -1,0 +1,22 @@
+\begin{defin}\label{logic:def:LAM:subst}
+Let $V$ be  a set and $\sigma :V\to \tv$ be a map. We define the
+{\em $\beta$-substitution} associated with
+$\sigma$ to be the map $\sigma:\tv\to\tv$ defined by
+$\sigma(\phi)=\sigma^{*}(\phi)(\emptyset)$, where
+$\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined by the following structural
+recursion, given $\phi\in\tv$ and $U\in{\cal P}(V)$:
+    \begin{equation}\label{logic:eqn:LAM:subst:1}
+                    \sigma^{*}(\phi)(U)=\left\{
+                    \begin{array}{lcl}
+                    \sigma_{U}(x)&\mbox{\ if\ }&\phi=x\\
+                    \sigma^{*}(\phi_{1})(U)\ \sigma^{*}(\phi_{2})(U)
+                    &\mbox{\ if\ }&\phi=\phi_{1}\ \phi_{2}\\
+                    \lambda x\sigma^{*}(\phi_{1})(U\cup\{x\})&
+                    \mbox{\ if\ }&\phi=\lambda x\phi_{1}
+                    \end{array}\right.
+    \end{equation}
+where $\sigma_{U}(x)=x$ if $x\in U$ and
+$\sigma_{U}(x)=\sigma(x)$ if $x\not\in U$.
+\end{defin}
+
+

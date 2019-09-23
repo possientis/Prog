@@ -1,0 +1,26 @@
+\begin{defin}\label{logic:def:LAM:type}
+Let $V$ be a set. We call {\em Lambda Calculus Type associated
+with $V$}, the type of universal algebra $\alpha$ defined by:
+    \[
+    \alpha=\{\otimes\}\cup\{\lambda x\ :\ x\in V\}
+    \]
+where $\otimes=((0,0),2)$ and $\lambda x=((1,x),1)$ given $x\in V$.
+\end{defin}
+
+So $\otimes$ represents a binary operator (function application),
+while forall $x\in V$ $\lambda x$ is meant to denote a unary operator 
+(lambda abstraction).
+
+
+\begin{defin}\label{logic:def:LAM:free:algebra}
+Let $V$ be a set with lambda calculus type $\alpha$. We call {\em
+Free Lambda Calculus Algebra associated with $V$},
+the free universal algebra \tv\ of type $\alpha$ with free generator
+$\tvo=V$.
+\end{defin}
+
+Given $\phi_{1}, \phi_{2}\in\tv$ we shall follow the common practice of 
+denoting the function application term $\phi_{1}\otimes \phi_{2}$ 
+simply by $\phi_{1}\ \phi_{2}$.
+
+
