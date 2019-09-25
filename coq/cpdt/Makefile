@@ -23,6 +23,7 @@ all:	Utils/nat.vo \
 		domain.vo \
 		thunk.vo \
 		comp.vo \
+		vec.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
 		Test/option_t.vo
@@ -101,6 +102,9 @@ thunk.vo : thunk.v
 
 comp.vo : comp.v
 	coqc comp.v
+
+vec.vo : vec.v
+	coqc vec.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
