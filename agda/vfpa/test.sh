@@ -28,6 +28,7 @@ agda bst.agda
 agda sigma.agda
 agda z.agda
 agda reflect-list.agda
+agda combinator.agda
 
 ./clean.sh
 

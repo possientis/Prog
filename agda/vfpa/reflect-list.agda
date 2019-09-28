@@ -274,8 +274,4 @@ simplify-sound (succ n) r = ≡-trans
   (superdev-sound (simplify n r))
   (simplify-sound n r)
 
-{-
-application : ∀ {a : Set} → {b : Set} → (f : a → b) → (xs ys zs : 𝕃 a) →
-  map f ((xs ++ ys) ++ zs) ≡ map f xs ++ map f ys ++ map f zs
-application f xs ys zs = {!!} 
--}
+

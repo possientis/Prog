@@ -1,3 +1,4 @@
+Require Import Arith.Le.
 Require Import Arith.Plus.
 Require Import Arith.PeanoNat.
 
@@ -205,7 +206,53 @@ Proof.
 Qed.
 
 Notation "x <== y" := (subset x y) (at level 90) : set_scope.
+Open Scope set_scope.
 
-Lemma subset_n_Nil : forall (x : set) (n:nat), subset_n n Nil x.
+Lemma subset_n_Nil : forall (x:set) (n:nat), subset_n n Nil x.
 Proof. intros x n. destruct n as [|n]; apply I. Qed.
 
+Lemma subset_Nil : forall (x:set), Nil <== x.
+Proof.
+    intros x. apply (subset_charac (order Nil + order x)).
+    - apply le_n.
+    - apply subset_n_Nil.
+Qed.
+
+(*
+Lemma subset_n_Cons : forall (xs ys y:set) (n:nat),
+    subset_n n xs ys -> subset_n n xs (Cons y ys).
+Proof.
+    intros xs ys y n. revert xs ys y. induction n as [|n IH]; intros xs ys y H.
+    - apply I.
+    - simpl.
+
+Show.
+*)
+
+
+(*
+Lemma subset_n_refl : forall (x:set) (n:nat),
+    order x <= n -> subset_n n x x.
+Proof.
+    intros x n. revert x. induction n as [|n IH]; intros x H.
+    - apply I.
+    - destruct x as [|x xs].
+        + apply I.
+        + split.
+            {
+Show.
+*)
+(*
+            { apply ExistsH. split.
+                { apply IH. simpl in H. apply le_S_n in H.
+                  apply le_trans with (max (order x) (order xs)).
+                    { apply n_le_max. }
+                    { assumption. }
+                }
+                { apply IH. simpl in H. apply le_S_n in H.
+                  apply le_trans with (max (order x) (order xs)).
+                    { apply n_le_max. }
+                    { assumption. }
+                }
+Admitted.
+*)

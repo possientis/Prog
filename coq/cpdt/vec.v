@@ -38,3 +38,20 @@ Fixpoint unject (a:Type) (n:nat) (xs:Vec a n) : list a :=
 
 Arguments unject {a} {n}.
 
+Definition head (a:Type) (n:nat) (xs:Vec a (S n)) : a :=
+    match xs in Vec _ (S n) with
+    | Cons x _  => x
+    end.
+
+Arguments head {a} {n}.
+
+
+(*
+Compute head (inject [1;2;3]).
+*)
+
+
+
+
+
+

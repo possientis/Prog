@@ -1,0 +1,29 @@
+\begin{defin}\label{logic:def:LAM:beta:valid:substitution}
+Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let
+$\phi\in\tv$. We say that $\sigma$ is {\em $\beta$-valid for} $\phi$ \ifand\
+for every sub-formula $\psi\preceq\phi$:
+    \[
+        x\in\free(\psi)\ \Rightarrow\ \free(\sigma(x))\subseteq\free(\sigma(\psi))
+    \]
+where $\sigma:\tv\to\tv$ also denotes the associated
+$\beta$-substitution mapping.
+\end{defin}
+
+\begin{prop}\label{logic:prop:LAM:beta:valid:subformula}
+Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let
+$\phi\in\tv$. Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is $\beta$-valid
+for any sub-formula $\psi\preceq\phi$.
+\end{prop}
+\begin{proof}
+Since $\phi\preceq\phi$, i.e. $\phi$ is a sub-formula of itself, the
+'if' part of this proposition is clear. So we now prove the 'only
+if' part. So suppose $\sigma$ is $\beta$-valid for $\phi$ and let
+$\psi\preceq\phi$. We need to show that $\sigma$ is also $\beta$-valid for
+$\psi$. So let $\chi\preceq\psi$ and let $x\in\free(\chi)$. We need
+    to show that $\free(\sigma(x))\subseteq\free(\sigma(\chi))$, which follows
+immediately from the $\beta$-validity of $\sigma$ for $\phi$ and the fact
+(by transitivity) that $\chi\preceq\phi$, i.e. that $\chi$ is also a
+sub-formula of $\phi$.
+\end{proof}
+
+
