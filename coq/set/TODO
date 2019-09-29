@@ -1,4 +1,4 @@
-find the correct statement for subset_n_Cons.
+subset_Cons.
 subset: subset_n_refl
 subset: subset_n_trans
 subset: subset_n_cons

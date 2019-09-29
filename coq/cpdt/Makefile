@@ -108,7 +108,7 @@ vec.vo : vec.v
 	coqc vec.v
 
 type.vo : type.v
-	coqc type.v
+	coqc type.v -R Utils Utils
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

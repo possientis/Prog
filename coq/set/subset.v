@@ -187,22 +187,18 @@ Qed.
 Definition subset (xs ys:set) : Prop :=
     let n := order xs + order ys in subset_n n xs ys.
 
-Lemma subset_charac : forall (n:nat) (xs ys:set),
-    order xs + order ys <= n -> (subset xs ys <-> subset_n n xs ys).
+Lemma subset_charac : forall (xs ys:set), subset xs ys <-> 
+    forall (n:nat), order xs + order ys <= n -> subset_n n xs ys.
 Proof.
-    intros n xs ys H. remember (order xs + order ys) as m eqn:E. revert E. 
-    induction H as [|n H IH].
-    - intros H. unfold subset. rewrite <- H. split; intros H'; assumption.
-    - intros H1. split; intros H2.
+    intros xs ys. unfold subset. split; intros H.
+    - intros n H'.
+      remember (order xs + order ys) as m eqn:E. revert E.
+      induction H' as [|n H1 IH]; intros H2.
+        + assumption.
         + apply (subset_n_Sn n).
-            { rewrite <- H1. assumption. }
-            { apply IH; assumption. }
-        + apply IH.
-            { assumption. }
-            { apply subset_n_Sn. 
-                { rewrite <- H1. assumption. }
-                { assumption. }
-            }
+            { rewrite <- H2. assumption. }
+            { apply IH. assumption. }
+    - apply H. apply le_n.
 Qed.
 
 Notation "x <== y" := (subset x y) (at level 90) : set_scope.
@@ -213,21 +209,40 @@ Proof. intros x n. destruct n as [|n]; apply I. Qed.
 
 Lemma subset_Nil : forall (x:set), Nil <== x.
 Proof.
-    intros x. apply (subset_charac (order Nil + order x)).
-    - apply le_n.
-    - apply subset_n_Nil.
+    intros x. apply subset_charac. intros n H. apply subset_n_Nil.
 Qed.
 
-(*
-Lemma subset_n_Cons : forall (xs ys y:set) (n:nat),
-    subset_n n xs ys -> subset_n n xs (Cons y ys).
-Proof.
-    intros xs ys y n. revert xs ys y. induction n as [|n IH]; intros xs ys y H.
-    - apply I.
-    - simpl.
 
-Show.
-*)
+Lemma subset_n_Cons : forall (xs ys y:set) (n:nat),
+    order xs <= n -> subset_n n xs ys -> subset_n n xs (Cons y ys).
+Proof.
+    intros xs ys y n. revert xs ys y. 
+    induction n as [|n IH]; intros xs ys y H1 H2. 
+    - apply I.
+    - destruct xs as [|x xs].
+        + apply I.
+        + destruct H2 as [H2 H3]. split.
+            { apply IH.
+                { simpl in H1. apply le_S_n in H1. 
+                  apply le_trans with (max (order x) (order xs)).
+                    { apply m_le_max. }
+                    { assumption. }
+                }
+                { assumption. }
+            }
+            { apply ExistsT. assumption. }
+Qed.
+
+
+Lemma subset_Cons : forall (xs ys y:set), xs <== ys -> xs <== (Cons y ys).
+Proof.
+    intros xs ys y H. apply subset_charac. intros n H'. apply subset_n_Cons.
+    - admit.
+    - apply subset_charac.
+        + assumption.
+        + admit.
+Admitted.
+
 
 
 (*
