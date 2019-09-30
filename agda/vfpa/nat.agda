@@ -5,6 +5,7 @@ open import sum
 open import bool
 open import void
 open import relations
+import min-max as minmax
 
 data ℕ : Set where
   zero : ℕ
@@ -118,6 +119,21 @@ infixr 4 _≤_
 ≤-anti : {n m : ℕ} → n ≤ m → m ≤ n → n ≡ m
 ≤-anti {zero} {zero} p q     = refl _
 ≤-anti {succ n} {succ m} p q = ap succ (≤-anti (≤-s-n p) (≤-s-n q))
+
+≤-s-0 : (n : ℕ) → ¬(succ n ≤ 0)
+≤-s-0 n p = succ-not-0 n (≤-anti p (≤-0-n _))
+
+{-
+≤-total : ∀ (n m : ℕ) → (n ≤ m) ∨ (m ≤ n)
+≤-total zero m            = left (≤-0-n m)
+≤-total (succ n) zero     = right (≤-s-0 _)
+≤-total (succ n) (succ m) with ≤-total n m
+≤-total (succ n) (succ m) | left  p   = left (≤-n-s p)
+≤-total (succ n) (succ m) | right p = right λ q → p (≤-s-n q)
+
+max : ℕ → ℕ → ℕ
+max = minmax.max _≤_ ≤-refl ≤-anti ≤-total 
+-}
 
 _<_ : ℕ → ℕ → Set
 n < m = succ n ≤ m
