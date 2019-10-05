@@ -1,8 +1,11 @@
 module vector where
 
-open import bool
-open import nat
 open import id
+open import lt
+open import nat
+open import bool
+open import plus
+open import mult
 
 -- Agda does not support overloading of functions
 open import list hiding (_++_;length;map;concat;nth)
@@ -62,7 +65,3 @@ nth (succ m) p (x ∷ xs) = nth m (<-s-n p) xs
 repeat : ∀{ℓ} {a : Set ℓ} → (x : a) → (n : ℕ) → 𝕍 a n
 repeat x zero     = []
 repeat x (succ n) = x ∷ repeat x n
-
-
-
-

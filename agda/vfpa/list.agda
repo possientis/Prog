@@ -1,11 +1,13 @@
 module list where
 
 open import id
+open import le
 open import nat
+open import func
 open import bool
 open import void
+open import plus
 open import maybe
-open import function
 
 data 𝕃 {ℓ} (a : Set ℓ) : Set ℓ where
   []  : 𝕃 a

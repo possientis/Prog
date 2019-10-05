@@ -1,7 +1,8 @@
 module rewrite-test where
 
-open import nat
 open import id
+open import nat
+open import plus
 
 postulate plus-commute : (a b : ℕ) → a + b ≡ b + a
 postulate P : ℕ → Set

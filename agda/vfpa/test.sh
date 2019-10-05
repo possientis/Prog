@@ -8,16 +8,9 @@ cd ${HOME1}
 echo
 echo "testing vfpa..."
 
-agda level.agda
-agda void.agda
-agda maybe.agda
-agda id.agda
-agda bool.agda
-agda function.agda
-agda sum.agda
-agda prod.agda
+make
+
 agda relations.agda
-agda nat.agda
 agda square.agda
 agda rewrite-test.agda
 agda with-abstraction.agda

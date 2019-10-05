@@ -36,5 +36,34 @@ denotes the associated $\beta$-substitution mapping.
     where $\sigma$ also denotes the associated $\beta$-substitution mapping.
 \end{prop}
 \begin{proof}
-    Using the notations of definition~(\ref{logic:def:LAM:subst}):
+    Using the notations of definition~(\ref{logic:def:LAM:subst}), we have:
+        \begin{eqnarray*}
+            \sigma(\phi)&=&\sigma(\phi_{1}\ \phi_{2})\\
+            &=&\sigma^{*}(\phi_{1}\ \phi_{2})(\emptyset)\\
+            &=&\sigma^{*}(\phi_{1})(\emptyset)\ \ \sigma^{*}(\phi_{2})(\emptyset)\\
+            &=&\sigma(\phi_{1})\ \sigma(\phi_{2})
+        \end{eqnarray*}
 \end{proof}
+
+\begin{prop}\label{logic:prop:LAM:subst:free}
+Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$:
+    \[
+    \free(\sigma(\phi))\subseteq\bigcup_{x\in\free(\phi)} \free(\sigma(x))
+    \]
+where $\sigma:\tv\to\tv$ also denotes the associated $\beta$-subsitution mapping.
+\end{prop}
+\begin{proof}
+Since for all $\phi\in\tv$ we have $\sigma(\phi)=\sigma^{*}(\phi)(\emptyset)$, it is sufficient to show that for all $\phi\in\tv$ and $U\subseteq V$ the following
+inclusion holds:
+    \begin{equation}\label{logic:eqn:LAM:subst:free}
+        \free(\sigma^{*}(\phi)(U)) \subseteq (\free(\phi)\cap U)\ \cup
+        \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
+    \end{equation}
+We shall do so by structural induction on $\phi$, using
+theorem~(\ref{logic:the:proof:induction}) of 
+page~\pageref{logic:the:proof:induction}.
+\end{proof}
+
+
+
+

@@ -2,6 +2,7 @@ all: 			set.vo \
 				nat.vo \
 				Exists.vo \
 				Order.vo \
+				Subset_n.vo \
 				subset.vo \
 				Elem.vo \
 				Equal.vo
@@ -22,11 +23,19 @@ Order.vo :		Order.v \
 				set.vo
 	coqc Order.v
 
-subset.vo :		subset.v \
+Subset_n.vo :	Subset_n.v \
 				set.vo \
 				nat.vo \
 				Exists.vo \
 				Order.vo
+	coqc Subset_n.v
+
+subset.vo :		subset.v \
+				set.vo \
+				nat.vo \
+				Order.vo \
+				Exists.vo \
+				Subset_n.vo
 	coqc subset.v
 
 Elem.vo :		Elem.v \

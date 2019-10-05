@@ -7,7 +7,7 @@ open import bool
 open import list
 open import prod
 open import level
-open import function
+open import func
 
 -- syntax of 'list' language
 data 𝕄 : Set -> Set ℓ₁ where

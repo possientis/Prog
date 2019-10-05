@@ -1,3 +1,4 @@
+complete Makefile
 define max for nat
 define order for Comb based on max. Check that recuction decreases order
 combinator

@@ -1,8 +1,10 @@
 module sigma where
 
 open import Agda.Primitive
+
 open import id
 open import nat
+open import plus
 open import void
 open import list
 open import vector

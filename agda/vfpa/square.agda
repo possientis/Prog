@@ -1,7 +1,8 @@
 module square where
 
-open import nat
 open import id
+open import nat
+open import mult
 
 data ⊥ : Set where
 
@@ -33,5 +34,3 @@ max-0-m m = refl m
 max-n-0 : (n : ℕ) → max n 0 ≡ n
 max-n-0 zero     = refl 0
 max-n-0 (succ n) = refl (succ n)
-
-   
