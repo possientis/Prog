@@ -44,7 +44,7 @@ if-then-else-same : ∀ {ℓ} {X : Set ℓ} (x : X) (b : 𝔹) → if b then x e
 if-then-else-same x tt = refl x
 if-then-else-same x ff = refl x
 
-𝔹-contra : ff ≡ tt → 𝕆
+𝔹-contra : ff ≡ tt → ⊥
 𝔹-contra ()
 
 𝔹-contra' : ∀ {ℓ} → ff ≡ tt → {P : Set ℓ} → P

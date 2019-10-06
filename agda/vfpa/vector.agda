@@ -21,24 +21,6 @@ _++_ : ∀ {ℓ} {a : Set ℓ} {n m : ℕ} → 𝕍 a n → 𝕍 a m → 𝕍 a 
 [] ++ ys       = ys
 (x ∷ xs) ++ ys =  x ∷ (xs ++ ys)
 
-test-vector1 : 𝕍 𝔹 4
-test-vector1 = ff ∷ tt ∷ ff ∷ ff ∷ []
-
--- overloading of data constructors at play
-test-vector2 : 𝕃 (𝕍 𝔹 2)
-test-vector2 = (ff ∷ tt ∷ [])
-             ∷ (tt ∷ ff ∷ [])
-             ∷ (tt ∷ ff ∷ [])
-             ∷ []
-
-test-vector3 : 𝕍 (𝕍 𝔹 3) 2
-test-vector3 = (tt ∷ tt ∷ tt ∷ [])
-             ∷ (ff ∷ ff ∷ ff ∷ [])
-             ∷ []
-
-test-vector-++ : 𝕍 𝔹 8
-test-vector-++ = test-vector1 ++ test-vector1
-
 -- This function is not doing much
 length : ∀ {ℓ} {a : Set ℓ} {n : ℕ} → 𝕍 a n → ℕ
 length {_} {_} {n} _ = n
@@ -65,3 +47,22 @@ nth (succ m) p (x ∷ xs) = nth m (<-s-n p) xs
 repeat : ∀{ℓ} {a : Set ℓ} → (x : a) → (n : ℕ) → 𝕍 a n
 repeat x zero     = []
 repeat x (succ n) = x ∷ repeat x n
+
+test-vector1 : 𝕍 𝔹 4
+test-vector1 = ff ∷ tt ∷ ff ∷ ff ∷ []
+
+test-vector-++ : 𝕍 𝔹 8
+test-vector-++ = test-vector1 ++ test-vector1
+
+-- overloading of data constructors at play
+test-vector2 : 𝕃 (𝕍 𝔹 2)
+test-vector2 = (ff ∷ tt ∷ [])
+             ∷ (tt ∷ ff ∷ [])
+             ∷ (tt ∷ ff ∷ [])
+             ∷ []
+
+test-vector3 : 𝕍 (𝕍 𝔹 3) 2
+test-vector3 = (tt ∷ tt ∷ tt ∷ [])
+             ∷ (ff ∷ ff ∷ ff ∷ [])
+             ∷ []
+

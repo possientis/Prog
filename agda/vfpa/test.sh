@@ -10,19 +10,6 @@ echo "testing vfpa..."
 
 make
 
-agda relations.agda
-agda square.agda
-agda rewrite-test.agda
-agda with-abstraction.agda
-agda min-max.agda
-agda list.agda
-agda vector.agda
-agda bst.agda
-agda sigma.agda
-agda z.agda
-agda reflect-list.agda
-agda combinator.agda
-
 ./clean.sh
 
 cd ${DIR}

@@ -1,3 +1,4 @@
+Require Import List.
 Require Import Arith.Le.
 Require Import Arith.Plus.
 
@@ -5,6 +6,8 @@ Require Import set.
 Require Import nat.
 Require Import Order.
 Require Import Exists.
+Require Import ToList.
+
 
 Fixpoint subset_n (n:nat) : set -> set -> Prop :=
     match n with
@@ -21,7 +24,7 @@ Fixpoint subset_n (n:nat) : set -> set -> Prop :=
     end.
  
 (* This is not the definition of equality, merely syntactic sugar               *)
-Definition equal_n (n:nat) (x:set) (y:set) : Prop :=
+Definition equal_n (n:nat) (x y:set) : Prop :=
     subset_n n y x /\ subset_n n x y.
 
 (* Technichal lemma needed later                                                *)
@@ -275,7 +278,28 @@ Proof.
                             { assumption. }
                         }
                     }
-                    { apply ExistsT.
+                    { apply ExistsT. apply Exists_toList.
+                      apply Exists_toList in H2'.
+                      destruct H2' as [u [H3 [H4 H5]]].
+                      exists u. split.
+                        { assumption. }
+                        { split.
+                            { apply IH with y.
+                                { admit. }
+                                { assumption. }
+                                { assumption. }
+                            }
+                            { apply IH with y.
+                                { admit. }
+                                { assumption. }
+                                { assumption. }
+                            }
+                        }
+                    }
+                }
+                { destruct H2 as [H2 H2']. 
+                  destruct H2' as [z zs [q q']| z zs H2'].
+                    { apply ExistsH.
 
 Show.
 *)

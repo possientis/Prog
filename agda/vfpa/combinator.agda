@@ -1,3 +1,4 @@
+module combinator where
 
 open import nat
 open import bool

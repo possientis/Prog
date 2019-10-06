@@ -3,11 +3,11 @@ module reflect-list where
 open import id
 open import nat
 open import sum
+open import func
 open import bool
 open import list
 open import prod
 open import level
-open import func
 
 -- syntax of 'list' language
 data 𝕄 : Set -> Set ℓ₁ where

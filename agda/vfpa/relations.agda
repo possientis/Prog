@@ -3,8 +3,8 @@ module relations {ℓ ℓ'} {a : Set ℓ} (_≤_ : a → a → Set ℓ') where
 open import Agda.Primitive
 
 open import id
-open import void
 open import sum
+open import void
 
 reflexive : Set (ℓ ⊔ ℓ')
 reflexive = ∀ (x : a) → x ≤ x

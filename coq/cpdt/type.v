@@ -118,14 +118,16 @@ Fixpoint cfold (t:type) (e:exp t) : exp t :=
 
 Arguments cfold {t}.
 
+(* book is useless *)
 (*
 Theorem cfold_correct : forall (t:type) (e:exp t), expDenote e = expDenote (cfold e).
 Proof.
     intros t. induction e as [n|e1 IH1 e2 IH2| | | | | | | ].
     - reflexivity.
     - simpl. remember (cfold e1) as f1 eqn:E1. remember (cfold e2) as f2 eqn:E2.
+      revert E1 E2 IH1 IH2.
 
 Show.
-
 *)
+
 

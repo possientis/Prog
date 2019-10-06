@@ -16,7 +16,7 @@ infixr 4 _<_
 <-s-n : {n m : ℕ} -> succ n < succ m -> n < m
 <-s-n p = ≤-s-n p
 
-<-irrefl : {n : ℕ} → (n < n) -> 𝕆
+<-irrefl : {n : ℕ} → (n < n) -> ⊥
 <-irrefl {succ n} p = <-irrefl (<-s-n p) 
 
 -- This is a weak result

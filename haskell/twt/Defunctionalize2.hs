@@ -4,8 +4,10 @@
 {-# LANGUAGE TypeFamilies           #-}
 {-# LANGUAGE TypeOperators          #-}
 {-# LANGUAGE ExplicitForAll         #-}
+{-# LANGUAGE UndecidableInstances   #-}
 
 import Data.Kind
+import GHC.TypeLits     (Nat)
 
 -- Given a kind k, defines a kind 'Exp k'
 type Exp k = k -> Type
@@ -30,30 +32,128 @@ type Ex1' = Snd' '(Int,String)
 type instance Eval (Snd  '(a,b)) = b
 type instance Eval (Snd' '(a,b)) = b
 
--- kind! Ex2 = [Char] :: *
+-- Ex2 and Ex2' are the type '[Char]' of kind '*'
 type Ex2  = Eval Ex1
 type Ex2' = Eval Ex1'
 
+-- Given a kind 'k', and two types 'a' 'b' of kind 'k' and 
+-- Maybe k respectively, creates a type of kind 'Exp k'.
 data FromMaybe :: forall k. k -> Maybe k -> Exp k
+data FromMaybe' (a :: k) (b :: Maybe k) :: Exp k
 
--- kind! Ex3 = Ex3 :: * -> Type  
-type Ex3 = FromMaybe Int ('Just Double)
-type Ex4 = FromMaybe Int ('Nothing )
+-- So both Ex3 and Ex3' are types of kind 'Exp *'
+type Ex3  = FromMaybe  Int ('Just Double)
+type Ex3' = FromMaybe' Int ('Just Double)  
 
-type instance Eval (FromMaybe _ ('Just a))  = a
-type instance Eval (FromMaybe a 'Nothing)   = a
+-- and both Ex4 and Ex4' are types of kind 'Exp *'
+type Ex4  = FromMaybe Int ('Nothing )
+type Ex4' = FromMaybe Int ('Nothing )
 
-type Ex5 = Eval Ex3
+type instance Eval (FromMaybe  _ ('Just a))  = a
+type instance Eval (FromMaybe' _ ('Just a))  = a
+
+type instance Eval (FromMaybe  a 'Nothing)   = a
+type instance Eval (FromMaybe' a 'Nothing)   = a
+
+-- Ex5 and Ex5' are the type 'Double' of kind '*'.
+type Ex5  = Eval Ex3
+type Ex5' = Eval Ex3'
+
+-- Ex6 and Ex6' are the type 'Int' of kind '*'.
+type Ex6  = Eval Ex4
+type Ex6' = Eval Ex4'
+
+-- Given a kind 'k', and a type 'a' of kind '[k]',
+-- creates a type of kind 'Exp (Maybe k)'
+data ListToMaybe :: forall k. [k] -> Exp (Maybe k)
+data ListToMaybe' (as :: [k]) :: Exp (Maybe k)
 
 
+-- So both Ex7 and Ex7' are types of kind 'Exp (Maybe *)'
+type Ex7  = ListToMaybe  '[Char, String, Int, Double]
+type Ex7' = ListToMaybe' '[Char, String, Int, Double]
+
+-- Ex8 and Ex8' are also types of kind 'Exp (Maybe *)'
+type Ex8   = ListToMaybe  ('[] :: [*])
+type Ex8'  = ListToMaybe' ('[] :: [*])
+
+type instance Eval (ListToMaybe  '[])   = 'Nothing
+type instance Eval (ListToMaybe' '[])   = 'Nothing
+
+type instance Eval (ListToMaybe  (a ': as))  = 'Just a
+type instance Eval (ListToMaybe' (a ': as))  = 'Just a
+
+-- Ex9 and Ex9' are the type ' 'Just [Char] ' of kind 'Maybe *'
+type Ex9  = Eval Ex7
+type Ex9' = Eval Ex7'
+
+-- Ex10 and Ex10' are the type ' 'Nothing ' of kind 'Maybe *'
+type Ex10  = Eval Ex8
+type Ex10' = Eval Ex8'
+
+-- Given two kinds 'k1' and 'k2', a type 'f' of kind 'k1 -> Exp k2'
+-- a type 'as' of kind '[k1]', creates a type of kind 'Exp [k2]'
+data MapList :: forall k1 k2. (k1 -> Exp k2) -> [k1] -> Exp [k2]
+data MapList' (f :: k1 -> Exp k2) (as :: [k1]) :: Exp [k2]
+
+-- So both Ex11 and Ex11' are types of kind 'Exp [*]'
+type Ex11  = MapList Snd '[ '(Int,Char), '(Double, String) ] 
+type Ex11' = MapList Snd '[ '(Int,Char), '(Double, String) ] 
+
+type instance Eval (MapList  f '[]) = '[]
+type instance Eval (MapList' f '[]) = '[]
+
+type instance Eval (MapList  f (a ': as)) = Eval (f a) ': Eval (MapList  f as)
+type instance Eval (MapList' f (a ': as)) = Eval (f a) ': Eval (MapList' f as)
+
+-- Ex12 and Ex12' are the type ' '[Char, [Char]] ' of kind '[*]'
+type Ex12  = Eval Ex11
+type Ex12' = Eval Ex11'
+
+-- Ex13 and Ex13' are the type ' '[0,1] ' of kind '[Nat]'
+type Ex13  = Eval (MapList  (FromMaybe  0) '[ 'Nothing, 'Just 1 ] )
+type Ex13' = Eval (MapList' (FromMaybe' 0) '[ 'Nothing, 'Just 1 ] )
+
+-- Given two kinds 'k1' and 'k2', a type 'op' of kind 'k1 -> k2 -> Exp k2'
+-- a type 'b' of kind k2 and a type 'as' of kind '[k1]',
+-- creates a type of kind 'Exp k2'
+data Foldr  :: forall k1 k2. (k1 -> k2 -> Exp k2) -> k2 -> [k1] -> Exp k2
+data Foldr' (op :: k1 -> k2 -> Exp k2) (b :: k2) (as :: [k1]) :: Exp k2
+
+data Append (xs :: [Nat]) (ys :: [Nat]) :: Exp [Nat]
+
+type instance Eval (Append '[] ys)       = ys
+type instance Eval (Append (x ': xs) ys) = x ': (Eval (Append xs ys))
+
+type instance Eval (Foldr  op init '[])       = init 
+type instance Eval (Foldr' op init '[])       = init 
+
+type instance Eval (Foldr  op init (a ': as)) = Eval (op a (Eval (Foldr  op init as)))
+type instance Eval (Foldr' op init (a ': as)) = Eval (op a (Eval (Foldr' op init as)))
 
 
+-- Ex14 and Ex14' are types of kind 'Exp [Nat]'
+type Ex14  = Foldr  Append '[] '[ '[0, 1, 2], '[3, 4], '[5] ]
+type Ex14' = Foldr' Append '[] '[ '[0, 1, 2], '[3, 4], '[5] ]
 
-data ListToMaybe :: [a] -> Exp (Maybe a)
-type instance Eval (ListToMaybe '[])        = 'Nothing
-type instance Eval (ListToMaybe (a ': as))  = 'Just a
+-- Ex15 and Ex15' are the type ' '[0,1,2,3,4,5] ' of kind '[Nat]'
+type Ex15  = Eval Ex14
+type Ex15' = Eval Ex14' 
 
 
-data MapList :: (a -> Exp b) -> [a] -> Exp [b]
+data Pure :: k -> Exp k
+data Pure' (a :: k) :: Exp k
+
+type instance Eval (Pure a) = a
+
+data (=<<) :: (k1 -> Exp k2) -> Exp k1 -> Exp k2
+type instance Eval (f =<< e) = Eval (f (Eval e))
+
+data (>>=) (a :: Exp k1) (f :: k1 -> Exp k2) :: Exp k2
+type instance Eval (e >>= f) = Eval (f (Eval e))
+
+infixr 0 =<<
+
+
 
 

@@ -25,6 +25,7 @@ all:	Utils/nat.vo \
 		comp.vo \
 		vec.vo \
 		type.vo \
+		RedBlackTree.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
 		Test/option_t.vo
@@ -85,6 +86,9 @@ refine.vo : refine.v
 
 type_check.vo : type_check.v option.vo
 	coqc type_check.v
+
+RedBlackTree.vo : RedBlackTree.v
+	coqc RedBlackTree.v
 
 option.vo : option.v
 	coqc option.v
