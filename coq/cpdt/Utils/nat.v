@@ -1,3 +1,5 @@
+Require Import Nat.
+
 Fixpoint blt_nat (n m:nat) : bool :=
     match n with
     | 0 => 
@@ -24,4 +26,17 @@ Proof.
             { left. rewrite H. reflexivity. }
             { right. intros H'. apply H. inversion H'. reflexivity. }
 Qed.
+
+Lemma plus_n_n : forall (n:nat), n + n = 2*n.
+Proof.
+    destruct n as [|n].
+    - reflexivity.
+    - simpl. rewrite <- plus_n_Sm, <- plus_n_Sm, <- plus_n_O. reflexivity.
+Qed.
+
+(*
+Lemma max_lub : forall (n m k:nat), n <= k -> m <= k -> max n m <= k.
+Proof.
+Show.
+*)
 

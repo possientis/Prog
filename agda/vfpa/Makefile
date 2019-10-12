@@ -68,7 +68,8 @@ le.agdai :				le.agda \
 						id.agdai \
 						nat.agdai \
 						sum.agdai \
-						void.agdai
+						void.agdai \
+						min-max.agdai
 	agda le.agda
 
 lt.agdai :				lt.agda \
@@ -173,7 +174,8 @@ reflect-list.agdai :	reflect-list.agda \
 	agda reflect-list.agda
 
 combinator.agdai :		combinator.agda \
+						le.agdai \
+						lt.agdai \
 						nat.agdai \
-						bool.agdai \
-						min-max.agdai
+						bool.agdai
 	agda combinator.agda

@@ -5,6 +5,8 @@ open import nat
 open import sum
 open import void
 
+import min-max as min-max
+
 data _≤_ : ℕ → ℕ → Set where
   le-n : (n : ℕ)   → n ≤ n
   le-s : {n m : ℕ} → n ≤ m → n ≤ succ m 
@@ -44,3 +46,15 @@ infixr 4 _≤_
 ≤-total (succ n) (succ m) with ≤-total n m
 ≤-total (succ n) (succ m) | left  p = left (≤-n-s p)
 ≤-total (succ n) (succ m) | right p = right (≤-n-s p)
+
+max : ℕ → ℕ → ℕ
+max = min-max.max _≤_ ≤-refl ≤-anti ≤-total
+
+min : ℕ → ℕ → ℕ
+min = min-max.min _≤_ ≤-refl ≤-anti ≤-total
+
+n-≤-max-n-m : (n m : ℕ) → n ≤ max n m
+n-≤-max-n-m n m = min-max.x-≤-max-x-y _≤_ ≤-refl ≤-anti ≤-total n m
+
+m-≤-max-n-m : (n m : ℕ) → m ≤ max n m
+m-≤-max-n-m n m = min-max.y-≤-max-x-y _≤_ ≤-refl ≤-anti ≤-total n m

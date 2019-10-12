@@ -2,6 +2,7 @@
 {-# LANGUAGE PolyKinds              #-}
 {-# LANGUAGE TypeInType             #-}
 {-# LANGUAGE TypeFamilies           #-}
+{-# LANGUAGE ConstraintKinds        #-}
 {-# LANGUAGE TypeOperators          #-}
 {-# LANGUAGE ExplicitForAll         #-}
 {-# LANGUAGE UndecidableInstances   #-}
@@ -152,7 +153,68 @@ type instance Eval (f =<< e) = Eval (f (Eval e))
 data (>>=) (a :: Exp k1) (f :: k1 -> Exp k2) :: Exp k2
 type instance Eval (e >>= f) = Eval (f (Eval e))
 
+infixl 0 >>=
 infixr 0 =<<
+
+data (>=>) 
+  :: (a -> Exp b)
+  -> (b -> Exp c)
+  -> (a -> Exp c)
+
+type instance Eval ((f >=> g) x) = Eval (f x >>= g)
+
+data TyEq :: a -> b -> Exp Bool
+
+type instance Eval (TyEq a b) = TyEqImpl a b
+
+type family TyEqImpl (a :: k) (b :: k) :: Bool where
+    TyEqImpl a a = 'True
+    TyEqImpl a b = 'False
+
+data Collapse :: [Constraint] -> Exp Constraint
+
+type instance Eval (Collapse '[]) = (() :: Constraint)
+type instance Eval (Collapse (a ': as)) = (a, Eval (Collapse as))
+
+data Pure1 :: (a -> b) -> a -> Exp b
+type instance Eval (Pure1 f x) = f x
+
+type All (c :: k -> Constraint) (ts :: [k]) = MapList (Pure1 c) ts >>= Collapse
+
+type Ex16 = Eval (All Eq '[Int, Bool])
+
+
+data Map :: (a -> Exp b) -> f a -> Exp (f b)
+
+type instance Eval (Map f '[]) = '[]
+type instance Eval (Map f (a ': as)) = Eval (f a) ': Eval (Map f as)
+
+type instance Eval (Map f 'Nothing)  = 'Nothing
+type instance Eval (Map f ('Just a)) = 'Just (Eval (f a)) 
+
+type instance Eval (Map f ('Left x))  = 'Left x
+type instance Eval (Map f ('Right x)) = 'Right (Eval (f x)) 
+
+type Ex17 = Eval (Map Snd ('Just '(1,2))) -- 'Just 2 :: Maybe Nat
+
+type Ex18 = Eval (Map Snd '[ '(1,2) ])    -- '[2] :: [Nat]
+
+type Ex19 = Eval (Map Snd ('Left 'False)) -- 'Left 'False :: Either Bool k
+
+
+data Mappend :: a -> a -> Exp a
+
+type instance Eval (Mappend '() '()) = '()
+
+type instance Eval (Mappend (a :: Constraint) (b :: Constraint)) = (a,b)
+
+
+data (++) (as :: [k]) (bs :: [k]) :: Exp [k]
+
+type instance Eval ('[] ++ bs) = bs
+type instance Eval ((a ': as) ++ bs) = a ': (Eval (as ++ bs))
+
+type instance Eval (Mappend (as :: [k]) (bs :: [k])) = Eval (as ++ bs)
 
 
 

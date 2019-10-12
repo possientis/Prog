@@ -33,3 +33,7 @@ au! Syntax agda source /usr/share/vim/vim80/syntax/agda.vim
 
 au BufRead,BufNewFile *.idr set filetype=idris
 au! Syntax idris source /usr/share/vim/vim80/syntax/idris.vim
+
+
+au BufRead,BufNewFile *.lean set filetype=lean
+au! Syntax lean source /usr/share/vim/vim80/syntax/lean.vim

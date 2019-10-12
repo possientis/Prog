@@ -1,6 +1,6 @@
+Require Import Le.
 Require Import List.
-Require Import Arith.Le.
-Require Import Arith.Plus.
+Require Import Plus.
 
 Require Import set.
 Require Import nat.

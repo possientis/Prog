@@ -1,5 +1,5 @@
-Require Import Arith.Le.
-Require Import Arith.Plus.
+Require Import Le.
+Require Import Plus.
 
 Lemma le_0 : forall (n:nat), n <= 0 -> n = 0.
 Proof.

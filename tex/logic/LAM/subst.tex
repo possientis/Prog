@@ -112,7 +112,22 @@ inclusion~(\ref{logic:eqn:LAM:subst:free}) for all $U\subseteq V$. Then for all
 $U\subseteq V$ we have:
     \begin{eqnarray*}
         \free(\sigma^{*}(\phi)(U))
-        &=&\free(\sigma^{*}(\lambda x\phi_{1})(U))
+        &=&\free(\sigma^{*}(\lambda x\phi_{1})(U))\\
+        &=&\free(\lambda x\sigma^{*}(\phi_{1})(U\cup\{x\}))\\
+        &=&\free(\sigma^{*}(\phi_{1})(U\cup\{x\}))\setminus\{x\}\\
+        &\subseteq& [(\free(\phi_{1})\cap(U\cup\{x\}))\ \cup\ 
+            \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}\free(\sigma(u))
+             ]\setminus\{x\}\\
+        &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})\ \cup\ 
+            \bigcup_{u\in\free(\phi_{1})\cap U^{c}\cap\{x\}^{c}}
+            \free(\sigma(u))\setminus\{x\}\\
+        &=&(\free(\lambda x\phi_{1})\cap U)\ \cup\ 
+            \bigcup_{u\in\free(\lambda x\phi_{1})\setminus U}
+            \free(\sigma(u))\setminus\{x\}\\
+        &=&(\free(\phi)\cap U)\ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
+            \free(\sigma(u))\setminus\{x\}\\
+        &\subseteq&(\free(\phi)\cap U)\ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
+            \free(\sigma(u))
     \end{eqnarray*}
 \end{proof}
 

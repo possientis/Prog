@@ -87,9 +87,6 @@ refine.vo : refine.v
 type_check.vo : type_check.v option.vo
 	coqc type_check.v
 
-RedBlackTree.vo : RedBlackTree.v
-	coqc RedBlackTree.v
-
 option.vo : option.v
 	coqc option.v
 
@@ -113,6 +110,10 @@ vec.vo : vec.v
 
 type.vo : type.v
 	coqc type.v -R Utils Utils
+
+RedBlackTree.vo : 	RedBlackTree.v \
+   					Utils/nat.vo	
+	coqc RedBlackTree.v -R Utils Utils
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
