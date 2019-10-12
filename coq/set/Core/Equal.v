@@ -1,5 +1,5 @@
-Require Import set.
-Require Import Elem.
+Require Import Core.Set.
+Require Import Core.Elem.
 
 Open Scope set_scope.
 

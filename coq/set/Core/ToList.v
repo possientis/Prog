@@ -1,9 +1,10 @@
 Require Import List.
-Require Import Arith.Le.
+Require Import Le.
 
-Require Import set.
-Require Import nat.
-Require Import Order.
+Require Import Core.Set.
+Require Import Core.Nat.
+Require Import Core.Order.
+
 
 Fixpoint toList (x:set) : list set :=
     match x with

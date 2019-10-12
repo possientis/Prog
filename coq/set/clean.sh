@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 DIR=`pwd`
 HOME=/home/john/Prog/coq/set
 cd ${HOME}
 
-rm -f .*.aux
-rm -f *.glob
-rm -f *.vo
+rm -f {Core,Utils}/.*.aux
+rm -f {Core,Utils}/*.glob
+rm -f {Core,Utils}/*.vo
 
 cd ${DIR}

@@ -1,6 +1,6 @@
-Require Import Arith.Max.
+Require Import Max.
 
-Require Import set.
+Require Import Core.Set.
 
 Fixpoint order (xs:set) : nat :=
     match xs with
