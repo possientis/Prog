@@ -1,6 +1,7 @@
 Require Import Le.
 Require Import List.
 Require Import Plus.
+Require Import Compare_dec.
 
 Require Import Core.Set.
 Require Import Core.Nat.
@@ -110,6 +111,50 @@ Proof.
 Qed.
 
 
+Lemma incl_le_n_m : forall (xs ys:set) (n m:nat),
+    order xs + order ys <= n    -> 
+    n <= m                      -> 
+    incl_n n xs ys              -> 
+    incl_n m xs ys.
+Proof.
+    intros xs ys n m H1 H2. induction  H2  as [H2|m H2 IH].
+    - auto.
+    - intros H. apply (incl_n_Sn m).
+        + apply le_trans with n; assumption.
+        + apply IH. assumption.
+Qed.
+
+Lemma incl_le_m_n : forall (xs ys:set) (n m:nat),
+    order xs + order ys <= n    -> 
+    n <= m                      ->
+    incl_n m xs ys              ->
+    incl_n n xs ys.
+Proof.
+    intros xs ys n m H1 H2. induction  H2  as [H2|m H2 IH].
+    - auto.
+    - intros H. apply IH. apply incl_n_Sn.
+        + apply le_trans with n; assumption.
+        + assumption.
+Qed.
+
+Lemma incl_n_m : forall (xs ys:set) (n m:nat),
+    order xs + order ys <= n    ->
+    order xs + order ys <= m    ->
+    incl_n n xs ys              -> 
+    incl_n m xs ys.
+Proof.
+    intros xs ys n m Hn Hm H. destruct (le_dec n m) as [H'|H'].
+    - apply incl_le_n_m with n; assumption.
+    - apply incl_le_m_n with n.
+        + assumption.
+        + apply not_le in H'. unfold gt in H'. unfold lt in H'.
+          apply le_trans with (S m).
+            { apply le_S, le_n. }
+            { assumption. }
+        + assumption.
+Qed.
+
+
 Lemma incl_n_Nil : forall (x:set) (n:nat), incl_n n Nil x.
 Proof. intros x n. destruct n as [|n]; apply I. Qed.
 
@@ -170,6 +215,7 @@ Proof.
                 }
             }
 Qed.
+
 
 (*
 Lemma incl_n_trans : forall (x y z:set) (n:nat),

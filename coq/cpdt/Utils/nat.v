@@ -1,4 +1,6 @@
+Require Import Le.
 Require Import Nat.
+Require Import Compare_dec.
 
 Fixpoint blt_nat (n m:nat) : bool :=
     match n with
@@ -34,9 +36,15 @@ Proof.
     - simpl. rewrite <- plus_n_Sm, <- plus_n_Sm, <- plus_n_O. reflexivity.
 Qed.
 
-(*
-Lemma max_lub : forall (n m k:nat), n <= k -> m <= k -> max n m <= k.
-Proof.
-Show.
-*)
 
+Lemma max_lub : forall (n m p:nat), n <= p -> m <= p -> max n m <= p.
+Proof.
+    intros n m p H1 H2. destruct (le_dec n m) as [H|H].
+    - rewrite max_r; assumption.
+    - rewrite max_l.
+        + assumption.
+        + apply not_le in H. unfold gt in H. unfold lt in H.
+          apply le_trans with (S m). 
+            { apply le_S, le_n. }
+            { assumption. }
+Qed.

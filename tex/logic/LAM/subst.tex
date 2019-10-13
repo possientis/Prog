@@ -57,7 +57,7 @@ Since for all $\phi\in\tv$ we have $\sigma(\phi)=\sigma^{*}(\phi)(\emptyset)$,
 it is sufficient to show that for all $\phi\in\tv$ and $U\subseteq V$ the following
 inclusion holds:
     \begin{equation}\label{logic:eqn:LAM:subst:free}
-        \free(\sigma^{*}(\phi)(U)) \subseteq (\free(\phi)\cap U)\ \cup
+        \free(\sigma^{*}(\phi)(U)) \subseteq (\free(\phi)\cap U)\ \ \ \cup
         \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
     \end{equation}
 We shall do so by structural induction on $\phi$, using
@@ -96,14 +96,14 @@ $U\subseteq V$ we have:
         &=&\free(\sigma^{*}(\phi_{1}\ \phi_{2})(U))\\
         &=&\free(\ \sigma^{*}(\phi_{1})(U)\ \ \sigma^{*}(\phi_{2})(U)\ )\\
         &=&\free(\sigma^{*}(\phi_{1})(U))\cup\free(\sigma^{*}(\phi_{2})(U))\\
-        &\subseteq&(\free(\phi_{1})\cap U)\ \cup\ 
+        &\subseteq&(\free(\phi_{1})\cap U)\ \ \ \cup\ 
             \bigcup_{x\in\free(\phi_{1})\setminus U} \free(\sigma(x))\\
-        &\cup&(\free(\phi_{2})\cap U)\ \cup\ 
+        &\cup&(\free(\phi_{2})\cap U)\ \ \ \cup\ 
             \bigcup_{x\in\free(\phi_{2})\setminus U} \free(\sigma(x))\\
         &=&(\free(\phi_{1})\cup\free(\phi_{2}))\cap U\\
         &\cup&\bigcup_{x\in(\free(\phi_{1})\cup\free(\phi_{2}))\setminus U}
             \free(\sigma(x))\\
-        &=&(\free(\phi)\cap U)\ \cup\ \bigcup_{x\in\free(\phi)\setminus U}
+        &=&(\free(\phi)\cap U)\ \ \ \cup\ \bigcup_{x\in\free(\phi)\setminus U}
             \free(\sigma(x))
     \end{eqnarray*}
 
@@ -115,18 +115,18 @@ $U\subseteq V$ we have:
         &=&\free(\sigma^{*}(\lambda x\phi_{1})(U))\\
         &=&\free(\lambda x\sigma^{*}(\phi_{1})(U\cup\{x\}))\\
         &=&\free(\sigma^{*}(\phi_{1})(U\cup\{x\}))\setminus\{x\}\\
-        &\subseteq& [(\free(\phi_{1})\cap(U\cup\{x\}))\ \cup\ 
+        &\subseteq& [\ (\free(\phi_{1})\cap(U\cup\{x\}))\ \ \ \cup\ 
             \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}\free(\sigma(u))
-             ]\setminus\{x\}\\
-        &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})\ \cup\ 
+             \ ]\setminus\{x\}\\
+        &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})\ \ \ \cup\ 
             \bigcup_{u\in\free(\phi_{1})\cap U^{c}\cap\{x\}^{c}}
             \free(\sigma(u))\setminus\{x\}\\
-        &=&(\free(\lambda x\phi_{1})\cap U)\ \cup\ 
+        &=&(\free(\lambda x\phi_{1})\cap U)\ \ \ \cup\ 
             \bigcup_{u\in\free(\lambda x\phi_{1})\setminus U}
             \free(\sigma(u))\setminus\{x\}\\
-        &=&(\free(\phi)\cap U)\ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
+        &=&(\free(\phi)\cap U)\ \ \ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
             \free(\sigma(u))\setminus\{x\}\\
-        &\subseteq&(\free(\phi)\cap U)\ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
+        &\subseteq&(\free(\phi)\cap U)\ \ \ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
             \free(\sigma(u))
     \end{eqnarray*}
 \end{proof}

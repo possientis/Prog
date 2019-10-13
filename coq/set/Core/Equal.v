@@ -3,7 +3,6 @@ Require Import Core.Elem.
 
 Open Scope set_scope.
 
-(* This is the right definition of equality                                     *)
 Definition equal (x y:set) : Prop :=
     (forall (z:set), z :: x <-> z :: y) 
  /\ (forall (z:set), x :: z <-> y :: z). 

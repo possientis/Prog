@@ -1,4 +1,2 @@
-subset_m.
-subset: subset_n_trans
-Elem:elem_subset
-extensionality
+elem_incl
+

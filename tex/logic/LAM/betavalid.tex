@@ -27,11 +27,34 @@ sub-formula of $\phi$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:beta:valid:free:commute}
-Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let
-$\phi\in\tv$. Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every subformula $\psi\preceq\phi$, we have:
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. 
+    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every 
+    subformula $\psi\preceq\phi$, we have:
     \[
-    \free(\sigma(\psi))=\bigcup_{x\in\free(\psi)} \free(\sigma(x))
+        \free(\sigma(\psi))
+        =
+        \bigcup_{x\in\free(\psi)} \free(\sigma(x))
     \]
 \end{prop}
 \begin{proof}
+    From definition~(\ref{logic:def:LAM:beta:valid:substitution}), the 
+    $\beta$-validity of $\sigma$ for $\phi$ is equivalent to the implication:
+    \[
+        x\in\free(\psi)\ \Rightarrow\ 
+            \free(\sigma(x))
+            \subseteq
+            \free(\sigma(\psi))
+    \]
+    holding for every $\psi\preceq\phi$. This implication is in turn 
+    equivalent to the inclusion:
+    \[
+        \bigcup_{x\in\free(\psi)} \free(\sigma(x))
+        \subseteq
+        \free(\sigma(\psi))
+    \]
+    which corresponds to the inclusion $\supseteq$ of the above equality.
+    However, from proposition~(\ref{logic:prop:LAM:subst:free}), the reverse
+    inclusion $\subseteq$ is always true. Hence, the above equality is
+    equivalent to $\supseteq$ which is equivalent to the $\beta$-validity 
+    of $\sigma$ for $\phi$.
 \end{proof}

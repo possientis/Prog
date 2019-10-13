@@ -53,7 +53,9 @@ ${CORE}/Incl.vo :	${CORE}/Incl.v \
 
 ${CORE}/Elem.vo :	${CORE}/Elem.v \
 					${CORE}/Set.vo \
+					${CORE}/Nat.vo \
 					${CORE}/Incl.vo \
+					${CORE}/Core.vo \
 					${CORE}/Order.vo
 	coqc ${CORE}/Elem.v -R ${CORE} ${CORE}
 		

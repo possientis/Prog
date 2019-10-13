@@ -15,7 +15,6 @@ Inductive RBTree : Color -> nat -> Set :=
     RBTree c1 n -> nat -> RBTree c2 n -> RBTree Black (S n)
 .
 
-
 Fixpoint depth (c:Color) (n:nat) (f:nat -> nat -> nat) (t:RBTree c n) : nat :=
     match t with
     | Leaf                      => 0
@@ -23,12 +22,7 @@ Fixpoint depth (c:Color) (n:nat) (f:nat -> nat -> nat) (t:RBTree c n) : nat :=
     | BlackNode _ _ _ t1 _ t2   => S (f (depth _ _ f t1) (depth _ _ f t2))
     end.
 
-(*
-Check min_dec.
-*)
-
 Arguments depth {c} {n}.
-
 
 Theorem depth_min : forall (c:Color) (n:nat) (t:RBTree c n), n <= depth min t.
 Proof.
@@ -43,7 +37,6 @@ Proof.
       rewrite H; apply le_n_S; assumption.
 Qed.
 
-(*
 Lemma depth_max' : forall (c:Color) (n:nat) (t:RBTree c n),
     match c with
     | Red   => depth max t <= 2*n + 1
@@ -55,17 +48,48 @@ Proof.
     - apply le_n.
     - simpl. rewrite <- plus_n_Sm. apply le_n_S.
       rewrite <- plus_n_O, <- plus_n_O. rewrite plus_n_n.
+      apply max_lub; assumption.
+    - destruct c1 as [H1|H1], c2 as [H2|H2]. 
+        + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm.
+          rewrite plus_n_n.
+          rewrite <- plus_n_Sm in IH1. rewrite <- plus_n_O in IH1.
+          rewrite <- plus_n_Sm in IH2. rewrite <- plus_n_O in IH2.
+          apply max_lub; assumption.
+        + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm. 
+          rewrite plus_n_n.
+          rewrite <- plus_n_Sm in IH1. rewrite <- plus_n_O in IH1.
+          apply max_lub.
+            { assumption. }
+            { apply le_S. assumption. }
+        + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm.
+          rewrite plus_n_n.
+          rewrite <- plus_n_Sm in IH2. rewrite <- plus_n_O in IH2.
+          apply max_lub.
+            { apply le_S. assumption. }
+            { assumption. }
+        + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm.
+          rewrite plus_n_n.
+          apply max_lub; apply le_S; assumption.
+Qed.
 
-Show.
-*)
-
-(*
 Theorem depth_max : forall (c:Color) (n:nat) (t:RBTree c n), 
     depth max t <= 2*n + 1.
 Proof.
-    intros c n t.
-    induction t as [|n t1 IH1 m t2 IH2|c1 c2 n t1 IH1 m t2 IH2].
-    - apply le_S, le_n.
-    - simpl.
+    intros c n t. destruct c as [H|H]. 
+    - apply (depth_max' Red). 
+    - rewrite <- plus_n_Sm. rewrite <- plus_n_O. apply le_S.
+      apply (depth_max' Black).
+Qed.
+
+(*
+Theorem balanced : forall (c:Color) (n:nat) (t:RBTree c n), 
+    depth max t <= 2 * (depth min t) + 1.
+Proof.
+
 Show.
 *)
+
+
+
+
+

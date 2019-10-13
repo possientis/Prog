@@ -22,12 +22,14 @@ order S           = 0
 order K           = 0
 order (App c₁ c₂) = succ (max (order c₁) (order c₂))
 
+data SFree : Comb -> Set where
+  SFreeK   : SFree K
+  SFreeApp : {c₁ c₂ : Comb} → SFree c₁ → SFree c₂ → SFree (App c₁ c₂)
+
 {-
-reduct-order : ∀ {c c' : Comb} → c ≻ c' → order c' < order c
-reduct-order (≻K a b)    = {!!}
-reduct-order (≻S a b c)  = {!!}
-reduct-order (Cong1 b p) = {!!}
-reduct-order (Cong2 a p) = {!!}
+-- If c reduces to c' and is SFree, then the order of c' is less than that of c
+reduct-order : ∀ {c c' : Comb} → SFree c → c ≻ c' → order c' < order c
+reduct-order {c} {c'} (SFreeApp p1 p2) q = {!!}
 -}
 
 
