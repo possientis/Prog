@@ -1,11 +1,14 @@
-Require Import List.
-Import ListNotations.
-
 (* 'Set' appears to be a Coq keyword, so lowercase it is                        *)
 Inductive set : Type :=
 | Nil   : set
 | Cons  : set -> set -> set
 .
+
+Fixpoint toList (x:set) : list set :=
+    match x with
+    | Nil           => nil
+    | (Cons x xs)   => cons x (toList xs)
+    end.
 
 Lemma set_eq_dec : forall (x y:set), {x = y} + {x <> y}.
 Proof.

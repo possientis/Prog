@@ -8,7 +8,6 @@ Require Import Core.Nat.
 Require Import Core.Incl.
 Require Import Core.Core.
 Require Import Core.Order.
-Require Import Core.ToList.
 
 Notation "{ x }" := (Cons x Nil) : set_scope.
 
@@ -119,6 +118,40 @@ Proof.
                                 { apply plus_le_compat_r. apply n_le_max. }}
                             { assumption. }}}}}    
 Qed.
+
+
+Lemma incl_n_trans : forall (x y z:set) (n:nat),
+    order x + order y + order z <= n ->
+    incl_n n x y -> incl_n n y z -> incl_n n x z.
+Proof.
+    intros x y z n. revert x y z. induction n as [|n IH].
+    - admit.
+    - intros xs ys zs H1 H2 H3. destruct xs as [|x xs].
+        + admit.
+        + simpl in H2. destruct H2 as [H2 [y [H4 [H5 H6]]]]. simpl. split.
+            { admit. }
+            { apply incl_n_incl in H3. rewrite elem_incl_toList in H3.
+              assert (y :: zs) as H7. { apply H3. assumption. }
+              rewrite elem_toList in H7.
+              destruct H7 as [z [H7 [H8 H9]]].
+              exists z. split.
+                { assumption. }
+                { split.
+                    { apply (incl_incl_n y z n) in H8.
+                        { apply IH with y.
+                            { admit. }
+                            { assumption. }
+                            { assumption. }}
+                        { admit. }}
+                    { apply (incl_incl_n z y n) in H9.
+                        { apply IH with y.
+                            { admit. }
+                            { assumption. }
+                            { assumption. }}
+                        { admit. }}}
+                    { admit. }}
+Admitted.
+
 
 (*
 Lemma elem_incl : forall (x y:set), 

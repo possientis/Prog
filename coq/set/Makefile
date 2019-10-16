@@ -3,7 +3,6 @@ CORE=Core
 all :			${CORE}/Nat.vo \
 				${CORE}/Set.vo \
 				${CORE}/Order.vo \
-				${CORE}/ToList.vo \
 				${CORE}/Core.vo \
 				${CORE}/Incl.vo \
 				${CORE}/Elem.vo \
@@ -13,32 +12,18 @@ all :			${CORE}/Nat.vo \
 ${CORE}/Nat.vo : 	${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
 
-
-
 ${CORE}/Set.vo : 	${CORE}/Set.v
 	coqc ${CORE}/Set.v -R ${CORE} ${CORE}
 
-
-
 ${CORE}/Order.vo :	${CORE}/Order.v \
-					${CORE}/Set.vo
-	coqc ${CORE}/Order.v -R ${CORE} ${CORE}
-
-
-
-${CORE}/ToList.vo :	${CORE}/ToList.v \
 					${CORE}/Set.vo \
-					${CORE}/Order.vo \
 					${CORE}/Nat.vo
-	coqc ${CORE}/ToList.v -R ${CORE} ${CORE}
-				
-
+	coqc ${CORE}/Order.v -R ${CORE} ${CORE}
 
 ${CORE}/Core.vo :	${CORE}/Core.v \
 					${CORE}/Set.vo \
 					${CORE}/Nat.vo \
-					${CORE}/Order.vo \
-					${CORE}/ToList.vo
+					${CORE}/Order.vo
 	coqc ${CORE}/Core.v -R ${CORE} ${CORE}
 
 

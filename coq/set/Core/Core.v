@@ -6,7 +6,6 @@ Require Import Compare_dec.
 Require Import Core.Set.
 Require Import Core.Nat.
 Require Import Core.Order.
-Require Import Core.ToList.
 
 Fixpoint incl_n (n:nat) (xs ys:set) : Prop := 
     match n with 
@@ -217,62 +216,3 @@ Proof.
 Qed.
 
 
-(*
-Lemma incl_n_trans : forall (x y z:set) (n:nat),
-    order x + order y + order z <= n ->
-    incl_n n x y -> incl_n n y z -> incl_n n x z.
-Proof.
-    intros x y z n. revert x y z. 
-    induction n as [|n IH]; intros x y z H.
-    - intros. apply I.
-    - intros H1 H2. destruct x as [|x xs].
-        + apply incl_n_Nil.
-        + destruct H1 as [H1 H1']. split.
-            { apply IH with y.
-                { admit. }
-                { assumption. }
-                { apply incl_n_Sn.
-                    { admit. }
-                    { assumption. }
-                }
-            }
-            { destruct H1' as [y ys [p p'] |y ys H1'].
-                { destruct H2 as [H2 H2']. 
-                  destruct H2' as [z zs [q q']| z zs H2'].
-                    { apply ExistsH. split.
-                        { apply IH with y.
-                            { admit. }
-                            { assumption. }
-                            { assumption. }
-                        }
-                        { apply IH with y.
-                            { admit. }
-                            { assumption. }
-                            { assumption. }
-                        }
-                    }
-                    { apply ExistsT. apply Exists_toList.
-                      apply Exists_toList in H2'.
-                      destruct H2' as [u [H3 [H4 H5]]].
-                      exists u. split.
-                        { assumption. }
-                        { split.
-                            { apply IH with y.
-                                { admit. }
-                                { assumption. }
-                                { assumption. }
-                            }
-                            { apply IH with y.
-                                { admit. }
-                                { assumption. }
-                                { assumption. }
-                            }
-                        }
-                    }
-                }
-                { destruct H2 as [H2 H2']. 
-                  destruct H2' as [z zs [q q']| z zs H2'].
-                    { apply ExistsH.
-
-Show.
-*)
