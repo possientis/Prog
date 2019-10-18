@@ -3,8 +3,8 @@ Require Import List.
 Require Import Plus.
 Require Import Compare_dec.
 
-Require Import Core.Set.
 Require Import Core.Nat.
+Require Import Core.Set.
 Require Import Core.Order.
 
 Fixpoint incl_n (n:nat) (xs ys:set) : Prop := 
@@ -49,7 +49,7 @@ Proof.
                               apply weaken_l' with (order (Cons x xs)).
                                 { apply weaken_r with (order ys).
                                     { assumption. }
-                                    { apply toList_order. assumption. }
+                                    { apply orderToList. assumption. }
                                 }
                                 { simpl. apply le_n_S. apply n_le_max. }
                             }
@@ -60,7 +60,7 @@ Proof.
                               apply weaken_l' with (order (Cons x xs)).
                                 { apply weaken_r with (order ys).
                                     { assumption. }
-                                    { apply toList_order. assumption. }
+                                    { apply orderToList. assumption. }
                                 }
                                 { simpl. apply le_n_S. apply n_le_max. }
                             }
@@ -87,7 +87,7 @@ Proof.
                               apply weaken_l' with (order (Cons x xs)).
                                 { apply weaken_r with (order ys).
                                     { assumption. }
-                                    { apply toList_order. assumption. }
+                                    { apply orderToList. assumption. }
                                 }
                                 { simpl. apply le_n_S. apply n_le_max. }
                             }
@@ -98,7 +98,7 @@ Proof.
                               apply weaken_l' with (order (Cons x xs)).
                                 { apply weaken_r with (order ys).
                                     { assumption. }
-                                    { apply toList_order. assumption. }
+                                    { apply orderToList. assumption. }
                                 }
                                 { simpl. apply le_n_S. apply n_le_max. }
                             }

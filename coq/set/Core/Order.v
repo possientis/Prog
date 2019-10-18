@@ -2,8 +2,8 @@ Require Import Le.
 Require Import Max.
 Require Import List.
 
-Require Import Core.Set.
 Require Import Core.Nat.
+Require Import Core.Set.
 
 Fixpoint order (xs:set) : nat :=
     match xs with
@@ -11,7 +11,7 @@ Fixpoint order (xs:set) : nat :=
     | Cons x xs =>  S (max (order x) (order xs))
     end.
 
-Lemma toList_order : forall (x y:set),
+Lemma orderToList : forall (x y:set),
     In x (toList y) -> order x <= order y.
 Proof.
     intros x. induction y as [|y _ ys IH]; intros H.
