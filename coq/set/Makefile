@@ -8,19 +8,23 @@ all :			${CORE}/Nat.vo \
 				${CORE}/Elem.vo \
 				${CORE}/ToList.vo \
 				${CORE}/Trans.vo \
+				${CORE}/ElemIncl.vo \
 				${CORE}/Equal.vo \
 
 
 ${CORE}/Nat.vo : 	${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
 
+
 ${CORE}/Set.vo : 	${CORE}/Set.v
 	coqc ${CORE}/Set.v -R ${CORE} ${CORE}
+
 
 ${CORE}/Order.vo :	${CORE}/Order.v \
 					${CORE}/Nat.vo \
 					${CORE}/Set.vo
 	coqc ${CORE}/Order.v -R ${CORE} ${CORE}
+
 
 ${CORE}/Core.vo :	${CORE}/Core.v \
 					${CORE}/Nat.vo \
@@ -53,6 +57,7 @@ ${CORE}/ToList.vo :	${CORE}/ToList.v \
 					${CORE}/Elem.vo
 	coqc ${CORE}/ToList.v -R ${CORE} ${CORE}
 	
+
 ${CORE}/Trans.vo :	${CORE}/Trans.v \
 					${CORE}/Set.vo \
 					${CORE}/Order.vo \
@@ -62,6 +67,14 @@ ${CORE}/Trans.vo :	${CORE}/Trans.v \
 					${CORE}/ToList.vo
 	coqc ${CORE}/Trans.v -R ${CORE} ${CORE}
 	
+
+${CORE}/ElemIncl.vo :	${CORE}/ElemIncl.v \
+						${CORE}/Set.vo \
+						${CORE}/Incl.vo \
+						${CORE}/Elem.vo
+	coqc ${CORE}/ElemIncl.v -R ${CORE} ${CORE}
+
+
 ${CORE}/Equal.vo :	${CORE}/Equal.v \
 					${CORE}/Set.vo \
 					${CORE}/Elem.vo

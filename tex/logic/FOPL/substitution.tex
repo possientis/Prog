@@ -44,21 +44,34 @@ W$}\index{substitution@$\sigma\,$: associated $\sigma:\pv\to{\bf
 P}(W)$}\index{substitution@Substitution of
 variables}\index{substitution@$\sigma(\phi)\,$: image
 $\sigma:\pv\to{\bf P}(W)$}
+
 \begin{defin}\label{logic:def:substitution}
-Let $V$ and $W$ be two sets and $\sigma:V\to W$ be a map. We call
-{\em substitution mapping between \pv\ and ${\bf P}(W)$ associated
-with $\sigma:V\to W$} the map $\sigma^{*}:\pv\to{\bf P}(W)$ defined
-by the structural recursion:
+    Let $V$ and $W$ be two sets and $\sigma:V\to W$ be a map. We call
+    {\em substitution mapping between \pv\ and ${\bf P}(W)$ associated
+    with $\sigma:V\to W$} the map $\sigma^{*}:\pv\to{\bf P}(W)$ defined
+    by the structural recursion:
     \begin{equation}\label{logic:eqn:substitution:recursion}
-    \forall\phi\in\pv\ ,\ \sigma^{*}(\phi)=\left\{
-                    \begin{array}{lcl}
-                    (\sigma(x)\in\sigma(y))&\mbox{\ if\ }&\phi=(x\in y)\\
-                    \bot&\mbox{\ if\ }&\phi=\bot\\
-                    \sigma^{*}(\phi_{1})\to \sigma^{*}(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
-                    \forall\sigma(x)\,\sigma^{*}(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
-                    \end{array}\right.
+        \forall\phi\in\pv\ ,\ \sigma^{*}(\phi)=\left\{
+            \begin{array}{lcl}
+                (\sigma(x)\in\sigma(y))
+                    &\mbox{\ if\ }&
+                \phi=(x\in y)
+                \\
+                \bot
+                    &\mbox{\ if\ }&
+                \phi=\bot
+                \\
+                \sigma^{*}(\phi_{1})\to \sigma^{*}(\phi_{2}) 
+                    &\mbox{\ if\ }&
+                \phi=\phi_{1}\to\phi_{2}
+                \\
+                \forall\sigma(x)\,\sigma^{*}(\phi_{1})
+                    &\mbox{\ if\ }&
+                \phi=\forall x\phi_{1}
+            \end{array}\right.
     \end{equation}
 \end{defin}
+
 This is one of our first definition by {\em structural recursion}.
 The principle of such definition on a free universal algebra is
 justified by virtue of
@@ -66,57 +79,68 @@ theorem~(\ref{logic:the:structural:recursion}) of
 page~\pageref{logic:the:structural:recursion}. As this is one of our
 first use of this theorem, we shall make sure its application is
 done appropriately by checking all the relevant details.
+
 \begin{prop}\label{logic:prop:substitution}
-The structural recursion of {\em definition~(\ref{logic:def:substitution})} is legitimate.
+    The structural recursion of {\em definition~(\ref{logic:def:substitution})} 
+    is legitimate.
 \end{prop}
+
 \begin{proof}
-We need to show the existence and uniqueness of the map
-$\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
-equation~(\ref{logic:eqn:substitution:recursion}). We shall do so by
-applying theorem~(\ref{logic:the:structural:recursion}) of
-page~\pageref{logic:the:structural:recursion} to the free universal
-algebra \pv\ with free generator $X_{0}=\pvo$ and the set $A={\bf
-P}(W)$. First we define $g_{0}:X_{0}\to A$ by $g_{0}(x\in
-y)=(\sigma(x)\in\sigma(y))$ for all $x,y\in V$. Next, given
-$f\in\alpha$ we need to define an operator $h(f):A^{\alpha(f)}\to
-A$. For all $\phi_{1},\phi_{2}\in A$ and for all $x\in V$, we set:
+    We need to show the existence and uniqueness of the map
+    $\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
+    equation~(\ref{logic:eqn:substitution:recursion}). We shall do so by
+    applying theorem~(\ref{logic:the:structural:recursion}) of
+    page~\pageref{logic:the:structural:recursion} to the free universal
+    algebra \pv\ with free generator $X_{0}=\pvo$ and the set $A={\bf
+    P}(W)$. First we define $g_{0}:X_{0}\to A$ by $g_{0}(x\in
+    y)=(\sigma(x)\in\sigma(y))$ for all $x,y\in V$. Next, given
+    $f\in\alpha$ we need to define an operator $h(f):A^{\alpha(f)}\to
+    A$. For all $\phi_{1},\phi_{2}\in A$ and for all $x\in V$, we set:
     \begin{eqnarray*}
-    (i)&&h(\bot)(0)=\bot\\
-    (ii)&&h(\to)(\phi_{1},\phi_{2})=\phi_{1}\to\phi_{2}\\
-    (iii)&&h(\forall x)(\phi_{1})=\forall \sigma(x)\phi_{1}
+        (i)&&h(\bot)(0)=\bot
+        \\
+        (ii)&&h(\to)(\phi_{1},\phi_{2})=\phi_{1}\to\phi_{2}
+        \\
+        (iii)&&h(\forall x)(\phi_{1})=\forall \sigma(x)\phi_{1}
     \end{eqnarray*}
-Applying theorem~(\ref{logic:the:structural:recursion}) of
-page~\pageref{logic:the:structural:recursion}, there exists a unique
-map $\sigma^{*}:\pv\to A$ such that $\sigma^{*}_{|X_{0}}=g_{0}$ and
-for all $f\in\alpha$ and $y\in\pv^{\alpha(f)}$:
+    Applying theorem~(\ref{logic:the:structural:recursion}) of
+    page~\pageref{logic:the:structural:recursion}, there exists a unique
+    map $\sigma^{*}:\pv\to A$ such that $\sigma^{*}_{|X_{0}}=g_{0}$ and
+    for all $f\in\alpha$ and $y\in\pv^{\alpha(f)}$:
     \begin{equation}\label{logic:eqn:substitution:recursion:proof}
-    \sigma^{*}(f(y))=h(f)(\sigma^{*}(y))
+        \sigma^{*}(f(y))=h(f)(\sigma^{*}(y))
     \end{equation}
-In other words, there exists a unique map $\sigma^{*}:\pv\to{\bf
-P}(W)$ such that for all $x,y\in V$ we have  $\sigma^{*}(x\in
-y)=(\sigma(x)\in\sigma(y))$  and which satisfies
-equation~(\ref{logic:eqn:substitution:recursion:proof}). Taking
-$f=\bot$ and $y=0$ in
-equation~(\ref{logic:eqn:substitution:recursion:proof}) we obtain:
+    In other words, there exists a unique map $\sigma^{*}:\pv\to{\bf
+    P}(W)$ such that for all $x,y\in V$ we have  $\sigma^{*}(x\in
+    y)=(\sigma(x)\in\sigma(y))$  and which satisfies
+    equation~(\ref{logic:eqn:substitution:recursion:proof}). Taking
+    $f=\bot$ and $y=0$ in
+    equation~(\ref{logic:eqn:substitution:recursion:proof}) we obtain:
     \begin{equation}\label{logic:eqn:substitution:bot}
-    \sigma^{*}(\bot)=\sigma^{*}(\bot(0))=h(\bot)(0)=\bot
+        \sigma^{*}(\bot)=\sigma^{*}(\bot(0))=h(\bot)(0)=\bot
     \end{equation}
-Taking $f=\to$ and $y=(\phi_{1},\phi_{2})\in\pv^{2}$ we obtain:
+    Taking $f=\to$ and $y=(\phi_{1},\phi_{2})\in\pv^{2}$ we obtain:
     \begin{equation}\label{logic:eqn:substitution:to}
-    \sigma^{*}(\phi_{1}\to\phi_{2})=h(\to)(\sigma^{*}(\phi_{1}),\sigma^{*}(\phi_{2}))
-    =\sigma^{*}(\phi_{1})\to\sigma^{*}(\phi_{2})
+        \sigma^{*}(\phi_{1}\to\phi_{2})
+        =
+        h(\to)(\sigma^{*}(\phi_{1}),\sigma^{*}(\phi_{2}))
+        =
+        \sigma^{*}(\phi_{1})\to\sigma^{*}(\phi_{2})
     \end{equation}
-Finally, taking $f=\forall x$ and $y=\phi_{1}\in\pv^{1}$ given $x\in V$:
+    Finally, taking $f=\forall x$ and $y=\phi_{1}\in\pv^{1}$ given $x\in V$:
     \begin{equation}\label{logic:eqn:substitution:forall}
-    \sigma^{*}(\forall x\phi_{1})=h(\forall x)(\sigma^{*}(\phi_{1}))
-    =\forall\sigma(x)\,\sigma^{*}(\phi_{1})
+        \sigma^{*}(\forall x\phi_{1})
+        =
+        h(\forall x)(\sigma^{*}(\phi_{1}))
+        =
+        \forall\sigma(x)\,\sigma^{*}(\phi_{1})
     \end{equation}
-Since equations~(\ref{logic:eqn:substitution:bot}),
-(\ref{logic:eqn:substitution:to}) and
-(\ref{logic:eqn:substitution:forall}) are exactly as
-equation~(\ref{logic:eqn:substitution:recursion}), we conclude there
-is a unique map $\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
-equation~(\ref{logic:eqn:substitution:recursion}).
+    Since equations~(\ref{logic:eqn:substitution:bot}),
+    (\ref{logic:eqn:substitution:to}) and
+    (\ref{logic:eqn:substitution:forall}) are exactly as
+    equation~(\ref{logic:eqn:substitution:recursion}), we conclude there
+    is a unique map $\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
+    equation~(\ref{logic:eqn:substitution:recursion}).
 \end{proof}
 
 Let $U,V,W$ be sets while $\tau:U\to V$ and $\sigma:V\to W$ are
@@ -137,15 +161,17 @@ $\sigma^{*}\circ\tau^{*}$ or $(\sigma\circ\tau)^{*}$ no longer
 matters since the two mappings coincide anyway.
 
 \begin{prop}\label{logic:prop:substitution:composition}
-Let $U$, $V$ and $W$ be sets. Let $\tau:U\to V$ and $\sigma:V\to W$
-be maps. Let $\tau^{*}:{\bf P}(U)\to\pv$ and $\sigma^{*}:\pv\to{\bf
-P}(W)$ be the substitution mappings associated with $\tau$ and
-$\sigma$ respectively. Then:
+    Let $U$, $V$ and $W$ be sets. Let $\tau:U\to V$ and $\sigma:V\to W$
+    be maps. Let $\tau^{*}:{\bf P}(U)\to\pv$ and $\sigma^{*}:\pv\to{\bf
+    P}(W)$ be the substitution mappings associated with $\tau$ and
+    $\sigma$ respectively. Then:
     \[
-    (\sigma\circ\tau)^{*}=\sigma^{*}\circ\tau^{*}
+        (\sigma\circ\tau)^{*}
+        =
+        \sigma^{*}\circ\tau^{*}
     \]
-where $(\sigma\circ\tau)^{*}:{\bf P}(U)\to {\bf P}(W)$ is the
-substitution mapping associated with $\sigma\circ\tau$.
+    where $(\sigma\circ\tau)^{*}:{\bf P}(U)\to {\bf P}(W)$ is the
+    substitution mapping associated with $\sigma\circ\tau$.
 \end{prop}
 \begin{proof}
 We need to show that

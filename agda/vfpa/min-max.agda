@@ -68,6 +68,9 @@ max-comm x y | right p with ≤-total y x
 max-comm x y | right p | left  q = refl x
 max-comm x y | right p | right q = ≤-antisymmetric q p
 
-
+max-l  : {x y : a} → y ≤ x → max x y ≡ x
+max-l {x} {y} p with ≤-total x y
+max-l {x} {y} p | left  q = ≤-antisymmetric p q
+max-l {x} {y} p | right q = refl _
 
 

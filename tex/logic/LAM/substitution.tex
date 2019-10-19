@@ -1,0 +1,49 @@
+\begin{defin}\label{logic:def:LAM:substitution}
+    Let $V$ and $W$ be two sets and $\sigma:V\to W$ be a map. We call
+    {\em substitution mapping between \tv\ and ${\bf T}(W)$ associated
+    with $\sigma:V\to W$} the map $\sigma^{*}:\tv\to{\bf T}(W)$ defined
+    by the structural recursion:
+    \begin{equation}\label{logic:eqn:LAM:substitution:recursion}
+        \forall\phi\in\tv\ ,\ \sigma^{*}(\phi)=\left\{
+            \begin{array}{lcl}
+                \sigma(x)
+                    &\mbox{\ if\ }&
+                \phi=x
+                \\
+                \sigma^{*}(\phi_{1})\ \sigma^{*}(\phi_{2}) 
+                    &\mbox{\ if\ }&
+                \phi=\phi_{1}\ \phi_{2}
+                \\
+                \lambda\sigma(x)\,\sigma^{*}(\phi_{1})
+                    &\mbox{\ if\ }&
+                \phi=\lambda x\phi_{1}
+            \end{array}\right.
+    \end{equation}
+\end{defin}
+
+\begin{prop}\label{logic:prop:LAM:substitution}
+    The structural recursion of 
+    {\em definition~(\ref{logic:def:LAM:substitution})} 
+    is legitimate.
+\end{prop}
+\begin{proof}
+    TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:substitution:composition}
+    Let $U$, $V$ and $W$ be sets. Let $\tau:U\to V$ and $\sigma:V\to W$
+    be maps. Let $\tau^{*}:{\bf T}(U)\to\tv$ and $\sigma^{*}:\tv\to{\bf
+    T}(W)$ be the substitution mappings associated with $\tau$ and
+    $\sigma$ respectively. Then:
+    \[
+        (\sigma\circ\tau)^{*}
+        =
+        \sigma^{*}\circ\tau^{*}
+    \]
+    where $(\sigma\circ\tau)^{*}:{\bf T}(U)\to {\bf T}(W)$ is the
+    substitution mapping associated with $\sigma\circ\tau$.
+\end{prop}
+\begin{proof}
+    TODO
+\end{proof}
+

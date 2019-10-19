@@ -1,3 +1,4 @@
+Require Import Le.
 Require Import Plus.
 
 Require Import Core.Nat.
@@ -29,48 +30,85 @@ Proof.
                         { apply le_plus_r. }}
                     { apply le_S, le_n. }
                     { assumption. }}}
-            { apply incl_n_incl in H3. rewrite toListIncl in H3.
-              assert (y :: zs) as H7. { apply H3. assumption. }
-              rewrite toListElem in H7.
-              destruct H7 as [z [H7 [H8 H9]]].
-              exists z. split.
-                { assumption. }
-                { split.
-                    { apply (incl_incl_n y z n) in H8.
-                        { apply IH with y.
-                            { apply weaken_r with (order zs).
-                                { apply weaken3_m with (order ys).
-                                    { admit. }
+            { apply incl_n_incl in H3. 
+                { rewrite toListIncl in H3.
+                  assert (y :: zs) as H7. { apply H3. assumption. }
+                  rewrite toListElem in H7.
+                  destruct H7 as [z [H7 [H8 H9]]].
+                  exists z. split.
+                    { assumption. }
+                    { split.
+                        { apply (incl_incl_n y z n) in H8.
+                            { apply IH with y.
+                                { apply weaken_r with (order zs).
+                                    { apply weaken3_m with (order ys).
+                                        { apply weaken3_l 
+                                          with (max (order x) (order xs)).
+                                            { assumption. }
+                                            { apply n_le_max. }}
+                                        { apply orderToList. assumption. }}
                                     { apply orderToList. assumption. }}
-                                { apply orderToList. assumption. }}
-                            { assumption. }
-                            { assumption. }}
-                        { admit. }}
-                    { apply (incl_incl_n z y n) in H9.
-                        { apply IH with y.
-                            { admit. }
-                            { assumption. }
-                            { assumption. }}
-                        { admit. }}}
-                    { admit. }}
-Admitted.
+                                { assumption. }
+                                { assumption. }}
+                            { apply le_trans with
+                              (max (order x) (order xs) + order ys + order zs).
+                                { rewrite <- plus_assoc.
+                                  apply le_trans with (order ys + order zs).
+                                    { apply le_trans with (order ys + order z).
+                                        { apply plus_le_compat_r.
+                                          apply orderToList. assumption. }
+                                        { apply plus_le_compat_l.
+                                          apply orderToList. assumption. }}
+                                    { apply le_plus_r. }}
+                                { assumption. }}}
+                        { apply (incl_incl_n z y n) in H9.
+                            { apply IH with y.
+                                { remember (order z + order y) as e eqn:E.
+                                  rewrite plus_comm. rewrite plus_comm in E.
+                                  rewrite E. rewrite plus_assoc.
+                                  apply weaken_r with (order zs).  
+                                    { apply weaken3_m with (order ys).
+                                        { apply weaken3_l
+                                          with (max (order x) (order xs)).
+                                            { assumption. }
+                                            { apply n_le_max. }}
+                                        { apply orderToList. assumption. }}
+                                    { apply orderToList. assumption. }}
+                                { assumption. }
+                                { assumption. }}
+                            { rewrite plus_comm.
+                              apply le_trans with
+                              (max (order x) (order xs) + order ys + order zs).
+                                { rewrite <- plus_assoc.
+                                  apply le_trans with (order ys + order zs).
+                                    { apply le_trans with (order ys + order z).
+                                        { apply plus_le_compat_r.
+                                          apply orderToList. assumption. }
+                                        { apply plus_le_compat_l.
+                                          apply orderToList. assumption. }}
+                                    { apply le_plus_r. }}
+                                { assumption. }}}}}
+                { apply le_S. apply le_trans
+                  with (max (order x) (order xs) + order ys + order zs).
+                      { rewrite <- plus_assoc. apply le_plus_r. }
+                      { assumption. }}}
+Qed.
 
-
-(*
-Lemma elem_incl : forall (x y:set), 
-    x <== y <-> forall (z:set), z :: x -> z :: y.
+Theorem incl_trans : forall (x y z:set),
+    incl x y -> incl y z -> incl x z.
 Proof.
-    intros x y. split; intros H.
-    - intros z H'. unfold elem. unfold incl. simpl. split.
-        + simpl. apply incl_n_Nil.
-        + unfold incl in H. destruct x as [|x xs].
-            { admit. }
-            { simpl in H.  apply elem_toList in H'.
-              destruct H as [H1 [y1 [H2 [H3 H4]]]].
-              destruct H' as [y2 [H5 [H6 H7]]].
-              simpl in H5. destruct H5 as [H5|H5].
-                { admit. (* not obvious *) }
-                {
-
-Show.
-*)
+    intros x y z H1 H2.
+    remember (order x + order y + order z) as n eqn:E.
+    apply incl_n_incl with n.
+    - rewrite <- plus_assoc in E. rewrite E.
+      apply plus_le_compat_l. apply le_plus_r.  
+    - apply incl_n_trans with y.
+        + rewrite E. apply le_n. 
+        + apply incl_incl_n.
+            { rewrite E. apply le_plus_l. }
+            { assumption. }
+        + apply incl_incl_n.
+            { rewrite <- plus_assoc in E. rewrite E.
+              apply le_plus_r. }
+            { assumption. }
+Qed.

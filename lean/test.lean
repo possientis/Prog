@@ -29,6 +29,3 @@ def twice (f:ℕ → ℕ) (x:ℕ) : ℕ := f (f x)
 def x := 3
 
 
-
-
-

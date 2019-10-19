@@ -58,3 +58,9 @@ n-≤-max-n-m n m = min-max.x-≤-max-x-y _≤_ ≤-refl ≤-anti ≤-total n m
 
 m-≤-max-n-m : (n m : ℕ) → m ≤ max n m
 m-≤-max-n-m n m = min-max.y-≤-max-x-y _≤_ ≤-refl ≤-anti ≤-total n m
+
+max-l : {n m : ℕ} → m ≤ n → max n m ≡ n
+max-l p = min-max.max-l _≤_ ≤-refl ≤-anti ≤-total p 
+
+max-0 : (n : ℕ) → max n 0 ≡ n
+max-0 n = max-l (≤-0-n n)

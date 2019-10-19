@@ -1,7 +1,9 @@
+Require Import Le.
 Require Import Nat.
 Require Import Min.
 Require Import Max.
 Require Import Plus.
+Require Import Mult.
 
 Require Import Utils.nat.
 
@@ -81,15 +83,37 @@ Proof.
       apply (depth_max' Black).
 Qed.
 
-(*
+
 Theorem balanced : forall (c:Color) (n:nat) (t:RBTree c n), 
     depth max t <= 2 * (depth min t) + 1.
 Proof.
-
-Show.
-*)
-
-
-
+    intros c n t. apply le_trans with (2 * n + 1).
+    - apply depth_max.
+    - apply plus_le_compat_r, mult_le_compat_l, depth_min.
+Qed.
 
 
+Inductive RTree : nat -> Set :=
+| RedNode' : forall c1 c2 n, RBTree c1 n -> nat -> RBTree c2 n -> RTree n
+.
+
+Fixpoint present (c:Color) (n:nat) (t:RBTree c n) (x:nat) : Prop :=
+    match t with
+    | Leaf                      => False
+    | RedNode _ t1 y t2         => present Black _ t1 x \/ y = x \/ present Black _ t2 x
+    | BlackNode _ _ _ t1 y t2   => present _ _ t1 x \/ y = x \/ present _ _ t2 x
+    end.
+
+Arguments present {c} {n}.
+
+Definition rpresent (n:nat) (t:RTree n) (x:nat) : Prop :=
+    match t with
+    | RedNode' _ _ _ t1 y t2    => present t1 x \/ y = x \/ present t2 x
+    end.
+
+
+Locate "_ :: _".
+Locate "{ _ : _ & _ }".
+Print sigT.
+
+Notation "{< x >}" := (existT _ _ x).

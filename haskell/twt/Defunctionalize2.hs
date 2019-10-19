@@ -19,6 +19,8 @@ type Exp k = k -> Type
 -- Defined as an open type family
 type family Eval (e :: Exp k) :: k
 
+data A (a :: k) :: k
+
 -- Given two kinds k1 k2, given a type of kind (k1,k2), 
 -- creates a type of kind Exp k2
 data Snd :: forall k1 k2. (k1,k2) -> Exp k2
