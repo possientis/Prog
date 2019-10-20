@@ -28,4 +28,31 @@ def twice (f:ℕ → ℕ) (x:ℕ) : ℕ := f (f x)
 
 def x := 3
 
+namespace foo
+  def a1 : ℕ := 5
+end foo
+
+#check foo.a1
+#print foo.a1
+
+open foo
+#print a1
+
+#check list.nil
+#check list.cons
+#check list.append
+
+open list
+#check nil
+#check cons
+#check append
+
+
+#check (2:ℕ)
+#check (2:ℤ)
+
+
+ 
+
+
 

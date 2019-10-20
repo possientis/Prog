@@ -44,7 +44,6 @@ W$}\index{substitution@$\sigma\,$: associated $\sigma:\pv\to{\bf
 P}(W)$}\index{substitution@Substitution of
 variables}\index{substitution@$\sigma(\phi)\,$: image
 $\sigma:\pv\to{\bf P}(W)$}
-
 \begin{defin}\label{logic:def:substitution}
     Let $V$ and $W$ be two sets and $\sigma:V\to W$ be a map. We call
     {\em substitution mapping between \pv\ and ${\bf P}(W)$ associated
@@ -71,7 +70,6 @@ $\sigma:\pv\to{\bf P}(W)$}
             \end{array}\right.
     \end{equation}
 \end{defin}
-
 This is one of our first definition by {\em structural recursion}.
 The principle of such definition on a free universal algebra is
 justified by virtue of
@@ -79,12 +77,10 @@ theorem~(\ref{logic:the:structural:recursion}) of
 page~\pageref{logic:the:structural:recursion}. As this is one of our
 first use of this theorem, we shall make sure its application is
 done appropriately by checking all the relevant details.
-
 \begin{prop}\label{logic:prop:substitution}
     The structural recursion of {\em definition~(\ref{logic:def:substitution})} 
     is legitimate.
 \end{prop}
-
 \begin{proof}
     We need to show the existence and uniqueness of the map
     $\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
@@ -142,7 +138,6 @@ done appropriately by checking all the relevant details.
     is a unique map $\sigma^{*}:\pv\to{\bf P}(W)$ satisfying
     equation~(\ref{logic:eqn:substitution:recursion}).
 \end{proof}
-
 Let $U,V,W$ be sets while $\tau:U\to V$ and $\sigma:V\to W$ are
 maps. From definition~(\ref{logic:def:substitution}) we obtain the
 substitution mappings $\tau^{*}:{\bf P}(U)\to\pv$ and
@@ -159,7 +154,6 @@ the '$*$' when referring to a substitution mapping. Whether the
 notation '$\sigma\circ\tau$' is understood to mean
 $\sigma^{*}\circ\tau^{*}$ or $(\sigma\circ\tau)^{*}$ no longer
 matters since the two mappings coincide anyway.
-
 \begin{prop}\label{logic:prop:substitution:composition}
     Let $U$, $V$ and $W$ be sets. Let $\tau:U\to V$ and $\sigma:V\to W$
     be maps. Let $\tau^{*}:{\bf P}(U)\to\pv$ and $\sigma^{*}:\pv\to{\bf
@@ -183,22 +177,38 @@ a generator of ${\bf P}(U)$, we show first that the property is true
 on ${\bf P}_{0}(U)$. So let $\phi = (x\in y)\in{\bf P}_{0}(U)$,
 where $x,y\in U$. We have:
     \[
-    (\sigma\circ\tau)^{*}(\phi)=(\,\sigma(\tau(x))\,\in\,\sigma(\tau(y))\,)=
-    \sigma^{*}(\,\tau(x)\in\tau(y)\,)=\sigma^{*}\circ\tau^{*}(\phi)
+        (\sigma\circ\tau)^{*}(\phi)
+        =
+        (\,\sigma(\tau(x))\,\in\,\sigma(\tau(y))\,)
+        =
+        \sigma^{*}(\,\tau(x)\in\tau(y)\,)
+        =
+        \sigma^{*}\circ\tau^{*}(\phi)
     \]
 Next we check that the property is true for $\bot\in{\bf P}(U)$:
     \[
-    (\sigma\circ\tau)^{*}(\bot)=\bot=\sigma^{*}(\bot)=\sigma^{*}\circ\tau^{*}(\bot)
+        (\sigma\circ\tau)^{*}(\bot)
+        =
+        \bot
+        =
+        \sigma^{*}(\bot)
+        =
+        \sigma^{*}\circ\tau^{*}(\bot)
     \]
 Next we check that the property is true for
 $\phi=\phi_{1}\to\phi_{2}$, if it is true for $\phi_{1},\phi_{2}$:
     \begin{eqnarray*}
-    (\sigma\circ\tau)^{*}(\phi)&=&(\sigma\circ\tau)^{*}(\phi_{1})\to
-    (\sigma\circ\tau)^{*}(\phi_{2})\\
-    &=&\sigma^{*}(\tau^{*}(\phi_{1}))\to\sigma^{*}(\tau^{*}(\phi_{2}))\\
-    &=&\sigma^{*}(\,\tau^{*}(\phi_{1})\to\tau^{*}(\phi_{2})\,)\\
-    &=&\sigma^{*}(\tau^{*}(\phi_{1}\to\phi_{2}))\\
-    &=&\sigma^{*}\circ\tau^{*}(\phi)
+        (\sigma\circ\tau)^{*}(\phi)
+        &=&
+        (\sigma\circ\tau)^{*}(\phi_{1})\to(\sigma\circ\tau)^{*}(\phi_{2})\\
+        &=&
+        \sigma^{*}(\tau^{*}(\phi_{1}))\to\sigma^{*}(\tau^{*}(\phi_{2}))\\
+        &=&
+        \sigma^{*}(\,\tau^{*}(\phi_{1})\to\tau^{*}(\phi_{2})\,)\\
+        &=&
+        \sigma^{*}(\tau^{*}(\phi_{1}\to\phi_{2}))\\
+        &=&
+        \sigma^{*}\circ\tau^{*}(\phi)
     \end{eqnarray*}
 Finally we check that the property is true for $\phi=\forall
 x\phi_{1}$, if it is true for $\phi_{1}$:
@@ -216,21 +226,27 @@ defined by $\sigma(x)=x$ for all $x\in V$,
 equation~(\ref{logic:eqn:substitution:recursion}) of
 definition~(\ref{logic:def:substitution}) becomes:
     \[
-    \forall\phi\in\pv\ ,\ \sigma(\phi)=\left\{
-                    \begin{array}{lcl}
-                    (x\in y)&\mbox{\ if\ }&\phi=(x\in y)\\
-                    \bot&\mbox{\ if\ }&\phi=\bot\\
-                    \sigma(\phi_{1})\to \sigma(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
-                    \forall x\,\sigma(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
-                    \end{array}\right.
+        \forall\phi\in\pv\ ,\ \sigma(\phi)
+        =
+        \left\{\begin{array}{lcl}
+            (x\in y)&\mbox{\ if\ }&\phi=(x\in y)
+            \\
+            \bot&\mbox{\ if\ }&\phi=\bot
+            \\
+            \sigma(\phi_{1})\to \sigma(\phi_{2}) 
+                &\mbox{\ if\ }&
+            \phi=\phi_{1}\to\phi_{2}
+            \\
+            \forall x\,\sigma(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
+        \end{array}\right.
     \]
 It seems pretty obvious that $\sigma:\pv\to\pv$ is also the identity
 mapping, i.e. that $\sigma(\phi)=\phi$ for all $\phi\in\pv$. Yet,
 formally speaking, there seems to be no other way but to prove this
 once and for all. So we shall do so now:
 \begin{prop}\label{logic:prop:substitution:identity}
-Let $V$ be a set and $i:V\to V$ be the identity mapping. Then, the
-associated substitution mapping $i:\pv\to\pv$ is also the identity.
+    Let $V$ be a set and $i:V\to V$ be the identity mapping. Then, the
+    associated substitution mapping $i:\pv\to\pv$ is also the identity.
 \end{prop}
 \begin{proof}
 We need to show that $i(\phi)=\phi$ for all $\phi\in\pv$. We shall
@@ -240,20 +256,36 @@ page~\pageref{logic:the:proof:induction}. Since $\pvo$ is a
 generator of \pv, we show first that the property is true on \pvo.
 So let $\phi = (x\in y)\in\pvo$:
     \[
-    i(\phi)=(\,i(x)\,\in\,i(y)\,)=
-    (x\in y)=\phi
+        i(\phi)
+        =
+        (\,i(x)\,\in\,i(y)\,)
+        =
+        (x\in y)
+        =
+        \phi
     \]
 The property is clearly true for $\bot\in\pv$ since $i(\bot)=\bot$.
 Next we check that the property is true for
-$\phi=\phi_{1}\to\phi_{2}$, if it is true for
-$\phi_{1},\phi_{2}\in\pv$:
+$\phi=\phi_{1}\to\phi_{2}$, if it is true for $\phi_{1},\phi_{2}\in\pv$:
     \[
-    i(\phi)=i(\phi_{1})\to i(\phi_{2})=\phi_{1}\to\phi_{2}=\phi
+        i(\phi)
+        =
+        i(\phi_{1})\to i(\phi_{2})
+        =
+        \phi_{1}\to\phi_{2}
+        =
+        \phi
     \]
 Finally we check that the property is true for $\phi=\forall
 x\phi_{1}$, if it is true for $\phi_{1}$:
     \[
-    i(\phi)=\forall i(x)i(\phi_{1})=\forall x\phi_{1}=\phi
+        i(\phi)
+        =
+        \forall i(x)i(\phi_{1})
+        =
+        \forall x\phi_{1}
+        =
+        \phi
     \]
 \end{proof}
 
@@ -276,7 +308,9 @@ Let $V,W$ be sets and $\sigma:V\to W$ be a map. The associated
 substitution $\sigma:\pv\to{\bf P}(W)$ is a structural substitution
 and for all $\phi\in\pv$\,:
     \[
-    \subf(\sigma(\phi))=\sigma(\subf(\phi))
+        \subf(\sigma(\phi))
+        =
+        \sigma(\subf(\phi))
     \]
 \end{prop}
 \begin{proof}
@@ -290,13 +324,15 @@ associated with $V$ and $W$ respectively as per
 definition~(\ref{logic:def:FOPL:type}). Let
 $q:\alpha(V)\to\alpha(W)$ be the map defined by:
     \[
-    \forall f\in\alpha(V)\ ,\ q(f)=\left\{
-        \begin{array}{lcl}
-        \bot&\mbox{\ if\ }&f=\bot\\
-        \to&\mbox{\ if\ }&f=\to\\
-        \forall\sigma(x)&\mbox{\ if\ }&f=\forall x
-        \end{array}
-    \right.
+        \forall f\in\alpha(V)\ ,\ q(f)
+        =
+        \left\{\begin{array}{lcl}
+            \bot&\mbox{\ if\ }&f=\bot
+            \\
+            \to&\mbox{\ if\ }&f=\to
+            \\
+            \forall\sigma(x)&\mbox{\ if\ }&f=\forall x
+        \end{array}\right.
     \]
 Then $q$ is clearly arity preserving. In order to show that $\sigma$
 is a structural substitution, we simply need to check that
@@ -310,31 +346,42 @@ $(ii)$. Given $f\in\alpha(V)$, given $\phi\in\pv^{\alpha(f)}$ we
 need to show that $\sigma(f(\phi))=q(f)(\sigma(\phi))$. First we
 assume that $f=\bot$. Then $\alpha(f)=0$, $\phi=0$ and consequently:
     \begin{eqnarray*}
-    \sigma(f(\phi))&=&\sigma(\bot(0))\\
-    \mbox{$\bot(0)$ denoted '$\bot$'}\ \rightarrow&=&\sigma(\bot)\\
-    \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow&=&\bot\\
-    \mbox{$\bot(0)$ denoted '$\bot$'}\ \rightarrow&=&\bot(0)\\
-    \sigma:\{0\}\to\{0\}\ \rightarrow&=&q(\bot)(\sigma(0))\\
-    &=&q(f)(\sigma(\phi))
+        \sigma(f(\phi))&=&\sigma(\bot(0))
+        \\
+        \mbox{$\bot(0)$ denoted '$\bot$'}\ \rightarrow&=&\sigma(\bot)
+        \\
+        \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow&=&\bot
+        \\
+        \mbox{$\bot(0)$ denoted '$\bot$'}\ \rightarrow&=&\bot(0)
+        \\
+        \sigma:\{0\}\to\{0\}\ \rightarrow&=&q(\bot)(\sigma(0))
+        \\
+        &=&q(f)(\sigma(\phi))
     \end{eqnarray*}
 Next we assume that $f=\to$. Then $\alpha(f)=2$ and given
 $\phi=(\phi_{0},\phi_{1})$\,:
     \begin{eqnarray*}
-    \sigma(f(\phi))&=&\sigma(\phi_{0}\to\phi_{1})\\
-    \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow
-    &=&\sigma(\phi_{0})\to\sigma(\phi_{1})\\
-    \sigma:\pv^{2}\to{\bf P}(W)^{2}\ \rightarrow
-    &=&q(\to)(\sigma(\phi_{0},\phi_{1}))\\
-    &=&q(f)(\sigma(\phi))
+        \sigma(f(\phi))&=&\sigma(\phi_{0}\to\phi_{1})
+        \\
+        \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow
+            &=&\sigma(\phi_{0})\to\sigma(\phi_{1})
+        \\
+        \sigma:\pv^{2}\to{\bf P}(W)^{2}\ \rightarrow
+            &=&q(\to)(\sigma(\phi_{0},\phi_{1}))
+        \\
+        &=&q(f)(\sigma(\phi))
     \end{eqnarray*}
 Finally we assume that $f=\forall x$, $x\in V$. Then $\alpha(f)=1$
 and given $\phi=(\phi_{0})$\,:
     \begin{eqnarray*}
-    \sigma(f(\phi))&=&\sigma(\forall x\phi_{0})\\
-    \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow
-    &=&\forall\sigma(x)\sigma(\phi_{0})\\
-    \sigma:\pv^{1}\to{\bf P}(W)^{1}\ \rightarrow
-    &=&q(\forall x)(\sigma(\phi_{0}))\\
-    &=&q(f)(\sigma(\phi))
+        \sigma(f(\phi))&=&\sigma(\forall x\phi_{0})
+        \\
+        \mbox{def.~(\ref{logic:def:substitution})}\ \rightarrow
+            &=&\forall\sigma(x)\sigma(\phi_{0})
+        \\
+        \sigma:\pv^{1}\to{\bf P}(W)^{1}\ \rightarrow
+            &=&q(\forall x)(\sigma(\phi_{0}))
+        \\
+        &=&q(f)(\sigma(\phi))
     \end{eqnarray*}
 \end{proof}

@@ -1,9 +1,11 @@
 module combinator where
 
 open import le
+open import le
 open import lt
 open import nat
 open import bool
+open import plus
 
 data Comb : Set where
   S   : Comb
@@ -20,7 +22,7 @@ data _≻_ : Comb → Comb → Set where  -- /succ
 order : Comb → ℕ
 order S           = 0
 order K           = 0
-order (App c₁ c₂) = succ (max (order c₁) (order c₂))
+order (App c₁ c₂) = succ (order c₁ + order c₂)
 
 data SFree : Comb -> Set where
   SFreeK   : SFree K
@@ -29,13 +31,10 @@ data SFree : Comb -> Set where
 {-
 -- If c reduces to c' and is SFree, then the order of c' is less than that of c
 reduct-order : ∀ {c c' : Comb} → SFree c → c ≻ c' → order c' < order c
-reduct-order (SFreeApp p1 p2) (≻K a b) = ≤-n-s (≤-trans
-  (le-s (le-n (order a)))
-  (n-≤-max-n-m (succ (order a)) (order b)))
-reduct-order (SFreeApp (SFreeApp (SFreeApp () p4) p3) p2) (≻S a b c)
-reduct-order (SFreeApp p1 SFreeK) (Cong1 .K q) = <-n-s {!!}
-reduct-order (SFreeApp p1 (SFreeApp p2 p3)) (Cong1 .(App _ _) q) = {!!}
-reduct-order (SFreeApp p1 p2) (Cong2 a q) = {!!}
+reduct-order (SFreeApp p₁ p₂) (≻K a b) = ≤-n-s (le-s {!!})
+reduct-order (SFreeApp p₁ p₂) (≻S a b c) = {!!}
+reduct-order (SFreeApp p₁ p₂) (Cong1 b q) = {!!}
+reduct-order (SFreeApp p₁ p₂) (Cong2 a q) = {!!} 
 -}
 
 

@@ -10,6 +10,7 @@ all :			${CORE}/Nat.vo \
 				${CORE}/Trans.vo \
 				${CORE}/ElemIncl.vo \
 				${CORE}/Equal.vo \
+				${CORE}/Extensionality.vo
 
 
 ${CORE}/Nat.vo : 	${CORE}/Nat.v
@@ -71,7 +72,9 @@ ${CORE}/Trans.vo :	${CORE}/Trans.v \
 ${CORE}/ElemIncl.vo :	${CORE}/ElemIncl.v \
 						${CORE}/Set.vo \
 						${CORE}/Incl.vo \
-						${CORE}/Elem.vo
+						${CORE}/Elem.vo \
+						${CORE}/ToList.vo \
+						${CORE}/Trans.vo
 	coqc ${CORE}/ElemIncl.v -R ${CORE} ${CORE}
 
 
@@ -80,3 +83,15 @@ ${CORE}/Equal.vo :	${CORE}/Equal.v \
 					${CORE}/Elem.vo
 	coqc ${CORE}/Equal.v -R ${CORE} ${CORE}
 	
+
+${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/ToList.vo \
+								${CORE}/Trans.vo \
+								${CORE}/ElemIncl.vo \
+								${CORE}/Equal.vo
+	coqc ${CORE}/Extensionality.v -R ${CORE} ${CORE}
+
+

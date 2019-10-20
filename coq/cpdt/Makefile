@@ -26,6 +26,7 @@ all:	Utils/nat.vo \
 		vec.vo \
 		type.vo \
 		RedBlackTree.vo \
+		regex.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
 		Test/option_t.vo
@@ -114,6 +115,9 @@ type.vo : type.v
 RedBlackTree.vo : 	RedBlackTree.v \
    					Utils/nat.vo	
 	coqc RedBlackTree.v -R Utils Utils
+
+regex.vo : regex.v
+	coqc regex.v
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

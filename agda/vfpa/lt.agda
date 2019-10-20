@@ -1,5 +1,6 @@
 module lt where
 
+open import id
 open import le
 open import nat
 open import void
@@ -22,4 +23,7 @@ infixr 4 _<_
 -- This is a weak result
 <-trans : {n m p : ℕ} → n < m → m < p → n < p
 <-trans {n} {m} {p} pnm qmp = ≤-trans pnm (≤-trans (le-s (le-n m)) qmp)
+
+<-equal : {n n' m m' : ℕ } → n' ≡ n → m' ≡ m → n < m → n' < m'
+<-equal (refl n) (refl m) r = r
 

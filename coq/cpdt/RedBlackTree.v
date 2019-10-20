@@ -111,9 +111,10 @@ Definition rpresent (n:nat) (t:RTree n) (x:nat) : Prop :=
     | RedNode' _ _ _ t1 y t2    => present t1 x \/ y = x \/ present t2 x
     end.
 
-
+(*
 Locate "_ :: _".
 Locate "{ _ : _ & _ }".
 Print sigT.
+*)
 
 Notation "{< x >}" := (existT _ _ x).

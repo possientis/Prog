@@ -95,7 +95,7 @@ Proof.
 Qed.
 
 Theorem incl_trans : forall (x y z:set),
-    incl x y -> incl y z -> incl x z.
+    x <== y -> y <== z -> x <== z.
 Proof.
     intros x y z H1 H2.
     remember (order x + order y + order z) as n eqn:E.

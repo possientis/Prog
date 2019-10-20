@@ -7,21 +7,25 @@ $\var(\phi)=\{x,y\}$.
 formula}\index{variable@$\var(\phi)\,$: set of variables of $\phi$}
 \begin{defin}\label{logic:def:variable}
 Let $V$ be a set. The map $\var:\pv\to {\cal P}(V)$ defined by the
-following structural recursion is called {\em variable mapping on
-\pv}:
- \begin{equation}\label{logic:eqn:var:recursion}
-    \forall\phi\in\pv\ ,\ \var(\phi)=\left\{
-                    \begin{array}{lcl}
-                    \{x,y\}&\mbox{\ if\ }&\phi=(x\in y)\\
-                    \emptyset&\mbox{\ if\ }&\phi=\bot\\
-                    \var(\phi_{1})\cup\var(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
-                    \{x\}\cup\var(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
-                    \end{array}\right.
-    \end{equation}
+following structural recursion is called {\em variable mapping on \pv}:
+\begin{equation}\label{logic:eqn:var:recursion}
+    \forall\phi\in\pv\ ,\ \var(\phi)
+    =
+    \left\{\begin{array}{lcl}
+        \{x,y\}&\mbox{\ if\ }&\phi=(x\in y)
+        \\
+        \emptyset&\mbox{\ if\ }&\phi=\bot
+        \\
+        \var(\phi_{1})\cup\var(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}
+        \\
+        \{x\}\cup\var(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
+    \end{array}\right.
+\end{equation}
 We say that $x\in V$ is a {\em variable} of $\phi\in\pv$ \ifand\ $x\in\var(\phi)$.
 \end{defin}
 \begin{prop}\label{logic:prop:variable}
-The structural recursion of {\em definition~(\ref{logic:def:variable})} is legitimate.
+    The structural recursion of {\em definition~(\ref{logic:def:variable})} 
+    is legitimate.
 \end{prop}
 \begin{proof}
 We need to show the existence and uniqueness of $\var:\pv\to{\cal
@@ -34,9 +38,9 @@ defined by $g_{0}(x\in y)=\{x,y\}$ for all $x,y\in V$, and the
 operators $h(f):A^{\alpha(f)}\to A$ ($f\in\alpha$) defined for all
 $V_{1},V_{2}\in A$ and $x\in V$ as:
     \begin{eqnarray*}
-    (i)&&h(\bot)(0)=\emptyset\\
-    (ii)&&h(\to)(V_{1},V_{2})=V_{1}\cup V_{2}\\
-    (iii)&&h(\forall x)(V_{1})=\{x\}\cup V_{1}
+        (i)&&h(\bot)(0)=\emptyset\\
+        (ii)&&h(\to)(V_{1},V_{2})=V_{1}\cup V_{2}\\
+        (iii)&&h(\forall x)(V_{1})=\{x\}\cup V_{1}
     \end{eqnarray*}
 \end{proof}
 
@@ -109,7 +113,9 @@ $\sigma(\var(\phi))$.
 \begin{prop}\label{logic:prop:var:of:substitution}
 Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Then:
     \[
-    \forall\phi\in\pv\ ,\ \var(\sigma(\phi))=\sigma(\var(\phi))
+        \forall\phi\in\pv\ ,\ \var(\sigma(\phi))
+        =
+        \sigma(\var(\phi))
     \]
 where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated substitution mapping.
 \end{prop}
@@ -122,38 +128,57 @@ generator of \pv, we first check that the property is true for
 $\phi\in\pvo$. So suppose $\phi=(x\in y)\in\pvo$ for some $x,y\in
 V$. Then we have:
     \begin{eqnarray*}
-    \var(\sigma(\phi))&=&\var(\sigma(x\in y))\\
-    &=&\var(\,\sigma(x)\in\sigma(y)\,)\\
-    &=&\{\sigma(x),\sigma(y)\}\\
-    &=&\{\sigma(u):u\in\{x,y\}\}\\
-    &=&\{\sigma(u):u\in\var(x\in y)\}\\
-    &=&\{\sigma(x):x\in\var(\phi)\}
+        \var(\sigma(\phi))&=&\var(\sigma(x\in y))\\
+        &=&\var(\,\sigma(x)\in\sigma(y)\,)\\
+        &=&\{\sigma(x),\sigma(y)\}\\
+        &=&\{\sigma(u):u\in\{x,y\}\}\\
+        &=&\{\sigma(u):u\in\var(x\in y)\}\\
+        &=&\{\sigma(x):x\in\var(\phi)\}
     \end{eqnarray*}
 Next we check that the property is true for $\bot\in\pv$:
     \[
-    \var(\sigma(\bot))=\var(\bot)=\emptyset=\{\sigma(x):x\in\var(\bot)\}
+        \var(\sigma(\bot))
+        =
+        \var(\bot)
+        =
+        \emptyset
+        =
+        \{\sigma(x):x\in\var(\bot)\}
     \]
 Next we check that the property is true for
 $\phi=\phi_{1}\to\phi_{2}$ if it is true for $\phi_{1},\phi_{2}$:
     \begin{eqnarray*}
-    \var(\sigma(\phi))&=&\var(\sigma(\phi_{1}\to\phi_{2}))\\
-    &=&\var(\sigma(\phi_{1})\to\sigma(\phi_{2}))\\
-    &=&\var(\sigma(\phi_{1}))\cup\var(\sigma(\phi_{2}))\\
-    &=&\{\,\sigma(x):x\in\var(\phi_{1})\,\}\cup\{\,\sigma(x):x\in\var(\phi_{2})\,\}\\
-    &=&\{\,\sigma(x):x\in\var(\phi_{1})\cup\var(\phi_{2})\,\}\\
-    &=&\{\,\sigma(x):x\in\var(\phi_{1}\to\phi_{2})\,\}\\
-    &=&\{\,\sigma(x):x\in\var(\phi)\,\}
+        \var(\sigma(\phi))&=&\var(\sigma(\phi_{1}\to\phi_{2}))
+        \\
+        &=&\var(\sigma(\phi_{1})\to\sigma(\phi_{2}))
+        \\
+        &=&\var(\sigma(\phi_{1}))\cup\var(\sigma(\phi_{2}))
+        \\
+        &=&\{\,\sigma(x):x\in\var(\phi_{1})\,\}
+            \cup\{\,\sigma(x):x\in\var(\phi_{2})\,\}
+        \\
+        &=&\{\,\sigma(x):x\in\var(\phi_{1})\cup\var(\phi_{2})\,\}
+        \\
+        &=&\{\,\sigma(x):x\in\var(\phi_{1}\to\phi_{2})\,\}
+        \\
+        &=&\{\,\sigma(x):x\in\var(\phi)\,\}
     \end{eqnarray*}
 Finally we check that the property is true for $\phi=\forall
 x\phi_{1}$ if it is true for $\phi_{1}$:
     \begin{eqnarray*}
-    \var(\sigma(\phi))&=&\var(\sigma(\forall x\phi_{1}))\\
-    &=&\var(\forall\sigma(x)\,\sigma(\phi_{1}))\\
-    &=&\{\,\sigma(x)\,\}\cup\var(\sigma(\phi_{1}))\\
-    &=&\{\,\sigma(x)\,\}\cup\{\,\sigma(u):u\in\var(\phi_{1})\,\}\\
-    &=&\{\,\sigma(u):u\in\{x\}\cup\var(\phi_{1})\,\}\\
-    &=&\{\,\sigma(u):u\in\var(\forall x\phi_{1})\,\}\\
-    &=&\{\,\sigma(x):x\in\var(\phi)\,\}
+        \var(\sigma(\phi))&=&\var(\sigma(\forall x\phi_{1}))
+        \\
+        &=&\var(\forall\sigma(x)\,\sigma(\phi_{1}))
+        \\
+        &=&\{\,\sigma(x)\,\}\cup\var(\sigma(\phi_{1}))
+        \\
+        &=&\{\,\sigma(x)\,\}\cup\{\,\sigma(u):u\in\var(\phi_{1})\,\}
+        \\
+        &=&\{\,\sigma(u):u\in\{x\}\cup\var(\phi_{1})\,\}
+        \\
+        &=&\{\,\sigma(u):u\in\var(\forall x\phi_{1})\,\}
+        \\
+        &=&\{\,\sigma(x):x\in\var(\phi)\,\}
     \end{eqnarray*}
 \end{proof}
 

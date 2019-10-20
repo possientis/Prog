@@ -1,0 +1,46 @@
+\begin{defin}\label{logic:def:LAM:variable}
+Let $V$ be a set. The map $\var:\tv\to {\cal P}(V)$ defined by the
+following structural recursion is called {\em variable mapping on \tv}:
+\begin{equation}\label{logic:eqn:LAM:var:recursion}
+    \forall\phi\in\tv\ ,\ \var(\phi)
+    =
+    \left\{\begin{array}{lcl}
+        \{x\}&\mbox{\ if\ }&\phi=x
+        \\
+        \var(\phi_{1})\cup\var(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\ \phi_{2}
+        \\
+        \{x\}\cup\var(\phi_{1})&\mbox{\ if\ }&\phi=\lambda x\phi_{1}
+    \end{array}\right.
+\end{equation}
+We say that $x\in V$ is a {\em variable} of $\phi\in\tv$ \ifand\ $x\in\var(\phi)$.
+\end{defin}
+
+\begin{prop}\label{logic:prop:LAM:variable}
+    The structural recursion of {\em definition~(\ref{logic:def:LAM:variable})} 
+    is legitimate.
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:variable:subformula}
+Let $V$ be a set and $\phi,\psi\in\tv$. Then we have:
+    \[
+    \psi\preceq\phi\ \Rightarrow\ \var(\psi)\subseteq\var(\phi)
+    \]
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:var:of:substitution}
+Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Then:
+    \[
+    \forall\phi\in\tv\ ,\ \var(\sigma(\phi))=\sigma(\var(\phi))
+    \]
+where $\sigma:\tv\to{\bf T}(W)$ also denotes the associated substitution mapping.
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
