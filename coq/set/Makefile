@@ -10,7 +10,8 @@ all :			${CORE}/Nat.vo \
 				${CORE}/Trans.vo \
 				${CORE}/ElemIncl.vo \
 				${CORE}/Equal.vo \
-				${CORE}/Extensionality.vo
+				${CORE}/Extensionality.vo \
+				${CORE}/Pairing.vo \
 
 
 ${CORE}/Nat.vo : 	${CORE}/Nat.v
@@ -95,3 +96,6 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 	coqc ${CORE}/Extensionality.v -R ${CORE} ${CORE}
 
 
+${CORE}/Pairing.vo :			${CORE}/Pairing.v \
+								${CORE}/Set.vo
+	coqc ${CORE}/Pairing.v -R ${CORE} ${CORE}

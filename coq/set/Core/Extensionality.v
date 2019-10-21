@@ -6,6 +6,7 @@ Require Import Core.Trans.
 Require Import Core.ElemIncl.
 Require Import Core.Equal.
 
+(* The extensionality axiom is satisfied in 'set'                               *)
 Theorem extensionality : forall (x y:set),
     x == y <-> forall (z:set), z :: x <-> z :: y.
 Proof.
