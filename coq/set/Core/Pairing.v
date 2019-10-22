@@ -37,11 +37,3 @@ Proof.
     intros x y. exists {x,y}. apply pair_charac. 
 Qed.
 
-(*
-(* Notation {x} is confusing coq in following lemma                             *)
-Lemma pair_singl : forall (x:set), {x,x} == Cons x Nil.
-Proof.
-
-Show.
-*)
-

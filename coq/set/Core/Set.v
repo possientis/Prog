@@ -26,3 +26,9 @@ Proof.
             { right. intros H. inversion H. apply H1. assumption. }
 Qed.
 
+Fixpoint fromList (xs:list set) : set :=
+    match xs with
+    | nil           => Nil
+    | cons x xs     => Cons x (fromList xs)
+    end.
+

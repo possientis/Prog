@@ -47,3 +47,21 @@ Proof.
         + rewrite elemIncl in H2. apply H2. assumption.
 Qed.
 
+Lemma consElem : forall (x xs z:set), z :: Cons x xs <-> (z == x) \/ z :: xs.
+Proof.
+    intros x xs z. split.
+    - intros H. apply toListElem in H. simpl in H.
+      destruct H as [z' [[H1|H1] [H2 H3]]].
+        + subst. left. apply doubleIncl. split; assumption.
+        + right. apply toListElem. exists z'. split.
+            { assumption. }
+            { split; assumption. }
+    - intros [H|H].
+        + apply toListElem. exists x. split.
+            { left. reflexivity. }
+            { apply doubleIncl. assumption. }
+        + apply toListElem. apply toListElem in H.
+          destruct H as [z' [H1 [H2 H3]]]. exists z'. split.
+            { right. assumption. }
+            { split; assumption. }
+Qed.
