@@ -32,3 +32,21 @@ Fixpoint fromList (xs:list set) : set :=
     | cons x xs     => Cons x (fromList xs)
     end.
 
+
+Lemma fromListToList : forall (xs:set), fromList (toList xs) = xs.
+Proof.
+    induction xs as [|x _ xs IH].
+    - reflexivity. 
+    - simpl. rewrite IH. reflexivity.
+Qed.
+
+Lemma toListFromList : forall (xs:list set), toList (fromList xs) = xs.
+Proof.
+    induction xs as [|x xs IH].
+    - reflexivity.
+    - simpl. rewrite IH. reflexivity.
+Qed.
+
+
+
+

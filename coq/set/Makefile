@@ -12,6 +12,7 @@ all :			${CORE}/Nat.vo \
 				${CORE}/Equal.vo \
 				${CORE}/Extensionality.vo \
 				${CORE}/Pairing.vo \
+				${CORE}/Empty.vo
 
 
 ${CORE}/Nat.vo : 	${CORE}/Nat.v
@@ -99,3 +100,11 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 ${CORE}/Pairing.vo :			${CORE}/Pairing.v \
 								${CORE}/Set.vo
 	coqc ${CORE}/Pairing.v -R ${CORE} ${CORE}
+
+
+${CORE}/Empty.vo :				${CORE}/Empty.v \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/ToList.vo
+	coqc ${CORE}/Empty.v -R ${CORE} ${CORE}
+
