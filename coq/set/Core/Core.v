@@ -216,3 +216,17 @@ Proof.
 Qed.
 
 
+
+(*
+Lemma incl_n_dec : forall (n:nat) (xs ys:set), 
+    { incl_n n xs ys } + { ~ incl_n n xs ys }.
+Proof.
+    induction n as [|n IH].
+    - admit.
+    - intros xs ys. destruct xs as [|x xs].
+        + admit.
+        + destruct (IH xs ys) as [H|H].
+            { simpl.
+
+Show.
+*)
