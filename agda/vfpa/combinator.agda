@@ -31,9 +31,9 @@ data SFree : Comb -> Set where
 {-
 -- If c reduces to c' and is SFree, then the order of c' is less than that of c
 reduct-order : ∀ {c c' : Comb} → SFree c → c ≻ c' → order c' < order c
-reduct-order (SFreeApp p₁ p₂) (≻K a b) = ≤-n-s (le-s {!!})
-reduct-order (SFreeApp p₁ p₂) (≻S a b c) = {!!}
-reduct-order (SFreeApp p₁ p₂) (Cong1 b q) = {!!}
+reduct-order (SFreeApp p₁ p₂) (≻K a b) = ≤-n-s (le-s (n-≤-n+m _ _))
+reduct-order (SFreeApp (SFreeApp (SFreeApp () p₃) p₁) p₂) (≻S a b c) 
+reduct-order (SFreeApp p₁ p₂) (Cong1 b q) = <-n-s ? 
 reduct-order (SFreeApp p₁ p₂) (Cong2 a q) = {!!} 
 -}
 

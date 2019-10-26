@@ -46,8 +46,8 @@ is-oddℤ (mkℤ n _) = is-odd n
 
 ℕ-trichotomy : (n m : ℕ) → (n < m) ∨ (n ≡ m) ∨ (m < n)
 ℕ-trichotomy zero zero      = left ( right (refl 0))
-ℕ-trichotomy zero (nat.succ m)  = left (left (le.≤-n-s (le.≤-0-n m)))
-ℕ-trichotomy (nat.succ n) zero  = right (le.≤-n-s (le.≤-0-n n))
+ℕ-trichotomy zero (nat.succ m)  = left (left (le.≤-n-s (le.0-≤-n m)))
+ℕ-trichotomy (nat.succ n) zero  = right (le.≤-n-s (le.0-≤-n n))
 ℕ-trichotomy (nat.succ n) (nat.succ m) with ℕ-trichotomy n m
 ℕ-trichotomy (nat.succ n) (nat.succ m) | left (left p)  = left (left (le.≤-n-s p))
 ℕ-trichotomy (nat.succ n) (nat.succ m) | left (right p) = left (right (ap nat.succ p))

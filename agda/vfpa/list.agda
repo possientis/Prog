@@ -124,10 +124,10 @@ filter-idempotent p (x ∷ xs) | ff with≡ eq = ≡-trans
 
 length-reverse-go : ∀ {ℓ} {a : Set ℓ} (acc xs : 𝕃 a) →
   length (reverse-go acc xs) ≡ length acc + length xs
-length-reverse-go acc []       = ≡-sym (+-n+O (length acc))
+length-reverse-go acc []       = ≡-sym (n+0≡0 (length acc))
 length-reverse-go acc (x ∷ xs) = ≡-trans
   (length-reverse-go (x ∷ acc) xs)
-  (≡-sym (+-n+succ (length acc) (length xs)))
+  (≡-sym (n+sm≡sn+m (length acc) (length xs)))
 
 length-reverse : ∀ {ℓ} {a : Set ℓ} (xs : 𝕃 a) → length (reverse xs) ≡ length xs
 length-reverse xs = length-reverse-go [] xs

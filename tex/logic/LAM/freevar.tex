@@ -1,0 +1,42 @@
+\begin{defin}\label{logic:def:LAM:free:variable}
+    Let $V$ be a set. The map $\free:\tv\to {\cal P}(V)$ defined by the
+    following structural recursion is called {\em free variable mapping on \tv}:
+    \begin{equation}\label{logic:eqn:LAM:free:var:recursion}
+        \forall\phi\in\tv\ ,\ 
+            \free(\phi) =
+                \left\{\begin{array}{lcl}
+                    \{x\}&\mbox{\ if\ }&\phi=x
+                    \\
+                    \free(\phi_{1})\cup\free(\phi_{2}) 
+                        &\mbox{\ if\ }&
+                    \phi=\phi_{1}\ \phi_{2}
+                    \\
+                    \free(\phi_{1})\setminus\{x\}
+                        &\mbox{\ if\ }&
+                    \phi=\lambda x\phi_{1}
+                \end{array}\right.
+    \end{equation}
+    We say that $x\in V$ is a {\em free variable} of $\phi\in\tv$ 
+    \ifand\ $x\in\free(\phi)$.
+\end{defin}
+\begin{prop}\label{logic:prop:LAM:free:variable}
+    The structural recursion of 
+    {\em definition~(\ref{logic:def:LAM:free:variable})} is legitimate.
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:freevar:of:substitution:inclusion}
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let
+    $\phi\in\tv$\,:
+    \[
+        \free(\sigma(\phi))\subseteq\sigma(\free(\phi))
+    \]
+    where $\sigma:\tv\to{\bf T}(W)$ also denotes the associated substitution 
+    mapping.
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+

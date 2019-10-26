@@ -13,7 +13,6 @@ data _≤_ : ℕ → ℕ → Set where
 
 infixr 4 _≤_
 
-
 ≤-refl : (n : ℕ) → n ≤ n
 ≤-refl n = le-n n
 
@@ -29,20 +28,20 @@ infixr 4 _≤_
 ≤-s-n {n} {.n} (le-n .(succ n)) = le-n n
 ≤-s-n {n} {m} (le-s p)          = ≤-trans (le-s (le-n n)) p
 
-≤-0-n : (n : ℕ) → 0 ≤ n
-≤-0-n zero     = le-n 0
-≤-0-n (succ n) = le-s (≤-0-n n)
+0-≤-n : (n : ℕ) → 0 ≤ n
+0-≤-n zero     = le-n 0
+0-≤-n (succ n) = le-s (0-≤-n n)
 
 ≤-anti : {n m : ℕ} → n ≤ m → m ≤ n → n ≡ m
 ≤-anti {zero} {zero} p q     = refl _
 ≤-anti {succ n} {succ m} p q = ap succ (≤-anti (≤-s-n p) (≤-s-n q))
 
-≤-s-0 : (n : ℕ) → ¬(succ n ≤ 0)
-≤-s-0 n p = succ-not-0 n (≤-anti p (≤-0-n _))
+¬-sn-≤-0 : (n : ℕ) → ¬(succ n ≤ 0)
+¬-sn-≤-0 n p = succ-not-0 n (≤-anti p (0-≤-n _))
 
 ≤-total : ∀ (n m : ℕ) → (n ≤ m) ∨ (m ≤ n)
-≤-total zero m = left (≤-0-n m)
-≤-total (succ n) zero = right (≤-0-n (succ n))
+≤-total zero m = left (0-≤-n m)
+≤-total (succ n) zero = right (0-≤-n (succ n))
 ≤-total (succ n) (succ m) with ≤-total n m
 ≤-total (succ n) (succ m) | left  p = left (≤-n-s p)
 ≤-total (succ n) (succ m) | right p = right (≤-n-s p)
@@ -63,4 +62,4 @@ max-l : {n m : ℕ} → m ≤ n → max n m ≡ n
 max-l p = min-max.max-l _≤_ ≤-refl ≤-anti ≤-total p 
 
 max-0 : (n : ℕ) → max n 0 ≡ n
-max-0 n = max-l (≤-0-n n)
+max-0 n = max-l (0-≤-n n)

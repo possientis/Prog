@@ -12,24 +12,33 @@ properties which are related to it.
 
 \index{free@Free variables of formula}\index{free@$\free(\phi)$ :
 set of free variables of $\phi$}
+
 \begin{defin}\label{logic:def:free:variable}
-Let $V$ be a set. The map $\free:\pv\to {\cal P}(V)$ defined by the
-following structural recursion is called {\em free variable mapping
-on \pv}:
- \begin{equation}\label{logic:eqn:free:var:recursion}
-    \forall\phi\in\pv\ ,\ \free(\phi)=\left\{
-                    \begin{array}{lcl}
-                    \{x,y\}&\mbox{\ if\ }&\phi=(x\in y)\\
-                    \emptyset&\mbox{\ if\ }&\phi=\bot\\
-                    \free(\phi_{1})\cup\free(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
-                    \free(\phi_{1})\setminus\{x\}&\mbox{\ if\ }&\phi=\forall x\phi_{1}
-                    \end{array}\right.
+    Let $V$ be a set. The map $\free:\pv\to {\cal P}(V)$ defined by the
+    following structural recursion is called {\em free variable mapping on \pv}:
+    \begin{equation}\label{logic:eqn:free:var:recursion}
+        \forall\phi\in\pv\ ,\ 
+            \free(\phi) =
+                \left\{\begin{array}{lcl}
+                    \{x,y\}&\mbox{\ if\ }&\phi=(x\in y)
+                    \\
+                    \emptyset&\mbox{\ if\ }&\phi=\bot
+                    \\
+                    \free(\phi_{1})\cup\free(\phi_{2}) 
+                        &\mbox{\ if\ }&
+                    \phi=\phi_{1}\to\phi_{2}
+                    \\
+                    \free(\phi_{1})\setminus\{x\}
+                        &\mbox{\ if\ }&
+                    \phi=\forall x\phi_{1}
+                \end{array}\right.
     \end{equation}
-We say that $x\in V$ is a {\em free variable} of $\phi\in\pv$ \ifand\ $x\in\free(\phi)$.
+    We say that $x\in V$ is a {\em free variable} of $\phi\in\pv$ 
+    \ifand\ $x\in\free(\phi)$.
 \end{defin}
 \begin{prop}\label{logic:prop:free:variable}
-The structural recursion of {\em
-definition~(\ref{logic:def:free:variable})} is legitimate.
+    The structural recursion of {\em definition~(\ref{logic:def:free:variable})} 
+    is legitimate.
 \end{prop}
 \begin{proof}
 We need to show the existence and uniqueness of $\free:\pv\to{\cal
@@ -68,13 +77,13 @@ $\sigma=[y/x]$, we have $\sigma(\phi)=(y\in y)$ and the equality
 $\free(\sigma(\phi))=\sigma(\free(\phi))$ still holds. We start with
 the general case leading to the weaker inclusion:
 \begin{prop}\label{logic:prop:freevar:of:substitution:inclusion}
-Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$\,:
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let
+    $\phi\in\pv$\,:
     \[
-    \free(\sigma(\phi))\subseteq\sigma(\free(\phi))
+        \free(\sigma(\phi))\subseteq\sigma(\free(\phi))
     \]
-where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated
-substitution mapping.
+    where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated substitution 
+    mapping.
 \end{prop}
 \begin{proof}
 Given $\phi\in\pv$, we need to show the inclusion

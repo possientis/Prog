@@ -1,2 +1,5 @@
-P n -> n = m -> P m?
++-<=-compat-l
++-<=-compat-r
++-<-compat-l
++-<-compat-r
 combinator

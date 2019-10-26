@@ -1,0 +1,35 @@
+Please refer to definitions~(\ref{logic:def:single:var:substitution})
+and~(\ref{logic:def:single:var:permutation}) for the notations $[y/x]$ 
+(the {\em substitution of $y$ in place of $x$}) and 
+$[y\!:\!x]$ (the  {\em permutation of $x$ and $y$}).
+
+\begin{prop}\label{logic:prop:LAM:permutation:is:substitution}
+Let $V$ be a set and $x,y\in V$. Let $\phi\in\tv$. Then, we have:
+    \[
+    y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x]=\phi[y\!:\!x]
+    \]
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:single:composition}
+Let $V$ be a set and $x,y,z\in V$. Then for all $\phi\in\tv$:
+    \[
+    y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x][z/y]=\phi[z/x]
+    \]
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:inplaceof:notvar}
+Let $V$ be a set, $x,y\in V$ with $x\neq y$. Then for all $\phi\in\tv$:
+    \[
+    x\not\in\var(\phi[y/x])
+    \]
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
