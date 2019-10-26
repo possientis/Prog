@@ -2,6 +2,7 @@ CORE=Core
 
 all :							${CORE}/Nat.vo \
 								${CORE}/Set.vo \
+								${CORE}/Decidability.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
 								${CORE}/Incl.vo \
@@ -23,6 +24,11 @@ ${CORE}/Nat.vo : 				${CORE}/Nat.v
 ${CORE}/Set.vo : 				${CORE}/Set.v
 	coqc ${CORE}/Set.v -R ${CORE} ${CORE}
 
+
+${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
+								${CORE}/Set.vo
+	coqc ${CORE}/Decidability.v -R ${CORE} ${CORE}
+	
 
 ${CORE}/Order.vo :				${CORE}/Order.v \
 								${CORE}/Nat.vo \
