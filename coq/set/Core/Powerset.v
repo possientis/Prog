@@ -7,6 +7,8 @@ Require Import Core.Equal.
 Require Import Core.ToList.
 Require Import Core.ElemIncl.
 Require Import Core.Extensionality.
+Require Import Core.Decidability. 
+
 
 
 
@@ -16,7 +18,6 @@ Fixpoint P (xs:set) : set :=
     | Cons x xs => fromList (toList (P xs) ++ map (Cons x) (toList (P xs)))
     end.
 
-(* looks like we need decidable (::)                                            *)
 (*
 Lemma Powerset_charac : forall (xs z:set), z :: P xs <-> z <== xs.
 Proof.
@@ -42,7 +43,8 @@ Proof.
                         { assumption. }
                         { split; apply incl_refl. }}
                     { assumption. }}} 
-        + intros H.
+        + intros H. destruct (elem_dec x z) as [H'|H'].
+            {
 
 
 Show.

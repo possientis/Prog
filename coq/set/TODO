@@ -1,4 +1,1 @@
-filter_nil: rewrite proof in terms of filter_equiv
-incl_n_dec (Core)
-decidability of  <==, ==, ::
 powerset

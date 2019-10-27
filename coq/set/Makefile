@@ -2,7 +2,6 @@ CORE=Core
 
 all :							${CORE}/Nat.vo \
 								${CORE}/Set.vo \
-								${CORE}/Decidability.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
 								${CORE}/Incl.vo \
@@ -12,6 +11,7 @@ all :							${CORE}/Nat.vo \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Extensionality.vo \
+								${CORE}/Decidability.vo \
 								${CORE}/Pairing.vo \
 								${CORE}/Empty.vo \
 								${CORE}/Union.vo
@@ -24,11 +24,6 @@ ${CORE}/Nat.vo : 				${CORE}/Nat.v
 ${CORE}/Set.vo : 				${CORE}/Set.v
 	coqc ${CORE}/Set.v -R ${CORE} ${CORE}
 
-
-${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
-								${CORE}/Set.vo
-	coqc ${CORE}/Decidability.v -R ${CORE} ${CORE}
-	
 
 ${CORE}/Order.vo :				${CORE}/Order.v \
 								${CORE}/Nat.vo \
@@ -43,7 +38,6 @@ ${CORE}/Core.vo :				${CORE}/Core.v \
 	coqc ${CORE}/Core.v -R ${CORE} ${CORE}
 
 
-
 ${CORE}/Incl.vo :				${CORE}/Incl.v \
 								${CORE}/Nat.vo \
 								${CORE}/Set.vo \
@@ -51,12 +45,13 @@ ${CORE}/Incl.vo :				${CORE}/Incl.v \
 								${CORE}/Core.vo
 	coqc ${CORE}/Incl.v -R ${CORE} ${CORE}
 
-
+	
 ${CORE}/Elem.vo :				${CORE}/Elem.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo
 	coqc ${CORE}/Elem.v -R ${CORE} ${CORE}
 		
+
 
 ${CORE}/ToList.vo :				${CORE}/ToList.v \
 								${CORE}/Nat.vo \
@@ -104,6 +99,17 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 	coqc ${CORE}/Extensionality.v -R ${CORE} ${CORE}
 
 
+${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
+								${CORE}/Set.vo \
+								${CORE}/Order.vo \
+								${CORE}/Core.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Extensionality.vo
+	coqc ${CORE}/Decidability.v -R ${CORE} ${CORE}
+
+
 ${CORE}/Pairing.vo :			${CORE}/Pairing.v \
 								${CORE}/Set.vo
 	coqc ${CORE}/Pairing.v -R ${CORE} ${CORE}
@@ -123,6 +129,6 @@ ${CORE}/Union.vo :				${CORE}/Union.v \
 								${CORE}/Equal.vo \
 								${CORE}/Empty.vo \
 								${CORE}/ToList.vo \
-								${CORE}/Extensionality.v
+								${CORE}/Extensionality.vo
 	coqc ${CORE}/Union.v -R ${CORE} ${CORE}
 
