@@ -145,13 +145,13 @@ proposition~(\ref{logic:prop:freevar:of:substitution:inclusion})
 which requires stronger assumptions but leads to an equality rather
 than mere inclusion:
 \begin{prop}\label{logic:prop:freevar:of:substitution}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$ be such that $\sigma_{|\var(\phi)}$ is an injective
-map. Then, we have:
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$ 
+    be such that $\sigma_{|\var(\phi)}$ is an injective map. Then, we have:
     \[
-    \free(\sigma(\phi))=\sigma(\free(\phi))
+        \free(\sigma(\phi))=\sigma(\free(\phi))
     \]
-where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated substitution mapping.
+    where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated substitution 
+    mapping.
 \end{prop}
 \begin{proof}
 Given $\phi\in\pv$ such that $\sigma_{|\var(\phi)}$ is injective, we
@@ -231,13 +231,18 @@ variable substitution mapping $\sigma=[y/x]$. We require that
 $y\not\in\var(\phi)$ to guarantee the injectivity of the map
 $\sigma_{|\var(\phi)}$.
 \begin{prop}\label{logic:prop:freevar:single:subst}
-Let $V$ be a set, $\phi\in\pv$, $x,y\in V$  with $y\not\in\var(\phi)$. Then:
+    Let $V$ be a set, $\phi\in\pv$, $x,y\in V$ with $y\not\in\var(\phi)$. Then:
     \[
-    \free(\phi[y/x])=\left\{\begin{array}{lcl}
-    \free(\phi)\setminus\{x\}\cup\{y\}&\mbox{\ if\ }&x\in\free(\phi)\\
-    \free(\phi)&\mbox{\ if\ }&x\not\in\free(\phi)
-    \end{array}
-    \right.
+        \free(\phi[y/x])=
+            \left\{\begin{array}{lcl}
+                \free(\phi)\setminus\{x\}\cup\{y\}
+                    &\mbox{\ if\ }&
+                x\in\free(\phi)
+                \\
+                \free(\phi)
+                    &\mbox{\ if\ }&
+                x\not\in\free(\phi)
+            \end{array}\right.
     \]
 \end{prop}
 \begin{proof}

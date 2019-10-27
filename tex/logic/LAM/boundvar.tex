@@ -1,0 +1,47 @@
+\begin{defin}\label{logic:def:LAM:bound:variable}
+    Let $V$ be a set. The map $\bound:\tv\to {\cal P}(V)$ defined by the
+    following structural recursion is called {\em bound variable mapping on \tv}:
+    \begin{equation}\label{logic:eqn:LAM:bound:var:recursion}
+        \forall\phi\in\tv\ ,\ \bound(\phi)=
+            \left\{\begin{array}{lcl}
+                \emptyset&\mbox{\ if\ }&\phi=x
+                \\
+                \bound(\phi_{1})\cup\bound(\phi_{2}) 
+                    &\mbox{\ if\ }&
+                \phi=\phi_{1}\ \phi_{2}
+                \\
+                \{x\}\cup\bound(\phi_{1})&\mbox{\ if\ }&\phi=\lambda x\phi_{1}
+            \end{array}\right.
+    \end{equation}
+    We say that $x\in V$ is a {\em bound variable} of $\phi\in\tv$ \ifand\ 
+    $x\in\bound(\phi)$.
+\end{defin}
+
+\begin{prop}\label{logic:prop:LAM:bound:variable}
+    The structural recursion of {\em 
+    definition~(\ref{logic:def:LAM:bound:variable})} is legitimate.
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:boundvar:free}
+    Let $V$ be a set and $\phi\in\tv$. Then we have:
+    \begin{equation}\label{logic:eqn:LAM:boundvar:free:1}
+        \var(\phi)=\free(\phi)\cup\bound(\phi)
+    \end{equation}
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:boundvar:subformula}
+    Let $V$ be a set and $\phi,\psi\in\tv$. Then we have:
+    \[
+        \psi\preceq\phi\ \Rightarrow\ \bound(\psi)\subseteq\bound(\phi)
+    \]
+\end{prop}
+\begin{proof}
+TODO
+\end{proof}
+

@@ -2,10 +2,13 @@
 {-# LANGUAGE TypeOperators          #-}
 {-# LANGUAGE KindSignatures         #-}
 {-# LANGUAGE FlexibleContexts       #-}
+{-# LANGUAGE DefaultSignatures      #-}
+{-# LANGUAGE DeriveAnyClass         #-}
 
 module  GenericEq
     (   GEq     (..)
     ,   Foo     (..)
+    ,   MyEq    (..)
     )   where
 
 
@@ -40,25 +43,24 @@ instance GEq a => GEq (M1 _x _y a) where
 genericEq :: (Generic a, GEq (Rep a)) => a -> a -> Bool
 genericEq x y = geq (from x) (from y)
 
+instance (Eq a, Eq b, Eq c) => Eq (Foo a b c) where
+    (==) = genericEq
+
+class MyEq a where
+    eq :: a -> a -> Bool
+    default eq
+        :: (Generic a, GEq (Rep a))
+        => a
+        -> a
+        -> Bool
+    eq a b = geq (from a) (from b)
+
 data Foo a b c
     = F0
     | F1 a
     | F2 b c
-    deriving (Generic)
+    deriving (Generic, MyEq) -- need recent version of ghc
 
-instance (Eq a, Eq b, Eq c) => Eq (Foo a b c) where
-    (==) = genericEq
-
-
-
-main :: IO ()
-main = do
-    print $ genericEq True  True
-    print $ genericEq True  False
-    print $ genericEq False True
-    print $ genericEq False False
-    print $ genericEq "hello" "hello"
-    print $ genericEq "hello" "Hello"
 
 
 

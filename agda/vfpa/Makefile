@@ -22,7 +22,8 @@ all:					void.agdai \
 						bst.agdai \
 						z.agdai \
 						reflect-list.agdai \
-						combinator.agdai
+						combinator.agdai \
+						vcombinator.agdai
 
 void.agdai : 			void.agda
 	agda void.agda
@@ -49,6 +50,8 @@ nat.agdai :				nat.agda \
 	agda nat.agda
 
 plus.agdai :			plus.agda \
+						le.agdai \
+						lt.agdai \
 						id.agdai \
 						nat.agdai
 	agda plus.agda
@@ -179,3 +182,8 @@ combinator.agdai :		combinator.agda \
 						nat.agdai \
 						bool.agdai
 	agda combinator.agda
+
+vcombinator.agdai :		vcombinator.agda \
+						nat.agdai
+	agda vcombinator.agda
+	

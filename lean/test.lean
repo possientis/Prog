@@ -52,7 +52,5 @@ open list
 #check (2:ℤ)
 
 
- 
-
 
 

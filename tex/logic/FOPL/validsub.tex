@@ -150,7 +150,7 @@ proposition~(\ref{logic:prop:freevar:of:substitution}), it is
 sufficient to prove that $\sigma_{|\var(\psi)}$ is injective. Since
 $\sigma_{|\var(\phi)}$ is injective, it is sufficient to show that
 $\var(\psi)\subseteq\var(\phi)$ which follows from $\psi\preceq\phi$
-and proposition~(\ref{logic:prop:FOBL:variable:subformula}).
+and proposition~(\ref{logic:prop:FOPL:variable:subformula}).
 \end{proof}
 
 If it is meaningful to speak of $\sigma(\phi_{1})$ and
@@ -532,7 +532,7 @@ $\tau(x)\in\free(\tau(\psi))$. However from
 proposition~(\ref{logic:prop:substitution:support}) and the equality
 $\sigma(\phi)=\tau(\phi)$ we see that $\sigma$ and $\tau$ coincide
 on $\var(\phi)$. Furthermore from
-proposition~(\ref{logic:prop:FOBL:variable:subformula}) we have
+proposition~(\ref{logic:prop:FOPL:variable:subformula}) we have
 $\var(\psi)\subseteq\var(\phi)$. It follows that $\sigma$ and $\tau$
 coincide on $\var(\psi)$ and in particular $\sigma(x)=\tau(x)$.
 Using proposition~(\ref{logic:prop:substitution:support}) we also
@@ -560,7 +560,7 @@ x\phi_{1}\preceq\phi$. Using
 proposition~(\ref{logic:prop:FOPL:validsub:criterion}), given
 $u\in\free(\forall x\phi_{1})$ we need to show that
 $\sigma(u)\neq\sigma(x)$. However, from
-proposition~(\ref{logic:prop:FOBL:boundvar:subformula}) we have
+proposition~(\ref{logic:prop:FOPL:boundvar:subformula}) we have
 $\bound(\forall x\phi_{1})\subseteq\bound(\phi)$ and consequently
 $x\in\bound(\phi)$. From the assumption~$(i)$ it follows that $x\in
 V_{0}$. We shall now distinguish two cases: first we assume that
@@ -568,7 +568,7 @@ $u\in V_{0}$. Then from assumption~$(ii)$, in order to show
 $\sigma(u)\neq\sigma(x)$ it is sufficient to prove that $u\neq x$
 which follows from $u\in\free(\forall x\phi_{1})$. We now assume
 that $u\not\in V_{0}$. However, from
-proposition~(\ref{logic:prop:FOBL:variable:subformula}) we have
+proposition~(\ref{logic:prop:FOPL:variable:subformula}) we have
 $\var(\forall x\phi_{1})\subseteq\var(\phi)$ and consequently
 $u\in\var(\phi)$. It follows that $u\in\var(\phi)\setminus V_{0}$.
 Hence, we see that $\sigma(u)\neq\sigma(x)$ is a consequence of

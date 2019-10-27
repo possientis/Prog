@@ -1,6 +1,7 @@
 module plus where
 
 open import le
+open import lt
 open import id
 open import nat
 
@@ -34,10 +35,17 @@ m-≤-n+m : (n m : ℕ) → m ≤ n + m
 m-≤-n+m zero m     = ≤-refl _
 m-≤-n+m (succ n) m = le-s (m-≤-n+m _ _)
 
-{-
 +-≤-compat-l : {n m : ℕ} (p : ℕ) → n ≤ m → p + n ≤ p + m
-+-≤-compat-l p (le-n n) = ≤-refl _
-+-≤-compat-l zero (le-s q) = le-s q
-+-≤-compat-l {n} {m} (succ p) (le-s q) = ≤-n-s
-  (leibniz (λ x → p + n ≤ x) {!!} {!n+sm≡sn+m!})
--}
++-≤-compat-l {n} {m} zero q = q
++-≤-compat-l {n} {m} (succ p) q = ≤-n-s (+-≤-compat-l p q)
+
++-≤-compat-r : {n m : ℕ} (p : ℕ) → n ≤ m → n + p ≤ m + p
++-≤-compat-r p (le-n n) = ≤-refl _
++-≤-compat-r p (le-s q) = le-s (+-≤-compat-r p q)
+
++-<-compat-l : {n m : ℕ} (p : ℕ) → n < m → p + n < p + m
++-<-compat-l zero q = q
++-<-compat-l (succ p) q = <-n-s (+-<-compat-l p q)
+
++-<-compat-r : {n m : ℕ} (p : ℕ) → n < m → n + p < m + p
++-<-compat-r p q = +-≤-compat-r p q

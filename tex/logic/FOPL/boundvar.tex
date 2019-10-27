@@ -12,24 +12,28 @@ a free variable, as is the case for the formula:
 \index{bound@Bound variables of formula}\index{bound@$\bound(\phi)$
 : bound variables of $\phi$}
 \begin{defin}\label{logic:def:bound:variable}
-Let $V$ be a set. The map $\bound:\pv\to {\cal P}(V)$ defined by the
-following structural recursion is called {\em bound variable mapping
-on \pv}:
- \begin{equation}\label{logic:eqn:bound:var:recursion}
-    \forall\phi\in\pv\ ,\ \bound(\phi)=\left\{
-                    \begin{array}{lcl}
-                    \emptyset&\mbox{\ if\ }&\phi=(x\in y)\\
-                    \emptyset&\mbox{\ if\ }&\phi=\bot\\
-                    \bound(\phi_{1})\cup\bound(\phi_{2}) &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
-                    \{x\}\cup\bound(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
-                    \end{array}\right.
+    Let $V$ be a set. The map $\bound:\pv\to {\cal P}(V)$ defined by the
+    following structural recursion is called {\em bound variable mapping on \pv}:
+    \begin{equation}\label{logic:eqn:bound:var:recursion}
+        \forall\phi\in\pv\ ,\ \bound(\phi)=
+            \left\{\begin{array}{lcl}
+                \emptyset&\mbox{\ if\ }&\phi=(x\in y)
+                \\
+                \emptyset&\mbox{\ if\ }&\phi=\bot
+                \\
+                \bound(\phi_{1})\cup\bound(\phi_{2}) 
+                    &\mbox{\ if\ }&
+                \phi=\phi_{1}\to\phi_{2}
+                \\
+                \{x\}\cup\bound(\phi_{1})&\mbox{\ if\ }&\phi=\forall x\phi_{1}
+            \end{array}\right.
     \end{equation}
-We say that $x\in V$ is a {\em bound variable} of $\phi\in\pv$
-\ifand\ $x\in\bound(\phi)$.
+    We say that $x\in V$ is a {\em bound variable} of $\phi\in\pv$ \ifand\ 
+    $x\in\bound(\phi)$.
 \end{defin}
 \begin{prop}\label{logic:prop:bound:variable}
-The structural recursion of {\em
-definition~(\ref{logic:def:bound:variable})} is legitimate.
+    The structural recursion of {\em definition~(\ref{logic:def:bound:variable})} 
+    is legitimate.
 \end{prop}
 \begin{proof}
 We need to show the existence and uniqueness of $\bound:\pv\to{\cal
@@ -104,7 +108,7 @@ bound variables of $\phi$. Note that this property is not true of
 free variables since $\free(\phi_{1})\not\subseteq\free(\forall
 x\phi_{1}))$ in general.
 
-\begin{prop}\label{logic:prop:FOBL:boundvar:subformula}
+\begin{prop}\label{logic:prop:FOPL:boundvar:subformula}
 Let $V$ be a set and $\phi,\psi\in\pv$. Then we have:
     \[
     \psi\preceq\phi\ \Rightarrow\ \bound(\psi)\subseteq\bound(\phi)
