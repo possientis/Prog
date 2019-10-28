@@ -1,6 +1,7 @@
 CORE=Core
 
 all :							${CORE}/Nat.vo \
+								${CORE}/Filter.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
@@ -19,6 +20,10 @@ all :							${CORE}/Nat.vo \
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
+
+
+${CORE}/Filter.vo : 			${CORE}/Filter.v
+	coqc ${CORE}/Filter.v -R ${CORE} ${CORE}
 
 
 ${CORE}/Set.vo : 				${CORE}/Set.v
@@ -100,6 +105,7 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 
 
 ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
+								${CORE}/Filter.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \

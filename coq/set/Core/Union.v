@@ -12,8 +12,10 @@ Require Import Core.Extensionality.
 (* This definition will be shown to be strictly equivalent to the usual one     *)
 Definition union2 (xs ys:set) : set := fromList (toList xs ++ toList ys).
 
+Notation "x \/ y" := (union2 x y) : set_scope.
+
 Lemma union2_charac : forall (xs ys z:set), 
-    z :: union2 xs ys <-> z :: xs \/ z :: ys.
+    z :: (xs \/ ys) <-> z :: xs \/ z :: ys.
 Proof.
     induction xs as [|x _ xs IH]. 
     - intros ys z. split.
@@ -64,7 +66,7 @@ Proof.
 Qed.
 
 (* Our definition of the union of two sets is strictly the usual one            *) 
-Lemma union2_union : forall (x y:set), union2 x y = union {x,y}.
+Lemma union2_union : forall (x y:set), (x \/ y) = union {x,y}.
 Proof.
     intros x y. unfold union2, pair, union, union2.
     rewrite toListFromList. simpl. rewrite app_nil_r. reflexivity.

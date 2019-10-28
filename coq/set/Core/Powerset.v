@@ -6,8 +6,8 @@ Require Import Core.Elem.
 Require Import Core.Equal.
 Require Import Core.ToList.
 Require Import Core.ElemIncl.
-Require Import Core.Extensionality.
 Require Import Core.Decidability. 
+Require Import Core.Extensionality.
 
 
 
@@ -17,6 +17,7 @@ Fixpoint P (xs:set) : set :=
     | Nil       => { Nil }
     | Cons x xs => fromList (toList (P xs) ++ map (Cons x) (toList (P xs)))
     end.
+
 
 (*
 Lemma Powerset_charac : forall (xs z:set), z :: P xs <-> z <== xs.
