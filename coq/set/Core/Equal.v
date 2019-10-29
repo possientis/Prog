@@ -32,3 +32,13 @@ Proof.
     - apply H2, H4. assumption.
 Qed.
 
+Lemma equal_l : forall (x y z:set), x == y -> x :: z -> y :: z.
+Proof.
+    intros x y z [H1 H2] H. apply H2. assumption.
+Qed.
+
+Lemma equal_r : forall (x y z:set), x == y -> z :: x -> z :: y.
+Proof.
+    intros x y z [H1 H2] H. apply H1. assumption.
+Qed.
+

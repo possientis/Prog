@@ -15,7 +15,8 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Decidability.vo \
 								${CORE}/Pairing.vo \
 								${CORE}/Empty.vo \
-								${CORE}/Union.vo
+								${CORE}/Union.vo \
+								${CORE}/Intersection.vo
 
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
@@ -138,3 +139,16 @@ ${CORE}/Union.vo :				${CORE}/Union.v \
 								${CORE}/Extensionality.vo
 	coqc ${CORE}/Union.v -R ${CORE} ${CORE}
 
+
+${CORE}/Intersection.vo :		${CORE}/Intersection.v \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Empty.vo \
+								${CORE}/Filter.vo \
+								${CORE}/ToList.vo \
+								${CORE}/Decidability.vo \
+								${CORE}/Extensionality.vo
+
+	coqc ${CORE}/Intersection.v -R ${CORE} ${CORE}
