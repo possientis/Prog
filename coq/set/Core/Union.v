@@ -73,7 +73,7 @@ Proof.
 Qed.
 
 (* The union axiom is satisfied in 'set'                                        *)
-Theorem union_axiom : forall (xs:set), exists (y:set), forall (z:set),
-    z :: y <-> exists (x:set), z :: x /\ x :: xs.
-Proof. intros xs. exists (union xs). apply union_charac. Qed.
+Theorem union_axiom : forall (x:set), exists (y:set), forall (z:set),
+    z :: y <-> exists (u:set), z :: u /\ u :: x.
+Proof. intros x. exists (union x). apply union_charac. Qed.
 

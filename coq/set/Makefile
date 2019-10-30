@@ -16,7 +16,8 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Pairing.vo \
 								${CORE}/Empty.vo \
 								${CORE}/Union.vo \
-								${CORE}/Intersection.vo
+								${CORE}/Intersection.vo \
+								${CORE}/Powerset.vo
 
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
@@ -152,3 +153,19 @@ ${CORE}/Intersection.vo :		${CORE}/Intersection.v \
 								${CORE}/Extensionality.vo
 
 	coqc ${CORE}/Intersection.v -R ${CORE} ${CORE}
+
+
+${CORE}/Powerset.vo :			${CORE}/Powerset.v \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Empty.vo \
+								${CORE}/ToList.vo \
+								${CORE}/ElemIncl.vo \
+								${CORE}/Intersection.vo \
+								${CORE}/Decidability.vo \
+								${CORE}/Extensionality.vo
+
+	coqc ${CORE}/Powerset.v -R ${CORE} ${CORE}
+

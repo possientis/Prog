@@ -4,6 +4,7 @@ Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
+Require Import Core.Empty.
 Require Import Core.ToList.
 Require Import Core.ElemIncl.
 Require Import Core.Intersection.
@@ -11,20 +12,23 @@ Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
 
-
-
+(* Defining the power set of a set, i.e. the set of its subsets                 *)
 Fixpoint P (xs:set) : set :=
     match xs with
     | Nil       => { Nil }
     | Cons x xs => fromList (toList (P xs) ++ map (Cons x) (toList (P xs)))
     end.
 
-
-(*
-Lemma Powerset_charac : forall (xs z:set), z :: P xs <-> z <== xs.
+Lemma powerset_charac : forall (xs z:set), z :: P xs <-> z <== xs.
 Proof.
     induction xs as [|x _ xs IH].
-    - admit.
+    - intros z. split; simpl; intros H. 
+        + apply consElem in H. destruct H as [H|H].
+            { apply doubleIncl in H. destruct H as [H1 H2]. assumption. }
+            { exfalso. apply empty_charac in H. assumption. }
+        + apply consElem. left. apply doubleIncl. split.
+            { assumption. }
+            { apply incl_Nil. }
     - intros z. simpl. split.
         + intros H. apply toListElem in H. rewrite toListFromList in H.
           destruct H as [z' [H1 [H2 H3]]]. apply in_app_or in H1.
@@ -74,7 +78,21 @@ Proof.
                             { apply (elemIncl y z'); assumption. }
                           rewrite E in H5. apply inter_charac in H5.
                           destruct H5 as [H5 H6]. assumption. }}}}
-            {
+            { assert (z <== xs) as H1.
+                { apply elemIncl. intros u H2. assert (u :: Cons x xs) as H3.
+                    { apply (elemIncl z (Cons x xs)); assumption. }
+                  apply consElem in H3. destruct H3 as [H3|H3].
+                    { exfalso. apply H'. apply equal_l with u; assumption. }
+                    { assumption. }}
+              apply IH in H1. apply toListElem in H1. 
+              destruct H1 as [y [H1 H2]]. apply toListElem. exists y. split.
+                { rewrite toListFromList. apply in_or_app. left. assumption. }
+                { assumption. }}
+Qed.
 
-Show.
-*)
+(* The power set axiom is satisfied in 'set'                                    *)
+Theorem powerset : forall (x:set), exists (y:set), forall (z:set),
+    z :: y <-> z <== x.
+Proof.
+    intros x. exists (P x). apply powerset_charac.
+Qed.
