@@ -1,0 +1,11 @@
+\begin{defin}\label{logic:def:LAM:valid:substitution}
+    Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
+    $\phi\in\tv$. We say that $\sigma$ is {\em valid for} $\phi$ \ifand\
+    for every sub-formula $\psi\preceq\phi$ we have:
+    \[
+        x\in\free(\psi)\ \Rightarrow\ \sigma(x)\in\free(\sigma(\psi))
+    \]
+    where $\sigma:\tv\to{\bf T}(W)$ also denotes the associated substitution 
+    mapping.
+\end{defin}
+

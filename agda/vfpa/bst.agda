@@ -9,7 +9,7 @@ module bst {ℓ ℓ'} {a : Set ℓ}
   (≤-trans : transitive _≤_)
   (≤-total : total _≤_)
   (≤-dec   : decidable _≤_)
-  (≡-dec   : eq_decidable a)
+  (≡-dec   : eq-decidable a)
   where
 
 open import Agda.Primitive

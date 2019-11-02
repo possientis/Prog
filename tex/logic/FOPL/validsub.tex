@@ -76,14 +76,14 @@ So in the light of this discussion we shall attempt the following:
 \index{valid@Valid substitution for
 formula}\index{capture@Capture-avoiding substitution}
 \begin{defin}\label{logic:def:FOPL:valid:substitution}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$. We say that $\sigma$ is {\em valid for} $\phi$ \ifand\
-for every sub-formula $\psi\preceq\phi$ we have:
+    Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
+    $\phi\in\pv$. We say that $\sigma$ is {\em valid for} $\phi$ \ifand\
+    for every sub-formula $\psi\preceq\phi$ we have:
     \[
-    x\in\free(\psi)\ \Rightarrow\ \sigma(x)\in\free(\sigma(\psi))
+        x\in\free(\psi)\ \Rightarrow\ \sigma(x)\in\free(\sigma(\psi))
     \]
-where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated
-substitution mapping.
+    where $\sigma:\pv\to{\bf P}(W)$ also denotes the associated substitution 
+    mapping.
 \end{defin}
 Recall that the notion of sub-formula and the relation
 $\psi\preceq\phi$ are defined in

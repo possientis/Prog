@@ -59,7 +59,7 @@ if-then-else-same x ff = refl x
 &&-and : ∀ {b1 b2 : 𝔹} → b1 ≡ tt → b2 ≡ tt → b1 && b2 ≡ tt
 &&-and (refl _) (refl _) = refl _
 
-𝔹-dec : eq_decidable 𝔹
+𝔹-dec : eq-decidable 𝔹
 𝔹-dec tt tt = left (refl _)
 𝔹-dec tt ff = right λ p → 𝔹-contra (≡-sym p)
 𝔹-dec ff tt = right 𝔹-contra

@@ -46,6 +46,7 @@ id.agdai : 				id.agda \
 
 nat.agdai :				nat.agda \
 						id.agdai \
+						sum.agdai \
 						void.agdai 
 	agda nat.agda
 

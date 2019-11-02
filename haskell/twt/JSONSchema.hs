@@ -1,12 +1,24 @@
+{-# LANGUAGE DataKinds              #-}
+{-# LANGUAGE TypeFamilies           #-}
+{-# LANGUAGE TypeOperators          #-}
+{-# LANGUAGE DeriveGeneric          #-}
 {-# LANGUAGE KindSignatures         #-}
+{-# LANGUAGE FlexibleContexts       #-}
+{-# LANGUAGE TypeApplications       #-}
+{-# LANGUAGE OverloadedStrings      #-}
+{-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 {-# LANGUAGE ScopedTypeVariables    #-}
-{-# LANGUAGE TypeApplications       #-}
+{-# LANGUAGE UndecidableInstances   #-}
+
+module JSONSchema where
 
 import Data.Kind
 import Data.Text
 import Data.Aeson
 import GHC.TypeLits
+import GHC.TypeLits
+import Data.Typeable
 import Control.Monad.Writer
 
 class GSchema (a :: Type -> Type) where

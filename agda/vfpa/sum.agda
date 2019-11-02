@@ -12,9 +12,8 @@ data _∨_ {ℓ ℓ'} (a : Set ℓ) (b : Set ℓ') : Set (ℓ ⊔ ℓ') where
 
 infixl 5 _∨_
 
-eq_decidable : ∀ {ℓ} (a : Set ℓ) → Set ℓ
-eq_decidable a = ∀ (x y : a) → (x ≡ y) ∨ ¬(x ≡ y)
-
+eq-decidable : ∀ {ℓ} (a : Set ℓ) → Set ℓ
+eq-decidable a = ∀ (x y : a) → (x ≡ y) ∨ ¬(x ≡ y)
 
 
 

@@ -6,6 +6,7 @@ Inductive HList (a:Type) (b:a -> Type) : list a -> Type :=
 | HCons : forall (x:a) (xs:list a), b x -> HList a b xs -> HList a b (x :: xs)
 .
 
+
 Arguments HList {a}.
 Arguments HNil {a} {b}.
 Arguments HCons {a} {b} {x} {xs}.
@@ -19,3 +20,4 @@ Inductive Elem (a:Type) (x:a) : list a -> Type :=
 Arguments Elem {a}.
 Arguments HFirst {a} {x} {xs}.
 Arguments HNext  {a} {x} {xs} {y}.
+
