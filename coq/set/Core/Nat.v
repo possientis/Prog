@@ -85,3 +85,14 @@ Proof.
     - apply plus_le_compat_l. assumption.
 Qed.
 
+
+Fixpoint maximum (xs:list nat) : nat :=
+    match xs with
+    | nil       => 0
+    | cons x xs => max x (maximum xs)
+    end.    
+
+Lemma max_n_0 : forall (n:nat), max n 0 = n.
+Proof.
+    destruct n as [|n]; reflexivity.
+Qed.
