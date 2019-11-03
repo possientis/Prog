@@ -91,9 +91,9 @@ definition~(\ref{logic:def:subformula}) of
 page~\pageref{logic:def:subformula}. An immediate consequence of
 definition~(\ref{logic:def:FOPL:valid:substitution}) is:
 \begin{prop}\label{logic:prop:FOPL:valid:subformula}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$. Then $\sigma$ is valid for $\phi$ \ifand\ it is valid
-for any sub-formula $\psi\preceq\phi$.
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$. 
+    Then $\sigma$ is valid for $\phi$ \ifand\ it is valid for any sub-formula 
+    $\psi\preceq\phi$.
 \end{prop}
 \begin{proof}
 Since $\phi\preceq\phi$, i.e. $\phi$ is a sub-formula of itself, the
@@ -110,11 +110,11 @@ sub-formula of $\phi$.
 Another immediate consequence of
 definition~(\ref{logic:def:FOPL:valid:substitution}) is:
 \begin{prop}\label{logic:prop:FOPL:valid:free:commute}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$. Then $\sigma$ is valid for $\phi$ \ifand\ for every
-sub-formula $\psi\preceq\phi$ we have:
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$. 
+    Then $\sigma$ is valid for $\phi$ \ifand\ for every sub-formula 
+    $\psi\preceq\phi$ we have:
     \[
-    \free(\sigma(\psi)) =\sigma(\free(\psi))
+        \free(\sigma(\psi)) =\sigma(\free(\psi))
     \]
 \end{prop}
 \begin{proof}
@@ -136,9 +136,9 @@ As anticipated, if $\sigma$ is injective on $\var(\phi)$ then it is
 valid for $\phi$:
 
 \begin{prop}\label{logic:prop:FOPL:valid:injective}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$ such that $\sigma_{|\var(\phi)}$ is an injective map.
-Then $\sigma$ is valid for $\phi$.
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$ 
+    such that $\sigma_{|\var(\phi)}$ is an injective map. Then $\sigma$ 
+    is valid for $\phi$.
 \end{prop}
 \begin{proof}
 Let $\sigma:V\to W$ be map and $\phi\in\pv$ such that the
@@ -162,10 +162,10 @@ should be sufficient to establish its validity both for $\phi_{1}$
 and $\phi_{2}$. The following proposition establishes that fact,
 which may be useful for structural induction arguments on \pv.
 \begin{prop}\label{logic:prop:FOPL:valid:recursion:imp}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$ of the form $\phi=\phi_{1}\to\phi_{2}$ with
-$\phi_{1},\phi_{2}\in\pv$. Then $\sigma$ is valid for $\phi$ \ifand\
-it is valid for both $\phi_{1}$ and $\phi_{2}$.
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$ 
+    of the form $\phi=\phi_{1}\to\phi_{2}$ with $\phi_{1},\phi_{2}\in\pv$. 
+    Then $\sigma$ is valid for $\phi$ \ifand\ it is valid for both $\phi_{1}$ 
+    and $\phi_{2}$.
 \end{prop}
 \begin{proof}
 Suppose $\sigma$ is valid for $\phi=\phi_{1}\to\phi_{2}$. From the
@@ -221,13 +221,12 @@ leads to the condition $u\in\free(\phi)\ \Rightarrow\
 \sigma(u)\neq\sigma(x)$.
 
 \begin{prop}\label{logic:prop:FOPL:valid:recursion:quant}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$ of the form $\phi=\forall x\phi_{1}$ with
-$\phi_{1}\in\pv$ and $x\in V$. Then $\sigma$ is valid for $\phi$
-\ifand\ it is valid for $\phi_{1}$ and for all $u\in V$ we have:
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$ 
+    of the form $\phi=\forall x\phi_{1}$ with $\phi_{1}\in\pv$ and $x\in V$. 
+    Then $\sigma$ is valid for $\phi$ \ifand\ it is valid for $\phi_{1}$ 
+    and for all $u\in V$ we have:
     \[
-    u\in\free(\forall x\phi_{1})\ \Rightarrow\
-    \sigma(u)\neq\sigma(x)
+        u\in\free(\forall x\phi_{1})\ \Rightarrow\ \sigma(u)\neq\sigma(x)
     \]
 \end{prop}
 \begin{proof}
@@ -302,13 +301,17 @@ to establish that $\sigma(u)$ is a free variable of $\sigma(\psi)$,
 but instead have to show that $\sigma(u)\neq\sigma(x)$ which is also
 a lot simpler.
 \begin{prop}\label{logic:prop:FOPL:validsub:criterion}
-Let $V$ and $W$ be sets and $\sigma:V\to W$ be a map. Let
-$\phi\in\pv$. Then $\sigma$ is valid for $\phi$ \ifand\ for all
-$\phi_{1}\in\pv$ and $x\in V$ we have:
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$. 
+    Then $\sigma$ is valid for $\phi$ \ifand\ for all $\phi_{1}\in\pv$ 
+    and $x\in V$ we have:
     \[
-    (\forall x\phi_{1}\preceq\phi)\ \Rightarrow\ [\
-    u\in\free(\forall x\phi_{1})\ \Rightarrow\
-    \sigma(u)\neq\sigma(x)\ ]
+        (\forall x\phi_{1}\preceq\phi)\ 
+            \Rightarrow\ 
+            [\ 
+                u\in\free(\forall x\phi_{1})\ 
+                    \Rightarrow\
+                \sigma(u)\neq\sigma(x)
+            \ ]
     \]
 \end{prop}
 \begin{proof}
@@ -388,10 +391,11 @@ The following proposition is a simple application of
 proposition~(\ref{logic:prop:FOPL:valid:injective}):
 
 \begin{prop}\label{logic:prop:FOPL:validsub:singlevar}
-Let $V$ be a set and $x,y\in V$. Let $\phi\in\pv$. Then we have:
+    Let $V$ be a set and $x,y\in V$. Let $\phi\in\pv$. Then we have:
     \[
-    y\not\in\var(\phi)\ \Rightarrow\ (\mbox{$[y/x]$ valid for
-    $\phi$})
+        y\not\in\var(\phi)\ 
+            \Rightarrow\ 
+        (\mbox{$[y/x]$ valid for $\phi$})
     \]
 \end{prop}
 \begin{proof}
@@ -416,15 +420,16 @@ valid for $\tau(\phi)$, but surprisingly $\tau$ itself is
 necessarily valid for $\phi$.
 
 \begin{prop}\label{logic:prop:FOPL:valid:composition}
-Let $U$, $V$, $W$ be sets and $\tau:U\to V$ and $\sigma:V\to W$ be
-maps. Then for all $\phi\in{\bf P}(U)$ we have the equivalence:
-\[
-    (\mbox{$\tau$ valid for $\phi$})\land(\mbox{$\sigma$ valid for
-    $\tau(\phi)$})\ \Leftrightarrow\ (\mbox{$\sigma\circ\tau$ valid for
-    $\phi$})
-\]
-where $\tau:{\bf P}(U)\to{\bf P}(V)$ also denotes the associated
-substitution mapping.
+    Let $U$, $V$, $W$ be sets and $\tau:U\to V$ and $\sigma:V\to W$ be
+    maps. Then for all $\phi\in{\bf P}(U)$ we have the equivalence:
+    \[
+        (\mbox{$\tau$ valid for $\phi$})\land(\mbox{$\sigma$ valid for
+        $\tau(\phi)$})\ 
+            \Leftrightarrow\ 
+        (\mbox{$\sigma\circ\tau$ valid for $\phi$})
+    \]
+    where $\tau:{\bf P}(U)\to{\bf P}(V)$ also denotes the associated
+    substitution mapping.
 \end{prop}
 \begin{proof}
 First we prove $\Rightarrow$: so we assume that $\tau$ is valid for
@@ -514,12 +519,13 @@ validity of $\sigma\circ\tau$ for $\phi=\forall x\phi_{1}$.
 
 
 \begin{prop}\label{logic:prop:FOPL:validsub:image}
-Let $V,W$ be sets and $\sigma,\tau:V\to W$ be maps. Let $\phi\in\pv$
-such that the equality $\sigma(\phi)=\tau(\phi)$ holds. Then we have
-the equivalence:
+    Let $V,W$ be sets and $\sigma,\tau:V\to W$ be maps. Let $\phi\in\pv$
+    such that the equality $\sigma(\phi)=\tau(\phi)$ holds. Then we have
+    the equivalence:
     \[
-    (\mbox{$\sigma$ valid for $\phi$})\ \Leftrightarrow\
-    (\mbox{$\tau$ valid for $\phi$})
+        (\mbox{$\sigma$ valid for $\phi$})\ 
+            \Leftrightarrow\
+        (\mbox{$\tau$ valid for $\phi$})
     \]
 \end{prop}
 \begin{proof}
@@ -543,16 +549,17 @@ $\sigma$ for $\phi$.
 
 The following proposition will appear later as a useful criterion:
 \begin{prop}\label{logic:prop:FOPL:validsub:minimalextension}
-Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$.
-We assume that there exists a subset $V_{0}\subseteq V$ with the
-following properties:
+    Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\pv$.
+    We assume that there exists a subset $V_{0}\subseteq V$ with the
+    following properties:
     \begin{eqnarray*}
-    (i)&&\bound(\phi)\subseteq V_{0}\\
-    (ii)&&\mbox{$\sigma_{|V_{0}}$ is injective}\\
-    (iii)&&\sigma(V_{0})\cap\sigma(\var(\phi)\setminus
-    V_{0})=\emptyset
+        (i)&&\bound(\phi)\subseteq V_{0}
+        \\
+        (ii)&&\mbox{$\sigma_{|V_{0}}$ is injective}
+        \\
+        (iii)&&\sigma(V_{0})\cap\sigma(\var(\phi)\setminus V_{0})=\emptyset
     \end{eqnarray*}
-Then the map $\sigma:V\to W$ is valid for the formula $\phi\in\pv$.
+    Then the map $\sigma:V\to W$ is valid for the formula $\phi\in\pv$.
 \end{prop}
 \begin{proof}
 Let $x\in V$ and $\phi_{1}\in\pv$ such that $\forall

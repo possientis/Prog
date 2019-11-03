@@ -14,3 +14,22 @@ lemma L3 : ∀ (p q:Prop), p ∨ q → q ∨ p :=
   λ p q h, or.elim h (or.intro_right q) (or.intro_left p)
 
 #check L3
+
+
+lemma L3' : ∀ (p q:Prop), p ∨ q → q ∨ p :=
+  λ p q h, or.elim h
+    (assume hp : p, show q ∨ p, from or.intro_right q hp)
+    (assume hq : q, show q ∨ p, from or.intro_left  p hq)
+
+#check L3'
+
+lemma L4 : ∀ (p q:Prop), p ∨ q → q ∨ p :=
+  λ p q h, or.elim h (λ hp, or.inr hp) (λ hq, or.inl hq)
+
+#check L4
+
+
+lemma L4' : ∀ (p q:Prop), p ∨ q → q ∨ p :=
+  λ p q h, h.elim (λ hp, or.inr hp) (λ hq, or.inl hq)
+
+#check L4'
