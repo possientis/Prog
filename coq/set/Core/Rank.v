@@ -1,8 +1,10 @@
+Require Import Le.
 Require Import List.
 
 Require Import Core.Nat.
 Require Import Core.Set.
 Require Import Core.Equal.
+Require Import Core.Decidability.
 
 Fixpoint rank (xs:set) : nat :=
     match xs with 
@@ -39,6 +41,16 @@ Qed.
 
 Lemma rank_compat : forall (x y:set), x == y -> rank x = rank y.
 Proof.
+    intros x y. remember (rank x) as n eqn:E. 
+    assert (rank x <= n) as H. { rewrite E. apply le_n. }
+    rewrite E. clear E. revert n x y H. induction n as [|n IH].
+    - admit. 
+    - intros x y H E. apply le_antisym.
+        + destruct (equal_dec x Nil) as [H1|H1].
+            { admit. }
+            { rewrite rank_maximum with x.
+                { rewrite rank_maximum with y.
+                    { apply le_n_S.
 
 Show.
 
