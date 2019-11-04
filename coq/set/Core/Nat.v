@@ -128,3 +128,14 @@ Proof.
         + apply IH. intros m Hm. apply H. right. assumption.
 Qed.
 
+Lemma maximum_ubound : forall (ns:list nat) (n:nat),
+    In n ns -> n <= maximum ns.
+Proof.
+    induction ns as [|n' ns IH].
+    - intros n H. inversion H.
+    - intros n [H|H].
+        + subst. apply n_le_max.
+        + apply le_trans with (maximum ns).
+            { apply IH. assumption. }
+            { apply m_le_max. }
+Qed.

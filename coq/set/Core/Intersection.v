@@ -24,7 +24,7 @@ Lemma inter_charac : forall (xs ys z:set),
 Proof.
     induction xs as [|x _ xs IH].
     - intros ys z. unfold inter. simpl. split.
-        + intros H. exfalso. apply empty_charac with z. assumption.
+        + intros H. exfalso. apply emptyCharac with z. assumption.
         + intros [H1 H2]. assumption.
     - intros ys z. split.
         + intros H. unfold inter in H. simpl in H.

@@ -6,6 +6,7 @@ Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
+Require Import Core.Empty.
 Require Import Core.ToList.
 Require Import Core.ElemIncl.
 Require Import Core.Decidability.
@@ -21,7 +22,7 @@ Fixpoint rank (xs:set) : nat :=
         end 
     end.
 (* The rank is 0 if and only if the set is empty                                *)
-Lemma rank_Nil : forall (x:set), rank x = 0 <-> x = Nil.
+Lemma rankNil : forall (x:set), rank x = 0 <-> x = Nil.
 Proof.
     intros x. destruct x as [|x xs]; split.
     - intros. reflexivity.
@@ -31,20 +32,33 @@ Proof.
 Qed.
 
 (* When not empty, the rank is 1 + the maximum of the ranks of the elements     *)
-Lemma rank_maximum : forall (x:set), x <> Nil -> 
+Lemma rankMaximum : forall (x:set), x <> Nil -> 
     rank x = S (maximum (map rank (toList x))).
 Proof.
     induction x as [|x IH1 xs IH2].
     - intros H. exfalso. apply H. reflexivity.
     - simpl. intros _. destruct (rank xs) as [|n] eqn:E.
-        + apply rank_Nil in E. rewrite E. simpl. rewrite max_n_0. reflexivity.
+        + apply rankNil in E. rewrite E. simpl. rewrite max_n_0. reflexivity.
         + assert (xs <> Nil) as H'.
             { intros H1. rewrite H1 in E. inversion E. }
           apply IH2 in H'. inversion H'. reflexivity.
 Qed.
 
+Lemma rankToList : forall (x xs:set), In x (toList xs) -> rank x < rank xs.
+Proof.
+    intros x xs H. destruct (set_eq_dec xs Nil) as [H'|H']. 
+    - rewrite H' in H. inversion H.
+    - rewrite (rankMaximum xs).
+        + unfold lt. apply le_n_S. apply maximum_ubound. apply in_map_iff.
+          exists x. split.
+            { reflexivity. }
+            { assumption. }
+        + assumption.
+Qed.
 
-Lemma rank_compat : forall (x y:set), x == y -> rank x = rank y.
+
+
+Lemma rankCompat : forall (x y:set), x == y -> rank x = rank y.
 Proof.
     intros x y. remember (rank x) as n eqn:E. 
     assert (rank x <= n) as H. { rewrite E. apply le_n. }
@@ -55,8 +69,8 @@ Proof.
       apply le_antisym.
         + destruct (equal_dec x Nil) as [H1|H1].
             { admit. }
-            { rewrite rank_maximum with x.
-                { rewrite rank_maximum with y.
+            { rewrite rankMaximum with x.
+                { rewrite rankMaximum with y.
                     { apply le_n_S. apply maximum_lub. intros m H2.
                       apply in_map_iff in H2. destruct H2 as [z [H2 H3]].
                       assert (z :: y) as H4.
@@ -65,9 +79,42 @@ Proof.
                             { apply toListElem. exists z. split.
                                 { assumption. }
                                 { split; apply incl_refl. }}}
-                        apply toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
-
-Show.
-
-
-
+                      apply toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
+                      rewrite <- H2. rewrite (IH z z').
+                        { apply maximum_ubound. apply in_map_iff. 
+                          exists z'. split.
+                            { reflexivity. }
+                            { assumption. }}
+                        { apply le_S_n. apply le_trans with (rank x).
+                            { apply rankToList. assumption. }
+                            { assumption. }}
+                        { apply doubleIncl. split; assumption. }}
+                    { intros H2. apply H1. rewrite <- H2. apply doubleIncl.
+                      split; assumption. }}
+                { intros H2. apply H1. rewrite H2. apply equal_refl. }}
+        + destruct (equal_dec y Nil) as [H1|H1].
+            { admit. }
+            { rewrite rankMaximum with x.
+                { rewrite rankMaximum with y.
+                    { apply le_n_S. apply maximum_lub. intros m H2.
+                      apply in_map_iff in H2. destruct H2 as [z [H2 H3]].
+                      assert (z :: x) as H4.
+                        { apply elemIncl with y.
+                            { assumption. }
+                            { apply toListElem. exists z. split.
+                                { assumption. }
+                                { split; apply incl_refl. }}}
+                      apply toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
+                      rewrite <- H2. rewrite <- (IH z' z).
+                        { apply maximum_ubound. apply in_map_iff.
+                          exists z'. split.
+                            { reflexivity. }
+                            { assumption. }}
+                        { apply le_S_n. apply le_trans with (rank x).
+                            { apply rankToList. assumption. }
+                            { assumption. }}
+                        { apply doubleIncl. split; assumption. }}
+                    { intros H2. apply H1. rewrite H2. apply equal_refl. }}
+                { intros H2. apply H1. rewrite <- H2. apply doubleIncl.
+                  split; assumption. }}
+Admitted.

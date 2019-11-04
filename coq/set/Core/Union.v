@@ -22,7 +22,7 @@ Proof.
         + intros H. unfold union2 in H. simpl in H. 
           rewrite fromListToList in H. right. assumption.
         + intros [H|H].
-            { exfalso. apply empty_charac in H. assumption. }
+            { exfalso. apply emptyCharac in H. assumption. }
             { unfold union2. simpl. rewrite fromListToList. assumption. }
     - intros ys z. unfold union2. simpl. split.
         + intros H. apply consElem in H. destruct H as [H|H].
@@ -49,8 +49,8 @@ Lemma union_charac : forall (xs z:set),
 Proof.
     induction xs as [|x _ xs IH].
     - intros z. simpl. split.
-        + intros H. exfalso. apply (empty_charac z). assumption.
-        + intros [x [H1 H2]]. exfalso. apply (empty_charac x). assumption.
+        + intros H. exfalso. apply (emptyCharac z). assumption.
+        + intros [x [H1 H2]]. exfalso. apply (emptyCharac x). assumption.
     - intros z. split.
         + simpl. intros H. apply union2_charac in H. destruct H as [H|H].
             { exists x. split.

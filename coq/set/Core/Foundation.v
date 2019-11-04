@@ -17,7 +17,7 @@ Definition minimal (x xs:set) : Prop :=
 Lemma coherence : forall (x y:set), x <== y -> ~ y :: x.
 Proof.
     induction x as [|x IH1 xs IH2].
-    - intros y _. apply empty_charac.
+    - intros y _. apply emptyCharac.
     - intros y H1 H2. apply consElem in H2. destruct H2 as [H2|H2].
         + apply (IH1 x).
             { apply incl_refl. }
@@ -51,7 +51,7 @@ Proof.
             { apply consElem. left. apply equal_refl. }
             { intros [y [H1 H2]]. apply consElem in H1. destruct H1 as [H1|H1].
                 { apply noSelfElem with x. apply equal_l with y; assumption. }
-                { apply empty_charac with y. apply equal_r with xs; assumption. }}
+                { apply emptyCharac with y. apply equal_r with xs; assumption. }}
         +
 
 Show.

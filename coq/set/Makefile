@@ -130,8 +130,12 @@ ${CORE}/Pairing.vo :			${CORE}/Pairing.v \
 
 ${CORE}/Empty.vo :				${CORE}/Empty.v \
 								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
-								${CORE}/ToList.vo
+								${CORE}/Equal.vo \
+								${CORE}/ToList.vo \
+								${CORE}/ElemIncl.vo \
+								${CORE}/Extensionality.vo
 	coqc ${CORE}/Empty.v -R ${CORE} ${CORE}
 
 

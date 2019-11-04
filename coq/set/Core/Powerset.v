@@ -25,7 +25,7 @@ Proof.
     - intros z. split; simpl; intros H. 
         + apply consElem in H. destruct H as [H|H].
             { apply doubleIncl in H. destruct H as [H1 H2]. assumption. }
-            { exfalso. apply empty_charac in H. assumption. }
+            { exfalso. apply emptyCharac in H. assumption. }
         + apply consElem. left. apply doubleIncl. split.
             { assumption. }
             { apply incl_Nil. }
