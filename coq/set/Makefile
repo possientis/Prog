@@ -119,7 +119,12 @@ ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
 
 
 ${CORE}/Pairing.vo :			${CORE}/Pairing.v \
-								${CORE}/Set.vo
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/ToList.vo \
+								${CORE}/Extensionality.vo
 	coqc ${CORE}/Pairing.v -R ${CORE} ${CORE}
 
 

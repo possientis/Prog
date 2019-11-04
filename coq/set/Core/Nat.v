@@ -1,5 +1,6 @@
 Require Import Le.
 Require Import Plus.
+Require Import List.
 
 Lemma le_0 : forall (n:nat), n <= 0 -> n = 0.
 Proof.
@@ -7,6 +8,14 @@ Proof.
     - intros _.  reflexivity.
     - intros H. inversion H. 
 Qed.
+
+Lemma le_0_n : forall (n:nat), 0 <= n.
+Proof.
+    induction n as [|n IH].
+    - apply le_n.
+    - apply le_S. assumption.
+Qed.
+
 
 Lemma sum_0 : forall (n m:nat), n + m = 0 -> n = 0 /\ m = 0.
 Proof.
@@ -41,6 +50,18 @@ Lemma m_le_max : forall (n m:nat), m <= max n m.
 Proof.
     intros n m. rewrite max_sym. apply n_le_max.
 Qed.
+
+Lemma max_lub : forall (n m N:nat), n <= N -> m <= N -> max n m <= N.
+Proof.
+    intros n m N. revert m N. induction n as [|n IH].
+    - simpl. intros. assumption.
+    - intros m N H1 H2. simpl. destruct m as [|m].
+        + assumption.
+        + destruct N as [|N].
+            { inversion H1. }
+            { apply le_n_S. apply IH; apply le_S_n; assumption. }
+Qed.
+
 
 Lemma weaken_r : forall (x y y' n:nat),
     (x + y' <= n) -> (y <= y') -> x + y <= n.
@@ -86,13 +107,24 @@ Proof.
 Qed.
 
 
-Fixpoint maximum (xs:list nat) : nat :=
-    match xs with
+Fixpoint maximum (ns:list nat) : nat :=
+    match ns with
     | nil       => 0
-    | cons x xs => max x (maximum xs)
+    | cons n ns => max n (maximum ns)
     end.    
 
 Lemma max_n_0 : forall (n:nat), max n 0 = n.
 Proof.
     destruct n as [|n]; reflexivity.
 Qed.
+
+Lemma maximum_lub : forall (ns:list nat) (N:nat), 
+    (forall (n:nat), In n ns -> n <= N) -> maximum ns <= N.
+Proof.
+    intros ns N. induction ns as [|n ns IH].
+    - intros _. apply le_0_n.
+    - intros H. simpl. apply max_lub.
+        + apply H. left. reflexivity.
+        + apply IH. intros m Hm. apply H. right. assumption.
+Qed.
+

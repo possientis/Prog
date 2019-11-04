@@ -3,8 +3,13 @@ Require Import List.
 
 Require Import Core.Nat.
 Require Import Core.Set.
+Require Import Core.Incl.
+Require Import Core.Elem.
 Require Import Core.Equal.
+Require Import Core.ToList.
+Require Import Core.ElemIncl.
 Require Import Core.Decidability.
+Require Import Core.Extensionality.
 
 Fixpoint rank (xs:set) : nat :=
     match xs with 
@@ -43,14 +48,24 @@ Lemma rank_compat : forall (x y:set), x == y -> rank x = rank y.
 Proof.
     intros x y. remember (rank x) as n eqn:E. 
     assert (rank x <= n) as H. { rewrite E. apply le_n. }
-    rewrite E. clear E. revert n x y H. induction n as [|n IH].
+    rewrite E. clear E. revert n x y H.  
+    induction n as [|n IH]. (* induction on n, rank x <= n *)
     - admit. 
-    - intros x y H E. apply le_antisym.
+    - intros x y H E. apply doubleIncl in E. destruct E as [E1 E2].
+      apply le_antisym.
         + destruct (equal_dec x Nil) as [H1|H1].
             { admit. }
             { rewrite rank_maximum with x.
                 { rewrite rank_maximum with y.
-                    { apply le_n_S.
+                    { apply le_n_S. apply maximum_lub. intros m H2.
+                      apply in_map_iff in H2. destruct H2 as [z [H2 H3]].
+                      assert (z :: y) as H4.
+                        { apply elemIncl with x.
+                            { assumption. }
+                            { apply toListElem. exists z. split.
+                                { assumption. }
+                                { split; apply incl_refl. }}}
+                        apply toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
 
 Show.
 
