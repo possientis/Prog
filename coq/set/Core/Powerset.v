@@ -28,7 +28,7 @@ Proof.
             { exfalso. apply emptyCharac in H. assumption. }
         + apply consElem. left. apply doubleIncl. split.
             { assumption. }
-            { apply incl_Nil. }
+            { apply inclNil. }
     - intros z. simpl. split.
         + intros H. apply toListElem in H. rewrite toListFromList in H.
           destruct H as [z' [H1 [H2 H3]]]. apply in_app_or in H1.

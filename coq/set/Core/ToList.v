@@ -57,7 +57,7 @@ Proof.
     intros xs. induction xs as [|x _ xs IH]. 
     - intros ys. split.
         + intros H1 z H2. inversion H2.
-        + intros. apply incl_Nil.
+        + intros. apply inclNil.
     - intros ys. split.
         + intros H1 z H2. unfold incl in H1. simpl in H1.
           destruct H1 as [H1 [y [H3 [H4 H5]]]].

@@ -17,7 +17,8 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Empty.vo \
 								${CORE}/Union.vo \
 								${CORE}/Intersection.vo \
-								${CORE}/Powerset.vo
+								${CORE}/Powerset.vo \
+								${CORE}/Rank.vo
 
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
@@ -178,3 +179,17 @@ ${CORE}/Powerset.vo :			${CORE}/Powerset.v \
 
 	coqc ${CORE}/Powerset.v -R ${CORE} ${CORE}
 
+
+${CORE}/Rank.vo :				${CORE}/Rank.v \
+								${CORE}/Nat.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Empty.vo \
+								${CORE}/ToList.vo \
+								${CORE}/ElemIncl.vo \
+								${CORE}/Decidability.vo \
+								${CORE}/Extensionality.vo
+	
+	coqc ${CORE}/Rank.v -R ${CORE} ${CORE}

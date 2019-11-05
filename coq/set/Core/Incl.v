@@ -38,20 +38,9 @@ Proof.
     - assumption.
 Qed.
 
-Lemma incl_Nil : forall (x:set), Nil <== x.
+Lemma inclNil : forall (x:set), Nil <== x.
 Proof.
     intros x. unfold incl. apply incl_n_Nil. 
-Qed.
-
-Lemma incl_Cons : forall (xs ys y:set), xs <== ys -> xs <== (Cons y ys).
-Proof.
-    intros xs ys y H. unfold incl. apply incl_n_Cons.
-    - apply le_plus_l.
-    - apply incl_incl_n.
-        + apply weaken_r with (order (Cons y ys)).
-            { apply le_n. }
-            { simpl. apply le_S. apply m_le_max. }
-        + assumption. 
 Qed.
 
 Lemma incl_refl : forall (x:set), x <== x.
