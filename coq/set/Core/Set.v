@@ -1,4 +1,4 @@
-(* 'Set' appears to be a Coq keyword, so lowercase it is                        *)
+(* 'Set' appears to be a Coq keyword, so lowercase it                           *)
 Inductive set : Type :=
 | Nil   : set
 | Cons  : set -> set -> set
