@@ -11,6 +11,17 @@ data VComb : Set where
     App : VComb → VComb → VComb
     Var : ℕ → VComb
 
+data _≻_ : VComb → VComb → Set where  -- /succ
+    ≻K     : (a b : VComb)   → App (App K a) b ≻ a
+    ≻S     : (a b c : VComb) → App (App (App S a) b) c ≻ App (App a c) (App b c)
+    Cong1  : {a a' : VComb}  →  (b : VComb) → a ≻ a' → App a b ≻ App a' b
+    Cong2  : {b b' : VComb}  →  (a : VComb) → b ≻ b' → App a b ≻ App a  b'
+    
+-- transitive closure of ≻
+data _≽_ : VComb -> VComb -> Set where -- /succeq
+  ≽Refl  : {a b   : VComb} → a ≻ b → a ≽ b
+  ≽Trans : {a b c : VComb} → a ≻ b → b ≽ c → a ≽ c
+
 
 λ* : ℕ → VComb → VComb
 λ* n S = App K S
@@ -46,3 +57,17 @@ data IsVarOf : ℕ → VComb → Set where
 [ c / n ] (Var m) with eq-dec n m
 [ c / n ] (Var m) | left  p = c
 [ c / n ] (Var m) | right p = Var m
+
+≽-Cong1 : ∀ {a a' : VComb} → (b : VComb) → a ≽ a' → App a b ≽ App a' b
+≽-Cong1 b (≽Refl p) = ≽Refl (Cong1 _ p)
+≽-Cong1 b (≽Trans p q) = ≽Trans (Cong1 _ p) (≽-Cong1 b q)
+
+{-
+λ*-≽ : ∀ (c₁ c₂ : VComb) (n : ℕ) → App (λ* n c₁) c₂ ≽ [ c₂ / n ] c₁
+λ*-≽ S c₂ n = ≽Refl (≻K _ _)
+λ*-≽ K c₂ n = ≽Refl (≻K _ _)
+λ*-≽ (App c c₁) c₂ n =
+  ≽Trans (≻S _ _ _)
+  (≽Trans (Cong1 {!!} {!!}) {!!})
+λ*-≽ (Var x) c₂ n = {!!}
+-}

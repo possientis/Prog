@@ -26,7 +26,7 @@ immediately from the $\beta$-validity of $\sigma$ for $\phi$ and the fact
 sub-formula of $\phi$.
 \end{proof}
 
-\begin{prop}\label{logic:prop:beta:valid:free:commute}
+\begin{prop}\label{logic:prop:LAM:beta:valid:free:commute}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. 
     Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every 
     subformula $\psi\preceq\phi$, we have:
@@ -57,4 +57,42 @@ sub-formula of $\phi$.
     the reverse inclusion $\subseteq$ is always true. Hence, the above equality 
     is equivalent to $\supseteq$ which is equivalent to the $\beta$-validity 
     of $\sigma$ for $\phi$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
+    of the form $\phi=\phi_{1}\ \phi_{2}$ with $\phi_{1},\phi_{2}\in\tv$. 
+    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is $\beta$-valid 
+    for both $\phi_{1}$ and $\phi_{2}$.
+\end{prop}
+\begin{proof}
+    First we assume that $\sigma$ is $\beta$-valid for $\phi$. We need to 
+    show that it is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$. 
+    However, both $\phi_{1}$ and $\phi_{2}$ are sub-formulas of $\phi$.
+    So this follows immediately from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:subformula}). 
+    Conversely, we assume that $\sigma$ is $\beta$-valid for both $\phi_{1}$
+    and $\phi_{2}$. We need to show it is $\beta$-valid for $\phi$. So let
+    $\psi\preceq\phi$ be a sub-formula of $\phi$ and $x\in\free(\psi)$.
+    We need to show the inclusion $\free(\sigma(x))\subseteq\free(\sigma(\psi))$.
+    However since $\psi\preceq\phi$ and $\phi=\phi_{1}\ \phi_{2}$, $\psi$ 
+    must be a sub-formula of $\phi_{1}$, or a sub-formula of $\phi_{2}$, 
+    or it must be equal to $\phi$ itself. If $\psi\preceq\phi_{1}$, having
+    assumed that $\sigma$ is $\beta$-valid for $\phi_{1}$, the desired 
+    inclusion must hold. Likewise if $\psi\preceq\phi_{2}$, having assumed
+    that $\phi$ is $\beta$-valid for $\phi_{2}$, the desired inclusion 
+    must hold. So we assume that $\psi=\phi$. Since 
+    $x\in\free(\psi)=\free(\phi_{1})\cup\free(\phi_{2})$, $x$ must be an 
+    element of $\free(\phi_{1})$ or $\free(\phi_{2})$. If $x\in\free(\phi_{1})$,
+    from $\phi_{1}\preceq\phi_{1}$ and the $\beta$-validity of $\sigma$ for 
+    $\phi_{1}$ we see that $\free(\sigma(x))\subseteq\free(\sigma(\phi_{1}))$.
+    However we have $\sigma(\phi)=\sigma(\phi_{1})\ \sigma(\phi_{2})$ from 
+    proposition~(\ref{logic:prop:LAM:subst:app}) and consequently
+    $\free(\sigma(\phi))=\free(\sigma(\phi_{1}))\cup\free(\sigma(\phi_{2}))$.
+    In particular $\free(\sigma(\phi_{1}))\subseteq\free(\sigma(\phi))$ and
+    it follows that 
+    $\free(\sigma(x))\subseteq\free(\sigma(\phi))$, that is
+    $\free(\sigma(x))\subseteq\free(\sigma(\psi))$ as desired.
+    The case $x\in\free(\phi_{2})$ is handled similarly.
+
 \end{proof}

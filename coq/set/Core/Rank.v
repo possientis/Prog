@@ -159,3 +159,12 @@ Proof.
         + assumption.
 Qed.
 
+(*
+(* If a set is non-empty, it has an element whose rank is minimal               *)
+Lemma rankMinimal : forall (x:set), x <> Nil ->
+    exists (y:set), y :: x /\ forall (z:set), z :: x -> rank y <= rank z.
+Proof.
+
+
+Show.
+*)

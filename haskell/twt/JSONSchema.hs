@@ -20,6 +20,9 @@ import GHC.TypeLits
 import GHC.Generics
 import Data.Typeable
 import Control.Monad.Writer
+import Data.Aeson.Encode.Pretty
+import qualified Data.Aeson.Types as T
+import qualified Data.ByteString.Lazy.Char8 as LC8
 
 data Person = Person
     { name    :: String
@@ -84,10 +87,6 @@ instance (KnownSymbol nm, KnownSymbol (ToJSONType a))
             $ makeTypeObj @a
     {-# INLINE gschema #-}
 
-
-
-
-
 type T1 = ToJSONType Double
 type T2 = ToJSONType String
 type T3 = ToJSONType [Int]
@@ -98,5 +97,4 @@ t1 = runWriter (emitRequired @"required property")
 
 t2 :: Value
 t2 = makeTypeObj @Int
-
 
