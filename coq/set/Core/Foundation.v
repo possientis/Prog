@@ -1,6 +1,9 @@
+Require Import Le.
+
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
+Require Import Core.Rank.
 Require Import Core.Order.
 Require Import Core.Equal.
 Require Import Core.Trans.
@@ -39,20 +42,18 @@ Proof.
     intros x. apply coherence. apply incl_refl.
 Qed.
 
-
+(*
 (* The foundation axiom is satisfied in 'set'                                   *) 
 Theorem foundation : forall (x:set), ~(x == Nil) -> 
     exists (y:set), minimal y x.
 Proof.
-    induction x as [|x _ xs IH].
-    - admit.
-    - intros _. destruct (equal_dec xs Nil) as [H|H].
-        + exists x. unfold minimal. split.
-            { apply consElem. left. apply equal_refl. }
-            { intros [y [H1 H2]]. apply consElem in H1. destruct H1 as [H1|H1].
-                { apply noSelfElem with x. apply equal_l with y; assumption. }
-                { apply emptyCharac with y. apply equal_r with xs; assumption. }}
-        +
-
+    intros x H. rewrite emptyIsNil in H. 
+    destruct (rankMinimal x H) as [y [H1 H2]]. exists y. split.
+    - assumption.
+    - intros H3. destruct H3 as [z [H3 H4]].
+      assert (S (rank z) <= rank z) as H5.
+        { apply le_trans with (rank y).
+            { apply rankElem. assumption. }
+            { apply H2. assumption. }}
 Show.
-
+*)

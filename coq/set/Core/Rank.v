@@ -159,12 +159,25 @@ Proof.
         + assumption.
 Qed.
 
-(*
+
 (* If a set is non-empty, it has an element whose rank is minimal               *)
 Lemma rankMinimal : forall (x:set), x <> Nil ->
     exists (y:set), y :: x /\ forall (z:set), z :: x -> rank y <= rank z.
 Proof.
+    intros x H. remember (map rank (toList x)) as ns eqn:H1.
+    assert (ns <> nil) as H2.
+        { intros H2. apply H. destruct x as [| x xs].
+            { reflexivity. }
+            { rewrite H1 in H2. simpl in H2. inversion H2. }}
+    destruct (natMinimal ns H2) as [n [H3 H4]]. rewrite H1 in H3.
+    apply in_map_iff in H3. destruct H3 as [y [H3 H5]]. exists y. split.
+    - apply toListElem. exists y. split.
+        + assumption.
+        + split; apply incl_refl.
+    - intros z H6. rewrite H3. apply H4. apply toListElem in H6.
+      destruct H6 as [z' [H6 [H7 H8]]]. rewrite H1. apply in_map_iff. 
+      exists z'. split.
+        + apply rankEqual. apply doubleIncl. split; assumption.
+        + assumption.
+Qed.
 
-
-Show.
-*)

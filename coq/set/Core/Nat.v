@@ -17,6 +17,25 @@ Proof.
     - apply le_S. assumption.
 Qed.
 
+Lemma not_eq_s_n : forall (n:nat), ~ S n = n.
+Proof.
+    induction n as [|n IH]; intros H.
+    - inversion H.
+    - apply IH. remember (S n) as m eqn:E. remember (S m) as p eqn:F.
+      rewrite E in H. rewrite F in H. inversion H. reflexivity.
+Qed.
+
+(*
+Lemma not_le_s_n : forall (n:nat), ~ S n <= n.
+Proof.
+    intros n H. remember (S n) as m eqn:E. revert E. 
+    destruct H as [n|n H].
+    - intros H. symmetry in H. apply (not_eq_s_n m). assumption.
+    - intros H'.
+
+Show.
+*)
+
 
 Lemma sum_0 : forall (n m:nat), n + m = 0 -> n = 0 /\ m = 0.
 Proof.
@@ -175,3 +194,4 @@ Proof.
                     { apply H2. left. assumption. }
                     { apply H2. right. assumption. }}}
 Qed.
+
