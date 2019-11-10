@@ -1,5 +1,6 @@
 Require Import Le.
 
+Require Import Core.Nat.
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
@@ -42,7 +43,7 @@ Proof.
     intros x. apply coherence. apply incl_refl.
 Qed.
 
-(*
+
 (* The foundation axiom is satisfied in 'set'                                   *) 
 Theorem foundation : forall (x:set), ~(x == Nil) -> 
     exists (y:set), minimal y x.
@@ -55,5 +56,6 @@ Proof.
         { apply le_trans with (rank y).
             { apply rankElem. assumption. }
             { apply H2. assumption. }}
-Show.
-*)
+      apply (not_le_s_n (rank z)). assumption.
+Qed.
+
