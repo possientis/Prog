@@ -27,8 +27,11 @@ testing maven
 testing gradle
 testing c#
 testing haskell
+testing coq
 testing agda
+testing lean
 testing idris
+testing hol
 testing scheme
 testing python
 testing ruby
@@ -37,8 +40,6 @@ testing php
 testing scala
 testing clojure
 testing sed
-testing coq
-testing hol
 testing tex
 testing bison
 

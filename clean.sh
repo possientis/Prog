@@ -12,6 +12,7 @@ rm -f test.log
 ./haskell/clean.sh
 ./coq/clean.sh
 ./agda/clean.sh
+./lean/clean.sh
 ./idris/clean.sh
 ./hol/clean.sh
 ./java/clean.sh
