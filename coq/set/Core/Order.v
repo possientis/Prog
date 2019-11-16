@@ -12,7 +12,11 @@ Require Import Core.Set.
 (* to define various notions in relation to it. For example we shall need to    *) 
 (* define what it means for a set x to belong to a set y (denoted x :: y), or   *)
 (* what it means for a set x to be a subset of y (denoted x <== y), or what it  *)
-(* means for a set x to be equal to y (denoted x == y).                         *)
+(* means for a set x to be equal to y (denoted x == y). These relations can be  *)
+(* defined in coq in any way we like. However, if we want our model of set      *)
+(* theory to be interesting, we shall need to use definitions which are more    *)
+(* complex than simple recursive definitions. In particular, we shall need to   *)
+(* reason on the 'complexity' of the arguments
 
 Fixpoint order (xs:set) : nat :=
     match xs with

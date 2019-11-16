@@ -23,7 +23,8 @@ all:					void.agdai \
 						z.agdai \
 						reflect-list.agdai \
 						combinator.agdai \
-						vcombinator.agdai
+						vcombinator.agdai \
+						formula.agdai
 
 void.agdai : 			void.agda
 	agda void.agda
@@ -188,3 +189,8 @@ vcombinator.agdai :		vcombinator.agda \
 						nat.agdai
 	agda vcombinator.agda
 	
+
+formula.agdai : formula.agda \
+				nat.agdai \
+				list.agdai
+	agda formula.agda

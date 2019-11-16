@@ -3,11 +3,17 @@
 {-# LANGUAGE RankNTypes                 #-}
 {-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE KindSignatures             #-}
+{-# LANGUAGE ConstraintKinds            #-}
+{-# LANGUAGE TypeApplications           #-}
 {-# LANGUAGE FlexibleContexts           #-}
+{-# LANGUAGE ScopedTypeVariables        #-}
 {-# LANGUAGE TypeFamilyDependencies     #-}
 
 
 import Data.Kind
+import Data.Constraint (Dict (..))
+import Data.Foldable (for_)
+import Control.Monad.Trans.Writer
 
 data SBool (b :: Bool) :: Type where
     STrue  :: SBool 'True
@@ -54,6 +60,25 @@ class Monad (LoggingMonad b) => MonadLogging (b :: Bool) where
     logMsg :: String -> LoggingMonad b ()
     runLogging :: LoggingMonad b a -> IO a
 
+instance MonadLogging 'False where
+    type LoggingMonad 'False = IO
+    logMsg _   = pure ()
+    runLogging = id
+
+instance MonadLogging 'True where
+    type LoggingMonad 'True = WriterT [String] IO
+    logMsg s = tell [s]
+    runLogging m = do
+        (a, w) <- runWriterT m
+        for_ w putStrLn
+        pure a
+
+
+program :: MonadLogging b => LoggingMonad b ()
+program = do
+    logMsg "hello world!"
+    pure ()
+
 
 main :: IO ()
 main = do
@@ -61,4 +86,12 @@ main = do
     print b2
     print b3
     print b4
+    bool <- read <$> getLine
+    withSomeSBool (toSBool bool) $
+        \(sb :: SBool b) -> 
+            case dict @MonadLogging sb of
+                Dict -> runLogging @b program
 
+dict :: ( c 'True, c 'False) => SBool b -> Dict (c b)
+dict STrue  = Dict
+dict SFalse = Dict
