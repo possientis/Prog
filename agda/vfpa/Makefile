@@ -24,7 +24,8 @@ all:					void.agdai \
 						reflect-list.agdai \
 						combinator.agdai \
 						vcombinator.agdai \
-						formula.agdai
+						formula.agdai \
+						kripke.agdai
 
 void.agdai : 			void.agda
 	agda void.agda
@@ -194,3 +195,8 @@ formula.agdai : formula.agda \
 				nat.agdai \
 				list.agdai
 	agda formula.agda
+
+kripke.agdai : 	kripke.agda \
+				level.agdai \
+				nat.agdai
+	agda kripke.agda	

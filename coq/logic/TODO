@@ -1,4 +1,3 @@
-split inclusion prop 342 to get a separate lemma on Fr(s*(p)(U)) <= ..
-prove Fr(s*(p)(U)) = .... forall U when s is beta-valid for p
+Continue proof of prop 363
 beta-validity of f for \x -> t1 in terms of beta-validity of f for t1 ?
 LAM/betavalid.tex

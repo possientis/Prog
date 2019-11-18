@@ -77,10 +77,10 @@ Proof.
 Show.
 *)
 
-(*
+
 Lemma L7 : forall (P Q:Prop), (P \/ Q \/ False) /\ (P -> Q) -> True /\ Q.
 Proof.
-    my_tauto.
+    repeat my_tauto.
 Qed.
 
 Lemma L8 : True.
@@ -89,4 +89,87 @@ Lemma L8 : True.
     | [|-True] => constructor   (* backtracking then move on to next pattern    *)
     end.                        (* overall success.                             *)
 Qed.
+
+
+Lemma L9 : forall (P Q R:Prop), P -> Q -> R -> Q.
+Proof.
+    intros P Q R Hp Hq Hr.
+    match goal with 
+    | [H : _ |- _]  => exact H
+    end.
+Qed.
+
+
+Ltac notHyp P :=
+    match goal with
+    | [ _ : P |- _] => fail 1
+    | _             =>
+        match P with 
+        | ?P1 /\ ?P2    => first [ notHyp P1 | notHyp P2 | fail 2]
+        | _             => idtac
+        end
+    end.
+
+
+Ltac extend pf :=
+    let t := type of pf in
+        notHyp t; generalize pf; intro.
+
+
+Ltac completer :=
+    repeat 
+    match goal with
+    | [|- _ /\ _ ]              => constructor
+    | [H: _ /\ _ |- _]          => destruct H
+    | [H:?P -> ?Q, H': ?P |- _] => specialize (H H') 
+    | [|- forall x, _ ]         => intro
+    | [H:forall x, ?P x -> _, H' : ?P ?X |- _ ] => extend (H X H')
+    end.
+
+
+Lemma L10 : forall (a:Set) (P Q R S:a -> Prop),
+    (forall (x:a), P x -> Q x /\ R x) ->
+    (forall (x:a), R x -> S x)  ->
+    forall (y x:a), P x -> S x.
+Proof.
+    completer. assumption.
+Qed.
+
+Ltac completer' :=
+    repeat
+    match goal with
+    | [|- _ /\ _ ]              => constructor
+    | [H : ?P /\ ?Q |- _]       => destruct H;
+        repeat match goal with
+        | [H':P/\Q |- _]        => clear H'
+        end
+    | [H:?P -> _, H': ?P |- _]  => specialize (H H')
+    | [|- forall x, _]          => intro
+    | [H:forall x, ?P x -> _, H': ?P ?X |- _] => extend (H X H')
+    end.
+(*
+Lemma L11 : forall (a:Set) (P Q R S:a -> Prop),
+    (forall (x:a), P x -> Q x /\ R x) ->
+    (forall (x:a), R x -> S x)  ->
+    forall (y x:a), P x -> S x.
+Proof.
+    completer'.
+
+Show.
 *)
+
+Lemma L12 : forall (n:nat), n = n.
+Proof.
+    match goal with
+    | [|- forall x, _]  => trivial
+    end.
+Qed.
+
+
+Lemma L13 : forall (n:nat), n = n.
+Proof.
+    match goal with
+    | [|- forall x, ?P] => trivial
+    end.
+Qed.
+

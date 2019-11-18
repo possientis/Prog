@@ -27,9 +27,9 @@ sub-formula of $\phi$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:free:commute}
-    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. 
-    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every 
-    subformula $\psi\preceq\phi$, we have:
+Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. 
+Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every 
+subformula $\psi\preceq\phi$, we have:
     \[
         \free(\sigma(\psi))
         =
@@ -57,6 +57,43 @@ sub-formula of $\phi$.
     the reverse inclusion $\subseteq$ is always true. Hence, the above equality 
     is equivalent to $\supseteq$ which is equivalent to the $\beta$-validity 
     of $\sigma$ for $\phi$.
+\end{proof}
+
+The following proposition is similar to 
+proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}). However,
+it relies on the stronger assumption of $\beta$-validity and yields the
+stronger conclusion of equality rather than inclusion.
+\begin{prop}\label{logic:prop:LAM:freevar:of:betasubst:gen:valid}
+Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map which is
+$\beta$-valid for $\phi$. Then for all $U\subseteq V$ we have:
+    \[
+        \free(\sigma^{*}(\phi)(U)) 
+            \ =\ 
+        (\free(\phi)\cap U)\ \ \ 
+            \cup
+        \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
+    \]
+where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
+definition~(\ref{logic:def:LAM:subst}).
+\end{prop}
+\begin{proof}
+We shall prove this equality by structural induction on $\phi$, using
+theorem~(\ref{logic:the:proof:induction}) of 
+page~\pageref{logic:the:proof:induction}. So first we assume that $\phi=x$ 
+for some $x\in V$. Then for all $U\subseteq V$, there are two possible cases: 
+either $x\in U$ or $x\not\in U$. If $x\in U$ we have:
+    \begin{eqnarray*}
+        \free(\sigma^{*}(\phi)(U))
+        &=&\free(\sigma^{*}(x)(U))\\
+        &=&\free(\sigma_{U}(x))\\
+        \mbox{$x\in U\ \rightarrow\ $}&=&\free(x)\\
+         &=&\{x\}\\
+         &=&\free(\phi)\\
+        \mbox{$x\in U\ \rightarrow\ $}&=&\free(\phi)\cap U\\
+        \mbox{$\free(\phi)\setminus U = \emptyset\ \rightarrow\ $} &=& 
+            (\free(\phi)\cap U)\ \ \ \cup
+            \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
+    \end{eqnarray*}
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app}
