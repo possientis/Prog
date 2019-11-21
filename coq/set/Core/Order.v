@@ -16,7 +16,7 @@ Require Import Core.Set.
 (* defined in coq in any way we like. However, if we want our model of set      *)
 (* theory to be interesting, we shall need to use definitions which are more    *)
 (* complex than simple recursive definitions. In particular, we shall need to   *)
-(* reason on the 'complexity' of the arguments
+(* reason on the 'complexity' of the arguments... TODO                          *)
 
 Fixpoint order (xs:set) : nat :=
     match xs with
