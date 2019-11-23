@@ -18,7 +18,8 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Union.vo \
 								${CORE}/Intersection.vo \
 								${CORE}/Powerset.vo \
-								${CORE}/Rank.vo
+								${CORE}/Rank.vo \
+								${CORE}/Foundation.vo
 
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
@@ -193,3 +194,19 @@ ${CORE}/Rank.vo :				${CORE}/Rank.v \
 								${CORE}/Extensionality.vo
 	
 	coqc ${CORE}/Rank.v -R ${CORE} ${CORE}
+
+
+${CORE}/Foundation.vo :			${CORE}/Foundation.v \
+								${CORE}/Nat.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Rank.vo \
+								${CORE}/Order.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Trans.vo \
+								${CORE}/Empty.vo \
+								${CORE}/ElemIncl.vo \
+								${CORE}/Decidability.vo \
+								${CORE}/Extensionality.vo
+	coqc ${CORE}/Foundation.v -R ${CORE} ${CORE}

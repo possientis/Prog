@@ -16,14 +16,17 @@ Require Import Core.Set.
 (* defined in coq in any way we like. However, if we want our model of set      *)
 (* theory to be interesting, we shall need to use definitions which are more    *)
 (* complex than simple recursive definitions. In particular, we shall need to   *)
-(* reason on the 'complexity' of the arguments... TODO                          *)
-
+(* reason on the 'complexity' of the arguments, as measured by the 'order'.      *)
 Fixpoint order (xs:set) : nat :=
     match xs with
     | Nil       =>  0
     | Cons x xs =>  S (max (order x) (order xs))
     end.
 
+(* This lemma will be used on many occasions. If a set x is one of the elements *)
+(* of the list of sets associated with a set y, then the 'complexity' of x      *)
+(* cannot be greater to that of y. In fact a stronger result with a strict      *)
+(* inequality can be obtained, but this has not been needed so far.             *)
 Lemma orderToList : forall (x y:set),
     In x (toList y) -> order x <= order y.
 Proof.
@@ -36,11 +39,10 @@ Proof.
             { apply m_le_max. }
 Qed.
 
+(* This only set with order 0 is Nil.                                           *)
 Lemma order_0 : forall (xs:set), order xs = 0 -> xs = Nil.
 Proof.
     intros [|x xs].
     - intros _. reflexivity.
     - intros H. inversion H.
 Qed.
-
-

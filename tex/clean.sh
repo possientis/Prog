@@ -6,5 +6,6 @@ cd ${HOME}
 
 ./logic/clean.sh
 ./notes/clean.sh
+./cats/clean.sh
 
 cd ${DIR}

@@ -94,6 +94,73 @@ either $x\in U$ or $x\not\in U$. If $x\in U$ we have:
             (\free(\phi)\cap U)\ \ \ \cup
             \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
     \end{eqnarray*}
+If $x\not\in U$, then:
+     \begin{eqnarray*}
+        \free(\sigma^{*}(\phi)(U))
+        &=&\free(\sigma^{*}(x)(U))\\
+        &=&\free(\sigma_{U}(x))\\
+        \mbox{$x\not\in U\ \rightarrow\ $}&=&\free(\sigma(x))\\
+        &=&\bigcup_{u\in\{x\}} \free(\sigma(u))\\
+        &=&\bigcup_{u\in\free(\phi)} \free(\sigma(u))\\
+        \mbox{$x\not\in U\ \rightarrow\ $}&=&\bigcup_{u\in\free(\phi)\setminus U} 
+            \free(\sigma(u))\\
+        \mbox{$\free(\phi)\cap U = \emptyset\ \rightarrow\ $} &=& 
+            (\free(\phi)\cap U)\ \ \ \cup
+            \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
+    \end{eqnarray*}
+We now assume that $\phi=\phi_{1}\ \phi_{2}$ and $\sigma$ is $\beta$-valid 
+for $\phi$, where $\phi_{1}, \phi_{2}\in\tv$ satisfy the equality for all 
+$\sigma$ $\beta$-valid and $U\subseteq V$. Since both $\phi_{1}$ and $\phi_{2}$ 
+are sub-formulas of $\phi$ using  
+proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that $\sigma$
+is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$. Hence, for all 
+$U\subseteq V$ we have:
+    \begin{eqnarray*}
+        \free(\sigma^{*}(\phi)(U))
+        &=&\free(\sigma^{*}(\phi_{1}\ \phi_{2})(U))\\
+        &=&\free(\ \sigma^{*}(\phi_{1})(U)\ \ \sigma^{*}(\phi_{2})(U)\ )\\
+        &=&\free(\sigma^{*}(\phi_{1})(U))\cup\free(\sigma^{*}(\phi_{2})(U))\\
+        \mbox{$\sigma$ $\beta$-valid for $\phi_{1}\ \rightarrow\ $}
+        &=&(\free(\phi_{1})\cap U)\ \ \ \cup\ 
+            \bigcup_{x\in\free(\phi_{1})\setminus U} \free(\sigma(x))\\
+        \mbox{$\sigma$ $\beta$-valid for $\phi_{2}\ \rightarrow\ $}
+        &\cup&(\free(\phi_{2})\cap U)\ \ \ \cup\ 
+            \bigcup_{x\in\free(\phi_{2})\setminus U} \free(\sigma(x))\\
+        &=&(\free(\phi_{1})\cup\free(\phi_{2}))\cap U\\
+        &\cup&\bigcup_{x\in(\free(\phi_{1})\cup\free(\phi_{2}))\setminus U}
+            \free(\sigma(x))\\
+        &=&(\free(\phi)\cap U)\ \ \ \cup\ \bigcup_{x\in\free(\phi)\setminus U}
+            \free(\sigma(x))
+    \end{eqnarray*}
+Finally, we assume that $\phi=\lambda x\phi_{1}$ and $\sigma$ is $\beta$-valid
+for $\phi$ where $\phi_{1}\in\tv$ satisfies the equality for all $\sigma$
+$\beta$-valid and $U\subseteq V$. Since $\phi_{1}$ is a sub-formula of $\phi$
+using proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that 
+    $\sigma$ is $\beta$-valid for $\phi_{1}$. Hence, for all $U\subseteq V$:
+    \begin{eqnarray*}
+        \free(\sigma^{*}(\phi)(U))
+        &=&\free(\sigma^{*}(\lambda x\phi_{1})(U))\\
+        &=&\free(\lambda x\sigma^{*}(\phi_{1})(U\cup\{x\}))\\
+        &=&\free(\sigma^{*}(\phi_{1})(U\cup\{x\}))\setminus\{x\}\\
+        \mbox{$\sigma$ $\beta$-valid for $\phi_{1}\ \rightarrow\ $}
+        &=& [\ (\free(\phi_{1})\cap(U\cup\{x\}))\ \ \ \cup\ 
+            \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}\free(\sigma(u))
+             \ ]\setminus\{x\}\\
+        &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})\ \ \ \cup\ 
+            \bigcup_{u\in\free(\phi_{1})\cap U^{c}\cap\{x\}^{c}}
+            \free(\sigma(u))\setminus\{x\}\\
+        &=&(\free(\lambda x\phi_{1})\cap U)\ \ \ \cup\ 
+            \bigcup_{u\in\free(\lambda x\phi_{1})\setminus U}
+            \free(\sigma(u))\setminus\{x\}\\
+        &=&(\free(\phi)\cap U)\ \ \ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
+            \free(\sigma(u))\setminus\{x\}\\
+        \mbox{see below $\ \rightarrow\ $}
+        &=&(\free(\phi)\cap U)\ \ \ 
+            \cup\ 
+            \bigcup_{u\in\free(\phi)\setminus U}\free(\sigma(u))
+    \end{eqnarray*}
+In order to jusfify the last equality, it is sufficient to prove
+that $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app}

@@ -1,3 +1,5 @@
+(* NEXT: ===> Incl                                                              *)
+
 Require Import Le.
 Require Import List.
 Require Import Plus.
@@ -6,6 +8,28 @@ Require Import Compare_dec.
 Require Import Core.Nat.
 Require Import Core.Set.
 Require Import Core.Order.
+
+(* This is where it all starts: we need to define the membership, inclusion     *)
+(* and equality relations on set, but we know that these relations cannot be    *)
+(* defined independently of each other. The membership statement 'x :: y'       *)
+(* should be equivalent to the inclusion '{x} <== y', while the equality        *)
+(* 'x == y' should be equivalent to the double inclusion 'x <== y' and          *)
+(* 'y <== x'. The stategy we shall adopt is to focus solely on the inclusion    *)
+(* relation, providing a standalone definition without reference to set         *)
+(* membership or set equality so as to avoid the complexity of mutually         *)
+(* recursive definitions. However, we cannot define set inclusion directly as   *)
+(* any such attempt would lead to a definition which Coq cannot regard as       *)
+(* well-founded. In order to satisfy Coq with our definition, we shall define   *)
+(* a sequence of inclusion relations indexed by the natural numbers.            *)
+(* The key to this definition is that the relation incl_n (S n) is defined      *)
+(* in terms of the relation incl_n n, so Coq has no trouble accepting this.     *)
+(* Heuristically, if we ignore the distinction between the 'levels' (S n)       *)
+(* and n, the following definition expresses the fact that the inclusion        *)
+(* '{x}\/xs <== ys' should hold if and only if:                                 *)
+(*      (i)  xs <== ys holds                                                    *)
+(*      (ii) x is itself an 'element' of ys                                     *)
+(* where (ii) is expressed as the existence of a set y in (the list of) ys      *)
+(* which is 'equal' to x, i.e. such that the double inclusion holds.            *)
 
 Fixpoint incl_n (n:nat) (xs ys:set) : Prop := 
     match n with 
@@ -21,6 +45,12 @@ Fixpoint incl_n (n:nat) (xs ys:set) : Prop :=
     end
 .
 
+(* We were not able to define the inclusion relation directly and we defined    *)
+(* instead a sequence of binary relations on the type set. The next lemma       *)
+(* crucially show that given two sets xs and ys, for n large enough all the     *)
+(* statements 'incl_n n xs ys' are equivalent. This fundamental fact will allow *)
+(* us to define the inclusion relation as a sort of 'pointwise' limit of our    *)
+(* sequence of relations.                                                       *)
 Lemma incl_n_Sn : forall (n:nat) (xs ys:set),
     order xs + order ys <= n -> (incl_n n xs ys <-> incl_n (S n) xs ys).
 Proof.
@@ -109,7 +139,11 @@ Proof.
             }
 Qed.
 
-
+(* Having proved the fundamental lemma incl_n_Sn, we provide a few easy         *)
+(* technical results allowing us to deduce inclusion statements of the form     *)
+(* 'incl_n m xs ys' from other inclusion statements involving a different       *)
+(* natural number (assumed to be large enough). In the present case, provided   *)
+(* n is large enough and n <= m, and can go from n to m.                        *)
 Lemma incl_le_n_m : forall (xs ys:set) (n m:nat),
     order xs + order ys <= n    -> 
     n <= m                      -> 
@@ -123,6 +157,7 @@ Proof.
         + apply IH. assumption.
 Qed.
 
+(* Equally, provided n is large enough and n <= m, we can go from m to n        *)
 Lemma incl_le_m_n : forall (xs ys:set) (n m:nat),
     order xs + order ys <= n    -> 
     n <= m                      ->
@@ -136,6 +171,8 @@ Proof.
         + assumption.
 Qed.
 
+(* As a consequence of the two previous lemmas, provided both n and m are large *)
+(* enough we can go from n to m without making any assumption on whether n <= m.*) 
 Lemma incl_n_m : forall (xs ys:set) (n m:nat),
     order xs + order ys <= n    ->
     order xs + order ys <= m    ->
@@ -153,10 +190,12 @@ Proof.
         + assumption.
 Qed.
 
-
+(* All inclusion  statements of the form 'incl_n n Nil x' are true.             *)
 Lemma incl_n_Nil : forall (x:set) (n:nat), incl_n n Nil x.
 Proof. intros x n. destruct n as [|n]; apply I. Qed.
 
+(* For n large enough, if an inclusion statement is true in relation to xs ys,  *)
+(* it is still true after you add an element to ys.                             *)
 Lemma incl_n_Cons : forall (xs ys y:set) (n:nat),
     order xs <= n -> incl_n n xs ys -> incl_n n xs (Cons y ys).
 Proof.
@@ -181,7 +220,7 @@ Proof.
             }
 Qed.
 
-
+(* Given x, for n large enough the inclusion statement 'incl_n n x x' holds     *)
 Lemma incl_n_refl : forall (x:set) (n:nat),
     order x <= n -> incl_n n x x.
 Proof.
@@ -214,4 +253,3 @@ Proof.
                 }
             }
 Qed.
-

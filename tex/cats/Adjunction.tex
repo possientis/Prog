@@ -1,0 +1,398 @@
+\documentclass[]{article}
+\usepackage{tikz-cd}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{amsthm,thmtools}
+\usepackage{hyperref, cleveref}
+\newcommand{\dotarrow}{% to be used in math mode...
+	\mathrel{\ooalign{\hss\raise.65ex\hbox{\scalebox{1.25}{\normalfont .}}%
+	\kern0.35ex\hss\cr$\longrightarrow$}}}
+		
+\declaretheoremstyle[postheadspace=\newline]{def}
+\declaretheorem[style=def,name=Definition]{definition}
+\declaretheorem[name=Lemma]{lemma}
+
+%opening
+\title{Adjunction definitions}
+\author{Cristóvão Gomes Ferreira}
+
+\begin{document}
+
+\newcommand{\blackqed}{
+	\renewcommand{\qedsymbol}{$\blacksquare$}
+	\qed
+	\renewcommand{\qedsymbol}{$\square$}
+}
+
+\maketitle
+
+\begin{abstract}
+We are going to prove that three definitions of adjunction are equivalent.
+\end{abstract}
+
+\section{Definitions}
+
+\subsection{Prelude}
+
+For this lecture, we assume the following:
+
+\begin{itemize}
+	\item $\mathcal{C}$, $\mathcal{D}$ or actually any calligraphed letter denotes a category.
+	\item $Hom(x,y)$ is the set of arrows between objects $x$ and $y$.
+	\item $I$ is the identity functor ($Ic=c$, $If=f$).
+	\item Basic category theory identities are trivial. \footnote{Namely, if F is a functor, $F(g \circ h) = Fg \circ Fh$, and $F id_a = id_{Fa}$}
+\end{itemize}
+
+\subsection{Adjunction}
+
+Let $F$ and $G$ such that:
+
+\begin{tikzcd}
+  \mathcal{D} \arrow[r, shift left, "F"] & \mathcal{C} \arrow[l, shift left, "G"]
+\end{tikzcd}
+
+We say that $F$ is left adjoint\footnote{or $F$ has a right adjoint $G$, or $G$ is right adjoint to $F$, or other trivially equivalent expression.} to $G$, written $F \dashv G$, when some rules apply.
+
+There are several equivalent definitions of the rules in this relation, we will prove the equivalence between two of them.
+
+\begin{definition}[Isomorphism collection]\label{def:isocollection}
+
+$F \dashv G$ if there is a collection of functions $\phi_{x,y} \colon Hom(F x, y) \to Hom(x, G y)$ that forms a natural isomorphism, i.e.:
+	
+\begin{itemize}
+	\item $\phi_{x,y}$ has an inverse $\phi^{-1}_{x,y}$;
+	\item The following diagrams commute:
+\end{itemize}
+\[
+\begin{tikzcd}
+    Hom(Fa, b) \arrow[r, "\phi_{a,b}"] \arrow[d, "{Hom(Ff,b)}"] & Hom(a, Gb) \arrow[d, "{Hom(f, Gb)}"] & Hom(Fa, b) \arrow[r, "\phi_{a,b}"] \arrow[d, "{Hom(Fa,f)}"] & Hom(a, Gb) \arrow[d, "{Hom(a, Gf)}"] 
+    \\ Hom(Fa', b) \arrow[r, "\phi_{a',b}"] & Hom(a', Gb) & Hom(Fa, b') \arrow[r, "\phi_{a,b'}"] & Hom(a, Gb')
+\end{tikzcd}
+\]
+\end{definition}
+\begin{definition}[Universal morphism]\label{def:universal}
+	
+	$F \dashv G$ if there is a natural transformation $\epsilon \colon FG \dotarrow I$ such that each $epsilon_c \colon FGc \to c$ is universal from $Fc$ to $c$, i.e., for all morphisms $f$ there is a unique $g$ such that:
+\end{definition}
+\[
+\begin{tikzcd}
+	d \arrow[d, dotted, "\exists! g"] & F d \arrow[d, dotted, "F g"] \arrow[rd, "f"] \\ Gc & FGc \arrow[r, "\epsilon_c"] & c
+\end{tikzcd}
+\]
+\begin{definition}[Natural units]\label{def:natural}
+	
+$F \dashv G$ if there are two natural transformations
+$\eta \colon I \dotarrow GF$ and $\epsilon \colon FG \dotarrow I$ such that $G\epsilon \circ \eta_G = I$, $\epsilon_F \circ F\eta = I$.
+\end{definition}
+
+\section{Main section}
+
+We are going to prove that all these definitions are equivalent, by proving $ \cref{def:isocollection} \Rightarrow \cref{def:universal} \Rightarrow \cref{def:natural} \Rightarrow \cref{def:isocollection}$
+
+\subsection{Proofs}
+\subsubsection{$\ref{def:isocollection} \Rightarrow \ref{def:universal}$}
+We have a collection of isomorphisms $\phi_{x,y}$, such that the naturality squares in \ref{def:isocollection} commute.
+
+We want to define a natural transformation $\epsilon \colon FG \dotarrow I$, such that for each arrow $f \colon Fd \to c$ there exists only one $g \colon d \to G c$ such that $\epsilon_c \circ F g = f$.
+
+\[
+\begin{tikzcd}
+d \arrow[d, dotted, "\exists! g"] & F d \arrow[d, dotted, "F g"] \arrow[rd, "f"] \\ Gc & FGc \arrow[r, "\epsilon_c"] & c
+\end{tikzcd}
+\]
+
+We start by taking the arrow $f \colon Fd \to c$
+
+\[
+\begin{tikzcd}
+d & F d \arrow[rd, "f"] \\ Gc & FGc & c
+\end{tikzcd}
+\]
+
+A motivation for defining $\epsilon$, is recognizing that $\epsilon_c \in Hom(FGc, c)$ and $\phi_{Gc,c}$ defines an isomorphism between $Hom(Gc,Gc)$ and $Hom(FGc,c)$. So $\phi_{Gc,c}(\epsilon_c) \in Hom(Gc,Gc)$.
+
+The canonical arrow to take from $Hom(Gc,Gc)$ is $id_{Gc}$, so we'll define $\epsilon_c = \phi_{Gc,c}^{-1}(id_{Gc})$, and see how that goes (the proof that $\epsilon$ is a natural transformation is \cref{lem:phi_inv_nat}).
+
+\[
+\begin{tikzcd}
+d & F d \arrow[rd, "f"] \\ Gc & FGc \arrow[r, swap, "\phi_{Gc,c}^{-1}(id_{Gc})"] & c
+\end{tikzcd}
+\]
+
+The motivation for defining the unique $g$ for each $f$ is actually quite intuitive: $g$ is just $\phi_{d,c}(f)$.
+
+\[
+\begin{tikzcd}
+d \arrow[d, swap, "\phi_{d,c}(f)"] & F d  \arrow[d, swap, "F (\phi_{d,c}(f))"] \arrow[rd, "f"] \\ Gc & FGc \arrow[r, swap, "\phi_{Gc,c}^{-1}(id_{Gc})"] & c
+\end{tikzcd}
+\]
+
+
+We actually have to prove that this diagram commutes, but note that, by \cref{lem:phi_inv}, $\phi_{Gc,c}^{-1}(id_{Gc}) \circ F (\phi_{d,c}(f)) = \phi_{d,c}^{-1}(\phi_{d,c}(f)) = f$, so it does!
+
+At last, we have to prove the uniqueness of our $g$, but note that, if $\phi_{d,c}^{-1}(g') = \phi_{Gc,c}^{-1}(id_{Gc}) \circ F g' = f = \phi_{d,c}^{-1}(\phi_{d,c}(f))$ then $g' = \phi_{d,c}(f)$ by injectiveness of $\phi_{d,c}^{-1}$.
+
+And with that we're done. \qed
+
+\subsubsection{$\ref{def:universal} \Rightarrow \ref{def:natural}$}
+We have a natural transformation $\epsilon \colon FG \dotarrow I$, such that for each arrow $f \colon Fd \to c$ there exists only one $g \colon d \to G c$ such that $\epsilon_c \circ F g = f$.
+
+\[
+\begin{tikzcd}
+d \arrow[d, dotted, "\exists! g"] & F d \arrow[d, dotted, "F g"] \arrow[rd, "f"] \\ Gc & FGc \arrow[r, "\epsilon_c"] & c
+\end{tikzcd}
+\]
+
+We want to get two natural transformations $\epsilon' \colon FG \dotarrow I$, $\eta \colon I \dotarrow GF$, such that $G\epsilon' \circ \eta_G = I$, $\epsilon'_F \circ F\eta = I$.
+
+Let us define $\epsilon' = \epsilon$ (and stop using the $'$ notation) and $\eta_d$ the unique $g$ for $f = id_{Fd}$. We now have to prove that:
+\begin{enumerate}
+	\item \label{epsilon_id} $\epsilon_F \circ F\eta = I$
+	\item \label{eta_id} $G\epsilon \circ \eta_G = I$
+	\item \label{eta_natural} $\eta$ is a natural transformation
+\end{enumerate}
+
+\Cref{epsilon_id} is immediate, by definition of $\eta$.
+
+\blackqed
+
+We prove \cref{eta_id} by noting that
+
+\[
+\begin{aligned}
+  \epsilon_a \circ F(G \epsilon_a \circ \eta_{Ga}) =
+  \\ \epsilon_a \circ FG \epsilon_a \circ F\eta_{Ga} = && \text{(by naturality of $\epsilon$)}
+  \\ \epsilon_a \circ \epsilon_{FGa} \circ F \eta_{Ga} = && \text{(by \cref{epsilon_id})}
+  \\ \epsilon_a \circ id_{FG a} = 
+  \\ \epsilon_a = 
+  \\ \epsilon_{a} \circ id_{FGa} = 
+  \\ \epsilon_{a} \circ F id_{Ga}
+\end{aligned}
+\]
+ 
+ hence, by \cref{lem:epsilon_unique} on $G\epsilon_a \circ \eta_{Ga}$ and $id_{Ga}$, we get $G\epsilon_a \circ \eta_{Ga} = id_{Ga}$. 
+
+ \blackqed
+ 
+ 
+To prove \cref{eta_natural} we need to prove that
+\[
+\begin{tikzcd}
+a \arrow[r, "\eta_a"] \arrow[d, "{f}"] 
+& GF a \arrow[d,"GF f"] \\
+b \arrow[r, "\eta_b"] & GF b
+\end{tikzcd}
+\]
+commutes, i.e., $GF f \circ \eta_a = \eta_b \circ f$. We prove this by resorting to \Cref{lem:epsilon_unique} again, but this time on
+\[
+\begin{aligned}
+\epsilon_{Fb} \circ F(GF f \circ \eta_a) =
+\\ \epsilon_{Fb} \circ FGF f \circ F \eta_a = && \text{(by naturality of $\epsilon$)}
+\\ F f \circ \epsilon_{Fa} \circ F \eta_a = && \text{(by \cref{epsilon_id})}
+\\ F f \circ id_{Fa} =
+\\ F f = 
+\\ id_{Fb} \circ F f = && \text{(by \cref{epsilon_id})}
+\\ \epsilon_{Fb} \circ F \eta_b \circ F f =
+\\ \epsilon_{Fb} \circ F (\eta_b \circ f)
+\end{aligned}
+\]
+
+This proves that $GF f \circ \eta_a = \eta_b \circ f$ which is exactly the equation defined by the naturality square.
+
+\qed
+
+\subsubsection{$\ref{def:natural} \Rightarrow \ref{def:isocollection}$}
+We have two natural transformations $\epsilon \colon FG \dotarrow I$, $\eta \colon I \dotarrow GF$, such that $G\epsilon \circ \eta_G = I$, $\epsilon_F \circ F\eta = I$.
+
+We want to get a collection of isomorphisms $\phi_{x,y} \colon Hom(Fx, y) \stackrel{\simeq}{\longrightarrow} Hom(x, Gy)$ that is natural in $x$ and in $y$.
+
+We do this by defining $\phi_{x,y}$, $\phi_{x,y}^{-1}$ as follows.
+\[
+\begin{tikzcd}
+Hom(Fx, y) \arrow[r, shift left, "\phi_{x,y}"] & \arrow[l, shift left, "\phi_{x,y}^{-1}"] Hom(x,Gy) \\[-10pt]
+f \arrow[r, maps to] & Gf \circ \eta_x \\[-20pt]
+\epsilon_y \circ F g & g \arrow[l, maps to]
+\end{tikzcd}
+\]
+
+We now have to prove:
+\begin{enumerate}
+	\item \label{iso} $\phi_{x,y}$ is an isomorphism
+	\item \label{square1} The first naturality square in \cref{def:isocollection} commutes.
+	\item \label{square2} The second naturality square in \cref{def:isocollection} commutes.
+\end{enumerate}
+
+We prove \cref{iso} by showing that our definitions of $\phi_{x,y}$ and $\phi_{x,y}^{-1}$ are actually inverses. This happens because:
+
+\[
+\begin{aligned}
+\phi_{x,y} (\phi_{x,y}^{-1}(g)) =
+\\ G(\phi_{x,y}^{-1}(g)) \circ \eta_x =
+\\ G(\epsilon_y \circ F g) \circ \eta_x =
+\\ G\epsilon_y \circ GF g \circ \eta_x = && \text{(by naturality of $\eta$)}
+\\ G\epsilon_y \circ \eta_{Gy} \circ g =
+\\ id_{Gy} \circ g = 
+\\ g
+\end{aligned}
+\]
+
+and
+
+\[
+\begin{aligned}
+\phi_{x,y}^{-1}(\phi_{x,y}(f)) =
+\\ \epsilon_y \circ F(\phi_{x,y}(f)) =
+\\ \epsilon_y \circ F(Gf \circ \eta_x) =
+\\ \epsilon_y \circ FGf \circ F\eta_x = && \text{(by naturality of $\epsilon$)}
+\\ f \circ \epsilon_{Fx} \circ F\eta_x =
+\\ f \circ id_{Fx} =
+\\ f
+\end{aligned}
+\]
+
+\blackqed
+
+To prove \cref{square1}, let us take a look at the first naturality square for $\phi$:
+
+\[
+\begin{tikzcd}
+Hom(Fa, b) \arrow[r, "\phi_{a,b}"] \arrow[d, "{Hom(Ff,b)}"] & Hom(a, Gb) \arrow[d, "{Hom(f, Gb)}"]
+\\ Hom(Fa', b) \arrow[r, "\phi_{a',b}"] & Hom(a', Gb)
+\end{tikzcd}
+\begin{tikzcd}
+h \arrow[r, maps to] \arrow[d, maps to] & \phi_{a,b}(h) \arrow[d, maps to]
+\\ h \circ Ff \arrow[r, maps to] & \phi_{a',b}(h \circ Ff) = \phi_{a,b}(h) \circ f
+\end{tikzcd}
+\]
+
+Replacing with our definition for $\phi$, we get that we have to prove:
+
+\[
+\begin{tikzcd}
+h \arrow[r, maps to] \arrow[d, maps to] & Gh \circ \eta_a \arrow[d, maps to]
+\\ h \circ Ff \arrow[r, maps to] & G(h \circ Ff) \circ \eta_{a'} = Gh \circ \eta_a \circ f
+\end{tikzcd}
+\]
+
+But this is true, for:
+
+\[
+\begin{aligned}
+G(h \circ Ff) \circ \eta_{a'} =
+\\ Gh \circ GFf \circ \eta_{a'} = && \text{(by naturality of $\eta$)}
+\\ Gh \circ \eta_{a} \circ f
+\end{aligned}
+\]
+
+\blackqed
+
+To prove \cref{square2}, let us take a look at the second naturality square for $\phi$:
+
+\[
+\begin{tikzcd}
+Hom(Fa, b) \arrow[r, "\phi_{a,b}"] \arrow[d, "{Hom(Fa,f)}"] & Hom(a, Gb) \arrow[d, "{Hom(a, Gf)}"]
+\\ Hom(Fa, b') \arrow[r, "\phi_{a,b'}"] & Hom(a, Gb')
+\end{tikzcd}
+\begin{tikzcd}
+h \arrow[r, maps to] \arrow[d, maps to] & \phi_{a,b}(h) \arrow[d, maps to]
+\\ f \circ h \arrow[r, maps to] & \phi_{a,b'}(f \circ h) = Gf \circ \phi_{a,b}(h)
+\end{tikzcd}
+\]
+
+Replacing with our definition for $\phi$, we get that we have to prove:
+
+\[
+\begin{tikzcd}
+h \arrow[r, maps to] \arrow[d, maps to] & Gh \circ \eta_a \arrow[d, maps to]
+\\ f \circ h \arrow[r, maps to] & G(f \circ h) \circ \eta_{a} = Gf \circ Gh \circ \eta_a
+\end{tikzcd}
+\]
+
+This is trivial. \qed
+
+\subsection{Conclusions}
+
+So\textellipsis Why did we go through all of this? What do we have now that we didn't before?
+
+The answer is two-fold: We now have more understanding of what an adjunction is, and we have more tools to work with adjunctions in the future.
+
+We understand adjunctions better because we are able to see them through different angles now.
+
+We no longer think an adjunction is just a relation between Hom-sets, we know that it also defines a family of universal morphisms (and we also know \textit{in what way} it defines such a family).
+
+And that also gives us more power: We can now use any of the lenses we have to see adjunctions to attack any problem related to them.
+
+That will be essential, when we start attacking the relation between monads and adjunctions next class.
+
+\pagebreak
+
+\section{Appendix}
+
+\subsection{Lemmas}
+
+Some lemmas were used above and are defined here to keep the flow of the proofs steady.
+
+\begin{lemma}{For any arrow $g \colon x \to Gy$, $\phi_{x,y}^{-1}(g) = \phi_{Gy,y}^{-1}(id_{Gy}) \circ Fg$}\label{lem:phi_inv}
+	
+\end{lemma}
+
+The proof for this lemma can be easily obtained by chasing the first naturality diagram for $\phi^{-1}$ (which is just the first naturality diagram for $\phi$ reversed at the x-axis) at $a = Gy, a' = x, b = y$.
+
+\[
+\begin{tikzcd}
+Hom(G y, G y) \arrow[r, "\phi_{Gy,y}^{-1}"] \arrow[d, "{Hom(g,Gy)}"] 
+& Hom(FG y, y) \arrow[d,"{Hom(Fg,y)}"] \\[25pt]
+Hom(x, Gy) \arrow[r, swap, "\phi_{x,y}^{-1}"] & Hom(F x, y)
+\end{tikzcd}
+\begin{tikzcd}
+id_{Gy} \arrow[r,maps to] \arrow[d,maps to] &[-15pt] \phi^{-1}_{Gy,y} (id_{Gy}) \arrow[d, maps to] \\[25pt]
+id_{Gy} \circ g = g \arrow[r, maps to] & \phi_{x,y}^{-1} (g) = \phi_{Gy,y}^{-1}(id_{Gy}) \circ F g
+\end{tikzcd}
+\]
+
+\qed
+
+\begin{lemma}{$\epsilon_c = \phi_{Gc,c}^{-1}(id_{Gc}) \colon FG \dotarrow I$ is a natural transformation}\label{lem:phi_inv_nat}
+\end{lemma}
+	
+In this case, the definition of natural transformation is that the following square commutes for all $c, c', f \colon c \to c'$:
+\[
+\begin{tikzcd}
+FG c \arrow[r, "\epsilon_c"] \arrow[d, "{FG f}"] 
+&[50pt] c \arrow[d,"f"] \\[25pt]
+FG c' \arrow[r, "\epsilon_{c'}"] & c'
+\end{tikzcd}
+\]
+
+Or, in algebraic terms, $\epsilon_{c'} \circ FG f = f \circ \epsilon_c$.
+
+We get to that point by applying \cref{lem:phi_inv} at $x = G c, y = c', g = G f$ and get $\epsilon_{c'} \circ FG f = \phi_{Gc',c'}^{-1}(id_{Gc'}) \circ FG f = \phi_{Gc,c'}^{-1}(G f)$, and then chasing the second naturality diagram for $\phi^{-1}$ at $a = Gc, b = c, b' = c'$ to get:
+
+\[
+\begin{tikzcd}
+Hom(G c, G c) \arrow[r, "\phi_{Gc,c}^{-1}"] \arrow[d, "{Hom(Gc,Gf)}"] 
+& Hom(FG c, c) \arrow[d,"{Hom(FG c,f)}"] \\[25pt]
+Hom(G c, G c') \arrow[r, swap, "\phi_{Gc,c'}^{-1}"] & Hom(FG c, c')
+\end{tikzcd}
+\begin{tikzcd}
+id_{Gc} \arrow[r,maps to] \arrow[d,maps to] &[-15pt] \phi^{-1}_{Gc,c} (id_{Gc}) \arrow[d, maps to] \\[25pt]
+Gf \arrow[r, maps to] & \phi_{Gc,c'}^{-1} (Gf) = f \circ \phi_{Gc,c}^{-1}(id_{Gc})
+\end{tikzcd}
+\]
+
+Hence, $\epsilon_{c'} \circ FG f = \phi_{Gc',c'}^{-1}(id_{Gc'}) \circ FG f = \phi_{Gc,c'}^{-1}(G f) = f \circ \phi_{Gc,c}^{-1}(id_{Gc}) =  f \circ \epsilon_c$. \qed
+
+\begin{lemma}\label{lem:epsilon_unique}
+	If two arrows $f_1,f_2 \colon a \to Gb$ are such that $\epsilon_b \circ Ff_1 = \epsilon_b \circ Ff_2$, then $f_1 = f_2$.
+\end{lemma}
+We prove this lemma by observing that we can put both $f_1$ and $f_2$ in the universal diagram:
+\[
+\begin{tikzcd}
+a \arrow[d, "f_2"] \arrow[d, swap, "f_1"] &[25pt] F a \arrow[d, "Ff_2"] \arrow[d, swap, "Ff_1"] \arrow[rd, "\epsilon_b \circ Ff_1 = \epsilon_b \circ Ff_2"] \\[35pt] Gb & FGb \arrow[r, "\epsilon_{b}"] &[50pt] b
+\end{tikzcd}
+\]
+
+Due to the uniqueness of $g$ for any $f$ in the universal diagram, both arrows must be the same.
+
+\end{document}
+

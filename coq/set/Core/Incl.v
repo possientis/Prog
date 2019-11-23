@@ -1,3 +1,5 @@
+(* NEXT: ===> Elem                                                              *)
+
 Require Import Le.
 Require Import Plus.
 
@@ -6,14 +8,22 @@ Require Import Core.Nat.
 Require Import Core.Core.
 Require Import Core.Order.
 
+(* At last we are able to define our inclusion relation on set. We previously   *)
+(* observed that given xs and ys and a natural number m, provided m is no less  *)
+(* than n = order xs + order ys, then all the inclusion statements in relation  *)
+(* to m are equivalent to the one in relation to n. Hence we simply define the  *)
+(* 'final' inclusion statement as the inclusion statement in relation to n.     *)
 Definition incl (xs ys:set) : Prop :=
     let n := order xs + order ys in incl_n n xs ys.
 
-
+(* This all important inclusion relation deserves an appropriate notation.      *)
 Notation "x <== y" := (incl x y) (at level 90) : set_scope.
 
 Open Scope set_scope.
 
+(* We shall need a few lemmas in order to prove that our relation has the       *)
+(* desired properties. The following allows us to deduce an inclusion statement *)
+(* for n from an inclusion statement proper, provided n is large enough.        *)
 Lemma incl_incl_n : forall (xs ys:set) (n:nat),
     order xs + order ys <= n    ->
     xs <== ys                   ->

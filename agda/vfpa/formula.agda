@@ -5,7 +5,7 @@ open import list
 -- PPIL : Positive Propositional Intuitionistic Logic
 data Formula : Set where
   Var   : ℕ → Formula
-  ⊤     : Formula
+  ⊤     : Formula -- \top
   _~>_  : Formula -> Formula -> Formula
   _&_   : Formula -> Formula -> Formula
 
@@ -13,7 +13,7 @@ data Formula : Set where
 Context : Set
 Context = 𝕃 Formula
 
-data _⊢_ : Context -> Formula -> Set where
+data _⊢_ : Context -> Formula -> Set where   -- \vdash
   Assume : {Γ : Context} → {φ : Formula} → (φ ∷ Γ) ⊢ φ
   Weaken : {Γ : Context} → {φ ψ : Formula} → Γ ⊢ φ → (ψ ∷ Γ) ⊢ φ
   TrueI  : {Γ : Context} → Γ ⊢ ⊤
