@@ -1,3 +1,7 @@
+{-# LANGUAGE ExistentialQuantification  #-}
+
+--import Data.Profunctor
+
 data  Lens s t a b 
     = Lens 
     { view :: s -> a
@@ -15,71 +19,27 @@ data  Adapter s t a b
     { from :: s -> a
     , to   :: b -> t 
     }
+
+data FunList a b t = Done t | More a (FunList a b (b -> t))
+
+-- FunList a b t is isomorphic to t + ax(FunList a b (b -> t))
+out :: FunList a b t -> Either t (a, FunList a b (b -> t))
+out (Done t)    = Left t
+out (More x l)  = Right (x,l) 
+
+inn :: Either t (a, FunList a b (b -> t)) -> FunList a b t
+inn (Left t)        = Done t
+inn (Right (x,l))   = More x l
+
+-- Adapters are lenses
+toLense :: Adapter s t a b -> Lens s t a b
+toLense x = Lens view_ update_ where
+    view_ = from x
+    update_ = to x . fst 
     
-data State s a = State { run :: s -> (a, s) }
-
-data Tree a = Empty | Node (Tree a) a (Tree a)
-
-
-instance Functor (State s) where 
-    fmap f k = State $ \s -> let (a,s') = run k s in (f a, s')
-
-instance Applicative (State s) where
-    pure x  = State $ \s -> (x, s)
-    m <*> k = State $ \s -> 
-        let (f,s') = run m s in
-            let (x,s'') = run k s' in
-                (f x, s'') 
-
-p1 :: Lens (a,c) (b,c) a b
-p1  = Lens view_ update_ where
-    view_ (x,_) = x
-    update_ (x',(_,c)) = (x',c)
-
-sign :: Lens Integer Integer Bool Bool
-sign  = Lens view_ update_ where
-    view_ n = (n >= 0)
-    update_ (b,n) = if b then abs n else -(abs n)
-
-the :: Prism (Maybe a) (Maybe b) a b
-the  = Prism match_ build_ where
-    match_ (Just x) = Right x
-    match_ Nothing  = Left Nothing
-    build_ x        = Just x
-
-
-whole :: Prism Double Double Integer Integer
-whole  = Prism match_ build_ where
-    match_ x
-        | f == 0    = Right n
-        | otherwise = Left x
-        where (n,f) = properFraction x
-    build_ = fromIntegral
-
-p11 :: Lens ((a,c),d) ((b,c),d) a b
-p11  = Lens view_ update_ where
-    Lens v u = p1
-    view_   = v . v
-    update_ (x',xyz) = u (xy', xyz) where
-        xy' = u (x', xy)
-        xy  = v  xyz
-
-flatten :: Adapter ((a,b),c) ((a',b'),c') (a,b,c) (a',b',c')
-flatten  = Adapter from_ to_ where
-    from_ ((x,y),z) = (x,y,z)
-    to_ (x,y,z)   = ((x,y),z)
-
-inc :: Bool -> State Integer Bool
-inc b = State $ \s -> (b, s + 1)
-
-
-inorder :: (Applicative f) => (a -> f b) -> Tree a -> f (Tree b)
-inorder _ Empty = pure Empty
-inorder g (Node lt x rt) = pure Node <*> inorder g lt <*> g x <*> inorder g rt
-
-     
-countOdd :: Integer -> State Integer Bool
-countOdd n = if even n then pure False else inc True    
-
-
+-- Adapters are prisms
+toPrism :: Adapter s t a b -> Prism s t a b
+toPrism x = Prism match_ build_ where
+    match_ = Right . from x
+    build_ = to x
 
