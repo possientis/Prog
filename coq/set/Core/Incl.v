@@ -36,6 +36,8 @@ Proof.
     - assumption.
 Qed.
 
+(* This lemma allows us to go the other way, from an inclusion statement in     *)
+(* relation to n, to an inclusion statement proper, provided n is large enough. *)
 Lemma incl_n_incl : forall (xs ys:set) (n:nat),
     order xs + order ys <= n    ->
     incl_n n xs ys              ->
@@ -48,17 +50,22 @@ Proof.
     - assumption.
 Qed.
 
+(* Nil is a subset of every set. Interestingly, this may look like our first    *)
+(* theorem (as opposed to meta-theorem), i.e. our first provable proposition    *)
+(* which can be expressed in the language of set theory itself. However, we     *)
+(* have not made clear what 'the language of set theory' is at this stage.      *)
+(* A core language of set theory would not have '<==' or 'Nil' as a primitive,  *)
+(* and the statement 'Nil <== x' would need to be de-sugared in terms of core   *)
+(* primitives.                                                                  *)
 Lemma inclNil : forall (x:set), Nil <== x.
 Proof.
     intros x. unfold incl. apply incl_n_Nil. 
 Qed.
 
+(* The inclusion relation is reflexive.                                         *)
 Lemma incl_refl : forall (x:set), x <== x.
 Proof.
     intros x. apply incl_n_incl with (order x + order x).
     - apply le_n.
     - apply incl_n_refl. apply le_plus_l.
 Qed.
-
-
-

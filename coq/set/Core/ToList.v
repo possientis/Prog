@@ -1,3 +1,5 @@
+(* NEXT: ===> Trans                                                             *)
+
 Require Import Le.
 Require Import List.
 Require Import Plus.
@@ -9,6 +11,18 @@ Require Import Core.Core.
 Require Import Core.Incl.
 Require Import Core.Elem.
 
+(* A this stage of the development, both the inclusion relation <== and the     *)
+(* membership relation :: have been defined. However, although we have ensured  *)
+(* that the equivalence 'x :: y <-> {x} <== y' is true by definition, we still  *)
+(* know very little about these two relations and a lot of work is required to  *)
+(* prove many other expected properties so as to vindicate our choice of        *)
+(* definitions. One such property is the transitivity of the inclusion relation *)
+(* which will be established in the next module. For now, we look at two        *)
+(* difficult and crucially important lemmas: the first one establishes a formal *)
+(* link between the membership statement 'x :: xs' and the Coq statement        *)
+(* 'In y (toList xs)'. Of course it is not true that if x is an element of xs   *)
+(* then x should be an element of (toList xs). However, there should exists a y *)
+(* in (toList xs) which is 'equivalent' to x in the sense of double inclusion.  *)
 Lemma toListElem : forall (x xs:set), x :: xs <-> 
     exists (y:set), In y (toList xs) /\ (x <== y) /\ (y <== x).
 Proof.

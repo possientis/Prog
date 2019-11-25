@@ -1,3 +1,4 @@
-Continue proof of prop 363
-beta-validity of f for \x -> t1 in terms of beta-validity of f for t1 ?
+prop 365
+beta-validity => f(t) is what you'd expect (no need to go through f*)
+f(t) = f*(t)(U) provided U/\Fr(t) = 0 ?
 LAM/betavalid.tex

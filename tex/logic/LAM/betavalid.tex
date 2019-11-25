@@ -161,6 +161,22 @@ using proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that
     \end{eqnarray*}
 In order to jusfify the last equality, it is sufficient to prove
 that $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)$.
+However, by assumption $\sigma$ is $\beta$-valid for $\phi$. Hence
+for all $u\in\free(\phi)$ looking at 
+definition~(\ref{logic:def:LAM:beta:valid:substitution}) we have 
+$\free(\sigma(u))\subseteq\free(\sigma(\phi))$ and it is therefore 
+sufficient to prove the inclusion $\free(\sigma(\phi))\subseteq\{x\}^{c}$,
+which follows from:
+    \begin{eqnarray*}
+        \free(\sigma(\phi))
+        &=&\free(\sigma^{*}(\phi)(\emptyset))\\
+        &=&\free(\sigma^{*}(\lambda x\phi_{1})(\emptyset))\\
+        \mbox{def.~(\ref{logic:def:LAM:subst})$\ \rightarrow\ $}
+        &=&\free(\lambda x \sigma^{*}(\phi_{1})(\{x\}))\\
+        \mbox{def.~(\ref{logic:def:LAM:free:variable})$\ \rightarrow\ $}
+        &=&\free(\sigma^{*}(\phi_{1})(\{x\}))\setminus\{x\}\\
+        &\subseteq&\{x\}^{c}
+    \end{eqnarray*}
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app}
@@ -199,3 +215,48 @@ that $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)$.
     $\free(\sigma(x))\subseteq\free(\sigma(\psi))$ as desired.
     The case $x\in\free(\phi_{2})$ is handled similarly.
 \end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:lam}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
+    of the form $\phi=\lambda x\phi_{1}$ with $\phi_{1}\in\tv$ and $x\in V$. 
+    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is $\beta$-valid 
+    for $\phi_{1}$ and for all $u\in V$ we have:
+    \[
+        u\in\free(\lambda x\phi_{1})\ \Rightarrow\ x\not\in\free(\sigma(u))
+    \]
+\end{prop}
+\begin{proof}
+    First we show the 'only if' part. So suppose $\sigma$ is $\beta$-valid
+    for $\phi=\lambda x\phi_{1}$. Since $\phi_{1}\preceq\phi$, from
+    proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we immediately
+    see that $\sigma$ is $\beta$-valid for $\phi_{1}$. So given
+    $u\in\free(\lambda x \phi_{1})=\free(\phi)$ it remains to show that
+    $x\not\in\free(\sigma(u))$. However, from the $\beta$-validity of 
+    $\sigma$ for $\phi$ and $u\in\free(\phi)$ we obtain
+    $\free(\sigma(u))\subseteq\free(\sigma(\phi))$. Hence it is sufficient
+    to show that $x\not\in\free(\sigma(\phi))$ which follows from:
+    \begin{eqnarray*}
+        \free(\sigma(\phi))
+        &=&\free(\sigma^{*}(\lambda x\phi_{1})(\emptyset))\\
+        \mbox{def.~(\ref{logic:def:LAM:subst})$\ \rightarrow\ $}
+        &=&\free(\lambda x \sigma^{*}(\phi_{1})(\{x\}))\\
+        \mbox{def.~(\ref{logic:def:LAM:free:variable})$\ \rightarrow\ $}
+        &=&\free(\sigma^{*}(\phi_{1})(\{x\}))\setminus\{x\}
+    \end{eqnarray*}
+    We now prove the 'if part'. So we assume that $\sigma$ is $\beta$-valid
+    for $\phi_{1}$ and furthermore that for all $u\in\free(\lambda x\phi_{1})$
+    we have $x\not\in\free(\sigma(u))$. We need to show that $\sigma$ is 
+    $\beta$-valid for $\phi=\lambda x\phi_{1}$. So let $\psi\preceq\phi$ and 
+    $u\in\free(\psi)$. We need to show that 
+    $\free(\sigma(u))\subseteq\free(\sigma(\psi))$. However from 
+    $\psi\preceq\lambda x\phi_{1}$ we see that either $\psi\preceq\phi_{1}$
+    or $\psi=\lambda x\phi_{1}$. When $\psi\preceq\phi_{1}$, the inclusion
+    $\free(\sigma(u))\subseteq\free(\sigma(\psi))$ follows immediately
+    from the $\beta$-validity of $\sigma$ for $\phi_{1}$. Hence we assume 
+    that $\psi=\lambda x\phi_{1}=\phi$. Then from $u\in\free(\psi)$ we
+    obtain $u\in\free(\lambda x\phi_{1})$ and by assumption, this implies
+    that $x\not\in\free(\sigma(u))$, and it remains to show that 
+    $\free(\sigma(u))\subseteq\free(\sigma(\phi))$.
+
+\end{proof}
+

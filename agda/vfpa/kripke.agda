@@ -51,8 +51,8 @@ val-mono : ∀ {x y : world} {n : ℕ} → rel x y → val x n → val y n
 val-mono (rrefl w) q = q
 
 -- Example of Kripke structure
-k : Kripke
-k = record
+kex : Kripke
+kex = record
   { W     = world
   ; R     = rel
   ; refl  = rel-refl
