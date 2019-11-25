@@ -65,6 +65,10 @@ Proof.
                         { assumption. }}}}
 Qed.
 
+(* The second lemma establishes a formal link between the inclusion statement   *)
+(* 'xs <= ys' and the implication 'In z (toList xs) -> z :: ys' for all z. Note *)
+(* that it is not quite the expected implication 'z :: xs -> z :: ys' but it is *)
+(* clear that this lemma is a step towards achieving that goal.                 *)
 Lemma toListIncl : forall (xs ys:set), xs <== ys <->
     (forall (z:set), In z (toList xs) -> z :: ys).
 Proof.

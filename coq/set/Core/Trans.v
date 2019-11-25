@@ -1,3 +1,5 @@
+(* NEXT: ===> ElemIncl                                                          *)
+
 Require Import Le.
 Require Import Plus.
 
@@ -9,6 +11,11 @@ Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.ToList.
 
+(* We have already established that out inclusion relation <== is reflexive.    *)
+(* In this module, we tackle a far more difficult property, namely proving that *)
+(* <== is a transitive relation. Obviously our definition would be useless if   *)
+(* this property did not hold, so it is very important that we establish it. We *)
+(* start with the inclusion statements which are relative to a natural number.  *)
 Lemma incl_n_trans : forall (x y z:set) (n:nat),
     order x + order y + order z <= n ->
     incl_n n x y -> incl_n n y z -> incl_n n x z.
@@ -94,6 +101,7 @@ Proof.
                       { assumption. }}}
 Qed.
 
+(* We can now extend the previous results to inclusion statements proper.       *)
 Theorem incl_trans : forall (x y z:set),
     x <== y -> y <== z -> x <== z.
 Proof.

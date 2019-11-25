@@ -1,3 +1,5 @@
+(* NEXT: ===> Extensionality                                                    *)
+
 Require Import Core.Set.
 Require Import Core.Elem.
 
