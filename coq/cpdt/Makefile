@@ -28,6 +28,7 @@ all:	Utils/nat.vo \
 		RedBlackTree.vo \
 		regex.vo \
 		Ltac/find_if.vo \
+		Ltac/monoid.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
 		Test/option_t.vo
@@ -122,6 +123,9 @@ regex.vo : regex.v
 	
 Ltac/find_if.vo : Ltac/find_if.v
 	coqc Ltac/find_if.v -R Ltac Ltac
+
+Ltac/monoid.vo : Ltac/monoid.v
+	coqc Ltac/monoid.v -R Ltac Ltac
 
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 

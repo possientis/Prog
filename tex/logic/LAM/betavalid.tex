@@ -144,10 +144,15 @@ using proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that
         &=&\free(\sigma^{*}(\phi_{1})(U\cup\{x\}))\setminus\{x\}\\
         \mbox{$\sigma$ $\beta$-valid for $\phi_{1}\ \rightarrow\ $}
         &=& [\ (\free(\phi_{1})\cap(U\cup\{x\}))\ \ \ \cup\ 
-            \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}\free(\sigma(u))
+            \!\!\!\!\!\!\!\!\!\!
+            \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}
+            \!\!\!\!\!\!\!\!\!\!
+            \free(\sigma(u))
              \ ]\setminus\{x\}\\
         &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})\ \ \ \cup\ 
+            \!\!\!\!\!\!
             \bigcup_{u\in\free(\phi_{1})\cap U^{c}\cap\{x\}^{c}}
+            \!\!\!\!\!\!
             \free(\sigma(u))\setminus\{x\}\\
         &=&(\free(\lambda x\phi_{1})\cap U)\ \ \ \cup\ 
             \bigcup_{u\in\free(\lambda x\phi_{1})\setminus U}
@@ -256,7 +261,24 @@ which follows from:
     that $\psi=\lambda x\phi_{1}=\phi$. Then from $u\in\free(\psi)$ we
     obtain $u\in\free(\lambda x\phi_{1})$ and by assumption, this implies
     that $x\not\in\free(\sigma(u))$, and it remains to show that 
-    $\free(\sigma(u))\subseteq\free(\sigma(\phi))$.
-
+    $\free(\sigma(u))\subseteq\free(\sigma(\phi))$, which is
+    $\free(\sigma(u))\subseteq\free(\sigma^{*}(\phi_{1})(\{x\}))\setminus\{x\}$.
+    From $x\not\in\free(\sigma(u))$ we already know that 
+    $\free(\sigma(u))\subseteq\{x\}^{c}$ and it remains to show that
+    $\free(\sigma(u))\subseteq\free(\sigma^{*}(\phi_{1})(\{x\}))$. However, from 
+    proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen:valid}) using the 
+    $\beta$-validity of $\sigma$ for $\phi_{1}$, we have:
+    \begin{eqnarray*}
+        \free(\sigma^{*}(\phi_{1})(\{x\}))
+        &=&(\free(\phi_{1})\cap\{x\})
+            \cup
+            \bigcup_{v\in\free(\phi_{1})\setminus\{x\}} \free(\sigma(v))\\
+        &=&(\free(\phi_{1})\cap\{x\})
+            \cup
+            \bigcup_{v\in\free(\lambda x\phi_{1})} \free(\sigma(v))
+    \end{eqnarray*}
+    and the inclusion 
+    $\free(\sigma(u))\subseteq\free(\sigma^{*}(\phi_{1})(\{x\}))$ simply
+    follows from $u\in\free(\lambda x\phi_{1})$.
 \end{proof}
 

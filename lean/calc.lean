@@ -62,3 +62,14 @@ lemma L7 : ∀ (x y : ℕ), (x + y)*(x + y) = x * x + y * x + x * y + y * y
   ...               = x * x + y * x + x * y + y * y   : by rw ←add_assoc -- \l
 
 #check L7
+
+lemma L8 : ∀ (x y : ℕ), (x + y)*(x + y) = x * x + y * x + x * y + y * y
+  := assume x y, by rw [mul_add, add_mul, add_mul, ←add_assoc]
+
+#check L8
+
+lemma L9 : ∀ (x y : ℕ), (x + y)*(x + y) = x * x + y * x + x * y + y * y
+  := assume x y, by simp [mul_add, add_mul]
+
+
+#check L9

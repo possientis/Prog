@@ -51,3 +51,52 @@ Proof.
     - simpl. rewrite identr. reflexivity.
     - simpl. rewrite <- appDenote. rewrite IH1, IH2. reflexivity.
 Qed.
+
+Theorem monoidReflect : forall (me1 me2:MExp),
+    mlDenote (flatten me1) = mlDenote (flatten me2) -> 
+    mDenote me1 = mDenote me2.
+Proof.
+    intros me1 me2 H. rewrite flattenCorrect, flattenCorrect. assumption.
+Qed.
+
+Ltac reify me :=
+    match me with
+    | e     => Ident
+    | ?me1 + ?me2   =>
+        let r1 := reify me1 in
+        let r2 := reify me2 in
+            constr:(Op r1 r2)
+    | _ => constr:(Var me)
+    end.
+
+(* change tactic changes the goal into something equivalent *)
+Lemma L1 : 2 * 2 = 4.
+Proof.
+    change (2 * 2 = 2 * 2).
+    change (4 = 4).
+    reflexivity.
+Qed.
+
+(* very cool *)
+Ltac monoid :=
+    match goal with
+    | [ |- ?me1 = ?me2 ]    =>
+        let r1 := reify me1 in
+        let r2 := reify me2 in
+            change (mDenote r1 = mDenote r2);
+                apply monoidReflect; simpl
+    end.
+
+Theorem T1 : forall (a b c d:M), a + b + c + d = a + (b + c) + d.
+Proof.
+    intros a b c d. monoid. reflexivity.
+Qed.
+
+Theorem T2 : forall (a b c d:M), a + b + c + d = a + (b + (c + d)).
+Proof.
+    intros a b c d. monoid. reflexivity.
+Qed.
+
+(*
+Print T1.
+*)
