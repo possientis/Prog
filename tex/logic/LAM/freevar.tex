@@ -47,8 +47,8 @@ Then for all $U\subseteq V$ we have:
         \free(\sigma^{*}(\phi)(U)) 
             \subseteq 
         (\free(\phi)\cap U)\ \ \ 
-            \cup
-        \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
+            \!\!\!\!\cup\!\!\!\!
+        \bigcup_{x\in\free(\phi)\setminus U}\!\!\!\! \free(\sigma(x))
     \]
 where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
 definition~(\ref{logic:def:LAM:subst}).
@@ -74,9 +74,10 @@ In particular, the inclusion holds. If $x\not\in U$, then:
         &=&\free(\sigma^{*}(x)(U))\\
         &=&\free(\sigma_{U}(x))\\
         \mbox{$x\not\in U\ \rightarrow\ $}&=&\free(\sigma(x))\\
-        &=&\bigcup_{u\in\{x\}} \free(\sigma(u))\\
-        &=&\bigcup_{u\in\free(\phi)} \free(\sigma(u))\\
-        \mbox{$x\not\in U\ \rightarrow\ $}&=&\bigcup_{u\in\free(\phi)\setminus U} 
+        &=&\!\!\!\bigcup_{u\in\{x\}} \free(\sigma(u))\\
+        &=&\!\!\!\!\!\bigcup_{u\in\free(\phi)}\!\! \free(\sigma(u))\\
+        \mbox{$x\not\in U\ \rightarrow\ $}
+        &=&\!\!\!\!\!\!\!\!\bigcup_{u\in\free(\phi)\setminus U}\!\!\!\!\!
             \free(\sigma(u))
     \end{eqnarray*}
 Hence once again, the inclusion holds. We now assume that 
@@ -87,14 +88,20 @@ inclusion for all $U\subseteq V$. Then for all $U\subseteq V$ we have:
         &=&\free(\sigma^{*}(\phi_{1}\ \phi_{2})(U))\\
         &=&\free(\ \sigma^{*}(\phi_{1})(U)\ \ \sigma^{*}(\phi_{2})(U)\ )\\
         &=&\free(\sigma^{*}(\phi_{1})(U))\cup\free(\sigma^{*}(\phi_{2})(U))\\
-        &\subseteq&(\free(\phi_{1})\cap U)\ \ \ \cup\ 
-            \bigcup_{x\in\free(\phi_{1})\setminus U} \free(\sigma(x))\\
-        &\cup&(\free(\phi_{2})\cap U)\ \ \ \cup\ 
-            \bigcup_{x\in\free(\phi_{2})\setminus U} \free(\sigma(x))\\
-        &=&(\free(\phi_{1})\cup\free(\phi_{2}))\cap U\\
-        &\cup&\bigcup_{x\in(\free(\phi_{1})\cup\free(\phi_{2}))\setminus U}
+        &\subseteq&(\free(\phi_{1})\cap U)\ \ \cup 
+            \!\!\!\!\!\!\bigcup_{x\in\free(\phi_{1})\setminus U}\!\!\!\!\!\!
             \free(\sigma(x))\\
-        &=&(\free(\phi)\cap U)\ \ \ \cup\ \bigcup_{x\in\free(\phi)\setminus U}
+        &\cup&(\free(\phi_{2})\cap U)\ \ \cup
+            \!\!\!\!\!\!\bigcup_{x\in\free(\phi_{2})\setminus U}\!\!\!\!\!\!
+            \free(\sigma(x))\\
+        &=&(\free(\phi_{1})\cup\free(\phi_{2}))\cap U
+        \ \cup
+        \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+        \bigcup_{x\in(\free(\phi_{1})\cup\free(\phi_{2}))\setminus U}
+        \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+        \free(\sigma(x))\\
+        &=&(\free(\phi)\cap U)\ \ \cup\ 
+        \!\!\!\!\bigcup_{x\in\free(\phi)\setminus U}\!\!\!\!
             \free(\sigma(x))
     \end{eqnarray*}
 Finally, we assume that $\phi=\lambda x\phi_{1}$ where $\phi_{1}\in\tv$ 
@@ -105,20 +112,37 @@ we have:
         &=&\free(\sigma^{*}(\lambda x\phi_{1})(U))\\
         &=&\free(\lambda x\sigma^{*}(\phi_{1})(U\cup\{x\}))\\
         &=&\free(\sigma^{*}(\phi_{1})(U\cup\{x\}))\setminus\{x\}\\
-        &\subseteq& [\ (\free(\phi_{1})\cap(U\cup\{x\}))\ \ \ \cup\ 
-            \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}\free(\sigma(u))
-             \ ]\setminus\{x\}\\
-        &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})\ \ \ \cup\ 
+        &\subseteq& [\ \ (\free(\phi_{1})\cap(U\cup\{x\}))
+            \ \cup
+            \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+            \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}
+            \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+            \free(\sigma(u))
+             \ \ ]\ \setminus\ \{x\}\\
+        &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})
+            \ \cup
+            \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
             \bigcup_{u\in\free(\phi_{1})\cap U^{c}\cap\{x\}^{c}}
+            \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
             \free(\sigma(u))\setminus\{x\}\\
-        &=&(\free(\lambda x\phi_{1})\cap U)\ \ \ \cup\ 
+        &=&(\free(\lambda x\phi_{1})\cap U)
+            \ \cup 
+            \!\!\!\!\!\!\!\!\!\!
             \bigcup_{u\in\free(\lambda x\phi_{1})\setminus U}
+            \!\!\!\!\!\!\!\!\!\!
             \free(\sigma(u))\setminus\{x\}\\
-        &=&(\free(\phi)\cap U)\ \ \ \cup\ \bigcup_{u\in\free(\phi)\setminus U} 
+        &=&(\free(\phi)\cap U)
+            \ \cup\ 
+            \!\!\!\!\!\!\!\!
+            \bigcup_{u\in\free(\phi)\setminus U} 
+            \!\!\!\!\!\!\!
             \free(\sigma(u))\setminus\{x\}\\
-        &\subseteq&(\free(\phi)\cap U)\ \ \ 
-            \cup\ 
-            \bigcup_{u\in\free(\phi)\setminus U}\free(\sigma(u))
+        &\subseteq&(\free(\phi)\cap U)
+            \ \cup\ 
+            \!\!\!\!\!\!\!\!
+            \bigcup_{u\in\free(\phi)\setminus U}
+            \!\!\!\!\!\!
+            \free(\sigma(u))
     \end{eqnarray*}
 \end{proof}
 

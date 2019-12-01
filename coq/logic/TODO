@@ -1,4 +1,4 @@
-fix bigcup ugliness
+fix bigcup ugliness (betavalid)
 beta-validity => f(t) is what you'd expect (no need to go through f*)
 f(t) = f*(t)(U) provided U/\Fr(t) = 0 ?
 f:V -> V can be viewed as a particular case of f:V -> T(V), review legacy results

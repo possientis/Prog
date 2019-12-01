@@ -1,3 +1,6 @@
+(* NEXT: ===> Decidability                                                      *) 
+
+
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
@@ -6,7 +9,17 @@ Require Import Core.Trans.
 Require Import Core.ElemIncl.
 Require Import Core.Equal.
 
-(* The extensionality axiom is satisfied in 'set'                               *)
+(* The extensionality axiom is one of the axioms of Zermelo-Fraenkel set theory *)
+(* aka 'ZF'. It expresses the fact that two sets are equal if and only if they  *)
+(* have identical elements. This axiom is true in our model. It is not obvious  *)
+(* that this should be the case, as we have defined equality between sets as a  *)
+(* stronger property than simply having identical elements. So this axiom is a  *)
+(* strong result, and it is effectively saying there is no need to check that   *)
+(* two sets belong to the same sets in order to establish their equality.       *)
+(* The statement of extensionality is an axiom in standard set theory. But of   *)
+(* course we are defining a model of set theory within Coq. So extensionality   *)
+(* is not an axiom in this case. It is something we prove from the Coq logical  *)
+(* system and our definitions of the type 'set' and the relations '::' and '==' *)
 Theorem extensionality : forall (x y:set),
     x == y <-> forall (z:set), z :: x <-> z :: y.
 Proof.
@@ -37,6 +50,9 @@ Proof.
                         { apply elemIncl. apply H. }}}}
 Qed.
 
+(* A consequence of extensionality is that equality is equivalent to double     *)
+(* inclusion. So while we were very careful to define equality in the proper    *)
+(* way, in the end we have a notion which is no stronger than double inclusion. *)
 Theorem doubleIncl : forall (x y:set), 
     x == y <-> (x <== y) /\ (y <== x).
 Proof.
@@ -47,6 +63,11 @@ Proof.
         + rewrite elemIncl in H2. apply H2. assumption.
 Qed.
 
+(* The following lemma will prove very useful in many places. Note that the     *)
+(* statement of this lemma involves the constructor 'Cons' which is not a       *)
+(* primitive of a core set theoretic language. So this lemma, like many of the  *)
+(* results we have proved until now, can be regarded as a lemma of the 'meta'   *)
+(* theory. It is not a lemma of set theory itself.                              *)
 Lemma consElem : forall (x xs z:set), z :: Cons x xs <-> (z == x) \/ z :: xs.
 Proof.
     intros x xs z. split.

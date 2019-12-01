@@ -32,8 +32,10 @@ Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every
 subformula $\psi\preceq\phi$, we have:
     \[
         \free(\sigma(\psi))
-        =
-        \bigcup_{x\in\free(\psi)} \free(\sigma(x))
+        =\!\!\!\!
+        \bigcup_{x\in\free(\psi)} 
+        \!\!\!\!
+        \free(\sigma(x))
     \]
 \end{prop}
 \begin{proof}
@@ -48,7 +50,7 @@ subformula $\psi\preceq\phi$, we have:
     holding for every $\psi\preceq\phi$. This implication is in turn 
     equivalent to the inclusion:
     \[
-        \bigcup_{x\in\free(\psi)} \free(\sigma(x))
+        \bigcup_{x\in\free(\psi)} \!\!\!\!\free(\sigma(x))
         \subseteq
         \free(\sigma(\psi))
     \]
@@ -69,9 +71,12 @@ $\beta$-valid for $\phi$. Then for all $U\subseteq V$ we have:
     \[
         \free(\sigma^{*}(\phi)(U)) 
             \ =\ 
-        (\free(\phi)\cap U)\ \ \ 
-            \cup
-        \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
+        (\free(\phi)\cap U)
+        \ \cup
+        \!\!\!\!\!\!
+        \bigcup_{x\in\free(\phi)\setminus U} 
+        \!\!\!\!\!\!
+        \free(\sigma(x))
     \]
 where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
 definition~(\ref{logic:def:LAM:subst}).
@@ -91,8 +96,12 @@ either $x\in U$ or $x\not\in U$. If $x\in U$ we have:
          &=&\free(\phi)\\
         \mbox{$x\in U\ \rightarrow\ $}&=&\free(\phi)\cap U\\
         \mbox{$\free(\phi)\setminus U = \emptyset\ \rightarrow\ $} &=& 
-            (\free(\phi)\cap U)\ \ \ \cup
-            \bigcup_{x\in\free(\phi)\setminus U} \free(\sigma(x))
+            (\free(\phi)\cap U)
+            \ \cup
+            \!\!\!\!\!\!
+            \bigcup_{x\in\free(\phi)\setminus U} 
+            \!\!\!\!\!\!
+            \free(\sigma(x))
     \end{eqnarray*}
 If $x\not\in U$, then:
      \begin{eqnarray*}
@@ -100,8 +109,16 @@ If $x\not\in U$, then:
         &=&\free(\sigma^{*}(x)(U))\\
         &=&\free(\sigma_{U}(x))\\
         \mbox{$x\not\in U\ \rightarrow\ $}&=&\free(\sigma(x))\\
-        &=&\bigcup_{u\in\{x\}} \free(\sigma(u))\\
-        &=&\bigcup_{u\in\free(\phi)} \free(\sigma(u))\\
+        &=&
+        \!\!\!
+        \bigcup_{u\in\{x\}} 
+        \!\!
+        \free(\sigma(u))\\
+        &=&
+        \!\!\!\!\!
+        \bigcup_{u\in\free(\phi)} 
+        \!\!\!\!
+        \free(\sigma(u))\\
         \mbox{$x\not\in U\ \rightarrow\ $}&=&\bigcup_{u\in\free(\phi)\setminus U} 
             \free(\sigma(u))\\
         \mbox{$\free(\phi)\cap U = \emptyset\ \rightarrow\ $} &=& 

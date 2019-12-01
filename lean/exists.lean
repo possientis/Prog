@@ -53,4 +53,67 @@ set_option pp.implicit true -- display implicit arguments
 #print T3
 #print T4
 
+#check @exists.elim
 
+lemma L8 : ∀ (α : Type) (p q : α → Prop), (∃ (x : α), p x ∧ q x) → ∃ (x : α), q x ∧ p x
+  :=  assume α p q H,
+      show ∃ (x : α), q x ∧ p x,
+        from exists.elim H
+        (assume x H, exists.intro x
+          (show q x ∧ p x, from ⟨H.right,H.left⟩))
+
+#check L8
+
+lemma L9 : ∀ (α : Type) (p q : α → Prop), (∃ (x : α), p x ∧ q x) → ∃ (x : α), q x ∧ p x
+  :=  assume α p q H,
+      show ∃ (x : α), q x ∧ p x,
+        from exists.elim H
+        (assume x H,⟨x,H.right,H.left⟩)
+
+
+#check L9
+
+
+lemma L10 : ∀ (α : Type) (p q : α → Prop), (∃ (x : α), p x ∧ q x) → ∃ (x : α), q x ∧ p x
+  := assume α p q H,
+    match H with ⟨x,H⟩
+      := ⟨x,H.right,H.left⟩
+    end
+
+#check L10
+
+lemma L11 : ∀ (α : Type) (p q : α → Prop), (∃ (x : α), p x ∧ q x) → ∃ (x : α), q x ∧ p x
+  := assume α p q H,
+    match H with ⟨(x:α),(H:p x ∧ q x)⟩
+      := ⟨x,H.right,H.left⟩
+    end
+
+#check L11
+
+lemma L12 : ∀ (α : Type) (p q : α → Prop), (∃ (x : α), p x ∧ q x) → ∃ (x : α), q x ∧ p x
+  := assume α p q H,
+    match H with ⟨x, H1, H2⟩
+      := ⟨x,H2,H1⟩
+    end
+
+#check L12
+
+
+lemma L13 : ∀ (α : Type) (p q : α → Prop), (∃ (x : α), p x ∧ q x) → ∃ (x : α), q x ∧ p x
+  := assume α p q H,
+    let ⟨x,H1,H2⟩ := H in ⟨x,H2,H1⟩
+
+#check L13
+
+lemma L14 : ∀ (α : Type) (p q : α → Prop), (∃ (x : α), p x ∧ q x) → ∃ (x : α), q x ∧ p x
+  := assume α p q ⟨x,H1,H2⟩, ⟨x,H2,H1⟩
+
+#check L14
+
+def is_even (n : ℕ) : Prop := ∃ (m : ℕ), n = 2 * m
+
+lemma L15 : ∀ (n m : ℕ), is_even n → is_even m → is_even (n + m)
+  := assume n m ⟨k,H⟩ ⟨k',H'⟩, ⟨k + k',
+  calc
+    n + m   = 2 * k + 2 * k' : by _
+    ...     = 2 * (k + k')   : by _⟩

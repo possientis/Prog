@@ -9,7 +9,6 @@ echo "testing lean..."
 
 lean classical.lean
 lean calc.lean
-lean exists.lean
 
 # clean up
 ./clean.sh

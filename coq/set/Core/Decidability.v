@@ -1,3 +1,6 @@
+(* NEXT: ===> Pairing                                                           *) 
+
+
 Require Import List.
 
 Require Import Core.Set.
@@ -9,6 +12,15 @@ Require Import Core.Equal.
 Require Import Core.Filter.
 Require Import Core.Extensionality.
 
+(* In this module, we are having a small interlude focussing on decidability    *)
+(* results which are specific to the Coq meta-theory, and are not set theoretic *)
+(* results. These results are interesting in their own rights, but will also    *)
+(* prove useful when attempting to establish some set theoretic properties of   *)
+(* our model. By default, the Coq logical system does not allow us to assume    *)
+(* the 'law of excluded middle' aka 'LEM'. We could postulate LEM as an axiom   *)
+(* of our meta-theory but we should remember that our model is just a simple    *)
+(* model of finite sets in which many things can be proven true without LEM.    *)
+(* TODO *)
 Lemma set_eq_dec : forall (x y:set), {x = y} + {x <> y}.
 Proof.
     intros xs. induction xs as [|x IH1 xs IH2]; intros ys.

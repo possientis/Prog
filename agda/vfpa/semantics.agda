@@ -39,9 +39,28 @@ k , w ⊨ctxt (φ ∷ Γ) = (k , w ⊨ φ) ∧ (k , w ⊨ctxt Γ)
   ⊨-mono {k} {w₁} {w₂} {φ₁} p q1 ,
   ⊨-mono {k} {w₁} {w₂} {φ₂} p q2 )
 
-{-
+
 ⊨-mono-ctxt : ∀ {k : Kripke} {w₁ w₂ : W k} {Γ : Context} →
   R k w₁ w₂ → k , w₁ ⊨ctxt Γ → k , w₂ ⊨ctxt Γ
 ⊨-mono-ctxt {k} {w₁} {w₂} {[]} p q = q
-⊨-mono-ctxt {k} {w₁} {w₂} {φ ∷ Γ} p q = {!!}
+⊨-mono-ctxt {k} {w₁} {w₂} {φ ∷ Γ} p (q₁ , q₂) =
+  (⊨-mono {k} {w₁} {w₂} {φ} p q₁ , ⊨-mono-ctxt p q₂)
+
+-- Γ 'semantically entails' φ if and only if for every possible Kripke structure k
+-- and every possible world w of k, if Γ is true in w then φ is true in w.
+_⊨_ : Context → Formula → Set ℓ₁
+Γ ⊨ φ = ∀ {k : Kripke} { w : W k} → k , w ⊨ctxt Γ → k , w ⊨ φ
+
+{-
+-- if a formula φ is provable in a context Γ, then Γ semantically entails φ.
+Soundness : ∀ {Γ : Context} {φ : Formula} → Γ ⊢ φ → Γ ⊨ φ
+Soundness Assume (p , q) = p
+Soundness (Weaken p) (q , r) = Soundness p r
+Soundness TrueI _ = triv
+Soundness (AndI p q) r = (Soundness p r , Soundness q r)
+Soundness (AndE1 p) q = fst (Soundness p q)
+Soundness (AndE2 p) = {!!}
+Soundness (ImpI p) = {!!}
+Soundness (ImpE p p₁) = {!!}
 -}
+
