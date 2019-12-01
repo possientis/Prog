@@ -1,7 +1,5 @@
 {-# LANGUAGE ExistentialQuantification  #-}
 
---import Data.Profunctor
-
 data  Lens s t a b 
     = Lens 
     { view :: s -> a
