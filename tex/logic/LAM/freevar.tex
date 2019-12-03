@@ -46,9 +46,12 @@ Then for all $U\subseteq V$ we have:
     \[
         \free(\sigma^{*}(\phi)(U)) 
             \subseteq 
-        (\free(\phi)\cap U)\ \ \ 
-            \!\!\!\!\cup\!\!\!\!
-        \bigcup_{x\in\free(\phi)\setminus U}\!\!\!\! \free(\sigma(x))
+        (\free(\phi)\cap U)
+        \ \cup\ 
+        \!\!\!\!\!\!\!\!
+        \bigcup_{x\in\free(\phi)\setminus U}
+        \!\!\!\!\!\!
+        \free(\sigma(x))
     \]
 where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
 definition~(\ref{logic:def:LAM:subst}).
@@ -74,35 +77,54 @@ In particular, the inclusion holds. If $x\not\in U$, then:
         &=&\free(\sigma^{*}(x)(U))\\
         &=&\free(\sigma_{U}(x))\\
         \mbox{$x\not\in U\ \rightarrow\ $}&=&\free(\sigma(x))\\
-        &=&\!\!\!\bigcup_{u\in\{x\}} \free(\sigma(u))\\
-        &=&\!\!\!\!\!\bigcup_{u\in\free(\phi)}\!\! \free(\sigma(u))\\
+        &=&
+        \!\!\!
+        \bigcup_{u\in\{x\}} 
+        \!
+        \free(\sigma(u))\\
+        &=&
+        \!\!\!\!\!
+        \bigcup_{u\in\free(\phi)}
+        \!\!\!\!
+        \free(\sigma(u))\\
         \mbox{$x\not\in U\ \rightarrow\ $}
-        &=&\!\!\!\!\!\!\!\!\bigcup_{u\in\free(\phi)\setminus U}\!\!\!\!\!
-            \free(\sigma(u))
+        &=&\!\!\!\!\!\!\!\!
+        \bigcup_{u\in\free(\phi)\setminus U}
+        \!\!\!\!\!\!\!
+        \free(\sigma(u))
     \end{eqnarray*}
 Hence once again, the inclusion holds. We now assume that 
 $\phi=\phi_{1}\ \phi_{2}$ where $\phi_{1}, \phi_{2}\in\tv$ satisfy the 
 inclusion for all $U\subseteq V$. Then for all $U\subseteq V$ we have:
     \begin{eqnarray*}
         \free(\sigma^{*}(\phi)(U))
-        &=&\free(\sigma^{*}(\phi_{1}\ \phi_{2})(U))\\
+        &=&\free(\ \sigma^{*}(\phi_{1}\ \phi_{2})(U)\ )\\
         &=&\free(\ \sigma^{*}(\phi_{1})(U)\ \ \sigma^{*}(\phi_{2})(U)\ )\\
-        &=&\free(\sigma^{*}(\phi_{1})(U))\cup\free(\sigma^{*}(\phi_{2})(U))\\
-        &\subseteq&(\free(\phi_{1})\cap U)\ \ \cup 
-            \!\!\!\!\!\!\bigcup_{x\in\free(\phi_{1})\setminus U}\!\!\!\!\!\!
-            \free(\sigma(x))\\
-        &\cup&(\free(\phi_{2})\cap U)\ \ \cup
-            \!\!\!\!\!\!\bigcup_{x\in\free(\phi_{2})\setminus U}\!\!\!\!\!\!
-            \free(\sigma(x))\\
-        &=&(\free(\phi_{1})\cup\free(\phi_{2}))\cap U
-        \ \cup
-        \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
-        \bigcup_{x\in(\free(\phi_{1})\cup\free(\phi_{2}))\setminus U}
-        \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+        &=&\free(\sigma^{*}(\phi_{1})(U))\ \cup\ \free(\sigma^{*}(\phi_{2})(U))\\
+        &\subseteq&(\free(\phi_{1})\cap U)
+        \ \cup\ 
+        \!\!\!\!\!\!\!\!\!\!
+        \bigcup_{x\in\free(\phi_{1})\setminus U}
+        \!\!\!\!\!\!\!\!
         \free(\sigma(x))\\
-        &=&(\free(\phi)\cap U)\ \ \cup\ 
-        \!\!\!\!\bigcup_{x\in\free(\phi)\setminus U}\!\!\!\!
-            \free(\sigma(x))
+        &\cup&(\free(\phi_{2})\cap U)
+        \ \cup\ 
+        \!\!\!\!\!\!\!\!\!\!
+        \bigcup_{x\in\free(\phi_{2})\setminus U}
+        \!\!\!\!\!\!\!\!
+        \free(\sigma(x))\\
+        &=&(\free(\phi_{1})\cup\free(\phi_{2}))\cap U
+        \ \cup\ 
+        \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+        \bigcup_{x\in(\free(\phi_{1})\cup\free(\phi_{2}))\setminus U}
+        \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+        \free(\sigma(x))\\
+        &=&(\free(\phi)\cap U)
+        \ \cup\ 
+        \!\!\!\!\!\!\!\!
+        \bigcup_{x\in\free(\phi)\setminus U}
+        \!\!\!\!\!\!
+        \free(\sigma(x))
     \end{eqnarray*}
 Finally, we assume that $\phi=\lambda x\phi_{1}$ where $\phi_{1}\in\tv$ 
 satisfies the inclusion for all $U\subseteq V$. Then for all $U\subseteq V$ 
@@ -149,7 +171,9 @@ we have:
 \begin{prop}\label{logic:prop:LAM:freevar:of:betasubst:inclusion}
 Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$:
     \[
-    \free(\sigma(\phi))\subseteq\bigcup_{x\in\free(\phi)} \free(\sigma(x))
+    \free(\sigma(\phi))\subseteq
+    \!\!\!\!\bigcup_{x\in\free(\phi)}\!\!\!\!
+    \free(\sigma(x))
     \]
 where $\sigma:\tv\to\tv$ also denotes the associated $\beta$-subsitution mapping.
 \end{prop}
