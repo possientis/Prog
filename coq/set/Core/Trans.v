@@ -11,7 +11,7 @@ Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.ToList.
 
-(* We have already established that out inclusion relation <== is reflexive.    *)
+(* We have already established that our inclusion relation <== is reflexive.    *)
 (* In this module, we tackle a far more difficult property, namely proving that *)
 (* <== is a transitive relation. Obviously our definition would be useless if   *)
 (* this property did not hold, so it is very important that we establish it. We *)

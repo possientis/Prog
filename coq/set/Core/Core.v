@@ -190,7 +190,7 @@ Proof.
         + assumption.
 Qed.
 
-(* All inclusion  statements of the form 'incl_n n Nil x' are true.             *)
+(* All inclusion statements of the form 'incl_n n Nil x' are true.              *)
 Lemma incl_n_Nil : forall (x:set) (n:nat), incl_n n Nil x.
 Proof. intros x n. destruct n as [|n]; apply I. Qed.
 

@@ -16,7 +16,7 @@ Require Import Core.Set.
 (* defined in coq in any way we like. However, if we want our model of set      *)
 (* theory to be interesting, we shall need to use definitions which are more    *)
 (* complex than simple recursive definitions. In particular, we shall need to   *)
-(* reason on the 'complexity' of the arguments, as measured by the 'order'.      *)
+(* reason on the 'complexity' of the arguments, as measured by the 'order'.     *)
 Fixpoint order (xs:set) : nat :=
     match xs with
     | Nil       =>  0
@@ -39,7 +39,7 @@ Proof.
             { apply m_le_max. }
 Qed.
 
-(* This only set with order 0 is Nil.                                           *)
+(* The only set with order 0 is Nil.                                            *)
 Lemma order_0 : forall (xs:set), order xs = 0 -> xs = Nil.
 Proof.
     intros [|x xs].
