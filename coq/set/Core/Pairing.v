@@ -1,3 +1,6 @@
+(* NEXT: ===> Empty                                                             *) 
+
+
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
@@ -5,10 +8,19 @@ Require Import Core.Equal.
 Require Import Core.ToList.
 Require Import Core.Extensionality.
 
+(* In this module, we aim at proving the pairing axiom is satisfied in our      *) 
+(* model. So we define the 'pair' {x,y} given two sets x and y. For computer    *)
+(* scientists, note that this pair {x,y} is a set and should not be confused    *)
+(* with the 'tuple' (x,y) commonly known as 'ordered pair' (x,y) in set theory. *)
+(* The pair {x,y} is essentially 'unordered' and we have {x,y} == {y,x}.        *)
 Definition pair (x y:set) : set := Cons x (Cons y Nil).
 
+(* Coq may be confused by this notation as we have already introduced '{x}'.    *)
 Notation "{ x , y }" := (pair x y) : set_scope.
 
+(* Since equality between sets is determined by their elements, this lemma      *)
+(* characterizes the pair {x,y}. z is an element of {x,y} if and only if        *)
+(* z == x or z == y. Use this lemma to show that {x,y} == {y,x} or {x,x} = {x}. *)
 Lemma pair_charac : forall (x y z:set), z :: {x,y} <-> (z == x) \/ (z == y).
 Proof.
     intros x y z. split.

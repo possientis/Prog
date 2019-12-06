@@ -18,9 +18,22 @@ Require Import Core.Extensionality.
 (* prove useful when attempting to establish some set theoretic properties of   *)
 (* our model. By default, the Coq logical system does not allow us to assume    *)
 (* the 'law of excluded middle' aka 'LEM'. We could postulate LEM as an axiom   *)
-(* of our meta-theory but we should remember that our model is just a simple    *)
-(* model of finite sets in which many things can be proven true without LEM.    *)
-(* TODO *)
+(* of our meta-theory (which is known to be consistent with Coq's logic) but    *)
+(* we should remember that our model is just a simple model of finite sets in   *)
+(* which many things can be proven without using LEM. For those not so familiar *)
+(* with Coq, the term 'forall (x y:set), {x = y} + {x <> y}' is not strictly    *)
+(* speaking a 'proposition'. It is a term of type 'Set' and not of type 'Prop'. *)
+(* The term 'forall (x y:set), (x = y) \/ (x <> y)' *is* a proposition but is   *)
+(* not what we are aiming to 'prove' in the following lemma. Instead, what we   *)
+(* are presenting as a 'lemma' is a dependent function with return type equal   *)
+(* to 'forall (x y:set), {x = y} + {x <> y}'. Given x y of type 'set' (not to   *)
+(* be confused with the Coq type 'Set'), the term 'set_eq_dec x y' is of type   *)
+(* '{x = y} + {x <> y}' which corresponds to the Haskell sum type 'Either a b'  *)
+(* giving us either a proof of 'x = y' or a proof of 'x <> y'. Hence we are     *)
+(* proving the existence of a function which given two sets as arguments, gives *)
+(* us back either a proof of their equality or a proof of their non-equality.   *)
+(* This is a stonger 'property' than the proposition '(x = y) \/ (x <> y)'      *)
+(* which does not tell us which of 'x = y' or 'x <> y' is the case.             *)
 Lemma set_eq_dec : forall (x y:set), {x = y} + {x <> y}.
 Proof.
     intros xs. induction xs as [|x IH1 xs IH2]; intros ys.
@@ -36,7 +49,10 @@ Proof.
             { right. intros H. inversion H. apply H1. assumption. }
 Qed.
 
-
+(* A dependent function which given a 'nat' n and two sets xs ys as arguments,  *)
+(* returns either a proof of the (level n) inclusion 'incl_n n xs ys', or a     *)
+(* a proof that this inclusion is False. In other words, the partial inclusion  *)
+(* statement 'incl_n n xs ys' is said to be 'decidable'.                        *)
 Lemma incl_n_dec : forall (n:nat) (xs ys:set), 
     { incl_n n xs ys } + { ~ incl_n n xs ys }.
 Proof.
@@ -63,17 +79,19 @@ Proof.
             { simpl. right. intros [H1 H2]. apply H. assumption. }
 Qed.
 
-
+(* For all sets x y, the inclusion statement 'x <== y' is decidable.            *)
 Lemma incl_dec : forall (x y:set), { x <== y } + { ~ (x <== y) }.
 Proof.
     intros x y. unfold incl. apply incl_n_dec.
 Qed.
 
+(* For all sets x y, the membership statement 'x :: y' is decidable.            *)             
 Lemma elem_dec : forall (x y:set), { x :: y } + { ~ x :: y }.
 Proof.
     intros x y. unfold elem. apply incl_dec.
 Qed.
 
+(* For all sets x y, the equality statement 'x == y' is decidable.              *)
 Lemma equal_dec : forall (x y:set), { x == y } + { ~ (x == y) }.
 Proof.
     intros x y.  
@@ -83,4 +101,3 @@ Proof.
     - right. rewrite doubleIncl. intros [H3 H4]. apply H1. assumption.
     - right. rewrite doubleIncl. intros [H3 H4]. apply H1. assumption.
 Qed.
-
