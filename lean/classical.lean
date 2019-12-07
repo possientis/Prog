@@ -80,4 +80,19 @@ lemma L7 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := λ p
 
 #check L7
 
+-- not readable
+lemma L8 : ∀ (α:Type) (p:α → Prop), (¬∀ (x:α), ¬p x) → ∃ (x:α), p x :=
+assume α p H, by_contradiction
+  (assume H', H (assume x P, (H' ⟨x,P⟩)))
 
+#check L8
+
+-- is this better ?
+lemma L9 : ∀ (α:Type) (p:α → Prop), (¬∀ (x:α), ¬p x) → ∃ (x:α), p x :=
+  assume α p (H : ¬∀ x, ¬p x), by_contradiction
+    (assume H' : ¬∃ x, p x, show false,
+      from H (show ∀ x, ¬p x,
+        from assume x (P : p x), show false,
+          from H' (show ∃ x, p x,
+            from ⟨x,P⟩)))
+#check L9

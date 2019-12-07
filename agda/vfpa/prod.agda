@@ -8,3 +8,6 @@ data _∧_ {ℓ ℓ'} (a : Set ℓ) (b : Set ℓ') : Set (ℓ ⊔ ℓ') where
 
 fst : ∀ {ℓ ℓ'} {a : Set ℓ} {b : Set ℓ'} → a ∧ b → a
 fst (x , y) = x
+
+snd : ∀ {ℓ ℓ'} {a : Set ℓ} {b : Set ℓ'} → a ∧ b → b
+snd (x , y) = y

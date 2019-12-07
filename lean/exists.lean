@@ -114,6 +114,16 @@ def is_even (n : ℕ) : Prop := ∃ (m : ℕ), n = 2 * m
 
 lemma L15 : ∀ (n m : ℕ), is_even n → is_even m → is_even (n + m)
   := assume n m ⟨k,H⟩ ⟨k',H'⟩, ⟨k + k',
-  calc
-    n + m   = 2 * k + 2 * k' : by _
-    ...     = 2 * (k + k')   : by _⟩
+     show n + m = 2 * (k + k'),
+     from calc
+     n + m = 2 * k + m      : by rw H
+     ...   = 2 * k + 2 * k' : by rw H' 
+     ...   = 2 * (k + k')   : by rw mul_add
+     ⟩
+
+#check L15
+
+lemma L16 : ∀ (n m : ℕ), is_even n → is_even m → is_even (n + m)
+  := assume n m ⟨k,H⟩ ⟨k',H'⟩, ⟨k + k', by rw [H, H', mul_add]⟩
+
+#check L16

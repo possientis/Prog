@@ -1,5 +1,6 @@
-beta-validity => f(t) is what you'd expect (no need to go through f*)
+U/\Fr(t) = U'\/Fr(t) => f*(t)(U) = f*(t)(U') (nothing to do with validity)
 f(t) = f*(t)(U) provided U/\Fr(t) = 0 ?
+f|Fr(t) = g|Fr(t) => f(t) = g(t)
 f:V -> V can be viewed as a particular case of f:V -> T(V), review legacy results
 and make sure they are compatible with beta-results
 LAM/betavalid.tex

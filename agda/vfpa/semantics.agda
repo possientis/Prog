@@ -51,7 +51,11 @@ k , w ⊨ctxt (φ ∷ Γ) = (k , w ⊨ φ) ∧ (k , w ⊨ctxt Γ)
 _⊨_ : Context → Formula → Set ℓ₁
 Γ ⊨ φ = ∀ {k : Kripke} { w : W k} → k , w ⊨ctxt Γ → k , w ⊨ φ
 
-{-
+
+sem-modus : ∀ {k : Kripke} {w : W k} {φ ψ : Formula} →
+  k , w ⊨ (ψ ~> φ) → k , w ⊨ ψ → k , w ⊨ φ
+sem-modus {k} {w} {φ} {ψ} p q = p (refl k w) q
+
 -- if a formula φ is provable in a context Γ, then Γ semantically entails φ.
 Soundness : ∀ {Γ : Context} {φ : Formula} → Γ ⊢ φ → Γ ⊨ φ
 Soundness Assume (p , q) = p
@@ -59,8 +63,9 @@ Soundness (Weaken p) (q , r) = Soundness p r
 Soundness TrueI _ = triv
 Soundness (AndI p q) r = (Soundness p r , Soundness q r)
 Soundness (AndE1 p) q = fst (Soundness p q)
-Soundness (AndE2 p) = {!!}
-Soundness (ImpI p) = {!!}
-Soundness (ImpE p p₁) = {!!}
--}
+Soundness (AndE2 p) q = snd (Soundness p q)
+Soundness (ImpI p) q r s = Soundness p ( s , ⊨-mono-ctxt r q)
+Soundness (ImpE p q) r = sem-modus (Soundness p r) (Soundness q r)
+
+
 

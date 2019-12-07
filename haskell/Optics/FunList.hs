@@ -5,9 +5,7 @@
 {-# LANGUAGE KindSignatures         #-}
 {-# LANGUAGE ScopedTypeVariables    #-}
 
-import Data.Kind
-
-data Nat = Z | S Nat
+import Optics.Fin
 
 data FunList a b t = Done t | More a (FunList a b (b -> t))
 
@@ -25,10 +23,6 @@ inn (Right (x,l))   = More x l
 
 -- (out . inn) (Left t) = out (Done t) = Left t
 -- (out . inn) (Right (x,l)) = out (More x l) = Right (x,l)
-
-data Fin (n :: Nat) :: Type where
-    FZ :: Fin ('S n)
-    FS :: Fin n -> Fin ('S n)
 
 -- a^n x (b^n -> t), need to separate case n = 0 
 type FunList_ (n :: Nat) a b t = (Fin n -> a, (Fin n -> b) -> t)
@@ -66,8 +60,6 @@ to (xa, (fa,fb)) = (ga,gb) where
 data FunList' a b t where
     FunList' :: FunList_ n a b t -> FunList' a b t
 
-absurd :: Fin 'Z -> a
-absurd x = case x of {}
 
 
 

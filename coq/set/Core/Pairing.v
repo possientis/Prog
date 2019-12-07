@@ -42,7 +42,9 @@ Proof.
             { apply doubleIncl in H. destruct H as [H1 H2]. split; assumption. }
 Qed.
 
-(* The pairing axiom is satisfied in 'set'                                      *)
+(* The pairing axiom is satisfied in 'set': Given two sets x and y, there       *)
+(* exists a set z, such that for any set u, u is an element of z if and only if *)
+(* u is equal to x or u is equal to y. In other words, the pair {x,y} exists.   *)
 Theorem pairing : forall (x y:set), exists (z:set), forall (u:set),
     u :: z <-> (u == x) \/ (u == y).
 Proof.
