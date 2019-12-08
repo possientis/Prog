@@ -13,8 +13,8 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Extensionality.vo \
 								${CORE}/Decidability.vo \
-								${CORE}/Pairing.vo \
 								${CORE}/Empty.vo \
+								${CORE}/Pairing.vo \
 								${CORE}/Union.vo \
 								${CORE}/Intersection.vo \
 								${CORE}/Powerset.vo \
@@ -119,17 +119,6 @@ ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
 								${CORE}/Extensionality.vo
 	coqc ${CORE}/Decidability.v -R ${CORE} ${CORE}
 
-
-${CORE}/Pairing.vo :			${CORE}/Pairing.v \
-								${CORE}/Set.vo \
-								${CORE}/Incl.vo \
-								${CORE}/Elem.vo \
-								${CORE}/Equal.vo \
-								${CORE}/ToList.vo \
-								${CORE}/Extensionality.vo
-	coqc ${CORE}/Pairing.v -R ${CORE} ${CORE}
-
-
 ${CORE}/Empty.vo :				${CORE}/Empty.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
@@ -139,6 +128,18 @@ ${CORE}/Empty.vo :				${CORE}/Empty.v \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Extensionality.vo
 	coqc ${CORE}/Empty.v -R ${CORE} ${CORE}
+
+
+${CORE}/Pairing.vo :			${CORE}/Pairing.v \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/ToList.vo \
+								${CORE}/Extensionality.vo \
+								${CORE}/Empty.vo
+	coqc ${CORE}/Pairing.v -R ${CORE} ${CORE}
+
 
 
 ${CORE}/Union.vo :				${CORE}/Union.v \

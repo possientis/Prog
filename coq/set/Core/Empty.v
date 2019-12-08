@@ -1,4 +1,4 @@
-(* NEXT: ===> Union                                                             *)
+(* NEXT: ===> Pairing                                                           *)
 
 
 Require Import Core.Set.
@@ -22,7 +22,8 @@ Qed.
 
 (* This lemma is useful on a few occasions, allowing us to convert the coq      *)
 (* equalty 'x = Nil' to the set theoretic equality 'x == Nil' and vice-versa.   *)
-(* This is also a meta-theoretic statement.                                     *)
+(* This is also a meta-theoretic statement. In effect, this lemma states that   *)
+(* the equivalence class of Nil modulo '==' is reduced to a single element.     *)
 Lemma emptyIsNil : forall (x:set), x == Nil <-> x = Nil.
 Proof.
     intros x. split; intros H.    
@@ -40,7 +41,11 @@ Proof.
     exists Nil. apply emptyCharac.
 Qed.
 
-
-
-
+(* The empty set is unique: any other set with no element is equal to Nil.      *)
+Lemma emptyUnique : forall (x:set), (forall (y:set), ~(y :: x)) -> x == Nil.
+Proof.
+    intros x H. apply extensionality. intros z. split; intros H'; exfalso.
+    - apply (H z). assumption.
+    - apply (emptyCharac z). assumption.
+Qed.
 

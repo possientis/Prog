@@ -52,10 +52,6 @@ _⊨_ : Context → Formula → Set ℓ₁
 Γ ⊨ φ = ∀ {k : Kripke} { w : W k} → k , w ⊨ctxt Γ → k , w ⊨ φ
 
 
-sem-modus : ∀ {k : Kripke} {w : W k} {φ ψ : Formula} →
-  k , w ⊨ (ψ ~> φ) → k , w ⊨ ψ → k , w ⊨ φ
-sem-modus {k} {w} {φ} {ψ} p q = p (refl k w) q
-
 -- if a formula φ is provable in a context Γ, then Γ semantically entails φ.
 Soundness : ∀ {Γ : Context} {φ : Formula} → Γ ⊢ φ → Γ ⊨ φ
 Soundness Assume (p , q) = p
@@ -65,7 +61,12 @@ Soundness (AndI p q) r = (Soundness p r , Soundness q r)
 Soundness (AndE1 p) q = fst (Soundness p q)
 Soundness (AndE2 p) q = snd (Soundness p q)
 Soundness (ImpI p) q r s = Soundness p ( s , ⊨-mono-ctxt r q)
-Soundness (ImpE p q) r = sem-modus (Soundness p r) (Soundness q r)
+Soundness (ImpE p q) {k} {w} r = Soundness p r (refl k w) (Soundness q r)
 
+data _≼_ : Context -> Context -> Set where
+  ≼-refl : ∀ {Γ : Context} → Γ ≼ Γ
+  ≼-cons : ∀ {Γ Γ' : Context} {φ : Formula} → Γ ≼ Γ' → Γ ≼ (φ ∷ Γ')
 
-
+≼-trans : ∀ {Γ Γ' Γ'' : Context} → Γ ≼ Γ' → Γ' ≼ Γ'' → Γ ≼ Γ''
+≼-trans ≼-refl q = q
+≼-trans (≼-cons p) q = ≼-trans (≼-cons p) q

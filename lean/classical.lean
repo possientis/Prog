@@ -96,3 +96,43 @@ lemma L9 : ∀ (α:Type) (p:α → Prop), (¬∀ (x:α), ¬p x) → ∃ (x:α), 
           from H' (show ∃ x, p x,
             from ⟨x,P⟩)))
 #check L9
+
+-- constructive
+lemma L10 : ∀ (α:Type) (r:Prop), (∃ (x:α), r) -> r :=
+  assume α r ⟨x,H⟩, show r,
+    from H
+
+#check L10
+
+lemma L11 : ∀ (α:Type) (a:α) (r:Prop), r → (∃ (x:α), r) :=
+  assume α a r (p:r), show ∃ (x:α), r ,
+    from ⟨a,p⟩
+
+#check L11
+
+
+lemma L12 : ∀ (α:Type) (r:Prop) (p:α → Prop), (∃x,p x ∧ r) ↔ (∃x,p x) ∧ r :=
+  assume α r p, ⟨
+    assume ⟨x,⟨H1,H2⟩⟩,
+      show (∃x,p x) ∧ r,
+        from ⟨⟨x,H1⟩,H2⟩
+  , assume ⟨⟨x,H1⟩,H2⟩,
+      show ∃x, (p x ∧ r),
+        from ⟨x, ⟨H1,H2⟩⟩⟩
+
+#check L12
+
+lemma L13 : ∀(α:Type) (p q:α → Prop),
+  (∃ (x:α), p x ∨ q x) ↔ (∃ (x:α), p x) ∨ (∃ (x:α), q x) :=
+  assume α p q, ⟨
+    assume ⟨x,H⟩, (
+      or.elim H
+        (assume (H:p x), or.intro_left _ ⟨x,H⟩)
+        (assume (H:q x), or.intro_right _ ⟨x,H⟩))
+    ,
+    assume H, (
+      or.elim H
+        (assume ⟨x,H'⟩, ⟨x,or.intro_left _ H'⟩)
+        (assume ⟨x,H'⟩, ⟨x,or.intro_right _ H'⟩))⟩
+
+#check L13

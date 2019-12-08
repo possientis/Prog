@@ -1,4 +1,5 @@
-U/\Fr(t) = U'\/Fr(t) => f*(t)(U) = f*(t)(U') (nothing to do with validity)
+prop 344: U/\Fr(t) = U'\/Fr(t) => f*(t)(U) = f*(t)(U')
+
 f(t) = f*(t)(U) provided U/\Fr(t) = 0 ?
 f|Fr(t) = g|Fr(t) => f(t) = g(t)
 f:V -> V can be viewed as a particular case of f:V -> T(V), review legacy results

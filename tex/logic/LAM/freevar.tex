@@ -183,6 +183,60 @@ the inclusion is an immediate consequence of
 proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:freevar:beta:intersect:gen}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$.
+    Then for all $U,U'\subseteq V$ we have the implication:
+        \[
+            U\cap\free(\phi) = U'\cap\free(\phi)
+            \ \Rightarrow\ 
+            \sigma^{*}(\phi)(U) = \sigma^{*}(\phi)(U')
+        \]
+    where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
+    definition~(\ref{logic:def:LAM:subst}).
+\end{prop}
+\begin{proof}
+    We shall prove this implication for all $U,U'\subseteq V$  by structural 
+    induction on $\phi$, using theorem~(\ref{logic:the:proof:induction}) of 
+    page~\pageref{logic:the:proof:induction}. So first we assume that $\phi=x$
+    for some $x\in V$ and furthermore that $U\cap\free(\phi) = U'\cap\free(\phi)$.
+    We need to show that $\sigma^{*}(\phi)(U)=\sigma^{*}(\phi)(U')$ which 
+    reduces to $\sigma_{U}(x)=\sigma_{U'}(x)$ using the notations of
+    definition~(\ref{logic:def:LAM:subst}). However, when $\phi=x$ our assumption
+    yields the equality $U\cap\{x\}=U'\cap\{x\}$ and we shall distinguish two
+    cases: first we assume that $U\cap\{x\}=\emptyset$. Then equally 
+    $U'\cap\{x\}=\emptyset$ and we have $x\not\in U$ together with $x\not\in U'$,
+    so the equality $\sigma_{U}(x)=\sigma_{U'}(x)$ reduces to 
+    $\sigma(x)=\sigma(x)$. Second we assume that $U\cap\{x\}=\{x\}$. Then
+    equally $U'\cap\{x\}=\{x\}$ and we have $x\in U$ together with $x\in U'$
+    so the equality $\sigma_{U}(x)=\sigma_{U'}(x)$ reduces to $x = x$.
+    This completes our base case. So we now assume that $\phi=\phi_{1}\ \phi_{2}$
+    for some $\phi_{1}, \phi_{2}\in\tv$ for which the implication is true for
+    all $U,U'\subseteq V$. We also assume that $U\cap\free(\phi)=U'\cap\free(\phi)$
+    and we need to show that $\sigma^{*}(\phi)(U)=\sigma^{*}(\phi)(U')$. Now
+    before we proceed, we claim that both equalities 
+    $U\cap\free(\phi_{1})=U'\cap\free(\phi_{1})$ and 
+    $U\cap\free(\phi_{2})=U'\cap\free(\phi_{2})$ hold. Indeed, suppose
+    $x\in U\cap\free(\phi_{1})$. Since 
+    $\free(\phi)=\free(\phi_{1})\cup\free(\phi_{2})$, we have 
+    $x\in U\cap\free(\phi)$ and consequently $x\in U'\cap\free(\phi)$.
+    So $x$ is an element of $U'$ and it is also an element of $\free(\phi_{1})$
+    by assumption, and we see that $x\in U'\cap\free(\phi_{1})$. Hence we have
+    proved the inclusion $U\cap\free(\phi_{1})\subseteq U'\cap\free(\phi_{1})$
+    and similarly we have $U'\cap\free(\phi_{1})\subseteq U\cap\free(\phi_{1})$
+    yielding the equality $U\cap\free(\phi_{1})=U'\cap\free(\phi_{1})$.
+    The other equality $U\cap\free(\phi_{2})=U'\cap\free(\phi_{2})$ follows
+    similarly. Hence:
+        \begin{eqnarray*}\sigma^{*}(\phi)(U)
+            &=&\sigma^{*}(\phi_{1}\ \phi_{2})(U)\\
+            &=&\sigma^{*}(\phi_{1})(U)\ \ \sigma^{*}(\phi_{2})(U)\\
+            \mbox{induction hypothesis $\ \rightarrow\ $}
+            &=&\sigma^{*}(\phi_{1})(U')\ \ \sigma^{*}(\phi_{2})(U')\\
+            &=&\sigma^{*}(\phi_{1}\ \phi_{2})(U')\\
+            &=&\sigma^{*}(\phi)(U')
+        \end{eqnarray*}
+
+\end{proof}
+
 \begin{prop}\label{logic:prop:LAM:freevar:of:substitution}
     Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\tv$ 
     be such that $\sigma_{|\var(\phi)}$ is an injective map. Then, we have:

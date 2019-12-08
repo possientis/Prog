@@ -1,10 +1,11 @@
-(* NEXT: ===> Empty                                                             *) 
+(* NEXT: ===> Union                                                             *) 
 
 
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
+Require Import Core.Empty.
 Require Import Core.ToList.
 Require Import Core.Extensionality.
 
@@ -21,7 +22,7 @@ Notation "{ x , y }" := (pair x y) : set_scope.
 (* Since equality between sets is determined by their elements, this lemma      *)
 (* characterizes the pair {x,y}. z is an element of {x,y} if and only if        *)
 (* z == x or z == y. Use this lemma to show that {x,y} == {y,x} or {x,x} = {x}. *)
-Lemma pair_charac : forall (x y z:set), z :: {x,y} <-> (z == x) \/ (z == y).
+Lemma pairCharac : forall (x y z:set), z :: {x,y} <-> (z == x) \/ (z == y).
 Proof.
     intros x y z. split.
     - intros H. apply toListElem in H. 
@@ -48,6 +49,29 @@ Qed.
 Theorem pairing : forall (x y:set), exists (z:set), forall (u:set),
     u :: z <-> (u == x) \/ (u == y).
 Proof.
-    intros x y. exists {x,y}. apply pair_charac. 
+    intros x y. exists {x,y}. apply pairCharac. 
 Qed.
 
+(* The pair {x,y} is characterized by a logical statement which involves a      *)
+(* disjunction. From the commutativity of '\/', the following should be true.   *)
+Lemma pairComm : forall (x y:set), {x,y} == {y,x}.
+Proof.
+    intros x y. apply extensionality. intros z. split; 
+    intros H; apply pairCharac in H; apply pairCharac; 
+    destruct H as [H|H].
+    - right. assumption.
+    - left.  assumption.
+    - right. assumption.
+    - left.  assumption.
+Qed.
+
+(* Coq is getting confused with {x} notation, so using 'Cons x Nil' instead.    *)
+Lemma pairSingle : forall (x:set), {x,x} == Cons x Nil.
+Proof.
+    intros x. apply extensionality. intros z. split; intros H.
+    - apply pairCharac in H. destruct H as [H|H]; 
+      apply consElem; left; assumption.
+    - apply pairCharac. left. apply consElem in H. destruct H as [H|H].
+        + assumption.
+        + exfalso. apply (emptyCharac z). assumption.
+Qed.
