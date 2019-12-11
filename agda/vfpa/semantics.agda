@@ -68,5 +68,27 @@ data _≼_ : Context -> Context -> Set where
   ≼-cons : ∀ {Γ Γ' : Context} {φ : Formula} → Γ ≼ Γ' → Γ ≼ (φ ∷ Γ')
 
 ≼-trans : ∀ {Γ Γ' Γ'' : Context} → Γ ≼ Γ' → Γ' ≼ Γ'' → Γ ≼ Γ''
-≼-trans ≼-refl q = q
-≼-trans (≼-cons p) q = ≼-trans (≼-cons p) q
+≼-trans p ≼-refl = p
+≼-trans p (≼-cons q) = ≼-cons (≼-trans p q)
+
+weaken-≼ : ∀ {Γ Γ' : Context} {φ : Formula} → Γ ≼ Γ' → Γ ⊢ φ → Γ' ⊢ φ
+weaken-≼ ≼-refl q = q
+weaken-≼ (≼-cons p) q = Weaken (weaken-≼ p q)
+
+-- universal kripke structure
+U : Kripke
+U = record
+  { W     = Context
+  ; R     = _≼_
+  ; refl  = λ Γ → ≼-refl {Γ}
+  ; trans = ≼-trans
+  ; V     = λ Γ n → Γ ⊢ (Var n)
+  ; mono  = weaken-≼
+  }
+
+CompletenessU : ∀ {Γ : W U} {φ : Formula} → U , Γ ⊨ φ → Γ ⊢ φ
+SoundnessU    : ∀ {Γ : W U} {φ : Formula} → Γ ⊢ φ → U , Γ ⊨ φ
+CompletenessU {Γ} {Var x} p = p
+CompletenessU {Γ} {Formula.⊤} p = TrueI
+CompletenessU {Γ} {φ₁ ~> φ₂} p = ImpI (CompletenessU (p {!!} (SoundnessU {!!})))
+CompletenessU {Γ} {f & f₁} p = {!!}

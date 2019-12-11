@@ -1,23 +1,57 @@
+Before we define a category in full generality, we shall focus our attention
+on the notion of {\em small category}. This notion is interesting to us 
+because while it essentially describes the notion of {\em category} itself,
+it remains simple enough to be compared with various other algebraic structures.
+So let us look at a monoid: a monoid is essentially a set $M$ together with 
+a binary relation $\circ$ defined on $M$ which is associative, and an 
+element $e$ of $M$ which acts as an identity element for $\circ$. In short 
+a monoid is a tuple $(M,\circ,e)$ containing some data, and  which satisfy 
+certain properties. The same is true of a {\em small category}: it is also
+a tuple containing some data, and which satisfy certain properties:
+
+\begin{defin}\label{Cat:def:category:small}
+    We call {\em small category} any tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ 
+    with:
+        \begin{eqnarray*}
+            (1)&\ &\ob\mbox{\ is a set}\\
+            (2)&\ &\arr\mbox{\ is a set}\\
+            (3)&\ &\dom:\arr\to\ob\mbox{\ is a map}\\
+            (4)&\ &\cod:\arr\to\ob\mbox{\ is a map}\\
+            (5)&\ &\id:\ob\to\arr\mbox{\ is a map}\\
+            (6)&\ &\circ:\arr\times\arr\to\arr\mbox{\ is a partial map}\\
+            (7)&\ &g\circ f\mbox{\ is defined}
+                \ \Leftrightarrow\ \cod(f)=\dom(g) \\
+            (8)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \dom(g\circ f) = \dom(f)\\
+            (9)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \cod(g\circ f) = \cod(g)\\
+            (10)&\ &\cod(f)=\dom(g)\,\land\,\cod(g)=\dom(h)
+               \ \Rightarrow\ (h\circ g)\circ f = h\circ(g\circ f)\\
+            (11)&\ &\dom\,(\,\id(a)\,) = a = \cod\,(\,\id(a)\,)\\
+            (12)&\ &\dom(f)=a\ \Rightarrow\ f\circ\id(a) = f\\
+            (13)&\ &\cod(f)=a\ \Rightarrow\ \id(a)\circ f = f
+       \end{eqnarray*} 
+    where $(7)-(13)$ hold for all $f,g,h\in\arr$ and $a\in\ob$: 
+\end{defin}
+
 \begin{defin}\label{Cat:def:category}
-    We call {\em category} any tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ where:
+    We call {\em category} any tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ 
+    such that:
         \begin{eqnarray*}
             (1)&\ &\ob\mbox{\ is a collection with equality}\\
             (2)&\ &\arr\mbox{\ is a collection with equality}\\
             (3)&\ &\dom:\arr\to\ob\mbox{\ is a map}\\
             (4)&\ &\cod:\arr\to\ob\mbox{\ is a map}\\
             (5)&\ &\id:\ob\to\arr\mbox{\ is a map}\\
-            (6)&\ &\circ:\arr\times\arr\to\arr\mbox{\ is a partial map}
-        \end{eqnarray*}
-    with the following properties, given $f,g,h\in\arr$ and $a\in\ob$: 
-        \begin{eqnarray*}
-            (1)&\ &g\circ f\mbox{\ is defined}
+            (6)&\ &\circ:\arr\times\arr\to\arr\mbox{\ is a partial map}\\
+            (7)&\ &g\circ f\mbox{\ is defined}
                 \ \Leftrightarrow\ \cod(f)=\dom(g) \\
-            (2)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \dom(g\circ f) = \dom(f)\\
-            (3)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \cod(g\circ f) = \cod(g)\\
-            (4)&\ &\dom\,(\,\id(a)\,) = a = \cod\,(\,\id(a)\,)\\
-            (5)&\ &\dom(f)=a\ \Rightarrow\ f\circ\id(a) = f\\
-            (6)&\ &\cod(f)=a\ \Rightarrow\ \id(a)\circ f = f\\
-            (7)&\ &\cod(f)=\dom(g)\,\land\,\cod(g)=\dom(h)
-                \ \Rightarrow\ (h\circ g)\circ f = h\circ(g\circ f) 
-        \end{eqnarray*} 
+            (8)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \dom(g\circ f) = \dom(f)\\
+            (9)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \cod(g\circ f) = \cod(g)\\
+            (10)&\ &\cod(f)=\dom(g)\,\land\,\cod(g)=\dom(h)
+               \ \Rightarrow\ (h\circ g)\circ f = h\circ(g\circ f)\\
+            (11)&\ &\dom\,(\,\id(a)\,) = a = \cod\,(\,\id(a)\,)\\
+            (12)&\ &\dom(f)=a\ \Rightarrow\ f\circ\id(a) = f\\
+            (13)&\ &\cod(f)=a\ \Rightarrow\ \id(a)\circ f = f
+       \end{eqnarray*} 
+    where $(7)-(13)$ hold for all $f,g,h\in\arr$ and $a\in\ob$: 
 \end{defin}
+

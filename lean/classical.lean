@@ -122,7 +122,7 @@ lemma L12 : ∀ (α:Type) (r:Prop) (p:α → Prop), (∃x,p x ∧ r) ↔ (∃x,p
 
 #check L12
 
-lemma L13 : ∀(α:Type) (p q:α → Prop),
+lemma L13 : ∀ (α:Type) (p q:α → Prop),
   (∃ (x:α), p x ∨ q x) ↔ (∃ (x:α), p x) ∨ (∃ (x:α), q x) :=
   assume α p q, ⟨
     assume ⟨x,H⟩, (
@@ -136,3 +136,52 @@ lemma L13 : ∀(α:Type) (p q:α → Prop),
         (assume ⟨x,H'⟩, ⟨x,or.intro_right _ H'⟩))⟩
 
 #check L13
+
+lemma L14 : ∀ (α:Type) (p:α → Prop),
+  (∀ (x:α), p x) ↔ ¬ (∃ (x:α), ¬ p x) :=
+  assume α p, ⟨
+    assume H ⟨x,H'⟩, (H' (H x))
+  ,
+    assume H' x, show p x, from
+      or.elim (em (p x))
+        (assume H, H)
+        (assume H, false.elim
+          (H' ⟨x,H⟩))⟩
+
+#check L14
+
+lemma L15 : ∀ (α:Type) (p:α → Prop),
+  (∃ (x:α), p x) ↔ ¬ (∀ (x:α), ¬ p x) :=
+  assume α p, ⟨
+    assume ⟨x,H⟩,
+      assume H':∀ x, ¬p x, show false, from
+        ((H' x) H)
+  ,
+    assume H:¬∀x, ¬p x, by_contradiction (
+      assume H', show false, from (H
+        (assume x P, show false, from
+          H' ⟨x,P⟩)))⟩
+
+#check L15
+
+
+lemma L16 : ∀ (α:Type) (p:α → Prop),
+  ¬(∃ (x:α), p x) ↔ (∀ (x:α), ¬ p x) :=
+  assume α p, ⟨
+    assume H x H', H ⟨x,H'⟩
+  ,
+    assume H ⟨x,H'⟩, (H x) H'⟩
+
+#check L16
+
+lemma L17 : ∀ (α:Type) (p:α → Prop),
+  ¬(∀ (x:α), p x) ↔ (∃ (x:α), ¬ p x) :=
+  assume α p, ⟨
+    assume H, by_contradiction (
+      assume H', H (
+        (assume x, by_contradiction
+          (assume P, H' ⟨x, P⟩))))
+  ,
+  assume ⟨x,H⟩ H', H (H' x)⟩
+
+#check L17

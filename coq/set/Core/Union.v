@@ -1,3 +1,6 @@
+(* NEXT: ===> Intersection                                                      *) 
+
+
 Require Import List.
 
 Require Import Core.Set.
@@ -9,11 +12,27 @@ Require Import Core.ToList.
 Require Import Core.Pairing.
 Require Import Core.Extensionality.
 
-(* This definition will be shown to be strictly equivalent to the usual one     *)
+(* In this module we shall prove that our model satisfies the 'union axiom'     *)
+(* which is another commonly known axiom of ZF. This axiom essentially states   *)
+(* the existence of a union set 'U x' given any set x. The union set U x is the *)
+(* set obtained by collecting all the elements of the sets contained in x. So   *)
+(* if you think of x as a set x = {y1, y2, y3, ... } then informally the union  *)
+(* set U x is the union y1 \/ y2 \/ y3 \/ ... Hence in order for a set z to be  *)
+(* an element of U x, it must be an element of a set y belonging to x. To show  *)
+(* the existence of a union set in our model, we need to define it. We shall    *)
+(* start by defining the union x \/ y of two sets x and y. The definition we    *)
+(* provide here is not the standard definition encountered in set theory texts. *)
+(* x \/ y is usually defined as U {x,y}, namely as the union set of the pair    *)
+(* {x,y}. But of course we cannot follow this route here since we have not yet  *)
+(* defined any notion of union set. Instead we use meta-theoretic constructs    *)
+(* such as 'fromList' and 'toList' which are specific to our Coq model.         *)
+
 Definition union2 (xs ys:set) : set := fromList (toList xs ++ toList ys).
 
 Notation "x \/ y" := (union2 x y) : set_scope.
 
+(* A set z is an element of the pairwise union xs \/ ys if and only if it is an *)
+(* element of xs, *or* it is an element of ys.                                  *)
 Lemma union2_charac : forall (xs ys z:set), 
     z :: (xs \/ ys) <-> z :: xs \/ z :: ys.
 Proof.
@@ -37,13 +56,16 @@ Proof.
             { apply consElem. right. apply IH. right. assumption. }
 Qed.
 
+(* Now that we have defined the union of two sets, we can define the union set  *)
+(* of a set xs, which is a fold over the elements of xs of the operator union2. *)
 Fixpoint union (xs:set) : set :=
     match xs with 
     | Nil       => Nil
     | Cons x xs => union2 x (union xs)
     end. 
 
-
+(* Our definition of union set satisfies the right property. A set z belongs    *)
+(* to the union set of xs, if and only if it belongs to some x belonging to xs. *)
 Lemma union_charac : forall (xs z:set), 
     z :: union xs <-> exists (x:set), z :: x /\ x :: xs.
 Proof.
@@ -72,7 +94,7 @@ Proof.
     rewrite toListFromList. simpl. rewrite app_nil_r. reflexivity.
 Qed.
 
-(* The union axiom is satisfied in 'set'                                        *)
+(* The union axiom is satisfied in our model: Every set x has a union set y.    *)
 Theorem union_axiom : forall (x:set), exists (y:set), forall (z:set),
     z :: y <-> exists (u:set), z :: u /\ u :: x.
 Proof. intros x. exists (union x). apply union_charac. Qed.

@@ -3,6 +3,8 @@
 {-# LANGUAGE EmptyCase              #-}
 {-# LANGUAGE KindSignatures         #-}
 {-# LANGUAGE ExplicitForAll         #-}
+{-# LANGUAGE FlexibleInstances      #-}
+{-# LANGUAGE MultiParamTypeClasses  #-}
 
 module  Optics.Fin
     (   Fin (..)
@@ -19,3 +21,15 @@ data Fin (n :: Nat) :: Type where
 absurd :: forall (a :: Type) . Fin 'Z -> a
 absurd x = case x of {}
 
+instance (Equal n a) => Eq (Fin n -> a) where
+    (==) f g = equal f g
+
+class Equal n a where
+    equal :: (Fin n -> a) -> (Fin n -> a) -> Bool
+
+instance Equal 'Z a where
+    equal _ _ = True
+
+instance (Eq a, Equal n a) => Equal ('S n) a where
+    equal f g = (f FZ == g FZ) 
+              && equal (\n -> f (FS n)) (\n -> g (FS n))

@@ -1,2 +1,2 @@
-proof iso in Vec
+proof fin2Id = id in Vec
 try out singleton solution for Vec Fin iso
