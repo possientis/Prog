@@ -1,4 +1,4 @@
-(* NEXT: ===> Intersection                                                      *) 
+(* NEXT: ===> Filter                                                            *) 
 
 
 Require Import List.

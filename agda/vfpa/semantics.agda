@@ -88,7 +88,23 @@ U = record
 
 CompletenessU : ∀ {Γ : W U} {φ : Formula} → U , Γ ⊨ φ → Γ ⊢ φ
 SoundnessU    : ∀ {Γ : W U} {φ : Formula} → Γ ⊢ φ → U , Γ ⊨ φ
-CompletenessU {Γ} {Var x} p = p
+CompletenessU {Γ} {Var n} p = p
 CompletenessU {Γ} {Formula.⊤} p = TrueI
-CompletenessU {Γ} {φ₁ ~> φ₂} p = ImpI (CompletenessU (p {!!} (SoundnessU {!!})))
-CompletenessU {Γ} {f & f₁} p = {!!}
+CompletenessU {Γ} {φ₁ ~> φ₂} p = ImpI
+  (CompletenessU (p (≼-cons ≼-refl) (SoundnessU {φ₁ ∷ Γ} {φ₁} Assume)))
+CompletenessU {Γ} {φ₁ & φ₂} (p₁ , p₂) = AndI
+  (CompletenessU p₁)
+  (CompletenessU p₂)
+SoundnessU {Γ} {Var n} p = p
+SoundnessU {Γ} {Formula.⊤} p = triv
+SoundnessU {Γ} {φ₁ ~> φ₂} p {Γ'} q r = SoundnessU {Γ'} {φ₂} (ImpE
+  (weaken-≼ q p) (CompletenessU r))
+SoundnessU {Γ} {φ₁ & φ₂} p = (SoundnessU (AndE1 p) , SoundnessU (AndE2 p))
+
+ctxt-id : ∀ {Γ : Context} → U , Γ ⊨ctxt Γ
+ctxt-id {[]} = triv
+ctxt-id {φ ∷ Γ} = (SoundnessU {φ ∷ Γ} {φ} Assume ,
+  ⊨-mono-ctxt (≼-cons ≼-refl) (ctxt-id {Γ}))
+
+
+

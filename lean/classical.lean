@@ -185,3 +185,13 @@ lemma L17 : ∀ (α:Type) (p:α → Prop),
   assume ⟨x,H⟩ H', H (H' x)⟩
 
 #check L17
+
+
+lemma L18 : ∀ (α:Type) (p:α → Prop) (r:Prop),
+  (∀ (x:α), p x → r) ↔ (∃ (x:α), p x) → r :=
+  assume α p r, ⟨
+    assume H ⟨x,H'⟩, (H x) H'
+  ,
+    assume H x H', H ⟨x,H'⟩⟩
+
+#check L18

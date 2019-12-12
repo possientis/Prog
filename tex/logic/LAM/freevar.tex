@@ -247,9 +247,40 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
             &=&\sigma^{*}(\lambda x\phi_{1})(U')\\
             &=&\sigma^{*}(\phi)(U')
         \end{eqnarray*}
-    It remains to justify why we were able to apply the induction hypothesis, i.e.
+    It remains to justify why we are able to apply the induction hypothesis, i.e.
     we need to prove the equality $(U\cup\{x\})\cap\free(\phi_{1})=
-    (U'\cup\{x\})\cap\free(\phi_{1})$.
+    (U'\cup\{x\})\cap\free(\phi_{1})$. So:
+        \begin{eqnarray*}(U\cup\{x\})\cap\free(\phi_{1})
+            &=&(\,U\setminus\{x\}\,\cup\,\{x\}\,)\cap\free(\phi_{1})\\
+            &=&U\cap\free(\phi_{1})\setminus\{x\}\,
+                \cup\,\{x\}\cap\free(\phi_{1})\\
+            &=&U\cap\free(\phi)\,\cup\,\{x\}\cap\free(\phi_{1})\\
+            \mbox{assumption\ $\rightarrow$\ }
+            &=&U'\cap\free(\phi)\,\cup\,\{x\}\cap\free(\phi_{1})\\
+            &=&(U'\cup\{x\})\cap\free(\phi_{1})
+        \end{eqnarray*}
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:freevar:beta:intersect}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$.
+    Then for all $U\subseteq V$ we have the implication:
+        \[
+            U\cap\free(\phi) = \emptyset
+            \ \Rightarrow\ 
+            \sigma^{*}(\phi)(U) = \sigma(\phi)
+        \]
+    where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
+    definition~(\ref{logic:def:LAM:subst}).
+\end{prop}
+\begin{proof}
+    This is an immediate application of 
+    proposition~(\ref{logic:prop:LAM:freevar:beta:intersect:gen}) 
+    to $U'=\emptyset$: Given the assumption $U\cap\free(\phi) = \emptyset$ 
+    we obtain $U\cap\free(\phi)=U'\cap\free(\phi)$ and consequently:
+        \[
+            \sigma^{*}(\phi)(U)=\sigma^{*}(\phi)(U')
+            =\sigma^{*}(\phi)(\emptyset)=\sigma(\phi)
+        \]
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:freevar:of:substitution}

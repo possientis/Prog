@@ -1,3 +1,6 @@
+(* NEXT: ===> Powerset                                                          *) 
+
+
 Require Import List.
 
 Require Import Core.Set.
@@ -10,8 +13,13 @@ Require Import Core.ToList.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
-
+(* In this module we shall define the intersection of two sets. The existence   *)
+(* of such intersection is usually derived from existing ZF axioms, so there is *)
+(* no specific axiom for intersection. However, in order for us to prove that   *)
+(* the powerset axiom is true in our model (see in the next module), we need a  *)
+(* notion of intersection. We start by defining a predicate on the type set.    *)
 Definition in_set (x:set) : set -> Prop := (fun (z:set) => z :: x).
+
 
 Definition in_set_dec (x:set) : Dec (in_set x) := (fun (z:set) => elem_dec z x).
 

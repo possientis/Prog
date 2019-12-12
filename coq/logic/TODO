@@ -1,7 +1,5 @@
-prop 344: U/\Fr(t) = U'\/Fr(t) => f*(t)(U) = f*(t)(U')
-
-f(t) = f*(t)(U) provided U/\Fr(t) = 0 ?
-f|Fr(t) = g|Fr(t) => f(t) = g(t)
+forall t, U, f & g coincide on Fr(t)\U <=> f*(t)(U)=g*(t)(U)
+f|Fr(t) = g|Fr(t) <=> f(t) = g(t)
 f:V -> V can be viewed as a particular case of f:V -> T(V), review legacy results
 and make sure they are compatible with beta-results
 LAM/betavalid.tex

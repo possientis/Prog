@@ -1,21 +1,41 @@
+(* NEXT: ===> Intersection                                                      *)
+
+
 Require Import List.
 
+(* This module is purely meta-theoretic and has little to do with set theory.   *)
+(* We need to define the intersection of two sets which we shall do in the next *)
+(* module. However, we cannot do so until we have defined the function 'filter' *)
+(* allowing us to restrict a list of sets to a list of sets satisfying a given  *)
+(* decidable predicate. We first define the notion of decidable predicate: let  *)
+(* 'a' be a type and 'p:a -> Prop' be a predicate. Saying that the predicate    *)
+(* 'p' is decidable is saying 'Dec p' which we are defining as the 'statement': *)
+(*      Dec p := forall (x:a), {p x} + {~p x}                                   *)
+(* However, this 'statement' is not a value of type 'Prop'. In other words, it  *)
+(* is not a Coq proposition. It is simply a type, namely the type of dependent  *)
+(* function q, which given an (x:a) returns a value q x of type {p x} + {~p x}, *)
+(* which is either a proof that p x holds, or a proof that ~p x holds.          *)
+(* So saying that 'q' is of type 'Dec p', i.e. the jugement 'q:Dec p' is simply *)
+(* saying that 'q' is such dependent function. Informally, we could think of q  *)
+(* as 'a proof of Dec p', or a witness to the fact that p is a decidable.       *)
 Definition Dec (a:Type) (p:a -> Prop) := forall (x:a), {p x} + {~p x}.
 
 Arguments Dec {a}.
 
+(* Given a predicate p and a 'proof' of decidability q we can filter a list.    *)
 Fixpoint filter (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a) : list a :=
     match xs with
     | nil       => nil
     | cons x xs => 
-        match q x with
-        | left  _   => cons x (filter a p q xs)
-        | right _   => filter a p q xs
+        match q x with  (* deciding whether p x holds or not                    *)
+        | left  _   => cons x (filter a p q xs) (*  p x holds                   *)
+        | right _   => filter a p q xs          (* ~p x holds                   *)
         end
     end.
 
 Arguments filter {a} {p}.
 
+(* TODO *)
 Lemma filter_equiv : forall (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a) (x:a),
     In x xs /\ p x <-> In x (filter q xs).
 Proof.

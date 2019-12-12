@@ -1,2 +1,1 @@
-proof fin2Id = id in Vec
-try out singleton solution for Vec Fin iso
+define fin2vec' by pattern match on singleton

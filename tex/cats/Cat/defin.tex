@@ -8,17 +8,16 @@ element $e$ of $M$ which acts as an identity element for $\circ$. In short
 a monoid is a tuple $(M,\circ,e)$ containing some data, and  which satisfy 
 certain properties. The same is true of a {\em small category}: it is also
 a tuple containing some data, and which satisfy certain properties:
-
 \begin{defin}\label{Cat:def:category:small}
     We call {\em small category} any tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ 
     with:
         \begin{eqnarray*}
             (1)&\ &\ob\mbox{\ is a set}\\
             (2)&\ &\arr\mbox{\ is a set}\\
-            (3)&\ &\dom:\arr\to\ob\mbox{\ is a map}\\
-            (4)&\ &\cod:\arr\to\ob\mbox{\ is a map}\\
-            (5)&\ &\id:\ob\to\arr\mbox{\ is a map}\\
-            (6)&\ &\circ:\arr\times\arr\to\arr\mbox{\ is a partial map}\\
+            (3)&\ &\dom:\arr\to\ob\mbox{\ is a function}\\
+            (4)&\ &\cod:\arr\to\ob\mbox{\ is a function}\\
+            (5)&\ &\id:\ob\to\arr\mbox{\ is a function}\\
+            (6)&\ &\circ:\arr\times\arr\to\arr\mbox{\ is a partial function}\\
             (7)&\ &g\circ f\mbox{\ is defined}
                 \ \Leftrightarrow\ \cod(f)=\dom(g) \\
             (8)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \dom(g\circ f) = \dom(f)\\
@@ -31,6 +30,30 @@ a tuple containing some data, and which satisfy certain properties:
        \end{eqnarray*} 
     where $(7)-(13)$ hold for all $f,g,h\in\arr$ and $a\in\ob$: 
 \end{defin}
+
+So if $\Cat=(\ob, \arr, \dom, \cod, \id, \circ)$ is a small category, we have
+two sets $\ob$ and $\arr$ together with some structure defined on these sets.
+This feels very much like a monoid, except that we have two sets instead of one
+and it all looks more complicated. The set \ob\ is called the {\em set of 
+objects} of the small category \Cat\ and is denoted $\ob\ \Cat$, while the set 
+\arr\ is called the {\em set of arrows} of the small category \Cat\ and is 
+denoted $\arr\ \Cat$. An element $x\in\ob\ \Cat$ is called an {\em object} 
+of \Cat, while an element $f\in\arr\ \Cat$ is called an {\em arrow} of \Cat.
+As part of the structure defined on the small category \Cat, we have two
+functions $\dom:\arr\to\ob$ and $\cod:\arr\to\ob$. Hence, given an arrow $f$
+of the small category \Cat, we have two objects $\dom(f)$ and $\cod(f)$ of the
+small category \Cat. The object $\dom(f)$ is called the {\em domain} of $f$
+or the {\em source} of $f$. The object $\cod(f)$ is called the {\em codomain}
+of $f$ or the {\em target} of $f$. Note that an arrow $f$ of the small 
+category \Cat\ is simply an element of the set $\arr\ \Cat$. So it is itself
+a set but it may not be a function. The words {\em domain} and {\em codomain}
+are therefore overloaded as we are using them in relation to a set $f$ which
+is possibly not a function. Whenever $f$ is an arrow of the small category 
+\Cat\ and $a,b$ are objets, it is common to use the notation $f:a\to b$ as
+a notational shortcut for the equations $\dom(f)=a$ and $\cod(f)=b$. Once
+again, it is important to guard against the possible confusion induced 
+by the notation $f:a\to b$ which does not mean that $f$ is function. It 
+simply means that $f$ is an arrow with domain $a$ and codomain $b$.
 
 \begin{defin}\label{Cat:def:category}
     We call {\em category} any tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ 
