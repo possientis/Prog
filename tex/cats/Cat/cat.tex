@@ -1,0 +1,23 @@
+\begin{defin}\label{Cat:def:category}
+    We call {\em category} any tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ 
+    such that:
+        \begin{eqnarray*}
+            (1)&\ &\ob\mbox{\ is a collection with equality}\\
+            (2)&\ &\arr\mbox{\ is a collection with equality}\\
+            (3)&\ &\dom:\arr\to\ob\mbox{\ is a map}\\
+            (4)&\ &\cod:\arr\to\ob\mbox{\ is a map}\\
+            (5)&\ &\id:\ob\to\arr\mbox{\ is a map}\\
+            (6)&\ &\circ:\arr\times\arr\to\arr\mbox{\ is a partial map}\\
+            (7)&\ &g\circ f\mbox{\ is defined}
+                \ \Leftrightarrow\ \cod(f)=\dom(g) \\
+            (8)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \dom(g\circ f) = \dom(f)\\
+            (9)&\ &\cod(f)=\dom(g)\ \Rightarrow\ \cod(g\circ f) = \cod(g)\\
+            (10)&\ &\cod(f)=\dom(g)\,\land\,\cod(g)=\dom(h)
+               \ \Rightarrow\ (h\circ g)\circ f = h\circ(g\circ f)\\
+            (11)&\ &\dom\,(\,\id(a)\,) = a = \cod\,(\,\id(a)\,)\\
+            (12)&\ &\dom(f)=a\ \Rightarrow\ f\circ\id(a) = f\\
+            (13)&\ &\cod(f)=a\ \Rightarrow\ \id(a)\circ f = f
+       \end{eqnarray*} 
+    where $(7)-(13)$ hold for all $f,g,h\in\arr$ and $a\in\ob$: 
+\end{defin}
+

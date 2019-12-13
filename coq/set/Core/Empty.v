@@ -35,7 +35,7 @@ Proof.
     - rewrite H. apply equal_refl.
 Qed.
 
-(* The existence of the empty set is true in 'set'                              *)
+(* The existence of the empty set is true in our model                          *)
 Theorem emptySet : exists (x:set), forall (z:set), ~ (z :: x).  
 Proof.
     exists Nil. apply emptyCharac.

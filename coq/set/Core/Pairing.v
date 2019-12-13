@@ -66,6 +66,7 @@ Proof.
 Qed.
 
 (* Coq is getting confused with {x} notation, so using 'Cons x Nil' instead.    *)
+(* There is no difference between the pair {x,x} and the singleton {x}.         *)
 Lemma pairSingle : forall (x:set), {x,x} == Cons x Nil.
 Proof.
     intros x. apply extensionality. intros z. split; intros H.

@@ -283,6 +283,55 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
         \]
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:freevar:beta:support}
+    Let $V$ be a set and $\sigma,\tau:V\to\tv$ be two maps. Then:
+        \[
+            \sigma_{|\free(\phi)\setminus U}=\tau_{|\free(\phi)\setminus U}
+            \ \Leftrightarrow\ \sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)
+        \]
+    for all $U\subseteq V$ and $\phi\in\tv$, where $\sigma^{*},\tau^{*}$ are 
+    defined as in definition~(\ref{logic:def:LAM:subst}).
+\end{prop}
+\begin{proof}
+    Given $U\subseteq V$ and $\phi\in\tv$, we need to show that if $\sigma$
+    and $\tau$ coincide on the set $\free(\phi)\setminus U$, then 
+    $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$, and conversely that if 
+    we have $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$ then $\sigma$ and $\tau$ 
+    coincide on $\free(\phi)\setminus U$. We shall do so by structural
+    induction using theorem~(\ref{logic:the:proof:induction}) of
+    page~\pageref{logic:the:proof:induction}. So first we assume that 
+    $\phi=x$ for some $x\in V$. Given $U\subseteq V$, we shall distinguish 
+    two cases: first we assume that $x\in U$. Then $\free(\phi)\setminus U=
+    \emptyset$ and $\sigma, \tau$ always coincide on $\free(\phi)\setminus U$.
+    However, the condition $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$ reduces
+    to $\sigma_{U}(x)=\tau_{U}(x)$ which is $x = x$ since $x\in U$. So this
+    condition is always true and we see that the equivalence holds. Next
+    we assume that $x\not\in U$. Then $\free(\phi)\setminus U$ reduces to 
+    $\{x\}$ and $\sigma,\tau$ coinciding on this set simply means that 
+    $\sigma(x) = \tau(x)$. However, the condition $\sigma_{U}(x)=\tau_{U}(x)$
+    also reduces to $\sigma(x)=\tau(x)$ since $x\not\in U$ and we see that 
+    the equivalence again holds, which complete the base case of our 
+    induction.
+
+    So we now assume that $\phi=\phi_{1}\ \phi_{2}$ for some 
+    $\phi_{1},\phi_{2}\in\tv$ for which the equivalence holds for all
+    $U\subseteq V$. Given $U\subseteq V$, we need to show that the 
+    equivalence holds for $\phi$. So first we assume that $\sigma$ and
+    $\tau$ coincide on $\free(\phi)\setminus U$. Since $\free(\phi)=
+    \free(\phi_{1})\cup\free(\phi_{2})$, $\sigma$ and $\tau$ coincide
+    both on $\free(\phi_{1})\setminus U$ and $\free(\phi_{2})\setminus U$.
+    Hence, using our induction hypothesis we obtain:
+        \begin{eqnarray*}\sigma^{*}(\phi)(U)
+            &=&\sigma^{*}(\phi_{1}\ \phi_{2})(U)\\
+            &=&\sigma^{*}(\phi_{1})(U)\ \ \sigma^{*}(\phi_{2})(U)\\
+            \mbox{induction hypothesis\ $\rightarrow$\ }
+            &=&\tau^{*}(\phi_{1})(U)\ \ \tau^{*}(\phi_{2})(U)\\
+            &=&\tau^{*}(\phi_{1}\ \phi_{2})(U)\\
+            &=&\tau^{*}(\phi)(U)
+        \end{eqnarray*}
+    Conversely, we assume that $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$.
+\end{proof}
+
 \begin{prop}\label{logic:prop:LAM:freevar:of:substitution}
     Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\tv$ 
     be such that $\sigma_{|\var(\phi)}$ is an injective map. Then, we have:

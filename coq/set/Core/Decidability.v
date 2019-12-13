@@ -12,16 +12,7 @@ Require Import Core.Equal.
 Require Import Core.Filter.
 Require Import Core.Extensionality.
 
-(* In this module, we are having a small interlude focussing on decidability    *)
-(* results which are specific to the Coq meta-theory, and are not set theoretic *)
-(* results. These results are interesting in their own rights, but will also    *)
-(* prove useful when attempting to establish some set theoretic properties of   *)
-(* our model. By default, the Coq logical system does not allow us to assume    *)
-(* the 'law of excluded middle' aka 'LEM'. We could postulate LEM as an axiom   *)
-(* of our meta-theory (which is known to be consistent with Coq's logic) but    *)
-(* we should remember that our model is just a simple model of finite sets in   *)
-(* which many things can be proven without using LEM. For those not so familiar *)
-(* with Coq, the term 'forall (x y:set), {x = y} + {x <> y}' is not strictly    *)
+(* Recall that the term 'forall (x y:set), {x = y} + {x <> y}' is not strictly  *)
 (* speaking a 'proposition'. It is a term of type 'Set' and not of type 'Prop'. *)
 (* The term 'forall (x y:set), (x = y) \/ (x <> y)' *is* a proposition but is   *)
 (* not what we are aiming to 'prove' in the following lemma. Instead, what we   *)
@@ -52,7 +43,8 @@ Qed.
 (* A dependent function which given a 'nat' n and two sets xs ys as arguments,  *)
 (* returns either a proof of the (level n) inclusion 'incl_n n xs ys', or a     *)
 (* a proof that this inclusion is False. In other words, the partial inclusion  *)
-(* statement 'incl_n n xs ys' is said to be 'decidable'.                        *)
+(* statement 'incl_n n xs ys' is said to be 'decidable'. This result makes use  *)
+(* of the theorem in_pred_dec which was proved in the previous 'Filter' module. *)
 Lemma incl_n_dec : forall (n:nat) (xs ys:set), 
     { incl_n n xs ys } + { ~ incl_n n xs ys }.
 Proof.

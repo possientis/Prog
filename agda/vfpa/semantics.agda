@@ -106,5 +106,28 @@ ctxt-id {[]} = triv
 ctxt-id {φ ∷ Γ} = (SoundnessU {φ ∷ Γ} {φ} Assume ,
   ⊨-mono-ctxt (≼-cons ≼-refl) (ctxt-id {Γ}))
 
+Completeness : ∀ {Γ : Context} {φ : Formula} → Γ ⊨ φ → Γ ⊢ φ
+Completeness {Γ} p = CompletenessU (p {U} {Γ} ctxt-id)
+
+Universality1 : ∀ {Γ : Context} {φ : Formula} → Γ ⊨ φ → U , Γ ⊨ φ
+Universality1 {Γ} {φ} p = SoundnessU {Γ} {φ} (Completeness p)
+
+Universality2 : ∀ {Γ : Context} {φ : Formula} → U , Γ ⊨ φ → Γ ⊨ φ
+Universality2 {Γ} {φ} p {k} {w} = Soundness {Γ} {φ} (CompletenessU p) 
+
+nbe : {Γ : Context} {φ : Formula} → Γ ⊢ φ → Γ ⊢ φ
+nbe {Γ} {φ} p = Completeness (Soundness p)  -- what is the point of this
+
+p1 : [] ⊢ formula.⊤
+p1 = AndE1 (AndI TrueI TrueI)
+
+p2 : [] ⊢ formula.⊤
+p2 = nbe p1
+
+p3 : [] ⊢ (Var 0 ~> Var 0)
+p3 = ImpI (ImpE (ImpI Assume) Assume)
+
+p4 : [] ⊢ (Var 0 ~> Var 0)
+p4 = nbe p3
 
 

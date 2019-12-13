@@ -21,6 +21,7 @@ Require Import Core.Extensionality.
 Definition in_set (x:set) : set -> Prop := (fun (z:set) => z :: x).
 
 
+(* TODO *)
 Definition in_set_dec (x:set) : Dec (in_set x) := (fun (z:set) => elem_dec z x).
 
 Definition inter (x y:set) : set := fromList (filter (in_set_dec y) (toList x)). 

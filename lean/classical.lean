@@ -195,3 +195,28 @@ lemma L18 : ∀ (α:Type) (p:α → Prop) (r:Prop),
     assume H x H', H ⟨x,H'⟩⟩
 
 #check L18
+
+#check @by_cases
+
+lemma L19 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α), -- type α is not void !!!
+  (∃ (x:α), p x → r) ↔ (∀ (x:α), p x) → r :=
+  assume α p r a, ⟨
+    assume ⟨x,H⟩ H', H (H' x),
+    assume H, or.elim (em (∀ x, p x))
+      (assume H', ⟨a, assume P, H H'⟩)  -- need 'a' here
+      (assume H', by_contradiction
+        (assume H'', H'
+          (assume x, by_contradiction
+            (assume P, H'' ⟨x,
+              (assume Q, false.elim (P Q))⟩))))⟩
+
+#check L19
+
+lemma L20 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α),  -- type α is not void !!!
+  (∃ (x:α), r → p x) ↔ (r → ∃ (x:α), p x) :=
+  assume α p r a, ⟨
+    assume ⟨x,H⟩ R, ⟨x, H R⟩
+  ,
+    assume H, or.elim (em r)
+      (assume R, _)
+      _⟩
