@@ -1,3 +1,4 @@
+(* NEXT: ===> Foundation                                                        *)
 Require Import Le.
 Require Import List.
 
@@ -12,6 +13,16 @@ Require Import Core.ElemIncl.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
+(* Our next objective is to prove that the 'foundation axiom' is satisfied in   *)
+(* our model. This will be carried out in the next module. However, in order    *)
+(* for us to achieve this goal, we develop here the notion of 'rank' which is   *)
+(* another measure of 'complexity' for a set, similar to the notion of 'order'  *)
+(* which was presented in the Order module. Informally, the rank of a set xs is *)
+(* defined as follows: 1. the rank of the empty set is 0. 2. the rank of a non- *)
+(* empty set is 1 + the maximum of the ranks of its elements. However, in order *)
+(* to convince Coq that our definition is well-founded, we need to express      *)
+(* things in a more convoluted way. Luckily the lemma 'rankMaximum' below       *)
+(* guarantees that our formal definition satisfies our informal description.    *)
 Fixpoint rank (xs:set) : nat :=
     match xs with 
     | Nil       => 0
@@ -21,7 +32,8 @@ Fixpoint rank (xs:set) : nat :=
         | S r   => S (max (rank x) r)
         end 
     end.
-(* The rank is 0 if and only if the set is empty                                *)
+
+(* The rank of a set is 0 if and only if the set is empty                       *)
 Lemma rankNil : forall (x:set), rank x = 0 <-> x = Nil.
 Proof.
     intros x. destruct x as [|x xs]; split.
@@ -44,6 +56,7 @@ Proof.
           apply IH2 in H'. inversion H'. reflexivity.
 Qed.
 
+(* TODO *)
 Lemma rankToList : forall (x xs:set), In x (toList xs) -> rank x < rank xs.
 Proof.
     intros x xs H. destruct (set_eq_dec xs Nil) as [H'|H']. 

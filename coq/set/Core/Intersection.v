@@ -21,13 +21,16 @@ Require Import Core.Extensionality.
 Definition in_set (x:set) : set -> Prop := (fun (z:set) => z :: x).
 
 
-(* TODO *)
+(* Having proved that set membership is decidable, so is our predicate 'in_set' *)
 Definition in_set_dec (x:set) : Dec (in_set x) := (fun (z:set) => elem_dec z x).
 
+(* We define the pairwise intersection x /\ y of x and y by restricting the     *)
+(* list of elements of x to those which also belong to y.                       *)
 Definition inter (x y:set) : set := fromList (filter (in_set_dec y) (toList x)). 
 
 Notation "x /\ y" := (inter x y) : set_scope.
 
+(* z belong to the intersection x /\ y if and only it belongs to both x and y.  *)
 Lemma inter_charac : forall (xs ys z:set),
     z :: (xs /\ ys) <-> z :: xs /\ z :: ys.
 Proof.

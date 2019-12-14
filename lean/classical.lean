@@ -218,5 +218,10 @@ lemma L20 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α),  -- type α is not vo
     assume ⟨x,H⟩ R, ⟨x, H R⟩
   ,
     assume H, or.elim (em r)
-      (assume R, _)
-      _⟩
+      (assume R,
+        (have H' : ∃ x, p x, from H R,
+          exists.elim H'
+            (assume b P, ⟨b, assume _, P⟩)))
+      (assume R, ⟨a, assume R', false.elim (R R')⟩)⟩
+
+#check L20

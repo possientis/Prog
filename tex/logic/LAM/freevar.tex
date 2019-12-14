@@ -329,7 +329,51 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
             &=&\tau^{*}(\phi_{1}\ \phi_{2})(U)\\
             &=&\tau^{*}(\phi)(U)
         \end{eqnarray*}
-    Conversely, we assume that $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$.
+    Conversely if $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$ then we obtain
+    the equality: 
+        \[
+            \sigma^{*}(\phi_{1})(U)\ \ \sigma^{*}(\phi_{2})(U)
+            =
+            \tau^{*}(\phi_{1})(U)\ \ \tau^{*}(\phi_{2})(U)
+        \]
+    Using theorem~(\ref{logic:the:unique:representation}) of
+    page~\pageref{logic:the:unique:representation} it follows that
+    $\sigma^{*}(\phi_{1})(U)=\tau^{*}(\phi_{1})(U)$ and
+    $\sigma^{*}(\phi_{2})(U)=\tau^{*}(\phi_{2})(U)$. Having assumed 
+    the equivalence is true for both $\phi_{1}$ and $\phi_{2}$ and
+    for all $U\subseteq V$, we see that $\sigma$ and $\tau$ coincide 
+    on the sets $\free(\phi_{1})\setminus U$ and $\free(\phi_{2})\setminus U$
+    and consequently they coincide on $\free(\phi)\setminus U$.
+
+    So we now assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$ and
+    $\phi_{1}\in\tv$ for which the equivalence holds for all $U\subseteq V$.
+    Given $U\subseteq V$, we need to show that the equivalence holds for 
+    $\phi$. So first we assume that $\sigma$ and $\tau$ coincide on
+    $\free(\phi)\setminus U$. Since $\free(\phi)=\free(\phi_{1})\setminus\{x\}$,
+    $\sigma$ and $\tau$ coincide on $\free(\phi_{1})\setminus (U\cup\{x\})$.
+    Hence, using our induction hypothesis we obtain:
+        \begin{eqnarray*}\sigma^{*}(\phi)(U)
+            &=&\sigma^{*}(\lambda x\phi_{1})(U)\\
+            &=&\lambda x\sigma^{*}(\phi_{1})(U\cup\{x\})\\
+            \mbox{induction hypothesis\ $\rightarrow$\ }
+            &=&\lambda x\tau^{*}(\phi_{1})(U\cup\{x\})\\
+            &=&\tau^{*}(\lambda x \phi_{1})(U)\\
+            &=&\tau^{*}(\phi)(U)
+        \end{eqnarray*}
+    Conversely if $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$ then we obtain
+    the equality:
+        \[
+            \lambda x\sigma^{*}(\phi_{1})(U\cup\{x\})
+            =
+            \lambda x\tau^{*}(\phi_{1})(U\cup\{x\})
+        \]
+    Using theorem~(\ref{logic:the:unique:representation}) of
+    page~\pageref{logic:the:unique:representation} it follows that
+    $\sigma^{*}(\phi_{1})(U\cup\{x\})=\tau^{*}(\phi_{1})(U\cup\{x\})$.
+    Having assumed the equivalence is true for $\phi_{1}$ and for all 
+    $U\subseteq V$, we conclude that $\sigma$ and $\tau$ coincide on
+    $\free(\phi_{1})\setminus(U\cup\{x\})$, i.e. they coincide on
+    $\free(\phi)\setminus U$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:freevar:of:substitution}

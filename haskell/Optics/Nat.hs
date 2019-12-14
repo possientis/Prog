@@ -11,7 +11,6 @@
 module  Optics.Nat
     (   Nat         (..)
     ,   SNat        (..)
-    ,   KnownNat    (..)
     ,   (:<)
     ,   Leq         (..)
     ,   lemma1
@@ -22,23 +21,12 @@ import Data.Kind
 
 data Nat = Z | S Nat
 
-data SNat = SZ | SS SNat
-
-class KnownNat (n :: Nat) where
-    value :: SNat
-
-instance KnownNat 'Z where
-    value = SZ
-
-instance (KnownNat n) => KnownNat ('S n) where
-    value = SS (value @ n)
-
 type family (n :: Nat) :< (m :: Nat) :: Bool 
 type instance   _    :<  'Z    = 'False
 type instance  'Z    :< ('S _) = 'True
 type instance ('S n) :< ('S m) = n :< m
 
-data Leq (n :: Nat) (m ::Nat) :: Type where
+data Leq (n :: Nat) (m :: Nat) :: Type where
     Le_n :: forall (n :: Nat) . Leq n n 
     Le_S :: forall (n :: Nat) (m :: Nat) . Leq n m -> Leq n ('S m)
 
@@ -47,6 +35,13 @@ lemma1 = Le_n
 
 lemma2 :: forall (n :: Nat) . Leq n ('S n)
 lemma2 = Le_S Le_n
+
+-- SNat 'Z has only one instance
+-- SNat ('S 'Z) has only one instance
+-- ...
+data SNat (n :: Nat) :: Type where
+    SZ :: SNat 'Z
+    SS :: forall (n :: Nat) . SNat n -> SNat ('S n)
 
 
 

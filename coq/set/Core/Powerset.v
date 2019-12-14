@@ -1,3 +1,6 @@
+(* NEXT: ===> Rank                                                              *) 
+
+
 Require Import List.
 
 Require Import Core.Set.
@@ -12,13 +15,22 @@ Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
 
-(* Defining the power set of a set, i.e. the set of its subsets                 *)
+(* We now define the 'power set' P xs of a set xs, i.e. the set of all subsets  *)
+(* of xs. This definition is done with pattern matching on xs. If xs is the     *)
+(* empty set, then it has one unique subset, namely the empty set itself. If xs *)
+(* is the union xs = {x} \/ xs', then all subsets of xs are obtained by taking  *)
+(* all subsets of xs', and adding to this collection all subsets of xs' with x  *)
+(* as an extra element. We are not claiming that this informal description or   *)
+(* indeed the formal definition below are clearly correct. However, the lemma   *)
+(* following this definition will confirm its correctness.                      *)
 Fixpoint P (xs:set) : set :=
     match xs with
     | Nil       => { Nil }
     | Cons x xs => fromList (toList (P xs) ++ map (Cons x) (toList (P xs)))
     end.
 
+(* The property which characterizes our power set is what we were hoping for.   *)
+(* z is an element of P xs if and only if z is a subset of xs.                  *)
 Lemma powerset_charac : forall (xs z:set), z :: P xs <-> z <== xs.
 Proof.
     induction xs as [|x _ xs IH].
@@ -90,7 +102,9 @@ Proof.
                 { assumption. }}
 Qed.
 
-(* The power set axiom is satisfied in 'set'                                    *)
+(* The power set axiom is satisfied in our model. For all x, there exists a y,  *)
+(* such that for all z, z belongs to y if and only if z is a subset of x.       *)
+(* In other words, for all x, the power set P x exists.                         *)
 Theorem powerset : forall (x:set), exists (y:set), forall (z:set),
     z :: y <-> z <== x.
 Proof.
