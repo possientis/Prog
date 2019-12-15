@@ -1,3 +1,6 @@
+(* NEXT: ===> ???                                                               *)
+
+
 Require Import Le.
 
 Require Import Core.Nat.
@@ -13,11 +16,24 @@ Require Import Core.ElemIncl.
 Require Import Core.Decidability. 
 Require Import Core.Extensionality.
 
-(* The set 'x' is ::-minimal in the set 'xs'                                    *)
+(* In this module, we prove that the foundation axiom is satisfied in our       *)
+(* model. Of course, the foundation axiom like other axioms of ZF, has more     *)
+(* than one possible formulation. These various formulations are known to be    *)
+(* equivalent within ZF, but it is far from obvious that they should still be   *)
+(* so within our model. This caveat may apply to other axioms which we have     *)
+(* previously proven (pairing, union, powerset). So we shall prove one possible *)
+(* formulation of the foundation axiom which states that every non-empty set    *)
+(* has an element which is minimal for the membership relation. A set x is said *)
+(* to be minimal (for ::) in xs, if and only if x is an element of xs, and no   *)
+(* element of xs belongs to x.                                                  *)
 Definition minimal (x xs:set) : Prop :=
     x :: xs /\ ~ exists (y:set), y :: xs /\ y :: x.
 
-(* No set has an element which is larger or equal to itself                     *)
+(* No set has an element which is larger or equal to itself. This result is not *)
+(* needed for proving the foundation axiom, but will allow us to show that no   *)
+(* set belongs to itself, which is interesting in its own right. These results  *)
+(* are obtained without making use of the notion of 'rank' seen previously.     *)
+(* So if x is a subset of y, y cannot belong to x.                              *)
 Lemma coherence : forall (x y:set), x <== y -> ~ y :: x.
 Proof.
     induction x as [|x IH1 xs IH2].
@@ -44,7 +60,8 @@ Proof.
 Qed.
 
 
-(* The foundation axiom is satisfied in 'set'                                   *) 
+(* The foundation axiom is true: every non-empty set has a ::-minimal element.  *)
+(* We crucially need to make use of the notion of 'rank' of the Rank module.    *)
 Theorem foundation : forall (x:set), ~(x == Nil) -> 
     exists (y:set), minimal y x.
 Proof.

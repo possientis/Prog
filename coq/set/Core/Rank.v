@@ -1,4 +1,6 @@
 (* NEXT: ===> Foundation                                                        *)
+
+
 Require Import Le.
 Require Import List.
 
@@ -56,7 +58,7 @@ Proof.
           apply IH2 in H'. inversion H'. reflexivity.
 Qed.
 
-(* TODO *)
+(* If x lies in the list associated with xs, then it has a lesser rank.         *)
 Lemma rankToList : forall (x xs:set), In x (toList xs) -> rank x < rank xs.
 Proof.
     intros x xs H. destruct (set_eq_dec xs Nil) as [H'|H']. 
@@ -69,6 +71,7 @@ Proof.
         + assumption.
 Qed.
 
+(* The notion of rank is actually compatible with our equivalence relation ==.  *)
 Lemma rankEqual : forall (x y:set), x == y -> rank x = rank y.
 Proof.
     intros x y. remember (rank x) as n eqn:E. 
@@ -136,6 +139,7 @@ Proof.
                   split; assumption. }}
 Qed.
 
+(* If x is an element of y, then its rank is less than that of y.               *)
 Lemma rankElem : forall (x y:set), x :: y -> rank x < rank y.
 Proof.
     intros x y H. apply toListElem in H. destruct H as [x' [H1 [H2 H3]]].
@@ -144,7 +148,7 @@ Proof.
     - apply doubleIncl. split; assumption.
 Qed.
 
-
+(* If x is a subset of y, then its rank is less than or equal to that of y.     *) 
 Lemma rankIncl : forall (x y:set), x <== y -> rank x <= rank y.
 Proof.
     intros x y H. destruct (set_eq_dec x Nil) as [H1|H1].
@@ -173,7 +177,7 @@ Proof.
 Qed.
 
 
-(* If a set is non-empty, it has an element whose rank is minimal               *)
+(* If a set is non-empty, it has an element of smallest rank.                   *)
 Lemma rankMinimal : forall (x:set), x <> Nil ->
     exists (y:set), y :: x /\ forall (z:set), z :: x -> rank y <= rank z.
 Proof.
@@ -193,4 +197,3 @@ Proof.
         + apply rankEqual. apply doubleIncl. split; assumption.
         + assumption.
 Qed.
-

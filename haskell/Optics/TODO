@@ -1,3 +1,4 @@
+define sIf, sNextEven
 paper: Dependently typed programming with singletons
 define fin2vec' by pattern match on singleton
 paper: profunctor optics

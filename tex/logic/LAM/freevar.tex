@@ -54,7 +54,7 @@ Then for all $U\subseteq V$ we have:
         \free(\sigma(x))
     \]
 where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
-definition~(\ref{logic:def:LAM:subst}).
+definition~(\ref{logic:def:LAM:beta:subst}).
 \end{prop}
 \begin{proof}
 We shall prove this inclusion by structural induction on $\phi$, using
@@ -192,7 +192,7 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
             \sigma^{*}(\phi)(U) = \sigma^{*}(\phi)(U')
         \]
     where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
-    definition~(\ref{logic:def:LAM:subst}).
+    definition~(\ref{logic:def:LAM:beta:subst}).
 \end{prop}
 \begin{proof}
     We shall prove this implication for all $U,U'\subseteq V$  by structural 
@@ -201,9 +201,9 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
     for some $x\in V$ and furthermore that $U\cap\free(\phi) = U'\cap\free(\phi)$.
     We need to show that $\sigma^{*}(\phi)(U)=\sigma^{*}(\phi)(U')$ which 
     reduces to $\sigma_{U}(x)=\sigma_{U'}(x)$ using the notations of
-    definition~(\ref{logic:def:LAM:subst}). However, when $\phi=x$ our assumption
-    yields the equality $U\cap\{x\}=U'\cap\{x\}$ and we shall distinguish two
-    cases: first we assume that $U\cap\{x\}=\emptyset$. Then equally 
+    definition~(\ref{logic:def:LAM:beta:subst}). However, when $\phi=x$ our 
+    assumptionyields the equality $U\cap\{x\}=U'\cap\{x\}$ and we shall distinguish 
+    two cases: first we assume that $U\cap\{x\}=\emptyset$. Then equally 
     $U'\cap\{x\}=\emptyset$ and we have $x\not\in U$ together with $x\not\in U'$,
     so the equality $\sigma_{U}(x)=\sigma_{U'}(x)$ reduces to 
     $\sigma(x)=\sigma(x)$. Second we assume that $U\cap\{x\}=\{x\}$. Then
@@ -270,7 +270,7 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
             \sigma^{*}(\phi)(U) = \sigma(\phi)
         \]
     where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
-    definition~(\ref{logic:def:LAM:subst}).
+    definition~(\ref{logic:def:LAM:beta:subst}).
 \end{prop}
 \begin{proof}
     This is an immediate application of 
@@ -283,14 +283,14 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
         \]
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:freevar:beta:support}
+\begin{prop}\label{logic:prop:LAM:freevar:beta:support:gen}
     Let $V$ be a set and $\sigma,\tau:V\to\tv$ be two maps. Then:
         \[
             \sigma_{|\free(\phi)\setminus U}=\tau_{|\free(\phi)\setminus U}
             \ \Leftrightarrow\ \sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)
         \]
     for all $U\subseteq V$ and $\phi\in\tv$, where $\sigma^{*},\tau^{*}$ are 
-    defined as in definition~(\ref{logic:def:LAM:subst}).
+    defined as in definition~(\ref{logic:def:LAM:beta:subst}).
 \end{prop}
 \begin{proof}
     Given $U\subseteq V$ and $\phi\in\tv$, we need to show that if $\sigma$
@@ -376,6 +376,22 @@ proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}).
     $\free(\phi)\setminus U$.
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:freevar:beta:support}
+    Let $V$ be a set and $\sigma,\tau:V\to\tv$ be two maps. Then:
+        \[
+            \sigma_{|\free(\phi)}=\tau_{|\free(\phi)}
+            \ \Leftrightarrow\ \sigma(\phi)=\tau(\phi)
+        \]
+    for all $\phi\in\tv$, where $\sigma,\tau$ also denote the associated
+    $\beta$-substitution mappings.
+\end{prop}
+\begin{proof}
+    Using definition~(\ref{logic:def:LAM:beta:subst}), we have 
+    $\sigma(\phi)=\sigma^{*}(\phi)(\emptyset)$ and 
+    $\tau(\phi)=\tau^{*}(\phi)(\emptyset)$. Hence, this is an immediate 
+    application of proposition~(\ref{logic:prop:LAM:freevar:beta:support:gen}) 
+    to the set $U=\emptyset$.
+\end{proof}
 \begin{prop}\label{logic:prop:LAM:freevar:of:substitution}
     Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $\phi\in\tv$ 
     be such that $\sigma_{|\var(\phi)}$ is an injective map. Then, we have:

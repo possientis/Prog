@@ -9,6 +9,7 @@ module  Optics.Vec
     ,   main
     ,   nth
     ,   head
+    ,   append
     )   where
 
 import Prelude      hiding (head)
@@ -32,8 +33,12 @@ nth :: forall (m :: Nat) (n :: Nat) (a :: Type)
 nth SZ      (Cons x _)  = x
 nth (SS n)  (Cons _ xs) = nth n xs 
 
-head :: forall (n :: Nat) (a :: Type) . Vec ('S n) a -> a
+head :: Vec ('S n) a -> a
 head (Cons x _) = x
+
+append :: Vec n a -> Vec m a -> Vec (Plus n m) a
+append  Nil        ys = ys
+append (Cons x xs) ys = Cons x (append xs ys)
 
 vec1 :: Vec ('S ('S ('S 'Z))) Int
 vec1 = Cons 0 (Cons 1 (Cons 2 Nil))

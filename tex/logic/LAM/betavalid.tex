@@ -79,7 +79,7 @@ $\beta$-valid for $\phi$. Then for all $U\subseteq V$ we have:
         \free(\sigma(x))
     \]
 where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
-definition~(\ref{logic:def:LAM:subst}).
+definition~(\ref{logic:def:LAM:beta:subst}).
 \end{prop}
 \begin{proof}
 We shall prove this equality by structural induction on $\phi$, using
@@ -228,7 +228,7 @@ which follows from:
         \free(\sigma(\phi))
         &=&\free(\sigma^{*}(\phi)(\emptyset))\\
         &=&\free(\sigma^{*}(\lambda x\phi_{1})(\emptyset))\\
-        \mbox{def.~(\ref{logic:def:LAM:subst})$\ \rightarrow\ $}
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})$\ \rightarrow\ $}
         &=&\free(\lambda x \sigma^{*}(\phi_{1})(\{x\}))\\
         \mbox{def.~(\ref{logic:def:LAM:free:variable})$\ \rightarrow\ $}
         &=&\free(\sigma^{*}(\phi_{1})(\{x\}))\setminus\{x\}\\
@@ -295,7 +295,7 @@ which follows from:
     \begin{eqnarray*}
         \free(\sigma(\phi))
         &=&\free(\sigma^{*}(\lambda x\phi_{1})(\emptyset))\\
-        \mbox{def.~(\ref{logic:def:LAM:subst})$\ \rightarrow\ $}
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})$\ \rightarrow\ $}
         &=&\free(\lambda x \sigma^{*}(\phi_{1})(\{x\}))\\
         \mbox{def.~(\ref{logic:def:LAM:free:variable})$\ \rightarrow\ $}
         &=&\free(\sigma^{*}(\phi_{1})(\{x\}))\setminus\{x\}

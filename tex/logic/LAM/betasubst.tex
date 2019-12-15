@@ -1,4 +1,4 @@
-\begin{defin}\label{logic:def:LAM:subst}
+\begin{defin}\label{logic:def:LAM:beta:subst}
 Let $V$ be  a set and $\sigma :V\to \tv$ be a map. We define the
 {\em $\beta$-substitution} associated with
 $\sigma$ to be the map $\sigma:\tv\to\tv$ defined by
@@ -18,14 +18,19 @@ recursion, given $\phi\in\tv$ and $U\in{\cal P}(V)$:
 where $\sigma_{U}(x)=x$ if $x\in U$ and
 $\sigma_{U}(x)=\sigma(x)$ if $x\not\in U$.
 \end{defin}
-
+{\bf Warning}: if $\sigma$ is a a map $\sigma:V\to V$, then $\sigma$ can 
+equally be viewed as a map $\sigma:V\to\tv$ and the notation $\sigma(\phi)$ 
+is ambiguous as it may refer to the substitution of 
+definition~(\ref{logic:def:LAM:substitution}), or the $\beta$-substitution
+of definition~(\ref{logic:def:LAM:beta:subst}). The two transformations
+behave differently on bound variables. 
 \begin{prop}\label{logic:prop:LAM:subst:x}
 Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ and $x\in V$. 
 If $\phi = x$, then  we have $\sigma(\phi) = \sigma(x)$ where $\sigma$ also 
 denotes the associated $\beta$-substitution mapping.
 \end{prop}
 \begin{proof}
-    Using the notations of definition~(\ref{logic:def:LAM:subst}):
+    Using the notations of definition~(\ref{logic:def:LAM:beta:subst}):
     $\sigma(\phi) = \sigma^{*}(\phi)(\emptyset) = \sigma_{\emptyset}(x)
     =\sigma(x)$
 \end{proof}
@@ -36,7 +41,7 @@ denotes the associated $\beta$-substitution mapping.
     where $\sigma$ also denotes the associated $\beta$-substitution mapping.
 \end{prop}
 \begin{proof}
-    Using the notations of definition~(\ref{logic:def:LAM:subst}), we have:
+    Using the notations of definition~(\ref{logic:def:LAM:beta:subst}), we have:
         \begin{eqnarray*}
             \sigma(\phi)&=&\sigma(\phi_{1}\ \phi_{2})\\
             &=&\sigma^{*}(\phi_{1}\ \phi_{2})(\emptyset)\\

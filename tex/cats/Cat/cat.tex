@@ -1,12 +1,28 @@
 The notion of {\em small category} defined in 
 definition~(\ref{Cat:def:category:small}) is similar to that of any other 
 algebraic structure the reader may be familiar with. It can safely be encoded 
-in set theory as a tuple (which is itself a set) containing data (which are 
-other sets) which satisfies certain properties. In set theory, everything is a 
+in set theory as a tuple (which is a set) containing data (which are other 
+sets) which satisfies certain properties. In set theory, everything is a 
 set. A small category \Cat\ is a set, its collection of objects $\ob\ \Cat$ is 
 a set, its arrows $\arr\ \Cat$ form a set, the functions $\dom$, $\cod$, $\id$ 
-and the partial function $\circ$ are all sets (functions are typically encoded
-as sets of ordered pairs). 
+and the composition operator $\circ$ are all sets (functions are typically 
+encoded as sets of ordered pairs). 
+
+Category theory falls outside of set theory. While the definition of a
+{\em category} we provide below is formally identical to that of a small
+category, the object we are defining can no longer be encoded in general 
+as an object of set theory. For example, say we want to speak about the 
+{\em universe of all sets} or the {\em universe of all monoids}. These 
+{\em universes} which are known as {\em classes} cannot be represented 
+as sets. They are not objects of set theory. Or say we are working within
+the formal framework of a proof assistant such as {\rm Coq}, {\rm Agda} or
+{\rm Lean}. These tools are based on type theory and do not fall within
+the scope of set theory. When defining a {\em category}, we assume some
+form of meta-theoretic context, some form of logic, some way of reasoning
+about objects which may not be sets, where some meaning is attached to the
+words {\em tuple}, {\em collection}, {\em equality} and {\em map}. 
+This may sound all very fuzzy, yet we cannot be more formal at this stage.
+
 \begin{defin}\label{Cat:def:category}
     We call {\em category} any tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ 
     such that:
@@ -29,4 +45,5 @@ as sets of ordered pairs).
        \end{eqnarray*} 
     where $(7)-(13)$ hold for all $f,g,h\in\arr$ and $a\in\ob$: 
 \end{defin}
+
 

@@ -225,3 +225,63 @@ lemma L20 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α),  -- type α is not vo
       (assume R, ⟨a, assume R', false.elim (R R')⟩)⟩
 
 #check L20
+
+
+lemma L21 : ∀ (α:Type) (p q:α → Prop),
+  (∀ (x:α), p x ∧ q x) ↔ (∀ (x:α), p x) ∧ (∀ (x:α), q x) :=
+  assume α p q,
+  ⟨ -- =>
+    assume H : ∀ (x:α), p x ∧ q x,
+      ⟨show ∀ (x:α), p x, from
+        assume x, show p x, from (and.left (H x))
+      ,
+      show ∀ (x:α), q x, from
+        assume x, show q x, from (and.right (H x))
+      ⟩
+  , -- <=
+    assume ⟨H1,H2⟩, show ∀ (x:α), p x ∧ q x, from
+      assume x, ⟨H1 x, H2 x⟩
+  ⟩
+
+#check L21
+
+
+lemma L22 : ∀ (α:Type) (p q:α → Prop),
+  (∀ (x:α), p x → q x) → (∀ (x:α), p x) → (∀ (x:α), q x) :=
+  assume α p q (H1 : ∀ x, p x → q x) (H2 : ∀ x, p x),
+    show ∀ x, q x, from
+      assume x, (H1 x) (H2 x)
+
+#check L22
+
+lemma L23 : ∀ (α:Type) (p q:α → Prop),
+  (∀ (x:α), p x) ∨ (∀ (x:α), q x) → ∀ (x:α), p x ∨ q x :=
+  assume α p q H, or.elim H
+    (assume H1 x, or.intro_left  _ (H1 x))
+    (assume H1 x, or.intro_right _ (H1 x))
+
+#check L23
+
+lemma L24 : ∀ (α:Type) (p q:α → Prop) (r:Prop) (a:α),
+  (∀ (x:α), r) ↔ r :=
+  assume α p q r a,
+  ⟨
+    assume H, H a
+  ,
+    assume H _, H
+  ⟩
+
+#check L24
+
+
+lemma L26 : ∀ (α:Type) (p:α → Prop) (r:Prop),
+  (∀ (x:α), r → p x) ↔ (r → ∀ (x:α), p x) :=
+  assume α p r,
+  ⟨
+    assume H R x, H x R
+  ,
+    assume H x R, H R x
+  ⟩
+
+
+#check L26

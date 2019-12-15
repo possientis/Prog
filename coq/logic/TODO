@@ -1,4 +1,2 @@
-f|Fr(t) = g|Fr(t) <=> f(t) = g(t)
-f:V -> V can be viewed as a particular case of f:V -> T(V), review legacy results
-and make sure they are compatible with beta-results
+Continue to investigate f:V -> V. Valid <-> beta-valid ?
 LAM/betavalid.tex
