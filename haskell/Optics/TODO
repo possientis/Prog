@@ -1,3 +1,4 @@
+try replacing open type families by closed ones, for type level functions
 define sIf, sNextEven
 paper: Dependently typed programming with singletons
 define fin2vec' by pattern match on singleton

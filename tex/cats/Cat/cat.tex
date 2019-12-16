@@ -46,4 +46,25 @@ This may sound all very fuzzy, yet we cannot be more formal at this stage.
     where $(7)-(13)$ hold for all $f,g,h\in\arr$ and $a\in\ob$: 
 \end{defin}
 
-
+\newpage
+So let $\Cat=(\ob, \arr, \dom, \cod, \id, \circ)$ be a category: then \Cat\ is 
+a {\em tuple} but it is no longer a tuple in a set theoretic sense. We assume
+given some logical framework where the notion of {\em tuple} is clear, even
+if not formally defined. Furthermore, We are no longer imposing that \ob\ 
+should be a set, but are instead using the phrase {\em collection with 
+equality}, whatever this may mean in our given logical context. So we shall 
+still make use of the notation $\ob\ \Cat$ but this will now refer to the 
+{\em collection} of all {\em objects} of the category \Cat. In fact, if
+$a$ is an object of the category \Cat, we shall abuse notations somewhat
+by writing $a\in\ob\ \Cat$ or even simply $a\in\Cat$ to express the fact 
+that $a$ is an object of \Cat, being understood that this use of the
+set membership symbol '$\in$' does not mean anything is a set. Since we 
+are stepping out of set theory, the objects of the category \Cat\ may not
+be sets themselves. They are simply members of the {\em collection} 
+$\ob\ \Cat$. However, properties $(7)-(13)$ of 
+definition~(\ref{Cat:def:category}) are all refering to equalities
+between objects such that $\cod(f)=\dom(g)$. So it must be the case that 
+the notion of {\em equality} be meaningful on the collection $\ob\ \Cat$. 
+This explains our use of the phrase {\em collection with equality}: given
+$a,b\in\Cat$, the statement $a=b$ while not a set-theoretic equality is 
+nonetheless assumed to be defined.

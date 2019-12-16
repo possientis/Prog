@@ -1,35 +1,37 @@
 \begin{defin}\label{logic:def:LAM:beta:valid:substitution}
-Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let
-$\phi\in\tv$. We say that $\sigma$ is {\em $\beta$-valid for} $\phi$ \ifand\
-for every sub-formula $\psi\preceq\phi$:
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let
+    $\phi\in\tv$. We say that $\sigma$ is {\em $\beta$-valid for} $\phi$ 
+    \ifand\ for every sub-formula $\psi\preceq\phi$:
     \[
-        x\in\free(\psi)\ \Rightarrow\ \free(\sigma(x))\subseteq\free(\sigma(\psi))
+        x\in\free(\psi)\ 
+            \Rightarrow\ 
+        \free(\sigma(x))\subseteq\free(\sigma(\psi))
     \]
-where $\sigma:\tv\to\tv$ also denotes the associated
-$\beta$-substitution mapping.
+    where $\sigma:\tv\to\tv$ also denotes the associated $\beta$-substitution 
+    mapping.
 \end{defin}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:subformula}
-Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let
-$\phi\in\tv$. Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is $\beta$-valid
-for any sub-formula $\psi\preceq\phi$.
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. 
+    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is $\beta$-valid
+    for any sub-formula $\psi\preceq\phi$.
 \end{prop}
 \begin{proof}
-Since $\phi\preceq\phi$, i.e. $\phi$ is a sub-formula of itself, the
-'if' part of this proposition is clear. So we now prove the 'only
-if' part. So suppose $\sigma$ is $\beta$-valid for $\phi$ and let
-$\psi\preceq\phi$. We need to show that $\sigma$ is also $\beta$-valid for
-$\psi$. So let $\chi\preceq\psi$ and let $x\in\free(\chi)$. We need
+    Since $\phi\preceq\phi$, i.e. $\phi$ is a sub-formula of itself, the
+    'if' part of this proposition is clear. So we now prove the 'only
+    if' part. So suppose $\sigma$ is $\beta$-valid for $\phi$ and let
+    $\psi\preceq\phi$. We need to show that $\sigma$ is also $\beta$-valid for
+    $\psi$. So let $\chi\preceq\psi$ and let $x\in\free(\chi)$. We need
     to show that $\free(\sigma(x))\subseteq\free(\sigma(\chi))$, which follows
-immediately from the $\beta$-validity of $\sigma$ for $\phi$ and the fact
-(by transitivity) that $\chi\preceq\phi$, i.e. that $\chi$ is also a
-sub-formula of $\phi$.
+    immediately from the $\beta$-validity of $\sigma$ for $\phi$ and the fact
+    (by transitivity) that $\chi\preceq\phi$, i.e. that $\chi$ is also a
+    sub-formula of $\phi$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:free:commute}
-Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. 
-Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every 
-subformula $\psi\preceq\phi$, we have:
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. 
+    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for every 
+    subformula $\psi\preceq\phi$, we have:
     \[
         \free(\sigma(\psi))
         =\!\!\!\!
@@ -61,13 +63,55 @@ subformula $\psi\preceq\phi$, we have:
     of $\sigma$ for $\phi$.
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:valid:iff:beta:valid}
+    Let $V$ be a set and $\sigma:V\to V$ be a map. Let $\phi\in\tv$. 
+    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is valid for $\phi$.
+\end{prop}
+\begin{proof}
+    Since $V\subseteq\tv$, the map $\sigma$ is both a map $\sigma:V\to V$ and
+    a map $\sigma:V\to\tv$. Given $\phi\in\tv$, it is therefore meaningful to 
+    ask whether $\sigma$ is valid for $\phi$ in the sense of 
+    definition~(\ref{logic:def:LAM:valid:substitution}), and whether it is
+    $\beta$-valid for $\phi$ in the sense of 
+    definition~(\ref{logic:def:LAM:beta:valid:substitution}). We need to show
+    that the two notions are equivalent when $\sigma:V\to V$. 
+    However in order for us to carry out a proof, we need to guard ourselves 
+    against a possible notational confusion arising from the use of the same 
+    symbol '$\sigma$' to denote not only the original map $\sigma:V\to V$, 
+    but also the {\em substitution mapping} $\sigma:\tv\to\tv$ of 
+    definition~(\ref{logic:def:LAM:substitution}), as well as the 
+    {\em $\beta$-substitution mapping} $\sigma:\tv\to\tv$ of
+    definition~(\ref{logic:def:LAM:beta:subst}). While we believe these 
+    two substition mappings are essentially the same modulo 
+    $\alpha$-equivalence, we have not yet established any such connection,
+    and it is clear that the two substitutions have a different impact
+    on bound variables. Hence they simply are different mappings and given
+    $\phi\in\tv$ we shall keep using the notation $\sigma(\phi)$ for the 
+    substitution mapping of definition~(\ref{logic:def:LAM:substitution})
+    and we shall write $\sigma_{\beta}(\phi)$ for the $\beta$-substitution
+    mapping of definition~(\ref{logic:def:LAM:beta:subst}).
+
+    So let us assume that $\sigma$ is valid for $\phi\in\tv$. We need
+    to show it is also $\beta$-valid for $\phi$. From
+    definition~(\ref{logic:def:LAM:beta:valid:substitution}), given
+    $\psi\preceq\phi$ and $x\in V$ we need to show:
+    \[
+        x\in\free(\psi)\ 
+            \Rightarrow\ 
+        \free(\sigma(x))\subseteq\free(\sigma_{\beta}(\psi))
+    \]
+    However, since $\sigma:V\to V$, the formula $\sigma(x)$ is simply
+    a variable and consequently $\free(\sigma(x))=\{\sigma(x)\}$.
+\end{proof}
+
 The following proposition is similar to 
 proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}). However,
 it relies on the stronger assumption of $\beta$-validity and yields the
 stronger conclusion of equality rather than inclusion.
+
 \begin{prop}\label{logic:prop:LAM:freevar:of:betasubst:gen:valid}
-Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map which is
-$\beta$-valid for $\phi$. Then for all $U\subseteq V$ we have:
+    Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map 
+    which is $\beta$-valid for $\phi$. Then for all $U\subseteq V$ we have:
     \[
         \free(\sigma^{*}(\phi)(U)) 
             \ =\ 
@@ -78,15 +122,15 @@ $\beta$-valid for $\phi$. Then for all $U\subseteq V$ we have:
         \!\!\!\!\!\!
         \free(\sigma(x))
     \]
-where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
-definition~(\ref{logic:def:LAM:beta:subst}).
+    where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined as in 
+    definition~(\ref{logic:def:LAM:beta:subst}).
 \end{prop}
 \begin{proof}
-We shall prove this equality by structural induction on $\phi$, using
-theorem~(\ref{logic:the:proof:induction}) of 
-page~\pageref{logic:the:proof:induction}. So first we assume that $\phi=x$ 
-for some $x\in V$. Then for all $U\subseteq V$, there are two possible cases: 
-either $x\in U$ or $x\not\in U$. If $x\in U$ we have:
+    We shall prove this equality by structural induction on $\phi$, using
+    theorem~(\ref{logic:the:proof:induction}) of 
+    page~\pageref{logic:the:proof:induction}. So first we assume that $\phi=x$ 
+    for some $x\in V$. Then for all $U\subseteq V$, there are two possible 
+    cases: either $x\in U$ or $x\not\in U$. If $x\in U$ we have:
     \begin{eqnarray*}
         \free(\sigma^{*}(\phi)(U))
         &=&\free(\sigma^{*}(x)(U))\\
@@ -103,8 +147,8 @@ either $x\in U$ or $x\not\in U$. If $x\in U$ we have:
             \!\!\!\!\!\!
             \free(\sigma(x))
     \end{eqnarray*}
-If $x\not\in U$, then:
-     \begin{eqnarray*}
+    If $x\not\in U$, then:
+    \begin{eqnarray*}
         \free(\sigma^{*}(\phi)(U))
         &=&\free(\sigma^{*}(x)(U))\\
         &=&\free(\sigma_{U}(x))\\
@@ -134,13 +178,13 @@ If $x\not\in U$, then:
         \!\!\!\!\!\!\!
         \free(\sigma(x))
     \end{eqnarray*}
-We now assume that $\phi=\phi_{1}\ \phi_{2}$ and $\sigma$ is $\beta$-valid 
-for $\phi$, where $\phi_{1}, \phi_{2}\in\tv$ satisfy the equality for all 
-$\sigma$ $\beta$-valid and $U\subseteq V$. Since both $\phi_{1}$ and $\phi_{2}$ 
-are sub-formulas of $\phi$ using  
-proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that $\sigma$
-is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$. Hence, for all 
-$U\subseteq V$ we have:
+    We now assume that $\phi=\phi_{1}\ \phi_{2}$ and $\sigma$ is $\beta$-valid 
+    for $\phi$, where $\phi_{1}, \phi_{2}\in\tv$ satisfy the equality for all 
+    $\sigma$ $\beta$-valid and $U\subseteq V$. Since both $\phi_{1}$ and 
+    $\phi_{2}$ are sub-formulas of $\phi$ using  
+    proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that 
+    $\sigma$ is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$. Hence, for 
+    all $U\subseteq V$ we have:
     \begin{eqnarray*}
         \free(\sigma^{*}(\phi)(U))
         &=&\free(\sigma^{*}(\phi_{1}\ \phi_{2})(U))\\
@@ -172,10 +216,11 @@ $U\subseteq V$ we have:
         \!\!\!\!\!\!\!
         \free(\sigma(x))
     \end{eqnarray*}
-Finally, we assume that $\phi=\lambda x\phi_{1}$ and $\sigma$ is $\beta$-valid
-for $\phi$ where $\phi_{1}\in\tv$ satisfies the equality for all $\sigma$
-$\beta$-valid and $U\subseteq V$. Since $\phi_{1}$ is a sub-formula of $\phi$
-using proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that 
+    Finally, we assume that $\phi=\lambda x\phi_{1}$ and $\sigma$ is 
+    $\beta$-valid for $\phi$ where $\phi_{1}\in\tv$ satisfies the equality 
+    for all $\sigma$ $\beta$-valid and $U\subseteq V$. Since $\phi_{1}$ is 
+    a sub-formula of $\phi$ using 
+    proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that 
     $\sigma$ is $\beta$-valid for $\phi_{1}$. Hence, for all $U\subseteq V$:
     \begin{eqnarray*}
         \free(\ \sigma^{*}(\phi)(U)\ )
@@ -216,14 +261,14 @@ using proposition~(\ref{logic:prop:LAM:beta:valid:subformula}) we see that
         \!\!\!\!\!\!\!
         \free(\sigma(u))
     \end{eqnarray*}
-In order to jusfify the last equality, it is sufficient to prove
-that $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)$.
-However, by assumption $\sigma$ is $\beta$-valid for $\phi$. Hence
-for all $u\in\free(\phi)$ looking at 
-definition~(\ref{logic:def:LAM:beta:valid:substitution}) we have 
-$\free(\sigma(u))\subseteq\free(\sigma(\phi))$ and it is therefore 
-sufficient to prove the inclusion $\free(\sigma(\phi))\subseteq\{x\}^{c}$,
-which follows from:
+    In order to jusfify the last equality, it is sufficient to prove
+    that $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)$.
+    However, by assumption $\sigma$ is $\beta$-valid for $\phi$. Hence
+    for all $u\in\free(\phi)$ looking at 
+    definition~(\ref{logic:def:LAM:beta:valid:substitution}) we have 
+    $\free(\sigma(u))\subseteq\free(\sigma(\phi))$ and it is therefore 
+    sufficient to prove the inclusion $\free(\sigma(\phi))\subseteq\{x\}^{c}$,
+    which follows from:
     \begin{eqnarray*}
         \free(\sigma(\phi))
         &=&\free(\sigma^{*}(\phi)(\emptyset))\\

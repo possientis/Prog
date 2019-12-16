@@ -18,6 +18,7 @@ rm -f a.out
 ./parconc/clean.sh
 ./types/clean.sh
 ./wiwik/clean.sh
+./Optics/clean.sh
 
 
 cd ${DIR}

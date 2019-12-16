@@ -1,22 +1,21 @@
 \begin{defin}\label{logic:def:LAM:beta:subst}
-Let $V$ be  a set and $\sigma :V\to \tv$ be a map. We define the
-{\em $\beta$-substitution} associated with
-$\sigma$ to be the map $\sigma:\tv\to\tv$ defined by
-$\sigma(\phi)=\sigma^{*}(\phi)(\emptyset)$, where
-$\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined by the following structural
-recursion, given $\phi\in\tv$ and $U\in{\cal P}(V)$:
+    Let $V$ be  a set and $\sigma :V\to \tv$ be a map. We define the
+    {\em $\beta$-substitution} associated with $\sigma$ to be the map 
+    $\sigma:\tv\to\tv$ defined by $\sigma(\phi)=\sigma^{*}(\phi)(\emptyset)$, 
+    where $\sigma^{*}:\tv\to[{\cal P}(V)\to\tv]$ is defined by the following 
+    structural recursion, given $\phi\in\tv$ and $U\in{\cal P}(V)$:
     \begin{equation}\label{logic:eqn:LAM:subst:1}
-                    \sigma^{*}(\phi)(U)=\left\{
-                    \begin{array}{lcl}
-                    \sigma_{U}(x)&\mbox{\ if\ }&\phi=x\\
-                    \sigma^{*}(\phi_{1})(U)\ \sigma^{*}(\phi_{2})(U)
+        \sigma^{*}(\phi)(U)=\left\{
+            \begin{array}{lcl}
+                \sigma_{U}(x)&\mbox{\ if\ }&\phi=x\\
+                \sigma^{*}(\phi_{1})(U)\ \sigma^{*}(\phi_{2})(U)
                     &\mbox{\ if\ }&\phi=\phi_{1}\ \phi_{2}\\
-                    \lambda x\sigma^{*}(\phi_{1})(U\cup\{x\})&
+                \lambda x\sigma^{*}(\phi_{1})(U\cup\{x\})&
                     \mbox{\ if\ }&\phi=\lambda x\phi_{1}
-                    \end{array}\right.
+            \end{array}\right.
     \end{equation}
-where $\sigma_{U}(x)=x$ if $x\in U$ and
-$\sigma_{U}(x)=\sigma(x)$ if $x\not\in U$.
+    where $\sigma_{U}(x)=x$ if $x\in U$ and $\sigma_{U}(x)=\sigma(x)$ 
+    if $x\not\in U$.
 \end{defin}
 {\bf Warning}: if $\sigma$ is a a map $\sigma:V\to V$, then $\sigma$ can 
 equally be viewed as a map $\sigma:V\to\tv$ and the notation $\sigma(\phi)$ 
@@ -24,10 +23,11 @@ is ambiguous as it may refer to the substitution of
 definition~(\ref{logic:def:LAM:substitution}), or the $\beta$-substitution
 of definition~(\ref{logic:def:LAM:beta:subst}). The two transformations
 behave differently on bound variables. 
+
 \begin{prop}\label{logic:prop:LAM:subst:x}
-Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ and $x\in V$. 
-If $\phi = x$, then  we have $\sigma(\phi) = \sigma(x)$ where $\sigma$ also 
-denotes the associated $\beta$-substitution mapping.
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
+    and $x\in V$. If $\phi = x$, then  we have $\sigma(\phi) = \sigma(x)$ 
+    where $\sigma$ also denotes the associated $\beta$-substitution mapping.
 \end{prop}
 \begin{proof}
     Using the notations of definition~(\ref{logic:def:LAM:beta:subst}):
@@ -45,7 +45,8 @@ denotes the associated $\beta$-substitution mapping.
         \begin{eqnarray*}
             \sigma(\phi)&=&\sigma(\phi_{1}\ \phi_{2})\\
             &=&\sigma^{*}(\phi_{1}\ \phi_{2})(\emptyset)\\
-            &=&\sigma^{*}(\phi_{1})(\emptyset)\ \ \sigma^{*}(\phi_{2})(\emptyset)\\
+            &=&\sigma^{*}(\phi_{1})(\emptyset)\ \ 
+               \sigma^{*}(\phi_{2})(\emptyset)\\
             &=&\sigma(\phi_{1})\ \sigma(\phi_{2})
         \end{eqnarray*}
 \end{proof}

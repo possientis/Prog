@@ -9,6 +9,16 @@ _+_ : ℕ → ℕ → ℕ
 zero   + m = m
 succ n + m = succ (n + m)
 
+_-_ : ℕ → ℕ → ℕ
+n      - zero   = n
+zero   - succ m = 0
+succ n - succ m = n - m
+
+infixl 6 _+_ _-_ -- 7 has higher precedence than 6
+
+{-# BUILTIN NATPLUS  _+_ #-}
+{-# BUILTIN NATMINUS _-_ #-}
+
 _ : 2 + 3 ≡ 5
 _ = begin
   2 + 3
@@ -27,3 +37,22 @@ _ = begin
 _ : 2 + 3 ≡ 5
 _ = refl
 
+_ : 3 - 2 ≡ 1
+_ = begin
+  3 - 2
+  ≡⟨⟩
+  2 - 1
+  ≡⟨⟩
+  1 - 0
+  ≡⟨⟩
+  1 ∎
+
+_ : 2 - 3 ≡ 0
+_ = begin
+  2 - 3
+  ≡⟨⟩
+  1 - 2
+  ≡⟨⟩
+  0 - 1
+  ≡⟨⟩
+  0 ∎

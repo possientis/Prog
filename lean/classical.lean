@@ -273,6 +273,32 @@ lemma L24 : ∀ (α:Type) (p q:α → Prop) (r:Prop) (a:α),
 
 #check L24
 
+lemma L25 : ∀ (α:Type) (p:α → Prop) (r:Prop),
+  (∀ (x:α), p x ∨ r) ↔ (∀ (x:α), p x) ∨ r :=
+  assume α p r,
+  ⟨ show (∀ (x:α), p x ∨ r) → (∀ (x:α), p x) ∨ r, from
+    assume H:∀ x, p x ∨ r,
+    show (∀ (x:α), p x) ∨ r, from
+    or.elim (em r)
+      (assume R:r, or.intro_right _ R)
+      (assume nonR:¬r, or.intro_left _
+        (show ∀ (x:α), p x, from
+          assume x:α, show p x, from
+            or.elim (H x)
+              (assume : p x, this)
+              (assume : r, false.elim (nonR this))))
+  ,
+  show (∀ (x:α),p x) ∨ r → ∀ (x:α), p x ∨ r, from
+  assume H:(∀ (x:α), p x) ∨ r,
+  show ∀ (x:α), p x ∨ r, from
+  or.elim H
+    (assume : ∀ (x:α), p x, show ∀ (x:α), p x ∨ r, from
+      assume (x:α), show p x ∨ r, from
+        or.intro_left _ (this x))
+    (assume R:r, show ∀ (x:α), p x ∨ r, from
+      assume (x:α), show p x ∨ r, from
+        or.intro_right _ R)
+  ⟩
 
 lemma L26 : ∀ (α:Type) (p:α → Prop) (r:Prop),
   (∀ (x:α), r → p x) ↔ (r → ∀ (x:α), p x) :=

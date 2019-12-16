@@ -6,15 +6,18 @@
 
 module  Optics.Vec
     (   Vec (..)
-    ,   main
     ,   nth
     ,   head
     ,   append
+    ,   vec1
     )   where
 
 import Prelude      hiding (head)
 import Data.Kind
+
 import Optics.Nat
+import Optics.Leq
+import Optics.Plus
 
 data Vec (n :: Nat) (a :: Type) :: Type where
     Nil  :: forall (a :: Type) . Vec 'Z a
@@ -43,11 +46,4 @@ append (Cons x xs) ys = Cons x (append xs ys)
 vec1 :: Vec ('S ('S ('S 'Z))) Int
 vec1 = Cons 0 (Cons 1 (Cons 2 Nil))
 
-main :: IO ()
-main = do
-    print $ head vec1
-    print $ nth SZ vec1
-    print $ nth (SS SZ) vec1
-    print $ nth (SS (SS SZ)) vec1
---    print $ nth (SS (SS (SS SZ))) vec1 : does not typecheck
 

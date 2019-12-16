@@ -76,3 +76,14 @@ Proof.
       apply (not_le_s_n (rank z)). assumption.
 Qed.
 
+(* The following statement is not a set theoretic statement as it involves      *)
+(* the Coq notion of function of type nat -> set. However, it is interesting to *)
+(* see that the notion of 'rank' allows us to prove that there can be no 'Coq'  *)
+(* sequence of sets which form an infinite descent via the membership relation. *)
+Lemma noDescendingSeq : ~ exists (f:nat -> set), forall (n:nat), f (S n) :: f n.
+Proof.
+    intros [f H]. apply noDecreasingSeq. 
+    exists (fun n => rank (f n)). 
+    intros n. apply rankElem. apply H.
+Qed.
+
