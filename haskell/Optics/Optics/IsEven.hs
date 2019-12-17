@@ -8,11 +8,16 @@ module  Optics.IsEven
     (   IsEven
     ,   isEven
     ,   sIsEven
+    ,   nextEven
+    ,   NextEven
+    ,   sNextEven
     )   where
 
 
 
+import Optics.If
 import Optics.Nat
+import Optics.Bool
 
 
 -- term level

@@ -3,7 +3,10 @@
 {-# LANGUAGE KindSignatures         #-}
 
 module Optics.FinVec
-    (   main
+    (   check0
+    ,   check1
+    ,   check2
+    ,   check3
     )   where
 
 
@@ -91,12 +94,5 @@ check3 = fin2Id check3_ == check3_
 -- = fin2Id (\n -> f (FS n)) n'
 -- = (\n -> f (FS n)) n' [induction on n?]
 -- = f (FS n')
-
-main :: IO ()
-main = do
-    print check0
-    print check1
-    print check2
-    print check3
 
 

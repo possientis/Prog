@@ -12,6 +12,7 @@ cd ${HOME}
 ./logic2/test.sh
 ./types/test.sh
 ./lisp/test.sh
+./Optics/test.sh
 
 cd ${DIR}
 echo '\nAll haskell tests completed successfully\n'

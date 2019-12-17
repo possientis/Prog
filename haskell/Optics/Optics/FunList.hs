@@ -4,7 +4,16 @@
 {-# LANGUAGE TypeOperators          #-}
 {-# LANGUAGE KindSignatures         #-}
 {-# LANGUAGE ScopedTypeVariables    #-}
+module  Optics.FunList
+    (   FunList     (..)   
+    ,   FunList'    (..)
+    ,   inn
+    ,   out
+    ,   to1
+    ,   from1
+    )   where
 
+import Optics.Nat
 import Optics.Fin
 
 data FunList a b t = Done t | More a (FunList a b (b -> t))
@@ -59,9 +68,6 @@ to (xa, (fa,fb)) = (ga,gb) where
 
 data FunList' a b t where
     FunList' :: FunList_ n a b t -> FunList' a b t
-
-
-
 
 {-
 -- FunList a b t and FunList' a b t are isomorphic
