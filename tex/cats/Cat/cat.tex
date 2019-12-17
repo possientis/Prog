@@ -48,7 +48,7 @@ This may sound all very fuzzy, yet we cannot be more formal at this stage.
 
 \newpage
 So let $\Cat=(\ob, \arr, \dom, \cod, \id, \circ)$ be a category: then \Cat\ is 
-a {\em tuple} but it is no longer a tuple in a set theoretic sense. We assume
+a {\em tuple} but it is no longer a tuple in a set-theoretic sense. We assume
 given some logical framework where the notion of {\em tuple} is clear, even
 if not formally defined. Furthermore, We are no longer imposing that \ob\ 
 should be a set, but are instead using the phrase {\em collection with 
@@ -56,15 +56,39 @@ equality}, whatever this may mean in our given logical context. So we shall
 still make use of the notation $\ob\ \Cat$ but this will now refer to the 
 {\em collection} of all {\em objects} of the category \Cat. In fact, if
 $a$ is an object of the category \Cat, we shall abuse notations somewhat
-by writing $a\in\ob\ \Cat$ or even simply $a\in\Cat$ to express the fact 
+by writing '$a\in\ob\ \Cat$' or even simply '$a\in\Cat$' to express the fact 
 that $a$ is an object of \Cat, being understood that this use of the
 set membership symbol '$\in$' does not mean anything is a set. Since we 
 are stepping out of set theory, the objects of the category \Cat\ may not
 be sets themselves. They are simply members of the {\em collection} 
 $\ob\ \Cat$. However, properties $(7)-(13)$ of 
-definition~(\ref{Cat:def:category}) are all refering to equalities
+definition~(\ref{Cat:def:category}) are all referring to equalities
 between objects such that $\cod(f)=\dom(g)$. So it must be the case that 
 the notion of {\em equality} be meaningful on the collection $\ob\ \Cat$. 
 This explains our use of the phrase {\em collection with equality}: given
 $a,b\in\Cat$, the statement $a=b$ while not a set-theoretic equality is 
-nonetheless assumed to be defined.
+nonetheless assumed to be defined. 
+
+Similarly, the {\em collection} of
+{\em arrows} of the category \Cat\ shall still be denoted $\arr\ \Cat$,
+but is no longer required to be a set. If $f$ is an arrow of the category
+\Cat\ then $f$ itself may not be a set and we may still write '$f\in\arr\ \Cat$'
+simply to indicate that $f$ is a {\em member} of the {\em collection}
+$\arr\ \Cat$. Properties $(10)$, $(12)$ and $(13)$ of 
+definition~(\ref{Cat:def:category}) are all referring to equalities 
+between arrows so the {\em collection} $\arr\ \Cat$ must have some notion
+of {\em equality} defined on it. 
+
+Since \ob\ and \arr\ are no longer sets in general, the {\em maps} 
+$\dom:\arr\to\ob$, $\cod:\arr\to\ob$, $\id:\ob\to\arr$ and the partial map 
+$\circ:\arr\times\arr\to\arr$ cannot possibly be {\em functions} in the 
+set-theoretic sense. So there must be some meaning to the word {\em map}
+(from one {\em collection} to another) in whatever logical framework
+we are working in. The {\em collection} $\arr\times\arr$ is not a set, 
+and is simply the {\em collection} of all $2$-dimensional {\em tuples}
+made from \arr. Our using the word {\em map} rather than {\em function}
+in definition~(\ref{Cat:def:category}) is simply an attempt at reminding
+ourselves of the fact these are not set-theoretic functions, eventhough
+the words {\em map} and {\em function} are perfectly interchangeable in 
+standard (set-theoretic) mathematics. 
+

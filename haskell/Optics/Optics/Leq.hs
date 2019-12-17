@@ -26,9 +26,7 @@ lemma1 = Le_n
 lemma2 :: forall (n :: Nat) . Leq n ('S n)
 lemma2 = Le_S Le_n
 
-type family (n :: Nat) :< (m :: Nat) :: Bool 
-type instance   _    :<  'Z    = 'False
-type instance  'Z    :< ('S _) = 'True
-type instance ('S n) :< ('S m) = n :< m
-
-
+type family (n :: Nat) :< (m :: Nat) :: Bool where
+    (:<)   _     'Z    = 'False
+    (:<)  'Z    ('S _) = 'True
+    (:<) ('S n) ('S m) = n :< m

@@ -63,46 +63,6 @@
     of $\sigma$ for $\phi$.
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:valid:iff:beta:valid}
-    Let $V$ be a set and $\sigma:V\to V$ be a map. Let $\phi\in\tv$. 
-    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is valid for $\phi$.
-\end{prop}
-\begin{proof}
-    Since $V\subseteq\tv$, the map $\sigma$ is both a map $\sigma:V\to V$ and
-    a map $\sigma:V\to\tv$. Given $\phi\in\tv$, it is therefore meaningful to 
-    ask whether $\sigma$ is valid for $\phi$ in the sense of 
-    definition~(\ref{logic:def:LAM:valid:substitution}), and whether it is
-    $\beta$-valid for $\phi$ in the sense of 
-    definition~(\ref{logic:def:LAM:beta:valid:substitution}). We need to show
-    that the two notions are equivalent when $\sigma:V\to V$. 
-    However in order for us to carry out a proof, we need to guard ourselves 
-    against a possible notational confusion arising from the use of the same 
-    symbol '$\sigma$' to denote not only the original map $\sigma:V\to V$, 
-    but also the {\em substitution mapping} $\sigma:\tv\to\tv$ of 
-    definition~(\ref{logic:def:LAM:substitution}), as well as the 
-    {\em $\beta$-substitution mapping} $\sigma:\tv\to\tv$ of
-    definition~(\ref{logic:def:LAM:beta:subst}). While we believe these 
-    two substition mappings are essentially the same modulo 
-    $\alpha$-equivalence, we have not yet established any such connection,
-    and it is clear that the two substitutions have a different impact
-    on bound variables. Hence they simply are different mappings and given
-    $\phi\in\tv$ we shall keep using the notation $\sigma(\phi)$ for the 
-    substitution mapping of definition~(\ref{logic:def:LAM:substitution})
-    and we shall write $\sigma_{\beta}(\phi)$ for the $\beta$-substitution
-    mapping of definition~(\ref{logic:def:LAM:beta:subst}).
-
-    So let us assume that $\sigma$ is valid for $\phi\in\tv$. We need
-    to show it is also $\beta$-valid for $\phi$. From
-    definition~(\ref{logic:def:LAM:beta:valid:substitution}), given
-    $\psi\preceq\phi$ and $x\in V$ we need to show:
-    \[
-        x\in\free(\psi)\ 
-            \Rightarrow\ 
-        \free(\sigma(x))\subseteq\free(\sigma_{\beta}(\psi))
-    \]
-    However, since $\sigma:V\to V$, the formula $\sigma(x)$ is simply
-    a variable and consequently $\free(\sigma(x))=\{\sigma(x)\}$.
-\end{proof}
 
 The following proposition is similar to 
 proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}). However,
@@ -381,7 +341,29 @@ stronger conclusion of equality rather than inclusion.
         \free(\sigma(v))
     \end{eqnarray*}
     and the inclusion 
-    $\free(\sigma(u))\subseteq\free(\sigma^{*}(\phi_{1})(\{x\}))$ simply
+    $\free(\sigma(u))\subseteq\free(\sigma^{*}(\phi_{1})(\{x\}))$
     follows from $u\in\free(\lambda x\phi_{1})$.
 \end{proof}
+{\bf Remark}: Since $V\subseteq\tv$, whenever $\sigma$ is a map 
+$\sigma:V\to V$, it is also a map $\sigma:V\to\tv$ and given $\phi\in\tv$
+it is therefore meaningful to ask whether $\sigma$ is valid for $\phi$ 
+in the sense of definition~(\ref{logic:def:LAM:valid:substitution}), 
+and whether it is $\beta$-valid for $\phi$ in the sense of 
+definition~(\ref{logic:def:LAM:beta:valid:substitution}). These two
+notions do not imply each other. For example, take $\phi=\lambda x y$
+for some $x,y\in V$, $x\neq y$. Any $\sigma:V\to V$ will always be
+both valid and $\beta$-valid for the formula $y$. However, using
+proposition~(\ref{logic:prop:LAM:valid:recursion:quant}) we see that
+$\sigma$ is valid for $\phi$ \ifand\ $\sigma(y)\neq\sigma(x)$. This makes
+sense since the substitution $\sigma(\phi)$ as per 
+definition~(\ref{logic:def:LAM:substitution}) is $\lambda\sigma(x)\sigma(y)$
+and we need the condition $\sigma(y)\neq\sigma(x)$ to avoid variable
+capture. However, using 
+proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) we see that 
+$\sigma$ is $\beta$-valid for $\phi$ \ifand\ $\sigma(y)\neq x$.
+This also makes sense as the $\beta$-substitution (also denoted $\sigma(\phi)$)
+as per definition~(\ref{logic:def:LAM:beta:subst}) is $\lambda x \sigma(y)$
+and we need the condition $\sigma(y)\neq x$ to avoid variable capture. In any
+case, it very easy to find a function $\sigma:V\to V$ which is valid but not 
+$\beta$-valid for $\phi$ and vice-versa.
 

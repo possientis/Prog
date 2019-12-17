@@ -1,12 +1,24 @@
 {-# LANGUAGE DataKinds              #-}
-{-# LANGUAGE PolyKinds              #-}
 {-# LANGUAGE TypeFamilies           #-}
 {-# LANGUAGE KindSignatures         #-}
 
 module  Optics.If
     (   If
+    ,   sIf
     )   where
 
-type family   If (b :: Bool) (x :: k) (y :: k) :: k
-type instance If 'True  x _ = x
-type instance If 'False _ y = y
+import Optics.Nat
+import Optics.Bool
+
+-- term level
+-- if b then x else y
+
+-- type level
+type family   If (b :: Bool) (n :: Nat) (m :: Nat) :: Nat where
+    If 'True  x _ = x
+    If 'False _ y = y
+
+-- singleton level
+sIf :: SBool b -> SNat n -> SNat m -> SNat (If b n m) 
+sIf STrue  n _ = n  
+sIf SFalse _ m = m

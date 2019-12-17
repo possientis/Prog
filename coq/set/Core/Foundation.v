@@ -59,6 +59,14 @@ Proof.
     intros x. apply coherence. apply incl_refl.
 Qed.
 
+(* Incidentally, if no set can contain itself, there can be no 'universe', i.e. *)
+(* there exists no set which contains every other set. So the universe of sets  *)
+(* does exist but only at the Coq meta-theoretic level, i.e. as the type 'set'. *)
+Lemma noUniverse : ~ exists (x:set), forall (y:set), y :: x.
+Proof.
+    intros [x H]. apply (noSelfElem x). apply H.
+Qed.
+
 
 (* The foundation axiom is true: every non-empty set has a ::-minimal element.  *)
 (* We crucially need to make use of the notion of 'rank' of the Rank module.    *)
@@ -86,4 +94,3 @@ Proof.
     exists (fun n => rank (f n)). 
     intros n. apply rankElem. apply H.
 Qed.
-

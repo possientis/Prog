@@ -6,6 +6,7 @@
 module  Optics.Nat
     (   Nat         (..)
     ,   SNat        (..)
+    ,   fromSNat
     )   where
 
 import Data.Kind
@@ -18,6 +19,10 @@ data Nat = Z | S Nat
 data SNat (n :: Nat) :: Type where
     SZ :: SNat 'Z
     SS :: forall (n :: Nat) . SNat n -> SNat ('S n)
+
+fromSNat :: SNat n -> Nat
+fromSNat SZ     = Z
+fromSNat (SS n) = S (fromSNat n)
 
 
 

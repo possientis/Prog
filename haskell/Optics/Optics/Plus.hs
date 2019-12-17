@@ -18,9 +18,9 @@ plus  Z    m = m
 plus (S n) m = S (plus n m)
 
 -- type level
-type family   Plus (n :: Nat) (m :: Nat) :: Nat
-type instance Plus  'Z    m = m
-type instance Plus ('S n) m = 'S (Plus n m)
+type family Plus (n :: Nat) (m :: Nat) :: Nat where
+    Plus  'Z    m = m
+    Plus ('S n) m = 'S (Plus n m)
 
 -- singleton level
 sPlus :: SNat n -> SNat m -> SNat (Plus n m)

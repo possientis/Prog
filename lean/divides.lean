@@ -6,11 +6,18 @@ instance : has_dvd nat := ⟨divides⟩    -- for '|' notation ?
 
 def even (n : ℕ) : Prop := divides 2 n  -- 2 | n fails
 
-variables a b : ℕ
+def prime (n : ℕ) : Prop := ¬(n = 1) ∧ (∀ (m:ℕ), divides m n → m = 1 ∨ m = n)
 
-#check divides a b
-#check a^b
-#check even (a^b + 3)
+def primes_infinite : Prop := ∀ (n:ℕ), ∃ (p:ℕ), n ≤ p ∧ prime p
+
+def Fermat_prime (n : ℕ) : Prop := prime n ∧ ∃ (k:ℕ), n = 2^(2^k) + 1
+
+def Fermat_primes_infinite : Prop := ∀ (n:ℕ), ∃ (p:ℕ), n ≤ p ∧ Fermat_prime n
+
+def Golbach : Prop := ∀ (n:ℕ), 4 ≤ n ∧ even n → ∃(p q:ℕ), prime p ∧ prime q ∧ n = p + q
+
+#print primes_infinite
+
 
 
 
