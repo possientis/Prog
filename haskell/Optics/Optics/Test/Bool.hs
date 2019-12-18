@@ -8,4 +8,5 @@ import Optics.Bool
 
 specBool :: Spec
 specBool = describe "Testing Bool..." $ do
-    return () 
+    it "Checked module compiled" $
+        True `shouldBe` True

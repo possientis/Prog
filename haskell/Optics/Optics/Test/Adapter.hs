@@ -8,4 +8,5 @@ import Optics.Adapter
 
 specAdapter :: Spec
 specAdapter = describe "Testing Adapter..." $ do
-    return () 
+    it "Checked module compiled" $
+        True `shouldBe` True

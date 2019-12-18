@@ -9,6 +9,7 @@
 module  Optics.Fin
     (   Fin (..)
     ,   absurd
+    ,   toList
     )   where
 
 import Data.Kind

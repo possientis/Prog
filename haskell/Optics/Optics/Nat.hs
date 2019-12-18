@@ -9,9 +9,18 @@ module  Optics.Nat
     ,   fromSNat
     )   where
 
+import Prelude      hiding (toInteger)
 import Data.Kind
 
 data Nat = Z | S Nat
+    deriving (Eq)
+
+toInteger :: Nat -> Integer
+toInteger Z = 0
+toInteger (S n) = 1 + toInteger n
+
+instance Show Nat where
+    show = show . toInteger
 
 -- SNat 'Z has only one instance
 -- SNat ('S 'Z) has only one instance
@@ -24,6 +33,9 @@ fromSNat :: SNat n -> Nat
 fromSNat SZ     = Z
 fromSNat (SS n) = S (fromSNat n)
 
+instance Eq (SNat n) where
+    (==) _ _ = True     -- singleton type
 
-
+instance Show (SNat n) where
+    show = show . fromSNat
 
