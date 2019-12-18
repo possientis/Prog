@@ -29,3 +29,12 @@ lemma L3 : ∀ (x y:real), x > 0 → y > 0 → log (x * y) = log x + log y :=
 
 #check L3
 
+#check @sub_self
+
+lemma L4 : ∀ (x : ℤ), x * 0 = 0 :=
+  assume x, calc
+    x * 0   = x * (1 - 1)   : by rw sub_self
+    ...     = x * 1 - x * 1 : by rw mul_sub
+    ...     = 0             : by rw sub_self
+
+#check L4

@@ -19,7 +19,9 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Intersection.vo \
 								${CORE}/Powerset.vo \
 								${CORE}/Rank.vo \
-								${CORE}/Foundation.vo
+								${CORE}/Foundation.vo \
+								${CORE}/Formula.vo \
+								${CORE}/Semantics.vo
 
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
@@ -211,3 +213,16 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 								${CORE}/Decidability.vo \
 								${CORE}/Extensionality.vo
 	coqc ${CORE}/Foundation.v -R ${CORE} ${CORE}
+
+
+${CORE}/Formula.vo :			${CORE}/Formula.v
+	coqc ${CORE}/Formula.v -R ${CORE} ${CORE}
+
+
+${CORE}/Semantics.vo :			${CORE}/Semantics.v \
+								${CORE}/Nat.vo \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Formula.vo
+	coqc ${CORE}/Semantics.v -R ${CORE} ${CORE}
+				

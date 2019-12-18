@@ -33,3 +33,15 @@ instance Equal 'Z a where
 instance (Eq a, Equal n a) => Equal ('S n) a where
     equal f g = (f FZ == g FZ) 
               && equal (\n -> f (FS n)) (\n -> g (FS n))
+
+class ToList n a where
+    toList :: (Fin n -> a) -> [a]
+ 
+instance ToList 'Z a where
+    toList _ = []
+
+instance (ToList n a) => ToList ('S n) a where
+    toList f = f FZ : toList (\n -> f (FS n))
+
+instance (ToList n a, Show a) => Show (Fin n -> a) where
+    show = show . toList

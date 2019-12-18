@@ -210,3 +210,17 @@ Proof.
             - apply H'. }
     apply not_le_s_n with (f 0). assumption.    
 Qed.
+
+(* Can't figure out which Coq module to import in order to get this.            *)
+Lemma eq_nat_dec : forall (n m:nat), {n = m} + {n <> m}.
+Proof.
+    induction n as [|n IH].
+    - intros [|m].
+        + left. reflexivity.
+        + right. intros H. inversion H.
+    - intros [|m].
+        + right. intros H. inversion H.
+        + destruct (IH m) as [H|H].
+            * left. rewrite H. reflexivity.
+            * right. intros H'. apply H. inversion H'. reflexivity.
+Qed.

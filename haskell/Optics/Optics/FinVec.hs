@@ -3,10 +3,8 @@
 {-# LANGUAGE KindSignatures         #-}
 
 module Optics.FinVec
-    (   check0
-    ,   check1
-    ,   check2
-    ,   check3
+    (   vec2Id
+    ,   fin2Id
     )   where
 
 
@@ -39,26 +37,6 @@ vec2Id = fin2vec . vec2fin
 -- We expect this function to be the identity
 fin2Id :: Fin2Vec n => (Fin n -> a) -> (Fin n -> a)
 fin2Id = vec2fin . fin2vec
-
--- Suitable instances of Eq have been defined on 'Vec n a' and
--- 'Fin n -> a'. So we are able to check some equalities.
-check0 :: Bool
-check0 = vec2Id Nil == (Nil :: Vec 'Z Int) 
-
-check1 :: Bool
-check1 = vec2Id (Cons (1 :: Int) (Cons 2 Nil)) == (Cons 1 (Cons 2 Nil))
-
-check2 :: Bool
-check2 = fin2Id absurd == absurd 
-
-check3_ :: Fin ('S ('S ('S 'Z)))  -> Int
-check3_ FZ = 0
-check3_ (FS FZ) = 1
-check3_ (FS (FS FZ)) = 2
-check3_ (FS (FS (FS _))) = error "should not be called"
-
-check3 :: Bool
-check3 = fin2Id check3_ == check3_
 
 -- we can also provide pseudo haskell proofs
 

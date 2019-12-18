@@ -92,3 +92,18 @@ ourselves of the fact these are not set-theoretic functions, eventhough
 the words {\em map} and {\em function} are perfectly interchangeable in 
 standard (set-theoretic) mathematics. 
 
+Given $f\in\arr\ \Cat$, we shall still call the object $\dom(f)$ the 
+{\em domain} of $f$ and the object $\cod(f)$ the {\em codomain} of $f$.
+Given $a,b\in\Cat$, we shall still use the notation $f:a\to b$ as a
+notational shortcut for $\dom(f)=a$ and $\cod(f)=b$. The partial map
+$\circ$ is still the {\em composition operator} and the arrow $g\circ f$
+shall still be called the {\em composition} of $g$ and $f$, provided it
+is defined. The map $\id:\ob\to\arr$ is still the {\em identity operator}
+on the category \Cat, and for all $a\in\Cat$, the arrow $id(a):a\to a$ is 
+known as the {\em identity at} $a$. For all arrows $f:a\to b$, it is still
+the case that the arrows $\id(b)\circ f$ and $f\circ\id(a)$ are well-defined
+and both equal to $f$. Just as in the case of a small category, whenever 
+$f:a\to b$, $g:b\to c$ and $h:c\to d$, all the terms involved in the 
+associativity condition $(h\circ g)\circ f=h\circ(g\circ f)$ of
+definition~(\ref{Cat:def:category}) are well defined.
+

@@ -367,3 +367,36 @@ and we need the condition $\sigma(y)\neq x$ to avoid variable capture. In any
 case, it very easy to find a function $\sigma:V\to V$ which is valid but not 
 $\beta$-valid for $\phi$ and vice-versa.
 
+\begin{prop}\label{logic:prop:LAM:beta:validsub:criterion}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$.
+    Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ for all $\phi_{1}\in\tv$
+    and $x\in V$ we have:
+    \[
+        (\lambda x\phi_{1}\preceq\phi)\
+            \Rightarrow\ 
+            [\ 
+                u\in\free(\lambda x\phi_{1})\ 
+                    \Rightarrow
+                x\not\in\free(\sigma(u))
+            \ ]
+    \]
+\end{prop}
+\begin{proof}
+    First we prove the 'only if' part: So suppose $\sigma$ is $\beta$-valid for
+    $\phi$. Let $\phi_{1}\in\tv$ and $x\in V$ such that 
+    $\psi=\lambda x\phi_{1}\preceq\phi$ and let $u\in\free(\psi)$. We need to
+    show that $x\not\in\free(\sigma(u))$. However, using
+    definition~(\ref{logic:def:LAM:beta:valid:substitution}) from the
+    $\beta$-validity of $\sigma$ for $\phi$ we have 
+    $\free(\sigma(u))\subseteq\free(\sigma(\psi))$. It is therefore sufficient
+    to show that $\free(\sigma(\psi))\subseteq\{x\}^{c}$ which follows from the
+    following derivation:
+        \begin{eqnarray*}\free(\sigma(\psi))
+            &=&\free(\sigma(\lambda x\phi_{1}))\\
+            \mbox{definition~(\ref{logic:def:LAM:beta:subst})\ $\rightarrow$\ }
+            &=&\free(\,\sigma^{*}(\lambda x\phi_{1})(\emptyset)\,)\\
+            &=&\free(\,\lambda x\sigma^{*}(\phi_{1})(\{x\})\,)\\
+            &=&\free(\,\sigma^{*}(\phi_{1})(\{x\})\,)\,\setminus\,\{x\}\\
+            &\subseteq&\{x\}^{c}
+        \end{eqnarray*}
+\end{proof}
