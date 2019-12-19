@@ -1,10 +1,10 @@
 Inductive Eq (a:Type) (x:a) : a -> Prop :=
-| Eq_refl : Eq a x x
+| Eqrefl : Eq a x x
 .
 
 Arguments Eq {a}.
 
-Arguments Eq_refl {a}.
+Arguments Eqrefl {a}.
 
 
 Definition Eq_sym : forall (a:Type) (x y:a), Eq x y -> Eq y x :=
@@ -12,8 +12,14 @@ Definition Eq_sym : forall (a:Type) (x y:a), Eq x y -> Eq y x :=
         fun (x y:a) =>
             fun (p:Eq x y) =>
                 match p with
-                | Eq_refl _ => Eq_refl _
+                | Eqrefl _ => Eqrefl _
                 end.
 
+Lemma Eq_refl' : forall (a:Type) (x y z:a),
+    Eq x y -> Eq y z -> Eq x z.
+Proof.
+    intros a x y z H1 H2. destruct H1. assumption.
+Qed.
 
+Print Eq_refl'.
     

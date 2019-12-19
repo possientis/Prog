@@ -8,5 +8,11 @@ import Optics.Leq
 
 specLeq :: Spec
 specLeq = describe "Testing Leq..." $ do
-    it "Checked module compiled" $
-        True `shouldBe` True
+    return ()
+{-
+    specLeqLemma1
+
+specLeqLemma1 :: Spec
+specLeqLemma1 = it "Checked lemma1" $ do
+    lemma1 `shouldBe` Le_n
+-}

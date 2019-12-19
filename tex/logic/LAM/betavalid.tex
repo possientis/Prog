@@ -399,4 +399,64 @@ $\beta$-valid for $\phi$ and vice-versa.
             &=&\free(\,\sigma^{*}(\phi_{1})(\{x\})\,)\,\setminus\,\{x\}\\
             &\subseteq&\{x\}^{c}
         \end{eqnarray*}
+    We now prove the 'if' part: Consider the property $P_{\sigma}(\phi)$
+    defined by:
+    \[
+        \forall\phi_{1}\forall x\ 
+            [\ (\lambda x\phi_{1}\preceq\phi)\ 
+                    \Rightarrow\ 
+                [\
+                    u\in\free(\lambda x\phi_{1})\ 
+                        \Rightarrow\
+                    x\not\in\free(\sigma(u))
+                \ ]
+            \ ]
+    \]
+    Then we need to prove that $P_{\sigma}(\phi)\ \Rightarrow\ (\mbox{$\sigma$
+    $\beta$-valid for $\phi$})$ for all $\phi\in\tv$. We shall do so by structural 
+    induction, using theorem~(\ref{logic:the:proof:induction}) of
+    page~\pageref{logic:the:proof:induction}. First we assume that $\phi=x$
+    for some $x\in V$. We need to show that the implication is true for $\phi$.
+    So suppose $P_{\sigma}(\phi)$ is true. We need to show that $\sigma$ is 
+    $\beta$-valid for $\phi$, which is always the case when $\phi=x$. This 
+    completes our base case.
+    Next we assume that $\phi=\phi_{1}\ \phi_{2}$ where the implication is true
+    for $\phi_{1},\phi_{2}\in\tv$. We need to show that the implication is also 
+    true for $\phi$. So we assume that $P_{\sigma}(\phi)$ is true. We need to 
+    show that $\sigma$ is $\beta$-valid for $\phi=\phi_{1}\ \phi_{2}$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app}) it is 
+    sufficient to prove that $\sigma$ is $\beta$-valid for both $\phi_{1}$
+    and $\phi_{2}$. Having assumed the implication is true for $\phi_{1}$
+    and $\phi_{2}$, it is therefore sufficient to prove that 
+    $P_{\sigma}(\phi_{1})$ and $P_{\sigma}(\phi_{2})$ are true. First we 
+    show that $P_{\sigma}(\phi_{1})$ is true. So let $\psi\in\tv$ and 
+    $z\in V$ such that $\lambda z\psi\preceq\phi_{1}$. Suppose
+    $u\in\free(\lambda z\psi)$. We need to show that $z\not\in\free(\sigma(u))$.
+    Having assumed that $P_{\sigma}(\phi)$ is true, it is sufficient to prove
+    that $\lambda z\psi\preceq\phi$, which follows immediately from 
+    $\lambda z\psi\preceq\phi_{1}$ and $\phi_{1}\preceq\phi$. So we have proved
+    that $P_{\sigma}(\phi_{1})$ is indeed true and a similar argument shows that
+    $P_{\sigma}(\phi_{2})$ is true. This concludes the case when $\phi=\phi_{1}\
+    \phi_{2}$. Next we assume that $\phi=\lambda x\phi_{1}$ where $x\in V$ and 
+    the implication is true for $\phi_{1}\in\tv$. We need to show that the 
+    implication is also true for $\phi$. So we assume that $P_{\sigma}(\phi)$
+    is true. We need to show that $\sigma$ is $\beta$-valid for $\phi=
+    \lambda x\phi_{1}$. Using 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) it is sufficient
+    to prove that $\sigma$ is $\beta$-valid for $\phi_{1}$ and furthermore that
+    $x\not\in\free(\sigma(u))$ whenever $u\in\free(\lambda x\phi_{1})$. First
+    we show that $\sigma$ is $\beta$-valid for $\phi_{1}$. Having assumed the
+    implication is true for $\phi_{1}$, it is sufficient to prove that 
+    $P_{\sigma}(\phi_{1})$ is true. So let $\psi\in\tv$ and $z\in V$ such that
+    $\lambda z\psi\preceq\phi_{1}$. Suppose $u\in\free(\lambda z\psi)$. We 
+    need to show that $z\not\in\free(\sigma(u))$. Having assumed that
+    $P_{\sigma}(\phi)$ is true, it is sufficient to prove that $\lambda z\psi
+    \preceq\phi$, which follows immediately from $\lambda z\psi\preceq\phi_{1}$
+    and $\phi_{1}\preceq\phi$. So we have proved that $P_{\sigma}(\phi_{1})$ is
+    indeed true and $\sigma$ is therefore $\beta$-valid for $\phi_{1}$.
+    Next we show that $x\not\in\free(\sigma(u))$ whenever $u\in\free(\lambda
+    x\phi_{1})$. So let $u\in\free(\lambda x\phi_{1})$. We need to show that 
+    $x\not\in\free(\sigma(u))$. Having assumed that $P_{\sigma}(\phi)$ is 
+    true, it is sufficient to prove that $\lambda x\phi_{1}\preceq\phi$ which
+    is immediate since $\lambda x\phi_{1}=\phi$.
 \end{proof}

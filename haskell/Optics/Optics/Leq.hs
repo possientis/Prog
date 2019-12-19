@@ -20,6 +20,10 @@ data Leq (n :: Nat) (m :: Nat) :: Type where
     Le_n :: forall (n :: Nat) . Leq n n 
     Le_S :: forall (n :: Nat) (m :: Nat) . Leq n m -> Leq n ('S m)
 
+instance Eq (Leq n m) where
+    (==) _ _  = True    -- all proofs are deemed equal
+
+
 lemma1 :: forall (n :: Nat) . Leq n n
 lemma1 = Le_n
 

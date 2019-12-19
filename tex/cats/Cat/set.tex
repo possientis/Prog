@@ -1,0 +1,26 @@
+\begin{defin}\label{Cat:def:set}
+    We call \Set\ the category $\Set=(\ob, \arr, \dom, \cod, \circ)$ where
+    \begin{eqnarray*}
+        (1)&\ &\ob = \{\ x\ |\  \mbox{x is a set}\ \}\\
+        (2)&\ &\arr = \{\ (a,b,f)\ |\  \mbox{f is a function $f : a\to b$}\ \}\\
+        (3)&\ &\dom\,(a,b,f) = a\\
+        (4)&\ &\cod\,(a,b,f) = b\\
+        (5)&\ &(b,c,g)\circ(a,b,f) = (a,c,g\circ f)
+    \end{eqnarray*}
+    where $(3)$, $(4)$, $(5)$ hold for all sets $a,b,c$ and functions $f:a\to b$,
+    $g:b\to c$, and $g\circ f$ denotes the usual function composition with 
+    $(g\circ f)(x)=g(f(x))$.
+\end{defin}
+The collection of objects of the category \Set\ is defined to be the 
+class of all sets. We are using the set comprehension notation 
+$\{\ x\ |\ \mbox{x is a set}\ \}$ to denote this class, but this is an
+abuse of notation as \ob\ is not a set but a proper class. One could 
+think of a class as a precicate $P(x)$ of first order logic with one
+free variable. From this point of view $\ob$ becomes the predicate
+$\ob(x)=\top$, i.e. the predicate which returns true for all $x$.
+Every set satisfies the predicate \ob, so every set is a member of 
+the class \ob. The class \ob\ is not a set because the set-theoretic
+statement $\exists y, \forall z, z\in y\ \Leftrightarrow\ \ob(z)$
+can be proven false. In other words, there exists no set $y$ whose
+elements $z$ are exactly the sets which satisfy the predicate \ob.
+There exists no set $y$ which contains all sets.

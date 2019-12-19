@@ -315,76 +315,80 @@ a lot simpler.
     \]
 \end{prop}
 \begin{proof}
-First we show the 'only if' part: So suppose $\sigma$ is valid for
-$\phi$. Let $\phi_{1}\in\pv$ and $x\in V$ such that $\psi=\forall
-x\phi_{1}\preceq\phi$ and let $u\in\free(\psi)$. We need to show
-that $\sigma(u)\neq\sigma(x)$. However, from the validity of
-$\sigma$ for $\phi$ we have $\sigma(u)\in\free(\sigma(\psi))$. So
-$\sigma(u)$ is a free variable of
-$\sigma(\psi)=\forall\sigma(x)\sigma(\phi_{1})$ and
-$\sigma(u)\neq\sigma(x)$ as requested.
-
-We now prove the 'if' part: Consider the property $P_{\sigma}(\phi)$
-defined by:
+    First we show the 'only if' part: So suppose $\sigma$ is valid for
+    $\phi$. Let $\phi_{1}\in\pv$ and $x\in V$ such that $\psi=\forall
+    x\phi_{1}\preceq\phi$ and let $u\in\free(\psi)$. We need to show
+    that $\sigma(u)\neq\sigma(x)$. However, from the validity of
+    $\sigma$ for $\phi$ we have $\sigma(u)\in\free(\sigma(\psi))$. So
+    $\sigma(u)$ is a free variable of $\sigma(\psi)=\forall\sigma(x)
+    \sigma(\phi_{1})$ and $\sigma(u)\neq\sigma(x)$ as requested.
+    We now prove the 'if' part: Consider the property $P_{\sigma}(\phi)$
+    defined by:
     \[
-    \forall\phi_{1}\forall x\ [\ (\forall x\phi_{1}\preceq\phi)\ \Rightarrow\ [\
-    u\in\free(\forall x\phi_{1})\ \Rightarrow\
-    \sigma(u)\neq\sigma(x)\ ]\ ]
+        \forall\phi_{1}\forall x\ 
+            [\ (\forall x\phi_{1}\preceq\phi)\ 
+                \Rightarrow\ 
+                [\
+                    u\in\free(\forall x\phi_{1})\ 
+                        \Rightarrow\
+                    \sigma(u)\neq\sigma(x)
+                \ ]
+            \ ]
     \]
-Then we need to prove that $P_{\sigma}(\phi)\ \Rightarrow\
+    Then we need to prove that $P_{\sigma}(\phi)\ \Rightarrow\
     (\mbox{$\sigma$ valid for $\phi$})$ for all $\phi\in\pv$.
-We shall do so by structural induction, using
-theorem~(\ref{logic:the:proof:induction}) of
-page~\pageref{logic:the:proof:induction}. First we assume that
-$\phi=(x\in y)$ for some $x,y\in V$. We need to show that the
-implication is true for $\phi$. So suppose $P_{\sigma}(\phi)$ is
-true. We need to show that $\sigma$ is valid for $\phi$, which is
-always the case when $\phi=(x\in y)$. Next we assume that
-$\phi=\bot$. Then $\sigma$ is once again always valid for $\phi$ and
-the implication is true. Next we assume that
-$\phi=\phi_{1}\to\phi_{2}$ where the implication is true for
-$\phi_{1},\phi_{2}\in\pv$. We need to show that the implication is
-also true for $\phi$. So we assume that $P_{\sigma}(\phi)$ is true.
-We need to show that $\sigma$ is valid for
-$\phi=\phi_{1}\to\phi_{2}$. Using
-proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}) it is
-sufficient to prove that $\sigma$ is valid for both $\phi_{1}$ and
-$\phi_{2}$. Having assumed the implication is true for $\phi_{1}$
-and $\phi_{2}$, it is therefore sufficient to prove that
-$P_{\sigma}(\phi_{1})$ and $P_{\sigma}(\phi_{2})$ are true. First we
-show that $P_{\sigma}(\phi_{1})$ is true. So let $\psi\in\pv$ and
-$z\in V$ such that $\forall z\psi\preceq\phi_{1}$. Suppose
-$u\in\free(\forall z\psi)$. We need to show that
-$\sigma(u)\neq\sigma(z)$. Having assumed $P_{\sigma}(\phi)$ is true,
-it is sufficient to prove that $\forall z\psi\preceq\phi$, which
-follows immediately from $\forall z\psi\preceq\phi_{1}$ and
-$\phi_{1}\preceq\phi$. So we have proved that $P_{\sigma}(\phi_{1})$
-is indeed true and a similar argument shows that
-$P_{\sigma}(\phi_{2})$ is true. This concludes the case when
-$\phi=\phi_{1}\to\phi_{2}$. Next we assume that $\phi=\forall
-x\phi_{1}$ where $x\in V$ and the implication is true for
-$\phi_{1}\in\pv$. We need to show that the implication is also true
-for $\phi$. So we assume that $P_{\sigma}(\phi)$ is true. We need to
-show that $\sigma$ is valid for $\phi=\forall x\phi_{1}$. Using
-proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) it is
-sufficient to prove that $\sigma$ is valid for $\phi_{1}$ and
-furthermore that $\sigma(u)\neq\sigma(x)$ whenever
-$u\in\free(\forall x\phi_{1})$. First we show that $\sigma$ is valid
-for $\phi_{1}$. Having assumed the implication is true for
-$\phi_{1}$, it is sufficient to prove that $P_{\sigma}(\phi_{1})$ is
-true. So let $\psi\in\pv$ and $z\in V$ such that $\forall
-z\psi\preceq\phi_{1}$. Suppose $u\in\free(\forall z\psi)$. We need
-to show that $\sigma(u)\neq\sigma(z)$. Having assumed
-$P_{\sigma}(\phi)$ is true, it is sufficient to prove that $\forall
-z\psi\preceq\phi$, which follows immediately from $\forall
-z\psi\preceq\phi_{1}$ and $\phi_{1}\preceq\phi$. So we have proved
-that $P_{\sigma}(\phi_{1})$ is indeed true and $\sigma$ is therefore
-valid for $\phi_{1}$. Next we show that $\sigma(u)\neq\sigma(x)$
-whenever $u\in\free(\forall x\phi_{1})$. So let $u\in\free(\forall
-x\phi_{1})$. We need to show that $\sigma(u)\neq\sigma(x)$. Having
-assumed $P_{\sigma}(\phi)$ is true, it is sufficient to prove that
-$\forall x\phi_{1}\preceq\phi$ which is immediate since $\forall
-x\phi_{1}=\phi$.
+    We shall do so by structural induction, using
+    theorem~(\ref{logic:the:proof:induction}) of
+    page~\pageref{logic:the:proof:induction}. First we assume that
+    $\phi=(x\in y)$ for some $x,y\in V$. We need to show that the
+    implication is true for $\phi$. So suppose $P_{\sigma}(\phi)$ is
+    true. We need to show that $\sigma$ is valid for $\phi$, which is
+    always the case when $\phi=(x\in y)$. Next we assume that
+    $\phi=\bot$. Then $\sigma$ is once again always valid for $\phi$ and
+    the implication is true. Next we assume that
+    $\phi=\phi_{1}\to\phi_{2}$ where the implication is true for
+    $\phi_{1},\phi_{2}\in\pv$. We need to show that the implication is
+    also true for $\phi$. So we assume that $P_{\sigma}(\phi)$ is true.
+    We need to show that $\sigma$ is valid for
+    $\phi=\phi_{1}\to\phi_{2}$. Using
+    proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}) it is
+    sufficient to prove that $\sigma$ is valid for both $\phi_{1}$ and
+    $\phi_{2}$. Having assumed the implication is true for $\phi_{1}$
+    and $\phi_{2}$, it is therefore sufficient to prove that
+    $P_{\sigma}(\phi_{1})$ and $P_{\sigma}(\phi_{2})$ are true. First we
+    show that $P_{\sigma}(\phi_{1})$ is true. So let $\psi\in\pv$ and
+    $z\in V$ such that $\forall z\psi\preceq\phi_{1}$. Suppose
+    $u\in\free(\forall z\psi)$. We need to show that
+    $\sigma(u)\neq\sigma(z)$. Having assumed $P_{\sigma}(\phi)$ is true,
+    it is sufficient to prove that $\forall z\psi\preceq\phi$, which
+    follows immediately from $\forall z\psi\preceq\phi_{1}$ and
+    $\phi_{1}\preceq\phi$. So we have proved that $P_{\sigma}(\phi_{1})$
+    is indeed true and a similar argument shows that
+    $P_{\sigma}(\phi_{2})$ is true. This concludes the case when
+    $\phi=\phi_{1}\to\phi_{2}$. Next we assume that $\phi=\forall
+    x\phi_{1}$ where $x\in V$ and the implication is true for
+    $\phi_{1}\in\pv$. We need to show that the implication is also true
+    for $\phi$. So we assume that $P_{\sigma}(\phi)$ is true. We need to
+    show that $\sigma$ is valid for $\phi=\forall x\phi_{1}$. Using
+    proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}) it is
+    sufficient to prove that $\sigma$ is valid for $\phi_{1}$ and
+    furthermore that $\sigma(u)\neq\sigma(x)$ whenever
+    $u\in\free(\forall x\phi_{1})$. First we show that $\sigma$ is valid
+    for $\phi_{1}$. Having assumed the implication is true for
+    $\phi_{1}$, it is sufficient to prove that $P_{\sigma}(\phi_{1})$ is
+    true. So let $\psi\in\pv$ and $z\in V$ such that $\forall
+    z\psi\preceq\phi_{1}$. Suppose $u\in\free(\forall z\psi)$. We need
+    to show that $\sigma(u)\neq\sigma(z)$. Having assumed
+    $P_{\sigma}(\phi)$ is true, it is sufficient to prove that $\forall
+    z\psi\preceq\phi$, which follows immediately from $\forall
+    z\psi\preceq\phi_{1}$ and $\phi_{1}\preceq\phi$. So we have proved
+    that $P_{\sigma}(\phi_{1})$ is indeed true and $\sigma$ is therefore
+    valid for $\phi_{1}$. Next we show that $\sigma(u)\neq\sigma(x)$
+    whenever $u\in\free(\forall x\phi_{1})$. So let $u\in\free(\forall
+    x\phi_{1})$. We need to show that $\sigma(u)\neq\sigma(x)$. Having
+    assumed $P_{\sigma}(\phi)$ is true, it is sufficient to prove that
+    $\forall x\phi_{1}\preceq\phi$ which is immediate since $\forall
+    x\phi_{1}=\phi$.
 \end{proof}
 
 The following proposition is a simple application of

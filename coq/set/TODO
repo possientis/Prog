@@ -1,3 +1,4 @@
+Semantics/Formula Or ?
 is every compatible predicate decidable?
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
 comprehension schema

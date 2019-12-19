@@ -223,4 +223,4 @@ Proof.
         + destruct (IH m) as [H|H].
             * left. rewrite H. reflexivity.
             * right. intros H'. apply H. inversion H'. reflexivity.
-Qed.
+Defined.

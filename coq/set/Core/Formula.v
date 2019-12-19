@@ -5,4 +5,7 @@ Inductive Formula : Type :=
 | All  : nat -> Formula -> Formula
 .
 
+Definition Not (p:Formula)   : Formula := Imp p Bot.
+Definition Or  (p q:Formula) : Formula := Imp (Not p) q.
+
 

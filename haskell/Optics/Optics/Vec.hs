@@ -6,12 +6,11 @@
 
 module  Optics.Vec
     (   Vec (..)
+    ,   toList
     ,   nth
     ,   head
     ,   append
     ,   makeEven
-    ,   vec1
-    ,   vec2
     )   where
 
 import Prelude      hiding (head)
@@ -60,10 +59,4 @@ makeEven n xs = case sIsEven n of
     STrue  -> xs
     SFalse -> case xs of
         Cons x _ -> Cons x xs
-
-vec1 :: Vec ('S ('S ('S 'Z))) Int
-vec1 = Cons 0 (Cons 1 (Cons 2 Nil))
-
-vec2 :: Vec ('S ('S ('S ('S 'Z)))) Int
-vec2 = makeEven (SS (SS (SS SZ))) vec1
 
