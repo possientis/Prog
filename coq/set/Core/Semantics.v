@@ -2,7 +2,7 @@ Require Import Core.Nat.
 Require Import Core.Set.
 Require Import Core.LEM.
 Require Import Core.Elem.
-Require Import Core.Formula.
+Require Import Core.Syntax.
 
 
 Definition Env : Type := nat -> set.
@@ -41,10 +41,14 @@ Lemma checkNot : forall (p:Formula),
     eval (Not p) <-> ~ eval p.
 Proof. firstorder. Qed.
 
-
 Lemma checkOr : LEM -> forall (p q:Formula), 
     eval(Or p q) <-> eval p \/ eval q.
 Proof.
     intros L p q. unfold Or, eval. simpl. apply LEMor. assumption.
 Qed.
 
+Lemma checkAnd : LEM -> forall (p q:Formula),
+    eval(And p q) <-> eval p /\ eval q.
+Proof.
+    intros L p q. unfold And, eval. simpl. apply LEMAnd. assumption.
+Qed.

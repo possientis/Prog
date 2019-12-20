@@ -20,7 +20,7 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Powerset.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Foundation.vo \
-								${CORE}/Formula.vo \
+								${CORE}/Syntax.vo \
 								${CORE}/LEM.vo \
 								${CORE}/Semantics.vo
 
@@ -216,8 +216,8 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 	coqc ${CORE}/Foundation.v -R ${CORE} ${CORE}
 
 
-${CORE}/Formula.vo :			${CORE}/Formula.v
-	coqc ${CORE}/Formula.v -R ${CORE} ${CORE}
+${CORE}/Syntax.vo :				${CORE}/Syntax.v
+	coqc ${CORE}/Syntax.v -R ${CORE} ${CORE}
 
 ${CORE}/LEM.vo :				${CORE}/LEM.v
 	coqc ${CORE}/LEM.v -R ${CORE} ${CORE}
@@ -226,6 +226,6 @@ ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
 								${CORE}/Nat.vo \
 								${CORE}/Set.vo \
 								${CORE}/Elem.vo \
-								${CORE}/Formula.vo
+								${CORE}/Syntax.vo
 	coqc ${CORE}/Semantics.v -R ${CORE} ${CORE}
 				
