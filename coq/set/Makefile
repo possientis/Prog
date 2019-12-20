@@ -21,6 +21,7 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Foundation.vo \
 								${CORE}/Formula.vo \
+								${CORE}/LEM.vo \
 								${CORE}/Semantics.vo
 
 
@@ -218,6 +219,8 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 ${CORE}/Formula.vo :			${CORE}/Formula.v
 	coqc ${CORE}/Formula.v -R ${CORE} ${CORE}
 
+${CORE}/LEM.vo :				${CORE}/LEM.v
+	coqc ${CORE}/LEM.v -R ${CORE} ${CORE}
 
 ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
 								${CORE}/Nat.vo \

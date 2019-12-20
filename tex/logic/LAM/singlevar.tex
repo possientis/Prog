@@ -4,32 +4,48 @@ and~(\ref{logic:def:single:var:permutation}) for the notations $[y/x]$
 $[y\!:\!x]$ (the  {\em permutation of $x$ and $y$}).
 
 \begin{prop}\label{logic:prop:LAM:permutation:is:substitution}
-Let $V$ be a set and $x,y\in V$. Let $\phi\in\tv$. Then, we have:
-    \[
-    y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x]=\phi[y\!:\!x]
-    \]
+    Let $V$ be a set and $x,y\in V$. Let $\phi\in\tv$. Then, we have:
+        \[
+            y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x]=\phi[y\!:\!x]
+        \]
 \end{prop}
 \begin{proof}
 TODO
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:single:composition}
-Let $V$ be a set and $x,y,z\in V$. Then for all $\phi\in\tv$:
-    \[
-    y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x][z/y]=\phi[z/x]
-    \]
+    Let $V$ be a set and $x,y,z\in V$. Then for all $\phi\in\tv$:
+        \[
+            y\not\in\var(\phi)\ \Rightarrow\ \phi[y/x][z/y]=\phi[z/x]
+        \]
 \end{prop}
 \begin{proof}
 TODO
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:inplaceof:notvar}
-Let $V$ be a set, $x,y\in V$ with $x\neq y$. Then for all $\phi\in\tv$:
-    \[
-    x\not\in\var(\phi[y/x])
-    \]
+    Let $V$ be a set, $x,y\in V$ with $x\neq y$. Then for all $\phi\in\tv$:
+        \[
+            x\not\in\var(\phi[y/x])
+        \]
 \end{prop}
 \begin{proof}
 TODO
 \end{proof}
 
+\begin{defin}\label{logic:def:LAM:single:var:beta:subst}
+    Let $V$ be a set, $x\in V$ and $\theta\in\tv$. We call {\em substitution 
+    of $\theta$ in place of $x$}, the map $[\theta/x]:V\to\tv$ defined by:
+        \[
+            \forall u\in V\ ,\ [\theta/x](u)=
+                \left\{
+                    \begin{array}{lcl}
+                        \theta&\mbox{\ if\ }&u=x\\
+                        u&\mbox{\ if\ }&u\neq x
+                    \end{array}
+                \right.
+        \]
+    If we denote $[\theta/x]:\tv\to\tv$ the associated $\beta$-substitution 
+    mapping, given $\phi\in\tv$ the image $[\theta/x](\phi)$ is called
+    {\em $\phi$ with $\theta$ in place of $x$} and denoted $\phi[\theta/x]$.
+\end{defin}

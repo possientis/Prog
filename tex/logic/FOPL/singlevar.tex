@@ -11,19 +11,20 @@ $x$}\index{substitution@Substitution of single
 variable}\index{substitution@$\phi[y/x]$ : image of $\phi$ by
 $[y/x]$}
 \begin{defin}\label{logic:def:single:var:substitution}
-Let $V$ be a set and $x,y\in V$. We call {\em substitution of $y$ in
-place of $x$}, the map $[y/x]:V\to V$ defined by:
-    \[
-    \forall u\in V\ ,\ [y/x](u)=\left\{
-    \begin{array}{lcl}
-    y&\mbox{\ if\ }&u=x\\
-    u&\mbox{\ if\ }&u\neq x
-    \end{array}
-    \right.
-    \]
-If we denote $[y/x]:\pv\to\pv$ the associated substitution mapping,
-given $\phi\in\pv$ the image $[y/x](\phi)$ is called {\em $\phi$
-with $y$ in place of $x$} and denoted $\phi[y/x]$.
+    Let $V$ be a set and $x,y\in V$. We call {\em substitution of $y$ in
+    place of $x$}, the map $[y/x]:V\to V$ defined by:
+        \[
+            \forall u\in V\ ,\ [y/x](u)=
+                \left\{
+                    \begin{array}{lcl}
+                        y&\mbox{\ if\ }&u=x\\
+                        u&\mbox{\ if\ }&u\neq x
+                    \end{array}
+                \right.
+        \]
+    If we denote $[y/x]:\pv\to\pv$ the associated substitution mapping,
+    given $\phi\in\pv$ the image $[y/x](\phi)$ is called {\em $\phi$
+    with $y$ in place of $x$} and denoted $\phi[y/x]$.
 \end{defin}
 
 The {\em substitution of $y$ in place of $x$} has a fundamental

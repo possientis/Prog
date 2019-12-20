@@ -1,4 +1,5 @@
-Semantics/Formula Or ?
+LEMAnd. (or maybe redefine And macro ? (A -> B -> Bot) -> Bot
+checkAnd semantics
 is every compatible predicate decidable?
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
 comprehension schema

@@ -1,1 +1,3 @@
+write remark about extension [t/x]:V -> T(V)
+var(phi)/\Fr(t) = 0 => [t/x] beta-valid for phi?
 LAM/betavalid.tex

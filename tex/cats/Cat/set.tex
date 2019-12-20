@@ -13,7 +13,7 @@
 \end{defin}
 The collection of objects of the category \Set\ is defined to be the 
 class of all sets. We are using the set comprehension notation 
-$\{\ x\ |\ \mbox{x is a set}\ \}$ to denote this class, but this is an
+$\{\ x\ |\ \mbox{$x$ is a set}\ \}$ to denote this class, but this is an
 abuse of notation as \ob\ is not a set but a proper class. One could 
 think of a class as a precicate $P(x)$ of first order logic with one
 free variable. From this point of view $\ob$ becomes the predicate
@@ -23,4 +23,32 @@ the class \ob. The class \ob\ is not a set because the set-theoretic
 statement $\exists y, \forall z, z\in y\ \Leftrightarrow\ \ob(z)$
 can be proven false. In other words, there exists no set $y$ whose
 elements $z$ are exactly the sets which satisfy the predicate \ob.
-There exists no set $y$ which contains all sets.
+There exists no set which contains all sets.
+
+The collection of arrows of the category \Set\ is defined to be the 
+class of triples $(a,b,f)$ where $a,b$ are sets and $f$ is a function
+$f:a\to b$. This last notation is a common set-theoretic shortcut to
+express that fact that $f$ is a {\em function} with {\em domain} $a$ and 
+{\em range} {\bf which is a subset of} $b$. A {\em function} is any set $f$
+whose elements are ordered pairs $(x,y)$ and which is functional, i.e.
+for which the following implication holds for all sets $x,y,y'$:
+    \[
+        (x,y)\in f\ \land\ (x,y')\in f\ \Rightarrow\ y = y'
+    \]
+The {\em domain} of a function $f$ is the set of all sets $x$ for which there
+exists a set $y$ with $(x,y)\in f$. The {\em range} of a function $f$ is the 
+set of all sets $y$ for which there exists a set $x$ with $(x,y)\in f$.
+If $x$ belongs to the domain of a function $f$, the notation '$f(x)$' commonly
+refers to the unique set $y$ with $(x,y)\in f$. 
+
+Now, as already pointed
+out the notation $f:a\to b$ only requires that the range of $f$ should be
+a subset of $b$. There is no requirement that the range of $f$ should be
+equal to $b$. So if $f:a\to b$ and $b\subseteq c$ then $f:a\to c$.
+This explains why the collection of arrows \arr\ is defined as a class of 
+triples $(a,b,f)$ rather than just functions $f$. Knowing the function
+$f$ does not tell you which {\em codomain} it should have. Any set $b$
+which is a superset of its range is a possible codomain. 
+
+
+

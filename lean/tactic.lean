@@ -50,29 +50,25 @@ lemma L5 : ∀ (p q r : Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
     begin
       split,
         intro H,
-        destruct (and.right H),
-          intro Hq,
+        cases (and.right H) with Hq Hr,
             left,
             split,
               exact and.left H,
               assumption,
-          intro Hr,
             right,
             split,
               exact and.left H,
               assumption,
         intro H,
-        destruct H,
-          intro H',
+        cases H with H' H',
             split,
             exact and.left H',
             left,
             exact and.right H',
-          intro H',
           split,
             exact and.left H',
             right,
-            destruct H',
+            cases H',
             intros,
             assumption
     end
@@ -139,3 +135,93 @@ lemma L11 : ∀ (m n p : ℕ), m = n → m = p → p = n :=
 
 #check L11
 
+
+lemma L12 : ∀ (n : ℕ), n ≤ n :=
+  begin
+    intros n,
+    refl
+  end
+
+#check L12
+
+
+lemma L13 : ∃ (n : ℕ), 5 = n :=
+  begin
+    apply exists.intro,
+    refl
+  end
+
+#check L13
+
+
+lemma L14 : ∃ (n : ℕ), 5 = n :=
+  begin
+    fapply exists.intro,  -- changes the order of subgoals
+    exact 5,
+    refl
+  end
+
+#check L14
+
+
+lemma L15 : 3 = 3 :=
+  begin
+    generalize : 3 = x,
+    revert x,
+    intro y, reflexivity
+  end
+
+lemma L16 : 2 + 3 = 5 :=
+  begin
+    generalize H : 3 = x,
+    rw ←H
+  end
+
+#check L15
+
+
+
+lemma L17 : ∀ (p q:Prop), p ∨ q → q ∨ p :=
+  begin
+    intros p q H,
+    cases H with Hp Hq,
+     right, assumption,
+     left, assumption
+  end
+
+lemma L18 : ∀ (p q:Prop), p ∧ q → q ∧ p :=
+  begin
+    intros p q H,
+    cases H with Hp Hq,
+    split; assumption
+  end
+
+lemma L19 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r,
+    split; intros H,
+      cases H with Hp Hqr,
+        cases Hqr with Hq Hr,
+          left, split; assumption,
+          right, split; assumption,
+      cases H with H H,
+        cases H with Hp Hq,
+          split,
+            assumption,
+            left, assumption,
+        cases H with Hp Hr,
+          split,
+            assumption,
+            right, assumption
+  end
+
+#check L19
+
+
+lemma L20 : ∀ (p q : ℕ → Prop), (∃ x, p x) → ∃ x, p x ∨ q x :=
+  begin
+    intros p q H,
+    cases H with x H,
+    constructor,
+    left, assumption
+  end

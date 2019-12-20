@@ -7,5 +7,6 @@ Inductive Formula : Type :=
 
 Definition Not (p:Formula)   : Formula := Imp p Bot.
 Definition Or  (p q:Formula) : Formula := Imp (Not p) q.
+Definition And (p q:Formula) : Formula := Not (Or (Not p) (Not q)).
 
 

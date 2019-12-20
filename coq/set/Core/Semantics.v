@@ -1,5 +1,6 @@
 Require Import Core.Nat.
 Require Import Core.Set.
+Require Import Core.LEM.
 Require Import Core.Elem.
 Require Import Core.Formula.
 
@@ -36,6 +37,14 @@ Proof.
     unfold p1. ceval. firstorder.
 Qed.
 
-Lemma checkNot : forall (p:Formula), eval (Not p) <-> ~ eval p.
+Lemma checkNot : forall (p:Formula), 
+    eval (Not p) <-> ~ eval p.
 Proof. firstorder. Qed.
+
+
+Lemma checkOr : LEM -> forall (p q:Formula), 
+    eval(Or p q) <-> eval p \/ eval q.
+Proof.
+    intros L p q. unfold Or, eval. simpl. apply LEMor. assumption.
+Qed.
 

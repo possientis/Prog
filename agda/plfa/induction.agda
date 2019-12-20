@@ -174,4 +174,78 @@ _ = begin
     ∎
 
 *-distrib-+ : ∀ (m n p : ℕ) → (m + n) * p ≡ m * p + n * p
-*-distrib-+ m n p = {!!}
+*-distrib-+ zero n p =
+  begin
+    (zero + n) * p
+    ≡⟨⟩
+    n * p
+    ≡⟨⟩
+    zero + n * p
+    ≡⟨⟩
+    zero * p + n * p
+    ∎
+*-distrib-+ (suc m) n p =
+  begin
+    (suc m + n) * p
+    ≡⟨⟩
+    suc (m + n) * p
+    ≡⟨⟩
+    p + (m + n) * p
+    ≡⟨ cong (p +_) (*-distrib-+ m n p) ⟩
+    p + (m * p + n * p)
+    ≡⟨ sym (+-assoc p (m * p) (n * p)) ⟩
+    (p + m * p) + n * p
+    ≡⟨⟩
+    suc m * p + n * p
+    ∎
+
+*-assoc : ∀ (m n p : ℕ) → (m * n) * p ≡ m * (n * p)
+*-assoc zero n p =
+  begin
+    (zero * n) * p
+    ≡⟨⟩
+    zero * p
+    ≡⟨⟩
+    zero
+    ≡⟨⟩
+    zero * (n * p)
+    ∎
+*-assoc (suc m) n p =
+  begin
+    (suc m * n) * p
+    ≡⟨⟩
+    (n + m * n) * p
+    ≡⟨ *-distrib-+ n (m * n) p ⟩
+    n * p + (m * n) * p
+    ≡⟨ cong (n * p +_) (*-assoc m n p) ⟩
+    n * p + m * (n * p)
+    ≡⟨⟩
+    suc m * (n * p)
+    ∎
+
+∸-0-n : ∀ (n : ℕ) → zero ∸ n ≡ zero
+∸-0-n zero =
+  begin
+    zero ∸ zero
+    ≡⟨⟩
+    zero
+    ∎
+∸-0-n (suc n) =
+  begin
+     zero ∸ suc n
+     ≡⟨⟩
+     zero
+     ∎
+
+∸-+-assoc : ∀ (m n p : ℕ) → (m ∸ n) ∸ p ≡ m ∸ (n + p)
+∸-+-assoc zero n p =
+  begin
+    (zero ∸ n) ∸ p
+    ≡⟨ cong (_∸ p) (∸-0-n n) ⟩
+    zero ∸ p
+    ≡⟨ ∸-0-n p ⟩
+    zero
+    ≡⟨ sym (∸-0-n (n + p)) ⟩
+    zero ∸ (n + p)
+    ∎
+∸-+-assoc (suc m) n p = {!!}

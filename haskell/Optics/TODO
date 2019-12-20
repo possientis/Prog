@@ -1,8 +1,3 @@
-lookup class KnownNat
-define class KnownNat for Nat
-Show instance for Leq (using knownnat so can see type)
-Test.Leq
-write proper Hspec
 DTPS: forgetting static information
 define fin2vec' by pattern match on singleton
 paper: profunctor optics
