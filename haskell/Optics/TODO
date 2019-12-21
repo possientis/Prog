@@ -1,3 +1,5 @@
+implement instances of SingE for Bool and Nat
+go back to Nat/Bool are remove orphan show instances
 DTPS: forgetting static information
 define fin2vec' by pattern match on singleton
 paper: profunctor optics

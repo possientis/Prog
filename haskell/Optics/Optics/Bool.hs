@@ -1,24 +1,32 @@
 {-# LANGUAGE GADTs                  #-}
 {-# LANGUAGE DataKinds              #-}
+{-# LANGUAGE TypeFamilies           #-}
 {-# LANGUAGE KindSignatures         #-}
+{-# LANGUAGE TypeSynonymInstances   #-}
 
 module  Optics.Bool
-    (   SBool   (..)
-    ,   fromSBool
+    (   Sing    (..)
+    ,   SBool
+    ,   fromSBool 
     )   where
 
-import Data.Kind
+import Optics.Singleton
 
+{-
 data SBool (b :: Bool) :: Type where
     STrue  :: SBool 'True
     SFalse :: SBool 'False 
+-}
+
+data instance Sing (a :: Bool) where
+    STrue  :: Sing 'True
+    SFalse :: Sing 'False 
+
+type SBool (a :: Bool) = Sing a
 
 fromSBool :: SBool b -> Bool
 fromSBool STrue  = True
 fromSBool SFalse = False
-
-instance Eq (SBool b) where
-    (==) _ _ = True     -- singleton type
 
 instance Show (SBool b) where
     show = show . fromSBool

@@ -1,21 +1,9 @@
+Require Import Core.LEM.
 Require Import Core.Nat.
 Require Import Core.Set.
-Require Import Core.LEM.
 Require Import Core.Elem.
 Require Import Core.Syntax.
-
-
-Definition Env : Type := nat -> set.
-
-Definition eDef : Env := (fun _ => Nil).
-
-(* Tweak environment e to that e n = x                                          *)
-Definition bind (e:Env) (n:nat) (x:set) : Env :=
-    fun (m:nat) =>
-        match eq_nat_dec n m with
-        | left _    => x        (* variable 'n' is bound to set 'x'             *)
-        | right _   => e m
-        end.
+Require Import Core.Environment.
 
 Fixpoint toProp (e:Env) (p:Formula) : Prop :=
     match p with
@@ -25,7 +13,11 @@ Fixpoint toProp (e:Env) (p:Formula) : Prop :=
     | All n p1      => forall (x:set), toProp (bind e n x) p1
     end.
 
+(* Evaluation is empty environment. Should only be used for closed formulas.    *)
 Definition eval (p:Formula) : Prop := toProp eDef p.
+
+(* Evaluation with single binding 'n := x'. Should be used when only 'n' free.  *)
+Definition eval_n (n:nat) (x:set) (p:Formula) : Prop := toProp (env n x) p.
 
 Definition p1 : Formula := All 0 (All 1 (Elem 0 1)).
 
@@ -44,11 +36,29 @@ Proof. firstorder. Qed.
 Lemma checkOr : LEM -> forall (p q:Formula), 
     eval(Or p q) <-> eval p \/ eval q.
 Proof.
-    intros L p q. unfold Or, eval. simpl. apply LEMor. assumption.
+    intros L p q. unfold Or, eval. simpl. 
+    apply LEMor. assumption.
 Qed.
 
 Lemma checkAnd : LEM -> forall (p q:Formula),
     eval(And p q) <-> eval p /\ eval q.
 Proof.
-    intros L p q. unfold And, eval. simpl. apply LEMAnd. assumption.
+    intros L p q. unfold And, eval. simpl. 
+    apply LEMAnd. assumption.
 Qed.
+
+Lemma checkExist : LEM -> forall (p:Formula) (n:nat),
+    eval (Exist n p) <-> exists (x:set), eval_n n x p.
+Proof.
+    intros L p n. unfold Exist, eval, eval_n, env. simpl. 
+    apply LEMExist. assumption.
+Qed.
+
+Lemma checkImp : forall (p q:Formula),
+    eval (Imp p q) <-> eval p -> eval q.
+Proof. firstorder. Qed.
+
+Lemma checkForall : forall (p:Formula) (n:nat),
+    eval (All n p) <-> forall (x:set), eval_n n x p.
+Proof. firstorder. Qed.
+

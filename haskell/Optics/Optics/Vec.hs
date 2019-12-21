@@ -11,6 +11,8 @@ module  Optics.Vec
     ,   head
     ,   append
     ,   makeEven
+    ,   vtake
+    ,   vtake'
     )   where
 
 import Prelude      hiding (head)
@@ -59,4 +61,16 @@ makeEven n xs = case sIsEven n of
     STrue  -> xs
     SFalse -> case xs of
         Cons x _ -> Cons x xs
+
+vtake :: Nat -> Vec n a -> [a]
+vtake Z _ = []
+vtake (S _) Nil = error "Index out of bound"
+vtake (S n) (Cons x xs) = x : vtake n xs 
+
+vtake' :: (m :< n) ~ 'True
+       => SNat m 
+       -> Vec n a
+       -> [a]
+vtake' m vec = vtake (fromSNat m) vec
+        
 

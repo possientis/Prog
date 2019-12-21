@@ -460,3 +460,20 @@ $\beta$-valid for $\phi$ and vice-versa.
     true, it is sufficient to prove that $\lambda x\phi_{1}\preceq\phi$ which
     is immediate since $\lambda x\phi_{1}=\phi$.
 \end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:validsub:singlevar}
+    Let $V$ be a set, $x\in V$ and $\theta,\phi\in\tv$. Then we have:
+        \[
+            \free(\theta)\cap\var(\phi)=\emptyset\
+                \Rightarrow
+            (\mbox{$[\theta/x]$ $\beta$-valid for $\phi$})
+        \]
+\end{prop}
+\begin{proof}
+    We assume that $\free(\theta)\cap\var(\phi)=\emptyset$. We shall prove
+    that $[\theta/x]$ is $\beta$-valid for $\phi$ using 
+    proposition~(\ref{logic:prop:LAM:beta:validsub:criterion}). 
+    So let $z\in V$ and $\phi_{1}\in\tv$ such that $\lambda z\phi_{1}
+    \preceq\phi$ and let $u\in\free(\lambda z\phi_{1})$. We need to show 
+    that $z\not\in\free([\theta/x](u))$. 
+\end{proof}

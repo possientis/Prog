@@ -225,3 +225,77 @@ lemma L20 : ∀ (p q : ℕ → Prop), (∃ x, p x) → ∃ x, p x ∨ q x :=
     constructor,
     left, assumption
   end
+
+lemma L21 : ∀ (p q : ℕ → Prop), (∃ x, p x) → ∃ x, p x ∨ q x :=
+  begin
+    intros p q H, cases H with x H, existsi x, left, assumption
+  end
+
+#check L21
+
+universes u v
+
+-- writing function body with tactics
+def swap_pair {α:Type u} {β:Type v} : α × β →  β × α :=
+  begin
+    intros x,
+    cases x with x y,
+    split; assumption
+  end
+
+#check @swap_pair
+
+def swap_sum {α:Type u} {β:Type v} : α ⊕ β → β ⊕ α :=
+  begin
+    intros x,
+    cases x with x x,
+      right, assumption,
+      left, assumption
+  end
+#check @swap_sum
+
+lemma L22 : ∀ (p q:Prop), p ∧ ¬p → q :=
+  begin
+    intros p q H, cases H with H1 H2,
+    contradiction
+  end
+
+#check L22
+
+
+lemma L23 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r H,
+    exact
+      have Hp : p, from H.left,
+      have Hqr : q ∨ r, from H.right,
+      show (p ∧ q) ∨ (p ∧ r),
+        begin
+          cases Hqr with Hq Hr,
+            left, exact
+              ⟨Hp,Hq⟩,
+            right, exact
+              ⟨Hp,Hr⟩
+        end
+  end
+
+#check L23
+
+
+lemma L24 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r, split; intros H,
+      cases H.right with Hq Hr,
+        left, exact ⟨H.left,Hq⟩,
+        right, exact ⟨H.left, Hr⟩,
+      cases H with Hp Hq; split,
+        exact Hp.left,
+        left, exact Hp.right,
+        exact Hq.left,
+        right,
+        exact Hq.right
+  end
+
+
+#check L24
+

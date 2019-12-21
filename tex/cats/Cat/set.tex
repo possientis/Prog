@@ -46,9 +46,34 @@ out the notation $f:a\to b$ only requires that the range of $f$ should be
 a subset of $b$. There is no requirement that the range of $f$ should be
 equal to $b$. So if $f:a\to b$ and $b\subseteq c$ then $f:a\to c$.
 This explains why the collection of arrows \arr\ is defined as a class of 
-triples $(a,b,f)$ rather than just functions $f$. Knowing the function
-$f$ does not tell you which {\em codomain} it should have. Any set $b$
-which is a superset of its range is a possible codomain. 
-
-
-
+triples $(a,b,f)$ rather than a class of functions $f$. Knowing the 
+function $f$ does not tell you which {\em codomain} it should have. Any 
+set $b$ which is a superset of its range is a possible codomain. So we 
+keep the set $b$ together with the function $f$ in the triple $(a,b,f)$
+so as to remember which codomain is intended for this particular arrow
+of the category \Set. Incidentally, we also keep the range $a$ of the 
+function $f$ in the triple $(a,b,f)$ but this is not necessary, as the
+knowledge of $f$ does allow us to recover its domain $a$. However,
+the triple $(a,b,f)$ is convenient, allowing us to treat {\em domain} 
+and {\em codomain} uniformly. Once again, it should be remembered that
+the collection of arrows \arr\ is not a set but a proper class, 
+corresponding to the predicate $\arr(x)$ defined as follows:
+    \[
+        \arr(x)=\exists a\,\exists b\,\exists f\,,\  
+        x = (a,b,f)\ \land\ f : a \to b
+    \]
+The maps $\dom:\arr\to\ob$ and $\cod:\arr\to\ob$ for the category \Set\
+are defined respectively by $\dom(a,b,f)=a$ and $\cod(a,b,f)=b$. This 
+looks simple enough, but for those who worry about foundational issues,
+we should just note that these are also proper classes which can be
+encoded as predicates. For example:
+    \[
+    \dom(x)=\exists u\,\exists v\,,\ x = (u,v)\ \land\ \arr(u)\ \land 
+    \ (\ \exists a\,\exists b\,\exists f\,,\  u = (a,b,f)\ \land\ 
+    v = a\ ) 
+    \]
+In other words, any set $x$ satisfies the predicate $\dom(x)$ \ifand\ 
+it is an ordered pair $(u,v)$ where $u$ satisfies the predicate $\arr(u)$
+and for which there exist sets $a,b,f$ with $u=(a,b,f)$ and $v=a$.
+In short, $(u,v)$ satisfies the predicate $\dom$ \ifand\ $u$ is an
+arrow $u=(a,b,f)$ and $v=a$.

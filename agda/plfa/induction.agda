@@ -1,7 +1,7 @@
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; sym)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_;_∎)
-open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_) -- \.-
+open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_;_^_) -- \.-
 
 _ : (3 + 4) + 5 ≡ 3 + (4 + 5)
 _ = begin
@@ -248,4 +248,65 @@ _ = begin
     ≡⟨ sym (∸-0-n (n + p)) ⟩
     zero ∸ (n + p)
     ∎
-∸-+-assoc (suc m) n p = {!!}
+∸-+-assoc (suc m) zero p =
+  begin
+    (suc m ∸ zero) ∸ p
+    ≡⟨⟩
+    suc m ∸ p
+    ≡⟨⟩
+    suc m ∸ (zero + p)
+    ∎
+∸-+-assoc (suc m) (suc n) p =
+  begin
+    (suc m ∸ suc n) ∸ p
+    ≡⟨⟩
+    (m ∸ n) ∸ p
+    ≡⟨ ∸-+-assoc m n p ⟩
+    m ∸ (n + p)
+    ≡⟨⟩
+    suc m ∸ suc (n + p)
+    ≡⟨⟩
+    suc m ∸ (suc n + p)
+    ∎
+
+*-identity-l : ∀ (n : ℕ) → 1 * n ≡ n
+*-identity-l zero = refl
+*-identity-l (suc n) =
+  begin
+     1 * suc n
+     ≡⟨⟩
+     suc n + 0 * suc n
+     ≡⟨⟩
+     suc n + 0
+     ≡⟨ cong suc (+-identity-r n) ⟩
+     suc n
+     ∎
+
+^-*-distrib-l-+ : ∀ (m n p : ℕ) → m ^ (n + p) ≡ (m ^ n) * (m ^ p)
+^-*-distrib-l-+ m zero p =
+  begin
+    m ^ (zero + p)
+    ≡⟨⟩
+    m ^ p
+    ≡⟨ sym (*-identity-l (m ^ p)) ⟩
+    1 * (m ^ p)
+    ≡⟨⟩
+    (m ^ zero) * (m ^ p)
+    ∎
+^-*-distrib-l-+ m (suc n) p =
+  begin
+    m ^ (suc n + p)
+    ≡⟨⟩
+    m ^ suc (n + p)
+    ≡⟨⟩
+    m * (m ^ (n + p))
+    ≡⟨ cong (m *_) (^-*-distrib-l-+ m n p) ⟩
+    m * ((m ^ n) * (m ^ p))
+    ≡⟨ sym (*-assoc m (m ^ n) (m ^ p)) ⟩
+    (m * (m ^ n)) * (m ^ p)
+    ≡⟨⟩
+    (m ^ suc n) * (m ^ p)
+    ∎
+
+
+

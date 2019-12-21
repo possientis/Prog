@@ -1,30 +1,43 @@
 {-# LANGUAGE GADTs                  #-}
 {-# LANGUAGE DataKinds              #-}
+{-# LANGUAGE TypeFamilies           #-}
 {-# LANGUAGE KindSignatures         #-}
 {-# LANGUAGE ExplicitForAll         #-}
 {-# LANGUAGE TypeApplications       #-}
 {-# LANGUAGE ScopedTypeVariables    #-}
+{-# LANGUAGE TypeSynonymInstances   #-}
 
 module  Optics.Nat
     (   Nat         (..)
-    ,   SNat        (..)
+    ,   SNat
     ,   KnownNat    (..)
+    ,   Sing        (..)
     ,   natVal
     ,   fromSNat
     )   where
 
 import Prelude      hiding (toInteger)
-import Data.Kind
+
+import Optics.Singleton
 
 data Nat = Z | S Nat
     deriving (Eq)
 
+{-
 -- SNat 'Z has only one instance
 -- SNat ('S 'Z) has only one instance
 -- ...
 data SNat (n :: Nat) :: Type where
     SZ :: SNat 'Z
     SS :: forall (n :: Nat) . SNat n -> SNat ('S n)
+-}
+
+data instance Sing (a :: Nat) where
+    SZ :: Sing 'Z
+    SS :: Sing n -> Sing ('S n)
+
+type SNat (a :: Nat) = Sing a
+
 
 class KnownNat (n :: Nat) where
     natSing :: SNat n
@@ -48,9 +61,6 @@ instance Show Nat where
 fromSNat :: SNat n -> Nat
 fromSNat SZ     = Z
 fromSNat (SS n) = S (fromSNat n)
-
-instance Eq (SNat n) where
-    (==) _ _ = True     -- singleton type
 
 instance Show (SNat n) where
     show = show . fromSNat

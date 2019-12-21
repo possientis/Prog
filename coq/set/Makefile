@@ -22,6 +22,7 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Foundation.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/LEM.vo \
+								${CORE}/Environment.vo \
 								${CORE}/Semantics.vo
 
 
@@ -222,10 +223,17 @@ ${CORE}/Syntax.vo :				${CORE}/Syntax.v
 ${CORE}/LEM.vo :				${CORE}/LEM.v
 	coqc ${CORE}/LEM.v -R ${CORE} ${CORE}
 
+${CORE}/Environment.vo :		${CORE}/Environment.v \
+								${CORE}/Nat.vo \
+								${CORE}/Set.vo
+	coqc ${CORE}/Environment.v -R ${CORE} ${CORE}
+
 ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
+								${CORE}/LEM.vo \
 								${CORE}/Nat.vo \
 								${CORE}/Set.vo \
 								${CORE}/Elem.vo \
-								${CORE}/Syntax.vo
+								${CORE}/Syntax.vo \
+								${CORE}/Environment.vo
 	coqc ${CORE}/Semantics.v -R ${CORE} ${CORE}
 				

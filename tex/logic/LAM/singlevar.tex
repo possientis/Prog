@@ -49,3 +49,18 @@ TODO
     mapping, given $\phi\in\tv$ the image $[\theta/x](\phi)$ is called
     {\em $\phi$ with $\theta$ in place of $x$} and denoted $\phi[\theta/x]$.
 \end{defin}
+{\bf Remark}: If $y\in V$ then $y$ is also an element of \tv\ and both
+definitions~(\ref{logic:def:single:var:substitution}) 
+and~(\ref{logic:def:LAM:single:var:beta:subst}) define the {\em substitution
+of $y$ in place of $x$} denoted $[y/x]:V\to V$. However, as far as the
+function of $[y/x]$ defined on $V$ is concerned, the two definitions are 
+consistent and there is no risk of confusion. The confusion is possible
+when it comes to the associated map $[y/x]:\tv\to\tv$ which according to
+definition~(\ref{logic:def:single:var:substitution}) denotes the 
+substitution mapping of definition~(\ref{logic:def:LAM:substitution}), while
+according to definition~(\ref{logic:def:LAM:single:var:beta:subst}) it denotes
+the $\beta$-substitution mapping of definition~(\ref{logic:def:LAM:beta:subst}).
+These two mappings are different, they clearly act differently on bound
+variables and it is important not to confuse them. So given $\phi\in\tv$,
+the notation $\phi[y/x]$ is ambiguous but the context should allow us
+to clearly establish what we are referring to at all times.
