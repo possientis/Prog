@@ -299,3 +299,74 @@ lemma L24 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
 
 #check L24
 
+-- using show and from tactics
+lemma L25 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r, split,
+      show p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r), intros H,
+        show (p ∧ q) ∨ (p ∧ r),
+          cases H with Hp Hqr,
+            cases Hqr with Hq Hr,
+              left, show p ∧ q, from ⟨Hp, Hq⟩,
+              right, show p ∧ r, from ⟨Hp, Hr⟩,
+      show (p ∧ q) ∨ (p ∧ r) → p ∧ (q ∨ r), intros H,
+        show p ∧ (q ∨ r),
+          cases H with Hpq Hpr,
+            cases Hpq with Hp Hq, split,
+              show p, assumption,
+              show q ∨ r, left, assumption,
+            cases Hpr with Hp Hr, split,
+              show p, assumption,
+              show q ∨ r, right, assumption
+  end
+
+#check L25
+
+-- use show tactic to select current goal
+lemma L26 : ∀ (p q:Prop), p ∧ q → q ∧ p :=
+  begin
+    intros p q H, cases H with Hp Hq, split,
+      show p, assumption,
+      show q, assumption
+  end
+
+lemma L27 : ∀ (p q:Prop), p ∧ q → q ∧ p :=
+  begin
+    intros p q H, cases H with Hp Hq, split,
+      show q, assumption,
+      show p, assumption
+  end
+
+
+#check L26
+#check L27
+
+-- using the have tactic
+lemma L28 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r H, cases H with Hp Hqr, cases Hqr with Hq Hr,
+      have Hpq : p ∧ q, from ⟨Hp,Hq⟩, left, assumption,
+      have Hpr : p ∧ r, from ⟨Hp,Hr⟩, right, assumption
+  end
+
+#check L28
+
+-- 'have' is for proof what 'let' is for data
+lemma L29 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r H, cases H with Hp Hqr, cases Hqr with Hq Hr,
+      have Hpq : p ∧ q := ⟨Hp,Hq⟩, left, assumption,
+      have Hpr : p ∧ r := ⟨Hp,Hr⟩, right, assumption
+  end
+
+#check L29
+
+lemma L30 : ∃ (n:ℕ), n + 2 = 8 :=
+  begin
+    let n : ℕ := 3 * 2,
+    existsi n,
+    reflexivity
+  end
+
+
+#check L30

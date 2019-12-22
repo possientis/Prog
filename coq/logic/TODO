@@ -1,2 +1,3 @@
-var(phi)/\Fr(t) = 0 => [t/x] beta-valid for phi?
+(g* U . f)* U = g* U . f* U ?
+f,g:V -> T(V), f',g':T(V)->(V), so g' . f : V -> T(V), so (g' . f)' : T(V) -> T(V). (g' . f)' = g' . f' ?
 LAM/betavalid.tex

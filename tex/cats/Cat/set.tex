@@ -1,15 +1,17 @@
 \begin{defin}\label{Cat:def:set}
-    We call \Set\ the category $\Set=(\ob, \arr, \dom, \cod, \circ)$ where
+    We call \Set\ the category $\Set=(\ob, \arr, \dom, \cod, \id, \circ)$ where
     \begin{eqnarray*}
         (1)&\ &\ob = \{\ x\ |\  \mbox{x is a set}\ \}\\
         (2)&\ &\arr = \{\ (a,b,f)\ |\  \mbox{f is a function $f : a\to b$}\ \}\\
         (3)&\ &\dom\,(a,b,f) = a\\
         (4)&\ &\cod\,(a,b,f) = b\\
-        (5)&\ &(b,c,g)\circ(a,b,f) = (a,c,g\circ f)
+        (5)&\ &\id(a) = (a,a,i(a))\\
+        (6)&\ &(b,c,g)\circ(a,b,f) = (a,c,g\circ f)
     \end{eqnarray*}
-    where $(3)$, $(4)$, $(5)$ hold for all sets $a,b,c$ and functions $f:a\to b$,
-    $g:b\to c$, and $g\circ f$ denotes the usual function composition with 
-    $(g\circ f)(x)=g(f(x))$.
+    where $(3)-(6)$ hold for all sets $a,b,c$ and functions $f:a\to b$,
+    $g:b\to c$, $i(a):a\to a$ denotes the usual identity function on $a$,
+    and $g\circ f$ denotes the usual function composition defined by 
+    $(g\circ f)(x)=g(f(x))$, for all $x\in a$.
 \end{defin}
 The collection of objects of the category \Set\ is defined to be the 
 class of all sets. We are using the set comprehension notation 
@@ -77,3 +79,27 @@ it is an ordered pair $(u,v)$ where $u$ satisfies the predicate $\arr(u)$
 and for which there exist sets $a,b,f$ with $u=(a,b,f)$ and $v=a$.
 In short, $(u,v)$ satisfies the predicate $\dom$ \ifand\ $u$ is an
 arrow $u=(a,b,f)$ and $v=a$.
+
+We defined the identity operator $\id$ by $\id(a)=(a,a,i(a))$ and the 
+composition operator $\circ$ by $(b,c,g)\circ(a,b,f)= (a,c,g\circ f)$ 
+where $g\circ f$ is the usual function composition and $i(a):a\to a$ is
+the usual identity function. As before, these defined maps are not 
+functional sets of ordered pairs but rather proper classes which we 
+could also encode as precicates of first order logic. 
+\begin{lemma}\label{Cat:lemma:set:is:category}
+    The category \Set\ of definition~(\ref{Cat:def:set}) is indeed a
+    category.
+\end{lemma}
+\begin{proof}
+    Now that we have defined 
+    the data $(\ob, \arr, \dom, \cod, \id, \circ)$ of the category \Set, 
+    it is time to check this data actually forms a category. We need to
+    check that conditions $(7)-(13)$ of definition~(\ref{Cat:def:category})
+    are satisfied. $(7)$: suppose $f^{*}$ and $g^{*}$ are two members of 
+    the collection \arr. We need to check that $g^{*}\circ f^{*}$ is defined 
+    \ifand\ $\cod(f^{*})=\dom(g^{*})$. 
+\end{proof}
+
+
+
+

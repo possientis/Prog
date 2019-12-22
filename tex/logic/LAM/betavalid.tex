@@ -475,5 +475,15 @@ $\beta$-valid for $\phi$ and vice-versa.
     proposition~(\ref{logic:prop:LAM:beta:validsub:criterion}). 
     So let $z\in V$ and $\phi_{1}\in\tv$ such that $\lambda z\phi_{1}
     \preceq\phi$ and let $u\in\free(\lambda z\phi_{1})$. We need to show 
-    that $z\not\in\free([\theta/x](u))$. 
+    that $z\not\in\free([\theta/x](u))$. So first we assume that $u\neq x$. 
+    Then from definition~(\ref{logic:def:LAM:single:var:beta:subst}) we have
+    $[\theta/x](u)=u$ and since $\free(u)=\{u\}$ we simply need to show that
+    $z\not\in\{u\}$ that is $z\neq u$, which follows from $u\in\free(\lambda
+    z\phi_{1})=\free(\phi_{1})\setminus\{z\}$. So we now assume that $u=x$.
+    Then $[\theta/x](u)=\theta$ and we need to show that $z\not\in\free(\theta)$.
+    Having assumed that $\free(\theta)\cap\var(\phi)=\emptyset$, it is sufficient
+    to prove that $z\in\var(\phi)$ which is clear since $z\in\var(\lambda z
+    \phi_{1})$ and $\var(\lambda z\phi_{1})\subseteq\var(\phi)$, the latter
+    inclusion being a consequence of the assumption $\lambda z\phi_{1}\preceq
+    \phi$ and proposition~(\ref{logic:prop:LAM:variable:subformula}).
 \end{proof}

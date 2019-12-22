@@ -282,6 +282,59 @@ _ = begin
      suc n
      ∎
 
+*-absorb-r : ∀ (n : ℕ) → n * 0 ≡ 0
+*-absorb-r zero = refl
+*-absorb-r (suc n) =
+  begin
+    suc n * 0
+    ≡⟨⟩
+    0 + n * 0
+    ≡⟨⟩
+    n * 0
+    ≡⟨ *-absorb-r n ⟩
+    0
+    ∎
+
+*-suc : ∀ (m n : ℕ) → m * suc n ≡ m + m * n
+*-suc zero n = refl
+*-suc (suc m) n =
+  begin
+    suc m * suc n
+    ≡⟨⟩
+    suc n + m * suc n
+    ≡⟨⟩
+    suc (n + m * suc n)
+    ≡⟨ {!!} ⟩
+    suc (n + (m + m * n))
+    ≡⟨ {!!} ⟩
+    suc ((n + m) + m * n)
+    ≡⟨ {!!} ⟩
+    suc ((m + n) + m * n)
+    ≡⟨ {!!} ⟩
+    suc (m + (n + m * n))
+    ≡⟨⟩
+    suc m + suc m * n
+    ∎
+
+*-comm : ∀ (m n : ℕ) → m * n ≡ n * m 
+*-comm zero n =
+  begin
+    zero * n
+    ≡⟨⟩
+    zero
+    ≡⟨ sym (*-absorb-r n) ⟩
+    n * zero ∎
+*-comm (suc m) n =
+  begin
+    suc m * n
+    ≡⟨⟩
+    n + m * n
+    ≡⟨ {!!} ⟩
+    n + n * m
+    ≡⟨ {!!} ⟩
+    n * suc m
+    ∎
+
 ^-*-distrib-l-+ : ∀ (m n p : ℕ) → m ^ (n + p) ≡ (m ^ n) * (m ^ p)
 ^-*-distrib-l-+ m zero p =
   begin
@@ -308,5 +361,35 @@ _ = begin
     (m ^ suc n) * (m ^ p)
     ∎
 
-
+^-distrib-r-* : ∀ (m n p : ℕ) → (m * n) ^ p ≡ (m ^ p) * (n ^ p)
+^-distrib-r-* m n zero =
+  begin
+    (m * n) ^ zero
+    ≡⟨⟩
+    1
+    ≡⟨⟩
+    1 * 1
+    ≡⟨⟩
+    (m ^ zero) * (n ^ zero)
+    ∎
+^-distrib-r-* m n (suc p) =
+  begin
+    (m * n) ^ suc p
+    ≡⟨⟩
+    (m * n) * ((m * n) ^ p)
+    ≡⟨ cong (m * n *_) (^-distrib-r-* m n p) ⟩
+    (m * n) * ((m ^ p) * (n ^ p))
+    ≡⟨ *-assoc m n ((m ^ p) * (n ^ p)) ⟩
+    m * (n * ((m ^ p) * (n ^ p)))
+    ≡⟨ sym (cong (m *_) (*-assoc n (m ^ p) (n ^ p))) ⟩
+    m * ((n * (m ^ p)) * (n ^ p))
+    ≡⟨ cong (λ k → m * (k * (n ^ p))) {!*-comm!} ⟩
+    m * (((m ^ p) * n) * (n ^ p))
+    ≡⟨ {!!} ⟩
+    m * ((m ^ p) * (n * (n ^ p)))
+    ≡⟨ {!!} ⟩
+    (m * (m ^ p)) * (n * (n ^ p))
+    ≡⟨⟩
+    (m ^ suc p) * (n ^ suc p)
+    ∎
 

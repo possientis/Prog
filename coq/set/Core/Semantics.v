@@ -13,21 +13,12 @@ Fixpoint toProp (e:Env) (p:Formula) : Prop :=
     | All n p1      => forall (x:set), toProp (bind e n x) p1
     end.
 
-(* Evaluation is empty environment. Should only be used for closed formulas.    *)
+(* Evaluation in empty environment. Should only be used for closed formulas.    *)
 Definition eval (p:Formula) : Prop := toProp eDef p.
 
 (* Evaluation with single binding 'n := x'. Should be used when only 'n' free.  *)
 Definition eval_n (n:nat) (x:set) (p:Formula) : Prop := toProp (env n x) p.
 
-Definition p1 : Formula := All 0 (All 1 (Elem 0 1)).
-
-Ltac ceval :=
-    unfold eval, toProp, eDef, bind, eq_nat_dec; simpl.
-
-Lemma L1 : eval p1 <-> forall (x y:set), x :: y.
-Proof.
-    unfold p1. ceval. firstorder.
-Qed.
 
 Lemma checkNot : forall (p:Formula), 
     eval (Not p) <-> ~ eval p.
@@ -37,7 +28,7 @@ Lemma checkOr : LEM -> forall (p q:Formula),
     eval(Or p q) <-> eval p \/ eval q.
 Proof.
     intros L p q. unfold Or, eval. simpl. 
-    apply LEMor. assumption.
+    apply LEMOr. assumption.
 Qed.
 
 Lemma checkAnd : LEM -> forall (p q:Formula),
@@ -47,10 +38,10 @@ Proof.
     apply LEMAnd. assumption.
 Qed.
 
-Lemma checkExist : LEM -> forall (p:Formula) (n:nat),
-    eval (Exist n p) <-> exists (x:set), eval_n n x p.
+Lemma checkExi : LEM -> forall (p:Formula) (n:nat),
+    eval (Exi n p) <-> exists (x:set), eval_n n x p.
 Proof.
-    intros L p n. unfold Exist, eval, eval_n, env. simpl. 
+    intros L p n. unfold Exi, eval, eval_n, env. simpl. 
     apply LEMExist. assumption.
 Qed.
 
@@ -61,4 +52,22 @@ Proof. firstorder. Qed.
 Lemma checkForall : forall (p:Formula) (n:nat),
     eval (All n p) <-> forall (x:set), eval_n n x p.
 Proof. firstorder. Qed.
+
+Definition P1 : Formula := All 0 (All 1 (Elem 0 1)).
+
+Lemma checkP1 : eval P1 <-> forall (x y:set), x :: y.
+Proof.
+    firstorder.
+Qed.
+
+(* There exists an empty set                                                    *)
+Definition P2 : Formula := Exi 0 (All 1 (Not (Elem 1 0))).
+
+Lemma checkP2 : LEM -> eval P2 <-> exists (x:set), forall (z:set), ~ (z :: x).
+Proof.
+    intros L. apply checkExi. assumption.
+Qed.
+
+
+
 
