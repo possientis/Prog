@@ -17,7 +17,7 @@ module  Optics.IsEven
 
 import Optics.If
 import Optics.Nat
-import Optics.Bool
+import Optics.Singleton
 
 
 -- term level

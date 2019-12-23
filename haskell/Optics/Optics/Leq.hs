@@ -18,6 +18,7 @@ import Data.Proxy
 import Data.Kind
 
 import Optics.Nat
+import Optics.Singleton
 
 data Leq (n :: Nat) (m :: Nat) :: Type where
     Le_n :: forall (n :: Nat) . Leq n n 

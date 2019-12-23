@@ -19,6 +19,13 @@ Definition eval (p:Formula) : Prop := toProp eDef p.
 (* Evaluation with single binding 'n := x'. Should be used when only 'n' free.  *)
 Definition eval_n (n:nat) (x:set) (p:Formula) : Prop := toProp (env n x) p.
 
+Lemma checkImp : forall (p q:Formula),
+    eval (Imp p q) <-> eval p -> eval q.
+Proof. firstorder. Qed.
+
+Lemma checkAll : forall (p:Formula) (n:nat),
+    eval (All n p) <-> forall (x:set), eval_n n x p.
+Proof. firstorder. Qed.
 
 Lemma checkNot : forall (p:Formula), 
     eval (Not p) <-> ~ eval p.
@@ -45,14 +52,6 @@ Proof.
     apply LEMExist. assumption.
 Qed.
 
-Lemma checkImp : forall (p q:Formula),
-    eval (Imp p q) <-> eval p -> eval q.
-Proof. firstorder. Qed.
-
-Lemma checkForall : forall (p:Formula) (n:nat),
-    eval (All n p) <-> forall (x:set), eval_n n x p.
-Proof. firstorder. Qed.
-
 Definition P1 : Formula := All 0 (All 1 (Elem 0 1)).
 
 Lemma checkP1 : eval P1 <-> forall (x y:set), x :: y.
@@ -67,6 +66,7 @@ Lemma checkP2 : LEM -> eval P2 <-> exists (x:set), forall (z:set), ~ (z :: x).
 Proof.
     intros L. apply checkExi. assumption.
 Qed.
+
 
 
 

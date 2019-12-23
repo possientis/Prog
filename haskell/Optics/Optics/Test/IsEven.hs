@@ -5,9 +5,8 @@ module  Optics.Test.IsEven
 
 import Test.Hspec
 
-import Optics.Nat
-import Optics.Bool
 import Optics.IsEven
+import Optics.Singleton
 
 specIsEven :: Spec
 specIsEven = describe "Testing IsEven..." $ do

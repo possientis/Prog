@@ -11,6 +11,7 @@ module  Optics.Plus
 
 
 import Optics.Nat
+import Optics.Singleton
 
 -- term level
 plus :: Nat -> Nat -> Nat

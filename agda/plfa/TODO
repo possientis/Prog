@@ -1,3 +1,2 @@
-induction: finish *-suc / *-comm / ^-distrib-r-*
-Induction: ^ stretch
+Induction: Bin-laws
 

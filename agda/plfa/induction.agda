@@ -304,19 +304,19 @@ _ = begin
     suc n + m * suc n
     ≡⟨⟩
     suc (n + m * suc n)
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (λ k → suc (n + k)) (*-suc m n) ⟩
     suc (n + (m + m * n))
-    ≡⟨ {!!} ⟩
+    ≡⟨ sym (cong suc (+-assoc n m (m * n))) ⟩
     suc ((n + m) + m * n)
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (λ k → suc (k + m * n)) (+-comm n m) ⟩
     suc ((m + n) + m * n)
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong suc (+-assoc m n (m * n)) ⟩
     suc (m + (n + m * n))
     ≡⟨⟩
     suc m + suc m * n
     ∎
 
-*-comm : ∀ (m n : ℕ) → m * n ≡ n * m 
+*-comm : ∀ (m n : ℕ) → m * n ≡ n * m
 *-comm zero n =
   begin
     zero * n
@@ -329,9 +329,9 @@ _ = begin
     suc m * n
     ≡⟨⟩
     n + m * n
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (n +_) (*-comm m n) ⟩
     n + n * m
-    ≡⟨ {!!} ⟩
+    ≡⟨ sym (*-suc n m) ⟩
     n * suc m
     ∎
 
@@ -383,13 +383,35 @@ _ = begin
     m * (n * ((m ^ p) * (n ^ p)))
     ≡⟨ sym (cong (m *_) (*-assoc n (m ^ p) (n ^ p))) ⟩
     m * ((n * (m ^ p)) * (n ^ p))
-    ≡⟨ cong (λ k → m * (k * (n ^ p))) {!*-comm!} ⟩
+    ≡⟨ cong (λ k → m * (k * (n ^ p))) (*-comm n (m ^ p)) ⟩
     m * (((m ^ p) * n) * (n ^ p))
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (m *_) (*-assoc (m ^ p) n (n ^ p)) ⟩
     m * ((m ^ p) * (n * (n ^ p)))
-    ≡⟨ {!!} ⟩
+    ≡⟨ sym (*-assoc m (m ^ p) (n * (n ^ p))) ⟩
     (m * (m ^ p)) * (n * (n ^ p))
     ≡⟨⟩
     (m ^ suc p) * (n ^ suc p)
     ∎
 
+^-^-distrib-l-* : ∀ (m n p : ℕ) → m ^ (n * p) ≡ (m ^ n) ^ p
+^-^-distrib-l-* m n zero =
+  begin
+     m ^ (n * zero)
+     ≡⟨ cong (m ^_) (*-absorb-r n) ⟩
+     m ^ zero
+     ≡⟨⟩
+     1 ≡⟨⟩
+     (m ^ n) ^ zero
+     ∎
+^-^-distrib-l-* m n (suc p) =
+  begin
+    m ^ (n * suc p)
+    ≡⟨ cong (m ^_) (*-suc n p) ⟩
+    m ^ (n + n * p)
+    ≡⟨ ^-*-distrib-l-+ m n (n * p) ⟩
+    (m ^ n) * (m ^ (n * p))
+    ≡⟨ cong ((m ^ n) *_) (^-^-distrib-l-* m n p) ⟩
+    (m ^ n) * ((m ^ n) ^ p)
+    ≡⟨⟩
+    (m ^ n) ^ suc p
+    ∎

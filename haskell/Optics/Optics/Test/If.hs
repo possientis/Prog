@@ -6,8 +6,7 @@ module  Optics.Test.If
 import Test.Hspec
 
 import Optics.If
-import Optics.Nat
-import Optics.Bool
+import Optics.Singleton
 
 specIf :: Spec
 specIf = describe "Testing If..." $ do

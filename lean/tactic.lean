@@ -370,3 +370,76 @@ lemma L30 : ∃ (n:ℕ), n + 2 = 8 :=
 
 
 #check L30
+
+lemma L31 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r, split,
+      show p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r),
+        assume H : p ∧ (q ∨ r), cases H with Hp Hqr,
+          show (p ∧ q) ∨ (p ∧ r),
+            begin
+              cases Hqr with Hq Hr,
+                left,  show p ∧ q, from ⟨Hp,Hq⟩,
+                right, show p ∧ r, from ⟨Hp, Hr⟩
+            end,
+      show (p ∧ q) ∨ (p ∧ r) → p ∧ (q ∨ r),
+        assume H : (p ∧ q) ∨ (p ∧ r),
+          show p ∧ (q ∨ r), cases H with Hpq Hpr,
+            begin
+              cases Hpq with Hp Hq, split,
+                show p, from Hp,
+                show q ∨ r, left, from Hq
+            end,
+            begin
+              cases Hpr with Hp Hr, split,
+                show p, from Hp,
+                show q ∨ r, right, from Hr
+            end
+  end
+
+#check L31
+
+-- curly braces instead of begin .. end
+lemma L32 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r, split,
+      show p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r),
+        assume H : p ∧ (q ∨ r), cases H with Hp Hqr,
+          show (p ∧ q) ∨ (p ∧ r),
+            { cases Hqr with Hq Hr,
+                    left,  show p ∧ q, from ⟨Hp,Hq⟩,
+                    right, show p ∧ r, from ⟨Hp,Hr⟩
+            },
+      show (p ∧ q) ∨ (p ∧ r) → p ∧ (q ∨ r),
+        assume H : (p ∧ q) ∨ (p ∧ r),
+          show p ∧ (q ∨ r), cases H with Hpq Hpr,
+            { cases Hpq with Hp Hq, split,
+                    show p, from Hp,
+                    show q ∨ r, left, from Hq
+            },
+            { cases Hpr with Hp Hr, split,
+                    show p, from Hp,
+                    show q ∨ r, right, from Hr
+            }
+  end
+
+#check L32
+
+lemma L33 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+  begin
+    intros p q r, split,
+      { assume H : p ∧ (q ∨ r), cases H with Hp Hqr,
+               show (p ∧ q) ∨ (p ∧ r), cases Hqr with Hq Hr,
+                 {left,  show p ∧ q, from ⟨Hp,Hq⟩},
+                 {right, show p ∧ r, from ⟨Hp,Hr⟩}},
+      { assume H : (p ∧ q) ∨ (p ∧ r),
+               show p ∧ (q ∨ r), cases H with Hpq Hpr,
+                 {cases Hpq with Hp Hq, split,
+                   {show p, from Hp},
+                   {show q ∨ r, left, show q, from Hq}},
+                 {cases Hpr with Hp Hr, split,
+                   {show p, from Hp},
+                   {show q ∨ r, right, show r, from Hr}}}
+  end
+
+#check L33

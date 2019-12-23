@@ -9,7 +9,7 @@ echo
 echo "testing plfa..."
 
 agda test.agda
-#agda induction.agda
+agda induction.agda
 
 ./clean.sh
 

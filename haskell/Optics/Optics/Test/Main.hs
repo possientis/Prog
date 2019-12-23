@@ -10,7 +10,6 @@ import Optics.Test.Nat
 import Optics.Test.Fin
 import Optics.Test.Vec
 import Optics.Test.Leq
-import Optics.Test.Bool
 import Optics.Test.Lens
 import Optics.Test.Plus
 import Optics.Test.Prism
@@ -18,6 +17,7 @@ import Optics.Test.IsEven
 import Optics.Test.FinVec
 import Optics.Test.FunList
 import Optics.Test.Adapter
+import Optics.Test.Singleton
 
 specMain :: Spec
 specMain = do
@@ -26,7 +26,6 @@ specMain = do
     specFin
     specVec
     specLeq
-    specBool
     specLens
     specPlus
     specPrism
@@ -34,3 +33,4 @@ specMain = do
     specFinVec
     specAdapter
     specFunList
+    specSingleton

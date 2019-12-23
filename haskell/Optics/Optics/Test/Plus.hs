@@ -4,8 +4,9 @@ module  Optics.Test.Plus
     )   where
 
 import Test.Hspec
-import Optics.Nat
+
 import Optics.Plus
+import Optics.Singleton
 
 specPlus :: Spec
 specPlus = describe "Testing Plus..." $ do

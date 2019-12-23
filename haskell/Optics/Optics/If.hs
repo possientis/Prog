@@ -8,8 +8,7 @@ module  Optics.If
     ,   sIf
     )   where
 
-import Optics.Nat
-import Optics.Bool
+import Optics.Singleton
 
 -- term level
 -- if b then x else y

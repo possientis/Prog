@@ -21,8 +21,8 @@ import Data.Kind
 import Optics.Nat
 import Optics.Leq
 import Optics.Plus
-import Optics.Bool
 import Optics.IsEven
+import Optics.Singleton
 
 data Vec (n :: Nat) (a :: Type) :: Type where
     Nil  :: forall (a :: Type) . Vec 'Z a
@@ -71,6 +71,6 @@ vtake' :: (m :< n) ~ 'True
        => SNat m 
        -> Vec n a
        -> [a]
-vtake' m vec = vtake (fromSNat m) vec
+vtake' m vec = vtake (fromSing m) vec
         
 

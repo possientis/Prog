@@ -85,19 +85,44 @@ composition operator $\circ$ by $(b,c,g)\circ(a,b,f)= (a,c,g\circ f)$
 where $g\circ f$ is the usual function composition and $i(a):a\to a$ is
 the usual identity function. As before, these defined maps are not 
 functional sets of ordered pairs but rather proper classes which we 
-could also encode as precicates of first order logic. 
+could also encode as precicates of first order logic. One important
+point to note is the fact that $(6)$ of definition~(\ref{Cat:def:set})
+only defines the composition arrow $(b,c,g)\circ(a,b,f)$ where
+$f:a\to b$ and $g:b\to c$. In other words, the composition 
+$(d,c,g)\circ(a,b,f)$ with $f:a\to b$ and $g:d\to c$ is only 
+defined when $b=d$. Furthermore, the usual function composition
+$g\circ f$ is a function $g\circ f:a \to c$ which from~$(2)$ of
+definition~(\ref{Cat:def:set}) means that the composed arrow
+$(b,c,g)\circ(a,b,f)=(a,c,g\circ f)$ is indeed a member of the
+collection \arr, and the partial map $\circ$ thus defined is 
+indeed a partial map $\circ:\arr\times\arr\to\arr$.
+
+
 \begin{lemma}\label{Cat:lemma:set:is:category}
-    The category \Set\ of definition~(\ref{Cat:def:set}) is indeed a
-    category.
+    The category \Set\ of definition~(\ref{Cat:def:set}) is a category.
 \end{lemma}
 \begin{proof}
     Now that we have defined 
     the data $(\ob, \arr, \dom, \cod, \id, \circ)$ of the category \Set, 
     it is time to check this data actually forms a category. We need to
     check that conditions $(7)-(13)$ of definition~(\ref{Cat:def:category})
-    are satisfied. $(7)$: suppose $f^{*}$ and $g^{*}$ are two members of 
+    are satisfied. 
+    
+    $(7)$: suppose $f^{*}$ and $g^{*}$ are two members of 
     the collection \arr. We need to check that $g^{*}\circ f^{*}$ is defined 
-    \ifand\ $\cod(f^{*})=\dom(g^{*})$. 
+    \ifand\ $\cod(f^{*})=\dom(g^{*})$. Using~$(2)$ of 
+    definition~(\ref{Cat:def:set}), $f^{*}$ can be written $f^{*}=(a,b,f)$
+    for some function $f:a\to b$ and $g^{*}$ can be written $g^{*}=(d,c,g)$
+    for some function $g:d\to c$. However, from $(6)$ of 
+    definition~(\ref{Cat:def:set}), the arrrow $(d,c,g)\circ(a,b,f)$ is only 
+    defined in the case when $b=d$. Furthermore, from~$(4)$ of 
+    definition~(\ref{Cat:def:set}) we have $\cod(f^{*})=b$ and from~$(3)$ 
+    of definition~(\ref{Cat:def:set}) we have $\dom(g^{*})=d$. We conclude
+    that $g^{*}\circ f^{*}$ is defined \ifand\ $\cod(f^{*})=\dom(g^{*})$
+    as required.
+
+    $(8)$: Let $f^{*},g^{*}\in\arr$ such that $\cod(f^{*})=\dom(g^{*})$. 
+    We need to show that $\dom(g^{*}\circ f^{*})=\dom(f^{*})$.
 \end{proof}
 
 

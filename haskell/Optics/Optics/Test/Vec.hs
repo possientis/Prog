@@ -10,6 +10,7 @@ import Prelude      hiding (head)
 import Test.Hspec
 import Optics.Nat
 import Optics.Vec
+import Optics.Singleton
 
 specVec :: Spec
 specVec = describe "Testing Vec..." $ do
