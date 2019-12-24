@@ -10,6 +10,7 @@
 module  Optics.Singleton
     (   Sing        (..)
     ,   SingE       (..)  
+    ,   SingI       (..)
     ,   SBool
     ,   SNat
     ,   KnownNat    (..)
@@ -27,6 +28,9 @@ instance Eq (Sing a) where
 class SingE (a :: k) where
     type Demote a
     fromSing :: Sing a -> Demote a
+
+class SingI (a :: k) where
+    sing :: Sing a
 
 -- SBool
 type SBool (a :: Bool) = Sing a
@@ -58,6 +62,12 @@ instance SingE (n :: Nat) where
     fromSing SZ = Z
     fromSing (SS n) = S (fromSing n)
 
+instance SingI 'Z where
+    sing = SZ 
+
+instance (SingI n) => SingI ('S n) where 
+    sing = SS sing
+
 class KnownNat (n :: Nat) where
     natSing :: SNat n
 
@@ -69,3 +79,5 @@ instance (KnownNat n) => KnownNat ('S n) where
 
 natVal :: forall n proxy . KnownNat n => proxy n -> Nat
 natVal _ = fromSing (natSing @ n)
+
+

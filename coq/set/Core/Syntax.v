@@ -1,6 +1,5 @@
 Require Import List.
-
-Require Import Core.Nat.
+Require Import Peano_dec.
 
 Inductive Formula : Type :=
 | Bot  : Formula

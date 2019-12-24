@@ -24,17 +24,12 @@ Proof.
     - injection H. intros H'. apply IH. assumption.
 Qed.
 
-
-
-
 Lemma not_le_s_n : forall (n:nat), ~ S n <= n.
 Proof.
     intros n H. apply (not_eq_s_n n). apply le_antisym.
     - assumption.
     - apply le_S, le_n.
 Qed.
-
-
 
 Lemma sum_0 : forall (n m:nat), n + m = 0 -> n = 0 /\ m = 0.
 Proof.
@@ -43,6 +38,11 @@ Proof.
     - intros H. inversion H.
     - intros H. inversion H.
     - intros H. inversion H.
+Qed.
+
+Lemma max_n_0 : forall (n:nat), max n 0 = n.
+Proof.
+    destruct n as [|n]; reflexivity.
 Qed.
 
 Lemma n_le_max : forall (n m:nat), n <= max n m.
@@ -125,17 +125,11 @@ Proof.
     - apply plus_le_compat_l. assumption.
 Qed.
 
-
 Fixpoint maximum (ns:list nat) : nat :=
     match ns with
     | nil       => 0
     | cons n ns => max n (maximum ns)
     end.    
-
-Lemma max_n_0 : forall (n:nat), max n 0 = n.
-Proof.
-    destruct n as [|n]; reflexivity.
-Qed.
 
 Lemma maximum_lub : forall (ns:list nat) (N:nat), 
     (forall (n:nat), In n ns -> n <= N) -> maximum ns <= N.
@@ -211,16 +205,3 @@ Proof.
     apply not_le_s_n with (f 0). assumption.    
 Qed.
 
-(* Can't figure out which Coq module to import in order to get this.            *)
-Lemma eq_nat_dec : forall (n m:nat), {n = m} + {n <> m}.
-Proof.
-    induction n as [|n IH].
-    - intros [|m].
-        + left. reflexivity.
-        + right. intros H. inversion H.
-    - intros [|m].
-        + right. intros H. inversion H.
-        + destruct (IH m) as [H|H].
-            * left. rewrite H. reflexivity.
-            * right. intros H'. apply H. inversion H'. reflexivity.
-Defined.

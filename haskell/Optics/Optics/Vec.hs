@@ -12,7 +12,8 @@ module  Optics.Vec
     ,   append
     ,   makeEven
     ,   vtake
-    ,   vtake'
+    ,   vtake2
+    ,   replicate1
     )   where
 
 import Prelude      hiding (head)
@@ -67,10 +68,22 @@ vtake Z _ = []
 vtake (S _) Nil = error "Index out of bound"
 vtake (S n) (Cons x xs) = x : vtake n xs 
 
-vtake' :: (m :< n) ~ 'True
+{- works but creates warning for redundant constraint.
+vtake1 :: (m :< n) ~ 'True
        => SNat m 
        -> Vec n a
        -> [a]
-vtake' m vec = vtake (fromSing m) vec
-        
+vtake1 m vec = vtake (fromSing m) vec
+-}
+
+replicate1 :: SNat n -> a -> Vec n a
+replicate1 SZ _ = Nil
+replicate1 (SS n) x = Cons x (replicate1 n x)
+
+vtake2 :: (m :< n) ~ 'True
+       => SNat m 
+       -> Vec n a
+       -> Vec m a
+vtake2 SZ _ = Nil
+vtake2 (SS n) (Cons x xs) = Cons x (vtake2 n xs) 
 

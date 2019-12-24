@@ -1,4 +1,6 @@
 Require Import List.
+Require Import Peano_dec.
+
 Import ListNotations.
 
 (* Abstract syntax for 'calculus of inductive constructions'.                   *)
@@ -13,6 +15,31 @@ Inductive Exp : Type :=
 | EApp  : Exp -> Exp -> Exp                 (* application                      *)
 | ELet  : nat -> Exp -> Exp -> Exp -> Exp   (* let x:=(t:T) in U                *)
 .
+
+(* xs represents the list of variables which are deemed 'bound'                 *)
+Definition h_ (f:nat -> Exp) (xs:list nat) (x:nat) : Exp :=
+    match in_dec eq_nat_dec x xs with
+    | left  _   => EVar x                   (* x is deemed bound                *)
+    | right _   => f x                      (* x is deemed free                 *) 
+    end.
+
+(* Unsure whether xs or (n :: xs) for 'T' in say 'forall (n:T), U'              *)
+Fixpoint subst_ (f:nat -> Exp) (t:Exp) (xs:list nat) : Exp :=
+    match t with
+    | EProp         => EProp
+    | ESet          => ESet
+    | EType n       => EType n
+    | EVar  n       => h_ f xs n
+    | ECon  n       => ECon n
+    | EProd n T U   => EProd n (subst_ f T xs) (subst_ f U (n :: xs))
+    | ELam  n T U   => ELam  n (subst_ f T xs) (subst_ f U (n :: xs))
+    | EApp t1 t2    => EApp (subst_ f t1 xs) (subst_ f t2 xs)
+    | ELet n t T U  => ELet n (subst_ f t xs)(subst_ f T xs)(subst_ f U (n::xs))
+    end.
+
+(* Does not avoid variable capture so inappropriate in current form.            *)
+(* This crucial map is casually 'defined' in one line in coq reference.         *)
+Definition subst (f:nat -> Exp) (t:Exp) : Exp := subst_ f t [].
 
 (* Whether a term is a 'sort' or not. Needed to defined typing rules.           *)
 Inductive isSort : Exp -> Prop :=

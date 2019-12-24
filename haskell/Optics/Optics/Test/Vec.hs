@@ -20,6 +20,8 @@ specVec = describe "Testing Vec..." $ do
     specVecHead
     specVecAppend
     specVecMakeEven
+    specVecReplicate
+    specVecTake
 
 specVecEq :: Spec
 specVecEq = it "Checked [0,1,2] is equal to its copy" $ do
@@ -46,6 +48,14 @@ specVecMakeEven :: Spec
 specVecMakeEven = it "Checked 'makeEven' function" $ do
     [toList (makeEven (SS (SS (SS SZ))) vec012), 
         toList (makeEven (SS (SS SZ)) vec34)] `shouldBe` [[0,0,1,2],[3,4]]
+
+specVecReplicate :: Spec
+specVecReplicate = it "Checked 'replicate1 3 0'" $ do
+    toList (replicate1 (SS (SS (SS SZ))) (0 :: Int)) `shouldBe` [0,0,0] 
+
+specVecTake :: Spec
+specVecTake = it "Checked 'vtake2 2 [0,1,2]'" $ do
+    toList (vtake2 (SS (SS SZ)) vec012) `shouldBe` [0,1]
 
 vec012 :: Vec ('S ('S ('S 'Z))) Int
 vec012 = Cons 0 (Cons 1 (Cons 2 Nil))

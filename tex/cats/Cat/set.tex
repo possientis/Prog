@@ -122,7 +122,50 @@ indeed a partial map $\circ:\arr\times\arr\to\arr$.
     as required.
 
     $(8)$: Let $f^{*},g^{*}\in\arr$ such that $\cod(f^{*})=\dom(g^{*})$. 
-    We need to show that $\dom(g^{*}\circ f^{*})=\dom(f^{*})$.
+    We need to show that $\dom(g^{*}\circ f^{*})=\dom(f^{*})$. As before,
+    $f^{*}$ and $g^{*}$ can be written as $f^{*}=(a,b,f)$ and
+    $g^{*}=(b,c,g)$ where $f:a\to b$ and $g:b \to c$. We have
+    $g^{*}\circ f^{*}=(a,c,g\circ f)$. Using~$(3)$ of 
+    definition~(\ref{Cat:def:set}) we obtain $\dom(g^{*}\circ f^{*})=a=
+    \dom(f^{*})$.
+
+    $(9)$: Let $f^{*},g^{*}\in\arr$ such that $\cod(f^{*})=\dom(g^{*})$. 
+    We need to show that $\cod(g^{*}\circ f^{*})=\cod(g^{*})$. As before,
+    we have $g^{*}\circ f^{*}=(a,c,g\circ f)$ and $g^{*}=(b,c,g)$. Using~$(4)$ 
+    of definition~(\ref{Cat:def:set}) we obtain $\cod(g^{*}\circ f^{*})=c=
+    \cod(g^{*})$.
+
+    $(10)$: Let $f^{*},g^{*},h^{*}\in\arr$ with $\cod(f^{*})=\dom(g^{*})$ 
+    and $\cod(g^{*})=\dom(h^{*})$. We need to show the equality:
+    $(h^{*}\circ g^{*})\circ f^{*} = h^{*}\circ(g^{*}\circ f^{*})$.
+    However, $f^{*},g^{*},h^{*}$ can be decomposed as 
+    $f^{*}=(a,b,f)$, $g^{*}=(b,c,g)$ and $h^{*}=(c,d,h)$ with
+    $f:a\to b$, $g:b \to c$, and $h:c\to d$. We have:
+        \begin{eqnarray*}(h^{*}\circ g^{*})\circ f^{*}
+            &=&((c,d,h)\circ(b,c,g))\circ (a,b,f)\\
+            \mbox{$(6)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(b,d,h\circ g)\circ (a,b,f)\\
+            \mbox{$(6)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(a,d,(h\circ g)\circ f)\\
+            \mbox{assoc of usual composition\ $\rightarrow$\ }
+            &=&(a,d,h\circ (g\circ f))\\
+            \mbox{$(6)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(c,d,h)\circ (a,c,g\circ f)\\
+            \mbox{$(6)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(c,d,h)\circ ((b,c,g)\circ(a,b,f))\\
+            &=&h^{*}\circ(g^{*}\circ f^{*})
+        \end{eqnarray*}
+    
+    $(11)$: Let $a$ be a set. We need to show that $\dom(\id(a))=a=\cod(\id(a))$.  
+    This follows immediately from $\id(a)=(a,a,i(a))$ which is $(5)$ of
+    definition~(\ref{Cat:def:set}).
+
+    $(12)$: Let $f^{*}=(a,b,f)$ be an arrow with $\dom(f^{*})=a$. We need to 
+    show that $f^{*}\circ\id(a)=f^{*}$, which follows from:
+        \begin{eqnarray*}f^{*}\circ\id(a)
+            &=&(a,b,f)\circ\id(a)
+        \end{eqnarray*}
+
 \end{proof}
 
 

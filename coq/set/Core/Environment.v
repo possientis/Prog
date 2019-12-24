@@ -1,4 +1,5 @@
-Require Import Core.Nat.
+Require Import Peano_dec.
+
 Require Import Core.Set.
 
 Definition Env : Type := nat -> set.
@@ -6,8 +7,8 @@ Definition Env : Type := nat -> set.
 (* Safe environment allowing variables to be unbound leading to error checking. *)
 Definition Env' : Type := nat -> option set.
 
-Definition eDef  : Env  := (fun _ => Nil).
-Definition eDef' : Env' := (fun _ => None).
+Definition env0  : Env  := (fun _ => Nil).
+Definition env0' : Env' := (fun _ => None).
 
 (* Tweak environment e to that e n = x                                          *)
 Definition bind (e:Env) (n:nat) (x:set) : Env :=
@@ -26,4 +27,27 @@ Definition bind' (e:Env') (n:nat) (x:set) : Env' :=
         end.
 
 (* Environment with single binding n := x, variable 'n' is bound to set 'x'.    *)
-Definition env (n:nat) (x:set) : Env := bind eDef n x.
+Definition env1 (n:nat) (x:set) : Env := bind env0 n x.
+
+
+(* Environment with two bindings n := x; m:= y (in that order)                 *)
+Definition env2 (n m:nat) (x y:set) : Env := bind (bind env0 n x) m y.
+
+Lemma env2_y : forall (n m:nat) (x y:set), env2 n m x y m = y.
+Proof.
+    intros n m x y. unfold env2, bind.
+    destruct (eq_nat_dec m m) as [H|H].
+    - reflexivity.
+    - exfalso. apply H. reflexivity.
+Qed.
+
+Lemma env2_x : forall (n m:nat) (x y:set), n <> m -> env2 n m x y n = x.
+Proof.
+    intros n m x y H. unfold env2, bind.
+    destruct (eq_nat_dec m n) as [H'|H'].
+    - exfalso. apply H. symmetry. assumption.
+    - destruct (eq_nat_dec n n) as [H1|H1].
+        + reflexivity.
+        + exfalso. apply H1. reflexivity.
+Qed.
+

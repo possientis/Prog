@@ -14,47 +14,65 @@ Fixpoint toProp (e:Env) (p:Formula) : Prop :=
     end.
 
 (* Evaluation in empty environment. Should only be used for closed formulas.    *)
-Definition eval (p:Formula) : Prop := toProp eDef p.
+Definition eval (p:Formula) : Prop := toProp env0 p.
 
 (* Evaluation with single binding 'n := x'. Should be used when only 'n' free.  *)
-Definition eval_n (n:nat) (x:set) (p:Formula) : Prop := toProp (env n x) p.
+Definition eval1 (n:nat) (x:set) (p:Formula) : Prop := toProp (env1 n x) p.
 
-Lemma checkImp : forall (p q:Formula),
+(* Evaluation with two bindings 'n := x' and 'm := y' (in that order).          *)
+Definition eval2 (n m:nat)(x y:set)(p:Formula):Prop := toProp (env2 n m x y) p.
+
+Lemma evalBot : eval Bot <-> False.
+Proof. firstorder. Qed.
+
+Lemma evalElem2 : forall (n m:nat) (x y:set), n <> m ->
+    eval2 n m x y (Elem n m) <-> x :: y. 
+Proof.
+    intros n m x y H. unfold eval2. unfold toProp.
+    rewrite env2_y. rewrite env2_x.
+    - tauto.
+    - assumption.
+Qed.
+
+
+(*
+
+Lemma evalImp : forall (p q:Formula),
     eval (Imp p q) <-> eval p -> eval q.
 Proof. firstorder. Qed.
 
-Lemma checkAll : forall (p:Formula) (n:nat),
-    eval (All n p) <-> forall (x:set), eval_n n x p.
+Lemma evalAll : forall (p:Formula) (n:nat),
+    eval (All n p) <-> forall (x:set), eval1 n x p.
 Proof. firstorder. Qed.
 
-Lemma checkNot : forall (p:Formula), 
+Lemma evalNot : forall (p:Formula), 
     eval (Not p) <-> ~ eval p.
 Proof. firstorder. Qed.
 
-Lemma checkOr : LEM -> forall (p q:Formula), 
+Lemma evalOr : LEM -> forall (p q:Formula), 
     eval(Or p q) <-> eval p \/ eval q.
 Proof.
     intros L p q. unfold Or, eval. simpl. 
     apply LEMOr. assumption.
 Qed.
 
-Lemma checkAnd : LEM -> forall (p q:Formula),
+Lemma evalAnd : LEM -> forall (p q:Formula),
     eval(And p q) <-> eval p /\ eval q.
 Proof.
     intros L p q. unfold And, eval. simpl. 
     apply LEMAnd. assumption.
 Qed.
 
-Lemma checkExi : LEM -> forall (p:Formula) (n:nat),
-    eval (Exi n p) <-> exists (x:set), eval_n n x p.
+Lemma evalExi : LEM -> forall (p:Formula) (n:nat),
+    eval (Exi n p) <-> exists (x:set), eval1 n x p.
 Proof.
-    intros L p n. unfold Exi, eval, eval_n, env. simpl. 
+    intros L p n. unfold Exi, eval, eval1, env1. simpl. 
     apply LEMExist. assumption.
 Qed.
 
 Definition P1 : Formula := All 0 (All 1 (Elem 0 1)).
 
-Lemma checkP1 : eval P1 <-> forall (x y:set), x :: y.
+Lemma evalP1 : eval P1 <-> forall (x y:set), x :: y.
 Proof.
     firstorder.
 Qed.
@@ -62,12 +80,12 @@ Qed.
 (* There exists an empty set                                                    *)
 Definition P2 : Formula := Exi 0 (All 1 (Not (Elem 1 0))).
 
-Lemma checkP2 : LEM -> eval P2 <-> exists (x:set), forall (z:set), ~ (z :: x).
+Lemma evalP2 : LEM -> eval P2 <-> exists (x:set), forall (z:set), ~ (z :: x).
 Proof.
-    intros L. apply checkExi. assumption.
+    intros L. apply evalExi. assumption.
 Qed.
 
-
+*)
 
 
 
