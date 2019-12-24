@@ -224,7 +224,6 @@ ${CORE}/LEM.vo :				${CORE}/LEM.v
 	coqc ${CORE}/LEM.v -R ${CORE} ${CORE}
 
 ${CORE}/Environment.vo :		${CORE}/Environment.v \
-								${CORE}/Nat.vo \
 								${CORE}/Set.vo
 	coqc ${CORE}/Environment.v -R ${CORE} ${CORE}
 

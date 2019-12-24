@@ -33,6 +33,15 @@ Definition env1 (n:nat) (x:set) : Env := bind env0 n x.
 (* Environment with two bindings n := x; m:= y (in that order)                 *)
 Definition env2 (n m:nat) (x y:set) : Env := bind (bind env0 n x) m y.
 
+Lemma env1_x : forall (n:nat) (x:set), env1 n x n = x.
+Proof.
+    intros n x. unfold env1, bind.
+    destruct (eq_nat_dec n n) as [H|H].
+    - reflexivity.
+    - exfalso. apply H. reflexivity.
+Qed.
+
+
 Lemma env2_y : forall (n m:nat) (x y:set), env2 n m x y m = y.
 Proof.
     intros n m x y. unfold env2, bind.
@@ -50,4 +59,3 @@ Proof.
         + reflexivity.
         + exfalso. apply H1. reflexivity.
 Qed.
-
