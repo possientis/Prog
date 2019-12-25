@@ -92,3 +92,16 @@ to-from (b O) = {!!}
 to-from (b I) = {!!}
 -}
 
+from-to : ∀ (n : ℕ) → from (to n) ≡ n
+from-to zero = refl
+from-to (suc n) =
+  begin
+    from (to (suc n))
+    ≡⟨⟩
+    from (inc (to n))
+    ≡⟨ from-inc (to n) ⟩
+    suc (from (to n))
+    ≡⟨ cong suc (from-to n) ⟩
+    suc n
+    ∎
+

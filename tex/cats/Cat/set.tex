@@ -163,11 +163,35 @@ indeed a partial map $\circ:\arr\times\arr\to\arr$.
     $(12)$: Let $f^{*}=(a,b,f)$ be an arrow with $\dom(f^{*})=a$. We need to 
     show that $f^{*}\circ\id(a)=f^{*}$, which follows from:
         \begin{eqnarray*}f^{*}\circ\id(a)
-            &=&(a,b,f)\circ\id(a)
+            &=&(a,b,f)\circ\id(a)\\
+            \mbox{$(5)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(a,b,f)\circ(a,a,i(a))\\
+            \mbox{$(6)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(a,b,f\circ i(a))\\
+            \mbox{usual right-identity\ $\rightarrow$\ }
+            &=&(a,b,f)\\
+            &=&f^{*}
         \end{eqnarray*}
-
+    $(13)$: Let $f^{*}=(b,a,f)$ be an arrow with $\cod(f^{*})=a$. We need to 
+    show that $\id(a)\circ f^{*}=f^{*}$, which follows from:
+        \begin{eqnarray*}\id(a)\circ f^{*}
+            &=&\id(a)\circ(b,a,f)\\
+            \mbox{$(5)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(a,a,i(a))\circ(b,a,f)\\
+            \mbox{$(6)$ of Def~(\ref{Cat:def:set})\ $\rightarrow$\ } 
+            &=&(b,a,i(a)\circ f)\\
+            \mbox{usual left-identity\ $\rightarrow$\ }
+            &=&(b,a,f)\\
+            &=&f^{*}
+        \end{eqnarray*}
+This completes our proof of properties~$(7)-(13)$.
 \end{proof}
 
+\noindent
+{\bf Notational convention}: We shall denote an arrow $(a,b,f)$ of the category 
+\Set\ simply by '$f$'. So on top of its usual meaning, '$f:a\to b$' may also 
+express the fact that $f$ is an arrow of the category \Set\ with domain $a$ and 
+codomain $b$.
 
 
 

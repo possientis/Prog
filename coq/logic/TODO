@@ -1,4 +1,4 @@
+(g* U' . f)* U t = (g* U' . f* U) t when U <= U' and f beta-valid for t.
 why is f always beta-valid for t=x ?
-(g* U . f)* U = g* U . f* U ?
 f,g:V -> T(V), f',g':T(V)->(V), so g' . f : V -> T(V), so (g' . f)' : T(V) -> T(V). (g' . f)' = g' . f' ?
 LAM/betavalid.tex

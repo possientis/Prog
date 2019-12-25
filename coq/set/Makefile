@@ -20,6 +20,7 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Powerset.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Foundation.vo \
+								${CORE}/Fresh.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/LEM.vo \
 								${CORE}/Environment.vo \
@@ -217,6 +218,9 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 	coqc ${CORE}/Foundation.v -R ${CORE} ${CORE}
 
 
+${CORE}/Fresh.vo :				${CORE}/Fresh.v
+	coqc ${CORE}/Fresh.v -R ${CORE} ${CORE}
+
 ${CORE}/Syntax.vo :				${CORE}/Syntax.v
 	coqc ${CORE}/Syntax.v -R ${CORE} ${CORE}
 
@@ -231,8 +235,11 @@ ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
 								${CORE}/LEM.vo \
 								${CORE}/Nat.vo \
 								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Fresh.vo \
 								${CORE}/Syntax.vo \
+								${CORE}/ElemIncl.vo \
 								${CORE}/Environment.vo
 	coqc ${CORE}/Semantics.v -R ${CORE} ${CORE}
 				

@@ -26,36 +26,17 @@ Definition bind' (e:Env') (n:nat) (x:set) : Env' :=
         | right _   => e m
         end.
 
-(* Environment with single binding n := x, variable 'n' is bound to set 'x'.    *)
-Definition env1 (n:nat) (x:set) : Env := bind env0 n x.
-
-
-(* Environment with two bindings n := x; m:= y (in that order)                 *)
-Definition env2 (n m:nat) (x y:set) : Env := bind (bind env0 n x) m y.
-
-Lemma env1_x : forall (n:nat) (x:set), env1 n x n = x.
-Proof.
-    intros n x. unfold env1, bind.
-    destruct (eq_nat_dec n n) as [H|H].
+Lemma bindSame : forall (e:Env) (n:nat) (x:set), bind e n x n = x.
+Proof. 
+    intros e n x. unfold bind. destruct (eq_nat_dec n n) as [H|H].
     - reflexivity.
     - exfalso. apply H. reflexivity.
 Qed.
 
-
-Lemma env2_y : forall (n m:nat) (x y:set), env2 n m x y m = y.
+Lemma bindDiff : forall (e:Env) (n m:nat) (x:set), 
+    n <> m -> bind e n x m = e m.
 Proof.
-    intros n m x y. unfold env2, bind.
-    destruct (eq_nat_dec m m) as [H|H].
+    intros e n m x H. unfold bind. destruct (eq_nat_dec n m) as [H'|H'].
+    - exfalso. apply H. assumption.
     - reflexivity.
-    - exfalso. apply H. reflexivity.
-Qed.
-
-Lemma env2_x : forall (n m:nat) (x y:set), n <> m -> env2 n m x y n = x.
-Proof.
-    intros n m x y H. unfold env2, bind.
-    destruct (eq_nat_dec m n) as [H'|H'].
-    - exfalso. apply H. symmetry. assumption.
-    - destruct (eq_nat_dec n n) as [H1|H1].
-        + reflexivity.
-        + exfalso. apply H1. reflexivity.
 Qed.

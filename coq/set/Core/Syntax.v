@@ -1,6 +1,8 @@
 Require Import List.
 Require Import Peano_dec.
 
+Require Import Core.Fresh.
+
 Inductive Formula : Type :=
 | Bot  : Formula
 | Elem : nat -> nat -> Formula
@@ -8,36 +10,20 @@ Inductive Formula : Type :=
 | All  : nat -> Formula -> Formula
 .
 
-Fixpoint fresh (m:nat) (n:nat) : nat :=
-    match eq_nat_dec 0 m, eq_nat_dec 0 n with
-    | right _, right _  => 0 
-    | left  _, left  _  => 1
-    | left  _, right _  =>          (* m = 0 so cannot use 0 *)
-        match eq_nat_dec 1 n with
-        | left  _       => 2        (* n = 1 so cannot use 1 *)
-        | right _       => 1 
-        end
-    | right _, left  _  =>          (* n = 0 so cannot use 0 *) 
-        match eq_nat_dec 1 m with
-        | left  _       => 2        (* m = 1 so cannot use 1 *)
-        | right _       => 1      
-        end
-    end.
-
 Definition Not (p:Formula)          :Formula := Imp p Bot.
 Definition Or  (p q:Formula)        :Formula := Imp (Not p) q.
 Definition And (p q:Formula)        :Formula := Not (Or (Not p) (Not q)).
 Definition Exi  (n:nat) (p:Formula) :Formula := Not (All n (Not p)).
 Definition Iff (p q:Formula)        :Formula := And (Imp p q) (Imp q p).
 
-Definition Sub (m n:nat) : Formula := 
-    let x := fresh m n in
-        All x (Imp (Elem x m) (Elem x n)).
+Definition Sub (n m:nat) : Formula := 
+    let x := fresh n m in
+        All x (Imp (Elem x n) (Elem x m)).
 
-Definition Equ (m n:nat) : Formula := 
-    let x := fresh m n in And
-        (All x (Iff (Elem x m) (Elem x n)))
-        (All x (Iff (Elem m x) (Elem n x))).
+Definition Equ (n m:nat) : Formula := 
+    let x := fresh n m in And
+        (All x (Iff (Elem x n) (Elem x m)))
+        (All x (Iff (Elem n x) (Elem m x))).
 
 Lemma checkFresh00 : fresh 0 0 = 1.
 Proof. reflexivity. Qed.
@@ -59,4 +45,3 @@ Proof. reflexivity. Qed.
 
 Lemma checkFresh22 : fresh 2 2 = 0.
 Proof. reflexivity. Qed.
-

@@ -1,8 +1,11 @@
 Require Import Core.LEM.
 Require Import Core.Nat.
 Require Import Core.Set.
+Require Import Core.Incl.
 Require Import Core.Elem.
+Require Import Core.Fresh.
 Require Import Core.Syntax.
+Require Import Core.ElemIncl.
 Require Import Core.Environment.
 
 Fixpoint eval (e:Env) (p:Formula) : Prop :=
@@ -12,17 +15,6 @@ Fixpoint eval (e:Env) (p:Formula) : Prop :=
     | Imp p1 p2     => eval e p1 -> eval e p2
     | All n p1      => forall (x:set), eval (bind e n x) p1
     end.
-
-
-(* Evaluation in empty environment. Should only be used for closed formulas.    *)
-Definition eval0 (p:Formula) : Prop := eval env0 p.
-
-(* Evaluation with single binding 'n := x'. Should be used when only 'n' free.  *)
-Definition eval1 (n:nat) (x:set) (p:Formula) : Prop := eval (env1 n x) p.
-
-(* Evaluation with two bindings 'n := x' and 'm := y' (in that order).          *)
-Definition eval2 (n m:nat)(x y:set)(p:Formula):Prop := eval (env2 n m x y) p.
-
 
 Lemma evalBot : forall (e:Env), eval e Bot <-> False.
 Proof. intros e. unfold eval. split; intros H; assumption. Qed.
@@ -72,6 +64,32 @@ Proof.
     apply LEMExist. assumption.
 Qed.
 
+Lemma evalIff : LEM -> forall (e:Env) (p q:Formula),
+    eval e (Iff p q) <-> (eval e p <-> eval e q).
+Proof.
+    intros L e p q. unfold Iff. apply evalAnd. assumption.
+Qed.
+
+
+Lemma evalSub : LEM -> forall (e:Env) (n m:nat), 
+    eval e (Sub n m) <-> (e n) <== (e m).
+Proof.
+    intros L e n m. unfold Sub. rewrite elemIncl. 
+    rewrite evalAll. simpl. split; intros H z.
+    - remember (H z) as H' eqn:E. clear E.
+      rewrite bindSame in H'.
+      rewrite bindDiff in H'.
+      rewrite bindDiff in H'.
+        + assumption.
+        + apply freshNot_m. 
+        + apply freshNot_n.
+    - rewrite bindSame.
+      rewrite bindDiff.
+      rewrite bindDiff.
+        + apply H.
+        + apply freshNot_m.
+        + apply freshNot_n.
+Qed.
 
 Definition P1 : Formula := All 0 (All 1 (Elem 0 1)).
 
@@ -81,12 +99,13 @@ Proof.
     split; intros H; assumption.
 Qed.
 
-(*
+
 (* There exists an empty set                                                    *)
 Definition P2 : Formula := Exi 0 (All 1 (Not (Elem 1 0))).
 
-Lemma evalP2 : LEM -> eval P2 <-> exists (x:set), forall (z:set), ~ (z :: x).
+Lemma evalP2 : LEM -> forall (e:Env),
+    eval e P2 <-> exists (x:set), forall (z:set), ~ (z :: x).
 Proof.
-    intros L. apply evalExi. assumption.
+    intros L e. apply evalExi. assumption.
 Qed.
-*)
+

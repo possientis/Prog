@@ -38,8 +38,17 @@ Fixpoint subst_ (f:nat -> Exp) (t:Exp) (xs:list nat) : Exp :=
     end.
 
 (* Does not avoid variable capture so inappropriate in current form.            *)
-(* This crucial map is casually 'defined' in one line in coq reference.         *)
 Definition subst (f:nat -> Exp) (t:Exp) : Exp := subst_ f t [].
+
+
+Definition replace (x:nat) (t:Exp) (u:nat) : Exp :=
+    match eq_nat_dec u x with
+    | left  _   => t        (* if u = x  return t   *)
+    | right _   => EVar u   (* otherwise return u   *)
+    end.
+
+(* substituting term t in place of variable x in term s                         *)
+Definition Sub (s t:Exp) (n:nat) : Exp := subst (replace n t) s.
 
 (* Whether a term is a 'sort' or not. Needed to defined typing rules.           *)
 Inductive isSort : Exp -> Prop :=
@@ -158,6 +167,15 @@ Inductive Entails : GlobalEnv -> LocalContext -> Exp -> Exp -> Prop :=
     Entails E C (EProd n T U) s             ->
     Entails E ((LAssume n T)::C) t U        ->
     Entails E C (ELam n T t) (EProd n T U)
+| App: forall E C t n U T u,
+    Entails E C t (EProd n U T)             ->  (* E[C] |- t:A(n:U),T           *)
+    Entails E C u U                         ->  (* E[C] |- u:U                  *)
+    Entails E C (EApp t u) (Sub T u n)          (* E[C] |- (t u):T[u/n]         *)
+| Let : forall E C t T n u U,
+    Entails E C t T                         ->  (* E[C] |- t:T                  *)
+    Entails E ((LDefine n t T)::C) u U      ->  (* E[(n := t:T)::C] |- u:U      *)
+    Entails E C (ELet n t T u) (Sub U t n)      (* E[C] |- (let (n:=t:T) in u)  *)
+                                                (*         : U[t/n]             *)
 with WF : GlobalEnv -> LocalContext -> Prop :=  
 | WEmpty: WF [] []
 | WLocalAssume: forall E C T s n, 
