@@ -494,7 +494,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     we have:
         \[
             (\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
-            =(\sigma_{*}(U')\circ\tau_{*}(U))(\phi)
+            =(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
         \]
     where for all $\chi:V\to\tv$, the map $\chi_{*}$ denotes the flipped version 
     of $\chi^{*}$ defined by $\chi_{*}(U)(\phi)=\chi^{*}(\phi)(U)$, and where 
@@ -508,4 +508,61 @@ $\beta$-valid for $\phi$ and vice-versa.
     P_{\sigma,\tau}(\phi)$. We shall prove this implication by structural
     induction on $\phi$, using theorem~(\ref{logic:the:proof:induction})
     of page~\pageref{logic:the:proof:induction}.
+
+    So first we assume that $\phi=x$ for some $x\in V$. Since $\tau$ is 
+    always $\beta$-valid for $\phi$, we simply need to prove that the 
+    equality holds for all $U\subseteq U'$. We shall distinguish two cases:
+    first we assume that $x\in U$. Then we have:
+        \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(x)\\
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(x)(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst}), $x\in U\ \to\ $}
+            &=&x\\
+            \mbox{$U\subseteq U'$ so $x\in U'\ \to\ $}
+            &=&\sigma^{*}(x)(U')\\
+            &=&\sigma_{*}(U')(x)\\
+            \mbox{$x\in U\ \to\ $}
+            &=&\sigma_{*}(U')(\,\tau^{*}(x)(U)\,)\\
+            &=&\sigma_{*}(U')(\,\tau_{*}(U)(x)\,)\\
+            &=&(\,\sigma_{*}(U')\circ \tau_{*}(U)\,)(x)\\
+            &=&(\,\sigma_{*}(U')\circ \tau_{*}(U)\,)(\phi)
+        \end{eqnarray*}
+    We now assume that $x\not\in U$. Then we have:
+        \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(x)\\
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(x)(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst}), $x\not\in U\ \to\ $}
+            &=&(\sigma_{*}(U')\circ\tau)(x)\\
+            &=&\sigma_{*}(U')(\tau(x))\\
+            \mbox{$x\not\in U\ \to\ $}
+            &=&\sigma_{*}(U')(\tau^{*}(x)(U))\\
+            &=&\sigma_{*}(U')(\tau_{*}(U)(x))\\
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(x)\\
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
+        \end{eqnarray*}
+    Next, we assume that $\phi=\phi_{1}\ \phi_{2}$ for some $\phi_{1},\phi_{2}
+    \in\tv$ for which the implication is true. We need to show that the
+    implication is also true for $\phi$. So we assume that $\tau$ is
+    $\beta$-valid for $\phi$ and $U\subseteq U'$. We need to show the
+    equality holds. Note that from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app}), $\tau$ is
+    $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$ and having assumed
+    the implication is true for these, so is the equality. Hence:
+        \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi_{1}\ \phi_{2})\\
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(\phi_{1}\ \phi_{2})(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(\phi_{1})(U)\ \ 
+               (\sigma_{*}(U')\circ\tau)^{*}(\phi_{2})(U)\\
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi_{1})\ \ 
+               (\sigma_{*}(U')\circ\tau)_{*}(U)(\phi_{2})\\
+            \mbox{induction hypothesis$\ \to\ $}
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi_{1})\ \ 
+               (\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi_{2})\\
+            &=&\sigma_{*}(U')(\,\tau_{*}(U)(\phi_{1})\,)\ \ 
+               \sigma_{*}(U')(\,\tau_{*}(U)(\phi_{2})\,)\\
+            &=&\sigma^{*}(\,\tau_{*}(U)(\phi_{1})\,)(U')\ \ 
+               \sigma^{*}(\,\tau_{*}(U)(\phi_{2})\,)(U')
+        \end{eqnarray*}
 \end{proof}
+

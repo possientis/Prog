@@ -29,7 +29,7 @@ class SingE (a :: k) where
     type Demote a
     fromSing :: Sing a -> Demote a
 
-class SingI (a :: k) where
+class SingI a where
     sing :: Sing a
 
 -- SBool

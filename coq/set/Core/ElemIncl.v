@@ -31,11 +31,11 @@ Proof.
       destruct H1 as [y [H1 [H4 H5]]]. exists y. split.
       + assumption.
       + split.
-        { apply incl_trans with z'; assumption. }
-        { apply incl_trans with z'; assumption. }
+        { apply inclTrans with z'; assumption. }
+        { apply inclTrans with z'; assumption. }
     - intros H. apply toListIncl. intros z H'. 
       apply H.  apply toListElem. exists z. split.
       + assumption.
-      + split; apply incl_refl.
+      + split; apply inclRefl.
 Qed.
 

@@ -63,7 +63,7 @@ Proof.
 Qed.
 
 (* The inclusion relation is reflexive.                                         *)
-Lemma incl_refl : forall (x:set), x <== x.
+Lemma inclRefl : forall (x:set), x <== x.
 Proof.
     intros x. apply incl_n_incl with (order x + order x).
     - apply le_n.

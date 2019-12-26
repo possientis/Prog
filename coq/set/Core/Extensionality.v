@@ -32,20 +32,20 @@ Proof.
               apply toListElem. exists x'. split.
                 { assumption. }
                 { split.
-                    { apply incl_trans with x.
+                    { apply inclTrans with x.
                         { apply elemIncl. apply H. }
                         { assumption. }}
-                    { apply incl_trans with x.
+                    { apply inclTrans with x.
                         { assumption. }
                         { apply elemIncl. apply H. }}}}
             { destruct H' as [y' [H1 [H2 H3]]]. 
               apply toListElem. exists y'. split.
                 { assumption. }
                 { split.
-                    { apply incl_trans with y.
+                    { apply inclTrans with y.
                         { apply elemIncl. apply H. }
                         { assumption. }}
-                    { apply incl_trans with y.
+                    { apply inclTrans with y.
                         { assumption. }
                         { apply elemIncl. apply H. }}}}
 Qed.

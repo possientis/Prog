@@ -1,4 +1,2 @@
-investigate diff between KnownNat and SingI
-DTPS: continue reading paper
-define fin2vec' by pattern match on singleton
+FunList isomorphism
 paper: profunctor optics

@@ -40,14 +40,14 @@ Proof.
     - intros y _. apply emptyCharac.
     - intros y H1 H2. apply consElem in H2. destruct H2 as [H2|H2].
         + apply (IH1 x).
-            { apply incl_refl. }
+            { apply inclRefl. }
             { apply equal_r with y.
                 { assumption. }
                 { apply elemIncl with (Cons x xs).
                     { assumption. }
                     { apply consElem. left. apply equal_refl. }}}
         + apply (IH2 y).
-            { apply incl_trans with (Cons x xs).
+            { apply inclTrans with (Cons x xs).
                 { apply elemIncl. intros z H. apply consElem. right. assumption. }
                 { assumption. }}
             { assumption. }
@@ -56,7 +56,7 @@ Qed.
 (* No set contains itself                                                       *)
 Lemma noSelfElem : forall (x:set), ~ x :: x.
 Proof.
-    intros x. apply coherence. apply incl_refl.
+    intros x. apply coherence. apply inclRefl.
 Qed.
 
 (* Incidentally, if no set can contain itself, there can be no 'universe', i.e. *)

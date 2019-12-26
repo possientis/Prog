@@ -102,7 +102,7 @@ Proof.
 Qed.
 
 (* We can now extend the previous results to inclusion statements proper.       *)
-Theorem incl_trans : forall (x y z:set),
+Theorem inclTrans : forall (x y z:set),
     x <== y -> y <== z -> x <== z.
 Proof.
     intros x y z H1 H2.

@@ -4,6 +4,35 @@
         \begin{eqnarray*}
             (1)&\ &F_{0}:\ob\ \Cat\to\ob\ \Dat\mbox{\ is a map}\\
             (2)&\ &F_{1}:\arr\ \Cat\to\arr\ \Dat\mbox{\ is a map}\\
-            (3)&\ & f:a\to b\ \ \Rightarrow\ \ F_{1}(f):F_{0}(a)\to F_{0}(b)
+            (3)&\ &F_{1}(f):F_{0}(a)\to F_{0}(b)\\
+            (4)&\ &F_{1}(\,\id(a)\,)=\id(\,F_{0}(a)\,)\\
+            (5)&\ &F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)
     \end{eqnarray*}
+    where $(3)-(5)$ hold for all $a,b,c\in\Cat$, $f:a\to b$ and $g:b\to c$.
 \end{defin}
+\noindent
+{\bf Notational convention}: We shall use $F:\Cat\to\Dat$ as a notational 
+shortcut for the statement that {\em $F$ is a functor from the category
+\Cat\ to the category \Dat}. If $F=(F_{0},F_{1})$ we shall also commonly 
+denote $F_{0}$ and $F_{1}$ simply by '$F$'.
+
+So if $F$ is a functor $F:\Cat\to\Dat$ we effectively have a map 
+$F:\ob\ \Cat\to\ob\ \Dat$ acting on objects, and a map 
+$F:\arr\ \Cat\to\arr\ \Dat$ acting on arrows. These two maps 
+satisfy the consistency condition~$(3)$ of definition~(\ref{Fun:def:functor})
+i.e. that if $f$ is an arrow $f:a\to b$ in \Cat, then $F(f)$ must be 
+an arrow $F(f):F(a)\to F(b)$ in~\Dat. Furthermore, the functor
+$F$ must preserve the identity operators on \Cat\ and \Dat\ which
+is condition~$(4)$ of definition~(\ref{Fun:def:functor}): for all objects
+$a\in\Cat$, we must have $F(\,\id(a)\,)=\id(\,F(a)\,)$. Note that since
+$\id(a):a\to a$, by consistency we have $F(\,\id(a)\,):F(a)\to F(a)$,
+and since $\id(\,F(a)\,):F(a)\to F(a)$ the equality makes sense.
+Another way to express the preservation of identity operators by $F$
+is simply $F\circ\id=\id\circ F$ or $F_{1}\circ\id=\id\circ F_{0}$ to 
+be more explicit. However, we should remember that the notation '$\circ$'
+in these equality does not refer to the composition operator $\circ$
+of either \Cat\ or \Dat, nor does it in general refer to the usual
+function composition since $\id$, $F_{0}$ and $F_{1}$ are maps between 
+collections and not functions between sets. Now going back to our
+functor $F$, it must also preserve the composition operators on
+\Cat\ and \Dat, which is condition~$(5)$ of definition~(\ref{Fun:def:functor}):

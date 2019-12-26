@@ -68,8 +68,12 @@ def ex1 {α : Type u} (n : ℕ) (H:n = 0) (t:tuple α n) : tuple α 0 :=
 
 #check @ex1
 
-def ex2 {α : Type u} [ring α] (a b c : α) :
+def ex3 {α : Type u} [ring α] (a b c : α) :
   a * 0 + 0 * b + c * 0 + 0 * a = 0 :=
-    begin
-    end
-  _
+  begin
+    rw [mul_zero, mul_zero, zero_mul, zero_mul],
+    repeat { rw add_zero }
+  end
+
+#check @ex3
+

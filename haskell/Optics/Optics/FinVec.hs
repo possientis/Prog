@@ -1,16 +1,20 @@
 {-# LANGUAGE GADTs                  #-}
 {-# LANGUAGE DataKinds              #-}
 {-# LANGUAGE KindSignatures         #-}
+{-# LANGUAGE TypeApplications       #-}
+{-# LANGUAGE ScopedTypeVariables    #-}
 
 module Optics.FinVec
     (   vec2Id
     ,   fin2Id
+    ,   fin2vec'
     )   where
 
 
 import Optics.Nat
 import Optics.Fin
 import Optics.Vec
+import Optics.Singleton
 
 -- We claim that the types 'Vec n a' and 'Fin n -> a' are isomorphic
 vec2fin :: Vec n a -> (Fin n -> a)
@@ -37,6 +41,19 @@ vec2Id = fin2vec . vec2fin
 -- We expect this function to be the identity
 fin2Id :: Fin2Vec n => (Fin n -> a) -> (Fin n -> a)
 fin2Id = vec2fin . fin2vec
+
+-- forall n, ... is explicit
+fin2vec' :: SNat n -> (Fin n -> a) -> Vec n a
+fin2vec' SZ _ = Nil
+fin2vec' (SS n) f = Cons (f FZ) $ fin2vec' n (\m -> f (FS m))
+
+
+{- failing to create a version for 'forall {n}' with implict argument n
+fin2vec'' :: forall n a . (SingI n) => (Fin n -> a) -> Vec n a
+fin2vec'' f = case (sing @ n) of
+    SZ      -> Nil
+    (SS _)  -> Cons (f FZ) $ fin2vec'' (\m -> f (FS m))
+-}
 
 -- we can also provide pseudo haskell proofs
 

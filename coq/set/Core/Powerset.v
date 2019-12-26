@@ -59,7 +59,7 @@ Proof.
                 { right. apply elemIncl with z0.
                     { apply IH. apply toListElem. exists z0. split.
                         { assumption. }
-                        { split; apply incl_refl. }}
+                        { split; apply inclRefl. }}
                     { assumption. }}} 
         + intros H. destruct (elem_dec x z) as [H'|H'].
             { remember (z /\ xs) as z' eqn:E. assert (z' <== xs) as Z.

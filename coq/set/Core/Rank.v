@@ -96,7 +96,7 @@ Proof.
                             { assumption. }
                             { apply toListElem. exists z. split.
                                 { assumption. }
-                                { split; apply incl_refl. }}}
+                                { split; apply inclRefl. }}}
                       apply toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
                       rewrite <- H2. rewrite (IH z z').
                         { apply maximum_ubound. apply in_map_iff. 
@@ -123,7 +123,7 @@ Proof.
                             { assumption. }
                             { apply toListElem. exists z. split.
                                 { assumption. }
-                                { split; apply incl_refl. }}}
+                                { split; apply inclRefl. }}}
                       apply toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
                       rewrite <- H2. rewrite <- (IH z' z).
                         { apply maximum_ubound. apply in_map_iff.
@@ -162,7 +162,7 @@ Proof.
                     { assumption. }
                     { apply toListElem. exists z. split.
                         { assumption. }
-                        { split; apply incl_refl. }}}
+                        { split; apply inclRefl. }}}
                 { rewrite <- H2. apply toListElem in H4.
                   destruct H4 as [z' [H4 [H5 H6]]]. rewrite (rankEqual z z').
                     { apply maximum_ubound. apply in_map_iff. exists z'. split.
@@ -190,7 +190,7 @@ Proof.
     apply in_map_iff in H3. destruct H3 as [y [H3 H5]]. exists y. split.
     - apply toListElem. exists y. split.
         + assumption.
-        + split; apply incl_refl.
+        + split; apply inclRefl.
     - intros z H6. rewrite H3. apply H4. apply toListElem in H6.
       destruct H6 as [z' [H6 [H7 H8]]]. rewrite H1. apply in_map_iff. 
       exists z'. split.
