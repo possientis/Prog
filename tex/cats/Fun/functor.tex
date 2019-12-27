@@ -36,3 +36,11 @@ function composition since $\id$, $F_{0}$ and $F_{1}$ are maps between
 collections and not functions between sets. Now going back to our
 functor $F$, it must also preserve the composition operators on
 \Cat\ and \Dat, which is condition~$(5)$ of definition~(\ref{Fun:def:functor}):
+For all objects $a,b,c\in\Cat$ and arrows $f:a\to b$ and $g:b\to c$, 
+we must have $F(g\circ f)=F(g)\circ F(f)$. Note that given these 
+assumptions, the composition arrow $g\circ f$ is well-defined,
+and by consistency we have $F(f):F(a)\to F(b)$ and $F(g):F(b)\to F(c)$,
+so $F(g)\circ F(f)$ is also well-defined. Furthermore, since
+$g\circ f:a \to c$ by consistency we have $F(g\circ f):F(a)\to F(c)$
+and since $F(g)\circ F(f):F(a)\to F(c)$, the equality 
+$F(g\circ f)=F(g)\circ F(f)$ makes sense.

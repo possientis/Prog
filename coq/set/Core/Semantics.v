@@ -143,6 +143,8 @@ Definition inclReflF : Formula := All 0 (Sub 0 0).
 (* itself prove that the propositions A and B are the 'same'. For our defense,  *)
 (* we are proving the equivalence 'A <-> B' without using any result which      *)
 (* asserts A or B. In particular, we make no use of the lemma 'inclRefl'.       *)
+(* With this caveat in mind, we assert that evaluating inclReflF in any         *)
+(* environment yields a proposition which is equivalent to the lemma inclRefl.  *)
 Lemma evalInclReflF : LEM -> forall (e:Env),
     eval e inclReflF <-> forall (x:set), x <== x.
 Proof.
@@ -156,18 +158,126 @@ Proof.
         + assumption.
 Qed.        
 
-(*
-(* Lemma 'inclTrans' expressed in set theory abstract syntax.                   *)
+
+(* Theorem 'inclTrans' expressed in set theory abstract syntax.                 *)
 Definition inclTransF : Formula := 
     All 0 (All 1 (All 2 (Imp (Sub 0 1) (Imp (Sub 1 2) (Sub 0 2))))).
 
+(* Evaluating inclTransF in any environment 'yields' the theorem inclTrans.     *)
 Lemma evalTransReflF : LEM -> forall (e:Env),
     eval e inclTransF <-> forall (x y z:set), x <== y -> y <== z -> x <== z. 
 Proof.
-    intros L e. unfold inclTransF. rewrite evalAll.
+    intros L e. unfold inclTransF. rewrite evalAll. split.
+    - intros H x y z. 
+      remember (H x) as H' eqn:E. clear E. clear H.
+      rewrite evalAll in H'.
+      remember (H' y) as H eqn:E. clear E. clear H'.
+      rewrite evalAll in H.
+      remember (H z) as H' eqn:E. clear E. clear H.
+      rewrite evalImp in H'. rewrite evalImp in H'.
+      rewrite evalSub in H'. rewrite evalSub in H'. rewrite evalSub in H'.
+      remember (bind e 0 x) as e1 eqn:E1.
+      remember (bind e1 1 y) as e2 eqn:E2.
+      rewrite (bindDiff e2 2 0 z) in H'.
+      rewrite (bindDiff e2 2 1 z) in H'.
+      rewrite (bindSame e2 2 z) in H'.
+      rewrite E2 in H'.
+      rewrite (bindDiff e1 1 0 y) in H'.
+      rewrite (bindSame e1 1 y) in H'.
+      rewrite E1 in H'.
+      rewrite (bindSame e 0 x) in H'.
+      + assumption.
+      + intros E. inversion E.
+      + intros E. inversion E.
+      + intros E. inversion E.
+      + assumption.
+      + assumption.
+      + assumption.
+    - intros H x. rewrite evalAll. intros y. rewrite evalAll. intros z.
+      remember (bind e 0 x) as e1 eqn:E1.
+      remember (bind e1 1 y) as e2 eqn:E2.
+      remember (bind e2 2 z) as e3 eqn:E3.
+      rewrite evalImp, evalImp, evalSub, evalSub, evalSub, E3. 
+      rewrite (bindDiff e2 2 0 z).
+      rewrite (bindDiff e2 2 1 z).
+      rewrite (bindSame e2 2 z).
+      rewrite E2.
+      rewrite (bindDiff e1 1 0 y).
+      rewrite (bindSame e1 1 y).
+      rewrite E1.
+      rewrite (bindSame e 0 x).
+      + apply H.
+      + intros E. inversion E.
+      + intros E. inversion E.
+      + intros E. inversion E.
+      + assumption.
+      + assumption.
+      + assumption.
+Qed.
 
-Show.
-*)
+(* Theorem 'elemIncl' expressed in set theory abstract syntax.                  *)
+Definition elemInclF : Formula :=
+    All 0 (All 1 (Iff (Sub 0 1) (All 2 (Imp (Elem 2 0) (Elem 2 1))))).
+
+
+(* Evaluating elemInclF in any environment 'yields' the theorem elemIncl.       *)
+Lemma evalElemInclF : LEM -> forall (e:Env), eval e elemInclF <-> 
+    forall (x y:set), (x <== y <-> forall (z:set), z :: x -> z :: y). 
+Proof.
+    intros L e. unfold elemInclF. rewrite evalAll. split; intros H x.
+    - remember (H x) as H' eqn:E. clear E. clear H.
+      rewrite evalAll in H'. intros y.
+      remember (H' y) as H eqn:E. clear E. clear H'.
+      rewrite evalIff in H. rewrite evalSub in H.
+      rewrite evalAll in H. 
+      remember (bind e 0 x)  as e1 eqn:E1.
+      remember (bind e1 1 y) as e2 eqn:E2.
+      destruct H as [H1 H2]. split; intro H0.
+        + intros z. rewrite E2 in H1.
+          rewrite bindDiff in H1. rewrite bindSame in H1.
+          rewrite E1 in H1. rewrite bindSame in H1.
+          remember (H1 H0) as H1' eqn:E. clear E. clear H1.
+          remember (H1' z) as H1  eqn:E. clear E. clear H1'.
+          rewrite evalImp in H1. rewrite evalElem in H1. rewrite evalElem in H1.
+          rewrite <- E1 in H1. rewrite <- E2 in H1.
+          rewrite bindSame in H1. rewrite bindDiff in H1. rewrite bindDiff in H1.
+          rewrite E2 in H1. rewrite bindSame in H1. rewrite bindDiff in H1.
+          rewrite E1 in H1. rewrite bindSame in H1.
+            { assumption. }
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+        + rewrite E2 in H2. rewrite bindSame in H2. rewrite bindDiff in H2.
+          rewrite E1 in H2. rewrite bindSame in H2. apply H2.
+          intros z. rewrite evalImp, evalElem, evalElem, <- E1, <- E2.
+          rewrite bindSame, bindDiff, bindDiff, E2, bindDiff, bindSame. 
+          rewrite E1, bindSame. apply H0.
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+        + assumption.
+        + assumption. 
+    - rewrite evalAll. intros y. rewrite evalIff, evalSub, evalAll.
+      remember (bind e 0 x)  as e1 eqn:E1.
+      remember (bind e1 1 y) as e2 eqn:E2.
+      split; intros H0.
+        + intros z. rewrite evalImp, evalElem, evalElem.
+          rewrite bindSame, bindDiff, bindDiff. apply H.
+            { assumption. }
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+        + apply H. intros z.
+          remember (H0 z) as H' eqn:E. clear E. clear H0.
+          rewrite evalImp in H'. rewrite evalElem in H'. rewrite evalElem in H'.
+          rewrite bindSame in H'. rewrite bindDiff in H'. rewrite bindDiff in H'.
+            { assumption. }
+            { intros E. inversion E. }
+            { intros E. inversion E. }
+        + assumption.
+        + assumption.
+Qed.
 
 (*
 (* Theorem 'emptySet' expressed in set theory abstract syntax.                  *)

@@ -1,7 +1,7 @@
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong)
-open import Data.Nat using (ℕ; zero; suc; _+_)
-open import Data.Nat.Properties using (+-comm)
+open import Data.Nat using (ℕ; zero; suc; _+_;_*_)
+open import Data.Nat.Properties using (+-comm;*-comm)
 
 data _≤_ : ℕ → ℕ → Set where
   z≤n : ∀ {n : ℕ}
@@ -87,7 +87,7 @@ data Total' : ℕ → ℕ → Set where
 
   flipped' : ∀ {m n : ℕ}
     →  n ≤ m
-    ---------
+      ---------
     → Total' m n
 
 
@@ -109,5 +109,91 @@ data Total' : ℕ → ℕ → Set where
   helper (flipped n≤m) = flipped (s≤s n≤m)
 
 
++-mono-r-≤ : ∀ (n p q : ℕ)
+  → p ≤ q
+    ---------
+  → n + p ≤ n + q
+
++-mono-r-≤ zero p q p≤q = p≤q
++-mono-r-≤ (suc n) p q p≤q = s≤s (+-mono-r-≤ n p q p≤q)
+
++-mono-l-≤ : ∀ (m n p : ℕ)
+  → m ≤ n
+    ---------
+  → m + p ≤ n + p
+
++-mono-l-≤ m n p m≤n rewrite +-comm m p | +-comm n p = +-mono-r-≤ p m n m≤n
+
++-mono-≤ : ∀ (m n p q : ℕ)
+  → m ≤ n
+  → p ≤ q
+    ---------
+  → m + p ≤ n + q
+
++-mono-≤ m n p q m≤n p≤q = ≤-trans (+-mono-l-≤ m n p m≤n) (+-mono-r-≤ n p q p≤q)
 
 
+*-mono-r-≤ : ∀ (n p q : ℕ)
+  → p ≤ q
+    ---------
+  → n * p ≤ n * q
+
+*-mono-r-≤ zero p q p≤q = z≤n
+*-mono-r-≤ (suc n) p q p≤q = +-mono-≤ p q (n * p) (n * q) p≤q (*-mono-r-≤ n p q p≤q)
+
+*-mono-l-≤ : ∀ (m n p : ℕ)
+  → m ≤ n
+    ---------
+  → m * p ≤ n * p
+
+*-mono-l-≤ m n p m≤n rewrite *-comm m p | *-comm n p = *-mono-r-≤ p m n m≤n
+
+
+*-mono-≤ : ∀ (m n p q : ℕ)
+  → m ≤ n
+  → p ≤ q
+    ---------
+  → m * p ≤ n * q
+
+*-mono-≤ m n p q m≤n p≤q = ≤-trans (*-mono-l-≤ m n p m≤n) (*-mono-r-≤ n p q p≤q)
+
+infix 4 _<_
+
+data _<_ : ℕ → ℕ → Set where
+
+  z<s : ∀ {n : ℕ}
+      -----------
+    → zero < suc n
+
+  s<s : ∀ {m n : ℕ}
+    → m < n
+      -------------
+    → suc m < suc n
+
+
+
+≤-< : ∀ {m n : ℕ}
+  → suc m ≤ n
+    -------------
+  → m < n
+
+≤-< {zero} (s≤s m≤n) = z<s
+≤-< {suc m} (s≤s m≤n) = s<s (≤-< m≤n)
+
+<-≤ : ∀ {m n : ℕ}
+  → m < n
+    -------------
+  → suc m ≤ n
+
+<-≤ z<s = s≤s z≤n
+<-≤ (s<s m<n) = s≤s (<-≤ m<n)
+
+
+<-trans : ∀ {m n p : ℕ}
+  → m < n
+  → n < p
+    ----------
+  → m < p
+
+<-trans z<s (s<s _) = z<s
+<-trans (s<s m<n) (s<s n<p) = s<s (<-trans m<n n<p)

@@ -6,15 +6,15 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 module  Optics.FunList
     (   FunList     (..)   
-    ,   FunList'    (..)
+    ,   FunList_
     ,   inn
     ,   out
-    ,   to1
-    ,   from1
+    ,   n_to_n
+    ,   sn_to_sn
     )   where
 
 import Optics.Nat
-import Optics.Fin
+import Optics.Vec
 
 data FunList a b t = Done t | More a (FunList a b (b -> t))
 
@@ -26,59 +26,45 @@ inn :: Either t (a, FunList a b (b -> t)) -> FunList a b t
 inn (Left t)        = Done t
 inn (Right (x,l))   = More x l
 
-
 -- (inn . out) (Done t)   = inn (Left t) = Done t
 -- (inn . out) (More x l) = inn (Right (x,l)) = More x l
 
 -- (out . inn) (Left t) = out (Done t) = Left t
 -- (out . inn) (Right (x,l)) = out (More x l) = Right (x,l)
 
--- a^n x (b^n -> t), need to separate case n = 0 
-type FunList_ (n :: Nat) a b t = (Fin n -> a, (Fin n -> b) -> t)
 
--- (b , Fin n -> b) and Fin (S n) -> b are isomorphic
-to1 :: (b, Fin n -> b) -> Fin ('S n) -> b
-to1 (b, _) FZ      = b
-to1 (_, bn) (FS n) = bn n
+type FunList_ (n :: Nat) a b t = (Vec n a, Vec n b -> t)
 
-class From1 (n :: Nat) where
-    from1 :: (Fin ('S n) -> b) -> (b, Fin n -> b)
-    
-instance From1 'Z where
-    from1 bn' = (bn' FZ, absurd)
+-- FunList_ ('S n) a b t and (a, FunList_ n a b (b -> t)) are isomorphic
 
+n_to_sn :: (a, FunList_ n a b (b -> t)) -> FunList_ ('S n) a b t
+n_to_sn (a, (vec, f)) = (Cons a vec, g) where
+    g (Cons b vec') = f vec' b
 
+sn_to_n :: FunList_ ('S n) a b t -> (a, FunList_ n a b (b -> t))
+sn_to_n (Cons a vec, f) = (a, (vec, g)) where 
+    g vec' b = f (Cons b vec')
 
-{-
--- (Fin (S n) -> b) -> t  and (Fin n -> b) -> b -> t are isomorphic
-to1 :: ((Fin n -> b) -> b -> t) -> (Fin ('S n) -> b) -> t
-to1 bn b bn' 
--}
+n_to_n :: (a, FunList_ n a b (b -> t)) -> (a, FunList_ n a b (b -> t))
+n_to_n = sn_to_n . n_to_sn
 
-{-
--- (a, FunList_ n a b (b -> t)) isomorphic to FunList_ (n + 1) a b t
-to :: forall n a b t . (a, FunList_ n a b (b -> t)) -> FunList_ ('S n) a b t
-to (xa, (fa,fb)) = (ga,gb) where
-    ga :: Fin ('S n) -> a
-    ga FZ     = xa
-    ga (FS n) = fa n
-    gb :: (Fin ('S n) -> b) -> t
-    gb = x 
--}
+sn_to_sn :: FunList_ ('S n) a b t -> FunList_ ('S n) a b t 
+sn_to_sn = n_to_sn . sn_to_n
 
-data FunList' a b t where
-    FunList' :: FunList_ n a b t -> FunList' a b t
+-- pseudo haskell proof
 
-{-
--- FunList a b t and FunList' a b t are isomorphic
--- can we 'prove' this ?
+-- n_to_n (a, (vec, f))
+-- = (sn_to_n . n_to_sn) (a, (vec f))
+-- = sn_to_n (n_to_sn (a, (vec f)))
+-- = sn_to_n (Cons a vec, g)            [g (Cons b vec') = f vec' b]
+-- = (a, (vec, g'))                     [g' vec' b = g (Cons b vec')]
+-- = (a, (vec, f))                      [need to show g' = f ]
+-- proof of g' = f
+-- f :: Vec n b -> b -> t
+-- g :: Vec ('S n) n -> t 
+-- g':: Vec n b -> b -> t 
+-- g' vec' b 
+-- = g (Cons b vec')
+-- = f vec' b
 
-from :: FunList a b t -> FunList' a b t 
-from (Done t)   = FunList' (Left t)
-from (More a l) = FunList' (Right (f1,f2)) where
-    f1 FZ     = a
-    f1 (FS n) = undefined k
-    f2 = undefined 
--}
-
-
+--TODO
