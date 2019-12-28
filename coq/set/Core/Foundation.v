@@ -45,7 +45,7 @@ Proof.
                 { assumption. }
                 { apply elemIncl with (Cons x xs).
                     { assumption. }
-                    { apply consElem. left. apply equal_refl. }}}
+                    { apply consElem. left. apply equalRefl. }}}
         + apply (IH2 y).
             { apply inclTrans with (Cons x xs).
                 { apply elemIncl. intros z H. apply consElem. right. assumption. }

@@ -1,0 +1,50 @@
+\begin{defin}\label{Cat:def:opposite}
+    Let $\Cat=(\ob, \arr, \dom,\cod, \id, \circ)$ be a category.
+    We call {\em opposit category of \Cat}, the category denoted
+    \Cop\ and defined by:
+        \[
+            \Cop=(\ob, \arr, \cod, \dom, \id, \circ')
+        \]
+    where the composition operator $\circ'$ is defined by 
+    $f \circ' g = g\circ f$, for all $f,g\in\arr$.
+\end{defin}
+
+So if $\Cat=(\ob, \arr, \dom,\cod, \id, \circ)$ is a category, the opposit
+category \Cop\ is almost identical, except for the composition operator
+$\circ'$ which is a flipped version of $\circ$, and for $\dom$ and $\cod$ 
+which have been swapped with each other. The collection of objects of
+\Cop\ is the same as that of \Cat, giving us the equality $\ob\ \Cop=\ob\ 
+\Cat$. Likewise, the collection of arrows of \Cop\ is the same as that of 
+\Cat, giving us this other equality $\arr\ \Cop=\arr\ \Cat$. If we denote
+$\dom':\arr\to\ob$ and $\cod':\arr\to\ob$ the domain and codomain maps
+on \Cop, then $\dom'=\cod$ and $\cod'=\dom$. The identity operator 
+$\id:\ob\to\arr$ is the same for both \Cat\ and \Cop, and the composition
+arrow $f\circ' g$ in \Cop\ is defined whenever the composition arrow
+$g\circ f$ in \Cat\ is defined, and we have $f\circ' g= g \circ f$.
+
+\begin{prop}\label{Cat:prop:opp:is:category}
+    Let \Cat\ be a category. Then \Cop\ of 
+    definition~(\ref{Cat:def:opposite}) is a category.
+\end{prop}
+\begin{proof}
+    We need to check that the data $\Cop=(\ob, \arr, \cod, \dom, \id, \circ')$ 
+    of definition~(\ref{Cat:def:opposite}) forms a category, having assumed
+    that the underlying data for \Cat\ does. We have indeed two collections 
+    \ob\ and \arr\ with maps between them $\cod:\arr\to\ob$, $\dom:\arr\to\ob$, 
+    $\id:\ob\to\arr$ and partial map $\circ':\arr\times\arr\to\arr$. So it
+    remains to show that conditions~$(7)-(13)$ of 
+    definition~(\ref{Cat:def:category}) are satisfied. For the purpose of
+    this proof, we shall denote $\dom'=\cod$ and $\cod'=\dom$.
+
+    $(7)$: We need to check that $f\circ' g$ is defined \ifand\ 
+    $\cod'(g)=\dom'(f)$ which is $\dom(g)=\cod(f)$. However by definition, 
+    we have set $f\circ' g$ to be defined whenever $g\circ f$ is itself 
+    defined, and since \Cat\ is a category, this is in turn equivalent 
+    to $\cod(f)=\dom(g)$. Hence, we are done.
+
+    $(8)$: We need to check that $\dom'(f\circ' g)=\dom'(g)$ which can be
+    written as $\cod(g\circ f)=\cod(g)$ and which is true since \Cat\ is a
+    category.
+\end{proof}
+
+

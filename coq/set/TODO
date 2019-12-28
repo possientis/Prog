@@ -1,4 +1,4 @@
-Semantics: after elemIncl ?
+Semantics: equalTrans
 Can we get all the semantics result without LEM?
 define a 'safe' semantics where unbound free variables are reported as errors
 is every compatible predicate decidable?

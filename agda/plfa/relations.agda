@@ -197,3 +197,88 @@ data _<_ : ℕ → ℕ → Set where
 
 <-trans z<s (s<s _) = z<s
 <-trans (s<s m<n) (s<s n<p) = s<s (<-trans m<n n<p)
+
+<-imp-≤ : ∀ {m n : ℕ}
+  → m < n
+    --------
+  → m ≤ n
+
+<-imp-≤ z<s = z≤n
+<-imp-≤ (s<s m<n) = s≤s (<-imp-≤ m<n)
+
+
+data Trichotomy (m n : ℕ) : Set where
+  Less  : m < n → Trichotomy m n
+  Equal : m ≡ n → Trichotomy m n
+  More  : n < m → Trichotomy m n
+
+
+trichotomy : ∀ (m n : ℕ) → Trichotomy m n 
+trichotomy zero zero = Equal refl
+trichotomy zero (suc n) = Less z<s
+trichotomy (suc m) zero = More z<s
+trichotomy (suc m) (suc n) with trichotomy m n
+trichotomy (suc m) (suc n) | Less m<n = Less (s<s m<n)
+trichotomy (suc m) (suc n) | Equal m≡n = Equal (cong suc m≡n)
+trichotomy (suc m) (suc n) | More m>n = More (s<s m>n)
+
++-mono-r-< : ∀ (n p q : ℕ)
+  → p < q
+    ----------
+  → n + p < n + q
+
++-mono-r-< zero p q p<q = p<q
++-mono-r-< (suc n) p q p<q = s<s (+-mono-r-< n p q p<q)
+
++-mono-l-< : ∀ (m n p : ℕ)
+  → m < n
+    ----------
+  → m + p < n + p
+
++-mono-l-< m n p m<n rewrite +-comm m p | +-comm n p = +-mono-r-< p m n m<n
+
+
++-mono-< : ∀ (m n p q : ℕ)
+  → m < n
+  → p < q
+    ----------
+  → m + p < n + q
+
++-mono-< m n p q m<n p<q = <-trans (+-mono-l-< m n p m<n) (+-mono-r-< n p q p<q)
+
+<-trans' : ∀ {m n p : ℕ}
+  → m < n
+  → n < p
+    ----------
+  → m < p
+
+<-trans' m<n n<p = ≤-< (≤-trans (<-≤ m<n) (<-imp-≤ n<p))
+
+-- mutually recursive datatypes
+
+data even : ℕ → Set
+data odd  : ℕ → Set
+
+-- Overloading of defined names is not allowed. But constructors are fine.
+
+data even where
+  zero :           -- overloaded constructor
+      ----------
+      even zero
+
+  suc : ∀ {n : ℕ}  -- overloaded constructor
+    → odd n
+      ----------
+    → even (suc n)
+
+data odd where
+
+  suc : ∀ {n : ℕ}  -- more overloading
+    → even n
+      ----------
+    → odd (suc n)
+
+
+
+
+

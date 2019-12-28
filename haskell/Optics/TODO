@@ -1,2 +1,2 @@
-FunList: finish pseudo haskell proof
+FunList: funToFun' & fun'ToFun
 paper: profunctor optics

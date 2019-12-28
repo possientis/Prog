@@ -45,7 +45,7 @@ Proof.
                 { split.
                     { apply consElem. left. assumption. }
                     { unfold in_set in H'. apply equal_l with x.
-                        { apply equal_sym. assumption. }
+                        { apply equalSym. assumption. }
                         { assumption. }}}
                 { apply IH in H. destruct H as [H1 H2]. split.
                     { apply consElem. right. assumption. }

@@ -31,8 +31,8 @@ Proof.
         + reflexivity.
         + exfalso. apply emptyCharac with x. apply elemIncl with (Cons x xs).
             { apply doubleIncl in H. destruct H as [H1 H2]. assumption. }
-            { apply consElem. left. apply equal_refl. }
-    - rewrite H. apply equal_refl.
+            { apply consElem. left. apply equalRefl. }
+    - rewrite H. apply equalRefl.
 Qed.
 
 (* The existence of the empty set is true in our model                          *)

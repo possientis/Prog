@@ -84,7 +84,7 @@ Proof.
                     { apply elemIncl. intros u H4. apply consElem in H4.
                       destruct H4 as [H4|H4].
                         { apply equal_l with x.
-                            { apply equal_sym. assumption. }
+                            { apply equalSym. assumption. }
                             { assumption. }}
                         { assert (u :: z') as H5.
                             { apply (elemIncl y z'); assumption. }

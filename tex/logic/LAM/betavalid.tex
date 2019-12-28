@@ -610,5 +610,47 @@ $\beta$-valid for $\phi$ and vice-versa.
             &=&\sigma_{*}(U')(\,\tau_{*}(U)(\phi)\,)\\
             &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
         \end{eqnarray*}
+    In order for us to complete the proof, we need to justify the quality:
+        \[
+            (\sigma_{*}(U')\circ\tau)^{*}(\phi_{1})(U\cup\{x\})
+            =
+            (\sigma_{*}(U'\cup\{x\})\circ\tau)^{*}(\phi_{1})(U\cup\{x\})
+        \]
+    This equality follows from 
+    proposition~(\ref{logic:prop:LAM:freevar:beta:support:gen}) provided
+    we show that the two functions $\sigma_{*}(U')\circ\tau$ and
+    $\sigma_{*}(U'\cup\{x\})\circ\tau$ coincide on the set $\free(\phi_{1})
+    \setminus(U\cup\{x\})$. So let $u\in\free(\phi_{1})\setminus(U\cup\{x\})$.
+    It remains to show that:
+        \[
+            (\sigma_{*}(U')\circ\tau)(u) 
+            =
+            (\sigma_{*}(U'\cup\{x\})\circ\tau)(u) 
+        \]
+    or equivalently:
+        \[
+            \sigma^{*}(\tau(u))(U')
+            =
+            \sigma^{*}(\tau(u))(U'\cup\{x\})
+        \]
+    This last equality follows from
+    proposition~(\ref{logic:prop:LAM:freevar:beta:intersect:gen}) provided
+    we show that:
+        \[
+            U' \cap\free(\tau(u)) = (U'\cup\{x\})\cap\free(\tau(u))
+        \]
+    It is therefore sufficient to prove that $\{x\}\cap\free(\tau(u))=\emptyset$,
+    or in other words that $x\not\in\free(\tau(u))$. However, we assumed that 
+    $\tau$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) once more
+    we have the implication:
+        \[
+            u\in\free(\lambda x\phi_{1})\ 
+            \Rightarrow\ 
+            x\not\in\free(\tau(u))
+        \]
+    It is therefore sufficient to prove that $u\in\free(\lambda x\phi_{1})$
+    which follows from the assumption $u\in\free(\phi_{1})\setminus(U\cup\{x\})
+    \subseteq\free(\phi_{1})\setminus\{x\}=\free(\lambda x\phi_{1})$.
 \end{proof}
 

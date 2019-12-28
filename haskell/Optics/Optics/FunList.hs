@@ -1,16 +1,20 @@
 {-# LANGUAGE GADTs                  #-}
 {-# LANGUAGE DataKinds              #-}
 {-# LANGUAGE EmptyCase              #-}
+{-# LANGUAGE RankNTypes             #-}
 {-# LANGUAGE TypeOperators          #-}
 {-# LANGUAGE KindSignatures         #-}
 {-# LANGUAGE ScopedTypeVariables    #-}
 module  Optics.FunList
     (   FunList     (..)   
+    ,   FunList'    (..)
     ,   FunList_
     ,   inn
     ,   out
     ,   n_to_n
     ,   sn_to_sn
+    ,   funToFun'
+    ,   fun'ToFun
     )   where
 
 import Optics.Nat
@@ -51,6 +55,20 @@ n_to_n = sn_to_n . n_to_sn
 sn_to_sn :: FunList_ ('S n) a b t -> FunList_ ('S n) a b t 
 sn_to_sn = n_to_sn . sn_to_n
 
+data FunList' a b t where
+     FunList' :: forall (n :: Nat) a b t . FunList_ n a b t -> FunList' a b t
+
+
+funToFun' :: FunList a b t -> FunList' a b t
+funToFun' (Done t) = FunList' (Nil, \_ -> t)
+funToFun' (More a fun) = case funToFun' fun of
+   (FunList' fun_n) -> FunList' $ n_to_sn (a , fun_n)
+
+fun'ToFun :: FunList' a b t -> FunList a b t
+fun'ToFun (FunList' (Nil, f)) = Done (f Nil)
+fun'ToFun (FunList' (Cons a vec, f)) = case sn_to_n (Cons a vec, f) of
+    (a', (vec', g)) -> More a' (fun'ToFun (FunList' (vec', g))) 
+
 -- pseudo haskell proof
 
 -- n_to_n (a, (vec, f))
@@ -67,4 +85,10 @@ sn_to_sn = n_to_sn . sn_to_n
 -- = g (Cons b vec')
 -- = f vec' b
 
---TODO
+-- sn_to_sn (Cons a vec, f)
+-- = (n_to_sn . sn_to_n) (Cons a vec, f)
+-- = n_to_sn (sn_to_n (Cons a vec, f))
+-- = n_to_sn (a, (vec , g))     [g vec' b = f (Cons b vec')]
+-- = (Cons a vec, g')           [g' (Cons b vec') = g vec' b]
+-- = (Cons a vec, f)            [since g' = f :: Vec ('S n) b -> t]
+

@@ -79,7 +79,7 @@ Proof.
     rewrite E. clear E. revert n x y H.  
     induction n as [|n IH]. (* induction on n, rank x <= n *)
     - intros x y H1 H2. apply le_0 in H1. apply rankNil in H1.
-      rewrite H1 in H2. apply equal_sym in H2. apply emptyIsNil in H2.
+      rewrite H1 in H2. apply equalSym in H2. apply emptyIsNil in H2.
       rewrite H1, H2. reflexivity.
     - intros x y H E. apply doubleIncl in E. destruct E as [E1 E2].
       apply le_antisym.
@@ -109,7 +109,7 @@ Proof.
                         { apply doubleIncl. split; assumption. }}
                     { intros H2. apply H1. rewrite <- H2. apply doubleIncl.
                       split; assumption. }}
-                { intros H2. apply H1. rewrite H2. apply equal_refl. }}
+                { intros H2. apply H1. rewrite H2. apply equalRefl. }}
         + destruct (equal_dec y Nil) as [H1|H1].
             { apply emptyIsNil in H1. rewrite H1 in E1. rewrite H1 in E2.
               assert (x == Nil) as E. { apply doubleIncl. split; assumption. }
@@ -134,7 +134,7 @@ Proof.
                             { apply rankToList. assumption. }
                             { assumption. }}
                         { apply doubleIncl. split; assumption. }}
-                    { intros H2. apply H1. rewrite H2. apply equal_refl. }}
+                    { intros H2. apply H1. rewrite H2. apply equalRefl. }}
                 { intros H2. apply H1. rewrite <- H2. apply doubleIncl.
                   split; assumption. }}
 Qed.

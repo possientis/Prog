@@ -27,12 +27,12 @@ Proof.
     intros x y z. split.
     - intros H. apply toListElem in H. 
       destruct H as [z' [H1 [H2 H3]]]. destruct H1 as [H1|[H1|H1]].
-        + left. apply equal_trans with z'.
+        + left. apply equalTrans with z'.
             { apply doubleIncl. split; assumption. }
-            { rewrite H1. apply equal_refl. }
-        + right. apply equal_trans with z'.
+            { rewrite H1. apply equalRefl. }
+        + right. apply equalTrans with z'.
             { apply doubleIncl. split; assumption. }
-            { rewrite H1. apply equal_refl. }
+            { rewrite H1. apply equalRefl. }
         + inversion H1.
     - intros [H|H]; apply toListElem.
         + exists x. split.

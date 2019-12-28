@@ -219,7 +219,6 @@ Qed.
 Definition elemInclF : Formula :=
     All 0 (All 1 (Iff (Sub 0 1) (All 2 (Imp (Elem 2 0) (Elem 2 1))))).
 
-
 (* Evaluating elemInclF in any environment 'yields' the theorem elemIncl.       *)
 Lemma evalElemInclF : LEM -> forall (e:Env), eval e elemInclF <-> 
     forall (x y:set), (x <== y <-> forall (z:set), z :: x -> z :: y). 
@@ -278,6 +277,67 @@ Proof.
         + assumption.
         + assumption.
 Qed.
+
+(* Lemma 'equalRefl' expressed in set theory abstract syntax.                   *)
+Definition equalReflF : Formula := All 0 (Equ 0 0).
+
+(* Evaluating equalReflF in any environment 'yields' the lemma equalRefl.       *)
+Lemma evalEqualReflF : LEM -> forall (e:Env), 
+    eval e equalReflF <-> forall (x:set), x == x.
+Proof.
+    intros L e. unfold equalReflF. rewrite evalAll. split; intros H x.
+    - remember (H x) as H' eqn:E. clear E. clear H.
+      rewrite evalEqu in H'. rewrite bindSame in H'. 
+        + assumption.
+        + assumption.
+    - rewrite evalEqu, bindSame. apply H.
+        + assumption.
+Qed.
+
+(* Lemma 'equalSym' expressed in set theory abstract syntax.                    *)
+Definition equalSymF : Formula := All 0 (All 1 (Imp (Equ 0 1) (Equ 1 0))).
+
+(* Evaluating equalSymF in any environment 'yields' the lemma equalSym.         *)
+Lemma evalEqualSymF : LEM -> forall (e:Env), 
+    eval e equalSymF <-> forall (x y:set), x == y -> y == x.
+Proof.
+    intros L e. unfold equalSymF. rewrite evalAll. split; intros H x.
+    - intros y.
+      remember (H  x) as H' eqn:E. clear E. clear H. rewrite evalAll in H'. 
+      remember (H' y) as H  eqn:E. clear E. clear H'.
+      rewrite evalImp in H. rewrite evalEqu in H. rewrite evalEqu in H.
+      remember (bind e 0 x) as e1 eqn:E1.
+      rewrite bindSame in H. rewrite bindDiff in H. rewrite E1 in H.
+      rewrite bindSame in H.
+        + assumption.
+        + intros E. inversion E.
+        + assumption.
+        + assumption.
+    - rewrite evalAll. intros y. remember (bind e 0 x) as e1 eqn:E1.
+      rewrite evalImp, evalEqu, evalEqu, bindSame, bindDiff, E1, bindSame.
+        + apply H.
+        + intros E. inversion E.
+        + assumption.
+        + assumption.
+Qed.
+
+(* Lemma 'equalTrans' expressed in set theory abstract syntax.                  *)
+Definition equalTransF : Formula := 
+    All 0 (All 1 (All 2 (Imp (Equ 0 1) (Imp (Equ 1 2) (Equ 0 2))))).
+
+(*
+(* Evaluating equalTransF in any environment 'yields' the lemma equalTrans.     *)
+Lemma evalEqualTransF : LEM -> forall (e:Env), 
+    eval e equalTransF <-> forall (x y z:set), x == y -> y == z -> x == z.
+Proof.
+    intros L e. unfold equalTransF. rewrite evalAll. split; intros H x.
+    - intros y z.
+      remember (H x) as H' eqn:E. clear E. clear H. rewrite evalAll in H'.
+      remember (H' y) as H eqn:E. clear E. clear H'. rewrite evalAll in H.
+      remember (H z) as H' eqn:E. clear E. clear H.
+
+Show.
+*)
 
 (*
 (* Theorem 'emptySet' expressed in set theory abstract syntax.                  *)

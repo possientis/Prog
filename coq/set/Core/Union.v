@@ -77,7 +77,7 @@ Proof.
         + simpl. intros H. apply union2_charac in H. destruct H as [H|H].
             { exists x. split.
                 { assumption. }
-                { apply consElem. left. apply equal_refl. }}
+                { apply consElem. left. apply equalRefl. }}
             { apply IH in H. destruct H as [y [H1 H2]]. exists y. split.
                 { assumption. }
                 { apply consElem. right. assumption. }}
