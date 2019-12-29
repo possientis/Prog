@@ -2,7 +2,7 @@ module bin where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; sym)
-open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_;_∎)
+open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_;_∎)         -- \qed
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_;_^_) -- \.-
 
 open import induction
@@ -105,3 +105,14 @@ from-to (suc n) =
     suc n
     ∎
 
+-- whether binary number has a leading '1'
+data One : Bin → Set where
+  justOne : One (⟨⟩ I)
+  oneO : ∀ {b : Bin} → One b → One (b O)
+  oneI : ∀ {b : Bin} → One b → One (b I)
+
+
+-- whether binary number is in canonical form
+data Can : Bin → Set where
+  canZero : Can ((_O) ⟨⟩)  -- agda fails to parse '⟨⟩ O'
+  canOne  : ∀ {b : Bin} → One b → Can b

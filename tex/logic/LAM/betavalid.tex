@@ -241,6 +241,23 @@ stronger conclusion of equality rather than inclusion.
     \end{eqnarray*}
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:x}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$
+    of the form $\phi=x$ with $x\in V$. Then $\sigma$ is $\beta$-valid
+    for $\phi$.
+\end{prop}
+\begin{proof}
+    Using definition~(\ref{logic:def:LAM:beta:valid:substitution}), given
+    a sub-formula $\psi\preceq\phi$ we need to check that if $u\in\free(\psi)$
+    then $\free(\sigma(u))\subseteq\free(\sigma(\psi))$. However if $\phi=x$,
+    the only possible sub-formula of $\phi$ is $\psi=x$ and $\free(\psi)=\{x\}$.
+    Furthemore, using proposition~(\ref{logic:prop:LAM:subst:x}), when 
+    $\psi=x$ we have $\sigma(\psi)=\sigma(x)$ (this is not totally obvious as
+    the notation '$\sigma$' is overloaded, and $'\sigma(\psi)'$ refers 
+    to definition~(\ref{logic:def:LAM:beta:subst})). So we only need to check
+    that $\free(\sigma(x))\subseteq\free(\sigma(x))$ which is the case.
+\end{proof}
+
 \begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
     of the form $\phi=\phi_{1}\ \phi_{2}$ with $\phi_{1},\phi_{2}\in\tv$. 
@@ -654,3 +671,15 @@ $\beta$-valid for $\phi$ and vice-versa.
     \subseteq\free(\phi_{1})\setminus\{x\}=\free(\lambda x\phi_{1})$.
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition}
+    Let $V$ be a set and $\sigma,\tau:V\to\tv$ be maps. Let $\phi\in\tv$. Then
+    if $\tau$ is $\beta$-valid for $\phi$, we have:
+        \[
+            (\sigma'\circ\tau)' (\phi) = (\sigma'\circ\tau')(\phi)
+        \]
+    where given $\chi:V\to\tv$, the map $\chi':\tv\to\tv$ denotes the 
+    associated $\beta$-substitution mapping of 
+    definition~(\ref{logic:def:LAM:beta:subst}).
+\end{prop}
+\begin{proof}
+\end{proof}

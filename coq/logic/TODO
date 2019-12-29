@@ -1,3 +1,2 @@
-why is f always beta-valid for t=x ?
-f,g:V -> T(V), f',g':T(V)->(V), so g' . f : V -> T(V), so (g' . f)' : T(V) -> T(V). (g' . f)' = g' . f' ?
+Prop 374: proof + can we find counter example when tau not beta-valid
 LAM/betavalid.tex

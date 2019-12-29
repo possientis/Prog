@@ -122,3 +122,46 @@ lemma L15 : ∀ (x x' y y' : ℕ),
       end
 
 #check L15
+
+lemma L16 : ∀ (x y z u w : ℕ) (p: ℕ → Prop),
+  x = y + z →
+  w = u + x →
+  p (z + y + u) →
+  p w := assume x y z u w p H1 H2 H3,
+    begin
+      simp at *, simp *
+    end
+
+#check L16
+
+universe u
+
+def mk_symm {α : Type} (xs : list α) : list α := xs ++ reverse xs
+
+#check @mk_symm
+
+
+lemma L17 : ∀ (α:Type), @reverse α nil = nil :=
+  assume α,
+    begin
+      unfold reverse,
+    end
+
+
+/-
+lemma L17 : ∀ (α:Type) (xs ys:list α), reverse (xs ++ ys) = reverse ys ++ reverse xs :=
+  assume α xs ys,
+    begin
+      induction xs with xs xs,
+        begin simp * end
+    end
+-/
+
+/-
+lemma L17 : ∀ (α : Type) (xs : list α), reverse (mk_symm xs) = mk_symm xs :=
+  assume α xs,
+    begin
+      unfold mk_symm,
+    end
+-/
+

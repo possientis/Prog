@@ -1,6 +1,6 @@
 \begin{defin}\label{Cat:def:opposite}
     Let $\Cat=(\ob, \arr, \dom,\cod, \id, \circ)$ be a category.
-    We call {\em opposit category of \Cat}, the category denoted
+    We call {\em opposite category of \Cat}, the category denoted
     \Cop\ and defined by:
         \[
             \Cop=(\ob, \arr, \cod, \dom, \id, \circ')
@@ -9,7 +9,7 @@
     $f \circ' g = g\circ f$, for all $f,g\in\arr$.
 \end{defin}
 
-So if $\Cat=(\ob, \arr, \dom,\cod, \id, \circ)$ is a category, the opposit
+So if $\Cat=(\ob, \arr, \dom,\cod, \id, \circ)$ is a category, the opposite
 category \Cop\ is almost identical, except for the composition operator
 $\circ'$ which is a flipped version of $\circ$, and for $\dom$ and $\cod$ 
 which have been swapped with each other. The collection of objects of
@@ -45,6 +45,58 @@ $g\circ f$ in \Cat\ is defined, and we have $f\circ' g= g \circ f$.
     $(8)$: We need to check that $\dom'(f\circ' g)=\dom'(g)$ which can be
     written as $\cod(g\circ f)=\cod(g)$ and which is true since \Cat\ is a
     category.
+
+
+    $(9)$: We need to check that $\cod'(f\circ' g)=\cod'(f)$ which can be
+    written as $\dom(g\circ f)=\dom(f)$ and which is true since \Cat\ is a
+    category.
+
+    $(10)$: Given arrows $h,g,f$ with $\cod'(h)=\dom'(g)$ and $\cod'(g)=
+    \dom'(f)$, we need to check that $(f\circ' g)\circ' h= f\circ'(g\circ' h)$.
+    However, our assumption can be written as $\dom(h)=\cod(g)$ and
+    $\dom(g)=\cod(f)$ and having assumed that \Cat\ is a category, by
+    property $(10)$ of definition~(\ref{Cat:def:category}) we have:
+        \begin{eqnarray*}(f\circ' g)\circ' h 
+            &=&h\circ(f\circ' g)\\
+            &=&h\circ(g\circ f)\\
+            \mbox{\Cat\ is a category\ $\to$\ }
+            &=&(h\circ g)\circ f\\
+            &=&f\circ' (h\circ g)\\
+            &=&f\circ' (g\circ' h)
+        \end{eqnarray*}
+
+    $(11)$: We need to check that $\dom'\,(\,\id(a)\,) = a = \cod'
+    \,(\,\id(a)\,)$ for all $a\in\Cat$, which follows from $\dom'=\cod$,
+    $\cod'=\dom$ and the fact that \Cat\ is a category.
+
+    $(12)$: We need to check that $f\circ'\id(a)=f$ whenever $\dom'(f)=a$,
+    that is $\id(a)\circ f=f$ whenever $\cod(f)=a$, which follows from
+    \Cat\ being a category.
+
+    $(13)$: We need to check that $\id(a)\circ' f=f$ whenever $\cod'(f)=a$,
+    that is $f\circ\id(a)=f$ whenever $\dom(f)=a$, which follows from
+    \Cat\ being a category.
 \end{proof}
 
+\begin{prop}
+    Let \Cat\ be a category. Then the opposite category of \Cop\ is \Cat, i.e.
+        \[
+            (\Cop)^{op} = \Cat
+        \]
+\end{prop}
+\begin{proof}
+    Let $\Cat=(\ob, \arr, \dom,\cod, \id, \circ)$ be a category. From
+    definition~(\ref{Cat:def:opposite}), we have
+    $\Cop=(\ob, \arr, \cod, \dom, \id, \circ')$ and consequently:
+        \[
+            (\Cop)^{op}=(\ob, \arr, \dom, \cod, \id, \circ'')
+        \]
+    In order to show that $(\Cop)^{op}=\Cat$ we simply need to show that
+    the partial maps $\circ,\circ'':\arr\times\arr\to\arr$ are equal.
+    Given two arrows $f$ and $g$, the composition arrow $g\circ'' f$ is 
+    defined \ifand\ $f\circ' g$ is defined, which is itself equivalent to 
+    $g\circ f$ being defined. So both $\circ$ and $\circ''$ are defined
+    on the same collection of arrow tuples $(g,f)$. Furthemore, whenever
+    $g\circ f$ is defined, we have $g\circ'' f=f\circ' g=g\circ f$.
+\end{proof}
 

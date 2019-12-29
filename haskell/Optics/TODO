@@ -1,2 +1,2 @@
-FunList: funToFun' & fun'ToFun
+FunList: fun2fun' & fun'2fun
 paper: profunctor optics

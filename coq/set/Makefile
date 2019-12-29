@@ -1,4 +1,5 @@
 CORE=Core
+SEM=Semantics
 
 all :							${CORE}/Nat.vo \
 								${CORE}/Set.vo \
@@ -24,8 +25,12 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/LEM.vo \
 								${CORE}/Environment.vo \
-								${CORE}/Semantics.vo
-
+								${CORE}/Semantics.vo \
+								${SEM}/Incl.vo \
+								${SEM}/Trans.vo \
+								${SEM}/ElemIncl.vo \
+								${SEM}/Equal.vo \
+								${SEM}/Empty.vo
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
@@ -243,3 +248,51 @@ ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
 								${CORE}/Environment.vo
 	coqc ${CORE}/Semantics.v -R ${CORE} ${CORE}
 				
+${SEM}/Incl.vo :				${SEM}/Incl.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Incl.v -R ${CORE} ${CORE}
+
+${SEM}/Trans.vo :				${SEM}/Trans.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Trans.v -R ${CORE} ${CORE}
+
+${SEM}/ElemIncl.vo :			${SEM}/ElemIncl.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/ElemIncl.v -R ${CORE} ${CORE}
+
+${SEM}/Equal.vo :				${SEM}/Equal.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Equal.v -R ${CORE} ${CORE}
+
+${SEM}/Empty.vo :				${SEM}/Empty.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Empty.v -R ${CORE} ${CORE}
+
