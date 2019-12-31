@@ -6,6 +6,7 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_;_∎)         -- 
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_;_^_) -- \.-
 
 open import induction
+open import relations
 
 data Bin : Set where
   ⟨⟩ : Bin
@@ -130,14 +131,13 @@ one-inc : ∀ {b : Bin}
      ----------
   →  One (inc b)
 
-can-inc canZero = canOne justOne
-can-inc (canOne justOne) = canOne (oneO justOne)
-can-inc (canOne (oneO oneb)) = canOne (oneI oneb)
-can-inc (canOne (oneI oneb)) = canOne (oneO (one-inc oneb))
-
 one-inc justOne = oneO justOne
 one-inc (oneO oneb) = oneI oneb
 one-inc (oneI oneb) = oneO (one-inc oneb)
+
+can-inc canZero = canOne justOne
+can-inc (canOne oneb) = canOne (one-inc oneb)
+
 
 can-to : ∀ (n : ℕ)
      ----------
@@ -146,11 +146,51 @@ can-to : ∀ (n : ℕ)
 can-to zero = canZero
 can-to (suc n) = can-inc (can-to n)
 
-to-from : ∀ {b : Bin}
+can-to-from : ∀ {b : Bin}
   →  Can b
      ----------
   →  to (from b) ≡ b
 
-to-from {⟨⟩} (canOne ())
-to-from {b O} canb = {!!}
-to-from {b I} canb = {!!}
+one-to-from : ∀ {b : Bin}
+  →  One b
+     ----------
+  →  to (from b) ≡ b
+
+can-to-from canZero = refl
+can-to-from (canOne oneb) = one-to-from oneb
+
+
+one-to-2 : ∀ {n : ℕ}
+  →   1 ≤ n
+      ----------
+  →   to (2 * n) ≡ (to n) O
+
+one-to-2 (s≤s {n = n} _) =
+  begin
+    to (2 * suc n)
+    ≡⟨⟩
+    to (suc n + 1 * suc n)
+    ≡⟨⟩
+    to (suc n + (suc n + 0))
+    ≡⟨ {!!} ⟩
+    to (suc n + suc n)
+    ≡⟨⟩
+    to (suc (n + suc n))
+    ≡⟨⟩
+    inc (to (n + suc n))
+    ≡⟨ {!!} ⟩
+    inc (to (suc (n + n)))
+    ≡⟨⟩
+    {!!}
+
+
+
+one-to-from justOne = refl
+one-to-from (oneO {b} oneb) =
+  begin
+    to (from (b O))
+    ≡⟨⟩
+    to (2 * from b)
+    ≡⟨⟩
+    {!!}
+one-to-from (oneI oneb) = {!!}

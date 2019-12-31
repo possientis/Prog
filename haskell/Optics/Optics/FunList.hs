@@ -15,6 +15,8 @@ module  Optics.FunList
     ,   snId
     ,   funId
     ,   fun'Id
+    ,   fun2fun'
+    ,   fun'2fun
     )   where
 
 import Optics.Nat
@@ -83,7 +85,7 @@ funId :: FunList a b t -> FunList a b t
 funId (Done t) = Done t
 
 -- 2. inductive case
-funId (More a fun) = fun'2fun (fun2fun' (More a fun))
+--funId (More a fun) = fun'2fun (fun2fun' (More a fun))
 {-
 funId (More a fun) = fun'2fun (case fun2fun' fun of
     (FunList' (vec,f)) -> FunList' $ (Cons a vec, g) 
@@ -91,10 +93,96 @@ funId (More a fun) = fun'2fun (case fun2fun' fun of
         g (Cons b vec') = f vec' b)
 -}
 
+{-
+funId (More a fun) = case fun2fun' fun of
+    (FunList' (vec,f)) -> fun'2fun (FunList' (Cons a vec, g)) 
+        where
+        g (Cons b vec') = f vec' b
+-}
+
+{-
+funId (More a fun) = case fun2fun' fun of
+    (FunList' (vec,f)) ->  More a (fun'2fun (FunList' (vec, g')))
+        where
+        g' vec' b = g (Cons b vec')
+        g (Cons b vec') = f vec' b
+-}
+
+{-
+funId (More a fun) = case fun2fun' fun of
+    (FunList' (vec,f)) ->  More a (fun'2fun (FunList' (vec, f)))
+-}
+
+{-
+funId (More a fun) = case fun2fun' fun of
+    (FunList' (_,_)) ->  More a (fun'2fun (fun2fun' fun))
+-}
+
+-- funId (More a fun) = More a (fun'2fun (fun2fun' fun))
+
+funId (More a fun) = More a fun -- induction
 
 
 fun'Id :: FunList' a b t -> FunList' a b t 
-fun'Id = fun2fun' . fun'2fun
+--fun'Id = fun2fun' . fun'2fun
+-- fun'Id (FunList' (vec, f)) = fun2fun' (fun'2fun (FunList' (vec, f)))
+-- 1. base case
+--- fun'Id (FunList' (Nil, f)) = fun2fun' (fun'2fun (FunList' (Nil, f)))
+--fun'Id (FunList' (Nil, f)) = fun2fun' (Done (f Nil))
+--fun'Id (FunList' (Nil, f)) = FunList' (Nil, \_ -> (f Nil))
+--fun'Id (FunList' (Nil, f)) = FunList' (Nil, \Nil -> (f Nil))
+fun'Id (FunList' (Nil, f)) = FunList' (Nil, f) -- eta contraction
+
+-- 2. inductive case
+--fun'Id (FunList' (Cons a vec, f)) = fun2fun' (fun'2fun (FunList' (Cons a vec, f)))
+{-
+fun'Id (FunList' (Cons a vec, f)) = fun2fun' (More a (fun'2fun (FunList' (vec, g)))) 
+    where
+    g vec' b = f (Cons b vec')
+-}
+
+{-
+fun'Id (FunList' (Cons a vec, f)) = fun2fun' (More a fun)
+    where
+    fun = fun'2fun (FunList' (vec, g))
+    g vec' b = f (Cons b vec')
+-}
+
+{-
+fun'Id (FunList' (Cons a vec, f)) = case fun2fun' fun of
+    (FunList' (vec',f')) -> FunList' $ (Cons a vec', g') 
+        where
+        g' (Cons b vec'') = f' vec'' b
+    where
+    fun = fun'2fun (FunList' (vec, g))
+    g vec' b = f (Cons b vec')
+-}
+
+{-
+fun'Id (FunList' (Cons a vec, f)) = case fun2fun' (fun'2fun (FunList' (vec, g))) of
+    (FunList' (vec',f')) -> FunList' $ (Cons a vec', g') 
+        where
+        g' (Cons b vec'') = f' vec'' b
+    where
+    g vec' b = f (Cons b vec')
+-}
+
+{- induction
+fun'Id (FunList' (Cons a vec, f)) = case FunList' (vec, g) of
+    (FunList' (vec',f')) -> FunList' $ (Cons a vec', g') 
+        where
+        g' (Cons b vec'') = f' vec'' b
+    where
+    g vec' b = f (Cons b vec')
+-}
+
+{-
+fun'Id (FunList' (Cons a vec, f)) = FunList' $ (Cons a vec, g') 
+    where
+    g' (Cons b vec') = g vec' b
+    g vec' b = f (Cons b vec')
+-}
+fun'Id (FunList' (Cons a vec, f)) = FunList' $ (Cons a vec, f) 
 
 -- pseudo haskell proof
 

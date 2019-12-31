@@ -16,9 +16,35 @@ assume:
 \end{axiom}
 
 \noindent
-The equality on {\em collections} should of course be reflexive, symmetric
-and also transitive.
+It is implicit in the statement of axiom~(\ref{Cat:ax:collection})
+that the notion of equality between {\em collections} should 
+be reflexive, symmetric and transitive. Furthermore:
 
+\begin{axiom}\label{Cat:ax:collection:extensional}
+    Two collections with identical members are equal.
+\end{axiom}
+In particular, if $\Cat=(\ob, \arr, \dom, \cod, \id, \circ)$ is
+a category and we have another partial map $\circ':\arr\times\arr\to\arr$ 
+such that $g\circ' f$ is defined \ifand\ $g\circ f$ is defined,
+then axiom~(\ref{Cat:ax:collection:extensional}) allows us to argue 
+that the domain of $\circ'$ is the same collection as the domain
+of $\circ$.
 
+\begin{axiom}\label{Cat:ax:map:extensional}
+    Let $A$ be a collection and $B$ be a collection with equality.
+    Then two maps $F,G:A\to B$ are equal \ifand\ $F(x)=G(x)$ for all x in $A$.
+\end{axiom}
+In particular, if $\Cat=(\ob, \arr, \dom, \cod, \id, \circ)$ is a 
+category and $\dom':\arr\to\ob$ is another map such that $\dom'(x)=\dom(x)$
+for every object $x\in\Cat$, then $\dom'=\dom$. Or if $\circ':\arr\times\arr\to\arr$ 
+is another partial map  with the same domain as that of $\circ$ and such that 
+$g\circ' f = g\circ f$ when defined, then $\circ'=\circ$.
 
-
+\begin{axiom}\label{Cat:ax:tuple:extensional}
+    Two tuples with identical entries are equal.
+\end{axiom}
+So if $\Cat=(\ob, \arr, \dom, \cod, \id, \circ)$ and
+$\Cat'=(\ob', \arr', \dom', \cod', \id', \circ')$ are two catgeories
+such that $\ob=\ob'$, $\arr=\arr'$, $\dom=\dom'$, $\cod=\cod'$,
+$\id=\id'$ and $\circ=\circ'$ then we have the equality $\Cat=\Cat'$.
+\newpage

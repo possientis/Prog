@@ -3,51 +3,80 @@ Inductive Vec : nat -> Type -> Type :=
 | Cons  : forall (n:nat) (a:Type), a -> Vec n a -> Vec (S n) a
 .
 
+Arguments Nil {a}.
+Arguments Cons {n} {a}.
+
+Definition v1 : Vec 3 nat := Cons 0 (Cons 1 (Cons 2 Nil)).
+Definition v2 : Vec 2 nat := Cons 3 (Cons 4 Nil).
 
 Inductive Vec' (a:Type) : nat -> Type :=
 | Nil'   : Vec' a 0
 | Cons'  : forall (n:nat), a -> Vec' a n -> Vec' a (S n)
 .
 
-Check Vec.
-Check Vec'.
+Arguments Nil' {a}.
+Arguments Cons' {a} {n}.
 
-Check Nil.
-Check Nil'.
+Definition v1' : Vec' nat 3 := Cons' 0 (Cons' 1 (Cons' 2 Nil')).
+Definition v2' : Vec' nat 2 := Cons' 3 (Cons' 4 Nil').
 
-Check Cons.
-Check Cons'.
+Fixpoint append (a:Type) (n m:nat) (xs:Vec n a) (ys:Vec m a) : Vec (n + m) a :=
+    ( match xs in Vec n a return Vec m a -> Vec (n + m) a  with
+      | Nil         => fun zs => zs
+      | Cons x xs'  => fun zs => Cons x (append _ _ _ xs' zs)   
+      end) ys.
+
+Arguments append {a} {n} {m}.
+
+Definition v3 : Vec 5 nat := append v1 v2.
 
 Fixpoint append' (a:Type) (n m:nat) (xs:Vec' a n) (ys:Vec' a m) : Vec' a (n + m) :=
     match xs with
-    | Nil' _            => ys
-    | Cons' _ _ x xs'   => Cons' _ _ x (append' _ _ _ xs' ys)
+    | Nil'          => ys
+    | Cons' x xs'   => Cons' x (append' _ _ _ xs' ys)
     end.
 
-Fail Fixpoint append (a:Type) (n m:nat) (xs:Vec n a) (ys:Vec m a) : Vec (n + m) a :=
-    match xs with
-    | Nil _             => ys
-    | Cons _ _ x xs'    => Cons _ _ x (append _ _ _ xs' ys)   
-    end.
+Arguments append' {a} {n} {m}.
 
-Print Vec.
-Print Vec'.
+Definition v3' : Vec' nat 5 := append' v1' v2'.
 
 Fixpoint vec2vec' (a:Type) (n:nat) (xs:Vec n a) : Vec' a n :=
     match xs with
-    | Nil _             => Nil' _
-    | Cons _ _ x xs     => Cons' _ _ x (vec2vec' _ _ xs)
+    | Nil           => Nil'
+    | Cons x xs     => Cons' x (vec2vec' _ _ xs)
     end.
 
 Fixpoint vec'2vec (a:Type) (n:nat) (xs:Vec' a n) : Vec n a :=
     match xs with
-    | Nil' _            => Nil _
-    | Cons' _ _ x xs    => Cons _ _ x (vec'2vec _ _ xs)
+    | Nil'          => Nil
+    | Cons' x xs    => Cons x (vec'2vec _ _ xs)
     end.
 
 Arguments vec2vec' {a} {n}.
 Arguments vec'2vec {a} {n}.
 
+Definition vecId  (a:Type) (n:nat) (xs:Vec n a)  : Vec n a  := vec'2vec (vec2vec' xs).
+Definition vecId' (a:Type) (n:nat) (xs:Vec' a n) : Vec' a n := vec2vec' (vec'2vec xs).
+
+Arguments vecId  {a} {n}.
+Arguments vecId' {a} {n}.
+
+Compute vecId  v3.
+Compute vecId' v3'.
+
+Fixpoint vecInd (a:Type) 
+    (P:forall (n:nat), Vec n a -> Prop) 
+    (H0:P 0 Nil)
+    (IH:forall (n:nat) (x:a) (xs:Vec n a), P n xs -> P (S n) (Cons x xs))
+    (n:nat) 
+    (xs:Vec n a)
+    : P n xs :=
+    match xs as ys in Vec n _ return P n ys with
+    | Nil        => H0
+    | Cons x xs' => IH _ x xs' (vecInd _ P H0 IH _ xs') 
+    end.
+
+(*
 Lemma vecId : forall (a:Type) (n:nat) (xs:Vec n a), vec'2vec (vec2vec' xs) = xs.
 Proof.
     intros a n. revert n a. induction n as [|n IH].
@@ -57,17 +86,6 @@ Proof.
         + simpl.
 
 Show.
-
-
-(*
-Definition cast1 (a:Type) (m:nat) (xs:Vec m a) : Vec (0 + m) a := xs.
-
-Arguments cast1 {a} {m}.
-
-
-Fixpoint append (a:Type) (n m:nat) (xs:Vec n a) (ys:Vec m a) : Vec (n + m) a :=
-    match xs in Vec n' a' return Vec (n' + m) a' with
-    | @Nil _        => cast1 ys
-    | Cons x xs'    => Cons x (append _ _ _ xs' ys)
-    end. 
 *)
+
+

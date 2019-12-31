@@ -713,3 +713,37 @@ $\tau(y)=x$ and $\sigma(x)=y$. From
 proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) we can see that
 $\tau$ is not $\beta$-valid for $\phi$ since we have $y\in\free(\lambda x y)$
 and yet $x\in\free(\tau(y))$. We have:
+    \begin{eqnarray*}(\sigma'\circ\tau)' (\phi)
+        &=&(\sigma'\circ\tau)' (\lambda x y)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&(\sigma'\circ\tau)^{*} (\lambda x y)(\emptyset)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\lambda x(\sigma'\circ\tau)^{*} (y)(\{x\})\\
+        y\not\in\{x\}\ \to\ 
+        &=&\lambda x(\sigma'\circ\tau) (y)\\
+        \tau(y)=x\ \to\ 
+        &=&\lambda x\sigma'(x)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\lambda x\sigma^{*}(x)(\emptyset)\\
+        x\not\in\emptyset\ \to\ 
+        &=&\lambda x\sigma(x)\\
+        \sigma(x)=y\ \to\ 
+        &=&\lambda x y\\
+        x\neq y\ \to\ 
+        &\neq&\lambda x x\\
+        x\in\{x\}\ \to\ 
+        &=&\lambda x \sigma^{*}(x)(\{x\})\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma^{*}(\lambda x x)(\emptyset)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma'(\,\lambda x x\,)\\
+        \tau(y)=x\ \to\ 
+        &=&\sigma'(\,\lambda x\tau(y)\,)\\
+        y\not\in\{x\}\ \to\ 
+        &=&\sigma'(\,\lambda x\tau^{*}(y)(\{x\})\,)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma'(\,\tau^{*}(\lambda x y)(\emptyset)\,)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma'(\tau'(\lambda x y))\\
+        &=&(\sigma'\circ\tau')(\phi)
+    \end{eqnarray*}

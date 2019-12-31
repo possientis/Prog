@@ -141,12 +141,6 @@ def mk_symm {α : Type} (xs : list α) : list α := xs ++ reverse xs
 #check @mk_symm
 
 
-lemma L17 : ∀ (α:Type), @reverse α nil = nil :=
-  assume α,
-    begin
-      unfold reverse,
-    end
-
 
 /-
 lemma L17 : ∀ (α:Type) (xs ys:list α), reverse (xs ++ ys) = reverse ys ++ reverse xs :=

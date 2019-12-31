@@ -1,2 +1,2 @@
-complete counter example when tau not beta-valid
+conjecture: f beta-valid for t & g beta-valid for f'(t) <=> (g' . f) beta-valid for t ?
 LAM/betavalid.tex

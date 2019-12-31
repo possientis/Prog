@@ -91,12 +91,16 @@ $g\circ f$ in \Cat\ is defined, and we have $f\circ' g= g \circ f$.
         \[
             (\Cop)^{op}=(\ob, \arr, \dom, \cod, \id, \circ'')
         \]
-    In order to show that $(\Cop)^{op}=\Cat$ we simply need to show that
+    In order to show that $(\Cop)^{op}=\Cat$, by virtue of 
+    axiom~(\ref{Cat:ax:tuple:extensional}) we simply need to show that
     the partial maps $\circ,\circ'':\arr\times\arr\to\arr$ are equal.
     Given two arrows $f$ and $g$, the composition arrow $g\circ'' f$ is 
     defined \ifand\ $f\circ' g$ is defined, which is itself equivalent to 
-    $g\circ f$ being defined. So both $\circ$ and $\circ''$ are defined
-    on the same collection of arrow tuples $(g,f)$. Furthemore, whenever
-    $g\circ f$ is defined, we have $g\circ'' f=f\circ' g=g\circ f$.
+    $g\circ f$ being defined. By virtue of
+    axiom~(\ref{Cat:ax:collection:extensional}), both $\circ$ and $\circ''$ 
+    are therefore defined on the same collection of arrow tuples $(g,f)$.
+    Furthemore, whenever $g\circ f$ is defined, we have 
+    $g\circ'' f=f\circ' g=g\circ f$. Using axiom~(\ref{Cat:ax:map:extensional})
+    we conclude that $\circ''=\circ$ as requested.
 \end{proof}
 

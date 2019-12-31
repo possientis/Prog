@@ -1,5 +1,6 @@
 Require Import Core.LEM.
 Require Import Core.Set.
+Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
 Require Import Core.Syntax.
@@ -8,10 +9,15 @@ Require Import Core.Environment.
 
 
 (* Theorem 'extensionality' expressed in set theory abstract syntax.            *)
+(* This formulation is correct provided the variables names n m p are distinct. *)
 Definition extensionalityF (n m p:nat) : Formula :=
     All n (All m (Iff (Equ n m) (All p (Iff (Elem p n) (Elem p m))))).
 
-(*
+(* Theorem 'doubleIncl' expressed in set theory abstract syntax.                *)
+(* This formulation is correct provided the variables names n m are distinct.   *)
+Definition doubleInclF (n m:nat) : Formula :=
+    All n (All m (Iff (Equ n m) (And (Sub n m) (Sub m n)))).
+
 (* Evaluating extensionalityF in any environment 'yields' the theorem.          *)
 Lemma evalExtensionalityF : LEM -> forall (e:Env) (n m p:nat),
     m <> n -> 
@@ -64,7 +70,53 @@ Proof.
             { assumption. }
             { assumption. }
             { assumption. }
-        + apply H2. intros z.
+        + apply H2. intros z. remember (H' z) as H eqn:E. clear E. clear H'.
+          rewrite <- E1 in H. rewrite <- E2 in H. rewrite evalIff in H.
+          rewrite evalElem in H. rewrite evalElem in H. rewrite bindSame in H.
+          rewrite bindDiff in H. rewrite bindDiff in H. rewrite E2 in H.
+          rewrite bindSame in H. rewrite bindDiff in H. rewrite E1 in H.
+          rewrite bindSame in H.
+            { assumption. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+        + assumption.
+        + assumption.
+        + assumption.
+Qed.
 
-Show.
-*)
+
+(* Evaluating doubleInclF in any environment 'yields' the theorem doubleIncl.   *)
+Lemma evaldoubleInclF : LEM -> forall (e:Env) (n m:nat),
+    m <> n -> 
+    eval e (doubleInclF n m)
+        <->
+    forall (x y:set), x == y <-> (x <== y) /\ (y <== x).
+Proof.
+    intros L e n m Hmn. unfold doubleInclF. rewrite evalAll. split; intros H x.
+    - intros y. remember (H x) as H' eqn:E. clear E. clear H.
+      rewrite evalAll in H'. remember (H' y) as H eqn:E. clear E. clear H'.
+      remember (bind e n x) as e1 eqn:E1.
+      rewrite evalIff in H. rewrite evalEqu in H. rewrite evalAnd  in H.
+      rewrite evalSub in H. rewrite evalSub in H. rewrite bindSame in H. 
+      rewrite bindDiff in H. rewrite E1 in H. rewrite bindSame in H.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+    - rewrite evalAll. intros y.
+      remember (bind e n x) as e1 eqn:E1.
+      rewrite evalIff, evalEqu, evalAnd, evalSub, evalSub, bindSame.
+      rewrite bindDiff, E1, bindSame.
+        + apply H.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+Qed.
