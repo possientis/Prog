@@ -30,6 +30,7 @@ all :							${CORE}/Nat.vo \
 								${SEM}/Trans.vo \
 								${SEM}/ElemIncl.vo \
 								${SEM}/Equal.vo \
+								${SEM}/Extensionality.vo \
 								${SEM}/Empty.vo
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
@@ -295,4 +296,15 @@ ${SEM}/Empty.vo :				${SEM}/Empty.v \
 								${CORE}/Semantics.vo \
 								${CORE}/Environment.vo
 	coqc ${SEM}/Empty.v -R ${CORE} ${CORE}
+
+${SEM}/Extensionality.vo :		${SEM}/Extensionality.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Extensionality.v -R ${CORE} ${CORE}
+
 

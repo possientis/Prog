@@ -62,39 +62,41 @@ data FunList' a b t where
 fun2fun' :: FunList a b t -> FunList' a b t
 fun2fun' (Done t) = FunList' (Nil, \_ -> t)
 fun2fun' (More a fun) = case fun2fun' fun of
-   (FunList' (vec,f)) -> FunList' $ n2sn (a , (vec,f))
-
+    (FunList' (vec,f)) -> FunList' $ (Cons a vec, g) 
+        where
+        g (Cons b vec') = f vec' b
+    
 fun'2fun :: FunList' a b t -> FunList a b t
 fun'2fun (FunList' (Nil, f)) = Done (f Nil)
-fun'2fun (FunList' (Cons a vec, f)) = case sn2n (Cons a vec, f) of
-    (a', (vec', g)) -> More a' (fun'2fun (FunList' (vec', g))) 
+fun'2fun (FunList' (Cons a vec, f)) = More a (fun'2fun (FunList' (vec, g))) 
+    where
+    g vec' b = f (Cons b vec')
 
 funId :: FunList a b t -> FunList a b t 
-funId = fun'2fun . fun2fun'
+--funId = fun'2fun . fun2fun'
+--1. base case
+--funId (Done t) = fun'2fun (fun2fun' (Done t))
+--funId (Done t) = fun'2fun (FunList' (Nil, \_ -> t))
+--funId (Done t) = fun'2fun (FunList' (Nil, f)) where f = (\_ -> t)
+--funId (Done t) = Done (f Nil) where f = (\_ -> t)
+--funId (Done t) = Done ((\_ -> t) Nil)
+funId (Done t) = Done t
+
+-- 2. inductive case
+funId (More a fun) = fun'2fun (fun2fun' (More a fun))
+{-
+funId (More a fun) = fun'2fun (case fun2fun' fun of
+    (FunList' (vec,f)) -> FunList' $ (Cons a vec, g) 
+        where
+        g (Cons b vec') = f vec' b)
+-}
+
+
 
 fun'Id :: FunList' a b t -> FunList' a b t 
 fun'Id = fun2fun' . fun'2fun
 
 -- pseudo haskell proof
-
--- funId (Done t) 
--- = (fun'2fun . fun2fun') (Done t)
--- = fun'2fun (fun2fun' (Done t))
--- = fun'2fun (FunList' (Nil, \_ -> t))
--- = Done ((\_ -> t) Nil)
--- = Done t
---
--- funId (More a fun)
--- = (fun'2fun . fun2fun') (More a fun)
--- = fun'2fun (fun2fun' (More a fun))
--- = fun'2fun (FunList' (n2sn (a, (vec, f)))) [FunList' (vec,f) = fun2fun' fun]
--- = fun'2fun (FunList' (Cons a vec, g))      [g (Cons b vec') = f vec' b     ] 
--- = More a' (fun'2fun (FunList' (vec',g')))  
--- where
--- (a', (vec',g')) 
--- = sn2n (Cons a vec, g)
--- = (a, (vec, g'))         [g' vec' b = g (Cons b vec')]    
---
 
 -- nId (a, (vec, f))
 -- = (sn2n . n2sn) (a, (vec f))

@@ -1,0 +1,70 @@
+Require Import Core.LEM.
+Require Import Core.Set.
+Require Import Core.Elem.
+Require Import Core.Equal.
+Require Import Core.Syntax.
+Require Import Core.Semantics.
+Require Import Core.Environment.
+
+
+(* Theorem 'extensionality' expressed in set theory abstract syntax.            *)
+Definition extensionalityF (n m p:nat) : Formula :=
+    All n (All m (Iff (Equ n m) (All p (Iff (Elem p n) (Elem p m))))).
+
+(*
+(* Evaluating extensionalityF in any environment 'yields' the theorem.          *)
+Lemma evalExtensionalityF : LEM -> forall (e:Env) (n m p:nat),
+    m <> n -> 
+    p <> m -> 
+    p <> n ->
+    eval e (extensionalityF n m p)
+        <->
+    forall (x y:set), x == y <-> forall (z:set), z :: x <-> z :: y. 
+Proof.
+    intros L e n m p Hmn Hpm Hpn. unfold extensionalityF. rewrite evalAll.
+    split; intros H x.
+    - intros y. 
+      remember (H x)  as H' eqn:E. clear E. clear H. rewrite evalAll in H'.
+      remember (H' y) as H  eqn:E. clear E. clear H'.  
+      rewrite evalIff in H. rewrite evalEqu in H. rewrite evalAll in H.
+      remember (bind e n x) as e1 eqn:E1. rewrite bindDiff in H.
+      rewrite bindSame in H. rewrite E1 in H. rewrite bindSame in H.
+      destruct H as [H1 H2]. split; intros H.
+        + intros z. remember (H1 H z) as H' eqn:E. clear E. clear H.
+          rewrite <- E1 in H'. remember (bind e1 m y) as e2 eqn:E2.
+          rewrite evalIff in H'. rewrite evalElem in H'. rewrite evalElem in H'.
+          rewrite bindSame in H'. rewrite bindDiff in H'. rewrite bindDiff in H'.
+          rewrite E2 in H'. rewrite bindSame in H'. rewrite bindDiff in H'.
+          rewrite E1 in H'. rewrite bindSame in H'.
+            { assumption. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+        + apply H2. intros z. rewrite <- E1. remember (bind e1 m y) as e2 eqn:E2.
+          rewrite evalIff, evalElem, evalElem, bindSame, bindDiff, bindDiff, E2.
+          rewrite bindSame, bindDiff, E1, bindSame.
+            { apply H. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+        + assumption.
+        + assumption.
+        + assumption.
+    - rewrite evalAll. intros y.
+      remember (bind e n x) as e1 eqn:E1. remember (bind e1 m y) as e2 eqn:E2.
+      rewrite evalIff, evalEqu, evalAll, E2, bindSame, bindDiff, E1, bindSame.
+      destruct (H x y) as [H1 H2]. clear H. split; intros H'.
+        + intros z. rewrite <- E1, <- E2, evalIff, evalElem, evalElem, bindSame.
+          rewrite  bindDiff, bindDiff, E2, bindSame, bindDiff, E1, bindSame.
+           apply H1.
+            { assumption. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+            { assumption. }
+        + apply H2. intros z.
+
+Show.
+*)
