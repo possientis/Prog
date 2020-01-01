@@ -17,12 +17,30 @@ module  Optics.FunList
     ,   fun'Id
     ,   fun2fun'
     ,   fun'2fun
+    ,   single
+    ,   fuse
     )   where
 
 import Optics.Nat
 import Optics.Vec
 
 data FunList a b t = Done t | More a (FunList a b (b -> t))
+
+instance Functor (FunList a b) where
+    fmap f (Done t) = Done (f t)
+    fmap f (More a fun) = More a (fmap (f .) fun) 
+
+instance Applicative (FunList a b) where
+    pure = Done
+    (Done f)     <*> k = fmap f k
+    (More a fun) <*> k = More a ((flip <$> fun) <*> k)
+
+single :: a -> FunList a b b
+single x = More x (Done id)
+
+fuse :: FunList b b t -> t
+fuse (Done t) = t
+fuse (More x fun) = fuse fun x
 
 fun2e :: FunList a b t -> Either t (a, FunList a b (b -> t))
 fun2e (Done t)    = Left t

@@ -31,7 +31,8 @@ all :							${CORE}/Nat.vo \
 								${SEM}/ElemIncl.vo \
 								${SEM}/Equal.vo \
 								${SEM}/Extensionality.vo \
-								${SEM}/Empty.vo
+								${SEM}/Empty.vo \
+								${SEM}/Pairing.vo
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
@@ -249,6 +250,7 @@ ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
 								${CORE}/Environment.vo
 	coqc ${CORE}/Semantics.v -R ${CORE} ${CORE}
 				
+
 ${SEM}/Incl.vo :				${SEM}/Incl.v \
 								${CORE}/LEM.vo \
 								${CORE}/Set.vo \
@@ -257,6 +259,7 @@ ${SEM}/Incl.vo :				${SEM}/Incl.v \
 								${CORE}/Semantics.vo \
 								${CORE}/Environment.vo
 	coqc ${SEM}/Incl.v -R ${CORE} ${CORE}
+
 
 ${SEM}/Trans.vo :				${SEM}/Trans.v \
 								${CORE}/LEM.vo \
@@ -267,6 +270,7 @@ ${SEM}/Trans.vo :				${SEM}/Trans.v \
 								${CORE}/Environment.vo
 	coqc ${SEM}/Trans.v -R ${CORE} ${CORE}
 
+
 ${SEM}/ElemIncl.vo :			${SEM}/ElemIncl.v \
 								${CORE}/LEM.vo \
 								${CORE}/Set.vo \
@@ -276,6 +280,7 @@ ${SEM}/ElemIncl.vo :			${SEM}/ElemIncl.v \
 								${CORE}/Semantics.vo \
 								${CORE}/Environment.vo
 	coqc ${SEM}/ElemIncl.v -R ${CORE} ${CORE}
+
 
 ${SEM}/Equal.vo :				${SEM}/Equal.v \
 								${CORE}/LEM.vo \
@@ -288,14 +293,6 @@ ${SEM}/Equal.vo :				${SEM}/Equal.v \
 								${CORE}/Environment.vo
 	coqc ${SEM}/Equal.v -R ${CORE} ${CORE}
 
-${SEM}/Empty.vo :				${SEM}/Empty.v \
-								${CORE}/LEM.vo \
-								${CORE}/Set.vo \
-								${CORE}/Elem.vo \
-								${CORE}/Syntax.vo \
-								${CORE}/Semantics.vo \
-								${CORE}/Environment.vo
-	coqc ${SEM}/Empty.v -R ${CORE} ${CORE}
 
 ${SEM}/Extensionality.vo :		${SEM}/Extensionality.v \
 								${CORE}/LEM.vo \
@@ -306,5 +303,26 @@ ${SEM}/Extensionality.vo :		${SEM}/Extensionality.v \
 								${CORE}/Semantics.vo \
 								${CORE}/Environment.vo
 	coqc ${SEM}/Extensionality.v -R ${CORE} ${CORE}
+
+
+${SEM}/Empty.vo :				${SEM}/Empty.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Empty.v -R ${CORE} ${CORE}
+
+
+${SEM}/Pairing.vo :				${SEM}/Pairing.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Pairing.v -R ${CORE} ${CORE}
 
 

@@ -1,0 +1,21 @@
+\begin{defin}\label{Cat:def:canonical:product}
+    We call {\em canonical product} of categories \Cone\ and \Ctwo\ the category 
+    denoted $\Cone\times\Ctwo$ and defined by $\Cone\times\Ctwo=
+    (\ob, \arr, \dom, \cod, \id, \circ)$ where:
+        \begin{eqnarray*}
+            (1)&\ &\ob=\{\ (x_{1},x_{2})\ |\ x_{1}\in\ob\ \Cone\ 
+                                          ,\ x_{2}\in\ob\ \Ctwo\ \}\\
+            (2)&\ &\arr=\{\ (f_{1},f_{2})\ |\ f_{1}\in\arr\ \Cone\ 
+                                           ,\ f_{2}\in\arr\ \Ctwo\ \}\\
+            (3)&\ &\dom(f_{1},f_{2})=(\,\dom(f_{1})\,,\,\dom(f_{2})\,)\\
+            (4)&\ &\cod(f_{1},f_{2})=(\,\cod(f_{1})\,,\,\cod(f_{2})\,)\\
+            (5)&\ &\id(x_{1},x_{2}) =(\,\id(x_{1})\,,\,\id(x_{2})\,)\\
+            (6)&\ &(g_{1},g_{2})\circ(f_{1},f_{2})=(\,g_{1}\circ f_{1}\,
+                                                   ,\,g_{2}\circ f_{2}\,)
+        \end{eqnarray*}
+    where $(3)$ and $(4)$ hold for all $f_{1}\in\arr\ \Cone$ and $f_{2}
+    \in\arr\ \Ctwo$, $(5)$ holds for all $x_{1}\in\ob\ \Cone$ and $x_{2}
+    \in\ob\ \Ctwo$, and $(6)$ holds for all $f_{1},g_{1}\in\arr\ \Cone$
+    and $f_{2},g_{2}\in\arr\ \Ctwo$ for which $g_{1}\circ f_{1}$ and
+    $g_{2}\circ f_{2}$ are defined.
+\end{defin}

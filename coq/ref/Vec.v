@@ -64,28 +64,26 @@ Arguments vecId' {a} {n}.
 Compute vecId  v3.
 Compute vecId' v3'.
 
-Fixpoint vecInd (a:Type) 
-    (P:forall (n:nat), Vec n a -> Prop) 
-    (H0:P 0 Nil)
-    (IH:forall (n:nat) (x:a) (xs:Vec n a), P n xs -> P (S n) (Cons x xs))
+Check Vec_ind.
+Check Vec'_ind.
+
+Fixpoint vecInd' (a:Type) 
+    (P:forall (n:nat), Vec' a n -> Prop) 
+    (H0:P 0 Nil')
+    (IH:forall (n:nat) (x:a) (xs:Vec' a n), P n xs -> P (S n) (Cons' x xs))
     (n:nat) 
-    (xs:Vec n a)
+    (xs:Vec' a n)
     : P n xs :=
-    match xs as ys in Vec n _ return P n ys with
-    | Nil        => H0
-    | Cons x xs' => IH _ x xs' (vecInd _ P H0 IH _ xs') 
-    end.
+    match xs with 
+    | Nil'       => H0
+    | Cons' x ys => IH _ x ys (vecInd' a P H0 IH _ ys)
+    end
+    .
 
 (*
-Lemma vecId : forall (a:Type) (n:nat) (xs:Vec n a), vec'2vec (vec2vec' xs) = xs.
+Lemma vecIdent' : forall (a:Type) (n:nat) (xs:Vec' a n), vec2vec' (vec'2vec xs) = xs.
 Proof.
-    intros a n. revert n a. induction n as [|n IH].
-    - admit.
-    - intros a xs. destruct xs as [|m b x xs].
-        + admit.
-        + simpl.
 
 Show.
 *)
-
 

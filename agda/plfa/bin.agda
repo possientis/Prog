@@ -107,6 +107,29 @@ from-to (suc n) =
     suc n
     ∎
 
+
+_⊕_ : Bin → Bin → Bin
+b₁ ⊕ b₂  = to (from b₁ + from b₂)
+
++-⊕ : ∀ (m n : ℕ) → from (to m ⊕ to n) ≡ m + n
++-⊕  m n =
+  begin
+    from (to m ⊕ to n)
+    ≡⟨⟩
+    from (to (from (to m) + from (to n)))
+    ≡⟨ from-to (from (to m) + from (to n) ) ⟩
+    from (to m) + from (to n)
+    ≡⟨ cong (_+ from (to n)) (from-to m) ⟩
+    m + from (to n)
+    ≡⟨ cong (m +_) (from-to n) ⟩
+    m + n
+    ∎
+
+b⊕b : ∀ (b : Bin) → b ⊕ b ≡ b O
+b⊕b ⟨⟩ = refl
+b⊕b (b O) = {!!}
+b⊕b (b I) = {!!}
+
 -- whether binary number has a leading '1'
 data One : Bin → Set where
   justOne : One (⟨⟩ I)
@@ -158,32 +181,6 @@ one-to-from : ∀ {b : Bin}
 
 can-to-from canZero = refl
 can-to-from (canOne oneb) = one-to-from oneb
-
-
-one-to-2 : ∀ {n : ℕ}
-  →   1 ≤ n
-      ----------
-  →   to (2 * n) ≡ (to n) O
-
-one-to-2 (s≤s {n = n} _) =
-  begin
-    to (2 * suc n)
-    ≡⟨⟩
-    to (suc n + 1 * suc n)
-    ≡⟨⟩
-    to (suc n + (suc n + 0))
-    ≡⟨ {!!} ⟩
-    to (suc n + suc n)
-    ≡⟨⟩
-    to (suc (n + suc n))
-    ≡⟨⟩
-    inc (to (n + suc n))
-    ≡⟨ {!!} ⟩
-    inc (to (suc (n + n)))
-    ≡⟨⟩
-    {!!}
-
-
 
 one-to-from justOne = refl
 one-to-from (oneO {b} oneb) =
