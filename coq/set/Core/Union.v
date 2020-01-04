@@ -95,7 +95,7 @@ Proof.
 Qed.
 
 (* The union axiom is satisfied in our model: Every set x has a union set y.    *)
-Theorem union_axiom : forall (x:set), exists (y:set), forall (z:set),
+Theorem unionAxiom : forall (x:set), exists (y:set), forall (z:set),
     z :: y <-> exists (u:set), z :: u /\ u :: x.
 Proof. intros x. exists (union x). apply union_charac. Qed.
 

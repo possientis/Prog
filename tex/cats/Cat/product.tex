@@ -19,3 +19,43 @@
     and $f_{2},g_{2}\in\arr\ \Ctwo$ for which $g_{1}\circ f_{1}$ and
     $g_{2}\circ f_{2}$ are defined.
 \end{defin}
+
+So if \Cone\ and \Ctwo\ are two categories, the objects of $\Cone\times\Ctwo$
+are the collection of all tuples $(x_{1}, x_{2})$ where $x_{1}$ is an
+object of \Cone\ and $x_{2}$ is an object of \Ctwo. The set comprehension 
+notation $\{\ (x_{1},x_{2})\ |\ x_{1}\in\ob\ \Cone\ ,\ x_{2}\in\ob\ \Ctwo\ \}$
+if of course an abuse of notation as it does not in general represent a set
+but a collection. We could also have denoted this collection 
+$\ob\ \Cone\times\ob\ \Ctwo$ using a cartesian product notation, keeping 
+in mind that this is a product of two collections.
+
+Similarly, the arrows of $\Cone\times\Ctwo$ are the collection of all tuples
+$(f_{1},f_{2})$ where $f_{1}$ is an arrow of \Cone\ and $f_{2}$ is an arrow
+of \Ctwo, a collection which could reasonably be denoted $\arr\ \Cone\times
+\arr\ \Ctwo$ instead of the set-comprehension notation.
+
+It should be clear from definition~(\ref{Cat:def:canonical:product}) that
+the notations '$\dom$', '$\cod$', '$\id$' and '$\circ$' are overloaded, 
+referring either to \Cone, \Ctwo\ or $\Cone\times\Ctwo$. Given our definitions 
+of $\ob\ (\Cone\times\Ctwo)$ and $\arr\ (\Cone\times\Ctwo)$, given that we 
+have $\dom:\arr\ \Cone\to\ob\ \Cone$ and $\dom:\arr\ \Ctwo\to\ob\ \Ctwo$ it 
+should be clear that $(3)$ of definition~(\ref{Cat:def:canonical:product})
+defines a map $\dom:\arr\ (\Cone\times\Ctwo)\to\ob\ (\Cone\times\Ctwo)$,
+and $\cod:\arr\ (\Cone\times\Ctwo)\to\ob\ (\Cone\times\Ctwo)$
+follows from $(4)$. Furthermore from $\id:\ob\ \Cone\to\arr\ \Cone$
+and $\id:\ob\ \Ctwo\to\arr\ \Ctwo$ we obtain $\id:\ob\ (\Cone\times\Ctwo)
+\to\arr\ (\Cone\times\Ctwo)$ using $(5)$. Finally using $(6)$, given 
+the partial maps $\circ:\arr\ \Cone\times\arr\ \Cone\to\arr\ \Cone$
+and $\circ:\arr\ \Ctwo\times\arr\ \Ctwo\to\arr\ \Ctwo$ we obtain
+a partial map $\circ:\arr\ (\Cone\times\Ctwo)\times\arr
+\ (\Cone\times\Ctwo)\to\arr\ \Cone\times\Ctwo$.
+
+\begin{prop}\label{Cat:prop:canonical:product:is:category}
+    The canonical product $\Cone\times\Ctwo$ of 
+    definition~(\ref{Cat:def:canonical:product}) is a category.
+\end{prop}
+\begin{proof}
+    We need to check that the data $\Cone\times\Ctwo=(\ob, \arr, \dom, 
+    \cod, \id, \circ)$ of definition~(\ref{Cat:def:canonical:product})
+    forms a category, having assumed \Cone\ and \Ctwo\ are categories.
+\end{proof}

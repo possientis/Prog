@@ -109,26 +109,75 @@ from-to (suc n) =
 
 
 _⊕_ : Bin → Bin → Bin
-b₁ ⊕ b₂  = to (from b₁ + from b₂)
+⟨⟩ ⊕ b = b
+(b O) ⊕ ⟨⟩ = b O
+(b₁ O) ⊕ (b₂ O) = (b₁ ⊕ b₂) O
+(b₁ O) ⊕ (b₂ I) = (b₁ ⊕ b₂) I
+(b I) ⊕ ⟨⟩ = b I
+(b₁ I) ⊕ (b₂ O) = (b₁ ⊕ b₂) I
+(b₁ I) ⊕ (b₂ I) = inc (b₁ ⊕ b₂) O
 
-+-⊕ : ∀ (m n : ℕ) → from (to m ⊕ to n) ≡ m + n
-+-⊕  m n =
+⊕-from : ∀ (m n : Bin) → from (m ⊕ n) ≡ from m + from n
+⊕-from ⟨⟩ n = refl
+⊕-from (m O) ⟨⟩ = sym (+-identity-r _)
+⊕-from (m O) (n O) =
   begin
-    from (to m ⊕ to n)
+    from ((m O) ⊕ (n O))
     ≡⟨⟩
-    from (to (from (to m) + from (to n)))
-    ≡⟨ from-to (from (to m) + from (to n) ) ⟩
-    from (to m) + from (to n)
-    ≡⟨ cong (_+ from (to n)) (from-to m) ⟩
-    m + from (to n)
-    ≡⟨ cong (m +_) (from-to n) ⟩
-    m + n
+    from ((m ⊕ n) O)
+    ≡⟨⟩
+    2 * from (m ⊕ n)
+    ≡⟨ {!!} ⟩
+    2 * (from m + from n)
+    ≡⟨ {!!} ⟩
+    2 * from m + 2 * from n
+    ≡⟨⟩
+    from (m O) + from (n O)
     ∎
+⊕-from (m O) (n I) =
+  begin
+    from ((m O) ⊕ (n I))
+    ≡⟨⟩
+    from ((m ⊕ n) I)
+    ≡⟨⟩
+    suc (2 * from (m ⊕ n))
+    ≡⟨ {!!} ⟩
+    suc (2 * (from m + from n))
+    ≡⟨ {!!} ⟩
+    suc (2 * from m + 2 * from n )
+    ≡⟨ {!!} ⟩
+    2 * from m + suc (2 * from n)
+    ≡⟨⟩
+    from (m O) + from (n I)
+    ∎
+⊕-from (m I) ⟨⟩ = sym (cong suc (+-identity-r _))
+⊕-from (m I) (n O) =
+  begin
+    from ((m I) ⊕ (n O))
+    ≡⟨⟩
+    from ((m ⊕ n) I)
+    ≡⟨⟩
+    suc (2 * from (m ⊕ n))
+    ≡⟨ {!!} ⟩
+    suc (2 * from m + 2 * from n)
+    ≡⟨⟩
+    suc (2 * from m) + 2 * from n
+    ≡⟨⟩
+    from (m I) + from (n O)
+    ∎
+⊕-from (m I) (n I) =
+  begin
+    from ((m I) ⊕ (n I))
+    ≡⟨⟩
+    from (inc (m ⊕ n) O)
+    ≡⟨⟩ 
+    2 * from (inc (m ⊕ n))
+    ≡⟨ {!!} ⟩
+    2 * suc (from (m ⊕ n))
+    ≡⟨ {!!} ⟩
+    2 * suc (from m + from n)
+    ≡⟨⟩ {!!}
 
-b⊕b : ∀ (b : Bin) → b ⊕ b ≡ b O
-b⊕b ⟨⟩ = refl
-b⊕b (b O) = {!!}
-b⊕b (b I) = {!!}
 
 -- whether binary number has a leading '1'
 data One : Bin → Set where

@@ -1,2 +1,3 @@
+is beta-validity defined wrongly? two strong to care about sub-formulas?
 conjecture: f beta-valid for t & g beta-valid for f'(t) <=> (g' . f) beta-valid for t ?
 LAM/betavalid.tex

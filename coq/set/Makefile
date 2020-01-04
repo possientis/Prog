@@ -32,7 +32,8 @@ all :							${CORE}/Nat.vo \
 								${SEM}/Equal.vo \
 								${SEM}/Extensionality.vo \
 								${SEM}/Empty.vo \
-								${SEM}/Pairing.vo
+								${SEM}/Pairing.vo \
+								${SEM}/Union.vo
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
@@ -324,5 +325,16 @@ ${SEM}/Pairing.vo :				${SEM}/Pairing.v \
 								${CORE}/Semantics.vo \
 								${CORE}/Environment.vo
 	coqc ${SEM}/Pairing.v -R ${CORE} ${CORE}
+
+
+${SEM}/Union.vo :				${SEM}/Union.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	coqc ${SEM}/Union.v -R ${CORE} ${CORE}
 
 
