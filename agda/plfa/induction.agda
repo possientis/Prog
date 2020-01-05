@@ -173,8 +173,8 @@ _ = begin
     n + (m + p)
     ∎
 
-*-distrib-+ : ∀ (m n p : ℕ) → (m + n) * p ≡ m * p + n * p
-*-distrib-+ zero n p =
+*-distrib-r-+ : ∀ (m n p : ℕ) → (m + n) * p ≡ m * p + n * p
+*-distrib-r-+ zero n p =
   begin
     (zero + n) * p
     ≡⟨⟩
@@ -184,20 +184,21 @@ _ = begin
     ≡⟨⟩
     zero * p + n * p
     ∎
-*-distrib-+ (suc m) n p =
+*-distrib-r-+ (suc m) n p =
   begin
     (suc m + n) * p
     ≡⟨⟩
     suc (m + n) * p
     ≡⟨⟩
     p + (m + n) * p
-    ≡⟨ cong (p +_) (*-distrib-+ m n p) ⟩
+    ≡⟨ cong (p +_) (*-distrib-r-+ m n p) ⟩
     p + (m * p + n * p)
     ≡⟨ sym (+-assoc p (m * p) (n * p)) ⟩
     (p + m * p) + n * p
     ≡⟨⟩
     suc m * p + n * p
     ∎
+
 
 *-assoc : ∀ (m n p : ℕ) → (m * n) * p ≡ m * (n * p)
 *-assoc zero n p =
@@ -215,7 +216,7 @@ _ = begin
     (suc m * n) * p
     ≡⟨⟩
     (n + m * n) * p
-    ≡⟨ *-distrib-+ n (m * n) p ⟩
+    ≡⟨ *-distrib-r-+ n (m * n) p ⟩
     n * p + (m * n) * p
     ≡⟨ cong (n * p +_) (*-assoc m n p) ⟩
     n * p + m * (n * p)
@@ -414,4 +415,22 @@ _ = begin
     (m ^ n) * ((m ^ n) ^ p)
     ≡⟨⟩
     (m ^ n) ^ suc p
+    ∎
+
+*-distrib-l-+ : ∀ (n p q : ℕ) → n * (p + q) ≡ n * p + n * q
+*-distrib-l-+ n p q rewrite *-comm n (p + q) | *-comm n p | *-comm n q =
+  *-distrib-r-+ p q n
+
+suc-suc-2 : ∀ (n : ℕ) → 2 * suc n ≡ suc (suc (2 * n))
+suc-suc-2 n =
+  begin
+    2 * suc n
+    ≡⟨ *-suc 2 n ⟩
+    2 + 2 * n
+    ≡⟨⟩
+    suc (1 + 2 * n)
+    ≡⟨⟩
+    suc (suc (0 + 2 * n))
+    ≡⟨⟩
+    suc (suc (2 * n))
     ∎

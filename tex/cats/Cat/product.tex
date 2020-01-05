@@ -24,7 +24,7 @@ So if \Cone\ and \Ctwo\ are two categories, the objects of $\Cone\times\Ctwo$
 are the collection of all tuples $(x_{1}, x_{2})$ where $x_{1}$ is an
 object of \Cone\ and $x_{2}$ is an object of \Ctwo. The set comprehension 
 notation $\{\ (x_{1},x_{2})\ |\ x_{1}\in\ob\ \Cone\ ,\ x_{2}\in\ob\ \Ctwo\ \}$
-if of course an abuse of notation as it does not in general represent a set
+is of course an abuse of notation as it does not in general represent a set
 but a collection. We could also have denoted this collection 
 $\ob\ \Cone\times\ob\ \Ctwo$ using a cartesian product notation, keeping 
 in mind that this is a product of two collections.
@@ -58,4 +58,60 @@ a partial map $\circ:\arr\ (\Cone\times\Ctwo)\times\arr
     We need to check that the data $\Cone\times\Ctwo=(\ob, \arr, \dom, 
     \cod, \id, \circ)$ of definition~(\ref{Cat:def:canonical:product})
     forms a category, having assumed \Cone\ and \Ctwo\ are categories.
+    We have established that \ob\ and \arr\ are collections, that 
+    $\dom,\ \cod,\ \id$ are maps with the appropriate signatures and
+    $\circ$ is a partial map with the appropriate signature.
+    It remains to check properties $(7)-(13)$ of 
+    definition~(\ref{Cat:def:category}).
+
+    $(7)$: Let $f,g\in\arr\ (\Cone\times\Ctwo)$. We need to show that $g\circ f$
+    is defined \ifand\ $\cod(f)=\dom(g)$. Let $f_{1},g_{1}\in\arr\ \Cone$ and
+    $f_{2},g_{2}\in\arr\ \Ctwo$ such that $f=(f_{1},f_{2})$ and $g=(g_{1},g_{2})$.
+    Then $\cod(f)=(\cod(f_{1}),\cod(f_{2}))$ and 
+    $\dom(g)=(\dom(g_{1}),\dom(g_{2}))$. So we need to show that $g\circ f$ is
+    defined \ifand\ $\cod(f_{1})=\dom(g_{1})$ and $\cod(f_{2})=\dom(g_{2})$.
+    However since \Cone\ and \Ctwo\ are categories, $\cod(f_{1})=\dom(g_{1})$
+    is equivalent to $g_{1}\circ f_{1}$ being defined, and 
+    $\cod(f_{2})=\dom(g_{2})$ is equivalent to $g_{2}\circ f_{2}$ being defined.
+    So we need to show that $g\circ f$ is defined \ifand\ both $g_{1}\circ f_{1}$
+    and $g_{2}\circ f_{2}$ are defined which follows exactly from 
+    definition~(\ref{Cat:def:canonical:product}).
+
+    $(8)$: Let $f=(f_{1},f_{2})$ and $g=(g_{1},g_{2})$ be arrows in $\Cone\times
+    \Ctwo$ with the equality $\cod(f)=\dom(g)$, i.e. for which $g_{1}\circ f_{1}$
+    and $g_{2}\circ f_{2}$ are defined. We need to check the equality
+    $\dom(g\circ f) = \dom(f)$ which goes as follows:
+        \begin{eqnarray*}\dom(g\circ f)
+            &=&\dom(\,(g_{1},g_{2})\,\circ\,(f_{1},f_{2})\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\dom(\,(g_{1}\circ f_{1}\,,\,g_{2}\circ f_{2})\,)\\
+            \mbox{$(3)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,\dom(g_{1}\circ f_{1})\,,\,\dom(g_{2}\circ f_{2})\,)\\
+            \mbox{\Cone,\ \Ctwo\ categories, 
+                $(8)$ of def.~(\ref{Cat:def:category})\ $\to$\ }
+            &=&(\,\dom(f_{1})\,,\,\dom(f_{2})\,)\\
+            \mbox{$(3)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\dom(f_{1},f_{2})\\
+            &=&\dom(f)
+        \end{eqnarray*}
+
+    $(9)$: Let $f=(f_{1},f_{2})$ and $g=(g_{1},g_{2})$ be arrows in $\Cone\times
+    \Ctwo$ with the equality $\cod(f)=\dom(g)$, i.e. for which $g_{1}\circ f_{1}$
+    and $g_{2}\circ f_{2}$ are defined. We need to check the equality
+    $\cod(g\circ f) = \cod(g)$ which goes as follows:
+        \begin{eqnarray*}\cod(g\circ f)
+            &=&\cod(\,(g_{1},g_{2})\,\circ\,(f_{1},f_{2})\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\cod(\,(g_{1}\circ f_{1}\,,\,g_{2}\circ f_{2})\,)\\
+            \mbox{$(4)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,\cod(g_{1}\circ f_{1})\,,\,\cod(g_{2}\circ f_{2})\,)\\
+            \mbox{\Cone,\ \Ctwo\ categories, 
+                $(9)$ of def.~(\ref{Cat:def:category})\ $\to$\ }
+            &=&(\,\cod(g_{1})\,,\,\cod(g_{2})\,)\\
+            \mbox{$(4)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\cod(g_{1},g_{2})\\
+            &=&\cod(g)
+        \end{eqnarray*}
+
+
 \end{proof}

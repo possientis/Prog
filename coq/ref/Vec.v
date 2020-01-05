@@ -37,6 +37,8 @@ Fixpoint vecInd (a:Type)
     end
     .
 
+Arguments vecInd {a}.
+
 Definition cast (a:Type) (n m:nat) (p:n = m) (xs:Vec n a) : Vec m a :=
     match p with
     | eq_refl _ => xs
@@ -44,10 +46,28 @@ Definition cast (a:Type) (n m:nat) (p:n = m) (xs:Vec n a) : Vec m a :=
 
 Arguments cast {a} {n} {m}.
 
-(*
-Lemma append_assoc : forall (a:Type) (n m p:nat) (xs:Vec n a) (ys:Vec m a) (zs:Vec p a),
+Notation "x ++ y" := (append x y) (at level 60, right associativity).
+
+Definition P (a:Type) (n:nat) (xs:Vec n a) : Prop :=
+    forall (m:nat) (ys:Vec m a) (p:nat) (zs:Vec p a),
+        append (append xs ys) zs = 
+            cast (plus_assoc n m p) (append xs (append ys zs)).
+
+Arguments P {a}.
+
+Axiom irrelevance : forall (A:Prop) (p q:A), p = q.
+
+Lemma append_assoc : forall (a:Type) (n m p:nat),
+    forall (xs:Vec n a) (ys:Vec m a) (zs:Vec p a),
     append (append xs ys) zs = cast (plus_assoc n m p) (append xs (append ys zs)).
 Proof.
-
+    intros a n m p xs ys. revert p. revert ys. revert m.
+    apply (vecInd P).
+    - unfold P. intros m ys p zs. 
+      rewrite (irrelevance _ (plus_assoc 0 m p) (eq_refl _)). reflexivity.
+    - clear n xs. intros n x xs. unfold P. intros IH. 
+      intros m ys p zs. simpl. rewrite IH.
+      remember (plus_assoc n m p) as p1 eqn:E1.
+      remember (plus_assoc (S n) m p) as p2 eqn:E2.
 Show.
-*)
+

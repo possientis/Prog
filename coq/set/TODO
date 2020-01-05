@@ -1,4 +1,4 @@
-Semantics: after pairing
+Semantics: Rank
 Can we get all the semantics result without LEM?
 define a 'safe' semantics where unbound free variables are reported as errors
 is every compatible predicate decidable?

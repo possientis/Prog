@@ -107,7 +107,7 @@ from-to (suc n) =
     suc n
     ∎
 
-
+-- binary addition
 _⊕_ : Bin → Bin → Bin
 ⟨⟩ ⊕ b = b
 (b O) ⊕ ⟨⟩ = b O
@@ -117,6 +117,7 @@ _⊕_ : Bin → Bin → Bin
 (b₁ I) ⊕ (b₂ O) = (b₁ ⊕ b₂) I
 (b₁ I) ⊕ (b₂ I) = inc (b₁ ⊕ b₂) O
 
+-- binary addition is sound
 ⊕-from : ∀ (m n : Bin) → from (m ⊕ n) ≡ from m + from n
 ⊕-from ⟨⟩ n = refl
 ⊕-from (m O) ⟨⟩ = sym (+-identity-r _)
@@ -127,9 +128,9 @@ _⊕_ : Bin → Bin → Bin
     from ((m ⊕ n) O)
     ≡⟨⟩
     2 * from (m ⊕ n)
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (2 *_) (⊕-from m n) ⟩
     2 * (from m + from n)
-    ≡⟨ {!!} ⟩
+    ≡⟨ *-distrib-l-+ 2 (from m) (from n) ⟩
     2 * from m + 2 * from n
     ≡⟨⟩
     from (m O) + from (n O)
@@ -141,11 +142,11 @@ _⊕_ : Bin → Bin → Bin
     from ((m ⊕ n) I)
     ≡⟨⟩
     suc (2 * from (m ⊕ n))
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (λ p → suc (2 * p)) (⊕-from m n) ⟩
     suc (2 * (from m + from n))
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong suc (*-distrib-l-+ 2 (from m) (from n)) ⟩
     suc (2 * from m + 2 * from n )
-    ≡⟨ {!!} ⟩
+    ≡⟨ sym (+-suc (2 * from m) (2 * from n)) ⟩
     2 * from m + suc (2 * from n)
     ≡⟨⟩
     from (m O) + from (n I)
@@ -158,7 +159,9 @@ _⊕_ : Bin → Bin → Bin
     from ((m ⊕ n) I)
     ≡⟨⟩
     suc (2 * from (m ⊕ n))
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (λ p → suc (2 * p)) (⊕-from m n) ⟩
+    suc (2 * (from m + from n))
+    ≡⟨ cong suc (*-distrib-l-+ 2 (from m) (from n)) ⟩
     suc (2 * from m + 2 * from n)
     ≡⟨⟩
     suc (2 * from m) + 2 * from n
@@ -170,13 +173,23 @@ _⊕_ : Bin → Bin → Bin
     from ((m I) ⊕ (n I))
     ≡⟨⟩
     from (inc (m ⊕ n) O)
-    ≡⟨⟩ 
+    ≡⟨⟩
     2 * from (inc (m ⊕ n))
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (2 *_) (from-inc (m ⊕ n)) ⟩
     2 * suc (from (m ⊕ n))
-    ≡⟨ {!!} ⟩
+    ≡⟨ cong (λ p → 2 * suc p) (⊕-from m n) ⟩
     2 * suc (from m + from n)
-    ≡⟨⟩ {!!}
+    ≡⟨ suc-suc-2 _ ⟩
+    suc (suc (2 * (from m + from n)))
+    ≡⟨ cong (λ p → suc (suc p)) (*-distrib-l-+ 2 (from m) (from n)) ⟩
+    suc (suc (2 * from m + 2 * from n))
+    ≡⟨ sym (cong suc (+-suc _ _))⟩
+    suc (2 * from m + suc (2 * from n))
+    ≡⟨⟩
+    suc (2 * from m) + suc (2 * from n)
+    ≡⟨⟩
+    from (m I) + from (n I)
+    ∎
 
 
 -- whether binary number has a leading '1'
@@ -231,6 +244,7 @@ one-to-from : ∀ {b : Bin}
 can-to-from canZero = refl
 can-to-from (canOne oneb) = one-to-from oneb
 
+
 one-to-from justOne = refl
 one-to-from (oneO {b} oneb) =
   begin
@@ -240,3 +254,4 @@ one-to-from (oneO {b} oneb) =
     ≡⟨⟩
     {!!}
 one-to-from (oneI oneb) = {!!}
+
