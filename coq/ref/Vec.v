@@ -48,26 +48,41 @@ Arguments cast {a} {n} {m}.
 
 Notation "x ++ y" := (append x y) (at level 60, right associativity).
 
-Definition P (a:Type) (n:nat) (xs:Vec n a) : Prop :=
-    forall (m:nat) (ys:Vec m a) (p:nat) (zs:Vec p a),
-        append (append xs ys) zs = 
-            cast (plus_assoc n m p) (append xs (append ys zs)).
-
-Arguments P {a}.
-
 Axiom irrelevance : forall (A:Prop) (p q:A), p = q.
 
-Lemma append_assoc : forall (a:Type) (n m p:nat),
-    forall (xs:Vec n a) (ys:Vec m a) (zs:Vec p a),
-    append (append xs ys) zs = cast (plus_assoc n m p) (append xs (append ys zs)).
+Arguments irrelevance {A}.
+
+(*
+Definition cast_irrel (a:Type)(n:nat)(xs:Vec n a)(p:n = n):
+    cast p xs = cast (eq_refl _) xs := 
+        match p with
+        | eq_refl _ => eq_refl _
+        end.
+*)
+
+(*
+Lemma Cons_cast : forall (a:Type)(n m:nat)(x:a)(xs:Vec n a)(p:n = m)(q:S n = S m),
+    Cons x (cast p xs) = cast q (Cons x xs).
+Proof.
+    intros a n m x xs p q. destruct p. simpl. 
+Show.
+*)
+
+(*
+Lemma append_assoc : 
+    forall (a:Type) (n m p:nat) (xs:Vec n a) (ys:Vec m a) (zs:Vec p a),
+        (xs ++ ys) ++ zs = cast (plus_assoc n m p) (xs ++ (ys ++ zs)).
 Proof.
     intros a n m p xs ys. revert p. revert ys. revert m.
-    apply (vecInd P).
-    - unfold P. intros m ys p zs. 
-      rewrite (irrelevance _ (plus_assoc 0 m p) (eq_refl _)). reflexivity.
-    - clear n xs. intros n x xs. unfold P. intros IH. 
+    apply (vecInd (fun (n:nat) (xs:Vec n a) => forall m ys p zs, 
+        (xs ++ ys) ++ zs = cast (plus_assoc n m p) (xs ++ (ys ++ zs)))).
+    - intros m ys p zs. 
+      rewrite (irrelevance (plus_assoc 0 m p) (eq_refl _)). reflexivity.
+    - clear n xs. intros n x xs. intros IH. 
       intros m ys p zs. simpl. rewrite IH.
       remember (plus_assoc n m p) as p1 eqn:E1.
       remember (plus_assoc (S n) m p) as p2 eqn:E2.
-Show.
-
+      rewrite (Cons_cast _ _ _ _ _ p1 p2). 
+      reflexivity.
+Qed.
+*)
