@@ -191,6 +191,52 @@ _⊕_ : Bin → Bin → Bin
     from (m I) + from (n I)
     ∎
 
+⊕-identity-l-inc : ∀ (n : Bin) → (⟨⟩ O) ⊕ inc n ≡ inc n
+⊕-identity-l-inc ⟨⟩ = refl
+⊕-identity-l-inc (n O) = refl
+⊕-identity-l-inc (n I) = refl
+
+⊕-inc-l : ∀ (m n : Bin) → inc m ⊕ n ≡ inc (m ⊕ n)
+⊕-inc-l ⟨⟩ ⟨⟩ = refl
+⊕-inc-l ⟨⟩ (n O) = refl
+⊕-inc-l ⟨⟩ (n I) = refl
+⊕-inc-l (m O) ⟨⟩ = refl
+⊕-inc-l (m O) (n O) = refl
+⊕-inc-l (m O) (n I) = refl
+⊕-inc-l (m I) ⟨⟩ = refl
+⊕-inc-l (m I) (n O) =
+  begin
+    inc (m I) ⊕ (n O)
+    ≡⟨⟩
+    (inc m O) ⊕ (n O)
+    ≡⟨⟩
+    (inc m ⊕ n) O
+    ≡⟨ cong (λ b → b O) (⊕-inc-l m n) ⟩
+    inc (m ⊕ n) O
+    ≡⟨⟩
+    inc ((m ⊕ n) I)
+    ≡⟨⟩
+    inc ((m I) ⊕ (n O))
+    ∎
+⊕-inc-l (m I) (n I) =
+  begin
+    inc (m I) ⊕ (n I)
+    ≡⟨⟩
+    (inc m O) ⊕ (n I)
+    ≡⟨⟩
+    (inc m ⊕ n) I
+    ≡⟨ cong (λ b → b I) (⊕-inc-l m n) ⟩
+    inc (m ⊕ n) I
+    ≡⟨⟩
+    inc (inc (m ⊕ n) O)
+    ≡⟨⟩
+    inc ((m I) ⊕ (n I))
+    ∎
+
+⊕-to : ∀ (m n : ℕ) → to m ⊕ to n ≡ to (m + n)
+⊕-to zero zero = refl
+⊕-to zero (suc n) = ⊕-identity-l-inc (to n)
+⊕-to (suc m) n = {!!}
 
 -- whether binary number has a leading '1'
 data One : Bin → Set where
