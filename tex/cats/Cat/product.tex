@@ -113,5 +113,53 @@ a partial map $\circ:\arr\ (\Cone\times\Ctwo)\times\arr
             &=&\cod(g)
         \end{eqnarray*}
 
+    $(10)$: Let $f=(f_{1},f_{2})$, $g=(g_{1},g_{2})$ and $h=(h_{1},h_{2})$ be
+    arrows in $\Cone\times\Ctwo$ with the equalities $\cod(f)=\dom(g)$ and
+    $\cod(g)=\dom(h)$, i.e. for which the composition arrows $g_{1}\circ f_{1}$,
+    $g_{2}\circ f_{2}$, $h_{1}\circ g_{1}$ and $h_{2}\circ g_{2}$ are defined.
+    We need to check the equality $(h\circ g)\circ f=h\circ(g\circ f)$ 
+    which goes as follows:
+        \begin{eqnarray*}(h\circ g)\circ f
+            &=&(\,(h_{1},h_{2})\,\circ\,(g_{1},g_{2})\,)\,\circ\,(f_{1},f_{2})\\ 
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,h_{1}\circ g_{1}\,,\,h_{2}\circ g_{2}\,)\,\circ\,(f_{1},f_{2})\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,(h_{1}\circ g_{1})\circ f_{1}\,,\,
+                   (h_{2}\circ g_{2})\circ f_{2}\,)\\
+            \mbox{\Cone,\ \Ctwo\ categories, 
+                $(10)$ of def.~(\ref{Cat:def:category})\ $\to$\ }
+            &=&(\,h_{1}\circ (g_{1}\circ f_{1})\,,\,
+                   h_{2}\circ(g_{2}\circ f_{2})\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(h_{1},h_{2})\circ(\,(g_{1}\circ f_{1})\,,\,(g_{2}\circ f_{2})\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(h_{1},h_{2})\circ(\,(g_{1},g_{2})\,\circ(f_{1},f_{2})\,)\\
+            &=&h\circ(g\circ f)
+        \end{eqnarray*}
 
+    $(11)$: Let $a=(a_{1},a_{2})$ be an object in $\Cone\times\Ctwo$. We need
+    to check that $\dom\,(\,\id(a)\,)=a=\cod\,(\,\id(a)\,)$ which goes as
+    follows:
+        \begin{eqnarray*}\dom\,(\,\id(a)\,)
+            &=&\dom\,(\,\id(a_{1},a_{2})\,)\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\dom\,(\,\id(a_{1})\,,\,\id(a_{2})\,)\\
+            \mbox{$(3)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,\dom\,(\,\id(a_{1})\,)\,,\,\dom\,(\,\id(a_{2})\,)\,)\\
+            \mbox{\Cone,\ \Ctwo\ categories, 
+                $(11)$ of def.~(\ref{Cat:def:category})\ $\to$\ }
+            &=&(a_{1},a_{2})\\
+            &=&a
+        \end{eqnarray*}
+        \begin{eqnarray*}\cod\,(\,\id(a)\,)
+            &=&\cod\,(\,\id(a_{1},a_{2})\,)\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\cod\,(\,\id(a_{1})\,,\,\id(a_{2})\,)\\
+            \mbox{$(4)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,\cod\,(\,\id(a_{1})\,)\,,\,\cod\,(\,\id(a_{2})\,)\,)\\
+            \mbox{\Cone,\ \Ctwo\ categories, 
+                $(11)$ of def.~(\ref{Cat:def:category})\ $\to$\ }
+            &=&(a_{1},a_{2})\\
+            &=&a
+        \end{eqnarray*}
 \end{proof}
