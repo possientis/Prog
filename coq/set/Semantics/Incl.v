@@ -1,6 +1,7 @@
 Require Import Core.LEM.
 Require Import Core.Set.
 Require Import Core.Incl.
+Require Import Core.Equal.
 Require Import Core.Syntax.
 Require Import Core.Semantics.
 Require Import Core.Environment.
@@ -32,4 +33,16 @@ Proof.
         + assumption.
 Qed.        
 
+(* An approximation of lemma 'inclNil' expressed in set theory abstract syntax. *)
+Definition inclNilF (n m:nat) : Formula := 
+    All n (Imp (Empty n) (All m (Sub n m))).
 
+(*
+Lemma evalInclNilF : forall (e:Env) (n m:nat), m <> n ->
+    eval e (inclNilF n m ) 
+        <-> 
+    forall (x:set), x == Nil -> forall (y:set), x <== y.
+Proof.
+
+Show.
+*)

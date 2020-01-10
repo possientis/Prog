@@ -25,6 +25,10 @@ Definition Equ (n m:nat) : Formula :=
         (All x (Iff (Elem x n) (Elem x m)))
         (All x (Iff (Elem n x) (Elem m x))).
 
+Definition Empty (n:nat) : Formula := 
+    let x := fresh n n in
+        All x (Not (Elem x n)).
+
 Lemma checkFresh00 : fresh 0 0 = 1.
 Proof. reflexivity. Qed.
 

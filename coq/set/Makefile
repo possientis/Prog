@@ -246,6 +246,7 @@ ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Empty.vo \
 								${CORE}/Fresh.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/ElemIncl.vo \
@@ -257,6 +258,7 @@ ${SEM}/Incl.vo :				${SEM}/Incl.v \
 								${CORE}/LEM.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
+								${CORE}/Equal.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/Semantics.vo \
 								${CORE}/Environment.vo

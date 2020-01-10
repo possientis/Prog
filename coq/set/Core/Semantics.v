@@ -4,6 +4,7 @@ Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
+Require Import Core.Empty.
 Require Import Core.Fresh.
 Require Import Core.Syntax.
 Require Import Core.ElemIncl.
@@ -130,4 +131,19 @@ Proof.
         + apply freshNot_n.
         + assumption.
     - assumption.
+Qed.
+
+Lemma evalEmpty : forall (e:Env) (n:nat),
+    eval e (Empty n) <-> (e n) == Nil. 
+Proof.
+    intros e n. unfold Empty. rewrite evalAll. split; intros H. 
+    - apply emptyUnique. intros x. remember (H x) as H' eqn:E. clear E. clear H.
+      rewrite evalNot in H'. rewrite evalElem in H'.
+      rewrite bindSame in H'. rewrite bindDiff in H'.
+        + assumption.
+        + apply freshNot_n.
+    - intro x. rewrite evalNot, evalElem, bindSame, bindDiff.
+      rewrite emptyIsNil in H. rewrite H.
+        + apply emptyCharac.
+        + apply freshNot_n.
 Qed.
