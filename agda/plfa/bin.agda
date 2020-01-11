@@ -236,7 +236,20 @@ _⊕_ : Bin → Bin → Bin
 ⊕-to : ∀ (m n : ℕ) → to m ⊕ to n ≡ to (m + n)
 ⊕-to zero zero = refl
 ⊕-to zero (suc n) = ⊕-identity-l-inc (to n)
-⊕-to (suc m) n = {!!}
+⊕-to (suc m) n =
+  begin
+    to (suc m) ⊕ to n
+    ≡⟨⟩
+    inc (to m) ⊕ to n
+    ≡⟨ ⊕-inc-l (to m) (to n) ⟩
+    inc (to m ⊕ to n)
+    ≡⟨ cong inc (⊕-to m n) ⟩
+    inc (to (m + n))
+    ≡⟨⟩
+    to (suc (m + n))
+    ≡⟨⟩
+    to (suc m + n)
+    ∎
 
 -- whether binary number has a leading '1'
 data One : Bin → Set where
@@ -290,6 +303,26 @@ one-to-from : ∀ {b : Bin}
 can-to-from canZero = refl
 can-to-from (canOne oneb) = one-to-from oneb
 
+⊕-b-b : ∀ {b : Bin} → One b → b ⊕ b ≡ b O
+⊕-b-b justOne = refl
+⊕-b-b (oneO {b} oneb) =
+  begin
+    (b O) ⊕ (b O)
+    ≡⟨⟩
+    (b ⊕ b) O
+    ≡⟨ cong _O (⊕-b-b oneb) ⟩
+    (b O) O
+    ∎
+⊕-b-b (oneI {b} oneb) =
+  begin
+    (b I) ⊕ (b I)
+    ≡⟨⟩
+    inc (b ⊕ b) O
+    ≡⟨ cong (λ b → inc b O) (⊕-b-b oneb) ⟩
+    inc (b O) O
+    ≡⟨⟩
+    (b I) O
+    ∎
 
 one-to-from justOne = refl
 one-to-from (oneO {b} oneb) =
@@ -297,7 +330,16 @@ one-to-from (oneO {b} oneb) =
     to (from (b O))
     ≡⟨⟩
     to (2 * from b)
-    ≡⟨⟩
-    {!!}
+    ≡⟨ cong (λ n → to (from b + n)) (+-identity-r (from b)) ⟩
+    to (from b + from b)
+    ≡⟨ sym (⊕-to (from b) (from b)) ⟩
+    to (from b) ⊕ to (from b)
+    ≡⟨ cong (λ n → n ⊕ to (from b)) (one-to-from oneb) ⟩
+    b ⊕ to (from b)
+    ≡⟨ cong (λ n → b ⊕ n) (one-to-from oneb) ⟩
+    b ⊕ b
+    ≡⟨ ⊕-b-b oneb ⟩
+    b O
+    ∎
 one-to-from (oneI oneb) = {!!}
 

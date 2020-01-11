@@ -162,4 +162,42 @@ a partial map $\circ:\arr\ (\Cone\times\Ctwo)\times\arr
             &=&(a_{1},a_{2})\\
             &=&a
         \end{eqnarray*}
+
+    $(12)$: Let $f=(f_{1},f_{2})$ be an arrow and $a=(a_{1},a_{2})$ be an 
+    object in $\Cone\times\Ctwo$ such that $\dom(f)=a$. We need to show that
+    $f\circ\id(a)=f$ which goes as follows: Using $(3)$ of 
+    definition~(\ref{Cat:def:canonical:product}) and the condition $\dom(f)=a$ 
+    we obtain the equation $(\,\dom(f_{1})\,,\,\dom(f_{2})\,)=(a_{1},a_{2})$.
+    Hence, we have:
+        \begin{eqnarray*}f\circ\id(a)
+            &=&(f_{1},f_{2})\circ\id\,(a_{1},a_{2})\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(f_{1},f_{2})\,\circ\,(\,\id(a_{1})\,,\,\id(a_{2})\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,f_{1}\circ\id(a_{1})\,,\,f_{2}\circ\id(a_{2})\,)\\
+            \mbox{\Cone\ category, $\dom(f_{1})=a_{1}$\ $\to$\ }
+            &=&(f_{1},\,f_{2}\circ\id(a_{2})\,)\\
+            \mbox{\Ctwo\ category, $\dom(f_{2})=a_{2}$\ $\to$\ }
+            &=&(f_{1},f_{2})\\
+            &=&f
+        \end{eqnarray*}
+    $(13)$: Let $f=(f_{1},f_{2})$ be an arrow and $a=(a_{1},a_{2})$ be an 
+    object in $\Cone\times\Ctwo$ such that $\cod(f)=a$. We need to show that
+    $\id(a)\circ f=f$ which goes as follows: Using $(4)$ of 
+    definition~(\ref{Cat:def:canonical:product}) and the condition $\cod(f)=a$ 
+    we obtain the equation $(\,\cod(f_{1})\,,\,\cod(f_{2})\,)=(a_{1},a_{2})$.
+    Hence, we have:
+        \begin{eqnarray*}\id(a)\circ f
+            &=&\id\,(a_{1},a_{2})\,\circ\,(f_{1},f_{2})\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,\id(a_{1})\,,\,\id(a_{2})\,)\,\circ\,(f_{1},f_{2})\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&(\,\id(a_{1})\circ f_{1}\,,\,\id(a_{2})\circ f_{2}\,)\\
+            \mbox{\Cone\ category, $\cod(f_{1})=a_{1}$\ $\to$\ }
+            &=&(f_{1},\,\id(a_{2})\circ f_{2}\,)\\
+            \mbox{\Ctwo\ category, $\cod(f_{2})=a_{2}$\ $\to$\ }
+            &=&(f_{1},f_{2})\\
+            &=&f
+        \end{eqnarray*}
+This completes our proof of properties~$(7)-(13)$.
 \end{proof}

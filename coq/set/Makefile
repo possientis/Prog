@@ -313,6 +313,7 @@ ${SEM}/Empty.vo :				${SEM}/Empty.v \
 								${CORE}/LEM.vo \
 								${CORE}/Set.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/Semantics.vo \
 								${CORE}/Environment.vo

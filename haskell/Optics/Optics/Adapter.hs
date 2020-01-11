@@ -6,6 +6,7 @@ module  Optics.Adapter
     ,   toLense
     ,   toPrism
     ,   adapterC2P
+    ,   adapterP2C
     )   where
 
 import Data.Profunctor
@@ -36,4 +37,22 @@ toPrism x = Prism match_ build_ where
 
 adapterC2P :: Adapter s t a b -> AdapterP s t a b
 adapterC2P (Adapter o i) = dimap o i
+
+data  Iso a b s t 
+    = Iso
+    { _from :: s -> a
+    , _to   :: b -> t
+    }
+
+instance Profunctor (Iso a b) where
+    dimap l r (Iso o i) = Iso (o . l) (r . i) 
+
+adapterI2C :: Iso a b s t -> Adapter s t a b
+adapterI2C (Iso o i) = Adapter o i
+
+adapterP2I :: AdapterP s t a b -> Iso a b s t
+adapterP2I f = f (Iso id id) 
+
+adapterP2C :: AdapterP s t a b -> Adapter s t a b
+adapterP2C f = adapterI2C (adapterP2I f)
 

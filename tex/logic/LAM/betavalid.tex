@@ -3,9 +3,31 @@ $\beta$-substitution as defined in definition~(\ref{logic:def:LAM:beta:subst})
 does not give rise to {\em variable capture}. Given a map $\sigma:V\to\tv$,
 we define a map $\kappa_{\sigma}:\tv\to{\cal P}(V)\to\{0,1\}$, the
 interpretation of which is as follows: given $\phi\in\tv$ and $U\subseteq V$, 
-a value of $\kappa_{\sigma}(\phi)(U)=0$ indicates that variable capture did
-occur in the substitution $\sigma^{*}(\phi)(U)$ of
-definition~(\ref{logic:def:LAM:beta:subst}).
+a value of $\kappa_{\sigma}(\phi)(U)=0$ indicates that {\em variable capture} 
+did occur in the substitution $\sigma^{*}(\phi)(U)$ of
+definition~(\ref{logic:def:LAM:beta:subst}), indicating that the substitution
+is not valid (in relation to $U$) for the formula $\phi$. Otherwise,
+if $\kappa_{\sigma}(\phi)(U)=1$ then no {\em variable capture} did occur,
+and the ordered pair $(\sigma,U)$ is said to be {\em valid} for $\phi$.
+In the case when $\phi=x$ for some $x\in V$, we set $\kappa_{\sigma}(\phi)
+(U)=1$ since no {\em variable capture} can arise as a result of the variable
+substitution. When $\phi=\phi_{1}\ \phi_{2}$ we set $\kappa_{\sigma}(\phi)(U)$
+to be the minimum of $\kappa_{\sigma}(\phi_{1})(U)$ and $\kappa_{\sigma}
+(\phi_{2})(U)$, taking the view that no {\em variable capture}
+arises from the variable substitution, unless it arises for $\phi_{1}$ or 
+$\phi_{2}$. The case when $\phi=\lambda x\phi_{1}$ is the most diffcult
+one: since we have:
+    \[
+        \sigma^{*}(\lambda x \phi_{1})(U)
+        =
+        \lambda x \,\sigma^{*}(\phi_{1})(U\cup\{x\})
+    \]
+a necessary condition to avoid {\em variable capture} is that no {\em 
+variable capture} occurs in $\sigma^{*}(\phi_{1})(U\cup\{x\})$. However,
+we also expect any $u\in\free(\lambda x\phi_{1})\setminus U$ to be 
+{\em replaced} by $\sigma(u)$ after the substitution. Hence we must have
+$x\not\in\free(\sigma(u))$, as otherwise a free variable of $\sigma(u)$
+would get {\em captured} by $x$. This motivate the following:
 \begin{defin}\label{logic:def:LAM:beta:valid:index}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. We call {\em validity
     index mapping associated with $\sigma$} the map $\kappa_{\sigma}:\tv
@@ -35,3 +57,5 @@ definition~(\ref{logic:def:LAM:beta:subst}).
     We say that $\sigma$ is $\beta$-valid for $\phi$ \ifand\
     $\kappa_{\sigma}(\phi)(\emptyset)=1$.
 \end{defin}
+
+
