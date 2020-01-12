@@ -1,7 +1,7 @@
 {\bf Remark}: The notion is $\beta$-validity defined in this section
 is too strong, and is probably not the correct one. This section is likely
 to disappear.
-\begin{defin}\label{logic:def:LAM:beta:valid:substitution}
+\begin{defin}\label{logic:def:LAM:beta:valid:substitution:2}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let
     $\phi\in\tv$. We say that $\sigma$ is {\em $\beta$-valid for} $\phi$ 
     \ifand\ for every sub-formula $\psi\preceq\phi$:
@@ -44,7 +44,7 @@ to disappear.
     \]
 \end{prop}
 \begin{proof}
-    From definition~(\ref{logic:def:LAM:beta:valid:substitution}), the 
+    From definition~(\ref{logic:def:LAM:beta:valid:substitution:2}), the 
     $\beta$-validity of $\sigma$ for $\phi$ is equivalent to the implication:
     \[
         x\in\free(\psi)\ \Rightarrow\ 
@@ -228,7 +228,7 @@ stronger conclusion of equality rather than inclusion.
     that $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)$.
     However, by assumption $\sigma$ is $\beta$-valid for $\phi$. Hence
     for all $u\in\free(\phi)$ looking at 
-    definition~(\ref{logic:def:LAM:beta:valid:substitution}) we have 
+    definition~(\ref{logic:def:LAM:beta:valid:substitution:2}) we have 
     $\free(\sigma(u))\subseteq\free(\sigma(\phi))$ and it is therefore 
     sufficient to prove the inclusion $\free(\sigma(\phi))\subseteq\{x\}^{c}$,
     which follows from:
@@ -244,13 +244,13 @@ stronger conclusion of equality rather than inclusion.
     \end{eqnarray*}
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:x}
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:x:2}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$
     of the form $\phi=x$ with $x\in V$. Then $\sigma$ is $\beta$-valid
     for $\phi$.
 \end{prop}
 \begin{proof}
-    Using definition~(\ref{logic:def:LAM:beta:valid:substitution}), given
+    Using definition~(\ref{logic:def:LAM:beta:valid:substitution:2}), given
     a sub-formula $\psi\preceq\phi$ we need to check that if $u\in\free(\psi)$
     then $\free(\sigma(u))\subseteq\free(\sigma(\psi))$. However if $\phi=x$,
     the only possible sub-formula of $\phi$ is $\psi=x$ and $\free(\psi)=\{x\}$.
@@ -261,7 +261,7 @@ stronger conclusion of equality rather than inclusion.
     that $\free(\sigma(x))\subseteq\free(\sigma(x))$ which is the case.
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app}
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app:2}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
     of the form $\phi=\phi_{1}\ \phi_{2}$ with $\phi_{1},\phi_{2}\in\tv$. 
     Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is $\beta$-valid 
@@ -298,7 +298,7 @@ stronger conclusion of equality rather than inclusion.
     The case $x\in\free(\phi_{2})$ is handled similarly.
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:lam}
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:lam:2}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
     of the form $\phi=\lambda x\phi_{1}$ with $\phi_{1}\in\tv$ and $x\in V$. 
     Then $\sigma$ is $\beta$-valid for $\phi$ \ifand\ it is $\beta$-valid 
@@ -369,7 +369,7 @@ $\sigma:V\to V$, it is also a map $\sigma:V\to\tv$ and given $\phi\in\tv$
 it is therefore meaningful to ask whether $\sigma$ is valid for $\phi$ 
 in the sense of definition~(\ref{logic:def:LAM:valid:substitution}), 
 and whether it is $\beta$-valid for $\phi$ in the sense of 
-definition~(\ref{logic:def:LAM:beta:valid:substitution}). These two
+definition~(\ref{logic:def:LAM:beta:valid:substitution:2}). These two
 notions do not imply each other. For example, take $\phi=\lambda x y$
 for some $x,y\in V$, $x\neq y$. Any $\sigma:V\to V$ will always be
 both valid and $\beta$-valid for the formula $y$. However, using
@@ -379,7 +379,7 @@ sense since the substitution $\sigma(\phi)$ as per
 definition~(\ref{logic:def:LAM:substitution}) is $\lambda\sigma(x)\sigma(y)$
 and we need the condition $\sigma(y)\neq\sigma(x)$ to avoid variable
 capture. However, using 
-proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) we see that 
+proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}) we see that 
 $\sigma$ is $\beta$-valid for $\phi$ \ifand\ $\sigma(y)\neq x$.
 This also makes sense as the $\beta$-substitution (also denoted $\sigma(\phi)$)
 as per definition~(\ref{logic:def:LAM:beta:subst}) is $\lambda x \sigma(y)$
@@ -406,7 +406,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     $\phi$. Let $\phi_{1}\in\tv$ and $x\in V$ such that 
     $\psi=\lambda x\phi_{1}\preceq\phi$ and let $u\in\free(\psi)$. We need to
     show that $x\not\in\free(\sigma(u))$. However, using
-    definition~(\ref{logic:def:LAM:beta:valid:substitution}) from the
+    definition~(\ref{logic:def:LAM:beta:valid:substitution:2}) from the
     $\beta$-validity of $\sigma$ for $\phi$ we have 
     $\free(\sigma(u))\subseteq\free(\sigma(\psi))$. It is therefore sufficient
     to show that $\free(\sigma(\psi))\subseteq\{x\}^{c}$ which follows from the
@@ -444,7 +444,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     for $\phi_{1},\phi_{2}\in\tv$. We need to show that the implication is also 
     true for $\phi$. So we assume that $P_{\sigma}(\phi)$ is true. We need to 
     show that $\sigma$ is $\beta$-valid for $\phi=\phi_{1}\ \phi_{2}$. Using
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app}) it is 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:2}) it is 
     sufficient to prove that $\sigma$ is $\beta$-valid for both $\phi_{1}$
     and $\phi_{2}$. Having assumed the implication is true for $\phi_{1}$
     and $\phi_{2}$, it is therefore sufficient to prove that 
@@ -462,7 +462,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     implication is also true for $\phi$. So we assume that $P_{\sigma}(\phi)$
     is true. We need to show that $\sigma$ is $\beta$-valid for $\phi=
     \lambda x\phi_{1}$. Using 
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) it is sufficient
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}) it is sufficient
     to prove that $\sigma$ is $\beta$-valid for $\phi_{1}$ and furthermore that
     $x\not\in\free(\sigma(u))$ whenever $u\in\free(\lambda x\phi_{1})$. First
     we show that $\sigma$ is $\beta$-valid for $\phi_{1}$. Having assumed the
@@ -565,7 +565,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     implication is also true for $\phi$. So we assume that $\tau$ is
     $\beta$-valid for $\phi$ and $U\subseteq U'$. We need to show the
     equality holds. Note that from 
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app}), $\tau$ is
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:2}), $\tau$ is
     $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$ and having assumed
     the implication is true for these, so is the equality. Hence:
         \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
@@ -599,7 +599,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     that the implication is also true for $\phi$. So we assume that $\tau$ is
     $\beta$-valid for $\phi$ and $U\subseteq U'$. We need to show that the 
     equality holds. Note that from 
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}), $\tau$ is
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}), $\tau$ is
     $\beta$-valid for $\phi_{1}$ and having assumed the implication is true
     for $\phi_{1}$, so is the equality for all subsets $U\subseteq U'$.
     Hence, we have:
@@ -662,7 +662,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     It is therefore sufficient to prove that $\{x\}\cap\free(\tau(u))=\emptyset$,
     or in other words that $x\not\in\free(\tau(u))$. However, we assumed that 
     $\tau$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$. Using
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) once more
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}) once more
     we have the implication:
         \[
             u\in\free(\lambda x\phi_{1})\ 
@@ -713,7 +713,7 @@ proposition~(\ref{logic:prop:LAM:beta:valid:composition}) when $\tau$ is not
 $\beta$-valid for $\phi$ is as follows: consider $\phi=\lambda x y$ where
 $x\neq y$. Assume that $\sigma,\tau:V\to\tv$ are such that
 $\tau(y)=x$ and $\sigma(x)=y$. From
-proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) we can see that
+proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}) we can see that
 $\tau$ is not $\beta$-valid for $\phi$ since we have $y\in\free(\lambda x y)$
 and yet $x\in\free(\tau(y))$. We have:
     \begin{eqnarray*}(\sigma'\circ\tau)' (\phi)

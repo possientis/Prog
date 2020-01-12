@@ -56,3 +56,5 @@ adapterP2I f = f (Iso id id)
 adapterP2C :: AdapterP s t a b -> Adapter s t a b
 adapterP2C f = adapterI2C (adapterP2I f)
 
+idC2C :: Adapter s t a b -> Adapter s t a b
+idC2C x = adapterP2C  (adapterC2P x)

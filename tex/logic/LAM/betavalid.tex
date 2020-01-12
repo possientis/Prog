@@ -28,7 +28,7 @@ we also expect any $u\in\free(\lambda x\phi_{1})\setminus U$ to be
 {\em replaced} by $\sigma(u)$ after the substitution. Hence we must have
 $x\not\in\free(\sigma(u))$, as otherwise a free variable of $\sigma(u)$
 would get {\em captured} by $x$. This motivate the following:
-\begin{defin}\label{logic:def:LAM:beta:valid:index}
+\begin{defin}\label{logic:def:LAM:beta:valid:substitution}
     Let $V$ be a set and $\sigma:V\to\tv$ be a map. We call {\em validity
     index mapping associated with $\sigma$} the map $\kappa_{\sigma}:\tv
     \to{\cal P}(V)\to\{0,1\}$ defined by the following structural induction,
@@ -55,7 +55,76 @@ would get {\em captured} by $x$. This motivate the following:
     We say that $(\sigma,U)$ is {\em $\beta$-valid for} $\phi$ \ifand\ 
     $\kappa_{\sigma}(\phi)(U)=1$. \newline
     We say that $\sigma$ is $\beta$-valid for $\phi$ \ifand\
-    $\kappa_{\sigma}(\phi)(\emptyset)=1$.
+    $(\sigma,\emptyset)$ is $\beta$-valid for $\phi$.
 \end{defin}
 
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:x:gen}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$
+    of the form $\phi=x$ with $x\in V$. Then for all $U\subseteq V$, 
+    $(\sigma,U)$ is $\beta$-valid for $\phi$.
+\end{prop}
+\begin{proof}
+    This follows immediately from 
+    definition~(\ref{logic:def:LAM:beta:valid:substitution}) and $\kappa_{
+        \sigma}(\phi)(U)=1$.
+\end{proof}
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:x}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$
+    of the form $\phi=x$ with $x\in V$. Then 
+    $\sigma$ is $\beta$-valid for $\phi$.
+\end{prop}
+\begin{proof}
+    This follows immediately from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:x:gen}) using 
+    $U=\emptyset$.
+\end{proof}
 
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app:gen}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
+    of the form $\phi=\phi_{1}\ \phi_{2}$ with $\phi_{1},\phi_{2}\in\tv$. 
+    Then for all $U\subseteq V$,  $(\sigma,U)$ is $\beta$-valid for $\phi$ 
+    \ifand\ it is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$.
+\end{prop}
+\begin{proof}
+    $(\sigma,U)$ is $\beta$-valid for $\phi$ \ifand\ $\kappa_{\sigma}(\phi)(U)
+    =1$ which is the same as $\kappa_{\sigma}(\phi_{1})(U)\land\kappa_{\sigma}
+    (\phi_{2})(U)=1$. This in turn is equivalent to $\kappa_{\sigma}
+    (\phi_{1})(U)=1$ and $\kappa_{\sigma}(\phi_{2})(U)=1$. So it is 
+    equivalent to $(\sigma,U)$ being $\beta$-valid for both $\phi_{1}$ and
+    $\phi_{2}$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:app}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
+    of the form $\phi=\phi_{1}\ \phi_{2}$ with $\phi_{1},\phi_{2}\in\tv$. 
+    Then $\sigma$ is $\beta$-valid for $\phi$ 
+    \ifand\ it is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$.
+\end{prop}
+\begin{proof}
+    This follows immediately from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}) using 
+    $U=\emptyset$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:valid:recursion:lam:gen}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ 
+    of the form $\phi=\lambda x\phi_{1}$ with $\phi_{1}\in\tv$ and $x\in V$. 
+    Then for all $U\subseteq V$, $(\sigma,U)$ is $\beta$-valid for $\phi$ 
+    \ifand\ $(\sigma, U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$ and for 
+    all $u\in V$:
+    \[
+        u\in\free(\lambda x\phi_{1})\setminus U
+        \ \Rightarrow\ 
+        x\not\in\free(\sigma(u))
+    \]
+\end{prop}
+\begin{proof}
+    From definition~(\ref{logic:def:LAM:beta:valid:substitution}), $(\sigma,U)$
+    is $\beta$-valid for $\phi$ \ifand\ $\kappa_{\sigma}(\phi)(U)=1$ which is
+    $\epsilon\land\kappa_{\sigma}(\phi_{1})(U\cup\{x\})=1$. This is turn is
+    equivalent to $\kappa_{\sigma}(\phi_{1})(U\cup\{x\})=1$ together with 
+    $\epsilon=1$. So it is equivalent to $(\sigma,U\cup\{x\})$ being 
+    $\beta$-valid for $\phi_{1}$ together with $\epsilon=1$. The proposition
+    follows from the fact that $\epsilon=1$ is itself equivalent to the
+    above implication being true for all $u\in V$.
+\end{proof}

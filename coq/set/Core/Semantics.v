@@ -8,6 +8,7 @@ Require Import Core.Empty.
 Require Import Core.Fresh.
 Require Import Core.Syntax.
 Require Import Core.ElemIncl.
+Require Import Core.Foundation.
 Require Import Core.Environment.
 
 Fixpoint eval (e:Env) (p:Formula) : Prop :=
@@ -146,4 +147,30 @@ Proof.
       rewrite emptyIsNil in H. rewrite H.
         + apply emptyCharac.
         + apply freshNot_n.
+Qed.
+
+Lemma evalMin : LEM -> forall (e:Env) (n m:nat),
+    eval e (Min n m) <-> minimal (e n) (e m).
+Proof.
+    intros L e n m. unfold Min. rewrite evalAnd, evalElem, evalNot, evalExi.
+    unfold minimal. split; intros [H1 H2].
+    - split.
+        + assumption.
+        + intros [y H]. apply H2. exists y. rewrite evalAnd, evalElem, evalElem.
+          rewrite bindSame, bindDiff, bindDiff.
+            { assumption. }
+            { apply freshNot_n. }
+            { apply freshNot_m. }
+            { assumption. }
+    - split.
+        + assumption.
+        + intros [y H]. apply H2. exists y. rewrite evalAnd in H.
+          rewrite evalElem in H. rewrite evalElem in H. rewrite bindSame in H.
+          rewrite bindDiff in H. rewrite bindDiff in H.
+            { assumption. }
+            { apply freshNot_n. }
+            { apply freshNot_m. }
+            { assumption. }
+    - assumption.
+    - assumption.
 Qed.

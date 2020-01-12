@@ -1,3 +1,3 @@
-recursive props for new beta validity
+beta-valid recursion:lam
 conjecture: f beta-valid for t & g beta-valid for f'(t) <=> (g' . f) beta-valid for t ?
 LAM/betavalid.tex

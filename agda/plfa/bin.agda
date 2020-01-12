@@ -341,5 +341,24 @@ one-to-from (oneO {b} oneb) =
     ≡⟨ ⊕-b-b oneb ⟩
     b O
     ∎
-one-to-from (oneI oneb) = {!!}
+one-to-from (oneI {b} oneb) =
+  begin
+    to (from (b I))
+    ≡⟨⟩
+    to (suc (2 * from b))
+    ≡⟨⟩
+    inc (to (2 * from b))
+    ≡⟨ cong (λ n → inc (to (from b + n))) (+-identity-r (from b)) ⟩
+    inc (to (from b + from b))
+    ≡⟨ cong inc (sym (⊕-to (from b) (from b))) ⟩
+    inc (to (from b) ⊕ to (from b))
+    ≡⟨ cong (λ n → inc (n ⊕ to (from b))) (one-to-from oneb) ⟩
+    inc (b ⊕ to (from b))
+    ≡⟨ cong (λ n → inc (b ⊕ n)) (one-to-from oneb) ⟩
+    inc (b ⊕ b)
+    ≡⟨ cong inc (⊕-b-b oneb) ⟩
+    inc (b O)
+    ≡⟨⟩
+    b I
+    ∎
 

@@ -104,13 +104,11 @@ Proof.
     - unfold P1. exists xs. exists x. reflexivity.
 Qed.
 
+Definition L2 (a:Type) (n:nat) (xs:Vec (S n) a) : 
+    exists (ys:Vec n a) (x:a), xs = Cons x ys := L1 a (S n) xs.
 
-(*
-Lemma L2 : forall (a:Type) (n:nat) (xs:Vec (S n) a),
+Lemma L3 : forall (a:Type) (n:nat) (xs:Vec (S n) a),
     exists (ys:Vec n a) (x:a), xs = Cons x ys.
-Proof.
-    intros a n.
+Proof. intros a n xs. apply L2. Qed.
 
-Show.
-*)
 

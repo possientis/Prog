@@ -34,7 +34,8 @@ all :							${CORE}/Nat.vo \
 								${SEM}/Empty.vo \
 								${SEM}/Pairing.vo \
 								${SEM}/Union.vo \
-								${SEM}/Powerset.vo
+								${SEM}/Powerset.vo \
+								${SEM}/Foundation.vo
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
@@ -250,6 +251,7 @@ ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
 								${CORE}/Fresh.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/ElemIncl.vo \
+								${CORE}/Foundation.vo \
 								${CORE}/Environment.vo
 	coqc ${CORE}/Semantics.v -R ${CORE} ${CORE}
 				
@@ -354,3 +356,14 @@ ${SEM}/Powerset.vo :			${SEM}/Powerset.v \
 	coqc ${SEM}/Powerset.v -R ${CORE} ${CORE}
 
 
+${SEM}/Foundation.vo :			${SEM}/Foundation.v \
+								${CORE}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
+	
+	coqc ${SEM}/Foundation.v -R ${CORE} ${CORE}

@@ -119,3 +119,93 @@ def sum_example (s : ℕ ⊕ ℕ) : ℕ :=
 #check @sum.inl
 #check @sum.inr
 
+
+namespace hidden3
+
+  universes u v
+
+  inductive prod (α : Type u) (β : Type v)
+  | mk (fst : α) (snd : β) : prod
+
+  #check @prod.mk
+  #check @prod.fst
+  #check @prod.snd
+end hidden3
+
+namespace hidden4
+  structure prod1 (α β: Type) :=
+    mk :: (fst : α) (snd : β)
+
+  #check @prod1.mk
+  #check @prod1.fst
+  #check @prod1.snd
+
+end hidden4
+
+
+structure color := (red : ℕ) (green : ℕ) (blue : ℕ)
+def yellow := color.mk 255 255 0
+
+#reduce color.red yellow
+#reduce color.green yellow
+#reduce color.blue yellow
+
+
+namespace hidden5
+universes u v
+
+inductive sigma {α : Type u} (β : α → Type v)
+| dpair : Π a : α, β a → sigma
+
+inductive option (α : Type u)
+| none {} : option
+| some : α → option
+
+inductive inhabited (α : Type u) : Prop
+| mk : α → inhabited
+
+#check @inhabited
+end hidden5
+
+
+namespace hidden6
+
+inductive false : Prop
+
+inductive true : Prop
+| intro : true
+
+inductive and (a b:Prop) : Prop
+| intro : a → b → and
+
+inductive or (a b:Prop) : Prop
+| intro_left  : a → or
+| intro_right : b → or
+
+universe u
+inductive Exists {α : Type u} (p:α → Prop) : Prop
+| intro : ∀ (a:α), p a → Exists
+
+def exists.intro := @Exists.intro
+
+
+inductive subtype {α : Type u} (p : α → Prop)
+| mk : Π x : α, p x → subtype
+
+structure subtype2 {α : Sort u} (p : α → Prop) :=
+  (val : α) (property : p val)
+
+variables {α : Type u} (p : α → Prop)
+
+#check subtype p
+#check subtype2 p
+#check { x : α // p x}
+
+
+end hidden6
+
+
+
+
+
+

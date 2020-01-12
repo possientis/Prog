@@ -29,6 +29,12 @@ Definition Empty (n:nat) : Formula :=
     let x := fresh n n in
         All x (Not (Elem x n)).
 
+(* Predicate expressing the 'minimality' of a set n in a set m                  *)
+Definition Min (n m:nat) : Formula :=
+    let x := fresh n m in And
+        (Elem n m)
+        (Not (Exi x (And (Elem x m) (Elem x n)))).
+
 Lemma checkFresh00 : fresh 0 0 = 1.
 Proof. reflexivity. Qed.
 
