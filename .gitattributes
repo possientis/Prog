@@ -3,4 +3,6 @@
 *.cpp linguist-detectable=false
 *.clj linguist-detectable=false
 *.java linguist-detectable=false
+*.h linguist-detectable=false
+*.sh linguist-detectable=false
 
