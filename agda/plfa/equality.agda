@@ -48,3 +48,91 @@ subst : ∀ {a : Set} {x y : a} (P : a → Set)
   →   P x → P y
 
 subst P refl px = px
+
+
+module ≡-Reasoning {a : Set} where
+
+  infix  1 begin_
+  infixr 2 _≡⟨⟩_ _≡⟨_⟩_
+  infix  3 _∎
+
+  begin_ : ∀ {x y : a}
+    →   x ≡ y
+      ----------
+    →   x ≡ y
+
+  begin x≡y = x≡y
+
+  _≡⟨⟩_ : ∀ (x : a) {y : a}
+    →   x ≡ y
+      ----------
+    →   x ≡ y
+
+  x ≡⟨⟩ x≡y = x≡y
+
+  _≡⟨_⟩_ : ∀ (x : a) {y z : a}
+    →   x ≡ y
+    →   y ≡ z
+      ----------
+    →   x ≡ z
+
+  x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
+
+  _∎ : ∀ (x : a)
+      ----------
+    →  x ≡ x
+
+  x ∎ = refl
+
+
+open ≡-Reasoning
+
+trans' : ∀ {a : Set} {x y z : a}
+  →   x ≡ y
+  →   y ≡ z
+    ----------
+  →   x ≡ z
+
+trans' {a} {x} {y} {z} x≡y y≡z =
+  begin
+    x
+    ≡⟨ x≡y ⟩
+    y
+    ≡⟨ y≡z ⟩
+    z
+    ∎
+
+data ℕ : Set where
+  zero : ℕ
+  suc  : ℕ → ℕ
+
+_+_ : ℕ → ℕ → ℕ
+zero  + n = n
+suc m + n = suc (m + n)
+
+postulate
+  +-identity : ∀ (m : ℕ) → m + zero ≡ m
+  +-suc : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
+
++-comm : ∀ (m n : ℕ) → m + n ≡ n + m
++-comm m zero =
+  begin
+    m + zero
+    ≡⟨ +-identity m ⟩
+    m
+    ≡⟨⟩
+    zero + m
+    ∎
++-comm m (suc n) =
+  begin
+    m + suc n
+    ≡⟨ +-suc m n ⟩
+    suc (m + n)
+    ≡⟨ cong suc (+-comm m n) ⟩
+    suc (n + m)
+    ≡⟨⟩
+    suc n + m
+    ∎
+
+
+
