@@ -24,3 +24,9 @@
 *.scala linguist-detectable=false
 *.scm linguist-detectable=false
 *.sed linguist-detectable=false
+*.m4 linguist-detectable=false
+*.md linguist-detectable=false
+*.am linguist-detectable=false
+*.ac linguist-detectable=false
+*.status linguist-detectable=false
+Makefile linguist-detectable=false
