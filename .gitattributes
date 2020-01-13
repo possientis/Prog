@@ -1,5 +1,4 @@
 *.tex linguist-detectable=false
-*.s linguist-detectable=false
 *.asm linguist-detectable=false
 *.c linguist-detectable=false
 *.h linguist-detectable=false
