@@ -1,11 +1,8 @@
 *.tex linguist-detectable=false
 *.asm linguist-detectable=false
 *.s linguist-detectable=false
-*.c linguist-detectable=false
-*.h linguist-detectable=false
 *.sh linguist-detectable=false
 *.cpp linguist-detectable=false
-*.hpp linguist-detectable=false
 *.cs linguist-detectable=false
 *.clj linguist-detectable=false
 *.vim linguist-detectable=false
@@ -15,7 +12,6 @@
 *.html linguist-detectable=false
 *.css linguist-detectable=false
 *.idr linguist-detectable=false
-*.java linguist-detectable=false
 *.js linguist-detectable=false
 *.ml linguist-detectable=false
 *.pl linguist-detectable=false
@@ -24,7 +20,6 @@
 *.rmd linguist-detectable=false
 *.rb linguist-detectable=false
 *.scala linguist-detectable=false
-*.scm linguist-detectable=false
 *.sed linguist-detectable=false
 *.m4 linguist-detectable=false
 *.md linguist-detectable=false
