@@ -6,4 +6,9 @@
 *.sh linguist-detectable=false
 *.py linguist-detectable=false
 *.vim linguist-detectable=false
+*.cs linguist-detectable=false
+*.rb linguist-detectable=false
+*.js linguist-detectable=false
+*.php linguist-detectable=false
+*.scala linguist-detectable=false
 
