@@ -7,6 +7,8 @@ module  Optics.Adapter
     ,   toPrism
     ,   adapterC2P
     ,   adapterP2C
+    ,   idC2C
+    ,   idP2P
     )   where
 
 import Data.Profunctor
@@ -57,4 +59,23 @@ adapterP2C :: AdapterP s t a b -> Adapter s t a b
 adapterP2C f = adapterI2C (adapterP2I f)
 
 idC2C :: Adapter s t a b -> Adapter s t a b
-idC2C x = adapterP2C  (adapterC2P x)
+-- 1. idC2C x = adapterP2C  (adapterC2P x)
+-- 2. idC2C (Adapter o i) = adapterP2C (adapterC2P (Adapter o i))
+-- 3. idC2C (Adapter o i) = adapterP2C (dimap o i)
+-- 4. idC2C (Adapter o i) = adapterI2C (adapterP2I (dimap o i))
+-- 5. idC2C (Adapter o i) = adapterI2C (dimap o i (Iso id id))
+-- 6. idC2C (Adapter o i) = adapterI2C (Iso (id . o) (i . id))
+-- 7. idC2C (Adapter o i) = adapterI2C (Iso o i)
+idC2C (Adapter o i) = Adapter o i
+
+-- f :: p a b -> p s t , Iso id id :: Iso a b a b, p = Iso a b, 
+idP2P :: AdapterP s t a b -> AdapterP s t a b
+-- 1. idP2P f = adapterC2P (adapterP2C f)
+-- 2. idP2P f = adapterC2P (adapterI2C (adapterP2I f))
+-- 3, idP2P f = adapterC2P (adapterI2C (f (Iso id id)))
+-- 4, idP2P f = let Iso o i = f (Iso id id) in adapterC2P (adapterI2C (Iso o i))
+-- 5. idP2P f = let Iso o i = f (Iso id id) in adapterC2P (Adapter o i)
+-- 6. idP2P f = let Iso o i = f (Iso id id) in dimap o i 
+idP2P f pab = let Iso o i = f (Iso id id) in dimap o i pab -- = f pab ?
+
+
