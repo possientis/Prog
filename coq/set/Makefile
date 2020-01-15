@@ -364,6 +364,7 @@ ${SEM}/Foundation.vo :			${SEM}/Foundation.v \
 								${CORE}/Equal.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/Semantics.vo \
+								${CORE}/Foundation.vo \
 								${CORE}/Environment.vo
 	
 	coqc ${SEM}/Foundation.v -R ${CORE} ${CORE}
