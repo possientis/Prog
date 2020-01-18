@@ -78,7 +78,7 @@ Qed.
 Definition foundationF (n m:nat) : Formula := 
     All n (Imp (Not (Empty n)) (Exi m (Min m n))).
 
-(*
+
 (* Evaluating foundationF in any environment 'yields' the theorem foundation.   *)
 Lemma evalFoundationF : LEM -> forall (e:Env) (n m:nat),
     m <> n ->
@@ -97,6 +97,13 @@ Proof.
         + assumption.
         + assumption.
         + assumption.
-    -
-Show.
-*)
+    - rewrite evalImp, evalNot, evalEmpty, bindSame, evalExi.
+      remember (H x) as H' eqn:E. clear E H. intros H.
+      remember (H' H) as H1 eqn:E. clear E H H'. destruct H1 as [y H].
+      exists y. rewrite evalMin, bindSame, bindDiff, bindSame.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+Qed.
+

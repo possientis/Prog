@@ -56,26 +56,14 @@ Inductive infer : ctx -> term -> type -> Prop :=
 
 Notation "G |- t $ T" := (infer G t T) (at level 20).
 
-(*
-Inductive term : ctx -> type -> Type :=
-| ax    : forall G t, term (G,t) t
-| weak  : forall G t, term G t -> forall s, term (G,s) t
-| abs   : forall G t s, term (G,t) s -> term G (t ~> s)
-| app   : forall G t s, term G (t ~> s) -> term G t -> term G s 
-.
-*)
 
 Lemma weakening : forall G D x t S T, 
         (G ; D) |- t $ T 
     (*---------------------------*)
     -> ((G, x :: S); D) |- t $ T.
 Proof.
-(*
-    intros G D t H. remember (G ; D) as E eqn:Ectx. revert Ectx. revert G D.
-    induction H as [ | | | ].
-    - intros G' D H s. revert H. induction D as [|D x].
-        + simpl. intros H. rewrite <- H.
-*)
-
+    intros G D x t S T H. remember (G;D) as G' eqn:E.
+    revert E. revert G D x S. induction H as [G x t Sx T H IH| | | ].
+    - intros G' D y Sy H'.
 Show.
 

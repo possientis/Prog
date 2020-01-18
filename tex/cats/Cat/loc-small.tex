@@ -1,0 +1,34 @@
+\begin{defin}\label{Cat:def:locally:small}
+    A category \Cat\ is said to be {\em locally small} \ifand\ the hom-set
+    $\Cat(a,b)$ associated with every ordered pair of objects $(a,b)$ is 
+    actually a set.
+\end{defin}
+
+\begin{prop}\label{Cat:prop:locally:small:opposite}
+    A category \Cat\ is locally small \ifand\ \Cop is locally small.
+\end{prop}
+\begin{proof}
+    The category \Cat\ being locally small is equivalent to $\Cat(a,b)$
+    being a set for all $a,b\in\ob\ \Cat$. Since $\ob\ \Cat=\ob\ \Cop$
+    and $\Cop(a,b)=\Cat(b,a)$ from 
+    proposition~(\ref{Cat:prop:homset:opposite}), this is in turn equivalent 
+    to $\Cop(a,b)$ being a set for all $a,b\in\ob\ \Cop$. Hence, it is
+    equivalent to \Cop\ being locally small.
+\end{proof}
+
+\begin{prop}\label{Cat:prop:locally:small:product}
+    The product $\Cone\times\Ctwo$ of locally small categories
+    is locally small.
+\end{prop}
+\begin{proof}
+    Let \Cone\ and \Ctwo\ be two locally small categories. We need to show that
+    the canonical product $\Cone\times\Ctwo$ is itself locally small. In other
+    words, given $a,b\in\Cone\times\Ctwo$ we need to show that the collection
+    $\Cone\times\Ctwo(a,b)$ is actually a set. However from 
+    proposition~(\ref{Cat:prop:homset:product}) we have 
+    $\Cone\times\Ctwo\,(a,b)=\Cone(a_{1},b_{1})\times\Ctwo(a_{2},b_{2})$
+    where $a=(a_{1},a_{2})$ and $b=(b_{1},b_{2})$. So the proposition
+    follows from the fact that both $\Cone(a_{1},b_{1})$ and 
+    $\Ctwo(a_{2},b_{2})$ are sets, $\Cone$ and $\Ctwo$ being locally 
+    small.
+\end{proof}

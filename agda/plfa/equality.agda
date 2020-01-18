@@ -87,6 +87,7 @@ module ≡-Reasoning {a : Set} where
 
 open ≡-Reasoning
 
+
 trans' : ∀ {a : Set} {x y z : a}
   →   x ≡ y
   →   y ≡ z
@@ -133,6 +134,7 @@ postulate
     ≡⟨⟩
     suc n + m
     ∎
+
 
 
 

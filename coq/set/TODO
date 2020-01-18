@@ -1,7 +1,5 @@
-Semantics: Foundations
-Can we get all the semantics result without LEM?
-define a 'safe' semantics where unbound free variables are reported as errors
-is every compatible predicate decidable?
+Semantics/Compatible.
+add sem/compat to Makefile
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
 comprehension schema
 axiom of infinity false ?

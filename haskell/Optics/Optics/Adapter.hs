@@ -58,6 +58,7 @@ adapterP2I f = f (Iso id id)
 adapterP2C :: AdapterP s t a b -> Adapter s t a b
 adapterP2C f = adapterI2C (adapterP2I f)
 
+-- This proofs stands without assuming o i to be isomorphism.
 idC2C :: Adapter s t a b -> Adapter s t a b
 -- 1. idC2C x = adapterP2C  (adapterC2P x)
 -- 2. idC2C (Adapter o i) = adapterP2C (adapterC2P (Adapter o i))

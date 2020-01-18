@@ -146,7 +146,7 @@ would get {\em captured} by $x$. This motivate the following:
     $U=\emptyset$.
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:freevar:of:betasubst:gen:valid}
+\begin{prop}\label{logic:prop:LAM:freevar:of:betasubst:valid:gen}
     Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map and
     $U\subseteq V$ such that $(\sigma,U)$ is $\beta$-valid for $\phi$. Then: 
     \[
@@ -262,24 +262,19 @@ would get {\em captured} by $x$. This motivate the following:
     is $\beta$-valid for $\phi$. Using
     proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) we see 
     that $(\sigma,U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$: 
-    
-    TO BE CONTINUED...
-
-
-
-    \begin{eqnarray*}
-        \free(\ \sigma^{*}(\phi)(U)\ )
+    \begin{eqnarray*}\free(\ \sigma^{*}(\phi)(U)\ )
         &=&\free(\ \sigma^{*}(\lambda x\phi_{1})(U)\ )\\
         &=&\free(\ \lambda x\sigma^{*}(\phi_{1})(U\cup\{x\})\ )\\
         &=&\free(\ \sigma^{*}(\phi_{1})(U\cup\{x\})\ )\setminus\{x\}\\
-        \mbox{$\sigma$ $\beta$-valid for $\phi_{1}\ \rightarrow\ $}
-        &=& [\ (\free(\phi_{1})\cap(U\cup\{x\}))
+        \mbox{$(\sigma,U\!\cup\!\{x\})$ $\beta$-valid for 
+            $\phi_{1}\rightarrow$}
+        &=& [(\free(\phi_{1})\cap(U\cup\{x\}))
         \ \cup\ 
         \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
         \bigcup_{u\in\free(\phi_{1})\setminus(U\cup\{x\})}
         \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
         \free(\sigma(u))
-        \ ]\setminus\{x\}\\
+        ]\setminus\{x\}\\
         &=&(\free(\phi_{1})\cap U\cap \{x\}^{c})
         \ \cup\ 
         \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
@@ -306,25 +301,35 @@ would get {\em captured} by $x$. This motivate the following:
         \!\!\!\!\!\!\!
         \free(\sigma(u))
     \end{eqnarray*}
-    In order to jusfify the last equality, it is sufficient to prove
-    that $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)$.
-    However, by assumption $\sigma$ is $\beta$-valid for $\phi$. Hence
-    for all $u\in\free(\phi)$ looking at 
-    definition~(\ref{logic:def:LAM:beta:valid:substitution:2}) we have 
-    $\free(\sigma(u))\subseteq\free(\sigma(\phi))$ and it is therefore 
-    sufficient to prove the inclusion $\free(\sigma(\phi))\subseteq\{x\}^{c}$,
-    which follows from:
-    \begin{eqnarray*}
-        \free(\sigma(\phi))
-        &=&\free(\sigma^{*}(\phi)(\emptyset))\\
-        &=&\free(\sigma^{*}(\lambda x\phi_{1})(\emptyset))\\
-        \mbox{def.~(\ref{logic:def:LAM:beta:subst})$\ \rightarrow\ $}
-        &=&\free(\lambda x \sigma^{*}(\phi_{1})(\{x\}))\\
-        \mbox{def.~(\ref{logic:def:LAM:free:variable})$\ \rightarrow\ $}
-        &=&\free(\sigma^{*}(\phi_{1})(\{x\}))\setminus\{x\}\\
-        &\subseteq&\{x\}^{c}
-    \end{eqnarray*}
+    In order to jusfify the last equality, it is sufficient to prove that 
+    $\free(\sigma(u))\subseteq\{x\}^{c}$ for all $u\in\free(\phi)\setminus U$.
+    However, by assumption $(\sigma,U)$ is $\beta$-valid for $\phi=\lambda
+    x\phi_{1}$. Hence using 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) once more,
+    for all $u\in V$ we have the implication $u\in\free(\phi)\setminus 
+    U\Rightarrow x\not\in \free(\sigma(u))$ which is exactly what we need.
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:freevar:of:betasubst:valid}
+    Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map which is 
+    $\beta$-valid for $\phi$. Then, we have: 
+    \[
+        \free(\sigma(\phi))
+        =
+        \bigcup_{x\in\free(\phi)}\free(\sigma(x))
+    \]
+    where $\sigma:\tv\to\tv$ also denotes the associated $\beta$-substitution
+    mapping.
+\end{prop}
+\begin{proof}
+    This is an immediate application of
+    proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:valid}) with
+    $U=\emptyset$, bearing in mind from
+    definition~(\ref{logic:def:LAM:beta:valid:substitution}) that the 
+    $\beta$-validity of $\sigma$ for $\phi$ is nothing but the $\beta$-validity
+    of $(\sigma,\emptyset)$ for $\phi$, and from
+    definition~(\ref{logic:def:LAM:beta:subst}) that $\sigma(\phi)=
+    \sigma^{*}(\phi)(\emptyset)$.
+\end{proof}
 
 

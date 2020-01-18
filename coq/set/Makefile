@@ -21,6 +21,8 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Powerset.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Foundation.vo \
+								${CORE}/Compatible.vo \
+								${CORE}/Comprehension.vo \
 								${CORE}/Fresh.vo \
 								${CORE}/Syntax.vo \
 								${CORE}/LEM.vo \
@@ -226,6 +228,15 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 								${CORE}/Decidability.vo \
 								${CORE}/Extensionality.vo
 	coqc ${CORE}/Foundation.v -R ${CORE} ${CORE}
+
+${CORE}/Compatible.vo :			${CORE}/Compatible.v \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo
+	coqc ${CORE}/Compatible.v -R ${CORE} ${CORE}
+
+${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
+								${CORE}/Set.vo
+	coqc ${CORE}/Comprehension.v -R ${CORE} ${CORE}
 
 
 ${CORE}/Fresh.vo :				${CORE}/Fresh.v

@@ -19,16 +19,16 @@ arbitary collection.
 \begin{proof}
     When working in the context of two categories \Cat\ and \Cop, the notation
     $f:a\to b$ is ambiguous as the underlying category is unclear. Let us
-    write $f:a\to b\ @\Cat$ and $f:a\to b\ @\Cop$ to disambiguate.
+    write $f:a\to b\ @~\Cat$ and $f:a\to b\ @~\Cop$ to disambiguate.
     Then if $\dom'=\cod$ and $\cod'=\dom$:
         \begin{eqnarray*}\Cop(a,b)
-            &=&\{\ f\in\arr\ \Cop\ |\ f : a \to b\ @\Cop\ \}\\
+            &=&\{\ f\in\arr\ \Cop\ |\ f : a \to b\ @~\Cop\ \}\\
             \mbox{def.~(\ref{Cat:def:opposite})\ $\to$\ }
-            &=&\{\ f\in\arr\ \Cat\ |\ f : a \to b\ @\Cop\ \}\\
+            &=&\{\ f\in\arr\ \Cat\ |\ f : a \to b\ @~\Cop\ \}\\
             \mbox{def.~(\ref{Cat:def:opposite})\ $\to$\ }
             &=&\{\ f\in\arr\ \Cat\ |\ \dom'(f)=a\ ,\ \cod'(f)=b\ \}\\
             &=&\{\ f\in\arr\ \Cat\ |\ \cod(f)=a\ ,\ \dom(f)=b\ \}\\
-            &=&\{\ f\in\arr\ \Cat\ |\ f : b \to a\ @\Cat\ \}\\
+            &=&\{\ f\in\arr\ \Cat\ |\ f : b \to a\ @~\Cat\ \}\\
             &=&\Cat(b,a)
         \end{eqnarray*}
 \end{proof}
@@ -52,24 +52,22 @@ arbitary collection.
                f : (a_{1},a_{2})\to(b_{1},b_{2})\ \}\\
         \mbox{def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
         &=&\{\ (f_{1},f_{2})\ |\ f_{1}\in\arr\ \Cone\ ,\ f_{2}\in\arr\ \Ctwo\\
-        &\ &\,,\ (f_{1},f_{2}) : (a_{1},a_{2})\to(b_{1},b_{2})\ \}
+        &\ &\,,\ (f_{1},f_{2}) : (a_{1},a_{2})\to(b_{1},b_{2})\ \}\\
+        &=&\{\ (f_{1},f_{2})\ |\ f_{1}\in\arr\ \Cone\ ,\ f_{2}\in\arr\ \Ctwo\\
+        &\ &\,,\ \dom(f_{1},f_{2})=(a_{1},a_{2})\\
+        &\ &\,,\ \cod(f_{1},f_{2})=(b_{1},b_{2})\ \}\\
+        \mbox{$(3)$ and $(4)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+        &=&\{\ (f_{1},f_{2})\ |\ f_{1}\in\arr\ \Cone\ ,\ f_{2}\in\arr\ \Ctwo\\
+        &\ &\,,\ (\,\dom(f_{1})\,,\,\dom(f_{2})\,)=(a_{1},a_{2})\\
+        &\ &\,,\ (\,\cod(f_{1})\,,\,\cod(f_{2})\,)=(b_{1},b_{2})\ \}\\
+        &=&\{\ (f_{1},f_{2})\ |\ f_{1}\in\arr\ \Cone\ ,\ f_{2}\in\arr\ \Ctwo\\
+        &\ &\,,\ f_{1}:a_{1}\to b_{1}\ ,\ f_{2}:a_{2}\to b_{2}\ \}\\
+        \mbox{product of collections\ $\to$\ }
+        &=&\{\ f_{1}\in\arr\ \Cone\ |\ f_{1}:a_{1}\to b_{1}\ \}\\
+        &\times& \{\ f_{2}\in\arr\ \Ctwo\ |\ f_{2}:a_{2}\to b_{2}\ \}\\
+        \mbox{def.~(\ref{Cat:def:homset})\ $\to$\ }
+        &=&\Cone(a_{1},b_{1})\times\Ctwo(a_{2},b_{2})
     \end{eqnarray*}
 \end{proof}
 
-\begin{defin}\label{Cat:def:locally:small}
-    A category \Cat\ is said to be {\em locally small} \ifand\ the hom-set
-    $\Cat(a,b)$ associated with every ordered pair of objects $(a,b)$ is 
-    actually a set.
-\end{defin}
 
-\begin{prop}\label{Cat:def:locally:small:opposite}
-    A category \Cat\ is locally small \ifand\ \Cop is locally small.
-\end{prop}
-\begin{proof}
-    The category \Cat\ being locally small is equivalent to $\Cat(a,b)$
-    being a set for all $a,b\in\ob\ \Cat$. Since $\ob\ \Cat=\ob\ \Cop$
-    and $\Cop(a,b)=\Cat(b,a)$ from 
-    proposition~(\ref{Cat:prop:homset:opposite}), this is in turn equivalent 
-    to $\Cop(a,b)$ being a set for all $a,b\in\ob\ \Cop$. Hence, it is
-    equivalent to \Cop\ being locally small.
-\end{proof}

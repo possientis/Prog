@@ -54,6 +54,41 @@ inv-z≤n z≤n = refl
 ≤-trans z≤n _ = z≤n
 ≤-trans (s≤s m≤n) (s≤s n≤p) = s≤s (≤-trans m≤n n≤p)
 
+module ≤-Reasoning where
+  infix  1 begin_
+  infixr 2 _≤⟨⟩_ _≤⟨_⟩_
+  infix  3 _∎
+
+  begin_ : ∀ {x y : ℕ}
+    →   x ≤ y
+      ----------
+    →   x ≤ y
+
+  begin x≤y = x≤y
+
+  _≤⟨⟩_ : ∀ (x : ℕ) {y : ℕ}
+    →   x ≤ y
+      ----------
+    →   x ≤ y
+
+  x ≤⟨⟩ x≤y = x≤y
+
+  _≤⟨_⟩_ : ∀ (x : ℕ) {y z : ℕ}
+    →   x ≤ y
+    →   y ≤ z
+      ----------
+    →   x ≤ z
+
+  x ≤⟨ x≤y ⟩ y≤z = ≤-trans x≤y y≤z
+
+  _∎ : ∀ (x : ℕ)
+      ----------
+    →   x ≤ x
+
+  x ∎ = ≤-refl
+
+
+open ≤-Reasoning
 
 ≤-antisym : ∀ {m n : ℕ}
   → m ≤ n
@@ -115,7 +150,16 @@ data Total' : ℕ → ℕ → Set where
   → n + p ≤ n + q
 
 +-mono-r-≤ zero p q p≤q = p≤q
-+-mono-r-≤ (suc n) p q p≤q = s≤s (+-mono-r-≤ n p q p≤q)
++-mono-r-≤ (suc n) p q p≤q =
+  begin
+    suc n + p
+    ≤⟨⟩
+    suc (n + p)
+    ≤⟨ s≤s (+-mono-r-≤ n p q p≤q) ⟩
+    suc (n + q)
+    ≤⟨⟩
+    suc n + q
+    ∎
 
 +-mono-l-≤ : ∀ (m n p : ℕ)
   → m ≤ n
@@ -130,8 +174,14 @@ data Total' : ℕ → ℕ → Set where
     ---------
   → m + p ≤ n + q
 
-+-mono-≤ m n p q m≤n p≤q = ≤-trans (+-mono-l-≤ m n p m≤n) (+-mono-r-≤ n p q p≤q)
-
++-mono-≤ m n p q m≤n p≤q =
+  begin
+    m + p
+    ≤⟨ +-mono-l-≤ m n p m≤n ⟩
+    n + p
+    ≤⟨ +-mono-r-≤ n p q p≤q ⟩
+    n + q
+    ∎
 
 *-mono-r-≤ : ∀ (n p q : ℕ)
   → p ≤ q
