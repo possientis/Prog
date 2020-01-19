@@ -16,11 +16,21 @@ Definition eval' (e:Env) (n:nat) (p:Formula) (x:set) : Prop :=
 Theorem formulaCompatible : forall (e:Env) (n:nat) (p:Formula),
     compatible (eval' e n p). 
 Proof.
-    intros e n p. revert e n. induction p as [|k m|p1 IH1 p2 IH2|k p1 IH1];
+    intros e n p. revert e n. induction p as [|k m|p1 IH1 p2 IH2|m p1 IH1];
     intros e n; unfold compatible, eval'; intros x y E; simpl; intros H.
     - assumption.
-    -
-
+    - apply equal_l with (bind e n x k). 
+        + apply bindEqual. assumption.
+        + apply equal_r with (bind e n x m).
+            { apply bindEqual. assumption. }
+            { assumption. }
+    - unfold compatible, eval' in IH1. unfold compatible, eval' in IH2. intros H'.
+      apply IH2 with x.
+        + assumption.
+        + apply H. apply IH1 with y.
+            { apply equalSym. assumption. }
+            { assumption. }
+    - intros z. unfold compatible, eval' in IH1.
 Show.
 
 

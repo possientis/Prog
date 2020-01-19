@@ -34,11 +34,6 @@ Inductive term : Type :=
 .
 
 Inductive infer : ctx -> term -> type -> Prop :=
-| iWeak: forall G x t S T, 
-        infer G t T
-    (*------------------------*)
-    ->  infer (G, x :: S) t T
-
 | iVar: forall G x T, 
     (*------------------------*)
         infer G (tVar x T) T
@@ -52,18 +47,26 @@ Inductive infer : ctx -> term -> type -> Prop :=
         infer (G, x :: S) t T
     (*--------------------------------*)
     ->  infer G (tLam x S t) (S ~> T)
+| iWeak: forall G x t S T, 
+        infer G t T
+    (*------------------------*)
+    ->  infer (G, x :: S) t T
+
+| iBeta: forall G x t S T,
+    infer G (tLam x S t) (S ~> T)
+ (*-------------------------------*)
+    ->  infer (G, x :: S) t T
 .
 
 Notation "G |- t $ T" := (infer G t T) (at level 20).
-
 
 Lemma weakening : forall G D x t S T, 
         (G ; D) |- t $ T 
     (*---------------------------*)
     -> ((G, x :: S); D) |- t $ T.
 Proof.
-    intros G D x t S T H. remember (G;D) as G' eqn:E.
-    revert E. revert G D x S. induction H as [G x t Sx T H IH| | | ].
-    - intros G' D y Sy H'.
-Show.
-
+    intros G. induction D as [|D IH a].
+    - simpl. intros x t S T H. constructor. assumption.
+    - simpl. destruct a as [u U]. intros x t S T H. apply iBeta, IH, iLam.
+      assumption.
+Qed.

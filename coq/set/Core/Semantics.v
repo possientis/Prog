@@ -174,3 +174,15 @@ Proof.
     - assumption.
     - assumption.
 Qed.
+
+(*
+Lemma evalEnvEqual : forall (e e':Env) (p:Formula),
+    envEqual e e' -> eval e p <-> eval e' p.
+Proof.
+    intros e e' p. unfold envEqual. revert e e'. 
+    induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
+    - split; auto.
+    - rewrite H, H. split; auto.
+    -
+Show.
+*)

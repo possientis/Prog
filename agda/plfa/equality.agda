@@ -135,6 +135,66 @@ postulate
     suc n + m
     ∎
 
+{-# BUILTIN EQUALITY _≡_ #-}
+
+
+data even : ℕ → Set
+data odd  : ℕ → Set
+
+-- Overloading of defined names is not allowed. But constructors are fine.
+
+data even where
+  zero :           -- overloaded constructor
+     ----------
+     even zero
+
+  suc : ∀ {n : ℕ}  -- overloaded constructor
+    → odd n
+      ----------
+    → even (suc n)
+
+data odd where
+
+  suc : ∀ {n : ℕ}  -- more overloading
+    → even n
+      ----------
+    → odd (suc n)
+
+
+even-comm : ∀ (m n : ℕ)
+  → even (m + n)
+    ------------
+  → even (n + m)
+
+even-comm m n ev rewrite +-comm  m n = ev
+
+
++-comm' : ∀ (m n : ℕ) → m + n ≡ n + m
++-comm' zero n rewrite +-identity n = refl
++-comm' (suc m) n rewrite +-suc n m | +-comm' m n = refl
+
+
+even-comm' : ∀ (m n : ℕ)
+  → even (m + n)
+    ------------
+  → even (n + m)
+
+even-comm' m n ev with (m + n) | +-comm m n
+even-comm' m n ev | .(n + m) | refl = ev
+
+even-comm'' : ∀ (m n : ℕ)
+  → even (m + n)
+    ------------
+  → even (n + m)
+
+even-comm'' m n = subst even (+-comm m n)
+
+-- \.= for ≐
+_≐_ : ∀ {a : Set} (x y : a) → Set₁         -- need Set₁ here, not Set
+_≐_ {a} x y = ∀ (P : a → Set) → P x → P y  -- need 'a' in scope, so not writing x ≐ y
+
+
+
 
 
 

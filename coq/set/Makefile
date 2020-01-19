@@ -249,7 +249,8 @@ ${CORE}/LEM.vo :				${CORE}/LEM.v
 	coqc ${CORE}/LEM.v -R ${CORE} ${CORE}
 
 ${CORE}/Environment.vo :		${CORE}/Environment.v \
-								${CORE}/Set.vo
+								${CORE}/Set.vo \
+								${CORE}/Equal.vo
 	coqc ${CORE}/Environment.v -R ${CORE} ${CORE}
 
 ${CORE}/Semantics.vo :			${CORE}/Semantics.v \
