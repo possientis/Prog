@@ -15,3 +15,20 @@ Fixpoint Ackermann (n:nat) : nat -> nat :=
         | S m   => Ackermann n (g m)
         end
     end.
+
+
+Lemma ackEqual : forall (n m:nat), Ack n m = Ackermann n m.
+Proof.
+    induction n as [|n IH].
+    - intros m. rewrite Ack0. reflexivity.
+    - induction m as [|m IH'].
+        + simpl. rewrite Ack1. apply IH.
+        + rewrite Ack2. simpl. rewrite IH'. apply IH.
+Qed.
+
+Hint Rewrite Ack0 Ack1 Ack2 : base0.
+
+Lemma ResAck0 : Ack 3 2 = 29.
+Proof.
+    autorewrite with base0 using try reflexivity.
+Qed.
