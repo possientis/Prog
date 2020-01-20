@@ -1,5 +1,4 @@
 var(phi)/\[ Union_{u in Fr(phi)\U} Fr(sig(u))\{u} ] = 0 => (sig,U) beta-valid for phi
-U <= U' -> (sig,U) beta valid for phi -> (sig,U') beta valid for phi
 find out when ([theta/x],U) is beta-valid for phi
 conjecture: f beta-valid for t & g beta-valid for f'(t) <=> (g' . f) beta-valid for t ?
 LAM/betavalid.tex

@@ -146,6 +146,71 @@ would get {\em captured} by $x$. This motivate the following:
     $U=\emptyset$.
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:beta:valid:monotone}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$ and
+    $U,U'\subseteq V$. Then if $U\subseteq U'$, we have the implication:
+        \[
+            (\sigma,U)\mbox{\ $\beta$-valid for $\phi$}
+            \ \Rightarrow\
+            (\sigma,U')\mbox{\ $\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    We need to show the implication holds whenever $U\subseteq U'$. We shall 
+    do so by structural induction on $\phi$, using 
+    theorem~(\ref{logic:the:proof:induction}) of 
+    page~\pageref{logic:the:proof:induction}. So first we assume that
+    $\phi=x$ for some $x\in V$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:x:gen}), 
+    $(\sigma,U')$ is always $\beta$-valid for $\phi$ and the implication
+    is true. So we now assume that $\phi=\phi_{1}\ \phi_{2}$ for some
+    $\phi_{1},\phi_{2}\in\tv$ for which the implication is true whenever
+    $U\subseteq U'$. We assume that $U\subseteq U'$ and we need to show that 
+    the implication is also true for $\phi$. So we assume that $(\sigma,U)$
+    is $\beta$-valid for $\phi$, and we need to show that $(\sigma,U')$ is
+    $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}), 
+    this is equivalent to showing that $(\sigma,U')$ is $\beta$-valid
+    for both $\phi_{1}$ and $\phi_{2}$. Having assumed the implication
+    is true for $\phi_{1}$ and $\phi_{2}$ whenever $U\subseteq U'$, it is
+    sufficient to show that $(\sigma,U)$ is $\beta$-valid for both
+    $\phi_{1}$ and $\phi_{2}$ which follows again from
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}) and
+    the $\beta$-validity of $(\sigma,U)$ for~$\phi$.
+    So we now assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$, and 
+    some $\phi_{1}\in\tv$ for which the implication is true whenever 
+    $U\subseteq U'$. We assume that $U\subseteq U'$ and we need to show
+    the implication is also true for $\phi$. So we assume that $(\sigma,U)$
+    is $\beta$-valid for $\phi$ and we need to show that $(\sigma,U')$ is
+    $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) it is
+    sufficient to show that $(\sigma,U'\cup\{x\})$ is $\beta$-valid for 
+    $\phi_{1}$, and furthermore that for all $u\in V$, the following 
+    implication holds:
+    \[
+        u\in\free(\lambda x\phi_{1})\setminus U'
+        \ \Rightarrow\ 
+        x\not\in\free(\sigma(u))
+    \]
+    First we focus on the implication. Having assumed that $U\subseteq U'$
+    it is sufficient to show a similar implication where $U'$ is replaced by $U$:
+    \[
+        u\in\free(\lambda x\phi_{1})\setminus U
+        \ \Rightarrow\ 
+        x\not\in\free(\sigma(u))
+    \]
+    This last implication follows from another use of
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) and the
+    fact that $(\sigma,U)$ is $\beta$-valid for $\phi$. So it remains to 
+    show that $(\sigma,U'\cup\{x\})$ is $\beta$-valid for $\phi_{1}$.
+    Having assumed the implication is true for $\phi_{1}$ and since 
+    $U\cup\{x\}\subseteq U'\cup\{x\}$, it is sufficient to show that 
+    $(\sigma, U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$, which 
+    follows once again from
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) and the
+    fact that $(\sigma,U)$ is $\beta$-valid for $\phi$.
+\end{proof}
+
 \begin{prop}\label{logic:prop:LAM:freevar:of:betasubst:valid:gen}
     Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map and
     $U\subseteq V$ such that $(\sigma,U)$ is $\beta$-valid for $\phi$. Then: 
