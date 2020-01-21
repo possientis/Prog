@@ -1,3 +1,5 @@
+open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc)
+
 data _≡_ {a : Set} (x : a) : a -> Set where -- \==
   refl : x ≡ x
 
@@ -194,7 +196,49 @@ _≐_ : ∀ {a : Set} (x y : a) → Set₁         -- need Set₁ here, not Set
 _≐_ {a} x y = ∀ (P : a → Set) → P x → P y  -- need 'a' in scope, so not writing x ≐ y
 
 
+refl-≐ : ∀ {a : Set} {x : a}
+    --------------------------
+  →         x ≐ x
+
+refl-≐ P Px = Px
 
 
+trans-≐ : ∀ {a : Set} {x y z : a}
+  →   x ≐ y
+  →   y ≐ z
+     ----------
+  →   x ≐ z
 
+trans-≐ x≐y y≐z P Px = y≐z P (x≐y P Px)
+
+
+sym-≐ : ∀ {a : Set} {x y : a}
+  →   x ≐ y
+     ----------
+  →   y ≐ x
+
+sym-≐ {a} {x} {y} x≐y P Py = x≐y Q Qx Py
+  where
+  Q : a → Set
+  Q z = P z → P x
+  Qx : Q x
+  Qx Px = Px
+
+≡-implies-≐ : ∀ {a : Set} {x y : a}
+  →   x ≡ y
+    ----------
+  →   x ≐ y
+
+≡-implies-≐ x≡y P Px = subst P x≡y Px
+
+
+≐-implies-≡ : ∀ {a : Set} {x y : a}
+  →   x ≐ y
+    ----------
+  →   x ≡ y
+
+≐-implies-≡ {a} {x} {y} x≐y = x≐y Q refl
+  where
+  Q : a → Set
+  Q z = x ≡ z
 
