@@ -54,14 +54,26 @@ if not formally defined. Furthermore, We are no longer imposing that \ob\
 should be a set, but are instead using the phrase {\em collection with 
 equality}, whatever this may mean in our given logical context. So we shall 
 still make use of the notation $\ob\ \Cat$ but this will now refer to the 
-{\em collection} of all {\em objects} of the category \Cat. In fact, if
+{\em collection} of all {\em objects} of the category \Cat. 
+\begin{notation}\label{Cat:notation:objects}
+    Let \Cat\ be a category. Its collection of {\em objects} is denoted $\ob\ 
+    \Cat$.
+\end{notation}
+
+In fact, if
 $a$ is an object of the category \Cat, we shall abuse notations somewhat
 by writing '$a\in\ob\ \Cat$' or even simply '$a\in\Cat$' to express the fact 
 that $a$ is an object of \Cat, being understood that this use of the
 set membership symbol '$\in$' does not mean anything is a set. Since we 
 are stepping out of set theory, the objects of the category \Cat\ may not
 be sets themselves. They are simply members of the {\em collection} 
-$\ob\ \Cat$. However, properties $(7)-(13)$ of 
+$\ob\ \Cat$. 
+\begin{notation}\label{Cat:notation:membership}
+    Let \Cat\ be a category. We write $a\in\Cat$ as a shortcut for 
+    $a\in\ob\ \Cat$.
+\end{notation}
+
+However, properties $(7)-(13)$ of 
 definition~(\ref{Cat:def:category}) are all referring to equalities
 between objects such that $\cod(f)=\dom(g)$. So it must be the case that 
 the notion of {\em equality} be meaningful on the collection $\ob\ \Cat$. 
@@ -79,6 +91,11 @@ definition~(\ref{Cat:def:category}) are all referring to equalities
 between arrows so the {\em collection} $\arr\ \Cat$ must have some notion
 of {\em equality} defined on it. 
 
+\begin{notation}\label{Cat:notation:arrows}
+    Let \Cat\ be a category. Its collection of {\em arrows} is denoted $\arr\ 
+    \Cat$.
+\end{notation}
+
 Since \ob\ and \arr\ are no longer sets in general, the {\em maps} 
 $\dom:\arr\to\ob$, $\cod:\arr\to\ob$, $\id:\ob\to\arr$ and the partial map 
 $\circ:\arr\times\arr\to\arr$ cannot possibly be {\em functions} in the 
@@ -90,15 +107,47 @@ made from \arr. Our using the word {\em map} rather than {\em function}
 in definition~(\ref{Cat:def:category}) is simply an attempt at reminding
 ourselves of the fact these are not set-theoretic functions, eventhough
 the words {\em map} and {\em function} are perfectly interchangeable in 
-standard (set-theoretic) mathematics. 
+standard (set-theoretic) mathematics. Given $f\in\arr\ \Cat$, we shall 
+still call the object $\dom(f)$ the {\em domain} of $f$ and the object 
+$\cod(f)$ the {\em codomain} of $f$.
 
-Given $f\in\arr\ \Cat$, we shall still call the object $\dom(f)$ the 
-{\em domain} of $f$ and the object $\cod(f)$ the {\em codomain} of $f$.
+\begin{notation}\label{Cat:notation:domain}
+    Let \Cat\ be a category. The domain of $f\in\arr\ \Cat$ is denoted 
+    $\dom(f)$.
+\end{notation}
+
+
+\begin{notation}\label{Cat:notation:codomain}
+    Let \Cat\ be a category. The codomain of $f\in\arr\ \Cat$ is denoted 
+    $\cod(f)$.
+\end{notation}
+
+\noindent
+{\bf Remark}: Notations~(\ref{Cat:notation:domain}) 
+and~(\ref{Cat:notation:codomain}) are potentially ambiguous as a mathematical 
+object $f$ could in principle be an arrow in several categories, and the
+designations $\dom(f)$ and $\cod(f)$ do not specfify which category is
+being referred to.
+
+
 Given $a,b\in\Cat$, we shall still use the notation $f:a\to b$ as a
-notational shortcut for $\dom(f)=a$ and $\cod(f)=b$. The partial map
-$\circ$ is still the {\em composition operator} and the arrow $g\circ f$
-shall still be called the {\em composition} of $g$ and $f$, provided it
-is defined. The map $\id:\ob\to\arr$ is still the {\em identity operator}
+notational shortcut for $\dom(f)=a$ and $\cod(f)=b$. Hence we state:
+
+\begin{notation}\label{Cat:notation:arrow:a:b}
+    Let \Cat\ be a category. We write $f:a\to b$ or $f:a\to b\ @\ \Cat$ 
+    as a shortcut for $f\in\arr\ \Cat$ together with $\dom(f)=a$ and 
+    $\cod(f)=b$.
+\end{notation}
+\noindent
+{\bf Remark}: The qualification $@\ \Cat$ in 
+notation~(\ref{Cat:notation:arrow:a:b}) may be useful to disambiguate
+between several categories in a given context.
+
+The partial map $\circ$ is still the {\em composition operator} and the 
+arrow $g\circ f$ shall still be called the {\em composition} of $g$ and $f$, 
+provided it is defined. 
+
+The map $\id:\ob\to\arr$ is still the {\em identity operator}
 on the category \Cat, and for all $a\in\Cat$, the arrow $id(a):a\to a$ is 
 known as the {\em identity at} $a$. For all arrows $f:a\to b$, it is still
 the case that the arrows $\id(b)\circ f$ and $f\circ\id(a)$ are well-defined
