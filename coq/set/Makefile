@@ -2,6 +2,7 @@ CORE=Core
 SEM=Semantics
 
 all :							${CORE}/Nat.vo \
+								${CORE}/LEM.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
@@ -25,7 +26,6 @@ all :							${CORE}/Nat.vo \
 								${CORE}/Comprehension.vo \
 								${CORE}/Fresh.vo \
 								${CORE}/Syntax.vo \
-								${CORE}/LEM.vo \
 								${CORE}/Environment.vo \
 								${CORE}/Semantics.vo \
 								${SEM}/Incl.vo \
@@ -42,7 +42,8 @@ all :							${CORE}/Nat.vo \
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
 
-
+${CORE}/LEM.vo :				${CORE}/LEM.v
+	coqc ${CORE}/LEM.v -R ${CORE} ${CORE}
 
 ${CORE}/Set.vo : 				${CORE}/Set.v
 	coqc ${CORE}/Set.v -R ${CORE} ${CORE}
@@ -245,8 +246,6 @@ ${CORE}/Fresh.vo :				${CORE}/Fresh.v
 ${CORE}/Syntax.vo :				${CORE}/Syntax.v
 	coqc ${CORE}/Syntax.v -R ${CORE} ${CORE}
 
-${CORE}/LEM.vo :				${CORE}/LEM.v
-	coqc ${CORE}/LEM.v -R ${CORE} ${CORE}
 
 ${CORE}/Environment.vo :		${CORE}/Environment.v \
 								${CORE}/Set.vo \

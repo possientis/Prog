@@ -1,4 +1,3 @@
-Core/Semantics
 Semantics/Compatible.
 add sem/compat to Makefile
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails

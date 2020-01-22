@@ -1,3 +1,5 @@
+Require Import Peano_dec.
+
 Require Import Core.LEM.
 Require Import Core.Nat.
 Require Import Core.Set.
@@ -175,7 +177,7 @@ Proof.
     - assumption.
 Qed.
 
-(*
+
 Lemma evalEnvEqual : forall (e e':Env) (p:Formula),
     envEqual e e' -> eval e p <-> eval e' p.
 Proof.
@@ -183,6 +185,26 @@ Proof.
     induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
     - split; auto.
     - rewrite H, H. split; auto.
-    -
-Show.
-*)
+    - rewrite (IH1 e e'), (IH2 e e').
+        + tauto.
+        + assumption.
+        + assumption.
+    - split; intros H' x.
+        + rewrite (IH1 (bind e' n x) (bind e n x)). 
+            { apply H'. }
+            { intros m. destruct (eq_nat_dec n m) as [E|E].
+                { subst. rewrite bindSame, bindSame. reflexivity. }
+                { rewrite bindDiff, bindDiff.
+                    { symmetry. apply H. }
+                    { assumption. }
+                    { assumption. }}}
+        + rewrite (IH1 (bind e n x) (bind e' n x)). 
+            { apply H'. }
+            { intros m. destruct (eq_nat_dec n m) as [E|E].
+                { subst. rewrite bindSame, bindSame. reflexivity. }
+                { rewrite bindDiff, bindDiff.
+                    { apply H. }
+                    { assumption. }
+                    { assumption. }}}
+Qed.
+
