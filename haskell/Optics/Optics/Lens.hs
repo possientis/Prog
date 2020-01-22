@@ -3,10 +3,13 @@ module  Optics.Lens
     )   where
 
 
-data  Lens s t a b 
+data  Lens a b s t 
     = Lens 
     { view :: s -> a
     , update :: (b,s) -> t 
     }
+
+
+
 
 

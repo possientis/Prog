@@ -3,5 +3,5 @@ module  Optics.Optic
     )   where
 
 
-type Optic p s t a b = p a b -> p s t
+type Optic p a b s t = p a b -> p s t
 

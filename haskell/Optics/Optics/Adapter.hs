@@ -17,49 +17,38 @@ import Optics.Lens
 import Optics.Prism
 import Optics.Optic
 
-data  Adapter s t a b 
+data  Adapter a b s t 
     = Adapter 
     { from :: s -> a
     , to   :: b -> t 
     }
 
-type AdapterP s t a b = forall p . Profunctor p => Optic p s t a b
+type AdapterP a b s t = forall p . Profunctor p => Optic p a b s t
 
 -- Adapters are lenses
-toLense :: Adapter s t a b -> Lens s t a b
+toLense :: Adapter a b s t -> Lens a b s t
 toLense x = Lens view_ update_ where
     view_   = from x
     update_ = to x . fst
     
 -- Adapters are prisms
-toPrism :: Adapter s t a b -> Prism s t a b
+toPrism :: Adapter a b s t -> Prism a b s t 
 toPrism x = Prism match_ build_ where
     match_ = Right . from x 
     build_ = to x 
 
-adapterC2P :: Adapter s t a b -> AdapterP s t a b
+adapterC2P :: Adapter a b s t -> AdapterP a b s t
 adapterC2P (Adapter o i) = dimap o i
 
-data  Iso a b s t 
-    = Iso
-    { _from :: s -> a
-    , _to   :: b -> t
-    }
+instance Profunctor (Adapter a b) where
+    dimap l r (Adapter o i) = Adapter (o . l) (r . i) 
 
-instance Profunctor (Iso a b) where
-    dimap l r (Iso o i) = Iso (o . l) (r . i) 
-
-adapterI2C :: Iso a b s t -> Adapter s t a b
-adapterI2C (Iso o i) = Adapter o i
-
-adapterP2I :: AdapterP s t a b -> Iso a b s t
-adapterP2I f = f (Iso id id) 
-
-adapterP2C :: AdapterP s t a b -> Adapter s t a b
-adapterP2C f = adapterI2C (adapterP2I f)
+--TODO
+adapterP2C :: AdapterP a b s t -> Adapter a b s t
+adapterP2C _f = undefined
 
 -- This proofs stands without assuming o i to be isomorphism.
-idC2C :: Adapter s t a b -> Adapter s t a b
+idC2C :: Adapter a b s t -> Adapter a b s t 
 -- 1. idC2C x = adapterP2C  (adapterC2P x)
 -- 2. idC2C (Adapter o i) = adapterP2C (adapterC2P (Adapter o i))
 -- 3. idC2C (Adapter o i) = adapterP2C (dimap o i)
@@ -67,16 +56,19 @@ idC2C :: Adapter s t a b -> Adapter s t a b
 -- 5. idC2C (Adapter o i) = adapterI2C (dimap o i (Iso id id))
 -- 6. idC2C (Adapter o i) = adapterI2C (Iso (id . o) (i . id))
 -- 7. idC2C (Adapter o i) = adapterI2C (Iso o i)
-idC2C (Adapter o i) = Adapter o i
+-- 8. idC2C (Adapter o i) = Adapter o i
+idC2C = id
 
 -- f :: p a b -> p s t , Iso id id :: Iso a b a b, p = Iso a b, 
-idP2P :: AdapterP s t a b -> AdapterP s t a b
--- 1. idP2P f = adapterC2P (adapterP2C f)
--- 2. idP2P f = adapterC2P (adapterI2C (adapterP2I f))
--- 3, idP2P f = adapterC2P (adapterI2C (f (Iso id id)))
--- 4, idP2P f = let Iso o i = f (Iso id id) in adapterC2P (adapterI2C (Iso o i))
--- 5. idP2P f = let Iso o i = f (Iso id id) in adapterC2P (Adapter o i)
--- 6. idP2P f = let Iso o i = f (Iso id id) in dimap o i 
-idP2P f pab = let Iso o i = f (Iso id id) in dimap o i pab -- = f pab ?
-
-
+idP2P :: AdapterP a b s t -> AdapterP a b s t 
+-- 1. idP2P f k = adapterC2P (adapterP2C f) k
+-- 2. idP2P f k = adapterC2P (adapterI2C (adapterP2I f)) k
+-- 3. idP2P f k = adapterC2P (adapterI2C (f (Iso id id))) k
+-- 4. idP2P f k = flip adapterC2P k (adapterI2C (f (Iso id id)))
+-- 5. idP2P f k = f (flip adapterC2P k (adapterI2C (Iso id id)))  -- see paper
+-- 6. idP2P f k = f (adapterC2P (adapterI2C (Iso id id)) k)
+-- 7. idP2P f k = f (adapterC2P (Adapter id id) k)
+-- 8. idP2P f k = f (dimap id id k)
+-- 9. idP2P f k = f k
+-- 10.idP2P f = f
+idP2P = id
