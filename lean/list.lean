@@ -67,5 +67,3 @@ def my_tuple : tuple ℕ 3 := ⟨ [0,1,2], rfl⟩
 
 example : g my_tuple = 7 := rfl
 
-
-

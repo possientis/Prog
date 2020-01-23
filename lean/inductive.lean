@@ -205,7 +205,124 @@ variables {α : Type u} (p : α → Prop)
 end hidden6
 
 
+inductive foo : Type
+| bar1 : ℕ → ℕ → foo
+| bar2 : ℕ → ℕ → ℕ → foo
+
+#check @foo
+
+def silly1 (x : foo) : ℕ :=
+  begin
+    cases x with a b c d e,
+      {exact (a + b)},
+      {exact (c + d + e)}
+  end
+
+#check @silly1
+
+open foo
+
+def silly2 (x : foo) : ℕ :=
+begin
+  cases x,
+    case bar1 : a b
+      {exact b},
+    case bar2 : c d e
+      {exact e}
+end
+
+#check @silly2
+
+def silly3 (x : foo) : ℕ :=
+begin
+  cases x,
+    case bar2 : c d e
+      {exact e},
+    case bar1 : a b
+      {exact b}
+end
+
+#check @silly3
 
 
+open nat
+
+variable p : ℕ → Prop
+
+lemma L3 : p 0 → (∀ n, p (succ n)) → ∀(m k : ℕ),  p (m + 3 * k) :=
+  assume hz hs m k,
+    begin
+      cases (m + 3 * k),
+        {exact hz},
+        {apply hs}
+    end
+
+#check L3
+
+lemma L4 : p 0 → (∀ n, p (succ n)) → ∀(m k : ℕ),  p (m + 3 * k) :=
+  assume hz hs m k,
+    begin
+      generalize : m + 3 * k = n,
+      cases n,
+        {exact hz},
+        {apply hs}
+    end
 
 
+#check L4
+
+lemma L5 : ∀ (p : Prop) (m n : ℕ), (m < n → p) → (m ≥ n → p) → p :=
+  assume p m n H1 H2,
+    begin
+      cases lt_or_ge m n with H H,
+        {apply H1, assumption},
+        {apply H2, assumption}
+    end
+
+#check L5
+
+
+lemma L6 : ∀ (p : Prop) (m n : ℕ), (m < n → p) → (m ≥ n → p) → p :=
+  assume p m n H1 H2,
+    begin
+      have H : m < n ∨ m ≥ n,
+        {apply lt_or_ge},
+        {cases H with H H,
+          {apply H1, assumption},
+          {apply H2, assumption}}
+    end
+
+#check L6
+
+#check @nat.sub_self
+
+lemma L7 : ∀ (m n : ℕ), m - n = 0 ∨ m ≠ n :=
+  assume m n,
+    begin
+      cases decidable.em (m = n) with H H,
+        {rewrite H, left, apply nat.sub_self},
+        {right, assumption}
+    end
+
+#check L7
+
+
+def f (m k : ℕ) : ℕ :=
+  begin
+    cases m - k,  -- hmmmm 
+      {exact 3},  -- ≤ 0 it seems
+      {exact 7}   -- > 0 it seems
+  end
+
+example : f 5 5 = 3  := rfl
+example : f 5 7 = 3  := rfl
+example : f 10 2 = 7 := rfl
+
+
+lemma L8 : ∀ (n : ℕ), 0 + n = n :=
+  assume n,
+    begin
+      induction n with n IH,
+        {reflexivity},
+        {simp}
+    end
