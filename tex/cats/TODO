@@ -3,3 +3,5 @@ a small category is a category
 hom-functor is a functor
 identity functor
 product of two functors
+composition of two functors
+F:C^op -> D^op

@@ -37,7 +37,8 @@ all :							${CORE}/Nat.vo \
 								${SEM}/Pairing.vo \
 								${SEM}/Union.vo \
 								${SEM}/Powerset.vo \
-								${SEM}/Foundation.vo
+								${SEM}/Foundation.vo \
+								${SEM}/Compatible.vo
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
@@ -379,3 +380,14 @@ ${SEM}/Foundation.vo :			${SEM}/Foundation.v \
 								${CORE}/Environment.vo
 	
 	coqc ${SEM}/Foundation.v -R ${CORE} ${CORE}
+
+${SEM}/Compatible.vo :			${SEM}/Compatible.v \
+								${CORE}/Set.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Compatible.vo \
+								${CORE}/Environment.vo
+	
+	coqc ${SEM}/Compatible.v -R ${CORE} ${CORE}

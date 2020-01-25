@@ -326,3 +326,60 @@ lemma L8 : ∀ (n : ℕ), 0 + n = n :=
         {reflexivity},
         {simp}
     end
+
+lemma L9 : ∀ (m n : ℕ), succ m + n = succ (m + n) :=
+  assume m n,
+    begin
+      induction n with n IH,
+        { by calc
+             succ m + 0 = succ m       : rfl
+               ...      = succ (m + 0) : rfl
+        },
+        { by calc
+             succ m + succ n = succ (succ m + n)   : by refl
+                    ...      = succ (succ (m + n)) : by rw IH
+                    ...      = succ (m + succ n)   : by refl
+        }
+    end
+
+#check L9
+
+#check @zero_add
+
+lemma L10 : ∀ (m n : ℕ), m + n = n + m :=
+  assume m n,
+    begin
+      induction n with n IH,
+        by calc
+             m + 0  = m     : by refl
+             ...    = 0 + m : by begin symmetry, apply zero_add end,
+        by calc
+            m + succ n = succ (m + n) : by refl
+              ...      = succ (n + m) : by rw IH
+              ...      = succ n + m   : by begin symmetry, apply L9 end
+    end
+
+#check L10
+
+lemma L11 : ∀ (n : ℕ), 0 + n = n :=
+  assume n,
+    by induction n; simp only [*, add_zero, add_succ]
+
+#check L11
+
+
+lemma L12 : ∀ (m n p : ℕ), (m + n) + p = m + (n + p) :=
+  assume m n p,
+    begin
+      induction p with p IH,
+        by calc
+          (m + n) + 0 = m + n       : by refl
+            ...       = m + (n + 0) : by refl,
+        by calc
+          (m + n) + succ p = succ ((m + n) + p) : by refl
+               ...         = succ (m + (n + p)) : by rw IH
+               ...         = m + succ (n + p)   : by refl
+               ...         = m + (n + succ p)   : by refl
+    end
+
+#check L12

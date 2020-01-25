@@ -1,6 +1,4 @@
-Semantics/Compatible.
-add sem/compat to Makefile
+Core/Comprehension
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
-comprehension schema
 axiom of infinity false ?
 existential quantification vs sugar over forall

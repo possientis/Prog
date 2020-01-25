@@ -1,3 +1,5 @@
+Require Import Peano_dec.
+
 Require Import Core.Set.
 Require Import Core.Elem.
 Require Import Core.Equal.
@@ -30,8 +32,22 @@ Proof.
         + apply H. apply IH1 with y.
             { apply equalSym. assumption. }
             { assumption. }
-    - intros z. unfold compatible, eval' in IH1.
-Show.
-
-
-
+    - intros z. unfold compatible, eval' in IH1. 
+      destruct (eq_nat_dec m n) as [H'|H'].
+        + subst. apply (evalEnvEqual (bind (bind e n y) n z) (bind e n z)).
+            { apply bindOver. }
+            { apply (evalEnvEqual (bind (bind e n x) n z) (bind e n z)).
+                { apply bindOver. }
+                { apply H. }}
+        + apply (evalEnvEqual 
+            (bind (bind e n y) m z)
+            (bind (bind e m z) n y)).
+            { apply bindPermute. assumption. }
+            { apply IH1 with x.
+                { assumption. }
+                { apply (evalEnvEqual 
+                    (bind (bind e n x) m z)
+                    (bind (bind e m z) n x)).
+                    { apply bindPermute. assumption. }
+                    { apply H. }}}
+Qed.

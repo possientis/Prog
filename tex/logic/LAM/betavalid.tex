@@ -397,4 +397,68 @@ would get {\em captured} by $x$. This motivate the following:
     \sigma^{*}(\phi)(\emptyset)$.
 \end{proof}
 
-
+\begin{prop}\label{logic:prop:LAM:var:inter:beta:valid:gen}
+    Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map. Then for
+    all $U\subseteq V$, we have the following implication:
+        \[
+            \var(\phi)\ \cap
+            \!\!\!\!\!\!\bigcup_{u\in\free(\phi)\setminus U}\!\!\!\!\!\!
+            \free(\sigma(u))\setminus\{u\}
+            =\emptyset
+            \ \ \Rightarrow\ \ 
+            \mbox{$(\sigma,U)$ is $\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    We shall prove this implication by structural induction on $\phi$, using 
+    theorem~(\ref{logic:the:proof:induction}) of 
+    page~\pageref{logic:the:proof:induction}. 
+    So first we assume that $\phi=x$ for some $x\in V$. Then for all $U\subseteq 
+    V$, from proposition~(\ref{logic:prop:LAM:beta:valid:recursion:x:gen}) it is
+    always the case that $(\sigma, U)$ is $\beta$-valid for $\phi$ and the 
+    implication is therefore satisfied. So we now assume that $\phi=\phi_{1}\ 
+    \phi_{2}$ for some $\phi_{1},\phi_{2}\in\tv$ for which the implication
+    is true for all $U\subseteq V$. Given $U\subseteq V$, we need to show that
+    the implication is also true for $\phi$. Hence we assume:
+        \begin{equation}\label{logic:eqn:LAM:var:inter:beta:valid:gen}
+            \var(\phi)\ \cap
+            \!\!\!\!\!\!\bigcup_{u\in\free(\phi)\setminus U}\!\!\!\!\!\!
+            \free(\sigma(u))\setminus\{u\}
+            =\emptyset
+        \end{equation}
+    and we shall show that $(\sigma,U)$ is $\beta$-valid for $\phi$.
+    From $\var(\phi)=\var(\phi_{1})\cup\var(\phi_{2})$
+    and $\free(\phi)=\free(\phi_{1})\cup\free(\phi_{2})$, in particular
+    we have:
+        \[
+            \var(\phi_{1})\ \cap
+            \!\!\!\!\!\!\bigcup_{u\in\free(\phi_{1})\setminus U}\!\!\!\!\!\!
+            \free(\sigma(u))\setminus\{u\}
+            =\emptyset
+        \]
+    and: 
+        \[
+            \var(\phi_{2})\ \cap
+            \!\!\!\!\!\!\bigcup_{u\in\free(\phi_{2})\setminus U}\!\!\!\!\!\!
+            \free(\sigma(u))\setminus\{u\}
+            =\emptyset
+        \]
+    Having assumed the implication is true for both $\phi_{1}$ and $\phi_{2}$ 
+    we see that $(\sigma,U)$ is therefore $\beta$-valid for $\phi_{1}$ and 
+    $\phi_{2}$ and the $\beta$-validity of $(\sigma,U)$ for $\phi$ follows 
+    from proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}).
+    So we now assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$ and
+    some $\phi_{1}\in\tv$ for which the implication is true for all
+    $U\subseteq V$. Given $U\subseteq V$, we need to show the implication
+    is also true for $\phi$. So once again we assume that
+    equation~(\ref{logic:eqn:LAM:var:inter:beta:valid:gen}) holds and we
+    need to show that $(\sigma,U)$ is $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}), we 
+    therefore need to show that $(\sigma, U\cup\{x\})$ is $\beta$-valid
+    for $\phi_{1}$ and furthermore that for all $u\in V$ we have:
+        \[
+            u\in\free(\lambda x\phi_{1})\setminus U
+            \ \Rightarrow\ 
+            x\not\in\free(\sigma(u))
+        \]
+ \end{proof}

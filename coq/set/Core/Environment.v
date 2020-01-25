@@ -5,6 +5,8 @@ Require Import Core.Equal.
 
 Definition Env : Type := nat -> set.
 
+Definition envEqual (e e':Env) : Prop := forall (n : nat), e n = e' n.
+
 (* Safe environment allowing variables to be unbound leading to error checking. *)
 Definition Env' : Type := nat -> option set.
 
@@ -51,9 +53,6 @@ Proof.
         + assumption.
         + assumption.
 Qed.
-
-Definition envEqual (e e':Env) : Prop := forall (n : nat), e n = e' n.
-
 
 Lemma bindPermute : forall (e:Env) (n m:nat) (x y:set), m <> n -> 
     envEqual (bind (bind e n x) m y) (bind (bind e m y) n x).

@@ -112,23 +112,16 @@ still call the object $\dom(f)$ the {\em domain} of $f$ and the object
 $\cod(f)$ the {\em codomain} of $f$.
 
 \begin{notation}\label{Cat:notation:domain}
-    Let \Cat\ be a category. The domain of $f\in\arr\ \Cat$ is denoted 
-    $\dom(f)$.
+    Let \Cat\ be a category. The domain of an arrow $f\in\arr\ \Cat$ is 
+    denoted $\dom(f)$, while its codomain is denoted $\cod(f)$.
 \end{notation}
 
-
-\begin{notation}\label{Cat:notation:codomain}
-    Let \Cat\ be a category. The codomain of $f\in\arr\ \Cat$ is denoted 
-    $\cod(f)$.
-\end{notation}
 
 \noindent
-{\bf Remark}: Notations~(\ref{Cat:notation:domain}) 
-and~(\ref{Cat:notation:codomain}) are potentially ambiguous as a mathematical 
-object $f$ could in principle be an arrow in several categories, and the
-designations $\dom(f)$ and $\cod(f)$ do not specfify which category is
-being referred to.
-
+{\bf Remark}: Notation~(\ref{Cat:notation:domain}) is potentially ambiguous 
+as a mathematical object $f$ could in principle be an arrow in several 
+categories, and the designations $\dom(f)$ and $\cod(f)$ do not specfify 
+which category is being referred to.
 
 Given $a,b\in\Cat$, we shall still use the notation $f:a\to b$ as a
 notational shortcut for $\dom(f)=a$ and $\cod(f)=b$. Hence we state:
@@ -146,12 +139,41 @@ between several categories in a given context.
 The partial map $\circ$ is still the {\em composition operator} and the 
 arrow $g\circ f$ shall still be called the {\em composition} of $g$ and $f$, 
 provided it is defined. 
+\begin{notation}\label{Cat:notation:composition}
+    Let \Cat\ be a category. The composition
+    operator on \Cat\ is denoted $\circ$, and the composition of 
+    two arrows $g$ and $f$ is denoted $g\circ f$.
+\end{notation}
+
+\noindent
+{\bf Remark}: $\circ$ may also be ambiguous in a context with several 
+categories. It is also the common symbol to refer to standard function
+composition.
 
 The map $\id:\ob\to\arr$ is still the {\em identity operator}
 on the category \Cat, and for all $a\in\Cat$, the arrow $id(a):a\to a$ is 
-known as the {\em identity at} $a$. For all arrows $f:a\to b$, it is still
+known as the {\em identity at} $a$. 
+
+\begin{notation}\label{Cat:notation:identity}
+    Let \Cat\ be a category. The identity arrow at $a$ is denoted 
+    $\id(a)$.
+\end{notation}
+
+For all arrows $f:a\to b$, it is still
 the case that the arrows $\id(b)\circ f$ and $f\circ\id(a)$ are well-defined
 and both equal to $f$. Just as in the case of a small category, whenever 
 $f:a\to b$, $g:b\to c$ and $h:c\to d$, all the terms involved in the 
-associativity condition $(h\circ g)\circ f=h\circ(g\circ f)$ of
+equation $(h\circ g)\circ f=h\circ(g\circ f)$ of
 definition~(\ref{Cat:def:category}) are well defined.
+
+
+\begin{prop}\label{Cat:prop:smallcat:is:cat}
+    A small category is a category.
+\end{prop}
+\begin{proof}
+    When considering a small category \Cat, we are implicitely working
+    within a set theoretic framework in which equality between any two
+    sets is always meaningful and elements of sets are themselves sets.
+    So any set can be viewed as a {\em collection with equality} and 
+    hence a small category satisfies definition~(\ref{Cat:def:category}).
+\end{proof}

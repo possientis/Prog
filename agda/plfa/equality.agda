@@ -1,4 +1,4 @@
-open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc)
+open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc) -- \sqcup for ⊔
 
 data _≡_ {a : Set} (x : a) : a -> Set where -- \==
   refl : x ≡ x
@@ -241,4 +241,26 @@ sym-≐ {a} {x} {y} x≐y P Py = x≐y Q Qx Py
   where
   Q : a → Set
   Q z = x ≡ z
+
+-- \ell for ℓ
+data _≡'_ {ℓ : Level} {a : Set ℓ} (x : a) : a → Set ℓ where
+  refl' : x ≡' x
+
+sym' : {ℓ : Level} {a : Set ℓ} {x y : a}
+  →    x ≡' y
+     ----------
+  →    y ≡' x
+
+sym' refl' = refl'
+
+-- \.= for ≐
+_≐'_ : ∀ {ℓ : Level} {a : Set ℓ} (x y : a) → Set (lsuc ℓ)
+_≐'_ {ℓ} {a} x y = ∀ (P : a → Set ℓ) → P x → P y
+
+
+-- \circ for ∘
+_∘_ : ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {a : Set ℓ₁} {b : Set ℓ₂} {c : Set ℓ₃}
+    → (b → c) → (a → b) → a → c
+
+_∘_ g f x = g (f x)
 
