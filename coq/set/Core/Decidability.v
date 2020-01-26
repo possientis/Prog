@@ -62,7 +62,7 @@ Proof.
                     { right. rewrite P. intros [H3 H4]. apply H2. assumption. }
                     { right. rewrite P. intros [H3 H4]. apply H1. assumption. }
                     { right. rewrite P. intros [H3 H4]. apply H1. assumption. }}
-                  destruct (in_pred_dec _ p q (toList ys)) as [H'|H'].
+                  destruct (inPredDec _ p q (toList ys)) as [H'|H'].
                         { left. split.
                             { assumption. }
                             { rewrite P in H'. assumption. }}

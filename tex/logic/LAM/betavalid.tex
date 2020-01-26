@@ -461,4 +461,38 @@ would get {\em captured} by $x$. This motivate the following:
             \ \Rightarrow\ 
             x\not\in\free(\sigma(u))
         \]
+    We shall first prove this last implication. So we assume $u\in\free
+    (\lambda x\phi_{1})\setminus U$ and we need to show that 
+    $x\not\in\free(\sigma(u))$. From $u\in\free(\phi)\setminus U$, looking
+    at equation~(\ref{logic:eqn:LAM:var:inter:beta:valid:gen}) we see that
+    the following equality must hold:
+        \[
+            \var(\phi)\cap\free(\sigma(u))\cap\{u\}^{c}=\emptyset
+        \]
+    Hence, in order to show that $x\not\in\free(\sigma(u))$ it is 
+    sufficient to show that $x\in\var(\phi)$ and $x\in\{u\}^{c}$.
+    However $x\in\var(\phi)$ is clear since $\phi=\lambda x\phi_{1}$.
+    As for $u\neq x$, this follows immediately from $u\in\free(\phi)=
+    \free(\phi_{1})\setminus\{x\}$. So it now remains to show that
+    $(\sigma,U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$. Having
+    assumed the implication is true for $\phi_{1}$ for all $U\subseteq V$,
+    it is sufficient to prove:
+        \[
+            \var(\phi_{1})\ \cap
+            \!\!\!\!\!\!\!\!
+            \bigcup_{u\in\free(\phi_{1})\setminus (U\cup\{x\})}
+            \!\!\!\!\!\!\!\!
+            \free(\sigma(u))\setminus\{u\}
+            =\emptyset
+        \]
+    which is:
+        \[
+            \var(\phi_{1})\ \cap
+            \!\!\!\!\!\!\bigcup_{u\in\free(\phi)\setminus U}\!\!\!\!\!\!
+            \free(\sigma(u))\setminus\{u\}
+            =\emptyset
+        \]
+    and which follows immediately from 
+    equation~(\ref{logic:eqn:LAM:var:inter:beta:valid:gen}) and $\var(\phi_{1})
+    \subseteq\var(\phi)$.
  \end{proof}

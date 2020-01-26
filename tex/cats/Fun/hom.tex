@@ -9,6 +9,20 @@
     where $(2)$ hold for $a_{1},a_{2},b_{1},b_{2}\in\Cat$,
     $f_{1}:b_{1}\to a_{1}$, $h:a_{1}\to a_{2}$ and $f_{2}:a_{2}\to b_{2}$.
 \end{defin}
+\begin{notation}\label{Fun:notation:hom:functor}
+    Given a locally small category \Cat, the hom-functor $F=(F_{0},F_{1})$ 
+    associated with \Cat\ is also denoted $\Cat=(\Cat_{0},\Cat_{1})$.
+\end{notation}
+\noindent
+{\bf Remark}: Using the notation \Cat\ to denote both the small category
+\Cat\ and its associated hom-functor may appear confusing, but the notation
+actally makes sense since the equation $F_{0}(a_{1},a_{2})=
+\Cat(a_{1},a_{2})$ simply becomes the tautology $\Cat(a_{1},a_{2})
+=\Cat(a_{1},a_{2})$. In other words, using \Cat\ to denote the hom-functor 
+makes it very easy to remember that when applied to the object $(a_{1},a_{2})$
+of the category $\Cop\times\Cat$, we simply obtain the hom-set 
+$\Cat(a_{1},a_{2})$ of the small category \Cat.
+
 Given a locally small category \Cat, definition~(\ref{Fun:def:hom:functor}) 
 defines a tuple $F=(F_{0},F_{1})$ where $F_{0}$ appears to be a map defined 
 on $\ob\ \Cat\times\ob\ \Cat$ with values in \Set, and $F_{1}$ appears to be 

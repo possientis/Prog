@@ -3,6 +3,8 @@
 
 Require Import List.
 
+Require Import Core.LEM.
+
 (* In this module, we are having a small interlude focussing on decidability    *)
 (* results which are specific to the Coq meta-theory, and are not set theoretic *)
 (* results. These results are interesting in their own rights, but will also    *)
@@ -45,7 +47,7 @@ Arguments filter {a} {p}.
 (* Given a decidable predicate p and a list xs, saying that x lies in xs and    *)
 (* satisfies the predicate p is equivalent to saying it lies in 'filter q xs'   *)
 (* where 'q' is a witness to the decidability of p.                             *)
-Lemma filter_equiv : forall (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a) (x:a),
+Lemma filterEquiv : forall (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a) (x:a),
     In x xs /\ p x <-> In x (filter q xs).
 Proof.
     intros a p q xs x. induction xs as [|y xs IH].
@@ -74,7 +76,7 @@ Proof.
 Qed.
 
 (* A list is not empty if and only if it has an element which lies in it.       *)
-Lemma exists_nil : forall (a:Type) (xs:list a),
+Lemma existsNil : forall (a:Type) (xs:list a),
     (exists (x:a), In x xs) <-> xs <> nil.
 Proof.
     intros a xs. destruct xs as [|x xs]; split.
@@ -86,19 +88,19 @@ Qed.
 
 (* A list has an element which satisfies a given decidable predicate, if and    *)
 (* only if the corresponding filtered list is not an empty list.                *)
-Lemma filter_nil : forall (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a),
+Lemma filterNil : forall (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a),
     (exists (x:a), In x xs /\ p x) <-> filter q xs <> nil.
 Proof.
     intros a p q xs. split.
-    - intros [x H]. apply exists_nil. exists x. apply filter_equiv. assumption.
-    - intros H. apply exists_nil in H. destruct H as [x H]. exists x.
-      apply (filter_equiv a p q). assumption.
+    - intros [x H]. apply existsNil. exists x. apply filterEquiv. assumption.
+    - intros H. apply existsNil in H. destruct H as [x H]. exists x.
+      apply (filterEquiv a p q). assumption.
 Qed.
 
-Arguments filter_nil {a} {p}.
+Arguments filterNil {a} {p}.
 
 (* Whether a list is the empty list or not is decidable.                        *)
-Lemma nil_dec : forall (a:Type) (xs:list a), {xs = nil} + {xs <> nil}.
+Lemma nilDec : forall (a:Type) (xs:list a), {xs = nil} + {xs <> nil}.
 Proof.
     intros a xs. destruct xs as [|x xs].
     - left. reflexivity.
@@ -106,17 +108,24 @@ Proof.
 Qed.
 
 
-Arguments nil_dec {a}.
+Arguments nilDec {a}.
 
 (* This is the main result of this module which we shall crucially use in order *)
 (* to prove the decidability of set inclusion in our model. Given a decidable   *)
 (* predicate p and a list xs, whether or not xs has an element which satisfies  *)
 (* the predicate p is a decidable property.                                     *)
-Theorem in_pred_dec : forall (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a),
+Theorem inPredDec : forall (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a),
     {exists (x:a), In x xs /\ p x} + {~ exists (x:a), In x xs /\ p x}.
 Proof.
-    intros a p q xs. destruct (nil_dec (filter q xs)) as [H|H] eqn:E.
-    - right. intros H'. apply (filter_nil q) in H'. apply H'. assumption.
-    - left. apply (filter_nil q). assumption.
+    intros a p q xs. destruct (nilDec (filter q xs)) as [H|H] eqn:E.
+    - right. intros H'. apply (filterNil q) in H'. apply H'. assumption.
+    - left. apply (filterNil q). assumption.
 Qed.
 
+(*
+Lemma filterLEM : forall (a:Type) (p:a -> Prop) (xs:list a), LEM -> 
+    exists (ys:list a), forall (x:a), In x xs /\ p x <-> In x ys.
+Proof.
+
+Show.
+*)

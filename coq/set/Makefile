@@ -123,7 +123,8 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 								${CORE}/Equal.vo
 	coqc ${CORE}/Extensionality.v -R ${CORE} ${CORE}
 
-${CORE}/Filter.vo : 			${CORE}/Filter.v
+${CORE}/Filter.vo : 			${CORE}/Filter.v \
+								${CORE}/LEM.vo
 	coqc ${CORE}/Filter.v -R ${CORE} ${CORE}
 
 
@@ -237,7 +238,14 @@ ${CORE}/Compatible.vo :			${CORE}/Compatible.v \
 	coqc ${CORE}/Compatible.v -R ${CORE} ${CORE}
 
 ${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
-								${CORE}/Set.vo
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo	\
+								${CORE}/Equal.vo \
+								${CORE}/Filter.vo \
+								${CORE}/ToList.vo \
+								${CORE}/Compatible.vo \
+								${CORE}/Extensionality.vo
 	coqc ${CORE}/Comprehension.v -R ${CORE} ${CORE}
 
 

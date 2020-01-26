@@ -383,3 +383,49 @@ lemma L12 : ∀ (m n p : ℕ), (m + n) + p = m + (n + p) :=
     end
 
 #check L12
+
+
+lemma L13 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :=
+  assume m n p H,
+    begin
+      injection H with H', clear H, injection H' with H, rewrite H
+    end
+
+#check L13
+
+
+lemma L14 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :=
+  assume m n p H,
+    begin
+      injections with H1 H2,
+      rewrite H2
+    end
+
+#check L14
+
+lemma L15 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :=
+  assume m n p H, by injections; simp *
+
+#check L15
+
+
+lemma L16 : ∀ (m n : ℕ), succ m = 0 → n = n + 7 :=
+  assume m n H, by injections
+
+#check L16
+
+
+lemma L17 : ∀ (m n : ℕ), succ m = 0 → n = n + 7 :=
+  assume m n H, by contradiction
+
+#check L17
+
+
+lemma L18 : 7 = 4 → false :=
+  assume H, by injections
+
+#check L18
+
+
+
+
