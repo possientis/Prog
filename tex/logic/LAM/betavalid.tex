@@ -496,3 +496,61 @@ would get {\em captured} by $x$. This motivate the following:
     equation~(\ref{logic:eqn:LAM:var:inter:beta:valid:gen}) and $\var(\phi_{1})
     \subseteq\var(\phi)$.
  \end{proof}
+
+\begin{prop}\label{logic:prop:LAM:var:inter:beta:valid}
+    Let $V$ be a set, $\phi\in\tv$ and $\sigma\!:\!V\!\to\!\tv$ be a map. Then:
+        \[
+            \var(\phi)\ \cap
+            \!\!\!\!\bigcup_{u\in\free(\phi)}\!\!\!\!
+            \free(\sigma(u))\setminus\{u\}
+            =\emptyset
+            \ \ \Rightarrow\ \ 
+            \mbox{$\sigma$ is $\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    This is an immediate application of 
+    proposition~(\ref{logic:prop:LAM:var:inter:beta:valid:gen}) with $U=\emptyset$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:validsub:singlevar:gen}
+    Let $V$ be a set, $x\in V$ and $\theta,\phi\in\tv$. Let $U\subseteq V$. Then:
+        \[
+            x\not\in\free(\phi)\setminus U
+            \ \lor\
+            \var(\phi)\cap\free(\theta)\subseteq\{x\}
+            \ \Rightarrow\ 
+            \mbox{$([\theta/x],U)$ $\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    We assume that $x\not\in\free(\phi)\setminus U$ or that $x$ is the only 
+    possible element of the intersection $\var(\phi)\cap\free(\theta)$. We 
+    need to show that $([\theta/x],U)$ is $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:var:inter:beta:valid:gen}), we simply
+    need to prove the quality:
+        \[
+            \var(\phi)\ \cap
+            \!\!\!\!\!\!\bigcup_{u\in\free(\phi)\setminus U}\!\!\!\!\!\!
+            \free([\theta/x](u))\setminus\{u\}
+            =\emptyset
+        \]
+\end{proof}
+
+
+
+\begin{prop}\label{logic:prop:LAM:beta:validsub:singlevar}
+    Let $V$ be a set, $x\in V$ and $\theta,\phi\in\tv$. Then we have:
+        \[
+            x\not\in\free(\phi)
+            \ \lor\
+            \var(\phi)\cap\free(\theta)\subseteq\{x\}
+            \ \Rightarrow\ 
+            \mbox{$[\theta/x]$ $\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    This is an immediate application of 
+    proposition~(\ref{logic:prop:LAM:beta:validsub:singlevar:gen}) with 
+    $U=\emptyset$.
+\end{proof}

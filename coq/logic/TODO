@@ -1,4 +1,3 @@
-non-gen version of last proposition var(\phi)\cap.... => sig beta-valid for phi
 find out when ([theta/x],U) is beta-valid for phi
 conjecture: f beta-valid for t & g beta-valid for f'(t) <=> (g' . f) beta-valid for t ?
 LAM/betavalid.tex
