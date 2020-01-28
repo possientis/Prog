@@ -83,5 +83,89 @@ to∘from' (mk-≃' _ _ _ q) = q
   ; to∘from = λ x → refl
   }
 
+≃-refl : ∀ {a : Set}
+    ----------
+  →   a ≃ a
+
+≃-refl {a} = record
+  { to = λ x → x
+  ; from = λ x → x
+  ; from∘to = λ x → refl
+  ; to∘from = λ x → refl
+  }
+
+≃-sym : ∀ {a b : Set}
+  →   a ≃ b
+    ----------
+  →   b ≃ a
+
+≃-sym a≃b = record
+  { to = from a≃b
+  ; from = to a≃b
+  ; from∘to = to∘from a≃b
+  ; to∘from = from∘to a≃b
+  }
+
+≃-trans : ∀ {a b c : Set}
+  →   a ≃ b
+  →   b ≃ c
+    ----------
+  →   a ≃ c
+
+≃-trans a≃b b≃c = record
+  { to   = to b≃c ∘ to a≃b
+  ; from = from a≃b ∘ from b≃c
+  ; from∘to = λ x →
+    begin
+       from a≃b (from b≃c (to b≃c (to a≃b x)))
+       ≡⟨ cong (from a≃b) (from∘to b≃c (to a≃b x)) ⟩
+       from a≃b (to a≃b x)
+       ≡⟨ from∘to a≃b x ⟩
+       x
+       ∎
+  ; to∘from = λ x →
+    begin
+      to b≃c (to a≃b (from a≃b (from b≃c x)))
+      ≡⟨ cong (to b≃c) (to∘from a≃b (from b≃c x)) ⟩
+      to b≃c (from b≃c x)
+      ≡⟨ to∘from b≃c x ⟩
+      x
+      ∎
+  }
+
+module ≃-Reasoning where
+
+  infix 1 ≃-begin_
+  infix 2 _≃⟨⟩_ _≃⟨_⟩_
+  infix 3 _≃-∎
+
+  ≃-begin_ : ∀ {a b : Set}
+    →   a ≃ b
+      ----------
+    →   a ≃ b
+
+  ≃-begin a≃b = a≃b
+
+  _≃⟨⟩_ : ∀ (a : Set) {b : Set}
+    →   a ≃ b
+      ----------
+    →   a ≃ b
+
+  a ≃⟨⟩ a≃b = a≃b
+
+  _≃⟨_⟩_ : ∀ (a : Set) {b c : Set}
+    →   a ≃ b
+    →   b ≃ c
+      ---------
+    →   a ≃ c
+
+  a ≃⟨ a≃b ⟩ b≃c = ≃-trans a≃b b≃c
 
 
+  _≃-∎ : ∀ (a : Set)
+    ----------
+    →   a ≃ a
+
+  a ≃-∎ = ≃-refl
+
+open ≃-Reasoning
