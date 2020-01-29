@@ -11,7 +11,7 @@
 \end{defin}
 \begin{notation}\label{Fun:notation:hom:functor}
     Given a locally small category \Cat, the hom-functor $F=(F_{0},F_{1})$ 
-    associated with \Cat\ is also denoted $\Cat=(\Cat_{0},\Cat_{1})$.
+    associated with \Cat\ is denoted $\Cat=(\Cat_{0},\Cat_{1})$.
 \end{notation}
 \noindent
 {\bf Remark}: Using the notation \Cat\ to denote both the small category
@@ -34,3 +34,24 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     Let \Cat\ be a locally-small category. Then the hom-functor $F$ associated 
     with \Cat\ is indeed a functor $F:\Cop\times\Cat\to\Set$.
 \end{prop}
+\begin{proof}
+    We need to check that properties~$(1)-(5)$ of 
+    definition~(\ref{Fun:def:functor}) are satisfied:
+
+    $(1)$: We need to show that $F_{0}$ is a map $F_{0}:\ob\ (\Cop\times\Cat)
+    \to\ob\ \Set$. Having defined $F_{0}(a_{1},a_{2})=\Cat(a_{1},a_{2})$ and
+    the category \Cat\ being locally small, we see that $F_{0}(a_{1},a_{2})$
+    is a set for all $a_{1},a_{2}\in\Cat$. So $F_{0}$ is defined as a map
+    $F_{0}:(\ob\ \Cat)\times(\ob\ \Cat)\to\ob\ \Set$, and it remains to check
+    that the collections $(\ob\ \Cat)\times(\ob\ \Cat)$ and $\ob\ (\Cop\times
+    \Cat)$ actually coincide, which goes as follows:
+        \begin{eqnarray*}(\ob\ \Cat)\times(\ob\ \Cat)
+            &=&\{\ (a_{1},a_{2})\ |\ a_{1}\in\ob\ \Cat\ ,\ a_{2}\in\ob\ \Cat\}\\
+            \mbox{def.~(\ref{Cat:def:opposite})\ $\to$\ }
+            &=&\{\ (a_{1},a_{2})\ |\ a_{1}\in\ob\ \Cop\ ,\ a_{2}\in\ob\ \Cat\}\\
+            \mbox{def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\ob\ (\Cop\times\Cat)
+        \end{eqnarray*}
+
+    $(2)$: TODO
+\end{proof}
