@@ -1,6 +1,6 @@
 module  Optics.Test.Lens
     (   specLens
-    ,   Lens
+    ,   LensC
     )   where
 
 import Test.Hspec

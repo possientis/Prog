@@ -7,6 +7,7 @@ module  Optics.Profunctor
     ,   Cartesian   (..)
     ,   Cocartesian (..)
     ,   Monoidal    (..)
+    ,   cross
     )   where
 
 import Data.Profunctor

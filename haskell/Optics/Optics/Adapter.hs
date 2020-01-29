@@ -33,8 +33,8 @@ data  AdapterC a b s t
 type AdapterP a b s t = forall p . Profunctor p => Optic p a b s t
 
 -- Adapters are lenses
-toLense :: AdapterC a b s t -> Lens a b s t
-toLense x = Lens view_ update_ where
+toLense :: AdapterC a b s t -> LensC a b s t
+toLense x = LensC view_ update_ where
     view_   = fromC x
     update_ = toC x . fst
     
