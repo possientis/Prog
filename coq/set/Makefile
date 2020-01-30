@@ -238,6 +238,7 @@ ${CORE}/Compatible.vo :			${CORE}/Compatible.v \
 	coqc ${CORE}/Compatible.v -R ${CORE} ${CORE}
 
 ${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
+								${CORE}/LEM.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo	\

@@ -1,6 +1,9 @@
-Core/Filter
-Comprehension without Dec but with LEM instead
+Core/Comprehension
 Semantics/Comprehension
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
+The other big schema for ZF
+axiom of choice?
 axiom of infinity false ?
+all ZF axioms covered?
 existential quantification vs sugar over forall
+extension to infinite set

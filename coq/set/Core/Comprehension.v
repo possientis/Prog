@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import Core.LEM.
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
@@ -39,8 +40,21 @@ Proof.
         + split; assumption.
 Qed.
   
+(* Axiom schema of comprehension, restricted to decidable predicates.           *)
 Theorem comprehensionDec : forall (p:set -> Prop) (q:Dec p), compatible p ->
     forall (x:set), exists (y:set), forall (z:set), z :: y <-> z :: x /\ p z.
 Proof.
     intros p q C x. exists (comp x p q). apply compCharac. assumption.
 Qed.
+
+(*
+(* Axiom schema of comprehension assuming LEM for our Coq meta logic.           *)
+Theorem comprehensionLEM : LEM -> forall (p:set -> Prop), compatible p -> 
+    forall (x:set), exists (y:set), forall (z:set), z :: y <-> z :: x /\ p z.
+Proof.
+    intros L p C x. 
+    remember (filterLEM set p L (toList x)) as H eqn:E. clear E.
+    destruct H as [ys H]. exists (fromList ys). intros z.
+
+Show.
+*)

@@ -122,10 +122,34 @@ Proof.
     - left. apply (filterNil q). assumption.
 Qed.
 
-(*
-Lemma filterLEM : forall (a:Type) (p:a -> Prop) (xs:list a), LEM -> 
+
+Lemma filterLEM : forall (a:Type) (p:a -> Prop), LEM -> forall (xs:list a), 
     exists (ys:list a), forall (x:a), In x xs /\ p x <-> In x ys.
 Proof.
+    intros a p L. induction xs as [|x xs IH].
+    - exists nil. intros z. split; intros H.
+        + destruct H as [H0 H1]. assumption.
+        + inversion H.
+    - destruct IH as [ys IH]. unfold LEM in L. destruct (L (p x)) as [H|H].
+        + exists (x :: ys). intros z. split; intros H'.
+            { destruct H' as [[H0|H0] H1].
+                { subst. left. reflexivity. }
+                { right. apply IH. split; assumption. }}
+            { destruct H' as [H0|H0].
+                { subst. split.
+                    { left. reflexivity. }
+                    { assumption. }}
+                { remember (IH z) as IH' eqn:E. clear E IH. apply IH' in H0.
+                  clear IH'. destruct H0 as [H0 H1]. split.
+                    { right. assumption. }
+                    { assumption. }}}
+        + exists ys. intros z. split; intros H'.
+            { destruct H' as [[H0|H0] H1].
+                { subst. apply H in H1. contradiction. }
+                { apply IH. split; assumption. }}
+            { remember (IH z) as IH' eqn:E. clear E IH.  apply IH' in H'.
+              clear IH'. destruct H' as [H0 H1]. split.
+                { right. assumption. }
+                { assumption. }}
+Qed.
 
-Show.
-*)
