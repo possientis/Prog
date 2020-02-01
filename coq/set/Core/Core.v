@@ -47,7 +47,7 @@ Fixpoint incl_n (n:nat) (xs ys:set) : Prop :=
 
 (* We were not able to define the inclusion relation directly and we defined    *)
 (* instead a sequence of binary relations on the type set. The next lemma       *)
-(* crucially show that given two sets xs and ys, for n large enough all the     *)
+(* crucially shows that given two sets xs and ys, for n large enough all the    *)
 (* statements 'incl_n n xs ys' are equivalent. This fundamental fact will allow *)
 (* us to define the inclusion relation as a sort of 'pointwise' limit of our    *)
 (* sequence of relations.                                                       *)
@@ -143,7 +143,7 @@ Qed.
 (* technical results allowing us to deduce inclusion statements of the form     *)
 (* 'incl_n m xs ys' from other inclusion statements involving a different       *)
 (* natural number (assumed to be large enough). In the present case, provided   *)
-(* n is large enough and n <= m, and can go from n to m.                        *)
+(* n is large enough and n <= m, we can go from n to m.                         *)
 Lemma incl_le_n_m : forall (xs ys:set) (n m:nat),
     order xs + order ys <= n    -> 
     n <= m                      -> 

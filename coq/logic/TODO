@@ -1,3 +1,2 @@
-find out when ([theta/x],U) is beta-valid for phi
-conjecture: f beta-valid for t & g beta-valid for f'(t) <=> (g' . f) beta-valid for t ?
+rewrite old prop 372
 LAM/betavalid.tex

@@ -535,6 +535,22 @@ would get {\em captured} by $x$. This motivate the following:
             \free([\theta/x](u))\setminus\{u\}
             =\emptyset
         \]
+    So let $u\in\free(\phi)\setminus U$. We need to show the simpler equality:
+        \begin{equation}\label{logic:eqn:LAM:beta:validsub:singlevar:gen}
+            \var(\phi)\ \cap
+            \free([\theta/x](u))\setminus\{u\}
+            =\emptyset
+        \end{equation}
+    We shall distinguish two cases: first we assume that $u\neq x$. Then we have
+    $[\theta/x](u)=u$ and consequently $\free([\theta/x](u))\setminus\{u\}
+    =\emptyset$ and equation~(\ref{logic:eqn:LAM:beta:validsub:singlevar:gen})
+    is clear. Next we assume that $u=x$. In this case we have $x\in\free(\phi)
+    \setminus U$ which means that the condition $x\not\in\free(\phi)\setminus U$
+    is not satisfied, so by assumption we know that $\var(\phi)\cap\free(\theta)
+    \subseteq\{x\}$. Furthermore, we have $[\theta/x](u)=\theta$ and
+    equation~(\ref{logic:eqn:LAM:beta:validsub:singlevar:gen}) reduces to
+    $\var(\phi)\cap\free(\theta)\setminus\{x\}=\emptyset$, and this equation
+    immediately follows from our assumption.
 \end{proof}
 
 

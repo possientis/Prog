@@ -22,7 +22,15 @@ definition subst {α : Type u} {a b : α} (p : α → Prop)(E : a = b) (H:p a) :
   eq.rec_on E H
 
 #check @subst
+#check@eq.refl
 
--- TODO
-definition symm {α : Type u} {a b : α} (E : a = b) : b = a :=
-  subst (λ (x:α), x = a) E (eq.refl a)
+definition P {α : Type u} (a : α) (x : α) : Prop := x = a
+
+definition symm2 {α : Type u} {a b : α} (E:a = b) : b = a :=
+@subst α a b (λ (x:α), x = a) E (eq.refl a)
+
+definition trans2 {α : Type u} (a b c : α) (Eab : a = b) (Ebc : b = c) : a = c :=
+  @subst α b c (λ x, a = x) Ebc Eab
+
+definition congr2 {α β : Type u} {a b : α} (f : α → β) (E : a = b) : f a = f b :=
+  @subst α a b (λ x, f a = f x) E (eq.refl (f a))

@@ -49,9 +49,40 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
             &=&\{\ (a_{1},a_{2})\ |\ a_{1}\in\ob\ \Cat\ ,\ a_{2}\in\ob\ \Cat\}\\
             \mbox{def.~(\ref{Cat:def:opposite})\ $\to$\ }
             &=&\{\ (a_{1},a_{2})\ |\ a_{1}\in\ob\ \Cop\ ,\ a_{2}\in\ob\ \Cat\}\\
-            \mbox{def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            \mbox{$(1)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
             &=&\ob\ (\Cop\times\Cat)
         \end{eqnarray*}
 
-    $(2)$: TODO
+    $(2)$: We need to show that $F_{1}$ is a map $F_{1}:\arr\ (\Cop\times\Cat)
+    \to\arr\ \Set$. Having defined $F_{1}(f_{1},f_{2})$ for any $f_{1}:b_{1}\to
+    a_{1}$ and $f_{2}:a_{2}\to b_{2}$ where $a_{1},a_{2},b_{1},b_{2}$ are 
+    arbitrary objects in \Cat, we see that $F_{1}$ is a map defined 
+    on $(\arr\ \Cat)\times(\arr\ \Cat)$. So we need to check that the collections
+    $(\arr\ \Cat)\times(\arr\ \Cat)$ and $\arr\ (\Cop\times\Cat)$ actually
+    coincide, which goes as follows:
+        \begin{eqnarray*}(\arr\ \Cat)\times(\arr\ \Cat)
+            &=&\{\ (f_{1},f_{2})\ |\ f_{1}\in\arr\ \Cat\ ,\ f_{2}\in\arr\ \Cat\}\\
+            \mbox{def.~(\ref{Cat:def:opposite})\ $\to$\ }
+            &=&\{\ (f_{1},f_{2})\ |\ f_{1}\in\arr\ \Cop\ ,\ f_{2}\in\arr\ \Cat\}\\
+            \mbox{$(2)$ of def.~(\ref{Cat:def:canonical:product})\ $\to$\ }
+            &=&\arr\ (\Cop\times\Cat)
+        \end{eqnarray*}
+    However, given arrows $f_{1}, f_{2}$ in \Cat, we still need to check that
+    $F_{1}(f_{1},f_{2})$ is a member of the collection $\arr\ \Set$. In other
+    words, we need to check that $F_{1}(f_{1},f_{2})$ is a function. Introducing
+    the notations $a_{1},a_{2},b_{1},b_{2}$ such that $f_{1}:b_{1}\to a_{1}$ and
+    $f_{2}:a_{2}\to b_{2}$, our definition states $F_{1}(f_{1},f_{2})(h)$ is
+    defined for any $h:a_{1}\to a_{2}$. In other words, $F_{1}(f_{1},f_{2})(h)$
+    is defined for any $h$ which belongs to the hom-set $\Cat(a_{1},a_{2})$.
+    Having assumed that \Cat\ is a locally small category, the collection
+    $\Cat(a_{1},a_{2})$ is in fact a set, and $F_{1}(f_{1},f_{2})$ is
+    therefore a function with domain $\Cat(a_{1},a_{2})$, defined by
+    $F_{1}(f_{1},f_{2})(h)=f_{2}\circ h\circ f_{1}$. Note that since
+    $f_{1}:b_{1}\to a_{1}$ and $f_{2}:a_{2}\to b_{2}$, the composition
+    $f_{2}\circ h\circ f_{1}$ is a well-defined arrow in \Cat\ whenever 
+    $h\in\Cat(a_{1},a_{2})$. This arrow has domain $b_{1}$ and codomain 
+    $b_{2}$ and we see that $F_{1}(f_{1},f_{2})(h)$ is in fact an element
+    of the hom-set $\Cat(b_{1},b_{2})$. So $F_{1}(f_{1},f_{2})$ is actually
+    a function $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{1})\to\Cat(b_{1},b_{2})$.
+ 
 \end{proof}

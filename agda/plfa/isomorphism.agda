@@ -169,3 +169,95 @@ module ≃-Reasoning where
   a ≃-∎ = ≃-refl
 
 open ≃-Reasoning
+
+infix 0 _≲_ -- \<~ for ≲
+
+record _≲_ (a b : Set) : Set where
+  field
+    to : a → b
+    from : b → a
+    from∘to : ∀ (x : a) → from (to x) ≡ x
+
+open _≲_
+
+≲-refl : ∀ {a : Set} → a ≲ a
+≲-refl = record
+  { to = λ x → x
+  ; from = λ y → y
+  ; from∘to = λ x → refl
+  }
+
+≲-trans : ∀ {a b c : Set} → a ≲ b → b ≲ c → a ≲ c
+≲-trans a≲b b≲c = record
+  { to = to b≲c ∘ to a≲b
+  ; from = from a≲b ∘ from b≲c
+  ; from∘to = λ x →
+    begin
+      from a≲b (from b≲c (to b≲c (to a≲b x)))
+      ≡⟨ cong (from a≲b) (from∘to b≲c (to a≲b x)) ⟩
+      from a≲b (to a≲b x)
+      ≡⟨ from∘to a≲b x ⟩
+      x
+      ∎
+  }
+
+≲-antisym : ∀ {a b : Set}
+  →  (a≲b : a ≲ b)
+  →  (b≲a : b ≲ a)
+  →  (to a≲b ≡ from b≲a)
+  →  (from a≲b ≡ to b≲a)
+     -------------------
+  →  a ≃ b                    -- \~- (≃) is not the same as \-~ (≂)
+
+≲-antisym a≲b b≲a to≡from from≡to = record
+  { to = to a≲b
+  ; from = from a≲b
+  ; from∘to = from∘to a≲b
+  ; to∘from = λ y →
+      begin
+        to a≲b (from a≲b y)
+        ≡⟨ cong (to a≲b) (cong-app from≡to y) ⟩
+        to a≲b (to b≲a y)
+        ≡⟨ cong-app to≡from (to b≲a y) ⟩
+        from b≲a (to b≲a y)
+        ≡⟨ from∘to b≲a y ⟩
+        y
+        ∎
+  }
+
+module ≲-Reasoning where
+  infix 1 ≲-begin_
+  infix 2 _≲⟨⟩_ _≲⟨_⟩_
+  infix 3 _≲-∎
+
+  ≲-begin_ : ∀ {a b : Set}
+    →   a ≃ b
+      ----------
+    →   a ≃ b
+
+  ≲-begin a≲b = a≲b
+
+  _≲⟨⟩_ : ∀ (a : Set) {b : Set}
+    →   a ≲ b
+      ----------
+    →   a ≲ b
+
+  a ≲⟨⟩ a≲b = a≲b
+
+  _≲⟨_⟩_ : ∀ (a : Set) {b c : Set}
+    →   a ≲ b
+    →   b ≲ c
+      ---------
+    →   a ≲ c
+
+  a ≲⟨ a≲b ⟩ b≲c = ≲-trans a≲b b≲c
+
+
+  _≲-∎ : ∀ (a : Set)
+       ----------
+    →   a ≲ a
+
+  a ≲-∎ = ≲-refl
+
+open ≲-Reasoning
+
