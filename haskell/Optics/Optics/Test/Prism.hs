@@ -1,6 +1,6 @@
 module  Optics.Test.Prism
     (   specPrism
-    ,   Prism
+    ,   PrismC
     )   where
 
 import Test.Hspec

@@ -39,8 +39,8 @@ toLense x = LensC view_ update_ where
     update_ = toC x . fst
     
 -- Adapters are prisms
-toPrism :: AdapterC a b s t -> Prism a b s t 
-toPrism x = Prism match_ build_ where
+toPrism :: AdapterC a b s t -> PrismC a b s t 
+toPrism x = PrismC match_ build_ where
     match_ = Right . fromC x 
     build_ = toC x 
 

@@ -570,3 +570,187 @@ would get {\em captured} by $x$. This motivate the following:
     proposition~(\ref{logic:prop:LAM:beta:validsub:singlevar:gen}) with 
     $U=\emptyset$.
 \end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition:gen}
+    Let $V$ be a set, $U\subseteq U' \subseteq V$ and $\sigma,\tau:V\to\tv$ 
+    be maps. Let $\phi\in\tv$. Then, if $(\tau,U)$ is $\beta$-valid for $\phi$ 
+    we have:
+        \[
+            (\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            =(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
+        \]
+    where for all $\chi:V\to\tv$, the map $\chi_{*}$ denotes the flipped version 
+    of $\chi^{*}$ defined by $\chi_{*}(U)(\phi)=\chi^{*}(\phi)(U)$, and where 
+    $\chi^{*}$ is defined as per definition~(\ref{logic:def:LAM:beta:subst}).
+\end{prop}
+\begin{proof}
+    We assume $\sigma,\tau:V\to\tv$ given and we consider the property
+    that for all $U\subseteq V$, if $(\tau, U)$ is $\beta$-valid for $\phi$
+    then for all $U'\subseteq V$ with $U\subseteq U'$, the above equality
+    holds. We shall prove this property by structural induction on $\phi$, 
+    using theorem~(\ref{logic:the:proof:induction})
+    of page~\pageref{logic:the:proof:induction}. So first we assume that 
+    $\phi=x$ for some $x\in V$. Let $U\subseteq V$. Since from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:x:gen}) $(\tau,U)$ 
+    is always $\beta$-valid for $\phi$, we simply need to prove that the 
+    equality holds for all $U'\subseteq V$ with $U\subseteq U'$. We shall 
+    distinguish two cases: first we assume that $x\in U$. Then we have:
+        \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(x)\\
+            \mbox{flipping\ $\to$\ }
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(x)(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst}), $x\in U\ \to\ $}
+            &=&x\\
+            \mbox{$U\subseteq U'$ so $x\in U'\ \to\ $}
+            &=&\sigma^{*}(x)(U')\\
+            \mbox{flipping\ $\to$\ }
+            &=&\sigma_{*}(U')(x)\\
+            \mbox{$x\in U\ \to\ $}
+            &=&\sigma_{*}(U')(\,\tau^{*}(x)(U)\,)\\
+            \mbox{flipping\ $\to$\ }
+            &=&\sigma_{*}(U')(\,\tau_{*}(U)(x)\,)\\
+            &=&(\,\sigma_{*}(U')\circ \tau_{*}(U)\,)(x)\\
+            &=&(\,\sigma_{*}(U')\circ \tau_{*}(U)\,)(\phi)
+        \end{eqnarray*}
+    \noindent
+    We now assume that $x\not\in U$. Then we have:
+        \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(x)\\
+            \mbox{flipping\ $\to$\ }
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(x)(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst}), $x\not\in U\ \to\ $}
+            &=&(\sigma_{*}(U')\circ\tau)(x)\\
+            &=&\sigma_{*}(U')(\tau(x))\\
+            \mbox{$x\not\in U\ \to\ $}
+            &=&\sigma_{*}(U')(\tau^{*}(x)(U))\\
+            \mbox{flipping\ $\to$\ }
+            &=&\sigma_{*}(U')(\tau_{*}(U)(x))\\
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(x)\\
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
+        \end{eqnarray*}
+    Next, we assume that $\phi=\phi_{1}\ \phi_{2}$ for some $\phi_{1},\phi_{2}
+    \in\tv$ for which the property is true. We need to show that the
+    property is also true for $\phi$. So let $U\subseteq V$ such that 
+    $(\tau, U)$ is $\beta$-valid for $\phi$. Given $U'\subseteq V$ with
+    $U\subseteq U'$, we need to show the equality holds for $\phi$. Note that 
+    from proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}), 
+    $(\tau,U)$ is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$ and 
+    having assumed the property is true for these, so is the equality for
+    all $U'\subseteq V$ with $U\subseteq U'$. Hence, we have:
+        \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi_{1}\ \phi_{2})\\
+            \mbox{flipping\ $\to$\ }
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(\phi_{1}\ \phi_{2})(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(\phi_{1})(U)\ \ 
+               (\sigma_{*}(U')\circ\tau)^{*}(\phi_{2})(U)\\
+            \mbox{flipping\ $\to$\ }
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi_{1})\ \ 
+               (\sigma_{*}(U')\circ\tau)_{*}(U)(\phi_{2})\\
+            \mbox{induction hypothesis$\ \to\ $}
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi_{1})\ \ 
+               (\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi_{2})\\
+            &=&\sigma_{*}(U')(\,\tau_{*}(U)(\phi_{1})\,)\ \ 
+               \sigma_{*}(U')(\,\tau_{*}(U)(\phi_{2})\,)\\
+            \mbox{flipping\ $\to$\ }
+            &=&\sigma^{*}(\,\tau_{*}(U)(\phi_{1})\,)(U')\ \ 
+               \sigma^{*}(\,\tau_{*}(U)(\phi_{2})\,)(U')\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+            &=&\sigma^{*}(\,\tau_{*}(U)(\phi_{1})\ \ 
+                            \tau_{*}(U)(\phi_{2})\,)(U')\\ 
+            \mbox{flipping\ $\to$\ }
+            &=&\sigma^{*}(\,\tau^{*}(\phi_{1})(U)\ \ 
+                            \tau^{*}(\phi_{2})(U)\,)(U')\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+            &=&\sigma^{*}(\,\tau^{*}(\phi_{1}\ \phi_{2})(U)\,)(U')\\
+            &=&\sigma^{*}(\,\tau^{*}(\phi)(U)\,)(U')\\
+            \mbox{flipping\ $\to$\ }
+            &=&\sigma_{*}(U')(\,\tau_{*}(U)(\phi)\,)\\
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
+        \end{eqnarray*}
+    Finally, we assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$, and
+    some $\phi_{1}\in\tv$ for which the property is true. We need to show
+    that the property is also true for $\phi$. So let $U\subseteq V$ such 
+    that $(\tau,U)$ is $\beta$-valid for $\phi$. Given $U'\subseteq V$  with
+    $U\subseteq U'$, we need to show that the equality holds for $\phi$. 
+    
+    
+    TODO 
+
+    Note that from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}), $\tau$ is
+    $\beta$-valid for $\phi_{1}$ and having assumed the implication is true
+    for $\phi_{1}$, so is the equality for all subsets $U\subseteq U'$.
+    Hence, we have:
+        \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
+            &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(\lambda x\phi_{1})\\
+            &=&(\sigma_{*}(U')\circ\tau)^{*}(\lambda x\phi_{1})(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+            &=&\lambda x(\sigma_{*}(U')\circ\tau)^{*}(\phi_{1})(U\cup\{x\})\\
+            \mbox{see below\ $\to$\ }
+            &=&\lambda x(\sigma_{*}(U'\cup\{x\})\circ
+                         \tau)^{*}(\phi_{1})(U\cup\{x\})\\
+            &=&\lambda x(\sigma_{*}(U'\cup\{x\})\circ
+                         \tau)_{*}(U\cup\{x\})(\phi_{1})\\
+            \mbox{induction, $U\cup\{x\}\subseteq U'\cup\{x\}\ \to\ $}
+            &=&\lambda x(\ \sigma_{*}(U'\cup\{x\})\,\circ\,
+                           \tau_{*}(U\cup\{x\})\ )(\phi_{1})\\
+            &=&\lambda x \sigma_{*}(U'\cup\{x\})(\,
+                         \tau_{*}(U\cup\{x\})(\phi_{1})\,)\\
+            &=&\lambda x \sigma^{*}(\,\tau_{*}(U\cup\{x\})(\phi_{1})\,)
+                         (U'\cup\{x\})\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+            &=&\sigma^{*}(\,\lambda x\tau_{*}(U\cup\{x\})(\phi_{1})\,)(U')\\
+            &=&\sigma_{*}(U')(\,\lambda x\tau_{*}(U\cup\{x\})(\phi_{1})\,)\\
+            &=&\sigma_{*}(U')(\,\lambda x\tau^{*}(\phi_{1})(U\cup\{x\})\,)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+            &=&\sigma_{*}(U')(\,\tau^{*}(\lambda x\phi_{1})(U)\,)\\
+            &=&\sigma_{*}(U')(\,\tau^{*}(\phi)(U)\,)\\
+            &=&\sigma_{*}(U')(\,\tau_{*}(U)(\phi)\,)\\
+            &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
+        \end{eqnarray*}
+    In order for us to complete the proof, we need to justify the quality:
+        \[
+            (\sigma_{*}(U')\circ\tau)^{*}(\phi_{1})(U\cup\{x\})
+            =
+            (\sigma_{*}(U'\cup\{x\})\circ\tau)^{*}(\phi_{1})(U\cup\{x\})
+        \]
+    This equality follows from 
+    proposition~(\ref{logic:prop:LAM:freevar:beta:support:gen}) provided
+    we show that the two functions $\sigma_{*}(U')\circ\tau$ and
+    $\sigma_{*}(U'\cup\{x\})\circ\tau$ coincide on the set $\free(\phi_{1})
+    \setminus(U\cup\{x\})$. So let $u\in\free(\phi_{1})\setminus(U\cup\{x\})$.
+    It remains to show that:
+        \[
+            (\sigma_{*}(U')\circ\tau)(u) 
+            =
+            (\sigma_{*}(U'\cup\{x\})\circ\tau)(u) 
+        \]
+    or equivalently:
+        \[
+            \sigma^{*}(\tau(u))(U')
+            =
+            \sigma^{*}(\tau(u))(U'\cup\{x\})
+        \]
+    This last equality follows from
+    proposition~(\ref{logic:prop:LAM:freevar:beta:intersect:gen}) provided
+    we show that:
+        \[
+            U' \cap\free(\tau(u)) = (U'\cup\{x\})\cap\free(\tau(u))
+        \]
+    It is therefore sufficient to prove that $\{x\}\cap\free(\tau(u))=\emptyset$,
+    or in other words that $x\not\in\free(\tau(u))$. However, we assumed that 
+    $\tau$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}) once more
+    we have the implication:
+        \[
+            u\in\free(\lambda x\phi_{1})\ 
+            \Rightarrow\ 
+            x\not\in\free(\tau(u))
+        \]
+    It is therefore sufficient to prove that $u\in\free(\lambda x\phi_{1})$
+    which follows from the assumption $u\in\free(\phi_{1})\setminus(U\cup\{x\})
+    \subseteq\free(\phi_{1})\setminus\{x\}=\free(\lambda x\phi_{1})$.
+\end{proof}
+
+

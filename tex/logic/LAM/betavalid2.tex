@@ -508,7 +508,7 @@ $\beta$-valid for $\phi$ and vice-versa.
     \phi$ and proposition~(\ref{logic:prop:LAM:variable:subformula}).
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:beta:valid:composition:gen}
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition:gen:2}
     Let $V$ be a set, $U\subseteq U' \subseteq V$ and $\sigma,\tau:V\to\tv$ 
     be maps. Let $\phi\in\tv$. Then, if $\tau$ is $\beta$-valid for $\phi$ 
     we have:
@@ -686,7 +686,7 @@ $\beta$-valid for $\phi$ and vice-versa.
 \end{prop}
 \begin{proof}
     This is an immediate application of 
-    proposition~(\ref{logic:prop:LAM:beta:valid:composition:gen}): if we recall
+    proposition~(\ref{logic:prop:LAM:beta:valid:composition:gen:2}): if we recall
     the notation $\chi_{*}(U)(\phi)=\chi^{*}(\phi)(U)$ where $\chi^{*}:\tv\to
     {\cal P}(V)\to\tv$ is defined as per 
     definition~(\ref{logic:def:LAM:beta:subst}) given any map $\chi:V\to\tv$, 
@@ -699,7 +699,7 @@ $\beta$-valid for $\phi$ and vice-versa.
             &=&(\sigma_{*}(\emptyset)\circ\tau)^{*}(\phi)(\emptyset)\\
             \mbox{flip\ $\to$\ }
             &=&(\sigma_{*}(\emptyset)\circ\tau)_{*}(\emptyset)(\phi)\\
-            \mbox{prop.~(\ref{logic:prop:LAM:beta:valid:composition:gen})
+            \mbox{prop.~(\ref{logic:prop:LAM:beta:valid:composition:gen:2})
             $\tau$ is $\beta$-valid for $\phi$\ $\to$\ }
             &=&(\,\sigma_{*}(\emptyset)\circ\tau_{*}(\emptyset)\,)(\phi)\\
             \mbox{def.~(\ref{logic:def:LAM:beta:subst}) with flip\ $\to$\ }

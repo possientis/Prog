@@ -47,14 +47,32 @@ Proof.
     intros p q C x. exists (comp x p q). apply compCharac. assumption.
 Qed.
 
-(*
-(* Axiom schema of comprehension assuming LEM for our Coq meta logic.           *)
+
+(* Axiom schema of comprehension assuming LEM for our Coq meta-logic.           *)
 Theorem comprehensionLEM : LEM -> forall (p:set -> Prop), compatible p -> 
     forall (x:set), exists (y:set), forall (z:set), z :: y <-> z :: x /\ p z.
 Proof.
     intros L p C x. 
     remember (filterLEM set p L (toList x)) as H eqn:E. clear E.
-    destruct H as [ys H]. exists (fromList ys). intros z.
+    destruct H as [ys H]. exists (fromList ys). intros z. split; intros H'.
+    - apply toListElem in H'. destruct H' as [z' H']. 
+      rewrite toListFromList in H'. destruct H' as [H0 [H1 H2]]. 
+      remember (H z') as H3 eqn:E. clear E H. destruct H3 as [H3 H4]. 
+      apply H4 in H0. destruct H0 as [H0 H5]. split.
+        + apply toListElem. exists z'. split.
+            {  assumption. }
+            { split; assumption. }
+        + unfold compatible in C. apply C with z'.
+            { apply doubleIncl. split; assumption. }
+            { assumption. }
+    - destruct H' as [H0 H1]. rewrite toListElem in H0.
+      destruct H0 as [z' [H0 [H2 H3]]]. apply toListElem. exists z'.
+      rewrite toListFromList. split.
+        + apply H. split.
+            { assumption. }
+            { unfold compatible in C. apply C with z. 
+                { apply doubleIncl. split; assumption. }
+                { assumption. }}
+        + split; assumption.
+Qed.
 
-Show.
-*)

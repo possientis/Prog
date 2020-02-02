@@ -283,6 +283,16 @@ syn region coqRecField   contained contains=coqField matchgroup=coqVernacPunctua
 syn region coqRecField   contained contains=coqField matchgroup=coqVernacPunctuation start=";" end=":"
 syn match coqField       contained "[_[:alpha:]][_'[:alnum:]]*"
 
+" Classes
+syn region coqCla        contains=coqClaProfile start="\<Class\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
+syn region coqClaProfile contained contains=coqIdent,coqClaTerm,coqClaBinder matchgroup=coqVernacCmd start="Class" matchgroup=NONE end="\.\_s"
+syn region coqClaBinder  contained contains=@coqTerm matchgroup=coqTermPunctuation start="("  end=")"
+syn region coqClaTerm    contained contains=@coqTerm,coqClaContent matchgroup=coqVernacPunctuation start=":"  end="\.\_s"
+syn region coqClaContent contained contains=coqConstructor,coqClaStart matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
+syn region coqClaStart   contained contains=coqClaField,@coqTerm start="{" matchgroup=coqVernacPunctuation end="}" keepend
+syn region coqClaField   contained contains=coqField matchgroup=coqVernacPunctuation start="{" end=":"
+syn region coqClaField   contained contains=coqField matchgroup=coqVernacPunctuation start=";" end=":"
+
 " Various (High priority)
 syn region  coqComment           containedin=ALL contains=coqComment,coqTodo start="(\*" end="\*)" extend keepend
 syn keyword coqTodo              contained TODO FIXME XXX NOTE

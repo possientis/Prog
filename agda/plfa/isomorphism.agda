@@ -261,3 +261,57 @@ module ≲-Reasoning where
 
 open ≲-Reasoning
 
+≃-implies-≲ : ∀ {a b : Set}
+  →   a ≃ b
+    --------
+  →   a ≲ b
+
+≃-implies-≲ a≃b = record
+  { to = to a≃b
+  ; from = from a≃b
+  ; from∘to = from∘to a≃b
+  }
+
+record _⇔_ (a b : Set) : Set where
+  field
+    to : a → b
+    from : b → a
+
+open _⇔_
+
+⇔-refl : ∀ {a : Set} → a ⇔ a
+⇔-refl {a} = record
+  { to = λ x → x
+  ; from = λ x → x
+  }
+
+⇔-sym : ∀ {a b : Set}
+  →   a ⇔ b
+    --------
+  →   b ⇔ a
+
+⇔-sym a⇔b = record
+  { to = from a⇔b
+  ; from = to a⇔b
+  }
+
+⇔-trans : ∀ {a b c : Set}
+  →  a ⇔ b
+  →  b ⇔ c
+    --------
+  →  a ⇔ c
+
+⇔-trans a⇔b b⇔c = record
+  { to = to b⇔c ∘ to a⇔b
+  ; from = from a⇔b ∘ from b⇔c
+  }
+
+open import bin using (Bin)
+import bin
+
+ℕ≲Bin : ℕ ≲ Bin
+ℕ≲Bin = record
+  { to = bin.to
+  ; from = bin.from
+  ; from∘to = bin.from-to
+  }

@@ -71,7 +71,7 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     $F_{1}(f_{1},f_{2})$ is a member of the collection $\arr\ \Set$. In other
     words, we need to check that $F_{1}(f_{1},f_{2})$ is a function. Introducing
     the notations $a_{1},a_{2},b_{1},b_{2}$ such that $f_{1}:b_{1}\to a_{1}$ and
-    $f_{2}:a_{2}\to b_{2}$, our definition states $F_{1}(f_{1},f_{2})(h)$ is
+    $f_{2}:a_{2}\to b_{2}$, our definition states that $F_{1}(f_{1},f_{2})(h)$ is
     defined for any $h:a_{1}\to a_{2}$. In other words, $F_{1}(f_{1},f_{2})(h)$
     is defined for any $h$ which belongs to the hom-set $\Cat(a_{1},a_{2})$.
     Having assumed that \Cat\ is a locally small category, the collection
@@ -84,5 +84,32 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     $b_{2}$ and we see that $F_{1}(f_{1},f_{2})(h)$ is in fact an element
     of the hom-set $\Cat(b_{1},b_{2})$. So $F_{1}(f_{1},f_{2})$ is actually
     a function $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{1})\to\Cat(b_{1},b_{2})$.
- 
+    Now looking at definition~(\ref{Cat:def:set}), an arrow of the category
+    \Set\ is a triple $(a,b,f)$ where $a$ and $b$ are sets and $f$ is a
+    function $f:a\to b$. Hence, strictly speaking our definition of 
+    $F_{1}(f_{1},f_{2})$ is not a member of $\arr\ \Set$ but simply a 
+    function $F_{1}(f_{1},f_{2}): \Cat(a_{1},a_{2})\to\Cat(b_{1},b_{2})$. 
+    However, the triple 
+    $(\Cat(a_{1},a_{2}),\Cat(b_{1},b_{2}),F_{1}(f_{1},f_{2}))$ is an arrow
+    of the category \Set\ and we have agreed in 
+    notation~(\ref{Cat:notation:set:arrow}) to simply refer to this arrow as
+    $F_{1}(f_{1},f_{2})$, as the domain $\Cat(a_{1},a_{2})$ and intended
+    codomain $\Cat(b_{1},b_{2})$ can easily be inferred from the formula
+    $F_{1}(f_{1},f_{2})(h) = f_{2}\circ h\circ f_{1}$ for all $h:a_{1}\to 
+    a_{2}$. This completes our proof that $F_{1}$ is a map $F_{1}:
+    \arr\ (\Cop\times\Cat)\to\arr\ \Set$.
+
+    $(3)$: We need to check that $F_{1}(f):F_{0}(a)\to F_{0}(b)$ whenever
+    $a,b\in\Cop\times\Cat$ and $f:a\to b$. So let $a=(a_{1},a_{2})\in\Cop
+    \times\Cat$, $b=(b_{1},b_{2})\in\Cop\times\Cat$ and $f=(f_{1},f_{2}):
+    (a_{1},a_{2})\to(b_{1},b_{2})\ @\ \Cop\times\Cat$. Since $F_{0}(a)=
+    \Cat(a_{1},a_{2})$ and $F_{0}(b)=\Cat(b_{1},b_{2})$, we need to check 
+    that $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{2})\to \Cat(b_{1},b_{2})$.
+    However, we have already established that fact in part $(2)$ of this 
+    proof, provided we show that $f_{1}:b_{1}\to a_{1}\ @\ \Cat$ and
+    $f_{2}:a_{2}\to b_{2}\ @\ \Cat$. So we need to check that
+    $(f_{1},f_{2})\in\Cat(b_{1},a_{1})\times\Cat(a_{2},b_{2})$ which
+    goes as follows:
+
+
 \end{proof}
