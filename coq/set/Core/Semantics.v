@@ -21,6 +21,12 @@ Fixpoint eval (e:Env) (p:Formula) : Prop :=
     | All n p1      => forall (x:set), eval (bind e n x) p1
     end.
 
+(* Given an environement e, a variable n and a formula p, we can define a       *)
+(* predicate P: set -> Prop by defining P x as the proposition obtained by      *)
+(* evaluating the formula p in an environment where n is bound to x.            *)
+Definition eval' (e:Env) (n:nat) (p:Formula) (x:set) : Prop :=
+    eval (bind e n x) p.
+
 Lemma evalBot : forall (e:Env), eval e Bot <-> False.
 Proof. intros e. unfold eval. split; intros H; assumption. Qed.
 

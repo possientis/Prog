@@ -1,5 +1,6 @@
-move Semantics/Compatible eval' ?
-Semantics/Comprehension
+add irrelevance lemma: eval (bind e n x) p = eval e p if n not free in p. 
+Semantics/Comprehension (need to add assumption n,m not free in P)
+add sem/compr to makefile
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
 axiom schema of substitution
 axiom of choice?

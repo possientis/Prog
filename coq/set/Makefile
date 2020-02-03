@@ -38,7 +38,6 @@ all :							${CORE}/Nat.vo \
 								${SEM}/Union.vo \
 								${SEM}/Powerset.vo \
 								${SEM}/Foundation.vo \
-								${SEM}/Compatible.vo
 
 ${CORE}/Nat.vo : 				${CORE}/Nat.v
 	coqc ${CORE}/Nat.v -R ${CORE} ${CORE}
@@ -234,7 +233,11 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 
 ${CORE}/Compatible.vo :			${CORE}/Compatible.v \
 								${CORE}/Set.vo \
-								${CORE}/Elem.vo
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo \
+								${CORE}/Semantics.vo \
+								${CORE}/Environment.vo
 	coqc ${CORE}/Compatible.v -R ${CORE} ${CORE}
 
 ${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
@@ -253,7 +256,8 @@ ${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
 ${CORE}/Fresh.vo :				${CORE}/Fresh.v
 	coqc ${CORE}/Fresh.v -R ${CORE} ${CORE}
 
-${CORE}/Syntax.vo :				${CORE}/Syntax.v
+${CORE}/Syntax.vo :				${CORE}/Syntax.v \
+								${CORE}/Fresh.vo
 	coqc ${CORE}/Syntax.v -R ${CORE} ${CORE}
 
 
@@ -390,13 +394,3 @@ ${SEM}/Foundation.vo :			${SEM}/Foundation.v \
 	
 	coqc ${SEM}/Foundation.v -R ${CORE} ${CORE}
 
-${SEM}/Compatible.vo :			${SEM}/Compatible.v \
-								${CORE}/Set.vo \
-								${CORE}/Elem.vo \
-								${CORE}/Equal.vo \
-								${CORE}/Syntax.vo \
-								${CORE}/Semantics.vo \
-								${CORE}/Compatible.vo \
-								${CORE}/Environment.vo
-	
-	coqc ${SEM}/Compatible.v -R ${CORE} ${CORE}

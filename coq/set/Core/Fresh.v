@@ -61,4 +61,23 @@ Proof.
 Qed.
 
 
+Lemma checkFresh00 : fresh 0 0 = 1.
+Proof. reflexivity. Qed.
 
+Lemma checkFresh01 : fresh 0 1 = 2.
+Proof. reflexivity. Qed.
+
+Lemma checkFresh02 : fresh 0 2 = 1.
+Proof. reflexivity. Qed.
+
+Lemma checkFresh10 : fresh 1 0 = 2.
+Proof. reflexivity. Qed.
+
+Lemma checkFresh11 : fresh 1 1 = 0.
+Proof. reflexivity. Qed.
+
+Lemma checkFresh12 : fresh 1 2 = 0.
+Proof. reflexivity. Qed.
+
+Lemma checkFresh22 : fresh 2 2 = 0.
+Proof. reflexivity. Qed.

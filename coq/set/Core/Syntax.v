@@ -10,6 +10,14 @@ Inductive Formula : Type :=
 | All  : nat -> Formula -> Formula
 .
 
+Fixpoint free (p:Formula) : list nat :=
+    match p with
+    | Bot       => nil
+    | Elem n m  => cons n (cons m nil)
+    | Imp p q   => free p ++ free q
+    | All n p   => remove (eq_nat_dec) n (free p)
+    end.  
+
 Definition Not (p:Formula)          :Formula := Imp p Bot.
 Definition Or  (p q:Formula)        :Formula := Imp (Not p) q.
 Definition And (p q:Formula)        :Formula := Not (Or (Not p) (Not q)).
@@ -35,23 +43,4 @@ Definition Min (n m:nat) : Formula :=
         (Elem n m)
         (Not (Exi x (And (Elem x m) (Elem x n)))).
 
-Lemma checkFresh00 : fresh 0 0 = 1.
-Proof. reflexivity. Qed.
 
-Lemma checkFresh01 : fresh 0 1 = 2.
-Proof. reflexivity. Qed.
-
-Lemma checkFresh02 : fresh 0 2 = 1.
-Proof. reflexivity. Qed.
-
-Lemma checkFresh10 : fresh 1 0 = 2.
-Proof. reflexivity. Qed.
-
-Lemma checkFresh11 : fresh 1 1 = 0.
-Proof. reflexivity. Qed.
-
-Lemma checkFresh12 : fresh 1 2 = 0.
-Proof. reflexivity. Qed.
-
-Lemma checkFresh22 : fresh 2 2 = 0.
-Proof. reflexivity. Qed.

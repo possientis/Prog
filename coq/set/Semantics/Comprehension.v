@@ -5,8 +5,8 @@ Require Import Core.Incl.
 Require Import Core.Equal.
 Require Import Core.Syntax.
 Require Import Core.Semantics.
+Require Import Core.Compatible.
 Require Import Core.Environment.
-Require Import Semantics.Compatible.
 
 (* Theorem schema 'comprehensionLEM' expressed in set theory abstract syntax.   *)
 (* The formulation is parameterized with respect to a formula P, hence this is  *)
@@ -21,11 +21,20 @@ Lemma evalComprehensionF : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
     m <> n ->
     p <> n ->
     p <> m ->
-    eval e (comprehensonF P n m p)
+    eval e (comprehensionF P n m p)
         <->
     forall (x:set), exists (y:set), forall (z:set),
-        z :: y <-> z :: x /\ (eval' e p P x).
+        z :: y <-> z :: x /\ (eval' e p P z).
 Proof.
+    intros L e P n m p Hmn Hpn Hpm. unfold comprehensionF. rewrite evalAll.
+    split; intros H x. 
+    - remember (H x) as H' eqn:E. clear E H. rewrite evalExi in H'.
+      destruct H' as [y H]. exists y. rewrite evalAll in H. intros z.
+      remember (H z) as H' eqn:E. clear E H. rewrite evalIff in H'.
+      rewrite evalElem in H'. rewrite evalAnd in H'. rewrite evalElem in H'.
+      rewrite bindSame in H'. rewrite bindDiff in H'. rewrite bindSame in H'.
+      rewrite bindDiff in H'. rewrite bindDiff in H'. rewrite bindSame in H'.
+      unfold eval'.
 
 Show.
 
