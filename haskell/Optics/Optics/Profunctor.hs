@@ -40,12 +40,13 @@ class Profunctor p => Monoidal p where
 cross :: (a1 -> b1) -> (a2 -> b2) -> a1 :*: a2 -> b1 :*: b2
 cross f1 f2 (x1,x2) = (f1 x1, f2 x2)
 
-fork :: (a -> b) -> (a -> c) -> a -> b :*: c
-fork f g x = (f x, g x)
-
 plus :: (a1 -> b1) -> (a2 -> b2) -> a1 :+: a2 -> b1 :+: b2
 plus f1 _ (Left x1)  = Left  (f1 x1)
 plus _ f2 (Right x2) = Right (f2 x2)
+
+fork :: (a -> b) -> (a -> c) -> a -> b :*: c
+fork f g x = (f x, g x)
+
 
 instance Cartesian (->) where
     first  f = cross f id

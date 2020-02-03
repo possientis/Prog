@@ -3,6 +3,8 @@
 module  Optics.Prism
     (   PrismC    (..)
     ,   PrismP
+    ,   prismC2P
+    ,   prismP2C
     )   where
 
 import Data.Profunctor
@@ -24,7 +26,18 @@ instance Profunctor (PrismC a b) where
 
 
 instance Cocartesian (PrismC a b) where
-    left = undefined
-    right = undefined
+    left (PrismC m b) = PrismC
+        (either ((plus Left id) . m) (Left . Right))
+        (Left . b)
+    right (PrismC m b) = PrismC
+        (either (Left . Left) ((plus Right id) . m))
+        (Right . b)
+
+prismC2P :: PrismC a b s t -> PrismP a b s t
+prismC2P (PrismC m b) = dimap m (either id b) . right
+
+
+prismP2C :: PrismP a b s t -> PrismC a b s t
+prismP2C f = f (PrismC Right id)
 
 

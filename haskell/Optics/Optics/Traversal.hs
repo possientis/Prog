@@ -1,7 +1,20 @@
+{-# LANGUAGE RankNTypes                 #-}
+
 module  Optics.Traversal
-    (   Traversal   (..)
+    (   TraversalC   (..)
+    ,   TraversalP
     )   where
 
+import Optics.Optic
 import Optics.FunList
+import Optics.Profunctor
 
-data Traversal s t a b = Traversal { extract :: s -> FunList a b t }
+
+-- FunList a b t ~ a^n x (b^n -> t)
+
+data TraversalC a b s t = TraversalC { extract :: s -> FunList a b t }
+
+
+type TraversalP a b s t 
+    = forall p . (Cartesian p, Cocartesian p, Monoidal p) => Optic p a b s t 
+    
