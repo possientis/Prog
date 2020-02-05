@@ -673,23 +673,21 @@ would get {\em captured} by $x$. This motivate the following:
     that the property is also true for $\phi$. So let $U\subseteq V$ such 
     that $(\tau,U)$ is $\beta$-valid for $\phi$. Given $U'\subseteq V$  with
     $U\subseteq U'$, we need to show that the equality holds for $\phi$. 
-    
-    
-    TODO 
-
     Note that from 
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}), $\tau$ is
-    $\beta$-valid for $\phi_{1}$ and having assumed the implication is true
-    for $\phi_{1}$, so is the equality for all subsets $U\subseteq U'$.
-    Hence, we have:
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}), 
+    $(\tau, U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$ and having assumed 
+    the property is true for $\phi_{1}$, so is the equality for all subsets 
+    $U'\subseteq V$ with $U\cup\{x\}\subseteq U'$. Hence, we have:
         \begin{eqnarray*}(\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
             &=&(\sigma_{*}(U')\circ\tau)_{*}(U)(\lambda x\phi_{1})\\
+            \mbox{flipping\ $\to$\ }
             &=&(\sigma_{*}(U')\circ\tau)^{*}(\lambda x\phi_{1})(U)\\
             \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
             &=&\lambda x(\sigma_{*}(U')\circ\tau)^{*}(\phi_{1})(U\cup\{x\})\\
             \mbox{see below\ $\to$\ }
             &=&\lambda x(\sigma_{*}(U'\cup\{x\})\circ
                          \tau)^{*}(\phi_{1})(U\cup\{x\})\\
+            \mbox{flipping\ $\to$\ }
             &=&\lambda x(\sigma_{*}(U'\cup\{x\})\circ
                          \tau)_{*}(U\cup\{x\})(\phi_{1})\\
             \mbox{induction, $U\cup\{x\}\subseteq U'\cup\{x\}\ \to\ $}
@@ -697,15 +695,19 @@ would get {\em captured} by $x$. This motivate the following:
                            \tau_{*}(U\cup\{x\})\ )(\phi_{1})\\
             &=&\lambda x \sigma_{*}(U'\cup\{x\})(\,
                          \tau_{*}(U\cup\{x\})(\phi_{1})\,)\\
+            \mbox{flipping\ $\to$\ }
             &=&\lambda x \sigma^{*}(\,\tau_{*}(U\cup\{x\})(\phi_{1})\,)
                          (U'\cup\{x\})\\
             \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
             &=&\sigma^{*}(\,\lambda x\tau_{*}(U\cup\{x\})(\phi_{1})\,)(U')\\
+            \mbox{flipping\ $\to$\ }
             &=&\sigma_{*}(U')(\,\lambda x\tau_{*}(U\cup\{x\})(\phi_{1})\,)\\
+            \mbox{flipping\ $\to$\ }
             &=&\sigma_{*}(U')(\,\lambda x\tau^{*}(\phi_{1})(U\cup\{x\})\,)\\
             \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
             &=&\sigma_{*}(U')(\,\tau^{*}(\lambda x\phi_{1})(U)\,)\\
             &=&\sigma_{*}(U')(\,\tau^{*}(\phi)(U)\,)\\
+            \mbox{flipping\ $\to$\ }
             &=&\sigma_{*}(U')(\,\tau_{*}(U)(\phi)\,)\\
             &=&(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
         \end{eqnarray*}
@@ -740,17 +742,97 @@ would get {\em captured} by $x$. This motivate the following:
         \]
     It is therefore sufficient to prove that $\{x\}\cap\free(\tau(u))=\emptyset$,
     or in other words that $x\not\in\free(\tau(u))$. However, we assumed that 
-    $\tau$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$. Using
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:2}) once more
+    $(\tau,U)$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) once more
     we have the implication:
         \[
-            u\in\free(\lambda x\phi_{1})\ 
+            u\in\free(\lambda x\phi_{1})\setminus U\ 
             \Rightarrow\ 
             x\not\in\free(\tau(u))
         \]
-    It is therefore sufficient to prove that $u\in\free(\lambda x\phi_{1})$
-    which follows from the assumption $u\in\free(\phi_{1})\setminus(U\cup\{x\})
-    \subseteq\free(\phi_{1})\setminus\{x\}=\free(\lambda x\phi_{1})$.
+    It is therefore sufficient to prove that $u\in\free(\lambda x\phi_{1})
+    \setminus U$ which follows from the assumption $u\in\free(\phi_{1})
+    \setminus(U\cup\{x\})=\free(\phi_{1})\cap\{x\}^{c}\cap U^{c}
+    =\free(\lambda x\phi_{1})\setminus U$.
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition}
+    Let $V$ be a set and $\sigma,\tau:V\to\tv$ be maps. Let $\phi\in\tv$. Then
+    if $\tau$ is $\beta$-valid for $\phi$, we have:
+        \[
+            (\sigma'\circ\tau)' (\phi) = (\sigma'\circ\tau')(\phi)
+        \]
+    where given $\chi:V\to\tv$, the map $\chi':\tv\to\tv$ denotes the 
+    associated $\beta$-substitution mapping of 
+    definition~(\ref{logic:def:LAM:beta:subst}).
+\end{prop}
+\begin{proof}
+    This is an immediate application of 
+    proposition~(\ref{logic:prop:LAM:beta:valid:composition:gen}) with
+    $U=U'=\emptyset$: if we recall
+    the notation $\chi_{*}(U)(\phi)=\chi^{*}(\phi)(U)$ where $\chi^{*}:\tv\to
+    {\cal P}(V)\to\tv$ is defined as per 
+    definition~(\ref{logic:def:LAM:beta:subst}) given $\chi:V\to\tv$, 
+    if $\tau$ is $\beta$-valid for $\phi$:
+        \begin{eqnarray*}(\sigma'\circ\tau)'(\phi)
+            &=&(\sigma'\circ\tau)^{*}(\phi)(\emptyset)
+            \mbox{\ \ \ \ \ $\leftarrow$\ def.~(\ref{logic:def:LAM:beta:subst})}\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst}) and flipping
+            \ $\to$\ }
+            &=&(\sigma_{*}(\emptyset)\circ\tau)^{*}(\phi)(\emptyset)\\
+            \mbox{flipping\ $\to$\ }
+            &=&(\sigma_{*}(\emptyset)\circ\tau)_{*}(\emptyset)(\phi)\\
+            \mbox{prop.~(\ref{logic:prop:LAM:beta:valid:composition:gen})
+            $(\tau,\emptyset)$ is $\beta$-valid for $\phi$\ $\to$\ }
+            &=&(\,\sigma_{*}(\emptyset)\circ\tau_{*}(\emptyset)\,)(\phi)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst}) and flipping\ $\to$\ }
+            &=&(\sigma'\circ\tau')(\phi)
+        \end{eqnarray*}
+\end{proof}
+
+\noindent
+{\bf Remark}: A counter-example for
+proposition~(\ref{logic:prop:LAM:beta:valid:composition}) when $\tau$ is not
+$\beta$-valid for $\phi$ is as follows: consider $\phi=\lambda x y$ where
+$x\neq y$. Assume that $\sigma,\tau:V\to\tv$ are such that
+$\tau(y)=x$ and $\sigma(x)=y$.  TODO
+
+From
+proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam}) we can see that
+$\tau$ is not $\beta$-valid for $\phi$ since we have $y\in\free(\lambda x y)$
+and yet $x\in\free(\tau(y))$. We have:
+    \begin{eqnarray*}(\sigma'\circ\tau)' (\phi)
+        &=&(\sigma'\circ\tau)' (\lambda x y)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&(\sigma'\circ\tau)^{*} (\lambda x y)(\emptyset)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\lambda x(\sigma'\circ\tau)^{*} (y)(\{x\})\\
+        y\not\in\{x\}\ \to\ 
+        &=&\lambda x(\sigma'\circ\tau) (y)\\
+        \tau(y)=x\ \to\ 
+        &=&\lambda x\sigma'(x)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\lambda x\sigma^{*}(x)(\emptyset)\\
+        x\not\in\emptyset\ \to\ 
+        &=&\lambda x\sigma(x)\\
+        \sigma(x)=y\ \to\ 
+        &=&\lambda x y\\
+        x\neq y\ \to\ 
+        &\neq&\lambda x x\\
+        x\in\{x\}\ \to\ 
+        &=&\lambda x \sigma^{*}(x)(\{x\})\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma^{*}(\lambda x x)(\emptyset)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma'(\,\lambda x x\,)\\
+        \tau(y)=x\ \to\ 
+        &=&\sigma'(\,\lambda x\tau(y)\,)\\
+        y\not\in\{x\}\ \to\ 
+        &=&\sigma'(\,\lambda x\tau^{*}(y)(\{x\})\,)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma'(\,\tau^{*}(\lambda x y)(\emptyset)\,)\\
+        \mbox{def.~(\ref{logic:def:LAM:beta:subst})\ $\to$\ }
+        &=&\sigma'(\tau'(\lambda x y))\\
+        &=&(\sigma'\circ\tau')(\phi)
+    \end{eqnarray*}
 
