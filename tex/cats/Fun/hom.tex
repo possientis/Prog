@@ -101,15 +101,35 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
 
     $(3)$: We need to check that $F_{1}(f):F_{0}(a)\to F_{0}(b)$ whenever
     $a,b\in\Cop\times\Cat$ and $f:a\to b$. So let $a=(a_{1},a_{2})\in\Cop
-    \times\Cat$, $b=(b_{1},b_{2})\in\Cop\times\Cat$ and $f=(f_{1},f_{2}):
-    (a_{1},a_{2})\to(b_{1},b_{2})\ @\ \Cop\times\Cat$. Since $F_{0}(a)=
-    \Cat(a_{1},a_{2})$ and $F_{0}(b)=\Cat(b_{1},b_{2})$, we need to check 
-    that $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{2})\to \Cat(b_{1},b_{2})$.
-    However, we have already established that fact in part $(2)$ of this 
-    proof, provided we show that $f_{1}:b_{1}\to a_{1}\ @\ \Cat$ and
-    $f_{2}:a_{2}\to b_{2}\ @\ \Cat$. So we need to check that
-    $(f_{1},f_{2})\in\Cat(b_{1},a_{1})\times\Cat(a_{2},b_{2})$ which
+    \times\Cat$, $b=(b_{1},b_{2})\in\Cop\times\Cat$ and let $f$ be an 
+    arrow $f=(f_{1},f_{2}):(a_{1},a_{2})\to(b_{1},b_{2})\ @\ \Cop\times\Cat$. 
+    From the equalities $F_{0}(a)=\Cat(a_{1},a_{2})$ and $F_{0}(b)=\Cat
+    (b_{1},b_{2})$, it is clear that we simply need to check 
+    $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{2})\to \Cat(b_{1},b_{2})$.
+    However, we have already established this fact in part $(2)$ of this 
+    proof, provided we show that $f_{1}:b_{1}\to a_{1}\ @\ \Cat$ together 
+    with $f_{2}:a_{2}\to b_{2}\ @\ \Cat$. Hence we need
+    $(f_{1},f_{2})\in\Cat(b_{1},a_{1})\times\Cat(a_{2},b_{2})$, knowing
+    that $(f_{1},f_{2})\in\Cop\times\Cat[\,(a_{1},a_{2})\,,\,(b_{1},b_{2})
+    \,]$ by assumption. It is therefore sufficient to prove that the 
+    two collections $\Cat(b_{1},a_{1})\times\Cat(a_{2},b_{2})$ and
+    $\Cop\times\Cat[\,(a_{1},a_{2})\,,\,(b_{1},b_{2})\,]$ coincide, which 
     goes as follows:
+        \begin{eqnarray*}\Cop\times\Cat[\,(a_{1},a_{2})\,,\,(b_{1},b_{2})\,]
+            &=&\Cop(a_{1},b_{1})\times\Cat(a_{2},b_{2})\ \leftarrow\ 
+            \mbox{prop.~(\ref{Cat:prop:homset:product})}\\
+            \mbox{prop.~(\ref{Cat:prop:homset:opposite})}\ \to\ 
+            &=&\Cat(b_{1},a_{1})\times\Cat(a_{2},b_{2})
+        \end{eqnarray*}
 
-
+    $(4)$: We need to check that $F_{1}(\,\id(a)\,)=\id(\,F_{0}(a)\,)$ whenever
+    $a\in\Cop\times\Cat$. So let $a=(a_{1},a_{2})\in\Cop\times\Cat$. Since
+    $F_{0}(a)=\Cat(a_{1},a_{2})$, we need to check that $F_{1}(\,\id(a)\,)
+    =\id(\,\Cat(a_{1},a_{2})\,)$. So let $h\in\Cat(a_{1},a_{2})$. We need to
+    check that $F_{1}(\,\id(a)\,)(h)=h$ which goes as follows:
+        \begin{eqnarray*}F_{1}(\,\id(a)\,)(h)
+            &=&F_{1}(\,\id\,(a_{1},a_{2})\,)(h)\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&F_{1}(\,\id(a_{1})\,,\,\id(a_{2})\,)(h)
+        \end{eqnarray*}
 \end{proof}
