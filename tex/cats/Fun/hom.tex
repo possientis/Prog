@@ -125,11 +125,36 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     $(4)$: We need to check that $F_{1}(\,\id(a)\,)=\id(\,F_{0}(a)\,)$ whenever
     $a\in\Cop\times\Cat$. So let $a=(a_{1},a_{2})\in\Cop\times\Cat$. Since
     $F_{0}(a)=\Cat(a_{1},a_{2})$, we need to check that $F_{1}(\,\id(a)\,)
-    =\id(\,\Cat(a_{1},a_{2})\,)$. So let $h\in\Cat(a_{1},a_{2})$. We need to
-    check that $F_{1}(\,\id(a)\,)(h)=h$ which goes as follows:
+    =\id(\,\Cat(a_{1},a_{2})\,)$. This is an equality between two arrows
+    of the category \Set, with identical domain and codomain, namely the set 
+    $\Cat(a_{1},a_{2})$. Given $h\in\Cat(a_{1},a_{2})$, it is sufficient to 
+    check that $F_{1}(\,\id(a)\,)(h)=h$:
         \begin{eqnarray*}F_{1}(\,\id(a)\,)(h)
             &=&F_{1}(\,\id\,(a_{1},a_{2})\,)(h)\\
             \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
-            &=&F_{1}(\,\id(a_{1})\,,\,\id(a_{2})\,)(h)
+            &=&F_{1}(\,\id(a_{1})\ @\ \Cop\,,\,\id(a_{2})\,)(h)\\
+            \mbox{def.~(\ref{Cat:def:opposite})}\ \to\ 
+            &=&F_{1}(\,\id(a_{1})\ @\ \Cat\,,\,\id(a_{2})\,)(h)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:hom:functor})}\ \to\ 
+            &=&\id(a_{2})\circ h\circ \id(a_{1})\\
+            \mbox{$(12)$ of def.~(\ref{Cat:def:category})}\ \to\ 
+            &=&\id(a_{2})\circ h\\
+            \mbox{$(13)$ of def.~(\ref{Cat:def:category})}\ \to\ 
+            &=&h
+        \end{eqnarray*}
+
+    $(5)$: We need to check that $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$ 
+    whenever $f:a\to b$, $g:b\to c$ and $a,b,c\in\Cop\times\Cat$. So let
+    $a=(a_{1},a_{2})$, $b=(b_{1},b_{2})$, $c=(c_{1},c_{2})$ be objects
+    in $\Cop\times\Cat$, and $f=(f_{1},f_{1}):a\to b$ and $g=(g_{1},g_{2}):
+    b\to c$. We have $g\circ f:a \to c$ and consequently $F_{1}(g\circ f):
+    F_{0}(a)\to F_{0}(c)$. Hence the arrows $F_{1}(g\circ f)$ and
+    $F_{1}(g)\circ F_{1}(f)$ are two arrows in \Set, with domain
+    $F_{0}(a)=\Cat(a_{1},a_{2})$ and codomain $F_{0}(c)=\Cat(c_{1},c_{2})$.
+    In order to prove the equality $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$
+    it is therefore sufficient to show that the underlying functions
+    coincide for all $h\in\Cat(a_{1},a_{2})$ which goes as follows:
+        \begin{eqnarray*}F_{1}(g\circ f)(h)
+            &=&F_{1}(\,(g_{1},g_{2})\,\circ\,(f_{1},f_{2})\,)(h)\\
         \end{eqnarray*}
 \end{proof}

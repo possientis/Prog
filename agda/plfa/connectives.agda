@@ -55,19 +55,83 @@ infixr 2 _×_
 
 open _⇔_
 
-⇔-to-× : ∀ {a b : Set} → a ⇔ b → (a → b) × (b → a)
-⇔-to-× r = ⟨ to r , from r ⟩
+to-× : ∀ {a b : Set} → a ⇔ b → (a → b) × (b → a)
+to-× r = ⟨ to r , from r ⟩
 
-×-to-⇔ : ∀ {a b : Set} → (a → b) × (b → a) → a ⇔ b
-×-to-⇔ ⟨ x , y ⟩ = record { to = x; from = y}
+from-× : ∀ {a b : Set} → (a → b) × (b → a) → a ⇔ b
+from-× ⟨ x , y ⟩ = record { to = x; from = y}
 
-from-⇔-to-× : ∀ {a b : Set} (x : a ⇔ b) → ×-to-⇔ (⇔-to-× x) ≡ x
-from-⇔-to-× record { to = to ; from = from } = refl
+from∘to-× : ∀ {a b : Set} (x : a ⇔ b) → from-× (to-× x) ≡ x
+from∘to-× record { to = to ; from = from } = refl
+
+to∘from-× : ∀ {a b : Set} (p : (a → b) × (b → a)) → (to-× (from-× p) ≡ p)
+to∘from-× ⟨ x , y ⟩ = refl
 
 ⇔≃× : ∀ {a b : Set} → a ⇔ b ≃ (a → b) × (b → a)
 ⇔≃× = record
-  { to = ⇔-to-×
-  ; from = ×-to-⇔
-  ; from∘to = from-⇔-to-×
+  { to = to-×
+  ; from = from-×
+  ; from∘to = from∘to-×
+  ; to∘from = to∘from-×
+  }
+
+
+data ⊤ : Set where  -- \top for ⊤
+  tt : ⊤
+
+η-⊤ : ∀ (w : ⊤) → tt ≡ w
+η-⊤ tt = refl
+
+
+⊤-count : ⊤ → ℕ
+⊤-count tt = 1
+
+⊤-identity-l : ∀ {a : Set} → ⊤ × a ≃ a
+⊤-identity-l = record
+  { to = λ { ⟨ tt , x ⟩ → x}
+  ; from = λ x → ⟨ tt , x ⟩
+  ; from∘to = λ { ⟨ tt , x ⟩ → refl}
+  ; to∘from = λ { x → refl}
+  }
+
+⊤-identity-r : ∀ {a : Set} → a × ⊤ ≃ a
+⊤-identity-r = record
+  { to = λ { ⟨ x , tt ⟩ → x}
+  ; from = λ { x → ⟨ x , tt ⟩}
+  ; from∘to = λ {⟨ x , tt ⟩ → refl}
+  ; to∘from = λ {x → refl}
+  }
+
+data _⊎_ (a b : Set) : Set where
+  inj1 : a → a ⊎ b
+  inj2 : b → a ⊎ b
+
+
+case-⊎ : ∀ {a b c : Set}
+  →   (a → c)
+  →   (b → c)
+  →    a ⊎ b
+    ----------
+  →      c
+
+case-⊎ a→c b→c (inj1 x) = a→c x
+case-⊎ a→c b→c (inj2 y) = b→c y
+
+η-⊎ : ∀ {a b : Set} (w : a ⊎ b) → case-⊎ inj1 inj2 w ≡ w
+η-⊎ (inj1 x) = refl
+η-⊎ (inj2 x) = refl
+
+uniq-⊎ : ∀ {a b c : Set} (h : a ⊎ b → c) (w : a ⊎ b) →
+  case-⊎ (h ∘ inj1) (h ∘ inj2) w ≡ h w
+uniq-⊎ h (inj1 x) = refl
+uniq-⊎ h (inj2 x) = refl
+
+infixr 1 _⊎_
+
+⊎-comm : ∀ (a b : Set) → a ⊎ b ≃ b ⊎ a
+⊎-comm a b = record
+  { to = {!!} 
+  ; from = {!!}
+  ; from∘to = {!!}
   ; to∘from = {!!}
   }

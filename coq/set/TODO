@@ -1,4 +1,7 @@
-add irrelevance lemma: eval (bind e n x) p = eval e p if n not free in p. 
+remove: n <> m -> In m xs -> In m (remove (eq_dec_nat) n xs)
+Core/semantics: relevance lemma
+evalEnvEqual should be a consequence of relevance lemma
+add lemma: eval (bind e n x) p = eval e p if n not free in p. 
 Semantics/Comprehension (need to add assumption n,m not free in P)
 add sem/compr to makefile
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
@@ -9,3 +12,5 @@ all ZF axioms covered?
 extension to infinite set
 extension of language
 compatible predicate -> notion of measurability ?
+
+

@@ -263,7 +263,8 @@ ${CORE}/Syntax.vo :				${CORE}/Syntax.v \
 
 ${CORE}/Environment.vo :		${CORE}/Environment.v \
 								${CORE}/Set.vo \
-								${CORE}/Equal.vo
+								${CORE}/Equal.vo \
+								${CORE}/Syntax.vo
 	coqc ${CORE}/Environment.v -R ${CORE} ${CORE}
 
 ${CORE}/Semantics.vo :			${CORE}/Semantics.v \

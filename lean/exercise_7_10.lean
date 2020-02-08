@@ -82,10 +82,43 @@ lemma prod_succ : ∀ (n m : ℕ), prod n (succ m) = n + prod n m :=
               ...           = 0 + prod 0 m  : by refl},
         {from assume m,
           calc
-            prod (succ n) (succ m)  = (succ m) + prod n (succ m)  : _
-                 ...                = (succ m) + (n + prod n m)   : _
-                 ...                = (succ m + n) + prod n m     : _
-                 ...                = _                           : _
+            prod (succ n) (succ m)  = (succ m) + prod n (succ m)  : by refl
+                 ...                = (succ m) + (n + prod n m)   : by rw IH
+                 ...                = (succ m + n) + prod n m     : by rw add_assoc
+                 ...                = succ (m + n) + prod n m     : by rw succ_add
+                 ...                = (m + succ n) + prod n m     : by rw add_succ
+                 ...                = (succ n + m) + prod n m     : by rw (add_comm m)
+                 ...                = succ n + (m + prod n m)     : by rw add_assoc
+                 ...                = succ n + prod (succ n) m    : by refl}
+    end
+
+
+lemma zero_prod : ∀ (n : ℕ), prod 0 n = 0 := assume n, by refl
+
+lemma prod_zero : ∀ (n : ℕ), prod n 0 = 0 :=
+  assume n,
+    begin
+      induction n with n IH,
+        {by refl},
+        {by calc
+          prod (succ n) 0   = 0 + prod n 0  : by refl
+            ...             = 0             : by rw IH
+          }
+    end
+
+lemma prod_comm : ∀ (n m : ℕ), prod n m = prod m n :=
+  assume n,
+    begin
+      induction n with n IH,
+        {from assume m,
+          calc
+            prod 0 m  = 0         : by refl
+              ...     = prod m 0  : by rw prod_zero},
+        {from assume m,
+          calc
+            prod (succ n) m = m + prod n m    : by refl
+                 ...        = m + prod m n    : by rw IH
+                 ...        = prod m (succ n) : by rw prod_succ}
     end
 
 
@@ -93,5 +126,13 @@ lemma prod_succ : ∀ (n m : ℕ), prod n (succ m) = n + prod n m :=
 #check prod_one
 #check add_prod
 #check prod_assoc
+#check prod_succ
+#check prod_zero
+#check prod_comm
 
 end hidden
+
+
+
+
+

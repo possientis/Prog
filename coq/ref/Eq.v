@@ -21,5 +21,4 @@ Proof.
     intros a x y z H1 H2. destruct H1. assumption.
 Qed.
 
-Print Eq_refl'.
     

@@ -1,11 +1,16 @@
+Require Import List.
 Require Import Peano_dec.
 
 Require Import Core.Set.
 Require Import Core.Equal.
+Require Import Core.Syntax.
 
 Definition Env : Type := nat -> set.
 
-Definition envEqual (e e':Env) : Prop := forall (n : nat), e n = e' n.
+Definition envEqual (e e':Env) : Prop := forall (n:nat), e n = e' n.
+
+Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
+    forall (n:nat), In n (free p) -> e n = e' n.
 
 (* Safe environment allowing variables to be unbound leading to error checking. *)
 Definition Env' : Type := nat -> option set.
@@ -85,7 +90,4 @@ Proof.
         + assumption.
         + assumption.
 Qed.
-
-
-
 

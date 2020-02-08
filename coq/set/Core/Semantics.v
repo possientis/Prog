@@ -1,4 +1,7 @@
+Require Import List.
 Require Import Peano_dec.
+Require Import PeanoNat.
+Import Nat.
 
 Require Import Core.LEM.
 Require Import Core.Nat.
@@ -214,3 +217,27 @@ Proof.
                     { assumption. }}}
 Qed.
 
+(*
+Lemma relevance : forall (e e':Env) (p:Formula), 
+    envEqualOn p e e' -> eval e p <-> eval e' p.
+Proof.
+    intros e e' p. unfold envEqualOn. revert e e'.
+    induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
+    - tauto.
+    - rewrite H, H. 
+        + tauto.
+        + simpl. right. left. reflexivity.
+        + simpl. left. reflexivity.
+    - rewrite (IH1 e e'), (IH2 e e').
+        + tauto.
+        + intros n H'. apply H. simpl. apply in_or_app. right. assumption.
+        + intros n H'. apply H. simpl. apply in_or_app. left.  assumption.
+    - split; intros H' x.
+        + rewrite (IH1 (bind e' n x) (bind e n x)). 
+            { apply H'. }
+            { intros m.  destruct (eq_nat_dec n m) as [E|E].
+                { subst. rewrite bindSame, bindSame. intros. reflexivity. }
+                { rewrite bindDiff, bindDiff.
+                    { intros H''. symmetry. apply H. simpl.
+Show.
+*)
