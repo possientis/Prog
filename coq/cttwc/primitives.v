@@ -51,6 +51,33 @@ Definition double := fix f (x:nat) :=
     | S x'  => S (S (f x'))
     end.
 
+Fixpoint iter (a : Type) (f:a -> a) (n:nat) (x : a) : a :=
+    match n with
+    | 0     => x
+    | S n   => f (iter a f n x)
+    end.
+
+(* Defining iter in terms of primitives                                         *)
+Definition iter' := fun (a:Type) =>
+    fun (f:a -> a) =>
+        fix g (n:nat) := 
+            match n with
+            | 0     => fun x => x
+            | S n   => fun x => f (g n x)
+            end.
+
+Arguments iter  {a}.
+Arguments iter' {a}.
+
+Lemma iter_correct : forall (a:Type) (f:a -> a) (n:nat) (x:a),
+    iter f n x = iter' f n x.
+Proof.
+    intros a f n x. induction n as [|n IH].
+    - reflexivity.
+    - simpl. rewrite IH. reflexivity.
+Qed.
+
+
 Lemma check1 : not true = false.
 Proof. reflexivity. Qed.
 
@@ -80,3 +107,13 @@ Proof. reflexivity. Qed.
 
 Lemma check10 : plus (minus 3 2) = S.
 Proof. reflexivity. Qed.
+
+Lemma check11 : (fun x => 1 + x) = S.
+Proof. reflexivity. Qed.
+
+Lemma check12 : (fun x => minus (3 + x) 2) = S. 
+Proof. reflexivity. Qed.
+
+Lemma check13 : iter S 2 = fun x => S (S x).
+Proof. reflexivity. Qed.
+

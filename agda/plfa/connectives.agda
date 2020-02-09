@@ -128,10 +128,100 @@ uniq-⊎ h (inj2 x) = refl
 
 infixr 1 _⊎_
 
+⊎-to : ∀ {a b : Set} → a ⊎ b → b ⊎ a
+⊎-to (inj1 x) = inj2 x
+⊎-to (inj2 x) = inj1 x
+
+⊎-idem : ∀ {a b : Set} → (x : a ⊎ b) → ⊎-to (⊎-to x) ≡ x
+⊎-idem (inj1 x) = refl
+⊎-idem (inj2 x) = refl
+
 ⊎-comm : ∀ (a b : Set) → a ⊎ b ≃ b ⊎ a
 ⊎-comm a b = record
-  { to = {!!} 
-  ; from = {!!}
-  ; from∘to = {!!}
-  ; to∘from = {!!}
+  { to = ⊎-to
+  ; from = ⊎-to
+  ; from∘to = ⊎-idem
+  ; to∘from = ⊎-idem
+  }
+
+⊎-assoc-to : ∀ {a b c : Set} → (a ⊎ b) ⊎ c → a ⊎ (b ⊎ c)
+⊎-assoc-to (inj1 (inj1 x)) = inj1 x
+⊎-assoc-to (inj1 (inj2 x)) = inj2 (inj1 x)
+⊎-assoc-to (inj2 x) = inj2 (inj2 x)
+
+
+⊎-assoc-from : ∀ {a b c : Set} → a ⊎ (b ⊎ c) → (a ⊎ b) ⊎ c
+⊎-assoc-from (inj1 x) = inj1 (inj1 x)
+⊎-assoc-from (inj2 (inj1 x)) = inj1 (inj2 x)
+⊎-assoc-from (inj2 (inj2 x)) = inj2 x
+
+⊎-assoc-from∘to : ∀ {a b c : Set} (x : (a ⊎ b) ⊎ c) → ⊎-assoc-from (⊎-assoc-to x) ≡ x
+⊎-assoc-from∘to (inj1 (inj1 x)) = refl
+⊎-assoc-from∘to (inj1 (inj2 x)) = refl
+⊎-assoc-from∘to (inj2 x) = refl
+
+⊎-assoc-to∘from : ∀ {a b c : Set} (x : a ⊎ (b ⊎ c)) → ⊎-assoc-to (⊎-assoc-from x) ≡ x
+⊎-assoc-to∘from (inj1 x) = refl
+⊎-assoc-to∘from (inj2 (inj1 x)) = refl
+⊎-assoc-to∘from (inj2 (inj2 x)) = refl
+
+⊎-assoc : ∀ {a b c : Set} → (a ⊎ b) ⊎ c ≃ a ⊎ (b ⊎ c)
+⊎-assoc = record
+  { to = ⊎-assoc-to
+  ; from = ⊎-assoc-from
+  ; from∘to = ⊎-assoc-from∘to
+  ; to∘from = ⊎-assoc-to∘from
+  }
+
+-- \bot for ⊥
+data ⊥ : Set where
+  -- no clauses !
+
+⊥-elim : ∀ {a : Set}
+  →    ⊥
+    --------
+  →    a
+
+⊥-elim ()
+
+uniq-⊥ : ∀ {a : Set} (h : ⊥ → a) (w : ⊥) → ⊥-elim w ≡ h w
+uniq-⊥ h ()
+
+
+⊥-identity-l : ∀ {a : Set} → ⊥ ⊎ a ≃ a
+⊥-identity-l = record
+  { to = λ { (inj2 x) → x}
+  ; from = inj2
+  ; from∘to = λ {(inj2 x) → refl}
+  ; to∘from = λ { y → refl}
+  }
+
+⊥-identity-r : ∀ {a : Set} → a ⊎ ⊥ ≃ a
+⊥-identity-r = record
+  { to = λ { (inj1 x) → x}
+  ; from = inj1
+  ; from∘to = λ { (inj1 x) → refl}
+  ; to∘from = λ {y → refl}
+  }
+
+
+→-elim : ∀ {a b : Set}
+  →    (a → b)
+  →    a
+     ----------
+  →    b
+
+→-elim f x = f x
+
+
+η-→ : ∀ {a b : Set} (f : a → b) → (λ (x : a) → f x) ≡ f
+η-→ f = refl
+
+
+currying : ∀ {a b c : Set} → (a → b → c) ≃ (a × b → c)
+currying = record
+  { to = λ {f → λ { ⟨ x , y ⟩ → f x y}}
+  ; from = λ {g → λ {x → λ {y → g ⟨ x , y ⟩}}}
+  ; from∘to = λ { f → refl}
+  ; to∘from = λ { g → {!!}}
   }

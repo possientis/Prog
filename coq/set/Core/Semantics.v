@@ -30,6 +30,41 @@ Fixpoint eval (e:Env) (p:Formula) : Prop :=
 Definition eval' (e:Env) (n:nat) (p:Formula) (x:set) : Prop :=
     eval (bind e n x) p.
 
+Lemma relevance : forall (e e':Env) (p:Formula), 
+    envEqualOn p e e' -> eval e p <-> eval e' p.
+Proof.
+    intros e e' p. unfold envEqualOn. revert e e'.
+    induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
+    - tauto.
+    - rewrite H, H. 
+        + tauto.
+        + simpl. right. left. reflexivity.
+        + simpl. left. reflexivity.
+    - rewrite (IH1 e e'), (IH2 e e').
+        + tauto.
+        + intros n H'. apply H. simpl. apply in_or_app. right. assumption.
+        + intros n H'. apply H. simpl. apply in_or_app. left.  assumption.
+    - split; intros H' x.
+        + rewrite (IH1 (bind e' n x) (bind e n x)). 
+            { apply H'. }
+            { intros m.  destruct (eq_nat_dec n m) as [E|E].
+                { subst. rewrite bindSame, bindSame. intros. reflexivity. }
+                { rewrite bindDiff, bindDiff.
+                    { intros H''. symmetry. apply H. simpl. 
+                      apply removeStill; assumption. }
+                    { assumption. }
+                    { assumption. }}}
+        + rewrite (IH1 (bind e n x) (bind e' n x)). 
+            { apply H'. }
+            { intros m H''. destruct (eq_nat_dec n m) as [E|E].
+                { subst. rewrite bindSame, bindSame. reflexivity. }
+                { rewrite bindDiff, bindDiff.
+                    { apply H. simpl. apply removeStill; assumption. }
+                    { assumption. }
+                    { assumption. }}}
+Qed.
+
+
 Lemma evalBot : forall (e:Env), eval e Bot <-> False.
 Proof. intros e. unfold eval. split; intros H; assumption. Qed.
 
@@ -186,58 +221,20 @@ Proof.
     - assumption.
 Qed.
 
-
 Lemma evalEnvEqual : forall (e e':Env) (p:Formula),
     envEqual e e' -> eval e p <-> eval e' p.
 Proof.
-    intros e e' p. unfold envEqual. revert e e'. 
-    induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
-    - split; auto.
-    - rewrite H, H. split; auto.
-    - rewrite (IH1 e e'), (IH2 e e').
-        + tauto.
-        + assumption.
-        + assumption.
-    - split; intros H' x.
-        + rewrite (IH1 (bind e' n x) (bind e n x)). 
-            { apply H'. }
-            { intros m. destruct (eq_nat_dec n m) as [E|E].
-                { subst. rewrite bindSame, bindSame. reflexivity. }
-                { rewrite bindDiff, bindDiff.
-                    { symmetry. apply H. }
-                    { assumption. }
-                    { assumption. }}}
-        + rewrite (IH1 (bind e n x) (bind e' n x)). 
-            { apply H'. }
-            { intros m. destruct (eq_nat_dec n m) as [E|E].
-                { subst. rewrite bindSame, bindSame. reflexivity. }
-                { rewrite bindDiff, bindDiff.
-                    { apply H. }
-                    { assumption. }
-                    { assumption. }}}
+    intros e e' p H. apply relevance. intros n H'. apply H.
 Qed.
 
-(*
-Lemma relevance : forall (e e':Env) (p:Formula), 
-    envEqualOn p e e' -> eval e p <-> eval e' p.
+
+Lemma evalNotInFree : forall (e:Env) (n:nat) (x:set) (p:Formula),
+    ~In n (free p) -> eval (bind e n x) p <-> eval e p.
 Proof.
-    intros e e' p. unfold envEqualOn. revert e e'.
-    induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
-    - tauto.
-    - rewrite H, H. 
-        + tauto.
-        + simpl. right. left. reflexivity.
-        + simpl. left. reflexivity.
-    - rewrite (IH1 e e'), (IH2 e e').
-        + tauto.
-        + intros n H'. apply H. simpl. apply in_or_app. right. assumption.
-        + intros n H'. apply H. simpl. apply in_or_app. left.  assumption.
-    - split; intros H' x.
-        + rewrite (IH1 (bind e' n x) (bind e n x)). 
-            { apply H'. }
-            { intros m.  destruct (eq_nat_dec n m) as [E|E].
-                { subst. rewrite bindSame, bindSame. intros. reflexivity. }
-                { rewrite bindDiff, bindDiff.
-                    { intros H''. symmetry. apply H. simpl.
-Show.
-*)
+    intros e n x p H. apply relevance. intros m H'. 
+    destruct (eq_nat_dec n m) as [E|E].
+    - subst. apply H in H'. contradiction.
+    - rewrite bindDiff. 
+        + reflexivity.
+        + assumption.
+Qed.

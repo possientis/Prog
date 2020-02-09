@@ -196,8 +196,43 @@ $f:a\to b$ may also have its categorical meaning expressing the fact
 that $f$ is an arrow of the category \Set\ with domain $a$ and codomain 
 $b$, i.e. that $f$ is really $(a,b,f)$. 
 
+Whenever $f^{*}:a\to b$ is an arrow of the category \Set\ and $x\in a$, the
+notation $f^{*}(x)$ is not strictly speaking meaningful since $f^{*}$ is not
+a function but a tuple $(a,b,f)$. However, it is natural enough
+to extend our notations:
+
 \begin{notation}\label{Cat:notation:set:arrow:apply}
     If $f^{*}:a \to b$ is an arrow of the category \Set, for all $x\in a$ 
     we shall write $f^{*}(x)$ as a shortcut for $f(x)$ where $f^{*}=(a,b,f)$.
 \end{notation}
 
+Functions in set theory are just sets, and equality between functions is 
+simply the standard equality between sets. As it turns out, if $f$ and $g$
+are two functions with the same domain $a$, then the set equality $f = g$
+is equivalent to the {\em extensional} equality $\forall x\in a\ ,\ f(x)=g(x)$:
+
+\begin{prop}\label{Cat:prop:functions:extensionality}
+    Let $f,g$ be two functions with identical domain $a$. We have:
+        \[
+        f = g\ \Leftrightarrow\ \forall x\in a\ ,\ f(x)=g(x)
+        \]
+\end{prop}
+\begin{proof}
+    $(\Rightarrow)$: We assume that $f=g$ and $x\in a$. We need to show that 
+    $f(x)=g(x)$. However $f(x)$ is defined as the unique set $y$ such that
+    $(x,y)\in f$, while $g(x)$ is the unique set $y$ such that $(x,y)\in g$.
+    Having assumed that $f=g$, both $f(x)$ and $g(x)$ are the unique set $y$
+    such that $(x,y)\in f$. So we must have $f(x)=g(x)$ by uniqueness.
+
+    \noindent
+    $(\Leftarrow)$: We assume that $f(x)=g(x)$ for all $x\in a$. We need to show
+    that $f=g$. Hence we need to show that $f\subseteq g$ and $g\subseteq f$.
+    By symmetry, we can focus on proving $f\subseteq g$ as the same proof will
+    carry over for $g\subseteq f$. So suppose $z\in f$. We need to show that 
+    $z\in g$. Having assumed that $f$ is a function, the element $z$ must be
+    an ordered pair $z=(x,y)$. Hence we have $(x,y)\in f$. Having assumed
+    that the domain of $f$ is $a$, this shows that $x\in a$. Furthermore,
+    from $(x,y)\in f$ we obtain $f(x)=y$. Hence, by assumption we obtain
+    $g(x)=y$. However $g(x)$ is the unique set $y'$ with $(x,y')\in g$.
+    Hence, we have $(x,y)\in g$ and finally $z\in g$.
+\end{proof}
