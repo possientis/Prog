@@ -4,6 +4,7 @@ module  Optics.Traversal
     (   TraversalC   (..)
     ,   TraversalP
     ,   traverse
+    ,   traverseOf
     ,   traversalC2P
     ,   traversalP2C
     ,   out
@@ -69,4 +70,6 @@ traversalC2P (TraversalC e) k = dimap e fuse (traverse k)
 traversalP2C :: TraversalP a b s t -> TraversalC a b s t
 traversalP2C f = f (TraversalC single) 
 
+traverseOf :: TraversalP a b s t -> (forall f . (Applicative f) => (a -> f b) -> s -> f t)
+traverseOf p f = unUpStar $ p (UpStar f)
 

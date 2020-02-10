@@ -33,6 +33,3 @@ lensC2P (LensC v u) = dimap (fork v id) u . first
 
 lensP2C :: LensP a b s t -> LensC a b s t
 lensP2C f = f (LensC id fst)
-
-
-

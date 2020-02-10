@@ -84,5 +84,3 @@ instance Applicative f => Cocartesian (UpStar f) where
 instance Applicative f => Monoidal (UpStar f) where
     par (UpStar h1) (UpStar h2) = UpStar $ pair h1 h2
     empty = UpStar pure
-
-
