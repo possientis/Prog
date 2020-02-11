@@ -1,3 +1,8 @@
+define weak versions envEqual' envEqualOn' ... carry out same development
+prove relevance lemma etc.
+
+remove envEqual, envEqualOn and affiliates
+Core/Compatible
 Core/Comprehension: get the statement right
 Semantics/Comprehension
 add sem/compr to makefile

@@ -24,11 +24,18 @@ Fixpoint eval (e:Env) (p:Formula) : Prop :=
     | All n p1      => forall (x:set), eval (bind e n x) p1
     end.
 
-(* Given an environement e, a variable n and a formula p, we can define a       *)
+(* Given an environement e, a formula p and a variable n, we can define a       *)
 (* predicate P: set -> Prop by defining P x as the proposition obtained by      *)
 (* evaluating the formula p in an environment where n is bound to x.            *)
-Definition eval' (e:Env) (n:nat) (p:Formula) (x:set) : Prop :=
+Definition eval1 (e:Env) (p:Formula) (n:nat) (x:set) : Prop :=
     eval (bind e n x) p.
+
+(* Given an environement e, a formula p and two variables n m, we can define a  *)
+(* two variables predicate P: set -> set -> Prop by defining P x y as the pro-  *)
+(* position obtained by evaluating the formula p in an environment where n is   *)
+(* bound to x and m is bound to y. This predicate makes sense if n <> m.        *)
+Definition eval2 (e:Env) (p:Formula) (n m:nat) (x y:set) : Prop :=
+    eval (bind (bind e n x) m y) p.
 
 Lemma relevance : forall (e e':Env) (p:Formula), 
     envEqualOn p e e' -> eval e p <-> eval e' p.
