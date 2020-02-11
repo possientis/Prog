@@ -56,6 +56,24 @@ lemma length_rev : ∀ (α : Type u) (xs : list α),
                  ...                =length (x :: xs)                :by refl}
     end
 
+lemma rev_app : ∀ {α : Type u} (xs ys : list α),
+  reverse (xs ++ ys) = reverse ys ++ reverse xs :=
+  assume α xs,
+    begin
+      induction xs with x xs IH,
+        {assume ys,
+          by calc
+            reverse ([] ++ ys) = reverse ys       : by refl
+                    ...        = reverse ys ++ [] : by rw append_nil},
+        {assume ys,
+          by calc
+            reverse ((x :: xs) ++ ys)
+                    = reverse (x :: (xs ++ ys))           : by refl
+            ...     = reverse (xs ++ ys) ++ [x]           : by refl
+            ...     = (reverse ys ++ reverse xs) ++ [x]   : by rw IH
+            ...     = reverse ys ++ (reverse xs ++ [x])   : by rw append_assoc
+            ...     = reverse ys ++ reverse (x :: xs)     : by refl}
+    end
 
 lemma rev_rev : ∀ { α : Type u} (xs : list α),
   reverse (reverse xs) = xs :=
@@ -63,9 +81,20 @@ lemma rev_rev : ∀ { α : Type u} (xs : list α),
     begin
       induction xs with x xs IH,
         {by calc
-          reverse (reverse []) = reverse [] : _
-                  ...          = []         : by refl},
-        {}
+          @reverse α (reverse []) = reverse nil : by refl
+                  ...             = []          : by refl},
+        {by calc
+          reverse (reverse (x :: xs))
+                  = reverse (reverse xs ++ [x])         : by refl
+            ...   = reverse [x] ++ reverse (reverse xs) : by rw rev_app
+            ...   = reverse [x] ++ xs                   : by rw IH
+            ...   = reverse (x :: []) ++ xs             : by refl
+            ...   = (reverse [] ++ [x]) ++ xs           : by refl
+            ...   = ([] ++ [x]) ++ xs                   : by refl
+            ...   = [x] ++ xs                           : by refl
+            ...   = (x :: []) ++ xs                     : by refl
+            ...   = x :: ([] ++ xs)                     : by refl
+            ...   = x :: xs                             : by refl}
     end
 
 
