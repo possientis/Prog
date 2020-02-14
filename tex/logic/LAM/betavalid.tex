@@ -397,6 +397,25 @@ would get {\em captured} by $x$. This motivate the following:
     \sigma^{*}(\phi)(\emptyset)$.
 \end{proof}
 
+\begin{prop}\label{logic:prop:LAM:free:support:beta:valid}
+    Let $V$ be a set, $U\subseteq V$ and $\phi\in\tv$. Let $\sigma,\tau:V\to\tv$ be maps
+    which coincide on $\free(\phi)\setminus U$. Then we have the equivalence:
+        \[
+            (\sigma,U)\ \mbox{$\beta$-valid for $\phi$}\ 
+            \Leftrightarrow\
+            (\tau,U)\ \mbox{$\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    We assume that $\sigma,\tau:V\to\tv$ are given and we consider the property 
+    on $\phi$ stating that for all $U\subseteq V$ the equivalence is true whenever
+    $\sigma$ and $\tau$ coincide on $\free(\phi)\setminus U$. We shall prove
+    this property by a structural induction argument, using 
+    theorem~(\ref{logic:the:proof:induction})
+    of page~\pageref{logic:the:proof:induction}. 
+    TODO
+\end{proof}
+
 \begin{prop}\label{logic:prop:LAM:var:inter:beta:valid:gen}
     Let $V$ be a set and $\phi\in\tv$. Let $\sigma:V\to\tv$ be a map. Then for
     all $U\subseteq V$, we have the following implication:
