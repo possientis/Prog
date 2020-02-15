@@ -1,7 +1,4 @@
-define weak versions envEqual' envEqualOn' ... carry out same development
-prove relevance lemma etc.
-
-remove envEqual, envEqualOn and affiliates
+Core/Environment.
 Core/Compatible
 Core/Comprehension: get the statement right
 Semantics/Comprehension

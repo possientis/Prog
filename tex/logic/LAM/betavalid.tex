@@ -412,8 +412,50 @@ would get {\em captured} by $x$. This motivate the following:
     $\sigma$ and $\tau$ coincide on $\free(\phi)\setminus U$. We shall prove
     this property by a structural induction argument, using 
     theorem~(\ref{logic:the:proof:induction})
-    of page~\pageref{logic:the:proof:induction}. 
-    TODO
+    of page~\pageref{logic:the:proof:induction}. So first we assume that $\phi=x$
+    for some $x\in V$. We need to show the property is true for $\phi$. So
+    let $U\subseteq V$ such that $\sigma$ and $\tau$ coincide on 
+    $\free(\phi)\setminus U$. We need to show that the equivalence is true,
+    which is obviously the case since both $(\sigma,U)$ and $(\tau,U)$ are
+    always $\beta$-valid for $\phi$ by virtue of 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:x:gen}). So next
+    we assume that $\phi=\phi_{1}\ \phi_{2}$ for some $\phi_{1},\phi_{2}\in\tv$
+    for which the property is true. We need to show the property is also true
+    for $\phi$. So let $U\subseteq V$ such that $\sigma$ and $\tau$ coincide
+    om $\free(\phi)\setminus U$. We need to show that the equivalence is true.
+    By symmetry, it is sufficient to focus on one implication. So we assume
+    that $(\sigma,U)$ is $\beta$-valid for $\phi$. We need to show that 
+    $(\tau,U)$ is also $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}), it is
+    sufficient to show that $(\tau,U)$ is $\beta$-valid for both $\phi_{1}$
+    and $\phi_{2}$. However, having assumed the property is true for $\phi_{1}$
+    and $\phi_{2}$ and since $\sigma,\tau$ coincide on $\free(\phi)\setminus U$,
+    they also coincide on $\free(\phi_{1})\setminus U$ and $\free(\phi_{2})
+    \setminus U$, and hence the equivalence is true for both $\phi_{1}$ and 
+    $\phi_{2}$ in relation to $U$. It is therefore sufficient to prove that
+    $(\sigma,U)$ is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$ which 
+    follows from proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen})
+    and our assumption that $(\sigma,U)$ is $\beta$-valid for $\phi$. Finally,
+    we assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$ and $\phi_{1}\in\tv$
+    for which the property is true. We need to show the property is also true
+    for $\phi$. So let $U\subseteq V$ such that $\sigma$ and $\tau$ coincide
+    on $\free(\phi)\setminus U$. We need to show the equivalence is true for 
+    $\phi$ is relation to $U$. By symmetry, it is sufficient to focus on one 
+    implication. So we assume that $(\sigma,U)$ is $\beta$-valid for $\phi$.
+    We need to show that $(\tau,U)$ is also $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}), it is
+    sufficient to establish two facts: on the one hand we need to prove
+    that $(\tau, U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$, and on the
+    other hand we need to show that $x\not\in\free(\tau(u))$ whenever
+    $u\in\free(\phi)\setminus U$. First we focus on the $\beta$-validity
+    of $(\tau,U\cup\{x\})$ for $\phi_{1}$. Having assumed that $(\sigma,U)$
+    is $\beta$-valid for $\phi$, using 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) once more
+    we see that $(\sigma, U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$.
+    It is therefore sufficient to establish that the equivalence is true
+    in relation to $\phi_{1}$ and $U\cup\{x\}$, and since the property is
+    true for $\phi_{1}$ it is sufficient to prove that $\sigma$ and $\tau$
+    coincide on $\free(\phi_{1})\setminus(U\cup\{x\})$. TODO
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:var:inter:beta:valid:gen}

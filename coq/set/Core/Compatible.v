@@ -60,7 +60,7 @@ Proof.
     remember (formulaCompatible (bind e n x') p m) as H' eqn:E. clear E.
     unfold compatible in H'. unfold eval1 in H'. apply H' with y; clear H'.
     - assumption.
-    - 
+    - apply evalEnvEqual with (bind (bind e n x) m y). 
 
 
 Show.

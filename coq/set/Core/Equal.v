@@ -67,3 +67,10 @@ Proof.
     intros x y z [H1 H2] H. apply H1. assumption.
 Qed.
 
+Lemma equal_lr : forall (x x' y y':set), x == x' -> y == y' -> x :: y -> x' :: y'.
+Proof.
+    intros x x' y y' Hx Hy H. apply equal_l with x.
+    - assumption.
+    - apply equal_r with y; assumption.
+Qed.
+

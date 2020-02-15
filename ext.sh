@@ -40,6 +40,9 @@ filtered=$( \
   | grep -v '.vimrc' \
   | grep -v '.dircolors' \
   | grep -v '.mem' \
+  | grep -v '.yaml' \
+  | grep -v '.md' \
+  | grep -v '.gitignore' \
   | grep '\.' \
   )
 

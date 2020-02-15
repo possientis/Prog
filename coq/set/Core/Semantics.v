@@ -43,10 +43,13 @@ Proof.
     intros e e' p. unfold envEqualOn. revert e e'.
     induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
     - tauto.
-    - rewrite H, H. 
-        + tauto.
-        + simpl. right. left. reflexivity.
-        + simpl. left. reflexivity.
+    - split. 
+        + apply equal_lr; apply H.
+            { left. reflexivity. }
+            { right. left. reflexivity. }
+        + apply equal_lr; apply equalSym; apply H.
+            { left. reflexivity. }
+            { right. left. reflexivity. }
     - rewrite (IH1 e e'), (IH2 e e').
         + tauto.
         + intros n H'. apply H. simpl. apply in_or_app. right. assumption.
@@ -55,22 +58,21 @@ Proof.
         + rewrite (IH1 (bind e' n x) (bind e n x)). 
             { apply H'. }
             { intros m.  destruct (eq_nat_dec n m) as [E|E].
-                { subst. rewrite bindSame, bindSame. intros. reflexivity. }
+                { subst. rewrite bindSame, bindSame. intros. apply equalRefl. }
                 { rewrite bindDiff, bindDiff.
-                    { intros H''. symmetry. apply H. simpl. 
+                    { intros H''. apply equalSym. apply H. simpl. 
                       apply removeStill; assumption. }
                     { assumption. }
                     { assumption. }}}
         + rewrite (IH1 (bind e n x) (bind e' n x)). 
             { apply H'. }
             { intros m H''. destruct (eq_nat_dec n m) as [E|E].
-                { subst. rewrite bindSame, bindSame. reflexivity. }
+                { subst. rewrite bindSame, bindSame. apply equalRefl. }
                 { rewrite bindDiff, bindDiff.
                     { apply H. simpl. apply removeStill; assumption. }
                     { assumption. }
                     { assumption. }}}
 Qed.
-
 
 Lemma evalBot : forall (e:Env), eval e Bot <-> False.
 Proof. intros e. unfold eval. split; intros H; assumption. Qed.
@@ -242,6 +244,6 @@ Proof.
     destruct (eq_nat_dec n m) as [E|E].
     - subst. apply H in H'. contradiction.
     - rewrite bindDiff. 
-        + reflexivity.
+        + apply equalRefl.
         + assumption.
 Qed.

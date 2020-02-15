@@ -17,6 +17,7 @@ module  Formula
     ,   lemma1
     ,   lemma2
     ,   lemma3
+    ,   lemma4
     ,   deduction
     ,   and1
     ,   and2
@@ -120,4 +121,6 @@ and2 pr = ImpI (ImpI (ImpE  (Weaken (Weaken pr))
 and3 :: forall p q r ctx . ctx :=>: p :&&: q :->: r -> ctx :=>: q :&&: p :->: r
 and3 pr = ImpI (ImpE (Weaken pr) (AndI (AndE2 Assume) (AndE1 Assume)))
 
+lemma4 :: forall p q r ctx . p ::: q ::: ctx :=>: r -> q ::: p ::: ctx :=>: r
+lemma4 = deduction . deduction . and2 . and3 . and1 . ImpI . ImpI
 

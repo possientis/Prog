@@ -223,5 +223,33 @@ currying = record
   { to = λ {f → λ { ⟨ x , y ⟩ → f x y}}
   ; from = λ {g → λ {x → λ {y → g ⟨ x , y ⟩}}}
   ; from∘to = λ { f → refl}
-  ; to∘from = λ { g → {!!}}
+  ; to∘from = λ { g → extensionality λ { ⟨ x , y ⟩ → refl} }
+  }
+
+⊎-distrib-to : ∀ {a b c : Set} → (a ⊎ b → c) → (a → c) × (b → c)
+⊎-distrib-to f = ⟨ f ∘ inj1 , f ∘ inj2 ⟩
+
+⊎-distrib-from : ∀ {a b c : Set} → (a → c) × (b → c) → a ⊎ b → c
+⊎-distrib-from ⟨ f , g ⟩ (inj1 x) = f x
+⊎-distrib-from ⟨ f , g ⟩ (inj2 y) = g y
+
+⊎-distrib-from∘to-x : ∀ {a b c : Set} → (f : a ⊎ b → c) → (x : a ⊎ b) →
+  ⊎-distrib-from (⊎-distrib-to f) x ≡ f x
+⊎-distrib-from∘to-x f (inj1 x) = refl
+⊎-distrib-from∘to-x f (inj2 x) = refl
+
+⊎-distrib-from∘to : ∀ {a b c : Set} → (f : a ⊎ b → c) →
+  ⊎-distrib-from (⊎-distrib-to f) ≡ f
+⊎-distrib-from∘to f = extensionality (⊎-distrib-from∘to-x f)
+
+⊎-distrib-to∘from : ∀ {a b c : Set} → (f : (a → c) × (b → c)) →
+  ⊎-distrib-to (⊎-distrib-from f) ≡ f
+⊎-distrib-to∘from ⟨ f , g ⟩ = refl
+
+→-distrib-⊎-r : ∀ {a b c : Set} → (a ⊎ b → c) ≃ (a → c) × (b → c)
+→-distrib-⊎-r = record
+  { to = ⊎-distrib-to
+  ; from = ⊎-distrib-from
+  ; from∘to = ⊎-distrib-from∘to
+  ; to∘from = ⊎-distrib-to∘from
   }

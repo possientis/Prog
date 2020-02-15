@@ -7,10 +7,10 @@ Require Import Core.Syntax.
 
 Definition Env : Type := nat -> set.
 
-Definition envEqual (e e':Env) : Prop := forall (n:nat), e n = e' n.
+Definition envEqual (e e':Env) : Prop := forall (n:nat), e n == e' n. 
 
 Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
-    forall (n:nat), In n (free p) -> e n = e' n.
+    forall (n:nat), In n (free p) -> e n == e' n.
 
 (* Safe environment allowing variables to be unbound leading to error checking. *)
 Definition Env' : Type := nat -> option set.
@@ -62,17 +62,17 @@ Qed.
 Lemma bindPermute : forall (e:Env) (n m:nat) (x y:set), m <> n -> 
     envEqual (bind (bind e n x) m y) (bind (bind e m y) n x).
 Proof.
-    intros e n m x y Hmn p. 
+    intros e n m x y Hmn p.
     destruct (eq_nat_dec m p) as [H1|H1], (eq_nat_dec n p) as [H2|H2].
     - subst. exfalso. apply Hmn. reflexivity.
     - subst. rewrite bindSame, bindDiff, bindSame.
-        + reflexivity.
+        + apply equalRefl.
         + assumption.
     - subst. rewrite bindSame, bindDiff, bindSame.
-        + reflexivity.
+        + apply equalRefl.
         + assumption.
     - rewrite bindDiff, bindDiff, bindDiff, bindDiff.
-        + reflexivity.
+        + apply equalRefl.
         + assumption.
         + assumption.
         + assumption.
@@ -83,11 +83,16 @@ Lemma bindOver : forall (e:Env) (n:nat) (x y:set),
     envEqual (bind (bind e n x) n y) (bind e n y).
 Proof.
     intros e n x y m. destruct (eq_nat_dec n m) as [H|H].
-    - subst. rewrite bindSame, bindSame. reflexivity.
+    - subst. rewrite bindSame, bindSame. apply equalRefl.
     - rewrite bindDiff, bindDiff, bindDiff.
-        + reflexivity.
+        + apply equalRefl.
         + assumption.
         + assumption.
         + assumption.
 Qed.
 
+(*
+Lemma bindEnvEqual : forall (e e':Env) (n:nat) (x x':set),
+    envEqual e e' -> x == x' -> envEqual (bind e n x) (bind e' n x').
+Proof.
+*)

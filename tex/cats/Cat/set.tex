@@ -236,3 +236,66 @@ is equivalent to the {\em extensional} equality $\forall x\in a\ ,\ f(x)=g(x)$:
     $g(x)=y$. However $g(x)$ is the unique set $y'$ with $(x,y')\in g$.
     Hence, we have $(x,y)\in g$ and finally $z\in g$.
 \end{proof}
+
+An important question which will invariably arise is deciding when two
+arrows of the category \Set\ are equal. Although we have defined an
+arrow to be a tuple $(a,b,f)$, as indicated in 
+notation~(\ref{Cat:notation:set:arrow}) we will often refer to such an
+arrow simply as $f$. However, we should not forget that the equality
+$f=g$ between underlying functions is not enough for two arrows
+$(a,b,f)$ and $(c,d,g)$ to be equal. The equality between functions
+will ensure that they have the same domain and the same
+range, but it does not tell us anything
+about the intended codomains of their respective arrows.
+
+\begin{prop}\label{Cat:prop:functions:equal:domain}
+    If two functions $f,g$ are equal, they have the same domain.
+\end{prop}
+\begin{proof}
+    We assume $f,g$ are functions and $f=g$. We need to show $f$ and
+    $g$ have the same domain. By symmetry, it is sufficient to show
+    that the domain of $f$ is a subset of that of $g$. So let $x$
+    be an element of the domain of $f$. There exists some $y$ with
+    $(x,y)\in f$. From $f=g$ we obtain $(x,y)\in g$ and consequently
+    $x$ is also an element of the domain of $g$.
+\end{proof}
+
+
+\begin{prop}\label{Cat:prop:functions:equal:range}
+    If two functions $f,g$ are equal, they have the same range.
+\end{prop}
+\begin{proof}
+    We assume $f,g$ are functions and $f=g$. We need to show $f$ and
+    $g$ have the same range. By symmetry, it is sufficient to show
+    that the range of $f$ is a subset of that of $g$. So let $y$
+    be an element of the range of $f$. There exists some $x$ with
+    $(x,y)\in f$. From $f=g$ we obtain $(x,y)\in g$ and consequently
+    $y$ is also an element of the range of $g$.
+\end{proof}
+
+\begin{prop}\label{Cat:prop:set:arrow:equal}
+    Let $f:a\to b$ and $g:c\to d$ be two arrows of the category \Set. Then 
+    $f=g$ \ifand\ $a=c$, $b=d$ and $f(x)=g(x)$ for all $x\in a$.
+\end{prop}
+\begin{proof}
+    Let $f^{*}=(a,b,f)$ and $g^{*}=(c,d,g)$ be two arrows
+    of the category \Set. Looking at definition~(\ref{Cat:def:set}), $f$
+    and $g$ are functions $f:a\to b$ and $g:c\to d$. So the domain of
+    $f$ is $a$ while the domain of $g$ is $c$, and the range of $f$
+    is a subset of $b$ while the range of $g$ is a subset of $d$.
+    First we assume that $f^{*}=g^{*}$. Then we have the equality
+    between triples $(a,b,f)=(c,d,g)$. Hence we obtain immediately
+    $a=c$ and $b=d$ as requested. However, we also obtain the equality
+    between underlying functions $f=g$. Using 
+    proposition~(\ref{Cat:prop:functions:extensionality}), we see
+    that $f(x)=g(x)$ for all $x\in a$. By virtue of
+    notation~(\ref{Cat:notation:set:arrow:apply}), $f^{*}(x)$ and 
+    $g^{*}(x)$ are notational shortcuts for $f(x)$ and $g(x)$ 
+    respectively. Hence we have $f^{*}(x)=g^{*}(x)$ for all $x\in a$
+    as requested. We now assume that $a=c$ , $b=d$ and $f^{*}(x)=g^{*}(x)$
+    for all $x\in a$. We need to show that $f^{*}=g^{*}$, or in other
+    words $(a,b,f)=(c,d,g)$. Hence it remains to show that $f=g$. This
+    follows from proposition~(\ref{Cat:prop:functions:extensionality}) and
+    the fact that $f(x)=g(x)$ for all $x\in a$.
+\end{proof}
+
