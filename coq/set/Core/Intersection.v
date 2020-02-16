@@ -3,12 +3,13 @@
 
 Require Import List.
 
+Require Import Utils.Filter.
+
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
 Require Import Core.Empty.
-Require Import Core.Filter.
 Require Import Core.ToList.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.

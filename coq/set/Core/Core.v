@@ -5,7 +5,8 @@ Require Import List.
 Require Import Plus.
 Require Import Compare_dec.
 
-Require Import Core.Nat.
+Require Import Utils.Nat.
+
 Require Import Core.Set.
 Require Import Core.Order.
 

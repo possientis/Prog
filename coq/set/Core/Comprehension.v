@@ -1,11 +1,12 @@
 Require Import List.
 
-Require Import Core.LEM.
+Require Import Utils.LEM.
+Require Import Utils.Filter.
+
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
-Require Import Core.Filter.
 Require Import Core.ToList.
 Require Import Core.Compatible.
 Require Import Core.Extensionality.

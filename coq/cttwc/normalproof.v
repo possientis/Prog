@@ -115,3 +115,71 @@ Definition L21 (X Y:Prop) : X \/ (X /\ Y) <-> X := conj
         end)
     (fun x => or_introl x).
         
+Definition L22 (X:Prop) : X <-> X := conj
+    (fun x => x)
+    (fun x => x).
+
+Definition L23 (X Y:Prop) : X <-> Y -> Y <-> X := 
+    fun p => match p with conj xy yx => conj yx xy end.
+
+Definition L24 (X Y Z:Prop) : X <-> Y -> Y <-> Z -> X <-> Z :=
+    fun p q => 
+        match p with conj xy yx =>
+            match q with conj yz zy => conj
+                (fun x => yz (xy x))
+                (fun z => yx (zy z))
+            end
+        end.
+
+Definition L25 (X X' Y Y':Prop) : X <-> X' -> Y <-> Y' -> X /\ Y <-> X' /\ Y' :=
+    fun p q => 
+        match p with 
+            conj xx' x'x =>
+                match q with
+                    conj yy' y'y => conj
+                        (fun r =>
+                            match r with
+                                conj x y    => conj (xx' x) (yy' y)
+                            end)
+                        (fun r =>
+                            match r with
+                                conj x' y'  => conj (x'x x') (y'y y')
+                            end)
+                end
+        end.
+
+Definition L26 (X X' Y Y':Prop) : X <-> X' -> Y <-> Y' -> X \/ Y <-> X' \/ Y' :=
+    fun p q =>
+        match p with
+            conj xx' x'x =>
+                match q with
+                    conj yy' y'y => conj
+                        (fun r =>
+                            match r with
+                            | or_introl x => or_introl (xx' x)
+                            | or_intror y => or_intror (yy' y)
+                            end)
+                        (fun r =>
+                            match r with
+                            | or_introl x' => or_introl (x'x x')
+                            | or_intror y' => or_intror (y'y y')
+                            end)
+                end
+        end. 
+
+Definition L27 (X X' Y Y':Prop) : X <-> X' -> Y <-> Y' -> (X -> Y) <-> (X' -> Y') :=
+    fun p q =>
+        match p with
+            conj xx' x'x =>
+                match q with 
+                    conj yy' y'y => conj
+                        (fun r x' => yy' (r (x'x x')))
+                        (fun r x  => y'y (r (xx' x )))
+                end
+        end.
+
+
+
+
+
+

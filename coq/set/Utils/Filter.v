@@ -3,7 +3,7 @@
 
 Require Import List.
 
-Require Import Core.LEM.
+Require Import Utils.LEM.
 
 (* In this module, we are having a small interlude focussing on decidability    *)
 (* results which are specific to the Coq meta-theory, and are not set theoretic *)

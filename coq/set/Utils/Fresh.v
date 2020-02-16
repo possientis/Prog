@@ -1,5 +1,6 @@
 Require Import Peano_dec.
 
+(* returns a variable which is not n and not m                                  *)
 Fixpoint fresh (n m:nat) : nat :=
     match eq_nat_dec 0 n, eq_nat_dec 0 m with
     | right _, right _  => 0 

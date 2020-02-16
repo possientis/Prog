@@ -127,7 +127,9 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     $F_{0}(a)=\Cat(a_{1},a_{2})$, we need to check that $F_{1}(\,\id(a)\,)
     =\id(\,\Cat(a_{1},a_{2})\,)$. This is an equality between two arrows
     of the category \Set, with identical domain and codomain, namely the set 
-    $\Cat(a_{1},a_{2})$. Given $h\in\Cat(a_{1},a_{2})$, it is sufficient to 
+    $\Cat(a_{1},a_{2})$. Given $h\in\Cat(a_{1},a_{2})$, 
+    from proposition~(\ref{Cat:prop:set:arrow:equal})
+    it is sufficient to 
     check that $F_{1}(\,\id(a)\,)(h)=h$:
         \begin{eqnarray*}F_{1}(\,\id(a)\,)(h)
             &=&F_{1}(\,\id\,(a_{1},a_{2})\,)(h)\\
@@ -151,10 +153,25 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     F_{0}(a)\to F_{0}(c)$. Hence the arrows $F_{1}(g\circ f)$ and
     $F_{1}(g)\circ F_{1}(f)$ are two arrows in \Set, with domain
     $F_{0}(a)=\Cat(a_{1},a_{2})$ and codomain $F_{0}(c)=\Cat(c_{1},c_{2})$.
-    In order to prove the equality $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$
-    it is therefore sufficient to show that the underlying functions
-    coincide for all $h\in\Cat(a_{1},a_{2})$ which goes as follows:
+    From proposition~(\ref{Cat:prop:set:arrow:equal}), in order to prove the 
+    equality $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$ it is therefore sufficient 
+    to show that the underlying functions coincide for all $h\in\Cat(a_{1},a_{2})$
+    which goes as follows:
         \begin{eqnarray*}F_{1}(g\circ f)(h)
             &=&F_{1}(\,(g_{1},g_{2})\,\circ\,(f_{1},f_{2})\,)(h)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&F_{1}(\,g_{1} \circ f_{1}\ @\ \Cop,\,g_{2}\circ f_{2}\,)\,(h)\\
+            \mbox{crucially, def.~(\ref{Cat:def:opposite})}\ \to\ 
+            &=&F_{1}(\,f_{1} \circ g_{1}\,,\,g_{2}\circ f_{2}\,)\,(h)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:hom:functor})}\ \to\ 
+            &=&(g_{2}\circ f_{2})\,\circ\, h\,\circ (f_{1}\circ g_{1})\\
+            \mbox{associativity of $\circ$ in \Cat}\ \to\ 
+            &=&g_{2}\,\circ\,(f_{2}\circ h\circ f_{1})\,\circ g_{1}\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:hom:functor})}\ \to\ 
+            &=&g_{2}\,\circ\,F_{1}(f_{1},f_{2})(h)\,\circ g_{1}\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:hom:functor})}\ \to\ 
+            &=&F_{1}(g_{1},g_{2})(\,F_{1}(f_{1},f_{2})(h)\,)\\
+            &=&F_{1}(g)(\,F_{1}(f)(h)\,)\\
+            &=&(F_{1}(g)\circ F_{1}(f))(h)
         \end{eqnarray*}
 \end{proof}

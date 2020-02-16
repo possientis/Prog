@@ -1,7 +1,7 @@
 Require Import List.
 Require Import Peano_dec.
 
-Require Import Core.Fresh.
+Require Import Utils.Fresh.
 
 Inductive Formula : Type :=
 | Bot  : Formula

@@ -3,7 +3,7 @@ Require Import Peano_dec.
 
 Require Import Core.Set.
 Require Import Core.Equal.
-Require Import Core.Syntax.
+Require Import Lang1.Syntax.
 
 Definition Env : Type := nat -> set.
 
@@ -12,25 +12,13 @@ Definition envEqual (e e':Env) : Prop := forall (n:nat), e n == e' n.
 Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
     forall (n:nat), In n (free p) -> e n == e' n.
 
-(* Safe environment allowing variables to be unbound leading to error checking. *)
-Definition Env' : Type := nat -> option set.
-
 Definition env0  : Env  := (fun _ => Nil).
-Definition env0' : Env' := (fun _ => None).
 
-(* Tweak environment e to that e n = x                                          *)
+(* Tweak environment e so that e n = x                                          *)
 Definition bind (e:Env) (n:nat) (x:set) : Env :=
     fun (m:nat) =>
         match eq_nat_dec n m with
         | left _    => x        (* variable 'n' is bound to set 'x'             *)
-        | right _   => e m
-        end.
-
-(* Tweak environment e to that e n = x                                          *)
-Definition bind' (e:Env') (n:nat) (x:set) : Env' :=
-    fun (m:nat) =>
-        match eq_nat_dec n m with
-        | left _    => Some x   (* variable 'n' is bound to set 'x'             *)
         | right _   => e m
         end.
 

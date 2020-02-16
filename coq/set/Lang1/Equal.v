@@ -1,11 +1,13 @@
-Require Import Core.LEM.
+Require Import Utils.LEM.
+
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
-Require Import Core.Syntax.
-Require Import Core.Semantics.
-Require Import Core.Environment.
+
+Require Import Lang1.Syntax.
+Require Import Lang1.Semantics.
+Require Import Lang1.Environment.
 
 (* Lemma 'equalRefl' expressed in set theory abstract syntax.                   *)
 Definition equalReflF (n:nat) : Formula := All n (Equ n n).

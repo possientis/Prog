@@ -3,13 +3,14 @@
 
 Require Import List.
 
+Require Import Utils.Filter.
+
 Require Import Core.Set.
 Require Import Core.Order.
 Require Import Core.Core.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
-Require Import Core.Filter.
 Require Import Core.Extensionality.
 
 (* Recall that the term 'forall (x y:set), {x = y} + {x <> y}' is not strictly  *)

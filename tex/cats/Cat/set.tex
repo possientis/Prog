@@ -278,13 +278,16 @@ about the intended codomains of their respective arrows.
     $f=g$ \ifand\ $a=c$, $b=d$ and $f(x)=g(x)$ for all $x\in a$.
 \end{prop}
 \begin{proof}
-    Let $f^{*}=(a,b,f)$ and $g^{*}=(c,d,g)$ be two arrows
-    of the category \Set. Looking at definition~(\ref{Cat:def:set}), $f$
-    and $g$ are functions $f:a\to b$ and $g:c\to d$. So the domain of
-    $f$ is $a$ while the domain of $g$ is $c$, and the range of $f$
-    is a subset of $b$ while the range of $g$ is a subset of $d$.
-    First we assume that $f^{*}=g^{*}$. Then we have the equality
-    between triples $(a,b,f)=(c,d,g)$. Hence we obtain immediately
+    Let $f^{*}:a \to b$ and $g^{*}:c \to d$, that is $f^{*}=(a,b,f)$ 
+    (for some $f$) and $g^{*}=(c,d,g)$ (for some $g$) be two arrows
+    of the category \Set. We call these arrows $f^{*}$ and $g^{*}$ in
+    this proof so as to be very precise on the distinction between
+    an arrow and its underlying function. Looking at 
+    definition~(\ref{Cat:def:set}), $f$ and $g$ are functions $f:a\to b$ 
+    and $g:c\to d$. So the domain of $f$ is the set $a$ while the domain of $g$ 
+    is the set $c$, and the range of $f$ is a subset of $b$ while the range of 
+    $g$ is a subset of $d$. First we assume that $f^{*}=g^{*}$. Then we have 
+    the equality between triples $(a,b,f)=(c,d,g)$. Hence we obtain immediately
     $a=c$ and $b=d$ as requested. However, we also obtain the equality
     between underlying functions $f=g$. Using 
     proposition~(\ref{Cat:prop:functions:extensionality}), we see

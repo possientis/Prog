@@ -3,7 +3,8 @@
 Require Import Le.
 Require Import Plus.
 
-Require Import Core.Nat.
+Require Import Utils.Nat.
+
 Require Import Core.Set.
 Require Import Core.Order.
 Require Import Core.Core.

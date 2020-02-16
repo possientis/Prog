@@ -4,7 +4,8 @@ Require Import Le.
 Require Import Max.
 Require Import List.
 
-Require Import Core.Nat.
+Require Import Utils.Nat.
+
 Require Import Core.Set.
 
 

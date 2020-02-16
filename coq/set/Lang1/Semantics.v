@@ -3,18 +3,21 @@ Require Import Peano_dec.
 Require Import PeanoNat.
 Import Nat.
 
-Require Import Core.LEM.
-Require Import Core.Nat.
+Require Import Utils.LEM.
+Require Import Utils.Nat.
+Require Import Utils.Fresh.
+
+
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
 Require Import Core.Empty.
-Require Import Core.Fresh.
-Require Import Core.Syntax.
 Require Import Core.ElemIncl.
 Require Import Core.Foundation.
-Require Import Core.Environment.
+
+Require Import Lang1.Syntax.
+Require Import Lang1.Environment.
 
 Fixpoint eval (e:Env) (p:Formula) : Prop :=
     match p with

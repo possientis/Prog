@@ -1,4 +1,4 @@
-import Relation.Binary.PropositionalEquality as Eq 
+import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl)
 open Eq.≡-Reasoning
 open import Data.Nat using (ℕ)
@@ -103,8 +103,8 @@ data ⊤ : Set where  -- \top for ⊤
   }
 
 data _⊎_ (a b : Set) : Set where
-  inj1 : a → a ⊎ b
-  inj2 : b → a ⊎ b
+  inj₁ : a → a ⊎ b
+  inj₂ : b → a ⊎ b
 
 
 case-⊎ : ∀ {a b c : Set}
@@ -114,27 +114,27 @@ case-⊎ : ∀ {a b c : Set}
     ----------
   →      c
 
-case-⊎ a→c b→c (inj1 x) = a→c x
-case-⊎ a→c b→c (inj2 y) = b→c y
+case-⊎ a→c b→c (inj₁ x) = a→c x
+case-⊎ a→c b→c (inj₂ y) = b→c y
 
-η-⊎ : ∀ {a b : Set} (w : a ⊎ b) → case-⊎ inj1 inj2 w ≡ w
-η-⊎ (inj1 x) = refl
-η-⊎ (inj2 x) = refl
+η-⊎ : ∀ {a b : Set} (w : a ⊎ b) → case-⊎ inj₁ inj₂ w ≡ w
+η-⊎ (inj₁ x) = refl
+η-⊎ (inj₂ x) = refl
 
 uniq-⊎ : ∀ {a b c : Set} (h : a ⊎ b → c) (w : a ⊎ b) →
-  case-⊎ (h ∘ inj1) (h ∘ inj2) w ≡ h w
-uniq-⊎ h (inj1 x) = refl
-uniq-⊎ h (inj2 x) = refl
+  case-⊎ (h ∘ inj₁) (h ∘ inj₂) w ≡ h w
+uniq-⊎ h (inj₁ x) = refl
+uniq-⊎ h (inj₂ x) = refl
 
 infixr 1 _⊎_
 
 ⊎-to : ∀ {a b : Set} → a ⊎ b → b ⊎ a
-⊎-to (inj1 x) = inj2 x
-⊎-to (inj2 x) = inj1 x
+⊎-to (inj₁ x) = inj₂ x
+⊎-to (inj₂ x) = inj₁ x
 
 ⊎-idem : ∀ {a b : Set} → (x : a ⊎ b) → ⊎-to (⊎-to x) ≡ x
-⊎-idem (inj1 x) = refl
-⊎-idem (inj2 x) = refl
+⊎-idem (inj₁ x) = refl
+⊎-idem (inj₂ x) = refl
 
 ⊎-comm : ∀ (a b : Set) → a ⊎ b ≃ b ⊎ a
 ⊎-comm a b = record
@@ -145,32 +145,35 @@ infixr 1 _⊎_
   }
 
 ⊎-assoc-to : ∀ {a b c : Set} → (a ⊎ b) ⊎ c → a ⊎ (b ⊎ c)
-⊎-assoc-to (inj1 (inj1 x)) = inj1 x
-⊎-assoc-to (inj1 (inj2 x)) = inj2 (inj1 x)
-⊎-assoc-to (inj2 x) = inj2 (inj2 x)
+⊎-assoc-to (inj₁ (inj₁ x)) = inj₁ x
+⊎-assoc-to (inj₁ (inj₂ x)) = inj₂ (inj₁ x)
+⊎-assoc-to (inj₂ x) = inj₂ (inj₂ x)
 
 
 ⊎-assoc-from : ∀ {a b c : Set} → a ⊎ (b ⊎ c) → (a ⊎ b) ⊎ c
-⊎-assoc-from (inj1 x) = inj1 (inj1 x)
-⊎-assoc-from (inj2 (inj1 x)) = inj1 (inj2 x)
-⊎-assoc-from (inj2 (inj2 x)) = inj2 x
+⊎-assoc-from (inj₁ x) = inj₁ (inj₁ x)
+⊎-assoc-from (inj₂ (inj₁ x)) = inj₁ (inj₂ x)
+⊎-assoc-from (inj₂ (inj₂ x)) = inj₂ x
 
 ⊎-assoc-from∘to : ∀ {a b c : Set} (x : (a ⊎ b) ⊎ c) → ⊎-assoc-from (⊎-assoc-to x) ≡ x
-⊎-assoc-from∘to (inj1 (inj1 x)) = refl
-⊎-assoc-from∘to (inj1 (inj2 x)) = refl
-⊎-assoc-from∘to (inj2 x) = refl
+⊎-assoc-from∘to (inj₁ (inj₁ x)) = refl
+⊎-assoc-from∘to (inj₁ (inj₂ x)) = refl
+⊎-assoc-from∘to (inj₂ x) = refl
 
 ⊎-assoc-to∘from : ∀ {a b c : Set} (x : a ⊎ (b ⊎ c)) → ⊎-assoc-to (⊎-assoc-from x) ≡ x
-⊎-assoc-to∘from (inj1 x) = refl
-⊎-assoc-to∘from (inj2 (inj1 x)) = refl
-⊎-assoc-to∘from (inj2 (inj2 x)) = refl
+⊎-assoc-to∘from (inj₁ x) = refl
+⊎-assoc-to∘from (inj₂ (inj₁ x)) = refl
+⊎-assoc-to∘from (inj₂ (inj₂ x)) = refl
 
 ⊎-assoc : ∀ {a b c : Set} → (a ⊎ b) ⊎ c ≃ a ⊎ (b ⊎ c)
 ⊎-assoc = record
-  { to = ⊎-assoc-to
+  { to = (λ { (inj₁ (inj₁ x)) → inj₁ x
+            ; (inj₁ (inj₂ y)) → inj₂ (inj₁ y)
+            ; (inj₂ z) → inj₂ (inj₂ z)
+            })
   ; from = ⊎-assoc-from
-  ; from∘to = ⊎-assoc-from∘to
-  ; to∘from = ⊎-assoc-to∘from
+  ; from∘to = (λ { (inj₁ (inj₁ x)) → refl ; (inj₁ (inj₂ y)) → refl ; (inj₂ z) → refl })
+  ; to∘from = λ{(inj₁ x) → refl ; (inj₂ (inj₁ y)) → refl ; (inj₂ (inj₂ z)) → refl}
   }
 
 -- \bot for ⊥
@@ -190,17 +193,17 @@ uniq-⊥ h ()
 
 ⊥-identity-l : ∀ {a : Set} → ⊥ ⊎ a ≃ a
 ⊥-identity-l = record
-  { to = λ { (inj2 x) → x}
-  ; from = inj2
-  ; from∘to = λ {(inj2 x) → refl}
+  { to = λ { (inj₂ x) → x}
+  ; from = inj₂
+  ; from∘to = λ {(inj₂ x) → refl}
   ; to∘from = λ { y → refl}
   }
 
 ⊥-identity-r : ∀ {a : Set} → a ⊎ ⊥ ≃ a
 ⊥-identity-r = record
-  { to = λ { (inj1 x) → x}
-  ; from = inj1
-  ; from∘to = λ { (inj1 x) → refl}
+  { to = λ { (inj₁ x) → x}
+  ; from = inj₁
+  ; from∘to = λ { (inj₁ x) → refl}
   ; to∘from = λ {y → refl}
   }
 
@@ -217,7 +220,6 @@ uniq-⊥ h ()
 η-→ : ∀ {a b : Set} (f : a → b) → (λ (x : a) → f x) ≡ f
 η-→ f = refl
 
-
 currying : ∀ {a b c : Set} → (a → b → c) ≃ (a × b → c)
 currying = record
   { to = λ {f → λ { ⟨ x , y ⟩ → f x y}}
@@ -226,30 +228,21 @@ currying = record
   ; to∘from = λ { g → extensionality λ { ⟨ x , y ⟩ → refl} }
   }
 
-⊎-distrib-to : ∀ {a b c : Set} → (a ⊎ b → c) → (a → c) × (b → c)
-⊎-distrib-to f = ⟨ f ∘ inj1 , f ∘ inj2 ⟩
-
-⊎-distrib-from : ∀ {a b c : Set} → (a → c) × (b → c) → a ⊎ b → c
-⊎-distrib-from ⟨ f , g ⟩ (inj1 x) = f x
-⊎-distrib-from ⟨ f , g ⟩ (inj2 y) = g y
-
-⊎-distrib-from∘to-x : ∀ {a b c : Set} → (f : a ⊎ b → c) → (x : a ⊎ b) →
-  ⊎-distrib-from (⊎-distrib-to f) x ≡ f x
-⊎-distrib-from∘to-x f (inj1 x) = refl
-⊎-distrib-from∘to-x f (inj2 x) = refl
-
-⊎-distrib-from∘to : ∀ {a b c : Set} → (f : a ⊎ b → c) →
-  ⊎-distrib-from (⊎-distrib-to f) ≡ f
-⊎-distrib-from∘to f = extensionality (⊎-distrib-from∘to-x f)
-
-⊎-distrib-to∘from : ∀ {a b c : Set} → (f : (a → c) × (b → c)) →
-  ⊎-distrib-to (⊎-distrib-from f) ≡ f
-⊎-distrib-to∘from ⟨ f , g ⟩ = refl
-
+-- the name does not really reflect situation here
 →-distrib-⊎-r : ∀ {a b c : Set} → (a ⊎ b → c) ≃ (a → c) × (b → c)
 →-distrib-⊎-r = record
-  { to = ⊎-distrib-to
-  ; from = ⊎-distrib-from
-  ; from∘to = ⊎-distrib-from∘to
-  ; to∘from = ⊎-distrib-to∘from
+  { to = λ{f → ⟨ f ∘ inj₁ , f ∘ inj₂ ⟩}
+  ; from = λ{⟨ f , g ⟩ → λ{(inj₁ x) → f x ; (inj₂ y) → g y}}
+  ; from∘to = λ{ f → extensionality (λ{(inj₁ x) → refl ; (inj₂ y) → refl})}
+  ; to∘from = λ{⟨ f , g ⟩ → refl}
   }
+
+→-distrib-×-l : ∀ {a b c : Set} → (a → b × c) ≃ (a → b) × (a → c)
+→-distrib-×-l = record
+  { to = λ{f → ⟨ proj₁ ∘ f ,  proj₂ ∘ f ⟩}
+  ; from = {!!}
+  ; from∘to = {!!}
+  ; to∘from = {!!}
+  }
+
+
