@@ -1,4 +1,11 @@
 identity functor
+constant functor 
 product of two functors
+(X): Set x Set -> Set
 composition of two functors
+defining a bifunctor
+defining a profunctor
 F:C^op -> D^op
+natural transformation
+identity natural trans: alpha: F => F
+composition of two nats (vertical)
