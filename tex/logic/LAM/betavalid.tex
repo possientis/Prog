@@ -397,9 +397,10 @@ would get {\em captured} by $x$. This motivate the following:
     \sigma^{*}(\phi)(\emptyset)$.
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:free:support:beta:valid}
-    Let $V$ be a set, $U\subseteq V$ and $\phi\in\tv$. Let $\sigma,\tau:V\to\tv$ be maps
-    which coincide on $\free(\phi)\setminus U$. Then we have the equivalence:
+\begin{prop}\label{logic:prop:LAM:free:support:beta:valid:gen}
+    Let $V$ be a set, $U\subseteq V$ and $\phi\in\tv$. Let $\sigma,\tau:V\to\tv$ 
+    be maps which coincide on $\free(\phi)\setminus U$. Then we have the 
+    equivalence:
         \[
             (\sigma,U)\ \mbox{$\beta$-valid for $\phi$}\ 
             \Leftrightarrow\
@@ -455,7 +456,73 @@ would get {\em captured} by $x$. This motivate the following:
     It is therefore sufficient to establish that the equivalence is true
     in relation to $\phi_{1}$ and $U\cup\{x\}$, and since the property is
     true for $\phi_{1}$ it is sufficient to prove that $\sigma$ and $\tau$
-    coincide on $\free(\phi_{1})\setminus(U\cup\{x\})$. TODO
+    coincide on $\free(\phi_{1})\setminus(U\cup\{x\})$. However we have:
+        \[
+            \free(\phi_{1})\setminus(U\cup\{x\})=
+            \free(\phi_{1})\cap\{x\}^{c}\cap U^{c}=\free(\phi)\setminus U
+        \]
+    and the result follows immediately from our assumption that $\sigma$ 
+    and $\tau$ coincide on $\free(\phi)\setminus U$. So we now assume that
+    $u\in\free(\phi)\setminus U$ and we need to show that 
+    $x\not\in\free(\tau(u))$. Having assumed $\sigma$ and $\tau$ coincide
+    on $\free(\phi)\setminus U$, we have $\tau(u)=\sigma(u)$ and it is 
+    therefore sufficient to prove that $x\not\in\free(\sigma(u))$. However
+    this follows immediately from
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}), our
+    assumption $u\in\free(\phi)\setminus U$ and the fact that $(\sigma,U)$
+    is $\beta$-valid for $\phi$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:free:support:beta:valid}
+    Let $V$ be a set and $\phi\in\tv$. Let $\sigma,\tau:V\to\tv$ be maps which 
+    coincide on $\free(\phi)$. Then we have the equivalence:
+        \[
+            \sigma\ \mbox{is $\beta$-valid for $\phi$}\ 
+            \Leftrightarrow\
+            \tau\ \mbox{is $\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    This is an mmediate application of 
+    proposition~(\ref{logic:prop:LAM:free:support:beta:valid:gen})
+    to $U=\emptyset$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:same:image:beta:valid:gen}
+    Let $V$ be a set, $U\subseteq V$ and $\phi\in\tv$. Let $\sigma,\tau:V\to\tv$ 
+    be maps such that $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$. Then we have the 
+    equivalence:
+        \[
+            (\sigma,U)\ \mbox{$\beta$-valid for $\phi$}\ 
+            \Leftrightarrow\
+            (\tau,U)\ \mbox{$\beta$-valid for $\phi$}
+        \]
+    where $\sigma^{*}, \tau^{*}$ are defined as per 
+    definition~(\ref{logic:def:LAM:beta:subst}).
+\end{prop}
+\begin{proof}
+    By virtue of proposition~(\ref{logic:prop:LAM:freevar:beta:support:gen}),
+    the condition $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$ is equivalent
+    to $\sigma$ and $\tau$ coinciding on $\free(\phi)\setminus U$. So the
+    result follows from
+    proposition~(\ref{logic:prop:LAM:free:support:beta:valid:gen}).
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:same:image:beta:valid}
+    Let $V$ be a set and $\phi\in\tv$. Let $\sigma,\tau:V\to\tv$ be maps such 
+    that $\sigma(\phi)=\tau(\phi)$. Then we have the equivalence:
+        \[
+            \sigma\ \mbox{is $\beta$-valid for $\phi$}\ 
+            \Leftrightarrow\
+            \tau\ \mbox{is $\beta$-valid for $\phi$}
+        \]
+    where $\sigma, \tau$ also denote the associated $\beta$-substitution 
+    mappings of definition~(\ref{logic:def:LAM:beta:subst}).
+\end{prop}
+\begin{proof}
+    This is an mmediate application of 
+    proposition~(\ref{logic:prop:LAM:same:image:beta:valid:gen})
+    to $U=\emptyset$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:var:inter:beta:valid:gen}

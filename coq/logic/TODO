@@ -1,3 +1,2 @@
-sig, tau coincide on Fr(phi)\U  =>? (sig,U) beta-valid for phi <=> (tau,U) beta-valid for phi
 (tau,U) beta-valid for phi & (sig, U') beta-valid for tau*(U)(phi) =>? (sig*(U'). tau, U) beta-valid for phi
 LAM/betavalid.tex
