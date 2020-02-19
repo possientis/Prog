@@ -1,4 +1,3 @@
-identity functor
 constant functor 
 product of two functors
 (X): Set x Set -> Set
