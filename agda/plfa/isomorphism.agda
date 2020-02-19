@@ -172,6 +172,7 @@ open ≃-Reasoning
 
 infix 0 _≲_ -- \<~ for ≲
 
+-- dubious definition, no embedding from void ?
 record _≲_ (a b : Set) : Set where
   field
     to : a → b

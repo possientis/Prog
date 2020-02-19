@@ -240,9 +240,38 @@ currying = record
 →-distrib-×-l : ∀ {a b c : Set} → (a → b × c) ≃ (a → b) × (a → c)
 →-distrib-×-l = record
   { to = λ{f → ⟨ proj₁ ∘ f ,  proj₂ ∘ f ⟩}
-  ; from = {!!}
-  ; from∘to = {!!}
-  ; to∘from = {!!}
+  ; from = λ{⟨ f , g ⟩ → λ{x → ⟨ f x , g x ⟩}}
+  ; from∘to = λ {f → extensionality (λ{x → η-× (f x)})}
+  ; to∘from = λ{⟨ f , g ⟩ → refl}
   }
 
+×-distrib-⊎-r : ∀ {a b c : Set} → (a ⊎ b) × c ≃ (a × c) ⊎ (b × c)
+×-distrib-⊎-r = record
+  { to      = λ {⟨ (inj₁ x) , z ⟩ → inj₁ ⟨ x , z ⟩
+                ;⟨ (inj₂ y) , z ⟩ → inj₂ ⟨ y , z ⟩
+                }
+  ; from    = λ {(inj₁ ⟨ x , z ⟩) → ⟨ inj₁ x , z ⟩
+                ;(inj₂ ⟨ y , z ⟩) → ⟨ inj₂ y , z ⟩
+                }
+  ; from∘to = λ {⟨ (inj₁ x) , z ⟩ → refl
+                ;⟨ (inj₂ y) , z ⟩ → refl
+                }
+  ; to∘from = λ {(inj₁ ⟨ x , y ⟩) → refl
+                ;(inj₂ ⟨ y , z ⟩) → refl
+                }
+  }
 
+-- only an embedding here
+⊎-distrib-×-r : ∀ {a b c : Set} → (a × b) ⊎ c ≲ (a ⊎ c) × (b ⊎ c)
+⊎-distrib-×-r = record
+  { to      = λ {(inj₁ ⟨ x , y ⟩) → ⟨ inj₁ x , inj₁ y ⟩
+                ;(inj₂ z) → ⟨ inj₂ z , inj₂ z ⟩
+                }
+  ; from    = λ {⟨ (inj₁ x) , (inj₁ y) ⟩ → inj₁ ⟨ x , y ⟩
+                ;⟨ (inj₂ z) , _ ⟩ → inj₂ z
+                ;⟨ (inj₁ _) , (inj₂ z) ⟩ → inj₂ z
+                }
+  ; from∘to = λ {(inj₁ ⟨ x , y ⟩) → refl
+                ; (inj₂ z) → refl
+                }
+  }
