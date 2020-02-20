@@ -3,16 +3,30 @@ Require Import Peano_dec.
 
 Require Import Core.Set.
 Require Import Core.Equal.
+
 Require Import Lang1.Syntax.
 
 Definition Env : Type := nat -> set.
 
 Definition envEqual (e e':Env) : Prop := forall (n:nat), e n == e' n. 
 
-Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
-    forall (n:nat), In n (free p) -> e n == e' n.
+Lemma envEqualRefl : forall (e:Env), envEqual e e.
+Proof.
+    unfold envEqual. intros e n. apply equalRefl.
+Qed.
 
-Definition env0  : Env  := (fun _ => Nil).
+Lemma envEqualSym : forall (e e':Env), envEqual e e' -> envEqual e' e.
+Proof.
+    unfold envEqual. intros e e' H n. apply equalSym. apply H.
+Qed.
+
+Lemma envEqualTrans : forall (e1 e2 e3:Env), 
+    envEqual e1 e2 -> envEqual e2 e3 -> envEqual e1 e3.
+Proof.
+    unfold envEqual. intros e1 e2 e3 H1 H2 n. apply equalTrans with (e2 n).
+    - apply H1.
+    - apply H2.
+Qed.
 
 (* Tweak environment e so that e n = x                                          *)
 Definition bind (e:Env) (n:nat) (x:set) : Env :=
@@ -79,8 +93,15 @@ Proof.
         + assumption.
 Qed.
 
-(*
+
 Lemma bindEnvEqual : forall (e e':Env) (n:nat) (x x':set),
     envEqual e e' -> x == x' -> envEqual (bind e n x) (bind e' n x').
 Proof.
-*)
+    intros e e' n x x'. unfold envEqual. intros H1 H2 m. 
+    destruct (eq_nat_dec n m) as [H3|H3]. 
+    - subst. rewrite bindSame, bindSame. assumption.
+    - rewrite bindDiff, bindDiff. apply H1.
+        + assumption.
+        + assumption.
+Qed.
+

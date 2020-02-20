@@ -29,6 +29,7 @@ all :							${UTILS}/LEM.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
+								${LANG1}/Relevance.vo \
 								${LANG1}/Compatible.vo \
 								${LANG1}/Incl.vo \
 								${LANG1}/Trans.vo \
@@ -283,19 +284,24 @@ ${LANG1}/Semantics.vo :			${LANG1}/Semantics.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo
 	coqc ${LANG1}/Semantics.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
-				
-${LANG1}/Compatible.vo :		${LANG1}/Compatible.v \
-								${UTILS}/LEM.vo \
+
+${LANG1}/Relevance.vo :			${LANG1}/Relevance.v \
 								${UTILS}/Nat.vo \
-								${UTILS}/Fresh.vo \
 								${CORE}/Set.vo \
-								${CORE}/Incl.vo \
-								${CORE}/Elem.vo \
-								${CORE}/Empty.vo \
-								${CORE}/ElemIncl.vo \
-								${CORE}/Foundation.vo \
+								${CORE}/Equal.vo \
 								${LANG1}/Syntax.vo \
-								${LANG1}/Environment.vo
+								${LANG1}/Environment.vo \
+								${LANG1}/Semantics.vo
+	coqc ${LANG1}/Relevance.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+					
+${LANG1}/Compatible.vo :		${LANG1}/Compatible.v \
+								${CORE}/Set.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Compatible.vo \
+								${LANG1}/Syntax.vo \
+								${LANG1}/Environment.vo \
+								${LANG1}/Semantics.vo \
+								${LANG1}/Relevance.vo
 	coqc ${LANG1}/Compatible.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
 	
 

@@ -5,8 +5,9 @@ Require Import Core.Equal.
 Require Import Core.Compatible.
 
 Require Import Lang1.Syntax.
-Require Import Lang1.Semantics.
 Require Import Lang1.Environment.
+Require Import Lang1.Semantics.
+Require Import Lang1.Relevance.
 
 
 (* Any predicate obtained by a formula is a compatible predicate.               *)
@@ -56,7 +57,11 @@ Proof.
     remember (formulaCompatible (bind e n x') p m) as H' eqn:E. clear E.
     unfold compatible in H'. unfold eval1 in H'. apply H' with y; clear H'.
     - assumption.
-    - apply evalEnvEqual with (bind (bind e n x) m y). 
+    -  apply evalEnvEqual with (bind (bind e n x) m y).
+        + apply bindEnvEqual.
+            { apply bindEnvEqual.
+                {
+     
 
 
 Show.
