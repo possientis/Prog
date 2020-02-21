@@ -168,3 +168,87 @@ def foo5 : ℕ → ℕ → ℕ
 | _ 0 := 1
 | _ _ := 2
 
+
+-- arbitrary is not a random value
+def foo6 : ℕ → ℕ → ℕ
+| 0 _ := 1
+| _ 0 := 2
+| _ _ := arbitrary ℕ
+
+variables (a b : ℕ)
+
+example : foo6 0 0 = 1 := rfl
+
+example : foo6 0 (a + 1) = 1 := rfl
+
+example : foo6 (a + 1) 0 = 2 := rfl
+
+example : foo6 (a + 1) (b + 1) = arbitrary ℕ := rfl
+
+#check arbitrary ℕ
+
+#reduce arbitrary ℕ
+
+
+-- option a
+def foo7 : ℕ → ℕ → option ℕ
+| 0 _ := some 1
+| _ 0 := some 2
+| _ _ := none
+
+example : foo7 0 0 = some 1 := rfl
+
+example : foo7 0 (a + 1) = some 1 := rfl
+
+example : foo7 (a + 1) 0 = some 2 := rfl
+
+example : foo7 (a + 1) (b + 1) = none := rfl
+
+
+-- can tell whether pattern match is complete or not
+def foo8 : ℕ → list ℕ → bool → ℕ
+| 0      _       ff := 0
+| 0     (b :: _) _  := b
+| 0     []       tt := 7
+| (a+1) []       ff := a
+| (a+1) []       tt := a + 1
+| (a+1) (b :: _) _  := a + b
+
+
+def foo9 : char → ℕ
+| 'A' := 1
+| 'B' := 2
+| _   := 3
+
+
+#check foo9
+#print foo9._main
+
+def add2 : ℕ → ℕ → ℕ
+| n 0        := n
+| n (succ m) := succ (add2 n m)
+
+
+local infix `⊕` : 50 := add2
+
+
+lemma add_zero2 : ∀ (n : ℕ), n ⊕ 0 = n := assume n, rfl
+lemma add_succ2 : ∀ (n m : ℕ), n ⊕ (succ m) = succ (n ⊕ m) := assume n m, rfl
+
+#check @congr_arg
+
+lemma zero_add2 : ∀ (n : ℕ), 0 ⊕ n = n
+| 0        := rfl
+| (succ n) := congr_arg succ (zero_add2 _)
+
+
+lemma zero_add3 : ∀ (n : ℕ), 0 ⊕ n = n :=
+  assume n,
+    begin
+      induction n with n IH,
+        {by refl},
+        {by calc
+          0 ⊕ (succ n)  = succ (0 ⊕ n)  : by refl
+              ...       = succ n        : by rw IH}
+    end
+
