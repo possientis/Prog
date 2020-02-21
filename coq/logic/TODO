@@ -1,2 +1,4 @@
+confirm that the condition Fr(phi) /\ U = Fr(phi) /\ U' is equivalent to Fr(phi)\U = Fr(phi)\U'
+Fr(phi)/\ U = Fr(phi)/\ U' => (sig, U) beta-valid for phi <=> (sig,U') beta-valid for phi?
 (tau,U) beta-valid for phi & (sig, U') beta-valid for tau*(U)(phi) =>? (sig*(U'). tau, U) beta-valid for phi
 LAM/betavalid.tex
