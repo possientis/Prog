@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Utils.LEM.
+Require Import Utils.Decidable.
 Require Import Utils.Filter.
 
 Require Import Core.Set.
@@ -11,16 +12,24 @@ Require Import Core.ToList.
 Require Import Core.Compatible.
 Require Import Core.Extensionality.
 
-(* Given a set x and a decidable predicate p, creates a set made of all those   *)
-(* elements of x which satisfy the predicate p.                                 *)
-Definition comp (x:set)(p:set -> Prop)(q:Dec p) : set :=
-    fromList (filter q (toList x)).
+
+(* Given a set x and a decidable two-fold predicate p, creates a set made of    *)
+(* all elements y of x for which p x y is satisfied. The term (Dec2Dec x q) is  *)
+(* simply a proof that the partially applied predicate p x is decidable.        *)
+Definition comp (x:set)(p:set -> set -> Prop)(q:Dec2 p) : set :=
+    fromList (filter (Dec2Dec x q) (toList x)).
 
 
-(* The predicate needs to be decidable and compatible.                          *)
-Lemma compCharac : forall (x:set) (p:set -> Prop) (q:Dec p), compatible p ->
-    forall (z:set), z :: comp x p q <-> z :: x /\ p z.
+(*
+(* The two-fold predicate needs to be decidable and compatible.                 *)
+Lemma compCharac : forall (x:set) (p:set -> set -> Prop) (q:Dec2 p), 
+    compatible2 p ->
+    forall (z:set), z :: comp x p q <-> z :: x /\ p x z.
 Proof.
+
+Show.
+*)
+(*
     intros x p q C z. unfold comp. split; intros H.
     - apply toListElem in H. destruct H as [y [H1 [H2 H3]]].
       rewrite toListFromList in H1. rewrite <- filterEquiv in H1.
@@ -76,4 +85,4 @@ Proof.
                 { assumption. }}
         + split; assumption.
 Qed.
-
+*)

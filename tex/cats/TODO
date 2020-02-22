@@ -1,7 +1,6 @@
-constant functor 
+composition of two functors
 product of two functors
 (X): Set x Set -> Set
-composition of two functors
 defining a bifunctor
 defining a profunctor
 F:C^op -> D^op

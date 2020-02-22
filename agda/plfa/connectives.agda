@@ -275,3 +275,12 @@ currying = record
                 ; (inj₂ z) → refl
                 }
   }
+
+⊎-weak-× : ∀ {a b c : Set} → (a ⊎ b) × c → a ⊎ (b × c)
+⊎-weak-× ⟨ inj₁ x , z ⟩ = inj₁ x
+⊎-weak-× ⟨ inj₂ y , z ⟩ = inj₂ ⟨ y , z ⟩
+
+
+⊎×-implies-×⊎ : ∀ {a b c d : Set} → (a × b) ⊎ (c × d) → (a ⊎ c) × (b ⊎ d)
+⊎×-implies-×⊎ (inj₁ ⟨ x , y ⟩) = ⟨ inj₁ x , inj₁ y ⟩
+⊎×-implies-×⊎ (inj₂ ⟨ z , t ⟩) = ⟨ inj₂ z , inj₂ t ⟩

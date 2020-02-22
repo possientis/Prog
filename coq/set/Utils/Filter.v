@@ -1,9 +1,9 @@
-(* NEXT: ===> Decidability                                                      *)
 
 
 Require Import List.
 
 Require Import Utils.LEM.
+Require Import Utils.Decidable.
 
 (* In this module, we are having a small interlude focussing on decidability    *)
 (* results which are specific to the Coq meta-theory, and are not set theoretic *)
@@ -15,22 +15,8 @@ Require Import Utils.LEM.
 (* we should remember that our model is just a simple model of finite sets in   *)
 (* which many things can be proven without using LEM. Our first objective is to *)
 (* define the function 'filter' allowing us to restrict a list of sets to a     *)
-(* list of sets satisfying a given decidable predicate. We first define the     *)
-(* notion of decidable predicate: let 'a' be a type and 'p:a -> Prop' be a      *)
-(* predicate. Saying that the predicate 'p' is decidable is saying 'Dec p'      *)
-(* which we are defining as the 'statement':                                    *)
-(*      Dec p := forall (x:a), {p x} + {~p x}                                   *)
-(* However, this 'statement' is not a value of type 'Prop'. In other words, it  *)
-(* is not a Coq proposition. It is simply a type, namely the type of dependent  *)
-(* function q, which given an (x:a) returns a value q x of type {p x} + {~p x}, *)
-(* which is either a proof that p x holds, or a proof that ~p x holds.          *)
-(* So saying that 'q' is of type 'Dec p', i.e. the jugement 'q:Dec p' is simply *)
-(* saying that 'q' is such a dependent function. Informally, we could think of  *)
-(* q as 'a proof of Dec p', or a witness to the fact that p is a decidable.     *)
-Definition Dec (a:Type) (p:a -> Prop) := forall (x:a), {p x} + {~p x}.
-
-Arguments Dec {a}.
-
+(* list of sets satisfying a given decidable predicate.                         *)
+    
 (* Given a predicate p and a 'proof' of decidability q we can filter a list.    *)
 Fixpoint filter (a:Type) (p:a -> Prop) (q:Dec p) (xs:list a) : list a :=
     match xs with

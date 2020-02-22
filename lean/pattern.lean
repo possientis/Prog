@@ -252,3 +252,59 @@ lemma zero_add3 : ∀ (n : ℕ), 0 ⊕ n = n :=
               ...       = succ n        : by rw IH}
     end
 
+def mul2 : ℕ → ℕ → ℕ
+| n 0        := 0
+| n (succ m) := n + mul2 n m
+
+
+def fib : ℕ → ℕ
+| 0     := 1
+| 1     := 1
+| (n+2) := fib (n+1) + fib n
+
+example : fib 0 = 1 := rfl
+
+example : fib 1 = 1 := rfl
+
+example (n:ℕ) : fib (n+2) = fib (n+1) + fib n := rfl
+
+example : fib 7 = 21 := rfl
+
+example : fib 7 = 21 :=
+  begin
+    dsimp [fib],
+    reflexivity
+  end
+
+
+variable (C : ℕ → Type)
+
+#check (@nat.below C)
+
+#reduce (@nat.below C 3)
+
+#check (@nat.brec_on C)
+
+
+def append2 {α : Type} :  list α → list α → list α
+| []         ys := ys
+| (x :: xs)  ys := x :: append2 xs ys
+
+
+example : append2 [(1:ℕ),2,3] [4,5] = [1,2,3,4,5] := rfl
+
+example : append2 [(1:ℕ),2,3] [4,5] = [1,2,3,4,5] :=
+  begin
+    dsimp [append2],
+    reflexivity
+  end
+
+
+def {l} list_add {α : Type l} [has_add α] : list α → list α → list α
+| []    _             := []
+| _     []            := []
+| (x :: xs) (y :: ys) := (x + y) :: list_add xs ys
+
+
+#reduce list_add [1,2,3] [4,5,6,6,9,10]
+#eval list_add [1,2,3] [4,5,6,6,9,10]

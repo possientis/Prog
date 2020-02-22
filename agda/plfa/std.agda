@@ -16,3 +16,9 @@ open Eq using (_≡_; refl; trans; sym; cong; cong-app; subst)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 
 import Function using (_∘_)
+
+import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
+import Data.Unit using (⊤; tt)
+import Data.Sum using (_⊎_; inj₁; inj₂) renaming ([_,_] to case-⊎)
+import Data.Empty using (⊥; ⊥-elim)
+import Function.Equivalence using (_⇔_) -- less convenient than that of isomorphism

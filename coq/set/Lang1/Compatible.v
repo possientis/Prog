@@ -48,7 +48,7 @@ Proof.
                     { apply H. }}}
 Qed.
 
-(*
+
 (* Any two-fold predicate obtained by a formula is a compatible predicate.      *)
 Theorem formulaCompatible2 : forall (e:Env) (p:Formula) (n m:nat),
     compatible2 (eval2 e p n m).
@@ -60,9 +60,9 @@ Proof.
     -  apply evalEnvEqual with (bind (bind e n x) m y).
         + apply bindEnvEqual.
             { apply bindEnvEqual.
-                {
-     
+                { apply envEqualRefl. }
+                { apply equalSym. assumption. }} 
+            { apply equalRefl. }
+        + assumption.
+Qed.
 
-
-Show.
-*)

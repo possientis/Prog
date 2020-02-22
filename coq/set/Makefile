@@ -3,6 +3,7 @@ CORE=Core
 LANG1=Lang1
 
 all :							${UTILS}/LEM.vo \
+								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
 								${UTILS}/Nat.vo \
 								${UTILS}/Fresh.vo \
@@ -45,7 +46,11 @@ all :							${UTILS}/LEM.vo \
 ${UTILS}/LEM.vo :				${UTILS}/LEM.v
 	coqc ${UTILS}/LEM.v -Q ${UTILS} ${UTILS}
 
+${UTILS}/Decidable.vo :			${UTILS}/Decidable.v
+	coqc ${UTILS}/Decidable.v -Q ${UTILS} ${UTILS}
+
 ${UTILS}/Filter.vo : 			${UTILS}/Filter.v \
+								${UTILS}/Decidable.vo \
 								${UTILS}/LEM.vo
 	coqc ${UTILS}/Filter.v -Q ${UTILS} ${UTILS}
 
@@ -136,6 +141,7 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 
 
 ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
+								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
@@ -182,6 +188,7 @@ ${CORE}/Union.vo :				${CORE}/Union.v \
 
 
 ${CORE}/Intersection.vo :		${CORE}/Intersection.v \
+								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
@@ -247,6 +254,7 @@ ${CORE}/Compatible.vo :			${CORE}/Compatible.v \
 
 ${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
 								${UTILS}/LEM.vo \
+								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \

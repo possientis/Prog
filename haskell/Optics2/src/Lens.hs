@@ -33,3 +33,14 @@ ex8 = set _1 'x' ('a','b')
 ex9 :: (Int,Int)
 ex9 = over _1 (*100) (1,2)
 
+-- you get back what you set
+law1 :: Bool
+law1 = view _1 (set _1 "newValue" ("oldValue","something")) == "newValue"
+
+-- setting back what you get doesn't do anything
+law2 :: Bool
+law2 = set _1 (view _1 ("1","2")) ("1","2") == ("1","2")
+
+-- Setting twice is the same as setting once
+law3 :: Bool
+law3 = set _1 "value2" (set _1 "value1" ("1","2")) == set _1 "value2" ("1","2")

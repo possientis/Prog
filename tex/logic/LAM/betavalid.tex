@@ -402,9 +402,9 @@ would get {\em captured} by $x$. This motivate the following:
     be maps which coincide on $\free(\phi)\setminus U$. Then we have the 
     equivalence:
         \[
-            (\sigma,U)\ \mbox{$\beta$-valid for $\phi$}\ 
+            (\sigma,U)\ \mbox{is $\beta$-valid for $\phi$}\ 
             \Leftrightarrow\
-            (\tau,U)\ \mbox{$\beta$-valid for $\phi$}
+            (\tau,U)\ \mbox{is $\beta$-valid for $\phi$}
         \]
 \end{prop}
 \begin{proof}
@@ -493,9 +493,9 @@ would get {\em captured} by $x$. This motivate the following:
     be maps such that $\sigma^{*}(\phi)(U)=\tau^{*}(\phi)(U)$. Then we have the 
     equivalence:
         \[
-            (\sigma,U)\ \mbox{$\beta$-valid for $\phi$}\ 
+            (\sigma,U)\ \mbox{is $\beta$-valid for $\phi$}\ 
             \Leftrightarrow\
-            (\tau,U)\ \mbox{$\beta$-valid for $\phi$}
+            (\tau,U)\ \mbox{is $\beta$-valid for $\phi$}
         \]
     where $\sigma^{*}, \tau^{*}$ are defined as per 
     definition~(\ref{logic:def:LAM:beta:subst}).
@@ -523,6 +523,40 @@ would get {\em captured} by $x$. This motivate the following:
     This is an mmediate application of 
     proposition~(\ref{logic:prop:LAM:same:image:beta:valid:gen})
     to $U=\emptyset$.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:free:support:U:U':beta:valid:gen}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. Let $\phi\in\tv$. Then 
+    for all $U,U'\subseteq V$, if $U\cap\free(\phi)=U'\cap\free(\phi)$ we have 
+    the equivalence:
+        \[
+            (\sigma,U)\ \mbox{is $\beta$-valid for $\phi$}\ 
+            \Leftrightarrow\
+            (\sigma,U')\ \mbox{is $\beta$-valid for $\phi$}
+        \]
+\end{prop}
+\begin{proof}
+    Consider the property on $\phi\in\tv$ stating that for all $U,U'\subseteq V$,
+    the equivalence is true whenever we have $U\cap\free(\phi)=U'\cap\free(\phi)$.
+    We shall prove this property by a structural induction argument, using 
+    theorem~(\ref{logic:the:proof:induction})
+    of page~\pageref{logic:the:proof:induction}. So first we assume that 
+    $\phi=x$ for some $x\in V$. We need to show the property is true for
+    $\phi$. So let $U,U'\subseteq V$ such that $U\cap\free(\phi)=U'\cap
+    \free(\phi)$. We need to show that the equivalence is true, which is 
+    clearly the case since both $(\sigma,U)$ and $(\sigma,U')$ are always
+    $\beta$-valid for $\phi=x$, as follows from
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:x:gen}). So we
+    now assume that $\phi=\phi_{1}\ \phi_{2}$ for some $\phi_{1},\phi_{2}\in
+    \tv$ for which the property is true. We need to show the property is
+    also true for $\phi$. So let $U,U'\subseteq V$ such that 
+    $U\cap\free(\phi)=U'\cap\free(\phi)$. We need to show that the 
+    equivalence is true. By symmetry, it is sufficient to prove one 
+    of the implication. So we assume that $(\sigma,U)$ is $\beta$-valid
+    for $\phi$. We need to show that $(\sigma,U')$ is also $\beta$-valid
+    for $\phi$.
+
+    TODO
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:var:inter:beta:valid:gen}

@@ -3,6 +3,7 @@
 
 Require Import List.
 
+Require Import Utils.Decidable.
 Require Import Utils.Filter.
 
 Require Import Core.Set.

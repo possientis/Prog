@@ -14,7 +14,7 @@
 \end{notation}
 
 \noindent
-As usual, we shall now check that our definition is what it claims to be.
+We shall now check our definition is indeed that of a functor.
 
 \begin{prop}\label{Fun:prop:identity}
     The identity functor on a category \Cat\ is a functor $I_{\cal C}:
@@ -25,21 +25,26 @@ As usual, we shall now check that our definition is what it claims to be.
     functor on \Cat. We need to check that properties $(1)-(5)$ of
     definition~(\ref{Fun:def:functor}) are satisfied:
 
-    $(1)$: We need to check that $F_{0}$ is a map $F_{0}:\ob\ \Cat \to\ob\ \Cat$. 
-    This follows immediately from $(1)$ of definition~(\ref{Fun:def:identity}).
+    $(1)$: $F_{0}$ is indeed a map $F_{0}:\ob\ \Cat \to\ob\ \Cat$ from $(1)$ 
+    of definition~(\ref{Fun:def:identity}).
 
-    $(2)$: We need to check that $F_{1}$ is a map $F_{1}:\arr\ \Cat\to\arr\ \Cat$.
-    This follows immediately from $(2)$ of definition~(\ref{Fun:def:identity}).
+    $(2)$: $F_{1}$ is indeed a map $F_{1}:\arr\ \Cat\to\arr\ \Cat$ from $(2)$ 
+    of definition~(\ref{Fun:def:identity}).
 
-    $(3)$: We need to check that $F_{1}(f):F_{0}(a)\to F_{0}(b)$ whenever 
-    $f:a\to b$. This is also clear from $F_{1}(f)=f$, $F_{0}(a)=a$ and
-    $F_{0}(b)=b$.
+    $(3)$: We have $F_{1}(f):F_{0}(a)\to F_{0}(b)$ whenever $f:a\to b$, since:
+        \[
+            F_{1}(f)=f,\ F_{0}(a)=a,\ F_{0}(b)=b
+        \]
 
-    $(4)$: We need to check that $F_{1}(\,\id(a)\,)=\id(\,F_{0}(a)\,)$ for
-    all $a\in\Cat$, which is also clear from $F_{1}(\,\id(a)\,)=\id(a)$
-    and $F_{0}(a)=a$.
+    $(4)$: We have $F_{1}(\,\id(a)\,)=\id(\,F_{0}(a)\,)$ for
+    all $a\in\Cat$, since: 
+        \[
+            F_{1}(\,\id(a)\,)=\id(a),\ F_{0}(a)=a
+        \]
 
-    $(5)$: We need to check that $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$
-    whenever $f:a\to b$ and $g:b\to c$ which is also clear from
-    $F_{1}(g\circ f) = g\circ f$, $F_{1}(g)=g$ and $F_{1}(f)=f$.
+    $(5)$: $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$ whenever $f:a\to b$ 
+    and $g:b\to c$, since:
+        \[
+            F_{1}(g\circ f) = g\circ f,\ F_{1}(g)=g,\  F_{1}(f)=f
+        \]
 \end{proof}
