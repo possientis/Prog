@@ -2,5 +2,59 @@
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Eat$ be functors where \Cat,\Dat,\Eat\ 
     are categories. We call {\em composition of $G$ and $F$} the functor
     $H:\Cat\to\Eat$ defined by:
-    TODO
+        \begin{eqnarray*}
+            (1)&\ &H_{0}(a) = G_{0}(F_{0}(a))\\
+            (2)&\ &H_{1}(f) = G_{1}(F_{1}(f))
+        \end{eqnarray*}
+    where $(1)$ holds for all $a\in\ob\ \Cat$ and $(2)$ holds for all
+    $f\in\arr\ \Cat$.
 \end{defin}
+
+\begin{notation}\label{Fun:notation:composition}
+    The composition of two functors $G$ and $F$ is denoted $GF$ or $G\circ F$.
+\end{notation}
+
+\noindent
+{\bf Remark}: In view of notation~(\ref{Cat:ax:composition}), $(1)$ and $(2)$ of
+definition~(\ref{Fun:def:composition}) could equally have been written
+$H_{0}=G_{0}\circ F_{0}$ and $H_{1}=G_{1}\circ F_{1}$. Note that the overloaded
+symbol '$\circ$' has many possible meanings: it is the usual symbol for
+set-theoretic function composition, it also refers to composition of maps
+between collections as per notation~(\ref{Cat:ax:composition}), it is the 
+generic symbol for the composition operator in an arbitrary category as
+per notation~(\ref{Cat:notation:composition}), and finally it is also used to
+denote composition of functors as per notation~(\ref{Fun:notation:composition}).
+\begin{prop}\label{Fun:prop:composition}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Eat$ be functors where \Cat,\Dat,\Eat\ 
+    are categories. Then $G\circ F$ is indeed a functor $G\circ F:\Cat\to\Eat$.
+\end{prop}
+\begin{proof}
+    We need to check that properties~$(1)-(5)$ of 
+    definition~(\ref{Fun:def:functor}) are satisfied:
+
+    $(1)$: $(GF)_{0}=G_{0}\circ F_{0}$ is indeed a map $(GF)_{0}:\ob\ \Cat
+    \to\ob\ \Eat$, since: 
+        \[
+            F_{0}:\ob\ \Cat\to\ob\ \Dat,\  G_{0}:\ob\ \Dat\to\ob\ \Eat
+        \]
+
+    $(2)$: $(GF)_{1}=G_{1}\circ F_{1}$ is indeed a map $(GF)_{1}:\arr\ \Cat
+    \to\arr\ \Eat$, since: 
+        \[
+            F_{1}:\arr\ \Cat\to\arr\ \Dat,\  G_{1}:\arr\ \Dat\to\arr\ \Eat
+        \]
+
+    $(3)$: We have $(GF)_{1}(f) : (GF)_{0}(a)\to(GF)_{0}(b)$ whenever $f:a\to b$, 
+    since:
+        \begin{eqnarray*}f:a\to b
+            &\Rightarrow& F_{1}(f):F_{0}(a)\to F_{0}(b) 
+            \mbox{\ \ $\leftarrow$\ $(3)$ of def.~(\ref{Fun:def:functor})}\\ 
+            \mbox{$(3)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &\Rightarrow& G_{1}(F_{1}(f)):G_{0}(F_{0}(a))\to G_{0}(F_{0}(b))\\
+            \mbox{$(1)$ and $(2)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
+            &\Leftrightarrow& (GF)_{1}(f):(GF)_{0}(a)\to (GF)_{0}(b)
+        \end{eqnarray*}
+
+    $(4)$: TODO
+\end{proof}
+

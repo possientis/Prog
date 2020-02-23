@@ -554,9 +554,56 @@ would get {\em captured} by $x$. This motivate the following:
     equivalence is true. By symmetry, it is sufficient to prove one 
     of the implication. So we assume that $(\sigma,U)$ is $\beta$-valid
     for $\phi$. We need to show that $(\sigma,U')$ is also $\beta$-valid
-    for $\phi$.
+    for $\phi$. 
+    Using proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}),
+    we simply need to prove that $(\sigma,U')$ is $\beta$-valid for both
+    $\phi_{1}$ and $\phi_{2}$. However, from that same proposition and
+    the $\beta$-validity of $(\sigma,U)$ for $\phi$, we know that 
+    $(\sigma,U)$ is $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$, so
+    it is sufficient for us to show that the equivalence holds for $\phi_{1}$
+    and $\phi_{2}$. Having assumed the property is true for $\phi_{1}$ and
+    $\phi_{2}$, we simply need to show that $U\cap\free(\phi_{1})=
+    U'\cap\free(\phi_{1})$ and likewise for $\phi_{2}$. However, this 
+    last equality follows immediately from the assumption
+    $U\cap\free(\phi)=U'\cap\free(\phi)$ and the fact that $\free(\phi_{1})
+    \subseteq\free(\phi)$. So we now assume that $\phi=\lambda x\phi_{1}$
+    for some $x\in V$ and some $\phi_{1}\in\tv$ for which the property is
+    true. We need to show the property is also true for $\phi$. So let
+    $U,U'\subseteq V$ such that $U\cap\free(\phi)=U'\cap\free(\phi)$.
+    We need to show that the equivalence is true. By symmetry, it is sufficient 
+    to prove one of the implication. So we assume that $(\sigma,U)$ is 
+    $\beta$-valid for $\phi$. We need to show that $(\sigma,U')$ is also 
+    $\beta$-valid for $\phi$. 
+    Using proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}),
+    it is sufficient to extablish two facts: on the one hand, we need
+    to prove that $(\sigma, U'\cup\{x\})$ is $\beta$-valid for $\phi_{1}$.
+    One the other hand, we need to prove that $x\not\in\free(\sigma(u))$
+    whenever $u\in\free(\phi)\setminus U'$. First we focus on the
+    $\beta$-validity of $(\sigma,U'\cup\{x\})$ for $\phi_{1}$.
+    Using proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen})
+    once more, our assumption that $(\sigma,U)$ is $\beta$-valid for $\phi$
+    shows that $(\sigma,U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$.
+    It is therefore sufficient to prove the equivalence in relation
+    to $U\cup\{x\}$, $U'\cup\{x\}$ and $\phi_{1}$. Having assumed the 
+    property is true for $\phi_{1}$, we simply need to show that
+    $(U\cup\{x\})\cap\free(\phi_{1})=(U'\cup\{x\})\cap\free(\phi_{1})$.
+    By symmetry, it is sufficient to prove the inclusion
+    $(U\cup\{x\})\cap\free(\phi_{1})\subseteq(U'\cup\{x\})\cap\free(\phi_{1})$.
+    So we assume that $z\in(U\cup\{x\})\cap\free(\phi_{1})$. We need to show
+    that $z\in(U'\cup\{x\})\cap\free(\phi_{1})$. We shall distinguish two
+    cases: first we assume that $z=x$. Then from $z\in\free(\phi_{1})$ we
+    see that $z\in(U'\cup\{x\})\cap\free(\phi_{1})$. Next we assume that
+    $z\neq x$. Then from $z\in(U\cup\{x\})\cap\free(\phi_{1})$ we see that
+    $z\in U\cap\free(\phi_{1})\cap\{x\}^{c}=U\cap\free(\phi)$. By assumption,
+    we have $U\cap\free(\phi)=U'\cap\free(\phi)$ and consequently we see
+    that $z\in U'\cap\free(\phi)=U'\cap\free(\phi_{1})\cap\{x\}^{c}$.
+    In particular $z\in(U'\cup\{x\})\cap\free(\phi_{1})$ as requested.
+    It remains to show that $x\not\in\free(\sigma(u))$ whenever
+    $u\in\free(\phi)\setminus U'$.
 
-    TODO
+    TODO.
+
+
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:var:inter:beta:valid:gen}

@@ -21,7 +21,7 @@ Definition Dec2 (a b:Type) (p:a -> b -> Prop) :=
 Arguments Dec2 {a} {b}.
 
 Lemma Dec2Dec : forall (a b:Type) (p:a -> b -> Prop) (x:a), 
-    Dec2 p -> Dec (fun y => p x y).
+    Dec2 p -> Dec (p x).
 Proof.
     intros a b p x H y. apply H.
 Qed.

@@ -60,6 +60,17 @@ Definition L15 (X Y:Prop) : ~(X \/ Y) <-> ~X /\ ~Y := conj
                 end
         end).
         
+Axiom extensionality : forall (a b:Type) (f g:a -> b),
+    (forall (x:a), f x = g x) -> f = g.
+
+
+(* extensionality => two proofs of same negation are equal *)
+Definition assimilation (X : Prop) (p q : ~X) : p = q.
+Proof.
+    apply extensionality. intros x. exfalso. apply p. assumption.
+Qed.
+
+
 
 
 

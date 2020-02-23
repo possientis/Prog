@@ -1,7 +1,5 @@
-Try and get clear ideas as to whether 2-fold predicates really needed
-Core/Comprehension: get the statement right
 Lang1/Comprehension
-add sem/compr to makefile
+add Lang1/Comprehension to makefile
 take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
 axiom schema of substitution
 axiom of choice?
