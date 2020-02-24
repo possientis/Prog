@@ -8,16 +8,22 @@ Class Ordered (T : Type) :=
     ; leq_total: forall (s t:T), leq s t \/ leq t s
     }.
 
+Notation "s <= t" := (leq s t) (at level 70) : Ordered_scope. 
+Open Scope Ordered_scope.
+
+
 Definition lt (T : Type) (Ord : Ordered T) (s t:T) : Prop :=
     match eq_dec s t with
     | left _    => False    (* s = t  *)
-    | right _   => leq s t  (* s <> t *)
+    | right _   => s <= t   (* s <> t *)
     end.
 
 Arguments lt {T} {Ord}.
+Notation "s < t" := (lt s t) (at level 70) : Ordered_scope.
 
-Lemma leq_lt_eq : forall (T:Type) (Ord:Ordered T) (s t:T), 
-    leq s t <-> s = t \/ lt s t.
+
+Lemma leq_is_eq_or_lt : forall (T:Type) (Ord:Ordered T) (s t:T), 
+    s <= t <-> s = t \/ s < t.
 Proof.
     intros T Ord s t. split.
     - intros H. destruct (eq_dec s t) as [H'|H'] eqn:E.
@@ -32,7 +38,7 @@ Qed.
 
 
 Definition leq_total_dec : forall (T:Type) (Ord:Ordered T) (s t:T),
-    {leq s t} + {leq t s}.
+    {s <= t} + {t <= s}.
 Proof.
     intros T Ord s t. destruct (leq_dec s t) as [H|H].
     - left. assumption.
@@ -46,3 +52,29 @@ Qed.
 Arguments leq_total_dec {T} {Ord}.
 
 
+Definition lt_dec : forall (T:Type) (Ord:Ordered T) (s t:T),
+    {s < t} + {~ s < t}.
+Proof.
+    intros T Ord s t.
+    destruct (eq_dec s t) as [H|H] eqn:E.
+    - subst. right. unfold lt. rewrite E. intros H. contradiction.
+    - destruct (leq_dec s t) as [H'|H'].
+        + left. unfold lt. rewrite E. assumption.
+        + right. unfold lt. rewrite E. assumption.
+Qed.
+
+Arguments lt_dec {T} {Ord}.
+
+Definition trichotomy : forall (T:Type) (Ord:Ordered T) (s t:T),
+    {s < t} + {s = t} + {t < s}.    (* left associative *)
+Proof.
+    intros T Ord s t. destruct (lt_dec s t) as [H|H].
+    - left. left. assumption.
+    - destruct (eq_dec s t) as [H'|H'] eqn:E.
+        + left. right. assumption.
+        + right. unfold lt. destruct (eq_dec t s) as [H1|H1]. 
+            { subst. apply H'. reflexivity. }
+            { destruct (leq_total_dec s t) as [H2|H2].
+                { exfalso. apply H. unfold lt. rewrite E. assumption. }
+                { assumption. }}
+Qed.
