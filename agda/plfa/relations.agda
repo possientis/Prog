@@ -263,7 +263,7 @@ data Trichotomy (m n : ℕ) : Set where
   More  : n < m → Trichotomy m n
 
 
-trichotomy : ∀ (m n : ℕ) → Trichotomy m n 
+trichotomy : ∀ (m n : ℕ) → Trichotomy m n
 trichotomy zero zero = Equal refl
 trichotomy zero (suc n) = Less z<s
 trichotomy (suc m) zero = More z<s
