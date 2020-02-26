@@ -55,6 +55,30 @@ denote composition of functors as per notation~(\ref{Fun:notation:composition}).
             &\Leftrightarrow& (GF)_{1}(f):(GF)_{0}(a)\to (GF)_{0}(b)
         \end{eqnarray*}
 
-    $(4)$: TODO
+    $(4)$: We have $(GF)_{1}(\,\id(a)\,)=\id(\,(GF)_{0}(a)\,)$ for all
+    $a\in\Cat$, since:
+        \begin{eqnarray*}(GF)_{1}(\,\id(a)\,)
+            &=&G_{1}(F_{1}(\,\id(a)\,))
+            \ \leftarrow\ \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\\
+            \mbox{$(4)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&G_{1}(\,\id(\,F_{0}(a)\,)\,)\\
+            \mbox{$(4)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&\id(\,G_{0}(\,F_{0}(a)\,)\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&\id(\,(GF)_{0}(a)\,)\\
+        \end{eqnarray*}
+
+    $(5)$: $(GF)_{1}(g\circ f)=(GF)_{1}(g)\circ (GF)_{1}(f)$ whenever $f:a\to b$
+    and $g:b\to c$\,:
+        \begin{eqnarray*}(GF)_{1}(g\circ f)
+            &=&G_{1}(F_{1}(\,g\circ f\,))
+            \ \leftarrow\ \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\\
+            \mbox{$(5)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&G_{1}(\,F_{1}(g)\circ F_{1}(f)\,)\\
+            \mbox{$(5)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&G_{1}(F_{1}(g))\circ G_{1}(F_{1}(f))\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&(GF)_{1}(g)\circ (GF)_{1}(f)\\
+        \end{eqnarray*}
 \end{proof}
 

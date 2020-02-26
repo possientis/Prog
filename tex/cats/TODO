@@ -1,4 +1,3 @@
-composition of two functors
 product of two functors
 (X): Set x Set -> Set
 defining a bifunctor
