@@ -10,6 +10,7 @@ Require Import Core.Compatible.
 
 Require Import Lang1.Syntax.
 Require Import Lang1.Semantics.
+Require Import Lang1.Relevance.
 Require Import Lang1.Environment.
 
 (* Theorem schema 'comprehensionLEM' expressed in set theory abstract syntax.   *)
@@ -24,14 +25,14 @@ Definition comprehensionF (P : Formula) (n m p:nat) : Formula :=
 Lemma evalComprehensionF : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
     m <> n ->
     p <> n ->
-    p <> m ->
+    m <> p ->
     ~In m (free P) ->
     eval e (comprehensionF P n m p)
         <->
     forall (x:set), exists (y:set), forall (z:set),
-        z :: y <-> z :: x /\ (eval' e p P z).
+        z :: y <-> z :: x /\ (eval2 e P n p x z).
 Proof.
-    intros L e P n m p Hmn Hpn Hpm NF. unfold comprehensionF. rewrite evalAll.
+    intros L e P n m p Hmn Hpn Hmp NF. unfold comprehensionF. rewrite evalAll.
     split; intros H x. 
     - remember (H x) as H' eqn:E. clear E H. rewrite evalExi in H'.
       destruct H' as [y H]. exists y. rewrite evalAll in H. intros z.
@@ -39,7 +40,13 @@ Proof.
       rewrite evalElem in H'. rewrite evalAnd in H'. rewrite evalElem in H'.
       rewrite bindSame in H'. rewrite bindDiff in H'. rewrite bindSame in H'.
       rewrite bindDiff in H'. rewrite bindDiff in H'. rewrite bindSame in H'.
-      unfold eval'.
+      unfold eval2. destruct H' as [H1 H2]. split.
+        + rewrite <- (evalNotInFree (bind (bind e n x) p z)).
+            { rewrite (evalEnvEqual _ (bind (bind (bind e n x) m y) p z)). 
+                { assumption. }
+                { apply bindPermute. assumption. }}
+            { assumption. }
+        +
 
 Show.
 
