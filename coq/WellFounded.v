@@ -2,9 +2,13 @@ Require Import Lt.
 Require Import Le.
 Require Import Peano_dec.
 
+
+Definition LEM   : Prop := forall (A:Prop), A \/ ~A.
+Definition IRREL : Prop := forall (A:Prop) (p q:A), p = q.
+
 (* Definition works for 'strict-like' relations                                 *)
 Inductive Accessible (a:Type)(r:a -> a -> Prop) : a -> Prop := 
-| Acc : forall (x:a), (forall (y:a), r y x -> Accessible a r y) -> 
+| MkAcc : forall (x:a), (forall (y:a), r y x -> Accessible a r y) -> 
     Accessible a r x
 .
 
@@ -141,7 +145,6 @@ Proof.
             { apply LeTotal. }
 Qed.
 
-Definition LEM : Prop :=  forall (p:Prop), p \/ ~p.
 
 Lemma LeHasMinProp : LEM -> HasMinProp le.
 Proof.
@@ -173,9 +176,95 @@ Proof.
     - apply LeHasMinProp. assumption.
 Qed.
 
-Theorem WellOrderWF : forall (a:Type) (r:a -> a -> Prop),
-    WellOrder r -> WellFounded (strict r).
-Proof.
-Admitted. (* TODO *)
 
+Definition NotAccessibleType (a:Type) (r:a -> a -> Prop) : Type := 
+    { x : a | ~Accessible r x }.
+
+Arguments NotAccessibleType {a}.
+
+Definition NotAccessibleInj (a:Type) (r:a -> a -> Prop) 
+    : NotAccessibleType r -> a := @proj1_sig _ _.
+
+Arguments NotAccessibleInj {a}.
+
+Lemma NotAccessibleInjInj :
+    forall (a:Type) (I:IRREL)(r:a -> a -> Prop),
+    forall (x y:NotAccessibleType r), 
+        NotAccessibleInj r x = NotAccessibleInj r y  -> x = y.
+Proof. 
+    intros a I r x y H. destruct x as [x p]. destruct y as [y q].
+    unfold NotAccessibleInj in H. simpl in H. revert p q.
+    rewrite H. intros p q. assert (p = q) as E. { apply I. } 
+    rewrite E. reflexivity.
+Qed.
+
+Arguments NotAccessibleInjInj {a}.
+
+Definition NotAccessibleEmbedding (a:Type) (I:IRREL)(r:a -> a -> Prop)
+    : Embedding (NotAccessibleType r) a := Embed
+        (NotAccessibleInj r)
+        (NotAccessibleInjInj I r).
+
+Arguments NotAccessibleEmbedding {a}.
+
+Lemma WellOrderAllAccessible : forall (a:Type) (r:a -> a -> Prop),
+    LEM         -> 
+    IRREL       ->
+    WellOrder r ->
+    forall (x:a), Accessible (strict r) x.
+Proof.
+    intros a r L I [[H1 [H2 [H3 H4]]] H5] x. 
+    destruct (L (Accessible (strict r) x)) as [H|H].
+    - assumption.
+    - unfold HasMinProp in H5.
+      remember (NotAccessibleType (strict r)) as b eqn:Eb.
+      unfold NotAccessibleType in Eb. 
+      remember (NotAccessibleEmbedding I (strict r)) as e eqn:Ee.
+      unfold NotAccessibleType in e.
+      remember (@exist a (fun x => ~Accessible (strict r) x) x H) as x' eqn:Ex. 
+      remember (H5 b) as H6 eqn:E. clear E. rewrite Eb in H6. clear H5.
+      remember (H6 e x') as H7 eqn:E. clear E. clear H6. clear Ex. clear x'.
+      clear H. exfalso. clear x. clear Eb. clear b. destruct H7 as [x H].
+      destruct x as [x p]. unfold Minimal in H. unfold restrict in H.
+      unfold NotAccessibleEmbedding in Ee. rewrite Ee in H.
+      unfold NotAccessibleInj in H. simpl in H. apply p. constructor.
+      intros y Hy. destruct (L (Accessible (strict r) y)) as [H'|H'].
+        + assumption.
+        + remember 
+            (@exist a (fun x => ~Accessible (strict r) x) y H') as y' eqn:Ey.  
+          remember (H y') as H5 eqn:E. clear E. rewrite Ey in H5. simpl in H5. 
+          clear H. unfold strict in Hy. destruct Hy as [H6 H7]. clear Ee. 
+          clear e. remember (H5 H6) as H8 eqn:E. clear E. clear H5. clear Ey. 
+          clear y'. clear H6.  exfalso. apply H7. inversion H8. reflexivity.
+Qed.
+
+(* If r is a well-order, then (strict r) is well-founded                        *)
+Theorem WellOrderWF : forall (a:Type) (r:a -> a -> Prop),
+    LEM         ->
+    IRREL       ->
+    WellOrder r -> 
+    WellFounded (strict r).
+Proof.
+    intros a r L I H. unfold WellFounded. apply WellOrderAllAccessible; 
+    assumption.
+Qed.
+
+(* Acc is defined by Coq.                                                       *)
+Lemma Acc_Accessible : forall (a:Type) (r:a -> a -> Prop) (x:a),
+    Accessible r x <-> Acc r x.
+Proof.
+    intros a r x. split; intros H; induction H as [x H IH]; 
+    constructor; assumption.
+Qed.
+
+(* well_founded is defined by Coq.                                              *)
+Lemma well_founded_WellFounded : forall (a:Type) (r:a -> a -> Prop),
+    WellFounded r <-> well_founded r.
+Proof.
+    intros a r. split; intros H.
+    - unfold well_founded. intros x. rewrite <- Acc_Accessible. apply H.
+    - unfold WellFounded.  intros x. rewrite Acc_Accessible.    apply H.
+Qed.
+
+Check Fix.
 
