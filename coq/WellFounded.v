@@ -141,14 +141,41 @@ Proof.
             { apply LeTotal. }
 Qed.
 
+Definition LEM : Prop :=  forall (p:Prop), p \/ ~p.
+
+Lemma LeHasMinProp : LEM -> HasMinProp le.
+Proof.
+    unfold HasMinProp. intros L b e x. destruct e as [j p].
+    unfold Minimal. unfold restrict. remember (j x) as n eqn:E.
+    assert (j x <= n) as H. { rewrite E. apply le_n. } clear E.
+    revert H. revert p. revert x. revert j. revert b.
+    induction n as [|n IH]; intros b j x p H.
+    - exists x. intros y H'. apply p. inversion H.
+      rewrite H1 in H'. inversion H'. rewrite H1, H2. reflexivity.
+    - apply le_lt_or_eq in H. destruct H as [H|H]. 
+        + unfold lt in H. apply le_S_n in H. apply IH with x; assumption.
+        + destruct (L (exists (y:b), j y <= n)) as [H'|H'].
+            { clear H. clear x. destruct H' as [x H]. 
+              apply IH with x; assumption. }
+            { exists x. intros y H0. rewrite H in H0. apply le_lt_or_eq in H0.
+              destruct H0 as [H0|H0]. 
+                { unfold lt in H0. apply le_S_n in H0. exfalso.
+                  apply H'. exists y. assumption. }
+                { apply p. rewrite H, H0. reflexivity. }}
+Qed.
+
+(* It seems surprising we needed LEM to prove this. However, defining a well    *)
+(* order relies on the notion of embedding from any type b to nat.              *)
+Lemma LeWellOrder : LEM -> WellOrder le.
+Proof.
+    intros L. unfold WellOrder. split.
+    - apply LeTotalOrder.
+    - apply LeHasMinProp. assumption.
+Qed.
+
 Theorem WellOrderWF : forall (a:Type) (r:a -> a -> Prop),
     WellOrder r -> WellFounded (strict r).
 Proof.
 Admitted. (* TODO *)
 
 
-Lemma LeHasMinProp : HasMinProp le.
-Proof.
-    unfold HasMinProp. intros b e y. destruct e as [j p].
-    unfold Minimal. unfold restrict.
-Show.
