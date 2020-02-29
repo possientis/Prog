@@ -70,9 +70,8 @@ Proof.
     apply extensionality. intros x. exfalso. apply p. assumption.
 Qed.
 
-
-
-
-
+(* Defined as constant rather than notation, possible thanks to conversion law  *)
+Definition myNot : Prop -> Prop := fun X => X -> False.
+Definition myAnd : Prop -> Prop -> Prop := fun X Y => (X -> Y) /\ (Y -> X).
 
 

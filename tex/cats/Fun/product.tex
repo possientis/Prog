@@ -10,3 +10,38 @@
     for all $a_{1}\in\ob\ \Cone$ and $a_{2}\in\ob\ \Ctwo$, and $(2)$ holds 
     for all $f_{1}\in\arr\ \Cone$ and $f_{2}\in\arr\ \Ctwo$.
 \end{defin}
+\noindent
+{\bf Remark}: In accordance with notation~(\ref{Fun:notation:functor:F0:F1}),
+we are using the same notations $F_{1}$ and $F_{2}$ in 
+definition~(\ref{Fun:def:canonical:product}) to describe the actions of these
+functors both on objects and on arrows. The alternative would be to use the
+notations $(F_{1})_{0}$, $(F_{1})_{1}$, $(F_{2})_{0}$ and $(F_{2})_{1}$ which 
+would arguably be harder to read.
+
+\begin{notation}\label{Fun:notation:canonical:product}
+    The canonical product of functors $F_{1}$ and $F_{2}$ is denoted
+    $F_{1}\times F_{2}$.
+\end{notation}
+
+\begin{prop}
+    Let $F_{1}:\Cone\to\Done$ and $F_{2}:\Ctwo\to\Dtwo$ be two functors. Then 
+    the product of $F_{1}$ and $F_{2}$ is indeed a functor $F_{1}\times F_{2}: 
+    \Cone\times\Ctwo\to\Done\times\Dtwo$.
+\end{prop}
+\begin{proof}
+    Let $G=(G_{0},G_{1})$ denote the product functor $F_{1}\times F_{2}$.
+    We need to check that properties~$(1)-(5)$ of 
+    definition~(\ref{Fun:def:functor}) are satisfied, which goes as follows:
+
+    $(1)$: $G_{0}$ is indeed a map $G_{0}:\ob\ (\Cone\times\Ctwo)\to\ob\ (\Done
+    \times\Dtwo)$: firstly, $G_{0}$ is defined on the 
+    collection of all $(a_{1},a_{2})$ where $a_{1}\in\ob\ \Cone$
+    and $a_{2}\in\ob\ \Ctwo$. According to 
+    definition~(\ref{Cat:def:canonical:product}), this is precisely 
+    the collection $\ob\ (\Cone\times\Ctwo)$. Furthermore $G_{0}(a_{1},a_{2})$
+    is defined as $(\,F_{1}(a_{1})\,,\,F_{2}(a_{2})\,)$ and since 
+    $F_{1}:\Cone\to\Done$ while $F_{2}:\Ctwo\to\Dtwo$, we have $F_{1}(a_{1})
+    \in\ob\ \Done$ together with $F_{2}(a_{2})\in\ob\ \Dtwo$. Hence we see that
+    $G_{0}(a_{1},a_{2})$ is indeed a member of the collection 
+    $\ob\ (\Done\times\Dtwo)$.
+\end{proof}

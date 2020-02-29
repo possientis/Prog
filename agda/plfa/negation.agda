@@ -2,8 +2,9 @@ open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 open import Data.Nat using (ℕ; zero; suc; _<_; _≤_; s≤s)
 open import Data.Empty using (⊥; ⊥-elim)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
-open import Data.Product using (_×_)
+open import Data.Product using (_×_) renaming (_,_ to ⟨_,_⟩)
 open import isomorphism using (_≃_; extensionality)
+open import Function using (_∘_)
 
 ¬_ : Set → Set
 ¬ x = x → ⊥
@@ -118,3 +119,29 @@ isoTrichotomy = record
   ; from∘to = λ{(Less n<m) → refl; (Equal m≡n) → refl; (More n<m) → refl}
   ; to∘from = {!!}   -- actually not true, unless proof irrelevance
   }
+
+-- Already defined in connectives.agda, but using library primitives now
+→-distrib-⊎-r : ∀ {a b c : Set} → (a ⊎ b → c) ≃ (a → c) × (b → c)
+→-distrib-⊎-r = record
+  { to = λ{f → ⟨ f ∘ inj₁ , f ∘ inj₂ ⟩}
+  ; from = λ{⟨ f , g ⟩ → λ{(inj₁ x) → f x ; (inj₂ y) → g y}}
+  ; from∘to = λ{ f → extensionality (λ{(inj₁ x) → refl ; (inj₂ y) → refl})}
+  ; to∘from = λ{⟨ f , g ⟩ → refl}
+  }
+
+
+⊎-dual-× : ∀ {a b : Set} → ¬ (a ⊎ b) ≃ (¬ a) × (¬ b)
+⊎-dual-× = →-distrib-⊎-r
+
+postulate
+  em : ∀ {a : Set} → a ⊎ ¬ a
+
+em-irrefutable : ∀ {a : Set} → ¬ ¬ (a ⊎ ¬ a)
+em-irrefutable {a} f = ¬¬a ¬a 
+  where
+    ¬¬a : ¬ ¬ a
+    ¬¬a = λ{x → f (inj₂ x)}
+    ¬a : ¬ a
+    ¬a  = λ{x → f (inj₁ x)}
+
+

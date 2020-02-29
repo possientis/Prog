@@ -599,11 +599,19 @@ would get {\em captured} by $x$. This motivate the following:
     that $z\in U'\cap\free(\phi)=U'\cap\free(\phi_{1})\cap\{x\}^{c}$.
     In particular $z\in(U'\cup\{x\})\cap\free(\phi_{1})$ as requested.
     It remains to show that $x\not\in\free(\sigma(u))$ whenever
-    $u\in\free(\phi)\setminus U'$.
-
-    TODO.
-
-
+    $u\in\free(\phi)\setminus U'$. However, having assumed that $(\sigma,U)$
+    is $\beta$-valid for $\phi$, using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) yet again
+    we see that $x\not\in\free(\sigma(u))$ whenever $u\in\free(\phi)\setminus 
+    U$. Hence it is sufficient to show that $\free(\phi)\setminus U=
+    \free(\phi)\setminus U'$ which is the same as:
+        \[
+            \free(\phi)\setminus(\free(\phi)\cap U) 
+            =
+            \free(\phi)\setminus(\free(\phi)\cap U')
+        \]
+    This equality follows immediately from our assumption $\free(\phi)\cap U
+    =\free(\phi)\cap U'$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:var:inter:beta:valid:gen}

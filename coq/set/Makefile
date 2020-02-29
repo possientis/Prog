@@ -41,7 +41,8 @@ all :							${UTILS}/LEM.vo \
 								${LANG1}/Pairing.vo \
 								${LANG1}/Union.vo \
 								${LANG1}/Powerset.vo \
-								${LANG1}/Foundation.vo
+								${LANG1}/Foundation.vo \
+								${LANG1}/Comprehension.vo
 
 ${UTILS}/LEM.vo :				${UTILS}/LEM.v
 	coqc ${UTILS}/LEM.v -Q ${UTILS} ${UTILS}
@@ -425,4 +426,18 @@ ${LANG1}/Foundation.vo :		${LANG1}/Foundation.v \
 								${CORE}/Foundation.vo
 	
 	coqc ${LANG1}/Foundation.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+
+${LANG1}/Comprehension.vo :		${LANG1}/Comprehension.v \
+								${UTILS}/LEM.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Compatible.vo \
+								${LANG1}/Syntax.vo \
+								${LANG1}/Environment.vo \
+								${LANG1}/Semantics.vo \
+								${LANG1}/Relevance.vo
+	
+	coqc ${LANG1}/Comprehension.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
 

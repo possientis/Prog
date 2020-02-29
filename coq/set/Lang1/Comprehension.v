@@ -17,22 +17,22 @@ Require Import Lang1.Environment.
 (* The formulation is parameterized with respect to a formula P, hence this is  *)
 (* not a single theorem, but rather a 'theorem schema'. This formulation is     *)
 (* correct provided the variables n m p are distinct and m is not free in P.    *)
-
-
 Definition comprehensionF (P : Formula) (n m p:nat) : Formula :=
     All n (Exi m (All p (Iff (Elem p m) (And (Elem p n) P)))). 
 
+(* Evaluating comprehensionF applied to a formula P in any environment 'yields' *)
+(* the theorem comprehensionLEM applied to the corresponding predicate.         *)
 Lemma evalComprehensionF : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
     m <> n ->
     p <> n ->
-    m <> p ->
+    p <> m ->
     ~In m (free P) ->
     eval e (comprehensionF P n m p)
         <->
     forall (x:set), exists (y:set), forall (z:set),
         z :: y <-> z :: x /\ (eval2 e P n p x z).
 Proof.
-    intros L e P n m p Hmn Hpn Hmp NF. unfold comprehensionF. rewrite evalAll.
+    intros L e P n m p Hmn Hpn Hpm NF. unfold comprehensionF. rewrite evalAll.
     split; intros H x. 
     - remember (H x) as H' eqn:E. clear E H. rewrite evalExi in H'.
       destruct H' as [y H]. exists y. rewrite evalAll in H. intros z.
@@ -44,9 +44,41 @@ Proof.
         + rewrite <- (evalNotInFree (bind (bind e n x) p z)).
             { rewrite (evalEnvEqual _ (bind (bind (bind e n x) m y) p z)). 
                 { assumption. }
-                { apply bindPermute. assumption. }}
+                { apply bindPermute. 
+                  intros Hmp. apply Hpm. symmetry. assumption. }}
             { assumption. }
-        +
-
-Show.
-
+        + intros [H3 H4]. apply H2. split.
+            { assumption. }
+            { rewrite (evalEnvEqual _ (bind (bind (bind e n x) p z) m y)).
+                { rewrite evalNotInFree; assumption. }
+                { apply bindPermute. assumption. }}
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+    - rewrite evalExi. remember (H x) as H' eqn:E. clear E H.
+      destruct H' as [y H]. exists y. rewrite evalAll. intros z.
+      rewrite evalIff, evalElem, evalAnd, evalElem, bindSame.
+      rewrite bindDiff, bindSame, bindDiff, bindDiff, bindSame. 
+      remember (H z) as H' eqn:E. clear E H. unfold eval2 in H'. split.
+        + destruct H' as [H1 _]. intros H'.
+          remember (H1 H') as H eqn:E. clear E H1 H'. 
+          destruct H as [H1 H2]. split.
+            { assumption. }
+            { rewrite (evalEnvEqual _ (bind (bind (bind e n x) p z) m y)).
+                { rewrite evalNotInFree; assumption. }
+                { apply bindPermute. assumption. }}
+        + destruct H' as [_ H]. intros [H1 H2]. apply H. split.
+            { assumption. }
+            { rewrite (evalEnvEqual _ (bind (bind (bind e n x) p z) m y)) in H2.
+                { rewrite evalNotInFree in H2; assumption. }
+                { apply bindPermute. assumption. }}
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+Qed.
