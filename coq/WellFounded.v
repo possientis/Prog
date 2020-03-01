@@ -266,5 +266,105 @@ Proof.
     - unfold WellFounded.  intros x. rewrite Acc_Accessible.    apply H.
 Qed.
 
+Check Acc_inv.
+
+(* Do it with 'refine' first ...                                                *)
+Definition AccessibleInv' : forall (a:Type) (r:a -> a -> Prop) (x:a),
+    Accessible r x -> forall (y:a), r y x -> Accessible r y.
+Proof. refine (
+    fun (a:Type) =>
+        fun (r:a -> a -> Prop) =>
+            fun (x:a) =>
+                fun (p:Accessible r x) =>
+                    match p with
+                    | MkAcc _ _ _ q => q
+                    end
+).
+Defined.
+
+(* Of course, this can be done the usual way ...                                *)                             
+Definition AccessibleInv3 : forall (a:Type) (r:a -> a -> Prop) (x:a),
+    Accessible r x -> forall (y:a), r y x -> Accessible r y.
+Proof.
+    intros a r x H. destruct H. assumption.
+Qed.
+
+
+Definition AccessibleInv : forall (a:Type) (r:a -> a -> Prop) (x:a),
+    Accessible r x -> forall (y:a), r y x -> Accessible r y :=
+    fun (a:Type) =>
+        fun (r:a -> a -> Prop) =>
+            fun (x:a) =>
+                fun (p:Accessible r x) =>
+                    match p with
+                    | MkAcc _ _ _ q => q
+                    end.
+
+
+Check Fix_F.
+Print Fix_F.
+
+(* Do it with 'refine' first: Attempting to redefine Fix_F                      *)
+Definition WFRecursion_F': forall (a:Type) (r:a -> a -> Prop) (c:a -> Type),
+    (forall (x:a), (forall (y:a), r y x -> c y) -> c x) ->
+    forall (x:a), Accessible r x -> c x.
+Proof. refine (
+    fun (a:Type) =>
+        fun (r:a -> a -> Prop) =>
+            fun (c:a -> Type) => 
+                fun (IH:forall (x:a), (forall (y:a), r y x -> c y) -> c x) =>
+                    fix WFRecursion_F (x:a) (p:Accessible r x) : c x :=
+                        IH x (fun (y:a) =>
+                            fun (H:r y x) =>
+                                WFRecursion_F y 
+                                    (AccessibleInv a r x p y H))
+
+).
+Defined.
+
+Definition WFRecursion_F: forall (a:Type) (r:a -> a -> Prop) (c:a -> Type),
+    (forall (x:a), (forall (y:a), r y x -> c y) -> c x) ->
+    forall (x:a), Accessible r x                        -> 
+    c x :=
+    fun (a:Type) =>
+        fun (r:a -> a -> Prop) =>
+            fun (c:a -> Type) => 
+                fun (IH:forall (x:a), (forall (y:a), r y x -> c y) -> c x) =>
+                    fix WFRecursion_F (x:a) (p:Accessible r x) : c x :=
+                        IH x (fun (y:a) =>
+                            fun (H:r y x) =>
+                                WFRecursion_F y 
+                                    (AccessibleInv a r x p y H)).
 Check Fix.
+
+(* Do it with 'refine' first: Attempting to re-define 'Fix'                     *)
+Definition WFRecursion' : forall (a:Type) (r:a -> a -> Prop),
+    WellFounded r -> 
+    forall (c:a -> Type),
+    (forall (x:a), (forall (y:a), r y x -> c y) -> c x) ->
+    forall (x:a), c x.
+Proof. refine (
+    fun (a:Type) =>
+        fun (r:a -> a -> Prop) =>
+            fun (H:WellFounded r) =>
+                fun (c:a -> Type) =>
+                    fun (IH: forall (x:a), (forall (y:a), r y x -> c y) -> c x) =>
+                        fun (x:a) => 
+                            WFRecursion_F a r c IH x (H x)
+).
+Defined.
+
+Definition WFRecursion : forall (a:Type) (r:a -> a -> Prop),
+    WellFounded r -> 
+    forall (c:a -> Type),
+    (forall (x:a), (forall (y:a), r y x -> c y) -> c x) ->
+    forall (x:a), c x 
+    :=
+    fun (a:Type) =>
+        fun (r:a -> a -> Prop) =>
+            fun (H:WellFounded r) =>
+                fun (c:a -> Type) =>
+                    fun (IH: forall (x:a), (forall (y:a), r y x -> c y) -> c x) =>
+                        fun (x:a) => 
+                            WFRecursion_F a r c IH x (H x).
 

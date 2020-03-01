@@ -44,4 +44,44 @@ would arguably be harder to read.
     \in\ob\ \Done$ together with $F_{2}(a_{2})\in\ob\ \Dtwo$. Hence we see that
     $G_{0}(a_{1},a_{2})$ is indeed a member of the collection 
     $\ob\ (\Done\times\Dtwo)$.
+
+    $(2)$: $G_{1}$ is indeed a map $G_{1}:\arr\ (\Cone\times\Ctwo)\to\arr\ (\Done
+    \times\Dtwo)$: $G_{1}$ is defined on the 
+    collection of all $(f_{1},f_{2})$ where $f_{1}\in\arr\ \Cone$
+    and $f_{2}\in\arr\ \Ctwo$. According to 
+    definition~(\ref{Cat:def:canonical:product}), this is precisely 
+    the collection $\arr\ (\Cone\times\Ctwo)$. Furthermore $G_{1}(f_{1},f_{2})$
+    is defined as $(\,F_{1}(f_{1})\,,\,F_{2}(f_{2})\,)$ and since 
+    $F_{1}:\Cone\to\Done$ while we have $F_{2}:\Ctwo\to\Dtwo$, we see that
+    $F_{1}(f_{1})\in\arr\ \Done$ and $F_{2}(f_{2})\in\arr\ \Dtwo$. Hence we 
+    conclude that $G_{1}(f_{1},f_{2})$ is indeed a member of the collection 
+    $\arr\ (\Done\times\Dtwo)$.
+
+    $(3)$: We have $G_{1}(f):G_{0}(a)\to G_{0}(b)$ whenever $f:a\to b$: indeed
+    suppose $f\in\arr\ (\Cone\times\Ctwo)$ such that $\dom(f)=a$ and $\cod(f)=b$.
+    Then $f=(f_{1},f_{2})$ for some $f_{1}\in\arr\ \Cone$ and $f_{2}\in\arr\ 
+    \Ctwo$. Furthermore, since $a,b\in\ob\ (\Cone\times\Ctwo)$, we have
+    $a=(a_{1},a_{2})$ and $b=(b_{1},b_{2})$ for some $a_{1},b_{1}\in\ob\ \Cone$
+    and $a_{2},b_{2}\in\ob\ \Ctwo$:
+        \begin{eqnarray*}(a_{1},a_{2})
+            &=&a\\
+            &=&\dom\,(f)\\
+            &=&\dom\,(f_{1},f_{2})\\
+            \mbox{$(3)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&(\,\dom\,(f_{1})\,,\,\dom\,(f_{2})\,)\\
+        \end{eqnarray*}
+    Hence we have $a_{1}=\dom(f_{1})$ and $a_{2}=\dom(f_{2})$ and similarly:
+        \begin{eqnarray*}(b_{1},b_{2})
+            &=&b\\
+            &=&\cod\,(f)\\
+            &=&\cod\,(f_{1},f_{2})\\
+            \mbox{$(4)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&(\,\cod\,(f_{1})\,,\,\cod\,(f_{2})\,)\\
+        \end{eqnarray*}
+    from which we conclude that $b_{1}=\cod(f_{1})$ and $b_{2}=\cod(f_{2})$. 
+    Hence we see that $f_{1}:a_{1}\to b_{1}\ @\ \Cone$ and $f_{2}:a_{2}\to 
+    b_{2}\ @\ \Ctwo$. Since $F_{1}$ and $F_{2}$ are functors, using $(3)$ of
+    definition~(\ref{Fun:def:functor}) we obtain $F_{1}(f_{1}): F_{1}(a_{1})
+    \to F_{1}(b_{1})\ @\ \Done$ and likewise $F_{2}(f_{2}): F_{2}(a_{2})
+    \to F_{2}(b_{2})\ @\ \Dtwo$
 \end{proof}

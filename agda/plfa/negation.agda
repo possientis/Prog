@@ -137,11 +137,57 @@ postulate
   em : ∀ {a : Set} → a ⊎ ¬ a
 
 em-irrefutable : ∀ {a : Set} → ¬ ¬ (a ⊎ ¬ a)
-em-irrefutable {a} f = ¬¬a ¬a 
+em-irrefutable {a} k = ¬¬a ¬a -- can be β-reduced
   where
     ¬¬a : ¬ ¬ a
-    ¬¬a = λ{x → f (inj₂ x)}
+    ¬¬a = λ{x → k (inj₂ x)}
     ¬a : ¬ a
-    ¬a  = λ{x → f (inj₁ x)}
+    ¬a  = λ{x → k (inj₁ x)}
 
+
+em-irrefutable' : ∀ {a : Set} → ¬ ¬ (a ⊎ ¬ a)
+em-irrefutable' k = k (inj₂ λ{x → k (inj₁ x)})
+
+-- TFAE: the following are equivalent
+
+LEM : Set₁
+LEM = ∀ {a : Set} → a ⊎ ¬ a
+
+DoubleNeg : Set₁
+DoubleNeg = ∀ {a : Set} → ¬ ¬ a → a
+
+PeirceLaw : Set₁
+PeirceLaw = ∀ {a b : Set} → ((a → b) → a) → a
+
+ImpAsDisj : Set₁
+ImpAsDisj = ∀ {a b : Set} → (a → b) → ¬ a ⊎ b
+
+DeMorgan : Set₁
+DeMorgan = ∀ {a b : Set} → ¬ (¬ a × ¬ b) → a ⊎ b
+
+-- However, before we prove these equivalences note that:
+
+-- reverse of DoubleNeg always true
+L1 : ∀ {a : Set} → a → ¬ ¬ a
+L1 = ¬¬-intro
+
+-- reverse of PeirceLaw always true
+L2 : ∀ {a b : Set} → a → ((a → b) → a)
+L2 x = λ{_ → x}
+
+absurd : ∀ {a : Set} → ⊥ → a
+absurd ()
+
+-- reverse of ImpAsDisj
+L3 : ∀ {a b : Set} → ¬ a ⊎ b → (a → b)
+L3 (inj₁ f) x = absurd (f x)
+L3 (inj₂ y) _ = y
+
+-- reverse of DeMorgan
+L4 : ∀ {a b : Set} → a ⊎ b → ¬ (¬ a × ¬ b)
+L4 (inj₁ x) = λ{⟨ f , g ⟩ → f x}
+L4 (inj₂ y) = λ{⟨ f , g ⟩ → g y}
+
+L5 : LEM → DoubleNeg
+L5 L = {!!}
 

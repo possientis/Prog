@@ -788,6 +788,22 @@ would get {\em captured} by $x$. This motivate the following:
     $U=\emptyset$.
 \end{proof}
 
+\begin{defin}\label{logic:def:LAM:beta:valid:flipped}
+    Let $V$ be a set and $\sigma:V\to\tv$ be a map. We denote $\sigma_{*}$ 
+    the flipped version of $\sigma^{*}$ defined by $\sigma_{*}(U)(\phi)
+    =\sigma^{*}(\phi)(U)$, where $\sigma^{*}$ is defined as per 
+    definition~(\ref{logic:def:LAM:beta:subst}).
+\end{defin}
+
+\begin{lemma}\label{logic:prop:LAM:beta:valid:technical:lemma:1}
+    Let $V$ be a set, $U,U'\subseteq V$ and $\sigma,\tau:V\to\tv$ be maps.
+    Let $\phi=\lambda x\phi_{1}$ for some $x\in V$ and $\phi_{1}\in\tv$, 
+    such that $(\tau,U)$ is $\beta$-valid for $\phi$. Then, the maps 
+    $\sigma_{*}(U')\circ\tau$ and $\sigma_{*}(U'\cup\{x\})\circ\tau$ 
+    coincide on $\free(\phi)\setminus U$.
+\end{lemma}
+
+
 \begin{prop}\label{logic:prop:LAM:beta:valid:composition:gen}
     Let $V$ be a set, $U\subseteq U' \subseteq V$ and $\sigma,\tau:V\to\tv$ 
     be maps. Let $\phi\in\tv$. Then, if $(\tau,U)$ is $\beta$-valid for $\phi$ 
@@ -796,9 +812,8 @@ would get {\em captured} by $x$. This motivate the following:
             (\sigma_{*}(U')\circ\tau)_{*}(U)(\phi)
             =(\,\sigma_{*}(U')\circ\tau_{*}(U)\,)(\phi)
         \]
-    where for all $\chi:V\to\tv$, the map $\chi_{*}$ denotes the flipped version 
-    of $\chi^{*}$ defined by $\chi_{*}(U)(\phi)=\chi^{*}(\phi)(U)$, and where 
-    $\chi^{*}$ is defined as per definition~(\ref{logic:def:LAM:beta:subst}).
+    where for all $\chi:V\to\tv$, the map $\chi_{*}$ is defined
+    as per definition~(\ref{logic:def:LAM:beta:valid:flipped}).
 \end{prop}
 \begin{proof}
     We assume $\sigma,\tau:V\to\tv$ given and we consider the property
