@@ -44,9 +44,9 @@ Proof.
         + split; assumption.
 Qed.
 
-(* Axiom schema of comprehension, restricted to decidable predicates.           *)
+(* Axiom schema of specification, restricted to decidable predicates.           *)
 (* Note that the predicate p is allowed to depend on the set x.                 *)
-Theorem comprehensionDec : forall (p:set -> set -> Prop), 
+Theorem specificationDec : forall (p:set -> set -> Prop), 
     Dec2 p          ->
     compatible2 p   ->
     forall (x:set), exists (y:set), forall (z:set), 
@@ -57,8 +57,8 @@ Proof.
 Qed.
 
 
-(* Axiom schema of comprehension assuming LEM for our Coq meta-logic.           *)
-Theorem comprehensionLEM : LEM -> forall (p:set -> set -> Prop), 
+(* Axiom schema of specification assuming LEM for our Coq meta-logic.           *)
+Theorem specificationLEM : LEM -> forall (p:set -> set -> Prop), 
     compatible2 p -> 
     forall (x:set), exists (y:set), forall (z:set), 
         z :: y <-> z :: x /\ p x z.

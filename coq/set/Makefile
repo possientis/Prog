@@ -26,7 +26,7 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Foundation.vo \
 								${CORE}/Compatible.vo \
-								${CORE}/Comprehension.vo \
+								${CORE}/Specification.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
@@ -42,7 +42,7 @@ all :							${UTILS}/LEM.vo \
 								${LANG1}/Union.vo \
 								${LANG1}/Powerset.vo \
 								${LANG1}/Foundation.vo \
-								${LANG1}/Comprehension.vo
+								${LANG1}/Specification.vo
 
 ${UTILS}/LEM.vo :				${UTILS}/LEM.v
 	coqc ${UTILS}/LEM.v -Q ${UTILS} ${UTILS}
@@ -253,7 +253,7 @@ ${CORE}/Compatible.vo :			${CORE}/Compatible.v \
 								${CORE}/Equal.vo
 	coqc ${CORE}/Compatible.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
 
-${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
+${CORE}/Specification.vo :		${CORE}/Specification.v \
 								${UTILS}/LEM.vo \
 								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
@@ -264,7 +264,7 @@ ${CORE}/Comprehension.vo :		${CORE}/Comprehension.v \
 								${CORE}/ToList.vo \
 								${CORE}/Compatible.vo \
 								${CORE}/Extensionality.vo
-	coqc ${CORE}/Comprehension.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Specification.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
 
 
 
@@ -427,7 +427,7 @@ ${LANG1}/Foundation.vo :		${LANG1}/Foundation.v \
 	
 	coqc ${LANG1}/Foundation.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
 
-${LANG1}/Comprehension.vo :		${LANG1}/Comprehension.v \
+${LANG1}/Specification.vo :		${LANG1}/Specification.v \
 								${UTILS}/LEM.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
@@ -439,5 +439,5 @@ ${LANG1}/Comprehension.vo :		${LANG1}/Comprehension.v \
 								${LANG1}/Semantics.vo \
 								${LANG1}/Relevance.vo
 	
-	coqc ${LANG1}/Comprehension.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Specification.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
 

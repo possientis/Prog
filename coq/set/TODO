@@ -1,10 +1,10 @@
-take a = {1}, 1' = Cons 0 (Cons 0 Nil), P z = (z = 1'). Comprehension fails
-axiom schema of substitution
+axiom schema of replacement
 axiom of choice?
 axiom of infinity false ?
 all ZF axioms covered?
 extension to infinite set
+new semantics in terms of variable r : set -> set -> Prop
+proof system of each language
 extension of language
-compatible predicate -> notion of measurability ?
 
 
