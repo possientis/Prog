@@ -19,14 +19,14 @@ Definition WellFounded (a:Type) (r:a -> a -> Prop) :=
 
 Arguments WellFounded {a}.
 
-Lemma lt_is_acc : forall (a:Type) (r:a -> a -> Prop) (x y:a),
-    r x y -> Accessible r y  -> Accessible r x.
+Lemma LessThanAccIsAcc : forall (a:Type) (r:a -> a -> Prop) (x y:a),
+    r y x -> Accessible r x  -> Accessible r y.
 Proof.
-    intros a r x y R Ay. destruct Ay as [y H].
+    intros a r x y R Ax. destruct Ax as [x H].
     apply H. assumption.
 Qed.
 
-Lemma nat_is_acc : forall (n:nat), Accessible lt n.
+Lemma AllNatsAccessible : forall (n:nat), Accessible lt n.
 Proof.
     induction n as [|n IH]; constructor.
     - intros n H. inversion H.
@@ -34,13 +34,13 @@ Proof.
         + subst. assumption.
         + unfold lt in H. apply le_S_n in H. 
           apply le_lt_or_eq in H. destruct H as [H|H].
-            { apply lt_is_acc with n; assumption. }
+            { apply LessThanAccIsAcc with n; assumption. }
             { apply H' in H. contradiction. }
 Qed.
 
 Lemma lt_is_wf : WellFounded lt.
 Proof.
-    unfold WellFounded. intros n. apply nat_is_acc.
+    unfold WellFounded. intros n. apply AllNatsAccessible.
 Qed.
 
 Definition Reflexive (a:Type) (r:a -> a -> Prop) : Prop :=
