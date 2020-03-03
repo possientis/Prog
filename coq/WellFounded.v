@@ -335,6 +335,9 @@ Definition WFRecursion_F: forall (a:Type) (r:a -> a -> Prop) (c:a -> Type),
                             fun (H:r y x) =>
                                 WFRecursion_F y 
                                     (AccessibleInv a r x p y H)).
+
+
+
 Check Fix.
 
 (* Do it with 'refine' first: Attempting to re-define 'Fix'                     *)
@@ -367,4 +370,28 @@ Definition WFRecursion : forall (a:Type) (r:a -> a -> Prop),
                     fun (IH: forall (x:a), (forall (y:a), r y x -> c y) -> c x) =>
                         fun (x:a) => 
                             WFRecursion_F a r c IH x (H x).
+
+
+(* Trying to rewrite the same function without using 'AccessibleInv'            *)
+Definition WFRecursion_F2: forall (a:Type) (r:a -> a -> Prop) (c:a -> Type),
+    (forall (x:a), (forall (y:a), r y x -> c y) -> c x) ->
+    forall (x:a), Accessible r x                        -> 
+    c x.
+Proof. refine (
+    fun (a:Type) =>
+        fun (r:a -> a -> Prop) =>
+            fun (c:a -> Type) => 
+                fun (IH:forall (x:a), (forall (y:a), r y x -> c y) -> c x) =>
+                    fix WFRecursion_F2 (x:a) (p:Accessible r x) : c x :=
+                        IH x (fun (y:a) => 
+                            fun (H:r y x) => WFRecursion_F2 y (
+                                (match p 
+                                    in Accessible _ x' 
+                                    return forall (y:a), r y x' -> Accessible r y 
+                                    with
+                                 | MkAcc _ _ _ H0 => H0
+                                 end) y H)
+
+)).
+Defined.
 
