@@ -1,4 +1,2 @@
-Need to refactor a lemma:
-sig*(U').tau and sig*(U'\/{x}).tau coincide on Fr(phi)\U provided (tau,U) beta-valid for phi=\x -> phi1.
 (tau,U) beta-valid for phi & (sig, U') beta-valid for tau*(U)(phi) =>? (sig*(U'). tau, U) beta-valid for phi
 LAM/betavalid.tex

@@ -795,6 +795,7 @@ would get {\em captured} by $x$. This motivate the following:
     definition~(\ref{logic:def:LAM:beta:subst}).
 \end{defin}
 
+
 \begin{lemma}\label{logic:prop:LAM:beta:valid:technical:lemma:1}
     Let $V$ be a set, $U,U'\subseteq V$ and $\sigma,\tau:V\to\tv$ be maps.
     Let $\phi=\lambda x\phi_{1}$ for some $x\in V$ and $\phi_{1}\in\tv$, 
@@ -802,7 +803,43 @@ would get {\em captured} by $x$. This motivate the following:
     $\sigma_{*}(U')\circ\tau$ and $\sigma_{*}(U'\cup\{x\})\circ\tau$ 
     coincide on $\free(\phi)\setminus U$.
 \end{lemma}
-
+\begin{proof}
+    Given $U,U'\subseteq V$ and $\sigma,\tau:V\to\tv$, we assume that
+    $(\tau,U)$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$ where 
+    $x\in V$ and $\phi_{1}\in\tv$, and we need to show that the two 
+    functions $\sigma_{*}(U')\circ\tau$ and $\sigma_{*}(U'\cup\{x\})\circ
+    \tau$ coincide on the set $\free(\phi)\setminus U$. So let $u\in\free(
+    \phi)\setminus U$. We therefore need to prove the following equality:
+        \[
+            (\sigma_{*}(U')\circ\tau)(u) 
+            =
+            (\sigma_{*}(U'\cup\{x\})\circ\tau)(u) 
+        \]
+    or equivalently, given definition~(\ref{logic:def:LAM:beta:valid:flipped}):
+        \[
+            \sigma^{*}(\tau(u))(U')
+            =
+            \sigma^{*}(\tau(u))(U'\cup\{x\})
+        \]
+    This equality follows from
+    proposition~(\ref{logic:prop:LAM:freevar:beta:intersect:gen}) provided
+    we show that:
+        \[
+            U' \cap\free(\tau(u)) = (U'\cup\{x\})\cap\free(\tau(u))
+        \]
+    It is therefore sufficient to prove that $\{x\}\cap\free(\tau(u))=
+    \emptyset$, or in other words that $x\not\in\free(\tau(u))$. However, 
+    we assumed that $(\tau,U)$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$. 
+    Using proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen})
+    we have the implication:
+        \[
+            u\in\free(\lambda x\phi_{1})\setminus U\ 
+            \Rightarrow\ 
+            x\not\in\free(\tau(u))
+        \]
+    Hence, the result follows from $\phi=\lambda x\phi_{1}$ and the assumption  
+    $u\in\free(\phi)\setminus U$.
+\end{proof}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:composition:gen}
     Let $V$ be a set, $U\subseteq U' \subseteq V$ and $\sigma,\tau:V\to\tv$ 
@@ -953,39 +990,12 @@ would get {\em captured} by $x$. This motivate the following:
     proposition~(\ref{logic:prop:LAM:freevar:beta:support:gen}) provided
     we show that the two functions $\sigma_{*}(U')\circ\tau$ and
     $\sigma_{*}(U'\cup\{x\})\circ\tau$ coincide on the set $\free(\phi_{1})
-    \setminus(U\cup\{x\})$. So let $u\in\free(\phi_{1})\setminus(U\cup\{x\})$.
-    It remains to show that:
-        \[
-            (\sigma_{*}(U')\circ\tau)(u) 
-            =
-            (\sigma_{*}(U'\cup\{x\})\circ\tau)(u) 
-        \]
-    or equivalently:
-        \[
-            \sigma^{*}(\tau(u))(U')
-            =
-            \sigma^{*}(\tau(u))(U'\cup\{x\})
-        \]
-    This last equality follows from
-    proposition~(\ref{logic:prop:LAM:freevar:beta:intersect:gen}) provided
-    we show that:
-        \[
-            U' \cap\free(\tau(u)) = (U'\cup\{x\})\cap\free(\tau(u))
-        \]
-    It is therefore sufficient to prove that $\{x\}\cap\free(\tau(u))=\emptyset$,
-    or in other words that $x\not\in\free(\tau(u))$. However, we assumed that 
-    $(\tau,U)$ is $\beta$-valid for $\phi=\lambda x\phi_{1}$. Using
-    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) once more
-    we have the implication:
-        \[
-            u\in\free(\lambda x\phi_{1})\setminus U\ 
-            \Rightarrow\ 
-            x\not\in\free(\tau(u))
-        \]
-    It is therefore sufficient to prove that $u\in\free(\lambda x\phi_{1})
-    \setminus U$ which follows from the assumption $u\in\free(\phi_{1})
-    \setminus(U\cup\{x\})=\free(\phi_{1})\cap\{x\}^{c}\cap U^{c}
-    =\free(\lambda x\phi_{1})\setminus U$.
+    \setminus(U\cup\{x\})$. However we have $\free(\phi_{1})\setminus(U
+    \cup\{x\}) =\free(\phi_{1})\cap \{x\}^{c}\cap U^{c}= \free(\phi)\setminus U$
+    and it is therefore sufficient to show that these two functions
+    coincide on $\free(\phi)\setminus U$. This follows from
+    lemma~(\ref{logic:prop:LAM:beta:valid:technical:lemma:1}) and our
+    assumption that $(\tau,U)$ is $\beta$-valid for $\phi$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:LAM:beta:valid:composition}
@@ -1001,11 +1011,7 @@ would get {\em captured} by $x$. This motivate the following:
 \begin{proof}
     This is an immediate application of 
     proposition~(\ref{logic:prop:LAM:beta:valid:composition:gen}) with
-    $U=U'=\emptyset$: if we recall
-    the notation $\chi_{*}(U)(\phi)=\chi^{*}(\phi)(U)$ where $\chi^{*}:\tv\to
-    {\cal P}(V)\to\tv$ is defined as per 
-    definition~(\ref{logic:def:LAM:beta:subst}) given $\chi:V\to\tv$, 
-    if $\tau$ is $\beta$-valid for $\phi$:
+    $U=U'=\emptyset$:         
         \begin{eqnarray*}(\sigma'\circ\tau)'(\phi)
             &=&(\sigma'\circ\tau)^{*}(\phi)(\emptyset)
             \mbox{\ \ \ \ \ $\leftarrow$\ def.~(\ref{logic:def:LAM:beta:subst})}\\
