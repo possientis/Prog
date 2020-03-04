@@ -1,17 +1,20 @@
-module  Chapter1
+module  Nat
     (   Nat (..)
     ,   j
     ,   plus, plus', (+)
     ,   mult, mult', (*)
-    ,   fact, fact2, fact3, fact4
-    ,   fib
+    ,   expn, expn', (^)
+    ,   fact, fact2, fact3
+    ,   fib, fib2
     ,   foldn
+    ,   zero, one
     )   where
 
 import qualified Prelude as P
 import Prelude hiding 
     (   (+)
     ,   (*)
+    ,   (^)
     ,   toInteger
     )
 
@@ -42,11 +45,18 @@ mult :: (Nat, Nat) -> Nat
 mult (_, Zero)   = Zero
 mult (m, Succ n) = plus (m, mult (m,n))
 
+expn :: (Nat, Nat) -> Nat
+expn (_, Zero)  = one
+expn (m, Succ n) = mult (m, expn (m,n)) 
+
 (+) :: Nat -> Nat -> Nat 
 (+) m n = plus (m,n)
 
 (*) :: Nat -> Nat -> Nat
 (*) m n = mult (m,n)
+
+(^) :: Nat -> Nat -> Nat
+(^) m n = expn (m,n)
 
 fact :: Nat -> Nat
 fact Zero     = one
@@ -67,10 +77,21 @@ plus' m = foldn (m, Succ)
 mult' :: Nat -> Nat -> Nat
 mult' m = foldn (Zero, plus' m)
 
+expn' :: Nat -> Nat -> Nat
+expn' m = foldn (one, mult' m)
+
 fact2 :: Nat -> Nat
 fact2 = go one where
     go acc Zero     = acc
     go acc (Succ n) = go (Succ n * acc) n
 
+fact3 :: Nat -> Nat
+fact3 = fst . foldn ((one, one), f) where
+    f :: (Nat, Nat) -> (Nat, Nat) 
+    f (p,q) = (p*q, q + one)
 
+fib2 :: Nat -> Nat
+fib2 = snd . foldn ((one,zero), f) where
+    f :: (Nat, Nat) -> (Nat, Nat)
+    f (p, q) = (q, p + q)
 
