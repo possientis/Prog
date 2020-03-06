@@ -189,5 +189,18 @@ L4 (inj₁ x) = λ{⟨ f , g ⟩ → f x}
 L4 (inj₂ y) = λ{⟨ f , g ⟩ → g y}
 
 L5 : LEM → DoubleNeg
-L5 L = {!!}
+L5 L {a} with L {a}
+L5 L {a} | inj₁ x = λ{_ → x}
+L5 L {a} | inj₂ y = λ { f → absurd (f y)}
 
+L6 : DoubleNeg → LEM
+L6 D = D λ {f → f (inj₂ λ{x → f (inj₁ x)})}
+
+L7 : DoubleNeg → PeirceLaw
+L7 D = λ{f → D λ{g → g (f λ{x → absurd (g x)})}}
+
+L8 : PeirceLaw → DoubleNeg
+L8 P {a} f = P λ{g → absurd (f g)}
+
+L9 : PeirceLaw → ImpAsDisj
+L9 P {a} {b} f = {!!}
