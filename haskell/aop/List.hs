@@ -17,6 +17,13 @@ module  List
     ,   lengthC
     ,   ite
     ,   filterC
+    ,   fromListC
+    ,   fromListS
+    ,   toListC
+    ,   toListS
+    ,   ex1, ex2
+    ,   headC
+    ,   headS
     )   where
 
 import Nat
@@ -79,4 +86,41 @@ filterC :: (a -> Bool) -> ListC a -> ListC a
 filterC p = concatC . fmap (ite p wrap nilp) where
     wrap x = Cons x NilC
     nilp _ = NilC
+
+fromListC :: [a] -> ListC a
+fromListC = foldr Cons NilC
+
+fromListS :: [a] -> ListS a
+fromListS [] = NilS
+fromListS (x : xs) = appendS (Snoc NilS x) (fromListS xs)
+
+toListC :: ListC a -> [a]
+toListC = foldC [] (:)
+
+toListS :: ListS a -> [a]
+toListS NilS = []
+toListS (Snoc xs x) = toListS xs ++ [x]
+
+instance (Show a) => Show (ListC a) where
+    show = show . toListC
+
+instance (Show a) => Show (ListS a) where
+    show = show . toListS
+
+ex1 :: ListC Int
+ex1 = fromListC [0,1,2,3,4,5]
+
+ex2 :: ListS Int
+ex2 = fromListS [0,1,2,3,4,5]
+
+headC :: ListC a -> Maybe a
+headC NilC = Nothing
+headC (Cons x _) = Just x
+
+headS :: ListS a -> Maybe a
+headS NilS = Nothing
+headS (Snoc _ x) = Just x
+
+
+
 

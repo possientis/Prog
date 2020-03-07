@@ -189,9 +189,9 @@ L4 (inj₁ x) = λ{⟨ f , g ⟩ → f x}
 L4 (inj₂ y) = λ{⟨ f , g ⟩ → g y}
 
 L5 : LEM → DoubleNeg
-L5 L {a} with L {a}
-L5 L {a} | inj₁ x = λ{_ → x}
-L5 L {a} | inj₂ y = λ { f → absurd (f y)}
+L5 L with L
+L5 L | inj₁ x = λ{_ → x}
+L5 L | inj₂ y = λ { f → absurd (f y)}
 
 L6 : DoubleNeg → LEM
 L6 D = D λ {f → f (inj₂ λ{x → f (inj₁ x)})}
@@ -200,7 +200,24 @@ L7 : DoubleNeg → PeirceLaw
 L7 D = λ{f → D λ{g → g (f λ{x → absurd (g x)})}}
 
 L8 : PeirceLaw → DoubleNeg
-L8 P {a} f = P λ{g → absurd (f g)}
+L8 P f = P λ{g → absurd (f g)}
 
 L9 : PeirceLaw → ImpAsDisj
-L9 P {a} {b} f = {!!}
+L9 P {a} {b} f  with L6 (L8 P) {a}
+L9 P {a} {b} f | inj₁ x = inj₂ (f x)
+L9 P {a} {b} f | inj₂ y = inj₁ y
+
+L10 : ImpAsDisj -> PeirceLaw
+L10 I {a} {b} f with I {a} (λ {x → x})
+L10 I {a} {b} f | inj₁ g = f λ {x → absurd (g x)}
+L10 I {a} {b} f | inj₂ y = y
+
+L11 : ImpAsDisj -> DeMorgan
+L11 I {a} {b} f with I {a} (λ {x → x})
+L11 I {a} {b} f | inj₁ x with I {b} (λ {x → x})
+L11 I {a} {b} f | inj₁ x | inj₁ x' = absurd (f ⟨ x , x' ⟩)
+L11 I {a} {b} f | inj₁ x | inj₂ y = inj₂ y
+L11 I {a} {b} f | inj₂ x = inj₁ x
+
+L12 : DeMorgan -> ImpAsDisj
+L12 D {a} {b} f = D λ{⟨ x , y ⟩ → x (λ{z → y (f z)})}

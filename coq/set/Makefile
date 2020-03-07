@@ -27,6 +27,7 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Foundation.vo \
 								${CORE}/Compatible.vo \
 								${CORE}/Specification.vo \
+								${CORE}/Functional.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
@@ -265,6 +266,11 @@ ${CORE}/Specification.vo :		${CORE}/Specification.v \
 								${CORE}/Compatible.vo \
 								${CORE}/Extensionality.vo
 	coqc ${CORE}/Specification.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+
+${CORE}/Functional.vo :			${CORE}/Functional.v \
+								${CORE}/Set.vo \
+								${CORE}/Equal.vo
+	coqc ${CORE}/Functional.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
 
 
 

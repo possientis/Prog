@@ -30,36 +30,40 @@ Inductive Eq (X:Type) : X -> X -> Prop :=
 | Refl : forall (x:X), Eq X x x
 .
 
+Arguments Eq {X}.
+
+Arguments Refl {X}.
+
 Lemma Rewrite' : forall (X:Type) (x y:X) (p:X -> Prop), 
-    Eq X x y -> p x -> p y.
+    Eq x y -> p x -> p y.
 Proof.
     intros X x y p H H'. destruct H. assumption.
 Qed.
 
-Lemma EqInv3 : forall (X:Type) (x y:X), Eq X x y -> x = y.
+Lemma EqInv3 : forall (X:Type) (x y:X), Eq x y -> x = y.
 Proof.
     intros X x y H. destruct H. reflexivity.
 Qed.
 
 (* Do it with 'refine' first ...                                               *)
-Definition EqInv2 : forall (X:Type) (x y:X), Eq X x y -> x = y.
+Definition EqInv2 : forall (X:Type) (x y:X), Eq x y -> x = y.
 Proof. refine (
     fun (X:Type) =>
         fun (x y:X) =>
-            fun (H:Eq X x y) =>
+            fun (H:Eq x y) =>
                 match H with
-                | Refl _ _  => eq_refl
+                | Refl _  => eq_refl
                 end
 
 ).
 Defined.
 
-Definition EqInv : forall (X:Type) (x y:X), Eq X x y -> x = y :=
+Definition EqInv : forall (X:Type) (x y:X), Eq x y -> x = y :=
     fun (X:Type) =>
         fun (x y:X) =>
-            fun (H:Eq X x y) =>
+            fun (H:Eq x y) =>
                 match H with
-                | Refl _ _  => eq_refl
+                | Refl _  => eq_refl
                 end.
 
 
@@ -67,27 +71,72 @@ Print EqInv.
 
 (* Do it with 'refine' first ...                                                *)
 Definition Rewrite2 : forall (X:Type) (x y:X) (p:X -> Prop), 
-    Eq X x y -> p x -> p y.
+    Eq x y -> p x -> p y.
 Proof. refine (
     fun (X:Type) =>
         fun(x y:X) =>
             fun (p:X -> Prop) =>
-                fun (e:Eq X x y) =>
-                        match e in (Eq _ x' y') return (p x' -> p y') with 
-                        | Refl _ x' => fun (z:p x') => z
+                fun (e:Eq x y) =>
+                        match e in (Eq x' y') return (p x' -> p y') with 
+                        | Refl x' => fun (z:p x') => z
                         end
 ).
 Defined.
 
 Definition Rewrite : forall (X:Type) (x y:X) (p:X -> Prop), 
-    Eq X x y -> p x -> p y 
+    Eq x y -> p x -> p y 
     :=
     fun (X:Type) =>
         fun(x y:X) =>
             fun (p:X -> Prop) =>
-                fun (e:Eq X x y) =>
+                fun (e:Eq x y) =>
                         match e with 
-                        | Refl _ x' => fun (z:p x') => z
+                        | Refl x' => fun (z:p x') => z
                         end.
 
+Arguments Rewrite {X} {x} {y}.
 
+
+Definition L3 : Eq (negb true) false.
+Proof. constructor. Qed.
+
+Definition L4 : Eq (negb true) false := Refl false.
+
+Definition L5 : Eq false (negb (negb false)) := Refl false.
+
+(* Managed to write a term where @Rewrite is applied to 7 arguments *)
+Definition L6 : Eq 0 0 := @Rewrite nat 0 0 
+    (fun (n:nat) => Eq n 0 -> Eq n 0) 
+    (Refl 0) 
+    (fun x => x) 
+    (Refl 0). 
+
+(* Managed to write a term where @Rewrite is applied to 8 arguments *)
+Definition L7 : Eq 0 0 := @Rewrite nat 0 0 
+    (fun (n:nat) => Eq n 0 -> Eq n 0 -> Eq n 0) 
+    (Refl 0) 
+    (fun x _ => x) 
+    (Refl 0) 
+    (Refl 0). 
+
+(* Usual Coq tactics, final proof term far from canonical                       *)
+Definition L8 : ~(Eq True False).
+Proof.
+    intros E. inversion E. apply I.
+Qed.
+
+Definition L9 : ~(Eq True False).
+Proof.
+    intros E. change ((fun X => X) False).
+    apply (Rewrite _ E). apply I.
+Qed.
+
+Definition L10 : ~(Eq True False).
+Proof. refine (
+    fun E => Rewrite (fun X => X) E I
+).
+Qed.
+
+Definition L11 : ~(Eq True False) :=
+    fun (E:Eq True False) => 
+        Rewrite  (fun (X:Prop) => X) E I.

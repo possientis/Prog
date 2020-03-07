@@ -57,12 +57,12 @@ would arguably be harder to read.
     conclude that $G_{1}(f_{1},f_{2})$ is indeed a member of the collection 
     $\arr\ (\Done\times\Dtwo)$.
 
-    $(3)$: We have $G_{1}(f):G_{0}(a)\to G_{0}(b)$ whenever $f:a\to b$: indeed
-    suppose $f\in\arr\ (\Cone\times\Ctwo)$ such that $\dom(f)=a$ and $\cod(f)=b$.
-    Then $f=(f_{1},f_{2})$ for some $f_{1}\in\arr\ \Cone$ and $f_{2}\in\arr\ 
-    \Ctwo$. Furthermore, since $a,b\in\ob\ (\Cone\times\Ctwo)$, we have
-    $a=(a_{1},a_{2})$ and $b=(b_{1},b_{2})$ for some $a_{1},b_{1}\in\ob\ \Cone$
-    and $a_{2},b_{2}\in\ob\ \Ctwo$:
+    $(3)$: We need to show that $G_{1}(f):G_{0}(a)\to G_{0}(b)$ whenever 
+    $f:a\to b$: let $f\in\arr\ (\Cone\times\Ctwo)$ such that $\dom(f)=a$ and 
+    $\cod(f)=b$. Then $f=(f_{1},f_{2})$ for some $f_{1}\in\arr\ \Cone$ and 
+    $f_{2}\in\arr\ \Ctwo$. Furthermore, since $a,b\in\ob\ (\Cone\times\Ctwo)$, 
+    we have $a=(a_{1},a_{2})$ and $b=(b_{1},b_{2})$ for some $a_{1},b_{1}\in\ob\ 
+    \Cone$ and $a_{2},b_{2}\in\ob\ \Ctwo$:
         \begin{eqnarray*}(a_{1},a_{2})
             &=&a\\
             &=&\dom\,(f)\\
@@ -83,5 +83,55 @@ would arguably be harder to read.
     b_{2}\ @\ \Ctwo$. Since $F_{1}$ and $F_{2}$ are functors, using $(3)$ of
     definition~(\ref{Fun:def:functor}) we obtain $F_{1}(f_{1}): F_{1}(a_{1})
     \to F_{1}(b_{1})\ @\ \Done$ and likewise $F_{2}(f_{2}): F_{2}(a_{2})
-    \to F_{2}(b_{2})\ @\ \Dtwo$
+    \to F_{2}(b_{2})\ @\ \Dtwo$. In order to show that $G_{1}(f):G_{0}(a)\to 
+    G_{0}(b)$, since we already know that $G_{1}(f)\in\arr(
+    \Done\times\Dtwo)$, it remains to show that $\dom\,(G_{1}(f))=G_{0}(a)$
+    and $\cod\,(G_{1}(f))=G_{0}(b)$, which goes as follows:
+        \begin{eqnarray*}\dom\,(G_{1}(f))
+            &=& \dom\,(\,G_{1}(f_{1},f_{2})\,)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+            &=&\dom\,(\,F_{1}(f_{1})\,,\,F_{2}(f_{2}))\\
+            \mbox{$(3)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&(\,\dom\,(\,F_{1}(f_{1})\,)\,,\,\dom\,(\,F_{2}(f_{2})\,)\,)\\
+            F_{1}(f_{1}):F_{1}(a_{1})\to F_{1}(b_{1})\ \to\ 
+            &=&(\,F_{1}(a_{1})\,,\,\dom\,(\,F_{2}(f_{2})\,)\,)\\
+            F_{2}(f_{2}):F_{2}(a_{2})\to F_{2}(b_{2})\ \to\ 
+            &=&(\,F_{1}(a_{1})\,,\,F_{2}(a_{2})\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+            &=&G_{0}(a_{1},a_{2})\\
+            &=&G_{0}(a)
+        \end{eqnarray*}
+        \begin{eqnarray*}\cod\,(G_{1}(f))
+            &=& \cod\,(\,G_{1}(f_{1},f_{2})\,)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+            &=&\cod\,(\,F_{1}(f_{1})\,,\,F_{2}(f_{2}))\\
+            \mbox{$(4)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&(\,\cod\,(\,F_{1}(f_{1})\,)\,,\,\cod\,(\,F_{2}(f_{2})\,)\,)\\
+            F_{1}(f_{1}):F_{1}(a_{1})\to F_{1}(b_{1})\ \to\ 
+            &=&(\,F_{1}(b_{1})\,,\,\cod\,(\,F_{2}(f_{2})\,)\,)\\
+            F_{2}(f_{2}):F_{2}(a_{2})\to F_{2}(b_{2})\ \to\ 
+            &=&(\,F_{1}(b_{1})\,,\,F_{2}(b_{2})\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+            &=&G_{0}(b_{1},b_{2})\\
+            &=&G_{0}(b)
+        \end{eqnarray*}
+
+    $(4)$: We have $G_{1}(\,\id(a)\,)=\id(\,G_{0}(a)\,)$ for all $a=(a_{1},a_{2})
+    \in\Cone\times\Ctwo$:
+        \begin{eqnarray*}G_{1}(\,\id(a)\,)
+            &=&G_{1}(\,\id(\,a_{1},a_{2}\,)\,)\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&G_{1}(\,\id(a_{1})\,,\,\id(a_{2})\,)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+            &=&(\,F_{1}(\,\id(a_{1})\,)\,,\,F_{2}(\,\id(a_{2})\,)\,)\\
+            \mbox{$(4)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&(\,\id(\,F_{1}(a_{1})\,)\,,\,\id(\,F_{2}(a_{2})\,)\,)\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&\id\,(\,F_{1}(a_{1})\,,\,F_{2}(a_{2})\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+            &=&\id\,(\,G_{0}(a_{1},a_{2})\,)\\
+            &=&\id\,(G_{0}(a))
+        \end{eqnarray*}
+
+    $(5)$: TODO
 \end{proof}

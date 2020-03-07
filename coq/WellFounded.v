@@ -38,7 +38,7 @@ Proof.
             { apply H' in H. contradiction. }
 Qed.
 
-Lemma lt_is_wf : WellFounded lt.
+Lemma LtWellFounded : WellFounded lt.
 Proof.
     unfold WellFounded. intros n. apply AllNatsAccessible.
 Qed.

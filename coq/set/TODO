@@ -1,4 +1,5 @@
-axiom schema of replacement
+Core/Replacement
+add Core/Replacement to Makefile
 axiom of choice?
 axiom of infinity false ?
 all ZF axioms covered?

@@ -35,7 +35,13 @@ lemma AllNatsAccessible : ∀ (n : ℕ), Accessible (<) n :=
         {from assume n H, by cases H},
         {from assume m H, begin cases decidable.em (m = n) with H' H',
               {rewrite H', assumption},
-              {unfold has_lt.lt at H, unfold nat.lt at H, from sorry}
+              {unfold has_lt.lt at H, unfold nat.lt at H,
+               have H1 := le_of_succ_le_succ H,
+               have H2 := lt_or_eq_of_le H1,
+               cases H2 with H2 H2,
+                 {apply LessThanAccIsAcc, exact H2, assumption},
+                 {have H3 := H' H2, contradiction}
+              }
         end}
     end
 
@@ -47,4 +53,41 @@ lemma AccessibleInv' : ∀ (α : Sort u) (r : α → α → Prop) (x : α),
         cases H with x H,
         assumption
       end
+
+lemma LtWellFounded : @WellFounded ℕ (<) :=
+  begin
+    unfold WellFounded,
+      from assume n,
+        begin
+          apply AllNatsAccessible
+        end
+  end
+
+def Reflexive  {α : Sort u} (r : α → α → Prop) : Prop :=
+  ∀ (x:α), r x x
+
+def AntiSym    {α : Sort u} (r : α → α → Prop) : Prop :=
+  ∀ (x y:α), r x y → r y x → x = y
+
+def Transitive {α : Sort u} (r : α → α → Prop) : Prop :=
+  ∀ (x y z:α), r x y → r y z → r x z
+
+def Total      {α : Sort u} (r : α → α → Prop) : Prop :=
+  ∀ (x y:α), r x y ∨ r y x
+
+def TotalOrder {α : Sort u} (r : α → α → Prop) : Prop :=
+  Reflexive r ∧ AntiSym r ∧ Transitive r ∧ Total r
+
+def Minimal {α : Sort u} (r : α → α → Prop) (x : α) : Prop :=
+  ∀ (y:α), r y x → x = y.
+
+inductive Embedding (β α : Sort u) : Sort u
+| Embed : ∀ (j:β → α), (∀ (x y:β), j x = j y → x = y) → Embedding
+
+open Embedding
+
+def restrict {α β : Sort u} (r : α → α → Prop) (e : Embedding β α) (x y : β) : Prop :=
+  begin
+    destruct e,
+  end
 
