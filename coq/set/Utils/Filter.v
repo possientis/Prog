@@ -139,3 +139,35 @@ Proof.
                 { assumption. }}
 Qed.
 
+Lemma filterReplace : forall (a b:Type) (p:a -> b -> Prop),
+    LEM                                                 ->
+    (forall (x:a) (y y':b), p x y -> p x y' -> y = y')  ->
+        forall (xs:list a), exists (ys:list b), forall (y:b),
+            In y ys <-> exists (x:a), In x xs /\ p x y.
+Proof.
+    intros a b p L F. induction xs as [|x xs IH].
+    - exists nil. intros y. split.
+        + intros H. inversion H.
+        + intros [x [H1 H2]]. inversion H1.
+    - destruct IH as [ys IH]. destruct (L (exists (y:b), p x y)) as [H|H].
+        + destruct H as [y H]. exists (y :: ys). intros z. split.
+            { intros [H'|H'].
+                { subst. exists x. split.
+                    { left. reflexivity. }
+                    { assumption. }}
+                { destruct (IH z) as [H1 _]. apply H1 in H'. 
+                  destruct H' as [x' [H2 H3]]. exists x'. split.
+                    { right. assumption. }
+                    { assumption. }}}
+            { intros [x' [[H1|H1] H2]].
+                { subst. left. apply F with x'; assumption. }
+                { right. rewrite (IH z). exists x'. split; assumption. }}
+        + exists ys. intros z. split.
+            { intros H'. destruct (IH z) as [H1 _]. apply H1 in H'.
+              destruct H' as [x' [H2 H3]]. exists x'. split.
+                { right. assumption. }
+                { assumption. }}
+            { intros [x' [[H1|H1] H2]].
+                { subst. exfalso. apply H. exists z. assumption. }
+                { apply IH. exists x'. split; assumption. }}
+Qed.

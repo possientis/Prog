@@ -212,12 +212,29 @@ L10 I {a} {b} f with I {a} (λ {x → x})
 L10 I {a} {b} f | inj₁ g = f λ {x → absurd (g x)}
 L10 I {a} {b} f | inj₂ y = y
 
-L11 : ImpAsDisj -> DeMorgan
+L11 : ImpAsDisj → DeMorgan
 L11 I {a} {b} f with I {a} (λ {x → x})
 L11 I {a} {b} f | inj₁ x with I {b} (λ {x → x})
 L11 I {a} {b} f | inj₁ x | inj₁ x' = absurd (f ⟨ x , x' ⟩)
 L11 I {a} {b} f | inj₁ x | inj₂ y = inj₂ y
 L11 I {a} {b} f | inj₂ x = inj₁ x
 
-L12 : DeMorgan -> ImpAsDisj
-L12 D {a} {b} f = D λ{⟨ x , y ⟩ → x (λ{z → y (f z)})}
+L12 : DeMorgan → ImpAsDisj
+L12 D f = D λ{⟨ x , y ⟩ → x (λ{z → y (f z)})}
+
+L13 : DeMorgan → LEM
+L13 D {a} = D (λ{⟨ f , g ⟩ → g f})
+
+L14 : LEM → DeMorgan
+L14 L = L11 (L9 (L7 (L5 L)))
+
+Stable : Set → Set
+Stable a = ¬ ¬ a → a
+
+negatedStable : ∀ {a : Set} → Stable (¬ a)
+negatedStable {a} f = λ{x → f (λ{g → g x})}
+
+conjStable : ∀ {a b : Set} → Stable a → Stable b → Stable (a × b)
+conjStable sa sb f = ⟨ sa (λ{¬a → f (λ{⟨ x , y ⟩ → ¬a x})})
+                     , sb (λ{¬b → f λ{⟨ x , y ⟩ → ¬b y}}) ⟩
+

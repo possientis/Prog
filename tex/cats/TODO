@@ -1,4 +1,3 @@
-product of two functors
 (X): Set x Set -> Set
 defining a bifunctor
 defining a profunctor

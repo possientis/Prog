@@ -8,6 +8,7 @@ module  Nat
     ,   fib, fib2
     ,   foldn
     ,   zero, one
+    ,   max
     )   where
 
 import qualified Prelude as P
@@ -16,6 +17,7 @@ import Prelude hiding
     ,   (*)
     ,   (^)
     ,   toInteger
+    ,   max
     )
 
 data Nat = Zero | Succ Nat
@@ -94,4 +96,9 @@ fib2 :: Nat -> Nat
 fib2 = snd . foldn ((one,zero), f) where
     f :: (Nat, Nat) -> (Nat, Nat)
     f (p, q) = (q, p + q)
+
+max :: Nat -> Nat -> Nat
+max Zero m = m
+max (Succ n) Zero = Succ n
+max (Succ n) (Succ m) = Succ (max n m)
 

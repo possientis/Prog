@@ -1,4 +1,6 @@
-Core/Replacement
+Normal form for sets
+Core/Functional : we d like => y = y' but we can only have y == y': we need some notion of normal form for sets
+Core/Replacement (use filterReplace)
 add Core/Replacement to Makefile
 axiom of choice?
 axiom of infinity false ?

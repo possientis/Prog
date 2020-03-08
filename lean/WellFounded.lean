@@ -12,12 +12,12 @@ lemma L1 : IRREL :=
 
 lemma L2 : IRREL := λ (A:Prop) (p:A) (q:A), rfl
 
-inductive Accessible {α : Sort u} (r : α → α → Prop) : α → Prop
+inductive Accessible {α : Type u} (r : α → α → Prop) : α → Prop
 | MkAcc : ∀ (x:α), (∀ (y:α), r y x → Accessible y) → Accessible x
 
-def WellFounded {α : Sort u} (r : α → α → Prop) : Prop := ∀ (x:α), Accessible r x
+def WellFounded {α : Type u} (r : α → α → Prop) : Prop := ∀ (x:α), Accessible r x
 
-lemma LessThanAccIsAcc : ∀ {α : Sort u} (r : α → α → Prop) (x y : α),
+lemma LessThanAccIsAcc : ∀ {α : Type u} (r : α → α → Prop) (x y : α),
   r y x → Accessible r x → Accessible r y :=
   assume α r x y R Ax,
     begin
@@ -46,7 +46,7 @@ lemma AllNatsAccessible : ∀ (n : ℕ), Accessible (<) n :=
     end
 
 
-lemma AccessibleInv' : ∀ (α : Sort u) (r : α → α → Prop) (x : α),
+lemma AccessibleInv' : ∀ (α : Type u) (r : α → α → Prop) (x : α),
   Accessible r x -> ∀ (y:α), r y x -> Accessible r y :=
     assume a r x H,
       begin
@@ -63,30 +63,30 @@ lemma LtWellFounded : @WellFounded ℕ (<) :=
         end
   end
 
-def Reflexive  {α : Sort u} (r : α → α → Prop) : Prop :=
+def Reflexive  {α : Type u} (r : α → α → Prop) : Prop :=
   ∀ (x:α), r x x
 
-def AntiSym    {α : Sort u} (r : α → α → Prop) : Prop :=
+def AntiSym    {α : Type u} (r : α → α → Prop) : Prop :=
   ∀ (x y:α), r x y → r y x → x = y
 
-def Transitive {α : Sort u} (r : α → α → Prop) : Prop :=
+def Transitive {α : Type u} (r : α → α → Prop) : Prop :=
   ∀ (x y z:α), r x y → r y z → r x z
 
-def Total      {α : Sort u} (r : α → α → Prop) : Prop :=
+def Total      {α : Type u} (r : α → α → Prop) : Prop :=
   ∀ (x y:α), r x y ∨ r y x
 
-def TotalOrder {α : Sort u} (r : α → α → Prop) : Prop :=
+def TotalOrder {α : Type u} (r : α → α → Prop) : Prop :=
   Reflexive r ∧ AntiSym r ∧ Transitive r ∧ Total r
 
-def Minimal {α : Sort u} (r : α → α → Prop) (x : α) : Prop :=
+def Minimal {α : Type u} (r : α → α → Prop) (x : α) : Prop :=
   ∀ (y:α), r y x → x = y.
 
-inductive Embedding (β α : Sort u) : Sort u
+inductive Embedding (β α : Type u) : Type u
 | Embed : ∀ (j:β → α), (∀ (x y:β), j x = j y → x = y) → Embedding
 
 open Embedding
 
-def restrict {α β : Sort u} (r : α → α → Prop) (e : Embedding β α) (x y : β) : Prop :=
+def restrict {α β : Type u} (r : α → α → Prop) (e : Embedding β α) (x y : β) : Prop :=
   begin
     destruct e,
   end

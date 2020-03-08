@@ -1074,12 +1074,59 @@ and yet $x\in\free(\tau(y))$. We have:
 
 \begin{prop}
     Let $V$ be a set, $U,U'\subseteq V$ and $\sigma,\tau:V\to\tv$ be maps.
-    Then for all $\phi\in\tv$, we have the implication:
-        \[
-            (\mbox{$(\tau,U)$ is $\beta$-valid for $\phi$})
-            \land
-            (\mbox{$(\sigma,U')$ is $\beta$-valid for $\tau^{*}(\phi)(U)$})
-            \ \Rightarrow\
-            \mbox{$(\sigma_{*}(U')\circ\tau,U)$ is $\beta$-valid for $\phi$}
-        \]
+    Given $\phi\in\tv$, we assume that $(\tau,U)$ is $\beta$-valid for $\phi$
+    and that $(\sigma,U')$ is $\beta$-valid for $\tau_{*}(U)(\phi)$.
+    Then, $(\sigma_{*}(U')\circ\tau,U)$ is $\beta$-valid for $\phi$,
+    where for all maps $\chi:V\to\tv$, the map $\chi_{*}$ is given by
+    definition~(\ref{logic:def:LAM:beta:valid:flipped}).
 \end{prop}
+\begin{proof}
+    Given the set $V$ and $\sigma,\tau:V\to\tv$, we consider the property on 
+    $\phi\in\tv$ which states that for all $U,U'\subseteq V$, we have the
+    implication from the $\beta$-validity for $(\tau,U)$ for $\phi$ and 
+    that of $(\sigma,U')$ for $\tau_{*}(U)(\phi)$, to the $\beta$-validity
+    of $(\sigma_{*}(U')\circ\tau,U)$ for $\phi$. We shall prove this property
+    with a structural induction argument on $\phi$, using
+    theorem~(\ref{logic:the:proof:induction}) of 
+    page~\pageref{logic:the:proof:induction}. So first we assume that $\phi=x$
+    for some $x\in V$. We need to show the property is true for $\phi$. So
+    let $U,U'\subseteq V$. We need to show the implication is true for $U,U'$
+    and $\phi$. So we assume that $(\tau,U)$ is $\beta$-valid for $\phi$ and
+    that $(\sigma,U')$ is $\beta$-valid for $\tau_{*}(U)(\phi)$. We need to 
+    show that $(\sigma_{*}(U')\circ\tau,U)$ is $\beta$-valid for $\phi=x$,
+    which is immediate from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:x:gen}). So we
+    now assume that $\phi=\phi_{1}\ \phi_{2}$ for some $\phi_{1},\phi_{2}\in\tv$
+    for which the property is true. We need to show the property is also true
+    for $\phi$. So let $U,U'\subseteq V$. We need to show that the implication
+    is true for $\phi$ in relation to $U$ and $U'$. So we assume that
+    $(\tau,U)$ is $\beta$-valid for $\phi$ and $(\sigma,U')$ is $\beta$-valid
+    for $\tau_{*}(U)(\phi)$. We need to show that $(\sigma_{*}(U')\circ\tau,U)$
+    is $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}), it is
+    sufficient to show that $(\sigma_{*}(U')\circ\tau)$ is $\beta$-valid
+    for both $\phi_{1}$ and $\phi_{2}$. However, having assumed the property
+    is true for $\phi_{1}$ and $\phi_{2}$, so is the implcation in relation
+    to $U$ and $U'$. It is therefore sufficient to show that $(\tau,U)$ is
+    $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$, and that 
+    $(\sigma,U')$ is $\beta$-valid for both $\tau_{*}(U)(\phi_{1})$
+    and $\tau_{*}(U)(\phi_{2})$. These facts follow immediately from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}) 
+    given our assumptions that $(\tau,U)$ is $\beta$-valid for $\phi$
+    and that $(\sigma,U')$ is $\beta$-valid for $\tau_{*}(U)(\phi)$,
+    together with $\tau_{*}(U)(\phi)=\tau_{*}(U)(\phi_{1})\ \ \tau_{*}(U)
+    (\phi_{2})$ as can be seen from:
+        \begin{eqnarray*}\tau_{*}(U)(\phi)
+            &=&\tau_{*}(U)(\phi_{1}\ \phi_{2})\\
+            \mbox{flipping}\ \to\ 
+            &=&\tau^{*}(\phi_{1}\ \phi_{2})(U)\\
+            \mbox{def.~(\ref{logic:def:LAM:beta:subst})}\ \to\ 
+            &=&\tau^{*}(\phi_{1})(U)\ \ \tau^{*}(\phi_{2})(U)\\
+            \mbox{flipping}\ \to\ 
+            &=&\tau_{*}(U)(\phi_{1})\ \ \tau_{*}(U)(\phi_{2})\\
+        \end{eqnarray*}
+    So we now assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$ and
+    $\phi_{1}\in\tv$ for which the property is true. We need to show the
+    property is also true $\phi$. So let $U,U'\subseteq V$. We need to show
+    the implication is true for $\phi$ in relation to $U$ and $U'$. TODO
+\end{proof}

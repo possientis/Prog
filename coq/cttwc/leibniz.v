@@ -140,3 +140,70 @@ Qed.
 Definition L11 : ~(Eq True False) :=
     fun (E:Eq True False) => 
         Rewrite  (fun (X:Prop) => X) E I.
+
+(* not canonical                                                                *)
+Definition L12 : ~(Eq true false).
+Proof.
+    intros E. inversion E.
+Qed.
+
+
+Definition L13 : ~(Eq true false).
+Proof.
+    intros E. change ((fun (b:bool) => if b then True else False) false). 
+    apply (Rewrite _ E). apply I.
+Qed.
+
+Definition L14: ~(Eq true false) :=
+    fun (E:Eq true false) =>
+        Rewrite (fun (b:bool) => if b then True else False) E I. 
+
+Definition L15 : forall (n:nat), ~(Eq 0 (S n)).
+Proof.
+    intros n E. inversion E.
+Qed.
+
+Definition L16 : forall (n:nat), ~(Eq 0 (S n)).
+Proof.
+    intros n E. 
+    change ((fun (m:nat) =>
+        match m with
+        | 0   => True
+        | S _ => False
+        end) (S n)).
+    apply (Rewrite _ E).
+    apply I.
+Qed.
+
+Definition L17 : forall (n:nat), ~(Eq 0 (S n)) :=
+    fun (n:nat) =>
+        fun (E:Eq 0 (S n)) =>
+            Rewrite (fun (m:nat) =>
+                match m with
+                | 0     => True
+                | S _   => False
+                end) E I. 
+
+Definition L18 : forall (m n:nat), Eq (S m) (S n) -> Eq m n.
+Proof.
+    intros m n E.
+    change ((fun (x:nat) => 
+        match x with
+        | 0     => True
+        | (S x) => Eq m x
+        end) (S n)).
+    apply (Rewrite _ E).
+    exact (Refl m).
+Qed.
+
+Definition L19 : forall (m n:nat), Eq (S m) (S n) -> Eq m n :=
+    fun (m n:nat) =>
+        fun (E:Eq (S m) (S n)) =>
+            Rewrite (fun (x:nat) =>
+                match x with
+                | 0     => True
+                | (S x) => Eq m x
+                end) E (Refl m).
+
+
+
