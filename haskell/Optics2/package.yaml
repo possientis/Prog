@@ -27,6 +27,7 @@ dependencies:
 - lens-aeson
 - mtl
 - text
+- bytestring
 
 library:
   source-dirs: src

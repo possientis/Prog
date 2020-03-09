@@ -1,5 +1,6 @@
 {-# LANGUAGE RankNTypes         #-}
 {-# LANGUAGE TemplateHaskell    #-}
+{-# LANGUAGE OverloadedStrings  #-}
 
 module  Fold
     (   Role        (..)
@@ -12,12 +13,16 @@ module  Fold
     ,   crewMembers
     ,   crewRole
     ,   toListSomehow
-    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7
+    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10
+    ,   ex11, ex12, ex13, ex14, ex15
     )   where
 
+import Data.Set         as S
+import Data.Map         as M
+import Data.Text
+import Data.Word
 import Control.Lens
-import Data.Set as S
-import Data.Map as M
+import Data.ByteString
 
 data Role
     = Gunner
@@ -56,7 +61,8 @@ crewMembers :: Fold (Set CrewMember) CrewMember
 crewMembers = folded
 
 -- lenses can be used as Folds
-crewRole :: Fold CrewMember Role
+--crewRole :: Fold CrewMember Role
+crewRole :: Lens' CrewMember Role -- avoiding compiler warning
 crewRole = role
 
 toListSomehow :: Fold (Set CrewMember) Role -> Set CrewMember -> [Role]
@@ -89,4 +95,56 @@ ex7 = M.fromList [("Jack", "Captain"),("Will", "First Mate")] ^.. folded
 -- both :: Bitraversable r => Traversal (r a a) (r b b) a b
 -- in spirit:
 -- both :: Bitraversable r => Fold (r a a) a
+
+ex8 :: [String] 
+ex8 = ("Gemini", "Leo") ^.. both
+
+
+ex9 :: [String]
+ex9 = Left "Albuquerque" ^.. both
+
+ex10 :: [String]
+ex10 =  Right "Yosemite" ^.. both
+
+ex11 :: [String]
+ex11 = ("Gemini", "Leo", "Libra") ^.. both
+
+-- each :: Each s t a b => Traversal s t a b
+-- Simplified
+-- each :: Each s s a a => Fold s a
+
+ex12 :: [Int]
+ex12 = (1,2,3,4,5) ^.. each
+
+ex13 :: [Int]
+ex13 = [1,2,3,4,5] ^.. each
+
+
+ex14 :: String
+ex14 = ("Made him an offer he couldn't refuse" :: Text) ^.. each
+
+
+ex15 :: [Word8]
+ex15 = ("Do or do not" :: ByteString) ^.. each
+
+beastSizes :: [(Int,String)]
+beastSizes = [(3,"Sirens"), (882,"Kraken"), (92,"Ogopogo")]
+
+ex16 = beastSizes ^.. folded 
+
+ex17 = beastSizes ^.. folded . folded
+
+ex18 = beastSizes ^.. folded . folded . folded
+
+ex19 = beastSizes ^.. folded . _2
+
+ex20 = toListOf (folded . folded) [[1,2,3],[4,5,6]]
+
+
+ex21 = toListOf
+    (folded . folded)
+    (M.fromList [("Jack","Captain"), ("Will", "First Mate")] :: Map String String)
+
+ex22 = ("Hello", "It's me" :: String) ^.. both . folded
+
 
