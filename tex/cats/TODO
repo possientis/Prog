@@ -1,7 +1,6 @@
 (X): Set x Set -> Set
 defining a bifunctor
 defining a profunctor
-F:C^op -> D^op
 natural transformation
 identity natural trans: alpha: F => F
 composition of two nats (vertical)

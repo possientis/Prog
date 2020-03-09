@@ -1,0 +1,42 @@
+\begin{prop}\label{Fun:prop:opposite}
+    Let $F:\Cat\to\Dat$ be a functor where \Cat\ and \Dat\ are categories. Then
+    $F$ is also a functor $F:\Cop\to\Dop$.
+\end{prop}
+\begin{proof}
+    We need to check that properties $(1)-(5)$ of 
+    definition~(\ref{Fun:def:functor}) are satisfied:
+
+    $(1)$: $F_{0}$ is indeed a map $F_{0}:\ob\ \Cop\to\ob\ \Dop$ since $F$ is
+    a functor and $F_{0}$ is therefore a map $F_{0}:\ob\ \Cat\to\ob\ \Dat$. 
+    Furthermore, we have $\ob\ \Cop=\ob\ \Cat$ and $\ob\ \Dop=\ob\ \Dat$ by 
+    virtue of definition~(\ref{Cat:def:opposite}).
+
+    $(2)$: $F_{1}$ is indeed a map $F_{1}:\arr\ \Cop\to\arr\ \Dop$ since
+    $\arr\ \Cop=\arr\ \Cat$ and $\arr\ \Dop=\arr\ \Dat$ from
+    definition~(\ref{Cat:def:opposite}), and $F_{1}$ is a map
+    $F_{1}:\arr\ \Cat\to\arr\ \Dat$.
+
+    $(3)$: We have $F_{1}(f):F_{0}(a)\to F_{0}(b)\ @\ \Dop$ whenever
+    $f:a\to b\ @\ \Cop$. Indeed, the assumption $f:a\to b\ @\ \Cop$ is equivalent
+    to $f:b\to a\ @\ \Cat$. $F$ being a functor, this implies
+    $F_{1}(f):F_{0}(b)\to F_{0}(a)\ @\ \Dat$ which is equivalent to 
+    $F_{1}(f):F_{0}(a)\to F_{0}(b)\ @\ \Dop$.
+
+    $(4)$: We have $F_{1}(\,\id(a)\ @\ \Cop)=\id(\,F_{0}(a)\,)\ @\ \Dop$ for
+    all $a\in\Cop$. This follows from the equality $F_{1}(\,\id(a)\ @\ \Cat)
+    =\id(\,F_{0}(a)\,)\ @\ \Dat$ and the fact that the notions of objects and
+    identity coincide on a category and its opposite.
+
+    $(5)$: We have $F_{1}(g\,\circ\,f\ @\ \Cop)=F_{1}(g)\circ F_{1}(f)\ @\ \Dop$
+    when $f:a\to b\ @\ \Cop$ and $g:b\to c\ @\ \Cop$. Indeed, the assumptions
+    $f:a\to b\ @\ \Cop$ and $g:b\to c\ @\ \Cop$ are equivalent to 
+    $f:b\to a\ @\ \Cat$ and $g:c\to b\ @\ \Cat$. Hence we have:
+        \begin{eqnarray*}F_{1}(g\circ f\ @\ \Cop)
+            &=&F_{1}(f\circ g\ @\ \Cat)\ \leftarrow\ 
+            \mbox{def.~(\ref{Cat:def:opposite})}\\
+            \mbox{$(5)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&F_{1}(f)\circ F_{1}(g)\ @\ \Dat\\
+            \mbox{def.~(\ref{Cat:def:opposite})}\ \to\ 
+            &=&F_{1}(g)\circ F_{1}(f)\ @\ \Dop
+        \end{eqnarray*}
+\end{proof}
