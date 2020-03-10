@@ -86,8 +86,41 @@ inductive Embedding (β α : Type u) : Type u
 
 open Embedding
 
-def restrict {α β : Type u} (r : α → α → Prop) (e : Embedding β α) (x y : β) : Prop :=
-  begin
-    destruct e,
-  end
+def restrict {α β : Type u} : Embedding β α → (α → α → Prop) → (β → β → Prop)
+| (Embed j _) r x y := r (j x) (j y)
 
+-- Every non-empty subset has a minimal element
+def HasMinProp {α : Type u} (r : α → α → Prop) : Prop :=
+  ∀ (β:Type u) (e:Embedding β α) (y:β), -- non-empty embedding
+    ∃ (z:β), Minimal (restrict e r) z
+
+def WellOrder {α : Type u} (r : α → α → Prop) : Prop :=
+  TotalOrder r ∧ HasMinProp r
+
+-- returns a 'strict' counterpart of a given relation
+def strict {α : Type u} (r : α → α → Prop) (x y : α) : Prop :=
+  r x y ∧ ¬ x = y
+
+open has_le
+
+lemma LeReflexive : Reflexive (@le ℕ _) :=
+  begin unfold Reflexive, apply le_refl, end
+
+lemma LeAntiSym : AntiSym (@le ℕ _) :=
+  begin unfold AntiSym, apply le_antisymm, end
+
+lemma LeTransitive : Transitive (@le ℕ _) :=
+  begin unfold Transitive, apply le_trans, end
+
+lemma nat_total_order: ∀ (m n : ℕ), ¬m = n → m < n ∨ m < n :=
+begin
+  assume m n H, 
+end
+
+lemma LeTotal : Total (@le ℕ _) :=
+begin
+  unfold Total, assume n m,
+  cases decidable.em (m = n) with H H,
+    {subst m, left, apply le_refl},
+    {}
+end

@@ -78,18 +78,17 @@ Inductive Embedding (b a:Type) : Type :=
 Arguments Embed {b} {a}.
 
 (* Restricting relation r on a to subset b                                      *)
-Definition restrict (a b:Type) (r:a -> a -> Prop) (e:Embedding b a)(x y:b) 
-    : Prop :=
-        match e with
-        | Embed j _ => r (j x) (j y)
-        end.
+Definition restrict (a b:Type)(e:Embedding b a)(r:a -> a -> Prop) (x y:b):Prop :=
+    match e with
+    | Embed j _ => r (j x) (j y)
+    end.
 
 Arguments restrict {a} {b}.
 
 (* Every non-empty subset has a minimal element                                 *)
 Definition HasMinProp (a:Type) (r:a -> a -> Prop) : Prop :=
-    forall (b:Type) (e:Embedding b a), forall (y:b), exists (z:b), 
-    Minimal (restrict r e) z.
+    forall (b:Type) (e:Embedding b a) (y:b), 
+        exists (z:b), Minimal (restrict e r) z.
 
 Arguments HasMinProp {a}.
 
@@ -395,3 +394,5 @@ Proof. refine (
 )).
 Defined.
 
+
+Check nat_total_order.
