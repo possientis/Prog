@@ -34,6 +34,15 @@ Arguments Eq {X}.
 
 Arguments Refl {X}.
 
+Inductive Eq2 (X:Type) : X -> X -> Prop :=
+| Refl2 : forall (x:X), Eq2 X x x
+.
+
+Arguments Eq2 {X}.
+
+Arguments Refl2 {X}.
+
+
 Lemma Rewrite' : forall (X:Type) (x y:X) (p:X -> Prop), 
     Eq x y -> p x -> p y.
 Proof.
@@ -70,7 +79,7 @@ Definition EqInv : forall (X:Type) (x y:X), Eq x y -> x = y :=
 Print EqInv.
 
 (* Do it with 'refine' first ...                                                *)
-Definition Rewrite2 : forall (X:Type) (x y:X) (p:X -> Prop), 
+Definition Rewrite'' : forall (X:Type) (x y:X) (p:X -> Prop), 
     Eq x y -> p x -> p y.
 Proof. refine (
     fun (X:Type) =>
@@ -92,6 +101,19 @@ Definition Rewrite : forall (X:Type) (x y:X) (p:X -> Prop),
                 fun (e:Eq x y) =>
                         match e with 
                         | Refl x' => fun (z:p x') => z
+                        end.
+
+Arguments Rewrite {X} {x} {y}.
+
+Definition Rewrite2 : forall (X:Type) (x y:X) (p:X -> Prop), 
+    Eq2 x y -> p x -> p y 
+    :=
+    fun (X:Type) =>
+        fun(x y:X) =>
+            fun (p:X -> Prop) =>
+                fun (e:Eq2 x y) =>
+                        match e with 
+                        | Refl2 x' => fun (z:p x') => z
                         end.
 
 Arguments Rewrite {X} {x} {y}.
@@ -206,4 +228,62 @@ Definition L19 : forall (m n:nat), Eq (S m) (S n) -> Eq m n :=
                 end) E (Refl m).
 
 
+Definition L20 : forall (X Y:Type) (f:X -> Y) (x y:X), Eq x y -> Eq (f x) (f y).
+Proof.
+    intros X Y f x y E.
+    change ((fun (z:X) => Eq (f x) (f z)) y).
+    apply (Rewrite _ E).
+    exact (Refl (f x)).
+Qed.
 
+Definition L21 : forall (X Y:Type) (f:X -> Y) (x y:X), Eq x y -> Eq (f x) (f y) :=
+    fun (X Y:Type) =>
+        fun (f:X -> Y) =>
+            fun (x y:X) =>
+                fun (E:Eq x y) =>
+                    Rewrite (fun (z:X) => Eq (f x) (f z)) E (Refl (f x)).
+
+Definition L22 : forall (X:Type) (x y:X), Eq x y -> Eq y x.
+Proof.
+    intros X x y E.
+    change ((fun (z:X) => Eq z x) y).
+    apply (Rewrite _ E).
+    exact (Refl x).
+Qed.
+
+Definition L23 : forall (X:Type) (x y:X), Eq x y -> Eq y x :=
+    fun (X:Type) =>
+        fun (x y:X) =>
+            fun (E:Eq x y) =>
+                Rewrite (fun (z:X) => Eq z x) E (Refl x).
+
+Definition L24 : forall (X:Type) (x y z:X), Eq x y -> Eq y z -> Eq x z.
+Proof.
+    intros X x y z Exy Eyz.
+    change ((fun (u:X) => Eq x u) z).
+    apply (Rewrite _ Eyz).
+    exact Exy.
+Qed.
+
+
+Definition L25 : forall (X:Type) (x y z:X), Eq x y -> Eq y z -> Eq x z :=
+    fun (X:Type) =>
+        fun (x y z:X) =>
+            fun (Exy:Eq x y) =>
+                fun (Eyz:Eq y z) =>
+                    Rewrite (fun (u:X) => Eq x u) Eyz Exy.
+
+(* All these equalities are equivalent                                          *)
+Definition L26 : forall (X:Type) (x y:X), Eq x y -> Eq2 x y.
+Proof.
+    intros X x y E.
+    change ((fun (z:X) => Eq2 x z) y).
+    apply (Rewrite _ E).
+    exact (Refl2 x).
+Qed.
+
+Definition L27 : forall (X:Type) (x y:X), Eq x y -> Eq2 x y :=
+    fun (X:Type) =>
+        fun (x y:X) =>
+            fun (E:Eq x y) =>
+                Rewrite (fun (z:X) => Eq2 x z) E (Refl2 x).
