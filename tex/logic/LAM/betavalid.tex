@@ -1128,5 +1128,42 @@ and yet $x\in\free(\tau(y))$. We have:
     So we now assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$ and
     $\phi_{1}\in\tv$ for which the property is true. We need to show the
     property is also true $\phi$. So let $U,U'\subseteq V$. We need to show
-    the implication is true for $\phi$ in relation to $U$ and $U'$. TODO
+    the implication is true for $\phi$ in relation to $U$ and $U'$. So we
+    assume that $(\tau,U)$ is $\beta$-valid for $\phi$ and $(\sigma,U')$ is
+    $\beta$-valid for $\tau_{*}(U)(\phi)$. We need to show that $(\sigma_{*}
+    (U')\circ\tau,U)$ is $\beta$-valid for $\phi$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}), we
+    need to establish two facts: on the one hand, we need to show that
+    $(\sigma_{*}(U')\circ\tau,U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$.
+    On the other hand, we need to show that $x\not\in\free(\sigma_{*}(U')(\tau
+    (u)))$ whenever $u\in\free(\phi)\setminus U$. First, we focus on the
+    $\beta$-validity of $(\sigma_{*}(U')\circ\tau,U\cup\{x\})$ for $\phi_{1}$.
+    Using proposition~(\ref{logic:prop:LAM:free:support:beta:valid:gen}), 
+    this $\beta$-validity is actually equivalent to the $\beta$-validity
+    of $(\sigma_{*}(U'\cup\{x\})\circ\tau,U\cup\{x\})$ for $\phi_{1}$,
+    provided we show that both functions $\sigma_{*}(U')\circ\tau$
+    and $\sigma_{*}(U'\cup\{x\})\circ\tau$ coincide on the set
+    $\free(\phi_{1})\setminus(U\cup\{x\})$. However, this follows
+    immediately from lemma~(\ref{logic:prop:LAM:beta:valid:technical:lemma:1}),
+    our assumption that $(\tau,U)$ is $\beta$-valid for $\phi$ and the
+    fact that $\free(\phi_{1})\setminus(U\cup\{x\})$ is exactly $\free(\phi)
+    \setminus U$. So we now have a slightly different goal, which is to
+    prove the $\beta$-validity of $(\sigma_{*}(U'\cup\{x\})\circ\tau,U\cup\{x\})$
+    for $\phi_{1}$. However, we assumed that the property was true for $\phi_{1}$
+    and consequently, so is the implication in relation to the sets
+    $U\cup\{x\}$ and $U'\cup\{x\}$. It is therefore sufficient to prove that
+    $(\tau,U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$, and furthermore
+    that $(\sigma,U'\cup\{x\})$ is $\beta$-valid for $\tau_{*}(U\cup\{x\})
+    (\phi_{1})$. The $\beta$-validity of $(\tau,U\cup\{x\})$ for $\phi_{1}$
+    is a consequence of the $\beta$-validity of $(\tau,U)$ for $\phi$, using 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}). Now
+    we assumed that $(\sigma,U')$ is $\beta$-valid for $\tau_{*}(U)(\phi)$ and
+    from definition~(\ref{logic:def:LAM:beta:valid:flipped}) we have
+    $\tau_{*}(U)(\phi)=\lambda x\,\tau_{*}(U\cup\{x\})(\phi_{1})$. Using
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) once
+    more, we see that $(\sigma, U'\cup\{x\})$ is $\beta$-valid for
+    $\tau_{*}(U\cup\{x\})(\phi_{1})$ as requested. This completes our
+    first goal of proving the $\beta$-validity of $(\sigma_{*}(U')\circ\tau,
+    U\cup\{x\})$ for $\phi_{1}$. TODO
+    
 \end{proof}
