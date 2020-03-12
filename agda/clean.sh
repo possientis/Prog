@@ -11,5 +11,6 @@ rm -f hello-world
 
 ./vfpa/clean.sh
 ./plfa/clean.sh
+./aop/clean.sh
 
 cd ${DIR}
