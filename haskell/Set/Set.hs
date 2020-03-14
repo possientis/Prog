@@ -14,36 +14,9 @@ module  Set
     ,   normalize
     ,   leq
     ,   toInt
-    ,   (+>)
     )   where
 
 import Test.Hspec
-
-main :: IO ()
-main = hspec $ do
-    it "Testing 0 <= 1 " $ incl zero one        `shouldBe` True
-    it "Testing 1 <= 2 " $ incl one two         `shouldBe` True
-    it "Testing 2 <= 3 " $ incl two three       `shouldBe` True
-    it "Testing 3 <= 4 " $ incl three four      `shouldBe` True
-    it "Testing 4 <= 5 " $ incl four five       `shouldBe` True
-    it "Testing 0 == 0 " $ equal zero zero      `shouldBe` True
-    it "Testing 1 == 1 " $ equal one one        `shouldBe` True
-    it "Testing 2 == 2 " $ equal two two        `shouldBe` True
-    it "Testing 3 == 3 " $ equal three three    `shouldBe` True
-    it "Testing 4 == 4 " $ equal four four      `shouldBe` True
-    it "Testing 5 == 5 " $ equal five five      `shouldBe` True
-    it "Testing 5 == {0} \\/ 5" $ equal (Cons zero five)    five `shouldBe` True
-    it "Testing 5 == {1} \\/ 5" $ equal (Cons one five)     five `shouldBe` True
-    it "Testing 5 == {2} \\/ 5" $ equal (Cons two five)     five `shouldBe` True
-    it "Testing 5 == {3} \\/ 5" $ equal (Cons three five)   five `shouldBe` True
-    it "Testing 5 == {4} \\/ 5" $ equal (Cons four five)    five `shouldBe` True
-    it "Testing 5 /= {5} \\/ 5" $ equal (Cons five five)    five `shouldBe` False
-    it "Testing 0 : 5"  $ belong zero five  `shouldBe` True
-    it "Testing 1 : 5"  $ belong one five   `shouldBe` True
-    it "Testing 2 : 5"  $ belong two five   `shouldBe` True
-    it "Testing 3 : 5"  $ belong three five `shouldBe` True
-    it "Testing 4 : 5"  $ belong four five  `shouldBe` True
-    it "Testing ¬5 : 5" $ belong five five  `shouldBe` False
 
 data Set = Nil | Cons Set Set
     deriving Eq
@@ -51,26 +24,23 @@ data Set = Nil | Cons Set Set
 instance Show Set where
     show = setShow
 
-(+>) :: Set -> Set -> Set
-(+>) = Cons
-
 zero :: Set
 zero = Nil
 
 one :: Set
-one = zero +> zero
+one = Cons zero zero
 
 two :: Set
-two = one +> one
+two = Cons one one
 
 three :: Set
-three = two +> two
+three = Cons two two
 
 four :: Set
-four = three +> three
+four = Cons three three
 
 five :: Set
-five = four +> four
+five = Cons four four
 
 fromList :: [Set] -> Set
 fromList [] = Nil
@@ -98,20 +68,19 @@ normalize (Cons x xs)
     | belong x xs   = normalize xs
     | otherwise     = insert (normalize x) (normalize xs)
 
-leq :: Set -> Set -> Bool
-leq x y = leq_ (normalize x) (normalize y)
 
-leq_ :: Set -> Set -> Bool
-leq_ Nil _   = True
-leq_ _   Nil = False
-leq_ (Cons x xs) (Cons y ys)
-    =  (x /= y) && (leq_ x y)
-    || (x == y) && (leq_ xs ys)
+-- should be called on normalized arguments
+leq :: Set -> Set -> Bool
+leq Nil _   = True
+leq _   Nil = False
+leq (Cons x xs) (Cons y ys)
+    =  (x /= y) && (leq x y)
+    || (x == y) && (leq xs ys)
 
 insert :: Set -> Set -> Set
 insert x Nil = Cons x Nil
 insert x (Cons y ys)
-    | leq_ x y  = Cons y (insert x ys)
+    | leq x y   = Cons y (insert x ys)
     | otherwise = Cons x (Cons y ys) 
 
 toInt :: Set -> Maybe Int
@@ -133,6 +102,32 @@ help :: [Set] -> String
 help [] = ""
 help [x] = setShow x
 help (x : xs) = setShow x ++ "," ++ help xs
+
+main :: IO ()
+main = hspec $ do
+    it "Testing 0 <= 1 " $ incl zero one        `shouldBe` True
+    it "Testing 1 <= 2 " $ incl one two         `shouldBe` True
+    it "Testing 2 <= 3 " $ incl two three       `shouldBe` True
+    it "Testing 3 <= 4 " $ incl three four      `shouldBe` True
+    it "Testing 4 <= 5 " $ incl four five       `shouldBe` True
+    it "Testing 0 == 0 " $ equal zero zero      `shouldBe` True
+    it "Testing 1 == 1 " $ equal one one        `shouldBe` True
+    it "Testing 2 == 2 " $ equal two two        `shouldBe` True
+    it "Testing 3 == 3 " $ equal three three    `shouldBe` True
+    it "Testing 4 == 4 " $ equal four four      `shouldBe` True
+    it "Testing 5 == 5 " $ equal five five      `shouldBe` True
+    it "Testing 5 == {0} \\/ 5" $ equal (Cons zero five)    five `shouldBe` True
+    it "Testing 5 == {1} \\/ 5" $ equal (Cons one five)     five `shouldBe` True
+    it "Testing 5 == {2} \\/ 5" $ equal (Cons two five)     five `shouldBe` True
+    it "Testing 5 == {3} \\/ 5" $ equal (Cons three five)   five `shouldBe` True
+    it "Testing 5 == {4} \\/ 5" $ equal (Cons four five)    five `shouldBe` True
+    it "Testing 5 /= {5} \\/ 5" $ equal (Cons five five)    five `shouldBe` False
+    it "Testing 0 : 5"  $ belong zero five  `shouldBe` True
+    it "Testing 1 : 5"  $ belong one five   `shouldBe` True
+    it "Testing 2 : 5"  $ belong two five   `shouldBe` True
+    it "Testing 3 : 5"  $ belong three five `shouldBe` True
+    it "Testing 4 : 5"  $ belong four five  `shouldBe` True
+    it "Testing ¬5 : 5" $ belong five five  `shouldBe` False
 
 
 

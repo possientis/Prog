@@ -10,16 +10,22 @@ module  Fold
     ,   talents
     ,   roster
     ,   myFold
-    ,   crewMembers
+    ,   setCrewMembers
     ,   crewRole
     ,   toListSomehow
     ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10
     ,   ex11, ex12, ex13, ex14, ex15
+    ,   shipName
+    ,   captain
+    ,   firstMate
+    ,   conscripts
     )   where
 
+import Prelude          as P
 import Data.Set         as S
 import Data.Map         as M
-import Data.Text
+import Data.Text        hiding (toUpper)
+import Data.Char        
 import Data.Word
 import Control.Lens
 import Data.ByteString
@@ -57,8 +63,8 @@ myFold = undefined
 -- (^..) :: s -> Fold s a -> [a]
 -- (^..) = flip toListOf
 
-crewMembers :: Fold (Set CrewMember) CrewMember
-crewMembers = folded
+setCrewMembers :: Fold (Set CrewMember) CrewMember
+setCrewMembers = folded
 
 -- lenses can be used as Folds
 --crewRole :: Fold CrewMember Role
@@ -146,5 +152,61 @@ ex21 = toListOf
     (M.fromList [("Jack","Captain"), ("Will", "First Mate")] :: Map String String)
 
 ex22 = ("Hello", "It's me" :: String) ^.. both . folded
+
+
+newtype Name = Name
+    { getName :: String
+    } deriving Show
+
+data ShipCrew = ShipCrew
+    { _shipName   :: Name
+    , _captain    :: Name
+    , _firstMate  :: Name
+    , _conscripts :: [Name]
+    } deriving (Show)
+
+makeLenses ''ShipCrew
+
+collectCrewMembers :: ShipCrew -> [Name]
+collectCrewMembers crew = [crew ^. captain, crew ^. firstMate] ++ crew ^. conscripts
+
+-- folding :: Foldable f => (s -> f a) -> Fold s a
+crewMembers :: Fold ShipCrew Name
+crewMembers = folding collectCrewMembers
+
+
+myCrew :: ShipCrew
+myCrew = ShipCrew
+    { _shipName   = Name "Purple Pearl"
+    , _captain    = Name "Grumpy Roger"
+    , _firstMate  = Name " Long-John Bronze"
+    , _conscripts = [Name "One-eyed Jack", Name "Filthy Frank"]
+    }
+
+
+ex23 = myCrew ^.. crewMembers
+
+-- to :: (s -> a) -> Fold s a
+
+ex24 = Name "Two-faced Tony" ^. to getName
+
+ex25 = Name "Two-faced Tony" ^. to getName . to (fmap toUpper)
+
+ex26 = Name "Two-faced Tony" ^. to (fmap toUpper . getName)
+
+ex27 = myCrew ^.. crewMembers . to getName
+
+ex28 = P.map getName $ myCrew ^.. crewMembers
+
+crewNames :: Fold ShipCrew Name
+crewNames = folding $ \s 
+    -> s ^.. captain
+    <> s ^.. firstMate
+    <> s ^.. conscripts . folded
+
+crewNames2 :: Fold ShipCrew Name
+crewNames2 = folding $ \s -> [s ^. captain, s ^. firstMate] ++ s ^. conscripts
+
+     
 
 

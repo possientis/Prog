@@ -1127,7 +1127,7 @@ and yet $x\in\free(\tau(y))$. We have:
         \end{eqnarray*}
     So we now assume that $\phi=\lambda x\phi_{1}$ for some $x\in V$ and
     $\phi_{1}\in\tv$ for which the property is true. We need to show the
-    property is also true $\phi$. So let $U,U'\subseteq V$. We need to show
+    property is also true for $\phi$. So let $U,U'\subseteq V$. We need to show
     the implication is true for $\phi$ in relation to $U$ and $U'$. So we
     assume that $(\tau,U)$ is $\beta$-valid for $\phi$ and $(\sigma,U')$ is
     $\beta$-valid for $\tau_{*}(U)(\phi)$. We need to show that $(\sigma_{*}
@@ -1149,7 +1149,7 @@ and yet $x\in\free(\tau(y))$. We have:
     fact that $\free(\phi_{1})\setminus(U\cup\{x\})$ is exactly $\free(\phi)
     \setminus U$. So we now have a slightly different goal, which is to
     prove the $\beta$-validity of $(\sigma_{*}(U'\cup\{x\})\circ\tau,U\cup\{x\})$
-    for $\phi_{1}$. However, we assumed that the property was true for $\phi_{1}$
+    for $\phi_{1}$. However, we assumed that the property is true for $\phi_{1}$
     and consequently, so is the implication in relation to the sets
     $U\cup\{x\}$ and $U'\cup\{x\}$. It is therefore sufficient to prove that
     $(\tau,U\cup\{x\})$ is $\beta$-valid for $\phi_{1}$, and furthermore
@@ -1164,6 +1164,33 @@ and yet $x\in\free(\tau(y))$. We have:
     more, we see that $(\sigma, U'\cup\{x\})$ is $\beta$-valid for
     $\tau_{*}(U\cup\{x\})(\phi_{1})$ as requested. This completes our
     first goal of proving the $\beta$-validity of $(\sigma_{*}(U')\circ\tau,
-    U\cup\{x\})$ for $\phi_{1}$. TODO
-    
+    U\cup\{x\})$ for $\phi_{1}$. We shall now prove our second goal which
+    is that $x\not\in\free(\sigma_{*}(U')(\tau(u)))$ whenever 
+    $u\in\free(\phi)\setminus U$. So we assume that $u\in\free(\phi)\setminus 
+    U$ and we need to show that $x\not\in\free(\sigma_{*}(U')(\tau(u)))$.
+    Bearing in mind that $\sigma_{*}(U')(\tau(u))=\sigma^{*}(\tau(u))(U')$,
+    applying proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:gen}), 
+    we obtain:
+        \[
+            \free(\sigma_{*}(U')(\tau(u))) 
+                \subseteq 
+            (\free(\tau(u))\cap U')
+            \ \cup\ 
+            \!\!\!\!\!\!\!\!
+            \bigcup_{v\in\free(\tau(u))\setminus U'}
+            \!\!\!\!\!\!
+            \free(\sigma(v))
+        \]
+    It is therefore sufficient to establish two facts: firstly we need to show 
+    that $x\not\in\free(\tau(u))\cap U'$, and secondly we need to show that 
+    $x\not\in\free(\sigma(v))$ whenever $v\in\free(\tau(u))\setminus U'$.
+    In order to prove our first goal, it is sufficient to show that $x\not
+    \in\free(\tau(u))$, and this follows from
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen}) and our
+    assumptions that $u\in\free(\phi)\setminus U$ and that $(\tau,U)$ is
+    $\beta$-valid for $\phi$. It remains to show our second goal. So we
+    assume that $v\in\free(\tau(u))\setminus U'$, and we need to show that
+    $x\not\in\free(\sigma(v))$.
+
+    TODO
 \end{proof}

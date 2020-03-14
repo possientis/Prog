@@ -1,0 +1,47 @@
+\begin{defin}\label{Fun:def:cartesian}
+    The {\em cartesian functor} $F:\Set\times\Set\to\Set$ is defined by:
+        \begin{eqnarray*}
+            (1)&\ &F_{0}(a_{1},a_{2}) = a_{1}\times a_{2}\\
+            (2)&\ &F_{1}(f_{1},f_{2})(x_{1},x_{2})
+                =(\,f_{1}(x_{1})\,,\,f_{2}(x_{2})\,)
+        \end{eqnarray*}
+    where $(1)$ holds for all sets $a_{1},a_{2}$, and $(2)$ holds for all
+    sets $a_{1},a_{2},b_{1},b_{2}$ as well as $f_{1}:a_{1}\to b_{1}$, 
+    $f_{2}:a_{2}\to b_{2}$ together with $x_{1}\in a_{1}$ and $x_{2}\in a_{2}$.
+\end{defin}
+
+\noindent
+{\bf Remark}: Recall that given two sets $a_{1}$ and $a_{2}$, the cartesian
+product $a_{1}\times a_{2}$ of $a_{1}$ and $a_{2}$ is the set of all
+ordered pairs $(x_{1},x_{2})$ where $x_{1}\in a_{1}$ and $x_{2}\in a_{2}$:
+    \[
+    a_{1}\times a_{2}=\{(x_{1},x_{2})\ |\ x_{1}\in a_{1},\ x_{2}\in a_{2}\}
+    \]
+
+\begin{notation}\label{Fun:notation:cartesian}
+    The cartesian functor is denoted $(\times)$ as an infix operator.
+\end{notation}
+
+\noindent
+{\bf Remark}: So if $F:\Set\times\Set\to\Set$ is the cartesian functor, we 
+shall typicallly write $a_{1}\times a_{2}$ and $f_{1}\times f_{2}$ instead
+of $F_{0}(a_{1},a_{2})$ and $F_{1}(f_{1},f_{2})$ respectively.
+
+{\bf Remark}: If $f_{1}$ and $f_{2}$ are arrows of the category \Set, strictly
+speaking from definition~(\ref{Cat:def:set}) $f_{1}$ and $f_{2}$ are tuples
+$(a,b,f)$ where $f:a\to b$. In particular $f_{1}$ and $f_{2}$ are sets and
+the cartesian product $f_{1}\times f_{2}$ is meaningful, so we have a 
+notational conflict with $f_{1}\times f_{2}$, the cartesian
+functor evaluated at $(f_{1},f_{2})$. Similarly to the composition $\circ$, 
+the symbol $\times$ is highly overloaded and may also be used to denote the 
+canonical product of two categories as in 
+definition~(\ref{Cat:def:canonical:product}), or the canonical product of
+two functors as in notation~(\ref{Fun:notation:canonical:product}).
+
+\begin{prop}\label{Fun:prop:cartesian}
+    The cartesian functor $(\times)$ is a functor $(\times):\Set\times\Set
+    \to\Set$. 
+\end{prop}
+\begin{proof}
+    TODO
+\end{proof}

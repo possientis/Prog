@@ -112,15 +112,42 @@ lemma LeAntiSym : AntiSym (@le ℕ _) :=
 lemma LeTransitive : Transitive (@le ℕ _) :=
   begin unfold Transitive, apply le_trans, end
 
-lemma nat_total_order: ∀ (m n : ℕ), ¬m = n → m < n ∨ m < n :=
+lemma nat_total_order: ∀ (m n : ℕ), ¬m = n → m < n ∨ n < m :=
 begin
-  assume m n H, 
+  assume m n H,
+  cases decidable.em (m <= n) with H H,
+    {left, apply lt_of_le_of_ne; assumption},
+    {right, apply lt_of_not_ge, assumption}
 end
 
 lemma LeTotal : Total (@le ℕ _) :=
 begin
-  unfold Total, assume n m,
+  unfold Total, assume m n,
   cases decidable.em (m = n) with H H,
     {subst m, left, apply le_refl},
+    {have H := nat_total_order m n H, cases H with H H,
+      {left, apply le_of_lt, assumption},
+      {right, apply le_of_lt, assumption}}
+end
+
+lemma LeTotalOrder : TotalOrder (@le ℕ _) :=
+begin
+  unfold TotalOrder, split,
+    {apply LeReflexive},
+    {split,
+      {apply LeAntiSym},
+      {split,
+        {apply LeTransitive},
+        {apply LeTotal}}}
+end
+
+lemma LeHasMinProp : LEM → HasMinProp (@le ℕ _) :=
+begin
+  unfold HasMinProp, assume L β e x, cases e with j p,
+  unfold Minimal, unfold restrict, generalize E:j x = n,
+  have H:j x <= n := begin rewrite E end, clear E,
+  revert H, revert p, revert x, revert j, revert β,
+  induction n with n IH; assume β j x p H,
+    {existsi x, assume y H', apply p, }, -- j x <= 0 -> j x = 0 ...
     {}
 end

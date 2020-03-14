@@ -287,3 +287,75 @@ Definition L27 : forall (X:Type) (x y:X), Eq x y -> Eq2 x y :=
         fun (x y:X) =>
             fun (E:Eq x y) =>
                 Rewrite (fun (z:X) => Eq2 x z) E (Refl2 x).
+
+
+Variable a : Type.
+Variable (x y : a).
+Variable plus : a -> a -> a.
+
+Notation "u $ v" := (plus u v) (at level 20, left associativity).
+
+(* The term y $ x cannot be rewritten in t, as $ is left associative            *)
+Definition t:Prop := x $ y $ x = y.
+
+Definition p1 (u:a) : Prop := u $ y $ x = y.
+
+Definition L28 : p1 x = t := eq_refl _.
+
+Definition p2 (u:a) : Prop := x $ y $ x = u.
+
+Definition L29 : p2 y = t := eq_refl _.
+
+Definition p3 (u:a) : Prop := x $ u $ x = u.
+
+Definition L30 : p3 y = t := eq_refl _.
+
+Definition p4 (u:a) : Prop := u $ x = y.
+
+Definition L31 : p4 (x $ y) = t := eq_refl _.
+
+Definition L32 : forall (n:nat), ~Eq 0 (S n).
+Proof.
+    intros n E.
+    change ((fun (n:nat) => 
+        match n with 
+        | 0     => True
+        | S_    => False
+        end) (S n)).
+    apply (Rewrite _ E).
+    apply I.
+Qed.
+
+Definition L33 : forall (n:nat), ~Eq 0 (S n) :=
+    fun (n:nat) =>
+        fun (E:Eq 0 (S n)) =>
+            Rewrite (fun (m:nat) =>
+                match m with
+                | 0     => True
+                | S _   => False
+                end) E I.
+
+
+Definition Eq3 : forall (X:Type), X -> X -> Prop :=
+    fun (X:Type) =>
+        fun (x y:X) =>
+            forall (p:X -> Prop), p x -> p y.
+
+Arguments Eq3 {X}.
+
+Definition Refl3 : forall (X:Type) (x:X), Eq3 x x :=
+    fun (X:Type) =>
+        fun (x:X) =>
+            fun (p:X -> Prop) =>
+                fun (z:p x) => z.
+
+Arguments Refl3 {X}.
+
+
+Definition Rewrite3 : forall (X:Type) (x y:X) (p:X -> Prop), 
+    Eq3 x y -> p x -> p y :=
+    fun (X:Type) =>
+        fun (x y:X) =>
+            fun (p:X -> Prop) =>
+                fun (E:Eq3 x y) =>
+                    fun (z:p x) => E p z.
