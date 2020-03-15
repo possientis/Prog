@@ -2,6 +2,8 @@ set encoding=utf-8
 set nocompatible          " use vim settings rather than vi
 colorscheme solarized
 
+let $BASH_ENV="~/.bash_aliases"
+
 syntax on                 " colouring based on syntax
 filetype on
 filetype plugin indent on " auto indentation based on syntax

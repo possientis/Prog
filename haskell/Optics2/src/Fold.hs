@@ -207,6 +207,65 @@ crewNames = folding $ \s
 crewNames2 :: Fold ShipCrew Name
 crewNames2 = folding $ \s -> [s ^. captain, s ^. firstMate] ++ s ^. conscripts
 
-     
+-- elemOf :: Eq a => Fold s a -> a -> s -> Bool
+ex29 = elemOf folded 3 [1,2,3,4]
 
+ex30 = elemOf folded 99 [1,2,3,4]
+
+-- anyOf :: Fold s a => (a -> Bool) -> s -> Bool (not quite the expected sig)
+ex31 = anyOf folded even [1,2,3,4]
+
+ex32 = anyOf folded (>10) [1,2,3,4]
+
+
+-- allOf :: Fold s a -> (a -> Bool) -> s -> Bool
+ex33 = allOf folded even [1,2,3,4]
+
+ex34 = allOf folded (<10) [1,2,3,4]
+
+
+-- findOf :: Fold s a -> (a -> Bool) -> s -> Maybe a
+ex35 = findOf folded even [1,2,3,4]
+
+ex36 = findOf folded (>10) [1,2,3,4]
+
+-- has :: Fold s a -> s -> Bool
+-- hasn't :: Fold s a -> s -> Bool
+
+ex37 = has folded []
+
+ex38 = has folded [1,2]
+
+ex39 = hasn't folded []
+
+ex40 = hasn't folded [1,2]
+
+-- lengthOf :: Fold s a -> s -> Int
+ex41 = lengthOf folded [1,2,3,4]
+
+-- sumOf :: Num a => Fold s a -> s -> a
+-- productOf :: Num a => Fold s a -> s -> a
+
+ex42 = sumOf folded [1,2,3,4]
+ex43 = productOf folded [1,2,3,4]
+
+-- same thing for Fold
+-- firstOf :: Fold s a -> s -> Maybe a
+-- preview :: Fold s a -> s -> Maybe a
+-- (^?)    :: s -> Fold s a -> Maybe a
+ex44 = firstOf folded []
+ex45 = firstOf folded [1,2,3,4]
+ex46 = preview folded [1,2,3,4]
+ex47 = [1,2,3,4] ^? folded
+
+-- lastOf :: Fold s a -> s -> Maybe a
+ex48 = lastOf folded [1,2,3,4]
+
+-- minimOf :: Ord a => Fold s a -> s -> Maybe a
+-- maximumOf :: Ord a => Fold s a -> s -> Maybe a
+
+ex49 = minimumOf folded [2,1,4,3] :: Maybe Int
+ex50 = maximumOf folded [2,1,4,3] :: Maybe Integer
+ex51 = minimumOf folded []        :: Maybe Integer
+ex52 = maximumOf folded []        :: Maybe Int
 

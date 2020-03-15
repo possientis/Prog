@@ -43,5 +43,38 @@ two functors as in notation~(\ref{Fun:notation:canonical:product}).
     \to\Set$. 
 \end{prop}
 \begin{proof}
-    TODO
+    Let $F=(F_{0},F_{1})$ denote the cartesian functor $(\times)$. We need
+    to check that properties $(1)-(5)$ of definition~(\ref{Fun:def:functor}) 
+    are satisfied:
+
+    $(1)$: $F_{0}$ is indeed a map $F_{0}:\ob\ (\Set\times\Set)\to\ob\ \Set$, 
+    since $F_{0}$ is defined on the collection of all $(a_{1},a_{2})$ where
+    $a_{1}$ and $a_{2}$ are sets and this collection is indeed the collection
+    of all objects of $\Set\times\Set$. Furthemore $F_{0}(a_{1},a_{2})=
+    a_{1}\times a_{2}\in\Set$.
+
+    $(2)$: $F_{1}$ is indeed a map $F_{1}:\arr\ (\Set\times\Set)\to\arr\ \Set$:
+    $F_{1}(f_{1},f_{2})$ is defined on the collection of all $(f_{1},f_{2})$
+    where $f_{1}:a_{1}\to b_{1}$ and $f_{2}:a_{2}\to b_{2}$ for arbitrary
+    $a_{1}, a_{2}, b_{1}, b_{2}$. So it is defined on the collection of all
+    $(f_{1},f_{2})$ where $f_{1},f_{2}$ are arrows in \Set, and this collection
+    is indeed $\arr\ (\Set\times\Set)$. Furthemore, if we have $f_{1}:a_{1}\to 
+    b_{1}$ and $f_{2}:a_{2}\to b_{2}$, then $F_{1}(f_{1},f_{2})(x_{1},x_{2})$ is 
+    defined for all $(x_{1},x_{2})$ where $x_{1}\in a_{1}$ and $x_{2}\in a_{2}$.
+    So $F_{1}(f_{1},f_{2})$ is a function defined on the 
+    cartesian product $a_{1}\times a_{2}$. Since $F_{1}(f_{1},f_{2})(x_{1},x_{2})$
+    is defined as $(\,f_{1}(x_{1})\,,\,f_{2}(x_{2})\,)$ we see that $F_{1}
+    (f_{1},f_{2})$ is in fact a function $F_{1}(f_{1},f_{2}):a_{1}\times a_{2}
+    \to b_{1}\times b_{2}$. However, definition~(\ref{Fun:def:cartesian}) does
+    not spell out the fact that $b_{1}\times b_{2}$ is the intended codomain
+    of $F_{1}(f_{1},f_{2})$, but this is pretty clear from the context.
+    Furthermore, definition~(\ref{Fun:def:cartesian}) does not explicitely 
+    define an arrow $(a_{1}\times a_{2},b_{1}\times b_{2},F_{1}(f_{1},f_{2}))$ of 
+    \Set, but only its underlying function $F_{1}(f_{1},f_{2})$. This is also 
+    fair enough given the context and in line with 
+    notation~(\ref{Cat:notation:set:arrow}). We conlude that $F_{1}(f_{1},f_{2})
+    \in\arr\ \Set$.
+
+    $(3)$: TODO
 \end{proof}
+

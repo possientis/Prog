@@ -148,6 +148,21 @@ begin
   have H:j x <= n := begin rewrite E end, clear E,
   revert H, revert p, revert x, revert j, revert β,
   induction n with n IH; assume β j x p H,
-    {existsi x, assume y H', apply p, }, -- j x <= 0 -> j x = 0 ...
-    {}
+    { existsi x, assume y H', apply p,
+      have H1 : j x = 0 := eq_zero_of_le_zero H,
+      have H2 : j y = 0 :=
+        begin
+          apply eq_zero_of_le_zero, apply le_trans, apply H', assumption
+        end,
+      rewrite H1, rewrite H2},
+    { have H' := lt_or_eq_of_le H, clear H, cases H' with H H,
+        { have H' := le_of_succ_le_succ H, clear H, apply IH; assumption},
+        { cases (L (∃ (y:β), j y ≤ n)) with H' H',
+          { clear H, clear x, cases H' with x H, apply IH; assumption},
+          { existsi x, assume y H0, have H1 : j y ≤ succ n,
+            {rewrite <- H, assumption},
+            have H2 := lt_or_eq_of_le H1, clear H0, clear H1, cases H2 with H0 H0,
+              { have H1 := le_of_succ_le_succ H0, clear H0, exfalso,
+                apply H', existsi y, assumption},
+              {apply p, rewrite H0, rewrite H}}}}
 end

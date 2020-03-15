@@ -1,7 +1,10 @@
+Require Import Peano_dec.
+
 Require Import Core.Set.
 Require Import Core.Decidability.
 
-(* Ordering of syntactic representations of sets.                               *)
+(* Ordering of syntactic representations of sets. This relation is not          *)
+(* compatible with set equality (==) and is used for normalization only.        *)
 Fixpoint leq (x y:set) : Prop :=
     match x with
     | Nil           => True
@@ -14,7 +17,7 @@ Fixpoint leq (x y:set) : Prop :=
     end.
 
 (* Strict equality between sets is decidable so leq itself is decidable.        *)
-Lemma leq_dec : forall (x y:set), {leq x y} + {~leq x y}.
+Lemma leqDec : forall (x y:set), {leq x y} + {~leq x y}.
 Proof.
     induction x as [|x IH1 xs IH2]; intros y.
     - left. apply I.
@@ -33,7 +36,7 @@ Proof.
                     { apply H1 in H3. contradiction. }}}
 Qed.
 
-Lemma leq_refl : forall (x:set), leq x x.
+Lemma leqRefl : forall (x:set), leq x x.
 Proof.
     induction x as [|x _ xs IH].
     - apply I.
@@ -41,3 +44,62 @@ Proof.
         + reflexivity.
         + apply IH.
 Qed.
+
+Lemma leqxNil : forall (x:set), leq x Nil -> x = Nil.
+Proof.
+    intros x. destruct x as [|x xs]. 
+    - intros. reflexivity.
+    - simpl. intros. contradiction.
+Qed.
+
+Lemma leqAnti : forall (x y:set), leq x y -> leq y x -> x = y.
+Proof.
+    induction x as [|x IH1 xs IH2].
+    - intros y H1 H2. symmetry. apply leqxNil. assumption.
+    - intros [|y ys].
+        + intros H. apply leqxNil in H. inversion H.
+        + simpl. intros [[H1 H2]|[H1 H2]].
+            { intros [[H3 H4]|[H3 H4]].
+                { exfalso. apply H1. apply IH1; assumption. }
+                { exfalso. apply H1. symmetry. assumption. }}
+            { intros [[H3 H4]|[H3 H4]].
+                { exfalso. apply H3. symmetry. assumption. }
+                { subst. rewrite (IH2 ys).
+                    { reflexivity. }
+                    { assumption. }
+                    { assumption. }}}
+Qed.
+
+
+Lemma leqTrans : forall (x y z:set), leq x y -> leq y z -> leq x z. 
+Proof.
+    induction x as [|x IH1 xs IH2]; intros y z H1 H2.
+    - apply I.
+    - destruct z as [|z zs].
+        + apply leqxNil in H2. subst. apply leqxNil in H1. inversion H1.
+        + simpl. destruct (set_eq_dec x z) as [H|H].
+            { subst. right. split.
+                { reflexivity. }
+                { destruct y as [|y ys]. 
+                    { apply leqxNil in H1. inversion H1. }
+                    { simpl in H1. simpl in H2. 
+                        destruct H1 as [[H1 H3]|[H1 H3]].
+                            { destruct H2 as [[H2 H4]|[H2 H4]].
+                                { exfalso. apply H1. apply leqAnti; assumption. }
+                                { exfalso. apply H1. symmetry. assumption. }}    
+                            { destruct H2 as [[H2 H4]|[H2 H4]].
+                                { exfalso. apply H2. symmetry. assumption. }
+                                { subst. apply IH2 with ys; assumption. }}}}}
+            { left. split.
+                { assumption. }
+                { destruct y as [|y ys].
+                    { apply leqxNil in H1. inversion H1. }
+                    { simpl in H1. simpl in H2. 
+                        destruct H1 as [[H1 H3]|[H1 H3]].
+                            { destruct H2 as [[H2 H4]|[H2 H4]].
+                                { apply IH1 with y; assumption. }
+                                { subst. assumption. }}
+                            { destruct H2 as [[H2 H4]|[H2 H4]].
+                                { subst. assumption. }
+                                { subst. apply leqRefl. }}}}}
+Qed.                            

@@ -359,3 +359,93 @@ Definition Rewrite3 : forall (X:Type) (x y:X) (p:X -> Prop),
             fun (p:X -> Prop) =>
                 fun (E:Eq3 x y) =>
                     fun (z:p x) => E p z.
+
+
+Definition L34 : forall (X Y Z:Prop), X /\ Y -> (X -> Y -> Z) -> Z :=
+    fun (X Y Z:Prop) =>
+        fun (p:X /\ Y) =>
+            fun (f:X -> Y -> Z) =>
+                match p with
+                | conj x y  => f x y
+                end.
+
+Definition L35 : forall (X Y Z:Prop), X \/ Y -> (X -> Z) -> (Y -> Z) -> Z :=
+    fun (X Y Z:Prop) =>
+        fun (p:X \/ Y) =>
+            fun (px:X -> Z) =>
+                fun (py:Y -> Z) =>
+                    match p with
+                    | or_introl x   => px x
+                    | or_intror y   => py y
+                    end.
+
+(* Impredicative definitions, not using inductive type definition               *)
+Definition And (X Y:Prop) : Prop := forall (Z:Prop), (X -> Y -> Z) -> Z. 
+
+Definition Or (X Y:Prop) : Prop := forall (Z:Prop), (X -> Z) -> (Y -> Z) -> Z.
+
+(* inductive and impredicative definitions of conjunction are equivalent        *)
+Definition L36 : forall (X Y:Prop), And X Y <-> X /\ Y :=
+    fun (X Y:Prop) => conj
+        (fun (f:forall (Z:Prop), (X -> Y -> Z) -> Z) => conj
+            (f X (fun (x:X) (y:Y) => x))
+            (f Y (fun (x:X) (y:Y) => y)))
+        (fun (p:X /\ Y) =>
+            fun (Z:Prop) =>
+                fun (f:X -> Y -> Z) =>
+                    match p with
+                    | conj x y => f x y
+                    end).
+
+(* Inductive and impredicative definitions of disjunction are equivalent        *)
+Definition L37 : forall (X Y:Prop), Or X Y <-> X \/ Y :=
+    fun (X Y:Prop) => conj
+        (fun (f:forall (Z:Prop), (X -> Z) -> (Y -> Z) -> Z) =>
+           f (X \/ Y) (fun (x:X) => or_introl x) (fun (y:Y) => or_intror y))
+        (fun (p:X \/ Y) =>
+            fun (Z:Prop) =>
+                fun (f:X -> Z) =>
+                    fun (g:Y-> Z) =>
+                        match p with
+                        | or_introl x   => f x
+                        | or_intror y   => g y
+                        end). 
+
+(* Constructor for conjonction based on impredicative definition.               *)
+Definition AndI : forall (X Y:Prop), X -> Y -> And X Y :=
+    fun (X Y:Prop) =>
+        fun (x:X) =>
+            fun (y:Y) =>
+                fun (Z:Prop) =>
+                    fun (f:X -> Y -> Z) => f x y.
+
+(* Destructor for conjonction based on impredicative definition.                *)
+Definition AndE : forall (X Y Z:Prop), And X Y -> (X -> Y -> Z) -> Z :=
+    fun (X Y Z:Prop) =>
+        fun (f:And X Y) =>
+            fun (g:X -> Y -> Z) =>
+                f Z g. 
+
+Definition OrI1 : forall (X Y:Prop), X -> Or X Y :=
+    fun (X Y:Prop) =>
+        fun (x:X) =>
+            fun (Z:Prop) =>
+                fun(f:X -> Z) =>
+                    fun (g:Y -> Z) => f x.  
+     
+
+Definition OrI2 : forall (X Y:Prop), Y -> Or X Y :=
+    fun (X Y:Prop) =>
+        fun (y:Y) =>
+            fun (Z:Prop) =>
+                fun(f:X -> Z) =>
+                    fun (g:Y -> Z) => g y.  
+     
+
+Definition OrE : forall (X Y Z:Prop), Or X Y -> (X -> Z) -> (Y -> Z) -> Z :=
+    fun (X Y Z:Prop) =>
+        fun (p:Or X Y) =>
+            fun (f:X -> Z) =>
+                fun (g:Y -> Z) =>
+                    p Z f g.
+
