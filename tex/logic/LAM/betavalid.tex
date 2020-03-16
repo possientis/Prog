@@ -1083,7 +1083,7 @@ and yet $x\in\free(\tau(y))$. We have:
 \begin{proof}
     Given the set $V$ and $\sigma,\tau:V\to\tv$, we consider the property on 
     $\phi\in\tv$ which states that for all $U,U'\subseteq V$, we have the
-    implication from the $\beta$-validity for $(\tau,U)$ for $\phi$ and 
+    implication from the $\beta$-validity of $(\tau,U)$ for $\phi$ and 
     that of $(\sigma,U')$ for $\tau_{*}(U)(\phi)$, to the $\beta$-validity
     of $(\sigma_{*}(U')\circ\tau,U)$ for $\phi$. We shall prove this property
     with a structural induction argument on $\phi$, using
@@ -1104,9 +1104,9 @@ and yet $x\in\free(\tau(y))$. We have:
     for $\tau_{*}(U)(\phi)$. We need to show that $(\sigma_{*}(U')\circ\tau,U)$
     is $\beta$-valid for $\phi$. Using
     proposition~(\ref{logic:prop:LAM:beta:valid:recursion:app:gen}), it is
-    sufficient to show that $(\sigma_{*}(U')\circ\tau)$ is $\beta$-valid
+    sufficient to show that $(\sigma_{*}(U')\circ\tau,U)$ is $\beta$-valid
     for both $\phi_{1}$ and $\phi_{2}$. However, having assumed the property
-    is true for $\phi_{1}$ and $\phi_{2}$, so is the implcation in relation
+    is true for $\phi_{1}$ and $\phi_{2}$, so is the implication in relation
     to $U$ and $U'$. It is therefore sufficient to show that $(\tau,U)$ is
     $\beta$-valid for both $\phi_{1}$ and $\phi_{2}$, and that 
     $(\sigma,U')$ is $\beta$-valid for both $\tau_{*}(U)(\phi_{1})$
@@ -1190,7 +1190,29 @@ and yet $x\in\free(\tau(y))$. We have:
     assumptions that $u\in\free(\phi)\setminus U$ and that $(\tau,U)$ is
     $\beta$-valid for $\phi$. It remains to show our second goal. So we
     assume that $v\in\free(\tau(u))\setminus U'$, and we need to show that
-    $x\not\in\free(\sigma(v))$.
-
-    TODO
+    $x\not\in\free(\sigma(v))$. Now we assumed that $(\sigma,U')$ is 
+    $\beta$-valid for $\tau_{*}(U)(\phi)=\lambda x\tau_{*}(U\cup \{x\})
+    (\phi_{1})$, so we know from 
+    proposition~(\ref{logic:prop:LAM:beta:valid:recursion:lam:gen})
+    that $x\not\in\free(\sigma(v))$ whenever $v\in\free(\tau_{*}(U)(\phi))
+    \setminus U'$. It is therefore sufficient to prove that $v\in\free(
+    \tau_{*}(U)(\phi))\setminus U'$. However, from our assumption
+    $v\in\free(\tau(u))\setminus U'$ we obtain $v\not\in U'$, and it
+    is therefore sufficient to prove that $v\in\free(\tau_{*}(U)(\phi))$.
+    Using proposition~(\ref{logic:prop:LAM:freevar:of:betasubst:valid:gen})
+    and the $\beta$-validity of $(\tau,U)$ for $\phi$, remembering that
+    $\tau_{*}(U)(\phi)=\tau^{*}(\phi)(U)$, we have the equality:
+        \[
+            \free(\tau_{*}(U)(\phi)) 
+                \ =\ 
+            (\free(\phi)\cap U)
+            \ \cup
+            \!\!\!\!\!\!
+            \bigcup_{u\in\free(\phi)\setminus U} 
+            \!\!\!\!\!\!
+            \free(\tau(u))
+        \]
+    Hence, from the assumptions $u\in\free(\phi)\setminus U$ and 
+    $v\in\free(\tau(u))\setminus U'\subseteq\free(\tau(u))$, we
+    conclude that $v\in\free(\tau_{*}(U)(\phi))$ as requested.
 \end{proof}
