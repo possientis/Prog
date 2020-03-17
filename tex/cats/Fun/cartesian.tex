@@ -27,6 +27,7 @@ ordered pairs $(x_{1},x_{2})$ where $x_{1}\in a_{1}$ and $x_{2}\in a_{2}$:
 shall typicallly write $a_{1}\times a_{2}$ and $f_{1}\times f_{2}$ instead
 of $F_{0}(a_{1},a_{2})$ and $F_{1}(f_{1},f_{2})$ respectively.
 
+\noindent
 {\bf Remark}: If $f_{1}$ and $f_{2}$ are arrows of the category \Set, strictly
 speaking from definition~(\ref{Cat:def:set}) $f_{1}$ and $f_{2}$ are tuples
 $(a,b,f)$ where $f:a\to b$. In particular $f_{1}$ and $f_{2}$ are sets and
@@ -75,6 +76,35 @@ two functors as in notation~(\ref{Fun:notation:canonical:product}).
     notation~(\ref{Cat:notation:set:arrow}). We conlude that $F_{1}(f_{1},f_{2})
     \in\arr\ \Set$.
 
-    $(3)$: TODO
+    $(3)$: We need to show that $F_{1}(f):F_{0}(a)\to F_{1}(b)$ whenever
+    $f:a\to b$\,: let $f\in\arr\ (\Set\times\Set)$ such that $\dom(f)=a$ and
+    $\cod(f)=b$. Then $a=(a_{1},a_{2})$ for some sets $a_{1},a_{2}$, $b=
+    (b_{1},b_{2})$ for some sets $b_{1},b_{2}$ and $f=(f_{1},f_{2})$ for some
+    arrows $f_{1}:a_{1}\to b_{1}$ and $f_{2}:a_{2}\to b_{2}$. We just established
+    in $(2)$ the fact that $F_{1}(f_{1},f_{2}):a_{1}\times a_{2}\to b_{1}
+    \times b_{2}$, which is $F_{1}(f):F_{0}(a)\to F_{0}(b)$ as requested.
+
+    $(4)$: We need to show that $F_{1}(\,\id(a)\,)=\id(\,F_{0}(a)\,)$ for all 
+    $a\in\Set\times\Set$. So let $a=(a_{1},a_{2})$. We need to show that
+    $F_{1}(\,\id(a)\,)=\id(a_{1}\times a_{2})$. We already know that
+    $F_{1}(\,\id(a)\,):a_{1}\times a_{2}\to a_{1}\times a_{2}$. So we simply
+    need to check that the underlying function is the usual identity on the
+    set $a_{1}\times a_{2}$. Let $(x_{1},x_{2})\in a_{1}\times a_{2}$:
+        \begin{eqnarray*}F_{1}(\,\id(a)\,)(x_{1},x_{2})
+            &=&F_{1}(\,\id(a_{1},a_{2})\,)(x_{1},x_{2})\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&F_{1}(\,\id(a_{1})\,,\,\id(a_{2})\,)(x_{1},x_{2})\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:cartesian})}\ \to\ 
+            &=&(\,\id(a_{1})(x_{1})\,,\,\id(a_{2})(x_{2})\,)\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:set})}\ \to\ 
+            &=&(\,(a_{1},a_{1},i(a_{1}))(x_{1})\,
+               ,\,(a_{2},a_{2},i(a_{2}))(x_{2})\,)\\
+            \mbox{notation~(\ref{Cat:notation:set:arrow:apply})}\ \to\ 
+            &=&(\,i(a_{1})(x_{1})\,,\,i(a_{2})(x_{2})\,)\\
+            i(a)(x)=x\ \to\ 
+            &=&(x_{1},x_{2})
+        \end{eqnarray*}
+
+    $(5)$: TODO
 \end{proof}
 
