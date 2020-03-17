@@ -103,3 +103,38 @@ Proof.
                                 { subst. assumption. }
                                 { subst. apply leqRefl. }}}}}
 Qed.                            
+
+
+Lemma leqTotal : forall (x y:set), leq x y \/ leq y x.
+Proof.
+    induction x as [|x IH1 xs IH2]; intros y.
+    - left. apply I. 
+    - destruct y as [|y ys].
+        + right. apply I.
+        + destruct (set_eq_dec x y) as [H|H].
+            { subst. destruct (IH2 ys) as [H|H].
+                { left. right. split.
+                    { reflexivity. }
+                    { assumption. }}
+                { right. right. split.
+                    { reflexivity. }
+                    { assumption. }}}
+            { destruct (IH1 y) as [H'|H'].
+                { left. left. split; assumption. }
+                { right. left. split.
+                    { intros E. apply H. symmetry. assumption. }
+                    { assumption. }}}
+Qed.
+
+
+(* Insert the set x inside the set y according to syntactic ordering.           *)
+Fixpoint insert (x y:set) : set :=
+    match y with
+    | Nil           => Cons x Nil
+    | (Cons y ys)   =>
+        match (leqDec x y) with
+        | left _    => Cons y (insert x ys)     (* x 'smaller' goes inside      *)
+        | right _   => Cons x (Cons y ys)
+        end
+    end.
+

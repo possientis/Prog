@@ -1,6 +1,7 @@
 UTILS=Utils
 CORE=Core
 LANG1=Lang1
+OPT=-Q ${UTILS} ${UTILS} -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1}
 
 all :							${UTILS}/LEM.vo \
 								${UTILS}/Decidable.vo \
@@ -28,6 +29,7 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Compatible.vo \
 								${CORE}/Specification.vo \
 								${CORE}/Functional.vo \
+								${CORE}/Leq.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
@@ -46,39 +48,42 @@ all :							${UTILS}/LEM.vo \
 								${LANG1}/Specification.vo
 
 ${UTILS}/LEM.vo :				${UTILS}/LEM.v
-	coqc ${UTILS}/LEM.v -Q ${UTILS} ${UTILS}
+	coqc ${UTILS}/LEM.v 		${OPT}
+
 
 ${UTILS}/Decidable.vo :			${UTILS}/Decidable.v
-	coqc ${UTILS}/Decidable.v -Q ${UTILS} ${UTILS}
+	coqc ${UTILS}/Decidable.v 	${OPT}
+
 
 ${UTILS}/Filter.vo : 			${UTILS}/Filter.v \
 								${UTILS}/Decidable.vo \
 								${UTILS}/LEM.vo
-	coqc ${UTILS}/Filter.v -Q ${UTILS} ${UTILS}
+	coqc ${UTILS}/Filter.v 		${OPT}
 
 
 ${UTILS}/Nat.vo : 				${UTILS}/Nat.v
-	coqc ${UTILS}/Nat.v -Q ${UTILS} ${UTILS}
+	coqc ${UTILS}/Nat.v 		${OPT}
+
 
 ${UTILS}/Fresh.vo :				${UTILS}/Fresh.v
-	coqc ${UTILS}/Fresh.v -Q ${UTILS} ${UTILS}
+	coqc ${UTILS}/Fresh.v		${OPT} 
+
 
 ${CORE}/Set.vo : 				${CORE}/Set.v
-	coqc ${CORE}/Set.v -Q ${CORE} ${CORE}
+	coqc ${CORE}/Set.v			${OPT} 
 
 
 ${CORE}/Order.vo :				${CORE}/Order.v \
 								${UTILS}/Nat.vo \
 								${CORE}/Set.vo
-	coqc ${CORE}/Order.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
-
+	coqc ${CORE}/Order.v		${OPT} 
 
 
 ${CORE}/Core.vo :				${CORE}/Core.v \
 								${UTILS}/Nat.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo
-	coqc ${CORE}/Core.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Core.v			${OPT} 
 
 
 ${CORE}/Incl.vo :				${CORE}/Incl.v \
@@ -86,15 +91,14 @@ ${CORE}/Incl.vo :				${CORE}/Incl.v \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo
-	coqc ${CORE}/Incl.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Incl.v			${OPT} 
 
 	
 ${CORE}/Elem.vo :				${CORE}/Elem.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo
-	coqc ${CORE}/Elem.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Elem.v			${OPT} 
 		
-
 
 ${CORE}/ToList.vo :				${CORE}/ToList.v \
 								${UTILS}/Nat.vo \
@@ -103,7 +107,7 @@ ${CORE}/ToList.vo :				${CORE}/ToList.v \
 								${CORE}/Core.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo
-	coqc ${CORE}/ToList.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/ToList.v		${OPT} 
 	
 
 ${CORE}/Trans.vo :				${CORE}/Trans.v \
@@ -113,7 +117,7 @@ ${CORE}/Trans.vo :				${CORE}/Trans.v \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
 								${CORE}/ToList.vo
-	coqc ${CORE}/Trans.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Trans.v		${OPT} 
 	
 
 ${CORE}/ElemIncl.vo :			${CORE}/ElemIncl.v \
@@ -122,13 +126,13 @@ ${CORE}/ElemIncl.vo :			${CORE}/ElemIncl.v \
 								${CORE}/Elem.vo \
 								${CORE}/ToList.vo \
 								${CORE}/Trans.vo
-	coqc ${CORE}/ElemIncl.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/ElemIncl.v		${OPT} 
 
 
 ${CORE}/Equal.vo :				${CORE}/Equal.v \
 								${CORE}/Set.vo \
 								${CORE}/Elem.vo
-	coqc ${CORE}/Equal.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Equal.v		${OPT} 
 	
 
 ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
@@ -139,7 +143,7 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 								${CORE}/Trans.vo \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Equal.vo
-	coqc ${CORE}/Extensionality.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Extensionality.v ${OPT} 
 
 
 ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
@@ -152,7 +156,7 @@ ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
 								${CORE}/Elem.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Extensionality.vo
-	coqc ${CORE}/Decidability.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Decidability.v	${OPT} 
 
 
 ${CORE}/Empty.vo :				${CORE}/Empty.v \
@@ -163,7 +167,7 @@ ${CORE}/Empty.vo :				${CORE}/Empty.v \
 								${CORE}/ToList.vo \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Extensionality.vo
-	coqc ${CORE}/Empty.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Empty.v		${OPT} 
 
 
 ${CORE}/Pairing.vo :			${CORE}/Pairing.v \
@@ -174,8 +178,7 @@ ${CORE}/Pairing.vo :			${CORE}/Pairing.v \
 								${CORE}/ToList.vo \
 								${CORE}/Extensionality.vo \
 								${CORE}/Empty.vo
-	coqc ${CORE}/Pairing.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
-
+	coqc ${CORE}/Pairing.v		${OPT} 
 
 
 ${CORE}/Union.vo :				${CORE}/Union.v \
@@ -186,7 +189,7 @@ ${CORE}/Union.vo :				${CORE}/Union.v \
 								${CORE}/Empty.vo \
 								${CORE}/ToList.vo \
 								${CORE}/Extensionality.vo
-	coqc ${CORE}/Union.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Union.v		${OPT} 
 
 
 ${CORE}/Intersection.vo :		${CORE}/Intersection.v \
@@ -200,8 +203,7 @@ ${CORE}/Intersection.vo :		${CORE}/Intersection.v \
 								${CORE}/ToList.vo \
 								${CORE}/Decidability.vo \
 								${CORE}/Extensionality.vo
-
-	coqc ${CORE}/Intersection.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Intersection.v ${OPT} 
 
 
 ${CORE}/Powerset.vo :			${CORE}/Powerset.v \
@@ -215,8 +217,7 @@ ${CORE}/Powerset.vo :			${CORE}/Powerset.v \
 								${CORE}/Intersection.vo \
 								${CORE}/Decidability.vo \
 								${CORE}/Extensionality.vo
-
-	coqc ${CORE}/Powerset.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Powerset.v		${OPT} 
 
 
 ${CORE}/Rank.vo :				${CORE}/Rank.v \
@@ -230,8 +231,7 @@ ${CORE}/Rank.vo :				${CORE}/Rank.v \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Decidability.vo \
 								${CORE}/Extensionality.vo 
-	
-	coqc ${CORE}/Rank.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Rank.v			${OPT} 
 
 
 ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
@@ -247,12 +247,14 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Decidability.vo \
 								${CORE}/Extensionality.vo
-	coqc ${CORE}/Foundation.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Foundation.v	${OPT} 
+
 
 ${CORE}/Compatible.vo :			${CORE}/Compatible.v \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo
-	coqc ${CORE}/Compatible.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Compatible.v	${OPT} 
+
 
 ${CORE}/Specification.vo :		${CORE}/Specification.v \
 								${UTILS}/LEM.vo \
@@ -265,26 +267,32 @@ ${CORE}/Specification.vo :		${CORE}/Specification.v \
 								${CORE}/ToList.vo \
 								${CORE}/Compatible.vo \
 								${CORE}/Extensionality.vo
-	coqc ${CORE}/Specification.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Specification.v ${OPT} 
+
 
 ${CORE}/Functional.vo :			${CORE}/Functional.v \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo
-	coqc ${CORE}/Functional.v -Q ${CORE} ${CORE} -Q ${UTILS} ${UTILS}
+	coqc ${CORE}/Functional.v	${OPT} 
 
 
+${CORE}/Leq.vo :				${CORE}/Leq.v \
+								${CORE}/Set.vo \
+								${CORE}/Decidability.vo
+	coqc ${CORE}/Leq.v			${OPT} 
 
 
 ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
 								${UTILS}/Fresh.vo
-	coqc ${LANG1}/Syntax.v -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Syntax.v		${OPT} 
 
 
 ${LANG1}/Environment.vo :		${LANG1}/Environment.v \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo \
 								${LANG1}/Syntax.vo
-	coqc ${LANG1}/Environment.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Environment.v	${OPT} 
+
 
 ${LANG1}/Semantics.vo :			${LANG1}/Semantics.v \
 								${UTILS}/LEM.vo \
@@ -298,7 +306,8 @@ ${LANG1}/Semantics.vo :			${LANG1}/Semantics.v \
 								${CORE}/Foundation.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo
-	coqc ${LANG1}/Semantics.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Semantics.v	${OPT} 
+
 
 ${LANG1}/Relevance.vo :			${LANG1}/Relevance.v \
 								${UTILS}/Nat.vo \
@@ -307,8 +316,9 @@ ${LANG1}/Relevance.vo :			${LANG1}/Relevance.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Relevance.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Relevance.v	${OPT} 
 					
+
 ${LANG1}/Compatible.vo :		${LANG1}/Compatible.v \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo \
@@ -317,7 +327,7 @@ ${LANG1}/Compatible.vo :		${LANG1}/Compatible.v \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
 								${LANG1}/Relevance.vo
-	coqc ${LANG1}/Compatible.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Compatible.v	${OPT} 
 	
 
 ${LANG1}/Incl.vo :				${LANG1}/Incl.v \
@@ -328,7 +338,7 @@ ${LANG1}/Incl.vo :				${LANG1}/Incl.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Incl.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Incl.v		${OPT} 
 
 
 ${LANG1}/Trans.vo :				${LANG1}/Trans.v \
@@ -338,7 +348,7 @@ ${LANG1}/Trans.vo :				${LANG1}/Trans.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Semantics.vo \
 								${LANG1}/Environment.vo
-	coqc ${LANG1}/Trans.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Trans.v		${OPT} 
 
 
 ${LANG1}/ElemIncl.vo :			${LANG1}/ElemIncl.v \
@@ -349,7 +359,7 @@ ${LANG1}/ElemIncl.vo :			${LANG1}/ElemIncl.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/ElemIncl.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/ElemIncl.v	${OPT} 
 
 
 ${LANG1}/Equal.vo :				${LANG1}/Equal.v \
@@ -361,7 +371,7 @@ ${LANG1}/Equal.vo :				${LANG1}/Equal.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Equal.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Equal.v		${OPT} 
 
 
 ${LANG1}/Extensionality.vo :	${LANG1}/Extensionality.v \
@@ -372,7 +382,7 @@ ${LANG1}/Extensionality.vo :	${LANG1}/Extensionality.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Extensionality.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Extensionality.v ${OPT} 
 
 
 ${LANG1}/Empty.vo :				${LANG1}/Empty.v \
@@ -383,7 +393,7 @@ ${LANG1}/Empty.vo :				${LANG1}/Empty.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Empty.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Empty.v		${OPT} 
 
 
 ${LANG1}/Pairing.vo :			${LANG1}/Pairing.v \
@@ -394,7 +404,7 @@ ${LANG1}/Pairing.vo :			${LANG1}/Pairing.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Pairing.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Pairing.v		${OPT} 
 
 
 ${LANG1}/Union.vo :				${LANG1}/Union.v \
@@ -405,7 +415,7 @@ ${LANG1}/Union.vo :				${LANG1}/Union.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Union.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Union.v		${OPT} 
 
 
 ${LANG1}/Powerset.vo :			${LANG1}/Powerset.v \
@@ -417,7 +427,7 @@ ${LANG1}/Powerset.vo :			${LANG1}/Powerset.v \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
-	coqc ${LANG1}/Powerset.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Powerset.v	${OPT} 
 
 
 ${LANG1}/Foundation.vo :		${LANG1}/Foundation.v \
@@ -430,8 +440,7 @@ ${LANG1}/Foundation.vo :		${LANG1}/Foundation.v \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
 								${CORE}/Foundation.vo
-	
-	coqc ${LANG1}/Foundation.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Foundation.v	${OPT} 
 
 ${LANG1}/Specification.vo :		${LANG1}/Specification.v \
 								${UTILS}/LEM.vo \
@@ -445,5 +454,5 @@ ${LANG1}/Specification.vo :		${LANG1}/Specification.v \
 								${LANG1}/Semantics.vo \
 								${LANG1}/Relevance.vo
 	
-	coqc ${LANG1}/Specification.v -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${UTILS} ${UTILS}
+	coqc ${LANG1}/Specification.v ${OPT} 
 
