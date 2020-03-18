@@ -191,7 +191,7 @@ Lemma NotAccessibleInjInj :
     forall (x y:NotAccessibleType r), 
         NotAccessibleInj r x = NotAccessibleInj r y  -> x = y.
 Proof. 
-    intros a I r x y H. destruct x as [x p]. destruct y as [y q].
+    intros a I r [x p] [y q] H.
     unfold NotAccessibleInj in H. simpl in H. revert p q.
     rewrite H. intros p q. assert (p = q) as E. { apply I. } 
     rewrite E. reflexivity.

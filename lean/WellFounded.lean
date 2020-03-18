@@ -166,3 +166,45 @@ begin
                 apply H', existsi y, assumption},
               {apply p, rewrite H0, rewrite H}}}}
 end
+
+
+lemma LeWellOrder : LEM → WellOrder (@le ℕ _) :=
+begin
+  assume L, unfold WellOrder, split,
+    { apply LeTotalOrder},
+    { apply LeHasMinProp, assumption }
+end
+
+def NotAccessibleType {α : Type u} (r : α → α → Prop) : Type u :=
+  { x : α // ¬ Accessible r x}
+
+
+
+def NotAccessibleInj {α : Type u} (r : α → α → Prop) : NotAccessibleType r → α :=
+    subtype.val
+
+lemma NotAccessibleInjInj : ∀ {α : Type u} (r : α → α → Prop),
+  ∀ (x y : NotAccessibleType r),
+       NotAccessibleInj r x = NotAccessibleInj r y → x = y :=
+begin
+  assume α r x y H, cases x with x p, cases y with y q,
+  unfold NotAccessibleInj at H, simp at H, revert p q, rewrite H,
+  assume p q, have H':p = q, {simp}, rewrite H'
+end
+
+def NotAccessibleEmbedding {α : Type u} (r : α → α → Prop)
+  : Embedding (NotAccessibleType r) α := Embed
+      (NotAccessibleInj r)
+      (NotAccessibleInjInj r)
+
+lemma WellOrderAllAccessible : ∀ {α : Type u} (r : α → α → Prop),
+  LEM → WellOrder r → ∀ (x:α), Accessible (strict r) x :=
+begin
+  assume α r L H x,
+  unfold WellOrder at H, unfold TotalOrder at H,
+  cases H with H H5,
+  cases H with H1 H,
+  cases H with H2 H,
+  cases H with H3 H4,
+end
+
