@@ -449,3 +449,47 @@ Definition OrE : forall (X Y Z:Prop), Or X Y -> (X -> Z) -> (Y -> Z) -> Z :=
                 fun (g:Y -> Z) =>
                     p Z f g.
 
+Arguments AndI {X} {Y}.
+Arguments AndE {X} {Y} {Z}.
+
+Definition L38 : forall (X Y:Prop), And (And X Y -> And Y X) (And Y X -> And X Y) := 
+    fun (X Y:Prop) => AndI
+        (fun (andXY : And X Y) => AndI
+            (AndE andXY (fun (x:X) (y:Y) => y))
+            (AndE andXY (fun (x:X) (y:Y) => x)))
+        (fun (andYX : And Y X) => AndI
+            (AndE andYX (fun (y:Y) (x:X) => x))
+            (AndE andYX (fun (y:Y) (x:X) => y))).
+
+Arguments OrI1 {X} {Y}.
+Arguments OrI2 {X} {Y}.
+Arguments OrE  {X} {Y} {Z}.
+
+Definition L39 : forall (X Y:Prop), And (Or X Y -> Or Y X) (Or Y X -> Or X Y) :=
+    fun (X Y:Prop) => AndI
+        (fun (orXY : Or X Y) => OrE orXY
+            (fun (x:X) => OrI2 x)
+            (fun (y:Y) => OrI1 y))
+        (fun (orYX : Or Y X) => OrE orYX
+            (fun (y:Y) => OrI2 y)
+            (fun (x:X) => OrI1 x)).
+
+(* These signatures characterize conjunction up to logical equivalence          *)
+Variable And1 : Prop -> Prop -> Prop.
+Variable And2 : Prop -> Prop -> Prop.
+
+Variable AndC1 : forall (X Y:Prop), X -> Y -> And1 X Y.
+Variable AndC2 : forall (X Y:Prop), X -> Y -> And2 X Y.
+
+Variable AndE1 : forall (X Y Z:Prop), And1 X Y -> (X -> Y -> Z) -> Z.
+Variable AndE2 : forall (X Y Z:Prop), And2 X Y -> (X -> Y -> Z) -> Z.
+
+Definition L40 : forall (X Y:Prop), And1 X Y <-> And2 X Y := 
+    fun (X Y:Prop) => conj
+        (fun (and1:And1 X Y) => AndC2 X Y
+            (AndE1 X Y X and1 (fun (x:X) (y:Y) => x))
+            (AndE1 X Y Y and1 (fun (x:X) (y:Y) => y)))
+        (fun (and2:And2 X Y) => AndC1 X Y
+            (AndE2 X Y X and2 (fun (x:X) (y:Y) => x))
+            (AndE2 X Y Y and2 (fun (x:X) (y:Y) => y))).
+
