@@ -1,13 +1,14 @@
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong)
+open Eq using (_≡_; refl; sym; cong)
+open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
+open import Data.Nat.Properties using (+-suc; +-assoc)
 open import Relation.Nullary using (¬_)
 open import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
 open import Data.Sum using (_⊎_; inj₁; inj₂) renaming ([_,_] to case-⊎)
 open import Data.Sum using (_⊎_)
 open import isomorphism using (_≃_; ∀-extensionality; extensionality)
 open import Function using (_∘_)
-
 
 ∀-elim : ∀ {a : Set} {b : a → Set}
   → (L : ∀ (x : a) → b x)
@@ -147,5 +148,32 @@ even-∃ (even-suc oddn) | ⟨ m , p ⟩ = ⟨ suc m , cong suc p ⟩
 odd-∃ (odd-suc evenn) with even-∃ evenn
 odd-∃ (odd-suc evenn) | ⟨ m , p ⟩ = ⟨ m , cong suc p ⟩
 
+-- more difficult
+even-∃' : ∀ {n : ℕ} → even n → ∃[ m ] (2 * m     ≡ n)
+odd-∃'  : ∀ {n : ℕ} → odd n  → ∃[ m ] (2 * m + 1 ≡ n)
+
++-identity-r : ∀ {n : ℕ} → n + 0 ≡ n
++-identity-r {zero} = refl
++-identity-r {suc n} = cong suc +-identity-r
+
+even-∃' even-zero =  ⟨ 0 , refl ⟩
+even-∃' (even-suc oddn) with odd-∃' oddn
+even-∃' (even-suc {m} oddn) | ⟨ n , p ⟩ =  ⟨ suc n , cong suc (
+  begin
+    n + suc (n + 0)
+    ≡⟨ sym +-identity-r ⟩
+    n + suc (n + 0) + 0
+    ≡⟨ +-assoc n (suc (n + 0)) 0 ⟩
+    n + (suc (n + 0) + 0)
+    ≡⟨ sym (cong (n +_) (+-suc (n + 0) 0)) ⟩
+    n + ((n + 0) + 1)
+    ≡⟨ sym (+-assoc n (n + 0) 1) ⟩
+    n + (n + 0) + 1
+    ≡⟨ p ⟩
+     m
+    ∎) ⟩
+
+odd-∃' (odd-suc evenn) with even-∃' evenn
+odd-∃' (odd-suc {m} evenn) | ⟨ n , p ⟩ = ⟨ n , {!!} ⟩
 
 

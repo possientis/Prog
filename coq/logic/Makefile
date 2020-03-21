@@ -1,272 +1,299 @@
-all:	   			Extensionality.vo \
-					Identity.vo \
-   					Composition.vo \
-					Coincide.vo \
-					Leq.vo \
-					Max.vo \
-					Map.vo \
-					Eq.vo \
-					Relation.vo \
-					Replace.vo \
-					Permute.vo \
-					Injective.vo \
-					Remove.vo \
-					Difference.vo \
-					Intersect.vo \
-					Include.vo \
-					Lam/T.vo \
-					Fol/P.vo \
-					Lam/Order.vo \
-					Fol/Order.vo \
-					Lam/Subformula.vo \
-					Fol/Subformula.vo \
-					Lam/Congruence.vo \
-					Fol/Congruence.vo \
-					Lam/Variable.vo \
-					Fol/Variable.vo \
-					Lam/Free.vo \
-					Fol/Free.vo \
-					Lam/Bound.vo \
-					Fol/Bound.vo \
-					Lam/Valid.vo \
-					Fol/Valid.vo \
-					Lam/Dmap.vo \
-					Fol/Dmap.vo \
-					Lam/Subst.vo
+FOL=Fol
+LAM=Lam
+OPT=-Q ${FOL} ${FOL} -Q ${LAM} ${LAM}
 
-Extensionality.vo : Extensionality.v
+all:	   						Extensionality.vo \
+								Identity.vo \
+   								Composition.vo \
+								Coincide.vo \
+								Leq.vo \
+								Max.vo \
+								Map.vo \
+								Eq.vo \
+								Relation.vo \
+								Replace.vo \
+								Permute.vo \
+								Injective.vo \
+								Remove.vo \
+								Difference.vo \
+								Intersect.vo \
+								Include.vo \
+								${LAM}/T.vo \
+								${FOL}/P.vo \
+								${LAM}/Order.vo \
+								${FOL}/Order.vo \
+								${LAM}/Subformula.vo \
+								${FOL}/Subformula.vo \
+								${LAM}/Congruence.vo \
+								${FOL}/Congruence.vo \
+								${LAM}/Variable.vo \
+								${FOL}/Variable.vo \
+								${LAM}/Free.vo \
+								${FOL}/Free.vo \
+								${LAM}/Bound.vo \
+								${FOL}/Bound.vo \
+								${LAM}/Valid.vo \
+								${FOL}/Valid.vo \
+								${LAM}/Dmap.vo \
+								${FOL}/Dmap.vo \
+								${LAM}/Subst.vo
+
+Extensionality.vo : 			Extensionality.v
 	coqc Extensionality.v
 
-Identity.vo : 		Identity.v
+Identity.vo : 					Identity.v
 	coqc Identity.v
 
-Composition.vo : 	Composition.v
+Composition.vo : 				Composition.v
 	coqc Composition.v
 
-Coincide.vo : 		Coincide.v
+Coincide.vo : 					Coincide.v
 	coqc Coincide.v
 
-Leq.vo : 			Leq.v
+Leq.vo : 						Leq.v
 	coqc Leq.v
 
-Max.vo : 			Max.v
+Max.vo : 						Max.v
 	coqc Max.v
 
-Map.vo : 			Map.v
+Map.vo : 						Map.v
 	coqc Map.v
 
-Eq.vo : 			Eq.v
+Eq.vo : 						Eq.v
 	coqc Eq.v
 
-Relation.vo : 		Relation.v
+Relation.vo : 					Relation.v
 	coqc Relation.v
 
-Replace.vo : 		Replace.v \
-					Eq.vo \
-					Identity.vo \
-					Injective.vo \
-					Coincide.vo \
-					Composition.vo \
-					Extensionality.vo
+Replace.vo : 					Replace.v \
+								Eq.vo \
+								Identity.vo \
+								Injective.vo \
+								Coincide.vo \
+								Composition.vo \
+								Extensionality.vo
 	coqc Replace.v
 
-Permute.vo : 		Permute.v \
-					Eq.vo \
-					Replace.vo \
-					Coincide.vo \
-					Injective.vo \
-					Composition.vo \
-					Extensionality.vo
+Permute.vo : 					Permute.v \
+								Eq.vo \
+								Replace.vo \
+								Coincide.vo \
+								Injective.vo \
+								Composition.vo \
+								Extensionality.vo
 	coqc Permute.v
 
-Injective.vo : 		Injective.v \
-					Composition.vo \
-					Include.vo
+
+Injective.vo : 					Injective.v \
+								Composition.vo \
+								Include.vo
 	coqc Injective.v
 
-Remove.vo :			Remove.v \
-					Eq.vo \
-					Include.vo \
-					Injective.vo
+
+Remove.vo :						Remove.v \
+								Eq.vo \
+								Include.vo \
+								Injective.vo
 	coqc Remove.v
 
-Difference.vo :		Difference.v \
-					Eq.vo
+
+Difference.vo :					Difference.v \
+								Eq.vo
 	coqc Difference.v
 
-Intersect.vo :		Intersect.v \
-					Eq.vo
+
+Intersect.vo :					Intersect.v \
+								Eq.vo
 	coqc Intersect.v
 
-Include.vo :		Include.v 
+
+Include.vo :					Include.v 
 	coqc Include.v
 
-Lam/T.vo:   		Lam/T.v \
-					Eq.vo \
-					Extensionality.vo \
-					Identity.vo \
-					Composition.vo
-	coqc Lam/T.v -R Lam Lam
 
-Fol/P.vo:			Fol/P.v	\
-					Eq.vo \
-					Extensionality.vo \
-					Identity.vo \
-					Composition.vo
-	coqc Fol/P.v -R Fol Fol
+${LAM}/T.vo:   					${LAM}/T.v \
+								Eq.vo \
+								Extensionality.vo \
+								Identity.vo \
+								Composition.vo
+	coqc ${LAM}/T.v				${OPT} 
 
-Lam/Order.vo : 		Lam/Order.v \
-					Lam/T.vo
-	coqc Lam/Order.v -R Lam Lam
 
-Fol/Order.vo : 		Fol/Order.v \
-					Fol/P.vo
-	coqc Fol/Order.v -R Fol Fol
+${FOL}/P.vo:					${FOL}/P.v	\
+								Eq.vo \
+								Extensionality.vo \
+								Identity.vo \
+								Composition.vo
+	coqc ${FOL}/P.v				${OPT} 
 
-Lam/Subformula.vo :	Lam/Subformula.v \
-					Eq.vo \
-					Leq.vo \
-					Max.vo \
-					Lam/T.vo \
-					Lam/Order.vo \
-					Lam/Bound.vo \
-					Lam/Variable.vo
-	coqc Lam/Subformula.v -R Lam Lam
 
-Fol/Subformula.vo : Fol/Subformula.v \
-					Eq.vo \
-					Leq.vo \
-					Max.vo \
-					Fol/P.vo \
-					Fol/Order.vo \
-					Fol/Bound.vo \
-					Fol/Variable.vo
-	coqc Fol/Subformula.v -R Fol Fol
+${LAM}/Order.vo : 				${LAM}/Order.v \
+								${LAM}/T.vo
+	coqc ${LAM}/Order.v			${OPT} 
 
-Lam/Congruence.vo : Lam/Congruence.v \
-					Relation.vo \
-					Lam/T.vo
-	coqc Lam/Congruence.v -R Lam Lam
 
-Fol/Congruence.vo : Fol/Congruence.v \
-					Relation.vo \
-					Fol/P.vo
-	coqc Fol/Congruence.v -R Fol Fol
+${FOL}/Order.vo : 				${FOL}/Order.v \
+								${FOL}/P.vo
+	coqc ${FOL}/Order.v			${OPT} 
 
-Lam/Variable.vo :	Lam/Variable.v \
-					Eq.vo \
-					Map.vo \
-					Permute.vo \
-					Replace.vo \
-					Coincide.vo \
-					Composition.vo \
-					Lam/T.vo
-	coqc Lam/Variable.v -R Lam Lam 
+
+${LAM}/Subformula.vo :			${LAM}/Subformula.v \
+								Eq.vo \
+								Leq.vo \
+								Max.vo \
+								${LAM}/T.vo \
+								${LAM}/Order.vo \
+								${LAM}/Bound.vo \
+								${LAM}/Variable.vo
+	coqc ${LAM}/Subformula.v	${OPT} 
+
+
+${FOL}/Subformula.vo : 			${FOL}/Subformula.v \
+								Eq.vo \
+								Leq.vo \
+								Max.vo \
+								${FOL}/P.vo \
+								${FOL}/Order.vo \
+								${FOL}/Bound.vo \
+								${FOL}/Variable.vo
+	coqc ${FOL}/Subformula.v	${OPT} 
+
+
+${LAM}/Congruence.vo : 			${LAM}/Congruence.v \
+								Relation.vo \
+								${LAM}/T.vo
+	coqc ${LAM}/Congruence.v	${OPT} 
+
+
+${FOL}/Congruence.vo : 			${FOL}/Congruence.v \
+								Relation.vo \
+								${FOL}/P.vo
+	coqc ${FOL}/Congruence.v	${OPT} 
+
+
+${LAM}/Variable.vo :			${LAM}/Variable.v \
+								Eq.vo \
+								Map.vo \
+								Permute.vo \
+								Replace.vo \
+								Coincide.vo \
+								Composition.vo \
+								${LAM}/T.vo
+	coqc ${LAM}/Variable.v		${OPT} 
 					
-Fol/Variable.vo :	Fol/Variable.v \
-					Eq.vo \
-					Map.vo \
-					Permute.vo \
-					Replace.vo \
-					Coincide.vo \
-					Composition.vo \
-					Fol/P.vo
-	coqc Fol/Variable.v -R Fol Fol
 
-Lam/Free.vo :		Lam/Free.v \
-					Eq.vo \
-					Map.vo \
-					Remove.vo \
-					Replace.vo \
-					Include.vo \
-					Coincide.vo \
-					Relation.vo \
-					Injective.vo \
-					Lam/T.vo \
-					Lam/Variable.vo \
-					Lam/Congruence.vo
-	coqc Lam/Free.v -R Lam Lam
+${FOL}/Variable.vo :			${FOL}/Variable.v \
+								Eq.vo \
+								Map.vo \
+								Permute.vo \
+								Replace.vo \
+								Coincide.vo \
+								Composition.vo \
+								${FOL}/P.vo
+	coqc ${FOL}/Variable.v -R ${FOL} ${FOL}
 
-Fol/Free.vo :		Fol/Free.v \
-					Eq.vo \
-					Map.vo \
-					Remove.vo \
-					Replace.vo \
-					Include.vo \
-					Coincide.vo \
-					Relation.vo \
-					Injective.vo \
-					Fol/P.vo \
-					Fol/Variable.vo \
-					Fol/Congruence.vo
-	coqc Fol/Free.v -R Fol Fol
 
-Lam/Bound.vo :		Lam/Bound.v \
-					Eq.vo \
-					Remove.vo \
-					Include.vo \
-					Lam/T.vo \
-					Lam/Free.vo \
-					Lam/Variable.vo
-	coqc Lam/Bound.v -R Lam Lam
+${LAM}/Free.vo :				${LAM}/Free.v \
+								Eq.vo \
+								Map.vo \
+								Remove.vo \
+								Replace.vo \
+								Include.vo \
+								Coincide.vo \
+								Relation.vo \
+								Injective.vo \
+								${LAM}/T.vo \
+								${LAM}/Variable.vo \
+								${LAM}/Congruence.vo
+	coqc ${LAM}/Free.v			${OPT} 
 
-Fol/Bound.vo :		Fol/Bound.v \
-					Eq.vo \
-					Remove.vo \
-					Include.vo \
-					Fol/P.vo \
-					Fol/Free.vo \
-					Fol/Variable.vo
-	coqc Fol/Bound.v -R Fol Fol
 
-Lam/Valid.vo :		Lam/Valid.v \
-					Eq.vo \
-					Map.vo \
-					Remove.vo \
-					Replace.vo \
-					Coincide.vo \
-					Injective.vo \
-					Composition.vo \
-					Lam/T.vo \
-					Lam/Free.vo \
-					Lam/Bound.vo \
-					Lam/Variable.vo \
-					Lam/Subformula.vo
-	coqc Lam/Valid.v -R Lam Lam
+${FOL}/Free.vo :				${FOL}/Free.v \
+								Eq.vo \
+								Map.vo \
+								Remove.vo \
+								Replace.vo \
+								Include.vo \
+								Coincide.vo \
+								Relation.vo \
+								Injective.vo \
+								${FOL}/P.vo \
+								${FOL}/Variable.vo \
+								${FOL}/Congruence.vo
+	coqc ${FOL}/Free.v			${OPT} 
 
-Fol/Valid.vo :		Fol/Valid.v \
-					Eq.vo \
-					Map.vo \
-					Remove.vo \
-					Replace.vo \
-					Coincide.vo \
-					Injective.vo \
-					Composition.vo \
-					Fol/P.vo \
-					Fol/Free.vo \
-					Fol/Bound.vo \
-					Fol/Variable.vo \
-					Fol/Subformula.vo
-	coqc Fol/Valid.v -R Fol Fol
 
-Lam/Dmap.vo :		Lam/Dmap.v \
-					Eq.vo \
-					Map.vo \
-					Identity.vo \
-					Extensionality.vo \
-					Lam/T.vo
-	coqc Lam/Dmap.v -R Lam Lam
+${LAM}/Bound.vo :				${LAM}/Bound.v \
+								Eq.vo \
+								Remove.vo \
+								Include.vo \
+								${LAM}/T.vo \
+								${LAM}/Free.vo \
+								${LAM}/Variable.vo
+	coqc ${LAM}/Bound.v			${OPT} 
 
-Fol/Dmap.vo :		Fol/Dmap.v \
-					Eq.vo \
-					Map.vo \
-					Identity.vo \
-					Extensionality.vo \
-					Fol/P.vo
-	coqc Fol/Dmap.v -R Fol Fol
 
-Lam/Subst.vo :		Lam/Subst.v \
-					Eq.vo \
-					Lam/T.vo
-	coqc Lam/Subst.v -R Lam Lam
+${FOL}/Bound.vo :				${FOL}/Bound.v \
+								Eq.vo \
+								Remove.vo \
+								Include.vo \
+								${FOL}/P.vo \
+								${FOL}/Free.vo \
+								${FOL}/Variable.vo
+	coqc ${FOL}/Bound.v			${OPT} 
+
+
+${LAM}/Valid.vo :				${LAM}/Valid.v \
+								Eq.vo \
+								Map.vo \
+								Remove.vo \
+								Replace.vo \
+								Coincide.vo \
+								Injective.vo \
+								Composition.vo \
+								${LAM}/T.vo \
+								${LAM}/Free.vo \
+								${LAM}/Bound.vo \
+								${LAM}/Variable.vo \
+								${LAM}/Subformula.vo
+	coqc ${LAM}/Valid.v			${OPT} 
+
+${FOL}/Valid.vo :				${FOL}/Valid.v \
+								Eq.vo \
+								Map.vo \
+								Remove.vo \
+								Replace.vo \
+								Coincide.vo \
+								Injective.vo \
+								Composition.vo \
+								${FOL}/P.vo \
+								${FOL}/Free.vo \
+								${FOL}/Bound.vo \
+								${FOL}/Variable.vo \
+								${FOL}/Subformula.vo
+	coqc ${FOL}/Valid.v			${OPT} 
+
+
+${LAM}/Dmap.vo :				${LAM}/Dmap.v \
+								Eq.vo \
+								Map.vo \
+								Identity.vo \
+								Extensionality.vo \
+								${LAM}/T.vo
+	coqc ${LAM}/Dmap.v			${OPT} 
+
+
+${FOL}/Dmap.vo :				${FOL}/Dmap.v \
+								Eq.vo \
+								Map.vo \
+								Identity.vo \
+								Extensionality.vo \
+								${FOL}/P.vo
+	coqc ${FOL}/Dmap.v			${OPT} 
+
+
+${LAM}/Subst.vo :				${LAM}/Subst.v \
+								Eq.vo \
+								${LAM}/T.vo
+	coqc ${LAM}/Subst.v			${OPT} 
 

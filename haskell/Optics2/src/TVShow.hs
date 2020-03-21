@@ -14,10 +14,14 @@ module  TVShow
     ,   howIMetYourMother
     ,   buffy
     ,   tvShows
-    ,   ex1, ex2, ex3, ex4, ex5, ex6
+    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10
     ,   comparingOf
+    ,   ageSummary
+    ,   ex11, ex12, ex13, ex14, ex15, ex16, ex17, ex18, ex19
     )   where
 
+
+import Data.Map         as M
 import Data.Ord         (comparing)
 import Data.Monoid
 import Control.Lens
@@ -117,4 +121,72 @@ showActor actor = _name actor <> ": " <> show (calcAge actor)
 
 ex6 :: IO ()
 ex6 = traverseOf_ (folded . actors . folded . to showActor) putStrLn tvShows
+
+
+-- foldOf    :: Monoid a => Fold s a -> s -> a
+-- foldMapOf :: Monoid m => Fold s a -> (a -> m) -> s -> m
+--
+-- Real signatures:
+-- foldOf    :: Getting a s a -> s -> a
+-- foldMapOf :: Getting m s a -> (a -> m) -> s -> m
+
+ageSummary :: Actor -> (Sum Int, Sum Int)
+ageSummary actor = (Sum 1 , Sum (calcAge actor))
+
+
+ex7 :: (Sum Int, Sum Int)
+ex7 = foldOf (folded . actors . folded . to ageSummary) tvShows
+
+computeAverage :: (Sum Int, Sum Int) -> Double
+computeAverage (Sum count, Sum total) = fromIntegral total / fromIntegral count
+
+
+ex8 :: Double
+ex8 = computeAverage $ foldOf (folded . actors . folded . to ageSummary) tvShows
+
+ex9 :: Double
+ex9 = computeAverage $ foldMapOf (folded . actors . folded) ageSummary tvShows
+
+
+ex10 :: Map String Int
+ex10 = foldMapOf (folded . actors . folded . name) (\n -> M.singleton n 1) tvShows
+
+-- M.unionWith :: Ord k => (a -> a -> a) -> Map k a -> Map k a -> Map k a
+
+ex11 :: Map String Int
+ex11 = unionWith (+) (M.singleton "an actor" 1) (M.singleton "an actor" 1)
+
+-- foldByOf    :: Fold s a -> (a -> a -> a) -> a -> s -> a
+-- foldMapByOf :: Fold s a -> (r -> r -> r) -> r -> (a -> r) -> s -> r
+-- foldrOf     :: Fold s a -> (a -> r -> r) -> r -> s -> r
+-- foldlOf     :: Fold s a -> (r -> a -> r) -> r -> s -> r
+
+ex12 :: Map String Int
+ex12 = foldMapByOf 
+    (folded . actors . folded . name)   -- focus each actor's name
+    (unionWith (+))                     -- combine duplicate keys with addition
+    mempty                              -- start with the empty map
+    (flip M.singleton 1)                -- inject names into maps with count of 1
+    tvShows 
+
+ex13 :: Bool
+ex13 = has folded [] 
+
+ex14 :: String
+ex14 = foldOf both ("Yo", "Adrian!")
+
+ex15 :: Bool
+ex15 = elemOf each "phone" ("E.T.", "phone", "home")
+
+ex16 :: Maybe Int 
+ex16 = minimumOf folded [5,7,2,3,13,17,11]
+
+ex17 :: Maybe Int 
+ex17 = lastOf folded [5,7,2,3,13,17,11]
+
+ex18 :: Bool
+ex18 = anyOf folded ((> 9) . length) ["Bulbasaur", "Charmander", "Squirtle"]
+
+ex19 :: Maybe Int
+ex19 = findOf folded even [11,22,3,5,6]
 

@@ -483,7 +483,7 @@ would get {\em captured} by $x$. This motivate the following:
         \]
 \end{prop}
 \begin{proof}
-    This is an mmediate application of 
+    This is an immediate application of 
     proposition~(\ref{logic:prop:LAM:free:support:beta:valid:gen})
     to $U=\emptyset$.
 \end{proof}
@@ -520,7 +520,7 @@ would get {\em captured} by $x$. This motivate the following:
     mappings of definition~(\ref{logic:def:LAM:beta:subst}).
 \end{prop}
 \begin{proof}
-    This is an mmediate application of 
+    This is an immediate application of 
     proposition~(\ref{logic:prop:LAM:same:image:beta:valid:gen})
     to $U=\emptyset$.
 \end{proof}
@@ -841,7 +841,7 @@ would get {\em captured} by $x$. This motivate the following:
     $u\in\free(\phi)\setminus U$.
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:beta:valid:composition:gen}
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition:eq:gen}
     Let $V$ be a set, $U\subseteq U' \subseteq V$ and $\sigma,\tau:V\to\tv$ 
     be maps. Let $\phi\in\tv$. Then, if $(\tau,U)$ is $\beta$-valid for $\phi$ 
     we have:
@@ -998,7 +998,7 @@ would get {\em captured} by $x$. This motivate the following:
     assumption that $(\tau,U)$ is $\beta$-valid for $\phi$.
 \end{proof}
 
-\begin{prop}\label{logic:prop:LAM:beta:valid:composition}
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition:eq}
     Let $V$ be a set and $\sigma,\tau:V\to\tv$ be maps. Let $\phi\in\tv$. Then
     if $\tau$ is $\beta$-valid for $\phi$, we have:
         \[
@@ -1010,7 +1010,7 @@ would get {\em captured} by $x$. This motivate the following:
 \end{prop}
 \begin{proof}
     This is an immediate application of 
-    proposition~(\ref{logic:prop:LAM:beta:valid:composition:gen}) with
+    proposition~(\ref{logic:prop:LAM:beta:valid:composition:eq:gen}) with
     $U=U'=\emptyset$:         
         \begin{eqnarray*}(\sigma'\circ\tau)'(\phi)
             &=&(\sigma'\circ\tau)^{*}(\phi)(\emptyset)
@@ -1020,7 +1020,7 @@ would get {\em captured} by $x$. This motivate the following:
             &=&(\sigma_{*}(\emptyset)\circ\tau)^{*}(\phi)(\emptyset)\\
             \mbox{flipping\ $\to$\ }
             &=&(\sigma_{*}(\emptyset)\circ\tau)_{*}(\emptyset)(\phi)\\
-            \mbox{prop.~(\ref{logic:prop:LAM:beta:valid:composition:gen})
+            \mbox{prop.~(\ref{logic:prop:LAM:beta:valid:composition:eq:gen})
             $(\tau,\emptyset)$ is $\beta$-valid for $\phi$\ $\to$\ }
             &=&(\,\sigma_{*}(\emptyset)\circ\tau_{*}(\emptyset)\,)(\phi)\\
             \mbox{def.~(\ref{logic:def:LAM:beta:subst}) and flipping\ $\to$\ }
@@ -1030,7 +1030,7 @@ would get {\em captured} by $x$. This motivate the following:
 
 \noindent
 {\bf Remark}: A counter-example for
-proposition~(\ref{logic:prop:LAM:beta:valid:composition}) when $\tau$ is not
+proposition~(\ref{logic:prop:LAM:beta:valid:composition:eq}) when $\tau$ is not
 $\beta$-valid for $\phi$ is as follows: consider $\phi=\lambda x y$ where
 $x\neq y$. Assume that $\sigma,\tau:V\to\tv$ are such that
 $\tau(y)=x$ and $\sigma(x)=y$. From
@@ -1072,7 +1072,7 @@ and yet $x\in\free(\tau(y))$. We have:
         &=&(\sigma'\circ\tau')(\phi)
     \end{eqnarray*}
 
-\begin{prop}
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition:gen}
     Let $V$ be a set, $U,U'\subseteq V$ and $\sigma,\tau:V\to\tv$ be maps.
     Given $\phi\in\tv$, we assume that $(\tau,U)$ is $\beta$-valid for $\phi$
     and that $(\sigma,U')$ is $\beta$-valid for $\tau_{*}(U)(\phi)$.
@@ -1215,4 +1215,21 @@ and yet $x\in\free(\tau(y))$. We have:
     Hence, from the assumptions $u\in\free(\phi)\setminus U$ and 
     $v\in\free(\tau(u))\setminus U'\subseteq\free(\tau(u))$, we
     conclude that $v\in\free(\tau_{*}(U)(\phi))$ as requested.
+\end{proof}
+
+\begin{prop}\label{logic:prop:LAM:beta:valid:composition}
+    Let $V$ be a set and $\sigma,\tau:V\to\tv$ be maps. Let $\phi\in\tv$.
+    We assume that $\tau$ is $\beta$-valid for $\phi$
+    and that $\sigma$ is $\beta$-valid for $\tau'(\phi)$.
+    Then, $\sigma'\circ\tau$ is $\beta$-valid for $\phi$,
+    where given $\chi:V\to\tv$, the map $\chi':\tv\to\tv$ denotes the 
+    associated $\beta$-substitution mapping of 
+    definition~(\ref{logic:def:LAM:beta:subst}).
+\end{prop}
+\begin{proof}
+    This is an immediate application of
+    proposition~(\ref{logic:prop:LAM:beta:valid:composition:gen}) with
+    $U=U'=\emptyset$, bearing in mind that $\tau'=\tau_{*}(\emptyset)$ 
+    and $\sigma'=\sigma_{*}(\emptyset)$ as follows from 
+    definition~(\ref{logic:def:LAM:beta:valid:flipped}).
 \end{proof}

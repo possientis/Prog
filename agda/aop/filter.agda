@@ -29,12 +29,11 @@ filter {a} p = concat ∘ map (p ~> wrap , nilp)
 pair : ∀ {a b c : Set} → (a → b) × (a → c) → a → b × c
 pair (f , g) x = (f x , g x)
 
-
-
-concatNat : ∀ {a b : Set} → (f : a → b) → (xss : List (List a)) →
+-- Lemma needed to prove concatNat
+concatNat' : ∀ {a b : Set} → (f : a → b) → (xss : List (List a)) →
   (map f ∘ concat) xss ≡ (concat ∘ map (map f)) xss
-concatNat f [] = refl
-concatNat f ([] ∷ xss) =
+concatNat' f [] = refl
+concatNat' f ([] ∷ xss) =
   begin
     (map f ∘ concat) ([] ∷ xss)
     ≡⟨⟩
@@ -45,7 +44,7 @@ concatNat f ([] ∷ xss) =
     map f (concat xss)
     ≡⟨⟩
     (map f ∘ concat) xss
-    ≡⟨ concatNat f xss ⟩
+    ≡⟨ concatNat' f xss ⟩
     (concat ∘ map (map f)) xss
     ≡⟨⟩
     concat (map (map f) xss)
@@ -59,7 +58,7 @@ concatNat f ([] ∷ xss) =
     (concat ∘ (map (map f))) ([] ∷ xss)
     ∎
 
-concatNat f ((x ∷ xs) ∷ xss) =
+concatNat' f ((x ∷ xs) ∷ xss) =
   begin
     (map f ∘ concat) ((x ∷ xs) ∷ xss)
     ≡⟨⟩
@@ -74,18 +73,44 @@ concatNat f ((x ∷ xs) ∷ xss) =
     f x ∷ map f (concat (xs ∷ xss))
     ≡⟨⟩
     f x ∷ ((map f ∘ concat) (xs ∷ xss))
-    ≡⟨⟩ {!!}
+    ≡⟨ cong (f x ∷_) (concatNat' f ((xs ∷ xss))) ⟩
+    f x ∷ ((concat ∘ (map (map f))) (xs ∷ xss))
+    ≡⟨⟩
+    f x ∷ (concat (map (map f) (xs ∷ xss)))
+    ≡⟨⟩
+    f x ∷ (concat ((map f xs) ∷ (map (map f) xss)))
+    ≡⟨⟩
+    f x ∷ ((map f xs) ++ concat (map (map f) xss))
+    ≡⟨⟩
+    (f x ∷ map f xs) ++ concat (map (map f) xss)
+    ≡⟨⟩
+    map f (x ∷ xs) ++ concat (map (map f) xss)
+    ≡⟨⟩
+    concat (map f (x ∷ xs) ∷ map (map f) xss)
+    ≡⟨⟩
+    concat (map (map f) ((x ∷ xs) ∷ xss))
+    ≡⟨⟩
+    (concat ∘ (map (map f))) ((x ∷ xs) ∷ xss)
+    ∎
 
+-- 'concat : List (List a) → List a' is a natural transformation 'concat : List² ⇒ List'
+concatNat : ∀ {a b : Set} → (f : a → b) → map f ∘ concat ≡ concat ∘ map (map f)
+concatNat f = extensionality (concatNat' f)
 
 
 L1 : ∀ {a : Set} → {p : a → Bool} →
-  map proj₁ ∘ filter proj₂ ∘ uncurry zip ∘ (pair (id , map p)) ≡ filter p
+  map proj₁ ∘ filter proj₂ ∘ uncurry zip ∘ pair (id , map p) ≡ filter p
 
 L1 {a} {p} =
   begin
-    map proj₁ ∘ filter proj₂ ∘ uncurry zip ∘ (pair (id , map p))
+    map proj₁ ∘ filter proj₂ ∘ uncurry zip ∘ pair (id , map p)
+    ≡⟨⟩         -- definition of filter
+    map proj₁ ∘ concat ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ pair (id , map p)
+    ≡⟨ cong     -- concat is natural
+         (λ { f → f ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ pair (id , map p)})
+         (concatNat proj₁)⟩
+    concat ∘ map (map proj₁) ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ pair (id , map p)
     ≡⟨⟩
-    map proj₁ ∘ concat ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ (pair (id , map p))
-    ≡⟨⟩ {!!}
+    {!!}
 
 

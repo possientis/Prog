@@ -105,6 +105,32 @@ two functors as in notation~(\ref{Fun:notation:canonical:product}).
             &=&(x_{1},x_{2})
         \end{eqnarray*}
 
-    $(5)$: TODO
+    $(5)$: We need to show that $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$ for
+    $f:a\to b\ @\ \Set\times\Set$ and $g:b\to c\ @\ \Set\times\Set$.
+    So let $f=(f_{1},f_{2})$ and $g=(g_{1},g_{2})$ with $a=(a_{1},a_{2})$,
+    $b=(b_{1},b_{2})$ and $c=(c_{1},c_{2})$. Then we have $f_{1}:a_{1}\to b_{1}$
+    and $f_{2}:a_{2}\to b_{2}$ and similarly $g_{1}:b_{1}\to c_{1}$ and
+    $g_{2}:b_{2}\to c_{2}$. We know that $F_{1}(f):a_{1}\times a_{2}
+    \to b_{1}\times b_{2}$ and $F_{1}(g):b_{1}\times b_{2}\to c_{1}\times c_{2}$.
+    Hence using proposition~(\ref{Cat:prop:set:arrow:equal}),
+    in order to show that $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$ it is
+    sufficient to prove that the underlying functions coincide on the set
+    $a_{1}\times a_{2}$. Given $(x_{1},x_{2})\in a_{1}\times a_{2}$, we have:
+        \begin{eqnarray*}F_{1}(g\circ f)(x_{1},x_{2})
+            &=&F_{1}(\,(g_{1},g_{2})\,\circ\,(f_{1},f_{2})\,)(x_{1},x_{2})\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&F_{1}(\,g_{1}\circ f_{1}\,,\,g_{2}\circ f_{2}\,)(x_{1},x_{2})\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:cartesian})}\ \to\ 
+            &=&(\,(g_{1}\circ f_{1})(x_{1})\,,\,(g_{2}\circ f_{2})(x_{2})\,)\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\,g_{1}(f_{1}(x_{1}))\,,\,g_{2}(f_{2}(x_{2}))\,)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:cartesian})}\ \to\ 
+            &=&F_{1}(g_{1},g_{2})(\,f_{1}(x_{1})\,,\,f_{2}(x_{2})\,)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:cartesian})}\ \to\ 
+            &=&F_{1}(g_{1},g_{2})(F_{1}(f_{1},f_{2})(x_{1},x_{2}))\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\,F_{1}(g_{1},g_{2})\,\circ\,F_{1}(f_{1},f_{2})\,)(x_{1},x_{2})\\
+            &=&(\,F_{1}(g)\,\circ\,F_{1}(f)\,)(x_{1},x_{2})\\
+        \end{eqnarray*}
 \end{proof}
 
