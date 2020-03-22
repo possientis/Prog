@@ -10,6 +10,9 @@ module  Variable
 import GHC.Generics
 import Test.QuickCheck
 
+(&&&) :: (a -> b) -> (a -> c) -> a -> (b,c)
+(&&&) f1 f2 var = (f1 var, f2 var)
+
 main :: IO ()
 main = do
     sample (arbitrary :: Gen (Var -> Var))
@@ -58,11 +61,14 @@ instance Arbitrary Var where
 instance CoArbitrary Var where
     coarbitrary = genericCoarbitrary
 
-toList :: (Var -> Var) -> [(Var,Var)]
-toList fun = map (\var -> (var, fun var)) mainVars
+toList :: (Var -> a) -> [(Var,a)]
+toList fun = map (id &&& fun) mainVars
 
-instance Show (Var -> Var) where
+
+instance Show a => Show (Var -> a) where
     show = show . toList
+
+
 
 a :: Var
 b :: Var 

@@ -220,11 +220,11 @@ Proof.
       unfold NotAccessibleType in Eb. 
       remember (NotAccessibleEmbedding I (strict r)) as e eqn:Ee.
       unfold NotAccessibleType in e.
-      remember (@exist a (fun x => ~Accessible (strict r) x) x H) as x' eqn:Ex. 
+      remember (exist (fun x => ~Accessible (strict r) x) x H) as x' eqn:Ex. 
       remember (H5 b) as H6 eqn:E. clear E. rewrite Eb in H6. clear H5.
       remember (H6 e x') as H7 eqn:E. clear E. clear H6. clear Ex. clear x'.
       clear H. exfalso. clear x. clear Eb. clear b. destruct H7 as [x H].
-      destruct x as [x p]. unfold Minimal in H. unfold restrict in H.
+      destruct x as [x p]. unfold Minimal in H.
       unfold NotAccessibleEmbedding in Ee. rewrite Ee in H.
       unfold NotAccessibleInj in H. simpl in H. apply p. constructor.
       intros y Hy. destruct (L (Accessible (strict r) y)) as [H'|H'].
@@ -396,3 +396,4 @@ Defined.
 
 
 Check nat_total_order.
+Check @exist.

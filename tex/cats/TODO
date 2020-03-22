@@ -1,5 +1,3 @@
-defining a bifunctor
-defining a profunctor
-natural transformation
+naturality square
 identity natural trans: alpha: F => F
 composition of two nats (vertical)

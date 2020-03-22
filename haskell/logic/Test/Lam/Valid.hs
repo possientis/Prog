@@ -11,15 +11,11 @@ import Formula
 import Lam.T
 
 specValid :: Spec
-specValid = describe "Testing non-polymorphic properties of valid..." $
-    sequence_ specsValid
-
-specsValid :: [Spec]
-specsValid  = [ testValidVar
-              , testValidApp
-              , testValidLam
-              , testValidCharac
-              ]
+specValid = describe "Testing non-polymorphic properties of valid..." $ do
+    testValidVar
+    testValidApp
+    testValidLam
+    testValidCharac
 
 testValidVar :: Spec
 testValidVar = it "Checked valid var property" $

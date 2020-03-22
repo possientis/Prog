@@ -206,5 +206,18 @@ begin
   cases H with H1 H,
   cases H with H2 H,
   cases H with H3 H4,
+  cases (L (Accessible (strict r) x)) with H H,
+    { assumption },
+    { unfold HasMinProp at H5,
+      generalize Eβ:NotAccessibleType (strict r) = β,
+      unfold NotAccessibleType at Eβ,
+      generalize Ee:NotAccessibleEmbedding (strict r) = e,
+      unfold NotAccessibleType at e,
+     -- generalize Ex:subtype.mk x H = x',
+    --  generalize E:H5 β = H6, clear E, rewrite ← Eβ at H6, clear H5,
+   --   generalize E:H6 e x' = H7, clear E, clear H6, clear Ex, clear x',
+   --   clear H, exfalso, clear x, clear Eβ, clear β, cases H7 with x H,
+   --   cases x with x p, unfold Minimal at H, unfold NotAccessibleEmbedding at Ee,
+    }
 end
 

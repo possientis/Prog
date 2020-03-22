@@ -1,7 +1,7 @@
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; sym; cong)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
-open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
+open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _≤_; z≤n; s≤s)
 open import Data.Nat.Properties using (+-suc; +-assoc)
 open import Relation.Nullary using (¬_)
 open import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
@@ -174,6 +174,33 @@ even-∃' (even-suc {m} oddn) | ⟨ n , p ⟩ =  ⟨ suc n , cong suc (
     ∎) ⟩
 
 odd-∃' (odd-suc evenn) with even-∃' evenn
-odd-∃' (odd-suc {m} evenn) | ⟨ n , p ⟩ = ⟨ n , {!!} ⟩
+odd-∃' (odd-suc {m} evenn) | ⟨ n , p ⟩ = ⟨ n ,
+  begin
+    n + (n + 0) + 1
+    ≡⟨ +-suc (n + (n + 0)) 0 ⟩
+    suc (n + (n + 0)) + 0
+    ≡⟨ cong suc +-identity-r ⟩
+    suc (n + (n + 0))
+    ≡⟨ cong suc p ⟩
+    suc m
+    ∎ ⟩
 
+Lemma0 : ∀ {m n : ℕ} → suc n ≡ suc m → n ≡ m
+Lemma0 refl = refl
 
+Lemma1 : ∀ {m n : ℕ} → m ≤ n → ∃[ p ] (m + p ≡ n)
+Lemma1 z≤n = ⟨ _ , refl ⟩
+Lemma1 (s≤s m≤n) with Lemma1 m≤n
+Lemma1 (s≤s m≤n) | ⟨ p , e ⟩ = ⟨ p , cong suc e ⟩
+
+Lemma2 : ∀ {m n : ℕ} → ∃[ p ] (m + p ≡ n) → m ≤ n
+Lemma2 {zero} ⟨ p , e ⟩ = z≤n
+Lemma2 {suc m} {suc n} ⟨ p , e ⟩ = s≤s (Lemma2 ⟨ p , Lemma0 e ⟩)
+
+¬∃≃∀¬ : ∀ {a : Set} {p : a → Set} → ¬ ∃[ x ] p x ≃ ∀ x → ¬ p x
+¬∃≃∀¬ = record
+  { to = λ{f → λ{x → λ{q → f ⟨ x , q ⟩}}}
+  ; from = λ{f → λ{ ⟨ x , q ⟩ → f x q}}
+  ; from∘to = λ{f → extensionality (λ{ ⟨ x , q ⟩ → refl})}
+  ; to∘from = λ{f → refl}
+  }

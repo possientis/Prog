@@ -17,7 +17,9 @@ module  TVShow
     ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10
     ,   comparingOf
     ,   ageSummary
-    ,   ex11, ex12, ex13, ex14, ex15, ex16, ex17, ex18, ex19
+    ,   ex11, ex12, ex13, ex14, ex15, ex16, ex17, ex18, ex19, ex20
+    ,   ex21, ex22, ex23, ex24, ex25, ex26, ex27, ex28, ex29, ex30
+    ,   ex31, ex32, ex33
     )   where
 
 
@@ -190,3 +192,54 @@ ex18 = anyOf folded ((> 9) . length) ["Bulbasaur", "Charmander", "Squirtle"]
 ex19 :: Maybe Int
 ex19 = findOf folded even [11,22,3,5,6]
 
+
+ex20 :: [Int]
+ex20 = [1,2,3,4] ^.. taking 2 folded
+
+ex21 :: [Int]
+ex21 = toListOf (taking 2 folded) [1,2,3,4]
+
+ex22 :: [Int]
+ex22 = [1,2,3,4] ^.. dropping 2 folded
+
+
+ex23 :: [Int]
+ex23 = [[1,2,3],[10,20,30],[100,200,300]] ^.. folded . taking 2 folded
+
+
+ex24 :: [Int]
+ex24 = [[1,2,3],[10,20,30],[100,200,300]] ^.. taking 2 folded . folded
+
+ex25 :: [Int]
+ex25 = [[1,2,3],[10,20,30],[100,200,300]] ^.. taking 2 (folded . folded)
+
+ex26 :: [Int]
+ex26 = [1,2,3] ^.. backwards folded
+
+ex27 :: [String]
+ex27 = ("one", "two") ^.. backwards both
+
+ex28 :: [Int]
+ex28 = [(1,2),(3,4)] ^.. backwards (folded . both)
+
+ex29 :: [Int]
+ex29 = [1..100] ^.. takingWhile (<10) folded
+
+ex30 :: [Int]
+ex30 = [1,5,15,5,1] ^.. takingWhile (<10) folded
+
+ex31 :: [Int]
+ex31 = [1..100] ^.. droppingWhile (<90) folded
+
+
+-- filtered :: (s -> Bool) -> Fold s s
+-- *real*
+-- filtered :: (Choice p, Applicative f) => (a -> Bool) -> Optic' p f a a
+
+ex32 :: [Int]
+ex32 = [1,2,3,4] ^.. folded . filtered even
+
+ex33 :: [String]
+ex33 = ["apple", "passionfruit", "orange", "pomegranate"]
+    ^.. folded
+      . filtered ((>6) . length)

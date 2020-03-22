@@ -97,6 +97,30 @@ concatNat' f ((x ∷ xs) ∷ xss) =
 concatNat : ∀ {a b : Set} → (f : a → b) → map f ∘ concat ≡ concat ∘ map (map f)
 concatNat f = extensionality (concatNat' f)
 
+∘-map' : ∀ {a b c : Set} → {f : a → b} → {g : b → c} → (xs : List a) →
+  map (g ∘ f) xs ≡ (map g ∘ map f) xs
+
+∘-map' [] = refl
+∘-map' {f = f} {g} (x ∷ xs) =
+  begin
+    map (g ∘ f) (x ∷ xs)
+    ≡⟨⟩
+    (g ∘ f) x ∷ map (g ∘ f) xs
+    ≡⟨ cong ((g ∘ f) x ∷_) (∘-map' xs) ⟩
+    (g ∘ f) x ∷ (map g ∘ map f) xs
+    ≡⟨⟩
+    g (f x) ∷ (map g (map f xs))
+    ≡⟨⟩
+    map g (f x ∷ map f xs)
+    ≡⟨⟩
+    map g (map f (x ∷ xs))
+    ≡⟨⟩
+    (map g ∘ map f) (x ∷ xs)
+    ∎
+
+∘-map : ∀ {a b c : Set} → {f : a → b} → {g : b → c} → map (g ∘ f) ≡ map g ∘ map f
+∘-map = extensionality ∘-map'
+
 
 L1 : ∀ {a : Set} → {p : a → Bool} →
   map proj₁ ∘ filter proj₂ ∘ uncurry zip ∘ pair (id , map p) ≡ filter p
@@ -110,6 +134,8 @@ L1 {a} {p} =
          (λ { f → f ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ pair (id , map p)})
          (concatNat proj₁)⟩
     concat ∘ map (map proj₁) ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ pair (id , map p)
+    ≡⟨ cong (λ { h → concat ∘ h ∘ uncurry zip ∘ pair (id , map p) }) (sym ∘-map) ⟩
+    concat ∘ (map (map proj₁ ∘ (proj₂ ~> wrap , nilp))) ∘ uncurry zip ∘ pair (id , map p)
     ≡⟨⟩
     {!!}
 

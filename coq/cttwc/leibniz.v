@@ -34,15 +34,6 @@ Arguments Eq {X}.
 
 Arguments Refl {X}.
 
-Inductive Eq2 (X:Type) : X -> X -> Prop :=
-| Refl2 : forall (x:X), Eq2 X x x
-.
-
-Arguments Eq2 {X}.
-
-Arguments Refl2 {X}.
-
-
 Lemma Rewrite' : forall (X:Type) (x y:X) (p:X -> Prop), 
     Eq x y -> p x -> p y.
 Proof.
@@ -101,19 +92,6 @@ Definition Rewrite : forall (X:Type) (x y:X) (p:X -> Prop),
                 fun (e:Eq x y) =>
                         match e with 
                         | Refl x' => fun (z:p x') => z
-                        end.
-
-Arguments Rewrite {X} {x} {y}.
-
-Definition Rewrite2 : forall (X:Type) (x y:X) (p:X -> Prop), 
-    Eq2 x y -> p x -> p y 
-    :=
-    fun (X:Type) =>
-        fun(x y:X) =>
-            fun (p:X -> Prop) =>
-                fun (e:Eq2 x y) =>
-                        match e with 
-                        | Refl2 x' => fun (z:p x') => z
                         end.
 
 Arguments Rewrite {X} {x} {y}.
@@ -272,21 +250,6 @@ Definition L25 : forall (X:Type) (x y z:X), Eq x y -> Eq y z -> Eq x z :=
             fun (Exy:Eq x y) =>
                 fun (Eyz:Eq y z) =>
                     Rewrite (fun (u:X) => Eq x u) Eyz Exy.
-
-(* All these equalities are equivalent                                          *)
-Definition L26 : forall (X:Type) (x y:X), Eq x y -> Eq2 x y.
-Proof.
-    intros X x y E.
-    change ((fun (z:X) => Eq2 x z) y).
-    apply (Rewrite _ E).
-    exact (Refl2 x).
-Qed.
-
-Definition L27 : forall (X:Type) (x y:X), Eq x y -> Eq2 x y :=
-    fun (X:Type) =>
-        fun (x y:X) =>
-            fun (E:Eq x y) =>
-                Rewrite (fun (z:X) => Eq2 x z) E (Refl2 x).
 
 
 Variable a : Type.
@@ -478,18 +441,57 @@ Definition L39 : forall (X Y:Prop), And (Or X Y -> Or Y X) (Or Y X -> Or X Y) :=
 Variable And1 : Prop -> Prop -> Prop.
 Variable And2 : Prop -> Prop -> Prop.
 
-Variable AndC1 : forall (X Y:Prop), X -> Y -> And1 X Y.
-Variable AndC2 : forall (X Y:Prop), X -> Y -> And2 X Y.
+Variable And1C : forall (X Y:Prop), X -> Y -> And1 X Y.
+Variable And2C : forall (X Y:Prop), X -> Y -> And2 X Y.
 
-Variable AndE1 : forall (X Y Z:Prop), And1 X Y -> (X -> Y -> Z) -> Z.
-Variable AndE2 : forall (X Y Z:Prop), And2 X Y -> (X -> Y -> Z) -> Z.
+Variable And1E : forall (X Y Z:Prop), And1 X Y -> (X -> Y -> Z) -> Z.
+Variable And2E : forall (X Y Z:Prop), And2 X Y -> (X -> Y -> Z) -> Z.
 
 Definition L40 : forall (X Y:Prop), And1 X Y <-> And2 X Y := 
     fun (X Y:Prop) => conj
-        (fun (and1:And1 X Y) => AndC2 X Y
-            (AndE1 X Y X and1 (fun (x:X) (y:Y) => x))
-            (AndE1 X Y Y and1 (fun (x:X) (y:Y) => y)))
-        (fun (and2:And2 X Y) => AndC1 X Y
-            (AndE2 X Y X and2 (fun (x:X) (y:Y) => x))
-            (AndE2 X Y Y and2 (fun (x:X) (y:Y) => y))).
+        (fun (and1:And1 X Y) => And2C X Y
+            (And1E X Y X and1 (fun (x:X) (y:Y) => x))
+            (And1E X Y Y and1 (fun (x:X) (y:Y) => y)))
+        (fun (and2:And2 X Y) => And1C X Y
+            (And2E X Y X and2 (fun (x:X) (y:Y) => x))
+            (And2E X Y Y and2 (fun (x:X) (y:Y) => y))).
+
+(* These signatures characterize disjunction up to logical equivalence          *)
+Variable Or1 : Prop -> Prop -> Prop.
+Variable Or2 : Prop -> Prop -> Prop.
+
+Variable Or1C1 : forall (X Y:Prop), X -> Or1 X Y.
+Variable Or1C2 : forall (X Y:Prop), Y -> Or1 X Y.
+Variable Or2C1 : forall (X Y:Prop), X -> Or2 X Y.
+Variable Or2C2 : forall (X Y:Prop), Y -> Or2 X Y.
+
+Variable Or1E : forall (X Y Z:Prop), Or1 X Y -> (X -> Z) -> (Y -> Z) -> Z.
+Variable Or2E : forall (X Y Z:Prop), Or2 X Y -> (X -> Z) -> (Y -> Z) -> Z.
+
+Definition L41 : forall (X Y:Prop), Or1 X Y <-> Or2 X Y :=
+    fun (X Y:Prop) => conj
+        (fun (or1:Or1 X Y) => Or1E X Y (Or2 X Y) or1 (Or2C1 X Y) (Or2C2 X Y))
+        (fun (or2:Or2 X Y) => Or2E X Y (Or1 X Y) or2 (Or1C1 X Y) (Or1C2 X Y)).
+
+(* These signatures characterize equality up to logical equivalence             *)
+
+Variable Eq1 : forall (X:Type), X -> X -> Prop.
+Variable Eq2 : forall (X:Type), X -> X -> Prop.
+
+Variable Eq1C : forall (X:Type) (x:X), Eq1 X x x.
+Variable Eq2C : forall (X:Type) (x:X), Eq2 X x x.
+
+Variable Eq1E : forall (X:Type) (x y:X) (p:X -> Prop), Eq1 X x y -> p x -> p y.
+Variable Eq2E : forall (X:Type) (x y:X) (p:X -> Prop), Eq2 X x y -> p x -> p y.
+
+Definition L42 : forall (X:Prop) (x y:X), Eq1 X x y <-> Eq2 X x y := 
+    fun (X:Prop) =>
+        fun (x y:X) => conj
+            (fun (e1:Eq1 X x y) => Eq1E X x y (fun (z:X) => Eq2 X x z) e1 (Eq2C X x))
+            (fun (e2:Eq2 X x y) => Eq2E X x y (fun (z:X) => Eq1 X x z) e2 (Eq1C X x)).
+
+
+
+
+
 
