@@ -212,12 +212,38 @@ begin
       generalize Eβ:NotAccessibleType (strict r) = β,
       unfold NotAccessibleType at Eβ,
       generalize Ee:NotAccessibleEmbedding (strict r) = e,
-      unfold NotAccessibleType at e,
-     -- generalize Ex:subtype.mk x H = x',
-    --  generalize E:H5 β = H6, clear E, rewrite ← Eβ at H6, clear H5,
-   --   generalize E:H6 e x' = H7, clear E, clear H6, clear Ex, clear x',
-   --   clear H, exfalso, clear x, clear Eβ, clear β, cases H7 with x H,
-   --   cases x with x p, unfold Minimal at H, unfold NotAccessibleEmbedding at Ee,
+      generalize Ex:subtype.mk x H = x',
+      generalize E:H5 β = H6, clear E, rewrite ← Eβ at H6, clear H5,
+      generalize E:H6 e x' = H7, clear E, clear H6, clear Ex, clear x',
+      clear H, exfalso, clear x, clear Eβ, clear β, cases H7 with x H,
+      cases x with x p, unfold Minimal at H,
+      rewrite ← Ee at H, unfold NotAccessibleEmbedding at H,
+      unfold NotAccessibleInj at H, apply p, constructor,
+      assume y Hy, cases (L (Accessible (strict r) y)) with H' H',
+        { assumption },
+        { generalize Ey:subtype.mk y H' = y',
+          generalize E:(H y') = H5, clear E,
+          rewrite ← Ey at H5, simp at H5, clear H, unfold strict at Hy,
+          cases Hy with H6 H7, clear Ee, clear e,
+          generalize E:H5 H6 = H8, clear E, clear H5, clear Ey, clear y', clear H6,
+          exfalso, apply H7, rewrite H8
+        }
     }
+end
+
+-- If r is a well-order, then (strict r) is well-founded
+theorem WellOrderWF : ∀ {α : Type u} (r : α → α → Prop),
+  LEM → WellOrder r → WellFounded (strict r) :=
+begin
+  assume α r L H, unfold WellFounded, apply WellOrderAllAccessible; assumption
+end
+
+-- acc is defined by lean
+lemma acc_Accessible : ∀ {α : Type u} (r : α → α → Prop) (x : α),
+  Accessible r x ↔ acc r x :=
+begin
+  assume α r x, split; assume H,
+    { induction H with x H IH, constructor, assume y H', apply IH, assumption},
+    { induction H with x H IH, constructor, assume y H', apply IH, assumption}
 end
 
