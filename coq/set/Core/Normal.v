@@ -1,9 +1,12 @@
+(* TODO: check imports are really needed                                        *)
+
 Require Import Core.Set.
 Require Import Core.Leq.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Equal.
 Require Import Core.Empty.
+Require Import Core.Insert.
 Require Import Core.ElemIncl.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
@@ -18,7 +21,31 @@ Fixpoint normalize (x:set) : set :=
         end
     end.
 
+(*
+Lemma normalizeSame : forall (x:set), normalize x == x.
+Proof.
+    induction x as [|x IH1 xs IH2].
+    - apply equalRefl.
+    - simpl. destruct (elem_dec x xs) as [H|H]; simpl.
+        + admit.
+        +
 
+Show.
+*)
+ 
+(*
+Lemma normalizeEqual : forall (x y:set), normalize x = normalize y -> x == y.
+Proof.
+    induction x as [|x IH1 xs IH2]; intros y H.
+    - admit.
+    - simpl in H. destruct (elem_dec x xs) as [Hx|Hx].
+        + admit.
+        +
+
+Show.
+*)
+
+(*
 Lemma equalNormalize : forall (x y:set), x == y -> normalize x = normalize y.
 Proof.
     induction x as [|x IH1 xs IH2]; intros y H.
@@ -26,6 +53,10 @@ Proof.
     - simpl. destruct (elem_dec x xs) as [Hx|Hx].
         + admit.
         +
+
+
+Show.
+*)
 (*
     - destruct y as [|y ys]; simpl.
         + rewrite emptyIsNil in H. inversion H.
@@ -54,4 +85,3 @@ Proof.
                 {
 
 *)
-Show.

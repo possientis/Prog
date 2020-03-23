@@ -126,15 +126,3 @@ Proof.
                     { assumption. }}}
 Qed.
 
-
-(* Insert the set x inside the set y according to syntactic ordering.           *)
-Fixpoint insert (x y:set) : set :=
-    match y with
-    | Nil           => Cons x Nil
-    | (Cons y ys)   =>
-        match (leqDec x y) with
-        | left _    => Cons y (insert x ys)     (* x 'smaller' goes inside      *)
-        | right _   => Cons x (Cons y ys)
-        end
-    end.
-

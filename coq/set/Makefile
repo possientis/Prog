@@ -30,6 +30,8 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Specification.vo \
 								${CORE}/Functional.vo \
 								${CORE}/Leq.vo \
+								${CORE}/Insert.vo \
+								${CORE}/Normal.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
@@ -280,6 +282,29 @@ ${CORE}/Leq.vo :				${CORE}/Leq.v \
 								${CORE}/Set.vo \
 								${CORE}/Decidability.vo
 	coqc ${CORE}/Leq.v			${OPT} 
+
+
+${CORE}/Insert.vo :				${CORE}/Insert.v \
+								${CORE}/Set.vo \
+								${CORE}/Leq.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Decidability.vo
+	coqc ${CORE}/Insert.v		${OPT} 
+
+
+${CORE}/Normal.vo :				${CORE}/Normal.v \
+								${CORE}/Set.vo \
+								${CORE}/Leq.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Empty.vo \
+								${CORE}/Insert.vo \
+								${CORE}/ElemIncl.vo \
+								${CORE}/Decidability.vo \
+								${CORE}/Extensionality.vo
+	coqc ${CORE}/Normal.v		${OPT} 
 
 
 ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
