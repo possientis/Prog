@@ -25,8 +25,12 @@ Definition subst (v:Type) (e:Eq v) (f:v -> T v) (t:T v) : T v :=
 
 Arguments subst {v}.
 
-Lemma substx : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (x:v),
+Lemma substVar : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (x:v),
     t = Var x -> subst e f t = f x.
 Proof. intros v e f t x H. rewrite H. reflexivity. Qed.
+
+Lemma substApp : forall (v:Type) (e:Eq v) (f:v -> T v) (t1 t2 t:T v),
+    t = App t1 t2 -> subst e f t = App (subst e f t1) (subst e f t2).
+Proof. intros v e f t1 t2 t H. rewrite H. unfold subst. simpl. reflexivity. Qed.  
 
 

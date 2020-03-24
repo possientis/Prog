@@ -12,15 +12,15 @@ import Lam.Subst
 
 specSubst :: Spec
 specSubst = describe "Testing properties of subst..." $ do
-    specSubstX
+    specSubstVar
 
 
-specSubstX :: Spec
-specSubstX = it "Check substx property" $
-    property $ propSubstX
+specSubstVar :: Spec
+specSubstVar = it "Check substVar property" $
+    property $ propSubstVar
 
-propSubstX :: (Var -> T Var) -> Var -> Bool
-propSubstX f x = subst f (Var x) == f x
+propSubstVar :: (Var -> T Var) -> Var -> Bool
+propSubstVar f x = subst f (Var x) == f x
 
 
 

@@ -36,7 +36,8 @@ all:	   						Extensionality.vo \
 								${FOL}/Valid.vo \
 								${LAM}/Dmap.vo \
 								${FOL}/Dmap.vo \
-								${LAM}/Subst.vo
+								${LAM}/Subst.vo \
+								${LAM}/Replace.vo
 
 Extensionality.vo : 			Extensionality.v
 	coqc Extensionality.v
@@ -203,6 +204,7 @@ ${LAM}/Free.vo :				${LAM}/Free.v \
 								Relation.vo \
 								Injective.vo \
 								${LAM}/T.vo \
+								${LAM}/Subst.vo \
 								${LAM}/Variable.vo \
 								${LAM}/Congruence.vo
 	coqc ${LAM}/Free.v			${OPT} 
@@ -296,4 +298,10 @@ ${LAM}/Subst.vo :				${LAM}/Subst.v \
 								Eq.vo \
 								${LAM}/T.vo
 	coqc ${LAM}/Subst.v			${OPT} 
+
+
+${LAM}/Replace.vo :				${LAM}/Replace.v \
+								Eq.vo \
+								${LAM}/T.vo
+	coqc ${LAM}/Replace.v		${OPT} 
 

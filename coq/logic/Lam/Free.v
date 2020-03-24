@@ -9,8 +9,10 @@ Require Import Include.
 Require Import Coincide.
 Require Import Relation.
 Require Import Injective.
+Require Import Intersect.
 
 Require Import Lam.T.
+Require Import Lam.Subst.
 Require Import Lam.Variable.
 Require Import Lam.Congruence.
 
@@ -149,4 +151,12 @@ Proof.
         + intros x s1 t1 H1. simpl. rewrite H1. reflexivity.
 Qed.
 
+(*
+Lemma free_fmap_gen : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v),
+    incl 
+        (free e (subst_ e f xs t)) 
+        ((inter e (free e t) xs) ++ (free e t)).
+Proof.
 
+Show.
+*)
