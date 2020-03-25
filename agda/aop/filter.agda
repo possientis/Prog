@@ -17,8 +17,23 @@ _~>_,_ : ∀ {a b : Set} → (a → Bool) → (a → b) → (a → b) → a → 
 (p ~> f , g) x | false = g x
 (p ~> f , g) x | true = f x
 
+∘-distrib-~>-l : ∀ {a b c : Set} → (p : a → Bool) → (f g : a → b) → (h : b → c) →
+  h ∘ (p ~> f , g) ≡ (p ~> (h ∘ f) , (h ∘ g))
+∘-distrib-~>-l {a} {b} {c} p f g h = extensionality k
+  where
+    k : ∀ (x : a) → (h ∘ (p ~> f , g)) x ≡ (p ~> (h ∘ f) , (h ∘ g)) x
+    k x with p x
+    k x | false = refl
+    k x | true = refl
+
 nilp : ∀ {a : Set} → a → List a
 nilp x = []
+
+nilpNat : ∀ {a b : Set} → (f : a → b) → map f ∘ nilp ≡ nilp ∘ f
+nilpNat {a} {b} f = extensionality k
+  where
+    k : ∀ (x : a) → (map f ∘ nilp) x ≡ (nilp ∘ f) x
+    k x = refl
 
 wrap : ∀ {a : Set} → a → List a
 wrap x = x ∷ []
@@ -135,8 +150,11 @@ L1 {a} {p} =
          (concatNat proj₁)⟩
     concat ∘ map (map proj₁) ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ pair (id , map p)
     ≡⟨ cong (λ { h → concat ∘ h ∘ uncurry zip ∘ pair (id , map p) }) (sym ∘-map) ⟩
-    concat ∘ (map (map proj₁ ∘ (proj₂ ~> wrap , nilp))) ∘ uncurry zip ∘ pair (id , map p)
-    ≡⟨⟩
-    {!!}
+    concat ∘ map (map proj₁ ∘ (proj₂ ~> wrap , nilp)) ∘ uncurry zip ∘ pair (id , map p)
+    ≡⟨ cong (λ { f → concat ∘ map f ∘ uncurry zip ∘ pair (id , map p) }) (∘-distrib-~>-l proj₂ wrap nilp (map proj₁)) ⟩
+    concat ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , (map proj₁ ∘ nilp)) ∘ uncurry zip ∘ pair (id , map p)
+    ≡⟨ cong (λ { f → concat ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , f) ∘ uncurry zip ∘ pair (id , map p)}) (nilpNat proj₁) ⟩
+    concat ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , (nilp ∘ proj₁)) ∘ uncurry zip ∘ pair (id , map p)
+    ≡⟨⟩ {!!}
 
 
