@@ -9,11 +9,41 @@
     where $(1)$ holds for all $a\in\ob\ \Cat$ and $(2)$ holds for all 
     $a,b\in\ob\ \Cat$ and $f:a\to b$.
 \end{defin}
+
 \begin{notation}\label{Nat:notation:natural:arrow}
     We shall use $\alpha:F\Rightarrow G$ as a notational shortcut for the
     statement that {\em $\alpha$ is a natural transformation from the
     functor $F$ to the functor $G$}.
 \end{notation}
+
+\noindent
+{\bf Remark}: Given $F,G:\Cat\to\Dat$ and $\alpha:F\Rightarrow G$, given
+$a,b\in\ob\ \Cat$ and $f:a \to b$, we have $F(f):F(a) \to F(b)$ and 
+$G(f):G(a)\to G(b)$. Furthemore, from $(1)$ of definition~(\ref{Nat:def:natural}), 
+we have $\alpha(a):F(a)\to G(a)$ and $\alpha(b):F(b)\to G(b)$. It follows 
+that both arrows $G(f)\circ\alpha(a)$ and $\alpha(b)\circ F(f)$ are well 
+defined arrows in \Dat\ (from $F(a)$ to $G(b)$), and the equality $(2)$ of 
+definition~(\ref{Nat:def:natural}) is always meaningful.
+
+\noindent
+{\bf Remark}: Equality~$(2)$ of definition~(\ref{Nat:def:natural}) is commonly
+visualized as: 
+    \[
+        \begin{tikzcd}
+            a\arrow[d,swap, "f"]
+            &F(a)\arrow[r, "\alpha(a)"]\arrow[d, swap,"F(f)"]
+            &G(a)\arrow[d, "G(f)"]
+            \\
+            b
+            &F(b)\arrow[r, swap, "\alpha(b)"]
+            &G(b)
+        \end{tikzcd}
+    \]
+This diagram is called the {\em naturality square} of the
+natural transformation $\alpha$ relative to $f:a \to b$. Equality~$(2)$
+is informally expressed by saying that {\em the naturality square commutes},
+i.e. that both arrows obtained by composition along the two paths from $F(a)$ 
+to $G(b)$ are equal. 
 
 \begin{defin}\label{Nat:def:natural:component}
     Given $F,G:\Cat\to\Dat$ and $\alpha:F\Rightarrow G$, given $a\in\Cat$
@@ -26,14 +56,7 @@
 in the category \Dat.
 
 \begin{notation}\label{Nat:notation:natural:component}
-    The component $\alpha(a)$ of $\alpha$ at $a$ is denoted $\alpha_{a}$.
+    The component $\alpha(a)$ of $\alpha$ at $a$ is commonly denoted $\alpha_{a}$.
 \end{notation}
 
-\noindent
-{\bf Remark}: Given $F,G:\Cat\to\Dat$ and $\alpha:F\Rightarrow G$, given
-$a,b\in\ob\ \Cat$ and $f:a \to b$, we have $F(f):F(a) \to F(b)$ and 
-$G(f):G(a)\to G(b)$. Furthemore, from $(1)$ of definition~(\ref{Nat:def:natural}), 
-we have $\alpha_{a}:F(a)\to G(a)$ and $\alpha_{b}:F(b)\to G(b)$. It follows 
-that both arrows $G(f)\circ\alpha_{a}$ and $\alpha_{b}\circ F(f)$ are well 
-defined arrows in \Dat\ (from $F(a)$ to $G(b)$), and the equality $(2)$ of 
-definition~(\ref{Nat:def:natural}) is always meaningful.
+
