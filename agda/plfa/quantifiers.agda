@@ -9,6 +9,7 @@ open import Data.Sum using (_⊎_; inj₁; inj₂) renaming ([_,_] to case-⊎)
 open import Data.Sum using (_⊎_)
 open import isomorphism using (_≃_; ∀-extensionality; extensionality)
 open import Function using (_∘_)
+open import bin
 
 ∀-elim : ∀ {a : Set} {b : a → Set}
   → (L : ∀ (x : a) → b x)
@@ -204,3 +205,38 @@ Lemma2 {suc m} {suc n} ⟨ p , e ⟩ = s≤s (Lemma2 ⟨ p , Lemma0 e ⟩)
   ; from∘to = λ{f → extensionality (λ{ ⟨ x , q ⟩ → refl})}
   ; to∘from = λ{f → refl}
   }
+
+
+∃¬-implies-¬∀ : ∀ {a : Set} {p : a → Set} → ∃[ x ] (¬ p x) → ¬ ∀ x → p x
+∃¬-implies-¬∀ ⟨ x , q ⟩ = λ{f → q (f x)}
+
+≡One : ∀ {b : Bin} (o o' : One b) → o ≡ o'
+≡One justOne justOne = refl
+≡One (oneO o) (oneO o') = cong oneO (≡One o o')
+≡One (oneI o) (oneI o') = cong oneI (≡One o o')
+
+≡Can : ∀ {b : Bin} (c c' : Can b) → c ≡ c'
+≡Can canZero canZero = refl
+≡Can canZero (canOne (oneO ()))
+≡Can (canOne (oneO ())) canZero
+≡Can (canOne justOne) (canOne justOne) = refl
+≡Can (canOne (oneO x)) (canOne (oneO y)) = cong canOne (cong oneO (≡One x y))
+≡Can (canOne (oneI x)) (canOne (oneI y)) = cong canOne (cong oneI (≡One x y))
+
+cast : ∀ {b b' : Bin} → b ≡ b' → Can b → Can b'
+cast refl cb = cb
+
+ℕ-iso-Can : ℕ ≃ ∃[ b ] (Can b)
+ℕ-iso-Can = record
+  { to = λ{n → ⟨ to n , can-to n ⟩}
+  ; from = λ{⟨ b , cb ⟩ → from b}
+  ; from∘to = λ{n → from-to n}
+  ; to∘from = λ{⟨ b , cb ⟩ →
+    begin -- clear the mess
+      ⟨ to (from b) , can-to (from b) ⟩
+      ≡⟨ cong (λ { q → ⟨ to (from b) , q ⟩ }) (≡Can (cast {!!} {!!}) {!!}) ⟩
+      ⟨ to (from b) , cast (sym (can-to-from cb)) cb ⟩
+      ≡⟨⟩
+      {!!}}
+  }
+
