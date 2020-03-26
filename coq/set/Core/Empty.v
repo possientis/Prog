@@ -4,6 +4,7 @@
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
+Require Import Core.Cons.
 Require Import Core.Equal.
 Require Import Core.ToList.
 Require Import Core.ElemIncl.

@@ -8,6 +8,7 @@ Require Import Utils.Nat.
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
+Require Import Core.Cons.
 Require Import Core.Rank.
 Require Import Core.Order.
 Require Import Core.Equal.
@@ -42,7 +43,7 @@ Proof.
     - intros y H1 H2. apply consElem in H2. destruct H2 as [H2|H2].
         + apply (IH1 x).
             { apply inclRefl. }
-            { apply equal_r with y.
+            { apply elemCompatR with y.
                 { assumption. }
                 { apply elemIncl with (Cons x xs).
                     { assumption. }

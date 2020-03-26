@@ -16,13 +16,12 @@ Fixpoint insert (x y:set) : set :=
     end.
 
 (*
-Lemma insertSemantics : forall (x xs:set), 
-    (x :: xs) /\ (insert x xs == xs)        \/
-   ~(x :: xs) /\ (insert x xs == Cons x xs). 
+Lemma insertCons : forall (x xs:set), insert x xs == Cons x xs.
 Proof.
     intros x ys. revert ys x. induction ys as [|y IH1 ys IH2]; intros x.
     - admit.
     - simpl. destruct (leqDec x y) as [H|H].
+        +
     
 
 Show.

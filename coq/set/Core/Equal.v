@@ -57,20 +57,21 @@ Proof.
 Qed.
 
 (* These immediate consequences of equality are sometimes useful in proofs      *)
-Lemma equal_l : forall (x y z:set), x == y -> x :: z -> y :: z.
+Lemma elemCompatL : forall (x y z:set), x == y -> x :: z -> y :: z.
 Proof.
     intros x y z [H1 H2] H. apply H2. assumption.
 Qed.
 
-Lemma equal_r : forall (x y z:set), x == y -> z :: x -> z :: y.
+Lemma elemCompatR : forall (x y z:set), x == y -> z :: x -> z :: y.
 Proof.
     intros x y z [H1 H2] H. apply H1. assumption.
 Qed.
 
-Lemma equal_lr : forall (x x' y y':set), x == x' -> y == y' -> x :: y -> x' :: y'.
+Lemma elemCompatLR : forall(x x' y y':set), 
+    x == x' -> y == y' -> x :: y -> x' :: y'.
 Proof.
-    intros x x' y y' Hx Hy H. apply equal_l with x.
+    intros x x' y y' Hx Hy H. apply elemCompatL with x.
     - assumption.
-    - apply equal_r with y; assumption.
+    - apply elemCompatR with y; assumption.
 Qed.
 

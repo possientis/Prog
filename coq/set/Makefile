@@ -18,6 +18,7 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Extensionality.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Decidability.vo \
 								${CORE}/Empty.vo \
 								${CORE}/Pairing.vo \
@@ -148,6 +149,17 @@ ${CORE}/Extensionality.vo :		${CORE}/Extensionality.v \
 	coqc ${CORE}/Extensionality.v ${OPT} 
 
 
+${CORE}/Cons.vo :				${CORE}/Cons.v \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/ToList.vo \
+								${CORE}/Trans.vo \
+								${CORE}/Equal.vo \
+								${CORE}/Extensionality.vo
+	coqc ${CORE}/Cons.v ${OPT} 
+
+
 ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
 								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
@@ -165,6 +177,7 @@ ${CORE}/Empty.vo :				${CORE}/Empty.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/ToList.vo \
 								${CORE}/ElemIncl.vo \
@@ -176,6 +189,7 @@ ${CORE}/Pairing.vo :			${CORE}/Pairing.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/ToList.vo \
 								${CORE}/Extensionality.vo \
@@ -187,6 +201,7 @@ ${CORE}/Union.vo :				${CORE}/Union.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Empty.vo \
 								${CORE}/ToList.vo \
@@ -200,6 +215,7 @@ ${CORE}/Intersection.vo :		${CORE}/Intersection.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Empty.vo \
 								${CORE}/ToList.vo \
@@ -212,6 +228,7 @@ ${CORE}/Powerset.vo :			${CORE}/Powerset.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Empty.vo \
 								${CORE}/ToList.vo \
@@ -241,6 +258,7 @@ ${CORE}/Foundation.vo :			${CORE}/Foundation.v \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Order.vo \
 								${CORE}/Equal.vo \

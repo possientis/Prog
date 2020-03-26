@@ -6,6 +6,7 @@ Require Import List.
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
+Require Import Core.Cons.
 Require Import Core.Equal.
 Require Import Core.Empty.
 Require Import Core.ToList.
@@ -83,7 +84,7 @@ Proof.
                           apply (elemIncl z' y); assumption. }}
                     { apply elemIncl. intros u H4. apply consElem in H4.
                       destruct H4 as [H4|H4].
-                        { apply equal_l with x.
+                        { apply elemCompatL with x.
                             { apply equalSym. assumption. }
                             { assumption. }}
                         { assert (u :: z') as H5.
@@ -94,7 +95,7 @@ Proof.
                 { apply elemIncl. intros u H2. assert (u :: Cons x xs) as H3.
                     { apply (elemIncl z (Cons x xs)); assumption. }
                   apply consElem in H3. destruct H3 as [H3|H3].
-                    { exfalso. apply H'. apply equal_l with u; assumption. }
+                    { exfalso. apply H'. apply elemCompatL with u; assumption. }
                     { assumption. }}
               apply IH in H1. apply toListElem in H1. 
               destruct H1 as [y [H1 H2]]. apply toListElem. exists y. split.

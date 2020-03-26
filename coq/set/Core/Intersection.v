@@ -9,6 +9,7 @@ Require Import Utils.Filter.
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
+Require Import Core.Cons.
 Require Import Core.Equal.
 Require Import Core.Empty.
 Require Import Core.ToList.
@@ -46,7 +47,7 @@ Proof.
             { simpl in H. apply consElem in H. destruct H as [H|H].
                 { split.
                     { apply consElem. left. assumption. }
-                    { unfold in_set in H'. apply equal_l with x.
+                    { unfold in_set in H'. apply elemCompatL with x.
                         { apply equalSym. assumption. }
                         { assumption. }}}
                 { apply IH in H. destruct H as [H1 H2]. split.
@@ -70,6 +71,6 @@ Proof.
                     { assumption. }}}
             { apply consElem in H1. destruct H1 as [H1|H1].
                 { exfalso. apply H'. unfold in_set. 
-                  apply equal_l with z; assumption. }
+                  apply elemCompatL with z; assumption. }
                 { apply IH. split; assumption. }}
 Qed.

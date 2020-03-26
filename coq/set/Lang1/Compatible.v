@@ -17,9 +17,9 @@ Proof.
     intros e p n. revert e n. induction p as [|k m|p1 IH1 p2 IH2|m p1 IH1];
     intros e n; unfold compatible, eval1; intros x y E; simpl; intros H.
     - assumption.
-    - apply equal_l with (bind e n x k). 
+    - apply elemCompatL with (bind e n x k). 
         + apply bindEqual. assumption.
-        + apply equal_r with (bind e n x m).
+        + apply elemCompatR with (bind e n x m).
             { apply bindEqual. assumption. }
             { assumption. }
     - unfold compatible, eval1 in IH1. unfold compatible, eval1 in IH2. intros H'.

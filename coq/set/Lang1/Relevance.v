@@ -20,10 +20,10 @@ Proof.
     induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H; simpl.
     - tauto.
     - split. 
-        + apply equal_lr; apply H.
+        + apply elemCompatLR; apply H.
             { left. reflexivity. }
             { right. left. reflexivity. }
-        + apply equal_lr; apply equalSym; apply H.
+        + apply elemCompatLR; apply equalSym; apply H.
             { left. reflexivity. }
             { right. left. reflexivity. }
     - rewrite (IH1 e e'), (IH2 e e').
