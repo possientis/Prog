@@ -3,7 +3,7 @@ universe u
 def LEM   : Prop := ∀ (A:Prop), A ∨ ¬A
 def IRREL : Prop := ∀ (A:Prop) (p q:A), p = q
 
--- Proof irrelevance is true in lean by default, unlike Coq
+-- Proof irrelevance is true in Lean by default, unlike Coq
 lemma L1 : IRREL :=
   assume A p q,
     begin
@@ -44,15 +44,6 @@ lemma AllNatsAccessible : ∀ (n : ℕ), Accessible (<) n :=
               }
         end}
     end
-
-
-lemma AccessibleInv' : ∀ (α : Type u) (r : α → α → Prop) (x : α),
-  Accessible r x -> ∀ (y:α), r y x -> Accessible r y :=
-    assume a r x H,
-      begin
-        cases H with x H,
-        assumption
-      end
 
 lemma LtWellFounded : @WellFounded ℕ (<) :=
   begin
@@ -238,7 +229,7 @@ begin
   assume α r L H, unfold WellFounded, apply WellOrderAllAccessible; assumption
 end
 
--- acc is defined by lean
+-- acc is defined by Lean
 lemma acc_Accessible : ∀ {α : Type u} (r : α → α → Prop) (x : α),
   Accessible r x ↔ acc r x :=
 begin
@@ -246,4 +237,31 @@ begin
     { induction H with x H IH, constructor, assume y H', apply IH, assumption},
     { induction H with x H IH, constructor, assume y H', apply IH, assumption}
 end
+
+-- well_founded is defined by Lean
+lemma well_founded_WellFounded: ∀ {α : Type u} (r : α → α → Prop),
+  WellFounded r ↔ well_founded r :=
+begin
+  assume α r, split; assume H,
+    { constructor, assume x, rewrite ← acc_Accessible, apply H},
+    { unfold WellFounded, assume x, rewrite acc_Accessible, cases H with H, apply H}
+end
+
+
+def AccessibleInv2 : ∀ {α : Type u} (r : α → α → Prop) (x : α),
+  Accessible r x → ∀ (y : α), r y x → Accessible r y :=
+begin
+  assume α r x H, cases H, assumption
+end
+
+-- same as Coq pretty much
+def AccessibleInv : ∀ {α : Type u} (r : α → α → Prop) (x : α),
+  Accessible r x → ∀ (y:α), r y x → Accessible r y :=
+    λ (α : Type u),
+      λ (r : α → α → Prop),
+        λ (x : α),
+          λ (p : Accessible r x),
+            match p with
+            | ⟨_,q⟩ := q
+            end
 
