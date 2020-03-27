@@ -67,20 +67,61 @@ Definition L6 : forall (p:bool -> Prop), (forall (x y:bool), y = x -> p x) -> fo
         fun (q:forall (x y:bool), y = x -> p x) =>
             fun (x:bool) => q x x (eq_refl x).
 
-Definition type (x:bool) : Type :=
-    match x with
-    | true  => x = true
-    | false => x = false
-    end.
 
-Definition refl : forall (x:bool), type x := BoolRec type (eq_refl true) (eq_refl false). 
-
-Definition L7 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
+Fail Definition L7 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
     fun (p:bool -> Prop) =>
         fun (x:bool) =>
             fun (tt:x = true -> p true) =>
                 fun (ff:x = false -> p false) =>
                     match x with
-                    | true  => tt (refl x)
-                    | false => ff (refl x)
+                    | true  => tt (eq_refl true)
+                    | false => ff (eq_refl false)
                     end.
+
+Definition bool_dec : forall (x:bool), x = true \/ x = false :=
+    fun (x:bool) =>
+        match x with
+        | true  => or_introl (eq_refl true)
+        | false => or_intror (eq_refl false)
+        end.
+
+Fail Definition L8 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
+    fun (p:bool -> Prop) =>
+        fun (x:bool) =>
+            fun (tt:x = true -> p true) =>
+                fun (ff:x = false -> p false) =>
+                    match bool_dec x with
+                    | or_introl p  => tt p
+                    | or_intror p  => ff p
+                    end.
+
+Definition bool_dec' : forall (x:bool), {x = true} + {x = false} :=
+    fun (x:bool) => 
+        match x with
+        | true  => left  (eq_refl true)
+        | false => right (eq_refl false)
+        end. 
+
+
+Fail Definition L9 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
+    fun (p:bool -> Prop) =>
+        fun (x:bool) =>
+            fun (tt:x = true -> p true) =>
+                fun (ff:x = false -> p false) =>
+                    match bool_dec' x with
+                    | left p   => tt p
+                    | right p  => ff p
+                    end.
+
+
+Definition L10 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
+    fun (p:bool -> Prop) =>
+        fun (x:bool) =>
+            fun (tt:x = true -> p true) =>
+                fun (ff:x = false -> p false) =>
+                    match bool_dec x with
+                    | or_introl p  => tt p
+                    | or_intror p  => ff p
+                    end.
+
+
