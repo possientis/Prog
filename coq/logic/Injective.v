@@ -54,7 +54,7 @@ Proof.
 Qed.
 
 Lemma injective_on_incl : forall (v w:Type) (xs ys:list v) (f:v -> w),
-    incl xs ys -> injective_on ys f -> injective_on xs f.
+    xs <= ys -> injective_on ys f -> injective_on xs f.
 Proof.
     intros v w xs ys f H0 H1 x y Hx Hy H. apply H1.
     - apply H0. assumption.

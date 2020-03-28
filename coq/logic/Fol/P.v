@@ -54,12 +54,10 @@ Qed.
 
 
 (* If equality on v is decidable, then so is equality on P v                    *) 
-(* It would seem that the 'right. intros H. inversion H' fragment could be      *)
-(* factorized in the below proof, but attempting to do so creates a problem,    *)
-(* as the fragment does not fail in branches where it should not be used.       *)
-Lemma eq_decidable : forall (v:Type), Eq v -> Eq (P v).
+Lemma eqDecidable : forall (v:Type) (e:Eq v),
+    forall (s t:P v), {s = t} + {s <> t}.
 Proof.
-    intros v eq s t. revert s t.
+    intros v e s t. revert s t.
     induction s as [|x y|s1 IH1 s2 IH2|x s1 IH1];
     destruct t as [|x' y'|t1 t2|x' t1].
     - left. reflexivity.
@@ -67,7 +65,7 @@ Proof.
     - right. intros H. inversion H.
     - right. intros H. inversion H.
     - right. intros H. inversion H.
-    - destruct (eq x x') as [Ex|Ex], (eq y y') as [Ey|Ey].
+    - destruct (eqDec x x') as [Ex|Ex], (eqDec y y') as [Ey|Ey].
         + subst. left. reflexivity.
         + right. intros H. inversion H. subst. apply Ey. reflexivity.
         + right. intros H. inversion H. subst. apply Ex. reflexivity.
@@ -85,11 +83,16 @@ Proof.
     - right. intros H. inversion H.
     - right. intros H. inversion H.
     - right. intros H. inversion H.
-    - destruct (eq x x') as [E|E], (IH1 t1) as [E1|E1].
+    - destruct (eqDec x x') as [E|E], (IH1 t1) as [E1|E1].
         + subst. left. reflexivity.
         + right. intros H. inversion H. subst. apply E1. reflexivity.
         + right. intros H. inversion H. subst. apply E.  reflexivity.
         + right. intros H. inversion H. subst. apply E.  reflexivity.
-Qed.
+Defined.
 
-Arguments eq_decidable {v} _.
+Arguments eqDecidable {v} {e}.
+
+
+Instance EqP (v:Type) (e:Eq v) : Eq (P v) := { eqDec := eqDecidable }.
+
+

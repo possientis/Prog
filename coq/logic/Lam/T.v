@@ -47,15 +47,13 @@ Proof.
 Qed.
 
 (* If equality on v is decidable, then so is equality on T v                    *) 
-(* It would seem that the 'right. intros H. inversion H' fragment could be      *)
-(* factorized in the below proof, but attempting to do so creates a problem,    *)
-(* as the fragment does not fail in branches where it should not be used.       *)
-Lemma eq_decidable : forall (v:Type), Eq v -> Eq (T v).
+Lemma eqDecidable : forall (v:Type) (e:Eq v), 
+    forall (s t:T v), {s = t} + {s <> t}.
 Proof.
-    intros v eq s t. revert s t.
+    intros v e s t. revert s t.
     induction s as [x|s1 IH1 s2 IH2|x s1 IH1];
     destruct t as [y|t1 t2|y t1].
-    - destruct (eq x y) as [E|E].
+    - destruct (eqDec x y) as [E|E].
         + subst. left. reflexivity.
         + right. intros H. inversion H. subst. apply E. reflexivity.
     - right. intros H. inversion H.
@@ -69,12 +67,15 @@ Proof.
     - right. intros H. inversion H.
     - right. intros H. inversion H.
     - right. intros H. inversion H.
-    - destruct (eq x y) as [E|E], (IH1 t1) as [E1|E1].
+    - destruct (eqDec x y) as [E|E], (IH1 t1) as [E1|E1].
         + subst. left. reflexivity.
         + right. intros H. inversion H. subst. apply E1. reflexivity.
         + right. intros H. inversion H. subst. apply E.  reflexivity.
         + right. intros H. inversion H. subst. apply E.  reflexivity.
-Qed.
+Defined.
 
-Arguments eq_decidable {v} _.
+Arguments eqDecidable {v} {e}.
+
+Instance EqT (v:Type) (e:Eq v) : Eq (T v) := { eqDec := eqDecidable }.
+
 

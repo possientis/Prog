@@ -4,6 +4,8 @@ Require Import List.
 Require Import Eq.
 Require Import Leq.
 Require Import Max.
+Require Import Include.
+
 Require Import Lam.T.
 Require Import Lam.Order.
 Require Import Lam.Bound.
@@ -18,7 +20,7 @@ Fixpoint Sub (v:Type) (t:T v) : list (T v) :=
     match t with
     | Var x     => cons (Var x) nil
     | App t1 t2 => cons (App t1 t2) (Sub v t1 ++ Sub v t2) 
-    | Lam x t1  => cons (Lam x t1) (Sub v t1)
+    | Lam x t1  => cons (Lam x t1)  (Sub v t1)
     end.
 
 Arguments Sub {v} _.
@@ -40,7 +42,7 @@ Qed.
 
 (* This lemma will allow us to get transitivity                                 *)
 Lemma Sub_incl : forall (v:Type) (t1 t2:T v),
-    incl (Sub t1) (Sub t2) <-> t1 <<= t2.
+    Sub t1 <= Sub t2 <-> t1 <<= t2.
 Proof.
     intros v t1 t2. split.
     - intros H.  apply H. apply Sub_refl. 
@@ -68,6 +70,8 @@ Proof.
     apply incl_tran with (Sub s); apply Sub_incl; assumption.
 Qed.
 
+
+Open Scope nat_scope.
 
 (* This lemma will allow us to get anti-symmetry                                *) 
 Lemma ord_monotone : forall (v:Type) (t1 t2:T v),
@@ -151,13 +155,13 @@ Qed.
 (* (<<=) :: (Eq v) => T v -> T v -> Bool                                        *)
 (* Hence we expect that (s <<= t) is a decidable propostion in coq, provided    *)
 (* the type v has decidable equality.                                           *)
-Lemma Sub_decidable : forall (v:Type), Eq v ->
+Lemma SubDecidable : forall (v:Type) (e:Eq v),
    forall (s t:T v), {s <<= t} + {~ s <<= t}.
 Proof.
-    intros v eq s t. revert s. revert t. 
+    intros v e s t. revert s. revert t. 
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1].
     - destruct s as [y|s1 s2|y s1].
-        + destruct (eq x y) as [E|E].
+        + destruct (eqDec x y) as [E|E].
             { subst. left. apply Sub_refl. }
             { right. intros H. apply E. destruct H as [H|H].
                 { inversion H. reflexivity. }
@@ -165,7 +169,7 @@ Proof.
             }
         + right. intros H. destruct H as [H|H]; inversion H.
         + right. intros H. destruct H as [H|H]; inversion H.
-    - intros s.  destruct (eq_decidable eq s (App t1 t2)) as [E|E].
+    - intros s.  destruct (eqDec s (App t1 t2)) as [E|E].
         + subst. left. apply Sub_refl.
         + destruct (IH1 s) as [E1|E1], (IH2 s) as [E2|E2].
             { left. right. apply in_or_app. left.  assumption. }
@@ -178,7 +182,7 @@ Proof.
                     { apply E2. assumption. }
                 }
             }
-    - intros s. destruct (eq_decidable eq s (Lam x t1)) as [E|E].
+    - intros s. destruct (eqDec s (Lam x t1)) as [E|E].
         + subst. left. apply Sub_refl.
         + destruct (IH1 s) as [E1|E1].
             { left. right. assumption. }
@@ -188,9 +192,9 @@ Proof.
             }
 Qed.
 
+Open Scope Include.
 
-Lemma Sub_var : forall (v:Type) (s t:T v),
-    s <<= t -> incl (var s) (var t).
+Lemma Sub_var : forall (v:Type) (s t:T v), s <<= t -> var s <= var t.
 Proof.
     intros v s t. revert t s. 
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros s [H|H].
@@ -209,8 +213,7 @@ Proof.
 Qed.
 
 
-Lemma Sub_bnd : forall (v:Type) (s t:T v),
-    s <<= t -> incl (bnd s) (bnd t).
+Lemma Sub_bnd : forall (v:Type) (s t:T v), s <<= t -> bnd s <= bnd t.
 Proof.
     intros v s t. revert t s. 
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros s [H|H].
@@ -227,6 +230,3 @@ Proof.
     - subst. apply incl_refl.
     - apply incl_tl, IH1. assumption. 
 Qed.
-
-
-

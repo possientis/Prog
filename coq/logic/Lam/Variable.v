@@ -60,18 +60,18 @@ Proof.
 Qed.
 
 Lemma var_permute_replace : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
-    ~(In y (var t)) -> fmap (replace e x y) t = fmap (permute e x y) t.
+    ~(In y (var t)) -> fmap (replace x y) t = fmap (permute x y) t.
 Proof.
     intros v e x y t H. apply var_support, permute_replace. assumption.
 Qed.
 
 Lemma var_replace_trans : forall (v:Type) (e:Eq v) (x y z:v) (t:T v),
-    ~(In y (var t)) -> fmap (replace e y z) (fmap (replace e x y) t) 
-                     = fmap (replace e x z) t.
+    ~(In y (var t)) -> fmap (replace y z) (fmap (replace x y) t) 
+                     = fmap (replace x z) t.
 Proof.
     intros v e x y z t H. 
-    remember (replace e y z) as g eqn:Eg. 
-    remember (replace e x y) as f eqn:Ef. 
+    remember (replace y z) as g eqn:Eg. 
+    remember (replace x y) as f eqn:Ef. 
     fold ((fmap g ; fmap f) t). rewrite <- fmap_comp. 
     apply var_support.
     rewrite Eg, Ef. apply replace_trans.
@@ -80,11 +80,11 @@ Qed.
     
 
 Lemma var_replace_remove : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
-    x <> y -> ~(In x (var (fmap (replace e x y) t))).
+    x <> y -> ~(In x (var (fmap (replace x y) t))).
 Proof.
     intros v e x y t E H. rewrite var_fmap in H.
     apply mapIn in H. destruct H as [u [H1 H2]].
-    destruct (e u x) as [H'|H'].
+    destruct (eqDec u x) as [H'|H'].
     - subst. rewrite replace_x in H2. apply E. assumption.
     - rewrite replace_not_x in H2.
         + apply H'. symmetry. assumption.

@@ -75,6 +75,7 @@ Replace.vo : 					Replace.v \
 								Extensionality.vo
 	coqc Replace.v
 
+
 Permute.vo : 					Permute.v \
 								Eq.vo \
 								Replace.vo \
@@ -83,6 +84,7 @@ Permute.vo : 					Permute.v \
 								Composition.vo \
 								Extensionality.vo
 	coqc Permute.v
+
 
 
 Injective.vo : 					Injective.v \
@@ -98,9 +100,11 @@ Remove.vo :						Remove.v \
 	coqc Remove.v
 
 
+
 Difference.vo :					Difference.v \
 								Eq.vo
 	coqc Difference.v
+
 
 
 Intersect.vo :					Intersect.v \
@@ -108,9 +112,9 @@ Intersect.vo :					Intersect.v \
 	coqc Intersect.v
 
 
+
 Include.vo :					Include.v 
 	coqc Include.v
-
 
 ${LAM}/T.vo:   					${LAM}/T.v \
 								Eq.vo \
@@ -118,6 +122,8 @@ ${LAM}/T.vo:   					${LAM}/T.v \
 								Identity.vo \
 								Composition.vo
 	coqc ${LAM}/T.v				${OPT} 
+
+
 
 
 ${FOL}/P.vo:					${FOL}/P.v	\
@@ -128,9 +134,11 @@ ${FOL}/P.vo:					${FOL}/P.v	\
 	coqc ${FOL}/P.v				${OPT} 
 
 
+
 ${LAM}/Order.vo : 				${LAM}/Order.v \
 								${LAM}/T.vo
 	coqc ${LAM}/Order.v			${OPT} 
+
 
 
 ${FOL}/Order.vo : 				${FOL}/Order.v \
@@ -138,10 +146,12 @@ ${FOL}/Order.vo : 				${FOL}/Order.v \
 	coqc ${FOL}/Order.v			${OPT} 
 
 
+
 ${LAM}/Subformula.vo :			${LAM}/Subformula.v \
 								Eq.vo \
 								Leq.vo \
 								Max.vo \
+								Include.vo \
 								${LAM}/T.vo \
 								${LAM}/Order.vo \
 								${LAM}/Bound.vo \
@@ -149,10 +159,13 @@ ${LAM}/Subformula.vo :			${LAM}/Subformula.v \
 	coqc ${LAM}/Subformula.v	${OPT} 
 
 
+
+
 ${FOL}/Subformula.vo : 			${FOL}/Subformula.v \
 								Eq.vo \
 								Leq.vo \
 								Max.vo \
+								Include.vo \
 								${FOL}/P.vo \
 								${FOL}/Order.vo \
 								${FOL}/Bound.vo \
@@ -166,10 +179,13 @@ ${LAM}/Congruence.vo : 			${LAM}/Congruence.v \
 	coqc ${LAM}/Congruence.v	${OPT} 
 
 
+
 ${FOL}/Congruence.vo : 			${FOL}/Congruence.v \
 								Relation.vo \
 								${FOL}/P.vo
 	coqc ${FOL}/Congruence.v	${OPT} 
+
+
 
 
 ${LAM}/Variable.vo :			${LAM}/Variable.v \
@@ -181,7 +197,9 @@ ${LAM}/Variable.vo :			${LAM}/Variable.v \
 								Composition.vo \
 								${LAM}/T.vo
 	coqc ${LAM}/Variable.v		${OPT} 
-					
+	
+
+				
 
 ${FOL}/Variable.vo :			${FOL}/Variable.v \
 								Eq.vo \
@@ -191,7 +209,7 @@ ${FOL}/Variable.vo :			${FOL}/Variable.v \
 								Coincide.vo \
 								Composition.vo \
 								${FOL}/P.vo
-	coqc ${FOL}/Variable.v -R ${FOL} ${FOL}
+	coqc ${FOL}/Variable.v     ${OPT}
 
 
 ${LAM}/Free.vo :				${LAM}/Free.v \
@@ -212,6 +230,7 @@ ${LAM}/Free.vo :				${LAM}/Free.v \
 	coqc ${LAM}/Free.v			${OPT} 
 
 
+
 ${FOL}/Free.vo :				${FOL}/Free.v \
 								Eq.vo \
 								Map.vo \
@@ -227,6 +246,8 @@ ${FOL}/Free.vo :				${FOL}/Free.v \
 	coqc ${FOL}/Free.v			${OPT} 
 
 
+
+
 ${LAM}/Bound.vo :				${LAM}/Bound.v \
 								Eq.vo \
 								Remove.vo \
@@ -235,6 +256,8 @@ ${LAM}/Bound.vo :				${LAM}/Bound.v \
 								${LAM}/Free.vo \
 								${LAM}/Variable.vo
 	coqc ${LAM}/Bound.v			${OPT} 
+
+
 
 
 ${FOL}/Bound.vo :				${FOL}/Bound.v \
@@ -247,11 +270,14 @@ ${FOL}/Bound.vo :				${FOL}/Bound.v \
 	coqc ${FOL}/Bound.v			${OPT} 
 
 
+
+
 ${LAM}/Valid.vo :				${LAM}/Valid.v \
 								Eq.vo \
 								Map.vo \
 								Remove.vo \
 								Replace.vo \
+								Include.vo \
 								Coincide.vo \
 								Injective.vo \
 								Composition.vo \
@@ -267,6 +293,7 @@ ${FOL}/Valid.vo :				${FOL}/Valid.v \
 								Map.vo \
 								Remove.vo \
 								Replace.vo \
+								Include.vo \
 								Coincide.vo \
 								Injective.vo \
 								Composition.vo \
