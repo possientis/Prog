@@ -203,6 +203,8 @@ ${LAM}/Free.vo :				${LAM}/Free.v \
 								Coincide.vo \
 								Relation.vo \
 								Injective.vo \
+								Difference.vo \
+								Composition.vo \
 								${LAM}/T.vo \
 								${LAM}/Subst.vo \
 								${LAM}/Variable.vo \

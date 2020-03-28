@@ -10,6 +10,8 @@ Require Import Coincide.
 Require Import Relation.
 Require Import Injective.
 Require Import Intersect.
+Require Import Difference.
+Require Import Composition.
 
 Require Import Lam.T.
 Require Import Lam.Subst.
@@ -153,9 +155,9 @@ Qed.
 
 (*
 Lemma free_fmap_gen : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v),
-    incl 
-        (free e (subst_ e f xs t)) 
-        ((inter e (free e t) xs) ++ (free e t)).
+    incl (free e (subst_ e f xs t)) 
+    (   (inter e (free e t) xs) 
+    ++  (concat (map (free e ; f) (diff e (free e t) xs)))).
 Proof.
 
 Show.

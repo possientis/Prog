@@ -14,7 +14,7 @@ Fixpoint diff (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     end.
 Arguments diff {v}.
 
-Lemma diff_charc : forall (v:Type) (e:Eq v) (xs ys:list v) (z:v),
+Lemma diff_charac : forall (v:Type) (e:Eq v) (xs ys:list v) (z:v),
     In z (diff e xs ys) <-> In z xs /\ ~In z ys.
 Proof.
     intros v e xs ys z. split.
