@@ -1,0 +1,31 @@
+\begin{defin}\label{Nat:def:identity}
+    Let $F:\Cat\to\Dat$ be a functor where \Cat,\,\Dat\ are categories. 
+    We call {\em identity natural transformation on} $F$, the 
+    natural transformation $\iota_{F}:F\Rightarrow F$:
+        \begin{eqnarray*}
+            (1)&\ &\iota_{F}(a)=\id(\,F(a)\,)
+        \end{eqnarray*}
+    where $(1)$ holds for all $a\in\Cat$.
+\end{defin}
+
+\begin{prop}\label{Nat:prop:identity}
+    The identity natural transformation $\iota_{F}:F\Rightarrow F$ on a
+    functor $F:\Cat\to\Dat$ where \Cat,\,\Dat\ are categories is indeed
+    a natural transformation.
+\end{prop}
+\begin{proof}
+    We need to check that $\iota_{F}$ is a map defined on $\ob\ \Cat$
+    which satisfies $(1)$ and $(2)$ of definition~(\ref{Nat:def:natural}).
+    The fact that it is map defined on $\ob\ \Cat$ is clear, since
+    $\iota_{F}(a)$ is defined for all $a\in\Cat$, that is for all 
+    $a\in\ob\ \Cat$.
+
+    $(1)$: We have $\iota_{F}(a):F(a)\to F(a)$ for all $a\in\Cat$,
+    since $\iota_{F}(a)=\id(\,F(a)\,)$
+
+    $(2)$: We need to check that $F(f)\circ\iota_{F}(a) = \iota_{F}(b)\circ F(f)$
+    for all  $f:a\to b$ where $a,b\in\Cat$. So we need to show that
+    $F(f)\circ\id(\,F(a)\,)=\id(\,F(b)\,)\circ F(f)$, which follows
+    from $(12)$ and $(13$) of definition~(\ref{Cat:def:category})
+    and the fact that $F(f):F(a)\to F(b)$.
+\end{proof}
