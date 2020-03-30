@@ -1,6 +1,7 @@
 Require Import Core.Set.
 Require Import Core.Leq.
 Require Import Core.Elem.
+Require Import Core.Cons.
 Require Import Core.Equal.
 Require Import Core.Decidability.
 
@@ -15,49 +16,42 @@ Fixpoint insert (x y:set) : set :=
         end
     end.
 
-(*
 Lemma insertCons : forall (x xs:set), insert x xs == Cons x xs.
 Proof.
     intros x ys. revert ys x. induction ys as [|y IH1 ys IH2]; intros x.
-    - admit.
+    - apply equalRefl.
     - simpl. destruct (leqDec x y) as [H|H].
-        +
-    
+        + apply equalTrans with (Cons y (Cons x ys)).
+            { apply consCompatR. apply IH2. }
+            { apply consSwitch. }
+        + apply equalRefl.
+Qed.
 
-Show.
-*)
-
-(*
-Lemma insertIn : forall (x xs:set), x :: xs -> insert x xs == xs.
-Proof.
-
-Show.
-*)
-
-(*
 Lemma insertCompatL : forall (x x' y:set), x == x' -> insert x y == insert x' y.
 Proof.
-    intros x x' y. revert y x x'. induction y as [|y IH1 ys IH2]; intros x x' H.
-    - admit.
-    - simpl. destruct (leqDec x y) as [H1|H1]; destruct (leqDec x' y) as [H2|H2].
-        + admit.
-        +
+    intros x x' y H. apply equalTrans with (Cons x y).
+    - apply insertCons.
+    - apply equalTrans with (Cons x' y).
+        + apply consCompatL. assumption.
+        + apply equalSym. apply insertCons.
+Qed.
 
-Show.
-*)
 
-(*
+
 Lemma insertCompatR : forall (x y y':set), y == y' -> insert x y == insert x y'.
 Proof.
+    intros x y y' H. apply equalTrans with (Cons x y).
+    - apply insertCons.
+    - apply equalTrans with (Cons x y').
+        + apply consCompatR. assumption.
+        + apply equalSym. apply insertCons.
+Qed.
 
-Show.
-*)
 
-(*
-Lemma insertNotIn : forall (x xs:set), ~ x :: xs  -> insert x xs == Cons x xs.
+Lemma insertCompatLR : forall (x x' y y':set), 
+    x == x' -> y == y' -> insert x y == insert x' y'.
 Proof.
-
-Show.
-*)
-
-   
+    intros x x' y y' Hx Hy. apply equalTrans with (insert x' y).
+    - apply insertCompatL. assumption.
+    - apply insertCompatR. assumption.
+Qed.

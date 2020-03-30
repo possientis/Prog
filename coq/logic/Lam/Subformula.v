@@ -192,7 +192,7 @@ Proof.
             }
 Qed.
 
-Open Scope Include.
+Open Scope Include_scope.
 
 Lemma Sub_var : forall (v:Type) (s t:T v), s <<= t -> var s <= var t.
 Proof.

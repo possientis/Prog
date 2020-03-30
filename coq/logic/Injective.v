@@ -1,16 +1,14 @@
 Require Import List.
 
+Require Import In.
 Require Import Include.
 Require Import Composition.
-
 
 Definition injective (v w:Type) (f:v -> w) : Prop :=
     forall (x y:v), f x = f y -> x = y.
 
-
 Arguments injective {v} {w} _.
 
-Open Scope Composition.
 
 Lemma injective_comp : forall (v w u:Type) (f:v -> w) (g:w -> u),
     injective f -> injective g -> injective (g ; f).
@@ -18,8 +16,9 @@ Proof.
     intros v w u f g If Ig x y H. apply If. apply Ig. assumption.
 Qed.
 
+
 Definition injective_on (v w:Type) (xs:list v) (f:v -> w) : Prop :=
-    forall (x y:v), In x xs -> In y xs -> f x = f y -> x = y. 
+    forall (x y:v), (x :: xs) -> (y :: xs) -> f x = f y -> x = y. 
 
 Arguments injective_on {v} {w} _ _.
 
@@ -64,10 +63,8 @@ Qed.
 
 
 Lemma injective_on_not_in : forall (v w:Type) (f:v -> w),
-    forall (x:v) (xs:list v),
-    injective_on (x :: xs) f -> 
-    ~In x xs -> 
-    ~In (f x) (map f xs).
+    forall (x:v) (xs:list v), injective_on (cons x xs) f -> 
+        ~ x :: xs -> ~ (f x) :: (map f xs).
 Proof.
     intros v w f x xs. revert x. 
     induction xs as [|a xs IH]; simpl; intros x H.
@@ -79,7 +76,7 @@ Proof.
             { assumption. }
         }
         { revert Hq. apply IH.
-            { apply injective_on_incl with (x :: a :: xs).
+            { apply injective_on_incl with (cons x (cons a xs)).
                 { apply incl_cons2. apply incl_tl. apply incl_refl. }
                 { assumption. }
             }

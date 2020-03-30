@@ -306,6 +306,7 @@ ${CORE}/Insert.vo :				${CORE}/Insert.v \
 								${CORE}/Set.vo \
 								${CORE}/Leq.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Decidability.vo
 	coqc ${CORE}/Insert.v		${OPT} 
@@ -316,6 +317,7 @@ ${CORE}/Normal.vo :				${CORE}/Normal.v \
 								${CORE}/Leq.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Empty.vo \
 								${CORE}/Insert.vo \

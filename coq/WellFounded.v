@@ -323,8 +323,7 @@ Defined.
 
 Definition WFRecursion_F: forall (a:Type) (r:a -> a -> Prop) (c:a -> Type),
     (forall (x:a), (forall (y:a), r y x -> c y) -> c x) ->
-    forall (x:a), Accessible r x                        -> 
-    c x :=
+    forall (x:a), Accessible r x -> c x :=
     fun (a:Type) =>
         fun (r:a -> a -> Prop) =>
             fun (c:a -> Type) => 
@@ -397,3 +396,13 @@ Defined.
 
 Check nat_total_order.
 Check @exist.
+
+Definition Fac : nat -> nat :=
+    fix f (n:nat) : nat :=
+        match n with
+        | 0     => 1
+        | S p   => S p * f p
+        end.
+
+
+

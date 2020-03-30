@@ -61,3 +61,28 @@ Proof.
         + assumption.
 Qed.
 
+
+Lemma consSwitch : forall (x y zs:set), Cons x (Cons y zs) == Cons y (Cons x zs).
+Proof.
+    intros x y zs. apply extensionality. intros z. split; intros H;
+    rewrite consElem in H; rewrite consElem in H; destruct H as [H1|[H1|H1]];
+    apply consElem; rewrite consElem.
+    - right. left. assumption.
+    - left. assumption.
+    - right. right. assumption.
+    - right. left. assumption.
+    - left. assumption.
+    - right. right. assumption.
+Qed.
+
+
+Lemma consIn : forall (x xs:set), x :: xs -> Cons x xs == xs.
+Proof.
+    intros x xs H. apply extensionality. intros z. split; intros H'.
+    - rewrite consElem in H'. destruct H' as [H'|H'].
+        + apply elemCompatL with x.
+            { apply equalSym. assumption. }
+            { assumption. }
+        + assumption.
+    - apply consElem. right. assumption.
+Qed.

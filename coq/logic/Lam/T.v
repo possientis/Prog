@@ -34,8 +34,6 @@ Proof.
     - rewrite IH1. reflexivity.
 Qed.
 
-Open Scope Composition.  (* for notation ';' *)
-
 Lemma fmap_comp : forall (v w u:Type) (f:v -> w) (g:w -> u),
     fmap (g ; f) = fmap g ; fmap f.
 Proof.

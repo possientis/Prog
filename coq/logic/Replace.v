@@ -16,9 +16,6 @@ Definition replace (v:Type) (e:Eq v) (x y:v) (u:v) : v :=
 
 Arguments replace {v} {e} _ _ _.
 
-Open Scope Composition.
-
-
 Lemma replace_x_x : forall (v:Type) (e:Eq v) (x:v), 
     replace x x = id.
 Proof.

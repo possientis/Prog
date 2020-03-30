@@ -1,6 +1,7 @@
 Require Import List.
 Import ListNotations.
 
+Require Import In.
 Require Import Eq.
 Require Import Map.
 Require Import Remove.
@@ -70,7 +71,8 @@ Proof.
         + reflexivity.
         + apply injective_on_appr with (var t1). assumption.
         + apply injective_on_appl with (var t2). assumption.
-    - rewrite IH1. apply remove_inj2. apply injective_on_incl with (x :: var t1).
+    - rewrite IH1. apply remove_inj2. 
+      apply injective_on_incl with (cons x (var t1)).
         + apply incl_cons.
             { left. reflexivity. }
             { apply incl_tl, free_var. }
@@ -80,8 +82,8 @@ Qed.
 
 
 Lemma free_replace1 : forall (v:Type) (e:Eq v) (t:T v) (x y:v), 
-    ~In y (var t)    -> 
-    ~In x (free t) -> 
+    ~ y :: var t    -> 
+    ~ x :: free t   -> 
     free (fmap (replace x y) t) = free t.
 Proof.
     intros v e t x y Hy Hx. 
@@ -95,11 +97,11 @@ Qed.
 
 (* We lack set theoretic notations to express this result nicely                *)
 Lemma free_replace2 : forall (v:Type) (e:Eq v) (t:T v) (x y:v),
-    ~In y (var t)    ->
-     In x (free t) -> 
+    ~ y :: var t  ->
+      x :: free t -> 
      forall (z:v), 
-        In z (free (fmap (replace x y) t)) <-> 
-        (z = y) \/ (In z (free t) /\ (z <> x)). 
+        z :: free (fmap (replace x y) t) <-> 
+        z = y \/ (z :: free t) /\ z <> x. 
 Proof.
     intros v e t x y Hy Hx z. rewrite (free_inj v v e e). split.
     - intros H. destruct (eqDec z y) as [Hzy|Hzy]. 

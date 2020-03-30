@@ -5,6 +5,7 @@ OPT=-Q ${FOL} ${FOL} -Q ${LAM} ${LAM}
 all:	   						Extensionality.vo \
 								Identity.vo \
    								Composition.vo \
+								In.vo \
 								Coincide.vo \
 								Leq.vo \
 								Max.vo \
@@ -48,6 +49,9 @@ Identity.vo : 					Identity.v
 Composition.vo : 				Composition.v
 	coqc Composition.v
 
+In.vo : 						In.v
+	coqc In.v
+
 Coincide.vo : 					Coincide.v
 	coqc Coincide.v
 
@@ -88,6 +92,7 @@ Permute.vo : 					Permute.v \
 
 
 Injective.vo : 					Injective.v \
+								In.vo \
 								Composition.vo \
 								Include.vo
 	coqc Injective.v
@@ -189,6 +194,7 @@ ${FOL}/Congruence.vo : 			${FOL}/Congruence.v \
 
 
 ${LAM}/Variable.vo :			${LAM}/Variable.v \
+								In.vo \
 								Eq.vo \
 								Map.vo \
 								Permute.vo \
@@ -202,6 +208,7 @@ ${LAM}/Variable.vo :			${LAM}/Variable.v \
 				
 
 ${FOL}/Variable.vo :			${FOL}/Variable.v \
+								In.vo \
 								Eq.vo \
 								Map.vo \
 								Permute.vo \
@@ -213,6 +220,7 @@ ${FOL}/Variable.vo :			${FOL}/Variable.v \
 
 
 ${LAM}/Free.vo :				${LAM}/Free.v \
+								In.vo \
 								Eq.vo \
 								Map.vo \
 								Remove.vo \
@@ -232,6 +240,7 @@ ${LAM}/Free.vo :				${LAM}/Free.v \
 
 
 ${FOL}/Free.vo :				${FOL}/Free.v \
+								In.vo \
 								Eq.vo \
 								Map.vo \
 								Remove.vo \
@@ -249,6 +258,7 @@ ${FOL}/Free.vo :				${FOL}/Free.v \
 
 
 ${LAM}/Bound.vo :				${LAM}/Bound.v \
+								In.vo \
 								Eq.vo \
 								Remove.vo \
 								Include.vo \
@@ -261,6 +271,7 @@ ${LAM}/Bound.vo :				${LAM}/Bound.v \
 
 
 ${FOL}/Bound.vo :				${FOL}/Bound.v \
+								In.vo \
 								Eq.vo \
 								Remove.vo \
 								Include.vo \

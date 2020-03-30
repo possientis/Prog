@@ -15,9 +15,9 @@ Fixpoint diff (v:Type) (e:Eq v) (xs ys:list v) : list v :=
 Arguments diff {v} {e}.
 
 Notation "xs \\ ys" := (diff xs ys) 
-    (at level 50, left associativity) : Difference.
+    (at level 50, left associativity) : Difference_scope.
 
-Open Scope Difference.
+Open Scope Difference_scope.
 
 Lemma diff_charac : forall (v:Type) (e:Eq v) (xs ys:list v) (z:v),
     In z (xs \\ ys) <-> In z xs /\ ~In z ys.

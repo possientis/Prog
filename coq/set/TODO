@@ -1,5 +1,3 @@
-split Lang1/Cons
-Core/Insert
 Core/Normal
 Core/Functional : we d like => y = y' but we can only have y == y': we need some notion of normal form for sets
 Core/Replacement (use filterReplace)

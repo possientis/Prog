@@ -4,6 +4,7 @@ Require Import Core.Set.
 Require Import Core.Leq.
 Require Import Core.Incl.
 Require Import Core.Elem.
+Require Import Core.Cons.
 Require Import Core.Equal.
 Require Import Core.Empty.
 Require Import Core.Insert.
@@ -21,17 +22,20 @@ Fixpoint normalize (x:set) : set :=
         end
     end.
 
-(*
 Lemma normalizeSame : forall (x:set), normalize x == x.
 Proof.
     induction x as [|x IH1 xs IH2].
     - apply equalRefl.
     - simpl. destruct (elem_dec x xs) as [H|H]; simpl.
-        + admit.
-        +
-
-Show.
-*)
+        +  apply equalTrans with xs.
+            { apply IH2. }
+            { apply equalSym. apply consIn. assumption. }
+        + apply equalTrans with (insert x xs).
+            { apply insertCompatLR.
+                { apply IH1. }
+                { apply IH2. }}
+            { apply insertCons. }
+Qed.
  
 (*
 Lemma normalizeEqual : forall (x y:set), normalize x = normalize y -> x == y.

@@ -2,9 +2,9 @@ Require Import List.
 Import ListNotations.
 
 Notation "xs <= ys" := (incl xs ys)
-    (at level 70, no associativity) : Include.
+    (at level 70, no associativity) : Include_scope.
 
-Open Scope Include.
+Open Scope Include_scope.
 
 Lemma incl_cons2 : forall (v:Type) (xs ys:list v) (a:v),
     xs <= ys -> (a :: xs) <= (a :: ys).

@@ -1,6 +1,7 @@
 Require Import List.
 Import ListNotations.
 
+Require Import In.
 Require Import Eq.
 Require Import Remove.
 Require Import Include.
@@ -28,7 +29,7 @@ Proof.
 Qed.
 
 Lemma bnd_free : forall (v:Type) (e:Eq v) (t:T v) (z:v),
-    In z (var t) <-> In z (free t) \/ In z (bnd t).
+    z :: var t <-> (z :: free t) \/ (z :: bnd t).
 Proof.
     intros v e t z. split.
     - induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros H; simpl in H.

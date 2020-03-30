@@ -10,6 +10,7 @@ Require Import Fol.Order.
 Require Import Fol.Bound.
 Require Import Fol.Variable.
 
+
 (* Defines the 'list' of sub-formulas of a given formula. We do not have        *)
 (* sets here, so using lists instead, being understood that the order is        *)
 (* irrelevant as are duplicate entries. Hopefully results which are true        *)
@@ -70,7 +71,8 @@ Proof.
     apply incl_tran with (Sub q); apply Sub_incl; assumption.
 Qed.
 
-Open Scope nat_scope.
+
+Open Scope nat_scope.   (* <= now interpreted as inequality between nats        *)
 
 (* This lemma will allow us to get anti-symmetry                                *) 
 Lemma ord_monotone : forall (v:Type) (p1 p2:P v),
@@ -94,6 +96,8 @@ Proof.
     - subst. apply le_n.
     - apply le_S, IH1. assumption.
 Qed.
+
+Open Scope Include_scope.
 
 
 (* Anti-symmentry follows from Lemma ord_monotone                               *)
@@ -210,7 +214,6 @@ Proof.
 Qed.
 
 
-Open Scope Include.
 
 Lemma Sub_var : forall (v:Type) (p q:P v),
     p <<= q -> var p <= var q.

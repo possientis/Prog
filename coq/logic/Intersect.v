@@ -16,9 +16,9 @@ Fixpoint inter (v:Type) (e:Eq v) (xs ys:list v) : list v :=
 Arguments inter {v} {e}.
 
 Notation "xs /\ ys" := (inter xs ys)
-    (at level 80, right associativity) : Intersect.
+    (at level 80, right associativity) : Intersect_scope.
 
-Open Scope Intersect.
+Open Scope Intersect_scope.
 
 Lemma inter_charac : forall (v:Type) (e:Eq v) (xs ys:list v) (z:v),
     In z (xs /\ ys) <-> In z xs /\ In z ys.

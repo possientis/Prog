@@ -9,9 +9,11 @@ module Cards
     ,   moveName
     ,   movePower
     ,   deck
-    ,   ex1, ex2, ex3, ex4, ex5
+    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10
+    ,   ex11
     )   where
 
+import Data.Ord         (comparing)
 import Control.Lens
 
 data Card = Card
@@ -81,3 +83,41 @@ ex5 = toListOf ( folded     -- fold over each card
                . filtered ((>30) . _movePower)
                . moveName
                ) deck
+
+{- Need a more recent version of lens
+ex6 :: [String]
+ex6 = deck
+    ^.. folded
+      . filteredBy (aura . only Spark)
+      . moves
+      . folded
+      . filteredBy (movePower . filtered (> 30))
+      . moveName
+-}
+
+
+ex6 :: Maybe ()
+ex6 = 1 ^? only (1 :: Int)
+
+
+ex7 :: Maybe ()
+ex7 = 2 ^? only (1 :: Int)
+
+ex8 :: Bool
+ex8 = has (only "needle") "needle"
+
+ex9 :: Bool
+ex9 = has (only "needle") "haystack"
+
+ex10 :: Maybe Card
+ex10 = maximumByOf
+    (folded . filtered _holo)
+    (comparing (lengthOf moves))
+    deck
+
+ex11 :: [String]
+ex11 = deck 
+    ^.. folded
+      . filtered ((=='S') . head . _name)
+      . name
+

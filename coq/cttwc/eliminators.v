@@ -114,14 +114,38 @@ Fail Definition L9 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (
                     end.
 
 
-Definition L10 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
-    fun (p:bool -> Prop) =>
-        fun (x:bool) =>
-            fun (tt:x = true -> p true) =>
-                fun (ff:x = false -> p false) =>
-                    match bool_dec x with
-                    | or_introl p  => tt p
-                    | or_intror p  => ff p
-                    end.
+Definition L10 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x.
+Proof.
+    intros p x H1 H2. destruct x.
+    - apply H1. reflexivity.
+    - apply H2. reflexivity.
+Qed.
 
 
+Definition L11 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
+    fun (p:bool -> Prop) (x:bool) (H1:x = true -> p true) (H2:x = false -> p false) =>
+        match x as b return x = b -> p b with
+        | true  => H1
+        | false => H2
+        end (eq_refl x).
+
+
+Print L10.
+
+Definition L12 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = false -> p false) -> p x :=
+    fun (p:bool -> Prop) (x:bool) (H1:x = true -> p true) (H2:x = false -> p false) =>
+        match x as b return  ((b = true -> p true) -> (b = false -> p false) -> p b) with
+        | true  => fun (H3:true  = true -> p true) (_ :true  = false -> p false) => H3 (eq_refl true)
+        | false => fun (_ :false = true -> p true) (H4:false = false -> p false) => H4 (eq_refl false) 
+        end H1 H2.
+
+
+Definition and : bool -> bool -> bool := BoolRec
+    (fun _ => bool -> bool)
+    (fun y => y)
+    (fun _ => false).
+
+Definition L13 : and = fun (x y:bool) => match x with true => y | false => false end.
+Proof.
+    unfold and. unfold BoolRec. reflexivity.
+Show.

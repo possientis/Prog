@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import In.
 Require Import Eq.
 Require Import Map.
 Require Import Permute.
@@ -60,14 +61,14 @@ Proof.
 Qed.
 
 Lemma var_permute_replace : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
-    ~(In y (var t)) -> fmap (replace x y) t = fmap (permute x y) t.
+    ~ y :: var t -> fmap (replace x y) t = fmap (permute x y) t.
 Proof.
     intros v e x y t H. apply var_support, permute_replace. assumption.
 Qed.
 
 Lemma var_replace_trans : forall (v:Type) (e:Eq v) (x y z:v) (t:T v),
-    ~(In y (var t)) -> fmap (replace y z) (fmap (replace x y) t) 
-                     = fmap (replace x z) t.
+    ~ y :: var t -> 
+    fmap (replace y z) (fmap (replace x y) t) = fmap (replace x z) t.
 Proof.
     intros v e x y z t H. 
     remember (replace y z) as g eqn:Eg. 
@@ -80,7 +81,7 @@ Qed.
     
 
 Lemma var_replace_remove : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
-    x <> y -> ~(In x (var (fmap (replace x y) t))).
+    x <> y -> ~ x :: var (fmap (replace x y) t).
 Proof.
     intros v e x y t E H. rewrite var_fmap in H.
     apply mapIn in H. destruct H as [u [H1 H2]].
