@@ -8,7 +8,7 @@ open import Function     using (_∘_; id)
 
 
 postulate
-  extensionality : ∀ {a b : Set} {f g : a → b}
+  extensionality : ∀ {ℓ} {a b : Set ℓ} {f g : a → b}
     → (∀ (x : a) → f x ≡ g x)
       -----------------------
     →         f ≡ g
@@ -126,6 +126,7 @@ concatNat {a} {b} = extensionality k
         (concat ∘ (map (map f))) ((x ∷ xs) ∷ xss)
         ∎
 
+-- functor law for List: composition
 ∘-map : ∀ {a b c : Set} → {f : a → b} → {g : b → c} → map (g ∘ f) ≡ map g ∘ map f
 ∘-map = extensionality k
   where
@@ -149,26 +150,90 @@ concatNat {a} {b} = extensionality k
         (map g ∘ map f) (x ∷ xs)
         ∎
 
+-- functor law for List: identity
+id-map : ∀ {ℓ} {a : Set ℓ} → map (id {ℓ} {a}) ≡ id {ℓ} {List a}
+id-map {ℓ} {a} = extensionality k
+  where
+    k : ∀ (xs : List a) → map id xs ≡ id xs
+    k [] = refl
+    k (x ∷ xs) =
+      begin
+        map id (x ∷ xs)
+        ≡⟨⟩
+        id x ∷ map id xs
+        ≡⟨⟩
+        x ∷ map id xs
+        ≡⟨ cong (x ∷_) (k xs) ⟩
+        x ∷ id xs
+        ≡⟨⟩
+        x ∷ xs
+        ∎
+
+zip' : {a b : Set} → List a × List b → List (a × b)
+zip' = uncurry zip
 
 L1 : ∀ {a : Set} → {p : a → Bool} →
-  map proj₁ ∘ filter proj₂ ∘ uncurry zip ∘ ⟨ id , map p ⟩ ≡ filter p
+  map proj₁ ∘ filter proj₂ ∘ zip' ∘ ⟨ id , map p ⟩ ≡ filter p
 
 L1 {a} {p} =
   begin
-    map proj₁ ∘ filter proj₂ ∘ uncurry zip ∘ ⟨ id , map p ⟩
-    ≡⟨⟩         -- definition of filter
-    map proj₁ ∘ concat ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ ⟨ id , map p ⟩
-    ≡⟨ cong     -- concat is natural
-         (λ { f → f ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ ⟨ id , map p ⟩})
-         concatNat ⟩
-    concat ∘ map (map proj₁) ∘ map (proj₂ ~> wrap , nilp) ∘ uncurry zip ∘ ⟨ id , map p ⟩
-    ≡⟨ cong (λ { h → concat ∘ h ∘ uncurry zip ∘ ⟨ id , map p ⟩ }) (sym ∘-map) ⟩
-    concat ∘ map (map proj₁ ∘ (proj₂ ~> wrap , nilp)) ∘ uncurry zip ∘ ⟨ id , map p ⟩
-    ≡⟨ cong (λ { f → concat ∘ map f ∘ uncurry zip ∘ ⟨ id , map p ⟩ }) (∘-distrib-~>-l proj₂ wrap nilp (map proj₁)) ⟩
-    concat ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , (map proj₁ ∘ nilp)) ∘ uncurry zip ∘ ⟨ id , map p ⟩
-    ≡⟨ cong (λ { f → concat ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , f) ∘ uncurry zip ∘ ⟨ id , map p ⟩}) (nilpNat proj₁) ⟩
-    concat ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , (nilp ∘ proj₁)) ∘ uncurry zip ∘ ⟨ id , map p ⟩
-    ≡⟨ cong (λ { f → concat ∘ map (proj₂ ~> f , (nilp ∘ proj₁)) ∘ uncurry zip ∘ ⟨ id , map p ⟩}) (wrapNat proj₁) ⟩
-    concat ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁)) ∘ uncurry zip ∘ ⟨ id , map p ⟩
+    map proj₁ ∘ filter proj₂ ∘ zip' ∘ ⟨ id , map p ⟩
+    -- definition of filter
+    ≡⟨⟩ map proj₁
+      ∘ concat
+      ∘ map (proj₂ ~> wrap , nilp)
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩
+    -- concat is a natural transformation List² ⇒ List
+    ≡⟨  cong (λ { f →
+    f ∘ map (proj₂ ~> wrap , nilp)
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩}) concatNat ⟩
+    -- =>
+        concat
+      ∘ map (map proj₁)
+      ∘ map (proj₂ ~> wrap , nilp)
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩
+    -- functor laws for List, aka applying ∘-map
+    ≡⟨  cong (λ { f → concat ∘ f ∘ zip' ∘ ⟨ id , map p ⟩ }) (sym ∘-map) ⟩
+    -- =>
+        concat
+      ∘ map (map proj₁ ∘ (proj₂ ~> wrap , nilp))
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩
+    -- left-distributivity of ∘ over ~>
+    ≡⟨  cong (λ { f →
+        concat
+      ∘ map f
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩ }) (∘-distrib-~>-l proj₂ wrap nilp (map proj₁)) ⟩
+    -- =>
+        concat
+      ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , (map proj₁ ∘ nilp))
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩
+    -- nilp is a natural transformation Id ⇒ List
+    ≡⟨ cong (λ { f →
+       concat
+      ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , f)
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩}) (nilpNat proj₁) ⟩
+    -- =>
+        concat
+      ∘ map (proj₂ ~> (map proj₁ ∘ wrap) , (nilp ∘ proj₁))
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩
+    -- wrap is a natural transformation Id ⇒ List
+    ≡⟨  cong (λ { f →
+        concat
+      ∘ map (proj₂ ~> f , (nilp ∘ proj₁))
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩}) (wrapNat proj₁) ⟩
+    -- =>
+        concat
+      ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁))
+      ∘ zip'
+      ∘ ⟨ id , map p ⟩
     ≡⟨⟩
     {!!}
