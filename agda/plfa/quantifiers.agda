@@ -1,3 +1,5 @@
+module quantifiers where
+
 import Relation.Binary.PropositionalEquality as Eq
 open Eq                         using (_≡_; refl; sym; cong)
 open Eq.≡-Reasoning             using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
@@ -244,3 +246,4 @@ cast refl cb = cb
       ≡⟨ Lemma3 (can-to-from cb) ⟩
       (b , cb)
       ∎}
+  }

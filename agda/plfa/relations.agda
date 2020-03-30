@@ -1,6 +1,9 @@
+module relations where
+
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong)
-open import Data.Nat using (ℕ; zero; suc; _+_;_*_)
+
+open        Eq                  using (_≡_; refl; cong)
+open import Data.Nat            using (ℕ; zero; suc; _+_;_*_)
 open import Data.Nat.Properties using (+-comm;*-comm)
 
 data _≤_ : ℕ → ℕ → Set where
