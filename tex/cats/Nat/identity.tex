@@ -8,6 +8,19 @@
     where $(1)$ holds for all $a\in\Cat$.
 \end{defin}
 
+\noindent
+{\bf Remark}: A mental picture of the identity natural transformation 
+$\iota_{F}:F\Rightarrow F$ where $F$ is a functor between categories \Cat\ 
+and \Dat\ is as follows:
+    \[
+        \begin{tikzcd}
+            \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "F", bend right = 50, ""{name=D, above}]
+              & \Dat
+            \arrow[Rightarrow, "\,\iota_{F}", from = U, to = D]
+        \end{tikzcd}
+    \]
+
 \begin{prop}\label{Nat:prop:identity}
     The identity natural transformation $\iota_{F}:F\Rightarrow F$ on a
     functor $F:\Cat\to\Dat$ where \Cat,\,\Dat\ are categories is indeed

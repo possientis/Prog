@@ -17,13 +17,27 @@
 \end{notation}
 
 \noindent
+{\bf Remark}: A mental picture of a natural transformation $\alpha:F\Rightarrow 
+G$ where $F$ and $G$ are two functors between categories \Cat\ and \Dat\ is as 
+follows:
+    \[
+        \begin{tikzcd}
+            \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G", bend right = 50, ""{name=D, above}]
+              & \Dat
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+        \end{tikzcd}
+    \]
+
+\noindent
 {\bf Remark}: Given $F,G:\Cat\to\Dat$ and $\alpha:F\Rightarrow G$, given
-$a,b\in\ob\ \Cat$ and $f:a \to b$, we have $F(f):F(a) \to F(b)$ and 
-$G(f):G(a)\to G(b)$. Furthemore, from $(1)$ of definition~(\ref{Nat:def:natural}), 
-we have $\alpha(a):F(a)\to G(a)$ and $\alpha(b):F(b)\to G(b)$. It follows 
-that both arrows $G(f)\circ\alpha(a)$ and $\alpha(b)\circ F(f)$ are well 
-defined arrows in \Dat\ (from $F(a)$ to $G(b)$), and the equality $(2)$ of 
-definition~(\ref{Nat:def:natural}) is always meaningful.
+$a,b\in\ob\ \Cat$ and $f:a \to b$, since $F$ and $G$ are functors we have 
+$F(f):F(a) \to F(b)$, $G(f):G(a)\to G(b)$ and from $(1)$ of 
+definition~(\ref{Nat:def:natural}), $\alpha(a):F(a)\to G(a)$ and 
+$\alpha(b):F(b)\to G(b)$. It follows that both arrows $G(f)\circ\alpha(a)$ 
+and $\alpha(b)\circ F(f)$ are well defined arrows in \Dat\ (from $F(a)$ to 
+$G(b)$), and the equality $(2)$ of definition~(\ref{Nat:def:natural}) is 
+always meaningful.
 
 \noindent
 {\bf Remark}: Equality~$(2)$ of definition~(\ref{Nat:def:natural}) is commonly
