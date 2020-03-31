@@ -404,5 +404,7 @@ Definition Fac : nat -> nat :=
         | S p   => S p * f p
         end.
 
+Definition Dum : nat -> nat :=
+    fix f (n:nat) : nat := f n.
 
 

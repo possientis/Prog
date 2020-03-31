@@ -268,6 +268,7 @@ def AccessibleInv : ∀ {α : Type u} (r : α → α → Prop) (x : α),
 #check @well_founded.fix -- counterpart of Fix in Coq
 
 /-
+-- The primitive 'fix' does not seem to exist in Lean.
 def WFRecursion_F : ∀ {α : Type u} (r : α → α → Prop) (c : α → Type u),
   (∀ (x:α), (∀ (y:α), r y x → c y) → c x) →
    ∀ (x:α), Accessible r x → c x :=
@@ -275,5 +276,21 @@ def WFRecursion_F : ∀ {α : Type u} (r : α → α → Prop) (c : α → Type 
        λ (r:α → α → Prop),
          λ (c:α → Type u),
            λ (IH:∀ (x:α), (∀(y:α), r y x → c y) → c x),
+             λ (x : α),
+               λ (p:Accessible r x),
+                 IH x (λ (y:α),
+                   λ (H:r y x), _)
 -/
 
+
+def fac : ∀ (α : Type u), ℕ → ℕ
+| α 0 := 1
+| α (succ n) := succ n * fac α n
+
+/- This won't work either
+def WFRecursion_F : ∀ (α : Type u) (r : α → α → Prop) (c : α → Type u),
+  (∀ (x:α), (∀ (y:α), r y x → c y) → c x) →
+  ∀ (x:α), Accessible r x → c x
+| α r c IH x (Accessible.MkAcc _ f) :=
+  IH x (λ (y:α) (H:r y x), WFRecursion_F α r c IH y (f y H))
+-/
