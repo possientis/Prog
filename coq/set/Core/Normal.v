@@ -6,23 +6,24 @@ Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Cons.
 Require Import Core.Equal.
+Require Import Core.Order.
 Require Import Core.Empty.
 Require Import Core.Insert.
 Require Import Core.ElemIncl.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
-Fixpoint normalize (x:set) : set :=
+Fixpoint normal (x:set) : set :=
     match x with
     | Nil           => Nil
     | (Cons x xs)   =>
         match (elem_dec x xs) with
-        | left _    => normalize xs                         (*  we have x :: xs *)
-        | right _   => insert (normalize x) (normalize xs)  (*  otherwise       *)
+        | left _    => normal xs                        (*  we have x :: xs     *)
+        | right _   => insert (normal x) (normal xs)    (*  otherwise           *)
         end
     end.
 
-Lemma normalizeSame : forall (x:set), normalize x == x.
+Lemma normalSame : forall (x:set), normal x == x.
 Proof.
     induction x as [|x IH1 xs IH2].
     - apply equalRefl.
@@ -37,55 +38,32 @@ Proof.
             { apply insertCons. }
 Qed.
  
-(*
-Lemma normalizeEqual : forall (x y:set), normalize x = normalize y -> x == y.
+
+Lemma normalEqual : forall (x y:set), normal x = normal y -> x == y.
 Proof.
-    induction x as [|x IH1 xs IH2]; intros y H.
+    intros x y H. apply equalTrans with (normal y).
+    - apply equalTrans with (normal x).
+        + apply equalSym. apply normalSame.
+        + rewrite H. apply equalRefl.
+    - apply normalSame.
+Qed.
+
+(*
+Lemma equalNormal_n : forall (n:nat) (x y:set),
+    order x + order y <= n -> x == y -> normal x = normal y.
+Proof.
+    induction n as [|n IH].
     - admit.
-    - simpl in H. destruct (elem_dec x xs) as [Hx|Hx].
+    - intros x y H1 H2. destruct x as [|x xs].
         + admit.
-        +
-
+        + simpl. destruct (elem_dec x xs) as [H3|H3]; simpl.
+            { admit. }
+            { destruct y as [|y ys].
+                { admit. }
+                { simpl. destruct (elem_dec y ys) as [H4|H4]; simpl.
+                    { admit. }
+                    {
 Show.
 *)
 
-(*
-Lemma equalNormalize : forall (x y:set), x == y -> normalize x = normalize y.
-Proof.
-    induction x as [|x IH1 xs IH2]; intros y H.
-    - apply equalSym in H. rewrite emptyIsNil in H. rewrite H. reflexivity.
-    - simpl. destruct (elem_dec x xs) as [Hx|Hx].
-        + admit.
-        +
 
-
-Show.
-*)
-(*
-    - destruct y as [|y ys]; simpl.
-        + rewrite emptyIsNil in H. inversion H.
-        + destruct (elem_dec x xs) as [Hx|Hx].
-            { destruct (elem_dec y ys) as [Hy|Hy].
-                { apply IH2. apply doubleIncl. split.
-                    { apply elemIncl. intros z Hz. 
-                        assert (z :: Cons x xs) as H'.
-                            { apply consElem. right. assumption. }
-                        apply (equal_r (Cons x xs) (Cons y ys) z H) in H'. 
-                        rewrite consElem in H'. destruct H' as [H'|H'].
-                            { apply equal_l with y.
-                                { apply equalSym. assumption. }
-                                { assumption. }}
-                            { assumption. }}
-                    { apply elemIncl. intros z Hz. 
-                        assert (z :: Cons y ys) as H'.
-                            { apply consElem. right. assumption. }
-                        apply (equal_r (Cons y ys) (Cons x xs) z) in H'. 
-                            { rewrite consElem in H'. destruct H' as [H'|H'].
-                                { apply equal_l with x.
-                                    { apply equalSym. assumption. }
-                                    { assumption. }}
-                                { assumption. }}
-                            { apply equalSym. assumption. }}}
-                {
-
-*)
