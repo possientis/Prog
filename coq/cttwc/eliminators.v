@@ -140,12 +140,62 @@ Definition L12 : forall (p:bool -> Prop) (x:bool), (x = true -> p true) -> (x = 
         end H1 H2.
 
 
-Definition and : bool -> bool -> bool := BoolRec
+Definition and1 : bool -> bool -> bool := BoolRec
     (fun _ => bool -> bool)
     (fun y => y)
     (fun _ => false).
 
+Definition and : bool -> bool -> bool :=
+    fun (x:bool) =>
+        fun(y:bool) => (BoolRec
+            (fun _ => bool)
+            y
+            false) x. 
+
+(* and is computationally equal to ....                                        *)
 Definition L13 : and = fun (x y:bool) => match x with true => y | false => false end.
 Proof.
     unfold and. unfold BoolRec. reflexivity.
+Qed.
+
+Definition or : bool -> bool -> bool :=
+    fun (x:bool) => 
+        fun (y:bool) => (BoolRec
+            (fun _ => bool)
+            true
+            y) x.
+
+(* or is computationally equal to ....                                        *)
+Definition L14 : or = fun (x y:bool) => match x with true => true | false => y end.
+Proof.
+    unfold or. unfold BoolRec. reflexivity.
+Qed.
+
+
+Definition L15 : forall (x y:bool), and x y = true <-> x = true /\ y = true.
+Proof.
+    intros x y. split; intros H.
+    - unfold and in H. unfold BoolRec in H. destruct x.
+        + split. 
+            { reflexivity. }
+            { assumption. }
+        + inversion H.
+    - destruct H as [H1 H2]. rewrite H1. rewrite H2. reflexivity.
+Qed.
+
+Print L15.
+
+(*
+Definition L16 : forall (x y:bool), and x y = true <-> x = true /\ y = true.
+Proof.
+    refine (fun (x y:bool) => conj
+        (fun (H:and x y = true)       => conj
+            _
+            _)
+
+        (fun (H:x = true /\ y = true) => _)
+).
+
 Show.
+
+*)
