@@ -27,11 +27,8 @@ Fixpoint Sub (v:Type) (p:P v) : list (P v) :=
 
 Arguments Sub {v} _.
 
-Definition isSubFormulaOf (v:Type) (p q:P v) : Prop := p :: Sub q.
-Arguments isSubFormulaOf {v} _ _.
-
 (* p is a sub-formula of q if it belongs to the list of sub-formulas of q       *)
-Notation "p <<= q" := (isSubFormulaOf p q) (at level 50).
+Notation "p <<= q" := (p :: Sub q) (at level 50).
  
 Lemma Sub_refl : forall (v:Type) (p:P v), p <<= p.
 Proof.

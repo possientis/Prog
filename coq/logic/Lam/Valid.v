@@ -166,11 +166,8 @@ Proof.
               apply in_or_app. left. assumption. }
             { apply IH2. intros s H'. apply H. right.
               apply in_or_app. right. assumption. } 
-        + apply valid_lam. split.
-            { apply IH1. intros s H'. apply H. apply Sub_tran with t1.
-                { assumption. }
-                { right. apply Sub_refl. }
-            }
+        + apply valid_lam. split. 
+            { apply IH1.  intros s H'. apply H. right. assumption. }
             { intros y H1 H2.
               assert (~ f x :: free (fmap f (Lam x t1))) as Ex.
                 { simpl. apply remove_x_gone. }
@@ -178,12 +175,9 @@ Proof.
                 { rewrite H.
                     { apply mapIn. exists y. split.
                         { assumption. }
-                        { reflexivity. }
-                    }
-                    { apply Sub_refl. }
-                }
-              rewrite <- H2 in Ey. apply Ex. assumption. 
-            }
+                        { reflexivity. }}
+                  left. reflexivity. }
+              rewrite <- H2 in Ey. apply Ex. assumption. }
 Qed.
 
 Lemma valid_inj : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
@@ -247,7 +241,7 @@ Proof.
         + rewrite valid_free in Hf. rewrite Hf.
             { rewrite map_map. reflexivity. }
             { assumption. }
-        + unfold isSubFormulaOf. rewrite Sub_fmap. apply mapIn.   
+        + rewrite Sub_fmap. apply mapIn.   
           exists s. split.
             { assumption. }
             { reflexivity. }
@@ -266,7 +260,7 @@ Proof.
       split.
         + assumption.
         + apply valid_free. intros s' H1. 
-          unfold isSubFormulaOf in H1. rewrite Sub_fmap in H1.
+          rewrite Sub_fmap in H1.
           rewrite mapIn in H1. destruct H1 as [s [H1 H2]].
           rewrite H2. fold (comp (fmap g) (fmap f) s). 
           rewrite <- fmap_comp. rewrite valid_free in H. 

@@ -1,4 +1,3 @@
-get rid of 'isSubFormulaOf'
 Notation for replace, permute, subst ?
 replace mapIn by library in_map_iff
 Lam/Free: prop 342

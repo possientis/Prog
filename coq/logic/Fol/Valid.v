@@ -182,10 +182,7 @@ Proof.
             { apply IH2. intros p H'. apply H. right.
               apply in_or_app. right. assumption. } 
         + apply valid_all. split.
-            { apply IH1. intros p H'. apply H. apply Sub_tran with p1.
-                { assumption. }
-                { right. apply Sub_refl. }
-            }
+            { apply IH1. intros p H'. apply H. right. assumption. }
             { intros y H1 H2.
               assert (~ f x :: free (fmap f (All x p1))) as Ex.
                 { simpl. apply remove_x_gone. }
@@ -193,10 +190,8 @@ Proof.
                 { rewrite H.
                     { apply mapIn. exists y. split.
                         { assumption. }
-                        { reflexivity. }
-                    }
-                    { apply Sub_refl. }
-                }
+                        { reflexivity. }}
+                    { left. reflexivity. }}
               rewrite <- H2 in Ey. apply Ex. assumption. 
             }
 Qed.
@@ -262,7 +257,7 @@ Proof.
         + rewrite valid_free in Hf. rewrite Hf.
             { rewrite map_map. reflexivity. }
             { assumption. }
-        + unfold isSubFormulaOf. rewrite Sub_fmap. apply mapIn.   
+        + rewrite Sub_fmap. apply mapIn.   
           exists p. split.
             { assumption. }
             { reflexivity. }
@@ -282,7 +277,7 @@ Proof.
       split.
         + assumption.
         + apply valid_free. intros p' H1. 
-          unfold isSubFormulaOf in H1. rewrite Sub_fmap in H1.
+          rewrite Sub_fmap in H1.
           rewrite mapIn in H1. destruct H1 as [p [H1 H2]].
           rewrite H2. fold (comp (fmap g) (fmap f) p). 
           rewrite <- fmap_comp. rewrite valid_free in H. 
