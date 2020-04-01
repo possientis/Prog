@@ -1,8 +1,9 @@
 Require Import List.
 
+Require Import In.
 
 Lemma mapIn : forall (v w:Type) (f:v -> w) (y:w) (xs:list v),
-    In y (map f xs) <-> exists (x:v), In x xs /\ y = f x.
+    y :: map f xs <-> exists (x:v), x :: xs /\ y = f x.
 Proof.
     intros v w f y xs. split. 
     - induction xs as [|x xs IH]; simpl.

@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import In.
 Require Import Eq.
 Require Import Identity.
 Require Import Injective.
@@ -52,7 +53,7 @@ Proof.
 Qed.
 
 Lemma replace_trans : forall (v:Type) (e:Eq v) (x y z:v) (ys:list v),
-    ~(In y ys) -> coincide ys (replace y z ; replace x y) (replace x z).
+    ~ y :: ys -> coincide ys (replace y z ; replace x y) (replace x z).
 Proof.
     intros v e x y z ys H u H'. unfold comp.
     destruct (eqDec u x) as [Hux|Hux], 
@@ -77,7 +78,7 @@ Proof.
 Qed.
 
 Lemma replace_inj : forall (v:Type) (e:Eq v) (x y:v) (ys:list v),
-    ~In y ys -> injective_on ys (replace x y).
+    ~ y :: ys -> injective_on ys (replace x y).
 Proof.
     intros v e x y ys Hy s t Hs Ht H.
     destruct (eqDec s x) as [Hsx|Hsx], (eqDec t x) as [Htx|Htx]; subst.

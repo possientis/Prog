@@ -1,6 +1,7 @@
 Require Import Le.
 Require Import List.
 
+Require Import In.
 Require Import Eq.
 Require Import Leq.
 Require Import Max.
@@ -25,7 +26,7 @@ Fixpoint Sub (v:Type) (t:T v) : list (T v) :=
 
 Arguments Sub {v} _.
 
-Definition isSubFormulaOf (v:Type) (s t:T v) : Prop := In s (Sub t).
+Definition isSubFormulaOf (v:Type) (s t:T v) : Prop := s :: Sub t.
 Arguments isSubFormulaOf {v} _ _.
 
 

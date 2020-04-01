@@ -71,6 +71,7 @@ Relation.vo : 					Relation.v
 	coqc Relation.v
 
 Replace.vo : 					Replace.v \
+								In.vo \
 								Eq.vo \
 								Identity.vo \
 								Injective.vo \
@@ -81,6 +82,7 @@ Replace.vo : 					Replace.v \
 
 
 Permute.vo : 					Permute.v \
+								In.vo \
 								Eq.vo \
 								Replace.vo \
 								Coincide.vo \
@@ -99,6 +101,7 @@ Injective.vo : 					Injective.v \
 
 
 Remove.vo :						Remove.v \
+								In.vo \
 								Eq.vo \
 								Include.vo \
 								Injective.vo
@@ -107,12 +110,14 @@ Remove.vo :						Remove.v \
 
 
 Difference.vo :					Difference.v \
+								In.vo \
 								Eq.vo
 	coqc Difference.v
 
 
 
 Intersect.vo :					Intersect.v \
+								In.vo \
 								Eq.vo
 	coqc Intersect.v
 
@@ -153,6 +158,7 @@ ${FOL}/Order.vo : 				${FOL}/Order.v \
 
 
 ${LAM}/Subformula.vo :			${LAM}/Subformula.v \
+								In.vo \
 								Eq.vo \
 								Leq.vo \
 								Max.vo \
@@ -167,6 +173,7 @@ ${LAM}/Subformula.vo :			${LAM}/Subformula.v \
 
 
 ${FOL}/Subformula.vo : 			${FOL}/Subformula.v \
+								In.vo \
 								Eq.vo \
 								Leq.vo \
 								Max.vo \
@@ -284,6 +291,7 @@ ${FOL}/Bound.vo :				${FOL}/Bound.v \
 
 
 ${LAM}/Valid.vo :				${LAM}/Valid.v \
+								In.vo \
 								Eq.vo \
 								Map.vo \
 								Remove.vo \
@@ -300,6 +308,7 @@ ${LAM}/Valid.vo :				${LAM}/Valid.v \
 	coqc ${LAM}/Valid.v			${OPT} 
 
 ${FOL}/Valid.vo :				${FOL}/Valid.v \
+								In.vo \
 								Eq.vo \
 								Map.vo \
 								Remove.vo \

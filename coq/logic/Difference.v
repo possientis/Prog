@@ -1,17 +1,19 @@
 Require Import List.
 Import ListNotations.
 
+Require Import In.
 Require Import Eq.
 
 Fixpoint diff (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     match xs with
     | []        => []
-    | (x :: xs) =>
+    | cons x xs =>
         match in_dec eqDec x ys with
         | left  _   => diff v e xs ys
-        | right _   => x :: diff v e xs ys
+        | right _   => cons x (diff v e xs ys)
         end
     end.
+
 Arguments diff {v} {e}.
 
 Notation "xs \\ ys" := (diff xs ys) 
@@ -20,7 +22,7 @@ Notation "xs \\ ys" := (diff xs ys)
 Open Scope Difference_scope.
 
 Lemma diff_charac : forall (v:Type) (e:Eq v) (xs ys:list v) (z:v),
-    In z (xs \\ ys) <-> In z xs /\ ~In z ys.
+    z :: (xs \\ ys) <-> z :: xs /\ ~ z :: ys.
 Proof.
     intros v e xs ys z. split.
     - induction xs as [|x xs IH]; intros H.

@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import In.
 Require Import Eq.
 Require Import Replace.
 Require Import Coincide.
@@ -48,7 +49,7 @@ Qed.
 
 
 Lemma permute_replace : forall (v:Type) (e:Eq v) (x y:v) (ys: list v),
-    ~(In y ys) -> coincide ys (replace x y) (permute x y).
+    ~ y :: ys -> coincide ys (replace x y) (permute x y).
 Proof.
     intros v e x y ys H. unfold coincide. intros u H'.
     destruct    (eqDec u x) as [Hux|Hux] eqn:Eux, 

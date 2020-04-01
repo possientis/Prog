@@ -1,26 +1,27 @@
 Require Import List.  
 Import ListNotations.
 
+Require Import In.
 Require Import Eq.
 Require Import Include.
 Require Import Injective.
 
-Fixpoint remove (v:Type) (e:Eq v) (x:v) (l:list v) : list v :=
-    match l with
-    | []        => []
-    | (y :: ys) => 
+Fixpoint remove (v:Type) (e:Eq v) (x:v) (xs:list v) : list v :=
+    match xs with
+    | []            => []
+    | (cons y ys)   => 
         match (eqDec x y) with 
         | left _    => remove v e x ys
-        | right _   => y :: remove v e x ys
+        | right _   => cons y (remove v e x ys)
         end
     end.  
 
 Arguments remove {v} {e}.
 
-Lemma remove_still : forall (v:Type) (e:Eq v) (x y:v) (l:list v),
-    x <> y -> In y l -> In y (remove x l).
+Lemma remove_still : forall (v:Type) (e:Eq v) (x y:v) (xs:list v),
+    x <> y -> y :: xs -> y :: (remove x xs).
 Proof.
-    intros v e x y l. induction l as [|a l IH].
+    intros v e x y. induction xs as [|a xs IH].
     - intros _ H. inversion H.
     - intros Exy H. simpl. destruct (eqDec x a) eqn:Exa. 
         + apply IH.
@@ -35,10 +36,10 @@ Proof.
 Qed.
 
 
-Lemma remove_mon : forall (v:Type) (e:Eq v) (x:v) (l l':list v),
-    l <= l' -> (remove x l) <= (remove x l').
+Lemma remove_mon : forall (v:Type) (e:Eq v) (x:v) (xs ys:list v),
+    xs <= ys -> (remove x xs) <= (remove x ys).
 Proof.
-    intros v e x l. induction l as [|a l IH]; simpl; intros l' H.
+    intros v e x. induction xs as [|a xs IH]; simpl; intros ys H.
     - intros y Hy. inversion Hy.
     - destruct (eqDec x a) eqn:E.
         + apply IH. intros y Hy. apply H. right. assumption.
@@ -73,7 +74,7 @@ Proof.
 Qed.
 
 Lemma remove_x_gone: forall (v:Type) (e:Eq v) (x:v) (xs:list v),
-    ~In x (remove x xs).
+    ~ x :: remove x xs.
 Proof.
     intros v e x. induction xs as [|a xs IH]; simpl.
     - intros H. assumption.
@@ -86,7 +87,7 @@ Qed.
 
 
 Lemma remove_x_not_in : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
-    ~In x xs -> remove x xs = xs.
+    ~ x :: xs -> remove x xs = xs.
 Proof.
     intros v e x xs. induction xs as [|a xs IH]; simpl; intros H.
     - reflexivity.
@@ -98,7 +99,7 @@ Proof.
 Qed.
 
 Lemma remove_map : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
-    (forall (y:v), x <> y -> In y xs -> f x <> f y) ->
+    (forall (y:v), x <> y -> y :: xs -> f x <> f y) ->
     remove (f x) (map f xs) = map f (remove x xs).
 Proof.
    intros v w e e' f x xs H. 
@@ -124,7 +125,7 @@ Qed.
 
 
 Lemma remove_inj : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
-    In x xs -> 
+    x :: xs -> 
     injective_on xs f -> 
     remove (f x) (map f xs) = map f (remove x xs).
 Proof.
@@ -155,7 +156,7 @@ Qed.
 
 
 Lemma remove_charac : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
-    forall (z:v), In z (remove x xs) <-> In z xs /\ x <> z.
+    forall (z:v), z :: remove x xs <-> z :: xs /\ x <> z.
 Proof.
     intros v e x. induction xs as [|y ys IH]; simpl; intros z.
     - split; intros H.

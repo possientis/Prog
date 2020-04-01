@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import In.
 Require Import Eq.
 Require Import Map.
 Require Import Remove.
@@ -17,7 +18,7 @@ Require Import Fol.Subformula.
 
 Definition valid (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (q:P v) : Prop :=
     forall (p:P v) (x:v), p <<= q -> 
-        In x (free p) -> In (f x) (free (fmap f p)).
+        x :: free p -> f x :: free (fmap f p).
 
 Arguments valid {v} {w} {e} {e'} _ _.
 
@@ -76,7 +77,7 @@ Qed.
 Lemma valid_all : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p1:P v) (x:v),
     valid f (All x p1) <->  
     valid f p1 /\  
-    forall (y:v), In y (free (All x p1)) -> f x <> f y.
+    forall (y:v), y :: free (All x p1) -> f x <> f y.
 Proof.
     intros v w e e' f p1 x. split.
     - intros H. split.
@@ -84,12 +85,12 @@ Proof.
             { assumption. }
             { right. apply Sub_refl. }
         + intros y H1 H2. 
-            assert (In (f y) (free (fmap f (All x p1)))) as H3.
+            assert (f y :: free (fmap f (All x p1))) as H3.
                 { apply H.
                     { apply Sub_refl. }
                     { assumption. }
                 }
-            assert (~In (f x) (free (fmap f (All x p1)))) as H4.
+            assert (~ f x :: free (fmap f (All x p1))) as H4.
                 { simpl. apply remove_x_gone. }
             apply H4. rewrite H2. assumption.
     - intros [H1 H2] s y H3 H4. destruct H3 as [H3|H3].
@@ -151,9 +152,9 @@ Proof.
         + destruct H' as [H'|H'].
             { subst. simpl. rewrite IH1.
                 { apply remove_map. intros y H1 H2 H3.
-                    assert (~In (f x) (free (All (f x) (fmap f p1)))) as Ex.
+                    assert (~ f x :: free (All (f x) (fmap f p1))) as Ex.
                         { simpl. apply remove_x_gone. }
-                    assert (In (f y) (free (All (f x) (fmap f p1)))) as Ey. 
+                    assert (f y :: free (All (f x) (fmap f p1))) as Ey. 
                         { unfold valid in H. apply (H (All x p1) y). 
                             { apply Sub_refl. }
                             { simpl. apply remove_charac. split; assumption. }
@@ -186,9 +187,9 @@ Proof.
                 { right. apply Sub_refl. }
             }
             { intros y H1 H2.
-              assert (~In (f x) (free (fmap f (All x p1)))) as Ex.
+              assert (~ f x :: free (fmap f (All x p1))) as Ex.
                 { simpl. apply remove_x_gone. }
-              assert (In (f y) (free (fmap f (All x p1)))) as Ey. 
+              assert (f y :: free (fmap f (All x p1))) as Ey. 
                 { rewrite H.
                     { apply mapIn. exists y. split.
                         { assumption. }
@@ -212,13 +213,13 @@ Qed.
 
 Lemma valid_charac : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p:P v),
     valid f p <-> forall (p1:P v) (x y:v), 
-        (All x p1) <<= p -> In y (free (All x p1)) -> f x <> f y.
+        (All x p1) <<= p -> y :: free (All x p1) -> f x <> f y.
 Proof.
     intros v w e e' f t. split.
     - intros H p1 x y H1 H2 H3.
-      assert (In (f y) (free (fmap f (All x p1)))) as H4.
+      assert (f y :: free (fmap f (All x p1))) as H4.
         { apply H; assumption. }
-      assert (~In (f x) (free (fmap f (All x p1)))) as H5.
+      assert (~ f x :: free (fmap f (All x p1))) as H5.
         { simpl. apply remove_x_gone. }
       rewrite <- H3 in H4. apply H5. assumption.
     - induction t as [|z z'|p1' IH1 p2' IH2|z p1' IH1]; intros H.
@@ -245,7 +246,7 @@ Proof.
 Qed.
 
 Lemma valid_replace : forall (v:Type) (e:Eq v) (x y:v) (p:P v),
-    ~In y (var p) -> valid (replace x y) p.
+    ~ y :: var p -> valid (replace x y) p.
 Proof.
     intros v e x y p H. apply valid_inj. apply replace_inj. assumption.
 Qed.
@@ -317,12 +318,12 @@ Lemma valid_bnd : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (q:P v),
     (exists (xs:list v), 
         bnd q <= xs /\
         injective_on xs f /\
-        (forall (x y:v), In x xs -> In y (var q) -> ~In y xs -> f x <> f y))
+        (forall (x y:v), x :: xs -> y :: var q -> ~ y :: xs -> f x <> f y))
         -> valid f q.
 Proof.
     intros v w e e' f q [xs [H1 [H2 H3]]]. apply valid_charac.
     intros q1 x y H4 H5. 
-    assert (In x xs) as H0. 
+    assert (x :: xs) as H0. 
         { apply H1. apply Sub_bnd in H4. apply H4. left. reflexivity. }
     destruct (in_dec eqDec y xs) as [H6|H6].
     - intros H7. simpl in H5. apply remove_charac in H5.
