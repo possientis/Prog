@@ -52,4 +52,44 @@ _ =
     false
     ∎
 
+T : Bool -> Set
+T true  = ⊤
+T false = ⊥
 
+
+T→≡ : ∀ (b : Bool) → T b → b ≡ true
+T→≡ true tt = refl
+
+≡→T : ∀ {b : Bool} → b ≡ true → T b
+≡→T refl = tt
+
+≤b→≤ : ∀ (m n : ℕ) → T (m ≤b n) → m ≤ n
+≤b→≤ zero n _ = z≤n
+≤b→≤ (suc m) (suc n) p = s≤s (≤b→≤ m n p)
+
+≤→≤b : ∀ {m n : ℕ} → m ≤ n → T (m ≤b n)
+≤→≤b z≤n = tt
+≤→≤b (s≤s m≤n) = ≤→≤b m≤n
+
+data Dec (a : Set) : Set where
+  yes : a   → Dec a
+  no  : ¬ a → Dec a
+
+¬s≤z : ∀ {n : ℕ} → ¬ (suc n ≤ zero)
+¬s≤z ()
+
+¬s≤s : ∀ {m n : ℕ} → ¬ (m ≤ n) → ¬ (suc m ≤ suc n)
+¬s≤s f (s≤s m≤n) = f m≤n
+
+_≤?_ : ∀ (m n : ℕ) → Dec (m ≤ n)
+zero ≤? n  = yes z≤n
+suc m ≤? zero = no ¬s≤z
+suc m ≤? suc n with m ≤? n
+(suc m ≤? suc n) | yes m≤n = yes (s≤s m≤n)
+(suc m ≤? suc n) | no ¬m≤n = no (¬s≤s ¬m≤n)
+
+_ : 2 ≤? 4 ≡ yes (s≤s (s≤s z≤n))
+_ = refl
+
+_ : 4 ≤? 2 ≡ no (¬s≤s (¬s≤s ¬s≤z))
+_ = refl
