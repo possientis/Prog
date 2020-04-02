@@ -127,10 +127,10 @@ concatNat {a} {b} = extensionality k
         ∎
 
 -- functor law for List: composition
-∘-map : ∀ {a b c : Set} → {f : a → b} → {g : b → c} → map (g ∘ f) ≡ map g ∘ map f
+∘-map : ∀ {ℓ} {a b c : Set ℓ} → {f : a → b} → {g : b → c} → map (g ∘ f) ≡ map g ∘ map f
 ∘-map = extensionality k
   where
-    k : ∀ {a b c : Set} → {f : a → b} → {g : b → c} → (xs : List a) →
+    k : ∀ {ℓ} {a b c : Set ℓ} → {f : a → b} → {g : b → c} → (xs : List a) →
       map (g ∘ f) xs ≡ (map g ∘ map f) xs
     k [] = refl
     k {f = f} {g} (x ∷ xs) =
@@ -195,7 +195,7 @@ L1 {a} {p} =
       ∘ map (proj₂ ~> wrap , nilp)
       ∘ zip'
       ∘ ⟨ id , map p ⟩
-    -- functor laws for List, aka applying ∘-map
+    -- functor law for List, aka applying ∘-map
     ≡⟨  cong (λ { f → concat ∘ f ∘ zip' ∘ ⟨ id , map p ⟩ }) (sym ∘-map) ⟩
     -- =>
         concat
@@ -235,5 +235,16 @@ L1 {a} {p} =
       ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁))
       ∘ zip'
       ∘ ⟨ id , map p ⟩
+    -- functor law for List, aka applying id-map
+    ≡⟨  cong (λ { f →
+        concat
+      ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁))
+      ∘ zip'
+      ∘ ⟨ f , map p ⟩ }) (sym id-map) ⟩
+    -- =>
+        concat
+      ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁))
+      ∘ zip'
+      ∘ ⟨ map id , map p ⟩
     ≡⟨⟩
     {!!}
