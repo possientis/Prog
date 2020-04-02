@@ -8,5 +8,27 @@
             (1)&\ &(\beta\circ\alpha)(a)=\beta(a)\,\circ\,\alpha(a)
         \end{eqnarray*}
     where $(1)$ holds for all $a\in\Cat$.
-\
 \end{defin}
+
+{\bf Remark}: If $\alpha:F\Rightarrow G$ and $\beta:G\Rightarrow H$ are 
+natural transformations then for all $a\in\Cat$ we have $\alpha(a):F(a)\to 
+G(a)$ and $\beta(a):G(a)\to H(a)$, and $\beta(a)\circ\alpha(a)$ is therefore 
+a well-defined arrow in \Dat.
+
+\begin{prop}\label{Nat:prop:composition}
+    Let $\alpha:F\Rightarrow G$ and $\beta:G\Rightarrow H$ be natural
+    transformations where $F,G$ and $H$ are functors $F,G,H:\Cat\to\Dat$
+    and \Cat,\ \Dat\ are categories. Then $\beta\circ\alpha$ is indeed
+    a natural transformation $\beta\circ\alpha:F\Rightarrow H$.
+\end{prop}
+\begin{proof}
+    We need to check that $\beta\circ\alpha$ is a map defined on
+    $\ob\ \Cat$ which satisfies $(1)$ and $(2)$ of 
+    definition~(\ref{Nat:def:natural}). As noted above, since
+    $\alpha(a):F(a)\to G(a)$ and $\beta(a):G(a)\to H(a)$, the expression
+    $\beta(a)\circ\alpha(a)$ is a well-defined arrow in \Dat\ and 
+    $(\beta\circ\alpha)(a)$ is therefore well-defined for all
+    $a\in\Cat$. So $\beta\circ\alpha$ is indeed a map defined on $\ob\ \Cat$.
+    TODO
+\end{proof}
+
