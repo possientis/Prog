@@ -9,6 +9,7 @@ all :							${UTILS}/LEM.vo \
 								${UTILS}/Nat.vo \
 								${UTILS}/Fresh.vo \
 								${UTILS}/Ord.vo \
+								${UTILS}/Sort.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
@@ -75,6 +76,8 @@ ${UTILS}/Fresh.vo :				${UTILS}/Fresh.v
 ${UTILS}/Ord.vo :				${UTILS}/Ord.v
 	coqc ${UTILS}/Ord.v			${OPT} 
 
+${UTILS}/Sort.vo :				${UTILS}/Sort.v
+	coqc ${UTILS}/Sort.v		${OPT} 
 
 ${CORE}/Set.vo : 				${CORE}/Set.v
 	coqc ${CORE}/Set.v			${OPT} 
