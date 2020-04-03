@@ -8,6 +8,7 @@ all :							${UTILS}/LEM.vo \
 								${UTILS}/Filter.vo \
 								${UTILS}/Nat.vo \
 								${UTILS}/Fresh.vo \
+								${UTILS}/Ord.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
@@ -70,6 +71,9 @@ ${UTILS}/Nat.vo : 				${UTILS}/Nat.v
 
 ${UTILS}/Fresh.vo :				${UTILS}/Fresh.v
 	coqc ${UTILS}/Fresh.v		${OPT} 
+
+${UTILS}/Ord.vo :				${UTILS}/Ord.v
+	coqc ${UTILS}/Ord.v			${OPT} 
 
 
 ${CORE}/Set.vo : 				${CORE}/Set.v

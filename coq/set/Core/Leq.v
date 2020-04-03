@@ -1,23 +1,25 @@
 Require Import Peano_dec.
 
+Require Import Utils.Ord.
+
 Require Import Core.Set.
 Require Import Core.Decidability.
 
 (* Ordering of syntactic representations of sets. This relation is not          *)
 (* compatible with set equality (==) and is used for normalization only.        *)
-Fixpoint leq (x y:set) : Prop :=
+Fixpoint leq_ (x y:set) : Prop :=
     match x with
     | Nil           => True
     | (Cons x xs)   =>
         match y with
         | Nil           => False
-        | (Cons y ys)   => (x <> y) /\ (leq x y)    (* lexicographic order      *)
-                        \/ (x = y)  /\ (leq xs ys)
+        | (Cons y ys)   => (x <> y) /\ (leq_ x y)    (* lexicographic order     *)
+                        \/ (x = y)  /\ (leq_ xs ys)
         end
     end.
 
 (* Strict equality between sets is decidable so leq itself is decidable.        *)
-Lemma leqDec : forall (x y:set), {leq x y} + {~leq x y}.
+Lemma leqDec_ : forall (x y:set), {leq_ x y} + {~leq_ x y}.
 Proof.
     induction x as [|x IH1 xs IH2]; intros y.
     - left. apply I.
@@ -36,7 +38,7 @@ Proof.
                     { apply H1 in H3. contradiction. }}}
 Qed.
 
-Lemma leqRefl : forall (x:set), leq x x.
+Lemma leqRefl_ : forall (x:set), leq_ x x.
 Proof.
     induction x as [|x _ xs IH].
     - apply I.
@@ -45,14 +47,14 @@ Proof.
         + apply IH.
 Qed.
 
-Lemma leqxNil : forall (x:set), leq x Nil -> x = Nil.
+Lemma leqxNil : forall (x:set), leq_ x Nil -> x = Nil.
 Proof.
     intros x. destruct x as [|x xs]. 
     - intros. reflexivity.
     - simpl. intros. contradiction.
 Qed.
 
-Lemma leqAnti : forall (x y:set), leq x y -> leq y x -> x = y.
+Lemma leqASym_ : forall (x y:set), leq_ x y -> leq_ y x -> x = y.
 Proof.
     induction x as [|x IH1 xs IH2].
     - intros y H1 H2. symmetry. apply leqxNil. assumption.
@@ -71,7 +73,7 @@ Proof.
 Qed.
 
 
-Lemma leqTrans : forall (x y z:set), leq x y -> leq y z -> leq x z. 
+Lemma leqTrans_ : forall (x y z:set), leq_ x y -> leq_ y z -> leq_ x z. 
 Proof.
     induction x as [|x IH1 xs IH2]; intros y z H1 H2.
     - apply I.
@@ -85,7 +87,7 @@ Proof.
                     { simpl in H1. simpl in H2. 
                         destruct H1 as [[H1 H3]|[H1 H3]].
                             { destruct H2 as [[H2 H4]|[H2 H4]].
-                                { exfalso. apply H1. apply leqAnti; assumption. }
+                                { exfalso. apply H1. apply leqASym_; assumption. }
                                 { exfalso. apply H1. symmetry. assumption. }}    
                             { destruct H2 as [[H2 H4]|[H2 H4]].
                                 { exfalso. apply H2. symmetry. assumption. }
@@ -101,11 +103,11 @@ Proof.
                                 { subst. assumption. }}
                             { destruct H2 as [[H2 H4]|[H2 H4]].
                                 { subst. assumption. }
-                                { subst. apply leqRefl. }}}}}
+                                { subst. apply leqRefl_. }}}}}
 Qed.                            
 
 
-Lemma leqTotal : forall (x y:set), leq x y \/ leq y x.
+Lemma leqTotal_ : forall (x y:set), leq_ x y \/ leq_ y x.
 Proof.
     induction x as [|x IH1 xs IH2]; intros y.
     - left. apply I. 
@@ -126,3 +128,12 @@ Proof.
                     { assumption. }}}
 Qed.
 
+Instance ordSet : Ord set :=
+    { leq      := leq_
+    ; leqDec   := leqDec_
+    ; eqDec    := set_eq_dec
+    ; leqRefl  := leqRefl_
+    ; leqTrans := leqTrans_
+    ; leqAsym  := leqASym_
+    ; leqTotal := leqTotal_
+    }. 

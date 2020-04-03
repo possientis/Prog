@@ -10,7 +10,7 @@ Fixpoint insert (x y:set) : set :=
     match y with
     | Nil           => Cons x Nil
     | (Cons y ys)   =>
-        match (leqDec x y) with
+        match (leqDec_ x y) with
         | left _    => Cons y (insert x ys)     (* x 'smaller' goes inside      *)
         | right _   => Cons x (Cons y ys)
         end
@@ -20,7 +20,7 @@ Lemma insertCons : forall (x xs:set), insert x xs == Cons x xs.
 Proof.
     intros x ys. revert ys x. induction ys as [|y IH1 ys IH2]; intros x.
     - apply equalRefl.
-    - simpl. destruct (leqDec x y) as [H|H].
+    - simpl. destruct (leqDec_ x y) as [H|H].
         + apply equalTrans with (Cons y (Cons x ys)).
             { apply consCompatR. apply IH2. }
             { apply consSwitch. }
