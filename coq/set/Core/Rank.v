@@ -62,7 +62,7 @@ Qed.
 (* If x lies in the list associated with xs, then it has a lesser rank.         *)
 Lemma rankToList : forall (x xs:set), In x (toList xs) -> rank x < rank xs.
 Proof.
-    intros x xs H. destruct (set_eq_dec xs Nil) as [H'|H']. 
+    intros x xs H. destruct (eqDec xs Nil) as [H'|H']. 
     - rewrite H' in H. inversion H.
     - rewrite (rankMaximum xs).
         + unfold lt. apply le_n_S. apply maximum_ubound. apply in_map_iff.
@@ -152,7 +152,7 @@ Qed.
 (* If x is a subset of y, then its rank is less than or equal to that of y.     *) 
 Lemma rankIncl : forall (x y:set), x <== y -> rank x <= rank y.
 Proof.
-    intros x y H. destruct (set_eq_dec x Nil) as [H1|H1].
+    intros x y H. destruct (eqDec x Nil) as [H1|H1].
     - rewrite H1. apply le_0_n.
     - rewrite (rankMaximum x).
         + rewrite (rankMaximum y).

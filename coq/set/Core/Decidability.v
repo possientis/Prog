@@ -3,8 +3,9 @@
 
 Require Import List.
 
-Require Import Utils.Decidable.
+Require Import Utils.Eq.
 Require Import Utils.Filter.
+Require Import Utils.Decidable.
 
 Require Import Core.Set.
 Require Import Core.Order.
@@ -20,14 +21,14 @@ Require Import Core.Extensionality.
 (* not what we are aiming to 'prove' in the following lemma. Instead, what we   *)
 (* are presenting as a 'lemma' is a dependent function with return type equal   *)
 (* to 'forall (x y:set), {x = y} + {x <> y}'. Given x y of type 'set' (not to   *)
-(* be confused with the Coq type 'Set'), the term 'set_eq_dec x y' is of type   *)
+(* be confused with the Coq type 'Set'), the term 'eqDec x y' is of type        *)
 (* '{x = y} + {x <> y}' which corresponds to the Haskell sum type 'Either a b'  *)
 (* giving us either a proof of 'x = y' or a proof of 'x <> y'. Hence we are     *)
 (* proving the existence of a function which given two sets as arguments, gives *)
 (* us back either a proof of their equality or a proof of their non-equality.   *)
 (* This is a stonger 'property' than the proposition '(x = y) \/ (x <> y)'      *)
 (* which does not tell us which of 'x = y' or 'x <> y' is the case.             *)
-Lemma set_eq_dec : forall (x y:set), {x = y} + {x <> y}.
+Lemma eqDec : forall (x y:set), {x = y} + {x <> y}.
 Proof.
     intros xs. induction xs as [|x IH1 xs IH2]; intros ys.
     - destruct ys as [|y ys].
@@ -41,6 +42,10 @@ Proof.
                 { right. intros H. inversion H. apply H2. assumption. }}
             { right. intros H. inversion H. apply H1. assumption. }
 Qed.
+
+
+Instance eqSet : Eq set := { eqDec := eqDec }.
+
 
 (* A dependent function which given a 'nat' n and two sets xs ys as arguments,  *)
 (* returns either a proof of the (level n) inclusion 'incl_n n xs ys', or a     *)
@@ -95,3 +100,5 @@ Proof.
     - right. rewrite doubleIncl. intros [H3 H4]. apply H1. assumption.
     - right. rewrite doubleIncl. intros [H3 H4]. apply H1. assumption.
 Qed.
+
+

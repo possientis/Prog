@@ -8,6 +8,7 @@ all :							${UTILS}/LEM.vo \
 								${UTILS}/Filter.vo \
 								${UTILS}/Nat.vo \
 								${UTILS}/Fresh.vo \
+								${UTILS}/Eq.vo \
 								${UTILS}/Ord.vo \
 								${UTILS}/Sort.vo \
 								${CORE}/Set.vo \
@@ -73,7 +74,11 @@ ${UTILS}/Nat.vo : 				${UTILS}/Nat.v
 ${UTILS}/Fresh.vo :				${UTILS}/Fresh.v
 	coqc ${UTILS}/Fresh.v		${OPT} 
 
-${UTILS}/Ord.vo :				${UTILS}/Ord.v
+${UTILS}/Eq.vo :				${UTILS}/Eq.v
+	coqc ${UTILS}/Eq.v			${OPT} 
+
+${UTILS}/Ord.vo :				${UTILS}/Ord.v \
+								${UTILS}/Eq.vo
 	coqc ${UTILS}/Ord.v			${OPT} 
 
 ${UTILS}/Sort.vo :				${UTILS}/Sort.v
@@ -170,6 +175,7 @@ ${CORE}/Cons.vo :				${CORE}/Cons.v \
 ${CORE}/Decidability.vo : 		${CORE}/Decidability.v \
 								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
+								${UTILS}/Eq.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
@@ -304,6 +310,7 @@ ${CORE}/Functional.vo :			${CORE}/Functional.v \
 
 
 ${CORE}/Leq.vo :				${CORE}/Leq.v \
+								${UTILS}/Ord.v \
 								${CORE}/Set.vo \
 								${CORE}/Decidability.vo
 	coqc ${CORE}/Leq.v			${OPT} 

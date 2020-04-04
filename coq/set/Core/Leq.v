@@ -5,27 +5,28 @@ Require Import Utils.Ord.
 Require Import Core.Set.
 Require Import Core.Decidability.
 
+
 (* Ordering of syntactic representations of sets. This relation is not          *)
 (* compatible with set equality (==) and is used for normalization only.        *)
-Fixpoint leq_ (x y:set) : Prop :=
+Fixpoint leq (x y:set) : Prop :=
     match x with
     | Nil           => True
     | (Cons x xs)   =>
         match y with
         | Nil           => False
-        | (Cons y ys)   => (x <> y) /\ (leq_ x y)    (* lexicographic order     *)
-                        \/ (x = y)  /\ (leq_ xs ys)
+        | (Cons y ys)   => (x <> y) /\ (leq x y)     (* lexicographic order     *)
+                        \/ (x = y)  /\ (leq xs ys)
         end
     end.
 
 (* Strict equality between sets is decidable so leq itself is decidable.        *)
-Lemma leqDec_ : forall (x y:set), {leq_ x y} + {~leq_ x y}.
+Lemma leqDec : forall (x y:set), {leq x y} + {~leq x y}.
 Proof.
     induction x as [|x IH1 xs IH2]; intros y.
     - left. apply I.
     - destruct y as [|y ys].
         + right. simpl. unfold not. intros. contradiction.
-        + destruct (set_eq_dec x y) as [H1|H1].
+        + destruct (eqDec x y) as [H1|H1].
             { destruct (IH2 ys) as [H2|H2].
                 { left. right. split; assumption. }
                 { right. simpl. intros [[H3 H4]|[H3 H4]].
@@ -38,7 +39,7 @@ Proof.
                     { apply H1 in H3. contradiction. }}}
 Qed.
 
-Lemma leqRefl_ : forall (x:set), leq_ x x.
+Lemma leqRefl : forall (x:set), leq x x.
 Proof.
     induction x as [|x _ xs IH].
     - apply I.
@@ -47,14 +48,14 @@ Proof.
         + apply IH.
 Qed.
 
-Lemma leqxNil : forall (x:set), leq_ x Nil -> x = Nil.
+Lemma leqxNil : forall (x:set), leq x Nil -> x = Nil.
 Proof.
     intros x. destruct x as [|x xs]. 
     - intros. reflexivity.
     - simpl. intros. contradiction.
 Qed.
 
-Lemma leqASym_ : forall (x y:set), leq_ x y -> leq_ y x -> x = y.
+Lemma leqASym : forall (x y:set), leq x y -> leq y x -> x = y.
 Proof.
     induction x as [|x IH1 xs IH2].
     - intros y H1 H2. symmetry. apply leqxNil. assumption.
@@ -73,13 +74,13 @@ Proof.
 Qed.
 
 
-Lemma leqTrans_ : forall (x y z:set), leq_ x y -> leq_ y z -> leq_ x z. 
+Lemma leqTrans : forall (x y z:set), leq x y -> leq y z -> leq x z. 
 Proof.
     induction x as [|x IH1 xs IH2]; intros y z H1 H2.
     - apply I.
     - destruct z as [|z zs].
         + apply leqxNil in H2. subst. apply leqxNil in H1. inversion H1.
-        + simpl. destruct (set_eq_dec x z) as [H|H].
+        + simpl. destruct (eqDec x z) as [H|H].
             { subst. right. split.
                 { reflexivity. }
                 { destruct y as [|y ys]. 
@@ -87,7 +88,7 @@ Proof.
                     { simpl in H1. simpl in H2. 
                         destruct H1 as [[H1 H3]|[H1 H3]].
                             { destruct H2 as [[H2 H4]|[H2 H4]].
-                                { exfalso. apply H1. apply leqASym_; assumption. }
+                                { exfalso. apply H1. apply leqASym; assumption. }
                                 { exfalso. apply H1. symmetry. assumption. }}    
                             { destruct H2 as [[H2 H4]|[H2 H4]].
                                 { exfalso. apply H2. symmetry. assumption. }
@@ -103,17 +104,17 @@ Proof.
                                 { subst. assumption. }}
                             { destruct H2 as [[H2 H4]|[H2 H4]].
                                 { subst. assumption. }
-                                { subst. apply leqRefl_. }}}}}
+                                { subst. apply leqRefl. }}}}}
 Qed.                            
 
 
-Lemma leqTotal_ : forall (x y:set), leq_ x y \/ leq_ y x.
+Lemma leqTotal : forall (x y:set), leq x y \/ leq y x.
 Proof.
     induction x as [|x IH1 xs IH2]; intros y.
     - left. apply I. 
     - destruct y as [|y ys].
         + right. apply I.
-        + destruct (set_eq_dec x y) as [H|H].
+        + destruct (eqDec x y) as [H|H].
             { subst. destruct (IH2 ys) as [H|H].
                 { left. right. split.
                     { reflexivity. }
@@ -129,11 +130,10 @@ Proof.
 Qed.
 
 Instance ordSet : Ord set :=
-    { leq      := leq_
-    ; leqDec   := leqDec_
-    ; eqDec    := set_eq_dec
-    ; leqRefl  := leqRefl_
-    ; leqTrans := leqTrans_
-    ; leqAsym  := leqASym_
-    ; leqTotal := leqTotal_
+    { leq      := leq
+    ; leqDec   := leqDec
+    ; leqRefl  := leqRefl
+    ; leqTrans := leqTrans
+    ; leqAsym  := leqASym
+    ; leqTotal := leqTotal
     }. 
