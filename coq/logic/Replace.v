@@ -17,8 +17,15 @@ Definition replace (v:Type) (e:Eq v) (x y:v) (u:v) : v :=
 
 Arguments replace {v} {e} _ _ _.
 
+
+Notation "y // x" := (replace x y)
+    (at level 70, no associativity) : Replace_scope.
+
+Open Scope Replace_scope.
+
+
 Lemma replace_x_x : forall (v:Type) (e:Eq v) (x:v), 
-    replace x x = id.
+    (x // x) = id.
 Proof.
     intros v e x. apply extensionality. intro u. unfold replace.
     destruct (eqDec u x) as [H|H].
@@ -27,7 +34,7 @@ Proof.
 Qed.
 
 Lemma replace_x : forall (v:Type) (e:Eq v) (x y:v),
-    replace x y x = y.
+    (y // x) x = y.
 Proof.
     intros v e x y. unfold replace.
     destruct (eqDec x x) as [H|H].
@@ -36,7 +43,7 @@ Proof.
 Qed.
 
 Lemma replace_y : forall (v:Type) (e:Eq v) (x y:v),
-    replace x y y = y.
+    (y // x) y = y.
 Proof.
     intros v e x y. unfold replace.
     destruct (eqDec y x) as [H|H]; reflexivity.
@@ -44,7 +51,7 @@ Qed.
 
 
 Lemma replace_not_x : forall (v:Type) (e:Eq v) (x y u:v),
-    u <> x -> replace x y u = u.
+    u <> x -> (y // x) u = u.
 Proof.
     intros v e x y u H. unfold replace.
     destruct (eqDec u x) as [H'|H'].
@@ -53,7 +60,7 @@ Proof.
 Qed.
 
 Lemma replace_trans : forall (v:Type) (e:Eq v) (x y z:v) (ys:list v),
-    ~ y :: ys -> coincide ys (replace y z ; replace x y) (replace x z).
+    ~ y :: ys -> coincide ys ((z // y) ; (y // x)) (z // x).
 Proof.
     intros v e x y z ys H u H'. unfold comp.
     destruct (eqDec u x) as [Hux|Hux], 
@@ -78,7 +85,7 @@ Proof.
 Qed.
 
 Lemma replace_inj : forall (v:Type) (e:Eq v) (x y:v) (ys:list v),
-    ~ y :: ys -> injective_on ys (replace x y).
+    ~ y :: ys -> injective_on ys (y // x).
 Proof.
     intros v e x y ys Hy s t Hs Ht H.
     destruct (eqDec s x) as [Hsx|Hsx], (eqDec t x) as [Htx|Htx]; subst.

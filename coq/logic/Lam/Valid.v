@@ -224,7 +224,7 @@ Proof.
 Qed.
 
 Lemma valid_replace : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
-    ~ y :: var t -> valid (replace x y) t.
+    ~ y :: var t -> valid (y // x) t.
 Proof.
     intros v e x y t H. apply valid_inj. apply replace_inj. assumption.
 Qed.

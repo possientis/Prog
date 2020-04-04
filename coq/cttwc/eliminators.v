@@ -185,17 +185,49 @@ Qed.
 
 Print L15.
 
+
+Definition subst2 (a:Type) (p:a -> Prop) (x y:a) (e:x = y) (px: p x) : p y.
+Proof.
+   rewrite <- e. assumption. 
+Qed.
+
+Definition subst1 (a:Type) (p:a -> Prop) (x y:a) (e:x = y) (px: p x) : p y.
+Proof.
+refine (
+    match e with
+    | eq_refl _ => px
+    end
+).
+Defined.
+
+Definition subst : forall (a:Type) (p:a -> Prop) (x y:a), x = y -> p x -> p y :=
+    fun (a:Type) (p:a -> Prop) (x y:a) (e:x = y) (px:p x) =>
+        match e with
+        | eq_refl _ => px
+        end.
+
+Definition boolFalse : false = true -> False :=
+    fun (e:false = true) => 
+        subst bool (fun (b:bool) => if b then False else True) false true e I.
+
+Definition contradiction : forall (p:Prop), False -> p :=
+    fun (p:Prop) (H:False) => match H with end.
+
 (*
 Definition L16 : forall (x y:bool), and x y = true <-> x = true /\ y = true.
 Proof.
     refine (fun (x y:bool) => conj
-        (fun (H:and x y = true)       => conj
-            _
-            _)
-
-        (fun (H:x = true /\ y = true) => _)
+        (fun (H:and x y = true)       => 
+            match x as b return (if b then y else false) = true -> b = true /\ y = true with
+            | true  => fun (H1:y = true) => conj (eq_refl true) H1
+            | false => fun (H1:false = true) => conj H1 (contradiction _ (boolFalse H1))
+            end H)
+        (fun (H:x = true /\ y = true) => 
+            match H with 
+            | conj H1 H2 => _
+            end)
 ).
 
 Show.
-
 *)
+

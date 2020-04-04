@@ -1,5 +1,4 @@
 Require Import List.
-Import ListNotations.
 
 Require Import In.
 Require Import Eq.
@@ -24,7 +23,7 @@ Require Import Lam.Congruence.
 (* from the list of free variables of the subterm, hence decidable equality.    *)
 Fixpoint free (v:Type) (e:Eq v) (t:T v) : list v :=
     match t with
-    | Var x         => [x]
+    | Var x         => (cons x nil)
     | App t1 t2     => free v e t1 ++ free v e t2
     | Lam x t1      => remove x (free v e t1)
     end.
@@ -84,7 +83,7 @@ Qed.
 Lemma free_replace1 : forall (v:Type) (e:Eq v) (t:T v) (x y:v), 
     ~ y :: var t    -> 
     ~ x :: free t   -> 
-    free (fmap (replace x y) t) = free t.
+    free (fmap (y // x) t) = free t.
 Proof.
     intros v e t x y Hy Hx. 
     rewrite (free_inj v v e e).
@@ -100,7 +99,7 @@ Lemma free_replace2 : forall (v:Type) (e:Eq v) (t:T v) (x y:v),
     ~ y :: var t  ->
       x :: free t -> 
      forall (z:v), 
-        z :: free (fmap (replace x y) t) <-> 
+        z :: free (fmap (y // x) t) <-> 
         z = y \/ (z :: free t) /\ z <> x. 
 Proof.
     intros v e t x y Hy Hx z. rewrite (free_inj v v e e). split.

@@ -27,8 +27,62 @@ a well-defined arrow in \Dat.
     definition~(\ref{Nat:def:natural}). As noted above, since
     $\alpha(a):F(a)\to G(a)$ and $\beta(a):G(a)\to H(a)$, the expression
     $\beta(a)\circ\alpha(a)$ is a well-defined arrow in \Dat\ and 
-    $(\beta\circ\alpha)(a)$ is therefore well-defined for all
-    $a\in\Cat$. So $\beta\circ\alpha$ is indeed a map defined on $\ob\ \Cat$.
-    TODO
+    $(\beta\circ\alpha)(a)$ is thus well-defined for all
+    $a\in\Cat$. So $\beta\circ\alpha$ is a map defined on $\ob\ \Cat$.
+    
+    $(1)$: We need to check that $(\beta \circ \alpha)(a) : F(a) \to H(a)$
+    for all $a\in\Cat$, which is clear since $(\beta\circ\alpha)(a)=
+    \beta(a)\circ\alpha(a)$, $\alpha(a):F(a)\to G(a)$ and 
+    $\beta(a):G(a)\to H(a)$.
+
+    $(2)$: We need $H(f)\circ(\beta\circ\alpha)(a)=
+    (\beta\circ\alpha)(b)\circ F(f)$ for all $a,b\in\Cat$ and $f:a\to b$,
+    which goes as follows:
+        \begin{eqnarray*}H(f)\circ(\beta\circ\alpha)(a)
+            &=&H(f)\circ(\beta(a)\circ\alpha(a))
+            \ \leftarrow\ \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\\
+            \mbox{$\circ$ associative in \Dat}\ \to\ 
+            &=&(H(f)\circ\beta(a))\circ\alpha(a)\\
+            \mbox{$(2)$ of def.~(\ref{Nat:def:natural})}, \beta:G\Rightarrow H
+            \ \to\
+            &=&(\beta(b)\circ G(f))\circ\alpha(a)\\
+            \mbox{$\circ$ associative in \Dat}\ \to\ 
+            &=&\beta(b)\circ (G(f)\circ\alpha(a))\\
+            \mbox{$(2)$ of def.~(\ref{Nat:def:natural})}, \alpha:F\Rightarrow G
+            \ \to\
+            &=&\beta(b)\circ (\alpha(b)\circ F(f))\\
+            \mbox{$\circ$ associative in \Dat}\ \to\ 
+            &=&(\beta(b)\circ\alpha(b))\circ F(f)\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&(\beta\circ\alpha)(b)\circ F(f)\\
+        \end{eqnarray*}
 \end{proof}
+
+
+\noindent
+{\bf Remark}: Showing that $\beta\circ\alpha$ is a natural transformation is
+essentially about proving the equality $H(f)\circ\beta(a)\circ\alpha(a)=
+\beta(b)\circ\alpha(b)\circ F(f)$, where we no longer care about brackets
+as composition is associative in \Dat. Informally, this equality amounts
+to saying that the big rectangle below commutes:
+    \[
+        \begin{tikzcd}
+            a\arrow[d,swap, "f"]
+            &F(a)\arrow[r, "\alpha(a)"]\arrow[d, swap,"F(f)"]
+            &G(a)\arrow[r,"\beta(a)"]\arrow[d, "G(f)"]
+            &H(a)\arrow[d, "H(f)"]
+            \\
+            b
+            &F(b)\arrow[r, swap, "\alpha(b)"]
+            &G(b)\arrow[r, swap, "\beta(b)"]
+            &H(b)
+        \end{tikzcd}
+    \]
+We formally proved the commutativity of this rectangle using the
+commutativity of the individual squares. Forgetting about associativity details:
+    \[
+        H(f)\circ\beta(a)\circ\alpha(a)=\beta(b)\circ G(f)\circ\alpha(a)
+        =\beta(b)\circ \alpha(b)\circ F(f)
+    \]
+We obtain a proof which is a lot simpler.
 

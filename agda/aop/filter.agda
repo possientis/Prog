@@ -60,6 +60,10 @@ filter {a} p = concat ∘ map (p ~> wrap , nilp)
 ⟨ f , g ⟩ x = (f x , g x)
 
 
+_⊕_ : ∀ {a₁ a₂ b₁ b₂ : Set} → (a₁ → b₁) → (a₂ → b₂) → a₁ × a₂ → b₁ × b₂
+(f₁ ⊕ f₂) (x₁ , x₂) = (f₁ x₁ , f₂ x₂)
+
+
 -- concat : List (List a) → List a is a natural transformation concat : List² ⇒ List
 concatNat : ∀ {a b : Set} → {f : a → b} → map f ∘ concat ≡ concat ∘ map (map f)
 concatNat {a} {b} = extensionality k
@@ -169,8 +173,28 @@ id-map {ℓ} {a} = extensionality k
         x ∷ xs
         ∎
 
-zip' : {a b : Set} → List a × List b → List (a × b)
+zip' : ∀ {a b : Set} → List a × List b → List (a × b)
 zip' = uncurry zip
+
+-- zip' is a natural transformation : (×) ∘ (List × List) ⇒ List ∘ (×)
+-- zip' : List a₁ × List a₂ → List (a₁ × a₂)
+zipNat : ∀ {a₁ a₂ b₁ b₂ : Set} → {f₁ : a₁ → b₁} → {f₂ : a₂ → b₂} →
+  map (f₁ ⊕ f₂) ∘ zip' ≡ zip' ∘ (map f₁ ⊕ map f₂)
+zipNat {a₁} {a₂} {b₁} {b₂} {f₁} {f₂} = extensionality k
+  where
+    k : ∀ (xs : List a₁ × List a₂) →
+      (map (f₁ ⊕ f₂) ∘ zip') xs ≡ (zip' ∘ (map f₁ ⊕ map f₂)) xs
+    k ([] , ys) = refl
+    k (x ∷ xs , []) = refl
+    k (x ∷ xs , y ∷ ys) =
+      begin
+        (map (f₁ ⊕ f₂) ∘ zip') (x ∷ xs , y ∷ ys)
+        ≡⟨⟩
+        map (f₁ ⊕ f₂) (zip' (x ∷ xs , y ∷ ys))
+        ≡⟨⟩
+        map (f₁ ⊕ f₂) ((x , y) ∷ zip' (xs , ys))
+        ≡⟨⟩
+        {!!}
 
 L1 : ∀ {a : Set} → {p : a → Bool} →
   map proj₁ ∘ filter proj₂ ∘ zip' ∘ ⟨ id , map p ⟩ ≡ filter p

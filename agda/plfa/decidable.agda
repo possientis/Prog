@@ -2,7 +2,7 @@ module decidable where
 
 import Relation.Binary.PropositionalEquality as Eq
 
-open        Eq                        using (_≡_; refl)
+open        Eq                        using (_≡_; refl; sym; cong)
 open import Data.Nat                  using (ℕ; zero; suc; _≤_; z≤n; s≤s)
 open import Data.Sum                  using (_⊎_; inj₁; inj₂)
 open import Data.Unit                 using (⊤; tt)
@@ -93,3 +93,49 @@ _ = refl
 
 _ : 4 ≤? 2 ≡ no (¬s≤s (¬s≤s ¬s≤z))
 _ = refl
+
+¬n<z : ∀ {n : ℕ} → ¬ (n < zero)
+¬n<z ()
+
+¬s<s : ∀ {m n : ℕ} → ¬ m < n → ¬ (suc m) < (suc n)
+¬s<s ¬m<n (s<s m<n) = ¬m<n m<n
+
+_<?_ : ∀ (m n : ℕ) → Dec (m < n)
+m <? zero  = no ¬n<z
+zero <? suc n = yes z<s
+suc m <? suc n with m <? n
+(suc m <? suc n) | yes m<n = yes (s<s m<n)
+(suc m <? suc n) | no ¬m<n = no (¬s<s ¬m<n)
+
+¬z≡s : ∀ {n : ℕ} → ¬ zero ≡ suc n
+¬z≡s ()
+
+¬s≡s : ∀ {m n : ℕ} → ¬ m ≡ n → ¬ (suc m) ≡ (suc n)
+¬s≡s ¬m≡n refl = ¬m≡n refl
+
+_≡ℕ?_ : ∀ (m n : ℕ) → Dec (m ≡ n)
+zero ≡ℕ? zero = yes refl
+zero ≡ℕ? suc n = no ¬z≡s
+suc m ≡ℕ? zero = no (λ{s≡z → ¬z≡s (sym s≡z)})
+suc m ≡ℕ? suc n with m ≡ℕ? n
+(suc m ≡ℕ? suc n) | yes m≡n = yes (cong suc m≡n)
+(suc m ≡ℕ? suc n) | no ¬m≡n = no (¬s≡s ¬m≡n)
+
+
+_≤?'_ : ∀ (m n : ℕ) → Dec (m ≤ n)
+m ≤?' n with m ≤b n | ≤b→≤ m n | ≤→≤b {m} {n}
+(m ≤?' n) | true  | q | _ = yes (q tt)
+(m ≤?' n) | false | _ | r = no r
+
+-- erasure: discards the proof
+⌞_⌟ : ∀ {a : Set} → Dec a → Bool
+⌞ yes _ ⌟ = true
+⌞ no _ ⌟ = false
+
+
+_≤b'_ : ∀ (m n : ℕ) → Bool
+m ≤b' n = ⌞ m ≤? n ⌟
+
+-- proving correctness of _≤b'_ not that simple
+L1 : ∀ (m n : ℕ) → (m ≤b n) ≡ (m ≤b' n)
+L1 m n = {!!}

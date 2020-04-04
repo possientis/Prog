@@ -61,18 +61,18 @@ Proof.
 Qed.
 
 Lemma var_permute_replace : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
-    ~ y :: var t -> fmap (replace x y) t = fmap (permute x y) t.
+    ~ y :: var t -> fmap (y // x) t = fmap (y <:> x) t.
 Proof.
     intros v e x y t H. apply var_support, permute_replace. assumption.
 Qed.
 
 Lemma var_replace_trans : forall (v:Type) (e:Eq v) (x y z:v) (t:T v),
     ~ y :: var t -> 
-    fmap (replace y z) (fmap (replace x y) t) = fmap (replace x z) t.
+    fmap (z // y) (fmap (y // x) t) = fmap (z // x) t.
 Proof.
     intros v e x y z t H. 
-    remember (replace y z) as g eqn:Eg. 
-    remember (replace x y) as f eqn:Ef. 
+    remember (z // y) as g eqn:Eg. 
+    remember (y // x) as f eqn:Ef. 
     fold ((fmap g ; fmap f) t). rewrite <- fmap_comp. 
     apply var_support.
     rewrite Eg, Ef. apply replace_trans.
@@ -81,7 +81,7 @@ Qed.
     
 
 Lemma var_replace_remove : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
-    x <> y -> ~ x :: var (fmap (replace x y) t).
+    x <> y -> ~ x :: var (fmap (y // x) t).
 Proof.
     intros v e x y t E H. rewrite var_fmap in H.
     apply mapIn in H. destruct H as [u [H1 H2]].

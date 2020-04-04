@@ -1,1 +1,2 @@
-agda: filter, something is wrong with zip !
+agda: filter: zipConcat
+

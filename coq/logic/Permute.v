@@ -21,9 +21,14 @@ Definition permute (v:Type) (e:Eq v) (x y:v) (u:v) : v :=
 
 Arguments permute {v} {e} _ _ _.
 
+Notation "x <:> y" := (permute y x)
+    (at level 70, no associativity) : Permute_scope.
+
+Open Scope Permute_scope.
+
 
 Lemma permute_comp : forall (v w:Type) (e:Eq v) (e':Eq w) (x y:v) (f:v -> w),
-    injective f -> f ; (permute x y) = permute (f x) (f y) ; f.
+    injective f -> f ; (y <:> x) = (f y <:> f x) ; f.
 Proof.
     intros v w e e' x y f I. apply extensionality. 
     intros u. unfold permute, comp.
@@ -49,7 +54,7 @@ Qed.
 
 
 Lemma permute_replace : forall (v:Type) (e:Eq v) (x y:v) (ys: list v),
-    ~ y :: ys -> coincide ys (replace x y) (permute x y).
+    ~ y :: ys -> coincide ys (y // x) (y <:> x).
 Proof.
     intros v e x y ys H. unfold coincide. intros u H'.
     destruct    (eqDec u x) as [Hux|Hux] eqn:Eux, 

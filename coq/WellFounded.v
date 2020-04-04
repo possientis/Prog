@@ -397,14 +397,4 @@ Defined.
 Check nat_total_order.
 Check @exist.
 
-Definition Fac : nat -> nat :=
-    fix f (n:nat) : nat :=
-        match n with
-        | 0     => 1
-        | S p   => S p * f p
-        end.
-
-Definition Dum : nat -> nat :=
-    fix f (n:nat) : nat := f n.
-
 

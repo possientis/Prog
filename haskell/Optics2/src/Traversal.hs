@@ -2,7 +2,7 @@ module  Traversal
     (   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10
     ,   ex11, ex12, ex13, ex14, ex15, ex16, ex17, ex18, ex19, ex20
     ,   ex21, ex22, ex23, ex24, ex25, ex26, ex27, ex28, ex29, ex30
-    ,   ex31, ex32
+    ,   ex31, ex32, ex33, ex34, ex35, ex36
     )   where
 
 import Data.Char        (toUpper)
@@ -174,3 +174,24 @@ ex31 = [0,1,2,3,4] ^? elementOf traversed 2
 
 ex32 :: Maybe Int
 ex32 = [[0,1,2],[3,4],[5,6,7,8]] ^? elementOf (traversed . traversed) 6
+
+ex33 :: [[Int]]
+ex33 = [[0,1,2],[3,4],[5,6,7,8]] & elementOf (traversed . traversed) 6 %~ (*100)
+
+
+ex34 :: String
+ex34 = "blue suede shoes" & worded . taking 1 traversed %~ toUpper
+
+ex35 :: [String]
+ex35 = ["short","really long"]
+     & traversed 
+     . filtered ((>5) . length)
+     . worded 
+     %~ \s -> "*" ++ s ++ "*"
+
+ex36 :: ((String,Int),(String,Int),(String,Int))
+ex36 = (("Ritchie",100000), ("Archie",32), ("Reggie",4350))
+     & each 
+     . filtered ((> 1000) . snd)
+     . _1
+     %~ ("Rich " ++)
