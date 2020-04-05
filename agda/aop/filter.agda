@@ -55,6 +55,8 @@ wrapNat {a} {b} f = extensionality k
 filter : ∀ {a : Set} → (a → Bool) → List a → List a
 filter {a} p = concat ∘ map (p ~> wrap , nilp)
 
+zip' : ∀ {a b : Set} → List a × List b → List (a × b)
+zip' = uncurry zip
 
 ⟨_,_⟩ : ∀ {a b c : Set} → (a → b) → (a → c) → a → b × c
 ⟨ f , g ⟩ x = (f x , g x)
@@ -63,6 +65,39 @@ filter {a} p = concat ∘ map (p ~> wrap , nilp)
 _⊕_ : ∀ {a₁ a₂ b₁ b₂ : Set} → (a₁ → b₁) → (a₂ → b₂) → a₁ × a₂ → b₁ × b₂
 (f₁ ⊕ f₂) (x₁ , x₂) = (f₁ x₁ , f₂ x₂)
 
+Δ : ∀ {a : Set} → a → a × a
+Δ x = (x , x)
+
+⊕∘Δ : ∀ {a b c : Set} → {f : a → b} → {g : a → c} → (f ⊕ g) ∘ Δ ≡ ⟨ f , g ⟩
+⊕∘Δ {a} {b} {c} {f} {g} = extensionality k
+  where
+    k : ∀ (x : a) → ((f ⊕ g) ∘ Δ) x ≡ ⟨ f , g ⟩ x
+    k x = refl
+
+map-⊕-zip-Δ : ∀ {a b c : Set} → {f : a → b} → {g : a → c} →
+  map (f ⊕ g) ∘ zip' ∘ Δ ≡ map ⟨ f , g ⟩
+
+map-⊕-zip-Δ {a} {b} {c} {f} {g} = extensionality k
+  where
+    k : ∀ (xs : List a) → (map (f ⊕ g) ∘ zip' ∘ Δ) xs ≡ map ⟨ f , g ⟩ xs
+    k [] = refl
+    k (x ∷ xs) =
+      begin
+        (map (f ⊕ g) ∘ zip' ∘ Δ) (x ∷ xs)
+        ≡⟨⟩
+        map (f ⊕ g) (zip' (Δ (x ∷ xs)))
+        ≡⟨⟩
+        map (f ⊕ g) (zip' (x ∷ xs , x ∷ xs))
+        ≡⟨⟩
+        map (f ⊕ g) ((x , x) ∷ zip' (xs , xs))
+        ≡⟨⟩
+        (f ⊕ g) (x , x) ∷ map (f ⊕ g) (zip' (xs , xs))
+        ≡⟨⟩
+        (f x , g x) ∷ map (f ⊕ g) (zip' (Δ xs))
+        ≡⟨⟩
+        (f x , g x) ∷ (map (f ⊕ g) ∘ zip' ∘ Δ) xs
+        ≡⟨⟩
+        {!!}
 
 -- concat : List (List a) → List a is a natural transformation concat : List² ⇒ List
 concatNat : ∀ {a b : Set} → {f : a → b} → map f ∘ concat ≡ concat ∘ map (map f)
@@ -173,8 +208,6 @@ id-map {ℓ} {a} = extensionality k
         x ∷ xs
         ∎
 
-zip' : ∀ {a b : Set} → List a × List b → List (a × b)
-zip' = uncurry zip
 
 -- zip' is a natural transformation : (×) ∘ (List × List) ⇒ List ∘ (×)
 -- zip' : List a₁ × List a₂ → List (a₁ × a₂)
@@ -194,7 +227,28 @@ zipNat {a₁} {a₂} {b₁} {b₂} {f₁} {f₂} = extensionality k
         ≡⟨⟩
         map (f₁ ⊕ f₂) ((x , y) ∷ zip' (xs , ys))
         ≡⟨⟩
-        {!!}
+        (f₁ ⊕ f₂) (x , y) ∷ map (f₁ ⊕ f₂) (zip' (xs , ys))
+        ≡⟨⟩
+        (f₁ ⊕ f₂) (x , y) ∷ (map (f₁ ⊕ f₂) ∘ zip') (xs , ys)
+        ≡⟨ cong ((f₁ ⊕ f₂) (x , y) ∷_) (k ((xs , ys))) ⟩
+        (f₁ ⊕ f₂) (x , y) ∷ (zip' ∘ (map f₁ ⊕ map f₂)) (xs , ys)
+        ≡⟨⟩
+        (f₁ ⊕ f₂) (x , y) ∷ zip' ((map f₁ ⊕ map f₂) (xs , ys))
+        ≡⟨⟩
+        (f₁ ⊕ f₂) (x , y) ∷ zip' (map f₁ xs , map f₂ ys)
+        ≡⟨⟩
+        (f₁ x , f₂ y) ∷ zip' (map f₁ xs , map f₂ ys)
+        ≡⟨⟩
+        zip' (f₁ x ∷ map f₁ xs , f₂ y ∷ map f₂ ys)
+        ≡⟨⟩
+        zip' (map f₁ (x ∷ xs) , map f₂ (y ∷ ys))
+        ≡⟨⟩
+        zip' ((map f₁ ⊕ map f₂) (x ∷ xs , y ∷ ys))
+        ≡⟨⟩
+        (zip' ∘ (map f₁ ⊕ map f₂)) (x ∷ xs , y ∷ ys)
+        ∎
+
+
 
 L1 : ∀ {a : Set} → {p : a → Bool} →
   map proj₁ ∘ filter proj₂ ∘ zip' ∘ ⟨ id , map p ⟩ ≡ filter p

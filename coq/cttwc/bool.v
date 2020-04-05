@@ -213,7 +213,19 @@ Definition boolFalse : false = true -> False :=
 Definition contradiction : forall (p:Prop), False -> p :=
     fun (p:Prop) (H:False) => match H with end.
 
-(*
+
+Definition subst2d : forall (a:Type) (p:a -> a -> Prop) (x x' y y':a),
+    x = x' -> y = y' -> p x y -> p x' y' :=
+    fun (a:Type) (p:a -> a -> Prop) (x x' y y':a) =>
+        fun (ex:x = x') (ey:y = y') (pxy:p x y) =>
+            match ex with
+            | eq_refl _ =>
+                match ey with
+                | eq_refl _ => pxy
+                end
+            end.  
+
+
 Definition L16 : forall (x y:bool), and x y = true <-> x = true /\ y = true.
 Proof.
     refine (fun (x y:bool) => conj
@@ -224,10 +236,11 @@ Proof.
             end H)
         (fun (H:x = true /\ y = true) => 
             match H with 
-            | conj H1 H2 => _
+            | conj H1 H2 => 
+                subst2d bool (fun x y => and x y = true) 
+                    true x true y (eq_sym H1) (eq_sym H2) (eq_refl true)
             end)
 ).
+Qed.
 
-Show.
-*)
 

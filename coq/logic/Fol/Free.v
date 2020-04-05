@@ -104,36 +104,35 @@ Proof.
     intros v e p x y Hy Hx z. rewrite (free_inj v v e e). split.
     - intros H. destruct (eqDec z y) as [Hzy|Hzy]. 
         + left. assumption.
-        + right. apply mapIn in H. destruct H as [u [H1 H2]]. split.
+        + right. apply in_map_iff in H. destruct H as [u [H1 H2]]. split.
             { destruct (eqDec u x) as [Hux|Hux].
-                { rewrite Hux, replace_x in H2. exfalso.
-                  apply Hzy. assumption.
+                { rewrite Hux, replace_x in H1. exfalso.
+                  apply Hzy. symmetry. assumption.
                 }
-                { rewrite replace_not_x in H2.
-                    { rewrite H2. assumption. }
+                { rewrite replace_not_x in H1.
+                    { rewrite <- H1. assumption. }
                     { assumption. }
                 }
             }
-            { intros Hzx. rewrite Hzx in H2.
+            { intros Hzx. rewrite Hzx in H1.
               destruct (eqDec u x) as [Hux|Hux].
-                { rewrite Hux, replace_x, <- Hzx in H2.
-                  apply Hzy. assumption.
+                { rewrite Hux, replace_x, <- Hzx in H1.
+                  apply Hzy. symmetry. assumption.
                 }
-                { rewrite replace_not_x in H2.
-                    { apply Hux. symmetry. assumption. }
+                { rewrite replace_not_x in H1.
+                    { apply Hux. assumption. }
                     { assumption. }
                 }
             }
-    - intros [H|[H1 H2]]; apply mapIn.
+   - intros [H|[H1 H2]]; apply in_map_iff.
         + exists x. split.
+            { rewrite replace_x. symmetry. assumption. }
             { assumption. }
-            { rewrite replace_x. assumption. }
         + exists z. split.
-            { assumption. }
             { rewrite replace_not_x.
                 { reflexivity. }
-                { assumption. }
-            }
+                { assumption. }}
+            { assumption. }
     - apply replace_inj. assumption.
 Qed.
 
@@ -151,5 +150,4 @@ Proof.
         + intros p1 p2 q1 q2 H1 H2. simpl. rewrite H1, H2. reflexivity.
         + intros x p1 q1 H1. simpl. rewrite H1. reflexivity.
 Qed.
-
 

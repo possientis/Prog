@@ -9,4 +9,11 @@ Definition replace' (v:Type) (e:Eq v) (x:v) (t:T v) (u:v) : T v :=
     | right _   => Var u
     end.
 
-Arguments replace' {v}.
+Arguments replace' {v} {e}.
+
+Notation "t // x" := (replace' x t)
+    (at level 70, no associativity) : BetaReplace_scope.
+
+Open Scope BetaReplace_scope.
+
+

@@ -188,12 +188,11 @@ Proof.
                 { simpl. apply remove_x_gone. }
               assert (f y :: free (fmap f (All x p1))) as Ey. 
                 { rewrite H.
-                    { apply mapIn. exists y. split.
-                        { assumption. }
-                        { reflexivity. }}
+                    { apply in_map_iff. exists y. split.
+                        { reflexivity. }
+                        { assumption. }}
                     { left. reflexivity. }}
-              rewrite <- H2 in Ey. apply Ex. assumption. 
-            }
+              rewrite <- H2 in Ey. apply Ex. assumption. }
 Qed.
 
 Lemma valid_inj : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (q:P v),
@@ -257,10 +256,10 @@ Proof.
         + rewrite valid_free in Hf. rewrite Hf.
             { rewrite map_map. reflexivity. }
             { assumption. }
-        + rewrite Sub_fmap. apply mapIn.   
+        + rewrite Sub_fmap. apply in_map_iff.
           exists p. split.
-            { assumption. }
             { reflexivity. }
+            { assumption. }
     - intros H. assert (valid f q) as H'.
         { revert H. induction q as [|x y|p1 IH1 p2 IH2|x p1 IH1]; intros H.
             + apply valid_bot.
@@ -278,8 +277,8 @@ Proof.
         + assumption.
         + apply valid_free. intros p' H1. 
           rewrite Sub_fmap in H1.
-          rewrite mapIn in H1. destruct H1 as [p [H1 H2]].
-          rewrite H2. fold (comp (fmap g) (fmap f) p). 
+          rewrite in_map_iff in H1. destruct H1 as [p [H1 H2]]. 
+          rewrite <- H1. fold (comp (fmap g) (fmap f) p). 
           rewrite <- fmap_comp. rewrite valid_free in H. 
           rewrite H.
             { unfold comp. rewrite <- map_map. rewrite valid_free in H'. 
@@ -307,7 +306,6 @@ Proof.
         }
     rewrite <- H3, <- H4. apply H'; assumption.
 Qed.
-
 
 Lemma valid_bnd : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (q:P v),
     (exists (xs:list v), 

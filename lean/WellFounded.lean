@@ -316,3 +316,12 @@ def WFRecursion_F : ∀ {α : Type u} (r : α → α → Prop) (c : α → Type 
 
 #check @well_founded.fix -- counterpart of Fix in Coq
 
+
+def WFRecursion : ∀ {α:Type u} (r : α → α → Prop),
+  WellFounded r →
+  ∀ (c : α → Type u),
+  (∀ (x:α), (∀ (y:α), r y x → c y) → c x) →
+  ∀ (x:α), c x :=
+    λ (α:Type u) (r:α → α → Prop) (H:WellFounded r) (c:α → Type u),
+      λ (IH:∀ (x:α), (∀ (y:α), r y x → c y) → c x),
+        λ (x:α), WFRecursion_F r c IH x (H x)

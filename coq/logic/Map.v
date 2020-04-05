@@ -5,22 +5,15 @@ Require Import In.
 Lemma mapIn : forall (v w:Type) (f:v -> w) (y:w) (xs:list v),
     y :: map f xs <-> exists (x:v), x :: xs /\ y = f x.
 Proof.
-    intros v w f y xs. split. 
-    - induction xs as [|x xs IH]; simpl.
-        + intros H. exfalso. assumption.
-        +  intros [H|H]. 
-            { exists x. split.
-                { left. reflexivity. }
-                { symmetry. assumption. }
-            }
-            { apply IH in H. destruct H as [x' [H1 H2]]. 
-              exists x'. split.
-                { right. assumption. }
-                { assumption. }
-            }
-    - induction xs as [|x xs IH]; simpl.
-        + intros [x [H1 H2]]. assumption.
-        + intros [z [[H1|H1] H2]].
-            { subst. left. reflexivity. }
-            { right. apply IH. exists z. split; assumption. }
+    intros v w f y xs. split; intros H.
+    - rewrite in_map_iff in H. destruct H as [x [H1 H2]].
+      exists x. split.
+        + assumption.
+        + symmetry. assumption.
+    - apply in_map_iff. destruct H as [x [H1 H2]].
+      exists x. split.
+        + symmetry. assumption.
+        + assumption.
 Qed.
+
+

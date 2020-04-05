@@ -1,0 +1,24 @@
+In this section, given two categories \Cat\ and \Dat, we define a new 
+category denoted $[\Cat,\Dat]$ and called the {\em functor category between
+\Cat\ and \Dat}. Heuristically, the functor category between \Cat\ and \Dat\
+is the category in which the objects are the functors between \Cat\ and \Dat,
+and the arrows are the natural transformations between them.
+\begin{defin}\label{Nat:def:functor:category}
+    We call {\em functor category between the categories \Cat\ and \Dat}, 
+    the category denoted $[\Cat,\Dat]$ and  defined by 
+    $[\Cat,\Dat]=(\ob,\arr,\dom,\cod,\id,\circ)$ where:
+        \begin{eqnarray*}
+            (1)&\ &\ob=\{\ F\ |\ F:\Cat\to\Dat\ \}\\
+            (2)&\ &\arr=\{\ (F,G,\alpha)\ |\ F\,,\,G:\Cat\to\Dat\ 
+            \mbox{and}\ \alpha:F\Rightarrow G\ \}\\
+            (3)&\ &\dom\,(F,G,\alpha)=F\\
+            (4)&\ &\cod\,(F,G,\alpha)=G\\
+            (5)&\ &\id(F)=(F,F,\iota_{F})\\
+            (6)&\ &(G,H,\beta)\circ(F,G,\alpha)=(F,H,\beta\circ\alpha)
+        \end{eqnarray*}
+    where $(3)-(6)$ hold for all functors $F,G,H:\Cat\to\Dat$ and natural
+    transformations $\alpha:F\Rightarrow G$ and $\beta:G\Rightarrow H$,
+    $\iota_{F}:F\Rightarrow F$ is the identify natural transformation 
+    of definition~(\ref{Nat:def:identity}) and $\beta\circ\alpha$ is the
+    composition of $\beta$ and $\alpha$ of definition~(\ref{Nat:def:composition}).
+\end{defin}

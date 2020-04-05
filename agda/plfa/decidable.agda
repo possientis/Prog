@@ -136,6 +136,22 @@ m ≤?' n with m ≤b n | ≤b→≤ m n | ≤→≤b {m} {n}
 _≤b'_ : ∀ (m n : ℕ) → Bool
 m ≤b' n = ⌞ m ≤? n ⌟
 
+L0 : ∀ {b : Bool} → ¬ b ≡ true → b ≡ false
+L0 {true} ¬btrue = contradiction refl ¬btrue
+L0 {false} ¬btrue = refl
+
 -- proving correctness of _≤b'_ not that simple
 L1 : ∀ (m n : ℕ) → (m ≤b n) ≡ (m ≤b' n)
-L1 m n = {!!}
+L1 zero n = refl
+L1 (suc m) zero = refl
+L1 (suc m) (suc n) with m ≤? n | ≤→≤b | ≤b→≤
+L1 (suc m) (suc n) | yes x | q | _ = T→≡ (m ≤b n) (q x)
+L1 (suc m) (suc n) | no x  | _ | q = L0 (λ{p → x (q m n (≡→T p))})
+
+toWitness : ∀ {a : Set} {d : Dec a} → T ⌞ d ⌟ → a
+toWitness {a} {yes p} _ = p
+
+fromWitness : ∀ {a : Set} {d : Dec a} → a → T ⌞ d ⌟
+fromWitness {a} {yes _} x = tt
+fromWitness {a} {no ¬p} p = ¬p p
+

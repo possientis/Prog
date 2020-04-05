@@ -397,4 +397,13 @@ Defined.
 Check nat_total_order.
 Check @exist.
 
-
+Definition fac : nat -> nat.
+Proof.
+refine (WFRecursion nat lt LtWellFounded (fun _ => nat)
+    (fun (n:nat) => 
+        match n as n' return (forall (m:nat), m < n' -> nat) -> nat with
+        | 0   => (fun _ => 1)
+        | S p => _
+        end
+)).
+Show.
