@@ -24,7 +24,7 @@ Fixpoint sort (a:Type) (o:Ord a) (xs:list a) : list a :=
 
 Arguments sort {a} {o}.
 
-(* 'Sorted' means by decreasing order                                           *)
+(* 'Sorted' means by decreasing order: need Ord instance for 'leq'              *)
 Inductive Sorted (a:Type) (o:Ord a) : list a -> Prop :=
 | SortedNil    : Sorted a o nil
 | SortedSingle : forall (x:a), Sorted a o (cons x nil)
@@ -69,7 +69,7 @@ Qed.
 (* Sorting a list leads to a sorted list.                                       *)
 Lemma sortSorted : forall (a:Type) (o:Ord a) (xs:list a), Sorted (sort xs).
 Proof.
-    intros a o. induction xs as [|x xs IH].
-    - simpl. constructor.
-    - simpl. apply insertSorted. assumption.
+    intros a o. induction xs as [|x xs IH]; simpl.
+    - constructor.
+    - apply insertSorted. assumption.
 Qed.

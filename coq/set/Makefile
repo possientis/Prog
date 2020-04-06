@@ -11,6 +11,7 @@ all :							${UTILS}/LEM.vo \
 								${UTILS}/Eq.vo \
 								${UTILS}/Ord.vo \
 								${UTILS}/Sort.vo \
+								${UTILS}/Nub.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
@@ -81,8 +82,14 @@ ${UTILS}/Ord.vo :				${UTILS}/Ord.v \
 								${UTILS}/Eq.vo
 	coqc ${UTILS}/Ord.v			${OPT} 
 
-${UTILS}/Sort.vo :				${UTILS}/Sort.v
+${UTILS}/Sort.vo :				${UTILS}/Sort.v \
+								${UTILS}/Ord.vo
 	coqc ${UTILS}/Sort.v		${OPT} 
+
+${UTILS}/Nub.vo :				${UTILS}/Nub.v \
+								${UTILS}/Eq.vo
+	coqc ${UTILS}/Nub.v			${OPT} 
+
 
 ${CORE}/Set.vo : 				${CORE}/Set.v
 	coqc ${CORE}/Set.v			${OPT} 
