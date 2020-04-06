@@ -1,6 +1,7 @@
 Require Import Lt.
 Require Import Le.
 Require Import Peano_dec.
+Require Import Wf_nat.
 
 
 Definition LEM   : Prop := forall (A:Prop), A \/ ~A.
@@ -36,12 +37,12 @@ Proof.
           apply le_lt_or_eq in H. destruct H as [H|H].
             { apply LessThanAccIsAcc with n; assumption. }
             { apply H' in H. contradiction. }
-Qed.
+Defined.
 
 Lemma LtWellFounded : WellFounded lt.
 Proof.
     unfold WellFounded. intros n. apply AllNatsAccessible.
-Qed.
+Defined. (* rather than 'Qed', will make proofs easier later                    *)
 
 
 (* Using Coq's primitives                                                       *)
@@ -63,13 +64,7 @@ Proof.
           apply le_lt_or_eq in H. destruct H as [H|H].
             { apply LessThanAccIsAcc' with n; assumption. }
             { apply H' in H. contradiction. }
-Qed.
-
-(* Using Coq's primitives                                                       *)
-Lemma LtWellFounded' : well_founded lt.
-Proof.
-    unfold well_founded. intros n. apply AllNatsAccessible'.
-Qed.
+Defined.
 
 
 Definition Reflexive (a:Type) (r:a -> a -> Prop) : Prop :=
@@ -426,7 +421,7 @@ Defined.
 Check nat_total_order.
 Check @exist.
 
-Definition fac1 : nat -> nat.
+Definition fac' : nat -> nat.
 Proof.
 refine (WFRecursion nat lt LtWellFounded (fun _ => nat)
     (fun (n:nat) =>
@@ -445,8 +440,21 @@ Definition fac : nat -> nat := WFRecursion nat lt LtWellFounded (fun _ => nat)
             S m (* n *) *  g m (le_n (S m)) (* fac (n -1 ) *)
         end).
 
+Compute fac 5. (* works thanks to 'Defined' instead of 'Qed' in proof terms.    *)
 
-Definition fac' : nat -> nat := Fix LtWellFounded' (fun _ => nat)
+(* Using Coq's primitives                                                       *)
+Lemma LtWellFounded1 : well_founded lt.
+Proof.
+    unfold well_founded. intros n. apply AllNatsAccessible'.
+Qed.
+
+Lemma LtWellFounded2 : well_founded lt.
+Proof.
+    unfold well_founded. intros n. apply AllNatsAccessible'.
+Defined. (* Defined instead of Qed.                                             *)
+
+(* Using LtWellFounded1                                                         *)
+Definition fac1 : nat -> nat := Fix LtWellFounded1 (fun _ => nat)
     (fun (n:nat) =>
         match n as n' return (forall (m:nat), m < n' -> nat) -> nat with
         | 0     => fun _ => 1
@@ -454,9 +462,92 @@ Definition fac' : nat -> nat := Fix LtWellFounded' (fun _ => nat)
             S m (* n *) *  g m (le_n (S m)) (* fac (n -1 ) *)
         end).
 
-Lemma fac0 : fac' 0 = 1.
+(* Using LtWellFounded2                                                         *)
+Definition fac2 : nat -> nat := Fix LtWellFounded2 (fun _ => nat)
+    (fun (n:nat) =>
+        match n as n' return (forall (m:nat), m < n' -> nat) -> nat with
+        | 0     => fun _ => 1
+        | S m   => fun (g : forall (k:nat), k < S m -> nat) => 
+            S m (* n *) *  g m (le_n (S m)) (* fac (n -1 ) *)
+        end).
+
+(* Using lt_wf of module Wf_nat                                                 *)
+Definition fac3 : nat -> nat := Fix lt_wf (fun _ => nat)
+    (fun (n:nat) =>
+        match n as n' return (forall (m:nat), m < n' -> nat) -> nat with
+        | 0     => fun _ => 1
+        | S m   => fun (g : forall (k:nat), k < S m -> nat) => 
+            S m (* n *) *  g m (le_n (S m)) (* fac (n -1 ) *)
+        end).
+
+Lemma checkFacZero1: fac1 0 = 1.
 Proof.
-    unfold fac', Fix, Fix_F, Acc_inv.
+    unfold fac1, Fix, Fix_F. 
+    (* for fix point to reduce, the head argument needs to be a constructor     *)
+    destruct (LtWellFounded1 0). 
+    (* 1 = 1                                                                    *) 
+    reflexivity.
+Qed.
+
+Lemma checkFacZero2: fac2 0 = 1.
+Proof.
+(* Using 'Defined' instead of 'Qed' when defining proof terms allow             *)
+(* the unfolding of these, and in the end 'simpl' has an effect.                *)
+(* Even better:                                                                 *)
+    reflexivity.
+Qed.
+
+Lemma checkFacZero3: fac3 0 = 1.
+Proof.
+    reflexivity.
+Qed.
+
+(* works thanks to 'Defined' instead of 'Qed' in proof terms.                   *)
+Lemma checkFacZero: fac 0 = 1.
+Proof.
+    reflexivity.
+Qed.
+
+Compute fac 0.
+Compute fac 1.
+Compute fac 2.
+Compute fac 3.
+Compute fac 4.
+Compute fac 5.
+
+Check Fix.
+(*
+Fix : forall (a : Type) (r : a -> a -> Prop),
+    well_founded r ->
+    forall c : a -> Type,
+    (forall x : a, (forall y : a, r y x -> c y) -> c x) ->
+     forall x : a, c x
+*)
+
+
+
+Lemma checkFix : 
+    forall 
+        (a:Type) 
+        (r:a -> a -> Prop) 
+        (p:well_founded r)
+        (c:a -> Type) 
+        (g:forall (x:a), (forall (y:a), r y x -> c y) -> c x)
+        (x:a),
+    Fix p c g x = g x (fun (y:a) (h:r y x) => Fix p c g y) .
+Proof.
+    intros a r p c g x. unfold Fix, Fix_F. destruct (p x).
+    unfold Acc_inv. unfold well_founded in p.
+Show.
+
+
+(*
+Lemma checkFacSn : forall (n:nat), fac (S n) = (S n) * fac n.
+Proof.
+    intros n. unfold fac at 1.
 
 Show.
+*)
+
+
 
