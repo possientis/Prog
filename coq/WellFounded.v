@@ -43,6 +43,35 @@ Proof.
     unfold WellFounded. intros n. apply AllNatsAccessible.
 Qed.
 
+
+(* Using Coq's primitives                                                       *)
+Lemma LessThanAccIsAcc' : forall (a:Type) (r:a -> a -> Prop) (x y:a),
+    r y x -> Acc r x  -> Acc r y.
+Proof.
+    intros a r x y R Ax. destruct Ax as [H x].
+    apply H. assumption.
+Qed.
+
+(* Using Coq's primitives                                                       *)
+Lemma AllNatsAccessible' : forall (n:nat), Acc lt n.
+Proof.
+    induction n as [|n IH]; constructor.
+    - intros n H. inversion H.
+    - intros m H. destruct (eq_nat_dec m n) as [H'|H'].
+        + subst. assumption.
+        + unfold lt in H. apply le_S_n in H. 
+          apply le_lt_or_eq in H. destruct H as [H|H].
+            { apply LessThanAccIsAcc' with n; assumption. }
+            { apply H' in H. contradiction. }
+Qed.
+
+(* Using Coq's primitives                                                       *)
+Lemma LtWellFounded' : well_founded lt.
+Proof.
+    unfold well_founded. intros n. apply AllNatsAccessible'.
+Qed.
+
+
 Definition Reflexive (a:Type) (r:a -> a -> Prop) : Prop :=
     forall (x:a), r x x.
 
@@ -397,13 +426,37 @@ Defined.
 Check nat_total_order.
 Check @exist.
 
-Definition fac : nat -> nat.
+Definition fac1 : nat -> nat.
 Proof.
 refine (WFRecursion nat lt LtWellFounded (fun _ => nat)
-    (fun (n:nat) => 
+    (fun (n:nat) =>
         match n as n' return (forall (m:nat), m < n' -> nat) -> nat with
-        | 0   => (fun _ => 1)
-        | S p => _
+        | 0     => fun _ => 1
+        | S m   => fun (g : forall (k:nat), k < S m -> nat) => S m * g m (le_n (S m))
         end
 )).
+Defined.
+
+Definition fac : nat -> nat := WFRecursion nat lt LtWellFounded (fun _ => nat)
+    (fun (n:nat) =>
+        match n as n' return (forall (m:nat), m < n' -> nat) -> nat with
+        | 0     => fun _ => 1
+        | S m   => fun (g : forall (k:nat), k < S m -> nat) => 
+            S m (* n *) *  g m (le_n (S m)) (* fac (n -1 ) *)
+        end).
+
+
+Definition fac' : nat -> nat := Fix LtWellFounded' (fun _ => nat)
+    (fun (n:nat) =>
+        match n as n' return (forall (m:nat), m < n' -> nat) -> nat with
+        | 0     => fun _ => 1
+        | S m   => fun (g : forall (k:nat), k < S m -> nat) => 
+            S m (* n *) *  g m (le_n (S m)) (* fac (n -1 ) *)
+        end).
+
+Lemma fac0 : fac' 0 = 1.
+Proof.
+    unfold fac', Fix, Fix_F, Acc_inv.
+
 Show.
+
