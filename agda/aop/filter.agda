@@ -13,6 +13,48 @@ postulate
       -----------------------
     →         f ≡ g
 
+-- functor law for List: composition
+∘-map : ∀ {ℓ} {a b c : Set ℓ} → {f : a → b} → {g : b → c} → map (g ∘ f) ≡ map g ∘ map f
+∘-map = extensionality k
+  where
+    k : ∀ {ℓ} {a b c : Set ℓ} → {f : a → b} → {g : b → c} → (xs : List a) →
+      map (g ∘ f) xs ≡ (map g ∘ map f) xs
+    k [] = refl
+    k {f = f} {g} (x ∷ xs) =
+      begin
+        map (g ∘ f) (x ∷ xs)
+        ≡⟨⟩
+        (g ∘ f) x ∷ map (g ∘ f) xs
+        ≡⟨ cong ((g ∘ f) x ∷_) (k xs) ⟩
+        (g ∘ f) x ∷ (map g ∘ map f) xs
+        ≡⟨⟩
+        g (f x) ∷ (map g (map f xs))
+        ≡⟨⟩
+        map g (f x ∷ map f xs)
+        ≡⟨⟩
+        map g (map f (x ∷ xs))
+        ≡⟨⟩
+        (map g ∘ map f) (x ∷ xs)
+        ∎
+
+-- functor law for List: identity
+id-map : ∀ {ℓ} {a : Set ℓ} → map (id {ℓ} {a}) ≡ id {ℓ} {List a}
+id-map {ℓ} {a} = extensionality k
+  where
+    k : ∀ (xs : List a) → map id xs ≡ id xs
+    k [] = refl
+    k (x ∷ xs) =
+      begin
+        map id (x ∷ xs)
+        ≡⟨⟩
+        id x ∷ map id xs
+        ≡⟨⟩
+        x ∷ map id xs
+        ≡⟨ cong (x ∷_) (k xs) ⟩
+        x ∷ id xs
+        ≡⟨⟩
+        x ∷ xs
+        ∎
 
 _~>_,_ : ∀ {a b : Set} → (a → Bool) → (a → b) → (a → b) → a → b
 (p ~> f , g) x with p x
@@ -28,6 +70,9 @@ _~>_,_ : ∀ {a b : Set} → (a → Bool) → (a → b) → (a → b) → a → 
     k x | false = refl
     k x | true = refl
 
+∘-distrib-~>-r : ∀ {a b c : Set} → (p : a → Bool) -> (f g : a → b) → (h : c → a) →
+  (p ~> f , g) ∘ h ≡ ((p ∘ h) ~> (f ∘ h) , (g ∘ h))
+∘-distrib-~>-r {a} {b} {c} p f g h = {!!}
 
 nilp : ∀ {a : Set} → a → List a
 nilp x = []
@@ -96,8 +141,13 @@ map-⊕-zip-Δ {a} {b} {c} {f} {g} = extensionality k
         (f x , g x) ∷ map (f ⊕ g) (zip' (Δ xs))
         ≡⟨⟩
         (f x , g x) ∷ (map (f ⊕ g) ∘ zip' ∘ Δ) xs
+        ≡⟨ cong ((f x , g x) ∷_) (k xs) ⟩
+        (f x , g x) ∷ map ⟨ f , g ⟩ xs
         ≡⟨⟩
-        {!!}
+        ⟨ f , g ⟩ x ∷ map ⟨ f , g ⟩ xs
+        ≡⟨⟩
+        map ⟨ f , g ⟩ (x ∷ xs)
+        ∎
 
 -- concat : List (List a) → List a is a natural transformation concat : List² ⇒ List
 concatNat : ∀ {a b : Set} → {f : a → b} → map f ∘ concat ≡ concat ∘ map (map f)
@@ -165,49 +215,6 @@ concatNat {a} {b} = extensionality k
         (concat ∘ (map (map f))) ((x ∷ xs) ∷ xss)
         ∎
 
--- functor law for List: composition
-∘-map : ∀ {ℓ} {a b c : Set ℓ} → {f : a → b} → {g : b → c} → map (g ∘ f) ≡ map g ∘ map f
-∘-map = extensionality k
-  where
-    k : ∀ {ℓ} {a b c : Set ℓ} → {f : a → b} → {g : b → c} → (xs : List a) →
-      map (g ∘ f) xs ≡ (map g ∘ map f) xs
-    k [] = refl
-    k {f = f} {g} (x ∷ xs) =
-      begin
-        map (g ∘ f) (x ∷ xs)
-        ≡⟨⟩
-        (g ∘ f) x ∷ map (g ∘ f) xs
-        ≡⟨ cong ((g ∘ f) x ∷_) (k xs) ⟩
-        (g ∘ f) x ∷ (map g ∘ map f) xs
-        ≡⟨⟩
-        g (f x) ∷ (map g (map f xs))
-        ≡⟨⟩
-        map g (f x ∷ map f xs)
-        ≡⟨⟩
-        map g (map f (x ∷ xs))
-        ≡⟨⟩
-        (map g ∘ map f) (x ∷ xs)
-        ∎
-
--- functor law for List: identity
-id-map : ∀ {ℓ} {a : Set ℓ} → map (id {ℓ} {a}) ≡ id {ℓ} {List a}
-id-map {ℓ} {a} = extensionality k
-  where
-    k : ∀ (xs : List a) → map id xs ≡ id xs
-    k [] = refl
-    k (x ∷ xs) =
-      begin
-        map id (x ∷ xs)
-        ≡⟨⟩
-        id x ∷ map id xs
-        ≡⟨⟩
-        x ∷ map id xs
-        ≡⟨ cong (x ∷_) (k xs) ⟩
-        x ∷ id xs
-        ≡⟨⟩
-        x ∷ xs
-        ∎
-
 
 -- zip' is a natural transformation : (×) ∘ (List × List) ⇒ List ∘ (×)
 -- zip' : List a₁ × List a₂ → List (a₁ × a₂)
@@ -248,7 +255,19 @@ zipNat {a₁} {a₂} {b₁} {b₂} {f₁} {f₂} = extensionality k
         (zip' ∘ (map f₁ ⊕ map f₂)) (x ∷ xs , y ∷ ys)
         ∎
 
+zipNatApp : ∀ {a b c : Set} → {f : a → b} → {g : a → c} →
+  zip' ∘ ⟨ map f , map g ⟩ ≡ map ⟨ f , g ⟩
 
+zipNatApp {a} {b} {c} {f} {g} =
+  begin
+    zip' ∘ ⟨ map f , map g ⟩
+    ≡⟨⟩
+    zip' ∘ (map f ⊕ map g) ∘ Δ
+    ≡⟨ cong (_∘ Δ) (sym zipNat) ⟩
+    map (f ⊕ g) ∘ zip' ∘ Δ
+    ≡⟨ map-⊕-zip-Δ ⟩
+    map ⟨ f , g ⟩
+    ∎
 
 L1 : ∀ {a : Set} → {p : a → Bool} →
   map proj₁ ∘ filter proj₂ ∘ zip' ∘ ⟨ id , map p ⟩ ≡ filter p
@@ -324,5 +343,19 @@ L1 {a} {p} =
       ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁))
       ∘ zip'
       ∘ ⟨ map id , map p ⟩
+    -- applying zipNatApp
+    ≡⟨  cong (λ { f →
+        concat
+      ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁))
+      ∘ f}) zipNatApp ⟩
+    -- =>
+        concat
+      ∘ map (proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁))
+      ∘ map ⟨ id , p ⟩
+    -- functor law for List, aka applying ∘-map
+    ≡⟨  cong (concat ∘_) (sym ∘-map) ⟩
+    -- =>
+        concat
+      ∘ map ((proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁)) ∘ ⟨ id , p ⟩)
     ≡⟨⟩
     {!!}
