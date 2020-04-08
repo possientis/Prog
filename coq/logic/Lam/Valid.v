@@ -2,7 +2,6 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
-Require Import Map.
 Require Import Remove.
 Require Import Replace.
 Require Import Include.
@@ -18,7 +17,7 @@ Require Import Lam.Subformula.
 
 Definition valid (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v) : Prop :=
     forall (s:T v) (x:v), s <<= t -> 
-        x :: free s -> f x :: free (fmap f s).
+        x :: Fr s -> f x :: Fr (fmap f s).
 
 Arguments valid {v} {w} {e} {e'} _ _.
 
@@ -67,7 +66,7 @@ Qed.
 Lemma valid_lam : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t1:T v) (x:v),
     valid f (Lam x t1) <->  
     valid f t1 /\  
-    forall (y:v), y :: free (Lam x t1) -> f x <> f y.
+    forall (y:v), y :: Fr (Lam x t1) -> f x <> f y.
 Proof.
     intros v w e e' f t1 x. split.
     - intros H. split.
@@ -75,12 +74,12 @@ Proof.
             { assumption. }
             { right. apply Sub_refl. }
         + intros y H1 H2. 
-            assert (f y :: free (fmap f (Lam x t1))) as H3.
+            assert (f y :: Fr (fmap f (Lam x t1))) as H3.
                 { apply H.
                     { apply Sub_refl. }
                     { assumption. }
                 }
-            assert (~ f x :: free (fmap f (Lam x t1))) as H4.
+            assert (~ f x :: Fr (fmap f (Lam x t1))) as H4.
                 { simpl. apply remove_x_gone. }
             apply H4. rewrite H2. assumption.
     - intros [H1 H2] s y H3 H4. destruct H3 as [H3|H3].
@@ -98,7 +97,7 @@ Qed.
 (* We cannot follow the set theoretic proof as this is a stronger result,       *)
 (* due to the order being preserved in lists. Structural induction on t.        *)
 Lemma valid_free : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
-    valid f t <-> forall (s:T v), s <<= t -> free (fmap f s) = map f (free s).
+    valid f t <-> forall (s:T v), s <<= t -> Fr (fmap f s) = map f (Fr s).
 Proof.
     intros v w e e' f t. split.
     - induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; intros H s H'.
@@ -138,9 +137,9 @@ Proof.
         + destruct H' as [H'|H'].
             { subst. simpl. rewrite IH1.
                 { apply remove_map. intros y H1 H2 H3.
-                    assert (~ f x :: free (Lam (f x) (fmap f t1))) as Ex.
+                    assert (~ f x :: Fr (Lam (f x) (fmap f t1))) as Ex.
                         { simpl. apply remove_x_gone. }
-                    assert (f y :: free (Lam (f x) (fmap f t1))) as Ey. 
+                    assert (f y :: Fr (Lam (f x) (fmap f t1))) as Ey. 
                         { unfold valid in H. apply (H (Lam x t1) y). 
                             { apply Sub_refl. }
                             { simpl. apply remove_charac. split; assumption. }
@@ -169,14 +168,14 @@ Proof.
         + apply valid_lam. split. 
             { apply IH1.  intros s H'. apply H. right. assumption. }
             { intros y H1 H2.
-              assert (~ f x :: free (fmap f (Lam x t1))) as Ex.
+              assert (~ f x :: Fr (fmap f (Lam x t1))) as Ex.
                 { simpl. apply remove_x_gone. }
-              assert (f y :: free (fmap f (Lam x t1))) as Ey. 
+              assert (f y :: Fr (fmap f (Lam x t1))) as Ey. 
                 { rewrite H.
-                    { apply mapIn. exists y. split.
-                        { assumption. }
-                        { reflexivity. }}
-                  left. reflexivity. }
+                    { apply in_map_iff. exists y. split.
+                        { reflexivity. }
+                        { assumption. }}
+                    { left. reflexivity. }}
               rewrite <- H2 in Ey. apply Ex. assumption. }
 Qed.
 
@@ -192,13 +191,13 @@ Qed.
 
 Lemma valid_charac : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t:T v),
     valid f t <-> forall (t1:T v) (x y:v), 
-        (Lam x t1) <<= t -> y :: free (Lam x t1) -> f x <> f y.
+        (Lam x t1) <<= t -> y :: Fr (Lam x t1) -> f x <> f y.
 Proof.
     intros v w e e' f t. split.
     - intros H t1 x y H1 H2 H3.
-      assert (f y :: free (fmap f (Lam x t1))) as H4.
+      assert (f y :: Fr (fmap f (Lam x t1))) as H4.
         { apply H; assumption. }
-      assert (~ f x :: free (fmap f (Lam x t1))) as H5.
+      assert (~ f x :: Fr (fmap f (Lam x t1))) as H5.
         { simpl. apply remove_x_gone. }
       rewrite <- H3 in H4. apply H5. assumption.
     - induction t as [z|t1' IH1 t2' IH2|z t1' IH1]; intros H.
@@ -241,10 +240,10 @@ Proof.
         + rewrite valid_free in Hf. rewrite Hf.
             { rewrite map_map. reflexivity. }
             { assumption. }
-        + rewrite Sub_fmap. apply mapIn.   
+        + rewrite Sub_fmap. apply in_map_iff. 
           exists s. split.
-            { assumption. }
             { reflexivity. }
+            { assumption. }
     - intros H. assert (valid f t) as H'.
         { revert H. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros H.
             + apply valid_var.
@@ -261,8 +260,8 @@ Proof.
         + assumption.
         + apply valid_free. intros s' H1. 
           rewrite Sub_fmap in H1.
-          rewrite mapIn in H1. destruct H1 as [s [H1 H2]].
-          rewrite H2. fold (comp (fmap g) (fmap f) s). 
+          rewrite in_map_iff in H1. destruct H1 as [s [H1 H2]].
+          rewrite <- H1. fold (comp (fmap g) (fmap f) s). 
           rewrite <- fmap_comp. rewrite valid_free in H. 
           rewrite H.
             { unfold comp. rewrite <- map_map. rewrite valid_free in H'. 

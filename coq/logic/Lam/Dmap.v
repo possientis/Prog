@@ -2,7 +2,6 @@ Require Import List.
 Import ListNotations.
 
 Require Import Eq.
-Require Import Map.
 Require Import Identity.
 Require Import Composition.
 Require Import Extensionality.

@@ -29,7 +29,7 @@ Proof.
 Qed.
 
 Lemma bnd_free : forall (v:Type) (e:Eq v) (t:T v) (z:v),
-    z :: var t <-> (z :: free t) \/ (z :: bnd t).
+    z :: var t <-> (z :: Fr t) \/ (z :: bnd t).
 Proof.
     intros v e t z. split.
     - induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros H; simpl in H.

@@ -2,7 +2,6 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
-Require Import Map.
 Require Import Permute.
 Require Import Replace.
 Require Import Coincide.

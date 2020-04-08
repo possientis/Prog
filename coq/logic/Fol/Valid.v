@@ -2,7 +2,6 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
-Require Import Map.
 Require Import Remove.
 Require Import Replace.
 Require Import Include.
@@ -18,7 +17,7 @@ Require Import Fol.Subformula.
 
 Definition valid (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (q:P v) : Prop :=
     forall (p:P v) (x:v), p <<= q -> 
-        x :: free p -> f x :: free (fmap f p).
+        x :: Fr p -> f x :: Fr (fmap f p).
 
 Arguments valid {v} {w} {e} {e'} _ _.
 
@@ -77,7 +76,7 @@ Qed.
 Lemma valid_all : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p1:P v) (x:v),
     valid f (All x p1) <->  
     valid f p1 /\  
-    forall (y:v), y :: free (All x p1) -> f x <> f y.
+    forall (y:v), y :: Fr (All x p1) -> f x <> f y.
 Proof.
     intros v w e e' f p1 x. split.
     - intros H. split.
@@ -85,12 +84,12 @@ Proof.
             { assumption. }
             { right. apply Sub_refl. }
         + intros y H1 H2. 
-            assert (f y :: free (fmap f (All x p1))) as H3.
+            assert (f y :: Fr (fmap f (All x p1))) as H3.
                 { apply H.
                     { apply Sub_refl. }
                     { assumption. }
                 }
-            assert (~ f x :: free (fmap f (All x p1))) as H4.
+            assert (~ f x :: Fr (fmap f (All x p1))) as H4.
                 { simpl. apply remove_x_gone. }
             apply H4. rewrite H2. assumption.
     - intros [H1 H2] s y H3 H4. destruct H3 as [H3|H3].
@@ -109,7 +108,7 @@ Qed.
 (* due to the order being preserved in lists. Structural induction on q.        *)
 Lemma valid_free : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (q:P v),
     valid f q <-> forall (p:P v), p <<= q -> 
-        free (fmap f p) = map f (free p).
+        Fr (fmap f p) = map f (Fr p).
 Proof.
     intros v w e e' f q. split.
     - induction q as [|x y|p1 IH1 p2 IH2|x p1 IH1]; simpl; intros H p H'.
@@ -152,9 +151,9 @@ Proof.
         + destruct H' as [H'|H'].
             { subst. simpl. rewrite IH1.
                 { apply remove_map. intros y H1 H2 H3.
-                    assert (~ f x :: free (All (f x) (fmap f p1))) as Ex.
+                    assert (~ f x :: Fr (All (f x) (fmap f p1))) as Ex.
                         { simpl. apply remove_x_gone. }
-                    assert (f y :: free (All (f x) (fmap f p1))) as Ey. 
+                    assert (f y :: Fr (All (f x) (fmap f p1))) as Ey. 
                         { unfold valid in H. apply (H (All x p1) y). 
                             { apply Sub_refl. }
                             { simpl. apply remove_charac. split; assumption. }
@@ -184,9 +183,9 @@ Proof.
         + apply valid_all. split.
             { apply IH1. intros p H'. apply H. right. assumption. }
             { intros y H1 H2.
-              assert (~ f x :: free (fmap f (All x p1))) as Ex.
+              assert (~ f x :: Fr (fmap f (All x p1))) as Ex.
                 { simpl. apply remove_x_gone. }
-              assert (f y :: free (fmap f (All x p1))) as Ey. 
+              assert (f y :: Fr (fmap f (All x p1))) as Ey. 
                 { rewrite H.
                     { apply in_map_iff. exists y. split.
                         { reflexivity. }
@@ -207,13 +206,13 @@ Qed.
 
 Lemma valid_charac : forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p:P v),
     valid f p <-> forall (p1:P v) (x y:v), 
-        (All x p1) <<= p -> y :: free (All x p1) -> f x <> f y.
+        (All x p1) <<= p -> y :: Fr (All x p1) -> f x <> f y.
 Proof.
     intros v w e e' f t. split.
     - intros H p1 x y H1 H2 H3.
-      assert (f y :: free (fmap f (All x p1))) as H4.
+      assert (f y :: Fr (fmap f (All x p1))) as H4.
         { apply H; assumption. }
-      assert (~ f x :: free (fmap f (All x p1))) as H5.
+      assert (~ f x :: Fr (fmap f (All x p1))) as H5.
         { simpl. apply remove_x_gone. }
       rewrite <- H3 in H4. apply H5. assumption.
     - induction t as [|z z'|p1' IH1 p2' IH2|z p1' IH1]; intros H.

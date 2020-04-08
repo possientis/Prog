@@ -9,7 +9,6 @@ all:	   						Extensionality.vo \
 								Coincide.vo \
 								Leq.vo \
 								Max.vo \
-								Map.vo \
 								Eq.vo \
 								Relation.vo \
 								Replace.vo \
@@ -60,9 +59,6 @@ Leq.vo : 						Leq.v
 
 Max.vo : 						Max.v
 	coqc Max.v
-
-Map.vo : 						Map.v
-	coqc Map.v
 
 Eq.vo : 						Eq.v
 	coqc Eq.v
@@ -203,7 +199,6 @@ ${FOL}/Congruence.vo : 			${FOL}/Congruence.v \
 ${LAM}/Variable.vo :			${LAM}/Variable.v \
 								In.vo \
 								Eq.vo \
-								Map.vo \
 								Permute.vo \
 								Replace.vo \
 								Coincide.vo \
@@ -217,7 +212,6 @@ ${LAM}/Variable.vo :			${LAM}/Variable.v \
 ${FOL}/Variable.vo :			${FOL}/Variable.v \
 								In.vo \
 								Eq.vo \
-								Map.vo \
 								Permute.vo \
 								Replace.vo \
 								Coincide.vo \
@@ -229,7 +223,6 @@ ${FOL}/Variable.vo :			${FOL}/Variable.v \
 ${LAM}/Free.vo :				${LAM}/Free.v \
 								In.vo \
 								Eq.vo \
-								Map.vo \
 								Remove.vo \
 								Replace.vo \
 								Include.vo \
@@ -249,7 +242,6 @@ ${LAM}/Free.vo :				${LAM}/Free.v \
 ${FOL}/Free.vo :				${FOL}/Free.v \
 								In.vo \
 								Eq.vo \
-								Map.vo \
 								Remove.vo \
 								Replace.vo \
 								Include.vo \
@@ -293,7 +285,6 @@ ${FOL}/Bound.vo :				${FOL}/Bound.v \
 ${LAM}/Valid.vo :				${LAM}/Valid.v \
 								In.vo \
 								Eq.vo \
-								Map.vo \
 								Remove.vo \
 								Replace.vo \
 								Include.vo \
@@ -310,7 +301,6 @@ ${LAM}/Valid.vo :				${LAM}/Valid.v \
 ${FOL}/Valid.vo :				${FOL}/Valid.v \
 								In.vo \
 								Eq.vo \
-								Map.vo \
 								Remove.vo \
 								Replace.vo \
 								Include.vo \
@@ -327,7 +317,6 @@ ${FOL}/Valid.vo :				${FOL}/Valid.v \
 
 ${LAM}/Dmap.vo :				${LAM}/Dmap.v \
 								Eq.vo \
-								Map.vo \
 								Identity.vo \
 								Extensionality.vo \
 								${LAM}/T.vo
@@ -336,7 +325,6 @@ ${LAM}/Dmap.vo :				${LAM}/Dmap.v \
 
 ${FOL}/Dmap.vo :				${FOL}/Dmap.v \
 								Eq.vo \
-								Map.vo \
 								Identity.vo \
 								Extensionality.vo \
 								${FOL}/P.vo
