@@ -7,7 +7,7 @@ open import Data.Nat                  using (ℕ; zero; suc; _≤_; z≤n; s≤s
 open import Data.Sum                  using (_⊎_; inj₁; inj₂)
 open import Data.Unit                 using (⊤; tt)
 open import Data.Empty                using (⊥; ⊥-elim)
-open import Data.Product              using (_×_; proj₁; proj₂)
+open import Data.Product              using (_×_; proj₁; proj₂; _,_)
 open        Eq.≡-Reasoning            using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 open import Relation.Nullary          using (¬_)
 open import Relation.Nullary.Negation using (contradiction)
@@ -154,4 +154,57 @@ toWitness {a} {yes p} _ = p
 fromWitness : ∀ {a : Set} {d : Dec a} → a → T ⌞ d ⌟
 fromWitness {a} {yes _} x = tt
 fromWitness {a} {no ¬p} p = ¬p p
+
+≤b'→≤ : ∀ {m n : ℕ} → T (m ≤b' n) → m ≤ n
+≤b'→≤ = toWitness
+
+≤→≤b' : ∀ {m n : ℕ} → m ≤ n → T (m ≤b' n)
+≤→≤b' = fromWitness
+
+infixr 6 _∧_
+
+_∧_ : Bool -> Bool -> Bool
+true ∧ y  = y
+false ∧ y = false
+
+infix 6 _⊗_
+
+_⊗_ : ∀ {a b : Set} → Dec a → Dec b → Dec (a × b)
+yes pa ⊗ yes pb = yes (pa , pb)
+yes _ ⊗ no p¬b = no (λ{(_ , pb) → p¬b pb})
+no p¬a ⊗ _ = no λ{(pa , _) → p¬a pa}
+
+
+infixr 5 _∨_
+
+_∨_ : Bool → Bool → Bool
+false ∨ y = y
+true ∨ y = true
+
+infix 5 _⊕_
+
+_⊕_ : ∀ {a b : Set} → Dec a → Dec b → Dec (a ⊎ b)
+yes pa ⊕ _ = yes (inj₁ pa)
+no _ ⊕ yes pb = yes (inj₂ pb)
+no p¬a ⊕ no p¬b = no λ{(inj₁ pa) → p¬a pa; (inj₂ pb) → p¬b pb}
+
+not : Bool → Bool
+not true = false
+not false = true
+
+¬? : ∀ {a : Set} → Dec a → Dec (¬ a)
+¬? (yes pa) = no (λ{p¬a → p¬a pa})
+¬? (no p¬a) = yes p¬a
+
+-- actually can't do this
+¬?-rev : ∀ {a : Set} → Dec (¬ a) → Dec a
+¬?-rev (yes p¬a) = no p¬a
+¬?-rev (no p¬¬a) = yes {!!}
+
+
+
+
+
+
+
 
