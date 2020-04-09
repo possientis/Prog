@@ -73,3 +73,12 @@ Proof.
     - constructor.
     - apply insertSorted. assumption.
 Qed.
+
+Lemma insertIn : forall (a:Type) (o:Ord a) (x:a) (xs:list a), In x (insert x xs).
+Proof.
+    intros a o x xs. revert x. induction xs as [|x xs IH]; intros y; simpl.
+    - left. reflexivity.
+    - destruct (leqDec y x) as [H|H].
+        + right. apply IH.
+        + left. reflexivity.
+Qed.
