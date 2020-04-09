@@ -1,15 +1,17 @@
 module  Traversable
     (   Traversable     (..)
-    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9
+    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10
+    ,   ex11, ex12, ex13, ex14, ex15, ex16
     )   where
 
 -- Data.Traversable
 
 import Prelude                  hiding (Traversable, traverse, sequenceA)
+import Text.Read                       (readMaybe)
 import Data.Char
 import Control.Lens             hiding (Traversable, traverse)
 import Control.Applicative
-import Text.Read (readMaybe)
+import Data.Either.Validation
 
 class (Functor t, Foldable t) => Traversable t where
     {-# MINIMAL traverse | sequenceA #-}
@@ -89,3 +91,65 @@ ex9 = traverseOf (traversed . _2) validateEmail
     ,("Leo",  "leo@tmnt.io")
     ]
 
+ex10 :: Either String [(String,String)]
+ex10 = traverseOf (traversed . _2) validateEmail
+    [("Mike", "mike@tmnt.io")
+    ,("Raph", "raph.io")
+    ,("Don",  "don@tmnt.io")
+    ,("Leo",  "leo@tmnt.io")
+    ]
+
+validateEmail' :: String -> Validation [String] String
+validateEmail' email 
+    | elem '@' email = Success email
+    | otherwise      = Failure ["missing '@': " ++ email]
+
+
+ex11 :: Validation [String] [(String,String)]
+ex11 = traverseOf (traversed . _2) validateEmail'
+    [("Mike", "mike@tmnt.io")
+    ,("Raph", "raph@tmnt.io")
+    ,("Don",  "don@tmnt.io")
+    ,("Leo",  "leo@tmnt.io")
+    ]
+
+ex12 :: Validation [String] [(String,String)]
+ex12 = traverseOf (traversed . _2) validateEmail'
+    [("Mike", "mike@tmnt.io")
+    ,("Raph", "raph.io")
+    ,("Don",  "don@tmnt.io")
+    ,("Leo",  "leo.io")
+    ]
+
+-- forOf :: Traversal s t a b -> s -> (a -> f b) -> f t
+-- sequenceAOf :: Traversal s t (f a) a -> s -> f t
+
+ex13 :: Maybe (String, String)
+ex13 = sequenceAOf _1 (Just "Garfield", "Lasagna")
+
+
+ex14 :: Maybe (String, String)
+ex14 = sequenceAOf _1 (Nothing, "Lasagna")
+
+
+ex15 :: Maybe ([String],[String])
+ex15 = sequenceAOf (both . traversed) ([Just "apples"], [Just "oranges"])
+
+ex16 :: Maybe ([String],[String])
+ex16 = sequenceAOf (both . traversed) ([Just "apples"], [Nothing])
+
+-- TraverseOf :: Traversal s t a b -> (a -> f b) -> s -> f t
+-- (%%~)      :: Traversal s t a b -> (a -> f b) -> s -> f t
+
+ex17 :: Maybe (Int, Int)
+ex17 = (("1","2") & both %%~ readMaybe) 
+
+
+ex18 :: Maybe (Int, Int)
+ex18 = (("1","fail") & both %%~ readMaybe) 
+
+--  using traversal directly
+ex19 :: Maybe (Int, Int)
+ex19 = both readMaybe ("1","2")
+
+-- type Traversal s t a b = forall f . Applicative f => (a -> f b) -> s -> f t
