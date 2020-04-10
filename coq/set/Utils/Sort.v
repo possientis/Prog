@@ -82,3 +82,20 @@ Proof.
         + right. apply IH.
         + left. reflexivity.
 Qed.
+
+
+Lemma sortedLeq : forall (a:Type) (o:Ord a) (x y:a) (xs:list a),
+    Sorted (cons x xs) -> In y xs -> leq y x.
+Proof.
+    intros a o x y xs H. remember (cons x xs) as ys eqn:E. revert E.
+    revert xs x y. induction H as [|u|u v us H1 H2 IH]; intros xs x y H.
+    - inversion H.
+    - inversion H. intros H'. inversion H'.
+    - inversion H. clear H. subst. intros [H3|H3].
+        + subst. assumption.
+        + apply leqTrans with u.
+            { apply IH with us.
+                { reflexivity. }
+                { assumption. }}
+            { assumption. }
+Qed.

@@ -4,6 +4,23 @@ Require Import Utils.Nub.
 Require Import Utils.Ord.
 Require Import Utils.Sort.
 
+Lemma nubSorted : forall (a:Type) (o:Ord a) (xs:list a),
+    Sorted xs -> Sorted (nub xs).
+Proof.
+    intros a o xs H. induction H as [|x|x y xs H1 H2 IH]. 
+    - constructor.
+    - constructor.
+    - simpl. destruct (eqDec x y) as [H3|H3].
+        + subst. exact IH.
+        + destruct (in_dec eqDec y xs) as [H4|H4].
+            { exact IH. }
+            { destruct (in_dec eqDec x xs) as [H5|H5].
+                {
+
+Show.
+
+
+(*
 (* is this true ? *)
 Lemma nubInInsert : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     In x xs -> nub (insert x xs) = nub xs.
@@ -21,7 +38,7 @@ Proof.
 
 
 Show.
-
+*)
 
 (*
 Lemma nubSortCommute : forall (a:Type) (o:Ord a) (xs:list a),
