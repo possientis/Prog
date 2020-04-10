@@ -72,7 +72,12 @@ _~>_,_ : ∀ {a b : Set} → (a → Bool) → (a → b) → (a → b) → a → 
 
 ∘-distrib-~>-r : ∀ {a b c : Set} → (p : a → Bool) -> (f g : a → b) → (h : c → a) →
   (p ~> f , g) ∘ h ≡ ((p ∘ h) ~> (f ∘ h) , (g ∘ h))
-∘-distrib-~>-r {a} {b} {c} p f g h = {!!}
+∘-distrib-~>-r {a} {b} {c} p f g h = extensionality k
+  where
+    k : ∀ (x : c) → ((p ~> f , g) ∘ h) x ≡ ((p ∘ h) ~> (f ∘ h) , (g ∘ h)) x
+    k x with p (h x)
+    k x | false = refl
+    k x | true = refl
 
 nilp : ∀ {a : Set} → a → List a
 nilp x = []
@@ -105,7 +110,6 @@ zip' = uncurry zip
 
 ⟨_,_⟩ : ∀ {a b c : Set} → (a → b) → (a → c) → a → b × c
 ⟨ f , g ⟩ x = (f x , g x)
-
 
 _⊕_ : ∀ {a₁ a₂ b₁ b₂ : Set} → (a₁ → b₁) → (a₂ → b₂) → a₁ × a₂ → b₁ × b₂
 (f₁ ⊕ f₂) (x₁ , x₂) = (f₁ x₁ , f₂ x₂)
@@ -357,5 +361,15 @@ L1 {a} {p} =
     -- =>
         concat
       ∘ map ((proj₂ ~> (wrap ∘ proj₁) , (nilp ∘ proj₁)) ∘ ⟨ id , p ⟩)
+    -- right-distributivity of ∘ over ~>
+    ≡⟨ cong (λ { f → concat ∘ map f }) (∘-distrib-~>-r proj₂ _ _ ⟨ id , p ⟩) ⟩
+    -- =>
+        concat
+      ∘ map ((proj₂ ∘ ⟨ id , p ⟩) ~> (wrap ∘ proj₁ ∘ ⟨ id , p ⟩) , (nilp ∘ proj₁ ∘ ⟨ id , p ⟩))
     ≡⟨⟩
-    {!!}
+        concat ∘ map (p ~> (wrap ∘ id) , nilp ∘ id)
+    ≡⟨⟩
+       concat ∘ map (p ~> wrap , nilp)
+    ≡⟨⟩
+       filter p
+    ∎

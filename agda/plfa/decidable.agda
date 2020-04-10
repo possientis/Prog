@@ -201,10 +201,51 @@ not false = true
 ¬?-rev (yes p¬a) = no p¬a
 ¬?-rev (no p¬¬a) = yes {!!}
 
+_⊃_ : Bool → Bool → Bool
+true  ⊃ true  = true
+true  ⊃ false = false
+false ⊃ _     = true
 
+_⊃?_ : ∀ {a b : Set} → Dec a → Dec b → Dec (a → b)
+yes _ ⊃? yes pb = yes λ{_ → pb}
+yes pa ⊃? no p¬b = no (λ{f → p¬b (f pa)})
+no p¬a ⊃? _ = yes λ{pa → ⊥-elim (p¬a pa)}
 
+∧-⊗ : ∀ {a b : Set} (x : Dec a) (y : Dec b) → ⌞ x ⌟ ∧ ⌞ y ⌟ ≡ ⌞ x ⊗ y ⌟
+∧-⊗ (yes _) (yes _) = refl
+∧-⊗ (yes _) (no _) = refl
+∧-⊗ (no _) _ = refl
 
+∨-⊕ : ∀ {a b : Set} (x : Dec a) (y : Dec b) → ⌞ x ⌟ ∨ ⌞ y ⌟ ≡ ⌞ x ⊕ y ⌟
+∨-⊕ (yes _) _ = refl
+∨-⊕ (no _) (yes _) = refl
+∨-⊕ (no _) (no _) = refl
 
+not-¬? : ∀ {a : Set} (x : Dec a) → not (⌞ x ⌟) ≡ ⌞ ¬? x ⌟
+not-¬? (yes _) = refl
+not-¬? (no _) = refl
+
+⊃-⊃? : ∀ {a b : Set} (x : Dec a) (y : Dec b) → ⌞ x ⌟ ⊃ ⌞ y ⌟ ≡ ⌞ x ⊃? y ⌟
+⊃-⊃? (yes _) (yes _) = refl
+⊃-⊃? (yes _) (no _) = refl
+⊃-⊃? (no _) _ = refl
+
+_iff_ : Bool → Bool → Bool
+true iff true = true
+true iff false = false
+false iff true = false
+false iff false = true
+
+open _⇔_
+
+_iff?_ : ∀ {a b : Set} (x : Dec a) (y : Dec b) → Dec (a ⇔ b)
+yes pa iff? yes pb = yes record { to = λ{_ → pb}; from = λ{_ → pa}}
+yes pa iff? no p¬b = no (λ{i → p¬b (to i pa)})
+no p¬a iff? yes pb = no (λ{i → p¬a (from i pb)})
+no p¬a iff? no p¬b = yes record
+  { to = λ{pa → ⊥-elim (p¬a pa)}
+  ; from = λ{pb → ⊥-elim (p¬b pb)}
+  }
 
 
 

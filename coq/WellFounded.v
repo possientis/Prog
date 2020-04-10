@@ -549,5 +549,6 @@ Proof.
 Show.
 *)
 
-
-
+(* Stopping here: see Coq Wf module. In order to prove that the function you    *)
+(* define with Fix satisfies the expected equation, it appears an additional    *)
+(* hypothesis is required, which is  some form of extensionality axiom.         *)

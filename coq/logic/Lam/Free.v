@@ -149,6 +149,16 @@ Qed.
 Lemma free_fmap_gen : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v),
     Fr (subst_ f xs t) <= (Fr t /\ xs) ++ concat (map (Fr ; f) (Fr t \\ xs)).
 Proof.
+    intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs; simpl.
+    - destruct (in_dec eqDec x xs) as [H|H]; simpl.
+        + apply incl_refl.
+        + unfold comp. rewrite app_nil_r. apply incl_refl.
+    - apply incl_app. 
+        + apply incl_tran with 
+            ((Fr t1 /\ xs) ++ concat (map (Fr; f) (Fr t1 \\ xs))).
+            { apply IH1. }
+            { apply incl_app.
+                { apply incl_appl.
 
 Show.
 *)

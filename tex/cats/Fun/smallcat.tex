@@ -3,9 +3,31 @@ in~(\ref{Cat:def:category}) as well as that of functor as defined
 in~(\ref{Fun:def:functor}). Thanks to definition~(\ref{Fun:def:composition}),
 we know how to {\em compose functors}, and we also have a notion of
 {\em identity functor} as defined in~(\ref{Fun:def:identity}). So it is
-very tempting at this stage to wonder whether the {\em collections of all
-categories} could be turned into a category itself, in which the arrows
-would be the functors.
-TODO
+very tempting at this stage to wonder whether the {\em collection of all
+categories} could be turned into a category itself, in which the objects
+are categories and the arrows are functors. However, we know from set theory 
+that assuming the existence of the {\em set of all sets} leads to a 
+contradiction. Those familiar with proof assistants such that Coq, Agda
+and Lean will also be used to the idea that {\em the type of all types}
+does not exist, as we have {\em universes} and {\em type levels} instead.
+So we shall not attempt to define {\em the category of all catgeories} here.
+Instead, we shall focus on a collection which is a lot smaller by considering
+only those categories which are {\em small}, as per 
+definition~(\ref{Cat:def:category:small}).
+
 \begin{defin}\label{Fun:def:category:small:cat}
+    We call \cat\ the category $\cat=(\ob, \arr, \dom, \cod, \id, \circ)$ where
+    \begin{eqnarray*}
+        (1)&\ &\ob = \{\ \Cat\ |\ \mbox{\Cat\ is a small category}\ \}\\
+        (2)&\ &\arr =\{\ (\Cat,\Dat,F)\ |\ \Cat,\Dat\in\ob\ 
+        \mbox{and}\ F:\Cat\to\Dat\ \}\\
+        (3)&\ &\dom\,(\Cat,\Dat,F)=\Cat\\
+        (4)&\ &\cod\,(\Cat,\Dat,F)=\Dat\\
+        (5)&\ &\id(\Cat)=(\Cat,\Cat,I_{\cal C})\\
+        (6)&\ &(\Dat,\Eat,G) \circ (\Cat,\Dat,F) = (\Cat,\Eat,G\circ F)
+    \end{eqnarray*}
+    where $(3)-(6)$ hold for all small categories $\Cat,\Dat,\Eat$, and
+    functors $F:\Cat\to\Dat$ and $G:\Dat\to\Eat$, $I_{\cal C}$ is the identity
+    functor of definition~(\ref{Fun:def:identity}) and $G\circ F$ is the 
+    composition of $G$ and $F$ of definition~(\ref{Fun:def:composition}).
 \end{defin}

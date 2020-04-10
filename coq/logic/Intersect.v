@@ -1,12 +1,11 @@
 Require Import List.
-Import ListNotations.
 
 Require Import In.
 Require Import Eq.
 
 Fixpoint inter (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     match xs with
-    | []        => []
+    | nil        => nil
     | cons x xs => 
         match in_dec eqDec x ys with
         | left  _   => cons x (inter v e xs ys)
@@ -55,3 +54,12 @@ Proof.
                 { apply IH. split; assumption. }
             } 
 Qed.
+
+(*
+Lemma inter_distrib_app_r : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    ((xs ++ ys) /\ zs) = (xs /\ zs) ++ (ys /\ zs).
+Proof.
+
+
+Show.
+*)

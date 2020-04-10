@@ -1,8 +1,21 @@
+open import Relation.Nullary using
+  ( Dec
+  ; yes
+  ; no
+  )
+
+open import Relation.Nullary.Decidable using
+  ( toWitness
+  ; fromWitness
+  ; ⌞_⌟
+  )
+
 open import Data.Nat using
   ( ℕ
   ; zero
   ; suc
   ; _≤_
+  ; _≤?_
   ; z≤n
   ; s≤s
   )
@@ -15,6 +28,16 @@ open import Data.Nat.Properties using
   ; ≤-trans
   ; ≤-antisym
   ; ≤-total
+  )
+
+open import Data.Bool.Base using
+  ( Bool
+  ; true
+  ; false
+  ; T
+  ; _∧_
+  ; _∨_
+  ; not
   )
 
 -- +-identity... cannot type superscript r with \^r, is this due to lean ?
