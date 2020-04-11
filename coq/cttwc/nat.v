@@ -131,3 +131,23 @@ refine ( NatE (fun (m:nat) => forall (n p:nat), m + n = m + p -> n = p)
 )).
 Qed.
 
+Definition L5 : forall (m n:nat), m = n \/ ~ m = n.
+refine (NatE (fun (m:nat) => forall (n:nat), m = n \/ ~ m = n)
+       (fun (n:nat) => 
+        match n with
+        | 0     => or_introl (eq_refl 0)
+        | S n   => or_intror (z_not_s _) 
+        end)
+        (fun (m:nat) (IH:forall (n:nat), m = n \/ ~ m = n) =>
+            fun (n:nat) => 
+                match n with
+                | 0     => or_intror (fun (p:S m = 0) => z_not_s m (eq_sym p))
+                | S n   => 
+                    match (IH n) with
+                    | or_introl e   => or_introl (cong nat nat S m n e)
+                    | or_intror ne  => or_intror (fun (se:S m = S n) => ne (sinj m n se))
+                    end 
+            end
+)).
+Qed.
+

@@ -1,12 +1,14 @@
 Require Import List.
-Import ListNotations.
 
 Require Import In.
 Require Import Eq.
+Require Import Intersect.
 
+(* diff cannot be defined in terms of intersection, as there is no such thing   *)
+(* as a 'complement list' of ys. Such complement would in general be infinite.  *) 
 Fixpoint diff (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     match xs with
-    | []        => []
+    | nil       => nil
     | cons x xs =>
         match in_dec eqDec x ys with
         | left  _   => diff v e xs ys
@@ -55,3 +57,24 @@ Proof.
                 { right. apply IH. split; assumption. }
             }
 Qed.
+
+Lemma diff_distrib_app_r : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    ((xs ++ ys) \\ zs) = (xs \\ zs) ++ (ys \\ zs).
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys zs.
+    - reflexivity.
+    - rewrite <- app_comm_cons. simpl. destruct (in_dec eqDec x zs) as [H|H].
+        + apply IH.
+        + rewrite <- app_comm_cons. rewrite IH. reflexivity.
+Qed.
+
+(*
+Lemma diff_distrib_app_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    zs \\ (xs ++ ys) = ((zs \\ xs) /\ (zs \\ ys)).
+Proof.
+    intros v e xs ys zs. revert xs ys. induction zs as [|z zs IH]; intros xs ys.
+    - reflexivity.
+    - simpl. destruct (in_dec eqDec z (xs ++ ys)) as [H|H].
+        +
+Show.
+*)

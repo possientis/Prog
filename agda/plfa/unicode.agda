@@ -15,8 +15,8 @@
 -- ⟨ : \<
 -- ⟩ : \>
 -- ∎ : \qed
--- ∧ : \and
--- ∨ : \or
+-- ∧ : \and, \wedge
+-- ∨ : \or, \vee
 -- ⊕ : \oplus
 -- ⊗ : \otimes
 -- ∸ : \.-
@@ -45,7 +45,13 @@
 -- ⌟ : \clr
 -- ⌜ : \cul
 -- ⌝ : \cur
--- ⊃ : \supset
--- ⊂ : \subset
+-- ⌊ : \lfloor
+-- ⌋ : \rfloor
+-- ⌈ : \lceil
+-- ⌉ : \rceil
+-- ⊃ : \supset, \sup
+-- ⊂ : \subset, \sub
 -- ⊇ : \supseteq
 -- ⊆ : \subseteq
+-- ᵇ : \^b
+

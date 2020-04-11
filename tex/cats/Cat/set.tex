@@ -57,13 +57,22 @@ of the category \Set. Incidentally, we also keep the range $a$ of the
 function $f$ in the triple $(a,b,f)$ but this is not necessary, as the
 knowledge of $f$ does allow us to recover its domain $a$. However,
 the triple $(a,b,f)$ is convenient, allowing us to treat {\em domain} 
-and {\em codomain} uniformly. Once again, it should be remembered that
+and {\em codomain} uniformly. In fact, it is worth pausing for a second
+and emphasize the difference between $f$ and $(a,b,f)$:
+\begin{defin}\label{Cat:def:typed:untyped:function}
+    Given a function $f:a\to b$ between two sets $a$ and $b$ we say that
+    $f$ is the {\em untyped function} while the triple $(a,b,f)$ is called
+    the {\em typed} function.
+\end{defin}
+
+Once again, it should be remembered that
 the collection of arrows \arr\ is not a set but a proper class, 
-corresponding to the predicate $\arr(x)$ defined as follows:
+corresponding to the predicate $\arr(x)$:
     \[
         \arr(x)=\exists a\,\exists b\,\exists f\,,\  
         x = (a,b,f)\ \land\ f : a \to b
     \]
+Informally, this predicates expresses the fact that $x$ is a typed function.
 The maps $\dom:\arr\to\ob$ and $\cod:\arr\to\ob$ for the category \Set\
 are defined respectively by $\dom(a,b,f)=a$ and $\cod(a,b,f)=b$. This 
 looks simple enough, but for those who worry about foundational issues,
@@ -188,22 +197,27 @@ This completes our proof of properties~$(7)-(13)$.
 \end{proof}
 
 \begin{notation}\label{Cat:notation:set:arrow}
-    We shall denote an arrow $(a,b,f)$ of the category \Set\ simply by~$f$. 
+    We shall often refer to an arrow $(a,b,f)$ of the category \Set\
+    i.e. a typed function, simply as its untyped counterpart~$f$. 
+    The context should make it clear that $f$ actually refers to a 
+    typed function.
 \end{notation}
 \noindent
-{\bf Remark} So on top of its usual set-theoretic meaning, the notation 
-$f:a\to b$ may also have its categorical meaning expressing the fact 
-that $f$ is an arrow of the category \Set\ with domain $a$ and codomain 
-$b$, i.e. that $f$ is really $(a,b,f)$. 
+{\bf Remark} So on top of its usual set-theoretic meaning for untyped
+functions, the notation $f:a\to b$ may also have its categorical meaning 
+for typed functions, expressing the fact that $f$ is an arrow of the 
+category \Set\ with domain $a$ and codomain $b$, i.e. that $f$ is really 
+the typed function $(a,b,f)$. 
 
-Whenever $f^{*}:a\to b$ is an arrow of the category \Set\ and $x\in a$, the
-notation $f^{*}(x)$ is not strictly speaking meaningful since $f^{*}$ is not
-a function but a tuple $(a,b,f)$. However, it is natural enough
-to extend our notations:
+Whenever $f:a\to b$ is an arrow of the category \Set\ and $x\in a$, the
+notation $f(x)$ is not strictly speaking meaningful since $f$ is not
+a function but a typed function, i.e a tuple $(a,b,f)$. However, it is
+natural enough to set:
 
 \begin{notation}\label{Cat:notation:set:arrow:apply}
-    If $f^{*}:a \to b$ is an arrow of the category \Set, for all $x\in a$ 
-    we shall write $f^{*}(x)$ as a shortcut for $f(x)$ where $f^{*}=(a,b,f)$.
+    If $f:a \to b$ is an arrow of the category \Set, 
+    for all $x\in a$ we shall write $f(x)$ as a shortcut 
+    for $f(x)$ where $f$ is the underlying untyped function.
 \end{notation}
 
 Functions in set theory are just sets, and equality between functions is 
@@ -239,14 +253,14 @@ is equivalent to the {\em extensional} equality $\forall x\in a\ ,\ f(x)=g(x)$:
 
 An important question which will invariably arise is deciding when two
 arrows of the category \Set\ are equal. Although we have defined an
-arrow to be a tuple $(a,b,f)$, as indicated in 
+arrow to a typed function $(a,b,f)$, as indicated in 
 notation~(\ref{Cat:notation:set:arrow}) we will often refer to such an
 arrow simply as $f$. However, we should not forget that the equality
-$f=g$ between underlying functions is not enough for two arrows
-$(a,b,f)$ and $(c,d,g)$ to be equal. The equality between functions
+$f=g$ between underlying untyped functions is not enough for two arrows
+$(a,b,f)$ and $(c,d,g)$ to be equal. The equality between untyped functions
 will ensure that they have the same domain and the same
 range, but it does not tell us anything
-about the intended codomains of their respective arrows.
+about the intended codomains of their respective typed functions.
 
 \begin{prop}\label{Cat:prop:functions:equal:domain}
     If two functions $f,g$ are equal, they have the same domain.
@@ -282,9 +296,10 @@ about the intended codomains of their respective arrows.
     (for some $f$) and $g^{*}=(c,d,g)$ (for some $g$) be two arrows
     of the category \Set. We call these arrows $f^{*}$ and $g^{*}$ in
     this proof so as to be very precise on the distinction between
-    an arrow and its underlying function. Looking at 
-    definition~(\ref{Cat:def:set}), $f$ and $g$ are functions $f:a\to b$ 
-    and $g:c\to d$. So the domain of $f$ is the set $a$ while the domain of $g$ 
+    an arrow (a typed function) and its underlying function (an
+    untyped function). Looking at definition~(\ref{Cat:def:set}), 
+    $f$ and $g$ are functions $f:a\to b$ and $g:c\to d$. So the 
+    domain of $f$ is the set $a$ while the domain of $g$ 
     is the set $c$, and the range of $f$ is a subset of $b$ while the range of 
     $g$ is a subset of $d$. First we assume that $f^{*}=g^{*}$. Then we have 
     the equality between triples $(a,b,f)=(c,d,g)$. Hence we obtain immediately

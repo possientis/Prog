@@ -20,10 +20,6 @@ with odd_of_even_succ : ∀ (n:ℕ), even (n + 1) → odd n
 | _ (even_succ _ no) := no
 
 
-
-
-
-
 universe u
 
 namespace hidden
@@ -64,4 +60,23 @@ begin
     { simp [bodd, beven] },
     { simp [beven, bodd], rewrite IH, simp}
 end
+
+inductive Term
+| Const : string → Term
+| App   : string → list Term → Term
+
+open Term
+
+mutual def numConsts, numConstsLst
+with numConsts : Term → ℕ
+| (Const _)  := 1
+| (App _ ts) := numConstsLst ts
+with numConstsLst : list Term → ℕ
+| [] := 0
+| (t :: ts) := numConsts t + numConstsLst ts
+
+def ex1 : Term := App "f" [App "g" [Const "x"], Const "y"]
+
+#eval numConsts ex1
+
 

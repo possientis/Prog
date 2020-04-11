@@ -2,13 +2,29 @@ open import Relation.Nullary using
   ( Dec
   ; yes
   ; no
+  ; ¬_
   )
 
 open import Relation.Nullary.Decidable using
   ( toWitness
   ; fromWitness
-  ; ⌞_⌟
+  ; ⌊_⌋
   )
+
+open import Relation.Nullary.Negation using
+  (¬?)
+
+open import Relation.Nullary.Negation using
+  (contraposition)
+
+open import Relation.Nullary.Product using
+  (_×-dec_)
+
+open import Relation.Nullary.Sum using
+  (_⊎-dec_)
+
+open import Relation.Binary using
+  (Decidable)
 
 open import Data.Nat using
   ( ℕ
@@ -18,6 +34,9 @@ open import Data.Nat using
   ; _≤?_
   ; z≤n
   ; s≤s
+  ; _+_
+  ; _*_
+  ; _∸_ --\.-
   )
 
 open import Data.Nat.Properties using
@@ -30,7 +49,7 @@ open import Data.Nat.Properties using
   ; ≤-total
   )
 
-open import Data.Bool.Base using
+open import Data.Bool using
   ( Bool
   ; true
   ; false
@@ -61,7 +80,7 @@ open Eq.≡-Reasoning using
   ; _∎
   )
 
-import Data.Product using
+open import Data.Product using
   ( _×_
   ; _,_
   ; proj₁
@@ -72,12 +91,11 @@ import Data.Product using
   ; ∃-syntax
   )
 
-import Data.Unit                 using (⊤; tt)
-import Data.Sum                  using (_⊎_; inj₁; inj₂) renaming ([_,_] to case-⊎)
-import Data.Empty                using (⊥; ⊥-elim)
+open import Data.Unit              using (⊤; tt)
+open import Data.Sum               using (_⊎_; inj₁; inj₂) renaming ([_,_] to case-⊎)
+open import Data.Empty             using (⊥; ⊥-elim)
 
-import Function                  using (_∘_)
-import Function.Equivalence      using (_⇔_) -- less convenient than in isomorphism
+open import Function               using (_∘_)
+open import Function.Equivalence   using (_⇔_) -- less convenient than in isomorphism
 
-import Relation.Nullary          using (¬_)
-import Relation.Nullary.Negation using (contraposition)
+open import Level                  using (Level)

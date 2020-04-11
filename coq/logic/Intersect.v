@@ -55,11 +55,17 @@ Proof.
             } 
 Qed.
 
-(*
+(* left-distributivity is false: xs = [0], ys = [1], zs = [1,0], then           *)
+(* zs /\ xs = [0]                                                               *)
+(* zs /\ ys = [1]                                                               *)
+(* so (zs /\ xs) ++ (zs /\ ys) = [0,1] where zs /\ (xs ++ ys) = [1,0]           *)
 Lemma inter_distrib_app_r : forall (v:Type) (e:Eq v) (xs ys zs:list v),
     ((xs ++ ys) /\ zs) = (xs /\ zs) ++ (ys /\ zs).
 Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys zs.
+    - reflexivity.
+    - rewrite <- app_comm_cons. simpl. destruct (in_dec eqDec x zs) as [H|H].
+        + rewrite <- app_comm_cons. rewrite IH. reflexivity.
+        + apply IH.
+Qed.
 
-
-Show.
-*)

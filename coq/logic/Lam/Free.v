@@ -158,7 +158,9 @@ Proof.
             ((Fr t1 /\ xs) ++ concat (map (Fr; f) (Fr t1 \\ xs))).
             { apply IH1. }
             { apply incl_app.
-                { apply incl_appl.
+                { apply incl_appl. rewrite inter_distrib_app_r. 
+                  apply incl_appl. apply incl_refl. }
+                { apply incl_appr.
 
 Show.
 *)

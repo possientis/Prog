@@ -1,3 +1,4 @@
+typed vs untyped: see hom-functor, cartesian functor
 category of small categories
 locally small => small
 category of locally small catgeories
@@ -6,3 +7,4 @@ functor category
 define Par (category of sets and partial functions)
 define Rel (category os sets and relations)
 define the notion of sub-category: Set <= Par <= Rel ?
+define an isomorphism

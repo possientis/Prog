@@ -34,3 +34,27 @@ definition trans2 {α : Type u} (a b c : α) (Eab : a = b) (Ebc : b = c) : a = c
 
 definition congr2 {α β : Type u} {a b : α} (f : α → β) (E : a = b) : f a = f b :=
   @subst α a b (λ x, f a = f x) E (eq.refl (f a))
+
+namespace Vec
+
+local notation x :: xs := cons x xs
+
+#check @Vec.cases_on
+
+def tail_aux {α : Type u} {n m : ℕ} (v : Vec α m) :
+  m = n + 1 → Vec α n :=
+    Vec.cases_on v
+      (begin assume H, cases H end)
+      (begin assume m x w H, cases H, exact w end)
+
+def tail1 {α : Type u} {n : ℕ} (v : Vec α (n+1)) : Vec α n := tail_aux v rfl
+
+#check @nat.no_confusion
+
+def head {α : Type u} : ∀ {n : ℕ}, Vec α (n + 1) → α
+| _ (x :: xs) := x
+
+def tail {α : Type u} : ∀ {n : ℕ}, Vec α (n + 1) → Vec α n
+| _ (x :: xs) := xs
+
+end Vec
