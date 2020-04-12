@@ -4,7 +4,7 @@ module  Banking
     (   Transaction
     ,   amount
     ,   transactions
-    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7
+    ,   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9
     ,   deposits1, deposits2, deposits3
     )   where
 
@@ -78,7 +78,13 @@ ex6 = bobAccount ^.. transactions . badDeposits -- looks good, but ...
 ex7 :: BankAccount
 ex7 = bobAccount & transactions . badDeposits *~ 10
 
+deposits4 :: Traversal' [Transaction] Int 
+deposits4 = traversed . filtered isDeposit . amount
 
+ex8 :: [Int]
+ex8 = bobAccount ^.. transactions . deposits4 
 
+ex9 :: BankAccount
+ex9 = bobAccount & transactions . deposits4 *~ 10
 
 

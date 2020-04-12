@@ -74,7 +74,23 @@ Lemma diff_distrib_app_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
 Proof.
     intros v e xs ys zs. revert xs ys. induction zs as [|z zs IH]; intros xs ys.
     - reflexivity.
-    - simpl. destruct (in_dec eqDec z (xs ++ ys)) as [H|H].
-        +
+    - simpl. destruct (in_dec eqDec z (xs ++ ys)) as [H1|H1].
+        + destruct (in_dec eqDec z xs) as [H2|H2]; 
+          destruct (in_dec eqDec z ys) as [H3|H3].
+            { apply IH. }
+            { rewrite inter_cons_r.
+                { apply IH. }
+                { intros H4. rewrite diff_charac in H4. destruct H4 as [H4 H5].
+                  apply H5. assumption. }}
+            { rewrite inter_cons_l.
+                { apply IH. }
+                { intros H4. rewrite diff_charac in H4. destruct H4 as [H4 H5].
+                    apply H5. assumption. }}
+            { exfalso. apply in_app_or in H1. destruct H1 as [H1|H1].
+                { apply H2. assumption. }
+                { apply H3. assumption. }}
+        + 
+
 Show.
+
 *)

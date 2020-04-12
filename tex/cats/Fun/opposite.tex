@@ -40,3 +40,22 @@
             &=&F_{1}(g)\circ F_{1}(f)\ @\ \Dop
         \end{eqnarray*}
 \end{proof}
+
+Proposition~(\ref{Fun:prop:opposite}) illustrates the fact that the knowledge
+of a functor $F$ by itself does not tell us what its domain and codomain are.
+In fact, we have not even defined what the {\em domain} or {\em codomain} of 
+a functor should be. By virtue of notation~(\ref{Fun:notation:functor:arrow}), 
+writing $F:\Cat\to\Dat$ is simply a notational shortcut for the statement that 
+$F$ is a functor between \Cat\ and \Dat. This is very similar to writing
+$f:a \to b$ for an untyped function $f$. Now we cannot simply define 
+the domain and codomain of a functor $F$ to be the categories \Cat\ and
+\Dat\ respectively, whenever $F:\Cat\to\Dat$. This is because the categories
+\Cat\ and \Dat\ are not unique, as whenever the statement $F:\Cat\to\Dat$
+holds, the statement $F:\Cop\to\Dop$ also holds. To resolve this issue,
+similarly to~(\ref{Cat:def:typed:untyped:function}), we define:
+
+\begin{defin}\label{Fun:def:typed:untyped:functor}
+    Given a functor $F:\Cat\to\Dat$ between categories \Cat, \Dat,
+    we say that $F$ is the {\em untyped functor} while the triple 
+    $(\Cat,\Dat,F)$ is called the {\em typed} functor.
+\end{defin}

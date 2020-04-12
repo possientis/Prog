@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Utils.Ord.
+Require Import Utils.Equiv.
 
 (* Insert the element x inside the ordered list xs                              *)
 Fixpoint insert (a:Type) (o:Ord a) (x:a) (xs:list a) : list a :=
@@ -99,3 +100,37 @@ Proof.
                 { assumption. }}
             { assumption. }
 Qed.
+
+(*
+Lemma insertCons : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
+    Equiv (insert x xs) (cons x xs).
+Proof.
+    intros a o x xs. revert x. induction xs as [|x xs IH]; intros y.
+    - apply EquivRefl.
+    - simpl. destruct (leqDec y x) as [H|H].
+        + split; intros z H1.
+            { destruct H1 as [H1|H1].
+                { subst. right. left. reflexivity. }
+                { destruct (IH y) as [H2 H3]. destruct ((H2 z) H1) as [H4|H4].
+                    { subst. left. reflexivity. }
+                    { right. right. assumption. }}}
+            { destruct H1 as [H1|H1].
+                { subst. destruct (IH z) as [H2 H3]. right. apply H3.
+                  left. reflexivity. }
+                { destruct H1 as [H1|H1].
+                    { subst. left. reflexivity. }
+                    { right. destruct (IH y) as [H2 H3]. apply H3.
+                      right. assumption. }}}
+        + split; intros z H1.
+
+Show.
+*)
+
+(*
+Lemma sortedEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (sort xs).
+Proof.
+    intros a o. induction xs as [|x xs [IH1 IH2]].
+    - apply EquivRefl.
+    - simpl.
+Show.
+*)

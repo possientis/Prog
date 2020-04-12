@@ -69,25 +69,26 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
         \end{eqnarray*}
     However, given arrows $f_{1}, f_{2}$ in \Cat, we still need to check that
     $F_{1}(f_{1},f_{2})$ is a member of the collection $\arr\ \Set$. In other
-    words, we need to check that $F_{1}(f_{1},f_{2})$ is a function. Introducing
-    the notations $a_{1},a_{2},b_{1},b_{2}$ such that $f_{1}:b_{1}\to a_{1}$ and
-    $f_{2}:a_{2}\to b_{2}$, our definition states that $F_{1}(f_{1},f_{2})(h)$ is
-    defined for any $h:a_{1}\to a_{2}$. In other words, $F_{1}(f_{1},f_{2})(h)$
-    is defined for any $h$ which belongs to the hom-set $\Cat(a_{1},a_{2})$.
-    Having assumed that \Cat\ is a locally small category, the collection
-    $\Cat(a_{1},a_{2})$ is in fact a set, and $F_{1}(f_{1},f_{2})$ is
-    therefore a function with domain $\Cat(a_{1},a_{2})$, defined by
-    $F_{1}(f_{1},f_{2})(h)=f_{2}\circ h\circ f_{1}$. Note that since
+    words, we need to check that $F_{1}(f_{1},f_{2})$ is a typed function. 
+    Introducing the notations $a_{1},a_{2},b_{1},b_{2}$ such that 
+    $f_{1}:b_{1}\to a_{1}$ and $f_{2}:a_{2}\to b_{2}$, our definition states 
+    that $F_{1}(f_{1},f_{2})(h)$ is defined for any $h:a_{1}\to a_{2}$. In other 
+    words, $F_{1}(f_{1},f_{2})(h)$ is defined for any $h$ which belongs to the 
+    hom-set $\Cat(a_{1},a_{2})$. Having assumed that \Cat\ is a locally small 
+    category, the collection $\Cat(a_{1},a_{2})$ is in fact a set, and 
+    $F_{1}(f_{1},f_{2})$ is therefore an untyped function with domain 
+    $\Cat(a_{1},a_{2})$, defined by $F_{1}(f_{1},f_{2})(h)=f_{2}\circ 
+    h\circ f_{1}$. Note that since
     $f_{1}:b_{1}\to a_{1}$ and $f_{2}:a_{2}\to b_{2}$, the composition
     $f_{2}\circ h\circ f_{1}$ is a well-defined arrow in \Cat\ whenever 
     $h\in\Cat(a_{1},a_{2})$. This arrow has domain $b_{1}$ and codomain 
     $b_{2}$ and we see that $F_{1}(f_{1},f_{2})(h)$ is in fact an element
-    of the hom-set $\Cat(b_{1},b_{2})$. So $F_{1}(f_{1},f_{2})$ is actually
-    a function $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{1})\to\Cat(b_{1},b_{2})$.
+    of the hom-set $\Cat(b_{1},b_{2})$. So $F_{1}(f_{1},f_{2})$ is an 
+    untyped function $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{1})\to\Cat(b_{1},b_{2})$.
     Now looking at definition~(\ref{Cat:def:set}), an arrow of the category
-    \Set\ is a triple $(a,b,f)$ where $a$ and $b$ are sets and $f$ is a
-    function $f:a\to b$. Hence, strictly speaking our definition of 
-    $F_{1}(f_{1},f_{2})$ is not a member of $\arr\ \Set$ but simply a 
+    \Set\ is a typed function $(a,b,f)$ where $a$ and $b$ are sets and $f$ is 
+    an untyped function $f:a\to b$. Hence, strictly speaking our definition of 
+    $F_{1}(f_{1},f_{2})$ is not a member of $\arr\ \Set$ but simply an untyped 
     function $F_{1}(f_{1},f_{2}): \Cat(a_{1},a_{2})\to\Cat(b_{1},b_{2})$. 
     However, the triple 
     $(\Cat(a_{1},a_{2}),\Cat(b_{1},b_{2}),F_{1}(f_{1},f_{2}))$ is an arrow

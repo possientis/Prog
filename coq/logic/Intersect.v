@@ -69,3 +69,30 @@ Proof.
         + apply IH.
 Qed.
 
+Lemma inter_cons_r : forall (v:Type) (e:Eq v) (xs ys:list v) (y:v),
+    ~In y xs -> (xs /\ (cons y ys)) = (xs /\ ys).
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys y H.
+    - reflexivity.
+    - simpl. destruct (eqDec y x) as [H1|H1].
+        + subst. exfalso. apply H. left. reflexivity.
+        + destruct (in_dec eqDec x ys) as [H2|H2].
+            { rewrite IH.
+                { reflexivity. }
+                { intros H3. apply H. right. assumption. }}
+            { apply IH.  intros H3. apply H. right. assumption. }
+Qed.
+
+
+Lemma inter_cons_l : forall (v:Type) (e:Eq v) (xs ys:list v) (x:v),
+    ~In x ys -> ((cons x xs) /\ ys) = (xs /\ ys).
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys y H;
+    simpl; destruct (in_dec eqDec y ys) as [H1|H1].
+    - apply H in H1. contradiction.
+    - reflexivity.
+    - apply H in H1. contradiction.
+    - reflexivity.
+Qed.
+
+

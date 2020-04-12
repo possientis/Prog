@@ -104,18 +104,17 @@ Remove.vo :						Remove.v \
 	coqc Remove.v
 
 
-
-Difference.vo :					Difference.v \
-								In.vo \
-								Eq.vo
-	coqc Difference.v
-
-
-
 Intersect.vo :					Intersect.v \
 								In.vo \
 								Eq.vo
 	coqc Intersect.v
+
+
+Difference.vo :					Difference.v \
+								In.vo \
+								Intersect.vo \
+								Eq.vo
+	coqc Difference.v
 
 
 

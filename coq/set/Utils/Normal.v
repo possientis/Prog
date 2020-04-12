@@ -4,6 +4,7 @@ Require Import Utils.Nub.
 Require Import Utils.Ord.
 Require Import Utils.Sort.
 
+(*
 Lemma nubSorted : forall (a:Type) (o:Ord a) (xs:list a),
     Sorted xs -> Sorted (nub xs).
 Proof.
@@ -18,7 +19,7 @@ Proof.
                 {
 
 Show.
-
+*)
 
 (*
 (* is this true ? *)

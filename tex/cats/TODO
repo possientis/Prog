@@ -8,3 +8,5 @@ define Par (category of sets and partial functions)
 define Rel (category os sets and relations)
 define the notion of sub-category: Set <= Par <= Rel ?
 define an isomorphism
+define the List : Set -> Set
+define the power set functor : Set -> Set 

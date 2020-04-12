@@ -10,8 +10,10 @@ all :							${UTILS}/LEM.vo \
 								${UTILS}/Fresh.vo \
 								${UTILS}/Eq.vo \
 								${UTILS}/Ord.vo \
+								${UTILS}/Equiv.vo \
 								${UTILS}/Sort.vo \
 								${UTILS}/Nub.vo \
+								${UTILS}/Normal.vo \
 								${CORE}/Set.vo \
 								${CORE}/Order.vo \
 								${CORE}/Core.vo \
@@ -82,13 +84,25 @@ ${UTILS}/Ord.vo :				${UTILS}/Ord.v \
 								${UTILS}/Eq.vo
 	coqc ${UTILS}/Ord.v			${OPT} 
 
+${UTILS}/Equiv.vo :				${UTILS}/Equiv.v
+	coqc ${UTILS}/Equiv.v		${OPT} 
+
 ${UTILS}/Sort.vo :				${UTILS}/Sort.v \
-								${UTILS}/Ord.vo
+								${UTILS}/Ord.vo \
+								${UTILS}/Equiv.vo
 	coqc ${UTILS}/Sort.v		${OPT} 
 
 ${UTILS}/Nub.vo :				${UTILS}/Nub.v \
-								${UTILS}/Eq.vo
+								${UTILS}/Eq.vo \
+								${UTILS}/Equiv.vo
 	coqc ${UTILS}/Nub.v			${OPT} 
+
+
+${UTILS}/Normal.vo :			${UTILS}/Normal.v \
+								${UTILS}/Nub.vo \
+								${UTILS}/Ord.vo \
+								${UTILS}/Sort.vo
+	coqc ${UTILS}/Normal.v		${OPT} 
 
 
 ${CORE}/Set.vo : 				${CORE}/Set.v

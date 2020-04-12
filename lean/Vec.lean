@@ -35,7 +35,7 @@ definition trans2 {α : Type u} (a b c : α) (Eab : a = b) (Ebc : b = c) : a = c
 definition congr2 {α β : Type u} {a b : α} (f : α → β) (E : a = b) : f a = f b :=
   @subst α a b (λ x, f a = f x) E (eq.refl (f a))
 
-namespace Vec
+open Vec
 
 local notation x :: xs := cons x xs
 
@@ -57,4 +57,44 @@ def head {α : Type u} : ∀ {n : ℕ}, Vec α (n + 1) → α
 def tail {α : Type u} : ∀ {n : ℕ}, Vec α (n + 1) → Vec α n
 | _ (x :: xs) := xs
 
-end Vec
+
+lemma eta : ∀ {α : Type u} {n : ℕ} (vs : Vec α (n + 1)), head vs :: tail vs = vs :=
+begin
+  intros α n vs, cases vs with v vs,
+  reflexivity
+end
+
+def map2 {α β γ : Type u} (f : α → β → γ) : ∀ {n : ℕ}, Vec α n → Vec β n → Vec γ n
+| 0 nil nil := nil
+| (n + 1) (a :: as) (b :: bs) := f a b :: map2 as bs
+
+
+def zip {α β : Type u} : ∀ {n : ℕ}, Vec α n → Vec β n → Vec (α × β) n
+| 0 nil nil := nil
+| (n + 1) (a :: as) (b :: bs) := (a, b) :: zip as bs
+
+#print map2
+#print map2._main -- scary stuff
+
+
+def map {α β : Type u} (f : α → β) : ∀ {n : ℕ}, Vec α n → Vec β n
+| 0 nil := nil
+| (n + 1) (x :: xs) := f x :: map xs
+
+#print map
+#print map._main
+#check @map._main
+
+
+def map1 : ∀ {α β : Type u}, (α → β) → ∀ {n : ℕ}, Vec α n → Vec β n :=
+  λ (α β:Type u) (f:α → β), nat.rec
+    (λ (_:Vec α 0), _)
+    _
+
+#check @nat.rec
+#check @nat.rec_on
+#check @nat.brec_on
+
+
+
+

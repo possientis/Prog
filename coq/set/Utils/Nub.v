@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Utils.Eq.
+Require Import Utils.Equiv.
 
 (* Removes duplicates from the list xs.                                         *)
 Fixpoint nub (a:Type) (e:Eq a) (xs:list a) : list a :=
@@ -58,3 +59,11 @@ Proof.
             { intros H1. apply H. rewrite nubPreserve. exact H1. }
             { assumption. }
 Qed.
+
+
+(*
+Lemma nubEquiv : forall (a:Type) (e:Eq a) (xs:list a), Equiv xs (nub xs).
+Proof.
+
+Show.
+*)
