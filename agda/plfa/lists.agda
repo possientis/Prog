@@ -80,3 +80,119 @@ _ =
      (x ∷ xs) ++ (ys ++ zs)
      ∎
 
+++-identity-l : ∀ {a : Set} → (xs : List a) → [] ++ xs ≡ xs
+++-identity-l xs = refl
+
+++-identity-r : ∀ {a : Set} → (xs : List a) → xs ++ [] ≡ xs
+++-identity-r [] = refl
+++-identity-r (x ∷ xs) =
+  begin
+    (x ∷ xs) ++ []
+    ≡⟨⟩
+    x ∷ (xs ++ [])
+    ≡⟨ cong (x ∷_) (++-identity-r xs) ⟩
+    x ∷ xs
+    ∎
+
+length : ∀ {a : Set} → List a → ℕ
+length [] = zero
+length (_ ∷ xs) = suc (length xs)
+
+_ : length [ 0 , 1  , 2 ] ≡ 3
+_ =
+  begin
+    length [ 0 , 1 , 2 ]
+    ≡⟨⟩
+    length (0 ∷ 1 ∷ 2 ∷ [])
+    ≡⟨⟩
+    suc (length (1 ∷ 2 ∷ []))
+    ≡⟨⟩
+    suc (suc (length (2 ∷ [])))
+    ≡⟨⟩
+    suc (suc (suc (length {ℕ} [])))
+    ≡⟨⟩
+    suc (suc (suc 0))
+    ≡⟨⟩
+    3
+    ∎
+
+length-++ : ∀ {a : Set} → (xs ys : List a) →
+  length (xs ++ ys) ≡ length xs + length ys
+
+length-++ [] ys = refl
+length-++ (x ∷ xs) ys =
+  begin
+    length ((x ∷ xs) ++ ys)
+    ≡⟨⟩
+    length (x ∷ (xs ++ ys))
+    ≡⟨⟩
+    suc (length (xs ++ ys))
+    ≡⟨ cong suc (length-++ xs ys) ⟩
+    suc (length xs + length ys)
+    ≡⟨⟩
+    (suc (length xs)) + length ys
+    ≡⟨⟩
+    length (x ∷ xs) + length ys
+    ∎
+
+reverse : ∀ {a : Set} → List a → List a
+reverse [] = []
+reverse (x ∷ xs) = reverse xs ++ [ x ]
+
+_ : reverse [ 0 , 1 , 2 ] ≡ [ 2 , 1 , 0 ]
+_ =
+  begin
+    reverse [ 0 , 1 , 2 ]
+    ≡⟨⟩
+    reverse (0 ∷ 1 ∷ 2 ∷ [])
+    ≡⟨⟩
+    reverse (1 ∷ 2 ∷ []) ++ [ 0 ]
+    ≡⟨⟩
+    (reverse (2 ∷ []) ++ [ 1 ]) ++ [ 0 ]
+    ≡⟨⟩
+    ((reverse [] ++ [ 2 ]) ++ [ 1 ]) ++ [ 0 ]
+    ≡⟨⟩
+    (([] ++ [ 2 ]) ++ [ 1 ]) ++ [ 0 ]
+    ≡⟨⟩
+    ([ 2 ] ++ [ 1 ]) ++ [ 0 ]
+    ≡⟨⟩
+    ((2 ∷ []) ++ [ 1 ]) ++ [ 0 ]
+    ≡⟨⟩
+    (2 ∷ ([] ++ [ 1 ])) ++ [ 0 ]
+    ≡⟨⟩
+    (2 ∷ [ 1 ]) ++ [ 0 ]
+    ≡⟨⟩
+    2 ∷ ([ 1 ] ++ [ 0 ])
+    ≡⟨⟩
+    2 ∷ ((1 ∷ []) ++ [ 0 ])
+    ≡⟨⟩
+    2 ∷ (1 ∷ ([] ++ [ 0 ]))
+    ≡⟨⟩
+    2 ∷ (1 ∷ [ 0 ])
+    ≡⟨⟩
+    2 ∷ 1 ∷ 0 ∷ []
+    ≡⟨⟩
+    [ 2 , 1 , 0 ]
+    ∎
+
+reverse++distrib : ∀ {a : Set} → (xs ys : List a) →
+  reverse (xs ++ ys) ≡ reverse ys ++ reverse xs
+
+reverse++distrib [] ys = sym (++-identity-r (reverse ys))
+reverse++distrib (x ∷ xs) ys =
+  begin
+    reverse ((x ∷ xs) ++ ys)
+    ≡⟨⟩
+    reverse (x ∷ (xs ++ ys))
+    ≡⟨⟩
+    reverse (xs ++ ys) ++ [ x ]
+    ≡⟨ cong (_++ [ x ]) (reverse++distrib xs ys) ⟩
+    (reverse ys ++ reverse xs) ++ [ x ]
+    ≡⟨ ++-assoc (reverse ys) (reverse xs) [ x ] ⟩
+    reverse ys ++ (reverse xs ++ [ x ])
+    ≡⟨⟩
+    reverse ys ++ reverse (x ∷ xs)
+    ∎
+
+
+

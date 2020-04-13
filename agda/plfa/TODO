@@ -1,1 +1,1 @@
-lists : identity for append
+lists : reverse involutive

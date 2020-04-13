@@ -61,9 +61,18 @@ Proof.
 Qed.
 
 
-(*
 Lemma nubEquiv : forall (a:Type) (e:Eq a) (xs:list a), Equiv xs (nub xs).
 Proof.
+    intros a e. induction xs as [|x xs IH]; simpl.
+    - apply EquivRefl.
+    - destruct (in_dec eqDec x xs) as [H|H].
+        + apply EquivTrans with xs.
+            { apply consIn. assumption. }
+            { assumption. }
+        + split; intros z [H1|H1].
+            { subst. left. reflexivity. }
+            { right. destruct IH as [H2 H3]. apply H2. assumption. }
+            { subst. left. reflexivity. }
+            { right. destruct IH as [H2 H3]. apply H3. assumption. }
+Qed.
 
-Show.
-*)

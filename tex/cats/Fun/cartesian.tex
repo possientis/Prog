@@ -29,13 +29,13 @@ of $F_{0}(a_{1},a_{2})$ and $F_{1}(f_{1},f_{2})$ respectively.
 
 \noindent
 {\bf Remark}: If $f_{1}$ and $f_{2}$ are arrows of the category \Set, strictly
-speaking from definition~(\ref{Cat:def:set}) $f_{1}$ and $f_{2}$ are tuples
-$(a,b,f)$ where $f:a\to b$. In particular $f_{1}$ and $f_{2}$ are sets and
-the cartesian product $f_{1}\times f_{2}$ is meaningful, so we have a 
-notational conflict with $f_{1}\times f_{2}$, the cartesian
-functor evaluated at $(f_{1},f_{2})$. Similarly to the composition $\circ$, 
-the symbol $\times$ is highly overloaded and may also be used to denote the 
-canonical product of two categories as in 
+speaking from definition~(\ref{Cat:def:set}) $f_{1}$ and $f_{2}$ are typed
+functions $(a,b,f)$ where $f:a\to b$ is untyped. In particular 
+$f_{1}$ and $f_{2}$ are sets and the cartesian product $f_{1}\times f_{2}$ is 
+meaningful, so we have a notational conflict with $f_{1}\times f_{2}$, the 
+cartesian functor evaluated at $(f_{1},f_{2})$. Similarly to the composition 
+$\circ$, the symbol $\times$ is highly overloaded and may also be used to denote 
+the canonical product of two categories as in 
 definition~(\ref{Cat:def:canonical:product}), or the canonical product of
 two functors as in notation~(\ref{Fun:notation:canonical:product}).
 
@@ -70,9 +70,9 @@ two functors as in notation~(\ref{Fun:notation:canonical:product}).
     not spell out the fact that $b_{1}\times b_{2}$ is the intended codomain
     of $F_{1}(f_{1},f_{2})$, but this is pretty clear from the context.
     Furthermore, definition~(\ref{Fun:def:cartesian}) does not explicitely 
-    define an arrow $(a_{1}\times a_{2},b_{1}\times b_{2},F_{1}(f_{1},f_{2}))$ of 
-    \Set, but only its underlying function $F_{1}(f_{1},f_{2})$. This is also 
-    fair enough given the context and in line with 
+    define a typed function $(a_{1}\times a_{2},b_{1}\times b_{2},F_{1}(f_{1},
+    f_{2}))$ of \Set, but only an untyped function $F_{1}(f_{1},f_{2})$. This 
+    is also fair enough given the context and in line with 
     notation~(\ref{Cat:notation:set:arrow}). We conlude that $F_{1}(f_{1},f_{2})
     \in\arr\ \Set$.
 

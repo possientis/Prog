@@ -6,7 +6,7 @@
             (1)&\ &F_{0}(a_{1},a_{2}) = \Cat(a_{1},a_{2})\\
             (2)&\ &F_{1}(f_{1},f_{2})(h) = f_{2}\circ h \circ f_{1}
         \end{eqnarray*}
-    where $(2)$ hold for $a_{1},a_{2},b_{1},b_{2}\in\Cat$,
+    where $(2)$ holds for $a_{1},a_{2},b_{1},b_{2}\in\Cat$,
     $f_{1}:b_{1}\to a_{1}$, $h:a_{1}\to a_{2}$ and $f_{2}:a_{2}\to b_{2}$.
 \end{defin}
 \begin{notation}\label{Fun:notation:hom:functor}
@@ -84,13 +84,13 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     $h\in\Cat(a_{1},a_{2})$. This arrow has domain $b_{1}$ and codomain 
     $b_{2}$ and we see that $F_{1}(f_{1},f_{2})(h)$ is in fact an element
     of the hom-set $\Cat(b_{1},b_{2})$. So $F_{1}(f_{1},f_{2})$ is an 
-    untyped function $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{1})\to\Cat(b_{1},b_{2})$.
+    untyped function $F_{1}(f_{1},f_{2}):\Cat(a_{1},a_{2})\to\Cat(b_{1},b_{2})$.
     Now looking at definition~(\ref{Cat:def:set}), an arrow of the category
     \Set\ is a typed function $(a,b,f)$ where $a$ and $b$ are sets and $f$ is 
     an untyped function $f:a\to b$. Hence, strictly speaking our definition of 
     $F_{1}(f_{1},f_{2})$ is not a member of $\arr\ \Set$ but simply an untyped 
     function $F_{1}(f_{1},f_{2}): \Cat(a_{1},a_{2})\to\Cat(b_{1},b_{2})$. 
-    However, the triple 
+    However, the typed function
     $(\Cat(a_{1},a_{2}),\Cat(b_{1},b_{2}),F_{1}(f_{1},f_{2}))$ is an arrow
     of the category \Set\ and we have agreed in 
     notation~(\ref{Cat:notation:set:arrow}) to simply refer to this arrow as
@@ -111,7 +111,7 @@ $F:\Cop\times\Cat\to\Set$. Hence we state:
     proof, provided we show that $f_{1}:b_{1}\to a_{1}\ @\ \Cat$ together 
     with $f_{2}:a_{2}\to b_{2}\ @\ \Cat$. Hence we need
     $(f_{1},f_{2})\in\Cat(b_{1},a_{1})\times\Cat(a_{2},b_{2})$, knowing
-    that $(f_{1},f_{2})\in\Cop\times\Cat[\,(a_{1},a_{2})\,,\,(b_{1},b_{2})
+    that $(f_{1},f_{2})\in(\Cop\times\Cat)[\,(a_{1},a_{2})\,,\,(b_{1},b_{2})
     \,]$ by assumption. It is therefore sufficient to prove that the 
     two collections $\Cat(b_{1},a_{1})\times\Cat(a_{2},b_{2})$ and
     $\Cop\times\Cat[\,(a_{1},a_{2})\,,\,(b_{1},b_{2})\,]$ coincide, which 

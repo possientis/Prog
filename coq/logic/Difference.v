@@ -78,19 +78,32 @@ Proof.
         + destruct (in_dec eqDec z xs) as [H2|H2]; 
           destruct (in_dec eqDec z ys) as [H3|H3].
             { apply IH. }
-            { rewrite inter_cons_r.
+            { rewrite inter_cons_not_in_r.
                 { apply IH. }
                 { intros H4. rewrite diff_charac in H4. destruct H4 as [H4 H5].
                   apply H5. assumption. }}
-            { rewrite inter_cons_l.
+            { rewrite inter_cons_not_in_l.
                 { apply IH. }
                 { intros H4. rewrite diff_charac in H4. destruct H4 as [H4 H5].
                     apply H5. assumption. }}
             { exfalso. apply in_app_or in H1. destruct H1 as [H1|H1].
                 { apply H2. assumption. }
                 { apply H3. assumption. }}
-        + 
-
+        + destruct (in_dec eqDec z xs) as [H2|H2];
+          destruct (in_dec eqDec z ys) as [H3|H3].
+            { exfalso. apply H1. apply in_or_app. left. assumption. }
+            { exfalso. apply H1. apply in_or_app. left. assumption. }
+            { exfalso. apply H1. apply in_or_app. right. assumption. }
+            { rewrite IH. simpl. destruct (eqDec z z) as [H4|H4].
+                { destruct (in_dec eqDec z zs) as [H5|H5].
+                    { rewrite inter_cons_in_r.
+                        { reflexivity. }
+                        { apply diff_charac; split; assumption. }}
+                    { rewrite inter_cons_not_in_r.
+                        { reflexivity. }
+                        { rewrite diff_charac. intros [H6 H7].
+                          apply H5. assumption. }}}
+                {
 Show.
-
 *)
+

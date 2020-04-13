@@ -18,3 +18,13 @@ Proof.
     split; apply incl_tran with ys; assumption.
 Qed.
 
+Lemma consIn : forall (a:Type) (x:a) (xs:list a),
+    In x xs -> Equiv (cons x xs) xs.
+Proof.
+    intros a x xs H. split; intros z.
+    - intros [H1|H1].
+        + subst. assumption.
+        + assumption.
+    - intros H1. right. assumption.
+Qed.
+

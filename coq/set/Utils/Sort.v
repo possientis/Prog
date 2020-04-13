@@ -84,7 +84,6 @@ Proof.
         + left. reflexivity.
 Qed.
 
-
 Lemma sortedLeq : forall (a:Type) (o:Ord a) (x y:a) (xs:list a),
     Sorted (cons x xs) -> In y xs -> leq y x.
 Proof.
@@ -101,7 +100,6 @@ Proof.
             { assumption. }
 Qed.
 
-(*
 Lemma insertCons : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     Equiv (insert x xs) (cons x xs).
 Proof.
@@ -121,16 +119,33 @@ Proof.
                     { subst. left. reflexivity. }
                     { right. destruct (IH y) as [H2 H3]. apply H3.
                       right. assumption. }}}
-        + split; intros z H1.
+        + split; intros z H1; assumption.
+Qed.
 
-Show.
-*)
-
-(*
 Lemma sortedEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (sort xs).
 Proof.
     intros a o. induction xs as [|x xs [IH1 IH2]].
     - apply EquivRefl.
-    - simpl.
+    - simpl. apply EquivTrans with (cons x (sort xs)).
+        + split; intros z [H1|H1].
+            { subst. left. reflexivity. }
+            { right. apply IH1. assumption. }
+            { subst. left. reflexivity. }
+            { right. apply IH2. assumption. }
+        + apply EquivSym. apply insertCons.
+Qed.
+
+(*
+Lemma sortedCons : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
+    (forall (z:a), In z xs -> leq z x) -> Sorted xs -> Sorted (cons x xs).
+Proof.
+    intros a o x xs H1 H2. revert H1. revert x.
+    induction H2 as [|x|x y xs H1 H2 IH]; intros z H.
+    - constructor.
+    - constructor.
+        + apply H. left. reflexivity.
+        + constructor.
+    -
+
 Show.
 *)

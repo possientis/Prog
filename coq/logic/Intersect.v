@@ -69,8 +69,8 @@ Proof.
         + apply IH.
 Qed.
 
-Lemma inter_cons_r : forall (v:Type) (e:Eq v) (xs ys:list v) (y:v),
-    ~In y xs -> (xs /\ (cons y ys)) = (xs /\ ys).
+Lemma inter_cons_not_in_r : forall (v:Type) (e:Eq v) (xs ys:list v) (y:v),
+    ~ y :: xs -> (xs /\ (cons y ys)) = (xs /\ ys).
 Proof.
     intros v e. induction xs as [|x xs IH]; intros ys y H.
     - reflexivity.
@@ -84,8 +84,8 @@ Proof.
 Qed.
 
 
-Lemma inter_cons_l : forall (v:Type) (e:Eq v) (xs ys:list v) (x:v),
-    ~In x ys -> ((cons x xs) /\ ys) = (xs /\ ys).
+Lemma inter_cons_not_in_l : forall (v:Type) (e:Eq v) (xs ys:list v) (x:v),
+    ~ x :: ys -> ((cons x xs) /\ ys) = (xs /\ ys).
 Proof.
     intros v e. induction xs as [|x xs IH]; intros ys y H;
     simpl; destruct (in_dec eqDec y ys) as [H1|H1].
@@ -95,4 +95,22 @@ Proof.
     - reflexivity.
 Qed.
 
+
+Lemma inter_cons_in_r : forall (v:Type) (e:Eq v) (xs ys:list v) (y:v),
+    y :: ys -> (xs /\ (cons y ys)) = (xs /\ ys).
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys y H.
+    - reflexivity.
+    - simpl. destruct (eqDec y x) as [H1|H1].
+        + subst. destruct (in_dec eqDec x ys) as [H2|H2].
+            { rewrite IH.
+                { reflexivity. }
+                { assumption. }}
+            { apply H2 in H. contradiction. }
+        + destruct (in_dec eqDec x ys) as [H2|H2]; rewrite IH.
+            { reflexivity. }
+            { assumption. }
+            { reflexivity. }
+            { assumption. }
+Qed.
 

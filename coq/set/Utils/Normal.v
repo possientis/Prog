@@ -15,8 +15,8 @@ Proof.
         + subst. exact IH.
         + destruct (in_dec eqDec y xs) as [H4|H4].
             { exact IH. }
-            { destruct (in_dec eqDec x xs) as [H5|H5].
-                {
+            { simpl in IH. destruct (in_dec eqDec x xs) as [H5|H5].
+                { 
 
 Show.
 *)

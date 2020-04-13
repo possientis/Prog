@@ -1,5 +1,5 @@
 module  LawTraversal
-    (   ex1, ex2, ex3, ex4, ex5, ex6, ex7
+    (   ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9
     )   where
 
 import Control.Lens
@@ -44,4 +44,15 @@ ex7 = pure (10, "Yo")
 -- ==
 -- x & myTraversal %~ (g . f)
 
+ex8 :: (Int, Int)
+ex8 = (0, 0) & both %~ (+10) & both %~ (*10)
 
+ex9 :: (Int, Int)
+ex9 = (0, 0) & both %~ (*10) . (+10)
+
+ex10 :: Int
+ex10 = 2 & filtered even %~ (+1)
+         & filtered even %~ (*10)   --- 3 not 30 !!!
+-- filtered even is a law breaking traversal !!!
+ex11 :: Int
+ex11 = 2 & filtered even %~ (*10) . (+1)
