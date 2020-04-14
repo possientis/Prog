@@ -4,7 +4,7 @@ Require Import Utils.Nub.
 Require Import Utils.Ord.
 Require Import Utils.Sort.
 
-(*
+
 Lemma nubSorted : forall (a:Type) (o:Ord a) (xs:list a),
     Sorted xs -> Sorted (nub xs).
 Proof.
@@ -16,10 +16,24 @@ Proof.
         + destruct (in_dec eqDec y xs) as [H4|H4].
             { exact IH. }
             { simpl in IH. destruct (in_dec eqDec x xs) as [H5|H5].
-                { 
+                { apply sortedCons.
+                    { intros z H6. apply leqTrans with x.
+                        { apply sortedLeq with xs.
+                            { assumption. }
+                            { rewrite nubIn. exact H6. }} (* 'assumption' fails *)
+                        { assumption. }}
+                    { assumption. }}
+                { apply sortedCons.
+                    { intros z [H6|H6].
+                        { subst. assumption. }
+                        { apply leqTrans with x.
+                            { apply sortedLeq with xs.
+                                { assumption. }
+                                { rewrite nubIn. exact H6. }}
+                            { assumption. }}}
+                    { assumption. }}}
+Qed.
 
-Show.
-*)
 
 (*
 (* is this true ? *)

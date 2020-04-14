@@ -122,6 +122,7 @@ Proof.
         + split; intros z H1; assumption.
 Qed.
 
+
 Lemma sortedEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (sort xs).
 Proof.
     intros a o. induction xs as [|x xs [IH1 IH2]].
@@ -135,7 +136,16 @@ Proof.
         + apply EquivSym. apply insertCons.
 Qed.
 
-(*
+Lemma sortedIn : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
+    In x xs <-> In x (sort xs).
+Proof.
+    intros a o x xs. destruct (sortedEquiv a o xs) as [H1 H2]. split; intros H.
+    - apply H1. assumption.
+    - apply H2. assumption.
+Qed.
+
+
+
 Lemma sortedCons : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     (forall (z:a), In z xs -> leq z x) -> Sorted xs -> Sorted (cons x xs).
 Proof.
@@ -145,7 +155,11 @@ Proof.
     - constructor.
         + apply H. left. reflexivity.
         + constructor.
-    -
-
-Show.
-*)
+    - constructor.
+        + apply H. left. reflexivity.
+        + apply IH. clear H. clear z. intros z [H3|H3].
+            { subst. assumption. }
+            { apply leqTrans with x.
+                { apply sortedLeq with xs; assumption. }
+                { assumption. }}
+Qed.

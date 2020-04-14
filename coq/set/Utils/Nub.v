@@ -17,7 +17,7 @@ Fixpoint nub (a:Type) (e:Eq a) (xs:list a) : list a :=
 Arguments nub {a} {e}.
 
 (* Nubing preserves the elements of a list.                                     *)
-Lemma nubPreserve : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
+Lemma nubIn : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
     In x xs <-> In x (nub xs).
 Proof.
     intros a e x xs. revert x. induction xs as [|x xs IH];
@@ -34,6 +34,13 @@ Proof.
         + destruct H as [H|H].
             { left. assumption. }
             { right. apply IH. assumption. }
+Qed.
+
+Lemma nubEquiv : forall (a:Type) (e:Eq a) (xs:list a), Equiv xs (nub xs).
+Proof.
+    intros a e xs. split; intros x H.
+    - apply nubIn. assumption.
+    - rewrite nubIn. exact H. (* 'assumption' fails, why ?                      *)
 Qed.
 
 (* Whether a list has no duplicate: need usual equality but not Eq instance.    *)
@@ -56,23 +63,9 @@ Proof.
         + assumption.
         + constructor.
             (* assumption tactic fails to work here. Very bizarre -> exact.     *)
-            { intros H1. apply H. rewrite nubPreserve. exact H1. }
+            { intros H1. apply H. rewrite nubIn. exact H1. }
             { assumption. }
 Qed.
 
 
-Lemma nubEquiv : forall (a:Type) (e:Eq a) (xs:list a), Equiv xs (nub xs).
-Proof.
-    intros a e. induction xs as [|x xs IH]; simpl.
-    - apply EquivRefl.
-    - destruct (in_dec eqDec x xs) as [H|H].
-        + apply EquivTrans with xs.
-            { apply consIn. assumption. }
-            { assumption. }
-        + split; intros z [H1|H1].
-            { subst. left. reflexivity. }
-            { right. destruct IH as [H2 H3]. apply H2. assumption. }
-            { subst. left. reflexivity. }
-            { right. destruct IH as [H2 H3]. apply H3. assumption. }
-Qed.
 
