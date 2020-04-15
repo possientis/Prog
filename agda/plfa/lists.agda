@@ -64,17 +64,17 @@ _ =
     ∎
 
 
-++-assoc : ∀ {a : Set} → (xs ys zs : List a) →
+++-assoc : ∀ {a : Set} → {xs ys zs : List a} →
   (xs ++ ys) ++ zs ≡ xs ++ (ys ++ zs)
-++-assoc [] ys zs = refl
-++-assoc (x ∷ xs) ys zs =
+++-assoc {a} {[]} {ys} {zs} = refl
+++-assoc {a} {(x ∷ xs)} {ys} {zs} =
   begin
      ((x ∷ xs) ++ ys) ++ zs
      ≡⟨⟩
      (x ∷ (xs ++ ys)) ++ zs
      ≡⟨⟩
      x ∷ ((xs ++ ys) ++ zs)
-     ≡⟨ cong (x ∷_) (++-assoc xs ys zs) ⟩
+     ≡⟨ cong (x ∷_) (++-assoc {a} {xs}) ⟩
      x ∷ (xs ++ (ys ++ zs))
      ≡⟨⟩
      (x ∷ xs) ++ (ys ++ zs)
@@ -175,24 +175,92 @@ _ =
     [ 2 , 1 , 0 ]
     ∎
 
-reverse++distrib : ∀ {a : Set} → (xs ys : List a) →
+reverse++distrib : ∀ {a : Set} → {xs ys : List a} →
   reverse (xs ++ ys) ≡ reverse ys ++ reverse xs
 
-reverse++distrib [] ys = sym (++-identity-r (reverse ys))
-reverse++distrib (x ∷ xs) ys =
+reverse++distrib {a} {[]} {ys} = sym (++-identity-r (reverse ys))
+reverse++distrib {a} {(x ∷ xs)} {ys} =
   begin
     reverse ((x ∷ xs) ++ ys)
     ≡⟨⟩
     reverse (x ∷ (xs ++ ys))
     ≡⟨⟩
     reverse (xs ++ ys) ++ [ x ]
-    ≡⟨ cong (_++ [ x ]) (reverse++distrib xs ys) ⟩
+    ≡⟨ cong (_++ [ x ]) (reverse++distrib {a} {xs}) ⟩
     (reverse ys ++ reverse xs) ++ [ x ]
-    ≡⟨ ++-assoc (reverse ys) (reverse xs) [ x ] ⟩
+    ≡⟨ ++-assoc {a} {reverse ys}  ⟩
     reverse ys ++ (reverse xs ++ [ x ])
     ≡⟨⟩
     reverse ys ++ reverse (x ∷ xs)
     ∎
 
+reverse-involutive : ∀ {a : Set} → {xs : List a} → reverse (reverse xs) ≡ xs
+reverse-involutive {a} {[]} = refl
+reverse-involutive {a} {x ∷ xs} =
+  begin
+    reverse (reverse (x ∷ xs))
+    ≡⟨⟩
+    reverse (reverse xs ++ [ x ])
+    ≡⟨ reverse++distrib {a} {reverse xs} ⟩
+    reverse [ x ] ++ reverse (reverse xs)
+    ≡⟨⟩
+    [ x ] ++ reverse (reverse xs)
+    ≡⟨ cong ([ x ] ++_) reverse-involutive ⟩
+    [ x ] ++ xs
+    ≡⟨⟩
+    x ∷ xs
+    ∎
 
+shunt : ∀ {a : Set} → List a → List a → List a
+shunt [] ys = ys
+shunt (x ∷ xs) ys =  shunt xs (x ∷ ys)
 
+shunt-reverse : ∀ {a : Set} → {xs ys : List a} →
+  shunt xs ys ≡ reverse xs ++ ys
+shunt-reverse {a} {[]} {_}= refl
+shunt-reverse {a} {x ∷ xs} {ys} =
+  begin
+    shunt (x ∷ xs) ys
+    ≡⟨⟩
+    shunt xs (x ∷ ys)
+    ≡⟨ shunt-reverse {a} {xs} ⟩
+    reverse xs ++ (x ∷ ys)
+    ≡⟨⟩
+    reverse xs ++ ([ x ] ++ ys)
+    ≡⟨ sym (++-assoc {a} {reverse xs}) ⟩
+    (reverse xs ++ [ x ]) ++ ys
+    ≡⟨⟩
+    reverse (x ∷ xs) ++ ys
+    ∎
+
+reverse' : ∀ {a : Set} → List a → List a
+reverse' xs = shunt xs []
+
+reverses : ∀ {a : Set} → {xs : List a} →
+  reverse' xs ≡ reverse xs
+reverses {a} {xs} =
+  begin
+    reverse' xs
+    ≡⟨⟩
+    shunt xs []
+    ≡⟨ shunt-reverse {a} {xs} ⟩
+    reverse xs ++ []
+    ≡⟨ ++-identity-r (reverse xs) ⟩
+    reverse xs 
+    ∎
+
+_ : reverse' [ 0 , 1 , 2 ] ≡ [ 2 , 1 , 0 ]
+_ =
+  begin
+    reverse' [ 0 , 1 , 2 ]
+    ≡⟨⟩
+    shunt [ 0 , 1 , 2 ] []
+    ≡⟨⟩
+    shunt [ 1 , 2 ] [ 0 ]
+    ≡⟨⟩
+    shunt [ 2 ] [ 1 , 0 ]
+    ≡⟨⟩
+    shunt [] [ 2 , 1 , 0 ]
+    ≡⟨⟩
+    [ 2 , 1 , 0 ]
+    ∎
