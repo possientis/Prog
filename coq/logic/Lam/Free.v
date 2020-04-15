@@ -160,7 +160,7 @@ Proof.
             { apply incl_app.
                 { apply incl_appl. rewrite inter_distrib_app_r. 
                   apply incl_appl. apply incl_refl. }
-                { apply incl_appr.
+                { apply incl_appr. rewrite diff_distrib_app_r.
 
 Show.
 *)

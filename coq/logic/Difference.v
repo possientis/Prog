@@ -68,7 +68,7 @@ Proof.
         + rewrite <- app_comm_cons. rewrite IH. reflexivity.
 Qed.
 
-(*
+
 Lemma diff_distrib_app_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
     zs \\ (xs ++ ys) = ((zs \\ xs) /\ (zs \\ ys)).
 Proof.
@@ -103,7 +103,5 @@ Proof.
                         { reflexivity. }
                         { rewrite diff_charac. intros [H6 H7].
                           apply H5. assumption. }}}
-                {
-Show.
-*)
-
+                { exfalso. apply H4. reflexivity. }}
+Qed.
