@@ -37,3 +37,39 @@ definition~(\ref{Cat:def:category:small}).
 of the category \Set\ are not functions but {\em typed functions}, the arrrows
 of the category \cat\ are not functors but {\em typed functors} as per 
 defintion~(\ref{Fun:def:typed:untyped:functor}).
+
+The definition of \cat\ is formally very similar to that of the category \Set.
+However, we still need to do our due diligence and checks it forms a category:
+
+\begin{prop}\label{Fun:prop:category:small:cat}
+    The category \cat\ of definition~(\ref{Fun:def:category:small:cat}) is 
+    a category.
+\end{prop}
+\begin{proof}
+    Given $(\ob, \arr, \dom, \cod, \id, \circ)$ of
+    definition~(\ref{Fun:def:category:small:cat}), we need to check that this
+    data satisfies condition~$(1)-(13)$ of definition~(\ref{Cat:def:category}).
+
+    $(1)$: The collection $\ob=\{\ \Cat\ |\ \mbox{\Cat\ is a small category}\ \}$
+    should be a collection with equality. The members of this collection are 
+    small categories which according to definition~(\ref{Cat:def:category:small})
+    are tuples $(\ob, \arr, \dom, \cod, \id, \circ)$ in which all the entries
+    are sets. So such a tuple is a set and the collections of all small 
+    categories is therefore a collection of sets for which set equality is 
+    defined.
+
+    $(2)$: The collection $\arr =\{\ (\Cat,\Dat,F)\ |\ \Cat,\Dat\in\ob\  
+    \mbox{and}\ F:\Cat\to\Dat\ \}$ should be a collection with equality.
+    It is sufficient for us to establish that all members of this collection
+    are sets. We have already seen that a small category is a set
+    (being a tuple with set entries) so each triple $(\Cat,\Dat,F)$ is also
+    a set provided we can show that any functor $F:\Cat\to\Dat$ between two
+    small categories is a set. However from definition~(\ref{Fun:def:functor}),
+    such a functor is an ordered pair $F=(F_{0},F_{1})$ where $F_{0}$ and 
+    $F_{1}$ are maps $F_{0}:\ob\ \Cat\to\ob\ \Dat$ and 
+    $F_{1}:\arr\ \Cat\to\arr\ \Dat$. Now the categories \Cat\ and \Dat\ being
+    small, all the collections $\ob\ \Cat$, $\ob\ \Dat$, $\arr\ \Cat$, 
+    $\arr\ \Dat$ are in fact sets and $F_{0}$ and $F_{1}$ are therefore maps
+    between sets. So $F_{0}$ and $F_{1}$ are themselves sets and so is 
+    $F=(F_{0},F_{1})$.
+\end{proof}
