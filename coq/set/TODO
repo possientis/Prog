@@ -1,3 +1,5 @@
+Sorted xs -> sort xs = xs
+Nubed xs -> nub xs = xs
 Utils/Normal
 conjecture: incl xs ys -> incl ys xs -> sort (nub xs) == sort (nub ys) and conversely...
 conjecture: normal x = sort . nub . map normal . toList $ x

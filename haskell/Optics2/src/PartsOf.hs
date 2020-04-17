@@ -62,6 +62,3 @@ ex15 = ex1 & unsafePartsOf (traversed . _1) .~ [True,False]
 -- no runtime error
 ex16 :: [(Bool,Int)]
 ex16 = ex1 & unsafePartsOf (traversed . _1) .~ [True,False, False, True]
-
-
-

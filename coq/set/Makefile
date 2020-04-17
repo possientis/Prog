@@ -101,7 +101,8 @@ ${UTILS}/Nub.vo :				${UTILS}/Nub.v \
 ${UTILS}/Normal.vo :			${UTILS}/Normal.v \
 								${UTILS}/Nub.vo \
 								${UTILS}/Ord.vo \
-								${UTILS}/Sort.vo
+								${UTILS}/Sort.vo \
+								${UTILS}/Equiv.vo
 	coqc ${UTILS}/Normal.v		${OPT} 
 
 
