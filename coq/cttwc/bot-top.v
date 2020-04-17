@@ -40,6 +40,10 @@ Qed.
 (* 2. inductive propositions and inductive predicates with a single proof cons, *)
 (*    provided every non-parametric argument of the proof constructor is a proof*)
 
+(* The elim restriction is the price we have to pay for the impredicativity of  *)
+(* the universe Prop of propositions. Without the elim restriction one could    *)
+(* constructor a proof of Falsity (difficult result).                           *)
+
 (* Bot is exempted from the elim restriction, as it has no constructor          *)
 
 Definition L3 (x:Bot) : nat := match x with _ => 3 end.
@@ -52,4 +56,21 @@ Fail Definition L4 (A B:Prop) (x:A \/ B) : nat :=
     | or_introl _   => 3
     | or_intror _   => 5
     end.
+
+(* Top is exempted from the elim restriction, unique constructor no argument    *)
+Definition L5 (x:Top) : nat := match x with _ => 3 end.
+
+Inductive Top2 (A:Prop): Prop :=
+| mkTop2 : forall (p:A), Top2 A  (* single proof constructor, arg is a proof    *)
+.
+
+Definition L6 (A:Prop) (p:Top2 A) : nat := match p with (mkTop2 _ _) => 3 end.
+
+Inductive Top3 (A:Type) : Prop :=
+| mkTop3 : forall (x:A), Top3 A (* single cons, but arg may not be a proof      *)
+.
+
+Fail Definition L7 (A:Type) (x:Top3 A) : nat := match x with (mkTop3 _ _) => 3 end.
+
+Definition L8 (A B:Prop) (p:A /\ B) : nat := match p with conj a b => 3 end.
 
