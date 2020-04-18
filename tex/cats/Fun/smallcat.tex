@@ -72,4 +72,41 @@ However, we still need to do our due diligence and checks it forms a category:
     $\arr\ \Dat$ are in fact sets and $F_{0}$ and $F_{1}$ are therefore maps
     between sets. So $F_{0}$ and $F_{1}$ are themselves sets and so is 
     $F=(F_{0},F_{1})$.
+
+    $(3)$: $\dom$ should be a map $\dom:\arr\to\ob$. The equation
+    $\dom(\Cat,\Dat,F)=\Cat$ holds for all small categories \Cat,\Dat\ and 
+    functor $F:\Cat\to\Dat$. So $\dom$ is indeed defined on the collection
+    $\arr$ as requested. Furthermore $\dom f \in\ob$ for all $f$.
+
+    $(4)$: $\cod$ should be a map $\cod:\arr\to\ob$ which is the case 
+    as per $(3)$.
+
+    $(5)$: $\id$ should be a map $\id:\ob\to\arr$. The equation $\id(\Cat)
+    =(\Cat,\Cat,I_{\cal C})$ holds for all small category \Cat. So $\id$
+    is indeed defined on \ob\ as requested. So it remains to show that
+    $(\Cat,\Cat,I_{\cal C})\in\arr$ for all \Cat, which the case since
+    the identity functor $I_{\cal C}$ is a functor $I_{\cal C}:\Cat\to\Cat$ as 
+    per definition~(\ref{Fun:def:identity}).
+
+    $(6)$: $\circ$ should be a partial map $\circ:\arr\times\arr\to\arr$.
+    From definition~(\ref{Fun:def:category:small:cat}), $g\circ f$ is defined
+    whenever $f$ and $g$ are of the form $f=(\Cat,\Dat,F)$ and $g=(\Dat,\Eat,G)$
+    where $F:\Cat\to\Dat$ and $G:\Dat\to\Eat$. So $g\circ f$ is defined on
+    a sub-collection of $\arr\times\arr$ as requested. So it remains to 
+    show that $g\circ f\in\arr$ when defined. However, $g\circ f$ is defined
+    as $(\Cat,\Eat,G \circ F)$ where $G\circ F$ is the functor composition,
+    so it remains to show that $G\circ F:\Cat\to\Eat$ which follows from
+    definition~(\ref{Fun:def:composition}).
+
+    $(7)$: $g\circ f$ should be defined exactly when $\cod(f)=\dom(g)$. From
+    definition~(\ref{Fun:def:category:small:cat}), $g\circ f$ is defined 
+    exactly when $f$ is of the form $f=(\Cat,\Dat,F)$ and $g$ is of the form
+    $(\Dat,\Eat,G)$. Since $\cod(f)=\Dat$ and $\dom(g)=\Dat$, we see that
+    $g\circ f$ is defined for all arrows $f,g$ for which $\cod(f)=\dom(g)$ 
+    as requested.
+
+    $(8)$: We should have $\dom(g\circ f) = \dom(f)$ when $g\circ f$ is defined.
+    So let $f=(\Cat,\Dat,F)$ and $g=(\Dat,\Eat,G)$. Then we have 
+    $g\circ f=(\Cat,\Eat,G\circ F)$ and consequently $\dom(g\circ f)=\Cat$ which
+    is $\dom(f)$ as requested.
 \end{proof}

@@ -1,5 +1,7 @@
 Require Import List.
 
+Require Import Concat.
+
 Notation "xs <= ys" := (incl xs ys)
     (at level 70, no associativity) : Include_scope.
 
@@ -30,10 +32,14 @@ Proof.
     - apply H1. assumption.
 Qed.
 
-(*
+
 Lemma incl_concat : forall (v:Type) (xss yss:list (list v)),
     xss <= yss -> concat xss <= concat yss.
-Show.
-
 Proof.
-*)
+    intros v xss yss H1 x H2. apply concat_charac.
+    rewrite concat_charac in H2. destruct H2 as [xs [H2 H3]].
+    exists xs. split.
+    - assumption.
+    - apply H1. assumption.
+Qed.
+

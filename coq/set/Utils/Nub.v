@@ -67,4 +67,12 @@ Proof.
             { assumption. }
 Qed.
 
-
+Lemma nubSame : forall (a:Type) (e:Eq a) (xs:list a), 
+    Nubed xs -> nub xs = xs.
+Proof.
+    intros a e xs H. induction H as [|x xs H1 H2 IH].
+    - reflexivity.
+    - simpl. destruct (in_dec eqDec x xs) as [H3|H3].
+        + apply H1 in H3. contradiction.
+        + rewrite IH. reflexivity.
+Qed.

@@ -5,6 +5,7 @@ Require Import In.
 Require Import Eq.
 Require Import Include.
 Require Import Injective.
+Require Import Difference.
 
 Fixpoint remove (v:Type) (e:Eq v) (x:v) (xs:list v) : list v :=
     match xs with
@@ -177,4 +178,14 @@ Proof.
         + simpl. destruct H as [H1 H2]. destruct H1 as [H1|H1].
             { subst. left. reflexivity. }
             { right. apply IH. split; assumption. }
+Qed.
+
+Lemma remove_diff : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
+    remove x xs = xs \\ [x].
+Proof.
+    intros v e x. induction xs as [|y ys IH].
+    - reflexivity.
+    - simpl. destruct (eqDec x y) as [H|H].
+        + apply IH.
+        + rewrite IH. reflexivity.
 Qed.

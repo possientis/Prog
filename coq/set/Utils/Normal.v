@@ -56,7 +56,6 @@ Proof.
             { constructor; assumption. }
 Qed.
 
-
 Lemma sortNubed : forall (a:Type) (o:Ord a) (xs:list a),
     Nubed xs -> Nubed (sort xs).
 Proof.
@@ -68,14 +67,17 @@ Proof.
 Qed.
 
 (*
-Lemma nubSame : forall (a:Type) (o:Ord a) (xs ys:list a),
+Lemma sortedEquivNubSame : forall (a:Type) (o:Ord a) (xs ys:list a),
     Sorted xs -> Sorted ys -> Equiv xs ys -> nub xs = nub ys.
 Proof.
     intros a o xs ys H. revert ys. 
     induction H as [|x|x y xs H1 H2 IH]; intros ys H3 H4.
     - admit.
     - admit.
-    -
+    - destruct H3 as [|x'|x' y' ys H5 H6].
+        + admit.
+        + admit.
+        + simpl.
 Show.
 *)
 

@@ -264,3 +264,111 @@ _ =
     ≡⟨⟩
     [ 2 , 1 , 0 ]
     ∎
+
+map : ∀ {a b : Set} → (a → b) → List a → List b
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
+
+_ : map suc [ 0 , 1 , 2 ] ≡ [ 1 , 2 , 3 ]
+_ =
+  begin
+    map suc [ 0 , 1 , 2 ]
+    ≡⟨⟩
+     1 ∷ map suc [ 1 , 2 ]
+     ≡⟨⟩
+     1 ∷ 2 ∷ map suc [ 2 ]
+     ≡⟨⟩
+     1 ∷ 2 ∷ 3 ∷ []
+     ≡⟨⟩
+     [ 1 , 2 , 3 ]
+     ∎
+
+sucs : List ℕ → List ℕ
+sucs = map suc
+
+_ : sucs [ 0 , 1 , 2 ] ≡ [ 1 , 2 , 3 ]
+_ =
+  begin
+    sucs [ 0 , 1 , 2 ]
+    ≡⟨⟩
+    map suc [ 0 , 1 , 2 ]
+    ≡⟨⟩
+    [ 1 , 2 , 3 ]
+    ∎
+
+postulate
+  extensionality : ∀ {a b : Set} → {f g : a → b} →
+    (∀ (x : a) → f x ≡ g x) → f ≡ g
+
+map-compose : ∀ {a b c : Set} → {f : a → b} → {g : b → c} →
+  map (g ∘ f) ≡ map g ∘ map f
+map-compose {a} {b} {c} {f} {g} = extensionality k
+  where
+    k : ∀ (xs : List a) → map (g ∘ f) xs ≡ (map g ∘ map f) xs
+    k [] = refl
+    k (x ∷ xs) =
+      begin
+        map (g ∘ f) (x ∷ xs)
+        ≡⟨⟩
+        (g ∘ f) x ∷ map (g ∘ f) xs
+        ≡⟨ cong ((g ∘ f) x ∷_) (k xs) ⟩
+        (g ∘ f) x ∷ (map g ∘ map f) xs
+        ≡⟨⟩
+        g (f x) ∷ map g (map f xs)
+        ≡⟨⟩
+        map g (f x ∷ map f xs)
+        ≡⟨⟩
+        map g (map f (x ∷ xs))
+        ≡⟨⟩
+        (map g ∘ map f) (x ∷ xs)
+        ∎
+
+map-++-distribute : ∀ {a b : Set} → {f : a → b} → {xs ys : List a} →
+  map f (xs ++ ys) ≡ map f xs ++ map f ys
+map-++-distribute {a} {b} {f} {[]} {ys} = refl
+map-++-distribute {a} {b} {f} {x ∷ xs} {ys} =
+  begin
+    map f ((x ∷ xs) ++ ys)
+    ≡⟨⟩
+    map f (x ∷ xs ++ ys)
+    ≡⟨⟩
+    f x ∷ map f (xs ++ ys)
+    ≡⟨ cong (f x ∷_) (map-++-distribute {a} {b} {f} {xs}) ⟩
+    f x ∷ map f xs ++ map f ys
+    ≡⟨⟩
+    (f x ∷ map f xs) ++ map f ys
+    ≡⟨⟩
+    map f (x ∷ xs) ++ map f ys
+    ∎
+
+-- leafs of type a, nodes of type b
+data Tree (a b : Set) : Set where
+  leaf : a → Tree a b
+  node : Tree a b → b → Tree a b → Tree a b
+
+
+mapTree : ∀ {a b c d : Set} → (a → c) → (b → d) → Tree a b → Tree c d
+mapTree f g (leaf x) = leaf (f x)
+mapTree f g (node tₗ x tᵣ) = node (mapTree f g tₗ) (g x) (mapTree f g tᵣ)
+
+foldr : ∀ {a b : Set} → (a → b → b) → b → List a → b
+foldr _⊗_ e [] = e
+foldr _⊗_ e (x ∷ xs) = x ⊗ foldr _⊗_ e xs
+
+_ : foldr _+_ 0 [ 1 , 2 , 3 , 4 ] ≡ 10
+_ =
+  begin
+    foldr _+_ 0 [ 1 , 2 , 3 , 4 ]
+    ≡⟨⟩
+    1 + foldr _+_ 0 [ 2 , 3 , 4 ]
+    ≡⟨⟩
+    1 + (2 + foldr _+_ 0 [ 3 , 4 ])
+    ≡⟨⟩
+    1 + (2 + (3 + foldr _+_ 0 [ 4 ]))
+    ≡⟨⟩
+    1 + (2 + (3 + (4 + foldr _+_ 0 [])))
+    ≡⟨⟩
+    1 + (2 + (3 + (4 + 0)))
+    ≡⟨⟩
+    10
+    ∎

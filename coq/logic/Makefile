@@ -101,7 +101,8 @@ Remove.vo :						Remove.v \
 								In.vo \
 								Eq.vo \
 								Include.vo \
-								Injective.vo
+								Injective.vo \
+								Difference.vo
 	coqc Remove.v
 
 

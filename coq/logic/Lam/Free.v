@@ -157,10 +157,21 @@ Proof.
         + apply incl_tran with 
             ((Fr t1 /\ xs) ++ concat (map (Fr; f) (Fr t1 \\ xs))).
             { apply IH1. }
-            { apply incl_app.
-                { apply incl_appl. rewrite inter_distrib_app_r. 
-                  apply incl_appl. apply incl_refl. }
-                { apply incl_appr. rewrite diff_distrib_app_r.
-
+            { apply incl_app2.
+                { rewrite inter_distrib_app_r. apply incl_appl. apply incl_refl. }
+                { rewrite diff_distrib_app_r. apply incl_concat. apply incl_map.
+                  apply incl_appl. apply incl_refl. }}
+        + apply incl_tran with
+            ((Fr t2 /\ xs) ++ concat (map (Fr; f) (Fr t2 \\ xs))).
+            { apply IH2. }
+            { apply incl_app2.
+                { rewrite inter_distrib_app_r. apply incl_appr. apply incl_refl. }
+                { rewrite diff_distrib_app_r. apply incl_concat. apply incl_map.
+                  apply incl_appr. apply incl_refl. }}
+    - apply incl_tran with 
+        (remove x (  (Fr t1 /\ (cons x xs)) 
+                  ++ concat (map (Fr; f) (Fr t1 \\ (cons x xs))))).
+        + apply remove_mon. apply IH1.
+        + rewrite remove_diff. rewrite diff_distrib_app_r.
 Show.
 *)

@@ -122,7 +122,6 @@ Proof.
         + split; intros z H1; assumption.
 Qed.
 
-
 Lemma sortedEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (sort xs).
 Proof.
     intros a o. induction xs as [|x xs [IH1 IH2]].
@@ -144,8 +143,6 @@ Proof.
     - apply H2. assumption.
 Qed.
 
-
-
 Lemma sortedCons : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     (forall (z:a), In z xs -> leq z x) -> Sorted xs -> Sorted (cons x xs).
 Proof.
@@ -163,3 +160,35 @@ Proof.
                 { apply sortedLeq with xs; assumption. }
                 { assumption. }}
 Qed.
+
+Lemma insertLeq : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
+    (forall (y:a), In y xs -> leq y x) -> insert x xs = cons x xs.
+Proof.
+    intros a o x xs. revert x. induction xs as [|x xs IH]; intros y H.
+    - reflexivity.
+    - simpl. destruct (leqDec y x) as [H1|H1].
+        + assert (x = y) as H2.
+            { apply leqAsym.
+                { apply H. left. reflexivity. }
+                { assumption. }}
+          subst. rewrite IH.
+            { reflexivity. }
+            { intros x H2. apply H. right. assumption. }
+        + reflexivity.
+Qed.
+
+Lemma sortSame : forall (a:Type) (o:Ord a) (xs:list a),
+    Sorted xs -> sort xs = xs.
+Proof.
+    intros a o xs H. induction H as [|x|x y xs H1 H2 IH].
+    - reflexivity.
+    - reflexivity.
+    - simpl. simpl in IH. rewrite IH. simpl. destruct (leqDec y x) as [H3|H3].
+        + destruct (eqDec x y) as [H4|H4].
+            { subst. clear H1 H3. simpl. rewrite insertLeq.
+                { reflexivity. }
+                { intros x H3. apply sortedLeq with xs; assumption. }}
+            { exfalso. apply H4. apply leqAsym; assumption. }
+        + reflexivity.
+Qed.
+
