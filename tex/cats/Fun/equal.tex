@@ -1,0 +1,34 @@
+One question which we have not yet considered is that of equality between
+functors. Given two categories \Cat\ and \Dat, and two functors $F,G:\Cat\to\Dat$, 
+it will be convenient to argue when these two functors are equal. For one thing,
+we would like to state that functor composition is associative, a statement which
+is not meaningful without a notion of equality between functors. Such equality
+is not obvious and may depend on the specifics of the logical context in 
+which we are working. Equality between sets is given but anything else requires
+careful consideration. Using the principles of section~(\ref{section:cat:equal}), 
+we are able to state: 
+
+\begin{prop}\label{Fun:prop:equal}
+    Let $F,G:\Cat\to\Dat$ be two functors between categories \Cat,\Dat\ with:
+        \begin{eqnarray*}
+            (1)&\ &\forall a\in\ob\ \Cat\ \ ,\ F(a)=G(a)\\
+            (2)&\ &\forall f\in\arr\ \Cat\ ,\ F(f)=G(f)
+        \end{eqnarray*}
+Then $F=G$, i.e. the two functors $F$ and $G$ are equal.
+\end{prop}
+\begin{proof}
+    Let $F=(F_{0},F_{1})$ and $G=(G_{0},G_{1})$ be two functors between \Cat\
+    and \Dat\ such that $F_{0}(a)=G_{0}(a)$ for all $a\in\ob\ \Cat$ and 
+    $F_{1}(f)=G_{1}(f)$ for all $f\in\arr\ \Cat$. We need to show that 
+    $F=G$, which is $(F_{0},F_{1})=(G_{0},G_{1})$. In order to show this
+    equality, using axiom~(\ref{Cat:ax:tuple:extensional}) it is sufficient
+    to prove that $F_{0}=G_{0}$ and $F_{1}=G_{1}$. However, by virtue of
+    definition~(\ref{Fun:def:functor}), both $F_{0}$ and $G_{0}$ are
+    maps $F_{0},G_{0}:\ob\ \Cat\to\ob\ \Dat$, and both $F_{1},G_{1}$
+    are maps $F_{1},G_{1}:\arr\ \Cat\to\arr\ \Dat$. Hence, using
+    axiom~(\ref{Cat:ax:map:extensional}), in order to show that $F_{0}=G_{0}$,
+    it is sufficient to prove that $F_{0}(a)=G_{0}(a)$ for all $a\in\ob\ \Cat$,
+    and this is true by assumption. Likewise, in order to show that
+    $F_{1}=G_{1}$ it is sufficient to prove that $F_{1}(f)=G_{1}(f)$
+    for all $f\in\arr\ \Cat$ which also true by assumption.
+\end{proof}

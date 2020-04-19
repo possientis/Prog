@@ -1,12 +1,18 @@
+functor composition is associative
 category of small categories
 cat is locally small
 locally small => small
 category of locally small catgeories
 natural transformation paradox: alpha also G => F 
 functor category
+composing a nat with a functor F . alpha
+composing a nat with a functor alpha . F
 define Par (category of sets and partial functions)
 define Rel (category os sets and relations)
 define the notion of sub-category: Set <= Par <= Rel ?
 define an isomorphism
 define the List : Set -> Set
 define the power set functor : Set -> Set 
+define a initial/terminal object
+! : I => K_1 for any terminal 1 in C
+

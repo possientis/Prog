@@ -172,6 +172,18 @@ Proof.
         (remove x (  (Fr t1 /\ (cons x xs)) 
                   ++ concat (map (Fr; f) (Fr t1 \\ (cons x xs))))).
         + apply remove_mon. apply IH1.
-        + rewrite remove_diff. rewrite diff_distrib_app_r.
+        + rewrite remove_diff. rewrite diff_distrib_app_r. apply incl_app2.
+            { rewrite remove_diff.
+              apply incl_tran with (Fr t1 \\ (x :: nil) /\ (cons x xs)).
+                { apply diff_inter_comm. }
+                { rewrite inter_cons_not_in_r. 
+                    { apply incl_refl. }
+                    { intros H. rewrite diff_charac in H. destruct H as [_ H]. 
+                      apply H. left. reflexivity. }}}
+            { rewrite <- remove_diff. 
+              apply incl_tran with (concat (map (Fr; f) (Fr t1 \\ (x :: xs)))).
+                { apply remove_incl. }
+                { apply incl_concat. apply incl_map. rewrite remove_diff.
+ 
 Show.
 *)

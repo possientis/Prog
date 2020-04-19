@@ -2,6 +2,7 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
+Require Import Include.
 Require Import Intersect.
 
 (* diff cannot be defined in terms of intersection, as there is no such thing   *)
@@ -104,4 +105,15 @@ Proof.
                         { rewrite diff_charac. intros [H6 H7].
                           apply H5. assumption. }}}
                 { exfalso. apply H4. reflexivity. }}
+Qed.
+
+
+Lemma diff_inter_comm : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    (xs /\ ys) \\ zs <= ((xs \\ zs) /\ ys).
+Proof.
+    intros v e xs ys zs x H. rewrite diff_charac in H. 
+    destruct H as [H1 H3]. rewrite inter_charac in H1. destruct H1 as [H1 H2].
+    apply inter_charac. split.
+    - apply diff_charac. split; assumption.
+    - assumption.
 Qed.

@@ -120,7 +120,8 @@ Difference.vo :					Difference.v \
 
 
 
-Include.vo :					Include.v 
+Include.vo :					Include.v \
+								Concat.vo
 	coqc Include.v
 
 Concat.vo :						Concat.v \

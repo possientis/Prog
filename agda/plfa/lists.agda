@@ -372,3 +372,86 @@ _ =
     ≡⟨⟩
     10
     ∎
+
+sum : List ℕ → ℕ
+sum = foldr _+_ 0
+
+_ : sum [ 1 , 2 , 3 , 4 ] ≡ 10
+_ =
+  begin
+    sum [ 1 , 2 , 3 , 4 ]
+    ≡⟨⟩
+    foldr _+_ 0 [ 1 , 2 , 3 , 4 ]
+    ≡⟨⟩
+    10
+    ∎
+
+product : List ℕ → ℕ
+product = foldr _*_ 1
+
+_ : product [ 1 , 2 , 3 , 4 ] ≡ 24
+_ = refl
+
+foldr-++ : ∀ {a b : Set} {_⊗_ : a → b → b} {e : b} {xs ys : List a} →
+  foldr _⊗_ e (xs ++ ys) ≡ foldr _⊗_ (foldr _⊗_ e ys) xs
+
+foldr-++ {a} {b} {_⊗_} {e} {[]} {ys} = refl
+foldr-++ {a} {b} {_⊗_} {e} {x ∷ xs} {ys} =
+  begin
+    foldr _⊗_ e ((x ∷ xs) ++ ys)
+    ≡⟨⟩
+    foldr _⊗_ e (x ∷ (xs ++ ys))
+    ≡⟨⟩
+    x ⊗ foldr _⊗_ e (xs ++ ys)
+    ≡⟨ cong (x ⊗_) (foldr-++ {a} {b} {_⊗_} {e} {xs}) ⟩
+    x ⊗ foldr _⊗_ (foldr _⊗_ e ys) xs
+    ≡⟨⟩
+    foldr _⊗_ (foldr _⊗_ e ys) (x ∷ xs)
+    ∎
+
+foldr-∷ : ∀ {a : Set} → {xs : List a} →
+  foldr _∷_ [] xs ≡ xs
+foldr-∷ {a} {[]} = refl
+foldr-∷ {a} {x ∷ xs} =
+  begin
+    foldr _∷_ [] (x ∷ xs)
+    ≡⟨⟩
+    x ∷ foldr _∷_ [] xs
+    ≡⟨ cong (x ∷_) foldr-∷ ⟩
+    x ∷ xs
+    ∎
+
+map-is-foldr : ∀ {a b : Set} → {f : a → b} →
+  map f ≡ foldr (λ x xs → f x ∷ xs) []
+map-is-foldr {a} {b} {f} = extensionality k
+  where
+    _⊗_ : a → List b → List b
+    x ⊗ xs = f x ∷ xs
+    k : ∀ (xs : List a) → map f xs ≡ foldr _⊗_ [] xs
+    k [] = refl
+    k (x ∷ xs) =
+      begin
+        map f (x ∷ xs)
+        ≡⟨⟩
+        f x ∷ map f xs
+        ≡⟨⟩
+        x ⊗ (map f xs)
+        ≡⟨ cong (x ⊗_) (k xs) ⟩
+        x ⊗ foldr _⊗_ [] xs
+        ≡⟨⟩
+        foldr _⊗_ [] (x ∷ xs)
+        ∎
+
+foldTree : ∀ {a b c : Set} → (a → c) → (c → b → c → c) → Tree a b → c
+foldTree f g (leaf x) = f x
+foldTree f g (node tₗ x tᵣ) = g (foldTree f g tₗ) x (foldTree f g tᵣ)
+
+
+TreeRec : ∀ {a b : Set} → (c : ∀ (t : Tree a b) → Set) →
+  (∀ (x : a) → c (leaf x)) →
+  (∀ (x : b) (tₗ tᵣ : Tree a b) → c tₗ → c tᵣ → c (node tₗ x tᵣ)) →
+  (∀ (t : Tree a b) → c t)
+TreeRec c Hl Hn (leaf x) = Hl x
+TreeRec c Hl Hn (node tₗ x tᵣ) = Hn x tₗ tᵣ (TreeRec c Hl Hn tₗ) (TreeRec c Hl Hn tᵣ)
+
+-- TODO : foldTree is a particular case of TreeRec
