@@ -1,4 +1,6 @@
 Require Import List.
+ 
+Require Import Utils.Include.
 
 Definition Equiv (a:Type) (xs ys:list a) : Prop :=
     incl xs ys /\ incl ys xs.
@@ -26,5 +28,13 @@ Proof.
         + subst. assumption.
         + assumption.
     - intros H1. right. assumption.
+Qed.
+
+Lemma equivNil : forall (a:Type) (xs:list a),
+    Equiv xs nil <-> xs = nil.
+Proof.
+    intros a xs. split; intros H.
+    - destruct H as [H1 H2]. apply inclNil. assumption.
+    - rewrite H. apply EquivRefl.
 Qed.
 

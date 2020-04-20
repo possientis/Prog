@@ -1,5 +1,4 @@
-Require Import List.
-
+Require Import List.  
 Require Import Utils.Ord.
 Require Import Utils.Equiv.
 

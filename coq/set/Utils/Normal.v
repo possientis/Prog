@@ -67,17 +67,29 @@ Proof.
 Qed.
 
 (*
-Lemma sortedEquivNubSame : forall (a:Type) (o:Ord a) (xs ys:list a),
-    Sorted xs -> Sorted ys -> Equiv xs ys -> nub xs = nub ys.
+Lemma equivSortedNubed : forall (a:Type) (o:Ord a) (xs ys:list a),
+    Nubed xs ->
+    Nubed ys ->
+    Sorted xs -> 
+    Sorted ys -> 
+    Equiv xs ys -> 
+    xs = ys.
 Proof.
-    intros a o xs ys H. revert ys. 
-    induction H as [|x|x y xs H1 H2 IH]; intros ys H3 H4.
-    - admit.
-    - admit.
-    - destruct H3 as [|x'|x' y' ys H5 H6].
+    intros a o xs ys H. revert ys. induction H as [|x xs H1 H2 IH]; 
+    intros ys H3 H4 H5 H6.
+    - symmetry. apply EquivSym in H6. apply equivNil. assumption.
+    - destruct ys as [|y ys].
         + admit.
-        + admit.
-        + simpl.
+        + destruct H6 as [H6 H7]. assert (xs = ys) as H8.
+            { apply IH.
+                { admit. }
+                { admit. }
+                { admit. }
+                { split; intros u H9.
+                    { assert (In u (cons y ys)) as H10. 
+                        { apply H6. right.  assumption. }
+                      destruct H10 as [H10|H10].
+                          { subst. exfalso. apply H1. assert (x = u) as H11.
 Show.
 *)
 
