@@ -7,7 +7,7 @@ module  Modular
     )   where
 
 import Data.Proxy
-import GHC.TypeLits
+import GHC.TypeLits     hiding (Mod)
 import Test.QuickCheck
 
 import Field

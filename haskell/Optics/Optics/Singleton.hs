@@ -58,7 +58,7 @@ instance Show (SNat n) where
     show = show . fromSing
 
 instance SingE (n :: Nat) where
-    type Demote a = Nat
+    type Demote n = Nat
     fromSing SZ = Z
     fromSing (SS n) = S (fromSing n)
 
