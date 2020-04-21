@@ -8,7 +8,7 @@ cd ${HOME}
 
 # ./simple/test.sh          (broken)
 # ./simple-weather/test.sh  (broken)
-./simple-webapp/test.sh
+#./simple-webapp/test.sh
 # ./simple-parent/test.sh   (broken)
 ./parent/test.sh
 
