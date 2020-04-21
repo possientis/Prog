@@ -246,7 +246,7 @@ reverses {a} {xs} =
     ≡⟨ shunt-reverse {a} {xs} ⟩
     reverse xs ++ []
     ≡⟨ ++-identity-r (reverse xs) ⟩
-    reverse xs 
+    reverse xs
     ∎
 
 _ : reverse' [ 0 , 1 , 2 ] ≡ [ 2 , 1 , 0 ]
@@ -454,4 +454,38 @@ TreeRec : ∀ {a b : Set} → (c : ∀ (t : Tree a b) → Set) →
 TreeRec c Hl Hn (leaf x) = Hl x
 TreeRec c Hl Hn (node tₗ x tᵣ) = Hn x tₗ tᵣ (TreeRec c Hl Hn tₗ) (TreeRec c Hl Hn tᵣ)
 
--- TODO : foldTree is a particular case of TreeRec
+-- foldTree is a specializarion of the recursor TreeRec
+foldTreeSpec : ∀ {a b c : Set} → (f : a → c) → (g : c → b → c → c) → (t : Tree a b) →
+  foldTree f g t ≡ TreeRec (λ _ → c) f (λ x _ _ cₗ cᵣ → g cₗ x cᵣ) t
+foldTreeSpec f g (leaf x) = refl
+foldTreeSpec {a} {b} {c} f g (node tₗ x tᵣ) =
+  begin
+    foldTree f g (node tₗ x tᵣ)
+    ≡⟨⟩
+    g (foldTree f g tₗ) x (foldTree f g tᵣ)
+    ≡⟨ cong (λ u → g u x (foldTree f g tᵣ)) (foldTreeSpec f g tₗ) ⟩
+    g (TreeRec (λ _ → c) f (λ x _ _ cₗ cᵣ → g cₗ x cᵣ) tₗ) x (foldTree f g tᵣ)
+    ≡⟨ cong
+       (λ u → g (TreeRec (λ _ → c) f (λ x _ _ cₗ cᵣ → g cₗ x cᵣ) tₗ) x u)
+       (foldTreeSpec f g tᵣ)
+     ⟩
+    g (TreeRec (λ _ → c) f (λ x _ _ cₗ cᵣ → g cₗ x cᵣ) tₗ) x
+      (TreeRec (λ _ → c) f (λ x _ _ cₗ cᵣ → g cₗ x cᵣ) tᵣ)
+    ≡⟨⟩
+    TreeRec (λ _ → c) f (λ x _ _ cₗ cᵣ → g cₗ x cᵣ) (node tₗ x tᵣ)
+    ∎
+
+map-is-foldTree : ∀ {a b c d : Set} → {f : a → c} → {g : b → d} →
+  mapTree f g ≡ foldTree (leaf ∘ f) (λ tₗ y tᵣ → node tₗ (g y) tᵣ)
+map-is-foldTree {a} {b} {c} {d} {f} {g} = extensionality k
+  where
+    k : ∀ (t : Tree a b) →
+      mapTree f g t ≡ foldTree (leaf ∘ f) (λ tₗ y tᵣ → node tₗ (g y) tᵣ) t
+    k (leaf x) = refl
+    k (node tₗ y tᵣ) =
+      begin
+        mapTree f g (node tₗ y tᵣ)
+        ≡⟨⟩
+        node (mapTree f g tₗ) (g y) (mapTree f g tᵣ)
+        ≡⟨⟩
+        {!!}

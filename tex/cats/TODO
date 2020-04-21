@@ -14,5 +14,8 @@ define an isomorphism
 define the List : Set -> Set
 define the power set functor : Set -> Set 
 define a initial/terminal object
+define a coproduct/product of two objects
+define the category cone_C(a,b) 
+product of (a,b) <-> terminal in Cone_C(a,b)
 ! : I => K_1 for any terminal 1 in C
 
