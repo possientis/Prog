@@ -145,8 +145,8 @@ Proof.
         + intros x s1 t1 H1. simpl. rewrite H1. reflexivity.
 Qed.
 
-(*
-Lemma free_fmap_gen : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v),
+
+Lemma free_subst_gen : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v),
     Fr (subst_ f xs t) <= (Fr t /\ xs) ++ concat (map (Fr ; f) (Fr t \\ xs)).
 Proof.
     intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs; simpl.
@@ -184,6 +184,19 @@ Proof.
               apply incl_tran with (concat (map (Fr; f) (Fr t1 \\ (x :: xs)))).
                 { apply remove_incl. }
                 { apply incl_concat. apply incl_map. rewrite remove_diff.
- 
-Show.
-*)
+                  assert (cons x xs = cons x nil ++ xs) as H1.
+                    { reflexivity. }
+                  rewrite H1. rewrite diff_distrib_app_l'. apply incl_refl. }}
+Qed.
+
+Lemma free_subst : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v),
+    Fr (subst f t) <= concat (map (Fr ; f) (Fr t)).
+Proof.
+    intros v e f t. unfold subst. rewrite <- (diff_nil v e (Fr t)).
+    assert (concat (map (Fr; f) (Fr t \\ nil)) 
+      = nil ++ concat (map (Fr; f) (Fr t \\ nil))) as H.
+        { reflexivity. } 
+    rewrite H. rewrite <- (inter_nil v e (Fr t)) at 2.
+    apply free_subst_gen.
+Qed.
+

@@ -114,3 +114,10 @@ Proof.
             { assumption. }
 Qed.
 
+Lemma inter_nil : forall (v:Type) (e:Eq v) (xs:list v),
+    (xs /\ nil) = nil.
+Proof.
+    intros v e. induction xs as [|x xs IH].
+    - reflexivity.
+    - simpl. apply IH.
+Qed.

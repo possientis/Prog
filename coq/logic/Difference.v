@@ -59,8 +59,18 @@ Proof.
             }
 Qed.
 
+Lemma diff_inter_comm : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    (xs /\ ys) \\ zs <= ((xs \\ zs) /\ ys).
+Proof.
+    intros v e xs ys zs x H. rewrite diff_charac in H. 
+    destruct H as [H1 H3]. rewrite inter_charac in H1. destruct H1 as [H1 H2].
+    apply inter_charac. split.
+    - apply diff_charac. split; assumption.
+    - assumption.
+Qed.
+
 Lemma diff_distrib_app_r : forall (v:Type) (e:Eq v) (xs ys zs:list v),
-    ((xs ++ ys) \\ zs) = (xs \\ zs) ++ (ys \\ zs).
+    (xs ++ ys) \\ zs = (xs \\ zs) ++ (ys \\ zs).
 Proof.
     intros v e. induction xs as [|x xs IH]; intros ys zs.
     - reflexivity.
@@ -68,7 +78,6 @@ Proof.
         + apply IH.
         + rewrite <- app_comm_cons. rewrite IH. reflexivity.
 Qed.
-
 
 Lemma diff_distrib_app_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
     zs \\ (xs ++ ys) = ((zs \\ xs) /\ (zs \\ ys)).
@@ -107,13 +116,32 @@ Proof.
                 { exfalso. apply H4. reflexivity. }}
 Qed.
 
-
-Lemma diff_inter_comm : forall (v:Type) (e:Eq v) (xs ys zs:list v),
-    (xs /\ ys) \\ zs <= ((xs \\ zs) /\ ys).
+Lemma diff_distrib_app_l' : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    zs \\ (xs ++ ys) = (zs \\ xs) \\ ys.
 Proof.
-    intros v e xs ys zs x H. rewrite diff_charac in H. 
-    destruct H as [H1 H3]. rewrite inter_charac in H1. destruct H1 as [H1 H2].
-    apply inter_charac. split.
-    - apply diff_charac. split; assumption.
-    - assumption.
+    intros v e xs ys zs. revert xs ys. induction zs as [|z zs IH]; intros xs ys.
+    - reflexivity.
+    - simpl. destruct (in_dec eqDec z (xs ++ ys)) as [H1|H1].
+        + destruct (in_dec eqDec z xs) as [H2|H2]; simpl;
+          destruct (in_dec eqDec z ys) as [H3|H3].
+            { apply IH. }
+            { apply IH. }
+            { apply IH. }
+            { exfalso. apply in_app_or in H1. destruct H1 as [H1|H1].
+                { apply H2. assumption. }
+                { apply H3. assumption. }}
+        + destruct (in_dec eqDec z xs) as [H2|H2]; simpl;
+          destruct (in_dec eqDec z ys) as [H3|H3].
+            { exfalso. apply H1. apply in_or_app. left. assumption. }
+            { exfalso. apply H1. apply in_or_app. left. assumption. }
+            { exfalso. apply H1. apply in_or_app. right. assumption. }
+            { rewrite IH. reflexivity. }
+Qed. 
+
+Lemma diff_nil : forall (v:Type) (e:Eq v) (xs:list v),
+    xs \\ nil = xs.
+Proof.
+    intros v e. induction xs as [|x xs IH].
+    - reflexivity.
+    - simpl. rewrite IH. reflexivity.
 Qed.
