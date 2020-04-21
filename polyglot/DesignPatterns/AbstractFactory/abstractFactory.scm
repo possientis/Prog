@@ -1,5 +1,5 @@
-; Abstract Factory design pattern
 (define (IShape hook)
+; Abstract Factory design pattern (define (IShape hook)
   ; interface
   (define (this m)
     (cond ((eq? m 'draw) (hook))
@@ -30,39 +30,39 @@
   this)
 
 (define (Rectangle color)
-  ; interface
-  (define this (AbstractShape draw))
   ; method
   (define (draw)
     (display "Drawing ")
     (display ((this 'asString) (this 'color)))
     (display " rectangle\n"))
+  ; interface
+  (define this (AbstractShape draw))
   ; initialization
   ((this 'setColor) color)
   ; returning interface
   this)
 
 (define (Square color)
-  ; interface
-  (define this (AbstractShape draw))
   ; method
   (define (draw)
     (display "Drawing ")
     (display ((this 'asString) (this 'color)))
     (display " square\n"))
+  ; interface
+  (define this (AbstractShape draw))
   ; initialization
   ((this 'setColor) color)
   ; returning interface
   this)
 
 (define (Circle color)
-  ; interface
-  (define this (AbstractShape draw))
   ; method
   (define (draw)
     (display "Drawing ")
     (display ((this 'asString) (this 'color)))
     (display " circle\n"))
+  ; interface
+  (define this (AbstractShape draw))
   ; initialization
   ((this 'setColor) color)
   ; returning interface
@@ -91,11 +91,11 @@
   this)
 
 (define (RedShapeFactory)
-  (define base (AbstractShapeFactory this)) 
   ;interface
   (define (this m)
     (cond ((eq? m 'getColor) (getColor))
           (else (base m))))
+  (define base (AbstractShapeFactory this)) 
   ; method
   (define (getColor)
     'RED)
@@ -103,11 +103,11 @@
   this)
 
 (define (GreenShapeFactory)
-  (define base (AbstractShapeFactory this)) 
   ;interface
   (define (this m)
     (cond ((eq? m 'getColor) (getColor))
           (else (base m))))
+  (define base (AbstractShapeFactory this)) 
   ; method
   (define (getColor)
     'GREEN)
@@ -115,11 +115,11 @@
   this)
 
 (define (BlueShapeFactory)
-  (define base (AbstractShapeFactory this)) 
   ;interface
   (define (this m)
     (cond ((eq? m 'getColor) (getColor))
           (else (base m))))
+  (define base (AbstractShapeFactory this)) 
   ; method
   (define (getColor)
     'BLUE)
