@@ -64,16 +64,16 @@ Theorem evalCmd_coind : forall (R:Env -> Cmd -> Env -> Prop),
             evalExp e1 e <> 0 /\ R e1 c e2 /\ R e2 (CWhile e c) e3)) ->
     (forall (e1 e2:Env) (c:Cmd), R e1 c e2 -> evalCmd e1 c e2).
 Proof.
-    intros R H1 H2 H3. cofix. intros e1 e2 c H. destruct c.
+    intros R H1 H2 H3. cofix coIH. intros e1 e2 c H. destruct c.
     - apply H1 in H. rewrite H. constructor.
     - rename e2 into e3. apply H2 in H. destruct H as [e2 [H12 H23]].
-      apply EvalSeq with e2; apply evalCmd_coind; assumption.
+      apply EvalSeq with e2; apply coIH; assumption.
     - rename e2 into e3. apply H3 in H. destruct H as [H|H].
         + destruct H as [E1 E2]. subst. apply EvalWhileFalse. assumption.
         + destruct H as [e2 [E1 [E2 E3]]]. apply EvalWhileTrue with e2.
             { assumption. }
-            { apply evalCmd_coind. assumption. }
-            { apply evalCmd_coind. assumption. }
+            { apply coIH. assumption. }
+            { apply coIH. assumption. }
 Qed.
 
 Fixpoint optExp (e:Exp) : Exp :=

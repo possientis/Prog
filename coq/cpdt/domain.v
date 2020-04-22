@@ -1,7 +1,7 @@
 Require Import extensionality.
 Require Import irrelevance.
 Require Import Nat.
-Require Import Max.
+Require Import Max2.
 
 (********************************************************************************)
 (************************* Parial Order on 'option a' ***************************)

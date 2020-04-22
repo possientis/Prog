@@ -19,7 +19,7 @@ all:	Utils/nat.vo \
 		type_check.vo \
 		option.vo \
 		well_founded.vo \
-		Max.vo \
+		Max2.vo \
 		domain.vo \
 		thunk.vo \
 		comp.vo \
@@ -96,10 +96,10 @@ option.vo : option.v
 well_founded.vo : well_founded.v stream.vo
 	coqc well_founded.v
 
-Max.vo : Max.v
-	coqc Max.v
+Max2.vo : Max2.v
+	coqc Max2.v
 
-domain.vo : domain.v Max.vo extensionality.vo irrelevance.vo
+domain.vo : domain.v Max2.vo extensionality.vo irrelevance.vo
 	coqc domain.v
 
 thunk.vo : thunk.v

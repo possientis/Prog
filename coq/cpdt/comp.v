@@ -46,22 +46,22 @@ Qed.
 
 Lemma comp_eq_refl : forall (a:Type) (c:Comp a), comp_eq c c.
 Proof.
-    cofix. intros a [x|a' c f].
+    cofix coIH. intros a [x|a' c f].
     - constructor.
     - constructor.
-        + apply comp_eq_refl.
-        + intros z. apply comp_eq_refl.
+        + apply coIH.
+        + intros z. apply coIH.
 Qed.
 
 Lemma comp_eq_sym : forall (a:Type) (c1 c2:Comp a), 
     comp_eq c1 c2 -> comp_eq c2 c1.
 Proof.
-    cofix. intros a c1 c2 H. 
+    cofix coIH. intros a c1 c2 H. 
     destruct H as [|a' c1 c2 f1 f2 H1 H2].
     - constructor.
     - constructor. 
-        + apply comp_eq_sym. assumption.
-        + intros z. apply comp_eq_sym. apply H2.
+        + apply coIH. assumption.
+        + intros z. apply coIH. apply H2.
 Qed.
 
 
@@ -69,7 +69,7 @@ Qed.
 Lemma comp_eq_trans : forall (a:Type) (c1 c2 c3:Comp a),
     comp_eq c1 c2 -> comp_eq c2 c3 -> comp_eq c1 c3.
 Proof.
-    cofix. intros a c1 c2 c3 H. revert c3.
+    cofix coIH. intros a c1 c2 c3 H. revert c3.
     destruct H as [|a' c1 c2 f1 f2 H1 H2].
     - intros c3 H. assumption.
     - intros c3 H3.

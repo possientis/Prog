@@ -132,22 +132,24 @@ Lemma stream_eq_coind : forall (a:Type) (R:Stream a -> Stream a -> Prop),
     (forall (s1 s2:Stream a), R s1 s2 -> R (tail s1) (tail s2)) ->
     (forall (s1 s2:Stream a), R s1 s2 -> stream_eq s1 s2).
 Proof.
-    intros a R Hhead Htail. cofix. intros [h1 t1] [h2 t2] H.
+    intros a R Hhead Htail. cofix coIH.
+    intros [h1 t1] [h2 t2] H.
     generalize H. intro H'. 
     apply Hhead in H'. simpl in H'. 
     rewrite H'. constructor. 
-    apply stream_eq_coind. 
+    apply coIH. 
     apply Htail in H. simpl in H. 
     assumption.
 Qed.
+
 
 Arguments stream_eq_coind {a} _ _ _.
 
 (* direct proof, using cofix tactic *)
 Lemma stream_eq_refl : forall (a:Type) (s:Stream a), stream_eq s s.
 Proof.
-    intros a. cofix. intros [h t]. 
-    constructor. apply stream_eq_refl.
+    intros a. cofix coIH. intros [h t]. 
+    constructor. apply coIH.
 Qed.
 
 (* proof using coinduction principle, not using cofix tactic *)
@@ -163,8 +165,8 @@ Qed.
 Lemma stream_eq_sym : forall (a:Type) (s1 s2:Stream a), 
     stream_eq s1 s2 -> stream_eq s2 s1.
 Proof.
-    intros a. cofix. intros s1 s2 H. destruct H.
-    constructor. apply stream_eq_sym.
+    intros a. cofix coIH. intros s1 s2 H. destruct H.
+    constructor. apply coIH.
     assumption.
 Qed.
 
@@ -182,12 +184,12 @@ Qed.
 Lemma stream_eq_trans : forall (a:Type) (s1 s2 s3:Stream a),
     stream_eq s1 s2 -> stream_eq s2 s3 -> stream_eq s1 s3.
 Proof.
-    intros a. cofix. intros s1 s2 s3 H12. revert s3. 
+    intros a. cofix coIH. intros s1 s2 s3 H12. revert s3. 
     destruct H12. intros s3 H23. 
     remember (Cons x t2) as s2 eqn:E in H23. revert E.
     destruct H23. intros H. inversion H. subst.
     constructor.
-    apply stream_eq_trans with t2; assumption.
+    apply coIH with t2; assumption.
 Qed.
 
 (* proof using coinduction principle, not using cofix tactic *)
@@ -218,18 +220,18 @@ CoInductive is_ones : Stream nat ->  Prop :=
 
 Lemma ones_are_ones : is_ones ones.
 Proof.
-    cofix. rewrite frob_same. simpl. constructor. assumption. 
+    cofix coIH. rewrite frob_same. simpl. constructor. assumption. 
 Qed.
 
 Lemma ones_are_ones' : is_ones ones'.
 Proof.
-    cofix. rewrite frob_same. simpl. constructor. assumption. 
+    cofix coIH. rewrite frob_same. simpl. constructor. assumption. 
 Qed.
 
 (* direct proof, so using cofix tactic *)
 Lemma ones_same : stream_eq ones ones'.
 Proof. 
-    cofix. 
+    cofix coIH. 
     rewrite (frob_same ones).
     rewrite (frob_same ones').
     simpl. constructor. assumption.
@@ -259,10 +261,10 @@ Qed.
 Lemma map_same : forall (a b:Type) (f:a -> b) (s:Stream a), 
     stream_eq (map f s) (map' f s).
 Proof.
-    intros a b f. cofix. intros [h t].
+    intros a b f. cofix coIH. intros [h t].
     rewrite (frob_same (map  f (Cons h t))).
     rewrite (frob_same (map' f (Cons h t))).
-    simpl. constructor. apply map_same.
+    simpl. constructor. apply coIH.
 Qed.
 
 (* proof using coinduction principle: syntactic equality between streams useful *)
@@ -281,9 +283,9 @@ Qed.
 Theorem stream_eq_loop : forall (a:Type) (s1 s2:Stream a),
     head s1 = head s2 -> tail s1 = s1 -> tail s2 = s2 -> stream_eq s1 s2.
 Proof.
-    intros a. cofix. intros [h1 t1] [h2 t2] H T1 T2.
+    intros a. cofix coIH. intros [h1 t1] [h2 t2] H T1 T2.
     simpl in H. rewrite <- H. constructor.
-    simpl in T1, T2. apply stream_eq_loop.
+    simpl in T1, T2. apply coIH.
     + rewrite T1, T2. assumption.
     + rewrite T1. assumption.
     + rewrite T2. assumption.

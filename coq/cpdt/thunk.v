@@ -73,11 +73,11 @@ Lemma thunk_eq_coind : forall (a:Type) (R:Thunk a -> Thunk a -> Prop),
     (forall (y:a)(t1:Thunk a), ~R (Think t1) (Answer y))         ->
     (forall (t1 t2:Thunk a), R t1 t2 -> thunk_eq t1 t2).
 Proof.
-    intros a R H1 H2 H3 H4. cofix. intros [x|t1] [y|t2] H.
+    intros a R H1 H2 H3 H4. cofix coIH. intros [x|t1] [y|t2] H.
     - apply H1 in H. rewrite H. constructor. reflexivity.
     - exfalso. apply (H3 x t2). assumption.
     - exfalso. apply (H4 y t1). assumption.
-    - apply H2 in H. constructor. apply thunk_eq_coind. assumption.
+    - apply H2 in H. constructor. apply coIH. assumption.
 Qed.
 
 Arguments thunk_eq_coind {a}.
@@ -85,8 +85,8 @@ Arguments thunk_eq_coind {a}.
 (* direct proof using cofix tactic                                              *)
 Lemma thunk_eq_refl : forall (a:Type) (t:Thunk a), thunk_eq t t.
 Proof.
-    intros a. cofix. intros [x|t].  - constructor. reflexivity.
-    - constructor. apply thunk_eq_refl.
+    intros a. cofix coIH. intros [x|t].  - constructor. reflexivity.
+    - constructor. apply coIH.
 Qed.
 
 (* proof using coinduction principle                                            *)
@@ -104,9 +104,9 @@ Qed.
 Lemma thunk_eq_sym : forall (a:Type) (t1 t2:Thunk a),
     thunk_eq t1 t2 -> thunk_eq t2 t1.
 Proof.
-    intros a. cofix. intros t1 t2 H. destruct H as [x y|t1 t2].
+    intros a. cofix coIH. intros t1 t2 H. destruct H as [x y|t1 t2].
     - constructor. symmetry. assumption.
-    - constructor. apply thunk_eq_sym. assumption.
+    - constructor. apply coIH. assumption.
 Qed.
 
 (* proof using coinduction principle                                            *)
@@ -129,13 +129,13 @@ Qed.
 Lemma thunk_eq_trans : forall (a:Type) (t1 t2 t3:Thunk a),
     thunk_eq t1 t2 -> thunk_eq t2 t3 -> thunk_eq t1 t3.
 Proof.
-    intros a. cofix. intros t1 t2 t3 H. revert t3. destruct H.
+    intros a. cofix  coIH. intros t1 t2 t3 H. revert t3. destruct H.
     - subst. intros t3 H. assumption.
     - intros t3. remember (Think t2) as t2' eqn:E. 
       intros H'. revert E. destruct H'.
         + intros H1. inversion H1.
         + intros H1. inversion H1. subst. constructor.
-          apply thunk_eq_trans with t2; assumption.
+          apply coIH with t2; assumption.
 Qed.
 
 (* proof using coinduction principle                                            *)
@@ -180,17 +180,17 @@ Qed.
 Lemma right_identity : forall (a:Type) (t:Thunk a),
     t >>= pure == t.
 Proof.
-    intros a. cofix. intros t. rewrite (frob_same (t >>= pure)). simpl.
+    intros a. cofix coIH. intros t. rewrite (frob_same (t >>= pure)). simpl.
     destruct t as [x|t'] eqn:E.
     - unfold pure. constructor. reflexivity.
-    - constructor. apply right_identity.
+    - constructor. apply coIH.
 Qed.
 
 Lemma associativity : forall (a b c:Type),
     forall (t:Thunk a) (f:a -> Thunk b) (g:b -> Thunk c),
     t >>= f >>= g == t >>= (fun (x:a) => (f x) >>= g).
 Proof.
-    intros a b c. cofix. intros t f g.
+    intros a b c. cofix coIH. intros t f g.
     rewrite (frob_same (t >>= f >>= g)).
     rewrite (frob_same (t >>= f)).
     rewrite (frob_same (t >>= (fun (x:a) => (f x) >>= g))).
@@ -199,7 +199,7 @@ Proof.
       destruct (f x) as [y|t2] eqn:E2.
         + destruct (g y) as [z|t3] eqn:E3; apply thunk_eq_refl.
         + apply thunk_eq_refl.
-    - constructor. apply associativity.
+    - constructor. apply coIH.
 Qed.
 
 

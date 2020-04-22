@@ -1,3 +1,5 @@
+Require Extraction.
+
 Extraction Language Haskell.
 
 Require Import List.

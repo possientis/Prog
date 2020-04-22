@@ -1,5 +1,7 @@
 (* using refine is very cool, feels like agda                                   *)
 
+Require Extraction.
+
 Extraction Language Haskell.
 
 Definition eq_nat_dec : forall (n m:nat), {n = m} + {n <> m}.
