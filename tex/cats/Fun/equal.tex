@@ -1,8 +1,8 @@
 One question which we have not yet considered is that of equality between
 functors. Given two categories \Cat\ and \Dat, and two functors $F,G:\Cat\to\Dat$, 
-it will be convenient to argue when these two functors are equal. For one thing,
-we would like to state that functor composition is associative, a statement which
-is not meaningful without a notion of equality between functors. Such equality
+it will sometimes be convenient to argue that these two functors are equal. For one 
+thing, we would like to state that functor composition is associative, a statement 
+which is not meaningful without a notion of equality between functors. Such equality
 is not obvious and may depend on the specifics of the logical context in 
 which we are working. Equality between sets is given but anything else requires
 careful consideration. Using the principles of section~(\ref{section:cat:equal}), 
@@ -31,4 +31,41 @@ Then $F=G$, i.e. the two functors $F$ and $G$ are equal.
     and this is true by assumption. Likewise, in order to show that
     $F_{1}=G_{1}$ it is sufficient to prove that $F_{1}(f)=G_{1}(f)$
     for all $f\in\arr\ \Cat$ which also true by assumption.
+\end{proof}
+
+
+\begin{prop}\label{Fun:prop:associative}
+    Let $F:\Cat\to\Dat$, $G:\Dat\to\Eat$ and $H:\Eat\to{\cal F}$ be functors
+    between categories \Cat,\Dat,\Eat\ and $\cal F$. Then we have the equality:
+        \[
+            (H\circ G)\circ F = H\circ (G\circ F)
+        \]
+    i.e. functor composition is associative.
+\end{prop}
+\begin{proof}
+    Using proposition~(\ref{Fun:prop:equal}) we simply need to show that
+    the two functors $(H\circ G)\circ F$ and $H\circ (G\circ F)$ act equally 
+    on both objects and arrows of the category \Cat. For $a\in\ob\ \Cat$, 
+    this goes as follows:
+        \begin{eqnarray*}((H\circ G)\circ F)(a)
+            &=&(H\circ G)(\,F(a)\,)\ \leftarrow\ 
+            \mbox{def.~(\ref{Fun:def:composition})}\\
+            \mbox{def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&H(\,G(\,F(a)\,)\,)\\
+            \mbox{def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&H(\,(G\circ F)(a)\,)\\
+            \mbox{def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&(H\circ (G\circ F))(a)
+        \end{eqnarray*}
+    and likewise for $f\in\arr\ \Cat$:
+        \begin{eqnarray*}((H\circ G)\circ F)(f)
+            &=&(H\circ G)(\,F(f)\,)\ \leftarrow\ 
+            \mbox{def.~(\ref{Fun:def:composition})}\\
+            \mbox{def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&H(\,G(\,F(f)\,)\,)\\
+            \mbox{def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&H(\,(G\circ F)(f)\,)\\
+            \mbox{def.~(\ref{Fun:def:composition})}\ \to\ 
+            &=&(H\circ (G\circ F))(f)
+        \end{eqnarray*}
 \end{proof}

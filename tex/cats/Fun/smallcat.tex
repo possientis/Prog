@@ -115,6 +115,12 @@ However, we still need to do our due diligence and checks it forms a category:
     $g\circ f=(\Cat,\Eat,G\circ F)$ and consequently $\cod(g\circ f)=\Eat$ which
     is $\cod(g)$ as requested.
 
-    $(10)$
-
+    $(10)$: We should have $(h\circ g)\circ f = h\circ(g\circ f)$ whenever
+    $g\circ f$ and $h\circ g$ are well defined. So let $f=(\Cat,\Dat,F)$,
+    $g=(\Dat,\Eat,G)$ and $h=(\Eat,{\cal F},H)$. We have:
+        \begin{eqnarray*}(h\circ g)\circ f
+            &=&(\,(\Eat,{\cal F},H)\,\circ\,(\Dat,\Eat,G)\,)\,
+            \circ\,(\Cat,\Dat,F)\\
+        \end{eqnarray*}
+TODO
 \end{proof}
