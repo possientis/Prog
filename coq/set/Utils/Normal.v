@@ -66,6 +66,32 @@ Proof.
         + assumption.
 Qed.
 
+Lemma equalHead : forall (a:Type) (o:Ord a) (x y:a) (xs ys:list a),
+    Equiv (cons x xs) (cons y ys) ->
+    Sorted (cons x xs) ->
+    Sorted (cons y ys) ->
+    x = y.
+Proof.
+    intros a o x y xs ys [H1 H2] H3 H4. destruct (eqDec x y) as [H5|H5].
+    - assumption.
+    - apply leqAsym.
+        + apply sortedLeq with ys.
+            { assumption. }
+            { assert (In x (cons y ys)) as H6.
+                { apply H1. left. reflexivity. }
+              destruct H6 as [H6|H6].  
+                { exfalso. apply H5. symmetry. assumption. }
+                { assumption. }}
+        + apply sortedLeq with xs.
+            { assumption. }
+            { assert (In y (cons x xs)) as H6.
+                { apply H2. left. reflexivity. }
+              destruct H6 as [H6|H6].  
+                  { exfalso.  apply H5. assumption. }
+                  { assumption. }}
+Qed.
+
+
 (*
 Lemma equivSortedNubed : forall (a:Type) (o:Ord a) (xs ys:list a),
     Nubed xs ->
@@ -80,17 +106,31 @@ Proof.
     - symmetry. apply EquivSym in H6. apply equivNil. assumption.
     - destruct ys as [|y ys].
         + admit.
-        + destruct H6 as [H6 H7]. assert (xs = ys) as H8.
+        + assert (xs = ys) as H7.
             { apply IH.
                 { admit. }
                 { admit. }
                 { admit. }
-                { split; intros u H9.
-                    { assert (In u (cons y ys)) as H10. 
+                { split; intros u H8.
+                    { assert (In u (cons y ys)) as H9. 
                         { apply H6. right.  assumption. }
-                      destruct H10 as [H10|H10].
-                          { subst. exfalso. apply H1. assert (x = u) as H11.
-Show.
+                      destruct H9 as [H9|H9].
+                        { subst. exfalso. apply H1. 
+                            assert (x = u) as H10.
+                                { apply (equalHead a o _ _ xs ys); assumption. }
+                          subst. assumption. }
+                        { assumption. }}
+                    { assert (In u (cons x xs)) as H11.
+                        { destruct H6 as [H6 H12]. apply H12. right. assumption. }
+                      destruct H11 as [H11|H11].
+                        { assert (x = y).
+                            { apply (equalHead a o _ _ xs ys); assumption. }
+                          subst. exfalso. apply (nubCons a _ y ys) in H3.
+                          apply H3. assumption. }
+                        { assumption. }}}}
+          assert (x = y) as H8. { apply (equalHead a o _ _ xs ys); assumption. }
+          subst. reflexivity. 
+Qed.
 *)
 
 

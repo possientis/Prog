@@ -76,3 +76,12 @@ Proof.
         + apply H1 in H3. contradiction.
         + rewrite IH. reflexivity.
 Qed.
+
+Lemma nubCons : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
+    Nubed (cons x xs) -> ~ In x xs.
+Proof.
+    intros a e x xs H. remember (cons x xs) as ys eqn:E. 
+    revert E. revert xs. revert x. destruct H; intros y ys H1.
+    - inversion H1.
+    - inversion H1. subst. assumption.
+Qed.
