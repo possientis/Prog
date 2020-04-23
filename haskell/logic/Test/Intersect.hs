@@ -29,8 +29,8 @@ testInterCharac = it "Checked inter characterization property" $
     property $ propInterCharac
 
 propInterIntersect :: [Var] -> [Var] -> Bool
-propInterIntersect xs ys = inter xs ys == intersect xs ys
+propInterIntersect xs ys = xs /\ ys == intersect xs ys
 
 propInterCharac :: [Var] -> [Var] -> Var -> Bool
-propInterCharac xs ys z = (z `elem` inter xs ys) == (z `elem` xs && z `elem` ys)
+propInterCharac xs ys z = (z `elem` xs /\ ys) == (z `elem` xs && z `elem` ys)
 

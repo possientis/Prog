@@ -13,5 +13,4 @@ main = hspec $ do
     describe "Testing common Haskell..."  $ specHask
     describe "Testing Haskell for Fol..." $ specFol
     describe "Testing Haskell for Lam..." $ specLam
-   
-    
+

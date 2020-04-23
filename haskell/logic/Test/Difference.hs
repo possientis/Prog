@@ -22,4 +22,4 @@ testDiffCharac = it "Checked diff characterization property" $
 
 
 propDiffCharac :: [Var] -> [Var] -> Var -> Bool
-propDiffCharac xs ys z = (z `elem` diff xs ys) == (z `elem` xs && z `notElem` ys)
+propDiffCharac xs ys z = (z `elem` xs \\ ys) == (z `elem` xs && z `notElem` ys)
