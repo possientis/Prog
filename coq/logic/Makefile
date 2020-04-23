@@ -8,7 +8,7 @@ all:	   						Extensionality.vo \
 								In.vo \
 								Coincide.vo \
 								Leq.vo \
-								Max.vo \
+								MinMax.vo \
 								Eq.vo \
 								Relation.vo \
 								Replace.vo \
@@ -58,8 +58,8 @@ Coincide.vo : 					Coincide.v
 Leq.vo : 						Leq.v
 	coqc Leq.v
 
-Max.vo : 						Max.v
-	coqc Max.v
+MinMax.vo : 					MinMax.v
+	coqc MinMax.v
 
 Eq.vo : 						Eq.v
 	coqc Eq.v
@@ -164,7 +164,7 @@ ${LAM}/Subformula.vo :			${LAM}/Subformula.v \
 								In.vo \
 								Eq.vo \
 								Leq.vo \
-								Max.vo \
+								MinMax.vo \
 								Include.vo \
 								${LAM}/T.vo \
 								${LAM}/Order.vo \
@@ -179,7 +179,7 @@ ${FOL}/Subformula.vo : 			${FOL}/Subformula.v \
 								In.vo \
 								Eq.vo \
 								Leq.vo \
-								Max.vo \
+								MinMax.vo \
 								Include.vo \
 								${FOL}/P.vo \
 								${FOL}/Order.vo \

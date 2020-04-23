@@ -4,7 +4,7 @@ Require Import List.
 Require Import In.
 Require Import Eq.
 Require Import Leq.
-Require Import Max.
+Require Import MinMax.
 Require Import Include.
 Require Import Fol.P.
 Require Import Fol.Order.
