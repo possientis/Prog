@@ -152,7 +152,7 @@ Proof. intro n. apply not_le_Sm_n. apply le_n. Qed.
 Lemma le_antisym : forall (n m:nat),
   n <= m -> m <= n -> n = m.
 Proof.
-  intros n m H. destruct H as [|n p H IH].
+  intros n m H. destruct H as [|n p H].
   - intros _. reflexivity.
   - intros H'. exfalso. apply (not_le_Sn_n p).
     apply le_trans with (m:=n).

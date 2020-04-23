@@ -1,4 +1,3 @@
-Require Import Le.
 Require Import Nat.
 Require Import Min.
 Require Import Max.
@@ -51,7 +50,7 @@ Proof.
     - simpl. rewrite <- plus_n_Sm. apply le_n_S.
       rewrite <- plus_n_O, <- plus_n_O. rewrite plus_n_n.
       apply max_lub; assumption.
-    - destruct c1 as [H1|H1], c2 as [H2|H2]. 
+    - destruct c1, c2. 
         + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm.
           rewrite plus_n_n.
           rewrite <- plus_n_Sm in IH1. rewrite <- plus_n_O in IH1.
@@ -77,7 +76,7 @@ Qed.
 Theorem depth_max : forall (c:Color) (n:nat) (t:RBTree c n), 
     depth max t <= 2*n + 1.
 Proof.
-    intros c n t. destruct c as [H|H]. 
+    intros c n t. destruct c. 
     - apply (depth_max' Red). 
     - rewrite <- plus_n_Sm. rewrite <- plus_n_O. apply le_S.
       apply (depth_max' Black).

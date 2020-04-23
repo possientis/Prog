@@ -50,7 +50,7 @@ Theorem reflect_iff : forall (P:Prop) (b:bool),
     reflect P b -> (P <-> b = true).
 Proof.
     intros P b H.
-    induction H as [H1 IH1|H1 IH1].
+    induction H as [H1|H1].
     - split.
         + intros _. reflexivity.
         + intros _. exact H1.

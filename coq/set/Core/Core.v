@@ -140,6 +140,7 @@ Proof.
             }
 Qed.
 
+
 (* Having proved the fundamental lemma incl_n_Sn, we provide a few easy         *)
 (* technical results allowing us to deduce inclusion statements of the form     *)
 (* 'incl_n m xs ys' from other inclusion statements involving a different       *)
@@ -151,12 +152,14 @@ Lemma incl_le_n_m : forall (xs ys:set) (n m:nat),
     incl_n n xs ys              -> 
     incl_n m xs ys.
 Proof.
-    intros xs ys n m H1 H2. induction  H2  as [H2|m H2 IH].
+    intros xs ys n m H1 H2. induction H2 as [|m H2 IH].
     - auto.
     - intros H. apply (incl_n_Sn m).
         + apply le_trans with n; assumption.
         + apply IH. assumption.
 Qed.
+
+
 
 (* Equally, provided n is large enough and n <= m, we can go from m to n        *)
 Lemma incl_le_m_n : forall (xs ys:set) (n m:nat),
@@ -165,7 +168,7 @@ Lemma incl_le_m_n : forall (xs ys:set) (n m:nat),
     incl_n m xs ys              ->
     incl_n n xs ys.
 Proof.
-    intros xs ys n m H1 H2. induction  H2  as [H2|m H2 IH].
+    intros xs ys n m H1 H2. induction  H2  as [|m H2 IH].
     - auto.
     - intros H. apply IH. apply incl_n_Sn.
         + apply le_trans with n; assumption.
@@ -254,3 +257,4 @@ Proof.
                 }
             }
 Qed.
+

@@ -379,7 +379,7 @@ Qed.
 Theorem count_member_nonzero : forall s:bag,
     leb 1 (count 1 (1::s))  = true.
 Proof.
-    destruct s as [|x xs H]. (* no need for induction hypothesis *)
+    destruct s as [|x xs].
     - reflexivity.
     - reflexivity.
 Qed.

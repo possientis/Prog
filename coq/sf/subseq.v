@@ -56,7 +56,7 @@ Qed.
 Theorem subseq_app : forall (a:Type) (l k m: list a),
     subseq l k -> subseq l (k ++ m).
 Proof.
-    intros a l k m H. induction H as [l IH|l k x H IH|l k x H IH].
+    intros a l k m H. induction H as [l|l k x H IH|l k x H IH].
     - apply nil_sub.
     - simpl. apply cons_sub. exact IH.
     - simpl. apply extend_sub. apply IH.
@@ -65,7 +65,7 @@ Qed.
 Theorem subseq_length : forall (a:Type) (l k:list a),
     subseq l k -> length l <= length k.
 Proof.
-    intros a l k H. induction H as [l IH|l k x H IH|l k x H IH]. 
+    intros a l k H. induction H as [l|l k x H IH|l k x H IH]. 
     - apply le_0_n.
     - simpl. apply n_le_m__Sn_le_Sm. exact IH.
     - simpl. apply le_S. exact IH.
@@ -74,7 +74,7 @@ Qed.
 Theorem subseq_length_eq : forall (a:Type) (l k:list a),
     subseq l k -> length l = length k -> l = k.
 Proof.
-    intros a l k H. induction H as [l IH|l k x H IH|l k x H IH]. 
+    intros a l k H. induction H as [l|l k x H IH|l k x H IH]. 
     - intros H. symmetry. apply length_0_iff_nil. symmetry. exact H.
     - intros H'. simpl in H'. inversion H' as [H0]. clear H'.
         assert (l = k) as H1. { apply IH. exact H0. }
@@ -124,7 +124,7 @@ Proof.
     - apply filter_is_subseq.
     - split.
         + apply filter_all_true.
-        + intros k H. induction H as [l IH|l k x H IH|l k x H IH]. 
+        + intros k H. induction H as [l|l k x H IH|l k x H IH]. 
             { intros _. apply le_0_n. }
             { intros H'. assert (test x = true) as Hx.
                 { apply H'. left. reflexivity. }
