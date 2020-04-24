@@ -196,10 +196,12 @@ not false = true
 ¬? (yes pa) = no (λ{p¬a → p¬a pa})
 ¬? (no p¬a) = yes p¬a
 
+{-
 -- actually can't do this
 ¬?-rev : ∀ {a : Set} → Dec (¬ a) → Dec a
 ¬?-rev (yes p¬a) = no p¬a
 ¬?-rev (no p¬¬a) = yes {!!}
+-}
 
 _⊃_ : Bool → Bool → Bool
 true  ⊃ true  = true

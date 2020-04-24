@@ -7,6 +7,10 @@ open Eq.≡-Reasoning
 open import Data.Nat using (ℕ; zero; suc; _+_)
 open import Data.Nat.Properties using (+-comm)
 
+open import bin using (Bin)
+import bin
+
+
 _∘_ : ∀ {a b c : Set} → (b → c) → (a → b) → a → c
 _∘_ g f x = g (f x)
 
@@ -308,9 +312,6 @@ open _⇔_
   { to = to b⇔c ∘ to a⇔b
   ; from = from a⇔b ∘ from b⇔c
   }
-
-open import bin using (Bin)
-import bin
 
 ℕ≲Bin : ℕ ≲ Bin
 ℕ≲Bin = record

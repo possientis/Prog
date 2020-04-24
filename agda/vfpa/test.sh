@@ -13,8 +13,9 @@ make
 ./clean.sh
 
 cd ${DIR}
-echo '\nAll vfpa tests completed successfully\n'
-
+echo
+echo 'All vfpa tests completed successfully'
+echo
 
 
 

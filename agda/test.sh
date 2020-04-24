@@ -6,16 +6,22 @@ DIR=`pwd`
 HOME1=/home/john/Prog/agda  # changing 'HOME' is a bad idea
 cd ${HOME1}
 
+echo
+echo "testing agda hello world..."
+agda --compile -v0 hello-world.agda
+./hello-world
+./clean.sh
+echo "hello world test completed successfully"
+echo
+
 ./vfpa/test.sh
 ./plfa/test.sh
 
-agda --compile hello-world.agda
-./hello-world
-./clean.sh
 
 cd ${DIR}
-echo '\nAll agda tests completed successfully\n'
-
+echo
+echo 'All agda tests completed successfully'
+echo
 
 
 

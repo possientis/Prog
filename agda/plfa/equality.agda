@@ -1,3 +1,5 @@
+module equality where
+
 open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc) -- \sqcup for ⊔
 
 data _≡_ {a : Set} (x : a) : a -> Set where -- \==

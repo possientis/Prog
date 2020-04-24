@@ -28,47 +28,47 @@ all:					void.agdai \
 						kripke.agdai
 
 void.agdai : 			void.agda
-	agda void.agda
+	agda -v0 void.agda
 
 level.agdai : 			level.agda
-	agda level.agda
+	agda -v0 level.agda
 
 maybe.agdai : 			maybe.agda
-	agda maybe.agda
+	agda -v0 maybe.agda
 
 func.agdai : 			func.agda
-	agda func.agda
+	agda -v0 func.agda
 
 prod.agdai :			prod.agda
-	agda prod.agda
+	agda -v0 prod.agda
 
 id.agdai : 				id.agda \
 						void.agdai
-	agda id.agda
+	agda -v0 id.agda
 
 nat.agdai :				nat.agda \
 						id.agdai \
 						sum.agdai \
 						void.agdai 
-	agda nat.agda
+	agda -v0 nat.agda
 
 plus.agdai :			plus.agda \
 						le.agdai \
 						lt.agdai \
 						id.agdai \
 						nat.agdai
-	agda plus.agda
+	agda -v0 plus.agda
 
 mult.agdai :			mult.agda \
 						id.agdai \
 						nat.agdai \
 						plus.agdai
-	agda mult.agda
+	agda -v0 mult.agda
 
 sum.agdai : 			sum.agda \
    						id.agdai \
 						void.agdai	
-	agda sum.agda
+	agda -v0 sum.agda
 
 le.agdai :				le.agda \
 						id.agdai \
@@ -76,19 +76,19 @@ le.agdai :				le.agda \
 						sum.agdai \
 						void.agdai \
 						min-max.agdai
-	agda le.agda
+	agda -v0 le.agda
 
 lt.agdai :				lt.agda \
 						le.agdai \
 						nat.agdai \
 						void.agdai
-	agda lt.agda
+	agda -v0 lt.agda
 
 bool.agdai :			bool.agda \
 			 			id.agdai \
 						sum.agdai \
 						void.agdai	
-	agda bool.agda
+	agda -v0 bool.agda
 
 list.agdai :			list.agda \
 						id.agdai \
@@ -99,7 +99,7 @@ list.agdai :			list.agda \
 						void.agdai \
 						plus.agdai \
 						maybe.agdai
-	agda list.agda
+	agda -v0 list.agda
 
 vector.agdai :			vector.agda \
 						id.agdai \
@@ -109,19 +109,19 @@ vector.agdai :			vector.agda \
 						plus.agdai \
 						mult.agdai \
 						list.agdai
-	agda vector.agda
+	agda -v0 vector.agda
 
 min-max.agdai :			min-max.agda \
 						id.agdai \
 						sum.agdai \
 						relations.agdai
-	agda min-max.agda
+	agda -v0 min-max.agda
 
 relations.agdai :		relations.agda \
 						id.agdai \
 						sum.agdai \
 						void.agdai
-	agda relations.agda
+	agda -v0 relations.agda
 
 sigma.agdai :			sigma.agda \
 						id.agdai \
@@ -130,24 +130,24 @@ sigma.agdai :			sigma.agda \
 						void.agdai \
 						list.agdai \
 						vector.agdai 
-	agda sigma.agda
+	agda -v0 sigma.agda
 
 square.agdai :			square.agda \
 						id.agdai \
 						nat.agdai \
 						mult.agdai
-	agda square.agda
+	agda -v0 square.agda
 
 rewrite-test.agdai :	rewrite-test.agda \
 						id.agdai \
 						nat.agdai \
 						plus.agdai
-	agda rewrite-test.agda
+	agda -v0 rewrite-test.agda
 
 with-abstraction.agdai:	with-abstraction.agda \
 						bool.agdai \
 						list.agdai
-	agda with-abstraction.agda
+	agda -v0 with-abstraction.agda
 						
 bst.agdai :				bst.agda \
 						id.agdai \
@@ -155,7 +155,7 @@ bst.agdai :				bst.agda \
 						relations.agdai \
 						maybe.agdai \
 						min-max.agdai
-	agda bst.agda
+	agda -v0 bst.agda
 
 z.agdai :				z.agda \
 						id.agdai \
@@ -166,7 +166,7 @@ z.agdai :				z.agda \
 						plus.agdai \
 						bool.agdai \
 						void.agdai
-	agda z.agda
+	agda -v0 z.agda
 
 reflect-list.agdai :	reflect-list.agda \
 						id.agdai \
@@ -177,26 +177,26 @@ reflect-list.agdai :	reflect-list.agda \
 						list.agdai \
 						prod.agdai \
 						level.agdai
-	agda reflect-list.agda
+	agda -v0 reflect-list.agda
 
 combinator.agdai :		combinator.agda \
 						le.agdai \
 						lt.agdai \
 						nat.agdai \
 						bool.agdai
-	agda combinator.agda
+	agda -v0 combinator.agda
 
 vcombinator.agdai :		vcombinator.agda \
 						nat.agdai
-	agda vcombinator.agda
+	agda -v0 vcombinator.agda
 	
 
 formula.agdai : formula.agda \
 				nat.agdai \
 				list.agdai
-	agda formula.agda
+	agda -v0 formula.agda
 
 kripke.agdai : 	kripke.agda \
 				level.agdai \
 				nat.agdai
-	agda kripke.agda	
+	agda -v0 kripke.agda	

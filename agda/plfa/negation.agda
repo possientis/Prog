@@ -1,3 +1,5 @@
+module negation where
+
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 open import Data.Nat using (ℕ; zero; suc; _<_; _≤_; s≤s)
 open import Data.Empty using (⊥; ⊥-elim)
@@ -112,6 +114,7 @@ fromTrichotomy' (Less'  m<n _ _) = Less m<n
 fromTrichotomy' (Equal' _ m≡n _) = Equal m≡n
 fromTrichotomy' (More'  _ _ n<m) = More n<m
 
+{-
 isoTrichotomy : ∀ {m n : ℕ} → Trichotomy m n ≃ Trichotomy' m n
 isoTrichotomy = record
   { to = toTrichotomy'
@@ -119,6 +122,7 @@ isoTrichotomy = record
   ; from∘to = λ{(Less n<m) → refl; (Equal m≡n) → refl; (More n<m) → refl}
   ; to∘from = {!!}   -- actually not true, unless proof irrelevance
   }
+ -}
 
 -- Already defined in connectives.agda, but using library primitives now
 →-distrib-⊎-r : ∀ {a b c : Set} → (a ⊎ b → c) ≃ (a → c) × (b → c)

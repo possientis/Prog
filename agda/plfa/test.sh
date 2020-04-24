@@ -8,14 +8,13 @@ cd ${HOME1}
 echo
 echo "testing plfa..."
 
-agda test.agda
-agda induction.agda
-
+make
 ./clean.sh
 
 cd ${DIR}
-echo '\nAll plfa tests completed successfully\n'
-
+echo
+echo 'All plfa tests completed successfully'
+echo
 
 
 
