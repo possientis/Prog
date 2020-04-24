@@ -39,7 +39,7 @@ of the category \cat\ are not functors but {\em typed functors} as per
 defintion~(\ref{Fun:def:typed:untyped:functor}).
 
 The definition of \cat\ is formally very similar to that of the category \Set.
-However, we still need to do our due diligence and checks it forms a category:
+However, we still need to do our due diligence and check it forms a category:
 
 \begin{prop}\label{Fun:prop:category:small:cat}
     The category \cat\ of definition~(\ref{Fun:def:category:small:cat}) is 
@@ -121,6 +121,40 @@ However, we still need to do our due diligence and checks it forms a category:
         \begin{eqnarray*}(h\circ g)\circ f
             &=&(\,(\Eat,{\cal F},H)\,\circ\,(\Dat,\Eat,G)\,)\,
             \circ\,(\Cat,\Dat,F)\\
+            \mbox{$(6)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Dat,{\cal F},H\circ G)\,\circ\,(\Cat,\Dat,F)\\
+            \mbox{$(6)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Cat,{\cal F},(H\circ G)\circ F)\\
+            \mbox{functor $\circ$ assoc, prop~(\ref{Fun:prop:associative})}
+            \ \to\ 
+            &=&(\Cat,{\cal F},H\circ (G\circ F))\\
+            \mbox{$(6)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Eat,{\cal F},H)\,\circ\,(\Cat,\Eat,G\circ F)\\
+            \mbox{$(6)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Eat,{\cal F},H)\,\circ\,(\,(\Dat,\Eat,G)\,
+            \circ\,(\Cat,\Dat,F)\,)\\
+            &=&h\circ(g\circ f)
         \end{eqnarray*}
-TODO
+    $(11)$: We should have $\dom\,(\,\id(\Cat)\,) = \Cat = \cod\,(\,\id(\Cat)\,)$
+    whenever $\Cat\in\ob$:
+        \begin{eqnarray*}\dom\,(\,\id(\Cat)\,)
+            &=&\dom\,(\,\Cat,\Cat, I_{\cal C}\,)
+            \ \leftarrow\ \mbox{$(5)$ of def.~(\ref{Fun:def:category:small:cat})}\\
+            \mbox{$(3)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&\Cat\\
+            \mbox{$(4)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&\cod\,(\,\Cat,\Cat, I_{\cal C}\,)\\
+            \mbox{$(5)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&\cod\,(\,\id(\Cat)\,)
+        \end{eqnarray*}
+    $(12)$: We should have $f\circ\id(\Cat)=f$ whenever $\dom(f)=\Cat$
+    so let $f=(\Cat,\Dat,F)$:
+        \begin{eqnarray*}f\circ\id(\Cat)
+            &=&(\Cat,\Dat,F)\circ\id(\Cat)\\
+            \mbox{$(5)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Cat,\Dat,F)\,\circ\,(\Cat,\Cat,I_{\cal C})\\
+            \mbox{$(6)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Cat,\Dat,F\circ I_{\cal C})\\
+            TODO
+        \end{eqnarray*}
 \end{proof}
