@@ -16,6 +16,17 @@ Fixpoint nub (a:Type) (e:Eq a) (xs:list a) : list a :=
 
 Arguments nub {a} {e}.
 
+(* Whether a list has no duplicate: need usual equality but not Eq instance.    *)
+Inductive Nubed (a:Type) : list a -> Prop :=
+| NubedNil    : Nubed a nil
+| NubedCons   : forall (x:a) (xs:list a),
+    ~In x xs -> Nubed a xs -> Nubed a (cons x xs)
+.
+
+Arguments Nubed     {a}.
+Arguments NubedNil  {a}.
+Arguments NubedCons {a}.
+
 (* Nubing preserves the elements of a list.                                     *)
 Lemma nubIn : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
     In x xs <-> In x (nub xs).
@@ -43,17 +54,6 @@ Proof.
     - rewrite nubIn. exact H. (* 'assumption' fails, why ?                      *)
 Qed.
 
-(* Whether a list has no duplicate: need usual equality but not Eq instance.    *)
-Inductive Nubed (a:Type) : list a -> Prop :=
-| NubedNil    : Nubed a nil
-| NubedCons   : forall (x:a) (xs:list a),
-    ~In x xs -> Nubed a xs -> Nubed a (cons x xs)
-.
-
-Arguments Nubed     {a}.
-Arguments NubedNil  {a}.
-Arguments NubedCons {a}.
-
 (* Nubing a list leads to a Nubed list.                                         *)
 Lemma nubNubed : forall (a:Type) (e:Eq a) (xs:list a), Nubed (nub xs).
 Proof.
@@ -77,11 +77,20 @@ Proof.
         + rewrite IH. reflexivity.
 Qed.
 
-Lemma nubCons : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
+Lemma nubedConsNotIn : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
     Nubed (cons x xs) -> ~ In x xs.
 Proof.
     intros a e x xs H. remember (cons x xs) as ys eqn:E. 
     revert E. revert xs. revert x. destruct H; intros y ys H1.
     - inversion H1.
     - inversion H1. subst. assumption.
+Qed.
+
+Lemma nubedConsTail : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
+    Nubed (cons x xs) -> Nubed xs.
+Proof.
+    intros a e x xs H. remember (cons x xs) as ys eqn:E.
+    revert E. revert x xs. destruct H as [|x xs H1 H2]; intros z zs H.
+    - inversion H.
+    - inversion H. subst. assumption.
 Qed.

@@ -46,7 +46,7 @@ Proof.
         + constructor.
     - destruct (leqDec y x) as [H3|H3].
         + constructor.
-            { intros H4. destruct (insertCons a o y xs) as [H5 H6].
+            { intros H4. destruct (insertEquiv a o y xs) as [H5 H6].
               apply (H5 x) in H4. destruct H4 as [H4|H4].
                 { subst. apply H. left. reflexivity. }
                 { apply H1.  assumption. }}
@@ -62,7 +62,7 @@ Proof.
     intros a o xs H. induction H as [|x xs H1 H2 IH]; simpl.
     - constructor.
     - apply insertNubed.
-        + rewrite <- sortedIn. assumption.
+        + rewrite <- sortIn. assumption.
         + assumption.
 Qed.
 
@@ -91,8 +91,6 @@ Proof.
                   { assumption. }}
 Qed.
 
-
-(*
 Lemma equivSortedNubed : forall (a:Type) (o:Ord a) (xs ys:list a),
     Nubed xs ->
     Nubed ys ->
@@ -105,12 +103,12 @@ Proof.
     intros ys H3 H4 H5 H6.
     - symmetry. apply EquivSym in H6. apply equivNil. assumption.
     - destruct ys as [|y ys].
-        + admit.
+        + apply equivNil. assumption.
         + assert (xs = ys) as H7.
             { apply IH.
-                { admit. }
-                { admit. }
-                { admit. }
+                { apply (nubedConsTail a _ y). assumption. }
+                { apply sortedConsTail with x. assumption. }
+                { apply sortedConsTail with y. assumption. }
                 { split; intros u H8.
                     { assert (In u (cons y ys)) as H9. 
                         { apply H6. right.  assumption. }
@@ -125,13 +123,12 @@ Proof.
                       destruct H11 as [H11|H11].
                         { assert (x = y).
                             { apply (equalHead a o _ _ xs ys); assumption. }
-                          subst. exfalso. apply (nubCons a _ y ys) in H3.
+                          subst. exfalso. apply (nubedConsNotIn a _ y ys) in H3.
                           apply H3. assumption. }
                         { assumption. }}}}
           assert (x = y) as H8. { apply (equalHead a o _ _ xs ys); assumption. }
           subst. reflexivity. 
 Qed.
-*)
 
 
 (*
