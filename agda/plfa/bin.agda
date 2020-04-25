@@ -1,8 +1,8 @@
 module bin where
 
-import Relation.Binary.PropositionalEquality as Eq
+import Relation.Binary.PropositionalEquality.Core as Eq
 open Eq              using (_≡_; refl; cong; sym)
-open Eq.≡-Reasoning  using (begin_; _≡⟨⟩_; _≡⟨_⟩_;_∎)        -- \qed
+open Eq.≡-Reasoning  using (begin_; _≡⟨⟩_; step-≡;_∎)        -- \qed
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_;_^_) -- \.-
 
 open import induction

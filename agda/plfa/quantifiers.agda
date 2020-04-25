@@ -1,8 +1,8 @@
 module quantifiers where
 
-import Relation.Binary.PropositionalEquality as Eq
+import Relation.Binary.PropositionalEquality.Core as Eq
 open Eq                         using (_≡_; refl; sym; cong)
-open Eq.≡-Reasoning             using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+open Eq.≡-Reasoning             using (begin_; _≡⟨⟩_; step-≡; _∎)
 open import Data.Nat            using (ℕ; zero; suc; _+_; _*_; _≤_; z≤n; s≤s)
 open import Data.Nat.Properties using (+-suc; +-assoc)
 open import Relation.Nullary    using (¬_)

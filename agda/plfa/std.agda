@@ -62,24 +62,25 @@ open import Data.Bool using
 
 -- +-identity... cannot type superscript r with \^r, is this due to lean ?
 
-import Relation.Binary.PropositionalEquality as Eq
+import Relation.Binary.PropositionalEquality.Core as Eq
 
-open Eq using
+open import Relation.Binary.PropositionalEquality.Core using
   ( _≡_
   ; refl
   ; trans
   ; sym
   ; cong
-  ; cong-app
   ; subst
   )
+
 
 open Eq.≡-Reasoning using
   ( begin_
   ; _≡⟨⟩_
-  ; _≡⟨_⟩_
   ; _∎
+  ; step-≡
   )
+
 
 open import Data.Product using
   ( _×_
