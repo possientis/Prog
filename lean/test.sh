@@ -2,7 +2,7 @@
 
 LOC=/home/john/Prog/lean
 
-function check(){ 
+check(){ 
 
     echo "${1}"
     lean ${1}.lean
