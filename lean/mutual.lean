@@ -33,7 +33,7 @@ with list_tree : Type u
 
 open list_tree
 
-#check @nil
+--#check @nil
 
 end hidden
 
@@ -77,6 +77,6 @@ with numConstsLst : list Term → ℕ
 
 def ex1 : Term := App "f" [App "g" [Const "x"], Const "y"]
 
-#eval numConsts ex1
+--#eval numConsts ex1
 
 

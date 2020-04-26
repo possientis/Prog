@@ -16,16 +16,6 @@ def Fermat_primes_infinite : Prop := ∀ (n:ℕ), ∃ (p:ℕ), n ≤ p ∧ Ferma
 
 def Golbach : Prop := ∀ (n:ℕ), 4 ≤ n ∧ even n → ∃(p q:ℕ), prime p ∧ prime q ∧ n = p + q
 
-#print primes_infinite
-
-
-
-
-
-
-
-
-
-
+--#print primes_infinite
 
 end hidden

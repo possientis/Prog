@@ -122,13 +122,13 @@ lemma prod_comm : ∀ (n m : ℕ), prod n m = prod m n :=
     end
 
 
-#check one_prod
-#check prod_one
-#check add_prod
-#check prod_assoc
-#check prod_succ
-#check prod_zero
-#check prod_comm
+--#check one_prod
+--#check prod_one
+--#check add_prod
+--#check prod_assoc
+--#check prod_succ
+--#check prod_zero
+--#check prod_comm
 
 end hidden
 

@@ -8,8 +8,8 @@ lemma L1 : ∀ (p q:Prop), p → q → p ∧ q ∧ p :=
       exact hp
     end
 
-#check L1
-#print L1
+--#check L1
+--#print L1
 
 lemma L2 : ∀ (p q:Prop), p → q → p ∧ q ∧ p :=
   assume p q hp hq,
@@ -18,7 +18,7 @@ lemma L2 : ∀ (p q:Prop), p → q → p ∧ q ∧ p :=
       exact and.intro hq hp
     end
 
-#print L2
+--#print L2
 
 
 lemma L3 : ∀ (p q:Prop), p → q → p ∧ q ∧ p :=
@@ -73,7 +73,7 @@ lemma L5 : ∀ (p q r : Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
             assumption
     end
 
-#check L5
+--#check L5
 
 
 lemma L6 : ∀ (α:Type), α → α :=
@@ -83,7 +83,7 @@ lemma L6 : ∀ (α:Type), α → α :=
     exact x
   end
 
-#check L6
+--#check L6
 
 lemma L7 : ∀ (α:Type) (x:α), x = x :=
   begin
@@ -92,7 +92,7 @@ lemma L7 : ∀ (α:Type) (x:α), x = x :=
   end
 
 
-#check L7
+--#check L7
 
 lemma L8 : ∀ (m n p : ℕ), m = n → m = p → p = n :=
   begin
@@ -103,7 +103,7 @@ lemma L8 : ∀ (m n p : ℕ), m = n → m = p → p = n :=
       assumption
   end
 
-#check L8
+--#check L8
 
 lemma L9 : ∀ (m n p q : ℕ), m = n → n = p → p = q → m = q :=
   begin
@@ -113,7 +113,7 @@ lemma L9 : ∀ (m n p q : ℕ), m = n → n = p → p = q → m = q :=
       apply eq.trans; assumption
   end
 
-#check L9
+--#check L9
 
 
 lemma L10 : ∀ (n:ℕ), (λ x:ℕ, 0) 0 = 0 :=
@@ -122,7 +122,7 @@ lemma L10 : ∀ (n:ℕ), (λ x:ℕ, 0) 0 = 0 :=
     refl
   end
 
-#check L10
+--#check L10
 
 
 lemma L11 : ∀ (m n p : ℕ), m = n → m = p → p = n :=
@@ -133,7 +133,7 @@ lemma L11 : ∀ (m n p : ℕ), m = n → m = p → p = n :=
       assumption
   end
 
-#check L11
+--#check L11
 
 
 lemma L12 : ∀ (n : ℕ), n ≤ n :=
@@ -142,7 +142,7 @@ lemma L12 : ∀ (n : ℕ), n ≤ n :=
     refl
   end
 
-#check L12
+--#check L12
 
 
 lemma L13 : ∃ (n : ℕ), 5 = n :=
@@ -151,7 +151,7 @@ lemma L13 : ∃ (n : ℕ), 5 = n :=
     refl
   end
 
-#check L13
+--#check L13
 
 
 lemma L14 : ∃ (n : ℕ), 5 = n :=
@@ -161,7 +161,7 @@ lemma L14 : ∃ (n : ℕ), 5 = n :=
     refl
   end
 
-#check L14
+--#check L14
 
 
 lemma L15 : 3 = 3 :=
@@ -177,7 +177,7 @@ lemma L16 : 2 + 3 = 5 :=
     rw ←H
   end
 
-#check L15
+--#check L15
 
 
 
@@ -215,7 +215,7 @@ lemma L19 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
             right, assumption
   end
 
-#check L19
+--#check L19
 
 
 lemma L20 : ∀ (p q : ℕ → Prop), (∃ x, p x) → ∃ x, p x ∨ q x :=
@@ -231,7 +231,7 @@ lemma L21 : ∀ (p q : ℕ → Prop), (∃ x, p x) → ∃ x, p x ∨ q x :=
     intros p q H, cases H with x H, existsi x, left, assumption
   end
 
-#check L21
+--#check L21
 
 universes u v
 
@@ -243,7 +243,7 @@ def swap_pair {α:Type u} {β:Type v} : α × β →  β × α :=
     split; assumption
   end
 
-#check @swap_pair
+--#check @swap_pair
 
 def swap_sum {α:Type u} {β:Type v} : α ⊕ β → β ⊕ α :=
   begin
@@ -252,7 +252,7 @@ def swap_sum {α:Type u} {β:Type v} : α ⊕ β → β ⊕ α :=
       right, assumption,
       left, assumption
   end
-#check @swap_sum
+--#check @swap_sum
 
 lemma L22 : ∀ (p q:Prop), p ∧ ¬p → q :=
   begin
@@ -260,7 +260,7 @@ lemma L22 : ∀ (p q:Prop), p ∧ ¬p → q :=
     contradiction
   end
 
-#check L22
+--#check L22
 
 
 lemma L23 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
@@ -279,7 +279,7 @@ lemma L23 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
         end
   end
 
-#check L23
+--#check L23
 
 
 lemma L24 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
@@ -297,7 +297,7 @@ lemma L24 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
   end
 
 
-#check L24
+--#check L24
 
 -- using show and from tactics
 lemma L25 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
@@ -320,7 +320,7 @@ lemma L25 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
               show q ∨ r, right, assumption
   end
 
-#check L25
+--#check L25
 
 -- use show tactic to select current goal
 lemma L26 : ∀ (p q:Prop), p ∧ q → q ∧ p :=
@@ -338,8 +338,8 @@ lemma L27 : ∀ (p q:Prop), p ∧ q → q ∧ p :=
   end
 
 
-#check L26
-#check L27
+--#check L26
+--#check L27
 
 -- using the have tactic
 lemma L28 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
@@ -349,7 +349,7 @@ lemma L28 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
       have Hpr : p ∧ r, from ⟨Hp,Hr⟩, right, assumption
   end
 
-#check L28
+--#check L28
 
 -- 'have' is for proof what 'let' is for data
 lemma L29 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
@@ -359,7 +359,7 @@ lemma L29 : ∀ (p q r:Prop), p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
       have Hpr : p ∧ r := ⟨Hp,Hr⟩, right, assumption
   end
 
-#check L29
+--#check L29
 
 lemma L30 : ∃ (n:ℕ), n + 2 = 8 :=
   begin
@@ -369,7 +369,7 @@ lemma L30 : ∃ (n:ℕ), n + 2 = 8 :=
   end
 
 
-#check L30
+--#check L30
 
 lemma L31 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
   begin
@@ -397,7 +397,7 @@ lemma L31 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
             end
   end
 
-#check L31
+--#check L31
 
 -- curly braces instead of begin .. end
 lemma L32 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
@@ -423,7 +423,7 @@ lemma L32 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
             }
   end
 
-#check L32
+--#check L32
 
 lemma L33 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
   begin
@@ -442,4 +442,4 @@ lemma L33 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
                    {show q ∨ r, right, show r, from Hr}}}
   end
 
-#check L33
+--#check L33

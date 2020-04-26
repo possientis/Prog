@@ -7,26 +7,26 @@ inductive WeekDay : Type
 | Friday    : WeekDay
 | Saturday  : WeekDay
 
-#check @WeekDay.Sunday
+--#check @WeekDay.Sunday
 
 open WeekDay
 
-#check @Sunday
+--#check @Sunday
 
-#check @WeekDay.rec
-#check @WeekDay.rec_on
+--#check @WeekDay.rec
+--#check @WeekDay.rec_on
 
 
 def numberOfDay1 (d : WeekDay) : ℕ := WeekDay.rec_on d 1 2 3 4 5 6 7
 def numberOfDay2 (d : WeekDay) : ℕ := WeekDay.rec 1 2 3 4 5 6 7 d
 def numberOfDay3 (d : WeekDay) : ℕ := WeekDay.cases_on d 1 2 3 4 5 6 7
 
-#reduce numberOfDay1 Sunday
-#reduce numberOfDay1 Monday
-#reduce numberOfDay2 Sunday
-#reduce numberOfDay2 Monday
-#reduce numberOfDay3 Tuesday
-#reduce numberOfDay3 Wednesday
+--#reduce numberOfDay1 Sunday
+--#reduce numberOfDay1 Monday
+--#reduce numberOfDay2 Sunday
+--#reduce numberOfDay2 Monday
+--#reduce numberOfDay3 Tuesday
+--#reduce numberOfDay3 Wednesday
 
 
 def next (d : WeekDay) : WeekDay := WeekDay.cases_on d
@@ -48,8 +48,8 @@ def previous (d : WeekDay) : WeekDay := WeekDay.cases_on d
   Thursday
   Friday
 
-#reduce (next (next Tuesday))
-#reduce (next (previous Tuesday))
+--#reduce (next (next Tuesday))
+--#reduce (next (previous Tuesday))
 
 
 lemma L1 : ∀ (d : WeekDay), next (previous d) = d :=
@@ -63,7 +63,7 @@ lemma L1 : ∀ (d : WeekDay), next (previous d) = d :=
     (show next (previous Saturday)   = Saturday   , from rfl)
 
 
-#check L1
+--#check L1
 
 
 lemma L2 : ∀ (d : WeekDay), next (previous d) = d :=
@@ -73,7 +73,7 @@ lemma L2 : ∀ (d : WeekDay), next (previous d) = d :=
       refl
     end
 
-#check L2
+--#check L2
 
 namespace hidden1
 
@@ -82,8 +82,8 @@ universes u v
 inductive prod (α : Type u) (β : Type v)
 | mk : α → β → prod
 
-#check @prod
-#check @prod.mk
+--#check @prod
+--#check @prod.mk
 
 inductive sum (α : Type u) (β : Type v)
 | inl {} : α → sum
@@ -107,17 +107,17 @@ end hidden2
 def prod_example (p: bool × ℕ) : ℕ :=
   prod.rec_on p (λ b n, cond b (2*n) (2*n +1))
 
-#reduce prod_example (tt,3)
-#reduce prod_example (ff,3)
+--#reduce prod_example (tt,3)
+--#reduce prod_example (ff,3)
 
 def sum_example (s : ℕ ⊕ ℕ) : ℕ :=
   sum.cases_on s (λ n, 2 * n) (λ n, 2 * n +1)
 
-#reduce sum_example (sum.inl 3)
-#reduce sum_example (sum.inr 3)
+--#reduce sum_example (sum.inl 3)
+--#reduce sum_example (sum.inr 3)
 
-#check @sum.inl
-#check @sum.inr
+--#check @sum.inl
+--#check @sum.inr
 
 
 namespace hidden3
@@ -127,18 +127,18 @@ namespace hidden3
   inductive prod (α : Type u) (β : Type v)
   | mk (fst : α) (snd : β) : prod
 
-  #check @prod.mk
-  #check @prod.fst
-  #check @prod.snd
+  --#check @prod.mk
+  --#check @prod.fst
+  --#check @prod.snd
 end hidden3
 
 namespace hidden4
   structure prod1 (α β: Type) :=
     mk :: (fst : α) (snd : β)
 
-  #check @prod1.mk
-  #check @prod1.fst
-  #check @prod1.snd
+  --#check @prod1.mk
+  --#check @prod1.fst
+  --#check @prod1.snd
 
 end hidden4
 
@@ -146,9 +146,9 @@ end hidden4
 structure color := (red : ℕ) (green : ℕ) (blue : ℕ)
 def yellow := color.mk 255 255 0
 
-#reduce color.red yellow
-#reduce color.green yellow
-#reduce color.blue yellow
+--#reduce color.red yellow
+--#reduce color.green yellow
+--#reduce color.blue yellow
 
 
 namespace hidden5
@@ -164,7 +164,7 @@ inductive option (α : Type u)
 inductive inhabited (α : Type u) : Prop
 | mk : α → inhabited
 
-#check @inhabited
+--#check @inhabited
 end hidden5
 
 
@@ -197,9 +197,9 @@ structure subtype2 {α : Sort u} (p : α → Prop) :=
 
 variables {α : Type u} (p : α → Prop)
 
-#check subtype p
-#check subtype2 p
-#check { x : α // p x}
+--#check subtype p
+--#check subtype2 p
+--#check { x : α // p x}
 
 
 end hidden6
@@ -209,7 +209,7 @@ inductive foo : Type
 | bar1 : ℕ → ℕ → foo
 | bar2 : ℕ → ℕ → ℕ → foo
 
-#check @foo
+--#check @foo
 
 def silly1 (x : foo) : ℕ :=
   begin
@@ -218,7 +218,7 @@ def silly1 (x : foo) : ℕ :=
       {exact (c + d + e)}
   end
 
-#check @silly1
+--#check @silly1
 
 open foo
 
@@ -231,7 +231,7 @@ begin
       {exact e}
 end
 
-#check @silly2
+--#check @silly2
 
 def silly3 (x : foo) : ℕ :=
 begin
@@ -242,7 +242,7 @@ begin
       {exact b}
 end
 
-#check @silly3
+--#check @silly3
 
 
 open nat
@@ -257,7 +257,7 @@ lemma L3 : p 0 → (∀ n, p (succ n)) → ∀(m k : ℕ),  p (m + 3 * k) :=
         {apply hs}
     end
 
-#check L3
+--#check L3
 
 lemma L4 : p 0 → (∀ n, p (succ n)) → ∀(m k : ℕ),  p (m + 3 * k) :=
   assume hz hs m k,
@@ -269,7 +269,7 @@ lemma L4 : p 0 → (∀ n, p (succ n)) → ∀(m k : ℕ),  p (m + 3 * k) :=
     end
 
 
-#check L4
+--#check L4
 
 lemma L5 : ∀ (p : Prop) (m n : ℕ), (m < n → p) → (m ≥ n → p) → p :=
   assume p m n H1 H2,
@@ -279,7 +279,7 @@ lemma L5 : ∀ (p : Prop) (m n : ℕ), (m < n → p) → (m ≥ n → p) → p :
         {apply H2, assumption}
     end
 
-#check L5
+--#check L5
 
 
 lemma L6 : ∀ (p : Prop) (m n : ℕ), (m < n → p) → (m ≥ n → p) → p :=
@@ -292,9 +292,9 @@ lemma L6 : ∀ (p : Prop) (m n : ℕ), (m < n → p) → (m ≥ n → p) → p :
           {apply H2, assumption}}
     end
 
-#check L6
+--#check L6
 
-#check @nat.sub_self
+--#check @nat.sub_self
 
 lemma L7 : ∀ (m n : ℕ), m - n = 0 ∨ m ≠ n :=
   assume m n,
@@ -304,7 +304,7 @@ lemma L7 : ∀ (m n : ℕ), m - n = 0 ∨ m ≠ n :=
         {right, assumption}
     end
 
-#check L7
+--#check L7
 
 
 def f (m k : ℕ) : ℕ :=
@@ -342,9 +342,9 @@ lemma L9 : ∀ (m n : ℕ), succ m + n = succ (m + n) :=
         }
     end
 
-#check L9
+--#check L9
 
-#check @zero_add
+--#check @zero_add
 
 lemma L10 : ∀ (m n : ℕ), m + n = n + m :=
   assume m n,
@@ -359,13 +359,13 @@ lemma L10 : ∀ (m n : ℕ), m + n = n + m :=
               ...      = succ n + m   : by begin symmetry, apply L9 end
     end
 
-#check L10
+--#check L10
 
 lemma L11 : ∀ (n : ℕ), 0 + n = n :=
   assume n,
     by induction n; simp only [*, add_zero, add_succ]
 
-#check L11
+--#check L11
 
 
 lemma L12 : ∀ (m n p : ℕ), (m + n) + p = m + (n + p) :=
@@ -382,7 +382,7 @@ lemma L12 : ∀ (m n p : ℕ), (m + n) + p = m + (n + p) :=
                ...         = m + (n + succ p)   : by refl
     end
 
-#check L12
+--#check L12
 
 
 lemma L13 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :=
@@ -391,7 +391,7 @@ lemma L13 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :
       injection H with H', clear H, injection H' with H, rewrite H
     end
 
-#check L13
+--#check L13
 
 
 lemma L14 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :=
@@ -401,30 +401,30 @@ lemma L14 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :
       rewrite H2
     end
 
-#check L14
+--#check L14
 
 lemma L15 : ∀ (m n p : ℕ), succ (succ m) = succ (succ n) → n + p = m + p :=
   assume m n p H, by injections; simp *
 
-#check L15
+--#check L15
 
 
 lemma L16 : ∀ (m n : ℕ), succ m = 0 → n = n + 7 :=
   assume m n H, by injections
 
-#check L16
+--#check L16
 
 
 lemma L17 : ∀ (m n : ℕ), succ m = 0 → n = n + 7 :=
   assume m n H, by contradiction
 
-#check L17
+--#check L17
 
 
 lemma L18 : 7 = 4 → false :=
   assume H, by injections
 
-#check L18
+--#check L18
 
 
 

@@ -31,18 +31,18 @@ def default (α : Type _) [s : inhabited α] : α :=
 def defaul2 (α : Type _) [s : inhabited α] : α :=
   inhabited.default α
 
-#check default Prop
-#reduce default Prop
+--#check default Prop
+--#reduce default Prop
 
 instance prod_inhabited {α : Type _} {β : Type _} [inhabited α] [inhabited β] : inhabited (α × β) :=
   { default := (default α, default β)}
 
-#reduce default (Prop × bool)
+--#reduce default (Prop × bool)
 
 instance fun_inhabited (α : Type _) {β : Type _} [inhabited β] : inhabited (α → β) :=
   {default := λ _, default β}
 
-#reduce default (ℕ → ℕ)
+--#reduce default (ℕ → ℕ)
 
 universe u
 
@@ -63,7 +63,7 @@ instance add_prod {α β : Type u} [has_add α] [has_add β] : has_add (α × β
 instance add_fun {α β : Type} [has_add β] : has_add (α → β) :=
   {add := λ f g x, f x + g x}
 
-#reduce (λ (x:ℕ), 1) + (λ x, 2)
+--#reduce (λ (x:ℕ), 1) + (λ x, 2)
 
 end hidden
 

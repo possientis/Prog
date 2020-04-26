@@ -24,7 +24,7 @@ def foo (n : ℕ) (b c : bool) : ℕ := 5 +
   | m + 1, ff := m + 3
   end
 
-#eval foo 7 tt ff
+--#eval foo 7 tt ff
 
 example : foo 7 tt ff = 9 := rfl
 
@@ -61,7 +61,7 @@ example (p q : ℕ → Prop) (H1 : ∃ x, p x) (H2: ∃ y, q y) : ∃ x y, p x �
 
 open function
 
-#print surjective
+--#print surjective
 
 universes v w
 

@@ -11,7 +11,7 @@ def length {α : Type u} (xs : list α) : ℕ :=
       {exact (n + 1)}
   end
 
-#check @length
+--#check @length
 
 def reverse {α : Type u} (xs : list α) : list α :=
   begin

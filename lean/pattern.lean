@@ -71,8 +71,8 @@ example : ∀ (n : ℕ), sub2 n = sub2' n
 | 1     := rfl
 | (n+2) := rfl
 
-#print sub2
-#print sub2._main
+--#print sub2
+--#print sub2._main
 
 example {α : Type u} (p q: α → Prop) : (∃ x, p x ∨ q x) → (∃ x, p x) ∨ (∃ x, q x)
 | ⟨x,(inl px)⟩ := inl ⟨x,px⟩
@@ -139,16 +139,16 @@ def tail_same5 : Π (α : Type u) (xs : list α), tail1 xs = tail2 xs
 | α []        := rfl
 | α (x :: xs) := rfl
 
-#check @tail_same
-#check @tail_same2
-#check @tail_same3
-#check @tail_same4
-#check @tail_same5
+--#check @tail_same
+--#check @tail_same2
+--#check @tail_same3
+--#check @tail_same4
+--#check @tail_same5
 
 
 lemma L1 : @tail_same3 = @tail_same4 := rfl
 
-#check L1
+--#check L1
 
 -- overallping pattern
 def foo4 : ℕ → ℕ → ℕ
@@ -185,9 +185,9 @@ example : foo6 (a + 1) 0 = 2 := rfl
 
 example : foo6 (a + 1) (b + 1) = arbitrary ℕ := rfl
 
-#check arbitrary ℕ
+--#check arbitrary ℕ
 
-#reduce arbitrary ℕ
+--#reduce arbitrary ℕ
 
 
 -- option a
@@ -221,8 +221,8 @@ def foo9 : char → ℕ
 | _   := 3
 
 
-#check foo9
-#print foo9._main
+--#check foo9
+--#print foo9._main
 
 def add2 : ℕ → ℕ → ℕ
 | n 0        := n
@@ -235,7 +235,7 @@ local infix `⊕` : 50 := add2
 lemma add_zero2 : ∀ (n : ℕ), n ⊕ 0 = n := assume n, rfl
 lemma add_succ2 : ∀ (n m : ℕ), n ⊕ (succ m) = succ (n ⊕ m) := assume n m, rfl
 
-#check @congr_arg
+--#check @congr_arg
 
 lemma zero_add2 : ∀ (n : ℕ), 0 ⊕ n = n
 | 0        := rfl
@@ -279,11 +279,11 @@ example : fib 7 = 21 :=
 
 variable (C : ℕ → Type)
 
-#check (@nat.below C)
+--#check (@nat.below C)
 
-#reduce (@nat.below C 3)
+--#reduce (@nat.below C 3)
 
-#check (@nat.brec_on C)
+--#check (@nat.brec_on C)
 
 
 def append2 {α : Type} :  list α → list α → list α
@@ -306,5 +306,5 @@ def {l} list_add {α : Type l} [has_add α] : list α → list α → list α
 | (x :: xs) (y :: ys) := (x + y) :: list_add xs ys
 
 
-#reduce list_add [1,2,3] [4,5,6,6,9,10]
-#eval list_add [1,2,3] [4,5,6,6,9,10]
+--#reduce list_add [1,2,3] [4,5,6,6,9,10]
+--#eval list_add [1,2,3] [4,5,6,6,9,10]

@@ -2,7 +2,7 @@ open classical
 
 variable p : Prop
 
-#check em p -- law of excluded middle
+----#check em p -- law of excluded middle
 
 -- This requres law of exlcuded middle
 lemma L1 : ∀ (p:Prop), ¬¬p → p := λ p h,
@@ -11,7 +11,7 @@ lemma L1 : ∀ (p:Prop), ¬¬p → p := λ p h,
     (assume hnp : ¬p, absurd hnp h)
 
 
-#check L1
+----#check L1
 
 
 lemma L2 : ∀ (p:Prop), ¬¬p → p := λ p h,
@@ -19,7 +19,7 @@ lemma L2 : ∀ (p:Prop), ¬¬p → p := λ p h,
     (assume h1:p, h1)
     (assume h1:¬p, absurd h1 h)
 
-#check L2
+----#check L2
 
 
 lemma L3 : ∀ (p:Prop), ¬¬p → p := λ p h,
@@ -27,7 +27,7 @@ lemma L3 : ∀ (p:Prop), ¬¬p → p := λ p h,
     (assume h1:¬p,
       show false, from h h1)
 
-#check L3
+----#check L3
 
 
 lemma L4 : ∀ (p q:Prop), ¬(p ∧ q) → ¬p ∨ ¬q := λ p q h,
@@ -39,7 +39,7 @@ lemma L4 : ∀ (p q:Prop), ¬(p ∧ q) → ¬p ∨ ¬q := λ p q h,
       (show ¬p, from
         hp))
 
-#check L4
+--#check L4
 
 
 lemma L5 : ∀ (p q:Prop), ¬(p ∧ q) → ¬p ∨ ¬q := λ p q h,
@@ -49,7 +49,7 @@ lemma L5 : ∀ (p q:Prop), ¬(p ∧ q) → ¬p ∨ ¬q := λ p q h,
         (assume hq:q, h ⟨hp,hq⟩)))
     (assume hp:¬p, or.inl hp)
 
-#check L5
+--#check L5
 
 
 lemma L6 : ∀ (p q:Prop), ¬(p ∧ q) → ¬p ∨ ¬q := λ p q h,
@@ -78,14 +78,14 @@ lemma L7 : ∀ (p q r:Prop), p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := λ p
         (have hr:r, from and.right hpr,
           ⟨hp,or.inr hr⟩))))
 
-#check L7
+--#check L7
 
 -- not readable
 lemma L8 : ∀ (α:Type) (p:α → Prop), (¬∀ (x:α), ¬p x) → ∃ (x:α), p x :=
 assume α p H, by_contradiction
   (assume H', H (assume x P, (H' ⟨x,P⟩)))
 
-#check L8
+--#check L8
 
 -- is this better ?
 lemma L9 : ∀ (α:Type) (p:α → Prop), (¬∀ (x:α), ¬p x) → ∃ (x:α), p x :=
@@ -95,20 +95,20 @@ lemma L9 : ∀ (α:Type) (p:α → Prop), (¬∀ (x:α), ¬p x) → ∃ (x:α), 
         from assume x (P : p x), show false,
           from H' (show ∃ x, p x,
             from ⟨x,P⟩)))
-#check L9
+--#check L9
 
 -- constructive
 lemma L10 : ∀ (α:Type) (r:Prop), (∃ (x:α), r) -> r :=
   assume α r ⟨x,H⟩, show r,
     from H
 
-#check L10
+--#check L10
 
 lemma L11 : ∀ (α:Type) (a:α) (r:Prop), r → (∃ (x:α), r) :=
   assume α a r (p:r), show ∃ (x:α), r ,
     from ⟨a,p⟩
 
-#check L11
+--#check L11
 
 
 lemma L12 : ∀ (α:Type) (r:Prop) (p:α → Prop), (∃x,p x ∧ r) ↔ (∃x,p x) ∧ r :=
@@ -120,7 +120,7 @@ lemma L12 : ∀ (α:Type) (r:Prop) (p:α → Prop), (∃x,p x ∧ r) ↔ (∃x,p
       show ∃x, (p x ∧ r),
         from ⟨x, ⟨H1,H2⟩⟩⟩
 
-#check L12
+--#check L12
 
 lemma L13 : ∀ (α:Type) (p q:α → Prop),
   (∃ (x:α), p x ∨ q x) ↔ (∃ (x:α), p x) ∨ (∃ (x:α), q x) :=
@@ -135,7 +135,7 @@ lemma L13 : ∀ (α:Type) (p q:α → Prop),
         (assume ⟨x,H'⟩, ⟨x,or.intro_left _ H'⟩)
         (assume ⟨x,H'⟩, ⟨x,or.intro_right _ H'⟩))⟩
 
-#check L13
+--#check L13
 
 lemma L14 : ∀ (α:Type) (p:α → Prop),
   (∀ (x:α), p x) ↔ ¬ (∃ (x:α), ¬ p x) :=
@@ -148,7 +148,7 @@ lemma L14 : ∀ (α:Type) (p:α → Prop),
         (assume H, false.elim
           (H' ⟨x,H⟩))⟩
 
-#check L14
+--#check L14
 
 lemma L15 : ∀ (α:Type) (p:α → Prop),
   (∃ (x:α), p x) ↔ ¬ (∀ (x:α), ¬ p x) :=
@@ -162,7 +162,7 @@ lemma L15 : ∀ (α:Type) (p:α → Prop),
         (assume x P, show false, from
           H' ⟨x,P⟩)))⟩
 
-#check L15
+--#check L15
 
 
 lemma L16 : ∀ (α:Type) (p:α → Prop),
@@ -172,7 +172,7 @@ lemma L16 : ∀ (α:Type) (p:α → Prop),
   ,
     assume H ⟨x,H'⟩, (H x) H'⟩
 
-#check L16
+--#check L16
 
 lemma L17 : ∀ (α:Type) (p:α → Prop),
   ¬(∀ (x:α), p x) ↔ (∃ (x:α), ¬ p x) :=
@@ -184,7 +184,7 @@ lemma L17 : ∀ (α:Type) (p:α → Prop),
   ,
   assume ⟨x,H⟩ H', H (H' x)⟩
 
-#check L17
+--#check L17
 
 
 lemma L18 : ∀ (α:Type) (p:α → Prop) (r:Prop),
@@ -194,9 +194,9 @@ lemma L18 : ∀ (α:Type) (p:α → Prop) (r:Prop),
   ,
     assume H x H', H ⟨x,H'⟩⟩
 
-#check L18
+--#check L18
 
-#check @by_cases
+--#check @by_cases
 
 lemma L19 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α), -- type α is not void !!!
   (∃ (x:α), p x → r) ↔ (∀ (x:α), p x) → r :=
@@ -210,7 +210,7 @@ lemma L19 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α), -- type α is not voi
             (assume P, H'' ⟨x,
               (assume Q, false.elim (P Q))⟩))))⟩
 
-#check L19
+--#check L19
 
 lemma L20 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α),  -- type α is not void !!!
   (∃ (x:α), r → p x) ↔ (r → ∃ (x:α), p x) :=
@@ -224,7 +224,7 @@ lemma L20 : ∀ (α:Type) (p:α → Prop) (r:Prop) (a:α),  -- type α is not vo
             (assume b P, ⟨b, assume _, P⟩)))
       (assume R, ⟨a, assume R', false.elim (R R')⟩)⟩
 
-#check L20
+--#check L20
 
 
 lemma L21 : ∀ (α:Type) (p q:α → Prop),
@@ -243,7 +243,7 @@ lemma L21 : ∀ (α:Type) (p q:α → Prop),
       assume x, ⟨H1 x, H2 x⟩
   ⟩
 
-#check L21
+--#check L21
 
 
 lemma L22 : ∀ (α:Type) (p q:α → Prop),
@@ -252,7 +252,7 @@ lemma L22 : ∀ (α:Type) (p q:α → Prop),
     show ∀ x, q x, from
       assume x, (H1 x) (H2 x)
 
-#check L22
+--#check L22
 
 lemma L23 : ∀ (α:Type) (p q:α → Prop),
   (∀ (x:α), p x) ∨ (∀ (x:α), q x) → ∀ (x:α), p x ∨ q x :=
@@ -260,7 +260,7 @@ lemma L23 : ∀ (α:Type) (p q:α → Prop),
     (assume H1 x, or.intro_left  _ (H1 x))
     (assume H1 x, or.intro_right _ (H1 x))
 
-#check L23
+--#check L23
 
 lemma L24 : ∀ (α:Type) (p q:α → Prop) (r:Prop) (a:α),
   (∀ (x:α), r) ↔ r :=
@@ -271,7 +271,7 @@ lemma L24 : ∀ (α:Type) (p q:α → Prop) (r:Prop) (a:α),
     assume H _, H
   ⟩
 
-#check L24
+--#check L24
 
 lemma L25 : ∀ (α:Type) (p:α → Prop) (r:Prop),
   (∀ (x:α), p x ∨ r) ↔ (∀ (x:α), p x) ∨ r :=
@@ -310,4 +310,4 @@ lemma L26 : ∀ (α:Type) (p:α → Prop) (r:Prop),
   ⟩
 
 
-#check L26
+--#check L26

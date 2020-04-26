@@ -14,17 +14,17 @@ def dite (p : Prop) [d : decidable p] {α : Type} (t : p → α) (e : ¬p → α
 
 end hidden
 
-#check @and.decidable
-#check @or.decidable
-#check @not.decidable
-#check @implies.decidable
+--#check @and.decidable
+--#check @or.decidable
+--#check @not.decidable
+--#check @implies.decidable
 
 open nat
 def step (a b x : ℕ) : ℕ :=
   if x < a ∨ x > b then 0 else 1
 
 set_option pp.implicit true
-#print definition step
+--#print definition step
 
 open classical
 local attribute [instance] prop_decidable

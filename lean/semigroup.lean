@@ -6,5 +6,5 @@ structure Semigroup :=
 (mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c))
 
 
-#check @Semigroup
+--#check @Semigroup
 

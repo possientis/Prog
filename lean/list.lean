@@ -16,7 +16,7 @@ end hidden1
 open list
 open nat
 
-#check [1,2,3,4,5]
+--#check [1,2,3,4,5]
 
 
 
@@ -28,7 +28,7 @@ lemma L1 : ∀ (p : ℕ -> Prop), p 0 → (∀ n, p (succ n)) → ∀ n, p n :=
         apply H1
     end
 
-#check L1
+--#check L1
 
 
 lemma L2 : ∀ (n : ℕ), n ≠ 0 → succ (pred n) = n :=
@@ -39,7 +39,7 @@ lemma L2 : ∀ (n : ℕ), n ≠ 0 → succ (pred n) = n :=
       { reflexivity }
     end
 
-#check L2
+--#check L2
 
 def f (n : ℕ) : ℕ :=
   begin
@@ -48,7 +48,7 @@ def f (n : ℕ) : ℕ :=
       {exact 7}
   end
 
-#check f
+--#check f
 
 universe u
 

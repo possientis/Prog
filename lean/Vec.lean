@@ -10,19 +10,19 @@ inductive Vec (α : Type u) : ℕ → Type u
 inductive eq' (α : Sort u) (a : α) : α → Prop
 | refl : eq' a
 
-#check @eq.rec_on
-#check @eq.rec
+--#check @eq.rec_on
+--#check @eq.rec
 
 lemma L1 : ∀ (α : Type u) (a b : α) (p : α → Prop), a = b → p a → p b :=
   λ α a b p E H, eq.rec_on E H
 
-#check L1
+--#check L1
 
 definition subst {α : Type u} {a b : α} (p : α → Prop)(E : a = b) (H:p a) : p b :=
   eq.rec_on E H
 
-#check @subst
-#check@eq.refl
+--#check @subst
+--#check@eq.refl
 
 definition P {α : Type u} (a : α) (x : α) : Prop := x = a
 
@@ -39,7 +39,7 @@ open Vec
 
 local notation x :: xs := cons x xs
 
-#check @Vec.cases_on
+--#check @Vec.cases_on
 
 def tail_aux {α : Type u} {n m : ℕ} (v : Vec α m) :
   m = n + 1 → Vec α n :=
@@ -49,7 +49,7 @@ def tail_aux {α : Type u} {n m : ℕ} (v : Vec α m) :
 
 def tail1 {α : Type u} {n : ℕ} (v : Vec α (n+1)) : Vec α n := tail_aux v rfl
 
-#check @nat.no_confusion
+--#check @nat.no_confusion
 
 def head {α : Type u} : ∀ {n : ℕ}, Vec α (n + 1) → α
 | _ (x :: xs) := x
@@ -73,27 +73,27 @@ def zip {α β : Type u} : ∀ {n : ℕ}, Vec α n → Vec β n → Vec (α × �
 | 0 nil nil := nil
 | (n + 1) (a :: as) (b :: bs) := (a, b) :: zip as bs
 
-#print map2
-#print map2._main -- scary stuff
+--#print map2
+--#print map2._main -- scary stuff
 
 
 def map {α β : Type u} (f : α → β) : ∀ {n : ℕ}, Vec α n → Vec β n
 | 0 nil := nil
 | (n + 1) (x :: xs) := f x :: map xs
 
-#print map
-#print map._main
-#check @map._main
+--#print map
+--#print map._main
+--#check @map._main
 
-
+/- How do we do this?
 def map1 : ∀ {α β : Type u}, (α → β) → ∀ {n : ℕ}, Vec α n → Vec β n :=
   λ (α β:Type u) (f:α → β), nat.rec
     (λ (_:Vec α 0), _)
     _
-
-#check @nat.rec
-#check @nat.rec_on
-#check @nat.brec_on
+-/
+--#check @nat.rec
+--#check @nat.rec_on
+--#check @nat.brec_on
 
 
 

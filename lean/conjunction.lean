@@ -24,28 +24,28 @@ lemma L4'' : ∀ (p q:Prop), p ∧ q → q ∧ p :=
   λ p q h, (|(and.right h),(and.left h)|) 
 
 
-#check L1
-#check L2
-#check L2'
-#check L3
-#check L3'
-#check L4
-#check L4'
-#check L4''
+--#check L1
+--#check L2
+--#check L2'
+--#check L3
+--#check L3'
+--#check L4
+--#check L4'
+--#check L4''
 
 variable l : list ℕ
 
-#check list.head l
-#check l.head
+--#check list.head l
+--#check l.head
 
 lemma L5 : ∀ (p q:Prop), p ∧ q → q ∧ p :=
   λ p q h, ⟨h.right,h.left⟩
 
-#check L5
+--#check L5
 
 lemma L6 : ∀ (p q:Prop), p ∧ q → q ∧ p ∧ q :=
   λ p q h, ⟨h.right,⟨h.left,h.right⟩⟩
-#check L6
+--#check L6
 
 
 

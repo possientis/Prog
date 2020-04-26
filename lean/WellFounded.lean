@@ -295,7 +295,7 @@ def WFRecursion_F : ∀ (α : Type u) (r : α → α → Prop) (c : α → Type 
   IH x (λ (y:α) (H:r y x), WFRecursion_F α r c IH y (f y H))
 -/
 
-#check @Accessible.rec_on
+--#check @Accessible.rec_on
 
 -- Trying again with Accessible.rec_on, woohoo !!
 def WFRecursion_F : ∀ {α : Type u} (r : α → α → Prop) (c : α → Type u),
@@ -314,7 +314,7 @@ def WFRecursion_F : ∀ {α : Type u} (r : α → α → Prop) (c : α → Type 
                          IH z g)
 
 
-#check @well_founded.fix -- counterpart of Fix in Coq
+--#check @well_founded.fix -- counterpart of Fix in Coq
 
 
 def WFRecursion : ∀ {α:Type u} (r : α → α → Prop),
