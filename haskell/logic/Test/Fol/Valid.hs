@@ -11,16 +11,12 @@ import Formula
 import Fol.P
 
 specValid :: Spec
-specValid = describe "Testing non-polymorphic properties of valid..." $
-    sequence_ specsValid
-
-specsValid :: [Spec]
-specsValid  = [ testValidElem
-              , testValidBot
-              , testValidImp
-              , testValidAll
-              , testValidCharac
-              ]
+specValid = describe "Testing non-polymorphic properties of valid..." $ do
+    testValidElem
+    testValidBot
+    testValidImp
+    testValidAll
+    testValidCharac
 
 testValidElem :: Spec
 testValidElem = it "Checked valid elem property" $

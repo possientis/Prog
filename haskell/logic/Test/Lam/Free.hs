@@ -28,9 +28,9 @@ testFreeSubst = it "Checked the free subst property" $
     property $ propFreeSubst
 
 propFreeSubstGen :: (Var -> T Var) -> T Var -> [Var] -> Bool
-propFreeSubstGen f t xs = incl (free $ subst_ f xs t) $
-    free t /\ xs ++ concatMap (free . f) (free t \\ xs)
+propFreeSubstGen f t xs = 
+    free (subst_ f xs t) <== free t /\ xs ++ concatMap (free . f) (free t \\ xs)
 
 propFreeSubst :: (Var -> T Var) -> T Var -> Bool
-propFreeSubst f t = incl (free $ subst f t) . concatMap (free . f) $ free t
+propFreeSubst f t = free (subst f t) <== concatMap (free . f) (free t)
 

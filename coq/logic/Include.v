@@ -7,10 +7,10 @@ Notation "xs <= ys" := (incl xs ys)
 
 Open Scope Include_scope.
 
-Lemma incl_cons2 : forall (v:Type) (xs ys:list v) (a:v),
-    xs <= ys -> (cons a xs) <= (cons a ys).
+Lemma incl_cons2 : forall (v:Type) (xs ys:list v) (x:v),
+    xs <= ys -> (cons x xs) <= (cons x ys).
 Proof.
-    intros v xs ys a H. apply incl_cons.
+    intros v xs ys x H. apply incl_cons.
     - left. reflexivity.
     - apply incl_tl. assumption.
 Qed.

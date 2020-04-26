@@ -11,16 +11,12 @@ import Injective
 import Variable (Var)
 
 specInjective :: Spec
-specInjective = describe "Testing properties for injective functions..." $
-    sequence_ specsInjective
-
-specsInjective :: [Spec]
-specsInjective  = [ testInjective_on_appl
-                  , testInjective_on_appr
-                  , testInjective_on_cons
-                  , testInjective_on_incl
-                  , testInjective_on_not_in
-                  ]
+specInjective = describe "Testing properties for injective functions..." $ do
+    testInjective_on_appl
+    testInjective_on_appr
+    testInjective_on_cons
+    testInjective_on_incl
+    testInjective_on_not_in
 
 testInjective_on_appl :: Spec
 testInjective_on_appl = it "Checked injective left append property" $
@@ -55,7 +51,7 @@ propInjective_on_cons x xs f = (not $ injective_on (x : xs) f)
     || injective_on xs f
 
 propInjective_on_incl :: [Var] -> [Var] -> (Var -> Var) -> Bool
-propInjective_on_incl xs ys f = (not $ incl xs ys) 
+propInjective_on_incl xs ys f = not (xs <== ys) 
     || (not $ injective_on ys f) || injective_on xs f
 
 propInjective_on_not_in :: Var -> [Var] -> (Var -> Var) -> Bool

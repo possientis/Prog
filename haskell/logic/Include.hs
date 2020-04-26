@@ -1,6 +1,8 @@
 module  Include
-    (   incl
+    (   (<==)
     )   where
 
-incl :: (Eq a) => [a] -> [a] -> Bool
-incl xs ys = all (`elem` ys) xs
+infix 3 <==
+
+(<==)  :: (Eq a) => [a] -> [a] -> Bool
+(<==)  xs ys = all (`elem` ys) xs

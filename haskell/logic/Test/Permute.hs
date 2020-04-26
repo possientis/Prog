@@ -11,15 +11,10 @@ import Coincide
 import Variable (Var)
 
 specPermute :: Spec
-specPermute = describe "Testing properties for permute (<->)..." $
-    sequence_ specsPermute
-
-specsPermute :: [Spec]
-specsPermute  = [ testNotation
-                , testPermuteComp
-                , testPermuteReplace
-                ]
-
+specPermute = describe "Testing properties for permute (<->)..." $ do
+    testNotation
+    testPermuteComp
+    testPermuteReplace
  
 testNotation :: Spec
 testNotation = it "Checked notation (<->) coincide with 'permute'" $

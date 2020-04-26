@@ -83,5 +83,3 @@ Proof.
             { intros H'. apply Hp. right. assumption. }
         }
 Qed.
-
-

@@ -14,13 +14,9 @@ import Test.Test
 import Variable  (Var)
 
 specFunctor :: forall f . (Test f) =>  Spec
-specFunctor = describe "Testing functor laws..." $
-    sequence_ (specsFunctor @ f)
-
-specsFunctor :: forall f . (Test f) =>  [Spec]
-specsFunctor =  [testFunctorIdLaw     @ f
-                ,testFunctorCompLaw   @ f
-                ]
+specFunctor = describe "Testing functor laws..." $ do
+    testFunctorIdLaw     @ f
+    testFunctorCompLaw   @ f
 
 testFunctorIdLaw :: forall f . (Test f) =>  Spec
 testFunctorIdLaw = it "Checked functor identity law" $

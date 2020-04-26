@@ -8,26 +8,23 @@ import  Test.QuickCheck
 import Remove
 import Include
 import Injective
+import Difference
 import Variable (Var)
 
 
 specRemove :: Spec
-specRemove = describe "Testing properties for remove..." $ 
-    sequence_ specsRemove
-
-specsRemove :: [Spec]
-specsRemove  = [ testRemoveStill
-               , testRemoveMon
-               , testRemoveMapIncl
-               , testRemoveXGone
-               , testRemoveXNotIn
-               , testRemoveMap
-               , testRemoveInj
-               , testRemoveInj2
-               , testRemoveIncl
-               , testRemoveCharac
-               ]
-
+specRemove = describe "Testing properties for remove..." $ do
+    testRemoveStill
+    testRemoveMon
+    testRemoveMapIncl
+    testRemoveXGone
+    testRemoveXNotIn
+    testRemoveMap
+    testRemoveInj
+    testRemoveInj2
+    testRemoveIncl
+    testRemoveCharac
+    testRemoveDiff
 
 testRemoveStill :: Spec
 testRemoveStill = it "Checked remove vs elem property" $
@@ -69,16 +66,20 @@ testRemoveCharac :: Spec
 testRemoveCharac = it "Checked remove characterization property" $ 
     property $ propRemoveCharac
 
+testRemoveDiff :: Spec
+testRemoveDiff = it "Checked remove x xs == xs \\\\ [x]" $ do
+    property $ propRemoveDiff
+
 propRemoveStill :: Var -> Var -> [Var] -> Bool
 propRemoveStill x y xs = x == y || y `notElem` xs || y `elem` (remove x xs) 
 
 
 propRemoveMon :: Var -> [Var] -> [Var] -> Bool
-propRemoveMon x xs ys = not (incl xs ys) || incl (remove x xs) (remove x ys) 
+propRemoveMon x xs ys = not (xs <== ys) || remove x xs <== remove x ys
 
 
 propRemoveMapIncl :: (Var -> Var) -> Var -> [Var] -> Bool
-propRemoveMapIncl f x xs = incl (remove (f x) (map f xs)) (map f (remove x xs)) 
+propRemoveMapIncl f x xs = remove (f x) (map f xs) <== map f (remove x xs)
 
 propRemoveXGone :: Var -> [Var] -> Bool
 propRemoveXGone x xs = x `notElem` remove x xs
@@ -103,7 +104,11 @@ propRemoveInj2 f x xs = (not $ injective_on (x:xs) f) ||
     remove (f x) (map f xs) == map f (remove x xs)
 
 propRemoveIncl :: Var -> [Var] -> Bool
-propRemoveIncl x xs = incl (remove x xs) xs
+propRemoveIncl x xs = remove x xs <== xs
 
 propRemoveCharac :: Var -> [Var] -> Var -> Bool
 propRemoveCharac x xs z = (z `elem` remove x xs) == ((z `elem` xs) && (x /= z))
+
+propRemoveDiff :: Var -> [Var] -> Bool
+propRemoveDiff x xs = remove x xs == xs \\ [x]
+

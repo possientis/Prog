@@ -11,19 +11,14 @@ import Injective
 import Variable (Var)
 
 specReplace :: Spec
-specReplace = describe "Testing properties for replace (<-:)..." $
-    sequence_ specsReplace
-
-specsReplace :: [Spec]
-specsReplace  = [ testNotation
-                , testReplaceId
-                , testReplaceX
-                , testReplaceY
-                , testReplaceNotX
-                , testReplaceTrans
-                , testReplaceInj
-                ]
-
+specReplace = describe "Testing properties for replace (<-:)..." $ do
+    testNotation
+    testReplaceId
+    testReplaceX
+    testReplaceY
+    testReplaceNotX
+    testReplaceTrans
+    testReplaceInj
  
 testNotation :: Spec
 testNotation = it "Checked notation (<-:) coincide with 'flip replace'" $

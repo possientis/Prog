@@ -52,7 +52,8 @@ Composition.vo : 				Composition.v
 In.vo : 						In.v
 	coqc In.v
 
-Coincide.vo : 					Coincide.v
+Coincide.vo : 					Coincide.v \
+								Include.vo
 	coqc Coincide.v
 
 Leq.vo : 						Leq.v

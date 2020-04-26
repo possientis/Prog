@@ -17,19 +17,15 @@ import Variable (Var)
 
 
 specSubformula :: forall f . (Test f) => Spec
-specSubformula = describe "Testing properties of subformula order (<<=)..." $
-    sequence_ (specsSubformula @ f)
-
-specsSubformula :: forall f . (Test f) => [Spec]
-specsSubformula  = [ testReflexivity    @ f
-                   , testAntiSymmetry   @ f
-                   , testTransitivity   @ f
-                   , testSubInclusion   @ f
-                   , testOrderMonotone  @ f
-                   , testSubFmap        @ f
-                   , testSubVar         @ f
-                   , testSubBound       @ f
-                   ]
+specSubformula = describe "Testing properties of subformula order (<<=)..." $ do
+    testReflexivity    @ f
+    testAntiSymmetry   @ f
+    testTransitivity   @ f
+    testSubInclusion   @ f
+    testOrderMonotone  @ f
+    testSubFmap        @ f
+    testSubVar         @ f
+    testSubBound       @ f
 
 testReflexivity :: forall f . (Test f) => Spec
 testReflexivity = it "Checked (<<=) is reflexive" $ 
@@ -92,11 +88,11 @@ propSubInclusion s t =  propSubInclusion_naive s t
                      && propSubInclusion_real2 t
 
 propSubInclusion_naive :: (Test f) => f Var -> f Var -> Bool
-propSubInclusion_naive s t = incl (sub s) (sub t) == (s <<= t)
+propSubInclusion_naive s t = (sub s <== sub t) == (s <<= t)
 
 propSubInclusion_real1 :: (Test f) => f Var -> Bool
 propSubInclusion_real1 t = all f (sub t) where
-    f s = incl (sub s) (sub t) 
+    f s = sub s <== sub t
          
 propSubInclusion_real2 :: (Test f) => f Var -> Bool
 propSubInclusion_real2 t = all (<<= t) (sub t) where 
@@ -119,14 +115,12 @@ propSubVar s t =  propSubVar_naive s t
                && propSubVar_real t
 
 propSubVar_naive :: (Test f) => f Var -> f Var -> Bool
-propSubVar_naive s t = not (s <<= t) || incl (var s) (var t) 
+propSubVar_naive s t = not (s <<= t) || var s <== var t
 
 propSubVar_real :: (Test f) => f Var -> Bool
 propSubVar_real t = all f (sub t) where
-    f s = incl (var s) (var t)
+    f s = var s <== var t
 
 propSubBound :: (Test f) => f Var -> f Var -> Bool
-propSubBound s t = not (s <<= t) || incl (bnd s) (bnd t)
-
-
+propSubBound s t = not (s <<= t) || bnd s <== bnd t
 

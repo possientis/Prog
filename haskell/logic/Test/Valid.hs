@@ -78,7 +78,7 @@ propValidFmap f g t = (fmap f t) /= (fmap g t) || (not $ valid f t) || valid g t
 
 propValidBound :: (Test f) => (Var -> Var) -> f Var -> [Var] -> Bool
 propValidBound f t xs = valid f t
-                      || not (incl (bnd t) xs)
+                      || not (bnd t <== xs)
                       || not (injective_on xs f)
                       || any g [(x,y) | x <- xs, y <- var t, y `notElem` xs]  
     where g (x,y) = f x == f y

@@ -17,16 +17,12 @@ import Formula
 import Variable (Var)
 
 specVariable :: forall f . (Test f) => Spec
-specVariable = describe "Testing properties of var..." $ 
-    sequence_ (specsVariable @ f)
-
-specsVariable :: forall f . (Test f) => [Spec]
-specsVariable  = [ testVarFmap              @ f
-                 , testVarSupport           @ f
-                 , testVarPermuteReplace    @ f
-                 , testVarReplaceTrans      @ f
-                 , testVarReplaceRemove     @ f
-                 ]
+specVariable = describe "Testing properties of var..." $ do
+    testVarFmap              @ f
+    testVarSupport           @ f
+    testVarPermuteReplace    @ f
+    testVarReplaceTrans      @ f
+    testVarReplaceRemove     @ f
 
 testVarFmap :: forall f . (Test f) => Spec
 testVarFmap = it "Checked var fmap property" $ 

@@ -14,9 +14,8 @@ import Test.Lam.Free
 import Lam.T
 
 specLam :: Spec
-specLam = sequence_
-    [ specFormula @ T 
-    , specValid
-    , specSubst
-    , specFree
-    ]
+specLam = do
+    specFormula @ T 
+    specValid
+    specSubst
+    specFree

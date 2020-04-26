@@ -135,3 +135,72 @@ Definition L8 : forall (a:Type) (p:a -> Prop), Exists p -> ~ forall (x:a), ~ p x
 :=  fun (a:Type) (p:a -> Prop) =>
         fun (H1:Exists p) (H2:forall (x:a), ~ p x) =>
             ExistsE a p False H2 H1.
+
+Definition L9 : forall (a:Type) (p:a -> Prop)(A:Prop),
+    (Exists p -> A) <-> forall (x:a), p x -> A.
+Proof.
+    intros a p A. split; intros H.
+    - intros x Hx. apply H. apply mkExists with x. exact Hx.
+    - intros H'. apply (ExistsE a p).
+        + exact H.
+        + exact H'.
+Qed.
+
+Definition L10 : forall (a:Type) (p:a -> Prop)(A:Prop),
+    (Exists p -> A) <-> forall (x:a), p x -> A.
+Proof.
+refine (
+    fun (a:Type) (p:a -> Prop) (A:Prop) => conj
+        (fun (H:Exists p -> A) (x:a) (Hx:p x)  => 
+            H (mkExists x Hx)) 
+        (fun (H:forall (x:a), p x -> A) (H':Exists p) =>
+            ExistsE a p A H H'
+)). 
+Qed.
+
+Definition L11 : forall (a:Type) (p:a -> Prop),
+    ~~(Exists p) <-> ~ forall (x:a), ~ p x.
+Proof.
+    intros a p. split; intros H1 H2.
+    - apply H1. intros H3. apply (ExistsE a p False).
+        + intros x Hx. apply (H2 x). exact Hx.
+        + exact H3.
+    - apply H1. intros x Hx. apply H2. apply mkExists with x. exact Hx.
+Qed.
+
+Definition L12 : forall (a:Type) (p:a -> Prop),
+    ~~(Exists p) <-> ~ forall (x:a), ~ p x.
+Proof.
+refine (
+    fun (a:Type) (p:a -> Prop) => conj
+        (fun (H1:~~Exists p) (H2: forall (x:a), ~ p x) => 
+            H1 (fun (H3:Exists p) => 
+                ExistsE a p False 
+                    (fun (x:a) (Hx:p x) => H2 x Hx) 
+                    H3))
+        (fun (H1:~ forall (x:a), ~ p x) (H2:~Exists p) =>
+            H1 (fun (x:a) (Hx:p x) => H2 (mkExists x Hx)))).
+Qed.
+
+Definition L13 : forall (a:Type) (p:a -> Prop),
+    Exists (fun x => ~~p x) -> ~~Exists p.
+Proof.
+    intros a p H1 H2. apply (ExistsE a (fun x => ~~p x) False).
+    - intros x Hx. apply Hx. intros Hx'. apply H2. 
+      apply mkExists with x. exact Hx'.
+    - exact H1.
+Qed.
+
+Definition L14 : forall (a:Type) (p:a -> Prop),
+    Exists (fun x => ~~p x) -> ~~Exists p.
+Proof.
+refine (
+    fun (a:Type) (p:a -> Prop) (H1:Exists (fun x => ~~p x)) (H2:~Exists p) =>
+    ExistsE a (fun x => ~~p x) False
+        (fun (x:a) (Hx:~~p x) => Hx (fun (Hx':p x) => H2 (mkExists x Hx')))
+        H1
+).
+Qed.
+
+
+

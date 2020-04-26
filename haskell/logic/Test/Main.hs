@@ -8,19 +8,20 @@ import Test.Permute
 import Test.Replace
 import Test.Include
 import Test.Remove
+import Test.Concat
 import Test.Coincide
 import Test.Injective
 import Test.Intersect
 import Test.Difference
 
 specHask :: Spec
-specHask = sequence_
-    [ specPermute
-    , specReplace
-    , specInclude
-    , specRemove
-    , specInjective
-    , specCoincide
-    , specIntersect
-    , specDifference
-    ]
+specHask = do
+    specPermute
+    specReplace
+    specInclude
+    specRemove
+    specInjective
+    specCoincide
+    specIntersect
+    specDifference
+    specConcat 

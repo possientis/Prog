@@ -12,7 +12,7 @@ import Test.Fol.Valid
 import Fol.P
 
 specFol :: Spec
-specFol = sequence_
-    [ specFormula @ P
-    , specValid
-    ]
+specFol = do
+    specFormula @ P
+    specValid
+

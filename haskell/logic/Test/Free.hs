@@ -46,10 +46,10 @@ testFreeReplace2 = it "Checked free second replace property" $
     property $ propFreeReplace2 @ f
 
 propFreeFmap :: (Test f) => (Var -> Var) -> f Var -> Bool
-propFreeFmap f t = incl (free (fmap f t)) (map f (free t))
+propFreeFmap f t = free (fmap f t) <== map f (free t)
 
 propFreeVar :: (Test f) => f Var -> Bool
-propFreeVar t = incl (free t) (var t)
+propFreeVar t = free t <== var t
 
 propFreeInj :: (Test f) => (Var -> Var) -> f Var -> Bool
 propFreeInj f t = (not $ injective_on (var t) f) || 
