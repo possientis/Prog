@@ -31,7 +31,6 @@ testing coq
 testing agda
 testing lean
 testing idris
-testing hol
 testing scheme
 testing python
 testing ruby
