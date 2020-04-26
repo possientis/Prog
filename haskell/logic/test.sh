@@ -1,19 +1,18 @@
 #!/bin/sh
 
+LOC=/home/john/Prog/haskell/logic/
+
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell/logic/
-cd ${HOME}
+cd ${LOC}
+
 echo
 echo "testing logic Haskell formalization..."
+echo
 
 ghc -O2 Main.hs
 ./Main
 ./clean.sh
 
-cd ${DIR}
-echo '\ntest completed successfully\n'
-
-
-
-
+echo
+echo 'test completed successfully'
+echo

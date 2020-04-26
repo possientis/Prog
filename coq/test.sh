@@ -1,11 +1,13 @@
 #!/bin/sh
 
+LOC=/home/john/Prog/coq
+
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/coq
-cd ${HOME}
+cd ${LOC}
+
 echo
 echo "testing coq..."
+echo
 
 ./set/test.sh
 ./set2/test.sh
@@ -20,8 +22,9 @@ echo "testing coq..."
 
 ./clean.sh
 
-cd ${DIR}
-echo '\nAll coq tests completed successfully\n'
+echo
+echo 'All coq tests completed successfully'
+echo
 
 
 

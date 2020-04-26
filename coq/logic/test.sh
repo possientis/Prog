@@ -1,18 +1,20 @@
 #!/bin/sh
 
-set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/coq/logic
-cd ${HOME}
-echo
-echo "testing logic..."
+LOC=/home/john/Prog/coq/logic
 
+set -e 
+cd ${LOC}
+
+echo
 echo "testing logic Coq formalization..."
+echo
+
 make
 ./clean.sh
 
-cd ${DIR}
-echo '\ntest completed successfully\n'
+echo
+echo 'test completed successfully'
+echo
 
 
 

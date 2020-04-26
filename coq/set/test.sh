@@ -1,16 +1,21 @@
 #!/bin/sh
 
+LOC=/home/john/Prog/coq/set
+
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/coq/set
-cd ${HOME}
+cd ${LOC}
+
 echo
 echo "testing set..."
+echo
 
-make; ./clean.sh
+make 
 
-cd ${DIR}
-echo '\ntest completed successfully\n'
+./clean.sh
+
+echo
+echo 'test completed successfully'
+echo
 
 
 
