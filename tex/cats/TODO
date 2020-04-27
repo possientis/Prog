@@ -1,5 +1,6 @@
 F\circ I_C and I_D\circ F
 category of small categories
+cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 cat is locally small
 locally small => small
 category of locally small catgeories
@@ -18,4 +19,13 @@ define a coproduct/product of two objects
 define the category cone_C(a,b) 
 product of (a,b) <-> terminal in Cone_C(a,b)
 ! : I => K_1 for any terminal 1 in C
+
+C: with (x) : CxC -> C, (x) should be a functor F such that
+C(c,a)xC(c,b) naturally isomorphic to C(c,F(a,b))
+similar idea for (+)
+polynomial functors on Set, more generally on C
+natural isos:
+ax1 ->1
+axb -> bxa
+(axb)xc -> ax(bxc)
 

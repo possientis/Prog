@@ -6,7 +6,7 @@ import Relation.Binary.PropositionalEquality as Eq
 open Eq                         using ( _≡_; refl; trans; sym; cong)
 open Eq.≡-Reasoning             using ( begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 open import Data.Bool           using (Bool; true; false; T; _∧_; _∨_; not)
-open import Data.Nat            using ( ℕ; zero; suc; _≤_; z≤n; s≤s; _+_; _*_)
+open import Data.Nat            using ( ℕ; zero; suc; _≤_; z≤n; s≤s; _+_; _*_; _∸_)
 open import Relation.Nullary    using ( Dec; yes; no; ¬_)
 open import Data.Nat.Properties using (+-assoc; +-suc; +-comm)
 open import Data.Product        using ( _×_; ∃; ∃-syntax)
@@ -479,13 +479,43 @@ map-is-foldTree : ∀ {a b c d : Set} → {f : a → c} → {g : b → d} →
   mapTree f g ≡ foldTree (leaf ∘ f) (λ tₗ y tᵣ → node tₗ (g y) tᵣ)
 map-is-foldTree {a} {b} {c} {d} {f} {g} = extensionality k
   where
+    h : Tree c d → b → Tree c d → Tree c d
+    h t₁ y t₂ = node t₁ (g y) t₂
+
     k : ∀ (t : Tree a b) →
-      mapTree f g t ≡ foldTree (leaf ∘ f) (λ tₗ y tᵣ → node tₗ (g y) tᵣ) t
+      mapTree f g t ≡ foldTree (leaf ∘ f) h t
     k (leaf x) = refl
     k (node tₗ y tᵣ) =
       begin
         mapTree f g (node tₗ y tᵣ)
         ≡⟨⟩
         node (mapTree f g tₗ) (g y) (mapTree f g tᵣ)
+        ≡⟨ cong (λ t → node t (g y) (mapTree f g tᵣ)) (k tₗ) ⟩
+        node (foldTree (leaf ∘ f) h tₗ) (g y) (mapTree f g tᵣ)
+        ≡⟨ cong (λ t → node (foldTree (leaf ∘ f) h tₗ) (g y) t) (k tᵣ) ⟩
+        node (foldTree (leaf ∘ f) h tₗ) (g y) (foldTree (leaf ∘ f) h tᵣ)
         ≡⟨⟩
-        {!!}
+        foldTree (leaf ∘ f) h (node tₗ y tᵣ)
+        ∎
+
+
+downFrom : ℕ → List ℕ
+downFrom zero = []
+downFrom (suc n) = n ∷ downFrom n
+
+_ : downFrom 3 ≡ [ 2 , 1 , 0 ]
+_ = refl
+
+sumDownFrom : ∀ {n : ℕ} → sum (downFrom n) * 2 ≡ n * (n ∸ 1)  -- \.-
+sumDownFrom {zero} = refl
+sumDownFrom {suc n} =
+  begin
+    sum (downFrom (suc n)) * 2
+    ≡⟨⟩
+    sum (n ∷ downFrom n) * 2
+    ≡⟨⟩
+    (n + sum (downFrom n)) * 2
+    ≡⟨ {! !} ⟩
+    n * 2 + sum (downFrom n) * 2
+    ≡⟨⟩
+    {!!}
