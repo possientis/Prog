@@ -155,6 +155,20 @@ However, we still need to do our due diligence and check it forms a category:
             &=&(\Cat,\Dat,F)\,\circ\,(\Cat,\Cat,I_{\cal C})\\
             \mbox{$(6)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
             &=&(\Cat,\Dat,F\circ I_{\cal C})\\
-            TODO
+            \mbox{prop.~(\ref{Fun:prop:right:identity})}\ \to\ 
+            &=&(\Cat,\Dat,F)\\
+            &=&f
+        \end{eqnarray*}
+    $(13)$: We should have $\id(\Dat)\circ f=f$ whenever $\cod(f)=\Dat$
+    so let $f=(\Cat,\Dat,F)$:
+        \begin{eqnarray*}\id(\Dat)\circ f
+            &=&\id(\Dat)\circ(\Cat,\Dat,F)\\
+            \mbox{$(5)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Dat,\Dat,I_{\cal D})\circ(\Cat,\Dat,F)\\
+            \mbox{$(6)$ of def.~(\ref{Fun:def:category:small:cat})}\ \to\ 
+            &=&(\Cat,\Dat,I_{\cal D}\circ F)\\
+            \mbox{prop.~(\ref{Fun:prop:left:identity})}\ \to\ 
+            &=&(\Cat,\Dat,F)\\
+            &=&f
         \end{eqnarray*}
 \end{proof}

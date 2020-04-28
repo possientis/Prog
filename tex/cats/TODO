@@ -1,7 +1,5 @@
-F\circ I_C and I_D\circ F
-category of small categories
-cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 cat is locally small
+cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 locally small => small
 category of locally small catgeories
 natural transformation paradox: alpha also G => F 

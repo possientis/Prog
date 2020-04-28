@@ -69,3 +69,57 @@ Then $F=G$, i.e. the two functors $F$ and $G$ are equal.
             &=&(H\circ (G\circ F))(f)
         \end{eqnarray*}
 \end{proof}
+
+\begin{prop}\label{Fun:prop:left:identity}
+    Let $F:\Cat\to\Dat$ be a functor between categories \Cat, \Dat. Then:
+        \[
+            I_{\cal D}\circ F = F
+        \]
+    where $I_{\cal D}:\Dat\to\Dat$ is the identity functor on \Dat\ as per
+    definition~(\ref{Fun:def:identity}).
+\end{prop}
+\begin{proof}
+    Using proposition~(\ref{Fun:prop:equal}) we simply need to show that
+    the two functors $I_{\cal D}\circ F$ and $F$ act equally on both objects 
+    and arrows of the category \Cat. For $a\in\ob\ \Cat$:
+        \begin{eqnarray*}(I_{\cal D}\circ F)(a)
+            &=&I_{\cal D}(\,F(a)\,)
+            \ \leftarrow\ \mbox{$(1)$ of def.~(\ref{Fun:def:composition})}\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+            &=&F(a)
+        \end{eqnarray*}
+    and likewise for $f\in\arr\ \Cat$:
+        \begin{eqnarray*}(I_{\cal D}\circ F)(f)
+            &=&I_{\cal D}(\,F(f)\,)
+            \ \leftarrow\ \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+            &=&F(f)
+        \end{eqnarray*}
+\end{proof}
+
+\begin{prop}\label{Fun:prop:right:identity}
+    Let $F:\Cat\to\Dat$ be a functor between categories \Cat, \Dat. Then:
+        \[
+            F\circ I_{\cal C} = F
+        \]
+    where $I_{\cal C}:\Cat\to\Cat$ is the identity functor on \Cat\ as per
+    definition~(\ref{Fun:def:identity}).
+\end{prop}
+\begin{proof}
+    Using proposition~(\ref{Fun:prop:equal}) we simply need to show that
+    the two functors $F\circ I_{\cal C}$ and $F$ act equally on both objects 
+    and arrows of the category \Cat. For $a\in\ob\ \Cat$:
+        \begin{eqnarray*}(F\circ I_{\cal C})(a)
+            &=&F(\,I_{\cal C}(a)\,)
+            \ \leftarrow\ \mbox{$(1)$ of def.~(\ref{Fun:def:composition})}\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+            &=&F(a)
+        \end{eqnarray*}
+    and likewise for $f\in\arr\ \Cat$:
+        \begin{eqnarray*}(F\circ I_{\cal C})(f)
+            &=&F(\,I_{\cal C}(f)\,)
+            \ \leftarrow\ \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+            &=&F(f)
+        \end{eqnarray*}
+\end{proof}
