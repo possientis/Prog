@@ -1,7 +1,6 @@
-Utils/Normal
-conjecture: incl xs ys -> incl ys xs -> sort (nub xs) == sort (nub ys) and conversely...
-conjecture: normal x = sort . nub . map normal . toList $ x
+review naming nub sort normal
 Core/Normal
+conjecture: normal x = sort . nub . map normal . toList $ x
 Core/Functional : we d like => y = y' but we can only have y == y': we need some notion of normal form for sets
 Core/Replacement (use filterReplace)
 add Core/Replacement to Makefile

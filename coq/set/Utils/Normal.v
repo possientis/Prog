@@ -91,7 +91,7 @@ Proof.
                   { assumption. }}
 Qed.
 
-Lemma equivSortedNubed : forall (a:Type) (o:Ord a) (xs ys:list a),
+Lemma NubedSortedEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
     Nubed xs ->
     Nubed ys ->
     Sorted xs -> 
@@ -130,14 +130,77 @@ Proof.
           subst. reflexivity. 
 Qed.
 
-
-(*
 Lemma nubSortCommute : forall (a:Type) (o:Ord a) (xs:list a),
     nub (sort xs) = sort (nub xs).
 Proof.
-    intros a o. induction xs as [|x xs IH].
-    - reflexivity.
-    - simpl. destruct (in_dec eqDec x xs) as [H|H]. 
-        +
-Show.
-*)
+    intros a o xs. apply (NubedSortedEquivEqual a _).
+    - apply nubNubed.
+    - apply sortNubed. apply nubNubed.
+    - apply nubSorted. apply sortSorted.
+    - apply sortSorted.
+    - apply EquivTrans with xs.
+        + apply EquivTrans with (sort xs).
+            { apply EquivSym. apply nubEquiv.  }
+            { apply EquivSym. apply sortEquiv. }
+        + apply EquivTrans with (nub xs).
+            { apply nubEquiv.  }
+            { apply sortEquiv. }
+Qed.
+
+Definition normal (a:Type) (o:Ord a) (xs:list a) : list a := sort (nub xs). 
+
+Arguments normal {a} {o}.
+
+Definition Normal (a:Type) (o:Ord a) (xs:list a) : Prop := Nubed xs /\ Sorted xs. 
+
+Arguments Normal {a} {o}.
+
+Lemma normalEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (normal xs).
+Proof.
+    intros a o xs. unfold normal. apply EquivTrans with (nub xs).
+    - apply nubEquiv.
+    - apply sortEquiv.
+Qed.
+
+Lemma normalNormal : forall (a:Type) (o:Ord a) (xs:list a), Normal (normal xs).
+Proof.
+    intros a o xs. unfold normal. split.
+    - apply sortNubed. apply nubNubed.
+    - apply sortSorted.
+Qed.
+
+Lemma normalSame : forall (a:Type) (o:Ord a) (xs:list a),
+    Normal xs -> normal xs = xs.
+Proof.
+    intros a o xs [H1 H2]. unfold normal. apply eq_trans with (nub xs).
+    - apply sortSame. apply nubSorted. assumption.
+    - apply nubSame. assumption.
+Qed.
+
+Lemma sameNormalEquiv : forall (a:Type) (o:Ord a) (xs ys:list a),
+    normal xs = normal ys -> Equiv xs ys.
+Proof.
+    intros a o xs ys H. apply EquivTrans with (normal xs).
+    - apply normalEquiv.
+    - rewrite H. apply EquivSym. apply normalEquiv.
+Qed.
+
+Lemma NormalEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
+    Normal xs -> Normal ys -> Equiv xs ys -> xs = ys.
+Proof.
+    intros a o xs ys [H1 H2] [H3 H4] H5. 
+    apply (NubedSortedEquivEqual a _); assumption.
+Qed.
+
+Lemma EquivSameNormal : forall (a:Type) (o:Ord a) (xs ys:list a),
+    Equiv xs ys -> normal xs = normal ys.
+Proof.
+    intros a o xs ys H. apply (NormalEquivEqual a _).
+    - apply normalNormal.
+    - apply normalNormal.
+    - apply EquivTrans with xs.
+        + apply EquivSym. apply normalEquiv.
+        + apply EquivTrans with ys.
+            { assumption. }
+            { apply normalEquiv. }
+Qed.
