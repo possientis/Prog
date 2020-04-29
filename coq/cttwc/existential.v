@@ -22,11 +22,12 @@ Definition ExistsE2 : forall (a:Type) (p:a -> Prop) (A:Prop),
     (forall (x:a), p x -> A) -> Exists2 a p -> A := 
     fun a p A H e => ExistsInd2 a p (fun _ => A) H e.
 
+(*
 Check Exists2.
 Check mkExists2.
 Check ExistsInd2.
 Check ExistsE2.
-
+*)
 
 
 Arguments Exists {a}.
@@ -202,5 +203,61 @@ refine (
 ).
 Qed.
 
+Definition L15 : forall (A:Prop), A <-> exists (q:A), True. 
+Proof.
+    intros A. split; intros H.
+    - exists H. apply I.
+    - destruct H as [q H]. exact q.
+Qed.
 
+
+
+Definition L16 : forall (A:Prop), A <-> exists (q:A), True.
+Proof.
+refine (
+    fun (A:Prop) => conj
+        (fun (H:A) => ex_intro (fun (_:A) => True) H I)
+        (fun (H:exists (q:A), True) =>
+            match H with
+            | ex_intro _ q _  => q
+            end
+)).
+Qed.
+
+Definition L17 : forall (a:Type) (x y:a), 
+    x <> y <-> exists (p:a -> Prop), p x /\ ~p y.
+Proof.
+    intros a x y. split; intros H.
+    - exists (fun (z:a) => x = z). split.
+        + reflexivity.
+        + exact H.
+    - destruct H as [p [H1 H2]]. intros H. apply H2. 
+      rewrite <- H. exact H1.
+Qed.
+
+Definition L18 : forall (a:Type) (x y:a), 
+    x <> y <-> exists (p:a -> Prop), p x /\ ~p y.
+Proof.
+refine (
+    fun (a:Type) (x y:a) => conj
+        (fun (H:x <> y) => ex_intro _ (fun (z:a) => x = z) (conj (eq_refl x) H))
+        (fun (H:exists (p:a -> Prop), p x /\ ~p y) =>
+            match H with
+            | ex_intro _ p H =>
+                match H with
+                | conj H1 H2 => 
+                    fun (H:x = y) => H2 (eq_ind x p H1 y H)
+                end
+            end
+        
+)).
+Qed.
+
+Definition L19 : forall (a:Type) (p:a -> Prop),
+    (exists (x:a), p x) <-> forall (A:Prop), (forall (x:a), p x -> A) -> A.
+Proof.
+    intros a p. split.
+    - intros [x H1] A H2. apply H2 with x. exact H1.
+    - intros H1. apply H1. intros x H2. exists x. exact H2.
+Qed.
 
