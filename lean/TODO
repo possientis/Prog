@@ -1,0 +1,3 @@
+
+write coq Decidable instance for p /\ q, p \/ q, n = m, n < m
+can we have dec_trivial in coq

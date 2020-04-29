@@ -23,6 +23,7 @@ Instance decNot (p:Prop) (d:Decidable p) : Decidable (~p) := { dec :=
     end 
 }.
 
+
 Definition check (p:Prop) (d:Decidable p) : bool :=
     if dec then true else false.
 
@@ -49,4 +50,33 @@ Compute check (False -> True) _.
 Compute check (True -> True) _.
 Compute check (True -> False) _.
 Compute check ((True -> False) -> False) _.
+
+Definition as_true (c:Prop) (d:Decidable c) : Prop :=
+    if dec then True else False.
+
+Arguments as_true _ {d}.
+
+Definition of_as_true (c:Prop) (d:Decidable c) (q:as_true c) : c.
+Proof.
+    unfold as_true in q. destruct dec as [H|H].
+    - exact H.
+    - contradiction.
+Defined.
+
+Print of_as_true.
+
+
+Definition of_as_true2 (c:Prop) (d:Decidable c) (q:as_true c) : c :=
+    match dec as d return (if d then True else False) -> c with
+    | isTrue H  => fun _ => H
+    | isFalse H => fun x => False_ind c x
+    end q.
+
+
+
+
+
+
+
+
 

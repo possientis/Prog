@@ -26,7 +26,25 @@ def step (a b x : ℕ) : ℕ :=
 set_option pp.implicit true
 --#print definition step
 
+
+-- Every proposition is decidable
+-- priority 0 use prop_decidable as a last resort
 open classical
-local attribute [instance] prop_decidable
+local attribute [instance, priority 0] prop_decidable
+
+
+def as_true2 (c:Prop) [decidable c] : Prop :=
+if c then true else false
+
+
+def of_as_true2 {c : Prop} [H1 : decidable c] (H2 : as_true c) : c :=
+  match H1, H2 with
+  | (is_true H), H2 := H
+  | (is_false H), H2 := false.elim H2
+  end
+
+notation `dec_trivial2` := of_as_true2 (by tactic.triv)
+
+example : 0 ≠ 1 ∧ (5 < 2 ∨ 3 < 7) := dec_trivial2
 
 
