@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import In.
 Require Import Concat.
 
 Notation "xs <= ys" := (incl xs ys)
@@ -43,3 +44,12 @@ Proof.
     - apply H1. assumption.
 Qed.
 
+Lemma incl_nil : forall (v:Type) (xs:list v),
+    xs <= nil -> xs = nil.
+Proof.
+    intros v xs H1. destruct xs as [|x xs].
+    - reflexivity.
+    - exfalso. assert (x :: nil) as H2.
+        { apply H1 with x. left. reflexivity. }
+      inversion H2.
+Qed.

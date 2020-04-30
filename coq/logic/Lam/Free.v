@@ -2,6 +2,7 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
+Require Import Equiv.
 Require Import Remove.
 Require Import Replace.
 Require Import Include.
@@ -199,4 +200,22 @@ Proof.
     rewrite H. rewrite <- (inter_nil v e (Fr t)) at 2.
     apply free_subst_gen.
 Qed.
+
+(*
+Lemma free_subst_intersect_gen : 
+    forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v), 
+       (Fr t /\ xs) == (Fr t /\ ys) ->  subst_ f xs t = subst_ f ys t.
+Proof.
+    intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; 
+    intros xs ys H1.
+    - simpl. simpl in H1. 
+      destruct (in_dec eqDec x xs) as [H2|H2];
+      destruct (in_dec eqDec x ys) as [H3|H3].
+        + reflexivity.
+        + apply EquivNilIsNil in H1. inversion H1.
+        +
+
+Show.
+*)
+
 

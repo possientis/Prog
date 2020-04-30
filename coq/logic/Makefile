@@ -18,6 +18,7 @@ all:	   						Extensionality.vo \
 								Difference.vo \
 								Intersect.vo \
 								Include.vo \
+								Equiv.vo \
 								Concat.vo \
 								${LAM}/T.vo \
 								${FOL}/P.vo \
@@ -122,8 +123,14 @@ Difference.vo :					Difference.v \
 
 
 Include.vo :					Include.v \
+								In.vo \
 								Concat.vo
 	coqc Include.v
+
+Equiv.vo :						Equiv.v \
+								Include.vo
+	coqc Equiv.v
+
 
 Concat.vo :						Concat.v \
 								In.vo

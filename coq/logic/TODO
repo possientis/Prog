@@ -1,2 +1,7 @@
-review haskell test coverage
-
+EquivRefl, sym , trans
+free_subst_intersect_gen
+EquivRefl, sym , trans: haskell
+InclNil : haskell
+EquivNilIsNil : haskell
+Equiv: haskell
+free_subst_intersect_gen: haskell
