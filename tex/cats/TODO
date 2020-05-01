@@ -1,9 +1,26 @@
 cat is locally small
+F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 locally small => small
 category of locally small catgeories
 natural transformation paradox: alpha also G => F 
 functor category
+category of F-algebra for F:C-> C : Alg(F)
+category of F-coalgebra for F:C->C: coAlg(F)
+
+if F is a polynomial endofunctor in Set, then Alg(F) has an initial object
+
+pointwise product and sum of functors in Set.
+
+polynomial functors on Set:
+    1. id : Set -> Set is polynomial
+    2. F,G: Set -> Set polynomial => G . F polynomial
+    3. F,G: Set -> Set polynomial => F + G and FG polynomial where:
+        (F + G) (a) = F a + G a (pointwise sum)
+        (F + G) (f) = F f + F g
+        (FG)(a) = F(a)xG(a)
+        (FG)(f) = F(f)xG(f)
+
 composing a nat with a functor F . alpha
 composing a nat with a functor alpha . F
 define Par (category of sets and partial functions)
@@ -21,9 +38,10 @@ product of (a,b) <-> terminal in Cone_C(a,b)
 C: with (x) : CxC -> C, (x) should be a functor F such that
 C(c,a)xC(c,b) naturally isomorphic to C(c,F(a,b))
 similar idea for (+)
-polynomial functors on Set, more generally on C
+polynomial functors on C
 natural isos:
 ax1 ->1
 axb -> bxa
 (axb)xc -> ax(bxc)
+
 
