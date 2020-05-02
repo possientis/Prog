@@ -8,7 +8,8 @@ open Eq.≡-Reasoning             using ( begin_; _≡⟨⟩_; _≡⟨_⟩_; _�
 open import Data.Bool           using (Bool; true; false; T; _∧_; _∨_; not)
 open import Data.Nat            using ( ℕ; zero; suc; _≤_; z≤n; s≤s; _+_; _*_; _∸_)
 open import Relation.Nullary    using ( Dec; yes; no; ¬_)
-open import Data.Nat.Properties using (+-assoc; +-suc; +-comm)
+open import Data.Nat.Properties using (+-assoc; +-suc; +-comm; *-distribʳ-+
+                                      ; *-distribˡ-+)
 open import Data.Product        using ( _×_; ∃; ∃-syntax)
 open import Function            using (_∘_)
 open import Level               using (Level)
@@ -515,7 +516,11 @@ sumDownFrom {suc n} =
     sum (n ∷ downFrom n) * 2
     ≡⟨⟩
     (n + sum (downFrom n)) * 2
-    ≡⟨ {! !} ⟩
+    ≡⟨ *-distribʳ-+ 2 n (sum (downFrom n)) ⟩
     n * 2 + sum (downFrom n) * 2
+    ≡⟨ cong (λ { x → n * 2 + x }) (sumDownFrom {n}) ⟩
+    n * 2 + n * (n ∸ 1)
+    ≡⟨ sym (*-distribˡ-+ n 2 (n ∸ 1)) ⟩
+    n * (2 + (n ∸ 1))
     ≡⟨⟩
     {!!}

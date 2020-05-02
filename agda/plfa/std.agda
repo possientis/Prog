@@ -47,6 +47,7 @@ open import Data.Nat.Properties using
   ; ≤-trans
   ; ≤-antisym
   ; ≤-total
+  ; *-distribʳ-+
   )
 
 open import Data.Bool using
