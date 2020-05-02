@@ -261,3 +261,104 @@ Proof.
     - intros H1. apply H1. intros x H2. exists x. exact H2.
 Qed.
 
+
+Definition L20 : forall (a:Type) (p:a -> Prop),
+    (exists (x:a), p x) <-> forall (A:Prop), (forall (x:a), p x -> A) -> A.
+Proof.
+refine (
+    fun (a:Type) (p:a -> Prop) => conj
+        (fun (H:exists (x:a), p x) =>
+            match H with
+            | ex_intro _ x H1  =>
+                fun (A:Prop) (H2:forall (x:a), p x -> A) => H2 x H1
+            end)
+        (fun (H1:forall (A:Prop), (forall (x:a), p x -> A) -> A) => 
+            H1 (exists (x:a), p x) (fun (x:a) (H2:p x) => ex_intro p x H2))).
+Defined.
+
+Definition L21 : forall (a:Type) (p q:a -> Prop),
+    (forall (x:a), p x <-> q x) -> 
+    (forall (x:a), p x) <-> (forall (x:a), q x).
+Proof.
+    intros a p q H1. split; intros H2 x; destruct (H1 x) as [H3 H4].
+    - apply H3. apply H2.
+    - apply H4. apply H2.
+Qed.
+
+Definition L22 : forall (a:Type) (p q:a -> Prop),
+    (forall (x:a), p x <-> q x) -> 
+    (forall (x:a), p x) <-> (forall (x:a), q x).
+Proof.
+refine (
+    fun (a:Type) (p q:a -> Prop) (H1:forall (x:a), p x <-> q x) => conj
+        (fun (H2:forall (x:a), p x) (x:a) =>
+            match (H1 x) with
+            | conj H3 H4    => H3 (H2 x)
+            end)
+        (fun (H2:forall (x:a), q x) (x:a) =>
+            match (H1 x) with 
+            | conj H3 H4    => H4 (H2 x)
+            end
+)).
+Defined.
+
+Definition L23 : forall (a:Type) (p q:a -> Prop),
+    (forall (x:a), p x <-> q x) -> 
+    (exists (x:a), p x) <-> (exists (x:a), q x).
+Proof.
+    intros a p q H1; split; intros [x H2]; 
+    destruct (H1 x) as [H3 H4]; exists x.
+    - apply H3. exact H2.
+    - apply H4. exact H2.
+Qed.
+
+Definition L24 : forall (a:Type) (p q:a -> Prop),
+    (forall (x:a), p x <-> q x) -> 
+    (exists (x:a), p x) <-> (exists (x:a), q x).
+Proof.
+refine (
+    fun (a:Type) (p q:a -> Prop) (H1:forall (x:a), p x <-> q x) => conj
+        (fun (H2:exists (x:a), p x) =>
+            match H2 with
+            | ex_intro _ x H2   =>
+                match (H1 x) with
+                | conj H3 H4    => ex_intro q x (H3 H2)
+                end
+            end)
+        (fun (H2:exists (x:a), q x) =>
+            match H2 with
+            | ex_intro _ x H2   =>
+                match (H1 x) with
+                | conj H3 H4    => ex_intro p x (H4 H2)
+                end
+            end)
+).
+Defined.
+
+Definition L25 : forall (a:Type) (p:a -> Prop) (A:Prop),
+    (exists (x:a), p x) /\ A <-> exists (x:a), p x /\ A.
+Proof.
+    intros a p A. split.
+    - intros [[x H1] H2]. exists x. split.
+        + exact H1.
+        + exact H2.
+    - intros [x [H1 H2]]. split.
+        + exists x. exact H1.
+        + exact H2.
+Qed.
+
+Definition L26 : forall (a:Type) (p:a -> Prop) (A:Prop),
+    (exists (x:a), p x) /\ A <-> exists (x:a), p x /\ A.
+Proof.
+refine (
+    fun (a:Type) (p:a -> Prop) (A:Prop) => conj
+        (fun (H1: (exists (x:a), p x) /\ A) =>
+            match H1 with
+            | conj (ex_intro _ x H1) H2 => ex_intro (fun (x:a) => p x /\ A) x (conj H1 H2)
+            end)
+        (fun (H1: exists (x:a), p x /\ A) =>
+            match H1 with
+            | ex_intro _ x (conj H1 H2) => conj (ex_intro p x H1) H2
+            end
+)).
+Defined.

@@ -2,6 +2,8 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
+Require Import Equiv.
+Require Import Include.
 
 Fixpoint inter (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     match xs with
@@ -121,3 +123,39 @@ Proof.
     - reflexivity.
     - simpl. apply IH.
 Qed.
+
+Lemma inter_comm : forall (v:Type) (e:Eq v) (xs ys:list v),
+    (xs /\ ys) == (ys /\ xs).
+Proof.
+   intros v e xs ys. split; intros z H; apply inter_charac in H; 
+    destruct H as [H1 H2]; apply inter_charac; split; assumption.
+Qed.
+
+Lemma inter_assoc : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    ((xs /\ ys) /\ zs) == (xs /\ (ys /\ zs)).
+Proof.
+    intros v e xs ys zs. split; intros z H; apply inter_charac in H;
+    destruct H as [H1 H3].
+    - apply inter_charac in H1. destruct H1 as [H1 H2].
+      apply inter_charac. split.
+        + assumption.
+        + apply inter_charac. split; assumption.
+    - apply inter_charac in H3. destruct H3 as [H2 H3].
+      apply inter_charac. split.
+        + apply inter_charac. split; assumption.
+        + assumption.
+Qed.
+
+Lemma inter_compat_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    xs == ys -> (xs /\ zs) == (ys /\ zs).
+Proof.
+    intros v e xs ys zs [H1 H2]. split; intros z H;
+    apply inter_charac in H; destruct H as [H3 H4];
+    apply inter_charac; split.
+    - apply H1. assumption.
+    - assumption.
+    - apply H2. assumption.
+    - assumption.
+Qed.
+
+

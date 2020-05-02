@@ -8,29 +8,18 @@ Arguments isFalse {p}.
 
 Class Decidable (p:Prop) := { dec : Dec p }.
  
-Definition ite (a:Type) (p:Prop) (d:Decidable p) (x y:a) : a :=
-    if dec then x else y.
+Definition check (p:Prop) (d:Decidable p) : bool :=
+    if dec then true else false.
 
-Arguments ite {a} {p}.
+Arguments check _ {d}.
 
 Instance decTrue   : Decidable True   := { dec := isTrue I  }.
 Instance decFalse  : Decidable False  := { dec := isFalse (fun x => x) }.
 
-Instance decNot (p:Prop) (d:Decidable p) : Decidable (~p) := { dec := 
-    match dec with
-    | isTrue q  => isFalse (fun f => f q)
-    | isFalse q => isTrue q
-    end 
-}.
-
-
-Definition check (p:Prop) (d:Decidable p) : bool :=
-    if dec then true else false.
-
-Definition L1 : check True _ = true.
+Definition L1 : check True = true.
 Proof. reflexivity. Qed.
 
-Definition L2 : check False _ = false.
+Definition L2 : check False = false.
 Proof. reflexivity. Qed.
 
 Instance decImp (p q:Prop) (d1:Decidable p) (d2:Decidable q) : Decidable (p -> q)
@@ -45,6 +34,93 @@ Instance decImp (p q:Prop) (d1:Decidable p) (d2:Decidable q) : Decidable (p -> q
             end
 }.  
 
+Definition L3 : check (~True) = false.
+Proof. reflexivity. Qed.
+
+Definition L4 : check (~False) = true.
+Proof. reflexivity. Qed.
+
+Definition L5 : check (True -> True) = true.
+Proof. reflexivity. Qed.
+
+Definition L6 : check (False -> True) = true.
+Proof. reflexivity. Qed.
+
+Instance decAnd (p q:Prop) (d1:Decidable p) (d2:Decidable q) : Decidable (p /\ q)
+    := { dec :=
+            match dec with
+            | isTrue x  =>
+                match dec with
+                | isTrue y  => isTrue (conj x y)
+                | isFalse y => isFalse 
+                    (fun (H:p /\ q) =>
+                        match H with
+                        | conj _ y' => y y'
+                        end)
+                end
+            | isFalse x => isFalse
+                (fun (H:p /\ q) =>
+                    match H with
+                    | conj x' _ => x x'
+                    end)
+            end
+}.
+
+Definition L8 : check (True /\ True) = true.
+Proof. reflexivity. Qed.
+
+
+Definition L9 : check (True /\ False) = false.
+Proof. reflexivity. Qed.
+
+
+Definition L10 : check (False /\ True) = false.
+Proof. reflexivity. Qed.
+
+
+Definition L11 : check (False /\ False) = false.
+Proof. reflexivity. Qed.
+
+Instance decOr (p q:Prop) (d1:Decidable p) (d2:Decidable q) : Decidable (p \/ q)
+    := { dec :=
+            match dec with
+            | isTrue x  => isTrue (or_introl x)
+            | isFalse x =>
+                match dec with
+                | isTrue y  => isTrue (or_intror y)
+                | isFalse y => isFalse
+                    (fun (H:p \/q) =>
+                        match H with
+                        | or_introl x'  => x x'
+                        | or_intror y'  => y y'
+                        end)
+                end
+            end
+}.
+
+Definition L12 : check (True \/ True) = true.
+Proof. reflexivity. Qed.
+
+Definition L13 : check (True \/ False) = true.
+Proof. reflexivity. Qed.
+
+Definition L14 : check (False \/ True) = true.
+Proof. reflexivity. Qed.
+
+Definition L15 : check (False \/ False) = false.
+Proof. reflexivity. Qed.
+
+(*
+Instance decEqNat (m n:nat) : Decidable (m = n) := { dec :=
+    match eq_nat_dec m n with
+    | left H    => _
+    | right H   => _
+    end
+
+Show.
+*)
+
+(*
 Compute check (False -> False) _.
 Compute check (False -> True) _.
 Compute check (True -> True) _.
@@ -72,11 +148,6 @@ Definition of_as_true2 (c:Prop) (d:Decidable c) (q:as_true c) : c :=
     | isFalse H => fun x => False_ind c x
     end q.
 
-
-
-
-
-
-
+*)
 
 

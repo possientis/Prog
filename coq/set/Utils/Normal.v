@@ -19,18 +19,18 @@ Proof.
             { simpl in IH. destruct (in_dec eqDec x xs) as [H5|H5].
                 { apply sortedCons.
                     { intros z H6. apply leqTrans with x.
-                        { apply sortedLeq with xs.
+                        { apply sortedConsInLeq with xs.
                             { assumption. }
-                            { rewrite nubIn. exact H6. }} (* 'assumption' fails *)
+                            { rewrite nubInIff. exact H6. }} (* assumption fails *)
                         { assumption. }}
                     { assumption. }}
                 { apply sortedCons.
                     { intros z [H6|H6].
                         { subst. assumption. }
                         { apply leqTrans with x.
-                            { apply sortedLeq with xs.
+                            { apply sortedConsInLeq with xs.
                                 { assumption. }
-                                { rewrite nubIn. exact H6. }}
+                                { rewrite nubInIff. exact H6. }}
                             { assumption. }}}
                     { assumption. }}}
 Qed.
@@ -46,7 +46,7 @@ Proof.
         + constructor.
     - destruct (leqDec y x) as [H3|H3].
         + constructor.
-            { intros H4. destruct (insertEquiv a o y xs) as [H5 H6].
+            { intros H4. destruct (insertEquivCons a o y xs) as [H5 H6].
               apply (H5 x) in H4. destruct H4 as [H4|H4].
                 { subst. apply H. left. reflexivity. }
                 { apply H1.  assumption. }}
@@ -62,7 +62,7 @@ Proof.
     intros a o xs H. induction H as [|x xs H1 H2 IH]; simpl.
     - constructor.
     - apply insertNubed.
-        + rewrite <- sortIn. assumption.
+        + rewrite <- sortInIff. assumption.
         + assumption.
 Qed.
 
@@ -75,14 +75,14 @@ Proof.
     intros a o x y xs ys [H1 H2] H3 H4. destruct (eqDec x y) as [H5|H5].
     - assumption.
     - apply leqAsym.
-        + apply sortedLeq with ys.
+        + apply sortedConsInLeq with ys.
             { assumption. }
             { assert (In x (cons y ys)) as H6.
                 { apply H1. left. reflexivity. }
               destruct H6 as [H6|H6].  
                 { exfalso. apply H5. symmetry. assumption. }
                 { assumption. }}
-        + apply sortedLeq with xs.
+        + apply sortedConsInLeq with xs.
             { assumption. }
             { assert (In y (cons x xs)) as H6.
                 { apply H2. left. reflexivity. }
@@ -91,7 +91,7 @@ Proof.
                   { assumption. }}
 Qed.
 
-Lemma NubedSortedEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
+Lemma nubedSortedEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
     Nubed xs ->
     Nubed ys ->
     Sorted xs -> 
@@ -101,14 +101,14 @@ Lemma NubedSortedEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
 Proof.
     intros a o xs ys H. revert ys. induction H as [|x xs H1 H2 IH]; 
     intros ys H3 H4 H5 H6.
-    - symmetry. apply EquivSym in H6. apply equivNil. assumption.
+    - symmetry. apply equivSym in H6. apply equivNil. assumption.
     - destruct ys as [|y ys].
         + apply equivNil. assumption.
         + assert (xs = ys) as H7.
             { apply IH.
-                { apply (nubedConsTail a _ y). assumption. }
-                { apply sortedConsTail with x. assumption. }
-                { apply sortedConsTail with y. assumption. }
+                { apply (nubedConsNubedTail a _ y). assumption. }
+                { apply sortedConsSortedTail with x. assumption. }
+                { apply sortedConsSortedTail with y. assumption. }
                 { split; intros u H8.
                     { assert (In u (cons y ys)) as H9. 
                         { apply H6. right.  assumption. }
@@ -133,16 +133,16 @@ Qed.
 Lemma nubSortCommute : forall (a:Type) (o:Ord a) (xs:list a),
     nub (sort xs) = sort (nub xs).
 Proof.
-    intros a o xs. apply (NubedSortedEquivEqual a _).
+    intros a o xs. apply (nubedSortedEquivEqual a _).
     - apply nubNubed.
     - apply sortNubed. apply nubNubed.
     - apply nubSorted. apply sortSorted.
     - apply sortSorted.
-    - apply EquivTrans with xs.
-        + apply EquivTrans with (sort xs).
-            { apply EquivSym. apply nubEquiv.  }
-            { apply EquivSym. apply sortEquiv. }
-        + apply EquivTrans with (nub xs).
+    - apply equivTrans with xs.
+        + apply equivTrans with (sort xs).
+            { apply equivSym. apply nubEquiv.  }
+            { apply equivSym. apply sortEquiv. }
+        + apply equivTrans with (nub xs).
             { apply nubEquiv.  }
             { apply sortEquiv. }
 Qed.
@@ -157,7 +157,7 @@ Arguments Normal {a} {o}.
 
 Lemma normalEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (normal xs).
 Proof.
-    intros a o xs. unfold normal. apply EquivTrans with (nub xs).
+    intros a o xs. unfold normal. apply equivTrans with (nub xs).
     - apply nubEquiv.
     - apply sortEquiv.
 Qed.
@@ -177,30 +177,30 @@ Proof.
     - apply nubSame. assumption.
 Qed.
 
-Lemma sameNormalEquiv : forall (a:Type) (o:Ord a) (xs ys:list a),
+Lemma normalEqualEquiv : forall (a:Type) (o:Ord a) (xs ys:list a),
     normal xs = normal ys -> Equiv xs ys.
 Proof.
-    intros a o xs ys H. apply EquivTrans with (normal xs).
+    intros a o xs ys H. apply equivTrans with (normal xs).
     - apply normalEquiv.
-    - rewrite H. apply EquivSym. apply normalEquiv.
+    - rewrite H. apply equivSym. apply normalEquiv.
 Qed.
 
 Lemma NormalEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
     Normal xs -> Normal ys -> Equiv xs ys -> xs = ys.
 Proof.
     intros a o xs ys [H1 H2] [H3 H4] H5. 
-    apply (NubedSortedEquivEqual a _); assumption.
+    apply (nubedSortedEquivEqual a _); assumption.
 Qed.
 
-Lemma EquivSameNormal : forall (a:Type) (o:Ord a) (xs ys:list a),
+Lemma equivNormalEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
     Equiv xs ys -> normal xs = normal ys.
 Proof.
     intros a o xs ys H. apply (NormalEquivEqual a _).
     - apply normalNormal.
     - apply normalNormal.
-    - apply EquivTrans with xs.
-        + apply EquivSym. apply normalEquiv.
-        + apply EquivTrans with ys.
+    - apply equivTrans with xs.
+        + apply equivSym. apply normalEquiv.
+        + apply equivTrans with ys.
             { assumption. }
             { apply normalEquiv. }
 Qed.

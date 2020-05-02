@@ -110,7 +110,9 @@ Remove.vo :						Remove.v \
 
 Intersect.vo :					Intersect.v \
 								In.vo \
-								Eq.vo
+								Eq.vo \
+								Include.vo \
+								Equiv.vo
 	coqc Intersect.v
 
 

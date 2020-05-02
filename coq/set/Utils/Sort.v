@@ -37,11 +37,11 @@ Arguments SortedNil    {a} {o}.
 Arguments SortedCons   {a} {o}.
 Arguments SortedSingle {a} {o}.
 
-Lemma insertEquiv : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
+Lemma insertEquivCons : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     Equiv (insert x xs) (cons x xs).
 Proof.
     intros a o x xs. revert x. induction xs as [|x xs IH]; intros y.
-    - apply EquivRefl.
+    - apply equivRefl.
     - simpl. destruct (leqDec y x) as [H|H].
         + split; intros z H1.
             { destruct H1 as [H1|H1].
@@ -62,14 +62,14 @@ Qed.
 Lemma sortEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (sort xs).
 Proof.
     intros a o. induction xs as [|x xs [IH1 IH2]].
-    - apply EquivRefl.
-    - simpl. apply EquivTrans with (cons x (sort xs)).
+    - apply equivRefl.
+    - simpl. apply equivTrans with (cons x (sort xs)).
         + split; intros z [H1|H1].
             { subst. left. reflexivity. }
             { right. apply IH1. assumption. }
             { subst. left. reflexivity. }
             { right. apply IH2. assumption. }
-        + apply EquivSym. apply insertEquiv.
+        + apply equivSym. apply insertEquivCons.
 Qed.
 
 Lemma insertIn : forall (a:Type) (o:Ord a) (x:a) (xs:list a), In x (insert x xs).
@@ -81,7 +81,7 @@ Proof.
         + left. reflexivity.
 Qed.
 
-Lemma sortIn : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
+Lemma sortInIff : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     In x xs <-> In x (sort xs).
 Proof.
     intros a o x xs. destruct (sortEquiv a o xs) as [H1 H2]. split; intros H.
@@ -128,7 +128,7 @@ Proof.
 Qed.
 
 
-Lemma sortedLeq : forall (a:Type) (o:Ord a) (x y:a) (xs:list a),
+Lemma sortedConsInLeq : forall (a:Type) (o:Ord a) (x y:a) (xs:list a),
     Sorted (cons x xs) -> In y xs -> leq y x.
 Proof.
     intros a o x y xs H. remember (cons x xs) as ys eqn:E. revert E.
@@ -158,7 +158,7 @@ Proof.
         + apply IH. clear H. clear z. intros z [H3|H3].
             { subst. assumption. }
             { apply leqTrans with x.
-                { apply sortedLeq with xs; assumption. }
+                { apply sortedConsInLeq with xs; assumption. }
                 { assumption. }}
 Qed.
 
@@ -188,12 +188,12 @@ Proof.
         + destruct (eqDec x y) as [H4|H4].
             { subst. clear H1 H3. simpl. rewrite insertIsCons.
                 { reflexivity. }
-                { intros x H3. apply sortedLeq with xs; assumption. }}
+                { intros x H3. apply sortedConsInLeq with xs; assumption. }}
             { exfalso. apply H4. apply leqAsym; assumption. }
         + reflexivity.
 Qed.
 
-Lemma sortedConsTail : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
+Lemma sortedConsSortedTail : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     Sorted (cons x xs) -> Sorted xs.
 Proof.
     intros a o x xs H. remember (cons x xs) as ys eqn:E.

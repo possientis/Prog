@@ -28,7 +28,7 @@ Arguments NubedNil  {a}.
 Arguments NubedCons {a}.
 
 (* Nubing preserves the elements of a list.                                     *)
-Lemma nubIn : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
+Lemma nubInIff : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
     In x xs <-> In x (nub xs).
 Proof.
     intros a e x xs. revert x. induction xs as [|x xs IH];
@@ -50,8 +50,8 @@ Qed.
 Lemma nubEquiv : forall (a:Type) (e:Eq a) (xs:list a), Equiv xs (nub xs).
 Proof.
     intros a e xs. split; intros x H.
-    - apply nubIn. assumption.
-    - rewrite nubIn. exact H. (* 'assumption' fails, why ?                      *)
+    - apply nubInIff. assumption.
+    - rewrite nubInIff. exact H. (* 'assumption' fails, why ?                      *)
 Qed.
 
 (* Nubing a list leads to a Nubed list.                                         *)
@@ -63,7 +63,7 @@ Proof.
         + assumption.
         + constructor.
             (* assumption tactic fails to work here. Very bizarre -> exact.     *)
-            { intros H1. apply H. rewrite nubIn. exact H1. }
+            { intros H1. apply H. rewrite nubInIff. exact H1. }
             { assumption. }
 Qed.
 
@@ -86,7 +86,7 @@ Proof.
     - inversion H1. subst. assumption.
 Qed.
 
-Lemma nubedConsTail : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
+Lemma nubedConsNubedTail : forall (a:Type) (e:Eq a) (x:a) (xs:list a),
     Nubed (cons x xs) -> Nubed xs.
 Proof.
     intros a e x xs H. remember (cons x xs) as ys eqn:E.

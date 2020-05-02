@@ -1,5 +1,5 @@
-review naming nub sort normal
-Core/Normal
+Core/Normal: establish a link with Utils.Normal.normal
+Core/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x
 Core/Functional : we d like => y = y' but we can only have y == y': we need some notion of normal form for sets
 Core/Replacement (use filterReplace)

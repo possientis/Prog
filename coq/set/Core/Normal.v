@@ -1,5 +1,3 @@
-(* TODO: check imports are really needed                                        *)
-
 Require Import Core.Set.
 Require Import Core.Leq.
 Require Import Core.Incl.
@@ -23,47 +21,29 @@ Fixpoint normal (x:set) : set :=
         end
     end.
 
-Lemma normalSame : forall (x:set), normal x == x.
+Lemma normalEquiv : forall (x:set), x == normal x.
 Proof.
     induction x as [|x IH1 xs IH2].
     - apply equalRefl.
     - simpl. destruct (elem_dec x xs) as [H|H]; simpl.
         +  apply equalTrans with xs.
+            { apply consIn. assumption. }
             { apply IH2. }
-            { apply equalSym. apply consIn. assumption. }
         + apply equalTrans with (insert x xs).
+            { apply equalSym. apply insertCons. }
             { apply insertCompatLR.
                 { apply IH1. }
                 { apply IH2. }}
-            { apply insertCons. }
 Qed.
  
 
-Lemma normalEqual : forall (x y:set), normal x = normal y -> x == y.
+Lemma normalEqualEquiv : forall (x y:set), normal x = normal y -> x == y.
 Proof.
     intros x y H. apply equalTrans with (normal y).
     - apply equalTrans with (normal x).
-        + apply equalSym. apply normalSame.
+        + apply normalEquiv.
         + rewrite H. apply equalRefl.
-    - apply normalSame.
+    - apply equalSym. apply normalEquiv.
 Qed.
-
-(*
-Lemma equalNormal_n : forall (n:nat) (x y:set),
-    order x + order y <= n -> x == y -> normal x = normal y.
-Proof.
-    induction n as [|n IH].
-    - admit.
-    - intros x y H1 H2. destruct x as [|x xs].
-        + admit.
-        + simpl. destruct (elem_dec x xs) as [H3|H3]; simpl.
-            { admit. }
-            { destruct y as [|y ys].
-                { admit. }
-                { simpl. destruct (elem_dec y ys) as [H4|H4]; simpl.
-                    { admit. }
-                    {
-Show.
-*)
 
 

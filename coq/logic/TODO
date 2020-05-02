@@ -1,7 +1,19 @@
-EquivRefl, sym , trans
+inter_compat_r
+inter_compat_lr
 free_subst_intersect_gen
-EquivRefl, sym , trans: haskell
-InclNil : haskell
-EquivNilIsNil : haskell
+
+review existing results and make them 'set'-like
+
+Haskell:
+inter_compat_l
+inter_compat_r
+inter_compat_lr
+inter_com
+inter_assoc
+equivRefl
+equivSym
+equivTrans
+equivNilIsNil
+inclNil
 Equiv: haskell
-free_subst_intersect_gen: haskell
+free_subst_intersect_gen

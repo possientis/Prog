@@ -39,7 +39,34 @@ of the category \cat\ are not functors but {\em typed functors} as per
 defintion~(\ref{Fun:def:typed:untyped:functor}).
 
 The definition of \cat\ is formally very similar to that of the category \Set.
-However, we still need to do our due diligence and check it forms a category:
+However, we still need to do our due diligence and check it forms a category.
+Before we do so, we shall emphasize a couple of results:
+
+\begin{prop}\label{Fun:prop:a:small:cat:is:a:set}
+    Let \Cat\ be a small category. Then \Cat\ is a set.
+\end{prop}
+\begin{proof}
+    According to definition~(\ref{Cat:def:category:small}), a small category
+    is a tuple $(\ob, \arr, \dom, \cod, \id, \circ)$ in which all the entries
+    are sets, functions between sets (which are also sets) or a partial function
+    between sets (which is also a set). Hence all the entries of this tuple
+    are in fact sets which makes the tuple itself a set.
+\end{proof}
+
+\begin{prop}\label{Fun:prop:a:small:functor:is:a:set}
+    A functor $F:\Cat\to\Dat$ between small categories \Cat,\Dat\ is a set.
+\end{prop}
+\begin{proof}
+    Using definition~(\ref{Fun:def:functor}), a functor $F$ is a tuple
+    $F=(F_{0},F_{1})$ where $F_{0}$ and $F_{1}$ are maps
+    $F_{0}:\ob\ \Cat\to\ob\ \Dat$ and $F_{1}:\arr\ \Cat\to\arr\ \Dat$.
+    When both \Cat\ and \Dat\ are small, the collections $\ob\ \Cat$,
+    $\ob\ \Dat$, $\arr\ \Cat$ and $\arr\ \Dat$ are sets and $F_{0}$, $F_{1}$
+    are therefore maps between sets, i.e. functions which are also sets.
+    So $F=(F_{0},F_{1})$ is a tuple where both entries are sets, which makes
+    $F$ itself a set.
+\end{proof}
+
 
 \begin{prop}\label{Fun:prop:category:small:cat}
     The category \cat\ of definition~(\ref{Fun:def:category:small:cat}) is 
@@ -51,28 +78,20 @@ However, we still need to do our due diligence and check it forms a category:
     data satisfies condition~$(1)-(13)$ of definition~(\ref{Cat:def:category}).
 
     $(1)$: The collection $\ob=\{\ \Cat\ |\ \mbox{\Cat\ is a small category}\ \}$
-    should be a collection with equality. The members of this collection are 
-    small categories which according to definition~(\ref{Cat:def:category:small})
-    are tuples $(\ob, \arr, \dom, \cod, \id, \circ)$ in which all the entries
-    are sets. So such a tuple is a set and the collections of all small 
-    categories is therefore a collection of sets for which set equality is 
-    defined.
-
+    should be a collection with equality. However, from
+    proposition~(\ref{Fun:prop:a:small:cat:is:a:set}) every small category is 
+    a set and \ob\ is therefore a collection of sets for which set equality 
+    is defined.
+    
     $(2)$: The collection $\arr =\{\ (\Cat,\Dat,F)\ |\ \Cat,\Dat\in\ob\  
     \mbox{and}\ F:\Cat\to\Dat\ \}$ should be a collection with equality.
     It is sufficient for us to establish that all members of this collection
-    are sets. We have already seen that a small category is a set
-    (being a tuple with set entries) so each triple $(\Cat,\Dat,F)$ is also
-    a set provided we can show that any functor $F:\Cat\to\Dat$ between two
-    small categories is a set. However from definition~(\ref{Fun:def:functor}),
-    such a functor is an ordered pair $F=(F_{0},F_{1})$ where $F_{0}$ and 
-    $F_{1}$ are maps $F_{0}:\ob\ \Cat\to\ob\ \Dat$ and 
-    $F_{1}:\arr\ \Cat\to\arr\ \Dat$. Now the categories \Cat\ and \Dat\ being
-    small, all the collections $\ob\ \Cat$, $\ob\ \Dat$, $\arr\ \Cat$, 
-    $\arr\ \Dat$ are in fact sets and $F_{0}$ and $F_{1}$ are therefore maps
-    between sets. So $F_{0}$ and $F_{1}$ are themselves sets and so is 
-    $F=(F_{0},F_{1})$.
-
+    are sets. We have already seen from 
+    proposition~(\ref{Fun:prop:a:small:cat:is:a:set}) that a small category 
+    is a set, so each triple $(\Cat,\Dat,F)$ is also a set provided we can 
+    show that any functor $F:\Cat\to\Dat$ between two small categories is a 
+    set, which is exactly proposition~(\ref{Fun:prop:a:small:functor:is:a:set}).
+    
     $(3)$: $\dom$ should be a map $\dom:\arr\to\ob$. The equation
     $\dom(\Cat,\Dat,F)=\Cat$ holds for all small categories \Cat,\Dat\ and 
     functor $F:\Cat\to\Dat$. So $\dom$ is indeed defined on the collection

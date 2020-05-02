@@ -212,8 +212,10 @@ Proof.
       destruct (in_dec eqDec x xs) as [H2|H2];
       destruct (in_dec eqDec x ys) as [H3|H3].
         + reflexivity.
-        + apply EquivNilIsNil in H1. inversion H1.
-        +
+        + apply equivNilIsNil in H1. inversion H1.
+        + apply equivSym in H1. apply equivNilIsNil in H1. inversion H1.
+        + reflexivity.
+    -
 
 Show.
 *)
