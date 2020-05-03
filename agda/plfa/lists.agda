@@ -4,12 +4,13 @@ module lists where
 import Relation.Binary.PropositionalEquality as Eq
 
 open Eq                         using ( _≡_; refl; trans; sym; cong)
-open Eq.≡-Reasoning             using ( begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+open Eq.≡-Reasoning             using ( begin_; _≡⟨⟩_; step-≡; _∎)
 open import Data.Bool           using (Bool; true; false; T; _∧_; _∨_; not)
 open import Data.Nat            using ( ℕ; zero; suc; _≤_; z≤n; s≤s; _+_; _*_; _∸_)
 open import Relation.Nullary    using ( Dec; yes; no; ¬_)
-open import Data.Nat.Properties using (+-assoc; +-suc; +-comm; *-distribʳ-+
-                                      ; *-distribˡ-+)
+open import Data.Nat.Properties using (+-assoc; +-suc; +-comm
+                                      ; *-distribʳ-+; *-distribˡ-+
+                                      ; *-comm; +-identityˡ; +-identityʳ)
 open import Data.Product        using ( _×_; ∃; ∃-syntax)
 open import Function            using (_∘_)
 open import Level               using (Level)
@@ -507,6 +508,19 @@ downFrom (suc n) = n ∷ downFrom n
 _ : downFrom 3 ≡ [ 2 , 1 , 0 ]
 _ = refl
 
+L1 : ∀ {n : ℕ} → n * (2 + (n ∸ 1)) ≡ suc n * n
+L1 {zero} = refl
+L1 {suc n} =
+  begin
+    suc n * (2 + (suc n ∸ 1))
+    ≡⟨⟩
+    suc n * (2 + n)
+    ≡⟨ *-comm (suc n) (2 + n) ⟩
+    (2 + n) * suc n
+    ≡⟨⟩
+    suc (suc n) * suc n
+    ∎
+
 sumDownFrom : ∀ {n : ℕ} → sum (downFrom n) * 2 ≡ n * (n ∸ 1)  -- \.-
 sumDownFrom {zero} = refl
 sumDownFrom {suc n} =
@@ -522,5 +536,23 @@ sumDownFrom {suc n} =
     n * 2 + n * (n ∸ 1)
     ≡⟨ sym (*-distribˡ-+ n 2 (n ∸ 1)) ⟩
     n * (2 + (n ∸ 1))
+    ≡⟨ L1 {n} ⟩
+    suc n * n
     ≡⟨⟩
-    {!!}
+    suc n * (suc n ∸ 1)
+    ∎
+
+record IsMonoid {a : Set} (_⊗_ : a → a → a) (e : a) : Set where
+  field
+    assoc : ∀ (x y z : a) → (x ⊗ y) ⊗ z ≡ x ⊗ (y ⊗ z)
+    identityˡ : ∀ (x : a) → e ⊗ x ≡ x
+    identityʳ : ∀ (x : a) → x ⊗ e ≡ x
+
+open IsMonoid
+
++-monoid : IsMonoid _+_ 0
++-monoid =  record
+  { assoc = +-assoc
+  ; identityˡ = +-identityˡ
+  ; identityʳ = +-identityʳ
+  }
