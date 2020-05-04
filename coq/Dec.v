@@ -110,15 +110,97 @@ Proof. reflexivity. Qed.
 Definition L15 : check (False \/ False) = false.
 Proof. reflexivity. Qed.
 
-(*
+(* Should be able to import this from Peano_dec, not some name conflict appears *)
+Definition eq_nat_dec : forall (m n:nat), {m = n} + {m <> n}.
+Proof.
+    induction m as [|m IH]; destruct n as [|n].
+    - left. reflexivity.
+    - right. intros H. inversion H.
+    - right. intros H. inversion H.
+    - destruct (IH n) as [H|H].
+        + subst. left. reflexivity.
+        + right. intros H'. inversion H'. subst. apply H. 
+          reflexivity.
+Defined. (* do  not use 'Qed' here, as we need to compute check                 *)
+
 Instance decEqNat (m n:nat) : Decidable (m = n) := { dec :=
     match eq_nat_dec m n with
-    | left H    => _
-    | right H   => _
+    | left H    => isTrue H
+    | right H   => isFalse H
     end
+}.
 
-Show.
-*)
+Definition L16 : check (0 = 0) = true.
+Proof. reflexivity. Qed.
+
+Definition L17 : check (0 <> 0) = false.
+Proof. reflexivity. Qed.
+
+Definition L18 : check (0 = 1) = false.
+Proof. reflexivity. Qed.
+
+Definition L19 : check (0 <> 1) = true.
+Proof. reflexivity. Qed.
+
+Definition L20 : check (3 <> 5) = true.
+Proof. reflexivity. Qed.
+
+Definition le_dec : forall (m n:nat), {m <= n} + {~ m <= n}.
+Proof.
+    induction m as [|m IH]; intro n.
+    - left. revert n. induction n as [|n IH].
+        + apply le_n.
+        + apply le_S. assumption.
+    - destruct n as [|n].
+        + right. intros H. inversion H.
+        + destruct (IH n) as [H|H].
+            { left. apply le_n_S. assumption. }
+            { right. intros H'. apply H. apply le_S_n. assumption. }
+Defined. (* not 'Qed' !!  *)
+
+Instance decLeqNat (m n:nat) : Decidable (m <= n) := { dec :=
+    match le_dec m n with
+    | left H    => isTrue H
+    | right H   => isFalse H
+    end
+}.
+
+Definition L21 : check (0 <= 0) = true.
+Proof. reflexivity. Qed.
+
+Definition L22 : check (~ 0 <= 0) = false.
+Proof. reflexivity. Qed.
+
+Definition L23 : check (3 <= 5) = true.
+Proof. reflexivity. Qed.
+
+Definition L24 : check (~ 3 <= 5) = false.
+Proof. reflexivity. Qed.
+
+Definition L25 : check (5 <= 3) = false.
+Proof. reflexivity. Qed.
+
+Definition L26 : check (~ 5 <= 3) = true.
+Proof. reflexivity. Qed.
+
+Definition eqb (m n:nat) (d:Decidable (m = n)) : bool :=
+    if dec then true else false.
+
+Arguments eqb _ _ {d}.
+
+Definition L27 : eqb 5 5 = true.
+Proof. reflexivity. Qed.
+
+Definition lt_dec : forall (m n:nat), {m < n} + {~ m < n}.
+Proof. intros m n. unfold lt. apply le_dec. Qed.
+
+Instance decLtNat (m n:nat) : Decidable (m < n) := { dec :=
+    match lt_dec m n with
+    | left H    => isTrue H
+    | right H   => isFalse H
+    end
+}.
+
 
 (*
 Compute check (False -> False) _.

@@ -317,3 +317,31 @@ about the intended codomains of their respective typed functions.
     the fact that $f(x)=g(x)$ for all $x\in a$.
 \end{proof}
 
+\begin{prop}\label{Cat:prop:set:not:small}
+    The category Set is not small.
+\end{prop}
+\begin{proof}
+    Assume \Set\ is a small category. Then $\Set=(\ob, \arr, \dom, 
+    \cod, \id, \circ)$ where the entries of the tuple satify 
+    conditions $(1)-(13)$ of definition~(\ref{Cat:def:category:small}).
+    In particular $\ob$ is a set. Using
+    axiom~(\ref{Cat:ax:tuple:extensional}), from the equality 
+    $\Set=(\ob, \arr, \dom, \cod, \id, \circ)$ we obtain in 
+    particular $\ob\ \Set=\ob$. This is not a standard equality
+    between sets since $\ob\ \Set$ was defined 
+    in~(\ref{Cat:def:set}) as the collection 
+    $\{\ x\ |\ \mbox{x is a set}\ \}$ and not as a set.
+    However, it is an equality between collections and 
+    using axiom~(\ref{Cat:ax:collection:extensional}), it follows
+    that the set $\ob$ and the collection 
+    $\{\ x\ |\ \mbox{x is a set}\ \}$ have identical members.
+    So we have found a set \ob\ whose members are all possible sets.
+    This is a contradiction as no such set exists.
+\end{proof}
+
+\noindent
+{\bf Remark}: These notes do not assume any specific formal 
+foundations and the proof of 
+proposition~(\ref{Cat:prop:set:not:small}) is therefore standing
+on shaky grounds. However, we feel some form of formal reasoning
+is better than nothing at all.

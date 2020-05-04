@@ -1,2 +1,1 @@
-write coq Decidable Instance for n = m, n <= m, n < m
 can we have dec_trivial in coq

@@ -362,3 +362,74 @@ refine (
             end
 )).
 Defined.
+
+Theorem Barber : forall (a:Type) (p:a -> a -> Prop),
+    ~exists (x:a), forall (y:a), p x y <-> ~ p y y.
+Proof.
+    intros a p [x H]. destruct (H x) as [H1 H2];
+    apply H1; apply H2; intros H3; apply H1; assumption.
+Qed.
+
+Definition L27 : forall (a:Type) (p:a -> a -> Prop),
+    ~exists (x:a), forall (y:a), p x y <-> ~ p y y.
+Proof.
+refine (
+    fun (a:Type) (p:a -> a -> Prop) =>
+        fun (H: exists (x:a), forall (y:a), p x y <-> ~p y y ) =>
+            match H with
+            | ex_intro _ x H    =>
+                match (H x) with
+                | conj H1 H2 => 
+                    let px := 
+                        H2 (fun (qx:p x x) => H1 qx qx)
+                    in H1 px px
+                end
+            end
+).
+Defined.
+
+
+Definition LawRussell : forall (A:Prop), ~(A <-> ~A).
+Proof.
+    intros A [H1 H2]. apply H1; apply H2; intros H3; apply H1; assumption.
+Qed.
+
+Definition L28 : forall (A:Prop), ~(A <-> ~A).
+Proof.
+refine (
+    fun (A:Prop) (H:A <-> ~A) => 
+        match H with
+        | conj H1 H2 => 
+            let p :=
+                H2 (fun (x:A) => H1 x x)
+            in H1 p p
+        end
+).
+Defined.
+
+Definition L29 : forall (a:Type) (p:a -> a -> Prop),
+    ~exists (x:a), forall (y:a), p x y <-> ~ p y y.
+Proof.
+refine (
+    fun (a:Type) (p:a -> a -> Prop) =>
+        fun (H:exists (x:a), forall (y:a), p x y <-> ~ p y y ) =>
+            match H with
+            | ex_intro _ x H => LawRussell (p x x) (H x)
+            end
+).
+Defined.
+
+Definition FixedPoint (a:Type) (f:a -> a) (x:a) : Prop := f x = x.
+
+Arguments FixedPoint {a}.
+
+Definition HasFixedPoint (a:Type) (f:a -> a) : Prop :=
+    exists (x:a), FixedPoint f x.
+
+Arguments HasFixedPoint {a}.
+
+Definition L30 : ~ HasFixedPoint negb.
+Proof.
+    unfold HasFixedPoint. unfold FixedPoint. intros [b H]. 
+    destruct b; inversion H.
+Qed.

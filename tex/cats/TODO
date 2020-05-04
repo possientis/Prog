@@ -1,3 +1,5 @@
+Set is not small
+Set is locally small
 cat is locally small
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2

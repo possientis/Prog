@@ -1,3 +1,8 @@
+Require Import List.
+
+Require Import Utils.Ord.
+Require Import Utils.Normal.
+
 Require Import Core.Set.
 Require Import Core.Leq.
 Require Import Core.Incl.
@@ -10,6 +15,7 @@ Require Import Core.Insert.
 Require Import Core.ElemIncl.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
+
 
 Fixpoint normal (x:set) : set :=
     match x with
@@ -35,7 +41,6 @@ Proof.
                 { apply IH1. }
                 { apply IH2. }}
 Qed.
- 
 
 Lemma normalEqualEquiv : forall (x y:set), normal x = normal y -> x == y.
 Proof.
@@ -46,4 +51,10 @@ Proof.
     - apply equalSym. apply normalEquiv.
 Qed.
 
+(*
+Lemma normalList : forall (x:set),
+    toList (normal x) = Normal.normal (map normal (toList x)).   
+Proof.
 
+Show.
+*)
