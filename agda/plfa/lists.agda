@@ -10,7 +10,8 @@ open import Data.Nat            using ( ℕ; zero; suc; _≤_; z≤n; s≤s; _+_
 open import Relation.Nullary    using ( Dec; yes; no; ¬_)
 open import Data.Nat.Properties using (+-assoc; +-suc; +-comm
                                       ; *-distribʳ-+; *-distribˡ-+
-                                      ; *-comm; +-identityˡ; +-identityʳ)
+                                      ; *-comm; +-identityˡ; +-identityʳ
+                                      ; *-assoc; *-identityˡ; *-identityʳ)
 open import Data.Product        using ( _×_; ∃; ∃-syntax)
 open import Function            using (_∘_)
 open import Level               using (Level)
@@ -66,33 +67,33 @@ _ =
     ∎
 
 
-++-assoc : ∀ {a : Set} → {xs ys zs : List a} →
+++-assoc : ∀ {a : Set} → (xs ys zs : List a) →
   (xs ++ ys) ++ zs ≡ xs ++ (ys ++ zs)
-++-assoc {a} {[]} {ys} {zs} = refl
-++-assoc {a} {(x ∷ xs)} {ys} {zs} =
+++-assoc {a} [] ys zs = refl
+++-assoc {a} (x ∷ xs) ys zs =
   begin
      ((x ∷ xs) ++ ys) ++ zs
      ≡⟨⟩
      (x ∷ (xs ++ ys)) ++ zs
      ≡⟨⟩
      x ∷ ((xs ++ ys) ++ zs)
-     ≡⟨ cong (x ∷_) (++-assoc {a} {xs}) ⟩
+     ≡⟨ cong (x ∷_) (++-assoc xs ys zs) ⟩
      x ∷ (xs ++ (ys ++ zs))
      ≡⟨⟩
      (x ∷ xs) ++ (ys ++ zs)
      ∎
 
-++-identity-l : ∀ {a : Set} → (xs : List a) → [] ++ xs ≡ xs
-++-identity-l xs = refl
+++-identityˡ : ∀ {a : Set} → (xs : List a) → [] ++ xs ≡ xs
+++-identityˡ xs = refl
 
-++-identity-r : ∀ {a : Set} → (xs : List a) → xs ++ [] ≡ xs
-++-identity-r [] = refl
-++-identity-r (x ∷ xs) =
+++-identityʳ : ∀ {a : Set} → (xs : List a) → xs ++ [] ≡ xs
+++-identityʳ [] = refl
+++-identityʳ (x ∷ xs) =
   begin
     (x ∷ xs) ++ []
     ≡⟨⟩
     x ∷ (xs ++ [])
-    ≡⟨ cong (x ∷_) (++-identity-r xs) ⟩
+    ≡⟨ cong (x ∷_) (++-identityʳ xs) ⟩
     x ∷ xs
     ∎
 
@@ -180,7 +181,7 @@ _ =
 reverse++distrib : ∀ {a : Set} → {xs ys : List a} →
   reverse (xs ++ ys) ≡ reverse ys ++ reverse xs
 
-reverse++distrib {a} {[]} {ys} = sym (++-identity-r (reverse ys))
+reverse++distrib {a} {[]} {ys} = sym (++-identityʳ (reverse ys))
 reverse++distrib {a} {(x ∷ xs)} {ys} =
   begin
     reverse ((x ∷ xs) ++ ys)
@@ -190,7 +191,7 @@ reverse++distrib {a} {(x ∷ xs)} {ys} =
     reverse (xs ++ ys) ++ [ x ]
     ≡⟨ cong (_++ [ x ]) (reverse++distrib {a} {xs}) ⟩
     (reverse ys ++ reverse xs) ++ [ x ]
-    ≡⟨ ++-assoc {a} {reverse ys}  ⟩
+    ≡⟨ ++-assoc (reverse ys) _ _  ⟩
     reverse ys ++ (reverse xs ++ [ x ])
     ≡⟨⟩
     reverse ys ++ reverse (x ∷ xs)
@@ -229,7 +230,7 @@ shunt-reverse {a} {x ∷ xs} {ys} =
     reverse xs ++ (x ∷ ys)
     ≡⟨⟩
     reverse xs ++ ([ x ] ++ ys)
-    ≡⟨ sym (++-assoc {a} {reverse xs}) ⟩
+    ≡⟨ sym (++-assoc (reverse xs) _ _) ⟩
     (reverse xs ++ [ x ]) ++ ys
     ≡⟨⟩
     reverse (x ∷ xs) ++ ys
@@ -247,7 +248,7 @@ reverses {a} {xs} =
     shunt xs []
     ≡⟨ shunt-reverse {a} {xs} ⟩
     reverse xs ++ []
-    ≡⟨ ++-identity-r (reverse xs) ⟩
+    ≡⟨ ++-identityʳ (reverse xs) ⟩
     reverse xs
     ∎
 
@@ -542,7 +543,7 @@ sumDownFrom {suc n} =
     suc n * (suc n ∸ 1)
     ∎
 
-record IsMonoid {a : Set} (_⊗_ : a → a → a) (e : a) : Set where
+record IsMonoid (a : Set) (_⊗_ : a → a → a) (e : a) : Set where
   field
     assoc : ∀ (x y z : a) → (x ⊗ y) ⊗ z ≡ x ⊗ (y ⊗ z)
     identityˡ : ∀ (x : a) → e ⊗ x ≡ x
@@ -550,9 +551,48 @@ record IsMonoid {a : Set} (_⊗_ : a → a → a) (e : a) : Set where
 
 open IsMonoid
 
-+-monoid : IsMonoid _+_ 0
++-monoid : IsMonoid ℕ _+_ 0
 +-monoid =  record
   { assoc = +-assoc
   ; identityˡ = +-identityˡ
   ; identityʳ = +-identityʳ
   }
+
+*-monoid : IsMonoid ℕ _*_ 1
+*-monoid = record
+  { assoc = *-assoc
+  ; identityˡ = *-identityˡ
+  ; identityʳ = *-identityʳ
+  }
+
+++-monoid : ∀ {a : Set} → IsMonoid (List a) _++_ []
+++-monoid = record
+  { assoc = ++-assoc
+  ; identityˡ = ++-identityˡ
+  ; identityʳ = ++-identityʳ
+  }
+
+foldr-monoid : ∀ {a : Set} (_⊗_ : a → a → a) (e : a) → IsMonoid a _⊗_ e →
+  ∀ (xs : List a) (y : a) → foldr _⊗_ y xs ≡ foldr _⊗_ e xs ⊗ y
+foldr-monoid _⊗_ e ⊗-monoid [] y =
+  begin
+    foldr _⊗_ y []
+    ≡⟨⟩
+    y
+    ≡⟨ sym (identityˡ ⊗-monoid y) ⟩
+    e ⊗ y
+    ≡⟨⟩
+    foldr _⊗_ e [] ⊗ y
+    ∎
+foldr-monoid _⊗_ e ⊗-monoid (x ∷ xs) y
+  = begin
+      foldr _⊗_ y (x ∷ xs)
+      ≡⟨⟩
+      x ⊗ foldr _⊗_ y xs
+      ≡⟨ cong (x ⊗_) (foldr-monoid _⊗_ e ⊗-monoid xs y) ⟩
+      x ⊗ (foldr _⊗_ e xs ⊗ y)
+      ≡⟨ sym (assoc ⊗-monoid x (foldr _⊗_ e xs) y) ⟩
+      (x ⊗ foldr _⊗_ e xs) ⊗ y
+      ≡⟨⟩
+      foldr _⊗_ e (x ∷ xs) ⊗ y
+      ∎
