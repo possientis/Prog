@@ -207,16 +207,28 @@ Lemma free_subst_intersect_gen :
        (Fr t /\ xs) == (Fr t /\ ys) ->  subst_ f xs t = subst_ f ys t.
 Proof.
     intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; 
-    intros xs ys H1.
-    - simpl. simpl in H1. 
+    intros xs ys H.
+    - simpl. simpl in H. 
       destruct (in_dec eqDec x xs) as [H2|H2];
       destruct (in_dec eqDec x ys) as [H3|H3].
         + reflexivity.
-        + apply equivNilIsNil in H1. inversion H1.
-        + apply equivSym in H1. apply equivNilIsNil in H1. inversion H1.
+        + apply equivNilIsNil in H. inversion H.
+        + apply equivSym in H. apply equivNilIsNil in H. 
+          inversion H.
         + reflexivity.
+    - assert ((Fr t1 /\ xs) == (Fr t1 /\ ys)) as H1.
+        { apply inter_sub_equiv with (Fr (App t1 t2)).
+            { simpl. apply incl_appl. apply incl_refl. }
+            { assumption. } }
+      assert ((Fr t2 /\ xs) == (Fr t2 /\ ys)) as H2.
+        { apply inter_sub_equiv with (Fr (App t1 t2)).
+            { simpl. apply incl_appr. apply incl_refl. }
+            { assumption. } }
+      simpl. rewrite (IH1 xs ys). rewrite (IH2 xs ys).
+        + reflexivity.
+        + assumption.
+        + assumption.
     -
-
 Show.
 *)
 

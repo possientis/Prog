@@ -1,5 +1,3 @@
-inter_compat_r
-inter_compat_lr
 free_subst_intersect_gen
 
 review existing results and make them 'set'-like

@@ -158,4 +158,52 @@ Proof.
     - assumption.
 Qed.
 
+Lemma inter_compat_r : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    xs == ys -> (zs /\ xs) == (zs /\ ys).
+Proof.
+    intros v e xs ys zs [H1 H2]. split; intros z H;
+    apply inter_charac in H; destruct H as [H3 H4];
+    apply inter_charac; split.
+    - assumption.
+    - apply H1. assumption.
+    - assumption.
+    - apply H2. assumption.
+Qed.
+
+Lemma inter_compat_lr : forall (v:Type) (e:Eq v) (xs xs' ys ys':list v),
+    xs == xs' -> ys == ys' -> (xs /\ ys) == (xs' /\ ys').
+Proof.
+   intros v e xs xs' ys ys' H1 H2. 
+   apply equivTrans with (xs' /\ ys).  
+   - apply inter_compat_l. assumption.
+   - apply inter_compat_r. assumption.
+Qed.
+
+Lemma inter_sub : forall (v:Type) (e:Eq v) (xs ys:list v),
+    xs <= ys -> (xs /\ ys) == xs.
+Proof.
+    intros v e xs ys H1. split; intros z H2.
+    - apply inter_charac in H2. destruct H2 as [H2 H3]. assumption.
+    - apply inter_charac. split.
+        + assumption.
+        + apply H1. assumption.
+Qed.
+
+
+Lemma inter_sub_equiv : forall (v:Type) (e:Eq v) (xs ys zs zs':list v),
+    zs' <= zs -> 
+    (zs /\ xs)  == (zs /\ ys) -> 
+    (zs' /\ xs) == (zs' /\ ys).
+Proof.
+    intros v e xs ys zs zs' H1 H2.
+    apply equivTrans with ((zs' /\ zs) /\ xs).
+    - apply inter_compat_l. apply equivSym. apply inter_sub. assumption.
+    - apply equivTrans with ((zs' /\ zs) /\ ys).
+        + apply equivTrans with (zs' /\ (zs /\ xs)).
+            { apply inter_assoc. }
+            { apply equivTrans with (zs' /\ (zs /\ ys)).
+                { apply inter_compat_r. assumption. }
+                { apply equivSym. apply inter_assoc. }}
+        + apply inter_compat_l. apply inter_sub. assumption.
+Qed.
 
