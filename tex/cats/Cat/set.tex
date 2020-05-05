@@ -2,7 +2,8 @@
     We call \Set\ the category $\Set=(\ob, \arr, \dom, \cod, \id, \circ)$ where
     \begin{eqnarray*}
         (1)&\ &\ob = \{\ x\ |\  \mbox{x is a set}\ \}\\
-        (2)&\ &\arr = \{\ (a,b,f)\ |\  \mbox{f is a function $f : a\to b$}\ \}\\
+        (2)&\ &\arr = \{\ (a,b,f)\ |\  a,b\in\ob\ ,\ 
+        \mbox{f is a function $f : a\to b$}\ \}\\
         (3)&\ &\dom\,(a,b,f) = a\\
         (4)&\ &\cod\,(a,b,f) = b\\
         (5)&\ &\id(a) = (a,a,i(a))\\
@@ -318,7 +319,7 @@ about the intended codomains of their respective typed functions.
 \end{proof}
 
 \begin{prop}\label{Cat:prop:set:not:small}
-    The category Set is not small.
+    The category \Set\ is not small.
 \end{prop}
 \begin{proof}
     Assume \Set\ is a small category. Then $\Set=(\ob, \arr, \dom, 
