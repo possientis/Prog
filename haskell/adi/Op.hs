@@ -9,6 +9,11 @@ module  Op
 
 data Op = OpAdd | OpMul
 
+instance Show Op where
+   show = \case
+        OpAdd -> "+"
+        OpMul -> "*"
+
 add :: Op
 add = OpAdd
 
