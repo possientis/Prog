@@ -4,18 +4,18 @@ Require Import Utils.Ord.
 Require Import Utils.Normal.
 
 Require Import Core.Set.
-Require Import Core.Leq.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Cons.
 Require Import Core.Equal.
 Require Import Core.Order.
 Require Import Core.Empty.
-Require Import Core.Insert.
 Require Import Core.ElemIncl.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
+Require Import Normal.Leq.
+Require Import Normal.Insert.
 
 Fixpoint normal (x:set) : set :=
     match x with

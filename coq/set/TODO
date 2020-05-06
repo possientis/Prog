@@ -1,7 +1,10 @@
-Core/Nub: define the notion for sets
-Core/Sort: define the notion for sets
-Core/Normal: establish a link with Utils.Normal.normal
-Core/Normal: check imports are really needed
+remove eqDec (leqDec should suffice)
+Normal/IsListOf
+Normal/Equiv
+Normal/Nub: define the notion for sets
+Normal/Sort: define the notion for sets
+Normal/Normal: establish a link with Utils.Normal.normal
+Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x
 Core/Functional : we d like => y = y' but we can only have y == y': we need some notion of normal form for sets
 Core/Replacement (use filterReplace)

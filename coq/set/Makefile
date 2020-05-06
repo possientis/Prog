@@ -1,7 +1,9 @@
 UTILS=Utils
 CORE=Core
 LANG1=Lang1
-OPT=-Q ${UTILS} ${UTILS} -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1}
+NORM=Normal
+
+OPT=-Q ${UTILS} ${UTILS} -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${NORM} ${NORM}
 
 all :							${UTILS}/LEM.vo \
 								${UTILS}/Decidable.vo \
@@ -37,9 +39,10 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Compatible.vo \
 								${CORE}/Specification.vo \
 								${CORE}/Functional.vo \
-								${CORE}/Leq.vo \
-								${CORE}/Insert.vo \
-								${CORE}/Normal.vo \
+								${NORM}/Leq.vo \
+								${NORM}/Insert.vo \
+								${NORM}/Normal.vo \
+								${NORM}/Equiv.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
@@ -336,37 +339,42 @@ ${CORE}/Functional.vo :			${CORE}/Functional.v \
 	coqc ${CORE}/Functional.v	${OPT} 
 
 
-${CORE}/Leq.vo :				${CORE}/Leq.v \
+${NORM}/Leq.vo :				${NORM}/Leq.v \
 								${UTILS}/Ord.v \
 								${CORE}/Set.vo \
 								${CORE}/Decidability.vo
-	coqc ${CORE}/Leq.v			${OPT} 
+	coqc ${NORM}/Leq.v			${OPT} 
 
 
-${CORE}/Insert.vo :				${CORE}/Insert.v \
+${NORM}/Insert.vo :				${NORM}/Insert.v \
 								${CORE}/Set.vo \
-								${CORE}/Leq.vo \
 								${CORE}/Elem.vo \
 								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
-								${CORE}/Decidability.vo
-	coqc ${CORE}/Insert.v		${OPT} 
+								${CORE}/Decidability.vo \
+								${NORM}/Leq.vo
+	coqc ${NORM}/Insert.v		${OPT} 
 
 
-${CORE}/Normal.vo :				${CORE}/Normal.v \
+${NORM}/Normal.vo :				${NORM}/Normal.v \
 								${CORE}/Set.vo \
-								${CORE}/Leq.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
 								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Empty.vo \
-								${CORE}/Insert.vo \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Decidability.vo \
-								${CORE}/Extensionality.vo
-	coqc ${CORE}/Normal.v		${OPT} 
+								${CORE}/Extensionality.vo \
+								${NORM}/Leq.vo \
+								${NORM}/Insert.vo
+	coqc ${NORM}/Normal.v		${OPT} 
 
+${NORM}/Equiv.vo :				${NORM}/Equiv.v \
+								${UTILS}/Equiv.vo \
+								${CORE}/Set.vo \
+								${NORM}/Leq.vo
+	coqc ${NORM}/Equiv.v		${OPT}
 
 ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
 								${UTILS}/Fresh.vo

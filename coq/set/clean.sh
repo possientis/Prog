@@ -4,8 +4,8 @@ DIR=`pwd`
 HOME=/home/john/Prog/coq/set
 cd ${HOME}
 
-rm -f {Lang1,Core,Utils}/.*.aux
-rm -f {Lang1,Core,Utils}/*.glob
-rm -f {Lang1,Core,Utils}/*.vo
+rm -f {Lang1,Core,Utils,Normal}/.*.aux
+rm -f {Lang1,Core,Utils,Normal}/*.glob
+rm -f {Lang1,Core,Utils,Normal}/*.vo
 
 cd ${DIR}

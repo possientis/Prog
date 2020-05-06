@@ -1,9 +1,10 @@
 Require Import Core.Set.
-Require Import Core.Leq.
 Require Import Core.Elem.
 Require Import Core.Cons.
 Require Import Core.Equal.
 Require Import Core.Decidability.
+
+Require Import Normal.Leq.
 
 (* Insert the set x inside the set y according to syntactic ordering.           *)
 Fixpoint insert (x y:set) : set :=
