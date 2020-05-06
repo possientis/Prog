@@ -192,7 +192,7 @@ Definition L27 : eqb 5 5 = true.
 Proof. reflexivity. Qed.
 
 Definition lt_dec : forall (m n:nat), {m < n} + {~ m < n}.
-Proof. intros m n. unfold lt. apply le_dec. Qed.
+Proof. intros m n. unfold lt. apply le_dec. Defined.
 
 Instance decLtNat (m n:nat) : Decidable (m < n) := { dec :=
     match lt_dec m n with
@@ -208,28 +208,41 @@ Compute check (False -> True) _.
 Compute check (True -> True) _.
 Compute check (True -> False) _.
 Compute check ((True -> False) -> False) _.
+*)
 
-Definition as_true (c:Prop) (d:Decidable c) : Prop :=
+Definition asTrueFalse (c:Prop) (d:Decidable c) : Prop :=
     if dec then True else False.
 
-Arguments as_true _ {d}.
+Arguments asTrueFalse _ {d}.
 
-Definition of_as_true (c:Prop) (d:Decidable c) (q:as_true c) : c.
+Definition fromAsTrueFalse (c:Prop) (d:Decidable c) (q:asTrueFalse c) : c.
 Proof.
-    unfold as_true in q. destruct dec as [H|H].
+    unfold asTrueFalse in q. destruct dec as [H|H].
     - exact H.
     - contradiction.
 Defined.
 
-Print of_as_true.
+Arguments fromAsTrueFalse _ {d}.
+
+Definition fromAsTrueFalse2 : forall (c:Prop) (d:Decidable c) (q:asTrueFalse c), c.
+Proof.
+refine (
+    fun (c:Prop) (d:Decidable c) =>
+        match dec as d return (if d then True else False) -> c with
+        | isTrue H  => fun _      => H
+        | isFalse H => fun pFalse => 
+            match pFalse with end
+        end
+).
+Qed.
+
+Notation "£ c" := (fromAsTrueFalse c I) (at level 50).
+
+Definition L28 : 0 <> 1 := £ (0 <> 1). 
+Definition L29 : check (0 <> 1 /\ (5 < 2 \/ 3 < 7)) = true.
+Proof. reflexivity. Qed.
+Definition L30 : (0 <> 1 /\ (5 < 2 \/ 3 < 7)) := £ (0 <> 1 /\ (5 < 2 \/ 3 < 7)).
 
 
-Definition of_as_true2 (c:Prop) (d:Decidable c) (q:as_true c) : c :=
-    match dec as d return (if d then True else False) -> c with
-    | isTrue H  => fun _ => H
-    | isFalse H => fun x => False_ind c x
-    end q.
-
-*)
 
 
