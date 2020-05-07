@@ -433,3 +433,27 @@ Proof.
     unfold HasFixedPoint. unfold FixedPoint. intros [b H]. 
     destruct b; inversion H.
 Qed.
+
+Definition L31 : ~ HasFixedPoint (fun (A:Prop) => ~A).
+Proof.
+    unfold HasFixedPoint. unfold FixedPoint. intros [A H1].
+    apply (LawRussell A). split; intros H2.
+    - rewrite <- H1 in H2. assumption.
+    - rewrite H1 in H2. assumption.
+Qed.
+
+Definition Surjective (a b:Type) (f:a -> b) : Prop :=
+    forall (y:b), exists (x:a), f x = y.
+
+Arguments Surjective {a} {b}.
+
+Theorem Lawvere : forall (X Y:Type), 
+    (exists (F:X -> (X -> Y)), Surjective F) -> 
+    forall (f:Y -> Y), HasFixedPoint f.
+Proof.
+    intros X Y [F H] f. unfold Surjective in H. 
+    unfold HasFixedPoint. unfold FixedPoint.
+    destruct (H (fun u => f (F u u))) as [x H'].
+    exists (F x x). change ((fun u => f (F u u)) x = F x x). 
+    rewrite <- H'. reflexivity.
+Qed.
