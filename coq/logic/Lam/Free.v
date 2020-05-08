@@ -201,7 +201,6 @@ Proof.
     apply free_subst_gen.
 Qed.
 
-(*
 Lemma free_subst_intersect_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v), 
        (Fr t /\ xs) == (Fr t /\ ys) ->  subst_ f xs t = subst_ f ys t.
@@ -228,8 +227,42 @@ Proof.
         + reflexivity.
         + assumption.
         + assumption.
-    -
-Show.
-*)
-
-
+    - simpl. rewrite (IH1 (cons x xs) (cons x ys)).
+        + reflexivity.
+        + simpl in H. rewrite remove_diff in H.
+          split; intros z H1; apply inter_charac in H1;
+          destruct H as [H3 H4];
+          destruct H1 as [H1 [H2|H2]]; apply inter_charac; split.
+            { subst. assumption. }
+            { subst. left. reflexivity. }
+            { assumption. }
+            { destruct (eqDec x z) as [H5|H5].
+                { subst. left. reflexivity. }
+                { right. 
+                  assert (z :: (Fr t1 \\ (cons x nil) /\ xs)) as H6.
+                    { apply inter_charac. split.
+                        { apply diff_charac. split.
+                            { assumption. }
+                            { intros [H6|H6].
+                                { subst. apply H5. reflexivity. }
+                                { inversion H6. }}}
+                        { assumption. }}
+                   apply H3 in H6. apply inter_charac in H6. 
+                   destruct H6 as [H6 H7]. assumption. }}
+            { assumption. }
+            { subst. left. reflexivity. }
+            { assumption. }
+            { destruct (eqDec x z) as [H5|H5].
+                { subst. left. reflexivity. }
+                { right. 
+                  assert (z :: (Fr t1 \\ (cons x nil) /\ ys)) as H6.
+                    { apply inter_charac. split.
+                        { apply diff_charac. split.
+                            { assumption. }
+                            { intros [H6|H6].
+                                { subst. apply H5. reflexivity. }
+                                { inversion H6. }}}
+                        { assumption. }}
+                   apply H4 in H6. apply inter_charac in H6. 
+                   destruct H6 as [H6 H7]. assumption. }}
+Qed.

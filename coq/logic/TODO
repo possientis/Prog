@@ -1,7 +1,6 @@
-free_subst_intersect_gen
-
 review existing results and make them 'set'-like
 
+free_subst_intersect
 Haskell:
 inter_compat_l
 inter_compat_r
@@ -15,3 +14,4 @@ equivNilIsNil
 inclNil
 Equiv: haskell
 free_subst_intersect_gen
+free_subst_intersect
