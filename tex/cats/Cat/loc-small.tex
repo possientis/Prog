@@ -36,5 +36,23 @@
     The category \Set\ is locally small.
 \end{prop}
 \begin{proof}
-    TODO
+    Given two sets $a,b$, we need to that the hom-set $\Set(a,b)$ is 
+    actually a set. Using axiom~(\ref{Cat:ax:collection:set}), it
+    is sufficient to show that this collection is a sub-collection
+    of another collection which is known to be a set. Now any 
+    (untyped) function $f:a\to b$ is a set of ordered pairs $(x,y)$
+    where $x\in a$ and $y\in b$ (and with additional properties). 
+    In particular, a function $f:a\to b$
+    is a subset of the cartesian product $a\times b$, i.e.
+    $f\subseteq a\times b$. Equivalently, $f$ is an element of
+    the power set ${\cal P}(a\times b)$, i.e. 
+    $f\in{\cal P}(a\times b)$. Consequently, we have:
+        \begin{eqnarray*}\Set(a,b)
+            &=&\{\ (a,b,f)\ |\ \mbox{$f$ is a function $f:a\to b$}\ \}
+            \ \leftarrow\ \mbox{prop.~(\ref{Cat:prop:homset:set})}\\
+            &\subseteq&\{\ (a,b,f)\ |\ f\in{\cal P}(a\times b)\ \}\\
+            &=&\{\ (x,y,f)\ |\ x\in\{a\}\ 
+            ,\ y\in\{b\}\ ,\ f\in{\cal P}(a\times b)\ \}\\
+            &=&\{a\}\times\{b\}\times{\cal P}(a\times b)
+        \end{eqnarray*}
 \end{proof}

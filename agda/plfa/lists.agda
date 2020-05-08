@@ -395,18 +395,18 @@ product = foldr _*_ 1
 _ : product [ 1 , 2 , 3 , 4 ] ≡ 24
 _ = refl
 
-foldr-++ : ∀ {a b : Set} {_⊗_ : a → b → b} {e : b} {xs ys : List a} →
+foldr-++ : ∀ {a b : Set} {_⊗_ : a → b → b} {e : b} (xs ys : List a) →
   foldr _⊗_ e (xs ++ ys) ≡ foldr _⊗_ (foldr _⊗_ e ys) xs
 
-foldr-++ {a} {b} {_⊗_} {e} {[]} {ys} = refl
-foldr-++ {a} {b} {_⊗_} {e} {x ∷ xs} {ys} =
+foldr-++ {a} {b} {_⊗_} {e} [] ys = refl
+foldr-++ {a} {b} {_⊗_} {e} (x ∷ xs) ys =
   begin
     foldr _⊗_ e ((x ∷ xs) ++ ys)
     ≡⟨⟩
     foldr _⊗_ e (x ∷ (xs ++ ys))
     ≡⟨⟩
     x ⊗ foldr _⊗_ e (xs ++ ys)
-    ≡⟨ cong (x ⊗_) (foldr-++ {a} {b} {_⊗_} {e} {xs}) ⟩
+    ≡⟨ cong (x ⊗_) (foldr-++ xs ys) ⟩
     x ⊗ foldr _⊗_ (foldr _⊗_ e ys) xs
     ≡⟨⟩
     foldr _⊗_ (foldr _⊗_ e ys) (x ∷ xs)
@@ -572,11 +572,11 @@ open IsMonoid
   ; identityʳ = ++-identityʳ
   }
 
-foldr-monoid : ∀ {a : Set} (_⊗_ : a → a → a) (e : a) → IsMonoid a _⊗_ e →
+foldr-monoid : ∀ {a : Set} {_⊗_ : a → a → a} {e : a} → IsMonoid a _⊗_ e →
   ∀ (xs : List a) (y : a) → foldr _⊗_ y xs ≡ foldr _⊗_ e xs ⊗ y
-foldr-monoid _⊗_ e ⊗-monoid [] y =
+foldr-monoid {a} {_⊗_} {e} ⊗-monoid [] y =
   begin
-    foldr _⊗_ y []
+    foldr {a} {a} _⊗_ y []
     ≡⟨⟩
     y
     ≡⟨ sym (identityˡ ⊗-monoid y) ⟩
@@ -584,15 +584,71 @@ foldr-monoid _⊗_ e ⊗-monoid [] y =
     ≡⟨⟩
     foldr _⊗_ e [] ⊗ y
     ∎
-foldr-monoid _⊗_ e ⊗-monoid (x ∷ xs) y
+foldr-monoid {a} {_⊗_} {e} ⊗-monoid (x ∷ xs) y
   = begin
-      foldr _⊗_ y (x ∷ xs)
+      foldr {a} {a} _⊗_ y (x ∷ xs)
       ≡⟨⟩
       x ⊗ foldr _⊗_ y xs
-      ≡⟨ cong (x ⊗_) (foldr-monoid _⊗_ e ⊗-monoid xs y) ⟩
+      ≡⟨ cong (x ⊗_) (foldr-monoid {a} {_⊗_} {e} ⊗-monoid xs y) ⟩
       x ⊗ (foldr _⊗_ e xs ⊗ y)
       ≡⟨ sym (assoc ⊗-monoid x (foldr _⊗_ e xs) y) ⟩
       (x ⊗ foldr _⊗_ e xs) ⊗ y
       ≡⟨⟩
       foldr _⊗_ e (x ∷ xs) ⊗ y
       ∎
+
+foldr-monoid-++ : ∀ {a : Set} (_⊗_ : a → a → a) (e : a) → IsMonoid a _⊗_ e →
+  ∀ (xs ys : List a) → foldr _⊗_ e (xs ++ ys) ≡ foldr _⊗_ e xs ⊗ foldr _⊗_ e ys
+foldr-monoid-++ {a} _⊗_ e ⊗-monoid xs ys =
+  begin
+    foldr _⊗_ e (xs ++ ys)
+    ≡⟨ foldr-++ xs ys  ⟩
+    foldr _⊗_ (foldr _⊗_ e ys) xs
+    ≡⟨ foldr-monoid ⊗-monoid xs (foldr _⊗_ e ys) ⟩
+    foldr _⊗_ e xs ⊗ foldr _⊗_ e ys
+    ∎
+
+foldl : ∀ {a b : Set} → (b → a → b) → b → List a → b
+foldl _⊗_ y [] = y
+foldl _⊗_ y (x ∷ xs) = foldl _⊗_ (y ⊗ x) xs
+
+L2 : ∀ {a : Set} (_⊗_ : a → a → a) (e : a) (x y z : a) →
+  foldr _⊗_ e [ x , y , z ] ≡ x ⊗ (y ⊗ (z ⊗ e))
+L2 _⊗_ e x y z =
+  begin
+    foldr _⊗_ e [ x , y , z ]
+    ≡⟨⟩
+    x ⊗ foldr _⊗_ e [ y , z ]
+    ≡⟨⟩
+    x ⊗ (y ⊗ foldr _⊗_ e [ z ])
+    ≡⟨⟩
+    x ⊗ (y ⊗ (z ⊗ foldr _⊗_ e []))
+    ≡⟨⟩
+    x ⊗ (y ⊗ (z ⊗ e))
+    ∎
+
+L3 : ∀ {a : Set} (_⊗_ : a → a → a) (e : a) (x y z : a) →
+  foldl _⊗_ e [ x , y , z ] ≡ ((e ⊗ x) ⊗ y) ⊗ z
+L3 _⊗_ e x y z =
+  begin
+    foldl _⊗_ e [ x , y , z ]
+    ≡⟨⟩
+    foldl _⊗_ (e ⊗ x) [ y , z ]
+    ≡⟨⟩
+    foldl _⊗_ ((e ⊗ x) ⊗ y) [ z ]
+    ≡⟨⟩
+    foldl _⊗_ (((e ⊗ x) ⊗ y) ⊗ z) []
+    ≡⟨⟩
+    ((e ⊗ x) ⊗ y) ⊗ z
+    ∎
+
+foldr-monoid-foldl : ∀ {a : Set} (_⊗_ : a → a → a) (e :  a) → IsMonoid a _⊗_ e →
+  ∀ (xs : List a) → foldr _⊗_ e xs ≡ foldl _⊗_ e xs
+foldr-monoid-foldl _⊗_ e ⊗-monoid [] = refl
+foldr-monoid-foldl _⊗_ e ⊗-monoid (x ∷ xs) =
+  begin
+    foldr _⊗_ e (x ∷ xs)
+    ≡⟨⟩
+    x ⊗ foldr _⊗_ e xs
+    ≡⟨⟩
+    {!!}
