@@ -10,38 +10,50 @@ import Op
 import Env
 import Var
 import Syntax
-import Value
 
-eval :: Env -> Expr -> Value
-eval env = cata $ \case 
-    EVar x          -> evalVar env x
+eval :: Expr -> Env -> Value
+eval = cata $ \case 
+    EVar x          -> evalVar x
     ENum n          -> evalNum n
     EOp op v1 v2    -> evalOp op v1 v2
     EIf v v1 v2     -> evalIf v v1 v2
     EApp v1 v2      -> evalApp v1 v2  
     _               -> error "eval: evaluation not yet implemented"
 
-evalVar :: Env -> Var -> Value
-evalVar env x = mkVal $ find env x
+evalVar :: Var -> Env -> Value
+evalVar = find
 
-evalNum :: Integer -> Value
-evalNum = mkVal
+evalNum :: Integer -> Env -> Value
+evalNum n _ = mkVal n
 
-evalOp :: Op -> Value -> Value -> Value
-evalOp op v1 v2 = case val v1 of
+evalOp 
+    :: Op 
+    -> (Env -> Value) 
+    -> (Env -> Value) 
+    -> Env 
+    -> Value
+evalOp op v1 v2 env = case val (v1 env) of
     Nothing -> error $ show op ++ ": illegal lhs arg."
-    Just n1 -> case val v2 of
+    Just n1 -> case val (v2 env) of
         Nothing -> error $ show op ++ ": illegal rhs arg."
         Just n2 -> mkVal $ delta op n1 n2
     
-evalIf :: Value -> Value -> Value -> Value
-evalIf v v1 v2 = case val v of 
+evalIf 
+    :: (Env -> Value) 
+    -> (Env -> Value) 
+    -> (Env -> Value) 
+    -> Env 
+    -> Value
+evalIf v v1 v2 env = case val (v env) of 
     Nothing -> error "If: cannot evaluate condition."
-    Just n  -> if n == 0 then v1 else v2
+    Just n  -> if n == 0 then (v1 env) else (v2 env)
 
-evalApp :: Value -> Value -> Value
-evalApp v1 _v2 = case fun v1 of
+evalApp 
+    :: (Env -> Value) 
+    -> (Env -> Value) 
+    -> Env 
+    -> Value
+evalApp v1 v2 env = case fun (v1 env) of
     Nothing -> error "App: lhs argument is not a function."
-    Just (_x,_e,_env)  -> undefined
-
-
+    Just (var, expr, envLocal)  -> eval expr env' where
+        env' = bind var (v2 env) envLocal  
