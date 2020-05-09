@@ -266,3 +266,11 @@ Proof.
                    apply H4 in H6. apply inter_charac in H6. 
                    destruct H6 as [H6 H7]. assumption. }}
 Qed.
+
+Lemma free_subst_intersect : 
+    forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v), 
+       (Fr t /\ xs) == nil ->  subst_ f xs t = subst f t.
+Proof.
+    intros v e f t xs H. unfold subst. apply free_subst_intersect_gen.
+    rewrite inter_nil. assumption.
+Qed.

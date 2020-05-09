@@ -39,10 +39,12 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Compatible.vo \
 								${CORE}/Specification.vo \
 								${CORE}/Functional.vo \
+								${NORM}/InListOf.vo \
 								${NORM}/Leq.vo \
+								${NORM}/Equiv.vo \
+								${NORM}/Nub.vo \
 								${NORM}/Insert.vo \
 								${NORM}/Normal.vo \
-								${NORM}/Equiv.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
@@ -339,11 +341,32 @@ ${CORE}/Functional.vo :			${CORE}/Functional.v \
 	coqc ${CORE}/Functional.v	${OPT} 
 
 
+${NORM}/InListOf.vo :			${NORM}/InListOf.v \
+								${CORE}/Set.vo
+	coqc ${NORM}/InListOf.v		${OPT}
+
+
 ${NORM}/Leq.vo :				${NORM}/Leq.v \
 								${UTILS}/Ord.v \
 								${CORE}/Set.vo \
 								${CORE}/Decidability.vo
 	coqc ${NORM}/Leq.v			${OPT} 
+
+
+${NORM}/Equiv.vo :				${NORM}/Equiv.v \
+								${UTILS}/Equiv.vo \
+								${CORE}/Set.vo \
+								${NORM}/Leq.vo
+	coqc ${NORM}/Equiv.v		${OPT}
+
+
+${NORM}/Nub.vo :				${NORM}/Nub.v \
+								${UTILS}/Nub.v \
+								${CORE}/Set.vo \
+								${NORM}/Leq.vo \
+								${NORM}/Equiv.vo \
+								${NORM}/InListOf.vo
+	coqc ${NORM}/Nub.v			${OPT} 
 
 
 ${NORM}/Insert.vo :				${NORM}/Insert.v \
@@ -370,11 +393,8 @@ ${NORM}/Normal.vo :				${NORM}/Normal.v \
 								${NORM}/Insert.vo
 	coqc ${NORM}/Normal.v		${OPT} 
 
-${NORM}/Equiv.vo :				${NORM}/Equiv.v \
-								${UTILS}/Equiv.vo \
-								${CORE}/Set.vo \
-								${NORM}/Leq.vo
-	coqc ${NORM}/Equiv.v		${OPT}
+
+
 
 ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
 								${UTILS}/Fresh.vo

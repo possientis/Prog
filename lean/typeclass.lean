@@ -67,3 +67,28 @@ instance add_fun {α β : Type} [has_add β] : has_add (α → β) :=
 
 end hidden
 
+--#print classes
+--#print instances inhabited
+
+def foo : has_add ℕ := by apply_instance
+def bar : inhabited (ℕ → ℕ) := by apply_instance
+
+def baz : has_add ℕ := infer_instance
+def bla : inhabited (ℕ → ℕ) := infer_instance
+
+--#print foo
+--#reduce foo
+
+--#print bar
+--#reduce bar
+
+--#reduce (by apply_instance : inhabited ℕ)
+--#reduce (infer_instance : inhabited ℕ)
+
+-- example {α : Type} : inhabited (set α) := by apply_instance
+
+def inhabited.set (α : Type) : inhabited (set α) := ⟨∅⟩
+
+-- #print inhabited.set
+-- #reduce inhabited.set ℕ
+

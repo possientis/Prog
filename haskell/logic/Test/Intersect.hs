@@ -5,8 +5,9 @@ module  Test.Intersect
 import Data.List
 
 import Test.Hspec
-import Test.QuickCheck
+import Test.QuickCheck  hiding ((===))
 
+import Equiv
 import Intersect
 import Variable (Var)
 
@@ -20,6 +21,12 @@ specIntersect = describe "Testing properties of intersect..." $ do
     testInterConsNotInL
     testInterConsInR
     testInterNil
+    testInterCompatL
+    testInterCompatR
+    testInterCompatLR
+    testInterComm
+    testInterAssoc
+    
 
 testInterIntersect :: Spec
 testInterIntersect = it "Checked inter coincide with GHC 'intersect'" $
@@ -49,6 +56,28 @@ testInterNil :: Spec
 testInterNil = it "Checked xs /\\ [] == xs" $ do
     property $ propInterNil
 
+testInterCompatL :: Spec
+testInterCompatL = it "Checked left compatibility of /\\" $ do
+    property $ propInterCompatL
+
+testInterCompatR :: Spec
+testInterCompatR = it "Checked right compatibility of /\\" $ do
+    property $ propInterCompatR
+
+testInterCompatLR :: Spec
+testInterCompatLR = it "Checked left-right compatibility of /\\" $ do
+    property $ propInterCompatLR
+
+testInterComm :: Spec
+testInterComm = it "Checked commutativity of /\\" $ do
+    property $ propInterComm
+
+testInterAssoc :: Spec
+testInterAssoc = it "Checked associativity of /\\" $ do
+    property $ propInterAssoc
+
+ 
+
 propInterIntersect :: [Var] -> [Var] -> Bool
 propInterIntersect xs ys = xs /\ ys == intersect xs ys
 
@@ -70,3 +99,19 @@ propInterConsInR xs ys y = y `notElem` ys || xs /\ (y : ys) == xs /\ ys
 propInterNil :: [Var] -> Bool
 propInterNil xs = xs /\ [] == []
 
+propInterCompatL :: [Var] -> [Var] -> [Var] -> Bool
+propInterCompatL xs ys zs = xs /== ys || xs /\ zs === ys /\ zs 
+
+propInterCompatR :: [Var] -> [Var] -> [Var] -> Bool
+propInterCompatR xs ys zs = xs /== ys || zs /\ xs === zs /\ ys
+
+propInterCompatLR :: [Var] -> [Var] -> [Var] -> [Var] -> Bool
+propInterCompatLR xs xs' ys ys' = xs /== xs' || ys /== ys' ||
+    xs /\ ys === xs' /\ ys'
+
+propInterComm :: [Var] -> [Var] -> Bool
+propInterComm xs ys = xs /\ ys === ys /\ xs
+
+propInterAssoc :: [Var] -> [Var] -> [Var] -> Bool
+propInterAssoc xs ys zs = (xs /\ ys) /\ zs === xs /\ (ys /\ zs)
+ 

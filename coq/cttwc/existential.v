@@ -457,3 +457,65 @@ Proof.
     exists (F x x). change ((fun u => f (F u u)) x = F x x). 
     rewrite <- H'. reflexivity.
 Qed.
+
+Definition Rewrite : forall (a:Type) (x y:a) (p:a -> Prop),
+    x = y -> p x -> p y.
+Proof.
+    intros a x y p E H. rewrite <- E. assumption.
+Qed.
+
+Definition L32 : forall (a:Type) (x y:a) (p:a -> Prop), 
+    x = y -> p x -> p y.
+Proof.
+refine (
+    fun (a:Type) (x y:a) (p:a -> Prop) (E:x = y) (H:p x) =>
+        match E with
+        | eq_refl _ => H
+        end
+).
+Qed.
+
+Definition CongFun : forall (a b:Type) (f g:a -> b) (x:a), f = g -> f x = g x.
+Proof.
+refine (
+    fun (a b:Type) (f g:a -> b) (x:a) (E:f = g) =>
+        match E with
+        | eq_refl _ => eq_refl (f x)
+        end
+).
+Qed.
+
+Arguments CongFun {a} {b} {f} {g}.
+
+Definition L33 : forall (X Y:Type), 
+    (exists (F:X -> (X -> Y)), Surjective F) -> 
+    forall (f:Y -> Y), HasFixedPoint f.
+Proof.
+refine (
+    fun (X Y:Type) (H:exists (F:X -> (X -> Y)), Surjective F) =>
+        fun (f:Y -> Y) => 
+            match H with
+            | ex_intro _ F H =>
+                match H (fun u => f (F u u)) with
+                | ex_intro _ x H'   => 
+                    ex_intro _ (F x x) 
+                        (@CongFun X Y (fun u => f (F u u)) (F x) x (eq_sym H'))
+                end
+            end
+).
+Qed.
+
+Definition Cantor : forall (X:Type), ~ exists (f:X -> (X -> bool)), Surjective f.
+Proof.
+    intros X H. assert (forall (f:bool -> bool), HasFixedPoint f) as H'.
+        { apply Lawvere with X. assumption. }
+    apply L30. apply H'.
+Qed.
+
+Definition Cantor' : forall (X:Type), ~ exists (f:X -> (X -> Prop)), Surjective f.
+Proof.
+    intros X H. assert (forall (f:Prop -> Prop), HasFixedPoint f) as H'.
+        { apply Lawvere with X. assumption. }
+    apply L31. apply H'.
+Qed.
+
