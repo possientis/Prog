@@ -642,6 +642,31 @@ L3 _⊗_ e x y z =
     ((e ⊗ x) ⊗ y) ⊗ z
     ∎
 
+⊗-foldl : ∀ {a : Set} (_⊗_ : a → a → a) (e : a) → IsMonoid a _⊗_ e →
+  ∀ (x : a) (xs : List a) → x ⊗ foldl _⊗_ e xs ≡ foldl _⊗_ e (x ∷ xs)
+⊗-foldl _⊗_ e ⊗-monoid x [] =
+  begin
+    x ⊗ foldl _⊗_ e []
+    ≡⟨⟩
+    x ⊗ e
+    ≡⟨ identityʳ ⊗-monoid x ⟩
+    x
+    ≡⟨ sym (identityˡ ⊗-monoid x) ⟩
+    e ⊗ x
+    ≡⟨⟩
+    foldl _⊗_ (e ⊗ x) []
+    ≡⟨⟩
+    foldl _⊗_ e (x ∷ [])
+    ∎
+⊗-foldl _⊗_ e ⊗-monoid x (y ∷ xs) =
+  begin
+    x ⊗ foldl _⊗_ e (y ∷ xs)
+    ≡⟨⟩
+    x ⊗ foldl _⊗_ (e ⊗ y) xs
+    ≡⟨⟩
+    {!!}
+
+
 foldr-monoid-foldl : ∀ {a : Set} (_⊗_ : a → a → a) (e :  a) → IsMonoid a _⊗_ e →
   ∀ (xs : List a) → foldr _⊗_ e xs ≡ foldl _⊗_ e xs
 foldr-monoid-foldl _⊗_ e ⊗-monoid [] = refl
@@ -650,5 +675,7 @@ foldr-monoid-foldl _⊗_ e ⊗-monoid (x ∷ xs) =
     foldr _⊗_ e (x ∷ xs)
     ≡⟨⟩
     x ⊗ foldr _⊗_ e xs
+    ≡⟨ cong (x ⊗_) (foldr-monoid-foldl _⊗_ e ⊗-monoid xs) ⟩
+    x ⊗ foldl _⊗_ e xs
     ≡⟨⟩
     {!!}
