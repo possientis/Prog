@@ -24,4 +24,32 @@ Proof.
     apply Nub.nubEquiv.
 Qed.
 
+
+Lemma nubNubed : forall (x:set), Nubed (nub x).
+Proof.
+    intros x. unfold Nubed. unfold nub. rewrite toListFromList.
+    apply Nub.nubNubed.
+Qed.
+
+Lemma nubSame : forall (x:set),
+    Nubed x -> nub x = x.
+Proof.
+    intros x. unfold Nubed. unfold nub. intros H.
+    rewrite Nub.nubSame.
+    - apply fromListToList.
+    - assumption.
+Qed.
+
+Lemma nubedConsNotIn : forall (x xs:set),
+    Nubed (Cons x xs) -> ~ inListOf x xs.
+Proof.
+    intros x xs. unfold Nubed. unfold inListOf. simpl.
+    apply (Nub.nubedConsNotIn _ _).
+Qed.
+
+Lemma nubedConsNubedTail : forall (x xs:set),
+    Nubed (Cons x xs) -> Nubed xs.
+Proof.
+    intros x xs. unfold Nubed. simpl. apply (Nub.nubedConsNubedTail _ _).
+Qed. 
     

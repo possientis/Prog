@@ -1,3 +1,5 @@
+Require Utils.Sort.
+
 Require Import Core.Set.
 Require Import Core.Elem.
 Require Import Core.Cons.
@@ -16,6 +18,19 @@ Fixpoint insert (x y:set) : set :=
         | right _   => Cons x (Cons y ys)
         end
     end.
+
+Definition insertAsList (x xs:set) : set :=
+    fromList (Sort.insert x (toList xs)).
+
+Lemma insertCorrect : forall (x y:set), insert x y = insertAsList x y.
+Proof.
+    intros x y. revert x. revert y. induction y as [|y _ ys IH]; intros x.
+    - reflexivity.
+    - unfold insertAsList. simpl. destruct (leqDec x y) as [H|H]; simpl.
+        + rewrite IH. reflexivity.
+        + rewrite fromListToList. reflexivity.
+Qed.
+
 
 Lemma insertCons : forall (x xs:set), insert x xs == Cons x xs.
 Proof.
@@ -56,3 +71,4 @@ Proof.
     - apply insertCompatL. assumption.
     - apply insertCompatR. assumption.
 Qed.
+

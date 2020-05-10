@@ -3,6 +3,8 @@
 module  Syntax  
     (   ExprF   (..)
     ,   Expr
+    ,   eVar
+    ,   eNum
     )   where
 
 import Data.Functor.Foldable
@@ -16,8 +18,14 @@ data ExprF a
     | EOp  Op a a
     | EIf  a a a
     | EApp a a
-    | ERec Var a
+--    | ERec Var a
     | ELam Var a
     deriving (Functor)
 
 type Expr = Fix ExprF
+
+eVar :: String -> Expr
+eVar s = Fix $ EVar $ mkVar s
+
+eNum :: Integer -> Expr
+eNum n = Fix $ ENum n

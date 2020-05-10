@@ -62,3 +62,28 @@ collection is a set:
     that every member of \Cat\ is an element of $A$. Then \Cat\ is
     itself a set.
 \end{axiom}
+\noindent
+{\bf Remark}: We do not attempt to provide a formal proof of 
+axiom~(\ref{Cat:ax:collection:set}), in part because we do not have
+a formal notion of {\em collection}. However, if our collection \Cat\
+is a collection of sets, it is probably specified as a predicate 
+$\Cat(x)$ with free variable $x$ (and possibly others), the assumption 
+$\Cat\subseteq A$ for some set $A$, allows us to write 
+$\Cat=\{\ x\in A\ |\ \Cat(x)\ \}$ and the existence of \Cat\ as a set 
+is guaranteed by the {\em axiom schema of specification}, which is a 
+common axiom schema of Zermelo-Fraenkel set theory.
+
+\begin{axiom}\label{Cat:ex:collection:not:set}
+    Let \Cat\ be a collection of sets for which there exists a 
+    injective map $f:{\cal U}\to\Cat$ defined on the collection 
+    of all sets $\cal U$. Then \Cat\ is not a set.
+\end{axiom}
+\noindent
+{\bf Remark}: Heuristically, a proof of axiom~(\ref{Cat:ex:collection:not:set})
+goes as follows: Assume \Cat\ is indeed a set. Then the collection
+$\{\ f(x)\ |\ x\in{\cal U}\ \}$ being a sub-collection of \Cat\ is also a set 
+by virtue of axiom~(\ref{Cat:ax:collection:set}). The injectivity of $f$ 
+allows us to define a map $f^{-1}:\{\ f(x)\ |\ x\in{\cal U}\ \}\to{\cal U}$,
+whose range is the whole of $\cal U$. The {\em axiom schema of substitution},
+(another common axiom schema of ZF set theory), allows us to conclude that 
+$\cal U$ is itself a set, which is a contradiction.

@@ -28,7 +28,8 @@ Require Import Core.Extensionality.
 (* us back either a proof of their equality or a proof of their non-equality.   *)
 (* This is a stonger 'property' than the proposition '(x = y) \/ (x <> y)'      *)
 (* which does not tell us which of 'x = y' or 'x <> y' is the case.             *)
-Lemma eqDec : forall (x y:set), {x = y} + {x <> y}.
+
+Lemma eqDecSet : forall (x y:set), {x = y} + {x <> y}.
 Proof.
     intros xs. induction xs as [|x IH1 xs IH2]; intros ys.
     - destruct ys as [|y ys].
@@ -44,7 +45,7 @@ Proof.
 Qed.
 
 
-Instance eqSet : Eq set := { eqDec := eqDec }.
+(* Instance eqSet : Eq set := { eqDec := eqDec }. *)
 
 
 (* A dependent function which given a 'nat' n and two sets xs ys as arguments,  *)

@@ -43,6 +43,7 @@ all :							${UTILS}/LEM.vo \
 								${NORM}/Leq.vo \
 								${NORM}/Equiv.vo \
 								${NORM}/Nub.vo \
+								${NORM}/Sort.vo \
 								${NORM}/Insert.vo \
 								${NORM}/Normal.vo \
 								${LANG1}/Syntax.vo \
@@ -286,6 +287,7 @@ ${CORE}/Powerset.vo :			${CORE}/Powerset.v \
 
 ${CORE}/Rank.vo :				${CORE}/Rank.v \
 								${UTILS}/Nat.vo \
+								${UTILS}/Ord.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
@@ -294,7 +296,8 @@ ${CORE}/Rank.vo :				${CORE}/Rank.v \
 								${CORE}/ToList.vo \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Decidability.vo \
-								${CORE}/Extensionality.vo 
+								${CORE}/Extensionality.vo \
+								${NORM}/Leq.vo 
 	coqc ${CORE}/Rank.v			${OPT} 
 
 
@@ -369,7 +372,17 @@ ${NORM}/Nub.vo :				${NORM}/Nub.v \
 	coqc ${NORM}/Nub.v			${OPT} 
 
 
+${NORM}/Sort.vo :				${NORM}/Sort.v \
+								${UTILS}/Sort.v \
+								${CORE}/Set.vo \
+								${NORM}/Leq.vo \
+								${NORM}/Equiv.vo \
+								${NORM}/InListOf.vo
+	coqc ${NORM}/Sort.v			${OPT} 
+
+
 ${NORM}/Insert.vo :				${NORM}/Insert.v \
+								${UTILS}/Sort.vo \
 								${CORE}/Set.vo \
 								${CORE}/Elem.vo \
 								${CORE}/Cons.vo \

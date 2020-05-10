@@ -1,4 +1,4 @@
-Normal/Nub: define the notion for sets
+Normal/Insert
 Normal/Sort: define the notion for sets
 Normal/Normal: establish a link with Utils.Normal.normal
 Normal/Normal: check imports are really needed

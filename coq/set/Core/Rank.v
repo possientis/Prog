@@ -5,6 +5,7 @@ Require Import Le.
 Require Import List.
 
 Require Import Utils.Nat.
+Require Import Utils.Ord.
 
 Require Import Core.Set.
 Require Import Core.Incl.
@@ -13,8 +14,11 @@ Require Import Core.Equal.
 Require Import Core.Empty.
 Require Import Core.ToList.
 Require Import Core.ElemIncl.
-Require Import Core.Decidability.
 Require Import Core.Extensionality.
+Require Import Core.Decidability.
+
+Require Import Normal.Leq.
+
 
 (* Our next objective is to prove that the 'foundation axiom' is satisfied in   *)
 (* our model. This will be carried out in the next module. However, in order    *)

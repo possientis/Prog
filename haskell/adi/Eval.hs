@@ -18,7 +18,8 @@ eval = cata $ \case
     EOp op v1 v2    -> evalOp op v1 v2
     EIf v v1 v2     -> evalIf v v1 v2
     EApp v1 v2      -> evalApp v1 v2  
-    _               -> error "eval: evaluation not yet implemented"
+    ELam x v        -> evalLam x v
+--    _               -> error "eval: evaluation not yet implemented"
 
 evalVar :: Var -> Env -> Value
 evalVar = find
@@ -55,5 +56,9 @@ evalApp
     -> Value
 evalApp v1 v2 env = case fun (v1 env) of
     Nothing -> error "App: lhs argument is not a function."
-    Just (var, expr, envLocal)  -> eval expr env' where
-        env' = bind var (v2 env) envLocal  
+    Just (x, v, envLocal)  -> v env' where 
+        env' = bind x (v2 env) envLocal  
+
+evalLam :: Var -> (Env -> Value) -> Env -> Value
+evalLam x v env = mkFun x v env 
+

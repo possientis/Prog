@@ -26,7 +26,7 @@ Proof.
     - left. apply I.
     - destruct y as [|y ys].
         + right. simpl. unfold not. intros. contradiction.
-        + destruct (eqDec x y) as [H1|H1].
+        + destruct (eqDecSet x y) as [H1|H1].
             { destruct (IH2 ys) as [H2|H2].
                 { left. right. split; assumption. }
                 { right. simpl. intros [[H3 H4]|[H3 H4]].
@@ -80,7 +80,7 @@ Proof.
     - apply I.
     - destruct z as [|z zs].
         + apply leqxNil in H2. subst. apply leqxNil in H1. inversion H1.
-        + simpl. destruct (eqDec x z) as [H|H].
+        + simpl. destruct (eqDecSet x z) as [H|H].
             { subst. right. split.
                 { reflexivity. }
                 { destruct y as [|y ys]. 
@@ -114,7 +114,7 @@ Proof.
     - left. apply I. 
     - destruct y as [|y ys].
         + right. apply I.
-        + destruct (eqDec x y) as [H|H].
+        + destruct (eqDecSet x y) as [H|H].
             { subst. destruct (IH2 ys) as [H|H].
                 { left. right. split.
                     { reflexivity. }
