@@ -519,3 +519,71 @@ Proof.
     apply L31. apply H'.
 Qed.
 
+Inductive Void : Type :=.
+
+Definition absurd (x:Void) : Void :=
+    match x with end.
+
+Lemma L34 : ~ HasFixedPoint absurd.
+Proof.
+    unfold HasFixedPoint. intros [x H]. inversion x.
+Qed.
+
+Lemma L35 : ~HasFixedPoint absurd.
+Proof.
+refine (
+    fun (p:HasFixedPoint absurd) =>
+        match p with
+        | ex_intro _ x H    => 
+            match x with end
+        end
+).
+Qed.
+
+Definition L36 (x : bool * bool) : bool * bool :=
+    match x with
+    | (b1,b2)   => (negb b1, b2)
+    end.
+
+Definition L37: ~HasFixedPoint L36.
+Proof.
+    unfold HasFixedPoint, FixedPoint, L36. intros [x H].
+    destruct x as [b1 b2]. destruct b1; inversion H.
+Qed.
+
+Definition L38: ~HasFixedPoint S.
+Proof.
+    unfold HasFixedPoint, FixedPoint. intros [n H].
+    revert H. revert n. induction n as [|n IH]; intros H.
+    - inversion H.
+    - inversion H. apply IH. assumption.
+Qed.
+
+Definition L39 (a:Type) : Type := a -> bool.
+
+Definition cast (a b:Type) (p:a = b) (x:a) : b :=
+    match p with
+    | eq_refl _  => x
+    end.
+
+Lemma cast_cast_is_id : forall (a b:Type) (x:a) (p:a = b)(q:b = a),
+    cast b a q (cast a b p x) = x.
+Proof.
+   intros a b x p q. unfold cast. destruct p. destruct q.
+Show.
+
+(*
+Definition L41: ~HasFixedPoint L39.
+Proof.
+    unfold HasFixedPoint, FixedPoint, L39. intros [a H].
+    apply Cantor with a.
+    remember (fun (x:a) => cast a (a -> bool) (eq_sym H) x) as f eqn:E. 
+    exists f. unfold Surjective. intros y.
+    remember (cast (a -> bool) a H y) as x eqn:H1.
+    exists x. rewrite E. rewrite H1. simpl.
+
+Show.
+*)
+
+
+
