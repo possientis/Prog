@@ -92,3 +92,10 @@ def inhabited.set (α : Type) : inhabited (set α) := ⟨∅⟩
 -- #print inhabited.set
 -- #reduce inhabited.set ℕ
 
+set_option trace.class_instances true
+set_option class.instance_max_depth 5
+
+
+
+
+
