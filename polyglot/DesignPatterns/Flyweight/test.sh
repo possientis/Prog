@@ -55,7 +55,8 @@ rm ${LNAME} *.hi *.o
 
 echo '\nThis is Scheme ...'
 START=$(date +%s%N)
-scm -b -f ${LNAME}.scm
+#scm -b -f ${LNAME}.scm
+echo skipping...
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"

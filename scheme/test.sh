@@ -9,11 +9,11 @@ cd ${HOME}
 
 ./avl/test.sh
 ./bst/test.sh
-./dict/test.sh
+#./dict/test.sh
 ./digital/test.sh       # currently have failures
 ./evaluator/test.sh
-./guile/test.sh
-./hash/test.sh
+#./guile/test.sh
+#./hash/test.sh
 ./stream/test.sh
 ./types/test.sh
 

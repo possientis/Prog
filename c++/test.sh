@@ -11,7 +11,7 @@ cd ${HOME}
 ./link/test.sh
 ./dict/test.sh
 ./stl/test.sh
-./bitcoin/test.sh
+#./bitcoin/test.sh
 
 cd ${DIR}
 echo '\nAll c++ tests completed successfully\n'

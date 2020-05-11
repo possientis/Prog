@@ -5,10 +5,10 @@ DIR=`pwd`
 HOME=/home/john/Prog/c/
 cd ${HOME}
 
-./bitcoin/test.sh
+#./bitcoin/test.sh
 ./dict/test.sh
 ./dlopen/test.sh
-./execve/test.sh
+#./execve/test.sh
 ./gcov/test.sh
 ./library/test.sh
 ./link/test.sh
