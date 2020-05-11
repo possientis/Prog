@@ -1,7 +1,6 @@
 variables m n : ℕ
 variables i j : ℤ
 universe u
-
 universe v
 
 --#check i + j
