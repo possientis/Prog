@@ -566,11 +566,11 @@ Definition cast (a b:Type) (p:a = b) (x:a) : b :=
     | eq_refl _  => x
     end.
 
-Lemma cast_cast_is_id : forall (a b:Type) (x:a) (p:a = b)(q:b = a),
-    cast b a q (cast a b p x) = x.
+Lemma cast_cast_is_id : forall (a b:Type) (x:a) (p:a = b),
+    cast b a (eq_sym p) (cast a b p x) = x.
 Proof.
-   intros a b x p q. unfold cast. destruct p. destruct q.
-Show.
+   intros a b x p. unfold cast. destruct p. simpl. reflexivity.
+Qed.
 
 (*
 Definition L41: ~HasFixedPoint L39.
