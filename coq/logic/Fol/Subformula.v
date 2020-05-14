@@ -69,7 +69,6 @@ Proof.
     apply incl_tran with (Sub q); apply Sub_incl; assumption.
 Qed.
 
-
 Open Scope nat_scope.   (* <= now interpreted as inequality between nats        *)
 
 (* This lemma will allow us to get anti-symmetry                                *) 
@@ -96,7 +95,6 @@ Proof.
 Qed.
 
 Open Scope Include_scope.
-
 
 (* Anti-symmentry follows from Lemma ord_monotone                               *)
 Lemma Sub_anti : forall (v:Type) (p1 p2:P v),
@@ -136,7 +134,6 @@ Proof.
         { assumption. } 
 Qed.
 
-
 (* A set theoretic formulation of the same result is Sub (f p) = f (Sub p)      *)
 (* with the customary abuse of notations, whereby 'f p' denotes the function    *)
 (* f acting on the formula p (formally fmap f p), Sub (f p) is simply the       *)
@@ -157,7 +154,6 @@ Proof.
     - rewrite IH1, IH2, map_app. reflexivity.
     - rewrite IH1. reflexivity.
 Qed.
-
 
 (* We defined (p <<= q) in Haskell as a function:                               *)
 (* (<<=) :: (Eq v) => P v -> P v -> Bool                                        *)
@@ -211,8 +207,6 @@ Proof.
             }
 Qed.
 
-
-
 Lemma Sub_var : forall (v:Type) (p q:P v),
     p <<= q -> var p <= var q.
 Proof.
@@ -233,7 +227,6 @@ Proof.
     - subst. apply incl_refl.
     - apply incl_tl, IH1. assumption. 
 Qed.
-
 
 Lemma Sub_bnd : forall (v:Type) (p q:P v),
     p <<= q -> bnd p <= bnd q.

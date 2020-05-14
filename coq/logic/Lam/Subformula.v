@@ -26,7 +26,7 @@ Fixpoint Sub (v:Type) (t:T v) : list (T v) :=
 
 Arguments Sub {v} _.
 
-(* t is a sub-term of s if it belongs to the list of sub-terms of s             *)
+(* s is a sub-term of t if it belongs to the list of sub-terms of t             *)
 Notation "s <<= t" := (s :: Sub t) (at level 50).
    
 (* Being a 'sub-term of' is reflexive relation                                  *)
@@ -35,7 +35,6 @@ Proof.
     intros v.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; left; reflexivity.
 Qed.
-
 
 (* This lemma will allow us to get transitivity                                 *)
 Lemma Sub_incl : forall (v:Type) (t1 t2:T v),
@@ -66,7 +65,6 @@ Proof.
     intros v r s t Hrs Hst. apply Sub_incl. 
     apply incl_tran with (Sub s); apply Sub_incl; assumption.
 Qed.
-
 
 Open Scope nat_scope.
 
@@ -208,7 +206,6 @@ Proof.
     - subst. apply incl_refl.
     - apply incl_tl, IH1. assumption. 
 Qed.
-
 
 Lemma Sub_bnd : forall (v:Type) (s t:T v), s <<= t -> bnd s <= bnd t.
 Proof.

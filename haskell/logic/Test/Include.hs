@@ -19,6 +19,7 @@ specInclude = describe "Testing properties for lists inclusion..." $ do
     testInclApp2
     testInclMap
     testInclConcat
+    testInclNil
 
 testInclReflexivity :: Spec
 testInclReflexivity = it "Checked lists inclusion is reflexive" $
@@ -44,6 +45,10 @@ testInclConcat :: Spec
 testInclConcat = it "Checked xss <== yss -> concat xss <== concat yss" $ do
     property $ propInclConcat
 
+testInclNil :: Spec
+testInclNil = it "Checked xs <= nil -> xs == nil" $ do
+    property $ propInclNil
+
 propInclReflexivity :: [Var] -> Bool
 propInclReflexivity xs = xs <== xs
 
@@ -65,3 +70,5 @@ propInclMap f xs ys = not (xs <== ys) || map f xs <== map f ys
 propInclConcat :: [[Var]] -> [[Var]] -> Bool
 propInclConcat xss yss = not (xss <== yss) || concat xss <== concat yss
 
+propInclNil :: [Var] -> Bool
+propInclNil xs = not (xs <= []) || xs == []

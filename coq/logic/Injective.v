@@ -43,7 +43,7 @@ Proof.
 Qed.
 
 Lemma injective_on_cons : forall (v w:Type) (x:v) (xs:list v) (f:v -> w),
-    injective_on (x :: xs) f -> injective_on xs f.
+    injective_on (cons x xs) f -> injective_on xs f.
 Proof.
     intros v w x xs f H x1 x2 H1 H2 H'.
     apply H; simpl.
