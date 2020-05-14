@@ -643,29 +643,27 @@ L3 _⊗_ e x y z =
     ∎
 
 ⊗-foldl : ∀ {a : Set} (_⊗_ : a → a → a) (e : a) → IsMonoid a _⊗_ e →
-  ∀ (x : a) (xs : List a) → x ⊗ foldl _⊗_ e xs ≡ foldl _⊗_ e (x ∷ xs)
-⊗-foldl _⊗_ e ⊗-monoid x [] =
+  ∀ (y' y : a) (xs : List a) → y' ⊗ foldl _⊗_ y xs ≡ foldl _⊗_ (y' ⊗ y) xs
+⊗-foldl _⊗_ e ⊗-monoid y' y [] =
   begin
-    x ⊗ foldl _⊗_ e []
+    y' ⊗ foldl _⊗_ y []
     ≡⟨⟩
-    x ⊗ e
-    ≡⟨ identityʳ ⊗-monoid x ⟩
-    x
-    ≡⟨ sym (identityˡ ⊗-monoid x) ⟩
-    e ⊗ x
+    y' ⊗ y
     ≡⟨⟩
-    foldl _⊗_ (e ⊗ x) []
-    ≡⟨⟩
-    foldl _⊗_ e (x ∷ [])
+    foldl _⊗_ (y' ⊗ y) []
     ∎
-⊗-foldl _⊗_ e ⊗-monoid x (y ∷ xs) =
+⊗-foldl _⊗_ e ⊗-monoid y' y (x ∷ xs) =
   begin
-    x ⊗ foldl _⊗_ e (y ∷ xs)
+    y' ⊗ foldl _⊗_ y (x ∷ xs)
     ≡⟨⟩
-    x ⊗ foldl _⊗_ (e ⊗ y) xs
+    y' ⊗ foldl _⊗_ (y ⊗ x) xs
+    ≡⟨ ⊗-foldl _⊗_ e ⊗-monoid y' (y ⊗ x) xs ⟩
+    foldl _⊗_ (y' ⊗ (y ⊗ x)) xs
+    ≡⟨ cong (λ { u → foldl _⊗_ u xs }) (sym (assoc ⊗-monoid y' y x)) ⟩
+    foldl _⊗_ ((y' ⊗ y) ⊗ x) xs
     ≡⟨⟩
-    {!!}
-
+    foldl _⊗_ (y' ⊗ y) (x ∷ xs)
+    ∎
 
 foldr-monoid-foldl : ∀ {a : Set} (_⊗_ : a → a → a) (e :  a) → IsMonoid a _⊗_ e →
   ∀ (xs : List a) → foldr _⊗_ e xs ≡ foldl _⊗_ e xs
@@ -677,5 +675,29 @@ foldr-monoid-foldl _⊗_ e ⊗-monoid (x ∷ xs) =
     x ⊗ foldr _⊗_ e xs
     ≡⟨ cong (x ⊗_) (foldr-monoid-foldl _⊗_ e ⊗-monoid xs) ⟩
     x ⊗ foldl _⊗_ e xs
+    ≡⟨ ⊗-foldl _⊗_ e ⊗-monoid x e xs ⟩
+    foldl _⊗_ (x ⊗ e) xs
+    ≡⟨ cong (λ{u → foldl _⊗_ u xs}) (identityʳ ⊗-monoid x) ⟩
+    foldl _⊗_ x xs
+    ≡⟨ cong (λ { u → foldl _⊗_ u xs }) (sym (identityˡ ⊗-monoid x)) ⟩
+    foldl _⊗_ (e ⊗ x) xs
     ≡⟨⟩
-    {!!}
+    foldl _⊗_ e (x ∷ xs)
+    ∎
+
+-- reusing the name of constructors for List appears to be fine
+data All {a : Set} (p : a → Set) : List a → Set where
+  []  : All p []
+  _∷_ : ∀ {x : a} {xs : List a} → p x → All p xs → All p (x ∷ xs)
+
+
+_ : All (_≤ 2) [ 0 , 1 , 2 ]
+_ = z≤n ∷ s≤s z≤n ∷ s≤s (s≤s z≤n) ∷ []
+
+data Any {a : Set} (p : a → Set) : List a → Set where
+  here  : ∀ {x : a} {xs : List a} → p x → Any p (x ∷ xs)
+  there : ∀ {x : a} {xs : List a} → Any p xs → Any p (x ∷ xs)
+
+
+
+
