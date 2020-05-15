@@ -196,12 +196,55 @@ Before we do so, we shall emphasize a couple of results:
     The category \cat\ is not small.
 \end{prop}
 \begin{proof}
-    TODO
+    Suppose \cat\ is a small category. Then $\cat=(\ob, \arr, \dom, \cod, \id, 
+    \circ)$ where $\ob$ is a set by virtue of 
+    definition~(\ref{Cat:def:category:small}).
+    Using axiom~(\ref{Cat:ax:tuple:extensional}) we obtain $\ob\ \cat=\ob$ and
+    it follows that $\ob\ \cat$ is itself a set. In order to obtain a 
+    contradiction, using axiom~(\ref{Cat:ex:collection:not:set}), it is 
+    sufficient to construct an injective map $f:{\cal U}\to\ob\ \cat$ defined
+    on the collection of all sets $\cal U$. Given a set $x$ consider the small
+    category ${\cal C}_{x}=(\{x\},\{x\},\dom,\cod,\id,\circ)$ with a single 
+    object $x$ and a single arrow $x$, where $\dom(x)=x=\cod(x)$ and $\id(x)=x$
+    and $x \circ x = x$. Being a small category, from 
+    definition~(\ref{Fun:def:category:small:cat}) we see that ${\cal C}_{x}$ 
+    is a member of the collection $\ob\ \cat$. We then define a map 
+    $f:{\cal U}\to\ob\ \cat$ by setting $f(x)={\cal C}_{x}$. This map is
+    injective as the equality $f(x)=f(y)$ clearly implies $x=y$.
 \end{proof}
 
 \begin{prop}\label{Fun:prop:cat:locally:small}
     The category \cat\ is locally small.
 \end{prop}
 \begin{proof}
-    TODO
+    From definition~(\ref{Cat:def:locally:small}) we need to show that
+    given two small categories \Cat\ and \Dat, the hom-set $\cat(\Cat,\Dat)$
+    is actually a set. In order to do so, we shall use 
+    axiom~(\ref{Cat:ax:collection:set}) and argue that the collection
+    $\cat(\Cat,\Dat)$ is a sub-collection of some set. An member of
+    this collection is a triple $(\Cat,\Dat,F)$ where $F$ is a functor
+    $F:\Cat\to\Dat$. Now every functor $F:\Cat\to\Dat$ is an ordered pair
+    $F=(F_{0},F_{1})$ where $F_{0}$ and $F_{1}$ are maps 
+    $F_{0}:\ob\ \Cat\to\ob\ \Dat$ and $F_{1}:\arr\ \Cat\to\arr\ \Dat$.
+    Since \Cat\ and \Dat\ are small categories, all the collections
+    $\ob\ \Cat$, $\ob\ \Dat$, $\arr\ \Cat$ and $\arr\ \Dat$ are sets,
+    and $F_{0}$ and $F_{1}$ are in fact (untyped) functions between sets
+    and in particular $F_{0}$ is a subset of the set $\ob\ \Cat\,\times\,\ob\ \Dat$
+    and $F_{1}$ is a subset of the set $\arr\ \Cat\,\times\,\arr\ \Dat$.
+    In other words, $F_{0}$ is an element of the power set 
+    ${\cal P}(\ob\ \Cat\,\times\,\ob\ \Dat)$ and $F_{1}$ is an element of the
+    power set ${\cal P}(\arr\ \Cat\,\times\,\arr\ \Dat)$, which means that
+    $F=(F_{0},F_{1})$ is an element of the cartesian product:
+        \[
+            A={\cal P}(\ob\ \Cat\,\times\,\ob\ \Dat)\,\times\, 
+              {\cal P}(\arr\ \Cat\,\times\,\arr\ \Dat)
+        \]
+    Furthermore, recall from 
+    proposition~(\ref{Fun:prop:a:small:cat:is:a:set}) that the small 
+    categories \Cat\ and \Dat\ are sets and $\{\Cat\}$ and $\{\Dat\}$ 
+    are therefore well-defined singleton sets. Having established that
+    $F$ is an element of the set $A$ above, we see that the triple
+    $(\Cat,\Dat,F)$ is an element of the set $\{\Cat\}\times\{\Dat\}\times 
+    A$. So given small categories \Cat\ and \Dat\, we have found a set
+    containing every member of the collection $\cat(\Cat,\Dat)$.
 \end{proof}
