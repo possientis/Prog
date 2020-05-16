@@ -572,7 +572,7 @@ Proof.
    intros a b x p. unfold cast. destruct p. simpl. reflexivity.
 Qed.
 
-(*
+
 Definition L41: ~HasFixedPoint L39.
 Proof.
     unfold HasFixedPoint, FixedPoint, L39. intros [a H].
@@ -581,9 +581,35 @@ Proof.
     exists f. unfold Surjective. intros y.
     remember (cast (a -> bool) a H y) as x eqn:H1.
     exists x. rewrite E. rewrite H1. simpl.
+    apply cast_cast_is_id.
+Qed.
 
-Show.
-*)
+Definition L42 : forall (f:True -> True), HasFixedPoint f.
+Proof.
+    intros f. unfold HasFixedPoint, FixedPoint.
+    exists I. destruct (f I). reflexivity.
+Qed.
 
+Definition L43 : forall (f:True -> True), HasFixedPoint f.
+Proof.
+refine (
+    fun (f:True -> True) =>
+        ex_intro _ I
+            match (f I) as x return x = I with
+            | I => eq_refl I
+            end
+).
+Qed.
+
+Definition L44 : ~ HasFixedPoint (fun (A:Prop) => ~A).
+Proof.
+    intros [X H1]. unfold FixedPoint in H1.
+    assert (HasFixedPoint (fun (x:False) => x)) as H2.
+        { apply Lawvere with X. unfold not in H1. rewrite H1.
+          exists (fun x => x). unfold Surjective. intros y.
+          exists y. reflexivity. }
+    unfold HasFixedPoint in H2. destruct H2 as [x H2].
+    contradiction.
+Qed.
 
 

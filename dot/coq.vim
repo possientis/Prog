@@ -209,7 +209,7 @@ syn region coqLtacContents contained contains=coqTactic,coqTacticKwd,coqLtac,coq
 
 syn keyword coqLtac contained do info progress repeat try
 syn keyword coqLtac contained abstract constr context end external eval fail first fresh fun goal
-syn keyword coqLtac contained idtac in let ltac lazymatch match of rec reverse solve type with
+syn keyword coqLtac contained idtac in let ltac lazymatch match of rec reverse solve type with return
 syn match   coqLtac contained "|-\|=>\|||\|\[\|\]\|\<_\>\||"
 
 " Proofs

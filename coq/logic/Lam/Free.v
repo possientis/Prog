@@ -94,7 +94,6 @@ Proof.
     - apply replace_inj. assumption.
 Qed.
 
-(* We lack set theoretic notations to express this result nicely                *)
 Lemma free_replace2 : forall (v:Type) (e:Eq v) (t:T v) (x y:v),
     ~ y :: var t  ->
       x :: Fr t -> 
@@ -274,3 +273,20 @@ Proof.
     intros v e f t xs H. unfold subst. apply free_subst_intersect_gen.
     rewrite inter_nil. assumption.
 Qed.
+
+(*
+Lemma free_coincide_subst_gen : 
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v) (xs:list v),
+        coincide (Fr t \\ xs) f g <-> subst_ f xs t = subst_ g xs t.
+Proof.
+    intros v e f g. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs; simpl.
+    - destruct (in_dec eqDec x xs) as [H|H]; split.
+        + intros _. reflexivity.
+        + intros _. intros z H'. inversion H'.
+        + intros H'. apply (H' x). left. reflexivity.
+        + intros H'. intros z [H1|H1].
+            { subst. assumption. }
+            { inversion H1. }
+    -
+Show.
+*)

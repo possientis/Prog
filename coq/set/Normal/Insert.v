@@ -7,6 +7,7 @@ Require Import Core.Equal.
 Require Import Core.Decidability.
 
 Require Import Normal.Leq.
+Require Import Normal.Equiv.
 
 (* Insert the set x inside the set y according to syntactic ordering.           *)
 Fixpoint insert (x y:set) : set :=
@@ -31,16 +32,15 @@ Proof.
         + rewrite fromListToList. reflexivity.
 Qed.
 
+Lemma insertEquivCons : forall (x xs:set), Equiv (insert x xs) (Cons x xs).
+Proof.
+    intros x xs. unfold Equiv. rewrite insertCorrect. unfold insertAsList.
+    rewrite toListFromList. simpl. apply Sort.insertEquivCons. 
+Qed.
 
 Lemma insertCons : forall (x xs:set), insert x xs == Cons x xs.
 Proof.
-    intros x ys. revert ys x. induction ys as [|y IH1 ys IH2]; intros x.
-    - apply equalRefl.
-    - simpl. destruct (leqDec x y) as [H|H].
-        + apply equalTrans with (Cons y (Cons x ys)).
-            { apply consCompatR. apply IH2. }
-            { apply consSwitch. }
-        + apply equalRefl.
+    intros x xs. apply Equiv.equivEqual. apply insertEquivCons.
 Qed.
 
 Lemma insertCompatL : forall (x x' y:set), x == x' -> insert x y == insert x' y.
@@ -52,8 +52,6 @@ Proof.
         + apply equalSym. apply insertCons.
 Qed.
 
-
-
 Lemma insertCompatR : forall (x y y':set), y == y' -> insert x y == insert x y'.
 Proof.
     intros x y y' H. apply equalTrans with (Cons x y).
@@ -62,7 +60,6 @@ Proof.
         + apply consCompatR. assumption.
         + apply equalSym. apply insertCons.
 Qed.
-
 
 Lemma insertCompatLR : forall (x x' y y':set), 
     x == x' -> y == y' -> insert x y == insert x' y'.

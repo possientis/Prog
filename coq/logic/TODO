@@ -1,25 +1,8 @@
 Coq:
-review existing results and make them 'set'-like
-
--rw-r--r-- 1 john john 5684 May  5 08:30 Difference.v
--rw-r--r-- 1 john john 6981 May  5 08:30 Intersect.v
-
-drwxr-xr-x 2 john john 4096 May 14 06:18 Lam
-
--rw-r--r-- 1 john john 10907 May  9 20:03 Free.v
--rw-r--r-- 1 john john  1174 May  5 08:30 Subst.v
--rw-r--r-- 1 john john  2696 May  5 08:30 T.v
--rw-r--r-- 1 john john 11830 May  5 08:30 Valid.v
--rw-r--r-- 1 john john  2999 May  5 08:30 Variable.v
-
-drwxr-xr-x 2 john john 4096 May  9 20:04 Fol
-
--rw-r--r-- 1 john john  5012 May  5 08:30 Free.v
--rw-r--r-- 1 john john  3349 May  5 08:30 P.v
--rw-r--r-- 1 john john 12354 May  5 08:30 Valid.v
--rw-r--r-- 1 john john  3187 May  5 08:30 Variable.v
+free_coincide_subst_gen
 
 Haskell:
+free_coincide_subst_gen
 
 Latex:
 

@@ -85,7 +85,6 @@ Proof.
             { apply IH.  intros H3. apply H. right. assumption. }
 Qed.
 
-
 Lemma inter_cons_not_in_l : forall (v:Type) (e:Eq v) (xs ys:list v) (x:v),
     ~ x :: ys -> ((cons x xs) /\ ys) = (xs /\ ys).
 Proof.
@@ -96,7 +95,6 @@ Proof.
     - apply H in H1. contradiction.
     - reflexivity.
 Qed.
-
 
 Lemma inter_cons_in_r : forall (v:Type) (e:Eq v) (xs ys:list v) (y:v),
     y :: ys -> (xs /\ (cons y ys)) = (xs /\ ys).
@@ -188,7 +186,6 @@ Proof.
         + assumption.
         + apply H1. assumption.
 Qed.
-
 
 Lemma inter_sub_equiv : forall (v:Type) (e:Eq v) (xs ys zs zs':list v),
     zs' <= zs -> 

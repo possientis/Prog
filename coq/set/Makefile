@@ -359,6 +359,12 @@ ${NORM}/Leq.vo :				${NORM}/Leq.v \
 ${NORM}/Equiv.vo :				${NORM}/Equiv.v \
 								${UTILS}/Equiv.vo \
 								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo \
+								${CORE}/Equal.vo \
+								${CORE}/ToList.vo \
+								${CORE}/ElemIncl.vo \
+								${CORE}/Extensionality.vo \
 								${NORM}/Leq.vo
 	coqc ${NORM}/Equiv.v		${OPT}
 
