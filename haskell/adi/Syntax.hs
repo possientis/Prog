@@ -5,6 +5,9 @@ module  Syntax
     ,   Expr
     ,   eVar
     ,   eNum
+    ,   eOp
+    ,   eIf
+    ,   eLam
     )   where
 
 import Data.Functor.Foldable
@@ -17,9 +20,9 @@ data ExprF a
     | ENum Integer
     | EOp  Op a a
     | EIf  a a a
+    | ELam Var a
     | EApp a a
 --    | ERec Var a
-    | ELam Var a
     deriving (Functor)
 
 type Expr = Fix ExprF
@@ -29,3 +32,12 @@ eVar s = Fix $ EVar $ mkVar s
 
 eNum :: Integer -> Expr
 eNum n = Fix $ ENum n
+
+eOp :: Op -> Expr -> Expr -> Expr
+eOp op e1 e2 = Fix $ EOp op e1 e2 
+
+eIf :: Expr -> Expr -> Expr -> Expr
+eIf ez e1 e2 = Fix $ EIf ez e1 e2
+
+eLam :: Var -> Expr -> Expr
+eLam x e = Fix $ ELam x e

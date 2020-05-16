@@ -13,6 +13,7 @@ cd ${HOME}
 ./types/test.sh
 ./lisp/test.sh
 ./Optics/test.sh
+./adi/test.sh
 
 cd ${DIR}
 echo '\nAll haskell tests completed successfully\n'

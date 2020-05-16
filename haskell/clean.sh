@@ -19,6 +19,7 @@ rm -f a.out
 ./types/clean.sh
 ./wiwik/clean.sh
 ./Optics/clean.sh
+./adi/clean.sh
 
 
 cd ${DIR}
