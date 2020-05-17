@@ -13,10 +13,12 @@ open import Data.Nat.Properties using (+-assoc; +-suc; +-comm
                                       ; *-comm; +-identityˡ; +-identityʳ
                                       ; *-assoc; *-identityˡ; *-identityʳ)
 open import Data.Product        using ( _×_; ∃; ∃-syntax)
+open import Data.Sum            using (_⊎_; inj₁; inj₂)
 open import Function            using (_∘_)
 open import Level               using (Level)
 open import isomorphism         using (_≃_; _⇔_)
 
+open import Data.Product        using () renaming (_,_ to ⟨_,_⟩)
 
 data List (a : Set) : Set where
   []  : List a
@@ -698,6 +700,55 @@ data Any {a : Set} (p : a → Set) : List a → Set where
   here  : ∀ {x : a} {xs : List a} → p x → Any p (x ∷ xs)
   there : ∀ {x : a} {xs : List a} → Any p xs → Any p (x ∷ xs)
 
+infix 4 _∈_ _∉_
+
+_∈_ : ∀ {a : Set} (x : a) (xs : List a) → Set
+x ∈ xs = Any (x ≡_) xs
+
+_∉_ : ∀ {a : Set} (x : a) (xs : List a) → Set
+x ∉ xs = ¬ (x ∈ xs)
 
 
+_ : 0 ∈ [ 0 , 1 , 0 , 2 ]
+_ = here refl
 
+_ : 0 ∈ [ 0 , 1 , 0 , 2 ]
+_ = there (there (here refl))
+
+not-in : 3 ∉ [ 0 , 1 , 0 , 2 ]
+not-in (there (there (there (here ()))))
+not-in (there (there (there (there ()))))
+
+All-++-⇔ : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
+  All p (xs ++ ys) ⇔ (All p xs × All p ys)
+All-++-⇔ xs ys = record
+  { to = to xs ys
+  ; from = from xs ys
+  }
+  where
+  to : ∀ {a : Set} {p : a → Set}(xs ys : List a) →
+    All p (xs ++ ys) → All p xs × All p ys
+  to [] ys = λ {p → ⟨ [] , p ⟩ }
+  to (x ∷ xs) ys (p ∷ q) with to xs ys q
+  ... | ⟨ fst , snd ⟩ = ⟨ p ∷ fst , snd ⟩
+
+  from : ∀ {a : Set} {p : a → Set}(xs ys : List a) →
+    All p xs × All p ys → All p (xs ++ ys)
+  from [] ys = λ{⟨ _ , x ⟩ → x}
+  from (x ∷ xs) ys ⟨ p ∷ fst , snd ⟩ = p ∷ from xs ys ⟨ fst , snd ⟩
+
+
+Any-++-⇔ : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
+  Any p (xs ++ ys) ⇔ (Any p xs ⊎ Any p ys)
+Any-++-⇔ xs ys = record
+  { to = to xs ys
+  ; from = from xs ys
+  }
+  where
+  to : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
+    Any p (xs ++ ys) → (Any p xs ⊎ Any p ys)
+  to xs ys = {!!}
+
+  from : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
+    (Any p xs ⊎ Any p ys) → Any p (xs ++ ys)
+  from xs ys = {!!}
