@@ -747,8 +747,47 @@ Any-++-⇔ xs ys = record
   where
   to : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
     Any p (xs ++ ys) → (Any p xs ⊎ Any p ys)
-  to xs ys = {!!}
+  to [] ys q = inj₂ q
+  to (x ∷ xs) ys (here q) = inj₁ (here q)
+  to (x ∷ xs) ys (there q) with to xs ys q
+  ... | inj₁ r = inj₁ (there r)
+  ... | inj₂ r = inj₂ r
 
   from : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
     (Any p xs ⊎ Any p ys) → Any p (xs ++ ys)
-  from xs ys = {!!}
+  from [] ys (inj₂ q) = q
+  from (x ∷ xs) ys (inj₁ (here q)) = here q
+  from (x ∷ xs) ys (inj₁ (there q)) = there (from xs ys (inj₁ q))
+  from (x ∷ xs) ys (inj₂ q) = there (from xs ys (inj₂ q))
+
+
+All-++-≃ : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
+  All p (xs ++ ys) ≃ All p xs × All p ys
+All-++-≃ xs ys = record
+  { to = to xs ys
+  ; from = from xs ys
+  ; from∘to = from∘to xs ys
+  ; to∘from = to∘from xs ys
+  }
+  where
+    to : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
+      All p (xs ++ ys) → All p xs × All p ys
+    to [] ys q = ⟨ [] , q ⟩
+    to (x ∷ xs) ys (q ∷ r) with to xs ys r
+    ... | ⟨ fst , snd ⟩ = ⟨ q ∷ fst , snd ⟩
+
+    from : ∀ {a : Set} {p : a → Set} (xs ys : List a) →
+      All p xs × All p ys → All p (xs ++ ys)
+    from [] ys ⟨ [] , q ⟩ = q
+    from (x ∷ xs) ys ⟨ q ∷ r , s ⟩ = q ∷ from xs ys ⟨ r , s ⟩
+
+    from∘to : ∀ {a : Set} {p : a → Set} (xs ys : List a) (q : All p (xs ++ ys)) →
+      from xs ys (to xs ys q) ≡ q
+    from∘to [] ys q = refl
+    from∘to (x ∷ xs) ys (q ∷ r) = cong (q ∷_) (from∘to xs ys r)
+
+    to∘from : ∀ {a : Set} {p : a → Set} (xs ys : List a) (q : All p xs × All p ys) →
+      to xs ys (from xs ys q) ≡ q
+    to∘from [] ys ⟨ [] , q ⟩ = refl
+    to∘from (x ∷ xs) ys ⟨ q ∷ r , s ⟩ = {!!}
+
