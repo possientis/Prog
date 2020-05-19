@@ -1,4 +1,3 @@
-cant test ELam, this has to change
-eval unit test
-add ERec to language
+test EApp
+more tests for eval
 implement Arbitrary for Env ?

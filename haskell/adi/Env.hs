@@ -3,13 +3,15 @@
 module  Env
     (   Env
     ,   Value
+    ,   Closure
     ,   newEnv
     ,   find
     ,   mkVal
-    ,   mkFun
+    ,   mkClosure
     ,   val
-    ,   fun
+    ,   closure
     ,   bind
+    ,   evalClosure
     )   where
 
 import Data.Map.Strict as M
@@ -18,9 +20,29 @@ import Var
 
 newtype Env = Env { unEnv :: Map Var Value }
 
+instance Show Env where
+    show = show . M.toList . unEnv
+
 data Value 
     = Val Integer
-    | Fun Var (Env -> Value) Env 
+    | Clo Closure
+
+instance Show Value where
+    show = \case 
+        Val n   -> show n
+        Clo c   -> show c
+
+data Closure = Closure
+    { cloVar :: Var
+    , cloFun :: Env -> Value 
+    , cloEnv :: Env
+    }
+
+instance Show Closure where
+    show c =  "Closure { var = " 
+           ++ show (cloVar c) 
+           ++ ", env = " 
+           ++ show (cloEnv c)
 
 newEnv :: Env
 newEnv = Env mempty
@@ -37,15 +59,28 @@ bind x v env = Env $ insert x v (unEnv env)
 mkVal :: Integer -> Value
 mkVal = Val
 
-mkFun :: Var -> (Env -> Value) -> Env -> Value
-mkFun = Fun
+mkClosure :: Var -> (Env -> Value) -> Env -> Value
+mkClosure x v e = Clo $ Closure 
+    { cloVar = x 
+    , cloFun = v
+    , cloEnv = e
+    }
 
 val :: Value -> Maybe Integer
 val = \case
-    Val n       -> Just n
-    Fun _ _ _   -> Nothing
+    Val n   -> Just n
+    Clo _   -> Nothing
 
-fun :: Value -> Maybe (Var, Env -> Value, Env)
-fun = \case
-    Val _       -> Nothing
-    Fun x v env -> Just (x, v, env)
+closure :: Value -> Maybe Closure
+closure = \case
+    Val _   -> Nothing
+    Clo c   -> Just c
+
+-- Given a value to which the closure variable is bound, 
+-- returns the value corresponding to the closure evaluation.
+-- This is simply the value returned by the closure function
+-- evaluated at the closure 'local environment', defined as
+-- the closure environment with the additional binding of
+-- the closure variable to the value argument.
+evalClosure :: Closure -> Value -> Value
+evalClosure c v = (cloFun c) (bind (cloVar c) v (cloEnv c))

@@ -20,7 +20,7 @@ Qed.
 
 Lemma nubEquiv : forall (x:set), Equiv x (nub x).
 Proof.
-    intros x. unfold Equiv. unfold nub. rewrite toListFromList.
+    intros x. unfold Equiv, nub. rewrite toListFromList.
     apply Nub.nubEquiv.
 Qed.
 

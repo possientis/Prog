@@ -8,6 +8,7 @@ Require Import Core.Decidability.
 
 Require Import Normal.Leq.
 Require Import Normal.Equiv.
+Require Import Normal.InListOf.
 
 (* Insert the set x inside the set y according to syntactic ordering.           *)
 Fixpoint insert (x y:set) : set :=
@@ -37,6 +38,23 @@ Proof.
     intros x xs. unfold Equiv. rewrite insertCorrect. unfold insertAsList.
     rewrite toListFromList. simpl. apply Sort.insertEquivCons. 
 Qed.
+
+Lemma insertInListOf : forall (x xs:set), inListOf x (insert x xs).
+Proof.
+    intros x xs. rewrite insertCorrect. unfold inListOf, insertAsList.
+    rewrite toListFromList. apply Sort.insertIn.
+Qed.
+
+Lemma insertIsCons : forall (x xs:set), 
+    (forall (y:set), inListOf y xs -> leq y x) -> insert x xs = Cons x xs.
+Proof.
+    intros x xs. rewrite insertCorrect. unfold inListOf, insertAsList.
+    intros H. rewrite <- (fromListToList (Cons x xs)).
+    rewrite Sort.insertIsCons.
+    - reflexivity.
+    - assumption.
+Qed.
+
 
 Lemma insertCons : forall (x xs:set), insert x xs == Cons x xs.
 Proof.

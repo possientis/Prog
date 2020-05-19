@@ -49,16 +49,16 @@ evalIf v v1 v2 env = case val (v env) of
     Nothing -> error "If: cannot evaluate condition."
     Just n  -> if n == 0 then (v1 env) else (v2 env)
 
+evalLam :: Var -> (Env -> Value) -> Env -> Value
+evalLam x v env = mkClosure x v env 
+
 evalApp 
     :: (Env -> Value) 
     -> (Env -> Value) 
     -> Env 
     -> Value
-evalApp v1 v2 env = case fun (v1 env) of
+evalApp v1 v2 env = case closure (v1 env) of
     Nothing -> error "App: lhs argument is not a function."
-    Just (x, v, envLocal)  -> v env' where 
-        env' = bind x (v2 env) envLocal  
+    Just c  -> evalClosure c (v2 env) 
 
-evalLam :: Var -> (Env -> Value) -> Env -> Value
-evalLam x v env = mkFun x v env 
 

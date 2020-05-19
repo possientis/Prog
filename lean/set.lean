@@ -1,0 +1,31 @@
+universe u
+
+-- Type of subsets of α. A subset of α is a predicate over α
+def set2 (α : Type u) : Type u := α → Prop
+
+--#check @set2
+--#check @set
+
+variable α : Type u
+
+def elem (x:α) (a : set α) := a x
+notation e ∈ a := elem e a
+
+lemma setext : ∀ {a b : set α}, (∀ (x:α), x ∈ a ↔ x ∈ b) → a = b :=
+begin
+  intros a b H, apply funext, intros x, apply propext, apply H
+end
+
+definition empty2 : set α := λ_, false
+
+#check @empty2
+#check @empty
+
+notation 0 := empty2
+
+def inter (a b : set α) : set α := λ x, x ∈ a ∧ x ∈ b
+notation a ∩ b := inter a b
+
+
+
+

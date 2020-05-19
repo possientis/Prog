@@ -30,4 +30,23 @@ Proof.
     intros v w f g xs ys H H' x H1. apply H in H1. apply H'. assumption.
 Qed.
 
+Lemma coincide_cons : forall (v w:Type) (f g:v -> w) (x:v) (xs:list v),
+    coincide (cons x xs) f g -> coincide xs f g.
+Proof.
+    intros v w f g x xs H z H'. apply H. right. assumption.
+Qed.
+
+Lemma coincide_app : forall (v w:Type) (f g:v -> w) (xs ys:list v),
+    coincide xs f g -> coincide ys f g -> coincide (xs ++ ys) f g.
+Proof.
+    intros v w f g. induction xs as [|x xs IH]; intros ys H1 H2; simpl.
+    - assumption.
+    - unfold coincide. intros z [H3|H3].
+        + subst. apply H1. left. reflexivity.
+        + apply (IH ys). 
+            { apply coincide_cons with x. assumption. }
+            { assumption. }
+            { assumption. }
+Qed.
+
 

@@ -1,7 +1,7 @@
 \begin{defin}\label{Nat:def:natural}
     Let $F,G:\Cat\to\Dat$ be functors where \Cat\ and \Dat\ are categories.
-    We call {\em natural transformation} from $F$ to $G$ any map $\alpha$
-    defined on $\ob\ \Cat$ with:
+    We call {\em natural transformation} from $F$ to $G$ any map 
+    $\alpha : \ob\ \Cat\to\arr\ \Dat$ with:
         \begin{eqnarray*}
             (1)& &\alpha(a) : F(a) \to G(a)\\
             (2)& &G(f)\circ\alpha(a) = \alpha(b) \circ F(f)
@@ -9,6 +9,14 @@
     where $(1)$ holds for all $a\in\ob\ \Cat$ and $(2)$ holds for all 
     $a,b\in\ob\ \Cat$ and $f:a\to b$.
 \end{defin}
+
+\noindent
+{\bf Remark}: the statement {\em $\alpha$ is a natural transformation
+from $F$ to $G$} is strictly speaking ambiguous since $F$ and $G$ are
+untyped functors which do not in themselves tell us which are the categories
+\Cat\ and \Dat\ under consideration. These are normally clear from the context
+however. It may sometimes be useful to say that {\em $\alpha$ is a natural 
+transformation between the typed functors $(\Cat,\Dat,F)$ and $(\Cat,\Dat,G)$}.
 
 \begin{notation}\label{Nat:notation:natural:arrow}
     We shall use $\alpha:F\Rightarrow G$ as a notational shortcut for the

@@ -15,6 +15,8 @@ echo
 echo "testing lean..."
 echo
 
+check funext
+check propext
 check coercions
 check WellFounded
 check Vec

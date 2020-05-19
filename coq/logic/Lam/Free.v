@@ -287,6 +287,20 @@ Proof.
         + intros H'. intros z [H1|H1].
             { subst. assumption. }
             { inversion H1. }
-    -
+    - destruct (IH1 xs) as [H1 H2]. destruct (IH2 xs) as [H3 H4]. split.
+        + intros H. 
+          rewrite H1, H3.
+            { reflexivity. }
+            { apply coincide_incl with ((Fr t1 ++ Fr t2) \\ xs).
+              rewrite diff_distrib_app_r. apply incl_appr.
+                { apply incl_refl. }
+                { assumption. }}
+            { apply coincide_incl with ((Fr t1 ++ Fr t2) \\ xs).
+              rewrite diff_distrib_app_r. apply incl_appl.
+                { apply incl_refl. }
+                { assumption. }}
+        + intros H. inversion H. rewrite diff_distrib_app_r.
+
+
 Show.
 *)

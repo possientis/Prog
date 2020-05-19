@@ -70,6 +70,9 @@ propEIfNZero :: Integer -> Integer -> Integer -> Bool
 propEIfNZero nz n m = if nz == 0 then True else
     val (eval (eIf (eNum nz) (eNum n) (eNum m)) newEnv) == Just m
 
-propELam :: String -> Bool
-propELam _ = True
+propELam :: Integer -> String -> Bool
+propELam n s = case closure (eval (eLam (mkVar s) (eVar s)) newEnv) of
+    Nothing -> False
+    Just c  -> val (evalClosure c (mkVal n)) == Just n
+
 

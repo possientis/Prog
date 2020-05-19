@@ -383,6 +383,7 @@ ${NORM}/Sort.vo :				${NORM}/Sort.v \
 								${CORE}/Set.vo \
 								${NORM}/Leq.vo \
 								${NORM}/Equiv.vo \
+								${NORM}/Insert.vo \
 								${NORM}/InListOf.vo
 	coqc ${NORM}/Sort.v			${OPT} 
 
@@ -394,7 +395,9 @@ ${NORM}/Insert.vo :				${NORM}/Insert.v \
 								${CORE}/Cons.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Decidability.vo \
-								${NORM}/Leq.vo
+								${NORM}/Leq.vo \
+								${NORM}/Equiv.vo \
+								${NORM}/InListOf.vo
 	coqc ${NORM}/Insert.v		${OPT} 
 
 

@@ -1,5 +1,4 @@
-Normal/Insert : lift functionality from Utils/Sort.v in relation to insert
-Normal/Sort: define the notion for sets
+Normal/Sort: lift Utils.Sort
 Normal/Normal: establish a link with Utils.Normal.normal
 Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x
