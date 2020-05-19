@@ -1,7 +1,8 @@
 \begin{defin}\label{Nat:def:natural}
     Let $F,G:\Cat\to\Dat$ be functors where \Cat\ and \Dat\ are categories.
-    We call {\em natural transformation} from $F$ to $G$ any map 
-    $\alpha : \ob\ \Cat\to\arr\ \Dat$ with:
+    We call {\em natural transformation} from the typed functor $(\Cat,\Dat,F)$ 
+    to the typed functor $(\Cat,\Dat,G)$ any map $\alpha : \ob\ \Cat\to\arr\ \Dat$ 
+    with the following properties:
         \begin{eqnarray*}
             (1)& &\alpha(a) : F(a) \to G(a)\\
             (2)& &G(f)\circ\alpha(a) = \alpha(b) \circ F(f)
@@ -11,17 +12,22 @@
 \end{defin}
 
 \noindent
-{\bf Remark}: the statement {\em $\alpha$ is a natural transformation
-from $F$ to $G$} is strictly speaking ambiguous since $F$ and $G$ are
-untyped functors which do not in themselves tell us which are the categories
-\Cat\ and \Dat\ under consideration. These are normally clear from the context
-however. It may sometimes be useful to say that {\em $\alpha$ is a natural 
-transformation between the typed functors $(\Cat,\Dat,F)$ and $(\Cat,\Dat,G)$}.
+{\bf Remark}: It is very common to casually say that {\em $\alpha$ is a natural
+transformation between $F$ and $G$}, i.e. to refer only to the untyped functors
+$F$ and $G$ rather than spell out the typed functors $(\Cat,\Dat,F)$ and
+$(\Cat,\Dat,G)$. This is fine as long as the typed functors under consideration
+are clear from the context. It should be remembered however that being a
+natural transformation is a statement about typed functors, not untyped
+functors, as the knowledge of which categories \Cat\ and \Dat\ are involved
+crucially matters and these categories are not determined from $F$ and $G$
+alone, which are also functors from $\Cop\to\Dop$ 
+(proposition~(\ref{Fun:prop:opposite}).
 
 \begin{notation}\label{Nat:notation:natural:arrow}
-    We shall use $\alpha:F\Rightarrow G$ as a notational shortcut for the
-    statement that {\em $\alpha$ is a natural transformation from the
-    functor $F$ to the functor $G$}.
+    We shall use $\alpha:(\Cat,\Dat,F)\Rightarrow (\Cat,\Dat,G)$ as a notational 
+    shortcut for the statement that {\em $\alpha$ is a natural transformation 
+    between the typed functors $(\Cat,\Dat,F)$ and $(\Cat,\Dat,G)$}. We shall
+    write $\alpha:F\Rightarrow G$ when the context is clear.
 \end{notation}
 
 \noindent

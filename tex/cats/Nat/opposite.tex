@@ -1,21 +1,42 @@
-Given two categories \Cat\ and \Dat, and a functor $F:\Cat\to\Dat$, we saw
+Given categories \Cat\ and \Dat, and a functor $F:\Cat\to\Dat$, we saw
 in proposition~(\ref{Fun:prop:opposite}) that $F$ is also a functor 
 $F:\Cop\to\Dop$. Now consider two functors $F,G:\Cat\to\Dat$ and a natural 
 transformation $\alpha:F \Rightarrow G$. By virtue of 
-notation~(\ref{Nat:notation:natural:arrow}), this means that $\alpha$ is a 
-natural transformation between the functor $F$ and the functor $G$. But 
-which underlying categories are we referring to? Are we considering
-the functor $F$ as a functor $F:\Cat\to\Dat$ or as a functor $F:\Cop\to\Dop$,
-and likewise for $G$? In other words, do we mean 
-$\alpha:(\Cat,\Dat,F)\Rightarrow(\Cat,\Dat,G)$ or 
-$\alpha:(\Cop,\Dop,F)\Rightarrow(\Cop,\Dop,G)$? The distinction matters
-as illustrated by:
+notation~(\ref{Nat:notation:natural:arrow}), $\alpha$ is a natural 
+transformation between the typed functors $(\Cat,\Dat,F)$ and $(\Cat,\Dat,G)$, 
+which are clearly understood from the context. But the notation is nonetheless 
+ambiguous as it could also indicate that $\alpha$ is a natural
+transformation between $(\Cop,\Dop,F)$ and $(\Cop,\Dop,G)$ among others. 
+The two statements are not identical and in fact as it turns out, we
+have the equivalence:
 
 \begin{prop}
-    Let $F,G:\Cat\to\Dat$ be functors between categories \Cat,\Dat\ and let 
-    $\alpha:F\Rightarrow G$ be a natural transformation from $F$ to $G$ 
-    (w.r. to \Cat,\Dat). Then $\alpha$ is also a natural transformation
-    $\alpha:G\Rightarrow F$ (w.r. to \Cop,\Dop).
+    Let $F,G:\Cat\to\Dat$ be functors between categories \Cat, \Dat. Then: 
+    \[
+        \alpha\,:\,(\Cat,\Dat,F)\,\Rightarrow\,(\Cat,\Dat,G)
+    \]
+    is equivalent to:
+    \[
+        \alpha\,:\,(\Cop,\Dop,G)\,\Rightarrow\,(\Cop,\Dop,F)
+    \]
+    In other words, being a natural transformation $\alpha:F\Rightarrow G$ (w.r.
+    to \Cat\ and \Dat) is equivalent to being a natural transformation 
+    $\alpha:G\Rightarrow F$ (w.r. to \Cop\ and \Dop):
+    \begin{eqnarray}
+        \begin{tikzcd}
+            \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G", bend right = 50, ""{name=D, above}]
+              & \Dat
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+        \end{tikzcd}
+        &\Leftrightarrow&
+        \begin{tikzcd}
+            \Cop \arrow[r, "G", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "F", bend right = 50, ""{name=D, above}]
+              & \Dop
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+        \end{tikzcd}
+    \end{eqnarray}
 \end{prop}
 \begin{proof}
 TODO
