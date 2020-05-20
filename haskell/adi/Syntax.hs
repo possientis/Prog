@@ -8,6 +8,7 @@ module  Syntax
     ,   eOp
     ,   eIf
     ,   eLam
+    ,   eApp
     )   where
 
 import Data.Functor.Foldable
@@ -41,3 +42,6 @@ eIf ez e1 e2 = Fix $ EIf ez e1 e2
 
 eLam :: Var -> Expr -> Expr
 eLam x e = Fix $ ELam x e
+
+eApp :: Expr -> Expr -> Expr
+eApp e1 e2 = Fix $ EApp e1 e2
