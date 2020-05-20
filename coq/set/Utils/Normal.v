@@ -66,7 +66,7 @@ Proof.
         + assumption.
 Qed.
 
-Lemma equalHead : forall (a:Type) (o:Ord a) (x y:a) (xs ys:list a),
+Lemma sameHead : forall (a:Type) (o:Ord a) (x y:a) (xs ys:list a),
     Equiv (cons x xs) (cons y ys) ->
     Sorted (cons x xs) ->
     Sorted (cons y ys) ->
@@ -91,7 +91,7 @@ Proof.
                   { assumption. }}
 Qed.
 
-Lemma nubedSortedEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
+Lemma nubedSortedEquivSame : forall (a:Type) (o:Ord a) (xs ys:list a),
     Nubed xs ->
     Nubed ys ->
     Sorted xs -> 
@@ -115,25 +115,25 @@ Proof.
                       destruct H9 as [H9|H9].
                         { subst. exfalso. apply H1. 
                             assert (x = u) as H10.
-                                { apply (equalHead a o _ _ xs ys); assumption. }
+                                { apply (sameHead a o _ _ xs ys); assumption. }
                           subst. assumption. }
                         { assumption. }}
                     { assert (In u (cons x xs)) as H11.
                         { destruct H6 as [H6 H12]. apply H12. right. assumption. }
                       destruct H11 as [H11|H11].
                         { assert (x = y).
-                            { apply (equalHead a o _ _ xs ys); assumption. }
+                            { apply (sameHead a o _ _ xs ys); assumption. }
                           subst. exfalso. apply (nubedConsNotIn a _ y ys) in H3.
                           apply H3. assumption. }
                         { assumption. }}}}
-          assert (x = y) as H8. { apply (equalHead a o _ _ xs ys); assumption. }
+          assert (x = y) as H8. { apply (sameHead a o _ _ xs ys); assumption. }
           subst. reflexivity. 
 Qed.
 
 Lemma nubSortCommute : forall (a:Type) (o:Ord a) (xs:list a),
     nub (sort xs) = sort (nub xs).
 Proof.
-    intros a o xs. apply (nubedSortedEquivEqual a _).
+    intros a o xs. apply (nubedSortedEquivSame a _).
     - apply nubNubed.
     - apply sortNubed. apply nubNubed.
     - apply nubSorted. apply sortSorted.
@@ -189,7 +189,7 @@ Lemma NormalEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
     Normal xs -> Normal ys -> Equiv xs ys -> xs = ys.
 Proof.
     intros a o xs ys [H1 H2] [H3 H4] H5. 
-    apply (nubedSortedEquivEqual a _); assumption.
+    apply (nubedSortedEquivSame a _); assumption.
 Qed.
 
 Lemma equivNormalEqual : forall (a:Type) (o:Ord a) (xs ys:list a),

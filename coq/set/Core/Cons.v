@@ -76,7 +76,7 @@ Proof.
 Qed.
 
 
-Lemma consIn : forall (x xs:set), x :: xs -> Cons x xs == xs.
+Lemma inConsEqual : forall (x xs:set), x :: xs -> Cons x xs == xs.
 Proof.
     intros x xs H. apply extensionality. intros z. split; intros H'.
     - rewrite consElem in H'. destruct H' as [H'|H'].

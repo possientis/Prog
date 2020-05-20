@@ -1,7 +1,8 @@
 Require Import List.
 
 Require Import Utils.Ord.
-Require Import Utils.Normal.
+
+Require Utils.Normal.
 
 Require Import Core.Set.
 Require Import Core.Incl.
@@ -15,7 +16,11 @@ Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
 Require Import Normal.Leq.
+Require Import Normal.Nub.
+Require Import Normal.Sort.
+Require Import Normal.Equiv.
 Require Import Normal.Insert.
+Require Import Normal.InListOf.
 
 Fixpoint normal (x:set) : set :=
     match x with
@@ -27,13 +32,13 @@ Fixpoint normal (x:set) : set :=
         end
     end.
 
-Lemma normalEquiv : forall (x:set), x == normal x.
+Lemma normalEqual : forall (x:set), x == normal x.
 Proof.
     induction x as [|x IH1 xs IH2].
     - apply equalRefl.
     - simpl. destruct (elem_dec x xs) as [H|H]; simpl.
         +  apply equalTrans with xs.
-            { apply consIn. assumption. }
+            { apply inConsEqual. assumption. }
             { apply IH2. }
         + apply equalTrans with (insert x xs).
             { apply equalSym. apply insertCons. }
@@ -42,13 +47,60 @@ Proof.
                 { apply IH2. }}
 Qed.
 
-Lemma normalEqualEquiv : forall (x y:set), normal x = normal y -> x == y.
+Lemma normalSameEqual : forall (x y:set), normal x = normal y -> x == y.
 Proof.
     intros x y H. apply equalTrans with (normal y).
     - apply equalTrans with (normal x).
-        + apply normalEquiv.
+        + apply normalEqual.
         + rewrite H. apply equalRefl.
-    - apply equalSym. apply normalEquiv.
+    - apply equalSym. apply normalEqual.
+Qed.
+
+Lemma nubSorted : forall (x:set), Sorted x -> Sorted (nub x).
+Proof.
+    intros x. unfold Sorted, nub. rewrite toListFromList.
+    apply Normal.nubSorted.
+Qed.
+
+Lemma insertNubed : forall (x xs:set),
+    ~ inListOf x xs -> Nubed xs -> Nubed (insert x xs).
+Proof.
+    intros x xs. rewrite insertCorrect. unfold inListOf, Nubed, insertAsList.
+    rewrite toListFromList. apply Normal.insertNubed.
+Qed.
+
+Lemma sortNubed : forall (x:set), Nubed x -> Nubed (sort x).
+Proof.
+    intros x. unfold Nubed, sort. 
+    rewrite toListFromList. apply Normal.sortNubed.
+Qed.
+
+
+Lemma sameHead : forall (x y xs ys:set),
+    Equiv (Cons x xs) (Cons y ys) ->
+    Sorted (Cons x xs) ->
+    Sorted (Cons y ys) ->
+    x = y.
+Proof.
+    intros x y xs ys. unfold Equiv, Sorted. simpl.
+    apply Normal.sameHead.
+Qed.
+
+Lemma nubedSortedEquivSame : forall (x y:set),
+    Nubed x ->
+    Nubed y ->
+    Sorted x ->
+    Sorted y ->
+    Equiv x y ->
+    x = y.
+Proof.
+    intros x y. unfold Nubed, Sorted, Equiv.
+    intros H1 H2 H3 H4 H5. 
+    rewrite <- (fromListToList x).
+    rewrite <- (fromListToList y).
+    assert (toList x = toList y) as H6.
+        { apply (Normal.nubedSortedEquivSame _ _); assumption. } 
+    rewrite H6. reflexivity.
 Qed.
 
 (*

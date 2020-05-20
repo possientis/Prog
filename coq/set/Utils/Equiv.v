@@ -20,7 +20,7 @@ Proof.
     split; apply incl_tran with ys; assumption.
 Qed.
 
-Lemma consIn : forall (a:Type) (x:a) (xs:list a),
+Lemma inConsEquiv : forall (a:Type) (x:a) (xs:list a),
     In x xs -> Equiv (cons x xs) xs.
 Proof.
     intros a x xs H. split; intros z.

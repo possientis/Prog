@@ -60,3 +60,9 @@ Proof.
     - reflexivity.
     - assumption.
 Qed.
+
+Lemma sortedConsSortedTail : forall (x xs:set),
+    Sorted (Cons x xs) -> Sorted xs.
+Proof.
+    intros x xs. unfold Sorted. simpl. apply Sort.sortedConsSortedTail.
+Qed.

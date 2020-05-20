@@ -32,11 +32,11 @@ Proof.
     intros x y z. unfold Equiv. apply Equiv.equivTrans.
 Qed.
 
-Lemma consIn : forall (x xs:set),
+Lemma inListOfConsEquiv : forall (x xs:set),
     inListOf x xs -> Equiv (Cons x xs) xs.
 Proof.
     intros x xs. unfold Equiv. unfold inListOf. simpl.
-    apply Equiv.consIn.
+    apply Equiv.inConsEquiv.
 Qed.
 
 Lemma equivNil : forall (x:set), Equiv x Nil <-> x = Nil.

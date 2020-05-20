@@ -402,6 +402,7 @@ ${NORM}/Insert.vo :				${NORM}/Insert.v \
 
 
 ${NORM}/Normal.vo :				${NORM}/Normal.v \
+								${UTILS}/Normal.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
@@ -412,7 +413,11 @@ ${NORM}/Normal.vo :				${NORM}/Normal.v \
 								${CORE}/Decidability.vo \
 								${CORE}/Extensionality.vo \
 								${NORM}/Leq.vo \
-								${NORM}/Insert.vo
+								${NORM}/Nub.vo \
+								${NORM}/Sort.vo \
+								${NORM}/Equiv.vo \
+								${NORM}/Insert.vo \
+								${NORM}/InListOf.vo
 	coqc ${NORM}/Normal.v		${OPT} 
 
 

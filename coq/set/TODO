@@ -1,5 +1,4 @@
-Normal/Sort: lift Utils.Sort
-Normal/Normal: establish a link with Utils.Normal.normal
+Normal/Normal: continue lifting
 Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x
 Core/Functional : we d like => y = y' but we can only have y == y': we need some notion of normal form for sets
