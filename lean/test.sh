@@ -15,6 +15,7 @@ echo
 echo "testing lean..."
 echo
 
+check set
 check funext
 check propext
 check coercions
