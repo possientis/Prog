@@ -1,10 +1,12 @@
+workout quickcheck ==> combinator
 Coq:
-free_coincide_subst_gen
+BetaValid
+
 
 Haskell:
-coincide_cons
 coincide_app
 free_coincide_subst_gen
+free_coincide_subst
 
 
 Latex:

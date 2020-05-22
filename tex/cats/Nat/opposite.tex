@@ -39,6 +39,36 @@ have the equivalence:
     \end{eqnarray}
 \end{prop}
 \begin{proof}
-TODO
+    from proposition~(\ref{Cat:prop:opposite:opposite}) we have
+    $(\Cop)^{op}=\Cat$ and $(\Dop)^{op}=\Dat$ and it is therefore sufficient 
+    to prove the implication $\Rightarrow$. So we assume that $\alpha$ is 
+    a natural transformation $\alpha:(\Cat,\Dat,F)\Rightarrow(\Cat,\Dat,G)$,
+    and we need to show that it is also a natural transformation
+    $\alpha:(\Cop,\Dop,G)\Rightarrow(\Cop,\Dop,F)$. Looking at 
+    definition~(\ref{Nat:def:natural}), we first need to establish that
+    $\alpha$ is a map $\alpha:\ob\ \Cop\to\arr\ \Dop$. However, it is 
+    certainly a map $\alpha:\ob\ \Cat\to\arr\ \Dat$ by assumption and from 
+    definition~(\ref{Cat:def:opposite}) we have $\ob\ \Cat=\ob\ \Cop$ and
+    $\arr\ \Dat=\arr\ \Dop$. Next we need to show property $(1)$ of
+    definition~(\ref{Nat:def:natural}), namely that 
+    $\alpha(a):G(a)\to F(a)\ @\ \Dop$ for all $a\in\ob\ \Cop$. This
+    follows immediately from the fact that $\alpha(a):F(a)\to G(a)\ @\ \Dat$
+    for all $a\in\ob\ \Cat$. So it remains to show property~$(2)$ of 
+    definition~(\ref{Nat:def:natural}). So we assume that $a,b\in\ob\ \Cop
+    =\ob\ \Cat$ and $f:a\to b\ @\ \Cop$. We need to show that 
+    $F(f)\circ\alpha(a)\ @\ \Dop = \alpha(b)\circ G(f)\ @\ \Dop$, i.e.
+    the following square commutes:
+    \begin{eqnarray*}@\ \Cop
+        &\begin{tikzcd}
+            a\arrow[d,swap, "f"]
+            &G(a)\arrow[r, "\alpha(a)"]\arrow[d, swap,"G(f)"]
+            &F(a)\arrow[d, "F(f)"]
+            \\
+            b
+            &G(b)\arrow[r, swap, "\alpha(b)"]
+            &F(b)
+        \end{tikzcd}&@\ \Dop
+    \end{eqnarray*}
+    A formal proof goes as follows: TODO
 \end{proof}
 

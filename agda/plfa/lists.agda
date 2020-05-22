@@ -12,7 +12,7 @@ open import Data.Nat.Properties using (+-assoc; +-suc; +-comm
                                       ; *-distribʳ-+; *-distribˡ-+
                                       ; *-comm; +-identityˡ; +-identityʳ
                                       ; *-assoc; *-identityˡ; *-identityʳ)
-open import Data.Product        using ( _×_; ∃; ∃-syntax)
+open import Data.Product        using ( _×_; ∃; ∃-syntax; proj₁; proj₂)
 open import Data.Sum            using (_⊎_; inj₁; inj₂)
 open import Function            using (_∘_)
 open import Level               using (Level)
@@ -789,5 +789,16 @@ All-++-≃ xs ys = record
     to∘from : ∀ {a : Set} {p : a → Set} (xs ys : List a) (q : All p xs × All p ys) →
       to xs ys (from xs ys q) ≡ q
     to∘from [] ys ⟨ [] , q ⟩ = refl
-    to∘from (x ∷ xs) ys ⟨ q ∷ r , s ⟩ = {!!}
+    to∘from (x ∷ xs) ys ⟨ q ∷ r , s ⟩ with to∘from xs ys ⟨ r , s ⟩
+    ... | k with to xs ys (from xs ys ⟨ r , s ⟩)
+    ... | ⟨ fst , snd ⟩ = cong (λ { x → ⟨ q ∷ proj₁ x , proj₂ x ⟩ }) k
 
+¬Any⇔All¬ : ∀ {a : Set} {p : a → Set} (xs : List a) →
+  (¬ Any p xs) ⇔ All (λ x → ¬ p x) xs
+¬Any⇔All¬ xs = record { to = to xs ; from = from xs }
+  where
+  to : ∀ {a : Set} {p : a → Set} (xs : List a) → (¬ Any p xs) → All (λ x → ¬ p x) xs
+  to xs = {!!}
+
+  from : ∀ {a : Set} {p : a → Set} (xs : List a) → All (λ x → ¬ p x) xs → ¬ Any p xs
+  from xs = {!!}

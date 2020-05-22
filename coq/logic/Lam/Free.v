@@ -274,7 +274,7 @@ Proof.
     rewrite inter_nil. assumption.
 Qed.
 
-(*
+
 Lemma free_coincide_subst_gen : 
     forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v) (xs:list v),
         coincide (Fr t \\ xs) f g <-> subst_ f xs t = subst_ g xs t.
@@ -287,9 +287,8 @@ Proof.
         + intros H'. intros z [H1|H1].
             { subst. assumption. }
             { inversion H1. }
-    - destruct (IH1 xs) as [H1 H2]. destruct (IH2 xs) as [H3 H4]. split.
-        + intros H. 
-          rewrite H1, H3.
+    - destruct (IH1 xs) as [H1 H2]. destruct (IH2 xs) as [H3 H4]. split; intros H.
+        + rewrite H1, H3.
             { reflexivity. }
             { apply coincide_incl with ((Fr t1 ++ Fr t2) \\ xs).
               rewrite diff_distrib_app_r. apply incl_appr.
@@ -299,8 +298,23 @@ Proof.
               rewrite diff_distrib_app_r. apply incl_appl.
                 { apply incl_refl. }
                 { assumption. }}
-        + intros H. inversion H. rewrite diff_distrib_app_r.
+        + inversion H. rewrite diff_distrib_app_r. apply coincide_app.
+            { apply IH1. assumption. }
+            { apply IH2. assumption. }
+    - split; intros H.
+        + rewrite remove_diff in H. rewrite <- diff_distrib_app_l' in H.
+          simpl in H. destruct (IH1 (cons x xs)) as [H1 H2]. clear IH1.
+          rewrite H1.
+            { reflexivity. }
+            { assumption. }
+        + inversion H as [H1]. rewrite remove_diff. 
+          rewrite <- diff_distrib_app_l'. simpl. apply IH1. assumption.
+Qed.
 
-
-Show.
-*)
+Lemma free_coincide_subst : 
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v),
+        coincide (Fr t) f g <-> subst f t = subst g t.
+Proof.
+    intros v e f g t. unfold subst. rewrite <- (diff_nil v e (Fr t)).
+    apply free_coincide_subst_gen.
+Qed.

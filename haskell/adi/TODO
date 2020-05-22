@@ -1,2 +1,4 @@
+eval'
 recursion
+implement Show for Expr
 implement Arbitrary for Env ?

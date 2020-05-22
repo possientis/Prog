@@ -2,23 +2,30 @@
 
 module  Env
     (   Env
+    ,   Env'
     ,   Value
     ,   Closure
     ,   newEnv
+    ,   newEnv'
     ,   find
+    ,   find'
     ,   mkVal
     ,   mkClosure
     ,   val
     ,   closure
     ,   bind
+    ,   bind'
     ,   evalClosure
     )   where
 
 import Data.Map.Strict as M
 
 import Var
+import Syntax
 
 newtype Env = Env { unEnv :: Map Var Value }
+
+newtype Env' = Env' {unEnv' :: Map Var Expr }
 
 instance Show Env where
     show = show . M.toList . unEnv
@@ -47,14 +54,25 @@ instance Show Closure where
 newEnv :: Env
 newEnv = Env mempty
 
+newEnv' :: Env'
+newEnv' = Env' mempty
+
 find :: Var -> Env -> Value
 find var env = case M.lookup var (unEnv env) of
     Just v  -> v
     Nothing -> error $ "Variable unbound:" ++ show var
 
+find' :: Var -> Env' -> Expr
+find' var env = case M.lookup var (unEnv' env) of
+    Just e  -> e
+    Nothing -> error $ "Variable unbound:" ++ show var
+
 -- Add binding to existing environment
 bind :: Var -> Value -> Env -> Env
 bind x v env = Env $ insert x v (unEnv env)
+
+bind' :: Var -> Expr -> Env' -> Env' 
+bind' x e env = Env' $ insert x e (unEnv' env)
 
 mkVal :: Integer -> Value
 mkVal = Val

@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase         #-}
 {-# LANGUAGE DeriveFunctor      #-}
 
 module  Syntax  
@@ -9,6 +10,7 @@ module  Syntax
     ,   eIf
     ,   eLam
     ,   eApp
+    ,   toNum
     )   where
 
 import Data.Functor.Foldable
@@ -17,8 +19,8 @@ import Op
 import Var
 
 data ExprF a
-    = EVar Var
-    | ENum Integer
+    = ENum Integer
+    | EVar Var
     | EOp  Op a a
     | EIf  a a a
     | ELam Var a
@@ -45,3 +47,12 @@ eLam x e = Fix $ ELam x e
 
 eApp :: Expr -> Expr -> Expr
 eApp e1 e2 = Fix $ EApp e1 e2
+
+toNum :: Expr -> Maybe Integer
+toNum = cata $ \case
+    ENum n  -> Just n
+    _       -> Nothing 
+
+
+
+
