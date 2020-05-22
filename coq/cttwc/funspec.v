@@ -17,11 +17,8 @@ Proof.
     unfold Add. split; intros y; reflexivity.
 Qed.
 
-
-
 Definition FunExt : Prop := forall (a b:Type) (f g:a -> b), 
     (forall (x:a), f x = g x) -> f = g.
-
 
 Definition Ack (f:nat -> nat -> nat) : Prop 
     := (forall (y:nat), f 0 y = S y)
@@ -32,7 +29,39 @@ Definition Ack (f:nat -> nat -> nat) : Prop
 Definition L3 : forall (f g:nat -> nat -> nat),
     Ack f -> Ack g -> forall (x y:nat), f x y = g x y.
 Proof.
-    intros f g [H1 [H2 H3]] [H4 [H5 H6]]. induction x as [|x IH].
-    - intros y. rewrite H1, H4. reflexivity.
-    - 
+    intros f g [H1 [H2 H3]] [H4 [H5 H6]]. induction x as [|x IH1]; intros y.
+    - rewrite H1, H4. reflexivity.
+    - induction y as [|y IH2]. 
+        + rewrite H2, H5. apply IH1.
+        + rewrite H3, H6. rewrite IH2. apply IH1.
+Qed.
+
+(* existence                                                                    *)
+Definition L4 : Ack (fix f (x:nat) : nat -> nat :=
+    match x with
+    | 0     => S
+    | S x   => fix g (y:nat) : nat :=
+        match y with
+        | 0     => f x 1
+        | S y   => f x (g y)
+        end
+    end).  
+Proof.
+    unfold Ack. split.
+    - intros y. reflexivity.
+    - split.
+        + destruct x as [|x]; reflexivity.
+        + intros x. destruct y as [|y]; reflexivity.
+Qed.
+
+Definition Add2 (f:nat -> nat -> nat) : Prop
+    := (forall (y:nat), f 0 y = y)
+    /\ (forall (x y:nat), f (S x) y = f x (S y)).
+
+Definition L5 : forall (f:nat -> nat -> nat), Add f -> Add2 f.
+Proof.
+    unfold Add, Add2. intros f [H1 H2]. split.
+    - assumption.
+    -
+
 Show.
