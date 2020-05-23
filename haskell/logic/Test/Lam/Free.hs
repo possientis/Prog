@@ -8,6 +8,7 @@ import Test.QuickCheck
 import Equiv
 import Include
 import Formula
+import Coincide
 import Variable     (Var)
 import Intersect
 import Difference
@@ -21,6 +22,8 @@ specFree = describe "Testing non-polymorphic properties of free..." $ do
     testFreeSubst
     testFreeSubstInterGen
     testFreeSubstInter
+    testFreeCoincideSubstGen
+    testFreeCoincideSubst
 
 testFreeSubstGen :: Spec
 testFreeSubstGen = it "Checked the free subst gen property" $
@@ -38,6 +41,14 @@ testFreeSubstInter :: Spec
 testFreeSubstInter = it "Checked Fr(t) /\\ xs = [] -> f*(t)(xs) = f t" $
     property $ propFreeSubstInter
 
+testFreeCoincideSubstGen :: Spec
+testFreeCoincideSubstGen = it "Checked free coincide subst gen property" $
+    property $ propFreeCoincideSubstGen
+
+testFreeCoincideSubst :: Spec
+testFreeCoincideSubst = it "Checked f|(Fr t) = g|(Fr t) => f t = g t" $
+    property $ propFreeCoincideSubst
+
 propFreeSubstGen :: (Var -> T Var) -> T Var -> [Var] -> Bool
 propFreeSubstGen f t xs = 
     free (subst_ f xs t) <== free t /\ xs ++ concatMap (free . f) (free t \\ xs)
@@ -51,4 +62,19 @@ propFreeSubstInterGen f t xs ys = (free t /\ xs) /== (free t /\ ys) ||
 
 propFreeSubstInter :: (Var -> T Var) -> T Var -> [Var] -> Bool
 propFreeSubstInter f t xs = (free t /\ xs) /== [] || subst_ f xs t == subst f t
+
+propFreeCoincideSubstGen 
+    :: (Var -> T Var) 
+    -> (Var -> T Var) 
+    -> T Var 
+    -> [Var] 
+    -> Bool
+propFreeCoincideSubstGen f g t xs = 
+    coincide (free t \\ xs) f g == (subst_ f xs t == subst_ g xs t)
+
+propFreeCoincideSubst :: (Var -> T Var) -> (Var -> T Var) -> T Var -> Bool
+propFreeCoincideSubst f g t = coincide (free t) f g == (subst f t == subst g t)
+
+
+
 

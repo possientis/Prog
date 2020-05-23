@@ -39,6 +39,7 @@ all:	   						Extensionality.vo \
 								${LAM}/Dmap.vo \
 								${FOL}/Dmap.vo \
 								${LAM}/Subst.vo \
+								${LAM}/BetaValid.vo \
 								${LAM}/Replace.vo
 
 Extensionality.vo : 			Extensionality.v
@@ -352,6 +353,15 @@ ${LAM}/Subst.vo :				${LAM}/Subst.v \
 								Eq.vo \
 								${LAM}/T.vo
 	coqc ${LAM}/Subst.v			${OPT} 
+
+
+${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
+								Eq.vo \
+								In.vo \
+								Difference.vo \
+								${LAM}/T.vo \
+								${LAM}/Free.vo
+	coqc ${LAM}/BetaValid.v		${OPT}
 
 
 ${LAM}/Replace.vo :				${LAM}/Replace.v \

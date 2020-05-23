@@ -16,6 +16,25 @@ axiom quot2.ind : ∀ {α : Sort u} {r : α → α → Prop} {β : quot2 r → P
 --#check @quot2.ind
 --#check @quot.ind
 
+constant quot2.lift : ∀ {α : Sort u} {r : α → α → Prop} {β : Sort u} (f : α → β),
+  (∀ a b, r a b → f a = f b) → quot2 r → β
+
+--#check @quot2.lift
+--#check@quot.lift
+
+
+lemma lift_compute : ∀ {α : Sort u} {r : α → α → Prop} {β : Sort u} (f : α → β)
+  (H:∀ a b, r a b → f a = f b) (x:α), quot.lift f H (quot.mk r x) = f x :=
+begin
+  intros α r β f H x, refl
+end
+
+axiom quot2.sound : ∀ {α : Type u} {r : α → α → Prop} {a b : α},
+  r a b → quot2.mk r a = quot2.mk r b
+
+--#check @quot2.sound
+--#check @quot.sound
+
 
 
 

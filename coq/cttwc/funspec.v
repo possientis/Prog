@@ -62,6 +62,71 @@ Definition L5 : forall (f:nat -> nat -> nat), Add f -> Add2 f.
 Proof.
     unfold Add, Add2. intros f [H1 H2]. split.
     - assumption.
-    -
+    - induction x as [|x IH]; intros y.
+        + rewrite H2, H1, H1. reflexivity.
+        + rewrite (H2 (S x) y), (H2 x (S y)), IH. reflexivity.
+Qed.
 
+Definition L6 : forall (f:nat -> nat -> nat), Add2 f -> Add f.
+Proof.
+    unfold Add, Add2. intros f [H1 H2]. split.
+    - assumption.
+    - induction x as [|x IH]; intros y.
+        + rewrite H2, H1, H1. reflexivity.
+        + rewrite (H2 (S x) y), (IH (S y)), H2. reflexivity.
+Qed.
+
+Definition Hardt (f:nat -> nat) : Prop
+    := f 0 = 0
+    /\ (forall (n:nat), f (S n) = S (f (f n))).
+
+Definition L7 : Hardt (fun x => x).
+Proof.
+    unfold Hardt. split.
+    - reflexivity.
+    - intros n. reflexivity.
+Qed.
+
+
+Definition L8 : forall (f:nat -> nat),
+    Hardt f -> forall (n:nat), f n = n.
+Proof.  
+    unfold Hardt. intros f [H1 H2]. induction n as [|n IH].
+    - assumption.
+    - rewrite H2, IH, IH. reflexivity.
+Qed.
+
+Definition Hardt2 (f:nat -> nat) : Prop
+    := f 0 = 0
+    /\ (forall (n:nat), f (S n) = f (S (f n))).
+
+
+Definition L9 : Hardt2 (fun x => x).
+Proof.
+    unfold Hardt2. split.
+    - reflexivity.
+    - intros n. reflexivity.
+Qed.
+
+(*
+Definition L10 : forall (f:nat -> nat),
+    Hardt2 f -> forall (n:nat), f n = n.
+Proof.  
+    unfold Hardt2. intros f [H1 H2]. induction n as [|n IH].
+    - assumption.
+    -
 Show.
+*)
+
+Definition Spec1 (f:False -> nat) : Prop := (forall x, f x = 5).
+
+Definition L10 : Spec1 (fun x => match x with end).
+Proof.
+    unfold Spec1. intros x. contradiction.
+Qed.
+
+Definition L11 : forall (f g:False -> nat), Spec1 f -> Spec1 g -> forall x, f x = g x.
+Proof.
+    unfold Spec1. intros f g H1 H2 x. contradiction.
+Qed.
+

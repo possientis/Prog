@@ -6,9 +6,10 @@ functor category
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 small => locally small 
-natural transformation paradox: alpha also G => F 
 category of F-algebra for F:C-> C : Alg(F)
 category of F-coalgebra for F:C->C: coAlg(F)
+
+F ~ G => Alg(F) ? Alg(G)
 
 if F is a polynomial endofunctor in Set, then Alg(F) has an initial object
 

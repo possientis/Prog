@@ -1,13 +1,7 @@
-workout quickcheck ==> combinator
 Coq:
 BetaValid
 
-
 Haskell:
-coincide_app
-free_coincide_subst_gen
-free_coincide_subst
-
 
 Latex:
 
