@@ -8,6 +8,7 @@ Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Cons.
+Require Import Core.Rank.
 Require Import Core.Equal.
 Require Import Core.Order.
 Require Import Core.Empty.
@@ -31,6 +32,7 @@ Fixpoint normal (x:set) : set :=
         | right _   => insert (normal x) (normal xs)    (*  otherwise           *)
         end
     end.
+
 
 Lemma normalEqual : forall (x:set), x == normal x.
 Proof.
@@ -103,10 +105,27 @@ Proof.
     rewrite H6. reflexivity.
 Qed.
 
-(*
-Lemma normalList : forall (x:set),
-    toList (normal x) = Normal.normal (map normal (toList x)).   
+Lemma nubSortCommute : forall (x:set), nub (sort x) = sort (nub x).
 Proof.
+    intros x. unfold nub, sort. rewrite toListFromList, toListFromList.
+    rewrite Normal.nubSortCommute. reflexivity.
+Qed.
+
+Definition normalAsList (x:set) : set :=
+    fromList (Normal.normal (map normal (toList x))).
+
+(*
+Lemma normalCorrect : forall (n:nat) (x:set), rank x <= n ->
+    toList (normal x) = Normal.normal (map normal (toList x)).
+Proof.
+    induction n as [|n IH]; intros x H1.
+    - admit.
+    - destruct x as [|x xs].
+        + reflexivity.
+        + simpl. destruct (elem_dec x xs) as [H2|H2].
+            { admit. }
+            {
 
 Show.
 *)
+

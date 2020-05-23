@@ -407,6 +407,7 @@ ${NORM}/Normal.vo :				${NORM}/Normal.v \
 								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
 								${CORE}/Cons.vo \
+								${CORE}/Rank.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Empty.vo \
 								${CORE}/ElemIncl.vo \
