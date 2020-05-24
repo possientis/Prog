@@ -409,6 +409,7 @@ ${NORM}/Normal.vo :				${NORM}/Normal.v \
 								${CORE}/Cons.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Equal.vo \
+								${CORE}/Order.vo \
 								${CORE}/Empty.vo \
 								${CORE}/ElemIncl.vo \
 								${CORE}/Decidability.vo \

@@ -1,1 +1,26 @@
+Now that we have a notion of composition between natural transformations,
+we would like to argue that this operation is associative. However, the 
+statement is not meaningful unless we are very clear as to what it means
+for two natural transformations to be equal. Now if $F,G:\Cat\to\Dat$ are
+two functors between categories \Cat\ and \Dat, and if 
+$\alpha,\beta:F\Rightarrow G$ are natural transformations between the 
+typed functors $(\Cat,\Dat,F)$ and $(\Cat,\Dat,G)$, then
+$\alpha,\beta:\ob\ \Cat\to\arr\ \Dat$, i.e. both $\alpha$ and $\beta$
+are maps from the collection $\ob\ \Cat$ to the collection $\arr\ \Dat$.
+Furthermore since \Dat\ is a category, from $(2)$ of 
+definition~(\ref{Cat:def:category}) there is a clear notion of equality 
+defined on $\arr\ \Dat$. Hence given $a\in\ob\ \Cat$, it is perfectly 
+meaningful to ask whether $\alpha(a)=\beta(a)$. In fact, using the
+extentionality axiom~(\ref{Cat:ax:map:extensional}) we have: 
+\begin{prop}\label{Nat:prop:equal}
+    Let $\alpha,\beta:F\Rightarrow G$ be two natural transformations between
+    functors $F,G:\Cat\to\Dat$ where \Cat\ and \Dat\ are categories, such that:
+        \[
+            \forall a\in\ob\ \Cat\ ,\ \alpha(a)=\beta(a)
+        \]
+    Then $\alpha=\beta$, i.e. the two natural transformations $\alpha$
+    and $\beta$ are equal.
+\end{prop}
+\begin{proof}
 TODO
+\end{proof}

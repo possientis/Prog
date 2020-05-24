@@ -53,6 +53,3 @@ toNum = cata $ \case
     ENum n  -> Just n
     _       -> Nothing 
 
-
-
-

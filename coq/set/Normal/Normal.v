@@ -33,7 +33,6 @@ Fixpoint normal (x:set) : set :=
         end
     end.
 
-
 Lemma normalEqual : forall (x:set), x == normal x.
 Proof.
     induction x as [|x IH1 xs IH2].
@@ -111,8 +110,24 @@ Proof.
     rewrite Normal.nubSortCommute. reflexivity.
 Qed.
 
-Definition normalAsList (x:set) : set :=
-    fromList (Normal.normal (map normal (toList x))).
+Fixpoint normalAsList_ (n:nat) (x:set) : set :=
+    match n with
+    | 0     => x
+    | S n   => 
+        fromList (Utils.Normal.normal (map (normalAsList_ n) (toList x)))
+    end.
+
+ 
+(*
+Lemma normalAsList_n_Sn : forall (n:nat) (x:set), 
+    rank x <= n -> normalAsList_ n x = normalAsList_ (S n) x.
+Proof.
+    induction n as [|n IH]; intros x H.
+    - admit.
+    - remember (S n) as e eqn:E. simpl.
+
+Show.
+*)
 
 (*
 Lemma normalCorrect : forall (n:nat) (x:set), rank x <= n ->
@@ -124,7 +139,7 @@ Proof.
         + reflexivity.
         + simpl. destruct (elem_dec x xs) as [H2|H2].
             { admit. }
-            {
+            { rewrite insertCorrect. unfold Normal.normal.
 
 Show.
 *)

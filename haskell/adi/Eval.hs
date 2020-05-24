@@ -18,15 +18,17 @@ eval = cata $ \case
     EVar x          -> evalVar x
     EOp op v1 v2    -> evalOp op v1 v2
     EIf v v1 v2     -> evalIf v v1 v2
-    EApp v1 v2      -> evalApp v1 v2  
     ELam x v        -> evalLam x v
+    EApp v1 v2      -> evalApp v1 v2  
 
 eval' :: Expr -> Env' -> Expr
 eval' = cata $ \case
     ENum n          -> evalNum' n
     EVar x          -> evalVar' x
     EOp op e1 e2    -> evalOp' op e1 e2
-    _               -> error "not implemented"
+    EIf e e1 e2     -> evalIf' e e1 e2
+    ELam x e        -> evalLam' x e
+    EApp e1 e2      -> evalApp' e1 e2  
 
 evalNum :: Integer -> Env -> Value
 evalNum n _ = mkVal n
@@ -73,8 +75,21 @@ evalIf v v1 v2 env = case val (v env) of
     Nothing -> error "If: cannot evaluate condition."
     Just n  -> if n == 0 then (v1 env) else (v2 env)
 
+evalIf'
+    :: (Env' -> Expr)
+    -> (Env' -> Expr)
+    -> (Env' -> Expr)
+    -> Env'
+    -> Expr
+evalIf' e e1 e2 env = case toNum (e env) of
+    Nothing -> error "If: condition does not evaluate to an integer."
+    Just n  -> if n == 0 then (e1 env) else (e2 env)
+
 evalLam :: Var -> (Env -> Value) -> Env -> Value
 evalLam x v env = mkClosure x v env 
+
+evalLam' :: Var -> (Env' -> Expr) -> Env' -> Expr
+evalLam' x e env = eLam x (e env)
 
 evalApp 
     :: (Env -> Value) 
@@ -84,5 +99,12 @@ evalApp
 evalApp v1 v2 env = case closure (v1 env) of
     Nothing -> error "App: lhs argument is not a function."
     Just c  -> evalClosure c (v2 env) 
+
+evalApp'
+    :: (Env' -> Expr) 
+    -> (Env' -> Expr) 
+    -> Env' 
+    -> Expr
+evalApp' = undefined
 
 
