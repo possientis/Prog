@@ -794,11 +794,44 @@ All-++-≃ xs ys = record
     ... | ⟨ fst , snd ⟩ = cong (λ { x → ⟨ q ∷ proj₁ x , proj₂ x ⟩ }) k
 
 ¬Any⇔All¬ : ∀ {a : Set} {p : a → Set} (xs : List a) →
-  (¬ Any p xs) ⇔ All (λ x → ¬ p x) xs
+  (¬_ ∘ Any p) xs ⇔ All (¬_ ∘ p) xs
 ¬Any⇔All¬ xs = record { to = to xs ; from = from xs }
   where
   to : ∀ {a : Set} {p : a → Set} (xs : List a) → (¬ Any p xs) → All (λ x → ¬ p x) xs
-  to xs = {!!}
+  to [] f = []
+  to (x ∷ xs) f =  (λ{px → f (here px)}) ∷ to xs (λ{h → f (there h)})
 
   from : ∀ {a : Set} {p : a → Set} (xs : List a) → All (λ x → ¬ p x) xs → ¬ Any p xs
-  from xs = {!!}
+  from (x ∷ xs) (q ∷ r) (here s) = q s
+  from (x ∷ xs) (q ∷ r) (there s) = from xs r s
+
+¬Any≃All¬ : ∀ {a : Set} {p : a → Set} (xs : List a) →
+  (¬_ ∘ Any p) xs ≃ All (¬_ ∘ p) xs
+¬Any≃All¬ xs = record
+  { to = to xs
+  ; from = from xs
+  ; from∘to = from∘to xs
+  ; to∘from = to∘from xs
+  }
+  where
+  to : ∀ {a : Set} {p : a → Set} (xs : List a) → (¬ Any p xs) → All (λ x → ¬ p x) xs
+  to [] f = []
+  to (x ∷ xs) f =  (λ{px → f (here px)}) ∷ to xs (λ{h → f (there h)})
+
+  from : ∀ {a : Set} {p : a → Set} (xs : List a) → All (λ x → ¬ p x) xs → ¬ Any p xs
+  from (x ∷ xs) (q ∷ r) (here s) = q s
+  from (x ∷ xs) (q ∷ r) (there s) = from xs r s
+
+  k : ∀ {a : Set} {p : a → Set} (xs : List a) (q : ¬ Any p xs) (r : Any p xs) →
+    from xs (to xs q) r ≡ q r
+  k (x ∷ xs) q (here r) = refl
+  k (x ∷ xs) q (there r) = k xs (q ∘ there) r
+
+  from∘to : ∀ {a : Set} {p : a → Set} (xs : List a) (q : ¬ Any p xs) →
+    from xs (to xs q) ≡ q
+  from∘to xs q = extensionality (k xs q)
+
+  to∘from : ∀ {a : Set} {p : a → Set} (xs : List a) (q : All (¬_ ∘ p) xs) →
+    to xs (from xs q) ≡ q
+  to∘from [] [] = refl
+  to∘from (x ∷ xs) (q ∷ r) = cong (q ∷_) (to∘from xs r)
