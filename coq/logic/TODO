@@ -2,7 +2,14 @@ Coq:
 BetaValid
 
 Haskell:
-
+BetaValid_
+BetaValid
+betaValid_var_gen
+betaValid_var
+betaValid_app_gen
+betaValid_app
+betaValid_lam_gen
+betaValid_lam
 Latex:
 
 
