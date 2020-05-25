@@ -145,3 +145,12 @@ Proof.
     - reflexivity.
     - simpl. rewrite IH. reflexivity.
 Qed.
+
+Lemma diff_incl_r : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    xs <= ys -> zs \\ ys <= zs \\ xs.
+Proof.
+    intros v e xs ys zs H1 z H2. apply diff_charac. apply diff_charac in H2. 
+    destruct H2 as [H2 H3]. split.
+    - assumption.
+    - intros H4. apply H3, H1. assumption.
+Qed.

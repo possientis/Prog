@@ -358,9 +358,14 @@ ${LAM}/Subst.vo :				${LAM}/Subst.v \
 ${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
 								Eq.vo \
 								In.vo \
+								Equiv.vo \
+								Include.vo \
+								Intersect.vo \
 								Difference.vo \
+								Composition.vo \
 								${LAM}/T.vo \
-								${LAM}/Free.vo
+								${LAM}/Free.vo \
+								${LAM}/Subst.vo
 	coqc ${LAM}/BetaValid.v		${OPT}
 
 
