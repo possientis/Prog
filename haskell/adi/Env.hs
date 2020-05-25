@@ -2,20 +2,18 @@
 
 module  Env
     (   Env
-    ,   Env'
     ,   Value
     ,   Closure
     ,   newEnv
-    ,   newEnv'
     ,   find
-    ,   find'
     ,   mkVal
     ,   mkClosure
     ,   val
     ,   closure
+    ,   closureVar
+    ,   closureBody
+    ,   closureEnv
     ,   bind
-    ,   bind'
-    ,   evalClosure
     )   where
 
 import Data.Map.Strict as M
@@ -24,8 +22,6 @@ import Var
 import Syntax
 
 newtype Env = Env { unEnv :: Map Var Value }
-
-newtype Env' = Env' {unEnv' :: Map Var Expr }
 
 instance Show Env where
     show = show . M.toList . unEnv
@@ -41,9 +37,18 @@ instance Show Value where
 
 data Closure = Closure
     { cloVar :: Var
-    , cloFun :: Env -> Value 
+    , cloExp :: Expr
     , cloEnv :: Env
     }
+
+closureVar :: Closure -> Var
+closureVar = cloVar
+
+closureBody :: Closure -> Expr
+closureBody = cloExp
+
+closureEnv :: Closure -> Env
+closureEnv = cloEnv
 
 instance Show Closure where
     show c =  "Closure { var = " 
@@ -54,34 +59,23 @@ instance Show Closure where
 newEnv :: Env
 newEnv = Env mempty
 
-newEnv' :: Env'
-newEnv' = Env' mempty
-
 find :: Var -> Env -> Value
 find var env = case M.lookup var (unEnv env) of
     Just v  -> v
-    Nothing -> error $ "Variable unbound:" ++ show var
-
-find' :: Var -> Env' -> Expr
-find' var env = case M.lookup var (unEnv' env) of
-    Just e  -> e
     Nothing -> error $ "Variable unbound:" ++ show var
 
 -- Add binding to existing environment
 bind :: Var -> Value -> Env -> Env
 bind x v env = Env $ insert x v (unEnv env)
 
-bind' :: Var -> Expr -> Env' -> Env' 
-bind' x e env = Env' $ insert x e (unEnv' env)
-
 mkVal :: Integer -> Value
 mkVal = Val
 
-mkClosure :: Var -> (Env -> Value) -> Env -> Value
-mkClosure x v e = Clo $ Closure 
+mkClosure :: Var -> Expr -> Env -> Value
+mkClosure x e env = Clo $ Closure 
     { cloVar = x 
-    , cloFun = v
-    , cloEnv = e
+    , cloExp = e
+    , cloEnv = env
     }
 
 val :: Value -> Maybe Integer
@@ -93,12 +87,3 @@ closure :: Value -> Maybe Closure
 closure = \case
     Val _   -> Nothing
     Clo c   -> Just c
-
--- Given a value to which the closure variable is bound, 
--- returns the value corresponding to the closure evaluation.
--- This is simply the value returned by the closure function
--- evaluated at the closure 'local environment', defined as
--- the closure environment with the additional binding of
--- the closure variable to the value argument.
-evalClosure :: Closure -> Value -> Value
-evalClosure c v = (cloFun c) (bind (cloVar c) v (cloEnv c))

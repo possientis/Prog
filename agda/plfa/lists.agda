@@ -3,7 +3,7 @@ module lists where
 
 import Relation.Binary.PropositionalEquality as Eq
 
-open Eq                         using ( _≡_; refl; trans; sym; cong)
+open Eq                         using ( _≡_; refl; trans; sym; cong; subst)
 open Eq.≡-Reasoning             using ( begin_; _≡⟨⟩_; step-≡; _∎)
 open import Data.Bool           using (Bool; true; false; T; _∧_; _∨_; not)
 open import Data.Nat            using ( ℕ; zero; suc; _≤_; z≤n; s≤s; _+_; _*_; _∸_)
@@ -304,6 +304,11 @@ _ =
 postulate
   extensionality : ∀ {a b : Set} → {f g : a → b} →
     (∀ (x : a) → f x ≡ g x) → f ≡ g
+
+postulate
+  extensionalityDep : ∀ {a : Set} {b : a → Set} {f g : ∀ (x : a) → b x} →
+    (∀ (x : a) → f x ≡ g x) → f ≡ g
+
 
 map-compose : ∀ {a b c : Set} → {f : a → b} → {g : b → c} →
   map (g ∘ f) ≡ map g ∘ map f
@@ -835,3 +840,34 @@ All-++-≃ xs ys = record
     to xs (from xs q) ≡ q
   to∘from [] [] = refl
   to∘from (x ∷ xs) (q ∷ r) = cong (q ∷_) (to∘from xs r)
+
+
+All-∀ : ∀ {a : Set} {p : a → Set} (xs : List a) →
+  All p xs ≃ ∀ (x : a) → x ∈ xs → p x
+All-∀ xs = record
+  { to = to xs
+  ; from = from xs
+  ; from∘to = from∘to xs
+  ; to∘from = {!!}
+  }
+  where
+  to : ∀ {a : Set} {p : a → Set} (xs : List a) →
+    All p xs → ∀ (x : a) → x ∈ xs → p x
+  to [] _ q ()
+  to (x ∷ xs) (q ∷ r) _ (here s) = subst _ (sym s) q
+  to (x ∷ xs) (q ∷ r) _ (there s) = to xs r _ s
+
+  from : ∀ {a : Set} {p : a → Set} (xs : List a) →
+    (∀ (x : a) → x ∈ xs → p x) → All p xs
+  from [] _ = []
+  from (x ∷ xs) f = f _ (here refl) ∷ from xs λ{_ q → f _ (there q)}
+
+  from∘to : ∀ {a : Set} {p : a → Set} (xs : List a) (q : All p xs) →
+    from xs (to xs q) ≡ q
+  from∘to [] [] = refl
+  from∘to (x ∷ xs) (q ∷ r) = cong (q ∷_) (from∘to xs r)
+
+  to∘from : ∀ {a : Set} {p : a → Set} (xs : List a) (f : ∀(x : a) → x ∈ xs → p x) →
+    to xs (from xs f) ≡ f
+  to∘from xs = {!!}
+

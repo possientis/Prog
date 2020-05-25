@@ -1,4 +1,4 @@
-eval'
+extend notion of Value so it can be an Expr 
 recursion
 implement Show for Expr
 implement Arbitrary for Env ?

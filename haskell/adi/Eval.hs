@@ -2,7 +2,7 @@
 
 module  Eval
     (   eval
-    ,   eval'
+    ,   evalClosure
     )   where
 
 import Data.Functor.Foldable
@@ -13,98 +13,51 @@ import Var
 import Syntax
 
 eval :: Expr -> Env -> Value
-eval = cata $ \case 
-    ENum n          -> evalNum n
-    EVar x          -> evalVar x
-    EOp op v1 v2    -> evalOp op v1 v2
-    EIf v v1 v2     -> evalIf v v1 v2
-    ELam x v        -> evalLam x v
-    EApp v1 v2      -> evalApp v1 v2  
-
-eval' :: Expr -> Env' -> Expr
-eval' = cata $ \case
-    ENum n          -> evalNum' n
-    EVar x          -> evalVar' x
-    EOp op e1 e2    -> evalOp' op e1 e2
-    EIf e e1 e2     -> evalIf' e e1 e2
-    ELam x e        -> evalLam' x e
-    EApp e1 e2      -> evalApp' e1 e2  
+eval = \case 
+    Fix (ENum n)        -> evalNum n
+    Fix (EVar x)        -> evalVar x
+    Fix (EOp op e1 e2)  -> evalOp op e1 e2
+    Fix (EIf e e1 e2)   -> evalIf e e1 e2
+    Fix (ELam x e)      -> evalLam x e
+    Fix (EApp v1 v2)    -> evalApp v1 v2  
+    Fix (ERec f e)      -> evalRec f e
 
 evalNum :: Integer -> Env -> Value
 evalNum n _ = mkVal n
 
-evalNum' :: Integer -> Env' -> Expr
-evalNum' n _ = eNum n
-
 evalVar :: Var -> Env -> Value
 evalVar = find
 
-evalVar' :: Var -> Env' -> Expr
-evalVar' = find'
-
-evalOp 
-    :: Op 
-    -> (Env -> Value) 
-    -> (Env -> Value) 
-    -> Env 
-    -> Value
-evalOp op v1 v2 env = case val (v1 env) of
-    Nothing -> error $ show op ++ ": illegal lhs arg."
-    Just n1 -> case val (v2 env) of
-        Nothing -> error $ show op ++ ": illegal rhs arg."
+evalOp :: Op -> Expr -> Expr -> Env -> Value
+evalOp op e1 e2 env = case val (eval e1 env) of
+    Nothing -> error $ show op ++ ": lhs does not evaluate to an integer."
+    Just n1 -> case val (eval e2 env) of
+        Nothing -> error $ show op ++ ": rhs does not evaluate to an integer."
         Just n2 -> mkVal $ delta op n1 n2
-evalOp' 
-    :: Op 
-    -> (Env' -> Expr) 
-    -> (Env' -> Expr) 
-    -> Env'
-    -> Expr
-evalOp' op e1 e2 env = case toNum (e1 env) of
-    Nothing -> error $ show op ++ ": illegal lhs arg."
-    Just n1 -> case toNum (e2 env) of
-        Nothing -> error $ show op ++ ": illegal rhs arg."
-        Just n2 -> eNum $ delta op n1 n2
-    
-evalIf 
-    :: (Env -> Value) 
-    -> (Env -> Value) 
-    -> (Env -> Value) 
-    -> Env 
-    -> Value
-evalIf v v1 v2 env = case val (v env) of 
-    Nothing -> error "If: cannot evaluate condition."
-    Just n  -> if n == 0 then (v1 env) else (v2 env)
-
-evalIf'
-    :: (Env' -> Expr)
-    -> (Env' -> Expr)
-    -> (Env' -> Expr)
-    -> Env'
-    -> Expr
-evalIf' e e1 e2 env = case toNum (e env) of
+   
+evalIf :: Expr -> Expr -> Expr -> Env -> Value
+evalIf e e1 e2 env = case val (eval e env) of 
     Nothing -> error "If: condition does not evaluate to an integer."
-    Just n  -> if n == 0 then (e1 env) else (e2 env)
+    Just n  -> if n == 0 then (eval e1 env) else (eval e2 env)
 
-evalLam :: Var -> (Env -> Value) -> Env -> Value
-evalLam x v env = mkClosure x v env 
+evalLam :: Var -> Expr -> Env -> Value
+evalLam x e env = mkClosure x e env 
 
-evalLam' :: Var -> (Env' -> Expr) -> Env' -> Expr
-evalLam' x e env = eLam x (e env)
+evalApp :: Expr -> Expr -> Env -> Value
+evalApp e1 e2 env = case closure (eval e1 env) of
+    Nothing -> error "App: lhs does not evaluate to a function."
+    Just c  -> evalClosure c (eval e2 env) 
 
-evalApp 
-    :: (Env -> Value) 
-    -> (Env -> Value) 
-    -> Env 
-    -> Value
-evalApp v1 v2 env = case closure (v1 env) of
-    Nothing -> error "App: lhs argument is not a function."
-    Just c  -> evalClosure c (v2 env) 
+evalRec :: Var -> Expr -> Env -> Value
+evalRec f e = undefined
 
-evalApp'
-    :: (Env' -> Expr) 
-    -> (Env' -> Expr) 
-    -> Env' 
-    -> Expr
-evalApp' = undefined
 
+-- Given a value to which the closure variable is bound, 
+-- returns the value corresponding to the closure evaluation.
+-- This is simply the value obtained by evaluating the closure 
+-- body in the 'local environment', defined as the closure 
+-- environment with the additional binding of the closure 
+-- variable to the value argument.
+evalClosure :: Closure -> Value -> Value
+evalClosure c v = eval (closureBody c) (bind (closureVar c) v (closureEnv c))
 

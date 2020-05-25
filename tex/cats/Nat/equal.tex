@@ -22,5 +22,80 @@ extentionality axiom~(\ref{Cat:ax:map:extensional}) we have:
     and $\beta$ are equal.
 \end{prop}
 \begin{proof}
-TODO
+    This is an immediate consequence of the extensionality 
+    axiom~(\ref{Cat:ax:map:extensional}).
+\end{proof}
+
+\begin{prop}\label{Nat:prop:associative}
+    Let $\alpha:F\Rightarrow G$, $\beta:G\Rightarrow H$, $\gamma:H\Rightarrow J$ 
+    be natural transformations between functors $F,G,H,J:\Cat\to\Dat$ where 
+    \Cat, \Dat\ are categories. Then:
+        \[
+            (\gamma \circ \beta)\circ\alpha=\gamma\circ(\beta\circ\alpha)
+        \]
+    i.e. composition of natural transfromations is associative.
+\end{prop}
+\begin{proof}
+    Using proposition~(\ref{Nat:prop:equal}) it is sufficient to show that for 
+    all $a\in\Cat$, the component at $a$ of both natural transformations
+    $(\gamma \circ \beta)\circ\alpha$ and $\gamma\circ(\beta\circ\alpha)$ 
+    are equal:
+        \begin{eqnarray*}(\,(\gamma\circ\beta)\,\circ\alpha\,)(a)
+            &=&(\gamma\circ\beta)(a)\circ\alpha(a)
+            \ \leftarrow\ \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&(\,\gamma(a)\,\circ\,\beta(a)\,)\,\circ\,\alpha(a)\\
+            \mbox{$\circ$ assoc in \Dat}\ \to\ 
+            &=&\gamma(a)\circ(\,\beta(a)\,\circ\,\alpha(a)\,)\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&\gamma(a)\circ(\beta\circ\alpha)(a)\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&(\,\gamma\,\circ\,(\beta\circ\alpha)\,)(a)
+        \end{eqnarray*}
+\end{proof}
+
+\begin{prop}\label{Nat:prop:left:identity}
+    Let $\alpha:F\Rightarrow G$ be a natural transformation between 
+    functors $F,G:\Cat\to\Dat$ where \Cat, \Dat\ are categories. Then, we have:
+        \[
+            \iota_{G}\circ\alpha = \alpha
+        \]
+    where $\iota_{G}:G\Rightarrow G$ is the identity natural transformation
+    as per definition~(\ref{Nat:def:identity}).
+\end{prop}
+\begin{proof}
+    Using proposition~(\ref{Nat:prop:equal}) it is sufficient to show that for 
+    all $a\in\Cat$, the component at $a$ of both natural transformations
+    $\iota_{G}\circ\alpha$ and $\alpha$ are equal:
+    \begin{eqnarray*} (\iota_{G}\circ\alpha)(a)
+        &=&\iota_{G}(a)\circ\alpha(a)
+        \ \leftarrow\ \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\\
+        \mbox{$(1)$ of def.~(\ref{Nat:def:identity})}\ \to\ 
+        &=&\id(\,G(a)\,)\circ\alpha(a)\\
+        \mbox{$(13)$ of def.~(\ref{Cat:def:category})}\ \to\ 
+        &=&\alpha(a)
+    \end{eqnarray*}
+\end{proof}
+
+\begin{prop}\label{Nat:prop:right:identity}
+    Let $\alpha:F\Rightarrow G$ be a natural transformation between 
+    functors $F,G:\Cat\to\Dat$ where \Cat, \Dat\ are categories. Then, we have:
+        \[
+            \alpha\circ\iota_{F} = \alpha
+        \]
+    where $\iota_{F}:F\Rightarrow F$ is the identity natural transformation
+    as per definition~(\ref{Nat:def:identity}).
+\end{prop}
+\begin{proof}
+    Using proposition~(\ref{Nat:prop:equal}) it is sufficient to show that for 
+    all $a\in\Cat$, the component at $a$ of both natural transformations
+    $\alpha\circ\iota_{F}$ and $\alpha$ are equal:
+    \begin{eqnarray*} (\alpha\circ\iota_{F})(a)
+        &=&\alpha(a)\circ\iota_{F}(a)
+        \ \leftarrow\ \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\\
+        \mbox{$(1)$ of def.~(\ref{Nat:def:identity})}\ \to\ 
+        &=&\alpha(a)\circ\id(\,F(a)\,)\\
+        \mbox{$(12)$ of def.~(\ref{Cat:def:category})}\ \to\ 
+        &=&\alpha(a)
+    \end{eqnarray*}
 \end{proof}

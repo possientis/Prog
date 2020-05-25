@@ -25,7 +25,7 @@ data ExprF a
     | EIf  a a a
     | ELam Var a
     | EApp a a
---    | ERec Var a
+    | ERec Var a
     deriving (Functor)
 
 type Expr = Fix ExprF

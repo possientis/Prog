@@ -20,6 +20,7 @@ rm -f a.out
 ./wiwik/clean.sh
 ./Optics/clean.sh
 ./adi/clean.sh
+./Set/clean.sh
 
 
 cd ${DIR}
