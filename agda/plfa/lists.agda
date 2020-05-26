@@ -869,5 +869,4 @@ All-∀ xs = record
 
   to∘from : ∀ {a : Set} {p : a → Set} (xs : List a) (f : ∀(x : a) → x ∈ xs → p x) →
     to xs (from xs f) ≡ f
-  to∘from xs = {!!}
-
+  to∘from xs f = {!!}
