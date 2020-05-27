@@ -10,7 +10,7 @@ transformation between $(\Cop,\Dop,F)$ and $(\Cop,\Dop,G)$ among others.
 The two statements are not identical and in fact as it turns out, we
 have the equivalence:
 
-\begin{prop}
+\begin{prop}\label{Nat:prop:opposite}
     Let $F,G:\Cat\to\Dat$ be functors between categories \Cat, \Dat. Then: 
     \[
         \alpha\,:\,(\Cat,\Dat,F)\,\Rightarrow\,(\Cat,\Dat,G)
@@ -86,3 +86,15 @@ have the equivalence:
 \Dop\ commutes amounts to proving the same square commutes, in relation to \Cat\ 
 and \Dat\ after all the arrows have been reversed, and this follows from 
 $\alpha:F\Rightarrow G$.
+
+
+Proposition~(\ref{Nat:prop:opposite}) illustrates the fact that the knowledge
+of a natural transformation $\alpha$ by itself does not tell us what its 
+intended domain and codomain are. This situation is similar to that encountered
+with untyped functions and untyped functors. In line with
+definitions~(\ref{Cat:def:typed:untyped:function}) and~(\ref{Fun:def:typed:untyped:functor}), we define:
+\begin{defin}\label{Nat:def:typed:untyped:natural}
+    Given a natural transformation $\alpha:(\Cat,\Dat,F)\Rightarrow(\Cat,\Dat,G)$
+    TODO
+\end{defin}
+
