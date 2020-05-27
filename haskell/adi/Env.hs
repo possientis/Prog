@@ -8,8 +8,10 @@ module  Env
     ,   find
     ,   mkVal
     ,   mkClosure
+    ,   mkExpr
     ,   val
     ,   closure
+    ,   expr
     ,   closureVar
     ,   closureBody
     ,   closureEnv
@@ -29,11 +31,13 @@ instance Show Env where
 data Value 
     = Val Integer
     | Clo Closure
+    | Exp Expr
 
 instance Show Value where
     show = \case 
         Val n   -> show n
         Clo c   -> show c
+        Exp _   -> "<expression>"
 
 data Closure = Closure
     { cloVar :: Var
@@ -78,12 +82,20 @@ mkClosure x e env = Clo $ Closure
     , cloEnv = env
     }
 
+mkExpr :: Expr -> Value
+mkExpr = Exp
+
 val :: Value -> Maybe Integer
 val = \case
     Val n   -> Just n
-    Clo _   -> Nothing
+    _       -> Nothing
 
 closure :: Value -> Maybe Closure
 closure = \case
-    Val _   -> Nothing
     Clo c   -> Just c
+    _       -> Nothing
+
+expr :: Value -> Maybe Expr
+expr = \case
+    Exp e   -> Just e
+    _       -> Nothing

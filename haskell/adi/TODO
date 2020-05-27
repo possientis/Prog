@@ -1,4 +1,4 @@
-extend notion of Value so it can be an Expr 
-recursion
+test for ERec
+revisit design Env: Var -> Expr, Value has no Expr
 implement Show for Expr
 implement Arbitrary for Env ?

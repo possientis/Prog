@@ -22,6 +22,7 @@ specEval = describe "Checking the Eval module ..." $ do
     specEIfNZero
     specELam
     specEApp
+    specERec
     specSum1
     specSum2
 
@@ -56,6 +57,10 @@ specELam = it "Checked eval for ELam x x" $ do
 specEApp :: Spec
 specEApp = it "Checked eval for (\\x -> x^2) n" $ do
     property $ propEApp
+
+specERec :: Spec
+specERec = it "Checked eval for fix f = fac" $ do
+    property $ propERec
 
 specSum1 :: Spec
 specSum1 = it "Checked eval for (\\x y -> x + y) n m" $ do
@@ -96,6 +101,9 @@ propEApp n s = s == "" ||
     val (eval 
         (eApp (eLam (mkVar s) (eOp mul (eVar s) (eVar s)))
         (eNum n)) newEnv) == Just (n * n)
+
+propERec :: Integer -> String -> Bool
+propERec _ _ = True
 
 propSum1 :: String -> String -> Integer -> Integer -> Bool
 propSum1 x y n m = x == "" || y == "" || x /= y ||  

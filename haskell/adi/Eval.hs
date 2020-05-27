@@ -26,7 +26,11 @@ evalNum :: Integer -> Env -> Value
 evalNum n _ = mkVal n
 
 evalVar :: Var -> Env -> Value
-evalVar = find
+evalVar x env = case expr v of
+    Just e  -> eval e env
+    Nothing -> v
+    where 
+    v = find x env
 
 evalOp :: Op -> Expr -> Expr -> Env -> Value
 evalOp op e1 e2 env = case val (eval e1 env) of
@@ -49,8 +53,7 @@ evalApp e1 e2 env = case closure (eval e1 env) of
     Just c  -> evalClosure c (eval e2 env) 
 
 evalRec :: Var -> Expr -> Env -> Value
-evalRec f e = undefined
-
+evalRec f e env = eval e (bind f (mkExpr e) env)
 
 -- Given a value to which the closure variable is bound, 
 -- returns the value corresponding to the closure evaluation.

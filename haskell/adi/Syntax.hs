@@ -1,5 +1,5 @@
-{-# LANGUAGE LambdaCase         #-}
-{-# LANGUAGE DeriveFunctor      #-}
+{-# LANGUAGE LambdaCase             #-}
+{-# LANGUAGE DeriveFunctor          #-}
 
 module  Syntax  
     (   ExprF   (..)
