@@ -40,5 +40,3 @@ fromList (x : xs) = Cons x (fromList xs)
 toList :: Set -> [Set]
 toList Nil = []
 toList (Cons x xs) = x : (toList xs)
-
-
