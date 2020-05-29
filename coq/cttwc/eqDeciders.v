@@ -93,7 +93,71 @@ Proof.
         + reflexivity.
         + reflexivity.
         + reflexivity.
-    - simpl in H.
+    - simpl in H. destruct (f x x') eqn:Ef; destruct (g y y') eqn:Eg.
+        + apply Hf in Ef. apply Hg in Eg. subst. reflexivity.
+        + inversion H.
+        + inversion H.
+        + inversion H.
+Qed.
 
-Show.
+Definition L7 : forall (a b:Type), Discrete a -> Discrete b -> Discrete (a * b).
+Proof.
+    intros a b [f Hf] [g Hg]. unfold Discrete. exists (eqProd f g).
+    apply L6; assumption.
+Qed.
 
+Definition eqFalse : False -> False -> bool := 
+    fun (p:False) => match p with end.
+
+Definition L8 : Discrete False.
+Proof.
+    unfold Discrete. exists eqFalse. unfold EqDecider.
+    intros x y. contradiction.
+Qed.
+
+Definition eqUnit : unit -> unit -> bool :=
+    fun (x y:unit) => 
+        match x,y with 
+        | tt,tt => true    
+        end.
+
+Definition L9 : Discrete unit.
+Proof.
+    unfold Discrete. exists eqUnit. unfold EqDecider.
+    intros x y. destruct x. destruct y. simpl. split; intros H; reflexivity. 
+Qed.
+
+Fixpoint leb (n m:nat) : bool :=
+    match n with
+    | 0     => true
+    | S n   =>
+        match m with
+        | 0     => false
+        | S m   => leb n m
+        end
+    end.
+
+Open Scope nat_scope.
+Definition L10 : forall (n m:nat), leb n m = true <-> exists (k:nat), n + k = m.
+Proof.
+    induction n as [|n IH]; intros m; destruct m; split; intros H; simpl in H; simpl.
+    - exists 0. reflexivity.
+    - reflexivity.
+    - exists (S m). reflexivity.
+    - reflexivity.
+    - inversion H.
+    - destruct H as [k H]. inversion H.
+    - apply IH in H. destruct H as [k H]. exists k. rewrite H. reflexivity.
+    - apply IH. destruct H as [k H]. exists k. inversion H. reflexivity.
+Qed.
+
+Definition FunExt : Prop := forall (a b:Type) (f g:a -> b), 
+    (forall (x:a), f x = g x) -> f = g.
+
+Definition L11 : FunExt -> forall (f g:unit -> unit), f = g.
+Proof.
+    unfold FunExt. intros H f g. apply H. intros x.
+    destruct x. destruct (f tt). destruct (g tt). reflexivity.
+Qed.
+
+Definition eqUnitUnit : (unit -> unit) -> (unit -> unit) -> bool.
