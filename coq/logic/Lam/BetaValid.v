@@ -116,6 +116,7 @@ Proof.
     intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs H1.
     - simpl. destruct (in_dec eqDec x xs) as [H2|H2].
         + apply equivRefl.
-        + simpl.
+        + simpl. rewrite app_nil_r. apply equivRefl.
+    - simpl. apply betaValid_app_gen in H1. destruct H1 as [H1 H2].
 Show.
 *)
