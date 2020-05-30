@@ -99,11 +99,14 @@ propELam n s = s == "" ||
 propEApp :: Integer -> String -> Bool
 propEApp n s = s == "" || 
     val (eval 
-        (eApp (eLam (mkVar s) (eOp mul (eVar s) (eVar s)))
-        (eNum n)) newEnv) == Just (n * n)
+            (eApp 
+                (eLam (mkVar s) (eOp mul (eVar s) (eVar s)))
+                (eNum n)) 
+            newEnv) == Just (n * n)
 
-propERec :: Integer -> String -> Bool
-propERec _ _ = True
+propERec :: Integer -> String -> String -> Bool
+propERec m f n  = f == "" || n == "" || f == n || m < 0 ||
+    val (eval (eApp (eFac f n) (eNum m)) newEnv) == Just (product [1..m])
 
 propSum1 :: String -> String -> Integer -> Integer -> Bool
 propSum1 x y n m = x == "" || y == "" || x /= y ||  
@@ -120,3 +123,11 @@ eSum x y =
         (eLam (mkVar y)
             (eOp add (eVar x) (eVar y))))
 
+eFac :: String -> String -> Expr
+eFac f n =
+    (eRec (mkVar f)
+       (eLam (mkVar n)
+            (eIf (eVar n) (eNum 1) 
+                (eOp mul (eVar n) 
+                    (eApp (eVar f) 
+                        (eOp add (eVar n) (eNum (-1)))))))) 

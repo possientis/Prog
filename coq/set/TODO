@@ -1,4 +1,3 @@
-haskell
 Normal/Normal
 Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x

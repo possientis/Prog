@@ -841,6 +841,9 @@ All-++-≃ xs ys = record
   to∘from [] [] = refl
   to∘from (x ∷ xs) (q ∷ r) = cong (q ∷_) (to∘from xs r)
 
+L4 : ∀ {a : Set} {p : a → Set} (xs : List a) (f g : ∀ (x : a) → x ∈ xs → p x) →
+  (∀ (x : a) (q : x ∈ xs) → f x q ≡ g x q) → f ≡ g
+L4 xs f g h = extensionalityDep (λ{x → extensionality (λ{q → h x q})})
 
 All-∀ : ∀ {a : Set} {p : a → Set} (xs : List a) →
   All p xs ≃ ∀ (x : a) → x ∈ xs → p x
@@ -848,7 +851,7 @@ All-∀ xs = record
   { to = to xs
   ; from = from xs
   ; from∘to = from∘to xs
-  ; to∘from = {!!}
+  ; to∘from = to∘from xs
   }
   where
   to : ∀ {a : Set} {p : a → Set} (xs : List a) →
@@ -867,6 +870,26 @@ All-∀ xs = record
   from∘to [] [] = refl
   from∘to (x ∷ xs) (q ∷ r) = cong (q ∷_) (from∘to xs r)
 
+  -- This was difficult
   to∘from : ∀ {a : Set} {p : a → Set} (xs : List a) (f : ∀(x : a) → x ∈ xs → p x) →
     to xs (from xs f) ≡ f
-  to∘from xs f = {!!}
+  to∘from xs f = L4 xs _ f (k xs f)
+    where
+    k : ∀ {a : Set} {p : a → Set} (xs : List a) (f : ∀(x : a) → x ∈ xs → p x) (x : a) (q : x ∈ xs) →
+      to xs (from xs f) x q ≡ f x q
+    k (y ∷ xs) f .y (here refl) = refl
+    k (y ∷ xs) f x (there q) =
+      begin
+        to (y ∷ xs) (from (y ∷ xs) f) x (there q)
+        ≡⟨⟩
+        to (y ∷ xs) (f _ (here refl) ∷ from xs λ{_ r → f _ (there r)}) x (there q)
+        ≡⟨⟩
+        to xs (from xs λ{_ r → f _ (there r)}) _ q
+        ≡⟨ k xs (λ{u r → f u (there r)}) x q ⟩
+        f x (there q)
+        ∎
+
+Any-∃ : ∀ {a : Set} {p : a → Set} (xs : List a) →
+  Any p xs ≃ ∃[ x ] (x ∈ xs × p x)
+Any-∃ xs = {!!}
+

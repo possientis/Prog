@@ -23,17 +23,24 @@ Require Import Normal.Equiv.
 Require Import Normal.Insert.
 Require Import Normal.InListOf.
 
-Fixpoint normal (x:set) : set :=
+(* Not a convenient definition                                                  *)
+Fixpoint normal2 (x:set) : set :=
     match x with
-    | Nil           => Nil
-    | (Cons x xs)   =>
+    | Nil       => Nil
+    | Cons x xs =>
         match (elem_dec x xs) with
-        | left _    => normal xs                        (*  we have x :: xs     *)
-        | right _   => insert (normal x) (normal xs)    (*  otherwise           *)
+        | left _    => normal2 xs                        (*  we have x :: xs     *)
+        | right _   => insert (normal2 x) (normal2 xs)   (*  otherwise           *)
         end
     end.
 
-Lemma normalEqual : forall (x:set), x == normal x.
+Fixpoint normal (x:set) : set :=
+    match x with
+    | Nil       => Nil
+    | Cons x xs => sort (nub (Cons (normal x) (normal xs)))
+    end.
+
+Lemma normalEqual : forall (x:set), x == normal2 x.
 Proof.
     induction x as [|x IH1 xs IH2].
     - apply equalRefl.
@@ -48,10 +55,10 @@ Proof.
                 { apply IH2. }}
 Qed.
 
-Lemma normalSameEqual : forall (x y:set), normal x = normal y -> x == y.
+Lemma normalSameEqual : forall (x y:set), normal2 x = normal2 y -> x == y.
 Proof.
-    intros x y H. apply equalTrans with (normal y).
-    - apply equalTrans with (normal x).
+    intros x y H. apply equalTrans with (normal2 y).
+    - apply equalTrans with (normal2 x).
         + apply normalEqual.
         + rewrite H. apply equalRefl.
     - apply equalSym. apply normalEqual.
@@ -110,37 +117,4 @@ Proof.
     rewrite Normal.nubSortCommute. reflexivity.
 Qed.
 
-Fixpoint normalAsList_ (n:nat) (x:set) : set :=
-    match n with
-    | 0     => x
-    | S n   => 
-        fromList (Utils.Normal.normal (map (normalAsList_ n) (toList x)))
-    end.
-
- 
-(*
-Lemma normalAsList_n_Sn : forall (n:nat) (x:set), 
-    rank x <= n -> normalAsList_ n x = normalAsList_ (S n) x.
-Proof.
-    induction n as [|n IH]; intros x H.
-    - admit.
-    - remember (S n) as e eqn:E. simpl.
-
-Show.
-*)
-
-(*
-Lemma normalCorrect : forall (n:nat) (x:set), rank x <= n ->
-    toList (normal x) = Normal.normal (map normal (toList x)).
-Proof.
-    induction n as [|n IH]; intros x H1.
-    - admit.
-    - destruct x as [|x xs].
-        + reflexivity.
-        + simpl. destruct (elem_dec x xs) as [H2|H2].
-            { admit. }
-            { rewrite insertCorrect. unfold Normal.normal.
-
-Show.
-*)
 

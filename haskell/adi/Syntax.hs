@@ -4,12 +4,13 @@
 module  Syntax  
     (   ExprF   (..)
     ,   Expr
-    ,   eVar
     ,   eNum
+    ,   eVar
     ,   eOp
     ,   eIf
     ,   eLam
     ,   eApp
+    ,   eRec
     ,   toNum
     )   where
 
@@ -30,11 +31,11 @@ data ExprF a
 
 type Expr = Fix ExprF
 
-eVar :: String -> Expr
-eVar s = Fix $ EVar $ mkVar s
-
 eNum :: Integer -> Expr
 eNum n = Fix $ ENum n
+
+eVar :: String -> Expr
+eVar s = Fix $ EVar $ mkVar s
 
 eOp :: Op -> Expr -> Expr -> Expr
 eOp op e1 e2 = Fix $ EOp op e1 e2 
@@ -47,6 +48,9 @@ eLam x e = Fix $ ELam x e
 
 eApp :: Expr -> Expr -> Expr
 eApp e1 e2 = Fix $ EApp e1 e2
+
+eRec :: Var -> Expr -> Expr
+eRec f e = Fix $ ERec f e
 
 toNum :: Expr -> Maybe Integer
 toNum = cata $ \case

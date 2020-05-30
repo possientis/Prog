@@ -95,6 +95,16 @@ with untyped functions and untyped functors. In line with
 definitions~(\ref{Cat:def:typed:untyped:function}) and~(\ref{Fun:def:typed:untyped:functor}), we define:
 \begin{defin}\label{Nat:def:typed:untyped:natural}
     Given a natural transformation $\alpha:(\Cat,\Dat,F)\Rightarrow(\Cat,\Dat,G)$
-    TODO
+    where $(\Cat,\Dat,F)$ and $(\Cat,\Dat,G)$ are typed functors, $\alpha$ is 
+    called the {\em untyped natural transformation} while
+    $((\Cat,\Dat,F),(\Cat,\Dat,G),\alpha)$ is the {\em typed} 
+    natural transformation.
 \end{defin}
+
+\begin{notation}\label{Nat:notation:typed:natural}
+    When the underlying categories \Cat\ and \Dat\ are clearly given from the
+    context, given two functors $F,G:\Cat\to\Dat$, the typed natural
+    transformation associated with $\alpha:(\Cat,\Dat,F)\Rightarrow (\Cat,\Dat,G)$
+    is simply denoted $(F,G,\alpha)$.
+\end{notation}
 

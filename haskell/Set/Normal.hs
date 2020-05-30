@@ -1,41 +1,32 @@
 module  Normal
     (   normal
+    ,   normal2
     ,   toInt
     ,   showSet
     ,   main
     )   where
 
+import Data.List        hiding (insert)
+
 import Set
 import Elem
 import Insert
 
-import Test.QuickCheck
-
-instance Show Set where
-    show = showSet
-
-instance Arbitrary Set where
-    arbitrary = chooseSet 10
-
-chooseSet :: Int -> Gen Set
-chooseSet n = do
-    k <- choose (0,n)
-    if k == 0
-        then return Nil
-        else do
-            x  <- chooseSet (k - 1)
-            xs <- chooseSet (n - 1)
-            return $ Cons x xs
-
-main :: IO ()
-main = do
-    sample (arbitrary :: Gen Set)
+--instance Show Set where
+--    show = showSet
 
 normal :: Set -> Set
 normal Nil = Nil
 normal (Cons x xs)
     | x <: xs   = normal xs
     | otherwise = insert (normal x) (normal xs)
+
+
+order :: Set -> Set -> Ordering
+order x y = if x <= y then GT else LT 
+
+normal2 :: Set -> Set
+normal2 = fromList . sortBy order . nub . map normal2 . toList
 
 toInt :: Set -> Maybe Int
 toInt x = case normal x of

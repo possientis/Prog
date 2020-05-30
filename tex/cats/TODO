@@ -1,6 +1,6 @@
-[C,D]^op
-typed natural transformation
+clean up the mess in relation to typed natural transformation
 functor category
+[C,D]^op vs [C^op,D^op]
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 small => locally small 
@@ -57,4 +57,5 @@ C(c,a)xC(c,b) naturally isomorphic to C(c,F(a,b))
 similar idea for (+)
 polynomial functors on C and laws modulo natural isos
 
-
+Paper:
+FixedPointFunctors
