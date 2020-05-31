@@ -160,4 +160,67 @@ Proof.
     destruct x. destruct (f tt). destruct (g tt). reflexivity.
 Qed.
 
-Definition eqUnitUnit : (unit -> unit) -> (unit -> unit) -> bool.
+Definition eqUnitUnit : (unit -> unit) -> (unit -> unit) -> bool :=
+    fun _ _ => true.
+
+Definition L12 : FunExt -> Discrete (unit -> unit).
+Proof.
+    unfold Discrete, EqDecider.
+    intros H. exists eqUnitUnit. intros x y. split; intros H1.
+    - reflexivity.
+    - apply L11. assumption.
+Qed.
+
+Definition bool_id : bool -> bool := fun x => x.
+Definition bool_not : bool -> bool := fun x =>
+    match x with
+    | true  => false
+    | false => true
+    end.
+Definition bool_true : bool -> bool := fun _ => true.
+Definition bool_false: bool -> bool := fun _ => false.
+
+Definition L13 : bool_id <> bool_not.
+Proof.
+    intro H. assert (true = false) as H'.
+    { change (bool_id true = bool_not true). rewrite H. reflexivity. }
+    inversion H'.
+Qed.
+
+
+Definition L14 : FunExt -> forall (f:bool -> bool),
+    f = bool_id \/ f = bool_not \/ f = bool_true \/ f = bool_false.
+Proof.
+    intros H f. destruct (f true) eqn:E1; destruct (f false) eqn:E2.
+    - right. right. left. apply H. intros x. destruct x; assumption.
+    - left. apply H. intros x. destruct x; assumption.
+    - right. left. apply H. intros x. destruct x; assumption.
+    - right. right. right. apply H. intros x. destruct x; assumption.
+Qed.
+
+Definition eqBoolBool (f g : bool -> bool) : bool := 
+    eqProd eqBool eqBool (f true, f false) (g true, g false).
+
+Definition L15 : FunExt -> EqDecider eqBoolBool.
+Proof.
+    unfold EqDecider. intros F f g. split; unfold eqBoolBool, eqProd, eqBool.
+    - intros H. rewrite H. 
+      destruct (g true) eqn:E1; destruct (g false) eqn:E2; reflexivity.
+    - destruct (g true) eqn:E1; destruct (g false) eqn:E2;
+      destruct (f true) eqn:E3; destruct (f false) eqn:E4; intros H1; apply F; intros x; destruct x; try (inversion H1).
+          + rewrite E1, E3. reflexivity.
+          + rewrite E4, E2. reflexivity.
+          + rewrite E1, E3. reflexivity.
+          + rewrite E4, E2. reflexivity.
+          + rewrite E1, E3. reflexivity.
+          + rewrite E4, E2. reflexivity.
+          + rewrite E1, E3. reflexivity.
+          + rewrite E4, E2. reflexivity.
+Qed.
+
+Definition L16 : FunExt -> Discrete (bool -> bool).
+Proof.
+    intros F. unfold Discrete. exists eqBoolBool. apply L15. assumption.
+Qed.
+
+
