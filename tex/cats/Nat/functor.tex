@@ -29,8 +29,29 @@ not typed functors. This makes the notations lighter without changing
 the essence of the category being defined: there is an obvious one-to-one
 mapping between the collections $\{\ F\ |\ F:\Cat\to\Dat\ \}$
 and $\{\ (\Cat,\Dat,F)\ |\ F:\Cat\to\Dat\ \}$, given \Cat\ and \Dat.
+There is also a one-to-one mapping between a collection containing 
+triples of the form $(F,G,\alpha)$ and a collection containing triples
+of the form $((\Cat,\Dat,F),(\Cat,\Dat,G),\alpha)$. This explains 
+why we decided to define a {\em typed natural transformation} simply
+as $(F,G,\alpha)$ rather than $((\Cat,\Dat,F),(\Cat,\Dat,G),\alpha)$
+in definition~(\ref{Nat:def:typed:untyped:natural}).
 
-\noindent
-{\bf Remark}: In light of notation~(\ref{Nat:notation:typed:natural}) we could
-regard a triple $(F,G,\alpha)$ as a notational shortcut for the typed natural 
-transformation $((\Cat,\Dat,F),(\Cat,\Dat,G),\alpha)$. 
+\begin{prop}\label{Nat:prop:functor:category}
+    The functor category $[\Cat,\Dat]$ for categories \Cat,\Dat\ is a 
+    category.
+\end{prop}
+\begin{proof}
+    Given $(\ob, \arr, \dom, \cod, \id, \circ)$ of
+    definition~(\ref{Nat:def:functor:category}), we need to check that this
+    data satisfies condition~$(1)-(13)$ of definition~(\ref{Cat:def:category}).
+
+    $(1)$: The collection $\ob=\{\ F\ |\ F:\Cat\to\Dat\ \}$ should be a
+    collection with equality. This is the case by virtue of 
+    proposition~(\ref{Fun:prop:equal}), where two functors are equal if 
+    and only if they coincide on all objects and all arrows.
+
+    $(2)$: The collection $\arr=\{\ (F,G,\alpha)\ |\ F\,,\,G:\Cat\to\Dat\ 
+    \mbox{and}\ \alpha:F\Rightarrow G\ \}$ should be a collection
+    with equality.
+
+\end{proof}

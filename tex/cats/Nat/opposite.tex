@@ -92,19 +92,21 @@ Proposition~(\ref{Nat:prop:opposite}) illustrates the fact that the knowledge
 of a natural transformation $\alpha$ by itself does not tell us what its 
 intended domain and codomain are. This situation is similar to that encountered
 with untyped functions and untyped functors. In line with
-definitions~(\ref{Cat:def:typed:untyped:function}) and~(\ref{Fun:def:typed:untyped:functor}), we define:
+definitions~(\ref{Cat:def:typed:untyped:function}) 
+and~(\ref{Fun:def:typed:untyped:functor}), we define:
 \begin{defin}\label{Nat:def:typed:untyped:natural}
     Given a natural transformation $\alpha:(\Cat,\Dat,F)\Rightarrow(\Cat,\Dat,G)$
     where $(\Cat,\Dat,F)$ and $(\Cat,\Dat,G)$ are typed functors, $\alpha$ is 
     called the {\em untyped natural transformation} while
-    $((\Cat,\Dat,F),(\Cat,\Dat,G),\alpha)$ is the {\em typed} 
-    natural transformation.
+    $(F,G,\alpha)$ is called the {\em typed} natural transformation.
 \end{defin}
 
-\begin{notation}\label{Nat:notation:typed:natural}
-    When the underlying categories \Cat\ and \Dat\ are clearly given from the
-    context, given two functors $F,G:\Cat\to\Dat$, the typed natural
-    transformation associated with $\alpha:(\Cat,\Dat,F)\Rightarrow (\Cat,\Dat,G)$
-    is simply denoted $(F,G,\alpha)$.
-\end{notation}
+\noindent
+{\bf Remark}: It may appear surprising that a typed natural transformation is 
+defined as a triple $(F,G,\alpha)$ which does not contain the data allowing 
+us to recover the categories \Cat\ and \Dat. We are adopting this simpler
+definition as opposed to the expected $((\Cat,\Dat,F),(\Cat,\Dat,G),\alpha)$
+because it allows us to define the functor category of
+definition~(\ref{Nat:def:functor:category}) while keeping notations light.
+
 

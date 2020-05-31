@@ -36,11 +36,32 @@ Proof.
     - right. apply H2. assumption.
 Qed.
 
-Lemma app_compat_lr : forall (v:Type) (e:Eq v) (xs xs' ys ys':list v),
+Lemma app_compat_lr : forall (v:Type) (xs xs' ys ys':list v),
     xs == xs' -> ys == ys' -> xs ++ ys == xs' ++ ys'.
 Proof.
-    intros v e xs xs' ys ys' H1 H2. apply equivTrans with (xs' ++ ys).
+    intros v xs xs' ys ys' H1 H2. apply equivTrans with (xs' ++ ys).
     - apply app_compat_l. assumption.
     - apply app_compat_r. assumption.
 Qed.
+
+(* not very useful                                                              *)
+Lemma app_assoc' : forall (v:Type) (xs ys zs:list v),
+    (xs ++ ys) ++ zs == xs ++ (ys ++ zs).
+Proof.
+    intros v xs ys zs. rewrite app_assoc. apply equivRefl.
+Qed.
+
+
+Lemma app_comm : forall (v:Type) (xs ys:list v),
+    xs ++ ys == ys ++ xs.
+Proof.
+    intros v xs ys. split; intros z; intros H1;
+    apply in_app_or in H1; destruct H1 as [H1|H1]; apply in_or_app.
+    - right. assumption.
+    - left. assumption.
+    - right. assumption.
+    - left. assumption.
+Qed.
+
+
 

@@ -891,5 +891,33 @@ All-∀ xs = record
 
 Any-∃ : ∀ {a : Set} {p : a → Set} (xs : List a) →
   Any p xs ≃ ∃[ x ] (x ∈ xs × p x)
-Any-∃ xs = {!!}
+Any-∃ xs = record
+  { to = to xs
+  ; from = from xs
+  ; from∘to = from∘to xs
+  ; to∘from = to∘from xs
+  }
+  where
+  to : ∀ {a : Set} {p : a → Set} (xs : List a) →
+    Any p xs → ∃[ x ] (x ∈ xs × p x)
+  to (x ∷ xs) (here q) = ⟨ x , ⟨ here refl , q ⟩ ⟩
+  to (x ∷ xs) (there q) with to xs q
+  ... | ⟨ y , ⟨ iny , py ⟩ ⟩ = ⟨ y , ⟨ there iny , py ⟩ ⟩
+
+  from : ∀ {a : Set} {p : a → Set} (xs : List a) →
+    ∃[ x ] (x ∈ xs × p x) → Any p xs
+  from [] ()
+  from (x ∷ xs) ⟨ y , ⟨ here q , py ⟩ ⟩ = here (subst _ q py)
+  from (x ∷ xs) ⟨ y , ⟨ there q , py ⟩ ⟩ = there (from xs ⟨ y , ⟨ q , py ⟩ ⟩)
+
+  from∘to : ∀ {a : Set} {p : a → Set} (xs : List a) (q : Any p xs) →
+    from xs (to xs q) ≡ q
+  from∘to (x ∷ xs) (here q) = refl
+  from∘to (x ∷ xs) (there q) = cong there (from∘to xs q)
+
+  to∘from : ∀ {a : Set} {p : a → Set} (xs : List a) (q : ∃[ x ] (x ∈ xs × p x)) →
+    to xs (from xs q) ≡ q
+  to∘from (x ∷ xs) ⟨ .x , ⟨ here refl , py ⟩ ⟩ = refl
+  to∘from (x ∷ xs) ⟨ y , ⟨ there q , py ⟩ ⟩ = {!!}
+
 

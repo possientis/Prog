@@ -1,4 +1,3 @@
-clean up the mess in relation to typed natural transformation
 functor category
 [C,D]^op vs [C^op,D^op]
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2

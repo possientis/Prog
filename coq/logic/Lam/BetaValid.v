@@ -3,6 +3,7 @@ Require Import List.
 Require Import Eq.
 Require Import In.
 Require Import Equiv.
+Require Import Append.
 Require Import Include.
 Require Import Intersect.
 Require Import Difference.
@@ -118,5 +119,26 @@ Proof.
         + apply equivRefl.
         + simpl. rewrite app_nil_r. apply equivRefl.
     - simpl. apply betaValid_app_gen in H1. destruct H1 as [H1 H2].
+    remember (Fr (subst_ f xs t1)) as T1 eqn:E1.    
+    remember (Fr (subst_ f xs t2)) as T2 eqn:E2.    
+    remember (Fr t1 ++ Fr t2 /\ xs) as T1' eqn:E1'.
+    remember (concat (map (Fr ; f) ((Fr t1 ++ Fr t2) \\ xs))) as T2' eqn:E2'.
+    remember (Fr t1 /\ xs) as T3 eqn:E3.
+    remember (Fr t2 /\ xs) as T4 eqn:E4.
+    remember (concat (map (Fr ; f) (Fr t1 \\ xs))) as T5 eqn:E5.
+    remember (concat (map (Fr ; f) (Fr t2 \\ xs))) as T6 eqn:E6.
+    assert (T1' = T3 ++ T4) as H3. 
+        { rewrite E1', E3, E4. apply inter_distrib_app_r. }
+    rewrite H3. clear H3 E1' T1'.
+    assert (T2' = T5 ++ T6) as H3.
+        { rewrite E2', E5, E6. rewrite diff_distrib_app_r, map_app. 
+          apply concat_app. }
+    rewrite H3. clear H3 E2' T2'.
+    rewrite <- app_assoc. rewrite (app_assoc T4).
+    apply equivTrans with (T3 ++ (T5 ++ T4) ++ T6).
+        + rewrite <- app_assoc. rewrite (app_assoc T3).
+(*
+        + apply app_compat_r, app_compat_l, app_comm.
+*)
 Show.
 *)

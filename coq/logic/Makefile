@@ -368,6 +368,7 @@ ${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
 								Eq.vo \
 								In.vo \
 								Equiv.vo \
+								Append.vo \
 								Include.vo \
 								Intersect.vo \
 								Difference.vo \
