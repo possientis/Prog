@@ -62,3 +62,9 @@ Proof.
     intros x y. unfold Equiv, Equiv.Equiv. intros [H1 H2].
     apply doubleIncl. split; apply inclIncl; assumption.
 Qed.
+
+Lemma equivConsCompat : forall (x xs ys:set),
+    Equiv xs ys -> Equiv (Cons x xs) (Cons x ys).
+Proof.
+    intros x xs ys. unfold Equiv. simpl. apply Equiv.equivConsCompat.
+Qed.

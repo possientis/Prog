@@ -40,6 +40,7 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Specification.vo \
 								${CORE}/Functional.vo \
 								${NORM}/InListOf.vo \
+								${NORM}/Map.vo \
 								${NORM}/Leq.vo \
 								${NORM}/Equiv.vo \
 								${NORM}/Nub.vo \
@@ -347,6 +348,11 @@ ${CORE}/Functional.vo :			${CORE}/Functional.v \
 ${NORM}/InListOf.vo :			${NORM}/InListOf.v \
 								${CORE}/Set.vo
 	coqc ${NORM}/InListOf.v		${OPT}
+
+
+${NORM}/Map.vo :				${NORM}/Map.v \
+								${CORE}/Set.vo
+	coqc ${NORM}/Map.v			${OPT}
 
 
 ${NORM}/Leq.vo :				${NORM}/Leq.v \

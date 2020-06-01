@@ -24,6 +24,15 @@ Proof.
     apply Nub.nubEquiv.
 Qed.
 
+Lemma nubEquivEquiv : forall (x y:set), Equiv x y -> Equiv (nub x) (nub y).
+Proof.
+    intros x y H. apply equivTrans with x.
+    - apply equivSym, nubEquiv.
+    - apply equivTrans with y.
+        + assumption.
+        + apply nubEquiv.
+Qed.
+
 
 Lemma nubNubed : forall (x:set), Nubed (nub x).
 Proof.
@@ -52,4 +61,4 @@ Lemma nubedConsNubedTail : forall (x xs:set),
 Proof.
     intros x xs. unfold Nubed. simpl. apply (Nub.nubedConsNubedTail _ _).
 Qed. 
-    
+ 

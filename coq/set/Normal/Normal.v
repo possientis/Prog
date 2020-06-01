@@ -1,4 +1,3 @@
-Require Import List.
 
 Require Import Utils.Ord.
 
@@ -16,53 +15,13 @@ Require Import Core.ElemIncl.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
+Require Import Normal.Map.
 Require Import Normal.Leq.
 Require Import Normal.Nub.
 Require Import Normal.Sort.
 Require Import Normal.Equiv.
 Require Import Normal.Insert.
 Require Import Normal.InListOf.
-
-(* Not a convenient definition                                                  *)
-Fixpoint normal2 (x:set) : set :=
-    match x with
-    | Nil       => Nil
-    | Cons x xs =>
-        match (elem_dec x xs) with
-        | left _    => normal2 xs                        (*  we have x :: xs     *)
-        | right _   => insert (normal2 x) (normal2 xs)   (*  otherwise           *)
-        end
-    end.
-
-Fixpoint normal (x:set) : set :=
-    match x with
-    | Nil       => Nil
-    | Cons x xs => sort (nub (Cons (normal x) (normal xs)))
-    end.
-
-Lemma normalEqual : forall (x:set), x == normal2 x.
-Proof.
-    induction x as [|x IH1 xs IH2].
-    - apply equalRefl.
-    - simpl. destruct (elem_dec x xs) as [H|H]; simpl.
-        +  apply equalTrans with xs.
-            { apply inConsEqual. assumption. }
-            { apply IH2. }
-        + apply equalTrans with (insert x xs).
-            { apply equalSym. apply insertCons. }
-            { apply insertCompatLR.
-                { apply IH1. }
-                { apply IH2. }}
-Qed.
-
-Lemma normalSameEqual : forall (x y:set), normal2 x = normal2 y -> x == y.
-Proof.
-    intros x y H. apply equalTrans with (normal2 y).
-    - apply equalTrans with (normal2 x).
-        + apply normalEqual.
-        + rewrite H. apply equalRefl.
-    - apply equalSym. apply normalEqual.
-Qed.
 
 Lemma nubSorted : forall (x:set), Sorted x -> Sorted (nub x).
 Proof.
@@ -117,4 +76,27 @@ Proof.
     rewrite Normal.nubSortCommute. reflexivity.
 Qed.
 
+(* Recursive definition which is accepted by coq.                               *)
+Fixpoint normal (x:set) : set :=
+    match x with
+    | Nil       => Nil
+    | Cons x xs => sort (nub (Cons (normal x) (normal xs)))
+    end.
+
+(* The real intended definition, given normal Nil = Nil                         *)
+Lemma normalDef : forall (x:set),
+    normal x = sort (nub (map normal x)).
+Proof.
+    induction x as [|x IH1 xs IH2].
+    - reflexivity.
+    - simpl. apply nubedSortedEquivSame.
+        + apply sortNubed, nubNubed.
+        + apply sortNubed, nubNubed.
+        + apply sortSorted.
+        + apply sortSorted.
+        + rewrite mapCons. apply sortEquivEquiv, nubEquivEquiv, equivConsCompat.
+          rewrite IH2. apply equivTrans with (nub (map normal xs)).
+            { apply equivSym, sortEquiv. }
+            { apply equivSym, nubEquiv. }
+Qed.
 

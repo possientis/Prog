@@ -38,3 +38,13 @@ Proof.
     - rewrite H. apply equivRefl.
 Qed.
 
+Lemma equivConsCompat : forall (a:Type) (x:a) (xs ys:list a),
+    Equiv xs ys -> Equiv (cons x xs) (cons x ys).
+Proof.
+    intros a x xs ys [H1 H2]. split; intros z [H3|H3].
+    - subst. left. reflexivity.
+    - right. apply H1. assumption.
+    - subst. left. reflexivity.
+    - right. apply H2. assumption.
+Qed.
+

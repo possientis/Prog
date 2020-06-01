@@ -18,6 +18,16 @@ Proof.
     apply Sort.sortEquiv.
 Qed.
 
+Lemma sortEquivEquiv : forall (x y:set), Equiv x y -> Equiv (sort x) (sort y).
+Proof.
+    intros x y H. apply equivTrans with x.
+    - apply equivSym, sortEquiv.
+    - apply equivTrans with y.
+        + assumption.
+        + apply sortEquiv.
+Qed.
+
+
 Lemma sortInListOfIff : forall (x xs:set), 
     inListOf x xs <-> inListOf x (sort xs).
 Proof.
@@ -66,3 +76,4 @@ Lemma sortedConsSortedTail : forall (x xs:set),
 Proof.
     intros x xs. unfold Sorted. simpl. apply Sort.sortedConsSortedTail.
 Qed.
+
