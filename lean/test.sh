@@ -15,6 +15,7 @@ echo
 echo "testing lean..."
 echo
 
+check choice
 check setoid
 check quotient
 check set

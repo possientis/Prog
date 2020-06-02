@@ -39,5 +39,6 @@ begin
   cases H with x /- now possible -/, constructor, constructor, exact x
 end
 
-
+--#check @classical.strong_indefinite_description
+--#check @classical.epsilon
 
