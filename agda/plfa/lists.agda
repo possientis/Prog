@@ -915,9 +915,11 @@ Any-∃ xs = record
   from∘to (x ∷ xs) (here q) = refl
   from∘to (x ∷ xs) (there q) = cong there (from∘to xs q)
 
+  -- This was difficult
   to∘from : ∀ {a : Set} {p : a → Set} (xs : List a) (q : ∃[ x ] (x ∈ xs × p x)) →
     to xs (from xs q) ≡ q
   to∘from (x ∷ xs) ⟨ .x , ⟨ here refl , py ⟩ ⟩ = refl
-  to∘from (x ∷ xs) ⟨ y , ⟨ there q , py ⟩ ⟩ = {!!}
-
+  to∘from {a} {p} (x ∷ xs) ⟨ y , ⟨ there q , py ⟩ ⟩ with to∘from {a} {p} xs ⟨ y , ⟨ q , py ⟩ ⟩
+  ... | k with to {a} {p} xs (from xs ⟨ y , ⟨ q , py ⟩ ⟩)
+  ... | ⟨ y' , ⟨ q' , py' ⟩ ⟩ = cong (λ { ⟨ x , ⟨ r , s ⟩ ⟩ → ⟨ x , ⟨ there r , s ⟩ ⟩ }) k
 
