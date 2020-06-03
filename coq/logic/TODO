@@ -2,6 +2,14 @@ Coq:
 BetaValid
 
 Haskell:
+app_compat_l
+app_compat_r
+app_compat_lr
+app_comm
+app_assoc
+diff_compat_l
+diff_compat_r
+diff_compat_lr
 BetaValid_
 BetaValid
 betaValid_var_gen

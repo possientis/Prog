@@ -120,8 +120,10 @@ Intersect.vo :					Intersect.v \
 
 Difference.vo :					Difference.v \
 								In.vo \
-								Intersect.vo \
-								Eq.vo
+								Eq.vo \
+								Equiv.vo \
+								Include.vo \
+								Intersect.vo
 	coqc Difference.v
 
 
@@ -368,6 +370,7 @@ ${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
 								Eq.vo \
 								In.vo \
 								Equiv.vo \
+								Remove.vo \
 								Append.vo \
 								Include.vo \
 								Intersect.vo \

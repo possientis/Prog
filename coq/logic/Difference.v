@@ -2,6 +2,7 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
+Require Import Equiv.
 Require Import Include.
 Require Import Intersect.
 
@@ -154,3 +155,36 @@ Proof.
     - assumption.
     - intros H4. apply H3, H1. assumption.
 Qed.
+
+Lemma diff_compat_l : forall (v:Type) (e:Eq v) (xs xs' ys:list v),
+    xs == xs' -> xs \\ ys == xs' \\ ys.
+Proof.
+    intros v e xs xs' ys [H1 H2]. split; intros z H3; 
+    apply diff_charac in H3; destruct H3 as [H3 H4];
+    apply diff_charac; split.
+    - apply H1. assumption.
+    - assumption.
+    - apply H2. assumption.
+    - assumption.
+Qed.
+
+Lemma diff_compat_r : forall (v:Type) (e:Eq v) (xs ys ys':list v),
+    ys == ys' -> xs \\ ys == xs \\ ys'.
+Proof.
+    intros v e xs ys ys' [H1 H2]. split; intros z H3;
+    apply diff_charac in H3; destruct H3 as [H3 H4];
+    apply diff_charac; split.
+    - assumption.
+    - intros H5. apply H4, H2. assumption.
+    - assumption.
+    - intros H5. apply H4, H1. assumption.
+Qed.
+
+Lemma diff_compat_lr : forall (v:Type) (e:Eq v) (xs xs' ys ys':list v),
+    xs == xs' -> ys == ys' -> xs \\ ys == xs' \\ ys'.
+Proof.
+    intros v e xs xs' ys ys' H1 H2. apply equivTrans with (xs' \\ ys).
+    - apply diff_compat_l. assumption.
+    - apply diff_compat_r. assumption.
+Qed.
+

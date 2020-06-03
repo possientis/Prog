@@ -3,6 +3,7 @@ Require Import List.
 Require Import Eq.
 Require Import In.
 Require Import Equiv.
+Require Import Remove.
 Require Import Append.
 Require Import Include.
 Require Import Intersect.
@@ -114,11 +115,11 @@ Lemma betaValid_free_gen :
     betaValid_ f xs t ->
     Fr (subst_ f xs t) == (Fr t /\ xs) ++ concat (map (Fr ; f) (Fr t \\ xs)).
 Proof.
-    intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs H1.
-    - simpl. destruct (in_dec eqDec x xs) as [H2|H2].
+    intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs H1; simpl.
+    - destruct (in_dec eqDec x xs) as [H2|H2].
         + apply equivRefl.
         + simpl. rewrite app_nil_r. apply equivRefl.
-    - simpl. apply betaValid_app_gen in H1. destruct H1 as [H1 H2].
+    - apply betaValid_app_gen in H1. destruct H1 as [H1 H2].
     remember (Fr (subst_ f xs t1)) as T1 eqn:E1.    
     remember (Fr (subst_ f xs t2)) as T2 eqn:E2.    
     remember (Fr t1 ++ Fr t2 /\ xs) as T1' eqn:E1'.
@@ -137,8 +138,18 @@ Proof.
     rewrite <- app_assoc. rewrite (app_assoc T4).
     apply equivTrans with (T3 ++ (T5 ++ T4) ++ T6).
         + rewrite <- app_assoc. rewrite (app_assoc T3).
-(*
+          apply app_compat_lr.
+            { rewrite E1, E3, E5. apply IH1. assumption. }
+            { rewrite E2, E4, E6. apply IH2. assumption. }
         + apply app_compat_r, app_compat_l, app_comm.
-*)
+    - apply betaValid_lam_gen in H1. destruct H1 as [H1 H2].
+      rewrite remove_diff, remove_diff.
+      remember (Fr (subst_ f (cons x xs) t1)) as T1 eqn:E1.
+      remember (Fr t1 \\ (cons x nil) /\ xs) as T2 eqn:E2.
+      remember (concat (map (Fr; f) (Fr t1 \\ (x :: nil) \\ xs))) as T3 eqn:E3.
+      remember (Fr t1 /\ (cons x xs)) as T4 eqn:E4.
+      remember (concat (map (Fr; f) (Fr t1 \\ (cons x xs)))) as T5 eqn:E5.
+      apply equivTrans with ((T4 ++ T5) \\ (cons x nil)).
+        +
 Show.
 *)
