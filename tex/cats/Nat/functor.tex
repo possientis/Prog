@@ -52,6 +52,54 @@ in definition~(\ref{Nat:def:typed:untyped:natural}).
 
     $(2)$: The collection $\arr=\{\ (F,G,\alpha)\ |\ F\,,\,G:\Cat\to\Dat\ 
     \mbox{and}\ \alpha:F\Rightarrow G\ \}$ should be a collection
-    with equality.
+    with equality. This is the case by virtue of 
+    proposition~(\ref{Nat:prop:equal}), where two natural transformations
+    $\alpha,\beta:F\Rightarrow G$ are equal if and only if they coincide on
+    all objects of \Cat. Having equality for functors and natural
+    transformations, we conclude from axiom~(\ref{Cat:ax:tuple:extensional})
+    that we also have equality for triples $(F,G,\alpha)$.
 
+    $(3)$: $\dom$ should be a map $\dom:\arr\to\ob$. The equation
+    $\dom(F,G,\alpha)=F$ holds for all functors $F,G:\Cat\to\Dat$ and 
+    natural transformations $\alpha:F\Rightarrow G$. So $\dom$ is 
+    indeed defined on the collection $\arr$ as requested. Also
+    $\dom\,(f)\in\ob$.
+
+    $(4)$: $\cod$ should be a map $\cod:\arr\to\ob$ which is the case 
+    as per $(3)$.
+
+    $(5)$: $\id$ should be a map $\id:\ob\to\arr$. The equation $\id(F)
+    =(F,F,\iota_{F})$ holds for all functors $F:\Cat\to\Dat$. So $\id$
+    is indeed defined on \ob\ as requested. So it remains to show that
+    $(F,F,\iota_{F})\in\arr$ for all $F$, which the case since
+    the identity natural transformation $\iota_{F}$ of
+    definition~(\ref{Nat:def:identity}) is a natural transformation 
+    $\iota_{F}:F\Rightarrow F$ as per proposition~(\ref{Nat:prop:identity}).
+
+    $(6)$: $\circ$ should be a partial map $\circ:\arr\times\arr\to\arr$.
+    From definition~(\ref{Nat:def:functor:category}), $g\circ f$ is defined
+    whenever $f$ and $g$ are of the form $f=(F,G,\alpha)$ and $g=(G,H,\beta)$
+    where $F,G,H:\Cat\to\Dat$, $\alpha:F\Rightarrow G$ and $\beta:G\Rightarrow H$. 
+    So $g\circ f$ is defined on a sub-collection of $\arr\times\arr$ as requested.     So it remains to show that $g\circ f\in\arr$ when defined. However, 
+    $g\circ f$ is defined as $(F,H,\beta\circ\alpha)$ where $\beta\circ\alpha$ 
+    is the composition of natural transformation, so it remains to show that 
+    $\beta\circ\alpha:F\Rightarrow H$ which follows from
+    proposition~(\ref{Nat:prop:composition}).
+
+    $(7)$: $g\circ f$ should be defined exactly when $\cod(f)=\dom(g)$. From
+    definition~(\ref{Nat:def:functor:category}), $g\circ f$ is defined 
+    exactly when $f$ is of the form $f=(F,G,\alpha)$ and $g$ is of the form
+    $(G,H,\beta)$. Since $\cod(f)=G$ and $\dom(g)=G$, we see that
+    $g\circ f$ is defined for all arrows $f,g$ for which $\cod(f)=\dom(g)$ 
+    as requested.
+
+    $(8)$: We should have $\dom(g\circ f) = \dom(f)$ when $g\circ f$ is defined.
+    So let $f=(F,G,\alpha)$ and $g=(G,H,\beta)$. Then we have 
+    $g\circ f=(F,H,\beta\circ\alpha)$ and consequently 
+    $\dom(g\circ f)=F$ which is $\dom(f)$ as requested.
+
+    $(9)$: We should have $\cod(g\circ f) = \cod(g)$ when $g\circ f$ is defined.
+    So let $f=(F,G,\alpha)$ and $g=(G,H,\beta)$. Then we have 
+    $g\circ f=(F,H,\beta\circ\alpha)$ and consequently $\cod(g\circ f)=H$ which
+    is $\cod(g)$ as requested.
 \end{proof}
