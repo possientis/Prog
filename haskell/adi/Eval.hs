@@ -2,18 +2,20 @@
 
 module  Eval
     (   eval
-    ,   evalClosure
     )   where
 
-import Data.Functor.Foldable
+--import Data.Functor.Foldable
 
-import Op
+--import Op
 import Env
-import Var
+--import Var
+import Value
 import Syntax
 
 eval :: Expr -> Env -> Value
 eval = \case 
+    _                   -> error "not implemented"
+{-
     Fix (ENum n)        -> evalNum n
     Fix (EVar x)        -> evalVar x
     Fix (EOp op e1 e2)  -> evalOp op e1 e2
@@ -21,7 +23,9 @@ eval = \case
     Fix (ELam x e)      -> evalLam x e
     Fix (EApp v1 v2)    -> evalApp v1 v2  
     Fix (ERec f e)      -> evalRec f e
+-}
 
+{-
 evalNum :: Integer -> Env -> Value
 evalNum n _ = mkVal n
 
@@ -63,4 +67,4 @@ evalRec f e env = eval e (bind f (mkExpr e) env)
 -- variable to the value argument.
 evalClosure :: Closure -> Value -> Value
 evalClosure c v = eval (closureBody c) (bind (closureVar c) v (closureEnv c))
-
+-}

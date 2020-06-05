@@ -27,7 +27,7 @@ alloc heap = (heap', addr) where
     addr  = next heap
     heap' = Heap 
         { next = inc addr 
-        , memory = insert addr valEmpty (memory heap)
+        , memory = insert addr mkNil (memory heap)
         }
 
 newHeap :: Heap

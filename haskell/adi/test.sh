@@ -9,9 +9,9 @@ echo
 echo "testing Abstracting Definitional Interpreter..."
 echo
 
-ghc -O2 Main.hs
-./Main
-./clean.sh
+#ghc -O2 Main.hs
+#./Main
+#./clean.sh
 
 echo
 echo 'test completed successfully'
