@@ -83,7 +83,7 @@ Fixpoint normal (x:set) : set :=
     | Cons x xs => sort (nub (Cons (normal x) (normal xs)))
     end.
 
-(* The real intended definition, given normal Nil = Nil                         *)
+(* The real intended definition                                                 *)
 Lemma normalDef : forall (x:set),
     normal x = sort (nub (map normal x)).
 Proof.
@@ -100,3 +100,40 @@ Proof.
             { apply equivSym, nubEquiv. }
 Qed.
 
+Inductive Normal (x:set) : Prop :=
+| mkNormal : Nubed x -> Sorted x -> 
+    (forall (z:set), inListOf z x -> Normal z) -> Normal x.
+
+Lemma normalNubed : forall (x:set), Nubed (normal x).
+Proof.
+    intros x. rewrite normalDef. apply sortNubed, nubNubed.
+Qed.
+
+Lemma normalSorted : forall (x:set), Sorted (normal x).
+Proof.
+    intros x. rewrite normalDef. apply sortSorted.
+Qed.
+
+Lemma NilNormal : Normal Nil.
+Proof.
+    constructor.
+    - constructor.
+    - constructor.
+    - intros z H. inversion H.
+Qed.
+
+(*
+Lemma normalNormal : forall (x:set), Normal (normal x).
+Proof.
+    (* setting up induction on rank x.                                          *)
+    intros x. remember (rank x) as n eqn:E. 
+    assert (rank x <= n) as H. { rewrite E. apply le_n. } 
+    clear E. revert H. revert x. revert n.
+    induction n as [|n IH]; intros x H1.
+    - inversion H1 as [H2|]. apply rankNil in H2. rewrite H2. apply NilNormal.
+    - constructor.
+        + apply normalNubed.
+        + apply normalSorted.
+        + intros z H2. unfold inListOf in H2. apply rankToList in H2.
+Show.
+*)
