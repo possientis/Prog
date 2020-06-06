@@ -1,4 +1,5 @@
 Coq:
+Difference
 BetaValid
 
 Haskell:
@@ -10,6 +11,7 @@ app_assoc
 diff_compat_l
 diff_compat_r
 diff_compat_lr
+diff_concat
 BetaValid_
 BetaValid
 betaValid_var_gen

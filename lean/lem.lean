@@ -39,5 +39,3 @@ begin
 end
 
 lemma p_implies_uv : ∀ (p : Prop), p → u p = v p := sorry
-
-

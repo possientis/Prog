@@ -150,6 +150,23 @@ Proof.
       remember (Fr t1 /\ (cons x xs)) as T4 eqn:E4.
       remember (concat (map (Fr; f) (Fr t1 \\ (cons x xs)))) as T5 eqn:E5.
       apply equivTrans with ((T4 ++ T5) \\ (cons x nil)).
-        +
+        + apply diff_compat_l. rewrite E1, E4, E5. apply IH1. assumption.
+        + rewrite diff_distrib_app_r. apply app_compat_lr.
+            { rewrite E4, E2. split; intros z H6.
+                { apply diff_charac in H6. destruct H6 as [H6 H7].
+                  apply inter_charac in H6. destruct H6 as [H6 H8].
+                  destruct H8 as [H8|H8].
+                    { subst. exfalso. apply H7. left. reflexivity. }
+                    { apply inter_charac. split.
+                        { apply diff_charac. split; assumption. }
+                        { assumption. }}}
+                { apply inter_charac in H6. destruct H6 as [H6 H7].
+                  apply diff_charac in H6. destruct H6 as [H6 H8].
+                  apply diff_charac. split.
+                    { apply inter_charac. split.
+                        { assumption. }
+                        { right. assumption. }}
+                    { assumption. }}}   
+            { rewrite E5, E3. rewrite <- diff_distrib_app_l'. simpl.
 Show.
 *)

@@ -102,4 +102,64 @@ in definition~(\ref{Nat:def:typed:untyped:natural}).
     So let $f=(F,G,\alpha)$ and $g=(G,H,\beta)$. Then we have 
     $g\circ f=(F,H,\beta\circ\alpha)$ and consequently $\cod(g\circ f)=H$ which
     is $\cod(g)$ as requested.
+
+    $(10)$: We should have $(h\circ g)\circ f = h\circ(g\circ f)$ whenever
+    $g\circ f$ and $h\circ g$ are well defined. So let $f=(F,G,\alpha)$,
+    $g=(G,H,\beta)$ and $h=(H,J,\gamma)$. We have:
+        \begin{eqnarray*}(h\circ g)\circ f
+            &=&(\,(H,J,\gamma)\,\circ\,(G,H,\beta)\,)\,
+            \circ\,(F,G,\alpha)\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(G,J,\gamma\circ\beta)\,\circ\,(F,G,\alpha)\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(F,J,(\gamma\circ \beta)\circ \alpha)\\
+            \mbox{nats $\circ$ assoc, prop~(\ref{Nat:prop:associative})}
+            \ \to\ 
+            &=&(F,J,\gamma\circ (\beta\circ \alpha))\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(H,J,\gamma)\,\circ\,(F,H,\beta\circ\alpha)\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(H,J,\gamma)\,\circ\,(\,(G,H,\beta)\,
+            \circ\,(F,G,\alpha)\,)\\
+            &=&h\circ(g\circ f)
+        \end{eqnarray*}
+ 
+    $(11)$: We should have $\dom\,(\,\id(F)\,) = F = \cod\,(\,\id(F)\,)$
+    whenever $F\in\ob$:
+        \begin{eqnarray*}\dom\,(\,\id(F)\,)
+            &=&\dom\,(\,F,F, \iota_{F}\,)
+            \ \leftarrow\ \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\\
+            \mbox{$(3)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&F\\
+            \mbox{$(4)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&\cod\,(\,F,F, \iota_{F}\,)\\
+            \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&\cod\,(\,\id(F)\,)
+        \end{eqnarray*}
+ 
+    $(12)$: We should have $f\circ\id(F)=f$ when $\dom(f)=F$
+    so let $f=(F,G,\alpha)$:
+        \begin{eqnarray*}f\circ\id(F)
+            &=&(F,G,\alpha)\circ\id(F)\\
+            \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(F,G,\alpha)\,\circ\,(F,F,\iota_{F})\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(F,G,\alpha\circ \iota_{F})\\
+            \mbox{prop.~(\ref{Nat:prop:right:identity})}\ \to\ 
+            &=&(F,G,\alpha)\\
+            &=&f
+        \end{eqnarray*}
+
+    $(13)$: We should have $\id(G)\circ f=f$ when $\cod(f)=G$
+    so let $f=(F,G,\alpha)$:
+        \begin{eqnarray*}\id(G)\circ f
+            &=&\id(G)\circ(F,G,\alpha)\\
+            \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(G,G,\iota_{G})\circ(F,G,\alpha)\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(F,G,\iota_{G}\circ \alpha)\\
+            \mbox{prop.~(\ref{Nat:prop:left:identity})}\ \to\ 
+            &=&(F,G,\alpha)\\
+            &=&f
+        \end{eqnarray*}
 \end{proof}

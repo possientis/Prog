@@ -3,6 +3,7 @@ Require Import List.
 Require Import In.
 Require Import Eq.
 Require Import Equiv.
+Require Import Concat.
 Require Import Include.
 Require Import Intersect.
 
@@ -188,3 +189,10 @@ Proof.
     - apply diff_compat_r. assumption.
 Qed.
 
+(*
+Lemma diff_concat : forall (v:Type) (e:Eq v) (xss:list(list v)) (ys:list v),
+    (forall (xs:list v) (y:v), y :: ys -> xs :: xss -> ~ y :: xs) ->
+    concat xss \\ ys = concat xss.
+Proof.
+Show.
+*)

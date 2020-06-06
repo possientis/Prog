@@ -923,3 +923,6 @@ Any-∃ xs = record
   ... | k with to {a} {p} xs (from xs ⟨ y , ⟨ q , py ⟩ ⟩)
   ... | ⟨ y' , ⟨ q' , py' ⟩ ⟩ = cong (λ { ⟨ x , ⟨ r , s ⟩ ⟩ → ⟨ x , ⟨ there r , s ⟩ ⟩ }) k
 
+all : ∀ {a : Set} → (a → Bool) → List a → Bool
+all p [] = ?
+all p (x ∷ xs) = ?

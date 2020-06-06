@@ -4,6 +4,19 @@
     actually a set.
 \end{defin}
 
+\begin{prop}\label{Cat:prop:small:locally:small}
+    A small category is locally small.
+\end{prop}
+\begin{proof}
+   Let \Cat\ be a small category and $a,b\in\Cat$. We need to show 
+    that $\Cat(a,b)$ is a set. Using axiom~(\ref{Cat:ax:collection:set}),
+    it is sufficient to find a set $A$ such that every member of
+    $\Cat(a,b)$ is an element of $A$. Take $A=\arr\ \Cat$. Then
+    from definition~(\ref{Cat:def:category:small}) $A$ is indeed a set,
+    and every member of $\Cat(a,b)$ is an element of $A$ by 
+    virtue of definition~(\ref{Cat:def:homset}).
+\end{proof}
+
 \begin{prop}\label{Cat:prop:locally:small:opposite}
     A category \Cat\ is locally small \ifand\ \Cop is locally small.
 \end{prop}

@@ -122,6 +122,7 @@ Difference.vo :					Difference.v \
 								In.vo \
 								Eq.vo \
 								Equiv.vo \
+								Concat.vo \
 								Include.vo \
 								Intersect.vo
 	coqc Difference.v

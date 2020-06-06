@@ -1,10 +1,5 @@
-functor category
-[C,D]^op vs [C^op,D^op]
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
-small => locally small 
-
-
 
 Initial algebras, Terminal co-algebras:
 
