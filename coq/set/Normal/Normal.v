@@ -23,12 +23,14 @@ Require Import Normal.Equiv.
 Require Import Normal.Insert.
 Require Import Normal.InListOf.
 
+(* Nubing a sorted set yields a sorted set.                                     *)
 Lemma nubSorted : forall (x:set), Sorted x -> Sorted (nub x).
 Proof.
     intros x. unfold Sorted, nub. rewrite toListFromList.
     apply Normal.nubSorted.
 Qed.
 
+(* Inserting a set not already present into a nubed set, yields a nubed set.    *)
 Lemma insertNubed : forall (x xs:set),
     ~ inListOf x xs -> Nubed xs -> Nubed (insert x xs).
 Proof.
@@ -36,13 +38,14 @@ Proof.
     rewrite toListFromList. apply Normal.insertNubed.
 Qed.
 
+(* Sorting a nubed set yields a nubed set.                                      *)
 Lemma sortNubed : forall (x:set), Nubed x -> Nubed (sort x).
 Proof.
     intros x. unfold Nubed, sort. 
     rewrite toListFromList. apply Normal.sortNubed.
 Qed.
 
-
+(* Two sorted sets which are equivalent as lists have identical heads.          *)
 Lemma sameHead : forall (x y xs ys:set),
     Equiv (Cons x xs) (Cons y ys) ->
     Sorted (Cons x xs) ->
@@ -53,6 +56,7 @@ Proof.
     apply Normal.sameHead.
 Qed.
 
+(* Two sorted and nubed sets which are equivalent as lists are identical.       *) 
 Lemma nubedSortedEquivSame : forall (x y:set),
     Nubed x ->
     Nubed y ->
@@ -70,20 +74,21 @@ Proof.
     rewrite H6. reflexivity.
 Qed.
 
+(* nubbing and sorting commute with each other.                                 *)
 Lemma nubSortCommute : forall (x:set), nub (sort x) = sort (nub x).
 Proof.
     intros x. unfold nub, sort. rewrite toListFromList, toListFromList.
     rewrite Normal.nubSortCommute. reflexivity.
 Qed.
 
-(* Recursive definition which is accepted by coq.                               *)
+(* Normalizing a set: recursive definition which is accepted by coq.            *)
 Fixpoint normal (x:set) : set :=
     match x with
     | Nil       => Nil
     | Cons x xs => sort (nub (Cons (normal x) (normal xs)))
     end.
 
-(* The real intended definition                                                 *)
+(* The real intended definition.                                                *)
 Lemma normalDef : forall (x:set),
     normal x = sort (nub (map normal x)).
 Proof.
@@ -100,9 +105,31 @@ Proof.
             { apply equivSym, nubEquiv. }
 Qed.
 
+(* Predicate expressing the fact that a set is in normal form:                  *)
+(* A set is in normal form when it has been Nubed and Sorted,                   *)
+(* and every element of its list is itself in normal form.                      *)
 Inductive Normal (x:set) : Prop :=
-| mkNormal : Nubed x -> Sorted x -> 
-    (forall (z:set), inListOf z x -> Normal z) -> Normal x.
+| mkNormal : 
+    Nubed x  -> 
+    Sorted x -> 
+    (forall (z:set), inListOf z x -> Normal z) -> 
+    Normal x
+.
+
+Lemma normalEqual : forall (x:set), x == normal x.
+Proof.
+    induction x as [|x IH1 xs IH2].
+    - apply equalRefl.
+    - unfold normal. fold normal. 
+      apply sortEqual', nubEqual', consCompatLR; assumption.
+Qed.
+
+Lemma normalRank : forall (x:set), rank (normal x) = rank x.
+Proof.
+    intros x. apply rankEqual, equalSym, normalEqual.
+Qed.
+
+
 
 Lemma normalNubed : forall (x:set), Nubed (normal x).
 Proof.
@@ -137,3 +164,4 @@ Proof.
         + intros z H2. unfold inListOf in H2. apply rankToList in H2.
 Show.
 *)
+

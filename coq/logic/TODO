@@ -12,6 +12,7 @@ diff_compat_l
 diff_compat_r
 diff_compat_lr
 diff_concat
+diff_not_in
 BetaValid_
 BetaValid
 betaValid_var_gen

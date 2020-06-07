@@ -168,5 +168,8 @@ Proof.
                         { right. assumption. }}
                     { assumption. }}}   
             { rewrite E5, E3. rewrite <- diff_distrib_app_l'. simpl.
+              rewrite diff_concat.
+                { apply equivRefl. }
+                {
 Show.
 *)

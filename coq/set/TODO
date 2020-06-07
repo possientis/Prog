@@ -1,6 +1,5 @@
-nub preserves the rank
-sort preserves the rank
-normal preserves the rank
+Normal/Normal: finish comments
+fix: x == normal x (order is wrong) 
 Normal/Normal
 Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x

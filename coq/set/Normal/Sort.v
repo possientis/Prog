@@ -1,6 +1,8 @@
 Require Utils.Sort.
 
 Require Import Core.Set.
+Require Import Core.Rank.
+Require Import Core.Equal.
 
 Require Import Normal.Leq.
 Require Import Normal.Equiv.
@@ -26,7 +28,6 @@ Proof.
         + assumption.
         + apply sortEquiv.
 Qed.
-
 
 Lemma sortInListOfIff : forall (x xs:set), 
     inListOf x xs <-> inListOf x (sort xs).
@@ -75,5 +76,23 @@ Lemma sortedConsSortedTail : forall (x xs:set),
     Sorted (Cons x xs) -> Sorted xs.
 Proof.
     intros x xs. unfold Sorted. simpl. apply Sort.sortedConsSortedTail.
+Qed.
+
+Lemma sortEqual : forall (x:set), x == sort x.
+Proof.
+    intros x. apply equivEqual, sortEquiv.
+Qed.
+
+Lemma sortEqual' : forall (x y:set), 
+    x == y -> x == sort y.
+Proof.
+    intros x y H. apply equalTrans with y.
+    - assumption.
+    - apply sortEqual.
+Qed.
+
+Lemma sortRank : forall (x:set), rank (sort x) = rank x.
+Proof.
+    intros x. apply rankEqual, equalSym, sortEqual.
 Qed.
 

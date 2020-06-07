@@ -189,10 +189,36 @@ Proof.
     - apply diff_compat_r. assumption.
 Qed.
 
-(*
+Lemma diff_not_in : forall (v:Type) (e:Eq v) (xs ys:list v),
+    (forall (z:v), z :: ys -> ~ z :: xs) -> xs \\ ys = xs.
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys H1.
+    - reflexivity.
+    - simpl. destruct (in_dec eqDec x ys) as [H2|H2].
+        + exfalso. apply (H1 x).
+            { assumption. }
+            { left. reflexivity. }
+        + rewrite IH.
+            { reflexivity. }
+            { intros z H3 H4. apply (H1 z).
+                { assumption. }
+                { right. assumption. }}
+Qed.
+
 Lemma diff_concat : forall (v:Type) (e:Eq v) (xss:list(list v)) (ys:list v),
     (forall (xs:list v) (y:v), y :: ys -> xs :: xss -> ~ y :: xs) ->
     concat xss \\ ys = concat xss.
 Proof.
-Show.
-*)
+    intros v e. induction xss as [|xs xss IH]; intros ys H1.
+    - reflexivity.
+    - simpl. rewrite diff_distrib_app_r, IH.
+        + assert (xs \\ ys = xs) as H2.
+            { apply diff_not_in. intros z H2. apply (H1 xs).
+                { assumption. }
+                { left. reflexivity. }}
+          rewrite H2. reflexivity.
+        + intros zs y H2 H3. apply H1.         
+            { assumption. }
+            { right. assumption. }
+Qed.
+

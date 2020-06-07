@@ -124,3 +124,91 @@ Definition PNPred (p:Prop -> Prop) : Prop :=
 Definition ProvPred (p:Prop -> Prop) : Prop :=
     PAPred p /\ PIPred p /\ PKPred p /\ PNPred p.
 
+Definition PEPred (p:Prop -> Prop) : Prop :=
+    forall (X:Prop), p False -> p X.
+
+Lemma L17 : ProvPred (fun (X:Prop) => X).
+Proof.
+    unfold ProvPred, PAPred, PIPred, PKPred, PNPred. split.
+    - intros X Y. auto.
+    - split.
+        + intros X. auto.
+        + split.
+            { intros X Y. auto. }
+            { intros X Y. auto. }
+Qed.
+
+Lemma L18 : ProvPred (fun (_:Prop) => True).
+Proof.
+    unfold ProvPred, PAPred, PIPred, PKPred, PNPred. split.
+    - intros X Y. auto.
+    - split.
+        + intros X. auto.
+        + split.
+            { intros X Y. auto. }
+            { intros X Y. auto. }
+Qed.
+
+Lemma L19 : forall (X Y:Prop), 
+    Provable (X -> Y) ->
+    Consistent X      ->
+    ~Provable Y       ->
+    (Independent X) /\ (Independent Y).
+Proof.
+    intros X Y H1 H2 H3. split.
+    - apply Sandwich. exists X, Y. split.
+        + constructor.
+        + split.
+            { assumption. }
+            { split; assumption. }
+    - apply Sandwich. exists X, Y. split.
+        + assumption.
+        + split.
+            { constructor. }
+            { split; assumption. }
+Qed.
+
+Lemma L20 : forall (p:Prop -> Prop), PEPred p -> 
+    ~ p False <-> ~ (forall (X:Prop), p X).
+Proof.
+    intros p. unfold PEPred.
+    intros H1. split; intros H2 H3; apply H2.
+    - apply H3.
+    - intros X. apply H1. assumption.
+Qed.
+
+Inductive Formula : Set :=
+| Bot : Formula
+| Imp : Formula -> Formula -> Formula
+.
+
+(* Truth value semantics                                                        *)
+Definition TVS : Prop := forall (X:Prop), X = True \/ X = False.
+
+(* Excluded middle                                                              *)
+Definition XM : Prop := forall (X:Prop), X \/ ~X.
+
+(* Limited propositional ominscience                                            *)
+(* Tests on numbers are either satisfiable or unsatisfiable                     *)
+Definition LPO : Prop := forall (f:nat -> bool), 
+    (exists n, f n = true) \/ ~(exists n, f n = true).
+
+(* Markov principle                                                             *)
+(* Tests on numbers which are not constantly false, are true for some numbers   *)
+Definition Markov : Prop := forall (f:nat -> bool),
+    ~(forall n, f n = false) -> exists n, f n = true.
+
+(* Propositional extensionality                                                 *)
+Definition PExt : Prop := forall (X Y:Prop), X <-> Y -> X = Y.
+
+(* Proof irrelevance                                                            *)
+Definition PIrr : Prop := forall (X:Prop) (a b:X), a = b.
+
+(* functional extensionality                                                    *)
+Definition FExt : Prop := forall (X Y:Type) (f g:X -> Y), 
+    (forall (x:X), f x = g x) -> f = g.
+
+Lemma L21 : TVS -> XM.
+Proof.
+
+Show.

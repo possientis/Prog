@@ -378,6 +378,8 @@ ${NORM}/Equiv.vo :				${NORM}/Equiv.v \
 ${NORM}/Nub.vo :				${NORM}/Nub.v \
 								${UTILS}/Nub.v \
 								${CORE}/Set.vo \
+								${CORE}/Rank.vo \
+								${CORE}/Equal.vo \
 								${NORM}/Leq.vo \
 								${NORM}/Equiv.vo \
 								${NORM}/InListOf.vo
@@ -387,6 +389,8 @@ ${NORM}/Nub.vo :				${NORM}/Nub.v \
 ${NORM}/Sort.vo :				${NORM}/Sort.v \
 								${UTILS}/Sort.v \
 								${CORE}/Set.vo \
+								${CORE}/Rank.vo \
+								${CORE}/Equal.vo \
 								${NORM}/Leq.vo \
 								${NORM}/Equiv.vo \
 								${NORM}/Insert.vo \

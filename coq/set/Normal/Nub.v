@@ -1,6 +1,8 @@
 Require Utils.Nub.
 
 Require Import Core.Set.
+Require Import Core.Rank.
+Require Import Core.Equal.
 
 Require Import Normal.Leq.
 Require Import Normal.Equiv.
@@ -33,7 +35,6 @@ Proof.
         + apply nubEquiv.
 Qed.
 
-
 Lemma nubNubed : forall (x:set), Nubed (nub x).
 Proof.
     intros x. unfold Nubed. unfold nub. rewrite toListFromList.
@@ -61,4 +62,22 @@ Lemma nubedConsNubedTail : forall (x xs:set),
 Proof.
     intros x xs. unfold Nubed. simpl. apply (Nub.nubedConsNubedTail _ _).
 Qed. 
+
+Lemma nubEqual : forall (x:set), x == nub x.
+Proof.
+    intros x. apply equivEqual, nubEquiv.
+Qed.
+
+Lemma nubEqual' : forall (x y:set),
+    x == y -> x == nub y.
+Proof.
+    intros x y H. apply equalTrans with y.
+    - assumption.
+    - apply nubEqual.
+Qed.
  
+Lemma nubRank : forall (x:set), rank (nub x) = rank x.
+Proof.
+    intros x. apply rankEqual, equalSym, nubEqual.
+Qed.
+

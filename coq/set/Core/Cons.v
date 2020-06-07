@@ -61,6 +61,13 @@ Proof.
         + assumption.
 Qed.
 
+Lemma consCompatLR : forall (x x' xs xs':set),
+    x == x' -> xs == xs' -> Cons x xs == Cons x' xs'.
+Proof.
+    intros x x' xs xs' H1 H2. apply equalTrans with (Cons x' xs).
+    - apply consCompatL. assumption.
+    - apply consCompatR. assumption.
+Qed.
 
 Lemma consSwitch : forall (x y zs:set), Cons x (Cons y zs) == Cons y (Cons x zs).
 Proof.
