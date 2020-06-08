@@ -14,7 +14,7 @@ Definition sort (x:set) : set := fromList (Sort.sort (toList x)).
 
 Definition Sorted (x:set) : Prop := Sort.Sorted (toList x).
 
-Lemma sortEquiv : forall (x:set), Equiv x (sort x).
+Lemma sortEquiv : forall (x:set), Equiv (sort x) x.
 Proof.
     intros x. unfold Equiv, sort. rewrite toListFromList.
     apply Sort.sortEquiv.
@@ -23,10 +23,10 @@ Qed.
 Lemma sortEquivEquiv : forall (x y:set), Equiv x y -> Equiv (sort x) (sort y).
 Proof.
     intros x y H. apply equivTrans with x.
-    - apply equivSym, sortEquiv.
+    - apply sortEquiv.
     - apply equivTrans with y.
         + assumption.
-        + apply sortEquiv.
+        + apply equivSym, sortEquiv.
 Qed.
 
 Lemma sortInListOfIff : forall (x xs:set), 
@@ -78,7 +78,7 @@ Proof.
     intros x xs. unfold Sorted. simpl. apply Sort.sortedConsSortedTail.
 Qed.
 
-Lemma sortEqual : forall (x:set), x == sort x.
+Lemma sortEqual : forall (x:set), sort x == x.
 Proof.
     intros x. apply equivEqual, sortEquiv.
 Qed.
@@ -88,11 +88,11 @@ Lemma sortEqual' : forall (x y:set),
 Proof.
     intros x y H. apply equalTrans with y.
     - assumption.
-    - apply sortEqual.
+    - apply equalSym, sortEqual.
 Qed.
 
 Lemma sortRank : forall (x:set), rank (sort x) = rank x.
 Proof.
-    intros x. apply rankEqual, equalSym, sortEqual.
+    intros x. apply rankEqual, sortEqual.
 Qed.
 

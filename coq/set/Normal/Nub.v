@@ -20,7 +20,7 @@ Proof.
     rewrite toListFromList. apply Nub.nubInIff.
 Qed.
 
-Lemma nubEquiv : forall (x:set), Equiv x (nub x).
+Lemma nubEquiv : forall (x:set), Equiv (nub x) x.
 Proof.
     intros x. unfold Equiv, nub. rewrite toListFromList.
     apply Nub.nubEquiv.
@@ -29,10 +29,10 @@ Qed.
 Lemma nubEquivEquiv : forall (x y:set), Equiv x y -> Equiv (nub x) (nub y).
 Proof.
     intros x y H. apply equivTrans with x.
-    - apply equivSym, nubEquiv.
+    - apply nubEquiv.
     - apply equivTrans with y.
         + assumption.
-        + apply nubEquiv.
+        + apply equivSym. apply nubEquiv.
 Qed.
 
 Lemma nubNubed : forall (x:set), Nubed (nub x).
@@ -63,7 +63,7 @@ Proof.
     intros x xs. unfold Nubed. simpl. apply (Nub.nubedConsNubedTail _ _).
 Qed. 
 
-Lemma nubEqual : forall (x:set), x == nub x.
+Lemma nubEqual : forall (x:set), nub x == x.
 Proof.
     intros x. apply equivEqual, nubEquiv.
 Qed.
@@ -73,11 +73,10 @@ Lemma nubEqual' : forall (x y:set),
 Proof.
     intros x y H. apply equalTrans with y.
     - assumption.
-    - apply nubEqual.
+    - apply equalSym. apply nubEqual.
 Qed.
  
 Lemma nubRank : forall (x:set), rank (nub x) = rank x.
 Proof.
-    intros x. apply rankEqual, equalSym, nubEqual.
+    intros x. apply rankEqual, nubEqual.
 Qed.
-

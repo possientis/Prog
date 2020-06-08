@@ -101,8 +101,8 @@ Proof.
         + apply sortSorted.
         + rewrite mapCons. apply sortEquivEquiv, nubEquivEquiv, equivConsCompat.
           rewrite IH2. apply equivTrans with (nub (map normal xs)).
-            { apply equivSym, sortEquiv. }
-            { apply equivSym, nubEquiv. }
+            { apply sortEquiv. }
+            { apply nubEquiv. }
 Qed.
 
 (* Predicate expressing the fact that a set is in normal form:                  *)
@@ -116,6 +116,7 @@ Inductive Normal (x:set) : Prop :=
     Normal x
 .
 
+(* A set is equal to its normal form, not identical, not equivalent as list.    *)
 Lemma normalEqual : forall (x:set), x == normal x.
 Proof.
     induction x as [|x IH1 xs IH2].
@@ -124,23 +125,25 @@ Proof.
       apply sortEqual', nubEqual', consCompatLR; assumption.
 Qed.
 
+(* Normalizing preserves the rank of a set.                                     *)
 Lemma normalRank : forall (x:set), rank (normal x) = rank x.
 Proof.
     intros x. apply rankEqual, equalSym, normalEqual.
 Qed.
 
-
-
+(* A normal form is nubed.                                                      *)
 Lemma normalNubed : forall (x:set), Nubed (normal x).
 Proof.
     intros x. rewrite normalDef. apply sortNubed, nubNubed.
 Qed.
 
+(* A normal form is sorted.                                                     *)
 Lemma normalSorted : forall (x:set), Sorted (normal x).
 Proof.
     intros x. rewrite normalDef. apply sortSorted.
 Qed.
 
+(* The empty set is in normal form.                                             *)
 Lemma NilNormal : Normal Nil.
 Proof.
     constructor.
@@ -150,6 +153,7 @@ Proof.
 Qed.
 
 (*
+(* Normalizing yields a normal form.                                            *)
 Lemma normalNormal : forall (x:set), Normal (normal x).
 Proof.
     (* setting up induction on rank x.                                          *)
@@ -161,7 +165,8 @@ Proof.
     - constructor.
         + apply normalNubed.
         + apply normalSorted.
-        + intros z H2. unfold inListOf in H2. apply rankToList in H2.
+        + intros z H2. rewrite normalDef in H2.
+          apply sortInListOfIff, nubInListOfIff in H2.
 Show.
 *)
 

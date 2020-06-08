@@ -47,11 +47,11 @@ Proof.
             { right. apply IH. assumption. }
 Qed.
 
-Lemma nubEquiv : forall (a:Type) (e:Eq a) (xs:list a), Equiv xs (nub xs).
+Lemma nubEquiv : forall (a:Type) (e:Eq a) (xs:list a), Equiv (nub xs) xs.
 Proof.
     intros a e xs. split; intros x H.
+    - rewrite nubInIff. exact H. (* 'assumption' fails, why ?                   *)
     - apply nubInIff. assumption.
-    - rewrite nubInIff. exact H. (* 'assumption' fails, why ?                      *)
 Qed.
 
 (* Nubing a list leads to a Nubed list.                                         *)

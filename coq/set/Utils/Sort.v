@@ -59,17 +59,17 @@ Proof.
         + split; intros z H1; assumption.
 Qed.
 
-Lemma sortEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (sort xs).
+Lemma sortEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv (sort xs) xs.
 Proof.
     intros a o. induction xs as [|x xs [IH1 IH2]].
     - apply equivRefl.
     - simpl. apply equivTrans with (cons x (sort xs)).
+        + apply insertEquivCons.
         + split; intros z [H1|H1].
             { subst. left. reflexivity. }
             { right. apply IH1. assumption. }
             { subst. left. reflexivity. }
             { right. apply IH2. assumption. }
-        + apply equivSym. apply insertEquivCons.
 Qed.
 
 Lemma insertIn : forall (a:Type) (o:Ord a) (x:a) (xs:list a), In x (insert x xs).
@@ -85,8 +85,8 @@ Lemma sortInIff : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     In x xs <-> In x (sort xs).
 Proof.
     intros a o x xs. destruct (sortEquiv a o xs) as [H1 H2]. split; intros H.
-    - apply H1. assumption.
     - apply H2. assumption.
+    - apply H1. assumption.
 Qed.
 
 

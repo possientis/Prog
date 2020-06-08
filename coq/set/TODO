@@ -1,5 +1,4 @@
-Normal/Normal: finish comments
-fix: x == normal x (order is wrong) 
+inListOf map f => ...
 Normal/Normal
 Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x

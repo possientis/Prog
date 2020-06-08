@@ -140,11 +140,11 @@ Proof.
     - apply sortSorted.
     - apply equivTrans with xs.
         + apply equivTrans with (sort xs).
-            { apply equivSym. apply nubEquiv.  }
-            { apply equivSym. apply sortEquiv. }
-        + apply equivTrans with (nub xs).
             { apply nubEquiv.  }
             { apply sortEquiv. }
+        + apply equivTrans with (nub xs).
+            { apply equivSym. apply nubEquiv.  }
+            { apply equivSym. apply sortEquiv. }
 Qed.
 
 Definition normal (a:Type) (o:Ord a) (xs:list a) : list a := sort (nub xs). 
@@ -158,8 +158,8 @@ Arguments Normal {a} {o}.
 Lemma normalEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (normal xs).
 Proof.
     intros a o xs. unfold normal. apply equivTrans with (nub xs).
-    - apply nubEquiv.
-    - apply sortEquiv.
+    - apply equivSym, nubEquiv.
+    - apply equivSym, sortEquiv.
 Qed.
 
 Lemma normalNormal : forall (a:Type) (o:Ord a) (xs:list a), Normal (normal xs).
