@@ -1,5 +1,8 @@
 module  State
-    (   State   (..)    -- TODO : hide
+    (   State
+    ,   initState
+    ,   getEnv
+    ,   getHeap
     )   where
 
 import Env
@@ -10,4 +13,14 @@ data State = State
     ,   env  :: Env
     }
 
+getEnv :: State -> Env
+getEnv = env
 
+getHeap :: State -> Heap
+getHeap = heap
+
+initState :: State
+initState = State
+    { heap = newHeap
+    , env  = newEnv
+    }

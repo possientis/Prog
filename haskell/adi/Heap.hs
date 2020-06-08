@@ -1,7 +1,7 @@
 module  Heap
     (   Heap 
     ,   newHeap
-    ,   find
+    ,   findVal
     ,   alloc
     )   where
 
@@ -15,8 +15,8 @@ data Heap = Heap
     , memory :: Map Addr Value
     }
 
-find :: Heap -> Addr -> Value
-find heap addr
+findVal :: Heap -> Addr -> Value
+findVal heap addr
     | addr >= next heap  = error "unallocated memory access"
     | otherwise = case M.lookup addr (memory heap) of
         Nothing -> error "memory corruption error"

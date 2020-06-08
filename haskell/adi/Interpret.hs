@@ -7,6 +7,7 @@ module  Interpret
 import Data.Functor.Foldable
 
 --import Op
+import Env
 import Var
 import Eval
 import Value
@@ -30,7 +31,9 @@ evalNum :: Integer -> (Expr -> Eval Value) -> Eval Value
 evalNum n _eval = return $ mkVal n
 
 evalVar :: Var -> (Expr -> Eval Value) -> Eval Value
-evalVar _x _eval = undefined
+evalVar x _eval = do
+    e <- askEnv
+    find (findAddr e x)
 
 {-
 evalOp :: Op -> Expr -> Expr -> Env -> Value

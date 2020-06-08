@@ -3,14 +3,15 @@
 module  Env
     (   Env
     ,   newEnv
-    ,   find
+    ,   findAddr
     ,   bind
     )   where
 
-import Data.Map.Strict as M
-
 import Var
 import Addr
+
+import Data.Map.Strict as M
+
 
 newtype Env = Env { unEnv :: Map Var Addr }
 
@@ -21,8 +22,8 @@ newEnv :: Env
 newEnv = Env mempty
 
 
-find :: Var -> Env -> Addr
-find var env = case M.lookup var (unEnv env) of
+findAddr :: Env -> Var  -> Addr
+findAddr env var = case M.lookup var (unEnv env) of
     Just addr  -> addr
     Nothing -> error $ "Variable unbound:" ++ show var
 
