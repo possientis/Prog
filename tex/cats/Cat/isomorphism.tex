@@ -1,0 +1,43 @@
+\begin{defin}\label{Cat:def:left:inverse}
+    Let \Cat\ be a category and $f:a\to b$ for some $a,b\in\Cat$. 
+    We say that $g:b \to a$ is a {\em left-inverse of} $f$, \ifand\ 
+    $g\circ f=\id(a)$.
+\end{defin}
+
+\begin{defin}\label{Cat:def:right:inverse}
+    Let \Cat\ be a category and $f:a\to b$ for some $a,b\in\Cat$. 
+    We say that $g:b \to a$ is a {\em right-inverse of} $f$, \ifand\ 
+    $f\circ g=\id(b)$.
+\end{defin}
+
+\begin{defin}\label{Cat:def:inverse}
+    Let \Cat\ be a category and $f:a\to b$ for some $a,b\in\Cat$. 
+    We say that $g:b \to a$ is an {\em inverse of} $f$, \ifand\ 
+    it is a left and right-inverse of $f$.
+\end{defin}
+
+\begin{defin}\label{Cat:def:isomorphism}
+    Let \Cat\ be a category and $f\in\arr\ \Cat$. We say that $f$ is
+    an {\em isomorphism} \ifand\ $f$ has an inverse.
+\end{defin}
+
+\begin{prop}\label{Cat:prop:inverse:unique}
+    Let \Cat\ be a category and $f\in\arr\ \Cat$. If $f$
+    has a right-inverse and a left-inverse, then these are equal.
+\end{prop}
+\begin{proof}
+    Let $a=\dom(f)$ and $b=\cod(f)$. Suppose $g:b\to a$ is a left-inverse of 
+    $f$ and $h:b \to a$ is a right-inverse of $f$. We need to show that $g=h$:
+    \begin{eqnarray*}g
+        &=&g\circ\id(b)\ \leftarrow\ 
+        \mbox{$(12)$ of def~(\ref{Cat:def:category})}\\
+        \mbox{$h$ is right inverse}\ \to\ 
+        &=&g\circ(f\circ h)\\
+        \mbox{$\circ$ assoc}\ \to\ 
+        &=&(g\circ f)\circ h\\
+        \mbox{$g$ is left inverse}\ \to\ 
+        &=&\id(a)\circ h\\
+        \mbox{$(12)$ of def~(\ref{Cat:def:category})}\ \to\ 
+        &=&h
+    \end{eqnarray*}
+\end{proof}
