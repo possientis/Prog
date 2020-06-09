@@ -210,5 +210,50 @@ Definition FExt : Prop := forall (X Y:Type) (f g:X -> Y),
 
 Lemma L21 : TVS -> XM.
 Proof.
+    unfold TVS, XM. intros TVS X. destruct (TVS X) as [H|H].
+    - left. rewrite H. trivial.
+    - right. rewrite H. auto.
+Qed.
 
+Lemma L22 : XM -> LPO.
+Proof.
+    unfold XM, LPO. intros XM f. apply XM.
+Qed.
+
+Lemma L23 : LPO -> Markov.
+Proof.
+    unfold LPO, Markov. intros LPO f H1. destruct (LPO f) as [H2|H2].
+    - assumption.
+    - exfalso. apply H1. intros n. destruct (f n) eqn:E.
+        + exfalso. apply H2. exists n. assumption.
+        + reflexivity.
+Qed.
+
+Lemma L24 : TVS -> PExt.
+Proof.
+   unfold TVS, PExt. intros TVS X Y [H3 H4].
+   destruct (TVS X) as [H1|H1]; destruct (TVS Y) as [H2|H2].
+   - rewrite H1, H2. reflexivity.
+   - exfalso. rewrite H1, H2 in H3. apply H3. trivial.
+   - exfalso. rewrite H1, H2 in H4. apply H4. trivial.
+   - rewrite H1, H2. reflexivity.
+Qed.
+
+Lemma L25 : XM -> PExt -> TVS.
+Proof.
+    unfold XM, PExt, TVS. intros XM PExt X.
+    destruct (XM X) as [H|H].
+    - left. apply PExt. split; intros H'.
+        + trivial.
+        + assumption.
+    - right. apply PExt. split; intros H'.
+        + apply H. assumption.
+        + contradiction.
+Qed.
+
+
+Lemma L26 : PExt -> PIrr.
+Proof.
+    unfold PExt, PIrr. intros PExt X p q.
 Show.
+
