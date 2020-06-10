@@ -13,6 +13,10 @@ Require Import Lam.T.
 Require Import Lam.Free.
 Require Import Lam.Subst.
 
+(* Predicate defining the beta-validity of the substitution f for (t,xs).       *)
+(* This predicates expresses the fact that when considering the variables of xs *)
+(* as bound variables, the substitution f in term t will not give rise to any   *)
+(* variable capture, i.e. the substitution is meaningful or 'valid'.            *)
 Inductive betaValid_ (v:Type) (e:Eq v) (f:v -> T v) : list v -> T v -> Prop :=
 | VVar : forall (xs:list v) (x:v), betaValid_ v _ f xs (Var x)
 | VApp : forall (xs:list v) (t1 t2:T v), 
@@ -24,26 +28,30 @@ Inductive betaValid_ (v:Type) (e:Eq v) (f:v -> T v) : list v -> T v -> Prop :=
     (forall (u:v), u :: Fr (Lam x t1) \\ xs -> ~ x :: Fr (f u)) ->
     betaValid_ v _ f xs (Lam x t1)  
 .
-
 Arguments betaValid_ {v} {e}.
 
+(* Predicate defining the beta-validity of the substitution f for term t        *)
 Definition betaValid (v:Type) (e:Eq v) (f:v -> T v) (t:T v) : Prop :=
     betaValid_ f nil t.
 
 Arguments betaValid {v} {e}.
 
+(* Substituting in a term 'Var x' never gives rise to variable capture.         *)
+(* So any f is always beta-valid for (Var x, xs) for all xs.                    *)
 Lemma betaValid_var_gen : forall (v:Type) (e:Eq v) (f:v -> T v) (x:v) (xs:list v), 
     betaValid_ f xs (Var x).
 Proof.
     intros v e f x xs. constructor.
 Qed.
 
+(* Any f is always beta-valid for Var x.                                        *)
 Lemma betaValid_var : forall (v:Type) (e:Eq v) (f:v -> T v) (x:v),
     betaValid f (Var x).
 Proof.
     intros v e f x. constructor.
 Qed.
 
+(* f is beta-valid for a term (t1 t2) iff it is beta-valid for both t1 and t2.  *)
 Lemma betaValid_app_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t1 t2:T v) (xs:list v),
     betaValid_ f xs (App t1 t2) 
@@ -56,6 +64,7 @@ Proof.
     - intros [H1 H2]. constructor; assumption.
 Qed.
 
+(* f is beta-valid for a term (t1 t2) iff it is beta-valid for both t1 and t2.  *)
 Lemma betaValid_app : forall (v:Type) (e:Eq v) (f:v -> T v) (t1 t2:T v),
     betaValid f (App t1 t2) 
         <-> 
@@ -109,7 +118,6 @@ Proof.
             { assumption. }
 Qed.
 
-(*
 Lemma betaValid_free_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v),
     betaValid_ f xs t ->
@@ -170,6 +178,20 @@ Proof.
             { rewrite E5, E3. rewrite <- diff_distrib_app_l'. simpl.
               rewrite diff_concat.
                 { apply equivRefl. }
-                {
-Show.
-*)
+                { clear T1 E1 T2 E2 T3 E3 T4 E4 T5 E5. intros ys y H3.
+                  destruct H3 as [H3|H3].
+                    { subst. rename y into x. intros H3. apply in_map_iff in H3.
+                      destruct H3 as [u [H3 H4]]. rewrite <- H3. clear H3.
+                      apply H2. simpl. rewrite remove_diff.
+                      rewrite <- diff_distrib_app_l'. simpl. assumption. }
+                    { inversion H3. }}}
+Qed.
+
+Lemma betaValid_free : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v),
+    betaValid f t -> Fr (subst f t) == concat (map (Fr ; f) (Fr t)).
+Proof.
+    intros v e f t H. rewrite <- (diff_nil v e (Fr t)).
+    change (Fr (subst f t) == nil ++ concat (map (Fr; f) (Fr t \\ nil))).
+    rewrite <- (inter_nil v e (Fr t)) at 1.
+    apply (betaValid_free_gen v e f t nil). assumption.
+Qed.

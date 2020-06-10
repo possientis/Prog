@@ -1,6 +1,5 @@
 Coq:
-Difference
-BetaValid
+BetaValid: prop 374
 
 Haskell:
 app_compat_l
@@ -21,6 +20,8 @@ betaValid_app_gen
 betaValid_app
 betaValid_lam_gen
 betaValid_lam
+betaValid_free_gen
+betaValid_free
 Latex:
 
 
