@@ -10,6 +10,12 @@
     $f\circ g=\id(b)$.
 \end{defin}
 
+\noindent
+{\bf Remark}: Comparing definitions~(\ref{Cat:def:left:inverse})
+and~(\ref{Cat:def:right:inverse}), given a category \Cat\ and given 
+$f,g\in\arr\ \Cat$, $g$ is a left-inverse of $f$ \ifand\ $f$ is a 
+right-inverse of $g$.
+
 \begin{defin}\label{Cat:def:inverse}
     Let \Cat\ be a category and $f:a\to b$ for some $a,b\in\Cat$. 
     We say that $g:b \to a$ is an {\em inverse of} $f$, \ifand\ 
@@ -21,7 +27,7 @@
     an {\em isomorphism} \ifand\ $f$ has an inverse.
 \end{defin}
 
-\begin{prop}\label{Cat:prop:inverse:unique}
+\begin{prop}\label{Cat:prop:inverse:left:right:inverse:equal}
     Let \Cat\ be a category and $f\in\arr\ \Cat$. If $f$
     has a right-inverse and a left-inverse, then these are equal.
 \end{prop}
@@ -40,4 +46,31 @@
         \mbox{$(12)$ of def~(\ref{Cat:def:category})}\ \to\ 
         &=&h
     \end{eqnarray*}
+\end{proof}
+
+\begin{prop}\label{Cat:prop:inverse:unique}
+    Let \Cat\ be a category. If $f\in\arr\ \Cat$ has 
+    an inverse, it is unique.
+\end{prop}
+\begin{proof}
+    Suppose $g,h\in\arr\ \Cat$ are both inverses of $f$. Then in particular
+    $g$ is a left-inverse of $f$ and $h$ is a right-inverse of $f$. From
+    proposition~(\ref{Cat:prop:inverse:left:right:inverse:equal}), we have $g=h$.
+\end{proof}
+
+\begin{prop}\label{Cat:prop:isomorphism:left:right}
+    Let \Cat\ be a category and $f\in\arr\ \Cat$. Then $f$ is an isomorphism
+    \ifand\ $f$ has a left-inverse and a right-inverse.
+\end{prop}
+\begin{proof}
+    Suppose $f$ is an isomorphism. From definition~(\ref{Cat:def:isomorphism}),
+    $f$ has an inverse. Hence from definition~(\ref{Cat:def:inverse}), there
+    is some $g\in\arr\ \Cat$ which is both a left-inverse and a right-inverse
+    of $f$. So in particular, $f$ has a left-inverse and a right-inverse.
+    Conversely, suppose $f$ has a left-inverse $g$ and a right-inverse $h$.
+    from proposition~(\ref{Cat:prop:inverse:left:right:inverse:equal}) we 
+    have $g=h$. So $g$ is in fact both a left-inverse and a right-inverse 
+    of $f$. From definition~(\ref{Cat:def:inverse}), $g$ is in fact an
+    inverse of $f$ and from definition~(\ref{Cat:def:isomorphism}) we conclude
+    that $f$ is an isomorphism.
 \end{proof}

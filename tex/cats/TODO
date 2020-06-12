@@ -1,8 +1,4 @@
-an iverse is unique
-f iso iff has a left and right-inverse
-remarks g left inverse of f <-> f right -inverse of g
-
-natural isomorphism
+natural isomorphism criterium: every component is an iso
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 
