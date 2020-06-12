@@ -3,16 +3,16 @@ module lists where
 
 import Relation.Binary.PropositionalEquality as Eq
 
-open Eq                         using ( _≡_; refl; trans; sym; cong; subst)
-open Eq.≡-Reasoning             using ( begin_; _≡⟨⟩_; step-≡; _∎)
+open Eq                         using (_≡_; refl; trans; sym; cong; subst)
+open Eq.≡-Reasoning             using (begin_; _≡⟨⟩_; step-≡; _∎)
 open import Data.Bool           using (Bool; true; false; T; _∧_; _∨_; not)
-open import Data.Nat            using ( ℕ; zero; suc; _≤_; z≤n; s≤s; _+_; _*_; _∸_)
-open import Relation.Nullary    using ( Dec; yes; no; ¬_)
+open import Data.Nat            using (ℕ; zero; suc; _≤_; z≤n; s≤s; _+_; _*_; _∸_)
+open import Relation.Nullary    using (Dec; yes; no; ¬_)
 open import Data.Nat.Properties using (+-assoc; +-suc; +-comm
-                                      ; *-distribʳ-+; *-distribˡ-+
-                                      ; *-comm; +-identityˡ; +-identityʳ
-                                      ; *-assoc; *-identityˡ; *-identityʳ)
-open import Data.Product        using ( _×_; ∃; ∃-syntax; proj₁; proj₂)
+                                      ;*-distribʳ-+; *-distribˡ-+
+                                      ;*-comm; +-identityˡ; +-identityʳ
+                                      ;*-assoc; *-identityˡ; *-identityʳ)
+open import Data.Product        using (_×_; ∃; ∃-syntax; proj₁; proj₂)
 open import Data.Sum            using (_⊎_; inj₁; inj₂)
 open import Function            using (_∘_)
 open import Level               using (Level)
@@ -924,5 +924,40 @@ Any-∃ xs = record
   ... | ⟨ y' , ⟨ q' , py' ⟩ ⟩ = cong (λ { ⟨ x , ⟨ r , s ⟩ ⟩ → ⟨ x , ⟨ there r , s ⟩ ⟩ }) k
 
 all : ∀ {a : Set} → (a → Bool) → List a → Bool
-all p [] = ?
-all p (x ∷ xs) = ?
+all p xs = foldr _∧_ true (map p xs)
+
+Decidable : ∀ {a : Set} → (a → Set) → Set
+Decidable {a} p = ∀ (x : a) → Dec (p x)
+
+All? : ∀  {a : Set} {p : a → Set} → Decidable p → Decidable (All p)
+All? q [] = yes []
+All? q (x ∷ xs) with q x | All? q xs
+... | yes r | yes s  = yes (r ∷ s)
+... | no r  | yes s  = no (λ{(k ∷ ks) → r k})
+... | _     | no s   = no (λ{(k ∷ ks) →  s ks})
+
+Any? : ∀ {a : Set} {p : a → Set} → Decidable p → Decidable (Any p)
+Any? q [] = no (λ ())
+Any? q (x ∷ xs) with q x | Any? q xs
+... | yes r | _ = yes (here r)
+... | no _  | yes s = yes (there s)
+... | no r  | no s = no (λ{(here k) → r k; (there k) → s k})
+
+
+data merge {a : Set} : (xs ys zs : List a) → Set where
+
+  [] :
+     ---------------
+     merge [] [] []
+
+
+  left-∷ : ∀ {x xs ys zs}
+   → merge xs ys zs
+     ----------------------------
+   →  merge (x ∷ xs) ys (x ∷ zs)
+
+
+  right-∷ : ∀ {y xs ys zs}
+   → merge xs ys zs
+     ----------------------------
+   → merge xs (y ∷ ys) (y ∷ zs)
