@@ -12,3 +12,13 @@ inductive aexp : Type
 | mul : aexp -> aexp -> aexp
 | div : aexp -> aexp -> aexp
 
+lemma add_zero2 : ∀ (n : ℕ), 0 + n = n :=
+begin
+  intros n,
+  induction n with n IH,
+    {reflexivity},
+    {simp}
+end
+
+
+

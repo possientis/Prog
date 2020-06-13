@@ -1,4 +1,5 @@
 Require Import Le.
+Require Import Nat.
 Require Import Plus.
 Require Import List.
 Require Import Peano_dec.

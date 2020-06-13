@@ -351,7 +351,8 @@ ${NORM}/InListOf.vo :			${NORM}/InListOf.v \
 
 
 ${NORM}/Map.vo :				${NORM}/Map.v \
-								${CORE}/Set.vo
+								${CORE}/Set.vo \
+								${NORM}/InListOf.vo
 	coqc ${NORM}/Map.v			${OPT}
 
 
@@ -412,6 +413,8 @@ ${NORM}/Insert.vo :				${NORM}/Insert.v \
 
 
 ${NORM}/Normal.vo :				${NORM}/Normal.v \
+								${UTILS}/Nat.vo \
+								${UTILS}/Ord.vo \
 								${UTILS}/Normal.vo \
 								${CORE}/Set.vo \
 								${CORE}/Incl.vo \

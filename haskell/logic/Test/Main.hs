@@ -14,6 +14,7 @@ import Test.Coincide
 import Test.Injective
 import Test.Intersect
 import Test.Difference
+import Test.Append
 
 specHask :: Spec
 specHask = do
@@ -27,3 +28,4 @@ specHask = do
     specDifference
     specConcat 
     specEquiv
+    specAppend

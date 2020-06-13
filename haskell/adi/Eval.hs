@@ -2,8 +2,9 @@
 
 module  Eval
     (   Eval    (..)    -- TODO: hide 
-    ,   find
+    ,   alloc
     ,   askEnv
+    ,   find
     )   where
 
 import Env
@@ -19,10 +20,18 @@ newtype Eval a = Eval { unEval :: StateT State Identity a }
     deriving (Functor, Applicative, Monad)
 
 askEnv :: Eval Env
-askEnv  = Eval $ getEnv <$> get
+askEnv  = Eval $ gets getEnv 
 
 find :: Addr -> Eval Value
 find addr = Eval $ do
-    heap <- getHeap <$> get
+    heap <- gets getHeap
     return $ findVal heap addr 
 
+alloc :: Eval Addr
+alloc = Eval $ do
+    s <- get
+    let heap = getHeap s
+    let (heap',addr) = heapAlloc heap
+    let s' = setHeap heap' s
+    put s'
+    return addr

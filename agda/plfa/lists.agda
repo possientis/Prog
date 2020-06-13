@@ -961,3 +961,21 @@ data merge {a : Set} : (xs ys zs : List a) → Set where
    → merge xs ys zs
      ----------------------------
    → merge xs (y ∷ ys) (y ∷ zs)
+
+_ : merge [ 1 , 4 ] [ 2 , 3 ] [ 1 , 2 , 3 , 4 ]
+_ = left-∷ (right-∷ (right-∷ (left-∷ [])))
+
+-- merge is not functional
+_ : merge [ 1 , 4 ] [ 2 , 3 ] [ 2 , 1 , 4 , 3 ]
+_ = right-∷ (left-∷ (left-∷ (right-∷ [])))
+
+
+split : ∀ {a : Set} {p : a → Set} (q : Decidable p) (zs : List a) →
+  ∃[ xs ] ∃[ ys ] (merge xs ys zs × All p xs × All (¬_ ∘ p) ys)
+split q [] = ⟨ [] , ⟨ [] , ⟨ [] , ⟨ [] , [] ⟩ ⟩ ⟩ ⟩
+split q (x ∷ zs) with q x | split q zs
+... | yes r | ⟨ xs , ⟨ ys , ⟨ mer , ⟨ fst , snd ⟩ ⟩ ⟩ ⟩ =
+  ⟨ x ∷ xs , ⟨ ys , ⟨ left-∷ mer , ⟨ r ∷ fst , snd ⟩ ⟩ ⟩ ⟩
+... | no r | ⟨ xs , ⟨ ys , ⟨ mer , ⟨ fst , snd ⟩ ⟩ ⟩ ⟩ =
+  ⟨ xs , ⟨ x ∷ ys , ⟨ right-∷ mer , ⟨ fst , r ∷ snd ⟩ ⟩ ⟩ ⟩
+

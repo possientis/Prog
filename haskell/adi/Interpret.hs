@@ -6,7 +6,7 @@ module  Interpret
 
 import Data.Functor.Foldable
 
---import Op
+import Op
 import Env
 import Var
 import Eval
@@ -17,44 +17,56 @@ eval :: Expr -> (Expr -> Eval Value) -> Eval Value
 eval = \case 
     Fix (ENum n)        -> evalNum n
     Fix (EVar x)        -> evalVar x
-    _                   -> error "not implemented"
-{-
     Fix (EOp op e1 e2)  -> evalOp op e1 e2
     Fix (EIf e e1 e2)   -> evalIf e e1 e2
     Fix (ELam x e)      -> evalLam x e
-    Fix (EApp v1 v2)    -> evalApp v1 v2  
+    Fix (EApp e1 e2)    -> evalApp e1 e2  
+    _                   -> error "not implemented"
+{-
     Fix (ERec f e)      -> evalRec f e
 -}
 
-
 evalNum :: Integer -> (Expr -> Eval Value) -> Eval Value
-evalNum n _eval = return $ mkVal n
+evalNum n _ev = return $ mkVal n
 
 evalVar :: Var -> (Expr -> Eval Value) -> Eval Value
-evalVar x _eval = do
-    e <- askEnv
-    find (findAddr e x)
+evalVar x _ev = do
+    env <- askEnv
+    find (findAddr env x)
+
+evalOp :: Op -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalOp op e1 e2 ev =  do
+    v1 <- ev e1
+    v2 <- ev e2
+    case val v1 of
+        Nothing -> error $ show op ++ ": lhs does not evaluate to an integer."
+        Just n1 -> case val v2 of
+            Nothing -> error $ show op ++ ": rhs does not evaluate to an integer."
+            Just n2 -> return $ mkVal $ delta op n1 n2
+
+evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalIf e e1 e2 ev = do
+    v <- ev e
+    case val v of
+        Nothing -> error "If: condition does not evaluate to an integer."
+        Just n  -> ev $ if n == 0 then e1 else e2
+
+evalLam :: Var -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalLam x e _ev = do
+    env <- askEnv
+    return $ mkClo x e env 
+
+evalApp :: Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalApp e1 e2 ev = do
+    v1 <- ev e1
+    case closure v1 of
+        Nothing -> error "App: lhs does not evaluate to a function."
+        Just c  -> do 
+            v1   <- ev e1 
+            addr <- alloc
+            return undefined
 
 {-
-evalOp :: Op -> Expr -> Expr -> Env -> Value
-evalOp op e1 e2 env = case val (eval e1 env) of
-    Nothing -> error $ show op ++ ": lhs does not evaluate to an integer."
-    Just n1 -> case val (eval e2 env) of
-        Nothing -> error $ show op ++ ": rhs does not evaluate to an integer."
-        Just n2 -> mkVal $ delta op n1 n2
-   
-evalIf :: Expr -> Expr -> Expr -> Env -> Value
-evalIf e e1 e2 env = case val (eval e env) of 
-    Nothing -> error "If: condition does not evaluate to an integer."
-    Just n  -> if n == 0 then (eval e1 env) else (eval e2 env)
-
-evalLam :: Var -> Expr -> Env -> Value
-evalLam x e env = mkClosure x e env 
-
-evalApp :: Expr -> Expr -> Env -> Value
-evalApp e1 e2 env = case closure (eval e1 env) of
-    Nothing -> error "App: lhs does not evaluate to a function."
-    Just c  -> evalClosure c (eval e2 env) 
 
 evalRec :: Var -> Expr -> Env -> Value
 evalRec f e env = eval e (bind f (mkExpr e) env)

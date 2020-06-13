@@ -3,8 +3,9 @@ module  Test.Difference
     )   where
 
 import Test.Hspec
-import Test.QuickCheck
+import Test.QuickCheck  hiding ((===))
 
+import Equiv
 import Include
 import Intersect
 import Difference
@@ -19,6 +20,12 @@ specDifference = describe "Testing properties of difference..." $ do
     testDiffDistribAppL1
     testDiffDistribAppL2
     testDiffNil
+    testDiffInclR
+    testDiffCompatL
+    testDiffCompatR
+    testDiffCompatLR
+    testDiffNotIn
+    testDiffCompat
 
 testDiffCharac :: Spec
 testDiffCharac = it "Checked characterization of (\\\\)" $ 
@@ -44,6 +51,10 @@ testDiffNil :: Spec
 testDiffNil = it "Checked xs \\\\ [] == xs" $ do
     property $ propDiffNil
 
+testDiffInclR :: Spec
+testDiffInclR = it "Checked the right compatibility of (\\\\) with  (<==)" $ do
+    property $ propDiffInclR
+
 propDiffCharac :: [Var] -> [Var] -> Var -> Bool
 propDiffCharac xs ys z = (z `elem` xs \\ ys) == (z `elem` xs && z `notElem` ys)
 
@@ -61,3 +72,38 @@ propDiffDistribAppL2 xs ys zs = zs \\ (xs ++ ys) == (zs \\ xs) \\ ys
 
 propDiffNil :: [Var] -> Bool
 propDiffNil xs = xs \\ [] == xs
+
+propDiffInclR :: [Var] -> [Var] -> [Var] -> Bool
+propDiffInclR xs ys zs = not (xs <== ys) || zs \\ ys <== zs \\ xs
+
+testDiffCompatL :: Spec
+testDiffCompatL = it "Checked the left compatibility of (\\\\) with (===)" $ do
+    property $ propDiffCompatL
+
+testDiffCompatR :: Spec
+testDiffCompatR = it "Checked the right compatibility of (\\\\) with (===)" $ do
+    property $ propDiffCompatR
+
+testDiffCompatLR :: Spec
+testDiffCompatLR = it "Checked the compatibility of (\\\\) with (===)" $ do
+    property $ propDiffCompatLR
+
+testDiffNotIn :: Spec
+testDiffNotIn = it "Checked the diff_not_in property" $ do
+    property $ propDiffNotIn
+
+testDiffCompat :: Spec
+testDiffCompat = undefined
+
+propDiffCompatL :: [Var] -> [Var] -> [Var] -> Bool
+propDiffCompatL xs xs' ys = xs /== xs' || xs \\ ys === xs' \\ ys
+
+propDiffCompatR :: [Var] -> [Var] -> [Var] -> Bool
+propDiffCompatR xs ys ys' = ys /== ys' || xs \\ ys === xs \\ ys'
+
+propDiffCompatLR :: [Var] -> [Var] -> [Var] -> [Var] -> Bool
+propDiffCompatLR xs xs' ys ys' = xs /== xs' || ys /== ys' || 
+    xs \\ ys === xs' \\ ys'
+
+propDiffNotIn :: [Var] -> [Var] -> Bool
+propDiffNotIn = undefined

@@ -101,3 +101,28 @@ open import Function               using (_∘_)
 open import Function.Equivalence   using (_⇔_) -- less convenient than in isomorphism
 
 open import Level                  using (Level)
+
+open import Data.List using
+  ( List
+  ; _++_
+  ; length
+  ; reverse
+  ; map
+  ; foldr
+  ; downFrom
+  )
+
+open import Data.List.Relation.Unary.All using (All; []; _∷_)
+open import Data.List.Relation.Unary.Any using (Any; here; there)
+open import Data.List.Membership.Propositional using (_∈_)
+open import Data.List.Properties using
+  ( reverse-++-commute
+  ; map-compose
+  ; map-++-commute
+  ; foldr-++
+  ; mapIsFold
+  )
+
+open import Algebra.Structures using (IsMonoid)
+open import Relation.Unary using (Decidable)
+open import Relation.Binary using (Decidable)

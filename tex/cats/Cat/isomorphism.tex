@@ -22,6 +22,10 @@ right-inverse of $g$.
     it is a left and right-inverse of $f$.
 \end{defin}
 
+\noindent 
+{\bf Remark} : Given a category \Cat\ and $f,g\in\arr\ \Cat$, $g$ is
+an inverse of $f$ \ifand\ $f$ is an inverse of $g$.
+
 \begin{defin}\label{Cat:def:isomorphism}
     Let \Cat\ be a category and $f\in\arr\ \Cat$. We say that $f$ is
     an {\em isomorphism} \ifand\ $f$ has an inverse.
@@ -58,6 +62,10 @@ right-inverse of $g$.
     proposition~(\ref{Cat:prop:inverse:left:right:inverse:equal}), we have $g=h$.
 \end{proof}
 
+\begin{notation}\label{Cat:notation:inverse}
+    Given a category \Cat, an inverse of $f\in\arr\ \Cat$ is denoted $f^{-1}$.
+\end{notation}
+
 \begin{prop}\label{Cat:prop:isomorphism:left:right}
     Let \Cat\ be a category and $f\in\arr\ \Cat$. Then $f$ is an isomorphism
     \ifand\ $f$ has a left-inverse and a right-inverse.
@@ -74,3 +82,44 @@ right-inverse of $g$.
     inverse of $f$ and from definition~(\ref{Cat:def:isomorphism}) we conclude
     that $f$ is an isomorphism.
 \end{proof}
+
+\begin{prop}\label{Cat:prop:isomorphism:composition}
+    Let \Cat\ be a category, $f:a\to b$ and $g:b\to c$ where $a,b,c\in\Cat$.
+    If $f$ and $g$ are isomorphisms then  $g\circ f$ is an isomophism and:
+        \[
+            (g\circ f)^{-1} = f^{-1}\circ g^{-1}
+        \]
+\end{prop}
+\begin{proof}
+    We assume that $f$ and $g$ are isomophisms with inverses denoted 
+    $f^{-1}$ and $g^{-1}$ respectively. We need to show that $g\circ f$
+    is an isomorphism, i.e. that it has an inverse and that the inverse
+    is actually $f^{-1}\circ g^{-1}$. So we need to show that 
+    $f^{-1}\circ g^{-1}$ is both a left-inverse and a right-inverse
+    of $g\circ f$. Note that since $f:a\to b$ and $g:b\to c$, we have
+    $f^{-1}:b\to a$ and $g^{-1}:c\to b$ and consequently
+    $f^{-1}\circ g^{-1}:c \to a$. The proof of left-identity goes as follows:
+        \begin{eqnarray*}(f^{-1}\circ g^{-1})\circ(g\circ f)
+            &=&f^{-1}\circ(g^{-1}\circ g)\circ f
+            \ \leftarrow\ \circ\ \mbox{assoc}\\
+            \mbox{$g^{-1}$ left-identity of $g$}\ \to\ 
+            &=&f^{-1}\circ\id\,(b)\circ f\\
+            \mbox{$(12)$ or $(13)$ of def.~(\ref{Cat:def:category})}\ \to\ 
+            &=&f^{-1}\circ f\\
+            \mbox{$f^{-1}$ left-identity of $f$}\ \to\ 
+            &=&\id\,(a)
+        \end{eqnarray*}
+The proof of right-identity goes as follows:
+        \begin{eqnarray*}(g\circ f)\circ(f^{-1}\circ g^{-1})
+            &=&g\circ (f\circ f^{-1})\circ g^{-1}
+            \ \leftarrow\ \circ\ \mbox{assoc}\\
+            \mbox{$f^{-1}$ right-identity of $f$}\ \to\ 
+            &=&g\circ\id\,(b)\circ g^{-1}\\
+            \mbox{$(12)$ or $(13)$ of def.~(\ref{Cat:def:category})}\ \to\ 
+            &=&g\circ g^{-1}\\
+            \mbox{$g^{-1}$ right-identity of $g$}\ \to\ 
+            &=&\id\,(c)
+        \end{eqnarray*}
+\end{proof}
+
+

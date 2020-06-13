@@ -251,9 +251,26 @@ Proof.
         + contradiction.
 Qed.
 
+Definition Pure (X:Prop) : Prop := forall (p q:X), p = q.
 
-Lemma L26 : PExt -> PIrr.
+Lemma L26 : Pure True.
+Proof.
+    unfold Pure. intros p q. destruct p, q. reflexivity.
+Qed.
+
+Lemma L27 : forall (X:Prop), X -> X <-> True.
+Proof.
+    intros X p. split; intros H.
+    - trivial.
+    - assumption.
+Qed.
+
+Lemma L28 : PExt -> PIrr.
 Proof.
     unfold PExt, PIrr. intros PExt X p q.
-Show.
-
+    assert (X = True) as H1.
+        { apply PExt. apply L27. assumption. }
+    assert (Pure X) as H2.
+        { rewrite H1.  apply L26. } 
+    unfold Pure in H2. apply H2.
+Qed.

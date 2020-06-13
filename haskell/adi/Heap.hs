@@ -2,7 +2,7 @@ module  Heap
     (   Heap 
     ,   newHeap
     ,   findVal
-    ,   alloc
+    ,   heapAlloc
     )   where
 
 import Data.Map as M
@@ -22,8 +22,8 @@ findVal heap addr
         Nothing -> error "memory corruption error"
         Just v  -> v 
 
-alloc :: Heap -> (Heap, Addr)
-alloc heap = (heap', addr) where
+heapAlloc :: Heap -> (Heap, Addr)
+heapAlloc heap = (heap', addr) where
     addr  = next heap
     heap' = Heap 
         { next = inc addr 

@@ -1,4 +1,6 @@
-inListOf map f => ...
+normalEqualSame
+Normal x -> normal x = x
+Normal x <-> normal x = x
 Normal/Normal
 Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x

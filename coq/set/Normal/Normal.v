@@ -1,4 +1,7 @@
+Require Import Le.
+Require Import Nat.
 
+Require Import Utils.Nat.
 Require Import Utils.Ord.
 
 Require Utils.Normal.
@@ -152,14 +155,14 @@ Proof.
     - intros z H. inversion H.
 Qed.
 
-(*
 (* Normalizing yields a normal form.                                            *)
 Lemma normalNormal : forall (x:set), Normal (normal x).
 Proof.
-    (* setting up induction on rank x.                                          *)
+    (* Setting up induction on rank x.                                          *)
     intros x. remember (rank x) as n eqn:E. 
     assert (rank x <= n) as H. { rewrite E. apply le_n. } 
     clear E. revert H. revert x. revert n.
+    (* Actual proof.                                                            *)
     induction n as [|n IH]; intros x H1.
     - inversion H1 as [H2|]. apply rankNil in H2. rewrite H2. apply NilNormal.
     - constructor.
@@ -167,6 +170,25 @@ Proof.
         + apply normalSorted.
         + intros z H2. rewrite normalDef in H2.
           apply sortInListOfIff, nubInListOfIff in H2.
+          apply inListOfMapIff in H2. destruct H2 as [z' [H2 H3]].
+          rewrite <- H2. apply IH. apply rankToList in H3.
+          apply le_S_n. apply le_trans with (rank x); assumption.
+Qed.
+
+(*
+(* Two equal sets in normal form are syntactically the same.                    *)
+Lemma normalEqualSame : forall (x y:set),
+    Normal x -> Normal y -> x == y -> x = y.
+Proof.
+    (* Setting up induction on max (rank x) (rank y).                           *)
+    intros x y. remember (max (rank x) (rank y)) as n eqn:E.
+    assert (rank x <= n) as H1. { rewrite E. apply n_le_max. }
+    assert (rank y <= n) as H2. { rewrite E. apply m_le_max. }
+    clear E. revert H1 H2. revert x y. revert n.
+    (* Actual proof.                                                            *)
+    induction n as [|n IH]; intros x y Rx Ry Nx Ny E.
+    - inversion Rx as [H1|]. inversion Ry as [H2|].
+      apply rankNil in H1. apply rankNil in H2. subst. reflexivity.
+    - apply nubedSortedEquivSame.
 Show.
 *)
-
