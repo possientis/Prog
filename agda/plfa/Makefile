@@ -7,7 +7,8 @@ all:					std.agdai \
 						connectives.agdai \
 						negation.agdai \
 						quantifiers.agdai \
-						decidable.agdai
+						decidable.agdai \
+						lists.agdai
 
 
 std.agdai:				std.agda
@@ -57,3 +58,10 @@ decidable.agdai:		decidable.agda \
 						isomorphism.agdai \
 						relations.agdai
 	agda -v0 decidable.agda
+
+lists.agdai:			lists.agda \
+						isomorphism.agdai \
+						relations.agdai \
+						bin.agdai
+	agda -v0 lists.agda
+						

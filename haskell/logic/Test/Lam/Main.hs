@@ -10,6 +10,7 @@ import Test.Formula
 import Test.Lam.Valid
 import Test.Lam.Subst
 import Test.Lam.Free
+import Test.Lam.BetaValid
 
 import Lam.T
 
@@ -19,3 +20,5 @@ specLam = do
     specValid
     specSubst
     specFree
+    specBetaValid
+

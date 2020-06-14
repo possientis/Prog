@@ -4,6 +4,7 @@ module  State
     ,   getEnv
     ,   getHeap
     ,   setHeap
+    ,   setEnv
     )   where
 
 import Env
@@ -22,6 +23,9 @@ getHeap = heap
 
 setHeap :: Heap -> State -> State
 setHeap h s = s { heap = h } 
+
+setEnv :: Env -> State -> State
+setEnv e s = s { env = e }
 
 initState :: State
 initState = State

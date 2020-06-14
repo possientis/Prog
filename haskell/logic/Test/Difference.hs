@@ -25,7 +25,7 @@ specDifference = describe "Testing properties of difference..." $ do
     testDiffCompatR
     testDiffCompatLR
     testDiffNotIn
-    testDiffCompat
+    testDiffConcat
 
 testDiffCharac :: Spec
 testDiffCharac = it "Checked characterization of (\\\\)" $ 
@@ -92,8 +92,9 @@ testDiffNotIn :: Spec
 testDiffNotIn = it "Checked the diff_not_in property" $ do
     property $ propDiffNotIn
 
-testDiffCompat :: Spec
-testDiffCompat = undefined
+testDiffConcat :: Spec
+testDiffConcat = it "Checked the diff_concat property" $ do
+    property $ propDiffConcat
 
 propDiffCompatL :: [Var] -> [Var] -> [Var] -> Bool
 propDiffCompatL xs xs' ys = xs /== xs' || xs \\ ys === xs' \\ ys
@@ -106,4 +107,8 @@ propDiffCompatLR xs xs' ys ys' = xs /== xs' || ys /== ys' ||
     xs \\ ys === xs' \\ ys'
 
 propDiffNotIn :: [Var] -> [Var] -> Bool
-propDiffNotIn = undefined
+propDiffNotIn xs ys = not (all (`notElem` xs) ys) || xs \\ ys == xs
+
+propDiffConcat :: [[Var]] -> [Var] -> Bool
+propDiffConcat xss ys = not (all (\y -> all (y `notElem`) xss) ys) ||
+    concat xss \\ ys == concat xss

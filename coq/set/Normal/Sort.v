@@ -84,11 +84,11 @@ Proof.
 Qed.
 
 Lemma sortEqual' : forall (x y:set), 
-    x == y -> x == sort y.
+    x == y -> sort x == y.
 Proof.
-    intros x y H. apply equalTrans with y.
+    intros x y H. apply equalTrans with x.
+    - apply sortEqual.
     - assumption.
-    - apply equalSym, sortEqual.
 Qed.
 
 Lemma sortRank : forall (x:set), rank (sort x) = rank x.

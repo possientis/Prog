@@ -274,3 +274,21 @@ Proof.
         { rewrite H1.  apply L26. } 
     unfold Pure in H2. apply H2.
 Qed.
+
+Axiom L29 : Consistent  (TVS /\ FExt).
+
+Axiom L30 : ~Provable Markov /\ ~Provable PIrr /\ ~Provable FExt.
+
+
+Lemma L31 : ~Provable False.
+Proof.
+    apply L14. exists (TVS /\ FExt). apply L29.
+Qed.
+
+Lemma L32 : Independent TVS.
+Proof.
+    remember (TVS /\ FExt) as X eqn:H1.
+    remember Markov as Z eqn:H2.
+    apply Sandwich. exists X, Z. split.
+    - rewrite H1.
+Admitted.

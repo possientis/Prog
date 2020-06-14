@@ -2,13 +2,6 @@ Coq:
 BetaValid: prop 374
 
 Haskell:
-diff_not_in
-diff_concat
-BetaValid_
-BetaValid
-betaValid_var_gen
-betaValid_var
-betaValid_app_gen
 betaValid_app
 betaValid_lam_gen
 betaValid_lam

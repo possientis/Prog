@@ -69,11 +69,11 @@ Proof.
 Qed.
 
 Lemma nubEqual' : forall (x y:set),
-    x == y -> x == nub y.
+    x == y -> nub x == y.
 Proof.
-    intros x y H. apply equalTrans with y.
+    intros x y H. apply equalTrans with x.
+    - apply nubEqual.
     - assumption.
-    - apply equalSym. apply nubEqual.
 Qed.
  
 Lemma nubRank : forall (x:set), rank (nub x) = rank x.

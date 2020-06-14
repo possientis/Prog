@@ -12,6 +12,7 @@ import Var
 import Eval
 import Value
 import Syntax
+import Closure
 
 eval :: Expr -> (Expr -> Eval Value) -> Eval Value
 eval = \case 
@@ -62,9 +63,14 @@ evalApp e1 e2 ev = do
     case closure v1 of
         Nothing -> error "App: lhs does not evaluate to a function."
         Just c  -> do 
-            v1   <- ev e1 
+            v2   <- ev e2 
             addr <- alloc
-            return undefined
+            write addr v2
+            let env = closureEnv c
+            let x   = closureVar c
+            let e   = closureBody c
+            v <- localEnv (bind x addr env) (ev e)
+            return v
 
 {-
 

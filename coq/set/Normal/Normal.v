@@ -1,5 +1,6 @@
 Require Import Le.
 Require Import Nat.
+Require Import List.
 
 Require Import Utils.Nat.
 Require Import Utils.Ord.
@@ -14,6 +15,7 @@ Require Import Core.Rank.
 Require Import Core.Equal.
 Require Import Core.Order.
 Require Import Core.Empty.
+Require Import Core.ToList.
 Require Import Core.ElemIncl.
 Require Import Core.Decidability.
 Require Import Core.Extensionality.
@@ -120,7 +122,7 @@ Inductive Normal (x:set) : Prop :=
 .
 
 (* A set is equal to its normal form, not identical, not equivalent as list.    *)
-Lemma normalEqual : forall (x:set), x == normal x.
+Lemma normalEqual : forall (x:set), normal x == x.
 Proof.
     induction x as [|x IH1 xs IH2].
     - apply equalRefl.
@@ -128,19 +130,19 @@ Proof.
       apply sortEqual', nubEqual', consCompatLR; assumption.
 Qed.
 
-(* Normalizing preserves the rank of a set.                                     *)
+(* The normal form has same rank                                                *)
 Lemma normalRank : forall (x:set), rank (normal x) = rank x.
 Proof.
-    intros x. apply rankEqual, equalSym, normalEqual.
+    intros x. apply rankEqual, normalEqual.
 Qed.
 
-(* A normal form is nubed.                                                      *)
+(* The normal form is nubed.                                                    *)
 Lemma normalNubed : forall (x:set), Nubed (normal x).
 Proof.
     intros x. rewrite normalDef. apply sortNubed, nubNubed.
 Qed.
 
-(* A normal form is sorted.                                                     *)
+(* The normal form is sorted.                                                   *)
 Lemma normalSorted : forall (x:set), Sorted (normal x).
 Proof.
     intros x. rewrite normalDef. apply sortSorted.
@@ -155,7 +157,7 @@ Proof.
     - intros z H. inversion H.
 Qed.
 
-(* Normalizing yields a normal form.                                            *)
+(* The normal form is in normal form.                                           *)
 Lemma normalNormal : forall (x:set), Normal (normal x).
 Proof.
     (* Setting up induction on rank x.                                          *)
@@ -175,7 +177,6 @@ Proof.
           apply le_S_n. apply le_trans with (rank x); assumption.
 Qed.
 
-(*
 (* Two equal sets in normal form are syntactically the same.                    *)
 Lemma normalEqualSame : forall (x y:set),
     Normal x -> Normal y -> x == y -> x = y.
@@ -189,6 +190,49 @@ Proof.
     induction n as [|n IH]; intros x y Rx Ry Nx Ny E.
     - inversion Rx as [H1|]. inversion Ry as [H2|].
       apply rankNil in H1. apply rankNil in H2. subst. reflexivity.
-    - apply nubedSortedEquivSame.
-Show.
-*)
+    - destruct Nx as [H1 H2 H3]. destruct Ny as [H4 H5 H6].
+      apply nubedSortedEquivSame; try (assumption). 
+      clear H1 H2 H4 H5. rename H3 into H1. rename H6 into H2. 
+      rewrite doubleIncl in E. destruct E as [E1 E2].
+      split; intros z H3.
+        + assert (z :: y) as H4. { apply toListIncl with x; assumption. }
+          rewrite toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
+          assert (z = z') as H7.
+            { apply IH.
+                { apply le_S_n. apply le_trans with (rank x).
+                    { apply rankToList. assumption. }
+                    { assumption. }}
+                { apply le_S_n. apply le_trans with (rank y).
+                    { apply rankToList. assumption. }
+                    { assumption. }}
+                { apply H1, H3. }
+                { apply H2, H4. }
+                { apply doubleIncl. split; assumption. } }
+            rewrite H7. assumption.
+        + assert (z :: x) as H4. { apply toListIncl with y; assumption. }
+          rewrite toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
+          assert (z = z') as H7.
+            { apply IH.
+                { apply le_S_n. apply le_trans with (rank y).
+                    { apply rankToList. assumption. }
+                    { assumption. }}
+                { apply le_S_n. apply le_trans with (rank x).
+                    { apply rankToList. assumption. }
+                    { assumption. }}
+                { apply H2, H3. }
+                { apply H1, H4. }
+                { apply doubleIncl. split; assumption. }}
+          rewrite H7. assumption.
+Qed.
+
+(* The predicate Normal has the right semantics in relation to normal.          *)
+(* A set is in normal form if and only if it is equal to its normal form.       *)
+Lemma normalCheck : forall (x:set), Normal x <-> normal x = x.
+Proof.
+    intros x. split; intro H.
+    - apply normalEqualSame.
+        + apply normalNormal.
+        + assumption.
+        + apply normalEqual.
+    - rewrite <- H. apply normalNormal.
+Qed.

@@ -1,7 +1,4 @@
-normalEqualSame
-Normal x -> normal x = x
-Normal x <-> normal x = x
-Normal/Normal
+Normal/Normal: what is left to do ?
 Normal/Normal: check imports are really needed
 conjecture: normal x = sort . nub . map normal . toList $ x
 Core/Functional : we d like => y = y' but we can only have y == y': we need some notion of normal form for sets
