@@ -98,28 +98,71 @@ an inverse of $f$ \ifand\ $f$ is an inverse of $g$.
     $f^{-1}\circ g^{-1}$ is both a left-inverse and a right-inverse
     of $g\circ f$. Note that since $f:a\to b$ and $g:b\to c$, we have
     $f^{-1}:b\to a$ and $g^{-1}:c\to b$ and consequently
-    $f^{-1}\circ g^{-1}:c \to a$. The proof of left-identity goes as follows:
+    $f^{-1}\circ g^{-1}:c \to a$. The proof for left-inverse goes as follows:
         \begin{eqnarray*}(f^{-1}\circ g^{-1})\circ(g\circ f)
             &=&f^{-1}\circ(g^{-1}\circ g)\circ f
             \ \leftarrow\ \circ\ \mbox{assoc}\\
-            \mbox{$g^{-1}$ left-identity of $g$}\ \to\ 
+            \mbox{$g^{-1}$ left-inverse of $g$}\ \to\ 
             &=&f^{-1}\circ\id\,(b)\circ f\\
             \mbox{$(12)$ or $(13)$ of def.~(\ref{Cat:def:category})}\ \to\ 
             &=&f^{-1}\circ f\\
-            \mbox{$f^{-1}$ left-identity of $f$}\ \to\ 
+            \mbox{$f^{-1}$ left-inverse of $f$}\ \to\ 
             &=&\id\,(a)
         \end{eqnarray*}
-The proof of right-identity goes as follows:
+The proof of right-inverse goes as follows:
         \begin{eqnarray*}(g\circ f)\circ(f^{-1}\circ g^{-1})
             &=&g\circ (f\circ f^{-1})\circ g^{-1}
             \ \leftarrow\ \circ\ \mbox{assoc}\\
-            \mbox{$f^{-1}$ right-identity of $f$}\ \to\ 
+            \mbox{$f^{-1}$ right-inverse of $f$}\ \to\ 
             &=&g\circ\id\,(b)\circ g^{-1}\\
             \mbox{$(12)$ or $(13)$ of def.~(\ref{Cat:def:category})}\ \to\ 
             &=&g\circ g^{-1}\\
-            \mbox{$g^{-1}$ right-identity of $g$}\ \to\ 
+            \mbox{$g^{-1}$ right-inverse of $g$}\ \to\ 
             &=&\id\,(c)
         \end{eqnarray*}
+\end{proof}
+
+\begin{prop}\label{Cat:prop:isomorphism:identity}
+    Let \Cat\ be a category and $a\in\Cat$. Then $\id\,(a)$ is an isomorphim.
+\end{prop}
+\begin{proof}
+    From $\id\,(a)\circ\id\,(a)=\id\,(a)$, $\id(a)$ is both a left
+    and right inverse of itself.
+\end{proof}
+
+\begin{prop}\label{Cat:prop:isomorphism:inverse}
+    Let \Cat\ be a category. If $f\in\arr\ \Cat$ is an isomorphism, so~is~$f^{-1}$.
+\end{prop}
+\begin{proof}
+    If $f$ is an isomorphism with imverse $f^{-1}$, $f$ is an inverse of $f^{-1}$.
+\end{proof}
+
+\begin{defin}\label{Cat:def:isomorphic}
+    Let \Cat\ be a category and $a,b\in\Cat$. We say that the object $a$ is 
+    {\em isomorphic} to the object $b$ \ifand\ there exists an isomorphism
+    $f:a\to b$.
+\end{defin}
+
+\begin{notation}\label{Cat:notation:isomorphic}
+    We write $a\simeq b$ to say that $a$ is isomorphic to $b$.
+\end{notation}
+
+\begin{prop}\label{Cat:prop:isomorphic:equivalence}
+    Let \Cat\ be a category. The relation $\simeq$ is an equivalence on 
+    $\ob\ \Cat$.
+\end{prop}
+\begin{proof}
+    We need to show that $\simeq$ is reflexive, symmetric and transitive.
+    Given $a\in\Cat$, from propostion~(\ref{Cat:prop:isomorphism:identity})
+    the arrow $\id\,(a):a\to a$ is an isomorpshim, so $a\simeq a$ and $\simeq$ is 
+    reflexive. Given $a,b\in\Cat$ with $a\simeq b$, there exists an isomorphism
+    $f:a\to b$. From proposition~(\ref{Cat:prop:isomorphism:inverse}) the
+    arrow $f^{-1}:b\to a$ is also an isomorphism. So $b\simeq a$ and $\simeq$
+    is symmetric. Suppose $a,b,c\in\Cat$ with $a\simeq b$ and $b\simeq c$. 
+    There exist isomorphisms $f:a\to b$ and $g:b\to c$. From
+    proposition~(\ref{Cat:prop:isomorphism:composition}) the arrow $g\circ f$
+    is an isomorphism from $a$ to $c$. So $a\simeq c$ and $\simeq$ is
+    transitive.
 \end{proof}
 
 
