@@ -7,6 +7,7 @@ module  Eval
     ,   find
     ,   write
     ,   localEnv
+    ,   runEval
     )   where
 
 import Env
@@ -20,6 +21,9 @@ import Control.Monad.Trans.State hiding (State)
 
 newtype Eval a = Eval { unEval :: StateT State Identity a } 
     deriving (Functor, Applicative, Monad)
+
+runEval :: Eval a -> a
+runEval m = runIdentity $ evalStateT (unEval m) initState
 
 askEnv :: Eval Env
 askEnv  = Eval $ gets getEnv 

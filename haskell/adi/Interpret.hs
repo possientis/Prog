@@ -14,18 +14,22 @@ import Value
 import Syntax
 import Closure
 
-eval :: Expr -> (Expr -> Eval Value) -> Eval Value
-eval = \case 
+
+eval :: Expr -> Value
+eval e = runEval $ eval' e
+
+eval' :: Expr -> Eval Value
+eval' e = eval_ e eval'
+
+eval_ :: Expr -> (Expr -> Eval Value) -> Eval Value
+eval_ = \case 
     Fix (ENum n)        -> evalNum n
     Fix (EVar x)        -> evalVar x
     Fix (EOp op e1 e2)  -> evalOp op e1 e2
     Fix (EIf e e1 e2)   -> evalIf e e1 e2
     Fix (ELam x e)      -> evalLam x e
     Fix (EApp e1 e2)    -> evalApp e1 e2  
-    _                   -> error "not implemented"
-{-
     Fix (ERec f e)      -> evalRec f e
--}
 
 evalNum :: Integer -> (Expr -> Eval Value) -> Eval Value
 evalNum n _ev = return $ mkVal n
@@ -72,17 +76,11 @@ evalApp e1 e2 ev = do
             v <- localEnv (bind x addr env) (ev e)
             return v
 
-{-
-
-evalRec :: Var -> Expr -> Env -> Value
-evalRec f e env = eval e (bind f (mkExpr e) env)
-
--- Given a value to which the closure variable is bound, 
--- returns the value corresponding to the closure evaluation.
--- This is simply the value obtained by evaluating the closure 
--- body in the 'local environment', defined as the closure 
--- environment with the additional binding of the closure 
--- variable to the value argument.
-evalClosure :: Closure -> Value -> Value
-evalClosure c v = eval (closureBody c) (bind (closureVar c) v (closureEnv c))
--}
+evalRec :: Var -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalRec f e ev = do
+    env  <- askEnv
+    addr <- alloc 
+    let env' = bind f addr env
+    v <- localEnv env' (ev e)
+    write addr v
+    return v
