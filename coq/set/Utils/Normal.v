@@ -5,7 +5,7 @@ Require Import Utils.Ord.
 Require Import Utils.Sort.
 Require Import Utils.Equiv.
 
-
+(* Nubing a sorted list yields a sorted list.                                   *)
 Lemma nubSorted : forall (a:Type) (o:Ord a) (xs:list a),
     Sorted xs -> Sorted (nub xs).
 Proof.
@@ -35,7 +35,7 @@ Proof.
                     { assumption. }}}
 Qed.
 
-
+(* Inserting a new element into a nubed list yields a nubed list.               *)
 Lemma insertNubed : forall (a:Type) (o:Ord a) (x:a) (xs:list a),
     ~ In x xs -> Nubed xs -> Nubed (insert x xs).
 Proof.
@@ -56,6 +56,7 @@ Proof.
             { constructor; assumption. }
 Qed.
 
+(* Sorting a nubed list yields a nubed list.                                    *)
 Lemma sortNubed : forall (a:Type) (o:Ord a) (xs:list a),
     Nubed xs -> Nubed (sort xs).
 Proof.
@@ -66,6 +67,7 @@ Proof.
         + assumption.
 Qed.
 
+(* Two sorted lists which are equivalent have identical heads.                  *)
 Lemma sameHead : forall (a:Type) (o:Ord a) (x y:a) (xs ys:list a),
     Equiv (cons x xs) (cons y ys) ->
     Sorted (cons x xs) ->
@@ -91,6 +93,7 @@ Proof.
                   { assumption. }}
 Qed.
 
+(* Two sorted and nubed lists which are equivalent are identical.               *)
 Lemma nubedSortedEquivSame : forall (a:Type) (o:Ord a) (xs ys:list a),
     Nubed xs ->
     Nubed ys ->
@@ -130,6 +133,7 @@ Proof.
           subst. reflexivity. 
 Qed.
 
+(* Nubing and sorting commute with each other.                                  *) 
 Lemma nubSortCommute : forall (a:Type) (o:Ord a) (xs:list a),
     nub (sort xs) = sort (nub xs).
 Proof.
@@ -147,21 +151,26 @@ Proof.
             { apply equivSym. apply sortEquiv. }
 Qed.
 
+(* Normalizing a list: simply sorting and nubing.                               *)
 Definition normal (a:Type) (o:Ord a) (xs:list a) : list a := sort (nub xs). 
 
 Arguments normal {a} {o}.
 
+(* Predicate expressing the fact that a list is in normal form:                 *)
+(* A list is in normal form when it has been nubed and sorted.                  *)
 Definition Normal (a:Type) (o:Ord a) (xs:list a) : Prop := Nubed xs /\ Sorted xs. 
 
 Arguments Normal {a} {o}.
 
-Lemma normalEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv xs (normal xs).
+(* A list is equivalent to its normal form                                      *)
+Lemma normalEquiv : forall (a:Type) (o:Ord a) (xs:list a), Equiv (normal xs) xs.
 Proof.
     intros a o xs. unfold normal. apply equivTrans with (nub xs).
-    - apply equivSym, nubEquiv.
-    - apply equivSym, sortEquiv.
+    - apply sortEquiv.
+    - apply nubEquiv.
 Qed.
 
+(* The normal form is in normal form.                                           *)
 Lemma normalNormal : forall (a:Type) (o:Ord a) (xs:list a), Normal (normal xs).
 Proof.
     intros a o xs. unfold normal. split.
@@ -169,38 +178,42 @@ Proof.
     - apply sortSorted.
 Qed.
 
-Lemma normalSame : forall (a:Type) (o:Ord a) (xs:list a),
-    Normal xs -> normal xs = xs.
-Proof.
-    intros a o xs [H1 H2]. unfold normal. apply eq_trans with (nub xs).
-    - apply sortSame. apply nubSorted. assumption.
-    - apply nubSame. assumption.
-Qed.
-
-Lemma normalEqualEquiv : forall (a:Type) (o:Ord a) (xs ys:list a),
-    normal xs = normal ys -> Equiv xs ys.
-Proof.
-    intros a o xs ys H. apply equivTrans with (normal xs).
-    - apply normalEquiv.
-    - rewrite H. apply equivSym. apply normalEquiv.
-Qed.
-
-Lemma NormalEquivEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
+(* Two equivalent lists in normal form are equal.                               *)
+Lemma normalEquivSame : forall (a:Type) (o:Ord a) (xs ys:list a),
     Normal xs -> Normal ys -> Equiv xs ys -> xs = ys.
 Proof.
     intros a o xs ys [H1 H2] [H3 H4] H5. 
     apply (nubedSortedEquivSame a _); assumption.
 Qed.
 
-Lemma equivNormalEqual : forall (a:Type) (o:Ord a) (xs ys:list a),
-    Equiv xs ys -> normal xs = normal ys.
+
+(* The predicate Normal has the right semantics in relation to normal.          *)
+(* A list is in normal form if and only if it is equal to its normal form.      *)
+Lemma normalCheck : forall (a:Type) (o:Ord a) (xs:list a),
+    Normal xs <-> normal xs = xs.
 Proof.
-    intros a o xs ys H. apply (NormalEquivEqual a _).
-    - apply normalNormal.
-    - apply normalNormal.
-    - apply equivTrans with xs.
-        + apply equivSym. apply normalEquiv.
-        + apply equivTrans with ys.
-            { assumption. }
+    intros a o xs. split; intro H.
+    - apply (normalEquivSame a _).
+        + apply normalNormal.
+        + assumption.
+        + apply normalEquiv.
+    - rewrite <- H. apply normalNormal.
+Qed.
+
+(* Equivalence between lists is equivalent to equality of their normal forms.   *)
+Lemma normalCharac : forall (a:Type) (o:Ord a) (xs ys:list a),
+    Equiv xs ys <-> normal xs = normal ys.
+Proof.
+    intros a o xs ys. split; intros H.
+    - apply (normalEquivSame a _).
+        + apply normalNormal.
+        + apply normalNormal.
+        + apply equivTrans with xs.
             { apply normalEquiv. }
+            { apply equivTrans with ys.
+                { assumption. }
+                { apply equivSym, normalEquiv. }}
+    - apply equivTrans with (normal xs).
+        + apply equivSym, normalEquiv.
+        + rewrite H. apply normalEquiv.
 Qed.

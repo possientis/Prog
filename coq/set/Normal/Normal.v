@@ -79,7 +79,7 @@ Proof.
     rewrite H6. reflexivity.
 Qed.
 
-(* nubbing and sorting commute with each other.                                 *)
+(* Nubing and sorting commute with each other.                                 *)
 Lemma nubSortCommute : forall (x:set), nub (sort x) = sort (nub x).
 Proof.
     intros x. unfold nub, sort. rewrite toListFromList, toListFromList.
@@ -111,7 +111,7 @@ Proof.
 Qed.
 
 (* Predicate expressing the fact that a set is in normal form:                  *)
-(* A set is in normal form when it has been Nubed and Sorted,                   *)
+(* A set is in normal form when it has been nubed and sorted,                   *)
 (* and every element of its list is itself in normal form.                      *)
 Inductive Normal (x:set) : Prop :=
 | mkNormal : 
@@ -235,4 +235,22 @@ Proof.
         + assumption.
         + apply normalEqual.
     - rewrite <- H. apply normalNormal.
+Qed.
+
+(* Equality between sets equivalent to syntactic equality of their normal forms.*)
+Lemma normalCharac : forall (x y:set),
+    x == y <-> normal x = normal y.
+Proof.
+    intros x y. split; intros H.
+    - apply normalEqualSame.
+        + apply normalNormal.
+        + apply normalNormal.
+        + apply equalTrans with x.
+            { apply normalEqual. }
+            { apply equalTrans with y.
+                { assumption. }
+                { apply equalSym, normalEqual. }}
+    - apply equalTrans with (normal x).
+        + apply equalSym, normalEqual.
+        + rewrite H. apply normalEqual.
 Qed.
