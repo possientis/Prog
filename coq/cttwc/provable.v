@@ -3,6 +3,7 @@ Inductive Provable : Prop -> Prop :=
 | PI : forall (X : Prop), Provable (X -> X)
 | PK : forall (X Y:Prop), Provable Y -> Provable (X -> Y)
 | PN : forall (X Y:Prop), Provable (X -> Y) -> Provable (~Y -> ~X)
+| RE : forall (X Y:Prop), (X -> Y) -> Provable (X -> Y) (* dodgy ? *)
 .
 
 Definition Contradictory (X:Prop) : Prop := Provable (~X).
@@ -275,8 +276,8 @@ Proof.
     unfold Pure in H2. apply H2.
 Qed.
 
+(* Proved at meta level                                                         *)
 Axiom L29 : Consistent  (TVS /\ FExt).
-
 Axiom L30 : ~Provable Markov /\ ~Provable PIrr /\ ~Provable FExt.
 
 
@@ -290,5 +291,66 @@ Proof.
     remember (TVS /\ FExt) as X eqn:H1.
     remember Markov as Z eqn:H2.
     apply Sandwich. exists X, Z. split.
-    - rewrite H1.
-Admitted.
+    - rewrite H1. apply RE. intros [H3 H4]. assumption.
+    - split.
+        + rewrite H2. apply RE. intros H3. apply L23, L22, L21. assumption.
+        + split.
+            { rewrite H1. apply L29. }
+            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+Qed.
+
+Lemma L33 : Independent XM.
+Proof.
+    remember (TVS /\ FExt) as X eqn:H1.
+    remember Markov as Z eqn:H2.
+    apply Sandwich. exists X, Z. split.
+    - rewrite H1. apply RE. intros [H3 H4]. apply L21. assumption.
+    - split. 
+        + rewrite H2. apply RE.  intros H3. apply L23, L22. assumption.
+        + split.
+            { rewrite H1. apply L29. }
+            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+Qed.
+
+
+Lemma L34 : Independent LPO.
+Proof.
+    remember (TVS /\ FExt) as X eqn:H1.
+    remember Markov as Z eqn:H2.
+    apply Sandwich. exists X, Z. split.
+    - rewrite H1. apply RE. intros [H3 H4]. apply L22, L21. assumption.
+    - split.
+        + rewrite H2. apply RE. apply L23.
+        + split.
+            { rewrite H1. apply L29. }
+            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+Qed.
+
+
+Lemma L35 : Independent Markov.
+Proof.
+    remember (TVS /\ FExt) as X eqn:H1.
+    remember Markov as Z eqn:H2.
+    apply Sandwich. exists X, Z. split.
+    - rewrite H1, H2. apply RE. intros [H3 H4]. apply L23, L22, L21. assumption.
+    - split.
+        + apply PI.
+        + split.
+            { rewrite H1. apply L29. }
+            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+Qed.
+
+Lemma L36 : ~Provable PExt.
+Proof.
+    intros H1. destruct L30 as [H2 [H3 H4]]. apply H3.
+    apply PA with PExt. 
+    - apply RE, L28.
+    - assumption.
+Qed.
+
+(*
+Lemma L36 : Independent PExt.
+Proof.
+
+Show.
+*)
