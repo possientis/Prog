@@ -2,11 +2,7 @@ Coq:
 BetaValid: prop 374
 
 Haskell:
-betaValid_app
-betaValid_lam_gen
-betaValid_lam
-betaValid_free_gen
-betaValid_free
+
 Latex:
 
 
