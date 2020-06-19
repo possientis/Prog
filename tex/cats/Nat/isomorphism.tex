@@ -12,3 +12,39 @@
     all $a\in\Cat$, the component $\alpha(a):F(a)\to G(a)$ is an
     isomorphim.
 \end{prop}
+\begin{proof}
+    We first show the {\em only if} part. So we assume that 
+    $\alpha:F\Rightarrow G$ is a natural isomorphism. From 
+    definition~(\ref{Nat:def:isomorphsim}), it follows that
+    $f=(F,G,\alpha)$ is an isomorphism of the functor category
+    $[\Cat,\Dat]$. Thus, from definition~(\ref{Cat:def:isomorphism}), 
+    the arrow $f$ has an inverse. Hence there exists some
+    $g=(F',G',\beta)$ arrow in $[\Cat,\Dat]$ which is both a left and
+    right-inverse of $f$. Since $f:F\to G$ we must have $g:G\to F$ and
+    consequently $g=(G,F,\beta)$ with $\beta:G\Rightarrow F$. Since $g$ 
+    is a left-inverse of $f$: 
+        \begin{eqnarray*}(F,F,\iota_{F})
+            &=&\id(F)\ \leftarrow\ 
+            \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\\
+            &=&g\circ f\\
+            &=&(G,F,\beta)\,\circ\,(F,G,\alpha)\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(F.F,\beta\circ\alpha)
+        \end{eqnarray*}
+    and it follows that $\iota_{F}=\beta\circ\alpha$. Since $g$ is
+    a right-inverse of $f$:
+        \begin{eqnarray*}(G,G,\iota_{G})
+            &=&\id(G)\ \leftarrow\ 
+            \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\\
+            &=&f\circ g\\
+            &=&(F,G,\alpha)\,\circ\,(G,F,\beta)\\
+            \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
+            &=&(G,G,\alpha\circ\beta)
+        \end{eqnarray*}
+    and it follows that $\iota_{G}=\alpha\circ\beta$. Now for all $a\in\Cat$,
+    we need to show that $\alpha(a):F(a)\to G(a)$ is an isomorphism in~\Dat.
+    So we need to show that $\alpha(a)$ has an inverse. However, having found
+    a natural transformation $\beta : G\Rightarrow F$ such that 
+    $\iota_{F}=\beta\circ\alpha$ and $\iota_{G}=\alpha\circ\beta$ we see that
+    $\beta(a)$ is the requested inverse, since:
+\end{proof}
