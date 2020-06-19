@@ -32,3 +32,36 @@ plus = μ "+" ⇒ ƛ "m" ⇒ ƛ "n" ⇒
      [zero⇒ ` "n"
      |suc "m" ⇒ `suc (` "+" · ` "m" · ` "n")
      ]
+
+twoᶜ : Term -- Church encoding
+twoᶜ = ƛ "s" ⇒ ƛ "z" ⇒ ` "s" · (` "s" · ` "z")
+
+plusᶜ : Term
+plusᶜ = ƛ "m" ⇒ ƛ "n" ⇒ ƛ "s" ⇒ ƛ "z" ⇒
+  ` "m" · ` "s" · (` "n" · ` "s" · ` "z")
+
+sucᶜ : Term -- Not Church here
+sucᶜ = ƛ "n" ⇒ `suc ` "n"
+
+
+mul : Term
+mul = μ "*" ⇒ ƛ "m" ⇒ ƛ "n" ⇒
+  case ` "m"
+    [zero⇒ `zero
+    |suc "m" ⇒ plus · ` "n" · (` "*" · ` "m" · ` "n")
+    ]
+
+mulᶜ : Term
+mulᶜ = ƛ "m" ⇒ ƛ "n" ⇒ ƛ "s" ⇒ ƛ "z" ⇒
+  ` "m" · (` "n" · ` "s") · ` "z"
+
+error : ∀ {a : Set} → a
+error = ⊥-elim impossible
+  where postulate impossible : ⊥
+
+ƛ'_⇒_ : Term → Term → Term
+ƛ' (` x) ⇒ N = ƛ x ⇒ N
+ƛ' _ ⇒ _ = error
+
+
+
