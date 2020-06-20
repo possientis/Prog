@@ -3,25 +3,18 @@ Require Import Nat.
 Require Import List.
 
 Require Import Utils.Nat.
-Require Import Utils.Ord.
 
 Require Utils.Normal.
 
 Require Import Core.Set.
-Require Import Core.Incl.
 Require Import Core.Elem.
 Require Import Core.Cons.
 Require Import Core.Rank.
 Require Import Core.Equal.
-Require Import Core.Order.
-Require Import Core.Empty.
 Require Import Core.ToList.
-Require Import Core.ElemIncl.
-Require Import Core.Decidability.
 Require Import Core.Extensionality.
 
 Require Import Normal.Map.
-Require Import Normal.Leq.
 Require Import Normal.Nub.
 Require Import Normal.Sort.
 Require Import Normal.Equiv.

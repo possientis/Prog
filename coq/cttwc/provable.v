@@ -277,80 +277,110 @@ Proof.
 Qed.
 
 (* Proved at meta level                                                         *)
-Axiom L29 : Consistent  (TVS /\ FExt).
-Axiom L30 : ~Provable Markov /\ ~Provable PIrr /\ ~Provable FExt.
-
+Axiom Ax29 : Consistent  (TVS /\ FExt).
+Axiom Ax30 : ~Provable Markov /\ ~Provable PIrr /\ ~Provable FExt.
 
 Lemma L31 : ~Provable False.
 Proof.
-    apply L14. exists (TVS /\ FExt). apply L29.
+    apply L14. exists (TVS /\ FExt). apply Ax29.
 Qed.
 
 Lemma L32 : Independent TVS.
 Proof.
-    remember (TVS /\ FExt) as X eqn:H1.
-    remember Markov as Z eqn:H2.
-    apply Sandwich. exists X, Z. split.
-    - rewrite H1. apply RE. intros [H3 H4]. assumption.
+    apply Sandwich. exists (TVS /\ FExt), Markov. split.
+    - apply RE. intros [H1 H2]. assumption.
     - split.
-        + rewrite H2. apply RE. intros H3. apply L23, L22, L21. assumption.
+        + apply RE. intros H1. apply L23, L22, L21. assumption.
         + split.
-            { rewrite H1. apply L29. }
-            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+            { apply Ax29. }
+            { destruct Ax30 as [H1 [H2 H3]]. assumption. }
 Qed.
 
 Lemma L33 : Independent XM.
 Proof.
-    remember (TVS /\ FExt) as X eqn:H1.
-    remember Markov as Z eqn:H2.
-    apply Sandwich. exists X, Z. split.
-    - rewrite H1. apply RE. intros [H3 H4]. apply L21. assumption.
+    apply Sandwich. exists (TVS /\ FExt), Markov. split.
+    - apply RE. intros [H1 H2]. apply L21. assumption.
     - split. 
-        + rewrite H2. apply RE.  intros H3. apply L23, L22. assumption.
+        + apply RE.  intros H3. apply L23, L22. assumption.
         + split.
-            { rewrite H1. apply L29. }
-            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+            { apply Ax29. }
+            { destruct Ax30 as [H1 [H2 H3]]. assumption. }
 Qed.
-
 
 Lemma L34 : Independent LPO.
 Proof.
-    remember (TVS /\ FExt) as X eqn:H1.
-    remember Markov as Z eqn:H2.
-    apply Sandwich. exists X, Z. split.
-    - rewrite H1. apply RE. intros [H3 H4]. apply L22, L21. assumption.
+    apply Sandwich. exists (TVS /\ FExt), Markov. split.
+    - apply RE. intros [H1 H2]. apply L22, L21. assumption.
     - split.
-        + rewrite H2. apply RE. apply L23.
+        + apply RE. apply L23.
         + split.
-            { rewrite H1. apply L29. }
-            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+            { apply Ax29. }
+            { destruct Ax30 as [H1 [H2 H3]]. assumption. }
 Qed.
-
 
 Lemma L35 : Independent Markov.
 Proof.
-    remember (TVS /\ FExt) as X eqn:H1.
-    remember Markov as Z eqn:H2.
-    apply Sandwich. exists X, Z. split.
-    - rewrite H1, H2. apply RE. intros [H3 H4]. apply L23, L22, L21. assumption.
+    apply Sandwich. exists (TVS /\ FExt), Markov. split.
+    - apply RE. intros [H1 H2]. apply L23, L22, L21. assumption.
     - split.
         + apply PI.
         + split.
-            { rewrite H1. apply L29. }
-            { rewrite H2. destruct L30 as [H3 [H4 H5]]. assumption. }
+            { apply Ax29. }
+            { destruct Ax30 as [H1 [H2 H3]]. assumption. }
 Qed.
 
 Lemma L36 : ~Provable PExt.
 Proof.
-    intros H1. destruct L30 as [H2 [H3 H4]]. apply H3.
+    intros H1. destruct Ax30 as [H2 [H3 H4]]. apply H3.
     apply PA with PExt. 
     - apply RE, L28.
     - assumption.
 Qed.
 
-(*
-Lemma L36 : Independent PExt.
+Lemma L37 : Independent PExt.
 Proof.
+    apply Sandwich. exists (TVS /\ FExt), PExt. split.
+    - apply RE. intros [H1 H2]. apply L24. assumption.
+    - split.
+        + constructor.
+        + split.
+            { apply Ax29. }
+            { apply L36. }
+Qed.
 
-Show.
-*)
+Lemma L38 : Independent PIrr.
+Proof.
+    apply Sandwich. exists (TVS /\ FExt), PIrr. split.
+    - apply RE. intros [H1 H2]. apply L28, L24. assumption.
+    - split.
+        + constructor.
+        + split.
+            { apply Ax29. }
+            { destruct Ax30 as [H1 [H2 H3]]. assumption. }
+Qed.
+
+Lemma L39 : Independent FExt.
+Proof.
+    apply Sandwich. exists (TVS /\ FExt), FExt. split.
+    - apply RE. intros [H1 H2]. assumption.
+    - split.
+        + constructor.
+        + split.
+            { apply Ax29. }
+            { destruct Ax30 as [H1 [H2 H3]]. assumption. }
+Qed.
+
+(* Able to characterize TVS without reference to True and False.                *)
+Lemma L40 : TVS <-> forall (X Y Z:Prop), X = Y \/ X = Z \/ Y = Z.
+Proof.
+    unfold TVS. split; intros H.
+    - intros X Y Z. destruct (H X), (H Y), (H Z); subst; try (left; reflexivity).
+        + right. left. reflexivity.
+        + right. right. reflexivity.
+        + right. right. reflexivity.
+        + right. left. reflexivity.
+    - intros X. destruct (H X True False) as [H1|[H1|H1]].
+        + left. assumption.
+        + right. assumption.
+        + exfalso. rewrite <- H1. trivial.
+Qed.

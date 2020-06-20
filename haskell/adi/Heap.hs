@@ -16,8 +16,8 @@ data Heap = Heap
     , memory :: Map Addr Value
     }
 
-findVal :: Heap -> Addr -> Value
-findVal heap addr
+findVal :: Addr -> Heap -> Value
+findVal addr heap
     | addr >= next heap  = error "unallocated memory access"
     | otherwise = case M.lookup addr (memory heap) of
         Nothing -> error "memory corruption error"

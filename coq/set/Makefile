@@ -414,20 +414,15 @@ ${NORM}/Insert.vo :				${NORM}/Insert.v \
 
 ${NORM}/Normal.vo :				${NORM}/Normal.v \
 								${UTILS}/Nat.vo \
-								${UTILS}/Ord.vo \
 								${UTILS}/Normal.vo \
 								${CORE}/Set.vo \
-								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
 								${CORE}/Cons.vo \
 								${CORE}/Rank.vo \
 								${CORE}/Equal.vo \
-								${CORE}/Order.vo \
-								${CORE}/Empty.vo \
-								${CORE}/ElemIncl.vo \
-								${CORE}/Decidability.vo \
+								${CORE}/ToList.vo \
 								${CORE}/Extensionality.vo \
-								${NORM}/Leq.vo \
+								${NORM}/Map.vo \
 								${NORM}/Nub.vo \
 								${NORM}/Sort.vo \
 								${NORM}/Equiv.vo \

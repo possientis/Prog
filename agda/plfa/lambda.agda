@@ -63,5 +63,41 @@ error = ⊥-elim impossible
 ƛ' (` x) ⇒ N = ƛ x ⇒ N
 ƛ' _ ⇒ _ = error
 
+case'_[zero⇒_|suc_⇒_] : Term → Term → Term → Term → Term
+case' L [zero⇒ M |suc ` x ⇒ N ] = case L [zero⇒ M |suc x ⇒ N ]
+case' L [zero⇒ M |suc _ ⇒ N ] = error
+
+μ'_⇒_ : Term → Term → Term
+μ' ` x ⇒ N = μ x ⇒ N
+μ' _ ⇒ N = error
+
+test : Term
+test = ƛ' two ⇒ two
+
+plus' : Term
+plus' = μ' + ⇒ ƛ' m ⇒ ƛ' n ⇒
+  case' m
+    [zero⇒ n
+    |suc m ⇒ `suc (+ · m · n)
+    ]
+  where
+  + = ` "+"
+  m = ` "m"
+  n = ` "n"
+
+data Value : Term -> Set where
+
+  V-ƛ : ∀ {x : Id} {N : Term}
+      -----------------------
+    → Value (ƛ x ⇒ N)
+
+  V-zero :
+      -----------------------
+      Value `zero
+
+  V-suc : ∀ {V : Term}
+    → Value V
+      -----------------------
+    → Value (`suc V)
 
 

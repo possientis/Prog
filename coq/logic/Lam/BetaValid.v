@@ -6,6 +6,7 @@ Require Import Equiv.
 Require Import Remove.
 Require Import Append.
 Require Import Include.
+Require Import Coincide.
 Require Import Intersect.
 Require Import Difference.
 Require Import Composition.
@@ -96,6 +97,7 @@ Proof.
     rewrite <- (diff_nil v e (Fr (Lam x t1))). apply betaValid_lam_gen.
 Qed.
 
+(* Some monotonicity property of beta-validity.                                 *)
 Lemma betaValid_incl : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v),
         xs <= ys -> betaValid_ f xs t -> betaValid_ f ys t.
@@ -118,6 +120,7 @@ Proof.
             { assumption. }
 Qed.
 
+(* When a substitution f is beta-valid, free variables are known.               *)
 Lemma betaValid_free_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v),
     betaValid_ f xs t ->
@@ -195,3 +198,24 @@ Proof.
     rewrite <- (inter_nil v e (Fr t)) at 1.
     apply (betaValid_free_gen v e f t nil). assumption.
 Qed.
+
+(*
+(* When two substitutions coincide, so does their beta-validity.                *)
+Lemma betaValid_coincide : 
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v) (xs:list v), 
+    coincide (Fr t \\ xs) f g ->
+    betaValid_ f xs t <-> betaValid_ g xs t.
+Proof.
+    intros v e f g. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs H.
+    - split; intros H1; apply betaValid_var_gen.
+    - split; intros H1; apply betaValid_app_gen; 
+      rewrite betaValid_app_gen in H1; destruct H1 as [H1 H2];
+      simpl in H; rewrite diff_distrib_app_r in H; apply coincide_app' in H;
+      destruct H as [H3 H4]; split.
+        + apply IH1; assumption.
+        + apply IH2; assumption.
+        + apply IH1; assumption.
+        + apply IH2; assumption.
+    -
+Show.
+*)

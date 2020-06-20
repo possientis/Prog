@@ -374,6 +374,7 @@ ${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
 								Remove.vo \
 								Append.vo \
 								Include.vo \
+								Coincide.vo \
 								Intersect.vo \
 								Difference.vo \
 								Composition.vo \

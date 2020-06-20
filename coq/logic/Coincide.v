@@ -49,4 +49,19 @@ Proof.
             { assumption. }
 Qed.
 
+Lemma coincide_app' : forall (v w:Type) (f g:v -> w) (xs ys:list v),
+    coincide (xs ++ ys) f g -> coincide xs f g /\ coincide ys f g.
+Proof.
+    intros v w f g. destruct xs as [|x xs]; intros ys H1; unfold coincide.
+    - split; intros x H2.
+        + simpl in H2. contradiction.
+        + simpl in H1. apply H1. assumption.
+    - split; intros y.
+        + intros [H2|H2].
+            { subst. apply H1. left. reflexivity. }
+            { apply H1. right. apply in_or_app. left. assumption. }
+        + intros H2. apply H1. right. apply in_or_app. right. assumption.
+Qed.
+
+
 

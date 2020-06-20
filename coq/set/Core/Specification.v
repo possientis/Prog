@@ -58,6 +58,7 @@ Qed.
 
 
 (* Axiom schema of specification assuming LEM for our Coq meta-logic.           *)
+(* So we lose having to assume LEM, but no need for decidable predicate.        *)
 Theorem specificationLEM : LEM -> forall (p:set -> set -> Prop), 
     compatible2 p -> 
     forall (x:set), exists (y:set), forall (z:set), 

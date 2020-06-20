@@ -139,6 +139,7 @@ Proof.
                 { assumption. }}
 Qed.
 
+(* This feels like an axiom schema of replacement for lists.                    *)
 Lemma filterReplace : forall (a b:Type) (p:a -> b -> Prop),
     LEM                                                 ->
     (forall (x:a) (y y':b), p x y -> p x y' -> y = y')  ->

@@ -2,6 +2,9 @@ Coq:
 BetaValid: prop 374
 
 Haskell:
+coincide_app'
+betaValid_coincide
+
 
 Latex:
 

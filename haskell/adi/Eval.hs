@@ -1,13 +1,14 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving     #-}
 
 module  Eval
-    (   Eval    (..)    -- TODO: hide 
-    ,   alloc
+    (   Eval
+    ,   runEval
     ,   askEnv
     ,   find
-    ,   write
-    ,   localEnv
-    ,   runEval
+--    ,   alloc
+--    ,   write
+--    ,   localEnv
+--    ,   runEval
     )   where
 
 import Env
@@ -16,17 +17,46 @@ import Heap
 import State
 import Value
 
+import Control.Monad.State
+import Control.Monad.Reader
 import Data.Functor.Identity
-import Control.Monad.Trans.State hiding (State)
 
-newtype Eval a = Eval { unEval :: StateT State Identity a } 
-    deriving (Functor, Applicative, Monad)
+type Eval = EvalT Identity
 
 runEval :: Eval a -> a
-runEval m = runIdentity $ evalStateT (unEval m) initState
+runEval = runIdentity . runEvalT newEnv newHeap
+
+newtype EvalT m a = EvalT 
+    { unEvalT :: ReaderT Env (StateT Heap m) a 
+    } deriving 
+        ( Functor
+        , Applicative
+        , Monad
+        , MonadReader Env
+        , MonadState Heap
+        )
+
+runEvalT 
+    :: (Monad m) 
+    => Env
+    -> Heap 
+    -> EvalT m a 
+    -> m a
+runEvalT env heap m  = evalStateT (runReaderT (unEvalT m) env) heap
+
+askEnvT :: (Monad m) => EvalT m Env
+askEnvT  = ask
 
 askEnv :: Eval Env
-askEnv  = Eval $ gets getEnv 
+askEnv = askEnvT
+
+findT :: (Monad m) => Addr -> EvalT m Value
+findT addr = findVal addr <$> get
+
+find :: Addr -> Eval Value
+find = findT
+
+{-
 
 find :: Addr -> Eval Value
 find addr = Eval $ do
@@ -63,3 +93,4 @@ localEnv env ev = Eval $ do
     let s3 = setEnv env0 s2
     put s3
     return v
+-}
