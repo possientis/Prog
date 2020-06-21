@@ -108,15 +108,16 @@ Proof.
     - left. apply (filterNil q). assumption.
 Qed.
 
-
-Lemma filterLEM : forall (a:Type) (p:a -> Prop), LEM -> forall (xs:list a), 
-    exists (ys:list a), forall (x:a), In x xs /\ p x <-> In x ys.
+(* Assuming weak decidability of predicate p, which is implied by LEM.          *)
+Lemma filterDec' : forall (a:Type) (p:a -> Prop), Dec' p -> 
+    forall (xs:list a), exists (ys:list a), forall (x:a), 
+        In x xs /\ p x <-> In x ys.
 Proof.
     intros a p L. induction xs as [|x xs IH].
     - exists nil. intros z. split; intros H.
         + destruct H as [H0 H1]. assumption.
         + inversion H.
-    - destruct IH as [ys IH]. unfold LEM in L. destruct (L (p x)) as [H|H].
+    - destruct IH as [ys IH]. destruct (L x) as [H|H].
         + exists (x :: ys). intros z. split; intros H'.
             { destruct H' as [[H0|H0] H1].
                 { subst. left. reflexivity. }

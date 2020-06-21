@@ -384,3 +384,52 @@ Proof.
         + right. assumption.
         + exfalso. rewrite <- H1. trivial.
 Qed.
+
+
+(* Able to characterize TVS without reference to True and False.                *)
+Lemma L41 : TVS <-> forall (p:Prop -> Prop), p True -> p False -> forall X, p X.
+Proof.
+    unfold TVS. split; intros H.
+    - intros p H1 H2 X. destruct (H X) as [H3|H3]; rewrite H3; assumption.
+    - apply H.
+        + left. reflexivity.
+        + right. reflexivity.
+Qed.
+
+(* We cannot have a sort of TVS applicable to all types, only Prop's.           *)
+Lemma L42 : ~ forall (X:Type), X = True \/ X = False.
+Proof.
+    intros H. destruct (H bool) as [H1|H1].
+    - assert (forall (x y:True), x = y) as H2.
+        { intros x y. destruct x, y. reflexivity. }
+      rewrite <- H1 in H2. 
+      assert (true = false) as H3.
+        { apply H2. }
+      inversion H3.
+    - assert (exists (x:bool), True) as H2.
+        { exists true. trivial. }
+      rewrite H1 in H2. destruct H2 as [X H2]. assumption. 
+Qed.
+
+(* Implicational excluded middle.                                               *) 
+Definition IXM : Prop := forall (X Y:Prop), (X -> Y) \/ (Y -> X).     
+
+Lemma L43 : XM -> IXM.
+Proof.
+    unfold XM, IXM. intros H X Y. destruct (H Y) as [H1|H1].
+    - left. intros _. assumption.
+    - right. intros H2. apply H1 in H2. contradiction.
+Qed.
+
+
+
+Lemma L44 : Consistent IXM.
+Proof.
+    apply L2 with XM.
+    - apply RE. apply L43.
+    - destruct L33 as [H1 H2]. assumption.
+Qed.
+
+Axiom Ax45 : ~Provable IXM.
+Axiom Ax46 : ~Provable (IXM -> XM).
+

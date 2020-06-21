@@ -1,9 +1,13 @@
 Coq:
-BetaValid: prop 374
+BetaValid
 
 Haskell:
 coincide_app'
+betaValid_coincide_gen
 betaValid_coincide
+betaValid_subst_gen
+betaValid_subst
+betaValid_support
 
 
 Latex:

@@ -37,8 +37,8 @@ newHeap = Heap
     , memory = M.empty
     }
 
-heapWrite :: Heap -> Addr -> Value -> Heap
-heapWrite heap addr v = if addr >= next heap
+heapWrite :: Addr -> Value -> Heap -> Heap
+heapWrite addr v heap = if addr >= next heap
     then error "heapWrite: illegal memory access"
     else heap { memory = M.insert addr v (memory heap) } 
 

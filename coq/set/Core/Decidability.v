@@ -101,5 +101,3 @@ Proof.
     - right. rewrite doubleIncl. intros [H3 H4]. apply H1. assumption.
     - right. rewrite doubleIncl. intros [H3 H4]. apply H1. assumption.
 Qed.
-
-

@@ -199,12 +199,12 @@ Proof.
     apply (betaValid_free_gen v e f t nil). assumption.
 Qed.
 
-(*
+
 (* When two substitutions coincide, so does their beta-validity.                *)
-Lemma betaValid_coincide : 
+Lemma betaValid_coincide_gen : 
     forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v) (xs:list v), 
     coincide (Fr t \\ xs) f g ->
-    betaValid_ f xs t <-> betaValid_ g xs t.
+        betaValid_ f xs t <-> betaValid_ g xs t.
 Proof.
     intros v e f g. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs H.
     - split; intros H1; apply betaValid_var_gen.
@@ -216,6 +216,53 @@ Proof.
         + apply IH2; assumption.
         + apply IH1; assumption.
         + apply IH2; assumption.
+    - split; intros H1; rewrite betaValid_lam_gen in H1; destruct H1 as [H1 H2];
+      apply betaValid_lam_gen; generalize H; intros H';
+      simpl in H; rewrite remove_diff in H;
+      rewrite <- diff_distrib_app_l' in H; simpl in H;
+      split.
+        + apply IH1; assumption.
+        + intros u H3. assert (f u = g u) as H4.
+            { apply H'. assumption. }
+          rewrite <- H4. apply H2. assumption.
+        + apply IH1; assumption.
+        + intros u H3. assert (f u = g u) as H4.
+            { apply H'. assumption. }
+          rewrite H4. apply H2. assumption.
+Qed.
+
+Lemma betaValid_coincide : forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v), 
+    coincide (Fr t) f g ->
+        betaValid f t <-> betaValid g t.
+Proof.
+    intros v e f g t H. unfold betaValid. apply betaValid_coincide_gen. 
+    rewrite diff_nil. assumption.
+Qed.
+
+Lemma betaValid_subst_gen :
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v) (xs:list v), 
+    subst_ f xs t = subst_ g xs t ->
+        betaValid_ f xs t <-> betaValid_ g xs t.
+Proof.
+    intros v e f g t xs H. apply betaValid_coincide_gen.
+    apply free_coincide_subst_gen. assumption.
+Qed.
+
+Lemma betaValid_subst : forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v), 
+    subst f t = subst g t ->
+        betaValid f t <-> betaValid g t.
+Proof.
+    unfold subst, betaValid. intros v e f g t H. 
+    apply betaValid_subst_gen. assumption.
+Qed.
+
+(*
+Lemma betaValid_support : 
+    forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v),
+    (xs /\ Fr t) == (ys /\ Fr t) ->
+        betaValid_ f xs t <-> betaValid_ f ys t.
+Proof.
+    intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs ys H.
     -
 Show.
 *)

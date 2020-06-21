@@ -57,15 +57,16 @@ Proof.
 Qed.
 
 
-(* Axiom schema of specification assuming LEM for our Coq meta-logic.           *)
-(* So we lose having to assume LEM, but no need for decidable predicate.        *)
-Theorem specificationLEM : LEM -> forall (p:set -> set -> Prop), 
+(* Axiom schema of specification for weaker assumption of weak decidability.    *)
+Theorem specificationDec' : forall (p:set -> set -> Prop), 
+    Dec2' p ->
     compatible2 p -> 
     forall (x:set), exists (y:set), forall (z:set), 
         z :: y <-> z :: x /\ p x z.
 Proof.
-    intros L p C x. 
-    remember (filterLEM set (p x) L (toList x)) as H eqn:E. clear E.
+    intros p L C x. 
+    remember (filterDec' set (p x) (L x) (toList x)) as H eqn:E. 
+    clear E.
     destruct H as [ys H]. exists (fromList ys). intros z. split; intros H'.
     - apply toListElem in H'. destruct H' as [z' H']. 
       rewrite toListFromList in H'. destruct H' as [H0 [H1 H2]]. 
@@ -89,4 +90,3 @@ Proof.
                 { assumption. }}
         + split; assumption.
 Qed.
-

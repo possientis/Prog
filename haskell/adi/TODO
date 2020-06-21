@@ -1,3 +1,3 @@
-replace state with reader monad for Env
+rewrite eval_ with cata?
 implement Show for Expr
 implement Arbitrary for Env ?

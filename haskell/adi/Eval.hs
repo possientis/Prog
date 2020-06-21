@@ -5,16 +5,14 @@ module  Eval
     ,   runEval
     ,   askEnv
     ,   find
---    ,   alloc
---    ,   write
---    ,   localEnv
---    ,   runEval
+    ,   alloc
+    ,   write
+    ,   localEnv
     )   where
 
 import Env
 import Addr
 import Heap
-import State
 import Value
 
 import Control.Monad.State
@@ -56,41 +54,26 @@ findT addr = findVal addr <$> get
 find :: Addr -> Eval Value
 find = findT
 
-{-
-
-find :: Addr -> Eval Value
-find addr = Eval $ do
-    heap <- gets getHeap
-    return $ findVal heap addr 
-
-alloc :: Eval Addr
-alloc = Eval $ do
-    s <- get
-    let heap = getHeap s
-    let (heap',addr) = heapAlloc heap
-    let s' = setHeap heap' s
-    put s'
+allocT :: (Monad m) => EvalT m Addr
+allocT = do
+    (heap,addr) <- heapAlloc <$> get
+    put heap
     return addr
 
+alloc :: Eval Addr
+alloc = allocT
+
+writeT :: (Monad m) => Addr -> Value -> EvalT m ()
+writeT addr v = do
+    heap <- heapWrite addr v <$> get
+    put heap
+
 write :: Addr -> Value -> Eval ()
-write addr v = Eval $ do
-    s <- get
-    let heap = getHeap s
-    let heap' = heapWrite heap addr v
-    let s' = setHeap heap' s
-    put s'
-    return () 
+write = writeT
 
 -- run computation in a local environment
+localEnvT :: (Monad m) => Env -> EvalT m Value -> EvalT m Value
+localEnvT env ev = EvalT $ ReaderT $ const $ runReaderT (unEvalT ev) env
+
 localEnv :: Env -> Eval Value -> Eval Value
-localEnv env ev = Eval $ do
-    s0 <- get
-    let env0 = getEnv s0
-    let s1 = setEnv env s0
-    put s1
-    v <- unEval ev
-    s2 <- get
-    let s3 = setEnv env0 s2
-    put s3
-    return v
--}
+localEnv = localEnvT
