@@ -3,6 +3,7 @@ module  Cata
     (   sum
     ,   length
     ,   average
+    ,   average2
     )   where
 
 import Prelude  hiding (sum, length, div)
@@ -14,15 +15,22 @@ import Data.Tuple.Extra
     Nil       -> b
     Cons x y  -> op x y 
 
-div :: (Fractional a) => (a,Int) -> a
+div :: (Eq a, Fractional a) => (a,Int) -> a
+div (_,0) = 0   -- avoiding singularity
 div (a,n) = a / fromIntegral n
 
 sum :: (Num a) => [a] -> a
 sum = cata $  0 +++ (+)
 
 length :: [a] -> Int
-length = cata $ 0 +++ (\_ n -> n + 1)
+length = cata $ 0 +++ const (+1)
 
-average :: (Fractional a) => [a] -> a
+-- This implementation of average using two catamorphisms with
+-- base functor ListF effectively traverses the structure twice.
+average :: (Eq a, Fractional a) => [a] -> a
 average = div . (sum &&& length)
+
+-- (cata &&& cata) can be expressed as a single catamorphism.
+average2 :: (Eq a, Fractional a) => [a] -> a
+average2 = div . (cata $ (0,0) +++ \x (s,n) -> (x + s, n + 1))
 
