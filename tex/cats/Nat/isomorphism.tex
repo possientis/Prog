@@ -8,9 +8,9 @@
 
 \begin{prop}\label{Nat:prop:isomorphism}
     Let $F,G:\Cat\to\Dat$ be functors where \Cat\ and \Dat\ are categories.
-    Then $\alpha:F\Rightarrow G$ is a natural isomorphism \ifand, for
-    all $a\in\Cat$, the component $\alpha(a):F(a)\to G(a)$ is an
-    isomorphim.
+    Then $\alpha:F\Rightarrow G$ is a natural isomorphism \ifand\ there
+    exists a natural transformation $\beta:G\Rightarrow F$ such that
+    $\beta\circ\alpha=\iota_{F}$ and $\alpha\circ\beta=\iota_{G}$.
 \end{prop}
 \begin{proof}
     We first show the {\em only if} part. So we assume that 
@@ -21,32 +21,61 @@
     the arrow $f$ has an inverse. Hence there exists some
     $g=(F',G',\beta)$ arrow in $[\Cat,\Dat]$ which is both a left and
     right-inverse of $f$. Since $f:F\to G$ we must have $g:G\to F$ and
-    consequently $g=(G,F,\beta)$ with $\beta:G\Rightarrow F$. Since $g$ 
-    is a left-inverse of $f$: 
+    consequently $g=(G,F,\beta)$ with $\beta:G\Rightarrow F$. So we
+    have found a natural transformation $\beta:G\Rightarrow F$ and 
+    it remains to show that $\beta\circ\alpha=\iota_{F}$ and 
+    $\alpha\circ\beta=\iota_{G}$. Since $g$ is a left-inverse of $f$,
+    we have: 
         \begin{eqnarray*}(F,F,\iota_{F})
             &=&\id(F)\ \leftarrow\ 
             \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\\
+            \mbox{$g$ left-inverse of $f$}\ \to\ 
             &=&g\circ f\\
             &=&(G,F,\beta)\,\circ\,(F,G,\alpha)\\
             \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
             &=&(F,F,\beta\circ\alpha)
         \end{eqnarray*}
-    and it follows that $\iota_{F}=\beta\circ\alpha$. Since $g$ is
+    and it follows that $\beta\circ\alpha=\iota_{F}$ as requested. Since $g$ is
     a right-inverse of $f$:
         \begin{eqnarray*}(G,G,\iota_{G})
             &=&\id(G)\ \leftarrow\ 
             \mbox{$(5)$ of def.~(\ref{Nat:def:functor:category})}\\
+            \mbox{$g$ right-inverse of $f$}\ \to\ 
             &=&f\circ g\\
             &=&(F,G,\alpha)\,\circ\,(G,F,\beta)\\
             \mbox{$(6)$ of def.~(\ref{Nat:def:functor:category})}\ \to\ 
             &=&(G,G,\alpha\circ\beta)
         \end{eqnarray*}
-    and it follows that $\iota_{G}=\alpha\circ\beta$. Now for all $a\in\Cat$,
-    we need to show that $\alpha(a):F(a)\to G(a)$ is an isomorphism in~\Dat.
-    So we need to show that $\alpha(a)$ has an inverse. However, having found
-    a natural transformation $\beta : G\Rightarrow F$ such that 
-    $\iota_{F}=\beta\circ\alpha$ and $\iota_{G}=\alpha\circ\beta$ we see that
-    $\beta(a)$ is the requested inverse, since:
+    and it follows that $\alpha\circ\beta=\iota_{G}$ which completes
+    the proof of the {\em only if} part.
+    
+    We now show the {\em if} part. So we assume the existence of a 
+    natural transformation $\beta:G\Rightarrow F$ such that 
+    $\beta\circ\alpha=\iota_{F}$ and $\alpha\circ\beta=\iota_{G}$.
+    We need to show that $\alpha$ is a natural isomorphim, i.e.
+    that $f=(F,G,\alpha)$ has an inverse in the functor category
+    $[\Cat,\Dat]$. Consider the arrow $g=(G,F,\beta)$. Using 
+    definition~(\ref{Nat:def:functor:category}), this is an
+    arrow of $[\Cat,\Dat]$ with domain $G$ and codomain $F$.
+    So we can complete proof by showing that $g$ is an inverse of
+    $f$, i.e. that $g\circ f=\id(F)$ and $f\circ g=\id(G)$. 
+    This follows easily reversing the above derivations with
+    $\beta\circ\alpha=\iota_{F}$ and $\alpha\circ\beta=\iota_{G}$.
+\end{proof}
+
+\begin{prop}\label{Nat:prop:isomorphism:component}
+    Let $F,G:\Cat\to\Dat$ be functors where \Cat\ and \Dat\ are categories.
+    Then $\alpha:F\Rightarrow G$ is a natural isomorphism \ifand\ for
+    all $a\in\Cat$, the component $\alpha(a):F(a)\to G(a)$ is an isomorphism.
+\end{prop}
+\begin{proof}
+    We first show the {\em only if} part. So we assume that $\alpha$
+    is a natural isomorphism and we need to show that $\alpha(a):F(a)\to G(a)$ 
+    is an isomorphism for all $a\in\Cat$. Using
+    proposition~(\ref{Nat:prop:isomorphism}), there exists a natural
+    transformation $\beta:G\Rightarrow F$ such that
+    $\beta\circ\alpha=\iota_{F}$ and $\alpha\circ\beta=\iota_{G}$.
+    It follows that $\beta(a)$ is the inverse of $\alpha(a)$, since:
         \begin{eqnarray*}\beta(a)\circ\alpha(a)
             &=&(\beta\circ\alpha)(a)\ \leftarrow\ 
             \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\\
@@ -62,29 +91,29 @@
             \mbox{$(1)$ of def.~(\ref{Nat:def:identity})}\ \to\ 
             &=&\id(\,G(a)\,)
         \end{eqnarray*}
-
-    We now show the {\em if} part. So we assume that $\alpha(a):F(a)\to G(a)$ 
-    is an isomorphism for all $a\in\Cat$, and we need to show that the arrow
-    $f=(F,G,\alpha)$ of the functor category $[\Cat,\Dat]$ is an isomorphism.
-    By assumption, given $a\in\Cat$, there exists $\beta(a):G(a)\to F(a)$ which
-    is an inverse of $\alpha(a)$. In fact using 
-    proposition~(\ref{Cat:prop:inverse:unique}) this inverse is unique and
-    collecting all $\beta(a)$'s for $a\in\Cat$ we obtain a map
-    $\beta:\ob\ \Cat\to\arr\ \Dat$. We do not know at this stage that 
-    $\beta$ is a natural transformation $\beta:G\Rightarrow F$ but let us
-    assume that it is. Then considering the arrow $g=(G,F,\beta)$ of the 
-    functor category $[\Cat,\Dat]$ we simply need to show that $g$ is the 
-    requested inverse of $f$ which will complete our proof. Having
-    assumed that $\beta(a)$ is the inverse of $\alpha(a)$ for all $a\in\Cat$,
-    we have $\beta(a)\circ\alpha(a)=\id(\,F(a)\,)$ and 
-    $\alpha(a)\circ\beta(a)=\id(\,G(a)\,)$. These equalities being true 
-    for all $a\in\Cat$, from proposition~(\ref{Nat:prop:equal}) we obtain
-    equalities of natural transformations $\alpha\circ\beta=\iota_{F}$
-    and $\beta\circ\alpha=\iota_{G}$ which in turn lead to the equalities
-    $g\circ f=\id(F)$ and $f\circ g=\id(G)$ simply by following the same
-    derivations as above. 
-
-    It remains to show that $\beta:\ob\ \Cat\to\arr\ \Dat$ is indeed a natural
-    transformation.
-
 \end{proof}
+
+%So we assume that $\alpha(a):F(a)\to G(a)$ 
+%    is an isomorphism for all $a\in\Cat$, and we need to show that the arrow
+%    $f=(F,G,\alpha)$ of the functor category $[\Cat,\Dat]$ is an isomorphism.
+%    By assumption, given $a\in\Cat$, there exists $\beta(a):G(a)\to F(a)$ which
+%    is an inverse of $\alpha(a)$. In fact using 
+%    proposition~(\ref{Cat:prop:inverse:unique}) this inverse is unique and
+%    collecting all $\beta(a)$'s for $a\in\Cat$ we obtain a map
+%    $\beta:\ob\ \Cat\to\arr\ \Dat$. We do not know at this stage that 
+%    $\beta$ is a natural transformation $\beta:G\Rightarrow F$ but let us
+%    assume that it is. Then considering the arrow $g=(G,F,\beta)$ of the 
+%    functor category $[\Cat,\Dat]$ we simply need to show that $g$ is the 
+%    requested inverse of $f$ which will complete our proof. Having
+%    assumed that $\beta(a)$ is the inverse of $\alpha(a)$ for all $a\in\Cat$,
+%    we have $\beta(a)\circ\alpha(a)=\id(\,F(a)\,)$ and 
+%    $\alpha(a)\circ\beta(a)=\id(\,G(a)\,)$. These equalities being true 
+%    for all $a\in\Cat$, from proposition~(\ref{Nat:prop:equal}) we obtain
+%    equalities of natural transformations $\alpha\circ\beta=\iota_{F}$
+%    and $\beta\circ\alpha=\iota_{G}$ which in turn lead to the equalities
+%    $g\circ f=\id(F)$ and $f\circ g=\id(G)$ simply by following the same
+%    derivations as above. 
+%
+%    It remains to show that $\beta:\ob\ \Cat\to\arr\ \Dat$ is indeed a natural
+%    transformation.
+%

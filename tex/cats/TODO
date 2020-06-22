@@ -1,4 +1,4 @@
-natural isomorphism criterium: every component is an iso
+natural isomorphism
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 
