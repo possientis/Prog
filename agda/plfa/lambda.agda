@@ -1,5 +1,5 @@
 open import Relation.Binary.PropositionalEquality.Core using (_≡_;_≢_;refl)
-open import Data.String                                using (String)
+open import Data.String                                using (String; _≟_) -- \?=
 open import Data.Nat                                   using (ℕ; zero; suc)
 open import Data.Empty                                 using (⊥; ⊥-elim)
 open import Relation.Nullary                           using (Dec; yes; no; ¬_)
@@ -100,4 +100,55 @@ data Value : Term -> Set where
       -----------------------
     → Value (`suc V)
 
+infix 9 _[_:=_]
 
+-- Substituting a single variable y by a term V (usually a value)
+-- The term V had better be closed or we have beta-validity issue
+_[_:=_] : Term → Id → Term → Term
+
+-- Variable
+(` x) [ y := V ] with x ≟ y
+... | yes _ = V
+... | no  _ = ` x
+
+-- Lambda abstraction
+(ƛ x ⇒ N) [ y := V ] with x ≟ y 
+... | yes _ = ƛ x ⇒ N
+... | no  _ = ƛ x ⇒ N [ y := V ]
+
+-- Application
+(L · M) [ y := V ] = L [ y := V ] · M [ y := V ]
+
+-- Constant zero
+`zero [ y := V ] = `zero
+
+-- Successor
+(`suc M) [ y := V ] = `suc M [ y := V ]
+
+-- Match
+case L [zero⇒ M |suc x ⇒ N ] [ y := V ] with x ≟ y
+... | yes _ = case L [ y := V ] [zero⇒ M [ y := V ] |suc x ⇒ N ]
+... | no  _ = case L [ y := V ] [zero⇒ M [ y := V ] |suc x ⇒ N [ y := V ] ]
+
+-- Mu abstraction
+(μ x ⇒ N) [ y := V ] with x ≟ y
+... | yes _ = μ x ⇒ N
+... | no  _ = μ x ⇒ N [ y := V ]
+
+_ : (ƛ "z" ⇒ ` "s" · (` "s" · ` "z")) [ "s" := sucᶜ ] ≡ ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")
+_ = refl
+
+_ : (sucᶜ · (sucᶜ · ` "z")) [ "z" := `zero ] ≡ sucᶜ · (sucᶜ · `zero)
+_ = refl
+
+_ : (ƛ "x" ⇒ ` "y") [ "y" := `zero ] ≡ ƛ "x" ⇒ `zero
+_ = refl
+
+_ : (ƛ "x" ⇒ ` "x") [ "x" := `zero ] ≡ ƛ "x" ⇒ ` "x"
+_ = refl
+
+_ : (ƛ "y" ⇒ ` "y") [ "x" := `zero ] ≡ ƛ "y" ⇒ ` "y"
+_ = refl
+
+_ : (ƛ "y" ⇒ ` "x" · (ƛ "x" ⇒ ` "x")) [ "x" := `zero ] ≡ ƛ "y" ⇒ `zero · (ƛ "x" ⇒ ` "x")
+_ = refl
