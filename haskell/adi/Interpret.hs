@@ -16,7 +16,7 @@ import Closure
 
 
 eval :: Expr -> Value
-eval e = runEval $ eval' e
+eval e = fst $ runEval $ eval' e
 
 eval' :: Expr -> Eval Value
 eval' e = eval_ e eval'

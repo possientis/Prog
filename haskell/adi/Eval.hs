@@ -17,20 +17,22 @@ import Value
 
 import Control.Monad.State
 import Control.Monad.Reader
+import Control.Monad.Writer
 import Data.Functor.Identity
 
 type Eval = EvalT Identity
 
-runEval :: Eval a -> a
+runEval :: Eval a -> (a, [String])
 runEval = runIdentity . runEvalT newEnv newHeap
 
 newtype EvalT m a = EvalT 
-    { unEvalT :: ReaderT Env (StateT Heap m) a 
+    { unEvalT :: ReaderT Env (WriterT [String] (StateT Heap m)) a 
     } deriving 
         ( Functor
         , Applicative
         , Monad
         , MonadReader Env
+        , MonadWriter [String]
         , MonadState Heap
         )
 
@@ -39,8 +41,8 @@ runEvalT
     => Env
     -> Heap 
     -> EvalT m a 
-    -> m a
-runEvalT env heap m  = evalStateT (runReaderT (unEvalT m) env) heap
+    -> m (a, [String])
+runEvalT env heap m  = evalStateT (runWriterT (runReaderT (unEvalT m) env)) heap
 
 askEnvT :: (Monad m) => EvalT m Env
 askEnvT  = ask
