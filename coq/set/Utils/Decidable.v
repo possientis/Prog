@@ -35,6 +35,14 @@ Definition Dec'(a:Type) (p:a -> Prop) := forall (x:a), p x \/ ~p x.
 
 Arguments Dec' {a}.
 
+(* Decidability implies weak decidability.                                      *)
+Lemma DecImpliesDec' : forall (a:Type) (p:a -> Prop), Dec p -> Dec' p.
+Proof.
+    intros a p q x. destruct (q x) as [H|H].
+    - left. assumption.
+    - right. assumption.
+Qed.
+
 Definition Dec2' (a b:Type) (p:a -> b -> Prop) := 
     forall (x:a) (y:b), p x y \/ ~p x y.
 
@@ -58,3 +66,4 @@ Lemma LEMDec2': LEM -> forall (a b:Type) (p:a -> b -> Prop), Dec2' p.
 Proof.
     intros L a b p x y. apply L.
 Qed.
+

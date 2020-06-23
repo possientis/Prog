@@ -1,4 +1,4 @@
-Core/Replacement (use filterReplace)
+Core/Replacement
 add Core/Replacement to Makefile
 can we deduce specification from replacement?
 axiom of choice?

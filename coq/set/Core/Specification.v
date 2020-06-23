@@ -44,29 +44,40 @@ Proof.
         + split; assumption.
 Qed.
 
-(* Axiom schema of specification, restricted to decidable predicates.           *)
-(* Note that the predicate p is allowed to depend on the set x.                 *)
-Theorem specificationDec : forall (p:set -> set -> Prop), 
+(* Axiom schema of specification true in our model for decidable predicates.    *)
+Theorem specificationDec : forall (p:set -> Prop), 
+    Dec p ->
+    compatible p ->
+    forall (x:set), exists (y:set), forall (z:set), 
+        z :: y <-> z :: x /\ p z.
+Proof.
+    intros p D C x. exists (comp x p D). apply compCharac. assumption.
+Qed.
+
+(* This is to emphasize that the predicate p above may depend on x. It is an    *)
+(* immediate consequence of the main result so not very useful. It only serves  *)
+(* to show there is no need to make dependency in x explicit in main result.    *)
+Corollary specificationDec_ : forall (p:set -> set -> Prop), 
     Dec2 p          ->
     compatible2 p   ->
     forall (x:set), exists (y:set), forall (z:set), 
-        z :: y <-> z :: x /\ p x z.
+        z :: y <-> z :: x /\ p x z.  (* explicit dependency in x *)
 Proof.
-    intros p q H x. exists (comp x (p x) (Dec2Dec x q)). apply compCharac.
-    apply Comp2Comp. assumption.
+    intros p D C x. apply specificationDec.
+    - apply Dec2Dec. assumption.
+    - apply Comp2Comp. assumption. 
 Qed.
 
-
 (* Axiom schema of specification for weaker assumption of weak decidability.    *)
-Theorem specificationDec' : forall (p:set -> set -> Prop), 
-    Dec2' p ->
-    compatible2 p -> 
+(* Again, there is no need to make possible dependency in x explicit in p.      *)
+Theorem specificationDec' : forall (p:set -> Prop), 
+    Dec' p ->
+    compatible p -> 
     forall (x:set), exists (y:set), forall (z:set), 
-        z :: y <-> z :: x /\ p x z.
+        z :: y <-> z :: x /\ p z.
 Proof.
-    intros p L C x. 
-    remember (filterDec' set (p x) (L x) (toList x)) as H eqn:E. 
-    clear E.
+    intros p D C x. 
+    remember (filterDec' set p D (toList x)) as H eqn:E. clear E.
     destruct H as [ys H]. exists (fromList ys). intros z. split; intros H'.
     - apply toListElem in H'. destruct H' as [z' H']. 
       rewrite toListFromList in H'. destruct H' as [H0 [H1 H2]]. 
@@ -75,8 +86,7 @@ Proof.
         + apply toListElem. exists z'. split.
             {  assumption. }
             { split; assumption. }
-        + unfold compatible2 in C. apply (C x x z' z).
-            { apply equalRefl. }
+        + unfold compatible in C. apply C with z'.
             { apply doubleIncl. split; assumption. }
             { assumption. }
     - destruct H' as [H0 H1]. rewrite toListElem in H0.
@@ -84,9 +94,20 @@ Proof.
       rewrite toListFromList. split.
         + apply H. split.
             { assumption. }
-            { unfold compatible2 in C. apply (C x x z z').
-                { apply equalRefl. }
+            { unfold compatible in C. apply C with z.
                 { apply doubleIncl. split; assumption. }
                 { assumption. }}
         + split; assumption.
+Qed.
+
+(* Again, this is simply to demonstrate explicit dependency in x in not needed. *)
+Corollary specificationDec'_ : forall (p:set -> set -> Prop), 
+    Dec2' p ->
+    compatible2 p -> 
+    forall (x:set), exists (y:set), forall (z:set), 
+        z :: y <-> z :: x /\ p x z.
+Proof.
+    intros p D C x. apply specificationDec'.
+    - apply Dec2Dec'. assumption.
+    - apply Comp2Comp. assumption.
 Qed.
