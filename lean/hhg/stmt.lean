@@ -42,6 +42,27 @@ def a1 : State → ℕ := λ _, 0
 
 def e1 : stmt := assign "x" a0 ;; assign "y" a1
 
+
+lemma L0 : "x" ≠ "y" :=
+begin
+  from dec_trivial
+end
+
+
+/-
+lemma L1 : s1 = bindVar "x" (a0 s0) s0 :=
+begin
+  apply funext, unfold s1, unfold s0, unfold a0, unfold env, unfold bindVar,
+  intros s, cases decidable.em (s = "x") with H1 H1,
+    {rewrite H1, simp, cases decidable.em ("y" = "x") with H2 H2,
+      {cases H2},
+      {sorry}},
+    {sorry}
+end
+-/
+
+/-
+
 lemma L1 : s1 = bindVar "x" (a0 s0) s0 :=
 begin
   apply funext, unfold s1, unfold s0, unfold a0, unfold env, unfold bindVar,
@@ -51,6 +72,7 @@ begin
       {simp *}},
     {simp *}
 end
+
 
 lemma L2 : s2 = bindVar "y" (a1 s1) s1 :=
 begin
@@ -72,3 +94,4 @@ begin
     {rewrite L1, constructor},
     {rewrite L2, constructor}
 end
+-/

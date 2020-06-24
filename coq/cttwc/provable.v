@@ -433,3 +433,46 @@ Qed.
 Axiom Ax45 : ~Provable IXM.
 Axiom Ax46 : ~Provable (IXM -> XM).
 
+(* Weak excluded middle                                                         *)
+Definition WXM : Prop := forall (X:Prop), ~X \/ ~~X.
+
+Lemma L45 : forall (A B:Prop), (A -> B) -> ~ B -> ~A.
+Proof.
+    intros A B H1 H2 H3. apply H2, H1, H3.
+Qed.
+
+Lemma L46 : WXM <-> forall (X:Prop), ~~X \/ ~~~X.
+Proof.
+    unfold WXM. split; intros H; intros X.
+    - apply H.
+    - destruct (H X) as [H'|H'].
+        + right. assumption.
+        + left. intros H1. apply H'. intros H2. apply H2. assumption.
+Qed.
+
+Lemma L47 : forall (A B:Prop), ~A \/ ~B -> ~(A /\ B).
+Proof.
+    intros A B [H1|H1] [H2 H3]; apply H1; assumption.
+Qed.
+
+Lemma L48 : forall (A:Prop), A -> ~~A.
+Proof.
+    intros A H1 H2. apply H2, H1.
+Qed.
+
+Lemma L49 : forall (A: Prop), ~A <-> ~~~A.
+Proof.
+    intros A. split; intros H1.
+    - intros H2. apply H2. assumption.
+    - intros H2. apply H1. intros H3. apply H3. assumption.
+Qed.
+
+Lemma L50 : WXM <-> forall (X Y:Prop), ~(X /\ Y) -> ~X \/ ~Y.
+Proof.
+    unfold WXM. split; intros H1 X.
+    - intros Y H2.
+Show.
+
+
+
+
