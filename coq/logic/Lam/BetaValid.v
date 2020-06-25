@@ -259,10 +259,32 @@ Qed.
 (*
 Lemma betaValid_support : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v),
-    (xs /\ Fr t) == (ys /\ Fr t) ->
+    (Fr t /\ xs) == (Fr t /\ ys) ->
         betaValid_ f xs t <-> betaValid_ f ys t.
 Proof.
     intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs ys H.
-    -
+    - split; intros H1; apply betaValid_var_gen.
+    - assert ((Fr t1 /\ xs) == (Fr t1 /\ ys)) as H1.
+        { apply inter_sub_equiv with (Fr (App t1 t2)).
+            { simpl. apply incl_appl, incl_refl. }
+            { assumption. }}
+      assert ((Fr t2 /\ xs) == (Fr t2 /\ ys)) as H2.
+        { apply inter_sub_equiv with (Fr (App t1 t2)).
+            { simpl. apply incl_appr, incl_refl. }
+            { assumption. }}
+      split; intros H3; apply betaValid_app_gen in H3; destruct H3 as [H3 H4];
+      apply betaValid_app_gen; split.
+        + apply (IH1 xs ys); assumption.
+        + apply (IH2 xs ys); assumption.
+        + apply (IH1 xs ys); assumption.
+        + apply (IH2 xs ys); assumption.
+    - simpl in H. rewrite remove_diff in H.
+      assert ((Fr t1 /\ (cons x xs)) == (Fr t1 /\ (cons x ys))) as H1.
+        {
+(*
+      split; intros H3; apply betaValid_lam_gen in H3; destruct H3 as [H3 H4];
+      apply betaValid_lam_gen; split.
+          + apply (IH1 (cons x xs) (cons x ys)).
+*)    
 Show.
 *)
