@@ -1,6 +1,7 @@
 -- unicodes
 -- ℕ : \bN
 -- → : \to, \r, \->
+-- — : \em
 -- ∀ : \all
 -- ∃ : \ex, \exists
 -- λ : \Gl

@@ -5,4 +5,5 @@ Closure should contain heap
 Show for closure
 Show for Expr
 rewrite eval_ with cata?
+can we define a small-step operational semantics
 implement Arbitrary for Env ?

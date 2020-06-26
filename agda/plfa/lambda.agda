@@ -102,8 +102,9 @@ data Value : Term -> Set where
 
 infix 9 _[_:=_]
 
--- Substituting a single variable y by a term V (usually a value)
--- The term V had better be closed or we have beta-validity issue
+-- Substituting a single variable y with a term V (usually a value)
+-- The term V had better be closed or we have a beta-validity issue
+-- V will not be a value when dealing with a fixed point.
 _[_:=_] : Term → Id → Term → Term
 
 -- Variable
@@ -135,6 +136,8 @@ case L [zero⇒ M |suc x ⇒ N ] [ y := V ] with x ≟ y
 ... | yes _ = μ x ⇒ N
 ... | no  _ = μ x ⇒ N [ y := V ]
 
+
+
 _ : (ƛ "z" ⇒ ` "s" · (` "s" · ` "z")) [ "s" := sucᶜ ] ≡ ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")
 _ = refl
 
@@ -152,3 +155,63 @@ _ = refl
 
 _ : (ƛ "y" ⇒ ` "x" · (ƛ "x" ⇒ ` "x")) [ "x" := `zero ] ≡ ƛ "y" ⇒ `zero · (ƛ "x" ⇒ ` "x")
 _ = refl
+
+infix 4 _—→_ -- \em\to
+
+-- Small-step operational semantics
+-- Call-by-value reduction. subterms are reduced to values before the whole term is reduced
+-- Also reduction from left to right, hence deterministic, i.e. reduction is in fact functional.
+data _—→_ : Term → Term → Set where
+
+  -- Left compatibility rule for ·
+  ξ—·₁ : ∀ {L L' M : Term}
+    →  L —→ L'
+       --------------------
+    →  L · M —→ L' · M
+
+  -- Right compatibility rule for ·
+  ξ—·₂ : ∀ {V M M' : Term}
+    →  Value V
+    →  M —→ M'
+       --------------------
+    →  V · M —→ V · M'
+
+  -- Beta reduction rule for abstraction
+  β—ƛ : ∀ {x : Id} {N V : Term}
+    → Value V
+      --------------------
+    → (ƛ x ⇒ N) · V —→ N [ x := V ]
+
+
+  -- Compatibility rule for suc
+  ξ—suc : ∀ {M M' : Term}
+    →  M —→ M'
+      --------------------
+    → `suc M —→ `suc M'
+
+  -- Compatibility rule for case
+  ξ—case : ∀ {x : Id} {L L' M N : Term}
+    →  L —→ L'
+      --------------------
+    →  case L [zero⇒ M |suc x ⇒ N ] —→ case L' [zero⇒ M |suc x ⇒ N ]
+
+
+  -- Beta reduction rule for case (zero)
+  β—zero : ∀ {x : Id} {M N : Term}
+      --------------------
+    →  case `zero [zero⇒ M |suc x ⇒ N ] —→ M
+
+
+  -- Beta reduction rule for case (suc)
+  β—suc : ∀ {x : Id} {V M N : Term}
+    →  Value V
+      --------------------
+    →  case `suc V [zero⇒ M |suc x ⇒ N ] —→ N [ x := V ]
+
+
+  -- Beta reduction rule for fixed point
+  -- The term being substituted is not a value
+  -- Question: when is the substitution beta-valid ?
+  β—μ : ∀ {x : Id} {M : Term}
+      --------------------
+    →  μ x ⇒ M —→ M [ x := μ x ⇒ M ]
