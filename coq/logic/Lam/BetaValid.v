@@ -280,7 +280,8 @@ Proof.
         + apply (IH2 xs ys); assumption.
     - simpl in H. rewrite remove_diff in H.
       assert ((Fr t1 /\ (cons x xs)) == (Fr t1 /\ (cons x ys))) as H1.
-        {
+        { change ((Fr t1 /\ (cons x nil ++ xs)) == (Fr t1 /\ (cons x nil ++ ys))).
+
 (*
       split; intros H3; apply betaValid_lam_gen in H3; destruct H3 as [H3 H4];
       apply betaValid_lam_gen; split.

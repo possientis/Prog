@@ -467,12 +467,24 @@ Proof.
     - intros H2. apply H1. intros H3. apply H3. assumption.
 Qed.
 
+Lemma L50 : forall (A B:Prop), ~A -> ~B -> ~(A \/ B).
+Proof.
+    intros A B H1 H2 [H3|H3].
+    - apply H1. assumption.
+    - apply H2. assumption.
+Qed.
+
+
+(*
 Lemma L50 : WXM <-> forall (X Y:Prop), ~(X /\ Y) -> ~X \/ ~Y.
 Proof.
     unfold WXM. split; intros H1 X.
-    - intros Y H2.
+    - intros Y H2. destruct (H1 X) as [H3|H3]; destruct (H1 Y) as [H4|H4].
+        + left. assumption.
+        + left. assumption.
+        + right. assumption.
 Show.
-
+*)
 
 
 

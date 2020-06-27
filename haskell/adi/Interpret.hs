@@ -2,6 +2,7 @@
 
 module  Interpret
     (   eval
+    ,   evalIO
     )   where
 
 import Data.Functor.Foldable
@@ -14,7 +15,12 @@ import Value
 import Syntax
 import Closure
 
-
+evalIO :: Expr -> IO ()
+evalIO e = do
+    let (res,logs) = runEval $ eval' e
+    mapM_ putStrLn logs
+    print res
+    
 eval :: Expr -> Value
 eval e = fst $ runEval $ eval' e
 

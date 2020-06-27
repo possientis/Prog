@@ -16,6 +16,9 @@ data Heap = Heap
     , memory :: Map Addr Value
     }
 
+instance Show Heap where
+    show = show . M.toList . memory
+
 findVal :: Addr -> Heap -> Value
 findVal addr heap
     | addr >= next heap  = error "unallocated memory access"

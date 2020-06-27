@@ -1,85 +1,77 @@
-def State : Type := string → ℕ
+def Env  : Type := string → ℕ
 
-def bindVar (x : string) (n : ℕ) (s:State) : State :=
-  λ v, if v = x then n else s v
+lemma L0 : "x" ≠ "y" :=
+begin
+  from dec_trivial  -- remember this, do not use 'cases' tactic on string
+end
+
+-- Shallow embedding for arithmetic expressions. Some function Env → ℕ, not interested in syntax, semantics etc
+def AExp : Type := Env → ℕ
+
+-- Shallow embedding for boolean expressions. Actually using Prop rather than bool
+def BExp : Type := Env → Prop
+
+def bindVar (x : string) (n : AExp) (s:Env) : Env :=
+  λ v, if v = x then n s else s v
 
 open list
 
-def env : list (string × ℕ) → State
+def env : list (string × ℕ) → Env
 | []        := λ s, 0
 | ((v,n) :: xs) := λ s, if s = v then n else env xs s
 
+def aNum (n : ℕ) : AExp := λ _, n
+def aVar (x : string) : AExp := λ s, s x
+def x : AExp := aVar "x"
+def y : AExp := aVar "y"
+def z : AExp := aVar "z"
+
+def aPlus  (m n : AExp) : AExp := λ s, m s + n s
 
 -- The WHILE language: deep embedding for actual language: full syntax and semantics specified
 inductive stmt : Type
 | skip    : stmt
-| assign  : string → (State → ℕ) → stmt         -- shallow embedding for arithmetic expressions. Some function State → ℕ, not interested in syntax, semantics etc
+| assign  : string → AExp → stmt
 | seq     : stmt → stmt → stmt
-| ite     : (State → Prop) → stmt → stmt → stmt -- shallow embedding for boolean expressions. Actually using Prop rather than bool
-| while   : (State → Prop) → stmt → stmt
-
-infixr ` ;; ` : 90 := stmt.seq
-
+| ite     : BExp → stmt → stmt → stmt
+| while   : BExp → stmt → stmt
 
 open stmt
 
--- Big step semantics as a relation over State
-inductive BigStep : stmt → State → State → Prop
-| SKIP    : ∀ (s:State), BigStep skip s s
-| ASN     : ∀ (x:string) (a:State → ℕ) (s:State), BigStep (assign x a) s (bindVar x (a s) s)
-| SEQ     : ∀ (e₁ e₂:stmt) (s u t:State), BigStep e₁ s u → BigStep e₂ u t → BigStep (e₁ ;; e₂) s t
-| IF_T    : ∀ (p:State → Prop) (e₁ e₂:stmt) (s t:State), p s → BigStep e₁ s t → BigStep (ite p e₁ e₂) s t
-| IF_F    : ∀ (p:State → Prop) (e₁ e₂:stmt) (s t:State), ¬(p s) → BigStep e₂ s t → BigStep (ite p e₁ e₂) s t
-| WHILE_T : ∀ (p:State → Prop) (e₁:stmt) (s u t:State), p s → BigStep e₁ s u → BigStep (while p e₁) u t → BigStep (while p e₁) s t
-| WHILE_F : ∀ (p:State → Prop) (e₁:stmt) (s:State), ¬(p s) → BigStep (while p e₁) s s
+infixr ` ;; `  : 70 := seq
+infix ` :== `  : 80 := assign
+infixl ` :+: ` : 90 := aPlus
 
-def s0 : State := env [("x",3),("y",5)]
-def s1 : State := env [("x",8),("y",5)]
-def s2 : State := env [("x",8),("y",0)]
+-- Big step semantics as a relation over Env
+inductive BigStep : stmt → Env → Env → Prop
+| SKIP    : ∀ (s:Env), BigStep skip s s
+| ASN     : ∀ (x:string) (a:AExp) (s:Env), BigStep (assign x a) s (bindVar x a s)
+| SEQ     : ∀ (e₁ e₂:stmt) (s u t:Env), BigStep e₁ s u → BigStep e₂ u t → BigStep (e₁ ;; e₂) s t
+| IF_T    : ∀ (p:Env → Prop) (e₁ e₂:stmt) (s t:Env), p s → BigStep e₁ s t → BigStep (ite p e₁ e₂) s t
+| IF_F    : ∀ (p:Env → Prop) (e₁ e₂:stmt) (s t:Env), ¬(p s) → BigStep e₂ s t → BigStep (ite p e₁ e₂) s t
+| WHILE_T : ∀ (p:Env → Prop) (e₁:stmt) (s u t:Env), p s → BigStep e₁ s u → BigStep (while p e₁) u t → BigStep (while p e₁) s t
+| WHILE_F : ∀ (p:Env → Prop) (e₁:stmt) (s:Env), ¬(p s) → BigStep (while p e₁) s s
 
-def a0 : State → ℕ := λ s, s "x" + s "y"
-def a1 : State → ℕ := λ _, 0
+def s0 : Env := env [("x",3),("y",5)]
+def s1 : Env := env [("x",8),("y",5)]
+def s2 : Env := env [("x",8),("y",0)]
 
-def e1 : stmt := assign "x" a0 ;; assign "y" a1
-
-
-lemma L0 : "x" ≠ "y" :=
+lemma L1 : s1 = bindVar "x" (x :+: y) s0 :=
 begin
-  from dec_trivial
-end
-
-
-/-
-lemma L1 : s1 = bindVar "x" (a0 s0) s0 :=
-begin
-  apply funext, unfold s1, unfold s0, unfold a0, unfold env, unfold bindVar,
+  apply funext, unfold s1 s0 aPlus x y aVar env bindVar,
   intros s, cases decidable.em (s = "x") with H1 H1,
     {rewrite H1, simp, cases decidable.em ("y" = "x") with H2 H2,
-      {cases H2},
-      {sorry}},
-    {sorry}
-end
--/
-
-/-
-
-lemma L1 : s1 = bindVar "x" (a0 s0) s0 :=
-begin
-  apply funext, unfold s1, unfold s0, unfold a0, unfold env, unfold bindVar,
-  intros s, cases decidable.em (s = "x") with H1 H1,
-    {rewrite H1, simp, cases decidable.em ("y" = "x") with H2 H2,
-      {cases H2},
+      {exfalso, revert H2, from dec_trivial},
       {simp *}},
     {simp *}
 end
 
-
-lemma L2 : s2 = bindVar "y" (a1 s1) s1 :=
+lemma L2 : s2 = bindVar "y" (aNum 0) s1 :=
 begin
-  apply funext, unfold s2, unfold s1, unfold a1, unfold env, unfold bindVar,
+  apply funext, unfold s2, unfold s1, unfold aNum, unfold env, unfold bindVar,
   intros s, cases decidable.em (s = "x") with H1 H1,
     {rewrite H1, simp, cases decidable.em ("x" = "y") with H2 H2,
-      {cases H2},
+      {exfalso, revert H2, from dec_trivial},
       {simp *}},
     {simp *, cases decidable.em (s = "y") with H2 H2,
       {rewrite H2, simp},
@@ -88,10 +80,11 @@ end
 
 open BigStep
 
+def e1 : stmt := "x" :== (x :+: y) ;; "y" :== aNum 0
+
 lemma L3 : BigStep e1 s0 s2 :=
 begin
   apply (SEQ _ _ s0 s1 s2),
     {rewrite L1, constructor},
     {rewrite L2, constructor}
 end
--/

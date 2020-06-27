@@ -1,9 +1,7 @@
-Find a way to use Writer monad and visualize log
-Show for Env
-Show for Heap
-Closure should contain heap
-Show for closure
+add Bools to language
+bring language in line with plfa
 Show for Expr
+Show for closure: add expr
 rewrite eval_ with cata?
 can we define a small-step operational semantics
 implement Arbitrary for Env ?

@@ -4,6 +4,7 @@ Require Import In.
 Require Import Eq.
 Require Import Equiv.
 Require Import Include.
+Require Import Append.
 
 Fixpoint inter (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     match xs with
@@ -202,5 +203,14 @@ Proof.
                 { apply inter_compat_r. assumption. }
                 { apply equivSym. apply inter_assoc. }}
         + apply inter_compat_l. apply inter_sub. assumption.
+Qed.
+
+
+Lemma inter_distrib_app_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    (zs /\ (xs ++ ys)) == (zs /\ xs) ++ (zs /\ ys).
+Proof.
+    intros v e xs ys zs. apply equivTrans with ((xs ++ ys) /\ zs). 
+    - apply inter_comm.
+    - rewrite inter_distrib_app_r. apply app_compat_lr; apply inter_comm.
 Qed.
 

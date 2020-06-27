@@ -43,14 +43,14 @@ eOp op e1 e2 = Fix $ EOp op e1 e2
 eIf :: Expr -> Expr -> Expr -> Expr
 eIf ez e1 e2 = Fix $ EIf ez e1 e2
 
-eLam :: Var -> Expr -> Expr
-eLam x e = Fix $ ELam x e
+eLam :: String -> Expr -> Expr
+eLam x e = Fix $ ELam (mkVar x) e
 
 eApp :: Expr -> Expr -> Expr
 eApp e1 e2 = Fix $ EApp e1 e2
 
-eRec :: Var -> Expr -> Expr
-eRec f e = Fix $ ERec f e
+eRec :: String -> Expr -> Expr
+eRec f e = Fix $ ERec (mkVar f) e
 
 toNum :: Expr -> Maybe Integer
 toNum = cata $ \case

@@ -4,7 +4,7 @@ module  Test.Eval
 
 
 import Op
-import Var
+import Macro
 import Value
 import Syntax
 import Interpret
@@ -80,7 +80,7 @@ propEApp :: Integer -> String -> Bool
 propEApp n s = s == "" || 
     val (eval 
             (eApp 
-                (eLam (mkVar s) (eOp mul (eVar s) (eVar s)))
+                (eLam s (eOp mul (eVar s) (eVar s)))
                 (eNum n))) == Just (n * n)
 
 propERec :: Integer -> String -> String -> Bool
@@ -94,19 +94,3 @@ propSum1 x y n m = x == "" || y == "" || x /= y ||
 propSum2 :: String -> Integer -> Integer -> Bool
 propSum2 x n m = x == "" || 
     val (eval (eApp (eApp (eSum x x) (eNum n)) (eNum m))) == Just (m + m)
-
--- \x y -> x + y
-eSum :: String -> String -> Expr
-eSum x y = 
-    (eLam (mkVar x)
-        (eLam (mkVar y)
-            (eOp add (eVar x) (eVar y))))
-
-eFac :: String -> String -> Expr
-eFac f n =
-    (eRec (mkVar f)
-       (eLam (mkVar n)
-            (eIf (eVar n) (eNum 1) 
-                (eOp mul (eVar n) 
-                    (eApp (eVar f) 
-                        (eOp add (eVar n) (eNum (-1)))))))) 

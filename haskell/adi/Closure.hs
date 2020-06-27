@@ -21,6 +21,7 @@ instance Show Closure where
            ++ show (cloVar c) 
            ++ ", env = " 
            ++ show (cloEnv c)
+           ++ " }"
 
 closureVar :: Closure -> Var
 closureVar = cloVar

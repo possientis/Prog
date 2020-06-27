@@ -5,7 +5,10 @@ module  Addr
     )   where
 
 newtype Addr = Addr { unAddr :: Integer }
-    deriving (Eq, Ord, Show)
+    deriving (Eq, Ord)
+
+instance Show Addr where
+    show = show . unAddr
 
 inc :: Addr -> Addr
 inc addr = Addr (unAddr addr + 1)

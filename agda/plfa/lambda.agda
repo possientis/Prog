@@ -4,9 +4,14 @@ open import Data.Nat                                   using (ℕ; zero; suc)
 open import Data.Empty                                 using (⊥; ⊥-elim)
 open import Relation.Nullary                           using (Dec; yes; no; ¬_)
 open import Data.List                                  using (List; _∷_; [])
+open import Data.Bool                                  using (Bool; true; false)
 
 Id : Set
 Id = String
+
+data Op : Set where
+  `+ : Op
+  `* : Op
 
 infix 5 ƛ_⇒_
 infix 5 μ_⇒_
@@ -15,6 +20,10 @@ infix 8 `suc_
 infix 9 `_
 
 data Term : Set where
+  eNum                 : ℕ → Term
+  eBool                : Bool → Term
+  eOp                  : Op → Term → Term → Term
+  eIf                  : Term → Term → Term → Term
   `_                   : Id → Term
   ƛ_⇒_                 : Id → Term → Term
   _·_                  : Term → Term → Term
@@ -100,6 +109,20 @@ data Value : Term -> Set where
       -----------------------
     → Value (`suc V)
 
+  V-op : ∀ {op : Op} {V W : Term}
+    → Value V
+    → Value W
+      --------------------
+    → Value (eOp op V W)
+
+  V-Num : ∀ {n : ℕ }
+       --------------------
+    →  Value (eNum n)
+
+  V-Bool : ∀ {b : Bool}
+       -------------------
+    →  Value (eBool b)
+
 infix 9 _[_:=_]
 
 -- Substituting a single variable y with a term V (usually a value)
@@ -107,13 +130,25 @@ infix 9 _[_:=_]
 -- V will not be a value when dealing with a fixed point.
 _[_:=_] : Term → Id → Term → Term
 
+-- Integers
+(eNum n) [ y := V ] = eNum n
+
+-- Booleans
+(eBool b) [ y := V ] = eBool b
+
+-- Op
+(eOp op L M) [ y := V ] = eOp op (L [ y := V ]) (M [ y := V ])
+
+-- If
+(eIf B L M) [ y := V ] = eIf (B [ y := V ]) (L [ y := V ]) (M [ y := V ])
+
 -- Variable
 (` x) [ y := V ] with x ≟ y
 ... | yes _ = V
 ... | no  _ = ` x
 
 -- Lambda abstraction
-(ƛ x ⇒ N) [ y := V ] with x ≟ y 
+(ƛ x ⇒ N) [ y := V ] with x ≟ y
 ... | yes _ = ƛ x ⇒ N
 ... | no  _ = ƛ x ⇒ N [ y := V ]
 
@@ -136,8 +171,6 @@ case L [zero⇒ M |suc x ⇒ N ] [ y := V ] with x ≟ y
 ... | yes _ = μ x ⇒ N
 ... | no  _ = μ x ⇒ N [ y := V ]
 
-
-
 _ : (ƛ "z" ⇒ ` "s" · (` "s" · ` "z")) [ "s" := sucᶜ ] ≡ ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")
 _ = refl
 
@@ -159,9 +192,22 @@ _ = refl
 infix 4 _—→_ -- \em\to
 
 -- Small-step operational semantics
--- Call-by-value reduction. subterms are reduced to values before the whole term is reduced
--- Also reduction from left to right, hence deterministic, i.e. reduction is in fact functional.
+-- Call-by-value: Subterms are reduced to values before the whole term is reduced
+-- Left to right, hence deterministic, i.e. reduction is in fact functional.
 data _—→_ : Term → Term → Set where
+
+  -- Left compatibility rule for eOp
+  ξ—op₁ : ∀ {op : Op} {L L' M : Term}
+    →  L —→ L'
+       --------------------
+    →  eOp op L M —→ eOp op L' M
+
+  -- Right compatibility rule for eOp
+  ξ-op₂ : ∀ {op : Op} {V M M' : Term}
+    →  Value V
+    →  M —→ M'
+       --------------------
+    →  eOp op V M —→ eOp op V M'
 
   -- Left compatibility rule for ·
   ξ—·₁ : ∀ {L L' M : Term}
@@ -207,7 +253,6 @@ data _—→_ : Term → Term → Set where
     →  Value V
       --------------------
     →  case `suc V [zero⇒ M |suc x ⇒ N ] —→ N [ x := V ]
-
 
   -- Beta reduction rule for fixed point
   -- The term being substituted is not a value
