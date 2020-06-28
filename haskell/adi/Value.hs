@@ -3,9 +3,11 @@
 module  Value
     (   Value
     ,   mkNil
-    ,   mkVal
+    ,   mkNum
+    ,   mkBool
     ,   mkClo
-    ,   val
+    ,   num
+    ,   bool
     ,   closure
     )   where
 
@@ -16,27 +18,37 @@ import Closure
 
 data Value 
     = Nil 
-    | Val Integer
-    | Clo Closure
+    | Num  Integer
+    | Bool Bool
+    | Clo  Closure
 
 instance Show Value where
     show = \case 
         Nil     -> "<nil>"
-        Val n   -> show n
-        Clo c   -> show c
+        Num  n  -> show n
+        Bool b  -> show b
+        Clo  c  -> show c
 
 mkNil :: Value 
 mkNil = Nil
 
-mkVal :: Integer -> Value
-mkVal = Val
+mkNum :: Integer -> Value
+mkNum = Num
+
+mkBool :: Bool -> Value
+mkBool = Bool
 
 mkClo :: Var -> Expr -> Env -> Value
 mkClo x e env = Clo $ mkClosure x e env
 
-val :: Value -> Maybe Integer
-val = \case
-    Val n   -> Just n
+num :: Value -> Maybe Integer
+num = \case
+    Num n   -> Just n
+    _       -> Nothing
+
+bool :: Value -> Maybe Bool
+bool = \case
+    Bool b  -> Just b
     _       -> Nothing
 
 closure :: Value -> Maybe Closure

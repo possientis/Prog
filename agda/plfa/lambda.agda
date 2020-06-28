@@ -12,6 +12,13 @@ Id = String
 data Op : Set where
   `+ : Op
   `* : Op
+  `- : Op
+  `/ : Op
+  `= : Op
+  `< : Op
+  `∧ : Op
+  `∨ : Op
+  `→ : Op
 
 infix 5 ƛ_⇒_
 infix 5 μ_⇒_
@@ -22,9 +29,9 @@ infix 9 `_
 data Term : Set where
   eNum                 : ℕ → Term
   eBool                : Bool → Term
+  `_                   : Id → Term
   eOp                  : Op → Term → Term → Term
   eIf                  : Term → Term → Term → Term
-  `_                   : Id → Term
   ƛ_⇒_                 : Id → Term → Term
   _·_                  : Term → Term → Term
   `zero                : Term
@@ -123,6 +130,13 @@ data Value : Term -> Set where
        -------------------
     →  Value (eBool b)
 
+  V-if : ∀ {V M N : Term}
+    →   Value V
+    →   ¬ V ≡ eBool true
+    →   ¬ V ≡ eBool false
+       --------------------
+    →  Value (eIf V M N)
+
 infix 9 _[_:=_]
 
 -- Substituting a single variable y with a term V (usually a value)
@@ -136,16 +150,16 @@ _[_:=_] : Term → Id → Term → Term
 -- Booleans
 (eBool b) [ y := V ] = eBool b
 
+-- Variable
+(` x) [ y := V ] with x ≟ y
+... | yes _ = V
+... | no  _ = ` x
+
 -- Op
 (eOp op L M) [ y := V ] = eOp op (L [ y := V ]) (M [ y := V ])
 
 -- If
 (eIf B L M) [ y := V ] = eIf (B [ y := V ]) (L [ y := V ]) (M [ y := V ])
-
--- Variable
-(` x) [ y := V ] with x ≟ y
-... | yes _ = V
-... | no  _ = ` x
 
 -- Lambda abstraction
 (ƛ x ⇒ N) [ y := V ] with x ≟ y
@@ -197,7 +211,7 @@ infix 4 _—→_ -- \em\to
 data _—→_ : Term → Term → Set where
 
   -- Left compatibility rule for eOp
-  ξ—op₁ : ∀ {op : Op} {L L' M : Term}
+  ξ-op₁ : ∀ {op : Op} {L L' M : Term}
     →  L —→ L'
        --------------------
     →  eOp op L M —→ eOp op L' M
@@ -209,47 +223,63 @@ data _—→_ : Term → Term → Set where
        --------------------
     →  eOp op V M —→ eOp op V M'
 
+  -- condition compatibility rule for eIf
+  ξ-if₀ : ∀ {L L' M N : Term}
+    →  L —→ L'
+       --------------------
+    →  eIf L M N —→ eIf L' M N
+
+  -- If reduction on true
+  β-if₁ : ∀ {M N : Term}
+       --------------------
+    →  eIf (eBool true) M N —→ M
+
+  -- if reduction on false
+  β-if₂ : ∀ {M N : Term}
+       --------------------
+    →  eIf (eBool false) M N —→ N
+
   -- Left compatibility rule for ·
-  ξ—·₁ : ∀ {L L' M : Term}
+  ξ-·₁ : ∀ {L L' M : Term}
     →  L —→ L'
        --------------------
     →  L · M —→ L' · M
 
   -- Right compatibility rule for ·
-  ξ—·₂ : ∀ {V M M' : Term}
+  ξ-·₂ : ∀ {V M M' : Term}
     →  Value V
     →  M —→ M'
        --------------------
     →  V · M —→ V · M'
 
   -- Beta reduction rule for abstraction
-  β—ƛ : ∀ {x : Id} {N V : Term}
+  β-ƛ : ∀ {x : Id} {N V : Term}
     → Value V
       --------------------
     → (ƛ x ⇒ N) · V —→ N [ x := V ]
 
 
   -- Compatibility rule for suc
-  ξ—suc : ∀ {M M' : Term}
+  ξ-suc : ∀ {M M' : Term}
     →  M —→ M'
       --------------------
     → `suc M —→ `suc M'
 
   -- Compatibility rule for case
-  ξ—case : ∀ {x : Id} {L L' M N : Term}
+  ξ-case : ∀ {x : Id} {L L' M N : Term}
     →  L —→ L'
       --------------------
     →  case L [zero⇒ M |suc x ⇒ N ] —→ case L' [zero⇒ M |suc x ⇒ N ]
 
 
   -- Beta reduction rule for case (zero)
-  β—zero : ∀ {x : Id} {M N : Term}
+  β-zero : ∀ {x : Id} {M N : Term}
       --------------------
     →  case `zero [zero⇒ M |suc x ⇒ N ] —→ M
 
 
   -- Beta reduction rule for case (suc)
-  β—suc : ∀ {x : Id} {V M N : Term}
+  β-suc : ∀ {x : Id} {V M N : Term}
     →  Value V
       --------------------
     →  case `suc V [zero⇒ M |suc x ⇒ N ] —→ N [ x := V ]
@@ -257,6 +287,14 @@ data _—→_ : Term → Term → Set where
   -- Beta reduction rule for fixed point
   -- The term being substituted is not a value
   -- Question: when is the substitution beta-valid ?
-  β—μ : ∀ {x : Id} {M : Term}
+  β-μ : ∀ {x : Id} {M : Term}
       --------------------
     →  μ x ⇒ M —→ M [ x := μ x ⇒ M ]
+
+
+L1 : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") —→ ƛ "x" ⇒ ` "x"
+L1 = β-ƛ V-ƛ
+
+
+L2 : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") —→ (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")
+L2 = ξ-·₁ L1

@@ -15,8 +15,11 @@ import Test.QuickCheck
 specEval :: Spec
 specEval = describe "Checking the Eval module ..." $ do
     specENum
+    specEBool
     specEOpAdd
     specEOpMul
+    specEOpSub
+    specEOpDiv
     specEIfZero
     specEIfNZero
     specEApp
@@ -28,6 +31,10 @@ specENum :: Spec
 specENum = it "Checked eval for ENum in empty environment" $ do
     property $ propENum
 
+specEBool :: Spec
+specEBool = it "Checked eval for EBool in empty environment" $ do
+    property $ propEBool
+
 specEOpAdd :: Spec 
 specEOpAdd = it "Checked eval for n + m" $ do
     property $ propEOpAdd
@@ -35,6 +42,14 @@ specEOpAdd = it "Checked eval for n + m" $ do
 specEOpMul :: Spec 
 specEOpMul = it "Checked eval for n * m" $ do
     property $ propEOpMul
+
+specEOpSub :: Spec 
+specEOpSub = it "Checked eval for n - m" $ do
+    property $ propEOpSub
+
+specEOpDiv :: Spec 
+specEOpDiv = it "Checked eval for n `div` m" $ do
+    property $ propEOpDiv
 
 specEIfZero :: Spec
 specEIfZero = it "Checked eval for if 0 n m" $ do
@@ -61,36 +76,46 @@ specSum2 = it "Checked eval for (\\x x -> x + x) n m" $ do
     property $ propSum2 
 
 propENum :: Integer -> Bool
-propENum n = val (eval (eNum n)) == Just n  
+propENum n = num (eval (eNum n)) == Just n  
+
+propEBool :: Bool -> Bool
+propEBool b = bool (eval (eBool b)) == Just b 
 
 propEOpAdd :: Integer -> Integer -> Bool
-propEOpAdd n m = val (eval (eOp add (eNum n) (eNum m))) == Just (n + m)
+propEOpAdd n m = num (eval (eOp add (eNum n) (eNum m))) == Just (n + m)
  
 propEOpMul :: Integer -> Integer -> Bool
-propEOpMul n m = val (eval (eOp mul (eNum n) (eNum m))) == Just (n * m)
+propEOpMul n m = num (eval (eOp mul (eNum n) (eNum m))) == Just (n * m)
+
+propEOpSub :: Integer -> Integer -> Bool
+propEOpSub n m = num (eval (eOp sub (eNum n) (eNum m))) == Just (n - m)
+
+propEOpDiv :: Integer -> Integer -> Bool
+propEOpDiv n m = m == 0 || 
+    num (eval (eOp dvd (eNum n) (eNum m))) == Just (n `div` m)
 
 propEIfZero :: Integer -> Integer -> Bool
-propEIfZero n m = val (eval (eIf (eNum 0) (eNum n) (eNum m))) == Just n
+propEIfZero n m = num (eval (eIf (eNum 0) (eNum n) (eNum m))) == Just n
 
 propEIfNZero :: Integer -> Integer -> Integer -> Bool
 propEIfNZero nz n m = if nz == 0 then True else
-    val (eval (eIf (eNum nz) (eNum n) (eNum m))) == Just m
+    num (eval (eIf (eNum nz) (eNum n) (eNum m))) == Just m
 
 propEApp :: Integer -> String -> Bool
 propEApp n s = s == "" || 
-    val (eval 
+    num (eval 
             (eApp 
                 (eLam s (eOp mul (eVar s) (eVar s)))
                 (eNum n))) == Just (n * n)
 
 propERec :: Integer -> String -> String -> Bool
 propERec m f n  = f == "" || n == "" || f == n || m < 0 ||
-    val (eval (eApp (eFac f n) (eNum m))) == Just (product [1..m])
+    num (eval (eApp (eFac f n) (eNum m))) == Just (product [1..m])
 
 propSum1 :: String -> String -> Integer -> Integer -> Bool
 propSum1 x y n m = x == "" || y == "" || x /= y ||  
-    val (eval (eApp (eApp (eSum x y) (eNum n)) (eNum m))) == Just (n + m)
+    num (eval (eApp (eApp (eSum x y) (eNum n)) (eNum m))) == Just (n + m)
 
 propSum2 :: String -> Integer -> Integer -> Bool
 propSum2 x n m = x == "" || 
-    val (eval (eApp (eApp (eSum x x) (eNum n)) (eNum m))) == Just (m + m)
+    num (eval (eApp (eApp (eSum x x) (eNum n)) (eNum m))) == Just (m + m)

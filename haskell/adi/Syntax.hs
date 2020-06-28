@@ -5,13 +5,13 @@ module  Syntax
     (   ExprF   (..)
     ,   Expr
     ,   eNum
+    ,   eBool
     ,   eVar
     ,   eOp
     ,   eIf
     ,   eLam
     ,   eApp
     ,   eRec
-    ,   toNum
     )   where
 
 import Data.Functor.Foldable
@@ -20,19 +20,23 @@ import Op
 import Var
 
 data ExprF a
-    = ENum Integer
-    | EVar Var
-    | EOp  Op a a
-    | EIf  a a a
-    | ELam Var a
-    | EApp a a
-    | ERec Var a
+    = ENum  Integer
+    | EBool Bool
+    | EVar  Var
+    | EOp   Op a a
+    | EIf   a a a
+    | ELam  Var a
+    | EApp  a a
+    | ERec  Var a
     deriving (Functor)
 
 type Expr = Fix ExprF
 
 eNum :: Integer -> Expr
 eNum n = Fix $ ENum n
+
+eBool :: Bool -> Expr
+eBool b = Fix $ EBool b
 
 eVar :: String -> Expr
 eVar s = Fix $ EVar $ mkVar s
@@ -51,9 +55,3 @@ eApp e1 e2 = Fix $ EApp e1 e2
 
 eRec :: String -> Expr -> Expr
 eRec f e = Fix $ ERec (mkVar f) e
-
-toNum :: Expr -> Maybe Integer
-toNum = cata $ \case
-    ENum n  -> Just n
-    _       -> Nothing 
-

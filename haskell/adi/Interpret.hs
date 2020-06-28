@@ -30,6 +30,7 @@ eval' e = eval_ e eval'
 eval_ :: Expr -> (Expr -> Eval Value) -> Eval Value
 eval_ = \case 
     Fix (ENum n)        -> evalNum n
+    Fix (EBool b)       -> evalBool b
     Fix (EVar x)        -> evalVar x
     Fix (EOp op e1 e2)  -> evalOp op e1 e2
     Fix (EIf e e1 e2)   -> evalIf e e1 e2
@@ -38,7 +39,10 @@ eval_ = \case
     Fix (ERec f e)      -> evalRec f e
 
 evalNum :: Integer -> (Expr -> Eval Value) -> Eval Value
-evalNum n _ev = return $ mkVal n
+evalNum n _ev = return $ mkNum n
+
+evalBool :: Bool -> (Expr -> Eval Value) -> Eval Value
+evalBool b _ev = return $ mkBool b
 
 evalVar :: Var -> (Expr -> Eval Value) -> Eval Value
 evalVar x _ev = do
@@ -49,16 +53,16 @@ evalOp :: Op -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalOp op e1 e2 ev =  do
     v1 <- ev e1
     v2 <- ev e2
-    case val v1 of
+    case num v1 of
         Nothing -> error $ show op ++ ": lhs does not evaluate to an integer."
-        Just n1 -> case val v2 of
+        Just n1 -> case num v2 of
             Nothing -> error $ show op ++ ": rhs does not evaluate to an integer."
-            Just n2 -> return $ mkVal $ delta op n1 n2
+            Just n2 -> return $ mkNum $ delta op n1 n2
 
 evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalIf e e1 e2 ev = do
     v <- ev e
-    case val v of
+    case num v of
         Nothing -> error "If: condition does not evaluate to an integer."
         Just n  -> ev $ if n == 0 then e1 else e2
 

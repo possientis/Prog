@@ -15,7 +15,7 @@ Require Import Core.Extensionality.
 Require Import Normal.Normal.
 
 (* Axiom schema of replacement assuming LEM for our Coq meta-logic.             *)
-Theorem replacememtLEM : forall (p:set -> set -> Prop),
+Theorem replacementLEM : forall (p:set -> set -> Prop),
     LEM ->
     compatible2 p ->
     functional p  -> 
@@ -45,5 +45,31 @@ Proof.
             { apply equalRefl. }
             { apply doubleIncl. split; assumption. }
             { assumption. }
-    -
-Show.
+    - apply toListElem. rewrite toListFromList. remember (normal z) as z' eqn:Z.
+      exists z'. destruct H4 as [u [H4 H5]]. apply toListElem in H4. 
+      destruct H4 as [u' [H4 [H6 H7]]]. split.
+        + apply H3. exists u'. split.
+            { rewrite H1. assumption. }
+            { rewrite Q. split.
+                { apply (C u u' z z').
+                    { apply doubleIncl. split; assumption. }
+                    { rewrite Z. apply equalSym, normalEqual. }
+                    { assumption. }}
+                { rewrite Z. apply normalNormal. }}
+        + apply doubleIncl. rewrite Z. apply equalSym, normalEqual. 
+Qed.
+
+(* Again, this is simply to demonstrate explicit dependency in x in not needed. *)
+Corollary replacementLEM_ : forall (p:set -> set -> set -> Prop),
+    LEM ->
+    compatible3 p ->
+    forall (x:set),
+    functional (p x)  -> 
+        exists (y:set), forall (z:set),
+            z :: y <-> exists (u:set), u :: x /\ p x u z.
+Proof.
+    intros p L C x F. apply replacementLEM. 
+    - assumption.
+    - apply Comp3Comp2. assumption.
+    - assumption.
+Qed.

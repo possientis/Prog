@@ -139,16 +139,30 @@
     \[
         \begin{tikzcd}
             a\arrow[d,swap, "f"]
-            &F(a)\arrow[r, "\alpha(a)"]\arrow[d, swap,"F(f)"]
-            &G(a)\arrow[r,"\beta(a)"]\arrow[d, "G(f)"]
-            &H(a)\arrow[d, "H(f)"]
+            &G(a)\arrow[r, "\beta(a)"]\arrow[d, swap,"G(f)"]
+            &F(a)\arrow[r,"\alpha(a)"]\arrow[d, "F(f)"]
+            &G(a)\arrow[d, "G(f)"]
             \\
             b
-            &F(b)\arrow[r, swap, "\alpha(b)"]
             &G(b)\arrow[r, swap, "\beta(b)"]
-            &H(b)
+            &F(b)\arrow[r, swap, "\alpha(b)"]
+            &G(b)
         \end{tikzcd}
     \]
-    TODO
+    The naturality squares are presented for convenience, and the proof is:
+    \begin{eqnarray*}F(f)\circ\beta(a)
+        &=&\id(\,F(b)\,)\circ (\,F(f)\circ\beta(a)\,)\\
+        \mbox{$\beta(b)$ inverse of $\alpha(b)$}\ \to\ 
+        &=&(\,\beta(b)\circ\alpha(b)\,)\circ(\,F(f)\circ\beta(a)\,)\\
+        \mbox{$\circ$ assoc}\ \to\ 
+        &=&\beta(b)\,\circ(\,\alpha(b)\circ F(f)\,)\circ\,\beta(a)\\
+        \mbox{$\alpha$ natural}\ \to\ 
+        &=&\beta(b)\,\circ(\,G(f)\circ \alpha(a)\,)\circ\,\beta(a)\\
+        \mbox{$\circ$ assoc}\ \to\ 
+        &=&(\,\beta(b)\circ G(f)\,)\circ(\,\alpha(a)\circ\beta(a)\,)\\
+        \mbox{$\beta(a)$ inverse of $\alpha(a)$}\ \to\ 
+        &=&(\,\beta(b)\circ G(f)\,)\circ\id(\,G(a)\,)\\
+        &=&\beta(b)\circ G(f)
+    \end{eqnarray*}
 \end{proof}
 

@@ -1,5 +1,5 @@
-add Bools to language
-bring language in line with plfa
+add and or not (<=) (==)
+add zero, suc, case to language
 Show for Expr
 Show for closure: add expr
 rewrite eval_ with cata?

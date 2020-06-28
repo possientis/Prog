@@ -222,3 +222,30 @@ Proof.
             { right. assumption. }
 Qed.
 
+(*
+Lemma diff_append : forall (v:Type) (e:Eq v) (xs ys:list v),
+    xs ++ ys == xs ++ (ys \\ xs).
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys; simpl.
+    - rewrite diff_nil. apply equivRefl.
+    - apply equivTrans with (cons x (xs ++ (ys \\ xs))).
+        + apply equivConsCompat, IH.
+        + split; intros z H1. 
+            { destruct (eqDec x z) as [H2|H2].
+                { subst. left. reflexivity. }
+                { destruct H1 as [H1|H1].
+                    { apply H2 in H1. contradiction. }
+                    { apply in_app_or in H1. destruct H1 as [H1|H1];
+                      right; apply in_or_app.
+                        { left. assumption. }
+                        { right. apply diff_charac in H1. destruct H1 as [H1 H3].
+                          apply diff_charac. split.
+                            { assumption. }
+                            { intros [H4|H4].
+                                { apply H2 in H4. contradiction. }
+                                { apply H3 in H4. contradiction. }}}}}}
+            {
+
+
+Show.
+*)

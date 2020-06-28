@@ -88,3 +88,21 @@ begin
     {rewrite L1, constructor},
     {rewrite L2, constructor}
 end
+
+theorem BigStepDeterministic : ∀ (e:stmt) (s s1 s2:Env),
+  BigStep e s s1 → BigStep e s s2 → s1 = s2 :=
+begin
+  intros e s s1 s2 H1, revert s2,
+  induction H1 with s2 x a s2 e1 e2 s1' s2 s3 H1 H2 IH1 IH2 b e1 e2 s1 s2 H1 H2 IH1,
+    {intros s2' H, cases H, refl},
+    {intros s2' H, cases H, refl},
+    {intros s3' H, cases H, have H2 : s2 = H_u, -- not able to qualify cases with names so have to use generated namesi, seems like a bug
+      {apply IH1, assumption},
+      {rewrite ← H2 at H_a_1, apply IH2, assumption}},
+    {intros s2' H, cases H,
+      {apply IH1, assumption},
+      {exfalso, apply H_a, assumption}},
+    {},
+    {},
+    {},
+end

@@ -39,6 +39,7 @@ all :							${UTILS}/LEM.vo \
 								${CORE}/Compatible.vo \
 								${CORE}/Specification.vo \
 								${CORE}/Functional.vo \
+								${CORE}/Replacement.vo \
 								${NORM}/InListOf.vo \
 								${NORM}/Map.vo \
 								${NORM}/Leq.vo \
@@ -343,6 +344,21 @@ ${CORE}/Functional.vo :			${CORE}/Functional.v \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo
 	coqc ${CORE}/Functional.v	${OPT} 
+
+
+${CORE}/Replacement.vo :		${CORE}/Functional.v \
+								${UTILS}/LEM.vo \
+								${UTILS}/Filter.vo \
+								${CORE}/Set.vo \
+								${CORE}/Incl.vo \
+								${CORE}/Elem.vo	\
+								${CORE}/Equal.vo \
+								${CORE}/ToList.vo \
+								${CORE}/Functional.vo \
+								${CORE}/Compatible.vo \
+								${CORE}/Extensionality.vo \
+								${NORM}/Normal.vo
+	coqc ${CORE}/Replacement.v	${OPT}
 
 
 ${NORM}/InListOf.vo :			${NORM}/InListOf.v \

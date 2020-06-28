@@ -36,3 +36,13 @@ Proof.
     intros v xs ys zs [H1 H2] [H3 H4]. split;
     apply incl_tran with ys; assumption.
 Qed.
+
+Lemma equivConsCompat : forall (v:Type) (x:v) (xs ys:list v),
+    xs == ys -> cons x xs == cons x ys.
+Proof.
+    intros v x xs ys [H1 H2]. split; intros z [H3|H3].
+    - subst. left. reflexivity.
+    - right. apply H1. assumption.
+    - subst. left. reflexivity.
+    - right. apply H2. assumption.
+Qed.

@@ -113,8 +113,9 @@ Remove.vo :						Remove.v \
 Intersect.vo :					Intersect.v \
 								In.vo \
 								Eq.vo \
-								Include.vo \
-								Equiv.vo
+								Equiv.vo \
+								Append.vo \
+								Include.vo
 	coqc Intersect.v
 
 

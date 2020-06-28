@@ -474,17 +474,12 @@ Proof.
     - apply H2. assumption.
 Qed.
 
-
-(*
-Lemma L50 : WXM <-> forall (X Y:Prop), ~(X /\ Y) -> ~X \/ ~Y.
+Lemma L51 : WXM <-> forall (X Y:Prop), ~(X /\ Y) -> ~X \/ ~Y.
 Proof.
     unfold WXM. split; intros H1 X.
-    - intros Y H2. destruct (H1 X) as [H3|H3]; destruct (H1 Y) as [H4|H4].
-        + left. assumption.
-        + left. assumption.
+    - intros Y H2. destruct (H1 Y) as [H3|H3].
         + right. assumption.
+        + left. intros H4. apply H3. intros H5.
+          apply H2. split; assumption.
+    -
 Show.
-*)
-
-
-
