@@ -73,3 +73,37 @@ Proof.
     - apply Comp3Comp2. assumption.
     - assumption.
 Qed.
+
+
+(* A proof of the axiom schema of specification based on replacement.           *)
+Theorem specificationLEM : forall (p:set -> Prop), 
+    LEM ->
+    compatible p -> 
+    forall (x:set), exists (y:set), forall (z:set), 
+        z :: y <-> z :: x /\ p z.
+Proof.
+    intros p L C. remember (fun x y => p x /\ (x == y)) as q eqn:Q.
+    assert (compatible2 q) as Cq.
+        { unfold compatible2. rewrite Q. intros x x' y y' H1 H2 [H3 H4]. split.
+            { apply (C x x'); assumption. }
+            { apply equalTrans with x.
+                { apply equalSym. assumption. }
+                { apply equalTrans with y; assumption. }}}
+    assert (functional q) as Fq.
+        { unfold functional. rewrite Q. intros x y y' [H1 H2] [H3 H4].
+          apply equalTrans with x.
+            { apply equalSym. assumption. }
+            { assumption. }}
+    intros x. remember (replacementLEM q L Cq Fq x) as R eqn:E. clear E. 
+    destruct R as [y R]. exists y. intros z. destruct (R z) as [H1 H2]. 
+    rewrite Q in H1. split; intros H.
+    -  apply H1 in H. clear H1 H2.
+      destruct H as [u [H1 [H2 H3]]]. split.
+        + apply elemCompatL with u; assumption.
+        + apply (C u z); assumption.
+    - apply H2. exists z. destruct H as [H3 H4]. split.
+        + assumption.
+        + rewrite Q. split.
+            { assumption. }
+            { apply equalRefl. }
+Qed.

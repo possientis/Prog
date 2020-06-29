@@ -12,6 +12,8 @@ Require Import Core.ToList.
 Require Import Core.Compatible.
 Require Import Core.Extensionality.
 
+(* The axiom schema of specification is implied by that of replacement.         *)
+
 (* Given a set x and a decidable predicate p (which may depend on x), returns   *)
 (* the set of all elements y of x for which p y is true. There is no need to    *)
 (* consider p a two variable predicate in order to make the possible dependency *)
