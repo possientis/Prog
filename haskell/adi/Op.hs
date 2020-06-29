@@ -1,4 +1,7 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE DataKinds      #-}
+{-# LANGUAGE LambdaCase     #-}
+{-# LANGUAGE TypeFamilies   #-}
+{-# LANGUAGE KindSignatures #-}
 
 module  Op
     (   Op
@@ -6,10 +9,20 @@ module  Op
     ,   mul
     ,   sub
     ,   dvd
-    ,   delta
+    ,   deltaNum
+    ,   deltaBool
+    ,   toType
     )   where
 
-data Op = OpAdd | OpMul | OpSub | OpDiv
+data Typ = TNum | TBool
+
+data Op = OpAdd 
+        | OpMul 
+        | OpSub 
+        | OpDiv
+        | OpAnd
+        | OpOr
+        | OpImp 
 
 instance Show Op where
    show = \case
@@ -17,6 +30,19 @@ instance Show Op where
         OpMul -> "*"
         OpSub -> "-"
         OpDiv -> "/"
+        OpAnd -> "/\\"
+        OpOr  -> "\\/"
+        OpImp -> "=>"
+
+toType :: Op -> Typ
+toType = \case 
+    OpAdd -> TNum
+    OpMul -> TNum
+    OpSub -> TNum
+    OpDiv -> TNum
+    OpAnd -> TBool
+    OpOr  -> TBool
+    OpImp -> TBool
 
 add :: Op
 add = OpAdd
@@ -30,9 +56,17 @@ sub = OpSub
 dvd :: Op
 dvd = OpDiv
 
-delta :: Op -> Integer -> Integer -> Integer
-delta = \case
+deltaNum :: Op -> Integer -> Integer -> Integer
+deltaNum = \case
     OpAdd   -> (+)
     OpMul   -> (*)
     OpSub   -> (-)
     OpDiv   -> div
+    _       -> error "deltaNum: illegal operator"
+
+deltaBool :: Op -> Bool -> Bool -> Bool
+deltaBool = \case
+    OpAnd   -> (&&)
+    OpOr    -> (||)
+    OpImp   -> (\x y -> not x || y)
+    _       -> error "deltaBool: illegal operator" 

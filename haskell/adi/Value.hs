@@ -9,8 +9,10 @@ module  Value
     ,   num
     ,   bool
     ,   closure
+    ,   delta
     )   where
 
+import Op
 import Var
 import Env
 import Syntax
@@ -55,3 +57,10 @@ closure :: Value -> Maybe Closure
 closure = \case
     Clo c   -> Just c
     _       -> Nothing
+
+delta :: Op -> Value -> Value -> Value
+delta op v1 v2 = case num v1 of
+    Nothing -> error $ show op ++ ": lhs does not evaluate to an integer."
+    Just n1 -> case num v2 of
+        Nothing -> error $ show op ++ ": rhs does not evaluate to an integer."
+        Just n2 -> mkNum $ deltaNum op n1 n2

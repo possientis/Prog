@@ -32,7 +32,7 @@ eval_ = \case
     Fix (ENum n)        -> evalNum n
     Fix (EBool b)       -> evalBool b
     Fix (EVar x)        -> evalVar x
-    Fix (EOp op e1 e2)  -> evalOp op e1 e2
+    Fix (EOp op es)     -> evalOp op es
     Fix (EIf e e1 e2)   -> evalIf e e1 e2
     Fix (ELam x e)      -> evalLam x e
     Fix (EApp e1 e2)    -> evalApp e1 e2  
@@ -49,15 +49,12 @@ evalVar x _ev = do
     env <- askEnv
     find (findAddr env x)
 
-evalOp :: Op -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
-evalOp op e1 e2 ev =  do
+evalOp :: Op -> [Expr] -> (Expr -> Eval Value) -> Eval Value
+evalOp op es ev =  do
+    let [e1,e2] = es    -- TODO 
     v1 <- ev e1
     v2 <- ev e2
-    case num v1 of
-        Nothing -> error $ show op ++ ": lhs does not evaluate to an integer."
-        Just n1 -> case num v2 of
-            Nothing -> error $ show op ++ ": rhs does not evaluate to an integer."
-            Just n2 -> return $ mkNum $ delta op n1 n2
+    return $ delta op v1 v2
 
 evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalIf e e1 e2 ev = do

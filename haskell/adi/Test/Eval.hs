@@ -82,17 +82,17 @@ propEBool :: Bool -> Bool
 propEBool b = bool (eval (eBool b)) == Just b 
 
 propEOpAdd :: Integer -> Integer -> Bool
-propEOpAdd n m = num (eval (eOp add (eNum n) (eNum m))) == Just (n + m)
+propEOpAdd n m = num (eval (eOp add [(eNum n),(eNum m)])) == Just (n + m)
  
 propEOpMul :: Integer -> Integer -> Bool
-propEOpMul n m = num (eval (eOp mul (eNum n) (eNum m))) == Just (n * m)
+propEOpMul n m = num (eval (eOp mul [(eNum n),(eNum m)])) == Just (n * m)
 
 propEOpSub :: Integer -> Integer -> Bool
-propEOpSub n m = num (eval (eOp sub (eNum n) (eNum m))) == Just (n - m)
+propEOpSub n m = num (eval (eOp sub [(eNum n),(eNum m)])) == Just (n - m)
 
 propEOpDiv :: Integer -> Integer -> Bool
 propEOpDiv n m = m == 0 || 
-    num (eval (eOp dvd (eNum n) (eNum m))) == Just (n `div` m)
+    num (eval (eOp dvd [(eNum n),(eNum m)])) == Just (n `div` m)
 
 propEIfZero :: Integer -> Integer -> Bool
 propEIfZero n m = num (eval (eIf (eNum 0) (eNum n) (eNum m))) == Just n
@@ -105,7 +105,7 @@ propEApp :: Integer -> String -> Bool
 propEApp n s = s == "" || 
     num (eval 
             (eApp 
-                (eLam s (eOp mul (eVar s) (eVar s)))
+                (eLam s (eOp mul [(eVar s),(eVar s)]))
                 (eNum n))) == Just (n * n)
 
 propERec :: Integer -> String -> String -> Bool
