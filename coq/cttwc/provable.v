@@ -481,5 +481,50 @@ Proof.
         + right. assumption.
         + left. intros H4. apply H3. intros H5.
           apply H2. split; assumption.
-    -
-Show.
+    - apply H1. intros [H2 H3]. apply H3, H2.
+Qed.
+
+Lemma L52 : forall (A:Prop), ~~(A \/ ~A).
+Proof.
+    intros A H1.
+    assert (~A) as H2. { intros H3. apply H1. left. assumption. }
+    assert (~~A) as H3. { intros H4. apply H1. right. assumption. }
+    apply H3. assumption.
+Qed.
+
+Lemma L53 : XM -> WXM. 
+Proof.
+    unfold XM , WXM. intros H X. apply H.
+Qed.
+
+Lemma L54 : forall (X Y:Prop), Provable (X -> Y) -> Consistent X -> Consistent Y.
+Proof.
+    unfold Consistent, Contradictory. intros X Y H1 H2 H3. apply H2.
+    apply PA with (~Y).
+    - apply PN; assumption.
+    - assumption.
+Qed.
+
+Lemma L55 : Consistent WXM.
+Proof.
+    apply L54 with XM. apply RE, L53. destruct L33 as [H1 H2]. assumption.
+Qed.
+
+Definition pure (X:Type) : Prop := forall (p q:X), p = q.
+
+Lemma L56 : FExt -> pure (True -> True).
+Proof.
+    unfold FExt, pure. intros H f g. apply H. intros x.
+    destruct (f x), (g x). reflexivity.
+Qed.
+
+Lemma L57 : FExt -> bool <> (True -> True).
+Proof.
+    intros H1 H2. apply L56 in H1. rewrite <- H2 in H1.
+    unfold pure in H1. assert (true = false) as H3. { apply H1. }
+    inversion H3.
+Qed.
+
+
+
+
