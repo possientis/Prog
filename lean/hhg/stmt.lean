@@ -93,7 +93,14 @@ theorem BigStepDeterministic : ∀ (e:stmt) (s s1 s2:Env),
   BigStep e s s1 → BigStep e s s2 → s1 = s2 :=
 begin
   intros e s s1 s2 H1, revert s2,
-  induction H1 with s2 x a s2 e1 e2 s1' s2 s3 H1 H2 IH1 IH2 b e1 e2 s1 s2 H1 H2 IH1,
+  induction H1 with
+    s2 x a
+    s2 e1 e2
+    s1' s2 s3 H1 H2 IH1 IH2
+    b e1 e2 s1 s2 H1 H2 IH1
+    b e1 e2 s1 s2 H1 H2 IH1
+    b e1 s1 s2 s3 H1 H2 H3 IH1 IH2
+    b e1 s1 H1,
     {intros s2' H, cases H, refl},
     {intros s2' H, cases H, refl},
     {intros s3' H, cases H, have H2 : s2 = H_u, -- not able to qualify cases with names so have to use generated namesi, seems like a bug
@@ -102,7 +109,37 @@ begin
     {intros s2' H, cases H,
       {apply IH1, assumption},
       {exfalso, apply H_a, assumption}},
-    {},
-    {},
-    {},
+    {intros s2' H, cases H,
+      {exfalso, apply H1, assumption},
+      {apply IH1, assumption}},
+    {intros s3' H, cases H,
+      {have H4 : s2 = H_u,
+        {apply IH1, assumption},
+        {rewrite ← H4 at H_a_2, apply IH2, assumption}},
+      {exfalso, apply H_a, assumption}},
+    {intros s2' H, cases H,
+      {exfalso, apply H1, assumption},
+      {refl}},
 end
+
+lemma BigStepDoesNotTerminate : ∀ (e : stmt) (s1 s2 : Env),
+  ¬BigStep (while (λ_, true) e) s1 s2 :=
+begin
+  intros e s1 s2 H, generalize H1 : while (λ_, true) e = e1,
+  rewrite H1 at H, revert e, induction H with
+    s1
+    x a s1
+    e1 e2 s1 s2 s3 H1 H2 IH1 IH2
+    b e1 e2 s1 s2 H1 H2 IH1
+    b e1 e2 s1 s2 H1 H2 IH1
+    b e1 s1 s2 s3 H1 H2 H3 IH1 IH2;
+
+    intros e H1,
+    {cases H1},
+    {cases H1},
+    {cases H1},
+    {cases H1},
+    {cases H1},
+    {},
+    {},
+  end
