@@ -11,6 +11,7 @@ betaValid_subst
 betaValid_support
 inter_distrib_app_l
 diff_append
+diff_inter_com (change test)
 equivConsCompat
 
 

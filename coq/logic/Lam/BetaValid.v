@@ -281,6 +281,19 @@ Proof.
     - simpl in H. rewrite remove_diff in H.
       assert ((Fr t1 /\ (cons x xs)) == (Fr t1 /\ (cons x ys))) as H1.
         { change ((Fr t1 /\ (cons x nil ++ xs)) == (Fr t1 /\ (cons x nil ++ ys))).
+          remember (Fr t1 /\ (cons x nil ++ xs \\ cons x nil)) as xs' eqn:X.
+          remember (Fr t1 /\ (cons x nil ++ ys \\ cons x nil)) as ys' eqn:Y.
+          apply (equivCompatLR v xs' ys').
+            { rewrite X. apply inter_compat_r, diff_append. }
+            { rewrite Y. apply inter_compat_r, diff_append. }
+          rewrite X, Y. clear X Y xs' ys'.
+          remember ((Fr t1/\cons x nil)++(Fr t1/\(xs \\ cons x nil))) as xs' eqn:X.
+          remember ((Fr t1/\cons x nil)++(Fr t1/\(ys \\ cons x nil))) as ys' eqn:Y.
+          apply (equivCompatLR v xs' ys').
+            { rewrite X. apply inter_distrib_app_l. }
+            { rewrite Y. apply inter_distrib_app_l. }
+          rewrite X, Y. clear X Y xs' ys'. apply app_compat_r.
+          
 
 (*
       split; intros H3; apply betaValid_lam_gen in H3; destruct H3 as [H3 H4];

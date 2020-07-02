@@ -61,6 +61,7 @@ Proof.
             }
 Qed.
 
+(* TODO: need == instead of <= *)
 Lemma diff_inter_comm : forall (v:Type) (e:Eq v) (xs ys zs:list v),
     (xs /\ ys) \\ zs <= ((xs \\ zs) /\ ys).
 Proof.
@@ -222,7 +223,7 @@ Proof.
             { right. assumption. }
 Qed.
 
-(*
+
 Lemma diff_append : forall (v:Type) (e:Eq v) (xs ys:list v),
     xs ++ ys == xs ++ (ys \\ xs).
 Proof.
@@ -244,8 +245,14 @@ Proof.
                             { intros [H4|H4].
                                 { apply H2 in H4. contradiction. }
                                 { apply H3 in H4. contradiction. }}}}}}
-            {
+            { destruct H1 as [H1|H1].
+                { subst. left. reflexivity. }
+                { right. apply in_or_app. 
+                  apply in_app_or in H1. destruct H1 as [H1|H1].
+                    { left. assumption. }
+                    { apply diff_charac in H1. destruct H1 as [H1 H2]. right.
+                      apply diff_charac. split.
+                        { assumption. }
+                        { intros H3. apply H2. right. assumption. }}}}
+Qed.
 
-
-Show.
-*)

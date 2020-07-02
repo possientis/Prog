@@ -46,3 +46,13 @@ Proof.
     - subst. left. reflexivity.
     - right. apply H2. assumption.
 Qed.
+
+Lemma equivCompatLR : forall (v:Type) (xs' ys' xs ys:list v),
+    xs == xs' -> ys == ys' -> xs' == ys' -> xs == ys.
+Proof.
+    intros v xs' ys' xs ys H1 H2 H3. apply equivTrans with xs'.
+    - assumption. 
+    - apply equivTrans with ys'.
+        + assumption.
+        + apply equivSym. assumption.
+Qed.
