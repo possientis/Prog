@@ -5,6 +5,7 @@ open import Data.Empty                                 using (⊥; ⊥-elim)
 open import Relation.Nullary                           using (Dec; yes; no; ¬_)
 open import Data.List                                  using (List; _∷_; [])
 open import Data.Bool                                  using (Bool; true; false)
+open import Data.Product                               using (∃; ∃-syntax)
 
 Id : Set
 Id = String
@@ -298,3 +299,59 @@ L1 = β-ƛ V-ƛ
 
 L2 : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") —→ (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")
 L2 = ξ-·₁ L1
+
+
+infix 2 _—↠_
+infix 1 begin_
+infixr 2 _—→⟨_⟩_
+infix 3 _∎
+
+-- reflexive and transitive closure of _—→_
+data _—↠_ : Term → Term → Set where
+
+  _∎ : ∀ (M : Term)
+      ---------------
+    → M —↠ M
+
+  _—→⟨_⟩_ : ∀ (L : Term) {M N : Term}
+    → L —→ M
+    → M —↠ N
+      ---------------
+    → L —↠ N
+
+
+begin_ : ∀ {M N : Term}
+  → M —↠ N
+    ----------
+  → M —↠ N
+begin M—↠N = M—↠N
+
+data _—↠'_ : Term → Term → Set where
+
+  step' : ∀ {M N : Term}
+    → M —→ N
+      ----------
+    → M —↠' N
+
+  refl' : ∀ {M : Term}
+      ---------------
+    →  M —↠' M
+
+  trans' : ∀ {L M N : Term}
+    → L —↠' M
+    → M —↠' N
+      ----------
+    → L —↠' N
+
+—↠-trans : ∀ {L M N : Term} → L —↠ M → M —↠ N → L —↠ N
+—↠-trans (_ ∎) q = q
+—↠-trans (_ —→⟨ s ⟩ p) q = _ —→⟨ s ⟩ —↠-trans p q
+
+—↠Imply—↠' : ∀ {M N : Term} → M —↠ N → M —↠' N
+—↠Imply—↠' (_ ∎) = refl'
+—↠Imply—↠' (_ —→⟨ s ⟩ p) = trans' (step' s) (—↠Imply—↠' p)
+
+—↠'Imply—↠ : ∀ {M N : Term} → M —↠' N → M —↠ N
+—↠'Imply—↠ {M} {N} (step' s) = begin M —→⟨ s ⟩ N ∎
+—↠'Imply—↠ refl' = _ ∎
+—↠'Imply—↠ (trans' p q) = —↠-trans (—↠'Imply—↠ p) (—↠'Imply—↠ q)

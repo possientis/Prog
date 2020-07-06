@@ -50,11 +50,7 @@ evalVar x _ev = do
     find (findAddr env x)
 
 evalOp :: Op -> [Expr] -> (Expr -> Eval Value) -> Eval Value
-evalOp op es ev =  do
-    let [e1,e2] = es    -- TODO 
-    v1 <- ev e1
-    v2 <- ev e2
-    return $ delta op v1 v2
+evalOp op es ev = delta op <$> mapM ev es
 
 evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalIf e e1 e2 ev = do

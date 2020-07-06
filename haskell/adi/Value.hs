@@ -18,6 +18,8 @@ import Env
 import Syntax
 import Closure
 
+import Data.Functor.Identity
+
 data Value 
     = Nil 
     | Num  Integer
@@ -43,6 +45,11 @@ mkBool = Bool
 mkClo :: Var -> Expr -> Env -> Value
 mkClo x e env = Clo $ mkClosure x e env
 
+mkValue :: PrimValue -> Value
+mkValue = \case
+    PNum (Identity n)  -> Num n
+    PBool (Identity b) -> Bool b
+    
 num :: Value -> Maybe Integer
 num = \case
     Num n   -> Just n
@@ -58,9 +65,18 @@ closure = \case
     Clo c   -> Just c
     _       -> Nothing
 
-delta :: Op -> Value -> Value -> Value
-delta op v1 v2 = case num v1 of
-    Nothing -> error $ show op ++ ": lhs does not evaluate to an integer."
-    Just n1 -> case num v2 of
-        Nothing -> error $ show op ++ ": rhs does not evaluate to an integer."
-        Just n2 -> mkNum $ deltaNum op n1 n2
+delta :: Op -> [Value] -> Value
+delta op args = case checkArgs args of
+    Left err    -> error $ "Error: " ++ show op ++ ": " ++ err
+    Right pvs   -> mkValue $ deltaPrim op pvs
+
+checkArgs :: [Value] -> Either String [PrimValue]
+checkArgs = mapM checkArg
+
+checkArg :: Value -> Either String PrimValue
+checkArg v = case v of
+    Nil     -> Left $ "Nil argument encountered in primitive call"
+    Clo c   -> Left $ "Closure encountered in primitive call: " ++ show c
+    Num n   -> Right . PNum  . Identity $ n
+    Bool b  -> Right . PBool . Identity $ b
+

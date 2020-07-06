@@ -1,14 +1,48 @@
 \begin{defin}\label{Adj:def:adjunction}
-    We call {\em adjunction} an ordered pair $(F,G)$ where $F$ is a functor
-    $F:\Cat\to\Dat$ and $G$ is a functor $G:\Dat\to\Cat$ while \Cat\  and 
-    \Dat\ are two locally-small categories for which there exists a natural 
-    isomorphism: 
-        \[
-            \alpha\ :\ 
-            \Dat\circ(F\times I_{\cal D})
-            \ \Rightarrow\ 
-            \Cat\circ(I_{{\cal C}^{op}}\times G)
-        \]
-    in the functor category $[\,\Cop\times\Dat\, ,\,\Set\,]$,
-    where $F$ also denotes $F:\Cop\rightarrow\Dop$.
+    We call {\em adjunction} any tuple $(\Cat,\Dat,F,G,\eta)$ where:
+        \begin{eqnarray*}
+            (1)& &\mbox{\Cat, \Dat\ are categories}\\
+            (2)& &\mbox{$F:\Cat\to\Dat$ is a functor}\\
+            (3)& &\mbox{$G:\Dat\to\Cat$ is a functor}\\
+            (4)& &\mbox{$\eta:I_{\cal C}\Rightarrow G\circ F$ is a natural
+                transformation}
+        \end{eqnarray*}
+    such that for all objects $c\in\Cat$, $d\in\Dat$ and arrow $f:c\to G(d)$, 
+    there exists a unique arrow $g:F(c) \to d$ satisfying the equality 
+    $f = G(g) \circ \eta_{c}$.
 \end{defin}
+
+\noindent
+{\bf Remark}: The equality $f = G(g) \circ \eta_{c}$ can be visualized as
+the diagram:
+    \[
+        \begin{tikzcd}
+            c \arrow[rd,swap, "f"]\arrow[r,"\eta_{c}"] 
+            &G(\,F(c)\,)\arrow[d,"G(\,g\,)"]\\
+            & G(\,d\,)
+        \end{tikzcd}
+    \]
+
+\begin{defin}\label{Adj:def:unit}
+    If $(\Cat,\Dat,F,G,\eta)$ is an adjunction, $\eta$ is called the {\em unit} of     
+    the adjunction, while $F$ is called the {\em left-adjoint} and $G$
+    is called the {\em right-adjoint}.
+\end{defin}
+
+%    We call {\em adjunction} an ordered pair $(F,G)$ where $F$ is a functor
+%    $F:\Cat\to\Dat$ and $G$ is a functor $G:\Dat\to\Cat$ while \Cat\  and 
+%    \Dat\ are two locally-small categories for which there exists a natural 
+%    isomorphism: 
+%        \[
+%            \alpha\ :\ 
+%            \Dat\circ(F\times I_{\cal D})
+%            \ \Rightarrow\ 
+%            \Cat\circ(I_{{\cal C}^{op}}\times G)
+%        \]
+%    in the functor category $[\,\Cop\times\Dat\, ,\,\Set\,]$,
+%    where $F$ also denotes $F:\Cop\rightarrow\Dop$.
+
+
+
+
+

@@ -61,15 +61,36 @@ Proof.
             }
 Qed.
 
-(* TODO: need == instead of <= *)
 Lemma diff_inter_comm : forall (v:Type) (e:Eq v) (xs ys zs:list v),
-    (xs /\ ys) \\ zs <= ((xs \\ zs) /\ ys).
+    (xs /\ ys) \\ zs == ((xs \\ zs) /\ ys).
 Proof.
-    intros v e xs ys zs x H. rewrite diff_charac in H. 
-    destruct H as [H1 H3]. rewrite inter_charac in H1. destruct H1 as [H1 H2].
-    apply inter_charac. split.
-    - apply diff_charac. split; assumption.
-    - assumption.
+    intros v e xs ys zs. split; intros x H. 
+    - rewrite diff_charac in H. destruct H as [H1 H3]. 
+      rewrite inter_charac in H1. destruct H1 as [H1 H2].
+      apply inter_charac. split.
+        + apply diff_charac. split; assumption.
+        + assumption.
+    - rewrite inter_charac in H. destruct H as [H1 H3].
+      rewrite diff_charac in H1. destruct H1 as [H1 H2].
+      apply diff_charac. split.
+        + apply inter_charac. split; assumption.
+        + assumption.
+Qed.
+
+Lemma diff_inter_assoc : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    (xs /\ ys) \\ zs == (xs /\ (ys \\ zs)).
+Proof.
+    intros v e xs ys zs. split; intros x H.
+    - apply diff_charac in H. destruct H as [H1 H3].
+      apply inter_charac in H1. destruct H1 as [H1 H2].
+      apply inter_charac. split.
+        + assumption.
+        + apply diff_charac. split; assumption.
+    - apply inter_charac in H. destruct H as [H1 H2].
+      apply diff_charac in H2. destruct H2 as [H2 H3].
+      apply diff_charac. split.
+        + apply inter_charac. split; assumption.
+        + assumption.
 Qed.
 
 Lemma diff_distrib_app_r : forall (v:Type) (e:Eq v) (xs ys zs:list v),
@@ -222,7 +243,6 @@ Proof.
             { assumption. }
             { right. assumption. }
 Qed.
-
 
 Lemma diff_append : forall (v:Type) (e:Eq v) (xs ys:list v),
     xs ++ ys == xs ++ (ys \\ xs).

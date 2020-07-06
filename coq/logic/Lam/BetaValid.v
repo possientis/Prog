@@ -293,12 +293,21 @@ Proof.
             { rewrite X. apply inter_distrib_app_l. }
             { rewrite Y. apply inter_distrib_app_l. }
           rewrite X, Y. clear X Y xs' ys'. apply app_compat_r.
-          
-
-(*
+          remember ((Fr t1 /\ xs) \\ (cons x nil)) as xs' eqn:X.          
+          remember ((Fr t1 /\ ys) \\ (cons x nil)) as ys' eqn:Y.          
+          apply (equivCompatLR v xs' ys').
+            { rewrite X. apply equivSym, diff_inter_assoc. }
+            { rewrite Y. apply equivSym, diff_inter_assoc. }
+          rewrite X, Y. clear X Y xs' ys'.
+          remember ((Fr t1 \\ (cons x nil)) /\ xs) as xs' eqn:X.
+          remember ((Fr t1 \\ (cons x nil)) /\ ys) as ys' eqn:Y.
+          apply (equivCompatLR v xs' ys').
+            { rewrite X. apply diff_inter_comm. }
+            { rewrite Y. apply diff_inter_comm. }
+          assumption. }
       split; intros H3; apply betaValid_lam_gen in H3; destruct H3 as [H3 H4];
       apply betaValid_lam_gen; split.
-          + apply (IH1 (cons x xs) (cons x ys)).
-*)    
+          + apply (IH1 (cons x xs) (cons x ys)); assumption.
+          + 
 Show.
 *)

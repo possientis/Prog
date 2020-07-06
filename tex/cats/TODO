@@ -1,8 +1,4 @@
-Is the unit of an adjunction unique?
-
-Define an adjunction: F:C -> D , G:D -> C, eta : I_C => GF
-forall c:C, d:D, f:c -> Gd, exists ! g : Fc -> d such that
-Gg . eta(c) = f
+add adjunction diagram
 
 Study the 4 equivalent definitions of adjunctions
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2

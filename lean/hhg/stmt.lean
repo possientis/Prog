@@ -103,9 +103,11 @@ begin
     b e1 s1 H1,
     {intros s2' H, cases H, refl},
     {intros s2' H, cases H, refl},
-    {intros s3' H, cases H, have H2 : s2 = H_u, -- not able to qualify cases with names so have to use generated namesi, seems like a bug
+    {intros s3' H, cases H with x x x x x x x s2' _ H1 H2,
+     have H3 : s2 = s2',
       {apply IH1, assumption},
-      {rewrite ← H2 at H_a_1, apply IH2, assumption}},
+      {apply IH2, rewrite H3, assumption}
+     },
     {intros s2' H, cases H,
       {apply IH1, assumption},
       {exfalso, apply H_a, assumption}},
@@ -132,14 +134,54 @@ begin
     e1 e2 s1 s2 s3 H1 H2 IH1 IH2
     b e1 e2 s1 s2 H1 H2 IH1
     b e1 e2 s1 s2 H1 H2 IH1
-    b e1 s1 s2 s3 H1 H2 H3 IH1 IH2;
-
+    b e1 s1 s2 s3 H1 H2 H3 IH1 IH2
+    b e1 s1 H2;
     intros e H1,
     {cases H1},
     {cases H1},
     {cases H1},
     {cases H1},
     {cases H1},
-    {},
-    {},
+    {cases H1, apply IH2; refl},
+    {cases H1, apply H2, trivial},
   end
+
+-- inversion rules
+
+@[simp] lemma BigStepSkipIff : ∀ {s t:Env}, BigStep skip s t ↔ s = t :=
+begin
+  intros s t, split; intros H,
+    { cases H, refl },
+    { rewrite H, constructor }
+end
+
+@[simp] lemma BigStepAssignIff : ∀ {x:string} {a:AExp} {s t:Env},
+  BigStep (x :== a) s t ↔ t = bindVar x a s :=
+begin
+  intros x a s t, split; intros H,
+    { cases H, unfold bindVar },
+    { rewrite H, constructor }
+end
+
+@[simp] lemma BigStepSeqIff : ∀ {e1 e2:stmt} {s t:Env},
+  BigStep (e1 ;; e2) s t ↔ ∃ (u:Env), BigStep e1 s u ∧ BigStep e2 u t :=
+begin
+  intros e1 e2 s t, split; intros H,
+    {cases H with _ _ _ _ _ _ _ u _ H1 H2, existsi u, split; assumption},
+    {cases H with u H1, cases H1 with H1 H2, constructor; assumption}
+end
+
+@[simp] lemma BigStepIteIff : ∀ {b:BExp} {e1 e2:stmt} {s t:Env},
+  BigStep (ite b e1 e2) s t ↔ (b s ∧ BigStep e1 s t) ∨ (¬b s ∧ BigStep e2 s t) :=
+begin
+  intros b e1 e2 s t, split; intros H,
+    {cases H with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ H1 H2,
+      {left, split; assumption},
+      {right, split; assumption}},
+    {cases H with H H,
+      {cases H with H1 H2, constructor; assumption},
+      {cases H with H1 H2, apply IF_F; assumption}}
+end
+
+@[simp] lemma BigStepWhileIff : ∀ {b:BExp} {e:stmt} {s t: Env}, sorry
+

@@ -196,3 +196,14 @@ Proof.
     - assumption.
 Qed.
 
+(*
+(* TODO: conjecture                                                             *)
+Lemma evalFmap : forall (e:Env) (f:nat -> nat) (p:Formula), Valid f p -> 
+    eval (cmap f e) p <-> eval e (fmap f p).
+Proof.
+    intros e f. induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1]; unfold cmap; intros H; simpl.
+    - split; auto.
+    - split; auto.
+    -
+Show.
+*)

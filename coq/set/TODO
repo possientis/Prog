@@ -1,4 +1,6 @@
-semantics for specification and replacement?
+Lang1/Semantics: evalFmap
+Lang1/Specifcation : give version with fmap
+Lang1/Replacement
 axiom of choice?
 axiom of infinity false ?
 all ZF axioms covered?
@@ -6,5 +8,7 @@ extension to infinite set
 new semantics in terms of variable r : set -> set -> Prop
 proof system of each language
 extension of language
+sets U as model ? (see cttwc)
+what is the difference between set and (Sets set) ?
 
 

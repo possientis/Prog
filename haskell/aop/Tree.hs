@@ -57,6 +57,3 @@ foldForest :: (a -> c -> b) -> c -> (b -> c -> c) -> Forest a -> c
 foldForest _ c _ Nil = c
 foldForest g c h (Grow t f) = h (foldTree' g c h t) (foldForest g c h f)
 
-
-
-

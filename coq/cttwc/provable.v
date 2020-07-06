@@ -277,7 +277,7 @@ Proof.
 Qed.
 
 (* Proved at meta level                                                         *)
-Axiom Ax29 : Consistent  (TVS /\ FExt).
+Axiom Ax29 : Consistent  (TVS /\ FExt). (* also true for FExtGen below *)
 Axiom Ax30 : ~Provable Markov /\ ~Provable PIrr /\ ~Provable FExt.
 
 Lemma L31 : ~Provable False.
@@ -525,6 +525,51 @@ Proof.
     inversion H3.
 Qed.
 
+Definition L58 : exists (x:bool), x = true.
+Proof.
+refine (
+    ex_intro 
+        _ 
+        true 
+        eq_refl
+).
+Qed.
 
+Definition L59 : exists (x:bool), x = true := ex_intro _ true eq_refl.
 
+Lemma L60 : (exists (f : (exists (x:bool), True) -> bool), 
+    forall (x:bool), f (ex_intro _ x I) = x) -> ~ PIrr.
+Proof.
+    intros [f H1] H2. unfold PIrr in H2.
+    assert (true = false) as H3.
+        { rewrite <- (H1 true). rewrite <- (H1 false).
+          remember (ex_intro _ true I)  as p1 eqn:P1.
+          remember (ex_intro _ false I) as p2 eqn:P2.
+          assert (p1 = p2) as H3. { apply H2. } 
+          rewrite H3. reflexivity. }
+    inversion H3.
+Qed.
 
+Fail Definition trying (p:exists (x:bool), True) : bool :=
+    match p with
+    | ex_intro _ x _ => x
+    end. 
+
+Lemma L61 : (exists (f: True \/ True -> bool), 
+    f (or_introl I) = true /\ f (or_intror I) = false) -> ~PIrr.
+Proof.
+    intros [f [H1 H2]] H3. unfold PIrr in H3.
+    assert (true = false) as H4.
+        { rewrite <- H1, <- H2.
+          assert (or_introl I = or_intror I) as H4. { apply H3. }
+          rewrite H4. reflexivity. }
+    inversion H4.
+Qed.
+
+Definition FExtGen : Prop := forall (X:Type) (p:X -> Type) (f g:forall (x:X), p x),
+    (forall (x:X), f x = g x) -> f = g.
+
+Lemma L62 : FExtGen -> FExt.
+Proof.
+    unfold FExtGen, FExt. intros H1 X Y f g H2. apply H1, H2.
+Qed.
