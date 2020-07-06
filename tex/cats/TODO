@@ -1,6 +1,8 @@
-add adjunction diagram
+(F,G) has a unit => (F,G) has a counit.
+(F,G) has a counit => (F,G) as a unit.
+locally small case: (F,G) has a unit <-> C(c,Gd) ~ D(Fc,d)
+4th definition of adjuction with eta + eps without universal condition.
 
-Study the 4 equivalent definitions of adjunctions
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 

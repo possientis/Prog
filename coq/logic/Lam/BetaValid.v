@@ -278,7 +278,8 @@ Proof.
         + apply (IH2 xs ys); assumption.
         + apply (IH1 xs ys); assumption.
         + apply (IH2 xs ys); assumption.
-    - simpl in H. rewrite remove_diff in H.
+    - generalize H. intros H'. 
+      simpl in H. rewrite remove_diff in H.
       assert ((Fr t1 /\ (cons x xs)) == (Fr t1 /\ (cons x ys))) as H1.
         { change ((Fr t1 /\ (cons x nil ++ xs)) == (Fr t1 /\ (cons x nil ++ ys))).
           remember (Fr t1 /\ (cons x nil ++ xs \\ cons x nil)) as xs' eqn:X.
@@ -305,9 +306,18 @@ Proof.
             { rewrite X. apply diff_inter_comm. }
             { rewrite Y. apply diff_inter_comm. }
           assumption. }
+      assert (Fr (Lam x t1) \\ xs == Fr (Lam x t1) \\ ys) as H6.
+            {
+(*
+      destruct H6 as [H6 H7].
       split; intros H3; apply betaValid_lam_gen in H3; destruct H3 as [H3 H4];
       apply betaValid_lam_gen; split.
           + apply (IH1 (cons x xs) (cons x ys)); assumption.
-          + 
+          + intros u H5. apply H4. apply H7. assumption.
+          + apply (IH1 (cons x ys) (cons x xs)).
+            { apply equivSym. assumption. }
+            { assumption. }
+          + intros u H5. apply H4. apply H6. assumption.
+*)
 Show.
 *)

@@ -61,6 +61,23 @@ Proof.
             }
 Qed.
 
+
+(* TODO: generalize : ys == zs -> xs \\ ys = xs \\ zs *)
+(*
+Lemma diff_inter : forall (v:Type) (e:Eq v) (xs ys:list v),
+    xs \\ ys = xs \\ (xs /\ ys).
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys.
+    - simpl. reflexivity.
+    - simpl. destruct (in_dec eqDec x ys) as [H1|H1];  
+      destruct (in_dec eqDec x (xs /\ ys)) as [H2|H2];
+      destruct (in_dec eqDec x (cons x (xs /\ ys))) as [H3|H3].
+        + admit.
+        + exfalso. apply H3. left. reflexivity.
+        +
+Show.
+*)
+
 Lemma diff_inter_comm : forall (v:Type) (e:Eq v) (xs ys zs:list v),
     (xs /\ ys) \\ zs == ((xs \\ zs) /\ ys).
 Proof.

@@ -1,7 +1,9 @@
-{-# LANGUAGE DataKinds      #-}
-{-# LANGUAGE LambdaCase     #-}
-{-# LANGUAGE TypeFamilies   #-}
-{-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE DataKinds              #-}
+{-# LANGUAGE LambdaCase             #-}
+{-# LANGUAGE TypeFamilies           #-}
+{-# LANGUAGE KindSignatures         #-}
+{-# LANGUAGE FlexibleInstances      #-}
+{-# LANGUAGE TypeSynonymInstances   #-}
 
 module  Op
     (   Op
@@ -12,7 +14,6 @@ module  Op
     ,   sub
     ,   dvd
     ,   deltaPrim
-    ,   opType      -- remove
     ,   deltaBool   -- remove
     ,   deltaNum    -- remove
     )   where
@@ -26,6 +27,15 @@ data Prim_ f
 
 type PrimValue = Prim_ Identity
 type PrimType  = Prim_ (Const ())
+
+instance Eq PrimType where
+    (==) (PNum _)  (PNum _)  = True
+    (==) (PBool _) (PBool _) = True
+    (==) _         _         = False
+
+instance Show PrimType where
+    show (PNum _)  = "Integer"
+    show (PBool _) = "Bool"
 
 data OpType = OpType
     { argType :: [PrimType]
@@ -52,20 +62,11 @@ instance Show Op where
 
 -- TODO
 deltaPrim :: Op -> [PrimValue] -> PrimValue
-deltaPrim op pvs = if length pvs /= length pts then
-    error $  show op 
-          ++ ": Wrong number of arguments in primitive call. Expecting "
-          ++ show m
-          ++ " arguments but received " 
-          ++ show n
-          ++ "."
-    else PNum $ Identity $ deltaNum op n1 n2            -- TODO
-
-    where
-    m   = length pts
-    n   = length pvs
-    pts = argType . opType $ op  
-    [PNum (Identity n1) , PNum (Identity n2)] = pvs     -- TODO
+deltaPrim op pvs = case checkArgs op pvs of
+    Left err  -> error err
+    Right pvs' -> PNum $ Identity $ deltaNum op n1 n2   
+        where
+        [PNum (Identity n1) , PNum (Identity n2)] = pvs'
 
 opType :: Op -> OpType
 opType = \case 
@@ -92,6 +93,41 @@ deltaBool = \case
     OpImp   -> (\x y -> not x || y)
     _       -> error "deltaBool: illegal operator" 
 
+checkArgs :: Op -> [PrimValue] -> Either String [PrimValue]
+checkArgs op pvs = if n /= m then
+    Left $ "Type Error: In primitive call to " 
+         ++ show op 
+         ++ ", expecting "
+         ++ show m
+         ++ " arguments but received " 
+         ++ show n
+         ++ "."
+    else mapM (checkArg op) $ zip (zip pvs pts) [1..]
+    where
+    m   = length pts
+    n   = length pvs
+    pts = argType . opType $ op  
+
+-- Op and Int are needed for error message only
+checkArg :: Op -> ((PrimValue,PrimType),Int) -> Either String PrimValue 
+checkArg op ((pv,pt),n)
+    | typeOf pv == pt   = Right pv
+    | otherwise         = 
+        Left $ "Type Error: In primitive call to " 
+             ++ show op
+             ++ ", argument n. "
+             ++ show n
+             ++ " is expected to be of type "
+             ++ show pt
+             ++ " but is of type "
+             ++ show (typeOf pv)
+             ++ "."
+    
+typeOf :: PrimValue -> PrimType
+typeOf = \case
+    PNum _  -> tNum
+    PBool _ -> tBool
+
 add :: Op
 add = OpAdd
 
@@ -108,4 +144,4 @@ tNum :: PrimType
 tNum = PNum (Const ())
 
 tBool :: PrimType
-tBool = PNum (Const ())
+tBool = PBool (Const ())
