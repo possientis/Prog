@@ -1,0 +1,21 @@
+\begin{defin}\label{Adj:def:unit}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat and \Dat\ 
+    are categories. We say that a natural transformation 
+    $\eta:I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$ \ifand\ 
+    it satisfies the following property: for all $c\in\Cat$, 
+    $d\in\Dat$ and $f:c\to G(d)$, there exists unique  
+    $g:F(c) \to d$ such that $f = G(g) \circ \eta_{c}$.
+\end{defin}
+
+\noindent
+{\bf Remark}: The equality $f = G(g) \circ \eta_{c}$ can be visualized as
+the diagram:
+    \[
+        \begin{tikzcd}
+            c \arrow[rd,swap, "f"]\arrow[r,"\eta_{c}"] 
+            &G(\,F(c)\,)\arrow[d,"G(\,g\,)"]\\
+            & G(\,d\,)
+        \end{tikzcd}
+    \]
+
+

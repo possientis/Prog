@@ -9,6 +9,7 @@ import Value
 import Syntax
 import Interpret
 
+import Prelude          hiding (and, or)
 import Test.Hspec
 import Test.QuickCheck
 
@@ -20,6 +21,9 @@ specEval = describe "Checking the Eval module ..." $ do
     specEOpMul
     specEOpSub
     specEOpDiv
+    specEOpAnd
+    specEOpOr
+    specEOpImp
     specEIfZero
     specEIfNZero
     specEApp
@@ -50,6 +54,18 @@ specEOpSub = it "Checked eval for n - m" $ do
 specEOpDiv :: Spec 
 specEOpDiv = it "Checked eval for n `div` m" $ do
     property $ propEOpDiv
+
+specEOpAnd :: Spec 
+specEOpAnd = it "Checked eval for b and b'" $ do
+    property $ propEOpAnd
+
+specEOpOr :: Spec 
+specEOpOr = it "Checked eval for b or b'" $ do
+    property $ propEOpOr
+
+specEOpImp :: Spec 
+specEOpImp = it "Checked eval for b imp b'" $ do
+    property $ propEOpImp
 
 specEIfZero :: Spec
 specEIfZero = it "Checked eval for if 0 n m" $ do
@@ -82,17 +98,26 @@ propEBool :: Bool -> Bool
 propEBool b = bool (eval (eBool b)) == Just b 
 
 propEOpAdd :: Integer -> Integer -> Bool
-propEOpAdd n m = num (eval (eOp add [(eNum n),(eNum m)])) == Just (n + m)
+propEOpAdd n m = num (eval (eOp oAdd [(eNum n),(eNum m)])) == Just (n + m)
  
 propEOpMul :: Integer -> Integer -> Bool
-propEOpMul n m = num (eval (eOp mul [(eNum n),(eNum m)])) == Just (n * m)
+propEOpMul n m = num (eval (eOp oMul [(eNum n),(eNum m)])) == Just (n * m)
 
 propEOpSub :: Integer -> Integer -> Bool
-propEOpSub n m = num (eval (eOp sub [(eNum n),(eNum m)])) == Just (n - m)
+propEOpSub n m = num (eval (eOp oSub [(eNum n),(eNum m)])) == Just (n - m)
 
 propEOpDiv :: Integer -> Integer -> Bool
 propEOpDiv n m = m == 0 || 
-    num (eval (eOp dvd [(eNum n),(eNum m)])) == Just (n `div` m)
+    num (eval (eOp oDiv [(eNum n),(eNum m)])) == Just (n `div` m)
+
+propEOpAnd :: Bool -> Bool -> Bool
+propEOpAnd n m = bool (eval (eOp oAnd [(eBool n),(eBool m)])) == Just (n && m)
+
+propEOpOr :: Bool -> Bool -> Bool
+propEOpOr n m = bool (eval (eOp oOr [(eBool n),(eBool m)])) == Just (n || m)
+
+propEOpImp :: Bool -> Bool -> Bool
+propEOpImp n m = bool (eval (eOp oImp [(eBool n),(eBool m)])) == Just (not n || m)
 
 propEIfZero :: Integer -> Integer -> Bool
 propEIfZero n m = num (eval (eIf (eNum 0) (eNum n) (eNum m))) == Just n
@@ -105,7 +130,7 @@ propEApp :: Integer -> String -> Bool
 propEApp n s = s == "" || 
     num (eval 
             (eApp 
-                (eLam s (eOp mul [(eVar s),(eVar s)]))
+                (eLam s (eOp oMul [(eVar s),(eVar s)]))
                 (eNum n))) == Just (n * n)
 
 propERec :: Integer -> String -> String -> Bool

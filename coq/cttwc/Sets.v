@@ -75,6 +75,15 @@ Proof.
     unfold elem, diff, comp, inter. intros U x y z. split; auto.
 Qed.
 
+Axiom FE : forall (a b:Type) (f g:a -> b),
+    (forall (x:a), f x = g x) -> f = g.
+
+Axiom PE : forall (p q:Prop), (p <-> q) -> p = q.
 
 
+Lemma L1 : forall (U:Type) (x y:Sets U),
+    (forall (z:U), z :: x <-> z :: y) -> x = y.
+Proof.
+    intros U x y H. apply FE. intros z. apply PE, H.
+Qed.
 

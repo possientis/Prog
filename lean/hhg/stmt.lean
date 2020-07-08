@@ -183,5 +183,21 @@ begin
       {cases H with H1 H2, apply IF_F; assumption}}
 end
 
-@[simp] lemma BigStepWhileIff : ∀ {b:BExp} {e:stmt} {s t: Env}, sorry
+@[simp] lemma BigStepWhileIff : ∀ {b:BExp} {e:stmt} {s t: Env},
+  BigStep (while b e) s t ↔
+  (b s ∧ ∃ (u:Env), BigStep e s u ∧ BigStep (while b e) u t) ∨ (¬ b s ∧ s = t) :=
+begin
+  intros b e s t, split; intros H,
+    { cases H with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+        u _ H1 H2 H3 _ _ _ H1,
+      { left, split,
+        { assumption },
+        { existsi u, split; assumption }},
+      { right, split,
+        { assumption },
+        { refl }}},
+    { cases H with H H,
+      { cases H with H1 H2, cases H2 with u H2, },
+      {}}
+end
 

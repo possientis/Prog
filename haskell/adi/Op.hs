@@ -9,10 +9,13 @@ module  Op
     (   Op
     ,   PrimValue
     ,   Prim_   (..)
-    ,   add
-    ,   mul
-    ,   sub
-    ,   dvd
+    ,   oAdd
+    ,   oMul
+    ,   oSub
+    ,   oDiv
+    ,   oAnd
+    ,   oOr
+    ,   oImp
     ,   deltaPrim
     ,   deltaBool   -- remove
     ,   deltaNum    -- remove
@@ -37,9 +40,9 @@ instance Show PrimType where
     show (PNum _)  = "Integer"
     show (PBool _) = "Bool"
 
-data OpType = OpType
-    { argType :: [PrimType]
-    , _retType ::  PrimType
+data OpData = OpData
+    { opTypes :: [PrimType]
+    , opImpl  :: [PrimValue] -> PrimValue
     }
 
 data Op = OpAdd 
@@ -60,34 +63,39 @@ instance Show Op where
         OpOr  -> "\\/"
         OpImp -> "=>"
 
--- TODO
 deltaPrim :: Op -> [PrimValue] -> PrimValue
 deltaPrim op pvs = case checkArgs op pvs of
     Left err  -> error err
-    Right pvs' -> PNum $ Identity $ deltaNum op n1 n2   
-        where
-        [PNum (Identity n1) , PNum (Identity n2)] = pvs'
+    Right pvs' -> opImpl (opData op) pvs'
 
-opType :: Op -> OpType
-opType = \case 
-    OpAdd -> OpType [tNum, tNum] tNum
-    OpMul -> OpType [tNum, tNum] tNum
-    OpSub -> OpType [tNum, tNum] tNum
-    OpDiv -> OpType [tNum, tNum] tNum
-    OpAnd -> OpType [tBool, tBool] tBool
-    OpOr  -> OpType [tBool, tBool] tBool
-    OpImp -> OpType [tBool, tBool] tBool
+opData :: Op -> OpData
+opData = \case 
+    OpAdd -> OpData [tNum, tNum]   (deltaNum OpAdd)
+    OpMul -> OpData [tNum, tNum]   (deltaNum OpMul)
+    OpSub -> OpData [tNum, tNum]   (deltaNum OpSub)
+    OpDiv -> OpData [tNum, tNum]   (deltaNum OpDiv)
+    OpAnd -> OpData [tBool, tBool] (deltaBool OpAnd)
+    OpOr  -> OpData [tBool, tBool] (deltaBool OpOr)
+    OpImp -> OpData [tBool, tBool] (deltaBool OpImp)
 
-deltaNum :: Op -> Integer -> Integer -> Integer
-deltaNum = \case
+deltaNum :: Op -> [PrimValue] -> PrimValue
+deltaNum op pvs = PNum . Identity  $ deltaNum_ op n1 n2 where
+    [PNum (Identity n1) , PNum (Identity n2)] = pvs
+    
+deltaNum_ :: Op -> Integer -> Integer -> Integer
+deltaNum_ = \case
     OpAdd   -> (+)
     OpMul   -> (*)
     OpSub   -> (-)
     OpDiv   -> div
     _       -> error "deltaNum: illegal operator"
 
-deltaBool :: Op -> Bool -> Bool -> Bool
-deltaBool = \case
+deltaBool :: Op -> [PrimValue] -> PrimValue 
+deltaBool op pvs = PBool . Identity $ deltaBool_ op b1 b2 where
+    [PBool (Identity b1) , PBool (Identity b2)] = pvs
+
+deltaBool_ :: Op -> Bool -> Bool -> Bool
+deltaBool_ = \case
     OpAnd   -> (&&)
     OpOr    -> (||)
     OpImp   -> (\x y -> not x || y)
@@ -106,7 +114,7 @@ checkArgs op pvs = if n /= m then
     where
     m   = length pts
     n   = length pvs
-    pts = argType . opType $ op  
+    pts = opTypes . opData $ op  
 
 -- Op and Int are needed for error message only
 checkArg :: Op -> ((PrimValue,PrimType),Int) -> Either String PrimValue 
@@ -128,20 +136,31 @@ typeOf = \case
     PNum _  -> tNum
     PBool _ -> tBool
 
-add :: Op
-add = OpAdd
+oAdd :: Op
+oAdd = OpAdd
 
-mul :: Op
-mul = OpMul
+oMul :: Op
+oMul = OpMul
 
-sub :: Op
-sub = OpSub
+oSub :: Op
+oSub = OpSub
 
-dvd :: Op
-dvd = OpDiv
+oDiv :: Op
+oDiv = OpDiv
+
+oAnd :: Op
+oAnd = OpAnd
+
+oImp :: Op
+oImp = OpImp
+
+oOr :: Op
+oOr = OpOr
 
 tNum :: PrimType 
 tNum = PNum (Const ())
 
 tBool :: PrimType
 tBool = PBool (Const ())
+
+

@@ -1,1 +1,11 @@
-ex: 3.4
+ex: 3.8
+Fokkinga's mutual recursion theorem
+Let F:C -> C, with initial algebra mu:F m -> m
+let a,b : C , assume product a x b exists
+let f : m -> a , g : m -> b
+let h : F (a x b) -> a , h : F (a x b) -> b
+Then we have the equivalence:
+
+<f,g> = |[ h,k ]|
+iff
+f . mu = h . F <f,g> /\ g . mu = k . F <f,g@

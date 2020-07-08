@@ -61,23 +61,6 @@ Proof.
             }
 Qed.
 
-
-(* TODO: generalize : ys == zs -> xs \\ ys = xs \\ zs *)
-(*
-Lemma diff_inter : forall (v:Type) (e:Eq v) (xs ys:list v),
-    xs \\ ys = xs \\ (xs /\ ys).
-Proof.
-    intros v e. induction xs as [|x xs IH]; intros ys.
-    - simpl. reflexivity.
-    - simpl. destruct (in_dec eqDec x ys) as [H1|H1];  
-      destruct (in_dec eqDec x (xs /\ ys)) as [H2|H2];
-      destruct (in_dec eqDec x (cons x (xs /\ ys))) as [H3|H3].
-        + admit.
-        + exfalso. apply H3. left. reflexivity.
-        +
-Show.
-*)
-
 Lemma diff_inter_comm : forall (v:Type) (e:Eq v) (xs ys zs:list v),
     (xs /\ ys) \\ zs == ((xs \\ zs) /\ ys).
 Proof.
@@ -219,6 +202,66 @@ Proof.
     - assumption.
     - intros H5. apply H4, H1. assumption.
 Qed.
+
+(* Stronger result, maybe useful for rewrite                                    *)
+Lemma diff_compat_r2 : forall (v:Type) (e:Eq v) (xs ys ys':list v),
+    ys == ys' -> xs \\ ys = xs \\ ys'.
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys ys' H; 
+    generalize H; intros [H1 H2]; simpl.
+    - reflexivity.
+    - destruct (in_dec eqDec x ys) as [H3|H3];
+      destruct (in_dec eqDec x ys') as [H4|H4].
+        + apply IH. assumption.
+        + exfalso. apply H4, H1. assumption.
+        + exfalso. apply H3, H2. assumption.
+        + rewrite (IH ys ys').
+            { reflexivity. }
+            { assumption. }
+Qed.
+
+(* TODO
+(* Even stronger yet.                                                           *)           
+Lemma diff_compat_r3 : forall (v:Type) (e:Eq v) (xs ys ys':list v),
+    (xs /\ ys) == (xs /\ ys') -> xs \\ ys = xs \\ ys'.
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys ys' H; simpl.
+    - reflexivity.
+    - generalize H. intros [H1 H2]. simpl in H1. simpl in H2.
+      destruct (in_dec eqDec x ys)  as [H3|H3];
+      destruct (in_dec eqDec x ys') as [H4|H4].
+        + apply IH. split; intros z H5; apply inter_charac in H5;
+          destruct H5 as [H5 H6]; apply inter_charac; split. 
+            { assumption. }
+            { assert (z :: cons x (xs /\ ys')) as H7.
+                { apply H1. right. apply inter_charac. split; assumption. }
+              destruct H7 as [H7|H7].
+                  { subst. assumption. }
+                  { apply inter_charac in H7. destruct H7 as [H7 H8]. assumption. }}
+            { assumption. }
+            { assert (z :: cons x (xs /\ ys)) as H7.
+                { apply H2. right. apply inter_charac. split; assumption. }
+              destruct H7 as [H7|H7].
+                  { subst. assumption. }
+                  { apply inter_charac in H7. destruct H7 as [H7 H8]. assumption. }}
+        +
+              
+
+Show.
+*)
+
+(* TODO
+Lemma diff_inter : forall (v:Type) (e:Eq v) (xs ys:list v),
+    xs \\ ys = xs \\ (xs /\ ys).
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys; simpl.
+    - reflexivity.
+    - destruct (in_dec eqDec x ys) as [H1|H1].
+        + destruct (in_dec eqDec x (cons x (xs /\ ys))) as [H2|H2].
+            {
+Show.
+*)
+
 
 Lemma diff_compat_lr : forall (v:Type) (e:Eq v) (xs xs' ys ys':list v),
     xs == xs' -> ys == ys' -> xs \\ ys == xs' \\ ys'.

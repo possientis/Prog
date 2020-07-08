@@ -189,7 +189,7 @@ Definition TVS : Prop := forall (X:Prop), X = True \/ X = False.
 (* Excluded middle                                                              *)
 Definition XM : Prop := forall (X:Prop), X \/ ~X.
 
-(* Limited propositional ominscience                                            *)
+(* Limited propositional omniscience                                            *)
 (* Tests on numbers are either satisfiable or unsatisfiable                     *)
 Definition LPO : Prop := forall (f:nat -> bool), 
     (exists n, f n = true) \/ ~(exists n, f n = true).

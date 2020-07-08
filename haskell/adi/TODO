@@ -1,5 +1,4 @@
-Op
-add and or => not (<=) (==)
+add not (<=) (==)
 add zero, suc, case to language
 Show for Expr
 Show for closure: add expr
