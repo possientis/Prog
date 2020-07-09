@@ -1,3 +1,4 @@
+-- open import Env
 def Env  : Type := string → ℕ
 
 lemma L0 : "x" ≠ "y" :=
@@ -183,7 +184,8 @@ begin
       {cases H with H1 H2, apply IF_F; assumption}}
 end
 
-@[simp] lemma BigStepWhileIff : ∀ {b:BExp} {e:stmt} {s t: Env},
+-- rhs has term which matches lhs, leaving out @[simp] to avoid potential loop
+lemma BigStepWhileIff : ∀ {b:BExp} {e:stmt} {s t: Env},
   BigStep (while b e) s t ↔
   (b s ∧ ∃ (u:Env), BigStep e s u ∧ BigStep (while b e) u t) ∨ (¬ b s ∧ s = t) :=
 begin
@@ -197,7 +199,31 @@ begin
         { assumption },
         { refl }}},
     { cases H with H H,
-      { cases H with H1 H2, cases H2 with u H2, },
-      {}}
+      { cases H with H1 H2, cases H2 with u H2, cases H2 with H2 H3,
+        constructor; assumption },
+      { cases H with H1 H2, rw H2, apply WHILE_F, rw H2 at H1, assumption}}
+end
+
+-- rhs has term which matches lhs, leaving out @[simp] to avoid potential loop
+lemma BigStepWhileTrueIff : ∀ {b:BExp} {e:stmt} {s t:Env}, b s →
+  (BigStep (while b e) s t ↔ (∃ (u:Env), BigStep e s u ∧ BigStep (while b e) u t)) :=
+begin
+  intros b e s t H1, split; intros H2,
+    { cases H2 with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+        u _ H2 H3 H4 _ _ _ H3,
+      { existsi u, split; assumption },
+      { exfalso, apply H3, assumption }},
+    { cases H2 with u H2, cases H2 with H2 H3, constructor; assumption}
+end
+
+@[simp] lemma BigStepWhileFalseIff : ∀ {b:BExp} {e:stmt} {s t:Env}, ¬ b s →
+  (BigStep (while b e) s t ↔ s = t) :=
+begin
+  intros b e s t H1, split; intros H2,
+    { cases H2 with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+       u _ H2 H3 H4,
+      { exfalso, apply H1, assumption },
+      { refl }},
+    { rw H2, apply WHILE_F, rw H2 at H1, assumption }
 end
 

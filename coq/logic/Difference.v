@@ -220,7 +220,6 @@ Proof.
             { assumption. }
 Qed.
 
-(* TODO
 (* Even stronger yet.                                                           *)           
 Lemma diff_compat_r3 : forall (v:Type) (e:Eq v) (xs ys ys':list v),
     (xs /\ ys) == (xs /\ ys') -> xs \\ ys = xs \\ ys'.
@@ -244,24 +243,25 @@ Proof.
               destruct H7 as [H7|H7].
                   { subst. assumption. }
                   { apply inter_charac in H7. destruct H7 as [H7 H8]. assumption. }}
-        +
-              
+        + exfalso. apply H4. assert (x :: (xs /\ ys')) as H5.
+            { apply H1. left. reflexivity. }
+          apply inter_charac in H5. destruct H5 as [H5 H6]. assumption.
+        + exfalso. apply H3. assert (x :: (xs /\ ys)) as H5.
+            { apply H2. left. reflexivity. }
+          apply inter_charac in H5. destruct H5 as [H5 H6]. assumption.
+        + rewrite (IH ys ys').
+            { reflexivity. }
+            { split; assumption. }
+Qed.
 
-Show.
-*)
-
-(* TODO
 Lemma diff_inter : forall (v:Type) (e:Eq v) (xs ys:list v),
     xs \\ ys = xs \\ (xs /\ ys).
 Proof.
-    intros v e. induction xs as [|x xs IH]; intros ys; simpl.
-    - reflexivity.
-    - destruct (in_dec eqDec x ys) as [H1|H1].
-        + destruct (in_dec eqDec x (cons x (xs /\ ys))) as [H2|H2].
-            {
-Show.
-*)
-
+    intros v e xs ys. apply diff_compat_r3. 
+    apply equivTrans with ((xs /\ xs) /\ ys).
+    - apply inter_compat_l. apply equivSym. apply inter_sub, equivRefl.
+    - apply inter_assoc.
+Qed.
 
 Lemma diff_compat_lr : forall (v:Type) (e:Eq v) (xs xs' ys ys':list v),
     xs == xs' -> ys == ys' -> xs \\ ys == xs' \\ ys'.
@@ -335,4 +335,3 @@ Proof.
                         { assumption. }
                         { intros H3. apply H2. right. assumption. }}}}
 Qed.
-

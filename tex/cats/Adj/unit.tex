@@ -1,14 +1,14 @@
 \begin{defin}\label{Adj:def:unit}
-    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat and \Dat\ 
-    are categories. We say that a natural transformation 
-    $\eta:I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$ \ifand\ 
-    it satisfies the following property: for all $c\in\Cat$, 
-    $d\in\Dat$ and $f:c\to G(d)$, there exists unique  
-    $g:F(c) \to d$ such that $f = G(g) \circ \eta_{c}$.
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. We call {\em unit} of the typed functors $(\Cat,\Dat,F)$
+    and $(\Dat,\Cat,G)$, a natural transformation 
+    $\eta:I_{\cal C}\Rightarrow G\circ F$ such that for all 
+    $c\in\Cat$, $d\in\Dat$ and $f:c\to G(d)$, there exists 
+    unique $g:F(c) \to d$ such that $f = G(g) \circ \eta_{c}$.
 \end{defin}
 
 \noindent
-{\bf Remark}: The equality $f = G(g) \circ \eta_{c}$ can be visualized as
+{\bf Remark}: The equality $f = G(g) \circ \eta_{c}$ can be visualized with
 the diagram:
     \[
         \begin{tikzcd}
@@ -18,4 +18,19 @@ the diagram:
         \end{tikzcd}
     \]
 
+\noindent
+{\bf Remark}: Recall from definition~(\ref{Nat:def:natural}) that $\eta$ being
+a natural transformation is a statement about typed functors, not just functors. 
+The same is true of a unit. Being a unit of $F$ and $G$ viewed as functors 
+$F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ is not the same as being a unit of $F$ 
+and $G$ viewed as functor $F:\Cop\to\Dop$ and $G:\Dop\to\Cop$. It is important
+to remember which categories are being considered, hence typed functors. The
+order also matters. Being a unit of $F$ and $G$ is not the same as being a unit
+of $G$ and $F$.
+
+\begin{notation}\label{Adj:notation:unit}
+    Whenever the categories \Cat\ and \Dat\ are clearly undertood from the 
+    context, we shall simply say that $\eta$ {\em is a unit of} the
+    ordered pair $(F,G)$.
+\end{notation}
 

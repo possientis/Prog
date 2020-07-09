@@ -30,16 +30,6 @@ Fixpoint free (p:Formula) : list nat :=
     | All n p   => remove (eq_nat_dec) n (free p)
     end.  
 
-(* The substitution f is valid, i.e. does not give rise to variable capture.    *)
-Inductive Valid (f:nat -> nat) : Formula -> Prop :=
-| VBot  : Valid f Bot
-| VElem : forall (n m:nat), Valid f (Elem n m)
-| VImp  : forall (p q:Formula), Valid f p -> Valid f q -> Valid f (Imp p q)
-| VAll  : forall (n:nat) (p:Formula), Valid f p           -> 
-    (forall (m:nat), In m (free (All n p)) -> f n <> f m) ->
-        Valid f (All n p) 
-.
-
 Definition Not (p:Formula)          :Formula := Imp p Bot.
 Definition Or  (p q:Formula)        :Formula := Imp (Not p) q.
 Definition And (p q:Formula)        :Formula := Not (Or (Not p) (Not q)).

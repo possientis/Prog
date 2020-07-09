@@ -16,6 +16,7 @@ specCoincide = describe "Testing properties of coincide..." $ do
     testCoincideIncl
     testCoincideCons
     testCoincideApp
+    testCoincideApp'
 
 testCoincideMap :: Spec
 testCoincideMap = it "Checked coincide map property" $
@@ -33,6 +34,10 @@ testCoincideApp :: Spec
 testCoincideApp = it "Checked coincide app property" $ 
     property $ propCoincideApp
 
+testCoincideApp' :: Spec
+testCoincideApp' = it "Checked coincide app' property" $ 
+    property $ propCoincideApp'
+
 propCoincideMap :: (Var -> Var) -> (Var -> Var) -> [Var] -> Bool
 propCoincideMap f g xs = (not $ coincide xs f g) || map f xs == map g xs
 
@@ -48,5 +53,7 @@ propCoincideApp :: (Var -> Var) -> (Var -> Var) -> [Var] -> [Var] -> Bool
 propCoincideApp f g xs ys = (not $ coincide xs f g) || (not $ coincide ys f g) ||
     coincide (xs ++ ys) f g
 
-
+propCoincideApp' :: (Var -> Var) -> (Var -> Var) -> [Var] -> [Var] -> Bool
+propCoincideApp' f g xs ys = (not $ coincide (xs ++ ys) f g) ||
+    (coincide xs f g && coincide ys f g)
 

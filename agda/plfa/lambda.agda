@@ -1,4 +1,4 @@
-open import Relation.Binary.PropositionalEquality.Core using (_≡_;_≢_;refl)
+open import Relation.Binary.PropositionalEquality.Core using (_≡_; _≢_; refl; subst)
 open import Data.String                                using (String; _≟_) -- \?=
 open import Data.Nat                                   using (ℕ; zero; suc)
 open import Data.Empty                                 using (⊥; ⊥-elim)
@@ -6,6 +6,7 @@ open import Relation.Nullary                           using (Dec; yes; no; ¬_)
 open import Data.List                                  using (List; _∷_; [])
 open import Data.Bool                                  using (Bool; true; false)
 open import Data.Product                               using (∃; ∃-syntax; _×_)
+open import Data.Product                               using () renaming (_,_ to ⟨_,_⟩)
 
 Id : Set
 Id = String
@@ -362,13 +363,13 @@ Deterministic {a} r = ∀ (x y y' : a) → r x y → r x y' → y ≡ y'
 
 -- Reflexive, transitive closure of a relation r on a
 data Closure {a : Set} (r : a → a → Set) : a → a → Set where
-  cloRef   : ∀ {x : a} → Closure r x x
+  cloRefl   : ∀ {x : a} → Closure r x x
   cloStep  : ∀ {x y z : a} → r x y → Closure r y z → Closure r x z
 
--- The Reflexive, transitive closure is indeed a transitive relation
+-- The reflexive, transitive closure is indeed a transitive relation
 ClosureTrans : ∀ {a : Set} {r : a → a → Set} {x y z : a} →
   Closure r x y → Closure r y z → Closure r x z
-ClosureTrans cloRef q = q
+ClosureTrans cloRefl q = q
 ClosureTrans (cloStep p q) r = cloStep p (ClosureTrans q r)
 
 -- Predicate for relation which has the 'diamond' property
@@ -387,5 +388,12 @@ Confluent {a} r = ∀ {x y z : a}
     ---------------------
   → ∃[ t ] (r y t × r z t)
 
+-- A Deterministic relation has the diamond property
 Deterministic→Diamond : ∀ {a : Set} {r : a → a → Set} → Deterministic r → Diamond r
-Deterministic→Diamond {a} {r} p x y z H1 H2 = {!!} 
+Deterministic→Diamond {a} {r} p x y z H1 H2
+  = ⟨ y , ⟨ cloRefl , subst (Closure r z) (p x z y H2 H1) cloRefl ⟩ ⟩
+
+-- The reflexive, transitive closure of relation with diamond property is confluent
+Diamond-Confluent : ∀ {a : Set} {r : a → a → Set} →
+  Diamond r → Confluent (Closure r)
+Diamond-Confluent {a} {r} p = {!!}

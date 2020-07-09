@@ -1,7 +1,7 @@
-Require Import List.
-Require Import Peano_dec.
-Require Import PeanoNat.
 Import Nat.
+Require Import List.
+Require Import PeanoNat.
+Require Import Peano_dec.
 
 Require Import Utils.LEM.
 Require Import Utils.Nat.
@@ -197,27 +197,14 @@ Proof.
 Qed.
 
 (*
-(* TODO: conjecture                                                             *)
 Lemma evalFmap : forall (e:Env) (f:nat -> nat) (p:Formula), Valid f p -> 
     eval (cmap f e) p <-> eval e (fmap f p).
 Proof.
-    intros e f p. revert p f e.
-    induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1];
-    intros f e H; simpl.
-    - split; auto.
-    - split; auto.
-    - revert IH1 IH2. 
-      remember (Imp p1 p2) as p eqn:E. revert E. revert p1 p2. 
-      destruct H as [|n m|q1 q2 H1 H2|n p H1 H2]; intros p1 p2 H;
-      inversion H. subst. clear H. intros IH1 IH2. rewrite IH1, IH2.
-        + split; auto.
-        + assumption.
-        + assumption.
-    - revert IH1. remember (All x p1) as p eqn:E. revert E. revert x p1.
-      destruct H as [|n m|q1 q2 H1 H2|n q1 H1 H2]; intros x p1 H;
-      inversion H. subst. clear H. intros IH1. split; intros H3 y.
-        + rewrite <- IH1.
-            { 
+    intros e f p. revert p f e. induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1];
+    intros f e V.
+    - simpl. split; auto.
+    - unfold cmap. simpl. split; auto.
+    - simpl. 
 
 Show.
 *)

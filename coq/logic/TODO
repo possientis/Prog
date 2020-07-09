@@ -1,9 +1,7 @@
 Coq:
-Difference
-BetaValid
+Proposition 379
 
 Haskell:
-coincide_app'
 betaValid_coincide_gen
 betaValid_coincide
 betaValid_subst_gen
@@ -13,6 +11,10 @@ inter_distrib_app_l
 diff_append
 diff_inter_com (change test from <= to ==)
 diff_inter_assoc
+diff_compat_r (review, still ok?)
+diff_compat_r2
+diff_compat_r3
+diff_inter
 equivConsCompat
 
 

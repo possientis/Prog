@@ -49,6 +49,7 @@ all :							${UTILS}/LEM.vo \
 								${NORM}/Insert.vo \
 								${NORM}/Normal.vo \
 								${LANG1}/Syntax.vo \
+								${LANG1}/Valid.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
 								${LANG1}/Relevance.vo \
@@ -452,6 +453,11 @@ ${NORM}/Normal.vo :				${NORM}/Normal.v \
 ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
 								${UTILS}/Fresh.vo
 	coqc ${LANG1}/Syntax.v		${OPT} 
+
+
+${LANG1}/Valid.vo :				${LANG1}/Valid.v \
+								${LANG1}/Syntax.vo
+	coqc ${LANG1}/Valid.v		${OPT} 
 
 
 ${LANG1}/Environment.vo :		${LANG1}/Environment.v \

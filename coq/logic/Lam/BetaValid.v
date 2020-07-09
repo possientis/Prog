@@ -256,7 +256,8 @@ Proof.
     apply betaValid_subst_gen. assumption.
 Qed.
 
-(*
+(* Beta-validity of f for t on xs and ys are equivalent, provided xs and ys     *)
+(* contain the same free variables of t.                                        *)
 Lemma betaValid_support : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v),
     (Fr t /\ xs) == (Fr t /\ ys) ->
@@ -307,8 +308,13 @@ Proof.
             { rewrite Y. apply diff_inter_comm. }
           assumption. }
       assert (Fr (Lam x t1) \\ xs == Fr (Lam x t1) \\ ys) as H6.
-            {
-(*
+            { remember (Fr (Lam x t1) \\ (Fr (Lam x t1) /\ xs)) as xs' eqn:X.
+              remember (Fr (Lam x t1) \\ (Fr (Lam x t1) /\ ys)) as ys' eqn:Y.
+              apply (equivCompatLR v xs' ys').
+                { rewrite X. rewrite diff_inter. apply equivRefl. }
+                { rewrite Y. rewrite diff_inter. apply equivRefl. }
+              rewrite X, Y. clear X Y xs' ys'. 
+              apply diff_compat_r. assumption. }
       destruct H6 as [H6 H7].
       split; intros H3; apply betaValid_lam_gen in H3; destruct H3 as [H3 H4];
       apply betaValid_lam_gen; split.
@@ -318,6 +324,5 @@ Proof.
             { apply equivSym. assumption. }
             { assumption. }
           + intros u H5. apply H4. apply H6. assumption.
-*)
-Show.
-*)
+Qed.
+

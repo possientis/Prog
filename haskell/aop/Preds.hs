@@ -21,9 +21,11 @@ module  Preds
     ,   product
     ,   fact1
     ,   fact
+    ,   even
+    ,   odd
     )   where
 
-import Prelude                  hiding (sum, product)
+import Prelude                  hiding (sum, product, even, odd)
 import Data.Functor.Foldable
 
 data NatF a = Zero | Suc a
@@ -95,8 +97,8 @@ prod = f . unNat where
 
 product :: [Nat] -> Nat
 product = cata $ \case
-    Nil           -> one
-    (Cons n m)    -> prod n m 
+    Nil         -> one
+    (Cons n m)  -> prod n m 
 
 fact1 :: Nat -> Nat 
 fact1 = product . preds
@@ -104,6 +106,17 @@ fact1 = product . preds
 fact :: Nat -> Nat
 fact = fst . f . unNat where
     f = cata $ \case
-        Zero      -> (one, one)
-        Suc (x,n) -> (prod x n, suc n)
+        Zero        -> (one, one)
+        Suc (x,n)   -> (prod x n, suc n)
 
+evenodd :: Nat -> (Bool,Bool)
+evenodd = f . unNat where
+    f = cata $ \case 
+        Zero        -> (True,False)
+        Suc (b,b')  -> (b',b) 
+
+even :: Nat -> Bool
+even = fst . evenodd
+
+odd :: Nat -> Bool
+odd = snd . evenodd
