@@ -1,7 +1,8 @@
-f: Nat -> a
-f (0) = a0
-f (S n) = h (n)
-has a solution, why ?
+problem linked to 3.4 ?
+a : set, a_0 : a, h : N x a -> a
+solve:
+f(0) = a_0
+f(S n) = h (n, f n)
 
 ex: 3.8
 Fokkinga's mutual recursion theorem

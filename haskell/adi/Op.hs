@@ -16,6 +16,9 @@ module  Op
     ,   oAnd
     ,   oOr
     ,   oImp
+    ,   oNot
+    ,   oLe
+    ,   oEq
     ,   deltaPrim
     ,   deltaBool   -- remove
     ,   deltaNum    -- remove
@@ -52,6 +55,9 @@ data Op = OpAdd
         | OpAnd
         | OpOr
         | OpImp 
+        | OpNot
+        | OpLe
+        | OpEq
 
 instance Show Op where
    show = \case
@@ -62,6 +68,9 @@ instance Show Op where
         OpAnd -> "/\\"
         OpOr  -> "\\/"
         OpImp -> "=>"
+        OpNot -> "¬"
+        OpLe  -> "<="
+        OpEq  -> "=="
 
 deltaPrim :: Op -> [PrimValue] -> PrimValue
 deltaPrim op pvs = case checkArgs op pvs of
@@ -70,36 +79,32 @@ deltaPrim op pvs = case checkArgs op pvs of
 
 opData :: Op -> OpData
 opData = \case 
-    OpAdd -> OpData [tNum, tNum]   (deltaNum OpAdd)
-    OpMul -> OpData [tNum, tNum]   (deltaNum OpMul)
-    OpSub -> OpData [tNum, tNum]   (deltaNum OpSub)
-    OpDiv -> OpData [tNum, tNum]   (deltaNum OpDiv)
+    OpAdd -> OpData [tNum, tNum]   (deltaNum  OpAdd)
+    OpMul -> OpData [tNum, tNum]   (deltaNum  OpMul)
+    OpSub -> OpData [tNum, tNum]   (deltaNum  OpSub)
+    OpDiv -> OpData [tNum, tNum]   (deltaNum  OpDiv)
     OpAnd -> OpData [tBool, tBool] (deltaBool OpAnd)
     OpOr  -> OpData [tBool, tBool] (deltaBool OpOr)
     OpImp -> OpData [tBool, tBool] (deltaBool OpImp)
+    OpNot -> OpData [tBool]        (deltaNot  OpNot)
+    OpLe  -> OpData [tNum, tNum]   (deltaComp OpLe)
+    OpEq  -> OpData [tNum, tNum]   (deltaComp OpEq)
 
 deltaNum :: Op -> [PrimValue] -> PrimValue
 deltaNum op pvs = PNum . Identity  $ deltaNum_ op n1 n2 where
     [PNum (Identity n1) , PNum (Identity n2)] = pvs
     
-deltaNum_ :: Op -> Integer -> Integer -> Integer
-deltaNum_ = \case
-    OpAdd   -> (+)
-    OpMul   -> (*)
-    OpSub   -> (-)
-    OpDiv   -> div
-    _       -> error "deltaNum: illegal operator"
-
 deltaBool :: Op -> [PrimValue] -> PrimValue 
 deltaBool op pvs = PBool . Identity $ deltaBool_ op b1 b2 where
     [PBool (Identity b1) , PBool (Identity b2)] = pvs
 
-deltaBool_ :: Op -> Bool -> Bool -> Bool
-deltaBool_ = \case
-    OpAnd   -> (&&)
-    OpOr    -> (||)
-    OpImp   -> (\x y -> not x || y)
-    _       -> error "deltaBool: illegal operator" 
+deltaNot :: Op -> [PrimValue] -> PrimValue
+deltaNot op pvs = PBool . Identity $ deltaNot_ op b where
+    [PBool (Identity b)] = pvs
+
+deltaComp :: Op -> [PrimValue] -> PrimValue
+deltaComp op pvs = PBool . Identity $ deltaComp_ op n1 n2 where
+    [PNum (Identity n1) , PNum (Identity n2)] = pvs
 
 checkArgs :: Op -> [PrimValue] -> Either String [PrimValue]
 checkArgs op pvs = if n /= m then
@@ -130,11 +135,43 @@ checkArg op ((pv,pt),n)
              ++ " but is of type "
              ++ show (typeOf pv)
              ++ "."
-    
+
+deltaNum_ :: Op -> Integer -> Integer -> Integer
+deltaNum_ = \case
+    OpAdd   -> (+)
+    OpMul   -> (*)
+    OpSub   -> (-)
+    OpDiv   -> div
+    _       -> error "deltaNum: illegal operator"
+
+deltaBool_ :: Op -> Bool -> Bool -> Bool
+deltaBool_ = \case
+    OpAnd   -> (&&)
+    OpOr    -> (||)
+    OpImp   -> (\x y -> not x || y)
+    _       -> error "deltaBool: illegal operator" 
+
+deltaNot_ :: Op -> Bool -> Bool
+deltaNot_ = \case
+    OpNot   -> not
+    _       -> error "deltaNot: illegal operator"
+
+deltaComp_ :: Op -> Integer -> Integer -> Bool
+deltaComp_ = \case
+    OpLe    -> (<=)
+    OpEq    -> (==)
+    _       -> error "deltaComp: illegal operator"
+
 typeOf :: PrimValue -> PrimType
 typeOf = \case
     PNum _  -> tNum
     PBool _ -> tBool
+
+tNum :: PrimType 
+tNum = PNum (Const ())
+
+tBool :: PrimType
+tBool = PBool (Const ())
 
 oAdd :: Op
 oAdd = OpAdd
@@ -157,10 +194,11 @@ oImp = OpImp
 oOr :: Op
 oOr = OpOr
 
-tNum :: PrimType 
-tNum = PNum (Const ())
+oNot :: Op
+oNot = OpNot
 
-tBool :: PrimType
-tBool = PBool (Const ())
+oLe :: Op
+oLe = OpLe
 
-
+oEq :: Op
+oEq = OpEq

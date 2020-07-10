@@ -188,6 +188,19 @@ Proof.
         + apply H1. assumption.
 Qed.
 
+(* Stronger result, useful for rewrite.                                         *)
+Lemma inter_sub' : forall (v:Type) (e:Eq v) (xs ys:list v),
+    xs <= ys -> (xs /\ ys) = xs.
+Proof.
+    intros v e. induction xs as [|x xs IH]; intros ys H.
+    - reflexivity.
+    - simpl. destruct (in_dec eqDec x ys) as [H1|H1].
+        + rewrite IH.
+            { reflexivity. }
+            { intros z H2. apply H. right. assumption. }
+        + exfalso. apply H1, H. left. reflexivity.
+Qed.
+
 Lemma inter_sub_equiv : forall (v:Type) (e:Eq v) (xs ys zs zs':list v),
     zs' <= zs -> 
     (zs /\ xs)  == (zs /\ ys) -> 

@@ -1,5 +1,5 @@
-add not (<=) (==)
-add zero, suc, case to language
+Interpret (zero, suc)
+add case Nat to language
 Show for Expr
 Show for closure: add expr
 rewrite eval_ with cata?

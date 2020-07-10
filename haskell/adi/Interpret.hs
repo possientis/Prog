@@ -37,6 +37,8 @@ eval_ = \case
     Fix (ELam x e)      -> evalLam x e
     Fix (EApp e1 e2)    -> evalApp e1 e2  
     Fix (ERec f e)      -> evalRec f e
+    Fix (EZero)         -> evalZero
+    Fix (ESuc e)        -> evalSuc e
 
 evalNum :: Integer -> (Expr -> Eval Value) -> Eval Value
 evalNum n _ev = return $ mkNum n
@@ -87,3 +89,9 @@ evalRec f e ev = do
     v <- localEnv env' (ev e)
     write addr v
     return v
+
+evalZero :: (Expr -> Eval Value) -> Eval Value
+evalZero _ev = undefined
+
+evalSuc :: Expr -> (Expr -> Eval Value) -> Eval Value
+evalSuc = undefined

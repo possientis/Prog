@@ -16,6 +16,7 @@ Require Import Core.Empty.
 Require Import Core.ElemIncl.
 Require Import Core.Foundation.
 
+Require Import Lang1.Valid.
 Require Import Lang1.Syntax.
 Require Import Lang1.Environment.
 
@@ -196,7 +197,6 @@ Proof.
     - assumption.
 Qed.
 
-(*
 Lemma evalFmap : forall (e:Env) (f:nat -> nat) (p:Formula), Valid f p -> 
     eval (cmap f e) p <-> eval e (fmap f p).
 Proof.
@@ -204,7 +204,12 @@ Proof.
     intros f e V.
     - simpl. split; auto.
     - unfold cmap. simpl. split; auto.
-    - simpl. 
+    - simpl.  apply ValidImp in V. destruct V as [V1 V2].
+      rewrite IH1, IH2.
+        + split; auto.
+        + assumption.
+        + assumption.
+    - simpl. apply ValidAll in V. destruct V as [V1 V2]. split; intros H1 x.
 
 Show.
-*)
+

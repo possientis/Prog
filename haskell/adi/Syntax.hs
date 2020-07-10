@@ -12,6 +12,8 @@ module  Syntax
     ,   eLam
     ,   eApp
     ,   eRec
+    ,   eZero
+    ,   eSuc
     )   where
 
 import Data.Functor.Foldable
@@ -28,6 +30,8 @@ data ExprF a
     | ELam  Var a
     | EApp  a a
     | ERec  Var a
+    | EZero         -- inductive type Nat
+    | ESuc a
     deriving (Functor)
 
 type Expr = Fix ExprF
@@ -55,3 +59,9 @@ eApp e1 e2 = Fix $ EApp e1 e2
 
 eRec :: String -> Expr -> Expr
 eRec f e = Fix $ ERec (mkVar f) e
+
+eZero :: Expr
+eZero = Fix $ EZero
+
+eSuc :: Expr -> Expr
+eSuc e1 = Fix $ ESuc e1

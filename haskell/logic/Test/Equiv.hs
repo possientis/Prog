@@ -15,6 +15,8 @@ specEquiv = describe "Testing properties of Equiv..." $ do
     testEquivSym
     testEquivTrans
     testEquivNilIsNil
+    testEquivConsCompat
+    testEquivCompatLR
     
 testEquivRefl :: Spec
 testEquivRefl = it "Checked reflexivity of Equiv" $ do
@@ -33,6 +35,13 @@ testEquivNilIsNil :: Spec
 testEquivNilIsNil = it "Checked NilIsNil property of Equiv" $ do
     property $ propEquivNilIsNil
 
+testEquivConsCompat :: Spec
+testEquivConsCompat = it "Checked the equiv compatibility of cons" $ do
+    property $ propEquivConsCompat
+
+testEquivCompatLR :: Spec
+testEquivCompatLR = it "Checked the left-right equiv compatibility of equiv" $ do
+    property $ propEquivCompatLR
 
 propEquivRefl :: [Var] -> Bool
 propEquivRefl xs = xs === xs 
@@ -46,5 +55,9 @@ propEquivTrans xs ys zs = xs /== ys || ys /== zs || xs === zs
 propEquivNilIsNil :: [Var] -> Bool
 propEquivNilIsNil xs = xs /== [] || xs == [] 
 
+propEquivConsCompat :: Var -> [Var] -> [Var] -> Bool
+propEquivConsCompat x xs ys = xs /== ys || (x : xs) === (x : ys)
 
+propEquivCompatLR :: [Var] -> [Var] -> [Var] -> [Var] -> Bool
+propEquivCompatLR xs' ys' xs ys = xs /== xs' || ys /== ys' || xs === ys
 

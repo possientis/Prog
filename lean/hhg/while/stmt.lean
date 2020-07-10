@@ -1,5 +1,5 @@
--- open import Env
-def Env  : Type := string → ℕ
+import Env
+--def Env  : Type := string → ℕ
 
 lemma L0 : "x" ≠ "y" :=
 begin

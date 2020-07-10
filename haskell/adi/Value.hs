@@ -6,8 +6,10 @@ module  Value
     ,   mkNum
     ,   mkBool
     ,   mkClo
+    ,   mkNat
     ,   num
     ,   bool
+    ,   nat
     ,   closure
     ,   delta
     )   where
@@ -25,6 +27,7 @@ data Value
     | Num  Integer
     | Bool Bool
     | Clo  Closure
+    | Nat Integer
 
 instance Show Value where
     show = \case 
@@ -32,18 +35,23 @@ instance Show Value where
         Num  n  -> show n
         Bool b  -> show b
         Clo  c  -> show c
+        Nat  n  -> show n
 
-mkNil :: Value 
-mkNil = Nil
+delta :: Op -> [Value] -> Value
+delta op args = case checkArgs args of
+    Left err    -> error $ "Error: " ++ show op ++ ": " ++ err
+    Right pvs   -> mkValue $ deltaPrim op pvs
 
-mkNum :: Integer -> Value
-mkNum = Num
+checkArgs :: [Value] -> Either String [PrimValue]
+checkArgs = mapM checkArg
 
-mkBool :: Bool -> Value
-mkBool = Bool
-
-mkClo :: Var -> Expr -> Env -> Value
-mkClo x e env = Clo $ mkClosure x e env
+checkArg :: Value -> Either String PrimValue
+checkArg v = case v of
+    Nil     -> Left $ "Nil argument encountered in primitive call"
+    Clo c   -> Left $ "Closure encountered in primitive call: " ++ show c
+    Num n   -> Right . PNum  . Identity $ n
+    Bool b  -> Right . PBool . Identity $ b
+    Nat  n  -> Left $ "Nat encountered in primitive call: " ++ show n
 
 mkValue :: PrimValue -> Value
 mkValue = \case
@@ -60,23 +68,31 @@ bool = \case
     Bool b  -> Just b
     _       -> Nothing
 
+nat :: Value -> Maybe Integer
+nat = \case
+    Nat n   -> Just n
+    _       -> Nothing
+
 closure :: Value -> Maybe Closure
 closure = \case
     Clo c   -> Just c
     _       -> Nothing
 
-delta :: Op -> [Value] -> Value
-delta op args = case checkArgs args of
-    Left err    -> error $ "Error: " ++ show op ++ ": " ++ err
-    Right pvs   -> mkValue $ deltaPrim op pvs
+mkNil :: Value 
+mkNil = Nil
 
-checkArgs :: [Value] -> Either String [PrimValue]
-checkArgs = mapM checkArg
+mkNum :: Integer -> Value
+mkNum = Num
 
-checkArg :: Value -> Either String PrimValue
-checkArg v = case v of
-    Nil     -> Left $ "Nil argument encountered in primitive call"
-    Clo c   -> Left $ "Closure encountered in primitive call: " ++ show c
-    Num n   -> Right . PNum  . Identity $ n
-    Bool b  -> Right . PBool . Identity $ b
+mkBool :: Bool -> Value
+mkBool = Bool
+
+mkNat :: Integer -> Value
+mkNat n
+    | n < 0     = error "mkNat : illegal argument, cannot be negative"
+    | otherwise = Nat n
+
+mkClo :: Var -> Expr -> Env -> Value
+mkClo x e env = Clo $ mkClosure x e env
+
 

@@ -24,6 +24,9 @@ specEval = describe "Checking the Eval module ..." $ do
     specEOpAnd
     specEOpOr
     specEOpImp
+    specEOpNot
+    specEOpLe
+    specEOpEq
     specEIfZero
     specEIfNZero
     specEApp
@@ -40,32 +43,44 @@ specEBool = it "Checked eval for EBool in empty environment" $ do
     property $ propEBool
 
 specEOpAdd :: Spec 
-specEOpAdd = it "Checked eval for n + m" $ do
+specEOpAdd = it "Checked eval for (n + m)" $ do
     property $ propEOpAdd
 
 specEOpMul :: Spec 
-specEOpMul = it "Checked eval for n * m" $ do
+specEOpMul = it "Checked eval for (n * m)" $ do
     property $ propEOpMul
 
 specEOpSub :: Spec 
-specEOpSub = it "Checked eval for n - m" $ do
+specEOpSub = it "Checked eval for (n - m)" $ do
     property $ propEOpSub
 
 specEOpDiv :: Spec 
-specEOpDiv = it "Checked eval for n `div` m" $ do
+specEOpDiv = it "Checked eval for (n `div` m)" $ do
     property $ propEOpDiv
 
 specEOpAnd :: Spec 
-specEOpAnd = it "Checked eval for b and b'" $ do
+specEOpAnd = it "Checked eval for (b and b')" $ do
     property $ propEOpAnd
 
 specEOpOr :: Spec 
-specEOpOr = it "Checked eval for b or b'" $ do
+specEOpOr = it "Checked eval for (b or b')" $ do
     property $ propEOpOr
 
 specEOpImp :: Spec 
-specEOpImp = it "Checked eval for b imp b'" $ do
+specEOpImp = it "Checked eval for (b imp b')" $ do
     property $ propEOpImp
+
+specEOpNot :: Spec 
+specEOpNot = it "Checked eval for (not b)'" $ do
+    property $ propEOpNot
+
+specEOpLe :: Spec 
+specEOpLe = it "Checked eval for (n <= m)'" $ do
+    property $ propEOpLe
+
+specEOpEq :: Spec 
+specEOpEq = it "Checked eval for (n == m)'" $ do
+    property $ propEOpEq
 
 specEIfZero :: Spec
 specEIfZero = it "Checked eval for if 0 n m" $ do
@@ -118,6 +133,15 @@ propEOpOr n m = bool (eval (eOp oOr [(eBool n),(eBool m)])) == Just (n || m)
 
 propEOpImp :: Bool -> Bool -> Bool
 propEOpImp n m = bool (eval (eOp oImp [(eBool n),(eBool m)])) == Just (not n || m)
+
+propEOpNot :: Bool -> Bool
+propEOpNot n = bool (eval (eOp oNot [(eBool n)])) == Just (not n)
+
+propEOpLe :: Integer -> Integer -> Bool
+propEOpLe n m = bool (eval (eOp oLe [(eNum n), (eNum m)])) == Just (n <= m)
+
+propEOpEq :: Integer -> Integer -> Bool
+propEOpEq n m = bool (eval (eOp oEq [(eNum n), (eNum m)])) == Just (n == m)
 
 propEIfZero :: Integer -> Integer -> Bool
 propEIfZero n m = num (eval (eIf (eNum 0) (eNum n) (eNum m))) == Just n

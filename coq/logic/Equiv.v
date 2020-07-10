@@ -12,13 +12,6 @@ Notation "xs == ys" := (Equiv xs ys)
 
 Open Scope Equiv_scope.
 
-
-Lemma equivNilIsNil : forall (v:Type) (xs:list v),
-    xs == nil -> xs = nil.
-Proof.
-    intros v xs [H1 H2]. apply incl_nil. assumption.
-Qed.
-
 Lemma equivRefl : forall (v:Type) (xs:list v), xs == xs.
 Proof.
     intros v xs. split; apply incl_refl.
@@ -35,6 +28,12 @@ Lemma equivTrans : forall (v:Type) (xs ys zs:list v),
 Proof.
     intros v xs ys zs [H1 H2] [H3 H4]. split;
     apply incl_tran with ys; assumption.
+Qed.
+
+Lemma equivNilIsNil : forall (v:Type) (xs:list v),
+    xs == nil -> xs = nil.
+Proof.
+    intros v xs [H1 H2]. apply incl_nil. assumption.
 Qed.
 
 Lemma equivConsCompat : forall (v:Type) (x:v) (xs ys:list v),

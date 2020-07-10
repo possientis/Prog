@@ -50,7 +50,65 @@ Proof.
         + right. intros H3. apply H2. assumption.
 Qed.
 
+(* Counterexample                                                               *)
+Definition LEM6 : Prop := forall (a:Type) (p:a -> Prop), 
+    (forall (x:a), p x) \/ exists (x:a), ~p x.
+
+Lemma L161 : LEM1 <-> LEM6.
+Proof.
+    unfold LEM1, LEM6. split; intros H.
+    - intros a p. destruct (H (exists x, ~p x)) as [H1|H1].
+        + right. assumption.
+        + left. intros x. destruct (H (p x)) as [H2|H2].
+            { assumption. }
+            { exfalso. apply H1. exists x. assumption. }
+    - intros X. destruct (H unit (fun _ => X)) as [H1|H1].
+        + left. apply H1. exact tt.
+        + destruct H1 as [u H1]. right. assumption.
+Qed.
 
 
+(* De Morgan law for disjunction. Provable without LEM                          *)
+Definition MOR1 : Prop := forall (X Y:Prop), ~(X \/ Y) <-> ~X /\ ~Y.
 
+Lemma M1 : MOR1.
+Proof.
+    unfold MOR1. intros X Y. split; intros H.
+    - split; intros H1; apply H.
+        + left. assumption.
+        + right. assumption.
+    - destruct H as [H1 H2]. intros [H3|H3].
+        + apply H1 in H3. contradiction.
+        + apply H2 in H3. contradiction.
+Qed.
+
+(* De Morgan law for existential quantification. Provable without LEM           *)
+Definition MOR2 : Prop := forall (a:Type) (p:a -> Prop), 
+~(exists (x:a), p x) <-> forall (x:a), ~p x.
+
+Lemma M2 : MOR2.
+Proof.
+    unfold MOR2. intros a p. split; intros H.
+    - intros x H1. apply H. exists x. assumption.
+    - intros [x H1]. apply (H x). assumption.
+Qed.
+
+(* De Morgan law for conjunction: right to left. Provable without LEM           *)
+Definition MOR3RL : Prop := forall (X Y:Prop), ~X \/ ~Y -> ~(X /\ Y).
+
+Lemma M3RL : MOR3RL.
+Proof.
+    unfold MOR3RL. intros X Y [H|H] [H1 H2]; apply H; assumption.
+Qed.
+
+
+(* De Morgan law for conjunction: left to right. Provable *with* LEM            *)
+Definition MOR3LR : Prop := forall (X Y:Prop), ~(X /\ Y) -> ~X \/ ~Y.
+
+Lemma M3LR : LEM1 -> MOR3LR.
+Proof.
+    unfold LEM1, MOR3LR. intros L X Y H. destruct (L X) as [H1|H1].
+    - right. intros H2. apply H. split; assumption.
+    - left. assumption.
+Qed.
 

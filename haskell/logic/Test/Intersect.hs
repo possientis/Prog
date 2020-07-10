@@ -8,6 +8,7 @@ import Test.Hspec
 import Test.QuickCheck  hiding ((===))
 
 import Equiv
+import Include
 import Intersect
 import Variable (Var)
 
@@ -21,12 +22,15 @@ specIntersect = describe "Testing properties of intersect..." $ do
     testInterConsNotInL
     testInterConsInR
     testInterNil
+    testInterComm
+    testInterAssoc
     testInterCompatL
     testInterCompatR
     testInterCompatLR
-    testInterComm
-    testInterAssoc
-    
+    testInterSub
+    testInterSub'
+    testInterSubEquiv
+    testInterDistribAppL 
 
 testInterIntersect :: Spec
 testInterIntersect = it "Checked inter coincide with GHC 'intersect'" $
@@ -56,6 +60,14 @@ testInterNil :: Spec
 testInterNil = it "Checked xs /\\ [] == xs" $ do
     property $ propInterNil
 
+testInterComm :: Spec
+testInterComm = it "Checked commutativity of /\\" $ do
+    property $ propInterComm
+
+testInterAssoc :: Spec
+testInterAssoc = it "Checked associativity of /\\" $ do
+    property $ propInterAssoc
+
 testInterCompatL :: Spec
 testInterCompatL = it "Checked left compatibility of /\\" $ do
     property $ propInterCompatL
@@ -68,15 +80,21 @@ testInterCompatLR :: Spec
 testInterCompatLR = it "Checked left-right compatibility of /\\" $ do
     property $ propInterCompatLR
 
-testInterComm :: Spec
-testInterComm = it "Checked commutativity of /\\" $ do
-    property $ propInterComm
-
-testInterAssoc :: Spec
-testInterAssoc = it "Checked associativity of /\\" $ do
-    property $ propInterAssoc
-
+testInterSub :: Spec
+testInterSub = it "Checked the sublist property of /\\" $ do
+    property $ propInterSub 
  
+testInterSub' :: Spec
+testInterSub' = it "Checked the sublist' property of /\\" $ do
+    property $ propInterSub' 
+
+testInterSubEquiv :: Spec
+testInterSubEquiv = it "Checked the sublist equiv property of /\\" $ do
+    property $ propInterSubEquiv
+
+testInterDistribAppL :: Spec 
+testInterDistribAppL = it "Check the left-distributivity of (/\\) over (++)" $ do
+    property $ propInterDistribAppL
 
 propInterIntersect :: [Var] -> [Var] -> Bool
 propInterIntersect xs ys = xs /\ ys == intersect xs ys
@@ -115,3 +133,15 @@ propInterComm xs ys = xs /\ ys === ys /\ xs
 propInterAssoc :: [Var] -> [Var] -> [Var] -> Bool
 propInterAssoc xs ys zs = (xs /\ ys) /\ zs === xs /\ (ys /\ zs)
  
+propInterSub :: [Var] -> [Var] -> Bool
+propInterSub xs ys = not (xs <== ys) || xs /\ ys === xs 
+
+propInterSub' :: [Var] -> [Var] -> Bool
+propInterSub' xs ys = not (xs <== ys) || xs /\ ys == xs 
+
+propInterSubEquiv :: [Var] -> [Var] -> [Var] -> [Var] -> Bool
+propInterSubEquiv xs ys zs zs' = not (zs' <== zs) ||
+    (zs /\ xs) /== (zs /\ ys) || zs' /\ xs === zs' /\ ys
+
+propInterDistribAppL :: [Var] -> [Var] -> [Var] -> Bool
+propInterDistribAppL xs ys zs = zs /\ (xs ++ ys) === (zs /\ xs) ++ (zs /\ ys)

@@ -7,7 +7,6 @@ betaValid_coincide
 betaValid_subst_gen
 betaValid_subst
 betaValid_support
-inter_distrib_app_l
 diff_append
 diff_inter_com (change test from <= to ==)
 diff_inter_assoc
@@ -15,8 +14,6 @@ diff_compat_r (review, still ok?)
 diff_compat_r2
 diff_compat_r3
 diff_inter
-equivConsCompat
-
 
 Latex:
 
