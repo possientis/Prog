@@ -6,6 +6,7 @@ NORM=Normal
 OPT=-Q ${UTILS} ${UTILS} -Q ${CORE} ${CORE} -Q ${LANG1} ${LANG1} -Q ${NORM} ${NORM}
 
 all :							${UTILS}/LEM.vo \
+								${UTILS}/Composition.vo \
 								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
 								${UTILS}/Nat.vo \
@@ -69,6 +70,8 @@ all :							${UTILS}/LEM.vo \
 ${UTILS}/LEM.vo :				${UTILS}/LEM.v
 	coqc ${UTILS}/LEM.v 		${OPT}
 
+${UTILS}/Composition.vo :		${UTILS}/Composition.v
+	coqc ${UTILS}/Composition.v ${OPT}
 
 ${UTILS}/Decidable.vo :			${UTILS}/Decidable.v
 	coqc ${UTILS}/Decidable.v 	${OPT}

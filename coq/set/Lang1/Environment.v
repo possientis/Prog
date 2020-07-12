@@ -8,8 +8,6 @@ Require Import Lang1.Syntax.
 
 Definition Env : Type := nat -> set.
 
-Definition cmap (f:nat -> nat) (e:Env) : Env := (fun (n:nat) => e (f n)).
-
 Definition envEqual (e e':Env) : Prop := forall (n:nat), e n == e' n. 
 
 Lemma envEqualRefl : forall (e:Env), envEqual e e.

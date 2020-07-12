@@ -1,5 +1,6 @@
 study proof of substitution lemma page 417
-Lang1/Semantics: evalFmap
+Lang1/Substitution
+add Lang1/Substitution to Makefile
 Lang1/Specifcation : give version with fmap
 Lang1/Replacement
 axiom of choice?

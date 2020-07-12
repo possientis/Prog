@@ -112,3 +112,68 @@ Proof.
     - left. assumption.
 Qed.
 
+(* De Morgan law for universal quantification: right to left. Provable no LEM   *)
+Definition MOR4RL : Prop := forall (a:Type) (p:a -> Prop), 
+    (exists (x:a), ~ p x) -> ~ (forall (x:a), p x).
+
+Lemma M4RL : MOR4RL.
+Proof.
+    unfold MOR4RL. intros a p [x H1] H2. apply H1, H2.
+Qed.
+
+(* De Morgan law for universal quantification: left to right. Provable *with*   *)
+Definition MOR4LR : Prop := forall (a:Type) (p:a -> Prop), 
+    ~ (forall (x:a), p x) -> exists (x:a), ~ p x.
+
+Lemma M4LR : LEM1 -> MOR4LR.
+Proof.
+    unfold LEM1, MOR4LR. intros L a p H1. 
+    destruct (L (exists x, ~p x)) as [H2|H2].
+    - assumption.
+    - exfalso. apply H1. intros x. destruct (L (p x)) as [H3|H3].
+        + assumption.
+        + exfalso. apply H2. exists x. assumption.
+Qed.
+
+(* Classical implication: right to left. Provable without LEM                   *)
+Definition CIRL : Prop := forall (X Y:Prop), ~X \/ Y -> X -> Y.
+
+Lemma ClassRL : CIRL.
+Proof.
+    unfold CIRL. intros X Y. intros [H1|H1] H2.
+    - apply H1 in H2. contradiction.
+    - assumption.
+Qed.
+
+(* Classical implication: left to right. Provable *with* LEM                   *)
+Definition CILR : Prop := forall (X Y:Prop), (X -> Y) -> ~X \/ Y.
+
+
+Lemma ClassLR : LEM1 -> CILR.
+Proof.
+    unfold LEM1, CILR. intros L X Y H1. destruct (L Y) as [H2|H2].
+    - right. assumption.
+    - left. intros H3. apply H2, H1. assumption.
+Qed.
+
+(* LEM is needed for left to right.                                             *)
+Lemma EX1 : forall (a:Type) (p:a -> Prop), LEM1 -> 
+    ~(exists (x:a), ~p x) <-> forall (x:a), p x.
+Proof.
+    unfold LEM1. intros a p L. split; intros H1.
+    - intros x. destruct (L (p x)) as [H2|H2].
+        + assumption.
+        + exfalso. apply H1. exists x. assumption.
+    - intros [x H2]. apply H2, H1.
+Qed.
+
+(* LEM is needed for left to right.                                             *)
+Lemma EX2 : forall (a:Type) (p:a -> Prop), LEM1 ->
+    ~(exists (x:a), ~p x) <-> ~~forall (x:a), p x.
+Proof.
+    unfold LEM1. intros a p L. split; intros H1.
+    - intros H2. apply H2. intros x. destruct (L (p x)) as [H3|H3].
+        + assumption.
+        + exfalso. apply H1. exists x. assumption.
+    - intros [x H2]. apply H1. intros H3. apply H2, H3.
+Qed,

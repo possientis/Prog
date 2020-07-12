@@ -31,6 +31,9 @@ specEval = describe "Checking the Eval module ..." $ do
     specEIfNZero
     specEApp
     specERec
+    specEZero
+    specESuc
+    specENat
     specSum1
     specSum2
 
@@ -98,6 +101,18 @@ specERec :: Spec
 specERec = it "Checked eval for fix f = fac" $ do
     property $ propERec
 
+specEZero :: Spec
+specEZero = it "Checked eval for zero" $ do
+    property $ propEZero
+
+specESuc :: Spec
+specESuc = it "Checked eval for suc" $ do
+    property $ propESuc
+
+specENat :: Spec
+specENat = it "Checked eval for eNat" $ do
+    property $ propENat
+
 specSum1 :: Spec
 specSum1 = it "Checked eval for (\\x y -> x + y) n m" $ do
     property $ propSum1 
@@ -160,6 +175,15 @@ propEApp n s = s == "" ||
 propERec :: Integer -> String -> String -> Bool
 propERec m f n  = f == "" || n == "" || f == n || m < 0 ||
     num (eval (eApp (eFac f n) (eNum m))) == Just (product [1..m])
+
+propEZero :: Bool
+propEZero = nat (eval eZero) == Just 0
+
+propESuc :: Integer -> Bool
+propESuc n = n < 0 || nat (eval (eSuc (eNat n))) == Just (n + 1)
+
+propENat :: Integer -> Bool
+propENat n = n < 0 || nat (eval (eNat n)) == Just n
 
 propSum1 :: String -> String -> Integer -> Integer -> Bool
 propSum1 x y n m = x == "" || y == "" || x /= y ||  

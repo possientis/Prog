@@ -7,7 +7,6 @@ Require Import Utils.LEM.
 Require Import Utils.Nat.
 Require Import Utils.Fresh.
 
-
 Require Import Core.Set.
 Require Import Core.Incl.
 Require Import Core.Elem.
@@ -196,20 +195,3 @@ Proof.
     - assumption.
     - assumption.
 Qed.
-
-Lemma evalFmap : forall (e:Env) (f:nat -> nat) (p:Formula), Valid f p -> 
-    eval (cmap f e) p <-> eval e (fmap f p).
-Proof.
-    intros e f p. revert p f e. induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1];
-    intros f e V.
-    - simpl. split; auto.
-    - unfold cmap. simpl. split; auto.
-    - simpl.  apply ValidImp in V. destruct V as [V1 V2].
-      rewrite IH1, IH2.
-        + split; auto.
-        + assumption.
-        + assumption.
-    - simpl. apply ValidAll in V. destruct V as [V1 V2]. split; intros H1 x.
-
-Show.
-

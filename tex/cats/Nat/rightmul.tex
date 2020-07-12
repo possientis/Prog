@@ -1,0 +1,49 @@
+Let $T:\Bat\to\Cat$ and $F,G:\Cat\to\Dat$ be functors where \Bat, \Cat\
+and \Dat\ are categories, and let $\alpha:F\Rightarrow G$ be a natural 
+transformation. Then the situation is as follows: 
+    \[
+        \begin{tikzcd}
+            \Bat \arrow[r,"T"]
+            & \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G", bend right = 50, ""{name=D, above}]
+              & \Dat
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+        \end{tikzcd}
+    \] 
+In particular the functors $F\circ T:\Bat\to\Dat$ and $G\circ T:\Bat\to\Dat$
+are well-defined by virtue of definition~(\ref{Fun:def:composition}).
+Furthermore, since $\alpha$ is a natural transformation $\alpha:F\Rightarrow G$,
+using definition~(\ref{Nat:def:natural}), for all $a\in\Cat$ we have 
+$\alpha(a):F(a)\to G(a)$. It follows that for all $a\in\Bat$ we have 
+$\alpha (T(a)) : F(T(a))\to G(T(a))$. So the question arises as to whether
+the expression $\alpha(T(a))$ for all $a\in\Bat$ defines a natural
+transformation between $F\circ T$ and $G\circ T$. As we shall see the 
+answer is 'yes' and we shall define a new natural transformation denoted 
+$\alpha T$:
+    \[
+        \begin{tikzcd}
+            \Bat \arrow[r,"T"]
+            & \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G", bend right = 50, ""{name=D, above}]
+              & \Dat
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+        \end{tikzcd}
+        \ \to\ 
+        \begin{tikzcd}
+            \Bat \arrow[r, "F\circ T", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G\circ T", bend right = 50, ""{name=D, above}]
+              & \Dat
+            \arrow[Rightarrow, "\,\alpha T", from = U, to = D]
+        \end{tikzcd}
+    \]
+
+\begin{defin}\label{Nat:def:rightmul}
+    Let $T:\Bat\to\Cat$ and $F,G:\Cat\to\Dat$ be functors where \Bat, \Cat\
+    and \Dat\ are categories, and let $\alpha:F\Rightarrow G$ be a natural 
+    transformation. We denote $\alpha T: F\circ T\Rightarrow G\circ T$ the 
+    natural transformation defined by, given $a\in\ob\ \Bat$:
+        \[
+            (\alpha T)(a) = \alpha (T(a))
+        \]
+\end{defin}  
+

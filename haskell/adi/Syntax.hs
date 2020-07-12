@@ -14,6 +14,8 @@ module  Syntax
     ,   eRec
     ,   eZero
     ,   eSuc
+    ,   eNat
+    ,   eCase
     )   where
 
 import Data.Functor.Foldable
@@ -30,8 +32,9 @@ data ExprF a
     | ELam  Var a
     | EApp  a a
     | ERec  Var a
-    | EZero         -- inductive type Nat
-    | ESuc a
+    | EZero             -- inductive type Nat
+    | ESuc a            -- successor for Nat
+    | ECase a a Var a   -- ECase e e1 x e2 : e == zero -> e1 , e == suc x -> e2
     deriving (Functor)
 
 type Expr = Fix ExprF
@@ -65,3 +68,12 @@ eZero = Fix $ EZero
 
 eSuc :: Expr -> Expr
 eSuc e1 = Fix $ ESuc e1
+
+eCase :: Expr -> Expr -> String -> Expr -> Expr
+eCase e e1 x e2 = Fix $ ECase e e1 (mkVar x) e2 
+
+eNat :: Integer -> Expr
+eNat n
+    | n > 0   = eSuc $ eNat (n - 1)
+    | n == 0  = eZero
+    | otherwise = error "eNat: negative argument"

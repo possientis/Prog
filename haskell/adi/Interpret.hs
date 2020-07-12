@@ -29,16 +29,17 @@ eval' e = eval_ e eval'
 
 eval_ :: Expr -> (Expr -> Eval Value) -> Eval Value
 eval_ = \case 
-    Fix (ENum n)        -> evalNum n
-    Fix (EBool b)       -> evalBool b
-    Fix (EVar x)        -> evalVar x
-    Fix (EOp op es)     -> evalOp op es
-    Fix (EIf e e1 e2)   -> evalIf e e1 e2
-    Fix (ELam x e)      -> evalLam x e
-    Fix (EApp e1 e2)    -> evalApp e1 e2  
-    Fix (ERec f e)      -> evalRec f e
-    Fix (EZero)         -> evalZero
-    Fix (ESuc e)        -> evalSuc e
+    Fix (ENum n)            -> evalNum n
+    Fix (EBool b)           -> evalBool b
+    Fix (EVar x)            -> evalVar x
+    Fix (EOp op es)         -> evalOp op es
+    Fix (EIf e e1 e2)       -> evalIf e e1 e2
+    Fix (ELam x e)          -> evalLam x e
+    Fix (EApp e1 e2)        -> evalApp e1 e2  
+    Fix (ERec f e)          -> evalRec f e
+    Fix (EZero)             -> evalZero
+    Fix (ESuc e)            -> evalSuc e
+    Fix (ECase e e1 x e2)   -> evalCase e e1 x e2  
 
 evalNum :: Integer -> (Expr -> Eval Value) -> Eval Value
 evalNum n _ev = return $ mkNum n
@@ -91,7 +92,21 @@ evalRec f e ev = do
     return v
 
 evalZero :: (Expr -> Eval Value) -> Eval Value
-evalZero _ev = undefined
+evalZero _ev = return $ mkNat 0
 
 evalSuc :: Expr -> (Expr -> Eval Value) -> Eval Value
-evalSuc = undefined
+evalSuc e ev = do
+    v <- ev e
+    case nat v of
+        Nothing -> error "Suc: argument is not a Nat."
+        Just n  -> return $ mkNat (n + 1)
+
+evalCase :: Expr -> Expr -> Var -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalCase e e1 _x _e2 ev = do
+    v <- ev e
+    case nat v of
+        Nothing -> error "Case: expression does not evaluate to a Nat."
+        Just n  -> if n == 0 then ev e1 else do
+            if n < 0 then error "Case: internal error, negative Nat."
+                else do
+                    undefined

@@ -1,5 +1,5 @@
-Interpret (zero, suc)
-add case Nat to language
+Interpret: evalCase
+add test for plus and mult for nat
 Show for Expr
 Show for closure: add expr
 rewrite eval_ with cata?

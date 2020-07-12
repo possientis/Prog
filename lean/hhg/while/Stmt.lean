@@ -1,57 +1,32 @@
 import Env
---def Env  : Type := string → ℕ
-
-lemma L0 : "x" ≠ "y" :=
-begin
-  from dec_trivial  -- remember this, do not use 'cases' tactic on string
-end
-
--- Shallow embedding for arithmetic expressions. Some function Env → ℕ, not interested in syntax, semantics etc
-def AExp : Type := Env → ℕ
-
--- Shallow embedding for boolean expressions. Actually using Prop rather than bool
-def BExp : Type := Env → Prop
-
-def bindVar (x : string) (n : AExp) (s:Env) : Env :=
-  λ v, if v = x then n s else s v
+import AExp
+import BExp
 
 open list
 
-def env : list (string × ℕ) → Env
-| []        := λ s, 0
-| ((v,n) :: xs) := λ s, if s = v then n else env xs s
-
-def aNum (n : ℕ) : AExp := λ _, n
-def aVar (x : string) : AExp := λ s, s x
-def x : AExp := aVar "x"
-def y : AExp := aVar "y"
-def z : AExp := aVar "z"
-
-def aPlus  (m n : AExp) : AExp := λ s, m s + n s
-
 -- The WHILE language: deep embedding for actual language: full syntax and semantics specified
-inductive stmt : Type
-| skip    : stmt
-| assign  : string → AExp → stmt
-| seq     : stmt → stmt → stmt
-| ite     : BExp → stmt → stmt → stmt
-| while   : BExp → stmt → stmt
+inductive Stmt : Type
+| skip    : Stmt
+| assign  : string → AExp → Stmt
+| seq     : Stmt → Stmt → Stmt
+| ite     : BExp → Stmt → Stmt → Stmt
+| while   : BExp → Stmt → Stmt
 
-open stmt
+open Stmt
 
 infixr ` ;; `  : 70 := seq
 infix ` :== `  : 80 := assign
 infixl ` :+: ` : 90 := aPlus
 
 -- Big step semantics as a relation over Env
-inductive BigStep : stmt → Env → Env → Prop
+inductive BigStep : Stmt → Env → Env → Prop
 | SKIP    : ∀ (s:Env), BigStep skip s s
 | ASN     : ∀ (x:string) (a:AExp) (s:Env), BigStep (assign x a) s (bindVar x a s)
-| SEQ     : ∀ (e₁ e₂:stmt) (s u t:Env), BigStep e₁ s u → BigStep e₂ u t → BigStep (e₁ ;; e₂) s t
-| IF_T    : ∀ (p:Env → Prop) (e₁ e₂:stmt) (s t:Env), p s → BigStep e₁ s t → BigStep (ite p e₁ e₂) s t
-| IF_F    : ∀ (p:Env → Prop) (e₁ e₂:stmt) (s t:Env), ¬(p s) → BigStep e₂ s t → BigStep (ite p e₁ e₂) s t
-| WHILE_T : ∀ (p:Env → Prop) (e₁:stmt) (s u t:Env), p s → BigStep e₁ s u → BigStep (while p e₁) u t → BigStep (while p e₁) s t
-| WHILE_F : ∀ (p:Env → Prop) (e₁:stmt) (s:Env), ¬(p s) → BigStep (while p e₁) s s
+| SEQ     : ∀ (e₁ e₂:Stmt) (s u t:Env), BigStep e₁ s u → BigStep e₂ u t → BigStep (e₁ ;; e₂) s t
+| IF_T    : ∀ (p:Env → Prop) (e₁ e₂:Stmt) (s t:Env), p s → BigStep e₁ s t → BigStep (ite p e₁ e₂) s t
+| IF_F    : ∀ (p:Env → Prop) (e₁ e₂:Stmt) (s t:Env), ¬(p s) → BigStep e₂ s t → BigStep (ite p e₁ e₂) s t
+| WHILE_T : ∀ (p:Env → Prop) (e₁:Stmt) (s u t:Env), p s → BigStep e₁ s u → BigStep (while p e₁) u t → BigStep (while p e₁) s t
+| WHILE_F : ∀ (p:Env → Prop) (e₁:Stmt) (s:Env), ¬(p s) → BigStep (while p e₁) s s
 
 def s0 : Env := env [("x",3),("y",5)]
 def s1 : Env := env [("x",8),("y",5)]
@@ -81,7 +56,7 @@ end
 
 open BigStep
 
-def e1 : stmt := "x" :== (x :+: y) ;; "y" :== aNum 0
+def e1 : Stmt := "x" :== (x :+: y) ;; "y" :== aNum 0
 
 lemma L3 : BigStep e1 s0 s2 :=
 begin
@@ -90,7 +65,7 @@ begin
     {rewrite L2, constructor}
 end
 
-theorem BigStepDeterministic : ∀ (e:stmt) (s s1 s2:Env),
+theorem BigStepDeterministic : ∀ (e:Stmt) (s s1 s2:Env),
   BigStep e s s1 → BigStep e s s2 → s1 = s2 :=
 begin
   intros e s s1 s2 H1, revert s2,
@@ -125,7 +100,7 @@ begin
       {refl}},
 end
 
-lemma BigStepDoesNotTerminate : ∀ (e : stmt) (s1 s2 : Env),
+lemma BigStepDoesNotTerminate : ∀ (e : Stmt) (s1 s2 : Env),
   ¬BigStep (while (λ_, true) e) s1 s2 :=
 begin
   intros e s1 s2 H, generalize H1 : while (λ_, true) e = e1,
@@ -164,7 +139,7 @@ begin
     { rewrite H, constructor }
 end
 
-@[simp] lemma BigStepSeqIff : ∀ {e1 e2:stmt} {s t:Env},
+@[simp] lemma BigStepSeqIff : ∀ {e1 e2:Stmt} {s t:Env},
   BigStep (e1 ;; e2) s t ↔ ∃ (u:Env), BigStep e1 s u ∧ BigStep e2 u t :=
 begin
   intros e1 e2 s t, split; intros H,
@@ -172,7 +147,7 @@ begin
     {cases H with u H1, cases H1 with H1 H2, constructor; assumption}
 end
 
-@[simp] lemma BigStepIteIff : ∀ {b:BExp} {e1 e2:stmt} {s t:Env},
+@[simp] lemma BigStepIteIff : ∀ {b:BExp} {e1 e2:Stmt} {s t:Env},
   BigStep (ite b e1 e2) s t ↔ (b s ∧ BigStep e1 s t) ∨ (¬b s ∧ BigStep e2 s t) :=
 begin
   intros b e1 e2 s t, split; intros H,
@@ -185,7 +160,7 @@ begin
 end
 
 -- rhs has term which matches lhs, leaving out @[simp] to avoid potential loop
-lemma BigStepWhileIff : ∀ {b:BExp} {e:stmt} {s t: Env},
+lemma BigStepWhileIff : ∀ {b:BExp} {e:Stmt} {s t: Env},
   BigStep (while b e) s t ↔
   (b s ∧ ∃ (u:Env), BigStep e s u ∧ BigStep (while b e) u t) ∨ (¬ b s ∧ s = t) :=
 begin
@@ -205,7 +180,7 @@ begin
 end
 
 -- rhs has term which matches lhs, leaving out @[simp] to avoid potential loop
-lemma BigStepWhileTrueIff : ∀ {b:BExp} {e:stmt} {s t:Env}, b s →
+lemma BigStepWhileTrueIff : ∀ {b:BExp} {e:Stmt} {s t:Env}, b s →
   (BigStep (while b e) s t ↔ (∃ (u:Env), BigStep e s u ∧ BigStep (while b e) u t)) :=
 begin
   intros b e s t H1, split; intros H2,
@@ -216,7 +191,7 @@ begin
     { cases H2 with u H2, cases H2 with H2 H3, constructor; assumption}
 end
 
-@[simp] lemma BigStepWhileFalseIff : ∀ {b:BExp} {e:stmt} {s t:Env}, ¬ b s →
+@[simp] lemma BigStepWhileFalseIff : ∀ {b:BExp} {e:Stmt} {s t:Env}, ¬ b s →
   (BigStep (while b e) s t ↔ s = t) :=
 begin
   intros b e s t H1, split; intros H2,
