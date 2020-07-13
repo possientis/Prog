@@ -59,5 +59,6 @@ propEquivConsCompat :: Var -> [Var] -> [Var] -> Bool
 propEquivConsCompat x xs ys = xs /== ys || (x : xs) === (x : ys)
 
 propEquivCompatLR :: [Var] -> [Var] -> [Var] -> [Var] -> Bool
-propEquivCompatLR xs' ys' xs ys = xs /== xs' || ys /== ys' || xs === ys
+propEquivCompatLR xs' ys' xs ys = xs /== xs' || ys /== ys' || xs' /== ys' 
+    || xs === ys
 

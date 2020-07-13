@@ -1,12 +1,16 @@
 Require Import List.
+Require Import Peano_dec.
 
+Require Import Utils.Nat.
 Require Import Utils.Composition.
 
 Require Import Core.Set.
+Require Import Core.Equal.
 
 Require Import Lang1.Valid.
 Require Import Lang1.Syntax.
 Require Import Lang1.Semantics.
+Require Import Lang1.Relevance.
 Require Import Lang1.Environment.
 
 Local Lemma rewrite_ : forall (p p' q:set -> Prop),
@@ -19,6 +23,8 @@ Proof.
     - intros x. rewrite <- (H1 x). apply H3. assumption.
 Qed.
 
+(* Substitution lemma: provided a variable substitution is valid for a formula  *)
+(* p, i.e. does not give rise to variable capture, semantics is preserved.      *)
 Lemma Substitution : forall (e:Env) (f:nat -> nat) (p:Formula), Valid f p -> 
     eval e (fmap f p) <-> eval (e ; f) p.
 Proof.
@@ -36,7 +42,16 @@ Proof.
         + intros x. rewrite IH1.
             { split; auto. }
             { assumption. }
-        +
-
-Show.
-
+        + apply rewrite_ with (fun x => eval (bind (e;f) n x) p1).
+            { intros x. apply relevance. intros m H1. 
+              unfold bind, comp. destruct (eq_nat_dec n m) as [H2|H2].
+                { subst. destruct (eq_nat_dec (f m) (f m)) as [H3|H3].
+                    { apply equalRefl. }
+                    { exfalso. apply H3. reflexivity. }}
+                { destruct (eq_nat_dec (f n) (f m)) as [H3|H3].
+                    { exfalso. apply (V2 m). 
+                        { simpl. apply removeStill; assumption. }
+                        { assumption. }}
+                    { apply equalRefl. }}}
+            { split; auto. }
+Qed.

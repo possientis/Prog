@@ -1,32 +1,31 @@
-import Env
-import AExp
-import BExp
-
-open list
-
--- The WHILE language: deep embedding for actual language: full syntax and semantics specified
-inductive Stmt : Type
-| skip    : Stmt
-| assign  : string → AExp → Stmt
-| seq     : Stmt → Stmt → Stmt
-| ite     : BExp → Stmt → Stmt → Stmt
-| while   : BExp → Stmt → Stmt
+import Stmt
 
 open Stmt
-
-infixr ` ;; `  : 70 := seq
-infix ` :== `  : 80 := assign
-infixl ` :+: ` : 90 := aPlus
 
 -- Big step semantics as a relation over Env
 inductive BigStep : Stmt → Env → Env → Prop
 | SKIP    : ∀ (s:Env), BigStep skip s s
-| ASN     : ∀ (x:string) (a:AExp) (s:Env), BigStep (assign x a) s (bindVar x a s)
-| SEQ     : ∀ (e₁ e₂:Stmt) (s u t:Env), BigStep e₁ s u → BigStep e₂ u t → BigStep (e₁ ;; e₂) s t
-| IF_T    : ∀ (p:Env → Prop) (e₁ e₂:Stmt) (s t:Env), p s → BigStep e₁ s t → BigStep (ite p e₁ e₂) s t
-| IF_F    : ∀ (p:Env → Prop) (e₁ e₂:Stmt) (s t:Env), ¬(p s) → BigStep e₂ s t → BigStep (ite p e₁ e₂) s t
-| WHILE_T : ∀ (p:Env → Prop) (e₁:Stmt) (s u t:Env), p s → BigStep e₁ s u → BigStep (while p e₁) u t → BigStep (while p e₁) s t
-| WHILE_F : ∀ (p:Env → Prop) (e₁:Stmt) (s:Env), ¬(p s) → BigStep (while p e₁) s s
+| ASN     : ∀ (x:string) (a:AExp) (s:Env), BigStep (x :== a) s (bindVar x a s)
+| SEQ     : ∀ (e₁ e₂:Stmt) (s u t:Env),
+    BigStep e₁ s u →
+    BigStep e₂ u t →
+    BigStep (e₁ ;; e₂) s t
+| IF_T    : ∀ (b:BExp) (e₁ e₂:Stmt) (s t:Env),
+    b s →
+    BigStep e₁ s t
+    → BigStep (ite b e₁ e₂) s t
+| IF_F    : ∀ (b:BExp) (e₁ e₂:Stmt) (s t:Env),
+    ¬(b s) →
+    BigStep e₂ s t →
+    BigStep (ite b e₁ e₂) s t
+| WHILE_T : ∀ (b:BExp) (e₁:Stmt) (s u t:Env),
+    b s →
+    BigStep e₁ s u →
+    BigStep (while b e₁) u t →
+    BigStep (while b e₁) s t
+| WHILE_F : ∀ (b:BExp) (e₁:Stmt) (s:Env),
+    ¬(b s) →
+    BigStep (while b e₁) s s
 
 def s0 : Env := env [("x",3),("y",5)]
 def s1 : Env := env [("x",8),("y",5)]
@@ -99,7 +98,6 @@ begin
       {exfalso, apply H1, assumption},
       {refl}},
 end
-
 lemma BigStepDoesNotTerminate : ∀ (e : Stmt) (s1 s2 : Env),
   ¬BigStep (while (λ_, true) e) s1 s2 :=
 begin

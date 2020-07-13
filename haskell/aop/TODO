@@ -1,15 +1,1 @@
-problem linked to 3.4 ?
-a : set, a_0 : a, h : N x a -> a
-solve:
-f(0) = a_0
-f(S n) = h (n, f n)
-
-ex: 3.8
-Fokkinga's mutual recursion theorem
-Let F:C -> C, with initial algebra mu:F m -> m
-let a,b : C , assume product a x b exists
-let h : F (a x b) -> a , k : F (a x b) -> b
-let f : m -> a , g : m -> b
-
-Then we have the equivalence:
-<f,g> = |[ <h,k> ]| <-> f . mu = h . F <f,g> /\ g . mu = k . F <f,g>
+initial type again

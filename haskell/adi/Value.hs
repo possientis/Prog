@@ -6,12 +6,16 @@ module  Value
     ,   mkNum
     ,   mkBool
     ,   mkClo
-    ,   mkNat
+    ,   mkZero
+    ,   mkSuc
     ,   num
     ,   bool
-    ,   nat
     ,   closure
     ,   delta
+    ,   isZero
+    ,   suc
+    ,   toInt
+    ,   nat
     )   where
 
 import Op
@@ -27,15 +31,17 @@ data Value
     | Num  Integer
     | Bool Bool
     | Clo  Closure
-    | Nat Integer
+    | Zero
+    | Suc Value
 
 instance Show Value where
-    show = \case 
+    show v = case v of 
         Nil     -> "<nil>"
         Num  n  -> show n
         Bool b  -> show b
         Clo  c  -> show c
-        Nat  n  -> show n
+        Zero    -> "zero"
+        Suc _   -> maybe "???" show (toInt v)
 
 delta :: Op -> [Value] -> Value
 delta op args = case checkArgs args of
@@ -51,7 +57,8 @@ checkArg v = case v of
     Clo c   -> Left $ "Closure encountered in primitive call: " ++ show c
     Num n   -> Right . PNum  . Identity $ n
     Bool b  -> Right . PBool . Identity $ b
-    Nat  n  -> Left $ "Nat encountered in primitive call: " ++ show n
+    Zero    -> Left $ "Nat zero encountered in primitive call"
+    Suc _   -> Left $ "Nat encountered in primitive call: " ++ show v
 
 mkValue :: PrimValue -> Value
 mkValue = \case
@@ -68,11 +75,6 @@ bool = \case
     Bool b  -> Just b
     _       -> Nothing
 
-nat :: Value -> Maybe Integer
-nat = \case
-    Nat n   -> Just n
-    _       -> Nothing
-
 closure :: Value -> Maybe Closure
 closure = \case
     Clo c   -> Just c
@@ -87,12 +89,33 @@ mkNum = Num
 mkBool :: Bool -> Value
 mkBool = Bool
 
-mkNat :: Integer -> Value
-mkNat n
-    | n < 0     = error "mkNat : illegal argument, cannot be negative"
-    | otherwise = Nat n
+mkZero :: Value
+mkZero = Zero
+
+mkSuc :: Value -> Value
+mkSuc = Suc
 
 mkClo :: Var -> Expr -> Env -> Value
 mkClo x e env = Clo $ mkClosure x e env
 
+toInt :: Value -> Maybe Integer
+toInt = \case
+    Zero  -> Just 0
+    Suc v -> (+1) <$> toInt v
+    _     -> Nothing
 
+isZero :: Value -> Bool
+isZero = \case
+    Zero -> True
+    _    -> False
+
+suc :: Value -> Maybe Value
+suc = \case
+    Suc v   -> Just v
+    _       -> Nothing
+
+nat :: Value -> Maybe Value
+nat = \case 
+    Zero    -> Just Zero
+    Suc v   -> Suc <$> nat v
+    _       -> Nothing

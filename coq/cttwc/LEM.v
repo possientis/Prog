@@ -135,6 +135,16 @@ Proof.
         + exfalso. apply H2. exists x. assumption.
 Qed.
 
+(* Actually, the converse is also true.                                         *)
+Lemma M4LR' : MOR4LR -> LEM1.
+Proof.
+    unfold LEM1, MOR4LR. intros H X. 
+    assert (~~(X \/ ~X)) as H1. 
+        { intros H2. apply H2. right. intros H3. apply H2. left. assumption. }
+    remember (H (X \/ ~X) (fun _ => False) H1) as H2 eqn:E. clear E. simpl in H2.
+    destruct H2 as [p _]. assumption.
+Qed.
+
 (* Classical implication: right to left. Provable without LEM                   *)
 Definition CIRL : Prop := forall (X Y:Prop), ~X \/ Y -> X -> Y.
 
@@ -176,4 +186,27 @@ Proof.
         + assumption.
         + exfalso. apply H1. exists x. assumption.
     - intros [x H2]. apply H1. intros H3. apply H2, H3.
-Qed,
+Qed.
+
+(* No need for LEM here.                                                        *)
+Lemma EX3 : forall (a:Type) (p:a -> Prop), 
+    ~~(exists (x:a), p x) <-> ~(forall (x:a), ~p x).
+Proof.
+    intros a p. split; intros H1 H2; apply H1.
+    - intros [x H3]. apply (H2 x). assumption.
+    - intros x H3. apply H2. exists x. assumption.
+Qed.
+
+(* Drinker's paradox: Assuming LEM and a bar with at least one drinker.         *)
+(* there exists at least one drinker so that everyone drinks if he drinks.      *)
+Lemma Drinker : forall (a:Type) (p:a -> Prop),
+    LEM1 ->
+    (exists (x:a), True) -> (* a not empty *)
+    exists (x:a), p x -> forall (x:a), p x.
+Proof.
+    unfold LEM1. intros a p L [x _]. apply L161 in L. unfold LEM6 in L.
+    destruct (L a p) as [H|H].
+    - exists x. intros H1. assumption.
+    - destruct H as [y H1]. exists y. intro H2. apply H1 in H2. contradiction.
+Qed.
+

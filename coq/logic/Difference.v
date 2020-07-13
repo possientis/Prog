@@ -254,6 +254,14 @@ Proof.
             { split; assumption. }
 Qed.
 
+Lemma diff_compat_lr : forall (v:Type) (e:Eq v) (xs xs' ys ys':list v),
+    xs == xs' -> ys == ys' -> xs \\ ys == xs' \\ ys'.
+Proof.
+    intros v e xs xs' ys ys' H1 H2. apply equivTrans with (xs' \\ ys).
+    - apply diff_compat_l. assumption.
+    - apply diff_compat_r. assumption.
+Qed.
+
 Lemma diff_inter : forall (v:Type) (e:Eq v) (xs ys:list v),
     xs \\ ys = xs \\ (xs /\ ys).
 Proof.
@@ -261,14 +269,6 @@ Proof.
     apply equivTrans with ((xs /\ xs) /\ ys).
     - apply inter_compat_l. apply equivSym. apply inter_sub, equivRefl.
     - apply inter_assoc.
-Qed.
-
-Lemma diff_compat_lr : forall (v:Type) (e:Eq v) (xs xs' ys ys':list v),
-    xs == xs' -> ys == ys' -> xs \\ ys == xs' \\ ys'.
-Proof.
-    intros v e xs xs' ys ys' H1 H2. apply equivTrans with (xs' \\ ys).
-    - apply diff_compat_l. assumption.
-    - apply diff_compat_r. assumption.
 Qed.
 
 Lemma diff_not_in : forall (v:Type) (e:Eq v) (xs ys:list v),

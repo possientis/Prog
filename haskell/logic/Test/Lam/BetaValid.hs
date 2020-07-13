@@ -9,8 +9,9 @@ import Test.QuickCheck  hiding ((===))
 import Equiv
 import Include
 import Variable     (Var)
-import Difference
+import Coincide
 import Intersect
+import Difference
 
 import Lam.T
 import Lam.Free
@@ -28,6 +29,8 @@ specBetaValid = describe "Testing non-polymorphic properties of BetaValid..." $ 
     testBetaValidIncl
     testBetaValidFreeGen
     testBetaValidFree
+    testBetaValidCoincideGen
+    testBetaValidCoincide
 
 
 testBetaValidVarGen :: Spec
@@ -65,6 +68,14 @@ testBetaValidFreeGen = it "Checked generic beta validity free property" $ do
 testBetaValidFree :: Spec
 testBetaValidFree = it "Checked beta validity free property" $ do
     property $ propBetaValidFree
+
+testBetaValidCoincideGen :: Spec
+testBetaValidCoincideGen = it "Checked generic beta validity coincide property"$ do
+    property $ propBetaValidCoincideGen
+
+testBetaValidCoincide :: Spec
+testBetaValidCoincide = it "Checked beta validity coincide property" $ do
+    property $ propBetaValidCoincide
 
 propBetaValidVarGen :: (Var -> T Var) -> Var -> [Var] -> Bool
 propBetaValidVarGen f x xs = betaValid_ f xs (Var x)
@@ -106,3 +117,19 @@ propBetaValidFree :: (Var -> T Var) -> T Var -> Bool
 propBetaValidFree f t = not (betaValid f t) ||
     (free (subst f t) === concatMap (free . f) (free t))
 
+propBetaValidCoincideGen 
+    :: (Var -> T Var) 
+    -> (Var -> T Var) 
+    -> T Var 
+    -> [Var] 
+    -> Bool
+propBetaValidCoincideGen f g t xs = not (coincide (free t \\ xs) f g) ||
+    betaValid_ f xs t == betaValid_ g xs t
+
+propBetaValidCoincide
+    :: (Var -> T Var) 
+    -> (Var -> T Var) 
+    -> T Var 
+    -> Bool
+propBetaValidCoincide f g t = not (coincide (free t) f g) ||
+    betaValid f t == betaValid g t

@@ -18,7 +18,7 @@ $\alpha(a):F(a)\to G(a)$. It follows that for all $a\in\Bat$ we have
 $\alpha (T(a)) : F(T(a))\to G(T(a))$. So the question arises as to whether
 the expression $\alpha(T(a))$ for all $a\in\Bat$ defines a natural
 transformation between $F\circ T$ and $G\circ T$. As we shall see the 
-answer is 'yes' and we shall define a new natural transformation denoted 
+answer is 'yes' so we shall define a new natural transformation denoted 
 $\alpha T$:
     \[
         \begin{tikzcd}
@@ -47,3 +47,56 @@ $\alpha T$:
         \]
 \end{defin}  
 
+
+\begin{prop}\label{Nat:prop:rightmul}
+    $\alpha T$ of~(\ref{Nat:def:rightmul}) is a natural transformation 
+    $\alpha T:F\circ T\Rightarrow G\circ T$.
+\end{prop}
+\begin{proof}
+    We need to show that $\alpha T$ is a map $\alpha T : \ob\ \Bat\to\arr\ \Dat$
+    which satisfies properties~$(1)$ and~$(2)$ of 
+    definition~(\ref{Nat:def:natural}). If we explicit the functor $T$ as the 
+    ordered pair $T=(T_{0},T_{1})$ (definition~(\ref{Fun:def:functor})), it is
+    implicit in definition~(\ref{Nat:def:rightmul}) that given $a\in\ob\ \Bat$,
+    $(\alpha T)(a)$ is defined as $\alpha (T_{0}(a))$. Since 
+    $\alpha:F\Rightarrow G$, in particular $\alpha$ is a map $\alpha:\ob\ \Cat
+    \to\arr\ \Dat$ while $T_{0}$ is a map $T_{0}:\ob\ \Bat\to\ob\ \Cat$. It 
+    follows that $\alpha (T_{0}(a))$ is a well defined arrow in \Dat\ and we
+    see that $\alpha T:\ob\ \Bat\to\arr\ \Dat$.
+
+    $(1)$: We need to show that $(\alpha T)(a): (F\circ T)(a) \to (G\circ T)(a)$
+    for all $a\in\Bat$. This is the same as showing that $\alpha (T(a)) :
+    F(T(a))\to G(T(a))$, which is the case since $\alpha(a):F(a)\to G(a)$ for
+    all $a\in\Cat$ ($\alpha$ being a natural transformation).
+
+    $(2)$: We need to show that the naturality square commutes, namely that
+    given $a,b\in\Bat$ and $f:a\to b$, we have $(G\circ T)(f)\circ(\alpha T)(a)
+    =(\alpha T)(b)\circ(F\circ T)(f)$.
+    \[
+        \begin{tikzcd}
+            a\arrow[d,swap, "f"]
+            &(F\circ T)(a)\arrow[r, "(\alpha T)(a)"]\arrow[d, swap,"(F\circ T)(f)"]
+            &(G\circ T)(a)\arrow[d, "(G\circ T)(f)"]
+            \\
+            b
+            &(F\circ T)(b)\arrow[r, swap, "(\alpha T)(b)"]
+            &(G\circ T)(b)
+        \end{tikzcd}
+    \]
+    However, this equality is the same as $G(\,T(f)\,)\circ\alpha(\,T(a)\,)
+    =\alpha(\,T(b)\,)\circ F(T(f))$, and is simply the equality expressing
+    the commutativity of the naturality square of $\alpha$, associated with 
+    $T(a),T(b)\in\Cat$ and $T(f):T(a)\to T(b)$.
+    \[
+        \begin{tikzcd}
+            T(a)\arrow[d,swap, "T(f)"]
+            &F(\,T(a)\,)\arrow[r, "\alpha(\,T(a)\,)"]\arrow[d, swap,"F(\,T(f)\,)"]
+            &G(\,T(a)\,)\arrow[d, "G(\,T(f)\,)"]
+            \\
+            T(b)
+            &F(\,T(b)\,)\arrow[r, swap, "\alpha(\,T(b)\,)"]
+            &G(\,T(b)\,).
+        \end{tikzcd}
+    \]
+ 
+\end{proof}

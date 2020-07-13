@@ -79,6 +79,6 @@ lemma L1 (S1 S2 : Semigroup) (f : morphism S1 S2) (a : S1) :
     f (a * a * a) = f (a * a) * f a : by rw resp_mul
       ...         = f a * f a * f a : by rw resp_mul
 
-#check @L1
-set_option pp.coercions false
-#check @L1
+--#check @L1
+--set_option pp.coercions false
+--#check @L1

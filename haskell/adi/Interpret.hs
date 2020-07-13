@@ -92,21 +92,20 @@ evalRec f e ev = do
     return v
 
 evalZero :: (Expr -> Eval Value) -> Eval Value
-evalZero _ev = return $ mkNat 0
+evalZero _ev = return mkZero
 
 evalSuc :: Expr -> (Expr -> Eval Value) -> Eval Value
 evalSuc e ev = do
     v <- ev e
-    case nat v of
+    case nat v of 
         Nothing -> error "Suc: argument is not a Nat."
-        Just n  -> return $ mkNat (n + 1)
+        Just v' -> return $ mkSuc $ v'
 
 evalCase :: Expr -> Expr -> Var -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalCase e e1 _x _e2 ev = do
     v <- ev e
-    case nat v of
-        Nothing -> error "Case: expression does not evaluate to a Nat."
-        Just n  -> if n == 0 then ev e1 else do
-            if n < 0 then error "Case: internal error, negative Nat."
-                else do
-                    undefined
+    if isZero v then ev e1 else
+        case suc v of
+            Nothing -> error "Case: expression does not evaluate to a Nat."
+            Just _v  -> do 
+                undefined

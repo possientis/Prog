@@ -54,6 +54,7 @@ all :							${UTILS}/LEM.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
 								${LANG1}/Relevance.vo \
+								${LANG1}/Substitution.vo \
 								${LANG1}/Compatible.vo \
 								${LANG1}/Incl.vo \
 								${LANG1}/Trans.vo \
@@ -495,6 +496,18 @@ ${LANG1}/Relevance.vo :			${LANG1}/Relevance.v \
 	coqc ${LANG1}/Relevance.v	${OPT} 
 					
 
+${LANG1}/Substitution.vo :		${LANG1}/Substitution.v \
+								${UTILS}/Nat.vo \
+								${UTILS}/Composition.vo \
+								${CORE}/Set.vo \
+								${CORE}/Equal.vo \
+								${LANG1}/Valid.vo \
+								${LANG1}/Syntax.vo \
+								${LANG1}/Semantics.vo \
+								${LANG1}/Relevance.vo \
+								${LANG1}/Environment.vo
+	coqc ${LANG1}/Substitution.v ${OPT} 
+	
 ${LANG1}/Compatible.vo :		${LANG1}/Compatible.v \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo \
