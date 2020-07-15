@@ -381,7 +381,8 @@ ${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
 								Composition.vo \
 								${LAM}/T.vo \
 								${LAM}/Free.vo \
-								${LAM}/Subst.vo
+								${LAM}/Subst.vo \
+								${LAM}/Variable.vo
 	coqc ${LAM}/BetaValid.v		${OPT}
 
 

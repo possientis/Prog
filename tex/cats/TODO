@@ -18,6 +18,16 @@ same developement for co-algebras
 F(c)(a) = sum_{k in n} c_k . a^k, (c in Set^n), then Alg(F(c)) has initial object
 Lambek's lemma (initial object in Alg(F) is an isomorphism)
 
+initial type of a bifunctor : F : A x C -> C:
+Assume F(a,-) : C -> C has an initial algebra, mu(a) : F(a,L(a)) -> L(a)
+These are not unique (only up to iso), but assume family of mu(a) and L(a) given.
+We have L:ob A -> ob C, can be extended into a functor L:A -> C
+but then the question arises as to whether:
+mu(a) : F (a, L(a)) -> L(a) is actually a natural transformation
+mu : F . <id(A),L>  => L which it is.
+remarkable fact is that we get a natural transformation despite an arbitrary choice of mu(a)
+(L(a) only determined up to iso)
+
 Th: Let F:C->C functor with initial alg mu:F m -> m. Let 
 alpha:F a -> a and beta : F b -> b algebras. Assume C has finite 
 products. Then <[alpha],[beta]> : m -> a x b is itself a catamorphism

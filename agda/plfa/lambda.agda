@@ -372,7 +372,27 @@ ClosureTrans : ∀ {a : Set} {r : a → a → Set} {x y z : a} →
 ClosureTrans cloRefl q = q
 ClosureTrans (cloStep p q) r = cloStep p (ClosureTrans q r)
 
+-- https://en.wikipedia.org/wiki/Abstract_rewriting_system
+
+-- Predicate for a relation which has the 'confluence' property
+Confluent : ∀ {a : Set} → (a → a → Set) → Set
+Confluent {a} r = ∀ {x y z : a}
+  → Closure r x y
+  → Closure r x z
+    ---------------------
+  → ∃[ t ] (Closure r y t × Closure r z t)
+
+-- Predicate for a relation which has the 'semi-confluence' property
+-- This is equivalent to confluence, see below
+Semi-Confluent : ∀ {a : Set} → (a → a → Set) → Set
+Semi-Confluent {a} r = ∀ {x y z : a}
+  → r x y
+  → Closure r x z
+    ---------------------
+  → ∃[ t ] (Closure r y t × Closure r z t)
+
 -- Predicate for relation which has the 'diamond' property
+-- aka 'locally confluent'
 Diamond : ∀ {a : Set} → (a → a → Set) → Set
 Diamond {a} r = ∀ (x y z : a)
   → r x y
@@ -380,13 +400,17 @@ Diamond {a} r = ∀ (x y z : a)
     --------------------
   → ∃[ t ] (Closure r y t × Closure r z t)
 
--- Predicate for a relation which has the 'confluence' property
-Confluent : ∀ {a : Set} → (a → a → Set) → Set
-Confluent {a} r = ∀ {x y z : a}
-  → r x y
-  → r x z
-    ---------------------
-  → ∃[ t ] (r y t × r z t)
+Confluent→Semi-Confluent : ∀ {a : Set} → {r : a → a → Set} →
+  Confluent r → Semi-Confluent r
+Confluent→Semi-Confluent {a} {r} p r1 r2 with p (cloStep r1 cloRefl) r2
+... | q = q
+
+Semi-Confluent→Confluent : ∀ {a : Set} → {r : a → a → Set} →
+  Semi-Confluent r → Confluent r
+Semi-Confluent→Confluent {a} {r} p {z = z} cloRefl q2 = ⟨ z ,  ⟨ q2 , cloRefl ⟩ ⟩
+Semi-Confluent→Confluent {a} {r} p (cloStep q q1) q2 with p q q2
+... | ⟨ u , ⟨ r1 , r2 ⟩ ⟩ with Semi-Confluent→Confluent p q1 r1
+... | ⟨ v , ⟨ s1 , s2 ⟩ ⟩ = ⟨ v , ⟨ s1 , ClosureTrans r2 s2 ⟩ ⟩
 
 -- A Deterministic relation has the diamond property
 Deterministic→Diamond : ∀ {a : Set} {r : a → a → Set} → Deterministic r → Diamond r
@@ -394,6 +418,6 @@ Deterministic→Diamond {a} {r} p x y z H1 H2
   = ⟨ y , ⟨ cloRefl , subst (Closure r z) (p x z y H2 H1) cloRefl ⟩ ⟩
 
 -- The reflexive, transitive closure of relation with diamond property is confluent
-Diamond-Confluent : ∀ {a : Set} {r : a → a → Set} →
-  Diamond r → Confluent (Closure r)
-Diamond-Confluent {a} {r} p = {!!}
+Deterministic-Confluent : ∀ {a : Set} {r : a → a → Set} →
+  Deterministic r → Confluent r
+Deterministic-Confluent {a} {r} p = {!!}

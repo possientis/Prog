@@ -1,10 +1,9 @@
 Coq:
-Proposition 379
+betaValid_inter_var_gen
 
 Haskell:
-betaValid_subst_gen
-betaValid_subst
-betaValid_support
+betaValid_inter_var_gen
+betaValid_inter_var
 
 Latex:
 

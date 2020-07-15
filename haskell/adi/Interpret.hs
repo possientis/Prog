@@ -79,8 +79,7 @@ evalApp e1 e2 ev = do
             let env = closureEnv c
             let x   = closureVar c
             let e   = closureBody c
-            v <- localEnv (bind x addr env) (ev e)
-            return v
+            localEnv (bind x addr env) (ev e)
 
 evalRec :: Var -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalRec f e ev = do
@@ -102,10 +101,13 @@ evalSuc e ev = do
         Just v' -> return $ mkSuc $ v'
 
 evalCase :: Expr -> Expr -> Var -> Expr -> (Expr -> Eval Value) -> Eval Value
-evalCase e e1 _x _e2 ev = do
+evalCase e e1 x e2 ev = do
     v <- ev e
     if isZero v then ev e1 else
         case suc v of
             Nothing -> error "Case: expression does not evaluate to a Nat."
-            Just _v  -> do 
-                undefined
+            Just v'  -> do 
+                env <- askEnv
+                addr <- alloc
+                write addr v'
+                localEnv (bind x addr env) (ev e2)

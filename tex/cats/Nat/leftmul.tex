@@ -1,0 +1,104 @@
+Let $F,G:\Cat\to\Dat$ and $T:\Dat\to\Eat$ be functors where \Cat, \Dat\ and \Eat\ 
+are categories, and let $\alpha:F\Rightarrow G$ be a natural 
+transformation. Then the situation is as follows: 
+    \[
+        \begin{tikzcd}
+            & \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G", bend right = 50, ""{name=D, above}]
+            & \Dat 
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+            \arrow[r,"T"]
+            & \Eat
+        \end{tikzcd}
+    \] 
+In particular the functors $T\circ F:\Cat\to\Eat$ and $T\circ G:\Cat\to\Eat$
+are well-defined by virtue of definition~(\ref{Fun:def:composition}). Furthermore, 
+since $\alpha$ is a natural transformation $\alpha:F\Rightarrow G$,
+using definition~(\ref{Nat:def:natural}), for all $a\in\Cat$ we have 
+$\alpha(a):F(a)\to G(a)$. $T$ being a functor, it follows that 
+$T(\,\alpha(a)\,) : T(\,F(a)\,)\to T(\,G(a)\,)$. So the question arises 
+as to whether the expression $T(\,\alpha(a)\,)$ for all $a\in\Cat$ defines 
+a natural transformation between $T\circ F$ and $T\circ G$. As we shall see the 
+answer is 'yes' so we shall define a new natural transformation denoted 
+$T\alpha$:
+    \[
+        \begin{tikzcd}
+            & \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G", bend right = 50, ""{name=D, above}]
+            & \Dat
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+            \arrow[r,"T"]
+            & \Eat
+        \end{tikzcd}
+        \ \to\ 
+        \begin{tikzcd}
+            \Cat \arrow[r, "T\circ F", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "T\circ G", bend right = 50, ""{name=D, above}]
+            & \Eat
+            \arrow[Rightarrow, "\,T\alpha", from = U, to = D]
+        \end{tikzcd}
+    \]
+\begin{defin}\label{Nat:def:leftmul}
+    Let $F,G:\Cat\to\Dat$ and $T:\Dat\to\Eat$ be functors where \Cat, \Dat\ 
+    and \Eat\ are categories, and let $\alpha:F\Rightarrow G$ be a natural 
+    transformation. We denote $T\alpha: T\circ F\Rightarrow T\circ G$ the 
+    natural transformation defined by, given $a\in\ob\ \Cat$:
+        \[
+            (T\alpha)(a) = T(\,\alpha(a)\,)
+        \]
+\end{defin}  
+
+\begin{prop}\label{Nat:prop:leftmul}
+    $T\alpha$ of~(\ref{Nat:def:leftmul}) is a natural transformation 
+    $T\alpha:T\circ F\Rightarrow T\circ G$.
+\end{prop}
+\begin{proof}
+    We need to show that $T\alpha$ is a map $T\alpha : \ob\ \Cat\to\arr\ \Eat$
+    which satisfies properties~$(1)$ and~$(2)$ of 
+    definition~(\ref{Nat:def:natural}). If we explicit the functor $T$ as the 
+    ordered pair $T=(T_{0},T_{1})$ (definition~(\ref{Fun:def:functor})), it is
+    implicit in definition~(\ref{Nat:def:leftmul}) that given $a\in\ob\ \Cat$,
+    $(T\alpha)(a)$ is defined as $T_{1}(\,\alpha(a)\,)$. Since 
+    $\alpha:F\Rightarrow G$, in particular $\alpha$ is a map $\alpha:\ob\ \Cat
+    \to\arr\ \Dat$ while $T_{1}$ is a map $T_{1}:\arr\ \Dat\to\arr\ \Eat$. It 
+    follows that $T_{1}(\,\alpha(a)\,)$ is a well defined arrow in \Eat\ and we
+    see that $T\alpha:\ob\ \Cat\to\arr\ \Eat$.
+
+    $(1)$: We need to show that $(T\alpha)(a): (T\circ F)(a) \to (T\circ G)(a)$
+    for all $a\in\Cat$. This is the same as showing that $T(\,\alpha(a)\,) :
+    T(\,F(a)\,)\to T(\,G(a)\,)$, which is the case since $\alpha(a):F(a)\to G(a)$ 
+    for all $a\in\Cat$ and $T$ is a functor.
+
+    $(2)$: We need to show that the naturality square commutes, namely that
+    given $a,b\in\Cat$ and $f:a\to b$, we have $(T\circ G)(f)\circ(T\alpha)(a)
+    =(T\alpha)(b)\circ(T\circ F)(f)$.
+    \[
+        \begin{tikzcd}
+            a\arrow[d,swap, "f"]
+            &(T\circ F)(a)\arrow[r, "(T\alpha)(a)"]\arrow[d, swap,"(T\circ F)(f)"]
+            &(T\circ G)(a)\arrow[d, "(T\circ G)(f)"]
+            \\
+            b
+            &(T\circ F)(b)\arrow[r, swap, "(T\alpha)(b)"]
+            &(T\circ G)(b)
+        \end{tikzcd}
+    \]
+    However, this equality is the same as $T(\,G(f)\,)\circ T(\,\alpha(a)\,)
+    =T(\,\alpha(b)\,)\circ T(\,F(f)\,)$, 
+    TODO 
+    
+    and is simply the equality expressing
+    the commutativity of the naturality square of $\alpha$, associated with 
+    $T(a),T(b)\in\Cat$ and $T(f):T(a)\to T(b)$.
+    \[
+        \begin{tikzcd}
+            T(a)\arrow[d,swap, "T(f)"]
+            &F(\,T(a)\,)\arrow[r, "\alpha(\,T(a)\,)"]\arrow[d, swap,"F(\,T(f)\,)"]
+            &G(\,T(a)\,)\arrow[d, "G(\,T(f)\,)"]
+            \\
+            T(b)
+            &F(\,T(b)\,)\arrow[r, swap, "\alpha(\,T(b)\,)"]
+            &G(\,T(b)\,).
+        \end{tikzcd}
+    \]
+\end{proof}

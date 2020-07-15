@@ -31,6 +31,9 @@ specBetaValid = describe "Testing non-polymorphic properties of BetaValid..." $ 
     testBetaValidFree
     testBetaValidCoincideGen
     testBetaValidCoincide
+    testBetaValidSubstGen
+    testBetaValidSubst
+    testBetaValidSupport
 
 
 testBetaValidVarGen :: Spec
@@ -76,6 +79,18 @@ testBetaValidCoincideGen = it "Checked generic beta validity coincide property"$
 testBetaValidCoincide :: Spec
 testBetaValidCoincide = it "Checked beta validity coincide property" $ do
     property $ propBetaValidCoincide
+
+testBetaValidSubstGen :: Spec
+testBetaValidSubstGen = it "Checked generic beta validity subst property" $ do
+    property $ propBetaValidSubstGen
+
+testBetaValidSubst :: Spec
+testBetaValidSubst = it "Checked beta validity subst property" $ do
+    property $ propBetaValidSubst
+
+testBetaValidSupport :: Spec
+testBetaValidSupport = it "Checked beta validity support property" $ do
+    property $ propBetaValidSupport
 
 propBetaValidVarGen :: (Var -> T Var) -> Var -> [Var] -> Bool
 propBetaValidVarGen f x xs = betaValid_ f xs (Var x)
@@ -133,3 +148,29 @@ propBetaValidCoincide
     -> Bool
 propBetaValidCoincide f g t = not (coincide (free t) f g) ||
     betaValid f t == betaValid g t
+
+propBetaValidSubstGen
+    :: (Var -> T Var) 
+    -> (Var -> T Var) 
+    -> T Var 
+    -> [Var]
+    -> Bool
+propBetaValidSubstGen f g t xs = subst_ f xs t /= subst_ g xs t || 
+    betaValid_ f xs t == betaValid_ g xs t
+
+propBetaValidSubst
+    :: (Var -> T Var) 
+    -> (Var -> T Var) 
+    -> T Var 
+    -> Bool
+propBetaValidSubst f g t = subst f t /= subst g t || 
+    betaValid f t == betaValid g t
+
+propBetaValidSupport
+    :: (Var -> T Var) 
+    -> T Var 
+    -> [Var]
+    -> [Var]
+    -> Bool
+propBetaValidSupport f t xs ys = (free t /\ xs) /== (free t /\ ys) || 
+    betaValid_ f xs t == betaValid_ f ys t

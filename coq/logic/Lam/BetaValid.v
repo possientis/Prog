@@ -1,4 +1,5 @@
 Require Import List.
+Import ListNotations.
 
 Require Import Eq.
 Require Import In.
@@ -13,6 +14,7 @@ Require Import Composition.
 Require Import Lam.T.
 Require Import Lam.Free.
 Require Import Lam.Subst.
+Require Import Lam.Variable.
 
 (* Predicate defining the beta-validity of the substitution f for (t,xs).       *)
 (* This predicates expresses the fact that when considering the variables of xs *)
@@ -326,3 +328,14 @@ Proof.
           + intros u H5. apply H4. apply H6. assumption.
 Qed.
 
+(*
+Lemma betaValid_inter_var_gen : 
+    forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v), 
+    (var t /\ concat (map (fun u => Fr (f u) \\ [u]) (Fr t \\ xs))) = [] ->
+        betaValid_ f xs t.
+Proof.
+    intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs H.
+    - apply betaValid_var_gen.
+    -
+Show.
+*)
