@@ -336,6 +336,10 @@ Lemma betaValid_inter_var_gen :
 Proof.
     intros v e f. induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs H.
     - apply betaValid_var_gen.
-    -
+    - simpl in H. rewrite diff_distrib_app_r in H. rewrite map_app in H.
+      rewrite concat_app in H. rewrite inter_distrib_app_r in H.
+      apply app_nil in H. destruct H as [H1 H2].
+      apply inter_app_nil_l in H1. destruct H1 as [H1 _].
+      apply inter_app_nil_l in H2. destruct H2 as [_ H2].
 Show.
 *)

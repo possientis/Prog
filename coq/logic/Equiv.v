@@ -31,9 +31,11 @@ Proof.
 Qed.
 
 Lemma equivNilIsNil : forall (v:Type) (xs:list v),
-    xs == nil -> xs = nil.
+    xs == nil <-> xs = nil.
 Proof.
-    intros v xs [H1 H2]. apply incl_nil. assumption.
+    intros v xs. split.
+    - intros [H1 H2]. apply incl_nil. assumption.
+    - intros H. rewrite H. apply equivRefl.
 Qed.
 
 Lemma equivConsCompat : forall (v:Type) (x:v) (xs ys:list v),

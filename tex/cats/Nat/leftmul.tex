@@ -84,21 +84,27 @@ $T\alpha$:
         \end{tikzcd}
     \]
     However, this equality is the same as $T(\,G(f)\,)\circ T(\,\alpha(a)\,)
-    =T(\,\alpha(b)\,)\circ T(\,F(f)\,)$, 
-    TODO 
-    
-    and is simply the equality expressing
-    the commutativity of the naturality square of $\alpha$, associated with 
-    $T(a),T(b)\in\Cat$ and $T(f):T(a)\to T(b)$.
+    =T(\,\alpha(b)\,)\circ T(\,F(f)\,)$, and is simply a lifting by the 
+    functor $T$ of the equality expressing the naturality of $\alpha$, 
+    associated with $a,b\in\Cat$ and $f:a\to b$.
     \[
         \begin{tikzcd}
-            T(a)\arrow[d,swap, "T(f)"]
-            &F(\,T(a)\,)\arrow[r, "\alpha(\,T(a)\,)"]\arrow[d, swap,"F(\,T(f)\,)"]
-            &G(\,T(a)\,)\arrow[d, "G(\,T(f)\,)"]
+            a\arrow[d,swap, "f"]
+            &T(\,F(a)\,)\arrow[r, "T(\,\alpha(a)\,)"]\arrow[d, swap,"T(\,F(f)\,)"]
+            &T(\,G(a)\,)\arrow[d, "T(\,G(f)\,)"]
             \\
-            T(b)
-            &F(\,T(b)\,)\arrow[r, swap, "\alpha(\,T(b)\,)"]
-            &G(\,T(b)\,).
+            b
+            &T(\,F(b)\,)\arrow[r, swap, "T(\,\alpha(b)\,)"]
+            &T(\,G(b)\,).
         \end{tikzcd}
     \]
+    However, we crucially need $T$ to be a functor for this square to commute:
+    \begin{eqnarray*}T(\,G(f)\,)\circ T(\,\alpha(a)\,)
+        &=&T(\,G(f)\circ\alpha(a)\,)
+        \ \leftarrow\ \mbox{$(5)$ of def.~(\ref{Fun:def:functor})}\\
+        \mbox{$(2)$ of def.~(\ref{Nat:def:natural})}\ \to\ 
+        &=&T(\,\alpha(b)\circ F(f)\,)\\
+        \mbox{$(5)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+        &=&T(\,\alpha(b)\,)\circ T(\,F(f)\,)
+    \end{eqnarray*}
 \end{proof}

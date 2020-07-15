@@ -7,9 +7,9 @@ module  Cata
     ,   average2
     )   where
 
-import Prelude  hiding (sum, length, div)
-import Data.Functor.Foldable
+import Prelude                  hiding (sum, length, div)
 import Data.Tuple.Extra
+import Data.Functor.Foldable
 
 (+++) :: b -> (a -> b -> b) -> ListF a b -> b
 (+++) b op = \case

@@ -45,6 +45,12 @@ eNum n = Fix $ ENum n
 eBool :: Bool -> Expr
 eBool b = Fix $ EBool b
 
+eNat :: Integer -> Expr
+eNat n
+    | n > 0   = eSuc $ eNat (n - 1)
+    | n == 0  = eZero
+    | otherwise = error "eNat: negative argument"
+
 eVar :: String -> Expr
 eVar s = Fix $ EVar $ mkVar s
 
@@ -71,9 +77,3 @@ eSuc e1 = Fix $ ESuc e1
 
 eCase :: Expr -> Expr -> String -> Expr -> Expr
 eCase e e1 x e2 = Fix $ ECase e e1 (mkVar x) e2 
-
-eNat :: Integer -> Expr
-eNat n
-    | n > 0   = eSuc $ eNat (n - 1)
-    | n == 0  = eZero
-    | otherwise = error "eNat: negative argument"

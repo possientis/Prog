@@ -202,7 +202,8 @@ _ = refl
 _ : (ƛ "y" ⇒ ` "y") [ "x" := `zero ] ≡ ƛ "y" ⇒ ` "y"
 _ = refl
 
-_ : (ƛ "y" ⇒ ` "x" · (ƛ "x" ⇒ ` "x")) [ "x" := `zero ] ≡ ƛ "y" ⇒ `zero · (ƛ "x" ⇒ ` "x")
+_ : (ƛ "y" ⇒ ` "x" · (ƛ "x" ⇒ ` "x")) [ "x" := `zero ]
+   ≡ ƛ "y" ⇒ `zero · (ƛ "x" ⇒ ` "x")
 _ = refl
 
 infix 4 _—→_ -- \em\to
@@ -298,11 +299,12 @@ L1 : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") —→ ƛ "x" ⇒ ` "x"
 L1 = β-ƛ V-ƛ
 
 
-L2 : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") —→ (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")
+L2 : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")
+  —→ (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")
 L2 = ξ-·₁ L1
 
 
-infix 2 _—↠_
+infix 2 _—↠_ -- \em\rr-
 infix 1 begin_
 infixr 2 _—→⟨_⟩_
 infix 3 _∎
@@ -417,7 +419,24 @@ Deterministic→Diamond : ∀ {a : Set} {r : a → a → Set} → Deterministic 
 Deterministic→Diamond {a} {r} p x y z H1 H2
   = ⟨ y , ⟨ cloRefl , subst (Closure r z) (p x z y H2 H1) cloRefl ⟩ ⟩
 
--- The reflexive, transitive closure of relation with diamond property is confluent
+-- The reflexive transitive closure of relation with diamond property is semi-confluent
+Deterministic-Semi-Confluent : ∀ {a : Set} {r : a → a → Set} →
+  Deterministic r → Semi-Confluent r
+Deterministic-Semi-Confluent {a} {r} p {y = y} r1 cloRefl
+  = ⟨ y , ⟨ cloRefl , cloStep r1 cloRefl ⟩ ⟩
+Deterministic-Semi-Confluent {a} {r} p r1 (cloStep r2 r2') with p _ _ _ r1 r2
+Deterministic-Semi-Confluent {a} {r} p {z = z} r1 (cloStep r2 r2') | refl
+  = ⟨ z , ⟨ r2' , cloRefl ⟩  ⟩
+
+-- The reflexive transitive closure of relation with diamond property is confluent
 Deterministic-Confluent : ∀ {a : Set} {r : a → a → Set} →
   Deterministic r → Confluent r
-Deterministic-Confluent {a} {r} p = {!!}
+Deterministic-Confluent p = Semi-Confluent→Confluent (Deterministic-Semi-Confluent p)
+
+_ : twoᶜ · sucᶜ · `zero —↠ `suc `suc `zero
+_ = begin
+  twoᶜ · sucᶜ · `zero
+  —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
+  (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · `zero
+  —→⟨ {!!} ⟩
+  {!!}

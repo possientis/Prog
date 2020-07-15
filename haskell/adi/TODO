@@ -1,4 +1,5 @@
-macros for primitives
+remove Macro (Debug, Test)
+refactor Test
 add test for eToNum and eFromNum
 add test for plus and mult for nat
 Show for Expr

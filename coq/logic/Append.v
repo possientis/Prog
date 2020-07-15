@@ -51,7 +51,6 @@ Proof.
     intros v xs ys zs. rewrite app_assoc. apply equivRefl.
 Qed.
 
-
 Lemma app_comm : forall (v:Type) (xs ys:list v),
     xs ++ ys == ys ++ xs.
 Proof.
@@ -63,5 +62,13 @@ Proof.
     - left. assumption.
 Qed.
 
-
-
+Lemma app_nil : forall (v:Type) (xs ys:list v),
+    xs ++ ys = nil -> xs = nil /\ ys = nil.
+Proof.
+    intros v xs ys. destruct xs as [|x xs]; destruct ys as [|y ys]; 
+    simpl; intros H.
+    - split; reflexivity.
+    - inversion H.
+    - inversion H.
+    - inversion H.
+Qed.

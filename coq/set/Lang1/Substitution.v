@@ -1,7 +1,7 @@
 Require Import List.
 Require Import Peano_dec.
 
-Require Import Utils.Nat.
+Require Import Utils.Remove.
 Require Import Utils.Composition.
 
 Require Import Core.Set.
@@ -55,3 +55,6 @@ Proof.
                     { apply equalRefl. }}}
             { split; auto. }
 Qed.
+
+
+

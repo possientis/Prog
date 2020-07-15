@@ -34,3 +34,20 @@ of $G$ and $F$.
     ordered pair $(F,G)$.
 \end{notation}
 
+Given functors $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ where \Cat, \Dat\ are 
+categories, if $\eta:I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$,
+then a question arises as to whether this unit is unique. As the following
+proposition shows, the answer is 'no' in general as every natural 
+isomorphism $\alpha : F\Rightarrow F$ potentially gives rise to a 
+new unit.
+
+\begin{prop}\label{Adj:prop:unit:not:unique}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit
+    of $(F,G)$. Then, a natural transformation $\eta':I_{\cal C}\Rightarrow 
+    G\circ F$ is a unit of $(F,G)$ \ifand\ there exists a natural isomorphism 
+    $\alpha:F\Rightarrow F$ such that:
+        \[
+            \eta'=(G\alpha)\circ\eta
+        \]
+\end{prop}

@@ -20,8 +20,6 @@ module  Op
     ,   oLe
     ,   oEq
     ,   deltaPrim
-    ,   deltaBool   -- remove
-    ,   deltaNum    -- remove
     )   where
 
 import Data.Functor.Const

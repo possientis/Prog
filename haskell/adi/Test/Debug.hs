@@ -3,14 +3,13 @@ module  Test.Debug
     ,   e1, e2, e3, e4
     )   where
 
-import Op
+import DSL
 import Macro
-import Syntax
 import Interpret
 
 main :: IO ()
 main = do
-   evalIO e4
+   evalIO e3
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
@@ -22,5 +21,5 @@ e3 :: Expr
 e3 = eApp (eFac "f" "n") (eNum 5)
 
 e4 :: Expr
-e4 = eOp dvd (eNum 0) (eNum 1)
+e4 = eDiv (eNum 0) (eNum 1)
 

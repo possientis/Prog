@@ -10,6 +10,8 @@ all :							${UTILS}/LEM.vo \
 								${UTILS}/Decidable.vo \
 								${UTILS}/Filter.vo \
 								${UTILS}/Nat.vo \
+								${UTILS}/Replace.vo \
+								${UTILS}/Remove.vo \
 								${UTILS}/Fresh.vo \
 								${UTILS}/Eq.vo \
 								${UTILS}/Ord.vo \
@@ -50,6 +52,7 @@ all :							${UTILS}/LEM.vo \
 								${NORM}/Insert.vo \
 								${NORM}/Normal.vo \
 								${LANG1}/Syntax.vo \
+								${LANG1}/Apply.vo \
 								${LANG1}/Valid.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
@@ -87,6 +90,11 @@ ${UTILS}/Filter.vo : 			${UTILS}/Filter.v \
 ${UTILS}/Nat.vo : 				${UTILS}/Nat.v
 	coqc ${UTILS}/Nat.v 		${OPT}
 
+${UTILS}/Replace.vo : 			${UTILS}/Replace.v
+	coqc ${UTILS}/Replace.v 	${OPT}
+
+${UTILS}/Remove.vo : 			${UTILS}/Remove.v
+	coqc ${UTILS}/Remove.v 		${OPT}
 
 ${UTILS}/Fresh.vo :				${UTILS}/Fresh.v
 	coqc ${UTILS}/Fresh.v		${OPT} 
@@ -458,6 +466,9 @@ ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
 								${UTILS}/Fresh.vo
 	coqc ${LANG1}/Syntax.v		${OPT} 
 
+${LANG1}/Apply.vo :				${LANG1}/Apply.v \
+								${UTILS}/Replace.vo
+	coqc ${LANG1}/Apply.v		${OPT} 
 
 ${LANG1}/Valid.vo :				${LANG1}/Valid.v \
 								${LANG1}/Syntax.vo
@@ -487,7 +498,7 @@ ${LANG1}/Semantics.vo :			${LANG1}/Semantics.v \
 
 
 ${LANG1}/Relevance.vo :			${LANG1}/Relevance.v \
-								${UTILS}/Nat.vo \
+								${UTILS}/Remove.vo \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo \
 								${LANG1}/Syntax.vo \
@@ -497,7 +508,7 @@ ${LANG1}/Relevance.vo :			${LANG1}/Relevance.v \
 					
 
 ${LANG1}/Substitution.vo :		${LANG1}/Substitution.v \
-								${UTILS}/Nat.vo \
+								${UTILS}/Remove.vo \
 								${UTILS}/Composition.vo \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo \

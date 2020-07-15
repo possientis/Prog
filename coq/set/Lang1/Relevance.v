@@ -1,7 +1,7 @@
 Require Import List.
 Require Import Peano_dec.
 
-Require Import Utils.Nat.
+Require Import Utils.Remove.
 
 Require Import Core.Set.
 Require Import Core.Equal.
