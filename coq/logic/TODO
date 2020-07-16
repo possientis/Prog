@@ -5,7 +5,9 @@ Haskell:
 betaValid_inter_var_gen
 betaValid_inter_var
 app_nil
+nil_charac
 inter_app_nil_l
+inter_sub_nil_l
 
 Latex:
 

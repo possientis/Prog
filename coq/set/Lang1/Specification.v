@@ -9,6 +9,7 @@ Require Import Core.Equal.
 Require Import Core.Compatible.
 
 Require Import Lang1.Syntax.
+Require Import Lang1.Apply.
 Require Import Lang1.Semantics.
 Require Import Lang1.Relevance.
 Require Import Lang1.Environment.
@@ -82,3 +83,13 @@ Proof.
         + assumption.
         + assumption.
 Qed.
+
+(* Theorem schema of specification where we explicitely 'apply' P at the    *)
+(* variable p with 'P $ p'. TODO                                            *)
+Definition specificationF' (P:Formula) (n m p:nat) : Formula :=
+    All n (Exi m (All p (Iff (Elem p m) (And (Elem p n) (P $ p))))). 
+
+Lemma specificationLink : forall (P:Formula) (n m p:nat),
+    specificationF' P n m p = specificationF (P $ p) n m p.
+Proof. intros P n m p. reflexivity. Qed.
+

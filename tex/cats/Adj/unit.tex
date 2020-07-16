@@ -3,7 +3,7 @@
     are categories. We call {\em unit} of the typed functors $(\Cat,\Dat,F)$
     and $(\Dat,\Cat,G)$, a natural transformation 
     $\eta:I_{\cal C}\Rightarrow G\circ F$ such that for all 
-    $c\in\Cat$, $d\in\Dat$ and $f:c\to G(d)$, there exists 
+    $c\in\Cat$, $d\in\Dat$ and $f:c\to G(d)$, there exists a
     unique $g:F(c) \to d$ such that $f = G(g) \circ \eta_{c}$.
 \end{defin}
 
@@ -51,3 +51,34 @@ new unit.
             \eta'=(G\alpha)\circ\eta
         \]
 \end{prop}
+
+\noindent
+{\bf Remark}: If $\alpha: F\Rightarrow F$ and $G:\Dat\to\Cat$, then $G\alpha$
+is the natural transformation $G\alpha:G\circ F\Rightarrow G\circ F$ as per
+definition~(\ref{Nat:def:leftmul}), and if $\eta:I_{\cal C}\Rightarrow G\circ F$
+then the composition $(G\alpha)\circ\eta$ is a well-defined natural 
+transformation from the identity functor $I_{\cal C}$ to the functor $G\circ F$ 
+as per definition~(\ref{Nat:def:composition}).
+
+\noindent
+\begin{proof}
+    First we show the {\em if} part. So we assume that $\eta'=(G\alpha)\circ\eta$
+    for some natural isomorphism $\alpha:F\Rightarrow F$. We need to show that
+    $\eta'$ is a unit of $(F,G)$. As already indicated $\eta'$ is a well-defined
+    natural transformation $\eta':I_{\cal C}\Rightarrow G\circ F$. Hence we
+    simply need to show that it satisfies the universal property of 
+    definition~(\ref{Adj:def:unit}). So let $c\in\Cat$, $d\in\Dat$ and 
+    $f:c\to G(d)$. We need to show the existence of a unique $g:F(c)\to d$
+    such that $f = G(g)\circ\eta'_{c}$. However, by assumption we have:
+        \begin{eqnarray*}\eta'_{c}
+            &=&((G\alpha)\circ\eta)_{c}\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&(G\alpha)_{c}\circ\eta_{c}\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:leftmul})}\ \to\ 
+            &=&G(\,\alpha_{c}\,)\circ\eta_{c}\\
+        \end{eqnarray*}
+    So we need to prove the existence of a unique arrow $g:F(c)\to d$
+    such that $f=G(g)\circ G(\alpha_{c})\circ\eta_{c}$, which is
+    $f=G(g\circ\alpha_{c})\circ\eta_{c}$ since $G$ is a functor.
+    TODO
+\end{proof}

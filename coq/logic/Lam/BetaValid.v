@@ -341,5 +341,13 @@ Proof.
       apply app_nil in H. destruct H as [H1 H2].
       apply inter_app_nil_l in H1. destruct H1 as [H1 _].
       apply inter_app_nil_l in H2. destruct H2 as [_ H2].
+      apply betaValid_app_gen. split.
+        + apply IH1. assumption.
+        + apply IH2. assumption.
+    - apply betaValid_lam_gen. split.
+        + apply IH1. generalize H. intros H'. 
+(*
+        + intros u H1. admit.
+*)
 Show.
 *)

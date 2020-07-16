@@ -438,5 +438,28 @@ _ = begin
   twoᶜ · sucᶜ · `zero
   —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
   (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · `zero
+  —→⟨ β-ƛ V-zero ⟩
+  sucᶜ · (sucᶜ · `zero)
+  —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
+  sucᶜ · `suc `zero
+  —→⟨ β-ƛ (V-suc V-zero) ⟩
+  `suc `suc `zero
+  ∎
+
+_ : plus · two · two —↠ `suc `suc `suc `suc `zero
+_ = begin
+  plus · two · two
+
+  —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
+  (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m" [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+  · two
+  · two
+
+  —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+  (ƛ "n" ⇒ case two [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ]) · two
+
+  —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
+  case two [zero⇒ two |suc "m" ⇒ `suc (plus · ` "m" · two) ]
+
   —→⟨ {!!} ⟩
   {!!}

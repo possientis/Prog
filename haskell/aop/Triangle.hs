@@ -41,3 +41,6 @@ triangle4_ f = mu4 . bimap id (map f)
 triangle4 :: (a -> a) -> [a] -> [a]
 triangle4 = cata . triangle4_
 
+
+
+

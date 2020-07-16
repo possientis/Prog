@@ -467,7 +467,13 @@ ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
 	coqc ${LANG1}/Syntax.v		${OPT} 
 
 ${LANG1}/Apply.vo :				${LANG1}/Apply.v \
-								${UTILS}/Replace.vo
+								${UTILS}/Replace.vo \
+								${UTILS}/Composition.vo \
+								${LANG1}/Valid.vo \
+								${LANG1}/Syntax.vo \
+								${LANG1}/Semantics.vo \
+								${LANG1}/Environment.vo \
+								${LANG1}/Substitution.vo
 	coqc ${LANG1}/Apply.v		${OPT} 
 
 ${LANG1}/Valid.vo :				${LANG1}/Valid.v \

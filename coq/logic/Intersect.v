@@ -2,6 +2,7 @@ Require Import List.
 
 Require Import In.
 Require Import Eq.
+Require Import Nil.
 Require Import Equiv.
 Require Import Include.
 Require Import Append.
@@ -239,5 +240,16 @@ Proof.
             { assumption. }}
     apply equivNilIsNil in H2. apply app_nil in H2. destruct H2 as [H2 H3].
     split; assumption.
+Qed.
+
+
+Lemma inter_sub_nil_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
+    xs <= ys -> (ys /\ zs) = nil -> (xs /\ zs) = nil.
+Proof.
+   intros v e xs ys zs H1 H2. apply nil_charac. intros x. 
+   rewrite inter_charac. intros [H3 H4]. rewrite nil_charac in H2.
+   apply (H2 x). apply inter_charac. split.
+   - apply H1. assumption.
+   - assumption.
 Qed.
 

@@ -9,49 +9,65 @@ module  DSL
     ,   eIf     -- :: Expr -> Expr -> Expr -> Expr
     ,   eLam    -- :: String -> Expr -> Expr
     ,   eApp    -- :: Expr -> Expr -> Expr
+    ,   eApp2   -- :: Expr -> Expr -> Expr -> Expr
     ,   eRec    -- :: String -> Expr -> Expr
     ,   eCase   -- :: Expr -> Expr -> String -> Expr -> Expr
-    ,   eAdd    -- :: Expr -> Expr -> Expr
-    ,   eMul    -- :: Expr -> Expr -> Expr
-    ,   eSub    -- :: Expr -> Expr -> Expr
-    ,   eDiv    -- :: Expr -> Expr -> Expr
-    ,   eAnd    -- :: Expr -> Expr -> Expr
-    ,   eOr     -- :: Expr -> Expr -> Expr
-    ,   eImp    -- :: Expr -> Expr -> Expr
-    ,   eNot    -- :: Exor -> Expr
-    ,   eLe     -- :: Expr -> Expr -> Expr
-    ,   eEq     -- :: Expr -> Expr -> Expr
+    ,   eAdd    -- :: Expr
+    ,   eMul    -- :: Expr
+    ,   eSub    -- :: Expr
+    ,   eDiv    -- :: Expr
+    ,   eAnd    -- :: Expr
+    ,   eOr     -- :: Expr
+    ,   eImp    -- :: Expr
+    ,   eNot    -- :: Expr
+    ,   eLe     -- :: Expr
+    ,   eEq     -- :: Expr
+    ,   eFac    -- :: Expr
     )   where
 
 import Op
 import Syntax
 
-eAdd :: Expr -> Expr -> Expr
-eAdd e1 e2 = eOp oAdd [e1,e2]
+eAdd :: Expr
+eAdd = eLam "x" (eLam "y" (eOp oAdd [eVar "x", eVar "y"]))
 
-eMul :: Expr -> Expr -> Expr
-eMul e1 e2 = eOp oMul [e1,e2]
+eMul :: Expr
+eMul = eLam "x" (eLam "y" (eOp oMul [eVar "x", eVar "y"]))
 
-eSub :: Expr -> Expr -> Expr
-eSub e1 e2 = eOp oSub [e1,e2]
+eSub :: Expr
+eSub = eLam "x" (eLam "y" (eOp oSub [eVar "x", eVar "y"]))
 
-eDiv :: Expr -> Expr -> Expr
-eDiv e1 e2 = eOp oDiv [e1,e2]
+eDiv :: Expr
+eDiv = eLam "x" (eLam "y" (eOp oDiv [eVar "x", eVar "y"]))
 
-eAnd :: Expr -> Expr -> Expr
-eAnd e1 e2 = eOp oAnd [e1,e2]
+eAnd :: Expr
+eAnd = eLam "x" (eLam "y" (eOp oAnd [eVar "x", eVar "y"]))
 
-eOr :: Expr -> Expr -> Expr
-eOr e1 e2 = eOp oOr [e1,e2]
+eOr :: Expr
+eOr = eLam "x" (eLam "y" (eOp oOr [eVar "x", eVar "y"]))
 
-eImp :: Expr -> Expr -> Expr
-eImp e1 e2 = eOp oImp [e1,e2]
+eImp :: Expr
+eImp = eLam "x" (eLam "y" (eOp oImp [eVar "x", eVar "y"]))
 
-eNot :: Expr -> Expr
-eNot e1 = eOp oNot [e1]
+eNot :: Expr
+eNot = eLam "x" (eOp oNot [eVar "x"])
 
-eLe :: Expr -> Expr -> Expr
-eLe e1 e2 = eOp oLe [e1,e2]
+eLe :: Expr
+eLe = eLam "x" (eLam "y" (eOp oLe [eVar "x", eVar "y"]))
 
-eEq :: Expr -> Expr -> Expr
-eEq e1 e2 = eOp oEq [e1,e2]
+eEq :: Expr
+eEq = eLam "x" (eLam "y" (eOp oEq [eVar "x", eVar "y"]))
+
+eApp2 :: Expr -> Expr -> Expr -> Expr
+eApp2 f x y = eApp (eApp f x) y
+
+eFac :: Expr
+eFac =  (eRec "f"
+            (eLam "n"
+                (eIf (eVar "n") (eNum 1) 
+                    (eApp2 eMul 
+                        (eVar "n") 
+                        (eApp (eVar "f") 
+                            (eApp2 eAdd (eVar "n") (eNum (-1))))))))
+
+

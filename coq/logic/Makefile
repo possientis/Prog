@@ -6,6 +6,7 @@ all:	   						Extensionality.vo \
 								Identity.vo \
    								Composition.vo \
 								In.vo \
+								Nil.vo \
 								Coincide.vo \
 								Leq.vo \
 								MinMax.vo \
@@ -54,6 +55,10 @@ Composition.vo : 				Composition.v
 
 In.vo : 						In.v
 	coqc In.v
+
+Nil.vo : 						Nil.v \
+								In.vo
+	coqc Nil.v
 
 Coincide.vo : 					Coincide.v \
 								Include.vo
@@ -113,6 +118,7 @@ Remove.vo :						Remove.v \
 Intersect.vo :					Intersect.v \
 								In.vo \
 								Eq.vo \
+								Nil.vo \
 								Equiv.vo \
 								Append.vo \
 								Include.vo
