@@ -64,33 +64,33 @@ begin
     {rewrite L2, constructor}
 end
 
-theorem BigStepDeterministic : ∀ (e:Stmt) (s s1 s2:Env),
-  BigStep e s s1 → BigStep e s s2 → s1 = s2 :=
+lemma BigStepDeterministic : ∀ (e:Stmt) (s s₁ s₂:Env),
+  BigStep e s s₁ → BigStep e s s₂ → s₁ = s₂ :=
 begin
-  intros e s s1 s2 H1, revert s2,
+  intros e s s₁ s₂ H1, revert s₂,
   induction H1 with
-    s2 x a
-    s2 e1 e2
-    s1' s2 s3 H1 H2 IH1 IH2
-    b e1 e2 s1 s2 H1 H2 IH1
-    b e1 e2 s1 s2 H1 H2 IH1
-    b e1 s1 s2 s3 H1 H2 H3 IH1 IH2
-    b e1 s1 H1,
-    {intros s2' H, cases H, refl},
-    {intros s2' H, cases H, refl},
-    {intros s3' H, cases H with x x x x x x x s2' _ H1 H2,
-     have H3 : s2 = s2',
+    s₂ x a
+    s₂ e₁ e₂
+    s₁' s₂ s₃ H1 H2 IH1 IH2
+    b e₁ e₂ s₁ s₂ H1 H2 IH1
+    b e₁ e₂ s₁ s₂ H1 H2 IH1
+    b e₁ s₁ s₂ s₃ H1 H2 H3 IH1 IH2
+    b e₁ s₁ H1,
+    {intros s₂' H, cases H, refl},
+    {intros s₂' H, cases H, refl},
+    {intros s₃' H, cases H with x x x x x x x s₂' _ H1 H2,
+     have H3 : s₂ = s₂',
       {apply IH1, assumption},
       {apply IH2, rewrite H3, assumption}
      },
-    {intros s2' H, cases H,
+    {intros s₂' H, cases H,
       {apply IH1, assumption},
       {exfalso, apply H_a, assumption}},
-    {intros s2' H, cases H,
+    {intros s₂' H, cases H,
       {exfalso, apply H1, assumption},
       {apply IH1, assumption}},
-    {intros s3' H, cases H,
-      {have H4 : s2 = H_u,
+    {intros s₃' H, cases H,
+      {have H4 : s₂ = H_u,
         {apply IH1, assumption},
         {rewrite ← H4 at H_a_2, apply IH2, assumption}},
       {exfalso, apply H_a, assumption}},
@@ -98,18 +98,18 @@ begin
       {exfalso, apply H1, assumption},
       {refl}},
 end
-lemma BigStepDoesNotTerminate : ∀ (e : Stmt) (s1 s2 : Env),
-  ¬BigStep (while (λ_, true) e) s1 s2 :=
+lemma BigStepDoesNotTerminate : ∀ (e : Stmt) (s₁ s₂ : Env),
+  ¬BigStep (while (λ_, true) e) s₁ s₂ :=
 begin
-  intros e s1 s2 H, generalize H1 : while (λ_, true) e = e1,
+  intros e s₁ s₂ H, generalize H1 : while (λ_, true) e = e₁,
   rewrite H1 at H, revert e, induction H with
-    s1
-    x a s1
-    e1 e2 s1 s2 s3 H1 H2 IH1 IH2
-    b e1 e2 s1 s2 H1 H2 IH1
-    b e1 e2 s1 s2 H1 H2 IH1
-    b e1 s1 s2 s3 H1 H2 H3 IH1 IH2
-    b e1 s1 H2;
+    s₁
+    x a s₁
+    e₁ e₂ s₁ s₂ s₃ H1 H2 IH1 IH2
+    b e₁ e₂ s₁ s₂ H1 H2 IH1
+    b e₁ e₂ s₁ s₂ H1 H2 IH1
+    b e₁ s₁ s₂ s₃ H1 H2 H3 IH1 IH2
+    b e₁ s₁ H2;
     intros e H1,
     {cases H1},
     {cases H1},
@@ -137,18 +137,18 @@ begin
     { rewrite H, constructor }
 end
 
-@[simp] lemma BigStepSeqIff : ∀ {e1 e2:Stmt} {s t:Env},
-  BigStep (e1 ;; e2) s t ↔ ∃ (u:Env), BigStep e1 s u ∧ BigStep e2 u t :=
+@[simp] lemma BigStepSeqIff : ∀ {e₁ e₂:Stmt} {s t:Env},
+  BigStep (e₁ ;; e₂) s t ↔ ∃ (u:Env), BigStep e₁ s u ∧ BigStep e₂ u t :=
 begin
   intros e1 e2 s t, split; intros H,
     {cases H with _ _ _ _ _ _ _ u _ H1 H2, existsi u, split; assumption},
     {cases H with u H1, cases H1 with H1 H2, constructor; assumption}
 end
 
-@[simp] lemma BigStepIteIff : ∀ {b:BExp} {e1 e2:Stmt} {s t:Env},
-  BigStep (ite b e1 e2) s t ↔ (b s ∧ BigStep e1 s t) ∨ (¬b s ∧ BigStep e2 s t) :=
+@[simp] lemma BigStepIteIff : ∀ {b:BExp} {e₁ e₂:Stmt} {s t:Env},
+  BigStep (ite b e₁ e₂) s t ↔ (b s ∧ BigStep e₁ s t) ∨ (¬b s ∧ BigStep e₂ s t) :=
 begin
-  intros b e1 e2 s t, split; intros H,
+  intros b e₁ e₂ s t, split; intros H,
     {cases H with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ H1 H2,
       {left, split; assumption},
       {right, split; assumption}},

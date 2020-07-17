@@ -1,6 +1,9 @@
 Require Import List.
 Require Import Peano_dec.
 
+Require Import Utils.Replace.
+Require Import Utils.Composition.
+
 Require Import Core.Set.
 Require Import Core.Equal.
 
@@ -105,3 +108,19 @@ Proof.
         + assumption.
 Qed.
 
+(*
+Lemma bindReplace : forall (e:Env) (n m:nat) (x:set),
+    envEqual (bind e n x ; replace m n) (bind e m x).
+Proof.
+    intros e n m x z. unfold bind, replace, comp. 
+    destruct (eq_nat_dec z m) as [H1|H1].
+    - subst. 
+      destruct (eq_nat_dec n n) as [H2|H2]; 
+      destruct (eq_nat_dec m m) as [H3|H3].
+        + apply equalRefl.
+        + exfalso. apply H3. reflexivity.
+        + exfalso. apply H2. reflexivity.
+        + exfalso. apply H2. reflexivity.
+    -
+Show.
+*)

@@ -1,4 +1,5 @@
 Coq:
+u :: xs -> g u <= concat (map g xs)
 betaValid_inter_var_gen
 
 Haskell:
@@ -8,6 +9,7 @@ app_nil
 nil_charac
 inter_app_nil_l
 inter_sub_nil_l
+inter_sub_nil_r
 
 Latex:
 

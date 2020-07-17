@@ -377,6 +377,7 @@ ${LAM}/Subst.vo :				${LAM}/Subst.v \
 ${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
 								Eq.vo \
 								In.vo \
+								Nil.vo \
 								Equiv.vo \
 								Remove.vo \
 								Append.vo \

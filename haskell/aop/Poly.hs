@@ -15,13 +15,21 @@ newtype Poly a = Poly { unPoly :: [a] }
 main :: IO ()
 main = hspec $ describe "Testing equivalence of implementations" $ do
     spec01
+    spec02
 
 spec01 :: Spec
 spec01 = it "Checked eval0 ~ eval1" $ do
     property prop01
 
+spec02 :: Spec
+spec02 = it "Checked eval0 ~ eval2" $ do
+    property prop02
+
 prop01 :: [Integer] -> Integer -> Bool
 prop01 xs x = eval0 (Poly xs) x == eval1 (Poly xs) x 
+
+prop02 :: [Integer] -> Integer -> Bool
+prop02 xs x = eval0 (Poly xs) x == eval2 (Poly xs) x 
 
 pow :: (Num a) => a -> Integer -> a
 pow x n
@@ -46,4 +54,10 @@ eval0 p x = sum $ map (\(a,n) -> a * pow x n) $ zip (unPoly p) [0..]
 
 eval1 :: (Num a) => Poly a -> a -> a
 eval1 p x = sum $ triangle (*x) $ unPoly p 
+
+eval2 :: (Num a) => Poly a -> a -> a
+eval2 p x = f (unPoly p) where
+    f = cata $ \case
+        Nil         -> 0
+        Cons c s    -> c + s * x
 

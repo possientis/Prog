@@ -22,7 +22,7 @@ open Reduce
 def Value (e:Stmt) (s:Env) : Prop := ¬ (∃ (e':Stmt) (s':Env), Reduce e s e' s')
 
 -- Sequential statement always reduces
-lemma seq_reduce : ∀ (e₁ e₂:Stmt) (s:Env),
+lemma seqReduce : ∀ (e₁ e₂:Stmt) (s:Env),
   (∃ (e':Stmt) (s':Env), Reduce (e₁ ;; e₂) s e' s') :=
 begin
   intros e₁, induction e₁ with x a e₁ e₁' IH1 IH1' b e₁ e₁' IH1 IH1' b e₁ IH1;
@@ -38,16 +38,40 @@ begin
       apply SEQ_STEP, apply WHILE},
 end
 
-lemma Value_is_skip : ∀ (e:Stmt) (s:Env), Value e s ↔ e = skip :=
+lemma ValueIsSkip : ∀ (e:Stmt) (s:Env), Value e s ↔ e = skip :=
 begin
   intros e s, split; intros H,
     { unfold Value at H, revert s,
-      cases e with x a e₁ e₂; intros s H,
-        {refl},
-        {exfalso, apply H, existsi skip, existsi (bindVar x a s), constructor},
-        {exfalso, apply H, },
-        {},
-        {}
-    },
+      cases e with x a e₁ e₂ b e₁ e₂ b e₁; intros s H,
+        { refl },
+        { exfalso, apply H, existsi skip, existsi (bindVar x a s), constructor },
+        { exfalso, apply H, apply seqReduce },
+        { exfalso, apply H, cases (LEM (b s)),
+          { existsi e₁, existsi s, constructor, assumption },
+          { existsi e₂, existsi s, constructor, assumption }},
+        { exfalso, apply H, existsi (ite b (e₁ ;; while b e₁) skip),
+          existsi s, constructor}},
+    { intros H1, cases H1 with e' H1, cases H1 with s' H1,
+      cases H1 with x a H1 e₁ e₁' e₂ H1 _ _ _ _ b _ e H1 _ b e₁ H1 _ _ b e₁ H1,
+        { cases H },
+        { cases H },
+        { cases H },
+        { cases H },
+        { cases H },
+        { cases H }}
+end
+
+lemma ReduceDeterministic : ∀ (e e₁ e₂:Stmt) (s s₁ s₂:Env),
+  Reduce e s e₁ s₁ → Reduce e s e₂ s₂ → e₁ = e₂ ∧ s₁ = s₂ :=
+begin
+  intros e e₁ e₂ s s₁ s₂ H1, revert e₂ s₂,
+  induction H1; intros e₂ s₂ H2,
+    {},
+    {},
+    {},
+    {},
+    {},
     {}
 end
+
+

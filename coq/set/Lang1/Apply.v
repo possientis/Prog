@@ -1,11 +1,15 @@
+Require Import List.
+
 Require Import Utils.Replace.
 Require Import Utils.Composition.
 
 Require Import Core.Set.
+Require Import Core.Equal.
 
 Require Import Lang1.Valid.
 Require Import Lang1.Syntax.
 Require Import Lang1.Semantics.
+Require Import Lang1.Relevance.
 Require Import Lang1.Environment.
 Require Import Lang1.Substitution.
 
@@ -28,13 +32,16 @@ Open Scope set_scope.
 (* Semantics of (p $ n) in an environement where n is bound to set x is the     *)
 (* same as the semantics of p in an environment where 0 is bound to x. However, *)
 (* we cannot hope to obtain this semantics equivalence without assuming that    *)
-(* the replacement of variable 0 by n is a valid substitution for p.            *)
+(* the replacement of variable 0 by n is a valid substitution for p, and that   *)
+(* n is not already a free variable in p.                                       *)
 
 (*
 Lemma evalApply1 : forall (e:Env) (p:Formula) (n:nat) (x:set),
     Valid (replace 0 n) p ->
-        eval1 e (p $ n) n x <-> eval1 e p 0 x.
+    ~In n (free p)        ->
+    eval1 e (p $ n) n x <-> eval1 e p 0 x.
 Proof.
-    unfold eval1, apply. intros e p n x H. rewrite Substitution.
+    unfold eval1, apply. intros e p n x H1 H2. rewrite Substitution.
+    apply relevance. intros m.
 Show.
 *)

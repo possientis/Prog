@@ -3,6 +3,7 @@ Import ListNotations.
 
 Require Import Eq.
 Require Import In.
+Require Import Nil.
 Require Import Equiv.
 Require Import Remove.
 Require Import Append.
@@ -328,6 +329,7 @@ Proof.
           + intros u H5. apply H4. apply H6. assumption.
 Qed.
 
+
 (*
 Lemma betaValid_inter_var_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v), 
@@ -346,8 +348,27 @@ Proof.
         + apply IH2. assumption.
     - apply betaValid_lam_gen. split.
         + apply IH1. generalize H. intros H'. 
+          assert (var t1 <= var (Lam x t1)) as H1.
+            { simpl. intros z H1. right. assumption. }
+          apply (inter_sub_nil_l v e _ _ _ H1) in H'.
+          simpl in H'. rewrite remove_diff in H'.
+          rewrite <- diff_distrib_app_l' in H'. simpl in H'. assumption.
+        + intros u H1. assert ( Fr (f u) \\ [u] <= 
+            concat (map (fun u : v => Fr (f u) \\ [u]) (Fr (Lam x t1) \\ xs)))
+            as H2. {
 (*
-        + intros u H1. admit.
+          apply (inter_sub_nil_r v e _ _ _ H2) in H.
+          rewrite nil_charac in H. intros H3. apply (H x).
+          apply inter_charac. split.
+            { simpl. left. reflexivity. }
+            { apply diff_charac. split.
+                { assumption. }
+                { apply diff_charac in H1. destruct H1 as [H1 H4]. 
+                  simpl in H1. rewrite remove_diff in H1. apply diff_charac in H1.
+                  destruct H1 as [H1 H5]. intros H6. apply H5. left.
+                  destruct H6 as [H6|H6].
+                    { subst. reflexivity. }
+                    { inversion H6. }}}
 *)
 Show.
 *)
