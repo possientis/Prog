@@ -25,8 +25,8 @@ specEval = describe "Checking the Eval module ..." $ do
     specENot
     specELe
     specEEq
-    specEIfZ
-    specEIfNZ
+    specEIfT
+    specEIfF
     specEFac
     specEZero
     specESuc
@@ -85,13 +85,13 @@ specEEq :: Spec
 specEEq = it "Checked eval for eEq" $ do
     property $ propEEq
 
-specEIfZ :: Spec
-specEIfZ = it "Checked eval for eIf (zero)" $ do
-    property $ propEIfZ
+specEIfT :: Spec
+specEIfT = it "Checked eval for eIf (zero)" $ do
+    property $ propEIfT
 
-specEIfNZ :: Spec
-specEIfNZ = it "Checked eval for eIf (not zero)" $ do
-    property $ propEIfNZ
+specEIfF :: Spec
+specEIfF = it "Checked eval for eIf (not zero)" $ do
+    property $ propEIfF
 
 specEFac :: Spec
 specEFac = it "Checked eval for eFac" $ do
@@ -120,7 +120,7 @@ propEBool :: Bool -> Bool
 propEBool b = bool (eval (eBool b)) == Just b 
 
 propENat :: Integer -> Bool
-propENat n = n < 0 || toInt (eval (eNat n)) == Just n
+propENat n = toInt (eval (eApp eNat (eNum n))) == Just (if n <= 0 then 0 else n)
 
 propEAdd :: Integer -> Integer -> Bool
 propEAdd n m = num (eval (eApp2 eAdd (eNum n) (eNum m))) == Just (n + m)
@@ -153,26 +153,26 @@ propELe n m = bool (eval (eApp2 eLe (eNum n) (eNum m))) == Just (n <= m)
 propEEq :: Integer -> Integer -> Bool
 propEEq n m = bool (eval (eApp2 eEq (eNum n) (eNum m))) == Just (n == m)
 
-propEIfZ :: Integer -> Integer -> Bool
-propEIfZ n m = num (eval (eIf (eNum 0) (eNum n) (eNum m))) == Just n
+propEIfT :: Integer -> Integer -> Bool
+propEIfT n m = num (eval (eIf (eBool True) (eNum n) (eNum m))) == Just n
 
-propEIfNZ :: Integer -> Integer -> Integer -> Bool
-propEIfNZ nz n m = if nz == 0 then True else
-    num (eval (eIf (eNum nz) (eNum n) (eNum m))) == Just m
+propEIfF :: Integer -> Integer -> Bool
+propEIfF n m = num (eval (eIf (eBool False) (eNum n) (eNum m))) == Just m
 
-propEFac :: Integer -> String -> String -> Bool
-propEFac m f n  = f == "" || n == "" || f == n || m < 0 ||
-    num (eval (eApp eFac (eNum m))) == Just (product [1..m])
+propEFac :: Integer -> Bool
+propEFac n  = num (eval (eApp eFac (eNum n))) == Just 
+    (if (n <= 0) then 1 else product [1..n])
 
 propEZero :: Bool
 propEZero = toInt (eval eZero) == Just 0
 
 propESuc :: Integer -> Bool
-propESuc n = n < 0 || toInt (eval (eSuc (eNat n))) == Just (n + 1)
+propESuc n = toInt (eval (eSuc (eApp eNat (eNum n)))) == Just 
+    (1 + if n <= 0 then 0 else n)
 
 propECaseZ :: Integer -> Integer -> String -> Bool
 propECaseZ n m x = num (eval (eCase eZero (eNum n) x (eNum m))) == Just n
 
 propECaseS :: Integer -> Integer -> String -> Bool
 propECaseS n m x = m <= 0 || 
-    toInt (eval (eCase (eNat m) (eNum n) x (eVar x))) == Just (m - 1)
+    toInt (eval (eCase (eApp eNat (eNum m)) (eNum n) x (eVar x))) == Just (m - 1)

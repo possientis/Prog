@@ -85,11 +85,11 @@ Proof.
 Qed.
 
 (* Theorem schema of specification where we explicitely 'apply' P at the    *)
-(* variable p with 'P $ p'. TODO                                            *)
+(* variable p with 'apply P p'. TODO                                            *)
 Definition specificationF' (P:Formula) (n m p:nat) : Formula :=
-    All n (Exi m (All p (Iff (Elem p m) (And (Elem p n) (P $ p))))). 
+    All n (Exi m (All p (Iff (Elem p m) (And (Elem p n) (apply P p))))). 
 
 Lemma specificationLink : forall (P:Formula) (n m p:nat),
-    specificationF' P n m p = specificationF (P $ p) n m p.
+    specificationF' P n m p = specificationF (apply P p) n m p.
 Proof. intros P n m p. reflexivity. Qed.
 

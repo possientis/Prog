@@ -451,15 +451,51 @@ _ = begin
   plus · two · two
 
   —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
-  (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m" [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+    (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m"
+      [zero⇒ ` "n"
+      |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
   · two
   · two
 
   —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
-  (ƛ "n" ⇒ case two [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ]) · two
+    (ƛ "n" ⇒ case two
+      [zero⇒ ` "n"
+      |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+  · two
 
   —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
-  case two [zero⇒ two |suc "m" ⇒ `suc (plus · ` "m" · two) ]
+    case two
+      [zero⇒ two
+      |suc "m" ⇒ `suc (plus · ` "m" · two) ]
+
+  —→⟨ β-suc (V-suc V-zero) ⟩
+    `suc (plus · `suc `zero · two)
+
+  —→⟨ ξ-suc (ξ-·₁ (ξ-·₁ β-μ)) ⟩
+  `suc
+    ( (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m"
+        [zero⇒ ` "n"
+        |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+    · `suc `zero
+    · two)
+
+  —→⟨ ξ-suc (ξ-·₁ (β-ƛ (V-suc V-zero))) ⟩
+  `suc
+    ( (ƛ "n" ⇒ case `suc `zero
+        [zero⇒ ` "n"
+        |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+    · two)
+
+  —→⟨ ξ-suc (β-ƛ (V-suc (V-suc V-zero))) ⟩
+  `suc (case `suc `zero
+    [zero⇒ two
+    |suc "m" ⇒ `suc (plus · ` "m" · two)] )
+
+  —→⟨ ξ-suc (β-suc V-zero) ⟩
+  `suc (`suc (plus · `zero · two))
+
+  —→⟨ ξ-suc (ξ-suc (ξ-·₁ (ξ-·₁ β-μ))) ⟩
+  `suc (`suc (( {!!} ) · `zero · two) )
 
   —→⟨ {!!} ⟩
   {!!}

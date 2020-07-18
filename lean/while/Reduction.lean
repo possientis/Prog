@@ -65,9 +65,12 @@ lemma ReduceDeterministic : ∀ (e e₁ e₂:Stmt) (s s₁ s₂:Env),
   Reduce e s e₁ s₁ → Reduce e s e₂ s₂ → e₁ = e₂ ∧ s₁ = s₂ :=
 begin
   intros e e₁ e₂ s s₁ s₂ H1, revert e₂ s₂,
-  induction H1; intros e₂ s₂ H2,
-    {},
-    {},
+  induction H1 with x a s e' e₁ e₂ s' s₁ H1 IH;
+  intros e₂ s₂ H2,
+    { cases H2, split, { refl }, { unfold bindVar}},
+    { cases H2 with _ _ _ _ e₁',
+      {},
+      {}},
     {},
     {},
     {},

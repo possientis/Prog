@@ -1,3 +1,11 @@
+In this section, we are interested in pairs of functors as follows:
+    \[
+        \begin{tikzcd}
+              \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+            & \Dat \arrow[l, "G", bend left = 50, ""{name=D, above}]
+        \end{tikzcd}
+    \]
+
 \begin{defin}\label{Adj:def:unit}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are categories. We call {\em unit} of the typed functors $(\Cat,\Dat,F)$
@@ -33,6 +41,34 @@ of $G$ and $F$.
     context, we shall simply say that $\eta$ {\em is a unit of} the
     ordered pair $(F,G)$.
 \end{notation}
+
+\begin{prop}\label{Adj:prop:unit:proving:equality}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit 
+    of $(F,G)$. Then, for all $c\in\Cat$, $d\in\Dat$ and $g_{1},g_{2}:F(c)\to d$,
+    we have the implication:
+        \[
+            G(g_{1})\circ\eta_{c} = G(g_{2})\circ\eta_{c}\ 
+            \Rightarrow\ 
+            g_{1}=g_{2}
+        \]
+\end{prop}
+\begin{proof}
+    This is an immediate consequence of the uniqueness property of
+    definition~(\ref{Adj:def:unit}). Consider the arrow 
+    $f=G(g_{1})\circ\eta_{c}$. Since $g_{1}:F(c)\to d$ and $G$ is a 
+    functor, we have 
+    $G(g_{1}):G(F(c))\to G(d)$ and since $\eta_{c}:c\to G(F(c))$, $f$
+    is a well-defined arrow $f:c\to G(d)$ in the category \Cat. Having
+    assumed that $\eta$ is a unit of $(F,G)$, from 
+    definition~(\ref{Adj:def:unit}) there exists a unique arrow 
+    $g:F(c)\to d$ in the category \Dat\ such that $f=G(g)\circ\eta_{c}$.
+    However the equality $f=G(g)\circ\eta_{c}$ is satified by the 
+    arrow $g=g_{1}$ since we defined $f$ as $f=G(g_{1})\circ\eta_{c}$.
+    Now if we assume that $G(g_{1})\circ\eta_{c}=G(g_{2})\circ\eta_{c}$,
+    then the equality $f=G(g)\circ\eta_{c}$ is also satisfied by $g_{2}$.
+    By uniquenes, it follows that $g_{1}=g_{2}$.
+\end{proof}
 
 Given functors $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ where \Cat, \Dat\ are 
 categories, if $\eta:I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$,

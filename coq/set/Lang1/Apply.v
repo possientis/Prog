@@ -25,23 +25,36 @@ Require Import Lang1.Substitution.
 
 Definition apply (p:Formula) (n:nat) : Formula := fmap (replace 0 n) p.
 
-Notation "p $ n" := (apply p n) (at level 60, right associativity) : set_scope.
+(* Same idea, but with two variables.                                           *)
+Definition apply2 (p:Formula) (n m:nat) : Formula := fmap (replace2 0 1 n m) p.
 
-Open Scope set_scope.
+(* The semantics of 'apply p n' in an environement where n is bound to set x    *)
+(* is the same as the semantics of p in an environment where 0 is bound to x.   *)
+(* However, we cannot hope to obtain this semantics equivalence without         *)
+(* assuming that the replacement of variable 0 by n is a valid substitution     *)
+(* for p. Also, n cannot already be a free variable of p.                       *)
 
-(* Semantics of (p $ n) in an environement where n is bound to set x is the     *)
-(* same as the semantics of p in an environment where 0 is bound to x. However, *)
-(* we cannot hope to obtain this semantics equivalence without assuming that    *)
-(* the replacement of variable 0 by n is a valid substitution for p, and that   *)
-(* n is not already a free variable in p.                                       *)
-
-(*
 Lemma evalApply1 : forall (e:Env) (p:Formula) (n:nat) (x:set),
     Valid (replace 0 n) p ->
     ~In n (free p)        ->
-    eval1 e (p $ n) n x <-> eval1 e p 0 x.
+    eval1 e (apply p n) n x <-> eval1 e p 0 x.
 Proof.
     unfold eval1, apply. intros e p n x H1 H2. rewrite Substitution.
-    apply relevance. intros m.
+    - apply relevance. intros m H3. apply bindReplace. intros H4. 
+      subst. apply H2. assumption. 
+    - assumption.
+Qed.
+
+(*
+(* The semantics of 'apply2 p n m' in an environment where n is bound to x and  *)
+(* m is bound to y, is the same as the semantics of p in an environment where 0 *)
+(* is bound to x and 1 is bound to y, with the obvious caveat.                  *)
+Lemma evalApply2 : forall (e:Env) (p:Formula) (n m:nat) (x y:set),
+    Valid (replace2 0 1 n m) p ->
+    ~In n (free p)  ->
+    ~In m (free p)  ->
+    eval2 e (apply2 p n m) n m x y <-> eval2 e p 0 1 x y.
+Proof.
+
 Show.
 *)

@@ -14,7 +14,6 @@ module  Syntax
     ,   eRec
     ,   eZero
     ,   eSuc
-    ,   eNat
     ,   eCase
     )   where
 
@@ -44,12 +43,6 @@ eNum n = Fix $ ENum n
 
 eBool :: Bool -> Expr
 eBool b = Fix $ EBool b
-
-eNat :: Integer -> Expr
-eNat n
-    | n > 0   = eSuc $ eNat (n - 1)
-    | n == 0  = eZero
-    | otherwise = error "eNat: negative argument"
 
 eVar :: String -> Expr
 eVar s = Fix $ EVar $ mkVar s

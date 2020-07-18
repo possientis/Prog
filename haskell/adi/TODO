@@ -1,7 +1,8 @@
-add test for eToNum and eFromNum
+add eFromNat
 add test for plus and mult for nat
 Show for Expr
 Show for closure: add expr
+add Error/Bot to syntax, value ?
 rewrite eval_ with cata?
 can we define a small-step operational semantics
 implement Arbitrary for Env ?

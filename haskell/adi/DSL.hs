@@ -2,7 +2,6 @@ module  DSL
     (   Expr 
     ,   eNum    -- :: Integer -> Expr
     ,   eBool   -- :: Bool -> Expr
-    ,   eNat    -- :: Integer -> Expr
     ,   eZero   -- :: Expr
     ,   eSuc    -- :: Expr -> Expr
     ,   eVar    -- :: String -> Expr
@@ -23,6 +22,7 @@ module  DSL
     ,   eLe     -- :: Expr
     ,   eEq     -- :: Expr
     ,   eFac    -- :: Expr
+    ,   eNat    -- :: Expr
     )   where
 
 import Op
@@ -62,12 +62,19 @@ eApp2 :: Expr -> Expr -> Expr -> Expr
 eApp2 f x y = eApp (eApp f x) y
 
 eFac :: Expr
-eFac =  (eRec "f"
-            (eLam "n"
-                (eIf (eVar "n") (eNum 1) 
-                    (eApp2 eMul 
-                        (eVar "n") 
-                        (eApp (eVar "f") 
-                            (eApp2 eAdd (eVar "n") (eNum (-1))))))))
+eFac = (eRec "f" (eLam "n"
+    (eIf (eApp2 eLe (eVar "n") (eNum 0)) 
+        (eNum 1) 
+        (eApp2 eMul 
+            (eVar "n") 
+            (eApp (eVar "f") 
+                (eApp2 eSub (eVar "n") (eNum 1)))))))
 
+eNat :: Expr
+eNat = (eRec "f" (eLam "n"
+    (eIf (eApp2 eLe (eVar "n") (eNum 0))
+        eZero
+        (eSuc 
+            (eApp (eVar "f") 
+                (eApp2 eSub (eVar "n") (eNum 1)))))))
 

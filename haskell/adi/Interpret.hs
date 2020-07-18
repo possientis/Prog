@@ -58,9 +58,9 @@ evalOp op es ev = delta op <$> mapM ev es
 evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalIf e e1 e2 ev = do
     v <- ev e
-    case num v of
-        Nothing -> error "If: condition does not evaluate to an integer."
-        Just n  -> ev $ if n == 0 then e1 else e2
+    case bool v of
+        Nothing -> error "If: condition does not evaluate to a boolean."
+        Just b  -> ev $ if b then e1 else e2
 
 evalLam :: Var -> Expr -> (Expr -> Eval Value) -> Eval Value
 evalLam x e _ev = do
