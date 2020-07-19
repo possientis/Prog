@@ -8,13 +8,13 @@ import Test.QuickCheck  hiding ((===))
 
 import Equiv
 import Include
+import Formula
 import Variable     (Var)
 import Coincide
 import Intersect
 import Difference
 
 import Lam.T
-import Lam.Free
 import Lam.Subst
 import Lam.BetaValid
 
@@ -34,63 +34,72 @@ specBetaValid = describe "Testing non-polymorphic properties of BetaValid..." $ 
     testBetaValidSubstGen
     testBetaValidSubst
     testBetaValidSupport
-
+    testBetaValidInterVarGen
+    testBetaValidInterVar
 
 testBetaValidVarGen :: Spec
 testBetaValidVarGen = it "Checked generic beta validity for variables" $
-    property $ propBetaValidVarGen
+    property propBetaValidVarGen
 
 testBetaValidVar :: Spec
 testBetaValidVar = it "Checked beta validity for variables" $
-    property $ propBetaValidVar
+    property propBetaValidVar
 
 testBetaValidAppGen :: Spec
 testBetaValidAppGen = it "Checked generic beta validity for applications" $
-    property $ propBetaValidAppGen
+    property propBetaValidAppGen
 
 testBetaValidApp :: Spec
 testBetaValidApp = it "Checked beta validity for applications" $
-    property $ propBetaValidApp
+    property propBetaValidApp
 
 testBetaValidLamGen :: Spec
 testBetaValidLamGen = it "Checked generic beta validity for lambda abstraction" $
-    property $ propBetaValidLamGen
+    property propBetaValidLamGen
 
 testBetaValidLam :: Spec
 testBetaValidLam = it "Checked beta validity for lambda abstraction" $
-    property $ propBetaValidLam
+    property propBetaValidLam
 
 testBetaValidIncl :: Spec
 testBetaValidIncl = it "Checked beta validity inclusion property" $ do
-    property $ propBetaValidIncl
+    property propBetaValidIncl
 
 testBetaValidFreeGen :: Spec
 testBetaValidFreeGen = it "Checked generic beta validity free property" $ do
-    property $ propBetaValidFreeGen
+    property propBetaValidFreeGen
 
 testBetaValidFree :: Spec
 testBetaValidFree = it "Checked beta validity free property" $ do
-    property $ propBetaValidFree
+    property propBetaValidFree
 
 testBetaValidCoincideGen :: Spec
 testBetaValidCoincideGen = it "Checked generic beta validity coincide property"$ do
-    property $ propBetaValidCoincideGen
+    property propBetaValidCoincideGen
 
 testBetaValidCoincide :: Spec
 testBetaValidCoincide = it "Checked beta validity coincide property" $ do
-    property $ propBetaValidCoincide
+    property propBetaValidCoincide
 
 testBetaValidSubstGen :: Spec
 testBetaValidSubstGen = it "Checked generic beta validity subst property" $ do
-    property $ propBetaValidSubstGen
+    property propBetaValidSubstGen
 
 testBetaValidSubst :: Spec
 testBetaValidSubst = it "Checked beta validity subst property" $ do
-    property $ propBetaValidSubst
+    property propBetaValidSubst
 
 testBetaValidSupport :: Spec
 testBetaValidSupport = it "Checked beta validity support property" $ do
-    property $ propBetaValidSupport
+    property propBetaValidSupport
+
+testBetaValidInterVarGen :: Spec
+testBetaValidInterVarGen = it "Checked gen beta validity inter var property" $ do
+    property propBetaValidInterVarGen
+
+testBetaValidInterVar :: Spec
+testBetaValidInterVar = it "Checked beta validity inter var gen property" $ do
+    property propBetaValidInterVar
 
 propBetaValidVarGen :: (Var -> T Var) -> Var -> [Var] -> Bool
 propBetaValidVarGen f x xs = betaValid_ f xs (Var x)
@@ -174,3 +183,17 @@ propBetaValidSupport
     -> Bool
 propBetaValidSupport f t xs ys = (free t /\ xs) /== (free t /\ ys) || 
     betaValid_ f xs t == betaValid_ f ys t
+
+propBetaValidInterVarGen
+    :: (Var -> T Var) 
+    -> T Var 
+    -> [Var]
+    -> Bool
+propBetaValidInterVarGen f t xs = 
+    (var t /\ concatMap (\u -> free (f u) \\ [u]) (free t \\ xs)) /= [] ||
+        betaValid_ f xs t
+
+propBetaValidInterVar :: (Var -> T Var) -> T Var -> Bool
+propBetaValidInterVar f t = 
+    (var t /\ concatMap (\u -> free (f u) \\ [u]) (free t)) /= [] ||
+        betaValid f t

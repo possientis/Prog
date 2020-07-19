@@ -14,7 +14,6 @@ specEval :: Spec
 specEval = describe "Checking the Eval module ..." $ do
     specENum
     specEBool
-    specENat
     specEAdd
     specEMul
     specESub
@@ -27,100 +26,116 @@ specEval = describe "Checking the Eval module ..." $ do
     specEEq
     specEIfT
     specEIfF
-    specEFac
     specEZero
     specESuc
     specECaseZ
     specECaseS
+    specEFac
+    specEToNat
+    specEFromNat
+    specEAddNat
+    specEMulNat
+
+pos :: Integer -> Integer 
+pos n = if n <= 0 then 0 else n
 
 specENum :: Spec
 specENum = it "Checked eval for ENum in empty environment" $ do
-    property $ propENum
+    property propENum
 
 specEBool :: Spec
 specEBool = it "Checked eval for EBool in empty environment" $ do
-    property $ propEBool
-
-specENat :: Spec
-specENat = it "Checked eval for eNat" $ do
-    property $ propENat
+    property propEBool
 
 specEAdd :: Spec 
 specEAdd = it "Checked eval for eAdd" $ do
-    property $ propEAdd
+    property propEAdd
 
 specEMul :: Spec 
 specEMul = it "Checked eval for eMul" $ do
-    property $ propEMul
+    property propEMul
 
 specESub :: Spec 
 specESub = it "Checked eval for eSub" $ do
-    property $ propESub
+    property propESub
 
 specEDiv :: Spec 
 specEDiv = it "Checked eval for eDiv" $ do
-    property $ propEDiv
+    property propEDiv
 
 specEAnd :: Spec 
 specEAnd = it "Checked eval for eAnd" $ do
-    property $ propEAnd
+    property propEAnd
 
 specEOr :: Spec 
 specEOr = it "Checked eval for eOr" $ do
-    property $ propEOr
+    property propEOr
 
 specEImp :: Spec 
 specEImp = it "Checked eval for eImp" $ do
-    property $ propEImp
+    property propEImp
 
 specENot :: Spec 
 specENot = it "Checked eval for eNot" $ do
-    property $ propENot
+    property propENot
 
 specELe :: Spec 
 specELe = it "Checked eval for eLe" $ do
-    property $ propELe
+    property propELe
 
 specEEq :: Spec 
 specEEq = it "Checked eval for eEq" $ do
-    property $ propEEq
+    property propEEq
 
 specEIfT :: Spec
 specEIfT = it "Checked eval for eIf (zero)" $ do
-    property $ propEIfT
+    property propEIfT
 
 specEIfF :: Spec
 specEIfF = it "Checked eval for eIf (not zero)" $ do
-    property $ propEIfF
-
-specEFac :: Spec
-specEFac = it "Checked eval for eFac" $ do
-    property $ propEFac
+    property propEIfF
 
 specEZero :: Spec
 specEZero = it "Checked eval for eZero" $ do
-    property $ propEZero
+    property propEZero
 
 specESuc :: Spec
 specESuc = it "Checked eval for eSuc" $ do
-    property $ propESuc
+    property propESuc
 
 specECaseZ :: Spec
 specECaseZ = it "Checked eval for eCase (zero)" $ do   
-    property $ propECaseZ
+    property propECaseZ
 
 specECaseS :: Spec
 specECaseS = it "Checked eval for eCase (successor)" $ do   
-    property $ propECaseS
+    property propECaseS
+
+specEFac :: Spec
+specEFac = it "Checked eval for eFac" $ do
+    property propEFac
+
+specEToNat :: Spec
+specEToNat = it "Checked eval for eToNat" $ do
+    property propEToNat
+
+specEFromNat :: Spec
+specEFromNat = it "Checked eval for eFromNat" $ do
+    property propEFromNat
+
+specEAddNat :: Spec
+specEAddNat = it "Checked eval for eAddNat" $ do
+    property propEAddNat
+
+specEMulNat :: Spec
+specEMulNat = it "Checked eval for eMulNat" $ do
+    property propEMulNat
 
 propENum :: Integer -> Bool
 propENum n = num (eval (eNum n)) == Just n  
 
 propEBool :: Bool -> Bool
 propEBool b = bool (eval (eBool b)) == Just b 
-
-propENat :: Integer -> Bool
-propENat n = toInt (eval (eApp eNat (eNum n))) == Just (if n <= 0 then 0 else n)
 
 propEAdd :: Integer -> Integer -> Bool
 propEAdd n m = num (eval (eApp2 eAdd (eNum n) (eNum m))) == Just (n + m)
@@ -159,20 +174,33 @@ propEIfT n m = num (eval (eIf (eBool True) (eNum n) (eNum m))) == Just n
 propEIfF :: Integer -> Integer -> Bool
 propEIfF n m = num (eval (eIf (eBool False) (eNum n) (eNum m))) == Just m
 
-propEFac :: Integer -> Bool
-propEFac n  = num (eval (eApp eFac (eNum n))) == Just 
-    (if (n <= 0) then 1 else product [1..n])
-
 propEZero :: Bool
 propEZero = toInt (eval eZero) == Just 0
 
 propESuc :: Integer -> Bool
-propESuc n = toInt (eval (eSuc (eApp eNat (eNum n)))) == Just 
-    (1 + if n <= 0 then 0 else n)
+propESuc n = toInt (eval (eSuc (eNat n))) == Just (1 + pos n)
 
 propECaseZ :: Integer -> Integer -> String -> Bool
 propECaseZ n m x = num (eval (eCase eZero (eNum n) x (eNum m))) == Just n
 
 propECaseS :: Integer -> Integer -> String -> Bool
 propECaseS n m x = m <= 0 || 
-    toInt (eval (eCase (eApp eNat (eNum m)) (eNum n) x (eVar x))) == Just (m - 1)
+    toInt (eval (eCase (eNat m) (eNum n) x (eVar x))) == Just (m - 1)
+
+propEFac :: Integer -> Bool
+propEFac n  = num (eval (eApp eFac (eNum n))) == Just 
+    (if (n <= 0) then 1 else product [1..n])
+
+propEToNat :: Integer -> Bool
+propEToNat n = toInt (eval (eApp eToNat (eNum n))) == Just (pos n)
+
+propEFromNat :: Integer -> Bool
+propEFromNat n = num (eval (eApp eFromNat (eNat n))) == Just (pos n)
+
+propEAddNat :: Integer -> Integer -> Bool
+propEAddNat n m = toInt (eval (eApp2 eAddNat (eNat n) (eNat m))) == Just 
+    (pos n + pos m)
+
+propEMulNat :: Integer -> Integer -> Bool
+propEMulNat n m = toInt (eval (eApp2 eMulNat (eNat $ n `mod` cap) (eNat $ m `mod` cap))) == Just 
+    (pos (n `mod` cap) * pos (m `mod` cap)) where cap = 12 -- too slow otherwise

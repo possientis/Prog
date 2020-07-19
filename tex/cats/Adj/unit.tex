@@ -115,6 +115,28 @@ as per definition~(\ref{Nat:def:composition}).
         \end{eqnarray*}
     So we need to prove the existence of a unique arrow $g:F(c)\to d$
     such that $f=G(g)\circ G(\alpha_{c})\circ\eta_{c}$, which is
-    $f=G(g\circ\alpha_{c})\circ\eta_{c}$ since $G$ is a functor.
-    TODO
+    $f=G(g\circ\alpha_{c})\circ\eta_{c}$ since $G$ is a functor:
+
+    Existence: having assumed $\eta$ is a unit of $(F,G)$, since 
+    $f:c\to G(d)$ using definition~(\ref{Adj:def:unit}) there exists
+    a (unique) $h:F(c)\to d$ with $f = G(h)\circ\eta_{c}$.
+    However, by assumption $\alpha:F\Rightarrow F$ is a natural
+    isomorphism. From proposition~(\ref{Nat:prop:isomorphism:component}),
+    every component of $\alpha$ is an isomorphism and in particular
+    $\alpha_{c}:F(c)\to F(c)$ has an inverse $\alpha_{c}^{-1}:F(c)\to F(c)$.
+    Defining $g=h\circ\alpha_{c}^{-1}$ we obtain an arrow $g:F(c)\to d$ such
+    that $f=G(g\circ\alpha_{c})\circ\eta_{c}$ as requested.
+
+    Uniqueness: Suppose $g_{1},g_{2}:F(c)\to d$ are two arrows in \Dat\ 
+    such that $G(g_{1}\circ\alpha_{c})\circ\eta_{c}=f=G(g_{2}\circ\alpha_{c})
+    \circ\eta_{c}$. Having assumed $\eta$ is a unit of $(F,G)$ using
+    proposition~(\ref{Adj:prop:unit:proving:equality}) we obtain 
+    $g_{1}\circ\alpha_{c}=g_{2}\circ\alpha_{c}$ and composing both sides
+    to the right by $\alpha_{c}^{-1}$ we conclude that $g_{1}=g_{2}$
+    as requested.
+
+    We now prove the {\em only if} part. So we assume that 
+    $\eta':I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$ and we need
+    to show the existence of a natural isomorphism $\alpha:F\Rightarrow F$
+    such that $\eta'=(G\alpha)\circ\eta$.
 \end{proof}

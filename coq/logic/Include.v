@@ -33,7 +33,6 @@ Proof.
     - apply H1. assumption.
 Qed.
 
-
 Lemma incl_concat : forall (v:Type) (xss yss:list (list v)),
     xss <= yss -> concat xss <= concat yss.
 Proof.
@@ -42,6 +41,16 @@ Proof.
     exists xs. split.
     - assumption.
     - apply H1. assumption.
+Qed.
+
+Lemma incl_concat_map : forall (v:Type) (f:v -> list v) (xs:list v) (x:v),
+    x :: xs -> f x <= concat (map f xs).
+Proof.
+    intros v f xs x H1 y H2. apply concat_charac. exists (f x). split.
+    - assumption.
+    - apply in_map_iff. exists x. split.
+        + reflexivity.
+        + assumption. 
 Qed.
 
 Lemma incl_nil : forall (v:Type) (xs:list v),

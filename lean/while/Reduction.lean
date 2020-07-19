@@ -65,16 +65,32 @@ lemma ReduceDeterministic : ∀ (e e₁ e₂:Stmt) (s s₁ s₂:Env),
   Reduce e s e₁ s₁ → Reduce e s e₂ s₂ → e₁ = e₂ ∧ s₁ = s₂ :=
 begin
   intros e e₁ e₂ s s₁ s₂ H1, revert e₂ s₂,
-  induction H1 with x a s e' e₁ e₂ s' s₁ H1 IH;
+  induction H1 with
+    x a s e' e₁ e₂ s' s₁ H1 IH e₁ s₁ b e₁ e₁' s₁ H1 b e₁' e₁ s₁ H1 b e₁ s₁;
   intros e₂ s₂ H2,
     { cases H2, split, { refl }, { unfold bindVar}},
-    { cases H2 with _ _ _ _ e₁',
-      {},
-      {}},
-    {},
-    {},
-    {},
-    {}
+    { cases H2 with _ _ _ _ e₁' _ _ _ H3,
+      { cases (IH e₁' s₂ H3) with H4 H5, split,
+        { rw H4 },
+        { assumption }},
+      { exfalso, have H3 : Value skip s' := begin rw ValueIsSkip end ,
+        apply H3, existsi e₁, existsi s₁, assumption }},
+    { cases H2 with _ _ _ _ e₂ _ _ _ H3,
+      { exfalso, have H4 : Value skip s₁ := begin rw ValueIsSkip end,
+        apply H4, existsi e₂, existsi s₂, assumption },
+      { split; refl }},
+    { cases H2 with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ H3,
+      { split; refl },
+      { exfalso, apply H3, assumption }},
+    { cases H2 with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ H3,
+      { exfalso, apply H1, assumption, },
+      { split; refl }},
+    { cases H2, split; refl }
 end
 
+lemma ReductionSkipIff : ∀ (e:Stmt) (s t:Env), ¬ Reduce skip s e t :=
+begin
+  intros e s t H1, have H2 : Value skip s := begin rw ValueIsSkip end,
+  apply H2, existsi e, existsi t, assumption
+end
 

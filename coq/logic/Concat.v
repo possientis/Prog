@@ -2,7 +2,6 @@ Require Import List.
 
 Require Import In.
 
-
 Lemma concat_charac : forall (v:Type) (xss:list (list v)) (x:v),
     x :: concat xss <-> exists (xs:list v), (x :: xs) /\ (xs :: xss).
 Proof.

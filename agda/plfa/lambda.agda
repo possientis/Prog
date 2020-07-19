@@ -307,6 +307,7 @@ L2 = ξ-·₁ L1
 infix 2 _—↠_ -- \em\rr-
 infix 1 begin_
 infixr 2 _—→⟨_⟩_
+infixr 2 _—→⟨⟩_
 infix 3 _∎
 
 -- reflexive and transitive closure of _—→_
@@ -322,6 +323,12 @@ data _—↠_ : Term → Term → Set where
       ---------------
     → L —↠ N
 
+_—→⟨⟩_ : ∀ (L : Term) {M : Term}
+  → L —↠ M
+    ----------
+  → L —↠ M
+
+L —→⟨⟩ p = p
 
 begin_ : ∀ {M N : Term}
   → M —↠ N
@@ -495,7 +502,29 @@ _ = begin
   `suc (`suc (plus · `zero · two))
 
   —→⟨ ξ-suc (ξ-suc (ξ-·₁ (ξ-·₁ β-μ))) ⟩
-  `suc (`suc (( {!!} ) · `zero · two) )
+  `suc (`suc
+    ( (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m"
+        [zero⇒ ` "n"
+        |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+    · `zero · two))
 
-  —→⟨ {!!} ⟩
-  {!!}
+  —→⟨ ξ-suc (ξ-suc (ξ-·₁ (β-ƛ V-zero))) ⟩
+  `suc (`suc
+    (  (ƛ "n" ⇒ case `zero
+         [zero⇒ ` "n"
+         |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+    · two))
+
+  —→⟨ ξ-suc (ξ-suc (β-ƛ (V-suc (V-suc V-zero)))) ⟩
+  `suc (`suc
+    case `zero
+      [zero⇒ two
+      |suc "m" ⇒ `suc (plus · `"m" · two) ])
+
+  —→⟨ ξ-suc (ξ-suc β-zero) ⟩
+  `suc (`suc two)
+
+  —→⟨⟩
+  `suc (`suc (`suc (`suc `zero)))
+  ∎
+

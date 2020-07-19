@@ -1,5 +1,3 @@
-add eFromNat
-add test for plus and mult for nat
 Show for Expr
 Show for closure: add expr
 add Error/Bot to syntax, value ?

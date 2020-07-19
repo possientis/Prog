@@ -1,28 +1,32 @@
 module  DSL
     (   Expr 
-    ,   eNum    -- :: Integer -> Expr
-    ,   eBool   -- :: Bool -> Expr
-    ,   eZero   -- :: Expr
-    ,   eSuc    -- :: Expr -> Expr
-    ,   eVar    -- :: String -> Expr
-    ,   eIf     -- :: Expr -> Expr -> Expr -> Expr
-    ,   eLam    -- :: String -> Expr -> Expr
-    ,   eApp    -- :: Expr -> Expr -> Expr
-    ,   eApp2   -- :: Expr -> Expr -> Expr -> Expr
-    ,   eRec    -- :: String -> Expr -> Expr
-    ,   eCase   -- :: Expr -> Expr -> String -> Expr -> Expr
-    ,   eAdd    -- :: Expr
-    ,   eMul    -- :: Expr
-    ,   eSub    -- :: Expr
-    ,   eDiv    -- :: Expr
-    ,   eAnd    -- :: Expr
-    ,   eOr     -- :: Expr
-    ,   eImp    -- :: Expr
-    ,   eNot    -- :: Expr
-    ,   eLe     -- :: Expr
-    ,   eEq     -- :: Expr
-    ,   eFac    -- :: Expr
-    ,   eNat    -- :: Expr
+    ,   eNum        -- :: Integer -> Expr
+    ,   eBool       -- :: Bool -> Expr
+    ,   eNat        -- :: Integer -> Expr
+    ,   eZero       -- :: Expr
+    ,   eSuc        -- :: Expr -> Expr
+    ,   eVar        -- :: String -> Expr
+    ,   eIf         -- :: Expr -> Expr -> Expr -> Expr
+    ,   eLam        -- :: String -> Expr -> Expr
+    ,   eApp        -- :: Expr -> Expr -> Expr
+    ,   eApp2       -- :: Expr -> Expr -> Expr -> Expr
+    ,   eRec        -- :: String -> Expr -> Expr
+    ,   eCase       -- :: Expr -> Expr -> String -> Expr -> Expr
+    ,   eAdd        -- :: Expr
+    ,   eMul        -- :: Expr
+    ,   eSub        -- :: Expr
+    ,   eDiv        -- :: Expr
+    ,   eAnd        -- :: Expr
+    ,   eOr         -- :: Expr
+    ,   eImp        -- :: Expr
+    ,   eNot        -- :: Expr
+    ,   eLe         -- :: Expr
+    ,   eEq         -- :: Expr
+    ,   eFac        -- :: Expr
+    ,   eToNat      -- :: Expr
+    ,   eFromNat    -- :: Expr
+    ,   eAddNat     -- :: Expr
+    ,   eMulNat     -- :: Expr
     )   where
 
 import Op
@@ -70,11 +74,41 @@ eFac = (eRec "f" (eLam "n"
             (eApp (eVar "f") 
                 (eApp2 eSub (eVar "n") (eNum 1)))))))
 
-eNat :: Expr
-eNat = (eRec "f" (eLam "n"
+eToNat :: Expr
+eToNat = (eRec "f" (eLam "n"
     (eIf (eApp2 eLe (eVar "n") (eNum 0))
         eZero
         (eSuc 
             (eApp (eVar "f") 
                 (eApp2 eSub (eVar "n") (eNum 1)))))))
+
+eNat :: Integer -> Expr
+eNat n = eApp eToNat (eNum n)
+
+eFromNat :: Expr
+eFromNat = (eRec "f" (eLam "n"
+    (eCase (eVar "n") 
+        (eNum 0)
+        "n" (eApp2 eAdd 
+                (eNum 1) 
+                (eApp (eVar "f") (eVar "n")))))) 
+
+eAddNat :: Expr
+eAddNat = (eRec "+" (eLam "n" (eLam "m"
+    (eCase (eVar "n")
+        (eVar "m")
+        "n" (eSuc 
+                (eApp2 (eVar "+") 
+                    (eVar "n") 
+                    (eVar "m")))))))
+
+eMulNat :: Expr
+eMulNat = (eRec "*" (eLam "n" (eLam "m"
+    (eCase (eVar "n")
+        eZero
+        "n" (eApp2 eAddNat 
+                (eVar "m") 
+                (eApp2 (eVar "*") 
+                    (eVar "n") 
+                    (eVar "m")))))))
 

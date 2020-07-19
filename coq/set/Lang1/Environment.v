@@ -109,23 +109,34 @@ Proof.
 Qed.
 
 
-Lemma bindReplace : forall (e:Env) (n m p:nat) (x:set),
-    n <> p -> (bind e n x ; replace m n) p == bind e m x p.
+Lemma bindReplace : forall (e:Env) (n n' k:nat) (x:set),
+    n' <> k -> bind e n' x (replace n n' k) == bind e n x k.
 Proof.
-    intros e n m p x H. unfold bind, replace, comp. 
-    destruct (eq_nat_dec p m) as [H1|H1].
+    intros e n n' k x H. unfold bind, replace, comp. 
+    destruct (eq_nat_dec k n) as [H1|H1].
     - subst. 
-      destruct (eq_nat_dec n n) as [H2|H2]; 
-      destruct (eq_nat_dec m m) as [H3|H3].
+      destruct (eq_nat_dec n' n') as [H2|H2]; 
+      destruct (eq_nat_dec n n) as [H3|H3].
         + apply equalRefl.
         + exfalso. apply H3. reflexivity.
         + exfalso. apply H2. reflexivity.
         + exfalso. apply H2. reflexivity.
-    - destruct (eq_nat_dec n p) as [H2|H2];
-      destruct (eq_nat_dec m p) as [H3|H3].
+    - destruct (eq_nat_dec n' k) as [H2|H2];
+      destruct (eq_nat_dec n k) as [H3|H3].
         + apply equalRefl.
         + exfalso. apply H. assumption.
         + exfalso. subst. apply H1. reflexivity.
         + apply equalRefl.
 Qed.
 
+(*
+Lemma bindReplace2 : forall (e:Env) (n m n' m' k:nat) (x y:set),  
+ n <> m  -> 
+ n' <> m'-> 
+ n' <> k ->
+ m' <> k ->
+    bind (bind e n' x) m' y (replace2 n m n' m' k) == bind (bind e n x) m y k.
+Proof.
+
+Show.
+*)

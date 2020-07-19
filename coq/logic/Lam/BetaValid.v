@@ -329,8 +329,6 @@ Proof.
           + intros u H5. apply H4. apply H6. assumption.
 Qed.
 
-
-(*
 Lemma betaValid_inter_var_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v), 
     (var t /\ concat (map (fun u => Fr (f u) \\ [u]) (Fr t \\ xs))) = [] ->
@@ -354,9 +352,8 @@ Proof.
           simpl in H'. rewrite remove_diff in H'.
           rewrite <- diff_distrib_app_l' in H'. simpl in H'. assumption.
         + intros u H1. assert ( Fr (f u) \\ [u] <= 
-            concat (map (fun u : v => Fr (f u) \\ [u]) (Fr (Lam x t1) \\ xs)))
-            as H2. {
-(*
+            concat (map (fun u => Fr (f u) \\ [u]) (Fr (Lam x t1) \\ xs))) as H2. 
+            { apply (incl_concat_map v (fun u => Fr (f u) \\ [u])). assumption. }
           apply (inter_sub_nil_r v e _ _ _ H2) in H.
           rewrite nil_charac in H. intros H3. apply (H x).
           apply inter_charac. split.
@@ -369,6 +366,12 @@ Proof.
                   destruct H6 as [H6|H6].
                     { subst. reflexivity. }
                     { inversion H6. }}}
-*)
-Show.
-*)
+Qed.
+
+Lemma betaValid_inter_var : forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v), 
+    (var t /\ concat (map (fun u => Fr (f u) \\ [u]) (Fr t))) = [] ->
+        betaValid f t.
+Proof.
+    intros v e f t H. apply betaValid_inter_var_gen. 
+    rewrite diff_nil. assumption. 
+Qed.

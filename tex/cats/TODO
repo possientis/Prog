@@ -59,7 +59,12 @@ define the power set functor : Set -> Set
 
 General:
 define a initial/terminal object
-define a coproduct/product of two objects
+define a coproduct/product of two objects. 
+C(-,a)xC(-,b):C^op -> Set  is representable <-> axb exists
+define exponential object from b to c: (c^b,ev) 
+  where ev:c^b x b -> c with universal prop:
+  for all a and f:axb -> c , there is a unique g:a -> c^b , such that
+  ev . (g x id(b)) = f
 bifunctor, profunctor
 F(A1,-), F(-,A2)
 p1 . <f,g> = f , p2 . <f,g> = g (split cancellation)

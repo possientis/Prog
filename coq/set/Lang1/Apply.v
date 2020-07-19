@@ -55,6 +55,7 @@ Lemma evalApply2 : forall (e:Env) (p:Formula) (n m:nat) (x y:set),
     ~In m (free p)  ->
     eval2 e (apply2 p n m) n m x y <-> eval2 e p 0 1 x y.
 Proof.
-
+    unfold eval2, apply2. intros e p n m x y H1 H2 H3. rewrite Substitution.
+    - apply relevance. intros r H4. unfold comp.
 Show.
 *)

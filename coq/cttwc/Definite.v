@@ -88,3 +88,74 @@ Proof.
     - left. assumption.
 Qed.
 
+Lemma L12 : forall (X Y:Prop), 
+    Definite X \/ Definite Y -> ~(X /\ Y) <-> ~X \/ ~Y.
+Proof.
+    unfold Definite. intros X Y [[H1|H1]|[H1|H1]]; split; intros H2.
+    - right. intros H3. apply H2. split; assumption.
+    - intros [H3 H4]. destruct H2 as [H2|H2]; apply H2; assumption.
+    - left. assumption.
+    - intros [H3 H4]. destruct H2 as [H2|H2]; apply H2; assumption.
+    - left. intros H3. apply H2. split; assumption.
+    - intros [H3 H4]. destruct H2 as [H2|H2]; apply H2; assumption.
+    - right. assumption.
+    - intros [H3 H4]. destruct H2 as [H2|H2]; apply H2; assumption.
+Qed.
+
+Lemma L13 : forall (X Y:Prop), Stable Y -> Stable (X -> Y).
+Proof.
+    unfold Stable. intros X Y H1 H2 H3. apply H1. intros H4. apply H2.
+    intros H5. apply H4, H5. assumption.
+Qed.
+
+Lemma L14 : forall (X Y:Prop), Stable X -> Stable Y -> Stable (X /\ Y).
+Proof.
+    unfold Stable. intros X Y H1 H2 H3. split.
+    - apply H1. intros H4. apply H3. intros [H5 H6]. apply H4. assumption.
+    - apply H2. intros H4. apply H3. intros [H5 H6]. apply H4. assumption.
+Qed.
+
+Lemma L15 : forall (a:Type) (p:a -> Prop), 
+    (forall (x:a), Stable (p x)) -> Stable (forall (x:a), p x).
+Proof.
+    unfold Stable. intros a p H1 H2 x. apply H1. intros H3. apply H2.
+    intros H4. apply H3, H4.
+Qed.
+
+Definition Markov : Prop := forall (f:nat -> bool),
+    ~(forall n, f n = false) -> exists n, f n = true.
+
+Lemma L16 : Markov <-> 
+    forall (f:nat -> bool), Stable (exists (n:nat), f n = true).
+Proof.
+    unfold Markov, Stable. split; intros H1 f H2.
+    - apply H1. intros H3. apply H2. intros [n H4].
+      rewrite (H3 n) in H4. inversion H4.
+    - apply H1. intros H3. apply H2. intros n. destruct (f n) eqn:E.
+        + exfalso. apply H3. exists n. assumption.
+        + reflexivity.
+Qed.
+
+Lemma L17 : forall (a:Type) (p:a -> Prop), 
+    (forall (x:a), Stable (p x)) -> 
+        ~(forall (x:a), p x) <-> ~~exists (x:a), ~p x.
+Proof.
+    unfold Stable. intros a p H1. split; intros H2 H3.
+    - apply H2. intros x. apply H1. intros H4. 
+      apply H3. exists x. assumption.
+    - apply H2. intros [x H4]. apply H4, H3.
+Qed.
+
+(* Classical definition of conjunction.                                         *)
+Definition And (X Y:Prop) : Prop := (X -> Y -> False) -> False.
+
+(* Classical definition of disjunction.                                         *)
+Definition Or  (X Y:Prop) : Prop := (X -> False) -> (Y -> False) -> False.
+
+(* Classical definition of existence.                                           *)
+Definition Exi (a:Type) (p:a -> Prop) : Prop := 
+    (forall (x:a), p x -> False) -> False.
+
+Arguments Exi {a}.
+
+

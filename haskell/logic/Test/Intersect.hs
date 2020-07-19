@@ -31,6 +31,9 @@ specIntersect = describe "Testing properties of intersect..." $ do
     testInterSub'
     testInterSubEquiv
     testInterDistribAppL 
+    testInterAppNilL
+    testInterSubNilL
+    testInterSubNilR
 
 testInterIntersect :: Spec
 testInterIntersect = it "Checked inter coincide with GHC 'intersect'" $
@@ -96,6 +99,18 @@ testInterDistribAppL :: Spec
 testInterDistribAppL = it "Check the left-distributivity of (/\\) over (++)" $ do
     property $ propInterDistribAppL
 
+testInterAppNilL :: Spec 
+testInterAppNilL = it "Check the inter app nil left property" $ do
+    property $ propInterAppNilL
+
+testInterSubNilL :: Spec 
+testInterSubNilL = it "Check the inter sub nil left property" $ do
+    property $ propInterSubNilL
+
+testInterSubNilR :: Spec 
+testInterSubNilR = it "Check the inter sub nil right property" $ do
+    property $ propInterSubNilR
+
 propInterIntersect :: [Var] -> [Var] -> Bool
 propInterIntersect xs ys = xs /\ ys == intersect xs ys
 
@@ -145,3 +160,16 @@ propInterSubEquiv xs ys zs zs' = not (zs' <== zs) ||
 
 propInterDistribAppL :: [Var] -> [Var] -> [Var] -> Bool
 propInterDistribAppL xs ys zs = zs /\ (xs ++ ys) === (zs /\ xs) ++ (zs /\ ys)
+
+propInterAppNilL :: [Var] -> [Var] -> [Var] -> Bool
+propInterAppNilL xs ys zs = zs /\ (xs ++ ys) /= [] ||
+      ((zs /\ xs) == [] && (zs /\ ys) == [])
+
+propInterSubNilL :: [Var] -> [Var] -> [Var] -> Bool
+propInterSubNilL xs ys zs = not (xs <== ys) || (ys /\ zs) /= [] ||
+    (xs /\ zs) == []
+
+propInterSubNilR :: [Var] -> [Var] -> [Var] -> Bool
+propInterSubNilR xs ys zs = not (xs <== ys) || (zs /\ ys) /= [] ||
+    (zs /\ xs) == []
+
