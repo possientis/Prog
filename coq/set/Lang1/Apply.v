@@ -45,7 +45,7 @@ Proof.
     - assumption.
 Qed.
 
-(*
+
 (* The semantics of 'apply2 p n m' in an environment where n is bound to x and  *)
 (* m is bound to y, is the same as the semantics of p in an environment where 0 *)
 (* is bound to x and 1 is bound to y, with the obvious caveat.                  *)
@@ -53,9 +53,15 @@ Lemma evalApply2 : forall (e:Env) (p:Formula) (n m:nat) (x y:set),
     Valid (replace2 0 1 n m) p ->
     ~In n (free p)  ->
     ~In m (free p)  ->
+    n <> m          ->
     eval2 e (apply2 p n m) n m x y <-> eval2 e p 0 1 x y.
 Proof.
-    unfold eval2, apply2. intros e p n m x y H1 H2 H3. rewrite Substitution.
-    - apply relevance. intros r H4. unfold comp.
-Show.
-*)
+    unfold eval2, apply2. intros e p n m x y H1 H2 H3 H4. rewrite Substitution.
+    - apply relevance. intros r H5. unfold comp. apply bindReplace2.
+        + auto.
+        + apply H4.                                     (* <- H4 *)
+        + intros H6. apply H2. rewrite H6. assumption.  (* <- H2 *)
+        + intros H6. apply H3. rewrite H6. assumption.  (* <- H3 *)
+    - apply H1.                                         (* <- H1 *)
+Qed.
+

@@ -88,9 +88,71 @@ begin
     { cases H2, split; refl }
 end
 
-lemma ReductionSkipIff : ∀ (e:Stmt) (s t:Env), ¬ Reduce skip s e t :=
+lemma ReduceSkipIff : ∀ (e:Stmt) (s t:Env), ¬ Reduce skip s e t :=
 begin
   intros e s t H1, have H2 : Value skip s := begin rw ValueIsSkip end,
   apply H2, existsi e, existsi t, assumption
 end
+
+@[simp] lemma ReduceSeqIff : ∀ (e₁ e₂ e':Stmt) (s s':Env),
+  Reduce (e₁ ;; e₂) s e' s'
+    ↔
+  (exists (e₁':Stmt), Reduce e₁ s e₁' s' ∧ e' = (e₁' ;; e₂))
+    ∨
+  (e₁ = skip ∧ e' = e₂ ∧ s' = s) :=
+begin
+  intros e₁ e₂ e' s s', split; intros H1,
+    { cases H1 with _ _ _ _ e₁' _ _ _ H2,
+      { left, existsi e₁', split,
+        { assumption },
+        { refl }},
+      { right, split,
+        { refl },
+        { split; refl }}},
+    { cases H1 with H1 H1,
+      { cases H1 with e₁' H1, cases H1 with H1 H2, rw H2, constructor, assumption },
+      { cases H1 with H1 H2, cases H2 with H2 H3, rw [H1,H2,H3], constructor }}
+end
+
+
+@[simp] lemma ReduceIteIff : ∀ (b:BExp) (e₁ e₂ e':Stmt) (s s':Env),
+  Reduce (ite b e₁ e₂) s e' s'
+    ↔
+  (b s ∧ e' = e₁ ∧ s' = s) ∨ (¬ b s ∧ e' = e₂ ∧ s' = s) :=
+begin
+  intros b e₁ e₂ e' s s', split; intros H1,
+    { cases H1 with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ H2,
+      { left, split,
+        { assumption },
+        { split; refl }},
+      { right, split,
+        { assumption },
+        { split; refl }}},
+    { cases H1 with H1 H1,
+      { cases H1 with H1 H2, cases H2 with H2 H3, rw [H2,H3], constructor,
+        assumption },
+      { cases H1 with H1 H2, cases H2 with H2 H3, rw [H2, H3], constructor,
+        assumption }}
+end
+
+lemma ReduceWhileIff : ∀ (b:BExp) (e e':Stmt) (s s':Env),
+  Reduce (while b e) s e' s'
+    ↔
+  e' = ite b (e ;; while b e) skip ∧ s' = s :=
+begin
+  intros b e e' s s', split; intros H1,
+    { cases H1, split; refl},
+    { cases H1 with H1 H2, rw [H1,H2], constructor }
+end
+
+lemma ReduceAssignIff : ∀ (x:string) (a:AExp) (e':Stmt) (s s':Env),
+  Reduce (x :== a) s e' s'
+    ↔
+  e' = skip ∧ s' = bindVar x a s :=
+begin
+  intros x a e' s s', split; intros H1,
+    { cases H1, split; refl },
+    { cases H1 with H1 H2, rw [H1, H2], constructor }
+end
+
 

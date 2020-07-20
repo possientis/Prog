@@ -70,6 +70,30 @@ of $G$ and $F$.
     By uniquenes, it follows that $g_{1}=g_{2}$.
 \end{proof}
 
+\begin{prop}\label{Adj:prop:unit:natural}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit 
+    of $(F,G)$. Then we have:
+        \[
+            (G\circ F)(f)\circ\eta_{a}=\eta_{b}\circ f
+        \]
+    for all objects $a,b\in\Cat$ and arrow $f:a\to b$.
+\end{prop}
+\begin{proof}
+    This is an immediate consequence of definition~(\ref{Nat:def:natural}) 
+    and the fact that $\eta$ is a natural transformation 
+    $\eta:I_{\cal C}\Rightarrow G\circ F$, so the following square commutes:
+    \[
+        \begin{tikzcd}
+            a\arrow[r, "\eta_{a}"]\arrow[d, swap,"f"]
+            &G(F(a))\arrow[d, "\ (G\circ F)(f)"]
+            \\
+            b\arrow[r, swap, "\eta_{b}"]
+            &G(F(b))
+        \end{tikzcd}
+    \]
+\end{proof}
+
 Given functors $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ where \Cat, \Dat\ are 
 categories, if $\eta:I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$,
 then a question arises as to whether this unit is unique. As the following
@@ -138,5 +162,15 @@ as per definition~(\ref{Nat:def:composition}).
     We now prove the {\em only if} part. So we assume that 
     $\eta':I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$ and we need
     to show the existence of a natural isomorphism $\alpha:F\Rightarrow F$
-    such that $\eta'=(G\alpha)\circ\eta$.
+    such that $\eta'=(G\alpha)\circ\eta$. So let $c\in\Cat$. First we need
+    to define $\alpha_{c}:F(c)\to F(c)$. Define $d=F(c)\in\Dat$. Then we 
+    have $\eta'_{c}:c\to G(d)$. Since $\eta$ is a unit of $(F,G)$ there exists
+    a unique arrow $g:F(c)\to d$ such that $\eta'_{c}=G(g)\circ\eta_{c}$.
+    Define $\alpha_{c}$ to be precisely this unique arrow $g$. Then we 
+    have $\alpha_{c}:F(c)\to F(c)$ and:
+        \begin{equation}\label{Adj:eqn:unit:not:unique}
+            \eta'_{c}=G(\alpha_{c})\circ\eta_{c}
+        \end{equation}
+    Collecting all these arrows $\alpha_{c}:F(c)\to F(c)$ for $c\in\Cat$,
+    we obtain a map $\alpha:\ob\ \Cat\to\arr\ \Dat$. 
 \end{proof}

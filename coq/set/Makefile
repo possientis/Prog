@@ -483,7 +483,6 @@ ${LANG1}/Valid.vo :				${LANG1}/Valid.v \
 
 ${LANG1}/Environment.vo :		${LANG1}/Environment.v \
 								${UTILS}/Replace.vo \
-								${UTILS}/Composition.vo \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo \
 								${LANG1}/Syntax.vo

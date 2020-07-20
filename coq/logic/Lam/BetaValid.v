@@ -15,6 +15,7 @@ Require Import Composition.
 Require Import Lam.T.
 Require Import Lam.Free.
 Require Import Lam.Subst.
+Require Import Lam.ReplaceT.
 Require Import Lam.Variable.
 
 (* Predicate defining the beta-validity of the substitution f for (t,xs).       *)
@@ -375,3 +376,18 @@ Proof.
     intros v e f t H. apply betaValid_inter_var_gen. 
     rewrite diff_nil. assumption. 
 Qed.
+
+(*
+Lemma betaValid_replaceT_gen : 
+    forall (v:Type) (e:Eq v) (s t:T v) (xs:list v) (x:v),
+    ~ x :: Fr t \\ xs \/ (var t /\ Fr s) <= [x] -> 
+        betaValid_ (s // x) xs t.  
+Proof.
+    intros v e s t xs x H1. apply betaValid_inter_var_gen.
+    apply inter_concat_nil_l. intros u H2. unfold replaceT.
+    destruct (eqDec u x) as [H3|H3].
+    - subst. admit.
+    - 
+Show.
+*)
+

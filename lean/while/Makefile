@@ -3,7 +3,7 @@ all:						Env.olean \
 							BExp.olean \
 							Stmt.olean \
 							BigStep.olean \
-							Reduction.olean
+							Reduce.olean
 
 
 Env.olean :					Env.lean
@@ -27,8 +27,8 @@ BigStep.olean : 			BigStep.lean \
 							Stmt.olean
 	lean --make BigStep.lean
 
-Reduction.olean : 			Reduction.lean \
+Reduce.olean : 				Reduce.lean \
 							Stmt.olean
-	lean --make Reduction.lean
+	lean --make Reduce.lean
 
 

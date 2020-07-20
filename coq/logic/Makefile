@@ -42,7 +42,7 @@ all:	   						Extensionality.vo \
 								${FOL}/Dmap.vo \
 								${LAM}/Subst.vo \
 								${LAM}/BetaValid.vo \
-								${LAM}/Replace.vo
+								${LAM}/ReplaceT.vo
 
 Extensionality.vo : 			Extensionality.v
 	coqc Extensionality.v
@@ -120,6 +120,7 @@ Intersect.vo :					Intersect.v \
 								Eq.vo \
 								Nil.vo \
 								Equiv.vo \
+								Concat.vo \
 								Append.vo \
 								Include.vo
 	coqc Intersect.v
@@ -389,12 +390,13 @@ ${LAM}/BetaValid.vo :			${LAM}/BetaValid.v \
 								${LAM}/T.vo \
 								${LAM}/Free.vo \
 								${LAM}/Subst.vo \
+								${LAM}/ReplaceT.vo \
 								${LAM}/Variable.vo
 	coqc ${LAM}/BetaValid.v		${OPT}
 
 
-${LAM}/Replace.vo :				${LAM}/Replace.v \
+${LAM}/ReplaceT.vo :			${LAM}/ReplaceT.v \
 								Eq.vo \
 								${LAM}/T.vo
-	coqc ${LAM}/Replace.v		${OPT} 
+	coqc ${LAM}/ReplaceT.v		${OPT} 
 

@@ -59,7 +59,7 @@ plusᶜ = ƛ "m" ⇒ ƛ "n" ⇒ ƛ "s" ⇒ ƛ "z" ⇒
   ` "m" · ` "s" · (` "n" · ` "s" · ` "z")
 
 sucᶜ : Term -- Not Church here
-sucᶜ = ƛ "n" ⇒ `suc ` "n"
+sucᶜ = ƛ "n" ⇒ (`suc (` "n"))
 
 
 mul : Term
@@ -175,7 +175,7 @@ _[_:=_] : Term → Id → Term → Term
 `zero [ y := V ] = `zero
 
 -- Successor
-(`suc M) [ y := V ] = `suc M [ y := V ]
+(`suc M) [ y := V ] = `suc (M [ y := V ])
 
 -- Match
 case L [zero⇒ M |suc x ⇒ N ] [ y := V ] with x ≟ y
@@ -266,7 +266,7 @@ data _—→_ : Term → Term → Set where
   ξ-suc : ∀ {M M' : Term}
     →  M —→ M'
       --------------------
-    → `suc M —→ `suc M'
+    → (`suc M) —→ (`suc M')
 
   -- Compatibility rule for case
   ξ-case : ∀ {x : Id} {L L' M N : Term}
@@ -448,9 +448,9 @@ _ = begin
   —→⟨ β-ƛ V-zero ⟩
   sucᶜ · (sucᶜ · `zero)
   —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
-  sucᶜ · `suc `zero
+  sucᶜ · (`suc `zero)
   —→⟨ β-ƛ (V-suc V-zero) ⟩
-  `suc `suc `zero
+  `suc (`suc `zero)
   ∎
 
 _ : plus · two · two —↠ `suc `suc `suc `suc `zero
@@ -476,14 +476,14 @@ _ = begin
       |suc "m" ⇒ `suc (plus · ` "m" · two) ]
 
   —→⟨ β-suc (V-suc V-zero) ⟩
-    `suc (plus · `suc `zero · two)
+    `suc (plus · (`suc `zero) · two)
 
   —→⟨ ξ-suc (ξ-·₁ (ξ-·₁ β-μ)) ⟩
   `suc
     ( (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m"
         [zero⇒ ` "n"
         |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
-    · `suc `zero
+    · (`suc `zero)
     · two)
 
   —→⟨ ξ-suc (ξ-·₁ (β-ƛ (V-suc V-zero))) ⟩
@@ -528,3 +528,31 @@ _ = begin
   `suc (`suc (`suc (`suc `zero)))
   ∎
 
+_ : plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero —↠ `suc `suc `suc `suc `zero
+_ = begin
+  plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero
+
+  —→⟨ ξ-·₁ (ξ-·₁ (ξ-·₁ (β-ƛ V-ƛ))) ⟩
+    (ƛ "n" ⇒ ƛ "s" ⇒ ƛ "z" ⇒ twoᶜ · ` "s" · (` "n" · ` "s" · ` "z"))
+  · twoᶜ
+  · sucᶜ
+  · `zero
+
+  —→⟨ ξ-·₁ (ξ-·₁ (β-ƛ V-ƛ)) ⟩
+    (ƛ "s" ⇒ ƛ "z" ⇒ twoᶜ · ` "s" · (twoᶜ · ` "s" · ` "z"))
+  · sucᶜ
+  · `zero
+
+  —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
+    (ƛ "z" ⇒ twoᶜ · sucᶜ · (twoᶜ · sucᶜ · ` "z"))
+  · `zero
+
+  —→⟨ β-ƛ V-zero ⟩
+  twoᶜ · sucᶜ · (twoᶜ · sucᶜ · `zero)
+
+  —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
+    (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z") )
+  · (twoᶜ · sucᶜ · `zero)
+
+  —→⟨ ξ-·₂ V-ƛ (ξ-·₁ (β-ƛ V-ƛ)) ⟩
+  {!!}

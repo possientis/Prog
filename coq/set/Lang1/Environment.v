@@ -2,7 +2,6 @@ Require Import List.
 Require Import Peano_dec.
 
 Require Import Utils.Replace.
-Require Import Utils.Composition.
 
 Require Import Core.Set.
 Require Import Core.Equal.
@@ -112,7 +111,7 @@ Qed.
 Lemma bindReplace : forall (e:Env) (n n' k:nat) (x:set),
     n' <> k -> bind e n' x (replace n n' k) == bind e n x k.
 Proof.
-    intros e n n' k x H. unfold bind, replace, comp. 
+    intros e n n' k x H. unfold bind, replace. 
     destruct (eq_nat_dec k n) as [H1|H1].
     - subst. 
       destruct (eq_nat_dec n' n') as [H2|H2]; 
@@ -129,7 +128,7 @@ Proof.
         + apply equalRefl.
 Qed.
 
-(*
+
 Lemma bindReplace2 : forall (e:Env) (n m n' m' k:nat) (x y:set),  
  n <> m  -> 
  n' <> m'-> 
@@ -137,6 +136,31 @@ Lemma bindReplace2 : forall (e:Env) (n m n' m' k:nat) (x y:set),
  m' <> k ->
     bind (bind e n' x) m' y (replace2 n m n' m' k) == bind (bind e n x) m y k.
 Proof.
+    intros e n m n' m' k x y H1 H2 H3 H4. unfold bind, replace2.
+    destruct (eq_nat_dec k n) as [H5|H5].
+    - subst. destruct (eq_nat_dec m' n') as [H5|H5].
+        + subst. exfalso. apply H2. reflexivity.                (* <- H2 *)
+        + destruct (eq_nat_dec n' n') as [H6|H6].
+            { destruct (eq_nat_dec m n) as [H7|H7].
+                { subst. exfalso. apply H1. reflexivity. }      (* <- H1 *)
+                { destruct (eq_nat_dec n n) as [H8|H8].
+                    { apply equalRefl. }
+                    { exfalso. apply H8. reflexivity. }}}
+            { exfalso. apply H6. reflexivity. }
+    - destruct (eq_nat_dec k m) as [H6|H6]. 
+        + subst. destruct (eq_nat_dec m' m') as [H6|H6].
+            { destruct (eq_nat_dec m m) as [H7|H7].
+                { apply equalRefl. }
+                { exfalso.  apply H7. reflexivity. }}
+            { exfalso. apply H6. reflexivity. }
+        + destruct (eq_nat_dec m' k) as [H7|H7].
+            { subst. exfalso. apply H4. reflexivity. }          (* <- H4 *)
+            { destruct (eq_nat_dec n' k) as [H8|H8]. 
+                { subst. exfalso. apply H3. reflexivity. }      (* <- H3 *)
+                { destruct (eq_nat_dec m k) as [H9|H9]. 
+                    { subst. exfalso. apply H6. reflexivity. }
+                    { destruct (eq_nat_dec n k) as [H10|H10].
+                        { subst. exfalso. apply H5. reflexivity. }
+                        { apply equalRefl. }}}}
+Qed.
 
-Show.
-*)

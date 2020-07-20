@@ -84,12 +84,17 @@ Proof.
         + assumption.
 Qed.
 
-(* Theorem schema of specification where we explicitely 'apply' P at the    *)
-(* variable p with 'apply P p'. TODO                                            *)
-Definition specificationF' (P:Formula) (n m p:nat) : Formula :=
-    All n (Exi m (All p (Iff (Elem p m) (And (Elem p n) (apply P p))))). 
 
+(* Theorem schema of specification where we explicitely 'apply' P at the        *)
+(* variables n and  p with 'apply2 P n p'.                                      *)
+Definition specificationF' (P:Formula) (n m p:nat) : Formula :=
+    All n (Exi m (All p (Iff (Elem p m) (And (Elem p n) (apply2 P n p))))). 
+
+(* Checking that the only difference between these statements is the apply2.    *)
 Lemma specificationLink : forall (P:Formula) (n m p:nat),
-    specificationF' P n m p = specificationF (apply P p) n m p.
-Proof. intros P n m p. reflexivity. Qed.
+    specificationF' P n m p = specificationF (apply2 P n p) n m p.
+Proof.
+    intros P n m p. reflexivity.
+Qed.
+
 

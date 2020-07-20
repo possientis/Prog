@@ -1,7 +1,12 @@
 Coq:
-prop 381.
+Intersect
+BetaValid
 
 Haskell:
+fix replace' vs replaceT
+betaValidReplaceTGen
+betaValidReplaceT
+interConcatNilL
 
 Latex:
 

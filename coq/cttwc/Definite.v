@@ -158,4 +158,106 @@ Definition Exi (a:Type) (p:a -> Prop) : Prop :=
 
 Arguments Exi {a}.
 
+(* Classical version implied by original.                                       *)
+Lemma L18 : forall (X Y:Prop), X /\ Y -> And X Y.
+Proof.
+    unfold And. intros X Y [H1 H2] H3. apply H3; assumption.
+Qed.
+
+(* Classical version implied by original.                                       *)
+Lemma L19 : forall (X Y:Prop), X \/ Y -> Or X Y.
+Proof.
+    unfold Or. intros X Y [H1|H1] H2 H3.
+    - apply H2. assumption.
+    - apply H3. assumption.
+Qed.
+
+(* Classical version implied by original.                                       *)
+Lemma L20 : forall (a:Type) (p:a -> Prop),
+    (exists (x:a), p x) -> Exi p.
+Proof.
+    unfold Exi. intros a p [x H1] H2. apply (H2 x). assumption.
+Qed.
+
+(* Classical version is equivalent to double negation of  original.             *)
+Lemma L21 : forall (X Y:Prop), And X Y <-> ~~(X /\ Y).
+Proof.
+    unfold And. intros X Y. split; intros H1 H2; apply H1.
+    - intros H3 H4. apply H2. split; assumption.
+    - intros [H3 H4]. apply H2; assumption.
+Qed.
+
+(* Classical version is equivalent to double negation of  original.             *)
+Lemma L22 : forall (X Y:Prop), Or X Y <-> ~~(X \/ Y).
+Proof.
+    unfold Or. intros X Y. split; intros H1 H2.
+    - apply H1; intros H3; apply H2.
+        + left. assumption.
+        + right. assumption.
+    - intros H3. apply H1. intros [H4|H4].
+        + apply H2. assumption.
+        + apply H3. assumption.
+Qed.
+
+(* Classical version is equivalent to double negation of  original.             *)
+Lemma L23 : forall (a:Type) (p:a -> Prop),
+    Exi p <-> ~~(exists (x:a), p x).
+Proof.
+    unfold Exi. intros a p. split; intros H1 H2; apply H1.
+    - intros x H3. apply H2. exists x. assumption.
+    - intros [x H3]. apply (H2 x). assumption.
+Qed.
+
+Lemma L24 : forall (X:Prop), Or X (~X).
+Proof.
+    unfold Or. intros X H1 H2. apply H2. assumption.
+Qed.
+
+Lemma L25 : forall (X Y:Prop), ~(And X Y) <-> Or (~X) (~Y).
+Proof.
+    unfold Or, And. intros X Y. split; intros H1 H2.
+    - intros H3. apply H1. intros H4. apply H2. intros H5.
+      apply H3. intros H6. apply H4; assumption.
+    - apply H2. intros H3 H4. apply H1; intros H5; apply H5; assumption.
+Qed.
+
+(* Not much to prove actually, literally the same statements, see L27.          *)
+Lemma L26 : forall (X Y:Prop), ~(Or X Y) <-> And (~X) (~Y).
+Proof.
+    unfold Or, And. intros X Y. split; intros H1 H2; apply H1.
+    - intros H3 H4. apply H2; assumption.
+    - assumption.
+Qed.
+
+Lemma L27 : forall (X Y:Prop), ~(Or X Y) <-> And (~X) (~Y).
+Proof.
+    unfold Or, And, not. intros X Y. split; auto.
+Qed.
+
+Lemma L28 : forall (a:Type) (p:a -> Prop), 
+    (forall (x:a), Stable (p x)) -> 
+        ~(forall (x:a), p x) <-> Exi (fun x => ~ p x).
+Proof.
+    unfold Stable, Exi. intros a p H1. split; intros H2 H3; apply H2; intros x.
+    - apply H1. intros H4. apply (H3 x). assumption.
+    - intros H4. apply H4, H3.
+Qed.
+
+Lemma L29 : forall (X Y:Prop), Stable (And X Y).
+Proof.
+    unfold And, Stable. intros X Y H1 H2. apply H1. intros H3. apply H3. 
+    assumption.
+Qed.
+
+Lemma L30 : forall (X Y:Prop), Stable (Or X Y).
+Proof.
+    unfold Or, Stable. intros X Y H1 H2 H3. apply H1. intros H4. apply H4; 
+    assumption.
+Qed.
+
+Lemma L31 : forall (a:Type) (p:a -> Prop), Stable (Exi p).
+Proof.
+    unfold Exi, Stable. intros a p H1 H2. apply H1. intros H3. apply H3.
+    assumption.
+Qed.
 

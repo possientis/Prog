@@ -4,8 +4,9 @@ Require Import In.
 Require Import Eq.
 Require Import Nil.
 Require Import Equiv.
-Require Import Include.
+Require Import Concat.
 Require Import Append.
+Require Import Include.
 
 Fixpoint inter (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     match xs with
@@ -262,3 +263,16 @@ Proof.
     - assumption.
     - apply H1. assumption.
 Qed.
+
+Lemma inter_concat_nil_l : forall (v:Type) (e:Eq v) (f:v -> list v) (xs ys:list v),
+    (forall (u:v), u :: ys -> (xs /\ f u) = nil) ->  
+        (xs /\ concat (map f ys)) = nil.
+Proof.
+    intros v e f xs ys H1. apply nil_charac. intros x H2.
+    apply inter_charac in H2. destruct H2 as [H2 H3]. apply concat_charac in H3.
+    destruct H3 as [zs [H3 H4]]. apply in_map_iff in H4. 
+    destruct H4 as [u [H4 H5]].
+    remember (H1 u H5) as H6 eqn:E. clear E. rewrite nil_charac in H6.
+    apply (H6 x), inter_charac. rewrite <- H4 in H3. split; assumption.
+Qed.
+ 
