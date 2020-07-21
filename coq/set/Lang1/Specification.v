@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Utils.LEM.
+Require Import Utils.Replace.
 
 Require Import Core.Set.
 Require Import Core.Elem.
@@ -8,8 +9,9 @@ Require Import Core.Incl.
 Require Import Core.Equal.
 Require Import Core.Compatible.
 
-Require Import Lang1.Syntax.
 Require Import Lang1.Apply.
+Require Import Lang1.Valid.
+Require Import Lang1.Syntax.
 Require Import Lang1.Semantics.
 Require Import Lang1.Relevance.
 Require Import Lang1.Environment.
@@ -91,10 +93,61 @@ Definition specificationF' (P:Formula) (n m p:nat) : Formula :=
     All n (Exi m (All p (Iff (Elem p m) (And (Elem p n) (apply2 P n p))))). 
 
 (* Checking that the only difference between these statements is the apply2.    *)
-Lemma specificationLink : forall (P:Formula) (n m p:nat),
+Local Lemma specificationLink_ : forall (P:Formula) (n m p:nat),
     specificationF' P n m p = specificationF (apply2 P n p) n m p.
 Proof.
     intros P n m p. reflexivity.
 Qed.
 
+Local Lemma specificationCarryOver_ : forall (p q: set -> set -> Prop),
+    (forall (x y:set), p x y <-> q x y) ->
+        (forall (x:set), exists (y:set), forall (z:set),
+            z :: y <-> z :: x /\ p x z)
+    <-> (forall (x:set), exists (y:set), forall (z:set),
+            z :: y <-> z :: x /\ q x z).
+Proof.
+    intros p q H1. split; intros H2 x; destruct (H2 x) as [y H3]; exists y;
+    intros z; destruct (H3 z) as [H4 H5]; split.
+    - intros H6. destruct (H4 H6) as [H7 H8]. split.
+        + assumption.
+        + apply H1. assumption.
+    - intros [H6 H7]. apply H5. split.
+        + assumption.
+        + apply H1. assumption.
+    - intros H6. destruct (H4 H6) as [H7 H8]. split.
+        + assumption.
+        + apply H1. assumption.
+    - intros [H6 H7]. apply H5. split.
+        + assumption.
+        + apply H1. assumption.
+Qed.
 
+(*
+(* Evaluating specificationF' applied to a formula P in any environment.        *)
+Lemma evalSpecificationF' : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
+    m <> n ->
+    p <> n ->
+    p <> m ->
+    ~In m (free P) ->
+    ~In n (free P) ->
+    ~In p (free P) ->
+    Valid (replace2 0 1 n p) P ->
+    eval e (specificationF' P n m p)
+        <->
+    forall (x:set), exists (y:set), forall (z:set),
+        z :: y <-> z :: x /\ (eval2 e P 0 1 x z).
+Proof.
+    intros L e P n m p H1 H2 H3 H4 H5 H6 H7. rewrite specificationLink_. 
+    rewrite evalSpecificationF. apply specificationCarryOver_.
+    intros x y. apply evalApply2.
+    - assumption.
+    - assumption.
+    - assumption.
+    - intros H8. subst. apply H2. reflexivity.
+    - assumption.
+    - assumption.
+    - assumption.
+    - assumption.
+    -
+Show.
+*)

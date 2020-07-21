@@ -1,12 +1,7 @@
 Coq:
-Intersect
-BetaValid
+Lemma 32.
 
 Haskell:
-fix replace' vs replaceT
-betaValidReplaceTGen
-betaValidReplaceT
-interConcatNilL
 
 Latex:
 

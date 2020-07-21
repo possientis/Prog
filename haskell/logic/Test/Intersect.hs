@@ -34,6 +34,7 @@ specIntersect = describe "Testing properties of intersect..." $ do
     testInterAppNilL
     testInterSubNilL
     testInterSubNilR
+    testInterConcatNilL
 
 testInterIntersect :: Spec
 testInterIntersect = it "Checked inter coincide with GHC 'intersect'" $
@@ -96,20 +97,24 @@ testInterSubEquiv = it "Checked the sublist equiv property of /\\" $ do
     property $ propInterSubEquiv
 
 testInterDistribAppL :: Spec 
-testInterDistribAppL = it "Check the left-distributivity of (/\\) over (++)" $ do
+testInterDistribAppL = it "Checked the left-distributivity of (/\\) over (++)" $ do
     property $ propInterDistribAppL
 
 testInterAppNilL :: Spec 
-testInterAppNilL = it "Check the inter app nil left property" $ do
+testInterAppNilL = it "Checked the inter app nil left property" $ do
     property $ propInterAppNilL
 
 testInterSubNilL :: Spec 
-testInterSubNilL = it "Check the inter sub nil left property" $ do
+testInterSubNilL = it "Checked the inter sub nil left property" $ do
     property $ propInterSubNilL
 
 testInterSubNilR :: Spec 
-testInterSubNilR = it "Check the inter sub nil right property" $ do
+testInterSubNilR = it "Checked the inter sub nil right property" $ do
     property $ propInterSubNilR
+
+testInterConcatNilL :: Spec 
+testInterConcatNilL = it "Checked the inter concat nil left property" $ do
+    property $ propInterConcatNilL
 
 propInterIntersect :: [Var] -> [Var] -> Bool
 propInterIntersect xs ys = xs /\ ys == intersect xs ys
@@ -172,4 +177,8 @@ propInterSubNilL xs ys zs = not (xs <== ys) || (ys /\ zs) /= [] ||
 propInterSubNilR :: [Var] -> [Var] -> [Var] -> Bool
 propInterSubNilR xs ys zs = not (xs <== ys) || (zs /\ ys) /= [] ||
     (zs /\ xs) == []
+
+propInterConcatNilL :: (Var -> [Var]) -> [Var] -> [Var] -> Bool
+propInterConcatNilL f xs ys = (not $ all (null . (xs /\) . f) ys) || 
+    (xs /\ concatMap f ys) == []
 

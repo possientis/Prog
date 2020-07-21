@@ -377,7 +377,7 @@ Proof.
     rewrite diff_nil. assumption. 
 Qed.
 
-(*
+
 Lemma betaValid_replaceT_gen : 
     forall (v:Type) (e:Eq v) (s t:T v) (xs:list v) (x:v),
     ~ x :: Fr t \\ xs \/ (var t /\ Fr s) <= [x] -> 
@@ -386,8 +386,20 @@ Proof.
     intros v e s t xs x H1. apply betaValid_inter_var_gen.
     apply inter_concat_nil_l. intros u H2. unfold replaceT.
     destruct (eqDec u x) as [H3|H3].
-    - subst. admit.
-    - 
-Show.
-*)
+    - subst. destruct H1 as [H1|H1].
+        + exfalso. apply H1. assumption.
+        + apply nil_charac. intros u H4. apply inter_charac in H4.
+          destruct H4 as [H4 H5]. apply diff_charac in H5.
+          destruct H5 as [H5 H6]. apply H6. apply H1. apply inter_charac.
+          split; assumption.
+    - simpl. destruct (eqDec u u) as [H4|H4]. 
+        + apply inter_nil.
+        + exfalso. apply H4. reflexivity.
+Qed.
 
+Lemma betaValid_replaceT : forall (v:Type) (e:Eq v) (s t:T v) (x:v),
+    ~ x :: Fr t \/ (var t /\ Fr s) <= [x] -> betaValid (s // x) t.  
+Proof.
+    intros v e s t x H1. apply betaValid_replaceT_gen. 
+    rewrite diff_nil. assumption.
+Qed.

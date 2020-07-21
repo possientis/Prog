@@ -555,4 +555,63 @@ _ = begin
   · (twoᶜ · sucᶜ · `zero)
 
   —→⟨ ξ-·₂ V-ƛ (ξ-·₁ (β-ƛ V-ƛ)) ⟩
+    (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z"))
+  · ((ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · `zero)
+
+  —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
+    (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z"))
+  · (sucᶜ · (sucᶜ · `zero))
+
+  —→⟨ ξ-·₂ V-ƛ (ξ-·₂ V-ƛ (β-ƛ V-zero)) ⟩
+    (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z"))
+  · (sucᶜ · (`suc `zero))
+
+  —→⟨ ξ-·₂ V-ƛ (β-ƛ (V-suc V-zero)) ⟩
+    (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z"))
+  · (`suc `suc `zero)
+
+  —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
+  sucᶜ · (sucᶜ · (`suc `suc `zero))
+
+  —→⟨ ξ-·₂ V-ƛ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+  sucᶜ · (`suc `suc `suc `zero)
+
+  —→⟨ β-ƛ (V-suc (V-suc (V-suc V-zero))) ⟩
+  `suc `suc `suc `suc `zero
+  ∎
+
+_ : plus · (`suc `zero) · (`suc `zero) —↠ `suc `suc `zero
+_ = begin
+  plus · (`suc `zero) · (`suc `zero)
+
+  —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
+    (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m"
+      [zero⇒ ` "n"
+      |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+  · (`suc `zero)
+  · (`suc `zero)
+
+  —→⟨ ξ-·₁ (β-ƛ (V-suc V-zero)) ⟩
+    (ƛ "n" ⇒ case (`suc `zero)
+      [zero⇒ ` "n"
+      |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+  · (`suc `zero)
+
+  —→⟨ β-ƛ (V-suc V-zero) ⟩
+  case (`suc `zero)
+    [zero⇒ (`suc `zero)
+    |suc "m" ⇒ `suc (plus · ` "m" · (`suc `zero)) ]
+
+  —→⟨ β-suc V-zero ⟩
+  `suc (plus · `zero · (`suc `zero))
+
+  —→⟨ ξ-suc (ξ-·₁ (ξ-·₁ β-μ)) ⟩
+  `suc (
+      (ƛ "m" ⇒ ƛ "n" ⇒ case ` "m"
+        [zero⇒ ` "n"
+        |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+    · `zero
+    · (`suc `zero))
+
+  —→⟨ ξ-suc (ξ-·₁ (β-ƛ V-zero)) ⟩
   {!!}

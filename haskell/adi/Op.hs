@@ -56,6 +56,7 @@ data Op = OpAdd
         | OpNot
         | OpLe
         | OpEq
+    deriving (Eq)
 
 instance Show Op where
    show = \case

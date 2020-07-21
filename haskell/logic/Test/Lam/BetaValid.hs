@@ -16,6 +16,7 @@ import Difference
 
 import Lam.T
 import Lam.Subst
+import Lam.ReplaceT
 import Lam.BetaValid
 
 specBetaValid :: Spec
@@ -36,6 +37,8 @@ specBetaValid = describe "Testing non-polymorphic properties of BetaValid..." $ 
     testBetaValidSupport
     testBetaValidInterVarGen
     testBetaValidInterVar
+    testBetaValidReplaceTGen
+    testBetaValidReplaceT
 
 testBetaValidVarGen :: Spec
 testBetaValidVarGen = it "Checked generic beta validity for variables" $
@@ -100,6 +103,14 @@ testBetaValidInterVarGen = it "Checked gen beta validity inter var property" $ d
 testBetaValidInterVar :: Spec
 testBetaValidInterVar = it "Checked beta validity inter var gen property" $ do
     property propBetaValidInterVar
+
+testBetaValidReplaceTGen :: Spec
+testBetaValidReplaceTGen = it "Checked beta validity replaceT gen property" $ do
+    property propBetaValidReplaceTGen
+
+testBetaValidReplaceT :: Spec
+testBetaValidReplaceT = it "Checked beta validity replaceT property" $ do
+    property propBetaValidReplaceT
 
 propBetaValidVarGen :: (Var -> T Var) -> Var -> [Var] -> Bool
 propBetaValidVarGen f x xs = betaValid_ f xs (Var x)
@@ -197,3 +208,22 @@ propBetaValidInterVar :: (Var -> T Var) -> T Var -> Bool
 propBetaValidInterVar f t = 
     (var t /\ concatMap (\u -> free (f u) \\ [u]) (free t)) /= [] ||
         betaValid f t
+
+propBetaValidReplaceTGen
+    :: T Var
+    -> T Var
+    -> [Var] 
+    -> Var
+    -> Bool
+propBetaValidReplaceTGen s t xs x =
+    ((x `elem` (free t \\ xs)) && (not $ (var t /\ free s) <== [x])) ||
+        betaValid_ (s <-: x) xs t
+
+propBetaValidReplaceT :: T Var -> T Var -> Var -> Bool
+propBetaValidReplaceT s t x =
+    ((x `elem` free t) && (not $ (var t /\ free s) <== [x])) ||
+        betaValid (s <-: x) t
+
+
+
+

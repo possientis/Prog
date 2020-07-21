@@ -651,15 +651,18 @@ ${LANG1}/Foundation.vo :		${LANG1}/Foundation.v \
 
 ${LANG1}/Specification.vo :		${LANG1}/Specification.v \
 								${UTILS}/LEM.vo \
+								${UTILS}/Replace.vo \
 								${CORE}/Set.vo \
-								${CORE}/Incl.vo \
 								${CORE}/Elem.vo \
+								${CORE}/Incl.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Compatible.vo \
+								${LANG1}/Apply.vo \
+								${LANG1}/Valid.vo \
 								${LANG1}/Syntax.vo \
-								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo \
-								${LANG1}/Relevance.vo
+								${LANG1}/Relevance.vo \
+								${LANG1}/Environment.vo
 	
 	coqc ${LANG1}/Specification.v ${OPT} 
 

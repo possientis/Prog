@@ -10,4 +10,4 @@ module  Replace
 
 
 replace :: (Eq v) => v -> v -> (v -> v)
-replace x y = y <-: x
+replace x y = (y <-: x) -- y in place of x

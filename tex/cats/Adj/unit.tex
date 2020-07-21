@@ -172,5 +172,53 @@ as per definition~(\ref{Nat:def:composition}).
             \eta'_{c}=G(\alpha_{c})\circ\eta_{c}
         \end{equation}
     Collecting all these arrows $\alpha_{c}:F(c)\to F(c)$ for $c\in\Cat$,
-    we obtain a map $\alpha:\ob\ \Cat\to\arr\ \Dat$. 
+    we obtain a map $\alpha:\ob\ \Cat\to\arr\ \Dat$. Next we need to show 
+    that $\alpha$ is a natural transformation, so it remains to show that
+    condition~$(2)$ of definition~(\ref{Nat:def:natural}) satisfied. So
+    let $a,b\in\Cat$ and $f:a\to b$. We need to show the equality
+    $F(f)\circ\alpha_{a}=\alpha_{b}\circ F(f)$:
+    \[
+        \begin{tikzcd}
+            a\arrow[d,swap, "f"]
+            &F(a)\arrow[r, "\alpha_{a}"]\arrow[d, swap,"F(f)"]
+            &F(a)\arrow[d, "F(f)"]
+            \\
+            b
+            &F(b)\arrow[r, swap, "\alpha_{b}"]
+            &F(b)
+        \end{tikzcd}
+    \]
+    Define $c=a\in\Cat$ and $d=F(b)\in\Dat$. Then both arrows 
+    $F(f)\circ\alpha_{a}$ and $\alpha_{b}\circ F(f)$ have domain $F(c)$ and
+    codomain $d$ in \Dat. Appplying 
+    proposition~(\ref{Adj:prop:unit:proving:equality}) 
+    since $\eta$ is a unit of $(F,G)$, in order to show that these are equal
+    it is sufficient to prove:
+        \[
+            G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{c}=
+            G(\,\alpha_{b}\circ F(f)\,)\circ\eta_{c}
+        \]
+    The proof goes as follows:
+        \begin{eqnarray*}G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{c}
+            &=&G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{a}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(F(f))\circ G(\alpha_{a})\circ\eta_{a}\\
+            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
+            &=&G(F(f))\circ\eta'_{a}\\
+            \mbox{prop.~(\ref{Adj:prop:unit:natural}), $\eta'$ unit}\ \to\ 
+            &=&\eta'_{b}\circ f\\
+            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
+            &=&G(\alpha_{b})\circ\eta_{b}\circ f\\
+            \mbox{prop.~(\ref{Adj:prop:unit:natural}), $\eta$ unit}\ \to\ 
+            &=&G(\alpha_{b})\circ G(F(f))\circ\eta_{a}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\,\alpha_{b}\circ F(f)\,)\circ\eta_{a}\\
+            &=&G(\,\alpha_{b}\circ F(f)\,)\circ\eta_{c}\\
+        \end{eqnarray*}
+    So we have now proved that $\alpha$ is a natural transformation
+    $\alpha:F\Rightarrow F$. However, we aim to show that it is actually
+    a natural isomorphism. 
+    Using proposition~(\ref{Nat:prop:isomorphism:component}), it is sufficient
+    to prove that each component $\alpha_{c}:F(c)\to F(c)$ for $c\in\Cat$ is 
+    an isomorphisn in \Dat.
 \end{proof}
