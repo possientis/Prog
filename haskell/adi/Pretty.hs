@@ -3,7 +3,7 @@
 {-# LANGUAGE TypeSynonymInstances   #-}
 
 module  Pretty
-    (   ppr     -- remove
+    (   showExpr
     )   where
 
 
@@ -14,6 +14,9 @@ import Data.Functor.Foldable
 import Op
 import Var
 import Syntax
+
+showExpr :: Expr -> String
+showExpr = render . ppr 0
 
 ppr :: Int -> Expr -> Doc
 ppr p = \case
@@ -49,18 +52,18 @@ pprOp p op es
 pprIf :: Int -> Expr -> Expr -> Expr -> Doc
 pprIf p b e1 e2 = parensIf (p > 0) $ 
         text "if" 
-    <+> ppr (p + 1) b 
+    <+> ppr 0 b 
     <+> text "then"
-    <+> ppr (p + 1) e1
+    <+> ppr 0 e1
     <+> text "else"
-    <+> ppr (p + 1) e2
+    <+> ppr 0 e2
 
 pprLam :: Int -> Expr -> Doc
 pprLam p e = parensIf (p > 0) $ 
         char '\\' 
     <>  hsep (fmap (text . show) (viewVars e))
     <+> text "->"
-    <+> ppr (p + 1) (viewBody e)
+    <+> ppr 0 (viewBody e)
  
 pprApp :: Int -> Expr -> Expr -> Doc
 pprApp p e1 e2 = parensIf (p > 0) $ (ppr (p + 1) e1) <+> (ppr (p + 1) e2)
@@ -103,5 +106,4 @@ parensIf :: Bool -> Doc -> Doc
 parensIf = \case
     True    -> parens
     False   -> id
-
 

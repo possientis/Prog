@@ -6,6 +6,7 @@ Require Import Utils.Composition.
 Require Import Core.Set.
 Require Import Core.Equal.
 
+Require Import Lang1.Free.
 Require Import Lang1.Valid.
 Require Import Lang1.Syntax.
 Require Import Lang1.Semantics.

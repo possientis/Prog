@@ -52,6 +52,7 @@ all :							${UTILS}/LEM.vo \
 								${NORM}/Insert.vo \
 								${NORM}/Normal.vo \
 								${LANG1}/Syntax.vo \
+								${LANG1}/Free.vo \
 								${LANG1}/Apply.vo \
 								${LANG1}/Valid.vo \
 								${LANG1}/Environment.vo \
@@ -466,9 +467,14 @@ ${LANG1}/Syntax.vo :			${LANG1}/Syntax.v \
 								${UTILS}/Fresh.vo
 	coqc ${LANG1}/Syntax.v		${OPT} 
 
+${LANG1}/Free.vo :				${LANG1}/Free.v \
+								${LANG1}/Syntax.vo
+	coqc ${LANG1}/Free.v		${OPT} 
+
 ${LANG1}/Apply.vo :				${LANG1}/Apply.v \
 								${UTILS}/Replace.vo \
 								${UTILS}/Composition.vo \
+								${LANG1}/Free.vo \
 								${LANG1}/Valid.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Semantics.vo \
@@ -477,6 +483,7 @@ ${LANG1}/Apply.vo :				${LANG1}/Apply.v \
 	coqc ${LANG1}/Apply.v		${OPT} 
 
 ${LANG1}/Valid.vo :				${LANG1}/Valid.v \
+								${LANG1}/Free.vo \
 								${LANG1}/Syntax.vo
 	coqc ${LANG1}/Valid.v		${OPT} 
 
@@ -508,6 +515,7 @@ ${LANG1}/Relevance.vo :			${LANG1}/Relevance.v \
 								${UTILS}/Remove.vo \
 								${CORE}/Set.vo \
 								${CORE}/Equal.vo \
+								${LANG1}/Free.vo \
 								${LANG1}/Syntax.vo \
 								${LANG1}/Environment.vo \
 								${LANG1}/Semantics.vo
@@ -657,6 +665,7 @@ ${LANG1}/Specification.vo :		${LANG1}/Specification.v \
 								${CORE}/Incl.vo \
 								${CORE}/Equal.vo \
 								${CORE}/Compatible.vo \
+								${LANG1}/Free.vo \
 								${LANG1}/Apply.vo \
 								${LANG1}/Valid.vo \
 								${LANG1}/Syntax.vo \

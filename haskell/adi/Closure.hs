@@ -8,6 +8,7 @@ module  Closure
 
 import Var
 import Env
+import Pretty
 import Syntax
 
 data Closure = Closure
@@ -19,6 +20,8 @@ data Closure = Closure
 instance Show Closure where
     show c =  "Closure { var = " 
            ++ show (cloVar c) 
+           ++ ", exp = "
+           ++ showExpr (cloExp c)
            ++ ", env = " 
            ++ show (cloEnv c)
            ++ " }"

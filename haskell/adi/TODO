@@ -1,5 +1,5 @@
-Show for Expr
 Show for closure: add expr
+primitives only exported as lambdas ?
 add Error/Bot to syntax, value ?
 rewrite eval_ with cata?
 can we define a small-step operational semantics

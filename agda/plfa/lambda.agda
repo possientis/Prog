@@ -614,4 +614,24 @@ _ = begin
     · (`suc `zero))
 
   —→⟨ ξ-suc (ξ-·₁ (β-ƛ V-zero)) ⟩
-  {!!}
+  `suc (
+      (ƛ "n" ⇒ case `zero
+        [zero⇒ ` "n"
+        |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
+    · (`suc `zero))
+
+  —→⟨ ξ-suc (β-ƛ (V-suc V-zero)) ⟩
+  `suc case `zero
+    [zero⇒ (`suc `zero)
+    |suc "m" ⇒ `suc (plus · ` "m" · (`suc `zero)) ]
+
+  —→⟨ ξ-suc β-zero ⟩
+  `suc `suc `zero
+  ∎
+
+
+infixr 7 _⇒_
+
+data Type : Set where
+  _⇒_ : Type -> Type -> Type
+  `ℕ  : Type

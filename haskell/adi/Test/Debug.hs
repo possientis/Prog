@@ -8,7 +8,7 @@ import Interpret
 
 main :: IO ()
 main = do
-   evalIO e2
+   evalIO e3
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 

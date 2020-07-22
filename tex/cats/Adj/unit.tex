@@ -220,5 +220,71 @@ as per definition~(\ref{Nat:def:composition}).
     a natural isomorphism. 
     Using proposition~(\ref{Nat:prop:isomorphism:component}), it is sufficient
     to prove that each component $\alpha_{c}:F(c)\to F(c)$ for $c\in\Cat$ is 
-    an isomorphisn in \Dat.
+    an isomorphisn in \Dat. So let $c\in\Cat$. Define $d=F(c)\in\Dat$. Then we 
+    have $\eta_{c}:c\to G(d)$. Having assumed that $\eta'$ is a unit of $(F,G)$ 
+    there exists a unique arrow $g:F(c)\to d$ such that 
+    $\eta_{c}=G(g)\circ\eta'_{c}$. Define $\beta_{c}$ to be precisely this 
+    unique arrow $g$. Then we have $\beta_{c}:F(c)\to F(c)$ and:
+        \begin{equation}\label{Adj:eqn:unit:not:unique:2}
+            \eta_{c}=G(\beta_{c})\circ\eta'_{c}
+        \end{equation}
+    We claim that $\beta_{c}$ is an inverse of $\alpha_{c}$. So we need to prove 
+    that $\beta_{c}\circ\alpha_{c}=\id(\,F(c)\,)$ and 
+    $\alpha_{c}\circ\beta_{c}=\id(\,F(c)\,)$.
+    In order to show that $\beta_{c}\circ\alpha_{c}=\id(\,F(c)\,)$, since both 
+    arrows are from $F(c)$ to $d=F(c)$ and $\eta$ is a unit of $(F,G)$, applying
+    proposition~(\ref{Adj:prop:unit:proving:equality}) it is sufficient to prove 
+    that:
+        \[
+            G(\,\beta_{c}\circ\alpha_{c}\,)\circ\eta_{c} 
+            = 
+            G(\,\id(F(c))\,)\circ\eta_{c}
+        \]
+    The proof goes as follows:
+        \begin{eqnarray*}G(\,\beta_{c}\circ\alpha_{c}\,)\circ\eta_{c}
+            &=&G(\beta_{c})\circ G(\alpha_{c})\circ\eta_{c}
+            \ \leftarrow\ \mbox{$G$ functor}\\
+            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
+            &=&G(\beta_{c})\circ\eta'_{c}\\
+            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique:2})}\ \to\ 
+            &=&\eta_{c}\\
+            \mbox{identity}\ \to\ 
+            &=&\id(\,G(F(c))\,)\circ\eta_{c}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\,\id(F(c))\,)\circ\eta_{c}\\
+        \end{eqnarray*}
+    In order to show that $\alpha_{c}\circ\beta_{c}=\id(\,F(c)\,)$, since both 
+    arrows are from $F(c)$ to $d=F(c)$ and $\eta'$ is assumed to be a unit of 
+    $(F,G)$, applying proposition~(\ref{Adj:prop:unit:proving:equality}) it is 
+    sufficient to prove that:
+        \[
+            G(\,\alpha_{c}\circ\beta_{c}\,)\circ\eta'_{c} 
+            = 
+            G(\,\id(F(c))\,)\circ\eta'_{c}
+        \]
+    The proof goes as follows:
+        \begin{eqnarray*}G(\,\alpha_{c}\circ\beta_{c}\,)\circ\eta'_{c}
+            &=&G(\alpha_{c})\circ G(\beta_{c})\circ\eta'_{c}
+            \ \leftarrow\ \mbox{$G$ functor}\\
+            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique:2})}\ \to\ 
+            &=&G(\alpha_{c})\circ\eta_{c}\\
+            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
+            &=&\eta'_{c}\\
+            \mbox{identity}\ \to\ 
+            &=&\id(\,G(F(c))\,)\circ\eta'_{c}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\,\id(F(c))\,)\circ\eta'_{c}\\
+        \end{eqnarray*}
+    So we now know that $\alpha:F\Rightarrow F$ is a natural isomorphism and it 
+    remains to show that $\eta'=(G\alpha)\circ\eta$. Using 
+    proposition~(\ref{Nat:prop:equal}), this equality between natural
+    transformations is obtained if we can show that all components are equal:
+        \begin{eqnarray*}\eta'_{c}
+            &=&G(\alpha_{c})\circ\eta_{c}
+            \ \leftarrow\ \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:leftmul})}\ \to\ 
+            &=&(G\alpha)_{c}\circ\eta_{c}\\
+            \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&(\,G\alpha\circ\eta\,)_{c}\\
+        \end{eqnarray*}
 \end{proof}

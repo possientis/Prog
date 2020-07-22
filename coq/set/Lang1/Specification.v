@@ -9,6 +9,7 @@ Require Import Core.Incl.
 Require Import Core.Equal.
 Require Import Core.Compatible.
 
+Require Import Lang1.Free.
 Require Import Lang1.Apply.
 Require Import Lang1.Valid.
 Require Import Lang1.Syntax.

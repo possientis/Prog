@@ -40,11 +40,11 @@ pos :: Integer -> Integer
 pos n = if n <= 0 then 0 else n
 
 specENum :: Spec
-specENum = it "Checked eval for ENum in empty environment" $ do
+specENum = it "Checked eval for eNum" $ do
     property propENum
 
 specEBool :: Spec
-specEBool = it "Checked eval for EBool in empty environment" $ do
+specEBool = it "Checked eval for eBool" $ do
     property propEBool
 
 specEAdd :: Spec 

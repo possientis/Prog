@@ -403,3 +403,36 @@ Proof.
     intros v e s t x H1. apply betaValid_replaceT_gen. 
     rewrite diff_nil. assumption.
 Qed.
+
+
+Lemma betaValid_compose_lemma :
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (x:v) (t1 t:T v),
+    t = Lam x t1      ->
+    betaValid_ f xs t -> 
+        coincide (Fr t \\ xs) (subst_ g xs' ; f) (subst_ g (x :: xs') ; f).
+Proof.
+    intros v e f g xs xs' x t1 t H1 H2 u H3. unfold comp.
+    apply free_subst_intersect_gen, equivSym. 
+    rewrite inter_cons_not_in_r.
+    - apply equivRefl.
+    - rewrite H1 in H2. apply betaValid_lam_gen in H2. destruct H2 as [H2 H4].
+      apply H4. rewrite H1 in H3. assumption.
+Qed.
+
+(*
+Lemma betaValid_compose_gen :
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (t:T v),
+    xs <= xs'         ->
+    betaValid_ f xs t ->
+        subst_ (subst_ g xs'; f) xs t = (subst_ g xs' ; subst_ f xs) t.
+Proof.
+    intros v e f g xs xs' t. revert t xs xs'.
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs xs' H1 H2.
+    - unfold comp. simpl. destruct (in_dec eqDec x xs) as [H3|H3].
+        + simpl. destruct (in_dec eqDec x xs') as [H4|H4].
+            { reflexivity. }
+            { exfalso. apply H4, H1. assumption. }
+        + reflexivity.
+    -
+Show.
+*)

@@ -46,19 +46,33 @@ Proof.
             { inversion H2. }
 Qed.
 
-Lemma L4 : forall (a:Type) (p:a -> Prop),
+Definition L4 (X:Prop) (b:bool) (p:X <-> b = true) : { X } + {~ X}.
+Proof.
+    destruct p as [H1 H2]. destruct b.
+    - left. apply H2. reflexivity.
+    - right.  intros H3. apply H1 in H3. inversion H3.
+Defined.
+
+Arguments L4 {X} {b}.
+
+Lemma L5 : forall (a:Type) (p:a -> Prop),
     Decidable p <-> exists (q:forall (x:a), {p x} + {~p x}), True.
 Proof.
-
-Show.
-
-(*
-Lemma L3 : forall (a:Type) (p:a -> Prop),
-    (forall (x:a), Decidable_ (p x)) -> Decidable p.
-Proof.
-
-Show.
-*)
+    unfold Decidable, Decider. intros a p. split.
+    - intros [f H1]. exists (fun (x:a) => L4 (H1 x)). trivial.
+    - intros [q _ ]. exists (fun (x:a) => 
+        match q x with 
+        | left _  => true 
+        | right _ => false
+        end).
+      intros x. destruct (q x) as [H1|H1].
+        + split.
+            { intros. reflexivity. }
+            { intros. assumption. }
+        + split.
+            { intros H2. exfalso. apply H1. assumption. }
+            { intros H2. inversion H2. }
+Qed.
 
 
 

@@ -1,4 +1,5 @@
 Require Import List.
+Require Import Lang1.Free.
 Require Import Lang1.Syntax.
 
 (* The substitution f is valid, i.e. does not give rise to variable capture.    *)

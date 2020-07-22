@@ -1,6 +1,3 @@
-Require Import List.
-Require Import Peano_dec.
-
 Require Import Utils.Fresh.
 
 (* Abstract syntax for core language of types (propositions): Lang1.            *)
@@ -20,15 +17,6 @@ Fixpoint fmap (f:nat -> nat) (p:Formula) : Formula :=
     | Imp p q   => Imp (fmap f p) (fmap f q)
     | All x p   => All (f x) (fmap f p)
     end.
-
-(* Free variables of a formula.                                                 *)
-Fixpoint free (p:Formula) : list nat :=
-    match p with
-    | Bot       => nil
-    | Elem n m  => cons n (cons m nil)
-    | Imp p q   => free p ++ free q
-    | All n p   => remove (eq_nat_dec) n (free p)
-    end.  
 
 Definition Not (p:Formula)          :Formula := Imp p Bot.
 Definition Or  (p q:Formula)        :Formula := Imp (Not p) q.

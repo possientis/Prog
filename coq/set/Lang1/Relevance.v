@@ -6,9 +6,10 @@ Require Import Utils.Remove.
 Require Import Core.Set.
 Require Import Core.Equal.
 
+Require Import Lang1.Free.
 Require Import Lang1.Syntax.
-Require Import Lang1.Environment.
 Require Import Lang1.Semantics.
+Require Import Lang1.Environment.
 
 Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
     forall (n:nat), In n (free p) -> e n == e' n.

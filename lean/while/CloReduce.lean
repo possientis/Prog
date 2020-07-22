@@ -42,5 +42,9 @@ lemma CloReduceMinimal : ∀ (r:Stmt × Env → Stmt × Env → Prop),
    ∀ (e₁ e₂:Stmt) (s₁ s₂:Env), CloReduce e₁ s₁ e₂ s₂ → r (e₁,s₁) (e₂,s₂) :=
 begin
   intros r H1 H3, cases H1 with H1 H2,
+  intros e₁ e₂ s₁ s₂ H4, induction H4 with e₁ s₁ e₁ e₂ e₃ s₁ s₂ s₃ H4 H5 IH,
+    { apply H1 },
+    { apply H2,
+      { apply H3, apply H4},
+      { assumption }}
 end
-

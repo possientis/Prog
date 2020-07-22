@@ -111,4 +111,3 @@ eMulNat = (eRec "*" (eLam "n" (eLam "m"
                 (eApp2 (eVar "*") 
                     (eVar "n") 
                     (eVar "m")))))))
-
