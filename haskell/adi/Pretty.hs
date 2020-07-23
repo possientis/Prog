@@ -60,7 +60,7 @@ pprIf p b e1 e2 = parensIf (p > 0) $
 
 pprLam :: Int -> Expr -> Doc
 pprLam p e = parensIf (p > 0) $ 
-        char '\\' 
+        char '\\'
     <>  hsep (fmap (text . show) (viewVars e))
     <+> text "->"
     <+> ppr 0 (viewBody e)

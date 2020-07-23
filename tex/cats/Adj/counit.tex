@@ -1,68 +1,64 @@
-\begin{defin}\label{Adj:def:unit}
+\begin{defin}\label{Adj:def:counit}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
-    are categories. We call {\em unit} of the typed functors $(\Cat,\Dat,F)$
+    are categories. We call {\em counit} of the typed functors $(\Cat,\Dat,F)$
     and $(\Dat,\Cat,G)$, a natural transformation 
-    $\eta:I_{\cal C}\Rightarrow G\circ F$ such that for all 
-    $c\in\Cat$, $d\in\Dat$ and $f:c\to G(d)$, there exists a
-    unique $g:F(c) \to d$ such that $f = G(g) \circ \eta_{c}$.
+    $\epsilon:F\circ G\Rightarrow I_{\cal D}$ such that for all 
+    $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$, there exists a
+    unique $f:c \to G(d)$ such that $g = \epsilon_{d}\circ F(f)$.
 \end{defin}
 
 \noindent
-{\bf Remark}: The equality $f = G(g) \circ \eta_{c}$ can be visualized with
+{\bf Remark}: The equality $g = \epsilon_{d}\circ F(f)$ can be visualized with
 the diagram:
     \[
         \begin{tikzcd}
-            c \arrow[rd,swap, "f"]\arrow[r,"\eta_{c}"] 
-            &G(\,F(c)\,)\arrow[d,"G(\,g\,)"]\\
-            & G(\,d\,)
+            F(\,G(d)\,)\arrow[r,"\epsilon_{d}"]
+            &d\\
+            F(\,c\,)\arrow[ru,swap,"g"]\arrow[u,"F(\,f\,)"]
         \end{tikzcd}
     \]
 
 \noindent
-{\bf Remark}: Recall from definition~(\ref{Nat:def:natural}) that $\eta$ being
-a natural transformation is a statement about typed functors, not just functors. 
-The same is true of a unit. Being a unit of $F$ and $G$ viewed as functors 
-$F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ is not the same as being a unit of $F$ 
-and $G$ viewed as functor $F:\Cop\to\Dop$ and $G:\Dop\to\Cop$. It is important
-to remember which categories are being considered, hence typed functors. The
-order also matters. Being a unit of $F$ and $G$ is not the same as being a unit
-of $G$ and $F$.
+{\bf Remark}: Just like for {\em units}, being a {\em counit} is a statement
+relating typed functors (not just functors), and the order between $F$ and 
+$G$ matters.
 
-\begin{notation}\label{Adj:notation:unit}
+\begin{notation}\label{Adj:notation:counit}
     Whenever the categories \Cat\ and \Dat\ are clearly undertood from the 
-    context, we shall simply say that $\eta$ {\em is a unit of} the
+    context, we shall simply say that $\epsilon$ {\em is a counit of} the
     ordered pair $(F,G)$.
 \end{notation}
 
-\begin{prop}\label{Adj:prop:unit:proving:equality}
+\begin{prop}\label{Adj:prop:counit:proving:equality}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
-    are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit 
-    of $(F,G)$. Then, for all $c\in\Cat$, $d\in\Dat$ and $g_{1},g_{2}:F(c)\to d$,
+    are categories, and let $\epsilon:F\circ G\Rightarrow I_{\cal D}$ be a counit 
+    of $(F,G)$. Then, for all $c\in\Cat$, $d\in\Dat$ and $f_{1},f_{2}:c\to G(d)$,
     we have the implication:
         \[
-            G(g_{1})\circ\eta_{c} = G(g_{2})\circ\eta_{c}\ 
+            \epsilon_{d}\circ F(f_{1}) = \epsilon_{d}\circ F(f_{2})\ 
             \Rightarrow\ 
-            g_{1}=g_{2}
+            f_{1}=f_{2}
         \]
 \end{prop}
 \begin{proof}
     This is an immediate consequence of the uniqueness property of
-    definition~(\ref{Adj:def:unit}). Consider the arrow 
-    $f=G(g_{1})\circ\eta_{c}$. Since $g_{1}:F(c)\to d$ and $G$ is a 
+    definition~(\ref{Adj:def:counit}). Consider the arrow 
+    $g=\epsilon_{d}\circ F(f_{1})$. Since $f_{1}:c\to G(d)$ and $F$ is a 
     functor, we have 
-    $G(g_{1}):G(F(c))\to G(d)$ and since $\eta_{c}:c\to G(F(c))$, $f$
-    is a well-defined arrow $f:c\to G(d)$ in the category \Cat. Having
-    assumed that $\eta$ is a unit of $(F,G)$, from 
-    definition~(\ref{Adj:def:unit}) there exists a unique arrow 
-    $g:F(c)\to d$ in the category \Dat\ such that $f=G(g)\circ\eta_{c}$.
-    However the equality $f=G(g)\circ\eta_{c}$ is satified by the 
-    arrow $g=g_{1}$ since we defined $f$ as $f=G(g_{1})\circ\eta_{c}$.
-    Now if we assume that $G(g_{1})\circ\eta_{c}=G(g_{2})\circ\eta_{c}$,
-    then the equality $f=G(g)\circ\eta_{c}$ is also satisfied by $g_{2}$.
-    By uniquenes, it follows that $g_{1}=g_{2}$.
+    $F(f_{1}):F(c)\to F(G(d))$ and since $\epsilon_{d}:F(G(d))\to d$, 
+    $g$ is a well-defined arrow $g:F(c)\to d$ in the category \Dat. Having
+    assumed that $\epsilon$ is a counit of $(F,G)$, from 
+    definition~(\ref{Adj:def:counit}) there exists a unique arrow 
+    $f:c\to G(d)$ in the category \Cat\ such that $g=\epsilon_{d}\circ F(f)$.
+    However the equality $g=\epsilon_{d}\circ F(f)$ is satified by the 
+    arrow $f=f_{1}$ since we defined $g$ as $g=\epsilon_{d}\circ F(f_{1})$.
+    Now if we assume that $\epsilon_{d}\circ F(f_{1})=\epsilon_{d}\circ F(f_{2})$,
+    then the equality $g=\epsilon_{d}\circ F(f)$ is also satisfied by $f_{2}$.
+    By uniquenes, it follows that $f_{1}=f_{2}$.
 \end{proof}
 
-\begin{prop}\label{Adj:prop:unit:natural}
+TODO
+\begin{prop}\label{Adj:prop:counit:natural}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit 
     of $(F,G)$. Then we have:
@@ -93,7 +89,7 @@ proposition shows, the answer is 'no' in general as every natural
 isomorphism $\alpha : F\Rightarrow F$ potentially gives rise to a 
 new unit.
 
-\begin{prop}\label{Adj:prop:unit:not:unique}
+\begin{prop}\label{Adj:prop:counit:not:unique}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit
     of $(F,G)$. Then, a natural transformation $\eta':I_{\cal C}\Rightarrow 
@@ -160,7 +156,7 @@ as per definition~(\ref{Nat:def:composition}).
     a unique arrow $g:F(c)\to d$ such that $\eta'_{c}=G(g)\circ\eta_{c}$.
     Define $\alpha_{c}$ to be precisely this unique arrow $g$. Then we 
     have $\alpha_{c}:F(c)\to F(c)$ and:
-        \begin{equation}\label{Adj:eqn:unit:not:unique}
+        \begin{equation}\label{Adj:eqn:counit:not:unique}
             \eta'_{c}=G(\alpha_{c})\circ\eta_{c}
         \end{equation}
     Collecting all these arrows $\alpha_{c}:F(c)\to F(c)$ for $c\in\Cat$,
@@ -217,7 +213,7 @@ as per definition~(\ref{Nat:def:composition}).
     there exists a unique arrow $g:F(c)\to d$ such that 
     $\eta_{c}=G(g)\circ\eta'_{c}$. Define $\beta_{c}$ to be precisely this 
     unique arrow $g$. Then we have $\beta_{c}:F(c)\to F(c)$ and:
-        \begin{equation}\label{Adj:eqn:unit:not:unique:2}
+        \begin{equation}\label{Adj:eqn:counit:not:unique:2}
             \eta_{c}=G(\beta_{c})\circ\eta'_{c}
         \end{equation}
     We claim that $\beta_{c}$ is an inverse of $\alpha_{c}$. So we need to prove 

@@ -25,7 +25,7 @@ specEBool = it "Checked showExpr for eBool" $
 
 specEAdd :: Spec
 specEAdd = it "Checked showExpr for eAdd" $
-    showExpr eAdd `shouldBe` "\\x y -> x + y"
+    property propEAdd
 
 propENum :: Integer -> Bool
 propENum n = showExpr (eNum n) == show n
@@ -33,4 +33,5 @@ propENum n = showExpr (eNum n) == show n
 propEBool :: Bool -> Bool
 propEBool b = showExpr (eBool b) == show b
 
-
+propEAdd :: Integer -> Integer -> Bool
+propEAdd n m = showExpr (eAdd (eNum n) (eNum m)) == show n ++ " + " ++ show m

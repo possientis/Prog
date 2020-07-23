@@ -138,35 +138,35 @@ propEBool :: Bool -> Bool
 propEBool b = bool (eval (eBool b)) == Just b 
 
 propEAdd :: Integer -> Integer -> Bool
-propEAdd n m = num (eval (eApp2 eAdd (eNum n) (eNum m))) == Just (n + m)
+propEAdd n m = num (eval (eAdd (eNum n) (eNum m))) == Just (n + m)
  
 propEMul :: Integer -> Integer -> Bool
-propEMul n m = num (eval (eApp2 eMul (eNum n) (eNum m))) == Just (n * m)
+propEMul n m = num (eval (eMul (eNum n) (eNum m))) == Just (n * m)
 
 propESub :: Integer -> Integer -> Bool
-propESub n m = num (eval (eApp2 eSub (eNum n) (eNum m))) == Just (n - m)
+propESub n m = num (eval (eSub (eNum n) (eNum m))) == Just (n - m)
 
 propEDiv :: Integer -> Integer -> Bool
 propEDiv n m = m == 0 || 
-    num (eval (eApp2 eDiv (eNum n) (eNum m))) == Just (n `div` m)
+    num (eval (eDiv (eNum n) (eNum m))) == Just (n `div` m)
 
 propEAnd :: Bool -> Bool -> Bool
-propEAnd n m = bool (eval (eApp2 eAnd (eBool n) (eBool m))) == Just (n && m)
+propEAnd n m = bool (eval (eAnd (eBool n) (eBool m))) == Just (n && m)
 
 propEOr :: Bool -> Bool -> Bool
-propEOr n m = bool (eval (eApp2 eOr (eBool n) (eBool m))) == Just (n || m)
+propEOr n m = bool (eval (eOr (eBool n) (eBool m))) == Just (n || m)
 
 propEImp :: Bool -> Bool -> Bool
-propEImp n m = bool (eval (eApp2 eImp (eBool n) (eBool m))) == Just (not n || m)
+propEImp n m = bool (eval (eImp (eBool n) (eBool m))) == Just (not n || m)
 
 propENot :: Bool -> Bool
-propENot n = bool (eval (eApp eNot (eBool n))) == Just (not n)
+propENot n = bool (eval (eNot (eBool n))) == Just (not n)
 
 propELe :: Integer -> Integer -> Bool
-propELe n m = bool (eval (eApp2 eLe (eNum n) (eNum m))) == Just (n <= m)
+propELe n m = bool (eval (eLe (eNum n) (eNum m))) == Just (n <= m)
 
 propEEq :: Integer -> Integer -> Bool
-propEEq n m = bool (eval (eApp2 eEq (eNum n) (eNum m))) == Just (n == m)
+propEEq n m = bool (eval (eEq (eNum n) (eNum m))) == Just (n == m)
 
 propEIfT :: Integer -> Integer -> Bool
 propEIfT n m = num (eval (eIf (eBool True) (eNum n) (eNum m))) == Just n

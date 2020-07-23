@@ -1,9 +1,12 @@
 -- unicodes
 -- ℕ : \bN
+-- 𝔹 : \bB
 -- → : \to, \r, \->
+-- ∶ : \:  -- looks the same, but not the same as normal semi-colon
 -- — : \em
 -- —→: \em\to
 -- —↠: \em\rr-
+-- ∅ : \0, \emptyset
 -- ∀ : \all
 -- ∃ : \ex, \exists
 -- λ : \Gl

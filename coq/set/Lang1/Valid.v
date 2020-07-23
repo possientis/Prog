@@ -8,7 +8,7 @@ Inductive Valid (f:nat -> nat) : Formula -> Prop :=
 | VElem : forall (n m:nat), Valid f (Elem n m)
 | VImp  : forall (p q:Formula), Valid f p -> Valid f q -> Valid f (Imp p q)
 | VAll  : forall (n:nat) (p:Formula), Valid f p           -> 
-    (forall (m:nat), In m (free (All n p)) -> f n <> f m) ->
+    (forall (m:nat), In m (Fr (All n p)) -> f n <> f m) ->
         Valid f (All n p) 
 .
 
@@ -23,7 +23,7 @@ Qed.
 
 Lemma ValidAll : forall (f:nat -> nat) (n:nat) (p1:Formula),
     Valid f (All n p1) -> Valid f p1 /\
-        forall (m:nat), In m (free (All n p1)) -> f n <> f m.
+        forall (m:nat), In m (Fr (All n p1)) -> f n <> f m.
 Proof.
     intros f n p1 H1. remember (All n p1) as p eqn:P. revert n p1 P.
     destruct H1 as [|x y|p1 p2 H1 H2|n p1 H1 H2]; intros m q1 H; inversion H.

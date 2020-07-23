@@ -4,6 +4,7 @@ module  Test.Debug
     )   where
 
 import DSL
+import Pretty
 import Interpret
 
 main :: IO ()
@@ -20,5 +21,5 @@ e3 :: Expr
 e3 = eApp eFac (eNum 5)
 
 e4 :: Expr
-e4 = eApp2 eDiv (eNum 0) (eNum 1)
+e4 = eDiv (eNum 0) (eNum 1)
 

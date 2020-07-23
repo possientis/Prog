@@ -37,7 +37,7 @@ Definition apply2 (p:Formula) (n m:nat) : Formula := fmap (replace2 0 1 n m) p.
 
 Lemma evalApply1 : forall (e:Env) (p:Formula) (n:nat) (x:set),
     Valid (replace 0 n) p ->
-    ~In n (free p)        ->
+    ~In n (Fr p)        ->
     eval1 e (apply p n) n x <-> eval1 e p 0 x.
 Proof.
     unfold eval1, apply. intros e p n x H1 H2. rewrite Substitution.
@@ -52,8 +52,8 @@ Qed.
 (* is bound to x and 1 is bound to y, with the obvious caveat.                  *)
 Lemma evalApply2 : forall (e:Env) (p:Formula) (n m:nat) (x y:set),
     Valid (replace2 0 1 n m) p ->
-    ~In n (free p)  ->
-    ~In m (free p)  ->
+    ~In n (Fr p)  ->
+    ~In m (Fr p)  ->
     n <> m          ->
     eval2 e (apply2 p n m) n m x y <-> eval2 e p 0 1 x y.
 Proof.

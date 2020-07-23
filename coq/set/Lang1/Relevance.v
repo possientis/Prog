@@ -12,7 +12,7 @@ Require Import Lang1.Semantics.
 Require Import Lang1.Environment.
 
 Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
-    forall (n:nat), In n (free p) -> e n == e' n.
+    forall (n:nat), In n (Fr p) -> e n == e' n.
 
 Lemma relevance : forall (e e':Env) (p:Formula), 
     envEqualOn p e e' -> eval e p <-> eval e' p.
@@ -58,7 +58,7 @@ Proof.
 Qed.
 
 Lemma evalNotInFree : forall (e:Env) (n:nat) (x:set) (p:Formula),
-    ~In n (free p) -> eval (bind e n x) p <-> eval e p.
+    ~In n (Fr p) -> eval (bind e n x) p <-> eval e p.
 Proof.
     intros e n x p H. apply relevance. intros m H'. 
     destruct (eq_nat_dec n m) as [E|E].

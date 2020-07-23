@@ -1,5 +1,4 @@
-Require Import List.
-
+Require Import List.  
 Require Import Utils.LEM.
 Require Import Utils.Replace.
 
@@ -30,7 +29,7 @@ Lemma evalSpecificationF : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
     m <> n ->
     p <> n ->
     p <> m ->
-    ~In m (free P) ->
+    ~In m (Fr P) ->
     eval e (specificationF P n m p)
         <->
     forall (x:set), exists (y:set), forall (z:set),
@@ -129,9 +128,9 @@ Lemma evalSpecificationF' : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
     m <> n ->
     p <> n ->
     p <> m ->
-    ~In m (free P) ->
-    ~In n (free P) ->
-    ~In p (free P) ->
+    ~In m (Fr P) ->
+    ~In n (Fr P) ->
+    ~In p (Fr P) ->
     Valid (replace2 0 1 n p) P ->
     eval e (specificationF' P n m p)
         <->

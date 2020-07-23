@@ -1,4 +1,6 @@
-open import Relation.Binary.PropositionalEquality.Core using (_≡_; _≢_; refl; subst)
+open import Relation.Binary.PropositionalEquality.Core
+  using (_≡_; _≢_; refl; subst;cong)
+
 open import Data.String                                using (String; _≟_) -- \?=
 open import Data.Nat                                   using (ℕ; zero; suc)
 open import Data.Empty                                 using (⊥; ⊥-elim)
@@ -7,6 +9,7 @@ open import Data.List                                  using (List; _∷_; [])
 open import Data.Bool                                  using (Bool; true; false)
 open import Data.Product                               using (∃; ∃-syntax; _×_)
 open import Data.Product                               using () renaming (_,_ to ⟨_,_⟩)
+open import isomorphism                                using (_≃_)
 
 Id : Set
 Id = String
@@ -635,3 +638,36 @@ infixr 7 _⇒_
 data Type : Set where
   _⇒_ : Type -> Type -> Type
   `ℕ  : Type
+  `𝔹  : Type
+
+
+infixl 5 _,_∶_  -- \:
+
+data Context : Set where
+  ∅     : Context -- \0
+  _,_∶_ : Context → Id → Type → Context
+
+
+open _≃_
+
+ContextListIso : Context ≃ List (Id × Type)
+ContextListIso = record
+  { to = toList
+  ; from = fromList
+  ; from∘to = fromTo
+  ; to∘from = toFrom
+  }
+    where
+      toList : Context → List (Id × Type)
+      toList ∅ = []
+      toList (Γ , x ∶ A) = ⟨ x , A ⟩ ∷ toList Γ
+      fromList : List (Id × Type) → Context
+      fromList [] = ∅
+      fromList (⟨ x , A ⟩ ∷ xs) = fromList xs , x ∶ A
+      fromTo : ∀ (Γ : Context) → fromList (toList Γ) ≡ Γ
+      fromTo ∅ = refl
+      fromTo (Γ , x ∶ A) = cong (_, x ∶ A) (fromTo Γ)
+      toFrom : ∀ (xs : List (Id × Type)) → toList (fromList xs) ≡ xs
+      toFrom [] = refl
+      toFrom (⟨ x , A ⟩ ∷ xs) = cong (⟨ x , A ⟩ ∷_) (toFrom xs)
+

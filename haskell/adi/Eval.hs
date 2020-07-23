@@ -69,7 +69,7 @@ writeT :: (Monad m) => Addr -> Value -> EvalT m ()
 writeT addr v = do
     heap <- heapWrite addr v <$> get
     put heap
-    tell ["write: " ++ show heap]
+    tell ["write at address " ++ show addr ++ ": " ++ show v]
 
 write :: Addr -> Value -> Eval ()
 write = writeT
