@@ -1,14 +1,15 @@
 #!/bin/sh
 
-LOC=/home/john/Prog/coq
+DIR=/home/john/Prog/coq
 
 set -e 
-cd ${LOC}
+cd ${DIR}
 
 echo
 echo "testing coq..."
 echo
 
+./Logic/test.sh
 ./set/test.sh
 ./set2/test.sh
 ./zf/test.sh
@@ -18,9 +19,6 @@ echo
 ./systemF/test.sh
 ./lam/test.sh
 ./cpdt/test.sh
-./logic/test.sh
-
-./clean.sh
 
 echo
 echo 'All coq tests completed successfully'
