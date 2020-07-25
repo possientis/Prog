@@ -6,6 +6,7 @@ FUNC  := Func
 LIST  := List
 FOL   := Fol
 LAM   := Lam
+SET   := Set
 
 all : Done
 
@@ -16,7 +17,8 @@ Done : 	${AXIOM}/Done \
 		${FUNC}/Done \
 		${LIST}/Done \
 		${FOL}/Done \
-		${LAM}/Done
+		${LAM}/Done \
+		${SET}/Done
 	touch Done
 
 ${AXIOM}/Done : 					$(ls ${AXIOM}/*.v)
@@ -68,6 +70,13 @@ ${LAM}/Done : 						$(ls ${LAM}/*.v) \
 	$(MAKE) --directory=${LAM}
 
 
+${SET}/Done : 						$(ls ${SET}/*.v) \
+									${NAT}/Done \
+									${CLASS}/Done \
+									${LIST}/Done
+	$(MAKE) --directory=${SET}
+
+
 clean: 
 	$(MAKE) --directory=${AXIOM} 	clean
 	$(MAKE) --directory=${CLASS} 	clean
@@ -77,4 +86,5 @@ clean:
 	$(MAKE) --directory=${LIST} 	clean
 	$(MAKE) --directory=${FOL} 		clean
 	$(MAKE) --directory=${LAM} 		clean
+	$(MAKE) --directory=${SET} 		clean
 	rm -f Done
