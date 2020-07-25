@@ -1,5 +1,6 @@
 Require Import List.
 
+Require Import Logic.List.In.
 Require Import Logic.List.Include.
 
 Definition Equiv (v:Type) (xs ys:list v) : Prop :=
@@ -30,7 +31,7 @@ Proof.
     apply incl_tran with ys; assumption.
 Qed.
 
-Lemma equivNilIsNil : forall (v:Type) (xs:list v),
+Lemma equivNil : forall (v:Type) (xs:list v),
     xs == nil <-> xs = nil.
 Proof.
     intros v xs. split.
@@ -46,6 +47,16 @@ Proof.
     - right. apply H1. assumption.
     - subst. left. reflexivity.
     - right. apply H2. assumption.
+Qed.
+
+Lemma inConsEquiv : forall (v:Type) (x:v) (xs:list v),
+    x :: xs -> cons x xs == xs.
+Proof.
+    intros a x xs H. split; intros z.
+    - intros [H1|H1].
+        + subst. assumption.
+        + assumption.
+    - intros H1. right. assumption.
 Qed.
 
 Lemma equivCompatLR : forall (v:Type) (xs' ys' xs ys:list v),

@@ -234,13 +234,13 @@ Qed.
 Lemma inter_app_nil_l : forall (v:Type) (e:Eq v) (xs ys zs:list v),
     (zs /\ (xs ++ ys)) = nil -> (zs /\ xs) = nil /\ (zs /\ ys) = nil.
 Proof.
-    intros v e xs ys zs H1. apply equivNilIsNil in H1.
+    intros v e xs ys zs H1. apply equivNil in H1.
     assert ((zs /\ xs) ++ (zs /\ ys) == nil) as H2.
         { apply (equivCompatLR v (zs /\ (xs ++ ys)) nil).
             { apply equivSym, inter_distrib_app_l. }
             { apply equivRefl. }
             { assumption. }}
-    apply equivNilIsNil in H2. apply app_nil in H2. destruct H2 as [H2 H3].
+    apply equivNil in H2. apply app_nil in H2. destruct H2 as [H2 H3].
     split; assumption.
 Qed.
 

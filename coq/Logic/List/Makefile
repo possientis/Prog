@@ -11,7 +11,11 @@ all: 										In.vo \
 											Intersect.vo \
 											Difference.vo \
 											Replace.vo \
-											Remove.vo
+											Remove.vo \
+											Nub.vo \
+											Sort.vo \
+											Normal.vo \
+											Filter.vo
 	touch Done
 
 In.vo:										In.v
@@ -41,6 +45,7 @@ InjectiveOn.vo:								InjectiveOn.v \
 
 
 Equiv.vo:								    Equiv.v \
+											In.vo \
 											Include.vo
 	coqc Equiv.v 		${LIB} 
 
@@ -89,6 +94,32 @@ Remove.vo:									Remove.v \
 											InjectiveOn.vo \
 											Difference.vo
 	coqc Remove.v		${LIB}
+
+
+Nub.vo:								    	Nub.v \
+											In.vo \
+											Equiv.vo
+	coqc Nub.v 		${LIB} 
+
+
+Sort.vo:								    Sort.v \
+											In.vo \
+											Equiv.vo
+	coqc Sort.v 		${LIB} 
+
+
+Normal.vo:								    Normal.v \
+											In.vo \
+											Nub.vo \
+											Sort.vo \
+											Equiv.vo
+	coqc Normal.v 		${LIB} 
+
+
+Filter.vo:									Filter.v \
+											In.vo \
+											Nil.vo
+	coqc Filter.v		${LIB} 
 
 
 clean :

@@ -23,6 +23,15 @@ Notation "y // x" := (replace x y)
 
 Open Scope Replace_scope.
 
+Definition replace2 (v:Type) (e:Eq v) (x y x' y':v) (u:v) : v :=
+    match eqDec u x with
+    | left _    => x'       (* if u = x  return x'  *)
+    | right _   =>
+        match eqDec u y with
+        | left _    => y'   (* if u = y  return y'  *)
+        | right _   => u    (* otherwise return u   *)
+        end
+    end.
 
 Lemma replace_x_x : forall (v:Type) (e:Eq v) (x:v), 
     (x // x) = id.

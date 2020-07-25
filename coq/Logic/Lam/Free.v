@@ -217,8 +217,8 @@ Proof.
       destruct (in_dec eqDec x xs) as [H2|H2];
       destruct (in_dec eqDec x ys) as [H3|H3].
         + reflexivity.
-        + apply equivNilIsNil in H. inversion H.
-        + apply equivSym in H. apply equivNilIsNil in H. 
+        + apply equivNil in H. inversion H.
+        + apply equivSym in H. apply equivNil in H. 
           inversion H.
         + reflexivity.
     - assert ((Fr t1 /\ xs) == (Fr t1 /\ ys)) as H1.
