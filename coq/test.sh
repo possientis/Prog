@@ -10,7 +10,6 @@ echo "testing coq..."
 echo
 
 ./Logic/test.sh
-./set/test.sh
 ./set2/test.sh
 ./zf/test.sh
 ./sf/test.sh

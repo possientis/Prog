@@ -7,6 +7,8 @@ Require Import List.
 Require Import Logic.Class.Eq.
 
 Require Import Logic.Nat.Max.
+Require Import Logic.Nat.Leq.
+Require Import Logic.Nat.Minimal.
 Require Import Logic.Nat.Maximum.
 
 Require Import Logic.Set.Set.
@@ -18,6 +20,8 @@ Require Import Logic.Set.ToList.
 Require Import Logic.Set.ElemIncl.
 Require Import Logic.Set.Decidable.
 Require Import Logic.Set.Extensionality.
+
+Require Import Logic.Set.Normal.Ord.
 
 
 (* Our next objective is to prove that the 'foundation axiom' is satisfied in   *)
@@ -77,6 +81,7 @@ Proof.
 Qed.
 
 (* The notion of rank is actually compatible with our equivalence relation ==.  *)
+Open Scope nat_scope.
 Lemma rankEqual : forall (x y:set), x == y -> rank x = rank y.
 Proof.
     intros x y. remember (rank x) as n eqn:E. 
@@ -154,7 +159,8 @@ Proof.
 Qed.
 
 (* If x is a subset of y, then its rank is less than or equal to that of y.     *) 
-Lemma rankIncl : forall (x y:set), x <= y -> rank x <= rank y.
+(* Notation '<=' for set and nat are conflicting, using 'incl'.                 *)
+Lemma rankIncl : forall (x y:set), incl x y -> rank x <= rank y.
 Proof.
     intros x y H. destruct (eqDec x Nil) as [H1|H1].
     - rewrite H1. apply le_0_n.

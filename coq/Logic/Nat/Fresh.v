@@ -1,17 +1,18 @@
-Require Import Peano_dec.
+Require Import Logic.Nat.Eq.
+Require Import Logic.Class.Eq.
 
 (* returns a variable which is not n and not m                                  *)
 Fixpoint fresh (n m:nat) : nat :=
-    match eq_nat_dec 0 n, eq_nat_dec 0 m with
+    match eqDec 0 n, eqDec 0 m with
     | right _, right _  => 0 
     | left  _, left  _  => 1
     | left  _, right _  =>          (* n = 0 so cannot use 0 *)
-        match eq_nat_dec 1 m with
+        match eqDec 1 m with
         | left  _       => 2        (* m = 1 so cannot use 1 *)
         | right _       => 1 
         end
     | right _, left  _  =>          (* m = 0 so cannot use 0 *) 
-        match eq_nat_dec 1 n with
+        match eqDec 1 n with
         | left  _       => 2        (* n = 1 so cannot use 1 *)
         | right _       => 1      
         end
@@ -20,17 +21,17 @@ Fixpoint fresh (n m:nat) : nat :=
 Lemma freshNot_n : forall (n m:nat), fresh n m <> n.
 Proof.
     intros n m. unfold fresh. destruct n as [|n].
-    - destruct (eq_nat_dec 0 0) as [H|H].
-        + destruct (eq_nat_dec 0 m) as [H'|H'].
+    - destruct (eqDec 0 0) as [H|H].
+        + destruct (eqDec 0 m) as [H'|H'].
             { intros C. inversion C. }
-            { destruct (eq_nat_dec 1 m) as [H0|H0].
+            { destruct (eqDec 1 m) as [H0|H0].
                 {intros C. inversion C. }
                 {intros C. inversion C. }}
         + exfalso. apply H. reflexivity.
-    - destruct (eq_nat_dec 0 (S n)) as [H|H].
+    - destruct (eqDec 0 (S n)) as [H|H].
         + inversion H.
-        + destruct (eq_nat_dec 0 m) as [H'|H'].
-            { destruct (eq_nat_dec 1 (S n)) as [H0|H0].
+        + destruct (eqDec 0 m) as [H'|H'].
+            { destruct (eqDec 1 (S n)) as [H0|H0].
                 { intros H1. rewrite <- H1 in H0. inversion H0. }
                 { assumption. }}
             { assumption. }
@@ -39,23 +40,23 @@ Qed.
 Lemma freshNot_m : forall (n m:nat), fresh n m <> m.
 Proof.
     intros n m. unfold fresh. destruct n as [|n].
-    - destruct (eq_nat_dec 0 0) as [H|H].
-        + destruct (eq_nat_dec 0 m) as [H'|H'].
+    - destruct (eqDec 0 0) as [H|H].
+        + destruct (eqDec 0 m) as [H'|H'].
             { intros H0. rewrite <- H0 in H'. inversion H'. }
-            { destruct (eq_nat_dec 1 m) as [H0|H0].
+            { destruct (eqDec 1 m) as [H0|H0].
                 { intros H1. rewrite <- H1 in H0. inversion H0. }
                 { assumption. }}
-        + destruct (eq_nat_dec 0 m) as [H'|H'].
+        + destruct (eqDec 0 m) as [H'|H'].
             { exfalso. apply H. reflexivity. }
             { assumption. }
-    - destruct (eq_nat_dec 0 (S n)) as [H|H].
-        + destruct (eq_nat_dec 0 m) as [H'|H'].
+    - destruct (eqDec 0 (S n)) as [H|H].
+        + destruct (eqDec 0 m) as [H'|H'].
             { intros H0. rewrite <- H0 in H'. inversion H'. }
-            { destruct (eq_nat_dec 1 m) as [H0|H0].
+            { destruct (eqDec 1 m) as [H0|H0].
                 { intros H1. rewrite <- H1 in H0. inversion H0. }
                 { assumption. }}
-        + destruct (eq_nat_dec 0 m) as [H'|H'].
-            { destruct (eq_nat_dec 1 (S n)) as [H0|H0].
+        + destruct (eqDec 0 m) as [H'|H'].
+            { destruct (eqDec 1 (S n)) as [H0|H0].
                 { intros H2. rewrite <- H2 in H'. inversion H'. }
                 { intros H1. rewrite <- H1 in H'. inversion H'. }}
             { assumption. }

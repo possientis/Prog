@@ -1,2 +1,6 @@
-Add Normal subdir
-Add Rank
+remove Lang1.Syntax
+remove Lang1.Free
+remove Lang1.Valid
+other duplication in Lang1?
+
+

@@ -15,7 +15,7 @@ Definition replace (v:Type) (e:Eq v) (x y:v) (u:v) : v :=
     | right _   => u    (* otherwise return u   *) 
     end.
 
-Arguments replace {v} {e} _ _ _.
+Arguments replace {v} {e}.
 
 
 Notation "y // x" := (replace x y)
@@ -32,6 +32,8 @@ Definition replace2 (v:Type) (e:Eq v) (x y x' y':v) (u:v) : v :=
         | right _   => u    (* otherwise return u   *)
         end
     end.
+
+Arguments replace2 {v} {e}.
 
 Lemma replace_x_x : forall (v:Type) (e:Eq v) (x:v), 
     (x // x) = id.

@@ -12,7 +12,7 @@ rm -f lib/.*.aux
 rm -f lib/*.glob
 rm -f lib/*.vo
 
-./set/clean.sh
+./Logic/clean.sh
 ./set2/clean.sh
 ./zf/clean.sh
 ./sf/clean.sh
@@ -24,6 +24,5 @@ rm -f lib/*.vo
 ./grin/clean.sh
 ./ref/clean.sh
 ./cttwc/clean.sh
-./Logic/clean.sh
 
 cd ${DIR}

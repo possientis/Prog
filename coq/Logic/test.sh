@@ -9,7 +9,7 @@ echo
 echo "testing Logic Coq formalization..."
 echo
 
-make
+make -j2
 ./clean.sh
 
 echo
