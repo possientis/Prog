@@ -1,4 +1,4 @@
-module  Test.Intersect
+module  Test.List.Intersect
     (   specIntersect
     )   where
 
@@ -7,11 +7,11 @@ import Data.List
 import Test.Hspec
 import Test.QuickCheck  hiding ((===))
 
-import Equiv
-import Include
-import Intersect
 import Variable (Var)
 
+import List.Equiv
+import List.Include
+import List.Intersect
 
 specIntersect :: Spec
 specIntersect = describe "Testing properties of intersect..." $ do

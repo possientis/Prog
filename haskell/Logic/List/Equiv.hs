@@ -1,9 +1,9 @@
-module  Equiv
+module  List.Equiv
     (   (===)
     ,   (/==)
     )   where
 
-import Include
+import List.Include
 
 infix 3 ===
 

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-LOC=/home/john/Prog/haskell/logic/
+DIR=/home/john/Prog/haskell/Logic/
 
 set -e 
-cd ${LOC}
+cd ${DIR}
 
 echo
 echo "testing logic Haskell formalization..."

@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/tex/logic
-cd ${HOME}
+DIR=/home/john/Prog/tex/Logic
+cd ${DIR}
 
 rm -f logic.aux
 rm -f logic.idx
@@ -10,5 +9,3 @@ rm -f logic.log
 rm -f logic.out
 rm -f logic.toc
 #rm -f logic.pdf
-
-cd ${DIR}

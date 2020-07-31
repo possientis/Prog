@@ -14,9 +14,10 @@ import Test.Test
 
 import Formula
 import Replace
-import Include
 import Variable (Var)
-import Injective
+
+import List.Include
+import List.InjectiveOn
 
 
 specValid :: forall f . (Test f) =>  Spec
@@ -65,7 +66,7 @@ propValidFree f t = valid f t == (all cond (sub t)) where
     cond s = free (fmap f s) == map f (free s) 
 
 propValidInj :: (Test f) => (Var -> Var) -> f Var -> Bool
-propValidInj f t = (not $ injective_on (var t) f) || valid f t
+propValidInj f t = (not $ injectiveOn (var t) f) || valid f t
 
 propValidReplace :: (Test f) => Var -> Var -> f Var -> Bool
 propValidReplace x y t = y `elem` var t || valid (y <-: x) t
@@ -79,7 +80,7 @@ propValidFmap f g t = (fmap f t) /= (fmap g t) || (not $ valid f t) || valid g t
 propValidBound :: (Test f) => (Var -> Var) -> f Var -> [Var] -> Bool
 propValidBound f t xs = valid f t
                       || not (bnd t <== xs)
-                      || not (injective_on xs f)
+                      || not (injectiveOn xs f)
                       || any g [(x,y) | x <- xs, y <- var t, y `notElem` xs]  
     where g (x,y) = f x == f y
 

@@ -11,11 +11,12 @@ import Test.QuickCheck
 
 import Test.Test
 
-import Include
 import Replace
 import Formula
 import Variable (Var)
-import Injective
+
+import List.Include
+import List.InjectiveOn
 
 specFree :: forall f . (Test f) => Spec
 specFree = describe "Testing properties of free..." $ do 
@@ -52,7 +53,7 @@ propFreeVar :: (Test f) => f Var -> Bool
 propFreeVar t = free t <== var t
 
 propFreeInj :: (Test f) => (Var -> Var) -> f Var -> Bool
-propFreeInj f t = (not $ injective_on (var t) f) || 
+propFreeInj f t = (not $ injectiveOn (var t) f) || 
     free (fmap f t) == map f (free t)
 
 propFreeReplace1 :: (Test f) => f Var -> Var -> Var -> Bool

@@ -1,4 +1,4 @@
-module  Intersect
+module  List.Intersect
     (   (/\)
     )   where
 

@@ -1,4 +1,4 @@
-module  Test.Include
+module  Test.List.Include
     (   specInclude
     )   where
 
@@ -6,7 +6,7 @@ module  Test.Include
 import Test.Hspec
 import Test.QuickCheck
 
-import Include
+import List.Include
 import Variable (Var)
 
 -- Note that inclusion on lists is *not* antisymmetric

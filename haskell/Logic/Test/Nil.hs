@@ -2,7 +2,7 @@ module  Test.Nil
     (   specNil
     )   where
 
-import Include
+import List.Include
 import Variable (Var)
 
 import Test.Hspec

@@ -1,13 +1,10 @@
 #!/bin/bash
 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell/logic/
-cd ${HOME}
+DIR=/home/john/Prog/haskell/Logic/
+cd ${DIR}
 
 rm -f Main
 rm -f ./{*,.*}.{o,hi}
 rm -f */{*,.*}.{o,hi}
 rm -f */*/{*,.*}.{o,hi}
 rm -f */*/*/{*,.*}.{o,hi}
-
-cd ${DIR}

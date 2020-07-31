@@ -1,4 +1,4 @@
-module  Test.Equiv
+module  Test.List.Equiv
     (   specEquiv
     )   where
 
@@ -6,7 +6,7 @@ module  Test.Equiv
 import Test.Hspec
 import Test.QuickCheck  hiding ((===))
 
-import Equiv
+import List.Equiv
 import Variable (Var)
 
 specEquiv :: Spec

@@ -11,7 +11,7 @@ import Test.QuickCheck
 
 import Test.Test
 
-import Include
+import List.Include
 import Formula
 import Variable (Var)
 

@@ -3,9 +3,8 @@
 
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/tex/logic/
-cd ${HOME}
+DIR=/home/john/Prog/tex/Logic/
+cd ${DIR}
 echo 
 
 echo "testing the universal algebra of predicate logic..."

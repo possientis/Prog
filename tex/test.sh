@@ -10,7 +10,7 @@ echo
 
 echo "testing tex documents..."
 
-./logic/test.sh
+./Logic/test.sh
 
 echo
 

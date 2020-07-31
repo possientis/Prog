@@ -7,7 +7,7 @@ module Lam.BetaValid
 
 import Lam.T
 import Lam.Free
-import Difference
+import List.Difference
 
 betaValid_ :: (Eq v) => (v -> T v) -> [v] -> T v -> Bool
 betaValid_ f xs = \case

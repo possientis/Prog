@@ -7,7 +7,7 @@ import  Test.QuickCheck
 
 import Permute
 import Replace
-import Coincide
+import List.Coincide
 import Variable (Var)
 
 specPermute :: Spec

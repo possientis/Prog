@@ -6,13 +6,14 @@ module  Test.Lam.BetaValid
 import Test.Hspec
 import Test.QuickCheck  hiding ((===))
 
-import Equiv
-import Include
 import Formula
 import Variable     (Var)
-import Coincide
-import Intersect
-import Difference
+
+import List.Equiv
+import List.Include
+import List.Coincide
+import List.Intersect
+import List.Difference
 
 import Lam.T
 import Lam.Subst

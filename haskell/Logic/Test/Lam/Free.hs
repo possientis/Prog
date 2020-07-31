@@ -5,13 +5,14 @@ module  Test.Lam.Free
 import Test.Hspec
 import Test.QuickCheck
 
-import Equiv
-import Include
 import Formula
-import Coincide
 import Variable     (Var)
-import Intersect
-import Difference
+
+import List.Equiv
+import List.Include
+import List.Coincide
+import List.Intersect
+import List.Difference
 
 import Lam.T
 import Lam.Subst

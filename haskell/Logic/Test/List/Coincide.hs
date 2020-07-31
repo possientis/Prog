@@ -1,4 +1,4 @@
-module  Test.Coincide
+module  Test.List.Coincide
     (   specCoincide
     )   where
 
@@ -6,8 +6,8 @@ module  Test.Coincide
 import  Test.Hspec
 import  Test.QuickCheck
     
-import Coincide
-import Include
+import List.Coincide
+import List.Include
 import Variable (Var)
 
 specCoincide :: Spec

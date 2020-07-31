@@ -2,7 +2,7 @@ module  Test.Append
     (   specAppend
     )   where
 
-import Equiv
+import List.Equiv
 import Variable (Var)
 
 import Test.Hspec

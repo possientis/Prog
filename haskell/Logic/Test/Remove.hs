@@ -6,11 +6,11 @@ import  Test.Hspec
 import  Test.QuickCheck
 
 import Remove
-import Include
-import Injective
-import Difference
 import Variable (Var)
 
+import List.Include
+import List.Difference
+import List.InjectiveOn
 
 specRemove :: Spec
 specRemove = describe "Testing properties for remove..." $ do
@@ -96,11 +96,11 @@ propRemoveMap f x xs = (not $ all p xs) ||
 
 
 propRemoveInj :: (Var -> Var) -> Var -> [Var] -> Bool
-propRemoveInj f x xs = x `notElem` xs || (not $ injective_on xs f) ||
+propRemoveInj f x xs = x `notElem` xs || (not $ injectiveOn xs f) ||
     remove (f x) (map f xs) == map f (remove x xs)
 
 propRemoveInj2 :: (Var -> Var) -> Var -> [Var] -> Bool
-propRemoveInj2 f x xs = (not $ injective_on (x:xs) f) ||
+propRemoveInj2 f x xs = (not $ injectiveOn (x:xs) f) ||
     remove (f x) (map f xs) == map f (remove x xs)
 
 propRemoveIncl :: Var -> [Var] -> Bool

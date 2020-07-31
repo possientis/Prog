@@ -6,9 +6,10 @@ import  Test.Hspec
 import  Test.QuickCheck
 
 import Replace
-import Coincide
-import Injective
 import Variable (Var)
+
+import List.Coincide
+import List.InjectiveOn
 
 specReplace :: Spec
 specReplace = describe "Testing properties for replace (<-:)..." $ do
@@ -69,4 +70,4 @@ propReplaceTrans x y z ys = (y `elem` ys) ||
 
 propReplaceInj :: Var -> Var -> [Var] -> Bool
 propReplaceInj x y ys = y `elem` ys ||
-    injective_on ys (y <-: x)
+    injectiveOn ys (y <-: x)

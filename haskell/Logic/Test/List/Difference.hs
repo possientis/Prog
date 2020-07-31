@@ -1,14 +1,14 @@
-module  Test.Difference
+module  Test.List.Difference
     (   specDifference
     )   where
 
 import Test.Hspec
 import Test.QuickCheck  hiding ((===))
 
-import Equiv
-import Include
-import Intersect
-import Difference
+import List.Equiv
+import List.Include
+import List.Intersect
+import List.Difference
 
 import Variable (Var)
 
