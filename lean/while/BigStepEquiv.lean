@@ -20,7 +20,9 @@ end
 lemma BigStepCloReduce : ∀ (e:Stmt) (s t:Env),
   BigStep e s t → CloReduce e s skip t :=
 begin
-  intros e s t H1, induction H1 with _ x a s e₁ e₂ s u t H1 H2 IH1 IH2,
+  intros e s t H1, induction H1 with
+    _ x a s e₁ e₂ s u t H1 H2 IH1 IH2 b e₁ e₂ s t H1 H2 H3
+    b e₁ e₂ s t H1 H2 H3 b e₁ s u t H1 H2 H3 H4 H5,
     { constructor },
     { constructor, constructor, constructor },
     { cases IH1 with _ _ _ e₁' _ _ s' _ H1 H2,
@@ -34,8 +36,22 @@ begin
         { apply cloStep,
           { apply SEQ_SKIP },
           { assumption }}}},
-    {},
-    {},
-    {},
+    { apply cloStep,
+      { constructor, assumption },
+      { assumption }},
+    { apply cloStep ,
+      { apply IF_F, assumption },
+      { assumption }},
+    { apply CloReduceTrans _ (while b e₁) skip s u t,
+      { apply CloReduceTrans _ (skip ;; while b e₁) _ s u u,
+        { apply CloReduceTrans _ (e₁ ;; while b e₁) _ _ s _,
+          { apply CloReduceTrans _ (ite b (e₁ ;; while b e₁) skip) _ _ s _,
+            { apply cloStep; constructor},
+            { apply cloStep _ (e₁ ;; while b e₁) _ _ s _,
+              { constructor, assumption },
+              { constructor }}},
+          { apply SeqCompatL, assumption }},
+        { apply cloStep _ (while b e₁) _ _ u _; constructor }},
+      { assumption }},
     {},
 end

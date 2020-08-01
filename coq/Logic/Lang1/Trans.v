@@ -1,5 +1,7 @@
 Require Import Logic.Axiom.LEM.
 
+Require Import Logic.Fol.Syntax.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Incl.
 

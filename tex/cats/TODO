@@ -29,7 +29,7 @@ remarkable fact is that we get a natural transformation despite an arbitrary cho
 Th: Let F:C->C functor with initial alg mu:F m -> m. Let 
 alpha:F a -> a and beta : F b -> b algebras. Assume C has finite 
 products. Then <[alpha],[beta]> : m -> a x b is itself a catamorphism
-(with base functor F) namely [<alpha . F(pi1), beta . F(p2)>]
+(with base functor F) namely [<alpha . F(p1), beta . F(p2)>]
 
 Polynomial functors Set:
 
@@ -57,8 +57,20 @@ define the power set functor : Set -> Set
 
 General:
 define a initial/terminal object
-define a coproduct/product of two objects. 
+
+Product:
+define product of two objects. 
 C(-,a)xC(-,b):C^op -> Set  is representable <-> axb exists
+Global product: assume we have F:ob C x ob C -> ob C, and
+alpha : forall a b : ob C, Iso[C(-,a)xC(-,b),C(-,F(a,b))]
+define fundamental split bracket: f1: c -> a , f:c -> b
+<f1,f2> : c -> F(a,b) , <f1,f2> = alpha_c (a,b) (f1,f2)
+Lemma1: forall a b, there is a unique (p1, p2) such that
+p1 : F(a,b) -> a and p2 : F(a,b) -> b such that 
+<p1, p2> = id (F(a,b))
+Lemma2: forall f1:c -> a f2:c -> b we have:
+    <f.p1,f.p2> = f
+
 define exponential object from b to c: (c^b,ev) 
   where ev:c^b x b -> c with universal prop:
   for all a and f:axb -> c , there is a unique g:a -> c^b , such that

@@ -5,6 +5,9 @@ Require Import PeanoNat.
 Require Import Logic.Axiom.LEM.
 Require Import Logic.Nat.Fresh.
 
+Require Import Logic.Fol.Valid.
+Require Import Logic.Fol.Syntax.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Incl.
 Require Import Logic.Set.Elem.
@@ -12,8 +15,6 @@ Require Import Logic.Set.Equal.
 Require Import Logic.Set.Empty.
 Require Import Logic.Set.ElemIncl.
 Require Import Logic.Set.Foundation.
-
-Require Import Logic.Lang1.Valid.
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Environment.
 

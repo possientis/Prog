@@ -3,7 +3,7 @@ import Reduce
 
 -- Reflexive, transtitive closure of small step semantics
 inductive CloReduce : Stmt → Env → Stmt → Env → Prop
-| cloRelf : ∀ (e:Stmt) (s:Env), CloReduce e s e s
+| cloRefl : ∀ (e:Stmt) (s:Env), CloReduce e s e s
 | cloStep : ∀ (e₁ e₂ e₃:Stmt) (s₁ s₂ s₃:Env),
           Reduce e₁ s₁ e₂ s₂ → CloReduce e₂ s₂ e₃ s₃ → CloReduce e₁ s₁ e₃ s₃
 

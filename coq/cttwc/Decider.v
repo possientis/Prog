@@ -1,3 +1,5 @@
+Require Import provable.
+
 (* f is a decider for p                                                         *)
 Definition Decider (a:Type) (f:a -> bool) (p:a -> Prop) : Prop :=
     forall (x:a), p x <-> f x = true.
@@ -174,3 +176,34 @@ Proof.
     - apply H2, H1. assumption.
     - apply H1, H2. assumption.
 Qed.
+
+Definition Satisfiable (f:nat -> bool) : Prop :=
+    exists (n:nat), f n = true.
+
+(* Computational omni science                                                   *)
+
+Definition CO : Prop := Decidable (Satisfiable).
+
+
+Lemma L13 : CO <-> exists (g:(nat -> bool) -> bool), Decider g Satisfiable.
+Proof.
+    unfold CO, Decidable. split; auto.
+Qed.
+
+
+Lemma L14 : LPO <-> forall (f:nat -> bool), Satisfiable f \/ ~ Satisfiable f.
+Proof.
+    unfold LPO, Satisfiable. split; auto.
+Qed.
+
+Lemma L15 : Markov <-> forall (f:nat -> bool), ~~Satisfiable f -> Satisfiable f.
+Proof.
+    unfold Markov, Satisfiable. split; intros H1 f H2; 
+    apply H1; intros H3; apply H2.
+    - intros [n H4]. 
+      rewrite (H3 n) in H4. inversion H4.
+    - intros n. destruct (f n) eqn:E.
+        + exfalso. apply H3. exists n. assumption.
+        + reflexivity.
+Qed.
+

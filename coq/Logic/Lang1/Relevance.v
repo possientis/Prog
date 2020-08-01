@@ -4,10 +4,11 @@ Require Import Logic.Nat.Eq.
 Require Import Logic.Class.Eq.
 Require Import Logic.List.Remove.
 
+Require Import Logic.Fol.Free.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Equal.
 
-Require Import Logic.Lang1.Free.
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.

@@ -2,15 +2,17 @@ Require Import List.
 Require Import Logic.Axiom.LEM.
 Require Import Logic.List.Replace.
 
+Require Import Logic.Fol.Free.
+Require Import Logic.Fol.Valid.
+Require Import Logic.Fol.Syntax.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Elem.
 Require Import Logic.Set.Incl.
 Require Import Logic.Set.Equal.
 Require Import Logic.Set.Compatible.
 
-Require Import Logic.Lang1.Free.
 Require Import Logic.Lang1.Apply.
-Require Import Logic.Lang1.Valid.
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Relevance.

@@ -121,11 +121,9 @@ SET_OBJ   = ${SET}/Set.vo \
 			${SET}/Specification.vo
 
 LANG1_OBJ = ${LANG1}/Syntax.vo \
-			${LANG1}/Free.vo \
 			${LANG1}/Environment.vo \
 			${LANG1}/Semantics.vo \
 			${LANG1}/Relevance.vo \
-			${LANG1}/Valid.vo \
 			${LANG1}/Substitution.vo \
 			${LANG1}/Apply.vo \
 			${LANG1}/Compatible.vo \

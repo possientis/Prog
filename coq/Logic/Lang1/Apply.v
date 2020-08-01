@@ -3,11 +3,13 @@ Require Import List.
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Composition.
 
+Require Import Logic.Fol.Free.
+Require Import Logic.Fol.Valid.
+Require Import Logic.Fol.Functor.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Equal.
 
-Require Import Logic.Lang1.Free.
-Require Import Logic.Lang1.Valid.
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Relevance.
@@ -24,7 +26,7 @@ Require Import Logic.Lang1.Substitution.
 (* The ability to apply a formula viewed as predicate to variables is important *)
 (* for two variables, and is needed to express the axiom schema of replacement. *)
 
-Definition apply (p:Formula) (n:nat) : Formula := fmap (replace 0 n) p.
+Definition apply (p:Formula) (n:nat) : Formula := fmap (n // 0) p.
 
 (* Same idea, but with two variables.                                           *)
 Definition apply2 (p:Formula) (n m:nat) : Formula := fmap (replace2 0 1 n m) p.
@@ -36,7 +38,7 @@ Definition apply2 (p:Formula) (n m:nat) : Formula := fmap (replace2 0 1 n m) p.
 (* for p. Also, n cannot already be a free variable of p.                       *)
 
 Lemma evalApply1 : forall (e:Env) (p:Formula) (n:nat) (x:set),
-    Valid (replace 0 n) p ->
+    valid (n // 0) p ->
     ~In n (Fr p)        ->
     eval1 e (apply p n) n x <-> eval1 e p 0 x.
 Proof.
@@ -51,7 +53,7 @@ Qed.
 (* m is bound to y, is the same as the semantics of p in an environment where 0 *)
 (* is bound to x and 1 is bound to y, with the obvious caveat.                  *)
 Lemma evalApply2 : forall (e:Env) (p:Formula) (n m:nat) (x y:set),
-    Valid (replace2 0 1 n m) p ->
+    valid (replace2 0 1 n m) p ->
     ~In n (Fr p)  ->
     ~In m (Fr p)  ->
     n <> m          ->

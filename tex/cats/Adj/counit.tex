@@ -57,78 +57,78 @@ $G$ matters.
     By uniquenes, it follows that $f_{1}=f_{2}$.
 \end{proof}
 
-TODO
 \begin{prop}\label{Adj:prop:counit:natural}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
-    are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit 
+    are categories, and let $\epsilon:F\circ G\Rightarrow I_{\cal D}$ be a counit 
     of $(F,G)$. Then we have:
         \[
-            (G\circ F)(f)\circ\eta_{a}=\eta_{b}\circ f
+            \epsilon_{b}\circ(F\circ G)(f)=f\circ\epsilon_{a}
         \]
     for all objects $a,b\in\Cat$ and arrow $f:a\to b$.
 \end{prop}
 \begin{proof}
     This is an immediate consequence of definition~(\ref{Nat:def:natural}) 
-    and the fact that $\eta$ is a natural transformation 
-    $\eta:I_{\cal C}\Rightarrow G\circ F$, so the following square commutes:
+    and the fact that $\epsilon$ is a natural transformation 
+    $\epsilon:F\circ G\Rightarrow I_{\cal D}$, so the following square commutes:
     \[
         \begin{tikzcd}
-            a\arrow[r, "\eta_{a}"]\arrow[d, swap,"f"]
-            &G(F(a))\arrow[d, "\ (G\circ F)(f)"]
+            F(G(a))\arrow[r, "\epsilon_{a}"]\arrow[d, swap,"(F\circ G)(f)\ "]
+            &a\arrow[d, "f"]
             \\
-            b\arrow[r, swap, "\eta_{b}"]
-            &G(F(b))
+            F(G(b))\arrow[r, swap, "\epsilon_{b}"]
+            &b
         \end{tikzcd}
     \]
 \end{proof}
 
 Given functors $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ where \Cat, \Dat\ are 
-categories, if $\eta:I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$,
-then a question arises as to whether this unit is unique. As the following
+categories, if $\epsilon:F\circ G\Rightarrow I_{\cal D}$ is a counit of $(F,G)$,
+then a question arises as to whether this counit is unique. As the following
 proposition shows, the answer is 'no' in general as every natural 
-isomorphism $\alpha : F\Rightarrow F$ potentially gives rise to a 
-new unit.
+isomorphism $\alpha : G\Rightarrow G$ potentially gives rise to a 
+new counit.
 
 \begin{prop}\label{Adj:prop:counit:not:unique}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
-    are categories, and let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit
-    of $(F,G)$. Then, a natural transformation $\eta':I_{\cal C}\Rightarrow 
-    G\circ F$ is a unit of $(F,G)$ \ifand\ there exists a natural isomorphism 
-    $\alpha:F\Rightarrow F$ such that:
+    are categories, and let $\epsilon:F\circ G\Rightarrow I_{\cal D}$ be a counit
+    of $(F,G)$. Then, a natural transformation $\epsilon':F\circ G\Rightarrow 
+    I_{\cal D}$ is a counit of $(F,G)$ \ifand\ there exists a natural isomorphism 
+    $\alpha:G\Rightarrow G$ such that:
         \[
-            \eta'=(G\alpha)\circ\eta
+            \epsilon'=\epsilon\circ(F\alpha)
         \]
 \end{prop}
 
 \noindent
-{\bf Remark}: If $\alpha: F\Rightarrow F$ and $G:\Dat\to\Cat$, then $G\alpha$
-is the natural transformation $G\alpha:G\circ F\Rightarrow G\circ F$ as per
-definition~(\ref{Nat:def:leftmul}), and if $\eta:I_{\cal C}\Rightarrow G\circ F$
-then the composition $(G\alpha)\circ\eta$ is a well-defined natural 
-transformation from the identity functor $I_{\cal C}$ to the functor $G\circ F$ 
+{\bf Remark}: If $\alpha: G\Rightarrow G$ and $F:\Cat\to\Dat$, then $F\alpha$
+is the natural transformation $F\alpha:F\circ G\Rightarrow F\circ G$ as per
+definition~(\ref{Nat:def:leftmul}), and if $\epsilon:F\circ G\Rightarrow 
+I_{\cal D}$ then the composition $\epsilon\circ(F\alpha)$ is a well-defined 
+natural transformation from the functor $F\circ G$ to the functor $I_{\cal D}$ 
 as per definition~(\ref{Nat:def:composition}).
 
 \noindent
 \begin{proof}
-    First we show the {\em if} part. So we assume that $\eta'=(G\alpha)\circ\eta$
-    for some natural isomorphism $\alpha:F\Rightarrow F$. We need to show that
-    $\eta'$ is a unit of $(F,G)$. As already indicated $\eta'$ is a well-defined
-    natural transformation $\eta':I_{\cal C}\Rightarrow G\circ F$. Hence we
-    simply need to show that it satisfies the universal property of 
-    definition~(\ref{Adj:def:unit}). So let $c\in\Cat$, $d\in\Dat$ and 
-    $f:c\to G(d)$. We need to show the existence of a unique $g:F(c)\to d$
-    such that $f = G(g)\circ\eta'_{c}$. However, by assumption we have:
-        \begin{eqnarray*}\eta'_{c}
-            &=&((G\alpha)\circ\eta)_{c}\\
+    First we show the {\em if} part. So we assume that $\epsilon'=\epsilon
+    \circ(F\alpha)$ for some natural isomorphism $\alpha:G\Rightarrow G$. We 
+    need to show that $\epsilon'$ is a counit of $(F,G)$. As already seen
+    $\epsilon'$ is a well-defined natural transformation $\epsilon':F\circ 
+    G\Rightarrow I_{\cal D}$. Hence we simply need to show that it satisfies 
+    the universal property of definition~(\ref{Adj:def:counit}). So let 
+    $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$. We need to show the existence 
+    of a unique $f:c\to G(d)$ such that $g = \epsilon_{d}'\circ F(f)$. However, 
+    by assumption we have:
+        \begin{eqnarray*}\epsilon'_{d}
+            &=&(\epsilon\circ(F\alpha))_{d}\\
             \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
-            &=&(G\alpha)_{c}\circ\eta_{c}\\
+            &=&\epsilon_{d}\circ(F\alpha)_{d}\\
             \mbox{$(1)$ of def.~(\ref{Nat:def:leftmul})}\ \to\ 
-            &=&G(\,\alpha_{c}\,)\circ\eta_{c}\\
+            &=&\epsilon_{d}\circ F(\,\alpha_{d}\,)\\
         \end{eqnarray*}
-    So we need to prove the existence of a unique arrow $g:F(c)\to d$
-    such that $f=G(g)\circ G(\alpha_{c})\circ\eta_{c}$, which is
-    $f=G(g\circ\alpha_{c})\circ\eta_{c}$ since $G$ is a functor:
-
+    So we need to prove the existence of a unique arrow $f:c\to G(d)$
+    such that $g = \epsilon_{d}\circ F(\alpha_{d})\circ F(f)$, which is
+     $g = \epsilon_{d}\circ F(\alpha_{d}\circ f)$ since $F$ is a functor:
+TODO
     Existence: having assumed $\eta$ is a unit of $(F,G)$, since 
     $f:c\to G(d)$ using definition~(\ref{Adj:def:unit}) there exists
     a (unique) $h:F(c)\to d$ with $f = G(h)\circ\eta_{c}$.

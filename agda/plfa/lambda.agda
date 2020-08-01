@@ -2,7 +2,7 @@ open import Relation.Binary.PropositionalEquality.Core
   using (_≡_; _≢_; refl; subst;cong)
 
 open import Data.String                                using (String; _≟_) -- \?=
-open import Data.Nat                                   using (ℕ; zero; suc)
+open import Data.Nat                                   using (ℕ; zero; suc; _≤_; s≤s)
 open import Data.Empty                                 using (⊥; ⊥-elim)
 open import Relation.Nullary                           using (Dec; yes; no; ¬_)
 open import Data.List                                  using (List; _∷_; [])
@@ -671,3 +671,41 @@ ContextListIso = record
       toFrom [] = refl
       toFrom (⟨ x , A ⟩ ∷ xs) = cong (⟨ x , A ⟩ ∷_) (toFrom xs)
 
+infix 4 _∋_∶_ -- \ni
+
+data _∋_∶_ : Context → Id → Type → Set where
+
+  Z : ∀ {Γ : Context}{x : Id}{A : Type}
+      ---------------------------------
+    → Γ , x ∶ A ∋ x ∶  A
+
+  S : ∀ {Γ : Context}{x y : Id}{A B : Type}
+    → x ≢ y -- \==n
+    → Γ ∋ x ∶ A
+      ---------------------------------
+    → Γ , y ∶ B ∋ x ∶ A
+
+
+_ : ∅ , "x" ∶  `ℕ ⇒ `ℕ , "y" ∶ `ℕ , "z" ∶ `ℕ   ∋   "x" ∶  `ℕ ⇒ `ℕ
+_ = S (λ ()) (S (λ ()) Z)
+
+-- Refresher on reflection
+minus : (m n : ℕ) → (n≤m : n ≤ m) → ℕ
+minus m zero _ = m
+minus (suc m) (suc n) (s≤s n≤m) = minus m n n≤m
+
+--TODO
+
+{-
+-- smart constructor using proof by reflection
+
+S' : ∀ {Γ : Context} {x y : Id} {A B : Type}
+  → {x≢y : False (x ≟ y)}
+  → Γ ∋ x ∶ A
+    ----------------------------------
+  → Γ , y ∶ B ∋ x ∶ A
+
+
+S' {p} x = ?
+
+-}

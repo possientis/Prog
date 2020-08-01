@@ -7,4 +7,10 @@ BetaValid
 
 Latex:
 
+Set Theory:
+other duplication in Lang1?
+redefine valid as an inductive type for Fol and Lam
+prove equivalence valid valid' for Fol and Lan
+
+
 

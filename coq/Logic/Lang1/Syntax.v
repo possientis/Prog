@@ -1,22 +1,7 @@
 Require Import Logic.Nat.Fresh.
+Require Import Logic.Fol.Syntax.
 
-(* Abstract syntax for core language of types (propositions): Lang1.            *)
-(* There is no possibility of writing terms (proofs) in this language.          *)
-Inductive Formula : Type :=
-| Bot  : Formula
-| Elem : nat -> nat -> Formula
-| Imp  : Formula -> Formula -> Formula
-| All  : nat -> Formula -> Formula
-.
-
-(* Variable substitution mapping.                                               *)
-Fixpoint fmap (f:nat -> nat) (p:Formula) : Formula :=
-    match p with
-    | Bot       => Bot
-    | Elem x y  => Elem (f x) (f y)
-    | Imp p q   => Imp (fmap f p) (fmap f q)
-    | All x p   => All (f x) (fmap f p)
-    end.
+Definition Formula : Type := P nat.
 
 Definition Not (p:Formula)          :Formula := Imp p Bot.
 Definition Or  (p q:Formula)        :Formula := Imp (Not p) q.

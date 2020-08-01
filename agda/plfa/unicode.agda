@@ -52,6 +52,8 @@
 -- Σ : \Sigma
 -- ∈ : \in
 -- ∉ : \notin, \inn
+-- ∋ : \ni
+-- ∌ : \nin
 -- ⌞ : \cll
 -- ⌟ : \clr
 -- ⌜ : \cul

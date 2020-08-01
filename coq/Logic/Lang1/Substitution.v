@@ -5,10 +5,12 @@ Require Import Logic.Class.Eq.
 Require Import Logic.List.Remove.
 Require Import Logic.Func.Composition.
 
+Require Import Logic.Fol.Valid.
+Require Import Logic.Fol.Functor.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Equal.
 
-Require Import Logic.Lang1.Valid.
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Relevance.
@@ -26,19 +28,19 @@ Qed.
 
 (* Substitution lemma: provided a variable substitution is valid for a formula  *)
 (* p, i.e. does not give rise to variable capture, semantics is preserved.      *)
-Lemma Substitution : forall (e:Env) (f:nat -> nat) (p:Formula), Valid f p -> 
+Lemma Substitution : forall (e:Env) (f:nat -> nat) (p:Formula), valid f p -> 
     eval e (fmap f p) <-> eval (e ; f) p.
 Proof.
     intros e f p. revert p f e. induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1];
     intros f e V.
     - simpl. split; auto.
     - simpl. split; auto.
-    - simpl.  apply ValidImp in V. destruct V as [V1 V2].
+    - simpl.  apply valid_imp in V. destruct V as [V1 V2].
       rewrite IH1, IH2.
         + split; auto.
         + assumption.
         + assumption.
-    - simpl. apply ValidAll in V. destruct V as [V1 V2].
+    - simpl. apply valid_all in V. destruct V as [V1 V2].
       apply rewrite_ with (fun x => eval ((bind e (f n) x) ; f) p1).
         + intros x. rewrite IH1.
             { split; auto. }

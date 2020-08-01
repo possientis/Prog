@@ -12,17 +12,17 @@ module  DSL
     ,   eApp2       -- :: Expr -> Expr -> Expr -> Expr
     ,   eRec        -- :: String -> Expr -> Expr
     ,   eCase       -- :: Expr -> Expr -> String -> Expr -> Expr
-    ,   eAdd        -- :: Expr
-    ,   eMul        -- :: Expr
-    ,   eSub        -- :: Expr
-    ,   eDiv        -- :: Expr
-    ,   eAnd        -- :: Expr
-    ,   eOr         -- :: Expr
-    ,   eImp        -- :: Expr
-    ,   eNot        -- :: Expr
-    ,   eLe         -- :: Expr
-    ,   eEq         -- :: Expr
-    ,   eFac        -- :: Expr
+    ,   eAdd        -- :: Expr -> Expr -> Expr
+    ,   eMul        -- :: Expr -> Expr -> Expr
+    ,   eSub        -- :: Expr -> Expr -> Expr
+    ,   eDiv        -- :: Expr -> Expr -> Expr
+    ,   eAnd        -- :: Expr -> Expr -> Expr
+    ,   eOr         -- :: Expr -> Expr -> Expr
+    ,   eImp        -- :: Expr -> Expr -> Expr
+    ,   eNot        -- :: Expr -> Expr
+    ,   eLe         -- :: Expr -> Expr -> Expr
+    ,   eEq         -- :: Expr -> Expr -> Expr
+    ,   eFac        -- :: Expr -> Expr -> Expr
     ,   eToNat      -- :: Expr
     ,   eFromNat    -- :: Expr
     ,   eAddNat     -- :: Expr
