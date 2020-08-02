@@ -1,4 +1,4 @@
-module  Replace
+module  Func.Replace
     (   (<-:)   -- 'y <-: x' is '[y/x]' 
     ,   replace
     )   where

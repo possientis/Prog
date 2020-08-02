@@ -1,4 +1,3 @@
-Test/Pretty
-add Error/Bot to syntax, value ?
 rewrite eval_ with cata?
 can we define a small-step operational semantics
+continue paper

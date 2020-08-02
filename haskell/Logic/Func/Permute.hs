@@ -1,4 +1,4 @@
-module  Permute
+module  Func.Permute
     (   (<->)   -- 'x <-> y' is '[x:y]'
     ,   permute
     )   where

@@ -1,12 +1,13 @@
-module  Test.Replace
+module  Test.Func.Replace
     (   specReplace
     )   where
 
 import  Test.Hspec
 import  Test.QuickCheck
 
-import Replace
 import Variable (Var)
+
+import Func.Replace
 
 import List.Coincide
 import List.InjectiveOn

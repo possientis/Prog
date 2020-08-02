@@ -2,23 +2,23 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 
-module  Test.Formula
-    (   specFormula
+module  Test.Poly.Main
+    (   specPoly
     )   where
 
 import Test.Hspec
 
-import Test.Test
-import Test.Free
-import Test.Dmap
-import Test.Bound
-import Test.Valid
-import Test.Functor
-import Test.Variable
-import Test.Subformula
+import Test.Poly.Test
+import Test.Poly.Free
+import Test.Poly.Dmap
+import Test.Poly.Bound
+import Test.Poly.Valid
+import Test.Poly.Functor
+import Test.Poly.Variable
+import Test.Poly.Subformula
 
-specFormula :: forall f . (Test f) =>  Spec
-specFormula = do
+specPoly :: forall f . (Test f) =>  Spec
+specPoly = do
     specFunctor     @ f
     specSubformula  @ f
     specVariable    @ f

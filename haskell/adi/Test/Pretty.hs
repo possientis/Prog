@@ -29,6 +29,10 @@ specPretty = describe "Checking the Pretty module..." $ do
     specEIf
     specELam
     specEApp
+    specEApp2
+    specERec
+    specECase
+    specEFac
     
 
 specENum :: Spec
@@ -107,6 +111,27 @@ specEApp :: Spec
 specEApp = it "Checked showExpr for eApp" $ showExpr
     (eApp (eVar "f") (eVar "x")) `shouldBe` "f x"
 
+specEApp2 :: Spec
+specEApp2 = it "Checked showExpr for eApp2" $ showExpr
+    (eApp2 (eVar "f") (eVar "x") (eVar "y")) `shouldBe` "f x y"
+
+specERec :: Spec
+specERec = it "Checked showExpr for eRec" $ showExpr
+    (eRec "f" (eLam "x" (eAdd (eNum 1) (eApp (eVar "f") (eVar "x"))))) `shouldBe`
+    "fix f := \\x -> 1 + (f x)"
+
+specECase :: Spec
+specECase = it "Checked showExpr for eCase" $ showExpr
+    (eCase (eVar "n") 
+        (eVar "m") 
+        "n" (eSuc (eApp2 (eVar "f") (eVar "n") (eVar "m"))))
+    `shouldBe`
+    "case n of | zero => m | suc n => suc (f n m)"
+
+specEFac :: Spec
+specEFac = it "Checked showExpr for eFac" $ showExpr eFac `shouldBe`
+   "fix f := \\n -> if n <= 0 then 1 else n * (f (n - 1))" 
+    
 propENum :: Integer -> Bool
 propENum n = showExpr (eNum n) == show n
 

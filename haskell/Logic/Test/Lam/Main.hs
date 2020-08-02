@@ -6,7 +6,7 @@ module  Test.Lam.Main
 
 import Test.Hspec
 
-import Test.Formula
+import Test.Poly.Main
 import Test.Lam.Valid
 import Test.Lam.Subst
 import Test.Lam.Free
@@ -15,8 +15,8 @@ import Test.Lam.BetaValid
 import Lam.T
 
 specLam :: Spec
-specLam = do
-    specFormula @ T 
+specLam = describe "Testing Haskell for Lam..." $ do
+    specPoly @ T 
     specValid
     specSubst
     specFree

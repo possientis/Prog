@@ -2,14 +2,16 @@ open import Relation.Binary.PropositionalEquality.Core
   using (_≡_; _≢_; refl; subst;cong)
 
 open import Data.String                                using (String; _≟_) -- \?=
-open import Data.Nat                                   using (ℕ; zero; suc; _≤_; s≤s)
+open import Data.Nat                                   using (ℕ;zero;suc;_≤_;s≤s;z≤n)
 open import Data.Empty                                 using (⊥; ⊥-elim)
 open import Relation.Nullary                           using (Dec; yes; no; ¬_)
+open import Relation.Nullary.Decidable                 using (False;toWitnessFalse)
 open import Data.List                                  using (List; _∷_; [])
 open import Data.Bool                                  using (Bool; true; false)
 open import Data.Product                               using (∃; ∃-syntax; _×_)
 open import Data.Product                               using () renaming (_,_ to ⟨_,_⟩)
 open import isomorphism                                using (_≃_)
+open import decidable                                  using (T;toWitness;⌞_⌟;_≤?_)
 
 Id : Set
 Id = String
@@ -694,18 +696,25 @@ minus : (m n : ℕ) → (n≤m : n ≤ m) → ℕ
 minus m zero _ = m
 minus (suc m) (suc n) (s≤s n≤m) = minus m n n≤m
 
---TODO
+_ : minus 5 3 (s≤s (s≤s (s≤s z≤n))) ≡ 2
+_ = refl
 
-{-
+_-_ : (m n : ℕ) → {n≤m : T ⌞ n ≤? m ⌟} → ℕ
+_-_ m n {n≤m} = minus m n (toWitness n≤m)
+
+_ : 5 - 3 ≡ 2
+_ = refl
+
+
 -- smart constructor using proof by reflection
 
 S' : ∀ {Γ : Context} {x y : Id} {A B : Type}
-  → {x≢y : False (x ≟ y)}
+  → {x≢y : False (x ≟ y) }
   → Γ ∋ x ∶ A
     ----------------------------------
   → Γ , y ∶ B ∋ x ∶ A
+S' {x≢y = x≢y} x = S (toWitnessFalse x≢y) x
 
+_ : ∅ , "x" ∶  `ℕ ⇒ `ℕ , "y" ∶ `ℕ , "z" ∶ `ℕ   ∋   "x" ∶  `ℕ ⇒ `ℕ
+_ = S' (S' Z)
 
-S' {p} x = ?
-
--}

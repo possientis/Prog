@@ -2,19 +2,20 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 
-module  Test.Variable
+module  Test.Poly.Variable
     (   specVariable
     )   where
 
 import Test.Hspec
 import Test.QuickCheck
 
-import Test.Test
+import Test.Poly.Test
 
-import Permute
-import Replace
 import Formula
 import Variable (Var)
+
+import Func.Replace
+import Func.Permute
 
 specVariable :: forall f . (Test f) => Spec
 specVariable = describe "Testing properties of var..." $ do

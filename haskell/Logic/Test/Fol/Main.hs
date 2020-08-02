@@ -6,13 +6,13 @@ module  Test.Fol.Main
 
 import Test.Hspec
 
-import Test.Formula
+import Test.Poly.Main
 import Test.Fol.Valid
 
 import Fol.P
 
 specFol :: Spec
-specFol = do
-    specFormula @ P
+specFol = describe "Testing Haskell for Fol..." $ do
+    specPoly @ P
     specValid
 

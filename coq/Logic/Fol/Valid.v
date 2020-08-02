@@ -329,3 +329,39 @@ Proof.
         + apply Sub_var in H4. apply H4. apply (free_var v e). assumption.
         + assumption.
 Qed.
+
+(* valid defined as an inductive predicate.                                     *)
+Inductive valid' (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) : P v -> Prop :=
+| VBot  : valid' v w e e' f Bot
+| VElem : forall (x y:v), valid' v w e e' f (Elem x y)
+| VImp  : forall (p1 p2:P v), 
+    valid' v w e e' f p1 -> 
+    valid' v w e e' f p2 -> 
+    valid' v w e e' f (Imp p1 p2)
+| VAll : forall (x:v) (p1:P v),
+    valid' v w e e' f p1 ->
+    (forall (y:v), y :: Fr (All x p1) -> f x <> f y) ->
+    valid' v w e e' f (All x p1)
+.
+
+Arguments valid' {v} {w} {e} {e'}.
+
+Lemma valid_equivalence : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(p:P v),
+    valid f p <-> valid' f p.
+Proof.
+    intros v w e e' f p. split.
+    - induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1].
+        + intros _. constructor.
+        + intros _. constructor. 
+        + intros H. apply valid_imp in H. destruct H as [H1 H2]. constructor.
+            { apply IH1. assumption. }
+            { apply IH2. assumption. }
+        + intros H. apply valid_all in H.  destruct H as [H1 H2]. constructor.
+            { apply IH1. assumption. }
+            { assumption. }
+    - intros H. induction H as [|x y|p1 p2 H1 IH1 H2 IH2|x p1 H1 IH1 H2].
+        + apply valid_bot.
+        + apply valid_elem.
+        + apply valid_imp. split; assumption.
+        + apply valid_all. split; assumption.
+Qed.

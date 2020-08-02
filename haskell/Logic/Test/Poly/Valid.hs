@@ -2,7 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 
-module  Test.Valid
+module  Test.Poly.Valid
     (   specValid
     )   where
 
@@ -10,11 +10,12 @@ module  Test.Valid
 import Test.Hspec
 import Test.QuickCheck
 
-import Test.Test
+import Test.Poly.Test
 
 import Formula
-import Replace
 import Variable (Var)
+
+import Func.Replace
 
 import List.Include
 import List.InjectiveOn

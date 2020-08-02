@@ -9,9 +9,7 @@ module  Variable
 
 import GHC.Generics
 import Test.QuickCheck
-
-(&&&) :: (a -> b) -> (a -> c) -> a -> (b,c)
-(&&&) f1 f2 var = (f1 var, f2 var)
+import Data.Tuple.Extra
 
 main :: IO ()
 main = do

@@ -2,8 +2,9 @@ module  Fol.Free
     (   free
     )   where
 
-import Remove
 import Fol.P
+
+import List.Remove
 
 free :: (Eq v) => P v -> [v]
 free (Bot)       = []

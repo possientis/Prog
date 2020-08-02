@@ -1,4 +1,4 @@
-module  Test.Concat
+module  Test.List.Concat
     (   specConcat
     )   where
 

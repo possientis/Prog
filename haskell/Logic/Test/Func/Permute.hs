@@ -1,14 +1,15 @@
-module  Test.Permute
+module  Test.Func.Permute
     (   specPermute
     )   where
 
 import  Test.Hspec
 import  Test.QuickCheck
 
-import Permute
-import Replace
 import List.Coincide
 import Variable (Var)
+
+import Func.Replace
+import Func.Permute
 
 specPermute :: Spec
 specPermute = describe "Testing properties for permute (<->)..." $ do

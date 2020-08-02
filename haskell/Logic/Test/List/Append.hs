@@ -1,4 +1,4 @@
-module  Test.Append
+module  Test.List.Append
     (   specAppend
     )   where
 

@@ -2,15 +2,20 @@ Coq:
 BetaValid
 
 Haskell:
-restructure Haskell?
 BetaValid
 
 Latex:
 
 Set Theory:
-other duplication in Lang1?
-redefine valid as an inductive type for Fol and Lam
-prove equivalence valid valid' for Fol and Lan
+Lang1/Specification
+Lang1/Replacement
+axiom of choice?
+axiom of infinity false ?
+all ZF axioms covered?
+extension to infinite set
+new semantics in terms of variable r : set -> set -> Prop
+proof system of each language
+extension of language
 
 
 

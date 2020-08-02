@@ -22,7 +22,7 @@ module  DSL
     ,   eNot        -- :: Expr -> Expr
     ,   eLe         -- :: Expr -> Expr -> Expr
     ,   eEq         -- :: Expr -> Expr -> Expr
-    ,   eFac        -- :: Expr -> Expr -> Expr
+    ,   eFac        -- :: Expr
     ,   eToNat      -- :: Expr
     ,   eFromNat    -- :: Expr
     ,   eAddNat     -- :: Expr

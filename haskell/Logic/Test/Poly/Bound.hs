@@ -2,14 +2,14 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 
-module  Test.Bound
+module  Test.Poly.Bound
     (   specBound
     )   where
 
 import Test.Hspec
 import Test.QuickCheck
 
-import Test.Test
+import Test.Poly.Test
 
 import List.Include
 import Formula

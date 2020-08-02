@@ -315,3 +315,36 @@ Proof.
         + apply Sub_var in H4. apply H4. apply (free_var v e). assumption.
         + assumption.
 Qed.
+
+(* valid defined as an inductive predicate.                                     *)
+Inductive valid' (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) : T v -> Prop :=
+| VVar  : forall (x:v), valid' v w e e' f (Var x)
+| VApp  : forall (t1 t2:T v), 
+    valid' v w e e' f t1 -> 
+    valid' v w e e' f t2 -> 
+    valid' v w e e' f (App t1 t2)
+| VLam : forall (x:v) (t1:T v),
+    valid' v w e e' f t1 ->
+    (forall (y:v), y :: Fr (Lam x t1) -> f x <> f y) ->
+    valid' v w e e' f (Lam x t1)
+.
+
+Arguments valid' {v} {w} {e} {e'}.
+
+Lemma valid_equivalence : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(t:T v),
+    valid f t <-> valid' f t.
+Proof.
+    intros v w e e' f t. split.
+    - induction t as [x|t1 IH1 t2 IH2|x t1 IH1].
+        + intros _. constructor. 
+        + intros H. apply valid_app in H. destruct H as [H1 H2]. constructor.
+            { apply IH1. assumption. }
+            { apply IH2. assumption. }
+        + intros H. apply valid_lam in H.  destruct H as [H1 H2]. constructor.
+            { apply IH1. assumption. }
+            { assumption. }
+    - intros H. induction H as [x|t1 t2 H1 IH1 H2 IH2|x t1 H1 IH1 H2].
+        + apply valid_var.
+        + apply valid_app. split; assumption.
+        + apply valid_lam. split; assumption.
+Qed.

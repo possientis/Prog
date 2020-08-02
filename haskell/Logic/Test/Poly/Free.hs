@@ -2,18 +2,19 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 
-module  Test.Free
+module  Test.Poly.Free
     (   specFree
     )   where
 
 import Test.Hspec
 import Test.QuickCheck
 
-import Test.Test
+import Test.Poly.Test
 
-import Replace
 import Formula
 import Variable (Var)
+
+import Func.Replace
 
 import List.Include
 import List.InjectiveOn

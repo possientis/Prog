@@ -1,4 +1,4 @@
-module  Test.Nil
+module  Test.List.Nil
     (   specNil
     )   where
 

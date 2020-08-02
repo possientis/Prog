@@ -5,6 +5,8 @@ module  Interpret
     ,   evalIO
     )   where
 
+import Control.Monad.Reader
+import Control.Monad.Writer
 import Data.Functor.Foldable
 
 import Op
@@ -12,6 +14,7 @@ import Env
 import Var
 import Eval
 import Value
+import Pretty
 import Syntax
 import Closure
 
@@ -25,7 +28,10 @@ eval :: Expr -> Value
 eval e = fst $ runEval $ eval' e
 
 eval' :: Expr -> Eval Value
-eval' e = eval_ e eval'
+eval' e = do
+    env <- ask
+    tell ["exp = " ++ showExpr e ++ ", env = " ++ show env ]
+    eval_ e eval'
 
 eval_ :: Expr -> (Expr -> Eval Value) -> Eval Value
 eval_ = \case 

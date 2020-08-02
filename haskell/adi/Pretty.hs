@@ -66,14 +66,14 @@ pprLam p e = parensIf (p > 0) $
     <+> ppr 0 (viewBody e)
  
 pprApp :: Int -> Expr -> Expr -> Doc
-pprApp p e1 e2 = parensIf (p > 0) $ (ppr (p + 1) e1) <+> (ppr (p + 1) e2)
+pprApp p e1 e2 = parensIf (p > 0) $ (ppr 0 e1) <+> (ppr (p + 1) e2)
 
 pprRec :: Int -> Var -> Expr -> Doc
 pprRec p f e = parensIf (p > 0) $ 
         text "fix" 
     <+> text (show f) 
     <+> text ":="
-    <+> ppr (p + 1) e 
+    <+> ppr 0 e 
 
 pprZero :: Doc
 pprZero = text "zero"
@@ -84,13 +84,13 @@ pprSuc p e = parensIf (p > 0) $ text "suc" <+> ppr (p + 1) e
 pprCase :: Int -> Expr -> Expr -> Var -> Expr -> Doc
 pprCase p e e1 n e2 = parensIf (p > 0) $
         text "case"
-    <+> ppr (p + 1) e
+    <+> ppr 0 e
     <+> text "of | zero =>"
-    <+> ppr (p + 1) e1  
+    <+> ppr 0 e1  
     <+> text "| suc"
     <+> text (show n)
     <+> text "=>"
-    <+> ppr (p + 1) e2
+    <+> ppr 0 e2
 
 viewVars :: Expr -> [Var]
 viewVars = \case

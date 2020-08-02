@@ -2,8 +2,8 @@ module  Lam.Free
     (   free
     )   where
 
-import Remove
 import Lam.T
+import List.Remove
 
 free :: (Eq v) => T v -> [v]
 free (Var x)     = [x]

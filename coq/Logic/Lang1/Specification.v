@@ -1,6 +1,6 @@
 Require Import List.  
 Require Import Logic.Axiom.LEM.
-Require Import Logic.List.Replace.
+Require Import Logic.Func.Replace.
 
 Require Import Logic.Fol.Free.
 Require Import Logic.Fol.Valid.
@@ -133,7 +133,7 @@ Lemma evalSpecificationF' : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
     ~In m (Fr P) ->
     ~In n (Fr P) ->
     ~In p (Fr P) ->
-    Valid (replace2 0 1 n p) P ->
+    valid (replace2 0 1 n p) P ->
     eval e (specificationF' P n m p)
         <->
     forall (x:set), exists (y:set), forall (z:set),

@@ -11,7 +11,7 @@ import Lam.Subst
 
 
 specSubst :: Spec
-specSubst = describe "Testing properties of subst..." $ do
+specSubst = describe "Testing non-polymorphic properties for subst..." $ do
     specSubstVar
 
 

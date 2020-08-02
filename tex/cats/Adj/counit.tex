@@ -128,64 +128,67 @@ as per definition~(\ref{Nat:def:composition}).
     So we need to prove the existence of a unique arrow $f:c\to G(d)$
     such that $g = \epsilon_{d}\circ F(\alpha_{d})\circ F(f)$, which is
      $g = \epsilon_{d}\circ F(\alpha_{d}\circ f)$ since $F$ is a functor:
-TODO
-    Existence: having assumed $\eta$ is a unit of $(F,G)$, since 
-    $f:c\to G(d)$ using definition~(\ref{Adj:def:unit}) there exists
-    a (unique) $h:F(c)\to d$ with $f = G(h)\circ\eta_{c}$.
-    However, by assumption $\alpha:F\Rightarrow F$ is a natural
-    isomorphism. From proposition~(\ref{Nat:prop:isomorphism:component}),
-    every component of $\alpha$ is an isomorphism and in particular
-    $\alpha_{c}:F(c)\to F(c)$ has an inverse $\alpha_{c}^{-1}:F(c)\to F(c)$.
-    Defining $g=h\circ\alpha_{c}^{-1}$ we obtain an arrow $g:F(c)\to d$ such
-    that $f=G(g\circ\alpha_{c})\circ\eta_{c}$ as requested.
 
-    Uniqueness: Suppose $g_{1},g_{2}:F(c)\to d$ are two arrows in \Dat\ 
-    such that $G(g_{1}\circ\alpha_{c})\circ\eta_{c}=f=G(g_{2}\circ\alpha_{c})
-    \circ\eta_{c}$. Having assumed $\eta$ is a unit of $(F,G)$ using
-    proposition~(\ref{Adj:prop:unit:proving:equality}) we obtain 
-    $g_{1}\circ\alpha_{c}=g_{2}\circ\alpha_{c}$ and composing both sides
-    to the right by $\alpha_{c}^{-1}$ we conclude that $g_{1}=g_{2}$
+    Existence: having assumed $\epsilon$ is a counit of $(F,G)$, since 
+    $g:F(c)\to d$ using definition~(\ref{Adj:def:counit}) there exists
+    a (unique) $h:c\to G(d)$ with $g = \epsilon_{d}\circ F(h)$. However, 
+    by assumption $\alpha:G\Rightarrow G$ is a natural isomorphism. 
+    From proposition~(\ref{Nat:prop:isomorphism:component}),
+    every component of $\alpha$ is an isomorphism and in particular
+    $\alpha_{d}:G(d)\to G(d)$ has an inverse $\alpha_{d}^{-1}:G(d)\to G(d)$.
+    Defining $f=\alpha_{d}^{-1}\circ h$ we obtain an arrow $f:c\to G(d)$ such
+    that $g=\epsilon_{d}\circ F(\alpha_{d}\circ f)$ as requested.
+
+    Uniqueness: Suppose $f_{1},f_{2}:c\to G(d)$ are two arrows in \Cat\ 
+    with the equality $\epsilon_{d}\circ F(\alpha_{d}\circ f_{1})=g=
+    \epsilon_{d}\circ F(\alpha_{d}\circ f_{2})$. Having assumed 
+    $\epsilon$ is a counit of $(F,G)$ using
+    proposition~(\ref{Adj:prop:counit:proving:equality}) we obtain 
+    $\alpha_{d}\circ f_{1}=\alpha_{d}\circ f_{2}$ and composing both sides
+    to the left by $\alpha_{d}^{-1}$ we conclude that $f_{1}=f_{2}$
     as requested.
 
     We now prove the {\em only if} part. So we assume that 
-    $\eta':I_{\cal C}\Rightarrow G\circ F$ is a unit of $(F,G)$ and we need
-    to show the existence of a natural isomorphism $\alpha:F\Rightarrow F$
-    such that $\eta'=(G\alpha)\circ\eta$. So let $c\in\Cat$. First we need
-    to define $\alpha_{c}:F(c)\to F(c)$. Define $d=F(c)\in\Dat$. Then we 
-    have $\eta'_{c}:c\to G(d)$. Since $\eta$ is a unit of $(F,G)$ there exists
-    a unique arrow $g:F(c)\to d$ such that $\eta'_{c}=G(g)\circ\eta_{c}$.
-    Define $\alpha_{c}$ to be precisely this unique arrow $g$. Then we 
-    have $\alpha_{c}:F(c)\to F(c)$ and:
+    $\epsilon':F\circ G\Rightarrow I_{\cal D}$ is a counit of $(F,G)$ and we need
+    to show the existence of a natural isomorphism $\alpha:G\Rightarrow G$
+    such that $\epsilon'=\epsilon\circ(F\alpha)$. So let $d\in\Dat$. First we need
+    to define $\alpha_{d}:G(d)\to G(d)$. Define $c=G(d)\in\Cat$. Then we 
+    have $\epsilon'_{d}:F(c)\to d$. Since $\epsilon$ is a counit of $(F,G)$ 
+    there exists a unique arrow $f:c\to G(d)$ such that $\epsilon'_{d}
+    =\epsilon_{d}\circ F(f)$.
+    Define $\alpha_{d}$ to be precisely this unique arrow $f$. Then we 
+    have $\alpha_{d}:G(d)\to G(d)$ and:
         \begin{equation}\label{Adj:eqn:counit:not:unique}
-            \eta'_{c}=G(\alpha_{c})\circ\eta_{c}
+            \epsilon'_{d}=\epsilon_{d}\circ F(\alpha_{d})
         \end{equation}
-    Collecting all these arrows $\alpha_{c}:F(c)\to F(c)$ for $c\in\Cat$,
-    we obtain a map $\alpha:\ob\ \Cat\to\arr\ \Dat$. Next we need to show 
+    Collecting all these arrows $\alpha_{d}:G(d)\to G(d)$ for $d\in\Dat$,
+    we obtain a map $\alpha:\ob\ \Dat\to\arr\ \Cat$. Next we need to show 
     that $\alpha$ is a natural transformation, so it remains to show that
-    condition~$(2)$ of definition~(\ref{Nat:def:natural}) satisfied. So
-    let $a,b\in\Cat$ and $f:a\to b$. We need to show the equality
-    $F(f)\circ\alpha_{a}=\alpha_{b}\circ F(f)$:
+    condition~$(2)$ of definition~(\ref{Nat:def:natural}) is satisfied. So
+    let $a,b\in\Dat$ and $g:a\to b$. We need to show the equality
+    $G(g)\circ\alpha_{a}=\alpha_{b}\circ G(g)$:
     \[
         \begin{tikzcd}
-            a\arrow[d,swap, "f"]
-            &F(a)\arrow[r, "\alpha_{a}"]\arrow[d, swap,"F(f)"]
-            &F(a)\arrow[d, "F(f)"]
+            a\arrow[d,swap, "g"]
+            &G(a)\arrow[r, "\alpha_{a}"]\arrow[d, swap,"G(g)"]
+            &G(a)\arrow[d, "G(g)"]
             \\
             b
-            &F(b)\arrow[r, swap, "\alpha_{b}"]
-            &F(b)
+            &G(b)\arrow[r, swap, "\alpha_{b}"]
+            &G(b)
         \end{tikzcd}
     \]
-    Define $c=a\in\Cat$ and $d=F(b)\in\Dat$. Then both arrows 
-    $F(f)\circ\alpha_{a}$ and $\alpha_{b}\circ F(f)$ have domain $F(c)$ and
-    codomain $d$ in \Dat. Appplying 
-    proposition~(\ref{Adj:prop:unit:proving:equality}) 
-    since $\eta$ is a unit of $(F,G)$, in order to show that these are equal
+    Define $c=G(a)\in\Cat$ and $d=b\in\Dat$. Then both arrows 
+    $G(g)\circ\alpha_{a}$ and $\alpha_{b}\circ G(g)$ have domain $c$ and
+    codomain $G(d)$ in \Cat. Appplying 
+    proposition~(\ref{Adj:prop:counit:proving:equality}) 
+    since $\epsilon$ is a counit of $(F,G)$, in order to show that these are equal
     it is sufficient to prove:
         \[
-            G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{c}=
-            G(\,\alpha_{b}\circ F(f)\,)\circ\eta_{c}
+            \epsilon_{d}\circ F(\,G(g)\circ\alpha_{a}\,)=
+            \epsilon_{d}\circ F(\,\alpha_{b}\circ G(g)\,)
         \]
+    TODO
     The proof goes as follows:
         \begin{eqnarray*}G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{c}
             &=&G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{a}\\

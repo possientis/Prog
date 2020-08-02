@@ -2,7 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 
-module  Test.Dmap
+module  Test.Poly.Dmap
     (   specDmap
     )   where
 
@@ -10,7 +10,7 @@ import Test.Hspec
 import Test.QuickCheck
 
 
-import Test.Test
+import Test.Poly.Test
 
 import Formula
 import Variable (Var)

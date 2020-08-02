@@ -4,7 +4,6 @@ module  Test.Debug
     )   where
 
 import DSL
-import Pretty
 import Interpret
 
 main :: IO ()

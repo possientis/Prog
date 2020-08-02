@@ -1,13 +1,13 @@
-module  Test.Remove
+module  Test.List.Remove
     (   specRemove
     )   where
 
 import  Test.Hspec
 import  Test.QuickCheck
 
-import Remove
 import Variable (Var)
 
+import List.Remove
 import List.Include
 import List.Difference
 import List.InjectiveOn

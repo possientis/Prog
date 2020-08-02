@@ -1,6 +1,6 @@
 {-# LANGUAGE ConstraintKinds        #-}
 
-module  Test.Test
+module  Test.Poly.Test
     (   Test
     )   where
 

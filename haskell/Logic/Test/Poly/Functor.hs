@@ -2,14 +2,14 @@
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE AllowAmbiguousTypes    #-}
 
-module  Test.Functor
+module  Test.Poly.Functor
     (   specFunctor
     )   where
 
 import Test.Hspec
 import Test.QuickCheck
 
-import Test.Test
+import Test.Poly.Test
 
 import Variable  (Var)
 
