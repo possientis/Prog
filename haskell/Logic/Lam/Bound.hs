@@ -2,7 +2,7 @@ module  Lam.Bound
     (   bnd
     )   where
 
-import Lam.T
+import Lam.Syntax
 
 bnd :: T v -> [v]
 bnd (Var _)     = []

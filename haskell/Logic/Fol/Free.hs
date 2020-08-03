@@ -2,7 +2,7 @@ module  Fol.Free
     (   free
     )   where
 
-import Fol.P
+import Fol.Syntax
 
 import List.Remove
 

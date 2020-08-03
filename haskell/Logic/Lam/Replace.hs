@@ -1,9 +1,9 @@
-module  Lam.ReplaceT
+module  Lam.Replace
     (   (<-:)   -- 't <-: x' is [t/x]
     ,   replaceT
     )   where
 
-import Lam.T
+import Lam.Syntax
 
 (<-:) :: (Eq v) => T v -> v -> (v -> T v)
 (<-:) t x u 

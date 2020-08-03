@@ -2,7 +2,7 @@ module  Lam.Free
     (   free
     )   where
 
-import Lam.T
+import Lam.Syntax
 import List.Remove
 
 free :: (Eq v) => T v -> [v]

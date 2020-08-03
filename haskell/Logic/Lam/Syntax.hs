@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveFunctor #-}
 
-module  Lam.T
+module  Lam.Syntax
     (   T   (..)
     )   where
 

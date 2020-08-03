@@ -2,7 +2,7 @@ module  Lam.Dmap
     (   dmap
     )   where
 
-import Lam.T
+import Lam.Syntax
 
 dmap :: (Eq v) => (v -> w) -> (v -> w) -> T v -> T w
 dmap f g t = dmap_ f g t []

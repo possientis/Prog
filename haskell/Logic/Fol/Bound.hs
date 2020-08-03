@@ -2,7 +2,7 @@ module  Fol.Bound
     (   bnd
     )   where
 
-import Fol.P
+import Fol.Syntax
 
 bnd :: P v -> [v]
 bnd (Bot)       = []

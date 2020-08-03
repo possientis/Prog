@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveFunctor #-}
 
-module  Fol.P
+module  Fol.Syntax
     (   P   (..)
     )   where
 

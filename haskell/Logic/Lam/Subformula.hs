@@ -2,7 +2,7 @@ module  Lam.Subformula
     (   sub
     )   where
 
-import Lam.T
+import Lam.Syntax
 
 sub :: T v -> [T v]
 sub (Var x)     = [Var x]

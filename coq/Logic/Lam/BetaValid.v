@@ -436,6 +436,19 @@ Proof.
             { reflexivity. }
             { exfalso. apply H4, H1. assumption. }
         + reflexivity.
-    -
+    - apply betaValid_app_gen in H2. destruct H2 as [H2 H3]. simpl.
+      rewrite IH1, IH2.
+        + reflexivity.
+        + assumption.
+        + assumption.
+        + assumption.
+        + assumption.
+    - generalize H2. intros H2'. apply betaValid_lam_gen in H2'. 
+      destruct H2' as [H3 H4]. simpl.
+      assert (
+        subst_ (subst_ g xs'; f) (x :: xs) t1 
+        = 
+        subst_ (subst_ g (x :: xs'); f) (x :: xs) t1) as H5.
+        { apply free_coincide_subst_gen.
 Show.
 *)

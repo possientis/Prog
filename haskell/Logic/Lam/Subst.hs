@@ -5,7 +5,7 @@ module  Lam.Subst
     ,   subst
     )   where
 
-import Lam.T
+import Lam.Syntax
 
 subst_ :: (Eq v) => (v -> T v) -> [v] -> T v -> T v 
 subst_ f xs = \case

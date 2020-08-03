@@ -6,9 +6,10 @@ module  Test.Fol.Valid
 import Test.Hspec
 import Test.QuickCheck
 
-import Variable (Var)
 import Formula
-import Fol.P
+import Variable (Var)
+
+import Fol.Syntax
 
 specValid :: Spec
 specValid = describe "Testing non-polymorphic properties of valid..." $ do

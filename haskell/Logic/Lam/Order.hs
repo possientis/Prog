@@ -2,7 +2,7 @@ module  Lam.Order
     (   ord
     )   where
 
-import Lam.T
+import Lam.Syntax
 
 ord :: T v -> Integer
 ord (Var _)     = 0

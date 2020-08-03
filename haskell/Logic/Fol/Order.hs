@@ -2,7 +2,7 @@ module  Fol.Order
     (   ord
     )   where
 
-import Fol.P
+import Fol.Syntax
 
 ord :: P v -> Integer
 ord Bot         = 1

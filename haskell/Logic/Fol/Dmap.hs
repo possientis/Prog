@@ -2,7 +2,7 @@ module  Fol.Dmap
     (   dmap
     )   where
 
-import Fol.P
+import Fol.Syntax
 
 
 dmap :: (Eq v) => (v -> w) -> (v -> w) -> P v -> P w

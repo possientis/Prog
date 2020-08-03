@@ -2,7 +2,7 @@ module  Fol.Variable
     (   var
     )   where
 
-import Fol.P
+import Fol.Syntax
 
 var :: P v -> [v]
 var (Bot)       = []

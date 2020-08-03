@@ -14,8 +14,8 @@ import List.Coincide
 import List.Intersect
 import List.Difference
 
-import Lam.T
 import Lam.Subst
+import Lam.Syntax
 
 specFree :: Spec
 specFree = describe "Testing non-polymorphic properties of free..." $ do

@@ -2,7 +2,7 @@ module  Fol.Subformula
     (   sub
     )   where
 
-import Fol.P
+import Fol.Syntax
 
 sub :: P v -> [P v]
 sub Bot         = [Bot]

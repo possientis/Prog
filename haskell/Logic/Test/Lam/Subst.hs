@@ -6,8 +6,9 @@ import Test.Hspec
 import Test.QuickCheck
 
 import Variable (Var)
-import Lam.T
+
 import Lam.Subst
+import Lam.Syntax
 
 
 specSubst :: Spec

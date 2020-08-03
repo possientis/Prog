@@ -5,8 +5,9 @@ module Lam.BetaValid
     ,   betaValid
     )   where
 
-import Lam.T
 import Lam.Free
+import Lam.Syntax
+
 import List.Difference
 
 betaValid_ :: (Eq v) => (v -> T v) -> [v] -> T v -> Bool

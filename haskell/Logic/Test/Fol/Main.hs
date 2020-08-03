@@ -9,7 +9,7 @@ import Test.Hspec
 import Test.Poly.Main
 import Test.Fol.Valid
 
-import Fol.P
+import Fol.Syntax
 
 specFol :: Spec
 specFol = describe "Testing Haskell for Fol..." $ do

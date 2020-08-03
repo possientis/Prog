@@ -15,9 +15,9 @@ import List.Coincide
 import List.Intersect
 import List.Difference
 
-import Lam.T
 import Lam.Subst
-import Lam.ReplaceT
+import Lam.Syntax
+import Lam.Replace
 import Lam.BetaValid
 
 specBetaValid :: Spec

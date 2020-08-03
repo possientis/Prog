@@ -4,8 +4,8 @@ module Formula
     ,   valid
     )   where
 
-import Lam.T  
-import Fol.P
+import Lam.Syntax
+import Fol.Syntax
 
 import qualified Lam.Free       as T
 import qualified Lam.Dmap       as T

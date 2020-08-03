@@ -2,7 +2,7 @@ module  Lam.Variable
     (   var
     )   where
 
-import Lam.T
+import Lam.Syntax
 
 var :: T v -> [v]
 var (Var x)     = [x]
