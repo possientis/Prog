@@ -62,9 +62,9 @@ $G$ matters.
     are categories, and let $\epsilon:F\circ G\Rightarrow I_{\cal D}$ be a counit 
     of $(F,G)$. Then we have:
         \[
-            \epsilon_{b}\circ(F\circ G)(f)=f\circ\epsilon_{a}
+            \epsilon_{b}\circ(F\circ G)(g)=g\circ\epsilon_{a}
         \]
-    for all objects $a,b\in\Cat$ and arrow $f:a\to b$.
+    for all objects $a,b\in\Cat$ and arrow $g:a\to b$.
 \end{prop}
 \begin{proof}
     This is an immediate consequence of definition~(\ref{Nat:def:natural}) 
@@ -72,8 +72,8 @@ $G$ matters.
     $\epsilon:F\circ G\Rightarrow I_{\cal D}$, so the following square commutes:
     \[
         \begin{tikzcd}
-            F(G(a))\arrow[r, "\epsilon_{a}"]\arrow[d, swap,"(F\circ G)(f)\ "]
-            &a\arrow[d, "f"]
+            F(G(a))\arrow[r, "\epsilon_{a}"]\arrow[d, swap,"(F\circ G)(g)\ "]
+            &a\arrow[d, "g"]
             \\
             F(G(b))\arrow[r, swap, "\epsilon_{b}"]
             &b
@@ -188,44 +188,44 @@ as per definition~(\ref{Nat:def:composition}).
             \epsilon_{d}\circ F(\,G(g)\circ\alpha_{a}\,)=
             \epsilon_{d}\circ F(\,\alpha_{b}\circ G(g)\,)
         \]
-    TODO
     The proof goes as follows:
-        \begin{eqnarray*}G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{c}
-            &=&G(\,F(f)\circ\alpha_{a}\,)\circ\eta_{a}\\
-            \mbox{$G$ functor}\ \to\ 
-            &=&G(F(f))\circ G(\alpha_{a})\circ\eta_{a}\\
-            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
-            &=&G(F(f))\circ\eta'_{a}\\
-            \mbox{prop.~(\ref{Adj:prop:unit:natural}), $\eta'$ unit}\ \to\ 
-            &=&\eta'_{b}\circ f\\
-            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
-            &=&G(\alpha_{b})\circ\eta_{b}\circ f\\
-            \mbox{prop.~(\ref{Adj:prop:unit:natural}), $\eta$ unit}\ \to\ 
-            &=&G(\alpha_{b})\circ G(F(f))\circ\eta_{a}\\
-            \mbox{$G$ functor}\ \to\ 
-            &=&G(\,\alpha_{b}\circ F(f)\,)\circ\eta_{a}\\
-            &=&G(\,\alpha_{b}\circ F(f)\,)\circ\eta_{c}\\
+        \begin{eqnarray*}\epsilon_{d}\circ F(\,G(g)\circ\alpha_{a}\,)
+            &=&\epsilon_{b}\circ F(\,G(g)\circ\alpha_{a}\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{b}\circ F(G(g)) \circ F(\alpha_{a})\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural}), $\epsilon$ counit}\ \to\ 
+            &=&g\circ\epsilon_{a}\circ F(\alpha_{a})\\
+            \mbox{eqn.~(\ref{Adj:eqn:counit:not:unique})}\ \to\ 
+            &=&g\circ\epsilon_{a}'\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural}), $\epsilon$' counit}\ \to\ 
+            &=&\epsilon_{b}'\circ F(G(g))\\
+            \mbox{eqn.~(\ref{Adj:eqn:counit:not:unique})}\ \to\ 
+            &=&\epsilon_{b}\circ F(\alpha_{b})\circ F(G(g))\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{b}\circ F(\,\alpha_{b}\circ G(g)\,)\\
+            &=&\epsilon_{d}\circ F(\,\alpha_{b}\circ G(g)\,)\\
         \end{eqnarray*}
     So we have now proved that $\alpha$ is a natural transformation
-    $\alpha:F\Rightarrow F$. However, we aim to show that it is actually
+    $\alpha:G\Rightarrow G$. However, we aim to show that it is actually
     a natural isomorphism. 
     Using proposition~(\ref{Nat:prop:isomorphism:component}), it is sufficient
-    to prove that each component $\alpha_{c}:F(c)\to F(c)$ for $c\in\Cat$ is 
-    an isomorphisn in \Dat. So let $c\in\Cat$. Define $d=F(c)\in\Dat$. Then we 
-    have $\eta_{c}:c\to G(d)$. Having assumed that $\eta'$ is a unit of $(F,G)$ 
-    there exists a unique arrow $g:F(c)\to d$ such that 
-    $\eta_{c}=G(g)\circ\eta'_{c}$. Define $\beta_{c}$ to be precisely this 
-    unique arrow $g$. Then we have $\beta_{c}:F(c)\to F(c)$ and:
+    to prove that each component $\alpha_{d}:G(d)\to G(d)$ for $d\in\Dat$ is 
+    an isomorphisn in \Cat. So let $d\in\Dat$. Define $c=G(d)\in\Cat$. Then we 
+    have $\epsilon_{d}:F(c)\to d$. Having assumed that $\epsilon'$ is a counit 
+    of $(F,G)$ there exists a unique arrow $f:c\to G(d)$ such that 
+    $\epsilon_{d}=\epsilon'_{d}\circ F(f)$. Define $\beta_{d}$ to be precisely this 
+    unique arrow $f$. Then we have $\beta_{d}:G(d)\to G(d)$ and:
         \begin{equation}\label{Adj:eqn:counit:not:unique:2}
-            \eta_{c}=G(\beta_{c})\circ\eta'_{c}
+            \epsilon_{d}=\epsilon_{d}'\circ F(\beta_{d})
         \end{equation}
-    We claim that $\beta_{c}$ is an inverse of $\alpha_{c}$. So we need to prove 
-    that $\beta_{c}\circ\alpha_{c}=\id(\,F(c)\,)$ and 
-    $\alpha_{c}\circ\beta_{c}=\id(\,F(c)\,)$.
-    In order to show that $\beta_{c}\circ\alpha_{c}=\id(\,F(c)\,)$, since both 
-    arrows are from $F(c)$ to $d=F(c)$ and $\eta$ is a unit of $(F,G)$, applying
-    proposition~(\ref{Adj:prop:unit:proving:equality}) it is sufficient to prove 
-    that:
+    We claim that $\beta_{d}$ is an inverse of $\alpha_{d}$. So we need to prove 
+    that $\beta_{d}\circ\alpha_{d}=\id(\,G(d)\,)$ and 
+    $\alpha_{d}\circ\beta_{d}=\id(\,G(d)\,)$.
+    In order to show that $\beta_{d}\circ\alpha_{d}=\id(\,G(d)\,)$, since both 
+    arrows are from $c=G(d)$ to $G(d)$ and $\epsilon$ is a counit of $(F,G)$, 
+    applying proposition~(\ref{Adj:prop:counit:proving:equality}) it is sufficient 
+    to prove that:
+    TODO
         \[
             G(\,\beta_{c}\circ\alpha_{c}\,)\circ\eta_{c} 
             = 
