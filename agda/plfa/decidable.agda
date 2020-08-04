@@ -1,6 +1,6 @@
 module decidable where
 
-import Relation.Binary.PropositionalEquality as Eq
+import Relation.Binary.PropositionalEquality.Core as Eq
 
 open        Eq                        using (_≡_; refl; sym; cong)
 open import Data.Nat                  using (ℕ; zero; suc; _≤_; z≤n; s≤s)
@@ -8,7 +8,7 @@ open import Data.Sum                  using (_⊎_; inj₁; inj₂)
 open import Data.Unit                 using (⊤; tt)
 open import Data.Empty                using (⊥; ⊥-elim)
 open import Data.Product              using (_×_; proj₁; proj₂; _,_)
-open        Eq.≡-Reasoning            using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+open        Eq.≡-Reasoning            using (begin_; _≡⟨⟩_; step-≡; _∎)
 open import Relation.Nullary          using (¬_)
 open import Relation.Nullary.Negation using (contradiction)
 open import relations                 using (_<_; z<s; s<s)

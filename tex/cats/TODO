@@ -73,6 +73,9 @@ Lemma2: forall f1:c -> a f2:c -> b we have:
 Lemma3: <f1,g1> = <f2,g2> => f1 = f2 /\ g1 = g2
 Lemma4: p1.<f,g> = f /\ p2.<f,g> = g
 Extend F to a functor : F : C x C -> C with F(f1,f2) = <f1.p1,f2.p2>
+Lemma5: alpha_c (a,b) : C(c,a)xC(c,b) -> C(c,F(a,b)) is 
+actually natural in a b c. (C^op x (C x C) -> Set)
+Lemma6: p1 : F(a,b) -> a , p2: F(a,b) -> b are natural in a,b
 
 define exponential object from b to c: (c^b,ev) 
   where ev:c^b x b -> c with universal prop:
