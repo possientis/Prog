@@ -30,7 +30,7 @@ eval e = fst $ runEval $ eval' e
 eval' :: Expr -> Eval Value
 eval' e = do
     env <- ask
-    tell ["exp = " ++ showExpr e ++ ", env = " ++ show env ]
+    tell ["Evaluating exp = " ++ showExpr e ++ ", env = " ++ show env ]
     eval_ e eval'
 
 eval_ :: Expr -> (Expr -> Eval Value) -> Eval Value

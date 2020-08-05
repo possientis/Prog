@@ -8,7 +8,7 @@ import Interpret
 
 main :: IO ()
 main = do
-   evalIO e3
+   evalIO e5
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
@@ -21,4 +21,7 @@ e3 = eApp eFac (eNum 5)
 
 e4 :: Expr
 e4 = eDiv (eNum 0) (eNum 1)
+
+e5 :: Expr
+e5 = eDiv (eNum 1) (eNum 0) -- division by zero
 

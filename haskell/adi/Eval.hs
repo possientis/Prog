@@ -15,6 +15,7 @@ import Addr
 import Heap
 import Value
 
+--import Control.Monad.Except
 import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Writer
@@ -24,6 +25,7 @@ type Eval = EvalT Identity
 
 runEval :: Eval a -> (a, [String])
 runEval = runIdentity . runEvalT newEnv newHeap
+
 
 newtype EvalT m a = EvalT 
     { unEvalT :: ReaderT Env (WriterT [String] (StateT Heap m)) a 
@@ -42,7 +44,12 @@ runEvalT
     -> Heap 
     -> EvalT m a 
     -> m (a, [String])
-runEvalT env heap m  = evalStateT (runWriterT (runReaderT (unEvalT m) env)) heap
+runEvalT env heap m  = do
+    let m1 = unEvalT m          -- ReaderT Env (WriterT [String] (StateT Heap m)) a
+    let m2 = runReaderT m1 env  -- WriterT [String] (StateT Heap m) a
+    let m3 = runWriterT m2      -- StateT Heap m (a , [String])
+    let m4 = evalStateT m3 heap -- m (a , [String])
+    m4
 
 askEnvT :: (Monad m) => EvalT m Env
 askEnvT  = ask
