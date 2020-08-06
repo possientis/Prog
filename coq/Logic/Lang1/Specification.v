@@ -1,10 +1,13 @@
 Require Import List.  
+Require Import Logic.Class.Eq.
 Require Import Logic.Axiom.LEM.
 Require Import Logic.Func.Replace.
 
 Require Import Logic.Fol.Free.
 Require Import Logic.Fol.Valid.
 Require Import Logic.Fol.Syntax.
+Require Import Logic.Fol.Functor.
+Require Import Logic.Fol.Subformula.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Elem.
@@ -101,6 +104,7 @@ Proof.
     intros P n m p. reflexivity.
 Qed.
 
+(* Helper lemma used in next result.                                            *)
 Local Lemma specificationCarryOver_ : forall (p q: set -> set -> Prop),
     (forall (x y:set), p x y <-> q x y) ->
         (forall (x:set), exists (y:set), forall (z:set),
@@ -124,8 +128,16 @@ Proof.
         + apply H1. assumption.
 Qed.
 
-(*
-(* Evaluating specificationF' applied to a formula P in any environment.        *)
+(* Evaluating specificationF' applied to a formula P in any environment yields  *)
+(* the expected statement. However, due to the way we defined 'apply2' where    *)
+(* the variable 0 and 1 have this special role, instead of having 'n' and 'p'   *)
+(* bound to the values x and z, we must have '0' and '1' bound to x and z. This *)
+(* is reflected by 'eval2 e P 0 1 x z'. Note that we cannot obtain this result  *)
+(* without making some assumptions on the variables n m p. As before, we need   *)
+(* n m and p to be distinct, and we need ~ In m (Fr P). But we also need the    *)
+(* replacement of 0 and 1 by n and p to be a valid substitution in P. We also   *)
+(* cannot expect this replacement to have the correct semantics if n and p are  *)
+(* already free variables of P. Hence the ~In n (Fr P) and ~In p (Fr P).        *)
 Lemma evalSpecificationF' : LEM -> forall (e:Env) (P: Formula) (n m p:nat),
     m <> n ->
     p <> n ->
@@ -143,13 +155,25 @@ Proof.
     rewrite evalSpecificationF. apply specificationCarryOver_.
     intros x y. apply evalApply2.
     - assumption.
-    - assumption.
-    - assumption.
+    - exact H5.         (* <- H5 *)
+    - exact H6.         (* <- H6 *)
     - intros H8. subst. apply H2. reflexivity.
     - assumption.
     - assumption.
     - assumption.
     - assumption.
-    -
-Show.
-*)
+    - unfold apply2. remember (replace2 0 1 n p) as f eqn:E.
+      assert (Fr (fmap f P) = map f (Fr P)) as H8.
+        { apply (valid_free nat nat _ _ f P).
+            { assumption. }
+            { apply Sub_refl. }}
+      rewrite H8. intros H9. apply in_map_iff in H9. destruct H9 as [x [H9 H10]].
+      clear H8 H7. rewrite E in H9. clear E f. unfold replace2 in H9.
+      destruct (eqDec x 0) as [H11|H11].
+        + subst. apply H1. reflexivity.
+        + destruct (eqDec x 1) as [H12|H12].
+            { subst. apply H3. reflexivity. }
+            { rewrite H9 in H10. 
+              apply H4. (* <- H4 *)
+              assumption. }
+Qed.
