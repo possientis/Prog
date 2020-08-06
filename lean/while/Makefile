@@ -4,7 +4,8 @@ all:						Env.olean \
 							Stmt.olean \
 							BigStep.olean \
 							Reduce.olean \
-							CloReduce.olean
+							CloReduce.olean \
+							BigStepEquiv.olean
 
 
 Env.olean :					Env.lean
@@ -37,3 +38,9 @@ CloReduce.olean : 			CloReduce.lean \
 							Reduce.olean
 	lean --make CloReduce.lean
 
+BigStepEquiv.olean : 		BigStepEquiv.lean \
+							Stmt.olean \
+							BigStep.olean \
+							Reduce.olean \
+							CloReduce.olean
+	lean --make BigStepEquiv.lean

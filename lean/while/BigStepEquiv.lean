@@ -64,15 +64,21 @@ lemma ReduceBigStep : ∀ (e₁ e₂:Stmt) (s₁ s₂ s₃:Env),
   Reduce e₁ s₁ e₂ s₂ → BigStep e₂ s₂ s₃ → BigStep e₁ s₁ s₃ :=
 begin
   intros e₁ e₂ s₁ s₂ s₃ H1, revert s₃,
-  induction H1 with x a s e₁ e₁' e₂ s s' H1 H2,
+  induction H1 with
+    x a s e₁ e₁' e₂ s s' H1 H2 e₁ s₁ b e₁ e₂ s₁ H1 b e₁ e₂ s₁ H1 b e₁ s₁,
     { intros t H1, cases H1, constructor },
     { intros t H2, cases H2 with _ _ _ _ _ _ _ u _ H3 H4, constructor,
       { apply H2, apply H3 },
       { apply H4 }},
-    {},
-    {},
-    {},
-    {}
+    { intros s₂ H1, constructor,
+      { constructor },
+      { assumption }},
+    { intros s₂ H2, apply BigStep.IF_T; assumption },
+    { intros s₂ H2, apply BigStep.IF_F; assumption },
+    { intros s₂ H1, cases H1 with
+      _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ H1 H2 _ _ _ _ _ H1 H2,
+      { cases H2, { apply BigStep.WHILE_T; assumption }},
+      { cases H2, apply BigStep.WHILE_F; assumption }}
 end
 
 lemma CloReduceBigStep : ∀ (e:Stmt) (s t:Env),
@@ -81,5 +87,16 @@ begin
   intros e₁ s₁ s₃ H1, generalize H2 : skip = e₃, rw H2 at H1, revert H2,
   induction H1 with e s e₁ e₂ e₃ s₁ s₂ s₃ H1 H2 H3,
     { intros H1, rw ← H1, constructor },
-    { sorry }
+    { intros H4, apply ReduceBigStep,
+      { assumption },
+      { apply H3, assumption }}
 end
+
+lemma BigStepCloReduceEquiv : ∀ (e:Stmt) (s t:Env),
+  BigStep e s t ↔ CloReduce e s skip t :=
+begin
+  intros e s t, split,
+    { apply BigStepCloReduce },
+    { apply CloReduceBigStep }
+end
+
