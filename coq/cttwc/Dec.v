@@ -109,3 +109,67 @@ Proof.
     - right. assumption.
 Defined.
 
+
+Definition L12 (b:bool) : {b = true} + {b = false}.
+Proof.
+    destruct b.
+    - left. reflexivity.
+    - right. reflexivity.
+Defined.
+
+Definition L13 : forall (a:Type) (x y:a),
+    (forall (p:a -> Type), p x -> p y -> forall (z:a), p z) 
+    ->
+    forall (z:a), {z = x} + {z = y}.
+Proof.
+    intros a x y H z. apply (H (fun z => {z = x} + {z = y})).
+    - left. reflexivity.
+    - right. reflexivity.
+Defined.
+
+Definition L14 : forall (a:Type) (x y:a),
+    (forall (z:a), {z = x} + {z = y})
+    ->
+    forall (p:a -> Type), p x -> p y -> forall (z:a), p z.
+Proof.
+    intros a x y H p H1 H2 z. destruct (H z) as [H3|H3]; rewrite H3; assumption.
+Defined.
+
+Definition EqDecider (a:Type) (f:a -> a -> bool) : Prop :=
+    forall (x y:a), x = y <-> f x y = true.
+ 
+Arguments EqDecider {a}.
+
+Definition Discrete (a:Type) : Prop := exists (f:a -> a -> bool), EqDecider f.
+
+Lemma L15 : forall (a:Type), 
+    Discrete a <-> exists (q:forall (x y:a), Dec (x = y)), True.
+Proof.
+    unfold Discrete, EqDecider, Dec. intros a. split.
+    - intros [f H1]. assert (forall (x y:a), {x = y} + {x <> y}) as q.
+        { intros x y. destruct (f x y) eqn:E.
+            { apply H1 in E. left. assumption. }
+            { destruct (H1 x y) as [H2 H3]. right. intros H4.
+              rewrite H2 in E. inversion E. assumption. }}
+      exists q. trivial.
+    - intros [q _]. remember (fun x y =>
+        match (q x y) with
+        | left _    => true
+        | right _   => false
+        end) as f eqn:E. exists f. intros x y. split; intros H1.
+        + rewrite H1, E. destruct (q y y) as [H2|H2].
+            { reflexivity. }
+            { exfalso. apply H2. reflexivity. } 
+        + rewrite E in H1. destruct (q x y) as [H2|H2].
+            { assumption. }
+            { inversion H1. }
+Qed.
+
+Lemma L16 : forall (a b:Type), 
+    Discrete a -> Discrete b -> Discrete (a + b).
+Proof.
+
+Show.
+
+
+
