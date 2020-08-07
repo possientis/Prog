@@ -8,7 +8,7 @@ Notation "xs <= ys" := (incl xs ys)
 
 Open Scope Include_scope.
 
-Lemma incl_cons2 : forall (v:Type) (xs ys:list v) (x:v),
+Lemma incl_cons_compat : forall (v:Type) (xs ys:list v) (x:v),
     xs <= ys -> (cons x xs) <= (cons x ys).
 Proof.
     intros v xs ys x H. apply incl_cons.

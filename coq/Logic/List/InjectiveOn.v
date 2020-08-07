@@ -63,7 +63,7 @@ Proof.
         }
         { revert Hq. apply IH.
             { apply injective_on_incl with (cons x (cons a xs)).
-                { apply incl_cons2. apply incl_tl. apply incl_refl. }
+                { apply incl_cons_compat. apply incl_tl. apply incl_refl. }
                 { assumption. }
             }
             { intros H'. apply Hp. right. assumption. }

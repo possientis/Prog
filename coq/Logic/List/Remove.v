@@ -153,7 +153,7 @@ Proof.
     - apply incl_refl.
     - destruct (eqDec x a) as [H|H].
         + apply incl_tl. assumption.
-        + apply incl_cons2. assumption.
+        + apply incl_cons_compat. assumption.
 Qed.
 
 

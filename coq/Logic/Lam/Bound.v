@@ -27,7 +27,7 @@ Proof.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl.
     - intros z H. inversion H.
     - apply incl_app2; assumption.
-    - apply incl_cons2. assumption.
+    - apply incl_cons_compat. assumption.
 Qed.
 
 Lemma bnd_free : forall (v:Type) (e:Eq v) (t:T v) (z:v),

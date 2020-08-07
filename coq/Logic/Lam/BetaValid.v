@@ -422,7 +422,7 @@ Proof.
       apply H4. rewrite H1 in H3. assumption.
 Qed.
 
-(*
+
 Lemma betaValid_compose_gen :
     forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (t:T v),
     xs <= xs'         ->
@@ -445,10 +445,31 @@ Proof.
         + assumption.
     - generalize H2. intros H2'. apply betaValid_lam_gen in H2'. 
       destruct H2' as [H3 H4]. simpl.
+      assert (Fr (Lam x t1) \\ xs = Fr t1 \\ (x :: xs)) as H5.
+        { simpl. rewrite remove_diff. 
+          rewrite <- diff_distrib_app_l'. reflexivity. }
       assert (
         subst_ (subst_ g xs'; f) (x :: xs) t1 
         = 
-        subst_ (subst_ g (x :: xs'); f) (x :: xs) t1) as H5.
-        { apply free_coincide_subst_gen.
-Show.
-*)
+        subst_ (subst_ g (x :: xs'); f) (x :: xs) t1) as H6.
+        { apply free_coincide_subst_gen. rewrite <- H5.
+          apply betaValid_compose_lemma with t1.
+            { reflexivity. }
+            { assumption. }}
+       rewrite H6, IH1. 
+        + reflexivity.
+        + apply incl_cons_compat. assumption.
+        + assumption.
+Qed.
+
+(* Provided the variable substitution f is beta-valid for the term t, then      *)
+(* substituting variables in t in one phase according to the map 'subst g ; f'  *)
+(* yields the same result as substituting in two phases, first according to f   *)
+(* in t, and second according to g in the result of the first substitution.     *)
+Lemma betaValid_compose : forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v),
+    betaValid f t -> subst (subst g ; f) t = (subst g ; subst f) t.
+Proof.
+    intros v e f g t. unfold betaValid, subst. 
+    apply betaValid_compose_gen, incl_refl.
+Qed.
+ 

@@ -1,5 +1,5 @@
 Coq:
-BetaValid
+BetaValid: prop 385
 
 Haskell:
 BetaValid
