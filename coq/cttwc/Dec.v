@@ -168,8 +168,76 @@ Qed.
 Lemma L16 : forall (a b:Type), 
     Discrete a -> Discrete b -> Discrete (a + b).
 Proof.
+    unfold Discrete, EqDecider. intros a b [f H1] [g H2].
+    remember (fun (x:a + b) (y:a + b) =>
+        match x,y with 
+        | inl x, inl y  => f x y
+        | inl x, inr y  => false
+        | inr x, inl y  => false
+        | inr x, inr y  => g x y
+        end) as h eqn:E.
+    exists h. intros [x|x] [y|y]; rewrite E; split; intros H3.
+    - apply H1. inversion H3. reflexivity.
+    - apply H1 in H3. rewrite H3. reflexivity.
+    - inversion H3.
+    - inversion H3.
+    - inversion H3.
+    - inversion H3.
+    - apply H2. inversion H3. reflexivity.
+    - apply H2 in H3. rewrite H3. reflexivity.
+Qed.
 
-Show.
+Definition witness (a:Type) (x:a) : exists (z:a), True.
+Proof.
+    exists x. trivial.
+Defined.
+
+Inductive Inhabited (a:Type) : Prop :=
+| this : a -> Inhabited a
+.
+
+Lemma L17 : forall (a:Type), Inhabited a <-> exists (x:a), True.
+Proof.
+    intros a. split.
+    - intros H1. destruct H1 as [x]. exists x. trivial.
+    - intros [x _]. constructor. assumption.
+Qed.
+
+Definition L18 : forall (x y:bool), andb x y = false -> {x = false} + {y = false}.
+Proof.
+    intros x y H1. destruct x; destruct y.
+    - inversion H1.
+    - right. reflexivity.
+    - left. reflexivity.
+    - left. reflexivity.
+Qed.
+
+Definition L19 : forall (x y:bool), {x = false} + {y = false} -> andb x y = false.
+Proof.
+    intros x y [H1|H1]; rewrite H1.
+    - destruct y; reflexivity.
+    - destruct x; reflexivity.
+Qed.
+
+Definition L20 : forall (x y:bool), orb x y = true -> {x = true} + {y = true}.
+Proof.
+    intros x y H1. destruct x; destruct y.
+    - left. reflexivity.
+    - left. reflexivity.
+    - right. reflexivity.
+    - inversion H1.
+Qed.
+
+Definition L21 : forall (x y:bool), {x = true} + {y = true} -> orb x y = true.
+Proof.
+    intros x y [H1|H1]; rewrite H1.
+    - destruct y; reflexivity.
+    - destruct x; reflexivity.
+Qed.
+
+
+
+
 
 
 

@@ -767,7 +767,30 @@ data _⊢_∶_ : Context → Term → Type → Set where
       --------------------
     → Γ ⊢ μ x ⇒ M ∶ A
 
+Church : Type -> Type
+Church A = (A ⇒ A) ⇒ A ⇒ A
 
-_ : ∀ {Γ : Context} {A : Type} →
-  Γ ⊢ ƛ "s" ⇒ ƛ "z" ⇒ ` "s" · (` "s" · ` "z") ∶ (A ⇒ A) ⇒ A ⇒ A
-_ = ⊢ƛ (⊢ƛ (⊢· (⊢` (S (λ ()) Z)) (⊢· (⊢` (S (λ ()) Z)) (⊢` Z))))
+⊢twoᶜ : ∀ {Γ : Context} {A : Type} → Γ ⊢ twoᶜ ∶ Church A
+⊢twoᶜ = ⊢ƛ (⊢ƛ (⊢· (⊢` (S (λ ()) Z)) (⊢· (⊢` (S (λ ()) Z)) (⊢` Z))))
+
+⊢two : ∀ {Γ : Context} → Γ ⊢ two ∶ `ℕ
+⊢two = ⊢suc (⊢suc ⊢zero)
+
+⊢plus : ∀ {Γ : Context} → Γ ⊢ plus ∶ `ℕ ⇒ `ℕ ⇒ `ℕ
+⊢plus = ⊢μ (⊢ƛ (⊢ƛ (⊢case (⊢` (S (λ ()) Z)) (⊢` Z)
+  (⊢suc (⊢· (⊢· (⊢` (S (λ()) (S (λ()) (S (λ()) Z)))) (⊢` Z)) (⊢` (S (λ()) Z)))))))
+
+⊢2+2 : ∀ {Γ : Context} → Γ ⊢ plus · two · two ∶ `ℕ
+⊢2+2 = ⊢· (⊢· ⊢plus ⊢two) ⊢two
+
+
+⊢plusᶜ : ∀ {Γ : Context} {A : Type} → Γ ⊢ plusᶜ ∶ Church A ⇒ Church A ⇒ Church A
+⊢plusᶜ = ⊢ƛ (⊢ƛ (⊢ƛ (⊢ƛ (⊢·
+  (⊢· (⊢` (S' (S' (S' Z)))) (⊢` (S' Z)))
+  (⊢· (⊢· (⊢` (S' (S' Z))) (⊢` (S' Z))) (⊢` Z))))))
+
+⊢sucᶜ : ∀ {Γ : Context} → Γ ⊢ sucᶜ ∶ `ℕ ⇒ `ℕ
+⊢sucᶜ = ⊢ƛ (⊢suc (⊢` Z))
+
+⊢2+2ᶜ : ∀ {Γ : Context} → Γ ⊢ plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero ∶ `ℕ
+⊢2+2ᶜ = ⊢· (⊢· (⊢· (⊢· ⊢plusᶜ ⊢twoᶜ) ⊢twoᶜ) ⊢sucᶜ) ⊢zero

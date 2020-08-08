@@ -222,60 +222,59 @@ as per definition~(\ref{Nat:def:composition}).
     that $\beta_{d}\circ\alpha_{d}=\id(\,G(d)\,)$ and 
     $\alpha_{d}\circ\beta_{d}=\id(\,G(d)\,)$.
     In order to show that $\beta_{d}\circ\alpha_{d}=\id(\,G(d)\,)$, since both 
-    arrows are from $c=G(d)$ to $G(d)$ and $\epsilon$ is a counit of $(F,G)$, 
-    applying proposition~(\ref{Adj:prop:counit:proving:equality}) it is sufficient 
-    to prove that:
-    TODO
+    arrows are from $c=G(d)$ to $G(d)$ and $\epsilon'$ is assumed to be a counit 
+    of $(F,G)$, applying proposition~(\ref{Adj:prop:counit:proving:equality}) it 
+    is sufficient to prove that:
         \[
-            G(\,\beta_{c}\circ\alpha_{c}\,)\circ\eta_{c} 
+            \epsilon_{d}'\circ F(\,\beta_{d}\circ\alpha_{d}\,)
             = 
-            G(\,\id(F(c))\,)\circ\eta_{c}
+            \epsilon_{d}'\circ F(\,\id(G(d))\,)
         \]
     The proof goes as follows:
-        \begin{eqnarray*}G(\,\beta_{c}\circ\alpha_{c}\,)\circ\eta_{c}
-            &=&G(\beta_{c})\circ G(\alpha_{c})\circ\eta_{c}
-            \ \leftarrow\ \mbox{$G$ functor}\\
-            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
-            &=&G(\beta_{c})\circ\eta'_{c}\\
-            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique:2})}\ \to\ 
-            &=&\eta_{c}\\
+        \begin{eqnarray*}\epsilon_{d}'\circ F(\,\beta_{d}\circ\alpha_{d}\,)
+            &=&\epsilon_{d}'\circ F(\beta_{d})\circ F(\alpha_{d})
+            \ \leftarrow\ \mbox{$F$ functor}\\
+            \mbox{eqn.~(\ref{Adj:eqn:counit:not:unique:2})}\ \to\ 
+            &=&\epsilon_{d}\circ F(\alpha_{d})\\
+            \mbox{eqn.~(\ref{Adj:eqn:counit:not:unique})}\ \to\ 
+            &=&\epsilon_{d}'\\
             \mbox{identity}\ \to\ 
-            &=&\id(\,G(F(c))\,)\circ\eta_{c}\\
-            \mbox{$G$ functor}\ \to\ 
-            &=&G(\,\id(F(c))\,)\circ\eta_{c}\\
+            &=&\epsilon_{d}'\circ \id(\,F(G(d))\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d}'\circ F(\,\id(G(d))\,)\\
         \end{eqnarray*}
-    In order to show that $\alpha_{c}\circ\beta_{c}=\id(\,F(c)\,)$, since both 
-    arrows are from $F(c)$ to $d=F(c)$ and $\eta'$ is assumed to be a unit of 
-    $(F,G)$, applying proposition~(\ref{Adj:prop:unit:proving:equality}) it is 
+    In order to show that $\alpha_{d}\circ\beta_{d}=\id(\,G(d)\,)$, since both 
+    arrows are from $c=G(d)$ to $G(d)$ and $\epsilon$ is a counit of 
+    $(F,G)$, applying proposition~(\ref{Adj:prop:counit:proving:equality}) it is 
     sufficient to prove that:
         \[
-            G(\,\alpha_{c}\circ\beta_{c}\,)\circ\eta'_{c} 
+            \epsilon_{d}\circ F(\,\alpha_{d}\circ\beta_{d}\,)
             = 
-            G(\,\id(F(c))\,)\circ\eta'_{c}
+            \epsilon_{d}\circ F(\,\id(G(d))\,)
         \]
     The proof goes as follows:
-        \begin{eqnarray*}G(\,\alpha_{c}\circ\beta_{c}\,)\circ\eta'_{c}
-            &=&G(\alpha_{c})\circ G(\beta_{c})\circ\eta'_{c}
-            \ \leftarrow\ \mbox{$G$ functor}\\
-            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique:2})}\ \to\ 
-            &=&G(\alpha_{c})\circ\eta_{c}\\
-            \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\ \to\ 
-            &=&\eta'_{c}\\
+        \begin{eqnarray*}\epsilon_{d}\circ F(\,\alpha_{d}\circ\beta_{d}\,)
+            &=&\epsilon_{d}\circ F(\alpha_{d})\circ F(\beta_{d})
+            \ \leftarrow\ \mbox{$F$ functor}\\
+            \mbox{eqn.~(\ref{Adj:eqn:counit:not:unique})}\ \to\ 
+            &=&\epsilon_{d}'\circ F(\beta_{d})\\
+            \mbox{eqn.~(\ref{Adj:eqn:counit:not:unique:2})}\ \to\ 
+            &=&\epsilon_{d}\\
             \mbox{identity}\ \to\ 
-            &=&\id(\,G(F(c))\,)\circ\eta'_{c}\\
-            \mbox{$G$ functor}\ \to\ 
-            &=&G(\,\id(F(c))\,)\circ\eta'_{c}\\
+            &=&\epsilon_{d}\circ \id(\,F(G(d))\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d}\circ F(\,\id(G(d))\,)\\
         \end{eqnarray*}
-    So we now know that $\alpha:F\Rightarrow F$ is a natural isomorphism and it 
-    remains to show that $\eta'=(G\alpha)\circ\eta$. Using 
+    So we now know that $\alpha:G\Rightarrow G$ is a natural isomorphism and it 
+    remains to show that $\epsilon'=\epsilon\circ (F\alpha)$. Using 
     proposition~(\ref{Nat:prop:equal}), this equality between natural
     transformations is obtained if we can show that all components are equal:
-        \begin{eqnarray*}\eta'_{c}
-            &=&G(\alpha_{c})\circ\eta_{c}
-            \ \leftarrow\ \mbox{eqn.~(\ref{Adj:eqn:unit:not:unique})}\\
+        \begin{eqnarray*}\epsilon'_{d}
+            &=&\epsilon_{d}\circ F(\alpha_{d})
+            \ \leftarrow\ \mbox{eqn.~(\ref{Adj:eqn:counit:not:unique})}\\
             \mbox{$(1)$ of def.~(\ref{Nat:def:leftmul})}\ \to\ 
-            &=&(G\alpha)_{c}\circ\eta_{c}\\
+            &=&\epsilon_{d}\circ (F\alpha)_{d}\\
             \mbox{$(1)$ of def.~(\ref{Nat:def:composition})}\ \to\ 
-            &=&(\,G\alpha\circ\eta\,)_{c}\\
+            &=&(\,\epsilon\circ F\alpha\,)_{d}\\
         \end{eqnarray*}
 \end{proof}

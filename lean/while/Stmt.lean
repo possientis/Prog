@@ -15,3 +15,13 @@ open Stmt
 infixr ` ;; `  : 70 := seq
 infix ` :== `  : 80 := assign
 infixl ` :+: ` : 90 := aPlus
+
+-- set of variables written by a thread
+def W  : Stmt → set string
+| skip          := ∅
+| (x :== _)     := {x}
+| (e₁ ;; e₂)    := W e₁ ∪ W e₂
+| (ite _ e₁ e₂) := W e₁ ∪ W e₂
+| (while _ e₁)  := W e₁
+
+

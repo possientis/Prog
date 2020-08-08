@@ -1,3 +1,5 @@
+Interpret: write polymorphic code
+Provide another instance of Eval: Eval2
 add ErrorT to monad stack
 continue paper
 rewrite eval_ with cata?

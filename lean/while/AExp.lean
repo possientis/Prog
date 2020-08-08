@@ -14,4 +14,11 @@ def z : AExp := aVar "z"
 
 def aPlus  (m n : AExp) : AExp := λ s, m s + n s
 
+-- A variable 'x' is read by a shallowly embedded arithmetic expression 'a', if and
+-- only if, there is a environment 's' and an integer 'n' such that evaluating a in
+-- s after binding x to n, makes a difference
+
+def ARead (a:AExp) : set string :=
+  {x | ∃ (s:Env)(n:ℕ), a (bindVar x (aNum n) s) ≠ a s }
+
 

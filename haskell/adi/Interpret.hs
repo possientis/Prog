@@ -1,4 +1,5 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase             #-}
+{-# LANGUAGE FlexibleContexts       #-}
 
 module  Interpret
     (   eval
@@ -13,6 +14,7 @@ import Op
 import Env
 import Var
 import Eval
+import Eval1
 import Value
 import Pretty
 import Syntax
@@ -27,13 +29,13 @@ evalIO e = do
 eval :: Expr -> Value
 eval e = fst $ runEval $ eval' e
 
-eval' :: Expr -> Eval Value
+eval' :: Expr -> Eval1 Value
 eval' e = do
     env <- ask
     tell ["Evaluating exp = " ++ showExpr e ++ ", env = " ++ show env ]
     eval_ e eval'
 
-eval_ :: Expr -> (Expr -> Eval Value) -> Eval Value
+eval_ :: Expr -> (Expr -> Eval1 Value) -> Eval1 Value
 eval_ = \case 
     Fix (ENum n)            -> evalNum n
     Fix (EBool b)           -> evalBool b
@@ -47,33 +49,33 @@ eval_ = \case
     Fix (ESuc e)            -> evalSuc e
     Fix (ECase e e1 x e2)   -> evalCase e e1 x e2  
 
-evalNum :: Integer -> (Expr -> Eval Value) -> Eval Value
+evalNum :: Integer -> (Expr -> Eval1 Value) -> Eval1 Value
 evalNum n _ev = return $ mkNum n
 
-evalBool :: Bool -> (Expr -> Eval Value) -> Eval Value
+evalBool :: Bool -> (Expr -> Eval1 Value) -> Eval1 Value
 evalBool b _ev = return $ mkBool b
 
-evalVar :: Var -> (Expr -> Eval Value) -> Eval Value
+evalVar :: Var -> (Expr -> Eval1 Value) -> Eval1 Value
 evalVar x _ev = do
     env <- askEnv
     find (findAddr env x)
 
-evalOp :: Op -> [Expr] -> (Expr -> Eval Value) -> Eval Value
+evalOp :: Op -> [Expr] -> (Expr -> Eval1 Value) -> Eval1 Value
 evalOp op es ev = delta op <$> mapM ev es
 
-evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
 evalIf e e1 e2 ev = do
     v <- ev e
     case bool v of
         Nothing -> error "If: condition does not evaluate to a boolean."
         Just b  -> ev $ if b then e1 else e2
 
-evalLam :: Var -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalLam :: Var -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
 evalLam x e _ev = do
     env <- askEnv
     return $ mkClo x e env 
 
-evalApp :: Expr -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalApp :: Expr -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
 evalApp e1 e2 ev = do
     v1 <- ev e1
     case closure v1 of
@@ -87,7 +89,7 @@ evalApp e1 e2 ev = do
             let e   = closureBody c
             localEnv (bind x addr env) (ev e)
 
-evalRec :: Var -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalRec :: Var -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
 evalRec f e ev = do
     env  <- askEnv
     addr <- alloc 
@@ -96,17 +98,24 @@ evalRec f e ev = do
     write addr v
     return v
 
-evalZero :: (Expr -> Eval Value) -> Eval Value
+evalZero :: (Expr -> Eval1 Value) -> Eval1 Value
 evalZero _ev = return mkZero
 
-evalSuc :: Expr -> (Expr -> Eval Value) -> Eval Value
+evalSuc :: Expr -> (Expr -> Eval1 Value) -> Eval1 Value
 evalSuc e ev = do
     v <- ev e
     case nat v of 
         Nothing -> error "Suc: argument is not a Nat."
         Just v' -> return $ mkSuc $ v'
 
-evalCase :: Expr -> Expr -> Var -> Expr -> (Expr -> Eval Value) -> Eval Value
+evalCase 
+    :: (Eval m) 
+    => Expr 
+    -> Expr 
+    -> Var 
+    -> Expr 
+    -> (Expr -> m Value) 
+    -> m Value
 evalCase e e1 x e2 ev = do
     v <- ev e
     if isZero v then ev e1 else
