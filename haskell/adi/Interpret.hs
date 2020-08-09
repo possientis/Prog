@@ -3,7 +3,6 @@
 
 module  Interpret
     (   eval
-    ,   evalIO
     )   where
 
 import Control.Monad.Reader
@@ -14,28 +13,19 @@ import Op
 import Env
 import Var
 import Eval
-import Eval1
 import Value
 import Pretty
 import Syntax
 import Closure
 
-evalIO :: Expr -> IO ()
-evalIO e = do
-    let (res,logs) = runEval $ eval' e
-    mapM_ putStrLn logs
-    print res
-    
-eval :: Expr -> Value
-eval e = fst $ runEval $ eval' e
 
-eval' :: Expr -> Eval1 Value
-eval' e = do
+eval :: (Eval m) => Expr -> m Value
+eval e = do
     env <- ask
     tell ["Evaluating exp = " ++ showExpr e ++ ", env = " ++ show env ]
-    eval_ e eval'
+    eval_ e eval
 
-eval_ :: Expr -> (Expr -> Eval1 Value) -> Eval1 Value
+eval_ :: (Eval m) => Expr -> (Expr -> m Value) -> m Value
 eval_ = \case 
     Fix (ENum n)            -> evalNum n
     Fix (EBool b)           -> evalBool b
@@ -49,33 +39,66 @@ eval_ = \case
     Fix (ESuc e)            -> evalSuc e
     Fix (ECase e e1 x e2)   -> evalCase e e1 x e2  
 
-evalNum :: Integer -> (Expr -> Eval1 Value) -> Eval1 Value
+evalNum 
+    :: (Eval m) 
+    => Integer 
+    -> (Expr -> m Value) 
+    -> m Value
 evalNum n _ev = return $ mkNum n
 
-evalBool :: Bool -> (Expr -> Eval1 Value) -> Eval1 Value
+evalBool 
+    :: (Eval m) 
+    => Bool 
+    -> (Expr -> m Value) 
+    -> m Value
 evalBool b _ev = return $ mkBool b
 
-evalVar :: Var -> (Expr -> Eval1 Value) -> Eval1 Value
+evalVar 
+    :: (Eval m) 
+    => Var 
+    -> (Expr -> m Value)    
+    -> m Value
 evalVar x _ev = do
     env <- askEnv
     find (findAddr env x)
 
-evalOp :: Op -> [Expr] -> (Expr -> Eval1 Value) -> Eval1 Value
+evalOp 
+    :: (Eval m) 
+    => Op 
+    -> [Expr] 
+    -> (Expr -> m Value) 
+    -> m Value
 evalOp op es ev = delta op <$> mapM ev es
 
-evalIf :: Expr -> Expr -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
+evalIf 
+    :: (Eval m) 
+    => Expr 
+    -> Expr 
+    -> Expr 
+    -> (Expr -> m Value) 
+    -> m Value
 evalIf e e1 e2 ev = do
     v <- ev e
     case bool v of
         Nothing -> error "If: condition does not evaluate to a boolean."
         Just b  -> ev $ if b then e1 else e2
 
-evalLam :: Var -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
+evalLam 
+    :: (Eval m) 
+    => Var 
+    -> Expr 
+    -> (Expr -> m Value) 
+    -> m Value
 evalLam x e _ev = do
     env <- askEnv
     return $ mkClo x e env 
 
-evalApp :: Expr -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
+evalApp 
+    :: (Eval m) 
+    => Expr 
+    -> Expr 
+    -> (Expr -> m Value) 
+    -> m Value
 evalApp e1 e2 ev = do
     v1 <- ev e1
     case closure v1 of
@@ -89,7 +112,12 @@ evalApp e1 e2 ev = do
             let e   = closureBody c
             localEnv (bind x addr env) (ev e)
 
-evalRec :: Var -> Expr -> (Expr -> Eval1 Value) -> Eval1 Value
+evalRec 
+    :: (Eval m) 
+    => Var 
+    -> Expr 
+    -> (Expr -> m Value) 
+    -> m Value
 evalRec f e ev = do
     env  <- askEnv
     addr <- alloc 
@@ -98,10 +126,17 @@ evalRec f e ev = do
     write addr v
     return v
 
-evalZero :: (Expr -> Eval1 Value) -> Eval1 Value
+evalZero 
+    :: (Eval m)
+    => (Expr -> m Value) 
+    -> m Value
 evalZero _ev = return mkZero
 
-evalSuc :: Expr -> (Expr -> Eval1 Value) -> Eval1 Value
+evalSuc 
+    :: (Eval m)
+    => Expr 
+    -> (Expr -> m Value) 
+    -> m Value
 evalSuc e ev = do
     v <- ev e
     case nat v of 

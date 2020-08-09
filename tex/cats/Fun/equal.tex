@@ -123,3 +123,20 @@ we are able to state:
             &=&F(f)
         \end{eqnarray*}
 \end{proof}
+
+\begin{prop}\label{Fun:prop:identity:opposite}
+    Let \Cat\ be a category. Then $I_{\cal C}=I_{{\cal C}^{op}}$, where 
+    $I_{\cal C}$ and $I_{{\cal C}^{op}}$ are the identity functors on \Cat\ and
+    \Cop\ respectively as per definition~(\ref{Fun:def:identity}).
+\end{prop}
+\begin{proof}
+    Since $I_{\cal C}$ is a functor $I_{\cal C}:\Cat\to\Cat$, by virtue of 
+    proposition~(\ref{Fun:prop:opposite}) it is also a functor 
+    $I_{\cal C}:\Cop\to\Cop$. Hence from proposition~(\ref{Fun:prop:equal}),
+    in order to show that $I_{\cal C}=I_{{\cal C}^{op}}$ it is sufficient
+    to prove that $I_{\cal C}(a)=I_{{\cal C}^{op}}(a)$ for all $a\in\ob\ \Cat
+    =\ob\ \Cop$, as well as $I_{\cal C}(f)=I_{{\cal C}^{op}}(f)$ for all
+    $f\in\arr\ \Cat=\arr\ \Cop$. This follows immediately from 
+    definition~(\ref{Fun:def:identity}), since both functors act as the 
+    identity on objects and arrows.
+\end{proof}

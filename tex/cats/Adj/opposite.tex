@@ -3,4 +3,24 @@ are categories. Suppose $\eta$ is a unit of $(F,G)$. Then in particular,
 $\eta$ is a natural transformation $\eta:I_{\cal C}\Rightarrow G\circ F$.
 Now if we are precise and wish to spell out the relevant typed functors,
 $\eta$ is a natural transformation between $(\Cat,\Cat,I_{\cal C})$ and
-$(\Cat,\Cat,G\circ F)$.
+$(\Cat,\Cat,G\circ F)$. However, using proposition~(\ref{Nat:prop:opposite}),
+it follows that $\eta$ is also a natural transformation between the typed
+functors $(\Cop,\Cop,G\circ F)$ and $(\Cop,\Cop,I_{\cal C})$. Furthermore,
+from proposition~(\ref{Fun:prop:identity:opposite}) we have $I_{\cal C}=
+I_{{\cal C}^{op}}$ so $\eta$ is in fact a natural transformation between
+the typed functors $(\Cop,\Cop,G\circ F)$ and $(\Cop,\Cop,I_{{\cal C}^{op}})$.
+In short, we have $\eta:G\circ F\Rightarrow I_{{\cal C}^{op}}$ where 
+$G:\Dop\to\Cop$ and $F:\Cop\to\Dop$. This is exactly the signature we would 
+expect from a counit of $(G,F)$ in relation to the categories \Dop\ and \Cop. 
+As the following proposition shows, whenever $\eta$ is a unit of $(F,G)$ in
+relation to categories \Cat\ and \Dat, it is indeed also a counit of $(G,F)$ in 
+relation to the categories \Dop\ and \Cop.
+    \[
+        \begin{tikzcd}
+              \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
+            & \Dat \arrow[l, "G", bend left = 50, ""{name=D, above}]
+            & \Dop \arrow[r, "G", bend left  = 50, ""{name=U, below}]
+            & \Cop \arrow[l, "F", bend left  = 50, ""{name=U, below}]
+        \end{tikzcd}
+    \]
+\

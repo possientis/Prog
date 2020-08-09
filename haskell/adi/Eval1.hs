@@ -1,23 +1,29 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving     #-}
 
 module  Eval1
-    (   Eval1
-    ,   runEval
+    (   eval1
+    ,   runEval1
     )   where
 
 import Env
 import Log
 import Heap
+import Value
+import Syntax
+import Interpret
 
 import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Writer
 import Data.Functor.Identity
 
+eval1 :: Expr -> Value
+eval1 e = fst $ runEval1 $ eval e
+
 type Eval1 = EvalT Identity
 
-runEval :: Eval1 a -> (a, Log)
-runEval = runIdentity . runEvalT newEnv newHeap
+runEval1 :: Eval1 a -> (a, Log)
+runEval1 = runIdentity . runEvalT newEnv newHeap
 
 newtype EvalT m a = EvalT 
     { unEvalT :: ReaderT Env (WriterT Log (StateT Heap m)) a 

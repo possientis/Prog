@@ -3,13 +3,21 @@ module  Test.Debug
     ,   e1, e2, e3, e4
     )   where
 
+
 import DSL
+import Eval1
 import Interpret
 
 main :: IO ()
 main = do
    evalIO e5
 
+evalIO :: Expr -> IO ()
+evalIO e = do
+    let (res,logs) = runEval1 $ eval e
+    mapM_ putStrLn logs
+    print res
+ 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
 

@@ -423,7 +423,7 @@ Proof.
 Qed.
 
 
-Lemma betaValid_compose_gen :
+Lemma betaValid_compose_subst_gen :
     forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (t:T v),
     xs <= xs'         ->
     betaValid_ f xs t ->
@@ -466,10 +466,41 @@ Qed.
 (* substituting variables in t in one phase according to the map 'subst g ; f'  *)
 (* yields the same result as substituting in two phases, first according to f   *)
 (* in t, and second according to g in the result of the first substitution.     *)
-Lemma betaValid_compose : forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v),
+Lemma betaValid_compose_subst : forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v),
     betaValid f t -> subst (subst g ; f) t = (subst g ; subst f) t.
 Proof.
     intros v e f g t. unfold betaValid, subst. 
-    apply betaValid_compose_gen, incl_refl.
+    apply betaValid_compose_subst_gen, incl_refl.
 Qed.
  
+(*
+Lemma betaValid_compose_gen :
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (t:T v),
+        betaValid_ f xs t ->
+        betaValid_ g xs' (subst_ f xs t) ->
+        betaValid_ (subst_ g xs' ; f) xs t.
+Proof.
+    intros v e f g xs xs' t. revert t xs xs'. 
+    induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs xs' H1 H2.
+    - apply betaValid_var_gen.
+    - apply betaValid_app_gen. 
+      apply betaValid_app_gen in H1. destruct H1 as [H1 H3].
+      simpl in H2. apply betaValid_app_gen in H2. destruct H2 as [H2 H4]. split.
+        + apply IH1; assumption.
+        + apply IH2; assumption.
+    - generalize H1. intros H1'. apply betaValid_lam_gen in H1'.
+      destruct H1' as [H6 H7]. simpl in H2. apply betaValid_lam_gen in H2.
+      destruct H2 as [H8 H9]. apply betaValid_lam_gen. split.
+        + apply (betaValid_coincide_gen v e 
+            (subst_ g xs' ; f) (subst_ g (x :: xs') ; f) t1 (x :: xs)).
+                { assert (Fr (Lam x t1) \\ xs = Fr t1 \\ (x :: xs)) as H5.
+                    { simpl. rewrite remove_diff. 
+                      rewrite <- diff_distrib_app_l'. reflexivity. }
+                  rewrite <- H5. apply betaValid_compose_lemma with t1.
+                    { reflexivity. }
+                    { assumption. }}
+                { apply IH1; assumption. }
+        +
+
+Show.
+*)

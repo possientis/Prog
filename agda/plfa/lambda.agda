@@ -794,3 +794,34 @@ Church A = (A ⇒ A) ⇒ A ⇒ A
 
 ⊢2+2ᶜ : ∀ {Γ : Context} → Γ ⊢ plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero ∶ `ℕ
 ⊢2+2ᶜ = ⊢· (⊢· (⊢· (⊢· ⊢plusᶜ ⊢twoᶜ) ⊢twoᶜ) ⊢sucᶜ) ⊢zero
+
+
+∋-injective : ∀ {Γ : Context} {x : Id} {A B : Type} →
+  Γ ∋ x ∶ A → Γ ∋ x ∶ B → A ≡ B
+∋-injective Z Z = refl
+∋-injective Z (S p q) = ⊥-elim (p refl)
+∋-injective (S p q) Z = ⊥-elim (p refl)
+∋-injective (S p q) (S r s) = ∋-injective q s
+
+nope₁ : ∀ {Γ : Context} {A : Type} {M : Term} → ¬ (Γ ⊢ `zero · M ∶ A)
+nope₁ (⊢· () q)
+
+nope₂ : ∀ {Γ : Context} {A : Type} → ¬ (Γ ⊢ ƛ "x" ⇒ ` "x" · ` "x" ∶ A)
+nope₂ (⊢ƛ (⊢· (⊢` q) (⊢` p))) = contradiction (∋-injective p q)
+  where
+    contradiction : ∀ {A B : Type} → ¬ (A ≡ A ⇒ B)
+    contradiction ()
+
+
+ex₁ : ∀ {Γ : Context} → Γ , "y" ∶ `ℕ ⇒ `ℕ , "x" ∶ `ℕ ⊢ ` "y" · ` "x" ∶ `ℕ
+ex₁ = ⊢· (⊢` (S' Z)) (⊢` Z)
+
+injₗ : ∀ {A A' B : Type} → A ⇒ B ≡ A' ⇒ B → A ≡ A'
+injₗ refl = refl
+
+injᵣ : ∀ {A B B' : Type} → A ⇒ B ≡ A ⇒ B' → B ≡ B'
+injᵣ refl = refl
+
+ex₂ : ∀ {Γ : Context} {A : Type} →
+  Γ , "y" ∶ `ℕ ⇒ `ℕ , "x" ∶ `ℕ ⊢ ` "y" · ` "x" ∶ A → A ≡ `ℕ
+ex₂ (⊢· (⊢` p) (⊢` q)) = {!!}

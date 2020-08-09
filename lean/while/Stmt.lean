@@ -24,4 +24,15 @@ def W  : Stmt → set string
 | (ite _ e₁ e₂) := W e₁ ∪ W e₂
 | (while _ e₁)  := W e₁
 
+-- set of variables read by a thread
+def R  : Stmt → set string
+| skip          := ∅
+| (_ :== a)     := ARead a
+| (e₁ ;; e₂)    := R e₁ ∪ R e₂
+| (ite b e₁ e₂) := BRead b ∪ R e₁ ∪ R e₂
+| (while b e₁)  := BRead b ∪ R e₁
+
+-- set of variables written or read by a thread
+def V (e:Stmt) : set string := W e ∪ R e
+
 

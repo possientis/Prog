@@ -1,0 +1,2 @@
+Define Hoare triples syntactically. prove soundness : triple is derivable => what it says is true
+Define Hoare triples semantically as per hhg
