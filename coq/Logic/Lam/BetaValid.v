@@ -8,6 +8,7 @@ Require Import Logic.Func.Composition.
 Require Import Logic.List.In.
 Require Import Logic.List.Nil.
 Require Import Logic.List.Equiv.
+Require Import Logic.List.Concat.
 Require Import Logic.List.Remove.
 Require Import Logic.List.Append.
 Require Import Logic.List.Include.
@@ -500,7 +501,22 @@ Proof.
                     { reflexivity. }
                     { assumption. }}
                 { apply IH1; assumption. }
-        +
+        + unfold comp. intros u H2 H3. assert (
+            Fr (subst_ g xs' (f u)) <= (Fr (f u) /\ xs') ++
+            concat (map (Fr ; g) (Fr (f u) \\ xs'))) as H4.
+            { apply free_subst_gen. }
+          assert (
+            In x ((Fr (f u) /\ xs') ++ concat (map (Fr ; g) (Fr (f u) \\ xs'))))
+            as H5.
+            { apply (H4 x). assumption. } 
+          clear H3 H4. apply in_app_or in H5. destruct H5 as [H3|H3].
+            { apply inter_charac in H3. destruct H3 as [H3 _]. 
+              apply (H7 u); assumption. }
+            { apply concat_charac in H3. destruct H3 as [zs [H3 H4]].
+              apply in_map_iff in H4. destruct H4 as [z [H4 H5]].
+              rewrite <- H4 in H3. unfold comp in H3. clear H4 zs.
+              apply (H9 z). change (z :: Fr (subst_ f xs (Lam x t1)) \\ xs').
+
 
 Show.
 *)
