@@ -10,11 +10,12 @@ from proposition~(\ref{Fun:prop:identity:opposite}) we have $I_{\cal C}=
 I_{{\cal C}^{op}}$ so $\eta$ is in fact a natural transformation between
 the typed functors $(\Cop,\Cop,G\circ F)$ and $(\Cop,\Cop,I_{{\cal C}^{op}})$.
 In short, we have $\eta:G\circ F\Rightarrow I_{{\cal C}^{op}}$ where 
-$G:\Dop\to\Cop$ and $F:\Cop\to\Dop$. This is exactly the signature we would 
-expect from a counit of $(G,F)$ in relation to the categories \Dop\ and \Cop. 
-As the following proposition shows, whenever $\eta$ is a unit of $(F,G)$ in
-relation to categories \Cat\ and \Dat, it is indeed also a counit of $(G,F)$ in 
-relation to the categories \Dop\ and \Cop.
+$G:\Dop\to\Cop$ and $F:\Cop\to\Dop$, as per proposition~(\ref{Fun:prop:opposite}).
+This is exactly the signature we would expect from a counit of $(G,F)$ in 
+relation to the categories \Dop\ and \Cop. As the following proposition shows, 
+whenever $\eta$ is a unit of $(F,G)$ in relation to categories \Cat\ and \Dat, 
+it is indeed also a counit of $(G,F)$ in relation to the categories 
+\Dop\ and \Cop.
     \[
         \begin{tikzcd}
               \Cat \arrow[r, "F", bend left  = 50, ""{name=U, below}]
@@ -23,4 +24,37 @@ relation to the categories \Dop\ and \Cop.
             & \Cop \arrow[l, "F", bend left  = 50, ""{name=U, below}]
         \end{tikzcd}
     \]
-\
+\begin{prop}\label{Adj:prop:opposite}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. Then every unit of $(F,G)$ is
+    a counit of $(G,F)$ w.r. to \Dop\ and \Cop.
+\end{prop}
+\begin{proof}
+    Let $\eta$ be a unit of $(F,G)$, i.e a unit between the typed functors 
+    $(\Cat,\Dat,F)$ and $(\Dat,\Cat,G)$ as per definition~(\ref{Adj:def:unit}).
+    We need to show that $\eta$ is a counit of $(G,F)$ in relation to the 
+    categories \Dop\ and \Cop, i.e. a counit between the typed functors
+    $(\Dop,\Cop,G)$ and $(\Cop,\Dop,F)$ as per definition~(\ref{Adj:def:counit}).
+    First we need to show that $\eta$ is a natural transformation
+    $\eta:G\circ F\Rightarrow I_{{\cal C}^{op}}$, or more precisely a natural
+    transformation between the typed functors $(\Cop,\Cop,G\circ F)$ and
+    $(\Cop,\Cop,I_{{\cal C}^{op}})$. From proposition~(\ref{Nat:prop:opposite}),
+    this amounts to showing that $\eta$ is a natural transformation between
+    $(\Cat,\Cat,I_{{\cal C}^{op}})$ and $(\Cat,\Cat,G\circ F)$. Since 
+    $I_{{\cal C}^{op}}=I_{\cal C}$ as per 
+    proposition~(\ref{Fun:prop:identity:opposite}), we need to show that
+    $\eta$ is natural transformation between the typed functors 
+    $(\Cat,\Cat,I_{\cal C})$ and $(\Cat,\Cat,G\circ F)$ which is
+    $\eta:I_{\cal C}\Rightarrow G\circ F$. This follows immediately from 
+    definition~(\ref{Adj:def:unit}) and our assumption that $\eta$ is 
+    a unit of $(F,G)$. So it remains to show that $\eta$ satisfies the 
+    universal property of definition~(\ref{Adj:def:counit}), where
+    $F$ and $G$ have been swapped and \Cat,\Dat\ replaced by \Dop,\Cop\
+    respectively. So let $d\in\Dop$, $c\in\Cop$ and $f:G(d)\to c\ @\ \Cop$.
+    We need to show the existence of a unique $g:d\to F(c)\ @\ \Dop$ such
+    $f=\eta_{c}\circ G(g)\ @\ \Cop$. In other words, given $d\in\Dat$, $c\in\Cat$
+    and $f:c\to G(d)$, we need to show the existence of a unique
+    $g:F(c)\to d$ such that $f=G(g)\circ\eta_{c}$. Once again, this 
+    follows from definition~(\ref{Adj:def:unit}) and our assumption that 
+    $\eta$ is a unit of $(F,G)$. 
+\end{proof}
