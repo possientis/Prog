@@ -816,12 +816,26 @@ nope₂ (⊢ƛ (⊢· (⊢` q) (⊢` p))) = contradiction (∋-injective p q)
 ex₁ : ∀ {Γ : Context} → Γ , "y" ∶ `ℕ ⇒ `ℕ , "x" ∶ `ℕ ⊢ ` "y" · ` "x" ∶ `ℕ
 ex₁ = ⊢· (⊢` (S' Z)) (⊢` Z)
 
-injₗ : ∀ {A A' B : Type} → A ⇒ B ≡ A' ⇒ B → A ≡ A'
-injₗ refl = refl
-
-injᵣ : ∀ {A B B' : Type} → A ⇒ B ≡ A ⇒ B' → B ≡ B'
-injᵣ refl = refl
-
 ex₂ : ∀ {Γ : Context} {A : Type} →
   Γ , "y" ∶ `ℕ ⇒ `ℕ , "x" ∶ `ℕ ⊢ ` "y" · ` "x" ∶ A → A ≡ `ℕ
-ex₂ (⊢· (⊢` p) (⊢` q)) = {!!}
+ex₂ (⊢· (⊢` (S _ Z)) (⊢` q)) = refl
+ex₂ (⊢· (⊢` (S _ (S p q))) (⊢` Z)) = ⊥-elim (p refl)
+ex₂ (⊢· (⊢` (S _ (S p q))) (⊢` (S r s))) = ⊥-elim (p refl)
+
+ex₃ : ∀ {Γ : Context} {A : Type} →
+  ¬(Γ , "y" ∶ `ℕ ⇒ `ℕ , "x" ∶ `ℕ ⊢ ` "x" · ` "y" ∶ A)
+ex₃ (⊢· (⊢` (S p _)) _) = ⊥-elim (p refl)
+
+ex₄ : ∀ {Γ : Context} →
+  Γ , "y" ∶ `ℕ ⇒ `ℕ ⊢ ƛ "x" ⇒ ` "y" · ` "x" ∶ `ℕ ⇒ `ℕ
+ex₄ = ⊢ƛ (⊢· (⊢` (S' Z)) (⊢` Z))
+
+ex₅ : ∀ {Γ : Context} {A : Type} →
+  Γ , "y" ∶ `ℕ ⇒ `ℕ ⊢ ƛ "x" ⇒ ` "y" · ` "x" ∶ A → A ≡ `ℕ ⇒ `ℕ
+ex₅ (⊢ƛ (⊢· (⊢` (S _ Z)) (⊢` Z))) = refl
+ex₅ (⊢ƛ (⊢· (⊢` (S _ (S p _))) (⊢` Z))) = ⊥-elim (p refl)
+ex₅ (⊢ƛ (⊢· _ (⊢` (S p _)))) = ⊥-elim (p refl)
+
+ex₆ : ∀ {Γ : Context} {A B : Type} → ¬(Γ , "x" ∶ A ⊢ ` "x" · ` "x" ∶ B)
+ex₆ (⊢· (⊢` (S p _)) (⊢` Z)) = ⊥-elim (p refl)
+ex₆ (⊢· _ (⊢` (S p _))) = ⊥-elim (p refl)
