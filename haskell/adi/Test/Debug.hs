@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeApplications       #-}
+
 module  Test.Debug
     (   main
     ,   e1, e2, e3, e4
@@ -6,7 +8,7 @@ module  Test.Debug
 
 import DSL
 import Eval1
-import Interpret
+import Eval
 
 main :: IO ()
 main = do
@@ -14,7 +16,7 @@ main = do
 
 evalIO :: Expr -> IO ()
 evalIO e = do
-    let (res,logs) = runEval1 $ eval e
+    let (res,logs) = runEval $ (eval' @ Eval1) e
     mapM_ putStrLn logs
     print res
  

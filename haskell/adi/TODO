@@ -1,5 +1,4 @@
-Can we have polymorphic test code, so we can test all monads
-Provide another instance of Eval: Eval2
+Eval2
 add ErrorT to monad stack
 continue paper
 rewrite eval_ with cata?

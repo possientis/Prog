@@ -1,29 +1,25 @@
+{-# LANGUAGE FlexibleInstances              #-}
+{-# LANGUAGE TypeSynonymInstances           #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving     #-}
 
 module  Eval1
-    (   eval1
-    ,   runEval1
+    (   Eval1
     )   where
 
 import Env
 import Log
 import Heap
-import Value
-import Syntax
-import Interpret
+import Eval
 
 import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Writer
 import Data.Functor.Identity
 
-eval1 :: Expr -> Value
-eval1 e = fst $ runEval1 $ eval e
-
 type Eval1 = EvalT Identity
 
-runEval1 :: Eval1 a -> (a, Log)
-runEval1 = runIdentity . runEvalT newEnv newHeap
+instance Eval Eval1 where
+    runEval = runIdentity . runEvalT newEnv newHeap
 
 newtype EvalT m a = EvalT 
     { unEvalT :: ReaderT Env (WriterT Log (StateT Heap m)) a 

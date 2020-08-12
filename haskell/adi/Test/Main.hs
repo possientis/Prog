@@ -4,10 +4,10 @@ module  Test.Main
 
 import Test.Hspec
 
-import Test.Eval
+import Test.Eval1
 import Test.Pretty
 
 specMain :: Spec
 specMain = do
-    specEval
+    specEval1
     specPretty
