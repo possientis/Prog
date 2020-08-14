@@ -24,7 +24,7 @@ Require Import Logic.Lam.Variable.
 
 (* Predicate defining the beta-validity of the substitution f for (t,xs).       *)
 (* This predicates expresses the fact that when considering the variables of xs *)
-(* as bound variables, the substitution f in term t will not give rise to any   *)
+(* as bound variables, the substitution f in the term t will not give rise to   *)
 (* variable capture, i.e. the substitution is meaningful or 'valid'.            *)
 Inductive betaValid_ (v:Type) (e:Eq v) (f:v -> T v) : list v -> T v -> Prop :=
 | VVar : forall (xs:list v) (x:v), betaValid_ v _ f xs (Var x)
@@ -82,6 +82,9 @@ Proof.
     unfold betaValid. intros v e f t1 t2. apply betaValid_app_gen.
 Qed.
 
+(* f is beta-valid for a term (Lam x t1) w.r. to xs iff 1. it is beta-valid     *)
+(* for the term t1 w.r. to (x :: xs) and 2. For any free variable u of          *)
+(* Lam x t1 which is not in xs, x is not a free variable of f u.                *)
 Lemma betaValid_lam_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t1:T v) (x:v) (xs:list v),
     betaValid_ f xs (Lam x t1)
@@ -95,6 +98,7 @@ Proof.
     - intros [H1 H2]. constructor; assumption.
 Qed.
  
+(* Application of the previous lemma with xs = []                               *)
 Lemma betaValid_lam : forall (v:Type) (e:Eq v) (f:v -> T v) (t1:T v) (x:v),
     betaValid f (Lam x t1)
         <->
@@ -105,7 +109,11 @@ Proof.
     rewrite <- (diff_nil v e (Fr (Lam x t1))). apply betaValid_lam_gen.
 Qed.
 
-(* Some monotonicity property of beta-validity.                                 *)
+(* Some monotonicity property of beta-validity. Remember that xs ys represent   *)
+(* those variables regarded as bound, i.e. which will not be substituted by f.  *)
+(* So if f does not give rise to variable capture when keeping all variables in *)
+(* xs unchanged, it seems natural that it will not give rise to variable        *)
+(* capture when keeping a larger subset ys of variables unchanged.              *)
 Lemma betaValid_incl : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v),
         xs <= ys -> betaValid_ f xs t -> betaValid_ f ys t.
@@ -474,7 +482,7 @@ Proof.
     apply betaValid_compose_subst_gen, incl_refl.
 Qed.
  
-(*
+
 Lemma betaValid_compose_gen :
     forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (t:T v),
         betaValid_ f xs t ->
@@ -515,8 +523,21 @@ Proof.
             { apply concat_charac in H3. destruct H3 as [zs [H3 H4]].
               apply in_map_iff in H4. destruct H4 as [z [H4 H5]].
               rewrite <- H4 in H3. unfold comp in H3. clear H4 zs.
-              apply (H9 z). change (z :: Fr (subst_ f xs (Lam x t1)) \\ xs').
-
-
-Show.
-*)
+              apply (H9 z).
+                { change (z :: Fr (subst_ f xs (Lam x t1)) \\ xs').
+                    { generalize H5. intros H5'. apply diff_charac in H5'.
+                      destruct H5' as [H10 H11]. apply diff_charac. split.
+                        { assert (Fr (subst_ f xs (Lam x t1)) 
+                            ==  (Fr (Lam x t1) /\ xs) 
+                            ++ concat (map (Fr ; f) (Fr (Lam x t1) \\ xs))) as H12.
+                            { apply betaValid_free_gen. assumption. }
+                          destruct H12 as [H12 H13]. apply (H13 z).
+                          apply in_or_app. right. apply concat_charac.
+                          exists (Fr (f u)). split.
+                            { assumption. }
+                            { apply in_map_iff. exists u. split.
+                                { reflexivity. }
+                                { assumption. }}}
+                        { assumption. }}}
+                { assumption. }}
+Qed.
