@@ -14,6 +14,7 @@ agda --compile -v0 hello-world.agda
 echo "hello world test completed successfully"
 echo
 
+./aop/test.sh
 ./vfpa/test.sh
 ./plfa/test.sh
 

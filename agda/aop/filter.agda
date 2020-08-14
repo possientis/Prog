@@ -1,6 +1,6 @@
-import Relation.Binary.PropositionalEquality as Eq
-open Eq                  using (_≡_; refl; trans; sym; cong; cong-app; subst)
-open Eq.≡-Reasoning      using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+import Relation.Binary.PropositionalEquality.Core as Eq
+open Eq                  using (_≡_; refl; trans; sym; cong; subst)
+open Eq.≡-Reasoning      using (begin_; _≡⟨⟩_; step-≡; _∎)
 open import Data.List    using (List; _∷_; []; concat; map; _++_; zip)
 open import Data.Product using (_×_; proj₁; proj₂; _,_; uncurry)
 open import Data.Bool    using (Bool; true; false)
