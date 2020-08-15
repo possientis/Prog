@@ -50,6 +50,8 @@
 -- η : \eta
 -- Π : \Pi
 -- Σ : \Sigma
+-- Γ : \GG
+-- γ : \Gg
 -- ∈ : \in
 -- ∉ : \notin, \inn
 -- ∋ : \ni

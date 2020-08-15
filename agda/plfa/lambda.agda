@@ -839,3 +839,15 @@ ex₅ (⊢ƛ (⊢· _ (⊢` (S p _)))) = ⊥-elim (p refl)
 ex₆ : ∀ {Γ : Context} {A B : Type} → ¬(Γ , "x" ∶ A ⊢ ` "x" · ` "x" ∶ B)
 ex₆ (⊢· (⊢` (S p _)) (⊢` Z)) = ⊥-elim (p refl)
 ex₆ (⊢· _ (⊢` (S p _))) = ⊥-elim (p refl)
+
+ex₇ : ∀ {Γ : Context} {A B C : Type} →
+  Γ , "x" ∶ B ⇒ C , "y" ∶ A ⇒ B ⊢ ƛ "z" ⇒ ` "x" · (` "y" · ` "z") ∶ A ⇒ C
+ex₇ = ⊢ƛ (⊢· (⊢` (S' (S' Z))) (⊢· (⊢` (S' Z)) (⊢` Z)))
+
+⊢mul : ∀ {Γ : Context} → Γ ⊢  mul ∶ `ℕ ⇒ `ℕ ⇒ `ℕ
+⊢mul = ⊢μ (⊢ƛ (⊢ƛ (⊢case (⊢` (S' Z)) ⊢zero (⊢· (⊢· ⊢plus (⊢` (S' Z)))
+  (⊢· (⊢· (⊢` (S' (S' (S' Z)))) (⊢` Z)) (⊢` (S' Z)))))))
+
+⊢mulᶜ : ∀ {Γ : Context} {A : Type} → Γ ⊢ mulᶜ ∶ Church A ⇒ Church A ⇒ Church A
+⊢mulᶜ = ⊢ƛ (⊢ƛ (⊢ƛ (⊢ƛ (⊢· (⊢· (⊢` (S' (S' (S' Z))))
+  (⊢· (⊢` (S' (S' Z))) (⊢` (S' Z)))) (⊢` Z)))))

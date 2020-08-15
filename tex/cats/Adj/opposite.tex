@@ -24,7 +24,7 @@ it is indeed also a counit of $(G,F)$ in relation to the categories
             & \Cop \arrow[l, "F", bend left  = 50, ""{name=U, below}]
         \end{tikzcd}
     \]
-\begin{prop}\label{Adj:prop:opposite}
+\begin{prop}\label{Adj:prop:unit:opposite}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are categories. Then every unit of $(F,G)$ is
     a counit of $(G,F)$ w.r. to \Dop\ and \Cop.
@@ -43,7 +43,7 @@ it is indeed also a counit of $(G,F)$ in relation to the categories
     $(\Cat,\Cat,I_{{\cal C}^{op}})$ and $(\Cat,\Cat,G\circ F)$. Since 
     $I_{{\cal C}^{op}}=I_{\cal C}$ as per 
     proposition~(\ref{Fun:prop:identity:opposite}), we need to show that
-    $\eta$ is natural transformation between the typed functors 
+    $\eta$ is a natural transformation between the typed functors 
     $(\Cat,\Cat,I_{\cal C})$ and $(\Cat,\Cat,G\circ F)$ which is
     $\eta:I_{\cal C}\Rightarrow G\circ F$. This follows immediately from 
     definition~(\ref{Adj:def:unit}) and our assumption that $\eta$ is 
@@ -52,9 +52,52 @@ it is indeed also a counit of $(G,F)$ in relation to the categories
     $F$ and $G$ have been swapped and \Cat,\Dat\ replaced by \Dop,\Cop\
     respectively. So let $d\in\Dop$, $c\in\Cop$ and $f:G(d)\to c\ @\ \Cop$.
     We need to show the existence of a unique $g:d\to F(c)\ @\ \Dop$ such
-    $f=\eta_{c}\circ G(g)\ @\ \Cop$. In other words, given $d\in\Dat$, $c\in\Cat$
-    and $f:c\to G(d)$, we need to show the existence of a unique
-    $g:F(c)\to d$ such that $f=G(g)\circ\eta_{c}$. Once again, this 
-    follows from definition~(\ref{Adj:def:unit}) and our assumption that 
-    $\eta$ is a unit of $(F,G)$. 
+    $f=\eta_{c}\circ G(g)\ @\ \Cop$. In other words, using
+    definition~(\ref{Cat:def:opposite}), given $d\in\Dat$, $c\in\Cat$ and 
+    $f:c\to G(d)$, we need to show the existence of a unique $g:F(c)\to d$ 
+    such that $f=G(g)\circ\eta_{c}$. Once again, this follows from 
+    definition~(\ref{Adj:def:unit}) and our assumption that $\eta$ is a 
+    unit of $(F,G)$. 
 \end{proof}
+
+As proposition~(\ref{Adj:prop:unit:opposite}) shows a unit of two functors can
+be seen as a counit, if we switch the two functors and the two catgeories 
+around, as well as replace each category by its opposite. Likewise we have:
+
+\begin{prop}\label{Adj:prop:counit:opposite}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. Then every counit of $(F,G)$ is
+    a unit of $(G,F)$ w.r. to \Dop\ and \Cop.
+\end{prop}
+\begin{proof}
+    Let $\epsilon$ be a counit of $(F,G)$, i.e a counit between the typed functors 
+    $(\Cat,\Dat,F)$ and $(\Dat,\Cat,G)$ as per definition~(\ref{Adj:def:counit}).
+    We need to show that $\epsilon$ is a unit of $(G,F)$ in relation to the 
+    categories \Dop\ and \Cop, i.e. a unit between the typed functors
+    $(\Dop,\Cop,G)$ and $(\Cop,\Dop,F)$ as per definition~(\ref{Adj:def:unit}).
+    First we need to show that $\epsilon$ is a natural transformation
+    $\epsilon: I_{{\cal D}^{op}}\Rightarrow F\circ G$, or more precisely a natural
+    transformation between the typed functors $(\Dop,\Dop,I_{{\cal D}^{op}})$ and
+    $(\Dop,\Dop,F\circ G)$. From proposition~(\ref{Nat:prop:opposite}),
+    this amounts to showing that $\epsilon$ is a natural transformation between
+    $(\Dat,\Dat,F\circ G)$ and $(\Dat,\Dat,I_{{\cal D}^{op}})$. Since 
+    $I_{{\cal D}^{op}}=I_{\cal D}$ as per 
+    proposition~(\ref{Fun:prop:identity:opposite}), we need to show that
+    $\epsilon$ is a natural transformation between the typed functors 
+    $(\Dat,\Dat,F\circ G)$ and  $(\Dat,\Dat,I_{\cal D})$ which is
+    $\epsilon:F\circ G\Rightarrow I_{\cal D}$. This follows immediately from 
+    definition~(\ref{Adj:def:counit}) and our assumption that $\epsilon$ is 
+    a counit of $(F,G)$. So it remains to show that $\epsilon$ satisfies the 
+    universal property of definition~(\ref{Adj:def:unit}), where
+    $F$ and $G$ have been swapped and \Cat,\Dat\ replaced by \Dop,\Cop\
+    respectively. So let $d\in\Dop$, $c\in\Cop$ and $g:d\to F(c)\ @\ \Dop$.
+    We need to show the existence of a unique $f:G(d)\to c\ @\ \Cop$ such
+    $g=F(f)\circ\epsilon_{d}\ @\ \Dop$. In other words, using
+    definition~(\ref{Cat:def:opposite}), given $d\in\Dat$, $c\in\Cat$ and 
+    $g:F(c)\to d$, we need to show the existence of a unique $f:c\to G(d)$ 
+    such that $g=\epsilon_{d}\circ F(f)$. Once again, this follows from 
+    definition~(\ref{Adj:def:counit}) and our assumption that $\epsilon$ is a 
+    counit of $(F,G)$. 
+\end{proof}
+
+

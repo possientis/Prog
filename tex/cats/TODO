@@ -1,4 +1,3 @@
-unit counit and opposit category
 (F,G) has a unit => (F,G) has a counit.
 (F,G) has a counit => (F,G) as a unit.
 4th definition of adjuction with eta + eps without universal condition.

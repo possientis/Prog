@@ -29,11 +29,30 @@ instance (Monad m) => Functor (EvalT m) where
         return (s,(f a,w)) 
 
 instance (Monad m) => Applicative (EvalT m) where
+    pure  = return
+    (<*>) f k = (>>=) f (<$> k)
 
 instance (Monad m) => Monad (EvalT m) where
+    return a = EvalT $ \_env heap -> return (heap, (a, mempty))
+    k >>= f = EvalT $ \env heap -> do
+        (s,(a,w))   <- runEvalT k env heap 
+        (s',(b,w')) <- runEvalT (f a) env s
+        return (s',(b,w <> w'))
 
 instance (Monad m) => MonadReader Env (EvalT m) where
+    ask   = EvalT $ \env heap -> return (heap, (env, mempty))
+    local f k = EvalT $ \env heap -> runEvalT k (f env) heap 
 
 instance (Monad m) => MonadWriter Log (EvalT m) where
+    tell w = EvalT $ \_env heap -> return (heap, ((),w))
+    listen k = EvalT $ \env heap -> do
+        (s,(a,w)) <- runEvalT k env heap
+        return (s,((a,w),mempty))
+    pass k = EvalT $ \env heap -> do
+        (s,((a,f),w)) <- runEvalT k env heap
+        return (s, (a, f w))
 
 instance (Monad m) => MonadState Heap (EvalT m) where
+    get = EvalT $ \_env heap -> return (heap, (heap,mempty))
+    put s = EvalT $ \_env _heap -> return (s,((),mempty))
+

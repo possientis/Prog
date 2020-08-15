@@ -90,10 +90,10 @@ Proof.
                                           assumption. }
                                         { apply equalRefl. }}}}}}} 
                 { assumption. }}
-        + (* apply Substitution. 
+        + apply Substitution.  
             { exact H2. }
             { remember (bind (bind (bind e n x) m y) m' y'; replace2 0 1 n m')  
-              as e1 eqn:E1. remember (bind (bind e 0 x) 1 y) as e2 eqn:E2.
+              as e1 eqn:E1. remember (bind (bind e 0 x) 1 y') as e2 eqn:E2.
               apply (relevance e1 e2).
                 { intros k H10. rewrite E1, E2. unfold comp, bind, replace2.
                   destruct (eqDec k 0) as [H11|H11] eqn:K0.
@@ -107,8 +107,27 @@ Proof.
                                 { exfalso. apply H14. reflexivity. }}}}
                     { destruct (eqDec k 1) as [H12|H12] eqn:K1.
                         { subst. destruct (eqDec m' m') as [H13|H13].
-                            { simpl.
-               
-        *)
+                            { apply equalRefl. }
+                            { exfalso. apply H13. reflexivity. }}
+                        { destruct (eqDec m' k) as [H13|H13].
+                            { subst. exfalso. apply H5'. assumption. }
+                            { destruct (eqDec m k) as [H14|H14].
+                                { subst. exfalso. apply H4'. assumption. }
+                                { destruct (eqDec n k) as [H15|H15].
+                                    { subst. exfalso. apply H3'. assumption. }
+                                    { destruct (eqDec 0 k) as [H16|H16];
+                                      destruct (eqDec 1 k) as [H17|H17].
+                                        { subst. inversion H17. }
+                                        { exfalso. apply H11. symmetry.
+                                          assumption. }
+                                        { exfalso. apply H12. symmetry.
+                                          assumption. }
+                                        { apply equalRefl. }}}}}}} 
+                { assumption. }}
+        + intros H10. apply H5. symmetry. assumption.
+        + assumption.
+    - rewrite evalAll. intros y. rewrite evalAll. intros y'. rewrite evalImp.
+      rewrite evalImp, evalEqu, bindSame, bindDiff, bindSame.
+
 Show.
 *)

@@ -5,9 +5,11 @@ module  Test.Main
 import Test.Hspec
 
 import Test.Eval1
+import Test.Eval2
 import Test.Pretty
 
 specMain :: Spec
 specMain = do
-    specEval1
     specPretty
+    specEval1
+    specEval2
