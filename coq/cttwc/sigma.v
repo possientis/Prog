@@ -95,14 +95,53 @@ intros X.
 refine (mkEquiv
     (fun q => 
         match q with
-        | left p  => Ex true _
-        | right p => Ex false _
+        | left p  => Ex true (conj (fun _ => eq_refl) (fun _ => p))
+        | right p => Ex false (conj _ _)
     end)
-    _
+    (fun q => _)
 ).
-Show.
+    - intros H1. exfalso. apply p. assumption.
+    - intros H1. inversion H1.
+    - destruct q as [b [H1 H2]]. destruct b.
+        + left. apply H2. reflexivity.
+        + right. intros H3. apply H1 in H3. inversion H3.
+Defined.
+
+Open Scope type_scope.
+
+Definition L7 : forall (X Y:Prop), {X} + {Y} -> X + Y.
+Proof.
+    intros X Y [H1|H1].
+    - left. assumption.
+    - right. assumption.
+Defined.
+
+Definition L8 : forall (X Y:Prop), X + Y -> {X} + {Y}.
+Proof.
+    intros X Y [H1|H1].
+    - left. assumption.
+    - right. assumption.
+Qed.
+
+Definition L9 : forall (X Y:Prop), {X} + {Y} -> X + Y :=
+    fun (X Y:Prop) (q:{X} + {Y}) =>
+        match q with
+        | left p    => inl p
+        | right p   => inr p
+        end.
+
+Definition L10 : forall (X Y:Prop), X + Y -> {X} + {Y} :=
+    fun (X Y:Prop) (q:X + Y) =>
+        match q with
+        | inl p     => left p
+        | inr p     => right p
+        end.
 
 
-
-
+Definition L11 : forall (n:nat), (n = 0) + Sig (fun k => n = S k).
+Proof.
+    intros n. destruct n as [|n].
+    - left. reflexivity.
+    - right. exact (Ex n eq_refl).
+Defined.
 
