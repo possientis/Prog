@@ -216,7 +216,7 @@ Proof.
 Qed.
 
 
-(* When two substitutions coincide, so does their beta-validity.                *)
+(* If f, g coincide on substituted free variables, so does their beta-validity. *)
 Lemma betaValid_coincide_gen : 
     forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v) (xs:list v), 
     coincide (Fr t \\ xs) f g ->
@@ -255,6 +255,7 @@ Proof.
     rewrite diff_nil. assumption.
 Qed.
 
+(* If the result of substitution is the same, so is beta-validity.              *)
 Lemma betaValid_subst_gen :
     forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v) (xs:list v), 
     subst_ f xs t = subst_ g xs t ->
@@ -273,7 +274,8 @@ Proof.
 Qed.
 
 (* Beta-validity of f for t on xs and ys are equivalent, provided xs and ys     *)
-(* contain the same free variables of t.                                        *)
+(* contain the same free variables of t. Or equivalently, provided the          *)
+(* substituted free variables are the same.                                     *)
 Lemma betaValid_support : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs ys:list v),
     (Fr t /\ xs) == (Fr t /\ ys) ->
@@ -342,6 +344,7 @@ Proof.
           + intros u H5. apply H4. apply H6. assumption.
 Qed.
 
+(* Some criterium for beta-validity.                                            *)
 Lemma betaValid_inter_var_gen : 
     forall (v:Type) (e:Eq v) (f:v -> T v) (t:T v) (xs:list v), 
     (var t /\ concat (map (fun u => Fr (f u) \\ [u]) (Fr t \\ xs))) = [] ->
@@ -390,6 +393,7 @@ Proof.
 Qed.
 
 
+(* Some criterium for beta-validity of single variable substitution (s // x).   *)
 Lemma betaValid_replace_gen : 
     forall (v:Type) (e:Eq v) (s t:T v) (xs:list v) (x:v),
     ~ x :: Fr t \\ xs \/ (var t /\ Fr s) <= [x] -> 
@@ -417,6 +421,7 @@ Proof.
 Qed.
 
 
+(* Technical lemma                                                              *)
 Lemma betaValid_compose_lemma :
     forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (x:v) (t1 t:T v),
     t = Lam x t1      ->
@@ -431,7 +436,9 @@ Proof.
       apply H4. rewrite H1 in H3. assumption.
 Qed.
 
-
+(* When we have two substitution f g:v -> T v, when is the effect of applying   *)
+(* the two substitutions one after the other the same as applying the single    *)
+(* substitution subst_ g xs' ; f on a given term t.                             *)
 Lemma betaValid_compose_subst_gen :
     forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (t:T v),
     xs <= xs'         ->
@@ -482,7 +489,9 @@ Proof.
     apply betaValid_compose_subst_gen, incl_refl.
 Qed.
  
-
+(* Result relating to the beta-validity of composed substitution. We need the   *)
+(* first substitution to be beta-valid for t, and the second to be beta-valid   *)
+(* for the result of the first substitution.                                    *)
 Lemma betaValid_compose_gen :
     forall (v:Type) (e:Eq v) (f g:v -> T v) (xs xs':list v) (t:T v),
         betaValid_ f xs t ->

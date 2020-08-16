@@ -38,8 +38,9 @@ specBetaValid = describe "Testing non-polymorphic properties of BetaValid..." $ 
     testBetaValidSupport
     testBetaValidInterVarGen
     testBetaValidInterVar
-    testBetaValidReplaceTGen
-    testBetaValidReplaceT
+    testBetaValidReplaceGen
+    testBetaValidReplace
+    testBetaValidComposeLemma
 
 testBetaValidVarGen :: Spec
 testBetaValidVarGen = it "Checked generic beta validity for variables" $
@@ -105,13 +106,17 @@ testBetaValidInterVar :: Spec
 testBetaValidInterVar = it "Checked beta validity inter var gen property" $ do
     property propBetaValidInterVar
 
-testBetaValidReplaceTGen :: Spec
-testBetaValidReplaceTGen = it "Checked beta validity replaceT gen property" $ do
-    property propBetaValidReplaceTGen
+testBetaValidReplaceGen :: Spec
+testBetaValidReplaceGen = it "Checked beta validity of replace gen property" $ do
+    property propBetaValidReplaceGen
 
-testBetaValidReplaceT :: Spec
-testBetaValidReplaceT = it "Checked beta validity replaceT property" $ do
-    property propBetaValidReplaceT
+testBetaValidReplace :: Spec
+testBetaValidReplace = it "Checked beta validity of replace property" $ do
+    property propBetaValidReplace
+
+testBetaValidComposeLemma :: Spec
+testBetaValidComposeLemma = it "Checked the beta valid compose lemma" $ do
+    property propBetaValidComposeLemma
 
 propBetaValidVarGen :: (Var -> T Var) -> Var -> [Var] -> Bool
 propBetaValidVarGen f x xs = betaValid_ f xs (Var x)
@@ -210,21 +215,29 @@ propBetaValidInterVar f t =
     (var t /\ concatMap (\u -> free (f u) \\ [u]) (free t)) /= [] ||
         betaValid f t
 
-propBetaValidReplaceTGen
+propBetaValidReplaceGen
     :: T Var
     -> T Var
     -> [Var] 
     -> Var
     -> Bool
-propBetaValidReplaceTGen s t xs x =
+propBetaValidReplaceGen s t xs x =
     ((x `elem` (free t \\ xs)) && (not $ (var t /\ free s) <== [x])) ||
         betaValid_ (s <-: x) xs t
 
-propBetaValidReplaceT :: T Var -> T Var -> Var -> Bool
-propBetaValidReplaceT s t x =
+propBetaValidReplace :: T Var -> T Var -> Var -> Bool
+propBetaValidReplace s t x =
     ((x `elem` free t) && (not $ (var t /\ free s) <== [x])) ||
         betaValid (s <-: x) t
 
-
-
-
+propBetaValidComposeLemma 
+    :: (Var -> T Var) 
+    -> (Var -> T Var)
+    -> [Var]
+    -> [Var]
+    -> Var
+    -> T Var
+    -> Bool
+propBetaValidComposeLemma f g xs xs' x t1 = let t = Lam x t1 in
+    not (betaValid_ f xs t) ||
+    coincide (free t \\ xs) (subst_ g xs' . f) (subst_ g (x : xs') . f)

@@ -145,3 +145,53 @@ Proof.
     - right. exact (Ex n eq_refl).
 Defined.
 
+Theorem Lawvere1 : forall (X Y:Type), 
+    (exists (F:X -> (X -> Y)), forall (g:X -> Y), exists (x:X), F x = g) -> 
+    forall (g:Y -> Y), exists (y:Y), g y = y.
+Proof.
+    intros X Y [F H] g. 
+    destruct (H (fun u => g (F u u))) as [x H'].
+    exists (F x x). change ((fun u => g (F u u)) x = F x x). 
+    rewrite <- H'. reflexivity.
+Qed.
+
+(* Not a very useful theorem to prove the existence of fixed points it seems.   *)
+(* It will not apply to Y = 0, it will apply to Y = 1, but for Y = 2 or bigger  *)
+(* there is no sujection from X to Y^X... So the theorem seems useful to prove  *)
+(* that no surjection exists between X and X -> Y, simply by exhibiting an fp   *)
+Theorem Lawvere2 : forall (X Y:Type) (F: X -> (X -> Y)),
+    (forall (g:X -> Y), exists (x:X), F x = g) ->
+    (forall (g:Y -> Y), exists (y:Y), g y = y).
+Proof.
+    intros X Y F H. apply Lawvere1 with X. exists F. assumption.
+Qed.
+
+(* Computational version of Lawvere's theorem.                                  *)
+Definition Lawvere3 : forall (X Y:Type) (F:X -> X -> Y),
+    (forall (g:X -> Y), Sig (fun x => F x = g)) ->
+    (forall (g:Y -> Y), Sig (fun y => g y = y)).
+Proof.
+    intros X Y F H g.
+    destruct (H (fun u => g (F u u))) as [x H'].
+    exists (F x x). change ((fun u => g (F u u)) x = F x x). 
+    rewrite <- H'. reflexivity.
+Qed.
+
+Definition L12 : forall (B:Type) (a b:B),
+    (forall (x:B), {x = a} + {x = b}) -> 
+    (forall (p:B -> Type), p a -> p b -> forall (x:B), p x).
+Proof.
+    intros B a b q p Ha Hb x. destruct (q x) as [H1|H1]; rewrite H1; assumption.
+Defined.
+
+Definition L13 : forall (B:Type) (a b:B),
+    (forall (p:B -> Type), p a -> p b -> forall (x:B), p x) ->
+    (forall (x:B), {x = a} + {x = b}).
+Proof.
+    intros B a b q x. apply (q (fun x => {x = a} + {x = b})).
+    - left. reflexivity.
+    - right. reflexivity.
+Defined.
+
+
+

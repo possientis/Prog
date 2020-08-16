@@ -24,9 +24,16 @@ begin
       { apply H4,
         { split; assumption },
         { assumption }}},
-    { cases H2
-      with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ u _ H5 H6 H7,
-      {},
-      {}},
+    { clear H3, revert H1, revert H4, generalize H5 : Stmt.while b e₁ = e,
+      rw H5 at H2, revert H5,
+      induction H2 with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+      b e₁ s u t H1 H2 H3 H4 H5,
+        { intros H5, cases H5 },
+        { intros H5, cases H5 },
+        { intros H5, cases H5 },
+        { intros H5, cases H5 },
+        { intros H5, cases H5 },
+        { intros H6 H7 H8, },
+        { intros H6 H7, assumption },},
     {}
 end

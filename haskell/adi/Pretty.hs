@@ -66,7 +66,7 @@ pprLam p e = parensIf (p > 0) $
     <+> ppr 0 (viewBody e)
  
 pprApp :: Int -> Expr -> Expr -> Doc
-pprApp p e1 e2 = parensIf (p > 0) $ (ppr 0 e1) <+> (ppr (p + 1) e2)
+pprApp p e1 e2 = parensIf (p > 0) $ (ppr (p + 1) e1) <+> (ppr (p + 1) e2)
 
 pprRec :: Int -> Var -> Expr -> Doc
 pprRec p f e = parensIf (p > 0) $ 

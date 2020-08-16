@@ -8,7 +8,9 @@
 module  Eval
     (   Eval    (..)
     ,   eval
-    ,   eval'
+    ,   evalLog
+    ,   evalAll
+    ,   evalIO
     )   where
 
 import Control.Monad.State
@@ -37,7 +39,20 @@ class
 
   
 eval :: forall m . (Eval m) => Expr -> Value
-eval e = fst $ runEval $ (eval' @ m) e
+eval = fst . (evalAll @ m)
+
+evalLog :: forall m . (Eval m) => Expr -> Log
+evalLog = snd . (evalAll @ m)
+
+evalAll :: forall m . (Eval m) => Expr -> (Value, Log)
+evalAll e = runEval $ (eval' @ m) e
+
+evalIO :: forall m . (Eval m) => Expr -> IO ()
+evalIO e = do
+    putStrLn $ "\nExpression: " ++ showExpr e ++ "\n"
+    let (v,w) = (evalAll @ m) e
+    mapM_ putStrLn w
+    putStrLn $ "\nResult: " ++ show v ++ "\n"
 
 eval' :: (Eval m) => Expr -> m Value
 eval' e = do

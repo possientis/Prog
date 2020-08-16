@@ -1,3 +1,4 @@
+related
 (F,G) has a unit => (F,G) has a counit.
 (F,G) has a counit => (F,G) as a unit.
 4th definition of adjuction with eta + eps without universal condition.
@@ -80,7 +81,11 @@ define exponential object from b to c: (c^b,ev)
   for all a and f:axb -> c , there is a unique g:a -> c^b , such that
   ev . (g x id(b)) = f
 bifunctor, profunctor
-F(A1,-), F(-,A2)
+partial functors F(A1,-), F(-,A2) of a bifunctor
+partial natural trans alpha(A1,-) alpha(-,A2) of a nat between bifunctors
+Define 'transformation' (all but comm square)
+Lemma: a trans is natural iff both partial trans are natural
+
 p1 . <f,g> = f , p2 . <f,g> = g (split cancellation)
 <f,g>.u = <f.u,g.u> (split fusion)
 

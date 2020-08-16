@@ -1,4 +1,4 @@
-Eval2
+Test logging equivalence between Eval1 and Eval2
 add ErrorT to monad stack
 continue paper
 rewrite eval_ with cata?

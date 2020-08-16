@@ -2,24 +2,16 @@
 
 module  Test.Debug
     (   main
-    ,   e1, e2, e3, e4
+    ,   e1, e2, e3, e4, e5
     )   where
 
-
 import DSL
-import Eval1
+import Eval2
 import Eval
 
 main :: IO ()
-main = do
-   evalIO e5
+main = mapM_ (evalIO @ Eval2) [e1,e2,e3,e4,e5]
 
-evalIO :: Expr -> IO ()
-evalIO e = do
-    let (res,logs) = runEval $ (eval' @ Eval1) e
-    mapM_ putStrLn logs
-    print res
- 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
 

@@ -1,5 +1,7 @@
 Require Import List.
 
+Require Import Logic.Class.Eq.
+
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Composition.
 
@@ -67,4 +69,33 @@ Proof.
         + intros H6. apply H3. rewrite H6. assumption.  (* <- H3 *)
     - apply H1.                                         (* <- H1 *)
 Qed.
+
+(*
+Lemma evalApplyF1 : forall (e:Env) (p:Formula) (n m m':nat) (x y y':set),
+    n <> m  ->
+    n <> m' ->
+    m <> m' -> 
+    valid (replace2 0 1 n m) p -> 
+    eval (bind (bind (bind e n x) m y) m' y') (apply2 p n m) 
+    <->
+    eval (bind (bind e 0 x) 1 y) p.
+Proof.
+    intros e p n m m' x y y' H1 H2 H3 H4. unfold apply2. rewrite Substitution.   
+    split; intros H.
+    - remember (bind (bind (bind e n x) m y) m' y'; replace2 0 1 n m)
+      as e1 eqn:E1. remember (bind (bind e 0 x) 1 y) as e2 eqn:E2.
+      apply (relevance e1 e2).
+        + intros k H5. rewrite E1, E2. unfold comp, bind, replace2.
+          destruct (eqDec k 0) as [H6|H6] eqn:K0.
+            { subst. destruct (eqDec m' n) as [H7|H7].
+                { subst. exfalso. apply H2. reflexivity. }
+                { destruct (eqDec m n) as [H8|H8].
+                    { subst. exfalso. apply H1. reflexivity. }
+                    { simpl. destruct (PeanoNat.Nat.eq_dec n n) as [H9|H9].
+                        { apply equalRefl. }
+                        { exfalso. apply H9. reflexivity. }}}}
+            { destruct (eqDec k 1) as [H7|H7] eqn:K1.
+                {
+Show.
+*)
 

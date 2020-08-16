@@ -1,5 +1,4 @@
 Coq:
-BetaValid: finish comments
 
 Haskell:
 BetaValid
@@ -7,7 +6,7 @@ BetaValid
 Latex:
 
 Set Theory:
-Can we find a helper lemma to make proof shorter?
+Lang1/Apply
 Lang1/Replacement
 axiom of choice?
 axiom of infinity false ?

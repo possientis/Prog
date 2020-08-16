@@ -113,7 +113,7 @@ specEApp = it "Checked showExpr for eApp" $ showExpr
 
 specEApp2 :: Spec
 specEApp2 = it "Checked showExpr for eApp2" $ showExpr
-    (eApp2 (eVar "f") (eVar "x") (eVar "y")) `shouldBe` "f x y"
+    (eApp2 (eVar "f") (eVar "x") (eVar "y")) `shouldBe` "(f x) y"
 
 specERec :: Spec
 specERec = it "Checked showExpr for eRec" $ showExpr
@@ -126,7 +126,7 @@ specECase = it "Checked showExpr for eCase" $ showExpr
         (eVar "m") 
         "n" (eSuc (eApp2 (eVar "f") (eVar "n") (eVar "m"))))
     `shouldBe`
-    "case n of | zero => m | suc n => suc (f n m)"
+    "case n of | zero => m | suc n => suc ((f n) m)"
 
 specEFac :: Spec
 specEFac = it "Checked showExpr for eFac" $ showExpr eFac `shouldBe`

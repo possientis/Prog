@@ -8,7 +8,8 @@ all:					std.agdai \
 						negation.agdai \
 						quantifiers.agdai \
 						decidable.agdai \
-						lists.agdai
+						lists.agdai \
+						lambda.agdai
 
 
 std.agdai:				std.agda
@@ -65,3 +66,9 @@ lists.agdai:			lists.agda \
 						bin.agdai
 	agda -v0 lists.agda
 						
+
+lambda.agdai:			lambda.agda \
+						isomorphism.agdai \
+						decidable.agdai
+	agda -v0 lambda.agda
+	

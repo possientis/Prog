@@ -29,6 +29,7 @@ Require Import Logic.Lang1.Substitution.
 Definition functionalF (P:Formula) (n m m':nat) : Formula :=
     All n (All m (All m' (Imp (apply2 P n m) (Imp (apply2 P n m') (Equ m m'))))). 
 
+
 (*
 Lemma evalFunctionalF : LEM -> forall (e:Env) (P:Formula) (n m m':nat),
     valid (replace2 0 1 n m)  P ->
@@ -44,7 +45,7 @@ Lemma evalFunctionalF : LEM -> forall (e:Env) (P:Formula) (n m m':nat),
     functional (eval2 e P 0 1).
 Proof.
     intros L e P n m m' H1 H2 H3 H4 H5 H3' H4' H5'. 
-    unfold functional, functionalF, apply2, eval2. rewrite evalAll.
+    unfold functional, functionalF, eval2. rewrite evalAll.
     split; intros H6 x.
     - intros y y' H7 H8. 
     remember (H6 x)  as H9 eqn:E. clear E H6. rewrite evalAll in H9.
@@ -52,6 +53,7 @@ Proof.
     remember (H6 y') as H9 eqn:E. clear E H6. rewrite evalImp in H9.
     rewrite evalImp in H9. rewrite evalEqu in H9.
     rewrite bindDiff in H9. rewrite bindSame in H9. rewrite bindSame in H9.
+    (*
     apply H9.
         + apply Substitution.
             { exact H1. }
@@ -128,6 +130,6 @@ Proof.
         + assumption.
     - rewrite evalAll. intros y. rewrite evalAll. intros y'. rewrite evalImp.
       rewrite evalImp, evalEqu, bindSame, bindDiff, bindSame.
-
+*)
 Show.
 *)
