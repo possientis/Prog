@@ -550,3 +550,14 @@ Proof.
                         { assumption. }}}
                 { assumption. }}
 Qed.
+
+Lemma betaValid_compose :
+    forall (v:Type) (e:Eq v) (f g:v -> T v) (t:T v),
+        betaValid f t ->
+        betaValid g (subst f t) ->
+        betaValid (subst g ; f) t.
+Proof.
+    unfold betaValid, subst. intros v e f g t H1 H2.
+    apply betaValid_compose_gen; assumption.
+Qed.
+ 

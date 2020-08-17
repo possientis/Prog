@@ -41,6 +41,10 @@ specBetaValid = describe "Testing non-polymorphic properties of BetaValid..." $ 
     testBetaValidReplaceGen
     testBetaValidReplace
     testBetaValidComposeLemma
+    testBetaValidComposeSubstGen
+    testBetaValidComposeSubst
+    testBetaValidComposeGen
+    testBetaValidCompose
 
 testBetaValidVarGen :: Spec
 testBetaValidVarGen = it "Checked generic beta validity for variables" $
@@ -117,6 +121,22 @@ testBetaValidReplace = it "Checked beta validity of replace property" $ do
 testBetaValidComposeLemma :: Spec
 testBetaValidComposeLemma = it "Checked the beta valid compose lemma" $ do
     property propBetaValidComposeLemma
+
+testBetaValidComposeSubstGen :: Spec
+testBetaValidComposeSubstGen = it "Checked beta valid compose subst gen" $ do
+    property propBetaValidComposeSubstGen
+
+testBetaValidComposeSubst :: Spec
+testBetaValidComposeSubst = it "Checked beta valid compose subst" $ do
+    property propBetaValidComposeSubst
+
+testBetaValidComposeGen :: Spec
+testBetaValidComposeGen = it "Checked beta valid compose gen" $ do
+    property propBetaValidComposeGen
+
+testBetaValidCompose :: Spec
+testBetaValidCompose = it "Checked beta valid compose" $ do
+    property propBetaValidCompose
 
 propBetaValidVarGen :: (Var -> T Var) -> Var -> [Var] -> Bool
 propBetaValidVarGen f x xs = betaValid_ f xs (Var x)
@@ -240,4 +260,44 @@ propBetaValidComposeLemma
     -> Bool
 propBetaValidComposeLemma f g xs xs' x t1 = let t = Lam x t1 in
     not (betaValid_ f xs t) ||
-    coincide (free t \\ xs) (subst_ g xs' . f) (subst_ g (x : xs') . f)
+        coincide (free t \\ xs) (subst_ g xs' . f) (subst_ g (x : xs') . f)
+
+propBetaValidComposeSubstGen
+    :: (Var -> T Var) 
+    -> (Var -> T Var)
+    -> [Var]
+    -> [Var]
+    -> T Var
+    -> Bool
+propBetaValidComposeSubstGen f g xs xs' t = not (xs <== xs') || 
+    not (betaValid_ f xs t) ||
+        subst_ (subst_ g xs' . f) xs t == (subst_ g xs' . subst_ f xs) t
+
+propBetaValidComposeSubst
+    :: (Var -> T Var) 
+    -> (Var -> T Var)
+    -> T Var
+    -> Bool
+propBetaValidComposeSubst f g t = not (betaValid f t) ||
+        subst (subst g . f) t == (subst g . subst f) t
+
+propBetaValidComposeGen
+    :: (Var -> T Var) 
+    -> (Var -> T Var)
+    -> [Var]
+    -> [Var]
+    -> T Var
+    -> Bool
+propBetaValidComposeGen f g xs xs' t = not (betaValid_ f xs t) ||
+    not (betaValid_ g xs' (subst_ f xs t)) ||
+        betaValid_ (subst_ g xs' . f) xs t
+
+propBetaValidCompose
+    :: (Var -> T Var) 
+    -> (Var -> T Var)
+    -> T Var
+    -> Bool
+propBetaValidCompose f g t = not (betaValid f t) ||
+    not (betaValid g (subst f t)) ||
+        betaValid (subst g . f) t
+
