@@ -137,13 +137,6 @@ data Value : Term -> Set where
        -------------------
     →  Value (eBool b)
 
-  V-if : ∀ {V M N : Term}
-    →   Value V
-    →   ¬ V ≡ eBool true
-    →   ¬ V ≡ eBool false
-       --------------------
-    →  Value (eIf V M N)
-
 infix 9 _[_:=_]
 
 -- Substituting a single variable y with a term V (usually a value)
@@ -638,9 +631,10 @@ _ = begin
 infixr 7 _⇒_
 
 data Type : Set where
-  _⇒_ : Type -> Type -> Type
-  `ℕ  : Type
-  `𝔹  : Type
+  _⇒_  : Type -> Type -> Type
+  `ℕ   : Type
+  `𝔹   : Type
+  `Num : Type
 
 
 infixl 5 _,_∶_  -- \:
