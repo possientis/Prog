@@ -16,6 +16,7 @@ module  Eval
 import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Writer
+import Control.Monad.Except
 import Data.Functor.Foldable
 
 import Op
@@ -24,35 +25,39 @@ import Var
 import Log
 import Heap
 import Prim
+import Error
 import Value
 import Pretty
 import Syntax
 import Closure
 
 class 
-    ( MonadReader Env m
-    , MonadWriter Log m
-    , MonadState Heap m 
+    ( MonadReader Env  m
+    , MonadWriter Log  m
+    , MonadState Heap  m 
+    , MonadError Error m
     ) => Eval m where
 
-    runEval :: m a -> (a,Log)
+    runEval :: m a -> Either Error (a,Log)
 
   
-eval :: forall m . (Eval m) => Expr -> Value
-eval = fst . (evalAll @ m)
+eval :: forall m . (Eval m) => Expr -> Either Error Value
+eval e = fst <$> (evalAll @ m) e
 
-evalLog :: forall m . (Eval m) => Expr -> Log
-evalLog = snd . (evalAll @ m)
+evalLog :: forall m . (Eval m) => Expr -> Either Error Log
+evalLog e = snd <$> (evalAll @ m) e
 
-evalAll :: forall m . (Eval m) => Expr -> (Value, Log)
+evalAll :: forall m . (Eval m) => Expr -> Either Error (Value, Log)
 evalAll e = runEval $ (eval' @ m) e
 
 evalIO :: forall m . (Eval m) => Expr -> IO ()
 evalIO e = do
     putStrLn $ "\nExpression: " ++ showExpr e ++ "\n"
-    let (v,w) = (evalAll @ m) e
-    mapM_ putStrLn w
-    putStrLn $ "\nResult: " ++ show v ++ "\n"
+    case (evalAll @ m) e of
+        Left errs   -> mapM_ putStrLn $ unError errs
+        Right (v,w) -> do 
+            mapM_ putStrLn w
+            putStrLn $ "\nResult: " ++ show v ++ "\n"
 
 eval' :: (Eval m) => Expr -> m Value
 eval' e = do

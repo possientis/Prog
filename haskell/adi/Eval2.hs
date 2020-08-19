@@ -10,18 +10,21 @@ import Env
 import Log
 import Heap
 import Eval
+import Error
 
 import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Writer
+import Control.Monad.Except
 import Data.Functor.Identity
 
 type Eval2 = EvalT Identity
 
 instance Eval Eval2 where
-    runEval k = snd . runIdentity $ runEvalT k newEnv newHeap
+    runEval k = snd <$> (runIdentity $ runEvalT k newEnv newHeap)
 
-newtype EvalT m a = EvalT { runEvalT :: Env -> Heap -> m (Heap, (a, Log)) }
+newtype EvalT m a = EvalT 
+    { runEvalT :: Env -> Heap -> m (Either Error (Heap, (a, Log))) }
 
 instance (Monad m) => Functor (EvalT m) where
     fmap f k = EvalT $ \env heap -> do
@@ -56,3 +59,6 @@ instance (Monad m) => MonadState Heap (EvalT m) where
     get = EvalT $ \_env heap -> return (heap, (heap,mempty))
     put s = EvalT $ \_env _heap -> return (s,((),mempty))
 
+instance (Monad m) => MonadError Error (EvalT m) where
+    throwError = undefined
+    catchError = undefined
