@@ -70,32 +70,73 @@ Proof.
     - apply H1.                                         (* <- H1 *)
 Qed.
 
-(*
+
 Lemma evalApplyF1 : forall (e:Env) (p:Formula) (n m m':nat) (x y y':set),
     n <> m  ->
     n <> m' ->
     m <> m' -> 
     valid (replace2 0 1 n m) p -> 
+    ~ In m' (Fr p) ->
+    ~ In m  (Fr p) -> 
+    ~ In n  (Fr p) ->
     eval (bind (bind (bind e n x) m y) m' y') (apply2 p n m) 
     <->
     eval (bind (bind e 0 x) 1 y) p.
 Proof.
-    intros e p n m m' x y y' H1 H2 H3 H4. unfold apply2. rewrite Substitution.   
-    split; intros H.
-    - remember (bind (bind (bind e n x) m y) m' y'; replace2 0 1 n m)
-      as e1 eqn:E1. remember (bind (bind e 0 x) 1 y) as e2 eqn:E2.
-      apply (relevance e1 e2).
-        + intros k H5. rewrite E1, E2. unfold comp, bind, replace2.
-          destruct (eqDec k 0) as [H6|H6] eqn:K0.
-            { subst. destruct (eqDec m' n) as [H7|H7].
-                { subst. exfalso. apply H2. reflexivity. }
-                { destruct (eqDec m n) as [H8|H8].
-                    { subst. exfalso. apply H1. reflexivity. }
-                    { simpl. destruct (PeanoNat.Nat.eq_dec n n) as [H9|H9].
-                        { apply equalRefl. }
-                        { exfalso. apply H9. reflexivity. }}}}
-            { destruct (eqDec k 1) as [H7|H7] eqn:K1.
-                {
+    intros e p n m m' x y y' H1 H2 H3 H4 H1' H2' H3'. 
+    unfold apply2. rewrite Substitution.   
+    remember (bind (bind (bind e n x) m y) m' y'; replace2 0 1 n m)
+    as e1 eqn:E1. remember (bind (bind e 0 x) 1 y) as e2 eqn:E2.
+    apply (relevance e1 e2).
+    - intros k H5. rewrite E1, E2. unfold comp, bind, replace2.
+      destruct (eqDec k 0) as [H6|H6] eqn:K0.
+        + subst. destruct (eqDec m' n) as [H7|H7].
+            { subst. exfalso. apply H2. reflexivity. }
+            { destruct (eqDec m n) as [H8|H8].
+                { subst. exfalso. apply H1. reflexivity. }
+                { simpl. destruct (PeanoNat.Nat.eq_dec n n) as [H9|H9].
+                    { apply equalRefl. }
+                    { exfalso. apply H9. reflexivity. }}}
+        + destruct (eqDec k 1) as [H7|H7] eqn:K1.
+            { subst. destruct (eqDec m' m) as [H7|H7].
+                { subst. exfalso. apply H3. reflexivity. }
+                { simpl. destruct (PeanoNat.Nat.eq_dec m m) as [H8|H8].
+                    { apply equalRefl. }
+                    { exfalso. apply H8. reflexivity. }}}
+            { destruct (eqDec m' k) as [H8|H8].
+                { subst. exfalso. apply H1'. assumption. }
+                { destruct (eqDec m k) as [H9|H9].
+                    { subst. exfalso. apply H2'. assumption. }
+                    { destruct (eqDec n k) as [H10|H10].
+                        { subst. exfalso. apply H3'. assumption. }
+                        { destruct (eqDec 0 k) as [H11|H11];
+                          destruct (eqDec 1 k) as [H12|H12].
+                            { subst. inversion H12. }
+                            { exfalso. apply H6. symmetry. assumption. }
+                            { exfalso. apply H7. symmetry. assumption. }
+                            { apply equalRefl. }}}}}
+    - assumption.
+Qed.
+
+(*
+Lemma evalApplyF2 : forall (e:Env) (p:Formula) (n m m':nat) (x y y':set),
+    n <> m  ->
+    n <> m' ->
+    m <> m' -> 
+    valid (replace2 0 1 n m) p -> 
+    ~ In m' (Fr p) ->
+    ~ In m  (Fr p) -> 
+    ~ In n  (Fr p) ->
+    eval (bind (bind (bind e n x) m y) m' y') (apply2 p n m') 
+    <->
+    eval (bind (bind e 0 x) 1 y') p.
+Proof.
+    intros e p n m m' x y y' H1 H2 H3 H4 H1' H2' H3'. 
+    remember (bind (bind (bind e n x) m y) m' y') as e1 eqn:E1.
+    remember (bind (bind (bind e n x) m' y') m y) as e2 eqn:E2.
+    remember (bind (bind e 0 x) 1 y') as e3 eqn:E3.
+    assert (envEqual e1 e2) as H5.
+        { rewrite E1, E2. apply bindPermute. 
+          intros H5. apply H3. symmetry. assumption. }
 Show.
 *)
-
