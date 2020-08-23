@@ -26,4 +26,35 @@ transformation, as per definition~(\ref{Nat:def:composition}) and likewise
 $G\epsilon\circ\eta G:G\Rightarrow G$ is well-defined. So both equations~$(1)$
 and~$(2)$ of definition~(\ref{Adj:def:related}) make perfect sense.
 
+\begin{prop}\label{Adj:prop:related:both}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. Let $\eta$ and $\epsilon$ be a unit and counit of $(F,G)$ 
+    respectively. Then if $\eta$ and $\epsilon$ are related, both equations~$(1)$
+    and $(2)$ of definition~(\ref{Adj:def:related}) hold.
+\end{prop}
+\begin{proof}
+    We assume that $\eta$ and $\epsilon$ are related unit and counit of $(F,G)$.
+    Then one of equation $(1)$ and $(2)$ holds, and we need to show that both
+    equations $(1)$ and $(2)$ hold. It is therefore sufficient to prove that
+    given a unit $\eta$ and a counit $\epsilon$, we have $(1)\Rightarrow(2)$
+    and $(2)\Rightarrow(1)$. First we show that $(1)\Rightarrow(2)$. So we
+    assume that $(1)$ holds, and we need to show $(2)$, which is an equality
+    between two natural transformations. Using proposition~(\ref{Nat:prop:equal}),
+    if sufficient to show that for all $c\in\Cat$:
+        \[
+            (\epsilon F\circ F\eta)_{c} = (\iota_{F})_{c}
+        \]
+    However, from definition~(\ref{Nat:def:identity}) we have $(\iota_{F})_{c}=
+    \id(\,F(c)\,)$ and furthermore:
+        \begin{eqnarray*}(\epsilon F\circ F\eta)_{c}
+            &=&(\epsilon F)_{c}\circ(F\eta)_{c}
+            \ \leftarrow\ \mbox{def.~(\ref{Nat:def:composition})}\\
+            \mbox{def.~(\ref{Nat:def:rightmul})}\ \to\ 
+            &=&\epsilon_{F(c)}\circ(F\eta)_{c}\\
+            \mbox{def.~(\ref{Nat:def:leftmul})}\ \to\ 
+            &=&\epsilon_{F(c)}\circ F(\eta_{c})\\
+        \end{eqnarray*}
+    So we need to show that $\epsilon_{F(c)}\circ F(\eta_{c})=\id(\,F(c)\,)$. 
+    Note that assumption $(1)$ TODO
+\end{proof}
 

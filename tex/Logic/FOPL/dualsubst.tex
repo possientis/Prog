@@ -6,18 +6,18 @@ page~\pageref{logic:def:substitution}. In this section, we wish to
 study another type of substitution $\tau:\pv\to{\bf P}(W)$ arising
 from two mappings $\tau_{0},\tau_{1}:V\to W$. The idea behind this
 new type is to allow us to move variables to different values,
-according to whether a given occurrence of the variable  is free or
-bound. For example, suppose we had $\phi=\forall x(x\in y)\to(x\in
+according to whether a given occurrence of the variable  is bound or
+free. For example, suppose we had $\phi=\forall x(x\in y)\to(x\in
 y)$. We want to construct a {\em dual substitution mapping}
 $\tau:\pv\to{\bf P}(W)$ such that:
     \[
     \tau(\phi)=\forall u^{*}(u^{*}\in v)\to(u\in v)
     \]
 More generally given a mapping $\tau_{0}:V\to W$ such that
-$\tau_{0}(x)=u$ and $\tau_{0}(y)=v$, and another mapping
-$\tau_{1}:V\to W$ such that $\tau_{1}(x)=u^{*}$, we want to define
-$\tau:\pv\to{\bf P}(W)$ which will assign free occurrences of a
-variable according to $\tau_{0}$ and bound occurrences according to
+$\tau_{0}(x)=u^{*}$, and another mapping  $\tau_{0}:V\to W$
+such that $\tau_{1}(x)=u$ and $\tau_{1}(y)=v$, we want to define
+$\tau:\pv\to{\bf P}(W)$ which will assign bound occurrences of a
+variable according to $\tau_{0}$ and free occurrences according to
 $\tau_{1}$.
 
 One of the main motivations for introducing dual variable
@@ -29,23 +29,23 @@ y)\to(x\in y)$ and there is no way to find a mapping $\tau:W\to V$
 such that $\tau\circ\sigma(\phi)=\phi$. We need to go further.
 
 So we are given $\tau_{0},\tau_{1}:V\to W$ and looking to define
-$\tau:\pv\to{\bf P}(W)$ which assigns free and bound occurrences of
+$\tau:\pv\to{\bf P}(W)$ which assigns bound and free occurrences of
 variables as specified by $\tau_{0}$ and $\tau_{1}$ respectively.
 The issue we have is that on the one hand we need to have some form
 of recursive definition, but on the other hand a sub-formula $x\in
 y$ has no knowledge of whether $x$ and $y$ will remain free
 occurrences of a given formula. One possible solution is to always
 assume that $x$ and $y$ will remain free and define $\tau(x\in
-y)=\tau_{0}(x)\in\tau_{0}(y)$ accordingly, while substituting the
-variable $\tau_{0}(x)$ by $\tau_{1}(x)$ whenever a quantification
+y)=\tau_{1}(x)\in\tau_{1}(y)$ accordingly, while substituting the
+variable $\tau_{1}(x)$ by $\tau_{0}(x)$ whenever a quantification
 $\forall x$ arises by setting:
      \begin{equation}\label{logic:eqn:FOPL:dualsubst:intro:1}
      \tau(\forall
-     x\phi_{1})=\forall\tau_{1}(x)\tau(\phi_{1})[\tau_{1}(x)/\tau_{0}(x)]
+     x\phi_{1})=\forall\tau_{0}(x)\tau(\phi_{1})[\tau_{0}(x)/\tau_{1}(x)]
     \end{equation}
 Unfortunately, this doesn't work. Suppose we have $\phi=\forall
-x(x\in y)$ with $x\neq y$. Take $\tau_{0}(x)=\tau_{0}(y)=u$ and
-$\tau_{1}(x)=u^{*}$. The formula we wish to obtain is
+x(x\in y)$ with $x\neq y$. Take $\tau_{1}(x)=\tau_{1}(y)=u$ and
+$\tau_{0}(x)=u^{*}$. The formula we wish to obtain is
 $\tau(\phi)=\forall u^{*}(u^{*}\in u)$. However, if we apply
 equation~(\ref{logic:eqn:FOPL:dualsubst:intro:1}) we have:
     \[
@@ -60,7 +60,7 @@ map:
 So given $\phi\in\pv$, we have a map $\tau^{*}(\phi):{\cal
 P}(V)\to{\bf P}(W)$ which assigns to every subset $U\subseteq V$ a
 formula $\tau^{*}(\phi)(U)\in{\bf P}(W)$ which represents the
-formula obtained from $\phi$ by assuming all free variables are in
+formula obtained from $\phi$ by assuming all bound variables are in
 $U$. Specifically, if we define $\tau_{U}(x)=\tau_{0}(x)$ if $x\in
 U$ and $\tau_{U}(x)=\tau_{1}(x)$ if $x\not\in U$, we put:
     \[
@@ -70,21 +70,22 @@ In the case when $\phi=\forall x\phi_{1}$, we cannot easily define
 $\tau^{*}(\phi)(U)$ in terms of $\tau^{*}(\phi_{1})(U)$ because we
 want the variable $x$ to be tagged as {\em bound} in
 $\tau^{*}(\phi_{1})$. So we need to consider the formula
-$\tau^{*}(\phi_{1})(U\setminus\{x\})$ instead, having excluded the
-variable $x$ from the set of possible free variables. Specifically
+$\tau^{*}(\phi_{1})(U\cup\{x\})$ instead, having added the
+variable $x$ to the set of bound variables. Specifically
 we define:
     \begin{equation}\label{logic:eqn:FOPL:dualsubst:intro:2}
     \tau^{*}(\forall
-    x\phi_{1})(U)=\forall\tau_{1}(x)\tau^{*}(\phi_{1})(U\setminus\{x\})
+    x\phi_{1})(U)=\forall\tau_{0}(x)\tau^{*}(\phi_{1})(U\cup\{x\})
     \end{equation}
 Once we have defined $\tau^{*}(\phi):{\cal P}(V)\to{\bf P}(W)$ we
-can just set $\tau(\phi)=\tau^{*}(\phi)(V)$ since all free variables
-of $\phi$ are possibly in $V$. So let us go back to our example of
-$\phi=\forall x(x\in y)$ with $x\neq y$, $\tau_{0}(x)=\tau_{0}(y)=u$
-and $\tau_{1}(x)=u^{*}$. We obtain:
+can just set $\tau(\phi)=\tau^{*}(\phi)(\emptyset)$ since all bound 
+variables of $\phi$ will appear via quantification, and no variable
+needs to be set as bound from the outset. So let us go back to our example of
+$\phi=\forall x(x\in y)$ with $x\neq y$, $\tau_{1}(x)=\tau_{1}(y)=u$
+and $\tau_{0}(x)=u^{*}$. We obtain:
     \[
-    \tau(\phi)=\tau^{*}(\phi)(V)=\forall u^{*}\tau^{*}(x\in
-    y)(V\setminus\{x\})=\forall u^{*}(u^{*}\in u)
+    \tau(\phi)=\tau^{*}(\phi)(\emptyset)=\forall u^{*}\tau^{*}(x\in
+    y)(\{x\})=\forall u^{*}(u^{*}\in u)
     \]
 This is exactly what we want. So let's hope for the best and define:
 \index{dual@Dual substitution in formula}
@@ -92,7 +93,7 @@ This is exactly what we want. So let's hope for the best and define:
 Let $V$, $W$ be sets and $\tau_{0}, \tau_{1}:V\to W$ be maps. We
 call {\em dual variable substitution} associated with
 $(\tau_{0},\tau_{1})$ the map $\tau:\pv\to {\bf P}(W)$ defined by
-$\tau(\phi)=\tau^{*}(\phi)(V)$, where the map $\tau^{*}:\pv\to[{\cal
+$\tau(\phi)=\tau^{*}(\phi)(\emptyset)$, where the map $\tau^{*}:\pv\to[{\cal
 P}(V)\to{\bf P}(W)]$ is defined by the following structural
 recursion, given $\phi\in\pv$ and $U\in{\cal P}(V)$:
     \begin{equation}\label{logic:eqn:FOPL:dualsubst:dualsubst:1}
@@ -102,7 +103,7 @@ recursion, given $\phi\in\pv$ and $U\in{\cal P}(V)$:
                     \bot&\mbox{\ if\ }&\phi=\bot\\
                     \tau^{*}(\phi_{1})(U)\to\tau^{*}(\phi_{2})(U)
                     &\mbox{\ if\ }&\phi=\phi_{1}\to\phi_{2}\\
-                    \forall\tau_{1}(x)\tau^{*}(\phi_{1})(U\setminus\{x\})&
+                    \forall\tau_{0}(x)\tau^{*}(\phi_{1})(U\cup\{x\})&
                     \mbox{\ if\ }&\phi=\forall x\phi_{1}
                     \end{array}\right.
     \end{equation}
@@ -178,9 +179,9 @@ consider $f=\forall x$ and $\phi=\forall x\phi_{1}$:
     \tau^{*}:X^{1}\to A^{1}\ \rightarrow
     &=&h(f)(\tau^{*}(\phi^{*}))(U)\\
     &=&h(\forall x)(\tau^{*}(\phi^{*}))(U)\\
-    &=&\forall\tau_{1}(x)\tau^{*}(\phi^{*})(0)(U\setminus\{x\})\\
-    &=&\forall\tau_{1}(x)\tau^{*}(\phi^{*}(0))(U\setminus\{x\})\\
-    &=&\forall\tau_{1}(x)\tau^{*}(\phi_{1})(U\setminus\{x\})\\
+    &=&\forall\tau_{0}(x)\tau^{*}(\phi^{*})(0)(U\cup\{x\})\\
+    &=&\forall\tau_{0}(x)\tau^{*}(\phi^{*}(0))(U\cup\{x\})\\
+    &=&\forall\tau_{0}(x)\tau^{*}(\phi_{1})(U\cup\{x\})\\
     \end{eqnarray*}
 and this is the last line of
 equation~(\ref{logic:eqn:FOPL:dualsubst:dualsubst:1}).

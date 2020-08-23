@@ -21,8 +21,6 @@ V¬—→ : ∀ {M N : Term}
   → ¬ (M —→ N)
 
 V¬—→ (V-suc p) (ξ-suc q) = V¬—→ p q
-V¬—→ (V-op p q) (ξ-op₁ r) = V¬—→ p r
-V¬—→ (V-op p q) (ξ-op₂ r s) = V¬—→ q s
 
 
 —→¬V : ∀ {M N : Term}

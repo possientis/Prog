@@ -10,8 +10,8 @@ Require Import Logic.Lam.Syntax.
 (* xs represents the list of variables which are deemed 'bound'                 *)
 Definition h_ (v w:Type) (e:Eq v) (f g:v -> w) (xs : list v) (x:v) : w :=
     match in_dec eqDec x xs with
-    | left _    => g x          (* x is deemed bound    -> g x                  *)
-    | right _   => f x          (* x is deemed free     -> f x                  *)
+    | left _    => f x          (* x is deemed bound    -> g x                  *)
+    | right _   => g x          (* x is deemed free     -> f x                  *)
     end.
 
 Arguments h_ {v} {w} {e}.
@@ -22,7 +22,7 @@ Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (t:T v) (xs:list v) : T w :=
     match t with
     | Var x     => Var (h_ f g xs x) 
     | App t1 t2 => App (dmap_ v w e f g t1 xs) (dmap_ v w e f g t2 xs)
-    | Lam x t1  => Lam (g x) (dmap_ v w e f g t1 (x :: xs))     (* x now bound  *)
+    | Lam x t1  => Lam (f x) (dmap_ v w e f g t1 (x :: xs))     (* x now bound  *)
     end.
 
 Arguments dmap_ {v} {w} {e}.

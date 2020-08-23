@@ -22,6 +22,7 @@ Definition Sig_proj2 (a:Type) (p:a -> Type) (y:Sig p) : p (Sig_proj1 y) :=
     | Ex x H => H
     end.
 
+Arguments Sig_proj2 {a} {p}.
 
 Definition L1 : forall (a:Type) (p:a -> Prop),
     Sig (Decider p) -> forall (x:a), {p x} + {~ p x}.
@@ -193,5 +194,44 @@ Proof.
     - right. reflexivity.
 Defined.
 
+Definition L14 : forall (B:Type) (a b:B) (q:forall (x:B), {x = a} + {x = b}),
+    a <> b -> Sig (fun (f:B -> B) => forall x, f x <> x).
+Proof.
+    intros B a b q H1. remember (
+        fun x =>  match q x with
+        | left _    => b
+        | right _   => a
+        end) as f eqn:E.
+    assert (forall x, f x <> x) as H2.
+        { intros x H2. destruct (q x) as [H3|H3]; 
+          rewrite E in H2; rewrite H3 in H2.
+            { destruct (q a).
+                { apply H1. symmetry. assumption. }
+                { apply H1. assumption. }}
+            { destruct (q b).
+                { apply H1. symmetry. assumption. }
+                { apply H1. assumption. }}} 
+    exact (Ex f H2).
+Defined.
 
+Definition L15 : forall (a:Type) (p:a -> Type) (y:Sig p),
+    y = Ex (Sig_proj1 y) (Sig_proj2 y).
+Proof.
+    intros a p y. destruct y. unfold Sig_proj1, Sig_proj2. reflexivity.
+Qed.
+
+(* Doing the same for Sig_proj2 won't typecheck                                 *)
+Definition L16 : forall (a:Type) (p:a -> Type) (y y':Sig p),
+    y = y' -> Sig_proj1 y = Sig_proj1 y'.
+Proof.
+    intros a p y y' H1. rewrite H1. reflexivity.
+Qed.
+
+(* Can't be done                                                                *)
+Lemma L17 : forall (a : Type) (p:a -> Type) (x:a) (q q':p x),
+    Ex x q = Ex x q' -> q = q'.
+Proof.
+    intros a p x q q' H1.
+    change (Sig_proj2 (Ex x q) = Sig_proj2 (Ex x q')).
+Admitted.
 

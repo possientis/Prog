@@ -2,7 +2,7 @@ open import Relation.Binary.PropositionalEquality.Core
   using (_≡_; _≢_; refl; subst;cong)
 
 open import Data.String                                using (String; _≟_) -- \?=
-open import Data.Nat                                   using (ℕ;zero;suc;_≤_;s≤s;z≤n)
+open import Data.Nat                                   using (ℕ;zero;suc;_≤_;s≤s;z≤n;_+_;_*_)
 open import Data.Empty                                 using (⊥; ⊥-elim)
 open import Relation.Nullary                           using (Dec; yes; no; ¬_)
 open import Relation.Nullary.Decidable                 using (False;toWitnessFalse)
@@ -19,13 +19,10 @@ Id = String
 data Op : Set where
   `+ : Op
   `* : Op
-  `- : Op
-  `/ : Op
   `= : Op
   `< : Op
   `∧ : Op
   `∨ : Op
-  `→ : Op
 
 infix 5 ƛ_⇒_
 infix 5 μ_⇒_
@@ -123,12 +120,6 @@ data Value : Term -> Set where
       -----------------------
     → Value (`suc V)
 
-  V-op : ∀ {op : Op} {V W : Term}
-    → Value V
-    → Value W
-      --------------------
-    → Value (eOp op V W)
-
   V-Num : ∀ {n : ℕ }
        --------------------
     →  Value (eNum n)
@@ -204,6 +195,30 @@ _ : (ƛ "y" ⇒ ` "x" · (ƛ "x" ⇒ ` "x")) [ "x" := `zero ]
    ≡ ƛ "y" ⇒ `zero · (ƛ "x" ⇒ ` "x")
 _ = refl
 
+_==_ : ℕ → ℕ → Bool
+zero == zero = true
+zero == suc n = false
+suc m == zero = false
+suc m == suc n = m == n
+
+_<_ : ℕ → ℕ → Bool
+zero < zero = false
+zero < suc n = true
+suc m < zero = false
+suc m < suc n = m < n
+
+and : Bool → Bool → Bool
+and false false = false
+and false true = false
+and true false = false
+and true true = true
+
+or : Bool → Bool → Bool
+or false false = false
+or false true = true
+or true false = true
+or true true = true
+
 infix 4 _—→_ -- \em\to
 
 -- Small-step operational semantics
@@ -223,6 +238,36 @@ data _—→_ : Term → Term → Set where
     →  M —→ M'
        --------------------
     →  eOp op V M —→ eOp op V M'
+
+  -- Reduction rule for primitive `+
+  β-+ : ∀ {m n : ℕ}
+        -------------------
+    →  eOp `+ (eNum m) (eNum n) —→ eNum (m + n)
+
+  -- Reduction rule for primitive `*
+  β-* : ∀ {m n : ℕ}
+        --------------------
+    →  eOp `* (eNum m) (eNum n) —→ eNum (m * n)
+
+  -- Reduction rule for primitive `=
+  β-= : ∀ {m n : ℕ}
+        ---------------------
+    → eOp `= (eNum m) (eNum n) —→ eBool (m == n)
+
+  -- Reduction rule for primitive `<
+  β-< : ∀ {m n : ℕ}
+        --------------------
+    → eOp `< (eNum m) (eNum n) —→ eBool (m < n)
+
+  -- Reduction rule for primitive `∧
+  β-∧ : ∀ {x y : Bool}
+        --------------------
+    → eOp `∧ (eBool x) (eBool y) —→ eBool (and x y)
+
+  -- Reduction rule for primitive `∨
+  β-∨ : ∀ {x y : Bool}
+        --------------------
+    → eOp `∨ (eBool x) (eBool y) —→ eBool (or x y)
 
   -- condition compatibility rule for eIf
   ξ-if₀ : ∀ {L L' M N : Term}

@@ -10,8 +10,8 @@ Require Import Logic.Fol.Syntax.
 (* xs represents the list of variables which are deemed 'bound'                 *)
 Definition h_ (v w:Type) (e:Eq v) (f g:v -> w) (xs : list v) (x:v) : w :=
     match in_dec eqDec x xs with
-    | left _    => g x
-    | right _   => f x
+    | left _    => f x
+    | right _   => g x
     end.
 
 Arguments h_ {v} {w} {e}.
@@ -23,7 +23,7 @@ Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (p:P v) (xs:list v) : P w :=
     | Bot       => Bot
     | Elem x y  => Elem (h_ f g xs x) (h_ f g xs y) 
     | Imp p1 p2 => Imp (dmap_ v w e f g p1 xs) (dmap_ v w e f g p2 xs)
-    | All x p1  => All (g x) (dmap_ v w e f g p1 (x :: xs))     (* x now bound  *)
+    | All x p1  => All (f x) (dmap_ v w e f g p1 (x :: xs))     (* x now bound  *)
     end.
 
 Arguments dmap_ {v} {w} {e}.
