@@ -1,5 +1,7 @@
-implement Eval2 with Error
+implement instance MonadError for Eval2
 implement Eval1 with Error
+Fix Test.Main
+Remove instances of 'error' within the code
 continue paper
 rewrite eval_ with cata?
 can we define a small-step operational semantics

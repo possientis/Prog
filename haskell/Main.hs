@@ -3,6 +3,7 @@ module  Main
     )   where
 
 import System.IO
+import System.Random
 
 main :: IO ()
 main = do

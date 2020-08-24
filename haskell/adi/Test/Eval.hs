@@ -138,7 +138,6 @@ specEMulNat = it "Checked eval for eMulNat" $ do
 propENum :: forall m . (Eval m) => Integer -> Bool
 propENum n = num ((eval @ m) (eNum n)) == Just n  
 
-
 propEBool :: forall m . (Eval m) => Bool -> Bool
 propEBool b = bool ((eval @ m) (eBool b)) == Just b 
 

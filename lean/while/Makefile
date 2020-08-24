@@ -1,11 +1,14 @@
 all:						Env.olean \
 							AExp.olean \
 							BExp.olean \
+							Subst.olean \
 							Stmt.olean \
 							BigStep.olean \
 							Reduce.olean \
 							CloReduce.olean \
-							BigStepEquiv.olean
+							BigStepEquiv.olean \
+							HoareSyntax.olean \
+							Soundness.olean
 
 
 Env.olean :					Env.lean
@@ -18,6 +21,11 @@ AExp.olean :				AExp.lean \
 BExp.olean :				BExp.lean \
 							Env.olean	
 	lean --make BExp.lean
+
+Subst.olean :				Subst.lean \
+							Env.olean \
+							AExp.olean
+	lean --make Subst.lean
 
 Stmt.olean :				Stmt.lean \
 							Env.olean \
@@ -44,3 +52,15 @@ BigStepEquiv.olean : 		BigStepEquiv.lean \
 							Reduce.olean \
 							CloReduce.olean
 	lean --make BigStepEquiv.lean
+
+
+
+HoareSyntax.olean :			HoareSyntax.lean \
+							Stmt.olean \
+							Subst.olean
+	lean --make HoareSyntax.lean
+
+Soundness.olean : 			Soundness.lean \
+							HoareSyntax.olean \
+							BigStep.olean
+	lean --make Soundness.lean

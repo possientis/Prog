@@ -119,7 +119,7 @@ evalIf
     -> m Value
 evalIf e e1 e2 ev = do
     v <- ev e
-    case bool v of
+    case bool' v of
         Nothing -> error "If: condition does not evaluate to a boolean."
         Just b  -> ev $ if b then e1 else e2
 

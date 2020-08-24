@@ -10,6 +10,7 @@ module  Value
     ,   mkSuc
     ,   num
     ,   bool
+    ,   bool'
     ,   closure
     ,   delta
     ,   isZero
@@ -21,6 +22,7 @@ module  Value
 import Op
 import Var
 import Env
+import Error
 import Syntax
 import Closure
 
@@ -41,7 +43,7 @@ instance Show Value where
         Bool b  -> show b
         Clo  c  -> show c
         Zero    -> "zero"
-        Suc _   -> maybe "???" show (toInt v)
+        Suc _   -> maybe "???" show (toInt' v)
 
 delta :: Op -> [Value] -> Value
 delta op args = case checkArgs args of
@@ -65,15 +67,25 @@ mkValue = \case
     PNum (Identity n)  -> Num n
     PBool (Identity b) -> Bool b
     
-num :: Value -> Maybe Integer
+num :: Either Error Value -> Maybe Integer
 num = \case
-    Num n   -> Just n
-    _       -> Nothing
+    Left _  -> Nothing
+    Right v -> case v of
+        Num n   -> Just n
+        _       -> Nothing
 
-bool :: Value -> Maybe Bool
+bool :: Either Error Value -> Maybe Bool
 bool = \case
+    Left _  -> Nothing
+    Right v -> case v of
+        Bool b  -> Just b
+        _       -> Nothing
+
+bool' :: Value -> Maybe Bool
+bool' = \case
     Bool b  -> Just b
     _       -> Nothing
+
 
 closure :: Value -> Maybe Closure
 closure = \case
@@ -98,11 +110,20 @@ mkSuc = Suc
 mkClo :: Var -> Expr -> Env -> Value
 mkClo x e env = Clo $ mkClosure x e env
 
-toInt :: Value -> Maybe Integer
+toInt :: Either Error Value -> Maybe Integer
 toInt = \case
+    Left _    -> Nothing
+    Right val -> case val of
+        Zero  -> Just 0
+        Suc v -> (+1) <$> toInt' v
+        _     -> Nothing
+
+toInt' :: Value -> Maybe Integer
+toInt' = \case
     Zero  -> Just 0
-    Suc v -> (+1) <$> toInt v
+    Suc v -> (+1) <$> toInt' v
     _     -> Nothing
+
 
 isZero :: Value -> Bool
 isZero = \case

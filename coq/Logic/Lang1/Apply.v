@@ -118,12 +118,12 @@ Proof.
     - assumption.
 Qed.
 
-(*
+
 Lemma evalApplyF2 : forall (e:Env) (p:Formula) (n m m':nat) (x y y':set),
     n <> m  ->
     n <> m' ->
     m <> m' -> 
-    valid (replace2 0 1 n m) p -> 
+    valid (replace2 0 1 n m') p -> 
     ~ In m' (Fr p) ->
     ~ In m  (Fr p) -> 
     ~ In n  (Fr p) ->
@@ -138,5 +138,9 @@ Proof.
     assert (envEqual e1 e2) as H5.
         { rewrite E1, E2. apply bindPermute. 
           intros H5. apply H3. symmetry. assumption. }
-Show.
-*)
+    assert (eval e1 (apply2 p n m') <-> eval e2 (apply2 p n m')) as H6.
+        { apply evalEnvEqual. assumption. }
+    rewrite H6, E2, E3. apply evalApplyF1; try (assumption).
+    intros H7.  apply H3. symmetry. assumption.
+Qed.
+
