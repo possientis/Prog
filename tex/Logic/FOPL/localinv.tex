@@ -6,25 +6,10 @@ cases where we can still argue the following implication is true:
     \begin{equation}\label{logic:eqn:FOPL:localinv:intro:1}
     \sigma(\phi)=\sigma(\psi)\ \Rightarrow\ \phi=\psi
     \end{equation}
-For example, if $\var(\phi)=\var(\psi)$ it is sufficient that
-$\sigma_{|\var(\phi)}$ be an injective map
-for~(\ref{logic:eqn:FOPL:localinv:intro:1}) to be true. But this
-itself is not necessary. Consider the case when $\phi=\forall y(x\in
-y)\to(x\in z)$ with $x,y,z$ distinct and $\sigma=[y/z]$. Then we
-have $\sigma(\phi)=\forall y(x\in y)\to(x\in y)$. Suppose we knew
-for some reason that $\bound(\psi)=\bound(\phi)=\{y\}$. Then this
-would exclude $\psi=\forall z(x\in z)\to(x\in z)$ and the
-implication~(\ref{logic:eqn:FOPL:localinv:intro:1}) would hold, if
-not everywhere at least on the set: TODO
-    \[
-    \Gamma(\phi)=\{\psi\in\pv:\bound(\psi)=\bound(\phi)\}
-    \]
-However, if $\sigma=[y/x]$ then $\sigma(\phi)=\forall y(y\in
-y)\to(y\in z)$ and the
-implication~(\ref{logic:eqn:FOPL:localinv:intro:1}) fails to be true
-even if $\psi\in\Gamma(\phi)$. As it turns out, the substitution
-$\sigma$ is not valid for $\phi$, and $\Gamma(\phi)$ is of little
-use if we mix up free and bound variables.
+This may happen in cases when we have additional information about 
+$\psi$, for instance that it belongs to some 
+subset $\Gamma$ of \pv\ for which~(\ref{logic:eqn:FOPL:localinv:intro:1})
+is true.
 
 In this section, we wish to establish sufficient conditions for the
 implication~(\ref{logic:eqn:FOPL:localinv:intro:1}) to hold, if not
@@ -41,19 +26,19 @@ $\tau:{\bf P}(W)\to\pv$ which will reverse the effect of the
 substitution $\sigma:\pv\to{\bf P}(W)$, at least locally on some
 interesting domain $\Gamma$. We cannot hope to achieve this for
 every $\sigma$, but we would like our result to be general enough.
-Suppose we knew our substitution $\sigma$ behaved on free variables
+Suppose we knew our substitution $\sigma$ behaved on bound variables
 in a reversible way. Specifically, we would have $V_{0}\subseteq V$
 such that $\sigma_{|V_{0}}$ is an injective map and
-$\free(\phi)\subseteq V_{0}$. Suppose likewise that the impact on
-bound variables was also reversible. So we assume there is
+$\bound(\phi)\subseteq V_{0}$. Suppose likewise that the impact on
+free variables was also reversible. So we assume there is
 $V_{1}\subseteq V$ such that $\sigma_{|V_{1}}$ is an injective map
-and $\bound(\phi)\subseteq V_{1}$. For example, if we go back to
+and $\free(\phi)\subseteq V_{1}$. For example, if we consider
 $\phi=\forall y(x\in y)\to(x\in z)$ with $x,y,z$ distinct and
 $\sigma=[y/z]$, then $\sigma$ is of course not injective but
 $\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are both injective with
-$V_{0}=V\setminus\{y\}$ and $V_{1}=V\setminus\{x,z\}$. As it turns
-out, we also have $\free(\phi)\subseteq V_{0}$ and
-$\bound(\phi)\subseteq V_{1}$. So $\sigma$ behaves in a reversible
+$V_{0}=V\setminus\{x,z\}$ and $V_{1}=V\setminus\{y\}$. As it turns
+out, we also have $\bound(\phi)\subseteq V_{0}$ and
+$\free(\phi)\subseteq V_{1}$. So $\sigma$ behaves in a reversible
 way both on free and bound variables. Consider now
 $\tau_{0},\tau_{1}:W\to V$ which are left-inverse of $\sigma$ on
 $V_{0}$ and $V_{1}$ respectively, i.e. such that:
@@ -62,7 +47,7 @@ $V_{0}$ and $V_{1}$ respectively, i.e. such that:
     (ii)&&u\in V_{1}\ \Rightarrow\ \tau_{1}\circ\sigma(u)=u
     \end{eqnarray*}
 Then we should hope to reverse the impact of $\sigma:\pv\to{\bf
-P}(W)$ by acting separately on the free and bound variables of
+P}(W)$ by acting separately on the bound and free variables of
 $\sigma(\phi)$ according to $\tau_{0}$ and $\tau_{1}$ respectively.
 Specifically, if we consider $\tau:{\bf P}(W)\to\pv$ the dual
 variable substitution associated with the ordered pair
@@ -70,8 +55,8 @@ $(\tau_{0},\tau_{1})$ as per
 definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) of
 page~\pageref{logic:def:FOPL:dualsubst:dualsubst}, we should hope to
 obtain $\tau\circ\sigma(\phi)=\phi$ at least for all $\phi$ such
-that $\free(\phi)\subseteq V_{0}$ and $\bound(\phi)\subseteq V_{1}$.
-So let us see if this works in our case:
+that $\bound(\phi)\subseteq V_{0}$ and $\free(\phi)\subseteq V_{1}$.
+So let us see if this works in our case: TODO
     \begin{eqnarray*}
     \tau\circ\sigma(\phi)&=&\tau\circ\sigma(\forall y(x\in y)\to(x\in
     z))\\
