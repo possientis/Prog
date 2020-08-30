@@ -1,6 +1,7 @@
 module  Addr
     (   Addr 
     ,   inc 
+    ,   dec
     ,   start
     )   where
 
@@ -12,6 +13,9 @@ instance Show Addr where
 
 inc :: Addr -> Addr
 inc addr = Addr (unAddr addr + 1)
+
+dec :: Addr -> Addr
+dec addr = Addr (unAddr addr - 1)
 
 start :: Addr
 start = Addr 0

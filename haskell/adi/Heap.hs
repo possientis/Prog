@@ -10,21 +10,27 @@ import Data.Map as M
 
 import Addr
 import Value
+import Error
 
 data Heap = Heap
     { next :: Addr
     , memory :: Map Addr Value
     }
 
+maxAddr :: Heap -> Maybe Addr
+maxAddr heap
+    | next heap == start = Nothing
+    | otherwise          = Just . dec . next $ heap
+
 instance Show Heap where
     show = show . M.toList . memory
 
-findVal :: Addr -> Heap -> Value
+findVal :: Addr -> Heap -> Either Error Value
 findVal addr heap
-    | addr >= next heap  = error "unallocated memory access"
+    | addr >= next heap  = Left $ error1 addr heap
     | otherwise = case M.lookup addr (memory heap) of
-        Nothing -> error "memory corruption error"
-        Just v  -> v 
+        Nothing -> Left . mkError $ "findVal: memory corruption error"
+        Just v  -> Right v 
 
 heapAlloc :: Heap -> (Heap, Addr)
 heapAlloc heap = (heap', addr) where
@@ -40,9 +46,19 @@ newHeap = Heap
     , memory = M.empty
     }
 
-heapWrite :: Addr -> Value -> Heap -> Heap
+heapWrite :: Addr -> Value -> Heap -> Either Error Heap
 heapWrite addr v heap = if addr >= next heap
-    then error "heapWrite: illegal memory access"
-    else heap { memory = M.insert addr v (memory heap) } 
+    then Left . mkError $ "heapWrite: illegal memory access"
+    else Right heap { memory = M.insert addr v (memory heap) } 
 
-
+error1 :: Addr -> Heap -> Error
+error1 addr heap = mkError $ unlines 
+    [ "findVal: illegal memory access. Attempting to read memory at address "
+    ++ show addr 
+    ++ " while " 
+    ++ maybe "the heap is empty." 
+        (\m -> "the maximum allowable address is " ++ show m ++ ".")
+        (maxAddr heap)
+    , "The current heap state is as follows:"
+    , show heap
+    ]

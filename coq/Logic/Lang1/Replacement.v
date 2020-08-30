@@ -65,8 +65,50 @@ Proof.
         + assumption.
 Qed.
 
+
+Definition replacementF (P:Formula) (q r r' n m k l:nat) : Formula := Imp 
+    (functionalF P q r r')
+    (All n (Exi m (All k (Iff 
+        (Elem k m) 
+        (Exi l (And (Elem l n) (apply2 P l k))))))). 
 (*
-Definition replacementF (P:Formula) (n m m' k l:nat) : Formula := Imp 
-    (functionalF P n m m')
-    (All n (Exi m (All k (Iff (Elem k m) (Exi l (And (Elem l n 
+Lemma evalReplacementF : LEM -> forall (e:Env) (P:Formula) (q r r' n m k l:nat),
+    q <> r  ->
+    q <> r' ->
+    r <> r' ->
+    n <> m  ->
+    n <> k  ->
+    n <> l  ->
+    m <> k  -> 
+    m <> l  ->
+    k <> l  ->
+    ~In q  (Fr P) ->
+    ~In r  (Fr P) ->
+    ~In r' (Fr P) ->
+    ~In k  (Fr P) ->
+    ~In l  (Fr P) -> 
+    ~In m  (Fr P) ->
+    valid (replace2 0 1 q r ) P ->
+    valid (replace2 0 1 q r') P ->
+    valid (replace2 0 1 l k ) P ->
+    eval e (replacementF P q r r' n m k l)
+        <->
+    (functional (eval2 e P 0 1) ->
+        forall (x:set),
+            exists (y:set), forall (z:set),
+                z :: y <-> exists (u:set), u :: x /\ (eval2 e P 0 1 u z)).
+Proof.
+    intros 
+        L e P q r r' n m k l 
+        H1 H2 H3 H4 H5 H6 H7 H8 H9 
+        H1' H2' H3' H4' H5' H6'
+        V1 V2 V3.
+    split; intros G1.
+    - intros G2 x. unfold replacementF in G1. rewrite evalImp in G1.
+      rewrite <- (evalFunctionalF L e P q r r') in G2; try (assumption).
+      remember (G1 G2) as G3 eqn:E. clear G1 E G2. 
+      rewrite evalAll in G3. remember (G3 x) as G1 eqn:E. clear E G3.
+      rewrite evalExi in G1; try (assumption). destruct G1 as [y G1]. 
+      exists y. intros z.
+Show.
 *)

@@ -54,7 +54,38 @@ and~$(2)$ of definition~(\ref{Adj:def:related}) make perfect sense.
             \mbox{def.~(\ref{Nat:def:leftmul})}\ \to\ 
             &=&\epsilon_{F(c)}\circ F(\eta_{c})\\
         \end{eqnarray*}
-    So we need to show that $\epsilon_{F(c)}\circ F(\eta_{c})=\id(\,F(c)\,)$. 
-    Note that assumption $(1)$ TODO
+    So we need to show that $\epsilon_{F(c)}\circ F(\eta_{c})=\id(\,F(c)\,)$
+    for all $c\in\Cat$. Note that a similar derivation using assumption $(1)$ 
+    allows us to obtain for all $d\in\Dat$\,:
+        \begin{equation}\label{Adj:eqn:related:both:1}
+            G(\epsilon_{d})\circ\eta_{G(d)}=\id(\,G(d)\,)
+        \end{equation}
+    Now given $c\in\Cat$, let us pick $d=F(c)$. Then both $\epsilon_{F(c)}\circ 
+    F(\eta_{c})$ and $\id(\,F(c)\,)$ are arrows from $F(c)$ to $d$ in \Dat.
+    In order to show that these two arrows coincide, having assumed $\eta$ is
+    a unit of $(F,G)$, from proposition~(\ref{Adj:prop:unit:proving:equality})
+    it is sufficient to prove that $G(\,\epsilon_{F(c)}\circ F(\eta_{c})\,)
+    \circ\eta_{c}=G(\,\id(\,F(c)\,)\,)\circ\eta_{c}$ which goes as follows:
+        \begin{eqnarray*}G(\,\epsilon_{F(c)}\circ F(\eta_{c})\,)\circ\eta_{c}
+            &=&G(\,\epsilon_{d}\circ F(\eta_{c})\,)\circ\eta_{c}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\epsilon_{d})\circ (G \circ F)(\eta_{c})\circ\eta_{c}\\
+            \mbox{prop~(\ref{Adj:prop:unit:natural}), $\eta_{c}:c\to G(d)$}\ \to\ 
+            &=&G(\epsilon_{d})\circ \eta_{G(d)}\circ\eta_{c}\\
+            \mbox{eqn.~(\ref{Adj:eqn:related:both:1})}\ \to\ 
+            &=&\id(\,G(d)\,)\circ\eta_{c}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\,\id(d)\,)\circ\eta_{c}\\
+            &=&G(\,\id(\,F(c)\,)\,)\circ\eta_{c}
+        \end{eqnarray*}
+    So we now show that $(2)\Rightarrow(1)$. In this case for all $c\in\Cat$
+    we have:
+        \begin{equation}\label{Adj:eqn:related:both:2}
+            \epsilon_{F(c)}\circ F(\eta_{c})=\id(\,F(c)\,)
+        \end{equation}
+    and we need to prove that equation~(\ref{Adj:eqn:related:both:2}) holds
+    for all $d\in\Dat$. However, given $d\in\Dat$ and setting $c=G(d)$, both
+    arrows of equation~(\ref{Adj:eqn:related:both:2}) are arrows from $c$ to
+    $G(d)$ in \Cat. TODO
 \end{proof}
 

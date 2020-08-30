@@ -30,7 +30,7 @@ instance (Monad m) => Functor (EvalT m) where
     fmap f k = EvalT $ \env heap -> do
         res <- runEvalT k env heap
         return $ case res of
-            Left err        -> Left err
+            Left e          -> Left e
             Right (s,(a,w)) -> Right (s,(f a,w)) 
 
 instance (Monad m) => Applicative (EvalT m) where
@@ -42,11 +42,11 @@ instance (Monad m) => Monad (EvalT m) where
     k >>= f = EvalT $ \env heap -> do
         res <- runEvalT k env heap 
         case res of 
-            Left err        -> return . Left $ err
+            Left e          -> return . Left $ e
             Right (s,(a,w)) -> do
                 res' <- runEvalT (f a) env s
                 return $ case res' of
-                    Left err            -> Left err
+                    Left e              -> Left e
                     Right (s',(b,w'))   -> Right (s',(b,w <> w'))
 
 instance (Monad m) => MonadReader Env (EvalT m) where
@@ -58,12 +58,12 @@ instance (Monad m) => MonadWriter Log (EvalT m) where
     listen k = EvalT $ \env heap -> do
         res <- runEvalT k env heap
         return $ case res of
-            Left err        -> Left err
+            Left e          -> Left e
             Right (s,(a,w)) -> Right (s,((a,w),mempty))
     pass k = EvalT $ \env heap -> do
         res <- runEvalT k env heap
         return $ case res of
-            Left err            -> Left err
+            Left e              -> Left e
             Right (s,((a,f),w)) -> Right (s, (a, f w))
 
 instance (Monad m) => MonadState Heap (EvalT m) where
@@ -71,5 +71,10 @@ instance (Monad m) => MonadState Heap (EvalT m) where
     put s = EvalT $ \_env _heap -> return . Right $ (s,((),mempty))
 
 instance (Monad m) => MonadError Error (EvalT m) where
-    throwError = undefined
-    catchError = undefined
+    throwError e = EvalT $ \_env _heap -> return . Left $ e 
+    catchError k handler = EvalT $ \env heap -> do
+        res <- runEvalT k env heap
+        case res of
+            Left e -> runEvalT (handler e) env heap
+            r@(Right (_,(_,_))) -> return r
+
