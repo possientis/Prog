@@ -12,8 +12,15 @@ open import Relation.Nullary using (Dec; yes; no; ¬_)
 open import Function         using (_∘_)
 
 open import isomorphism
-open import lambda
 
+open import Lam.Id
+open import Lam.Op
+open import Lam.Type
+open import Lam.Value
+open import Lam.Typing
+open import Lam.Syntax
+open import Lam.Context
+open import Lam.Reduction
 
 V¬—→ : ∀ {M N : Term}
   → Value M
@@ -67,5 +74,3 @@ data Canonical_∶_ : Term → Type → Set where
     → Canonical N ∶ `Num
       --------------------
     → Canonical (eOp `* M N) ∶ `Num
-
-

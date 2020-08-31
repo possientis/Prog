@@ -61,13 +61,25 @@ Proof.
     - intros H1. apply IH. apply L6. assumption.
 Qed.
 
+
 Lemma L8 : forall (f:nat -> bool), (exists (n:nat), f n = true) -> G f 0.
 Proof.
     intros f [n H1].  apply L7 with n. apply L5. assumption.
 Qed.
 
-Definition L9 : forall (f:nat -> bool) (n:nat), G f n -> Sig (fun k => f k = true).
-Proof.
-    intros f n H1.
-Show.
 
+Definition elimG 
+    (f:nat -> bool) 
+    (p:nat -> Type)
+    (g: forall (n:nat), (f n = false -> p (S n)) -> p n)
+    : forall (n:nat), G f n -> p n 
+    := fix k (n:nat) (H:G f n) : p n := g n 
+        (fun e => k (S n) 
+            ( match H with
+              | mkG _ _ H => H
+              end e)).
+
+
+
+
+ 

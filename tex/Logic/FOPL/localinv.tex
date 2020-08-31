@@ -56,29 +56,29 @@ definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) of
 page~\pageref{logic:def:FOPL:dualsubst:dualsubst}, we should hope to
 obtain $\tau\circ\sigma(\phi)=\phi$ at least for all $\phi$ such
 that $\bound(\phi)\subseteq V_{0}$ and $\free(\phi)\subseteq V_{1}$.
-So let us see if this works in our case: TODO
-    \begin{eqnarray*}
-    \tau\circ\sigma(\phi)&=&\tau\circ\sigma(\forall y(x\in y)\to(x\in
-    z))\\
-    \sigma=[y/z]\ \rightarrow&=&\tau(\forall y(x\in y)\to(x\in y))\\
-    \mbox{$W=V$ and definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
-    \rightarrow
-    &=&\tau^{*}(\,\forall y(x\in y)\to(x\in y)\,)(V)\\
-    &=&\tau^{*}(\,\forall y(x\in y)\,)(V)\to\tau^{*}(x\in y)(V)\\
-    &=&\forall \tau_{1}(y)\tau^{*}(x\in
-    y)(V\!\setminus\!\!\{y\})\to(\tau_{0}(x)\in\tau_{0}(y))\\
-    &=&\forall\tau_{1}(y)(\tau_{0}(x)\in
-    \tau_{1}(y))\to(\tau_{0}(x)\in\tau_{0}(y))\\
-    \mbox{A: to be proved}\ \rightarrow&=&\forall y(x\in y)\to(x\in z)\\
-    &=&\phi
+So let us see if this works in our case:
+    \begin{eqnarray*}\tau\circ\sigma(\phi)
+        &=&\tau\circ\sigma(\forall y(x\in y)\to(x\in z))\\
+        \sigma=[y/z]\ \to\ 
+        &=&\tau(\forall y(x\in y)\to(x\in y))\\
+        \mbox{def.~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\ \to\ 
+        &=&\tau^{*}(\,\forall y(x\in y)\to(x\in y)\,)(\emptyset)\\
+        &=&\tau^{*}(\,\forall y(x\in y)\,)(\emptyset)\to
+           \tau^{*}(x\in y)(\emptyset)\\
+        &=&\forall \tau_{0}(y)\tau^{*}(x\in y)(\{y\})\to
+           (\tau_{1}(x)\in\tau_{1}(y))\\
+        &=&\forall\tau_{0}(y)(\tau_{1}(x)\in \tau_{0}(y))\to
+        (\tau_{1}(x)\in\tau_{1}(y))\\
+        \mbox{A: to be proved}\ \to\ &=&\forall y(x\in y)\to(x\in z)\\
+        &=&\phi
     \end{eqnarray*}
-So it remains to show that $\tau_{1}(y)=y$, $\tau_{0}(x)=x$ and
-$\tau_{0}(y)=z$. Since we have $V_{0}=V\setminus\{y\}$ we obtain
-$x,z\in V_{0}$ and consequently from $(i)$ above it follows that
-$\tau_{0}(x)=\tau_{0}\circ[y/z](x)=x$ and
-$\tau_{0}(y)=\tau_{0}\circ[y/z](z)=z$. Similarly, since
-$V_{1}=V\setminus\{x,z\}$ we have $y\in V_{1}$ and consequently from
-$(ii)$ above it follows that $\tau_{1}(y)=\tau_{1}\circ[y/z](y)=y$
+So it remains to show that $\tau_{0}(y)=y$, $\tau_{1}(x)=x$ and
+$\tau_{1}(y)=z$. Since we have $V_{1}=V\setminus\{y\}$ we obtain
+$x,z\in V_{1}$ and consequently from $(ii)$ above it follows that
+$\tau_{1}(x)=\tau_{1}\circ[y/z](x)=x$ and
+$\tau_{1}(y)=\tau_{1}\circ[y/z](z)=z$. Similarly, since
+$V_{0}=V\setminus\{x,z\}$ we have $y\in V_{0}$ and consequently from
+$(i)$ above it follows that $\tau_{0}(y)=\tau_{0}\circ[y/z](y)=y$
 as requested. Hence we see that our inversion scheme is working, at
 least in this case. As it turns out, the substitution $\sigma=[y/z]$
 is valid for the formula $\phi=\forall y(x\in y)\to(x\in z)$. But
@@ -88,39 +88,39 @@ variables of $\sigma(\phi)$ have been muddled up. We cannot expect
 our scheme to work any longer. So let us consider $\sigma=[y/x]$
 instead which is clearly not valid for $\phi=\forall y(x\in
 y)\to(x\in z)$. Then $\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are
-still injective and we still have $\free(\phi)\subseteq V_{0}$ and
-$\bound(\phi)\subseteq V_{1}$. Of course the maps
+still injective and we still have $\bound(\phi)\subseteq V_{0}$ and
+$\free(\phi)\subseteq V_{1}$. Of course the maps
 $\tau_{0},\tau_{1}:V\to V$ would need to be different but even
 assuming $(i)$ and $(ii)$ above, our scheme would fail:
-    \begin{eqnarray*}
-    \tau\circ\sigma(\phi)&=&\tau\circ\sigma(\forall y(x\in y)\to(x\in
-    z))\\
-    \sigma=[y/x]\ \rightarrow&=&\tau(\forall y(y\in y)\to(y\in z))\\
-    \mbox{$W=V$ and definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
-    \rightarrow
-    &=&\tau^{*}(\,\forall y(y\in y)\to(y\in z)\,)(V)\\
-    &=&\tau^{*}(\,\forall y(y\in y)\,)(V)\to\tau^{*}(y\in z)(V)\\
-    &=&\forall \tau_{1}(y)\tau^{*}(y\in
-    y)(V\!\setminus\!\!\{y\})\to(\tau_{0}(y)\in\tau_{0}(z))\\
-    &=&\forall\tau_{1}(y)(\tau_{1}(y)\in
-    \tau_{1}(y))\to(\tau_{0}(y)\in\tau_{0}(z))\\
-    \mbox{A: to be proved}\ \rightarrow&=&\forall y(y\in y)\to(x\in z)\\
-    &\neq&\phi
+    \begin{eqnarray*}\tau\circ\sigma(\phi)
+        &=&\tau\circ\sigma(\forall y(x\in y)\to(x\in z))\\
+        \sigma=[y/x]\ \to\ &=&\tau(\forall y(y\in y)\to(y\in z))\\
+        \mbox{def.~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\ \to\ 
+        &=&\tau^{*}(\,\forall y(y\in y)\to(y\in z)\,)(\emptyset)\\
+        &=&\tau^{*}(\,\forall y(y\in y)\,)(\emptyset)\to
+           \tau^{*}(y\in z)(\emptyset)\\
+        &=&\forall \tau_{0}(y)\tau^{*}(y\in y)(\{y\})\to
+          (\tau_{1}(y)\in\tau_{1}(z))\\
+        &=&\forall\tau_{0}(y)(\tau_{0}(y)\in\tau_{0}(y))\to
+          (\tau_{1}(y)\in\tau_{1}(z))\\
+        \mbox{A: to be proved}\ \to\ 
+        &=&\forall y(y\in y)\to(x\in z)\\
+        &\neq&\phi
     \end{eqnarray*}
-So it remains to show that $\tau_{1}(y)=y$, $\tau_{0}(y)=x$ and
-$\tau_{0}(z)=z$. Since we have $V_{0}=V\setminus\{y\}$ we obtain
-$x,z\in V_{0}$ and consequently from $(i)$ above it follows that
-$\tau_{0}(y)=\tau_{0}\circ[y/x](x)=x$ and
-$\tau_{0}(z)=\tau_{0}\circ[y/x](z)=z$. Similarly, since
-$V_{1}=V\setminus\{x,z\}$ we have $y\in V_{1}$ and consequently from
-$(ii)$ above it follows that $\tau_{1}(y)=\tau_{1}\circ[y/x](y)=y$
+So it remains to show that $\tau_{0}(y)=y$, $\tau_{1}(y)=x$ and
+$\tau_{1}(z)=z$. Since we have $V_{1}=V\setminus\{y\}$ we obtain
+$x,z\in V_{1}$ and consequently from $(ii)$ above it follows that
+$\tau_{1}(y)=\tau_{1}\circ[y/x](x)=x$ and
+$\tau_{1}(z)=\tau_{1}\circ[y/x](z)=z$. Similarly, since
+$V_{0}=V\setminus\{x,z\}$ we have $y\in V_{0}$ and consequently from
+$(i)$ above it follows that $\tau_{0}(y)=\tau_{0}\circ[y/x](y)=y$
 as requested. Ok so we are now ready to proceed. We are given a map
 $\sigma:V\to W$ and $V_{0}, V_{1}\subseteq V$ such that
 $\sigma_{|V_{0}}$ and $\sigma_{|V_{1}}$ are injective maps. We then
 consider $\Gamma\subseteq\pv$ defined by:
     \[
-    \Gamma=\{\phi\in\pv:(\free(\phi)\subseteq
-    V_{0})\land(\bound(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
+    \Gamma=\{\phi\in\pv:(\bound(\phi)\subseteq
+    V_{0})\land(\free(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
     valid for $\phi$})\}
     \]
 We are hoping the inversion scheme will work on $\Gamma$, namely
@@ -131,35 +131,35 @@ page~\pageref{logic:the:FOPL:localinv:main} below. The proof of this
 theorem relies on a technical lemma for which we shall now provide a
 few words of explanations: proving the formula
 $\tau\circ\sigma(\phi)=\phi$ is in fact showing
-$\tau^{*}(\sigma(\phi))(W)=\phi$ as follows from
+$\tau^{*}(\sigma(\phi))(\emptyset)=\phi$ as follows from
 definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}). A structural
 induction with $\phi=\forall x\phi_{1}$ leads to:
-    \begin{eqnarray*}
-    \tau^{*}(\sigma(\phi))(W)&=&\tau^{*}(\sigma(\forall
-    x\phi_{1}))(W)\\
-    &=&\tau^{*}(\,\forall
-    \sigma(x)\sigma(\phi_{1})\,)(W)\\
-    &=&\forall
-    \tau_{1}\circ\sigma(x)\,\tau^{*}(\sigma(\phi_{1}))(W\setminus\{\sigma(x)\})\\
-    x\in\bound(\phi)\subseteq V_{1}\ \rightarrow
-    &=&\forall x\,\tau^{*}(\sigma(\phi_{1}))(W\setminus\{\sigma(x)\})
+    \begin{eqnarray*}\tau^{*}(\sigma(\phi))(\emptyset)
+        &=&\tau^{*}(\sigma(\forall x\phi_{1}))(\emptyset)\\
+        &=&\tau^{*}(\,\forall \sigma(x)\sigma(\phi_{1})\,)(\emptyset)\\
+        &=&\forall \tau_{0}\circ\sigma(x)\,
+           \tau^{*}(\sigma(\phi_{1}))(\{\sigma(x)\})\\
+        x\in\bound(\phi)\subseteq V_{0}\ \to\ 
+        &=&\forall x\,\tau^{*}(\sigma(\phi_{1}))(\{\sigma(x)\})
     \end{eqnarray*}
 So we are immediately confronted with two separate issues. One the
 one hand we cannot hope to carry out a successful induction argument
-relating to $W$ only, since $W\setminus\{\sigma(x)\}$ appears on the
+relating to $\emptyset$ only, since $\{\sigma(x)\}$ appears on the
 right-hand-side of this equation. So we need to prove something
-which relates to some $\tau^{*}(\sigma(\phi))(W\setminus\sigma(U))$
-rather than $\tau^{*}(\sigma(\phi))(W)$ where $U$ is a possibly
-non-empty subset of $V$. On the other hand, the condition
+which relates to some $\tau^{*}(\sigma(\phi))(\sigma(U))$
+rather than $\tau^{*}(\sigma(\phi))(\emptyset)$ where $U$ is a 
+possibly non-empty subset of $V$. On the other hand, the condition
 $\phi\in\Gamma$ is not very useful when $\phi=\forall x\phi_{1}$.
 From the equality $\free(\phi)=\free(\phi_{1})\setminus\{x\}$, it is
-clear that the condition $\free(\phi)\subseteq V_{0}$ does not imply
-$\free(\phi_{1})\subseteq V_{0}$. So it is possible to have
+clear that the condition $\free(\phi)\subseteq V_{1}$ does not imply
+$\free(\phi_{1})\subseteq V_{1}$. So it is possible to have
 $\phi\in\Gamma$ and yet $\phi_{1}\not\in\Gamma$. It is important for
 us to design an induction argument in such a way that if an
 assumption is made about $\phi=\forall x\phi_{1}$, this assumption
 is also satisfied by $\phi_{1}$ so we can use our induction
 hypothesis. The following lemma addresses these two issues:
+
+TODO: find suitable statement for this lemma
 \begin{lemma}\label{logic:lemma:FOPL:localinv:lem}
 Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
 $V_{1}$ be subsets of $V$ and $\tau_{0},\tau_{1}:W\to V$ be maps
