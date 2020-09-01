@@ -1,6 +1,7 @@
 related
-(F,G) has a unit => (F,G) has a counit.
-(F,G) has a counit => (F,G) as a unit.
+unit has related counit.
+counit has related unit.
+related unit/counit is unique?
 4th definition of adjuction with eta + eps without universal condition.
 locally small case: (F,G) has a unit <-> C(c,Gd) ~ D(Fc,d)
 

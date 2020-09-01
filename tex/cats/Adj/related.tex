@@ -26,6 +26,12 @@ transformation, as per definition~(\ref{Nat:def:composition}) and likewise
 $G\epsilon\circ\eta G:G\Rightarrow G$ is well-defined. So both equations~$(1)$
 and~$(2)$ of definition~(\ref{Adj:def:related}) make perfect sense.
 
+In order for a unit $\eta$ and counit $\epsilon$ to be related, according 
+to definition~(\ref{Adj:def:related}) only one of equations $(1)$ and $(2)$
+needs to be satisfied. However, as the following proposition shows, each of
+these equalities imply the other, so that related units and counits will 
+always in fact satisfy both equations.
+
 \begin{prop}\label{Adj:prop:related:both}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are categories. Let $\eta$ and $\epsilon$ be a unit and counit of $(F,G)$ 
@@ -83,9 +89,35 @@ and~$(2)$ of definition~(\ref{Adj:def:related}) make perfect sense.
         \begin{equation}\label{Adj:eqn:related:both:2}
             \epsilon_{F(c)}\circ F(\eta_{c})=\id(\,F(c)\,)
         \end{equation}
-    and we need to prove that equation~(\ref{Adj:eqn:related:both:2}) holds
+    and we need to prove that equation~(\ref{Adj:eqn:related:both:1}) holds
     for all $d\in\Dat$. However, given $d\in\Dat$ and setting $c=G(d)$, both
-    arrows of equation~(\ref{Adj:eqn:related:both:2}) are arrows from $c$ to
-    $G(d)$ in \Cat. TODO
+    arrows of equation~(\ref{Adj:eqn:related:both:1}) are arrows from $c$ to
+    $G(d)$ in \Cat. In order to show that these two arrows coincide, having
+    assumed $\epsilon$ is a counit of $(F,G)$, from
+    proposition~(\ref{Adj:prop:counit:proving:equality}) it is sufficient to
+    prove the equality $\epsilon_{d}\circ F(\,G(\epsilon_{d})\circ\eta_{G(d)}\,)=
+    \epsilon_{d}\circ F(\,\id(\,G(d)\,)\,)$ which goes as follows:
+        \begin{eqnarray*}\epsilon_{d}\circ F(\,G(\epsilon_{d})\circ\eta_{G(d)}\,)
+            &=&\epsilon_{d}\circ F(\,G(\epsilon_{d})\circ\eta_{c}\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d}\circ (F\circ G)(\epsilon_{d})\circ F(\eta_{c})\\
+            \mbox{prop~(\ref{Adj:prop:counit:natural}), $\epsilon_{d}:F(c)\to d$}
+            \ \to\ 
+            &=&\epsilon_{d}\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
+            \mbox{eqn.~(\ref{Adj:eqn:related:both:2})}\ \to\ 
+            &=&\epsilon_{d}\circ\id(\,F(c)\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d}\circ F(\,\id(c)\,)\\
+            &=&\epsilon_{d}\circ F(\,\id(\,G(d)\,)\,)\\
+        \end{eqnarray*}
 \end{proof}
 
+\begin{prop}\label{Adj:prop:unit:has:related:counit}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. Then every unit of $(F,G)$ has a related counit.
+\end{prop}
+\begin{proof}
+    Let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit of $(F,G)$. We need to 
+    show the existence of a counit $\epsilon:F\circ G\Rightarrow I_{\cal D}$ 
+    which is related to $\eta$ as per definition~(\ref{Adj:def:related}).
+\end{proof}
