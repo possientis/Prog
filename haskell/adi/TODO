@@ -1,4 +1,3 @@
-Heap: polish error messages
 Remove instances of 'error' within the code
 implement Eval1 with Error
 Fix Test.Main

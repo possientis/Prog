@@ -54,7 +54,7 @@ evalIO :: forall m . (Eval m) => Expr -> IO ()
 evalIO e = do
     putStrLn $ "\nExpression: " ++ showExpr e ++ "\n"
     case (evalAll @ m) e of
-        Left errs   -> mapM_ putStrLn $ unError errs
+        Left err    -> printTrace err
         Right (v,w) -> do 
             mapM_ putStrLn w
             putStrLn $ "\nResult: " ++ show v ++ "\n"
@@ -100,7 +100,9 @@ evalVar
     -> m Value
 evalVar x _ev = do
     env <- askEnv
-    find (findAddr env x)
+    case findAddr env x of  
+        Left e      -> throwError $ errorEvalVar x e
+        Right addr  -> find addr
 
 evalOp 
     :: (Eval m) 
@@ -201,3 +203,6 @@ evalCase e e1 x e2 ev = do
                 addr <- alloc
                 write addr v'
                 localEnv (bind x addr env) (ev e2)
+
+errorEvalVar :: Var -> Error -> Error
+errorEvalVar x e = mkError ("evalVar: unbound variable " ++ show x) <> e
