@@ -71,15 +71,16 @@ Definition replacementF (P:Formula) (q r r' n m k l:nat) : Formula := Imp
     (All n (Exi m (All k (Iff 
         (Elem k m) 
         (Exi l (And (Elem l n) (apply2 P l k))))))). 
+
 (*
 Lemma evalReplacementF : LEM -> forall (e:Env) (P:Formula) (q r r' n m k l:nat),
     q <> r  ->
     q <> r' ->
     r <> r' ->
-    n <> m  ->
-    n <> k  ->
-    n <> l  ->
-    m <> k  -> 
+    m <> n  ->
+    k <> n  ->
+    l <> n  ->
+    k <> m  -> 
     m <> l  ->
     k <> l  ->
     ~In q  (Fr P) ->
@@ -109,6 +110,26 @@ Proof.
       remember (G1 G2) as G3 eqn:E. clear G1 E G2. 
       rewrite evalAll in G3. remember (G3 x) as G1 eqn:E. clear E G3.
       rewrite evalExi in G1; try (assumption). destruct G1 as [y G1]. 
-      exists y. intros z.
+      exists y. intros z. 
+      rewrite evalAll in G1. remember (G1 z) as G2 eqn:E. clear E G1.
+      rewrite evalIff in G2; try (assumption).
+      rewrite evalElem in G2. rewrite bindSame in G2.
+      rewrite bindDiff in G2; try (assumption). rewrite bindSame in G2.
+      rewrite evalExi in G2; try (assumption). 
+      destruct G2 as [G1 G2]. split; intros G3.
+        + apply G1 in G3. clear G1 G2. destruct G3 as [u G1]. exists u.
+          rewrite evalAnd in G1; try (assumption).
+          rewrite evalElem in G1. rewrite bindSame in G1.
+          rewrite bindDiff in G1; try (assumption).
+          rewrite bindDiff in G1; try (assumption).
+          rewrite bindDiff in G1; try (assumption). 
+          rewrite bindSame in G1. destruct G1 as [G2 G1].
+          split; try (assumption). clear G2. 
+          remember (bind (bind (bind (bind e n x) m y) k z) l u) as e1 eqn:E1.
+          remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
+          rewrite (evalEnvEqual e1 e2) in G1.
+            { rewrite E2 in G1. remember (bind (bind e n x) m y) as e' eqn:E'.
+              
+  
 Show.
 *)
