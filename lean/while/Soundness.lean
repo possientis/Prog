@@ -41,7 +41,7 @@ begin
           { apply (H6 s),
             { split; assumption },
             { assumption }}},
-        { intros H3 H4, assumption }},
+        { intros H3 H4, cases H1, split; assumption }},
     { clear e, apply H5, apply H6,
       { apply H3, assumption },
       { assumption }}

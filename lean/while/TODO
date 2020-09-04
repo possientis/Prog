@@ -1,2 +1,2 @@
-Hoare: change while_intro's statement
+Hoare: conseq_intro , check with HoareSyntax
 Define Hoare triples semantically as per hhg

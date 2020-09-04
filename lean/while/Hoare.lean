@@ -44,14 +44,24 @@ begin
 end
 
 lemma while_intro : ∀ (p:Pred) (b:BExp) (e₁:Stmt),
-  Hoare (λ s, p s ∧ b s) e₁ p → Hoare p (while b e₁) p :=
+  Hoare (λ s, p s ∧ b s) e₁ p → Hoare p (while b e₁) (λ s, p s ∧ ¬ b s) :=
 begin
-  intros p b e₁ H1 s t H2 H3, unfold Hoare at H1,
-  generalize H4 : while b e₁ = e, rw H4 at H3,
-  revert e₁ H1 H4, induction H3
-  with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-  e₁ s u t H3 H5 H6 H7 H8;
-  intros e₁ H1 H4; try { cases H4 },
-    {},
-    {}
+  intros p b e₁ H1 s t H2 H3, unfold Hoare at H1, revert H2,
+  generalize H2 : while b e₁ = e, rw H2 at H3, revert H2,
+  induction H3
+  with _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    s u t G1 G2 G3 G4 G5; intros H2,
+    { cases H2 },
+    { cases H2 },
+    { cases H2 },
+    { cases H2 },
+    { cases H2 },
+    { cases H2, clear H2, intros G6, apply G5,
+      { refl},
+      { apply (H1 s u),
+        { split; assumption },
+        { assumption }}},
+    { cases H2, intros, split; assumption }
 end
+
+

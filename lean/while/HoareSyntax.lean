@@ -13,7 +13,7 @@ inductive Hoare : Pred → Stmt → Pred → Prop
     Hoare (λ s, p s ∧ ¬b s) e₂ q →
     Hoare p (ite b e₁ e₂) q
 | WHILE  : ∀ (p:Pred) (b:BExp) (e₁:Stmt),
-    Hoare (λ s, p s ∧ b s) e₁ p → Hoare p (while b e₁) p
+    Hoare (λ s, p s ∧ b s) e₁ p → Hoare p (while b e₁) (λ s, p s ∧ ¬ b s)
 | WEAKEN : ∀ (p p' q q':Pred) (e₁:Stmt),
     (∀ s, p' s → p s) →
     Hoare p e₁ q      →
