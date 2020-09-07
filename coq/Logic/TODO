@@ -6,7 +6,7 @@ Haskell:
 Latex:
 
 Set Theory:
-Lang1/Replacement
+Lang1/Replacement: eval3 . need to bind n to x. What about functional and n being free in P ?
 axiom of choice?
 axiom of infinity false ?
 all ZF axioms covered?

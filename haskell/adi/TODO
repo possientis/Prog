@@ -1,4 +1,4 @@
-Remove instances of 'error' within the code
+handle divide by zero error
 implement Eval1 with Error
 Fix Test.Main
 continue paper

@@ -83,3 +83,43 @@ Proof.
     - destruct H1. reflexivity.
     - rewrite H1. constructor.
 Qed.
+
+Inductive either (a b c:Type) (r:R a c) (s:R b c) : R (a + b) c := 
+| eitherL : forall (x:a) (y:c), r x y -> either a b c r s (inl x) y
+| eitherR : forall (x:b) (y:c), s x y -> either a b c r s (inr x) y
+.
+
+Arguments either {a} {b} {c}.
+
+Lemma either_charac : forall (a b c:Type) (r:R a c) (s:R b c) (x:a + b) (y:c), 
+    either r s x y 
+        <-> 
+    (exists (x':a), x = inl x' /\ r x' y) \/
+    (exists (x':b), x = inr x' /\ s x' y).
+Proof.
+    intros a b c r s x y. split.
+    - intros [x' y' H1|x' y' H1].
+        + left. exists x'. split.
+            { reflexivity. }
+            { assumption. }
+        + right. exists x'. split.
+            { reflexivity. }
+            { assumption. }
+    - intros [[x' [H1 H2]]|[x' [H1 H2]]]; rewrite H1; constructor; assumption.
+Qed.
+
+Lemma either_inj1 : forall (a b c:Type) (r:R a c) (s:R b c), 
+    either r s ; inj1 = r.
+Proof.
+    intros a b c r s. apply Ext. intros x y. unfold comp. split.
+    - intros [[z|z] [H1 H2]].
+        + remember (inl z) as z' eqn:E. destruct H1. inversion E. 
+          subst. clear E. remember (inl z) as z' eqn:E. destruct H2; inversion E.
+          subst. assumption.
+        +
+Show.
+
+(*
+Lemma sum_existence : forall (a b c:Type) (r:R a c) (s:R b c), 
+    exists (t:R (a + b) c), t ; inj1 = r /\ s ; inj2 = s.
+*)

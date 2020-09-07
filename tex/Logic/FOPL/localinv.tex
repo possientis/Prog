@@ -159,7 +159,6 @@ assumption is made about $\phi=\forall x\phi_{1}$, this assumption
 is also satisfied by $\phi_{1}$ so we can use our induction
 hypothesis. The following lemma addresses these two issues:
 
-TODO: find suitable statement for this lemma
 \begin{lemma}\label{logic:lemma:FOPL:localinv:lem}
 Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
 $V_{1}$ be subsets of $V$ and $\tau_{0},\tau_{1}:W\to V$ be maps
@@ -173,12 +172,13 @@ associated with $(\tau_{0},\tau_{1})$ as per {\em
 definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}. Then for all
 $U\in{\cal P}(V)$ and $\phi\in\pv$ we have:
     \begin{equation}\label{logic:eqn:FOPL:localinv:lemma:1}
-    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))=\phi
+    \tau^{*}(\sigma(\phi))(\sigma(U))=\phi
     \end{equation}
 provided $U$ and $\phi$ satisfy the following properties:
     \begin{eqnarray*}
-    (iii)&&(\,\free(\phi)\setminus U\subseteq V_{0}\,)
-    \land(\,\bound(\phi)\cup U\subseteq V_{1}\,)\\
+    (iii)&&
+    (\,\bound(\phi)\cup U\subseteq V_{0}\,)
+    \land(\,\free(\phi)\setminus U\subseteq V_{1}\,)\\
     (iv)&&(\,\mbox{$\sigma$ valid for $\phi$}\,)\land
     (\,\sigma(U)\cap\sigma(\free(\phi)\setminus U)=\emptyset\,)\\
     \end{eqnarray*}
@@ -195,7 +195,7 @@ $(iii)$ and $(iv)$. Then we need to show that for all $\phi\in\pv$
 we have the property:
     \[
     \forall U\subseteq V\ ,\ [\,q(U,\phi)\ \Rightarrow\
-    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))=\phi\,]
+    \tau^{*}(\sigma(\phi))(\sigma(U))=\phi\,]
     \]
 We shall do so by a structural induction argument, using
 theorem~(\ref{logic:the:proof:induction}) of
@@ -203,18 +203,17 @@ page~\pageref{logic:the:proof:induction}. First we assume that
 $\phi=(x\in y)$ for some $x, y\in V$. Let $U\subseteq V$ and suppose
 $q(U,\phi)$ is true. We need to show that
 equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds. We have:
-    \begin{eqnarray*}
-    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))&=&
-    \tau^{*}(\sigma(x\in y))(W\setminus\sigma(U))\\
-    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
-    &=&\tau^{*}(\sigma(x\in y))(U^{*})\\
-    &=&\tau^{*}(\,\sigma(x)\in \sigma(y)\,)(U^{*})\\
-    \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
-    \rightarrow
-    &=&\tau_{U^{*}}\circ\sigma(x)\in \tau_{U^{*}}\circ\sigma(y)\\
-    \mbox{A: to be proved}\ \rightarrow&=&x\in y\\
-    &=&\phi
+    \begin{eqnarray*}\tau^{*}(\sigma(\phi))(\sigma(U))
+        &=&\tau^{*}(\sigma(x\in y))(\sigma(U))\\
+        \mbox{define $U^{*}=\sigma(U)$}\ \to\ 
+        &=&\tau^{*}(\sigma(x\in y))(U^{*})\\
+        &=&\tau^{*}(\,\sigma(x)\in \sigma(y)\,)(U^{*})\\
+        \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\ \to\ 
+        &=&\tau_{U^{*}}\circ\sigma(x)\in \tau_{U^{*}}\circ\sigma(y)\\
+        \mbox{A: to be proved}\ \rightarrow&=&x\in y\\
+        &=&\phi
     \end{eqnarray*}
+TODO:
 So it remains to show that $\tau_{U^{*}}\circ\sigma(x)=x$ and
 $\tau_{U^{*}}\circ\sigma(y)=y$. First we show that
 $\tau_{U^{*}}\circ\sigma(x)=x$. We shall distinguish two cases:

@@ -1,5 +1,7 @@
 module Lam.Typing where
 
+open import Data.Nat
+open import Data.Bool
 
 open import Lam.Id
 open import Lam.Type
@@ -54,4 +56,12 @@ data _⊢_∶_ : Context → Term → Type → Set where
       --------------------
     → Γ ⊢ μ x ⇒ M ∶ A
 
+  -- Num-I
+  ⊢Num : ∀ {Γ : Context} {n : ℕ}
+       ---------------------
+    →  Γ ⊢ (eNum n) ∶ `Num
 
+  -- Bool-I
+  ⊢Bool : ∀ {Γ : Context} {b : Bool}
+        --------------------
+    →  Γ ⊢ (eBool b) ∶ `𝔹

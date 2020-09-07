@@ -45,22 +45,22 @@ instance Show Value where
         Zero    -> "zero"
         Suc _   -> maybe "???" show (toInt' v)
 
-delta :: Op -> [Value] -> Value
+delta :: Op -> [Value] -> Either Error Value
 delta op args = case checkArgs args of
-    Left err    -> error $ "Error: " ++ show op ++ ": " ++ err
-    Right pvs   -> mkValue $ deltaPrim op pvs
+    Left e      -> Left $ (mkError $ "delta: " ++ show op ++ ": ") <> e
+    Right pvs   -> mkValue <$> deltaPrim op pvs
 
-checkArgs :: [Value] -> Either String [PrimValue]
+checkArgs :: [Value] -> Either Error [PrimValue]
 checkArgs = mapM checkArg
 
-checkArg :: Value -> Either String PrimValue
+checkArg :: Value -> Either Error PrimValue
 checkArg v = case v of
-    Nil     -> Left $ "Nil argument encountered in primitive call"
-    Clo c   -> Left $ "Closure encountered in primitive call: " ++ show c
+    Nil     -> Left $ mkError $ "Nil argument encountered in primitive call"
+    Clo c   -> Left $ mkError $ "Closure encountered in primitive call: " ++ show c
     Num n   -> Right . PNum  . Identity $ n
     Bool b  -> Right . PBool . Identity $ b
-    Zero    -> Left $ "Nat zero encountered in primitive call"
-    Suc _   -> Left $ "Nat encountered in primitive call: " ++ show v
+    Zero    -> Left $ mkError $ "Nat zero encountered in primitive call"
+    Suc _   -> Left $ mkError $"Nat encountered in primitive call: " ++ show v
 
 mkValue :: PrimValue -> Value
 mkValue = \case

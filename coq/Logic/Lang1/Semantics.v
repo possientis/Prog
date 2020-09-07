@@ -39,6 +39,9 @@ Definition eval1 (e:Env) (p:Formula) (n:nat) (x:set) : Prop :=
 Definition eval2 (e:Env) (p:Formula) (n m:nat) (x y:set) : Prop :=
     eval (bind (bind e n x) m y) p.
 
+Definition eval3 (e:Env) (p:Formula) (n m k:nat) (x y z:set) : Prop :=
+    eval (bind (bind (bind e n x) m y) k z) p.
+
 Lemma evalBot : forall (e:Env), eval e Bot <-> False.
 Proof. intros e. unfold eval. split; intros H; assumption. Qed.
 

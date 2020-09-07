@@ -82,7 +82,7 @@ Lemma evalReplacementF : LEM -> forall (e:Env) (P:Formula) (q r r' n m k l:nat),
     l <> n  ->
     k <> m  -> 
     m <> l  ->
-    k <> l  ->
+    l <> k  ->
     ~In q  (Fr P) ->
     ~In r  (Fr P) ->
     ~In r' (Fr P) ->
@@ -129,7 +129,8 @@ Proof.
           remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
           rewrite (evalEnvEqual e1 e2) in G1.
             { rewrite E2 in G1. remember (bind (bind e n x) m y) as e' eqn:E'.
+              rewrite (evalApply2 e' P l k u z) in G1; try (assumption).
+              unfold eval2. unfold eval2 in G1.
               
-  
 Show.
 *)

@@ -109,12 +109,6 @@ L2 : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")
   —→ (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")
 L2 = ξ-·₁ L1
 
-infix 2 _—↠_ -- \em\rr-
-infix 1 begin_
-infixr 2 _—→⟨_⟩_
-infixr 2 _—→⟨⟩_
-infix 3 _∎
-
 data _—↠'_ : Term → Term → Set where
 
   step' : ∀ {M N : Term}
@@ -467,7 +461,6 @@ Church A = (A ⇒ A) ⇒ A ⇒ A
 ⊢2+2 : ∀ {Γ : Context} → Γ ⊢ plus · two · two ∶ `ℕ
 ⊢2+2 = ⊢· (⊢· ⊢plus ⊢two) ⊢two
 
-
 ⊢plusᶜ : ∀ {Γ : Context} {A : Type} → Γ ⊢ plusᶜ ∶ Church A ⇒ Church A ⇒ Church A
 ⊢plusᶜ = ⊢ƛ (⊢ƛ (⊢ƛ (⊢ƛ (⊢·
   (⊢· (⊢` (S' (S' (S' Z)))) (⊢` (S' Z)))
@@ -478,7 +471,6 @@ Church A = (A ⇒ A) ⇒ A ⇒ A
 
 ⊢2+2ᶜ : ∀ {Γ : Context} → Γ ⊢ plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero ∶ `ℕ
 ⊢2+2ᶜ = ⊢· (⊢· (⊢· (⊢· ⊢plusᶜ ⊢twoᶜ) ⊢twoᶜ) ⊢sucᶜ) ⊢zero
-
 
 ∋-injective : ∀ {Γ : Context} {x : Id} {A B : Type} →
   Γ ∋ x ∶ A → Γ ∋ x ∶ B → A ≡ B
@@ -495,7 +487,6 @@ nope₂ (⊢ƛ (⊢· (⊢` q) (⊢` p))) = contradiction (∋-injective p q)
   where
     contradiction : ∀ {A B : Type} → ¬ (A ≡ A ⇒ B)
     contradiction ()
-
 
 ex₁ : ∀ {Γ : Context} → Γ , "y" ∶ `ℕ ⇒ `ℕ , "x" ∶ `ℕ ⊢ ` "y" · ` "x" ∶ `ℕ
 ex₁ = ⊢· (⊢` (S' Z)) (⊢` Z)

@@ -20,6 +20,7 @@ open import Lam.Value
 open import Lam.Typing
 open import Lam.Syntax
 open import Lam.Context
+open import Lam.Canonical
 open import Lam.Reduction
 
 V¬—→ : ∀ {M N : Term}
@@ -37,40 +38,39 @@ V¬—→ (V-suc p) (ξ-suc q) = V¬—→ p q
 
 —→¬V p q = V¬—→ q p
 
-infix 4 Canonical_∶_
+-- a value which is well-typed in the empty context is canonical
+canonical : ∀ {V : Term} {A : Type}
+  → ∅ ⊢ V ∶ A
+  → Value V
+    ---------------
+  → Canonical V ∶ A
 
-data Canonical_∶_ : Term → Type → Set where
+canonical (⊢ƛ p) V-ƛ = C-ƛ p
+canonical ⊢zero V-zero = C-zero
+canonical (⊢suc p) (V-suc q) = C-suc (canonical p q)
 
-  C-ƛ : ∀ {x : Id} {A B : Type} {N : Term}
-    →  ∅ , x ∶ A ⊢ N ∶ B
-      --------------------
-    → Canonical (ƛ x ⇒ N) ∶ A ⇒ B
+-- a canonical term is a value and is well-typed in the empty context
+value : ∀ {M : Term} {A : Type}
+  → Canonical M ∶ A
+    --------------
+  → Value M
 
-  C-zero :
-      ---------------------
-      Canonical `zero ∶ `ℕ
+value (C-ƛ x) = V-ƛ
+value C-zero = V-zero
+value (C-suc p) = V-suc (value p)
+value C-Num = V-Num
+value C-Bool = V-Bool
 
-  C-suc : ∀ {V : Term}
-    →  Canonical V ∶ `ℕ
-      --------------------
-    → Canonical (`suc V) ∶ `ℕ
 
-  C-Num : ∀ {n : ℕ}
-      ---------------------
-    → Canonical (eNum n) ∶ `Num
+typed : ∀ {M : Term} {A : Type}
+  → Canonical M ∶ A
+    --------------------
+  → ∅ ⊢ M ∶ A
 
-  C-Bool : ∀ {b : Bool}
-      ----------------------
-    → Canonical (eBool b) ∶ `𝔹
+typed (C-ƛ p) = ⊢ƛ p
+typed C-zero = ⊢zero
+typed (C-suc p) = ⊢suc (typed p)
+typed C-Num = ⊢Num
+typed C-Bool = ⊢Bool
 
-  C-+ : ∀ {M N : Term}
-    →  Canonical M ∶ `Num
-    →  Canonical N ∶ `Num
-      -----------------------
-    →  Canonical (eOp `+ M N) ∶ `Num
 
-  C-* : ∀ {M N : Term}
-    → Canonical M ∶ `Num
-    → Canonical N ∶ `Num
-      --------------------
-    → Canonical (eOp `* M N) ∶ `Num

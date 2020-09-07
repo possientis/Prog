@@ -110,7 +110,11 @@ evalOp
     -> [Expr] 
     -> (Expr -> m Value) 
     -> m Value
-evalOp op es ev = delta op <$> mapM ev es
+evalOp op es ev = do
+    vs <- mapM ev es
+    case delta op vs of
+        Left e  -> throwError $ errorEvalOp op es e
+        Right v -> return v
 
 evalIf 
     :: (Eval m) 
@@ -122,7 +126,7 @@ evalIf
 evalIf e e1 e2 ev = do
     v <- ev e
     case bool' v of
-        Nothing -> error "If: condition does not evaluate to a boolean."
+        Nothing -> throwError $ errorEvalIf e 
         Just b  -> ev $ if b then e1 else e2
 
 evalLam 
@@ -144,7 +148,7 @@ evalApp
 evalApp e1 e2 ev = do
     v1 <- ev e1
     case closure v1 of
-        Nothing -> error "App: lhs does not evaluate to a function."
+        Nothing -> throwError $ errorEvalApp e1
         Just c  -> do 
             v2   <- ev e2 
             addr <- alloc
@@ -182,14 +186,14 @@ evalSuc
 evalSuc e ev = do
     v <- ev e
     case nat v of 
-        Nothing -> error "Suc: argument is not a Nat."
+        Nothing -> throwError $ errorEvalSuc e
         Just v' -> return $ mkSuc $ v'
 
 evalCase 
     :: (Eval m) 
     => Expr 
     -> Expr 
-    -> Var 
+    -> Var
     -> Expr 
     -> (Expr -> m Value) 
     -> m Value
@@ -197,7 +201,7 @@ evalCase e e1 x e2 ev = do
     v <- ev e
     if isZero v then ev e1 else
         case suc v of
-            Nothing -> error "Case: expression does not evaluate to a Nat."
+            Nothing -> throwError $ errorEvalCase e
             Just v'  -> do 
                 env <- askEnv
                 addr <- alloc
@@ -205,4 +209,30 @@ evalCase e e1 x e2 ev = do
                 localEnv (bind x addr env) (ev e2)
 
 errorEvalVar :: Var -> Error -> Error
-errorEvalVar x e = mkError ("evalVar: unbound variable " ++ show x) <> e
+errorEvalVar x e = mkError 
+    ("evalVar: unbound variable " ++ show x) <> e
+
+
+errorEvalIf :: Expr -> Error
+errorEvalIf e = mkError 
+    ("evalIf: expression " ++ showExpr e ++ " does not evaluate to a boolean")
+
+errorEvalApp :: Expr -> Error
+errorEvalApp e = mkError
+    ("evalApp: expression " ++ showExpr e ++ " does not evaluate to a function")
+
+errorEvalSuc :: Expr -> Error
+errorEvalSuc e = mkError
+    ("evalSuc: expression " ++ showExpr e ++ " does not evaluate to a Nat")
+
+errorEvalCase :: Expr -> Error
+errorEvalCase e = mkError
+    ("evalCase: expression " ++ showExpr e ++ " does not evalute to a Nat")
+
+errorEvalOp :: Op -> [Expr] -> Error -> Error
+errorEvalOp op es e = mkError
+    ( "evalOp: error when attempting to evaluate the operation " 
+   ++ show op
+   ++ " on the arguments: "
+   ++ show (map showExpr es)
+    ) <> e

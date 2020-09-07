@@ -25,6 +25,8 @@ module  Op
 import Data.Functor.Const
 import Data.Functor.Identity
 
+import Error
+
 data Prim_ f 
     = PNum  (f Integer) 
     | PBool (f Bool)
@@ -71,10 +73,10 @@ instance Show Op where
         OpLe  -> "<="
         OpEq  -> "=="
 
-deltaPrim :: Op -> [PrimValue] -> PrimValue
+deltaPrim :: Op -> [PrimValue] -> Either Error PrimValue
 deltaPrim op pvs = case checkArgs op pvs of
-    Left err  -> error err
-    Right pvs' -> opImpl (opData op) pvs'
+    Left e  -> Left $ (mkError $ "deltaPrim error:") <> e
+    Right pvs' -> Right $ opImpl (opData op) pvs'
 
 opData :: Op -> OpData
 opData = \case 
@@ -105,9 +107,9 @@ deltaComp :: Op -> [PrimValue] -> PrimValue
 deltaComp op pvs = PBool . Identity $ deltaComp_ op n1 n2 where
     [PNum (Identity n1) , PNum (Identity n2)] = pvs
 
-checkArgs :: Op -> [PrimValue] -> Either String [PrimValue]
+checkArgs :: Op -> [PrimValue] -> Either Error [PrimValue]
 checkArgs op pvs = if n /= m then
-    Left $ "Type Error: In primitive call to " 
+    Left $ mkError $ "Type Error: In primitive call to " 
          ++ show op 
          ++ ", expecting "
          ++ show m
@@ -121,11 +123,11 @@ checkArgs op pvs = if n /= m then
     pts = opTypes . opData $ op  
 
 -- Op and Int are needed for error message only
-checkArg :: Op -> ((PrimValue,PrimType),Int) -> Either String PrimValue 
+checkArg :: Op -> ((PrimValue,PrimType),Int) -> Either Error PrimValue 
 checkArg op ((pv,pt),n)
     | typeOf pv == pt   = Right pv
     | otherwise         = 
-        Left $ "Type Error: In primitive call to " 
+        Left $ mkError $ "Type Error: In primitive call to " 
              ++ show op
              ++ ", argument n. "
              ++ show n
