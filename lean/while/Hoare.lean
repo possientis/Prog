@@ -64,4 +64,56 @@ begin
     { cases H2, intros, split; assumption }
 end
 
+lemma weaken_intro : ∀ (p p' q q':Pred) (e₁:Stmt),
+  (∀ s, p' s → p s) →
+  Hoare p e₁ q      →
+  (∀ s, q s → q' s) →
+  Hoare p' e₁ q' :=
+begin
+  intros p p' q q' e₁ H1 H2 H3 s t H4 H5, unfold Hoare at H2,
+  apply H3, apply (H2 s t),
+    { apply H1, assumption },
+    { assumption }
+end
+
+lemma weaken_left : ∀ (p p' q:Pred) (e₁:Stmt),
+  (∀ s, p' s → p s) → Hoare p e₁ q → Hoare p' e₁ q :=
+begin
+  intros p p' q e₁ H1 H2, apply (weaken_intro p p' q q),
+    { assumption },
+    { assumption },
+    { intros s H3, assumption }
+end
+
+lemma weaken_right : ∀ (p q q':Pred) (e₁:Stmt),
+  Hoare p e₁ q → (∀ s, q s → q' s) → Hoare p e₁ q' :=
+begin
+  intros p q q' e₁ H1 H2, apply (weaken_intro p p q q'),
+    {intros s H3, assumption },
+    { assumption },
+    { assumption }
+end
+
+
+lemma skip_intro' : ∀ (p q:Pred),
+  (∀ s, p s → q s) → Hoare p skip q :=
+begin
+  intros p q H1, apply (weaken_left q p q),
+    { assumption },
+    { apply skip_intro }
+end
+
+lemma assign_intro' : ∀ (p q:Pred) (x:string) (a:AExp),
+  (∀ s, p s → subst x a q s) → Hoare p (x :== a) q :=
+begin
+  intros p q x a H1, apply (weaken_left (subst x a q) p q),
+    { assumption },
+    { apply assign_intro }
+end
+
+lemma seq_intro' : ∀ (p q r:Pred) (e₁ e₂:Stmt),
+  Hoare q e₂ r → Hoare p e₁ q → Hoare p (e₁ ;; e₂) r :=
+begin
+  intros p q r e₁ e₂ H1 H2, apply (seq_intro p q r); assumption
+end
 
