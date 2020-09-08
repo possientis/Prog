@@ -40,6 +40,8 @@ Proof.
     - exists k. rewrite <- plus_n_Sm in H1. assumption.
 Qed.
 
+(* G f n is equivalent to (exists (k:nat), f (n + k) = true), but this is far   *)
+(* from obvious at this stage (see Lemma L13). This definition is miraculous    *)
 Inductive G (f:nat -> bool) : nat -> Prop :=
 | mkG : forall (n:nat), (f n = false -> G f (S n)) -> G f n
 .
@@ -106,8 +108,34 @@ Defined.
 (* Very cool                                                                    *)
 Compute witness f1 L10.
 
-Lemma L11 : forall (f:nat -> bool) (n:nat), 
+
+Lemma L11 : forall (f:nat -> bool) (k n:nat),
+    f(n + k) = true -> G f n.
+Proof.
+    intros f. induction k as [|k IH]; intros n.
+    - rewrite <- plus_n_O. apply L5.
+    - rewrite <- plus_n_Sm. intros H1. apply L6, IH. assumption.
+Qed.
+
+(* Improvement on L9                                                            *)
+Definition L12 : forall (f:nat -> bool) (n:nat), 
+    G f n -> Sig (fun k => f (n + k) = true).
+Proof.
+    intro f. apply elimG. intros n H1. destruct (f n) eqn:E. 
+    - assert (f (n + 0) = true) as E'. { rewrite <- plus_n_O. assumption. }
+      exact (Ex 0 E').
+    - destruct (H1 eq_refl) as [k H2].
+      assert (f (n + S k) = true) as H3. { rewrite <- plus_n_Sm. assumption. }
+      exact (Ex (S k) H3).
+Qed. 
+
+Lemma L13 : forall (f:nat -> bool) (n:nat), 
     G f n <-> exists (k:nat), f(n + k) = true.
 Proof.
+    intros f n. split.
+    - intros H1. remember (L12 f n H1) as e eqn:E. clear E. destruct e as [k H2].
+      exists k. assumption.
+    - intros [k H1]. apply L11 with k. assumption.
+Qed.
 
-Show.
+
