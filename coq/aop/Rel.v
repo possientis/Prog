@@ -64,6 +64,17 @@ Proof.
         + exists y'. split; assumption.
 Qed.
 
+Definition inv (a b:Type) (r:R a b) : R b a := fun (y:b) (x:a) => r x y.
+
+Arguments inv {a} {b}.
+
+Lemma inv_left : forall (a b:Type) (r:R a b), inv r ; r = id.
+Proof.
+    unfold comp. intros a b r. apply Ext. intros x y.
+Show.
+
+
+(*
 Definition inj1 (a b:Type) : R a (a + b) := func_embed inl.
 Definition inj2 (a b:Type) : R b (a + b) := func_embed inr.
 
@@ -116,10 +127,66 @@ Proof.
         + remember (inl z) as z' eqn:E. destruct H1. inversion E. 
           subst. clear E. remember (inl z) as z' eqn:E. destruct H2; inversion E.
           subst. assumption.
-        +
-Show.
+        + remember (inr z) as z' eqn:E. destruct H1. inversion E. 
+    - intros H1. exists (inl x). split.
+        + constructor.
+        + constructor. assumption.
+Qed.
 
-(*
+Lemma either_inj2 : forall (a b c:Type) (r:R a c) (s:R b c), 
+    either r s ; inj2 = s.
+Proof.
+    intros a b c r s. apply Ext. intros x y. unfold comp. split.
+    - intros [[z|z] [H1 H2]].
+        + remember (inl z) as z' eqn:E. destruct H1. inversion E. 
+        + remember (inr z) as z' eqn:E. destruct H1. inversion E. 
+          subst. clear E. remember (inr z) as z' eqn:E. destruct H2; inversion E.
+          subst. assumption.
+    - intros H1. exists (inr x). split.
+        + constructor.
+        + constructor. assumption.
+Qed.
+
 Lemma sum_existence : forall (a b c:Type) (r:R a c) (s:R b c), 
-    exists (t:R (a + b) c), t ; inj1 = r /\ s ; inj2 = s.
+    exists (t:R (a + b) c), t ; inj1 = r /\ t ; inj2 = s.
+Proof.
+    intros a b c r s. exists (either r s). split.
+    - apply either_inj1.
+    - apply either_inj2.
+Qed.
+
+Lemma sum_uniqueness : forall (a b c:Type) (r s:R (a + b) c),
+    r ; inj1 = s ; inj1 ->
+    r ; inj2 = s ; inj2 ->
+    r = s.
+Proof.
+    intros a b c r s H1 H2. apply Ext. intros [x|x] y.
+    - split; intros H3.    
+        + assert (exists z, inj1 x z /\ r z y) as H4.
+            { exists (inl x). split.
+                { constructor. }
+                { assumption. }}
+          change ((r ; inj1) x y) in H4. rewrite H1 in H4.
+          unfold comp in H4. destruct H4 as [z [H4 H5]]. destruct H4. assumption.
+        + assert (exists z, inj1 x z /\ s z y) as H4.
+            { exists (inl x). split.
+                { constructor. }
+                { assumption. }}
+          change ((s ; inj1) x y) in H4. rewrite <- H1 in H4.
+          unfold comp in H4. destruct H4 as [z [H4 H5]]. destruct H4. assumption.
+    - split; intros H3.    
+        + assert (exists z, inj2 x z /\ r z y) as H4.
+            { exists (inr x). split.
+                { constructor. }
+                { assumption. }}
+          change ((r ; inj2) x y) in H4. rewrite H2 in H4.
+          unfold comp in H4. destruct H4 as [z [H4 H5]]. destruct H4. assumption.
+        + assert (exists z, inj2 x z /\ s z y) as H4.
+            { exists (inr x). split.
+                { constructor. }
+                { assumption. }}
+          change ((s ; inj2) x y) in H4. rewrite <- H2 in H4.
+          unfold comp in H4. destruct H4 as [z [H4 H5]]. destruct H4. assumption.
+Qed.
+
 *)
