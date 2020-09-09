@@ -213,18 +213,17 @@ equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds. We have:
         \mbox{A: to be proved}\ \rightarrow&=&x\in y\\
         &=&\phi
     \end{eqnarray*}
-TODO:
 So it remains to show that $\tau_{U^{*}}\circ\sigma(x)=x$ and
 $\tau_{U^{*}}\circ\sigma(y)=y$. First we show that
 $\tau_{U^{*}}\circ\sigma(x)=x$. We shall distinguish two cases:
 first we assume that $x\in U$. Then $\sigma(x)\in\sigma(U)$ and it
-follows that $\sigma(x)\not\in U^{*}$. Thus, using
+follows that $\sigma(x)\in U^{*}$. Thus, using
 definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) we have
-$\tau_{U^{*}}\circ\sigma(x)=\tau_{1}\circ\sigma(x)$. From the
-property $(ii)$ above we have $\tau_{1}\circ\sigma(x)=x$ whenever
-$x\in V_{1}$. So we only need to show that $x\in V_{1}$. However,
+$\tau_{U^{*}}\circ\sigma(x)=\tau_{0}\circ\sigma(x)$. From the
+property $(i)$ above we have $\tau_{0}\circ\sigma(x)=x$ whenever
+$x\in V_{0}$. So we only need to show that $x\in V_{0}$. However,
 having assumed that $q(U,\phi)$ is true, in particular we have
-$\bound(\phi)\cup U\subseteq V_{1}$. So $x\in V_{1}$ follows
+$\bound(\phi)\cup U\subseteq V_{0}$. So $x\in V_{0}$ follows
 immediately from our assumption $x\in U$. Next we assume that
 $x\not\in U$. Since $\phi=(x\in y)$ we have $x\in\free(\phi)$. So it
 follows that $x\in\free(\phi)\setminus U$ and consequently
@@ -232,13 +231,13 @@ $\sigma(x)\in\sigma(\free(\phi)\setminus U)$. Having assumed that
 $q(U,\phi)$ is true, in particular we have
 $\sigma(U)\cap\sigma(\free(\phi)\setminus U)=\emptyset$. Thus, from
 $\sigma(x)\in\sigma(\free(\phi)\setminus U)$ we obtain
-$\sigma(x)\not\in\sigma(U)$ and we see that $\sigma(x)\in U^{*}$.
+$\sigma(x)\not\in\sigma(U)$ and we see that $\sigma(x)\not\in U^{*}$.
 Thus, using definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}) we
-have $\tau_{U^{*}}\circ\sigma(x)=\tau_{0}\circ\sigma(x)$. From the
-property $(i)$ above we have $\tau_{0}\circ\sigma(x)=x$ whenever
-$x\in V_{0}$. So it remains to show that $x\in V_{0}$. Having
+have $\tau_{U^{*}}\circ\sigma(x)=\tau_{1}\circ\sigma(x)$. From the
+property $(ii)$ above $\tau_{1}\circ\sigma(x)=x$ whenever
+$x\in V_{1}$. So it remains to show that $x\in V_{1}$. Having
 assumed that $q(U,\phi)$ is true, in particular we have
-$\free(\phi)\setminus U\subseteq V_{0}$. So $x\in V_{0}$ follows
+$\free(\phi)\setminus U\subseteq V_{1}$. So $x\in V_{1}$ follows
 immediately from $x\in\free(\phi)\setminus U$ which we have already
 proved. This completes our proof of $\tau_{U^{*}}\circ\sigma(x)=x$.
 The proof of $\tau_{U^{*}}\circ\sigma(y)=y$ is identical so we are
@@ -247,25 +246,23 @@ $\phi=\bot$. Let $U\subseteq V$ and suppose $q(U,\phi)$ is true. We
 need to show that equation~(\ref{logic:eqn:FOPL:localinv:lemma:1})
 holds:
     \[
-    \tau^{*}(\sigma(\bot))(W\setminus\sigma(U))
-    =\tau^{*}(\bot)(W\setminus\sigma(U))=\bot
+    \tau^{*}(\sigma(\bot))(\sigma(U))
+    =\tau^{*}(\bot)(\sigma(U))=\bot
     \]
 Next we assume that $\phi=\phi_{1}\to\phi_{2}$ where
 $\phi_{1},\phi_{2}\in\pv$ satisfy our desired property. We need to
 show that the same is true of $\phi$. So let $U\subseteq V$ and
 suppose $q(U,\phi)$ is true. We need to show that
 equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds:
-    \begin{eqnarray*}
-    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))&=&
-    \tau^{*}(\sigma(\phi_{1}\to\phi_{2}))(W\setminus\sigma(U))\\
-    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
-    &=&\tau^{*}(\sigma(\phi_{1}\to\phi_{2}))(U^{*})\\
-    &=&\tau^{*}(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)(U^{*})\\
-    \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
-    \rightarrow
-    &=&\tau^{*}(\sigma(\phi_{1}))(U^{*})\to\tau^{*}(\sigma(\phi_{2}))(U^{*})\\
-    \mbox{A: to be proved}\ \rightarrow&=&\phi_{1}\to\phi_{2}\\
-    &=&\phi
+    \begin{eqnarray*}\tau^{*}(\sigma(\phi))(\sigma(U))
+        &=&\tau^{*}(\sigma(\phi_{1}\to\phi_{2}))(\sigma(U))\\
+        \mbox{define $U^{*}=\sigma(U)$}\ \to\ 
+        &=&\tau^{*}(\sigma(\phi_{1}\to\phi_{2}))(U^{*})\\
+        &=&\tau^{*}(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)(U^{*})\\
+        \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\ \to\ 
+        &=&\tau^{*}(\sigma(\phi_{1}))(U^{*})\to\tau^{*}(\sigma(\phi_{2}))(U^{*})\\
+        \mbox{A: to be proved}\ \rightarrow&=&\phi_{1}\to\phi_{2}\\
+        &=&\phi
     \end{eqnarray*}
 So it remains to show that
 equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds for
@@ -275,12 +272,12 @@ sufficient to prove that $q(U,\phi_{1})$ and $q(U,\phi_{2})$ are
 true. First we show that $q(U,\phi_{1})$ is true. We need to prove
 that $(iii)$ and $(iv)$ above are true for $\phi_{1}$:
     \[
-    \free(\phi_{1})\setminus U\subseteq\free(\phi)\setminus U\subseteq V_{0}
+    \free(\phi_{1})\setminus U\subseteq\free(\phi)\setminus U\subseteq V_{1}
     \]
 where the second inclusion follows from our assumption of
 $q(U,\phi)$. Furthermore:
     \[
-    \bound(\phi_{1})\cup U\subseteq\bound(\phi)\cup U\subseteq V_{1}
+    \bound(\phi_{1})\cup U\subseteq\bound(\phi)\cup U\subseteq V_{0}
     \]
 So $(iii)$ is now established for $\phi_{1}$. Also from $q(U,\phi)$
 we obtain:
@@ -300,60 +297,54 @@ the same is true for $\phi$. So let $U\subseteq V$ and suppose
 $q(U,\phi)$ is true. We need to show that
 equation~(\ref{logic:eqn:FOPL:localinv:lemma:1}) holds for $U$,
 which goes as follows:
-    \begin{eqnarray*}
-    \tau^{*}(\sigma(\phi))(W\setminus\sigma(U))&=&
-    \tau^{*}(\sigma(\forall x\phi_{1}))(W\setminus\sigma(U))\\
-    \mbox{define $U^{*}=W\setminus\sigma(U)$}\ \rightarrow
-    &=&\tau^{*}(\sigma(\forall x\phi_{1}))(U^{*})\\
-    &=&\tau^{*}(\,\forall\sigma(x)\sigma(\phi_{1})\,)(U^{*})\\
-    \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\
-    \rightarrow
-    &=&\forall \tau_{1}\circ\sigma(x)\,\tau^{*}(
-    \sigma(\phi_{1}))(\,U^{*}\setminus\{\sigma(x)\}\,)\\
-    \mbox{$(ii)$ and $x\in\bound(\phi)\subseteq V_{1}$}\ \rightarrow
-    &=&\forall x\,\tau^{*}(
-    \sigma(\phi_{1}))(\,U^{*}\setminus\{\sigma(x)\}\,)\\
-    \mbox{define $U_{1}^{*}=U^{*}\setminus\{\sigma(x)\}$}\ \rightarrow
-    &=&\forall x\,\tau^{*}(\sigma(\phi_{1}))(U_{1}^{*})\\
-    \mbox{A: to be proved}\ \rightarrow&=&\forall x\phi_{1}\\
-    &=&\phi
+    \begin{eqnarray*}\tau^{*}(\sigma(\phi))(\sigma(U))
+        &=&\tau^{*}(\sigma(\forall x\phi_{1}))(\sigma(U))\\
+        \mbox{define $U^{*}=\sigma(U)$}\ \to\ 
+        &=&\tau^{*}(\sigma(\forall x\phi_{1}))(U^{*})\\
+        &=&\tau^{*}(\,\forall\sigma(x)\sigma(\phi_{1})\,)(U^{*})\\
+        \mbox{definition~(\ref{logic:def:FOPL:dualsubst:dualsubst})}\ \to\ 
+        &=&\forall \tau_{0}\circ\sigma(x)\,\tau^{*}(
+            \sigma(\phi_{1}))(\,U^{*}\cup\{\sigma(x)\}\,)\\
+        \mbox{$(i)$ and $x\in\bound(\phi)\subseteq V_{0}$}\ \to\ 
+        &=&\forall x\,\tau^{*}(
+            \sigma(\phi_{1}))(\,U^{*}\cup\{\sigma(x)\}\,)\\
+        \mbox{define $U_{1}^{*}=U^{*}\cup\{\sigma(x)\}$}\ \to\ 
+        &=&\forall x\,\tau^{*}(\sigma(\phi_{1}))(U_{1}^{*})\\
+        \mbox{A: to be proved}\ \rightarrow&=&\forall x\phi_{1}\\
+        &=&\phi
     \end{eqnarray*}
-So it remains to show that
-$\tau^{*}(\sigma(\phi_{1}))(U_{1}^{*})=\phi_{1}$. From
-$U^{*}=W\setminus\sigma(U)$ and
-$U_{1}^{*}=U^{*}\setminus\{\sigma(x)\}$ we obtain
-$U_{1}^{*}=W\setminus\sigma(U_{1})$ where $U_{1}=U\cup\{x\}$. So it
-remains to show that
-$\tau^{*}(\sigma(\phi_{1}))(W\setminus\sigma(U_{1}))=\phi_{1}$, or
+So it remains to show that $\tau^{*}(\sigma(\phi_{1}))(U_{1}^{*})=\phi_{1}$. 
+From $U^{*}=\sigma(U)$ as well as  $U_{1}^{*}=U^{*}\cup\{\sigma(x)\}$ we obtain
+$U_{1}^{*}=\sigma(U_{1})$ where $U_{1}=U\cup\{x\}$. So it remains to show that
+$\tau^{*}(\sigma(\phi_{1}))(\sigma(U_{1}))=\phi_{1}$, or
 equivalently that equation~(\ref{logic:eqn:FOPL:localinv:lemma:1})
 holds for $U_{1}$ and $\phi_{1}$. Having assumed $\phi_{1}$
 satisfies our induction hypothesis, it is therefore sufficient to
 prove that $q(U_{1},\phi_{1})$ is true. So we need to show that
 $(iii)$ and $(iv)$ above are true for $U_{1}$ and $\phi_{1}$:
-    \begin{eqnarray*}
-    \free(\phi_{1})\setminus
-    U_{1}&=&\free(\phi_{1})\setminus\{x\}\setminus U\\
-    &=&\free(\phi)\setminus U\\
-    q(U,\phi)\ \rightarrow&\subseteq&V_{0}
+    \begin{eqnarray*}\free(\phi_{1})\setminus U_{1}
+        &=&\free(\phi_{1})\setminus\{x\}\setminus U\\
+        &=&\free(\phi)\setminus U\\
+        q(U,\phi)\ \to\ 
+        &\subseteq& V_{1}
     \end{eqnarray*}
 Furthermore:
-    \begin{eqnarray*}
-    \bound(\phi_{1})\cup U_{1}&=&\bound(\phi_{1})\cup\{x\}\cup U\\
-    &=&\bound(\phi)\cup U\\
-    q(U,\phi)\ \rightarrow&\subseteq& V_{1}
+    \begin{eqnarray*}\bound(\phi_{1})\cup U_{1}
+        &=&\bound(\phi_{1})\cup\{x\}\cup U\\
+        &=&\bound(\phi)\cup U\\
+        q(U,\phi)\ \to\ 
+        &\subseteq& V_{0}
     \end{eqnarray*}
 and:
-    \begin{eqnarray*}
-    \sigma(U_{1})\cap\sigma(\free(\phi_{1})\setminus U_{1})
-    &=&\sigma(U_{1})\cap\sigma(\,\free(\phi_{1})\setminus\{x\}\setminus
-    U\,)\\
-    &=&\sigma(U_{1})\cap\sigma(\free(\phi)\setminus U)\\
-    &=&(\sigma(U)\cup\{\sigma(x)\})\cap\sigma(\free(\phi)\setminus
-    U)\\
-    q(U,\phi)\ \rightarrow&=&\{\sigma(x)\}\cap\sigma(\free(\phi)\setminus
-    U)\\
-    &\subseteq&\{\sigma(x)\}\cap\sigma(\free(\phi))\\
-    \mbox{A: to be proved}\ \rightarrow&=&\emptyset
+    \begin{eqnarray*}\sigma(U_{1})\cap\sigma(\free(\phi_{1})\setminus U_{1})
+        &=&\sigma(U_{1})\cap\sigma(\,\free(\phi_{1})\setminus\{x\}\setminus U\,)\\
+        &=&\sigma(U_{1})\cap\sigma(\free(\phi)\setminus U)\\
+        &=&(\sigma(U)\cup\{\sigma(x)\})\cap\sigma(\free(\phi)\setminus U)\\
+        q(U,\phi)\ \to\ 
+        &=&\{\sigma(x)\}\cap\sigma(\free(\phi)\setminus U)\\
+        &\subseteq&\{\sigma(x)\}\cap\sigma(\free(\phi))\\
+        \mbox{A: to be proved}\ \to\ 
+        &=&\emptyset
     \end{eqnarray*}
 So we need to show that $\sigma(u)\neq\sigma(x)$ whenever
 $u\in\free(\phi)$, which follows immediately from
@@ -365,6 +356,7 @@ valid for $\phi_{1}$, which is another immediate consequence of
 proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}). This
 completes our induction argument.
 \end{proof}
+TODO
 \index{local@Local inversion for formula}
 \begin{theorem}\label{logic:the:FOPL:localinv:main}
 Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
