@@ -20,6 +20,7 @@ open import Lam.Value
 open import Lam.Typing
 open import Lam.Syntax
 open import Lam.Context
+open import Lam.Progress
 open import Lam.Canonical
 open import Lam.Reduction
 
@@ -48,6 +49,8 @@ canonical : ∀ {V : Term} {A : Type}
 canonical (⊢ƛ p) V-ƛ = C-ƛ p
 canonical ⊢zero V-zero = C-zero
 canonical (⊢suc p) (V-suc q) = C-suc (canonical p q)
+canonical ⊢Num V-Num = C-Num
+canonical ⊢Bool V-Bool = C-Bool
 
 -- a canonical term is a value and is well-typed in the empty context
 value : ∀ {M : Term} {A : Type}
@@ -73,4 +76,26 @@ typed (C-suc p) = ⊢suc (typed p)
 typed C-Num = ⊢Num
 typed C-Bool = ⊢Bool
 
+progress : ∀ {M : Term} {A : Type}
+  → ∅ ⊢ M ∶ A
+    ----------
+  → Progress M
 
+progress (⊢ƛ p) = done V-ƛ
+progress (⊢· p q) with (progress p)
+... | step r = step (ξ-·₁ r)
+... | done r with (progress q)
+... | step s = step (ξ-·₂ r s)
+progress (⊢· (⊢ƛ p) q) | done r | done s = step (β-ƛ s)
+progress ⊢zero = {!!}
+progress (⊢suc p) = {!!}
+progress (⊢case p p₁ p₂) = {!!}
+progress (⊢μ p) = {!!}
+progress ⊢Num = {!!}
+progress (⊢+ p p₁) = {!!}
+progress (⊢* p p₁) = {!!}
+progress ⊢Bool = {!!}
+progress (⊢= p p₁) = {!!}
+progress (⊢< p p₁) = {!!}
+progress (⊢∧ p p₁) = {!!}
+progress (⊢∨ p p₁) = {!!}

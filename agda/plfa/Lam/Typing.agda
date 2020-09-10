@@ -4,6 +4,7 @@ open import Data.Nat
 open import Data.Bool
 
 open import Lam.Id
+open import Lam.Op
 open import Lam.Type
 open import Lam.Syntax
 open import Lam.Context
@@ -56,12 +57,57 @@ data _⊢_∶_ : Context → Term → Type → Set where
       --------------------
     → Γ ⊢ μ x ⇒ M ∶ A
 
-  -- Num-I
+  -- Num-I₁
   ⊢Num : ∀ {Γ : Context} {n : ℕ}
        ---------------------
     →  Γ ⊢ (eNum n) ∶ `Num
 
-  -- Bool-I
+  -- Num-I₂
+  ⊢+ : ∀ {Γ : Context} {M N : Term}
+    → Γ ⊢ M ∶ `Num
+    → Γ ⊢ N ∶ `Num
+      ---------------
+    → Γ ⊢ eOp `+ M N ∶ `Num
+
+  -- Num-I₃
+  ⊢* : ∀ {Γ : Context} {M N : Term}
+    → Γ ⊢ M ∶ `Num
+    → Γ ⊢ N ∶ `Num
+      ---------------
+    → Γ ⊢ eOp `* M N ∶ `Num
+
+  -- Bool-I₁
   ⊢Bool : ∀ {Γ : Context} {b : Bool}
         --------------------
     →  Γ ⊢ (eBool b) ∶ `𝔹
+
+  -- Bool-I₂
+  ⊢= : ∀ {Γ : Context} {M N : Term}
+    → Γ ⊢ M ∶ `Num
+    → Γ ⊢ N ∶ `Num
+      ---------------
+    → Γ ⊢ eOp `= M N ∶ `𝔹
+
+  -- Bool-I₃
+  ⊢< : ∀ {Γ : Context} {M N : Term}
+    → Γ ⊢ M ∶ `Num
+    → Γ ⊢ N ∶ `Num
+      ---------------
+    → Γ ⊢ eOp `< M N ∶ `𝔹
+
+  -- Bool-I₄
+  ⊢∧ : ∀ {Γ : Context} {M N : Term}
+    → Γ ⊢ M ∶ `𝔹
+    → Γ ⊢ N ∶ `𝔹
+      ---------------
+    → Γ ⊢ eOp `∧ M N ∶ `𝔹
+
+  -- Bool-I₅
+  ⊢∨ : ∀ {Γ : Context} {M N : Term}
+    → Γ ⊢ M ∶ `𝔹
+    → Γ ⊢ N ∶ `𝔹
+      ---------------
+    → Γ ⊢ eOp `∨ M N ∶ `𝔹
+
+
+
