@@ -8,7 +8,7 @@ module  Error
 
 
 newtype Error = Error { unError :: [String] }
-    deriving (Semigroup, Monoid, Show)
+    deriving (Eq, Semigroup, Monoid, Show)
 
 mkError :: String -> Error
 mkError s = Error [s]

@@ -45,7 +45,7 @@ instance Show PrimType where
 
 data OpData = OpData
     { opTypes :: [PrimType]
-    , opImpl  :: [PrimValue] -> PrimValue
+    , opImpl  :: [PrimValue] -> Either Error PrimValue
     }
 
 data Op = OpAdd 
@@ -76,7 +76,7 @@ instance Show Op where
 deltaPrim :: Op -> [PrimValue] -> Either Error PrimValue
 deltaPrim op pvs = case checkArgs op pvs of
     Left e  -> Left $ (mkError $ "deltaPrim error:") <> e
-    Right pvs' -> Right $ opImpl (opData op) pvs'
+    Right pvs' -> opImpl (opData op) pvs'
 
 opData :: Op -> OpData
 opData = \case 
@@ -91,20 +91,20 @@ opData = \case
     OpLe  -> OpData [tNum, tNum]   (deltaComp OpLe)
     OpEq  -> OpData [tNum, tNum]   (deltaComp OpEq)
 
-deltaNum :: Op -> [PrimValue] -> PrimValue
-deltaNum op pvs = PNum . Identity  $ deltaNum_ op n1 n2 where
+deltaNum :: Op -> [PrimValue] -> Either Error PrimValue
+deltaNum op pvs = PNum . Identity  <$> deltaNum_ op n1 n2 where
     [PNum (Identity n1) , PNum (Identity n2)] = pvs
     
-deltaBool :: Op -> [PrimValue] -> PrimValue 
-deltaBool op pvs = PBool . Identity $ deltaBool_ op b1 b2 where
+deltaBool :: Op -> [PrimValue] -> Either Error PrimValue 
+deltaBool op pvs = Right . PBool . Identity $ deltaBool_ op b1 b2 where
     [PBool (Identity b1) , PBool (Identity b2)] = pvs
 
-deltaNot :: Op -> [PrimValue] -> PrimValue
-deltaNot op pvs = PBool . Identity $ deltaNot_ op b where
+deltaNot :: Op -> [PrimValue] -> Either Error PrimValue
+deltaNot op pvs = Right . PBool . Identity $ deltaNot_ op b where
     [PBool (Identity b)] = pvs
 
-deltaComp :: Op -> [PrimValue] -> PrimValue
-deltaComp op pvs = PBool . Identity $ deltaComp_ op n1 n2 where
+deltaComp :: Op -> [PrimValue] -> Either Error PrimValue
+deltaComp op pvs = Right . PBool . Identity $ deltaComp_ op n1 n2 where
     [PNum (Identity n1) , PNum (Identity n2)] = pvs
 
 checkArgs :: Op -> [PrimValue] -> Either Error [PrimValue]
@@ -137,12 +137,14 @@ checkArg op ((pv,pt),n)
              ++ show (typeOf pv)
              ++ "."
 
-deltaNum_ :: Op -> Integer -> Integer -> Integer
+deltaNum_ :: Op -> Integer -> Integer -> Either Error Integer
 deltaNum_ = \case
-    OpAdd   -> (+)
-    OpMul   -> (*)
-    OpSub   -> (-)
-    OpDiv   -> div
+    OpAdd   -> \n m -> Right $ n + m
+    OpMul   -> \n m -> Right $ n * m
+    OpSub   -> \n m -> Right $ n - m
+    OpDiv   -> \n m -> if m == 0
+        then Left  $ mkError $ "Divide by 0 error"
+        else Right $ div n m  
     _       -> error "deltaNum: illegal operator"
 
 deltaBool_ :: Op -> Bool -> Bool -> Bool

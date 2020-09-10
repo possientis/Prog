@@ -1,6 +1,3 @@
-handle divide by zero error
-implement Eval1 with Error
-Fix Test.Main
+define a small-step operational semantics
 continue paper
 rewrite eval_ with cata?
-can we define a small-step operational semantics
