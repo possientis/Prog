@@ -1,7 +1,10 @@
 Coq:
-Rewrite tex for dual substitutions (and coq) 
+Fol/LocalInv
+Lam/LocalInv
 
 Haskell:
+Fol/LocalInv
+Lam/LocalInv
 
 Latex:
 

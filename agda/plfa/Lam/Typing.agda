@@ -51,6 +51,14 @@ data _⊢_∶_ : Context → Term → Type → Set where
       --------------------
     → Γ ⊢ case L [zero⇒ M |suc x ⇒ N ] ∶ A
 
+  -- 𝔹-E
+  ⊢if : ∀ {Γ : Context} {L M N : Term} {A : Type}
+    → Γ ⊢ L ∶ `𝔹
+    → Γ ⊢ M ∶ A
+    → Γ ⊢ N ∶ A
+     ---------------
+    → Γ ⊢ eIf L M N ∶ A
+
   -- μ-I
   ⊢μ : ∀ {Γ : Context} {x : Id} {M : Term} {A : Type}
     → Γ , x ∶ A ⊢ M ∶ A

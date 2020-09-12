@@ -18,25 +18,25 @@ Arguments h_ {v} {w} {e}.
 
 (* Notion of 'dual substitution of variable, but defined in terms of the list   *)
 (* xs of variables which are deemed bound, rather than free.                    *)
-Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (p:P v) (xs:list v) : P w :=
+Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (xs:list v) (p:P v) : P w :=
     match p with
     | Bot       => Bot
     | Elem x y  => Elem (h_ f g xs x) (h_ f g xs y) 
-    | Imp p1 p2 => Imp (dmap_ v w e f g p1 xs) (dmap_ v w e f g p2 xs)
-    | All x p1  => All (f x) (dmap_ v w e f g p1 (x :: xs))     (* x now bound  *)
+    | Imp p1 p2 => Imp (dmap_ v w e f g xs p1) (dmap_ v w e f g xs p2)
+    | All x p1  => All (f x) (dmap_ v w e f g (x :: xs) p1)     (* x now bound  *)
     end.
 
 Arguments dmap_ {v} {w} {e}.
 
 Definition dmap (v w:Type) (e:Eq v) (f g:v -> w) (p:P v) : P w :=
-    dmap_ f g p [].
+    dmap_ f g [] p.
 
 Arguments dmap {v} {w} {e}.
 
-Lemma dmap_id_ : forall (v:Type) (e:Eq v) (p:P v) (xs:list v),
-    dmap_ id id p xs = p.
+Lemma dmap_id_ : forall (v:Type) (e:Eq v) (xs:list v) (p:P v),
+    dmap_ id id xs p = p.
 Proof.
-    intros v e p.
+    intros v e xs p. revert xs.
     induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1]; intros xs; simpl.
     - reflexivity.
     - unfold h_. 
@@ -53,4 +53,3 @@ Proof.
 Qed.
 
 (* There is no obvious result in relation to function composition               *)
-

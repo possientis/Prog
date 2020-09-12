@@ -356,7 +356,7 @@ valid for $\phi_{1}$, which is another immediate consequence of
 proposition~(\ref{logic:prop:FOPL:valid:recursion:quant}). This
 completes our induction argument.
 \end{proof}
-TODO
+
 \index{local@Local inversion for formula}
 \begin{theorem}\label{logic:the:FOPL:localinv:main}
 Let $V$, $W$ be sets and $\sigma:V\to W$ be a map. Let $V_{0}$,
@@ -364,9 +364,12 @@ $V_{1}$ be subsets of $V$ such that $\sigma_{|V_{0}}$ and
 $\sigma_{|V_{1}}$ are injective maps. Let $\Gamma$ be the subset of
 \pv:
     \[
-    \Gamma=\{\phi\in\pv:(\free(\phi)\subseteq
-    V_{0})\land(\bound(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
-    valid for $\phi$})\}
+        \Gamma = 
+            \{ \phi\in\pv:
+                (\bound(\phi)\subseteq V_{0})\land
+                (\free(\phi)\subseteq V_{1}) \land
+                (\mbox{$\sigma$ valid for $\phi$})
+            \}
     \]
 Then, there exits $\tau:{\bf P}(W)\to\pv$ such that:
     \[
@@ -433,16 +436,19 @@ definition~(\ref{logic:def:FOPL:dualsubst:dualsubst}). We shall
 complete the proof of the theorem by showing that
 $\tau\circ\sigma(\phi)=\phi$ for all $\phi\in\Gamma$ where:
     \[
-    \Gamma=\{\phi\in\pv:(\free(\phi)\subseteq
-    V_{0})\land(\bound(\phi)\subseteq V_{1})\land(\mbox{$\sigma$
-    valid for $\phi$})\}
+        \Gamma = 
+            \{ \phi\in\pv:
+                (\bound(\phi)\subseteq V_{0})\land
+                (\free(\phi)\subseteq V_{1}) \land
+                (\mbox{$\sigma$ valid for $\phi$})
+            \}
     \]
 So let $\phi\in\Gamma$. Then in particular $\phi$ satisfies property
 $(iii)$ and $(iv)$ of lemma~(\ref{logic:lemma:FOPL:localinv:lem}) in
 the particular case when $U=\emptyset$. So applying
 lemma~(\ref{logic:lemma:FOPL:localinv:lem}) for $U=\emptyset$, we
-see that $\tau^{*}(\sigma(\phi))(W\setminus\sigma(\emptyset))=\phi$
+see that $\tau^{*}(\sigma(\phi))(\sigma(\emptyset))=\phi$
 where $\tau^{*}:{\bf P}(W)\to[{\cal P}(W)\to\pv]$ is the map
 associated with $\tau$. Hence we conclude that
-$\tau\circ\sigma(\phi)=\tau^{*}(\sigma(\phi))(W)=\phi$.
+$\tau\circ\sigma(\phi)=\tau^{*}(\sigma(\phi))(\emptyset)=\phi$.
 \end{proof}

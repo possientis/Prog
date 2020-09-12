@@ -87,15 +87,33 @@ progress (⊢· p q) with (progress p)
 ... | done r with (progress q)
 ... | step s = step (ξ-·₂ r s)
 progress (⊢· (⊢ƛ p) q) | done r | done s = step (β-ƛ s)
-progress ⊢zero = {!!}
-progress (⊢suc p) = {!!}
-progress (⊢case p p₁ p₂) = {!!}
-progress (⊢μ p) = {!!}
-progress ⊢Num = {!!}
-progress (⊢+ p p₁) = {!!}
-progress (⊢* p p₁) = {!!}
-progress ⊢Bool = {!!}
-progress (⊢= p p₁) = {!!}
-progress (⊢< p p₁) = {!!}
-progress (⊢∧ p p₁) = {!!}
-progress (⊢∨ p p₁) = {!!}
+progress ⊢zero = done V-zero
+progress (⊢suc p) with progress p
+... | step q = step (ξ-suc q)
+... | done q = done (V-suc q)
+progress (⊢case p q r) with progress p
+... | step s = step (ξ-case s)
+... | done V-zero = step β-zero
+... | done (V-suc s) = step (β-suc s)
+progress (⊢μ p) = step β-μ
+progress ⊢Num = done V-Num
+progress (⊢+ p q) with progress p
+... | step r = step (ξ-op₁ r)
+... | done r with progress q
+... | step s = step (ξ-op₂ r s)
+progress (⊢+ p q) | done V-Num | done V-Num = step β-+
+progress (⊢* p q) with progress p
+... | step r = step (ξ-op₁ r)
+... | done r with progress q
+... | step s = step (ξ-op₂ r s)
+progress (⊢* p q) | done V-Num | done V-Num = step β-*
+progress ⊢Bool = done V-Bool
+progress (⊢= p q) with progress p
+... | step r = step (ξ-op₁ r)
+... | done r with progress q
+... | step s = step (ξ-op₂ r s)
+progress (⊢= p q) | done V-Num | done V-Num = step β-=
+progress (⊢< p q) = {!!}
+progress (⊢∧ p q) = {!!}
+progress (⊢∨ p q) = {!!}
+progress (⊢if p q r) = {!!}

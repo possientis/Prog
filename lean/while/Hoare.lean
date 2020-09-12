@@ -117,3 +117,17 @@ begin
   intros p q r e₁ e₂ H1 H2, apply (seq_intro p q r); assumption
 end
 
+lemma while_intro' : ∀ (p q i:Pred) (b:BExp) (e₁:Stmt),
+  Hoare (λ s, i s ∧ b s) e₁ i →
+  (∀ s, p s → i s) →
+  (∀ s, ¬b s → i s → q s) →
+  Hoare p (while b e₁) q :=
+begin
+  intros p q i b e₁ H1 H2 H3,
+  apply (weaken_intro i _ (λ s, i s ∧ ¬b s)),
+    { assumption },
+    { apply while_intro, assumption },
+    { intros s H4, cases H4 with H4 H5, apply H3; assumption }
+end
+
+

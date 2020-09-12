@@ -9,6 +9,23 @@ Inductive func_embed (a b:Type) (f:a -> b) : R a b :=
 
 Arguments func_embed {a} {b}.
 
+Lemma func_embed_charac : forall (a b:Type) (f:a -> b) (x:a) (y:b),
+    func_embed f x y <-> f x = y.
+Proof.
+    intros a b f x y. split; intros H1. 
+    - destruct H1. reflexivity.
+    - rewrite <- H1. constructor.
+Qed.
+
+Definition conv (a b:Type) (r:R a b) : R b a := fun y x => r x y.
+Arguments conv {a} {b}.
+
+Lemma conv_charac : forall (a b:Type) (r:R a b) (x:a) (y:b),
+    conv r y x <-> r x y.
+Proof.
+    intros a b r x y. unfold conv. split; auto.
+Qed.
+
 
 Inductive id (a:Type) : R a a :=
 | refl : forall (x:a), id a x x
@@ -64,22 +81,18 @@ Proof.
         + exists y'. split; assumption.
 Qed.
 
-Definition inv (a b:Type) (r:R a b) : R b a := fun (y:b) (x:a) => r x y.
 
-Arguments inv {a} {b}.
-
-Lemma inv_left : forall (a b:Type) (r:R a b), inv r ; r = id.
-Proof.
-    unfold comp. intros a b r. apply Ext. intros x y.
-Show.
-
-
-(*
 Definition inj1 (a b:Type) : R a (a + b) := func_embed inl.
 Definition inj2 (a b:Type) : R b (a + b) := func_embed inr.
 
 Arguments inj1 {a} {b}.
 Arguments inj2 {a} {b}.
+
+Definition prj1 (a b:Type) : R (a + b) a := conv inj1.
+Definition prj2 (a b:Type) : R (a + b) b := conv inj2.
+
+Arguments prj1 {a} {b}.
+Arguments prj2 {a} {b}.
 
 Lemma inj1_charac : forall (a b:Type) (x:a) (y:a + b), inj1 x y <-> y = inl x.
 Proof.
@@ -95,6 +108,17 @@ Proof.
     - rewrite H1. constructor.
 Qed.
 
+Lemma prj1_charac : forall (a b:Type) (x:a + b) (y:a), prj1 x y <-> x = inl y.
+Proof.
+    intros a b x y. unfold prj1, conv. apply inj1_charac.
+Qed.
+
+Lemma prj2_charac : forall (a b:Type) (x:a + b) (y:b), prj2 x y <-> x = inr y.
+Proof.
+    intros a b x y. unfold prj2, conv. apply inj2_charac.
+Qed.
+
+(*
 Inductive either (a b c:Type) (r:R a c) (s:R b c) : R (a + b) c := 
 | eitherL : forall (x:a) (y:c), r x y -> either a b c r s (inl x) y
 | eitherR : forall (x:b) (y:c), s x y -> either a b c r s (inr x) y
@@ -188,5 +212,4 @@ Proof.
           change ((s ; inj2) x y) in H4. rewrite <- H2 in H4.
           unfold comp in H4. destruct H4 as [z [H4 H5]]. destruct H4. assumption.
 Qed.
-
 *)

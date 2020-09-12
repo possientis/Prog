@@ -28,6 +28,7 @@ class (Functor f) => Formula f where
     sub   ::            f v -> [f v]
     ord   ::            f v -> Integer
     dmap  :: (Eq v) => (v -> w) -> (v -> w) -> f v -> f w
+    dmap_ :: (Eq v) => (v -> w) -> (v -> w) -> [v] -> f v -> f w
 
 
 instance Formula T where
@@ -37,6 +38,7 @@ instance Formula T where
     sub     = T.sub
     ord     = T.ord
     dmap    = T.dmap
+    dmap_   = T.dmap_
 
 instance Formula P where
     var     = P.var
@@ -45,6 +47,7 @@ instance Formula P where
     sub     = P.sub
     ord     = P.ord
     dmap    = P.dmap
+    dmap_   = P.dmap_
 
 -- 'is a subformula of' relation
 (<<=) :: (Formula f, Eq (f v)) => f v -> f v -> Bool
@@ -55,5 +58,3 @@ valid :: (Formula f, Eq v, Eq w) => (v -> w) -> f v -> Bool
 valid f t = all cond xs where
     cond (s,x) = (f x) `elem` free (fmap f s) 
     xs = [(s,x)| s <- sub t, x <- free s]
-
-

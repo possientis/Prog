@@ -18,24 +18,24 @@ Arguments h_ {v} {w} {e}.
 
 (* Notion of 'dual substitution of variable, but defined in terms of the list   *)
 (* xs of variables which are deemed bound, rather than free.                    *)
-Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (t:T v) (xs:list v) : T w :=
+Fixpoint dmap_ (v w:Type) (e:Eq v) (f g:v -> w) (xs:list v) (t:T v) : T w :=
     match t with
     | Var x     => Var (h_ f g xs x) 
-    | App t1 t2 => App (dmap_ v w e f g t1 xs) (dmap_ v w e f g t2 xs)
-    | Lam x t1  => Lam (f x) (dmap_ v w e f g t1 (x :: xs))     (* x now bound  *)
+    | App t1 t2 => App (dmap_ v w e f g xs t1) (dmap_ v w e f g xs t2)
+    | Lam x t1  => Lam (f x) (dmap_ v w e f g (x :: xs) t1)     (* x now bound  *)
     end.
 
 Arguments dmap_ {v} {w} {e}.
 
 Definition dmap (v w:Type) (e:Eq v) (f g:v -> w) (t:T v) : T w :=
-    dmap_ f g t [].
+    dmap_ f g [] t.
 
 Arguments dmap {v} {w} {e}.
 
-Lemma dmap_id_ : forall (v:Type) (e:Eq v) (t:T v) (xs:list v),
-    dmap_ id id t xs = t.
+Lemma dmap_id_ : forall (v:Type) (e:Eq v) (xs:list v) (t:T v),
+    dmap_ id id xs t = t.
 Proof.
-    intros v e t.
+    intros v e xs t. revert xs.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros xs; simpl.
     - unfold h_. destruct (in_dec eqDec x xs) as [H|H]; reflexivity.
     - rewrite IH1, IH2. reflexivity.

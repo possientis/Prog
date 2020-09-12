@@ -138,4 +138,75 @@ Proof.
     - intros [k H1]. apply L11 with k. assumption.
 Qed.
 
+Lemma L14 : forall (f:nat -> bool), 
+    (exists (n:nat), f n = true) <-> G f 0.
+Proof.
+    intros f. split.
+    - intros [n H1]. apply L7 with n. apply L5. assumption.
+    - intros H1. apply (L13 f 0). assumption.
+Qed.
 
+Lemma L15 : forall (f:nat -> bool),
+    Sig (fun n => f n = true) -> exists (n:nat), f n = true.
+Proof.
+    intros f [n H1]. exists n. assumption.
+Qed.
+
+Definition L16 : forall (f:bool -> bool),
+    (exists (b:bool), f b = true) -> Sig (fun b => f b = true).
+Proof.
+    intros f H1. destruct (f true) eqn:E1; destruct (f false) eqn:E2.
+    - exact (Ex true E1).
+    - exact (Ex true E1).
+    - exact (Ex false E2).
+    - exfalso. destruct H1 as [b H1]. destruct b eqn:E.
+        + rewrite H1 in E1. inversion E1.
+        + rewrite H1 in E2. inversion E2.
+Defined.
+
+Lemma L17 : exists (b:bool), negb b = true.
+Proof.
+    exists false. reflexivity.
+Qed.
+
+Lemma L18 : exists (b:bool), (fun b => b) b = true.
+Proof.
+    exists true. reflexivity.
+Qed.
+
+Lemma L19 : exists (b:bool), (fun b => true) b = true.
+Proof.
+    exists true. reflexivity.
+Qed.
+
+Lemma L20 : exists (b:bool), (fun b => true) b = true.
+Proof.
+    exists false. reflexivity.
+Qed.
+
+Compute L16 negb L17.
+Compute L16 (fun b => b) L18.
+Compute L16 (fun b => true) L19.
+Compute L16 (fun b => true) L20.
+
+Definition L21 : forall (p:nat -> Prop),
+    (forall (n:nat), {p n} + {~ p n}) ->
+    (exists (n:nat), p n) -> 
+    Sig p.
+Proof.
+    intros p q H1. remember (fun n => 
+        match q n with
+        | left _    => true
+        | right _   => false
+        end) as f eqn:F.
+    assert (exists (n:nat), f n = true) as H2.
+        { destruct H1 as [n H1]. exists n. rewrite F. destruct (q n) as [H2|H2].
+            { reflexivity. }
+            { exfalso. apply H2. assumption. }}
+    remember (witness f H2) as e eqn:E. destruct e as [n H3].
+    assert (p n) as H4.
+        { clear E. rewrite F in H3. destruct (q n) as [H4|H4].
+            { assumption . }
+            { inversion H3. }}
+    exact (Ex n H4).
+Defined.
