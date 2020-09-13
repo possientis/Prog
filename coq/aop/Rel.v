@@ -26,6 +26,10 @@ Proof.
     intros a b r x y. unfold conv. split; auto.
 Qed.
 
+Lemma conv_conv : forall (a b:Type) (r:R a b), conv (conv r) = r.
+Proof.
+    intros a b r. apply Ext. intros x y. unfold conv. split; auto.
+Qed.
 
 Inductive id (a:Type) : R a a :=
 | refl : forall (x:a), id a x x
@@ -50,6 +54,13 @@ Notation "s ; r" := (comp s r)
     (at level 60, right associativity) : Rel_scope.
 
 Open Scope Rel_scope.
+
+Lemma conv_comp : forall (a b c:Type) (r:R a b) (s:R b c),
+    conv (s ; r) = conv r ; conv s.
+Proof.
+    intros a b c r s. apply Ext. intros x y. unfold conv, comp. 
+    split; intros [z [H1 H2]]; exists z; split; assumption.
+Qed.
 
 Lemma id_left : forall (a b:Type) (r:R a b), r ; id = r.
 Proof.
@@ -80,7 +91,6 @@ Proof.
         + assumption.
         + exists y'. split; assumption.
 Qed.
-
 
 Definition inj1 (a b:Type) : R a (a + b) := func_embed inl.
 Definition inj2 (a b:Type) : R b (a + b) := func_embed inr.
@@ -118,13 +128,64 @@ Proof.
     intros a b x y. unfold prj2, conv. apply inj2_charac.
 Qed.
 
-(*
+Lemma inj1_prj1 : forall (a b:Type), inj1 = conv (@prj1 a b).
+Proof.
+    intros a b. apply Ext. intros x y. unfold conv. split; intros H1.
+    - apply prj1_charac. apply inj1_charac in H1. assumption.
+    - apply inj1_charac. apply prj1_charac in H1. assumption.
+Qed.
+
+Lemma prj1_inj1 : forall (a b:Type), prj1 = conv (@inj1 a b).
+Proof.
+    intros a b. apply Ext. intros x y. unfold conv. split; intros H1.
+    - apply prj1_charac. apply inj1_charac in H1. assumption.
+    - apply inj1_charac. apply prj1_charac in H1. assumption.
+Qed.
+
+Lemma inj2_prj2 : forall (a b:Type), inj2 = conv (@prj2 a b).
+Proof.
+    intros a b. apply Ext. intros x y. unfold conv. split; intros H1.
+    - apply prj2_charac. apply inj2_charac in H1. assumption.
+    - apply inj2_charac. apply prj2_charac in H1. assumption.
+Qed.
+
+Lemma prj2_inj2 : forall (a b:Type), prj2 = conv (@inj2 a b).
+Proof.
+    intros a b. apply Ext. intros x y. unfold conv. split; intros H1.
+    - apply prj2_charac. apply inj2_charac in H1. assumption.
+    - apply inj2_charac. apply prj2_charac in H1. assumption.
+Qed.
+
+
 Inductive either (a b c:Type) (r:R a c) (s:R b c) : R (a + b) c := 
 | eitherL : forall (x:a) (y:c), r x y -> either a b c r s (inl x) y
 | eitherR : forall (x:b) (y:c), s x y -> either a b c r s (inr x) y
 .
 
 Arguments either {a} {b} {c}.
+
+Inductive split (a b c:Type) (r:R a b) (s:R a c) : R a (b + c) :=
+| splitL : forall (x:a) (y:b), r x y -> split a b c r s x (inl y)
+| splitR : forall (x:a) (y:c), s x y -> split a b c r s x (inr y)
+.
+
+Arguments split {a} {b} {c}.
+
+Lemma either_split : forall (a b c:Type) (r:R a c) (s:R b c), 
+    either r s = conv (split (conv r) (conv s)).
+Proof.
+    intros a b c r s. apply Ext. intros x y. unfold conv. split; intros H1.
+    - destruct H1 as [x y H1|x y H1]; constructor; assumption.
+    - destruct H1 as [x y H1|x y H1]; constructor; assumption.
+Qed.
+
+Lemma split_either : forall (a b c:Type) (r:R a b) (s:R a c), 
+    split r s = conv (either (conv r) (conv s)).
+Proof.
+    intros a b c r s. apply Ext. intros x y. unfold conv. split; intros H1.
+    - destruct H1 as [x y H1|x y H1]; constructor; assumption.
+    - destruct H1 as [x y H1|x y H1]; constructor; assumption.
+Qed.
 
 Lemma either_charac : forall (a b c:Type) (r:R a c) (s:R b c) (x:a + b) (y:c), 
     either r s x y 
@@ -141,6 +202,24 @@ Proof.
             { reflexivity. }
             { assumption. }
     - intros [[x' [H1 H2]]|[x' [H1 H2]]]; rewrite H1; constructor; assumption.
+Qed.
+
+Lemma split_charac : forall (a b c:Type) (r:R a b) (s:R a c) (x:a) (y:b + c),
+    split r s x y
+        <->
+    (exists (y':b), y = inl y' /\ r x y') \/
+    (exists (y':c), y = inr y' /\ s x y').
+Proof.
+    intros a b c r s x y. split.
+    - intros [x' y' H1|x' y' H1].
+        + left. exists y'. split.
+            { reflexivity. }
+            { assumption. }
+        + right. exists y'. split.
+            { reflexivity. }
+            { assumption. }
+
+    - intros [[y' [H1 H2]]|[y' [H1 H2]]]; rewrite H1; constructor; assumption.
 Qed.
 
 Lemma either_inj1 : forall (a b c:Type) (r:R a c) (s:R b c), 
@@ -170,6 +249,18 @@ Proof.
         + constructor.
         + constructor. assumption.
 Qed.
+
+
+Lemma split_prj1 : forall (a b c:Type) (r:R a b) (s:R a c),
+    prj1 ; split r s = r.
+Proof.
+    intros a b c r s. apply Ext. intros x y. unfold comp. split.
+    -
+      
+Show.
+
+
+(*
 
 Lemma sum_existence : forall (a b c:Type) (r:R a c) (s:R b c), 
     exists (t:R (a + b) c), t ; inj1 = r /\ t ; inj2 = s.

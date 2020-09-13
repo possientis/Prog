@@ -106,14 +106,12 @@ Proof.
         V1 V2 V3.
     split; intros G1.
     - intros x G2. unfold replacementF in G1. rewrite evalAll in G1.
-      remember (G1 x) as G3 eqn:E. clear E G1. rename G3 into G1. rewrite evalImp in G1.
-
-(*
-    - intros G2 x. unfold replacementF in G1. rewrite evalImp in G1.
-      rewrite <- (evalFunctionalF L e P q r r') in G2; try (assumption).
-      remember (G1 G2) as G3 eqn:E. clear G1 E G2. 
-      rewrite evalAll in G3. remember (G3 x) as G1 eqn:E. clear E G3.
-      rewrite evalExi in G1; try (assumption). destruct G1 as [y G1]. 
+      remember (G1 x) as G3 eqn:E. clear E G1. rename G3 into G1. 
+      rewrite evalImp in G1. unfold eval3 in G2. 
+      fold (eval2 (bind e n x) P 0 1) in G2.
+      rewrite <- (evalFunctionalF L (bind e n x) P q r r') in G2; 
+      try (assumption). remember (G1 G2) as G3 eqn:E. clear G1 E G2. 
+      rewrite evalExi in G3; try (assumption). destruct G3 as [y G1]. 
       exists y. intros z. 
       rewrite evalAll in G1. remember (G1 z) as G2 eqn:E. clear E G1.
       rewrite evalIff in G2; try (assumption).
@@ -128,14 +126,21 @@ Proof.
           rewrite bindDiff in G1; try (assumption).
           rewrite bindDiff in G1; try (assumption). 
           rewrite bindSame in G1. destruct G1 as [G2 G1].
-          split; try (assumption). clear G2. 
+          split; try (assumption). clear G2.
           remember (bind (bind (bind (bind e n x) m y) k z) l u) as e1 eqn:E1.
           remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
           rewrite (evalEnvEqual e1 e2) in G1.
             { rewrite E2 in G1. remember (bind (bind e n x) m y) as e' eqn:E'.
               rewrite (evalApply2 e' P l k u z) in G1; try (assumption).
-              unfold eval2. unfold eval2 in G1.
-*)             
+              unfold eval3. unfold eval2 in G1. rewrite E' in G1.
+              admit. }
+            { rewrite E1, E2. apply bindPermute. assumption. } 
+        + apply G2. clear G1 G2. destruct G3 as [u [G1 G2]]. exists u.
+          rewrite evalAnd; try (assumption).
+          rewrite evalElem. rewrite bindSame. rewrite bindDiff; try (assumption).
+          rewrite bindDiff; try (assumption). rewrite bindDiff; try (assumption).
+          rewrite bindSame. split; try (assumption). 
+
 
 Show.
 *)

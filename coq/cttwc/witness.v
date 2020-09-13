@@ -210,3 +210,62 @@ Proof.
             { inversion H3. }}
     exact (Ex n H4).
 Defined.
+
+
+Lemma L22 : forall (f g:nat -> bool), 
+    (exists (n:nat), f n = true \/ g n = true) 
+    <->
+    (exists (n:nat), f n = true) \/ (exists (n:nat), g n = true).
+Proof.
+    intros f g. split.
+    - intros [n [H1|H1]].
+        + left. exists n. assumption.
+        + right. exists n. assumption.
+    - intros [[n H1]|[n H1]]; exists n.
+        + left. assumption.
+        + right. assumption.
+Qed.
+
+(* Characterises predicates p which are 'like' G in relation to f.              *)
+Definition GLike (f:nat -> bool) (p:nat -> Prop) :=
+    (forall (n:nat), (f n = false -> p (S n)) -> p n). 
+
+(* The predicate 'G f' is like the predicate 'G f'.                             *)
+Lemma L23 : forall (f:nat -> bool), GLike f (G f).
+Proof.
+    unfold GLike. intros f n H1. constructor. assumption.
+Qed.
+
+(* Similar to L5                                                                *)
+Lemma L24 : forall (f:nat -> bool) (p:nat -> Prop) (n:nat), GLike f p -> 
+    f n = true -> p n.
+Proof.
+    unfold GLike. intros f p n H1 H2. apply H1. intros H3.
+    rewrite H2 in H3. inversion H3.
+Qed.
+
+(* Similar to L6                                                                *)
+Lemma L25 : forall (f:nat -> bool) (p:nat -> Prop) (n:nat), GLike f p -> 
+    p (S n) -> p n.
+Proof.
+    unfold GLike. intros f p n H1 H2. apply H1. intros H3. assumption.
+Qed.
+
+Lemma L26 : forall (f:nat -> bool) (p:nat -> Prop) (n:nat), GLike f p ->
+    p n -> p 0.
+Proof.
+    intros f p n H1. revert n. induction n as [|n IH].
+    - auto.
+    - intros H2. apply IH. apply L25 with f; assumption.
+Qed.
+
+(*
+Lemma L23 : forall (f:nat -> bool) (n:nat),
+    G f n <-> forall (p:nat -> Prop), GLike f p -> p n.
+Proof.
+    intros f n. split.
+    - revert n. induction n as [|n IH].
+        + intros H1 p H2.
+
+Show.
+*)

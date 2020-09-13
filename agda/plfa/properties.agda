@@ -113,7 +113,47 @@ progress (⊢= p q) with progress p
 ... | done r with progress q
 ... | step s = step (ξ-op₂ r s)
 progress (⊢= p q) | done V-Num | done V-Num = step β-=
-progress (⊢< p q) = {!!}
-progress (⊢∧ p q) = {!!}
-progress (⊢∨ p q) = {!!}
-progress (⊢if p q r) = {!!}
+progress (⊢< p q) with progress p
+... | step r = step (ξ-op₁ r)
+... | done r with progress q
+... | step s = step (ξ-op₂ r s)
+progress (⊢< p q) | done V-Num | done V-Num = step β-<
+progress (⊢∧ p q) with progress p
+... | step r = step (ξ-op₁ r)
+... | done r with progress q
+... | step s = step (ξ-op₂ r s)
+progress (⊢∧ p q) | done V-Bool | done V-Bool = step β-∧
+progress (⊢∨ p q) with progress p
+... | step r = step (ξ-op₁ r)
+... | done r with progress q
+... | step s = step (ξ-op₂ r s)
+progress (⊢∨ p q) | done V-Bool | done V-Bool = step β-∨
+progress (⊢if p q r) with progress p
+... | step s = step (ξ-if₀ s)
+progress (⊢if p q r) | done (V-Bool {false}) = step β-if₂
+progress (⊢if p q r) | done (V-Bool {true}) = step β-if₁
+
+
+progress-≃ : ∀ {M : Term} → Progress M ≃ Value M ⊎ ∃[ N ](M —→ N)
+progress-≃ =  record
+  { to = to
+  ; from = from
+  ; from∘to = from∘to
+  ; to∘from = to∘from
+  }
+  where
+    to : ∀ {M : Term} → Progress M → Value M ⊎ ∃[ N ](M —→ N)
+    to (step p) = inj₂ ⟨ _ , p ⟩
+    to (done p) = inj₁ p
+
+    from : ∀ {M : Term} → Value M ⊎ ∃[ N ](M —→ N) → Progress M
+    from (inj₁ p) = done p
+    from (inj₂ ⟨ N , p ⟩) = step p
+
+    from∘to : ∀ {M : Term} → ∀ (p : Progress M) → from (to p) ≡ p
+    from∘to (step p) = refl
+    from∘to (done p) = refl
+
+    to∘from : ∀ {M : Term} → ∀ (p : Value M ⊎ ∃[ N ](M —→ N)) → to (from p) ≡ p
+    to∘from (inj₁ p) = refl
+    to∘from (inj₂ ⟨ N , p ⟩) = refl
