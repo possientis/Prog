@@ -13,8 +13,6 @@ Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
 
-Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
-    forall (n:nat), In n (Fr p) -> e n == e' n.
 
 Lemma relevance : forall (e e':Env) (p:Formula), 
     envEqualOn p e e' -> eval e p <-> eval e' p.

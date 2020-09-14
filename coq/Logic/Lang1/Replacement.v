@@ -83,6 +83,8 @@ Lemma evalReplacementF : LEM -> forall (e:Env) (P:Formula) (q r r' n m k l:nat),
     k <> m  -> 
     m <> l  ->
     l <> k  ->
+    0 <> m  ->
+    1 <> m  ->
     ~In q  (Fr P) ->
     ~In r  (Fr P) ->
     ~In r' (Fr P) ->
@@ -101,7 +103,7 @@ Lemma evalReplacementF : LEM -> forall (e:Env) (P:Formula) (q r r' n m k l:nat),
 Proof.
     intros 
         L e P q r r' n m k l 
-        H1 H2 H3 H4 H5 H6 H7 H8 H9 
+        H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11
         H1' H2' H3' H4' H5' H6'
         V1 V2 V3.
     split; intros G1.
@@ -133,14 +135,36 @@ Proof.
             { rewrite E2 in G1. remember (bind (bind e n x) m y) as e' eqn:E'.
               rewrite (evalApply2 e' P l k u z) in G1; try (assumption).
               unfold eval3. unfold eval2 in G1. rewrite E' in G1.
-              admit. }
+              clear E1 e1 E2 e2 E' e'. remember 
+              (bind (bind (bind (bind e n x) m y) 0 u) 1 z) as e1 eqn:E1.
+              remember (bind (bind (bind e n x) 0 u) 1 z) as e2 eqn:E2.
+              apply (relevance e1 e2).
+                { remember (bind (bind (bind e n x) m y) 0 u) as e3 eqn:E3.
+                  remember (bind (bind (bind e n x) 0 u) m y) as e4 eqn:E4.
+                  assert (envEqual e3 e4) as G2.
+                    { rewrite E3, E4. apply bindPermute. assumption. }
+                  assert (envEqual e1 (bind e4 1 z)) as G3.
+                    { rewrite E1. apply bindEnvEqual.
+                        { assumption. }
+                        { apply equalRefl. }}
+                  rewrite E4 in G3. clear E4 G2 e4. 
+                  remember 
+                    (bind (bind (bind (bind e n x) 0 u) m y) 1 z) as e4 eqn:E4.
+                  remember 
+                    (bind (bind (bind (bind e n x) 0 u) 1 z) m y) as e5 eqn:E5.
+                  assert (envEqual e4 e5) as G4.
+                    { rewrite E4, E5. apply bindPermute. assumption. } 
+                  rewrite E3 in E1. clear E3 e3. assert (envEqual e1 e5) as G5.
+                    { apply envEqualTrans with e4; assumption. }
+                  clear G4 G3 E4 e4.
+(*
             { rewrite E1, E2. apply bindPermute. assumption. } 
         + apply G2. clear G1 G2. destruct G3 as [u [G1 G2]]. exists u.
           rewrite evalAnd; try (assumption).
           rewrite evalElem. rewrite bindSame. rewrite bindDiff; try (assumption).
           rewrite bindDiff; try (assumption). rewrite bindDiff; try (assumption).
           rewrite bindSame. split; try (assumption). 
-
+*)
 
 Show.
 *)

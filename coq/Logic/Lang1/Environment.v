@@ -4,6 +4,8 @@ Require Import Logic.Nat.Eq.
 Require Import Logic.Class.Eq.
 Require Import Logic.Func.Replace.
 
+Require Import Logic.Fol.Free.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Equal.
 
@@ -30,6 +32,9 @@ Proof.
     - apply H1.
     - apply H2.
 Qed.
+
+Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
+    forall (n:nat), In n (Fr p) -> e n == e' n.
 
 (* Tweak environment e so that e n = x                                          *)
 Definition bind (e:Env) (n:nat) (x:set) : Env :=

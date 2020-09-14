@@ -12,6 +12,7 @@ Set Theory:
 Lang1/Replacement
 axiom of choice?
 axiom of infinity false ?
+a new semantics based on different type of environments (plfa)
 all ZF axioms covered?
 extension to infinite set
 new semantics in terms of variable r : set -> set -> Prop
