@@ -2,7 +2,6 @@ import Stmt
 import Subst
 import Hoare
 
-
 def Swap : Stmt :=
   "t" :== x ;;
   "x" :== y ;;
@@ -27,7 +26,7 @@ begin
   unfold subst, unfold bindVar, unfold p₁, unfold p₃,
   unfold x, unfold aVar,
   apply funext, intros s, apply propext, split; intros H1,
-    { cases H1 with H1 H2, simp at H1 },
+    { cases H1 with H1 H2, simp at H1, },
     {}
 end
 

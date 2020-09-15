@@ -251,6 +251,7 @@ Proof.
     unfold GLike. intros f p n H1 H2. apply H1. intros H3. assumption.
 Qed.
 
+(* Similar to L7                                                                *)
 Lemma L26 : forall (f:nat -> bool) (p:nat -> Prop) (n:nat), GLike f p ->
     p n -> p 0.
 Proof.
@@ -259,13 +260,39 @@ Proof.
     - intros H2. apply IH. apply L25 with f; assumption.
 Qed.
 
-(*
-Lemma L23 : forall (f:nat -> bool) (n:nat),
+(* Similar to L8                                                                *)
+Lemma L27 : forall (f:nat -> bool) (p:nat -> Prop), GLike f p ->
+    (exists (n:nat), f n = true) -> p 0.
+Proof.
+    intros f p H1 [n H2]. apply (L26 f p n H1).
+    apply (L24 f p n H1). assumption.
+Qed.
+
+
+Lemma L28 : forall (f:nat -> bool) (n:nat),
     G f n <-> forall (p:nat -> Prop), GLike f p -> p n.
 Proof.
-    intros f n. split.
-    - revert n. induction n as [|n IH].
-        + intros H1 p H2.
+    intros f n. split; intros H1.
+    - intros p H2. revert n H1. apply elimG. assumption. 
+    - apply H1. apply L23.
+Qed.
 
-Show.
-*)
+
+Lemma L29 : forall (f:nat -> bool) (n:nat),
+    G f n 
+        <-> 
+    forall (p:nat -> Prop), 
+        (forall (n:nat), f n = true -> p n) -> 
+        (forall (n:nat), p (S n) -> p n)    ->
+        p n.
+Proof.
+    intros f n. split.
+    - intros H1 p H2 H3. revert n H1. apply elimG. intros n H4. 
+      destruct (f n) eqn:E.
+        + apply H2. assumption.
+        + apply H3, H4. reflexivity.
+    - intros H1. apply H1.
+        + apply L5.
+        + apply L6.
+Qed.
+
