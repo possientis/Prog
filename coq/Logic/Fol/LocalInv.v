@@ -79,7 +79,31 @@ Proof.
                       { right. left. reflexivity. }
                       { assumption. }}}}
       rewrite G1, G1'. reflexivity.
-    -
-
+    - simpl in H3. simpl in H4.  rewrite diff_distrib_app_r in H4.
+      apply valid_imp in H5. destruct H5 as [H7 H8]. simpl in H6.
+      rewrite diff_distrib_app_r in H6. rewrite map_app in H6.
+      apply inter_app_nil_l in H6. destruct H6 as [H9 H10].
+      rewrite <- app_assoc in H3. 
+      rewrite IH1, IH2; try (assumption).
+        + reflexivity.
+        + apply incl_tran with (bnd p1 ++ bnd p2 ++ xs).
+            { apply incl_appr, incl_refl. }
+            { assumption. }
+        + apply incl_tran with (Fr p1 \\ xs ++ Fr p2 \\ xs).
+            { apply incl_appr, incl_refl. }
+            { assumption. }
+        + apply incl_tran with (bnd p1 ++ bnd p2 ++ xs).
+            { apply incl_app2.
+                { apply incl_refl. }
+                { apply incl_appr, incl_refl. }}
+            { assumption. }
+        + apply incl_tran with (Fr p1 \\ xs ++ Fr p2 \\ xs).
+            { apply incl_appl, incl_refl. }
+            { assumption. }
+    - simpl in H3. rewrite <- map_cons. rewrite IH1.
+        + rewrite H1.
+            { reflexivity. }
+            { apply H3. left. reflexivity. }
+        +
 Show.
 *)
