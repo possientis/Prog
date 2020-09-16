@@ -157,3 +157,36 @@ progress-≃ =  record
     to∘from : ∀ {M : Term} → ∀ (p : Value M ⊎ ∃[ N ](M —→ N)) → to (from p) ≡ p
     to∘from (inj₁ p) = refl
     to∘from (inj₂ ⟨ N , p ⟩) = refl
+
+progress' : ∀ {M : Term} {A : Type} → ∅ ⊢ M ∶ A → Value M ⊎ ∃[ N ](M —→ N)
+progress' (⊢ƛ p) = inj₁ V-ƛ
+progress' (⊢· p q) with progress' p
+progress' (⊢· p q) | inj₂ ⟨ N , r ⟩ = inj₂ ⟨  N · _ , ξ-·₁ r ⟩
+... | inj₁ r with progress' q
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ · N , ξ-·₂ r s ⟩
+progress' (⊢· p q) | inj₁ V-ƛ | inj₁ s = inj₂ ⟨ _ , β-ƛ s ⟩
+progress' ⊢zero = inj₁ V-zero
+progress' (⊢suc p) with progress' p
+... | inj₂ ⟨ N , q ⟩ = inj₂ ⟨ _ , ξ-suc q ⟩
+... | inj₁ q = inj₁ (V-suc q)
+progress' (⊢case p q r) with progress' p
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-case s ⟩
+... | inj₁ V-zero = inj₂ ⟨ _ , β-zero ⟩
+... | inj₁ (V-suc s) = inj₂ ⟨ _ , β-suc s ⟩
+progress' (⊢if p q r) with progress' p
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-if₀ s ⟩
+progress' (⊢if p q r) | inj₁ (V-Bool {false}) = inj₂ ⟨ _ , β-if₂ ⟩
+progress' (⊢if p q r) | inj₁ (V-Bool {true}) = inj₂ ⟨ _ , β-if₁ ⟩
+progress' (⊢μ p) = inj₂ ⟨ _ , β-μ ⟩
+progress' ⊢Num = inj₁ V-Num
+progress' (⊢+ p q) with progress' p
+... | inj₂ ⟨ N , r ⟩ = inj₂ ⟨ _ , ξ-op₁ r ⟩
+... | inj₁ r with progress' q
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
+progress' (⊢+ p q) | inj₁ V-Num | inj₁ V-Num = inj₂ ⟨ _ , β-+ ⟩
+progress' (⊢* p q) = {!!}
+progress' ⊢Bool = {!!}
+progress' (⊢= p q) = {!!}
+progress' (⊢< p q) = {!!}
+progress' (⊢∧ p q) = {!!}
+progress' (⊢∨ p q) = {!!}
