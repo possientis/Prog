@@ -286,54 +286,54 @@ always in fact satisfy both equations.
             &=&\id(\,F(b)\,)\circ F(f)\\
             &=&F(f)
         \end{eqnarray*}
-    TODO
-    So we have now proved that $\epsilon$ is a natural transformation
-    $\epsilon:F\circ G\Rightarrow I_{\cal D}$, and we need to show that
-    it is a counit of $(F,G)$ as per definition~(\ref{Adj:def:counit}).
-    So let $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$. We need to show
-    the existence of a unique $f:c\to G(d)$ such that $g=\epsilon_{d}\circ F(f)$.
-    We first show the existence: let $f=G(g)\circ\eta_{c}$. Since $\eta$
-    is a natural transformation $\eta:I_{\cal C}\Rightarrow G\circ F$, in 
-    particular we have $\eta_{c}:c\to (G\circ F)(c)$. Since $G$ is a functor
-    and $g:F(c)\to d$, we have $G(g):(G\circ F)(c)\to G(d)$. It follows that
-    $f$ is a well-defined arrow $f:c\to G(d)$. We need to show that
-    $g=\epsilon_{d}\circ F(f)$. Having assumed that $\eta$ is a unit
-    of $(F,G)$, using proposition~(\ref{Adj:prop:unit:proving:equality}) it
-    is sufficient to prove that $G(g)\circ\eta_{c}=G(\,\epsilon_{d}\circ F(f)\,)
-    \circ\eta_{c}$, which is $f=G(\,\epsilon_{d}\circ F(f)\,)\circ\eta_{c}$.
+    So we have now proved that $\eta$ is a natural transformation
+    $\eta:I_{\cal C}\Rightarrow G\circ F$, and we need to show that
+    it is a unit of $(F,G)$ as per definition~(\ref{Adj:def:unit}).
+    So let $c\in\Cat$, $d\in\Dat$ and $f:c\to G(d)$. We need to show
+    the existence of a unique $g:F(c)\to d$ such that $f=G(g)\circ\eta_{c}$.
+    We first show the existence: let $g=\epsilon_{d}\circ F(f)$. Since $\epsilon$
+    is a natural transformation $\epsilon:F\circ G\Rightarrow I_{\cal D}$, in 
+    particular we have $\epsilon_{d}:(F\circ G)(d)\to d$. Since $F$ is a functor
+    and $f:c\to G(d)$, we have $F(f):F(c)\to(F\circ G)(d)$. It follows that
+    $g$ is a well-defined arrow $g:F(c)\to d$. We need to show that
+    $f=G(g)\circ\eta_{c}$. Having assumed that $\epsilon$ is a counit
+    of $(F,G)$, using proposition~(\ref{Adj:prop:counit:proving:equality}) it
+    is sufficient to prove that $\epsilon_{d}\circ F(f)=\epsilon_{d}\circ
+    F(\,G(g)\circ\eta_{c}\,)$, which is $g=\epsilon_{d}\circ 
+    F(\,G(g)\circ\eta_{c}\,)$.
     The proof goes as follows:
-        \begin{eqnarray*}G(\,\epsilon_{d}\circ F(f)\,)\circ\eta_{c}
-            &=&G(\epsilon_{d})\circ(G\circ F)(f)\circ\eta_{c}
-            \ \leftarrow\ \mbox{$G$ functor}\\
-            \mbox{prop.~(\ref{Adj:prop:unit:natural}), $f:c\to G(d)$}\ \to\ 
-            &=&G(\epsilon_{d})\circ\eta_{G(d)}\circ f\\
+        \begin{eqnarray*}\epsilon_{d}\circ F(\,G(g)\circ\eta_{c}\,)
+            &=&\epsilon_{d}\circ (F\circ G)(g)\circ F(\eta_{c})
+            \ \leftarrow\ \mbox{$F$ functor}\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural}), $g:F(c)\to d$}\ \to\ 
+            &=&g\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
             \mbox{eqn.~\ref{Adj:eqn:counit:has:related:unit:1}}\ \to\ 
-            &=&\id(\,G(d)\,)\circ f\\
-            &=&f
+            &=&g\circ\id(\,F(c)\,)\\
+            &=&g
         \end{eqnarray*}
-    We now prove the uniqueness. So we assume that $f_{1},f_{2}:c\to G(d)$ are
-    such that $g=\epsilon_{d}\circ F(f_{1})=\epsilon_{d}\circ F(f_{2})$ and
-    we need to show that $f_{1}=f_{2}$:
-        \begin{eqnarray*}f_{1}
-            &=&\id(\,G(d)\,)\circ f_{1}\\
+    We now prove the uniqueness. So we assume that $g_{1},g_{2}:F(c)\to d$ are
+    such that $f=G(g_{1})\circ\eta_{c}=G(g_{2})\circ\eta_{c}$ and
+    we need to show that $g_{1}=g_{2}$:
+        \begin{eqnarray*}g_{1}
+            &=&g_{1}\circ\id(\,F(c)\,)\\
             \mbox{eqn.~\ref{Adj:eqn:counit:has:related:unit:1}}\ \to\ 
-            &=&G(\epsilon_{d})\circ\eta_{G(d)}\circ f_{1}\\
-            \mbox{prop.~(\ref{Adj:prop:unit:natural}), $f_{1}:c\to G(d)$}\ \to\ 
-            &=&G(\epsilon_{d})\circ (G\circ F)(f_{1})\circ\eta_{c}\\
-            \mbox{$G$ functor}\ \to\ 
-            &=&G(\,\epsilon_{d}\circ F(f_{1})\,)\circ\eta_{c}\\
+            &=&g_{1}\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural}), $g_{1}:F(c)\to d$}\ \to\ 
+            &=&\epsilon_{d}\circ (F\circ G)(g_{1})\circ F(\eta_{c})\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d}\circ F(\,G(g_{1})\circ\eta_{c}\,)\\
             \mbox{assumption}\ \to\ 
-            &=&G(\,\epsilon_{d}\circ F(f_{2})\,)\circ\eta_{c}\\
+            &=&\epsilon_{d}\circ F(\,G(g_{2})\circ\eta_{c}\,)\\
             \mbox{same derivation}\ \to\ 
-            &=&f_{2}
+            &=&g_{2}
         \end{eqnarray*}
-    So we have now proved that $\epsilon$ is a counit of $(F,G)$ as per
-    definition~(\ref{Adj:def:counit}) and it remains to show that it is
-    related to $\eta$. From definition~(\ref{Adj:def:related}), 
-    it is sufficient to show that $G\epsilon\circ\eta G=\iota_{G}$ or
-    equivalently that $G(\epsilon_{d})\circ\eta_{G(d)}=\id(\,G(d)\,)$ for
-    all $d\in\Dat$. This follows directly from 
-    equation~(\ref{Adj:eqn:unit:has:related:counit:1}).
+    So we have now proved that $\eta$ is a unit of $(F,G)$ as per
+    definition~(\ref{Adj:def:unit}) and it remains to show that it is
+    related to $\epsilon$. From definition~(\ref{Adj:def:related}), 
+    it is sufficient to show that $\epsilon F\circ F\eta=\iota_{F}$ or
+    equivalently that $\epsilon_{F(c)}\circ F(\eta_{c})=\id(\,F(c)\,)$ for
+    all $c\in\Cat$. This follows directly from 
+    equation~(\ref{Adj:eqn:counit:has:related:unit:1}).
 \end{proof}
 
 
