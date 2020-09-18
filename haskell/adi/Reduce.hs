@@ -9,15 +9,16 @@ import Data.Functor.Foldable
 
 import Op
 import Var
+import Subst
 import Syntax
 
 irreducible :: Expr -> Bool
 irreducible = \case
     Fix (ENum _)    -> True
     Fix (EBool _)   -> True
+    Fix (ELam _ _)  -> True
     Fix (EZero)     -> True
     Fix (ESuc e)    -> irreducible e
-    Fix (ELam _ _)  -> True
     _               -> False
 
 reduce :: Expr -> Expr
@@ -29,16 +30,20 @@ reduce = \case
     Fix (EIf e e1 e2)   -> reduceIf e e1 e2
     Fix (ELam x e1)     -> reduceLam x e1
     Fix (EApp e1 e2)    -> reduceApp e1 e2
+    Fix (ERec x e1)     -> reduceRec x e1
+    Fix (EZero)         -> reduceZero
+    Fix (ESuc e1)       -> reduceSuc e1
     _                   -> error "xxx"
 
 reduceNum :: Integer -> Expr
-reduceNum = eNum
+reduceNum = error "reduce: attempting to reduce an ENum"
 
 reduceBool :: Bool -> Expr
-reduceBool = eBool
+reduceBool = error "reduce: attempting to reduce an EBool"
 
+-- Yet a Var is not classified as irreducible
 reduceVar :: Var -> Expr
-reduceVar _ = error "reduceVar: should never be called"
+reduceVar _ = error "reduce: attempting to reduce a Var"
 
 reduceOp :: Op -> [Expr] -> Expr
 reduceOp op es = case es of
@@ -58,10 +63,28 @@ reduceIf e e1 e2 = if irreducible e
     else eIf (reduce e) e1 e2
 
 reduceLam :: Var -> Expr -> Expr
-reduceLam x e1 = Fix (ELam x e1)
+reduceLam = error "reduce: attempting to reduce a lambda abstraction"
 
+-- Beta reduction is unsafe, does not avoid variable capture. TODO
 reduceApp :: Expr -> Expr -> Expr
-reduceApp _e1 _e2 = undefined
+reduceApp e1 e2 = if irreducible e1
+    then if irreducible e2
+        then let Fix (ELam x e) = e1 in subst (e2 <-: x) e
+        else eApp e1 (reduce e2)
+    else eApp (reduce e1) e2
+
+-- Beta reduction is unsafe, does not avoid variable capture. TODO
+reduceRec :: Var -> Expr -> Expr
+reduceRec x e1 = subst (Fix (ERec x e1) <-: x) e1
+
+
+reduceZero :: Expr
+reduceZero = error "reduce: attempting to reduce Zero"
+
+reduceSuc :: Expr -> Expr
+reduceSuc e1 = if irreducible e1
+    then error "reduce: attempting to reduce successor of irreducible expression"
+    else eSuc (reduce e1)
 
 -- Arguments are irreducible
 reduceOp_ :: Op -> [Expr] -> Expr
