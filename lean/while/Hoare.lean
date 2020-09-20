@@ -129,5 +129,3 @@ begin
     { apply while_intro, assumption },
     { intros s H4, cases H4 with H4 H5, apply H3; assumption }
 end
-
-

@@ -4,6 +4,8 @@ Import ListNotations.
 Require Import Logic.Class.Eq.
 
 Require Import Logic.List.In.
+Require Import Logic.List.Nil.
+Require Import Logic.List.Remove.
 Require Import Logic.List.Include.
 Require Import Logic.List.Intersect.
 Require Import Logic.List.Difference.
@@ -100,10 +102,32 @@ Proof.
         + apply incl_tran with (Fr p1 \\ xs ++ Fr p2 \\ xs).
             { apply incl_appl, incl_refl. }
             { assumption. }
-    - simpl in H3. rewrite <- map_cons. rewrite IH1.
+    - simpl in H3. rewrite <- map_cons. apply valid_all in H5.
+      destruct H5 as [H5 H8].
+      rewrite IH1.
         + rewrite H1.
             { reflexivity. }
             { apply H3. left. reflexivity. }
-        +
+        + intros z H7. apply in_app_or in H7. destruct H7 as [H7|H7]; apply H3.
+            { right. apply in_or_app. left. assumption. }
+            { destruct H7 as [H7|H7].
+                { subst. left. reflexivity. }
+                { right. apply in_or_app. right. assumption. }}
+        + simpl in H4. rewrite remove_diff in H4. 
+          rewrite <- diff_distrib_app_l' in H4. simpl in H4. assumption.
+        + assumption.
+        + apply nil_charac. intros y' H7. apply inter_charac in H7.
+          destruct H7 as [H7 H9]. rewrite map_cons in H7. destruct H7 as [H7|H7].
+            { apply in_map_iff in H9. destruct H9 as [y [H9 H10]].
+             apply (H8 y). 
+                { simpl. rewrite remove_diff. apply diff_charac in H10.
+                  destruct H10 as [H10 H11]. apply diff_charac. split.
+                    { assumption. }
+                    { intros H12.  apply H11. left. destruct H12 as [H12|H12].
+                        { assumption. }
+                        { inversion H12. }}}
+                { rewrite H7, H9. reflexivity. }}
+            {
+
 Show.
 *)

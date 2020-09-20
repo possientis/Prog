@@ -156,15 +156,17 @@ Proof.
                     { rewrite E4, E5. apply bindPermute. assumption. } 
                   rewrite E3 in E1. clear E3 e3. assert (envEqual e1 e5) as G5.
                     { apply envEqualTrans with e4; assumption. }
-                  clear G4 G3 E4 e4.
-(*
-            { rewrite E1, E2. apply bindPermute. assumption. } 
+                  clear G4 G3 E4 e4. apply envEqualOnTrans with e5.
+                    { apply envEqualEnvEqualOn. assumption. }
+                    { clear E1 G1 G5 e1. rewrite E2, E5. apply bindNotInFree.
+                      assumption. }}
+                { assumption. }}
+            { rewrite E1, E2. apply bindPermute. assumption. }
         + apply G2. clear G1 G2. destruct G3 as [u [G1 G2]]. exists u.
           rewrite evalAnd; try (assumption).
           rewrite evalElem. rewrite bindSame. rewrite bindDiff; try (assumption).
           rewrite bindDiff; try (assumption). rewrite bindDiff; try (assumption).
           rewrite bindSame. split; try (assumption). 
-*)
 
 Show.
 *)

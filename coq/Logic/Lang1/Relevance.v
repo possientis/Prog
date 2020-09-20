@@ -51,19 +51,16 @@ Proof.
                     { assumption. }}}
 Qed.
 
-Lemma evalEnvEqual : forall (e e':Env) (p:Formula),
-    envEqual e e' -> eval e p <-> eval e' p.
-Proof.
-    intros e e' p H. apply relevance. intros n H'. apply H.
-Qed.
-
 Lemma evalNotInFree : forall (e:Env) (n:nat) (x:set) (p:Formula),
     ~In n (Fr p) -> eval (bind e n x) p <-> eval e p.
 Proof.
-    intros e n x p H. apply relevance. intros m H'. 
-    destruct (eqDec n m) as [E|E].
-    - subst. apply H in H'. contradiction.
-    - rewrite bindDiff. 
-        + apply equalRefl.
-        + assumption.
+    intros e n x p H1. apply relevance. apply bindNotInFree. assumption.
 Qed.
+
+Lemma evalEnvEqual : forall (e e':Env) (p:Formula),
+    envEqual e e' -> eval e p <-> eval e' p.
+Proof.
+    intros e e' p H1. apply relevance. apply envEqualEnvEqualOn. assumption.
+Qed.
+
+

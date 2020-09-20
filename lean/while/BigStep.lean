@@ -31,6 +31,8 @@ def s0 : Env := env [("x",3),("y",5)]
 def s1 : Env := env [("x",8),("y",5)]
 def s2 : Env := env [("x",8),("y",0)]
 
+namespace BigStep
+
 lemma L1 : s1 = bindVar "x" (x :+: y) s0 :=
 begin
   apply funext, unfold s1 s0 aPlus x y aVar env bindVar,
@@ -63,6 +65,10 @@ begin
     {rewrite L1, constructor},
     {rewrite L2, constructor}
 end
+
+end BigStep
+
+open BigStep
 
 lemma BigStepDeterministic : ∀ (e:Stmt) (s s₁ s₂:Env),
   BigStep e s s₁ → BigStep e s s₂ → s₁ = s₂ :=

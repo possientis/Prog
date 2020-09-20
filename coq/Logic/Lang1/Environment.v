@@ -36,6 +36,31 @@ Qed.
 Definition envEqualOn (p:Formula) (e e':Env) : Prop :=
     forall (n:nat), In n (Fr p) -> e n == e' n.
 
+Lemma envEqualOnRefl : forall (p:Formula) (e:Env), envEqualOn p e e.
+Proof.
+    intros p e n H1. apply equalRefl.
+Qed.
+
+Lemma envEqualOnSym : forall (p:Formula) (e e':Env),
+    envEqualOn p e e' -> envEqualOn p e' e.
+Proof.
+    intros p e e' H1 n H2. apply equalSym, H1. assumption.
+Qed.
+
+Lemma envEqualOnTrans : forall (p:Formula) (e1 e2 e3:Env),
+    envEqualOn p e1 e2 -> envEqualOn p e2 e3 -> envEqualOn p e1 e3.
+Proof.
+    intros p e1 e2 e3 H1 H2 n H3. apply equalTrans with (e2 n).
+    - apply H1. assumption.
+    - apply H2. assumption.
+Qed.
+
+Lemma envEqualEnvEqualOn : forall (p:Formula) (e e':Env),
+    envEqual e e' -> envEqualOn p e e'.
+Proof.
+    intros p e e' H1 n H2. apply H1.
+Qed.
+
 (* Tweak environment e so that e n = x                                          *)
 Definition bind (e:Env) (n:nat) (x:set) : Env :=
     fun (m:nat) =>
@@ -113,6 +138,14 @@ Proof.
         + assumption.
 Qed.
 
+Lemma bindNotInFree : forall (p:Formula) (e:Env) (n:nat) (x:set),
+    ~In n (Fr p) -> envEqualOn p (bind e n x) e.
+Proof.
+    intros p e n x H1 m H2. unfold bind. destruct (eqDec n m) as [H3|H3].
+    - subst. apply H1 in H2. contradiction.
+    - apply equalRefl.
+Qed.
+
 
 Lemma bindReplace : forall (e:Env) (n n' k:nat) (x:set),
     n' <> k -> bind e n' x (replace n n' k) == bind e n x k.
@@ -133,7 +166,6 @@ Proof.
         + exfalso. subst. apply H1. reflexivity.
         + apply equalRefl.
 Qed.
-
 
 Lemma bindReplace2 : forall (e:Env) (n m n' m' k:nat) (x y:set),  
  n <> m  -> 

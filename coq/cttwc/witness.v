@@ -296,3 +296,56 @@ Proof.
         + apply L6.
 Qed.
 
+Inductive G' (f:nat -> bool) : nat -> Prop :=
+| mkG1 : forall (n:nat), f n = true -> G' f n
+| mkG2 : forall (n:nat), G' f (S n) -> G' f n
+.
+
+
+Lemma L30 : forall (f:nat -> bool) (n:nat), G f n -> G' f n.
+Proof.
+    intros f. apply elimG. intros n H1. destruct (f n) eqn:E.
+    - apply mkG1. assumption.
+    - apply mkG2, H1. reflexivity.
+Qed.
+
+(* Not a computational eliminator (stays in Prop)                               *)
+Definition elimG' : forall (f:nat -> bool) (p:nat -> Prop),
+    (forall (n:nat), f n = true -> p n) ->
+    (forall (n:nat), p (S n) -> p n)    ->
+    forall (n:nat), G' f n -> p n.
+Proof.
+    intros f p H1 H2 n H3. induction H3 as [n H3|n H3 IH].
+    - apply H1. assumption.
+    - apply H2, IH.
+Qed.
+
+Lemma L31 : forall (f:nat -> bool) (n:nat), G' f n -> G f n.
+Proof.
+    intros f. apply elimG'; intros n.
+    - apply L5.
+    - apply L6.
+Qed.
+
+Inductive G'' (f:nat -> bool) : nat -> Prop :=
+| mkG'' : forall (n:nat), f n = true \/ G'' f (S n) -> G'' f n
+.
+
+Lemma L32 : forall (f:nat -> bool) (n:nat), G f n -> G'' f n.
+Proof.
+    intros f. apply elimG. intros n H1. destruct (f n) eqn:E; constructor.
+    - left. assumption.
+    - right. apply H1. reflexivity.
+Qed.
+
+(* Not a computational eliminator (stays in Prop)                               *)
+Definition elimG'' : forall (f:nat -> bool) (p:nat -> Prop),
+    (forall (n:nat), f n = true -> p n) ->
+    (forall (n:nat), p (S n) -> p n)    ->
+    forall (n:nat), G'' f n -> p n.
+Proof.
+    intros f p H1 H2 n H3. destruct H3 as [n [H3|H3]].
+    - apply H1. assumption.
+    -
+
+Show.
