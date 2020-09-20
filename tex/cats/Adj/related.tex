@@ -114,19 +114,19 @@ always in fact satisfy both equations.
 
 \begin{prop}\label{Adj:prop:unit:has:related:counit}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
-    are categories. Then every unit of $(F,G)$ has a related counit.
+    are categories. Then every unit of $(F,G)$ has a unique related counit.
 \end{prop}
 \begin{proof}
     Let $\eta:I_{\cal C}\Rightarrow G\circ F$ be a unit of $(F,G)$. We need to 
-    show the existence of a counit $\epsilon:F\circ G\Rightarrow I_{\cal D}$ 
+    show the existence of a unique counit $\epsilon:F\circ G\Rightarrow I_{\cal D}$ 
     which is related to $\eta$ as per definition~(\ref{Adj:def:related}).
     First we shall define a natural transformation $\epsilon:F\circ G\Rightarrow
-    I_{\cal D}$, then prove that it is a counit and finally that it is related
-    to $\eta$. So let $d\in\Dat$. We need to define an arrow $\epsilon_{d}:
-    (F\circ G)(d)\to d$ in the category \Dat. Define $c=G(d)$. Then we need
-    to define an arrow $\epsilon_{d}:F(c)\to d$. However, $\eta$ is a unit
-    of $(F,G)$ and $\id(c)$ is an arrow $\id(c):c\to G(d)$. Applying
-    definition~(\ref{Adj:def:unit}) we can define $\epsilon_{d}$ to be
+    I_{\cal D}$, then prove that it is a counit which is related
+    to $\eta$, and finally prove that it is unique. So let $d\in\Dat$. We need to 
+    define an arrow $\epsilon_{d}: (F\circ G)(d)\to d$ in the category \Dat. 
+    Define $c=G(d)$. Then we need to define an arrow $\epsilon_{d}:F(c)\to d$. 
+    However, $\eta$ is a unit of $(F,G)$ and $\id(c)$ is an arrow $\id(c):c\to G(d)$. 
+    Applying definition~(\ref{Adj:def:unit}) we can define $\epsilon_{d}$ to be
     the unique arrow $\epsilon_{d}:F(c)\to d$ such that $\id(c)=G(\epsilon_{d})
     \circ\eta_{c}$. Rewriting $c=G(d)$ we obtain:
         \begin{equation}\label{Adj:eqn:unit:has:related:counit:1}
@@ -221,19 +221,41 @@ always in fact satisfy both equations.
     equivalently that $G(\epsilon_{d})\circ\eta_{G(d)}=\id(\,G(d)\,)$ for
     all $d\in\Dat$. This follows directly from 
     equation~(\ref{Adj:eqn:unit:has:related:counit:1}).
+
+    So we have now proved the existence of a counit $\epsilon$ which is
+    related to $\eta$. It remains to show that such counit is unique.
+    So we assume that $\epsilon':F\circ G\Rightarrow I_{\cal D}$ is 
+    another counit which is related to $\eta$. We need to show that
+    $\epsilon=\epsilon'$ or equivalently that $\epsilon_{d}=\epsilon_{d}'$
+    for all $d\in\Dat$. Given $d\in\Dat$ define $c=G(d)$. Then both 
+    $\epsilon_{d}$ and $\epsilon_{d}'$ are arrows from $F(c)$ to $d$ in
+    \Dat. Using proposition~(\ref{Adj:prop:unit:proving:equality}), having
+    assumed that $\eta$ is a unit of $(F,G)$, in order to show that 
+    $\epsilon_{d}=\epsilon_{d}'$ it is sufficient to prove that
+    $G(\epsilon_{d})\circ\eta_{c}=G(\epsilon_{d}')\circ\eta_{c}$. Rewriting
+    $c=G(d)$, we need to show that:
+        \[
+            G(\epsilon_{d})\circ\eta_{G(d)}=G(\epsilon_{d}')\circ\eta_{G(d)}
+        \]
+    However this follows from $(1)$ of definition~(\ref{Adj:def:related}) and
+    our assumption that both $\epsilon$ and $\epsilon'$ are related to $\eta$,
+    which implies that both sides of this equation are equal to $\id(\,G(d)\,)$.
+    Note that $(1)$ of definition~(\ref{Adj:def:related}) is true from
+    proposition~(\ref{Adj:prop:related:both}).
 \end{proof}
 
 \begin{prop}\label{Adj:prop:counit:has:related:unit}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
-    are categories. Then every counit of $(F,G)$ has a related unit.
+    are categories. Then every counit of $(F,G)$ has a unique related unit.
 \end{prop}
 \begin{proof}
     Let $\epsilon:F\circ G\Rightarrow I_{\cal D}$ be a counit of $(F,G)$. We need 
-    to show the existence of a unit $\eta:I_{\cal C}\Rightarrow G\circ F$ 
+    to show the existence of a unique unit $\eta:I_{\cal C}\Rightarrow G\circ F$ 
     which is related to $\epsilon$ as per definition~(\ref{Adj:def:related}).
     First we shall define a natural transformation $\eta:I_{\cal C}\Rightarrow
-    G\circ F$, then prove that it is a unit and finally that it is related
-    to $\epsilon$. So let $c\in\Cat$. We need to define an arrow $\eta_{c}:
+    G\circ F$, then prove that it is a unit which is related
+    to $\epsilon$, and finally prove that it is unique. So let $c\in\Cat$. 
+    We need to define an arrow $\eta_{c}:
     c\to(G\circ F)(c)$ in the category \Cat. Define $d=F(c)$. Then we need
     to define an arrow $\eta_{c}:c\to G(d)$. However, $\epsilon$ is a counit
     of $(F,G)$ and $\id(d)$ is an arrow $\id(d):F(c)\to d$. Applying
@@ -334,6 +356,27 @@ always in fact satisfy both equations.
     equivalently that $\epsilon_{F(c)}\circ F(\eta_{c})=\id(\,F(c)\,)$ for
     all $c\in\Cat$. This follows directly from 
     equation~(\ref{Adj:eqn:counit:has:related:unit:1}).
+
+    So we have now proved the existence of a unit $\eta$ which is
+    related to $\epsilon$. It remains to show that such unit is unique.
+    So we assume that $\eta':I_{\cal C}\Rightarrow G\circ F$ is 
+    another unit which is related to $\epsilon$. We need to show that
+    $\eta=\eta'$ or equivalently that $\eta_{c}=\eta_{c}'$
+    for all $c\in\Cat$. Given $c\in\Cat$ define $d=F(c)$. Then both 
+    $\eta_{c}$ and $\eta_{c}'$ are arrows from $c$ to $G(d)$ in
+    \Cat. Using proposition~(\ref{Adj:prop:counit:proving:equality}), having
+    assumed that $\epsilon$ is a counit of $(F,G)$, in order to show that 
+    $\eta_{c}=\eta_{c}'$ it is sufficient to prove that
+    $\epsilon_{d}\circ F(\eta_{c})=\epsilon_{d}\circ F(\eta_{c}')$. Rewriting
+    $d=F(c)$, we need to show that:
+        \[
+            \epsilon_{F(c)}\circ F(\eta_{c})=\epsilon_{F(c)}\circ F(\eta_{c}')
+        \]
+    However this follows from $(2)$ of definition~(\ref{Adj:def:related}) and
+    our assumption that both $\eta$ and $\eta'$ are related to $\epsilon$,
+    which implies that both sides of this equation are equal to $\id(\,F(c)\,)$.
+    Note that $(2)$ of definition~(\ref{Adj:def:related}) is true from
+    proposition~(\ref{Adj:prop:related:both}).
 \end{proof}
 
 

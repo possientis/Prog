@@ -339,13 +339,24 @@ Proof.
 Qed.
 
 (* Not a computational eliminator (stays in Prop)                               *)
-Definition elimG'' : forall (f:nat -> bool) (p:nat -> Prop),
+Definition elimG'' (f:nat -> bool) (p:nat -> Prop):
     (forall (n:nat), f n = true -> p n) ->
     (forall (n:nat), p (S n) -> p n)    ->
-    forall (n:nat), G'' f n -> p n.
-Proof.
-    intros f p H1 H2 n H3. destruct H3 as [n [H3|H3]].
-    - apply H1. assumption.
-    -
+    forall (n:nat), G'' f n -> p n 
+    := 
+    fun H1 H2 => 
+        fix g (n:nat) (H:G'' f n) : p n :=
+            match H with
+            | mkG'' _ n H4 =>
+                match H4 with
+                | or_introl H5  => H1 n H5
+                | or_intror H5  => H2 n (g (S n) H5)
+                end
+            end.
 
-Show.
+Lemma L33 : forall (f:nat -> bool) (n:nat), G'' f n -> G f n.
+Proof.
+    intros f. apply elimG''; intros n.
+    - apply L5.
+    - apply L6.
+Qed.

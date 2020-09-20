@@ -138,6 +138,15 @@ Proof.
         + assumption.
 Qed.
 
+Lemma bindEnvEqualOn : forall (p:Formula) (e e':Env) (n:nat) (x x':set),
+    envEqualOn p e e' -> x == x' -> envEqualOn p (bind e n x) (bind e' n x').
+Proof.
+    intros p e e' n x x' H1 H2 m H3. unfold bind. destruct (eqDec n m) as [H4|H4].
+    - assumption.
+    - apply H1. assumption.
+Qed.
+
+
 Lemma bindNotInFree : forall (p:Formula) (e:Env) (n:nat) (x:set),
     ~In n (Fr p) -> envEqualOn p (bind e n x) e.
 Proof.

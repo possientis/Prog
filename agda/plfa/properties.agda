@@ -184,9 +184,35 @@ progress' (⊢+ p q) with progress' p
 ... | inj₁ r with progress' q
 ... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
 progress' (⊢+ p q) | inj₁ V-Num | inj₁ V-Num = inj₂ ⟨ _ , β-+ ⟩
-progress' (⊢* p q) = {!!}
-progress' ⊢Bool = {!!}
-progress' (⊢= p q) = {!!}
-progress' (⊢< p q) = {!!}
-progress' (⊢∧ p q) = {!!}
-progress' (⊢∨ p q) = {!!}
+progress' (⊢* p q) with progress' p
+... | inj₂ ⟨ N , r ⟩ = inj₂ ⟨ _ , ξ-op₁ r ⟩
+... | inj₁ r with progress' q
+... | inj₂ ⟨ N , s ⟩ = inj₂  ⟨ _ , ξ-op₂ r s ⟩
+progress' (⊢* p q) | inj₁ V-Num | inj₁ V-Num = inj₂ ⟨ _ , β-* ⟩
+progress' ⊢Bool = inj₁ V-Bool
+progress' (⊢= p q) with progress' p
+... | inj₂ ⟨ N , r ⟩ = inj₂ ⟨ _ , ξ-op₁ r ⟩
+... | inj₁ r with progress' q
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
+progress' (⊢= p q) | inj₁ V-Num | inj₁ V-Num = inj₂ ⟨ _ , β-= ⟩
+progress' (⊢< p q) with progress' p
+... | inj₂ ⟨ N , r ⟩ = inj₂ ⟨ _ , ξ-op₁ r ⟩
+... | inj₁ r with progress' q
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
+progress' (⊢< p q) | inj₁ V-Num | inj₁ V-Num = inj₂ ⟨ _ , β-< ⟩
+progress' (⊢∧ p q) with progress' p
+... | inj₂ ⟨ N , r ⟩ = inj₂ ⟨ _ , ξ-op₁ r ⟩
+... | inj₁ r with progress' q
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
+progress' (⊢∧ p q) | inj₁ V-Bool | inj₁ V-Bool = inj₂ ⟨ _ , β-∧ ⟩
+progress' (⊢∨ p q) with progress' p
+... | inj₂ ⟨ N , r ⟩ = inj₂ ⟨ _ , ξ-op₁ r ⟩
+... | inj₁ r with progress' q
+... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
+progress' (⊢∨ p q) | inj₁ V-Bool | inj₁ V-Bool = inj₂ ⟨ _ , β-∨ ⟩
+
+
+value? : ∀ {M : Term} {A : Type} → ∅ ⊢ M ∶ A → Dec (Value M)
+value? p with progress p
+... | step q = no (—→¬V q)
+... | done q = yes q

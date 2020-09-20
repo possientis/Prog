@@ -17,7 +17,7 @@ Require Import Logic.Fol.Valid.
 Require Import Logic.Fol.Syntax.
 Require Import Logic.Fol.Functor.
 
-(*
+
 Lemma localInv_lemma : 
     forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(v0 v1:list v)(g0 g1:w -> v),
         forall (xs:list v) (p:P v), 
@@ -127,7 +127,27 @@ Proof.
                         { assumption. }
                         { inversion H12. }}}
                 { rewrite H7, H9. reflexivity. }}
-            {
+            { rewrite nil_charac in H6. apply (H6 y'). apply inter_charac. split.
+                { assumption. }
+                { simpl. rewrite remove_diff. rewrite <- diff_distrib_app_l'.
+                  simpl. assumption. }}
+Qed.
+
+(*
+Theorem localInv : 
+    forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(v0 v1:list v),
+        (exists (g0:w -> v), forall (x:v), x :: v0 -> g0 (f x) = x) ->
+        (exists (g1:w -> v), forall (x:v), x :: v1 -> g1 (f x) = x) ->
+        exists (g:P w -> P v), forall (p:P v),
+            bnd p <= v0 ->
+            Fr p  <= v1 ->
+            valid f p   ->
+                g (fmap f p) = p.
+Proof.
+    intros v w e e' f v0 v1 [g0 H0] [g1 H1]. exists (dmap g0 g1). 
+    intros p G1 G2 G3. unfold dmap. 
+    change (dmap_ g0 g1 (map f []) (fmap f p) = p).
+    apply (localInv_lemma v w e e' f v0 v1).
 
 Show.
 *)

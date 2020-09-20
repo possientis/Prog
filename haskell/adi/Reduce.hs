@@ -9,6 +9,7 @@ import Data.Functor.Foldable
 
 import Op
 import Var
+import DSL
 import Subst
 import Syntax
 
@@ -23,17 +24,17 @@ irreducible = \case
 
 reduce :: Expr -> Expr
 reduce = \case
-    Fix (ENum n)        -> reduceNum n
-    Fix (EBool b)       -> reduceBool b
-    Fix (EVar x)        -> reduceVar x
-    Fix (EOp op es)     -> reduceOp op es
-    Fix (EIf e e1 e2)   -> reduceIf e e1 e2
-    Fix (ELam x e1)     -> reduceLam x e1
-    Fix (EApp e1 e2)    -> reduceApp e1 e2
-    Fix (ERec x e1)     -> reduceRec x e1
-    Fix (EZero)         -> reduceZero
-    Fix (ESuc e1)       -> reduceSuc e1
-    _                   -> error "xxx"
+    Fix (ENum n)            -> reduceNum n
+    Fix (EBool b)           -> reduceBool b
+    Fix (EVar x)            -> reduceVar x
+    Fix (EOp op es)         -> reduceOp op es
+    Fix (EIf e e1 e2)       -> reduceIf e e1 e2
+    Fix (ELam x e1)         -> reduceLam x e1
+    Fix (EApp e1 e2)        -> reduceApp e1 e2
+    Fix (ERec x e1)         -> reduceRec x e1
+    Fix (EZero)             -> reduceZero
+    Fix (ESuc e1)           -> reduceSuc e1
+    Fix (ECase e e1 x e2)   -> reduceCase e e1 x e2
 
 reduceNum :: Integer -> Expr
 reduceNum = error "reduce: attempting to reduce an ENum"
@@ -65,7 +66,6 @@ reduceIf e e1 e2 = if irreducible e
 reduceLam :: Var -> Expr -> Expr
 reduceLam = error "reduce: attempting to reduce a lambda abstraction"
 
--- Beta reduction is unsafe, does not avoid variable capture. TODO
 reduceApp :: Expr -> Expr -> Expr
 reduceApp e1 e2 = if irreducible e1
     then if irreducible e2
@@ -73,7 +73,6 @@ reduceApp e1 e2 = if irreducible e1
         else eApp e1 (reduce e2)
     else eApp (reduce e1) e2
 
--- Beta reduction is unsafe, does not avoid variable capture. TODO
 reduceRec :: Var -> Expr -> Expr
 reduceRec x e1 = subst (Fix (ERec x e1) <-: x) e1
 
@@ -85,6 +84,15 @@ reduceSuc :: Expr -> Expr
 reduceSuc e1 = if irreducible e1
     then error "reduce: attempting to reduce successor of irreducible expression"
     else eSuc (reduce e1)
+
+
+reduceCase :: Expr -> Expr -> Var -> Expr -> Expr
+reduceCase e e1 x e2 = if irreducible e 
+    then case e of
+        Fix (EZero)     -> e1
+        Fix (ESuc e3)   -> subst (e3 <-: x) e2
+        _               -> error "reduce: case expression is not a Nat"
+    else Fix (ECase (reduce e) e1 x e2)
 
 -- Arguments are irreducible
 reduceOp_ :: Op -> [Expr] -> Expr

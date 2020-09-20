@@ -54,11 +54,26 @@ begin
         { simp [H3], assumption }}}
 end
 
+lemma L3 : ∀ (n m:ℕ), subst "y" (aVar "t") (p₂ n m) = p₄ n m :=
+begin
+  intros n m,
+  unfold subst, unfold bindVar, unfold p₂, unfold p₄, unfold aVar,
+  apply funext, intros s, apply propext, split; intros H1; cases H1 with H1 H2,
+    { simp at H2, cases decidable.em ("x" = "y") with H3 H3,
+      { exfalso, revert H3, from dec_trivial },
+      { simp [H3] at H1, split; assumption }},
+    { simp,  split,
+      { cases decidable.em ("x" = "y") with H3 H3,
+        { exfalso, revert H3, from dec_trivial },
+        { simp [H3], assumption }},
+      { assumption }}
+end
+
 lemma Swap_Correct : ∀ (n m:ℕ), Hoare (p₁ n m) Swap (p₂ n m) :=
 begin
   intros n m, unfold Swap, apply (seq_intro _ (p₃ n m)),
     { rw ← L1, apply assign_intro },
     { apply (seq_intro _ (p₄ n m)),
       { rw ← L2, apply assign_intro },
-      {}}
+      { rw ← L3, apply assign_intro }}
 end

@@ -166,7 +166,25 @@ Proof.
           rewrite evalAnd; try (assumption).
           rewrite evalElem. rewrite bindSame. rewrite bindDiff; try (assumption).
           rewrite bindDiff; try (assumption). rewrite bindDiff; try (assumption).
-          rewrite bindSame. split; try (assumption). 
+          rewrite bindSame. split; try (assumption). rewrite eval3ToEval2 in G2.
+          remember (bind (bind (bind (bind e n x) m y) k z) l u) as e1 eqn:E1.
+          remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
+          assert (envEqual e1 e2) as G3.
+            { rewrite E1, E2. apply bindPermute. assumption. }
+          apply evalEnvEqual with e2.
+              { assumption. }
+              { rewrite E2. clear G3 E1 E2 e1 e2. apply evalApply2; 
+                try (assumption). unfold eval2 in G2. unfold eval2.
+                apply relevance with (bind (bind (bind e n x) 0 u) 1 z);
+                try (assumption). 
+                apply bindEnvEqualOn; try (apply equalRefl).
+                apply bindEnvEqualOn; try (apply equalRefl).
+                apply bindNotInFree. assumption. }
+    - unfold replacementF. rewrite evalAll. intros x. rewrite evalImp.
+      intros G2. apply evalFunctionalF in G2; try (assumption).
+      rewrite evalExi; try (assumption). remember (G1 x) as G3 eqn:E. clear E G1.
+      unfold eval2 in G2. unfold eval3 in G3. remember (G3 G2) as G1 eqn:E.
+      clear E G2 G3. destruct G1 as [y G1]. exists y. rewrite evalAll. intros z.
 
 Show.
 *)
