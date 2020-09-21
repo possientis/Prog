@@ -76,63 +76,6 @@ typed (C-suc p) = ⊢suc (typed p)
 typed C-Num = ⊢Num
 typed C-Bool = ⊢Bool
 
-progress : ∀ {M : Term} {A : Type}
-  → ∅ ⊢ M ∶ A
-    ----------
-  → Progress M
-
-progress (⊢ƛ p) = done V-ƛ
-progress (⊢· p q) with (progress p)
-... | step r = step (ξ-·₁ r)
-... | done r with (progress q)
-... | step s = step (ξ-·₂ r s)
-progress (⊢· (⊢ƛ p) q) | done r | done s = step (β-ƛ s)
-progress ⊢zero = done V-zero
-progress (⊢suc p) with progress p
-... | step q = step (ξ-suc q)
-... | done q = done (V-suc q)
-progress (⊢case p q r) with progress p
-... | step s = step (ξ-case s)
-... | done V-zero = step β-zero
-... | done (V-suc s) = step (β-suc s)
-progress (⊢μ p) = step β-μ
-progress ⊢Num = done V-Num
-progress (⊢+ p q) with progress p
-... | step r = step (ξ-op₁ r)
-... | done r with progress q
-... | step s = step (ξ-op₂ r s)
-progress (⊢+ p q) | done V-Num | done V-Num = step β-+
-progress (⊢* p q) with progress p
-... | step r = step (ξ-op₁ r)
-... | done r with progress q
-... | step s = step (ξ-op₂ r s)
-progress (⊢* p q) | done V-Num | done V-Num = step β-*
-progress ⊢Bool = done V-Bool
-progress (⊢= p q) with progress p
-... | step r = step (ξ-op₁ r)
-... | done r with progress q
-... | step s = step (ξ-op₂ r s)
-progress (⊢= p q) | done V-Num | done V-Num = step β-=
-progress (⊢< p q) with progress p
-... | step r = step (ξ-op₁ r)
-... | done r with progress q
-... | step s = step (ξ-op₂ r s)
-progress (⊢< p q) | done V-Num | done V-Num = step β-<
-progress (⊢∧ p q) with progress p
-... | step r = step (ξ-op₁ r)
-... | done r with progress q
-... | step s = step (ξ-op₂ r s)
-progress (⊢∧ p q) | done V-Bool | done V-Bool = step β-∧
-progress (⊢∨ p q) with progress p
-... | step r = step (ξ-op₁ r)
-... | done r with progress q
-... | step s = step (ξ-op₂ r s)
-progress (⊢∨ p q) | done V-Bool | done V-Bool = step β-∨
-progress (⊢if p q r) with progress p
-... | step s = step (ξ-if₀ s)
-progress (⊢if p q r) | done (V-Bool {false}) = step β-if₂
-progress (⊢if p q r) | done (V-Bool {true}) = step β-if₁
-
 
 progress-≃ : ∀ {M : Term} → Progress M ≃ Value M ⊎ ∃[ N ](M —→ N)
 progress-≃ =  record
@@ -210,6 +153,7 @@ progress' (⊢∨ p q) with progress' p
 ... | inj₁ r with progress' q
 ... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
 progress' (⊢∨ p q) | inj₁ V-Bool | inj₁ V-Bool = inj₂ ⟨ _ , β-∨ ⟩
+
 
 
 value? : ∀ {M : Term} {A : Type} → ∅ ⊢ M ∶ A → Dec (Value M)

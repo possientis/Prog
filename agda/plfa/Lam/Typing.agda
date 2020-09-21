@@ -118,4 +118,20 @@ data _⊢_∶_ : Context → Term → Type → Set where
     → Γ ⊢ eOp `∨ M N ∶ `𝔹
 
 
-
+rename : ∀ {Γ Δ : Context} {M : Term} {A : Type} → Γ ⊆ Δ → Γ ⊢ M ∶ A → Δ ⊢ M ∶ A
+rename f (⊢` p) = ⊢` (f p)
+rename f (⊢ƛ p) = ⊢ƛ (rename (ext f) p)
+rename f (⊢· p q) = ⊢· (rename f p) (rename f q)
+rename f ⊢zero = ⊢zero
+rename f (⊢suc p) = ⊢suc (rename f p)
+rename f (⊢case p q r) = ⊢case (rename f p) (rename f q) (rename (ext f) r)
+rename f (⊢if p q r) = ⊢if (rename f p) (rename f q) (rename f r)
+rename f (⊢μ p) = ⊢μ (rename (ext f) p)
+rename f ⊢Num = ⊢Num
+rename f (⊢+ p q) = ⊢+ (rename f p) (rename f q)
+rename f (⊢* p q) = ⊢* (rename f p) (rename f q)
+rename f ⊢Bool = ⊢Bool
+rename f (⊢= p q) = ⊢= (rename f p) (rename f q)
+rename f (⊢< p q) = ⊢< (rename f p) (rename f q)
+rename f (⊢∧ p q) = ⊢∧ (rename f p) (rename f q)
+rename f (⊢∨ p q) = ⊢∨ (rename f p) (rename f q)
