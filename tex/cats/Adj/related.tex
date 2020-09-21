@@ -379,4 +379,32 @@ always in fact satisfy both equations.
     proposition~(\ref{Adj:prop:related:both}).
 \end{proof}
 
+The following proposition is not an immediate consequence of 
+definition~(\ref{Adj:def:related}). We do not assume that $\eta$ and
+$\epsilon$ are a unit and counit of $(F,G)$ to start with. We simply
+require them to be natural transformations. The remarkable thing
+is that when equations $(1)$ and $(2)$ below are met, then both
+$\eta$ and $\epsilon$ satisfy the universal property which makes
+them a unit and counit of $(F,G)$.
 
+\begin{prop}\label{Adj:prop:related:just:natural}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. Let $\eta:I_{\cal C}\Rightarrow G\circ F$ and 
+    $\epsilon:F\circ G\Rightarrow I_{\cal D}$ be natural transformations
+    which satisfy both of the following equations:
+        \begin{eqnarray*}
+            (1)&\ &G\epsilon\circ\eta G=\iota_{G}\\
+            (2)&\ &\epsilon F \circ F\eta=\iota_{F}
+        \end{eqnarray*}
+    Then $\eta$ and $\epsilon$ are related unit and counit of $(F,G)$ respectively.
+\end{prop}
+\begin{proof}
+    It is sufficient to prove that $\eta$ is a unit of $(F,G)$ and $\epsilon$ 
+    is a counit. The fact that $\eta$ and $\epsilon$ are related will then 
+    follow immediately from  definition~(\ref{Adj:def:related}), given our
+    assumption of equations $(1)$ and $(2)$. First we show that $\eta$ is
+    a unit of $(F,G)$. By assumption, we already know that it is a natural
+    transformation $\eta:I_{\cal C}\Rightarrow G\circ F$. So let $c\in\Cat$,
+    $d\in\Dat$ and $f:c\to G(d)$. We need to prove the existence of a unique
+    $g:F(c)\to d$ such that $f=G(g)\circ\eta_{c}$. TODO
+\end{proof}
