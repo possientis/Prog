@@ -27,6 +27,7 @@ module  DSL
     ,   eFromNat    -- :: Expr
     ,   eAddNat     -- :: Expr
     ,   eMulNat     -- :: Expr
+    ,   eFacNat     -- :: Expr
     )   where
 
 import Op
@@ -74,6 +75,16 @@ eFac = (eRec "f" (eLam "n"
             (eApp (eVar "f") 
                 (eSub (eVar "n") (eNum 1)))))))
 
+eFacNat :: Expr
+eFacNat = (eRec "f" (eLam "n"
+    (eCase (eVar "n") 
+        (eSuc eZero)
+        "m"
+        (eApp2 eMulNat
+            (eVar "n")
+            (eApp (eVar "f") (eVar "m"))))))  
+
+
 eToNat :: Expr
 eToNat = (eRec "f" (eLam "n"
     (eIf (eLe (eVar "n") (eNum 0))
@@ -111,3 +122,4 @@ eMulNat = (eRec "*" (eLam "n" (eLam "m"
                 (eApp2 (eVar "*") 
                     (eVar "n") 
                     (eVar "m")))))))
+
