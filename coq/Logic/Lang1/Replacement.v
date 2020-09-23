@@ -112,28 +112,28 @@ Proof.
       rewrite evalImp in G1. unfold eval3 in G2. 
       fold (eval2 (bind e n x) P 0 1) in G2.
       rewrite <- (evalFunctionalF L (bind e n x) P q r r') in G2; 
-      try (assumption). remember (G1 G2) as G3 eqn:E. clear G1 E G2. 
-      rewrite evalExi in G3; try (assumption). destruct G3 as [y G1]. 
+      try assumption. remember (G1 G2) as G3 eqn:E. clear G1 E G2. 
+      rewrite evalExi in G3; try assumption. destruct G3 as [y G1]. 
       exists y. intros z. 
       rewrite evalAll in G1. remember (G1 z) as G2 eqn:E. clear E G1.
-      rewrite evalIff in G2; try (assumption).
+      rewrite evalIff in G2; try assumption.
       rewrite evalElem in G2. rewrite bindSame in G2.
-      rewrite bindDiff in G2; try (assumption). rewrite bindSame in G2.
-      rewrite evalExi in G2; try (assumption). 
+      rewrite bindDiff in G2; try assumption. rewrite bindSame in G2.
+      rewrite evalExi in G2; try assumption. 
       destruct G2 as [G1 G2]. split; intros G3.
         + apply G1 in G3. clear G1 G2. destruct G3 as [u G1]. exists u.
-          rewrite evalAnd in G1; try (assumption).
+          rewrite evalAnd in G1; try assumption.
           rewrite evalElem in G1. rewrite bindSame in G1.
-          rewrite bindDiff in G1; try (assumption).
-          rewrite bindDiff in G1; try (assumption).
-          rewrite bindDiff in G1; try (assumption). 
+          rewrite bindDiff in G1; try assumption.
+          rewrite bindDiff in G1; try assumption.
+          rewrite bindDiff in G1; try assumption. 
           rewrite bindSame in G1. destruct G1 as [G2 G1].
-          split; try (assumption). clear G2.
+          split; try assumption. clear G2.
           remember (bind (bind (bind (bind e n x) m y) k z) l u) as e1 eqn:E1.
           remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
           rewrite (evalEnvEqual e1 e2) in G1.
             { rewrite E2 in G1. remember (bind (bind e n x) m y) as e' eqn:E'.
-              rewrite (evalApply2 e' P l k u z) in G1; try (assumption).
+              rewrite (evalApply2 e' P l k u z) in G1; try assumption.
               unfold eval3. unfold eval2 in G1. rewrite E' in G1.
               clear E1 e1 E2 e2 E' e'. remember 
               (bind (bind (bind (bind e n x) m y) 0 u) 1 z) as e1 eqn:E1.
@@ -163,10 +163,10 @@ Proof.
                 { assumption. }}
             { rewrite E1, E2. apply bindPermute. assumption. }
         + apply G2. clear G1 G2. destruct G3 as [u [G1 G2]]. exists u.
-          rewrite evalAnd; try (assumption).
-          rewrite evalElem. rewrite bindSame. rewrite bindDiff; try (assumption).
-          rewrite bindDiff; try (assumption). rewrite bindDiff; try (assumption).
-          rewrite bindSame. split; try (assumption). rewrite eval3ToEval2 in G2.
+          rewrite evalAnd; try assumption.
+          rewrite evalElem. rewrite bindSame. rewrite bindDiff; try assumption.
+          rewrite bindDiff; try assumption. rewrite bindDiff; try assumption.
+          rewrite bindSame. split; try assumption. rewrite eval3ToEval2 in G2.
           remember (bind (bind (bind (bind e n x) m y) k z) l u) as e1 eqn:E1.
           remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
           assert (envEqual e1 e2) as G3.
@@ -174,17 +174,39 @@ Proof.
           apply evalEnvEqual with e2.
               { assumption. }
               { rewrite E2. clear G3 E1 E2 e1 e2. apply evalApply2; 
-                try (assumption). unfold eval2 in G2. unfold eval2.
+                try assumption. unfold eval2 in G2. unfold eval2.
                 apply relevance with (bind (bind (bind e n x) 0 u) 1 z);
-                try (assumption). 
+                try assumption. 
                 apply bindEnvEqualOn; try (apply equalRefl).
                 apply bindEnvEqualOn; try (apply equalRefl).
                 apply bindNotInFree. assumption. }
     - unfold replacementF. rewrite evalAll. intros x. rewrite evalImp.
-      intros G2. apply evalFunctionalF in G2; try (assumption).
-      rewrite evalExi; try (assumption). remember (G1 x) as G3 eqn:E. clear E G1.
+      intros G2. apply evalFunctionalF in G2; try assumption.
+      rewrite evalExi; try assumption. remember (G1 x) as G3 eqn:E. clear E G1.
       unfold eval2 in G2. unfold eval3 in G3. remember (G3 G2) as G1 eqn:E.
       clear E G2 G3. destruct G1 as [y G1]. exists y. rewrite evalAll. intros z.
-
+      rewrite evalIff; try assumption. rewrite evalElem, evalExi; 
+      try assumption. rewrite bindSame, bindDiff; try assumption.
+      rewrite bindSame. destruct (G1 z) as [G2 G3]. clear G1. split.
+        + intros G4. clear G3. destruct (G2 G4) as [u [G1 G3]]. clear G2.
+          exists u. rewrite evalAnd; try assumption.
+          rewrite evalElem, bindSame, bindDiff; try assumption.
+          rewrite bindDiff; try assumption. rewrite bindDiff; try assumption.
+          rewrite bindSame. split; try assumption.
+          remember (bind (bind (bind (bind e n x) m y) k z) l u) as e1 eqn:E1.
+          remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
+          clear G1. assert (envEqual e1 e2) as G1.
+            { rewrite E1, E2. apply bindPermute. assumption. }
+          apply (evalEnvEqual e1 e2); try assumption.
+          rewrite E2. clear G1 E1 E2 e1 e2.
+          fold (eval2 (bind (bind e n x) m y) (apply2 P l k) l k u z).
+          apply evalApply2; try assumption. unfold eval2.
+          remember (bind (bind (bind e n x) 0 u) 1 z) as e1 eqn:E1.
+          remember (bind (bind (bind (bind e n x) m y) 0 u) 1 z) as e2 eqn:E2.
+          apply (relevance e1 e2); try assumption. rewrite E1, E2.
+          clear G3 E1 E2 e1 e2. apply bindEnvEqualOn; try apply equalRefl.
+          apply bindEnvEqualOn; try apply equalRefl.
+          apply envEqualOnSym, bindNotInFree. assumption.
+        +
 Show.
 *)
