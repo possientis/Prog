@@ -3,8 +3,8 @@
 module  Reduce
     (   irreducible
     ,   reduce
-    ,   reduceEval
-    ,   reduceTrace
+    ,   eval
+    ,   trace
     )   where 
 
 import Data.Functor.Foldable
@@ -15,15 +15,15 @@ import DSL
 import Subst
 import Syntax
 
-reduceTrace :: Expr -> [Expr]
-reduceTrace e = if irreducible e
+trace :: Expr -> [Expr]
+trace e = if irreducible e
     then [e]
-    else e : reduceTrace (reduce e)
+    else e : trace (reduce e)
 
-reduceEval :: Expr -> Expr
-reduceEval e = if irreducible e
+eval :: Expr -> Expr
+eval e = if irreducible e
     then e
-    else reduceEval (reduce e)
+    else eval (reduce e)
 
 irreducible :: Expr -> Bool
 irreducible = \case

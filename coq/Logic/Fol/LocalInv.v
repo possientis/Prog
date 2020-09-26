@@ -133,7 +133,8 @@ Proof.
                   simpl. assumption. }}
 Qed.
 
-(*
+(* This is an approximate statement to that of the pdf. We cannot deduce the    *)
+(* existence of a (computational) left-inverse from a function's injectivity.   *)
 Theorem localInv : 
     forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(v0 v1:list v),
         (exists (g0:w -> v), forall (x:v), x :: v0 -> g0 (f x) = x) ->
@@ -147,7 +148,9 @@ Proof.
     intros v w e e' f v0 v1 [g0 H0] [g1 H1]. exists (dmap g0 g1). 
     intros p G1 G2 G3. unfold dmap. 
     change (dmap_ g0 g1 (map f []) (fmap f p) = p).
-    apply (localInv_lemma v w e e' f v0 v1).
+    apply (localInv_lemma v w e e' f v0 v1); try assumption.
+    - rewrite app_nil_r. assumption.
+    - rewrite diff_nil. assumption.
+    - reflexivity.
+Qed.
 
-Show.
-*)

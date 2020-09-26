@@ -1,78 +1,10 @@
-(* Type of relations from a to b.                                               *)
-Definition R (a b:Type) : Type := a -> b -> Prop.
+Require Import Logic.Axiom.Extensionality.
 
-Axiom Ext : forall (a b:Type) (r s:R a b),
-    (forall (x:a) (y:b), r x y <-> s x y) -> r = s.
-
-(* Identity operator.                                                           *)
-Inductive id (a:Type) : R a a :=
-| refl : forall (x:a), id a x x
-.
-
-Arguments id {a}.
-
-Lemma id_charac : forall (a:Type) (x y:a),
-    id x y <-> x = y.
-Proof.
-    intros a x y. split; intros H1.
-    - destruct H1. reflexivity.
-    - rewrite H1. constructor.
-Qed.
-
-(* Composition operator.                                                        *)
-Definition comp (a b c:Type) (s:R b c) (r:R a b) : R a c :=
-    fun (x:a) (z:c) => exists (y:b), r x y /\ s y z.
-
-Arguments comp {a} {b} {c}.
-
-(* Converse operator. Needed for Rel to be an allegory.                         *)
-Definition conv (a b:Type) (r:R a b) : R b a := fun y x => r x y.
-Arguments conv {a} {b}.
-
-(* Intersection operator. Needed for Rel to be an allegory.                     *) 
-Definition inter (a b:Type) (r s:R a b) : R a b := fun x y => r x y /\ s x y.
-Arguments inter {a} {b}.
-
-Notation "s ; r" := (comp s r) 
-    (at level 60, right associativity) : Rel_scope.
-
-Notation "r ^ s" := (inter r s)
-    (at level 30, right associativity) : Rel_scope.
-
-Open Scope Rel_scope.
-
-(* left-identity law.                                                           *)
-Lemma id_left : forall (a b:Type) (r:R a b), r ; id = r.
-Proof.
-    intros a b r. apply Ext. intros x y. unfold comp. split.
-    - intros [z [H1 H2]]. destruct H1. assumption.
-    - intros H1. exists x. split.
-        + constructor.
-        + assumption.
-Qed.
-
-(* right-identity law.                                                          *)
-Lemma id_right : forall (a b:Type) (r:R a b), id ; r = r.
-Proof.
-    intros a b r. apply Ext. intros x y. unfold comp. split.
-    - intros [z [H1 H2]]. destruct H2 as [y]. assumption.
-    - intros H1. exists y. split.
-        + assumption.
-        + constructor.
-Qed.
-
-(* associativity law.                                                           *)
-Lemma comp_assoc : forall (a b c d:Type) (r:R a b) (s:R b c) (t:R c d),
-    (t ; s) ; r = t ; (s ; r).
-Proof.
-    intros a b c d r s t. apply Ext. intros x y. unfold comp. split.
-    - intros [x' [H1 [y' [H2 H3]]]]. exists y'. split.
-        + exists x'. split; assumption.
-        + assumption.
-    - intros [y' [[x' [H1 H2]] H3]]. exists x'. split.
-        + assumption.
-        + exists y'. split; assumption.
-Qed.
+Require Import Logic.Rel.R.
+Require Import Logic.Rel.Id.
+Require Import Logic.Rel.Converse.
+Require Import Logic.Rel.Intersect.
+Require Import Logic.Rel.Composition.
 
 Inductive func_embed (a b:Type) (f:a -> b) : R a b :=
 | mkEmbed : forall (x:a), func_embed a b f x (f x)
@@ -87,53 +19,6 @@ Proof.
     - destruct H1. reflexivity.
     - rewrite <- H1. constructor.
 Qed.
-
-
-Lemma conv_charac : forall (a b:Type) (r:R a b) (x:a) (y:b),
-    conv r y x <-> r x y.
-Proof.
-    intros a b r x y. unfold conv. split; auto.
-Qed.
-
-Lemma conv_conv : forall (a b:Type) (r:R a b), conv (conv r) = r.
-Proof.
-    intros a b r. apply Ext. intros x y. unfold conv. split; auto.
-Qed.
-
-Lemma conv_comp : forall (a b c:Type) (r:R a b) (s:R b c),
-    conv (s ; r) = conv r ; conv s.
-Proof.
-    intros a b c r s. apply Ext. intros x y. unfold conv, comp. 
-    split; intros [z [H1 H2]]; exists z; split; assumption.
-Qed.
-
-(* Intersection is idempotent.                                                  *)
-Lemma inter_idem : forall (a b:Type) (r:R a b), r ^ r = r.
-Proof.
-    intros a b r. apply Ext. intros x y. unfold inter. split.
-    - intros [H1 H2]. assumption.
-    - intros H1. split; assumption.
-Qed.
-
-(* Intersection is commutative.                                                 *)
-Lemma inter_comm : forall (a b:Type) (r s:R a b), r ^ s = s ^ r.
-Proof.
-    intros a b r s. apply Ext. intros x y. unfold inter. split;
-    intros [H1 H2]; split; assumption.
-Qed.
-
-(* Intersection is associative.                                                 *)
-Lemma inter_assoc : forall (a b:Type) (r s t:R a b), (r ^ s) ^ t = r ^ (s ^ t).
-Proof.
-    intros a b r s t. apply Ext. intros x y. unfold inter. split.
-    - intros [[H1 H2] H3]. split.
-        + assumption.
-        + split; assumption.
-    - intros [H1 [H2 H3]]. split.
-        + split; assumption.
-        + assumption.
-Qed.
-
 
 Definition inj1 (a b:Type) : R a (a + b) := func_embed inl.
 Definition inj2 (a b:Type) : R b (a + b) := func_embed inr.

@@ -40,7 +40,13 @@ FUNC_OBJ  = ${FUNC}/Composition.vo \
 			${FUNC}/Replace.vo \
 			${FUNC}/Permute.vo
 
-REL_OBJ   = ${REL}/Properties.vo
+REL_OBJ   = ${REL}/Properties.vo \
+			${REL}/R.vo \
+			${REL}/Id.vo \
+			${REL}/Composition.vo \
+			${REL}/Converse.vo \
+			${REL}/Intersect.vo \
+			${REL}/Include.vo
 
 NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
@@ -206,6 +212,12 @@ ${AXIOM}/Extensionality.vo : ${AXIOM}/Extensionality.v
 
 ${FUNC}/Composition.vo : ${FUNC}/Composition.v
 	coqc $< 	${FUNC_LIB}
+
+${REL}/R.vo : 		${REL}/R.v
+	coqc $< 			${REL_LIB}
+
+${REL}/Id.vo : 		${REL}/Id.v
+	coqc $< 			${REL_LIB}
 
 ${NAT}/Eq.vo : ${NAT}/Eq.v
 	coqc $<			${NAT_LIB}

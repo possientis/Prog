@@ -1,15 +1,13 @@
 Coq:
-Fol/LocalInv
-Lam/LocalInv
+Alpha equivalence
 
 Haskell:
-Fol/LocalInv
-Lam/LocalInv
 
 Latex:
+remove 'substitution congruence' replace by 'alpha-equivalence'
 
 Set Theory:
-Lang1/Replacement
+define Context as alternative to Environment
 axiom of choice?
 axiom of infinity false ?
 a new semantics based on different type of environments (plfa)
@@ -18,6 +16,11 @@ extension to infinite set
 new semantics in terms of variable r : set -> set -> Prop
 proof system of each language
 extension of language
+
+Rel: 
+continue refactor.
+properties f <=
+Allegory wiki
 
 
 

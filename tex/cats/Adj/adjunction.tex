@@ -1,31 +1,35 @@
-%\begin{defin}\label{Adj:def:adjunction}
-%    We call {\em adjunction} any tuple $(\Cat,\Dat,F,G,\eta)$ where:
-%        \begin{eqnarray*}
-%            (1)& &\mbox{\Cat, \Dat\ are categories}\\
-%            (2)& &\mbox{$F:\Cat\to\Dat$ is a functor}\\
-%            (3)& &\mbox{$G:\Dat\to\Cat$ is a functor}\\
-%            (4)& &\mbox{$\eta:I_{\cal C}\Rightarrow G\circ F$ is a natural
-%                transformation}
-%        \end{eqnarray*}
-%    such that for all objects $c\in\Cat$, $d\in\Dat$ and arrow $f:c\to G(d)$, 
-%    there exists a unique arrow $g:F(c) \to d$ satisfying the equality 
-%    $f = G(g) \circ \eta_{c}$.
-%\end{defin}
+\begin{defin}\label{Adj:def:adjunction}
+    We call {\em adjunction} between two categories \Cat\ and \Dat\ any
+    pair of functors $(F,G)$ where $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ which 
+    has a unit.
+\end{defin}
 
-%    We call {\em adjunction} an ordered pair $(F,G)$ where $F$ is a functor
-%    $F:\Cat\to\Dat$ and $G$ is a functor $G:\Dat\to\Cat$ while \Cat\  and 
-%    \Dat\ are two locally-small categories for which there exists a natural 
-%    isomorphism: 
-%        \[
-%            \alpha\ :\ 
-%            \Dat\circ(F\times I_{\cal D})
-%            \ \Rightarrow\ 
-%            \Cat\circ(I_{{\cal C}^{op}}\times G)
-%        \]
-%    in the functor category $[\,\Cop\times\Dat\, ,\,\Set\,]$,
-%    where $F$ also denotes $F:\Cop\rightarrow\Dop$.
+\begin{defin}\label{Adj:def:left:right:adjoint}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. We say that $F$ and $G$ are {\em adjoint functors}, 
+    or that $F$ is {\em left adjoint} to $G$, or that $G$ is {\em right-adjoint}
+    to $F$, \ifand\ $(F,G)$ is an adjunction.
+\end{defin}
 
+\begin{notation}\label{Adj:notation:adjunction}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. We write $F\dashv G$ to express the fact that $(F,G)$
+    is an adjunction.
+\end{notation}
 
-
-
-
+\begin{prop}\label{Adj:prop:adjunction:charac}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. Then the following are equivalent:
+        \begin{eqnarray*}
+            (i)&\ &\mbox{$(F,G)$ is an adjunction between \Cat\ and \Dat}\\
+            (ii)&\ &F\dashv G\\
+            (iii)&\ &\mbox{$F$ and $G$ are adjoint functors}\\
+            (iv)&\ &\mbox{$F$ is left adjoint to $G$}\\
+            (v)&\ &\mbox{$G$ is right adjoint to $F$}\\
+            (vi)&\ &\mbox{$(F,G)$ has a unit}\\
+            (vii)&\ &\mbox{$(F,G)$ has a counit}\\
+        \end{eqnarray*}
+\end{prop}
+\begin{proof}
+    TODO
+\end{proof}

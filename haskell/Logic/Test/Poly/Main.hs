@@ -15,6 +15,7 @@ import Test.Poly.Bound
 import Test.Poly.Valid
 import Test.Poly.Functor
 import Test.Poly.Variable
+import Test.Poly.LocalInv
 import Test.Poly.Subformula
 
 specPoly :: forall f . (Test f) =>  Spec
@@ -26,4 +27,5 @@ specPoly = do
     specBound       @ f
     specValid       @ f
     specDmap        @ f
+    specLocalInv    @ f
    

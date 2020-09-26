@@ -72,7 +72,11 @@ Definition replacementF (P:Formula) (q r r' n m k l:nat) : Formula :=
             (Elem k m) 
             (Exi l (And (Elem l n) (apply2 P l k))))))). 
 
-(*
+(* Very inelegant. Many conditions need to be met for the (replacementF P)      *)
+(* statement to have the right semantics. Part of the problem is the language   *)
+(* in which the replacement axiom schema is expressed, which has no lambda      *)
+(* abstraction and function application which would allow us to nicely express  *)
+(* the fact that P is a predicate of two variables and P x y holds.             *)
 Lemma evalReplacementF : LEM -> forall (e:Env) (P:Formula) (q r r' n m k l:nat),
     q <> r  ->
     q <> r' ->
@@ -207,6 +211,28 @@ Proof.
           clear G3 E1 E2 e1 e2. apply bindEnvEqualOn; try apply equalRefl.
           apply bindEnvEqualOn; try apply equalRefl.
           apply envEqualOnSym, bindNotInFree. assumption.
-        +
-Show.
-*)
+        + intros [u G4]. clear G2. apply G3. clear G3. exists u.
+          rewrite evalAnd in G4; try assumption.
+          rewrite evalElem in G4. rewrite bindSame in G4.
+          rewrite bindDiff in G4; try assumption. 
+          rewrite bindDiff in G4; try assumption.
+          rewrite bindDiff in G4; try assumption. rewrite bindSame in G4.
+          destruct G4 as [G1 G2]. split; try assumption.
+          remember (bind (bind (bind (bind e n x) m y) k z) l u) as e1 eqn:E1.
+          remember (bind (bind (bind (bind e n x) m y) l u) k z) as e2 eqn:E2.
+          clear G1. assert (envEqual e1 e2) as G1.
+            { rewrite E1, E2. apply bindPermute. assumption. }
+          apply (relevance e1 e2) in G2.
+              { rewrite E2 in G2. clear G1 E1 E2 e1 e2.
+                fold (eval2 (bind (bind e n x) m y) (apply2 P l k) l k u z) in G2.
+                apply evalApply2 in G2; try assumption. unfold eval2 in G2.
+                remember (bind (bind (bind e n x) 0 u) 1 z) as e1 eqn:E1.
+                remember (bind (bind (bind (bind e n x) m y) 0 u) 1 z) 
+                as e2 eqn:E2. apply (relevance e1 e2).
+                    { rewrite E1, E2. clear G2 E1 E2 e1 e2.
+                      apply bindEnvEqualOn; try apply equalRefl.
+                      apply bindEnvEqualOn; try apply equalRefl.
+                      apply envEqualOnSym, bindNotInFree. assumption. }
+                    { assumption. }}
+              { apply envEqualEnvEqualOn. assumption. }
+Qed.

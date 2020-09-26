@@ -1,5 +1,10 @@
 module Lam.Typing where
 
+open import Relation.Binary.PropositionalEquality.Core
+  using (_≡_; _≢_; refl; subst;cong)
+
+open import Data.Empty       using (⊥; ⊥-elim)
+
 open import Data.Nat
 open import Data.Bool
 
@@ -135,3 +140,38 @@ rename f (⊢= p q) = ⊢= (rename f p) (rename f q)
 rename f (⊢< p q) = ⊢< (rename f p) (rename f q)
 rename f (⊢∧ p q) = ⊢∧ (rename f p) (rename f q)
 rename f (⊢∨ p q) = ⊢∨ (rename f p) (rename f q)
+
+weaken : ∀ {Γ : Context} {M : Term} {A : Type}
+  → ∅ ⊢ M ∶ A
+    ---------------
+  → Γ ⊢ M ∶ A
+
+weaken {Γ} p = rename ρ p
+  where
+    ρ : ∀ {x : Id} {A : Type} → ∅ ∋ x ∶ A → Γ ∋ x ∶ A
+    ρ ()
+
+drop : ∀ {Γ : Context} {x : Id} {M : Term} {A B C : Type}
+  → Γ , x ∶ A , x ∶ B ⊢ M ∶ C
+    ------------------------------
+  → Γ , x ∶ B ⊢ M ∶ C
+
+drop {Γ} {x} {M} {A} {B} p = rename {!!} p
+  where
+    ρ : ∀ {y : Id} {D : Type} → Γ , x ∶ A , x ∶ B ∋ y ∶ D → Γ , x ∶ B ∋ y ∶ D
+    ρ Z = Z
+    ρ {x} {D} (S p Z) = S p (⊥-elim (p refl))
+    ρ {x} {D} (S p (S q r)) = S p r
+
+swap : ∀ {Γ : Context} {x y : Id} {M : Term} {A B C : Type}
+  → x ≢ y        -- \==n
+  → Γ , y ∶ B , x ∶ A ⊢ M ∶ C
+    -------------------------
+  → Γ , x ∶ A , y ∶ B ⊢ M ∶ C
+
+swap {Γ} {x} {y} {M} {A} {B} {C} x≢y p = rename ρ p
+  where
+    ρ : ∀ {z : Id} {D : Type} → Γ , y ∶ B , x ∶ A ∋ z ∶ D → Γ , x ∶ A , y ∶ B ∋ z ∶ D
+    ρ {z} {D} Z = S x≢y Z
+    ρ {z} {D} (S p Z) = Z
+    ρ {z} {D} (S p (S q r)) = S q (S p r)

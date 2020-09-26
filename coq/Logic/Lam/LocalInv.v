@@ -107,3 +107,25 @@ Proof.
                 { simpl. rewrite remove_diff. rewrite <- diff_distrib_app_l'.
                   simpl. assumption. }}
 Qed.
+
+(* This is an approximate statement to that of the pdf. We cannot deduce the    *)
+(* existence of a (computational) left-inverse from a function's injectivity.   *)
+Theorem localInv : 
+    forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(v0 v1:list v),
+        (exists (g0:w -> v), forall (x:v), x :: v0 -> g0 (f x) = x) ->
+        (exists (g1:w -> v), forall (x:v), x :: v1 -> g1 (f x) = x) ->
+        exists (g:T w -> T v), forall (t:T v),
+            bnd t <= v0 ->
+            Fr t  <= v1 ->
+            valid f t   ->
+                g (fmap f t) = t.
+Proof.
+    intros v w e e' f v0 v1 [g0 H0] [g1 H1]. exists (dmap g0 g1). 
+    intros t G1 G2 G3. unfold dmap. 
+    change (dmap_ g0 g1 (map f []) (fmap f t) = t).
+    apply (localInv_lemma v w e e' f v0 v1); try assumption.
+    - rewrite app_nil_r. assumption.
+    - rewrite diff_nil. assumption.
+    - reflexivity.
+Qed.
+
