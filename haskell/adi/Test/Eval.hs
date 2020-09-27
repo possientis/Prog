@@ -92,11 +92,11 @@ specEEq = it "Checked eval for eEq" $ do
     property (propEEq @ m)
 
 specEIfT :: forall m . (Eval m) =>  Spec
-specEIfT = it "Checked eval for eIf (zero)" $ do
+specEIfT = it "Checked eval for eIf (True)" $ do
     property (propEIfT @ m)
 
 specEIfF :: forall m . (Eval m) =>  Spec
-specEIfF = it "Checked eval for eIf (not zero)" $ do
+specEIfF = it "Checked eval for eIf (False)" $ do
     property (propEIfF @ m)
 
 specEZero :: forall m . (Eval m) =>  Spec

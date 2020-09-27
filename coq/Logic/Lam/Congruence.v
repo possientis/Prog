@@ -1,7 +1,8 @@
+Require Import Logic.Rel.R.
+Require Import Logic.Rel.Properties.
+
 Require Import Logic.Lam.Syntax.
 Require Import Logic.Lam.Functor.
-
-Require Import Logic.Rel.Properties.
 
 Definition congruent (v:Type) (r:Rel (T v)) : Prop := 
     (forall (s1 s2 t1 t2:T v), r s1 t1 -> r s2 t2 -> r (App s1 s2) (App t1 t2)) /\

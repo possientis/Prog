@@ -89,7 +89,7 @@ eOp :: Op -> [Expr] -> Expr
 eOp op es = Fix $ EOp op es
 
 eIf :: Expr -> Expr -> Expr -> Expr
-eIf ez e1 e2 = Fix $ EIf ez e1 e2
+eIf b e1 e2 = Fix $ EIf b e1 e2
 
 eLam :: String -> Expr -> Expr
 eLam x e = Fix $ ELam (mkVar x) e

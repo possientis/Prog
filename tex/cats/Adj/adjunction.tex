@@ -17,7 +17,7 @@
     is an adjunction.
 \end{notation}
 
-\begin{prop}\label{Adj:prop:adjunction:charac}
+\begin{prop}\label{Adj:prop:adjunction:TFAE}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are categories. Then the following are equivalent:
         \begin{eqnarray*}
@@ -31,5 +31,47 @@
         \end{eqnarray*}
 \end{prop}
 \begin{proof}
-    TODO
+    $(i)\Leftrightarrow (ii)$: is a restatement of notation~(\ref{Adj:notation:adjunction}).
+    \newline\noindent
+    $(i)\Leftrightarrow (iii)\Leftrightarrow (iv)\Leftrightarrow (v)$ is restatement
+    of definition~(\ref{Adj:def:left:right:adjoint}).
+    \newline\noindent
+    $(i)\Leftrightarrow (vi)$: is a restatement of 
+    definition~(\ref{Adj:def:adjunction}).
+    \newline\noindent
+    $(vi)\Rightarrow(vii)$: Suppose $(F,G)$ has a unit $\eta$. Using
+    proposition~(\ref{Adj:prop:unit:has:related:counit}), $\eta$ has a unique
+    related counit. In particular, $(F,G)$ has a counit.
+    \newline\noindent
+    $(vii)\Rightarrow(vi)$: Suppose $(F,G)$ has a counit $\epsilon$. Using
+    proposition~(\ref{Adj:prop:counit:has:related:unit}), $\epsilon$ has a unique
+    related unit. In particular, $(F,G)$ has a unit.
 \end{proof}
+
+The following propostion provides an easy criterium to determine whether
+a pair of functors $(F,G)$ is an adjunction between two categories \Cat\ and
+\Dat. This criterium only demands that two natural transformations
+with the appropriate properties be defined. It does not require proving
+any universal property.
+\begin{prop}\label{Adj:prop:adjunction:criteria}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are categories. Let $\eta:I_{\cal C}\Rightarrow G\circ F$ and 
+    $\epsilon:F\circ G\Rightarrow I_{\cal D}$ be natural transformations
+    which satisfy both of the following equations:
+        \begin{eqnarray*}
+            (1)&\ &G\epsilon\circ\eta G=\iota_{G}\\
+            (2)&\ &\epsilon F \circ F\eta=\iota_{F}
+        \end{eqnarray*}
+    Then $(F,G)$ is an adjunction between the categories \Cat\ and \Dat, 
+    i.e. $F\dashv G$.
+\end{prop}
+\begin{proof}
+    Suppose such natural transformations $\eta$ and $\epsilon$ do exist.
+    Using proposition~(\ref{Adj:prop:related:just:natural}) it follows
+    that $\eta$ and $\epsilon$ are related unit and counit of $(F,G)$
+    respectively. In particular, $(F,G)$ has a unit and it is therefore
+    an adjunction between \Cat\ and \Dat.
+\end{proof}
+
+
+

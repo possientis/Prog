@@ -41,12 +41,16 @@ FUNC_OBJ  = ${FUNC}/Composition.vo \
 			${FUNC}/Permute.vo
 
 REL_OBJ   = ${REL}/Properties.vo \
+			${REL}/Equiv.vo \
 			${REL}/R.vo \
 			${REL}/Id.vo \
 			${REL}/Composition.vo \
 			${REL}/Converse.vo \
 			${REL}/Intersect.vo \
-			${REL}/Include.vo
+			${REL}/Include.vo \
+			${REL}/Func.vo \
+			${REL}/Sum.vo \
+			${REL}/Product.vo
 
 NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
@@ -56,7 +60,8 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Maximum.vo \
 			${NAT}/Minimal.vo \
 			${NAT}/Seq.vo \
-			${NAT}/Fresh.vo
+			${NAT}/Fresh.vo \
+			${NAT}/NatxNat.vo
 
 LIST_OBJ  = ${LIST}/In.vo \
 		   	${LIST}/Nil.vo \
@@ -130,6 +135,7 @@ SET_OBJ   = ${SET}/Set.vo \
 
 LANG1_OBJ = ${LANG1}/Syntax.vo \
 			${LANG1}/Environment.vo \
+			${LANG1}/Context.vo \
 			${LANG1}/Semantics.vo \
 			${LANG1}/Relevance.vo \
 			${LANG1}/Substitution.vo \
@@ -217,6 +223,9 @@ ${REL}/R.vo : 		${REL}/R.v
 	coqc $< 			${REL_LIB}
 
 ${REL}/Id.vo : 		${REL}/Id.v
+	coqc $< 			${REL_LIB}
+
+${REL}/Sum.vo : 	${REL}/Sum.v
 	coqc $< 			${REL_LIB}
 
 ${NAT}/Eq.vo : ${NAT}/Eq.v

@@ -1,10 +1,9 @@
-Coq:
-Alpha equivalence
+Logic:
+Rel/Equiv
 
 Haskell:
 
 Latex:
-remove 'substitution congruence' replace by 'alpha-equivalence'
 
 Set Theory:
 define Context as alternative to Environment
@@ -17,10 +16,13 @@ new semantics in terms of variable r : set -> set -> Prop
 proof system of each language
 extension of language
 
-Rel: 
-continue refactor.
+Algebra of Programming: 
+continue refactor Rel
 properties f <=
 Allegory wiki
+
+Computatinal Type Theory with Coq:
+Nat: N <-> N x X
 
 
 

@@ -3,14 +3,17 @@ module Lam.Typing where
 open import Relation.Binary.PropositionalEquality.Core
   using (_≡_; _≢_; refl; subst;cong)
 
+open import Relation.Nullary using (Dec; yes; no; ¬_)
 open import Data.Empty       using (⊥; ⊥-elim)
+open import Data.String      using (_≟_) -- \?=
 
-open import Data.Nat
-open import Data.Bool
+open import Data.Nat         hiding (_≟_)
+open import Data.Bool        hiding (_≟_)
 
 open import Lam.Id
 open import Lam.Op
 open import Lam.Type
+open import Lam.Subst
 open import Lam.Syntax
 open import Lam.Context
 
@@ -175,3 +178,43 @@ swap {Γ} {x} {y} {M} {A} {B} {C} x≢y p = rename ρ p
     ρ {z} {D} Z = S x≢y Z
     ρ {z} {D} (S p Z) = Z
     ρ {z} {D} (S p (S q r)) = S q (S p r)
+
+
+substitution : ∀ {Γ : Context} {x : Id} {N V : Term} {A B : Type}
+  → ∅ ⊢ V ∶ A
+  → Γ , x ∶ A ⊢ N ∶ B
+    --------------------
+  → Γ ⊢ N [ x := V ] ∶ B
+
+substitution {Γ} {x} p (⊢` {x = y} q) with y ≟ x
+substitution {Γ} {x} p (⊢` {x = _} Z) | yes r = weaken p
+substitution {Γ} {x} p (⊢` {x = _} (S q r)) | yes s = ⊥-elim (q s)
+substitution {Γ} {x} p (⊢` {x = _} Z) | no r = ⊢` (⊥-elim (r refl))
+substitution {Γ} {x} p (⊢` {x = _} (S q r)) | no s = ⊢` r
+substitution {Γ} {x} p (⊢ƛ q) = {!!}
+substitution {Γ} {x} p (⊢· q q₁) = {!!}
+substitution {Γ} {x} p ⊢zero = {!!}
+substitution {Γ} {x} p (⊢suc q) = {!!}
+substitution {Γ} {x} p (⊢case q q₁ q₂) = {!!}
+substitution {Γ} {x} p (⊢if q q₁ q₂) = {!!}
+substitution {Γ} {x} p (⊢μ q) = {!!}
+substitution {Γ} {x} p ⊢Num = {!!}
+substitution {Γ} {x} p (⊢+ q q₁) = {!!}
+substitution {Γ} {x} p (⊢* q q₁) = {!!}
+substitution {Γ} {x} p ⊢Bool = {!!}
+substitution {Γ} {x} p (⊢= q q₁) = {!!}
+substitution {Γ} {x} p (⊢< q q₁) = {!!}
+substitution {Γ} {x} p (⊢∧ q q₁) = {!!}
+substitution {Γ} {x} p (⊢∨ q q₁) = {!!}
+
+
+
+
+
+
+
+
+
+
+
+
