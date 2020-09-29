@@ -35,9 +35,56 @@ begin
   have H₃ : (n₁ + m₃) + m₂ = (m₁ + n₃) + m₂ :=
     begin
       from calc
-        n₁ + m₃ + m₂ = n₁ + m₂ + m₃ : _
-        ...          = m₁ + n₃ + m₂ : _
+        n₁ + m₃ + m₂ = n₁ + (m₃ + m₂) : by apply add_assoc
+        ...          = n₁ + (m₂ + m₃) : by rw (add_comm m₃ m₂)
+        ...          = (n₁ + m₂) + m₃ : by rw add_assoc
+        ...          = (m₁ + n₂) + m₃ : by rw H₁
+        ...          = m₁ + (n₂ + m₃) : by apply add_assoc
+        ...          = m₁ + (m₂ + n₃) : by rw H₂
+        ...          = m₁ + (n₃ + m₂) : by rw (add_comm m₂ n₃)
+        ...          = m₁ + n₃ + m₂   : by rw add_assoc
     end,
   apply L₂, assumption
 end
 
+lemma equiv_equiv : equivalence (equiv) :=
+begin
+  unfold equivalence, split,
+    { apply equiv_refl },
+    { split,
+      { apply equiv_sym },
+      { apply equiv_trans }}
+end
+
+-- A type together with an equivalence relation on it
+@[instance] def Z_setoid : setoid (ℕ × ℕ) :=
+  { r     := equiv
+  , iseqv := equiv_equiv
+  }
+
+-- Just testing the builtin notation ≈ for setoid  \~~
+lemma equiv_def : forall (x y:ℕ × ℕ), x ≈ y ↔ equiv x y :=
+begin
+  intros x y, split; intros H₁; assumption
+end
+
+def Z : Type := quotient Z_setoid
+
+def Z.zero : Z := ⟦(0,0)⟧ -- \[[ , \]]
+
+lemma zero_eq : ∀ (n:ℕ), Z.zero = ⟦(n,n)⟧ :=
+begin
+  intros n, unfold Z.zero, apply quotient.sound,
+  rw equiv_def, unfold equiv, simp
+end
+
+def add_ (p q:ℕ × ℕ) : Z :=
+begin
+  cases p with n₁ m₁, cases q with n₂ m₂,
+  exact ⟦(n₁ + n₂, m₁ + m₂)⟧
+end
+
+def Z.add : Z → Z → Z := quotient.lift₂ add_
+begin
+
+end

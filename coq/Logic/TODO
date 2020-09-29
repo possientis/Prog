@@ -1,5 +1,6 @@
 Logic:
-Rel/Equiv
+Fol/Congruence
+Lam/Congruence
 
 Haskell:
 
