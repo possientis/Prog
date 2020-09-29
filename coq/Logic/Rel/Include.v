@@ -1,7 +1,9 @@
 Require Import Logic.Axiom.Extensionality.
 
 Require Import Logic.Rel.R.
+Require Import Logic.Rel.Converse.
 Require Import Logic.Rel.Intersect.
+Require Import Logic.Rel.Composition.
 
 Definition incl (a b:Type) (r s:R a b) : Prop := r = inter r s.
 Arguments incl {a} {b}.
@@ -49,3 +51,28 @@ Proof.
     apply incl_charac_to with s; try assumption.
     apply incl_charac_to with r; try assumption.
 Qed.
+
+Lemma comp_semi_distrib_inter_l : forall (a b c:Type) (r s:R a b) (t:R b c), 
+    t ; (r ^ s) <= (t ; r) ^ (t ; s).
+Proof.
+    intros a b c r s t. apply incl_charac. intros x y.
+    unfold comp, inter. intros [z [[H1 H2] H3]]. 
+    split; exists z; split; assumption.
+Qed.
+
+Lemma comp_semi_distrib_inter_r : forall (a b c:Type) (t:R a b) (r s:R b c),
+    (r ^ s) ; t <= (r ; t) ^ (s ; t).
+Proof.
+    intros a b c t r s. apply incl_charac. intros x y.
+    unfold comp, inter. intros [z [H1 [H2 H3]]]. 
+    split; exists z; split; assumption.
+Qed.
+
+Lemma modulatity_law : forall (a b c:Type) (r:R a b) (s:R b c) (t:R a c),
+    (s ; r) ^ t <= (s ^ (t ; conv r)) ; r.  
+Proof.
+    intros a b c r s t. apply incl_charac. intros x y.
+    unfold comp, inter, conv. intros [[z [H1 H2]] H3]. exists z.
+    split; try assumption. split; try assumption. exists x. split; assumption.
+Qed.
+

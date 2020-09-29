@@ -50,7 +50,7 @@ Proof.
     intros a b. reflexivity.
 Qed.
 
-(* arrow needed for product universal property.                                 *)
+(* Arrow needed for product universal property.                                 *)
 Inductive split (a b c:Type) (r:R a b) (s:R a c) : R a (b + c) :=
 | splitL : forall (x:a) (y:b), r x y -> split a b c r s x (inl y)
 | splitR : forall (x:a) (y:c), s x y -> split a b c r s x (inr y)

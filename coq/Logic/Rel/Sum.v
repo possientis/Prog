@@ -27,7 +27,7 @@ Proof.
     - rewrite H1. constructor.
 Qed.
 
-(* arrow needed for coproduct universal property.                               *)
+(* Arrow needed for coproduct universal property.                               *)
 Inductive either (a b c:Type) (r:R a c) (s:R b c) : R (a + b) c := 
 | eitherL : forall (x:a) (y:c), r x y -> either a b c r s (inl x) y
 | eitherR : forall (x:b) (y:c), s x y -> either a b c r s (inr x) y

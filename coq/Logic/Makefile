@@ -50,7 +50,9 @@ REL_OBJ   = ${REL}/Properties.vo \
 			${REL}/Include.vo \
 			${REL}/Func.vo \
 			${REL}/Sum.vo \
-			${REL}/Product.vo
+			${REL}/Product.vo \
+			${REL}/Initial.vo \
+			${REL}/Terminal.vo
 
 NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
