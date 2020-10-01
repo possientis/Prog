@@ -1,5 +1,3 @@
-define adjunction
-3rd definition of adjuction with eta + eps without universal condition.
 locally small case: (F,G) has a unit <-> C(c,Gd) ~ D(Fc,d)
 
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2

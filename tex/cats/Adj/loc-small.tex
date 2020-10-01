@@ -1,0 +1,34 @@
+In this section, we consider the case when both categories \Cat\ and \Dat\ are
+locally small, as per definition~(\ref{Cat:def:locally:small}). The difference
+this makes is the availability of the associated hom-functors
+$\Cat:\Cop\times\Cat\to\Set$ and $\Dat:\Dop\times\Dat\to\Set$ as per
+definition~(\ref{Fun:def:hom:functor}). So suppose
+we have two functors $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$. We also have
+identity functors $I_{\cal C}:\Cat\to\Cat$ and $I_{\cal D}:\Dat\to\Dat$
+as per definition~(\ref{Fun:def:identity}). Using 
+proposition~(\ref{Fun:prop:opposite}), we know that $F$ is also a functor 
+$F:\Cop\to\Dop$, while from proposition~(\ref{Fun:prop:identity:opposite})
+we see that $I_{\cal C}$ and $I_{{\cal C}^{op}}$ are the same functors.
+Using definition~(\ref{Fun:def:canonical:product}) we can define the 
+product functors $F\times I_{\cal D}:\Cop\times\Dat\to\Dop\times\Dat$.
+and $I_{\cal C}\times G:\Cop\times\Dat\to\Cop\times\Cat$. Composing 
+these functors with the hom-functors \Dat\ and \Cat\ respectively as per
+definition~(\ref{Fun:def:composition}), we obtain
+two functors $\Dat\circ(F\times I_{\cal D}):\Cop\times\Dat\to\Set$ and
+$\Cat\circ(I_{\cal C}\times G):\Cop\times\Dat\to\Set$. These functors 
+are very important in what follows, so we shall give then a name:
+
+\begin{defin}\label{Adj:def:lhs:functor}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. We call {\em left-hand-side functor} associated
+    with the pair $(F,G)$ the functor $\Dat\circ(F\times I_{\cal D}):\Cop\times
+    \Dat\to\Set$.
+\end{defin}
+
+\begin{defin}\label{Adj:def:rh:functor}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. We call {\em right-hand-side functor} associated
+    with the pair $(F,G)$ the functor $\Cat\circ(I_{\cal C}\times G):\Cop\times
+    \Dat\to\Set$.
+\end{defin}
+
