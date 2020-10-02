@@ -13,11 +13,11 @@ import Reduce
 
 main :: IO ()
 main = do
-    putStrLn $ "e8 = " ++ showExpr e8
-    putStrLn $ "eval e8 = " ++ showExpr (eval e8)
-    putStrLn $ "e9 = " ++ showExpr e9
-    putStrLn $ "eval e9 = " ++ showExpr (eval e9)
-    print $ eval e8 == eval e9
+    putStrLn $ "e10 = " ++ showExpr e10
+    putStrLn $ "eval e10 = " ++ showExpr (eval e10)
+    putStrLn $ "e11 = " ++ showExpr e11
+    putStrLn $ "eval e11 = " ++ showExpr (eval e11)
+    print $ eval e10 == eval e11
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
@@ -45,3 +45,9 @@ e8 = eSuc (eNat 5)
 
 e9 :: Expr
 e9 = eNat 6
+
+e10 :: Expr
+e10 = eCase (eNat 1) (eNum 0) "a" (eVar "a")
+
+e11 :: Expr
+e11 = eNat 0

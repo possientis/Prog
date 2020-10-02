@@ -27,6 +27,13 @@ specReduce = describe "Checking the Reduce module ..." $ do
     specEIfF
     specEZero
     specESuc
+    specECaseZ
+    specECaseS
+    specEFac
+    specEToNat
+    specEFromNat
+    specEAddNat
+    specEMulNat
 
 pos :: Integer -> Integer 
 pos n = if n <= 0 then 0 else n
@@ -95,6 +102,34 @@ specESuc :: Spec
 specESuc = it "Checked eval for eSuc" $ do
     property propESuc
 
+specECaseZ :: Spec
+specECaseZ = it "Checked eval for eCase (zero)" $ do
+    property propECaseZ
+
+specECaseS :: Spec
+specECaseS = it "Checked eval for eCase (suc)" $ do
+    property propECaseS
+
+specEFac :: Spec
+specEFac = it "Checked eval for eFac" $ do
+    property propEFac
+
+specEToNat :: Spec
+specEToNat = it "Checked eval for eToNat" $ do
+    property propEToNat
+
+specEFromNat :: Spec
+specEFromNat = it "Checked eval for eFromNat" $ do
+    property propEFromNat
+
+specEAddNat :: Spec
+specEAddNat = it "Checked eval for eAddNat" $ do
+    property propEAddNat
+
+specEMulNat :: Spec
+specEMulNat = it "Checked eval for eMulNat" $ do
+    property propEMulNat
+
 propENum :: Integer -> Bool
 propENum n = eval (eNum n) == eNum n
 
@@ -143,3 +178,34 @@ propEZero = eval eZero == eZero
 propESuc :: Integer -> Bool
 propESuc n = eval (eSuc (eNat m)) == eval (eNat (1 + pos m)) where
     m = n `mod` 10
+
+propECaseZ :: Integer -> String -> Bool
+propECaseZ n x = eval (eCase eZero (eNum n) x (eVar x)) == eNum n
+
+propECaseS :: Integer -> Integer -> String -> Bool
+propECaseS n m x = m <= 0 || x == "" ||
+    eval (eCase (eNat m) (eNum n) x (eVar x)) == eval (eNat (m - 1))
+
+propEFac :: Integer -> Bool
+propEFac n  = eval (eApp eFac (eNum n)) == eNum 
+    (if (n <= 0) then 1 else product [1..n])
+
+propEToNat :: Integer -> Bool
+propEToNat n = eval (eApp eToNat (eNum n)) == eval (eNat (pos n))
+
+propEFromNat :: Integer -> Bool
+propEFromNat n = eval (eApp eFromNat (eNat n)) == eNum (pos n)
+
+propEAddNat :: Integer -> Integer -> Bool
+propEAddNat n m = eval (eApp2 eAddNat (eNat n') (eNat m')) == eval 
+    (eNat (pos n' + pos m'))
+    where -- to slow otherwise 
+        n' = n `mod` 12
+        m' = m `mod` 12
+
+propEMulNat :: Integer -> Integer -> Bool
+propEMulNat n m = eval (eApp2 eMulNat (eNat n') (eNat m')) == eval
+    (eNat (pos n' * pos m'))
+    where -- to slow otherwise 
+        n' = n `mod` 12
+        m' = m `mod` 12

@@ -112,7 +112,7 @@ specECaseZ = it "Checked eval for eCase (zero)" $ do
     property (propECaseZ @ m)
 
 specECaseS :: forall m . (Eval m) =>  Spec
-specECaseS = it "Checked eval for eCase (successor)" $ do   
+specECaseS = it "Checked eval for eCase (suc)" $ do   
     property (propECaseS @ m)
 
 specEFac :: forall m . (Eval m) =>  Spec
@@ -184,11 +184,11 @@ propEZero = toInt ((eval @ m) eZero) == Just 0
 propESuc :: forall m . (Eval m) => Integer -> Bool
 propESuc n = toInt ((eval @ m) (eSuc (eNat n))) == Just (1 + pos n)
 
-propECaseZ :: forall m . (Eval m) => Integer -> Integer -> String -> Bool
-propECaseZ n m x = num ((eval @ m) (eCase eZero (eNum n) x (eNum m))) == Just n
+propECaseZ :: forall m . (Eval m) => Integer -> String -> Bool
+propECaseZ n x = num ((eval @ m) (eCase eZero (eNum n) x (eVar x))) == Just n
 
 propECaseS :: forall m . (Eval m) => Integer -> Integer -> String -> Bool
-propECaseS n m x = m <= 0 || 
+propECaseS n m x = m <= 0 || x == "" ||
     toInt ((eval @ m) (eCase (eNat m) (eNum n) x (eVar x))) == Just (m - 1)
 
 propEFac :: forall m . (Eval m) => Integer -> Bool
@@ -202,13 +202,15 @@ propEFromNat :: forall m . (Eval m) => Integer -> Bool
 propEFromNat n = num ((eval @ m) (eApp eFromNat (eNat n))) == Just (pos n)
 
 propEAddNat :: forall m. (Eval m) => Integer -> Integer -> Bool
-propEAddNat n m = toInt ((eval @ m) (eApp2 eAddNat (eNat n) (eNat m))) == Just 
-    (pos n + pos m)
+propEAddNat n m = toInt ((eval @ m) (eApp2 eAddNat (eNat n') (eNat m'))) == Just 
+    (pos n' + pos m')
+    where -- to slow otherwise 
+        n' = n `mod` 12
+        m' = m `mod` 12
 
 propEMulNat :: forall m . (Eval m) => Integer -> Integer -> Bool
-propEMulNat n m = toInt ((eval @ m) 
-    (eApp2 eMulNat 
-        (eNat $ n `mod` cap) 
-        (eNat $ m `mod` cap))) 
-    == Just (pos (n `mod` cap) * pos (m `mod` cap)) 
-    where cap = 12 -- too slow otherwise
+propEMulNat n m = toInt ((eval @ m) (eApp2 eMulNat (eNat n') (eNat m'))) == Just 
+    (pos n' * pos m') 
+    where -- to slow otherwise 
+        n' = n `mod` 12
+        m' = m `mod` 12
