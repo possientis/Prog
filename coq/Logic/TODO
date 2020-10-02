@@ -7,6 +7,7 @@ Haskell:
 Latex:
 
 Set Theory:
+Lang1/Context: replace nat * set by nice notation
 define Context as alternative to Environment
 axiom of choice?
 axiom of infinity false ?
