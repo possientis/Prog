@@ -25,10 +25,67 @@ are very important in what follows, so we shall give then a name:
     \Dat\to\Set$.
 \end{defin}
 
-\begin{defin}\label{Adj:def:rh:functor}
+\begin{defin}\label{Adj:def:rhs:functor}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are locally small categories. We call {\em right-hand-side functor} associated
     with the pair $(F,G)$ the functor $\Cat\circ(I_{\cal C}\times G):\Cop\times
     \Dat\to\Set$.
 \end{defin}
+
+\begin{prop}\label{Adj:prop:lhs:object}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories and let $F^{*}=\Dat\circ(F\times I_{\cal D})$
+    be the left-hand-side functor associated with $(F,G)$. Then for all $c\in\Cat$ 
+    and $d\in\Dat$, we have:
+        \[
+            F^{*}(c,d) = \Dat(F(c),d)
+        \]
+\end{prop}
+\begin{proof}
+    \begin{eqnarray*}F^{*}(c,d)
+        &=&\Dat\circ(F\times I_{\cal D})(c,d)\\
+        \mbox{$(1)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
+        &=&\Dat(\,(F\times I_{\cal D})(c,d)\,)\\
+        \mbox{$(1)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+        &=&\Dat(F(c),I_{\cal D}(d))\\
+        \mbox{$(1)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+        &=&\Dat(F(c),d)
+    \end{eqnarray*}
+\end{proof}
+
+\noindent
+{\bf Remark}: In light of proposition~(\ref{Adj:prop:lhs:object}), it is
+common to refer to the left-hand-side functor casually as '$\Dat(F(c),d)$'
+where '$c$' and '$d$' are dummy variables. We should not forget however
+that a functor is more than a mere transformation on objects, and that 
+the left-hand-side functor is really $\Dat\circ(F\times I_{\cal D})$.
+
+\begin{prop}\label{Adj:prop:rhs:object}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories and let $G^{*}=\Cat\circ(I_{\cal C}\times G)$
+    be the right-hand-side functor associated with $(F,G)$. Then for all 
+    $c\in\Cat$ and $d\in\Dat$, we have:
+        \[
+            G^{*}(c,d) = \Cat(c,G(d))
+        \]
+\end{prop}
+\begin{proof}
+    \begin{eqnarray*}G^{*}(c,d)
+        &=&\Cat\circ(I_{\cal C}\times G)(c,d)\\
+        \mbox{$(1)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
+        &=&\Cat(\,(I_{\cal C}\times G)(c,d)\,)\\
+        \mbox{$(1)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+        &=&\Cat(I_{\cal C}(c),G(d))\\
+        \mbox{$(1)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+        &=&\Cat(c,G(d))
+    \end{eqnarray*}
+\end{proof}
+
+\noindent
+{\bf Remark}: In light of proposition~(\ref{Adj:prop:rhs:object}), it is
+common to refer to the right-hand-side functor casually as '$\Cat(c,G(d))$'
+where '$c$' and '$d$' are dummy variables. Once again, a functor is more than 
+a mere transformation on objects, and we should remember that the right-hand-side 
+functor is really $\Cat\circ(I_{\cal C}\times G)$.
+
 

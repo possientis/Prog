@@ -48,6 +48,7 @@ REL_OBJ   = ${REL}/Properties.vo \
 			${REL}/Converse.vo \
 			${REL}/Intersect.vo \
 			${REL}/Include.vo \
+			${REL}/Allegory.vo \
 			${REL}/Func.vo \
 			${REL}/Sum.vo \
 			${REL}/Product.vo \
@@ -56,6 +57,7 @@ REL_OBJ   = ${REL}/Properties.vo \
 
 NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
+			${NAT}/Ord.vo \
 			${NAT}/Max.vo \
 			${NAT}/Weaken.vo \
 			${NAT}/Plus.vo \
@@ -234,6 +236,9 @@ ${NAT}/Eq.vo : ${NAT}/Eq.v
 	coqc $<			${NAT_LIB}
 
 ${NAT}/Leq.vo : ${NAT}/Leq.v
+	coqc $<			${NAT_LIB}
+
+${NAT}/Ord.vo : ${NAT}/Ord.v
 	coqc $<			${NAT_LIB}
 
 ${NAT}/Max.vo : ${NAT}/Max.v

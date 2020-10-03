@@ -86,5 +86,39 @@ end
 
 def Z.add : Z → Z → Z := quotient.lift₂ add_
 begin
+  intros a₁ a₂ a₁' a₂',
+  cases a₁ with n₁ m₁, cases a₂ with n₂ m₂,
+  cases a₁' with n₁' m₁', cases a₂' with n₂' m₂',
+  intros H₁ H₂, unfold add_, apply quotient.sound,
+  rw equiv_def, unfold equiv, simp,
+  rw equiv_def at H₁, unfold equiv at H₁, simp at H₁,
+  rw equiv_def at H₂, unfold equiv at H₂, simp at H₂,
+  by calc
+  n₁ + (n₂ + (m₁' + m₂')) = n₁ + (n₂ + m₁' + m₂')   : by rw add_assoc
+  ...                     = n₁ + (m₁' + n₂ + m₂')   : by rw (add_comm n₂)
+  ...                     = n₁ + (m₁' + (n₂ + m₂')) : by rw add_assoc
+  ...                     = (n₁ + m₁') + (n₂ + m₂') : by rw add_assoc
+  ...                     = (m₁ + n₁') + (n₂ + m₂') : by rw H₁
+  ...                     = (m₁ + n₁') + (m₂ + n₂') : by rw H₂
+  ...                     = m₁ + (n₁' + (m₂ + n₂')) : by rw add_assoc
+  ...                     = m₁ + (n₁' + m₂ + n₂')   : by rw add_assoc
+  ...                     = m₁ + (m₂ + n₁' + n₂')   : by rw (add_comm n₁')
+  ...                     = m₁ + (m₂ + (n₁' + n₂')) : by rw add_assoc
+end
 
+-- why is local required here ?
+local infixl `⊕` : 50 := Z.add
+
+local notation 0 := ⟦(0,0)⟧
+
+lemma Z.add_def : ∀ (n₁ m₁ n₂ m₂ : ℕ),
+  ⟦(n₁,m₁)⟧ ⊕ ⟦(n₂,m₂)⟧ = ⟦(n₁ + n₂, m₁ + m₂)⟧ :=
+begin
+  intros n₁ m₁ n₂ m₂, refl
+end
+
+lemma Z.add_0_n : ∀ (n:Z), 0 ⊕ n = n :=
+begin
+  intros n, apply quotient.induction_on n, clear n,
+  intros p, cases p with n m, rw Z.add_def, simp
 end

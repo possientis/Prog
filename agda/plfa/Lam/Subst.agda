@@ -55,5 +55,3 @@ case L [zero⇒ M |suc x ⇒ N ] [ y := V ] with x ≟ y
 (μ x ⇒ N) [ y := V ] with x ≟ y
 ... | yes _ = μ x ⇒ N
 ... | no  _ = μ x ⇒ N [ y := V ]
-
-

@@ -176,36 +176,42 @@ propEZero :: Bool
 propEZero = eval eZero == eZero
 
 propESuc :: Integer -> Bool
-propESuc n = eval (eSuc (eNat m)) == eval (eNat (1 + pos m)) where
-    m = n `mod` 10
+propESuc n = eval (eSuc (eNat n')) == eval (eNat (1 + pos n')) where
+    n' = n `mod` cap
 
 propECaseZ :: Integer -> String -> Bool
 propECaseZ n x = eval (eCase eZero (eNum n) x (eVar x)) == eNum n
 
 propECaseS :: Integer -> Integer -> String -> Bool
-propECaseS n m x = m <= 0 || x == "" ||
-    eval (eCase (eNat m) (eNum n) x (eVar x)) == eval (eNat (m - 1))
+propECaseS n m x = m' <= 0 || x == "" ||
+    eval (eCase (eNat m') (eNum n) x (eVar x)) == eval (eNat (m' - 1))
+    where m' = m `mod` cap
 
 propEFac :: Integer -> Bool
 propEFac n  = eval (eApp eFac (eNum n)) == eNum 
     (if (n <= 0) then 1 else product [1..n])
 
 propEToNat :: Integer -> Bool
-propEToNat n = eval (eApp eToNat (eNum n)) == eval (eNat (pos n))
+propEToNat n = eval (eApp eToNat (eNum n')) == eval (eNat (pos n'))
+    where n' = n `mod` cap
 
 propEFromNat :: Integer -> Bool
-propEFromNat n = eval (eApp eFromNat (eNat n)) == eNum (pos n)
+propEFromNat n = eval (eApp eFromNat (eNat n')) == eNum (pos n')
+    where n' = n `mod` cap
 
 propEAddNat :: Integer -> Integer -> Bool
 propEAddNat n m = eval (eApp2 eAddNat (eNat n') (eNat m')) == eval 
     (eNat (pos n' + pos m'))
     where -- to slow otherwise 
-        n' = n `mod` 12
-        m' = m `mod` 12
+        n' = n `mod` cap
+        m' = m `mod` cap
 
 propEMulNat :: Integer -> Integer -> Bool
 propEMulNat n m = eval (eApp2 eMulNat (eNat n') (eNat m')) == eval
     (eNat (pos n' * pos m'))
     where -- to slow otherwise 
-        n' = n `mod` 12
-        m' = m `mod` 12
+        n' = n `mod` cap
+        m' = m `mod` cap
+
+cap :: Integer
+cap = 7

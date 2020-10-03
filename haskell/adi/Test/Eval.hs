@@ -182,35 +182,42 @@ propEZero :: forall m . (Eval m) => Bool
 propEZero = toInt ((eval @ m) eZero) == Just 0
 
 propESuc :: forall m . (Eval m) => Integer -> Bool
-propESuc n = toInt ((eval @ m) (eSuc (eNat n))) == Just (1 + pos n)
+propESuc n = toInt ((eval @ m) (eSuc (eNat n'))) == Just (1 + pos n')
+    where n' = n `mod` cap
 
 propECaseZ :: forall m . (Eval m) => Integer -> String -> Bool
 propECaseZ n x = num ((eval @ m) (eCase eZero (eNum n) x (eVar x))) == Just n
 
 propECaseS :: forall m . (Eval m) => Integer -> Integer -> String -> Bool
-propECaseS n m x = m <= 0 || x == "" ||
-    toInt ((eval @ m) (eCase (eNat m) (eNum n) x (eVar x))) == Just (m - 1)
+propECaseS n m x = m' <= 0 || x == "" ||
+    toInt ((eval @ m) (eCase (eNat m') (eNum n) x (eVar x))) == Just (m' - 1)
+    where m' = m `mod` cap
 
 propEFac :: forall m . (Eval m) => Integer -> Bool
 propEFac n  = num ((eval @ m) (eApp eFac (eNum n))) == Just 
     (if (n <= 0) then 1 else product [1..n])
 
 propEToNat :: forall m . (Eval m) => Integer -> Bool
-propEToNat n = toInt ((eval @ m) (eApp eToNat (eNum n))) == Just (pos n)
+propEToNat n = toInt ((eval @ m) (eApp eToNat (eNum n'))) == Just (pos n')
+    where n' = n `mod` cap
 
 propEFromNat :: forall m . (Eval m) => Integer -> Bool
-propEFromNat n = num ((eval @ m) (eApp eFromNat (eNat n))) == Just (pos n)
+propEFromNat n = num ((eval @ m) (eApp eFromNat (eNat n'))) == Just (pos n')
+    where n' = n `mod` cap
 
 propEAddNat :: forall m. (Eval m) => Integer -> Integer -> Bool
 propEAddNat n m = toInt ((eval @ m) (eApp2 eAddNat (eNat n') (eNat m'))) == Just 
     (pos n' + pos m')
     where -- to slow otherwise 
-        n' = n `mod` 12
-        m' = m `mod` 12
+        n' = n `mod` cap
+        m' = m `mod` cap
 
 propEMulNat :: forall m . (Eval m) => Integer -> Integer -> Bool
 propEMulNat n m = toInt ((eval @ m) (eApp2 eMulNat (eNat n') (eNat m'))) == Just 
     (pos n' * pos m') 
     where -- to slow otherwise 
-        n' = n `mod` 12
-        m' = m `mod` 12
+        n' = n `mod` cap
+        m' = m `mod` cap
+
+cap :: Integer
+cap = 7
