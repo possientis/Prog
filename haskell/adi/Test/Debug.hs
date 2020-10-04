@@ -2,7 +2,8 @@
 
 module  Test.Debug
     (   main
-    ,   e1, e2, e3, e4, e5, e6, e7, e8, e9
+    ,   e1, e2, e3, e4, e5, e6, e7, e8, e9, e10
+    ,   e11, e12
     )   where
 
 import DSL
@@ -13,11 +14,8 @@ import Reduce
 
 main :: IO ()
 main = do
-    putStrLn $ "e10 = " ++ showExpr e10
-    putStrLn $ "eval e10 = " ++ showExpr (eval e10)
-    putStrLn $ "e11 = " ++ showExpr e11
-    putStrLn $ "eval e11 = " ++ showExpr (eval e11)
-    print $ eval e10 == eval e11
+    putStrLn $ "e12 = " ++ showExpr e12
+    print $ map showExpr $ take 10 $ trace e12
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
@@ -51,3 +49,10 @@ e10 = eCase (eNat 1) (eNum 0) "a" (eVar "a")
 
 e11 :: Expr
 e11 = eNat 0
+
+-- reduces for ever
+e12 :: Expr
+e12 = eRec "x" (eSuc (eVar "x"))
+
+
+

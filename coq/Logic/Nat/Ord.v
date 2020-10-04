@@ -1,3 +1,7 @@
+Require Import Le.
+
+Require Import Logic.Class.Ord.
+
 Require Import Logic.Nat.Leq.
 
 Lemma leqDec : forall (n m:nat), { n <= m } + { ~ n <= m}.
@@ -9,6 +13,24 @@ Proof.
         + destruct (IH m) as [H1|H1].
             { left. apply le_n_S. assumption. }
             { right. intros H2. apply H1. apply le_S_n. assumption. }
+Defined.
+
+Lemma leqTotal : forall (n m:nat), n <= m \/ m <= n.
+Proof.
+    induction n as [|n IH]; intros m.
+    - left. apply le_0_n.
+    - destruct m as [|m].
+        + right. apply le_0_n.
+        + destruct (IH m) as [H1|H1].
+            { left. apply le_n_S. assumption. }
+            { right. apply le_n_S. assumption. }
 Qed.
 
-(* TODO *)
+Instance OrdNat : Ord nat :=
+    { leq       := le
+    ; leqDec    := leqDec
+    ; leqRefl   := le_refl
+    ; leqTrans  := le_trans
+    ; leqAsym   := le_antisym
+    ; leqTotal  := leqTotal
+    }. 

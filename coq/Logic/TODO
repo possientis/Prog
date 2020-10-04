@@ -1,4 +1,6 @@
 Logic:
+Fol/StrongAlpha
+Lam/StrongAlpha
 go back to book
 
 Haskell:
@@ -6,8 +8,9 @@ Haskell:
 Latex:
 
 Set Theory:
-Lang1/Context: replace nat * set by nice notation
-define Context as alternative to Environment
+Lang1/Context: same split Env + Semantics ?
+Lang1/Context compare with agda
+Lang1/Context compare with Lang1/Environment
 axiom of choice?
 axiom of infinity false ?
 a new semantics based on different type of environments (plfa)
@@ -18,11 +21,9 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
-Allegory wiki, finish reading
 go back to book
 
-Computatinal Type Theory with Coq:
-define Ord instance for nat
+Computational Type Theory with Coq:
 Nat: N <-> N x X
 go back to book
 

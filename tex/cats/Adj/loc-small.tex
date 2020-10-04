@@ -88,4 +88,33 @@ where '$c$' and '$d$' are dummy variables. Once again, a functor is more than
 a mere transformation on objects, and we should remember that the right-hand-side 
 functor is really $\Cat\circ(I_{\cal C}\times G)$.
 
-
+The left-hand side functor $F^{*}=\Dat\circ(F\times I_{\cal D})$ is a functor
+$F^{*}:\Cop\times\Dat\to\Set$. If $c,c'\in\Cat$ and $d,d'\in\Dat$, if 
+$f:c'\to c\ @\ \Cat$ and $g:d\to d'\ @\ \Dat$ then we have $(f,g):(c,d)\to
+(c',d')\ @\ \Cop\times\Dat$ and $F^{*}(f,g):F^{*}(c,d)\to F^{*}(c',d')\ @\ \Set$, 
+which is $F^{*}(f,g):\Dat(F(c),d)\to\Dat(F(c'),d')$. So if 
+$g':F(c)\to d\ @\ \Dat$ then $F^{*}(f,g)(g')$ is well-defined in
+$\Dat(F(c'),d')$, i.e. $F^{*}(f,g)(g'):F(c')\to d'\ @\ \Dat$.
+\begin{prop}\label{Adj:prop:lhs:arrow}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories and let $F^{*}=\Dat\circ(F\times I_{\cal D})$
+    be the left-hand-side functor associated with $(F,G)$. Then for all 
+    $c,c'\in\Cat$ and $d,d'\in\Dat$, for all $f:c'\to c$, $g:d\to d'$
+    and $g':F(c)\to d$, we have:
+        \[
+            F^{*}(f,g)(g') = g \circ g'\circ F(f)
+        \]
+\end{prop}
+\noindent
+{\bf Remark}: Note that the expression $g\circ g'\circ F(f)$ is a well-defined
+arrow in \Dat\ from $F(c')$ to $d'$, since $F(f):F(c')\to F(c)$, $g':F(c)\to d$
+and $g:d\to d'$.
+TODO
+\noindent
+\begin{proof}
+    \begin{eqnarray*}F^{*}(f,g)(g')
+        &=&\Dat\circ(F\times I_{\cal D})(f,g)(g')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
+        &=&\Dat(\,(F\times I_{\cal D})(f,g)\,)(g')\\
+    \end{eqnarray*}
+\end{proof}

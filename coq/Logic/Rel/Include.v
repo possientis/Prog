@@ -3,7 +3,7 @@ Require Import Logic.Axiom.Extensionality.
 Require Import Logic.Rel.R.
 Require Import Logic.Rel.Intersect.
 
-Definition incl (a b:Type) (r s:R a b) : Prop := r = inter r s.
+Definition incl (a b:Type) (r s:R a b) : Prop := r = (r /\ s).
 Arguments incl {a} {b}.
 
 Notation "r <= s" := (incl r s)
@@ -59,13 +59,13 @@ Proof.
     - apply (H1 s), incl_refl.
 Qed.
 
-Lemma incl_inter_l : forall (a b:Type) (r s:R a b), r ^ s <= r.
+Lemma incl_inter_l : forall (a b:Type) (r s:R a b), (r /\ s) <= r.
 Proof.
     intros a b r s. unfold inter. apply incl_charac. intros x y.
     intros [H1 H2]. assumption.
 Qed.
 
-Lemma incl_inter_r : forall (a b:Type) (r s:R a b), r ^ s <= s.
+Lemma incl_inter_r : forall (a b:Type) (r s:R a b), (r /\ s) <= s.
 Proof.
     intros a b r s. unfold inter. apply incl_charac. intros x y.
     intros [H1 H2]. assumption.

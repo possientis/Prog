@@ -107,7 +107,7 @@ begin
 end
 
 -- why is local required here ?
-local infixl `⊕` : 50 := Z.add
+local infixl `⊕` : 60 := Z.add
 
 local notation 0 := ⟦(0,0)⟧
 
@@ -122,3 +122,30 @@ begin
   intros n, apply quotient.induction_on n, clear n,
   intros p, cases p with n m, rw Z.add_def, simp
 end
+
+lemma Z.add_n_0 : ∀ (n:Z), n ⊕ 0 = n :=
+begin
+  intros n, apply quotient.induction_on n, clear n,
+  intros p, cases p with n m, rw Z.add_def, simp
+end
+
+lemma Z.add_comm : ∀ (n m:Z), n ⊕ m = m ⊕ n :=
+begin
+  intros n m,
+  apply quotient.induction_on n, intros p,
+  apply quotient.induction_on m, intros q,
+  cases p with n m, cases q with n' m',
+  rw [Z.add_def,Z.add_def, (add_comm n'), (add_comm m')]
+end
+
+lemma Z.add_assoc : ∀ (n m p:Z), (n ⊕ m) ⊕ p = n ⊕ (m ⊕ p) :=
+begin
+  intros n m p,
+  apply quotient.induction_on n, clear n, intros n,
+  apply quotient.induction_on m, clear m, intros m,
+  apply quotient.induction_on p, clear p, intros p,
+  cases n with n₁ m₁, cases m with n₂ m₂, cases p with n₃ m₃,
+  rw [Z.add_def, Z.add_def, Z.add_def, Z.add_def, add_assoc, add_assoc]
+end
+
+
