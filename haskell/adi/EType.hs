@@ -5,3 +5,4 @@ module  EType
 infixr 9 :->
 
 data EType = TNat | TNum | TBool | EType :-> EType
+    deriving (Eq)
