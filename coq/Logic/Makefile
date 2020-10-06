@@ -143,6 +143,7 @@ LANG1_OBJ = ${LANG1}/Syntax.vo \
 			${LANG1}/Environment.vo \
 			${LANG1}/Context.vo \
 			${LANG1}/Semantics.vo \
+			${LANG1}/SemanCtx.vo \
 			${LANG1}/Relevance.vo \
 			${LANG1}/Substitution.vo \
 			${LANG1}/Apply.vo \

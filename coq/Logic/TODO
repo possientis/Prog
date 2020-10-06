@@ -8,9 +8,10 @@ Haskell:
 Latex:
 
 Set Theory:
-Lang1/Context: same split Env + Semantics ?
 Lang1/Context compare with agda
 Lang1/Context compare with Lang1/Environment
+Lang1/SemanCtx compare with agda
+Lang1/SemanCtx compare with Lang1/Semantics
 axiom of choice?
 axiom of infinity false ?
 a new semantics based on different type of environments (plfa)
