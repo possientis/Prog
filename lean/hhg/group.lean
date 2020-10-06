@@ -42,3 +42,69 @@ end
   , neg          := ℤ₂.neg
   , add_left_neg := ℤ₂.add_left_neg
   }
+
+lemma ℤ₂.L₁ : ∀ (x y z : ℤ₂), (x + y) + z = x + (y + z) :=
+begin
+  intros x y z, apply add_assoc
+end
+
+lemma ℤ₂.L₂ : ∀ (x : ℤ₂), 0 + x = x :=
+begin
+  intros x, apply zero_add
+end
+
+lemma ℤ₂.L₃ : ∀ (x : ℤ₂), x + 0 = x :=
+begin
+  intros x, apply add_zero
+end
+
+lemma ℤ₂.L₄ : ∀ (x : ℤ₂), (-x) + x = 0 :=
+begin
+  intros x, apply add_left_neg
+end
+
+def ℤ₂.mul : ℤ₂ → ℤ₂ → ℤ₂
+| ℤ₂.one  x        := x
+| x       ℤ₂.one   := x
+| ℤ₂.zero ℤ₂.zero  := ℤ₂.zero
+
+#print ring
+
+lemma ℤ₂.add_comm : ∀ (a b : ℤ₂), a + b = b + a :=
+begin
+  intros x y, cases x; cases y; refl
+end
+
+lemma ℤ₂.mul_assoc : ∀ (x y z : ℤ₂),
+  ℤ₂.mul (ℤ₂.mul x y) z = ℤ₂.mul x (ℤ₂.mul y z) :=
+begin
+  intros x y z, cases x; cases y; cases z; refl
+end
+
+lemma ℤ2.one_mul : ∀ (x : ℤ₂), ℤ₂.mul ℤ₂.one x = x :=
+begin
+  intros x, cases x; refl
+end
+
+lemma ℤ₂.mul_one : ∀ (x : ℤ₂), ℤ₂.mul x ℤ₂.one = x :=
+begin
+  intros x, cases x; refl
+end
+
+lemma ℤ₂.left_distrib : ∀ (x y z : ℤ₂),
+  ℤ₂.mul z (x + y) = ℤ₂.mul z x + ℤ₂.mul z y :=
+begin
+  intros x y z, cases x; cases y; cases z; refl
+end
+
+lemma ℤ₂.right_distrib : ∀ (x y z : ℤ₂),
+  ℤ₂.mul (x + y) z = ℤ₂.mul x z + ℤ₂.mul y z :=
+begin
+  intros x y z, cases x; cases y; cases z; refl
+end
+
+@[instance] def ℤ₂.ring : ring ℤ₂ :=
+  { one      := ℤ₂.one
+  , mul      := ℤ₂.mul
+  , add_comm := ℤ₂.add_comm
+  }
