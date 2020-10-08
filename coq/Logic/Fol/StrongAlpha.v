@@ -1,15 +1,21 @@
+Require Import List.
+
 Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
 
 Require Import Logic.List.In.
+Require Import Logic.List.Remove.
+Require Import Logic.List.Difference.
 
 Require Import Logic.Rel.Include.
 
 Require Import Logic.Fol.Free.
+Require Import Logic.Fol.Valid.
 Require Import Logic.Fol.Syntax.
 Require Import Logic.Fol.Functor.
 Require Import Logic.Fol.Variable.
+Require Import Logic.Fol.Subformula.
 Require Import Logic.Fol.Congruence.
 
 (* Generator of strong alpha-equivalence.                                       *)
@@ -35,11 +41,23 @@ Notation "p ~ q" := (StrongAlpha p q)
 Open Scope Fol_StrongAlpha_scope.
 
 (*
+(* Not following pdf to obtain stronger result of equality as lists.            *)
 Lemma StrongAlpha_free : forall (v:Type) (e:Eq v) (p q:P v), 
     p ~ q -> Fr p = Fr q.
 Proof.
     intros v e. apply incl_charac. apply Cong_smallest.
     - apply free_congruence.
     - apply incl_charac. intros x y H1. destruct H1 as [x y p1 H1 H2]. 
+      simpl.
+      assert (valid (y // x) p1) as H3. { admit. }
+      assert (Fr (fmap (y // x) p1) = map (y // x) (Fr p1)) as H4.
+        { destruct (valid_free v v e e (y // x) p1) as [H5 H6].
+          apply H5.
+            { apply H3. } 
+            { apply Sub_refl. }}
+      rewrite H4. assert (y = (y // x) x) as H7.
+        { rewrite replace_x. reflexivity. } 
+      rewrite H7 at 1. clear H3 H4 H7. rewrite (remove_map v v e e).
+        +
 Show.
 *)
