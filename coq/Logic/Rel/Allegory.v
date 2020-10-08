@@ -104,3 +104,11 @@ Proof.
     apply incl_charac_to. assumption.
 Qed.
 
+
+Lemma incl_r_conv_r : forall (a b:Type) (r:R a b),
+    r <= r ; conv r ; r.
+Proof.
+    intros a b r. apply incl_charac. intros x y H1.
+    unfold comp. exists x. split; try assumption. exists y.
+    split; assumption.
+Qed.

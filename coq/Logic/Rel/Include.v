@@ -1,7 +1,12 @@
 Require Import Logic.Axiom.Extensionality.
 
 Require Import Logic.Rel.R.
+Require Import Logic.Rel.Id.
+Require Import Logic.Rel.Converse.
 Require Import Logic.Rel.Intersect.
+Require Import Logic.Rel.Properties.
+Require Import Logic.Rel.Composition.
+
 
 Definition incl (a b:Type) (r s:R a b) : Prop := r = (r /\ s).
 Arguments incl {a} {b}.
@@ -70,3 +75,43 @@ Proof.
     intros a b r s. unfold inter. apply incl_charac. intros x y.
     intros [H1 H2]. assumption.
 Qed.
+
+Lemma incl_reflexive : forall (a:Type) (r:Rel a), 
+    reflexive r <-> id <= r.
+Proof.
+    intros a r. unfold reflexive. split; intros H1.
+    - apply incl_charac. intros x y H2. destruct H2. apply H1.
+    - intros x. apply incl_charac_to with id; try assumption. constructor.
+Qed.
+
+Lemma incl_symmetric : forall (a:Type) (r:Rel a),
+    symmetric r <-> r <= conv r.
+Proof.
+    intros a r. unfold symmetric, conv. split; intros H1.
+    - apply incl_charac. assumption.
+    - intros x y H2. apply (incl_charac_to a a r (conv r) x y); assumption.
+Qed.
+
+Lemma incl_transitive : forall (a:Type) (r:Rel a),
+    transitive r <-> r ; r <= r.
+Proof.
+    intros a r. unfold transitive. split; intros H1.
+    - apply incl_charac. intros x y. intros [z [H2 H3]]. 
+      apply H1 with z; assumption.
+    - intros x z y H2 H3. apply incl_charac_to with (r;r); try assumption.
+      exists z. split; assumption.
+Qed.
+
+Lemma incl_antisymmetric : forall (a:Type) (r:Rel a),
+    antisymmetric r <-> (r /\ conv r) <= id.
+Proof.
+    intros a r. unfold antisymmetric, inter. split; intros H1.
+    - apply incl_charac. intros x y [H2 H3]. rewrite (H1 x y);
+      try assumption. constructor.
+    - intros x y H2 H3. assert (id x y) as H4.
+        { apply incl_charac_to with (r /\ conv r).
+            { assumption. }
+            { split; assumption. }}
+      destruct H4. reflexivity.
+Qed.
+
