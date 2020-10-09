@@ -109,12 +109,55 @@ $\Dat(F(c'),d')$, i.e. $F^{*}(f,g)(g'):F(c')\to d'\ @\ \Dat$.
 {\bf Remark}: Note that the expression $g\circ g'\circ F(f)$ is a well-defined
 arrow in \Dat\ from $F(c')$ to $d'$, since $F(f):F(c')\to F(c)$, $g':F(c)\to d$
 and $g:d\to d'$.
-TODO
+
 \noindent
 \begin{proof}
     \begin{eqnarray*}F^{*}(f,g)(g')
         &=&\Dat\circ(F\times I_{\cal D})(f,g)(g')\\
         \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
         &=&\Dat(\,(F\times I_{\cal D})(f,g)\,)(g')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+        &=&\Dat(F(f),I_{\cal D}(g))(g')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+        &=&\Dat(F(f),g)(g')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:hom:functor})}\ \to\ 
+        &=&g\circ g'\circ F(f)
+    \end{eqnarray*}
+\end{proof}
+
+The right-hand side functor $G^{*}=\Cat\circ(I_{\cal C}\times G)$ is a functor
+$G^{*}:\Cop\times\Dat\to\Set$. If $c,c'\in\Cat$ and $d,d'\in\Dat$, if 
+$f:c'\to c\ @\ \Cat$ and $g:d\to d'\ @\ \Dat$ then we have $(f,g):(c,d)\to
+(c',d')\ @\ \Cop\times\Dat$ and $G^{*}(f,g):G^{*}(c,d)\to G^{*}(c',d')\ @\ \Set$, 
+which is $G^{*}(f,g):\Cat(c,G(d))\to\Cat(c',G(d'))$. So if 
+$f':c\to G(d)\ @\ \Cat$ then $G^{*}(f,g)(f')$ is well-defined in
+$\Cat(c',G(d'))$, i.e. $G^{*}(f,g)(f'):c'\to G(d')\ @\ \Cat$.
+\begin{prop}\label{Adj:prop:rhs:arrow}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories and let $G^{*}=\Cat\circ(I_{\cal C}\times G)$
+    be the right-hand-side functor associated with $(F,G)$. Then for all 
+    $c,c'\in\Cat$ and $d,d'\in\Dat$, for all $f:c'\to c$, $g:d\to d'$
+    and $f':c\to G(d)$, we have:
+        \[
+            G^{*}(f,g)(f') = G(g) \circ f'\circ f
+        \]
+\end{prop}
+\noindent
+{\bf Remark}: Note that the expression $G(g)\circ f'\circ f$ is a well-defined
+arrow in \Cat\ from $c'$ to $G(d')$, since $f:c'\to c$, $f':c\to G(d)$
+and $G(g):G(d)\to G(d')$.
+
+\noindent
+\begin{proof}
+    \begin{eqnarray*}G^{*}(f,g)(f')
+        &=&\Cat\circ(I_{\cal C}\times G)(f,g)(f')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:composition})}\ \to\ 
+        &=&\Cat(\,(I_{\cal C}\times G)(f,g)\,)(f')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+        &=&\Cat(I_{\cal C}(f),G(g))(f')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:identity})}\ \to\ 
+        &=&\Cat(f,G(g))(f')\\
+        \mbox{$(2)$ of def.~(\ref{Fun:def:hom:functor})}\ \to\ 
+        &=&G(g)\circ f'\circ f
     \end{eqnarray*}
 \end{proof}

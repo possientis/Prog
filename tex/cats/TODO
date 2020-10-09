@@ -1,4 +1,4 @@
-locally small case: (F,G) has a unit <-> C(c,Gd) ~ D(Fc,d)
+locally small case: (F,G) adjunction <-> F* ~ G*
 
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
