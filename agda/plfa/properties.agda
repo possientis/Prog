@@ -19,10 +19,12 @@ open import Lam.Type
 open import Lam.Value
 open import Lam.Typing
 open import Lam.Syntax
+open import Lam.Closure
 open import Lam.Context
 open import Lam.Progress
 open import Lam.Canonical
 open import Lam.Reduction
+open import Lam.Preservation
 
 V¬—→ : ∀ {M N : Term}
   → Value M
@@ -154,9 +156,66 @@ progress' (⊢∨ p q) with progress' p
 ... | inj₂ ⟨ N , s ⟩ = inj₂ ⟨ _ , ξ-op₂ r s ⟩
 progress' (⊢∨ p q) | inj₁ V-Bool | inj₁ V-Bool = inj₂ ⟨ _ , β-∨ ⟩
 
-
-
 value? : ∀ {M : Term} {A : Type} → ∅ ⊢ M ∶ A → Dec (Value M)
 value? p with progress p
 ... | step q = no (—→¬V q)
 ... | done q = yes q
+
+sucμ : Term
+sucμ = μ "x" ⇒ `suc ` "x"
+
+_ =
+  begin
+    sucμ
+    —→⟨ β-μ ⟩
+    `suc sucμ
+    —→⟨ ξ-suc β-μ ⟩
+    `suc `suc sucμ
+    —→⟨ ξ-suc (ξ-suc β-μ) ⟩
+    `suc `suc `suc sucμ
+    -- ...
+    ∎
+
+record Gas : Set where
+  constructor gas
+  field
+    amount : ℕ
+
+data Finished (N : Term) : Set where
+
+  done :
+      Value N
+    ----------
+    → Finished N
+
+  out-of-gas :
+    ----------
+      Finished N
+
+data Steps (L : Term) : Set where
+
+  steps : ∀ {N : Term}
+    → L —↠ N
+    → Finished N
+      ----------
+    → Steps L
+
+eval : ∀ {L : Term} {A : Type}
+  → Gas
+  → ∅ ⊢ L ∶ A
+    ----------
+  → Steps L
+
+eval {L} (gas zero) p = steps (L ∎) out-of-gas
+eval {L} (gas (suc m)) p with progress p
+... | done q = steps (L ∎) (done q)
+eval {L} (gas (suc m)) p | step {N} q with eval (gas m) (preserve p q)
+... | steps r s = steps (L —→⟨ q ⟩ r) s
+
+⊢sucμ : ∅ ⊢ sucμ ∶ `ℕ
+⊢sucμ = ⊢μ (⊢suc (⊢` Z))
+
+res : Steps sucμ
+res = eval (gas 1) ⊢sucμ
+
+
