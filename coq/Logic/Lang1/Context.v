@@ -64,13 +64,28 @@ Notation "G <= H"  := (inclCtx G H)
 
 Open Scope Context_scope.
 
-(*
+(* The corresponding proof in agda appears to be a lot simpler.                 *)
 Lemma inclCtxExtend : forall (G H:Context) (n:nat) (x:set),
     G <= H -> G ; n~>x <= H ; n~>x.
 Proof.
     intros G H n x. unfold inclCtx. intros H2 m y H3.
     remember (G ; n~>x) as G' eqn:G1. remember (H ; n~>x) as H' eqn:H1. 
-    revert G1 H1.
-    
-Show.
-*)
+    remember (m~>y) as b eqn:H4.
+    revert m y H H' G n x H4 H2 G1 H1.
+    destruct H3 as [G' n' x'|G' n' m' x' y' Hnm H1]; 
+    intros n x H H' G m y H2 H3 H4 H5; inversion H2; subst; clear H2;
+    inversion H4; subst; clear H4.
+    - apply findZ.
+    - apply findS; try assumption. apply H3. assumption.
+Qed.
+
+Lemma inclCtxRefl : forall (G:Context), G <= G.
+Proof.
+    unfold inclCtx. intros G n x. auto.
+Qed.
+
+Lemma inclCtxTrans : forall (G H K:Context), G <= H -> H <= K -> G <= K.
+Proof.
+    unfold inclCtx. intros G H K H1 H2 n x H3. apply H2, H1. assumption.
+Qed.
+

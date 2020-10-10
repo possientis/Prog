@@ -53,7 +53,10 @@ REL_OBJ   = ${REL}/Properties.vo \
 			${REL}/Sum.vo \
 			${REL}/Product.vo \
 			${REL}/Initial.vo \
-			${REL}/Terminal.vo
+			${REL}/Terminal.vo \
+			${REL}/Coreflexive.vo \
+			${REL}/Domain.vo \
+			${REL}/Range.vo
 
 NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
@@ -65,7 +68,8 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Minimal.vo \
 			${NAT}/Seq.vo \
 			${NAT}/Fresh.vo \
-			${NAT}/NatxNat.vo
+			${NAT}/NatxNat.vo \
+			${NAT}/Witness.vo
 
 LIST_OBJ  = ${LIST}/In.vo \
 		   	${LIST}/Nil.vo \

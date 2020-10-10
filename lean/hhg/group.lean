@@ -81,7 +81,7 @@ begin
   intros x y z, cases x; cases y; cases z; refl
 end
 
-lemma ℤ2.one_mul : ∀ (x : ℤ₂), ℤ₂.mul ℤ₂.one x = x :=
+lemma ℤ₂.one_mul : ∀ (x : ℤ₂), ℤ₂.mul ℤ₂.one x = x :=
 begin
   intros x, cases x; refl
 end
@@ -92,7 +92,7 @@ begin
 end
 
 lemma ℤ₂.left_distrib : ∀ (x y z : ℤ₂),
-  ℤ₂.mul z (x + y) = ℤ₂.mul z x + ℤ₂.mul z y :=
+  ℤ₂.mul x (y + z) = ℤ₂.mul x y + ℤ₂.mul x z :=
 begin
   intros x y z, cases x; cases y; cases z; refl
 end
@@ -104,7 +104,84 @@ begin
 end
 
 @[instance] def ℤ₂.ring : ring ℤ₂ :=
-  { one      := ℤ₂.one
-  , mul      := ℤ₂.mul
-  , add_comm := ℤ₂.add_comm
+  { add            := ℤ₂.add
+  , add_assoc      := ℤ₂.add_assoc
+  , zero           := ℤ₂.zero
+  , zero_add       := ℤ₂.zero_add
+  , add_zero       := ℤ₂.add_zero
+  , neg            := ℤ₂.neg
+  , add_left_neg   := ℤ₂.add_left_neg
+  , add_comm       := ℤ₂.add_comm
+  , mul            := ℤ₂.mul
+  , mul_assoc      := ℤ₂.mul_assoc
+  , one            := ℤ₂.one
+  , one_mul        := ℤ₂.one_mul
+  , mul_one        := ℤ₂.mul_one
+  , left_distrib   := ℤ₂.left_distrib
+  , right_distrib  := ℤ₂.right_distrib
   }
+
+
+#print field
+
+
+def ℤ₂.inv : ℤ₂ → ℤ₂ := λ x, x
+
+lemma ℤ₂.zero_ne_one : ℤ₂.zero ≠ ℤ₂.one :=
+begin
+  intros H₁, cases H₁
+end
+
+lemma ℤ₂.mul_inv_cancel : ∀ (x : ℤ₂), x ≠ 0 → x * ℤ₂.inv x = 1 :=
+begin
+  intros x H₁, cases x,
+    { exfalso, apply H₁, refl },
+    { refl }
+end
+
+lemma ℤ₂.inv_mul_cancel : ∀ (x : ℤ₂), x ≠ 0 → ℤ₂.inv x * x = 1 :=
+begin
+  intros x H₁, cases x,
+    { exfalso, apply H₁, refl },
+    { refl }
+end
+
+lemma ℤ₂.mul_comm : ∀ (x y : ℤ₂), x * y = y * x :=
+begin
+  intros x y, cases x; cases y; refl
+end
+
+@[instance] def ℤ₂.field : field ℤ₂ :=
+  { add            := ℤ₂.add
+  , add_assoc      := ℤ₂.add_assoc
+  , zero           := ℤ₂.zero
+  , zero_add       := ℤ₂.zero_add
+  , add_zero       := ℤ₂.add_zero
+  , neg            := ℤ₂.neg
+  , add_left_neg   := ℤ₂.add_left_neg
+  , add_comm       := ℤ₂.add_comm
+  , mul            := ℤ₂.mul
+  , mul_assoc      := ℤ₂.mul_assoc
+  , one            := ℤ₂.one
+  , one_mul        := ℤ₂.one_mul
+  , mul_one        := ℤ₂.mul_one
+  , left_distrib   := ℤ₂.left_distrib
+  , right_distrib  := ℤ₂.right_distrib
+  , inv            := ℤ₂.inv
+  , zero_ne_one    := ℤ₂.zero_ne_one
+  , mul_inv_cancel := ℤ₂.mul_inv_cancel
+  , inv_mul_cancel := ℤ₂.inv_mul_cancel
+  , mul_comm       := ℤ₂.mul_comm
+  }
+
+#reduce (1 : ℤ₂) * 0 / (0 - 1)
+
+#reduce (3 : ℤ₂)
+
+
+lemma ring_example : ∀ (x y : ℤ₂),
+  (x + y) ^ 3 = x ^ 3 + 3 * a ^ 2 * b + 3 * a * b ^ 2 + b ^ 3 :=
+begin
+end
+
+#print has_pow

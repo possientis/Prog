@@ -1,5 +1,4 @@
 Logic:
-Fol/StrongAlpha
 Lam/StrongAlpha
 go back to book
 
@@ -7,8 +6,9 @@ Haskell:
 
 Latex:
 
+
 Set Theory:
-Lang1/Context compare with agda
+Lang1/Context
 Lang1/Context compare with Lang1/Environment
 Lang1/SemanCtx compare with agda
 Lang1/SemanCtx compare with Lang1/Semantics
@@ -22,10 +22,12 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
+Rel/Range
+Rel/Domain
 go back to book
 
 Computational Type Theory with Coq:
-cttwc/witness2
+Nat/Witness. pen and paper? or does witness return smallest?
 Nat: N <-> N x X
 go back to book
 

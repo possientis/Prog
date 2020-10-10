@@ -161,3 +161,16 @@ and $G(g):G(d)\to G(d')$.
         &=&G(g)\circ f'\circ f
     \end{eqnarray*}
 \end{proof}
+
+\begin{prop}\label{Adj:prop:natural:left:right}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Let $\eta$ be a unit of $(F,G)$. Consider the
+    map $\alpha:\ob\ (\Cop\times\Dat)\to\arr\ \Set$ defined for all $c\in\Cat$ and
+    $d\in\Dat$ by:
+        \[
+            \alpha(c,d)(g)=G(g)\circ\eta_{c}
+        \]
+    for all $g:F(c)\to d$. Then $\alpha$ is a natural transformation 
+    $\alpha:F^{*}\Rightarrow G^{*}$, where $F^{*}$ and $G^{*}$ denote
+    the left-hand-side and right-hand-side functors respectively.
+\end{prop}

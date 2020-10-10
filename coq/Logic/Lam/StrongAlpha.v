@@ -1,13 +1,22 @@
+Require Import List.
+
 Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
 
 Require Import Logic.List.In.
+Require Import Logic.List.Remove.
+Require Import Logic.List.Coincide.
+Require Import Logic.List.Difference.
+
+Require Import Logic.Rel.Include.
 
 Require Import Logic.Lam.Free.
+Require Import Logic.Lam.Valid.
 Require Import Logic.Lam.Syntax.
 Require Import Logic.Lam.Functor.
 Require Import Logic.Lam.Variable.
+Require Import Logic.Lam.Subformula.
 Require Import Logic.Lam.Congruence.
 
 (* Generator of strong alpha-equivalence.                                       *)
@@ -32,10 +41,30 @@ Notation "t ~ s" := (StrongAlpha t s)
 
 Open Scope Fol_StrongAlpha_scope.
 
-(*
+
 Lemma StrongAlpha_free : forall (v:Type) (e:Eq v) (t s:T v), 
     t ~ s -> Fr t = Fr s.
 Proof.
+    intros v e. apply incl_charac. apply Cong_smallest.
+    - apply free_congruence.
+    - apply incl_charac. intros x y H1. destruct H1 as [x y t1 H1 H2]. 
+      simpl.
+      assert (valid (y // x) t1) as H3. { apply valid_replace. assumption. }
+      assert (Fr (fmap (y // x) t1) = map (y // x) (Fr t1)) as H4.
+        { destruct (valid_free v v e e (y // x) t1) as [H5 H6].
+          apply H5.
+            { apply H3. } 
+            { apply Sub_refl. }}
+      rewrite H4. assert (y = (y // x) x) as H7.
+        { rewrite replace_x. reflexivity. } 
+      rewrite H7 at 1. clear H3 H4 H7. rewrite (remove_map v v e e).
+        + rewrite (coincide_map v v (y //x) id).
+            { symmetry. apply map_id. }
+            { intros u H3. apply replace_not_x. unfold id. intros H4. 
+              subst. revert H3. apply remove_x_gone. }
+        + intros u H3 H4. rewrite replace_x. rewrite replace_not_x; 
+          intros H5; subst.
+            { apply H2. apply (free_var v e). assumption. }
+            { apply H3. reflexivity. }
+Qed.
 
-Show.
-*)

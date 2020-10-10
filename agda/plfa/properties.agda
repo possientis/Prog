@@ -11,11 +11,13 @@ open import Data.Bool        using (Bool; true; false)
 open import Relation.Nullary using (Dec; yes; no; ¬_)
 open import Function         using (_∘_)
 
+open import lambda
 open import isomorphism
 
 open import Lam.Id
 open import Lam.Op
 open import Lam.Type
+open import Lam.Eval
 open import Lam.Value
 open import Lam.Typing
 open import Lam.Syntax
@@ -176,46 +178,32 @@ _ =
     -- ...
     ∎
 
-record Gas : Set where
-  constructor gas
-  field
-    amount : ℕ
-
-data Finished (N : Term) : Set where
-
-  done :
-      Value N
-    ----------
-    → Finished N
-
-  out-of-gas :
-    ----------
-      Finished N
-
-data Steps (L : Term) : Set where
-
-  steps : ∀ {N : Term}
-    → L —↠ N
-    → Finished N
-      ----------
-    → Steps L
-
-eval : ∀ {L : Term} {A : Type}
-  → Gas
-  → ∅ ⊢ L ∶ A
-    ----------
-  → Steps L
-
-eval {L} (gas zero) p = steps (L ∎) out-of-gas
-eval {L} (gas (suc m)) p with progress p
-... | done q = steps (L ∎) (done q)
-eval {L} (gas (suc m)) p | step {N} q with eval (gas m) (preserve p q)
-... | steps r s = steps (L —→⟨ q ⟩ r) s
-
 ⊢sucμ : ∅ ⊢ sucμ ∶ `ℕ
 ⊢sucμ = ⊢μ (⊢suc (⊢` Z))
 
 res : Steps sucμ
 res = eval (gas 1) ⊢sucμ
 
+_ : eval (gas 3) ⊢sucμ ≡ steps
+  (sucμ
+    —→⟨ β-μ ⟩
+    `suc sucμ
+    —→⟨ ξ-suc β-μ ⟩
+    `suc `suc sucμ
+    —→⟨ ξ-suc (ξ-suc β-μ) ⟩
+    `suc `suc `suc sucμ
+    ∎)
+  out-of-gas
 
+_ = refl
+
+twoᶜ-sucᶜ-zero : ∅ ⊢ twoᶜ · sucᶜ · `zero ∶ `ℕ
+twoᶜ-sucᶜ-zero = ⊢· (⊢· ⊢twoᶜ ⊢sucᶜ) ⊢zero
+
+_ : eval (gas 100) twoᶜ-sucᶜ-zero ≡ steps
+  ( twoᶜ · sucᶜ · `zero
+    —→⟨ ξ-·₂ {!!} {!!} ⟩ 
+    {!!})
+  {!!}
+
+_ = {!!}
