@@ -654,5 +654,55 @@ eBracket1 = do
 ex26 :: [(Expr, String)]
 ex26 = runParser expr1 "34 + 12"
 
--- TODO: write a parser for Expr which actually works !!
 
+-- STILL IN TRYING STAGES
+-- Following the paper: "Removing Left Recursion from Context-Free Grammars"
+-- Robert C. Moore
+
+expr :: Parser Expr
+expr = eNum <|> eNumExpr' <|> eBracket
+
+eBracket :: Parser Expr
+eBracket = do
+    _ <- char '('       -- expects '('
+    e <- expr          -- get an expression 
+    _ <- char ')'       -- expects '}'
+    return e
+
+eNumExpr' :: Parser Expr
+eNumExpr' = do
+    n     <- eNum
+    (c,e) <- expr'
+    if c == '+'
+        then return $ EAdd n e
+        else return $ EMul n e
+
+expr' :: Parser (Char, Expr)
+expr' = do
+    c <- op
+    e <- expr <|> 
+        do
+            e <- expr
+            (c',e') <- expr'
+            if c' == '+'
+                then return $ EAdd e e'
+                else return $ EMul e e'
+    return (c,e)
+
+ex27 :: [(Expr, String)]
+ex27 = runParser expr "56*34+12"
+
+parse :: String -> Either String Expr
+parse s = case map fst $ filter (null . snd) $ runParser expr s of
+    []  -> Left "Cannot parse input string"
+    [e] -> Right e
+    xs  -> Left $ "Ambiguous parse: " ++ show xs
+
+ex28 :: Either String Expr
+ex28 = parse "56*(23+12)"       -- Right (EMul (ENum 56) (EAdd (ENum 23) (ENum 12)))
+
+ex29 :: Either String Expr
+ex29 = parse "some gibberish"   -- Left "Cannot parse input string"
+
+ex30 :: Either String Expr
+ex30 = parse "(34+12)*56"
