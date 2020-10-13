@@ -27,8 +27,8 @@ e3 :: Expr
 e3 = EMul (ENum 56) (EAdd (ENum 34) (ENum 12))  -- abstract syntax
 
 -- The notion of abstract syntax is very important as all the programming is done
--- around it. It would be very difficult and messy to deal with the concrete 
--- syntax directly. For example, the abstract syntax allows to write an interpreter:
+-- around it. It would be very difficult and messy to deal with the concrete syntax 
+-- directly. For example, the abstract syntax allows to write an interpreter:
 
 eval :: Expr -> Integer
 eval (ENum n) = n
@@ -39,7 +39,7 @@ eval (EMul e e') = eval e * eval e'
 -- the user, either directly from the terminal, or from a source file. In fact
 -- this very file is written using Haskell's concrete syntax.
 
--- Enters the notion of parsing: it is the process of converting the concrete
+-- Enters the notion of PARSING: it is the process of converting the concrete
 -- syntax into the abstract syntax, a very important process.
 
 -- On the face of it, parsing appears to be the design of a function:
@@ -52,7 +52,7 @@ parse1 = undefined  -- parse1 "34 + 12" should be e1
 -- Hence a better approach would be to aim at writing a function:
 
 parse2 :: String -> (Expr, String)
-parse2 = undefined  -- parse2 "34 + 12" should be (ENum 34, "+ 12")
+parse2 = undefined  -- parse2 "34 + 12" could be (ENum 34, "+ 12")
 
 -- This function would return an expression, together with the remainder of the
 -- input String which was not processed and remains to be analysed.
@@ -61,17 +61,17 @@ parse2 = undefined  -- parse2 "34 + 12" should be (ENum 34, "+ 12")
 -- (String, Expr). Our choice of order is arbitrary and we could equally have:
 
 parse3 :: String -> (String, Expr)
-parse3 = undefined  -- parse3 "34 + 12" should be ("+ 12", ENum 34)
+parse3 = undefined  -- parse3 "34 + 12" could be ("+ 12", ENum 34)
 
 -- However, this does not work either: it is very unlikely that all intermediate
 -- stages of parsing will lead to a valid expression of the abstract syntax.
 -- In fact, from the string "34 + 12" we could extract the expression "ENum 34",
 -- but we are then left with the string "+ 12" from which we would like to consume
--- or process the '+'. So parse2 "+ 12" should be (???,"12") but we do not have an 
--- expression of the abstract syntax to return.
+-- or process the character '+'. So parse2 "+ 12" should be something like 
+-- (???,"12") but we do not have an expression of the abstract syntax to return.
 
 -- As we do not want to return a meaningful expression, we need a parser:
-parse4 :: String -> ((),String)
+parse4 :: String -> ((),String) -- processes part of input string, returns ()
 parse4 = undefined
 
 -- Sometimes we may want our parser to return a simple character, so we need:
@@ -85,10 +85,10 @@ parse6 = undefined
 -- So it appears we need different types of parsers depending on what it is we 
 -- expect at a given intermediary stage of our parsing.
 
--- Dealing with all these different types is cumbersome. Luckily, Haskell has
--- polymorphism which allows us to express all these different types as one.
+-- Dealing with all these different types is cumbersome but luckily Haskell has
+-- polymorphism: this allows us to express all these different types as one.
 
-parse7 :: String -> (a, String)
+parse7 :: String -> (a, String) -- 'a' is called a 'type variable'
 parse7 = undefined
 
 -- However, this is still not good enough: suppose you expect an integer and
@@ -104,13 +104,13 @@ parse7 = undefined
 parse8 :: String -> [(a, String)]
 parse8 = undefined
 
--- The polymorphic type String -> [(a, String)] seems to be the right type
+-- The polymorphic type: String -> [(a, String)] seems to be the right type
 -- to consider, and we should give it a name. One solution is a type synonym:
 
 type Parser1 a = String -> [(a, String)]
 
--- So now we do not need to write String -> [(a, String)] everywhere and we
--- can simply write 'Parser1 a' which is not only shorter, but also more
+-- So now we do not need to write 'String -> [(a, String)]' everywhere and 
+-- we can simply write 'Parser1 a' which not only is shorter, but also more
 -- readable with a meaningful name declaring the intent of the programmer.
 
 -- Note that a type synonym is not always the preferred approach, because all
@@ -133,28 +133,31 @@ data Parser3 a = Parser3 (String -> [(a, String)])
 -- As you can see, the same name 'Parser3' is used for both the type constructor
 -- and data constructor without creating a conflict in Haskell.
 
--- The type 'Parser3 a' has only one data constructor, unlike our abstract
--- syntax Expr which has three. While it is perfectly possible to use the 'data'
+-- The type 'Parser3 a' has only one data constructor, unlike our abstract syntax 
+-- type 'Expr' which has three. While it is perfectly possible to use the 'data'
 -- keyword to define a new type with a single constructor, most people prefer
 -- using the 'newtype' keyword:
 
 newtype Parser4 a = Parser4 (String -> [(a, String)])
 
 -- Unlike type synonyms which are regarded as the same type by Haskell, declaring
--- a newtype will ensure it cannot be mixed up with (String -> [(a, String)]).
--- Unlike types declared with 'data', a newtype will be as efficient at runtime
--- as the underlying type String -> [(a, String)].
+-- a newtype will ensure it cannot be mixed up with 'String -> [(a, String)]'.
+-- Unlike types declared with 'data', a 'newtype' will be as efficient at runtime
+-- as the underlying type String -> [(a, String)]. Hence for types which a unique
+-- type constructor, using the keyword 'newtype' brings the best of both worlds:
+-- total type safety without runtime cost.
 
 -- It is very common when declaring a newtype to use the syntax:
 
 newtype Parser a = Parser { runParser :: String -> [(a, String)] }
 
--- This syntax allows you to declare both the type and an accessor for the newtype
--- runParser :: Parser a -> String -> [(a, String)]. 
--- which is a function which extracts the underlying function from the parser.
+-- This syntax allows you to declare both the type and its accessor, i.e.
+-- runParser :: Parser a -> String -> [(a, String)] 
+-- which is a function extracting the underlying function used to create
+-- a value of type 'Parser a'.
 
--- So if we had a parser for exression:
-parser1 :: Parser Expr
+-- So if we had a parser for exressions:
+parser1 :: Parser Expr              -- parser returning an 'Expr'
 parser1 = undefined                 -- we still need to write such a parser
 
 -- We could 'run' this parser on the string "34 + 12"
@@ -168,20 +171,20 @@ ex1 = runParser parser1 "34 + 12"
 -- for the accessor 'runParser', but this name turns out to be a good choice.
 -- 
 -- Note that a parse which yields a singleton list is good: there is only one
--- possible result which is unambiguous.
+-- possible result and the parse is unambiguous.
 --
 -- A parse which yields the empty string "" is also good: there is no more input
 -- to process and the parse was in fact successful.
 
 -- Another advantage of declaring our type 'Parser a' is that it allows us to
--- free our brain from remembering the details of what a parser really is. A
+-- free our brain from remembering the details of what a parser really is: a
 -- value of type 'Parser a' (aka a parser of type 'a') is something which you can
 -- run against a string using 'runParser' to obtain a value of type 'a' together 
 -- with the remainder of the input string which needs to be processed.
 
 -- Now that we have settled our Parser type, we need to start writing parsers.
 
--- One parser which is bound to be useful is a 'Char' parser which returns
+-- One parser which is bound to be useful is a Char parser which returns
 -- a Char if it satifies a given condition. So given a predicate function
 -- p :: Char -> Bool, the parser will consume the first character c and return
 -- it if the condition (p c) is True, otherwise will fail to return anything.
@@ -270,7 +273,7 @@ ex10 = runParser digit "+ 12"           -- [], no successful parse
 -- we create a parser which accepts two digits? More generally, given two 
 -- parsers p1 and p2 of type 'a', can we create a parser of type 'a' which
 -- will get all the results obtained from p1, and then process each result
--- with the parser p2, to obtain more results. This is about combining parsers:
+-- with the parser p2, to obtain more results? This is about combining parsers:
 
 combine1 :: Parser a -> Parser a -> Parser a
 combine1 = undefined
@@ -287,7 +290,7 @@ combine2 = undefined
 -- two successive digits. What should the result be? We want a final parser 
 -- that gives the two digits it found, not simply the last one. So we want
 -- a parser which returns a list of Char, not just a single Char. So our 
--- second parser should be of type 'Parser [Char]'. However, it should 
+-- second parser should be of type [Char] or (Char,Char). However, it should 
 -- also return the digit which was found from running the first parser.
 -- So the result of our second parser should depend on the outcome of the
 -- first parser. In other words, we cannot have the same second parser 
@@ -298,15 +301,15 @@ combine :: Parser a -> (a -> Parser b) -> Parser b
 
 -- We are hoping this signature will do. It allows us to have a different 
 -- second parser, depending on the result of type 'a' obtained from the
--- first parser. So let us try and implement this parser combinator:
+-- first parser. We can try and implement this parser as follows:
 
 combine p1 f2 = Parser f where
-          -- get all results from running the first parser p1 on input string s
+          -- get all the results from running the first parser p1 on the string s
     f s = let xs = runParser p1 s in 
           -- For each result (x,t), run the parser (f2 x) on the remainder
           -- string t, and get a new list of results of type 'b'. Collect
           -- all these list of results, in a 'list of list' ys.
-          -- This is the 'list comprehension syntax' common in Haskell
+          -- (This is the 'list comprehension syntax' common in Haskell)
           let ys = [runParser (f2 x) t | (x,t) <- xs] in
           concat ys -- concatenate all these lists of results into a single list
 
@@ -326,8 +329,8 @@ inject x = Parser f where
 silly1 :: Parser [Char]                 -- same as 'Parser String'
 silly1 = combine digit (\x -> inject ['0',x])
 
--- Can you see what this parser silly1 is doing. It will run the
--- first parser digit, and for each result 'x' will produce the 
+-- Can you see what this parser silly1 is doing? It will run the
+-- first parser digit, and for each result x will produce the 
 -- result ['0',x] without processing the string further.
 
 ex11 :: [(String, String)]              -- same as [([Char], String)]
@@ -349,7 +352,7 @@ twoDigits1 =
 ex12 :: [(String,String)]
 ex12 = runParser twoDigits1 "34 + 12"   -- [("34"," + 12")], it works !!
 
--- It is now time to speak of monads. We have avoided doing so until now
+-- It is now time to speak of 'monads'. We have avoided doing so until now
 -- to keep things as simple as possible. However, our type constructor
 -- 'Parser' (which takes one single argument) has a 'combine' function:
 --
@@ -378,24 +381,24 @@ instance Monad Parser where
     (>>=)  = combine
 
 -- However, this declaration alone will create an error because Haskell 
--- will not let you define an instance 'Monad' without first defining
--- an instance for 'Applicative'. If you search for 'Monad' on Hoogle
+-- will not let you define an instance for Monad without first defining
+-- an instance for Applicative. If you search for 'Monad' on Hoogle
 -- (https://hoogle.haskell.org/) you will find something like:
 --
 -- 'class Applicative m => Monad m' where ...
 --
--- which means that the type class 'Monad' is defined as a subclass of
--- the type class 'Applicative', or that 'Applicative' is a superclass
--- of 'Monad'. In other words, nothing can be a monad without being 
--- first an applicative. In order to define an applicative instance,
+-- which means that the type class Monad is defined as a subclass of
+-- the type class Applicative, or that Applicative is a superclass
+-- of Monad. In other words, nothing can be a 'Monad' without being 
+-- first an 'Applicative'. In order to define an applicative instance,
 -- we need to provide two functions:
 --
--- pure :: a -> m a     -- Oh we already have 'return' (our 'inject')
+-- pure :: a -> m a     -- Oh, we already have 'return' (our 'inject')
 --
--- (<*>) :: m (a -> b) -> m a -> m b
+-- (<*>) :: m (a -> b) -> m a -> m b    -- what do we do here ?
 
--- However, because we intend that our applicative instance will also
--- be a monad and not just an applicative, we do not need to do any work
+-- However, because we intend our Applicative instance to also be a 
+-- be a Monad and not just an Applicative, we do not need to do any work
 -- and we can simply use the 'ap' function which works for every monad,
 -- provided the module 'Control.Monad' is imported.
 
@@ -403,7 +406,7 @@ instance Applicative Parser where
     pure  = return  -- Parser is also a monad, so return will do
     (<*>) = ap      -- defined in Control.Monad for all monads
 
--- How the function 'ap' is defined is not very important at this stage.
+-- How the function 'ap' is defined is not important at this stage.
 -- We really want our 'Parser' type constructor to be a Monad and we
 -- can simply use this trick of using the 'ap' function to quickly
 -- define an Applicative instance so our Monad instance is accepted
@@ -411,12 +414,12 @@ instance Applicative Parser where
 --
 -- class Functor f => Applicative f where ...
 --
--- The problem is that 'Applicative' is a subclass of 'Functor',
--- and nothing can be an applicative unless it is first a functor.
+-- The problem is that Applicative is a subclass of Functor,
+-- and nothing can be an 'Applicative' unless it is first a functor.
 -- In order to define an instance of functor for a type constructor
 -- 'f', we need to provide the following function:
 --
--- fmap :: (a -> b) -> f a -> f b
+-- fmap :: (a -> b) -> f a -> f b   -- what do we do here ?
 -- 
 -- Once again there is no need to do any work because our Parser will be
 -- a Monad anyway, and there is a function 'liftM' which will do the job:
@@ -436,15 +439,15 @@ twoDigits2 =
         (>>=) digit $ \d2 ->
             return [d1,d2]
 
--- In fact, why not take advantage of the fact that bind is an infix operator:
+-- In fact, why not take advantage of the fact that 'bind' is an infix operator:
 twoDigits3 :: Parser String
 twoDigits3 = 
     digit >>= \d1 ->
         digit >>= \d2 ->
             return [d1,d2]
 
--- The code is now looking better, but this is still somewhat messy and
--- unintuitive: enter the 'DO NOTATION' !!!
+-- The code is now looking better, but is still somewhat messy and unintuitive.
+-- Enter the 'DO NOTATION' !!!
 
 twoDigits4 :: Parser String
 twoDigits4 = do 
@@ -452,18 +455,20 @@ twoDigits4 = do
     d2 <- digit     -- get second digit
     return [d1,d2]  -- return the result
 
--- This means exactly the same thing has before to Haskell, but is a lot
--- more readable and intuitive. This is the whole point of using a Monad
--- for parsing: we get code which is a lot simpler and easier to read.
--- Very nice ! But are we sure this still works ?
+-- This code is exactly the same from the point of view of Haskell as the previous
+-- one. However it is a lot more readable and intuitive, which is the whole point 
+-- of using a Monad for parsing: we get code which is a lot simpler and easier to 
+-- read, thanks to the 'do notation'.
+--
+-- But are we sure this still works ?
 
 ex13 :: [(String,String)]
 ex13 = runParser twoDigits4 "34 + 12"   -- [("34"," + 12")], yep still works !
 
 -- So we see that working with the type class Monad has allowed us to express
 -- a somewhat convoluted parser in very simple terms. There is another
--- class which is probably worth learning about here, namely the 
--- class 'Alternative'. To define an instance of Alternative we need:
+-- class which is probably worth learning at this point, namely the class 
+-- Alternative: to define an instance of Alternative we need:
 --
 -- empty :: m a                 -- a parser which always returns no results []
 -- 
@@ -477,7 +482,7 @@ instance Alternative Parser where
 range' :: [Char] -> Parser Char
 range' []        = error "range: empty list"
 range' [c]       = char c               -- only one possible character in the list
-range' (c:cs)    = char c <|> range cs  -- this a little bit nicer, not much
+range' (c:cs)    = char c <|> range cs  -- this a little bit nicer, but not much
 
 -- And we could define the digit parser based on our new range parser:
 digit' :: Parser Char
@@ -486,8 +491,8 @@ digit' = range' "0123456789"
 -- And why stop there?
 twoDigits5 :: Parser String
 twoDigits5 = do 
-    d1 <- digit'     -- get first digit
-    d2 <- digit'     -- get second digit
+    d1 <- digit'    -- get first digit
+    d2 <- digit'    -- get second digit
     return [d1,d2]  -- return the result
 
 ex14 :: [(String,String)]
@@ -504,7 +509,7 @@ parser2 = empty
 ex15 :: [(String, String)]
 ex15 = runParser parser2 "34 + 12"      -- [], no result as expected 
 
--- This parser is not the same things as the parser which always succeeds
+-- This parser is not the same thing as the parser which always succeeds
 -- and returns [] without processing the input string.
 
 parser3 :: Parser String
@@ -515,8 +520,9 @@ ex16 :: [(String, String)]
 ex16 = runParser parser3 "34 + 12"      -- [("","34 + 12")], single result
 
 -- Hence we see that it is important not to confuse the failing parser
--- which returns no results with the successful parser which returns
--- a single result, namely the empty list without processing the input string.
+-- which returns no results with the successful parser of some type [a]
+-- which returns a single result, namely the empty list without processing 
+-- the input string.
 
 -- Now that we have a nice Monad to play with, it will be easier to create
 -- new parsers. One parser we certainly want to have is the one accepting
@@ -527,17 +533,19 @@ ex16 = runParser parser3 "34 + 12"      -- [("","34 + 12")], single result
 
 plus :: Parser a -> Parser [a]  -- give one or more values of type 'a'
 plus p = do
-    x  <- p         -- get first value of type a
-    xs <- star p    -- get zero or more values   
+    x  <- p         -- get first value of type a from parser p
+    xs <- star p    -- get zero or more values from parser p  
     return (x:xs)   -- return one or more values
 
 star :: Parser a -> Parser [a] -- give zero or more values of type 'a'
-star p = return [] <|> plus p  -- return zero value (still a success) or 1 & more
+star p = return [] <|> plus p  -- return zero value (still a success) *or* 1 & more
+
+-- Note that the two parser combinators plus and star are defined by
+-- mutual recursion, since they are calling each other.
 
 -- give one or more digits
 ex17 :: [(String, String)]              -- There are two possible results
 ex17 = runParser (plus digit) "34 + 12" -- [("3","4 + 12"),("34"," + 12")]
-
 
 -- give zero or more digits
 ex18 :: [(String, String)]              -- There are three possible results
@@ -546,11 +554,11 @@ ex18 = runParser (star digit) "34 + 12"
 
 -- It may seem concerning that a parser should give us more than one possible
 -- result. Indeed, this indicates an ambiguous parse. However, it may happen
--- that the ambiguities will be lifted as we proceed with the various
--- stages of parsing. For example, the parser 'star digit' is ambiguous when
--- run against the string '34 + 12'. But what if we said 'give me zero or
--- more digits, then an empty space, then a '+'. Would that still be
--- ambiguous? Let us find out:
+-- that the ambiguities will be lifted as we proceed with the various stages 
+-- of parsing. For example, the parser 'star digit' is ambiguous when run 
+-- against the string '34 + 12' (it has three successful parse). But what if 
+-- we said 'give me zero or more digits, then an empty space, then a '+'. 
+-- Would that still be ambiguous? Let us find out:
 
 parser4 :: Parser String
 parser4 = do
@@ -559,7 +567,7 @@ parser4 = do
     _  <- char '+'      -- get a '+'
     return $ cs ++ " +" -- just return what has been processed
 
--- The ambiguity has been lifted
+-- The ambiguity has been lifted, only one successful parse
 ex19 :: [(String, String)]
 ex19 = runParser parser4 "34 + 12"      -- [("34 +"," 12")], no ambiguity
 
@@ -571,18 +579,17 @@ integer1 :: Parser Integer
 integer1 = do
     ds <- plus digit    -- get one or more digits
     let n = read ds     -- convert the string into an Integer
-    return n
+    return n            -- just return the integer
 
 -- The parser is ambiguous, but otherwise behaves as normal
-ex21 :: [(Integer, String)]
+ex21 :: [(Integer, String)]             -- parser returns an Integer, not a String
 ex21 = runParser integer1 "34 + 12"     -- [(3,"4 + 12"),(34," + 12")], 2 results
 
--- When defining the parser integer1, all we are doing is using the parser
--- (plus digit) :: Parser String and calling the function 'read' on the result 
--- of the parse. Hence we are transforming a 'Parser String' into a 
--- 'Parser Integer', using the function 'read :: String -> Integer'.
--- Since 'Parser' is also an instance of the 'Functor' type class we can
--- simply write:
+-- When defining the parser integer1, all we are doing is using the String parser
+-- 'plus digit' and calling the function 'read' on the result of the parse. Hence 
+-- we are transforming a String parser into an Integer Parser, using the function 
+-- 'read :: String -> Integer'. Since 'Parser' is also an instance of the Functor 
+-- type class we can simply write:
 
 integer2 :: Parser Integer
 integer2 = fmap read (plus digit)
@@ -593,17 +600,17 @@ ex22 = runParser integer2 "34 + 12"     -- [(3,"4 + 12"),(34," + 12")], 2 result
 
 -- Or indeed, since 'fmap' is also known as the infix operator '(<$>)':
 integer :: Parser Integer
-integer = read  <$> (plus digit)
+integer = read <$> (plus digit)
 
 -- Same result
 ex23 :: [(Integer, String)]
 ex23 = runParser integer "34 + 12"     -- [(3,"4 + 12"),(34," + 12")], 2 results
 
--- In fact, we can now write a parser returning an expression:
+-- In fact, we can now write a parser returning an expression, rather than Integer:
 eNum :: Parser Expr
 eNum = ENum <$> integer
 
--- Still ambiguous, but we are getting expressions out
+-- Still ambiguous, but we are getting expressions out, not Integers
 ex24 :: [(Expr, String)]
 ex24 = runParser eNum "34 + 12"         -- [(ENum 3,"4 + 12"),(ENum 34," + 12")]
 
@@ -617,6 +624,8 @@ white = range " \\t\\n"
 -- The leading white space has been successfully removed from the input string
 ex25 :: [(Char, String)]
 ex25 = runParser white " + 12"          -- [(' ',"+ 12")]
+
+-- TODO
 
 -- We now want to write a full parser for any expression of our language
 -- THE FOLLOWING IS VERY NAIVE AND DOES NOT WORK. The parser keeps calling
