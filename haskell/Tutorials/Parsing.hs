@@ -625,18 +625,50 @@ white = range " \\t\\n"
 ex25 :: [(Char, String)]
 ex25 = runParser white " + 12"          -- [(' ',"+ 12")]
 
--- TODO
-
+-- A possible grammar for the concrete syntax of our language is:
+-- Expr -> N                -- Produce an Expr from an integer 
+--       | Expr '+' Expr    -- Produce an Expr from two Expr and '+' in between
+--       | Expr '*' Expr    -- Produce an Expr from two Expr and '*' in between
+--       | '(' Expr ')'     -- Produce an Expr from an Expr surrounded by brackets
+-- 
+-- Of course, to be precise we would need to spell out the grammar to produce
+-- the non-terminal N representing an integer:
+--
+-- N -> digit               -- Produce an N from a digit
+--    | digit N             -- Produce an N from a digit followed by an N
+--
+-- digit -> '0'             -- Produce a digit from the terminal '0'
+--        | '1'             -- Produce a digit from the terminal '1'
+--        | '2'             -- Produce a digit from the terminal '2'
+--        ...
+--
+-- Actually we want our concrete syntax to accept white spaces:
+-- so we should add a production rule for Expr
+--
+-- Expr -> Sp Expr          -- Produce an Expr from an Expr preceded by Sp
+--       | Expr Sp          -- Produce an Expr from an Expr followed by Sp
+--
+-- Sp -> ' '
+--     | '\t'
+--     | '\n' 
+--
+-- Note that the concrete grammar chosen here allows for ambiguous expressions:
+-- 56 * 34 + 12 belongs to the language defined by the grammar yet it is unclear
+-- whether this expression of concrete syntax should be parsed as:
+-- EAdd (EMul (ENum 56) (ENum 34)) (ENum 12) 
+-- or
+-- EMul (ENum 56) (EAdd (ENum 34) (ENum 12)) 
+--
 -- We now want to write a full parser for any expression of our language
--- THE FOLLOWING IS VERY NAIVE AND DOES NOT WORK. The parser keeps calling
--- itself and never terminates. But it is still interesting to look at.
+-- We shall do so naively by following our grammar to the letter
+-- i.e. we are calling a different parser for each production rule
 expr1 :: Parser Expr
-expr1 = do
-    _ <- star white     -- remove leading white spaces
-    -- get an ENum, EAdd or EMul type expression, or a bracketted expression
-    e <- eNum <|> eAdd1 <|> eMul1 <|> eBracket1
-    _ <- star white     -- remove trailing white spaces
-    return e
+expr1 =  eNum       -- Expr -> N 
+     <|> eAdd1      -- Expr -> Expr '+' Expr
+     <|> eMul1      -- Expr -> Expr '*' Expr
+     <|> eBracket1  -- Expr -> '(' Expr ')'
+     <|> eLeft1     -- Expr -> Sp Expr
+     <|> eRight1    -- Expr -> Expr Sp
 
 eAdd1 :: Parser Expr
 eAdd1 = do
@@ -659,59 +691,94 @@ eBracket1 = do
     _ <- char ')'       -- expects '}'
     return e
 
--- Don't try this at home, your computer will be in an infinite loop
+eLeft1 :: Parser Expr
+eLeft1 = do
+    _ <- white          -- get a white space
+    e <- expr1          -- get an expression
+    return e
+
+eRight1 :: Parser Expr
+eRight1 = do
+    e <- expr1          -- get an expression
+    _ <- white          -- get a white space
+    return e
+
+-- DO NOT TRY TO EVALUATE ex26 on ghci, your computer will be in an infinite loop
 ex26 :: [(Expr, String)]
 ex26 = runParser expr1 "34 + 12"
 
+-- unfortunately, naively following the structure of the grammar leads to failure,
+-- whereby the parser gets into an infinite search loop. The parser aggregates
+-- the results of 6 different parsers corresponding to each production rule of
+-- the grammar. The parser failing to terminate must be due to the fact that one
+-- of these six parsers fails to terminate.
 
--- STILL IN TRYING STAGES
+-- This terminates with two successful parse but does not consume whole string.
+ex26_1 :: [(Expr, String)]
+ex26_1 = runParser eNum "34 + 12"
+
+-- This also terminates and with no successful parse as expected
+ex26_2 :: [(Expr, String)]
+ex26_2 = runParser eBracket1 "34 + 12"
+
+-- This also terminates and with no successful parse as expected
+ex26_3 :: [(Expr, String)]
+ex26_3 = runParser eLeft1 "34 + 12"
+
+-- This does not terminate. What is the problem? It is looking for an expression
+-- followed by a white space. But when looking for an expression, part of the
+-- work will be to look for an expression followed by a white space. We can 
+-- see there is an inifinite loop.
+ex26_4 :: [(Expr, String)]
+ex26_4 = runParser eRight1 "34 + 12"
+
+-- This does not terminate. What is the problem? It is looking for an expression
+-- followed by the terminal symbol '+' followed by an expression. But when 
+-- looking for the first expression, part of the work will be to look for an
+-- expression followed by '+' followed by an expression. 
+ex26_5 :: [(Expr, String)]
+ex26_5 = runParser eMul1 "34 + 12"
+
+-- This does not terminate
+ex26_6 :: [(Expr, String)]
+ex26_6 = runParser eAdd1 "34 + 12"
+
+-- The problem is our grammar has left recursion. We need to transform it
+-- into an equivalent grammar where left recursion has been removed.
 -- Following the paper: "Removing Left Recursion from Context-Free Grammars"
--- Robert C. Moore
+-- Robert C. Moore, Microsoft Research
+
+-- Our grammar is of the form:
+--
+-- Non left-recursive rules
+-- E -> N 
+--    | Sp E 
+--    | '(' E ')'
+--
+-- Left-recursive rules
+-- E -> E e1    -- e1 = '+' E
+--    | E e2    -- e2 = '*' E
+--    | E e3    -- e3 = Sp
+
+-- Following the paper, a non left-recursive yet equivalent grammar is
+--
+-- E -> N
+--    | N E'
+--    | Sp E
+--    | Sp E E'
+--    | '(' E ')'
+--    | '(' E ')' E'
+--
+--  where the production rules for E' are as follows:
+-- 
+-- E' -> e1
+--     | e1 E'
+--     | e2 
+--     | e2 E'
+--     | e3
+--     | e3 E'
 
 expr :: Parser Expr
-expr = eNum <|> eNumExpr' <|> eBracket
+expr = undefined
 
-eBracket :: Parser Expr
-eBracket = do
-    _ <- char '('       -- expects '('
-    e <- expr          -- get an expression 
-    _ <- char ')'       -- expects '}'
-    return e
 
-eNumExpr' :: Parser Expr
-eNumExpr' = do
-    n     <- eNum
-    (c,e) <- expr'
-    if c == '+'
-        then return $ EAdd n e
-        else return $ EMul n e
-
-expr' :: Parser (Char, Expr)
-expr' = do
-    c <- op
-    e <- expr <|> 
-        do
-            e <- expr
-            (c',e') <- expr'
-            if c' == '+'
-                then return $ EAdd e e'
-                else return $ EMul e e'
-    return (c,e)
-
-ex27 :: [(Expr, String)]
-ex27 = runParser expr "56*34+12"
-
-parse :: String -> Either String Expr
-parse s = case map fst $ filter (null . snd) $ runParser expr s of
-    []  -> Left "Cannot parse input string"
-    [e] -> Right e
-    xs  -> Left $ "Ambiguous parse: " ++ show xs
-
-ex28 :: Either String Expr
-ex28 = parse "56*(23+12)"       -- Right (EMul (ENum 56) (EAdd (ENum 23) (ENum 12)))
-
-ex29 :: Either String Expr
-ex29 = parse "some gibberish"   -- Left "Cannot parse input string"
-
-ex30 :: Either String Expr
-ex30 = parse "(34+12)*56"
