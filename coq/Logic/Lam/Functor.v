@@ -35,3 +35,11 @@ Proof.
     - rewrite IH1, IH2. reflexivity.
     - rewrite IH1. reflexivity.
 Qed.
+
+(* Appears convenient for real use.                                             *)
+Lemma fmap_comp' : forall (v w u:Type) (f:v -> w) (g:w -> u) (t:T v),
+    fmap (g ; f) t = fmap g (fmap f t).
+Proof.
+    intros v w u f g t. change (fmap (g ; f) t = (fmap g ; fmap f) t).
+    rewrite fmap_comp. reflexivity.
+Qed.

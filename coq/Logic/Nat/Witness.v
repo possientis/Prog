@@ -1,4 +1,7 @@
+Require Import Logic.Class.Ord.
+
 Require Import Logic.Nat.Leq.
+Require Import Logic.Nat.Ord.
 
 Definition Dec (p:nat -> Prop) : Type := forall (n:nat), {p n} + {~p n}.  
 
@@ -49,9 +52,31 @@ Proof.
     apply Gn_imp_G0 with n. apply pn_imp_Gn. assumption.
 Defined.
 
-Definition asSmallest (p:nat -> Prop) (n:nat) : Prop :=
+(* Transform a predicate into another predicate which is satisfied when the     *)
+(* argument predicate is satisfied and it is the smallest value doing so.       *)
+Definition small (p:nat -> Prop) (n:nat) : Prop :=
     p n /\ forall (m:nat), p m -> n <= m.
 
+
+(* Expresses the idea that a predicate represents a finite subset of N.         *)
+Definition Finite (p:nat -> Prop) : Prop :=
+    exists (n:nat), forall (m:nat), p m -> m <= n.
+
+Definition truncate (p:nat -> Prop) (n:nat) : nat -> Prop :=
+    fun (m:nat) => p m /\ m <= n.
+
+(*
+Lemma technical : forall (p:nat -> Prop) (n m:nat), p n ->
+    small p m <-> small (truncate p n) m.
+Proof.
+    intros p n m H1. unfold small, truncate. split.
+    - intros [H2 H3]. split.
+        + split; try assumption. apply H3. assumption.
+        + intros k [H4 H5]. apply H3. assumption.
+    - intros [[H2 H3] H4]. split; try assumption. intros k H5.
+      apply leqTrans.
+Show.
+*)
 
 (*
 Lemma ex_imp_small : forall (p:nat -> Prop), 

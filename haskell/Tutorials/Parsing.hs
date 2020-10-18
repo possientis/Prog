@@ -778,7 +778,93 @@ ex26_6 = runParser eAdd1 "34 + 12"
 --     | e3
 --     | e3 E'
 
+
+-- Let us define a custom type for the data returned by an E' parser
+data E'
+    = AddE   Expr       -- parser finds a '+' then an expression
+    | AddEE' Expr E'    -- parser finds a '+' then an expression then an E'
+    | MulE   Expr       -- parser finds a '*' then an expression
+    | MulEE' Expr E'    -- parser finds a '*' then an expression then an E'
+    | Sp                -- parser finds a white space, nothing to return 
+    | SpE'   E'         -- parser finds a white space then an E' 
+
+-- We assume we have already written a parser expr :: Parser Expr and we wish
+-- to write a parser which corresponds to the non-terminal E'. Recall the
+-- production rules:
+-- E' -> + E
+--     | + E E'
+--     | * E 
+--     | * E E'
+--     | Sp
+--     | Sp E'
+
+expr' :: Parser E'
+expr' = pAddE <|> pAddEE' <|> pMulE <|> pMulEE' <|> pSp <|> pSpE'
+    where
+        pAddE = do
+            _ <- char '+'               -- expects a '+'
+            e <- expr                   -- expects an expression
+            return $ AddE e
+
+        pAddEE' = do
+            _  <- char '+'              -- expects a '+'
+            e  <- expr                  -- expects an expression
+            e' <- expr'                 -- expects an E'
+            return $ AddEE' e e'
+
+        pMulE   = do
+            _ <- char '*'               -- expects a '*'
+            e <- expr                   -- expects an expression
+            return $ MulE e
+
+        pMulEE' = do
+            _  <- char '*'              -- expects a '*'
+            e  <- expr                  -- expects an expression
+            e' <- expr'                 -- expects an E'
+            return $ MulEE' e e'
+
+        pSp     = do
+            _ <- white                  -- expects a whitespace
+            return Sp
+
+        pSpE'   = do
+            _  <- white                 -- expects a whitespace
+            e' <- expr'                 -- expects an E'
+            return $ SpE' e'
+
+-- main parser, parsing for E. Recall the production rules:
+-- E -> N
+--    | N E'
+--    | Sp E
+--    | Sp E E'
+--    | '(' E ')'
+--    | '(' E ')' E'
+
 expr :: Parser Expr
-expr = undefined
+expr = pNum <|> pNumE' <|> pSpE <|> pSpEE' <|> pBrEBr <|> pBrEBrE'
+
+pNum :: Parser Expr
+pNum = eNum
+
+pNumE' :: Parser Expr
+pNumE' = do
+    n  <- eNum
+    e' <- expr'
+    return $ case e' of
+        AddE e        -> EAdd n e   
+        AddEE' _e _f' -> undefined      -- Houston, we have a problem
+        _             -> undefined
+
+pSpE :: Parser Expr
+pSpE = undefined
+
+pSpEE' :: Parser Expr
+pSpEE' = undefined
+
+pBrEBr :: Parser Expr
+pBrEBr = undefined
+
+pBrEBrE' :: Parser Expr
+pBrEBrE' = undefined
 
 

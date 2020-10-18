@@ -7,15 +7,17 @@ module  Test.Debug
     )   where
 
 import DSL
---import Eval
---import Eval2
+import Eval     as E
+import Eval1
 import Pretty
 import Reduce
 
 main :: IO ()
 main = do
-    putStrLn $ "e12 = " ++ showExpr e12
-    print $ map showExpr $ take 10 $ trace e12
+    let e = e2
+    putStrLn $ "e       = " ++ showExpr e
+    putStrLn $ "eval e  = " ++ show (E.eval @ Eval1 e) 
+    mapM_ (putStrLn . showExpr) $ trace e
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 

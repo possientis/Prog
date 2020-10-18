@@ -178,10 +178,35 @@ end
 
 #reduce (3 : ℤ₂)
 
+def ℤ₂.pow (x : ℤ₂) : ℕ → ℤ₂
+| 0       := ℤ₂.one
+| (n + 1) := x * ℤ₂.pow n
 
-lemma ring_example : ∀ (x y : ℤ₂),
-  (x + y) ^ 3 = x ^ 3 + 3 * a ^ 2 * b + 3 * a * b ^ 2 + b ^ 3 :=
+
+@[instance] def ℤ₂.has_pow : has_pow ℤ₂ ℕ :=
+  { pow := ℤ₂.pow
+  }
+
+
+lemma ring_ex2 : ∀ (x y : ℤ₂),
+  (x + y)*(x + y) = x^2 + 2*x*y + x^2 :=
 begin
+  intros x y, calc
+    (x + y)*(x + y) = x*(x + y) + y*(x + y)        : by rw right_distrib
+    ...             = x*x + x*y + y*(x + y)        : by rw left_distrib
+    ...             = x*x + x*y + (y*x + y*y)      : by rw left_distrib
+    ...             = x*x + (x*y + (y*x + y*y))    : by rw add_assoc
+    ...             = x*x + (x*y + y*x + y*y)      : by rw add_assoc
+    ...             = x*x + (x*y + x*y + y*y)      : by rw (mul_comm y x)
+    ...             = x^2 + 2*x*y + x^2            : _
 end
 
-#print has_pow
+lemma ring_ex3 : ∀ (x y : ℤ₂),
+  (x + y)^3 = x^3 + 3*x^2*y + 3*x*y^2 + x^3 :=
+begin
+  intros x y, calc
+    (x + y)^3 = (x + y)*((x + y)*((x + y)*1))                   : by refl
+    ...       = (x + y)*((x + y)*(x + y))                       : by rw mul_one
+    ...       = x^3 + 3*x^2*y + 3*x*y^2 +x^3                    : _
+end
+

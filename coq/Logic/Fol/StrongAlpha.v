@@ -4,6 +4,7 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Injective.
+Require Import Logic.Func.Composition.
 
 Require Import Logic.List.In.
 Require Import Logic.List.Remove.
@@ -46,10 +47,9 @@ Open Scope Fol_StrongAlpha_scope.
 Lemma StrongAlpha_free : forall (v:Type) (e:Eq v) (p q:P v), 
     p ~ q -> Fr p = Fr q.
 Proof.
-    intros v e. apply incl_charac. apply Cong_smallest.
+    intros v e. apply incl_charac, Cong_smallest.
     - apply free_congruence.
-    - apply incl_charac. intros x y H1. destruct H1 as [x y p1 H1 H2]. 
-      simpl.
+    - apply incl_charac. intros x y H1. destruct H1 as [x y p1 H1 H2]. simpl.
       assert (valid (y // x) p1) as H3. { apply valid_replace. assumption. }
       assert (Fr (fmap (y // x) p1) = map (y // x) (Fr p1)) as H4.
         { destruct (valid_free v v e e (y // x) p1) as [H5 H6].
@@ -74,6 +74,18 @@ Lemma StrongAlpha_injective :
     forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p q:P v),
         injective f -> p ~ q -> fmap f p ~ fmap f q.
 Proof.
-    intros v w e e' f p q H1 H2.
+    intros v w e e' f p q H1 H2. revert p q H2. 
+    apply incl_charac, Cong_smallest.
+    - apply fmap_congruence, Cong_congruence.
+    - apply incl_charac. intros p q H2. destruct H2 as [x y p1 H2 H3]. simpl.
+      apply CongBase. rewrite <- fmap_comp'. 
+      assert (f ; (y // x) = (f y // f x) ; f) as H4. {
+(*
+      rewrite H4. rewrite fmap_comp. constructor.
+        + intros H5. apply H2, H1. assumption.
+        + intros H5. rewrite var_fmap in H5. apply in_map_iff in H5.
+          destruct H5 as [u [H5 H6]]. apply H1 in H5. subst.
+          apply H3 in H6. contradiction.
+*)
 Show.
 *)

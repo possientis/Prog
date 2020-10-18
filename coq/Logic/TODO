@@ -1,4 +1,5 @@
 Logic:
+Fol/StrongAlpha
 Lam/StrongAlpha
 go back to book
 
@@ -8,8 +9,7 @@ Latex:
 
 
 Set Theory:
-Lang1/Context
-Lang1/Context compare with Lang1/Environment
+Lang1/Context: continue parallel with Lang1/Environment
 Lang1/SemanCtx compare with agda
 Lang1/SemanCtx compare with Lang1/Semantics
 axiom of choice?
@@ -22,12 +22,10 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
-Rel/Range
-Rel/Domain
 go back to book
 
 Computational Type Theory with Coq:
-Nat/Witness. pen and paper? or does witness return smallest?
+Nat/Witness: finish proof forcing yourself to use Ord class for nat ?
 Nat: N <-> N x X
 go back to book
 
