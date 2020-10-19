@@ -200,10 +200,35 @@ _ = refl
 twoᶜ-sucᶜ-zero : ∅ ⊢ twoᶜ · sucᶜ · `zero ∶ `ℕ
 twoᶜ-sucᶜ-zero = ⊢· (⊢· ⊢twoᶜ ⊢sucᶜ) ⊢zero
 
+_ : Steps (twoᶜ · sucᶜ · `zero)
+_ = eval (gas 100) twoᶜ-sucᶜ-zero
+
 _ : eval (gas 100) twoᶜ-sucᶜ-zero ≡ steps
   ( twoᶜ · sucᶜ · `zero
-    —→⟨ ξ-·₂ {!!} {!!} ⟩ 
+    —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
+    _
+    —→⟨ β-ƛ V-zero ⟩
+    _
+    —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
+    _
+    —→⟨ β-ƛ (V-suc V-zero) ⟩
+    `suc `suc `zero ∎)
+  (done (V-suc (V-suc V-zero)))
+
+_ = refl
+
+_ : Steps (plus · two · two)
+_ = eval (gas 100) ⊢2+2
+
+_ : eval (gas 100) ⊢2+2 ≡ steps
+    (plus · two · two
+    —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
+    _
+    —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+    _
+    —→⟨ {!!} ⟩
     {!!})
-  {!!}
+
+    (done {!!})
 
 _ = {!!}
