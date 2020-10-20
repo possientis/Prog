@@ -162,6 +162,29 @@ and $G(g):G(d)\to G(d')$.
     \end{eqnarray*}
 \end{proof}
 
+Suppose $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ are functors where \Cat\ and \Dat\ 
+are locally small categories and let us assume that $(F,G)$ is an adjunction, 
+or equivalently that we have a unit $\eta:I_{\cal C}\Rightarrow G\circ F$. 
+Then given $c\in\Cat$ and $d\in\Dat$, we can consider the function
+$\alpha(c,d):\Dat(F(c),d)\to\Cat(c,G(d))$ which maps any arrow $g:F(c)\to d\ @\ 
+\Dat$ to the arrow $\alpha(c,d)(g):c\to G(d)$ defined by the equation
+$\alpha(c,d)(g)=G(g)\circ\eta_{c}$. This is a valid definition since we have
+$\eta_{c}:c\to G(F(c))$ and $G(g):G(F(c))\to G(d)$ and $G(g)\circ\eta_{c}$
+is a well-defined element of $\Cat(c,G(g))$. So $\alpha(c,d)$ is a well-defined
+function from the hom-set $\Dat(F(c),d)$ to the hom-set $\Cat(c,G(d)$. In short,
+we have $\alpha(c,d):F^{*}(c,d)\to G^{*}(c,d)$ where $F^{*}$ and $G^{*}$
+are the left and right-hand side functors associated with $(F,G)$. 
+    \[
+        \begin{tikzcd}
+            \Cop\times\Dat \arrow[r, "F^{*}", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "G^{*}", bend right = 50, ""{name=D, above}]
+              & \Set
+            \arrow[Rightarrow, "\,\alpha", from = U, to = D]
+        \end{tikzcd}
+    \]
+The obvious question to ask is whether the map $\alpha:\ob\ (\Cop\times\Dat)
+\to\arr\ \Set$ we have just defined is in fact a natural transformation:
+
 \begin{prop}\label{Adj:prop:natural:left:right}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
     are locally small categories. Let $\eta$ be a unit of $(F,G)$. Consider the
