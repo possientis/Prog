@@ -52,7 +52,6 @@ write addr v = do
         Left e -> throwError $ errorWrite addr e
         Right heap' -> do
             put heap'
-            tell ["write at address " ++ show addr ++ ": " ++ show v]
 
 -- Run computation in a local environment
 localEnv 

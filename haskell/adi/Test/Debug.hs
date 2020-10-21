@@ -3,21 +3,25 @@
 module  Test.Debug
     (   main
     ,   e1, e2, e3, e4, e5, e6, e7, e8, e9, e10
-    ,   e11, e12
+    ,   e11, e12, e13
     )   where
 
 import DSL
 import Eval     as E
 import Eval1
-import Pretty
-import Reduce
+--import Pretty
+--import Reduce
 
 main :: IO ()
+main = evalIO @ Eval1 e13
+{-
 main = do
-    let e = e2
+    let e = e5
     putStrLn $ "e       = " ++ showExpr e
     putStrLn $ "eval e  = " ++ show (E.eval @ Eval1 e) 
+    putStrLn "Reduction:"
     mapM_ (putStrLn . showExpr) $ trace e
+-}
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
@@ -55,6 +59,9 @@ e11 = eNat 0
 -- reduces for ever
 e12 :: Expr
 e12 = eRec "x" (eSuc (eVar "x"))
+
+e13 :: Expr
+e13 = eMul (eAdd (eNum 3) (eNum 4)) (eNum 9)
 
 
 

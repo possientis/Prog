@@ -51,18 +51,17 @@ evalAll :: forall m . (Eval m) => Expr -> Either Error (Value, Log)
 evalAll e = runEval $ (eval' @ m) e
 
 evalIO :: forall m . (Eval m) => Expr -> IO ()
-evalIO e = do
-    putStrLn $ "\nExpression: " ++ showExpr e ++ "\n"
-    case (evalAll @ m) e of
+evalIO e = case (evalAll @ m) e of
         Left err    -> printTrace err
-        Right (v,w) -> do 
+        Right (v,w) -> do
+            print v
             mapM_ putStrLn w
-            putStrLn $ "\nResult: " ++ show v ++ "\n"
 
 eval' :: (Eval m) => Expr -> m Value
 eval' e = do
-    env <- ask
-    tell ["Evaluating exp = " ++ showExpr e ++ ", env = " ++ show env ]
+    env  <- ask
+    heap <- get
+    tell [showExpr e ++ ", env = " ++ show env ++ ", heap = " ++ show heap]
     eval_ e eval'
 
 eval_ :: (Eval m) => Expr -> (Expr -> m Value) -> m Value
