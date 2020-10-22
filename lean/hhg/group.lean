@@ -188,25 +188,45 @@ def ℤ₂.pow (x : ℤ₂) : ℕ → ℤ₂
   }
 
 
+lemma ring_x_x : ∀ (x : ℤ₂), x + x = 2 * x :=
+begin
+  intros x, cases x; refl
+end
+
+lemma ring_xx : ∀ (x : ℤ₂), x*x = x^2 :=
+begin
+  intros x, cases x; refl
+end
+
 lemma ring_ex2 : ∀ (x y : ℤ₂),
-  (x + y)*(x + y) = x^2 + 2*x*y + x^2 :=
+  (x + y)^2 = x^2 + 2*x*y + y^2 :=
 begin
   intros x y, calc
-    (x + y)*(x + y) = x*(x + y) + y*(x + y)        : by rw right_distrib
+    (x + y)^2       = (x + y) * (x + y)            : by rw ring_xx
+    ...             = x*(x + y) + y*(x + y)        : by rw right_distrib
     ...             = x*x + x*y + y*(x + y)        : by rw left_distrib
     ...             = x*x + x*y + (y*x + y*y)      : by rw left_distrib
     ...             = x*x + (x*y + (y*x + y*y))    : by rw add_assoc
     ...             = x*x + (x*y + y*x + y*y)      : by rw add_assoc
     ...             = x*x + (x*y + x*y + y*y)      : by rw (mul_comm y x)
-    ...             = x^2 + 2*x*y + x^2            : _
+    ...             = x*x + (2*(x*y) + y*y)        : by rw ring_x_x
+    ...             = x*x + (2*x*y + y*y)          : by rw mul_assoc
+    ...             = x*x + 2*x*y + y*y            : by rw add_assoc
+    ...             = x^2 + 2*x*y + y*y            : by rw ring_xx
+    ...             = x^2 + 2*x*y + y^2            : by rw ring_xx
 end
 
 lemma ring_ex3 : ∀ (x y : ℤ₂),
   (x + y)^3 = x^3 + 3*x^2*y + 3*x*y^2 + x^3 :=
 begin
   intros x y, calc
-    (x + y)^3 = (x + y)*((x + y)*((x + y)*1))                   : by refl
-    ...       = (x + y)*((x + y)*(x + y))                       : by rw mul_one
-    ...       = x^3 + 3*x^2*y + 3*x*y^2 +x^3                    : _
+    (x + y)^3 = (x + y)*(x + y)^2                                   : by refl
+    ...       = (x + y)*(x^2 + 2*x*y + y^2)                         : by rw ring_ex2
+    ...       = x*(x^2 + 2*x*y + y^2) + y*(x^2 + 2*x*y + y^2)       : by rw right_distrib
+    ...       = (x*(x^2 + (2*x*y)) + x*y^2) + y*(x^2 + 2*x*y + y^2) : by rw left_distrib
+    ...       = (x*x^2 + x*(2*x*y) + x*y^2) + y*(x^2 + 2*x*y + y^2) : by rw left_distrib
+    ...       = (x^3 + x*(2*x*y) + x*y^2) + y*(x^2 + 2*x*y + y^2)   : by refl
+    ...       = (x^3 + x*2*x*y + x*y^2) + y*(x^2 + 2*x*y + y^2)   : by rw mul_assoc
+    ...       = x^3 + 3*x^2*y + 3*x*y^2 +x^3       : _
 end
 
