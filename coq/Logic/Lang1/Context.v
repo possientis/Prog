@@ -9,6 +9,7 @@ Require Import Logic.Fol.Syntax.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Elem.
+Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
 
@@ -37,6 +38,10 @@ Inductive Find : Context -> Binding -> Prop :=
     n <> m      -> 
     Find G n~>x -> 
     Find (G ; m~>y) n~>x
+| FindE : forall (G:Context) (n:nat) (x y:set),
+    x == y      ->
+    Find G n~>x ->
+    Find G n~>y
 .
 
 Notation "G ':>' x" := (Find G x)
@@ -57,6 +62,13 @@ Proof.
     intros G n m x y H1 H2. constructor; assumption.
 Qed.
 
+(* Just restating constructor FindS with custom notations.                      *)
+Lemma findE : forall (G:Context) (n:nat) (x y:set),
+    x == y -> G :> n~>x -> G :> n~>y.
+Proof.
+    intros G n x y H1 H2. apply FindE with x; assumption.
+Qed.
+
 Definition ctxIncl (G H:Context) : Prop :=
     forall (n:nat) (x:set), G :> n~>x -> H :> n~>x.
 
@@ -73,13 +85,16 @@ Proof.
     remember (G ; n~>x) as G' eqn:G1. remember (H ; n~>x) as H' eqn:H1. 
     remember (m~>y) as b eqn:H4.
     revert m y H H' G n x H4 H2 G1 H1.
-    destruct H3 as [G' n' x'|G' n' m' x' y' Hnm H1]; 
-    intros n x H H' G m y H2 H3 H4 H5; inversion H2; subst; clear H2;
-    inversion H4; subst; clear H4.
-    - apply findZ.
-    - apply findS; try assumption. apply H3. assumption.
+    induction H3 as [G' n' x'|G' n' m' x' y' Hnm H1 IH|G' n' x' y' Hxy H1 IH];
+    intros n x H H' G m y H2 H3 H4 H5; inversion H2; subst; clear H2.
+    - inversion H4. subst. clear H4. apply findZ.
+    - inversion H4. subst. clear H4. apply findS; 
+      try assumption. apply H3. assumption.
+    - apply findE with x'; try assumption.
+      apply (IH n x' H (H ; m~>y) G m y); try reflexivity. assumption.
 Qed.
 
+(*
 Lemma ctxInclRefl : forall (G:Context), G <= G.
 Proof.
     unfold ctxIncl. intros G n x. auto.
@@ -145,3 +160,4 @@ Qed.
 (* Not very useful. Just following the parallel with Environment.               *)
 Definition bind (G:Context) (n:nat) (x:set) : Context := G ; n~>x. 
 
+*)
