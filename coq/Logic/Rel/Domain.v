@@ -57,6 +57,27 @@ Proof.
     - destruct H1 as [z [H1 H2]]. destruct H1. assumption.
 Qed.
 
+Lemma dom_comp : forall (a b c:Type) (r:R a b) (s:R b c),
+    dom (s ; r) = dom (dom s ; r).
+Proof.
+    intros a b c r s. apply Ext. intros x y. split; intros H1.
+    - destruct H1 as [x [y H1]]. constructor. unfold comp in H1.
+      destruct H1 as [z [H1 H2]]. exists z. unfold comp. exists z.
+      split; try assumption. constructor. exists y. assumption.
+    - destruct H1 as [x [y H1]]. constructor. unfold comp in H1.
+      destruct H1 as [z [H1 H2]]. destruct H2 as [z [y H2]].
+      exists y. exists z. split; assumption.
+Qed.
+
+Lemma dom_inter_conv : forall (a b:Type) (r s:R a b), 
+    dom (s /\ r) = (id /\ (conv r ; s)).
+Proof.
+    intros a b r s. apply Ext. intros x y. split; intros H1.
+    - destruct H1 as [x [y [H1 H2]]]. split; try constructor.
+      exists y. split; assumption.
+    - destruct H1 as [H1 [z [H2 H3]]]. destruct H1. constructor.
+      exists z. split; assumption.
+Qed.
 
 Lemma dom_rng_conv : forall (a b:Type) (r:R a b), dom r = rng (conv r).
 Proof.
@@ -69,10 +90,4 @@ Proof.
     intros a b r. apply Ext. intros x y. split; intros H1;
     destruct H1 as [y [x H1]]; constructor; exists x; assumption.
 Qed.
-
-
-
-
-
-
 

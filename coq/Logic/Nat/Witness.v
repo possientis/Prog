@@ -5,8 +5,44 @@ Require Import Logic.Class.Ord.
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Ord.
 
+(* Decidability of predicate.                                                   *)
 Definition Dec (p:nat -> Prop) : Type := forall (n:nat), {p n} + {~p n}.  
 
+(* Weak decidability of predicate.                                              *)
+Definition Wec (p:nat -> Prop) : Type := forall (n:nat), p n \/ ~p n.
+
+Lemma DecWec : forall (p:nat -> Prop), Dec p -> Wec p.
+Proof.
+    intros p q n. destruct (q n) as [H1|H1].
+    - left. assumption.
+    - right. assumption.
+Qed.
+
+(*
+Lemma boundedWec : forall (p:nat -> Prop), Wec p -> forall (n:nat), 
+    (exists (m:nat), p m /\ m <= n) \/ ~(exists (m:nat), p m /\ m <= n).
+Proof.
+    intros p H1. induction n as [|n IH].
+    - destruct (H1 0) as [H2|H2].
+        + left. exists 0. split; try assumption. apply le_n.
+        + right. intros [m [H3 H4]]. apply le_0 in H4. subst.
+          apply H2 in H3. contradiction.
+    - destruct IH as [H2|H2].
+        + destruct H2 as [m [H2 H3]].
+          left. exists m. split; try assumption. apply le_S. assumption.
+        + destruct (H1 (S n)) as [H3|H3].
+            { left. exists (S n). split; try assumption. apply le_n. }
+            { right. intros [m [H4 H5]].   
+              destruct (leqDec m n) as [H6|H6].
+                { apply H2. exists m. split; assumption. }
+                { assert (m = S n) as H7. 
+                    { apply le_antisym; try assumption.
+(*
+                  subst. apply H3 in H4. contradiction. }}
+*)
+Show.
+*)
+(*
 Inductive G (p : nat -> Prop) : nat -> Prop :=
 | mkG : forall (n:nat), (~ p n -> G p (S n)) -> G p n
 .
@@ -85,16 +121,17 @@ Proof.
         + apply le_trans with n; assumption.
 Qed.
 
+
 (*
 Lemma finiteNonEmptyHasSmallest : forall (p:nat -> Prop), Finite p -> 
     (exists (k:nat), p k) -> (exists (k:nat), small p k).
 Proof.
-    unfold Finite. intros p [n H1]. revert n H1. 
-    induction n as [|n IH]; intros H1 [m H2]; unfold small.
-    - assert (m = 0) as H3.
-        { apply le_0, H1. assumption. }
+    unfold Finite, small. intros p [n H1]. revert n p H1. 
+    induction n as [|n IH]; intros p H1 [m H2].
+    - assert (m = 0) as H3. { apply le_0, H1. assumption. }
       subst. exists 0. split; try assumption. intros m H3. apply le_0_n.
     -
+
 Show.
 *)
 
@@ -125,4 +162,5 @@ Lemma witnessSmallest : forall (p:nat -> Prop) (q:Dec p) (r:exists (n:nat), p n)
 Proof.
 
 Show.
+*)
 *)

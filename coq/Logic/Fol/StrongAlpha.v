@@ -101,3 +101,37 @@ Proof.
     rewrite H4, H5. apply (StrongAlpha_injective _ _ _).
     apply permute_injective. assumption.
 Qed.
+
+(*
+Lemma StrongAlpha_replace_self:
+    forall (v:Type) (e:Eq v) (p:P v) (x y:v),
+        ~ y :: var p -> 
+        ~ x :: Fr p  ->
+        fmap (y // x) p ~ p.
+Proof.
+    intros v e p x y. revert p. 
+    induction p as [|x' y'|p1 IH1 p2 IH2|x' p1 IH1]; 
+    intros H1 H2; simpl; simpl in H1; simpl in H2.
+    - apply Cong_reflexive.
+    - unfold replace. 
+      destruct (eqDec x' x) as [H3|H3]; destruct (eqDec y' x) as [H4|H4].
+        + subst. exfalso. apply H2. left. reflexivity.
+        + subst. exfalso. apply H2. left. reflexivity.
+        + subst. exfalso. apply H2. right. left. reflexivity.
+        + apply Cong_reflexive.
+    - apply CongImp.
+        + apply IH1; intros H3.
+            { apply H1, in_or_app. left. assumption. }
+            { apply H2, in_or_app. left. assumption. }
+        + apply IH2; intros H3.
+            { apply H1, in_or_app. right. assumption. }
+            { apply H2, in_or_app. right. assumption. }
+    - unfold replace. destruct (eqDec x' x) as [H3|H3].
+        + 
+(*
+        + apply CongAll. apply IH1; intros H4.
+            { apply H1. right. assumption. }
+            { apply H2. exfalso. apply H2. apply remove_still; assumption. }
+*)
+Show.
+*)

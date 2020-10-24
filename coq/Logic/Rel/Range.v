@@ -68,4 +68,12 @@ Proof.
       exists x. exists z. split; assumption.
 Qed.
 
-
+Lemma rng_inter_conv : forall (a b:Type) (r s:R a b), 
+    rng (s /\ r) = (id /\ (r ; conv s)).
+Proof.
+    intros a b r s. apply Ext. intros x y. split; intros H1.
+    - destruct H1 as [y [x [H1 H2]]]. split; try constructor.
+      exists x. split; assumption.
+    - destruct H1 as [H1 [z [H2 H3]]]. destruct H1. constructor.
+      exists z. split; assumption.
+Qed.

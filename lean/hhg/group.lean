@@ -220,13 +220,32 @@ lemma ring_ex3 : ∀ (x y : ℤ₂),
   (x + y)^3 = x^3 + 3*x^2*y + 3*x*y^2 + x^3 :=
 begin
   intros x y, calc
-    (x + y)^3 = (x + y)*(x + y)^2                                   : by refl
-    ...       = (x + y)*(x^2 + 2*x*y + y^2)                         : by rw ring_ex2
-    ...       = x*(x^2 + 2*x*y + y^2) + y*(x^2 + 2*x*y + y^2)       : by rw right_distrib
-    ...       = (x*(x^2 + (2*x*y)) + x*y^2) + y*(x^2 + 2*x*y + y^2) : by rw left_distrib
-    ...       = (x*x^2 + x*(2*x*y) + x*y^2) + y*(x^2 + 2*x*y + y^2) : by rw left_distrib
-    ...       = (x^3 + x*(2*x*y) + x*y^2) + y*(x^2 + 2*x*y + y^2)   : by refl
-    ...       = (x^3 + x*2*x*y + x*y^2) + y*(x^2 + 2*x*y + y^2)   : by rw mul_assoc
+    (x + y)^3 = (x + y)*(x + y)^2                                     : by refl
+    ...       = (x + y)*(x^2 + 2*x*y + y^2)                           : by rw ring_ex2
+    ...       = x*(x^2 + 2*x*y + y^2) + y*(x^2 + 2*x*y + y^2)         : by rw right_distrib
+    ...       = (x*(x^2 + (2*x*y)) + x*y^2) + y*(x^2 + 2*x*y + y^2)   : by rw left_distrib
+    ...       = (x*x^2 + x*(2*x*y) + x*y^2) + y*(x^2 + 2*x*y + y^2)   : by rw left_distrib
+    ...       = (x^3 + x*(2*x*y) + x*y^2) + y*(x^2 + 2*x*y + y^2)     : by refl
+    ...       = (x^3 + x*(2*x)*y + x*y^2) + y*(x^2 + 2*x*y + y^2)     : by rw (mul_assoc x (2*x) y)
+    ...       = (x^3 + x*2*x*y + x*y^2) + y*(x^2 + 2*x*y + y^2)       : by rw (mul_assoc x 2 x)
+    ...       = (x^3 + 2*x*x*y + x*y^2) + y*(x^2 + 2*x*y + y^2)       : by rw (mul_comm x 2)
+    ...       = (x^3 + 2*(x*x)*y + x*y^2) + y*(x^2 + 2*x*y + y^2)     : by rw (mul_assoc 2 x x)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + y*(x^2 + 2*x*y + y^2)       : by rw ring_xx
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (y*(x^2 + 2*x*y) + y*y^2)   : by rw left_distrib
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (y*(x^2 + 2*x*y) + y^3)     : by refl
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (y*x^2 + y*(2*x*y) + y^3)   : by rw left_distrib
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + y*(2*x*y) + y^3)   : by rw (mul_comm y (x^2))
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + y*(2*x)*y + y^3)   : by rw (mul_assoc y (2*x) y)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + y*2*x*y + y^3)     : by rw (mul_assoc y 2 x)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*y*x*y + y^3)     : by rw (mul_comm y 2)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*(y*x)*y + y^3)   : by rw (mul_assoc 2 y x)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*(x*y)*y + y^3)   : by rw (mul_comm y x)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*(x*y*y) + y^3)   : by rw (mul_assoc 2 (x*y) y)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*(x*(y*y)) + y^3) : by rw (mul_assoc x y y)
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*(x*y^2) + y^3)   : by rw ring_xx
+    ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*x*y^2 + y^3)     : by rw (mul_assoc 2 x (y^2))
+    ...       = x^3 + 2*x^2*y + x*y^2 + (x^2*y + 2*x*y^2) + y^3       : by rw (add_assoc (x^3 + 2*x^2*y + x*y^2))
+    ...       = x^3 + 2*x^2*y + x*y^2 + x^2*y + 2*x*y^2 + y^3         : by rw (add_assoc (x^3 + 2*x^2*y + x*y^2) (x^2*y))
     ...       = x^3 + 3*x^2*y + 3*x*y^2 +x^3       : _
 end
 
