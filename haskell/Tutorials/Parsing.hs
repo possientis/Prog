@@ -1,3 +1,4 @@
+import Data.List
 import Control.Monad        (ap, liftM)
 import Control.Applicative  (Alternative (..))
 
@@ -6,25 +7,25 @@ data Expr
     = ENum Integer
     | EAdd Expr Expr
     | EMul Expr Expr
-    deriving (Show)     -- Show instance so haskell can print expressions
+    deriving (Show, Eq)
 
 -- Example of expressions are as follows:
 
--- 34                                           -- concrete syntax
-e0 :: Expr
-e0 = ENum 34                                    -- abstract syntax
+-- 34                                               -- concrete syntax
+exp0 :: Expr
+exp0 = ENum 34                                      -- abstract syntax
 
--- 34 + 12                                      -- concrete syntax
-e1 :: Expr
-e1 = EAdd (ENum 34) (ENum 12)                   -- abstract syntax
+-- 34 + 12                                          -- concrete syntax
+exp1 :: Expr
+exp1 = EAdd (ENum 34) (ENum 12)                     -- abstract syntax
 
--- 34 * 12                                      -- concrete syntax
-e2 :: Expr
-e2 = EMul (ENum 34) (ENum 12)                   -- abstract syntax
+-- 34 * 12                                          -- concrete syntax
+exp2 :: Expr
+exp2 = EMul (ENum 34) (ENum 12)                     -- abstract syntax
 
--- 56 * (34 + 12)                               -- concrete syntax
-e3 :: Expr
-e3 = EMul (ENum 56) (EAdd (ENum 34) (ENum 12))  -- abstract syntax
+-- 56 * (34 + 12)                                   -- concrete syntax
+exp3 :: Expr
+exp3 = EMul (ENum 56) (EAdd (ENum 34) (ENum 12))    -- abstract syntax
 
 -- The notion of abstract syntax is very important as all the programming is done
 -- around it. It would be very difficult and messy to deal with the concrete syntax 
@@ -843,6 +844,21 @@ expr' = pAddE <|> pAddEE' <|> pMulE <|> pMulEE' <|> pSp <|> pSpE'
 expr :: Parser Expr
 expr = pNum <|> pNumE' <|> pSpE <|> pSpEE' <|> pBrEBr <|> pBrEBrE'
 
+-- Parser which combines and Expr with an E' without processing string
+-- This parser may return more than one successful parse
+-- THIS IS UNEXPLAINED AND HARD TO UNDERSTAND
+glue :: Expr -> E' -> Parser Expr
+glue e e' = Parser f where
+    f s = case e' of
+      AddE e2       -> [(EAdd e e2,s)]  -- one parse, same string 
+      AddEE' e2 e2' -> runParser (glue (EAdd e e2) e2') s
+                    ++ (map (\(e3,s') -> (EAdd e e3, s')) $ runParser (glue e2 e2') s)
+      MulE e2       -> [(EMul e e2,s)]  -- one parse, same string 
+      MulEE' e2 e2' -> runParser (glue (EMul e e2) e2') s
+                    ++ (map (\(e3,s') -> (EMul e e3, s')) $ runParser (glue e2 e2') s)
+      Sp            -> [(e,s)]          -- one parse, same string
+      SpE' e2'      -> runParser (glue e e2') s
+
 pNum :: Parser Expr
 pNum = eNum
 
@@ -850,21 +866,78 @@ pNumE' :: Parser Expr
 pNumE' = do
     n  <- eNum
     e' <- expr'
-    return $ case e' of
-        AddE e        -> EAdd n e   
-        AddEE' _e _f' -> undefined      -- Houston, we have a problem
-        _             -> undefined
+    glue n e'
 
 pSpE :: Parser Expr
-pSpE = undefined
+pSpE = do
+    _ <- white
+    expr
 
 pSpEE' :: Parser Expr
-pSpEE' = undefined
+pSpEE' = do
+    _  <- white
+    e  <- expr
+    e' <- expr'
+    glue e e' 
 
 pBrEBr :: Parser Expr
-pBrEBr = undefined
+pBrEBr = do
+    _ <- char '('
+    e <- expr
+    _ <- char ')'
+    return e
 
 pBrEBrE' :: Parser Expr
-pBrEBrE' = undefined
+pBrEBrE' = do
+    _  <- char '('
+    e  <- expr
+    _  <- char ')'
+    e' <- expr'
+    glue e e'
 
+-- So far so good
+ex27 :: [(Expr, String)]
+ex27 = runParser expr "34"              -- [(ENum 3,"4"),(ENum 34,"")] 
+
+-- Now we'd like to see only the results which process the whole string
+parse' :: String -> [Expr]
+parse' = map fst . filter (null . snd) . runParser expr 
+
+-- nice, only one result
+ex28 :: [Expr]
+ex28 = parse' "34"                      -- [ENum 34]
+
+-- many duplicated results
+ex29 :: [Expr]
+ex29 = parse' "    34   "               -- [ENum 34,ENum 34,ENum 34,....]
+
+-- let us remove duplicated results
+parse :: String -> [Expr]
+parse = nub . map fst . filter (null . snd) . runParser expr 
+
+-- nice, only one result
+ex30 :: [Expr]
+ex30 = parse "    34   "                -- [ENum 34]
+
+-- no result as expected
+ex31 :: [Expr]
+ex31 = parse "  3 4  "                  -- []
+
+-- beautiful
+ex32 :: [Expr]
+ex32 = parse "34 + 12"                  -- [EAdd (ENum 34) (ENum 12)]
+
+-- can cope with extra spaces and brackets....
+ex33 :: [Expr]
+ex33 = parse "   ((34)    + 12)  "      -- [EAdd (ENum 34) (ENum 12)]
+
+-- very nice, one single result
+ex34 :: [Expr]
+ex34 = parse "56 * (34 + 12)"           -- [EMul (ENum 56) (EAdd (ENum 34) (ENum 12))]
+
+--[EMul (ENum 56) (EAdd (ENum 34) (ENum 12)),EAdd (EMul (ENum 56) (ENum 34)) (ENum 12)]
+-- The parser correctly sees that there are two possible interpretations
+-- 56 * (34 + 12) ans (56 * 34) + 12
+ex35 :: [Expr]
+ex35 = parse "56 * 34 + 12"           
 

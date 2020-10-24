@@ -51,3 +51,26 @@ Proof.
             { reflexivity. }
 Qed.
 
+Lemma permute_injective : forall (v:Type) (e:Eq v) (x y:v), injective (y <:> x).
+Proof.
+    intros v e x y u u'. unfold permute. intros H1. 
+    destruct (eqDec u x) as [H2|H2].
+    - destruct (eqDec u' x) as [H3|H3].
+        + subst. reflexivity.
+        + destruct (eqDec u' y) as [H4|H4].
+            { subst. reflexivity. }
+            { rewrite H1 in H4. exfalso. apply H4. reflexivity. }
+    - destruct (eqDec u y) as [H3|H3].
+        + subst. destruct (eqDec u' x) as [H4|H4].
+            { subst. reflexivity. }
+            { destruct (eqDec u' y) as [H5|H5].
+                { subst. reflexivity. }
+                { rewrite H1 in H4. exfalso. apply H4. reflexivity. }}
+        + destruct (eqDec u' x) as [H4|H4].
+            { subst. exfalso. apply H3. reflexivity. }
+            { destruct (eqDec u' y) as [H5|H5].
+                { subst. exfalso. apply H2. reflexivity. }
+                { assumption. }}
+Qed.
+
+

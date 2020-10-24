@@ -5,6 +5,7 @@ Require Import Logic.Rel.Id.
 Require Import Logic.Rel.Range.
 Require Import Logic.Rel.Include.
 Require Import Logic.Rel.Converse.
+Require Import Logic.Rel.Intersect.
 Require Import Logic.Rel.Composition.
 Require Import Logic.Rel.Coreflexive.
 
@@ -37,6 +38,26 @@ Proof.
       destruct H3'. assumption.
 Qed.
 
+Lemma dom_inter : forall (a b:Type) (r:R a b),
+    dom r = ((conv r ; r) /\ id).
+Proof.
+    intros a b r. apply Ext. intros x y. split; intros H1.
+    - destruct H1 as [x [y H1]]. unfold inter, conv, comp. split.
+        + exists y. split; assumption.
+        + constructor.
+    - unfold inter in H1. destruct H1 as [H1 H2]. destruct H2 as [x].
+      constructor. unfold comp in H1. destruct H1 as [y [H1 H2]].
+      exists y. assumption.
+Qed.
+
+Lemma dom_comp_self : forall (a b:Type) (r:R a b), r = r ; dom r.
+Proof.
+    intros a b r. apply Ext. intros x y. unfold comp. split; intros H1.
+    - exists x. split; try assumption. constructor. exists y. assumption.
+    - destruct H1 as [z [H1 H2]]. destruct H1. assumption.
+Qed.
+
+
 Lemma dom_rng_conv : forall (a b:Type) (r:R a b), dom r = rng (conv r).
 Proof.
     intros a b r. apply Ext. intros x y. split; intros H1;
@@ -48,6 +69,10 @@ Proof.
     intros a b r. apply Ext. intros x y. split; intros H1;
     destruct H1 as [y [x H1]]; constructor; exists x; assumption.
 Qed.
+
+
+
+
 
 
 

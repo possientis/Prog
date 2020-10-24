@@ -94,17 +94,17 @@ Proof.
       apply (IH n x' H (H ; m~>y) G m y); try reflexivity. assumption.
 Qed.
 
-(*
+
 Lemma ctxInclRefl : forall (G:Context), G <= G.
 Proof.
     unfold ctxIncl. intros G n x. auto.
 Qed.
 
+
 Lemma ctxInclTrans : forall (G H K:Context), G <= H -> H <= K -> G <= K.
 Proof.
     unfold ctxIncl. intros G H K H1 H2 n x H3. apply H2, H1. assumption.
 Qed.
-
 
 Definition ctxEqual (G G':Context) : Prop := G <= G' /\ G' <= G.
 
@@ -160,4 +160,21 @@ Qed.
 (* Not very useful. Just following the parallel with Environment.               *)
 Definition bind (G:Context) (n:nat) (x:set) : Context := G ; n~>x. 
 
+Lemma bindSame : forall (G:Context) (n:nat) (x:set), bind G n x :> n~>x.
+Proof.
+    intros G n x. apply findZ.
+Qed.
+
+(* going nuts
+Lemma bindDiff : forall (G:Context) (n m:nat) (x y:set), n <> m -> 
+    bind G n x :> m~>y <-> G :> m~>y.
+Proof.
+    intros G n m x y H1. split; intros H2.
+    - unfold bind in H2. 
+      remember (G ; n~>x) as G' eqn:E. revert G E.
+      remember (m~>y) as b eqn:E. revert E. revert H1.
+      revert n m x y. destruct H2.
+        +
+
+Show.
 *)

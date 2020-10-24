@@ -1,4 +1,5 @@
 Logic:
+Prop 65
 Fol/StrongAlpha
 Lam/StrongAlpha
 go back to book
@@ -22,6 +23,7 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
+Rel/Domain: dom_comp (as per rng_comp)
 go back to book
 
 Computational Type Theory with Coq:

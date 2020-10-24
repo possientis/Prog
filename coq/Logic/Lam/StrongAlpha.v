@@ -3,6 +3,9 @@ Require Import List.
 Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
+Require Import Logic.Func.Permute.
+Require Import Logic.Func.Injective.
+Require Import Logic.Func.Composition.
 
 Require Import Logic.List.In.
 Require Import Logic.List.Remove.
@@ -68,3 +71,34 @@ Proof.
             { apply H3. reflexivity. }
 Qed.
 
+Lemma StrongAlpha_injective : 
+    forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t s:T v),
+        injective f -> t ~ s -> fmap f t ~ fmap f s.
+Proof.
+    intros v w e e' f t s H1 H2. revert t s H2. 
+    apply incl_charac, Cong_smallest.
+    - apply fmap_congruence, Cong_congruence.
+    - apply incl_charac. intros t s H2. destruct H2 as [x y p1 H2 H3]. simpl.
+      apply CongBase. rewrite <- fmap_comp'. 
+      assert (f ; (y // x) = (f y // f x) ; f) as H4. {
+        apply replace_injective. assumption. }
+      rewrite H4. rewrite fmap_comp. constructor.
+        + intros H5. apply H2, H1. assumption.
+        + intros H5. rewrite var_fmap in H5. apply in_map_iff in H5.
+          destruct H5 as [u [H5 H6]]. apply H1 in H5. subst.
+          apply H3 in H6. contradiction.
+Qed.
+
+Lemma StrongAlpha_replace : 
+    forall (v:Type) (e:Eq v) (t s:T v) (x y:v),
+        ~ y :: var t -> ~ y :: var s -> 
+            t ~ s -> fmap (y // x) t ~ fmap (y // x) s.
+Proof.
+    intros v e t s x y H1 H2 H3.
+    assert (fmap (y // x) t = fmap (y <:> x) t) as H4.
+        { apply var_replace_permute. assumption. }
+    assert (fmap (y // x) s = fmap (y <:> x) s) as H5.
+        { apply var_replace_permute. assumption. }
+    rewrite H4, H5. apply (StrongAlpha_injective _ _ _).
+    apply permute_injective. assumption.
+Qed.

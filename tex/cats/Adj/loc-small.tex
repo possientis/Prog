@@ -167,7 +167,7 @@ are locally small categories and let us assume that $(F,G)$ is an adjunction,
 or equivalently that we have a unit $\eta:I_{\cal C}\Rightarrow G\circ F$. 
 Then given $c\in\Cat$ and $d\in\Dat$, we can consider the function
 $\alpha(c,d):\Dat(F(c),d)\to\Cat(c,G(d))$ which maps any arrow $g:F(c)\to d\ @\ 
-\Dat$ to the arrow $\alpha(c,d)(g):c\to G(d)$ defined by the equation
+\Dat$ to the arrow $\alpha(c,d)(g):c\to G(d)\ @\ \Cat$ defined by the equation
 $\alpha(c,d)(g)=G(g)\circ\eta_{c}$. This is a valid definition since we have
 $\eta_{c}:c\to G(F(c))$ and $G(g):G(F(c))\to G(d)$ and $G(g)\circ\eta_{c}$
 is a well-defined element of $\Cat(c,G(g))$. So $\alpha(c,d)$ is a well-defined
@@ -183,7 +183,8 @@ are the left and right-hand side functors associated with $(F,G)$.
         \end{tikzcd}
     \]
 The obvious question to ask is whether the map $\alpha:\ob\ (\Cop\times\Dat)
-\to\arr\ \Set$ we have just defined is in fact a natural transformation:
+\to\arr\ \Set$ we have just defined is in fact a natural transformation.
+This answer is 'yes':
 
 \begin{prop}\label{Adj:prop:natural:left:right}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
@@ -197,3 +198,34 @@ The obvious question to ask is whether the map $\alpha:\ob\ (\Cop\times\Dat)
     $\alpha:F^{*}\Rightarrow G^{*}$, where $F^{*}$ and $G^{*}$ denote
     the left-hand-side and right-hand-side functors respectively.
 \end{prop}
+\begin{proof}
+    The left-hand-side functor $F^{*}$ as defined in~(\ref{Adj:def:lhs:functor})
+    and the right-hand-side functor $G^{*}$ as defined 
+    in~(\ref{Adj:def:rhs:functor}) are both functors 
+    $F^{*},G^{*}:\Cop\times\Dat\to\Set$. Using definition~(\ref{Nat:def:natural}),
+    in order for $\alpha$ to qualify as a natural transformation 
+    $\alpha:F^{*}\Rightarrow G^{*}$ it needs to be a map
+    $\alpha:\ob\ (\Cop\times\Dat)\to\arr\ \Set$ (which is the case) satisfying
+    $(1)$ and $(2)$ of definition~(\ref{Nat:def:natural}). We have
+    seen that $\alpha(c,d):F^{*}(c,d)\to G^{*}(c,d)$ for all $c\in\Cat$
+    and $d\in\Dat$, that is for all $(c,d)\in\Cop\times\Dat$. Hence $(1)$ of
+    definition~(\ref{Nat:def:natural}) is satisfied, and it remains to show~$(2)$.
+    So let $c,c'\in\Cat$, $d,d'\in\Dat$ and $k:(c,d)\to(c',d')\ @\ \Cop\times\Dat$.
+    Then $k=(f,g)$ for some $f:c'\to c\ @\ \Cat$ and $g:d \to d'\ @\ \Dat$, and
+    we need to show that the following square commutes:
+    \[
+        \begin{tikzcd}
+            c
+            &d\arrow[d,swap, "g"]
+            &\Dat(F(c),d)\arrow[r, "\alpha\mbox{$(c,d)$}"]
+             \arrow[d, swap,"F^{*}\mbox{$(f,g)$}"]
+            &\Cat(c,G(d))
+             \arrow[d, "G^{*}\mbox{$(f,g)$}"]
+            \\
+            c'\arrow[u, "f"]
+            &d'
+            &\Dat(F(c'),d')\arrow[r, swap, "\alpha\mbox{$(c',d')$}"]
+            &\Cat(c',G(d'))
+        \end{tikzcd}
+    \]
+\end{proof}
