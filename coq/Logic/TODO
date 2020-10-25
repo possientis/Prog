@@ -1,6 +1,6 @@
 Logic:
-Fol/StrongAlpha
-Lam/StrongAlpha
+choose notation for almost
+prop 67
 go back to book
 
 Haskell:
@@ -25,7 +25,7 @@ Algebra of Programming:
 go back to book
 
 Computational Type Theory with Coq:
-Nat/Witness
+Nat/Smallest
 Nat: N <-> N x N
 go back to book
 

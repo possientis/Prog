@@ -171,7 +171,7 @@ $\alpha(c,d):\Dat(F(c),d)\to\Cat(c,G(d))$ which maps any arrow $g:F(c)\to d\ @\
 $\alpha(c,d)(g)=G(g)\circ\eta_{c}$. This is a valid definition since we have
 $\eta_{c}:c\to G(F(c))$ and $G(g):G(F(c))\to G(d)$ and $G(g)\circ\eta_{c}$
 is a well-defined element of $\Cat(c,G(g))$. So $\alpha(c,d)$ is a well-defined
-function from the hom-set $\Dat(F(c),d)$ to the hom-set $\Cat(c,G(d)$. In short,
+function from the hom-set $\Dat(F(c),d)$ to the hom-set $\Cat(c,G(d))$. In short,
 we have $\alpha(c,d):F^{*}(c,d)\to G^{*}(c,d)$ where $F^{*}$ and $G^{*}$
 are the left and right-hand side functors associated with $(F,G)$. 
     \[
@@ -228,4 +228,116 @@ This answer is 'yes':
             &\Cat(c',G(d'))
         \end{tikzcd}
     \]
+    Hence we need to show that $G^{*}(f,g)\circ\alpha(c,d)=\alpha(c',d')\circ
+    F^{*}(f,g)$. This an equality between arrows in the category \Set. Using
+    proposition~(\ref{Cat:prop:set:arrow:equal}), we can prove this equality
+    simply by showing the two underlying untyped functions coincide on 
+    every $g'\in\Dat(F(c),d)$. So let $g'\in\Dat(F(c),d)$. We need to show that
+    $(G^{*}(f,g)\circ\alpha(c,d))(g')=(\alpha(c',d')\circ F^{*}(f,g))(g')$
+    which goes as follows:
+        \begin{eqnarray*}(G^{*}(f,g)\circ\alpha(c,d))(g')
+            &=&G^{*}(f,g)(\,\alpha(c,d)(g')\,)\\
+            &=&G^{*}(f,g)(\,G(g')\circ\eta_{c}\,)\\
+            \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
+            &=&G(g)\circ G(g')\circ\eta_{c}\circ f\\
+            \mbox{prop.~(\ref{Adj:prop:unit:natural})}\ \to\ 
+            &=&G(g)\circ G(g')\circ (G\circ F)(f)\circ\eta_{c'}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\,g\circ g'\circ F(f)\,)\circ\eta_{c'}\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
+            &=&G(\,F^{*}(f,g)(g')\,)\circ\eta_{c'}\\
+            &=&\alpha(c',d')(\,F^{*}(f,g)(g'))\\
+            &=&(\alpha(c',d')\circ F^{*}(f,g))(g')\\
+        \end{eqnarray*}
+\end{proof}
+
+Suppose $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ are functors where \Cat\ and \Dat\ 
+are locally small categories and let us assume that $(F,G)$ is an adjunction, 
+or equivalently that we have a counit $\epsilon:F\circ G\Rightarrow I_{\cal D}$. 
+Then given $c\in\Cat$ and $d\in\Dat$, we can consider the function
+$\beta(c,d):\Cat(c,G(d))\to\Dat(F(c),d)$ which maps any arrow $f:c\to G(d)\ @\ 
+\Cat$ to the arrow $\beta(c,d)(f):F(c)\to d\ @\ \Dat$ defined by the equation
+$\beta(c,d)(f)=\epsilon_{d}\circ F(f)$. This is a valid definition since we see 
+that
+$F(f):F(c)\to F(G(d))$ and $\epsilon_{d}:F(G(d))\to d$ and $\epsilon_{d}\circ 
+F(f)$ is a well-defined element of $\Dat(F(c),d)$. So $\beta(c,d)$ is a 
+well-defined function from the hom-set $\Cat(c,G(d))$ to the hom-set 
+$\Dat(F(c),d)$. In short, $\beta(c,d):G^{*}(c,d)\to F^{*}(c,d)$ 
+where $F^{*}$ and $G^{*}$
+are the left and right-hand side functors of $(F,G)$. 
+    \[
+        \begin{tikzcd}
+            \Cop\times\Dat \arrow[r, "G^{*}", bend left  = 50, ""{name=U, below}]
+                 \arrow[r, swap, "F^{*}", bend right = 50, ""{name=D, above}]
+              & \Set
+            \arrow[Rightarrow, "\,\beta", from = U, to = D]
+        \end{tikzcd}
+    \]
+The obvious question to ask is whether the map $\beta:\ob\ (\Cop\times\Dat)
+\to\arr\ \Set$ we have just defined is in fact a natural transformation.
+This answer is 'yes':
+
+\begin{prop}\label{Adj:prop:natural:right:left}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Let $\epsilon$ be a counit of $(F,G)$. 
+    Consider the map $\beta:\ob\ (\Cop\times\Dat)\to\arr\ \Set$ defined 
+    for all $c\in\Cat$ and $d\in\Dat$ by:
+        \[
+            \beta(c,d)(f)=\epsilon_{d}\circ F(f)
+        \]
+    for all $f:c\to G(d)$. Then $\beta$ is a natural transformation 
+    $\beta:G^{*}\Rightarrow F^{*}$, where $F^{*}$ and $G^{*}$ denote
+    the left-hand-side and right-hand-side functors respectively.
+\end{prop}
+\begin{proof}TODO
+    The left-hand-side functor $F^{*}$ as defined in~(\ref{Adj:def:lhs:functor})
+    and the right-hand-side functor $G^{*}$ as defined 
+    in~(\ref{Adj:def:rhs:functor}) are both functors 
+    $F^{*},G^{*}:\Cop\times\Dat\to\Set$. Using definition~(\ref{Nat:def:natural}),
+    in order for $\alpha$ to qualify as a natural transformation 
+    $\alpha:F^{*}\Rightarrow G^{*}$ it needs to be a map
+    $\alpha:\ob\ (\Cop\times\Dat)\to\arr\ \Set$ (which is the case) satisfying
+    $(1)$ and $(2)$ of definition~(\ref{Nat:def:natural}). We have
+    seen that $\alpha(c,d):F^{*}(c,d)\to G^{*}(c,d)$ for all $c\in\Cat$
+    and $d\in\Dat$, that is for all $(c,d)\in\Cop\times\Dat$. Hence $(1)$ of
+    definition~(\ref{Nat:def:natural}) is satisfied, and it remains to show~$(2)$.
+    So let $c,c'\in\Cat$, $d,d'\in\Dat$ and $k:(c,d)\to(c',d')\ @\ \Cop\times\Dat$.
+    Then $k=(f,g)$ for some $f:c'\to c\ @\ \Cat$ and $g:d \to d'\ @\ \Dat$, and
+    we need to show that the following square commutes:
+    \[
+        \begin{tikzcd}
+            c
+            &d\arrow[d,swap, "g"]
+            &\Dat(F(c),d)\arrow[r, "\alpha\mbox{$(c,d)$}"]
+             \arrow[d, swap,"F^{*}\mbox{$(f,g)$}"]
+            &\Cat(c,G(d))
+             \arrow[d, "G^{*}\mbox{$(f,g)$}"]
+            \\
+            c'\arrow[u, "f"]
+            &d'
+            &\Dat(F(c'),d')\arrow[r, swap, "\alpha\mbox{$(c',d')$}"]
+            &\Cat(c',G(d'))
+        \end{tikzcd}
+    \]
+    Hence we need to show that $G^{*}(f,g)\circ\alpha(c,d)=\alpha(c',d')\circ
+    F^{*}(f,g)$. This an equality between arrows in the category \Set. Using
+    proposition~(\ref{Cat:prop:set:arrow:equal}), we can prove this equality
+    simply by showing the two underlying untyped functions coincide on 
+    every $g'\in\Dat(F(c),d)$. So let $g'\in\Dat(F(c),d)$. We need to show that
+    $(G^{*}(f,g)\circ\alpha(c,d))(g')=(\alpha(c',d')\circ F^{*}(f,g))(g')$
+    which goes as follows:
+        \begin{eqnarray*}(G^{*}(f,g)\circ\alpha(c,d))(g')
+            &=&G^{*}(f,g)(\,\alpha(c,d)(g')\,)\\
+            &=&G^{*}(f,g)(\,G(g')\circ\eta_{c}\,)\\
+            \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
+            &=&G(g)\circ G(g')\circ\eta_{c}\circ f\\
+            \mbox{prop.~(\ref{Adj:prop:unit:natural})}\ \to\ 
+            &=&G(g)\circ G(g')\circ (G\circ F)(f)\circ\eta_{c'}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\,g\circ g'\circ F(f)\,)\circ\eta_{c'}\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
+            &=&G(\,F^{*}(f,g)(g')\,)\circ\eta_{c'}\\
+            &=&\alpha(c',d')(\,F^{*}(f,g)(g'))\\
+            &=&(\alpha(c',d')\circ F^{*}(f,g))(g')\\
+        \end{eqnarray*}
 \end{proof}

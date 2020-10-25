@@ -3,9 +3,9 @@
 
 Require Import List.
 
-Require Import Logic.List.Filter.
+Require Import Logic.Axiom.Dec.
 
-Require Import Logic.Axiom.Decidable.
+Require Import Logic.List.Filter.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Incl.
@@ -26,7 +26,7 @@ Definition in_set (x:set) : set -> Prop := (fun (z:set) => z :: x).
 
 
 (* Having proved that set membership is decidable, so is our predicate 'in_set' *)
-Definition in_set_dec (x:set) : Dec (in_set x) := (fun (z:set) => elem_dec z x).
+Definition in_set_dec (x:set) : pDec (in_set x) := (fun (z:set) => elem_dec z x).
 
 (* We define the pairwise intersection x /\ y of x and y by restricting the     *)
 (* list of elements of x to those which also belong to y.                       *)

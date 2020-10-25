@@ -5,7 +5,7 @@ Require Import List.
 
 Require Import Logic.Class.Eq.
 
-Require Import Logic.Axiom.Decidable.
+Require Import Logic.Axiom.Dec.
 
 Require Import Logic.List.Filter.
 
@@ -65,8 +65,8 @@ Proof.
         + destruct (IH xs ys) as [H|H].
             { simpl. 
               remember (fun y => incl_n n x y /\ incl_n n y x) as p eqn:P.
-              assert (Dec p) as q.
-                { unfold Dec. intros y. 
+              assert (pDec p) as q.
+                { unfold pDec. intros y. 
                   destruct (IH x y) as [H1|H1]; destruct (IH y x) as [H2|H2].
                     { left. rewrite P. split; assumption. }
                     { right. rewrite P. intros [H3 H4]. apply H2. assumption. }

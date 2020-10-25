@@ -1,4 +1,16 @@
-Definition LEM : Prop :=  forall (p:Prop), p \/ ~p.
+Require Import Logic.Axiom.Wec.
+
+Definition LEM : Prop := forall (A:Prop), Wec A.
+
+Lemma LEMpWec : LEM -> forall (a:Type) (p:a -> Prop), pWec p.
+Proof.
+    intros L a p x. apply L.
+Qed.
+
+Lemma LEMpWec2 : LEM -> forall (a b:Type) (p:a -> b -> Prop), pWec2 p.
+Proof.
+    intros L a b p x y. apply L.
+Qed.
 
 Lemma LEMOr : LEM -> forall (p q:Prop), (~p -> q) <-> p \/ q.
 Proof.
@@ -36,4 +48,3 @@ Proof.
         + exfalso. apply H. intros x H''. apply H'. exists x. assumption.
     - intros [x H] H'. apply (H' x). assumption.
 Qed.
-

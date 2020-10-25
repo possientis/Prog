@@ -23,3 +23,14 @@ Proof.
     - apply le_S. assumption.
 Qed.
 
+Lemma not_le_ge : forall (n m:nat), ~ n <= m -> S m <= n.
+Proof.
+    intros n m. revert m n. induction m as [|m IH]; intros n H1.
+    - destruct n as [|n].
+        + exfalso.  apply H1, le_n.
+        + apply le_n_S, le_0_n.
+    - destruct n as [|n].
+        + exfalso. apply H1, le_0_n. 
+        + apply le_n_S, IH. intros H2. apply H1. apply le_n_S. assumption.
+Qed.
+

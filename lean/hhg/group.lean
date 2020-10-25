@@ -1,3 +1,5 @@
+open tactic.interactive
+
 inductive ℤ₂ : Type
 | zero
 | one
@@ -217,7 +219,7 @@ begin
 end
 
 lemma ring_ex3 : ∀ (x y : ℤ₂),
-  (x + y)^3 = x^3 + 3*x^2*y + 3*x*y^2 + x^3 :=
+  (x + y)^3 = x^3 + 3*x^2*y + 3*x*y^2 + y^3 :=
 begin
   intros x y, calc
     (x + y)^3 = (x + y)*(x + y)^2                                     : by refl
@@ -246,6 +248,31 @@ begin
     ...       = (x^3 + 2*x^2*y + x*y^2) + (x^2*y + 2*x*y^2 + y^3)     : by rw (mul_assoc 2 x (y^2))
     ...       = x^3 + 2*x^2*y + x*y^2 + (x^2*y + 2*x*y^2) + y^3       : by rw (add_assoc (x^3 + 2*x^2*y + x*y^2))
     ...       = x^3 + 2*x^2*y + x*y^2 + x^2*y + 2*x*y^2 + y^3         : by rw (add_assoc (x^3 + 2*x^2*y + x*y^2) (x^2*y))
-    ...       = x^3 + 3*x^2*y + 3*x*y^2 +x^3       : _
+    ...       = x^3 + 2*x^2*y + (x*y^2 + x^2*y) + 2*x*y^2 + y^3       : by rw (add_assoc (x^3 + 2*x^2*y) (x*y^2) (x^2*y))
+    ...       = x^3 + 2*x^2*y + (x^2*y + x*y^2) + 2*x*y^2 + y^3       : by rw (add_comm (x*y^2) (x^2*y))
+    ...       = x^3 + 2*x^2*y + x^2*y + x*y^2 + 2*x*y^2 + y^3         : by rw (add_assoc (x^3 + 2*x^2*y) (x^2*y) (x*y^2))
+    ...       = x^3 + (2*x^2*y + x^2*y) + x*y^2 + 2*x*y^2 + y^3       : by rw (add_assoc (x^3) (2*x^2*y) (x^2*y))
+    ...       = x^3 + (2*x^2*y + 1*x^2*y) + x*y^2 + 2*x*y^2 + y^3     : by rw one_mul
+    ...       = x^3 + (2*(x^2*y) + 1*x^2*y) + x*y^2 + 2*x*y^2 + y^3   : by rw (mul_assoc 2 (x^2) y)
+    ...       = x^3 + (2*(x^2*y) + 1*(x^2*y)) + x*y^2 + 2*x*y^2 + y^3 : by rw (mul_assoc 1 (x^2) y)
+    ...       = x^3 + (2 + 1)*(x^2*y) + x*y^2 + 2*x*y^2 + y^3         : by rw right_distrib
+    ...       = x^3 + (2 + 1)*x^2*y + x*y^2 + 2*x*y^2 + y^3           : by rw (mul_assoc (2 + 1) (x^2) y)
+    ...       = x^3 + 3*x^2*y + x*y^2 + 2*x*y^2 + y^3                 : by refl
+    ...       = x^3 + 3*x^2*y + 1*(x*y^2) + 2*x*y^2 + y^3             : by rw one_mul
+    ...       = x^3 + 3*x^2*y + 1*(x*y^2) + 2*(x*y^2) + y^3           : by rw (mul_assoc 2 x (y^2))
+    ...       = x^3 + 3*x^2*y + (1*(x*y^2) + 2*(x*y^2)) + y^3         : by rw (add_assoc (x^3 + 3*x^2*y) (1*(x*y^2)) (2*(x*y^2)))
+    ...       = x^3 + 3*x^2*y + (1 + 2)*(x*y^2) + y^3                 : by rw  right_distrib
+    ...       = x^3 + 3*x^2*y + 3*(x*y^2) + y^3                       : by refl
+    ...       = x^3 + 3*x^2*y + 3*x*y^2 + y^3                         : by rw (mul_assoc 3 x (y^2))
 end
+
+lemma neg_mul_neg_nat : ∀ (n : ℕ) (z : ℤ), (- z) * (- n) = z * n := sorry
+
+
+lemma norm_cast_ex1 : ∀ (n m : ℕ), (m : ℤ) = (n : ℤ) → m = n :=
+begin
+  intros n m H₁, norm_cast at H₁,  -- where is this defined ?
+end
+
+
 

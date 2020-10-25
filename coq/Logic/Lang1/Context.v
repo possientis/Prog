@@ -165,16 +165,37 @@ Proof.
     intros G n x. apply findZ.
 Qed.
 
-(* going nuts
 Lemma bindDiff : forall (G:Context) (n m:nat) (x y:set), n <> m -> 
     bind G n x :> m~>y <-> G :> m~>y.
 Proof.
     intros G n m x y H1. split; intros H2.
     - unfold bind in H2. 
       remember (G ; n~>x) as G' eqn:E. revert G E.
-      remember (m~>y) as b eqn:E. revert E. revert H1.
-      revert n m x y. destruct H2.
-        +
+      remember (m~>y) as b eqn:E. revert n m x y H1 E.
+      induction H2 as [G' n' x'|G' n' m' x' y' H1 H2 IH|G' n' x' y' H1 H2 IH];
+      intros n m x y H3 H4 G H5.
+        + exfalso. inversion H5. subst. clear H5. 
+          inversion H4. subst. apply H3. reflexivity.
+        + inversion H5. subst. assumption.
+        + inversion H4. subst. clear H4. apply findE with x'; try assumption.
+          apply (IH n m x x'); try reflexivity. assumption.
+    - apply FindS; try assumption. intros H3. subst. apply H1. reflexivity.
+Qed.
 
+(*
+Lemma bindEqual : forall (G:Context) (n m:nat) (x y z:set),
+    x == y -> bind G n x :> m~>z <-> bind G n y :> m~>z.
+Proof.
+    intros G n m x y z H1. split; intros H2.
+    - unfold bind in H2.
+      remember (G ; n~>x) as G' eqn:E. revert G E.
+      remember (m~>z) as b eqn:E. revert n m x y z H1 E.
+      induction H2 as [G' n' x'|G' n' m' x' y' H1 H2 IH|G' n' x' y' H1 H2 IH];
+      intros n m x y z H3 H4 G H5.
+        + inversion H5. subst. clear H5. inversion H4. subst. clear H4.
+          unfold bind. apply findE with y.
+            { apply equalSym. assumption. }
+            { apply FindZ. }
+        +
 Show.
 *)

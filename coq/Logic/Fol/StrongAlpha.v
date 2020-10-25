@@ -4,6 +4,7 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Permute.
+Require Import Logic.Func.Identity.
 Require Import Logic.Func.Injective.
 Require Import Logic.Func.Composition.
 
@@ -102,7 +103,6 @@ Proof.
     apply permute_injective. assumption.
 Qed.
 
-(*
 Lemma StrongAlpha_replace_self:
     forall (v:Type) (e:Eq v) (p:P v) (x y:v),
         ~ y :: var p -> 
@@ -127,11 +127,33 @@ Proof.
             { apply H1, in_or_app. right. assumption. }
             { apply H2, in_or_app. right. assumption. }
     - unfold replace. destruct (eqDec x' x) as [H3|H3].
-        + 
-(*
+        + subst. destruct (eqDec x y) as [H4|H4].
+            { subst. apply CongAll. fold (y // y). rewrite replace_x_x.
+              rewrite fmap_id. apply Cong_reflexive. }
+            { fold (y // x). apply Cong_symmetric, CongBase. 
+              constructor; try assumption.
+              intros H5. apply H1. right. assumption. }
         + apply CongAll. apply IH1; intros H4.
             { apply H1. right. assumption. }
             { apply H2. exfalso. apply H2. apply remove_still; assumption. }
-*)
-Show.
-*)
+Qed.
+
+Inductive AlmostStrongAlpha (v:Type) (e:Eq v) : P v -> P v -> Prop := 
+| ABot : AlmostStrongAlpha v e Bot Bot
+| AElem : forall (x y:v), AlmostStrongAlpha v e (Elem x y) (Elem x y)
+| AImp  : forall (p1 p2 q1 q2:P v), 
+    p1 ~ q1 -> 
+    p2 ~ q2 -> 
+    AlmostStrongAlpha v e (Imp p1 p2) (Imp q1 q2)
+| AAllx : forall (x:v) (p1 q1:P v), 
+    p1 ~ q1 -> 
+    AlmostStrongAlpha v e (All x p1) (All x q1)
+| AAllxy : forall (x y:v) (p1 q1 r:P v),
+    x <> y               ->
+    p1 ~ r               ->
+    q1 ~ fmap (y // x) r ->
+    ~ y :: var r         ->
+    AlmostStrongAlpha v e (All x p1) (All y q1)
+.
+
+Arguments AlmostStrongAlpha {v} {e}.

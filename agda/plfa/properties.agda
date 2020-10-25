@@ -271,9 +271,54 @@ _ : eval (gas 100) ⊢2+2ᶜ ≡ steps
     _
     —→⟨ ξ-·₂ V-ƛ (ξ-·₁ (β-ƛ V-ƛ)) ⟩
     _
+    —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
+    _
+    —→⟨ ξ-·₂ V-ƛ (ξ-·₂ V-ƛ (β-ƛ V-zero)) ⟩
+    _
+    —→⟨ ξ-·₂ V-ƛ (β-ƛ (V-suc V-zero)) ⟩
+    _
+    —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
+    _
+    —→⟨ ξ-·₂ V-ƛ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+    _
+    —→⟨ β-ƛ (V-suc (V-suc (V-suc V-zero))) ⟩
+    `suc `suc `suc `suc `zero
+    ∎)
+
+  (done (V-suc (V-suc (V-suc (V-suc V-zero)))))
+
+_ = refl
+
+⊢2*2 : ∀ {Γ : Context} → Γ ⊢ mul · two · two ∶ `ℕ
+⊢2*2 = ⊢· (⊢· (⊢μ (⊢ƛ (⊢ƛ (⊢case (⊢` (S' Z)) ⊢zero
+  (⊢· (⊢· ⊢plus (⊢` (S' Z)))
+  (⊢· (⊢· (⊢` (S' (S' (S' Z)))) (⊢` Z)) (⊢` (S' Z))))))))
+  (⊢suc (⊢suc ⊢zero))) (⊢suc (⊢suc ⊢zero))
+
+_ : Steps (mul · two · two)
+_ = eval (gas 100) ⊢2*2
+
+_ : eval (gas 100) ⊢2*2 ≡ steps
+  (mul · two · two
+    —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
+    _
+    —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+    _
+    —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
+    _
+    —→⟨ β-suc (V-suc V-zero) ⟩
+    _
+    —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
+    _
+    —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+    _
+    —→⟨ ξ-·₂ V-ƛ (ξ-·₁ (ξ-·₁ β-μ)) ⟩
+    _
     —→⟨ {!!} ⟩
     {!!})
 
-  (done {!!})
+  {!!}
 
 _ = {!!}
+
+

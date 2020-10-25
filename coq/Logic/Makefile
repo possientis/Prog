@@ -28,8 +28,9 @@ NORM_LIB  = -Q ${SET}/${NORM}   Logic.${SET}.${NORM}   -Q ../Logic Logic
 
 # Object files
 AXIOM_OBJ = ${AXIOM}/Extensionality.vo \
-			${AXIOM}/LEM.vo \
-			${AXIOM}/Decidable.vo
+			${AXIOM}/Dec.vo \
+			${AXIOM}/Wec.vo \
+			${AXIOM}/LEM.vo
 
 CLASS_OBJ = ${CLASS}/Ord.vo \
 		   	${CLASS}/Eq.vo	
@@ -62,6 +63,7 @@ REL_OBJ   = ${REL}/Properties.vo \
 NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
 			${NAT}/Ord.vo \
+			${NAT}/Wec.vo \
 			${NAT}/Max.vo \
 			${NAT}/Weaken.vo \
 			${NAT}/Plus.vo \
@@ -69,8 +71,9 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Minimal.vo \
 			${NAT}/Seq.vo \
 			${NAT}/Fresh.vo \
-			${NAT}/NatxNat.vo \
-			${NAT}/Witness.vo
+			${NAT}/Smallest.vo \
+			${NAT}/Witness.vo \
+			${NAT}/NatxNat.vo
 
 LIST_OBJ  = ${LIST}/In.vo \
 		   	${LIST}/Nil.vo \
@@ -244,6 +247,9 @@ ${NAT}/Eq.vo : ${NAT}/Eq.v
 	coqc $<			${NAT_LIB}
 
 ${NAT}/Leq.vo : ${NAT}/Leq.v
+	coqc $<			${NAT_LIB}
+
+${NAT}/Wec.vo : ${NAT}/Wec.v
 	coqc $<			${NAT_LIB}
 
 ${NAT}/Ord.vo : ${NAT}/Ord.v

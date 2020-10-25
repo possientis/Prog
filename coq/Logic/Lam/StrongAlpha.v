@@ -4,6 +4,7 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Permute.
+Require Import Logic.Func.Identity.
 Require Import Logic.Func.Injective.
 Require Import Logic.Func.Composition.
 
@@ -102,3 +103,54 @@ Proof.
     rewrite H4, H5. apply (StrongAlpha_injective _ _ _).
     apply permute_injective. assumption.
 Qed.
+
+Lemma StrongAlpha_replace_self:
+    forall (v:Type) (e:Eq v) (t:T v) (x y:v),
+        ~ y :: var t -> 
+        ~ x :: Fr t  ->
+        fmap (y // x) t ~ t.
+Proof.
+    intros v e t x y. revert t. 
+    induction t as [x'|p1 IH1 p2 IH2|x' p1 IH1]; 
+    intros H1 H2; simpl; simpl in H1; simpl in H2.
+    - unfold replace. 
+      destruct (eqDec x' x) as [H3|H3].
+        + subst. exfalso. apply H2. left. reflexivity.
+        + apply Cong_reflexive.
+    - apply CongApp.
+        + apply IH1; intros H3.
+            { apply H1, in_or_app. left. assumption. }
+            { apply H2, in_or_app. left. assumption. }
+        + apply IH2; intros H3.
+            { apply H1, in_or_app. right. assumption. }
+            { apply H2, in_or_app. right. assumption. }
+    - unfold replace. destruct (eqDec x' x) as [H3|H3].
+        + subst. destruct (eqDec x y) as [H4|H4].
+            { subst. apply CongLam. fold (y // y). rewrite replace_x_x.
+              rewrite fmap_id. apply Cong_reflexive. }
+            { fold (y // x). apply Cong_symmetric, CongBase. 
+              constructor; try assumption.
+              intros H5. apply H1. right. assumption. }
+        + apply CongLam. apply IH1; intros H4.
+            { apply H1. right. assumption. }
+            { apply H2. exfalso. apply H2. apply remove_still; assumption. }
+Qed.
+
+Inductive AlmostStrongAlpha (v:Type) (e:Eq v) : T v -> T v -> Prop := 
+| AVar : forall (x:v), AlmostStrongAlpha v e (Var x) (Var x)
+| AApp  : forall (t1 t2 s1 s2:T v), 
+    t1 ~ s1 -> 
+    t2 ~ s2 -> 
+    AlmostStrongAlpha v e (App t1 t2) (App s1 s2)
+| ALamx : forall (x:v) (t1 s1:T v), 
+    t1 ~ s1 -> 
+    AlmostStrongAlpha v e (Lam x t1) (Lam x s1)
+| ALamxy : forall (x y:v) (t1 s1 r:T v),
+    x <> y               ->
+    t1 ~ r               ->
+    s1 ~ fmap (y // x) r ->
+    ~ y :: var r         ->
+    AlmostStrongAlpha v e (Lam x t1) (Lam y s1)
+.
+
+Arguments AlmostStrongAlpha {v} {e}.
