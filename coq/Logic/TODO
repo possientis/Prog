@@ -22,6 +22,7 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
+Rel/Allegory: comp_distrib_inter_r in functional case
 go back to book
 
 Computational Type Theory with Coq:

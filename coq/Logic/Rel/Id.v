@@ -18,24 +18,24 @@ Proof.
     - rewrite H1. constructor.
 Qed.
 
-(* left-identity law.                                                           *)
-Lemma id_left : forall (a b:Type) (r:R a b), r ; id = r.
-Proof.
-    intros a b r. apply Ext. intros x y. unfold comp. split.
-    - intros [z [H1 H2]]. destruct H1. assumption.
-    - intros H1. exists x. split.
-        + constructor.
-        + assumption.
-Qed.
-
-(* right-identity law.                                                          *)
-Lemma id_right : forall (a b:Type) (r:R a b), id ; r = r.
+(* left-identity law.                                                          *)
+Lemma id_left : forall (a b:Type) (r:R a b), id ; r = r.
 Proof.
     intros a b r. apply Ext. intros x y. unfold comp. split.
     - intros [z [H1 H2]]. destruct H2 as [y]. assumption.
     - intros H1. exists y. split.
         + assumption.
         + constructor.
+Qed.
+
+(* right-identity law.                                                           *)
+Lemma id_right : forall (a b:Type) (r:R a b), r ; id = r.
+Proof.
+    intros a b r. apply Ext. intros x y. unfold comp. split.
+    - intros [z [H1 H2]]. destruct H1. assumption.
+    - intros H1. exists x. split.
+        + constructor.
+        + assumption.
 Qed.
 
 
