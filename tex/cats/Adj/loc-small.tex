@@ -184,7 +184,7 @@ are the left and right-hand side functors associated with $(F,G)$.
     \]
 The obvious question to ask is whether the map $\alpha:\ob\ (\Cop\times\Dat)
 \to\arr\ \Set$ we have just defined is in fact a natural transformation.
-This answer is 'yes':
+The answer is 'yes':
 
 \begin{prop}\label{Adj:prop:natural:left:right}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
@@ -229,7 +229,7 @@ This answer is 'yes':
         \end{tikzcd}
     \]
     Hence we need to show that $G^{*}(f,g)\circ\alpha(c,d)=\alpha(c',d')\circ
-    F^{*}(f,g)$. This an equality between arrows in the category \Set. Using
+    F^{*}(f,g)$. This is an equality between arrows in the category \Set. Using
     proposition~(\ref{Cat:prop:set:arrow:equal}), we can prove this equality
     simply by showing the two underlying untyped functions coincide on 
     every $g'\in\Dat(F(c),d)$. So let $g'\in\Dat(F(c),d)$. We need to show that
@@ -275,7 +275,7 @@ are the left and right-hand side functors of $(F,G)$.
     \]
 The obvious question to ask is whether the map $\beta:\ob\ (\Cop\times\Dat)
 \to\arr\ \Set$ we have just defined is in fact a natural transformation.
-This answer is 'yes':
+The answer is 'yes':
 
 \begin{prop}\label{Adj:prop:natural:right:left}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
@@ -289,16 +289,16 @@ This answer is 'yes':
     $\beta:G^{*}\Rightarrow F^{*}$, where $F^{*}$ and $G^{*}$ denote
     the left-hand-side and right-hand-side functors respectively.
 \end{prop}
-\begin{proof}TODO
+\begin{proof}
     The left-hand-side functor $F^{*}$ as defined in~(\ref{Adj:def:lhs:functor})
     and the right-hand-side functor $G^{*}$ as defined 
     in~(\ref{Adj:def:rhs:functor}) are both functors 
     $F^{*},G^{*}:\Cop\times\Dat\to\Set$. Using definition~(\ref{Nat:def:natural}),
-    in order for $\alpha$ to qualify as a natural transformation 
-    $\alpha:F^{*}\Rightarrow G^{*}$ it needs to be a map
-    $\alpha:\ob\ (\Cop\times\Dat)\to\arr\ \Set$ (which is the case) satisfying
+    in order for $\beta$ to qualify as a natural transformation 
+    $\beta:G^{*}\Rightarrow F^{*}$ it needs to be a map
+    $\beta:\ob\ (\Cop\times\Dat)\to\arr\ \Set$ (which is the case) satisfying
     $(1)$ and $(2)$ of definition~(\ref{Nat:def:natural}). We have
-    seen that $\alpha(c,d):F^{*}(c,d)\to G^{*}(c,d)$ for all $c\in\Cat$
+    seen that $\beta(c,d):G^{*}(c,d)\to F^{*}(c,d)$ for all $c\in\Cat$
     and $d\in\Dat$, that is for all $(c,d)\in\Cop\times\Dat$. Hence $(1)$ of
     definition~(\ref{Nat:def:natural}) is satisfied, and it remains to show~$(2)$.
     So let $c,c'\in\Cat$, $d,d'\in\Dat$ and $k:(c,d)\to(c',d')\ @\ \Cop\times\Dat$.
@@ -308,36 +308,36 @@ This answer is 'yes':
         \begin{tikzcd}
             c
             &d\arrow[d,swap, "g"]
-            &\Dat(F(c),d)\arrow[r, "\alpha\mbox{$(c,d)$}"]
-             \arrow[d, swap,"F^{*}\mbox{$(f,g)$}"]
-            &\Cat(c,G(d))
-             \arrow[d, "G^{*}\mbox{$(f,g)$}"]
+            &\Cat(c,G(d))\arrow[r, "\beta\mbox{$(c,d)$}"]
+             \arrow[d, swap,"G^{*}\mbox{$(f,g)$}"]
+            &\Dat(F(c),d)
+             \arrow[d, "F^{*}\mbox{$(f,g)$}"]
             \\
             c'\arrow[u, "f"]
             &d'
-            &\Dat(F(c'),d')\arrow[r, swap, "\alpha\mbox{$(c',d')$}"]
-            &\Cat(c',G(d'))
+            &\Cat(c',G(d'))\arrow[r, swap, "\beta\mbox{$(c',d')$}"]
+            &\Dat(F(c'),d')
         \end{tikzcd}
     \]
-    Hence we need to show that $G^{*}(f,g)\circ\alpha(c,d)=\alpha(c',d')\circ
-    F^{*}(f,g)$. This an equality between arrows in the category \Set. Using
+    Hence we need to show that $F^{*}(f,g)\circ\beta(c,d)=\beta(c',d')\circ
+    G^{*}(f,g)$. This is an equality between arrows in the category \Set. Using
     proposition~(\ref{Cat:prop:set:arrow:equal}), we can prove this equality
     simply by showing the two underlying untyped functions coincide on 
-    every $g'\in\Dat(F(c),d)$. So let $g'\in\Dat(F(c),d)$. We need to show that
-    $(G^{*}(f,g)\circ\alpha(c,d))(g')=(\alpha(c',d')\circ F^{*}(f,g))(g')$
+    every $f'\in\Cat(c,G(d))$. So let $f'\in\Cat(c,G(d))$. We need to show that
+    $(F^{*}(f,g)\circ\beta(c,d))(f')=(\beta(c',d')\circ G^{*}(f,g))(f')$
     which goes as follows:
-        \begin{eqnarray*}(G^{*}(f,g)\circ\alpha(c,d))(g')
-            &=&G^{*}(f,g)(\,\alpha(c,d)(g')\,)\\
-            &=&G^{*}(f,g)(\,G(g')\circ\eta_{c}\,)\\
-            \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
-            &=&G(g)\circ G(g')\circ\eta_{c}\circ f\\
-            \mbox{prop.~(\ref{Adj:prop:unit:natural})}\ \to\ 
-            &=&G(g)\circ G(g')\circ (G\circ F)(f)\circ\eta_{c'}\\
-            \mbox{$G$ functor}\ \to\ 
-            &=&G(\,g\circ g'\circ F(f)\,)\circ\eta_{c'}\\
+        \begin{eqnarray*}(F^{*}(f,g)\circ\beta(c,d))(f')
+            &=&F^{*}(f,g)(\,\beta(c,d)(f')\,)\\
+            &=&F^{*}(f,g)(\,\epsilon_{d}\circ F(f')\,)\\
             \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
-            &=&G(\,F^{*}(f,g)(g')\,)\circ\eta_{c'}\\
-            &=&\alpha(c',d')(\,F^{*}(f,g)(g'))\\
-            &=&(\alpha(c',d')\circ F^{*}(f,g))(g')\\
+            &=&g\circ \epsilon_{d}\circ F(f')\circ F(f)\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural})}\ \to\ 
+            &=&\epsilon_{d'}\circ (F\circ G)(g)\circ F(f')\circ F(f)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d'}\circ F(\,G(g)\circ f'\circ f\,)\\
+            \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
+            &=&\epsilon_{d'}\circ F(\,G^{*}(f,g)(f')\,)\\
+            &=&\beta(c',d')(\,G^{*}(f,g)(f')\,)\\
+            &=&(\beta(c',d')\circ G^{*}(f,g))(f')\\
         \end{eqnarray*}
 \end{proof}

@@ -406,5 +406,22 @@ them a unit and counit of $(F,G)$.
     a unit of $(F,G)$. By assumption, we already know that it is a natural
     transformation $\eta:I_{\cal C}\Rightarrow G\circ F$. So let $c\in\Cat$,
     $d\in\Dat$ and $f:c\to G(d)$. We need to prove the existence of a unique
-    $g:F(c)\to d$ such that $f=G(g)\circ\eta_{c}$. TODO
+    $g:F(c)\to d$ such that $f=G(g)\circ\eta_{c}$. We shall first prove the 
+    uniqueness. So suppose that $g:F(c)\to d$ is such that $f=G(g)\circ\eta_{c}$.
+    Then:
+        \begin{eqnarray*}\epsilon_{d}\circ F(f)
+            &=&\epsilon_{d}\circ F(\,G(g)\circ\eta_{c}\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d}\circ (F\circ G)(g)\circ F(\eta_{c})\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural})}\ \to\ 
+            &=&g\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
+            &=&g\circ (\epsilon F\circ F\eta)(c)\\
+            \mbox{equation~$(2)$}\ \to\  
+            &=&g\circ\iota_{F}(c)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&g\circ\id(\,F(c)\,)\\
+            &=&g
+        \end{eqnarray*}
+    So we see that $g$ must be equal to $\epsilon_{d}\circ F(f)$ and is therefore
+    unique. TODO
 \end{proof}
