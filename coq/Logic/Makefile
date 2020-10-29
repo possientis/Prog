@@ -64,6 +64,7 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
 			${NAT}/Ord.vo \
 			${NAT}/Wec.vo \
+			${NAT}/Subset.vo \
 			${NAT}/Max.vo \
 			${NAT}/Weaken.vo \
 			${NAT}/Plus.vo \
@@ -71,7 +72,6 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Minimal.vo \
 			${NAT}/Seq.vo \
 			${NAT}/Fresh.vo \
-			${NAT}/Smallest.vo \
 			${NAT}/Witness.vo \
 			${NAT}/NatxNat.vo
 

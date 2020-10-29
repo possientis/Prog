@@ -16,12 +16,12 @@ main(){
     check setoid
     check quotient
     check set
-    check funext
+#    check funext
     check propext
     check coercions
     check WellFounded
     check Vec
-    check typeclass
+#    check typeclass
     check tactic
     check tacticComb
     check structure
