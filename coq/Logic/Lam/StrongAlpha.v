@@ -13,8 +13,6 @@ Require Import Logic.List.Remove.
 Require Import Logic.List.Coincide.
 Require Import Logic.List.Difference.
 
-Require Import Logic.Rel.Include.
-
 Require Import Logic.Lam.Free.
 Require Import Logic.Lam.Valid.
 Require Import Logic.Lam.Syntax.
@@ -22,6 +20,8 @@ Require Import Logic.Lam.Functor.
 Require Import Logic.Lam.Variable.
 Require Import Logic.Lam.Subformula.
 Require Import Logic.Lam.Congruence.
+
+Require Import Logic.Rel.Include.
 
 (* Generator of strong alpha-equivalence.                                       *)
 Inductive StrongAlpha0 (v:Type) (e:Eq v) : T v -> T v -> Prop :=
@@ -154,3 +154,22 @@ Inductive AlmostStrongAlpha (v:Type) (e:Eq v) : T v -> T v -> Prop :=
 .
 
 Arguments AlmostStrongAlpha {v} {e}.
+
+Notation "t :~: s" := (AlmostStrongAlpha t s)
+    (at level 60, no associativity) : Fol_StrongAlpha_scope.
+
+Open Scope Fol_StrongAlpha_scope.
+
+Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
+    @StrongAlpha0 v e <= @AlmostStrongAlpha v e.
+Proof.
+    intros v e. apply incl_charac. intros t s H1.
+    destruct H1 as [x y p1 H1 H2]. apply ALamxy with p1;
+    try assumption; try (apply Cong_reflexive).
+Qed.
+
+Lemma almostRefl : forall (v:Type) (e:Eq v) (t:T v), t :~: t.
+Proof.
+    intros v e t. destruct t as [x|t1 t2|x t1]; 
+    try constructor; try (apply Cong_reflexive).
+Qed.

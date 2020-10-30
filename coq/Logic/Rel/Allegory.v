@@ -104,8 +104,18 @@ Proof.
             { rewrite id_left. apply incl_refl. } 
 Qed.
 
+Lemma comp_distrib_inter_r : forall (a b c:Type) (t:R a b) (r s:R b c),
+    Functional t -> (r /\ s) ; t = ((r ; t) /\ (s ; t)).
+Proof.
+    intros a b c t r s H1. apply incl_anti.
+    - apply comp_semi_distrib_inter_r.
+    - apply incl_charac. intros x y [[z' [H2 H3]] [z [H4 H5]]].
+      assert (z' = z) as H6.
+        { destruct (Functional_charac a b t) as [H6 H7].
+          apply (H6 H1) with x; assumption. }
+      subst. exists z. split; try assumption. split; assumption.
+Qed.
 
-(*
 (* Intuition: factorize composition.                                            *)
 Lemma modularity_law_sym : forall (a b c:Type) (r:R a b) (s:R b c) (t:R a c),
     ((s ; r) /\ t) <= (s /\ (t ; conv r)) ; (r /\ (conv s ; t)).
@@ -151,4 +161,4 @@ Proof.
     unfold comp. exists x. split; try assumption. exists y.
     split; assumption.
 Qed.
-*)
+

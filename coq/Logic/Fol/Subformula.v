@@ -33,7 +33,10 @@ Fixpoint Sub (v:Type) (p:P v) : list (P v) :=
 Arguments Sub {v} _.
 
 (* p is a sub-formula of q if it belongs to the list of sub-formulas of q       *)
-Notation "p <<= q" := (p :: Sub q) (at level 50).
+Notation "p <<= q" := (p :: Sub q) 
+    (at level 50, no associativity) : Fol_Subformula_scope.
+
+Open Scope Fol_Subformula_scope.
  
 Lemma Sub_refl : forall (v:Type) (p:P v), p <<= p.
 Proof.
@@ -74,11 +77,9 @@ Proof.
     apply incl_tran with (Sub q); apply Sub_incl; assumption.
 Qed.
 
-Open Scope nat_scope.   (* <= now interpreted as inequality between nats        *)
-
 (* This lemma will allow us to get anti-symmetry                                *) 
 Lemma ord_monotone : forall (v:Type) (p1 p2:P v),
-    p1 <<= p2  -> ord p1 <= ord p2.
+    p1 <<= p2  -> le (ord p1) (ord p2).
 Proof. 
     intros v p1 p2. revert p1. 
     induction p2 as [|x y|p2 IH2 p2' IH2'|x p1' IH1];
@@ -98,8 +99,6 @@ Proof.
     - subst. apply le_n.
     - apply le_S, IH1. assumption.
 Qed.
-
-Open Scope Include_scope.
 
 (* Anti-symmentry follows from Lemma ord_monotone                               *)
 Lemma Sub_anti : forall (v:Type) (p1 p2:P v),

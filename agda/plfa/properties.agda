@@ -298,6 +298,7 @@ _ = refl
 _ : Steps (mul · two · two)
 _ = eval (gas 100) ⊢2*2
 
+{- Way too slow
 _ : eval (gas 100) ⊢2*2 ≡ steps
   (mul · two · two
     —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
@@ -349,10 +350,24 @@ _ : eval (gas 100) ⊢2*2 ≡ steps
     —→⟨ ξ-·₂ V-ƛ (ξ-suc (ξ-suc (ξ-·₁ (β-ƛ V-zero)))) ⟩
     _
     —→⟨ ξ-·₂ V-ƛ (ξ-suc (ξ-suc (β-ƛ V-zero))) ⟩
-    {!!})
+    _
+    —→⟨ ξ-·₂ V-ƛ (ξ-suc (ξ-suc β-zero)) ⟩
+    _
+    —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
+    _
+    —→⟨ β-suc (V-suc V-zero) ⟩
+    _
+    —→⟨ ξ-suc (ξ-·₁ (ξ-·₁ β-μ)) ⟩
+    _
+    —→⟨ ξ-suc (ξ-·₁ (β-ƛ (V-suc V-zero))) ⟩
+    _
+    —→⟨ ξ-suc (β-ƛ (V-suc (V-suc V-zero))) ⟩
+    _
+    —→⟨ ξ-suc (β-suc V-zero) ⟩
+    ? —→⟨ ? ⟩ ?)
 
   {!!}
 
 _ = {!!}
 
-
+-}

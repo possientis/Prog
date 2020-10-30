@@ -423,5 +423,32 @@ them a unit and counit of $(F,G)$.
             &=&g
         \end{eqnarray*}
     So we see that $g$ must be equal to $\epsilon_{d}\circ F(f)$ and is therefore
-    unique. TODO
+    unique. To prove the existence, suppose conversely that $g=\epsilon_{d}
+    \circ F(f)$. We need to show that $f=G(g)\circ\eta_{c}$ which goes
+    as follows:
+        \begin{eqnarray*}G(g)\circ\eta_{c}
+            &=&G(\,\epsilon_{d}\circ F(f)\,)\circ\eta_{c}\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\epsilon_{d})\circ(G\circ F)(f)\circ\eta_{c}\\
+            \mbox{prop.~(\ref{Adj:prop:unit:natural})}\ \to\ 
+            &=&G(\epsilon_{d})\circ\eta_{G(d)}\circ f\\
+            &=&(G\epsilon\circ\eta G)(d)\circ f\\
+            \mbox{equation~$(1)$}\ \to\  
+            &=&\iota_{G}(d)\circ f\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&\id(\,G(d)\,)\circ f\\
+            &=&f
+        \end{eqnarray*}
+    So we have proved that $\eta$ is a unit of $(F,G)$ as requested, and it 
+    remains to show that $\epsilon$ is a counit of $(F,G)$. By assumption,
+    we already know that it is a natural transformation $\epsilon:F\circ G
+    \Rightarrow I_{\cal D}$. So let $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$.
+    We need to prove the existence of a unique $f:c\to G(d)$ such that 
+    $g=\epsilon_{d}\circ F(f)$. We shall first prove the uniqueness. So 
+    suppose that $f:c\to G(d)$ is such that $g=\epsilon_{d}\circ F(f)$.
+    Following the same derivation as above, we see that $f$ must be equal
+    to $G(g)\circ\eta_{c}$ and is therefore unique. To prove the existence,
+    suppose conversely that $f=G(g)\circ\eta_{c}$. We need to show that
+    $g=\epsilon_{d}\circ F(f)$. Once again, this is obtained by following
+    the same derivation as above.
 \end{proof}

@@ -4,9 +4,9 @@ Require Import Logic.List.In.
 Require Import Logic.List.Concat.
 
 Notation "xs <= ys" := (incl xs ys)
-    (at level 70, no associativity) : Include_scope.
+    (at level 70, no associativity) : List_Include_scope.
 
-Open Scope Include_scope.
+Open Scope List_Include_scope.
 
 Lemma incl_cons_compat : forall (v:Type) (xs ys:list v) (x:v),
     xs <= ys -> (cons x xs) <= (cons x ys).

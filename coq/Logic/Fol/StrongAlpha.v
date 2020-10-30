@@ -23,6 +23,7 @@ Require Import Logic.Fol.Variable.
 Require Import Logic.Fol.Subformula.
 Require Import Logic.Fol.Congruence.
 
+
 (* Generator of strong alpha-equivalence.                                       *)
 Inductive StrongAlpha0 (v:Type) (e:Eq v) : P v -> P v -> Prop :=
 | mkStrongAlpha0: forall (x y:v) (p1:P v), 
@@ -157,3 +158,22 @@ Inductive AlmostStrongAlpha (v:Type) (e:Eq v) : P v -> P v -> Prop :=
 .
 
 Arguments AlmostStrongAlpha {v} {e}.
+
+Notation "p :~: q" := (AlmostStrongAlpha p q)
+    (at level 60, no associativity) : Fol_StrongAlpha_scope.
+
+Open Scope Fol_StrongAlpha_scope.
+
+Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
+    @StrongAlpha0 v e <= @AlmostStrongAlpha v e.
+Proof.
+    intros v e. apply incl_charac. intros p q H1.
+    destruct H1 as [x y p1 H1 H2]. apply AAllxy with p1;
+    try assumption; try (apply Cong_reflexive).
+Qed.
+
+Lemma almostRefl : forall (v:Type) (e:Eq v) (p:P v), p :~: p.
+Proof.
+    intros v e p. destruct p as [|x y|p1 p2|x p1]; 
+    try constructor; try (apply Cong_reflexive).
+Qed.

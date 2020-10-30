@@ -251,6 +251,21 @@ The answer is 'yes':
         \end{eqnarray*}
 \end{proof}
 
+The natural transformation $\alpha:F^{*}\Rightarrow G^{*}$ above deserves to 
+be named:
+\begin{defin}\label{Adj:def:natural:associated:unit}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Let $\eta$ be a unit of $(F,G)$. We call
+    {\em natural transformation associated with} $\eta$ the transformation 
+    $\alpha:F^{*}\Rightarrow G^{*}$, defined by:
+        \[
+            \alpha(c,d)(g)=G(g)\circ\eta_{c}
+        \]
+    for all $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$, where $F^{*}$ and $G^{*}$ 
+    denote the left-hand-side and right-hand-side functors respectively,
+    as per definitions~(\ref{Adj:def:lhs:functor}) and~(\ref{Adj:def:rhs:functor}).
+\end{defin}
+
 Suppose $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ are functors where \Cat\ and \Dat\ 
 are locally small categories and let us assume that $(F,G)$ is an adjunction, 
 or equivalently that we have a counit $\epsilon:F\circ G\Rightarrow I_{\cal D}$. 

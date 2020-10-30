@@ -32,8 +32,11 @@ Fixpoint Sub (v:Type) (t:T v) : list (T v) :=
 Arguments Sub {v} _.
 
 (* s is a sub-term of t if it belongs to the list of sub-terms of t             *)
-Notation "s <<= t" := (s :: Sub t) (at level 50).
-   
+Notation "s <<= t" := (s :: Sub t)
+    (at level 50, no associativity) : Lam_Subformula_scope.
+
+Open Scope Lam_Subformula_scope.
+  
 (* Being a 'sub-term of' is reflexive relation                                  *)
 Lemma Sub_refl : forall (v:Type) (t:T v), t <<= t.
 Proof.
@@ -71,11 +74,9 @@ Proof.
     apply incl_tran with (Sub s); apply Sub_incl; assumption.
 Qed.
 
-Open Scope nat_scope.
-
 (* This lemma will allow us to get anti-symmetry                                *) 
 Lemma ord_monotone : forall (v:Type) (t1 t2:T v),
-    t1 <<= t2  -> ord t1 <= ord t2.
+    t1 <<= t2  -> le (ord t1) (ord t2).
 Proof. 
     intros v t1 t2. revert t1. 
     induction t2 as [x|t2 IH2 t2' IH2'|x t1' IH1];
@@ -191,8 +192,6 @@ Proof.
                 { apply E1. assumption. }
             }
 Qed.
-
-Open Scope Include_scope.
 
 Lemma Sub_var : forall (v:Type) (s t:T v), s <<= t -> var s <= var t.
 Proof.

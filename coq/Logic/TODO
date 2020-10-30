@@ -1,6 +1,5 @@
 Logic:
-choose notation for almost
-prop 67
+prop 69
 go back to book
 
 Haskell:
@@ -22,7 +21,7 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
-Rel/Allegory: comp_distrib_inter_r in functional case
+Rel/Total
 go back to book
 
 Computational Type Theory with Coq:
