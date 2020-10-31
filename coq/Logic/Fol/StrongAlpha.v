@@ -72,6 +72,7 @@ Proof.
             { apply H3. reflexivity. }
 Qed.
 
+(* Strong alpha-equivalence is preserved by injective maps.                     *)
 Lemma StrongAlpha_injective : 
     forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (p q:P v),
         injective f -> p ~ q -> fmap f p ~ fmap f q.
@@ -90,6 +91,7 @@ Proof.
           apply H3 in H6. contradiction.
 Qed.
 
+(* Strong alpha-equivalence is preserved by var replacement with caveat.        *)
 Lemma StrongAlpha_replace : 
     forall (v:Type) (e:Eq v) (p q:P v) (x y:v),
         ~ y :: var p -> ~ y :: var q -> 
@@ -104,6 +106,7 @@ Proof.
     apply permute_injective. assumption.
 Qed.
 
+(* Strong alpha-equivalence class unchanged by var replacement with caveat.     *)
 Lemma StrongAlpha_replace_self:
     forall (v:Type) (e:Eq v) (p:P v) (x y:v),
         ~ y :: var p -> 
@@ -139,6 +142,7 @@ Proof.
             { apply H2. exfalso. apply H2. apply remove_still; assumption. }
 Qed.
 
+(* Almost strong alpha-equivalence. Will be shown to be the same.               *)
 Inductive AlmostStrongAlpha (v:Type) (e:Eq v) : P v -> P v -> Prop := 
 | ABot : AlmostStrongAlpha v e Bot Bot
 | AElem : forall (x y:v), AlmostStrongAlpha v e (Elem x y) (Elem x y)
@@ -164,6 +168,7 @@ Notation "p :~: q" := (AlmostStrongAlpha p q)
 
 Open Scope Fol_StrongAlpha_scope.
 
+(* Almost equivalence contains generator of strong alpha-equivalence.           *)
 Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
     @StrongAlpha0 v e <= @AlmostStrongAlpha v e.
 Proof.
@@ -172,8 +177,37 @@ Proof.
     try assumption; try (apply Cong_reflexive).
 Qed.
 
+(* Almost equivalence is reflexive.                                             *)
 Lemma almostRefl : forall (v:Type) (e:Eq v) (p:P v), p :~: p.
 Proof.
     intros v e p. destruct p as [|x y|p1 p2|x p1]; 
     try constructor; try (apply Cong_reflexive).
 Qed.
+
+(* Almost equivalence is symmetric.                                             *)
+Lemma almostSym : forall (v:Type) (e:Eq v) (p q:P v), p :~: q -> q :~: p.
+Proof.
+    intros v e p q H1. 
+    destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1|x y p1 q1 r H1 H2 H3 H4].
+    - constructor.
+    - constructor.
+    - constructor; apply Cong_symmetric; assumption.
+    - constructor. apply Cong_symmetric. assumption.
+    - apply AAllxy with (fmap (y // x) r).
+        + intros H5. apply H1. symmetry. assumption.
+        + assumption.
+        + apply Cong_transitive with r; try assumption.
+          assert (r = fmap (x // y) (fmap (y // x) r)) as H5.
+            { rewrite var_replace_trans; try assumption.
+              rewrite replace_x_x. rewrite fmap_id. reflexivity. }
+          rewrite <- H5. apply Cong_reflexive.
+        + apply var_replace_remove. assumption.
+Qed.
+
+(*
+Lemma almostTrans : forall (v:Type) (e:Eq v) (p q r:P v),
+    p :~: q -> q :~: r -> p :~: r.
+Proof.
+
+Show.
+*)

@@ -24,4 +24,12 @@ Proof.
     destruct H2. destruct H3. assumption.
 Qed.
 
+Lemma corefl_id : forall (a:Type) (r:Rel a),
+    coreflexive r -> id <= r <-> id = r.
+Proof.
+    intros a r H1. split; intros H2.
+    - apply incl_anti; assumption.
+    - rewrite H2. apply incl_refl.
+Qed.
+
 

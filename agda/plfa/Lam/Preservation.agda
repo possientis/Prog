@@ -9,6 +9,7 @@ open import Lam.Subst
 open import Lam.Value
 open import Lam.Typing
 open import Lam.Syntax
+open import Lam.Closure
 open import Lam.Context
 open import Lam.Reduction
 open import Lam.Substitution
@@ -47,3 +48,12 @@ preserve (⊢∧ p q) β-∧ = ⊢Bool
 preserve (⊢∨ p q) (ξ-op₁ r) = ⊢∨ (preserve p r) q
 preserve (⊢∨ p q) (ξ-op₂ r s) = ⊢∨ p (preserve q s)
 preserve (⊢∨ p q) β-∨ = ⊢Bool
+
+preserves : ∀ {M N : Term} {A : Type}
+  → ∅ ⊢ M ∶ A
+  → M —↠ N  -- \em\rr-
+    ----------
+  → ∅ ⊢ N ∶ A
+
+preserves p (_ ∎) = p
+preserves p (_ —→⟨ q ⟩ r) = preserves (preserve p q) r

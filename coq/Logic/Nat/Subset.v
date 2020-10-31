@@ -1,8 +1,12 @@
 Require Import Le.
 
+Require Import Logic.Axiom.Wec.
+Require Import Logic.Axiom.Dec.
+
 Require Import Logic.Class.Ord.
 Require Import Logic.Nat.Ord.
 Require Import Logic.Nat.Leq.
+Require Import Logic.Nat.Wec.
 
 (* Subset of N defined as predicate over N                                      *)
 Definition Subset : Type := nat -> Prop.
@@ -26,17 +30,29 @@ Definition Finite (A:Subset) : Prop :=
 Definition restrict (n:nat) (A:Subset) : Subset :=
     fun (m:nat)  => m :: A /\ m <= n.
 
+Lemma restrictWec : forall (A:Subset) (n:nat), pWec A -> pWec (restrict n A).
+Proof.
+    intros A n H1 k. apply andWec.
+    - apply H1.
+    - apply DecWec, leqDec.
+Qed.
+
 (* All restricted subsets are finite.                                           *)
 Lemma restrictFinite : forall (A:Subset) (n:nat), Finite (restrict n A).
 Proof.
     intros A n. exists n. intros m [H1 H2]. assumption.
 Qed.
 
+(*
 (* If n belongs to A, being the smallest element of A is the same as being the  *)
 (* smallest element of A /\ [0, n].                                             *)
-Lemma smallestRestrict : forall (A:Subset) (n m:nat), n :: A ->
+Lemma smallestRestrict : forall (A:Subset) (n m:nat), 
+    (exists (k:nat), k :: restrict n A) ->
     Smallest m A <-> Smallest m (restrict n A).
 Proof.
+
+Show.
+(*
     intros A n m H1. split.
     - intros [H2 H3]. split.
         + split; try assumption. apply H3. assumption.
@@ -46,19 +62,28 @@ Proof.
         + apply H4. split; assumption.
         + apply le_trans with n; assumption.
 Qed.
-
+*)
+*)
 (*
 Lemma nonEmptyFiniteHasSmallest : forall (A:Subset),
+    pWec A                   ->     (* A is weakly decidable *)
     (exists (k:nat), k :: A) -> 
     Finite A                 -> 
     (exists (k:nat), Smallest k A).
 
 Proof.
-    unfold Finite, Smallest. intros A H2 [n H1]. revert n A H1 H2.
-    induction n as [|n IH]; intros A H1 [m H2].
+    intros A W H2 [n H1]. revert n A W H1 H2.
+    induction n as [|n IH]; intros A W H1 [m H2].
     - assert (m = 0) as H3. { apply le_0, H1. assumption. }
       subst. exists 0. split; try assumption. intros m H3. apply le_0_n.
-    -
+    - destruct (boundedWec A W n) as [H3|H3]. 
+        + destruct H3 as [m' [H3 H4]].
+          assert (exists (k:nat), Smallest k (restrict n A)) as H5. 
+            {apply IH.
+                { apply  restrictWec. assumption. }
+                { intros k [H5 H6]. assumption. }
+                { exists m'. split; assumption. }}
+          destruct H5 as [k H5]. exists k. rewrite (smallestRestrict A n k).
 Show.
 *)
 

@@ -68,6 +68,13 @@ Proof.
       exists x. exists z. split; assumption.
 Qed.
 
+Lemma rng_comp_incl : forall (a b c:Type) (r:R a b) (s:R b c),
+    rng (s ; r) <= rng s.
+Proof.
+    intros a b c r s. apply incl_charac. intros x y H1. 
+    destruct H1 as [z [x [y [H1 H2]]]]. constructor. exists y. assumption.
+Qed.
+
 Lemma rng_inter_conv : forall (a b:Type) (r s:R a b), 
     rng (s /\ r) = (id /\ (r ; conv s)).
 Proof.
@@ -76,4 +83,12 @@ Proof.
       exists x. split; assumption.
     - destruct H1 as [H1 [z [H2 H3]]]. destruct H1. constructor.
       exists z. split; assumption.
+Qed.
+
+Lemma rng_incl_compat : forall (a b:Type) (r s:R a b),
+    r <= s -> rng r <= rng s.
+Proof.
+    intros a b r s H1. apply incl_charac. intros x y H2.
+    destruct H2 as [y [x H2]]. constructor. exists x.
+    apply incl_charac_to with r; assumption.
 Qed.

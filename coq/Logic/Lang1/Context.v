@@ -221,10 +221,38 @@ Proof.
     - rewrite (bindEqual G n m x y z); try assumption.
 Qed.
 
+Lemma bindEqualRev : forall (G:Context) (n:nat) (x y:set),
+    G ; n~>x :> n~>y -> x == y.
+Proof.
+    intros G n x y H1. remember (G ; n~>x) as G' eqn:H2.
+    remember (n~>y) as b eqn:H3. revert G n x y H2 H3.
+    induction H1 as [G' n' x'|G' n' m' x' y' H1 H2 IH|G' n' x' y' H1 H2 IH ]; 
+    intros G n x y H3 H4. 
+    - inversion H3. subst. clear H3. inversion H4. apply equalRefl.
+    - inversion H3. subst. clear H3. inversion H4. subst. clear H4.
+      exfalso. apply H1. reflexivity.
+    - inversion H4. subst. clear H4. apply equalTrans with x';
+      try assumption. apply (IH G n x x'); reflexivity.
+Qed.
+
 (*
 Lemma bindPermute : forall (G:Context) (n m:nat) (x y:set), m <> n ->
     ctxEqual (bind (bind G n x) m y) (bind (bind G m y) n x).
 Proof.
-    intros G n m x y Hmn. unfold bind. split; intros p z H1.
+    intros G n m x y Hmn. unfold bind. split; intros p z H1;
+    destruct (eqDec m p) as [H2|H2]; destruct (eqDec n p) as [H3|H3].
+    - subst. exfalso. apply Hmn. reflexivity.
+    - subst. apply bindDiff; try assumption. apply FindE with y.
+        + apply bindEqualRev in H1. assumption.
+        + constructor.
+    - subst. apply bindDiff in H1; try assumption. apply FindE with x.
+        + apply bindEqualRev in H1. assumption.
+        + constructor.        
+    - apply bindDiff; try assumption. apply bindDiff; try assumption.
+      apply bindDiff in H1; try assumption. apply bindDiff in H1; assumption.
+    - subst. exfalso. apply Hmn. reflexivity.
+    - subst. apply bindDiff in H1; try assumption. apply bindEqualRev in H1.
+      apply FindE with y; try assumption. constructor.
+    -
 Show.
 *)

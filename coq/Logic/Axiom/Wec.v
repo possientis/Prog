@@ -33,3 +33,12 @@ Proof.
     intros a p H1 x. apply DecWec. apply H1.
 Qed.
 
+Lemma andWec : forall (A B:Prop), Wec A -> Wec B -> Wec (A /\ B).
+Proof.
+    intros A B [H1|H1] [H2|H2].
+    - left. split; assumption.
+    - right. intros [H3 H4]. apply H2 in H4. contradiction.
+    - right. intros [H3 H4]. apply H1 in H3. contradiction.
+    - right. intros [H3 H4]. apply H1 in H3. contradiction.
+Qed.
+

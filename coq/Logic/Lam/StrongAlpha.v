@@ -45,7 +45,7 @@ Notation "t ~ s" := (StrongAlpha t s)
 
 Open Scope Fol_StrongAlpha_scope.
 
-
+(* Not following pdf to obtain stronger result of equality as lists.            *)
 Lemma StrongAlpha_free : forall (v:Type) (e:Eq v) (t s:T v), 
     t ~ s -> Fr t = Fr s.
 Proof.
@@ -72,6 +72,7 @@ Proof.
             { apply H3. reflexivity. }
 Qed.
 
+(* Strong alpha-equivalence is preserved by injective maps.                     *)
 Lemma StrongAlpha_injective : 
     forall (v w:Type) (e:Eq v) (e':Eq w) (f:v -> w) (t s:T v),
         injective f -> t ~ s -> fmap f t ~ fmap f s.
@@ -90,6 +91,7 @@ Proof.
           apply H3 in H6. contradiction.
 Qed.
 
+(* Strong alpha-equivalence is preserved by var replacement with caveat.        *)
 Lemma StrongAlpha_replace : 
     forall (v:Type) (e:Eq v) (t s:T v) (x y:v),
         ~ y :: var t -> ~ y :: var s -> 
@@ -104,6 +106,7 @@ Proof.
     apply permute_injective. assumption.
 Qed.
 
+(* Strong alpha-equivalence class unchanged by var replacement with caveat.     *)
 Lemma StrongAlpha_replace_self:
     forall (v:Type) (e:Eq v) (t:T v) (x y:v),
         ~ y :: var t -> 
@@ -136,6 +139,7 @@ Proof.
             { apply H2. exfalso. apply H2. apply remove_still; assumption. }
 Qed.
 
+(* Almost strong alpha-equivalence. Will be shown to be the same.               *)
 Inductive AlmostStrongAlpha (v:Type) (e:Eq v) : T v -> T v -> Prop := 
 | AVar : forall (x:v), AlmostStrongAlpha v e (Var x) (Var x)
 | AApp  : forall (t1 t2 s1 s2:T v), 
@@ -160,6 +164,7 @@ Notation "t :~: s" := (AlmostStrongAlpha t s)
 
 Open Scope Fol_StrongAlpha_scope.
 
+(* Almost equivalence contains generator of strong alpha-equivalence.           *)
 Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
     @StrongAlpha0 v e <= @AlmostStrongAlpha v e.
 Proof.
@@ -168,8 +173,28 @@ Proof.
     try assumption; try (apply Cong_reflexive).
 Qed.
 
+(* Almost equivalence is reflexive.                                             *)
 Lemma almostRefl : forall (v:Type) (e:Eq v) (t:T v), t :~: t.
 Proof.
     intros v e t. destruct t as [x|t1 t2|x t1]; 
     try constructor; try (apply Cong_reflexive).
+Qed.
+
+(* Almost equivalence is symmetric.                                             *)
+Lemma almostSym : forall (v:Type) (e:Eq v) (t s:T v), t :~: s -> s :~: t.
+Proof.
+    intros v e t s H1. 
+    destruct H1 as [x|t1 t2 s1 s2 H1 H2|x t1 s1|x y t1 s1 r H1 H2 H3 H4].
+    - constructor.
+    - constructor; apply Cong_symmetric; assumption.
+    - constructor. apply Cong_symmetric. assumption.
+    - apply ALamxy with (fmap (y // x) r).
+        + intros H5. apply H1. symmetry. assumption.
+        + assumption.
+        + apply Cong_transitive with r; try assumption.
+          assert (r = fmap (x // y) (fmap (y // x) r)) as H5.
+            { rewrite var_replace_trans; try assumption.
+              rewrite replace_x_x. rewrite fmap_id. reflexivity. }
+          rewrite <- H5. apply Cong_reflexive.
+        + apply var_replace_remove. assumption.
 Qed.

@@ -69,6 +69,13 @@ Proof.
       exists y. exists z. split; assumption.
 Qed.
 
+Lemma dom_comp_incl : forall (a b c:Type) (r:R a b) (s:R b c),
+    dom (s ; r) <= dom r.
+Proof.
+    intros a b c r s. apply incl_charac. intros x y H1. 
+    destruct H1 as [x [z [y [H1 H2]]]]. constructor. exists y. assumption.
+Qed.
+
 Lemma dom_inter_conv : forall (a b:Type) (r s:R a b), 
     dom (s /\ r) = (id /\ (conv r ; s)).
 Proof.
@@ -77,6 +84,14 @@ Proof.
       exists y. split; assumption.
     - destruct H1 as [H1 [z [H2 H3]]]. destruct H1. constructor.
       exists z. split; assumption.
+Qed.
+
+Lemma dom_incl_compat : forall (a b:Type) (r s:R a b),
+    r <= s -> dom r <= dom s.
+Proof.
+    intros a b r s H1. apply incl_charac. intros x y H2.
+    destruct H2 as [x [y H2]]. constructor. exists y.
+    apply incl_charac_to with r; assumption.
 Qed.
 
 Lemma dom_rng_conv : forall (a b:Type) (r:R a b), dom r = rng (conv r).
