@@ -43,28 +43,24 @@ Proof.
     intros A n. exists n. intros m [H1 H2]. assumption.
 Qed.
 
-(*
-(* If n belongs to A, being the smallest element of A is the same as being the  *)
-(* smallest element of A /\ [0, n].                                             *)
-Lemma smallestRestrict : forall (A:Subset) (n m:nat), 
+
+(* If A /\ [0,n] is non-empty, being the smallest element of A is the same as   *)
+(* being the smallest element of A /\ [0, n].                                   *)
+Lemma restrictSmallest : forall (A:Subset) (n m:nat), 
     (exists (k:nat), k :: restrict n A) ->
     Smallest m A <-> Smallest m (restrict n A).
 Proof.
-
-Show.
-(*
-    intros A n m H1. split.
-    - intros [H2 H3]. split.
-        + split; try assumption. apply H3. assumption.
-        + intros k [H4 H5]. apply H3. assumption.
-    - intros [[H2 H3] H4]. split; try assumption. intros k H5.
-      destruct (leqTotal k n) as [H6|H6].
-        + apply H4. split; assumption.
+    intros A n m [k [H1 H2]]. split.
+    - intros [H3 H4]. split.
+        + split; try assumption. apply le_trans with k; try assumption.
+          apply H4. assumption.
+        + intros p [H5 H6]. apply H4. assumption.
+    - intros [[H3 H4] H5]. split; try assumption. intros p H6.
+      destruct (leqTotal p n) as [H7|H7].
+        + apply H5. split; assumption.
         + apply le_trans with n; assumption.
 Qed.
-*)
-*)
-(*
+
 Lemma nonEmptyFiniteHasSmallest : forall (A:Subset),
     pWec A                   ->     (* A is weakly decidable *)
     (exists (k:nat), k :: A) -> 
@@ -83,7 +79,31 @@ Proof.
                 { apply  restrictWec. assumption. }
                 { intros k [H5 H6]. assumption. }
                 { exists m'. split; assumption. }}
-          destruct H5 as [k H5]. exists k. rewrite (smallestRestrict A n k).
+          destruct H5 as [k H5]. exists k. rewrite (restrictSmallest A n k);
+          try assumption. exists k. destruct H5 as [H5 H6]. assumption.
+        + exists m. split; try assumption. intros k H4.
+          assert (k = S n) as H5. 
+            { apply le_antisym.
+                { apply H1. assumption. }
+                { destruct (leqDec k n) as [H5|H5].
+                    { exfalso. apply H3. exists k. split; assumption. }
+                    { apply not_le_ge. assumption. }}}
+          rewrite H5. apply H1. assumption. 
+Qed.
+
+(*
+Theorem nonEmptyHasSmallest : forall (A:Subset),
+    pWec A                   ->
+    (exists (k:nat), k :: A) ->
+    (exists (k:nat), Smallest k A).
+Proof.
+    intros A W [k H1]. 
+    assert (exists (m:nat), Smallest m (restrict k A)) as H2.
+    { apply nonEmptyFiniteHasSmallest.
+        { apply restrictWec. assumption. }
+        { exists k. split; try assumption. apply le_n. }
+        { apply restrictFinite. }}
+    destruct H2 as [m H2]. exists m. 
 Show.
 *)
 

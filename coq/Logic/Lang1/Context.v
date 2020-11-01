@@ -235,7 +235,7 @@ Proof.
       try assumption. apply (IH G n x x'); reflexivity.
 Qed.
 
-(*
+
 Lemma bindPermute : forall (G:Context) (n m:nat) (x y:set), m <> n ->
     ctxEqual (bind (bind G n x) m y) (bind (bind G m y) n x).
 Proof.
@@ -253,6 +253,52 @@ Proof.
     - subst. exfalso. apply Hmn. reflexivity.
     - subst. apply bindDiff in H1; try assumption. apply bindEqualRev in H1.
       apply FindE with y; try assumption. constructor.
+    - subst. apply bindDiff; try assumption. apply FindE with x;
+      try (apply FindZ). apply bindEqualRev in H1. assumption.
+    - apply bindDiff; try assumption. apply bindDiff; try assumption.
+      apply bindDiff in H1; try assumption. apply bindDiff in H1; assumption.
+Qed.
+
+Lemma bindOver : forall (G:Context) (n:nat) (x y:set),
+    ctxEqual (bind (bind G n x) n y) (bind G n y).
+Proof.
+    intros G n x y. unfold bind. split; intros m z H1;
+    destruct (eqDec n m) as [H2|H2].
+    - subst. apply FindE with y; try (apply FindZ).
+      apply bindEqualRev in H1. assumption.
+    - apply bindDiff; try assumption.
+      apply bindDiff in H1; try assumption. apply bindDiff in H1; assumption.
+    - subst. apply FindE with y; try (apply FindZ).
+      apply bindEqualRev in H1. assumption.
+    - apply bindDiff; try assumption. apply bindDiff; try assumption.
+      apply bindDiff in H1; assumption.
+Qed.
+
+Lemma bindCtxEqual : forall (G G':Context) (n:nat) (x x':set),
+    ctxEqual G G' -> x == x' -> ctxEqual (bind G n x) (bind G' n x').
+Proof.
+    intros G G' n x x' [H1 H2] H3. unfold bind. split; intros m y H4;
+    destruct (eqDec n m) as [H5|H5].
+    - subst. apply FindE with x'; try (apply FindZ). apply equalTrans with x.
+        + apply equalSym. assumption.
+        + apply bindEqualRev in H4. assumption.
+    - apply bindDiff; try assumption. apply bindDiff in H4; try assumption.
+      apply H1. assumption.
+    - subst. apply FindE with x; try (apply FindZ). 
+      apply bindEqualRev in H4. apply equalTrans with x'; assumption.
+    - apply bindDiff; try assumption. apply bindDiff in H4; try assumption.
+      apply H2. assumption.
+Qed.
+
+(*
+Lemma bindCtxEqualOn : forall (p:Formula) (G G':Context) (n:nat) (x x':set),
+    ctxEqualOn p G G' -> x == x' -> ctxEqualOn p (bind G n x) (bind G' n x').
+Proof.
+    intros p G G' n x x' H1 H2 m y H3. split; intros H4;
+    destruct (eqDec n m) as [H5|H5].
+    - subst. apply FindE with x'; try (apply FindZ). apply equalTrans with x.
+        + apply equalSym. assumption.
+        + apply bindEqualRev in H4. assumption.
     -
 Show.
 *)

@@ -168,6 +168,39 @@ Notation "p :~: q" := (AlmostStrongAlpha p q)
 
 Open Scope Fol_StrongAlpha_scope.
 
+Lemma almostImpRev : forall (v:Type) (e:Eq v) (p q1 q2:P v), 
+    p :~: Imp q1 q2 -> exists (p1 p2:P v),
+        (p1 ~ q1) /\ (p2 ~ q2) /\ (p = Imp p1 p2).
+Proof.
+    intros v e p q1 q2 H1. remember (Imp q1 q2) as q eqn:Q. revert q1 q2 Q.
+    destruct H1 as [|x y|p1 p2 q1' q2' H1 H2|x p1 q1'|x y p1 q1' r H1 H2 H3 H4];
+    intros q1 q2 Q; inversion Q. subst. exists p1. exists p2.
+    split; try assumption. split; try assumption. reflexivity.
+Qed.
+
+Lemma almostAllRev : forall (v:Type) (e:Eq v) (p q1:P v) (y:v),
+    p :~: All y q1 -> 
+        (exists (p1:P v), (p1 ~ q1) /\ (p = All y p1)) \/
+        (exists (p1 r:P v) (x:v),
+            (x <> y)                /\ 
+            (p1 ~ r)                /\ 
+            (q1 ~ fmap (y // x) r)  /\
+            (~ y :: var r)          /\
+            (p = All x p1)).
+Proof.
+    intros v e p q1 y H1. remember (All y q1) as q eqn:Q. revert y q1 Q.
+    destruct H1 as [|x y'|p1 p2 q1' q2' H1 H2|x p1 q1'|x y' p1 q1' r H1 H2 H3 H4];
+    intros y q1 Q; inversion Q; subst.
+    - left. exists p1. split; try assumption. reflexivity.
+    - right. exists p1. exists r. exists x.
+      split; try assumption. 
+      split; try assumption.
+      split; try assumption.
+      split; try assumption.
+      reflexivity.
+Qed.
+
+
 (* Almost equivalence contains generator of strong alpha-equivalence.           *)
 Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
     @StrongAlpha0 v e <= @AlmostStrongAlpha v e.
@@ -208,6 +241,17 @@ Qed.
 Lemma almostTrans : forall (v:Type) (e:Eq v) (p q r:P v),
     p :~: q -> q :~: r -> p :~: r.
 Proof.
-
+    intros v e p q r H1. revert r.
+    destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1|x y p1 q1 r' H1 H2 H3 H4];
+    intros r H5.
+    - assumption.
+    - assumption.
+    - apply almostSym in H5. apply almostImpRev in H5. 
+      destruct H5 as [p1' [p2' [H5 [H6 H7]]]]. rewrite H7. constructor. 
+        + apply Cong_transitive with q1; try assumption.
+          apply Cong_symmetric. assumption.
+        + apply Cong_transitive with q2; try assumption.
+          apply Cong_symmetric. assumption.
+    - apply almostSym in H5. apply almostAllRev in H5. destruct H5 as [H5|H5].
 Show.
 *)

@@ -356,3 +356,49 @@ The answer is 'yes':
             &=&(\beta(c',d')\circ G^{*}(f,g))(f')\\
         \end{eqnarray*}
 \end{proof}
+
+The natural transformation $\beta:G^{*}\Rightarrow F^{*}$ above deserves to 
+be named:
+\begin{defin}\label{Adj:def:natural:associated:counit}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Let $\epsilon$ be a counit of $(F,G)$. We call
+    {\em natural transformation associated with} $\epsilon$ the transformation 
+    $\beta:G^{*}\Rightarrow F^{*}$, defined by:
+        \[
+            \beta(c,d)(f)=\epsilon_{d}\circ F(f)
+        \]
+    for all $c\in\Cat$, $d\in\Dat$ and $f:c\to G(d)$, where $F^{*}$ and $G^{*}$ 
+    denote the left-hand-side and right-hand-side functors respectively,
+    as per definitions~(\ref{Adj:def:lhs:functor}) and~(\ref{Adj:def:rhs:functor}).
+\end{defin}
+
+\begin{prop}\label{Adj:prop:natural:associated:unit:isomorphism}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Let $\eta$ be a unit of $(F,G)$ and 
+    $\alpha:F^{*}\Rightarrow G^{*}$ be the natural transformation associated
+    with $\eta$, as per~(\ref{Adj:def:natural:associated:unit}). Then $\alpha$ 
+    is a natural isomorphism with inverse $\beta:G^{*}\Rightarrow F^{*}$ 
+    associated with the related counit $\epsilon$.
+\end{prop}
+\noindent
+{\bf Remark}: Recall from proposition~(\ref{Adj:prop:unit:has:related:counit})
+that every unit $\eta$ of $(F,G)$ has a unique related counit $\epsilon$ and
+$\beta:G^{*}\Rightarrow F^{*}$ is therefore well-defined by virtue 
+of~(\ref{Adj:def:natural:associated:counit}).
+\begin{proof}
+    Using proposition~(\ref{Nat:prop:isomorphism}), we need to show that 
+    $\beta\circ\alpha=\iota_{F^{*}}$ and $\alpha\circ\beta
+    =\iota_{G^{*}}$, where $F^{*}$ and $G^{*}$ denote the left-hand-side 
+    and right-hand-side functors respectively, as per 
+    definitions~(\ref{Adj:def:lhs:functor}) and~(\ref{Adj:def:rhs:functor}).
+    We shall start with $\beta\circ\alpha=\iota_{F^{*}}$. From
+    proposition~(\ref{Nat:prop:equal}), in order to prove this equality it 
+    is sufficient to show that all components are equal. So given
+    $c\in\Cat$ and $d\in\Dat$, i.e. given an arbitrary $(c,d)\in\Cop\times\Dat$,
+    we need to show that $(\beta\circ\alpha)(c,d)=\iota_{F^{*}}(c,d)$.
+    This is an equality between two arrows of the category \Set\ with
+    domain and codomain $F^{*}(c,d)=\Dat(F(c),d)$. Using 
+    proposition~(\ref{Cat:prop:set:arrow:equal}), it is sufficient to show
+    that for all $g:F(c)\to d\ @\ \Dat$ we have $(\beta\circ\alpha)(c,d)(g)=
+    \iota_{F^{*}}(c,d)(g)$:
+\end{proof}

@@ -10,6 +10,7 @@ Latex:
 
 Set Theory:
 Lang1/Context: continue parallel with Lang1/Environment
+Context <-> Environment
 Lang1/SemanCtx compare with agda
 Lang1/SemanCtx compare with Lang1/Semantics
 axiom of choice?
