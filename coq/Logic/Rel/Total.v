@@ -60,7 +60,7 @@ Proof.
     rewrite <- H1. apply dom_incl_compat. assumption.
 Qed.
 
-(*
+
 Lemma Total_inter : forall (a b:Type) (r s:R a b),
     Total (r /\ s) <-> id <= conv r ; s.
 Proof.
@@ -69,7 +69,8 @@ Proof.
       remember (H2 H1) as H4 eqn:E. clear E H1 H2 H3.
       apply incl_charac. intros x y H1. destruct H1 as [x].
       destruct (H4 x) as [y [H1 H2]]. exists y. split; assumption.
-    - apply Total_charac. intros x.
-Show.
-*)
+    - apply Total_charac. intros x. 
+      apply (incl_charac_to _ _ id _ x x) in H1; try constructor.
+      destruct H1 as [y [H1 H2]]. exists y. split; assumption.
+Qed.
 

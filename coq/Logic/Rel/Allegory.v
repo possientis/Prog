@@ -1,5 +1,7 @@
 Require Import Logic.Rel.R.
 Require Import Logic.Rel.Id.
+Require Import Logic.Rel.Func.
+Require Import Logic.Rel.Total.
 Require Import Logic.Rel.Include.
 Require Import Logic.Rel.Converse.
 Require Import Logic.Rel.Intersect.
@@ -162,3 +164,26 @@ Proof.
     split; assumption.
 Qed.
 
+Lemma shunting_rule_left : 
+    forall (a b c:Type) (r:R a b) (f:R b c) (s:R a c), Function f -> 
+        f ; r <= s <-> r <= conv f ; s.
+Proof.
+    intros a b c r f s [H1 H2]. split; intros H3.
+    - apply incl_trans with ((conv f; f) ; r).
+        + remember ((conv f; f) ; r) as e eqn:E. rewrite <- (id_left _ _ r). 
+          rewrite E. clear e E. apply comp_incl_compat_l. assumption.
+        + rewrite comp_assoc. apply comp_incl_compat_r. assumption.
+    - apply incl_trans with ((f ; conv f) ; s).
+        + rewrite comp_assoc. apply comp_incl_compat_r. assumption.
+        + remember ((f ; conv f) ; s) as e eqn:E. rewrite <- (id_left _ _ s).
+          rewrite E. clear e E. apply comp_incl_compat_l. assumption.
+Qed.
+
+(*
+Lemma shunting_rule_right :
+    forall (a b c:Type) (f:R b a) (r:R b c) (s:R a c), Function f ->
+        r ; conv f <= s <-> r <= s ; f.
+Proof.
+    intros a b c f r s H1.
+Show.
+*)  
