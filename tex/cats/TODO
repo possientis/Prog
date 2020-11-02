@@ -1,4 +1,3 @@
-define nat associated with counit
 locally small case: (F,G) adjunction <-> F* ~ G*
 
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2

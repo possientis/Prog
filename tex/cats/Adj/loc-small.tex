@@ -401,4 +401,64 @@ of~(\ref{Adj:def:natural:associated:counit}).
     proposition~(\ref{Cat:prop:set:arrow:equal}), it is sufficient to show
     that for all $g:F(c)\to d\ @\ \Dat$ we have $(\beta\circ\alpha)(c,d)(g)=
     \iota_{F^{*}}(c,d)(g)$:
+        \begin{eqnarray*}(\beta\circ\alpha)(c,d)(g)
+            &=&(\,\beta(c,d)\circ\alpha(c,d)\,)(g)
+            \ \leftarrow\ \mbox{def.~(\ref{Nat:def:composition})}\\
+            \mbox{$\circ$ on \Set}\ \to\ 
+            &=&\beta(c,d)(\,\alpha(c,d)(g)\,)\\
+            \mbox{def.~(\ref{Adj:def:natural:associated:unit})}\ \to\ 
+            &=&\beta(c,d)(\,G(g)\circ\eta_{c}\,)\\
+            \mbox{def.~(\ref{Adj:def:natural:associated:counit})}\ \to\ 
+            &=&\epsilon_{d}\circ F(\,G(g)\circ\eta_{c}\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\epsilon_{d}\circ (F\circ G)(g)\circ F(\eta_{c})\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural})}\ \to\ 
+            &=&g\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
+            \mbox{def.~(\ref{Nat:def:leftmul}) and~(\ref{Nat:def:rightmul})}\ \to\ 
+            &=&g\circ(\epsilon F\circ F\eta)(c)\\
+            \mbox{def.~(\ref{Adj:def:related}), $\eta$ and $\epsilon$ related}
+            \ \to\ 
+            &=&g\circ\iota_{F}(c)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&g\circ\id(\,F(c)\,)\\
+            &=&g\\
+            \mbox{$g:F(c)\to d\ @\ \Dat$}\ \to\ 
+            &=&\id(\,\Dat(F(c),d)\,)(g)\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:object})}\ \to\ 
+            &=&\id(\,F^{*}(c,d)\,)(g)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&\iota_{F^{*}}(c,d)(g)\\
+        \end{eqnarray*} 
+    So it remains to show that $\alpha\circ\beta=\iota_{G^{*}}$. Similarly,
+    given $c\in\Cat$, $d\in\Dat$ and $f:c\to G(d)\ @\ \Cat$, we need to 
+    show that $(\alpha\circ\beta)(c,d)(f)=\iota_{G^{*}}(c,d)(f)$:
+        \begin{eqnarray*}(\alpha\circ\beta)(c,d)(f)
+            &=&(\,\alpha(c,d)\circ\beta(c,d)\,)(f)
+            \ \leftarrow\ \mbox{def.~(\ref{Nat:def:composition})}\\
+            \mbox{$\circ$ on \Set}\ \to\ 
+            &=&\alpha(c,d)(\,\beta(c,d)(f)\,)\\
+            \mbox{def.~(\ref{Adj:def:natural:associated:counit})}\ \to\ 
+            &=&\alpha(c,d)(\,\epsilon_{d}\circ F(f)\,)\\
+            \mbox{def.~(\ref{Adj:def:natural:associated:unit})}\ \to\ 
+            &=&G(\,\epsilon_{d}\circ F(f)\,)\circ\eta_{c}\\
+            \mbox{TODO:$F$ functor}\ \to\ 
+            &=&\epsilon_{d}\circ (F\circ G)(g)\circ F(\eta_{c})\\
+            \mbox{prop.~(\ref{Adj:prop:counit:natural})}\ \to\ 
+            &=&g\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
+            \mbox{def.~(\ref{Nat:def:leftmul}) and~(\ref{Nat:def:rightmul})}\ \to\ 
+            &=&g\circ(\epsilon F\circ F\eta)(c)\\
+            \mbox{def.~(\ref{Adj:def:related}), $\eta$ and $\epsilon$ related}
+            \ \to\ 
+            &=&g\circ\iota_{F}(c)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&g\circ\id(\,F(c)\,)\\
+            &=&g\\
+            \mbox{$g:F(c)\to d\ @\ \Dat$}\ \to\ 
+            &=&\id(\,\Dat(F(c),d)\,)(g)\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:object})}\ \to\ 
+            &=&\id(\,F^{*}(c,d)\,)(g)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&\iota_{F^{*}}(c,d)(g)\\
+        \end{eqnarray*} 
+ 
 \end{proof}
