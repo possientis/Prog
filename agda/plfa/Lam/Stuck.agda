@@ -12,6 +12,7 @@ open import Lam.Normal
 open import Lam.Context
 open import Lam.Closure
 open import Lam.Progress
+open import Lam.Preservation
 
 
 Stuck : Term → Set
@@ -33,4 +34,6 @@ wttdgs : ∀ {M N : Term} {A : Type}
     ----------
   → ¬ Stuck N
 
-wttdgs p q r = {!!}
+wttdgs p (_ ∎) = unstuck p
+wttdgs p (_ —→⟨ q ⟩ r) = wttdgs (preserve p q) r
+

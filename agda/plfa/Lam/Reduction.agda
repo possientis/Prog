@@ -1,10 +1,15 @@
 module Lam.Reduction where
 
+open import Relation.Binary.PropositionalEquality.Core
+  using (_≡_; _≢_; refl; sym; cong)
+
+open import Data.Empty          using (⊥; ⊥-elim)
 open import Data.Nat            using (ℕ;zero;suc;_+_;_*_)
 open import Data.Bool           using (Bool;true;false)
 
 open import Lam.Id
 open import Lam.Op
+open import Lam.Cong
 open import Lam.Prim
 open import Lam.Subst
 open import Lam.Value
@@ -129,3 +134,40 @@ data _—→_ : Term → Term → Set where
       --------------------
     →  μ x ⇒ M —→ M [ x := μ x ⇒ M ]
 
+
+valueReduce : ∀ {M N : Term} → Value M → M —→ N → ⊥
+valueReduce (V-suc p) (ξ-suc q) = valueReduce p q
+
+det : ∀ {M N N' : Term}
+  → M —→ N
+  → M —→ N'
+    ----------
+  → N ≡ N'
+
+det (ξ-op₁ p) (ξ-op₁ q) = cong _ (det p q)
+det (ξ-op₁ p) (ξ-op₂ v q) = ⊥-elim (valueReduce v p)
+det (ξ-op₂ v p) (ξ-op₁ q) = ⊥-elim (valueReduce v q)
+det (ξ-op₂ v p) (ξ-op₂ x q) = cong _ (det p q)
+det β-+ β-+ = refl
+det β-* β-* = refl
+det β-= β-= = refl
+det β-< β-< = refl
+det β-∧ β-∧ = refl
+det β-∨ β-∨ = refl
+det (ξ-if₀ p) (ξ-if₀ q) = cong _ (det p q)
+det β-if₁ β-if₁ = refl
+det β-if₂ β-if₂ = refl
+det (ξ-·₁ p) (ξ-·₁ q) = cong _ (det p q)
+det (ξ-·₁ p) (ξ-·₂ v q) = ⊥-elim (valueReduce v p)
+det (ξ-·₂ v p) (ξ-·₁ q) = ⊥-elim (valueReduce v q)
+det (ξ-·₂ v p) (ξ-·₂ w q) = cong _ (det p q)
+det (ξ-·₂ v p) (β-ƛ w) = ⊥-elim (valueReduce w p)
+det (β-ƛ v) (ξ-·₂ w q) = ⊥-elim (valueReduce v q)
+det (β-ƛ v) (β-ƛ w) = refl
+det (ξ-suc p) (ξ-suc q) = cong _ (det p q)
+det (ξ-case p) (ξ-case q) = cong _ (det p q)
+det (ξ-case p) (β-suc v) = ⊥-elim (valueReduce (V-suc v) p)
+det β-zero β-zero = refl
+det (β-suc v) (ξ-case q) = ⊥-elim (valueReduce (V-suc v) q)
+det (β-suc v) (β-suc w) = refl
+det β-μ β-μ = refl
