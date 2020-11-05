@@ -126,7 +126,6 @@ Proof.
         + assumption.
 Qed.
 
-
 Lemma bindEnvEqual : forall (e e':Env) (n:nat) (x x':set),
     envEqual e e' -> x == x' -> envEqual (bind e n x) (bind e' n x').
 Proof.
@@ -146,7 +145,6 @@ Proof.
     - apply H1. assumption.
 Qed.
 
-
 Lemma bindNotInFree : forall (p:Formula) (e:Env) (n:nat) (x:set),
     ~In n (Fr p) -> envEqualOn p (bind e n x) e.
 Proof.
@@ -154,7 +152,6 @@ Proof.
     - subst. apply H1 in H2. contradiction.
     - apply equalRefl.
 Qed.
-
 
 Lemma bindReplace : forall (e:Env) (n n' k:nat) (x:set),
     n' <> k -> bind e n' x (replace n n' k) == bind e n x k.

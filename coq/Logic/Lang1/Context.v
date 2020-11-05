@@ -290,7 +290,7 @@ Proof.
       apply H2. assumption.
 Qed.
 
-(*
+
 Lemma bindCtxEqualOn : forall (p:Formula) (G G':Context) (n:nat) (x x':set),
     ctxEqualOn p G G' -> x == x' -> ctxEqualOn p (bind G n x) (bind G' n x').
 Proof.
@@ -299,6 +299,25 @@ Proof.
     - subst. apply FindE with x'; try (apply FindZ). apply equalTrans with x.
         + apply equalSym. assumption.
         + apply bindEqualRev in H4. assumption.
-    -
-Show.
-*)
+    - apply bindDiff; try assumption. apply bindDiff in H4; try assumption.
+      apply H1; assumption.
+    - subst. apply FindE with x; try (apply FindZ). apply equalTrans with x'.
+        + assumption.
+        + apply bindEqualRev in H4. assumption.
+    - apply bindDiff; try assumption. apply bindDiff in H4; try assumption.
+      apply H1; assumption. 
+Qed.
+
+Lemma bindNotInFree : forall (p:Formula) (G:Context) (n:nat) (x:set),
+    ~ In n (Fr p) -> ctxEqualOn p (bind G n x) G.
+Proof.
+    intros p G n x H1 m y H2. split; intros H3; 
+    destruct (eqDec n m) as [H4|H4].
+    - subst. apply H1 in H2. contradiction.
+    - apply bindDiff in H3; assumption.
+    - subst. apply H1 in H2. contradiction.
+    - apply bindDiff; assumption.
+Qed.
+
+
+
