@@ -1,3 +1,4 @@
+
 lemma L1 : ∀ (f : ℕ → ℕ) (k : ℕ), f 0 = 0 → k = 0 → f k = 0 :=
   assume f k H1 H2,
     begin

@@ -7,6 +7,7 @@ Require Import Logic.Class.Ord.
 Require Import Logic.Nat.Ord.
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Wec.
+Require Import Logic.Nat.Witness.
 
 (* Subset of N defined as predicate over N                                      *)
 Definition Subset : Type := nat -> Prop.
@@ -91,7 +92,6 @@ Proof.
           rewrite H5. apply H1. assumption. 
 Qed.
 
-(*
 Theorem nonEmptyHasSmallest : forall (A:Subset),
     pWec A                   ->
     (exists (k:nat), k :: A) ->
@@ -104,35 +104,19 @@ Proof.
         { exists k. split; try assumption. apply le_n. }
         { apply restrictFinite. }}
     destruct H2 as [m H2]. exists m. 
-Show.
-*)
-
-(*
-Lemma ex_imp_small : forall (p:nat -> Prop), 
-    (exists (n:nat), p n ) -> exists (n:nat), asSmallest p n.
-Proof.
-    unfold asSmallest. intros p [n H1].
-
-Show.
-*)
-
-
-
-(*
-Definition witnessNat (p:nat -> Prop) (q:Dec p) (r:exists (n:nat), p n) : nat :=
-    proj1_sig (witness p q r).
-
-Lemma witnessSound : forall (p:nat -> Prop) (q:Dec p) (r:exists (n:nat), p n),
-    p (witnessNat p q r).
-Proof.
-    intros p q r. exact (proj2_sig (witness p q r)).
+    apply restrictSmallest in H2; try assumption. exists k. 
+    split; try assumption. apply le_n.
 Qed.
 
-
-Lemma witnessSmallest : forall (p:nat -> Prop) (q:Dec p) (r:exists (n:nat), p n),
-    forall (n:nat), p n -> witnessNat p q r <= n.
+(*
+(* If a subset is computationally decidable, then so is the predicate which     *)
+(* expresses the fact that an natural number is the smallest element.           *)
+Lemma DecSmallest : forall (A:Subset), pDec A -> pDec (fun k => Smallest k A).
 Proof.
-
+    unfold pDec, Dec. intros A H1 n. induction n as [|n IH].
+    - destruct (H1 0) as [H2|H2]. 
+        + left. split; try assumption. intros m H3. apply le_0_n.
+        + right. intros [H3 H4]. apply H2. assumption.
+    -
 Show.
 *)
-

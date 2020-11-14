@@ -2,4 +2,4 @@
 
 HOME=/home/john/Prog/lean/hhg
 cd ${HOME}
-    rm -f *.olean
+rm -f *.olean

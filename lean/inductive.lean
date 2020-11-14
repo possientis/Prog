@@ -1,3 +1,5 @@
+open tactic.interactive
+
 inductive WeekDay : Type
 | Sunday    : WeekDay
 | Monday    : WeekDay

@@ -6,5 +6,6 @@ cd ${HOME}
 
 ./hhg/clean.sh
 ./while/clean.sh
+rm -f *.olean
 
 cd ${DIR}

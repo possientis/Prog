@@ -9,7 +9,8 @@ Latex:
 
 
 Set Theory:
-Context <-> Environment
+Lang1/Context
+Lang1/SemanCtx
 Lang1/SemanCtx compare with agda
 Lang1/SemanCtx compare with Lang1/Semantics
 axiom of choice?
@@ -26,6 +27,8 @@ Rel/Allegory
 go back to book
 
 Computational Type Theory with Coq:
+Nat/Dec
+add Nat/Dec to Makefile
 Nat/Subset
 Nat: N <-> N x N
 go back to book

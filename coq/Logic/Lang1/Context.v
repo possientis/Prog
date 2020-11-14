@@ -77,6 +77,14 @@ Notation "G <= H"  := (ctxIncl G H)
 
 Open Scope Context_scope.
 
+(*
+Lemma ctxInclO : forall (G:Context), O <= G.
+Proof.
+    intros G n x H1.
+Show.
+*)
+
+
 (* The corresponding proof in agda appears to be a lot simpler.                 *)
 Lemma ctxInclExtend : forall (G H:Context) (n:nat) (x:set),
     G <= H -> G ; n~>x <= H ; n~>x.
@@ -235,7 +243,6 @@ Proof.
       try assumption. apply (IH G n x x'); reflexivity.
 Qed.
 
-
 Lemma bindPermute : forall (G:Context) (n m:nat) (x y:set), m <> n ->
     ctxEqual (bind (bind G n x) m y) (bind (bind G m y) n x).
 Proof.
@@ -318,6 +325,4 @@ Proof.
     - subst. apply H1 in H2. contradiction.
     - apply bindDiff; assumption.
 Qed.
-
-
 

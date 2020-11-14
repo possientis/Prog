@@ -253,5 +253,19 @@ Proof.
         + apply Cong_transitive with q2; try assumption.
           apply Cong_symmetric. assumption.
     - apply almostSym in H5. apply almostAllRev in H5. destruct H5 as [H5|H5].
+        + destruct H5 as [r1 [H5 H6]]. subst. constructor.
+          apply Cong_transitive with q1; try assumption. 
+          apply Cong_symmetric. assumption.
+        + destruct H5 as [r1 [s1 [y [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
+          apply almostSym. apply AAllxy with s1; try assumption.
+          apply Cong_transitive with q1; assumption.
+    - apply almostSym in H5. apply almostAllRev in H5. destruct H5 as [H5|H5].
+        + destruct H5 as [r1 [H5 H6]]. subst. 
+          apply AAllxy with r'; try assumption. 
+          apply Cong_transitive with q1; assumption.
+        + destruct H5 as [r1 [s1 [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
+          destruct (eqDec x z) as [H10|H10].
+            { subst. constructor.
+        
 Show.
 *)

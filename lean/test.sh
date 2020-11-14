@@ -25,34 +25,34 @@ main(){
     check tactic
     check tacticComb
     check structure
-    check simp
+#    check simp
     check semigroup
-    check rewrite
-    check real
+#    check rewrite
+#    check real
     check pattern
     check negation
-    check nat
+#    check nat
     check mutual
     check match
     check list
     check instance
-    check inductive
-    check inaccessible
+#    check inductive
+#    check inaccessible
     check implicit
     check have
     check first_order
-    check exists
-    check exercise_7_10_1
-    check exercise_7_10_2
-    check exercise_7_10_3
+#    check exists
+#    check exercise_7_10_1
+#    check exercise_7_10_2
+#    check exercise_7_10_3
     check equivalence
-    check eq
-    check divides
+#    check eq
+#    check divides
     check disjunction
     check decidable
-    check conjunction
+#    check conjunction
     check classical
-    check calc
+#    check calc
     check attribute
     echo
     echo 'main test completed successfully'
