@@ -9,7 +9,8 @@ all:					std.agdai \
 						quantifiers.agdai \
 						decidable.agdai \
 						lists.agdai \
-						lambda.agdai
+						lambda.agdai \
+						properties.agdai
 
 
 std.agdai:				std.agda
@@ -24,9 +25,7 @@ relations.agdai:		relations.agda
 	agda -v0 relations.agda
 
 
-bin.agdai:				bin.agda \
-						induction.agdai \
-						relations.agdai
+bin.agdai:				bin.agda
 	agda -v0 bin.agda
 
 
@@ -34,41 +33,30 @@ equality.agdai:			equality.agda
 	agda -v0 equality.agda	
 
 
-isomorphism.agdai:		isomorphism.agda \
-						bin.agdai
+isomorphism.agdai:		isomorphism.agda
 	agda -v0 isomorphism.agda
 
 
-connectives.agdai:		connectives.agda \
-						isomorphism.agdai	
+connectives.agdai:		connectives.agda
 	agda -v0 connectives.agda
 
 
-negation.agdai:			negation.agda \
-						isomorphism.agdai	
+negation.agdai:			negation.agda
 	agda -v0 negation.agda
 
 
-quantifiers.agdai:		quantifiers.agda \
-						isomorphism.agdai \
-						bin.agdai
+quantifiers.agdai:		quantifiers.agda
 	agda -v0 quantifiers.agda
 
 
-decidable.agdai:		decidable.agda \
-						isomorphism.agdai \
-						relations.agdai
+decidable.agdai:		decidable.agda
 	agda -v0 decidable.agda
 
-lists.agdai:			lists.agda \
-						isomorphism.agdai \
-						relations.agdai \
-						bin.agdai
+lists.agdai:			lists.agda
 	agda -v0 lists.agda
 						
-
-lambda.agdai:			lambda.agda \
-						isomorphism.agdai \
-						decidable.agdai
+lambda.agdai:			lambda.agda
 	agda -v0 lambda.agda
 	
+properties.agdai:		properties.agda
+	agda -v0 properties.agda

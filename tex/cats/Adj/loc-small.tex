@@ -416,8 +416,8 @@ of~(\ref{Adj:def:natural:associated:counit}).
             &=&g\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
             \mbox{def.~(\ref{Nat:def:leftmul}) and~(\ref{Nat:def:rightmul})}\ \to\ 
             &=&g\circ(\epsilon F\circ F\eta)(c)\\
-            \mbox{def.~(\ref{Adj:def:related}), $\eta$ and $\epsilon$ related}
-            \ \to\ 
+            \mbox{def.~(\ref{Adj:prop:related:both}), $\eta$ and 
+            $\epsilon$ related}\ \to\ 
             &=&g\circ\iota_{F}(c)\\
             \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
             &=&g\circ\id(\,F(c)\,)\\
@@ -441,24 +441,64 @@ of~(\ref{Adj:def:natural:associated:counit}).
             &=&\alpha(c,d)(\,\epsilon_{d}\circ F(f)\,)\\
             \mbox{def.~(\ref{Adj:def:natural:associated:unit})}\ \to\ 
             &=&G(\,\epsilon_{d}\circ F(f)\,)\circ\eta_{c}\\
-            \mbox{TODO:$F$ functor}\ \to\ 
-            &=&\epsilon_{d}\circ (F\circ G)(g)\circ F(\eta_{c})\\
-            \mbox{prop.~(\ref{Adj:prop:counit:natural})}\ \to\ 
-            &=&g\circ\epsilon_{F(c)}\circ F(\eta_{c})\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&G(\epsilon_{d})\circ(G\circ F)(f)\circ\eta_{c}\\
+            \mbox{prop.~(\ref{Adj:prop:unit:natural})}\ \to\ 
+            &=&G(\epsilon_{d})\circ\eta_{G(d)}\circ f\\
             \mbox{def.~(\ref{Nat:def:leftmul}) and~(\ref{Nat:def:rightmul})}\ \to\ 
-            &=&g\circ(\epsilon F\circ F\eta)(c)\\
-            \mbox{def.~(\ref{Adj:def:related}), $\eta$ and $\epsilon$ related}
-            \ \to\ 
-            &=&g\circ\iota_{F}(c)\\
+            &=&(G\epsilon\circ\eta G)(d)\circ f\\
+            \mbox{def.~(\ref{Adj:prop:related:both}), $\eta$ and 
+            $\epsilon$ related}\ \to\ 
+            &=&\iota_{G}(d)\circ f\\
             \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
-            &=&g\circ\id(\,F(c)\,)\\
-            &=&g\\
-            \mbox{$g:F(c)\to d\ @\ \Dat$}\ \to\ 
-            &=&\id(\,\Dat(F(c),d)\,)(g)\\
-            \mbox{prop.~(\ref{Adj:prop:lhs:object})}\ \to\ 
-            &=&\id(\,F^{*}(c,d)\,)(g)\\
+            &=&\id(\,G(d)\,)\circ f\\
+            &=&f\\
+            \mbox{$f:c\to G(d)\ @\ \Cat$}\ \to\ 
+            &=&\id(\,\Cat(c,G(d))\,)(f)\\
+            \mbox{prop.~(\ref{Adj:prop:rhs:object})}\ \to\ 
+            &=&\id(\,G^{*}(c,d)\,)(f)\\
             \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
-            &=&\iota_{F^{*}}(c,d)(g)\\
+            &=&\iota_{G^{*}}(c,d)(f)\\
         \end{eqnarray*} 
- 
+\end{proof}
+
+\begin{prop}\label{Adj:prop:natural:associated:counit:isomorphism}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Let $\epsilon$ be a counit of $(F,G)$ and 
+    $\beta:G^{*}\Rightarrow F^{*}$ be the natural transformation associated
+    with $\epsilon$, as per~(\ref{Adj:def:natural:associated:counit}). Then 
+    $\beta$ is a natural isomorphism with inverse $\alpha:F^{*}\Rightarrow G^{*}$ 
+    associated with the related unit $\eta$.
+\end{prop}
+\noindent
+{\bf Remark}: Recall from proposition~(\ref{Adj:prop:counit:has:related:unit})
+that every counit $\epsilon$ of $(F,G)$ has a unique related unit $\eta$ and
+$\alpha:F^{*}\Rightarrow G^{*}$ is therefore well-defined by virtue 
+of~(\ref{Adj:def:natural:associated:unit}).
+
+\noindent
+\begin{proof}
+    Saying that $\beta$ is a natural isomorphism with inverse $\alpha$ is the
+    same as saying that $\alpha$ is a natural isomorphism with inverse $\beta$.
+    So the result follows immediately from 
+    proposition~(\ref{Adj:prop:natural:associated:unit:isomorphism}),
+    since $\eta$ and $\epsilon$ are related unit and counit of $(F,G)$ and
+    $\alpha:F^{*}\Rightarrow G^{*}$ is associated with $\eta$ while
+    $\beta:G^{*}\Rightarrow F^{*}$ is associated with $\epsilon$.
+\end{proof}
+
+\begin{prop}\label{Adj:prop:adjunction:F*:G*:iso}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Then we have the implication:
+        \[
+            F\dashv G\ \Rightarrow\  F^{*}\simeq G^{*}
+        \]
+    where $F^{*}$ and $G^{*}$ denote the left-hand-side and right-hand-side 
+    functors respectively associated with $(F,G)$, as per 
+    definitions~(\ref{Adj:def:lhs:functor}) and~(\ref{Adj:def:rhs:functor}). 
+    In other words, if $(F,G)$ is an adjunction then $F^{*}$ and $G^{*}$ are 
+    naturally isomorphic.
+\end{prop}
+\begin{proof}
+    TODO
 \end{proof}

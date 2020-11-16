@@ -1,6 +1,8 @@
+Require Import Logic.Class.Eq.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Elem.
+Require Import Logic.Set.Equal.
 
 Require Import Logic.Fol.Syntax.
 
@@ -75,12 +77,28 @@ Proof.
     - apply evalAll. intros x. apply IH1. apply ctxInclExtend. assumption.
 Qed.
 
-
-(*
 Lemma evalWeaken : forall (G:Context) (p:Formula) (A:Prop),
     O :- p >> A -> G :- p >> A.
 Proof.
-    intros G p A. apply evalMonotone.
+    intros G p A. apply evalMonotone, ctxInclO.
+Qed.
 
+(*
+Lemma evalDrop : forall (G:Context) (p:Formula) (n:nat) (x y:set) (A : Prop),
+    G ; n~>y ; n~>x :- p >> A -> G ; n~>x :- p >> A.
+Proof.
+    intros G p n x y A H1. remember (G ; n~>y ; n~>x) as G1 eqn:E1.
+    revert G n x y E1. induction H1 as
+        [G'|G' n m x y H1 H2|G' p1 p2 A1 A2 H1 IH1 H2 IH2|G' n p1 A1 H1 IH1];
+    intros G n' x' y' H3.
+    - apply evalBot.
+    - subst. apply evalElem.
+        +  destruct (eqDec n' n) as [H4|H4].
+            { subst. apply bindEqualRev in H1. apply FindE with x';
+              try assumption. apply FindZ. }
+            { apply bindDiff; try assumption. 
+              apply bindDiff in H1; try assumption. 
+              apply bindDiff in H1; assumption. }
+        +
 Show.
 *)

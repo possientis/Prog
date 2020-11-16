@@ -2,7 +2,7 @@
 -- ℕ : \bN
 -- 𝔹 : \bB
 -- → : \to, \r, \->
--- ∶ : \:  -- looks the same, but not the same as normal semi-colon
+-- ∶ : \:  -- looks the same, but not the same as normal colon
 -- — : \em
 -- —→: \em\to
 -- —↠: \em\rr-
@@ -41,7 +41,7 @@
 -- ₀ : \_0
 -- ₁ : \_1
 -- ₂ : \_2
--- ⊢ : \vdash
+-- ⊢ : \vdash, \|-
 -- ⊨ : \vDash
 -- ≃ : \~-, \simeq
 -- ≲ : \<~

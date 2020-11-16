@@ -77,12 +77,17 @@ Notation "G <= H"  := (ctxIncl G H)
 
 Open Scope Context_scope.
 
-(*
+
 Lemma ctxInclO : forall (G:Context), O <= G.
 Proof.
-    intros G n x H1.
-Show.
-*)
+    intros G n x H1. remember (n~>x) as b eqn:E. clear n x E.
+    remember O as H eqn:E. revert G E.
+    induction H1 as [H n x|H n m x y H1 IH1|H n x y H1 H2 IH2]; 
+    intros G H3.
+    - inversion H3.
+    - inversion H3.
+    - apply FindE with x; try assumption. apply IH2. assumption.
+Qed.
 
 
 (* The corresponding proof in agda appears to be a lot simpler.                 *)

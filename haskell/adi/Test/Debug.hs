@@ -16,9 +16,8 @@ main :: IO ()
 --main = evalIO @ Eval1 e13
 main = do
     let e = e14
-    putStrLn $ showExpr e
     putStrLn "Reduction:"
-    mapM_ (putStrLn . showExpr) $ take 4 $ trace e
+    mapM_ (putStrLn . showExpr) $ take 3 $ trace e
 
 
 e1 :: Expr
