@@ -7,7 +7,7 @@ Require Import Logic.Class.Ord.
 Require Import Logic.Nat.Ord.
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Wec.
-Require Import Logic.Nat.Witness.
+Require Import Logic.Nat.Dec.
 
 (* Subset of N defined as predicate over N                                      *)
 Definition Subset : Type := nat -> Prop.
@@ -113,10 +113,11 @@ Qed.
 (* expresses the fact that an natural number is the smallest element.           *)
 Lemma DecSmallest : forall (A:Subset), pDec A -> pDec (fun k => Smallest k A).
 Proof.
-    unfold pDec, Dec. intros A H1 n. induction n as [|n IH].
+    intros A H1 n. destruct n as [|n]. 
     - destruct (H1 0) as [H2|H2]. 
         + left. split; try assumption. intros m H3. apply le_0_n.
         + right. intros [H3 H4]. apply H2. assumption.
-    -
+    - remember (boundedDec A H1 n) as H2 eqn:E. clear E. destruct H2 as [H2|H2].
+        + right. intros [H3 H4].
 Show.
 *)

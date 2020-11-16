@@ -26,8 +26,6 @@ Rel/Allegory
 go back to book
 
 Computational Type Theory with Coq:
-Nat/Dec
-add Nat/Dec to Makefile
 Nat/Subset
 Nat: N <-> N x N
 go back to book

@@ -65,6 +65,7 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \
 			${NAT}/Ord.vo \
 			${NAT}/Wec.vo \
+			${NAT}/Dec.vo \
 			${NAT}/Subset.vo \
 			${NAT}/Max.vo \
 			${NAT}/Weaken.vo \
@@ -251,6 +252,9 @@ ${NAT}/Leq.vo : ${NAT}/Leq.v
 	coqc $<			${NAT_LIB}
 
 ${NAT}/Wec.vo : ${NAT}/Wec.v
+	coqc $<			${NAT_LIB}
+
+${NAT}/Dec.vo : ${NAT}/Dec.v
 	coqc $<			${NAT_LIB}
 
 ${NAT}/Ord.vo : ${NAT}/Ord.v
