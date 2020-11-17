@@ -265,7 +265,21 @@ Proof.
           apply Cong_transitive with q1; assumption.
         + destruct H5 as [r1 [s1 [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
           destruct (eqDec x z) as [H10|H10].
-            { subst. constructor.
+            { subst. constructor. assert (r' ~ s1) as H9.
+                { change (id r' ~ id s1). rewrite <- fmap_id.
+                  rewrite <- (permute_involution v e y z).
+                  rewrite fmap_comp', fmap_comp'.
+                  apply (StrongAlpha_injective _ _ _ _); 
+                  try (apply permute_injective).
+                  rewrite permute_comm.
+                  rewrite <- var_replace_permute; try assumption.
+                  rewrite <- var_replace_permute; try assumption.
+                  apply Cong_transitive with q1 ; try assumption.
+                  apply Cong_symmetric. assumption. }
+              apply Cong_transitive with r'; try assumption.
+              apply Cong_transitive with s1; try assumption.
+              apply Cong_symmetric. assumption. }
+            {
         
 Show.
 *)

@@ -2,6 +2,7 @@ Require Import List.
 
 Require Import Logic.Class.Eq.
 
+Require Import Logic.Func.Identity.
 Require Import Logic.Func.Injective.
 Require Import Logic.Func.Composition.
 
@@ -73,4 +74,31 @@ Proof.
                 { assumption. }}
 Qed.
 
+Lemma permute_comm : forall (v:Type) (e:Eq v) (x y:v), (y <:> x) = (x <:> y).
+Proof.
+    intros v e x y. apply extensionality. intros u. unfold permute.
+    destruct (eqDec u x) as [H1|H1].
+    - subst. destruct (eqDec x y) as [H2|H2].
+        + subst. reflexivity.
+        + reflexivity.
+    - reflexivity.
+Qed.
 
+Lemma permute_involution : forall (v:Type) (e:Eq v) (x y:v),
+    (y <:> x) ; (y <:> x) = @id v.
+Proof.
+    intros v e x y. apply extensionality. intros u. unfold permute, comp.
+    destruct (eqDec u x) as [H1|H1].
+    - subst. destruct (eqDec y x) as [H2|H2].
+        + subst. reflexivity.
+        + destruct (eqDec y y) as [H3|H3].
+            { reflexivity. }
+            { exfalso. apply H3. reflexivity. }
+    - destruct (eqDec u y) as [H2|H2] eqn:E.
+        + subst. destruct (eqDec x x) as [H3|H3].
+            { reflexivity. }
+            { exfalso. apply H3. reflexivity. }
+        + destruct (eqDec u x) as [H3|H3].
+            { subst. exfalso. apply H1. reflexivity. }
+            { rewrite E. reflexivity. }
+Qed.
