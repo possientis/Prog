@@ -50,9 +50,11 @@ REL_OBJ   = ${REL}/Properties.vo \
 			${REL}/Intersect.vo \
 			${REL}/Include.vo \
 			${REL}/Functional.vo \
+			${REL}/Modularity.vo \
 			${REL}/Total.vo \
 			${REL}/Allegory.vo \
 			${REL}/Func.vo \
+			${REL}/Shunting.vo \
 			${REL}/Sum.vo \
 			${REL}/Product.vo \
 			${REL}/Initial.vo \
