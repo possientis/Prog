@@ -19,19 +19,19 @@ Lemma pWec2Wec : forall (a b:Type) (p:a -> b -> Prop) (x:a),
     pWec2 p -> pWec (p x).
 Proof.
     intros a b p x H1 y. apply H1.
-Qed.
+Defined.
 
 Lemma DecWec : forall (A:Prop), Dec A -> Wec A.
 Proof.
     intros A [H1|H1]. 
     - left. assumption.
     - right. assumption.
-Qed.
+Defined.
 
 Lemma pDecWec : forall (a:Type) (p:a -> Prop), pDec p -> pWec p.
 Proof.
     intros a p H1 x. apply DecWec. apply H1.
-Qed.
+Defined.
 
 Lemma andWec : forall (A B:Prop), Wec A -> Wec B -> Wec (A /\ B).
 Proof.
@@ -40,5 +40,5 @@ Proof.
     - right. intros [H3 H4]. apply H2 in H4. contradiction.
     - right. intros [H3 H4]. apply H1 in H3. contradiction.
     - right. intros [H3 H4]. apply H1 in H3. contradiction.
-Qed.
+Defined.
 

@@ -168,26 +168,31 @@ Notation "p :~: q" := (AlmostStrongAlpha p q)
 
 Open Scope Fol_StrongAlpha_scope.
 
-Lemma almostImpRev : forall (v:Type) (e:Eq v) (p q1 q2:P v), 
-    p :~: Imp q1 q2 -> exists (p1 p2:P v),
-        (p1 ~ q1) /\ (p2 ~ q2) /\ (p = Imp p1 p2).
+Lemma almostImpRev : forall (v:Type) (e:Eq v) (p1 p2 q:P v), 
+    Imp p1 p2 :~: q -> exists (q1 q2:P v),
+        (p1 ~ q1) /\ (p2 ~ q2) /\ (q = Imp q1 q2).
 Proof.
-    intros v e p q1 q2 H1. remember (Imp q1 q2) as q eqn:Q. revert q1 q2 Q.
-    destruct H1 as [|x y|p1 p2 q1' q2' H1 H2|x p1 q1'|x y p1 q1' r H1 H2 H3 H4];
-    intros q1 q2 Q; inversion Q. subst. exists p1. exists p2.
+    intros v e p1 p2 q H1. remember (Imp p1 p2) as p eqn:E. revert p1 p2 E.
+    destruct H1 as [|x y|p1' p2' q1 q2 H1 H2|x p1' q1|x y p1' q1 r H1 H2 H3 H4];
+    intros p1 p2 E; inversion E. subst. exists q1. exists q2.
     split; try assumption. split; try assumption. reflexivity.
 Qed.
 
-Lemma almostAllRev : forall (v:Type) (e:Eq v) (p q1:P v) (y:v),
-    p :~: All y q1 -> 
-        (exists (p1:P v), (p1 ~ q1) /\ (p = All y p1)) \/
-        (exists (p1 r:P v) (x:v),
+(*
+Lemma almostAllRev : forall (v:Type) (e:Eq v) (p1 q:P v) (x:v),
+    All x p1 :~: q -> 
+        (exists (q1:P v), (p1 ~ q1) /\ (q = All x q1)) \/
+        (exists (q1 r:P v) (y:v),
             (x <> y)                /\ 
             (p1 ~ r)                /\ 
             (q1 ~ fmap (y // x) r)  /\
             (~ y :: var r)          /\
-            (p = All x p1)).
+            (q = All y q1)).
 Proof.
+
+Show.
+*)
+(*
     intros v e p q1 y H1. remember (All y q1) as q eqn:Q. revert y q1 Q.
     destruct H1 as [|x y'|p1 p2 q1' q2' H1 H2|x p1 q1'|x y' p1 q1' r H1 H2 H3 H4];
     intros y q1 Q; inversion Q; subst.
@@ -236,14 +241,15 @@ Proof.
           rewrite <- H5. apply Cong_reflexive.
         + apply var_replace_remove. assumption.
 Qed.
+*)
 
 (*
 Lemma almostTrans : forall (v:Type) (e:Eq v) (p q r:P v),
     p :~: q -> q :~: r -> p :~: r.
 Proof.
     intros v e p q r H1. revert r.
-    destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1|x y p1 q1 r' H1 H2 H3 H4];
-    intros r H5.
+    destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1|x y p1 q1 r H1 H2 H3 H4];
+    intros r' H5.
     - assumption.
     - assumption.
     - apply almostSym in H5. apply almostImpRev in H5. 
@@ -261,12 +267,12 @@ Proof.
           apply Cong_transitive with q1; assumption.
     - apply almostSym in H5. apply almostAllRev in H5. destruct H5 as [H5|H5].
         + destruct H5 as [r1 [H5 H6]]. subst. 
-          apply AAllxy with r'; try assumption. 
+          apply AAllxy with r; try assumption. 
           apply Cong_transitive with q1; assumption.
-        + destruct H5 as [r1 [s1 [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
+        + destruct H5 as [r1 [s [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
           destruct (eqDec x z) as [H10|H10].
-            { subst. constructor. assert (r' ~ s1) as H9.
-                { change (id r' ~ id s1). rewrite <- fmap_id.
+            { subst. constructor. assert (r ~ s) as H9.
+                { change (id r ~ id s). rewrite <- fmap_id.
                   rewrite <- (permute_involution v e y z).
                   rewrite fmap_comp', fmap_comp'.
                   apply (StrongAlpha_injective _ _ _ _); 
@@ -276,8 +282,8 @@ Proof.
                   rewrite <- var_replace_permute; try assumption.
                   apply Cong_transitive with q1 ; try assumption.
                   apply Cong_symmetric. assumption. }
-              apply Cong_transitive with r'; try assumption.
-              apply Cong_transitive with s1; try assumption.
+              apply Cong_transitive with r; try assumption.
+              apply Cong_transitive with s; try assumption.
               apply Cong_symmetric. assumption. }
             {
         

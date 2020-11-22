@@ -99,6 +99,16 @@ Proof.
             { apply bindDiff; try assumption. 
               apply bindDiff in H1; try assumption. 
               apply bindDiff in H1; assumption. }
-        +
+        + destruct (eqDec n' m) as [H4|H4].
+            { subst. apply bindEqualRev in H2. apply FindE with x';
+              try assumption. apply FindZ. }
+            { apply bindDiff; try assumption.
+              apply bindDiff in H2; try assumption. 
+              apply bindDiff in H2; assumption. }
+    - subst. apply evalImp.
+        + apply IH1 with y'. reflexivity.
+        + apply IH2 with y'. reflexivity.
+    - subst. apply evalAll. intros x.
+
 Show.
 *)

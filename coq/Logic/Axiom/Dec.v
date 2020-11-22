@@ -16,6 +16,6 @@ Lemma pDec2Dec : forall (a b:Type) (p:a -> b ->Prop) (x:a),
     pDec2 p -> pDec (p x).
 Proof.
     intros a b p x H1 y. apply H1.
-Qed.
+Defined.
 
 

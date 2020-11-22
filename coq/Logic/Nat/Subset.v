@@ -4,10 +4,12 @@ Require Import Logic.Axiom.Wec.
 Require Import Logic.Axiom.Dec.
 
 Require Import Logic.Class.Ord.
+
 Require Import Logic.Nat.Ord.
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Wec.
 Require Import Logic.Nat.Dec.
+Require Import Logic.Nat.Witness.
 
 (* Subset of N defined as predicate over N                                      *)
 Definition Subset : Type := nat -> Prop.
@@ -20,7 +22,7 @@ Notation "n :: A" := (Elem n A) : Nat_Subset_scope.
 Open Scope Nat_Subset_scope.
 
 (* n is the smallest element of A.                                              *)
-Definition Smallest (n:nat) (A:Subset) : Prop :=
+Definition SmallestOf (A:Subset) (n:nat) : Prop :=
     (n :: A) /\ forall (m:nat), m :: A -> n <= m.
 
 (* A is a finite subset of N.                                                   *)
@@ -36,20 +38,20 @@ Proof.
     intros A n H1 k. apply andWec.
     - apply H1.
     - apply DecWec, leqDec.
-Qed.
+Defined.
 
 (* All restricted subsets are finite.                                           *)
 Lemma restrictFinite : forall (A:Subset) (n:nat), Finite (restrict n A).
 Proof.
     intros A n. exists n. intros m [H1 H2]. assumption.
-Qed.
+Defined.
 
 
 (* If A /\ [0,n] is non-empty, being the smallest element of A is the same as   *)
 (* being the smallest element of A /\ [0, n].                                   *)
 Lemma restrictSmallest : forall (A:Subset) (n m:nat), 
     (exists (k:nat), k :: restrict n A) ->
-    Smallest m A <-> Smallest m (restrict n A).
+    SmallestOf A m <-> SmallestOf (restrict n A) m.
 Proof.
     intros A n m [k [H1 H2]]. split.
     - intros [H3 H4]. split.
@@ -60,13 +62,13 @@ Proof.
       destruct (leqTotal p n) as [H7|H7].
         + apply H5. split; assumption.
         + apply le_trans with n; assumption.
-Qed.
+Defined.
 
 Lemma nonEmptyFiniteHasSmallest : forall (A:Subset),
     pWec A                   ->     (* A is weakly decidable *)
     (exists (k:nat), k :: A) -> 
     Finite A                 -> 
-    (exists (k:nat), Smallest k A).
+    (exists (k:nat), SmallestOf A k).
 
 Proof.
     intros A W H2 [n H1]. revert n A W H1 H2.
@@ -75,7 +77,7 @@ Proof.
       subst. exists 0. split; try assumption. intros m H3. apply le_0_n.
     - destruct (boundedWec A W n) as [H3|H3]. 
         + destruct H3 as [m' [H3 H4]].
-          assert (exists (k:nat), Smallest k (restrict n A)) as H5. 
+          assert (exists (k:nat), SmallestOf (restrict n A) k) as H5. 
             {apply IH.
                 { apply  restrictWec. assumption. }
                 { intros k [H5 H6]. assumption. }
@@ -90,15 +92,15 @@ Proof.
                     { exfalso. apply H3. exists k. split; assumption. }
                     { apply not_le_ge. assumption. }}}
           rewrite H5. apply H1. assumption. 
-Qed.
+Defined.
 
 Theorem nonEmptyHasSmallest : forall (A:Subset),
     pWec A                   ->
     (exists (k:nat), k :: A) ->
-    (exists (k:nat), Smallest k A).
+    (exists (k:nat), SmallestOf A k).
 Proof.
     intros A W [k H1]. 
-    assert (exists (m:nat), Smallest m (restrict k A)) as H2.
+    assert (exists (m:nat), SmallestOf (restrict k A) m) as H2.
     { apply nonEmptyFiniteHasSmallest.
         { apply restrictWec. assumption. }
         { exists k. split; try assumption. apply le_n. }
@@ -106,18 +108,64 @@ Proof.
     destruct H2 as [m H2]. exists m. 
     apply restrictSmallest in H2; try assumption. exists k. 
     split; try assumption. apply le_n.
-Qed.
+Defined.
 
-(*
+
 (* If a subset is computationally decidable, then so is the predicate which     *)
-(* expresses the fact that an natural number is the smallest element.           *)
-Lemma DecSmallest : forall (A:Subset), pDec A -> pDec (fun k => Smallest k A).
+(* expresses the fact that a natural number is its smallest element.            *)
+Lemma DecSmallest : forall (A:Subset), pDec A -> pDec (SmallestOf A).
 Proof.
     intros A H1 n. destruct n as [|n]. 
     - destruct (H1 0) as [H2|H2]. 
         + left. split; try assumption. intros m H3. apply le_0_n.
         + right. intros [H3 H4]. apply H2. assumption.
     - remember (boundedDec A H1 n) as H2 eqn:E. clear E. destruct H2 as [H2|H2].
-        + right. intros [H3 H4].
-Show.
+        + right. intros [H3 H4]. destruct H2 as [m [H2 H5]].
+          apply not_le_Sn_n with n. apply le_trans with m; try assumption.
+          apply H4. assumption.
+        + destruct (H1 (S n)) as [H3|H3].
+            { left. split; try assumption. intros m H4.
+              destruct (leqDec m n) as [H5|H5].
+                { exfalso. apply H2. exists m. split; assumption. }
+                { apply not_le_ge. assumption. }}
+            { right. intros [H4 H5]. apply H3 in H4. contradiction. }
+Defined.
+
+(* Function which given a subset, a proof of it computational decidability,     *)
+(* a proof of its non-emptiness, returns its smallest element.                  *)
+Definition smallestOf (A:Subset) (p:pDec A) (q:exists (k:nat), k :: A) : nat :=
+    proj1_sig 
+        (witness 
+            (SmallestOf A) 
+            (DecSmallest A p) 
+            (nonEmptyHasSmallest A (pDecWec nat A p) q)).
+
+
+Lemma smallestOfSound : 
+    forall (A:Subset) (p:pDec A) (q:exists (k:nat), k :: A),
+        SmallestOf A (smallestOf A p q).
+Proof.
+    intros A p q. exact (
+        proj2_sig 
+            (witness 
+                (SmallestOf A) 
+                (DecSmallest A p) 
+                (nonEmptyHasSmallest A (pDecWec nat A p) q))).
+Defined.
+
+(*
+Definition ex1 : Subset := fun n => n * n = 25.
+
+Lemma ex1Dec : pDec ex1.
+Proof.
+    unfold ex1. intros n. exact (eqDec (n*n) 25).
+Defined.
+
+Lemma ex1NonEmpty : exists (k:nat), k :: ex1.
+Proof.
+    exists 5. reflexivity.
+Defined.
+
+Compute smallestOf ex1 ex1Dec ex1NonEmpty.
 *)
+

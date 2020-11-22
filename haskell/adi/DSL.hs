@@ -28,8 +28,8 @@ module  DSL
     ,   eAddNat     -- :: Expr
     ,   eMulNat     -- :: Expr
     ,   eFacNat     -- :: Expr
-    ,   eY          -- :: Expr
-    ,   eFacY       -- :: Expr
+    ,   eZ          -- :: Expr
+    ,   eFacZ       -- :: Expr
     )   where
 
 import Op
@@ -124,16 +124,18 @@ eMulNat = (eRec "*" (eLam "n" (eLam "m"
                     (eVar "n") 
                     (eVar "m")))))))
 
--- Y combinator
-eY :: Expr
-eY = (eLam "f"
+-- Z combinator : Y combinator will not work with strict semantics
+eZ :: Expr
+eZ = (eLam "f"
         (eApp
-            (eLam "x" (eApp (eVar "f") (eApp (eVar "x") (eVar "x"))))
-            (eLam "x" (eApp (eVar "f") (eApp (eVar "x") (eVar "x"))))))
+            (eLam "x" (eApp (eVar "f") 
+                (eLam "v" (eApp (eApp (eVar "x") (eVar "x")) (eVar "v")))))
+            (eLam "x" (eApp (eVar "f") 
+                (eLam "v" (eApp (eApp (eVar "x") (eVar "x")) (eVar "v")))))))
 
 -- Factorial function implemented via Y combinator
-eFacY :: Expr
-eFacY = (eApp eY 
+eFacZ :: Expr
+eFacZ = (eApp eZ 
             (eLam "f"  
                 (eLam "n"
                     (eIf (eLe (eVar "n") (eNum 0)) 

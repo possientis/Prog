@@ -17,8 +17,7 @@ main :: IO ()
 main = do
     let e = e14
     putStrLn "Reduction:"
-    mapM_ (putStrLn . showExpr) $ take 3 $ trace e
-
+    mapM_ (putStrLn . showExpr) $ trace e
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 
@@ -61,5 +60,4 @@ e13 :: Expr
 e13 = eMul (eAdd (eNum 3) (eNum 4)) (eNum 9)
 
 e14 :: Expr 
-e14 = eApp eFacY (eNum 0)
-
+e14 = eApp eFacZ (eNum 5)

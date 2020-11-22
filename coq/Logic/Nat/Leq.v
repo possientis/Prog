@@ -7,21 +7,21 @@ Proof.
     induction n as [|n IH]; intros H.
     - inversion H.
     - apply IH. apply le_S_n. assumption.
-Qed.
+Defined.
 
 Lemma le_0 : forall (n:nat), n <= 0 -> n = 0.
 Proof.
     intros [|n].
     - intros _.  reflexivity.
     - intros H. inversion H. 
-Qed.
+Defined.
 
 Lemma le_0_n : forall (n:nat), 0 <= n.
 Proof.
     induction n as [|n IH].
     - apply le_n.
     - apply le_S. assumption.
-Qed.
+Defined.
 
 Lemma not_le_ge : forall (n m:nat), ~ n <= m -> S m <= n.
 Proof.
@@ -32,5 +32,5 @@ Proof.
     - destruct n as [|n].
         + exfalso. apply H1, le_0_n. 
         + apply le_n_S, IH. intros H2. apply H1. apply le_n_S. assumption.
-Qed.
+Defined.
 

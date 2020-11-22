@@ -7,7 +7,7 @@ Proof.
     induction n as [|n IH]; intros H.
     - inversion H.
     - injection H. intros H'. apply IH. assumption.
-Qed.
+Defined.
 
 (* TODO: issue already has an Eq instance from Ord                              *)
 Instance EqNat : Eq nat := { eqDec := eq_nat_dec }.

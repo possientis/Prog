@@ -52,9 +52,10 @@ REL_OBJ   = ${REL}/Properties.vo \
 			${REL}/Functional.vo \
 			${REL}/Modularity.vo \
 			${REL}/Total.vo \
-			${REL}/Allegory.vo \
-			${REL}/Func.vo \
+			${REL}/Function.vo \
+			${REL}/Embed.vo \
 			${REL}/Shunting.vo \
+			${REL}/Allegory.vo \
 			${REL}/Sum.vo \
 			${REL}/Product.vo \
 			${REL}/Initial.vo \

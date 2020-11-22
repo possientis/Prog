@@ -24,7 +24,7 @@ Proof.
         + destruct (IH m) as [H1|H1].
             { left. apply le_n_S. assumption. }
             { right. apply le_n_S. assumption. }
-Qed.
+Defined.
 
 Instance OrdNat : Ord nat :=
     { leq       := le

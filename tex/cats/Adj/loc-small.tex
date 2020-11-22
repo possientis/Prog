@@ -500,5 +500,23 @@ of~(\ref{Adj:def:natural:associated:unit}).
     naturally isomorphic.
 \end{prop}
 \begin{proof}
-    TODO
+    We assume that $F\dashv G$, i.e. that $(F,G)$ is an adjunction. In other
+    words we assume that $(F,G)$ has a unit $\eta:I_{\cal C}\Rightarrow G\circ F$
+    as per definition~(\ref{Adj:def:unit}) and we need to show that 
+    $F^{*}\simeq G^{*}$ i.e. that the right-hand-side functor $F^{*}$ is 
+    isomorphic to the left-hand-side functor $G^{*}$ as per
+    definition~(\ref{Cat:def:isomorphic}). Note that in order for the 
+    statement $F^{*}\simeq G^{*}$ to make sense, we need $F^{*}$ and $G^{*}$
+    to be objects of a common category. Since both $F^{*}$ and $G^{*}$ are
+    functors between the categories $\Cop\times\Dat$ and \Set, it is 
+    understood that the common category under consideration is the functor
+    category $[\,\Cop\times\Dat\,,\,\Set\,]$ as per 
+    definition~(\ref{Nat:def:functor:category}). From 
+    definition~(\ref{Cat:def:isomorphic}), in order to prove that $F^{*}\simeq 
+    G^{*}$ we need to show the existence of an isomophism $\alpha:F^{*}
+    \Rightarrow G^{*}$. However, having assumed that $(F,G)$ has a unit $\eta$,
+    we can consider the associated natural transformation $\alpha : F^{*}
+    \Rightarrow G^{*}$ as per definition~(\ref{Adj:def:natural:associated:unit})
+    which is a natural isomorphism as follows 
+    from~(\ref{Adj:prop:natural:associated:unit:isomorphism}).
 \end{proof}

@@ -35,7 +35,7 @@ specEval = describe "Checking the Eval module ..." $ do
     specECaseZ      @ m
     specECaseS      @ m
     specEFac        @ m
---    specEFacY       @ m
+    specEFacZ       @ m
     specEToNat      @ m
     specEFromNat    @ m
     specEAddNat     @ m
@@ -120,9 +120,9 @@ specEFac :: forall m . (Eval m) =>  Spec
 specEFac = it "Checked eval for eFac" $ do
     property (propEFac @ m)
 
-_specEFacY :: forall m . (Eval m) =>  Spec
-_specEFacY = it "Checked eval for eFacY" $ do
-    property (_propEFacY @ m)
+specEFacZ :: forall m . (Eval m) =>  Spec
+specEFacZ = it "Checked eval for eFacZ" $ do
+    property (propEFacZ @ m)
 
 specEToNat :: forall m . (Eval m) =>  Spec
 specEToNat = it "Checked eval for eToNat" $ do
@@ -202,8 +202,8 @@ propEFac :: forall m . (Eval m) => Integer -> Bool
 propEFac n  = num ((eval @ m) (eApp eFac (eNum n))) == Just 
     (if (n <= 0) then 1 else product [1..n])
 
-_propEFacY :: forall m . (Eval m) => Integer -> Bool
-_propEFacY n  = num ((eval @ m) (eApp eFacY (eNum n))) == Just 
+propEFacZ :: forall m . (Eval m) => Integer -> Bool
+propEFacZ n  = num ((eval @ m) (eApp eFacZ (eNum n))) == Just 
     (if (n <= 0) then 1 else product [1..n])
 
 propEToNat :: forall m . (Eval m) => Integer -> Bool

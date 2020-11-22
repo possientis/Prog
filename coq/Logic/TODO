@@ -1,7 +1,6 @@
 Logic:
-Func/Permute
-Fol/StrongAlpha
-Lam/StrongAlpha
+Fol/StrongAlpha : continue turning around 'Rev'
+Lam/StrongAlpha (turn around Rev lemmas)
 go back to book
 
 Haskell:
@@ -27,7 +26,7 @@ Rel/Allegory
 go back to book
 
 Computational Type Theory with Coq:
-Nat/Subset
+Nat/Subset: can we compute ?
 Nat: N <-> N x N
 go back to book
 

@@ -1,7 +1,7 @@
 Require Import Logic.Rel.R.
 Require Import Logic.Rel.Id.
-Require Import Logic.Rel.Func.
 Require Import Logic.Rel.Include.
+Require Import Logic.Rel.Function.
 Require Import Logic.Rel.Converse.
 Require Import Logic.Rel.Composition.
 

@@ -30,6 +30,7 @@ specReduce = describe "Checking the Reduce module ..." $ do
     specECaseZ
     specECaseS
     specEFac
+    specEFacZ
     specEToNat
     specEFromNat
     specEAddNat
@@ -114,6 +115,10 @@ specEFac :: Spec
 specEFac = it "Checked eval for eFac" $ do
     property propEFac
 
+specEFacZ :: Spec
+specEFacZ = it "Checked eval for eFacZ" $ do
+    property propEFacZ
+
 specEToNat :: Spec
 specEToNat = it "Checked eval for eToNat" $ do
     property propEToNat
@@ -189,6 +194,10 @@ propECaseS n m x = m' <= 0 || x == "" ||
 
 propEFac :: Integer -> Bool
 propEFac n  = eval (eApp eFac (eNum n)) == eNum 
+    (if (n <= 0) then 1 else product [1..n])
+
+propEFacZ :: Integer -> Bool
+propEFacZ n  = eval (eApp eFacZ (eNum n)) == eNum 
     (if (n <= 0) then 1 else product [1..n])
 
 propEToNat :: Integer -> Bool

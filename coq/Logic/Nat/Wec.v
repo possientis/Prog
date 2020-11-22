@@ -28,4 +28,4 @@ Proof.
                     { apply le_antisym; try assumption. 
                       apply not_le_ge. assumption. }
                   subst. apply H3 in H4. contradiction. }}
-Qed.
+Defined.

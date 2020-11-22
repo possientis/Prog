@@ -7,19 +7,19 @@ Inductive G (p : nat -> Prop) : nat -> Prop :=
 Lemma pn_imp_Gn : forall (p:nat -> Prop) (n:nat), p n -> G p n.
 Proof.
     intros p n H1. constructor. intros H2. apply H2 in H1. contradiction.
-Qed.
+Defined.
 
 Lemma GSn_imp_Gn : forall (p:nat -> Prop) (n:nat), G p (S n) -> G p n.
 Proof.
     intros p n H1. constructor. intros H2. assumption.
-Qed.
+Defined.
 
 Lemma Gn_imp_G0 : forall (p:nat -> Prop) (n:nat), G p n -> G p 0.
 Proof.
     intros p. induction n as [|n IH].
     - auto.
     - intros H1.  apply IH, GSn_imp_Gn. assumption.
-Qed.
+Defined.
 
 Definition elimG 
     (p:nat -> Prop) 

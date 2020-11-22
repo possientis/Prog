@@ -1,14 +1,14 @@
 Require Import Logic.Axiom.Extensionality.
 
 Require Import Logic.Rel.R.
-Require Import Logic.Rel.Func.
+Require Import Logic.Rel.Embed.
 Require Import Logic.Rel.Composition.
 
 (* The category of relations has coproducts with sum object a + b               *)
 
 (* Injection mappings                                                           *)
-Definition inj1 (a b:Type) : R a (a + b) := func inl.
-Definition inj2 (a b:Type) : R b (a + b) := func inr.
+Definition inj1 (a b:Type) : R a (a + b) := embed inl.
+Definition inj2 (a b:Type) : R b (a + b) := embed inr.
 
 Arguments inj1 {a} {b}.
 Arguments inj2 {a} {b}.
