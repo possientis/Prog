@@ -53,6 +53,7 @@ Proof.
     rewrite <- H1. apply dom_comp_incl.
 Qed.
 
+
 Lemma Total_incl : forall (a b:Type) (r s:R a b), 
     Total r -> r <= s -> Total s.
 Proof.
@@ -72,5 +73,11 @@ Proof.
     - apply Total_charac. intros x. 
       apply (incl_charac_to _ _ id _ x x) in H1; try constructor.
       destruct H1 as [y [H1 H2]]. exists y. split; assumption.
+Qed.
+
+Lemma Total_id : forall (a:Type), Total (@id a).
+Proof.
+    intros a. apply incl_charac. intros x y H1. destruct H1. exists x. 
+    split; constructor.
 Qed.
 

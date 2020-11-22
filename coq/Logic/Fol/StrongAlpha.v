@@ -178,7 +178,7 @@ Proof.
     split; try assumption. split; try assumption. reflexivity.
 Qed.
 
-(*
+
 Lemma almostAllRev : forall (v:Type) (e:Eq v) (p1 q:P v) (x:v),
     All x p1 :~: q -> 
         (exists (q1:P v), (p1 ~ q1) /\ (q = All x q1)) \/
@@ -189,22 +189,17 @@ Lemma almostAllRev : forall (v:Type) (e:Eq v) (p1 q:P v) (x:v),
             (~ y :: var r)          /\
             (q = All y q1)).
 Proof.
-
-Show.
-*)
-(*
-    intros v e p q1 y H1. remember (All y q1) as q eqn:Q. revert y q1 Q.
-    destruct H1 as [|x y'|p1 p2 q1' q2' H1 H2|x p1 q1'|x y' p1 q1' r H1 H2 H3 H4];
-    intros y q1 Q; inversion Q; subst.
-    - left. exists p1. split; try assumption. reflexivity.
-    - right. exists p1. exists r. exists x.
-      split; try assumption. 
+    intros v e p1 q x H1. remember (All x p1) as p eqn:E. revert x p1 E.
+    destruct H1 as [|x' y|p1' p2 q1 q2 H1 H2|x' p1' q1|x' y p1' q1 r H1 H2 H3 H4];
+    intros x p1 E; inversion E; subst; clear E.
+    - left. exists q1. split; try assumption. reflexivity.
+    - right. exists q1. exists r. exists y.
+      split; try assumption.
       split; try assumption.
       split; try assumption.
       split; try assumption.
       reflexivity.
 Qed.
-
 
 (* Almost equivalence contains generator of strong alpha-equivalence.           *)
 Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
@@ -241,34 +236,38 @@ Proof.
           rewrite <- H5. apply Cong_reflexive.
         + apply var_replace_remove. assumption.
 Qed.
-*)
 
 (*
+(* Almost equivalence is transitive.                                            *)
 Lemma almostTrans : forall (v:Type) (e:Eq v) (p q r:P v),
     p :~: q -> q :~: r -> p :~: r.
 Proof.
     intros v e p q r H1. revert r.
-    destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1|x y p1 q1 r H1 H2 H3 H4];
-    intros r' H5.
+    destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1|x y p1 q1 r' H1 H2 H3 H4];
+    intros r H5.
     - assumption.
     - assumption.
-    - apply almostSym in H5. apply almostImpRev in H5. 
-      destruct H5 as [p1' [p2' [H5 [H6 H7]]]]. rewrite H7. constructor. 
-        + apply Cong_transitive with q1; try assumption.
-          apply Cong_symmetric. assumption.
-        + apply Cong_transitive with q2; try assumption.
-          apply Cong_symmetric. assumption.
-    - apply almostSym in H5. apply almostAllRev in H5. destruct H5 as [H5|H5].
+    - apply almostImpRev in H5. 
+      destruct H5 as [r1 [r2 [H5 [H6 H7]]]]. subst. constructor.
+        + apply Cong_transitive with q1; assumption.
+        + apply Cong_transitive with q2; assumption.
+    - apply almostAllRev in H5. destruct H5 as [H5|H5].
         + destruct H5 as [r1 [H5 H6]]. subst. constructor.
-          apply Cong_transitive with q1; try assumption. 
+          apply Cong_transitive with q1; assumption.
+        + destruct H5 as [r1 [r' [y [H5 [H6 [H7 [H8 H9]]]]]]]. subst. 
+          apply AAllxy with r'; try assumption.
+          apply Cong_transitive with q1; assumption.
+    - apply almostAllRev in H5. destruct H5 as [H5|H5].
+        + destruct H5 as [r1 [H5 H6]]. subst.
+          apply AAllxy with r'; try assumption.
+          apply Cong_transitive with q1; try assumption.
           apply Cong_symmetric. assumption.
-        + destruct H5 as [r1 [s1 [y [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
-          apply almostSym. apply AAllxy with s1; try assumption.
-          apply Cong_transitive with q1; assumption.
-    - apply almostSym in H5. apply almostAllRev in H5. destruct H5 as [H5|H5].
-        + destruct H5 as [r1 [H5 H6]]. subst. 
-          apply AAllxy with r; try assumption. 
-          apply Cong_transitive with q1; assumption.
+        + destruct H5 as [r1 [s [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
+          destruct (eqDec x z) as [H10|H10].
+            { subst. constructor. 
+                 
+
+(*      Old proof:
         + destruct H5 as [r1 [s [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
           destruct (eqDec x z) as [H10|H10].
             { subst. constructor. assert (r ~ s) as H9.
@@ -286,6 +285,6 @@ Proof.
               apply Cong_transitive with s; try assumption.
               apply Cong_symmetric. assumption. }
             {
-        
+*)       
 Show.
 *)

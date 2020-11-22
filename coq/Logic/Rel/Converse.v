@@ -1,6 +1,7 @@
 Require Import Logic.Axiom.Extensionality.
 
 Require Import Logic.Rel.R.
+Require Import Logic.Rel.Id.
 Require Import Logic.Rel.Composition.
 
 (* Converse operator. Needed for Rel to be an allegory.                         *)
@@ -23,6 +24,12 @@ Lemma conv_comp : forall (a b c:Type) (r:R a b) (s:R b c),
 Proof.
     intros a b c r s. apply Ext. intros x y. unfold conv, comp. 
     split; intros [z [H1 H2]]; exists z; split; assumption.
+Qed.
+
+Lemma conv_id : forall (a:Type), conv (@id a) = id.
+Proof.
+    intros a. apply Ext. intros x y. split; intros H1; 
+    inversion H1; subst; constructor.
 Qed.
 
 

@@ -154,16 +154,16 @@ Proof.
 Defined.
 
 (*
-Definition ex1 : Subset := fun n => n * n = 25.
+Definition ex1 : Subset := fun n => n * n = 144.
 
 Lemma ex1Dec : pDec ex1.
 Proof.
-    unfold ex1. intros n. exact (eqDec (n*n) 25).
+    unfold ex1. intros n. exact (eqDec (n*n) 144).
 Defined.
 
 Lemma ex1NonEmpty : exists (k:nat), k :: ex1.
 Proof.
-    exists 5. reflexivity.
+    exists 12. reflexivity.
 Defined.
 
 Compute smallestOf ex1 ex1Dec ex1NonEmpty.

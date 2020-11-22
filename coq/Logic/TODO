@@ -1,5 +1,5 @@
 Logic:
-Fol/StrongAlpha : continue turning around 'Rev'
+Fol/StrongAlpha 
 Lam/StrongAlpha (turn around Rev lemmas)
 go back to book
 
@@ -22,11 +22,10 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
-Rel/Allegory
 go back to book
 
 Computational Type Theory with Coq:
-Nat/Subset: can we compute ?
+Define f3: N -> N, f3 n = min {k : n <= f1 k}
 Nat: N <-> N x N
 go back to book
 

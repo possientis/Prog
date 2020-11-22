@@ -88,11 +88,12 @@ Lemma evalDrop : forall (G:Context) (p:Formula) (n:nat) (x y:set) (A : Prop),
     G ; n~>y ; n~>x :- p >> A -> G ; n~>x :- p >> A.
 Proof.
     intros G p n x y A H1. remember (G ; n~>y ; n~>x) as G1 eqn:E1.
-    revert G n x y E1. induction H1 as
+    remember (p >> A) as I1 eqn:E2. revert G n x y p A E1 E2. 
+    induction H1 as
         [G'|G' n m x y H1 H2|G' p1 p2 A1 A2 H1 IH1 H2 IH2|G' n p1 A1 H1 IH1];
-    intros G n' x' y' H3.
+    intros G n' x' y' p' A' H3 H4.
     - apply evalBot.
-    - subst. apply evalElem.
+    - inversion H4. subst. clear H4. apply evalElem.
         +  destruct (eqDec n' n) as [H4|H4].
             { subst. apply bindEqualRev in H1. apply FindE with x';
               try assumption. apply FindZ. }
@@ -105,10 +106,9 @@ Proof.
             { apply bindDiff; try assumption.
               apply bindDiff in H2; try assumption. 
               apply bindDiff in H2; assumption. }
-    - subst. apply evalImp.
-        + apply IH1 with y'. reflexivity.
-        + apply IH2 with y'. reflexivity.
-    - subst. apply evalAll. intros x.
-
+    - inversion H4. subst. apply evalImp.
+        + apply (IH1 G n' x' y' p1 A1); reflexivity.
+        + apply (IH2 G n' x' y' p2 A2); reflexivity.
+    - inversion H4. subst. clear H4. apply evalAll. intros x.
 Show.
 *)
