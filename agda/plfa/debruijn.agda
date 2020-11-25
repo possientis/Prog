@@ -153,3 +153,41 @@ _ : ∅ , `ℕ ⇒ `ℕ , `ℕ ⊢ `ℕ
 _ =  ` (S Z) · ` Z
 
 
+_ : ∅ , `ℕ ⇒ `ℕ , `ℕ ⊢ `ℕ
+_ = ` S Z · (` (S Z) · ` Z)
+
+_ : ∅ , `ℕ ⇒ `ℕ ⊢ `ℕ ⇒ `ℕ
+_ = ƛ ` (S Z) · (` S Z · ` Z)
+
+_ : ∅ ⊢ (`ℕ ⇒ `ℕ) ⇒ `ℕ ⇒ `ℕ
+_ = ƛ (ƛ ` S Z · (` S Z · ` Z))
+
+
+length : Context → ℕ
+length ∅ = zero
+length (Γ , _) = suc (length Γ)
+
+lookup : {Γ : Context} → {n : ℕ} → (p : n < length Γ) → Type
+lookup {_ , A} {zero} (s≤s z≤n) = A
+lookup {_ , _} {suc n} (s≤s p) = lookup p
+
+count : ∀ {Γ : Context} → {n : ℕ} → (p : n < length Γ) → Γ ∋ lookup p
+count {_ , _} {zero} (s≤s z≤n) = Z
+count {Γ , A} {suc n} (s≤s p) = S (count p)
+
+#_ : ∀ {Γ : Context}
+  → (n : ℕ)
+  → {n∈Γ : True (suc n ≤? length Γ)}
+    ---------------------------------
+  → Γ ⊢ lookup (toWitness n∈Γ)
+
+#_ n {n∈Γ} = ` count (toWitness n∈Γ)
+
+_ : ∅ ⊢ (`ℕ ⇒ `ℕ) ⇒ `ℕ ⇒ `ℕ
+_ = ƛ ƛ # 1 · (# 1 · # 0)
+
+two : ∀ {Γ : Context} → Γ ⊢ `ℕ
+two = `suc (`suc `zero)
+
+plus : ∀ {Γ : Context} → Γ ⊢ `ℕ ⇒ `ℕ ⇒ `ℕ
+plus = {!!}
