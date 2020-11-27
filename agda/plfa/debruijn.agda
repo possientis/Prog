@@ -190,4 +190,43 @@ two : ∀ {Γ : Context} → Γ ⊢ `ℕ
 two = `suc (`suc `zero)
 
 plus : ∀ {Γ : Context} → Γ ⊢ `ℕ ⇒ `ℕ ⇒ `ℕ
-plus = {!!}
+plus = μ ƛ ƛ case (# 1) (# 0) (`suc (# 3 · # 0 · # 1))
+
+2+2 : ∀ {Γ : Context} → Γ ⊢ `ℕ
+2+2 = plus · two · two
+
+
+Church : Type -> Type
+Church A = (A ⇒ A) ⇒ A ⇒ A
+
+twoᶜ : ∀ {Γ : Context} {A : Type} → Γ ⊢ Church A
+twoᶜ = ƛ ƛ # 1 · (# 1 · # 0)
+
+plusᶜ : ∀ {Γ : Context} {A : Type} → Γ ⊢ Church A ⇒ Church A ⇒ Church A
+plusᶜ = ƛ ƛ ƛ ƛ # 3 · # 1 · (# 2 · # 1 · # 0)
+
+sucᶜ : ∀ {Γ : Context} → Γ ⊢ `ℕ ⇒ `ℕ
+sucᶜ = ƛ `suc # 0
+
+2+2ᶜ : ∀ {Γ : Context} → Γ ⊢ `ℕ
+2+2ᶜ = plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero
+
+mul : ∀ {Γ : Context} → Γ ⊢ `ℕ ⇒ `ℕ ⇒ `ℕ
+mul = μ ƛ ƛ case (# 1) `zero (plus · # 0 · (# 3 · # 0 · # 1))
+
+_≤_ : Context -> Context -> Set
+_≤_ Γ Δ = ∀ {A : Type } → Γ ∋ A → Δ ∋ A
+
+≤-refl : ∀ {Γ : Context} → Γ ≤ Γ
+≤-refl p = p
+
+≤-trans : ∀ {Γ Δ Ε : Context} → Γ ≤ Δ → Δ ≤ Ε → Γ ≤ Ε
+≤-trans p q r = q (p r)
+
+
+
+
+
+
+
+

@@ -43,14 +43,18 @@ Qed.
 
 (* Just restating constructor EvalElem with custom notations.                   *)
 Lemma evalElem : forall (G:Context) (n m:nat) (x y:set),
-    G :> n~>x -> G :> m~>y -> G :- (Elem n m) >> (x :: y).
+    G :> n~>x -> 
+    G :> m~>y -> 
+    G :- (Elem n m) >> (x :: y).
 Proof.
     intros G n m x y H1 H2. constructor; assumption.
 Qed.
 
 (* Just restating constructor EvalImp with custom notations.                    *)
 Lemma evalImp : forall (G:Context) (p1 p2:Formula) (A1 A2:Prop),
-    G :- p1 >> A1 -> G :- p2 >> A2 -> G :- (Imp p1 p2) >> (A1 -> A2).
+    G :- p1 >> A1 -> 
+    G :- p2 >> A2 -> 
+    G :- (Imp p1 p2) >> (A1 -> A2).
 Proof.
     intros G p1 p2 A1 A2 H1 H2. constructor; assumption.
 Qed.
@@ -64,7 +68,9 @@ Proof.
 Qed.
 
 Lemma evalMonotone : forall (G H:Context) (p:Formula) (A:Prop),
-    G <= H -> G :- p >> A -> H :- p >> A.
+    G <= H      -> 
+    G :- p >> A -> 
+    H :- p >> A.
 Proof.
     intros G H p A H1 H2. revert H H1. induction H2 as 
         [G|G n m x y H1 H2|G p1 p2 A1 A2 H1 IH1 H2 IH2|G n p1 A1 H1 IH1]; 
@@ -78,37 +84,50 @@ Proof.
 Qed.
 
 Lemma evalWeaken : forall (G:Context) (p:Formula) (A:Prop),
-    O :- p >> A -> G :- p >> A.
+    O :- p >> A -> 
+    G :- p >> A.
 Proof.
     intros G p A. apply evalMonotone, ctxInclO.
 Qed.
 
-(*
 Lemma evalDrop : forall (G:Context) (p:Formula) (n:nat) (x y:set) (A : Prop),
-    G ; n~>y ; n~>x :- p >> A -> G ; n~>x :- p >> A.
+    G ; n~>y ; n~>x :- p >> A -> 
+    G ; n~>x :- p >> A.
 Proof.
-    intros G p n x y A H1. remember (G ; n~>y ; n~>x) as G1 eqn:E1.
-    remember (p >> A) as I1 eqn:E2. revert G n x y p A E1 E2. 
-    induction H1 as
-        [G'|G' n m x y H1 H2|G' p1 p2 A1 A2 H1 IH1 H2 IH2|G' n p1 A1 H1 IH1];
-    intros G n' x' y' p' A' H3 H4.
-    - apply evalBot.
-    - inversion H4. subst. clear H4. apply evalElem.
-        +  destruct (eqDec n' n) as [H4|H4].
-            { subst. apply bindEqualRev in H1. apply FindE with x';
-              try assumption. apply FindZ. }
-            { apply bindDiff; try assumption. 
-              apply bindDiff in H1; try assumption. 
-              apply bindDiff in H1; assumption. }
-        + destruct (eqDec n' m) as [H4|H4].
-            { subst. apply bindEqualRev in H2. apply FindE with x';
-              try assumption. apply FindZ. }
-            { apply bindDiff; try assumption.
-              apply bindDiff in H2; try assumption. 
-              apply bindDiff in H2; assumption. }
-    - inversion H4. subst. apply evalImp.
-        + apply (IH1 G n' x' y' p1 A1); reflexivity.
-        + apply (IH2 G n' x' y' p2 A2); reflexivity.
-    - inversion H4. subst. clear H4. apply evalAll. intros x.
+    intros G p n x y A. apply evalMonotone. intros m z H1.
+    destruct (eqDec n m) as [H2|H2].
+    - subst. apply bindEqualRev in H1. 
+      apply FindE with x; try assumption. constructor.
+    - apply bindDiff in H1; try assumption.
+      apply bindDiff in H1; try assumption.
+      apply bindDiff; assumption.
+Qed.
+
+Lemma evalSwap : forall (G:Context) (p:Formula) (n m:nat) (x y:set) (A:Prop),
+    n <> m                      ->
+    G ; m~>y ; n~>x :- p >> A   ->
+    G ; n~>x ; m~>y :- p >> A.
+Proof.
+    intros G p n m x y A H1. apply evalMonotone. intros k z H2.
+    destruct (eqDec n k) as [H3|H3].
+    - subst. apply bindEqualRev in H2. apply bindDiff.
+        + intros H3. apply H1. symmetry. assumption.
+        + apply FindE with x; try assumption. constructor.
+    - destruct (eqDec m k) as [H4|H4].
+        + subst. apply bindDiff in H2; try assumption.
+          apply bindEqualRev in H2. 
+          apply FindE with y; try assumption. constructor.
+        + apply bindDiff in H2; try assumption.
+          apply bindDiff in H2; try assumption.
+          apply bindDiff; try assumption.
+          apply bindDiff; assumption.
+Qed.
+
+(*
+Lemma evalNot : forall (G:Context) (p:Formula) (A:Prop),
+    G :- (Not p) >> A <-> G :- p >> ~A.
+Proof.
+    intros G p A. split; intros H1.
+    -
 Show.
 *)

@@ -9,8 +9,6 @@ Latex:
 
 
 Set Theory:
-Lang1/SemanCtx
-Lang1/SemanCtx compare with agda
 Lang1/SemanCtx compare with Lang1/Semantics
 axiom of choice?
 axiom of infinity false ?
@@ -22,10 +20,10 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
-go back to book
+Ex 4.10
+Complete Ex 4.11
 
 Computational Type Theory with Coq:
-Define f3: N -> N, f3 n = min {k : n <= f1 k}
 Nat: N <-> N x N
 go back to book
 

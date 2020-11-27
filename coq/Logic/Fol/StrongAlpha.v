@@ -265,26 +265,25 @@ Proof.
         + destruct H5 as [r1 [s [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
           destruct (eqDec x z) as [H10|H10].
             { subst. constructor. 
-                 
-
-(*      Old proof:
-        + destruct H5 as [r1 [s [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
-          destruct (eqDec x z) as [H10|H10].
-            { subst. constructor. assert (r ~ s) as H9.
-                { change (id r ~ id s). rewrite <- fmap_id.
-                  rewrite <- (permute_involution v e y z).
-                  rewrite fmap_comp', fmap_comp'.
-                  apply (StrongAlpha_injective _ _ _ _); 
-                  try (apply permute_injective).
-                  rewrite permute_comm.
-                  rewrite <- var_replace_permute; try assumption.
-                  rewrite <- var_replace_permute; try assumption.
-                  apply Cong_transitive with q1 ; try assumption.
-                  apply Cong_symmetric. assumption. }
-              apply Cong_transitive with r; try assumption.
-              apply Cong_transitive with s; try assumption.
-              apply Cong_symmetric. assumption. }
-            {
-*)       
+              rewrite var_replace_permute in H3; try assumption.
+              rewrite var_replace_permute in H7; try assumption.
+              rewrite permute_comm in H7.
+              apply Cong_transitive with (fmap (y <:> z) s);
+              try (apply Cong_symmetric; assumption).
+              apply Cong_transitive with (fmap (y <:> z) q1).
+              { apply Cong_transitive with (fmap (y <:> z) (fmap (y <:> z) r')).
+                { rewrite <- fmap_comp', permute_involution, fmap_id.
+                  assumption. }
+                { apply (StrongAlpha_injective _ _ _ _).
+                    { apply permute_injective. }
+                    { apply Cong_symmetric. assumption. }}}  
+              { apply (StrongAlpha_injective _ _ _ _); try assumption.
+                  { apply permute_injective. }}}
+            { apply AAllxy with (fmap (y // z) r'); try assumption.
+                { admit. }
+                { admit. }
+                { apply var_replace_remove. intros H11. 
+                  apply H5. symmetry. assumption. }}
+      
 Show.
 *)

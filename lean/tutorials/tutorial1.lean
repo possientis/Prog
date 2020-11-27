@@ -36,4 +36,52 @@ example : ∀ (A : set ℝ) (x y : ℝ),
   linarith
 end
 
+def low_bounds (A : set ℝ) := { a : ℝ | ∀ x ∈ A, a ≤ x }
+
+def is_inf (a : ℝ) (A : set ℝ) := a is_a_max_of (low_bounds A)
+
+infix ` is_an_inf_of `:55 := is_inf
+
+lemma inf_lt {A : set ℝ} {a : ℝ} : a is_an_inf_of A →
+  ∀ x, a < x → ∃ y ∈ A, y < x
+:= begin
+  intros H₁ x,
+  contrapose,
+  push_neg,
+  intros H₂,
+  unfold is_inf at H₁, unfold is_max at H₁, cases H₁ with H₁ H₃,
+  unfold up_bounds at H₃,
+  apply H₃, assumption,
+end
+
+lemma le_of_le_add_eps : ∀ (x y : ℝ),
+  (∀ ε > 0, y ≤ x + ε) → y ≤ x
+:= begin
+  intros x y, contrapose!, intros H₁, use ((y-x)/2), split; linarith
+end
+
+example : ∀ (x y : ℝ), (∀ ε > 0, y ≤ x + ε) → y ≤ x
+:= begin
+  intros x y, contrapose!, intros H₁,
+  exact ⟨(y-x)/2, by linarith, by linarith⟩,
+end
+
+example : ∀ (x y : ℝ), (∀ ε > 0, y ≤ x + ε) → y ≤ x
+:= by { intros x y, contrapose!, intros H₁, exact ⟨(y-x)/2, by linarith, by linarith⟩}
+
+example : ∀ (x y : ℝ), (∀ ε > 0, y ≤ x + ε) → y ≤ x
+:= begin
+  intros x y H₁,
+  by_contradiction H₂,
+  push_neg at H₂,
+  have H₃ := calc
+    y    ≤ x + (y-x)/2 : by { apply H₁, linarith }
+    ...  = x/2 + y/2   : by ring
+    ...  < y           : by linarith,
+  linarith
+end
+
+local notation `|`x`|` := abs x
+
+def limit (u : ℕ → ℝ) (l : ℝ) := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
