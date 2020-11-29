@@ -92,3 +92,18 @@ Proof.
     destruct H2 as [y [x H2]]. constructor. exists x.
     apply incl_charac_to with r; assumption.
 Qed.
+
+Lemma rng_ex4_12 : forall (a b:Type) (r:R a b) (c:Rel b),
+    coreflexive c -> rng (c ; r) = c ; rng r.
+Proof.
+    intros a b r c H1. apply Ext. intros x y. split; intros H2.
+    - destruct H2 as [y [x [z [H2 H3]]]].
+      apply (incl_charac_to _ _ c id z y) in H1; try assumption. 
+      destruct H1 as [y]. exists y. split; try assumption. constructor.
+      exists x. assumption.
+    - destruct H2 as [z [[y' [x' H2]] H3]].
+      apply (incl_charac_to _ _ c id y' y) in H1; try assumption. 
+      destruct H1 as [y]. constructor. exists x'. exists y. split; assumption.
+Qed.
+
+

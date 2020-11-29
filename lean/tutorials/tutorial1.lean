@@ -85,3 +85,34 @@ local notation `|`x`|` := abs x
 
 def limit (u : ℕ → ℝ) (l : ℝ) := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
+lemma le_lim : forall (x y : ℝ) (u : ℕ → ℝ),
+  limit u x → (∀ n, y ≤ u n) → y ≤ x
+:= begin
+  intros x y u H₁ H₂,
+  apply le_of_le_add_eps,
+  intros ε H₃,
+  cases H₁ ε H₃ with N H₄,
+  calc
+  y   ≤ u N           : H₂ N
+  ... = x + (u N - x) : by linarith
+  ... ≤ x + |u N - x| : add_le_add (by apply le_refl) (by apply le_abs_self)
+  ... ≤ x + ε         : add_le_add (by apply le_refl) (H₄ N (by apply le_refl))
+end
+
+lemma inv_succ_pos : ∀ (n : ℕ), 1/(n+1 : ℝ) > 0
+:=begin
+  intros n,
+  suffices : (n + 1 : ℝ) > 0 ,
+    {exact one_div_pos.mpr this},
+    {norm_cast, linarith}
+end
+
+
+lemma limit_inv_succ : ∀ (ε > 0), ∃ (N : ℕ), ∀ (n ≥ N), 1/(n + 1 : ℝ) ≤ ε
+:=
+begin
+  intros ε H₁,
+  suffices : ∃ N : ℕ, 1/ε ≤ N,
+    {cases this with N H₂, use N, intros n H₃, }
+    {}
+end

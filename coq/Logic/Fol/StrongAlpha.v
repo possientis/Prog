@@ -280,10 +280,25 @@ Proof.
               { apply (StrongAlpha_injective _ _ _ _); try assumption.
                   { apply permute_injective. }}}
             { apply AAllxy with (fmap (y // z) r'); try assumption.
-                { admit. }
-                { admit. }
+                { apply Cong_transitive with r'; try assumption.
+                  apply Cong_symmetric. apply StrongAlpha_replace_self;
+                  try assumption. intros H9. 
+                  assert (z :: Fr (fmap (y // x) r')) as H11.
+                    { destruct (in_dec eqDec x (Fr r')) as [H12|H12]. 
+                        { apply free_replace2; try assumption. right.
+                          split; try assumption. intros H11. apply H10. 
+                          symmetry. assumption. }
+                        { rewrite free_replace1; assumption. }}
+                  apply H8. apply (free_var _ _ s z).
+                  rewrite (StrongAlpha_free _ _ s (fmap (y // x) r'));
+                  try assumption. apply Cong_transitive with q1; try assumption.
+                  apply Cong_symmetric. assumption. }
+                { assert (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))
+                        = fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H9.
+                    {
+(*
                 { apply var_replace_remove. intros H11. 
                   apply H5. symmetry. assumption. }}
-      
+*)      
 Show.
 *)

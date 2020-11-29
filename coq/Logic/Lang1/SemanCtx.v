@@ -123,11 +123,12 @@ Proof.
           apply bindDiff; assumption.
 Qed.
 
-(*
 Lemma evalNot : forall (G:Context) (p:Formula) (A:Prop),
-    G :- (Not p) >> A <-> G :- p >> ~A.
+    G :- p >> A  -> 
+    G :- (Not p) >> ~A.
 Proof.
-    intros G p A. split; intros H1.
-    -
-Show.
-*)
+    intros G p A H1. unfold Not. constructor; try assumption. constructor.
+Qed.
+
+
+
