@@ -214,19 +214,52 @@ sucᶜ = ƛ `suc # 0
 mul : ∀ {Γ : Context} → Γ ⊢ `ℕ ⇒ `ℕ ⇒ `ℕ
 mul = μ ƛ ƛ case (# 1) `zero (plus · # 0 · (# 3 · # 0 · # 1))
 
-_≤_ : Context -> Context -> Set
-_≤_ Γ Δ = ∀ {A : Type } → Γ ∋ A → Δ ∋ A
+_⊆_ : Context -> Context -> Set
+_⊆_ Γ Δ = ∀ {A : Type } → Γ ∋ A → Δ ∋ A
 
-≤-refl : ∀ {Γ : Context} → Γ ≤ Γ
-≤-refl p = p
+infix 4 _⊆_
 
-≤-trans : ∀ {Γ Δ Ε : Context} → Γ ≤ Δ → Δ ≤ Ε → Γ ≤ Ε
-≤-trans p q r = q (p r)
+⊆-refl : ∀ {Γ : Context} → Γ ⊆ Γ
+⊆-refl p = p
+
+⊆-trans : ∀ {Γ Δ Ε : Context} → Γ ⊆ Δ → Δ ⊆ Ε → Γ ⊆ Ε
+⊆-trans p q r = q (p r)
+
+ext : ∀ {Γ Δ : Context} {A : Type}
+  →   Γ ⊆ Δ
+      --------------
+  →   Γ , A ⊆ Δ , A
+
+ext f Z = Z
+ext f (S p) = S f p
+
+rename : ∀ {Γ Δ : Context} {A : Type} → Γ ⊆ Δ → Γ ⊢ A → Δ ⊢ A
+rename f (` p) = ` f p
+rename f (ƛ p) = ƛ rename (ext f) p
+rename f (p · q) = rename f p · rename f q
+rename f `zero = `zero
+rename f (`suc p) = `suc rename f p
+rename f (case p q r) = case (rename f p) (rename f q) (rename (ext f) r)
+rename f (if p p₁ p₂) = if (rename f p) (rename f p₁) (rename f p₂)
+rename f (μ p) = μ rename (ext f) p
+rename f (num x) = num x
+rename f (`+ p q) = `+ (rename f p) (rename f q)
+rename f (`* p q) = `* (rename f p) (rename f q)
+rename f (bool b) = bool b
+rename f (`= p q) = `= (rename f p) (rename f q)
+rename f (`< p q) = `< (rename f p) (rename f q)
+rename f (`∧ p q) = `∧ (rename f p) (rename f q)
+rename f (`∨ p q) = `∨ (rename f p) (rename f q)
 
 
+M₀ : ∅ , `ℕ ⇒ `ℕ ⊢ `ℕ ⇒ `ℕ
+M₀ = ƛ # 1 · (# 1 · # 0)
 
+M₁ : ∅ , `ℕ ⇒ `ℕ , `ℕ ⇒ `ℕ ⊢ `ℕ ⇒ `ℕ
+M₁ = ƛ # 2 · (# 2 · # 0)
 
-
+_ : rename S_ M₀ ≡ M₁
+_ = refl
 
 
 
