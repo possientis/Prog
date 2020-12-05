@@ -295,10 +295,52 @@ Proof.
                   apply Cong_symmetric. assumption. }
                 { assert (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))
                         = fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H9.
-                    {
+                    { rewrite <- fmap_comp', <- fmap_comp'.
+                      rewrite <- fmap_comp', <- fmap_comp'.
+                      apply var_support. intros u H9.
+                      assert (u <> y) as H11.
+                        { intros H12. subst. apply H4. assumption. }
+                      unfold comp.
+                      destruct (eqDec u x) as [H12|H12]; 
+                      destruct (eqDec u z) as [H13|H13].
+                        { subst. reflexivity. }
+                        { subst. rewrite replace_x.
+                          rewrite (replace_not_x _ _ z y x); try assumption.
+                          rewrite replace_x.
+                          rewrite (replace_not_x _ _ y x z).
+                            { rewrite (replace_not_x _ _ z x y); try assumption.
+                              rewrite replace_x. reflexivity. }
+                            { intros H14. subst. apply H5. reflexivity. }}
+                        { subst. rewrite replace_x.
+                          rewrite (replace_not_x _ _ x z y).
+                            { rewrite replace_x.
+                              rewrite (replace_not_x _ _ x y z); try assumption.
+                              rewrite replace_x.
+                              rewrite (replace_not_x _ _ y z x); try assumption.
+                              reflexivity. }
+                            { intros H13. subst. apply H1. reflexivity. }}
+                        { rewrite (replace_not_x _ _ z y u); try assumption.
+                          rewrite (replace_not_x _ _ x z u); try assumption.
+                          rewrite (replace_not_x _ _ y x u); try assumption.
+                          rewrite (replace_not_x _ _ x y u); try assumption.
+                          rewrite (replace_not_x _ _ z x u); try assumption.
+                          rewrite (replace_not_x _ _ y z u); try assumption.
+                          reflexivity. }}
+                  apply Cong_transitive with (fmap (z // y) s); try assumption. 
+                  apply Cong_symmetric.
+                  assert (fmap (z // x) (fmap (y // z) r') ~
+                    fmap (x // y) (fmap (z // x) (fmap (y // z) r'))) as H11. 
+                    { 
 (*
+                  assert (fmap (z // y) s ~
+                    fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H12.
+                    { admit. }
+                  apply Cong_transitive with 
+                    (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))).
+                    { assumption. }
+                    { apply Cong_symmetric. rewrite H9. assumption. }}
                 { apply var_replace_remove. intros H11. 
                   apply H5. symmetry. assumption. }}
-*)      
+*)
 Show.
 *)

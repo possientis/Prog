@@ -5,6 +5,7 @@ Require Import Logic.Rel.Converse.
 Require Import Logic.Rel.Intersect.
 Require Import Logic.Rel.Composition.
 
+(* A Functional relation is known as a 'simple arrow' in the book AOP           *)
 
 Definition Functional (a b:Type) (r:R a b) : Prop := r ; conv r <= id.
 

@@ -113,6 +113,14 @@ lemma limit_inv_succ : ∀ (ε > 0), ∃ (N : ℕ), ∀ (n ≥ N), 1/(n + 1 : �
 begin
   intros ε H₁,
   suffices : ∃ N : ℕ, 1/ε ≤ N,
-    {cases this with N H₂, use N, intros n H₃, }
-    {}
+    { cases this with N H₂, use N, intros n H₃, rw div_le_iff,
+      { rw ← div_le_iff',
+        {replace H₃ : (N : ℝ) ≤ n,
+          {exact_mod_cast H₃},
+          {linarith}},
+        {assumption}},
+      {exact_mod_cast _, apply nat.succ_pos}},
+    { apply archimedean_iff_nat_le.1, apply_instance }
 end
+
+#check archimedean_iff_nat_le.1

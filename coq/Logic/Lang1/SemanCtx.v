@@ -1,5 +1,7 @@
 Require Import Logic.Class.Eq.
 
+Require Import Logic.Axiom.LEM.
+
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
@@ -25,9 +27,11 @@ Inductive Eval : Context -> Interpretation -> Prop :=
     G :> n~>x -> G :> m~>y -> Eval G (Elem n m) >> (x :: y)
 | EvalImp  : forall (G:Context) (p1 p2:Formula) (A1 A2:Prop), 
     Eval G p1 >> A1 -> Eval G p2 >> A2 -> Eval G (Imp p1 p2) >> (A1 -> A2)
-|EvalAll   : forall (G:Context) (n:nat) (p1:Formula) (A1:set -> Prop),
+| EvalAll  : forall (G:Context) (n:nat) (p1:Formula) (A1:set -> Prop),
     (forall (x:set), Eval (G ; n~>x) p1 >> (A1 x)) ->
     Eval G (All n p1) >> (forall (x:set), A1 x)
+| EvalEqu  : forall (G:Context) (p:Formula) (A B:Prop), 
+    A <-> B -> Eval G p >> A -> Eval G p >> B
 .
 
 Notation "G :- I" := (Eval G I)
@@ -73,7 +77,12 @@ Lemma evalMonotone : forall (G H:Context) (p:Formula) (A:Prop),
     H :- p >> A.
 Proof.
     intros G H p A H1 H2. revert H H1. induction H2 as 
-        [G|G n m x y H1 H2|G p1 p2 A1 A2 H1 IH1 H2 IH2|G n p1 A1 H1 IH1]; 
+        [G
+        |G n m x y H1 H2
+        |G p1 p2 A1 A2 H1 IH1 H2 IH2
+        |G n p1 A1 H1 IH1
+        |G p' A' B' H1 H2 IH2
+        ]; 
     intros H H3.
     - apply evalBot.
     - apply evalElem; apply H3; assumption.
@@ -81,6 +90,7 @@ Proof.
         + apply IH1. assumption.
         + apply IH2. assumption.
     - apply evalAll. intros x. apply IH1. apply ctxInclExtend. assumption.
+    - apply EvalEqu with A'; try assumption. apply IH2. assumption. 
 Qed.
 
 Lemma evalWeaken : forall (G:Context) (p:Formula) (A:Prop),
@@ -130,5 +140,18 @@ Proof.
     intros G p A H1. unfold Not. constructor; try assumption. constructor.
 Qed.
 
-
-
+Lemma evalOr : LEM -> forall (G:Context) (p q:Formula) (A B:Prop),
+    G :- p >> A                 ->
+    G :- q >> B                 -> 
+    G :- (Or p q) >> (A \/ B).
+Proof.
+    intros L G p q A B H1 H2. unfold Or. apply EvalEqu with (~A -> B).
+    - split; intros H3. 
+        + destruct (L A) as [H4|H4].
+            { left. assumption. }
+            { right. apply H3. assumption. }
+        + destruct H3 as [H3|H3].
+            { intros H4. apply H4 in H3. contradiction. }
+            { intros H4. assumption. }
+    - constructor; try assumption. apply evalNot. assumption.
+Qed.

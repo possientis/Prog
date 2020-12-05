@@ -1,8 +1,11 @@
 Require Import Coq.Arith.Le.
 Require Import Coq.Arith.Plus.
+Require Import Coq.Arith.Mult.
 
 Require Import Logic.Class.Ord.
 Require Import Logic.Axiom.Dec.
+
+Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Subset.
 
 (* We want to define a map toNat : NxN -> N such that                           *)
@@ -199,6 +202,37 @@ Lemma checkFromTo_12 : fromNat (toNat (1,2)) = (1,2). Proof. reflexivity. Qed.
 Lemma checkFromTo_03 : fromNat (toNat (0,3)) = (0,3). Proof. reflexivity. Qed.
 
 
+(* returns n * (n + 1)/2                                                        *)
+Fixpoint f5 (n:nat) : nat :=
+    match n with
+    | 0     => 0
+    | S n   => f5 n + S n
+    end.
+
+Lemma f5_S : forall (n:nat), f5 (S n) = f5 n + S n.
+Proof.
+    intros n. reflexivity.
+Qed.
+
+(* A real proof of correctness rather than testing 10 values...                 *)
+Lemma checkf5 : forall (n:nat), 2 * f5 n = n * S n.
+Proof.
+    induction n as [|n IH].
+    - reflexivity.
+    - rewrite f5_S. rewrite mult_plus_distr_l, IH, <- mult_plus_distr_r.
+      rewrite mult_comm. assert (n + 2 = S (S n)) as H1.
+        { rewrite <- plus_n_Sm, <- plus_n_Sm, <- plus_n_O. reflexivity. }
+      rewrite H1. reflexivity.
+Qed.
 
 
 
+(*
+Lemma toFrom_ : forall (n:nat), forall (k:nat), k <= n -> toNat (fromNat k) = k.
+Proof.
+    induction n as [|n IH]; intros k H1.
+    - apply le_0 in H1. rewrite H1. reflexivity.
+    - destruct (eqDec k (S n)) as [H2|H2].
+        + subst. clear H1.
+Show.
+*)

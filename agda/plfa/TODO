@@ -1,1 +1,3 @@
+refactor debruijn syntax out (similar to Lam/Syntax2)
+follow similar development for Lam.Syntax2 as debruijn
 debruijn: Simultaneous Substitution
