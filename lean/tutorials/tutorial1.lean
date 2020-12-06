@@ -123,4 +123,32 @@ begin
     { apply archimedean_iff_nat_le.1, apply_instance }
 end
 
-#check archimedean_iff_nat_le.1
+--#check archimedean_iff_nat_le.1
+
+lemma inf_seq : ∀ (A : set ℝ) (a : ℝ),
+  (a is_an_inf_of A) ↔ (a ∈ low_bounds A ∧ ∃ u : ℕ → ℝ, limit u a ∧ ∀ n, u n ∈ A)
+:=begin
+  intros A a, split,
+    { intros H₁, unfold is_inf at H₁, unfold is_max at H₁, cases H₁ with H₁ H₂, split,
+      { assumption },
+      { have H₃ : ∀ (n:ℕ), ∃ (x ∈ A), x < a + 1/(n+1),
+          { intros n, apply inf_lt,
+            { exact ⟨H₁,H₂⟩},
+            { have : 0 < 1/(n + 1 : ℝ),
+              {apply inv_succ_pos},
+              linarith}},
+        choose u H₄ using H₃,
+        use u,
+        split,
+          { intros ε H₅, cases limit_inv_succ ε H₅ with N H₆,
+            use N, intros n H₇,
+            have : a ≤ u n,
+              { unfold low_bounds at H₁,
+                apply H₁, cases (H₄ n) with H₈ H₉, assumption },
+
+              },
+          { }}},
+    {}
+end
+
+

@@ -2,9 +2,13 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.Axiom.LEM.
 
+Require Import Logic.Nat.Fresh.
+
 Require Import Logic.Set.Set.
+Require Import Logic.Set.Incl.
 Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
+Require Import Logic.Set.ElemIncl.
 
 Require Import Logic.Fol.Syntax.
 
@@ -145,13 +149,60 @@ Lemma evalOr : LEM -> forall (G:Context) (p q:Formula) (A B:Prop),
     G :- q >> B                 -> 
     G :- (Or p q) >> (A \/ B).
 Proof.
-    intros L G p q A B H1 H2. unfold Or. apply EvalEqu with (~A -> B).
-    - split; intros H3. 
-        + destruct (L A) as [H4|H4].
-            { left. assumption. }
-            { right. apply H3. assumption. }
-        + destruct H3 as [H3|H3].
-            { intros H4. apply H4 in H3. contradiction. }
-            { intros H4. assumption. }
+    intros L G p q A B H1 H2. unfold Or. 
+    apply EvalEqu with (~A -> B).
+    - apply LEMOr. assumption.
     - constructor; try assumption. apply evalNot. assumption.
 Qed.
+
+Lemma evalAnd : LEM -> forall (G:Context) (p q:Formula) (A B:Prop),
+    G :- p >> A                 ->
+    G :- q >> B                 ->
+    G :- (And p q) >> (A /\ B).
+Proof.
+    intros L G p q A B H1 H2. unfold And, Or. 
+    apply EvalEqu with (~(~~A -> ~B)).
+    - apply LEMAnd. assumption.
+    - apply evalNot, evalImp.
+        + apply evalNot, evalNot. assumption.
+        + apply evalNot. assumption.
+Qed.
+
+Lemma evalExi : LEM -> forall (G:Context) (p:Formula) (n:nat) (A:set -> Prop), 
+    (forall (x:set), G ; n~>x :- p >> (A x))  ->
+    G :- (Exi n p) >> exists (x:set), A x.
+Proof.
+    intros L G p n A H1. unfold Exi. 
+    apply EvalEqu with (~(forall (x:set), ~A x)).
+    - apply LEMExist. assumption.
+    - apply evalNot, evalAll. intros x. apply evalNot, H1.
+Qed.
+
+Lemma evalIff : LEM -> forall (G:Context) (p q:Formula) (A B:Prop),
+    G :- p >> A                 ->
+    G :- q >> B                 ->
+    G :- (Iff p q) >> (A <-> B).
+Proof.
+    intros K G p q A B H1 H2. unfold Iff.
+    apply evalAnd; try assumption; apply evalImp; assumption.
+Qed.
+
+(* Needed for set inclusion notation x <= y                                     *)
+Open Scope Set_Incl_scope.
+
+(*
+Lemma evalSub : LEM -> forall (G:Context) (n m:nat) (x y:set),
+    G :> n~>x                   ->
+    G :> m~>y                   ->
+    G :- (Sub n m) >> (x <= y).
+Proof.
+    intros L G n m x y H1 H2. unfold Sub. 
+    apply EvalEqu with (forall (z:set), z :: x -> z :: y).
+    - rewrite elemIncl. split; auto.
+    - apply evalAll. intros z. apply evalImp.
+        + apply evalElem; try (apply FindZ).
+Show.
+*)
+(*
+Open Scope Context_scope.
+*)

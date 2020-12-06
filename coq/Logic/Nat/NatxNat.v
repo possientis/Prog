@@ -8,6 +8,9 @@ Require Import Logic.Axiom.Dec.
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Subset.
 
+(* Attempting to prove the existence of a bijection N <-> N x N but giving up   *)
+(* for now, as it appears to be more involved than expected.                    *)
+
 (* We want to define a map toNat : NxN -> N such that                           *)
 (* toNat 0 0 = 0                                                                *)
 (* toNat 1 0 = 1                                                                *)
@@ -225,14 +228,19 @@ Proof.
       rewrite H1. reflexivity.
 Qed.
 
+(* Same as toNat                                                                *)
+Definition f6 (p:nat * nat) : nat :=
+    match p with
+    | (x,y) => f5 (x + y) + y
+    end.
 
-
-(*
-Lemma toFrom_ : forall (n:nat), forall (k:nat), k <= n -> toNat (fromNat k) = k.
-Proof.
-    induction n as [|n IH]; intros k H1.
-    - apply le_0 in H1. rewrite H1. reflexivity.
-    - destruct (eqDec k (S n)) as [H2|H2].
-        + subst. clear H1.
-Show.
-*)
+Lemma checkf6_00 : f6 (0,0) = 0. Proof. reflexivity. Qed.
+Lemma checkf6_10 : f6 (1,0) = 1. Proof. reflexivity. Qed.
+Lemma checkf6_01 : f6 (0,1) = 2. Proof. reflexivity. Qed.
+Lemma checkf6_20 : f6 (2,0) = 3. Proof. reflexivity. Qed.
+Lemma checkf6_11 : f6 (1,1) = 4. Proof. reflexivity. Qed.
+Lemma checkf6_02 : f6 (0,2) = 5. Proof. reflexivity. Qed.
+Lemma checkf6_30 : f6 (3,0) = 6. Proof. reflexivity. Qed.
+Lemma checkf6_21 : f6 (2,1) = 7. Proof. reflexivity. Qed.
+Lemma checkf6_12 : f6 (1,2) = 8. Proof. reflexivity. Qed.
+Lemma checkf6_03 : f6 (0,3) = 9. Proof. reflexivity. Qed.

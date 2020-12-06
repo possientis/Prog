@@ -106,4 +106,12 @@ Proof.
       destruct H1 as [y]. constructor. exists x'. exists y. split; assumption.
 Qed.
 
-
+Lemma rng_ex4_16 : forall (a b c:Type) (r:R a b) (s:R b c) (t:R a c),
+    rng (t /\ (s ; r)) = rng ((t ; conv r) /\ s).
+Proof.
+    intros a b c r s t. apply Ext. intros x y. split; intros H1.
+    - destruct H1 as [z [x [H1 [y [H2 H3]]]]]. constructor. exists y.
+      split; try assumption. exists x. split; assumption.
+    - destruct H1 as [z [y [[x [H1 H2]] H3]]]. constructor. exists x.
+      split; try assumption. exists y. split; assumption.
+Qed.

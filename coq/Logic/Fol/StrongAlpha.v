@@ -330,7 +330,20 @@ Proof.
                   apply Cong_symmetric.
                   assert (fmap (z // x) (fmap (y // z) r') ~
                     fmap (x // y) (fmap (z // x) (fmap (y // z) r'))) as H11. 
-                    { 
+                    { apply Cong_symmetric, StrongAlpha_replace_self.
+                        { apply var_replace_remove. assumption. }
+                        { intros H11. assert (y :: Fr (fmap (y // z) r')) as H12.
+                            { destruct (in_dec eqDec x (Fr (fmap (y // z) r')))
+                              as [H13|H13]. 
+                                { rewrite free_replace2 in H11; try assumption.
+                                    { destruct H11 as [H11|H11].
+                                        { subst. exfalso. apply H5. reflexivity. }
+                                        { destruct H11 as [H11 H14]. assumption. }}
+                                    { apply var_replace_remove. intros H14. subst.
+                                      apply H5. reflexivity. }}
+                                { rewrite free_replace1 in H11; try assumption.
+                                  apply var_replace_remove. intros H14. subst.
+                                  apply H5. reflexivity. }}
 (*
                   assert (fmap (z // y) s ~
                     fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H12.

@@ -520,3 +520,48 @@ of~(\ref{Adj:def:natural:associated:unit}).
     which is a natural isomorphism as follows 
     from~(\ref{Adj:prop:natural:associated:unit:isomorphism}).
 \end{proof}
+
+Suppose $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ are functors where \Cat\ and \Dat\ 
+are locally small categories, and let $\alpha:F^{*}\Rightarrow G^{*}$ be a 
+natural transformation between the associated left-hand-side and right-hand-side
+functors. Then for all $c\in\Cat$ and $d\in\Dat$, i.e. for all $(c,d)\in
+\Cop\times\Dat$, the component $\alpha(c,d)$ is an arrow
+$\alpha(c,d):\Dat(F(c),d)\to\Cat(c,G(d))\ @\ \Set$. Hence for all $c\in\Cat$,
+taking $d=F(c)$, we have $\alpha(c,F(c)):\Dat(F(c),F(c))\to\Cat(c,G(F(c)))$.
+Consequently, if we define $\eta_{c}=\alpha(c,F(c))(\,\id(\,F(c)\,)\,)$ then
+$\eta_{c}$ is a well-defined element of $\Cat(c,G(F(c)))$, i.e.
+$\eta_{c}$ is a well-defined arrow $\eta_{c}:c\to G(F(c))\ @\ \Cat$. The question
+arises as to whether the map $\eta:\ob\ \Cat\to\arr\ \Cat$ we have just defined
+is in fact a natural transformation $\eta:I_{\cal C}\Rightarrow G\circ F$.
+This is in fact the case:
+
+\begin{prop}\label{Adj:prop:alpha:F*:G*:eta}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories, and let $F^{*}$ and $G^{*}$ denote the associated
+    left-hand-side and right-hand-side functors respectively as per 
+    definitions~(\ref{Adj:def:lhs:functor}) and~(\ref{Adj:def:rhs:functor}). Let
+    $\alpha:F^{*}\Rightarrow G^{*}$ be a natural transformation and for all
+    $c\in\Cat$ define:
+        \begin{equation}\label{Adj:eqn:alpha:F*:G*:eta:1}
+            \eta_{c}=\alpha(c,F(c))(\,\id(\,F(c)\,)\,)
+        \end{equation}
+    Then $\eta$ is a natural transformation $\eta:I_{\cal C}\Rightarrow G\circ F$
+    and furthermore the equation:
+        \begin{equation}\label{Adj:eqn:alpha:F*:G*:eta:2}
+            \alpha(c,d)(g)=G(g)\circ\eta_{c}
+        \end{equation}
+    holds for all $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$.
+\end{prop}
+\noindent
+{\bf Remark}: Note that for all $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$, since
+we have $\alpha(c,d):\Dat(F(c),d)\to\Cat(c,G(d))$, the left-hand-side
+$\alpha(c,d)(g)$ of equation~(\ref{Adj:eqn:alpha:F*:G*:eta:2}) is a well-defined
+arrow $\alpha(c,d)(g):c\to G(d)\ @\ \Cat$. Also, since $\eta_{c}:c\to
+G(F(c))$ and $G(g):G(F(c))\to G(d)$, the right-hand-side $G(g)\circ\eta_{c}$ of
+equation~(\ref{Adj:eqn:alpha:F*:G*:eta:2}) is likewise a well-defined arrow
+from $c$ to $G(d)$ in the category \Cat.
+
+\noindent
+\begin{proof}
+    TODO
+\end{proof}

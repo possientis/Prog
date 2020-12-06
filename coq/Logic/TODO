@@ -9,7 +9,7 @@ Latex:
 
 
 Set Theory:
-Lang1/SemanCtx: evalAnd
+Lang1/SemanCtx
 axiom of choice?
 axiom of infinity false ?
 a new semantics based on different type of environments (plfa)
@@ -20,7 +20,7 @@ proof system of each language
 extension of language
 
 Algebra of Programming: 
-Ex 4.15
+Ex 4.18
 
 Computational Type Theory with Coq:
 Nat: N <-> N x N

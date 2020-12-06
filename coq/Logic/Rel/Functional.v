@@ -1,5 +1,8 @@
+Require Import Logic.Axiom.Extensionality.
+
 Require Import Logic.Rel.R.
 Require Import Logic.Rel.Id.
+Require Import Logic.Rel.Domain.
 Require Import Logic.Rel.Include.
 Require Import Logic.Rel.Converse.
 Require Import Logic.Rel.Intersect.
@@ -33,4 +36,29 @@ Proof.
         { destruct (Functional_charac a b t) as [H6 H7].
           apply (H6 H1) with x; assumption. }
       subst. exists z. split; try assumption. split; assumption.
+Qed.
+
+Lemma Functional_conv : forall (a b:Type) (r:R a b),
+    Functional r -> r = r ; conv r ; r.
+Proof.
+    intros a b r H1. apply Ext. intros x y. split; intros H2.
+    - exists x. split; try assumption. exists y. split; assumption.
+    - destruct H2 as [z [[u [H2 H3]] H4]]. assert (y = u) as H5.
+        { destruct (Functional_charac a b r) as [H6 H7].
+          apply H6 with z; assumption. }
+      subst. assumption.
+Qed.
+
+Lemma dom_ex4_17 : forall (a b c:Type) (r:R a b) (s:R b c),
+    Functional r -> dom s ; r = r ; dom (s ; r).
+Proof.
+    intros a b c r s H0. apply Ext. intros x y. split; intros H1.
+    - destruct H1 as [z [H1 H2]]. destruct H2 as [y [z H2]].
+      exists x. split; try assumption. constructor. exists z. exists y.
+      split; assumption.
+    - destruct H1 as [z [H1 H2]]. destruct H1 as [x [z [y' [H1 H3]]]]. 
+      assert (y' = y) as H4.
+        { destruct (Functional_charac a b r) as [H5 H6].
+          apply H5 with x; assumption. }
+      subst. exists y. split; try assumption. constructor. exists z. assumption.
 Qed.
