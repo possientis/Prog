@@ -3,22 +3,29 @@ module Lam.Context where
 open import Relation.Binary.PropositionalEquality.Core
   using (_≡_; _≢_; refl; subst;cong)
 
-open import Relation.Nullary.Decidable
-    using (False;toWitnessFalse)
-
-open import Data.String
-    using (String; _≟_) -- \?=
+open import Data.Nat                     using (ℕ; zero; suc; _<_; _≤?_; z≤n; s≤s)
+open import Data.String                  using (String; _≟_) -- \?=
+open import Data.Product                 using (_×_; proj₁; proj₂; ∃; ∃-syntax)
+open import Data.Product                 using () renaming (_,_ to ⟨_,_⟩)
+open import Relation.Nullary.Decidable   using (False;toWitnessFalse)
 
 open import Lam.Id
 open import Lam.Type
 
 infixl 5 _,_∶_  -- \:
+infix 4 _∋_∶_ -- \ni
 
 data Context : Set where
   ∅     : Context -- \0
   _,_∶_ : Context → Id → Type → Context
 
-infix 4 _∋_∶_ -- \ni
+length : Context → ℕ
+length ∅ = zero
+length (Γ , _ ∶ _) = suc (length Γ)
+
+lookup : {Γ : Context} → {n : ℕ} → (p : n < length Γ) → Id × Type
+lookup {_ , x ∶ A} {zero} (s≤s z≤n) = ⟨ x , A ⟩
+lookup {_ , _ ∶ _} {suc n} (s≤s p) = lookup p
 
 data _∋_∶_ : Context → Id → Type → Set where
 
@@ -31,6 +38,8 @@ data _∋_∶_ : Context → Id → Type → Set where
     → Γ ∋ x ∶ A
       ---------------------------------
     → Γ , y ∶ B ∋ x ∶ A
+
+
 
 -- smart constructor using proof by reflection
 

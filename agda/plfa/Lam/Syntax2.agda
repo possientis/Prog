@@ -8,6 +8,11 @@ open import Lam.Type
 open import Lam.Context
 
 infix 4 _⊢_
+infix 5 ƛ_
+infix 5 μ_
+infixl 7 _·_  -- \cdot
+infix 8 `suc_
+infix 9 `_
 
 
 data _⊢_ : Context → Type → Set where

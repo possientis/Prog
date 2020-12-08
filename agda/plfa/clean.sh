@@ -8,4 +8,5 @@ rm -f *.agda~
 rm -f *.agda#
 
 ./Lam/clean.sh
+./DeBruijn/clean.sh
 
