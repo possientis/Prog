@@ -563,5 +563,46 @@ from $c$ to $G(d)$ in the category \Cat.
 
 \noindent
 \begin{proof}
+    Given $c\in\Cat$, $d\in\Dat$ and $g:F(c)\to d$, we shall first establish 
+    equation~(\ref{Adj:eqn:alpha:F*:G*:eta:2}). Since $\alpha$
+    is a natural transformation, the following square commutes:
+        \[
+            \begin{tikzcd}
+                c
+                &F(c)\arrow[d,swap, "g"]
+                &\Dat(F(c),F(c))\arrow[r, "\alpha\mbox{$(c,F(c))$}"]
+                \arrow[d, swap,"F^{*}\mbox{$(\id(c),g)$}"]
+                &\Cat(c,G(F(c)))
+                \arrow[d, "G^{*}\mbox{$(\id(c),g)$}"]
+                \\
+                c\arrow[u, "\id(c)"]
+                &d
+                &\Dat(F(c),d)\arrow[r, swap, "\alpha\mbox{$(c,d)$}"]
+                &\Cat(c,G(d))
+            \end{tikzcd}
+        \]
+    In other words the following equation holds: 
+        \begin{equation}\label{Adj:eqn:alpha:F*:G*:eta:3}
+            \alpha(c,g)\circ F^{*}(\,\id(c)\,,\,g\,) = 
+            G^{*}(\,\id(c)\,,\,g\,)\circ\alpha(c,F(c))
+        \end{equation}
+    Hence we have:
+        \begin{eqnarray*}\alpha(c,d)(g)
+            &=&\alpha(c,d)(\,g\circ\id(\,F(c)\,)\circ\id(\,F(c)\,)\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&\alpha(c,d)(\,g\circ\id(\,F(c)\,)\circ F(\,\id(c)\,)\,)\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
+            &=&\alpha(c,d)(\,F^{*}(\,\id(c)\,,\,g\,)(\,\id(\,F(c)\,)\,)\,)\\
+            &=&(\,\alpha(c,d)\circ F^{*}(\,\id(c)\,,\,g\,)\,)(\,\id(\,F(c)\,)\,)\\
+            \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:3})}\ \to\ 
+            &=&(\,G^{*}(\,\id(c)\,,\,g\,)\circ\alpha(c,F(c))\,)(\,\id(\,F(c)\,)\,)\\
+            &=&G^{*}(\,\id(c)\,,\,g\,)(\,\alpha(c,F(c))(\,\id(\,F(c)\,)\,)\,)\\
+            \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:1})}\ \to\ 
+            &=&G^{*}(\,\id(c)\,,\,g\,)(\eta_{c})\\
+            \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
+            &=&G(g)\circ\eta_{c}\circ\id(c)\\
+            &=&G(g)\circ\eta_{c}\\
+        \end{eqnarray*}
+    So it remains to show that $\eta$ is a natural transformation $\eta:I_{\cal C}\Rightarrow G\circ F$.
     TODO
 \end{proof}
