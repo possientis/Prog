@@ -44,13 +44,11 @@ Proof.
         + assumption.
         + assumption.
         + assumption.
-        + assumption.
     - destruct (H x) as [y H']. rewrite evalExi. exists y. rewrite evalAll.
       intros z. rewrite evalIff, evalElem, evalSub.
       remember (bind e n x) as e1 eqn:E1. remember (bind e1 m y) as e2 eqn:E2.
       rewrite bindSame, bindDiff, bindDiff, E2, bindSame, bindDiff, E1.
       rewrite bindSame. apply H'.
-        + assumption.
         + assumption.
         + assumption.
         + assumption.

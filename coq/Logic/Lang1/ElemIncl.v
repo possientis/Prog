@@ -58,7 +58,6 @@ Proof.
             { assumption. }
             { assumption. }
             { assumption. }
-        + assumption.
         + assumption. 
     - rewrite evalAll. intros y. rewrite evalIff, evalSub, evalAll.
       remember (bind e n x)  as e1 eqn:E1.
@@ -76,6 +75,5 @@ Proof.
             { assumption. }
             { assumption. }
             { assumption. }
-        + assumption.
         + assumption.
 Qed.

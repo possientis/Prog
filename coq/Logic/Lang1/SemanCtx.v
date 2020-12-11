@@ -9,6 +9,7 @@ Require Import Logic.Set.Incl.
 Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
 Require Import Logic.Set.ElemIncl.
+Require Import Logic.Set.Extensionality.
 
 Require Import Logic.Fol.Syntax.
 
@@ -183,26 +184,40 @@ Lemma evalIff : LEM -> forall (G:Context) (p q:Formula) (A B:Prop),
     G :- q >> B                 ->
     G :- (Iff p q) >> (A <-> B).
 Proof.
-    intros K G p q A B H1 H2. unfold Iff.
+    intros L G p q A B H1 H2. unfold Iff.
     apply evalAnd; try assumption; apply evalImp; assumption.
 Qed.
 
 (* Needed for set inclusion notation x <= y                                     *)
 Open Scope Set_Incl_scope.
 
-(*
-Lemma evalSub : LEM -> forall (G:Context) (n m:nat) (x y:set),
+
+(* LEM is not needed for this one.                                              *)
+Lemma evalSub : forall (G:Context) (n m:nat) (x y:set),
     G :> n~>x                   ->
     G :> m~>y                   ->
     G :- (Sub n m) >> (x <= y).
 Proof.
-    intros L G n m x y H1 H2. unfold Sub. 
+    intros G n m x y H1 H2. unfold Sub. 
     apply EvalEqu with (forall (z:set), z :: x -> z :: y).
     - rewrite elemIncl. split; auto.
-    - apply evalAll. intros z. apply evalImp.
-        + apply evalElem; try (apply FindZ).
-Show.
-*)
+    - apply evalAll. intros z. apply evalImp; apply evalElem; try (apply FindZ);
+      apply bindDiff; try assumption.
+          + apply freshNot_n.
+          + apply freshNot_m.
+Qed.
+
+Lemma evalEqu : LEM -> forall (G:Context) (n m:nat) (x y:set),
+    G :> n~>x                   ->
+    G :> m~>y                   ->
+    G :- (Equ n m) >> (x == y).
+Proof.
+    intros L G n m x y H1 H2. unfold Equ. apply evalAnd; try assumption;
+    apply evalAll; intros z; apply evalIff; try assumption; apply evalElem;
+    try (apply FindZ); apply bindDiff; try assumption;
+    try (apply freshNot_n); apply freshNot_m.
+Qed.
+
 (*
 Open Scope Context_scope.
 *)

@@ -31,10 +31,8 @@ Proof.
     - remember (H x) as H' eqn:E. clear E. 
       rewrite evalSub in H'. 
         + rewrite bindSame in H'. assumption.
-        + assumption.
     - rewrite evalSub.
         + rewrite bindSame. apply H.
-        + assumption.
 Qed.        
 
 (* An approximation of lemma 'inclNil' expressed in set theory abstract syntax. *)
@@ -58,10 +56,8 @@ Proof.
       rewrite bindSame in H.
         + assumption.
         + assumption.
-        + assumption.
     - rewrite evalImp, evalEmpty, bindSame, evalAll. intros H' y.
       rewrite evalSub, bindSame, bindDiff, bindSame. apply H.
-        + assumption.
         + assumption.
         + assumption.
 Qed.

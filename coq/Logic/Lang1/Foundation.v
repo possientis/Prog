@@ -31,10 +31,8 @@ Proof.
       rewrite bindSame in H. rewrite bindDiff in H. rewrite bindSame in H.
         + assumption.
         + assumption.
-        + assumption.
     - rewrite evalAll. intros y. rewrite evalImp, evalSub, evalNot, evalElem.
       rewrite bindSame, bindDiff, bindSame. apply H.
-        + assumption.
         + assumption.
 Qed.
 

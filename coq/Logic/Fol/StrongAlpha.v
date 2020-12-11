@@ -238,6 +238,7 @@ Proof.
 Qed.
 
 (*
+
 (* Almost equivalence is transitive.                                            *)
 Lemma almostTrans : forall (v:Type) (e:Eq v) (p q r:P v),
     p :~: q -> q :~: r -> p :~: r.
@@ -279,10 +280,8 @@ Proof.
                     { apply Cong_symmetric. assumption. }}}  
               { apply (StrongAlpha_injective _ _ _ _); try assumption.
                   { apply permute_injective. }}}
-            { apply AAllxy with (fmap (y // z) r'); try assumption.
-                { apply Cong_transitive with r'; try assumption.
-                  apply Cong_symmetric. apply StrongAlpha_replace_self;
-                  try assumption. intros H9. 
+            { assert (~z :: Fr r') as K.
+                { intros H9.
                   assert (z :: Fr (fmap (y // x) r')) as H11.
                     { destruct (in_dec eqDec x (Fr r')) as [H12|H12]. 
                         { apply free_replace2; try assumption. right.
@@ -291,8 +290,12 @@ Proof.
                         { rewrite free_replace1; assumption. }}
                   apply H8. apply (free_var _ _ s z).
                   rewrite (StrongAlpha_free _ _ s (fmap (y // x) r'));
-                  try assumption. apply Cong_transitive with q1; try assumption.
-                  apply Cong_symmetric. assumption. }
+                  try assumption. apply Cong_transitive with q1; 
+                  try assumption. apply Cong_symmetric. assumption. }
+              apply AAllxy with (fmap (y // z) r'); try assumption.
+                { apply Cong_transitive with r'; try assumption.
+                  apply Cong_symmetric. apply StrongAlpha_replace_self;
+                  try assumption. }
                 { assert (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))
                         = fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H9.
                     { rewrite <- fmap_comp', <- fmap_comp'.
@@ -344,10 +347,12 @@ Proof.
                                 { rewrite free_replace1 in H11; try assumption.
                                   apply var_replace_remove. intros H14. subst.
                                   apply H5. reflexivity. }}
-(*
+                      apply H4. apply (free_var _ _ _). 
+                      rewrite free_replace1 in H12; assumption. }}
                   assert (fmap (z // y) s ~
                     fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H12.
-                    { admit. }
+                    {
+(* CONFUSED.....
                   apply Cong_transitive with 
                     (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))).
                     { assumption. }

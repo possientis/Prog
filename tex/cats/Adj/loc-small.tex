@@ -583,7 +583,7 @@ from $c$ to $G(d)$ in the category \Cat.
         \]
     In other words the following equation holds: 
         \begin{equation}\label{Adj:eqn:alpha:F*:G*:eta:3}
-            \alpha(c,g)\circ F^{*}(\,\id(c)\,,\,g\,) = 
+            \alpha(c,d)\circ F^{*}(\,\id(c)\,,\,g\,) = 
             G^{*}(\,\id(c)\,,\,g\,)\circ\alpha(c,F(c))
         \end{equation}
     Hence we have:
@@ -603,6 +603,45 @@ from $c$ to $G(d)$ in the category \Cat.
             &=&G(g)\circ\eta_{c}\circ\id(c)\\
             &=&G(g)\circ\eta_{c}\\
         \end{eqnarray*}
-    So it remains to show that $\eta$ is a natural transformation $\eta:I_{\cal C}\Rightarrow G\circ F$.
-    TODO
+    So it remains to show that $\eta$ is a natural transformation 
+    $\eta:I_{\cal C}\Rightarrow G\circ F$. So we need to check that 
+    $\eta$ is a map $\eta:\ob\ \Cat\to\arr\ \Cat$ (which it is) satisfying
+    $(1)$ and $(2)$ of definition~(\ref{Nat:def:natural}). We have already
+    seen that for all $c\in\Cat$, $\eta_{c}$ of
+    equation~(\ref{Adj:eqn:alpha:F*:G*:eta:1}) is a well defined arrow
+    $\eta_{c}:c\to G(F(c))$. So $(1)$ is satisfied and it remains to show $(2)$.
+    So given $c,c'\in\Cat$ and $f:c\to c'$ we need to show that
+    $G(F(f))\circ\eta_{c}=\eta_{c'}\circ f$, that is the following 
+    square commutes:
+        \[
+            \begin{tikzcd}
+                c\arrow[r, "\eta_{c}"]\arrow[d, swap,"f\ "]
+                &G(F(c))\arrow[d, "(G\circ F)(f)"]
+                \\
+                c'\arrow[r, swap, "\eta_{c'}"]
+                &G(F(c'))
+            \end{tikzcd}
+        \]
+    However, since $\alpha$ is natural, setting $d=F(c')$, the following
+    square commutes:
+        \[
+            \begin{tikzcd}
+                c'
+                &d\arrow[d,swap, "\id(d)"]
+                &\Dat(F(c'),d)\arrow[r, "\alpha\mbox{$(c',d)$}"]
+                \arrow[d, swap,"F^{*}\mbox{$(f,\id(d))$}"]
+                &\Cat(c',G(d))
+                \arrow[d, "G^{*}\mbox{$(f,\id(d))$}"]
+                \\
+                c\arrow[u, "f"]
+                &d
+                &\Dat(F(c),d)\arrow[r, swap, "\alpha\mbox{$(c,d)$}"]
+                &\Cat(c,G(d))
+            \end{tikzcd}
+        \]
+    In other words...TODO
+    Hence we have: 
+        \begin{eqnarray*}G(F(f))\circ\eta_{c}
+            &=&TODO
+        \end{eqnarray*}
 \end{proof}

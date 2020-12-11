@@ -41,9 +41,6 @@ Proof.
         + assumption.
         + assumption.
         + assumption.
-        + assumption.
-        + assumption.
-        + assumption.
     - intros H x. rewrite evalAll. intros y. rewrite evalAll. intros z.
       remember (bind e n x)  as e1 eqn:E1.
       remember (bind e1 m y) as e2 eqn:E2.
@@ -52,9 +49,6 @@ Proof.
       rewrite bindSame, bindDiff, bindDiff, E2.
       rewrite bindSame, bindDiff, E1, bindSame.
         + apply H.
-        + assumption.
-        + assumption.
-        + assumption.
         + assumption.
         + assumption.
         + assumption.

@@ -38,8 +38,7 @@ data _∋_∶_ : Context → Id → Type → Set where
     → Γ ∋ x ∶ A
       ---------------------------------
     → Γ , y ∶ B ∋ x ∶ A
-
-
+ 
 
 -- smart constructor using proof by reflection
 

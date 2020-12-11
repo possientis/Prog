@@ -110,15 +110,11 @@ Proof.
         + assumption.
         + assumption.
         + assumption.
-        + assumption.
-        + assumption.
     - rewrite evalAll. intros y.
       remember (bind e n x) as e1 eqn:E1.
       rewrite evalIff, evalEqu, evalAnd, evalSub, evalSub, bindSame.
       rewrite bindDiff, E1, bindSame.
         + apply H.
-        + assumption.
-        + assumption.
         + assumption.
         + assumption.
         + assumption.

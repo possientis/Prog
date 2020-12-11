@@ -145,10 +145,18 @@ lemma inf_seq : ∀ (A : set ℝ) (a : ℝ),
             have : a ≤ u n,
               { unfold low_bounds at H₁,
                 apply H₁, cases (H₄ n) with H₈ H₉, assumption },
-
-              },
-          { }}},
-    {}
+            have := calc
+              u n <  a + 1/(n + 1) : (H₄ n).2
+              ... <= a + ε         : add_le_add (le_refl _) (H₆ n H₇),
+            rw abs_of_nonneg; linarith},
+          { intros n, exact (H₄ n).1}}},
+    { intros H₁, rcases H₁ with ⟨H₁, u, H₂, H₃⟩,
+      unfold is_inf, unfold is_max, split,
+        { assumption },
+        { unfold up_bounds, intros x H₄, unfold low_bounds at H₄,
+          apply le_lim,
+            { assumption },
+            { intros n, apply H₄, apply H₃}}}
 end
 
 

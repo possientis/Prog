@@ -1,3 +1,5 @@
+Require Import Coq.Bool.Bool.
+
 Inductive Sig (a:Type) (p:a -> Type) : Type :=
 | Ex : forall (x:a), p x -> Sig a p
 .
@@ -92,9 +94,27 @@ Proof.
     exact (Ex h H3).
 Defined.
 
+Variable toNat : nat * nat -> nat.
+Variable fromNat : nat -> nat * nat.
+
+Axiom toNatFromNat : forall (n:nat), toNat (fromNat n) = n.
+Axiom fromNatToNat : forall (p:nat*nat), fromNat (toNat p) = p. 
+
+Definition fromNat1 (n:nat) : nat := fst (fromNat n).
+Definition fromNat2 (n:nat) : nat := snd (fromNat n).
+
+
 Definition toSemiAnd : forall (X Y:Prop), S X -> S Y -> S (X /\ Y).
 Proof.
-    intros X Y [f [H1 H2]] [g [G1 G2]].
-
-Show.
-
+    intros X Y [f [H1 H2]] [g [G1 G2]]. 
+    remember (fun n => andb (f (fromNat1 n)) (g (fromNat2 n))) as h eqn:E. 
+    apply Ex with h. split.
+    - intros [H3 H4]. apply H1 in H3. apply G1 in H4.
+      destruct H3 as [n H3]. destruct H4 as [m H4]. exists (toNat (n,m)).
+      rewrite E. unfold fromNat1, fromNat2. rewrite fromNatToNat. simpl.
+      rewrite H3, H4. reflexivity.
+    - intros [n H3]. rewrite E in H3. apply andb_true_iff in H3.
+      destruct H3 as [H3 H4]. split.
+        + apply H2. exists (fromNat1 n). assumption.
+        + apply G2. exists (fromNat2 n). assumption.
+Qed.

@@ -103,10 +103,11 @@ Proof.
     intros L e p q. unfold Iff. apply evalAnd. assumption.
 Qed.
 
-Lemma evalSub : LEM -> forall (e:Env) (n m:nat), 
+(* LEM is not needed for this one.                                              *)
+Lemma evalSub : forall (e:Env) (n m:nat), 
     eval e (Sub n m) <-> (e n) <= (e m).
 Proof.
-    intros L e n m. unfold Sub. rewrite elemIncl. 
+    intros e n m. unfold Sub. rewrite elemIncl. 
     rewrite evalAll. simpl. split; intros H z.
     - remember (H z) as H' eqn:E. clear E.
       rewrite bindSame in H'.
