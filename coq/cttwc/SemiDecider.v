@@ -7,6 +7,21 @@ Inductive Sig (a:Type) (p:a -> Type) : Type :=
 Arguments Sig {a}.
 Arguments Ex {a} {p}.
 
+Definition prj1 (a:Type) (p:a -> Type) (q:Sig p) : a :=
+    match q with
+    | Ex x _    => x
+    end.
+
+
+Arguments prj1 {a} {p}.
+
+Definition prj2 (a:Type) (p:a -> Type) (q:Sig p) : p (prj1 q) :=
+    match q with
+    | Ex _ r    => r
+    end.
+
+Arguments prj2 {a} {p}.
+
 (* f is a decider for p                                                         *)
 Definition Decider (a:Type) (f:a -> bool) (p:a -> Prop) : Prop :=
     forall (x:a), p x <-> f x = true.
@@ -118,3 +133,39 @@ Proof.
         + apply H2. exists (fromNat1 n). assumption.
         + apply G2. exists (fromNat2 n). assumption.
 Qed.
+
+(* Certifying semi-decider                                                      *)
+Definition CertSemiDecider (a:Type) (p:a -> Prop) : Type := forall (x:a), S (p x).
+
+Arguments CertSemiDecider {a}.
+
+Definition fromCertSD : forall (a:Type) (p:a -> Prop), 
+    CertSemiDecider p -> 
+    Sig (fun (F:a -> nat -> bool) => forall (x:a), p x <-> tsat (F x)).
+Proof.
+    unfold CertSemiDecider. intros a p q.
+    remember (fun (x:a) (n:nat) => prj1 (q x) n) as F eqn:E. exists F.
+    intros x. remember (prj2 (q x)) as H1 eqn:E'. clear E'. simpl in H1.
+    rewrite E. assumption.
+Defined.
+
+Arguments fromCertSD {a} {p}.
+
+Definition toCertSD : forall (a:Type) (p:a -> Prop),
+    Sig (fun (F:a -> nat -> bool) => forall (x:a), p x <-> tsat (F x)) ->
+    CertSemiDecider p.
+Proof.
+    unfold CertSemiDecider. intros a p [F H1] x. apply (Ex (F x)), H1.
+Defined.
+
+Lemma L3 : forall (a:Type) (p:a -> Prop),
+    SemiDecidable p <-> exists (q:CertSemiDecider p), True.
+Proof.
+    unfold SemiDecidable, SemiDecider, CertSemiDecider. 
+    intros a p. split; intros H1.
+    - destruct H1 as [F H1]. exists (fun x => Ex (F x) (H1 x)). trivial.
+    - destruct H1 as [q _]. exists (prj1 (fromCertSD q)). 
+      exact (prj2 (fromCertSD q)).
+Qed.
+
+

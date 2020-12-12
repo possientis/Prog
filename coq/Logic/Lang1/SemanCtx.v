@@ -8,7 +8,9 @@ Require Import Logic.Set.Set.
 Require Import Logic.Set.Incl.
 Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
+Require Import Logic.Set.Empty.
 Require Import Logic.Set.ElemIncl.
+Require Import Logic.Set.Foundation.
 Require Import Logic.Set.Extensionality.
 
 Require Import Logic.Fol.Syntax.
@@ -218,6 +220,31 @@ Proof.
     try (apply freshNot_n); apply freshNot_m.
 Qed.
 
-(*
+Lemma evalEmpty : forall (G:Context) (n:nat) (x:set),
+    G :> n~>x                   ->
+    G :- (Empty n) >> (x == Nil).
+Proof.
+    intros G n x H1. unfold Empty. 
+    apply EvalEqu with (forall (z:set), ~z :: x).
+    - split.
+        + apply emptyUnique.
+        + intros H2. rewrite emptyIsNil in H2. rewrite H2. apply emptyCharac.
+    - apply evalAll. intros z. apply evalNot, evalElem; try (apply FindZ).
+      apply bindDiff; try assumption. apply freshNot_n.
+Qed.
+
+Lemma evalMin : LEM -> forall (G:Context) (n m:nat) (x y:set),
+    G :> n~>x                   ->
+    G :> m~>y                   ->
+    G :- (Min n m) >> (minimal x y).
+Proof.
+    intros L G n m x y H1 H2. unfold Min, minimal.
+    apply evalAnd; try assumption.
+    - apply evalElem; assumption.
+    - apply evalNot, evalExi; try assumption. intros z. 
+      apply evalAnd; try assumption; apply evalElem; try (apply FindZ);
+      apply bindDiff; try assumption;
+      try (apply freshNot_n); apply freshNot_m.
+Qed.
+
 Open Scope Context_scope.
-*)

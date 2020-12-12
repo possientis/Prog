@@ -7,8 +7,10 @@ Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
+Require        Logic.Lang1.SemanCtx.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
+
 
 (* Theorem 'emptySet' expressed in set theory abstract syntax.                  *)
 (* This formulation is correct provided the variable names n m are distinct.    *)
@@ -35,7 +37,8 @@ Proof.
         + assumption. 
     - assumption.
 Qed.
-
+ 
+(*
 (* An approximation of lemma 'emptyCharac' expressed in set theory syntax.      *)
 (* This formulation is correct when variables n and m are distinct.             *)
 Definition emptyCharacF (n m:nat) : Formula :=
@@ -63,3 +66,4 @@ Proof.
         + assumption.
         + assumption.
 Qed.
+*)
