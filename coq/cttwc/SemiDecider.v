@@ -168,4 +168,54 @@ Proof.
       exact (prj2 (fromCertSD q)).
 Qed.
 
+Definition Fact_13_1_9_1 : 
+    (forall (X:Prop), S X -> D X) -> (forall (f:nat -> bool), D (tsat f)).
+Proof.
+    intros q f. apply q. apply (Ex f). split; auto.
+Defined.
+
+Definition Fact_13_1_9_2 :
+    (forall (f:nat -> bool), D(tsat f)) -> (forall (X:Prop), S X -> D X).
+Proof.
+    intros q X [f [H1 H2]]. destruct (q f) as [H3|H3].
+    - left. apply H2. assumption.
+    - right. intros H4. apply H3, H1. assumption.
+Qed.
+
+Definition Markov : Prop := forall (f:nat -> bool),
+    ~(forall n, f n = false) -> exists n, f n = true.
+
+Definition Post : Type := forall (X:Prop), S X -> S (~X) -> D X.
+
+Definition Fact_13_2_1_1 : Post -> forall (X:Prop), D X -> S X * S (~X).
+Proof.
+    unfold Post. intros H1 X H2. split.
+    - destruct H2 as [H3|H3]. 
+        + apply (Ex (fun n => true)). split; intros H4; try assumption. 
+          exists 0. reflexivity.
+        + apply (Ex (fun n => false)). split; intros H4.
+            { apply H3 in H4. contradiction. }
+            { destruct H4 as [n H4]. inversion H4. }
+    - destruct H2 as [H3|H3].
+        + apply (Ex (fun n => false)). split; intros H4.
+            { apply H4 in H3. contradiction. }
+            { destruct H4 as [n H4]. inversion H4. }
+        + apply (Ex (fun n => true)). split; intros H4; try assumption.
+          exists 0. reflexivity.
+Defined.
+
+Definition Fact_13_2_1_2 : Post -> forall (X:Prop), S X * S (~X) -> D X.
+Proof.
+    unfold Post. intros H1 X [H2 H3]. apply H1; assumption.
+Qed.
+
+Lemma Markov2Post : Markov -> Post.
+Proof.
+
+Show.
+
+
+
+
+
 

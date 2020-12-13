@@ -14,6 +14,7 @@ cd ${HOME}
 ./lisp/test.sh
 ./Optics/test.sh
 ./adi/test.sh
+./adh/test.sh
 ./Set/test.sh
 
 cd ${DIR}

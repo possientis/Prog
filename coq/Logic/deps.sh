@@ -14,8 +14,8 @@ sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\
 sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\/\2.vo/g' /tmp/deps
 
 # Ssimilar process for dependencies without 'Import', just 'Require'
-grep 'Require Logic\.' -r | cat - > /tmp/deps_
-sed -i 's/\.v\:Require Logic\./.vo:/g' /tmp/deps_
+grep 'Require[[:space:]]*Logic\.' -r | cat - > /tmp/deps_
+sed -i 's/\.v\:Require[[:space:]]*Logic\./.vo:/g' /tmp/deps_
 sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\/\2\/\3.vo/g' /tmp/deps_
 sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\/\2.vo/g' /tmp/deps_
 

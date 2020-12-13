@@ -1,4 +1,5 @@
 Logic:
+Fix flawed proof in logic
 Fol/StrongAlpha 
 Lam/StrongAlpha (turn around Rev lemmas)
 go back to book
@@ -9,7 +10,7 @@ Latex:
 
 
 Set Theory:
-Lang1/Empty: resolve name conflicts
+Lang1/Equal
 axiom of choice?
 axiom of infinity false ?
 a new semantics based on different type of environments (plfa)

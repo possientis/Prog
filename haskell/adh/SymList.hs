@@ -2,21 +2,17 @@ module  SymList
     (   SymList (..) 
     ,   fromSL
     ,   toSL
+    ,   reverseSL
+    ,   nilSL
     ,   consSL
     ,   snocSL
     ,   headSL
     ,   lastSL
     ,   tailSL
     ,   initSL
-    ,   nilSL
-    ,   main
     )   where
 
-import Test.Hspec
 import Test.QuickCheck
-
-main :: IO ()
-main = hspec specTest
 
 data SymList a = SymList
     { start :: [a]
@@ -26,6 +22,9 @@ data SymList a = SymList
 instance Eq a => Eq (SymList a) where
     (==) (SymList xs ys) (SymList xs' ys') 
         = xs ++ reverse ys == xs' ++ reverse ys'
+
+instance (Arbitrary a) => Arbitrary (SymList a) where
+    arbitrary = toSL <$> arbitrary
 
 single :: [a] -> Bool
 single [_] = True
@@ -41,6 +40,9 @@ toSL :: [a] -> SymList a
 toSL xs = SymList us (reverse vs)
     where (us,vs) = splitAt (length xs `div` 2) xs
 
+reverseSL :: SymList a -> SymList a
+reverseSL (SymList xs ys) = SymList ys xs
+
 consSL :: a -> SymList a -> SymList a
 consSL x (SymList xs ys) = if null ys
     then (SymList [x] xs)
@@ -51,35 +53,25 @@ snocSL x (SymList xs ys) = if null xs
     then (SymList ys [x])
     else (SymList xs (x:ys))
 
-headSL :: SymList a -> a
+headSL :: SymList a -> Maybe a
 headSL (SymList xs ys) = if null xs
-    then head ys
-    else head xs
+    then if null ys then Nothing else Just (head ys)
+    else Just (head xs)
 
-lastSL :: SymList a -> a
+lastSL :: SymList a -> Maybe a
 lastSL (SymList xs ys) = if null ys 
-    then head xs 
-    else head ys
+    then if null xs then Nothing else Just (head xs)
+    else Just (head ys)
 
-tailSL :: SymList a -> SymList a
+tailSL :: SymList a -> Maybe (SymList a)
 tailSL (SymList xs ys)
-    | null xs   =  if null ys then error "tailSL: empty list" else nilSL
-    | single xs = SymList (reverse vs) us
-    | otherwise = SymList (tail xs) ys
-    where (us,vs) = splitAt (length ys `div` 2) ys
+    | null xs   =  if null ys then Nothing else Just nilSL
+    | single xs = Just $ reverseSL (toSL ys)
+    | otherwise = Just $ SymList (tail xs) ys
     
-
-initSL :: SymList a -> SymList a
-initSL = undefined
-
-specTest :: Spec
-specTest = do
-    specToFrom
-
-specToFrom :: Spec
-specToFrom = it "Check toSL (fromSL sl) == sl" $ property propToFrom
-
-propToFrom :: [Int] -> [Int] -> Bool
-propToFrom xs ys = toSL (fromSL (SymList xs ys)) == SymList xs ys
-
+initSL :: SymList a -> Maybe (SymList a)
+initSL (SymList xs ys)
+    | null ys   = if null xs then Nothing else Just nilSL
+    | single ys = Just $ toSL xs
+    | otherwise = Just $ SymList xs (tail ys)
 

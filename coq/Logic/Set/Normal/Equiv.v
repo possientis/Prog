@@ -1,5 +1,6 @@
 Require List.
-Require Logic.List.Equiv.
+
+Require        Logic.List.Equiv.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Incl.

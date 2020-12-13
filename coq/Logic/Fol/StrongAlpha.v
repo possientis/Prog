@@ -237,7 +237,7 @@ Proof.
         + apply var_replace_remove. assumption.
 Qed.
 
-(*
+
 (* Almost equivalence is transitive.                                            *)
 Lemma almostTrans : forall (v:Type) (e:Eq v) (p q r:P v),
     p :~: q -> q :~: r -> p :~: r.
@@ -360,15 +360,19 @@ Proof.
                           try assumption. apply Cong_symmetric.
                           apply StrongAlpha_replace_self.
                             { apply var_replace_remove; try assumption. }
-                            {
-
-(* CONFUSED.....
+                            { intros H12. 
+                              destruct (in_dec eqDec x (Fr r')) as [H13|H13].
+                                { rewrite free_replace2 in H12; try assumption.
+                                  destruct H12 as [H12|[H12 H14]]. 
+                                    { subst. apply H5. reflexivity. }
+                                    { apply K in H12. contradiction. }}
+                                { rewrite free_replace1 in H12; try assumption.
+                                  apply K in H12. contradiction. }}}}
                   apply Cong_transitive with 
                     (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))).
                     { assumption. }
                     { apply Cong_symmetric. rewrite H9. assumption. }}
                 { apply var_replace_remove. intros H11. 
                   apply H5. symmetry. assumption. }}
-*)
-Show.
-*)
+Qed.
+

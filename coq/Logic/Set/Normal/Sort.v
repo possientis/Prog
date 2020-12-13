@@ -1,4 +1,4 @@
-Require Logic.List.Sort.
+Require        Logic.List.Sort.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Rank.

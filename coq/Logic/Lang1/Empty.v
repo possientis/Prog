@@ -7,8 +7,9 @@ Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
+Require Import Logic.Lang1.Context.
 Require        Logic.Lang1.SemanCtx.
-Require Import Logic.Lang1.Semantics.
+Require        Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
 
 
@@ -17,6 +18,7 @@ Require Import Logic.Lang1.Environment.
 Definition emptySetF (n m:nat) : Formula := Exi n (All m (Not (Elem m n))).
 
 (* Evaluating emptySetF in any environment 'yields' the theorem emptySet.       *)
+Import Semantics.
 Lemma evalEmptySetF : LEM -> forall (e:Env) (n m:nat),
     m <> n ->
     eval e (emptySetF n m) 
@@ -37,14 +39,24 @@ Proof.
         + assumption. 
     - assumption.
 Qed.
- 
-(*
+
+Import SemanCtx.
+Lemma evalEmptySetFCtx : LEM -> forall (G:Context) (n m:nat),
+    n <> m ->
+    G :- (emptySetF n m) >> exists (x:set), forall (z:set), ~ (z :: x).
+Proof.
+    intros L G n m H1. unfold emptySetF. apply evalExi; try assumption.
+    intros x. apply evalAll. intros z. apply evalNot, evalElem; try (apply FindZ).
+    apply FindS; try assumption. apply findZ.
+Qed.
+
+
 (* An approximation of lemma 'emptyCharac' expressed in set theory syntax.      *)
 (* This formulation is correct when variables n and m are distinct.             *)
 Definition emptyCharacF (n m:nat) : Formula :=
         All n (Imp (Empty n) (All m (Not (Elem m n)))).
 
-
+Import Semantics.
 (* Evaluating emptyCharacF in any environment 'yields' the lemma.               *)
 Lemma evalEmptyCharacF : forall (e:Env) (n m:nat),
         m <> n ->
@@ -66,4 +78,16 @@ Proof.
         + assumption.
         + assumption.
 Qed.
-*)
+
+Import SemanCtx.
+Lemma evalEmptyCharacFCtx : forall (G:Context) (n m:nat),
+    n <> m ->
+    G :- (emptyCharacF n m) >> 
+        forall (x:set), x == Nil -> forall (y:set), ~ (y :: x).
+Proof.
+    intros G n m H1. unfold emptyCharacF. apply evalAll. intros x. apply evalImp.
+    - apply evalEmpty. apply FindZ.
+    - apply evalAll. intros y. apply evalNot, evalElem; try (apply FindZ).
+      apply FindS; try assumption. apply FindZ.
+Qed.
+

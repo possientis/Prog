@@ -1,4 +1,4 @@
-Require Logic.List.Nub.
+Require        Logic.List.Nub.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Rank.

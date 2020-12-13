@@ -7,14 +7,19 @@ Require Import Logic.Set.Incl.
 Require Import Logic.Set.Elem.
 
 Require Import Logic.Lang1.Syntax.
-Require Import Logic.Lang1.Semantics.
+Require Import Logic.Lang1.Context.
+Require        Logic.Lang1.SemanCtx.
+Require        Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
+
+Open Scope Set_Incl_scope.
 
 (* Theorem 'elemIncl' expressed in set theory abstract syntax.                  *)
 (* This formulation is correct when variables n m p are distinct.               *)
 Definition elemInclF (n m p:nat) : Formula :=
     All n (All m (Iff (Sub n m) (All p (Imp (Elem p n) (Elem p m))))).
 
+Import Semantics.
 (* Evaluating elemInclF in any environment 'yields' the theorem elemIncl.       *)
 Lemma evalElemInclF : LEM -> forall (e:Env) (n m p:nat), 
     m <> n -> 
@@ -77,3 +82,21 @@ Proof.
             { assumption. }
         + assumption.
 Qed.
+
+Import SemanCtx.
+Lemma evalElemInclFCtx : LEM -> forall (G:Context) (n m p:nat), 
+    n <> m -> 
+    n <> p -> 
+    m <> p ->
+    G :- (elemInclF n m p) >> 
+        forall (x y:set), (x <= y <-> forall (z:set), z :: x -> z :: y). 
+Proof.
+    intros L G n m p H1 H2 H3. unfold elemInclF.
+    apply evalAll. intros x. apply evalAll. intros y. 
+    apply evalIff; try assumption. 
+    - apply evalSub; try (apply FindZ). apply FindS; try assumption. apply FindZ.
+    - apply evalAll. intros z. apply evalImp; apply evalElem; try (apply FindZ);
+      apply FindS; try assumption; try (apply FindZ). 
+      apply FindS; try assumption. apply FindZ.
+Qed.
+

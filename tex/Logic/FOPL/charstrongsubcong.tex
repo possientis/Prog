@@ -463,9 +463,12 @@ sufficient to show that $x\not\in\var(\theta[y/x])$ and
 $z\not\in\free(\theta[y/x])$. The fact that
 $x\not\in\var(\theta[y/x])$ is an immediate consequence of
 proposition~(\ref{logic:prop:inplaceof:notvar}) and $x\neq y$. So it
-remains to show that $z\not\in\free(\theta[y/x])$, which in fact was
-already proved in the course of proving the equivalence
-$\phi_{1}\sim\eta$.
+remains to show that $z\not\in\free(\theta[y/x])$. However, applying 
+proposition~(\ref{logic:prop:freevar:single:subst}), since
+$y\not\in\var(\theta)$ we see that $\free(\theta[y/x])$ is either
+$\free(\theta)$ or $\free(\theta)\setminus\{x\}\cup\{y\}$ depending
+on whether $x\in\free(\theta)$. Since $z\neq y$, we need to
+show that $z\not\in\free(\theta)$ which we know.
 \end{proof}
 
 Having shown that $\simeq$ is a reflexive, symmetric and transitive

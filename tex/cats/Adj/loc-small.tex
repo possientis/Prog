@@ -571,9 +571,9 @@ from $c$ to $G(d)$ in the category \Cat.
                 c
                 &F(c)\arrow[d,swap, "g"]
                 &\Dat(F(c),F(c))\arrow[r, "\alpha\mbox{$(c,F(c))$}"]
-                \arrow[d, swap,"F^{*}\mbox{$(\id(c),g)$}"]
+                \arrow[d, swap,"F^{*}\mbox{$({\rm id}(c)\,,\,g)$}"]
                 &\Cat(c,G(F(c)))
-                \arrow[d, "G^{*}\mbox{$(\id(c),g)$}"]
+                \arrow[d, "G^{*}\mbox{$({\rm id}(c)\,,\,g)$}"]
                 \\
                 c\arrow[u, "\id(c)"]
                 &d
@@ -629,9 +629,9 @@ from $c$ to $G(d)$ in the category \Cat.
                 c'
                 &d\arrow[d,swap, "\id(d)"]
                 &\Dat(F(c'),d)\arrow[r, "\alpha\mbox{$(c',d)$}"]
-                \arrow[d, swap,"F^{*}\mbox{$(f,\id(d))$}"]
+                \arrow[d, swap,"F^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
                 &\Cat(c',G(d))
-                \arrow[d, "G^{*}\mbox{$(f,\id(d))$}"]
+                \arrow[d, "G^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
                 \\
                 c\arrow[u, "f"]
                 &d
@@ -639,9 +639,46 @@ from $c$ to $G(d)$ in the category \Cat.
                 &\Cat(c,G(d))
             \end{tikzcd}
         \]
-    In other words...TODO
+    In other words, the following equation holds:
+        \begin{equation}\label{Adj:eqn:alpha:F*:G*:eta:4}
+            \alpha(c,d)\circ F^{*}(f,\id(d)) = G^{*}(f,\id(d))\circ\alpha(c',d)
+        \end{equation}
     Hence we have: 
         \begin{eqnarray*}G(F(f))\circ\eta_{c}
-            &=&TODO
+            &=&\alpha(c,d)(\,F(f)\,)
+            \leftarrow\ \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:2})}\\
+            \mbox{$d=F(c')$}\ \to\ 
+            &=&\alpha(c,d)(\,\id(d)\circ\id(d)\circ F(f)\,)\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
+            &=&\alpha(c,d)(\,F^{*}(f,\id(d))(\id(d))\,)\\
+            &=&(\alpha(c,d)\circ F^{*}(f,\id(d)))(\id(d))\\
+            \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:4})}\ \to\ 
+            &=&(G^{*}(f,\id(d))\circ\alpha(c',d))(\id(d))\\
+            &=&G^{*}(f,\id(d))(\,\alpha(c',d)(\id(d))\,)\\
+            \mbox{$d=F(c')$}\ \to\ 
+            &=&G^{*}(f,\id(d))(\,\alpha(c',F(c'))(\,\id(F(c'))\,)\,)\\
+            \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:1})}\ \to\ 
+            &=&G^{*}(f,\id(d))(\eta_{c'})\\
+            \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
+            &=&G(\id(d))\circ\eta_{c'}\circ f\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&\id(\,G(d)\,)\circ\eta_{c'}\circ f\\
+            &=&\eta_{c'}\circ f\\
         \end{eqnarray*}
 \end{proof}
+
+Suppose $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ are functors where \Cat\ and \Dat\ 
+are locally small categories, and let $\beta:G^{*}\Rightarrow F^{*}$ be a 
+natural transformation between the associated right-hand-side and left-hand-side
+functors. Then for all $c\in\Cat$ and $d\in\Dat$, i.e. for all $(c,d)\in
+\Cop\times\Dat$, the component $\beta(c,d)$ is an arrow
+$\beta(c,d):\Cat(c,G(d))\to\Dat(F(c),d)\ @\ \Set$. Hence for all $d\in\Dat$,
+taking $c=G(d)$, we have $\beta(G(d),d):\Cat(G(d),G(d))\to\Dat(F(G(d)),d)$.
+Consequently, if we define $\epsilon_{d}=\beta(G(d),d)(\,\id(\,G(d)\,)\,)$ then
+$\epsilon_{d}$ is a well-defined element of $\Dat(F(G(d)),d)$, i.e.
+$\epsilon_{d}$ is a well-defined arrow $\epsilon_{d}:F(G(d))\to d\ @\ \Dat$. The question
+arises as to whether the map $\epsilon:\ob\ \Dat\to\arr\ \Dat$ we have just defined
+is in fact a natural transformation $\epsilon:F\circ G\Rightarrow I_{\cal D}$.
+This is in fact the case:
+TODO
+

@@ -247,4 +247,3 @@ Proof.
       try (apply freshNot_n); apply freshNot_m.
 Qed.
 
-Open Scope Context_scope.

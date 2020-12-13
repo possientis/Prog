@@ -2,7 +2,7 @@ Require Import Le.
 Require Import Nat.
 Require Import List.
 
-Require Logic.List.Normal.
+Require        Logic.List.Normal.
 
 Require Import Logic.Nat.Max.
 

@@ -1,96 +1,62 @@
 import data.real.basic
 
-example : ∀ (a b c : ℝ), (a * b) * c = b * (a * c) :=
+example : ∀ (a b c : ℝ), a ≤ b → c + a ≤ c + b :=
 begin
-  intros a b c, rw (mul_comm a b), apply mul_assoc
+  intros a b c H₁, rw ← sub_nonneg,
+  have H₂ : c + b - (c + a) = b - a, by ring,
+  rw [H₂, sub_nonneg], assumption
 end
 
-example : ∀ (a b c : ℝ) , (c * b) * a = b * (a * c) :=
+example : ∀ (a b : ℝ), a ≤ b → ∀ (c : ℝ), a + c ≤ b + c :=
 begin
-  intros a b c,
+  intros a b H₁ c, rw ← sub_nonneg,
+  have H₂ : b + c - (a + c) = b - a, by ring,
+  rw [H₂, sub_nonneg], assumption
+end
+
+example : ∀ (a b : ℝ), 0 ≤ a → b ≤ a + b :=
+begin
+  intros a b H₁,
   calc
-  (c * b) * a   = (b * c)* a  : by rw (mul_comm c b)
-  ...           =  b *(c * a) : by apply mul_assoc
-  ...           =  b *(a * c) : by rw (mul_comm c a)
+    b   = 0 + b   : by rw zero_add
+    ... ≤ a + b   : add_le_add_right H₁ b
 end
 
-example : ∀ (a b c : ℝ), a * (b * c) = b * (a * c) :=
+example : ∀ (a b : ℝ), 0 ≤ b → a ≤ a + b :=
 begin
-  intros a b c,
+  intros a b H₁,
   calc
-  a * (b * c)   = (a * b)* c  : by rw mul_assoc
-  ...           = (b * a)* c  : by rw (mul_comm a b)
-  ...           =  b *(a * c) : by apply mul_assoc
+    a   = a + 0   : by rw add_zero
+    ... ≤ a + b   : add_le_add_left H₁ a
 end
 
-example : ∀ (a b c d : ℝ),
-  c = d*a + b →
-  b = a*d     →
-  c = 2*a*d   :=
+example : ∀ (a b : ℝ), 0 ≤ a → 0 ≤ b → 0 ≤ a + b :=
+begin
+  intros a b H₁ H₂,
+  calc
+    0   = 0 + 0   : by rw add_zero
+    ... ≤ a + 0   : add_le_add_right H₁ 0
+    ... ≤ a + b   : add_le_add_left H₂ a
+end
+
+example : ∀ (a b c d : ℝ), a ≤ b → c ≤ d → a + c ≤ b + d :=
 begin
   intros a b c d H₁ H₂,
   calc
-  c   = d*a + b       : H₁
-  ... = d*a + a*d     : by rw H₂
-  ... = a*d + a*d     : by rw (mul_comm d a)
-  ... = 2*(a*d)       : by rw two_mul
-  ... = 2*a*d         : by rw mul_assoc
+    a + c ≤ b + c   : add_le_add_right H₁ c
+    ...   ≤ b + d   : add_le_add_left H₂ b
 end
 
-example : ∀ (a b c d : ℝ),
-  c = b*a - d  →
-  d = a*b      →
-  c = 0        :=
+example : ∀ (a b c : ℝ), 0 ≤ c → a ≤ b → a*c ≤ b*c  :=
 begin
-  intros a b c d H₁ H₂,
-  calc
-  c   = b*a - d     : H₁
-  ... = b*a - a*b   : by rw H₂
-  ... = a*b - a*b   : by rw mul_comm
-  ... = 0           : by apply sub_self
+  intros a b c H₁ H₂, rw ← sub_nonneg,
+  have H₃ : b*c - a*c = (b - a)*c, by ring,
+  rw H₃, apply mul_nonneg; try {assumption},
+  rw sub_nonneg, assumption
 end
 
 
-example : ∀ (a b c d : ℝ),
-  c = d*a + b  →
-  b = a*d      →
-  c = 2*a*d    :=
-begin
-  intros a b c d H₁ H₂,
-  calc
-  c   = d*a + b     : H₁
-  ... = d*a + a*d   : by rw H₂
-  ... = 2*a*d       : by ring
-end
 
-example : ∀ (a b c : ℝ), a * (b * c) = b * (a * c) :=
-begin
-  intros a b c, ring
-end
 
-example : ∀ (a b : ℝ), (a + b) + a = 2*a + b :=
-begin
-  intros a b, ring
-end
 
-example : ∀ (a b : ℝ), (a + b)*(a - b) = a^2 - b^2 :=
-begin
-  intros a b,
-  calc
-  (a + b)*(a - b) = (a + b)*a - (a + b)*b       : by apply mul_sub
-  ...             = a*a + b*a - (a + b)*b       : by rw add_mul
-  ...             = a*a + b*a - (a*b + b*b)     : by rw add_mul
-  ...             = a*a + (b*a - (a*b + b*b))   : by rw add_sub
-  ...             = a*a + (b*a - a*b - b*b)     : by rw sub_sub
-  ...             = a*a + (a*b - a*b - b*b)     : by rw (mul_comm b a)
-  ...             = a*a + (0 - b*b)             : by rw sub_self
-  ...             = a*a + 0 - b*b               : by rw add_sub
-  ...             = a*a - b*b                   : by rw add_zero
-  ...             = a^2 - b*b                   : by rw (pow_two a)
-  ...             = a^2 - b^2                   : by rw (pow_two b)
-end
 
-example : ∀ (a b : ℝ), (a + b)*(a - b) = a^2 - b^2 :=
-begin
-  intros a b, ring
-end
