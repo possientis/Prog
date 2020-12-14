@@ -21,10 +21,6 @@ data Context : Set where
   ∅     : Context -- \0
   _,_∶_ : Context → Id → Type → Context
 
-length : Context → ℕ
-length ∅ = zero
-length (Γ , _ ∶ _) = suc (length Γ)
-
 data _∋_∶_ : Context → Id → Type → Set where
 
   Z : ∀ {Γ : Context}{x : Id}{A : Type}
