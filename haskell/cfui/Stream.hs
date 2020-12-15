@@ -1,4 +1,11 @@
+module  Stream 
+    (   Stream  (..)
+    ,   naturals
+    ,   toList
+    )   where 
+
 import Control.Comonad
+
 
 data Stream a = Cons a (Stream a)
 
@@ -24,8 +31,8 @@ instance Comonad Stream where
 sumWithNext :: Num a => Stream a -> a
 sumWithNext (Cons a (Cons a' _)) = a + a'
 
-stream0 :: Stream Integer
-stream0 = extend sumWithNext naturals
+_stream0 :: Stream Integer
+_stream0 = extend sumWithNext naturals
 
 next :: Stream a -> a
 next (Cons _ (Cons a _)) = a
@@ -33,8 +40,8 @@ next (Cons _ (Cons a _)) = a
 -- extend :: Comonad w => (w a -> b) -> w a -> w b
 -- (=>>)  :: Comonad w => w a -> (w a -> b) -> w b
 
-first3 :: Stream a -> [a]
-first3 stream = 
+_first3 :: Stream a -> [a]
+_first3 stream = 
     let stream2 = stream  =>> next
         stream3 = stream2 =>> next
     in [extract stream, extract stream2, extract stream3]
