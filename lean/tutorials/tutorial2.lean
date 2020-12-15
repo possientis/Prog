@@ -56,7 +56,50 @@ begin
 end
 
 
+example : ∀ (a b c : ℝ), 0 ≤ c → a ≤ b → a*c ≤ b*c :=
+begin
+  intros a b c H₁ H₂,
+  have H₃ : 0 ≤ b - a               ,{ rw sub_nonneg, assumption },
+  have H₄ : 0 ≤ (b - a)*c           ,{ apply mul_nonneg; assumption },
+  have H₅ : (b - a)*c = b*c - a*c   ,{ ring },
+  have H₆ : 0 ≤ b*c - a*c           ,{ rw ← H₅, assumption },
+  rw ← sub_nonneg, assumption
+end
 
+-- Slightly shorter using 'rwa' tactic
+example : ∀ (a b c : ℝ), 0 ≤ c → a ≤ b → a*c ≤ b*c :=
+begin
+  intros a b c H₁ H₂,
+  have H₃ : 0 ≤ b - a               ,{ rwa sub_nonneg },
+  have H₄ : 0 ≤ (b -a)*c            ,{ apply mul_nonneg; assumption },
+  have H₅ : (b - a)*c = b*c - a*c   ,{ ring },
+  have H₆ : 0 ≤ b*c - a*c           ,{ rwa ← H₅ },
+  rwa ← sub_nonneg
+end
 
+example : ∀ (a b c : ℝ), 0 ≤ c → a ≤ b → a*c ≤ b*c :=
+begin
+  intros a b c H₁ H₂, rw ← sub_nonneg, calc
+  0   ≤ (b - a)*c     : mul_nonneg (by rwa sub_nonneg) H₁
+  ... = b*c - a*c     : by ring,
+end
 
+-- Backward reasoning
+example : ∀ (a b c : ℝ), c ≤ 0 → a ≤ b → b*c ≤ a*c :=
+begin
+  intros a b c H₁ H₂, rw ← sub_nonneg,
+  have H₃ : a*c - b*c = (a - b)*c, { ring },
+  rw H₃,
+  apply mul_nonneg_of_nonpos_of_nonpos; try { assumption },
+  rwa sub_nonpos
+end
 
+example : ∀ (a b c : ℝ), c ≤ 0 → a ≤ b → b*c ≤ a*c :=
+begin
+  intros a b c H₁ H₂,
+  have H₃ : a - b ≤ 0, { rwa sub_nonpos },
+  have H₄ : 0 ≤ (a - b)*c, { apply mul_nonneg_of_nonpos_of_nonpos; assumption },
+  have H₅ : (a - b)*c = a*c - b*c, { ring },
+  have H₆ : 0 ≤ a*c - b*c, { rwa ← H₅ },
+  rwa ← sub_nonneg
+end
