@@ -247,3 +247,33 @@ Proof.
       try (apply freshNot_n); apply freshNot_m.
 Qed.
 
+(*
+Lemma evalUnique : forall (G:Context) (p:Formula) (A B:Prop),
+    G :- p >> A -> G :- p >> B -> A -> B.
+Proof.
+    intros G p A B H1. revert B. remember (p >> A) as b eqn:E.
+    revert p A E. induction H1 as 
+        [G
+        |G n m x y H1 H2
+        |G p1 p2 A1 A2 H1 IH1 H2 IH2
+        |G n p1 A1 H1 IH1
+        |G p' A' B' H1 H2 IH2
+        ];
+    intros p A H3 B H4; remember (p >> B) as b eqn:E;
+    revert p A B E H3. destruct H4 as
+        [G
+        |G n m x y H1 H2
+        |G p1 p2 A1 A2 H1 H2
+        |G n p1 A1 H1
+        |G p' A' B' H1 H2
+        ];
+    intros p A B H3 H4; 
+    inversion H3; subst; clear H3;
+    inversion H4; subst; clear H4.
+    - auto.
+    - intros H3. contradiction.
+    - intros p A B H5 H6. subst. inversion H6. subst. clear H6.
+
+ 
+Show.
+*)

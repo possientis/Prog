@@ -10,7 +10,8 @@ Latex:
 
 
 Set Theory:
-Lang1/Equal
+Lang1/SemanCtx
+Lang1/Compatible
 axiom of choice?
 axiom of infinity false ?
 a new semantics based on different type of environments (plfa)
