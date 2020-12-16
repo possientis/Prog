@@ -13,6 +13,8 @@ Require Import Logic.List.Remove.
 Require Import Logic.List.Coincide.
 Require Import Logic.List.Difference.
 
+Require Import Logic.Rel.Include.
+
 Require Import Logic.Lam.Free.
 Require Import Logic.Lam.Valid.
 Require Import Logic.Lam.Syntax.
@@ -20,8 +22,6 @@ Require Import Logic.Lam.Functor.
 Require Import Logic.Lam.Variable.
 Require Import Logic.Lam.Subformula.
 Require Import Logic.Lam.Congruence.
-
-Require Import Logic.Rel.Include.
 
 (* Generator of strong alpha-equivalence.                                       *)
 Inductive StrongAlpha0 (v:Type) (e:Eq v) : T v -> T v -> Prop :=
@@ -160,9 +160,41 @@ Inductive AlmostStrongAlpha (v:Type) (e:Eq v) : T v -> T v -> Prop :=
 Arguments AlmostStrongAlpha {v} {e}.
 
 Notation "t :~: s" := (AlmostStrongAlpha t s)
-    (at level 60, no associativity) : Fol_StrongAlpha_scope.
+    (at level 60, no associativity) : Lam_StrongAlpha_scope.
 
-Open Scope Fol_StrongAlpha_scope.
+Open Scope Lam_StrongAlpha_scope.
+
+Lemma almostAppRev : forall (v:Type) (e:Eq v) (t1 t2 s:T v), 
+    App t1 t2 :~: s -> exists (s1 s2:T v),
+        (t1 ~ s1) /\ (t2 ~ s2) /\ (s = App s1 s2).
+Proof.
+    intros v e t1 t2 s H1. remember (App t1 t2) as t eqn:E. revert t1 t2 E.
+    destruct H1 as [x|t1' t2' s1 s2 H1 H2|x t1' s1|x y t1' s1 r H1 H2 H3 H4];
+    intros t1 t2 E; inversion E. subst. exists s1. exists s2.
+    split; try assumption. split; try assumption. reflexivity.
+Qed.
+
+Lemma almostLamRev : forall (v:Type) (e:Eq v) (t1 s:T v) (x:v),
+    Lam x t1 :~: s -> 
+        (exists (s1:T v), (t1 ~ s1) /\ (s = Lam x s1)) \/
+        (exists (s1 r:T v) (y:v),
+            (x <> y)                /\ 
+            (t1 ~ r)                /\ 
+            (s1 ~ fmap (y // x) r)  /\
+            (~ y :: var r)          /\
+            (s = Lam y s1)).
+Proof.
+    intros v e t1 s x H1. remember (Lam x t1) as t eqn:E. revert x t1 E.
+    destruct H1 as [x'|t1' t2 s1 s2 H1 H2|x' t1' s1|x' y t1' s1 r H1 H2 H3 H4];
+    intros x t1 E; inversion E; subst; clear E.
+    - left. exists s1. split; try assumption. reflexivity.
+    - right. exists s1. exists r. exists y.
+      split; try assumption.
+      split; try assumption.
+      split; try assumption.
+      split; try assumption.
+      reflexivity.
+Qed.
 
 (* Almost equivalence contains generator of strong alpha-equivalence.           *)
 Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
@@ -197,4 +229,158 @@ Proof.
               rewrite replace_x_x. rewrite fmap_id. reflexivity. }
           rewrite <- H5. apply Cong_reflexive.
         + apply var_replace_remove. assumption.
+Qed.
+
+(* Almost equivalence is transitive.                                            *)
+Lemma almostTrans : forall (v:Type) (e:Eq v) (t s r:T v),
+    t :~: s -> s :~: r -> t :~: r.
+Proof.
+    intros v e t s r H1. revert r.
+    destruct H1 as [x|t1 t2 s1 s2 H1 H2|x t1 s1|x y t1 s1 r' H1 H2 H3 H4];
+    intros r H5.
+    - assumption.
+    - apply almostAppRev in H5. 
+      destruct H5 as [r1 [r2 [H5 [H6 H7]]]]. subst. constructor.
+        + apply Cong_transitive with s1; assumption.
+        + apply Cong_transitive with s2; assumption.
+    - apply almostLamRev in H5. destruct H5 as [H5|H5].
+        + destruct H5 as [r1 [H5 H6]]. subst. constructor.
+          apply Cong_transitive with s1; assumption.
+        + destruct H5 as [r1 [r' [y [H5 [H6 [H7 [H8 H9]]]]]]]. subst. 
+          apply ALamxy with r'; try assumption.
+          apply Cong_transitive with s1; assumption.
+    - apply almostLamRev in H5. destruct H5 as [H5|H5].
+        + destruct H5 as [r1 [H5 H6]]. subst.
+          apply ALamxy with r'; try assumption.
+          apply Cong_transitive with s1; try assumption.
+          apply Cong_symmetric. assumption.
+        + destruct H5 as [r1 [s' [z [H5 [H6 [H7 [H8 H9]]]]]]]. subst.
+          destruct (eqDec x z) as [H10|H10].
+            { subst. constructor. 
+              rewrite var_replace_permute in H3; try assumption.
+              rewrite var_replace_permute in H7; try assumption.
+              rewrite permute_comm in H7.
+              apply Cong_transitive with (fmap (y <:> z) s');
+              try (apply Cong_symmetric; assumption).
+              apply Cong_transitive with (fmap (y <:> z) s1).
+              { apply Cong_transitive with (fmap (y <:> z) (fmap (y <:> z) r')).
+                { rewrite <- fmap_comp', permute_involution, fmap_id.
+                  assumption. }
+                { apply (StrongAlpha_injective _ _ _ _).
+                    { apply permute_injective. }
+                    { apply Cong_symmetric. assumption. }}}  
+              { apply (StrongAlpha_injective _ _ _ _); try assumption.
+                  { apply permute_injective. }}}
+            { assert (~z :: Fr r') as K.
+                { intros H9.
+                  assert (z :: Fr (fmap (y // x) r')) as H11.
+                    { destruct (in_dec eqDec x (Fr r')) as [H12|H12]. 
+                        { apply free_replace2; try assumption. right.
+                          split; try assumption. intros H11. apply H10. 
+                          symmetry. assumption. }
+                        { rewrite free_replace1; assumption. }}
+                  apply H8. apply (free_var _ _ s' z).
+                  rewrite (StrongAlpha_free _ _ s' (fmap (y // x) r'));
+                  try assumption. apply Cong_transitive with s1; 
+                  try assumption. apply Cong_symmetric. assumption. }
+              apply ALamxy with (fmap (y // z) r'); try assumption.
+                { apply Cong_transitive with r'; try assumption.
+                  apply Cong_symmetric. apply StrongAlpha_replace_self;
+                  try assumption. }
+                { assert (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))
+                        = fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H9.
+                    { rewrite <- fmap_comp', <- fmap_comp'.
+                      rewrite <- fmap_comp', <- fmap_comp'.
+                      apply var_support. intros u H9.
+                      assert (u <> y) as H11.
+                        { intros H12. subst. apply H4. assumption. }
+                      unfold comp.
+                      destruct (eqDec u x) as [H12|H12]; 
+                      destruct (eqDec u z) as [H13|H13].
+                        { subst. reflexivity. }
+                        { subst. rewrite replace_x.
+                          rewrite (replace_not_x _ _ z y x); try assumption.
+                          rewrite replace_x.
+                          rewrite (replace_not_x _ _ y x z).
+                            { rewrite (replace_not_x _ _ z x y); try assumption.
+                              rewrite replace_x. reflexivity. }
+                            { intros H14. subst. apply H5. reflexivity. }}
+                        { subst. rewrite replace_x.
+                          rewrite (replace_not_x _ _ x z y).
+                            { rewrite replace_x.
+                              rewrite (replace_not_x _ _ x y z); try assumption.
+                              rewrite replace_x.
+                              rewrite (replace_not_x _ _ y z x); try assumption.
+                              reflexivity. }
+                            { intros H13. subst. apply H1. reflexivity. }}
+                        { rewrite (replace_not_x _ _ z y u); try assumption.
+                          rewrite (replace_not_x _ _ x z u); try assumption.
+                          rewrite (replace_not_x _ _ y x u); try assumption.
+                          rewrite (replace_not_x _ _ x y u); try assumption.
+                          rewrite (replace_not_x _ _ z x u); try assumption.
+                          rewrite (replace_not_x _ _ y z u); try assumption.
+                          reflexivity. }}
+                  apply Cong_transitive with (fmap (z // y) s'); try assumption. 
+                  apply Cong_symmetric.
+                  assert (fmap (z // x) (fmap (y // z) r') ~
+                    fmap (x // y) (fmap (z // x) (fmap (y // z) r'))) as H11. 
+                    { apply Cong_symmetric, StrongAlpha_replace_self.
+                        { apply var_replace_remove. assumption. }
+                        { intros H11. assert (y :: Fr (fmap (y // z) r')) as H12.
+                            { destruct (in_dec eqDec x (Fr (fmap (y // z) r')))
+                              as [H13|H13]. 
+                                { rewrite free_replace2 in H11; try assumption.
+                                    { destruct H11 as [H11|H11].
+                                        { subst. exfalso. apply H5. reflexivity. }
+                                        { destruct H11 as [H11 H14]. assumption. }}
+                                    { apply var_replace_remove. intros H14. subst.
+                                      apply H5. reflexivity. }}
+                                { rewrite free_replace1 in H11; try assumption.
+                                  apply var_replace_remove. intros H14. subst.
+                                  apply H5. reflexivity. }}
+                      apply H4. apply (free_var _ _ _). 
+                      rewrite free_replace1 in H12; assumption. }}
+                  assert (fmap (z // y) s' ~
+                    fmap (z // y) (fmap (x // z) (fmap (y // x) r'))) as H12.
+                    { apply StrongAlpha_replace; try assumption.
+                        { apply var_replace_remove. intros H12. subst.
+                          apply H10. reflexivity. }
+                        { apply Cong_symmetric.
+                          apply Cong_transitive with s1; try assumption.
+                          apply Cong_symmetric.
+                          apply Cong_transitive with (fmap (y // x) r');
+                          try assumption. apply Cong_symmetric.
+                          apply StrongAlpha_replace_self.
+                            { apply var_replace_remove; try assumption. }
+                            { intros H12. 
+                              destruct (in_dec eqDec x (Fr r')) as [H13|H13].
+                                { rewrite free_replace2 in H12; try assumption.
+                                  destruct H12 as [H12|[H12 H14]]. 
+                                    { subst. apply H5. reflexivity. }
+                                    { apply K in H12. contradiction. }}
+                                { rewrite free_replace1 in H12; try assumption.
+                                  apply K in H12. contradiction. }}}}
+                  apply Cong_transitive with 
+                    (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))).
+                    { assumption. }
+                    { apply Cong_symmetric. rewrite H9. assumption. }}
+                { apply var_replace_remove. intros H11. 
+                  apply H5. symmetry. assumption. }}
+Qed.
+
+(* Almost strong equivalence implies strong equivalence.                        *)
+Lemma almostStrongAlpha : forall (v:Type) (e:Eq v) (t s:T v),
+   t :~: s -> t ~ s.
+Proof.
+    intros v e t s H1.
+    destruct H1 as [x|t1 t2 s1 s2 H1 H2|x t1 s1|x y t1 s1 r' H1 H2 H3 H4].
+    - apply Cong_reflexive.
+    - apply CongApp; assumption.
+    - apply CongLam. assumption.
+    - apply Cong_transitive with (Lam x r').
+        + apply CongLam. assumption.
+        + apply Cong_symmetric. 
+          apply Cong_transitive with (Lam y (fmap (y // x) r')).
+            { apply CongLam. assumption. }
+            { apply Cong_symmetric, CongBase. constructor; assumption. }
 Qed.

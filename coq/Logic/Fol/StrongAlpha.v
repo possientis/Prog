@@ -237,7 +237,6 @@ Proof.
         + apply var_replace_remove. assumption.
 Qed.
 
-
 (* Almost equivalence is transitive.                                            *)
 Lemma almostTrans : forall (v:Type) (e:Eq v) (p q r:P v),
     p :~: q -> q :~: r -> p :~: r.
@@ -376,3 +375,20 @@ Proof.
                   apply H5. symmetry. assumption. }}
 Qed.
 
+(* Almost strong equivalence implies strong equivalence.                        *)
+Lemma almostStrongAlpha : forall (v:Type) (e:Eq v) (p q:P v),
+   p :~: q -> p ~ q.
+Proof.
+    intros v e p q H1.
+    destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1|x y p1 q1 r' H1 H2 H3 H4].
+    - apply Cong_reflexive.
+    - apply Cong_reflexive.
+    - apply CongImp; assumption.
+    - apply CongAll. assumption.
+    - apply Cong_transitive with (All x r').
+        + apply CongAll. assumption.
+        + apply Cong_symmetric. 
+          apply Cong_transitive with (All y (fmap (y // x) r')).
+            { apply CongAll. assumption. }
+            { apply Cong_symmetric, CongBase. constructor; assumption. }
+Qed.
