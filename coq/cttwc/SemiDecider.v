@@ -211,7 +211,9 @@ Qed.
 
 Lemma Markov2Post : Markov -> Post.
 Proof.
-
+    unfold Markov, Post. intros H1 X H2 H3. 
+    destruct H2 as [f H2]. destruct H3 as [g H3]. 
+    unfold tsat in H2. unfold tsat in H3.
 Show.
 
 

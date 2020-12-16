@@ -30,7 +30,12 @@ NORM_LIB  = -Q ${SET}/${NORM}   Logic.${SET}.${NORM}   -Q ../Logic Logic
 AXIOM_OBJ = ${AXIOM}/Extensionality.vo \
 			${AXIOM}/Dec.vo \
 			${AXIOM}/Wec.vo \
-			${AXIOM}/LEM.vo
+			${AXIOM}/LEM.vo \
+			${AXIOM}/Sat.vo \
+			${AXIOM}/Sec.vo \
+			${AXIOM}/Markov.vo \
+			${AXIOM}/Post.vo
+
 
 CLASS_OBJ = ${CLASS}/Ord.vo \
 		   	${CLASS}/Eq.vo	
