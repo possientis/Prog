@@ -9,6 +9,7 @@ open import Relation.Nullary             using (Dec; yes; no; ¬_)
 
 open import Lam.Type
 
+open import DeBruijn.Subst
 open import DeBruijn.Syntax
 open import DeBruijn.Context
 
@@ -80,5 +81,9 @@ M₁ = ƛ # 2 · (# 2 · # 0)
 _ : rename S_ M₀ ≡ M₁
 _ = refl
 
+M₂ : ∅ , `ℕ ⇒ `ℕ ⊢ `ℕ ⇒ `ℕ
+M₂ = ƛ # 1 · (# 1 · # 0)
 
+M₃ : ∅ ⊢ `ℕ ⇒ `ℕ
+M₃ = ƛ `suc # 0
 
