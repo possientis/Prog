@@ -10,10 +10,19 @@ module  SymList
     ,   lastSL
     ,   tailSL
     ,   initSL
+    ,   nullSL
+    ,   single
+    ,   singleSL
+    ,   lengthSL
     )   where
 
 import Test.QuickCheck
 
+-- Data structure invariant:
+-- null start -> null end   \/ single end
+-- null end   -> null start \/ single start
+-- i.e. Never allow one part to [] if the other part has more than 1 element.
+-- API implementation should ensure this invariant is never broken.
 data SymList a = SymList
     { start :: [a]
     , end   :: [a]
@@ -75,3 +84,11 @@ initSL (SymList xs ys)
     | single ys = Just $ toSL xs
     | otherwise = Just $ SymList xs (tail ys)
 
+nullSL :: SymList a -> Bool
+nullSL (SymList xs ys) = null xs && null ys
+
+singleSL :: SymList a -> Bool
+singleSL (SymList xs ys) = (single xs && null ys) || (null xs && single ys)
+
+lengthSL :: SymList a -> Int
+lengthSL (SymList xs ys) = length xs + length ys
