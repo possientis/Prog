@@ -34,8 +34,8 @@ AXIOM_OBJ = ${AXIOM}/Extensionality.vo \
 			${AXIOM}/Sat.vo \
 			${AXIOM}/Sec.vo \
 			${AXIOM}/Markov.vo \
+			${AXIOM}/Witness.vo \
 			${AXIOM}/Post.vo
-
 
 CLASS_OBJ = ${CLASS}/Ord.vo \
 		   	${CLASS}/Eq.vo	
@@ -82,7 +82,6 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Minimal.vo \
 			${NAT}/Seq.vo \
 			${NAT}/Fresh.vo \
-			${NAT}/Witness.vo \
 			${NAT}/NatxNat.vo
 
 LIST_OBJ  = ${LIST}/In.vo \

@@ -48,5 +48,3 @@ instance Monad Sequence where
 
 ap :: (Monad m) => m (a -> b) -> m a -> m b
 ap mf ma = mf >>= \f -> ma >>= \a -> return (f a)
-
--- question: ap = (<*>) ?

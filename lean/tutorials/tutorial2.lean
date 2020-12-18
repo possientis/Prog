@@ -94,6 +94,7 @@ begin
   rwa sub_nonpos
 end
 
+-- Forward reasoning
 example : ∀ (a b c : ℝ), c ≤ 0 → a ≤ b → b*c ≤ a*c :=
 begin
   intros a b c H₁ H₂,
@@ -103,3 +104,48 @@ begin
   have H₆ : 0 ≤ a*c - b*c, { rwa ← H₅ },
   rwa ← sub_nonneg
 end
+
+example : ∀ (a b c : ℝ), c ≤ 0 → a ≤ b → b*c ≤ a*c :=
+begin
+  intros a b c H₁ H₂, rw ← sub_nonneg, calc
+  0   ≤ (a - b)*c      : mul_nonneg_of_nonpos_of_nonpos (by rwa sub_nonpos) H₁
+  ... = a * c - b* c   : by ring
+end
+
+example : ∀ (P Q R : Prop), (P ∧ Q → R) ↔ (P → Q → R) :=
+begin
+  intros P Q R, split; intros H₁,
+    { intros H₂ H₃, apply H₁, split; assumption },
+    { rintros ⟨H₂,H₃⟩, apply H₁; assumption }
+end
+
+example : ∀ (a b : ℝ), 0 ≤ b → a ≤ a + b :=
+begin
+  intros a b H₁, linarith
+end
+
+example : ∀ (a b : ℝ), 0 ≤ a → 0 ≤ b → 0 ≤ a + b :=
+begin
+  intros a b H₁ H₂, linarith
+end
+
+
+example : ∀ (a b c d : ℝ), a ≤ b → c ≤ d → a + c ≤ b + d :=
+begin
+  intros a b c d H₁ H₂, linarith
+end
+
+open nat
+
+example : ∀ (a b : ℕ), a ∣ b ↔ gcd a b = a := -- '∣' is \| ... not just |
+begin
+  intros a b, split; intros H₁,
+    { apply dvd_antisymm,
+      { apply gcd_dvd_left },
+      { rw dvd_gcd_iff, split,
+        { apply dvd_refl},
+        { assumption }}},
+    { rw ← H₁, apply gcd_dvd_right }
+end
+
+

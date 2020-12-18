@@ -23,10 +23,10 @@ subst σ (`suc M) = `suc subst σ M
 subst σ (case M M₁ M₂) = case (subst σ M) (subst σ M₁) (subst (exts σ) M₂)
 subst σ (if M M₁ M₂) = if (subst σ M) (subst σ M₁) (subst σ M₂)
 subst σ (μ M) = μ subst (exts σ) M
-subst σ (num x) = num x
+subst σ (eNum x) = eNum x
 subst σ (`+ M₁ M₂) = `+ (subst σ M₁) (subst σ M₂)
 subst σ (`* M₁ M₂) = `* (subst σ M₁) (subst σ M₂)
-subst σ (bool b) = bool b
+subst σ (eBool b) = eBool b
 subst σ (`= M₁ M₂) = `= (subst σ M₁) (subst σ M₂)
 subst σ (`< M₁ M₂) = `< (subst σ M₁) (subst σ M₂)
 subst σ (`∧ M₁ M₂) = `∧ (subst σ M₁) (subst σ M₂)

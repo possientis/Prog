@@ -62,7 +62,7 @@ data _⊢_ : Context → Type → Set where
       ----------------------------
     →  Γ ⊢ A
 
-  num : ∀ {Γ : Context}
+  eNum : ∀ {Γ : Context}
     →  ℕ
       ------------------
     →  Γ ⊢ `Num
@@ -79,7 +79,7 @@ data _⊢_ : Context → Type → Set where
        -----------------
     →  Γ ⊢ `Num
 
-  bool : ∀ {Γ : Context}
+  eBool : ∀ {Γ : Context}
     →  Bool
        -----------------
     →  Γ ⊢ `𝔹
@@ -126,10 +126,10 @@ rename f (`suc p) = `suc rename f p
 rename f (case p q r) = case (rename f p) (rename f q) (rename (ext f) r)
 rename f (if p p₁ p₂) = if (rename f p) (rename f p₁) (rename f p₂)
 rename f (μ p) = μ rename (ext f) p
-rename f (num x) = num x
+rename f (eNum x) = eNum x
 rename f (`+ p q) = `+ (rename f p) (rename f q)
 rename f (`* p q) = `* (rename f p) (rename f q)
-rename f (bool b) = bool b
+rename f (eBool b) = eBool b
 rename f (`= p q) = `= (rename f p) (rename f q)
 rename f (`< p q) = `< (rename f p) (rename f q)
 rename f (`∧ p q) = `∧ (rename f p) (rename f q)

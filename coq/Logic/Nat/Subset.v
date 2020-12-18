@@ -2,6 +2,7 @@ Require Import Le.
 
 Require Import Logic.Axiom.Wec.
 Require Import Logic.Axiom.Dec.
+Require Import Logic.Axiom.Witness.
 
 Require Import Logic.Class.Ord.
 
@@ -9,7 +10,6 @@ Require Import Logic.Nat.Ord.
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Wec.
 Require Import Logic.Nat.Dec.
-Require Import Logic.Nat.Witness.
 
 (* Subset of N defined as predicate over N                                      *)
 Definition Subset : Type := nat -> Prop.

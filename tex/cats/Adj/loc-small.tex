@@ -588,17 +588,19 @@ from $c$ to $G(d)$ in the category \Cat.
         \end{equation}
     Hence we have:
         \begin{eqnarray*}\alpha(c,d)(g)
-            &=&\alpha(c,d)(\,g\circ\id(\,F(c)\,)\circ\id(\,F(c)\,)\,)\\
+            &=&\alpha(c,d)(\ g\,\circ\,\id(\,F(c)\,)\,\circ\,\id(\,F(c)\,)\ )\\
             \mbox{$F$ functor}\ \to\ 
-            &=&\alpha(c,d)(\,g\circ\id(\,F(c)\,)\circ F(\,\id(c)\,)\,)\\
+            &=&\alpha(c,d)(\ g\,\circ\,\id(\,F(c)\,)\,\circ\,F(\,\id(c)\,)\ )\\
             \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
-            &=&\alpha(c,d)(\,F^{*}(\,\id(c)\,,\,g\,)(\,\id(\,F(c)\,)\,)\,)\\
-            &=&(\,\alpha(c,d)\circ F^{*}(\,\id(c)\,,\,g\,)\,)(\,\id(\,F(c)\,)\,)\\
+            &=&\alpha(c,d)(\ F^{*}(\,\id(c),\,g\,)\,(\,\id(\,F(c)\,)\,)\ )\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\ \alpha(c,d)\,\circ\,F^{*}(\,\id(c),\,g\,)\ )\,(\,\id(\,F(c)\,)\,)\\
             \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:3})}\ \to\ 
-            &=&(\,G^{*}(\,\id(c)\,,\,g\,)\circ\alpha(c,F(c))\,)(\,\id(\,F(c)\,)\,)\\
-            &=&G^{*}(\,\id(c)\,,\,g\,)(\,\alpha(c,F(c))(\,\id(\,F(c)\,)\,)\,)\\
+            &=&(\ G^{*}(\,\id(c),\,g\,)\,\circ\,\alpha(c,F(c))\ )\,(\,\id(\,F(c)\,)\,)\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&G^{*}(\,\id(c),\,g\,)(\ \alpha(c,F(c))(\,\id(\,F(c)\,)\,)\ )\\
             \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:1})}\ \to\ 
-            &=&G^{*}(\,\id(c)\,,\,g\,)(\eta_{c})\\
+            &=&G^{*}(\,\id(c),\,g\,)(\eta_{c})\\
             \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
             &=&G(g)\circ\eta_{c}\circ\id(c)\\
             &=&G(g)\circ\eta_{c}\\
@@ -629,9 +631,9 @@ from $c$ to $G(d)$ in the category \Cat.
                 c'
                 &d\arrow[d,swap, "{\rm id}(d)"]
                 &\Dat(F(c'),d)\arrow[r, "\alpha\mbox{$(c',d)$}"]
-                \arrow[d, swap,"F^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
+                \arrow[d, swap,"F^{*}\mbox{$(f\,\,{\rm id}(d))$}"]
                 &\Cat(c',G(d))
-                \arrow[d, "G^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
+                \arrow[d, "G^{*}\mbox{$(f,\,{\rm id}(d))$}"]
                 \\
                 c\arrow[u, "f"]
                 &d
@@ -641,24 +643,26 @@ from $c$ to $G(d)$ in the category \Cat.
         \]
     In other words, the following equation holds:
         \begin{equation}\label{Adj:eqn:alpha:F*:G*:eta:4}
-            \alpha(c,d)\circ F^{*}(f,\id(d)) = G^{*}(f,\id(d))\circ\alpha(c',d)
+            \alpha(c,d)\circ F^{*}(\,f,\,\id(d)\,) = G^{*}(\,f,\,\id(d)\,)\circ\alpha(c',d)
         \end{equation}
     Hence we have: 
         \begin{eqnarray*}G(F(f))\circ\eta_{c}
             &=&\alpha(c,d)(\,F(f)\,)
             \leftarrow\ \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:2})}\\
             \mbox{$d=F(c')$}\ \to\ 
-            &=&\alpha(c,d)(\,\id(d)\circ\id(d)\circ F(f)\,)\\
+            &=&\alpha(c,d)(\ \id(d)\,\circ\,\id(d)\,\circ\,F(f)\ )\\
             \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
-            &=&\alpha(c,d)(\,F^{*}(f,\id(d))(\id(d))\,)\\
-            &=&(\alpha(c,d)\circ F^{*}(f,\id(d)))(\id(d))\\
+            &=&\alpha(c,d)(\ F^{*}(\,f,\,\id(d)\,)\,(\,\id(d)\,)\ )\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\ \alpha(c,d)\,\circ\,F^{*}(\,f,\,\id(d)\,)\ )\,(\,\id(d)\,)\\
             \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:4})}\ \to\ 
-            &=&(G^{*}(f,\id(d))\circ\alpha(c',d))(\id(d))\\
-            &=&G^{*}(f,\id(d))(\,\alpha(c',d)(\id(d))\,)\\
+            &=&(\ G^{*}(\,f,\,\id(d)\,)\,\circ\,\alpha(c',d)\ )\,(\,\id(d)\,)\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&G^{*}(\,f,\,\id(d)\,)\,(\ \alpha(c',d)\,(\,\id(d)\,)\ )\\
             \mbox{$d=F(c')$}\ \to\ 
-            &=&G^{*}(f,\id(d))(\,\alpha(c',F(c'))(\,\id(F(c'))\,)\,)\\
+            &=&G^{*}(\,f,\,\id(d)\,)\,(\ \alpha(c',F(c'))\,(\,\id(\,F(c')\,)\,)\ )\\
             \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:1})}\ \to\ 
-            &=&G^{*}(f,\id(d))(\eta_{c'})\\
+            &=&G^{*}(\,f,\,\id(d)\,)(\eta_{c'})\\
             \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
             &=&G(\id(d))\circ\eta_{c'}\circ f\\
             \mbox{$G$ functor}\ \to\ 
@@ -717,9 +721,9 @@ from $F(c)$ to $d$ in the category \Dat.
                 G(d)
                 &d\arrow[d,swap, "{\rm id}(d)"]
                 &\Cat(G(d),G(d))\arrow[r, "\beta\mbox{$(G(d),d)$}"]
-                \arrow[d, swap,"G^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
+                \arrow[d, swap,"G^{*}\mbox{$(f,\,{\rm id}(d))$}"]
                 &\Dat(F(G(d)),d)
-                \arrow[d, "F^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
+                \arrow[d, "F^{*}\mbox{$(f,\,{\rm id}(d))$}"]
                 \\
                 c\arrow[u, "f"]
                 &d
@@ -729,64 +733,65 @@ from $F(c)$ to $d$ in the category \Dat.
         \]
     In other words the following equation holds: 
         \begin{equation}\label{Adj:eqn:beta:G*:F*:epsilon:3}
-            \beta(c,d)\circ G^{*}(\,f\,,\,\id(d)\,) = 
-            F^{*}(\,f\,,\,\id(d)\,)\circ\beta(G(d),d)
+            \beta(c,d)\circ G^{*}(\,f,\,\id(d)\,) = 
+            F^{*}(\,f,\,\id(d)\,)\circ\beta(G(d),d)
         \end{equation}
-    TODO
     Hence we have:
-        \begin{eqnarray*}\alpha(c,d)(g)
-            &=&\alpha(c,d)(\,g\circ\id(\,F(c)\,)\circ\id(\,F(c)\,)\,)\\
-            \mbox{$F$ functor}\ \to\ 
-            &=&\alpha(c,d)(\,g\circ\id(\,F(c)\,)\circ F(\,\id(c)\,)\,)\\
-            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
-            &=&\alpha(c,d)(\,F^{*}(\,\id(c)\,,\,g\,)(\,\id(\,F(c)\,)\,)\,)\\
-            &=&(\,\alpha(c,d)\circ F^{*}(\,\id(c)\,,\,g\,)\,)(\,\id(\,F(c)\,)\,)\\
-            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:3})}\ \to\ 
-            &=&(\,G^{*}(\,\id(c)\,,\,g\,)\circ\alpha(c,F(c))\,)(\,\id(\,F(c)\,)\,)\\
-            &=&G^{*}(\,\id(c)\,,\,g\,)(\,\alpha(c,F(c))(\,\id(\,F(c)\,)\,)\,)\\
-            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:1})}\ \to\ 
-            &=&G^{*}(\,\id(c)\,,\,g\,)(\eta_{c})\\
+        \begin{eqnarray*}\beta(c,d)(f)
+            &=&\beta(c,d)(\ \id(\,G(d)\,)\,\circ\,\id(\,G(d)\,)\,\circ\,f\ )\\
+            \mbox{$G$ functor}\ \to\ 
+            &=&\beta(c,d)(\ G(\,\id(d)\,)\,\circ\,\id(\,G(d)\,)\,\circ\,f\ )\\
             \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
-            &=&G(g)\circ\eta_{c}\circ\id(c)\\
-            &=&G(g)\circ\eta_{c}\\
+            &=&\beta(c,d)(\ G^{*}(\,f,\,\id(d)\,)\,(\ \id(\,G(d)\,)\ )\ )\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\ \beta(c,d)\,\circ\,G^{*}(\,f,\,\id(d)\,)\ )\,(\ \id(\,G(d)\,)\ )\\
+            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:3})}\ \to\ 
+            &=&(\ F^{*}(\,f,\,\id(d)\,)\circ\beta(G(d),d)\ )\,(\ \id(\,G(d)\,)\ )\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&F^{*}(\,f,\,\id(d)\,)\,(\ \beta(G(d),d)(\,\id(\,G(d)\,)\,)\ )\\
+            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:1})}\ \to\ 
+            &=&F^{*}(\,f,\,\id(d)\,)\,(\epsilon_{d})\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
+            &=&\id(d)\circ\epsilon_{d}\circ F(f)\\
+            &=&\epsilon_{d}\circ F(f)\\
         \end{eqnarray*}
-    So it remains to show that $\eta$ is a natural transformation 
-    $\eta:I_{\cal C}\Rightarrow G\circ F$. So we need to check that 
-    $\eta$ is a map $\eta:\ob\ \Cat\to\arr\ \Cat$ (which it is) satisfying
+    So it remains to show that $\epsilon$ is a natural transformation 
+    $\epsilon:F\circ G\Rightarrow I_{\cal D}$. So we need to check that 
+    $\epsilon$ is a map $\epsilon:\ob\ \Dat\to\arr\ \Dat$ (which it is) satisfying
     $(1)$ and $(2)$ of definition~(\ref{Nat:def:natural}). We have already
-    seen that for all $c\in\Cat$, $\eta_{c}$ of
+    seen that for all $d\in\Dat$, $\epsilon_{d}$ of
     equation~(\ref{Adj:eqn:beta:G*:F*:epsilon:1}) is a well defined arrow
-    $\eta_{c}:c\to G(F(c))$. So $(1)$ is satisfied and it remains to show $(2)$.
-    So given $c,c'\in\Cat$ and $f:c\to c'$ we need to show that
-    $G(F(f))\circ\eta_{c}=\eta_{c'}\circ f$, that is the following 
+    $\epsilon_{d}:F(G(d))\to d$. So $(1)$ is satisfied and it remains to show $(2)$.
+    So given $d,d'\in\Dat$ and $g:d\to d'$ we need to show that
+    $g \circ \epsilon_{d}=\epsilon_{d'}\circ F(G(g))$, that is the following 
     square commutes:
         \[
             \begin{tikzcd}
-                c\arrow[r, "\eta_{c}"]\arrow[d, swap,"f\ "]
-                &G(F(c))\arrow[d, "(G\circ F)(f)"]
+                F(G(d))\arrow[r, "\epsilon_{d}"]\arrow[d, swap,"(F\circ G)(g)"]
+                &d\arrow[d, "g"]
                 \\
-                c'\arrow[r, swap, "\eta_{c'}"]
-                &G(F(c'))
+                F(G(d'))\arrow[r, swap, "\epsilon_{d'}"]
+                &d'
             \end{tikzcd}
         \]
-    However, since $\alpha$ is natural, setting $d=F(c')$, the following
+    However, since $\beta$ is natural, setting $c=G(d)$, the following
     square commutes:
         \[
             \begin{tikzcd}
-                c'
-                &d\arrow[d,swap, "\id(d)"]
-                &\Dat(F(c'),d)\arrow[r, "\alpha\mbox{$(c',d)$}"]
-                \arrow[d, swap,"F^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
-                &\Cat(c',G(d))
-                \arrow[d, "G^{*}\mbox{$(f\,,\,{\rm id}(d))$}"]
+                c
+                &d\arrow[d,swap, "g"]
+                &\Cat(c,G(d))\arrow[r, "\beta\mbox{$(c,d)$}"]
+                \arrow[d, swap,"G^{*}\mbox{$({\rm id}(c),\,g)$}"]
+                &\Dat(F(c),d)
+                \arrow[d, "F^{*}\mbox{$({\rm id}(c),\,g)$}"]
                 \\
-                c\arrow[u, "f"]
-                &d
-                &\Dat(F(c),d)\arrow[r, swap, "\alpha\mbox{$(c,d)$}"]
-                &\Cat(c,G(d))
+                c\arrow[u, "{\rm id}(c)"]
+                &d'
+                &\Cat(c,G(d'))\arrow[r, swap, "\beta\mbox{$(c,d')$}"]
+                &\Dat(F(c),d')
             \end{tikzcd}
         \]
-    In other words, the following equation holds:
+    In other words, the following equation holds: TODO
         \begin{equation}\label{Adj:eqn:beta:G*:F*:epsilon:4}
             \alpha(c,d)\circ F^{*}(f,\id(d)) = G^{*}(f,\id(d))\circ\alpha(c',d)
         \end{equation}

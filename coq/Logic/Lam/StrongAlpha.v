@@ -14,6 +14,7 @@ Require Import Logic.List.Coincide.
 Require Import Logic.List.Difference.
 
 Require Import Logic.Rel.Include.
+Require Import Logic.Rel.Properties.
 
 Require Import Logic.Lam.Free.
 Require Import Logic.Lam.Valid.
@@ -197,7 +198,7 @@ Proof.
 Qed.
 
 (* Almost equivalence contains generator of strong alpha-equivalence.           *)
-Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
+Lemma almostStrongAlpha0 : forall (v:Type) (e:Eq v),
     @StrongAlpha0 v e <= @AlmostStrongAlpha v e.
 Proof.
     intros v e. apply incl_charac. intros t s H1.
@@ -383,4 +384,34 @@ Proof.
           apply Cong_transitive with (Lam y (fmap (y // x) r')).
             { apply CongLam. assumption. }
             { apply Cong_symmetric, CongBase. constructor; assumption. }
+Qed.
+
+Lemma almostCongruent : forall (v:Type) (e:Eq v),
+    congruent (@AlmostStrongAlpha v e).
+Proof.
+    intros v e. split.
+    - intros p1 p2 q1 q2 H1 H2. constructor; apply almostStrongAlpha; assumption.
+    - intros x p1 q1 H1. constructor. apply almostStrongAlpha. assumption.
+Qed.
+
+Lemma almostCongruence : forall (v:Type) (e:Eq v),
+    congruence (@AlmostStrongAlpha v e).
+Proof.
+    intros v e. split.
+    - split.
+        + unfold reflexive. apply almostRefl.
+        + split.
+            { unfold symmetric. apply almostSym. }
+            { unfold transitive. apply almostTrans. }
+    - apply almostCongruent.
+Qed.
+
+Lemma almostIsStrong : forall (v:Type) (e:Eq v) (t s:T v),
+    t :~: s <-> t ~ s.
+Proof.
+    intros v e t s. split.
+    - apply almostStrongAlpha.
+    - apply incl_charac_to. apply Cong_smallest.
+        + apply almostCongruence.
+        + apply almostStrongAlpha0.
 Qed.

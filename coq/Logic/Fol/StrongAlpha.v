@@ -1,5 +1,7 @@
 Require Import List.
 
+Require Import Logic.Axiom.Extensionality.
+
 Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
@@ -14,6 +16,7 @@ Require Import Logic.List.Coincide.
 Require Import Logic.List.Difference.
 
 Require Import Logic.Rel.Include.
+Require Import Logic.Rel.Properties.
 
 Require Import Logic.Fol.Free.
 Require Import Logic.Fol.Valid.
@@ -202,7 +205,7 @@ Proof.
 Qed.
 
 (* Almost equivalence contains generator of strong alpha-equivalence.           *)
-Lemma almostSrongAlpha0 : forall (v:Type) (e:Eq v),
+Lemma almostStrongAlpha0 : forall (v:Type) (e:Eq v),
     @StrongAlpha0 v e <= @AlmostStrongAlpha v e.
 Proof.
     intros v e. apply incl_charac. intros p q H1.
@@ -392,3 +395,59 @@ Proof.
             { apply CongAll. assumption. }
             { apply Cong_symmetric, CongBase. constructor; assumption. }
 Qed.
+
+Lemma almostCongruent : forall (v:Type) (e:Eq v),
+    congruent (@AlmostStrongAlpha v e).
+Proof.
+    intros v e. split.
+    - intros p1 p2 q1 q2 H1 H2. constructor; apply almostStrongAlpha; assumption.
+    - intros x p1 q1 H1. constructor. apply almostStrongAlpha. assumption.
+Qed.
+
+
+Lemma almostCongruence : forall (v:Type) (e:Eq v),
+    congruence (@AlmostStrongAlpha v e).
+Proof.
+    intros v e. split.
+    - split.
+        + unfold reflexive. apply almostRefl.
+        + split.
+            { unfold symmetric. apply almostSym. }
+            { unfold transitive. apply almostTrans. }
+    - apply almostCongruent.
+Qed.
+
+Lemma almostIsStrong : forall (v:Type) (e:Eq v) (p q:P v),
+    p :~: q <-> p ~ q.
+Proof.
+    intros v e p q. split.
+    - apply almostStrongAlpha.
+    - apply incl_charac_to. apply Cong_smallest.
+        + apply almostCongruence.
+        + apply almostStrongAlpha0.
+Qed.
+
+(*
+Theorem strongAlphaCharac : forall (v:Type) (e:Eq v) (p q:P v),
+    p ~ q <->
+    (p = Bot /\ q = Bot)                            \/
+    (exists (x y:v), p = Elem x y /\ q = Elem x y)  \/
+    (exists (p1 p2 q1 q2:P v), 
+        p = Imp p1 p2               /\ 
+        q = Imp q1 q2               /\ 
+        p1 ~ q1                     /\
+        p2 ~ q2)                                    \/
+    (exists (x:v) (p1 q1:P v), 
+        p = All x p1                /\
+        q = All x q1                /\
+        p1 ~ q1)                                    \/
+    (exists (x y:v) (p1 q1 r:P v), 
+        p = All x p1                /\
+        q = All y q1                /\
+        x <> y                      /\
+        ~ y :: var r                /\
+        p1 ~ r                      /\
+        q1 ~ fmap (y // x) r).
+Proof.
+Show.
+*)
