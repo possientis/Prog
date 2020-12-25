@@ -50,7 +50,7 @@ data _⊢_ : Context → Type → Set where
        ----------------------------
     →   Γ ⊢ A
 
-  if : ∀ {Γ : Context} {A : Type}
+  eIf : ∀ {Γ : Context} {A : Type}
     →  Γ ⊢ `𝔹
     →  Γ ⊢ A
     →  Γ ⊢ A
@@ -124,7 +124,7 @@ rename f (p · q) = rename f p · rename f q
 rename f `zero = `zero
 rename f (`suc p) = `suc rename f p
 rename f (case p q r) = case (rename f p) (rename f q) (rename (ext f) r)
-rename f (if p p₁ p₂) = if (rename f p) (rename f p₁) (rename f p₂)
+rename f (eIf p p₁ p₂) = eIf (rename f p) (rename f p₁) (rename f p₂)
 rename f (μ p) = μ rename (ext f) p
 rename f (eNum x) = eNum x
 rename f (`+ p q) = `+ (rename f p) (rename f q)

@@ -331,3 +331,19 @@ Proof.
     - apply bindDiff; assumption.
 Qed.
 
+Lemma bindUnique : forall (G:Context) (n:nat) (x y:set),
+    G :> n~>x -> G :> n~>y -> x == y.
+Proof.
+    intros G n x y H1 H2. 
+    remember (n~>x) as b eqn:Ex. remember (n~>y) as c eqn:Ey.
+    revert n x y c H2 Ex Ey.
+    induction H1 as [G n' x'|G n' m' x' y' H1 H2 IH1|G n' x' y' H1 H2 IH2];
+    intros n x y c H3 H4 H5.
+    - inversion H4. subst. clear H4. apply (bindEqualRev G n). assumption.
+    - inversion H4. subst. clear H4. apply bindDiff in H3.
+        + apply (IH1 n x y n~>y); try reflexivity. assumption. 
+        + intros H4. subst. apply H1. reflexivity.
+    - inversion H4. subst. clear H4. apply equalTrans with x'.
+        + apply equalSym. assumption.
+        + apply (IH2 n x' y n~>y); try reflexivity. assumption.
+Qed.

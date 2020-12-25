@@ -18,4 +18,10 @@ Proof.
     intros a b p x H1 y. apply H1.
 Defined.
 
+Definition DeciderOf (a:Type) (p:a -> Prop) (f:a -> bool) : Prop :=
+    forall (x:a), p x <-> f x = true.
 
+Arguments DeciderOf {a}.
+
+Definition Decidable (a:Type) (p:a -> Prop) : Prop :=
+    exists (f:a -> bool), DeciderOf p f.

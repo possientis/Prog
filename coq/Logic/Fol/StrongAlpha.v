@@ -1,7 +1,5 @@
 Require Import List.
 
-Require Import Logic.Axiom.Extensionality.
-
 Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
@@ -25,7 +23,6 @@ Require Import Logic.Fol.Functor.
 Require Import Logic.Fol.Variable.
 Require Import Logic.Fol.Subformula.
 Require Import Logic.Fol.Congruence.
-
 
 (* Generator of strong alpha-equivalence.                                       *)
 Inductive StrongAlpha0 (v:Type) (e:Eq v) : P v -> P v -> Prop :=
@@ -427,7 +424,6 @@ Proof.
         + apply almostStrongAlpha0.
 Qed.
 
-(*
 Theorem strongAlphaCharac : forall (v:Type) (e:Eq v) (p q:P v),
     p ~ q <->
     (p = Bot /\ q = Bot)                            \/
@@ -449,5 +445,29 @@ Theorem strongAlphaCharac : forall (v:Type) (e:Eq v) (p q:P v),
         p1 ~ r                      /\
         q1 ~ fmap (y // x) r).
 Proof.
-Show.
-*)
+    intros v e p q. split.
+    - intros H1. rewrite <- almostIsStrong in H1. 
+      destruct H1 as [|x y|p1 p2 q1 q2 H1 H2|x p1 q1 H1|x y p1 q1 r H1 H2 H3 H4].
+        + left. split; reflexivity.
+        + right. left. exists x. exists y. split; reflexivity.
+        + right. right. left. exists p1. exists p2. exists q1. exists q2.
+          split; try reflexivity. split; try reflexivity. split; assumption.
+        + right. right. right. left. exists x. exists p1. exists q1.
+          split; try reflexivity. split; try reflexivity. assumption.
+        + right. right. right. right. exists x. exists y. exists p1. exists q1.
+          exists r. split; try reflexivity. split; try reflexivity.
+          split; try assumption. split; try assumption. split; assumption.
+    - intros 
+        [ [H1 H2]
+        | [[x [y [H1 H2]]]
+        | [[p1 [p2 [q1 [q2 [H1 [H2 [H3 H4]]]]]]]
+        | [[x [p1 [q1 [H1 [H2 H3]]]]]
+        | [x [y [p1 [q1 [r [H1 [H2 [H3 [H4 [H5 H6]]]]]]]]]]
+        ]]]]; apply almostIsStrong; rewrite H1, H2.
+        + constructor.
+        + constructor.
+        + constructor; assumption.
+        + constructor. assumption.
+        + apply AAllxy with r; assumption.
+Qed.
+

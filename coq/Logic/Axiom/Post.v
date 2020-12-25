@@ -6,6 +6,7 @@ Require Import Logic.Axiom.Sat.
 Require Import Logic.Axiom.Markov.
 Require Import Logic.Axiom.Witness.
 
+(* This is equivalent to Markov, see below.                                     *)
 Definition Post : Type := forall (A:Prop), Sec A -> Sec (~A) -> Dec A.
 
 Lemma Markov2Post : Markov -> Post.
@@ -35,9 +36,18 @@ Proof.
       apply H9. assumption.
 Defined.
 
-(*
+
 Lemma Post2Markov : Post -> Markov.
 Proof.
     intros H1. apply MarkovSat. intros f H2.
-Show.
-*)
+    assert (Dec (tsat f) -> tsat f) as H3.
+        { intros [H3|H3].
+            { assumption. }
+            { apply H2 in H3. contradiction. }}
+    apply H3, H1.
+        { apply exist with f. split; auto. }
+        { apply exist with (fun _ => false). split; intros H4.
+            { apply H2 in H4. contradiction. }
+            { exfalso.  destruct H4 as [n H4]. inversion H4. }}
+Qed.
+

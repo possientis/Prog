@@ -1,5 +1,6 @@
 Require Import Logic.Axiom.Sat.
 
+(* This is equivalent to Post, see Post module.                                 *)
 Definition Markov : Prop := forall (f:nat -> bool),
     ~(forall n, f n = false) -> tsat f.
 

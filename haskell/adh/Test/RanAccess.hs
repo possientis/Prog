@@ -4,7 +4,7 @@ module  Test.RanAccess
 
 
 import Test.Hspec
---import Test.QuickCheck
+import Test.QuickCheck
 
 import Tree
 import RanAccess
@@ -13,8 +13,9 @@ specRanAccess :: Spec
 specRanAccess = do
     specEx1
     specEx2
-
-
+    specFetchRA1
+    specFetchRA2
+    
 specEx1 :: Spec
 specEx1 = it "Checked fromRA ex1 == [1,2,3,4,5,6]" $ do
     fromRA ex1 `shouldBe` [1,2,3,4,5,6]
@@ -23,6 +24,17 @@ specEx2 :: Spec
 specEx2 = it "Checked fromRA ex2 == [1,2,3,4,5]" $ do
     fromRA ex2 `shouldBe` [1,2,3,4,5]
 
+specFetchRA1 :: Spec
+specFetchRA1 = it "Checked fetchRA for [1,2,3,4,5,6]" $ do
+    property (propFetchRA ex1)
+
+specFetchRA2 :: Spec
+specFetchRA2 = it "Checked fetchRA for [1,2,3,4,5]" $ do
+    property (propFetchRA ex2)
+
+propFetchRA :: RAList Int -> Int -> Bool
+propFetchRA xs n = fetch m (fromRA xs) == fetchRA m xs
+    where m = (n `mod` 10) - 2
 
 -- 110 is binary representation of 6. List [1,2,3,4,5,6]
 ex1 :: RAList Int
@@ -39,3 +51,5 @@ ex2 = RAList
     , Zero
     , One (node (node (leaf 2) (leaf 3)) (node (leaf 4) (leaf 5)))
     ]
+
+

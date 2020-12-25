@@ -415,3 +415,46 @@ Proof.
         + apply almostCongruence.
         + apply almostStrongAlpha0.
 Qed.
+
+Theorem strongAlphaCharac : forall (v:Type) (e:Eq v) (t s:T v),
+    t ~ s <->
+    (exists (x:v), t = Var x /\ s = Var x)          \/
+    (exists (t1 t2 s1 s2:T v), 
+        t = App t1 t2               /\ 
+        s = App s1 s2               /\ 
+        t1 ~ s1                     /\
+        t2 ~ s2)                                    \/
+    (exists (x:v) (t1 s1:T v), 
+        t = Lam x t1                /\
+        s = Lam x s1                /\
+        t1 ~ s1)                                    \/
+    (exists (x y:v) (t1 s1 r:T v), 
+        t = Lam x t1                /\
+        s = Lam y s1                /\
+        x <> y                      /\
+        ~ y :: var r                /\
+        t1 ~ r                      /\
+        s1 ~ fmap (y // x) r).
+Proof.
+    intros v e t s. split.
+    - intros H1. rewrite <- almostIsStrong in H1. 
+      destruct H1 as [x|t1 t2 s1 s2 H1 H2|x t1 s1 H1|x y t1 s1 r H1 H2 H3 H4].
+        + left. exists x. split; reflexivity.
+        + right. left. exists t1. exists t2. exists s1. exists s2.
+          split; try reflexivity. split; try reflexivity. split; assumption.
+        + right. right. left. exists x. exists t1. exists s1.
+          split; try reflexivity. split; try reflexivity. assumption.
+        + right. right. right. exists x. exists y. exists t1. exists s1.
+          exists r. split; try reflexivity. split; try reflexivity.
+          split; try assumption. split; try assumption. split; assumption.
+    - intros 
+        [ [x [H1 H2]]
+        | [[p1 [p2 [q1 [q2 [H1 [H2 [H3 H4]]]]]]]
+        | [[x [p1 [q1 [H1 [H2 H3]]]]]
+        | [x [y [p1 [q1 [r [H1 [H2 [H3 [H4 [H5 H6]]]]]]]]]]
+        ]]]; apply almostIsStrong; rewrite H1, H2.
+        + constructor.
+        + constructor; assumption.
+        + constructor. assumption.
+        + apply ALamxy with r; assumption.
+Qed.

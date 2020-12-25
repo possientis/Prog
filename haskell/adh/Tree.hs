@@ -13,7 +13,6 @@ size :: Tree a -> Int
 size (Leaf _) = 1
 size (Node n _ _) = n
 
-
 node :: Tree a -> Tree a -> Tree a
 node t1 t2 = Node (size t1 + size t2) t1 t2
 

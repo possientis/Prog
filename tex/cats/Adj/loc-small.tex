@@ -791,32 +791,62 @@ from $F(c)$ to $d$ in the category \Dat.
                 &\Dat(F(c),d')
             \end{tikzcd}
         \]
-    In other words, the following equation holds: TODO
+    In other words, the following equation holds:
         \begin{equation}\label{Adj:eqn:beta:G*:F*:epsilon:4}
-            \alpha(c,d)\circ F^{*}(f,\id(d)) = G^{*}(f,\id(d))\circ\alpha(c',d)
+            \beta(c,d')\circ G^{*}(\id(c),g) = F^{*}(\id(c),g)\circ\beta(c,d)
         \end{equation}
     Hence we have: 
-        \begin{eqnarray*}G(F(f))\circ\eta_{c}
-            &=&\alpha(c,d)(\,F(f)\,)
+        \begin{eqnarray*}\epsilon_{d'}\circ F(G(g))
+            &=&\beta(c,d')(\,G(g)\,)
             \leftarrow\ \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:2})}\\
-            \mbox{$d=F(c')$}\ \to\ 
-            &=&\alpha(c,d)(\,\id(d)\circ\id(d)\circ F(f)\,)\\
-            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
-            &=&\alpha(c,d)(\,F^{*}(f,\id(d))(\id(d))\,)\\
-            &=&(\alpha(c,d)\circ F^{*}(f,\id(d)))(\id(d))\\
-            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:4})}\ \to\ 
-            &=&(G^{*}(f,\id(d))\circ\alpha(c',d))(\id(d))\\
-            &=&G^{*}(f,\id(d))(\,\alpha(c',d)(\id(d))\,)\\
-            \mbox{$d=F(c')$}\ \to\ 
-            &=&G^{*}(f,\id(d))(\,\alpha(c',F(c'))(\,\id(F(c'))\,)\,)\\
-            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:1})}\ \to\ 
-            &=&G^{*}(f,\id(d))(\eta_{c'})\\
+            \mbox{$c=G(d)$}\ \to\ 
+            &=&\beta(c,d')(\ G(g)\,\circ\,\id(c)\,\circ\,\id(c)\ )\\
             \mbox{prop.~(\ref{Adj:prop:rhs:arrow})}\ \to\ 
-            &=&G(\id(d))\circ\eta_{c'}\circ f\\
-            \mbox{$G$ functor}\ \to\ 
-            &=&\id(\,G(d)\,)\circ\eta_{c'}\circ f\\
-            &=&\eta_{c'}\circ f\\
+            &=&\beta(c,d')(\ G^{*}(\,\id(c),\, g\,)\,(\,\id(c)\,)\ )\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\ \beta(c,d')\,\circ\,G^{*}(\,\id(c),\, g\,)\ )\,(\,\id(c)\,)\\
+            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:4})}\ \to\ 
+            &=&(\ F^{*}(\,\id(c),\,g\,)\,\circ\,\beta(c,d)\ )\,(\,\id(c)\,)\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&F^{*}(\,\id(c),\,g\,)(\ \beta(c,d)\,(\,\id(c)\,)\ )\\
+            \mbox{$c=G(d)$}\ \to\ 
+            &=&F^{*}(\,\id(c),\,g\,)(\ \beta(\,G(d),\,d\,)\,(\,\id(\,G(d)\,)\,)\ )\\
+            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:1})}\ \to\ 
+            &=&F^{*}(\,\id(c),\,g\,)(\epsilon_{d})\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:arrow})}\ \to\ 
+            &=&g\circ\epsilon_{d}\circ F(\,\id(c)\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&g\circ\epsilon_{d}\circ\id(\,F(c)\,)\\
+            &=&g\circ\epsilon_{d}
         \end{eqnarray*}
 \end{proof}
 
+\noindent
+We can now state the converse of proposition~(\ref{Adj:prop:adjunction:F*:G*:iso}):
+\begin{prop}\label{Adj:prop:F*:G*:iso:adjunction}
+    Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
+    are locally small categories. Then we have the implication:
+        \[
+            F^{*}\simeq G^{*}\ \Rightarrow\ F\dashv G
+        \]
+    where $F^{*}$ and $G^{*}$ denote the left-hand-side and right-hand-side 
+    functors respectively associated with $(F,G)$, as per 
+    definitions~(\ref{Adj:def:lhs:functor}) and~(\ref{Adj:def:rhs:functor}). 
+    In other words, if $F^{*}$ and $G^{*}$ are 
+    naturally isomorphic then $(F,G)$ is an adjunction.
+\end{prop}
+\begin{proof}
+    We assume that $F^{*}$ abnd $G^{*}$ are naturally isomorphic and we need
+    to show that $(F,G)$ is an adjunction. So we need to show that $(F,G)$ has
+    a unit. From proposition~(\ref{Adj:prop:related:just:natural}), it is
+    sufficient to prove the existence of natural transformations
+    $\eta:I_{\cal C}\Rightarrow G\circ F$ and 
+    $\epsilon:F\circ G\Rightarrow I_{\cal D}$ satisfying both of the 
+    following equations:
+        \begin{eqnarray*}
+            (1)&\ &G\epsilon\circ\eta G=\iota_{G}\\
+            (2)&\ &\epsilon F \circ F\eta=\iota_{F}
+        \end{eqnarray*}
+TODO 
+\end{proof}
 

@@ -1,5 +1,5 @@
 Logic:
-Fol/StrongAlpha
+prop 75.
 go back to book
 
 Haskell:
@@ -23,7 +23,7 @@ Algebra of Programming:
 Ex 4.18
 
 Computational Type Theory with Coq:
-Axiom/Post
+Deciders & Semi-Deciders
 go back to book
 
 
