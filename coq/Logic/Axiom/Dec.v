@@ -25,3 +25,6 @@ Arguments DeciderOf {a}.
 
 Definition Decidable (a:Type) (p:a -> Prop) : Prop :=
     exists (f:a -> bool), DeciderOf p f.
+
+Arguments Decidable {a}.
+

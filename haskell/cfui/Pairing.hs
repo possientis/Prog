@@ -34,12 +34,12 @@ instance Functor Sequence where
     fmap f (End x)   = End (f x)
     fmap f (Next xs) = Next (fmap f xs)  
 
+-- This definition is consistent with 'ap', see coq file
 instance Applicative Sequence where
     pure  = End
     (<*>) (End f)   (End a)   = End (f a)
     (<*>) (End f)   (Next as) = Next (fmap f as)
-    (<*>) (Next fs) (End a)   = Next (fs <*> pure a)
-    (<*>) (Next fs) (Next as) = Next (fs <*> as)
+    (<*>) (Next fs) x         = Next (fs <*> x)
 
 instance Monad Sequence where
     return  = End
@@ -48,3 +48,13 @@ instance Monad Sequence where
 
 ap :: (Monad m) => m (a -> b) -> m a -> m b
 ap mf ma = mf >>= \f -> ma >>= \a -> return (f a)
+
+instance Pairing Sequence Stream where
+    pair f (End a) (Cons b _) = f a b
+    pair f (Next as) (Cons _ bs) = pair f as bs
+
+s1 :: Stream Integer
+s1 = move s0 (Next (End ()))
+
+s2 :: Stream Integer
+s2 = move s0 (Next (Next (End ())))

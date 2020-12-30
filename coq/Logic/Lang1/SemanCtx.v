@@ -2,6 +2,8 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.Axiom.LEM.
 
+Require Import Logic.Rel.Prop.
+
 Require Import Logic.Nat.Fresh.
 
 Require Import Logic.Set.Set.
@@ -259,8 +261,43 @@ Proof.
         |G n p1 A1 H1 IH1
         |G p' A' B' H1 H2 IH2
         ];
-    intros p A H3 B H4.
-    - inversion H3. subst. clear H3.
-
-Show.
+    intros p A H3 B H4; inversion H3; subst; clear H3.
+    - remember (Bot >> B) as b eqn:E. revert B E. 
+      induction H4 as
+        [
+        |
+        |
+        |
+        | G p' A B H2 H3 IH
+        ];
+      intros B' H1; inversion H1; subst; clear H1.
+        + split; auto.
+        + apply equivTrans with A; try assumption. apply IH. reflexivity.
+    - remember ((Elem n m) >> B) as b eqn:E. revert n m x y H1 H2 B E.
+      induction H4 as
+        [
+        |
+        |
+        |
+        | G p' A B H2 H3 IH
+        ];
+      intros n' m' x' y' H4 H5 B' H6; inversion H6; subst; clear H6.
+        + split; apply elemCompatLR.
+            { apply (bindUnique G n'); assumption. }
+            { apply (bindUnique G m'); assumption. }
+            { apply (bindUnique G n'); assumption. }
+            { apply (bindUnique G m'); assumption. }
+        + apply equivTrans with A; try assumption. apply (IH n' m' x' y');
+          try assumption. reflexivity. 
+    - remember ((Imp p1 p2) >> B) as b eqn:E. 
+      revert p1 p2 A1 A2 H1 H2 IH1 IH2 B E.
+      induction H4 as
+        [
+        |
+        |
+        |
+        | G p' A B H2 H3 IH
+        ];
+      intros p1' p2' A1' A2' H4 H5 H6 H7 B' H9; inversion H9; subst; clear H9.
+ Show.
 *)

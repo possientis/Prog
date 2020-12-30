@@ -25,11 +25,7 @@ Fixpoint apply (a b:Type) (f : Sequence (a -> b)) (x:Sequence a) : Sequence b :=
         | End x     => End (f x)
         | Next xs   => Next (fmap f xs)
         end
-    | Next fs   => 
-        match x with
-        | End x     => Next (apply a b fs (End x))
-        | Next xs   => Next (apply a b fs xs)
-        end
+    | Next fs   => Next (apply a b fs x)
     end.
 
 Arguments apply {a} {b}.
@@ -47,7 +43,6 @@ Lemma fmapApply : forall (a b:Type) (f:a -> b) (xs:Sequence a),
 Proof.
     intros a b f. destruct xs as [x|xs]; reflexivity.
 Qed.
-
 
 Arguments bind {a} {b}.
 
@@ -68,9 +63,6 @@ Proof.
           unfold ap in IH. unfold bind at 1 in IH. 
           unfold bind. fold (xs >>= (fun x : a => End (f x))).
           rewrite <- IH. rewrite fmapApply. reflexivity.
-    - (* induction x as [x|xs IH2].
-        + unfold apply. fold (fs <*> End x). rewrite IH1. reflexivity. 
-        + unfold apply. fold (fs <*> xs).
-      *)
-Show.
+    - intros x. simpl. rewrite IH1. reflexivity.
+Qed.
 

@@ -67,7 +67,8 @@ REL_OBJ   = ${REL}/Properties.vo \
 			${REL}/Terminal.vo \
 			${REL}/Coreflexive.vo \
 			${REL}/Domain.vo \
-			${REL}/Range.vo
+			${REL}/Range.vo \
+			${REL}/Prop.vo
 
 NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Leq.vo \

@@ -36,7 +36,6 @@ Proof.
       apply H9. assumption.
 Defined.
 
-
 Lemma Post2Markov : Post -> Markov.
 Proof.
     intros H1. apply MarkovSat. intros f H2.
@@ -50,4 +49,22 @@ Proof.
             { apply H2 in H4. contradiction. }
             { exfalso.  destruct H4 as [n H4]. inversion H4. }}
 Qed.
+
+(*
+Lemma MarkovDecSec : Markov -> forall (a:Type) (p:a -> Prop),
+    Decidable p <-> SemiDecidable p /\ CoSemiDecidable p.
+Proof.
+    intros M a p. split.
+    - intros [f H1]. unfold DeciderOf in H1. split.
+        + exists (fun x _ => f x). intros x. split.
+            { intros H2. exists 0. apply H1. assumption. }
+            { intros [n H2]. apply H1. assumption. }
+        + exists (fun x _ => negb (f x)). intros x. split.
+            { intros H2. exists 0. destruct (f x) eqn:E.
+                { exfalso. apply H2, H1. assumption. }
+                { reflexivity. }}
+            { intros [n H2] H3. apply H1 in H3. rewrite H3 in H2. inversion H2. }
+    - intros [[F H1] [G H2]].
+Show.
+*)
 

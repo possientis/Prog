@@ -15,3 +15,7 @@ Definition SemiDecidable (a:Type) (p:a -> Prop) : Prop :=
 
 Arguments SemiDecidable {a}.
 
+Definition CoSemiDecidable (a:Type) (p:a -> Prop) : Prop :=
+    SemiDecidable (fun x => ~p x).
+
+Arguments CoSemiDecidable {a}.

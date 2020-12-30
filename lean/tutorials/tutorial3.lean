@@ -82,3 +82,23 @@ begin
     {left, linarith },
     {right, linarith }
 end
+
+example : ∀ (f : ℝ → ℝ), non_decreasing f ↔ ∀ x y, x < y → f x ≤ f y :=
+begin
+  intros f, split; intros H₁,
+    { intros x y H₂, apply H₁, linarith },
+    { intros x y H₂, have H₃ : x = y ∨ x < y, {apply eq_or_lt_of_le, assumption },
+      cases H₃ with H₃ H₃,
+        { rw H₃ },
+        { apply H₁, assumption }}
+end
+
+example : ∀ (f : ℝ → ℝ), non_decreasing f → (∀ x, f (f x) = x) → ∀ x, f x = x :=
+begin
+  intros f H₁ H₂ x, have H₃ : f x ≤ x ∨ x ≤ f x, { apply le_total },
+  cases H₃ with H₃ H₃,
+    { apply le_antisymm; try { assumption }, have H₄ : f (f x) ≤ f x,
+      { apply H₁, assumption},  rw H₂ at H₄, assumption },
+    { apply le_antisymm; try { assumption }, have H₄ : f x ≤ f (f x),
+      {apply H₁, assumption }, rw H₂ at H₄, assumption }
+end
