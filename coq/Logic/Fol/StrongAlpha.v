@@ -471,3 +471,50 @@ Proof.
         + apply AAllxy with r; assumption.
 Qed.
 
+
+Definition V : Type := bool.
+Definition x : V := true.
+Definition y : V := false.
+
+Definition bool_eq_dec : forall (a b:V), {a = b} + {a <> b}.
+Proof.
+    intros a b. destruct a eqn:E1; destruct b eqn:E2.
+    - left. reflexivity.
+    - right. intros H1. inversion H1.
+    - right. intros H1. inversion H1.
+    - left. reflexivity.
+Defined.
+
+Instance EqV : Eq V := { eqDec := bool_eq_dec }.
+
+(*
+Lemma CounterExample1 : ~(All x (All y (Elem x y)) ~ All y (All x (Elem y x))).
+Proof.
+    remember (All y (Elem x y)) as p1 eqn:H1. 
+    remember (All x (Elem y x)) as q1 eqn:H2.
+    intros H3. apply strongAlphaCharac in H3.
+    destruct H3 as 
+        [[H3 H4]
+        |[[u [v [H3 H4]]]
+        |[[p1' [p2' [q1' [q2' [H3 H4]]]]]
+        |[[u [p1' [q1' [H3 [H4 H5]]]]]
+        |[x' [y' [p1' [q1' [r [H3 [H4 [H5 [H6 [H7 H8]]]]]]]]]]]]]].
+    - inversion H3.
+    - inversion H3.
+    - inversion H3.
+    - inversion H3. inversion H4. subst. inversion H7.
+    - inversion H3. inversion H4. subst. clear H3 H4.
+      apply strongAlphaCharac in H7. destruct H7 as
+        [[G1 G2]
+        |[[u [v [G1 G2]]]
+        |[[p1 [p2 [q1 [q2 [G1 G2]]]]]
+        |[[x' [p1 [q1 [G1 [G2 G3]]]]]
+        |[x' [y' [p1 [q1 [r' [G1 [G2 [G3 [G4 [G5 G6]]]]]]]]]]]]]].
+        + inversion G1.
+        + inversion G1.
+        + inversion G1.
+        + inversion G1. subst. clear G1. apply H6. left. reflexivity.
+        + inversion G1. subst. clear G1.
+
+Show.
+*)
