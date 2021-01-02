@@ -72,12 +72,12 @@ data _—→_ : Term → Term → Set where
        --------------------
     →  eIf L M N —→ eIf L' M N
 
-  -- If reduction on true
+  -- eIf reduction on true
   β-if₁ : ∀ {M N : Term}
        --------------------
     →  eIf (eBool true) M N —→ M
 
-  -- if reduction on false
+  -- eIf reduction on false
   β-if₂ : ∀ {M N : Term}
        --------------------
     →  eIf (eBool false) M N —→ N

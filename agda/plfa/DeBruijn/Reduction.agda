@@ -5,12 +5,14 @@ open import Data.Bool           using (Bool;true;false)
 
 open import Lam.Type
 open import Lam.Prim
+open import DeBruijn.Subst
 open import DeBruijn.Value
 open import DeBruijn.Syntax
 open import DeBruijn.Context
 
 infix 2 _—→_ -- \em\to
 
+-- Reduction preserves type by construction
 data _—→_ : ∀ {Γ : Context} {A : Type} → Γ ⊢ A → Γ ⊢ A → Set where
 
   -- Left compatibility rule for +
@@ -138,8 +140,79 @@ data _—→_ : ∀ {Γ : Context} {A : Type} → Γ ⊢ A → Γ ⊢ A → Set 
       ----------------------------
     → `∨ (eBool {Γ} x) (eBool {Γ} y) —→ eBool {Γ} (or x y)
 
+
+  -- condition compatibility rule for eIf
   ξ-if₀ : ∀ {Γ : Context} {A : Type} {L L' : Γ ⊢ `𝔹} {M N : Γ ⊢ A}
     → L —→ L'
       ------------------------------------------------------------
     → eIf L M N —→ eIf L' M N
+
+
+  -- eIf reduction on true
+  β-if₁ : ∀ {Γ : Context} {A : Type} {M N : Γ ⊢ A}
+      ------------------------------------------------------------
+    → eIf (eBool {Γ} true) M N —→ M
+
+
+  -- eIf reduction on false
+  β-if₂ : ∀ {Γ : Context} {A : Type} {M N : Γ ⊢ A}
+      ------------------------------------------------------------
+    → eIf (eBool {Γ} false) M N —→ N
+
+
+  -- Left compatibility rule for ·
+  ξ-·₁ : ∀ {Γ : Context} {A B : Type} {L L' : Γ ⊢ A ⇒ B} {M : Γ ⊢ A}
+    → L —→ L'
+      --------------------------------------------------------------
+    → L · M —→ L' · M
+
+
+  -- Right compatibility rule for ·
+  ξ-·₂ : ∀ {Γ : Context} {A B : Type} {V : Γ ⊢ A ⇒ B} {M M' : Γ ⊢ A}
+    → Value V
+    → M —→ M'
+      ---------------------------------------------------------------
+    → V · M —→ V · M'
+
+
+  -- Beta reduction rule for abstraction
+  β-ƛ : ∀ {Γ : Context} {A B : Type} {N : Γ , A ⊢ B} {W : Γ ⊢ A}
+    → Value W
+      ----------------------------------------------------------
+    → (ƛ N) · W —→ N [ W ]
+
+
+  -- Compatibility rule for suc
+  ξ-suc : ∀ {Γ : Context} {M M' : Γ ⊢ `ℕ}
+    → M —→ M'
+      -----------------------------------
+    → `suc M —→ `suc M'
+
+
+  -- Compatibility rule for case
+  ξ-case : ∀ {Γ : Context} {A : Type} {L L' : Γ ⊢ `ℕ} {M : Γ ⊢ A} {N : Γ , `ℕ ⊢ A}
+    → L —→ L'
+      -----------------------------------------------------------------------------
+    → case L M N —→ case L' M N
+
+
+  -- Beta reduction rule for case (zero)
+  β-zero : ∀ {Γ : Context} {A : Type} {M : Γ ⊢ A} {N : Γ , `ℕ ⊢ A}
+      ------------------------------------------------------------
+    → case `zero M N —→ M
+
+
+  -- Beta reduction rule for case (suc)
+  β-suc : ∀ {Γ : Context} {A : Type} {V : Γ ⊢ `ℕ} {M : Γ ⊢ A} {N : Γ , `ℕ ⊢ A}
+    → Value V
+      ------------------------------------------------------------
+    → case (`suc V) M N —→ N [ V ]
+
+
+  -- Beta reduction rule for fixed point
+  β-μ : ∀  {Γ : Context} {A : Type} {N : Γ , A ⊢ A}
+      ---------------------------------------------
+    →  μ N —→ N [ μ N ]
+
+
 

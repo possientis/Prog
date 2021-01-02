@@ -836,7 +836,7 @@ We can now state the converse of proposition~(\ref{Adj:prop:adjunction:F*:G*:iso
     naturally isomorphic then $(F,G)$ is an adjunction.
 \end{prop}
 \begin{proof}
-    We assume that $F^{*}$ abnd $G^{*}$ are naturally isomorphic and we need
+    We assume that $F^{*}$ and $G^{*}$ are naturally isomorphic and we need
     to show that $(F,G)$ is an adjunction. So we need to show that $(F,G)$ has
     a unit. From proposition~(\ref{Adj:prop:related:just:natural}), it is
     sufficient to prove the existence of natural transformations
@@ -847,6 +847,28 @@ We can now state the converse of proposition~(\ref{Adj:prop:adjunction:F*:G*:iso
             (1)&\ &G\epsilon\circ\eta G=\iota_{G}\\
             (2)&\ &\epsilon F \circ F\eta=\iota_{F}
         \end{eqnarray*}
-TODO 
+    However, by assumption there exists $\alpha:F^{*}\Rightarrow G^{*}$ 
+    natural transformation which is a natural isomorphism. Hence using
+    proposition~(\ref{Nat:prop:isomorphism}), there exists a natural
+    transformation $\beta:G^{*}\Rightarrow F^{*}$ such that
+    $\beta\circ\alpha=\iota_{F^{*}}$ and $\alpha\circ\beta=\iota_{G^{*}}$.
+    From the natural transformation $\alpha:F^{*}\Rightarrow G^{*}$ and
+    proposition~(\ref{Adj:prop:alpha:F*:G*:eta}) we obtain a natural 
+    transformation $\eta:I_{\cal C}\Rightarrow G\circ F$ satisfying 
+    equations~(\ref{Adj:eqn:alpha:F*:G*:eta:1}) 
+    and~(\ref{Adj:eqn:alpha:F*:G*:eta:2}). From the natural
+    transformation $\beta:G^{*}\Rightarrow F^{*}$ and 
+    proposition~(\ref{Adj:prop:beta:G*:F*:epsilon}) we obtain a natural
+    transformation $\epsilon:F\circ G\Rightarrow I_{\cal D}$ satisfying
+    equations~(\ref{Adj:eqn:beta:G*:F*:epsilon:1})
+    and~(\ref{Adj:eqn:beta:G*:F*:epsilon:2}). So it remains to show that
+    $\eta$ and $\epsilon$ satisfy equations~$(1)$ and~$(2)$ above. We first
+    establish $(1)$: this is an equality between two natural transformations.
+    Using proposition~(\ref{Nat:prop:equal}), given $d\in\Dat$ we need to show
+    that $(G\epsilon \circ\eta G)(d) = \iota_{G}(d)$:
+        \begin{eqnarray*}(G\epsilon \circ\eta G)(d)
+            &=&G(\epsilon_{d})\circ\eta_{G(d)}\\
+        \end{eqnarray*}
+    TODO
 \end{proof}
 
