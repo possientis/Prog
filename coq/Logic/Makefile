@@ -32,6 +32,7 @@ AXIOM_OBJ = ${AXIOM}/Extensionality.vo \
 			${AXIOM}/Wec.vo \
 			${AXIOM}/LEM.vo \
 			${AXIOM}/Sat.vo \
+			${AXIOM}/CO.vo \
 			${AXIOM}/Sec.vo \
 			${AXIOM}/Markov.vo \
 			${AXIOM}/Witness.vo \

@@ -2,6 +2,7 @@ module  Stream
     (   Stream  (..)
     ,   naturals
     ,   toList
+    ,   unfoldStream
     )   where 
 
 import Control.Comonad
@@ -45,3 +46,11 @@ _first3 stream =
     let stream2 = stream  =>> next
         stream3 = stream2 =>> next
     in [extract stream, extract stream2, extract stream3]
+
+
+unfoldStream :: s -> (s -> (a,s)) -> Stream a
+unfoldStream initState getNext = Cons a (unfoldStream nextState getNext)
+    where
+    (a, nextState) = getNext initState
+
+

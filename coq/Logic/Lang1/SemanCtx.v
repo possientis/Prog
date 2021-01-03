@@ -299,5 +299,22 @@ Proof.
         | G p' A B H2 H3 IH
         ];
       intros p1' p2' A1' A2' H4 H5 H6 H7 B' H9; inversion H9; subst; clear H9.
- Show.
+        + apply implyCompatLR.
+            { apply H6 with p1'; try assumption. reflexivity. }
+            { apply H7 with p2'; try assumption. reflexivity. }
+        + apply equivTrans with A; try assumption.
+          apply (IH p1' p2'); try assumption. reflexivity.
+    - remember ((All n p1) >> B) as b eqn:E.
+      revert n p1 A1 H1 IH1 B E.
+      induction H4 as
+        [
+        |
+        |
+        |
+        | G p' A B H2 H3 IH
+        ];
+        intros n' p1' A1' H4 H5 B' H6; inversion H6; subst; clear H6.
+        +
+ 
+Show.
 *)

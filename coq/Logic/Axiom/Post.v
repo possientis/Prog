@@ -50,7 +50,7 @@ Proof.
             { exfalso.  destruct H4 as [n H4]. inversion H4. }}
 Qed.
 
-(*
+
 Lemma MarkovDecSec : Markov -> forall (a:Type) (p:a -> Prop),
     Decidable p <-> SemiDecidable p /\ CoSemiDecidable p.
 Proof.
@@ -64,7 +64,12 @@ Proof.
                 { exfalso. apply H2, H1. assumption. }
                 { reflexivity. }}
             { intros [n H2] H3. apply H1 in H3. rewrite H3 in H2. inversion H2. }
-    - intros [[F H1] [G H2]].
-Show.
-*)
+    - intros [[F H1] [G H2]]. 
+      unfold SemiDeciderOf in H1.
+      unfold SemiDeciderOf in H2.
+      apply pDecDecidable. intros x. apply Markov2Post in M. apply M.
+        + exists (F x). apply H1.
+        + exists (G x). apply H2.
+Qed.
+
 

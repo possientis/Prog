@@ -514,7 +514,7 @@ Proof.
         + inversion G1.
         + inversion G1.
         + inversion G1. subst. clear G1. apply H6. left. reflexivity.
-        + inversion G1. subst. clear G1.
+        + inversion G1. subst. clear G1. 
 
 Show.
 *)

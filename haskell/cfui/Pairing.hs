@@ -2,6 +2,11 @@
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
 
+module  Pairing
+    (   Pairing     (..) 
+    ,   Sequence    (..)
+    ,   move
+    )   where
 --type Pairing f g = forall a b. f (a -> b) -> g a -> b
 
 import Control.Comonad
@@ -19,8 +24,8 @@ instance Pairing Identity Identity where
 instance Pairing ((->) a) ((,) a) where
     pair f g (a,b) = f (g a) b 
 
-uncurry :: (a -> b -> c) -> (a, b) -> c
-uncurry = pair ($)
+_uncurry :: (a -> b -> c) -> (a, b) -> c
+_uncurry = pair ($)
 
 move :: (Comonad w, Pairing m w) => w a -> m b -> w a
 move space movement = pair (const id) movement (duplicate space)
@@ -46,15 +51,15 @@ instance Monad Sequence where
     (>>=) (End a)   f   = f a
     (>>=) (Next as) f   = Next (as >>= f)
 
-ap :: (Monad m) => m (a -> b) -> m a -> m b
-ap mf ma = mf >>= \f -> ma >>= \a -> return (f a)
+_ap :: (Monad m) => m (a -> b) -> m a -> m b
+_ap mf ma = mf >>= \f -> ma >>= \a -> return (f a)
 
 instance Pairing Sequence Stream where
     pair f (End a) (Cons b _) = f a b
     pair f (Next as) (Cons _ bs) = pair f as bs
 
-s1 :: Stream Integer
-s1 = move s0 (Next (End ()))
+_s1 :: Stream Integer
+_s1 = move s0 (Next (End ()))
 
-s2 :: Stream Integer
-s2 = move s0 (Next (Next (End ())))
+_s2 :: Stream Integer
+_s2 = move s0 (Next (Next (End ())))

@@ -28,3 +28,25 @@ begin
   rcases H₁ with ⟨n, H₁⟩, rcases H₂ with ⟨m,H₂⟩, use (n + m),
   rw [H₁,H₂], ring
 end
+
+example : ∀ (a : ℤ), 0 ∣ a ↔ a = 0 :=
+begin
+  intros a, split; intros H₁,
+    { cases H₁ with k H₁, rw H₁, ring },
+    { use 0, rw H₁, ring }
+end
+
+open function
+
+example : ∀ (f g : ℝ → ℝ), surjective (g ∘ f) → surjective g :=
+begin
+  intros f g H₁ y, cases (H₁ y) with x H₁, use (f x), assumption
+end
+
+example : ∀ (f g : ℝ → ℝ), surjective f → surjective g → surjective (g ∘ f) :=
+begin
+  intros f g H₁ H₂ y,
+  cases (H₂ y) with y' H₂,
+  cases (H₁ y') with x H₁,
+  use x, simp, rw H₁, assumption
+end

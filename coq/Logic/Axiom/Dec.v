@@ -28,3 +28,20 @@ Definition Decidable (a:Type) (p:a -> Prop) : Prop :=
 
 Arguments Decidable {a}.
 
+Lemma pDecDecidable : forall (a:Type) (p:a -> Prop),
+    pDec p -> Decidable p.
+Proof.
+    intros a p q. remember (fun x => 
+        match (q x) with
+        | left _    => true
+        | right _   => false
+        end) as f eqn:E.
+    exists f. intros x. split; intros H1.
+    - rewrite E. destruct (q x) as [H2|H2].
+        + reflexivity.
+        + apply H2 in H1. contradiction.
+    - rewrite E in H1. destruct (q x) as [H2|H2].
+        + assumption.
+        + inversion H1.
+Qed.
+
