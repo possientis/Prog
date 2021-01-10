@@ -6,6 +6,7 @@ CLASS = Class
 FUNC  = Func
 REL   = Rel
 NAT	  = Nat
+BOOL  = Bool
 LIST  = List
 FOL	  = Fol
 LAM   = Lam
@@ -19,6 +20,7 @@ CLASS_LIB = -Q ${CLASS} Logic.${CLASS} -Q ../Logic Logic
 FUNC_LIB  = -Q ${FUNC}  Logic.${FUNC}  -Q ../Logic Logic
 REL_LIB   = -Q ${REL}   Logic.${REL}   -Q ../Logic Logic
 NAT_LIB   = -Q ${NAT}   Logic.${NAT}   -Q ../Logic Logic
+BOOL_LIB  = -Q ${BOOL}  Logic.${BOOL}  -Q ../Logic Logic
 LIST_LIB  = -Q ${LIST}  Logic.${LIST}  -Q ../Logic Logic
 FOL_LIB   = -Q ${FOL}   Logic.${FOL}   -Q ../Logic Logic
 LAM_LIB   = -Q ${LAM}   Logic.${LAM}   -Q ../Logic Logic
@@ -85,6 +87,8 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Seq.vo \
 			${NAT}/Fresh.vo \
 			${NAT}/NatxNat.vo
+
+BOOL_OBJ  = ${BOOL}/Eq.vo
 
 LIST_OBJ  = ${LIST}/In.vo \
 		   	${LIST}/Nil.vo \
@@ -197,6 +201,7 @@ all : 	${AXIOM_OBJ} \
 		${FUNC_OBJ}	 \
 		${REL_OBJ} \
 		${NAT_OBJ} \
+		${BOOL_OBJ} \
 		${LIST_OBJ} \
 		${FOL_OBJ} \
 		${LAM_OBJ} \
@@ -219,6 +224,9 @@ ${REL}/%.vo   : ${REL}/%.v
 
 ${NAT}/%.vo   : ${NAT}/%.v
 	coqc $< 		${NAT_LIB}
+
+${BOOL}/%.vo  : ${BOOL}/%.v
+	coqc $< 		${BOOL_LIB}
 
 ${LIST}/%.vo  : ${LIST}/%.v
 	coqc $< 		${LIST_LIB}
@@ -274,6 +282,9 @@ ${NAT}/Max.vo : ${NAT}/Max.v
 
 ${NAT}/Seq.vo : ${NAT}/Seq.v
 	coqc $<			${NAT_LIB}
+
+${BOOL}/Eq.vo : ${BOOL}/Eq.v
+	coqc $<			${BOOL_LIB}
 
 ${LIST}/In.vo : ${LIST}/In.v
 	coqc $<			${LIST_LIB}

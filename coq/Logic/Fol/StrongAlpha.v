@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Logic.Class.Eq.
+Require Import Logic.Bool.Eq.
 
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Permute.
@@ -471,23 +472,58 @@ Proof.
         + apply AAllxy with r; assumption.
 Qed.
 
+Lemma StrongAlphaBotRev : forall (v:Type) (e:Eq v) (p:P v), Bot ~ p -> p = Bot.
+Proof.
+    intros v e p H1. apply strongAlphaCharac in H1. destruct H1 as 
+    [[H1 H2]
+    |[[x [y [H1 H2]]]
+    |[[p1 [p2 [q1 [q2 [H1 [H2 H3]]]]]]
+    |[[x [p1 [q1 [H1 [H2 H3]]]]]
+    |[x [y [p1 [q1 [r [H1 [H2 H3]]]]]]]]]]]; try inversion H1.
+    assumption.
+Qed.
 
+
+Lemma StrongAlphaElemRev : forall (v:Type) (e:Eq v) (p:P v) (x y:v),
+    Elem x y ~ p -> p = Elem x y.
+Proof.
+    intros v e p x' y' H1. apply strongAlphaCharac in H1. destruct H1 as 
+    [[H1 H2]
+    |[[x [y [H1 H2]]]
+    |[[p1 [p2 [q1 [q2 [H1 [H2 H3]]]]]]
+    |[[x [p1 [q1 [H1 [H2 H3]]]]]
+    |[x [y [p1 [q1 [r [H1 [H2 H3]]]]]]]]]]]; try inversion H1.
+    subst. reflexivity.
+Qed.
+
+Lemma StrongAlphaImpRev : forall (v:Type) (e:Eq v) (p1 p2 q:P v), 
+    Imp p1 p2 ~ q -> exists (q1 q2:P v),
+        (p1 ~ q1) /\ (p2 ~ q2) /\ (q = Imp q1 q2).
+Proof.
+    intros v e pq p2 q H1. apply almostImpRev, almostIsStrong. assumption.
+Qed.
+
+(*
+Lemma StrongAlphaAllRev : forall (v:Type) (e:Eq v) (p1 q:P v) (x:v),
+    All x p1 :~: q -> 
+        (exists (q1:P v), (p1 ~ q1) /\ (q = All x q1)) \/
+        (exists (q1 r:P v) (y:v),
+            (x <> y)                /\ 
+            (p1 ~ r)                /\ 
+            (q1 ~ fmap (y // x) r)  /\
+            (~ y :: var r)          /\
+            (q = All y q1)).
+Proof.
+
+Show.
+*)
+
+(*
 Definition V : Type := bool.
 Definition x : V := true.
 Definition y : V := false.
 
-Definition bool_eq_dec : forall (a b:V), {a = b} + {a <> b}.
-Proof.
-    intros a b. destruct a eqn:E1; destruct b eqn:E2.
-    - left. reflexivity.
-    - right. intros H1. inversion H1.
-    - right. intros H1. inversion H1.
-    - left. reflexivity.
-Defined.
 
-Instance EqV : Eq V := { eqDec := bool_eq_dec }.
-
-(*
 Lemma CounterExample1 : ~(All x (All y (Elem x y)) ~ All y (All x (Elem y x))).
 Proof.
     remember (All y (Elem x y)) as p1 eqn:H1. 
@@ -518,3 +554,6 @@ Proof.
 
 Show.
 *)
+
+
+

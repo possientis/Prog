@@ -6,9 +6,11 @@ Require Import Logic.Set.Equal.
 Require Import Logic.Set.Compatible.
 
 Require Import Logic.Lang1.Syntax.
-Require Import Logic.Lang1.Environment.
+Require Import Logic.Lang1.Context.
+Require Import Logic.Lang1.SemanCtx.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Relevance.
+Require Import Logic.Lang1.Environment.
 
 
 (* Any predicate obtained by a formula is a compatible predicate.               *)
@@ -49,7 +51,20 @@ Proof.
                     { apply H. }}}
 Qed.
 
+(*
+Import SemanCtx.
+Theorem formulaCompatibleCtx : 
+    forall (G:Context) (p:Formula) (n:nat) (A:set -> Prop),
+    (forall (x:set), G ; n~>x :- p >> (A x)) -> compatible A. 
+Proof.
+    intros G p n A H1 x x' H2 H3.
+    remember (H1 x)  as H4 eqn:E. clear E.
+    remember (H1 x') as H5 eqn:E. clear E.
+Show.
+*)
 
+
+(*
 (* Any two-fold predicate obtained by a formula is a compatible predicate.      *)
 Theorem formulaCompatible2 : forall (e:Env) (p:Formula) (n m:nat),
     compatible2 (eval2 e p n m).
@@ -66,4 +81,4 @@ Proof.
             { apply equalRefl. }
         + assumption.
 Qed.
-
+*)

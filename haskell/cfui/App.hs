@@ -6,8 +6,11 @@ import Data.IORef
 import Control.Monad
 import Control.Comonad
 
+import UI
 import Stream
 import Pairing
+import Console
+import Component
 
 main :: IO ()
 main = explore counterComponent
@@ -24,9 +27,6 @@ ui ref = do
     _ <- getLine
     writeIORef ref (counter + 1)
 
-type UI base m a = (m () -> base ()) -> a
-
-type Component base w m a = w (UI base m a)
 
 explore :: (Comonad w, Pairing m w) => Component IO w m Console -> IO ()
 explore component = do
@@ -40,11 +40,6 @@ explore component = do
         input <- getLine
         action input
 
-data Console = Console
-    { _text   :: String
-    , _action :: String -> IO ()
-    }
-
 counterComponent :: Component IO Stream Sequence Console
 counterComponent = unfoldStream 0 (\state -> (render state, state + 1))
     where
@@ -53,6 +48,3 @@ counterComponent = unfoldStream 0 (\state -> (render state, state + 1))
             Console
                 (show state)                        -- display the current value 
                 (\_input -> send (Next (End ())))    -- move to next state
-
-
-

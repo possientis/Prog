@@ -122,4 +122,27 @@ _ = begin
    `suc `suc `zero
    ∎
 
+{- This is taking too long: type checking hitting some exponential wall
+_ : plus {∅} · two · two —↠ `suc `suc `suc `suc `zero
+_ = begin
+  plus · two · two
+  —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
+  _
+  —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+  _
+  —→⟨ β-ƛ (V-suc (V-suc (V-zero))) ⟩
+  _
+  —→⟨ β-suc (V-suc V-zero) ⟩
+  _
+  —→⟨ ξ-suc (ξ-·₁ (ξ-·₁ β-μ)) ⟩
+  _
+  —→⟨ ξ-suc (ξ-·₁ (β-ƛ (V-suc V-zero))) ⟩
+  _
+  —→⟨ ξ-suc (β-ƛ (V-suc (V-suc (V-zero)))) ⟩
+  _
+  —→⟨ ξ-suc (β-suc V-zero) ⟩
+  _
+  —→⟨ {!!} ⟩
+  {!!}
+-}
 

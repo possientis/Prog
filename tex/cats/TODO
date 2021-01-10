@@ -1,5 +1,4 @@
-if alpha: F* => G* , define eta, then eta natural and alpha(c,d)(g) = G(g) . eta(c)
-prove converse: F* ~ G* => F -| G
+pick new topic
 
 F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2

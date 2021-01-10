@@ -320,4 +320,3 @@ Proof.
         + apply equivSym. assumption.
         + apply IH2 with p; try assumption. reflexivity.
 Qed.
-

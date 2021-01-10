@@ -88,7 +88,7 @@ where '$c$' and '$d$' are dummy variables. Once again, a functor is more than
 a mere transformation on objects, and we should remember that the right-hand-side 
 functor is really $\Cat\circ(I_{\cal C}\times G)$.
 
-The left-hand side functor $F^{*}=\Dat\circ(F\times I_{\cal D})$ is a functor
+The left-hand-side functor $F^{*}=\Dat\circ(F\times I_{\cal D})$ is a functor
 $F^{*}:\Cop\times\Dat\to\Set$. If $c,c'\in\Cat$ and $d,d'\in\Dat$, if 
 $f:c'\to c\ @\ \Cat$ and $g:d\to d'\ @\ \Dat$ then we have $(f,g):(c,d)\to
 (c',d')\ @\ \Cop\times\Dat$ and $F^{*}(f,g):F^{*}(c,d)\to F^{*}(c',d')\ @\ \Set$, 
@@ -125,7 +125,7 @@ and $g:d\to d'$.
     \end{eqnarray*}
 \end{proof}
 
-The right-hand side functor $G^{*}=\Cat\circ(I_{\cal C}\times G)$ is a functor
+The right-hand-side functor $G^{*}=\Cat\circ(I_{\cal C}\times G)$ is a functor
 $G^{*}:\Cop\times\Dat\to\Set$. If $c,c'\in\Cat$ and $d,d'\in\Dat$, if 
 $f:c'\to c\ @\ \Cat$ and $g:d\to d'\ @\ \Dat$ then we have $(f,g):(c,d)\to
 (c',d')\ @\ \Cop\times\Dat$ and $G^{*}(f,g):G^{*}(c,d)\to G^{*}(c',d')\ @\ \Set$, 
@@ -173,7 +173,7 @@ $\eta_{c}:c\to G(F(c))$ and $G(g):G(F(c))\to G(d)$ and $G(g)\circ\eta_{c}$
 is a well-defined element of $\Cat(c,G(g))$. So $\alpha(c,d)$ is a well-defined
 function from the hom-set $\Dat(F(c),d)$ to the hom-set $\Cat(c,G(d))$. In short,
 we have $\alpha(c,d):F^{*}(c,d)\to G^{*}(c,d)$ where $F^{*}$ and $G^{*}$
-are the left and right-hand side functors associated with $(F,G)$. 
+are the left-hand-side and right-hand-side functors associated with $(F,G)$. 
     \[
         \begin{tikzcd}
             \Cop\times\Dat \arrow[r, "F^{*}", bend left  = 50, ""{name=U, below}]
@@ -184,7 +184,7 @@ are the left and right-hand side functors associated with $(F,G)$.
     \]
 The obvious question to ask is whether the map $\alpha:\ob\ (\Cop\times\Dat)
 \to\arr\ \Set$ we have just defined is in fact a natural transformation.
-The answer is 'yes':
+Indeed it is:
 
 \begin{prop}\label{Adj:prop:natural:left:right}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
@@ -279,7 +279,7 @@ F(f)$ is a well-defined element of $\Dat(F(c),d)$. So $\beta(c,d)$ is a
 well-defined function from the hom-set $\Cat(c,G(d))$ to the hom-set 
 $\Dat(F(c),d)$. In short, $\beta(c,d):G^{*}(c,d)\to F^{*}(c,d)$ 
 where $F^{*}$ and $G^{*}$
-are the left and right-hand side functors of $(F,G)$. 
+are the left-and-side and right-hand-side functors of $(F,G)$. 
     \[
         \begin{tikzcd}
             \Cop\times\Dat \arrow[r, "G^{*}", bend left  = 50, ""{name=U, below}]
@@ -290,7 +290,7 @@ are the left and right-hand side functors of $(F,G)$.
     \]
 The obvious question to ask is whether the map $\beta:\ob\ (\Cop\times\Dat)
 \to\arr\ \Set$ we have just defined is in fact a natural transformation.
-The answer is 'yes':
+Indeed it is:
 
 \begin{prop}\label{Adj:prop:natural:right:left}
     Let $F:\Cat\to\Dat$ and $G:\Dat\to\Cat$ be functors where \Cat\ and \Dat\ 
@@ -897,8 +897,34 @@ We can now state the converse of proposition~(\ref{Adj:prop:adjunction:F*:G*:iso
         \end{eqnarray*}
     It remains to show eqn~$(2)$. Given $c\in\Cat$, we need 
     $(\epsilon F \circ F\eta)(c)=\iota_{F}(c)$:
-        \begin{eqnarray*}
-            TODO
+        \begin{eqnarray*}(\epsilon F \circ F\eta)(c)
+            &=&\epsilon_{F(c)}\circ F(\eta_{c})
+            \ \leftarrow\ \mbox{done before}\\
+            \mbox{set $d=F(c)$}\ \to\ 
+            &=&\epsilon_{d}\circ F(\eta_{c})\\
+            \mbox{$\eta_{c}:c\to G(d)$,\ 
+            eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:2})}\ \to\ 
+            &=&\beta(c,d)(\eta_{c})\\
+            \mbox{eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:1})}\ \to\ 
+            &=&\beta(c,d)(\ \alpha(c,d)(\,\id(d)\,) \ )\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\ \beta(c,d)\,\circ\,\alpha(c,d)\ )(\,\id(d)\,)\\
+            \mbox{def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&(\beta\circ\alpha)(c,d)(\,\id(d)\,)\\
+            \mbox{$\beta\circ\alpha=\iota_{F^{*}}$}\ \to\ 
+            &=&\iota_{F^{*}}(c,d)(\,\id(d)\,)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&\id(\,F^{*}(c,d)\,)(\,\id(d)\,)\\
+            \mbox{prop.~(\ref{Adj:prop:lhs:object})}\ \to\ 
+            &=&\id(\,\Dat(F(c),d)\,)(\,\id(d)\,)\\
+            \mbox{$d = F(c)$}\ \to\ 
+            &=&\id(\,\Dat(d,d)\,)(\,\id(d)\,)\\
+            \mbox{$\id$ in \Set}\ \to\ 
+            &=&\id(d)\\
+            \mbox{$d = F(c)$}\ \to\ 
+            &=&\id(\,F(c)\,)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&\iota_{F}(c)\\
         \end{eqnarray*}
 \end{proof}
 
