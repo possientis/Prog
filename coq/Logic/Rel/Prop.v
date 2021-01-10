@@ -44,3 +44,13 @@ Proof.
     - apply implyCompatL. assumption.
     - apply implyCompatR. assumption.
 Qed.
+
+Lemma allCompat : forall (a:Type) (A B:a -> Prop), 
+  (forall (x:a), A x <-> B x) ->
+  ((forall (x:a), A x) <-> (forall (x:a), B x)).
+Proof.
+  intros a A B H1. 
+  split; intros H2 x; specialize H1 with x; destruct H1 as [H1 H3]. 
+  - apply H1, H2.
+  - apply H3, H2.
+Qed.

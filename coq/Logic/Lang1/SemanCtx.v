@@ -249,8 +249,7 @@ Proof.
       try (apply freshNot_n); apply freshNot_m.
 Qed.
 
-(*
-Lemma evalUnique : forall (G:Context) (p:Formula) (A B:Prop),
+Lemma evalDeterministic : forall (G:Context) (p:Formula) (A B:Prop),
     G :- p >> A -> G :- p >> B -> A <-> B.
 Proof.
     intros G p A B H1. revert B. remember (p >> A) as b eqn:E.
@@ -283,10 +282,10 @@ Proof.
         ];
       intros n' m' x' y' H4 H5 B' H6; inversion H6; subst; clear H6.
         + split; apply elemCompatLR.
-            { apply (bindUnique G n'); assumption. }
-            { apply (bindUnique G m'); assumption. }
-            { apply (bindUnique G n'); assumption. }
-            { apply (bindUnique G m'); assumption. }
+            { apply (bindDeterministic G n'); assumption. }
+            { apply (bindDeterministic G m'); assumption. }
+            { apply (bindDeterministic G n'); assumption. }
+            { apply (bindDeterministic G m'); assumption. }
         + apply equivTrans with A; try assumption. apply (IH n' m' x' y');
           try assumption. reflexivity. 
     - remember ((Imp p1 p2) >> B) as b eqn:E. 
@@ -314,7 +313,11 @@ Proof.
         | G p' A B H2 H3 IH
         ];
         intros n' p1' A1' H4 H5 B' H6; inversion H6; subst; clear H6.
-        +
- 
-Show.
-*)
+        + apply allCompat. intros x. apply (H5 x p1'); try reflexivity. apply H.
+        + apply equivTrans with A; try assumption.
+          apply (IH n' p1'); try assumption. reflexivity.
+    - apply equivTrans with A'. 
+        + apply equivSym. assumption.
+        + apply IH2 with p; try assumption. reflexivity.
+Qed.
+

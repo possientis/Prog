@@ -10,8 +10,11 @@ open import Relation.Nullary             using (Dec; yes; no; ¬_)
 open import Lam.Type
 
 open import DeBruijn.Subst
+open import DeBruijn.Value
 open import DeBruijn.Syntax
 open import DeBruijn.Context
+open import DeBruijn.Closure
+open import DeBruijn.Reduction
 
 
 _ : Context
@@ -106,5 +109,17 @@ _ : M₅ [ M₆ ] ≡ M₇
 _ = refl
 
 
+_ : twoᶜ · sucᶜ · `zero {∅} —↠ `suc `suc `zero
+_ = begin
+   twoᶜ · sucᶜ · `zero
+   —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
+   ((ƛ # 1 · (# 1 · # 0)) [ sucᶜ ]) · `zero
+   —→⟨ β-ƛ V-zero ⟩
+   _
+   —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
+   _
+   —→⟨ β-ƛ (V-suc V-zero) ⟩
+   `suc `suc `zero
+   ∎
 
 

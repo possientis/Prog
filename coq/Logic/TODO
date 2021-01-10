@@ -8,7 +8,7 @@ Latex:
 
 
 Set Theory:
-Rel/Prop: need some allCompat lemma
+Not sure what to do next here
 Lang1/SemanCtx
 Lang1/Compatible
 axiom of choice?
@@ -24,7 +24,7 @@ Algebra of Programming:
 Ex 4.18
 
 Computational Type Theory with Coq:
-Axiom/Post (13.2.6) (find the right module for this)
+13.2.7 (Axiom/Sec)
 go back to book
 
 

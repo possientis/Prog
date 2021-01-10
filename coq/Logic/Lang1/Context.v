@@ -331,7 +331,7 @@ Proof.
     - apply bindDiff; assumption.
 Qed.
 
-Lemma bindUnique : forall (G:Context) (n:nat) (x y:set),
+Lemma bindDeterministic : forall (G:Context) (n:nat) (x y:set),
     G :> n~>x -> G :> n~>y -> x == y.
 Proof.
     intros G n x y H1 H2. 

@@ -867,8 +867,38 @@ We can now state the converse of proposition~(\ref{Adj:prop:adjunction:F*:G*:iso
     Using proposition~(\ref{Nat:prop:equal}), given $d\in\Dat$ we need to show
     that $(G\epsilon \circ\eta G)(d) = \iota_{G}(d)$:
         \begin{eqnarray*}(G\epsilon \circ\eta G)(d)
-            &=&G(\epsilon_{d})\circ\eta_{G(d)}\\
+            &=&G(\epsilon_{d})\circ\eta_{G(d)}
+            \ \leftarrow\ \mbox{done before}\\
+            \mbox{set $c=G(d)$}\ \to\ 
+            &=&G(\epsilon_{d})\circ\eta_{c}\\
+            \mbox{$\epsilon_{d}:F(c)\to d$,\ 
+            eqn.~(\ref{Adj:eqn:alpha:F*:G*:eta:2})}\ \to\ 
+            &=&\alpha(c,d)(\epsilon_{d})\\
+            \mbox{eqn.~(\ref{Adj:eqn:beta:G*:F*:epsilon:1})}\ \to\ 
+            &=&\alpha(c,d)(\ \beta(c,d)(\,\id(c)\,) \ )\\
+            \mbox{$\circ$ in \Set}\ \to\ 
+            &=&(\ \alpha(c,d)\,\circ\,\beta(c,d)\ )(\,\id(c)\,)\\
+            \mbox{def.~(\ref{Nat:def:composition})}\ \to\ 
+            &=&(\alpha\circ\beta)(c,d)(\,\id(c)\,)\\
+            \mbox{$\alpha\circ\beta=\iota_{G^{*}}$}\ \to\ 
+            &=&\iota_{G^{*}}(c,d)(\,\id(c)\,)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&\id(\,G^{*}(c,d)\,)(\,\id(c)\,)\\
+            \mbox{prop.~(\ref{Adj:prop:rhs:object})}\ \to\ 
+            &=&\id(\,\Cat(c,G(d))\,)(\,\id(c)\,)\\
+            \mbox{$c = G(d)$}\ \to\ 
+            &=&\id(\,\Cat(c,c)\,)(\,\id(c)\,)\\
+            \mbox{$\id$ in \Set}\ \to\ 
+            &=&\id(c)\\
+            \mbox{$c = G(d)$}\ \to\ 
+            &=&\id(\,G(d)\,)\\
+            \mbox{def.~(\ref{Nat:def:identity})}\ \to\ 
+            &=&\iota_{G}(d)\\
         \end{eqnarray*}
-    TODO
+    It remains to show eqn~$(2)$. Given $c\in\Cat$, we need 
+    $(\epsilon F \circ F\eta)(c)=\iota_{F}(c)$:
+        \begin{eqnarray*}
+            TODO
+        \end{eqnarray*}
 \end{proof}
 

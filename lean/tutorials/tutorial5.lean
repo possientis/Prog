@@ -1,10 +1,8 @@
 import data.real.basic
 import algebra.group.pi
+import tuto_lib
 
 notation `|`x`|` := abs x
-
-def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop :=
-  ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
 variables (u v w : ℕ → ℝ) (l l' : ℝ)
 
@@ -27,5 +25,11 @@ begin
   specialize H₁ (ε/2) (by linarith), cases H₁ with N₁ H₁,
   specialize H₂ (ε/2) (by linarith), cases H₂ with N₂ H₂,
   use max N₁ N₂, intros n H₃,
-  rw ge_max_iff at H₃,
+  rw ge_max_iff at H₃, cases H₃ with H₃ H₄,
+  specialize H₁ n H₃, specialize H₂ n H₄,
+  calc
+  |(u + v) n - (l + l')| = |u n + v n - (l + l')|   : rfl
+               ...       = |(u n - l) + (v n - l')| : by { congr' 1, ring }
+               ...       ≤ |u n - l| + |v n - l'|   : by apply abs_add
+               ...       ≤ ε                        : by linarith
 end

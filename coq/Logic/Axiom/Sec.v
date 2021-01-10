@@ -1,3 +1,4 @@
+Require Import Logic.Axiom.Dec.
 Require Import Logic.Axiom.Sat.
 
 (* A proposition has a semi-decider                                             *)
@@ -19,3 +20,15 @@ Definition CoSemiDecidable (a:Type) (p:a -> Prop) : Prop :=
     SemiDecidable (fun x => ~p x).
 
 Arguments CoSemiDecidable {a}.
+
+Lemma tsatSemiDecidable : SemiDecidable tsat.
+Proof.
+    exists (fun f n => f n). intros f. split; auto.
+Qed.
+
+(*
+Definition toDec : forall (X:Prop), (X \/ ~ X) -> Sec X -> Sec (~X) -> Dec X.
+Proof.
+    intros X H1 [f H2] [g H3].
+Show.
+*)

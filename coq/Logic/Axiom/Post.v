@@ -1,5 +1,6 @@
 Require Import Coq.Bool.Bool.
 
+Require Import Logic.Axiom.CO.
 Require Import Logic.Axiom.Dec.
 Require Import Logic.Axiom.Sec.
 Require Import Logic.Axiom.Sat.
@@ -72,4 +73,9 @@ Proof.
         + exists (G x). apply H2.
 Qed.
 
+Corollary tsatNotCoSemiDecidable : Markov -> ~ CO -> ~ CoSemiDecidable (tsat).
+Proof.
+    intros M C H1. apply C, MarkovDecSec; try assumption.
+    split; try assumption. apply tsatSemiDecidable.
+Qed.
 
