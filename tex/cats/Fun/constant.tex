@@ -1,53 +1,56 @@
 \begin{defin}\label{Fun:def:constant}
-    Let \Cat\ be a category and $c\in\Cat$. We call {\em constant functor on 
-    \Cat\ at $c$} the functor $F:\Cat\to\Cat$ defined by 
+    Let \Cat,\ \Dat\ be categories and $d\in\Dat$. We call {\em constant functor 
+    from \Cat\ to \Dat\ at $d$} the functor $F:\Cat\to\Dat$ defined by 
     $F=(F_{0},F_{1})$ with:
         \begin{eqnarray*}
-            (1)&\ &F_{0}(a) = c\\
-            (2)&\ &F_{1}(f) = \id(c)
+            (1)&\ &F_{0}(c) = d\\
+            (2)&\ &F_{1}(f) = \id(d)
         \end{eqnarray*}
-    where $(1)$ holds for all $a\in\ob\ \Cat$ and $(2)$ holds for all
+    where $(1)$ holds for all $c\in\ob\ \Cat$ and $(2)$ holds for all
     $f\in\arr\ \Cat$.
 \end{defin}
 
 \begin{notation}\label{Fun:notation:constant}
-    The constant functor on a category \Cat\ at $c\in\Cat$ is denoted $K_{c}$.
+    The constant functor from \Cat\ to \Dat\ at $d\in\Dat$ is denoted $K_{d}$.
 \end{notation}
+
+\noindent
+{\bf Remark}: The notation $K_{d}$ is ambiguous and must be understood in a context.
 
 \noindent
 We shall now check our definition is indeed that of a functor.
 
 \begin{prop}\label{Fun:prop:constant}
-    Given a category \Cat\ and $c\in\Cat$, $K_{c}$ is a functor $K_{c}:
-    \Cat\to\Cat$.
+    Given categories \Cat,\ \Dat\ and $d\in\Dat$, $K_{d}$ is a functor $K_{d}:
+    \Cat\to\Dat$.
 \end{prop}
 \begin{proof}
-    Let \Cat\ be a category, $c\in\Cat$ and $K_{c}=(F_{0},F_{1})$ be the 
-    constant functor on \Cat\ at $c$. We need to check that properties 
-    $(1)-(5)$ of definition~(\ref{Fun:def:functor}) are satisfied:
+    Let \Cat,\ \Dat\ be categories, $d\in\Dat$ and $K_{d}=(F_{0},F_{1})$ be the 
+    constant functor from \Cat\ to \Dat\ at $d$. We need to check properties 
+    $(1)-(5)$ of definition~(\ref{Fun:def:functor}):
 
-    $(1)$: $F_{0}$ is indeed a map $F_{0}:\ob\ \Cat \to\ob\ \Cat$ from $(1)$ 
+    $(1)$: $F_{0}$ is indeed a map $F_{0}:\ob\ \Cat \to\ob\ \Dat$ from $(1)$ 
     of definition~(\ref{Fun:def:constant}).
 
-    $(2)$: $F_{1}$ is indeed a map $F_{1}:\arr\ \Cat\to\arr\ \Cat$ from $(2)$ 
+    $(2)$: $F_{1}$ is indeed a map $F_{1}:\arr\ \Cat\to\arr\ \Dat$ from $(2)$ 
     of definition~(\ref{Fun:def:constant}).
 
     $(3)$: We have $F_{1}(f):F_{0}(a)\to F_{0}(b)$ whenever $f:a\to b$, since:
         \[
-            F_{1}(f)=\id(c),\  F_{0}(a)=c,\ F_{0}(b)=c
+            F_{1}(f)=\id(d),\  F_{0}(a)=d,\ F_{0}(b)=d
         \]
 
     $(4)$: We have $F_{1}(\,\id(a)\,)=\id(\,F_{0}(a)\,)$ for
     all $a\in\Cat$, since:
         \[
-            F_{1}(\,\id(a)\,)=\id(c),\ F_{0}(a)=c
+            F_{1}(\,\id(a)\,)=\id(d),\ F_{0}(a)=d
         \]
 
     $(5)$: $F_{1}(g\circ f)=F_{1}(g)\circ F_{1}(f)$ whenever $f:a\to b$ 
     and $g:b\to c$, since:
         \[
-            F_{1}(g\circ f) = \id(c),\ F_{1}(g)=\id(c),\  F_{1}(f)=\id(c)
+            F_{1}(g\circ f) = \id(d),\ F_{1}(g)=\id(d),\  F_{1}(f)=\id(d)
         \]
-    and $\id(c)=\id(c)\circ\id(c)$ from $(12)$ (or $(13)$) of
+    and $\id(d)=\id(d)\circ\id(d)$ from $(12)$ (or $(13)$) of
     definition~(\ref{Cat:def:category}).
 \end{proof}

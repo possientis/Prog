@@ -1,6 +1,7 @@
 Require Import List.
 
 Require Import Logic.Class.Eq.
+Require Import Logic.Bool.Eq.
 
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Permute.
@@ -458,3 +459,37 @@ Proof.
         + constructor. assumption.
         + apply ALamxy with r; assumption.
 Qed.
+
+Lemma StrongAlphaVarRev : forall (v:Type) (e:Eq v) (t:T v) (x:v),
+    Var x ~ t -> t = Var x.
+Proof.
+    intros v e t x' H1. apply strongAlphaCharac in H1. destruct H1 as 
+    [[x [H1 H2]]
+    |[[t1 [t2 [s1 [s2 [H1 [H2 H3]]]]]]
+    |[[x [t1 [s1 [H1 [H2 H3]]]]]
+    |[x [y [t1 [s1 [r [H1 [H2 H3]]]]]]]]]]; try inversion H1.
+    subst. reflexivity.
+Qed.
+
+Lemma StrongAlphaAppRev : forall (v:Type) (e:Eq v) (t1 t2 s:T v), 
+    App t1 t2 ~ s -> exists (s1 s2:T v),
+        (t1 ~ s1) /\ (t2 ~ s2) /\ (s = App s1 s2).
+Proof.
+    intros v e t1 t2 s H1. apply almostAppRev, almostIsStrong. assumption.
+Qed.
+
+Lemma StrongAlphaLamRev : forall (v:Type) (e:Eq v) (t1 s:T v) (x:v),
+    Lam x t1 ~ s -> 
+        (exists (s1:T v), (t1 ~ s1) /\ (s = Lam x s1)) \/
+        (exists (s1 r:T v) (y:v),
+            (x <> y)                /\ 
+            (t1 ~ r)                /\ 
+            (s1 ~ fmap (y // x) r)  /\
+            (~ y :: var r)          /\
+            (s = Lam y s1)).
+Proof.
+    intros v e t1 s x H1. apply almostLamRev, almostIsStrong. assumption.
+Qed.
+
+
+

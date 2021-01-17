@@ -1,5 +1,6 @@
 module DeBruijn.Reduction where
 
+open import Data.Empty          using (⊥; ⊥-elim)
 open import Data.Nat            using (ℕ; zero; suc; _+_; _*_)
 open import Data.Bool           using (Bool;true;false)
 
@@ -213,6 +214,12 @@ data _—→_ : ∀ {Γ : Context} {A : Type} → Γ ⊢ A → Γ ⊢ A → Set 
   β-μ : ∀  {Γ : Context} {A : Type} {N : Γ , A ⊢ A}
       ---------------------------------------------
     →  μ N —→ N [ μ N ]
+
+
+valueReduce : ∀ {Γ : Context} {A : Type} {M N : Γ ⊢ A} →
+  Value M → M —→ N → ⊥
+valueReduce (V-suc p) (ξ-suc q) = valueReduce p q
+
 
 
 

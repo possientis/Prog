@@ -3,6 +3,7 @@ Require Import List.
 Require Import PeanoNat.
 
 Require Import Logic.Axiom.LEM.
+Require Import Logic.Rel.Prop.
 Require Import Logic.Nat.Fresh.
 
 Require Import Logic.Fol.Valid.
@@ -15,6 +16,7 @@ Require Import Logic.Set.Equal.
 Require Import Logic.Set.Empty.
 Require Import Logic.Set.ElemIncl.
 Require Import Logic.Set.Foundation.
+
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Environment.
 
@@ -25,6 +27,21 @@ Fixpoint eval (e:Env) (p:Formula) : Prop :=
     | Imp p1 p2     => eval e p1 -> eval e p2
     | All n p1      => forall (x:set), eval (bind e n x) p1
     end.
+
+Lemma evalCompat : forall (e e':Env) (p:Formula), 
+    envEqual e e' -> eval e p <-> eval e' p.
+Proof.
+    intros e e' p. revert p e e'. 
+    induction p as [ |n m|p1 IH1 p2 IH2|n p1 IH1]; intros e e' H1; simpl.
+    - split; auto.
+    - split; apply elemCompatLR; try (apply H1); 
+      apply envEqualSym in H1; apply H1.
+    - apply implyCompatLR.
+        + apply IH1. assumption.
+        + apply IH2. assumption.
+    - apply allCompat. intros x. apply IH1, bindEnvEqual; try assumption.
+      apply equalRefl.
+Qed.
 
 (* Given an environement e, a formula p and a variable n, we can define a       *)
 (* predicate P: set -> Prop by defining P x as the proposition obtained by      *)

@@ -26,9 +26,9 @@ progress : ∀ {M : Term} {A : Type}
   → Progress M
 
 progress (⊢ƛ p) = done V-ƛ
-progress (⊢· p q) with (progress p)
+progress (⊢· p q) with progress p
 ... | step r = step (ξ-·₁ r)
-... | done r with (progress q)
+... | done r with progress q
 ... | step s = step (ξ-·₂ r s)
 progress (⊢· (⊢ƛ p) q) | done r | done s = step (β-ƛ s)
 progress ⊢zero = done V-zero

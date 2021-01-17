@@ -1,7 +1,6 @@
 Logic:
-Fol/StrongAlpha: Revs lemmas
-Lam/StrongAlpha: Revs lemmas
-Fol/StrongAlpha: 3 distinct values.
+Lam/StrongAlpha: CounterExample1.
+prop 76.
 go back to book
 
 Haskell:
@@ -10,9 +9,7 @@ Latex:
 
 
 Set Theory:
-if e = e' then eval e p = eval e' p
-if G = G' then G :- p >> A -> G' :- p >> A 
-Lang1/Compatible
+continue expanding Lang1 with parallel context semantics results 
 axiom of choice?
 axiom of infinity false ?
 a new semantics based on different type of environments (plfa)
@@ -23,7 +20,7 @@ proof system of each language
 extension of language
 
 Computational Type Theory with Coq:
-13.2.7 (Axiom/Sec)
+13.2.8 (Axiom/Post)
 go back to book
 
 

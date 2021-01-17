@@ -500,12 +500,12 @@ Lemma StrongAlphaImpRev : forall (v:Type) (e:Eq v) (p1 p2 q:P v),
     Imp p1 p2 ~ q -> exists (q1 q2:P v),
         (p1 ~ q1) /\ (p2 ~ q2) /\ (q = Imp q1 q2).
 Proof.
-    intros v e pq p2 q H1. apply almostImpRev, almostIsStrong. assumption.
+    intros v e p1 p2 q H1. apply almostImpRev, almostIsStrong. assumption.
 Qed.
 
-(*
+
 Lemma StrongAlphaAllRev : forall (v:Type) (e:Eq v) (p1 q:P v) (x:v),
-    All x p1 :~: q -> 
+    All x p1 ~ q -> 
         (exists (q1:P v), (p1 ~ q1) /\ (q = All x q1)) \/
         (exists (q1 r:P v) (y:v),
             (x <> y)                /\ 
@@ -514,46 +514,27 @@ Lemma StrongAlphaAllRev : forall (v:Type) (e:Eq v) (p1 q:P v) (x:v),
             (~ y :: var r)          /\
             (q = All y q1)).
 Proof.
+    intros v e p1 q x H1. apply almostAllRev, almostIsStrong. assumption.
+Qed.
 
-Show.
-*)
-
-(*
 Definition V : Type := bool.
 Definition x : V := true.
 Definition y : V := false.
 
-
+(* This is why strong alpha-equivalence is not the right notion, as it fails    *)
+(* in cases when the set of variables is finite. Here card V = 2.               *)
 Lemma CounterExample1 : ~(All x (All y (Elem x y)) ~ All y (All x (Elem y x))).
 Proof.
     remember (All y (Elem x y)) as p1 eqn:H1. 
     remember (All x (Elem y x)) as q1 eqn:H2.
-    intros H3. apply strongAlphaCharac in H3.
-    destruct H3 as 
-        [[H3 H4]
-        |[[u [v [H3 H4]]]
-        |[[p1' [p2' [q1' [q2' [H3 H4]]]]]
-        |[[u [p1' [q1' [H3 [H4 H5]]]]]
-        |[x' [y' [p1' [q1' [r [H3 [H4 [H5 [H6 [H7 H8]]]]]]]]]]]]]].
-    - inversion H3.
-    - inversion H3.
-    - inversion H3.
-    - inversion H3. inversion H4. subst. inversion H7.
-    - inversion H3. inversion H4. subst. clear H3 H4.
-      apply strongAlphaCharac in H7. destruct H7 as
-        [[G1 G2]
-        |[[u [v [G1 G2]]]
-        |[[p1 [p2 [q1 [q2 [G1 G2]]]]]
-        |[[x' [p1 [q1 [G1 [G2 G3]]]]]
-        |[x' [y' [p1 [q1 [r' [G1 [G2 [G3 [G4 [G5 G6]]]]]]]]]]]]]].
-        + inversion G1.
-        + inversion G1.
-        + inversion G1.
-        + inversion G1. subst. clear G1. apply H6. left. reflexivity.
-        + inversion G1. subst. clear G1. 
-
-Show.
-*)
-
-
-
+    intros H3. apply StrongAlphaAllRev in H3. destruct H3 as [H3|H3].
+    - destruct H3 as [p1' [H3 H4]]. inversion H4.
+    - destruct H3 as [q1' [r [z [H3 [H4 [H5 [H6 H7]]]]]]]. 
+      inversion H7. subst. clear H7. apply StrongAlphaAllRev in H4.
+      destruct H4 as [H4|H4].
+      + destruct H4 as [q1 [H4 H7]]. apply H6. rewrite H7. left. reflexivity.
+      + destruct H4 as [q1 [r' [z [H4 [H7 [H8 [H9 H10]]]]]]].
+        apply StrongAlphaElemRev in H7. 
+        apply (onlyTwoElements x y z); try assumption.
+        intros H11. subst. apply H9. left. reflexivity.
+Qed.

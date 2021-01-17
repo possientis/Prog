@@ -1,10 +1,9 @@
-module  Main
+module  Components.Counter
     (   main
     )   where
 
 import Data.IORef
 import Control.Monad
-import Control.Comonad
 
 import UI
 import Stream
@@ -27,24 +26,11 @@ ui ref = do
     _ <- getLine
     writeIORef ref (counter + 1)
 
-
-explore :: (Comonad w, Pairing m w) => Component IO w m Console -> IO ()
-explore component = do
-    ref <- newIORef component
-    forever $ do
-        space <- readIORef ref
-        let send action = writeIORef ref (move space action)
-        let Console text action = extract space send
-
-        putStrLn text
-        input <- getLine
-        action input
-
 counterComponent :: Component IO Stream Sequence Console
 counterComponent = unfoldStream 0 (\state -> (render state, state + 1))
     where
         render :: Int -> UI IO Sequence Console
         render state = \send -> 
             Console
-                (show state)                        -- display the current value 
-                (\_input -> send (Next (End ())))    -- move to next state
+                (show state)                                    -- display the current value 
+                (\_input -> send $ return $ (Next (End ())))    -- move to next state

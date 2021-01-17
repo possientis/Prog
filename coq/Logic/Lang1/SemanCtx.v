@@ -102,6 +102,12 @@ Proof.
     - apply EvalEqu with A'; try assumption. apply IH2. assumption. 
 Qed.
 
+Lemma evalCompat : forall (G G':Context) (p:Formula) (A:Prop),
+    ctxEqual G G' -> G :- p >> A -> G' :- p >> A.
+Proof.
+    intros G G' p A [H1 H2] H3. apply evalMonotone with G; assumption.
+Qed.
+
 Lemma evalWeaken : forall (G:Context) (p:Formula) (A:Prop),
     O :- p >> A -> 
     G :- p >> A.
@@ -320,3 +326,4 @@ Proof.
         + apply equivSym. assumption.
         + apply IH2 with p; try assumption. reflexivity.
 Qed.
+
