@@ -75,3 +75,16 @@ begin
   rw abs_le at H₂, cases H₂ with H₂ G₂,
   rw abs_le, split; linarith
 end
+
+def non_decreasing (u : ℕ → ℝ) := ∀ n m, n ≤ m → u n ≤ u m
+
+def is_seq_sup (M : ℝ) (u : ℕ → ℝ) :=
+  (∀ n, u n ≤ M) ∧ ∀ ε > 0, ∃ n₀, u n₀ ≥ M - ε
+
+example : ∀ (M : ℝ), is_seq_sup M u → non_decreasing u → seq_limit u M :=
+begin
+  intros M H₁ H₂ ε H₃, cases H₁ with H₁ H₄, specialize H₄ ε H₃,
+  cases H₄ with N H₄, use N, intros n H₅,
+  specialize H₂ N n H₅, specialize H₁ n,
+  rw abs_le, split; linarith
+end
