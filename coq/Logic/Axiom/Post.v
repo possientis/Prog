@@ -79,3 +79,37 @@ Proof.
     split; try assumption. apply tsatSemiDecidable.
 Qed.
 
+Lemma MarkovDecSecSec : Markov -> 
+    forall (X:Prop), Dec X -> Sec X * Sec (~X).
+Proof.
+    intros M X H1. apply Markov2Post in M. split.
+    - destruct H1 as [H1|H1].
+        + exists (fun n => true). split; intros H2; try assumption.
+          exists 0. reflexivity.
+        + exists (fun n => false). split; intros H2.
+            { apply H1 in H2. contradiction. }
+            { destruct H2 as [n H2]. inversion H2. }
+    - destruct H1 as [H1|H1].
+        + exists (fun n => false). split; intros H2.
+            { apply H2 in H1. contradiction. }
+            { destruct H2 as [n H2]. inversion H2. }
+        + exists (fun n => true). split; intros H2; try assumption.
+          exists 0. reflexivity.
+Defined.
+
+Lemma MarkovSecSecDec : Markov -> 
+    forall (X:Prop), Sec X * Sec (~X) -> Dec X.
+Proof.
+    intros M X [H1 H2]. apply Markov2Post; assumption.
+Qed.
+
+(*
+Lemma MarkovSecCO : Markov ->
+    (forall (X:Prop), Sec X -> Sec (~X)) -> CO.
+Proof.
+    intros M H1. unfold CO. apply MarkovDecSec; try assumption. split.
+    - apply tsatSemiDecidable.
+    - unfold CoSemiDecidable.
+Show.
+*)
+
