@@ -532,9 +532,9 @@ Proof.
     - destruct H3 as [q1' [r [z [H3 [H4 [H5 [H6 H7]]]]]]]. 
       inversion H7. subst. clear H7. apply StrongAlphaAllRev in H4.
       destruct H4 as [H4|H4].
-      + destruct H4 as [q1 [H4 H7]]. apply H6. rewrite H7. left. reflexivity.
-      + destruct H4 as [q1 [r' [z [H4 [H7 [H8 [H9 H10]]]]]]].
-        apply StrongAlphaElemRev in H7. 
-        apply (onlyTwoElements x y z); try assumption.
-        intros H11. subst. apply H9. left. reflexivity.
+        + destruct H4 as [q1 [H4 H7]]. apply H6. rewrite H7. left. reflexivity.
+        + destruct H4 as [q1 [r' [z [H4 [H7 [H8 [H9 H10]]]]]]].
+          apply StrongAlphaElemRev in H7. 
+          apply (onlyTwoElements x y z); try assumption.
+          intros H11. subst. apply H9. left. reflexivity.
 Qed.

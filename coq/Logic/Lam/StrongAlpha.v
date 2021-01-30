@@ -491,5 +491,27 @@ Proof.
     intros v e t1 s x H1. apply almostLamRev, almostIsStrong. assumption.
 Qed.
 
+Definition V : Type := bool.
+Definition x : V := true.
+Definition y : V := false.
 
-
+(* This is why strong alpha-equivalence is not the right notion, as it fails    *)
+(* in cases when the set of variables is finite. Here card V = 2.               *)
+Lemma CounterExample1 : 
+    ~(Lam x (Lam y (App (Var x) (Var y))) ~ Lam y (Lam x (App (Var y) (Var x)))).
+Proof.
+    remember (Lam y (App (Var x) (Var y))) as t1 eqn:H1. 
+    remember (Lam x (App (Var y) (Var x))) as s1 eqn:H2. 
+    intros H3. apply StrongAlphaLamRev in H3. destruct H3 as [H3|H3].
+    - destruct H3 as [t1' [H3 H4]]. inversion H4.
+    - destruct H3 as [q1' [r [z [H3 [H4 [H5 [H6 H7]]]]]]].
+      inversion H7. subst. clear H7. apply StrongAlphaLamRev in H4.
+      destruct H4 as [H4|H4].
+        + destruct H4 as [s1 [H4 H7]]. apply H6. rewrite H7. left. reflexivity.
+        + destruct H4 as [s1 [r' [z [H4 [H7 [H8 [H9 H10]]]]]]].
+          apply StrongAlphaAppRev in H7. 
+          destruct H7 as [t1 [t2 [H1 [H2 H7]]]].
+          apply (onlyTwoElements x y z); try assumption.
+          intros H11. subst. apply H9. apply StrongAlphaVarRev in H1.
+          rewrite H1. left. reflexivity.
+Qed.

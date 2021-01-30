@@ -1,4 +1,7 @@
 pairing of 2 functors: F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
+bifunctor, profunctor
+partial functors F(A1,-), F(-,A2) of a bifunctor
+
 cocartesian functor: SetxSet -> Set , F(a1,a2) = a1 + a2
 
 Initial algebras, Terminal co-algebras:
@@ -74,8 +77,6 @@ define exponential object from b to c: (c^b,ev)
   where ev:c^b x b -> c with universal prop:
   for all a and f:axb -> c , there is a unique g:a -> c^b , such that
   ev . (g x id(b)) = f
-bifunctor, profunctor
-partial functors F(A1,-), F(-,A2) of a bifunctor
 partial natural trans alpha(A1,-) alpha(-,A2) of a nat between bifunctors
 Define 'transformation' (all but comm square)
 Lemma: a trans is natural iff both partial trans are natural

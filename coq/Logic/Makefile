@@ -88,7 +88,8 @@ NAT_OBJ   = ${NAT}/Eq.vo \
 			${NAT}/Fresh.vo \
 			${NAT}/NatxNat.vo
 
-BOOL_OBJ  = ${BOOL}/Eq.vo
+BOOL_OBJ  = ${BOOL}/Eq.vo \
+			${BOOL}/Three.vo
 
 LIST_OBJ  = ${LIST}/In.vo \
 		   	${LIST}/Nil.vo \

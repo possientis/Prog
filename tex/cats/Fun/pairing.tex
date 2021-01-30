@@ -1,0 +1,74 @@
+\begin{defin}\label{Fun:def:pairing}
+    We call {\em pairing} of two functors $F_{1}:\Cat\to\Done$ and
+    $F_{2}:\Cat\to\Dtwo$ the functor $G:\Cat\to\Done\times\Dtwo$
+    defined by $G=(G_{0},G_{1})$ with:
+        \begin{eqnarray*}
+            (1)&\ &G_{0}(a) = (\,F_{1}(a)\,,\,F_{2}(a)\,)\\
+            (2)&\ &G_{1}(f) = (\,F_{1}(f)\,,\,F_{2}(f)\,)
+        \end{eqnarray*}
+    where $\Cat, \Done, \Dtwo$ are categories and $(1)-(2)$ hold
+    for all $a\in\ob\ \Cat$ and $f\in\arr\ \Cat$.
+\end{defin}
+\noindent
+{\bf Remark}: In accordance with notation~(\ref{Fun:notation:functor:F0:F1}),
+we are using the same notations $F_{1}$ and $F_{2}$ in 
+definition~(\ref{Fun:def:pairing}) to describe the actions of these
+functors both on objects and on arrows. The alternative would be to use the
+notations $(F_{1})_{0}$, $(F_{1})_{1}$, $(F_{2})_{0}$ and $(F_{2})_{1}$ which 
+would arguably be harder to read.
+
+\begin{notation}\label{Fun:notation:pairing}
+    The pairing of two functors $F_{1}$ and $F_{2}$ is denoted
+    $\langle F_{1}, F_{2}\rangle$.
+\end{notation}
+\begin{prop}\label{Fun:prop:pairing}
+    Let $F_{1}:\Cat\to\Done$ and $F_{2}:\Cat\to\Dtwo$ be two functors. Then 
+    the pairing of $F_{1}$ and $F_{2}$ is indeed a functor 
+    $\langle F_{1}, F_{2}\rangle : \Cat\to\Done\times\Dtwo$.
+\end{prop}
+\begin{proof}
+    Let $G=(G_{0},G_{1})$ denote the functor $\langle F_{1}, F_{2}\rangle$.
+    We need to check that properties~$(1)-(5)$ of 
+    definition~(\ref{Fun:def:functor}) are satisfied, which goes as follows:
+
+    $(1)$: $G_{0}$ is indeed a map $G_{0}:\ob\ \Cat\to\ob\ (\Done
+    \times\Dtwo)$: firstly, $G_{0}$ is defined on the 
+    collection of all $a$'s where $a\in\ob\ \Cat$. Furthermore 
+    $G_{0}(a)$ is defined as $(\,F_{1}(a)\,,\,F_{2}(a)\,)$ and since 
+    $F_{1}:\Cat\to\Done$ while $F_{2}:\Cat\to\Dtwo$, $F_{1}(a)
+    \in\ob\ \Done$ while $F_{2}(a)\in\ob\ \Dtwo$. Hence we see that
+    $G_{0}(a)$ is indeed a member of the collection $\ob\ (\Done\times\Dtwo)$,
+    by virtue of definition~(\ref{Cat:def:canonical:product}).
+    
+    $(2)$: $G_{1}$ is indeed a map $G_{1}:\arr\ \Cat\to\arr\ (\Done
+    \times\Dtwo)$: $G_{1}$ is defined on the 
+    collection of all $f$'s where $f\in\arr\ \Cat$. Furthermore
+    $G_{1}(f)$ is defined as $(\,F_{1}(f)\,,\,F_{2}(f)\,)$ and since 
+    $F_{1}:\Cat\to\Done$ while we have $F_{2}:\Cat\to\Dtwo$, we see that
+    $F_{1}(f)\in\arr\ \Done$ while $F_{2}(f)\in\arr\ \Dtwo$. Hence we 
+    conclude that $G_{1}(f)$ is indeed a member of the collection 
+    $\arr\ (\Done\times\Dtwo)$.
+
+    $(3)$: We need to show that $G_{1}(f):G_{0}(a)\to G_{0}(b)$ when
+    $f:a\to b$: so consider $f\in\arr\ \Cat$ such that $\dom(f)=a$ and 
+    $\cod(f)=b$. We to show that $\dom\,(G_{1}(f))=G_{0}(a)$
+    and $\cod\,(G_{1}(f))=G_{0}(b)$, which goes as follows:
+        \begin{eqnarray*}\dom\,(G_{1}(f))
+            &=&\dom\,(\,F_{1}(f)\,,\,F_{2}(f))\ \leftarrow \
+            \mbox{$(2)$ of def.~(\ref{Fun:def:pairing})}\\
+            &=&\mbox{TODO}\\
+            \mbox{$(3)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&(\,\dom\,(\,F_{1}(f_{1})\,)\,,\,\dom\,(\,F_{2}(f_{2})\,)\,)\\
+            F_{1}(f_{1}):F_{1}(a_{1})\to F_{1}(b_{1})\ \to\ 
+            &=&(\,F_{1}(a_{1})\,,\,\dom\,(\,F_{2}(f_{2})\,)\,)\\
+            F_{2}(f_{2}):F_{2}(a_{2})\to F_{2}(b_{2})\ \to\ 
+            &=&(\,F_{1}(a_{1})\,,\,F_{2}(a_{2})\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
+            &=&G_{0}(a_{1},a_{2})\\
+            &=&G_{0}(a)
+        \end{eqnarray*}
+ 
+\end{proof}
+
+
+

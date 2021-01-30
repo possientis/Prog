@@ -33,14 +33,44 @@ progress `zero = done V-zero
 progress (`suc M) with progress M
 ... | step p = step (ξ-suc p)
 ... | done p = done (V-suc p)
-progress (case M M₁ M₂) = {!!}
-progress (eIf t t₁ t₂) = {!!}
-progress (μ t) = {!!}
-progress (eNum x) = {!!}
-progress (`+ t t₁) = {!!}
-progress (`* t t₁) = {!!}
-progress (eBool x) = {!!}
-progress (`= t t₁) = {!!}
-progress (`< t t₁) = {!!}
-progress (`∧ t t₁) = {!!}
-progress (`∨ t t₁) = {!!}
+progress (case M M₁ M₂) with progress M
+... | step p = step (ξ-case p)
+progress (case `zero M₁ M₂)    | done p = step β-zero
+progress (case (`suc M) M₁ M₂) | done (V-suc p) = step (β-suc p)
+progress (eIf M M₁ M₂) with progress M
+... | step p = step (ξ-if₀ p)
+progress (eIf (eBool false) M₁ M₂) | done p = step β-if₂
+progress (eIf (eBool true) M₁ M₂) | done p = step β-if₁
+progress (μ M) = step β-μ
+progress (eNum n) = done V-Num
+progress (eBool b)  = done V-Bool
+progress (`+ M₁ M₂) with progress M₁
+... | step p = step (ξ-+₁ p)
+... | done V-Num with progress M₂
+... | step p = step (ξ-+₂ V-Num p)
+... | done V-Num = step β-+
+progress (`* M₁ M₂) with progress M₁
+... | step p = step (ξ-*₁ p)
+... | done V-Num with progress M₂
+... | step p = step (ξ-*₂ V-Num p)
+... | done V-Num = step β-*
+progress (`= M₁ M₂) with progress M₁
+... | step p = step (ξ-=₁ p)
+... | done V-Num with progress M₂
+... | step p = step (ξ-=₂ V-Num p)
+... | done V-Num = step β-=
+progress (`< M₁ M₂) with progress M₁
+... | step p = step (ξ-<₁ p)
+... | done V-Num with progress M₂
+... | step p = step (ξ-<₂ V-Num p)
+... | done V-Num = step β-<
+progress (`∧ M₁ M₂) with progress M₁
+... | step p = step (ξ-∧₁ p)
+... | done V-Bool with progress M₂
+... | step p = step (ξ-∧₂ V-Bool p)
+... | done V-Bool = step β-∧
+progress (`∨ M₁ M₂) with progress M₁
+... | step p = step (ξ-∨₁ p)
+... | done V-Bool with progress M₂
+... | step p = step (ξ-∨₂ V-Bool p)
+... | done V-Bool = step β-∨
