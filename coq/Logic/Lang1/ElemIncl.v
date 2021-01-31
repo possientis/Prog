@@ -27,7 +27,7 @@ Lemma evalElemInclF : LEM -> forall (e:Env) (n m p:nat),
     p <> n ->
     eval e (elemInclF n m p) 
         <-> 
-    forall (x y:set), (x <= y <-> forall (z:set), z :: x -> z :: y). 
+    forall (x y:set), x <= y <-> forall (z:set), z :: x -> z :: y. 
 Proof.
     intros L e n m p Mmn Hpm Hpn. unfold elemInclF. rewrite evalAll. split; 
     intros H x.
@@ -89,7 +89,7 @@ Lemma evalElemInclFCtx : LEM -> forall (G:Context) (n m p:nat),
     n <> p -> 
     m <> p ->
     G :- (elemInclF n m p) >> 
-        forall (x y:set), (x <= y <-> forall (z:set), z :: x -> z :: y). 
+        forall (x y:set), x <= y <-> forall (z:set), z :: x -> z :: y.
 Proof.
     intros L G n m p H1 H2 H3. unfold elemInclF.
     apply evalAll. intros x. apply evalAll. intros y. 

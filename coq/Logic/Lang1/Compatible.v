@@ -51,7 +51,6 @@ Proof.
                     { apply H. }}}
 Qed.
 
-
 Import SemanCtx.
 Theorem formulaCompatibleCtx : 
     forall (G:Context) (p:Formula) (n:nat) (A:set -> Prop),
@@ -66,7 +65,6 @@ Proof.
           apply bindEqual', equalSym. assumption. }
     rewrite H6. assumption.
 Qed.
-
 
 (* Any two-fold predicate obtained by a formula is a compatible predicate.      *)
 Theorem formulaCompatible2 : forall (e:Env) (p:Formula) (n m:nat),
@@ -85,3 +83,19 @@ Proof.
         + assumption.
 Qed.
 
+Import SemanCtx.
+Theorem formulaCompatible2Ctx :
+    forall (G:Context) (p:Formula) (n m:nat) (A:set -> set -> Prop),
+    (forall (x y:set), G ; n~>x ; m~>y :- p >> (A x y)) -> compatible2 A.
+Proof.
+    intros G p n m A H1 x x' y y' H2 H3 H4. generalize H1. intros H1'.
+    specialize (H1 x y). specialize (H1' x' y').
+    assert (A x' y' <-> A x y) as H5.
+        { apply (evalDeterministic (G;n~>x;m~>y) p); try assumption.
+          apply evalCompat with (G;n~>x';m~>y'); try assumption.
+          apply bindCtxEqual.
+            { apply bindCtxEqual; try (apply ctxEqualRefl).
+              apply equalSym. assumption. }
+            { apply equalSym. assumption. }}
+    rewrite H5. assumption.
+Qed.

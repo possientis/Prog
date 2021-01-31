@@ -2,6 +2,7 @@ Require Import List.
 
 Require Import Logic.Class.Eq.
 Require Import Logic.Bool.Eq.
+Require Import Logic.Bool.Three.
 
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Permute.
@@ -517,24 +518,42 @@ Proof.
     intros v e p1 q x H1. apply almostAllRev, almostIsStrong. assumption.
 Qed.
 
-Definition V : Type := bool.
-Definition x : V := true.
-Definition y : V := false.
-
 (* This is why strong alpha-equivalence is not the right notion, as it fails    *)
 (* in cases when the set of variables is finite. Here card V = 2.               *)
-Lemma CounterExample1 : ~(All x (All y (Elem x y)) ~ All y (All x (Elem y x))).
+Lemma CounterExample1 : forall (x y:bool), x <> y ->
+    ~(All x (All y (Elem x y)) ~ All y (All x (Elem y x))).
 Proof.
+    intros x y Hxy.
     remember (All y (Elem x y)) as p1 eqn:H1. 
     remember (All x (Elem y x)) as q1 eqn:H2.
     intros H3. apply StrongAlphaAllRev in H3. destruct H3 as [H3|H3].
-    - destruct H3 as [p1' [H3 H4]]. inversion H4.
+    - destruct H3 as [p1' [H3 H4]]. inversion H4. subst. apply Hxy. reflexivity.
     - destruct H3 as [q1' [r [z [H3 [H4 [H5 [H6 H7]]]]]]]. 
       inversion H7. subst. clear H7. apply StrongAlphaAllRev in H4.
       destruct H4 as [H4|H4].
         + destruct H4 as [q1 [H4 H7]]. apply H6. rewrite H7. left. reflexivity.
-        + destruct H4 as [q1 [r' [z [H4 [H7 [H8 [H9 H10]]]]]]].
+        + destruct H4 as [q1 [r' [y [H4 [H7 [H8 [H9 H10]]]]]]].
           apply StrongAlphaElemRev in H7. 
           apply (onlyTwoElements x y z); try assumption.
-          intros H11. subst. apply H9. left. reflexivity.
+            { intros H11. subst. apply H9. left. reflexivity. }
+            { auto. }
 Qed.
+
+(*
+Lemma CounterExample2 : forall (x y z:Three), 
+    x <> y -> 
+    x <> z -> 
+    y <> z -> ~ (
+        All x (All y (All z (Imp (Elem x y) (Elem y z))))
+        ~
+        All y (All z (All x (Imp (Elem y z) (Elem z x))))).
+Proof.
+    intros x y z H1 H2 H3.
+    remember (All y (All z (Imp (Elem x y) (Elem y z)))) as p1 eqn:H4.
+    remember (All z (All x (Imp (Elem y z) (Elem z x)))) as q1 eqn:H5. 
+    intros H6. apply StrongAlphaAllRev in H6. destruct H6 as [H6|H6]. 
+    - destruct H6 as [p1' [H6 H7]]. inversion H7. subst. apply H1. reflexivity.
+    - destruct H6 as [q1' [r [u [H6 [H7 [H8 [H9 H10]]]]]]].
+      inversion H10 as [H11]. (* naming ??? *)
+Show.
+*)

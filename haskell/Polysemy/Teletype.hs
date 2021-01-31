@@ -1,23 +1,19 @@
 {-# LANGUAGE LambdaCase     #-}
 
-import Control.Monad
+module  Teletype
+    (   Teletype
+    ,   readLine
+    ,   writeLine
+    ,   runTeletype
+    ,   runTeletypePurely
+    )   where 
 
-main :: IO ()
-main = runTeletype echo2
+import Control.Monad
 
 data Teletype a
     = Done a
     | WriteLine String (Teletype a)
     | ReadLine (String -> Teletype a)
-
-echo1 :: Teletype ()
-echo1 = ReadLine $ \s -> WriteLine s (Done ())
-
-runTeletype :: Teletype a -> IO a
-runTeletype = \case
-    Done a        -> return a
-    WriteLine s k -> putStrLn s >>  runTeletype k
-    ReadLine f    -> getLine    >>= runTeletype . f
 
 instance Functor Teletype where
     fmap f = \case
@@ -42,9 +38,17 @@ readLine = ReadLine Done
 writeLine :: String -> Teletype ()
 writeLine s = WriteLine s $ Done ()
 
-echo2 :: Teletype ()
-echo2 = do
-    writeLine "What is your name:"
-    s <- readLine 
-    writeLine $ "Hello " ++ s ++ " please to meet you."
+runTeletype :: Teletype a -> IO a
+runTeletype = \case
+    Done a        -> return a
+    WriteLine s k -> putStrLn s >>  runTeletype k
+    ReadLine f    -> getLine    >>= runTeletype . f
+
+runTeletypePurely :: [String] -> Teletype a -> ([String], a)
+runTeletypePurely xs = \case
+    Done a        -> ([],a)
+    WriteLine s k -> let (ss,a) = runTeletypePurely xs k in (s:ss,a) 
+    ReadLine f    -> case xs of
+        []        -> runTeletypePurely [] (f "") -- missing input <-> "" input 
+        (s:ss)    -> runTeletypePurely ss (f s) 
 

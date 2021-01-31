@@ -24,7 +24,7 @@ Arguments CoSemiDecidable {a}.
 
 Lemma tsatSemiDecidable : SemiDecidable tsat.
 Proof.
-    exists (fun f n => f n). intros f. split; auto.
+    exists (fun f => f). intros f. split; auto.
 Qed.
 
 (* Difficult result which requires the use of the witness operator              *)

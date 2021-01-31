@@ -7,8 +7,8 @@ import Control.Monad
 
 import UI
 import Stream
-import Pairing
 import Console
+import Sequence
 import Component
 
 main :: IO ()
@@ -32,5 +32,5 @@ counterComponent = unfoldStream 0 (\state -> (render state, state + 1))
         render :: Int -> UI IO Sequence Console
         render state = \send -> 
             Console
-                (show state)                                    -- display the current value 
-                (\_input -> send $ return $ (Next (End ())))    -- move to next state
+                (show state)                                 
+                (\_input -> send $ return $ (Next (End ()))) 

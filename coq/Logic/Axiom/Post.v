@@ -103,13 +103,19 @@ Proof.
     intros M X [H1 H2]. apply Markov2Post; assumption.
 Qed.
 
-(*
+Definition helper (f:nat -> bool) : Sec (tsat f).
+Proof.
+    exists f. split; auto.
+Defined.
+
+(* This was hard.                                                               *) 
 Lemma MarkovSecCO : Markov ->
     (forall (X:Prop), Sec X -> Sec (~X)) -> CO.
 Proof.
     intros M H1. unfold CO. apply MarkovDecSec; try assumption. split.
     - apply tsatSemiDecidable.
-    - unfold CoSemiDecidable.
-Show.
-*)
-
+    - unfold CoSemiDecidable, SemiDecidable, SemiDeciderOf. 
+      remember (fun f => H1 (tsat f) (helper f)) as S eqn:ES.  
+      remember (fun f => proj1_sig (S f)) as F eqn:EF.
+      exists F. intros f. rewrite EF. apply (proj2_sig (S f)).
+Qed.

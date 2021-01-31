@@ -1,6 +1,6 @@
 Logic:
-Define Three on the same lines as Bool.
-prop 76.
+Fol/StrongAlpha
+Lam/StrongAlpha
 go back to book
 
 Haskell:
@@ -9,6 +9,7 @@ Latex:
 
 
 Set Theory:
+Lang1/Extensionality: evalDoubleInclFCtx
 continue expanding Lang1 with parallel context semantics results 
 axiom of choice?
 axiom of infinity false ?
@@ -20,7 +21,6 @@ proof system of each language
 extension of language
 
 Computational Type Theory with Coq:
-13.2.9 (Axiom/Post)
 go back to book
 
 

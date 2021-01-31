@@ -1,3 +1,15 @@
+module  Components.List
+    (   main
+    )   where
+
+import Control.Monad.State.Class
+
+import UI
+import Store
+import State
+import Console
+import Component
+
 -- type Component base w m a = w (UI base m a)
 -- base = IO            : base monad
 -- w = Store [String]   : space comonad

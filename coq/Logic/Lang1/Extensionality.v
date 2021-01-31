@@ -8,9 +8,12 @@ Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
+Require Import Logic.Lang1.Context.
+Require        Logic.Lang1.SemanCtx.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
 
+Open Scope Set_Incl_scope.
 
 (* Theorem 'extensionality' expressed in set theory abstract syntax.            *)
 (* This formulation is correct provided the variables names n m p are distinct. *)
@@ -22,6 +25,7 @@ Definition extensionalityF (n m p:nat) : Formula :=
 Definition doubleInclF (n m:nat) : Formula :=
     All n (All m (Iff (Equ n m) (And (Sub n m) (Sub m n)))).
 
+Import Semantics.
 (* Evaluating extensionalityF in any environment 'yields' the theorem.          *)
 Lemma evalExtensionalityF : LEM -> forall (e:Env) (n m p:nat),
     m <> n -> 
@@ -90,9 +94,31 @@ Proof.
         + assumption.
 Qed.
 
+Import SemanCtx.
+Lemma evalExtensionalityFCtx : LEM -> forall (G:Context) (n m p:nat),
+    n <> m  ->
+    n <> p  ->
+    m <> p  ->
+    G :- (extensionalityF n m p) >>
+        forall (x y:set), x == y <-> forall (z:set), z :: x <-> z :: y.
+Proof.
+    intros L G n m p H1 H2 H3. unfold extensionalityF.
+    apply evalAll. intros x. apply evalAll. intros y.
+    apply evalIff; try assumption.
+    - apply evalEqu; try assumption.
+        + apply FindS. assumption. apply FindZ.
+        + apply FindZ.
+    - apply evalAll. intros z. apply evalIff; try assumption.
+        + apply evalElem; try (apply FindZ).
+          apply FindS; try assumption. apply FindS; try assumption.
+          apply FindZ.
+        + apply evalElem; try (apply FindZ).
+          apply FindS; try assumption. apply FindZ.
+Qed.
 
+Import Semantics.
 (* Evaluating doubleInclF in any environment 'yields' the theorem doubleIncl.   *)
-Lemma evaldoubleInclF : LEM -> forall (e:Env) (n m:nat),
+Lemma evalDoubleInclF : LEM -> forall (e:Env) (n m:nat),
     m <> n -> 
     eval e (doubleInclF n m)
         <->
@@ -120,3 +146,4 @@ Proof.
         + assumption.
         + assumption.
 Qed.
+

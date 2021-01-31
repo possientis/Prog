@@ -24,7 +24,6 @@ toList n (Cons a s)
 instance Functor Stream where
     fmap f (Cons a s) = Cons (f a) (fmap f s)
 
-
 instance Comonad Stream where
     extract (Cons a _) = a
     duplicate s@(Cons _ s') = Cons s (duplicate s')
@@ -38,15 +37,11 @@ _stream0 = extend sumWithNext naturals
 next :: Stream a -> a
 next (Cons _ (Cons a _)) = a
 
--- extend :: Comonad w => (w a -> b) -> w a -> w b
--- (=>>)  :: Comonad w => w a -> (w a -> b) -> w b
-
 _first3 :: Stream a -> [a]
 _first3 stream = 
     let stream2 = stream  =>> next
         stream3 = stream2 =>> next
     in [extract stream, extract stream2, extract stream3]
-
 
 unfoldStream :: s -> (s -> (a,s)) -> Stream a
 unfoldStream initState getNext = Cons a (unfoldStream nextState getNext)
