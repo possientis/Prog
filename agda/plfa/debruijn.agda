@@ -9,6 +9,7 @@ open import Relation.Nullary             using (Dec; yes; no; ¬_)
 
 open import Lam.Type
 
+open import DeBruijn.Eval
 open import DeBruijn.Subst
 open import DeBruijn.Value
 open import DeBruijn.Syntax
@@ -145,4 +146,23 @@ _ = begin
   —→⟨ {!!} ⟩
   {!!}
 -}
+
+sucμ : ∅ ⊢ `ℕ
+sucμ = μ (`suc (# 0))
+
+_ : eval (gas 3) sucμ ≡
+  steps
+    (begin
+      sucμ
+      —→⟨ β-μ ⟩
+      `suc (μ `suc (# 0))
+      —→⟨ ξ-suc β-μ ⟩
+      `suc (`suc (μ `suc (# 0)))
+      —→⟨ ξ-suc (ξ-suc β-μ) ⟩
+      `suc (`suc (`suc (μ `suc (# 0))))
+     ∎)
+
+  out-of-gas
+
+_ = refl
 
