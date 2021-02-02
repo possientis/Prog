@@ -1,4 +1,3 @@
-pairing of 2 functors: F1:C->D1, F2:C -> D2, define <F1,F2>:C -> D1xD2
 bifunctor, profunctor
 partial functors F(A1,-), F(-,A2) of a bifunctor
 

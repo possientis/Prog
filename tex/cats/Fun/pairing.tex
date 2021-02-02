@@ -51,24 +51,58 @@ would arguably be harder to read.
 
     $(3)$: We need to show that $G_{1}(f):G_{0}(a)\to G_{0}(b)$ when
     $f:a\to b$: so consider $f\in\arr\ \Cat$ such that $\dom(f)=a$ and 
-    $\cod(f)=b$. We to show that $\dom\,(G_{1}(f))=G_{0}(a)$
+    $\cod(f)=b$. We need to show that $\dom\,(G_{1}(f))=G_{0}(a)$
     and $\cod\,(G_{1}(f))=G_{0}(b)$, which goes as follows:
         \begin{eqnarray*}\dom\,(G_{1}(f))
             &=&\dom\,(\,F_{1}(f)\,,\,F_{2}(f))\ \leftarrow \
             \mbox{$(2)$ of def.~(\ref{Fun:def:pairing})}\\
-            &=&\mbox{TODO}\\
             \mbox{$(3)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
-            &=&(\,\dom\,(\,F_{1}(f_{1})\,)\,,\,\dom\,(\,F_{2}(f_{2})\,)\,)\\
-            F_{1}(f_{1}):F_{1}(a_{1})\to F_{1}(b_{1})\ \to\ 
-            &=&(\,F_{1}(a_{1})\,,\,\dom\,(\,F_{2}(f_{2})\,)\,)\\
-            F_{2}(f_{2}):F_{2}(a_{2})\to F_{2}(b_{2})\ \to\ 
-            &=&(\,F_{1}(a_{1})\,,\,F_{2}(a_{2})\,)\\
-            \mbox{$(1)$ of def.~(\ref{Fun:def:canonical:product})}\ \to\ 
-            &=&G_{0}(a_{1},a_{2})\\
+            &=&(\,\dom\,(\,F_{1}(f)\,)\,,\,\dom\,(\,F_{2}(f)\,)\,)\\
+            F_{1}(f):F_{1}(a)\to F_{1}(b)\ \to\ 
+            &=&(\,F_{1}(a)\,,\,\dom\,(\,F_{2}(f)\,)\,)\\
+            F_{2}(f):F_{2}(a)\to F_{2}(b)\ \to\ 
+            &=&(\,F_{1}(a)\,,\,F_{2}(a)\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:pairing})}\ \to\ 
             &=&G_{0}(a)
         \end{eqnarray*}
- 
+        \begin{eqnarray*}\cod\,(G_{1}(f))
+            &=&\cod\,(\,F_{1}(f)\,,\,F_{2}(f))\ \leftarrow\ 
+            \mbox{$(2)$ of def.~(\ref{Fun:def:pairing})}\\
+            \mbox{$(4)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&(\,\cod\,(\,F_{1}(f)\,)\,,\,\cod\,(\,F_{2}(f)\,)\,)\\
+            F_{1}(f):F_{1}(a)\to F_{1}(b)\ \to\ 
+            &=&(\,F_{1}(b)\,,\,\cod\,(\,F_{2}(f)\,)\,)\\
+            F_{2}(f):F_{2}(a)\to F_{2}(b)\ \to\ 
+            &=&(\,F_{1}(b)\,,\,F_{2}(b)\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:pairing})}\ \to\ 
+            &=&G_{0}(b)
+        \end{eqnarray*}
+
+    $(4)$: We have $G_{1}(\,\id(a)\,)=\id(\,G_{0}(a)\,)$ for all $a\in\Cat$:
+        \begin{eqnarray*}G_{1}(\,\id(a)\,)
+            &=&(\,F_{1}(\,\id(a)\,)\,,\,F_{2}(\,\id(a)\,)\,)\ \leftarrow\ 
+            \mbox{$(2)$ of def.~(\ref{Fun:def:pairing})}\\
+            \mbox{$(4)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&(\,\id(\,F_{1}(a)\,)\,,\,\id(\,F_{2}(a)\,)\,)\\
+            \mbox{$(5)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&\id\,(\,F_{1}(a)\,,\,F_{2}(a)\,)\\
+            \mbox{$(1)$ of def.~(\ref{Fun:def:pairing})}\ \to\ 
+            &=&\id\,(G_{0}(a))
+        \end{eqnarray*}
+
+    $(5)$: We need to show that $G_{1}(g\circ f)=G_{1}(g)\circ G_{1}(f)$ 
+    for all $f:a\to b\ @\ \Cat$ and $g:b\to c\ @\ \Cat$. The proof goes
+    as follows:
+        \begin{eqnarray*}G_{1}(g\circ f)
+            &=&(\,F_{1}(\,g\circ f\,)\,,\,F_{2}(\,g\circ f\,)\,)\ \leftarrow\ 
+            \mbox{$(2)$ of def.~(\ref{Fun:def:pairing})}\\
+            \mbox{$(5)$ of def.~(\ref{Fun:def:functor})}\ \to\ 
+            &=&(\,F_{1}(g)\,\circ\, F_{1}(f)\,,\,F_{2}(g)\,
+                \circ\, F_{2}(f)\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&(\,F_{1}(g)\,,\,F_{2}(g)\,)\,\circ\,(\,F_{1}(f)\,
+                \,,\,F_{2}(f)\,)\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:pairing})}\ \to\ 
+            &=&G_{1}(g)\,\circ\,G_{1}(f)
+        \end{eqnarray*}
 \end{proof}
-
-
-
