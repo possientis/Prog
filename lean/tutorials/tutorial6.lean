@@ -56,3 +56,19 @@ begin
   apply unique_limit; assumption
 end
 
+def cauchy_sequence (u : ℕ → ℝ) :=
+  ∀ ε > 0, ∃ N, ∀ p q, p ≥ N → q ≥ N → |u p - u q| ≤ ε
+
+example : (∃ l, seq_limit u l) → cauchy_sequence u :=
+begin
+  rintros ⟨l,H₁⟩ ε H₂, specialize H₁ (ε/2) (half_pos H₂), cases H₁ with N H₁, use N,
+  intros p q H₃ H₄,
+  have H₅ : |u p - l| ≤ ε/2, { apply H₁, assumption },
+  have H₆ : |u q - l| ≤ ε/2, { apply H₁, assumption },
+  calc
+    |u p - u q| = |u p - l  + (l - u q)|  : by { apply congr; try {refl}, ring }
+    ...         ≤ |u p - l| + |l - u q|   : by { apply abs_add }
+    ...         = |u p - l| + |u q - l|   : by { rw (abs_sub (u q)) }
+    ...         ≤ ε/2 + ε/2               : by linarith
+    ...         = ε                       : by ring
+end

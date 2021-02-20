@@ -8,8 +8,8 @@ Require Import Logic.Set.Elem.
 
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Context.
-Require        Logic.Lang1.SemanCtx.
-Require        Logic.Lang1.Semantics.
+Require Import Logic.Lang1.SemanCtx.
+Require Import  Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
 
 Open Scope Set_Incl_scope.

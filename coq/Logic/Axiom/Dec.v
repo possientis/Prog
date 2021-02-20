@@ -1,7 +1,7 @@
 (* A proposition is (computationally) decidable                                 *)
 Definition Dec (A:Prop) : Type := {A} + {~A}.
 
-(* a predicate is (comptationally) decidable                                    *)
+(* A predicate is (computationally) decidable                                    *)
 Definition pDec (a:Type) (p:a -> Prop) : Type := forall (x:a), Dec (p x).
 
 Arguments pDec {a}.

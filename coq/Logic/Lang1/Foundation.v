@@ -9,14 +9,19 @@ Require Import Logic.Set.Equal.
 Require Import Logic.Set.Foundation.
 
 Require Import Logic.Lang1.Syntax.
+Require Import Logic.Lang1.Context.
+Require Import Logic.Lang1.SemanCtx.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
+
+Open Scope Set_Incl_scope.
 
 (* Lemma 'coherence' expressed in set theory abstract syntax.                   *)
 (* This formulation is correct provided the variables n m are distinct.         *)
 Definition coherenceF (n m:nat) : Formula :=
     All n (All m (Imp (Sub n m) (Not (Elem m n)))).
 
+Import Semantics.
 (* Evaluating coherenceF in any environment 'yields' the lemma coherence.       *)
 Lemma evalCoherenceF : LEM -> forall (e:Env) (n m:nat),
     m <> n ->
@@ -36,9 +41,27 @@ Proof.
         + assumption.
 Qed.
 
+
+Import SemanCtx.
+Lemma evalCoherenceFCtx : LEM -> forall (G:Context) (n m:nat),
+    n <> m ->
+    G :- (coherenceF n m) >>
+        forall (x y:set), x <= y -> ~ y :: x.
+Proof.
+    intros L G n m H1. unfold coherenceF.
+    apply evalAll. intros x. apply evalAll. intros y. apply evalImp.
+    - apply evalSub.
+        + apply FindS; try assumption. apply FindZ.
+        + apply FindZ.
+    - apply evalNot, evalElem.
+        + apply FindZ.
+        + apply FindS; try assumption. apply FindZ.
+Qed.
+ 
 (* Lemma 'noSelfElem' expressed in set theory abstract syntax.                  *)
 Definition noSelfElemF (n:nat) : Formula := All n (Not (Elem n n)).
 
+Import Semantics.
 (* Evaluating noSelfElemF in any environment 'yields' the lemma noSelfElem.     *)
 Lemma evalNoSelfElemF : forall (e:Env) (n:nat),
     eval e (noSelfElemF n) <-> forall (x:set), ~ x :: x.
@@ -108,4 +131,3 @@ Proof.
         + assumption.
         + assumption.
 Qed.
-

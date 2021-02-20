@@ -9,7 +9,7 @@ Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
 Require Import Logic.Lang1.Context.
-Require        Logic.Lang1.SemanCtx.
+Require Import Logic.Lang1.SemanCtx.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
 
@@ -147,3 +147,24 @@ Proof.
         + assumption.
 Qed.
 
+Import SemanCtx.
+Lemma evalDoubleInclFCtx : LEM -> forall (G:Context) (n m:nat),
+    n <> m -> 
+    G :- (doubleInclF n m) >>
+        forall (x y:set), x == y <-> (x <= y) /\ (y <= x).
+Proof.
+    intros L G n m H1. unfold doubleInclF.
+    apply evalAll. intros x. apply evalAll. intros y.
+    apply evalIff; try assumption.
+    - apply evalEqu; try assumption.
+        + apply FindS; try assumption. apply FindZ.
+        + apply FindZ.
+    - apply evalAnd; try assumption.
+        + apply evalSub. 
+            { apply FindS; try assumption. apply FindZ. }
+            { apply FindZ. }
+        + apply evalSub.
+            { apply FindZ. }
+            { apply FindS; try assumption. apply FindZ. }
+Qed.
+ 

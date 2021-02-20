@@ -5,6 +5,11 @@ Require Import Logic.Axiom.Witness.
 (* A proposition has a semi-decider                                             *)
 Definition Sec (A:Prop) : Type := sig (fun f => A <-> tsat f). 
 
+(* A predicate is (computationally) semi-decidable                              *)
+Definition pSec (a:Type) (p:a -> Prop) : Type := forall (x:a), Sec (p x).
+
+Arguments pSec {a}.
+
 (* The function F is a semi-decider of the predicate p.                         *)
 Definition SemiDeciderOf (a:Type) (p:a -> Prop)(F:a -> nat -> bool) : Prop :=
     forall (x:a), p x <-> tsat (F x).
@@ -16,6 +21,15 @@ Definition SemiDecidable (a:Type) (p:a -> Prop) : Prop :=
     exists (F:a -> nat -> bool), SemiDeciderOf p F.
 
 Arguments SemiDecidable {a}.
+
+Lemma pSecSemiDecidable : forall (a:Type) (p:a -> Prop),
+    pSec p -> SemiDecidable p.
+Proof.
+    intros a p H1. unfold pSec in H1.
+    exists (fun (x:a) => proj1_sig (H1 x)).
+    intros x. apply (proj2_sig (H1 x)).
+Qed.
+
 
 Definition CoSemiDecidable (a:Type) (p:a -> Prop) : Prop :=
     SemiDecidable (fun x => ~p x).

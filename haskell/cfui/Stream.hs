@@ -47,5 +47,3 @@ unfoldStream :: s -> (s -> (a,s)) -> Stream a
 unfoldStream initState getNext = Cons a (unfoldStream nextState getNext)
     where
     (a, nextState) = getNext initState
-
-

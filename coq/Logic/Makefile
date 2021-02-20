@@ -38,7 +38,8 @@ AXIOM_OBJ = ${AXIOM}/Extensionality.vo \
 			${AXIOM}/Sec.vo \
 			${AXIOM}/Markov.vo \
 			${AXIOM}/Witness.vo \
-			${AXIOM}/Post.vo
+			${AXIOM}/Post.vo \
+			${AXIOM}/Reduction.vo
 
 CLASS_OBJ = ${CLASS}/Ord.vo \
 		   	${CLASS}/Eq.vo	

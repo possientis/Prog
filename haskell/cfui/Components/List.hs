@@ -27,8 +27,8 @@ listComponent = Store render initStore where
     -- send :: State [String] () -> IO ()
     render :: [String] -> UI IO (State [String]) Console
     render xs send = Console
-        { _text   = "I have received:\n" ++ show xs
-        , _action = \input -> send $
+        { text   = "I have received:\n" ++ show xs
+        , action = \input -> send $
             if input == "" 
                 then return $ put [] 
                 else return $ modify (++[input])
