@@ -553,7 +553,28 @@ Proof.
     remember (All z (All x (Imp (Elem y z) (Elem z x)))) as q1 eqn:H5. 
     intros H6. apply StrongAlphaAllRev in H6. destruct H6 as [H6|H6]. 
     - destruct H6 as [p1' [H6 H7]]. inversion H7. subst. apply H1. reflexivity.
-    - destruct H6 as [q1' [r [u [H6 [H7 [H8 [H9 H10]]]]]]].
-      inversion H10 as [H11]. (* naming ??? *)
+    - destruct H6 as [q1' [r [u [H6 [H7 [H8 [H9 H10]]]]]]]. inversion H10. 
+      rewrite <- H11 in H8. (* H11 name is auto *)
+      rewrite <- H0  in H8. (* H0  name is auto *)
+      rewrite <- H0  in H9. (* H0  name is auto *)
+      clear H0 H6 H10 H11 q1' u.
+      rewrite H4 in H7. generalize H7. intros G7.
+        apply StrongAlphaAllRev in H7. destruct H7 as [H7|H7].
+        + destruct H7 as [q1' [H7 H10]]. apply H9. rewrite H10. 
+          left. reflexivity.
+        + destruct H7 as [q2 [r2 [u [H7 [H10 [H11 [H12 H13]]]]]]].
+          destruct (eqDec u y) as [H14|H14].
+            { subst. apply H9. left. reflexivity. }
+            { destruct (eqDec u x) as [H15|H15]. 
+                { assert (~ x :: Fr r) as H16.
+                    { intros H16. rewrite H15 in H13. rewrite H13 in H16.
+                      simpl in H16. apply remove_x_gone in H16. assumption. }
+                  apply H16. assert 
+                    (Fr (All y (All z (Imp (Elem x y) (Elem y z)))) = Fr r) as H17.
+                        { apply StrongAlpha_free. assumption. }
+                  rewrite <- H17. simpl.
+                  apply remove_still.
+                    {  auto. }
+                    { 
 Show.
 *)

@@ -22,6 +22,7 @@ rm -f a.out
 ./adi/clean.sh
 ./adh/clean.sh
 ./Set/clean.sh
+./Crypto/clean.sh
 
 
 cd ${DIR}

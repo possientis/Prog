@@ -1,7 +1,7 @@
 {-# LANGUAGE LambdaCase     #-}
 
 module  Teletype
-    (   Teletype
+    (   Teletype    (..)
     ,   readLine
     ,   writeLine
     ,   runTeletype

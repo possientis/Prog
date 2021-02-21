@@ -166,3 +166,42 @@ _ : eval (gas 3) sucμ ≡
 
 _ = refl
 
+_ : eval (gas 100) (twoᶜ · sucᶜ · `zero) ≡
+  steps
+    (begin
+      twoᶜ · sucᶜ · `zero
+      —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
+      _
+      —→⟨ β-ƛ V-zero ⟩
+      _
+      —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
+      _
+      —→⟨ β-ƛ (V-suc V-zero) ⟩
+      `suc `suc `zero
+      ∎)
+    (done (V-suc (V-suc V-zero)))
+
+_ = refl
+
+{- Too slow
+_ : eval (gas 100) (plus · two · two) ≡
+  steps
+    (begin
+      plus · two · two
+      —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
+      _
+      —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
+      _
+      —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
+      _
+      —→⟨ β-suc (V-suc V-zero) ⟩
+      _
+      —→⟨ ξ-suc (ξ-·₁ (ξ-·₁ β-μ)) ⟩
+      _
+      —→⟨ ξ-suc (ξ-·₁ (β-ƛ (V-suc V-zero))) ⟩
+      _ —→⟨ {!!} ⟩ {!!})
+    (done (V-suc (V-suc (V-suc (V-suc V-zero)))))
+
+_ = {!!}
+
+-}

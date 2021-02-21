@@ -4,9 +4,36 @@
     \Ctwo, where \Dat\ is also a category.
 \end{defin}
 
-\begin{defin}\label{Fun:def:profunctor}
-    We call {\em profunctor} any functor $F:\Coneop\times\Ctwo\to\Dat$ defined
-    on the cartesian product $\Coneop\times\Ctwo$ between the opposite 
-    category $\Coneop$ of a category \Cone\ and a category \Ctwo, 
-    where \Dat\ is also a category.
+\begin{defin}\label{Fun:def:partial:functor:1}
+    Let $F:\Cone\times\Ctwo\to\Dat$ be a bifunctor and let $a_{1}\in\Cone$. 
+    We call {\em first partial functor at} $a_{1}$, the functor $G:\Ctwo\to\Dat$ 
+    defined by $G=(G_{0},G_{1})$ with:
+        \begin{eqnarray*}
+            (1)&\ &G_{0}(a_{2}) = F(a_{1},a_{2})\\
+            (2)&\ &G_{1}(f_{2}) = F(\id(a_{1}),f_{2})
+        \end{eqnarray*}
+    where $(1)-(2)$ hold for all $a_{2}\in\ob\ \Ctwo$ and $f_{2}\in\arr\ \Ctwo$.
 \end{defin}
+
+\noindent
+{\bf Remark}: As per notation~(\ref{Fun:notation:functor:F0:F1}),
+we are using the same notation $F$ in definition~(\ref{Fun:def:partial:functor:1}) 
+to describe the actions of the functor on both objects and arrows.
+
+
+\noindent
+{\bf Remark}: Given $a_{2}\in\ob\ \Ctwo$, from 
+definition~(\ref{Cat:def:canonical:product}) the ordered pair $(a_{1},a_{2})$
+is a well-defined object of the product category $\Cone\times\Ctwo$ and 
+$F(a_{1},a_{2})$ is therefore a well-defined object of the category \Dat.
+
+\noindent
+{\bf Remark}: Given $f_{2}\in\arr\ \Ctwo$, from
+definition~(\ref{Cat:def:canonical:product}) and the fact that $\id(a_{1})$
+is an arrow in \Cone, the ordered pair $(\id(a_{1}),f_{2})$ is a 
+well-defined arrow of $\Cone\times\Ctwo$ and
+$F(\id(a_{1}),f_{2})$ is therefore a well-defined arrow of the category \Dat.
+
+\begin{notation}\label{Fun:notation:partial:functor:1}
+    The first partial functor of $F$ at $a_{1}$ is denoted $F(a_{1},-)$.
+\end{notation}
