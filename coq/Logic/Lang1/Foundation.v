@@ -23,13 +23,13 @@ Definition coherenceF (n m:nat) : Formula :=
 
 Import Semantics.
 (* Evaluating coherenceF in any environment 'yields' the lemma coherence.       *)
-Lemma evalCoherenceF : LEM -> forall (e:Env) (n m:nat),
+Lemma evalCoherenceF : forall (e:Env) (n m:nat),
     m <> n ->
     eval e (coherenceF n m)
         <->
     forall (x y:set), x <= y -> ~ y :: x.
 Proof.
-    intros L e n m Hmn. unfold coherenceF. rewrite evalAll. split; intros H x.
+    intros e n m Hmn. unfold coherenceF. rewrite evalAll. split; intros H x.
     - remember (H x)  as H' eqn:E. clear E H.  rewrite evalAll in H'. intros y.
       remember (H' y) as H  eqn:E. clear E H'. rewrite evalImp in H. 
       rewrite evalSub in H. rewrite evalNot in H. rewrite evalElem in H.
@@ -43,12 +43,12 @@ Qed.
 
 
 Import SemanCtx.
-Lemma evalCoherenceFCtx : LEM -> forall (G:Context) (n m:nat),
+Lemma evalCoherenceFCtx : forall (G:Context) (n m:nat),
     n <> m ->
     G :- (coherenceF n m) >>
         forall (x y:set), x <= y -> ~ y :: x.
 Proof.
-    intros L G n m H1. unfold coherenceF.
+    intros G n m H1. unfold coherenceF.
     apply evalAll. intros x. apply evalAll. intros y. apply evalImp.
     - apply evalSub.
         + apply FindS; try assumption. apply FindZ.
@@ -72,12 +72,20 @@ Proof.
     - rewrite evalNot, evalElem, bindSame. apply H.
 Qed.
 
+Import SemanCtx.
+Lemma evalNoSelfElemFCtx : forall (G:Context) (n:nat),
+    G :- (noSelfElemF n) >>  forall (x:set), ~ x :: x.
+Proof.
+    intros G n. unfold noSelfElemF.
+    apply evalAll. intros x. apply evalNot, evalElem; apply FindZ.
+Qed.
+
 
 (* Lemma 'noUniverse' expressed in set theory abstract syntax.                  *)
 (* This formulation is correct provided the variables n m are distinct.         *)
 Definition noUniverseF (n m:nat) : Formula := Not (Exi n (All m (Elem m n))).
 
-
+Import Semantics.
 (* Evaluating noUniverseF in any environment 'yields' the lemma noUniverse.     *)
 Lemma evalNoUniverseF : LEM -> forall (e:Env) (n m:nat),
     m <> n ->
@@ -95,6 +103,17 @@ Proof.
     - assumption.
 Qed.
 
+Import SemanCtx.
+Lemma evalNoUniverseFCtx : LEM -> forall (G:Context) (n m:nat),
+    n <> m ->
+    G :- (noUniverseF n m) >>
+        ~ exists (x:set), forall (y:set), y :: x.
+Proof.
+    intros L G n m H1. unfold noUniverseF.
+    apply evalNot, evalExi; try assumption. intros x. apply evalAll. intros y.
+    apply evalElem; try (apply FindZ). apply FindS; try assumption. apply FindZ.
+Qed.
+ 
 
 (* Theorem 'foundation' expressed in set theory abstract syntax.                *)
 (* This formulation is correct provided the variables n m are distinct.         *)
@@ -103,7 +122,7 @@ Qed.
 Definition foundationF (n m:nat) : Formula := 
     All n (Imp (Not (Empty n)) (Exi m (Min m n))).
 
-
+Import Semantics.
 (* Evaluating foundationF in any environment 'yields' the theorem foundation.   *)
 Lemma evalFoundationF : LEM -> forall (e:Env) (n m:nat),
     m <> n ->
@@ -130,4 +149,18 @@ Proof.
         + assumption.
         + assumption.
         + assumption.
+Qed.
+
+Import SemanCtx.
+Lemma evalFoundationFCtx : LEM -> forall (G:Context) (n m:nat),
+    n <> m ->
+    G :- (foundationF n m)  >>
+        forall (x:set), ~(x == Nil) -> exists (y:set), minimal y x.
+Proof.
+    intros L G n m H1. unfold foundationF. 
+    apply evalAll. intros x. apply evalImp. 
+    - apply evalNot, evalEmpty, FindZ.
+    - apply evalExi; try assumption. intros y. apply evalMin; try assumption.
+        + apply FindZ.
+        + apply FindS; try assumption. apply FindZ.
 Qed.

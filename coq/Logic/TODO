@@ -9,7 +9,7 @@ Latex:
 
 
 Set Theory:
-Lang1/Foundation
+Lang1/Pairing
 continue expanding Lang1 with parallel context semantics results 
 axiom of choice?
 axiom of infinity false ?
@@ -21,7 +21,7 @@ proof system of each language
 extension of language
 
 Computational Type Theory with Coq:
-Axiom/Reduction: 13.3.1
+Axiom/Reduction: 13.3.2
 go back to book
 
 

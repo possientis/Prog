@@ -72,3 +72,15 @@ begin
     ...         ≤ ε/2 + ε/2               : by linarith
     ...         = ε                       : by ring
 end
+
+example : cauchy_sequence u → cluster_point u l → seq_limit u l :=
+begin
+  intros H₁ H₂ ε H₃, specialize H₁ (ε/2) (half_pos H₃), cases H₁ with N H₁, use N,
+  intros n H₄, have H₅ : ∃ m ≥ N, |u m - l| ≤ ε/2,
+    { apply near_cluster, assumption, apply half_pos, assumption },
+  rcases H₅ with ⟨m,H₅,H₆⟩, specialize H₁ n m H₄ H₅, calc
+    |u n - l|  = |(u n - u m) + (u m - l)|  : by { apply congr; try {refl}, ring}
+    ...        ≤ |u n - u m| + |u m - l|    : by { apply abs_add }
+    ...        ≤ ε/2 + ε/2                  : by linarith
+    ...        = ε                          : by ring
+end

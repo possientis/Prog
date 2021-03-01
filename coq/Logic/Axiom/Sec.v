@@ -30,7 +30,6 @@ Proof.
     intros x. apply (proj2_sig (H1 x)).
 Qed.
 
-
 Definition CoSemiDecidable (a:Type) (p:a -> Prop) : Prop :=
     SemiDecidable (fun x => ~p x).
 
