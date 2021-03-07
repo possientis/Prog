@@ -37,3 +37,46 @@ $F(\id(a_{1}),f_{2})$ is therefore a well-defined arrow of the category \Dat.
 \begin{notation}\label{Fun:notation:partial:functor:1}
     The first partial functor of $F$ at $a_{1}$ is denoted $F(a_{1},-)$.
 \end{notation}
+
+\begin{prop}\label{Fun:prop:partial:functor:1}
+    Let $F:\Cone\times\Ctwo\to\Dat$ be a bifunctor and let $a_{1}\in\Cone$. 
+    Then the first partial functor at $a_{1}$ of $F$ is indeed a functor
+    $F(a_{1},-):\Ctwo\to\Dat$.
+\end{prop}
+\begin{proof}
+    Let $G=(G_{0},G_{1})$ denote the first partial functor at $a_{1}$. 
+    We need to check that properties~$(1)-(5)$ of 
+    definition~(\ref{Fun:def:functor}) are satisfied, which goes as follows:
+
+    $(1)$: $G_{0}$ is indeed a map $G_{0}:\ob\ \Ctwo\to\ob\ \Dat$: it is 
+    defined on the collection $\ob\ \Ctwo$ and for all $a_{2}\in\ob\ \Ctwo$,
+    $G_{0}(a_{2})=F(a_{1},a_{2})$ is an element of $\ob\ \Dat$.
+
+    $(2)$: $G_{1}$ is indeed a map $G_{1}:\arr\ \Ctwo\to\arr\ \Dat$: it is 
+    defined on the collection $\arr\ \Ctwo$ and for all $f_{2}\in\arr\ \Ctwo$,
+    $G_{1}(f_{2})=F(\id(a_{1}),f_{2})$ is an element of $\arr\ \Dat$.
+
+    $(3)$: We need to show that $G_{1}(f_{2}):G_{0}(a_{2})\to G_{0}(b_{2})$ 
+    whenever we have $f_{2}:a_{2}\to b_{2}\ @\ \Ctwo$. So we need to 
+    show that $F(\id(a_{1}),f_{2}):F(a_{1},a_{2})\to F(a_{1},b_{2})$. However,
+    this follows immediately from the functoriality of $F$ and the fact that
+    $(\id(a_{1}),f_{2}):(a_{1},a_{2})\to (a_{1},b_{2})\ @\ \Cone\times\Ctwo$
+    since $\id(a_{1}):a_{1}\to a_{1}\ @\ \Cone$ and $f_{2}:a_{2}\to b_{2}
+    \ @\ \Ctwo$, and using definition~(\ref{Cat:def:canonical:product}).
+    
+    $(4)$: We need to show that $G_{1}(\id(a_{2}))=\id(\,G_{0}(a_{2})\,)$ for
+    all $a_{2}\in\ob\ \Ctwo$. In other words, we need to show that
+    $F(\id(a_{1}),\id(a_{2}))=\id(\,F(a_{1},a_{2})\,)$, which follows
+    immediately from the functoriality of $F$ and
+    $(\id(a_{1}),\id(a_{2}))=\id(a_{1},a_{2})$.
+
+    $(5)$: We need to show that $G_{1}(g_{2}\circ f_{2})=G_{1}(g_{2})
+    \circ G_{1}(f_{2})$ whenever we have $f_{2}:a_{2}\to b_{2}\ @\ \Ctwo$ and 
+    $g:b_{2}\to c_{2}\ @\ \Ctwo$. This goes as follows:
+        \begin{eqnarray*}G_{1}(g_{2}\circ f_{2})
+            &=&F(\id(a_{1}),g_{2}\circ f_{2})\ \leftarrow\ 
+            \mbox{$(2)$ of def.~(\ref{Fun:def:partial:functor:1})}\\
+            TODO
+        \end{eqnarray*}
+ 
+\end{proof}

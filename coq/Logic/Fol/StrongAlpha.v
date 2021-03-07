@@ -539,7 +539,7 @@ Proof.
             { auto. }
 Qed.
 
-(*
+(* Another example of failure, this time with a three-element variable set.     *)
 Lemma CounterExample2 : forall (x y z:Three), 
     x <> y -> 
     x <> z -> 
@@ -559,22 +559,59 @@ Proof.
       rewrite <- H0  in H9. (* H0  name is auto *)
       clear H0 H6 H10 H11 q1' u.
       rewrite H4 in H7. generalize H7. intros G7.
-        apply StrongAlphaAllRev in H7. destruct H7 as [H7|H7].
+      apply StrongAlphaAllRev in H7. destruct H7 as [H7|H7].
         + destruct H7 as [q1' [H7 H10]]. apply H9. rewrite H10. 
           left. reflexivity.
-        + destruct H7 as [q2 [r2 [u [H7 [H10 [H11 [H12 H13]]]]]]].
-          destruct (eqDec u y) as [H14|H14].
-            { subst. apply H9. left. reflexivity. }
-            { destruct (eqDec u x) as [H15|H15]. 
-                { assert (~ x :: Fr r) as H16.
-                    { intros H16. rewrite H15 in H13. rewrite H13 in H16.
-                      simpl in H16. apply remove_x_gone in H16. assumption. }
-                  apply H16. assert 
-                    (Fr (All y (All z (Imp (Elem x y) (Elem y z)))) = Fr r) as H17.
-                        { apply StrongAlpha_free. assumption. }
-                  rewrite <- H17. simpl.
-                  apply remove_still.
-                    {  auto. }
-                    { 
-Show.
-*)
+        + destruct H7 as [q2 [r2 [u [H7 [H10 [H11 [H12 H13]]]]]]]. 
+          destruct (eqDec x u) as [H14|H14].
+            { assert (~ x :: Fr r) as H15. 
+                { intros H15. rewrite <- H14 in H13. rewrite H13 in H15.
+                  simpl in H15. apply remove_x_gone in H15. assumption. }
+              apply H15. 
+              assert (Fr(All y (All z (Imp (Elem x y) (Elem y z)))) = Fr r) as H16. 
+                { apply StrongAlpha_free. assumption. }
+              rewrite <- H16. 
+              apply remove_still; try auto.
+              apply remove_still; try auto.
+              left. reflexivity. }
+            { destruct (eqDec z u) as [H15|H15].
+                { rewrite <- H15 in H13. 
+                  apply StrongAlphaAllRev in G7. destruct G7 as [G7|G7].
+                    { destruct G7 as [q3 [G8 G9]]. rewrite H13 in G9.
+                      inversion G9. subst. apply H3. reflexivity. }
+                    { destruct G7 as [q3 [r3 [v [G8 [G9 [G10 [G11 G12]]]]]]].
+                      rewrite H13 in G12. inversion G12. rewrite <- H6 in G10.
+                      rewrite <- H0 in G10. (* H0 name is auto *)
+                      rewrite <- H0 in G11. clear G8 G12 H0 H6 v.
+                      generalize G9. intros K9.
+                      apply StrongAlphaAllRev in G9. destruct G9 as [G9|G9].
+                        { destruct G9 as [q4 [G12 G13]]. apply G11. rewrite G13.
+                          left. reflexivity. }
+                        { destruct G9 as [q4 [r4 [v [G12 [G13 [G14 [G15 G16]]]]]]].
+                            { destruct (eqDec x v) as [K10|K10].
+                                { rewrite <- K10 in G16.
+                                  assert (~ x :: Fr r3) as K11.
+                                    { intros K11. rewrite G16 in K11.
+                                      apply remove_x_gone in K11. assumption. }
+                                  assert (Fr(All z (Imp (Elem x y) (Elem y z)))
+                                    = Fr r3) as K13.
+                                    { apply StrongAlpha_free. assumption. }
+                                  apply K11. rewrite <- K13.
+                                  apply remove_still; try auto.
+                                  left. reflexivity. }
+                                { destruct (eqDec y v) as [K11|K11].
+                                    { rewrite <- K11 in G16.
+                                      assert (~ y :: Fr r3) as K12.
+                                        { intros K12. rewrite G16 in K12.
+                                          apply remove_x_gone in K12. assumption. }
+                                       assert 
+                                        (Fr(All z (Imp (Elem x y) (Elem y z)))
+                                        = Fr r3) as K13.
+                                        { apply StrongAlpha_free. assumption. }
+                                       apply K12. rewrite <- K13.
+                                       apply remove_still; try auto.
+                                       right. left. reflexivity. }
+                                    { apply (onlyThreeElements x y z v); 
+                                      auto. }}}}}}
+                { apply (onlyThreeElements x y z u); auto. }}
+Qed.
