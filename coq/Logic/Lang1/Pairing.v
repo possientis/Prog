@@ -7,14 +7,19 @@ Require Import Logic.Set.Elem.
 Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
+Require Import Logic.Lang1.Context.
+Require Import Logic.Lang1.SemanCtx.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
+
+Open Scope Set_Incl_scope.
 
 (* Theorem 'pairing' expressed in set theory abstract syntax.                   *)
 (* This formulation is correct provided the variables n m p q are distinct.     *)
 Definition pairingF (n m p q:nat) : Formula :=
     All n (All m (Exi p (All q (Iff (Elem q p) (Or (Equ q n) (Equ q m)))))).
 
+Import Semantics.
 (* Evaluating pairingF in any environment 'yields' the theorem pairing.         *)
 Lemma evalPairingF : LEM -> forall (e:Env) (n m p q:nat),
     m <> n ->
@@ -79,4 +84,29 @@ Proof.
         + assumption.
 Qed.
 
-
+Import SemanCtx.
+Lemma evalPairingFCtx : LEM -> forall (G:Context) (n m p q:nat),
+    n <> m ->
+    n <> p ->
+    n <> q ->
+    m <> p ->
+    m <> q ->
+    p <> q ->
+    G :- (pairingF n m p q) >>
+        forall (x y:set), exists (z:set), forall (u:set),
+            u :: z <-> (u == x) \/ (u == y).
+Proof.
+    intros L G n m p q H1 H2 H3 H4 H5 H6. unfold pairingF. 
+    apply evalAll. intros x. apply evalAll. intros y.
+    apply evalExi; try assumption. intros z. apply evalAll. intros u.
+    apply evalIff; try assumption.
+    - apply evalElem; try (apply FindZ). apply FindS; try assumption.
+      apply FindZ.
+    - apply evalOr; try assumption.
+        + apply evalEqu; try assumption; try (apply FindZ).
+          apply FindS; try assumption. apply FindS; try assumption.
+          apply FindS; try assumption. apply FindZ.
+        + apply evalEqu; try assumption; try (apply FindZ).
+          apply FindS; try assumption. apply FindS; try assumption.
+          apply FindZ.
+Qed.

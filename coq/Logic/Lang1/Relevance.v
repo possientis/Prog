@@ -5,15 +5,20 @@ Require Import Logic.Class.Eq.
 Require Import Logic.List.Remove.
 
 Require Import Logic.Fol.Free.
+Require Import Logic.Fol.Syntax.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
+Require Import Logic.Lang1.Context.
+Require Import Logic.Lang1.SemanCtx.
 Require Import Logic.Lang1.Semantics.
 Require Import Logic.Lang1.Environment.
 
+Open Scope Set_Incl_scope.
 
+Import Semantics.
 Lemma relevance : forall (e e':Env) (p:Formula), 
     envEqualOn p e e' -> eval e p <-> eval e' p.
 Proof.
@@ -63,4 +68,18 @@ Proof.
     intros e e' p H1. apply relevance. apply envEqualEnvEqualOn. assumption.
 Qed.
 
+(*
 
+(* There is not much value in proving the equivalence                           *)
+Import SemanCtx.
+Lemma relevanceCtx : forall (G G':Context) (p:Formula) (A:Prop), 
+    ctxEqualOn p G G' -> G :- p >> A -> G' :- p >> A.
+Proof.
+    intros G G' p. unfold ctxEqualOn. revert G G'.
+    induction p as [|n m|p1 IH1 p2 IH2|n p1 IH1]; intros G G' A H1 H2.
+    - apply EvalEqu with False.
+        + apply (evalDeterministic G Bot); try assumption. constructor.
+        + constructor.
+    -
+Show.
+*)
