@@ -151,14 +151,14 @@ defining specialization axioms: the level of mathematical
 sophistication required to follow the analysis is a lot higher and
 most people will stop reading. Surely we do not want that. Another
 drawback is that essential substitutions are intertwined with the
-notion of substitution congruence. If $\sigma:\pv\to \pv$ is an
+notion of alpha equivalence. If $\sigma:\pv\to \pv$ is an
 essential substitution and $\phi\in\pv$ then $\sigma(\phi)$ is of
 course a well defined formula of \pv\ but the specifics of
 $\sigma(\phi)$ are usually unknown. We typically only know about the
-class of $\sigma(\phi)$ modulo the substitution congruence. Luckily
+class of $\sigma(\phi)$ modulo alpha equivalence. Luckily
 this is often all we care about, but it does mean we are not able to
 provide an axiomatization of first order logic without dependencies
-to the substitution congruence. In the light of these
+to the alpha equivalence. In the light of these
 considerations, our preferred option would have been to define the
 specialization axioms in line with the existing literature:
     \begin{equation}\label{logic:eqn:FOPL:axioms:specialization:eqn2}
@@ -168,7 +168,7 @@ where the substitution $[y/x]:\pv\to\pv$ is now simply the
 substitution associated with $[y/x]:V\to V$ as per
 definition~(\ref{logic:def:substitution}). This would have the
 advantage of being simple, consistent with the usual practice and
-devoid of any reference to the substitution congruence. The fact
+devoid of any reference to alpha equivalence. The fact
 that our substitutions of definition~(\ref{logic:def:substitution})
 have an impact on bound occurrences of variables is contrary to
 standard practice, but of little significance. The notion of {\em
@@ -248,14 +248,14 @@ We know from
 proposition~(\ref{logic:prop:FOPL:esssubstprop:redefine}) that an
 essential substitution $\sigma:\pv\to\pv$ can be redefined
 arbitrarily without changing its associated map $\sigma:V\to V$, as
-long as such re-definition preserves classes modulo the substitution
-congruence. It follows that if $[y/x]:\pv\to\pv$ is an essential
+long as such re-definition preserves classes modulo alpha equivalence. 
+It follows that if $[y/x]:\pv\to\pv$ is an essential
 substitution of $y$ in place of $x$, it remains an essential
 substitution of $y$ in place of $x$ after re-definition modulo
 substitution. It follows that any formula $\forall
 x\phi_{1}\to\phi_{1}^{*}$ is a specialization axiom, as long as
 $\phi_{1}^{*}\sim\phi_{1}[y/x]$, where $\sim$ denotes the
-substitution congruence:
+alpha equivalence:
 \begin{prop}\label{logic:prop:FOPL:specialization:axiom:2}
 Let $V$ be a set. Let $\phi_{1}\in\pv$ and $x,y\in V$. Let
 $\phi_{1}^{*}\in\pv$ such that $\phi_{1}^{*}\sim\phi_{1}[y/x]$ where

@@ -57,7 +57,7 @@ in ${\bf P}(W)$. We are now ready to move on and quote:
 \index{rank@Substitution rank of proof}\index{r@$\rnk(\pi)$ :
 substitution rank of $\pi$}
 \begin{defin}\label{logic:def:FUAP:substrank:main}
-Let $V$ be a set and $\sim$ be the substitution congruence on
+Let $V$ be a set and $\sim$ be the alpha equivalence on
 $\pvs$. For all $\pi\in\pvs$ we call {\em substitution rank} of
 $\pi$ the integer $\rnk(\pi)$ defined by:
     \[
@@ -87,8 +87,8 @@ definition~(\ref{logic:def:FOPL:substrank:substrank})}.
 \end{prop}
 \begin{proof}
 First we show $\rnk(\pi)\leq\rnk(\phi)$\,: so let $\psi\in\pv$ such
-that $\phi\sim\psi$, where $\sim$ is also the substitution
-congruence on \pv. We need to show $\rnk(\pi)\leq|\var(\psi)|$.
+that $\phi\sim\psi$, where $\sim$ is also the alpha equivalence on \pv. 
+We need to show $\rnk(\pi)\leq|\var(\psi)|$.
 However take $\rho=\psi$. Then $\rho$ is a proof such that
 $\pi\sim\rho$. It follows from
 definition~(\ref{logic:def:FUAP:substrank:main}) that
@@ -116,8 +116,8 @@ definition~(\ref{logic:def:FOPL:substrank:substrank})}.
 \end{prop}
 \begin{proof}
 First we show $\rnk(\pi)\leq\rnk(\phi)$\,: so let $\psi\in\pv$ such
-that $\phi\sim\psi$, where $\sim$ is also the substitution
-congruence on \pv. We need to show $\rnk(\pi)\leq|\var(\psi)|$.
+that $\phi\sim\psi$, where $\sim$ is also the alpha equivalence on \pv. 
+We need to show $\rnk(\pi)\leq|\var(\psi)|$.
 However take $\rho=\axi\psi$. Then $\rho$ is a proof such that
 $\pi\sim\rho$. It follows from
 definition~(\ref{logic:def:FUAP:substrank:main}) that
@@ -147,7 +147,7 @@ Let $V$ be a set and $\pi\in\pvs$. Then, we have:
 The inequality $\rnk(\pi)\leq|\var(\pi)|$ follows immediately from
 definition~(\ref{logic:def:FUAP:substrank:main}). So it remains to
 show that $|\free(\pi)|\leq\rnk(\pi)$. So let $\rho\in\pvs$ such
-that $\pi\sim\rho$ where $\sim$ is the substitution congruence. We
+that $\pi\sim\rho$ where $\sim$ is the alpha equivalence. We
 need to show $|\free(\pi)|\leq|\var(\rho)|$. From
 proposition~(\ref{logic:prop:FUAP:charsubcong:freevar}) we have
 $\free(\pi)=\free(\rho)$. Hence we need to show that
@@ -173,7 +173,7 @@ then we can find $\rho$ such that $V_{0}\subseteq\var(\rho)$.
 \begin{prop}\label{logic:prop:FUAP:substrank:changeofvar}
 Let $V$ be a set and $\pi\in\pvs$ such that $\free(\pi)\subseteq
 V_{0}$ for some $V_{0}\subseteq V$.  Let $\sim$ denote the
-substitution congruence on \pvs. Then there exists $\rho\in\pvs$
+alpha equivalence on \pvs. Then there exists $\rho\in\pvs$
 such that $\pi\sim\rho$ and $|\var(\rho)|=\rnk(\pi)$ such that:
     \begin{eqnarray*}
     (i)&&\rnk(\pi)\leq|V_{0}|\ \Rightarrow\ \var(\rho)\subseteq
@@ -409,7 +409,7 @@ minimal transform have equal substitution rank, i.e.:
     \]
 \end{prop}
 \begin{proof}
-Let $\sim$ denote the substitution congruence on ${\bf\Pi}(V)$ and
+Let $\sim$ denote the alpha equivalence on ${\bf\Pi}(V)$ and
 $i:V\to\bar{V}$ be the inclusion map. From
 proposition~(\ref{logic:prop:FUAP:mintransfsubcong:equivalence}) we
 have ${\cal M}(\pi)\sim\, i(\pi)$ and consequently $\rnk({\cal
@@ -483,7 +483,7 @@ i(\,\var(\pi)\setminus\free(\pi)\,)=\emptyset$. So let us accept for
 now that $\tau_{1}$ is admissible for $\tau_{0}(\pi)$. Then using
 proposition~(\ref{logic:prop:FUAP:subcong:admissible:subcong}) we
 obtain $\tau_{1}\circ\tau_{0}(\pi)\sim\tau_{0}(\pi)$ where $\sim$ is
-the substitution congruence on \pvs. Hence in particular we have
+the alpha equivalence on \pvs. Hence in particular we have
 $\rnk(\tau_{1}\circ\tau_{0}(\pi))=\rnk(\tau_{0}(\pi))=\rnk(\pi)$. So
 in order to show that the proposition is true in the case when
 $W=V$, it remains to prove that $\tau_{0}$ is injective on
@@ -623,7 +623,7 @@ $\max(\,|\free(\pi)|\,,\,\rnk(\pi_{1})\,,\,\rnk(\pi_{2})\,)\leq\rnk(\pi)$.
 From proposition~(\ref{logic:prop:FUAP:substrank:basic:ineq}) we
 already know that $|\free(\pi)|\leq\rnk(\pi)$. So it remains to show
 that $\rnk(\pi_{1})\leq\rnk(\pi)$ and $\rnk(\pi_{2})\leq\rnk(\pi)$.
-So let $\sim$ be the substitution congruence on \pvs\ and
+So let $\sim$ be the alpha equivalence on \pvs\ and
 $\rho\sim\pi$. We need to show that $\rnk(\pi_{1})\leq|\var(\rho)|$
 and $\rnk(\pi_{2})\leq|\var(\rho)|$. However, from
 $\rho\sim\pi=\pi_{1}\pon\pi_{2}$ and
@@ -711,7 +711,7 @@ equivalence:
     =\rnk(\pi_{1})\,)
     \end{equation}
 So first we show that $\rnk(\pi_{1})\leq\rnk(\pi)$. Let
-$\rho\sim\pi$ where $\sim$ denotes the substitution congruence on
+$\rho\sim\pi$ where $\sim$ denotes the alpha equivalence on
 \pvs. We need to show that $\rnk(\pi_{1})\leq|\var(\rho)|$. Using
 theorem~(\ref{logic:the:FUAP:charsubcong:charac}) of
 page~\pageref{logic:the:FUAP:charsubcong:charac}, from the

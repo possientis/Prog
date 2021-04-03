@@ -1,8 +1,15 @@
+{-# LANGUAGE RankNTypes     #-}
+{-# LANGUAGE TypeOperators  #-}
+
 module  Free
     (   Free        (..) 
+    ,   (:->)
+    ,   runFree
     )   where
 
 import Control.Monad
+
+type f :-> g = forall x . f x -> g x
 
 data Free f k
     = Pure k
@@ -20,3 +27,12 @@ instance Functor f => Monad (Free f) where
     return = Pure
     (>>=) (Pure k) g = g k
     (>>=) (Impure k) g = Impure $ fmap (flip (>>=) g) k
+
+runFree 
+    :: (Monad m)
+    => (f :-> m)
+    -> Free f a
+    -> m a
+runFree _     (Pure k) = pure k
+runFree alpha (Impure k) = alpha k >>= runFree alpha
+

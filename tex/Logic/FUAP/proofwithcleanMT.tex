@@ -1,5 +1,5 @@
 As you may recall, we defined a minimal transform for proofs which
-naturally led to the notion of substitution congruence on \pvs. We
+naturally led to the notion of alpha equivalence on \pvs. We
 gave a result to characterize this $\alpha$-equivalence in
 theorem~(\ref{logic:the:FUAP:charsubcong:charac}) of
 page~\pageref{logic:the:FUAP:charsubcong:charac}. We also
@@ -9,15 +9,15 @@ theorem~(\ref{logic:the:FUAP:mintransfsubcong:kernel}) of
 page~\pageref{logic:the:FUAP:mintransfsubcong:kernel} which serves
 as a neat validation of our definition choices so far. One other
 thing to check is that two equivalent proofs are indeed {\em the
-same}. Specifically, if $\sim$ denotes the substitution congruence
+same}. Specifically, if $\sim$ denotes the alpha equivalence
 on \pvs\ and $\pi\sim\rho$, we want to make sure the {\em
 fundamental properties} of $\pi$ are also those of $\rho$. So if
 $\pi$ is a clean proof, we should expect $\rho$ to be clean as well.
 We should also expect $\pi$ and $\rho$ to have equivalent valuation
 modulo, i.e. $\vals(\pi)\sim\vals(\rho)$ where $\sim$ now denotes
-the substitution congruence on \pv. Finally, we would want to check
-we have the equality $\hyp(\pi)\sim\hyp(\rho)$ modulo the
-substitution congruence, as per
+the alpha equivalence on \pv. Finally, we would want to check
+we have the equality $\hyp(\pi)\sim\hyp(\rho)$ modulo alpha 
+equivalence, as per
 definition~(\ref{logic:def:FUAP:valuationmod:equality:modulo}). In
 short, two equivalent proofs should prove the same thing from the
 same hypothesis, modulo $\alpha$-equivalence, and they should both
@@ -79,14 +79,14 @@ that both ${\cal M}(\pi_{1})$ and ${\cal M}(\pi_{2})$ are clean, and
 furthermore $\vals\circ{\cal M}(\pi_{2})=\chi_{1}\to\chi_{2}$ for
 some $\chi_{1},\chi_{2}\in\pvb$ such that
 $\chi_{1}\sim\vals\circ{\cal M}(\pi_{1})$, where $\sim$ refers to
-the substitution congruence on \pvb. Having assumed our implication
+the alpha equivalence on \pvb. Having assumed our implication
 is true for $\pi_{1}$ and $\pi_{2}$, it follows that both $\pi_{1}$
 and $\pi_{2}$ are clean. Using
 proposition~(\ref{logic:prop:FUAP:almostclean:modus:ponens}), in
 order to show that $\pi$ is clean it remains to prove that
 $\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ for some
 $\psi_{1},\psi_{2}\in\pv$ such that $\psi_{1}\sim\vals(\pi_{1})$,
-where $\sim$ is now the substitution congruence on \pv. However,
+where $\sim$ is now the alpha equivalence on \pv. However,
 using
 proposition~(\ref{logic:prop:FUAP:mintransproof:valuation:commute})
 and the fact that $\pi_{2}$ is clean, we obtain ${\cal

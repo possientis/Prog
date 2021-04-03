@@ -14,8 +14,8 @@ definition~(\ref{logic:def:FUAP:clean:clean:proof}). The benefit of
 this approach is that we were able to define a notion of provability
 and sequent $\Gamma\vdash\phi$  in
 definition~(\ref{logic:def:FOPL:proof:of:formula}) while keeping to
-a minimum the complexity associated with the substitution
-congruence. As you may recall, we were not able to completely strip
+a minimum the complexity associated with alpha equivalence. 
+As you may recall, we were not able to completely strip
 out references to this congruence, as our specialization axioms
 namely $\forall x\phi_{1}\to\phi_{1}[y/x]$ are defined in terms of
 essential substitutions of $y$ in place of $x$, as per
@@ -25,7 +25,7 @@ well clear of any informal treatment where the reader is casually
 invited to assume renaming of variables is continually taking place
 to avoid variable capture. In short, we kept it simple but without
 waving our hands on variable binding, capture and
-$\alpha$-equivalence. It is all very nice, but we have now
+alpha equivalence. It is all very nice, but we have now
 discovered a major flaw in this approach: as explained in the
 previous section, our very natural definition of minimal transform
 for proofs is failing, seemingly because $\pi=\pi_{1}\pon\pi_{2}$ is
@@ -65,7 +65,7 @@ equivalent to an axiom. With this in mind, we define:
 
 \index{axiom@Axiom modulo}
 \begin{defin}\label{logic:def:FUAP:valuationmod:axiom:modulo}
-Let $V$ be a set and $\sim$ be the substitution congruence. We say
+Let $V$ be a set and $\sim$ be the alpha equivalence. We say
 that $\phi\in\pv$ is an {\em axiom modulo} \ifand\ there exists an
 axiom $\psi\in\av$ such that $\phi\sim\psi$. The set of axioms
 modulo on \pv\ is denoted \avs.
@@ -95,7 +95,7 @@ $\psi_{1}\sim\phi_{1}$'\,:
 \index{modus@Modus ponens
 mapping}\index{m@$M^{+}(\phi_{1},\phi_{2})$ : mp map modulo}
 \begin{defin}\label{logic:def:FUAP:valuationmod:mp:modulo}
-Let $V$ be a set and $\sim$ be the substitution congruence. We call
+Let $V$ be a set and $\sim$ be the alpha equivalence. We call
 {\em modus ponens mapping modulo} the map $M^{+}:\pv^{2}\rightarrow
 \pv$ defined by:
     \[
@@ -213,7 +213,7 @@ $\vals(\pi_{1})=\val(\pi_{1})$ and $\vals(\pi_{2})=\val(\pi_{2})$
 and consequently $\vals(\pi_{2})=\vals(\pi_{1})\to\val(\pi)$. In
 particular, we see that $\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ with
 $\psi_{1}\sim\vals(\pi_{1})$ for some $\psi_{1},\psi_{2}\in\pv$,
-where $\sim$ is the substitution congruence on \pv. Using
+where $\sim$ is the alpha equivalence on \pv. Using
 definition~(\ref{logic:def:FUAP:valuationmod:valuation:modulo}) it
 follows that $\vals(\pi)=\psi_{2}=\val(\pi)$. So we now assume that
 $\pi=\gen x\pi_{1}$ where $x\in V$ and $\pi_{1}\in\pvs$ is a proof
@@ -273,8 +273,8 @@ equivalent to $\Gamma\vdash\phi$. Thus, our new notion of {\em
 provability modulo} is in fact equivalent to our initial
 definition~(\ref{logic:def:FOPL:proof:of:formula}). This is of
 course extremely reassuring. We want our new valuation
-$\vals:\pvs\to\pv$ to be clever enough to cope with the substitution
-congruence, in order to make sense of minimal transforms on \pvs. We
+$\vals:\pvs\to\pv$ to be clever enough to cope with the alpha
+equivalence, in order to make sense of minimal transforms on \pvs. We
 do not want $\vals$ to change the set of provable formulas on \pv.
 Somehow we believe '$\vdash\phi$' is an {\em absolute} on \pv.
 
@@ -337,7 +337,7 @@ have $\vals(\pi)=\phi$. So we need to show that $\vdash\phi$.
 However, from $\phi\in\avs$ and
 definition~(\ref{logic:def:FUAP:valuationmod:axiom:modulo}), there
 exists an axiom $\psi\in\av$ such that $\phi\sim\psi$, where $\sim$
-is the substitution congruence on \pv. Since $\psi$ is an axiom,
+is the alpha equivalence on \pv. Since $\psi$ is an axiom,
 from proposition~(\ref{logic:prop:FOPL:axiom}) it is provable i.e.
 we have $\vdash\psi$. It follows that $\vdash\psi$ and
 $\psi\sim\phi$, and from
@@ -418,7 +418,7 @@ which is a proof $\pi^{*}$ such that $\val(\pi^{*})=\phi(x,x)$
 proposition~(\ref{logic:prop:FUAP:valuationmod:equivalence}) is an
 improvement allowing us to establish provability with the leaner
 proof $\pi_{1}\pon\pi_{2}$ instead of $\pi^{*}$. However, we can
-still do better than this: if $\sim$ is the substitution congruence
+still do better than this: if $\sim$ is the alpha equivalence
 on \pv, we know from
 proposition~(\ref{logic:prop:FOPL:HDC:sequent:stronger:congruence})
 that the sequent $\Gamma\vdash\phi$ is true whenever
@@ -478,8 +478,7 @@ Then:
     (\Gamma\succsim\Delta)\land(\Delta\vdash\phi)\ \Rightarrow\
     \Gamma\vdash\phi
     \]
-where $\precsim$ denotes the inclusion modulo the substitution
-congruence on \pv.
+where $\precsim$ denotes the inclusion modulo the alpha equivalence on \pv.
 \end{prop}
 \begin{proof}
 Using the transitivity of the consequence relation $\vdash$ in the
@@ -488,7 +487,7 @@ it is sufficient to prove that $\Gamma\vdash\psi$ for all
 $\psi\in\Delta$. So let $\psi\in\Delta$. We need to show that
 $\Gamma\vdash\psi$. However, from the assumption
 $\Gamma\succsim\Delta$, there exists $\phi\in\Gamma$ such that
-$\phi\sim\psi$, where $\sim$ is the substitution congruence on \pv.
+$\phi\sim\psi$, where $\sim$ is the alpha equivalence on \pv.
 It is clear that $\Gamma\vdash\phi$. Hence from
 proposition~(\ref{logic:prop:FOPL:HDC:sequent:stronger:congruence})
 we obtain $\Gamma\vdash\psi$ as requested.
@@ -507,8 +506,7 @@ $\pi\in\pvs$ such that:
     \[
     \vals(\pi)\sim\phi\mbox{\ and\ }\hyp(\pi)\precsim\Gamma
     \]
-where $\precsim$ denotes the inclusion modulo the substitution
-congruence $\sim$ on \pv.
+where $\precsim$ denotes the inclusion modulo alpha equivalence $\sim$ on \pv.
 \end{theorem}
 \begin{proof}
 First we show the 'only if' part: so we assume that
@@ -605,7 +603,7 @@ $\vals(\pi_{1}\pon\pi_{2})\neq\bot\to\bot$. Then we must have
 $\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ for some $\psi_{1},\psi_{2}$
 such that $\psi_{1}\sim\vals(\pi_{1})$ and
 $\psi_{2}=\vals(\pi_{1}\pon\pi_{2})$, where $\sim$ is the
-substitution congruence. Consequently:
+alpha equivalence. Consequently:
     \[
     \var(\vals(\pi_{1}\pon\pi_{2}))=\var(\psi_{2})\subseteq\var(\vals(\pi_{2}))
     \]
@@ -688,8 +686,8 @@ This is clearly the case if $\vals(\pi)=\bot\to\bot$. So we may
 assume that $\vals(\pi)\neq\bot\to\bot$ in which case
 $\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ for some
 $\psi_{1},\psi_{2}\in\pv$ with $\psi_{1}\sim\vals(\pi_{1})$ and
-$\psi_{2}=\vals(\pi)$, where $\sim$ denotes the substitution
-congruence on \pv\,:
+$\psi_{2}=\vals(\pi)$, where $\sim$ denotes the alpha equivalence
+on \pv\,:
     \begin{eqnarray*}
     \free(\vals(\pi))&=&\free(\psi_{2})\\
     &\subseteq&\free(\psi_{1})\cup\free(\psi_{2})\\
@@ -770,7 +768,7 @@ obviously the case if $\vals(\pi)=\bot\to\bot$. So we may assume
 that $\vals(\pi)\neq\bot\to\bot$ in which case we have
 $\vals(\pi_{2})=\psi_{1}\to\psi_{2}$ where $\psi_{1},\psi_{2}\in\pv$
 are such that $\psi_{1}\sim\vals(\pi_{1})$ and
-$\psi_{2}=\vals(\pi)$, where $\sim$ denotes substitution congruence
+$\psi_{2}=\vals(\pi)$, where $\sim$ denotes alpha equivalence
 on \pv. So we need to show that $\sigma$ is valid for $\psi_{2}$.
 Using proposition~(\ref{logic:prop:FOPL:valid:recursion:imp}), it is
 sufficient to prove that $\sigma$ is valid for $\vals(\pi_{2})$.

@@ -74,7 +74,7 @@ sucᶜ = ƛ `suc # 0
 2+2ᶜ = plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero
 
 mul : ∀ {Γ : Context} → Γ ⊢ `ℕ ⇒ `ℕ ⇒ `ℕ
-mul = μ ƛ ƛ case (# 1) `zero (plus · # 0 · (# 3 · # 0 · # 1))
+mul = μ ƛ ƛ case (# 1) `zero (plus · (# 3 · # 0 · # 1) · # 0)
 
 M₀ : ∅ , `ℕ ⇒ `ℕ ⊢ `ℕ ⇒ `ℕ
 M₀ = ƛ # 1 · (# 1 · # 0)
@@ -206,7 +206,7 @@ _ = {!!}
 
 -}
 
-
+{-
 _ : eval (gas 100) (plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero) ≡
   steps
     (begin
@@ -229,3 +229,5 @@ _ : eval (gas 100) (plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero) ≡
       {!!})
     (done (V-suc (V-suc (V-suc (V-suc V-zero)))))
 _ = {!!}
+-}
+

@@ -1,4 +1,4 @@
-Lemma equivRelf : forall (A:Prop), A <-> A.
+Lemma equivRefl : forall (A:Prop), A <-> A.
 Proof.
     intro A. split; auto.
 Qed.

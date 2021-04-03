@@ -1,5 +1,8 @@
 module DeBruijn.Reduction where
 
+open import Relation.Binary.PropositionalEquality.Core
+  using (_≡_; _≢_; refl; sym; cong)
+
 open import Data.Empty          using (⊥; ⊥-elim)
 open import Data.Nat            using (ℕ; zero; suc; _+_; _*_)
 open import Data.Bool           using (Bool;true;false)
@@ -219,6 +222,53 @@ data _—→_ : ∀ {Γ : Context} {A : Type} → Γ ⊢ A → Γ ⊢ A → Set 
 valueReduce : ∀ {Γ : Context} {A : Type} {M N : Γ ⊢ A} →
   Value M → M —→ N → ⊥
 valueReduce (V-suc p) (ξ-suc q) = valueReduce p q
+
+det : ∀ {Γ : Context} {A : Type} {M N N' : Γ ⊢ A}
+  → M —→ N
+  → M —→ N'
+    -------
+  → N ≡ N'
+
+det (ξ-+₁ p) (ξ-+₁ q) = cong _ (det p q)
+det (ξ-+₁ p) (ξ-+₂ q r) = ⊥-elim (valueReduce q p)
+det (ξ-+₂ p q) (ξ-+₁ r) = ⊥-elim (valueReduce p r)
+det (ξ-+₂ p q) (ξ-+₂ r s) = cong _ (det q s)
+det (ξ-*₁ p) (ξ-*₁ q) = cong _ (det p q)
+det (ξ-*₁ p) (ξ-*₂ q r) = ⊥-elim (valueReduce q p )
+det (ξ-*₂ p q) (ξ-*₁ r) = ⊥-elim (valueReduce p r)
+det (ξ-*₂ p q) (ξ-*₂ r s) = cong _ (det q s)
+det (ξ-=₁ p) (ξ-=₁ q) = cong _ (det p q)
+det (ξ-=₁ p) (ξ-=₂ q r) = ⊥-elim (valueReduce q p)
+det (ξ-=₂ p q) (ξ-=₁ r) = ⊥-elim (valueReduce p r)
+det (ξ-=₂ p q) (ξ-=₂ r s) = cong _ (det q s)
+det (ξ-<₁ p) (ξ-<₁ q) = cong _ (det p q)
+det (ξ-<₁ p) (ξ-<₂ q r) = ⊥-elim (valueReduce q p)
+det (ξ-<₂ p q) (ξ-<₁ r) = ⊥-elim (valueReduce p r)
+det (ξ-<₂ p q) (ξ-<₂ r s) = cong _ (det q s)
+det (ξ-∧₁ p) (ξ-∧₁ q) = cong _ (det p q)
+det (ξ-∧₁ p) (ξ-∧₂ q r) = ⊥-elim (valueReduce q p)
+det (ξ-∧₂ p q) (ξ-∧₁ r) = ⊥-elim (valueReduce p r)
+det (ξ-∧₂ p q) (ξ-∧₂ r s) = cong _ (det q s)
+det (ξ-∨₁ p) (ξ-∨₁ q) = cong _ (det p q)
+det (ξ-∨₁ p) (ξ-∨₂ q r) = ⊥-elim (valueReduce q p )
+det (ξ-∨₂ x p) q = {!!}
+det β-+ q = {!!}
+det β-* q = {!!}
+det β-= q = {!!}
+det β-< q = {!!}
+det β-∧ q = {!!}
+det β-∨ q = {!!}
+det (ξ-if₀ p) q = {!!}
+det β-if₁ q = {!!}
+det β-if₂ q = {!!}
+det (ξ-·₁ p) q = {!!}
+det (ξ-·₂ x p) q = {!!}
+det (β-ƛ x) q = {!!}
+det (ξ-suc p) q = {!!}
+det (ξ-case p) q = {!!}
+det β-zero q = {!!}
+det (β-suc x) q = {!!}
+det β-μ q = {!!}
 
 
 

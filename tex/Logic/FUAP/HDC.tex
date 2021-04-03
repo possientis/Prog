@@ -170,7 +170,7 @@ equivalence} between formulas. We are already familiar with other
 congruences which formalize the idea of {\em identical meaning}.
 Obviously we should expect formulas which have {\em identical
 meaning} to be {\em logically equivalent}. We shall now check this
-is indeed the case, starting with the substitution congruence on
+is indeed the case, starting with the alpha equivalence on
 \pv\,:
 
 \begin{prop}\label{logic:prop:FOPL:HDC:substitution:v:HDC}
@@ -180,13 +180,13 @@ $\phi,\psi\in\pv$:
     \[
     \phi\sim\psi\ \Rightarrow\ \phi\equiv\psi
     \]
-The substitution congruence is stronger than the Hilbert deductive
+The alpha equivalence is stronger than the Hilbert deductive
 congruence.
 \end{prop}
 \begin{proof}
 We need to show the inclusion $\sim\,\subseteq\,\equiv$, for which
 it is sufficient to show $R_{0}\subseteq\,\equiv$ where $R_{0}$ is a
-generator of the substitution congruence. Using
+generator of the alpha equivalence. Using
 definition~(\ref{logic:def:sub:congruence}) it is therefore
 sufficient to prove that $\phi\equiv\psi$ where $\phi=\forall
 x\phi_{1}$ for some $x\in V$ and $\phi_{1}\in\pv$, and $\psi=\forall

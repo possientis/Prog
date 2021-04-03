@@ -1,12 +1,12 @@
-The purpose of this section is to provide a characterization of the
-substitution congruence on \pvs\ similar to
+The purpose of this section is to provide a characterization of 
+alpha equivalence on \pvs\ similar to
 theorem~(\ref{logic:the:sub:congruence:charac}) of
 page~\pageref{logic:the:sub:congruence:charac} for \pv. The result
 will be proved in theorem~(\ref{logic:the:FUAP:charsubcong:charac})
 below. This type of theorem is very useful as it confirms the
-natural belief that $\alpha$-equivalence can only occur between
+natural belief that alpha equivalence can only occur between
 proofs which are {\em structurally identical}. So if $\equiv$ and
-$\sim$ denote the substitution congruence on \pvs\ and \pv\
+$\sim$ denote the alpha equivalence on \pvs\ and \pv\
 respectively, then the equivalence $\pi\equiv\rho$ can only arise
 when $\pi$ and $\rho$ are both elements of \pv\ with $\pi\sim\rho$,
 or both 'axioms' with $\pi=\axi\phi$, $\rho=\axi\psi$ and
@@ -17,7 +17,7 @@ proofs have the same free variables, which is the counterpart of
 proposition~(\ref{logic:prop:sub:congruence:freevar}).
 
 \begin{prop}\label{logic:prop:FUAP:charsubcong:freevar}
-Let $\equiv$ denote the substitution congruence on \pvs\ where $V$
+Let $\equiv$ denote the alpha equivalence on \pvs\ where $V$
 is a set. Then for all $\pi,\rho\in\pvs$ we have the implication:
     \[
     \pi\equiv\rho\ \Rightarrow\ \free(\pi)=\free(\rho)
@@ -28,7 +28,7 @@ Let $\simeq$ be the relation on \pvs\ defined by $\pi\simeq\rho\
 \Leftrightarrow\ \free(\pi)=\free(\rho)$. We need to show that
 $\pi\equiv\rho\ \Rightarrow\ \pi\simeq\rho$ or equivalently that the
 inclusion $\equiv\,\subseteq\,\simeq$ holds. Since $\equiv$ is the
-substitution congruence on \pvs, it is the smallest congruence on
+alpha equivalence on \pvs, it is the smallest congruence on
 \pvs\ which contains the sets $R_{0}$, $R_{1}$ and $R_{2}$ of
 definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
 In order to show the inclusion $\equiv\,\subseteq\,\simeq$ it is
@@ -39,7 +39,7 @@ proposition~(\ref{logic:prop:FUAP:freevarproof:congruence}) that
 $\simeq$ is a congruence on \pvs. So it remains to show that
 $R_{i}\subseteq\,\simeq$ for $i\in 3$. First we show that
 $R_{0}\subseteq\,\simeq$\,. So let $\phi,\psi\in\pv$ such that
-$\phi\sim\psi$ where $\sim$ denotes the substitution congruence on
+$\phi\sim\psi$ where $\sim$ denotes the alpha equivalence on
 \pv. We need to show that $\phi\simeq\psi$ i.e. that
 $\free(\phi)=\free(\psi)$ which follows from
 proposition~(\ref{logic:prop:sub:congruence:freevar}). We now show
@@ -77,7 +77,7 @@ $[y\!:\!x]$ is valid for $\pi_{1}$. Hence:
 The following proposition is the counterpart of
 proposition~(\ref{logic:prop:FOPL:freesubcong:xy:not:free})\,:
 \begin{prop}\label{logic:prop:FUAP:charsubcong:xy:not:free}
-Let $\equiv$ denote the substitution congruence on \pvs\ where $V$
+Let $\equiv$ denote the alpha equivalence on \pvs\ where $V$
 is a set. Then for all $\pi_{1}\in\pvs$ and $x,y\in V$ such that
 $x,y\not\in\free(\pi_{1})$ we have:
     \[
@@ -109,7 +109,7 @@ is the counterpart of
 proposition~(\ref{logic:prop:sub:congruence:injective:substitution})\,:
 \begin{prop}\label{logic:prop:FUAP:charsubcong:injective:substitution}
 Let $V$ and $W$ be sets and $\sigma:V\to W$ be an injective map.
-Let~$\equiv$ be the substitution congruence both on \pvs\ and
+Let~$\equiv$ be the alpha equivalence both on \pvs\ and
 ${\bf\Pi}(W)$. Then:
     \[
     \pi\equiv\rho\ \Rightarrow\ \sigma(\pi)\equiv\sigma(\rho)
@@ -122,7 +122,7 @@ Let $\simeq$ be the relation on \pvs\ defined by $\pi\simeq\rho\
 \Leftrightarrow\ \sigma(\pi)\equiv\sigma(\rho)$. We need to show
 that $\pi\equiv\rho\ \Rightarrow\ \pi\simeq\rho$ or equivalently
 that the inclusion $\equiv\,\subseteq\,\simeq$ holds. Since $\equiv$
-is the substitution congruence on \pvs, it is the smallest
+is the alpha equivalence on \pvs, it is the smallest
 congruence on \pvs\ which contains the sets $R_{0}$, $R_{1}$ and
 $R_{2}$ of
 definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
@@ -134,12 +134,12 @@ proposition~(\ref{logic:prop:FUAP:substitution:congruence}) that
 $\simeq$ is a congruence on \pvs. So it remains to show that
 $R_{i}\subseteq\,\simeq$ for $i\in 3$. First we show that
 $R_{0}\subseteq\,\simeq$\,. So let $\phi,\psi\in\pv$ such that
-$\phi\sim\psi$, where $\sim$ denotes the substitution congruence on
+$\phi\sim\psi$, where $\sim$ denotes the alpha equivalence on
 \pv. We need to show that $\phi\simeq\psi$ or equivalently that
 $\sigma(\phi)\equiv\sigma(\psi)$. Looking at
 definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}) it
 is sufficient to show that $\sigma(\phi)\sim\sigma(\psi)$ where
-$\sim$ now denotes the substitution congruence on ${\bf P}(W)$.
+$\sim$ now denotes the alpha equivalence on ${\bf P}(W)$.
 However, the equivalence $\sigma(\phi)\sim\sigma(\psi)$ follows
 immediately from the injectivity of $\sigma$ and
 proposition~(\ref{logic:prop:sub:congruence:injective:substitution}).
@@ -157,7 +157,7 @@ $\pi=\gen x\pi_{1}$ and $\rho=\gen y\,\pi_{1}[y\!:\!x]$. We need to
 show that $\pi\simeq\rho$ or equivalently that
 $\sigma(\pi)\equiv\sigma(\rho)$. In order to do so, it is sufficient
 to show that the ordered pair $(\sigma(\pi),\sigma(\rho))$ belongs
-to the set $R_{2}'$ of the substitution congruence on ${\bf\Pi}(W)$
+to the set $R_{2}'$ of the alpha equivalence on ${\bf\Pi}(W)$
 as per
 definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
 In other words, it is sufficient to show the existence of
@@ -202,7 +202,7 @@ We shall now follow a familiar strategy leading to
 theorem~(\ref{logic:the:FUAP:charsubcong:charac}) of
 page~\pageref{logic:the:FUAP:charsubcong:charac}. We shall first
 define a new relation~$\simeq$ on \pvs\ reflecting our best estimate
-of what the substitution congruence~$\equiv$ should be like. We
+of what the alpha equivalence~$\equiv$ should be like. We
 shall then show that $\simeq$ is in fact a congruence which is
 indeed equal to~$\equiv$ as expected. Note that some of the
 mathematical statements of the following definition have been
@@ -214,7 +214,7 @@ $\pi_{2}\equiv\rho_{2}$' etc.
 
 
 \begin{defin}\label{logic:def:FUAP:charsubcong:almost:equivalent}
-Let $\equiv$ and $\sim$ be the substitution congruence on \pvs\ and
+Let $\equiv$ and $\sim$ be the alpha equivalence on \pvs\ and
 \pv\ respectively where $V$ is a set. Let $\pi,\rho\in\pvs$. We say
 that $\pi$ is {\em almost equivalent to $\rho$} denoted
 $\pi\simeq\rho$, \ifand\ one of the following is the case:
@@ -466,11 +466,11 @@ This is the case when $u\not\in\{x,y,z\}$. The cases $u=x$, $u=y$
 and $u=z$ are easy.
 \end{proof}
 
-The almost equivalence is stronger than the substitution congruence:
+The almost equivalence is stronger than the alpha equivalence:
 
 \begin{prop}\label{logic:prop:FUAP:subcong:almost:implies:sub:congruence}
 Let $\simeq$ be the almost equivalence and $\equiv$ be the
-substitution congruence on \pvs, where $V$ is a set. Then for all
+alpha equivalence on \pvs, where $V$ is a set. Then for all
 $\pi,\rho\in\pvs$ we have:
     \[
     \pi\simeq\rho\ \Rightarrow\ \pi\equiv\rho
@@ -491,14 +491,14 @@ definition~(\ref{logic:def:FUAP:subcong:substitution:congruence})
 and in particular $\pi\equiv\rho$. We now assume that
 $\pi=\pi_{1}\pon\pi_{2}$ and $\rho=\rho_{1}\pon\rho_{2}$ where
 $\pi_{1}\equiv\rho_{1}$ and $\pi_{2}\equiv\rho_{2}$. The
-substitution congruence being a congruent relation on \pvs, we
+alpha equivalence being a congruent relation on \pvs, we
 obtain $\pi\equiv\rho$. Next we assume that $\pi=\gen x\pi_{1}$ and
 $\rho=\gen x\rho_{1}$ where $\pi_{1}\equiv\rho_{1}$ and $x\in\ V$.
-Again, the substitution congruence being a congruent relation we
+Again, the alpha equivalence being a congruent relation we
 obtain $\pi\equiv\rho$. Finally we assume that $\pi=\gen x\pi_{1}$
 and $\rho=\gen y\rho_{1}$ where $x\neq y$,
 $\rho_{1}\equiv\pi_{1}[y\!:\!x]$ and $y\not\in\free(\pi_{1})$. For
-the last time, the substitution congruence being a congruent
+the last time, the alpha equivalence being a congruent
 relation we obtain $\rho\equiv\gen y\, \pi_{1}[y\!:\!x]$. Hence in
 order to show $\pi\equiv\rho$ it is sufficient to show that $\gen
 x\pi_{1}\equiv\gen y\,\pi_{1}[y\!:\!x]$ which follows immediately
@@ -549,7 +549,7 @@ relation~$\simeq$ is a congruent relation.
 
 \begin{prop}\label{logic:prop:FUAP:subcong:almost:is:sub:congruence}
 Let $\simeq$ be the almost equivalence and $\equiv$ be the
-substitution congruence on \pvs, where $V$ is a set. For all
+alpha equivalence on \pvs, where $V$ is a set. For all
 $\pi,\rho\in\pvs$ we have:
     \[
     \pi\simeq\rho\ \Leftrightarrow\ \pi\equiv\rho
@@ -560,7 +560,7 @@ From
 proposition~(\ref{logic:prop:FUAP:subcong:almost:implies:sub:congruence})
 it is sufficient to show the implication $\Leftarrow$ or
 equivalently the inclusion $\equiv\,\subseteq\,\simeq\,$. Since
-$\equiv$ is the substitution congruence on \pvs, it is the smallest
+$\equiv$ is the alpha equivalence on \pvs, it is the smallest
 congruence on \pvs\ which contains the sets $R_{0}$, $R_{1}$ and
 $R_{2}$ of
 definition~(\ref{logic:def:FUAP:subcong:substitution:congruence}).
@@ -578,7 +578,7 @@ The almost equivalence~$\simeq$ can now be forgotten. We obtain:
 
 \index{congruence@Charact. of sub. congruence}
 \begin{theorem}\label{logic:the:FUAP:charsubcong:charac}
-Let $\equiv$ be the substitution congruence on \pvs\ where $V$ is a
+Let $\equiv$ be the alpha equivalence on \pvs\ where $V$ is a
 set. For all $\pi,\rho\in\pvs$, $\pi\equiv\rho$ \ifand\ one of the
 following is the case:
     \begin{eqnarray*}
@@ -590,7 +590,7 @@ following is the case:
     (v)&&\pi=\gen x\pi_{1}\ ,\ \rho=\gen y\rho_{1}\ ,\ x\neq y\ ,\
     \rho_{1}\equiv \pi_{1}[y\!:\!x]\ ,\ y\not\in\free(\pi_{1})
     \end{eqnarray*}
-where $\sim$ denotes the substitution congruence on \pv.
+where $\sim$ denotes the alpha equivalence on \pv.
 \end{theorem}
 \begin{proof}
 Immediately follows from
@@ -599,10 +599,10 @@ and definition~(\ref{logic:def:FUAP:charsubcong:almost:equivalent}).
 \end{proof}
 
 We can now prove what we claimed at the beginning of this section:
-if $\sim$ and $\equiv$ denote the substitution congruence on \pv\
+if $\sim$ and $\equiv$ denote the alpha equivalence on \pv\
 and \pvs\ respectively, then $\phi\sim\psi$ is equivalent to
 $\phi\equiv\psi$. It will no longer be necessary for us to use two
-different notations for the substitution congruence, and we shall
+different notations for the alpha equivalence, and we shall
 stick to the familiar $\sim$ going forward. When confronted with the
 equivalence $\phi\sim\psi$, we do not need to worry as to whether
 $\phi$, $\psi$ are regarded as formulas or proofs.
@@ -613,7 +613,7 @@ $\phi,\psi\in\pv$:
     \[
     \pi\equiv\rho\ \Leftrightarrow\ \phi\sim\psi
     \]
-where $\equiv$ and $\sim$ are the substitution congruence on \pvs\
+where $\equiv$ and $\sim$ are the alpha equivalence on \pvs\
 and \pv\ respectively.
 \end{prop}
 \begin{proof}
@@ -638,7 +638,7 @@ $\phi,\psi\in\pv$:
     \[
     \pi\equiv\rho\ \Leftrightarrow\ \phi\sim\psi
     \]
-where $\equiv$ and $\sim$ are the substitution congruence on \pvs\
+where $\equiv$ and $\sim$ are the alpha equivalence on \pvs\
 and \pv\ respectively.
 \end{prop}
 \begin{proof}

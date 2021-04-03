@@ -189,7 +189,7 @@ It remains to show that
 $v(\,\sigma(\phi_{1})\to\sigma(\phi_{2})\,)=v(\sigma(\phi))$. From
 proposition~(\ref{logic:prop:FOPL:esssubstprop:charac}) we have
 $\sigma(\phi)\sim\sigma(\phi_{1})\to\sigma(\phi_{2})$ where $\sim$
-is the substitution congruence. So our desired equality follows from
+is the alpha equivalence. So our desired equality follows from
 proposition~(\ref{logic:prop:FOPL:semantics:stronger:congruence}).
 We now assume that $\phi=\forall x\phi_{1}$ where $\phi_{1}\in\pv$
 satisfies our equality for all $\sigma:\pv\to\pv$ essential. We need
@@ -199,7 +199,7 @@ proposition~(\ref{logic:prop:FOPL:esssubstprop:tau}), let
 $\tau:\pv\to\pv$ be an essential substitution such that
 $\tau=\sigma$ on $V\setminus\{x\}$, and
 $\tau(x)\not\in\free(\sigma(\phi))$. Note that we have the
-substitution equivalence
+alpha equivalence
 $\sigma(\phi)\sim\forall\tau(x)\tau(\phi_{1})$ and consequently:
     \begin{eqnarray*}
     \beta(\phi)(\sigma)&=&\beta(\forall x\phi_{1})(\sigma)\\
