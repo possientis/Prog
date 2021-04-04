@@ -20,7 +20,6 @@
 we are using the same notation $F$ in definition~(\ref{Fun:def:partial:functor:1}) 
 to describe the actions of the functor on both objects and arrows.
 
-
 \noindent
 {\bf Remark}: Given $a_{2}\in\ob\ \Ctwo$, from 
 definition~(\ref{Cat:def:canonical:product}) the ordered pair $(a_{1},a_{2})$
@@ -74,9 +73,96 @@ $F(\id(a_{1}),f_{2})$ is therefore a well-defined arrow of the category \Dat.
     \circ G_{1}(f_{2})$ whenever we have $f_{2}:a_{2}\to b_{2}\ @\ \Ctwo$ and 
     $g:b_{2}\to c_{2}\ @\ \Ctwo$. This goes as follows:
         \begin{eqnarray*}G_{1}(g_{2}\circ f_{2})
-            &=&F(\id(a_{1}),g_{2}\circ f_{2})\ \leftarrow\ 
+            &=&F(\,\id(a_{1})\,,\,g_{2}\circ f_{2}\,)\ \leftarrow\ 
             \mbox{$(2)$ of def.~(\ref{Fun:def:partial:functor:1})}\\
-            TODO
+            &=&F(\,\id(a_{1})\circ\id(a_{1})\,,\,g_{2}\circ f_{2}\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&F(\,(\id(a_{1}),g_{2})\,\circ\,(\id(a_{1}),f_{2})\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&F(\id(a_{1}),g_{2})\circ F(\id(a_{1}),f_{2})\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:partial:functor:1})}\ \to\ 
+            &=&G_{1}(g_{2})\circ G_{1}(f_{2})
         \end{eqnarray*}
- 
 \end{proof}
+
+\begin{defin}\label{Fun:def:partial:functor:2}
+    Let $F:\Cone\times\Ctwo\to\Dat$ be a bifunctor and let $a_{2}\in\Ctwo$. 
+    We call {\em second partial functor at} $a_{2}$, the functor $G:\Cone\to\Dat$ 
+    with $G=(G_{0},G_{1})$ and:
+        \begin{eqnarray*}
+            (1)&\ &G_{0}(a_{1}) = F(a_{1},a_{2})\\
+            (2)&\ &G_{1}(f_{1}) = F(f_{1},\id(a_{2}))
+        \end{eqnarray*}
+    where $(1)-(2)$ hold for all $a_{1}\in\ob\ \Cone$ and $f_{1}\in\arr\ \Cone$.
+\end{defin}
+
+\noindent
+{\bf Remark}: As per notation~(\ref{Fun:notation:functor:F0:F1}),
+we are using the same notation $F$ in definition~(\ref{Fun:def:partial:functor:2}) 
+to describe the actions of the functor on both objects and arrows.
+
+\noindent
+{\bf Remark}: Given $a_{1}\in\ob\ \Cone$, from 
+definition~(\ref{Cat:def:canonical:product}) the ordered pair $(a_{1},a_{2})$
+is a well-defined object of the product category $\Cone\times\Ctwo$ and 
+$F(a_{1},a_{2})$ is therefore a well-defined object of the category \Dat.
+
+\noindent
+{\bf Remark}: Given $f_{1}\in\arr\ \Cone$, from
+definition~(\ref{Cat:def:canonical:product}) and the fact that $\id(a_{2})$
+is an arrow in \Ctwo, the ordered pair $(f_{1},\id(a_{2}))$ is a 
+well-defined arrow of $\Cone\times\Ctwo$ and
+$F(f_{1},\id(a_{2}))$ is therefore a well-defined arrow of the category \Dat.
+
+\begin{notation}\label{Fun:notation:partial:functor:2}
+    The second partial functor of $F$ at $a_{2}$ is denoted $F(-,a_{2})$.
+\end{notation}
+
+\begin{prop}\label{Fun:prop:partial:functor:2}
+    Let $F:\Cone\times\Ctwo\to\Dat$ be a bifunctor and let $a_{2}\in\Ctwo$. 
+    Then the second partial functor at $a_{2}$ of $F$ is indeed a functor
+    $F(-,a_{2}):\Cone\to\Dat$.
+\end{prop}
+\begin{proof}
+    Let $G=(G_{0},G_{1})$ denote the second partial functor at $a_{2}$. 
+    We need to check that properties~$(1)-(5)$ of 
+    definition~(\ref{Fun:def:functor}) are satisfied, which goes as follows:
+
+    $(1)$: $G_{0}$ is indeed a map $G_{0}:\ob\ \Cone\to\ob\ \Dat$: it is 
+    defined on the collection $\ob\ \Cone$ and for all $a_{1}\in\ob\ \Cone$,
+    $G_{0}(a_{1})=F(a_{1},a_{2})$ is an element of $\ob\ \Dat$.
+
+    $(2)$: $G_{1}$ is indeed a map $G_{1}:\arr\ \Cone\to\arr\ \Dat$: it is 
+    defined on the collection $\arr\ \Cone$ and for all $f_{1}\in\arr\ \Cone$,
+    $G_{1}(f_{1})=F(f_{1},\id(a_{2}))$ is an element of $\arr\ \Dat$.
+
+    $(3)$: We need to show that $G_{1}(f_{1}):G_{0}(a_{1})\to G_{0}(b_{1})$ 
+    whenever we have $f_{1}:a_{1}\to b_{1}\ @\ \Cone$. So we need to 
+    show that $F(f_{1},\id(a_{2})):F(a_{1},a_{2})\to F(b_{1},a_{2})$. However,
+    this follows immediately from the functoriality of $F$ and the fact that
+    $(f_{1},\id(a_{2})):(a_{1},a_{2})\to (b_{1},a_{2})\ @\ \Cone\times\Ctwo$
+    since $\id(a_{2}):a_{2}\to a_{2}\ @\ \Ctwo$ and $f_{1}:a_{1}\to b_{1}
+    \ @\ \Cone$, and using definition~(\ref{Cat:def:canonical:product}).
+    
+    $(4)$: We need to show that $G_{1}(\id(a_{1}))=\id(\,G_{0}(a_{1})\,)$ for
+    all $a_{1}\in\ob\ \Cone$. In other words, we need to show that
+    $F(\id(a_{1}),\id(a_{2}))=\id(\,F(a_{1},a_{2})\,)$, which follows
+    immediately from the functoriality of $F$ and
+    $(\id(a_{1}),\id(a_{2}))=\id(a_{1},a_{2})$.
+
+    $(5)$: We need to show that $G_{1}(g_{1}\circ f_{1})=G_{1}(g_{1})
+    \circ G_{1}(f_{1})$ whenever we have $f_{1}:a_{1}\to b_{1}\ @\ \Cone$ and 
+    $g:b_{1}\to c_{1}\ @\ \Cone$. This goes as follows:
+        \begin{eqnarray*}G_{1}(g_{1}\circ f_{1})
+            &=&F(\,g_{1}\circ f_{1}\,,\,\id(a_{2})\,)\ \leftarrow\ 
+            \mbox{$(2)$ of def.~(\ref{Fun:def:partial:functor:2})}\\
+            &=&F(\,g_{1}\circ f_{1}\,,\,\id(a_{2})\circ\id(a_{2})\,)\\
+            \mbox{$(6)$ of def.~(\ref{Cat:def:canonical:product})}\ \to\ 
+            &=&F(\,(g_{1},\id(a_{2}))\,\circ\,(f_{1},\id(a_{2}))\,)\\
+            \mbox{$F$ functor}\ \to\ 
+            &=&F(g_{1},\id(a_{2}))\circ F(f_{1},\id(a_{2}))\\
+            \mbox{$(2)$ of def.~(\ref{Fun:def:partial:functor:2})}\ \to\ 
+            &=&G_{1}(g_{1})\circ G_{1}(f_{1})
+        \end{eqnarray*}
+\end{proof}
+

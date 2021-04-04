@@ -13,6 +13,7 @@ LAM   = Lam
 SET   = Set
 NORM  = Normal
 LANG1 = Lang1
+STLC  = STLC
 
 # coqc command line option
 AXIOM_LIB = -Q ${AXIOM} Logic.${AXIOM} -Q ../Logic Logic
@@ -26,6 +27,7 @@ FOL_LIB   = -Q ${FOL}   Logic.${FOL}   -Q ../Logic Logic
 LAM_LIB   = -Q ${LAM}   Logic.${LAM}   -Q ../Logic Logic
 SET_LIB   = -Q ${SET}   Logic.${SET}   -Q ../Logic Logic
 LANG1_LIB = -Q ${LANG1} Logic.${LANG1} -Q ../Logic Logic
+STLC_LIB  = -Q ${STLC}  Logic.${STLC}  -Q ../Logic Logic
 NORM_LIB  = -Q ${SET}/${NORM}   Logic.${SET}.${NORM}   -Q ../Logic Logic
 
 # Object files
@@ -186,6 +188,12 @@ LANG1_OBJ = ${LANG1}/Syntax.vo \
 			${LANG1}/Specification.vo \
 			${LANG1}/Replacement.vo
 
+STLC_OBJ  = ${STLC}/Syntax.vo \
+			${STLC}/Value.vo \
+			${STLC}/Subst.vo \
+			${STLC}/Replace.vo \
+			${STLC}/Eval.vo \
+			${STLC}/Example.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
@@ -209,6 +217,7 @@ all : 	${AXIOM_OBJ} \
 		${LAM_OBJ} \
 		${SET_OBJ} \
 		${LANG1_OBJ} \
+		${STLC_OBJ} \
 		${NORM_OBJ}
 
 # General rules
@@ -242,8 +251,11 @@ ${LAM}/%.vo   : ${LAM}/%.v
 ${SET}/%.vo   : ${SET}/%.v
 	coqc $< 		${LAM_LIB}
 
-${LANG1}/%.vo   : ${LANG1}/%.v
+${LANG1}/%.vo : ${LANG1}/%.v
 	coqc $< 		${LANG1_LIB}
+
+${STLC}/%.vo  : ${STLC}/%.v
+	coqc $< 		${STLC_LIB}
 
 ${SET}/${NORM}/%.vo   : ${SET}/${NORM}/%.v
 	coqc $< 	${NORM_LIB}
