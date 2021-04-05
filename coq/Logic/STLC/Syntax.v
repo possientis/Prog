@@ -6,7 +6,7 @@ Inductive T (b:Type) : Type :=
 .
 
 Arguments Base {b}.
-Arguments Fun {b}.
+Arguments Fun  {b}.
 
 (* Expression language for base types in b and variables in v                   *) 
 Inductive Exp (b v:Type) : Type :=
@@ -21,4 +21,19 @@ Arguments Var {b} {v}.
 Arguments App {b} {v}.
 Arguments Lam {b} {v}.
 
+Notation "t :: Ty" := (Ann t Ty)        : STLC_Syntax_scope.
+
+Notation "t $ t'" := (App t t')
+    (at level 10, left associativity)   : STLC_Syntax_scope.
+
+Notation "a :-> b" := (Fun a b)
+    (at level 20, right associativity)  : STLC_Syntax_scope.
+
+Notation "` x" := (Var x)
+    (at level 1, no associativity)      : STLC_Syntax_scope.
+
+Notation "\ x ~> t" := (Lam x t)
+    (at level 90, right associativity)   : STLC_Syntax_scope.
+
+Open Scope STLC_Syntax_scope.
 

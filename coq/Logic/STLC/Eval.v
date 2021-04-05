@@ -5,7 +5,7 @@ Require Import Logic.STLC.Value.
 Require Import Logic.STLC.Syntax.
 Require Import Logic.STLC.Replace.
 
-(* Big step semantcis of STLC                                                   *)
+(* Big step semantics of STLC                                                   *)
 (* EVar: a variable evaluates to itself                                         *)
 (* EAnn: if a term evaluates to a value, the annotated term evaluates to same   *)
 (* ELam: if a term evaluates to a value, abstracting preserves evaluation       *) 
@@ -31,9 +31,17 @@ Inductive Eval (b v:Type)(e:Eq v) : Exp b v -> Exp b v -> Prop :=
     Eval b v e (App t1 t2) t2'
 .
 
-Arguments Eval {b} {v} {e}.
-Arguments EVar {b} {v} {e}.
-Arguments EAnn {b} {v} {e}.
-Arguments ELam {b} {v} {e}.
+Arguments Eval  {b} {v} {e}.
+Arguments EVar  {b} {v} {e}.
+Arguments EAnn  {b} {v} {e}.
+Arguments ELam  {b} {v} {e}.
 Arguments EAppN {b} {v} {e}.
 Arguments EAppL {b} {v} {e}.
+
+
+Notation "t >> t'" := (Eval t t')
+    (at level 90, no associativity) : STLC_Eval_scope.
+
+Open Scope STLC_Eval_scope.
+
+

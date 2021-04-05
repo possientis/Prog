@@ -15,13 +15,12 @@ with Neutral (b v:Type) : Exp b v -> Prop :=
     Neutral b v e -> Value b v e' -> Neutral b v (App e e')  
 .
 
-Arguments Value {b} {v}.
-Arguments VNeu {b} {v}.
-Arguments VLam {b} {v}.
-
+Arguments Value   {b} {v}.
+Arguments VNeu    {b} {v}.
+Arguments VLam    {b} {v}.
 Arguments Neutral {b} {v}.
-Arguments NVar {b} {v}.
-Arguments NApp {b} {v}.
+Arguments NVar    {b} {v}.
+Arguments NApp    {b} {v}.
 
 Lemma VVar : forall (b v:Type) (x:v), Value (@Var b v x).
 Proof. intros b v x. apply VNeu. constructor. Qed.

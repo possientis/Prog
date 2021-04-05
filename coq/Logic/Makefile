@@ -193,7 +193,10 @@ STLC_OBJ  = ${STLC}/Syntax.vo \
 			${STLC}/Subst.vo \
 			${STLC}/Replace.vo \
 			${STLC}/Eval.vo \
-			${STLC}/Example.vo
+			${STLC}/Example.vo \
+			${STLC}/Context.vo \
+			${STLC}/IsType.vo \
+			${STLC}/Valid.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \

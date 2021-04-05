@@ -27,7 +27,7 @@ Inductive Context : Type :=
 | CtxSnoc  : Context -> Binding -> Context
 .
 
-Notation "G ';' x" := (CtxSnoc G x)
+Notation "G ; x" := (CtxSnoc G x)
     (at level 50, left associativity) : Context_scope.
 
 Open Scope Context_scope.
@@ -44,7 +44,7 @@ Inductive Find : Context -> Binding -> Prop :=
     Find G n~>y
 .
 
-Notation "G ':>' x" := (Find G x)
+Notation "G :> x" := (Find G x)
     (at level 60, no associativity) : Context_scope.
 
 Open Scope Context_scope.
