@@ -55,5 +55,9 @@ Lemma ValidValid2IsType2 : forall (b v:Type) (G:@Context b v),
     Valid G -> Valid2 G /\ (forall (Ty:T b), G :- Ty -> IsType2 G Ty).
 Proof.
     intros b v G H1. induction H1 as [ |G Ty H2 IH|G x Ty H2 IH H3].
-    - split; try constructor. intros Ty H2.
+    - split; try constructor. intros Ty H2. 
+      apply notIsTypeInO in H2. contradiction.
+    - destruct IH as [IH1 IH2]. split.
+        + constructor. assumption.
+        + intros Ty' H3.
 Show.

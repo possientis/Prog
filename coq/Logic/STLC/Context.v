@@ -56,6 +56,16 @@ Proof.
     - inversion H2. subst. assumption.
 Qed.
 
+Lemma findTyRev' : forall (b v:Type) (G:@Context b v) (Ty Ty':b),
+    G ; Ty ::: * :> Ty' -> Ty = Ty' \/ G :> Ty'.
+Proof.
+    intros b v G Ty Ty' H1. remember (G;Ty ::: *) as G' eqn:E.
+    revert G Ty E. destruct H1 as [G Ty|G Ty k H2];
+    intros G' Ty' H3; inversion H3. 
+    - left. reflexivity.
+    - subst. right. assumption.
+Qed.
+
 
 Inductive FindVar (b v:Type) (e:Eq v) : @Context b v -> @Binding b v -> Prop :=
 | FindVarZ : forall (G:Context) (x:v) (Ty:T b), 
@@ -146,3 +156,4 @@ Proof.
         + inversion H5. subst. apply FindVarS; try assumption. 
           apply H4. assumption.
 Qed.
+
