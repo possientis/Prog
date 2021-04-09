@@ -5,15 +5,15 @@ Require Import Logic.STLC.Context.
 
 Inductive Valid2 (b v:Type) : @Context b v -> Prop :=
 | Valid2O   : Valid2 b v O
-| Valid2Ty  : forall (G:Context) (Ty:b),
-    Valid2 b v G -> Valid2 b v (G ; Ty ::: *)
+| Valid2Ty  : forall (G:Context) (t:b),
+    Valid2 b v G -> Valid2 b v (G ; t ::: *)
 | Valid2Var : forall (G:Context) (x:v) (Ty:T b),
     Valid2 b v G -> IsType2 b v G Ty -> Valid2 b v (G ; x ::: Ty) 
 with IsType2 (b v:Type) : @Context b v -> T b -> Prop :=
-| TVar2 : forall (G:Context) (Ty:b),
+| TVar2 : forall (G:Context) (t:b),
     Valid2 b v G ->
-    G :> Ty      ->
-    IsType2 b v G (Base Ty)
+    G :> t      ->
+    IsType2 b v G (Base t)
 | TFun2 : forall (G:Context) (Ty Ty':T b),
     Valid2 b v G        ->
     IsType2 b v G Ty    ->
@@ -54,10 +54,10 @@ Qed.
 Lemma ValidValid2IsType2 : forall (b v:Type) (G:@Context b v),
     Valid G -> Valid2 G /\ (forall (Ty:T b), G :- Ty -> IsType2 G Ty).
 Proof.
-    intros b v G H1. induction H1 as [ |G Ty H2 IH|G x Ty H2 IH H3].
+    intros b v G H1. induction H1 as [ |G t H2 IH|G x Ty H2 IH H3].
     - split; try constructor. intros Ty H2. 
       apply notIsTypeInO in H2. contradiction.
     - destruct IH as [IH1 IH2]. split.
         + constructor. assumption.
-        + intros Ty' H3.
+        + intros Ty H3.
 Show.

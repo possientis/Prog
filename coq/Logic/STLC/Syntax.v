@@ -21,18 +21,18 @@ Arguments Var {b} {v}.
 Arguments App {b} {v}.
 Arguments Lam {b} {v}.
 
-Notation "t :: Ty" := (Ann t Ty)        : STLC_Syntax_scope.
+Notation "e :: Ty" := (Ann e Ty)        : STLC_Syntax_scope.
 
-Notation "t $ t'" := (App t t')
+Notation "e1 $ e2" := (App e1 e2)
     (at level 10, left associativity)   : STLC_Syntax_scope.
 
-Notation "a :-> b" := (Fun a b)
+Notation "Ty :-> Ty'" := (Fun Ty Ty')
     (at level 20, right associativity)  : STLC_Syntax_scope.
 
 Notation "` x" := (Var x)
     (at level 1, no associativity)      : STLC_Syntax_scope.
 
-Notation "\ x ~> t" := (Lam x t)
+Notation "\ x ~> e" := (Lam x e)
     (at level 90, right associativity)   : STLC_Syntax_scope.
 
 Open Scope STLC_Syntax_scope.

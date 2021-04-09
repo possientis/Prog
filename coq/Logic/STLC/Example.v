@@ -18,10 +18,10 @@ Definition const (b v:Type) (x y:v) : Exp b v := \x ~> \y ~> `x.
 Arguments const {b} {v}.
 
 (* Annotated identity applied to variable y reduces to variable y               *)
-Lemma idAnn : forall (b v:Type) (e:Eq v) (x y:v) (a:T b),
-    (id x :: a :-> a) $ `y >> `y.
+Lemma idAnn : forall (b v:Type) (e:Eq v) (x y:v) (Ty:T b),
+    (id x :: Ty :-> Ty) $ `y >> `y.
 Proof.
-    intros b v e x y a. apply (EAppL (id x :: a :-> a) `x _ _ x).
+    intros b v e x y Ty. apply (EAppL (id x :: Ty :-> Ty) `x _ _ x).
     - apply VVar.
     - apply VVar.
     - constructor. apply VLam, VVar. apply ELam.
@@ -32,10 +32,10 @@ Qed.
 
 (* Annotated const applied to identity and variable u reduces to identity       *)
 (* Note that we need the variables x and y to be distinct for this to hold      *)
-Lemma constAnn : forall (base v:Type) (e:Eq v) (x y z u:v) (a b : T base),
-    x <> y -> (const x y :: (b :-> b) :-> a :-> b :-> b) $ (id z) $ `u >> id z. 
+Lemma constAnn : forall (b v:Type) (e:Eq v) (x y z u:v) (Ty Ty' : T b),
+    x <> y -> (const x y :: (Ty' :-> Ty') :-> Ty :-> Ty' :-> Ty') $ (id z) $ `u >> id z. 
 Proof.
-    intros base v e x y z u a b H1. apply (EAppL _ (id z) _ _ y).
+    intros base v e x y z u Ty Ty' H1. apply (EAppL _ (id z) _ _ y).
     - apply VLam, VVar.
     - apply VLam, VVar.
     - apply (EAppL _ (\y ~> `x) _ _ x). 
@@ -63,5 +63,3 @@ Proof.
             { apply EVar. }
             { exfalso. apply H2. left. reflexivity. }
 Qed.
-
-
