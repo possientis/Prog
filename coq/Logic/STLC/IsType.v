@@ -7,8 +7,8 @@ Require Import Logic.STLC.Context.
 (* TFun: a function type is well-formed if both types involved are well-formed. *)
 Inductive IsType (b v:Type) : @Context b v -> T b -> Prop :=
 | TVar : forall (G:Context) (t:b), 
-    G :> t -> 
-    IsType b v G (Base t) 
+    G >> t -> 
+    IsType b v G 't
 | TFun : forall (G:Context) (Ty Ty':T b),
     IsType b v G Ty     -> 
     IsType b v G Ty'    -> 
@@ -20,7 +20,7 @@ Arguments TVar   {b} {v}.
 Arguments TFun   {b} {v}.
 
 (* The type expression Ty is well-formed in context G.                          *)
-Notation "G :- Ty" := (IsType G Ty)
+Notation "G :> Ty" := (IsType G Ty)
     (at level 1, no associativity) : STLC_IsType_scope.
 
 Open Scope STLC_IsType_scope.

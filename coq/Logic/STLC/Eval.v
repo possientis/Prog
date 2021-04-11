@@ -39,7 +39,7 @@ Arguments EAppN {b} {v} {eq}.
 Arguments EAppL {b} {v} {eq}.
 
 
-Notation "e >> e'" := (Eval e e')
+Notation "e >>> e'" := (Eval e e')
     (at level 90, no associativity) : STLC_Eval_scope.
 
 Open Scope STLC_Eval_scope.

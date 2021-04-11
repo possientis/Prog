@@ -9,6 +9,10 @@ Inductive T (b:Type) : Type :=
 Arguments Base {b}.
 Arguments Fun  {b}.
 
+(* Type Variable (base type)                                                    *)
+Notation "' t" := (Base t)
+    (at level 1, no associativity)      : STLC_Syntax_scope.
+
 (* Function type                                                                *)
 Notation "Ty :-> Ty'" := (Fun Ty Ty')
     (at level 20, right associativity)  : STLC_Syntax_scope.
