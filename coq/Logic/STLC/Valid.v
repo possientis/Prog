@@ -1,3 +1,5 @@
+Require Import Logic.Class.Eq.
+
 Require Import Logic.STLC.Syntax.
 Require Import Logic.STLC.IsType.
 Require Import Logic.STLC.Context.
@@ -19,3 +21,12 @@ Arguments Valid  {b} {v}.
 Arguments ValidO {b} {v}.
 Arguments ValidT {b} {v}.
 Arguments ValidV {b} {v}.
+
+(*
+(* The type expression of a binding of a valid context is always well-formed.   *)
+Lemma ValidIsType : forall (b v:Type) (eq:Eq v) (G:@Context b v) (x:v) (Ty:T b),
+    Valid G -> G :>> x ::: Ty -> G :> Ty.
+Proof.
+
+Show.
+*)
