@@ -33,3 +33,14 @@ Proof.
     - intros H3. subst. inversion H2.
     - assumption.
 Qed.
+
+Lemma IsTypeS : forall (b v:Type) (G:@Context b v) (t:b) (Ty:T b),
+    G :> Ty -> (G ; t ::: *) :> Ty.
+Proof.
+    intros b v G t Ty H1. revert t.
+    induction H1 as [G t H2|G Ty Ty' H2 IH1 H3 IH2].
+    - intros t'. apply TVar, FindTS. assumption.
+    - intros t'. apply TFun.
+        + apply IH1.
+        + apply IH2.
+Qed.

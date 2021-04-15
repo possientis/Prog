@@ -27,6 +27,16 @@ Arguments ValidV {b} {v}.
 Lemma ValidIsType : forall (b v:Type) (eq:Eq v) (G:@Context b v) (x:v) (Ty:T b),
     Valid G -> G :>> x ::: Ty -> G :> Ty.
 Proof.
-
+    intros b v eq G x Ty H1. revert x Ty.
+    induction H1 as [ |G t H1 IH|G x Ty H1 IH H2].
+    - intros x' Ty' H3. inversion H3.
+    - intros x' Ty' H3. remember (G ; t ::: * ) as G' eqn:E.
+      remember (x' ::: Ty') as k eqn:F. revert G t H1 IH x' Ty' E F.
+      destruct H3 as [G x Ty|G k t H4|G x y Ty Ty' H4 H5];
+      intros G' t' H6 H7 y' Sy H8 H9. 
+        + inversion H8.
+        + inversion H8. subst. apply IsTypeS. apply H7 with y'. assumption.
+        + inversion H8.
+    -
 Show.
 *)
