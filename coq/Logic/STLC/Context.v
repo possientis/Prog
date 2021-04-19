@@ -64,7 +64,7 @@ Proof.
     - subst. right. assumption.
 Qed.
 
-Inductive FindV (b v:Type) (e:Eq v) : @Context b v -> @Binding b v -> Prop :=
+Inductive FindV (b v:Type) (e:Eq v) : Context -> Binding -> Prop :=
 | FindVZ : forall (G:Context) (x:v) (Ty:T b), 
     FindV b v e (G ; x ::: Ty) (x ::: Ty)
 | FindVK : forall (G:Context) (k:Binding) (t:b),
@@ -95,7 +95,20 @@ Proof.
     - inversion H3.
 Qed.
 
-Definition ctxIncl (b v:Type)(e:Eq v)(G H:@Context b v) : Prop :=
+Lemma findVRev' : forall (b v:Type) (e:Eq v) (G:Context) (x x':v) (Ty Ty':T b),
+    G ; x' ::: Ty' :>> x ::: Ty -> (x = x' /\ Ty = Ty') \/ G :>> x ::: Ty.
+Proof.
+    intros b v e G x x' Ty Ty' H1. remember (G;x' ::: Ty') as G' eqn:E.
+    remember (x ::: Ty) as k eqn:F. revert G x x' Ty Ty' E F.
+    destruct H1 as [G x Ty|G k t H2|G x y Ty Ty' H2 H3];
+    intros G' x' y' Sy' Sy H4 H5. 
+    - inversion H4. subst. inversion H5. subst. left. split; reflexivity.
+    - inversion H4.
+    - inversion H4. subst. inversion H5. subst. right. assumption.
+Qed.
+
+
+Definition ctxIncl (b v:Type)(e:Eq v)(G H:Context) : Prop :=
     (forall (t:b), G >> t -> H >> t) /\
     (forall (x:v) (Ty:T b), G :>> x ::: Ty -> H :>> x ::: Ty).
 
@@ -126,7 +139,7 @@ Lemma ctxInclTrans : forall (b v:Type) (e:Eq v) (G H K:@Context b v),
     G <= H -> H <= K -> G <= K.
 Proof. intros b v e G H K [H1 H2] [H3 H4]. split; auto. Qed.
 
-Lemma ctxInclExtendTy : forall (b v:Type) (e:Eq v) (G H:@Context b v) (t:b),
+Lemma ctxInclExtendTy : forall (b v:Type) (e:Eq v) (G H:Context) (t:b),
     G <= H -> G ; t ::: * <= H ; t ::: *.
 Proof.
     intros b v e G H t [H1 H2]. split.
@@ -138,7 +151,7 @@ Proof.
     - intros x t' H3. constructor. apply H2. apply findVRev in H3. assumption.
 Qed.
 
-Lemma ctxInclExtendVar : forall (b v:Type)(e:Eq v)(G H:@Context b v)(x:v)(Ty:T b),
+Lemma ctxInclExtendVar : forall (b v:Type)(e:Eq v)(G H:Context)(x:v)(Ty:T b),
     G <= H -> G ; x ::: Ty <= H ; x ::: Ty.
 Proof.
     intros b v e G H x Ty [H1 H2]. split.
@@ -153,3 +166,4 @@ Proof.
         + inversion H5. subst. apply FindVS; try assumption. 
           apply H4. assumption.
 Qed.
+

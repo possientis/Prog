@@ -19,7 +19,7 @@ Notation "e >: Ty" :=(mkTyping e Ty)
 Open Scope STLC_Typing_scope.
 
 (* Predicate expressing a typing judgement.                                     *)
-Inductive Judgement (b v:Type) (eq:Eq v): @Context b v -> @Typing b v  -> Prop :=
+Inductive Judgement (b v:Type) (eq:Eq v): Context -> Typing -> Prop :=
 | JAnn : forall (G:Context) (e:Exp b v) (Ty:T b),
     Judgement b v eq G (e >: Ty)            ->  (* e is of type Ty in context G *) 
     Judgement b v eq G ((e :: Ty) >: Ty)        (* Annotated expr same type     *)
@@ -50,7 +50,7 @@ Notation "G :- T" := (Judgement G T)
 Open Scope STLC_Typing_scope.
 
 (* A typing judgement will never hold, unless the context is valid.             *)
-Lemma TypedIsValid : forall (b v:Type)(eq:Eq v)(G:@Context b v)(e:Exp b v)(Ty:T b),
+Lemma TypedIsValid : forall (b v:Type)(eq:Eq v)(G:Context)(e:Exp b v)(Ty:T b),
     G :- e >: Ty -> Valid G.
 Proof.
     intros b v eq G e Ty H1. remember (e >: Ty) as k eqn:E. revert e Ty E.
@@ -66,9 +66,9 @@ Proof.
     - assumption.
 Qed.
 
-(*
+
 (* A typing judgement will never hold, unless type expression is well-formed    *)
-Lemma TypedIsType : forall (b v:Type)(eq:Eq v)(G:@Context b v)(e:Exp b v)(Ty:T b),
+Lemma TypedIsType : forall (b v:Type)(eq:Eq v)(G:Context)(e:Exp b v)(Ty:T b),
     G :- e >: Ty -> G :> Ty.
 Proof.
     intros b v eq G e Ty H1. remember (e >: Ty) as k eqn:E. revert e Ty E.
@@ -77,9 +77,11 @@ Proof.
         | G x Ty H3 H4
         | G e1 e2 Ty Ty' H3 IH1 H4 IH2
         | G x e Ty Ty' H3 H4 H5 IH 
-        ]; intros e' Sy H2; inversion H2; subst.    
+        ]; intros e' Sy H2; inversion H2; subst; clear H2.
     - apply (IH e). reflexivity.
-    -
- 
-Show.
-*)
+    - apply (ValidIsType _ _ _ G x); assumption.
+    - apply IsTypeRevR with Ty. apply IH1 with e1. reflexivity.
+    - apply TFun; try assumption. apply IsTypeIrrelevant with x Ty.
+      apply IH with e. reflexivity. 
+Qed.
+

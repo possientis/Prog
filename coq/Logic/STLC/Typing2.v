@@ -6,7 +6,7 @@ Require Import Logic.STLC.IsType.
 Require Import Logic.STLC.Typing.
 Require Import Logic.STLC.Context.
 
-Inductive Judgement2 (b v:Type) (eq:Eq v): @Context b v -> @Typing b v  -> Prop :=
+Inductive Judgement2 (b v:Type) (eq:Eq v): Context -> Typing -> Prop :=
 | JAnn : forall (G:Context) (e:Exp b v) (Ty:T b),
     Valid G                                     ->  (* superfluous              *)
     G :> Ty                                     ->  (* superfluous              *)

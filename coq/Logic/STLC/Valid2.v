@@ -15,7 +15,7 @@ Require Import Logic.STLC.Context.
 (* involved in a well-formed type expression to be valid.                       *)
 (* Note that these definitions cannot be decoupled from one another.            *)
 (* Compare with the definiton of Valid.                                         *)
-Inductive Valid2 (b v:Type) : @Context b v -> Prop :=
+Inductive Valid2 (b v:Type) : Context -> Prop :=
 | Valid2O   : Valid2 b v O
 | Valid2Ty  : forall (G:Context) (t:b),
     Valid2 b v G -> Valid2 b v (G ; t ::: *)
