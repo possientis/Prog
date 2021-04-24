@@ -42,5 +42,3 @@ Proof.
         + subst. assumption.
         + apply IH with x'. assumption.
 Qed.
-
-

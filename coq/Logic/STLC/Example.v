@@ -158,3 +158,26 @@ Proof.
             { apply TVar, FindTZ. }
         + apply FindVK, FindVZ.
 Qed.
+
+(* id x is of type Ty :-> Ty in any valid context for which Ty well-formed      *)
+(* Note in particular that the typing relation is not deterministic: in a given *)
+(* context, an expression is liable to be of more than one type.                *)
+Lemma idTyping : forall (b v:Type) (eq:Eq v) (x:v) (G:Context) (Ty:T b),
+    Valid G -> 
+    G :> Ty -> 
+    G :- id x >: Ty :-> Ty. 
+Proof.
+    intros b v eq x G Ty H1 H2. apply JLam; try assumption. apply JVar.
+    - apply ValidV; assumption.
+    - apply FindVZ.
+Qed.
+
+(* Note that id x cannot be of type Ty :-> Ty unless Ty is well-formed and      *)
+(* the given context is valid.                                                  *) 
+Lemma idTyping' : forall (b v:Type) (eq:Eq v) (x:v) (G:Context) (Ty:T b),
+    G :- id x >: Ty :-> Ty -> Valid G /\ G :> Ty.
+Proof.
+    intros b v eq x G Ty H1. split.
+    - apply TypedIsValid with eq (id x) (Ty :-> Ty). assumption.
+    - apply IsTypeRevL with Ty. apply TypedIsType with eq (id x). assumption.
+Qed.
