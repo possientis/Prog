@@ -1,89 +1,87 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/idris
-cd ${HOME}
+DIR=/home/john/Prog/idris
+cd ${DIR}
 echo
 echo "testing idris..."
 echo
 
 echo "WordLength..."
-idris WordLength.idr --check
+idris2 --quiet --check WordLength.idr 
 
 echo "Vehicle..."
-idris Vehicle.idr --check
+idris2 --quiet --check Vehicle.idr 
 
-echo "Vect..."
-idris Vect.idr --check
+#echo "Vect..."
+#idris2 --quiet --check Vect.idr 
 
 echo "VecSort..."
-idris VecSort.idr --check
+idris2 --quiet --check VecSort.idr 
 
 echo "TupleVect..."
-idris TupleVect.idr --check
+idris2 --quiet --check TupleVect.idr 
 
 echo "Tree..."
-idris Tree.idr --check
+idris2 --quiet --check Tree.idr 
 
-echo "StringOrInt..."
-idris StringOrInt.idr --check
+#echo "StringOrInt..."
+#idris2 --quiet --check StringOrInt.idr 
 
-echo "Reverse..."
-idris Reverse.idr --check
+#echo "Reverse..."
+#idris2 --quiet --check Reverse.idr 
 
-echo "replWith..."
-idris replWith.idr --check
+#echo "replWith..."
+#idris2 --quiet --check replWith.idr 
 
 echo "Printf..."
-idris Printf.idr --check
+idris2 --quiet --check Printf.idr 
 
 echo "Polygon..."
-idris Polygon.idr --check
+idris2 --quiet --check Polygon.idr 
 
 echo "Overloading..."
-idris Overloading.idr --check
+idris2 --quiet --check Overloading.idr 
 
 echo "Mutual..."
-idris Mutual.idr --check
+idris2 --quiet --check Mutual.idr 
 
 echo "Matter..."
-idris Matter.idr --check
+idris2 --quiet --check Matter.idr 
 
-echo "Matrix..."
-idris Matrix.idr --check
+#echo "Matrix..."
+#idris2 --quiet --check Matrix.idr 
 
 echo "Map..."
-idris Map.idr --check
+idris2 --quiet --check Map.idr 
 
 echo "Length..."
-idris Length.idr --check
+idris2 --quiet --check Length.idr 
 
 echo "Hello world..."
-idris Hello.idr --check
+idris2 --quiet --check Hello.idr 
 
 echo "Expr..."
-idris Expr.idr --check
+idris2 --quiet --check Expr.idr 
 
-echo "ExactLength..."
-idris ExactLength.idr --check
+#echo "ExactLength..."
+#idris2 --quiet --check ExactLength.idr 
 
 echo "EqNat..."
-idris EqNat.idr --check
+idris2 --quiet --check EqNat.idr 
 
 echo "DepPairs..."
-idris DepPairs.idr --check
+idris2 --quiet --check DepPairs.idr 
 
-echo "DataStore..."
-idris DataStore.idr --check
+#echo "DataStore..."
+#idris2 --quiet --check DataStore.idr 
 
 echo "Adder..."
-idris Adder.idr --check
+idris2 --quiet --check Adder.idr 
 
 ./clean.sh
 
-cd ${DIR}
-echo '\nAll idris tests completed successfully\n'
+echo 'All idris tests completed successfully'
 
 
 
