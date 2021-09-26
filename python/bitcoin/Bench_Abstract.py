@@ -2,6 +2,8 @@ import random
 import sys
 import time
 
+# This is a comment
+
 class Bench_Abstract(object):
 
     randGen = random.SystemRandom() 
