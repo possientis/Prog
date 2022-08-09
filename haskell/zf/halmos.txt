@@ -1,0 +1,28 @@
+Set :: Sort
+Set = 0 | 1 | 2 | ...
+
+Prop :: Sort
+Prop = 'bot' | Set 'in' Set | Prop '=>' Prop | 'forall' Set '.' Prop
+
+not :: Prop -> Prop
+not = \p -> p => bot
+
+(||) :: Prop -> Prop -> Prop
+(||) = \p -> \q -> not p => q
+
+(&&) :: Prop -> Prop -> Prop
+(&&) = \p -> \q -> not (not p || not q)
+
+(==) :: Set -> Set -> Prop
+(==) = \x -> \y -> 
+   (forall z . (z in x) -> (z in y))
+&& (forall z . (z in y) -> (z in x))
+&& (forall z . (x in z) -> (y in z))
+&& (forall z . (y in z) -> (x in z))          
+
+ex :: Set -> Prop -> Prop
+ex = \x -> \p -> not (forall x . not p)
+
+'exists' x '.' p  = ex x p
+
+
