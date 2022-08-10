@@ -7,6 +7,7 @@ module Stitch.Data.Exists
   ( Ex  (..)
   , packEx
   , unPackEx
+  , test1
   ) where
 
 import Data.Kind
@@ -29,14 +30,14 @@ unPackEx (Ex x) k = k x
 newtype Vec' a n = Vec' { _unVec' :: Vec n a }
   deriving Show
 
-_test1 :: Ex (Vec' Int)
-_test1 = packEx . Vec' $ (2 :> 1 :> 0 :> VNil)
+test1 :: Ex (Vec' Int)
+test1 = packEx . Vec' $ (2 :> 1 :> 0 :> VNil)
 
 _test2 :: Ex (Vec' Int)
 _test2 = packEx . Vec' $ (3 :> 2 :> 1 :> 0 :> VNil)
 
 _test3 :: Vec ('Succ ('Succ 'Zero)) (Ex (Vec' Int))
-_test3 = _test1 :> _test2 :> VNil
+_test3 = test1 :> _test2 :> VNil
 
 _exVecSum :: Ex (Vec' Int) -> Int
 _exVecSum (Ex (Vec' v)) = go v where
