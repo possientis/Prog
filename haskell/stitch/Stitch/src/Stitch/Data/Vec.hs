@@ -72,13 +72,13 @@ type family (v1 :: Vec n a) :++: (v2 :: Vec m a) :: Vec (n :+: m) a where
   'VNil      :++: v2 = v2
   (x ':> xs) :++: v2 = x ':> (xs :++: v2)
 
-data Length :: forall a n . Vec n a -> Type where
+data Length :: forall n a . Vec n a -> Type where
   LZ :: Length 'VNil
   LS :: Length xs -> Length (x ':> xs)
 
 deriving instance Show (Length xs)
 
-data Elem :: forall a n . a -> Vec n a -> Type where
+data Elem :: forall n a . a -> Vec n a -> Type where
   EZ :: Elem x (x ':> xs)
   ES :: Elem x xs -> Elem x (y ':> xs)
 

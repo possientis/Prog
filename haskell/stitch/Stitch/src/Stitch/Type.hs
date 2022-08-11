@@ -44,12 +44,6 @@ mkTy = Ty (typeRep @a)
 instance Eq Ty where
   Ty a == Ty b = isJust (a `eqTypeRep` b)
 
-pattern (:->) 
-  :: forall (fun :: Type). ()
-  => forall (arg :: Type) (res :: Type) . (fun ~ (arg -> res))
-  => TypeRep arg 
-  -> TypeRep res
-  -> TypeRep fun
 pattern arg :-> res <- (checkFun -> FunOnTypes arg res)
   where
     arg :-> res = arg `Fun` res
@@ -83,27 +77,18 @@ extractResType
 extractResType (_ `Fun` res) = res
 extractResType (App _ res)   = res
 
-pattern (:@:) 
-  :: forall k_res (app :: k_res)
-   . ()
-  => forall k_arg (fun :: k_arg -> k_res) (arg :: k_arg)
-   . (app ~ fun arg)
-  => TypeRep fun 
-  -> TypeRep arg
-  -> TypeRep app
 pattern f :@: a = f `App` a
 
 isTypeRep :: forall a b. Typeable a => TypeRep b -> Maybe (a :~~: b)
 isTypeRep = eqTypeRep (typeRep @a)
 
 -- Sing instance for types
-
 instance SingKind Type where
   type Sing = TypeRep
 
   fromSing _ = error "no term-level Types"
 
-instance Typeable a => SingI (a :: Type) where
+instance Typeable (a :: Type)  => SingI a where
   sing = typeRep
 
 _castTo :: forall a b . Typeable a => a -> TypeRep b -> Maybe b
@@ -111,13 +96,11 @@ _castTo x repB = case isTypeRep @a repB of
   Just HRefl  -> Just x
   Nothing     -> Nothing
 
-
 instance Pretty Ty where
   pretty (Ty ty) = pretty_ty topPrec ty
 
 instance Pretty (TypeRep ty) where
   pretty = pretty_ty topPrec
-
 
 arrowLeftPrec   :: Precedence
 arrowRightPrec  :: Precedence

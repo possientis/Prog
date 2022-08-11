@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs                #-}
+{-# LANGUAGE GADTs                #-}
 {-# LANGUAGE RankNTypes           #-}
 {-# LANGUAGE StandaloneDeriving   #-}
 {-# LANGUAGE TypeFamilies         #-}
@@ -20,14 +21,12 @@ import Data.Kind
 import Stitch.Data.Nat
 import Stitch.Data.Vec
 
--- Singleton type for vectors
-data SVec :: forall (a :: Type) (n :: Nat) . Vec n a -> Type where
-  SVNil :: SVec 'VNil
-  (:%>) :: Sing a -> Sing as -> SVec (a ':> as)
+-- Singleton class
+class SingKind k where
 
-infixr 5 :%>
+  type Sing :: k -> Type
 
-deriving instance ShowSingVec v => Show (SVec v)
+  fromSing :: forall (a :: k) . Sing a -> k
 
 -- Singleton type for Nat
 data SNat :: Nat -> Type where
@@ -36,19 +35,21 @@ data SNat :: Nat -> Type where
 
 deriving instance Show (SNat n)
 
--- Singleton class
-class SingKind k where
-
-  type Sing :: k -> Type
-
-  fromSing :: Sing (a :: k) -> k
-
 instance SingKind Nat where
 
   type Sing = SNat
 
   fromSing SZero      = Zero
   fromSing (SSucc n)  = Succ (fromSing n)
+
+-- Singleton type for vectors
+data SVec :: forall n a . Vec n a -> Type where
+  SVNil :: SVec 'VNil
+  (:%>) :: Sing a -> Sing as -> SVec (a ':> as)
+
+infixr 5 :%>
+
+deriving instance ShowSingVec v => Show (SVec v)
 
 instance SingKind a => SingKind (Vec n a) where
 
@@ -73,6 +74,10 @@ instance SingKind a => SingI ('VNil :: Vec 'Zero a) where
 instance (SingI h, SingI t) => SingI (h ':> t) where
   sing = sing :%> sing
 
+type family ShowSingVec (v :: Vec n a) :: Constraint where
+  ShowSingVec 'VNil       = ()
+  ShowSingVec (x ':> xs)  = (Show (Sing x), ShowSingVec xs) 
+
 snatToInt :: SNat n -> Int
 snatToInt SZero     = 0
 snatToInt (SSucc n) = 1 + snatToInt n 
@@ -86,13 +91,3 @@ _test1 = SSucc SZero
 _replicate :: SNat n -> a -> Vec n a
 _replicate SZero _    = VNil
 _replicate (SSucc n)  x = x :> _replicate n x
-
-_test2 :: SVec 'VNil
-_test2 = SVNil
-
-_test3 :: SVec ('Zero ':> 'VNil)
-_test3 = sing
-
-type family ShowSingVec (v :: Vec n a) :: Constraint where
-  ShowSingVec 'VNil       = ()
-  ShowSingVec (x ':> xs)  = (Show (Sing x), ShowSingVec xs) 

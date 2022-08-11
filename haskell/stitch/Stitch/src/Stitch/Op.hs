@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-missing-pattern-synonym-signatures #-}
+{-# LANGUAGE FlexibleInstances                          #-}
 {-# LANGUAGE GADTs                                      #-}
 {-# LANGUAGE PatternSynonyms                            #-}
 {-# LANGUAGE TypeOperators                              #-}
@@ -22,11 +23,15 @@ module  Stitch.Op
   , uEquals
   ) where
 
+import Data.Hashable
 import Data.Maybe
+
+import Text.PrettyPrint.ANSI.Leijen
 import Type.Reflection
 
 import Stitch.Data.Exists
 import Stitch.Type ()
+import Stitch.Utils
 
 data ArithOp ty where
   Plus      :: ArithOp Int
@@ -71,7 +76,7 @@ uGreater  :: UArithOp
 uGreaterE :: UArithOp 
 uEquals   :: UArithOp 
 
-uPlus     =  UArithOp Plus     
+uPlus     =  UArithOp Plus  
 uMinus    =  UArithOp Minus    
 uTimes    =  UArithOp Times    
 uDivide   =  UArithOp Divide   
@@ -100,3 +105,45 @@ eqArithOp _        _        = Nothing
 eqArithOpB :: ArithOp ty1 -> ArithOp ty2 -> Bool
 eqArithOpB op1 op2 = isJust (eqArithOp op1 op2)
 
+instance Eq (ArithOp ty) where
+  (==) = eqArithOpB
+
+instance Hashable (ArithOp ty) where
+  hashWithSalt s op = hashWithSalt s ctor_num
+    where
+      ctor_num :: Int
+      ctor_num = case op of
+        Plus     -> 0
+        Minus    -> 1
+        Times    -> 2
+        Divide   -> 3
+        Mod      -> 4
+        Less     -> 5
+        LessE    -> 6
+        Greater  -> 7
+        GreaterE -> 8
+        Equals   -> 9
+
+instance Eq UArithOp where
+  UArithOp op1 == UArithOp op2 = op1 `eqArithOpB` op2
+
+instance Pretty (ArithOp ty) where
+  pretty Plus     = char '+'
+  pretty Minus    = char '-'
+  pretty Times    = char '*'
+  pretty Divide   = char '/'
+  pretty Mod      = char '%'
+  pretty Less     = char '<'
+  pretty LessE    = text "<="
+  pretty Greater  = char '>'
+  pretty GreaterE = text ">="
+  pretty Equals   = text "=="
+
+instance Show (ArithOp ty) where
+  show = render . pretty
+
+instance Pretty UArithOp where
+  pretty (UArithOp op) = pretty op
+
+instance Show UArithOp where
+  show = render . pretty

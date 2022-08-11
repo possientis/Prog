@@ -1,3 +1,4 @@
+{-# LANGUAGE ExplicitForAll     #-}
 {-# LANGUAGE GADTs              #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TypeInType         #-}
@@ -17,7 +18,7 @@ data Fin :: Nat -> Type where
 
 deriving instance Show (Fin a)
 
-finToInt :: Fin n -> Int
+finToInt :: forall (n :: Nat) . Fin n -> Int
 finToInt FZ = 0
 finToInt (FS n) = 1 + finToInt n
 

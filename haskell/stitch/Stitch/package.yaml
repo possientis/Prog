@@ -23,6 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - ansi-wl-pprint >= 0.6.7.1
 - parsec         >= 3.1.14.0
+- hashable       >= 1.2.7.0
 
 library:
   source-dirs: src
