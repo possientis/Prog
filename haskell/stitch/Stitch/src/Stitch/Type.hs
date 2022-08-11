@@ -1,16 +1,16 @@
-{-# OPTIONS_GHC -Wno-orphans      #-}
-{-# LANGUAGE AllowAmbiguousTypes  #-}
-{-# LANGUAGE FlexibleInstances    #-}
-{-# LANGUAGE GADTs                #-}
-{-# LANGUAGE PatternSynonyms      #-}
-{-# LANGUAGE RankNTypes           #-}
-{-# LANGUAGE ScopedTypeVariables  #-}
-{-# LANGUAGE TypeApplications     #-}
-{-# LANGUAGE TypeFamilies         #-}
-{-# LANGUAGE TypeInType           #-}
-{-# LANGUAGE TypeOperators        #-}
-{-# LANGUAGE ViewPatterns         #-}
-
+{-# OPTIONS_GHC -Wno-missing-pattern-synonym-signatures #-}
+{-# OPTIONS_GHC -Wno-orphans                            #-}
+{-# LANGUAGE AllowAmbiguousTypes                        #-}
+{-# LANGUAGE FlexibleInstances                          #-}
+{-# LANGUAGE GADTs                                      #-}
+{-# LANGUAGE PatternSynonyms                            #-}
+{-# LANGUAGE RankNTypes                                 #-}
+{-# LANGUAGE ScopedTypeVariables                        #-}
+{-# LANGUAGE TypeApplications                           #-}
+{-# LANGUAGE TypeFamilies                               #-}
+{-# LANGUAGE TypeInType                                 #-}
+{-# LANGUAGE TypeOperators                              #-}
+{-# LANGUAGE ViewPatterns                               #-}
 
 module  Stitch.Type
   ( pattern Ty
@@ -26,18 +26,15 @@ module  Stitch.Type
 import Data.Kind
 import Data.Maybe
 import Type.Reflection
---import Text.PrettyPrint.ANSI.Leijen
+import Text.PrettyPrint.ANSI.Leijen
 
 import Stitch.Data.Exists
 import Stitch.Data.Singletons
 
+import Stitch.Utils
+
 type Ty = Ex (TypeRep :: Type -> Type)
 
-pattern Ty 
-  :: forall k f
-   . forall (i :: k)
-   . f i 
-  -> Ex f 
 pattern Ty t = Ex t
 {-# COMPLETE Ty #-}
 
@@ -99,6 +96,8 @@ pattern f :@: a = f `App` a
 isTypeRep :: forall a b. Typeable a => TypeRep b -> Maybe (a :~~: b)
 isTypeRep = eqTypeRep (typeRep @a)
 
+-- Sing instance for types
+
 instance SingKind Type where
   type Sing = TypeRep
 
@@ -112,22 +111,26 @@ _castTo x repB = case isTypeRep @a repB of
   Just HRefl  -> Just x
   Nothing     -> Nothing
 
-{-
+
 instance Pretty Ty where
   pretty (Ty ty) = pretty_ty topPrec ty
 
 instance Pretty (TypeRep ty) where
   pretty = pretty_ty topPrec
 
-arrowLeftPrec, arrowRightPrec, arrowPrec :: Prec
-arrowLeftPrec  = 5
-arrowRightPrec = 4.9
-arrowPrec      = 5
 
-pretty_ty :: Prec -> TypeRep ty -> Doc
-pretty_ty prec (arg `Fun` res) = maybeParens (prec >= arrowPrec) $
-                                 hsep [ pretty_ty arrowLeftPrec arg
-                                      , text "->"
-                                      , pretty_ty arrowRightPrec res ]
-pretty_ty _    other           = text (show other)
--}
+arrowLeftPrec   :: Precedence
+arrowRightPrec  :: Precedence
+arrowPrec       :: Precedence
+arrowLeftPrec   = 5
+arrowRightPrec  = 4.9
+arrowPrec       = 5
+
+pretty_ty :: Precedence -> TypeRep ty -> Doc
+pretty_ty prec (arg `Fun` res) 
+  = maybeParens (prec >= arrowPrec) 
+  $ hsep [ pretty_ty arrowLeftPrec arg
+         , text "->"
+         , pretty_ty arrowRightPrec res 
+         ]
+pretty_ty _ other = text (show other)

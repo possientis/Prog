@@ -57,7 +57,6 @@ instance SingKind a => SingKind (Vec n a) where
   fromSing SVNil  = VNil
   fromSing (h :%> t) = fromSing h :> fromSing t
 
-
 -- Implicit singleton
 class SingKind k => SingI (a :: k) where
   sing :: Sing a

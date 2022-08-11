@@ -22,6 +22,7 @@ description:         Please see the README on GitHub at <https://github.com/gith
 dependencies:
 - base >= 4.7 && < 5
 - ansi-wl-pprint >= 0.6.7.1
+- parsec         >= 3.1.14.0
 
 library:
   source-dirs: src
