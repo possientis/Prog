@@ -31,7 +31,9 @@ library
       Stitch.Data.Singletons
       Stitch.Data.Vec
       Stitch.Op
+      Stitch.Parse
       Stitch.Pretty
+      Stitch.Token
       Stitch.Type
       Stitch.Unchecked
       Stitch.Utils
