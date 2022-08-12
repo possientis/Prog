@@ -44,6 +44,9 @@ mkTy = Ty (typeRep @a)
 instance Eq Ty where
   Ty a == Ty b = isJust (a `eqTypeRep` b)
 
+pattern arg :-> res = Fun arg res 
+
+{-
 pattern arg :-> res <- (checkFun -> FunOnTypes arg res)
   where
     arg :-> res = arg `Fun` res
@@ -62,6 +65,7 @@ checkFun (arg `Fun` res)
   , Just HRefl <- typeRepKind res `eqTypeRep` typeRep @Type
   = FunOnTypes arg res
 checkFun _other = OtherType
+-}
 
 extractArgType 
   :: forall (arg :: Type) (res :: Type)

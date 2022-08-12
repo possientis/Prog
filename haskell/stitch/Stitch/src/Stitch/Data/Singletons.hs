@@ -14,6 +14,7 @@ module Stitch.Data.Singletons
   , SNat        (..)
   , SVec        (..)
   , snatToInt
+  , elemToSing
   ) where
 
 import Data.Kind
@@ -81,6 +82,14 @@ type family ShowSingVec (v :: Vec n a) :: Constraint where
 snatToInt :: SNat n -> Int
 snatToInt SZero     = 0
 snatToInt (SSucc n) = 1 + snatToInt n 
+
+elemToSing
+  :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a)
+   . Elem x xs
+  -> Sing xs
+  -> Sing x
+elemToSing  EZ (h :%> _) = h
+elemToSing (ES e) (_ :%> t) = elemToSing e t
 
 _test0 :: SNat 'Zero
 _test0 = SZero

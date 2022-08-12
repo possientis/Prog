@@ -82,16 +82,28 @@ data Elem :: forall n a . a -> Vec n a -> Type where
   EZ :: Elem x (x ':> xs)
   ES :: Elem x xs -> Elem x (y ':> xs)
 
-eqElem :: Elem x1 xs -> Elem x2 xs -> Maybe (x1 :~: x2)
+deriving instance Show (Elem xs x)
+
+eqElem 
+  :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x1 :: a) (x2 :: a) 
+   . Elem x1 xs 
+  -> Elem x2 xs 
+  -> Maybe (x1 :~: x2)
 eqElem  EZ      EZ     = Just Refl
 eqElem (ES e1) (ES e2) = eqElem e1 e2
 eqElem  _       _      = Nothing
 
-elemToInt :: Elem ty ctx -> Int
+elemToInt 
+  :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a) 
+   . Elem x xs 
+  -> Int
 elemToInt  EZ     = 0
 elemToInt (ES e)  = 1 + elemToInt e
 
-elemToFin :: Elem x (ctx :: Vec n a) -> Fin n
+elemToFin 
+  :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a)
+   . Elem x xs 
+  -> Fin n
 elemToFin EZ      = FZ
 elemToFin (ES e)  = FS (elemToFin e) 
 
