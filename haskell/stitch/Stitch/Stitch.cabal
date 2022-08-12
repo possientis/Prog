@@ -27,9 +27,11 @@ library
   exposed-modules:
       Stitch.Data.Exists
       Stitch.Data.Fin
+      Stitch.Data.IHashable
       Stitch.Data.Nat
       Stitch.Data.Singletons
       Stitch.Data.Vec
+      Stitch.Exp
       Stitch.Op
       Stitch.Parse
       Stitch.Pretty
