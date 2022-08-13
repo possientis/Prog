@@ -33,6 +33,7 @@ library
       Stitch.Data.Vec
       Stitch.Exp
       Stitch.Globals
+      Stitch.Lex
       Stitch.Monad
       Stitch.Op
       Stitch.Parse
