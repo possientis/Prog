@@ -38,6 +38,7 @@ library
       Stitch.Op
       Stitch.Parse
       Stitch.Pretty
+      Stitch.Statement
       Stitch.Token
       Stitch.Type
       Stitch.Unchecked
