@@ -10,6 +10,7 @@ module Stitch.Data.Exists
   , packEx
   , packSingIEx
   , unpackEx
+  , unpackSingEx
   , unpackSingIEx
   , test1
   ) where
@@ -70,6 +71,14 @@ unpackSingIEx
   -> (forall (i :: k) . SingI i => a i -> r) 
   -> r
 unpackSingIEx (SingEx x) k = k x
+
+-- | Unpack an existential with an explicit singleton (CPS-style)
+unpackSingEx 
+  :: forall k (a :: k -> Type) (r :: Type)
+   . SingEx a 
+  -> (forall i. Sing i -> a i -> r) 
+  -> r
+unpackSingEx (SingEx x) k = k sing x
 
 newtype Vec' a n = Vec' { _unVec' :: Vec n a }
   deriving Show

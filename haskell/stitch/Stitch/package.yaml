@@ -24,6 +24,8 @@ dependencies:
 - ansi-wl-pprint >= 0.6.7.1
 - parsec         >= 3.1.14.0
 - hashable       >= 1.2.7.0
+- containers     >= 0.5
+- mtl            >= 2.2.1
 
 library:
   source-dirs: src
