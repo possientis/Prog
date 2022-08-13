@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Stitch.Control.Monad.HReader
       Stitch.Data.Exists
       Stitch.Data.Fin
       Stitch.Data.IHashable
