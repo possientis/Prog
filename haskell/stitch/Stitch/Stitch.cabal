@@ -33,6 +33,7 @@ library
       Stitch.Data.Vec
       Stitch.Exp
       Stitch.Globals
+      Stitch.Monad
       Stitch.Op
       Stitch.Parse
       Stitch.Pretty
@@ -49,8 +50,10 @@ library
     , base >=4.7 && <5
     , containers >=0.5
     , hashable >=1.2.7.0
+    , haskeline >=0.7.1.1
     , mtl >=2.2.1
     , parsec >=3.1.14.0
+    , transformers >=0.4.0.0
   default-language: Haskell2010
 
 executable Stitch-exe
@@ -66,8 +69,10 @@ executable Stitch-exe
     , base >=4.7 && <5
     , containers >=0.5
     , hashable >=1.2.7.0
+    , haskeline >=0.7.1.1
     , mtl >=2.2.1
     , parsec >=3.1.14.0
+    , transformers >=0.4.0.0
   default-language: Haskell2010
 
 test-suite Stitch-test
@@ -84,6 +89,8 @@ test-suite Stitch-test
     , base >=4.7 && <5
     , containers >=0.5
     , hashable >=1.2.7.0
+    , haskeline >=0.7.1.1
     , mtl >=2.2.1
     , parsec >=3.1.14.0
+    , transformers >=0.4.0.0
   default-language: Haskell2010
