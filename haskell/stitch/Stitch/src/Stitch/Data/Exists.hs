@@ -80,21 +80,18 @@ unpackSingEx
   -> r
 unpackSingEx (SingEx x) k = k sing x
 
-newtype Vec' a n = Vec' { _unVec' :: Vec n a }
-  deriving Show
+test1 :: Ex (Vec Int)
+test1 = packEx (2 :> 1 :> 0 :> VNil)
 
-test1 :: Ex (Vec' Int)
-test1 = packEx . Vec' $ (2 :> 1 :> 0 :> VNil)
+_test2 :: Ex (Vec Int)
+_test2 = packEx (3 :> 2 :> 1 :> 0 :> VNil)
 
-_test2 :: Ex (Vec' Int)
-_test2 = packEx . Vec' $ (3 :> 2 :> 1 :> 0 :> VNil)
-
-_test3 :: Vec ('Succ ('Succ 'Zero)) (Ex (Vec' Int))
+_test3 :: Vec (Ex (Vec Int)) ('Succ ('Succ 'Zero)) 
 _test3 = test1 :> _test2 :> VNil
 
-_exVecSum :: Ex (Vec' Int) -> Int
-_exVecSum (Ex (Vec' v)) = go v where
-  go :: forall (n :: Nat) . Vec n Int -> Int
+_exVecSum :: Ex (Vec Int) -> Int
+_exVecSum (Ex v) = go v where
+  go :: forall (n :: Nat) . Vec Int n -> Int
   go VNil = 0
   go (x :> xs) = x + go xs
 

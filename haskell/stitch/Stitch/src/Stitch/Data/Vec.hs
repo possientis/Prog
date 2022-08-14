@@ -27,22 +27,22 @@ import Data.Type.Equality
 import Stitch.Data.Fin
 import Stitch.Data.Nat
 
-data Vec :: Nat -> Type -> Type where
-  VNil :: Vec 'Zero a
-  (:>) :: a -> Vec n a -> Vec ('Succ n) a
+data Vec :: Type -> Nat -> Type where
+  VNil :: Vec a 'Zero
+  (:>) :: a -> Vec a n -> Vec a ('Succ n)
 
 infixr 5 :>
 
-deriving instance Show a => Show (Vec n a)
+deriving instance Show a => Show (Vec a n)
 
-(!!!) :: Vec n a -> Fin n -> a
+(!!!) :: Vec a n -> Fin n -> a
 (!!!) (x :> _)  FZ     = x
 (!!!) (_ :> xs) (FS j) = xs !!! j 
 
-_vec1 :: Vec ('Succ ('Succ ('Succ 'Zero))) Int
+_vec1 :: Vec Int ('Succ ('Succ ('Succ 'Zero)))
 _vec1 = 2 :> 1 :> 0 :> VNil
 
-_vec2 :: Vec ('Succ ('Succ ('Succ 'Zero))) Int
+_vec2 :: Vec Int ('Succ ('Succ ('Succ 'Zero)))
 _vec2 = 5 :> 4 :> 3 :> VNil
 
 _test2 :: Int
@@ -54,38 +54,38 @@ _test1 = _vec1 !!! (FS FZ)
 _test0 :: Int
 _test0 = _vec1 !!! (FS (FS FZ))
 
-type family (v :: Vec n a) :!: (i :: Fin n) :: a where
+type family (v :: Vec a n) :!: (i :: Fin n) :: a where
   (x ':> _ ) :!:  'FZ     = x
   (_ ':> xs) :!: ('FS j)  = xs :!: j
 
-elemIndex :: Eq a => a -> Vec n a -> Maybe (Fin n)
+elemIndex :: Eq a => a -> Vec a n -> Maybe (Fin n)
 elemIndex _ VNil  = Nothing
 elemIndex x (y :> ys)
   | x == y    = Just FZ
   | otherwise = FS <$> elemIndex x ys
 
-(+++) :: Vec n a -> Vec m a -> Vec (n :+: m) a
+(+++) :: Vec a n -> Vec a m -> Vec a (n :+: m)
 (+++) VNil ys = ys
 (+++) (x :> xs) ys = x :> (xs +++ ys)
 
-type family (v1 :: Vec n a) :++: (v2 :: Vec m a) :: Vec (n :+: m) a where
+type family (v1 :: Vec a n) :++: (v2 :: Vec a m) :: Vec a (n :+: m) where
   'VNil      :++: v2 = v2
   (x ':> xs) :++: v2 = x ':> (xs :++: v2)
 
-data Length :: forall n a . Vec n a -> Type where
+data Length :: forall a n . Vec a n -> Type where
   LZ :: Length 'VNil
   LS :: Length xs -> Length (x ':> xs)
 
 deriving instance Show (Length xs)
 
-data Elem :: forall n a . Vec n a -> a -> Type where
+data Elem :: forall a n . Vec a n -> a -> Type where
   EZ :: Elem (x ':> xs) x
   ES :: Elem xs x -> Elem (y ':> xs) x
 
 deriving instance Show (Elem xs x)
 
 eqElem 
-  :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x1 :: a) (x2 :: a) 
+  :: forall (a :: Type) (n :: Nat) (xs :: Vec a n) (x1 :: a) (x2 :: a) 
    . Elem xs x1 
   -> Elem xs x2
   -> Maybe (x1 :~: x2)
@@ -94,14 +94,14 @@ eqElem (ES e1) (ES e2) = eqElem e1 e2
 eqElem  _       _      = Nothing
 
 elemToInt 
-  :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a) 
+  :: forall (a :: Type) (n :: Nat) (xs :: Vec a n) (x :: a) 
    . Elem xs x 
   -> Int
 elemToInt  EZ     = 0
 elemToInt (ES e)  = 1 + elemToInt e
 
 elemToFin 
-  :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a)
+  :: forall (a :: Type) (n :: Nat) (xs :: Vec a n) (x :: a)
    . Elem xs x 
   -> Fin n
 elemToFin EZ      = FZ
@@ -109,8 +109,8 @@ elemToFin (ES e)  = FS (elemToFin e)
 
 weakenElem 
   :: forall 
-      (n :: Nat) (m :: Nat) (a :: Type) 
-      (prefix :: Vec n a) (xs :: Vec m a) (x :: a) 
+      (a :: Type) (n :: Nat) (m :: Nat) 
+      (prefix :: Vec a n) (xs :: Vec a m) (x :: a) 
    . Length prefix 
   -> Elem xs x 
   -> Elem (prefix :++: xs) x
@@ -119,8 +119,8 @@ weakenElem (LS len) e = ES (weakenElem len e)
 
 strengthenElem 
   :: forall 
-      (n :: Nat) (m :: Nat) (a :: Type) 
-      (prefix :: Vec n a) (xs :: Vec m a) (x :: a) 
+      (a :: Type) (n :: Nat) (m :: Nat)
+      (prefix :: Vec a n) (xs :: Vec a m) (x :: a) 
    . Length prefix 
   -> Elem (prefix :++: xs) x 
   -> Maybe (Elem xs x)

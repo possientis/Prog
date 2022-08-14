@@ -67,13 +67,13 @@ parse p ts
 -- A parser usable in a context with n bound variables
 -- the "state" is a list of bound names. searching a bound name in the list
 -- gives you the correct deBruijn index
-type Parser n a = ParsecT [LToken] () (Reader (Vec n String)) a
+type Parser n a = ParsecT [LToken] () (Reader (Vec String n)) a
 
 -- | Bind a name over an expression
 bind :: String -> Parser ('Succ n) a -> Parser n a
 bind v body = hlocal f body
   where
-    f :: Vec n String -> Vec ('Succ n) String 
+    f :: Vec String n -> Vec String ('Succ n)
     f = (v :>)
 
 -- | Parse the given nullary token

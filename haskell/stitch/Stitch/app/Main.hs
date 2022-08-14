@@ -22,7 +22,7 @@ main = do
   print $ Succ Zero
   print FZ
   print $ FS FZ
-  print (VNil :: Vec 'Zero Int)
+  print (VNil :: Vec Int 'Zero)
   print (sing :: Sing 'Zero)
   print test1
   print $ mkTy @Int

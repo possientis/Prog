@@ -38,7 +38,7 @@ import Stitch.Type
 import Stitch.Utils
 
 -- | A context is just a vector of types
-type Ctx n = Vec n Type
+type Ctx = Vec Type
 
 -- | Convenient constraint synonym
 type KnownLength (ctx :: Ctx n) = SingI n
