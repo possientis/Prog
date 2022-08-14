@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Stitch.Check
       Stitch.Control.Monad.HReader
       Stitch.Data.Exists
       Stitch.Data.Fin
@@ -39,6 +40,7 @@ library
       Stitch.Op
       Stitch.Parse
       Stitch.Pretty
+      Stitch.Shift
       Stitch.Statement
       Stitch.Token
       Stitch.Type

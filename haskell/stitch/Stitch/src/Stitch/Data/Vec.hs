@@ -78,16 +78,16 @@ data Length :: forall n a . Vec n a -> Type where
 
 deriving instance Show (Length xs)
 
-data Elem :: forall n a . a -> Vec n a -> Type where
-  EZ :: Elem x (x ':> xs)
-  ES :: Elem x xs -> Elem x (y ':> xs)
+data Elem :: forall n a . Vec n a -> a -> Type where
+  EZ :: Elem (x ':> xs) x
+  ES :: Elem xs x -> Elem (y ':> xs) x
 
 deriving instance Show (Elem xs x)
 
 eqElem 
   :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x1 :: a) (x2 :: a) 
-   . Elem x1 xs 
-  -> Elem x2 xs 
+   . Elem xs x1 
+  -> Elem xs x2
   -> Maybe (x1 :~: x2)
 eqElem  EZ      EZ     = Just Refl
 eqElem (ES e1) (ES e2) = eqElem e1 e2
@@ -95,23 +95,35 @@ eqElem  _       _      = Nothing
 
 elemToInt 
   :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a) 
-   . Elem x xs 
+   . Elem xs x 
   -> Int
 elemToInt  EZ     = 0
 elemToInt (ES e)  = 1 + elemToInt e
 
 elemToFin 
   :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a)
-   . Elem x xs 
+   . Elem xs x 
   -> Fin n
 elemToFin EZ      = FZ
 elemToFin (ES e)  = FS (elemToFin e) 
 
-weakenElem :: Length prefix -> Elem x xs -> Elem x (prefix :++: xs)
-weakenElem  LZ      e = e
+weakenElem 
+  :: forall 
+      (n :: Nat) (m :: Nat) (a :: Type) 
+      (prefix :: Vec n a) (xs :: Vec m a) (x :: a) 
+   . Length prefix 
+  -> Elem xs x 
+  -> Elem (prefix :++: xs) x
+weakenElem  LZ e      = e
 weakenElem (LS len) e = ES (weakenElem len e)
 
-strengthenElem :: Length prefix -> Elem x (prefix :++: xs) -> Maybe (Elem x xs)
+strengthenElem 
+  :: forall 
+      (n :: Nat) (m :: Nat) (a :: Type) 
+      (prefix :: Vec n a) (xs :: Vec m a) (x :: a) 
+   . Length prefix 
+  -> Elem (prefix :++: xs) x 
+  -> Maybe (Elem xs x)
 strengthenElem  LZ e     = Just e
 strengthenElem (LS _) EZ = Nothing
 strengthenElem (LS len) (ES e) = strengthenElem len e

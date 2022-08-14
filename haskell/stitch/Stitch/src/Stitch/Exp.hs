@@ -4,6 +4,7 @@
 {-# LANGUAGE LambdaCase           #-}
 {-# LANGUAGE ScopedTypeVariables  #-}
 {-# LANGUAGE StandaloneDeriving   #-}
+{-# LANGUAGE TypeApplications     #-}
 {-# LANGUAGE TypeFamilies         #-}
 {-# LANGUAGE TypeInType           #-}
 {-# LANGUAGE TypeOperators        #-}
@@ -47,7 +48,7 @@ type KnownLength (ctx :: Ctx n) = SingI n
 -- in the list indicates the de Bruijn index of the associated term-level
 -- variable.
 data Exp :: forall n. Ctx n -> Type -> Type where
-  Var   :: Elem ty ctx -> Exp ctx ty
+  Var   :: Elem ctx ty -> Exp ctx ty
   Lam   :: TypeRep arg -> Exp (arg ':> ctx) res -> Exp ctx (arg -> res)
   App   :: Exp ctx (arg -> res) -> Exp ctx arg -> Exp ctx res
   Let   :: Exp ctx rhs_ty -> Exp (rhs_ty ':> ctx) body_ty -> Exp ctx body_ty
@@ -125,7 +126,7 @@ instance KnownLength ctx => IHashable (Exp ctx) where
   ihashWithSalt = hashWithSalt
   ihash = hash
 
-instance KnownLength ctx => Hashable (Elem ty ctx) where
+instance KnownLength ctx => Hashable (Elem ctx ty) where
   hashWithSalt s v = hashDeBruijn s v sing
 
 
@@ -136,7 +137,7 @@ instance KnownLength ctx => Hashable (Elem ty ctx) where
 hashDeBruijn 
   :: forall (n :: Nat) (ctx :: Ctx n) (ty :: Type)
    . Int 
-  -> Elem ty ctx
+  -> Elem ctx ty
   -> SNat n 
   -> Int
 hashDeBruijn s EZ     sn         = hashWithSalt s (snatToInt sn)
@@ -190,3 +191,7 @@ pretty_exp prec (Fix b)          = prettyFix prec b
 pretty_exp _    (IntE i)         = int i
 pretty_exp _    (BoolE True)     = text "true"
 pretty_exp _    (BoolE False)    = text "false"
+
+-- (\x:Int. x + 1) 5
+_test1 :: Exp 'VNil Int
+_test1 = App (Lam (typeRep @Int) (Arith (Var EZ) Plus (IntE 1))) (IntE 5)

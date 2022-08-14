@@ -85,7 +85,7 @@ snatToInt (SSucc n) = 1 + snatToInt n
 
 elemToSing
   :: forall (n :: Nat) (a :: Type) (xs :: Vec n a) (x :: a)
-   . Elem x xs
+   . Elem xs x
   -> Sing xs
   -> Sing x
 elemToSing  EZ (h :%> _) = h
