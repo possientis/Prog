@@ -47,7 +47,7 @@ type KnownLength (ctx :: Ctx n) = SingI n
 -- @ctx@. Note that a context is a list of types, where a type's index
 -- in the list indicates the de Bruijn index of the associated term-level
 -- variable.
-data Exp :: forall n. Ctx n -> Type -> Type where
+data Exp :: forall (n :: Nat) . Ctx n -> Type -> Type where
   Var   :: Elem ctx ty -> Exp ctx ty
   Lam   :: TypeRep arg -> Exp (arg ':> ctx) res -> Exp ctx (arg -> res)
   App   :: Exp ctx (arg -> res) -> Exp ctx arg -> Exp ctx res
