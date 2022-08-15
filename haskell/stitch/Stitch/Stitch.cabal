@@ -43,6 +43,8 @@ library
       Stitch.Pretty
       Stitch.Shift
       Stitch.Statement
+      Stitch.Test.Fol
+      Stitch.Test.Lam
       Stitch.Token
       Stitch.Type
       Stitch.Unchecked
