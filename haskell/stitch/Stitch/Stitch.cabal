@@ -33,6 +33,7 @@ library
       Stitch.Data.Nat
       Stitch.Data.Singletons
       Stitch.Data.Vec
+      Stitch.Eval
       Stitch.Exp
       Stitch.Globals
       Stitch.Lex

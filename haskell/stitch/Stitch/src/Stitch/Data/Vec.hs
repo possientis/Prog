@@ -67,10 +67,12 @@ elemIndex x (y :> ys)
 (+++) :: Vec a n -> Vec a m -> Vec a (n :+: m)
 (+++) VNil ys = ys
 (+++) (x :> xs) ys = x :> (xs +++ ys)
+infixr 5 +++
 
 type family (v1 :: Vec a n) :++: (v2 :: Vec a m) :: Vec a (n :+: m) where
   'VNil      :++: v2 = v2
   (x ':> xs) :++: v2 = x ':> (xs :++: v2)
+infixr 5 :++:
 
 data Length :: forall a n . Vec a n -> Type where
   LZ :: Length 'VNil
