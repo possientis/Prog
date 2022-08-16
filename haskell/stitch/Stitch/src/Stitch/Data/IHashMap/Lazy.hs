@@ -1,4 +1,4 @@
---{-# LANGUAGE Trustworthy #-}
+{-# LANGUAGE Trustworthy #-}
 
 ------------------------------------------------------------------------
 -- |
@@ -22,8 +22,7 @@
 -- implementation uses a large base (i.e. 16) so in practice these
 -- operations are constant time.
 
-module  Stitch.Data.IHashMap.Lazy () where
-{-
+module  Stitch.Data.IHashMap.Lazy
   ( -- * Strictness properties
     -- $strictness
   IHashMap
@@ -91,13 +90,15 @@ module  Stitch.Data.IHashMap.Lazy () where
   , HS.keysSet
   ) where
 
-import Stitch.Data.IHashMap.Base
-import qualified Stitch.Data.IHashSet.Base as HS
 import Prelude ()
+
+import qualified Stitch.Data.IHashSet.Base as HS
+
+import Stitch.Data.IHashMap.Base
 
 -- $strictness
 --
 -- This module satisfies the following strictness property:
 --
 -- * Key arguments are evaluated to WHNF
--}
+
