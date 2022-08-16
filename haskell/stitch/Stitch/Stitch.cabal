@@ -35,6 +35,7 @@ library
       Stitch.Data.IHashMap.Lazy
       Stitch.Data.IHashMap.List
       Stitch.Data.IHashMap.UnsafeShift
+      Stitch.Data.IHashSet.Base
       Stitch.Data.Nat
       Stitch.Data.Singletons
       Stitch.Data.Vec

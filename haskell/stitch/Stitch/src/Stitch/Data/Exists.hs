@@ -15,6 +15,7 @@ module Stitch.Data.Exists
   , test1
   ) where
 
+import Control.Arrow
 import Data.Kind
 
 import Stitch.Data.Nat
@@ -23,6 +24,9 @@ import Stitch.Data.Vec
 
 data Ex :: forall k . (k -> Type) -> Type  where
   Ex :: forall k (f :: k -> Type)  (i :: k) . f i -> Ex f
+
+instance (forall i. Read (a i)) => Read (Ex a) where
+  readsPrec prec s = fmap (first Ex) $ readsPrec prec s
 
 instance (forall i . Show (f i)) => Show (Ex f) where
   show (Ex x) = show x
