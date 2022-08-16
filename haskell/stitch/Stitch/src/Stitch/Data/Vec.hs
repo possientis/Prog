@@ -95,6 +95,9 @@ eqElem  EZ      EZ     = Just Refl
 eqElem (ES e1) (ES e2) = eqElem e1 e2
 eqElem  _       _      = Nothing
 
+instance TestEquality (Elem xs) where
+  testEquality = eqElem
+
 elemToInt 
   :: forall (a :: Type) (n :: Nat) (xs :: Vec a n) (x :: a) 
    . Elem xs x 

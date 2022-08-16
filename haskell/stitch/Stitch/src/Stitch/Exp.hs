@@ -22,6 +22,7 @@ module  Stitch.Exp
 import Data.Hashable
 import Data.Kind
 import Data.Maybe
+import Data.Type.Equality
 
 import Text.PrettyPrint.ANSI.Leijen
 
@@ -110,6 +111,9 @@ eqExp (BoolE b1) (BoolE b2)
 
 eqExp _ _ = Nothing
 
+instance TestEquality (Exp ctx) where
+  testEquality = eqExp
+
 instance KnownLength ctx => Hashable (Exp ctx ty) where
   hashWithSalt s = \case
     (Var v)           -> hashDeBruijn s v sing
@@ -128,7 +132,6 @@ instance KnownLength ctx => IHashable (Exp ctx) where
 
 instance KnownLength ctx => Hashable (Elem ctx ty) where
   hashWithSalt s v = hashDeBruijn s v sing
-
 
 -- | The identity of a de Bruijn index comes from the difference 
 -- between the size of the context and the value of the index. We 

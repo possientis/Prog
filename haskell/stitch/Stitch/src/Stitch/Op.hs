@@ -25,6 +25,7 @@ module  Stitch.Op
 
 import Data.Hashable
 import Data.Maybe
+import Data.Type.Equality
 
 import Text.PrettyPrint.ANSI.Leijen
 import Type.Reflection
@@ -100,6 +101,9 @@ eqArithOp Greater  Greater  = Just Refl
 eqArithOp GreaterE GreaterE = Just Refl
 eqArithOp Equals   Equals   = Just Refl
 eqArithOp _        _        = Nothing
+
+instance TestEquality ArithOp where
+  testEquality = eqArithOp
 
 -- | Compare two 'ArithOp's for uninformative equality
 eqArithOpB :: ArithOp ty1 -> ArithOp ty2 -> Bool
