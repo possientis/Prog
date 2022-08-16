@@ -32,6 +32,7 @@ library
       Stitch.Data.IHashable
       Stitch.Data.IHashMap.Array
       Stitch.Data.IHashMap.Base
+      Stitch.Data.IHashMap.List
       Stitch.Data.Nat
       Stitch.Data.Singletons
       Stitch.Data.Vec
