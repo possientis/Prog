@@ -8,6 +8,7 @@
 
 module  Stitch.Shift
   ( Shiftable (..)
+  , ShiftableKind
   , shift
   , uncheckedUnshift
   , unshift

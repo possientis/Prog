@@ -27,6 +27,7 @@ library
   exposed-modules:
       Stitch.Check
       Stitch.Control.Monad.HReader
+      Stitch.CSE
       Stitch.Data.Exists
       Stitch.Data.Fin
       Stitch.Data.IHashable

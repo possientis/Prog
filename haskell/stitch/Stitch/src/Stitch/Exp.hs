@@ -133,6 +133,10 @@ instance KnownLength ctx => IHashable (Exp ctx) where
 instance KnownLength ctx => Hashable (Elem ctx ty) where
   hashWithSalt s v = hashDeBruijn s v sing
 
+instance KnownLength ctx => IHashable (Elem ctx) where
+  ihashWithSalt = hashWithSalt
+  ihash = hash
+
 -- | The identity of a de Bruijn index comes from the difference 
 -- between the size of the context and the value of the index. We 
 -- use this when hashing so that, say, (#2 #3) is recognized as 
