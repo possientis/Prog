@@ -66,6 +66,7 @@ library
     , base >=4.7 && <5
     , containers >=0.5
     , deepseq >=1.4
+    , directory >=1.2.0.1
     , hashable >=1.2.7.0
     , haskeline >=0.7.1.1
     , mtl >=2.2.1
@@ -86,6 +87,7 @@ executable Stitch-exe
     , base >=4.7 && <5
     , containers >=0.5
     , deepseq >=1.4
+    , directory >=1.2.0.1
     , hashable >=1.2.7.0
     , haskeline >=0.7.1.1
     , mtl >=2.2.1
@@ -107,6 +109,7 @@ test-suite Stitch-test
     , base >=4.7 && <5
     , containers >=0.5
     , deepseq >=1.4
+    , directory >=1.2.0.1
     , hashable >=1.2.7.0
     , haskeline >=0.7.1.1
     , mtl >=2.2.1

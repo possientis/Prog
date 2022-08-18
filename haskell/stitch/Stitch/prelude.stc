@@ -1,0 +1,25 @@
+-- Stitch prelude
+
+add = \x:Int.\y:Int.x+y;
+
+sub = \x:Int.\y:Int.x-y;
+
+noDivAbove = 
+  fix \nda : Int -> Int -> Bool .
+    \tester : Int. \scrutinee : Int .
+      if tester * tester > scrutinee
+        then true
+        else if scrutinee % tester == 0
+          then false
+          else nda (tester + 1) scrutinee;
+
+isPrime = \x : Int .
+  if x <= 1
+    then false
+    else noDivAbove 2 x;
+
+
+fib = fix
+  \f : (Int -> Int) . \n : Int .
+    if n <= 1 then 1 else (f (n - 2) + f (n -1))
+    
