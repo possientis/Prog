@@ -1,9 +1,3 @@
-Kind := 'Prop' | 'Set' | k '->' k
-
-Prop := p | 'bot' | x ':' x | p '=>' p | 'forall' x '.' Prop
-
-Set := x | Sig Prop
-
 
 not :: Prop -> Prop
 not = \p -> p => bot
@@ -25,5 +19,4 @@ ex :: Set -> Prop -> Prop
 ex = \x -> \p -> not (forall x . not p)
 
 'exists' x '.' p  = ex x p
-
 

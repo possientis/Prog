@@ -58,6 +58,9 @@ library
       Stitch.Type
       Stitch.Unchecked
       Stitch.Utils
+      ZF.Halmos
+      ZF.Sort
+      ZF.TExp
   other-modules:
       Paths_Stitch
   hs-source-dirs:
