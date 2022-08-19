@@ -125,6 +125,7 @@ check_ ctx = \case
   (UIntE n)  -> \k -> k sing (IntE n)
   (UBoolE b) -> \k -> k sing (BoolE b)
 
+
 check_var
   :: Fin n 
   -> Sing (ctx :: Ctx n)

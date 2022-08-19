@@ -51,6 +51,7 @@ library
       Stitch.Pretty
       Stitch.Shift
       Stitch.Statement
+      Stitch.Subst
       Stitch.Test.Fol
       Stitch.Test.Lam
       Stitch.Token
