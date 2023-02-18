@@ -27,6 +27,12 @@ Require Import Logic.Fol.Subformula.
 Require Import Logic.Fol.Congruence.
 
 (* Generator of strong alpha-equivalence.                                       *)
+(* Strong alpha-equivalence coincides with the usual alpha-equivalence when the *)
+(* type of variable v is infinite. Otherwise, it is a stronger relation. For    *)
+(* example, if the type v only has two possible values x and y, the terms       *)
+(* t1 = All x (All y (Elem x y))                                                *)
+(* t2 = All y (All x (Elem y x))                                                *)
+(* are alpha-equivalent but not strongly so. See examples below.                *)
 Inductive StrongAlpha0 (v:Type) (e:Eq v) : P v -> P v -> Prop :=
 | mkStrongAlpha0: forall (x y:v) (p1:P v), 
     x <> y        -> 
@@ -49,6 +55,7 @@ Notation "p ~ q" := (StrongAlpha p q)
 Open Scope Fol_StrongAlpha_scope.
 
 (* Not following pdf to obtain stronger result of equality as lists.            *)
+(* Two strongly alpha-equivalent terms has the same free variables.             *)
 Lemma StrongAlpha_free : forall (v:Type) (e:Eq v) (p q:P v), 
     p ~ q -> Fr p = Fr q.
 Proof.
@@ -93,7 +100,8 @@ Proof.
           apply H3 in H6. contradiction.
 Qed.
 
-(* Strong alpha-equivalence is preserved by var replacement with caveat.        *)
+(* Strong alpha-equivalence is preserved by variable replacement, if the new    *)
+(* variable y is fresh, i.e. does not already belong to any of the terms.       *)
 Lemma StrongAlpha_replace : 
     forall (v:Type) (e:Eq v) (p q:P v) (x y:v),
         ~ y :: var p -> ~ y :: var q -> 
@@ -108,7 +116,8 @@ Proof.
     apply permute_injective. assumption.
 Qed.
 
-(* Strong alpha-equivalence class unchanged by var replacement with caveat.     *)
+(* Strong alpha-equivalence class unchanged by variable replacement, if the new *)
+(* variable y is fresh and the variable being replaced x is not free.           *)
 Lemma StrongAlpha_replace_self:
     forall (v:Type) (e:Eq v) (p:P v) (x y:v),
         ~ y :: var p -> 
@@ -395,6 +404,7 @@ Proof.
             { apply Cong_symmetric, CongBase. constructor; assumption. }
 Qed.
 
+(* The almost equivalence is a congruent relation.                              *)
 Lemma almostCongruent : forall (v:Type) (e:Eq v),
     congruent (@AlmostStrongAlpha v e).
 Proof.
@@ -403,7 +413,7 @@ Proof.
     - intros x p1 q1 H1. constructor. apply almostStrongAlpha. assumption.
 Qed.
 
-
+(* The almost equivalence is a congruence                                       *)
 Lemma almostCongruence : forall (v:Type) (e:Eq v),
     congruence (@AlmostStrongAlpha v e).
 Proof.
@@ -416,6 +426,7 @@ Proof.
     - apply almostCongruent.
 Qed.
 
+(* The almost equivalence is the same relation as the strong alpha-equivalence. *)
 Lemma almostIsStrong : forall (v:Type) (e:Eq v) (p q:P v),
     p :~: q <-> p ~ q.
 Proof.
@@ -520,6 +531,7 @@ Qed.
 
 (* This is why strong alpha-equivalence is not the right notion, as it fails    *)
 (* in cases when the set of variables is finite. Here card V = 2.               *)
+(* We expose two terms which are clearly alpha-equivalent but not strongly so.  *)
 Lemma CounterExample1 : forall (x y:bool), x <> y ->
     ~(All x (All y (Elem x y)) ~ All y (All x (Elem y x))).
 Proof.
