@@ -26,6 +26,38 @@ Notation "x <:> y" := (permute y x)
 
 Open Scope Permute_scope.
 
+Lemma permute_app_left : forall (v:Type) (e:Eq v) (x y:v), 
+  (x <:> y) x = y.
+Proof.
+  intros v e x y. unfold permute.
+  destruct (eqDec x y) as [H1|H1].
+  - assumption.
+  - destruct (eqDec x x) as [H2|H2].
+    + reflexivity.
+    + contradiction.
+Qed.
+
+Lemma permute_app_right : forall (v:Type) (e:Eq v) (x y:v),
+  (x <:> y) y = x.
+Proof.
+  intros v e x y. unfold permute.
+  destruct (eqDec y y) as [H1|H1].
+  - reflexivity.
+  - destruct (eqDec y x) as [H2|H2].
+    + assumption.
+    + contradiction.
+Qed.
+
+Lemma permute_app_diff : forall (v:Type) (e:Eq v) (x y z:v),
+  z <> x -> z <> y -> (x <:> y) z = z.
+Proof.
+  intros v e x y z H1 H2. unfold permute.
+  destruct (eqDec z y) as [H3|H3].
+  - contradiction.
+  - destruct (eqDec z x) as [H4|H4].
+    + contradiction.
+    + reflexivity.
+Qed.
 
 Lemma permute_comp : forall (v w:Type) (e:Eq v) (e':Eq w) (x y:v) (f:v -> w),
     injective f -> f ; (y <:> x) = (f y <:> f x) ; f.
@@ -102,3 +134,4 @@ Proof.
             { subst. exfalso. apply H1. reflexivity. }
             { rewrite E. reflexivity. }
 Qed.
+

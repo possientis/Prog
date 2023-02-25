@@ -122,7 +122,8 @@ FOL_OBJ   = ${FOL}/Syntax.vo \
 			${FOL}/Subformula.vo \
 			${FOL}/Valid.vo \
 			${FOL}/LocalInv.vo \
-			${FOL}/StrongAlpha.vo
+			${FOL}/StrongAlpha.vo \
+			${FOL}/Admissible.vo
 
 
 LAM_OBJ   = ${LAM}/Syntax.vo \
@@ -140,7 +141,8 @@ LAM_OBJ   = ${LAM}/Syntax.vo \
 			${LAM}/Valid.vo \
 			${LAM}/BetaValid.vo \
 			${LAM}/LocalInv.vo \
-			${LAM}/StrongAlpha.vo
+			${LAM}/StrongAlpha.vo \
+			${LAM}/Admissible.vo
 
 SET_OBJ   = ${SET}/Set.vo \
 			${SET}/Order.vo \

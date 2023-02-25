@@ -1,5 +1,7 @@
 Require Import List.
 
+Require Import Logic.Func.Injective.
+
 Require Import Logic.List.In.
 Require Import Logic.List.Include.
 
@@ -7,6 +9,13 @@ Definition injective_on (v w:Type) (xs:list v) (f:v -> w) : Prop :=
     forall (x y:v), (x :: xs) -> (y :: xs) -> f x = f y -> x = y. 
 
 Arguments injective_on {v} {w} _ _.
+
+Lemma injective_injective_on: forall (v w:Type) (f: v -> w) (xs:list v),
+  injective f -> injective_on xs f.
+Proof.
+  intros v w f xs H1. unfold injective_on. intros x y _ _ H2. 
+  apply H1. assumption.
+Qed.
 
 Lemma injective_on_appl : forall (v w:Type) (xs ys:list v) (f:v -> w),
     injective_on (xs ++ ys) f -> injective_on xs f.
@@ -69,3 +78,4 @@ Proof.
             { intros H'. apply Hp. right. assumption. }
         }
 Qed.
+

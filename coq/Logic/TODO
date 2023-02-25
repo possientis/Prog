@@ -1,6 +1,6 @@
 Logic:
-2.2.7: The Substitution congruence
-go back to book
+Prop 78 page 124 book
+Add Alpha.v to Makefile
 
 Haskell:
 
