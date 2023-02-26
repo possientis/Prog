@@ -1,11 +1,11 @@
-We now show that equivalence between formulas is invariant under
+We now show that $\alpha$-equivalence between formulas is invariant under
 injective substitution. The following proposition is the counterpart
 of proposition~(\ref{logic:prop:strong:injective:substitution}) of
-the strong substitution congruence.
+the strong $\alpha$-equivalence.
 
 \begin{prop}\label{logic:prop:sub:congruence:injective:substitution}
 Let $V$ and $W$ be sets and $\sigma:V\to W$ be an injective map.
-Let~$\sim$ be the substitution congruence both on \pv\ and ${\bf
+Let~$\sim$ be the $\alpha$-equivalence both on \pv\ and ${\bf
 P}(W)$. Then:
     \[
     \phi\sim\psi\ \Rightarrow\ \sigma(\phi)\sim\sigma(\psi)
@@ -13,12 +13,14 @@ P}(W)$. Then:
 for all $\phi,\psi\in\pv$, where $\sigma:\pv\to{\bf P}(W)$ is also
 the substitution mapping.
 \end{prop}
+
+\noindent
 \begin{proof}
 Let $\equiv$ be the relation on \pv\ defined by $\phi\equiv\psi\
 \Leftrightarrow\ \sigma(\phi)\sim\sigma(\psi)$. We need to show that
 $\phi\sim\psi\ \Rightarrow\ \phi\equiv\psi$ or equivalently that the
-inclusion $\sim\,\subseteq\,\equiv$ holds. Since $\sim$ is the
-substitution congruence on \pv, it is the smallest congruence on
+inclusion $\sim\,\subseteq\,\equiv$ holds. Since $\sim$ is the 
+$\alpha$-equivalence on \pv, it is the smallest congruence on
 \pv\ which contains the set $R_{0}$ of
 definition~(\ref{logic:def:sub:congruence}). In order to show the
 inclusion $\sim\,\subseteq\,\equiv$ it is therefore sufficient to
@@ -32,7 +34,7 @@ $\phi=\forall x\phi_{1}$ and $\psi=\forall y\,\phi_{1}[y\!:\!x]$. We
 need to show that $\phi\equiv\psi$ or equivalently that
 $\sigma(\phi)\sim\sigma(\psi)$. In order to do so, it is sufficient
 to show that the ordered pair $(\sigma(\phi),\sigma(\psi))$ belongs
-to the generator $R_{0}'$ of the substitution congruence on ${\bf
+to the generator $R_{0}'$ of the $\alpha$-equivalence on ${\bf
 P}(W)$ as per definition~(\ref{logic:def:sub:congruence}). In other
 words, it is sufficient to show the existence of $\phi_{1}'\in{\bf
 P}(W)$ and $x',y'\in W$ with $x'\neq y'$ and

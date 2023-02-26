@@ -1,5 +1,5 @@
-Just like the strong substitution congruence, the substitution
-congruence was defined in terms of a generator. This makes it
+Just like the strong $\alpha$-equivalence, the $\alpha$-equivalence 
+was defined in terms of a generator. This makes it
 convenient to prove an equivalence $\phi\sim\psi$, but inconvenient
 when it comes to proving this equivalence does not hold. We shall
 therefore follow a similar strategy to that leading up to
@@ -12,34 +12,34 @@ define a new relation $\simeq$ on \pv\ and prove that $\phi\sim\psi\
 is to give us more insight about the formulas $\phi$ and $\psi$
 whenever we have $\phi\sim\psi$. Most of the hard work consists in
 proving that $\simeq$ is a transitive relation. However, this will
-be a lot simpler than in the case of the strong substitution
-congruence. In fact comparing
+be a lot simpler than in the case of the strong $\alpha$-equivalence. 
+In fact comparing
 definition~(\ref{logic:def:almost:equivalent}) below to its
 counterpart definition~(\ref{logic:def:almost:strong:equivalent}),
 we see that these definitions are formally identical with a
-difference occurring solely in $(v)$. For the strong substitution
-congruence:
+difference occurring solely in $(v)$. 
+For the strong $\alpha$-equivalence :
     \begin{eqnarray*}
     (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
     \phi_{1}\sim \theta\ ,\ \psi_{1}\sim \theta[y/x]\ ,\ y\not\in\var(\theta)
     \end{eqnarray*}
-while for the substitution congruence we have:
+while for the $\alpha$-equivalence we have:
     \begin{eqnarray*}
     (v)&&\phi=\forall x\phi_{1}\ ,\ \psi=\forall y\psi_{1}\ ,\ x\neq y\ ,\
     \psi_{1}\sim \phi_{1}[y\!:\!x]\ ,\ y\not\in\free(\phi_{1})
     \end{eqnarray*}
-This is the beauty of the substitution congruence. Not only does it
+This is the beauty of the $\alpha$-equivalence. Not only does it
 work equally well for $V$ finite and $V$ infinite or so we believe,
 but it is also a lot simpler in many respects. It involves the
 injective permutation $[y\!:\!x]$ rather than the non-injective
 substitution $[y/x]$. It makes no reference to the existence of a
 third formula $\theta$ in the case of $(v)$ but directly gives us
 $\psi_{1}\sim \phi_{1}[y\!:\!x]$ instead. The proofs in the case of
-the substitution congruence are simpler than their counterparts of
-the strong substitution congruence.
+the $\alpha$-equivalence are simpler than their counterparts of
+the strong $\alpha$-equivalence.
 
 \begin{defin}\label{logic:def:almost:equivalent}
-Let $\sim$ be the substitution congruence on \pv\ where $V$ is a
+Let $\sim$ be the $\alpha$-equivalence on \pv\ where $V$ is a
 set. Let $\phi,\psi\in\pv$. We say that $\phi$ is {\em almost
 equivalent to $\psi$} and we write $\phi\simeq\psi$, \ifand\ one of
 the following is the case:
@@ -53,10 +53,14 @@ the following is the case:
     \psi_{1}\sim \phi_{1}[y\!:\!x]\ ,\ y\not\in\free(\phi_{1})
     \end{eqnarray*}
 \end{defin}
+
+
 \begin{prop}
 $(i),(ii),(iii),(iv), (v)$ of {\em
 def.~(\ref{logic:def:almost:equivalent})} are mutually exclusive.
 \end{prop}
+
+\noindent
 \begin{proof}
 This is an immediate consequence of
 theorem~(\ref{logic:the:unique:representation}) of
@@ -73,8 +77,8 @@ occur at the same time as $(iv)$.
 
 Having defined the relation $\simeq$, we now proceed to prove the
 equivalence $\phi\sim\psi\ \Leftrightarrow\ \phi\simeq\psi$. The
-strategy is the same as the one adopted for the strong substitution
-congruence. The difficult part is to show the inclusion
+strategy is the same as the one adopted for the strong 
+$\alpha$-equivalence. The difficult part is to show the inclusion
 $\sim\,\subseteq\,\simeq$, which we achieve by showing
 $R_{0}\subseteq\,\simeq$ together with the fact that $\simeq$ is a
 congruence.
@@ -84,6 +88,8 @@ Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
 a set. Then $\simeq$ contains the generator $R_{0}$ of {\em
 definition~(\ref{logic:def:sub:congruence})}.
 \end{prop}
+
+\noindent
 \begin{proof}
 Suppose $x,y\in V$ and $\phi_{1}\in\pv$ are such that $x\neq y$ and
 $y\not\in\free(\phi_{1})$. Note that this cannot happen unless $V$
@@ -101,6 +107,8 @@ immediate from the reflexivity of $\sim$\,.
 Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
 a set. Then $\simeq$ is a reflexive relation on \pv.
 \end{prop}
+
+\noindent
 \begin{proof}
 Let $\phi\in\pv$. We need to show that $\phi\simeq\phi$. From
 theorem~(\ref{logic:the:unique:representation}) of
@@ -112,7 +120,7 @@ mutually exclusive cases separately. Suppose first that
 $\phi\in\pvo$: then from $\phi=\phi$ we obtain $\phi\simeq\phi$.
 Suppose next that $\phi=\bot$: then it is clear that
 $\phi\simeq\phi$. Suppose now that $\phi=\phi_{1}\to\phi_{2}$. Since
-the substitution congruence $\sim$ is reflexive, we have
+the $\alpha$-equivalence $\sim$ is reflexive, we have
 $\phi_{1}\sim\phi_{1}$ and $\phi_{2}\sim\phi_{2}$. It follows from
 $(iii)$ of definition~(\ref{logic:def:almost:equivalent}) that
 $\phi\simeq\phi$. Suppose finally that $\phi=\forall x\phi_{1}$.
@@ -121,10 +129,14 @@ definition~(\ref{logic:def:almost:equivalent}) we conclude that
 $\phi\simeq\phi$. In all cases, we have proved that
 $\phi\simeq\phi$.
 \end{proof}
+
+
 \begin{prop}\label{logic:prop:almost:symmetric}
 Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
 a set. Then $\simeq$ is a symmetric relation on \pv.
 \end{prop}
+
+\noindent
 \begin{proof}
 Let $\phi,\psi\in\pv$ be such that $\phi\simeq\psi$. We need to show
 that $\psi\simeq\phi$. We shall consider the five possible cases of
@@ -133,12 +145,12 @@ $\phi\in\pvo$, $\psi\in\pvo$ and $\phi=\psi$. Then it is clear that
 $\psi\simeq\phi$. Suppose next that $\phi=\bot$ and $\psi=\bot$.
 Then we also have $\psi\simeq\phi$. We now assume that
 $\phi=\phi_{1}\to\phi_{2}$ and $\psi=\psi_{1}\to\psi_{2}$ with
-$\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$. Since the
-substitution congruence on \pv\ is symmetric, we have
+$\phi_{1}\sim\psi_{1}$ and $\phi_{2}\sim\psi_{2}$. Since the 
+$\alpha$-equivalence on \pv\ is symmetric, we have
 $\psi_{1}\sim\phi_{1}$ and $\psi_{2}\sim\phi_{2}$. Hence we have
 $\psi\simeq\phi$. We now assume that $\phi=\forall x\phi_{1}$ and
 $\psi=\forall x\psi_{1}$ with $\phi_{1}\sim\psi_{1}$. Then once
-again by symmetry of the substitution congruence we have
+again by symmetry of the $\alpha$-equivalence we have
 $\psi_{1}\sim\phi_{1}$ and consequently $\psi\simeq\phi$. We finally
 consider the last possible case of $\phi=\forall x\phi_{1}$,
 $\psi=\forall y\psi_{1}$ with $x\neq y$,
@@ -175,12 +187,14 @@ assumption $y\not\in\free(\phi_{1})$.
 Showing that $\simeq$ is a transitive relation is the difficult part
 of this section. The following proposition is the counterpart of
 proposition~(\ref{logic:prop:almost:strong:transitive}) of the
-strong substitution congruence. Its proof is however a lot simpler.
+strong $\alpha$-equivalence . Its proof is however a lot simpler.
 
 \begin{prop}\label{logic:prop:almost:transitive}
 Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
 a set. Then $\simeq$ is a transitive relation on \pv.
 \end{prop}
+
+\noindent
 \begin{proof}
 Let $\phi,\psi$ and $\chi\in\pv$ be such that $\phi\simeq\psi$ and
 $\psi\simeq\chi$. We need to show that $\phi\simeq\chi$. We shall
@@ -196,7 +210,7 @@ $\phi\simeq\chi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$ and
 $\psi=\psi_{1}\to\psi_{2}$ with $\phi_{1}\sim\psi_{1}$ and
 $\phi_{2}\sim\psi_{2}$. From $\psi\simeq\chi$ we obtain
 $\chi=\chi_{1}\to\chi_{2}$ with $\psi_{1}\sim\chi_{1}$ and
-$\psi_{2}\sim\chi_{2}$. The substitution congruence being
+$\psi_{2}\sim\chi_{2}$. The $\alpha$-equivalence being
 transitive, it follows that $\phi_{1}\sim\chi_{1}$ and
 $\phi_{2}\sim\chi_{2}$. Hence we see that $\phi\simeq\chi$. We now
 assume that $\phi=\forall x\phi_{1}$ and $\psi=\forall x\psi_{1}$
@@ -204,7 +218,7 @@ with $\phi_{1}\sim\psi_{1}$, for some $x\in V$. From
 $\psi\simeq\chi$ only the cases $(iv)$ and $(v)$ of
 definition~(\ref{logic:def:almost:equivalent}) are possible. First
 we assume that $(iv)$ is the case. Then $\chi=\forall x\chi_{1}$
-with $\psi_{1}\sim\chi_{1}$. The substitution congruence being
+with $\psi_{1}\sim\chi_{1}$. The $\alpha$-equivalence being
 transitive, we obtain $\phi_{1}\sim\chi_{1}$ and consequently
 $\phi\simeq\chi$. We now assume that $(v)$ is the case. Then
 $\chi=\forall y\chi_{1}$ for some $y\in V$ with $x\neq y$,
@@ -227,7 +241,7 @@ y$, $\psi_{1}\sim\phi_{1}[y\!:\!x]$ and $y\not\in\free(\phi_{1})$.
 From $\psi\simeq\chi$ only the cases $(iv)$ and $(v)$ of
 definition~(\ref{logic:def:almost:equivalent}) are possible. First
 we assume that $(iv)$ is the case. Then $\chi=\forall y\chi_{1}$
-with $\psi_{1}\sim\chi_{1}$. The substitution congruence being
+with $\psi_{1}\sim\chi_{1}$. The $\alpha$-equivalence being
 transitive, we obtain $\chi_{1}\sim\phi_{1}[y\!:\!x]$ and
 consequently $\phi\simeq\chi$. We now assume that $(v)$ is the case.
 Then $\chi=\forall z\chi_{1}$ for some $z\in V$ with $y\neq z$,
@@ -315,31 +329,33 @@ simple one. We need to prove it now in order to show that $\simeq$
 is a congruent relation.
 
 \begin{prop}\label{logic:prop:almost:implies:sub:congruence}
-Let $\simeq$ be the almost equivalence and $\sim$ be the
-substitution congruence on \pv, where $V$ is a set. For all
+Let $\simeq$ be the almost equivalence and $\sim$ be the 
+$\alpha$-equivalence on \pv, where $V$ is a set. For all
 $\phi,\psi\in\pv$:
     \[
     \phi\simeq\psi\ \Rightarrow\ \phi\sim\psi
     \]
 \end{prop}
+
+\noindent
 \begin{proof}
 Let $\phi,\psi\in\pv$ such that $\phi\simeq\psi$. We need to show
 that $\phi\sim\psi$. We shall consider the five possible cases of
 definition~(\ref{logic:def:almost:equivalent}) in relation to
 $\phi\simeq\psi$. Suppose first that $\phi=\psi\in\pvo$. From the
-reflexivity of the substitution congruence, it is clear that
+reflexivity of the $\alpha$-equivalence, it is clear that
 $\phi\sim\psi$. Suppose next that $\phi=\psi=\bot$. Then we also
 have $\phi\sim\psi$. We now assume that $\phi=\phi_{1}\to\phi_{2}$
 and $\psi=\psi_{1}\to\psi_{2}$ where $\phi_{1}\sim\psi_{1}$ and
-$\phi_{2}\sim\psi_{2}$. The substitution congruence being a
+$\phi_{2}\sim\psi_{2}$. The $\alpha$-equivalence being a
 congruent relation on \pv, we obtain $\phi\sim\psi$. Next we assume
 that $\phi=\forall x\phi_{1}$ and $\psi=\forall x\psi_{1}$ where
-$\phi_{1}\sim\psi_{1}$ and $x\in\ V$. Again, the substitution
-congruence being a congruent relation we obtain $\phi\sim\psi$.
+$\phi_{1}\sim\psi_{1}$ and $x\in\ V$. Again, the $\alpha$-equivalence 
+being a congruent relation we obtain $\phi\sim\psi$.
 Finally we assume that $\phi=\forall x\phi_{1}$ and $\psi=\forall
 y\psi_{1}$ where $x\neq y$, $\psi_{1}\sim\phi_{1}[y\!:\!x]$ and
-$y\not\in\free(\phi_{1})$. For the last time, the substitution
-congruence being a congruent relation we obtain $\psi\sim \forall
+$y\not\in\free(\phi_{1})$. For the last time, the $\alpha$-equivalence 
+being a congruent relation we obtain $\psi\sim \forall
 y\, \phi_{1}[y\!:\!x]$. Hence in order to show $\phi\sim\psi$ it is
 sufficient to show that $\forall x\phi_{1}\sim\forall
 y\,\phi_{1}[y\!:\!x]$ which follows immediately from $x\neq y$,
@@ -351,6 +367,8 @@ definition~(\ref{logic:def:sub:congruence}).
 Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
 a set. Then $\simeq$ is a congruent relation on \pv.
 \end{prop}
+
+\noindent
 \begin{proof}
 From proposition~(\ref{logic:prop:almost:reflexive}), the almost
 equivalence $\simeq$ is reflexive and so $\bot\simeq\bot$. We now
@@ -374,6 +392,9 @@ $\phi\simeq\psi$.
 Let $\simeq$ be the almost equivalence relation on \pv\ where $V$ is
 a set. Then $\simeq$ is a congruence on \pv.
 \end{prop}
+
+
+\noindent
 \begin{proof}
 We need to show that $\simeq$ is reflexive, symmetric, transitive
 and that it is a congruent relation on \pv. From
@@ -387,22 +408,24 @@ relation~$\simeq$ is a congruent relation.
 \end{proof}
 
 So we have shown that $\simeq$ is a congruence on \pv\ which
-contains the generator $R_{0}$ of the substitution congruence. The
+contains the generator $R_{0}$ of the $\alpha$-equivalence. The
 equality $\simeq\,=\,\sim$ follows immediately.
 
 \begin{prop}\label{logic:prop:almost:is:sub:congruence}
-Let $\simeq$ be the almost equivalence and $\sim$ be the
-substitution congruence on \pv, where $V$ is a set. For all
+Let $\simeq$ be the almost equivalence and $\sim$ be the 
+$\alpha$-equivalence on \pv, where $V$ is a set. For all
 $\phi,\psi\in\pv$:
     \[
     \phi\simeq\psi\ \Leftrightarrow\ \phi\sim\psi
     \]
 \end{prop}
+
+\noindent
 \begin{proof}
 From proposition~(\ref{logic:prop:almost:implies:sub:congruence}) it
 is sufficient to show the implication $\Leftarrow$ or equivalently
-the inclusion $\sim\,\subseteq\,\simeq\,$. Since $\sim$ is the
-substitution congruence on \pv, it is the smallest congruence on
+the inclusion $\sim\,\subseteq\,\simeq\,$. Since $\sim$ is the 
+$\alpha$-equivalence on \pv, it is the smallest congruence on
 \pv\ which contains the set $R_{0}$ of
 definition~(\ref{logic:def:sub:congruence}). In order to show the
 inclusion $\sim\,\subseteq\,\simeq$ it is therefore sufficient to
@@ -417,12 +440,11 @@ We have no need to remember the relation $\simeq$. The equality
 $\simeq\,=\,\sim$ is wrapped up in the following theorem for future
 reference. This is the counterpart of
 theorem~(\ref{logic:the:strong:sub:congruence:charac}) of
-page~\pageref{logic:the:strong:sub:congruence:charac} of the strong
-substitution congruence.
+page~\pageref{logic:the:strong:sub:congruence:charac} of the strong $\alpha$-equivalence.
 
 \index{congruence@Charact. of sub. congruence}
 \begin{theorem}\label{logic:the:sub:congruence:charac}
-Let $\sim$ be the substitution congruence on \pv\ where $V$ is a
+Let $\sim$ be the $\alpha$-equivalence on \pv\ where $V$ is a
 set. For all $\phi,\psi\in\pv$, $\phi\sim\psi$ \ifand\ one of the
 following is the case:
     \begin{eqnarray*}
@@ -435,6 +457,8 @@ following is the case:
     \psi_{1}\sim \phi_{1}[y\!:\!x]\ ,\ y\not\in\free(\phi_{1})
     \end{eqnarray*}
 \end{theorem}
+
+\noindent
 \begin{proof}
 Immediately follows from
 proposition~(\ref{logic:prop:almost:is:sub:congruence}) and

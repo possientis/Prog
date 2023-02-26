@@ -1,33 +1,35 @@
-A fair amount of work has been devoted to the study of the strong
-substitution congruence, culminating with its characterization in
+A fair amount of work has been devoted to the study of the strong 
+$\alpha$-equivalence, culminating with its characterization in
 the form of theorem~(\ref{logic:the:strong:sub:congruence:charac}).
 Unfortunately, most of this work was done vain. As we shall now
-discover, the strong substitution congruence is not the appropriate
+discover, the strong $\alpha$-equivalence is not the appropriate
 notion to study. It may give us insight and will certainly help us
 in the forthcoming developments, it may be commonly referred to in
 the literature, but it is marred by a major flaw. The problem is as
 follows: when $V=\{x,y\}$ with $x\neq y$, i.e. when $V$ has only two
 elements, the formulas $\phi=\forall x\forall y (x\in y)$ and
-$\psi=\forall y\forall x(y\in x)$ are not equivalent. This is highly
-disappointing. If there is one thing we would expect of a {\em
-substitution congruence}, it is certainly to be such that $\phi$ and
+$\psi=\forall y\forall x(y\in x)$ are not strongly $\alpha$-equivalent. 
+This is highly disappointing. If there is one thing we would expect of an 
+{\em $\alpha$-equivalence}, it is certainly to be such that $\phi$ and
 $\psi$ be equivalent. This leaves us with a painful alternative: we
 either give up on the possibility of finite sets of variables $V$,
-or we abandon the notion of strong substitution congruence and all
+or we abandon the notion of strong $\alpha$-equivalence and all
 the work that has gone along with it. As already hinted, we are not
 prepared to accept that nothing interesting can be said with finite
-sets $V$. There must be an appropriate notion of {\em substitution
-congruence} to be defined on \pv, and we shall therefore continue
-our search for it. But before we resume our quest, we shall first
-prove that the problem truly exists:
+sets $V$. There must be an appropriate notion of 
+{\em $\alpha$-equivalence} to be defined on \pv, and we shall 
+therefore continue our search for it. But before we resume our quest, 
+we shall first prove that the problem truly exists:
 
 \begin{prop}\label{logic:prop:counter:strong:1}
-Let $\sim$ be the strong substitution congruence on \pv\ where
+Let $\sim$ be the strong $\alpha$-equivalence on \pv\ where
 $V=\{x,y\}$ and $x\neq y$. Then, we have:
     \[
     \forall x\forall y\,(x\in y)\not\sim\forall y\forall x\,(y\in x)
     \]
 \end{prop}
+
+\noindent
 \begin{proof}
 Define $\phi_{1}=\forall y(x\in y)$ and $\psi_{1}=\forall x(y\in
 x)$. We need to show that $\forall x\phi_{1}\not\sim\forall
@@ -52,21 +54,23 @@ $\{x\}=\free(\,\forall y(x\in y)\,)=\free(\theta)$. This is our
 desired contradiction.
 \end{proof}
 
-As we have just seen, the strong substitution congruence is
+As we have just seen, the strong $\alpha$-equivalence is
 inadequate when $V$ has two elements. In fact, it is also inadequate
 when $V$ has three elements as the following proposition shows. We
 do not intend to spend too much time proving negative results, but
-we certainly believe the strong substitution congruence on \pv\ will
+we certainly believe the strong $\alpha$-equivalence on \pv\ will
 fail whenever $V$ is a finite set.
 
 \begin{prop}\label{logic:prop:counter:strong:2}
-Let $\sim$ be the strong substitution congruence on \pv\ where
+Let $\sim$ be the strong $\alpha$-equivalence on \pv\ where
 $V=\{x,y,z\}$ and $x\neq y$, $y\neq z$ and $x\neq z$. Then, we have:
     \[
     \forall x\forall y\forall z\,[(x\in y)\to(y\in z)]\not\sim\forall
     y\forall z\forall x\,[(y\in z)\to(z\in x)]
     \]
 \end{prop}
+
+\noindent
 \begin{proof}
 Define $\phi_{1}=\forall y\forall z\,[(x\in y)\to(y\in z)]$ and
 $\psi_{1}=\forall z\forall x\,[(y\in z)\to(z\in x)]$. We need to

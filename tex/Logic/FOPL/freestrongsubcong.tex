@@ -1,8 +1,8 @@
-The strong substitution congruence is designed in such a way that if
+Strong $\alpha$-equivalence is designed in such a way that if
 you take a formula $\phi$ and replace its bound variables by other
 variables, you obtain a formula $\psi$ which is equivalent to
-$\phi$, provided the variable substitution is valid. The strong
-substitution congruence is also designed to be the smallest
+$\phi$, provided the variable substitution is valid. Strong
+$\alpha$-equivalence is also designed to be the smallest
 congruence on \pv\ with such property. So one would expect two
 equivalent formulas to be identical in all respects, except possibly
 in relation to their bound variables. In particular, if a formula
@@ -11,11 +11,11 @@ formulas to have the same free variables. This is indeed the case,
 as the following proposition shows. Since we already know from
 proposition~(\ref{logic:prop:congruence:freevar}) that
 $\free(\phi)=\free(\psi)$ defines a congruence on \pv, the proof
-reduces to making sure that every ordered pair $(\phi,\psi)$
-belonging to the generator $R_{0}$ of the strong substitution
-congruence, is such that $\free(\phi)=\free(\psi)$.
+reduces to checking every ordered pair $(\phi,\psi)$
+belonging to the generator $R_{0}$ of the strong $\alpha$-equivalence, 
+is such that $\free(\phi)=\free(\psi)$.
 \begin{prop}\label{logic:prop:strong:freevar}
-Let $\sim$ be the strong substitution congruence on \pv\ where $V$
+Let $\sim$ be the strong $\alpha$-equivalence on \pv\ where $V$
 is a set. Then for all $\phi,\psi\in\pv$ we have the implication:
     \[
     \phi\sim\psi\ \Rightarrow\ \free(\phi)=\free(\psi)
@@ -26,7 +26,7 @@ Let $\equiv$ be the relation on \pv\ defined by $\phi\equiv\psi\
 \Leftrightarrow\ \free(\phi)=\free(\psi)$. We need to show that
 $\phi\sim\psi\ \Rightarrow\ \phi\equiv\psi$ or equivalently that the
 inclusion $\sim\,\subseteq\,\equiv$ holds. Since $\sim$ is the
-strong substitution congruence on \pv, it is the smallest congruence
+strong $\alpha$-equivalence on \pv, it is the smallest congruence
 on \pv\ which contains the set $R_{0}$ of
 definition~(\ref{logic:def:strong:sub:congruence}). In order to show
 the inclusion $\sim\,\subseteq\,\equiv$ it is therefore sufficient

@@ -1,23 +1,25 @@
-A lot of the work which was done for the strong substitution
-congruence needs to be done all over again for the substitution
-congruence. We start by showing that equivalent formulas have the
+A lot of the work which was done for the strong $\alpha$-equivalence
+needs to be done all over again for the $\alpha$-equivalence. 
+We start by showing that equivalent formulas have the
 same free variables. The following proposition is the counterpart of
-proposition~(\ref{logic:prop:strong:freevar}) of the strong
-substitution congruence.
+proposition~(\ref{logic:prop:strong:freevar}) of the strong 
+$\alpha$-equivalence.
 
 \begin{prop}\label{logic:prop:sub:congruence:freevar}
-Let $\sim$ denote the substitution congruence on \pv\ where $V$ is a
+Let $\sim$ denote the $\alpha$-equivalence on \pv\ where $V$ is a
 set. Then for all $\phi,\psi\in\pv$ we have the implication:
     \[
     \phi\sim\psi\ \Rightarrow\ \free(\phi)=\free(\psi)
     \]
 \end{prop}
+
+\noindent
 \begin{proof}
 Let $\equiv$ be the relation on \pv\ defined by $\phi\equiv\psi\
 \Leftrightarrow\ \free(\phi)=\free(\psi)$. We need to show that
 $\phi\sim\psi\ \Rightarrow\ \phi\equiv\psi$ or equivalently that the
 inclusion $\sim\,\subseteq\,\equiv$ holds. Since $\sim$ is the
-substitution congruence on \pv, it is the smallest congruence on
+$\alpha$-equivalence on \pv, it is the smallest congruence on
 \pv\ which contains the set $R_{1}$ of
 proposition~(\ref{logic:prop:sub:congruence:from:admissible}). In
 order to show the inclusion $\sim\,\subseteq\,\equiv$ it is
@@ -37,13 +39,15 @@ $\sigma(u)=u$ for all $u\in\free(\phi)$.
 \end{proof}
 
 \begin{prop}\label{logic:prop:FOPL:freesubcong:xy:not:free}
-Let $\sim$ denote the substitution congruence on \pv\ where $V$ is a
+Let $\sim$ denote the $\alpha$-equivalence on \pv\ where $V$ is a
 set. Then for all $\phi_{1}\in\pv$ and $x,y\in V$ such that
 $x,y\not\in\free(\phi_{1})$ we have:
     \[
     \forall x\phi_{1}\sim\forall y\phi_{1}
     \]
 \end{prop}
+
+\noindent
 \begin{proof}
 From $y\not\in\free(\phi_{1})$ and
 definition~(\ref{logic:def:sub:congruence}) we see that $\forall
