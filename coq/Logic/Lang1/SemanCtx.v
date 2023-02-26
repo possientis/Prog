@@ -136,7 +136,7 @@ Proof.
     intros G p n m x y A H1. apply evalMonotone. intros k z H2.
     destruct (eqDec n k) as [H3|H3].
     - subst. apply bindEqualRev in H2. apply bindDiff.
-        + intros H3. apply H1. symmetry. assumption.
+        + apply not_eq_sym. assumption.
         + apply FindE with x; try assumption. constructor.
     - destruct (eqDec m k) as [H4|H4].
         + subst. apply bindDiff in H2; try assumption.

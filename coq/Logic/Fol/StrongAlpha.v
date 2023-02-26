@@ -238,7 +238,7 @@ Proof.
     - constructor; apply Cong_symmetric; assumption.
     - constructor. apply Cong_symmetric. assumption.
     - apply AAllxy with (fmap (y // x) r).
-        + intros H5. apply H1. symmetry. assumption.
+        + apply not_eq_sym. assumption.
         + assumption.
         + apply Cong_transitive with r; try assumption.
           assert (r = fmap (x // y) (fmap (y // x) r)) as H5.
@@ -294,8 +294,7 @@ Proof.
                   assert (z :: Fr (fmap (y // x) r')) as H11.
                     { destruct (in_dec eqDec x (Fr r')) as [H12|H12]. 
                         { apply free_replace2; try assumption. right.
-                          split; try assumption. intros H11. apply H10. 
-                          symmetry. assumption. }
+                          split; try assumption. apply not_eq_sym. assumption. }
                         { rewrite free_replace1; assumption. }}
                   apply H8. apply (free_var _ _ s z).
                   rewrite (StrongAlpha_free _ _ s (fmap (y // x) r'));
@@ -382,8 +381,7 @@ Proof.
                     (fmap (x // y) (fmap (z // x) (fmap (y // z) r'))).
                     { assumption. }
                     { apply Cong_symmetric. rewrite H9. assumption. }}
-                { apply var_replace_remove. intros H11. 
-                  apply H5. symmetry. assumption. }}
+                { apply var_replace_remove. apply not_eq_sym. assumption. }}
 Qed.
 
 (* Almost strong equivalence implies strong equivalence.                        *)

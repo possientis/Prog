@@ -52,8 +52,7 @@ Proof.
         + rewrite <- (evalNotInFree (bind (bind e n x) p z)).
             { rewrite (evalEnvEqual _ (bind (bind (bind e n x) m y) p z)). 
                 { assumption. }
-                { apply bindPermute. 
-                  intros Hmp. apply Hpm. symmetry. assumption. }}
+                { apply bindPermute. apply not_eq_sym. assumption. }}
             { assumption. }
         + intros [H3 H4]. apply H2. split.
             { assumption. }

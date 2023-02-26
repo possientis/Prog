@@ -136,11 +136,10 @@ Proof.
     remember (bind (bind (bind e n x) m' y') m y) as e2 eqn:E2.
     remember (bind (bind e 0 x) 1 y') as e3 eqn:E3.
     assert (envEqual e1 e2) as H5.
-        { rewrite E1, E2. apply bindPermute. 
-          intros H5. apply H3. symmetry. assumption. }
+        { rewrite E1, E2. apply bindPermute. apply not_eq_sym. assumption. }
     assert (eval e1 (apply2 p n m') <-> eval e2 (apply2 p n m')) as H6.
         { apply evalEnvEqual. assumption. }
     rewrite H6, E2, E3. apply evalApplyF1; try (assumption).
-    intros H7.  apply H3. symmetry. assumption.
+    apply not_eq_sym. assumption.
 Qed.
 
