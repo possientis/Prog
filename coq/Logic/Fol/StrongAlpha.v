@@ -55,7 +55,7 @@ Notation "p ~ q" := (StrongAlpha p q)
 Open Scope Fol_StrongAlpha_scope.
 
 (* Not following pdf to obtain stronger result of equality as lists.            *)
-(* Two strongly alpha-equivalent terms has the same free variables.             *)
+(* Two strongly alpha-equivalent formulas have the same free variables.         *)
 Lemma StrongAlpha_free : forall (v:Type) (e:Eq v) (p q:P v), 
     p ~ q -> Fr p = Fr q.
 Proof.

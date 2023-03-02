@@ -55,7 +55,7 @@ Notation "t ~ s" := (StrongAlpha t s)
 Open Scope Fol_StrongAlpha_scope.
 
 (* Not following pdf to obtain stronger result of equality as lists.            *)
-(* Two strongly alpha-equivalent terms has the same free variables.             *)
+(* Two strongly alpha-equivalent terms have the same free variables.            *)
 Lemma StrongAlpha_free : forall (v:Type) (e:Eq v) (t s:T v), 
     t ~ s -> Fr t = Fr s.
 Proof.
