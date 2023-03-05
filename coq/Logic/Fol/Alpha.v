@@ -191,7 +191,7 @@ Proof.
         apply V1.
 
       (* ... and that free variables of p1 are invariant by f *)
-      * assert (forall (u:v), u :: Fr p1-> f u = u) as A. 2: apply A.
+      * assert (forall (u:v), u :: Fr p1 -> f u = u) as A. 2: apply A.
 
         (* So let u with u :: Fr p1 *)
         intros u H5. 
@@ -289,7 +289,7 @@ Proof.
           (* Given that g = (y <:> x) ... *)
           rewrite E2. unfold comp.
 
-          (* We need to show that g u = u *)
+          (* ... amounts to showing that: *)
           assert ((y <:> x) (f u) = u) as A. 2: apply A.
 
           (* We shall distinguish two cases *)
@@ -310,7 +310,6 @@ Proof.
 
             (* We claim that f u = u *)
             assert (f u = u) as A4.
-
             { (* This follows from the admissibility for f for All x p1 ... *)  
               apply H2. 
 
@@ -625,10 +624,10 @@ Proof.
                 destruct H3 as [H3 H4]. assumption. 
               }
                 
-                (* So if we assume that u = y ... *)
+              (* So if we assume that u = y ... *)
               intros H4. 
 
-                (* ... we obtain y :: Fr p1 which is a contradiction  *)
+              (* ... we obtain y :: Fr p1 which is a contradiction  *)
               rewrite H4 in A. contradiction. 
             }
 
@@ -657,7 +656,7 @@ Proof.
     (* And we need to show that Alpha contains Alpha1 *)
     + assert (Alpha1 <= Alpha) as A. 2: apply A.
       
-      (* So let p and f : v -> v such that f is admissible *) 
+      (* So let p and f : v -> v such that f is admissible for p  *) 
       apply incl_charac. intros p q H5. destruct H5 as [p f H5].
 
       (* We need to show that p is alpha-equivalent to fmap f p  *)
@@ -667,8 +666,7 @@ Proof.
       apply Alpha_admissible. 
       
       (* ... which is true by assumption *)
-      assumption. 
-   
+      apply H5. 
 Qed.
 
 (*
