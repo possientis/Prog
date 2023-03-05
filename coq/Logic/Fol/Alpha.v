@@ -57,124 +57,447 @@ Open Scope Fol_Alpha_scope.
 Lemma Alpha_admissible : forall (v:Type) (e:Eq v) (p:P v) (f:v -> v),
   admissible f p -> p ~ fmap f p.
 Proof.
+  (* Let v be a Type with decidable equality e  *)
   intros v e.
+
+  (* We prove the lemma with an induction argument on p *)
   induction p as [|x y|p1 IH1 p2 IH2|x p1 IH1]; 
+
+  (* In each case we assume f:v -> v is valid for p with f u = u for u :: Fr p  *)
   intros f [H1 H2]; simpl; simpl in H2.
 
   (* case p = Bot *)
-  - apply Cong_reflexive.
+  - assert (Bot ~ Bot) as A. 2: apply A.
+
+    apply Cong_reflexive.
 
   (* case p = Elem x y *)
-  - assert (f x = x) as E1. { apply H2. left. reflexivity. }
-    assert (f y = y) as E2. { apply H2. right. left. reflexivity. }
-    rewrite E1, E2. apply Cong_reflexive.
+  - assert (Elem x y ~ Elem (f x) (f y)) as A. 2: apply A.
+
+    assert (f x = x) as A1. { apply H2. left. reflexivity. }
+
+    assert (f y = y) as A2. { apply H2. right. left. reflexivity. }
+
+    rewrite A1, A2. 
+
+    apply Cong_reflexive.
 
   (* case p = Imp p1 p2 *)
-  - rewrite valid_imp in H1; destruct H1 as [H1 H3].
+  - assert (Imp p1 p2 ~ Imp (fmap f p1) (fmap f p2)) as A. 2: apply A. 
+    
+    (* Note that since f is valid for p = Imp p1 p2, it is valid for both p1 p2 *) 
+    rewrite valid_imp in H1; destruct H1 as [V1 V2].
 
-    assert (p1 ~ fmap f p1) as E1.
-      { apply IH1. unfold admissible. split.
-        { assumption. }
-        { intros x H4. apply H2, app_charac. left. assumption. }}
+    (* We argue that alpha-equivalence is a congruence  *)
+    apply CongImp.
 
-    assert (p2 ~ fmap f p2) as E2.
-      { apply IH2. unfold admissible. split.
-        { assumption. }
-        { intros x H4. apply H2, app_charac. right. assumption. }}
+    (* So we need to prove that p1 ~ fmap f p1  *)
+    + assert (p1 ~ fmap f p1) as A. 2: apply A. 
+  
+      (* This follows from the induction hypothesis ... *)
+      apply IH1. 
 
-    apply CongImp; assumption. 
+      (* ... provided we show that f is admissible for p1 *)
+      assert (admissible f p1) as A. 2: apply A.
+ 
+      (* Given the definition of an admissible mapping ... *)
+      unfold admissible. split.
+    
+      (* ... we need to show that f is valid for p1 ... *)
+      * assert (valid f p1) as A. 2: apply A.
+
+        (* ... which is true as we have noted *)
+        apply V1.
+
+      (* ... and that free variables of p1 are invariant by f *)
+      * assert (forall (u:v), u :: Fr p1 -> f u = u) as A. 2: apply A.
+      
+        (* So let u with u :: Fr p1 *)
+        intros u H3. 
+      
+        (* We need to show that f u = u ... *) 
+        assert (f u = u) as A. 2: apply A.
+
+        (* ... which follows by assumption since u is also free in Imp p1 p2  *)
+        apply H2, app_charac. left. assumption.
+
+    (* We need to prove similarly that p2 ~ fmap f p2  *)
+    + assert (p2 ~ fmap f p2) as A. 2: apply A.
+
+      (* This follows from the induction hypothesis ... *)
+      apply IH2.
+
+      (* ... provided we show that f is admissible for p2 *)
+      assert (admissible f p2) as A. 2: apply A.
+
+      (* Given the definition of an admissible mapping ... *)
+      unfold admissible. split.
+
+      (* ... we need to show that f is valid for p2 ... *)
+      * assert (valid f p2) as A. 2: apply A.
+
+        (* ... which is true as we have noted *)
+        apply V2.
+
+      (* ... and that free variables of p2 are invariant by f *)
+      * assert (forall (u:v), u :: Fr p2 -> f u = u) as A. 2: apply A.
+      
+        (* So let u with u :: Fr p2 *)
+        intros u H3. 
+      
+        (* We need to show that f u = u ... *) 
+        assert (f u = u) as A. 2: apply A.
+
+        (* ... which follows by assumption since u is also free in Imp p1 p2  *)
+        apply H2, app_charac. right. assumption.
 
   (* case p = All x p1 *)
-  - rewrite valid_all in H1. destruct H1 as [H3 H4].
-    destruct (eqDec (f x) x) as [H5|H5].
+  - assert (All x p1 ~ All (f x) (fmap f p1)) as A. 2: apply A. 
+    
+    (* Since f is valid for All x p1, it is valid for p1 ...  *) 
+    (* and f x <> f y for all y :: Fr (All x p1)              *)
+    rewrite valid_all in H1. destruct H1 as [V1 H3].
 
-    + (* f x = x *)
-      assert (p1 ~ fmap f p1) as E1.
-        { apply IH1. unfold admissible. split.
-          { assumption. }
-          { intros y H6.
-            assert (f y = y) as E1.
-              { destruct (eqDec x y) as [H7|H7].
-                { (* x = y  *)
-                  rewrite <- H7. assumption. }
-                { (* x <> y *)
-                  apply H2, remove_charac. split; assumption. }}
-           assumption. }} 
-      rewrite H5. apply CongAll. assumption.
+    (* We carry out the proof by distinguishing two cases *)
+    destruct (eqDec (f x) x) as [H4|H4].
 
-    + (* f x <> x *)
-      remember (f x) as y eqn:H6.
+    + (* First we assume that f x = x *)
 
-      assert (All x p1 ~ All y (fmap f p1)) as E.
-        { remember ((y <:> x) ; f) as g eqn:H7.
-          remember (fmap g p1) as q1 eqn:H8. 
+      (* Given that f x = x *)
+      rewrite H4.
 
-          assert (f = (y <:> x) ; g) as E1.
-            { rewrite H7. rewrite comp_assoc, permute_involution.
-              symmetry. apply comp_id_left. }
+      (* We need to show that All x p1 ~ All x (fmap f p1)  *)
+      assert (All x p1 ~ All x (fmap f p1)) as A. 2: apply A.
 
-          assert (fmap f p1 = fmap (y <:> x) q1) as E2.
-            { rewrite H8, <- fmap_comp', <- E1. reflexivity. }
+      (* Alpha-equivalence being a congruence ... *)
+      apply CongAll.
 
-          rewrite E2.
+      (* ... we simply need to show that p1 ~ fmap f p1 *)
+      assert (p1 ~ fmap f p1) as A. 2: apply A.
 
-          assert (All x p1 ~ All y (fmap (y <:> x) q1)) as E3.
-            { assert (admissible g p1) as E8. 
-                { unfold admissible. split.
-                  { rewrite H7. rewrite <- valid_compose. split.
-                    { apply H3. (* why is the assumption tactic failing here *) }
-                    { apply valid_inj, injective_injective_on. 
-                      apply permute_injective. }}
-                  { intros u H10. destruct (eqDec u x) as [H11|H11].
-                    { subst. unfold comp. apply permute_app_left. }
-                    { rewrite H7. unfold comp. 
-                      assert (f u = u) as H12.
-                        { apply H2. apply remove_charac. split.
-                            { assumption. }
-                            { apply not_eq_sym.  assumption. }}
-                      rewrite H12. apply permute_app_diff. 
-                        { intros H13. apply H4 with u. 
-                          { simpl. apply remove_charac. split.
-                            { assumption. }
-                            { apply not_eq_sym. assumption. }}
-                          { rewrite H12. symmetry. assumption. }}
-                        { assumption. }}}}
+      (* This follows from the induction hypothesis ... *)
+      apply IH1.
 
-              assert (~ y :: Fr q1) as E4.
-                { rewrite H8. intros H9. apply (free_fmap v v e) in H9.
-                  apply in_map_iff in H9. destruct H9 as [u [H9 H10]].
-                  unfold admissible in E8. destruct E8 as [H11 H12]. 
+      (* ... provided we show that f is admissible for p1 *)
+      assert (admissible f p1) as A. 2: apply A.
 
-                  assert (g u = u) as H13. { apply H12. assumption. }
+      (* Given the definition of an admissible mapping ... *)
+      unfold admissible. split.
 
-                  assert (y :: Fr p1) as H14. { rewrite <- H9, H13. assumption. }
+      (* ... we need to show that f is valid for p1 ... *)
+      * assert (valid f p1) as A. 2: apply A.
 
-                  assert (y :: Fr (All x p1)) as H15.
-                    { simpl. apply remove_charac. split.
-                      { assumption. }
-                      { apply not_eq_sym. assumption. }} 
+        (* ... which is true as we have noted *)
+        apply V1.
 
-                  assert (f y = y) as H17. { apply H2. assumption. }
+      (* ... and that free variables of p1 are invariant by f *)
+      * assert (forall (u:v), u :: Fr p1-> f u = u) as A. 2: apply A.
 
-                  assert (f x <> f y) as H18. 
-                    { rewrite <- H6. apply H4. assumption. }
+        (* So let u with u :: Fr p1 *)
+        intros u H5. 
+      
+        (* We need to show that f u = u ... *) 
+        assert (f u = u) as A. 2: apply A.
 
-                  assert (f x <> y) as H19. { rewrite <- H17. assumption. }
+        (* We shall distinguish two cases *)
+        destruct (eqDec x u) as [H6|H6].
 
-                  apply H19. symmetry. assumption. }
+        (* First we assume that x = u *)
+        { rewrite <- H6.
 
-              assert (All x q1 ~ All y (fmap (y <:> x) q1)) as E5.
-                { constructor. constructor.
-                  { apply not_eq_sym. assumption. }
-                  { assumption. }}
+          (* Then we need to show that f x = x ...  *)
+          assert (f x = x) as A. 2: apply A.
 
-              assert (All x p1 ~ All x q1) as E6.
-                { assert (p1 ~ q1) as E7. { rewrite H8. apply IH1. apply E8. }
-                  apply Cong_congruent, E7. }
+          (* ... which we have assumed is true. *)
+          apply H4.
+        }
 
-              apply Cong_transitive with (All x q1); assumption. }
-          apply E3. }
-      apply E.
+        (* Next we assume that x <> u *)
+        { 
+          (* Then f u = u follows from the admissibility of f for All x p1 ...*)
+          apply H2.
+
+          (* ... provided we show that u is free in All x p1  *) 
+          assert (u :: Fr (All x p1)) as A. 2: apply A.
+           
+          simpl. apply remove_charac. split; assumption.
+        }
+
+    + (* Then we assume that f x <> x *)
+
+      (* Define y *)
+      remember (f x) as y eqn:E1.
+
+      (* Define g *)
+      remember ((y <:> x) ; f) as g eqn:E2.
+
+      (* Define q1  *)
+      remember (fmap g p1) as q1 eqn:E3. 
+
+      (* So we need to show:  *)
+      assert (All x p1 ~ All y (fmap f p1)) as A. 2: apply A.
+
+      (* We claim that: *)
+      assert (f = (y <:> x) ; g) as A1.
+      { rewrite E2, comp_assoc, permute_involution. 
+        symmetry. apply comp_id_left. 
+      }
+    
+      (* And furthermore: *) 
+      assert (fmap f p1 = fmap (y <:> x) q1) as A2.
+      { rewrite E3, <- fmap_comp', <- A1. clear A1. reflexivity. 
+      }
+
+      (* We also claim that g is admissible for p1  *)
+      assert (admissible g p1) as A3.
+      { (* Given the definition of an admissible mapping ... *)
+        unfold admissible. split.
+
+        (* ... need need to show that g is valid for p1 *)
+        - assert (valid g p1) as A. 2: apply A.
+            
+          (* Since g = (y <:> x) ; f  ... *)
+          rewrite E2. 
+
+          (* ... we need to show: *)
+          assert (valid ((y <:> x) ; f) p1) as A. 2: apply A.
+
+          (* and consequently ... *)
+          rewrite <- valid_compose. split.
+
+          (* ... we need to show that f is valid for p1 ... *)
+          +  assert (valid f p1) as A. 2: apply A.
+            
+             (* ... we which know is true *)
+             apply V1.
+
+          (* ... and we need to show that (y <:> x) is valid for fmap f p1 ...*)
+          + assert (valid (y <:> x) (fmap f p1)) as A. 2: apply A.
+
+            (* ... which follows from the injectivity of pernutations *)
+            apply valid_inj, injective_injective_on, permute_injective.
+
+        (* ... and show that free variables of p1 are invariant by g  *)
+        - assert (forall (u:v), u :: Fr p1 -> g u = u) as A. 2: apply A.
+
+          (* so let u with u :: Fr p1 *)
+          intros u H5. 
+
+          (* We need to show that g u = u *)
+          assert (g u = u) as A. 2: apply A.
+
+          (* Given that g = (y <:> x) ... *)
+          rewrite E2. unfold comp.
+
+          (* We need to show that g u = u *)
+          assert ((y <:> x) (f u) = u) as A. 2: apply A.
+
+          (* We shall distinguish two cases *)
+          destruct (eqDec u x) as [H6|H6].
+
+          * (* We first assume that u = x *)
+           
+            (* Given that u = x and y = f x ... *)
+            rewrite H6, E1.
+
+            (* ... we need to show that:  *)
+            assert ((f x <:> x) (f x) = x) as A. 2: apply A.
+
+            (* This is an immediate property of the permutation mapping *)
+            apply permute_app_left.
+
+          * (* We then assume that u <> x *)
+
+            (* We claim that f u = u *)
+            assert (f u = u) as A4.
+
+            { (* This follows from the admissibility for f for All x p1 ... *)  
+              apply H2. 
+
+              (* ... provided we show that u is free in All x p1  *)
+              assert (u :: Fr (All x p1)) as A. 2: apply A.
+
+              simpl. apply remove_charac. split.
+
+              (* So we need to show that u is free in p1 ...  *)
+              - assert (u :: Fr p1) as A. 2: apply A.
+                    
+                apply H5.
+              
+              (* ... and that x <> u  *)
+              - assert (x <> u) as A. 2: apply A.
+
+                apply not_eq_sym, H6. 
+            }             
+
+            (* So given that f u = u ... *)
+            rewrite A4.
+
+            (* we need to show that:  *)
+            assert ((y <:> x) u = u) as A. 2: apply A.
+
+            (* Hence, it is sufficient to prove... *)
+            apply permute_app_diff.
+
+            (* ... that u <> y  *)
+            { assert (u <> y) as A. 2: apply A.
+
+              (* So suppose that u = y  *)
+              intros H7.
+
+              (* Then we obtain a contradiction by showing f u <> u *)
+              assert (f u <> u) as A. 2: contradiction.
+
+              (* Given that u = y ... *)
+              apply not_eq_sym. rewrite H7 at 1.
+
+              (* ... we need to show that y <> f u  *)
+              assert (y <> f u) as A. 2: apply A. 
+
+              (* This follows from the validity of f for All x p1 ... *)
+              apply H3.
+
+              (* ... provided we show that u is free in All x p1 *)
+              assert (u :: Fr (All x p1)) as A. 2: apply A.
+         
+              simpl. apply remove_charac. split.
+
+              (* So we need to show that u is free in p1 ...  *)
+              - assert (u :: Fr p1) as A. 2: apply A.
+                  
+                apply H5.
+
+              (* ... and that x <> u  *)
+              - assert (x <> u) as A. 2: apply A. 
+                
+                apply not_eq_sym, H6. 
+            }
+
+            (* ... and u <> x  *)
+            { assert (u <> x) as A. 2: apply A.
+                  
+              apply H6.
+            }
+      (* This completes the proof of the admissibility of g for p1  *)
+      } 
+
+      (* So we now need to show:  *)
+      assert (All x p1 ~ All y (fmap f p1)) as A. 2: apply A.
+
+      (* Given that fmap f p1 = fmap (y <:> x) q1 ... *)
+      rewrite A2. clear A2.
+
+      (* ... we need to show that:  *)
+      assert (All x p1 ~ All y (fmap (y <:> x) q1)) as A. 2: apply A.
+
+      (* Alpha-equivalence being a transitive relation ...  *)
+      apply Cong_transitive with (All x q1).
+
+      (* ... it is sufficient to show firstly that: *) 
+      * assert (All x p1 ~ All x q1) as A. 2: apply A.
+
+        (* Alpha-equivalence being a congruence ... *)
+        apply Cong_congruent.
+
+        (* ... it is sufficient to show that p1 ~ q1 *)
+        assert (p1 ~ q1) as A. 2: apply A.
+
+        (* Given that q1 = fmap g p1  *)
+        rewrite E3.
+
+        (* we need to show that p1 ~ fmap q p1 ... *)
+        assert (p1 ~ fmap g p1) as A. 2: apply A.
+
+        (* ... which follows from the induction hypothesis ... *)
+        apply IH1.
+
+        (* ... provided we show show that g is admissible for p1 ...  *)
+        assert (admissible g p1) as A. 2: apply A.
+
+        (* ... which we have already proven *)
+        apply A3.
+
+      (* ... and secondly that:  *)
+      * assert (All x q1 ~ All y (fmap (y <:> x) q1)) as A. 2: apply A.
+
+        (* We argue that the pair actually belongs to the generator Alpha0  *)
+        constructor.
+
+        (* So we need to show that: *)
+        assert (Alpha0 (All x q1) (All y (fmap (y <:> x) q1))) as A. 2: apply A.
+
+        (* This is true by definition ...  *)
+        constructor.
+
+        (* ... provided we show that x <> y ... *)
+        { assert (x <> y) as A. 2: apply A. 
+          
+          (* ... which is true since with have assumed f x <> x *)
+          apply not_eq_sym, H4.
+        }
+
+        (* ... and that y is not free in q1 *)
+        { assert (~ y :: Fr q1) as A. 2: apply A. 
+
+          (* Given that q1 = fmap g p1 ...  *)
+          rewrite E3. 
+
+          (* ... we need to show that y is not free in fmap g p1 *)
+          assert (~ y :: Fr (fmap g p1)) as A. 2: apply A. 
+
+          (* So suppose to the contrary that y is free in fmap g p1 *)
+          intros H5. 
+
+          (* We need to obtain a contradiction by showing y <> f x *)
+          assert (y <> f x) as A. 2: contradiction.
+
+          (* Since Fr (fmap g p1) <= map g (Fr p1), we have y :: map g (Fr p1)  *)
+          apply (free_fmap v v e) in H5.
+
+          (* So there exists u such that y = g u and u :: Fr p1 *)
+          apply in_map_iff in H5. destruct H5 as [u [H5 H6]].
+
+          (* Note that g is valid for p1 and g u = u for all u :: Fr p1  *)
+          unfold admissible in A3. destruct A3 as [H7 H8]. 
+
+          (* It follows that g u = u *)
+          assert (g u = u) as A4. { apply H8, H6. }
+
+          (* It follows that y = u  *)
+          assert (y = u) as A5. { rewrite <- A4. symmetry. apply H5. }
+
+          (* So y is free in p1 *)
+          assert (y :: Fr p1) as A6. { rewrite A5. apply H6. }
+
+          (* So y is free in All x p1 *)
+          assert (y :: Fr (All x p1)) as A7.
+          { simpl. apply remove_charac. split.
+
+            - assert (y :: Fr p1) as A. 2:apply A. apply A6.
+
+            - assert (x <> y) as A. 2:apply A. apply not_eq_sym, H4.             
+          }
+         
+          (* Hence from the admissibility of f for All x p1 we have f y = y *)
+          assert (f y = y) as A8. { apply H2, A7. }
+
+          (* Given that f y = y and y = f x ... *)
+          rewrite <- A8, <- E1. apply not_eq_sym.
+
+          (* We therefore need to show that y <> f y ... *) 
+          assert (y <> f y) as A. 2: apply A.
+
+          (* ... which follows from the validity of f for All x p1 ... *)
+          apply H3. 
+
+          (* ... provided we show that y is free in All x p1 ...  *)
+          assert (y :: Fr (All x p1)) as A. 2: apply A.
+
+          (* ... which has already been  established  *)
+          apply A7.
+
+        (* Completes the proof that y is not free in q1 *) 
+        } 
 Qed.
 
 (* This is a relation which is larger than Alpha0 but a lot simpler. As we      *)
@@ -241,10 +564,10 @@ Proof.
 
         (* However, q is in fact q = fmap f p *)
         assert (q = fmap f p) as A.
-          { rewrite E2, E3. simpl.
-            assert (f x = y) as A5. 2: rewrite A5; reflexivity.
-            rewrite E4. apply permute_app_right.
-          }
+        { rewrite E2, E3. simpl.
+          assert (f x = y) as A5. 2: rewrite A5; reflexivity.
+          rewrite E4. apply permute_app_right.
+        }
 
         (* So we need to show that (p, fmap f p) lies in Alpha1 *)
         rewrite A. clear A. 
@@ -292,33 +615,33 @@ Proof.
             (* ... it is sufficient to show that u <> x and u <> y *)
             apply permute_app_diff. 
 
-              (* First we show that u <> y  *)
-              { assert (u <> y) as A. 2: apply A.
+            (* First we show that u <> y  *)
+            { assert (u <> y) as A. 2: apply A.
 
-                (* Since u :: Fr p, we have u :: Fr p1  *)
-                assert (u :: Fr p1) as A.
-                  { rewrite E2 in H3. simpl in H3.
-                    apply remove_charac in H3.
-                    destruct H3 as [H3 H4]. assumption. 
-                  }
+              (* Since u :: Fr p, we have u :: Fr p1  *)
+              assert (u :: Fr p1) as A.
+              { rewrite E2 in H3. simpl in H3.
+                apply remove_charac in H3.
+                destruct H3 as [H3 H4]. assumption. 
+              }
                 
                 (* So if we assume that u = y ... *)
-                intros H4. 
+              intros H4. 
 
                 (* ... we obtain y :: Fr p1 which is a contradiction  *)
-                rewrite H4 in A. contradiction. 
-              }
+              rewrite H4 in A. contradiction. 
+            }
 
-              (* We now show that u <> x  *)
-              { assert (u <> x) as A. 2: apply A.
+            (* We now show that u <> x  *)
+            { assert (u <> x) as A. 2: apply A.
 
-                (* This is the case since u is free in p = All x p1 *)
-                rewrite E2 in H3. simpl in H3. 
-                apply remove_charac in H3.
-                destruct H3 as [H3 H4]. apply not_eq_sym.
-                assumption.
+              (* This is the case since u is free in p = All x p1 *)
+              rewrite E2 in H3. simpl in H3. 
+              apply remove_charac in H3.
+              destruct H3 as [H3 H4]. apply not_eq_sym.
+              assumption.
 
-              } 
+            } 
           
   (* We now show that r <= Alpha  *)
   - assert (r <= Alpha) as A. 2: apply A.
@@ -329,11 +652,7 @@ Proof.
     (* So we need to show that Alpha is a congruence  *)
     + assert (congruence Alpha) as A. 2: apply A.
       
-      (* Given that Alpha is the congruence generated by Alpha0 ... *)
-      unfold Alpha. 
-        
-      (* ... it is indeed a congruence  *)
-      apply Cong_congruence.
+      unfold Alpha. apply Cong_congruence.
  
     (* And we need to show that Alpha contains Alpha1 *)
     + assert (Alpha1 <= Alpha) as A. 2: apply A.
