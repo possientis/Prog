@@ -13,6 +13,7 @@ Require Import Logic.Func.Composition.
 Require Import Logic.List.In.
 Require Import Logic.List.Remove.
 Require Import Logic.List.Append.
+Require Import Logic.List.Coincide.
 Require Import Logic.List.InjectiveOn.
 
 Require Import Logic.Lam.Free.
@@ -64,12 +65,16 @@ Proof.
   induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; 
 
   (* In each case we assume f:v -> v is valid for t with f u = u for u :: Fr t  *)
-  intros f [H1 H2]; simpl; simpl in H2.
+  intros f H1.
 
   (* case t = Var x *)
   - assert (Var x ~ Var (f x)) as A. 2: apply A.
 
-    assert (f x = x) as A1. { apply H2. left. reflexivity. }
+    assert (f x = x) as A1. 
+    { apply admissible_free with (Var x).
+      - apply H1.
+      - left. reflexivity.
+    }
 
     rewrite A1.
 
@@ -78,8 +83,15 @@ Proof.
   (* case t = App t1 t2 *)
   - assert (App t1 t2 ~ App (fmap f t1) (fmap f t2)) as A. 2: apply A. 
 
-    (* Note that since f is valid for t = App t1 t2, it is valid for both t1 t2 *) 
-    rewrite valid_app in H1; destruct H1 as [V1 V2].
+    (* Note that f being admissible for App t1 t2  ... *)
+    apply admissible_app in H1. destruct H1 as [H1 H2].
+    
+    (* ... it is admissible for t1 ... *)
+    assert (admissible f t1) as A. apply H1. clear A.
+
+    (* ... and it is admissible for t2 *)
+    assert (admissible f t2)as A. apply H2. clear A.
+
 
     (* We argue that alpha-equivalence is a congruence  *)
     apply CongApp.
@@ -93,26 +105,8 @@ Proof.
       (* ... provided we show that f is admissible for t1 *)
       assert (admissible f t1) as A. 2: apply A.
  
-      (* Given the definition of an admissible mapping ... *)
-      unfold admissible. split.
-    
-      (* ... we need to show that f is valid for t1 ... *)
-      * assert (valid f t1) as A. 2: apply A.
-
-        (* ... which is true as we have noted *)
-        apply V1.
-
-      (* ... and that free variables of t1 are invariant by f *)
-      * assert (forall (u:v), u :: Fr t1 -> f u = u) as A. 2: apply A.
-      
-        (* So let u with u :: Fr t1 *)
-        intros u H3. 
-      
-        (* We need to show that f u = u ... *) 
-        assert (f u = u) as A. 2: apply A.
-
-        (* ... which follows by assumption since u is also free in App t1 t2  *)
-        apply H2, app_charac. left. assumption.
+      (* ... which we know is true  *) 
+      apply H1.
 
     (* We need to prove similarly that t2 ~ fmap f t2  *)
     + assert (t2 ~ fmap f t2) as A. 2: apply A.
@@ -123,34 +117,24 @@ Proof.
       (* ... provided we show that f is admissible for t2 *)
       assert (admissible f t2) as A. 2: apply A.
 
-      (* Given the definition of an admissible mapping ... *)
-      unfold admissible. split.
-
-      (* ... we need to show that f is valid for t2 ... *)
-      * assert (valid f t2) as A. 2: apply A.
-
-        (* ... which is true as we have noted *)
-        apply V2.
-
-      (* ... and that free variables of t2 are invariant by f *)
-      * assert (forall (u:v), u :: Fr t2 -> f u = u) as A. 2: apply A.
-      
-        (* So let u with u :: Fr t2 *)
-        intros u H3. 
-      
-        (* We need to show that f u = u ... *) 
-        assert (f u = u) as A. 2: apply A.
-
-        (* ... which follows by assumption since u is also free in App t1 t2  *)
-        apply H2, app_charac. right. assumption.
+      (* ... which we know is true *)
+      apply H2.
 
   (* case p = Lam x t1 *)
   - assert (Lam x t1 ~ Lam (f x) (fmap f t1)) as A. 2: apply A. 
 
-    (* Since f is valid for Lam x t1, it is valid for t1 ...  *) 
-    (* and f x <> f y for all y :: Fr (Lam x t1)              *)
-    rewrite valid_lam in H1. destruct H1 as [V1 H3].
+    (* Note that f being admissible for Lam x t1 ... *)
+    destruct H1 as [H1 H3]. apply valid_lam in H1. destruct H1 as [H1 H2].
 
+    (* ... it is valid for t1 ... *)
+    assert (valid f t1) as A. apply H1. clear A.
+
+    (* ... we have f x <> f y for any y free in Lam x t1  ... *)
+    assert (forall (y:v), y :: Fr (Lam x t1)->f x <> f y) as A. apply H2. clear A.
+
+    (* ... and we have f y = y for any y free in Lam x t1 *)
+    assert (forall (y:v), y :: Fr (Lam x t1) -> f y = y) as A. apply H3. clear A.
+ 
     (* We carry out the proof by distinguishing two cases *)
     destruct (eqDec (f x) x) as [H4|H4].
 
@@ -181,7 +165,7 @@ Proof.
       * assert (valid f t1) as A. 2: apply A.
 
         (* ... which is true as we have noted *)
-        apply V1.
+        apply H1.
 
       (* ... and that free variables of t1 are invariant by f *)
       * assert (forall (u:v), u :: Fr t1 -> f u = u) as A. 2: apply A.
@@ -207,8 +191,8 @@ Proof.
 
         (* Next we assume that x <> u *)
         { 
-          (* Then f u = u follows from the admissibility of f for Lam x t1 ...*)
-          apply H2.
+          (* Then f u = u follows from H3 ...*)
+          apply H3.
 
           (* ... provided we show that u is free in Lam x t1  *) 
           assert (u :: Fr (Lam x t1)) as A. 2: apply A.
@@ -262,7 +246,7 @@ Proof.
           +  assert (valid f t1) as A. 2: apply A.
             
              (* ... we which know is true *)
-             apply V1.
+             apply H1.
 
           (* ... and we need to show that (y <:> x) is valid for fmap f t1 ...*)
           + assert (valid (y <:> x) (fmap f t1)) as A. 2: apply A.
@@ -303,8 +287,8 @@ Proof.
 
             (* We claim that f u = u *)
             assert (f u = u) as A4.
-            { (* This follows from the admissibility for f for Lam x t1 ... *)  
-              apply H2. 
+            { (* This follows from H3 ... *)  
+              apply H3. 
 
               (* ... provided we show that u is free in Lam x t1  *)
               assert (u :: Fr (Lam x t1)) as A. 2: apply A.
@@ -346,8 +330,8 @@ Proof.
               (* ... we need to show that y <> f u  *)
               assert (y <> f u) as A. 2: apply A. 
 
-              (* This follows from the validity of f for Lam x t1 ... *)
-              apply H3.
+              (* This follows from H2 ... *)
+              apply H2.
 
               (* ... provided we show that u is free in Lam x t1 *)
               assert (u :: Fr (Lam x t1)) as A. 2: apply A.
@@ -470,8 +454,8 @@ Proof.
             - assert (x <> y) as A. 2:apply A. apply not_eq_sym, H4.             
           }
          
-          (* Hence from the admissibility of f for Lam x t1 we have f y = y *)
-          assert (f y = y) as A8. { apply H2, A7. }
+          (* Hence from H3  we have f y = y *)
+          assert (f y = y) as A8. { apply H3, A7. }
 
           (* Given that f y = y and y = f x ... *)
           rewrite <- A8, <- E1. apply not_eq_sym.
@@ -479,8 +463,8 @@ Proof.
           (* We therefore need to show that y <> f y ... *) 
           assert (y <> f y) as A. 2: apply A.
 
-          (* ... which follows from the validity of f for All x p1 ... *)
-          apply H3. 
+          (* ... which follows from H2 ... *)
+          apply H2. 
 
           (* ... provided we show that y is free in Lam x t1 ...  *)
           assert (y :: Fr (Lam x t1)) as A. 2: apply A.
@@ -491,7 +475,6 @@ Proof.
         (* Completes the proof that y is not free in q1 *) 
         } 
 Qed.
-
 
 (* This is a relation which is larger than Alpha0 but a lot simpler. As we      *)
 (* shall see, it is also a generator of the alpha-equivalence congruence.       *)
@@ -523,118 +506,118 @@ Proof.
     (* We argue that Alpha is the smallest congruence containing Alpha0 *)
     unfold Alpha. apply Cong_smallest.
 
-      (* So we need to show that r is a congruence  *)
-      + assert (congruence r) as A. 2: apply A.
+    (* So we need to show that r is a congruence  *)
+    + assert (congruence r) as A. 2: apply A.
         
-        rewrite E1. apply Cong_congruence.
+      rewrite E1. apply Cong_congruence.
 
-      (* And we need to show that r contains Alpha0 *)
-      + assert (Alpha0 <= r) as A. 2: apply A.
+    (* And we need to show that r contains Alpha0 *)
+    + assert (Alpha0 <= r) as A. 2: apply A.
 
-        (* So let x y and t1 such that x <> y and ~ y :: Fr t1  *)
-        apply incl_charac. intros t s H1. destruct H1 as [x y t1 H1 H2].
+      (* So let x y and t1 such that x <> y and ~ y :: Fr t1  *)
+      apply incl_charac. intros t s H1. destruct H1 as [x y t1 H1 H2].
 
-        (* Define t *)
-        remember (Lam x t1) as t eqn:E2.
+      (* Define t *)
+      remember (Lam x t1) as t eqn:E2.
 
-        (* Define s *)
-        remember (Lam y (fmap (y <:> x) t1)) as s eqn:E3.
+      (* Define s *)
+      remember (Lam y (fmap (y <:> x) t1)) as s eqn:E3.
 
-        (* Define f *)
-        remember (y <:> x) as f eqn:E4.
+      (* Define f *)
+      remember (y <:> x) as f eqn:E4.
 
-        (* We need to show that (p,q) :: r  *)
-        assert (r t s) as A. 2: apply A.
+      (* We need to show that (p,q) :: r  *)
+      assert (r t s) as A. 2: apply A.
 
-        (* i.e. that (p.q) belongs to the congruence generated by Alpha1  *)
-        rewrite E1. 
+      (* i.e. that (p.q) belongs to the congruence generated by Alpha1  *)
+      rewrite E1. 
         
-        (* We argue that (p,q) actually belongs to the generator itself *)
-        constructor.
+      (* We argue that (p,q) actually belongs to the generator itself *)
+      constructor.
 
-        (* So we need to show that (t,s) belongs to Alpha1  *)
-        assert (Alpha1 t s) as A. 2: apply A.
+      (* So we need to show that (t,s) belongs to Alpha1  *)
+      assert (Alpha1 t s) as A. 2: apply A.
 
-        (* However, s is in fact s = fmap f t *)
-        assert (s = fmap f t) as A.
-        { rewrite E2, E3. simpl.
-          assert (f x = y) as A5. 2: rewrite A5; reflexivity.
-          rewrite E4. apply permute_app_right.
-        }
+      (* However, s is in fact s = fmap f t *)
+      assert (s = fmap f t) as A.
+      { rewrite E2, E3. simpl.
+        assert (f x = y) as A5. 2: rewrite A5; reflexivity.
+        rewrite E4. apply permute_app_right.
+      }
 
-        (* So we need to show that (t, fmap f t) lies in Alpha1 *)
-        rewrite A. clear A. 
+      (* So we need to show that (t, fmap f t) lies in Alpha1 *)
+      rewrite A. clear A. 
           
-        (* which is true by definition... *)
-        constructor.  
+      (* which is true by definition... *)
+      constructor.  
  
-        (* ... provided we show that f is admissible for t  *)
-        assert (admissible f t) as A. 2: apply A.
+      (* ... provided we show that f is admissible for t  *)
+      assert (admissible f t) as A. 2: apply A.
 
-        (* Given the definition of an admissible substitution *)
-        unfold admissible. split. 
+      (* Given the definition of an admissible substitution *)
+      unfold admissible. split. 
 
-          (* First we need to show that f is valid for t *)
-          * assert (valid f t) as A. 2: apply A.
+      (* First we need to show that f is valid for t *)
+      * assert (valid f t) as A. 2: apply A.
             
-            (* It is sufficient to show that f is injective on (var t) *)
-            apply valid_inj.
+        (* It is sufficient to show that f is injective on (var t) *)
+        apply valid_inj.
             
-            (* It is sufficient to show that f is injective *)
-            apply injective_injective_on.
+        (* It is sufficient to show that f is injective *)
+        apply injective_injective_on.
 
-            (* So we now prove that f is injective *)
-            assert (injective f) as A. 2: apply A. 
+        (* So we now prove that f is injective *)
+        assert (injective f) as A. 2: apply A. 
             
-            (* However, f is the permutation mapping (y <:> x)  *) 
-            rewrite E4. 
+        (* However, f is the permutation mapping (y <:> x)  *) 
+        rewrite E4. 
             
-            (* it is therefore injective  *)
-            apply permute_injective.
+        (* it is therefore injective  *)
+        apply permute_injective.
          
 
-          (* And furthermore that free variables are invariant by f *)
-          * assert (forall (u:v), u :: Fr t -> f u = u) as A. 2: apply A.
+      (* And furthermore that free variables are invariant by f *)
+      * assert (forall (u:v), u :: Fr t -> f u = u) as A. 2: apply A.
 
-            (* So let u with u :: Fr t  *) 
-            intros u H3.
+        (* So let u with u :: Fr t  *) 
+        intros u H3.
             
-            (* We need to show that f u = u *)
-            assert (f u = u) as A. 2: apply A.
+        (* We need to show that f u = u *)
+        assert (f u = u) as A. 2: apply A.
 
-            (* Given that f is the permutation mapping (y <:> x) ...  *)
-            rewrite E4.
+        (* Given that f is the permutation mapping (y <:> x) ...  *)
+        rewrite E4.
 
-            (* ... it is sufficient to show that u <> x and u <> y *)
-            apply permute_app_diff. 
+        (* ... it is sufficient to show that u <> x and u <> y *)
+        apply permute_app_diff. 
 
-            (* First we show that u <> y  *)
-            { assert (u <> y) as A. 2: apply A.
+        (* First we show that u <> y  *)
+        { assert (u <> y) as A. 2: apply A.
 
-              (* Since u :: Fr t, we have u :: Fr t1  *)
-              assert (u :: Fr t1) as A.
-              { rewrite E2 in H3. simpl in H3.
-                apply remove_charac in H3.
-                destruct H3 as [H3 H4]. assumption. 
-              }
+          (* Since u :: Fr t, we have u :: Fr t1  *)
+          assert (u :: Fr t1) as A.
+          { rewrite E2 in H3. simpl in H3.
+            apply remove_charac in H3.
+            destruct H3 as [H3 H4]. assumption. 
+          }
                 
-              (* So if we assume that u = y ... *)
-              intros H4. 
+          (* So if we assume that u = y ... *)
+          intros H4. 
 
-              (* ... we obtain y :: Fr t1 which is a contradiction  *)
-              rewrite H4 in A. contradiction. 
-            }
+          (* ... we obtain y :: Fr t1 which is a contradiction  *)
+          rewrite H4 in A. contradiction. 
+        }
 
-            (* We now show that u <> x  *)
-            { assert (u <> x) as A. 2: apply A.
+        (* We now show that u <> x  *)
+         { assert (u <> x) as A. 2: apply A.
 
-              (* This is the case since u is free in p = All x p1 *)
-              rewrite E2 in H3. simpl in H3. 
-              apply remove_charac in H3.
-              destruct H3 as [H3 H4]. apply not_eq_sym.
-              assumption.
+          (* This is the case since u is free in p = All x p1 *)
+          rewrite E2 in H3. simpl in H3. 
+          apply remove_charac in H3.
+          destruct H3 as [H3 H4]. apply not_eq_sym.
+          assumption.
 
-            } 
+        } 
  
   (* We now show that r <= Alpha  *)
   - assert (r <= Alpha) as A. 2: apply A.
