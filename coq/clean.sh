@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/coq
-cd ${HOME}
+DIR=/home/john/Prog/coq
+cd ${DIR}
 
 rm -f .*.aux
 rm -f *.glob
@@ -25,4 +24,3 @@ rm -f lib/*.vo
 ./ref/clean.sh
 ./cttwc/clean.sh
 
-cd ${DIR}

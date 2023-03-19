@@ -38,5 +38,3 @@ Proof.
             { inversion H1. }
             { apply le_n_S. apply IH; apply le_S_n; assumption. }
 Qed.
-
-

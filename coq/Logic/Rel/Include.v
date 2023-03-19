@@ -7,6 +7,7 @@ Require Import Logic.Rel.Intersect.
 Require Import Logic.Rel.Properties.
 Require Import Logic.Rel.Composition.
 
+Declare Scope Rel_Include_scope.
 
 Definition incl (a b:Type) (r s:R a b) : Prop := r = (r /\ s).
 Arguments incl {a} {b}.

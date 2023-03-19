@@ -16,6 +16,7 @@ Require Import Logic.Fol.Syntax.
 Require Import Logic.Fol.Functor.
 Require Import Logic.Fol.Variable.
 
+Declare Scope Fol_Subformula_scope.
 
 (* Defines the 'list' of sub-formulas of a given formula. We do not have        *)
 (* sets here, so using lists instead, being understood that the order is        *)

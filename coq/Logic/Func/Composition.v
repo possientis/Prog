@@ -2,6 +2,8 @@ Require Import Logic.Axiom.Extensionality.
 
 Require Import Logic.Func.Identity.
 
+Declare Scope Composition_scope.
+
 (* we are running out of operator symbols. Using ';' for composition in the     *)
 (* usual sense of '.', so 'g ; f' means f is applied first                      *)
 

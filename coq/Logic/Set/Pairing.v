@@ -1,6 +1,5 @@
 (* NEXT: ===> Union                                                             *) 
 
-
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Incl.
 Require Import Logic.Set.Elem.
@@ -9,6 +8,8 @@ Require Import Logic.Set.Equal.
 Require Import Logic.Set.Empty.
 Require Import Logic.Set.ToList.
 Require Import Logic.Set.Extensionality.
+
+Declare Scope Pairing_scope.
 
 (* In this module, we aim at proving the pairing axiom is satisfied in our      *) 
 (* model. So we define the 'pair' {x,y} given two sets x and y. For computer    *)

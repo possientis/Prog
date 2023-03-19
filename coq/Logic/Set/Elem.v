@@ -3,6 +3,8 @@
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Incl.
 
+Declare Scope Elem_scope.
+
 (* The standard mathematical notation for the singleton set.                    *)
 Notation "{ x }" := (Cons x Nil) : Elem_scope.
 

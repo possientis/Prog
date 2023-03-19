@@ -1,3 +1,5 @@
+Declare Scope STLC_Syntax_scope.
+
 (* Type language where possible type variables are in type b.                   *)
 (* The type 'b' may be thought of as the set of all possible 'type variables'.  *)
 (* The type 'T b' may be thought of as the set of all type expressions.         *)

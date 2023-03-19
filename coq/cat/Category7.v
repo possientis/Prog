@@ -1,5 +1,7 @@
 Require Import Setoids.
 
+Declare Scope categ.
+
 (* The internals of a category are not readable, however the hope 
    is to provide a highly intuitive API to categorical notions.
    A category is defined as a base Setoid 'Arrows_' (i.e. a type 

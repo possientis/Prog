@@ -2,6 +2,8 @@ Require Import Logic.Axiom.Extensionality.
 
 Require Import Logic.Rel.R.
 
+Declare Scope Rel_Composition_scope.
+
 (* Composition operator.                                                        *)
 Definition comp (a b c:Type) (s:R b c) (r:R a b) : R a c :=
     fun (x:a) (z:c) => exists (y:b), r x y /\ s y z.
@@ -26,5 +28,3 @@ Proof.
         + assumption.
         + exists y'. split; assumption.
 Qed.
-
-

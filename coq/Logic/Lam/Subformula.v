@@ -16,6 +16,7 @@ Require Import Logic.Lam.Syntax.
 Require Import Logic.Lam.Functor.
 Require Import Logic.Lam.Variable.
 
+Declare Scope Lam_Subformula_scope.
 
 (* Defines the 'list' of sub-terms of a given term. We do not have sets here,   *)
 (* so using lists instead, being understood that the order is irrelevant as     *) 

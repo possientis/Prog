@@ -2,7 +2,7 @@ Require Import Logic.Nat.Eq.
 Require Import Logic.Class.Eq.
 
 (* returns a variable which is not n and not m                                  *)
-Fixpoint fresh (n m:nat) : nat :=
+Definition fresh (n m:nat) : nat :=
     match eqDec 0 n, eqDec 0 m with
     | right _, right _  => 0 
     | left  _, left  _  => 1

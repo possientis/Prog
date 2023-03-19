@@ -7,6 +7,8 @@ Require Import Logic.Set.Set.
 Require Import Logic.Set.Core.
 Require Import Logic.Set.Order.
 
+Declare Scope Set_Incl_scope.
+
 (* At last we are able to define our inclusion relation on set. We previously   *)
 (* observed that given xs and ys and a natural number m, provided m is no less  *)
 (* than n = order xs + order ys, then all the inclusion statements in relation  *)

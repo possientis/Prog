@@ -26,6 +26,8 @@ Require Import Logic.Lam.Variable.
 Require Import Logic.Lam.Subformula.
 Require Import Logic.Lam.Congruence.
 
+Declare Scope Lam_StrongAlpha_scope.
+
 (* Generator of strong alpha-equivalence.                                       *)
 (* Strong alpha-equivalence coincides with the usual alpha-equivalence when the *)
 (* type of variable v is infinite. Otherwise, it is a stronger relation. For    *)
@@ -50,9 +52,9 @@ Definition StrongAlpha (v:Type) (e:Eq v) : T v -> T v -> Prop :=
 Arguments StrongAlpha {v} {e}.
 
 Notation "t ~ s" := (StrongAlpha t s)
-    (at level 60, no associativity) : Fol_StrongAlpha_scope.
+    (at level 60, no associativity) : Lam_StrongAlpha_scope.
 
-Open Scope Fol_StrongAlpha_scope.
+Open Scope Lam_StrongAlpha_scope.
 
 (* Not following pdf to obtain stronger result of equality as lists.            *)
 (* Two strongly alpha-equivalent terms have the same free variables.            *)

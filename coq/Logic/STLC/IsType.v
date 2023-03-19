@@ -1,6 +1,8 @@
 Require Import Logic.STLC.Syntax.
 Require Import Logic.STLC.Context.
 
+Declare Scope STLC_IsType_scope.
+
 (* This predicate expresses the fact that a type expression Ty is well-formed   *)
 (* in a context G. Note that we do not require G to be a valid context.         *)
 (* TVar: a base type is well-formed if the corresponding variable is declared.  *)

@@ -17,6 +17,8 @@ Require Import Logic.Set.ToList.
 Require Import Logic.Set.Decidable.
 Require Import Logic.Set.Extensionality.
 
+Declare Scope Set_Intersection_scope.
+
 (* In this module we shall define the intersection of two sets. The existence   *)
 (* of such intersection is usually derived from existing ZF axioms, so there is *)
 (* no specific axiom for intersection. However, in order for us to prove that   *)

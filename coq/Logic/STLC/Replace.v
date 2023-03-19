@@ -2,6 +2,8 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.STLC.Syntax.
 
+Declare Scope STLC_Replace_scope.
+
 Definition replace (b v:Type) (eq:Eq v) (x:v) (e:Exp b v) (u:v) : Exp b v :=
     match eqDec u x with
     | left _    => e

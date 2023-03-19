@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/coq/Logic
-
 set -e 
+DIR=/home/john/Prog/coq/Logic
 cd ${DIR}
 
 echo
@@ -15,7 +14,3 @@ make -j2
 echo
 echo 'test completed successfully'
 echo
-
-
-
-

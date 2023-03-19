@@ -1,5 +1,7 @@
 Require Import Eq.
 
+Declare Scope setoid.
+
 Record Setoid : Type := setoid 
     { elems     : Type
     ; eqElems   : Eq elems

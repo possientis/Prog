@@ -8,6 +8,8 @@ Require Import Logic.Func.Composition.
 
 Require Import Logic.Axiom.Extensionality. 
 
+Declare Scope Replace_scope.
+
 (* replace x by y                                                               *)
 Definition replace (v:Type) (e:Eq v) (x y:v) (u:v) : v :=
     match eqDec u x with

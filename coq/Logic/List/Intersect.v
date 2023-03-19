@@ -9,6 +9,8 @@ Require Import Logic.List.Concat.
 Require Import Logic.List.Append.
 Require Import Logic.List.Include.
 
+Declare Scope Intersect_scope.
+
 Fixpoint inter (v:Type) (e:Eq v) (xs ys:list v) : list v :=
     match xs with
     | nil        => nil

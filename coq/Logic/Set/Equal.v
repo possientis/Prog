@@ -3,6 +3,8 @@
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Elem.
 
+Declare Scope Set_Equal_scope.
+
 (* There is one other crucially important relation on 'set' which we have not   *)
 (* yet defined, namely that of equality. It is tempting to define equality      *)
 (* simply as 'double inclusion'. However, if we assume that equality is not     *)

@@ -56,7 +56,7 @@ all:	Axiom_Extensionality.vo \
 		test_nat_ind.vo \
 		polymorphism.vo \
 		closure.vo \
-		omega.vo \
+		lia.vo \
 		syntax.vo \
 		eval.vo \
 		test_eval.vo \
@@ -259,8 +259,8 @@ polymorphism.vo : polymorphism.v
 closure.vo : closure.v nat.vo le.vo
 	coqc closure.v
 
-omega.vo : omega.v
-	coqc omega.v
+lia.vo : lia.v
+	coqc lia.v
 
 syntax.vo : syntax.v bool.vo nat.vo dictionary.vo
 	coqc syntax.v

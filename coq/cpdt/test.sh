@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/coq/cpdt
-cd ${HOME}
+DIR=/home/john/Prog/coq/cpdt
+cd ${DIR}
 echo
 echo "testing cpdt..."
 
@@ -12,9 +11,4 @@ ghc Main.hs
 make 
 ./clean.sh
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

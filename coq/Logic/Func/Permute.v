@@ -8,6 +8,8 @@ Require Import Logic.Func.Composition.
 
 Require Import Logic.Axiom.Extensionality.
 
+Declare Scope Permute_scope.
+
 (* permutes x and y                                                             *)
 Definition permute (v:Type) (e:Eq v) (x y:v) (u:v) : v :=
     match eqDec u x with

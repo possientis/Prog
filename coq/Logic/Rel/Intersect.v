@@ -3,6 +3,8 @@ Require Import Logic.Axiom.Extensionality.
 Require Import Logic.Rel.R.
 Require Import Logic.Rel.Converse.
 
+Declare Scope Rel_Intersect_scope.
+
 (* Intersection operator. Needed for Rel to be an allegory.                     *) 
 Definition inter (a b:Type) (r s:R a b) : R a b := fun x y => r x y /\ s x y.
 Arguments inter {a} {b}.

@@ -13,6 +13,8 @@ Require Import Logic.Set.ToList.
 Require Import Logic.Set.Pairing.
 Require Import Logic.Set.Extensionality.
 
+Declare Scope Union_scope.
+
 (* In this module we shall prove that our model satisfies the 'union axiom'     *)
 (* which is another commonly known axiom of ZF. This axiom essentially states   *)
 (* the existence of a union set 'U x' given any set x. The union set U x is the *)

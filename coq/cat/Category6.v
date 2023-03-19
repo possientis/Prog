@@ -1,7 +1,7 @@
 Require Import Eq.
 Require Import Setoids.
 
-
+Declare Scope categ.
 
 Record Category : Type := category
     { Obj           : Type

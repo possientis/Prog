@@ -26,6 +26,8 @@ Require Import Logic.Fol.Variable.
 Require Import Logic.Fol.Subformula.
 Require Import Logic.Fol.Congruence.
 
+Declare Scope Fol_StrongAlpha_scope.
+
 (* Generator of strong alpha-equivalence.                                       *)
 (* Strong alpha-equivalence coincides with the usual alpha-equivalence when the *)
 (* type of variable v is infinite. Otherwise, it is a stronger relation. For    *)

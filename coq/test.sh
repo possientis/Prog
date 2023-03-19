@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/coq
-
 set -e 
+DIR=/home/john/Prog/coq
 cd ${DIR}
 
 echo
@@ -22,7 +21,3 @@ echo
 echo
 echo 'All coq tests completed successfully'
 echo
-
-
-
-

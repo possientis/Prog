@@ -8,6 +8,8 @@ Require Import Logic.List.Concat.
 Require Import Logic.List.Include.
 Require Import Logic.List.Intersect.
 
+Declare Scope Difference_scope.
+
 (* diff cannot be defined in terms of intersection, as there is no such thing   *)
 (* as a 'complement list' of ys. Such complement would in general be infinite.  *) 
 Fixpoint diff (v:Type) (e:Eq v) (xs ys:list v) : list v :=

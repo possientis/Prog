@@ -2,6 +2,8 @@ Require Import Logic.Axiom.Extensionality.
 
 Require Import Logic.Rel.R.
 
+Declare Scope Rel_Initial_scope.
+
 (* The category of relations has an initial object namely 0.                    *)
 
 Inductive Void : Type :=.
@@ -26,6 +28,3 @@ Lemma initial_uniqueness : forall (a:Type) (r s:R 0 a), r = s.
 Proof.
     intros a r s. apply Ext. intros x y. split; intros H1; inversion x.
 Qed.
-
-
-

@@ -3,6 +3,8 @@ Require Import List.
 Require Import Logic.List.In.
 Require Import Logic.List.Concat.
 
+Declare Scope List_Include_scope.
+
 Notation "xs <= ys" := (incl xs ys)
     (at level 70, no associativity) : List_Include_scope.
 

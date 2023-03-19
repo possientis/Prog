@@ -225,7 +225,7 @@ syn keyword coqTactic    contained decide decompose dependant destruct discrimin
 syn keyword coqTactic    contained eapply eassumption eauto econstructor elim[type] equality evar exact eexact exists exfalso
 syn keyword coqTactic    contained field fix f_equal fold fourier functional generalize hnf
 syn keyword coqTactic    contained idtac induction injection instantiate intro[s] intuition inversion[_clear]
-syn keyword coqTactic    contained lapply left move now omega pattern pose proof quote
+syn keyword coqTactic    contained lapply left move now lia pattern pose proof quote
 syn keyword coqTactic    contained red refine reflexivity remember rename replace revert rewrite right ring
 syn keyword coqTactic    contained set simpl[e] simplify_eq split subst stepl stepr symmetry
 syn keyword coqTactic    contained tauto transitivity trivial unfold vm_compute

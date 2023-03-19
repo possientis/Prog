@@ -1,17 +1,11 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/coq/sf
-cd ${HOME}
+DIR=/home/john/Prog/coq/sf
+cd ${DIR}
 echo
 echo "testing software foundations..."
 
 make; ./clean.sh
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

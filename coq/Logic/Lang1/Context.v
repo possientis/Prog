@@ -13,6 +13,8 @@ Require Import Logic.Set.Equal.
 
 Require Import Logic.Lang1.Syntax.
 
+Declare Scope Context_scope.
+
 (* Custom notations for predicates of 3 arguments appear to fail in Coq.        *)
 (* Creating intermediary types Binding and Interpretation to bypass the issue.  *)
 Inductive Binding : Type :=

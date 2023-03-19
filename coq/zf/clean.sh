@@ -1,11 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-DIR=`pwd`
-HOME=/home/john/Prog/coq/zf
-cd ${HOME}
+DIR=/home/john/Prog/coq/zf
+cd ${DIR}
 
 rm -f .*.aux
-rm -f *.glob
-rm -f *.vo
+rm -f *.{glob,vo,vok,vos}
 
-cd ${DIR}

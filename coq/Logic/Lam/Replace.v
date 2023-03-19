@@ -2,6 +2,8 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.Lam.Syntax.
 
+Declare Scope Lam_Replace_scope.
+
 (* replace x by the term t                                                      *)
 Definition replace (v:Type) (e:Eq v) (x:v) (t:T v) (u:v) : T v :=
     match eqDec u x with

@@ -5,6 +5,8 @@ Require Import Logic.STLC.Syntax.
 Require Import Logic.STLC.IsType.
 Require Import Logic.STLC.Context.
 
+Declare Scope STLC_Typing_scope.
+
 (* Just so the predicate Judgment can have two arguments instead of three.      *)
 Inductive Typing (b v:Type) : Type :=
 | mkTyping : forall (e:Exp b v) (Ty:T b), Typing b v

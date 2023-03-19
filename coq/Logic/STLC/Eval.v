@@ -5,6 +5,8 @@ Require Import Logic.STLC.Value.
 Require Import Logic.STLC.Syntax.
 Require Import Logic.STLC.Replace.
 
+Declare Scope STLC_Eval_scope.
+
 (* Big step semantics of STLC                                                   *)
 (* EVar: a variable evaluates to itself                                         *)
 (* EAnn: if a term evaluates to a value, the annotated term evaluates to same   *)

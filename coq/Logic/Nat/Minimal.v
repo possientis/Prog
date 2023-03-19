@@ -37,6 +37,3 @@ Proof.
                     { apply H2. left. assumption. }
                     { apply H2. right. assumption. }}}
 Qed.
-
-
-

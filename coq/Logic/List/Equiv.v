@@ -3,6 +3,8 @@ Require Import List.
 Require Import Logic.List.In.
 Require Import Logic.List.Include.
 
+Declare Scope Equiv_scope.
+
 Definition Equiv (v:Type) (xs ys:list v) : Prop :=
     (xs <= ys) /\ (ys <= xs).
 

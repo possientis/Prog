@@ -11,6 +11,8 @@ Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Wec.
 Require Import Logic.Nat.Dec.
 
+Declare Scope Nat_Subset_scope.
+
 (* Subset of N defined as predicate over N                                      *)
 Definition Subset : Type := nat -> Prop.
 

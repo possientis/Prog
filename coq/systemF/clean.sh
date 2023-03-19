@@ -1,11 +1,11 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/coq/systemF
-cd ${HOME}
+DIR=/home/john/Prog/coq/systemF
+cd ${DIR}
 
 rm -f .*.aux
 rm -f *.glob
 rm -f *.vo
+rm -f *.vok
+rm -f *.vos
 
-cd ${DIR}

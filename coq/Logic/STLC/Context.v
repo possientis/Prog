@@ -2,6 +2,8 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.STLC.Syntax.
 
+Declare Scope STLC_Context_scope.
+
 Inductive Binding (b v:Type) : Type :=
 | BType : b -> Binding b v          (* Adding base type to context              *)
 | BVar  : v -> T b -> Binding b v   (* Adding variable to context               *)
