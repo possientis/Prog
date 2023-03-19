@@ -3,9 +3,8 @@
 # need to set up gradle.properties
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/gradle
-cd ${HOME}
+DIR=/home/john/Prog/gradle
+cd ${DIR}
 
 cat /home/john/.gradle/gradle.properties | grep 'org\.gradle\.daemon=true'
 
@@ -23,9 +22,4 @@ cat /home/john/.gradle/gradle.properties | grep 'org\.gradle\.daemon=true'
 ./ant/test.sh
 # ./maven/test.sh  TODO
 
-cd ${DIR}
 echo '\nAll gradle tests completed successfully\n'
-
-
-
-

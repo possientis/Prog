@@ -1,9 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/gradle
-cd ${HOME}
+DIR=/home/john/Prog/gradle
+cd ${DIR}
 
 ./maven/clean.sh
 
-cd ${DIR}
