@@ -18,7 +18,7 @@ DIR=`pwd`
 HOME=/home/john/Prog/java/
 cd ${HOME}
 
-./gcj/test.sh
+#./gcj/test.sh
 ./ijvm/test.sh
 ./jdbc/test.sh
 ./slf4j/test.sh

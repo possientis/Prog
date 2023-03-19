@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/c
-cd ${HOME}
+DIR=/home/john/Prog/c
+cd ${DIR}
 
 rm -f a.out
 rm -f *.o
@@ -19,4 +18,3 @@ rm -f log
 ./pragma/clean.sh
 ./tlpi/clean.sh
 
-cd ${DIR}

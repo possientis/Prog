@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/clojure/rabbitmq
-cd ${HOME}
+DIR=/home/john/Prog/clojure/rabbitmq
+cd ${DIR}
 
 
 RABBIT_JARS=
@@ -16,9 +15,4 @@ clojurec -cp ${RABBIT_JARS} test_rabbitmq 1> /dev/null
 java -cp ${RABBIT_JARS} test_rabbitmq
 ./clean.sh
 
-cd ${DIR}
 echo '\nrabbitmq test completed successfully\n'
-
-
-
-

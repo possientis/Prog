@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/pragma
-cd ${HOME}
+DIR=/home/john/Prog/c/pragma
+cd ${DIR}
 
 
 # running program without foo override
@@ -18,7 +17,6 @@ gcc unresolved.c; ./a.out; ./clean.sh
 # running program with debug function provided
 gcc -c debug.c; gcc unresolved.c debug.o; ./a.out; ./clean.sh
 
-cd ${DIR}
 echo '\npragma test completed successfully\n'
 
 

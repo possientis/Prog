@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/gcov
-cd ${HOME}
+DIR=/home/john/Prog/c/gcov
+cd ${DIR}
 echo
 echo "testing gcov..."
 echo
@@ -21,7 +20,6 @@ cat coverage.c.gcov
 
 ./clean.sh
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
 
 

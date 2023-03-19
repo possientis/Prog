@@ -374,6 +374,6 @@ deps :
 include deps
 
 clean :
-	rm -f {*/*,*/*/*}.{glob,vo} {*/.*,*/*/.*}.aux deps
+	bash rm.sh
 
 

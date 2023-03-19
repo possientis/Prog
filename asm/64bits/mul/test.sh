@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits/mul
-cd ${HOME}
+HOME=/home/john/Prog/asm/64bits/mul
+cd ${DIR}
 echo
 
 option=$(sh ../option.sh)
@@ -52,7 +51,6 @@ echo
 
 # TODO 64 bits signed multiplication
 
-cd ${DIR}
 echo
 echo "multiplication tests completed successfully"
 echo

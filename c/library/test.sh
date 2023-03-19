@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/library
-cd ${HOME}
+DIR=/home/john/Prog/c/library
+cd ${DIR}
 echo
 
 echo "testing static library use"
@@ -20,7 +19,6 @@ echo
 
 ./clean.sh
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
 
 

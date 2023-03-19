@@ -8,12 +8,9 @@
 
 version=$(uname -a | cut -d' ' -f 7 | cut -d '.' -f 1)
 
-if [ "$version" = "4" ]   # debian stretch 
+if [ "$version" = "5" ]   # debian stretch 
 then
   option="-no-pie"
-elif [ "$version" = "3" ] # debian jessie
-then
-  option=""
 else
   echo "unsupported version"
   exit 1

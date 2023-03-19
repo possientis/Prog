@@ -1,13 +1,11 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/execve 
-cd ${HOME}
+DIR=/home/john/Prog/c/execve 
+cd ${DIR}
 
 ./run.sh
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
 
 

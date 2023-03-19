@@ -1,9 +1,9 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits
-cd ${HOME}
+DIR=/home/john/Prog/asm/64bits
+cd ${DIR}
+
 option=$(sh option.sh)
 
 # hello world
@@ -27,7 +27,6 @@ option=$(sh option.sh)
 # testing isa
 ./isa/test.sh
 
-cd ${DIR}
 echo
 echo "64 bits tests completed successfully"
 echo

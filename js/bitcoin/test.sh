@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/javascript/bitcoin
+HOME=/home/john/Prog/js/bitcoin
 cd ${HOME}
 
 BITCOINJ_JARS=

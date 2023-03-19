@@ -2,9 +2,8 @@
 # need to install packages gcc-multilib and g++-multilib
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/32bits
-cd ${HOME}
+DIR=/home/john/Prog/asm/32bits
+cd ${DIR}
 
 ./write-prog.sh
 ./read-prog.sh
@@ -16,8 +15,6 @@ cd ${HOME}
 
 ./clean.sh
 
-
-cd ${DIR}
 echo '\n32 bits tests completed successfully\n'
 
 

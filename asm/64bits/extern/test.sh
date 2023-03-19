@@ -2,9 +2,8 @@
 # need to install packages gcc-multilib and g++-multilib
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits/extern
-cd ${HOME}
+DIR=/home/john/Prog/asm/64bits/extern
+cd ${DIR}
 option=$(sh ../option.sh)
 
 # quad
@@ -43,7 +42,6 @@ gcc -c byteFunction.c
 ../yasm.sh byteASMFunction.asm;
 gcc $option byte.c byteASMFunction.o byteFunction.o; ./a.out; ./clean.sh
 
-cd ${DIR}
 echo
 echo "test completed successfully"
 echo

@@ -1,13 +1,11 @@
-#!/bin/sh
+#/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/bitcoin
-cd ${HOME}
+DIR=/home/john/Prog/c/bitcoin
+cd ${DIR}
 
 ./secp256k1/test.sh
 
-cd ${DIR}
 echo '\nbitcoin tests completed successfully\n'
 
 

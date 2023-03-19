@@ -1,11 +1,9 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/c/cpp
-cd ${HOME}
+DIR=/home/john/Prog/c/cpp
+cd ${DIR}
 
 rm -f a.out
 rm -f *.o
 rm -f log
 
-cd ${DIR}

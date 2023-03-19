@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c++/
-cd ${HOME}
+DIR=/home/john/Prog/c++/
+cd ${DIR}
 
 ./avl/test.sh
 ./bst/test.sh
@@ -13,9 +12,4 @@ cd ${HOME}
 ./stl/test.sh
 ./bitcoin/test.sh
 
-cd ${DIR}
 echo '\nAll c++ tests completed successfully\n'
-
-
-
-

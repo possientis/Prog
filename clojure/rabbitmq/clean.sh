@@ -1,9 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/clojure/rabbitmq
-cd ${HOME}
+DIR=/home/john/Prog/clojure/rabbitmq
+cd ${DIR}
 
 rm -f *.class
 
-cd ${DIR}

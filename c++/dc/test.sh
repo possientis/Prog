@@ -1,17 +1,11 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c++/dc
-cd ${HOME}
+DIR=/home/john/Prog/c++/dc
+cd ${DIR}
 
 make
 ./dc
 make clean
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/clojure/jdbc
-cd ${HOME}
+DIR=/home/john/Prog/clojure/jdbc
+cd ${DIR}
 
 JDBC_JARS=
 for d in *.jar
@@ -20,9 +19,5 @@ java -cp "$JDBC_JARS" test_java_jdbc
 # clean up
 ./clean.sh
 
-cd ${DIR}
 echo '\njdbc test completed successfully\n'
-
-
-
 

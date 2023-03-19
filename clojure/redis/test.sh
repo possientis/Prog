@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/clojure/redis
-cd ${HOME}
+DIR=/home/john/Prog/clojure/redis
+cd ${DIR}
 
 
 RABBIT_JARS=
@@ -16,9 +15,4 @@ clojurec -cp ${RABBIT_JARS} test_redis 1> /dev/null
 java -cp ${RABBIT_JARS} test_redis
 ./clean.sh
 
-cd ${DIR}
 echo '\nredis test completed successfully\n'
-
-
-
-

@@ -3,7 +3,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/javascript/
+HOME=/home/john/Prog/js/
 cd ${HOME}
 
 node node.js

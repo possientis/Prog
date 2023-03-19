@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c++/link
-cd ${HOME}
+DIR=/home/john/Prog/c++/link
+cd ${DIR}
 
 make link
 make linknode
@@ -11,7 +10,6 @@ make linknode
 ./link
 make clean
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
 
 

@@ -1,18 +1,12 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/clojure/
-cd ${HOME}
+DIR=/home/john/Prog/clojure/
+cd ${DIR}
 
 ./hiccup/test.sh
 ./rabbitmq/test.sh
 ./redis/test.sh
 ./jdbc/test.sh
 
-cd ${DIR}
 echo '\nAll clojure tests completed successfully\n'
-
-
-
-

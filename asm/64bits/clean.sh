@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits
-cd ${HOME}
+DIR=/home/john/Prog/asm/64bits
+cd ${DIR}
 
 rm -f *.lst
 rm -f *.o
@@ -17,5 +16,3 @@ rm -f test
 ./hello/clean.sh
 ./isa/clean.sh
 ./mul/clean.sh
-
-cd ${DIR}

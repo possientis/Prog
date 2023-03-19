@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits/carry
-cd ${HOME}
+DIR=/home/john/Prog/asm/64bits/carry
+cd ${DIR}
 echo
 
 echo "testing carry for 8 bits add"
@@ -16,12 +15,6 @@ echo "testing carry for 8 bits sub"
 gcc test_sub_carry_8bits.c sub_carry_8bits.o
 ./a.out; ./clean.sh 
 
-
-cd ${DIR}
 echo
 echo "carry tests completed successfully"
 echo
-
-
-
-

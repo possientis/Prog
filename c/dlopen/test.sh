@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/dlopen
-cd ${HOME}
+DIR=/home/john/Prog/c/dlopen
+cd ${DIR}
 echo
 
 # creating shared library which exposes function 'foo'
@@ -27,8 +26,6 @@ echo "testing dynamic loading of cosine function"
 gcc -ldl cosine.c; ./a.out; ./clean.sh
 echo
 
-
-cd ${DIR}
 echo '\ndlopen test completed successfully\n'
 
 

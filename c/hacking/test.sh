@@ -1,12 +1,9 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/hacking
-cd ${HOME}
-
-
+DIR=/home/john/Prog/c/hacking
 cd ${DIR}
+
 echo '\ntest completed successfully\n'
 
 

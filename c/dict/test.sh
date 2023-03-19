@@ -1,16 +1,13 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/dict/
-cd ${HOME}
+DIR=/home/john/Prog/c/dict/
+cd ${DIR}
 
 gcc dict.t.c dict.c link.c link_node.c
 ./a.out
 rm a.out
 
-
-cd ${DIR}
 echo '\ntest completed successfully\n'
 
 

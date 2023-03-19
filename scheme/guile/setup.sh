@@ -4,7 +4,7 @@ root="/home/john/Prog/scheme"
 
 current=$(pwd)
 
-cd /usr/share/guile/2.0/
+cd /usr/share/guile/2.2/
 
 sudo mkdir -p foo
 cd foo
@@ -20,7 +20,7 @@ sudo mkdir -p bitcoin
 cd bitcoin
 sudo ln -nfs ${root}/bitcoin/secp256k1/secp256k1.scm secp256k1.scm
 
-cd /usr/lib/x86_64-linux-gnu/guile/2.0
+cd /usr/lib/x86_64-linux-gnu/guile/2.2
 sudo mkdir -p extensions
 cd extensions
 sudo ln -nfs /home/john/Prog/scheme/guile/libguile-bessel.so libguile-bessel.so

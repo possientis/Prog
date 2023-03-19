@@ -1,5 +1,5 @@
 #!/bin/sh
-# need to install guile-2.0
+# need to install guile-2.2
 # may also need to set up symlink in /usr/include 
 
 set -e 
@@ -15,8 +15,8 @@ guile -s hello.scm
 echo
 
 echo "testing creation of guile executable from c source ..."
-gcc -c simple-guile.c $(pkg-config --cflags guile-2.0)
-gcc simple-guile.o $(pkg-config --libs guile-2.0)
+gcc -c simple-guile.c $(pkg-config --cflags guile-2.2)
+gcc simple-guile.o $(pkg-config --libs guile-2.2)
 echo
 
 echo "running custom executable ..."
@@ -25,7 +25,7 @@ echo
 
 # extending guile with shared library
 echo "testing extension of guile from custom shared library ..."
-gcc $(pkg-config --cflags guile-2.0) -shared -o libguile-bessel.so -fPIC bessel.c
+gcc $(pkg-config --cflags guile-2.2) -shared -o libguile-bessel.so -fPIC bessel.c
 guile -s bessel1.scm   # running shared library
 echo
 
@@ -43,7 +43,7 @@ echo
 
 # defining library module example
 # guile must be able to locate module foo/bar-module: create symlink of bar-module.scm
-# into /usr/share/guile/2.0/foo
+# into /usr/share/guile/2.2/foo
 echo "testing use of custom module ..."
 guile -s test-module.scm  
 echo
@@ -52,9 +52,9 @@ echo
 
 # testing extended module
 # guile must be able to locate module math/bessel: create symlink of bessel.scm
-# into /usr/share/guile/2.0/math
+# into /usr/share/guile/2.2/math
 # guile must also be able to locate the share library libguile-bessel 
-# create symlink of libguile-bessel.so into /usr/lib/x86_64-linux-gnu/guile/2.0/extensions/
+# create symlink of libguile-bessel.so into /usr/lib/x86_64-linux-gnu/guile/2.2/extensions/
 echo "testing use of module created from shared library ..."
 guile -s test-bessel.scm
 echo

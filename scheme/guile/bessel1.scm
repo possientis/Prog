@@ -3,7 +3,7 @@
 
 ; or simply using library name. However, guile must be
 ; able to locate the shared library libguile-bessel.so
-; create a symlink into /usr/lib/x86_64-linux-gnu/guile/2.0/extensions
+; create a symlink into /usr/lib/x86_64-linux-gnu/guile/2.2/extensions
 ; create directory
 
 ;(load-extension "libguile-bessel" "init_bessel")

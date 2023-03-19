@@ -1,12 +1,12 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits/hello
-cd ${HOME}
+DIR=/home/john/Prog/asm/64bits/hello
+cd ${DIR}
 
 
-option=$(sh ../option.sh)
+#option=$(sh ../option.sh)
+export option=$(sh ../option.sh)
 
 # Hello world!
 echo
@@ -115,7 +115,6 @@ echo -n "7 arguments printf call with Intel syntax:"
 echo -n "8 arguments printf call with Intel syntax:"
 ../yasm.sh hello_printf_7.asm; gcc $option hello_printf_7.o; ./a.out; ./clean.sh
 
-cd ${DIR}
 echo
 echo "test completed successfully"
 echo

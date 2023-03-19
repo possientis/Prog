@@ -1,10 +1,8 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/c++/bitcoin
-cd ${HOME}
+DIR=/home/john/Prog/c++/bitcoin
+cd ${DIR}
 
 rm -f *.o
 rm -f a.out
 
-cd ${DIR}

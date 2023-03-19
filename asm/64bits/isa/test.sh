@@ -1,9 +1,8 @@
 #!/bin/bash
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/assembly/64bits/isa
-cd ${HOME}
+DIR=/home/john/Prog/asm/64bits/isa
+cd ${DIR}
 echo
 echo "testing X86_64 isa..."
 
@@ -17,8 +16,6 @@ done
 
 ./clean.sh
 
-
-cd ${DIR}
 echo
 echo "test completed successfully"
 echo

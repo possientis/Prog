@@ -2,9 +2,8 @@
 # need to install packages ant junit
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/ant/
-cd ${HOME}
+DIR=/home/john/Prog/ant/
+cd ${DIR}
 
 ./Available/test.sh
 ./AntTask/test.sh
@@ -16,7 +15,6 @@ cd ${HOME}
 #./Lucene/test.sh
 ./Script/test.sh
 
-cd ${DIR}
 echo '\nAll ant tests completed successfully\n'
 
 

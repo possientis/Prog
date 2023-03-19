@@ -1,4 +1,4 @@
-// gcc -o simple-guile simple-guile.c $(pkg-config --cflags --libs guile-2.0)
+// gcc -o simple-guile simple-guile.c $(pkg-config --cflags --libs guile-2.2)
 // For some reason, HOSTNAME needs to be exported first for my-hostname to work
 
 #include <stdlib.h>

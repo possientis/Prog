@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/clojure
-cd ${HOME}
+DIR=/home/john/Prog/clojure
+cd ${DIR}
 
 rm -f *.class
 ./hiccup/clean.sh
@@ -10,4 +9,3 @@ rm -f *.class
 ./rabbitmq/clean.sh
 ./redis/clean.sh
 
-cd ${DIR}

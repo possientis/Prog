@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/c/cs
-cd ${HOME}
+DIR=/home/john/Prog/c/cs
+cd ${DIR}
 
 ./syscall/clean.sh
 ./rio/clean.sh
@@ -21,4 +20,3 @@ rm -fr .libs
 
 mv pushtest.ss pushtest.s
 
-cd ${DIR}
