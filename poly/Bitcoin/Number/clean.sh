@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/polyglot/Bitcoin/Number
-cd ${HOME}
+DIR=/home/john/Prog/poly/Bitcoin/Number
+cd ${DIR}
 
 ./c/clean.sh
 ./c#/clean.sh
@@ -10,5 +9,3 @@ cd ${HOME}
 ./haskell/clean.sh
 ./scheme/clean.sh
 ./python/clean.sh
-
-cd ${DIR}

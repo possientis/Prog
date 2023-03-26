@@ -2,9 +2,8 @@
 # need libmono-system-numerics4.0-cil
 
 set -e
-DIR=`pwd`
-HOME=/home/john/Prog/polyglot/Bitcoin/Number/c#
-cd ${HOME}
+DIR=/home/john/Prog/poly/Bitcoin/Number/c#
+cd ${DIR}
 
 echo '\nThis is C# ...'
 ./compile.sh Test_Number.cs
@@ -14,8 +13,3 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 ./clean.sh
-
-cd ${DIR}
-
-
-

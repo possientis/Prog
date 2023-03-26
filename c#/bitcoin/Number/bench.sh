@@ -2,7 +2,7 @@
 
 set -e
 DIR=`pwd`
-HOME=/home/john/Prog/polyglot/Bitcoin/Number/c#
+HOME=/home/john/Prog/poly/Bitcoin/Number/c#
 cd ${HOME}
 
 echo '\nThis is C# ...'
@@ -13,6 +13,3 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 ./clean.sh
-
-cd ${DIR}
-

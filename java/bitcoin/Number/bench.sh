@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-DIR=/home/john/Prog/polyglot/Bitcoin/Number/java
+DIR=/home/john/Prog/poly/Bitcoin/Number/java
 cd ${DIR}
 
 echo '\nThis is Java ...'

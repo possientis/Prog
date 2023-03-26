@@ -6,9 +6,8 @@
 # libghc-monadcryptorandom-dev
 
 set -e
-DIR=`pwd`
-HOME=/home/john/Prog/polyglot/Bitcoin/Number
-cd ${HOME}
+DIR=/home/john/Prog/poly/Bitcoin/Number
+cd ${DIR}
 
 ./java/test.sh
 ./c#/test.sh
@@ -16,7 +15,4 @@ cd ${HOME}
 ./scheme/test.sh
 ./python/test.sh
 
-cd ${DIR}
 echo '\nAll Number tests completed successfully\n'
-
-

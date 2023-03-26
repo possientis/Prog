@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e
-DIR=`pwd`
-HOME=/home/john/Prog/polyglot/Bitcoin/Number/python
-cd ${HOME}
+DIR=/home/john/Prog/poly/Bitcoin/Number/python
+cd ${DIR}
 
 
 echo '\nThis is Python ...'
@@ -14,8 +13,3 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 ./clean.sh
-
-
-cd ${DIR}
-
-

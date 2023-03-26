@@ -4,9 +4,8 @@
 set -e
 UNAME=Flyweight
 LNAME=flyweight
-HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
-DIR=`pwd`
-cd ${HOME}
+DIR=/home/john/Prog/poly/DesignPatterns/${UNAME}
+cd ${DIR}
 
 echo '\nThis is C ...'
 gcc ${LNAME}.c dict.c link.c link_node.c  
@@ -106,5 +105,4 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
-cd ${DIR}
 echo '\nflyweight test completed successfully'

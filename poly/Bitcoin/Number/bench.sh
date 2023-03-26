@@ -1,16 +1,11 @@
 #!/bin/sh
 
 set -e
-DIR=`pwd`
-HOME=/home/john/Prog/polyglot/Bitcoin/Number
-cd ${HOME}
+DIR=/home/john/Prog/poly/Bitcoin/Number
+cd ${DIR}
 
 ./java/bench.sh
 ./c#/bench.sh
 ./haskell/bench.sh
 ./scheme/bench.sh
 ./python/bench.sh
-
-
-cd ${DIR}
-

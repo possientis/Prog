@@ -3,9 +3,8 @@
 set -e
 UNAME=Adapter
 LNAME=adapter
-HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
-DIR=`pwd`
-cd ${HOME}
+DIR=/home/john/Prog/poly/DesignPatterns/${UNAME}
+cd ${DIR}
 
 echo '\nThis is C ...'
 gcc ${LNAME}.c 
@@ -117,5 +116,4 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
-cd ${DIR}
 echo '\nadapter test completed successfully'

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 PROG=/home/john/Prog
-PATTERNS=${PROG}/polyglot/DesignPatterns
-BITCOIN=${PROG}/polyglot/Bitcoin
+PATTERNS=${PROG}/poly/DesignPatterns
+BITCOIN=${PROG}/poly/Bitcoin
 
 echo 'Testing log file\n' > test.log
 
