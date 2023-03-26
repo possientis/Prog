@@ -22,7 +22,6 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm a.out
 
 
-
 echo '\nThis is Java ...'
 javac Primes.java
 START=$(date +%s%N)
@@ -43,19 +42,19 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 rm primes.exe
 
 
-echo '\nThis is Scala ...'
-env JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 scalac Primes.scala
+echo '\nThis is Haskell ...'
+ghc -v0 primes.hs;
 START=$(date +%s%N)
-scala Primes $NUM_PRIMES
+./primes $NUM_PRIMES 
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm *.class
+rm primes; rm primes.o; rm primes.hi
 
 
 echo '\nThis is JavaScript ...'
 START=$(date +%s%N)
-js primes.js $NUM_PRIMES
+node primes.js $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
@@ -77,7 +76,6 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
-
 echo '\nThis is Ruby ...'
 START=$(date +%s%N)
 ruby primes.rb $NUM_PRIMES
@@ -94,23 +92,21 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 
 
-echo '\nThis is Clojure ...'
-clojurec primes 1> /dev/null 
+echo '\nThis is Scala ...'
+env JAVA_HOME=/usr/lib/jvm/default-java scalac Primes.scala
 START=$(date +%s%N)
-java -Xss16m -cp .:/usr/share/java/clojure-1.6.0.jar primes $NUM_PRIMES
+scala Primes $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
 
-echo '\nThis is Haskell ...'
-ghc -v0 primes.hs;
+echo '\nThis is Clojure ...'
+clojurec primes 1> /dev/null 
 START=$(date +%s%N)
-./primes $NUM_PRIMES 
+java -Xss16m -cp .:/usr/share/java/clojure.jar primes $NUM_PRIMES
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
-rm primes; rm primes.o; rm primes.hi
-
-
+rm *.class
