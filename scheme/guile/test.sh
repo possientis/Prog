@@ -3,9 +3,8 @@
 # may also need to set up symlink in /usr/include 
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/scheme/guile
-cd ${HOME}
+DIR=/home/john/Prog/scheme/guile
+cd ${DIR}
 
 export GUILE_AUTO_COMPILE=0
 
@@ -61,9 +60,4 @@ echo
 
 ./clean.sh
 
-cd ${DIR}
 echo '\nguile tests completed successfully\n'
-
-
-
-

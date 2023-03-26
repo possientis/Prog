@@ -2,9 +2,8 @@
 # need to install scm
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/scheme/
-cd ${HOME}
+DIR=/home/john/Prog/scheme/
+cd ${DIR}
 
 
 ./avl/test.sh
@@ -17,9 +16,4 @@ cd ${HOME}
 ./stream/test.sh
 ./types/test.sh
 
-cd ${DIR}
 echo '\nAll scheme tests completed successfully\n'
-
-
-
-

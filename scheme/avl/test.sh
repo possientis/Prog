@@ -1,16 +1,10 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/scheme/avl
-cd ${HOME}
+DIR=/home/john/Prog/scheme/avl
+cd ${DIR}
 
 scm -b -f avl-node-test.scm
 scm -b -f avl-test.scm
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

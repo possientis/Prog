@@ -1,16 +1,10 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/scheme/bst
-cd ${HOME}
+DIR=/home/john/Prog/scheme/bst
+cd ${DIR}
 
 scm -b -f bst-node-test.scm
 scm -b -f bst-test.scm
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

@@ -1,15 +1,9 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/scheme/hash
-cd ${HOME}
+DIR=/home/john/Prog/scheme/hash
+cd ${DIR}
 
 scm -b -f hash-test.scm
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

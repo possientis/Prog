@@ -1,9 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/scala
-cd ${HOME}
+DIR=/home/john/Prog/scala
+cd ${DIR}
 
 rm -f *.class
 
-cd ${DIR}

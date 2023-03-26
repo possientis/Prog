@@ -1,10 +1,8 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/python
-cd ${HOME}
+DIR=/home/john/Prog/python
+cd ${DIR}
 
 rm -rf __pycache__
 ./bitcoin/clean.sh
 
-cd ${DIR}

@@ -1,15 +1,9 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/scheme/dict
-cd ${HOME}
+DIR=/home/john/Prog/scheme/dict
+cd ${DIR}
 
 scm -b -f dict-test.scm
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

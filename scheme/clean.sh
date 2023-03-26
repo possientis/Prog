@@ -1,11 +1,9 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/scheme
-cd ${HOME}
+DIR=/home/john/Prog/scheme
+cd ${DIR}
 
 rm -f a.out
 rm -f *.o
 ./guile/clean.sh
 
-cd ${DIR}

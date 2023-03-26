@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/python/bitcoin
-cd ${HOME}
+DIR=/home/john/Prog/python/bitcoin
+cd ${DIR}
 echo
 
 echo "testing ecdsa module ..."
@@ -28,9 +27,4 @@ echo
 #ku -j KxFC1jmwwCoACiCAWZ3eXa96mBM6tb3TYzGmf6YwgdGWZgawvrtJ
 #echo
 
-cd ${DIR}
 echo '\nbitcoin tests completed successfully\n'
-
-
-
-
