@@ -1,6 +1,5 @@
 // A very reasonable performance from JavaScript on this one
 
-// TODO: make this work with nodejs
 
 // We did not implement memoization in the thunk. We initially forgot,
 // then realized it had no beneficial impact in the Scheme implementation
@@ -73,12 +72,18 @@ Cell.sieve = function(input, paramPredicate){
   return cell;
 }
 
-// 'scriptArgs' works for this interpreter (spidermonkey)
-// command line arguments
+function print (cell) {
+  if(cell != null){
+    process.stdout.write(cell.car.toString()+ " ");
+    print (cell.cdr());
+  }
+}
 
 var numPrimes = Number(process.argv[2]);
 
 from2 = Cell.fromTransition(2, function(n){ return n+1; });
 primes = Cell.sieve(from2, function(n,x){ return n % x != 0; });
-console.log(primes.take(numPrimes))
+process.stdout.write("(");
+print(primes.take(numPrimes));
+process.stdout.write("\b)\n");
 
