@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell/wiwik
-cd ${HOME}
+DIR=/home/john/Prog/haskell/wiwik
+cd ${DIR}
 
 rm -f *.hi
 rm -f *.o
@@ -16,4 +15,3 @@ rm -f *.dyn_*
 
 ./happy/clean.sh
 
-cd ${DIR}

@@ -1,9 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell/bitcoin
-cd ${HOME}
+DIR=/home/john/Prog/haskell/bitcoin
+cd ${DIR}
 
 ./Number/clean.sh
 
-cd ${DIR}

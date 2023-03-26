@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell/logic2
-cd ${HOME}
+DIR=/home/john/Prog/haskell/logic2
+cd ${DIR}
 echo
 
 echo "testing logic"
@@ -11,9 +10,4 @@ echo "testing logic"
 ./fopl/test.sh
 ./lambda/test.sh
 
-cd ${DIR}
 echo '\nAll logic tests completed successfully\n'
-
-
-
-

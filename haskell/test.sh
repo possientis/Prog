@@ -2,9 +2,8 @@
 # need to install ghc
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell
-cd ${HOME}
+DIR=/home/john/Prog/haskell
+cd ${DIR}
 
 ./song/test.sh
 ./json/test.sh
@@ -17,9 +16,4 @@ cd ${HOME}
 ./adh/test.sh
 ./Set/test.sh
 
-cd ${DIR}
 echo '\nAll haskell tests completed successfully\n'
-
-
-
-

@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/Logic/
-
 set -e 
+DIR=/home/john/Prog/haskell/Logic/
 cd ${DIR}
 
 echo

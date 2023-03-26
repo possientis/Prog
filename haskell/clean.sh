@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell
-cd ${HOME}
+DIR=/home/john/Prog/haskell
+cd ${DIR}
 
 rm -f *.hi
 rm -f *.o
@@ -23,6 +22,3 @@ rm -f a.out
 ./adh/clean.sh
 ./Set/clean.sh
 ./Crypto/clean.sh
-
-
-cd ${DIR}

@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/adi
-
 set -e 
+DIR=/home/john/Prog/haskell/adi
 cd ${DIR}
 
 echo

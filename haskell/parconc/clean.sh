@@ -1,13 +1,9 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell/parconc
-cd ${HOME}
+DIR=/home/john/Prog/haskell/parconc
+cd ${DIR}
 
 rm -f *.hi
 rm -f *.o
 rm -f *.eventlog
 rm -f a.out
-
-
-cd ${DIR}
