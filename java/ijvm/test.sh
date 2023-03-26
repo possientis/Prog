@@ -1,15 +1,9 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/java/ijvm/
-cd ${HOME}
+DIR=/home/john/Prog/java/ijvm/
+cd ${DIR}
 
 ./greeters/test.sh
 
-cd ${DIR}
 echo '\nijvm test completed successfully\n'
-
-
-
-

@@ -1,11 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/java/ijvm
-cd ${HOME}
+DIR=/home/john/Prog/java/ijvm
+cd ${DIR}
 
 rm -f *.class
 ./greeters/clean.sh
-
-
-cd ${DIR}

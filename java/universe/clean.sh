@@ -1,9 +1,6 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/java/universe
-cd ${HOME}
+DIR=/home/john/Prog/java/universe
+cd ${DIR}
 
 rm -f *.class
-
-cd ${DIR}

@@ -82,7 +82,3 @@ idris2 --quiet --check Adder.idr
 ./clean.sh
 
 echo 'All idris tests completed successfully'
-
-
-
-

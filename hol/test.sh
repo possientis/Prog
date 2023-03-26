@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/hol
-cd ${HOME}
+DIR=/home/john/Prog/hol
+cd ${DIR}
 echo
 echo "testing hol..."
 
@@ -13,9 +12,4 @@ echo "testing hol..."
 ./euclid/test.sh
 ./parity/test.sh
 
-cd ${DIR}
 echo '\nAll hol tests completed successfully\n'
-
-
-
-

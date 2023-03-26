@@ -1,10 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/java/bitcoin
-cd ${HOME}
+DIR=/home/john/Prog/java/bitcoin
+cd ${DIR}
 
 rm -f *.class
 ./Number/clean.sh
-
-cd ${DIR}

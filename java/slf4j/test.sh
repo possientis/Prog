@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/java/slf4j
-cd ${HOME}
+DIR=/home/john/Prog/java/slf4j
+cd ${DIR}
 
 echo '\nslf4j with no binding ...'
 javac -cp /usr/share/java/slf4j-api.jar SLF4JExample.java
@@ -32,9 +31,4 @@ java -cp  /usr/share/java/slf4j-api.jar:/usr/share/java/slf4j-nop.jar:. \
 
 rm *.class
 
-cd ${DIR}
 echo '\nslf4j test completed successfully\n'
-
-
-
-

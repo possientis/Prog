@@ -1,9 +1,6 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/java/bitcoin/Number
-cd ${HOME}
+DIR=/home/john/Prog/java/bitcoin/Number
+cd ${DIR}
 
 rm -f *.class
-
-cd ${DIR}

@@ -14,9 +14,8 @@
 # $ ./configure --enable-jni --enable-module-edch --enable-experimental
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/java/
-cd ${HOME}
+DIR=/home/john/Prog/java/
+cd ${DIR}
 
 #./gcj/test.sh
 ./ijvm/test.sh
@@ -24,9 +23,4 @@ cd ${HOME}
 ./slf4j/test.sh
 #./bitcoin/test.sh
 
-cd ${DIR}
 echo '\nAll java tests completed successfully\n'
-
-
-
-

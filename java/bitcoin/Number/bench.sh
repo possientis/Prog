@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e
-DIR=`pwd`
-HOME=/home/john/Prog/polyglot/Bitcoin/Number/java
-cd ${HOME}
+DIR=/home/john/Prog/polyglot/Bitcoin/Number/java
+cd ${DIR}
 
 echo '\nThis is Java ...'
 ./compile.sh Bench_Number.java
@@ -13,6 +12,3 @@ END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 ./clean.sh
-
-cd ${DIR}
-
