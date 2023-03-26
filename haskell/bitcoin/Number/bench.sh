@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-DIR=/home/john/Prog/polyglot/Bitcoin/Number/haskell
+DIR=/home/john/Prog/poly/Bitcoin/Number/haskell
 cd ${DIR}
 
 echo '\nThis is Haskell ...'

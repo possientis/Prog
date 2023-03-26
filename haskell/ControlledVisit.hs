@@ -36,7 +36,7 @@ getInfo path = do
  
 
 main = do
-  infos <- traverse id "/home/john/Prog/polyglot"
+  infos <- traverse id "/home/john/Prog/poly"
   putStrLn (show infos)
 
 traverse :: ([Info] -> [Info]) -> FilePath -> IO [Info]

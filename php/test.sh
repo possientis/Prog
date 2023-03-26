@@ -1,15 +1,9 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/php/
-cd ${HOME}
+DIR=/home/john/Prog/php/
+cd ${DIR}
 
 php hello.php
 
-cd ${DIR}
 echo '\nAll php tests completed successfully\n'
-
-
-
-

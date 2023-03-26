@@ -4,9 +4,8 @@ set -e
 
 UNAME=Prototype
 LNAME=prototype
-HOME=/home/john/Prog/polyglot/DesignPatterns/${UNAME}
-DIR=`pwd`
-cd ${HOME}
+DIR=/home/john/Prog/poly/DesignPatterns/${UNAME}
+cd ${DIR}
 
 echo '\nThis is C ...'
 gcc ${LNAME}.c 
@@ -106,5 +105,4 @@ DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
 rm *.class
 
-cd ${DIR}
 echo '\nprototype test completed successfully'
