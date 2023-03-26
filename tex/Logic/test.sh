@@ -24,7 +24,3 @@ mv logic.bak logic.pdf
 echo
 cd ${DIR}
 echo '\nlogic test completed successfully\n'
-
-
-
-

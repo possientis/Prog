@@ -1,11 +1,9 @@
 #!/bin/sh
 # need to install texlive-latex-base texlive-humanities textlive-pictures
 
-
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/tex/
-cd ${HOME}
+DIR=/home/john/Prog/tex/
+cd ${DIR}
 echo
 
 echo "testing tex documents..."
@@ -14,9 +12,4 @@ echo "testing tex documents..."
 
 echo
 
-cd ${DIR}
 echo '\nAll tex tests completed successfully\n'
-
-
-
-

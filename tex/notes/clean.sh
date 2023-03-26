@@ -1,11 +1,9 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/tex/notes
-cd ${HOME}
+DIR=/home/john/Prog/tex/notes
+cd ${DIR}
 
 rm -f *.aux
 rm -f *.log
 rm -f *.out
 
-cd ${DIR}
