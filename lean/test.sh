@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LOC=/home/john/Prog/lean
+DIR=/home/john/Prog/lean
 
 check(){ 
 
@@ -60,7 +60,7 @@ main(){
 }
 
 set -e 
-cd ${LOC}
+cd ${DIR}
 
 echo
 echo "testing lean..."

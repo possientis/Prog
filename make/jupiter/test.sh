@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/make/jupiter
-cd ${HOME}
+DIR=/home/john/Prog/make/jupiter
+cd ${DIR}
 
 ./autogen.sh
 ./configure
@@ -13,11 +12,4 @@ make check
 make clean
 ./clean.sh
 
-
-
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

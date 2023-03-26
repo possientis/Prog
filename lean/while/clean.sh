@@ -1,5 +1,5 @@
 #!/bin/sh
 
-HOME=/home/john/Prog/lean/while
-cd ${HOME}
+DIR=/home/john/Prog/lean/while
+cd ${DIR}
 rm -f *.olean

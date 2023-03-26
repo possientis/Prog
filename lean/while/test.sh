@@ -1,8 +1,8 @@
 #!/bin/sh
 
-LOC=/home/john/Prog/lean/while
 set -e 
-cd ${LOC}
+DIR=/home/john/Prog/lean/while
+cd ${DIR}
 
 echo
 echo "testing while..."

@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/make
-cd ${HOME}
+DIR=/home/john/Prog/make
+cd ${DIR}
 
 ./guile/clean.sh
 ./jupiter/clean.sh
@@ -10,4 +9,3 @@ cd ${HOME}
 ./saturn/clean.sh
 ./test/clean.sh
 
-cd ${DIR}

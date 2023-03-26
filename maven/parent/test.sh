@@ -1,17 +1,10 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/maven/parent/
-cd ${HOME}
+DIR=/home/john/Prog/maven/parent/
+cd ${DIR}
 
 mvn install
 mvn clean
 
-
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

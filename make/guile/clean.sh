@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/make/guile
-cd ${HOME}
+DIR=/home/john/Prog/make/guile
+cd ${DIR}
 
 rm -f .cache -r
 rm -f autom4te.cache -r
@@ -15,5 +14,3 @@ rm -f *.o
 rm -f hello.scm
 
 #tree -a
-
-cd ${DIR}

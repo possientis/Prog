@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/make/mars
-cd ${HOME}
+DIR=/home/john/Prog/make/mars
+cd ${DIR}
 
 rm -f aclocal.m4
 rm -f autom4te.cache -r
@@ -58,4 +57,3 @@ rm -f src/modules/hithere/Makefile.in
 # tree -a
 # autoreconf -i 
 
-cd ${DIR}

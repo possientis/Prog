@@ -1,5 +1,5 @@
 #!/bin/sh
 
-HOME=/home/john/Prog/lean/hhg
-cd ${HOME}
+DIR=/home/john/Prog/lean/hhg
+cd ${DIR}
 rm -f *.olean

@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/make/saturn
-cd ${HOME}
+DIR=/home/john/Prog/make/saturn
+cd ${DIR}
 
 rm -f aclocal.m4
 rm -f autom4te.cache -r
@@ -37,6 +36,4 @@ rm -f *.tar.gz
 # tree -a
 
 # autoreconf -i 
-
-cd ${DIR}
 

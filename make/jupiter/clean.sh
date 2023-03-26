@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/make/jupiter
-cd ${HOME}
+DIR=/home/john/Prog/make/jupiter
+cd ${DIR}
 
 rm -f autom4te.cache -r
 rm -f config.*
@@ -13,5 +12,3 @@ rm -f src/Makefile
 rm -f src/jupiter
 rm -f src/a.out   # just in case
 # tree -a
-
-cd ${DIR}

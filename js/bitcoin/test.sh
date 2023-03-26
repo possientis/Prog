@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/js/bitcoin
-cd ${HOME}
+DIR=/home/john/Prog/js/bitcoin
+cd ${DIR}
 
 BITCOINJ_JARS=
 
@@ -14,9 +13,4 @@ done
 
 jjs -cp "$BITCOINJ_JARS" test.js
 
-cd ${DIR}
 echo '\njjs test completed successfully\n'
-
-
-
-
