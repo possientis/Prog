@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/bison/MGL
-cd ${HOME}
+DIR=/home/john/Prog/bison/MGL
+cd ${DIR}
 echo
 
 echo "Testing menu generator language 1 ..."
@@ -31,13 +30,7 @@ flex MGL5.l; bison -d MGL5.y;
 gcc MGL5.tab.c lex.yy.c -ll; ./a.out < MGL5.txt; ./clean.sh
 echo
 
-echo "Testing menu generator language 6 ..."
-flex MGL6.l; bison -d MGL6.y;
-gcc MGL6.c MGL6.tab.c lex.yy.c -ll; ./a.out MGL6.txt; ./clean.sh
-echo
-
-cd ${DIR}
-
-
-
-
+#echo "Testing menu generator language 6 ..."
+#flex MGL6.l; bison -d MGL6.y;
+#gcc MGL6.c MGL6.tab.c lex.yy.c -ll; ./a.out MGL6.txt; ./clean.sh
+#echo

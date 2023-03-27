@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/bison
-cd ${HOME}
+DIR=/home/john/Prog/bison
+cd ${DIR}
 
 rm -f *.tab.c
 rm -f *.tab.h
@@ -12,6 +11,3 @@ rm -f a.out
 
 ./calc/clean.sh
 ./MGL/clean.sh
-
-cd ${DIR}
-

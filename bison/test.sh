@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/bison
-cd ${HOME}
+DIR=/home/john/Prog/bison
+cd ${DIR}
 echo
 
 echo "Testing word recognizer with symbol table ..."
@@ -31,9 +30,4 @@ echo
 ./calc/test.sh
 ./MGL/test.sh
 
-cd ${DIR}
 echo '\nAll flex & bison tests completed successfully\n'
-
-
-
-
