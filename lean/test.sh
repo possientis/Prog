@@ -1,7 +1,5 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/lean
-
 check(){ 
 
     echo "${1}"
@@ -60,6 +58,7 @@ main(){
 }
 
 set -e 
+DIR=/home/john/Prog/lean
 cd ${DIR}
 
 echo

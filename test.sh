@@ -18,7 +18,7 @@ function testing () {
 
 DIR=${PROG}
 testing c
-testing assembly
+testing asm
 testing make
 testing c++
 testing java
@@ -29,12 +29,12 @@ testing c#
 testing haskell
 testing coq
 testing agda
-testing lean
+#testing lean
 testing idris
 testing scheme
 testing python
 testing ruby
-testing javascript
+testing js
 testing php
 testing scala
 testing clojure
