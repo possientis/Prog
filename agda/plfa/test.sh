@@ -1,18 +1,14 @@
 #!/bin/sh
-# need to install agda
 
 set -e 
-DIR=/home/john/Prog/agda/plfa  # changing 'HOME' is a bad idea
+DIR=/home/john/Prog/agda/plfa
 cd ${DIR}
 echo
 echo "testing plfa..."
 
-make -j2
+make
 ./clean.sh
 
 echo
 echo 'All plfa tests completed successfully'
 echo
-
-
-

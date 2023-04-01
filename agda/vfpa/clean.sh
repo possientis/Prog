@@ -1,11 +1,9 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/agda/vfpa
-cd ${HOME}
+DIR=/home/john/Prog/agda/vfpa
+cd ${DIR}
 
 rm -f *.agdai
 rm -f *.agda~
 rm -f *.agda#
 
-cd ${DIR}

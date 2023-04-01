@@ -11,8 +11,5 @@ agda filter.agda
 ./clean.sh
 
 echo
-echo 'All plfa tests completed successfully'
+echo 'All aop tests completed successfully'
 echo
-
-
-
