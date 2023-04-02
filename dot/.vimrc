@@ -28,14 +28,14 @@ set nocp                  " no vi compatibility mode
 
 " will conflict with verilog, beware !!
 au BufRead,BufNewFile *.v set filetype=coq  
-au! Syntax coq source /usr/share/vim/vim81/syntax/coq.vim
+au! Syntax coq source /usr/share/vim/vim82/syntax/coq.vim
 
 au BufRead,BufNewFile *.agda set filetype=agda
-au! Syntax agda source /usr/share/vim/vim81/syntax/agda.vim
+au! Syntax agda source /usr/share/vim/vim82/syntax/agda.vim
 
 au BufRead,BufNewFile *.idr set filetype=idris
-au! Syntax idris source /usr/share/vim/vim81/syntax/idris.vim
+au! Syntax idris source /usr/share/vim/vim82/syntax/idris.vim
 
 
 au BufRead,BufNewFile *.lean set filetype=lean
-au! Syntax lean source /usr/share/vim/vim81/syntax/lean.vim
+au! Syntax lean source /usr/share/vim/vim82/syntax/lean.vim
