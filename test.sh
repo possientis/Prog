@@ -1,8 +1,9 @@
 #!/bin/bash
 
 PROG=/home/john/Prog
-PATTERNS=${PROG}/poly/DesignPatterns
-BITCOIN=${PROG}/poly/Bitcoin
+POLY=${PROG}/poly
+PATTERNS=${POLY}/DesignPatterns
+BITCOIN=${POLY}/Bitcoin
 
 echo 'Testing log file\n' > test.log
 
@@ -41,6 +42,10 @@ testing clojure
 testing sed
 testing tex
 testing bison
+
+DIR=${POLY}
+testing Pascal
+testing Primes
 
 DIR=${BITCOIN}
 testing Number

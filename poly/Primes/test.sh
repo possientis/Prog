@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -e
+DIR=/home/john/Prog/poly/Primes
+cd ${DIR}
+
 NUM_PRIMES=138
 
 echo '\nThis is C ...'

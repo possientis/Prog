@@ -2,7 +2,7 @@
 
 rm -f test.log
 
-./assembly/clean.sh
+./asm/clean.sh
 ./bison/clean.sh
 ./c/clean.sh
 ./c++/clean.sh

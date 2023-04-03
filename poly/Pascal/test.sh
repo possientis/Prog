@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -e
+DIR=/home/john/Prog/poly/Pascal
+cd ${DIR}
 
 echo '\nThis is Haskell ...'
 ghc -v0 pascal.hs 
