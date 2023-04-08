@@ -9,5 +9,6 @@ node node.js
 echo '\nnodejs test completed successfully\n'
 
 ./bitcoin/test.sh
+./crypt/test.sh
 
 echo '\nAll javascript tests completed successfully\n'
