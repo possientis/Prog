@@ -31,6 +31,18 @@
     ansible.builtin.apt:
       name: rsync
 
+  - name: General - Install tree
+    ansible.builtin.apt:
+      name: tree
+
+  - name: General - Install screen
+    ansible.builtin.apt:
+      name: screen
+
+  - name: General - Install curl
+    ansible.builtin.apt:
+      name: curl
+
   # Applications
 
   - name: Application - Install vim       
