@@ -1,0 +1,188 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  # Setup
+
+  - name: Setup - Install gtk canberra
+    ansible.builtin.apt:
+      name: libcanberra-gtk-module
+
+  - name: Setup - Install tor
+    ansible.builtin.apt:
+      name: tor
+
+  - name: Setup - Install ufw
+    ansible.builtin.apt:
+      name: ufw
+
+  # General utilities
+
+  - name: General - Install lm-sensors  # sensors for internal temperature
+    ansible.builtin.apt:
+      name: lm-sensors
+
+  - name: General - Install htop
+    ansible.builtin.apt:
+      name: htop
+
+  # Applications
+
+  - name: Application - Install vim       
+    ansible.builtin.apt:
+      name: vim
+
+  - name: Application - Install keepassx
+    ansible.builtin.apt:
+      name: keepassx
+ 
+  - name: Application - Install thunderbird
+    ansible.builtin.apt:
+      name: thunderbird
+
+  - name: Application - Install pidgin
+    ansible.builtin.apt:
+      name: pidgin
+
+  - name: Application - Install pidgin-otr
+    ansible.builtin.apt:
+      name: pidgin-otr
+
+  # Coding
+
+  - name: Coding - Install git
+    ansible.builtin.apt:
+      name: git
+
+  - name: Coding - Install git-core
+    ansible.builtin.apt:
+      name: git-core
+ 
+  - name: Coding - Install gcc
+    ansible.builtin.apt:
+      name: gcc
+
+  - name: Coding - Install g++
+    ansible.builtin.apt:
+      name: g++
+
+  - name: Coding - Install default-jdk
+    ansible.builtin.apt:
+      name: default-jdk
+
+  - name: Coding - Install python3
+    ansible.builtin.apt:
+      name: python3
+
+  # Build tools
+  
+  - name: Build - Install make
+    ansible.builtin.apt:
+      name: make
+
+  - name: Build - Install maven
+    ansible.builtin.apt:
+      name: maven
+
+  - name: Build - Install build-essential
+    ansible.builtin.apt:
+      name: build-essential
+
+  - name: Build - Install libtool
+    ansible.builtin.apt:
+      name: libtool
+
+  - name: Build - Install autotools-dev
+    ansible.builtin.apt:
+      name: autotools-dev
+
+  - name: Build - Install automake
+    ansible.builtin.apt:
+      name: automake
+
+  - name: Build - Install pkg-config
+    ansible.builtin.apt:
+      name: pkg-config
+
+  # Database
+  
+  - name: Database - Install postgresql
+    ansible.builtin.apt:
+      name: postgresql
+
+
+  - name: Database - Install libsqlite3-dev
+    ansible.builtin.apt:
+      name: libsqlite3-dev
+
+  # GUI
+  
+  - name: GUI - Install libqt5gui5
+    ansible.builtin.apt:
+      name: libqt5gui5
+
+  - name: GUI - Install libqt5core5a
+    ansible.builtin.apt:
+      name: libqt5core5a
+
+  - name: GUI - Install libqt5dbus5
+    ansible.builtin.apt:
+      name: libqt5dbus5
+
+  - name: GUI - Install qttools5-dev
+    ansible.builtin.apt:
+      name: qttools5-dev
+
+  - name: GUI - Install qttools5-dev-tools
+    ansible.builtin.apt:
+      name: qttools5-dev-tools
+
+  - name: GUI - Install qtwayland5
+    ansible.builtin.apt:
+      name: qtwayland5
+
+  # Bitcoin core dependencies
+
+  - name: Bitcoin - Install libboost-all-dev
+    ansible.builtin.apt:
+      name: libboost-all-dev
+
+  - name: Bitcoin - Install bsdmainutils
+    ansible.builtin.apt:
+      name: bsdmainutils
+
+  - name: Bitcoin - Install libevent-dev
+    ansible.builtin.apt:
+      name: libevent-dev
+
+  - name: Bitcoin - Install libminiupnpc-dev
+    ansible.builtin.apt:
+      name: libminiupnpc-dev
+
+  - name: Bitcoin - Install libnatpmp-dev
+    ansible.builtin.apt:
+      name: libnatpmp-dev
+
+  - name: Bitcoin - Install libzmq3-dev
+    ansible.builtin.apt:
+      name: libzmq3-dev
+
+  - name: Bitcoin - Install systemtap-sdt-dev
+    ansible.builtin.apt:
+      name: systemtap-sdt-dev
+
+  - name: Bitcoin - Install libqrencode-dev
+    ansible.builtin.apt:
+      name: libqrencode-dev
+
+  # Java libraries
+
+  - name: Java - Install libpostgresql-jdbc-java
+    ansible.builtin.apt:
+      name: libpostgresql-jdbc-java
+
+  - name: Java - Install libprotobuf-java
+    ansible.builtin.apt:
+      name: libprotobuf-java
+
