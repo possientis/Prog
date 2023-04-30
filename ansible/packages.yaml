@@ -27,6 +27,10 @@
     ansible.builtin.apt:
       name: htop
 
+  - name: General - Install rsync
+    ansible.builtin.apt:
+      name: rsync
+
   # Applications
 
   - name: Application - Install vim       
@@ -59,21 +63,61 @@
     ansible.builtin.apt:
       name: git-core
  
-  - name: Coding - Install gcc
+  - name: Coding - Install Assembly
+    ansible.builtin.apt:
+      name: yasm
+
+  - name: Coding - Install C
     ansible.builtin.apt:
       name: gcc
 
-  - name: Coding - Install g++
+  - name: Coding - Install C++
     ansible.builtin.apt:
       name: g++
 
-  - name: Coding - Install default-jdk
+  - name: Coding - Install Java
     ansible.builtin.apt:
       name: default-jdk
 
-  - name: Coding - Install python3
+  - name: Coding - Install Python
     ansible.builtin.apt:
       name: python3
+
+  - name: Coding - Install Haskell
+    ansible.builtin.apt:
+      name: ghc
+
+  - name: Coding - Install Coq
+    ansible.builtin.apt:
+      name: coq
+
+  - name: Coding - Install Scheme
+    ansible.builtin.apt:
+      name: scm
+
+  - name: Coding - Install Scala
+    ansible.builtin.apt:
+      name: scala
+
+  - name: Coding - Install C#
+    ansible.builtin.apt:
+      name: mono-mcs
+
+  - name: Coding - Install Ruby
+    ansible.builtin.apt:
+      name: ruby
+
+  - name: Coding - Install PHP
+    ansible.builtin.apt:
+      name: php
+
+  - name: Coding - Install Clojure
+    ansible.builtin.apt:
+      name: clojure
+
+  - name: Coding - Install Scheme (guile)
+    ansible.builtin.apt:
+      name: guile-2.2-dev
 
   # Build tools
   
@@ -84,6 +128,10 @@
   - name: Build - Install maven
     ansible.builtin.apt:
       name: maven
+
+  - name: Build - Install gradle
+    ansible.builtin.apt:
+      name: gradle
 
   - name: Build - Install build-essential
     ansible.builtin.apt:
@@ -101,9 +149,38 @@
     ansible.builtin.apt:
       name: automake
 
-  - name: Build - Install pkg-config
+  - name: Build - Install cmake
+    ansible.builtin.apt:
+      name: cmake
+
+  # Package Manager
+
+  - name: Package Manager - Install pkg-config
     ansible.builtin.apt:
       name: pkg-config
+
+  - name: Package Manager - Install python3-pip
+    ansible.builtin.apt:
+      name: python3-pip
+
+  # Latex
+
+  - name: Latex - Install textlive-latex-base
+    ansible.builtin.apt:
+      name: texlive-latex-base
+
+  - name: Latex - Install textlive-humanities
+    ansible.builtin.apt:
+      name: texlive-humanities
+
+  - name: Latex - Install textlive-pictures
+    ansible.builtin.apt:
+      name: texlive-pictures
+
+  - name: Latex - Install textlive-latex-extra
+    ansible.builtin.apt:
+      name: texlive-latex-extra
+
 
   # Database
   
@@ -142,6 +219,58 @@
     ansible.builtin.apt:
       name: qtwayland5
 
+  - name: GUI - Install qtbase5-dev
+    ansible.builtin.apt:
+      name: qtbase5-dev
+
+  - name: GUI - Install qtdeclarative5-dev
+    ansible.builtin.apt:
+      name: qtdeclarative5-dev
+
+  - name: GUI - Install qtdeclarative5-dev
+    ansible.builtin.apt:
+      name: qtdeclarative5-dev
+
+  - name: GUI - Install qml-module-qtqml-models2 
+    ansible.builtin.apt:
+      name: qml-module-qtqml-models2 
+
+  - name: GUI - Install qml-module-qtquick-controls
+    ansible.builtin.apt: 
+      name: qml-module-qtquick-controls
+
+  - name: GUI - Install qml-module-qtquick-controls2
+    ansible.builtin.apt: 
+      name: qml-module-qtquick-controls2
+
+  - name: GUI - Install qml-module-qtquick-dialogs
+    ansible.builtin.apt: 
+      name: qml-module-qtquick-dialogs
+
+  - name: GUI - Install qml-module-qtquick-xmllistmodel
+    ansible.builtin.apt: 
+      name: qml-module-qtquick-xmllistmodel
+
+  - name: GUI - Install qml-module-qt-labs-settings
+    ansible.builtin.apt: 
+      name: qml-module-qt-labs-settings
+
+  - name: GUI - Install qml-module-qt-labs-platform 
+    ansible.builtin.apt: 
+      name: qml-module-qt-labs-platform
+
+  - name: GUI - Install qml-module-qt-labs-folderlistmodel
+    ansible.builtin.apt: 
+      name: qml-module-qt-labs-folderlistmodel
+
+  - name: GUI - Install qml-module-qtquick-templates2
+    ansible.builtin.apt: 
+      name: qml-module-qtquick-templates2
+
+  - name: GUI - Install libqt5svg5-dev
+    ansible.builtin.apt: 
+      name: libqt5svg5-dev
+
   # Bitcoin core dependencies
 
   - name: Bitcoin - Install libboost-all-dev
@@ -176,6 +305,145 @@
     ansible.builtin.apt:
       name: libqrencode-dev
 
+
+  # Monero dependencies
+
+  - name: Monero - Install libssl-dev
+    ansible.builtin.apt:
+      name: libssl-dev 
+
+  - name: Monero - Install libpgm-dev
+    ansible.builtin.apt:
+      name: libpgm-dev 
+
+  - name: Monero - Install libnorm-dev
+    ansible.builtin.apt:
+      name: libnorm-dev 
+
+  - name: Monero - Install libunbound-dev
+    ansible.builtin.apt:
+      name: libunbound-dev 
+        
+  - name: Monero - Install libsodium-dev
+    ansible.builtin.apt:
+      name: libsodium-dev 
+
+  - name: Monero - Install libunwind8-dev
+    ansible.builtin.apt:
+      name: libunwind8-dev 
+
+  - name: Monero - Install liblzma-dev
+    ansible.builtin.apt:
+      name: liblzma-dev 
+
+  - name: Monero - Install libreadline6-dev
+    ansible.builtin.apt:
+      name: libreadline6-dev 
+
+  - name: Monero - Install libexpat1-dev
+    ansible.builtin.apt:
+      name: libexpat1-dev 
+
+  - name: Monero - Install libgtest-dev # further manual install required
+    ansible.builtin.apt:
+      name: libgtest-dev 
+
+  - name: Monero - Install ccache
+    ansible.builtin.apt:
+      name: ccache
+
+  - name: Monero - Install doxygen
+    ansible.builtin.apt:
+      name: doxygen
+
+  - name: Monero - Install graphviz
+    ansible.builtin.apt:
+      name: graphviz
+
+  - name: Monero - Install libhidapi-dev
+    ansible.builtin.apt:
+      name: libhidapi-dev
+
+  - name: Monero - Install libusb-1.0-0-dev
+    ansible.builtin.apt:
+      name: libusb-1.0-0-dev
+
+  - name: Monero - Install libprotobuf-dev
+    ansible.builtin.apt:
+      name: libprotobuf-dev
+
+  - name: Monero - Install protobuf-compiler
+    ansible.builtin.apt:
+      name: protobuf-compiler
+
+  - name: Monero - Install libudev-dev
+    ansible.builtin.apt:
+      name: libudev-dev
+
+  - name: Monero - Install miniupnpc
+    ansible.builtin.apt:
+      name: miniupnpc
+
+  - name: Monero - Install libgcrypt20-dev
+    ansible.builtin.apt:
+      name: libgcrypt20-dev
+
+  # C libraries
+
+  - name: C - Install flex
+    ansible.builtin.apt:
+      name: flex
+
+  - name: C - Install bison
+    ansible.builtin.apt:
+      name: bison
+
+  # Haskell libraries
+  
+  - name: Haskell - Install libghc-parsec3-dev
+    ansible.builtin.apt:
+      name: libghc-parsec3-dev
+
+  - name: Haskell - Install libghc-hunit-dev
+    ansible.builtin.apt:
+      name: libghc-hunit-dev
+
+  - name: Haskell - Install libghc-hspec-dev
+    ansible.builtin.apt:
+      name: libghc-hspec-dev
+
+  - name: Haskell - Install libghc-profunctors-dev
+    ansible.builtin.apt:
+      name: libghc-profunctors-dev
+
+  - name: Haskell - Install libghc-lens-dev
+    ansible.builtin.apt:
+      name: libghc-lens-dev
+
+  - name: Haskell - Install libghc-recursion-schemes-dev
+    ansible.builtin.apt:
+      name: libghc-recursion-schemes-dev
+
+  - name: Haskell - Install libghc-extra-dev
+    ansible.builtin.apt:
+      name: libghc-extra-dev
+
+  - name: Haskell - Install libghc-rio-dev
+    ansible.builtin.apt:
+      name: libghc-rio-dev
+
+  - name: Haskell - Install libghc-crypto-api-dev
+    ansible.builtin.apt:
+      name: libghc-crypto-api-dev
+
+  - name: Haskell - Install libghc-monadcryptorandom-dev
+    ansible.builtin.apt:
+      name: libghc-monadcryptorandom-dev
+
+  - name: Haskell - Install libghc-hashable-dev
+    ansible.builtin.apt:
+      name: libghc-hashable-dev
+
   # Java libraries
 
   - name: Java - Install libpostgresql-jdbc-java
@@ -185,4 +453,54 @@
   - name: Java - Install libprotobuf-java
     ansible.builtin.apt:
       name: libprotobuf-java
+
+  - name: Java - Install libopenjfx-java
+    ansible.builtin.apt:
+      name: libopenjfx-java
+
+  - name: Java - Install openjfx
+    ansible.builtin.apt:
+      name: openjfx
+
+  - name: Java - Install libjcip-annotations-java
+    ansible.builtin.apt:
+      name: libjcip-annotations-java
+
+  - name: Java - Install libcommons-pool-java
+    ansible.builtin.apt:
+      name: libcommons-pool-java
+
+  # Assembly libraries
+
+
+  # Python libraries
+  
+  - name: Python -  Install python3-ecdsa
+    ansible.builtin.apt:
+      name: python3-ecdsa
+
+  # C# libraries
+
+  - name: C# -  Install libmono-system-numerics4.0-cil
+    ansible.builtin.apt:
+      name: libmono-system-numerics4.0-cil
+
+  # Fail on Raspberry pi 4
+
+  - name: Coding - Install Agda
+    ansible.builtin.apt:
+      name: agda
+
+  - name: Agda -  Install agda-stdlib
+    ansible.builtin.apt:
+      name: agda-stdlib
+
+  - name: Assembly - Install gcc-multilib
+    ansible.builtin.apt:
+      name: gcc-multilib
+
+  - name: Assembly - Install g++-multilib
+    ansible.builtin.apt:
+      name: g++-multilib
+
 
