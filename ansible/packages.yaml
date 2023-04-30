@@ -23,6 +23,10 @@
     ansible.builtin.apt:
       name: lm-sensors
 
+  - name: General - Install ncdu
+    ansible.builtin.apt:
+      name: ncdu
+
   - name: General - Install htop
     ansible.builtin.apt:
       name: htop
