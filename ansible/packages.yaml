@@ -19,17 +19,41 @@
 
   # General utilities
 
-  - name: General - Install lm-sensors  # sensors for internal temperature
+  - name: General - Install lm-sensors  # 'sensors' to monitor internal temperature
     ansible.builtin.apt:
       name: lm-sensors
 
-  - name: General - Install ncdu
+  - name: General - Install ncdu        # 'ncdu' to monitor disk usage
     ansible.builtin.apt:
       name: ncdu
 
-  - name: General - Install htop
+  - name: General - Install htop        # 'htop' to monitor cpu usage
     ansible.builtin.apt:
       name: htop
+
+  - name: General - Install bmon        # 'bmon' to monitor network
+    ansible.builtin.apt:
+      name: bmon
+
+  - name: General - Install slurm       # 'slurm -i <nic>' to monitor network
+    ansible.builtin.apt:
+      name: slurm
+
+  - name: General - Install tcptrack    # 'sudo tcptrack -i <nic>' 
+    ansible.builtin.apt:
+      name: tcptrack
+
+  - name: General - Install iftop    # 'sudo iftop' 
+    ansible.builtin.apt:
+      name: iftop
+
+  - name: General - Install nethogs    # 'sudo nethogs' 
+    ansible.builtin.apt:
+      name: nethogs
+
+  - name: General - Install lshw        # 'sudo lshw' to monitor hardware
+    ansible.builtin.apt:
+      name: lshw
 
   - name: General - Install rsync
     ansible.builtin.apt:
