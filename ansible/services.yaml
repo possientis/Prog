@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Start ufw service
+    ansible.builtin.service:
+      name: ufw
+      state: started
+      enabled: true
+
+  - name: Start tor service
+    ansible.builtin.service:
+      name: tor
+      state: started
+      enabled: true
