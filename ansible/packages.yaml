@@ -13,6 +13,10 @@
     ansible.builtin.apt:
       name: tor
 
+  - name: Setup - Install apt-transport-tor
+    ansible.builtin.apt:
+      name: apt-transport-tor
+
   - name: Setup - Install ufw
     ansible.builtin.apt:
       name: ufw
@@ -70,6 +74,11 @@
   - name: General - Install curl
     ansible.builtin.apt:
       name: curl
+
+  - name: General - Install vlc
+    ansible.builtin.apt:
+      name: vlc
+
 
   # Applications
 
