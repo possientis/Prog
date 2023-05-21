@@ -144,6 +144,14 @@
     ansible.builtin.apt:
       name: scm
 
+  - name: Coding - Install Scheme
+    ansible.builtin.apt:
+      name: chezscheme
+
+  - name: Coding - Install Scheme (guile)
+    ansible.builtin.apt:
+      name: guile-2.2-dev
+
   - name: Coding - Install Scala
     ansible.builtin.apt:
       name: scala
@@ -163,10 +171,6 @@
   - name: Coding - Install Clojure
     ansible.builtin.apt:
       name: clojure
-
-  - name: Coding - Install Scheme (guile)
-    ansible.builtin.apt:
-      name: guile-2.2-dev
 
   # Build tools
   
