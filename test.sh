@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROG=/home/john/Prog
+PROG=${HOME}/Prog
 POLY=${PROG}/poly
 PATTERNS=${POLY}/DesignPatterns
 BITCOIN=${POLY}/Bitcoin

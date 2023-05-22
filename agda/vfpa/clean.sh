@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/agda/vfpa
+DIR=${HOME}/Prog/agda/vfpa
 cd ${DIR}
 
 rm -f *.agdai

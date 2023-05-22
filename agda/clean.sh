@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/agda
+DIR=${HOME}/Prog/agda
 cd ${DIR}
 
 rm -f *.agdai

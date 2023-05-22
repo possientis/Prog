@@ -2,7 +2,7 @@
 # need to install agda
 
 set -e 
-DIR=/home/john/Prog/agda/aop
+DIR=${HOME}/Prog/agda/aop
 cd ${DIR}
 echo
 echo "testing aop..."

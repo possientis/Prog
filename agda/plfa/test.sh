@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/agda/plfa
+DIR=${HOME}/Prog/agda/plfa
 cd ${DIR}
 echo
 echo "testing plfa..."

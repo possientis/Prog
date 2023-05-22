@@ -3,7 +3,7 @@
 
 set -e 
 DIR=`pwd`
-HOME1=/home/john/Prog/agda/vfpa  # changing 'HOME' is a bad idea
+HOME1=${HOME}/Prog/agda/vfpa  # changing 'HOME' is a bad idea
 cd ${HOME1}
 echo
 echo "testing vfpa..."

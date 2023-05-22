@@ -2,7 +2,7 @@
 # need to install agda
 
 set -e 
-DIR=/home/john/Prog/agda
+DIR=${HOME}/Prog/agda
 cd ${DIR}
 
 echo
