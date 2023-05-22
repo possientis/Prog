@@ -2,7 +2,7 @@
 # need to install packages gcc-multilib and g++-multilib
 
 set -e 
-DIR=/home/john/Prog/asm/64bits/extern
+DIR=${HOME}/Prog/asm/64bits/extern
 cd ${DIR}
 option=$(sh ../option.sh)
 

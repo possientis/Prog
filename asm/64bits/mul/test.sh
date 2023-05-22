@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-HOME=/home/john/Prog/asm/64bits/mul
+HOME=${HOME}/Prog/asm/64bits/mul
 cd ${DIR}
 echo
 

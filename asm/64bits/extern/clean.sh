@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/asm/64bits/extern
+DIR=${HOME}/Prog/asm/64bits/extern
 cd ${DIR}
 
 rm -f *.lst

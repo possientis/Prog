@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/asm/64bits/carry
+DIR=${HOME}/Prog/asm/64bits/carry
 cd ${DIR}
 echo
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e 
-DIR=/home/john/Prog/asm/64bits/isa
+DIR=${HOME}/Prog/asm/64bits/isa
 cd ${DIR}
 echo
 echo "testing X86_64 isa..."

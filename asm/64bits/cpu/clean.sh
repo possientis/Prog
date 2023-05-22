@@ -1,6 +1,6 @@
 #!/bin/sh
 
-HOME=/home/john/Prog/asm/64bits/cpu
+HOME=${HOME}/Prog/asm/64bits/cpu
 cd ${DIR}
 
 rm -f *.lst

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/asm/32bits
+DIR=${HOME}/Prog/asm/32bits
 cd ${DIR}
 
 rm -f test.dat

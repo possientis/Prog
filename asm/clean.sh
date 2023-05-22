@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/asm
+DIR=${HOME}/Prog/asm
 cd ${DIR}
 
 ./32bits/clean.sh

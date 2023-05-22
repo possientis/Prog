@@ -2,7 +2,7 @@
 # need to install packages gcc-multilib and g++-multilib
 
 set -e 
-DIR=/home/john/Prog/asm/32bits
+DIR=${HOME}/Prog/asm/32bits
 cd ${DIR}
 
 ./write-prog.sh

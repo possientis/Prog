@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/asm/64bits
+DIR=${HOME}/Prog/asm/64bits
 cd ${DIR}
 
 option=$(sh option.sh)
