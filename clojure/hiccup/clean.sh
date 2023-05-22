@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/clojure/hiccup
+DIR=${HOME}/Prog/clojure/hiccup
 cd ${DIR}
 
 rm -f *.class

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/clojure/rabbitmq
+DIR=${HOME}/Prog/clojure/rabbitmq
 cd ${DIR}
 
 

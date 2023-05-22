@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/clojure/redis
+DIR=${HOME}/Prog/clojure/redis
 cd ${DIR}
 
 rm -f *.class

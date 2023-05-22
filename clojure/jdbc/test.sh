@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/clojure/jdbc
+DIR=${HOME}/Prog/clojure/jdbc
 cd ${DIR}
 
 JDBC_JARS=

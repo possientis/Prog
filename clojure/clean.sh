@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/clojure
+DIR=${HOME}/Prog/clojure
 cd ${DIR}
 
 rm -f *.class

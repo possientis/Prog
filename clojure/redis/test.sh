@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/clojure/redis
+DIR=${HOME}/Prog/clojure/redis
 cd ${DIR}
 
 

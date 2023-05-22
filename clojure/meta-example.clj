@@ -20,10 +20,11 @@
 ; meta data not associated with function object itself
 ; meta data is associated with the var testing-meta
 
+; TODO: fix the ${HOME} issue
 (println (meta (var testing-meta))) 
 ; { :ns       #<Namespace user>, 
 ;   :name     testing-meta, 
-;   :file     /home/john/Prog/clojure/meta-example.clj, 
+;   :file     ${HOME}/Prog/clojure/meta-example.clj, 
 ;   :column   1, 
 ;   :line     12, 
 ;   :console  true, 

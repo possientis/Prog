@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/clojure/rabbitmq
+DIR=${HOME}/Prog/clojure/rabbitmq
 cd ${DIR}
 
 rm -f *.class
