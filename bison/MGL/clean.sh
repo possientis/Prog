@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/bison/MGL
+DIR=${HOME}/Prog/bison/MGL
 cd ${DIR}
 
 rm -f *.tab.c

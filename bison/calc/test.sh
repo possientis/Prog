@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/bison/calc
+DIR=${HOME}/Prog/bison/calc
 cd ${DIR}
 echo
 
