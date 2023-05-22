@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c/gcov
+DIR=${HOME}/Prog/c/gcov
 cd ${DIR}
 echo
 echo "testing gcov..."

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c/hacking
+DIR=${HOME}/Prog/c/hacking
 cd ${DIR}
 
 rm -f *.o

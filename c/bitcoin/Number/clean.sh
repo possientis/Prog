@@ -1,10 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/c/bitcoin/Number
-cd ${HOME}
+DIR=${HOME}/Prog/c/bitcoin/Number
+cd ${DIR}
 
 rm -f *.o
 rm -f a.out
-
-cd ${DIR}

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c/library
+DIR=${HOME}/Prog/c/library
 cd ${DIR}
 
 rm -f a.out

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c/cpp
+DIR=${HOME}/Prog/c/cpp
 cd ${DIR}
 
 rm -f a.out

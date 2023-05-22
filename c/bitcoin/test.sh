@@ -1,7 +1,7 @@
 #/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c/bitcoin
+DIR=${HOME}/Prog/c/bitcoin
 cd ${DIR}
 
 ./secp256k1/test.sh

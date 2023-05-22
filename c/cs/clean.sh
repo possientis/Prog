@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c/cs
+DIR=${HOME}/Prog/c/cs
 cd ${DIR}
 
 ./syscall/clean.sh

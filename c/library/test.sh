@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c/library
+DIR=${HOME}/Prog/c/library
 cd ${DIR}
 echo
 

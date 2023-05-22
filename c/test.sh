@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c/
+DIR=${HOME}/Prog/c/
 cd ${DIR}
 
 #./bitcoin/test.sh

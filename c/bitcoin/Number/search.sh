@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR1=/home/john/Prog/
+DIR1=${HOME}/Prog/
 
 grep "$@" $DIR1 -r | grep '\.c' \
                    | grep -v '\.cs' \

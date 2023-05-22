@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c/dlopen
+DIR=${HOME}/Prog/c/dlopen
 cd ${DIR}
 
 rm -f a.out

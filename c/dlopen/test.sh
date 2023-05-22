@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c/dlopen
+DIR=${HOME}/Prog/c/dlopen
 cd ${DIR}
 echo
 

@@ -1,11 +1,7 @@
 #!/bin/bash
 
-DIR=`pwd`
-HOME=/home/john/Prog/c/bitcoin/secp256k1/test
-cd ${HOME}
+DIR=${HOME}/Prog/c/bitcoin/secp256k1/test
+cd ${DIR}
 
 rm -f *.o
 rm -f a.out
-
-cd ${DIR}
-

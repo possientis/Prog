@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c/attribute
+DIR=${HOME}/Prog/c/attribute
 cd ${DIR}
 
 rm -f a.out

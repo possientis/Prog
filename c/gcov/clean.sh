@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c/gcov
+DIR=${HOME}/Prog/c/gcov
 cd ${DIR}
 
 rm -f a.out

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c/pragma
+DIR=${HOME}/Prog/c/pragma
 cd ${DIR}
 
 

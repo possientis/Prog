@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=/home/john/Prog/c/bitcoin/secp256k1/test
-cd ${HOME}
+DIR=${HOME}/Prog/c/bitcoin/secp256k1/test
+cd ${DIR}
 
 echo
 echo "testing main secp256k1 library..."
@@ -15,7 +14,6 @@ echo "testing cloned secp256k1 library..."
 # bash run.sh clone # broken
 echo
 
-cd ${DIR}
 echo
 echo "All secp256k1 tests completed successfully"
 echo

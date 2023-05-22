@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/c/cs/network
-cd ${HOME}
+DIR=${HOME}/Prog/c/cs/network
+cd ${DIR}
 
 rm -f a.out
 rm -f *.o
@@ -13,4 +12,3 @@ rm -f log
 rm -f server
 rm -f client
 
-cd ${DIR}
