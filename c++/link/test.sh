@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c++/link
+DIR=${HOME}/Prog/c++/link
 cd ${DIR}
 
 make link

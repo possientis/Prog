@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c++/bst
+DIR=${HOME}/Prog/c++/bst
 cd ${DIR}
 
 make
@@ -9,7 +9,3 @@ make
 make clean
 
 echo '\ntest completed successfully\n'
-
-
-
-

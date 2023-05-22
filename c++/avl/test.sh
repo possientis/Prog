@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c++/avl
+DIR=${HOME}/Prog/c++/avl
 cd ${DIR}
 
 make

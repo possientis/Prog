@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c++/stl
+DIR=${HOME}/Prog/c++/stl
 cd ${DIR}
 
 g++ --std=c++14 remove_copy.cpp

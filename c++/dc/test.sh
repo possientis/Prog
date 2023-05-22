@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/c++/dc
+DIR=${HOME}/Prog/c++/dc
 cd ${DIR}
 
 make

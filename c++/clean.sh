@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/c++
+DIR=${HOME}/Prog/c++
 cd ${DIR}
 
 rm -f *.o
