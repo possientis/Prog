@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/ant/JNI
+HOME=${HOME}/Prog/ant/JNI
 cd ${HOME}
 
 ant

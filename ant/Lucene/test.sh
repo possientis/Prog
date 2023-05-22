@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/ant/Lucene
+HOME=${HOME}/Prog/ant/Lucene
 cd ${HOME}
 
 ant

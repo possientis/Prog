@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/ant/JavaTask
+HOME=${HOME}/Prog/ant/JavaTask
 cd ${HOME}
 
 ant

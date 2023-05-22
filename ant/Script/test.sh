@@ -4,7 +4,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/ant/Script
+HOME=${HOME}/Prog/ant/Script
 cd ${HOME}
 
 ant

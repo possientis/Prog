@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/ant/GettingStarted
+HOME=${HOME}/Prog/ant/GettingStarted
 cd ${HOME}
 
 ant

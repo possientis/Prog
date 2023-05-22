@@ -2,7 +2,7 @@
 # need to install packages ant junit
 
 set -e 
-DIR=/home/john/Prog/ant/
+DIR=${HOME}/Prog/ant/
 cd ${DIR}
 
 ./Available/test.sh
