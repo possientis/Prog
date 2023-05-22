@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e
-DIR=`pwd`
-HOME=/home/john/Prog/poly/Bitcoin/Number/c#
-cd ${HOME}
+DIR=${HOME}/Prog/poly/Bitcoin/Number/c#
+cd ${DIR}
 
 echo '\nThis is C# ...'
 ./compile.sh Bench_Number.cs

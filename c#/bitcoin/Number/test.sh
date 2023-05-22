@@ -2,7 +2,7 @@
 # need libmono-system-numerics4.0-cil
 
 set -e
-DIR=/home/john/Prog/poly/Bitcoin/Number/c#
+DIR=${HOME}/Prog/poly/Bitcoin/Number/c#
 cd ${DIR}
 
 echo '\nThis is C# ...'

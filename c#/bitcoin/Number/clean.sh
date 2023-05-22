@@ -1,11 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/c#/bitcoin/Number
-cd ${HOME}
+DIR=${HOME}/Prog/c#/bitcoin/Number
+cd ${DIR}
 
 rm -f *.dll
 rm -f *.exe
-
-
-cd ${DIR}

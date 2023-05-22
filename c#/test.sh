@@ -2,7 +2,7 @@
 # need to install mono-mcs
 
 set -e 
-DIR=/home/john/Prog/c#/
+DIR=${HOME}/Prog/c#/
 cd ${DIR}
 
 mcs Sort.cs
