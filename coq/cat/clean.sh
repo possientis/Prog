@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/coq/cat
+DIR=${HOME}/Prog/coq/cat
 cd ${DIR}
 
 rm -f .*.aux

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq/cpdt
+DIR=${HOME}/Prog/coq/cpdt
 cd ${DIR}
 echo
 echo "testing cpdt..."

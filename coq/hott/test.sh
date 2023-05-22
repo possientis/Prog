@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq/hott
+DIR=${HOME}/Prog/coq/hott
 cd ${DIR}
 echo
 echo "testing set hierarchy ..."

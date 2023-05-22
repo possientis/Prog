@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/coq/Logic
+DIR=${HOME}/Prog/coq/Logic
 cd ${DIR}
 
 make clean > /dev/null

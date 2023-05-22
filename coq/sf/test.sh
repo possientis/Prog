@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq/sf
+DIR=${HOME}/Prog/coq/sf
 cd ${DIR}
 echo
 echo "testing software foundations..."

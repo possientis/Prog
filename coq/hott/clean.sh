@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/coq/hott
+DIR=${HOME}/Prog/coq/hott
 cd ${DIR}
 
 rm -f .*.aux

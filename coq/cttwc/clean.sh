@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/coq/cttwc
+DIR=${HOME}/Prog/coq/cttwc
 cd ${DIR}
 
 rm -f Main

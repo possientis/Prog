@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq/zf
+DIR=${HOME}/Prog/coq/zf
 cd ${DIR}
 echo
 echo "testing ZF..."

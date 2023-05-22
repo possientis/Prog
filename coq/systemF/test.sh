@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq/systemF
+DIR=${HOME}/Prog/coq/systemF
 cd ${DIR}
 echo
 echo "testing system F ..."

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq/cat
+DIR=${HOME}/Prog/coq/cat
 cd ${DIR}
 echo
 echo "testing categories ..."

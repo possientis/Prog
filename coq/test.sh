@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq
+DIR=${HOME}/Prog/coq
 cd ${DIR}
 
 echo

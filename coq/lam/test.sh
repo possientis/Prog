@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/coq/lam
+DIR=${HOME}/Prog/coq/lam
 cd ${DIR}
 echo
 echo "testing lambda calculus..."

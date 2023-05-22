@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/coq/cpdt/Haskell
+DIR=${HOME}/Prog/coq/cpdt/Haskell
 cd ${DIR}
 
 rm -f Main

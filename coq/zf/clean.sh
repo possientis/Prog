@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/coq/zf
+DIR=${HOME}/Prog/coq/zf
 cd ${DIR}
 
 rm -f .*.aux
