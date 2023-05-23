@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/todo-webapp
+DIR=${HOME}/Prog/gradle/todo-webapp
 cd ${DIR}
 
 gradle build

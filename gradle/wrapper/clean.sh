@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/gradle/wrapper
+DIR=${HOME}/Prog/gradle/wrapper
 cd ${DIR}
 
 rm -f gradle -r

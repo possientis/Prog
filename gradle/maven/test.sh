@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/maven/
+DIR=${HOME}/Prog/gradle/maven/
 cd ${DIR}
 
 gradle init #sets up gradle build from maven?

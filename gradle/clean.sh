@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/gradle
+DIR=${HOME}/Prog/gradle
 cd ${DIR}
 
 ./maven/clean.sh

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/todo-eclipse
+DIR=${HOME}/Prog/gradle/todo-eclipse
 cd ${DIR}
 
 gradle eclipse        # generate eclipse config files

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/todo-scala
+DIR=${HOME}/Prog/gradle/todo-scala
 cd ${DIR}
 
 gradle build

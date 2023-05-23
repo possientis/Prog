@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/props
+DIR=${HOME}/Prog/gradle/props
 cd ${DIR}
 
 gradle printProperties

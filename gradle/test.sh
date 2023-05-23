@@ -3,10 +3,10 @@
 # need to set up gradle.properties
 
 set -e 
-DIR=/home/john/Prog/gradle
+DIR=${HOME}/Prog/gradle
 cd ${DIR}
 
-cat /home/john/.gradle/gradle.properties | grep 'org\.gradle\.daemon=true'
+cat ${HOME}/.gradle/gradle.properties | grep 'org\.gradle\.daemon=true'
 
 ./Hello/test.sh
 ./Rocks/test.sh

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/pogo/
+DIR=${HOME}/Prog/gradle/pogo/
 cd ${DIR}
 
 #gradle -q printVersion

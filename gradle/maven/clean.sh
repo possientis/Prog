@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/gradle/maven
+DIR=${HOME}/Prog/gradle/maven
 cd ${DIR}
 
 rm -f build.gradle

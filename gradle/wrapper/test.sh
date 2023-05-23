@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/wrapper
+DIR=${HOME}/Prog/gradle/wrapper
 cd ${DIR}
 
 gradle wrapper

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/Hello
+DIR=${HOME}/Prog/gradle/Hello
 cd ${DIR}
 
 gradle hW

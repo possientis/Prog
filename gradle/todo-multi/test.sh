@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/gradle/todo-multi
+DIR=${HOME}/Prog/gradle/todo-multi
 cd ${DIR}
 
 gradle build
