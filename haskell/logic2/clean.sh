@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/logic2
+DIR=${HOME}/Prog/haskell/logic2
 cd ${DIR}
 
 rm -f *.hi

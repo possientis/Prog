@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/haskell/types
+DIR=${HOME}/Prog/haskell/types
 cd ${DIR}
 echo
 

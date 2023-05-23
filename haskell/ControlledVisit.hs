@@ -34,9 +34,9 @@ getInfo path = do
   modified <- maybeIO (getModificationTime path)
   return (Info path perms size modified)
  
-
+-- TODO: fix ${HOME} issue
 main = do
-  infos <- traverse id "/home/john/Prog/poly"
+  infos <- traverse id "${HOME}/Prog/poly"
   putStrLn (show infos)
 
 traverse :: ([Info] -> [Info]) -> FilePath -> IO [Info]

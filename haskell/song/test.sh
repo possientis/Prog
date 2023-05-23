@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/haskell/song
+DIR=${HOME}/Prog/haskell/song
 cd ${DIR}
 echo
 echo "testing jimmy song's bitcoin"

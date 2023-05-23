@@ -2,7 +2,7 @@
 # need to install ghc
 
 set -e 
-DIR=/home/john/Prog/haskell
+DIR=${HOME}/Prog/haskell
 cd ${DIR}
 
 ./song/test.sh

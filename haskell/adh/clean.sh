@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/haskell/adh/
+DIR=${HOME}/Prog/haskell/adh/
 cd ${DIR}
 
 rm -f Main

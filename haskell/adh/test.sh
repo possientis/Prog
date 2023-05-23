@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/adh
+DIR=${HOME}/Prog/haskell/adh
 
 set -e 
 cd ${DIR}

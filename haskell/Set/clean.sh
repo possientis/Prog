@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/haskell/Set/
+DIR=${HOME}/Prog/haskell/Set/
 cd ${DIR}
 
 rm -f Main

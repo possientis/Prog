@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/Crypto
+DIR=${HOME}/Prog/haskell/Crypto
 cd ${DIR}
 
 rm -f *.hi

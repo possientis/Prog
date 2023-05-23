@@ -133,9 +133,9 @@ infix 4 <?  -- so we can redefine ur predicate without parentheses:
 
 myTest4 = liftPath takeExtension ==? ".cpp" &&? sizeP <? 512
 
-
+-- TODO: fix ${HOME} issue
 main = do
-  paths <- betterFind myTest4 "/home/john/Prog/"
+  paths <- betterFind myTest4 "${HOME}/Prog/"
   putStrLn (show paths)
 
 

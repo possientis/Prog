@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/parconc
+DIR=${HOME}/Prog/haskell/parconc
 cd ${DIR}
 
 rm -f *.hi

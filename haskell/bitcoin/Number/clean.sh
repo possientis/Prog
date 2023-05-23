@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/bitcoin/Number
+DIR=${HOME}/Prog/haskell/bitcoin/Number
 cd ${DIR}
 
 rm -f *.hi

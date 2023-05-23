@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/json
+DIR=${HOME}/Prog/haskell/json
 cd ${DIR}
 
 rm -f *.hi

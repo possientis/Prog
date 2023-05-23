@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/song
+DIR=${HOME}/Prog/haskell/song
 cd ${DIR}
 
 rm -f *.hi

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/wiwik
+DIR=${HOME}/Prog/haskell/wiwik
 cd ${DIR}
 
 rm -f *.hi

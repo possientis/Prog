@@ -50,11 +50,11 @@ countDirectories count info =
             else count)
 
 
-
+-- TODO: fix ${HOME} issue
 main = do
-  paths <- foldTree atMostThreePictures [] "/home/john/Prog"
+  paths <- foldTree atMostThreePictures [] "${HOME}/Prog"
   putStrLn (show paths)
-  count <- foldTree countDirectories 0 "/home/john/Prog"
+  count <- foldTree countDirectories 0 "${HOME}/Prog"
   putStrLn (show count)
 
 

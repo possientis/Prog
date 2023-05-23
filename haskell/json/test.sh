@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/haskell/json
+DIR=${HOME}/Prog/haskell/json
 cd ${DIR}
 echo
 

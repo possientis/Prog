@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/haskell/wiwik/happy
-cd ${HOME}
+DIR=${HOME}/Prog/haskell/wiwik/happy
+cd ${DIR}
 
 rm -f *.hi
 rm -f *.o
@@ -10,5 +9,3 @@ rm -f *.o
 rm -f Lexer.hs
 rm -f Parser.hs
 rm -f a.out
-
-cd ${DIR}

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/types
+DIR=${HOME}/Prog/haskell/types
 cd ${DIR}
 
 rm -f *.hi

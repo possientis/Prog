@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/haskell/logic2/lambda
+HOME=${HOME}/Prog/haskell/logic2/lambda
 cd ${HOME}
 echo
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/haskell/Set
+DIR=${HOME}/Prog/haskell/Set
 cd ${DIR}
 
 echo

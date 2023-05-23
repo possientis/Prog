@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/bitcoin
+DIR=${HOME}/Prog/haskell/bitcoin
 cd ${DIR}
 
 ./Number/clean.sh
