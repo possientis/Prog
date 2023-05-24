@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/idris
+DIR=${HOME}/Prog/idris
 cd ${DIR}
 echo
 echo "testing idris..."

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/idris
+DIR=${HOME}/Prog/idris
 cd ${DIR}
 
 rm -f -r build
