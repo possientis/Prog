@@ -6,7 +6,7 @@
 # libghc-monadcryptorandom-dev
 
 set -e
-DIR=/home/john/Prog/poly/Bitcoin/Number
+DIR=${HOME}/Prog/poly/Bitcoin/Number
 cd ${DIR}
 
 ./java/test.sh

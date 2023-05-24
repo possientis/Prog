@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-DIR=/home/john/Prog/poly/Primes
+DIR=${HOME}/Prog/poly/Primes
 cd ${DIR}
 
 NUM_PRIMES=138

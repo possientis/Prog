@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-DIR=/home/john/Prog/poly/Pascal
+DIR=${HOME}/Prog/poly/Pascal
 cd ${DIR}
 
 echo '\nThis is Haskell ...'

@@ -3,7 +3,7 @@
 set -e
 UNAME=Composite
 LNAME=composite
-DIR=/home/john/Prog/poly/DesignPatterns/${UNAME}
+DIR=${HOME}/Prog/poly/DesignPatterns/${UNAME}
 cd ${DIR}
 
 echo '\nThis is C ...'
