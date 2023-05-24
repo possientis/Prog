@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/tex/cats
+DIR=${HOME}/Prog/tex/cats
 cd ${DIR}
 
 rm -f *.aux

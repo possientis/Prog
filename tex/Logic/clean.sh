@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/tex/Logic
+DIR=${HOME}/Prog/tex/Logic
 cd ${DIR}
 
 rm -f logic.aux

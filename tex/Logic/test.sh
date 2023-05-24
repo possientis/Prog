@@ -3,7 +3,7 @@
 
 
 set -e 
-DIR=/home/john/Prog/tex/Logic/
+DIR=${HOME}/Prog/tex/Logic/
 cd ${DIR}
 echo 
 

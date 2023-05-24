@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/tex/
+DIR=${HOME}/Prog/tex/
 cd ${DIR}
 echo
 

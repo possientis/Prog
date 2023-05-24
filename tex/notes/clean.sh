@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/tex/notes
+DIR=${HOME}/Prog/tex/notes
 cd ${DIR}
 
 rm -f *.aux
