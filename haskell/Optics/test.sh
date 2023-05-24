@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/haskell/Optics/
+DIR=${HOME}/Prog/haskell/Optics/
 cd ${DIR}
 echo
 echo "testing logic Haskell optics..."

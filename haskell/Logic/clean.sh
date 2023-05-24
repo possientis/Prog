@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/haskell/Logic/
+DIR=${HOME}/Prog/haskell/Logic/
 cd ${DIR}
 
 rm -f Main

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/haskell/lisp
+DIR=${HOME}/Prog/haskell/lisp
 cd ${DIR}
 
 rm -f *.hi

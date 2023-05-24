@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/haskell/lisp
+DIR=${HOME}/Prog/haskell/lisp
 cd ${DIR}
 echo
 

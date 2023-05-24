@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/home/john/Prog/haskell/Optics
+DIR=${HOME}/Prog/haskell/Optics
 cd ${DIR}
 
 rm -f Main
