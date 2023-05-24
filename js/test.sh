@@ -2,7 +2,7 @@
 # need to install nodejs (which may not be a debian package)
 
 set -e 
-DIR=/home/john/Prog/js/
+DIR=${HOME}/Prog/js/
 cd ${DIR}
 
 node node.js

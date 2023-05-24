@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/js/bitcoin
+DIR=${HOME}/Prog/js/bitcoin
 cd ${DIR}
 
 BITCOINJ_JARS=
