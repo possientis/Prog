@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/php/
+DIR=${HOME}/Prog/php/
 cd ${DIR}
 
 php hello.php
