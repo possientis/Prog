@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/scheme
+DIR=${HOME}/Prog/scheme
 cd ${DIR}
 
 rm -f a.out

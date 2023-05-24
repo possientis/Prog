@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/scheme/dict
+DIR=${HOME}/Prog/scheme/dict
 cd ${DIR}
 
 scm -b -f dict-test.scm

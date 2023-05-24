@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/scheme/digital
+DIR=${HOME}/Prog/scheme/digital
 cd ${DIR}
 
 scm -b -f queue-test.scm

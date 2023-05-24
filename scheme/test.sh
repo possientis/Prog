@@ -2,7 +2,7 @@
 # need to install scm
 
 set -e 
-DIR=/home/john/Prog/scheme/
+DIR=${HOME}/Prog/scheme/
 cd ${DIR}
 
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-root="/home/john/Prog/scheme"
+root="${HOME}/Prog/scheme"
 
 cd /usr/share/guile/2.2/
 
@@ -21,4 +21,4 @@ sudo ln -nfs ${root}/bitcoin/secp256k1/secp256k1.scm secp256k1.scm
 cd /usr/lib/x86_64-linux-gnu/guile/2.2
 sudo mkdir -p extensions
 cd extensions
-sudo ln -nfs /home/john/Prog/scheme/guile/libguile-bessel.so libguile-bessel.so
+sudo ln -nfs ${HOME}/Prog/scheme/guile/libguile-bessel.so libguile-bessel.so

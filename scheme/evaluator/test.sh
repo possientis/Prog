@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/scheme/evaluator
+DIR=${HOME}/Prog/scheme/evaluator
 cd ${DIR}
 
 echo 'starting scheme evaluator unit test ...'

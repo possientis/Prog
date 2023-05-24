@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/scheme/guile
+DIR=${HOME}/Prog/scheme/guile
 cd ${DIR}
 
 rm -f *.go

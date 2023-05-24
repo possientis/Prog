@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/scheme/digital/simple
+HOME=${HOME}/Prog/scheme/digital/simple
 cd ${HOME}
 
 scm -b -f binary-test.scm

@@ -2,7 +2,7 @@
 
 set -e 
 DIR=`pwd`
-HOME=/home/john/Prog/scheme/guile/ffi
+HOME=${HOME}/Prog/scheme/guile/ffi
 cd ${HOME}
 
 export GUILE_AUTO_COMPILE=0

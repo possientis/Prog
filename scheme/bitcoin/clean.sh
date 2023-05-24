@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/scheme/bitcoin
+DIR=${HOME}/Prog/scheme/bitcoin
 cd ${DIR}
 
 ./Number/clean.sh

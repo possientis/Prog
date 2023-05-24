@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/scheme/bst
+DIR=${HOME}/Prog/scheme/bst
 cd ${DIR}
 
 scm -b -f bst-node-test.scm

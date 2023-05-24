@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/scheme/avl
+DIR=${HOME}/Prog/scheme/avl
 cd ${DIR}
 
 scm -b -f avl-node-test.scm

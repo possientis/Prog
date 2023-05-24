@@ -3,7 +3,7 @@
 # may also need to set up symlink in /usr/include 
 
 set -e 
-DIR=/home/john/Prog/scheme/guile
+DIR=${HOME}/Prog/scheme/guile
 cd ${DIR}
 
 export GUILE_AUTO_COMPILE=0
