@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/maven/simple-parent/
+DIR=${HOME}/Prog/maven/simple-parent/
 cd ${DIR}
 
 mvn install

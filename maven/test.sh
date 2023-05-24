@@ -2,7 +2,7 @@
 # need to install package maven
 
 set -e 
-DIR=/home/john/Prog/maven/
+DIR=${HOME}/Prog/maven/
 cd ${DIR}
 
 # ./simple/test.sh          (broken)

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/maven/simple-webapp/
+DIR=${HOME}/Prog/maven/simple-webapp/
 cd ${DIR}
 
 mvn install

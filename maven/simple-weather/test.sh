@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/maven/simple-weather/
+DIR=${HOME}/Prog/maven/simple-weather/
 cd ${DIR}
 
 mvn install
