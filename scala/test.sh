@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/scala
+DIR=${HOME}/Prog/scala
 cd ${DIR}
 
 scalac HelloWorld.scala
