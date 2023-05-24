@@ -2,7 +2,7 @@
 # need to install ruby and jruby
 
 set -e 
-DIR=/home/john/Prog/ruby/
+DIR=${HOME}/Prog/ruby/
 cd ${DIR}
 
 ruby hello.rb
