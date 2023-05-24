@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/hol/euclid
-cd ${HOME}
+DIR=${HOME}/Prog/hol/euclid
+cd ${DIR}
 
 rm -rf .hollogs
 rm -rf .HOLMK
@@ -10,6 +9,3 @@ rm -rf .HOLMK
 rm -f *Theory.*
 rm -f *.uo
 rm -f *.ui
-
-
-cd ${DIR}

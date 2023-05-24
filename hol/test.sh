@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/hol
+DIR=${HOME}/Prog/hol
 cd ${DIR}
 echo
 echo "testing hol..."

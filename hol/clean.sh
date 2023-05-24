@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/hol
+DIR=${HOME}/Prog/hol
 cd ${DIR}
 
 rm -rf .hollogs
