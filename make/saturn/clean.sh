@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/make/saturn
+DIR=${HOME}/Prog/make/saturn
 cd ${DIR}
 
 rm -f aclocal.m4

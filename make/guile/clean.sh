@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/make/guile
+DIR=${HOME}/Prog/make/guile
 cd ${DIR}
 
 rm -f .cache -r

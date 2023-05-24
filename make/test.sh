@@ -2,7 +2,7 @@
 # need to install packages make automake libtool
 
 set -e 
-DIR=/home/john/Prog/make
+DIR=${HOME}/Prog/make
 cd ${DIR}
 
 ./guile/test.sh

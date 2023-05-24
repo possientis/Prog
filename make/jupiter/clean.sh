@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/make/jupiter
+DIR=${HOME}/Prog/make/jupiter
 cd ${DIR}
 
 rm -f autom4te.cache -r

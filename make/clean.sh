@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/make
+DIR=${HOME}/Prog/make
 cd ${DIR}
 
 ./guile/clean.sh

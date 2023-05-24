@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/make/test
+DIR=${HOME}/Prog/make/test
 cd ${DIR}
 
 rm -f main

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/make/saturn
+DIR=${HOME}/Prog/make/saturn
 cd ${DIR}
 
 ./autogen.sh

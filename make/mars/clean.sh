@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/make/mars
+DIR=${HOME}/Prog/make/mars
 cd ${DIR}
 
 rm -f aclocal.m4
