@@ -58,7 +58,7 @@ main(){
 }
 
 set -e 
-DIR=/home/john/Prog/lean
+DIR=${HOME}/Prog/lean
 cd ${DIR}
 
 echo

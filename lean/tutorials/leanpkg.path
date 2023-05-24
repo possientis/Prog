@@ -1,4 +1,4 @@
 builtin_path
-path /home/john/Libs/tutorials/_target/deps/mathlib/src
-path /home/john/Libs/tutorials/src/solutions
+path ${HOME}/Libs/tutorials/_target/deps/mathlib/src
+path ${HOME}/Libs/tutorials/src/solutions
 path .

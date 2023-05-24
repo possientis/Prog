@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/lean
+DIR=${HOME}/Prog/lean
 cd ${DIR}
 
 ./hhg/clean.sh

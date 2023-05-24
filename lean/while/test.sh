@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/lean/while
+DIR=${HOME}/Prog/lean/while
 cd ${DIR}
 
 echo
