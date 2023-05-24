@@ -70,7 +70,7 @@ bar2          # prints nothing
 
 
 echo
-declare | grep HOME # HOME=/home/john
+declare | grep HOME # HOME${HOME}=
 
 zzy=68
 declare | grep zzy  # zzy=68

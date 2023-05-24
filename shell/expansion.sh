@@ -28,12 +28,12 @@ echo
 
 #   - 2. tilde expansion
 echo "Examples of tilde expansions:"
-echo ~                    # /home/john
+echo ~                    #${HOME} 
 echo ~root                # /root
-echo ~john                # /home/john
+echo ~john                #${HOME} 
 echo path:~/Prog          # path:~/Prog (not a tilde expansion)
 echo path=~Prog           # path=~Prog  (not a tilde expansion)
-echo path is ~/Prog       # path is /home/john/Prog
+echo path is ~/Prog       # path is ${HOME}/Prog
 echo
 
 # tilde expansion is not performed when '~' immediately follows ':' or '='
@@ -108,7 +108,7 @@ echo "$(cal)"
 #     19 20 21 22 23 24 25  
 #     26 27 28 29 30 31   
 
-echo a   test a*k.sh ~ log{1,2,5} $(uname) $((2+5))   # a test asterisk.sh awk.sh /home/john log1 log2 log5 Linux 7
+echo a   test a*k.sh ~ log{1,2,5} $(uname) $((2+5))   # a test asterisk.sh awk.sh ${HOME}log1 log2 log5 Linux 7
 
 # single quotes: all expansions are suppressed
 echo 'a   test a*k.sh ~ log{1,2,5} $(uname) $((2+5))' # a   test a*k.sh ~ log{1,2,5} $(uname) $((2+5))
