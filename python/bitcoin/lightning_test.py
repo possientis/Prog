@@ -1,7 +1,7 @@
 from lightning import LightningRpc
 import random
 
-l = LightningRpc("/home/john/.lightning/lightning-rpc")
+l = LightningRpc("${HOME}/.lightning/lightning-rpc") # TODO: fix ${HOME} issue
 
 #invoice = l.invoice(100,"lbl{}".format(random.random()),"testpayment")
 

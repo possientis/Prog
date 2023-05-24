@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-DIR=/home/john/Prog/poly/Bitcoin/Number/python
+DIR=${HOME}/Prog/poly/Bitcoin/Number/python
 cd ${DIR}
 
 echo '\nThis is Python ...'

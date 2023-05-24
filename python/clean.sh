@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/python
+DIR=${HOME}/Prog/python
 cd ${DIR}
 
 rm -rf __pycache__

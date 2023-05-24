@@ -1,2 +1,3 @@
 import os
-print(os.path.isdir("/home/john/")) # True
+# TODO: fix ${HOME} issue
+print(os.path.isdir("${HOME}/")) # True 

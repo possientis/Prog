@@ -7,7 +7,7 @@ def handle_err(reason):
     reactor.stop()
 
 def call_ls(def_call_obj):
-    return def_call_obj.callRemote('ls', '/home/john/')
+    return def_call_obj.callRemote('ls', '${HOME}/')    # TODO: fix ${HOME} issue
 
 def print_ls(print_result):
     print(print_result)

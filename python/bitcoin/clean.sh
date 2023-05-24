@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/python/bitcoin
+DIR=${HOME}/Prog/python/bitcoin
 cd ${DIR}
 
 ./Number/clean.sh

@@ -10,8 +10,8 @@ class EventLoopDelaySpawn(object):
     def __init__(self,  poll=10,
                         wait=1,
                         verbose=True,
-                        dir1="/home/john/Prog/python/dir1",
-                        dir2="/home/john/Prog/python/dir2"):
+                        dir1="${HOME}/Prog/python/dir1",    # TODO: fix ${HOME} issue
+                        dir2="${HOME}/Prog/python/dir2"):   # TODO: fix ${HOME} issue
         self.poll = int(poll)
         self.wait = int(wait)
         self.verbose = verbose

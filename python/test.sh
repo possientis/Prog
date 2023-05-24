@@ -2,7 +2,7 @@
 # need to install python3-ecdsa
 
 set -e 
-DIR=/home/john/Prog/python/
+DIR=${HOME}/Prog/python/
 cd ${DIR}
 
 ./bitcoin/test.sh

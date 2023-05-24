@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIR=`pwd`
-HOME=/home/john/Prog/python/bitcoin/Number
+HOME=${HOME}/Prog/python/bitcoin/Number
 cd ${HOME}
 
 rm -rf __pycache__

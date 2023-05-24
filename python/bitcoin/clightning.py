@@ -4,7 +4,7 @@ import logging
 import tempfile
 
 
-import utils  # PYTHONPATH set to /home/john/Libs/lightning/tests
+import utils  # PYTHONPATH set to ${HOME}/Libs/lightning/tests
 
 bitcoind = None
 TEST_DIR = tempfile.mkdtemp(prefix='lightning-')
@@ -23,7 +23,7 @@ logging.info("Tests running in '%s'",TEST_DIR)
 
 
 # bitcoind testnet should be running
-bitcoind = utils.BitcoinD(bitcoin_dir="/home/john/.bitcoin/testnet3")
+bitcoind = utils.BitcoinD(bitcoin_dir="${HOME}/.bitcoin/testnet3") # TODO: fix ${HOME} issue
 
 info = bitcoind.rpc.getnetworkinfo()
 
