@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/sed/
+DIR=${HOME}/Prog/sed/
 cd ${DIR}
 echo 
 echo "testing sed..."
