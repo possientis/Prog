@@ -14,7 +14,7 @@
 # $ ./configure --enable-jni --enable-module-edch --enable-experimental
 
 set -e 
-DIR=/home/john/Prog/java/
+DIR=${HOME}/Prog/java/
 cd ${DIR}
 
 #./gcj/test.sh

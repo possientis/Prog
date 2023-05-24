@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/java
+DIR=${HOME}/Prog/java
 cd ${DIR}
 
 rm -f *.class

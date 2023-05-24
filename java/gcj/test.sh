@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/java/gcj
+DIR=${HOME}/Prog/java/gcj
 cd ${DIR}
 
 gcj=$(sh gcj.sh)

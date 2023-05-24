@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/java/jdbc
+DIR=${HOME}/Prog/java/jdbc
 cd ${DIR}
 
 echo '\nJDBCExample1:'

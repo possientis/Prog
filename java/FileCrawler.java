@@ -47,7 +47,7 @@ public class FileCrawler implements Runnable {
   public FileCrawler(BlockingQueue<File> queue){
     fileQueue = queue;
     fileFilter = (File pathname) -> true;           // should be changed
-    root = new File("/home/john");                  // should be changed
+    root = new File("${HOME}");                     // TODO: fix ${HOME} issue
   }
 }
 

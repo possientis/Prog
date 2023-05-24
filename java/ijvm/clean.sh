@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/java/ijvm
+DIR=${HOME}/Prog/java/ijvm
 cd ${DIR}
 
 rm -f *.class

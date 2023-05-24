@@ -1,10 +1,6 @@
 #!/bin/sh
 
-DIR=`pwd`
-HOME=/home/john/Prog/java/ijvm/greeters
-cd ${HOME}
+DIR=${HOME}/Prog/java/ijvm/greeters
+cd ${DIR}
 
 rm -f build -r
-
-
-cd ${DIR}

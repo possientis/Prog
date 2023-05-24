@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=/home/john/Prog/java/bitcoin
+DIR=${HOME}/Prog/java/bitcoin
 cd ${DIR}
 
 rm -f *.class

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/java/slf4j
+DIR=${HOME}/Prog/java/slf4j
 cd ${DIR}
 
 echo '\nslf4j with no binding ...'

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e 
-DIR=/home/john/Prog/java/ijvm/
+DIR=${HOME}/Prog/java/ijvm/
 cd ${DIR}
 
 ./greeters/test.sh
