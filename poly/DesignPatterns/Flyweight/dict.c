@@ -1,1 +1,1 @@
-/home/john/Prog/c/dict/dict.c
+../../../c/dict/dict.c

@@ -1,1 +1,1 @@
-/home/john/Prog/scheme/dict/dict.scm
+../../../scheme/dict/dict.scm

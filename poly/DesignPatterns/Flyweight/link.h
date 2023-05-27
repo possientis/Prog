@@ -1,1 +1,1 @@
-/home/john/Prog/c/link/link.h
+../../../c/link/link.h
