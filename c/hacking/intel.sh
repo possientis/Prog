@@ -1,1 +1,1 @@
-/home/john/Prog/assembly/64bits/intel.sh
+../../asm/64bits/intel.sh
