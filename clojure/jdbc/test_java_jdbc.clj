@@ -40,10 +40,11 @@
   (:require [clojure.string :as s]))
 
 
-(def db { :subprotocol  "postgresql"
-          :subname      "//127.0.0.1:5432/john" ; port number is optional
-          :user         "john"
-          :password     "john" })
+(defn db [user] 
+  { :subprotocol  "postgresql"
+     :subname      (str "//127.0.0.1:5432/" user) ; port number is optional
+     :user         user
+     :password     user })
 
 (defn create-table [conn]
   (let [sql (str "CREATE  TABLE COMPANY ("
@@ -78,7 +79,7 @@
 
   (println "test_java_jdbc is running ...")
 
-  (j/with-db-connection [conn db]
+  (j/with-db-connection [conn (db (nth args 0))]
     (create-table conn)
 
     (let [item {:id 1 :name "Paul" :age 32 :address "California" :salary 20000.0}]
@@ -110,14 +111,3 @@
     (delete-table conn)
   )
 )
-
-
-
-
-
-
-
-
-
-
-

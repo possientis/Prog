@@ -14,7 +14,7 @@ done
 clojurec -cp "$JDBC_JARS" test_java_jdbc 1> /dev/null
 
 # running program
-java -cp "$JDBC_JARS" test_java_jdbc
+java -cp "$JDBC_JARS" test_java_jdbc ${USER}
 
 # clean up
 ./clean.sh
