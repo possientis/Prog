@@ -6,11 +6,11 @@ cd ${DIR}
 
 echo '\nJDBCExample1:'
 javac JDBCExample1.java;
-java -cp /usr/share/java/postgresql.jar:. JDBCExample1
+java -cp /usr/share/java/postgresql.jar:. JDBCExample1 ${USER}
 
 echo '\nJDBCExample2:'
 javac JDBCExample2.java
-java -cp /usr/share/java/postgresql.jar:. JDBCExample2
+java -cp /usr/share/java/postgresql.jar:. JDBCExample2 ${USER}
 
 rm *.class
 

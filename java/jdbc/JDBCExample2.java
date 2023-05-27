@@ -10,14 +10,14 @@ import java.sql.ResultSet;
 
 public class JDBCExample2 {
 
-  // inclusion of port number in url seems to be optional
-  private static final String url = "jdbc:postgresql://127.0.0.1:5432/john";
-  private static final String user = "john";
-  private static final String password = "john";
-
   public static void main(String[] args){
 
-    Connection conn = connect();
+    // inclusion of port number in url seems to be optional
+    final String user = args[0];
+    final String url = "jdbc:postgresql://127.0.0.1:5432/" + user;
+    final String password = user;
+
+    Connection conn = connect(user, url, password);
 
     try 
     {
@@ -61,7 +61,7 @@ public class JDBCExample2 {
 
   }
 
-  public static Connection connect() {
+  public static Connection connect(String user, String url, String password) {
 
     Connection conn = null;
 

@@ -8,6 +8,8 @@ public class JDBCExample1 {
 
   public static void main(String[] args) {
 
+    final String user = args[0];
+
     System.out.println("PostgreSQL jdbc connection testing ...");
 
     try {
@@ -29,11 +31,11 @@ public class JDBCExample1 {
 
     try {
 
-      final String dbname = "jdbc:postgresql://127.0.0.1/john";
+      final String dbname = "jdbc:postgresql://127.0.0.1/" + user;
 
-      final String username = "john";
+      final String username = user;
 
-      final String password = "john";
+      final String password = user;
 
       connection = DriverManager.getConnection(dbname, username, password);
 
