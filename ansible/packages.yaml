@@ -144,10 +144,6 @@
     ansible.builtin.apt:
       name: scm
 
-  - name: Coding - Install Scheme
-    ansible.builtin.apt:
-      name: chezscheme
-
   - name: Coding - Install Scheme (guile)
     ansible.builtin.apt:
       name: guile-2.2-dev
@@ -539,6 +535,10 @@
       name: libmono-system-numerics4.0-cil
 
   # Fail on Raspberry pi 4
+
+  - name: Coding - Install Scheme
+    ansible.builtin.apt:
+      name: chezscheme
 
   - name: Coding - Install Agda
     ansible.builtin.apt:
