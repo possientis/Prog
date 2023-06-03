@@ -9,14 +9,6 @@
     ansible.builtin.apt:
       name: libcanberra-gtk-module
 
-  - name: Setup - Install tor
-    ansible.builtin.apt:
-      name: tor
-
-  - name: Setup - Install apt-transport-tor
-    ansible.builtin.apt:
-      name: apt-transport-tor
-
   - name: Setup - Install ufw
     ansible.builtin.apt:
       name: ufw
@@ -35,26 +27,6 @@
     ansible.builtin.apt:
       name: htop
 
-  - name: General - Install bmon        # 'bmon' to monitor network
-    ansible.builtin.apt:
-      name: bmon
-
-  - name: General - Install slurm       # 'slurm -i <nic>' to monitor network
-    ansible.builtin.apt:
-      name: slurm
-
-  - name: General - Install tcptrack    # 'sudo tcptrack -i <nic>' 
-    ansible.builtin.apt:
-      name: tcptrack
-
-  - name: General - Install iftop    # 'sudo iftop' 
-    ansible.builtin.apt:
-      name: iftop
-
-  - name: General - Install nethogs    # 'sudo nethogs' 
-    ansible.builtin.apt:
-      name: nethogs
-
   - name: General - Install lshw        # 'sudo lshw' to monitor hardware
     ansible.builtin.apt:
       name: lshw
@@ -71,14 +43,55 @@
     ansible.builtin.apt:
       name: screen
 
+  - name: General - Install tmux
+    ansible.builtin.apt:
+      name: tmux
+
   - name: General - Install curl
     ansible.builtin.apt:
       name: curl
 
-  - name: General - Install vlc
-    ansible.builtin.apt:
-      name: vlc
+  # Network
 
+  - name: Network - Install tor
+    ansible.builtin.apt:
+      name: tor
+
+  - name: Network - Install apt-transport-tor
+    ansible.builtin.apt:
+      name: apt-transport-tor
+
+  - name: Network - Install bmon        # 'bmon' to monitor network
+    ansible.builtin.apt:
+      name: bmon
+
+  - name: Network - Install slurm       # 'slurm -i <nic>' to monitor network
+    ansible.builtin.apt:
+      name: slurm
+
+  - name: Network - Install tcptrack    # 'sudo tcptrack -i <nic>' 
+    ansible.builtin.apt:
+      name: tcptrack
+
+  - name: Network - Install iftop       # 'sudo iftop' 
+    ansible.builtin.apt:
+      name: iftop
+
+  - name: Network - Install nethogs     # 'sudo nethogs' 
+    ansible.builtin.apt:
+      name: nethogs
+
+  - name: Network - Install net-tools
+    ansible.builtin.apt:
+      name: net-tools
+
+  - name: Network - Install arping
+    ansible.builtin.apt:
+      name: arping
+
+  - name: Network - Install bridge-utils
+    ansible.builtin.apt:
+      name: bridge-utils
 
   # Applications
 
@@ -101,6 +114,11 @@
   - name: Application - Install pidgin-otr
     ansible.builtin.apt:
       name: pidgin-otr
+
+  - name: Application - Install vlc
+    ansible.builtin.apt:
+      name: vlc
+
 
   # Coding
 
