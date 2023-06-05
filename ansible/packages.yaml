@@ -93,6 +93,10 @@
     ansible.builtin.apt:
       name: bridge-utils
 
+  - name: Network - Install netplan.io
+    ansible.builtin.apt:
+      name: netplan.io
+
   # Virtualization
 
   - name: Virtualization - Install libvirt-clients
@@ -110,6 +114,14 @@
   - name: Virtualization - Install virtinst
     ansible.builtin.apt:
       name: virtinst
+
+  - name: Virtualization - Install virt-manager
+    ansible.builtin.apt:
+      name: virt-manager
+
+  - name: Virtualization - Install ssh-askpass
+    ansible.builtin.apt:
+      name: ssh-askpass
 
   # Applications
 
