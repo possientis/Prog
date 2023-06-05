@@ -93,6 +93,24 @@
     ansible.builtin.apt:
       name: bridge-utils
 
+  # Virtualization
+
+  - name: Virtualization - Install libvirt-clients
+    ansible.builtin.apt:
+      name: libvirt-clients
+
+  - name: Virtualization - Install libvirt-daemon-system
+    ansible.builtin.apt:
+      name: libvirt-daemon-system
+
+  - name: Virtualization - Install qemu-system-x86
+    ansible.builtin.apt:
+      name: qemu-system-x86
+ 
+  - name: Virtualization - Install virtinst
+    ansible.builtin.apt:
+      name: virtinst
+
   # Applications
 
   - name: Application - Install vim       
