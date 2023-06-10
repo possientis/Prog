@@ -1,15 +1,9 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=${HOME}/Prog/ant/Env
-cd ${HOME}
+DIR=${HOME}/Prog/ant/Env
+cd ${DIR}
 
 ant
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

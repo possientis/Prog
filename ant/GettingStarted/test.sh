@@ -1,16 +1,10 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=${HOME}/Prog/ant/GettingStarted
-cd ${HOME}
+DIR=${HOME}/Prog/ant/GettingStarted
+cd ${DIR}
 
 ant
 ant clean
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

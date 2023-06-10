@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=${HOME}/Prog/scheme/guile/ffi
-cd ${HOME}
+DIR=${HOME}/Prog/scheme/guile/ffi
+cd ${DIR}
 
 export GUILE_AUTO_COMPILE=0
 
@@ -18,9 +17,4 @@ echo
 
 #./clean.sh
 
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-

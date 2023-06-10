@@ -1,19 +1,12 @@
 #!/bin/sh
 
 set -e 
-DIR=`pwd`
-HOME=${HOME}/Prog/haskell/logic2/lambda
-cd ${HOME}
+DIR=${HOME}/Prog/haskell/logic2/lambda
+cd ${DIR}
 echo
 
 echo "testing lambda calculus"
 
 ghc -o a.out Unit-Test.hs; ./a.out; ./clean.sh
 
-
-cd ${DIR}
 echo '\ntest completed successfully\n'
-
-
-
-
