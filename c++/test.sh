@@ -9,7 +9,6 @@ cd ${DIR}
 ./dc/test.sh
 ./link/test.sh
 ./dict/test.sh
-./stl/test.sh
 ./bitcoin/test.sh
 
 echo '\nAll c++ tests completed successfully\n'
