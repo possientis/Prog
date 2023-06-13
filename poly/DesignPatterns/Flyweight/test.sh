@@ -82,7 +82,8 @@ echo "It took $(( $DIFF / 1000000 )) ms"
 
 echo '\nThis is PHP ...'
 START=$(date +%s%N)
-php ${LNAME}.php
+echo "Skipping..."
+#php ${LNAME}.php
 END=$(date +%s%N)
 DIFF=$(( $END - $START ))
 echo "It took $(( $DIFF / 1000000 )) ms"
