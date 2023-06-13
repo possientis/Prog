@@ -1,22 +1,23 @@
 Require Import Arith.
 Require Import Monoid.
+Import Nat.
 
 (* a monoid can be defined from nat 0 and plus *)
 Definition NatPlus : Monoid nat := monoid 
-    0           (* identity  *) 
-    plus        (* product   *) 
-    plus_0_l    (* proof_idl *) 
-    plus_0_r    (* proof_idr *)
-    plus_assoc  (* proof_asc *)
+    0          (* identity  *) 
+    plus       (* product   *) 
+    add_0_l    (* proof_idl *) 
+    add_0_r    (* proof_idr *)
+    add_assoc  (* proof_asc *)
     .
 
 (* a monoid can be defined from nat 1 and mult *)
 Definition NatMult : Monoid nat := monoid
     1
     mult
-    mult_1_l
-    mult_1_r
-    mult_assoc
+    mul_1_l
+    mul_1_r
+    mul_assoc
     .
 
 (*
