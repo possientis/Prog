@@ -29,9 +29,9 @@ instance Eq (Leq n m) where
 
 instance (KnownNat n, KnownNat m) => Show (Leq n m) where
     show _ = "_ :: Leq " 
-           ++ (show $ natVal @ n Proxy)
+           ++ (show $ natVal @n Proxy)
            ++ " "
-           ++ (show $ natVal @ m Proxy)
+           ++ (show $ natVal @m Proxy)
 
 lemma1 :: forall (n :: Nat) . Leq n n
 lemma1 = Le_n

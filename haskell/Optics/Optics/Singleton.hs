@@ -78,6 +78,6 @@ instance (KnownNat n) => KnownNat ('S n) where
     natSing = SS natSing
 
 natVal :: forall n proxy . KnownNat n => proxy n -> Nat
-natVal _ = fromSing (natSing @ n)
+natVal _ = fromSing (natSing @n)
 
 

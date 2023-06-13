@@ -50,7 +50,7 @@ fin2vec' (SS n) f = Cons (f FZ) $ fin2vec' n (\m -> f (FS m))
 
 {- failing to create a version for 'forall {n}' with implict argument n
 fin2vec'' :: forall n a . (SingI n) => (Fin n -> a) -> Vec n a
-fin2vec'' f = case (sing @ n) of
+fin2vec'' f = case (sing @n) of
     SZ      -> Nil
     (SS _)  -> Cons (f FZ) $ fin2vec'' (\m -> f (FS m))
 -}

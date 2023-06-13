@@ -16,4 +16,4 @@ specLeq = describe "Testing Leq..." $ do
 
 specLeqLemma1 :: Spec
 specLeqLemma1 = it "Checked lemma1" $ do
-    lemma1 `shouldBe` (Le_n @ ('S 'Z))
+    lemma1 `shouldBe` (Le_n @('S 'Z))

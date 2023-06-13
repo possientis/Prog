@@ -74,7 +74,7 @@ idP2P :: AdapterP a b s t -> AdapterP a b s t
 -- 6. idP2P f k = f (dimap id id k)
 -- 7. idP2P f k = f k
 -- 8.idP2P f = f
-idP2P = id
+idP2P x = id x -- point free appears to fail
 
 -- point-free definition will fail
 fromP :: AdapterP a b s t -> s -> a
