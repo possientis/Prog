@@ -7,7 +7,7 @@ module  Reduce
     ,   trace
     )   where 
 
-import Data.Functor.Foldable
+import Data.Fix
 
 import Op
 import Var

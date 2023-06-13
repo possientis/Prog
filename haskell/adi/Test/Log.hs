@@ -17,7 +17,7 @@ specLog = describe "Testing Log for existing monads" $ do
 
 testExpr :: (Int, Expr) -> Spec
 testExpr (n,e) = it ("Checked expression n. " ++ show n) $ do
-    (evalLog @ Eval1) e `shouldBe` (evalLog @ Eval2) e
+    (evalLog @Eval1) e `shouldBe` (evalLog @Eval2) e
 
 e1 :: Expr
 e1 = eLam "x" (eVar "x") 

@@ -9,7 +9,7 @@ module  Pretty
 
 import Prelude                  hiding  ((<>))
 import Text.PrettyPrint
-import Data.Functor.Foldable
+import Data.Fix
 
 import Op
 import Var

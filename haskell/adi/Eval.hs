@@ -17,7 +17,7 @@ import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Writer
 import Control.Monad.Except
-import Data.Functor.Foldable
+import Data.Fix
 
 import Op
 import Env
@@ -42,16 +42,16 @@ class
 
   
 eval :: forall m . (Eval m) => Expr -> Either Error Value
-eval e = fst <$> (evalAll @ m) e
+eval e = fst <$> (evalAll @m) e
 
 evalLog :: forall m . (Eval m) => Expr -> Either Error Log
-evalLog e = snd <$> (evalAll @ m) e
+evalLog e = snd <$> (evalAll @m) e
 
 evalAll :: forall m . (Eval m) => Expr -> Either Error (Value, Log)
-evalAll e = runEval $ (eval' @ m) e
+evalAll e = runEval $ (eval' @m) e
 
 evalIO :: forall m . (Eval m) => Expr -> IO ()
-evalIO e = case (evalAll @ m) e of
+evalIO e = case (evalAll @m) e of
         Left err    -> printTrace err
         Right (v,w) -> do
             print v

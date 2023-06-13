@@ -13,7 +13,7 @@ import Pretty
 import Reduce
 
 main :: IO ()
---main = evalIO @ Eval1 e13
+--main = evalIO @Eval1 e13
 main = do
     let e = e14
     putStrLn "Reduction:"

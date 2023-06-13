@@ -12,4 +12,4 @@ import Test.Eval
 
 specEval2 :: Spec
 specEval2 = describe "Testing monad Eval2" $ do
-    specEval @ Eval2
+    specEval @Eval2

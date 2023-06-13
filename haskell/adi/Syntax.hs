@@ -19,8 +19,8 @@ module  Syntax
     ,   eCase
     )   where
 
+import Data.Fix
 import Data.Functor.Classes
-import Data.Functor.Foldable
 
 import Op
 import Var
