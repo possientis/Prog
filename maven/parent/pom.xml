@@ -16,7 +16,6 @@
     <module>simple-model</module>
     <module>simple-weather</module>
     <module>simple-persist</module>
-    <module>simple-webapp</module>
   </modules>
 
   <build>
