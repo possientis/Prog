@@ -8,9 +8,9 @@
 
 version=$(uname -a | cut -d' ' -f 8 | cut -d '.' -f 1)
 
-if [ "$version" = "6" ]   # debian stretch 
+if [ "$version" = "6" ]
 then
-  option="-no-pie"
+  option="-no-pie -z noexecstack"
 else
   echo "unsupported version"
   exit 1
