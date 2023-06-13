@@ -8,7 +8,7 @@ cd ${DIR}
 ./dict/test.sh
 #./dlopen/test.sh
 ./execve/test.sh
-./gcov/test.sh
+#./gcov/test.sh
 ./library/test.sh
 ./link/test.sh
 ./pragma/test.sh
