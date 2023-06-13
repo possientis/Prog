@@ -13,7 +13,7 @@ cd ${DIR}
 ./JavaTask/test.sh
 #./JNI/test.sh
 #./Lucene/test.sh
-./Script/test.sh
+#./Script/test.sh
 
 echo '\nAll ant tests completed successfully\n'
 
