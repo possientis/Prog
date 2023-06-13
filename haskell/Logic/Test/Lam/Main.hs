@@ -18,7 +18,7 @@ import Test.Lam.BetaValid
 
 specLam :: Spec
 specLam = describe "Testing Haskell for Lam..." $ do
-    specPoly @ T 
+    specPoly @T 
     specValid
     specSubst
     specFree

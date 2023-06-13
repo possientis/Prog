@@ -23,41 +23,41 @@ import List.InjectiveOn
 
 specValid :: forall f . (Test f) =>  Spec
 specValid = describe "Testing properties of valid..." $ do 
-    testValidSub        @ f
-    testValidFree       @ f
-    testValidInj        @ f
-    testValidReplace    @ f
-    testValidCompose    @ f 
-    testValidFmap       @ f
-    testValidBound      @ f
+    testValidSub        @f
+    testValidFree       @f
+    testValidInj        @f
+    testValidReplace    @f
+    testValidCompose    @f 
+    testValidFmap       @f
+    testValidBound      @f
 
 testValidSub :: forall f . (Test f) =>  Spec
 testValidSub = it "Checked valid subformula property" $
-    property $ propValidSub @ f
+    property $ propValidSub @f
 
 testValidFree :: forall f . (Test f) =>  Spec
 testValidFree = it "Checked valid free property" $
-    property $ propValidFree @ f
+    property $ propValidFree @f
 
 testValidInj :: forall f . (Test f) =>  Spec
 testValidInj = it "Checked valid injective property" $
-    property $ propValidInj @ f
+    property $ propValidInj @f
 
 testValidReplace :: forall f . (Test f) =>  Spec
 testValidReplace = it "Checked valid replace property" $
-    property $ propValidReplace @ f
+    property $ propValidReplace @f
 
 testValidCompose :: forall f . (Test f) =>  Spec
 testValidCompose = it "Checked valid compose property" $
-    property $ propValidCompose @ f
+    property $ propValidCompose @f
 
 testValidFmap :: forall f . (Test f) =>  Spec
 testValidFmap = it "Checked valid fmap property" $
-    property $ propValidFmap @ f
+    property $ propValidFmap @f
 
 testValidBound :: forall f . (Test f) =>  Spec
 testValidBound = it "Checked valid bound property" $
-    property $ propValidBound @ f
+    property $ propValidBound @f
 
 propValidSub :: (Test f) =>  (Var -> Var) -> f Var -> Bool
 propValidSub f t = valid f t == all (valid f) (sub t)

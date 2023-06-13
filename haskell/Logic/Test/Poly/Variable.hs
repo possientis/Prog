@@ -19,31 +19,31 @@ import Func.Permute
 
 specVariable :: forall f . (Test f) => Spec
 specVariable = describe "Testing properties of var..." $ do
-    testVarFmap              @ f
-    testVarSupport           @ f
-    testVarPermuteReplace    @ f
-    testVarReplaceTrans      @ f
-    testVarReplaceRemove     @ f
+    testVarFmap              @f
+    testVarSupport           @f
+    testVarPermuteReplace    @f
+    testVarReplaceTrans      @f
+    testVarReplaceRemove     @f
 
 testVarFmap :: forall f . (Test f) => Spec
 testVarFmap = it "Checked var fmap property" $ 
-    property $ propVarFmap @ f
+    property $ propVarFmap @f
 
 testVarSupport :: forall f . (Test f) =>  Spec
 testVarSupport = it "Checked var support property" $ 
-    property $ propVarSupport @ f
+    property $ propVarSupport @f
 
 testVarPermuteReplace :: forall f . (Test f) =>  Spec
 testVarPermuteReplace = it "Checked var permute-replace property" $
-    property $ propVarPermuteReplace @ f
+    property $ propVarPermuteReplace @f
 
 testVarReplaceTrans :: forall f . (Test f) =>  Spec
 testVarReplaceTrans = it "Checked var replace-trans property" $ 
-    property $ propVarReplaceTrans @ f
+    property $ propVarReplaceTrans @f
 
 testVarReplaceRemove :: forall f . (Test f) =>  Spec
 testVarReplaceRemove = it "Checked var replace-remove property" $
-    property $ propVarReplaceRemove @ f
+    property $ propVarReplaceRemove @f
 
 propVarFmap :: (Test f) => (Var -> Var) ->  f Var -> Bool
 propVarFmap f t = var (fmap f t) == map f (var t)

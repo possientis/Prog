@@ -13,6 +13,6 @@ import Fol.Syntax
 
 specFol :: Spec
 specFol = describe "Testing Haskell for Fol..." $ do
-    specPoly @ P
+    specPoly @P
     specValid
 

@@ -20,12 +20,12 @@ import Test.Poly.Subformula
 
 specPoly :: forall f . (Test f) =>  Spec
 specPoly = do
-    specFunctor     @ f
-    specSubformula  @ f
-    specVariable    @ f
-    specFree        @ f
-    specBound       @ f
-    specValid       @ f
-    specDmap        @ f
-    specLocalInv    @ f
+    specFunctor     @f
+    specSubformula  @f
+    specVariable    @f
+    specFree        @f
+    specBound       @f
+    specValid       @f
+    specDmap        @f
+    specLocalInv    @f
    

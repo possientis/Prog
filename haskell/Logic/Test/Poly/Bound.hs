@@ -18,21 +18,21 @@ import Variable (Var)
 
 specBound :: forall f . (Test f) =>  Spec
 specBound = describe "Testing properties of bnd..." $ do
-    testBoundVar    @ f
-    testBoundFree   @ f
-    testBoundFmap   @ f
+    testBoundVar    @f
+    testBoundFree   @f
+    testBoundFmap   @f
 
 testBoundVar :: forall f . (Test f) =>  Spec
 testBoundVar = it "Checked bound variables are variables" $ 
-    property $ propBoundVar @ f
+    property $ propBoundVar @f
 
 testBoundFree :: forall f . (Test f) =>  Spec
 testBoundFree = it "Checked all variables are free or bound" $ 
-    property $ propBoundFree @ f
+    property $ propBoundFree @f
 
 testBoundFmap :: forall f . (Test f) =>  Spec
 testBoundFmap = it "Checked bnd fmap property" $
-    property $ propBoundFmap @ f
+    property $ propBoundFmap @f
 
 propBoundVar :: (Test f) => f Var -> Bool
 propBoundVar t = bnd t <== var t

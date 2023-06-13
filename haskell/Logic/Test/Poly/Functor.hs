@@ -15,16 +15,16 @@ import Variable  (Var)
 
 specFunctor :: forall f . (Test f) =>  Spec
 specFunctor = describe "Testing functor laws..." $ do
-    testFunctorIdLaw     @ f
-    testFunctorCompLaw   @ f
+    testFunctorIdLaw     @f
+    testFunctorCompLaw   @f
 
 testFunctorIdLaw :: forall f . (Test f) =>  Spec
 testFunctorIdLaw = it "Checked functor identity law" $
-    property $ propFunctorIdLaw @ f
+    property $ propFunctorIdLaw @f
 
 testFunctorCompLaw :: forall f . (Test f) =>  Spec
 testFunctorCompLaw = it "Checked functor composition law" $
-    property $ propFunctorCompLaw @ f
+    property $ propFunctorCompLaw @f
 
 propFunctorIdLaw :: (Test f) => f Var -> Bool
 propFunctorIdLaw t = fmap id t == t 

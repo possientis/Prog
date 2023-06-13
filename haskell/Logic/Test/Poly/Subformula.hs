@@ -18,46 +18,46 @@ import Variable (Var)
 
 specSubformula :: forall f . (Test f) => Spec
 specSubformula = describe "Testing properties of subformula order (<<=)..." $ do
-    testReflexivity    @ f
-    testAntiSymmetry   @ f
-    testTransitivity   @ f
-    testSubInclusion   @ f
-    testOrderMonotone  @ f
-    testSubFmap        @ f
-    testSubVar         @ f
-    testSubBound       @ f
+    testReflexivity    @f
+    testAntiSymmetry   @f
+    testTransitivity   @f
+    testSubInclusion   @f
+    testOrderMonotone  @f
+    testSubFmap        @f
+    testSubVar         @f
+    testSubBound       @f
 
 testReflexivity :: forall f . (Test f) => Spec
 testReflexivity = it "Checked (<<=) is reflexive" $ 
-    property $ propReflexivity @ f
+    property $ propReflexivity @f
 
 testAntiSymmetry :: forall f . (Test f) =>  Spec
 testAntiSymmetry = it "Checked (<<=) is antisymmetric" $
-    property $ propAntiSymmetry @ f
+    property $ propAntiSymmetry @f
 
 testTransitivity :: forall f . (Test f) =>  Spec
 testTransitivity = it "Checked (<<=) is transitive" $
-    property $ propTransitivity @ f
+    property $ propTransitivity @f
 
 testSubInclusion :: forall f . (Test f) =>  Spec
 testSubInclusion = it "Checked (<<=) inclusion property" $
-    property $ propSubInclusion @ f
+    property $ propSubInclusion @f
 
 testOrderMonotone :: forall f . (Test f) =>  Spec
 testOrderMonotone = it "Checked (<<=) monotone order property" $ 
-    property $ propOrderMonotone @ f
+    property $ propOrderMonotone @f
 
 testSubFmap :: forall f . (Test f) =>  Spec
 testSubFmap = it "Checked (<<=) fmap property" $
-    property $ propSubFmap @ f
+    property $ propSubFmap @f
 
 testSubVar :: forall f . (Test f) =>  Spec
 testSubVar = it "Checked (<<=) var inclusion property" $
-    property $ propSubVar @ f
+    property $ propSubVar @f
 
 testSubBound :: forall f . (Test f) =>  Spec
 testSubBound = it "Checked (<<=) bnd inclusion property" $
-    property $ propSubBound @ f
+    property $ propSubBound @f
 
 propReflexivity :: (Test f) => f Var -> Bool
 propReflexivity t = t <<= t
