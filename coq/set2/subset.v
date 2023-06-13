@@ -1,5 +1,6 @@
 Require Import Arith.
 Require Import Arith.Max.
+Import Nat.
 
 Require Import set.
 Require Import order.
@@ -143,7 +144,7 @@ Proof.
   intro n. elim n.
   (* n = 0 *)
   intros a b. intro H. cut(a = Empty). intro H'. rewrite H'. simpl. tauto.
-  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  apply order_sum_eq_0_l with (b:=b). apply le_0_r. exact H.
   (* n -> n+1 *)(* induction on a *)
   clear n. intros n IH. intro a. elim a.
   (* a = Empty *)
@@ -158,7 +159,7 @@ Proof.
   cut(subset_n (S (S n)) (Singleton x) (Singleton y) <-> 
      (subset_n (S n) x y)/\(subset_n (S n) y x)). 
   intro H'. rewrite H'. rewrite <- IH, <- IH. tauto.
-  apply order_sum_singleton. rewrite plus_comm. exact H.
+  apply order_sum_singleton. rewrite add_comm. exact H.
   apply order_sum_singleton. exact H.
   simpl. reflexivity.
   (* b = Union y z *)
@@ -200,8 +201,8 @@ Proof.
   (* n = 0 *)
   intros a b H. cut (a = Empty). cut (b = Empty). intros Hb Ha. rewrite Ha, Hb.
   unfold subset. simpl. tauto.
-  apply order_sum_eq_0_r with (a:=a). symmetry. apply le_n_0_eq. exact H.
-  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  apply order_sum_eq_0_r with (a:=a). apply le_0_r. exact H.
+  apply order_sum_eq_0_l with (b:=b). apply le_0_r. exact H.
   (* n -> n+1 *)
   clear n. intros n IH a b H.
   (* either order a + order b < S n or = S n *)
@@ -212,7 +213,7 @@ Proof.
   (* order a + order b = S n *)
   intro H1. unfold subset. rewrite H1. tauto.
   (* finally *)
-  apply le_lt_or_eq. exact H.
+  apply lt_eq_cases. exact H.
 Qed.
 
 (* 
@@ -258,8 +259,8 @@ Proposition subset_single_single : forall (x y:set),
 Proof.
   intros x y. unfold subset at 1. simpl. 
   rewrite <- subset_subset_n, <- subset_subset_n. tauto.
-  rewrite plus_comm. apply plus_le_compat_l. apply le_S. apply le_n.
-  apply plus_le_compat_l. apply le_S. apply le_n.
+  rewrite add_comm. apply add_le_mono_l. apply le_S. apply le_n.
+  apply add_le_mono_l. apply le_S. apply le_n.
 Qed.
 
 (*
@@ -273,9 +274,9 @@ Proof.
   intros x y z. unfold subset at 1. simpl.
   rewrite <- subset_subset_n, <- subset_subset_n. tauto. 
   simpl. rewrite <- plus_n_Sm. apply le_n_S. 
-  apply plus_le_compat_l. apply le_max_r.
+  apply add_le_mono_l. apply le_max_r.
   simpl. rewrite <- plus_n_Sm. apply le_n_S. 
-  apply plus_le_compat_l. apply le_max_l.
+  apply add_le_mono_l. apply le_max_l.
 Qed.
 
 (*
@@ -287,7 +288,7 @@ Proposition subset_union_all : forall (x y b:set),
 Proof.
   intros x y b. unfold subset at 1. simpl.
   rewrite <- subset_subset_n, <- subset_subset_n. tauto.
-  apply plus_le_compat_r. apply le_max_r. apply plus_le_compat_r. apply le_max_l.
+  apply add_le_mono_r. apply le_max_r. apply add_le_mono_r. apply le_max_l.
 Qed.
 
 (*
@@ -359,7 +360,7 @@ Proof.
   (* order a + order b <= 0 *) 
   intros a b H. cut (a = Empty). intro H'. rewrite H'.
   split. intros. apply subset_0_all. intros. apply H1.
-  apply order_sum_eq_0_l with (b:=b). symmetry. apply le_n_0_eq. exact H.
+  apply order_sum_eq_0_l with (b:=b). apply le_0_r. exact H.
   (* true for <= n -> true for <= n+1 *)
   (* induction on a *)  
   clear n. intros n IH a. elim a.
@@ -374,7 +375,7 @@ Proof.
   (* b = Singleton y *)
   clear b. intros y H' H''. unfold subset_prop_3 in H3. 
   rewrite H3, subset_single_single, IH, IH. tauto.
-  rewrite plus_comm. apply order_sum_singleton. exact H''.
+  rewrite add_comm. apply order_sum_singleton. exact H''.
   apply order_sum_singleton. exact H''.
   (* b = Union y z *)
   clear b. intros y Hy z Hz H'. unfold subset_prop_4 in H4.

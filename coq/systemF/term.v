@@ -1,5 +1,6 @@
 Require Import Arith.
 Require Import type.
+Import Nat.
 
 Inductive Var : Type :=
 | var : nat -> FType -> Var
@@ -16,7 +17,7 @@ Inductive Term : Type :=
 
 Definition varEqual (x x':Var) : bool :=
     match x, x' with
-    | (var x T), (var x' T') => andb (beq_nat x x') (FTypeEqual T T')
+    | (var x T), (var x' T') => andb (eqb x x') (FTypeEqual T T')
     end.
 
 

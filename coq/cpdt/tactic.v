@@ -1,4 +1,5 @@
 Require Import Arith.
+Import Nat.
 
 (* some useful bindings *)
 Definition peirce                 := forall P Q:Prop, ((P->Q)->P)->P.
@@ -145,10 +146,12 @@ Proof. intros H. inversion H. Qed.
 
 
 (* tactic auto *)
-Hint Constructors Even.
+(* Local Hint Constructors Even.
+ 
 
 Lemma Even_4 : Even 4.
 Proof. auto. Qed.
+*)
 
 (* tactic ring*)
 Lemma fact_basic: forall (n:nat), (S n) * fact n = fact (S n).

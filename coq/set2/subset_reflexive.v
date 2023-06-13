@@ -1,5 +1,6 @@
 Set Implicit Arguments.
 Require Import Arith.
+Import Nat.
 
 Require Import set.
 Require Import order.
@@ -15,7 +16,7 @@ Proof.
   intros H a. apply H with (n:= order a). apply le_n. intro n. elim n.
   (* order a <= 0 *)
   intros a H. cut (a = Empty). intro H'. rewrite H'. unfold subset. simpl.
-  reflexivity. apply order_eq_0. symmetry. apply le_n_0_eq. exact H.
+  reflexivity. apply order_eq_0. apply le_0_r. exact H.
   (* order a <= S n *)
   clear n. intros n IH a H. cut(order a < S n \/ order a = S n). intro H'. elim H'.
   (* order a < S n *)
@@ -27,7 +28,7 @@ Proof.
   apply IH. apply le_S_n. rewrite <- H''. apply order_elements.
   exact Hx.
   (* clean up *)
-  apply le_lt_or_eq. exact H.
+  apply lt_eq_cases. exact H.
 Qed.
 
 

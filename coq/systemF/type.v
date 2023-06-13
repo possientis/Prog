@@ -1,4 +1,5 @@
 Require Import Arith.
+Import Nat.
 
 Inductive TVar : Type :=
 | tvar : nat -> TVar
@@ -12,7 +13,7 @@ Inductive FType : Type :=
 
 Definition tvarEqual (X Y:TVar) : bool :=
     match X, Y with
-    | (tvar x), (tvar y)    => if (beq_nat x y) then true else false
+    | (tvar x), (tvar y)    => if (eqb x y) then true else false
     end.
 
 Fixpoint FTypeEqual (T T':FType) : bool :=

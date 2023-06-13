@@ -1,5 +1,6 @@
 Require Import List.
 Require Import Arith.
+Import Nat.
 
 
 CoInductive Stream (a:Type) : Type :=
@@ -321,7 +322,7 @@ Qed.
 
 Lemma fact_def : forall (x n:nat), fact_iter' x (fact n * S n) = fact_iter' x (fact (S n)).
 Proof.
-    intros x n. rewrite mult_comm. rewrite <- fact_basic. reflexivity.
+    intros x n. rewrite mul_comm. rewrite <- fact_basic. reflexivity.
 Qed.
 
 Lemma fact_eq' : forall (n:nat), stream_eq (fact_iter' (S n) (fact n)) (fact_slow' n).

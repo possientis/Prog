@@ -1,6 +1,7 @@
 Require Import List.
 Require Import Arith.Le.
 Require Import Arith.Lt.
+Import Nat.
 
 Require Import stream.
 

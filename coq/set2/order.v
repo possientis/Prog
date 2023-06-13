@@ -1,5 +1,6 @@
 Require Import Arith.
 Require Import Arith.Max.
+Import Nat.
 
 Require Import set.
 
@@ -37,14 +38,14 @@ Lemma order_sum_eq_0_l : forall (a b:set),
 Proof.
   intros a b H. apply order_eq_0. 
   apply and_ind with (A:= order a = 0)(B:= order b = 0). trivial.
-  apply plus_is_O. exact H.
+  apply eq_add_0. exact H.
 Qed.
 
 (* order(a) + order(b) = 0 =>  b = 0  *)
 Lemma order_sum_eq_0_r : forall (a b:set),
   order a + order b = 0 -> b = Empty.
 Proof.
-  intros a b H. rewrite plus_comm in H. apply order_sum_eq_0_l
+  intros a b H. rewrite add_comm in H. apply order_sum_eq_0_l
   with (b:=a). exact H.
 Qed.
 
@@ -62,8 +63,8 @@ Lemma order_sum_singleton_r : forall (n:nat) (a y:set),
   order a + order (Singleton y) <= S n ->
   order a + order y <= n.
 Proof. 
-  intros n a y H. rewrite plus_comm. apply order_sum_singleton_l.
-  rewrite plus_comm in H. exact H.
+  intros n a y H. rewrite add_comm. apply order_sum_singleton_l.
+  rewrite add_comm in H. exact H.
 Qed.
 
 
@@ -74,7 +75,7 @@ Lemma order_sum_singleton_strong : forall (n:nat) (x y:set),
 Proof.
   intros n x y H. unfold lt. apply le_S_n. apply le_trans with
   (m:= order (Singleton x) + order (Singleton y)). simpl.
-  rewrite <- plus_Snm_nSm. simpl. reflexivity. exact H.
+  rewrite <- add_succ_r. simpl. reflexivity. exact H.
 Qed.
 
 (* This is a weakening of the previous result *)
@@ -96,7 +97,7 @@ Lemma order_sum_union_Ll : forall (n:nat) (x y b:set),
 Proof.
   intros n x y b H. apply le_S_n. apply le_trans with
   (m:= order (Union x y) + order b). simpl. apply le_n_S.
-  apply plus_le_compat_r. simpl. apply le_max_l. exact H.
+  apply add_le_mono_r. simpl. apply le_max_l. exact H.
 Qed.
   
 (* same proof, but use le_max_r instead of le_max_l *)
@@ -106,7 +107,7 @@ Lemma order_sum_union_Lr : forall (n:nat) (x y b:set),
 Proof.
   intros n x y b H. apply le_S_n. apply le_trans with
   (m:= order (Union x y) + order b). simpl. apply le_n_S.
-  apply plus_le_compat_r. simpl. apply le_max_r. exact H.
+  apply add_le_mono_r. simpl. apply le_max_r. exact H.
 Qed.
 
 (* consequence of 'Ll' lemma and commutativity *)
@@ -114,8 +115,8 @@ Lemma order_sum_union_Rl : forall (n:nat) (a y z:set),
   order a + order (Union y z) <= S n ->
   order a + order y <= n.
 Proof.
-  intros n a y z H. rewrite plus_comm. apply order_sum_union_Ll
-  with(x:= y)(y:=z). rewrite plus_comm in H. exact H.
+  intros n a y z H. rewrite add_comm. apply order_sum_union_Ll
+  with(x:= y)(y:=z). rewrite add_comm in H. exact H.
 Qed.
 
 (* consequence of 'Lr' lemma and commutativity *)
@@ -123,8 +124,8 @@ Lemma order_sum_union_Rr : forall (n:nat) (a y z:set),
   order a + order (Union y z) <= S n ->
   order a + order z <= n.
 Proof.
-  intros n a y z H. rewrite plus_comm. apply order_sum_union_Lr
-  with(x:= y)(y:=z). rewrite plus_comm in H. exact H.
+  intros n a y z H. rewrite add_comm. apply order_sum_union_Lr
+  with(x:= y)(y:=z). rewrite add_comm in H. exact H.
 Qed.
 
 

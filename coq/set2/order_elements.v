@@ -1,6 +1,7 @@
 Require Import List.
 Require Import Arith.
 Require Import Arith.Max.
+Import Nat.
 
 Require Import set.
 Require Import order.

@@ -1,6 +1,7 @@
 Require Import Le.
 Require Import Nat.
 Require Import Compare_dec.
+Import Nat.
 
 Fixpoint blt_nat (n m:nat) : bool :=
     match n with

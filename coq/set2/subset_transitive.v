@@ -3,6 +3,7 @@ Set Implicit Arguments.
 Require Import Arith.
 Require Import Arith.Max.
 Require Import List.
+Import Nat.
 
 Require Import set.
 Require Import order.
@@ -31,7 +32,7 @@ Proof.
   apply  le_max_r. intro n. elim n.
   (* n = 0 *)
   intros a b c Ha Hb Hc Hab Hbc. clear Hb Hc Hab Hbc. cut (a = Empty). intro H. 
-  rewrite H. apply subset_0_all. apply order_eq_0. symmetry. apply le_n_0_eq.
+  rewrite H. apply subset_0_all. apply order_eq_0. apply le_0_r.
   exact Ha.
   (* n => n+1 *)
   clear n. intros n IH. intros a b c Ha Hb Hc Hab Hbc. apply subset_elements.
