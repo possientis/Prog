@@ -22,12 +22,12 @@ Record Category : Type := category
     .
 
 
-Arguments Hom {c} _ _.
-Arguments compose {c} {a} {b} {c0}.
-Arguments id {c} _.
-Arguments proof_idl {c} {a} {b} _.
-Arguments proof_idr {c} {a} {b} _.
-Arguments proof_assoc {c} {a} {b} {c0} {d} _ _ _.
+Arguments Hom {c} _ _                             : rename.
+Arguments compose {c} {a} {b} {c0}                : rename.
+Arguments id {c} _                                : rename.
+Arguments proof_idl {c} {a} {b} _                 : rename.
+Arguments proof_idr {c} {a} {b} _                 : rename.
+Arguments proof_assoc {c} {a} {b} {c0} {d} _ _ _  : rename.
 
 
 Notation "g @ f" := (apply (apply compose g) f) (at level 60, right associativity) :
