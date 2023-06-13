@@ -32,7 +32,7 @@ Definition tbinopDenote (t1 t2 t:type) (b:tbinop t1 t2 t)
         match b with 
         | TPlus    => plus
         | TTimes   => mult
-        | TEq Nat  => beq_nat
+        | TEq Nat  => Nat.eqb
         | TEq Bool => eqb 
         | TLt      => blt_nat
         end.

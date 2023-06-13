@@ -1,14 +1,14 @@
 Require Import List.
 Import ListNotations.
 
-Variable M:Set.
-Variable e:M.
-Variable f:M -> M -> M.
+Parameter M:Set.
+Parameter e:M.
+Parameter f:M -> M -> M.
 Infix "+" := f.
 
-Hypothesis assoc : forall a b c, (a + b) + c = a + (b + c).
-Hypothesis identl: forall a, e + a = a.
-Hypothesis identr: forall a, a + e = a.
+Parameter assoc : forall a b c, (a + b) + c = a + (b + c).
+Parameter identl: forall a, e + a = a.
+Parameter identr: forall a, a + e = a.
 
 (* This is about proof by reflection                                            *)
 (* We have some domain type 'M', and need to prove equalities between           *)

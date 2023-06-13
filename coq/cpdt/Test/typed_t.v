@@ -30,7 +30,7 @@ Proof. reflexivity. Qed.
 Lemma tbinopDenote_test2: tbinopDenote TTimes = mult.
 Proof. reflexivity. Qed.
 
-Lemma tbinopDenote_test3: tbinopDenote (TEq Nat) = beq_nat.
+Lemma tbinopDenote_test3: tbinopDenote (TEq Nat) = Nat.eqb.
 Proof. reflexivity. Qed.
 
 Lemma tbinopDenote_test4: tbinopDenote (TEq Bool) = eqb.

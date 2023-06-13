@@ -7,7 +7,7 @@ Definition Env := Var -> nat.
 Definition empty : Env := fun v => 0.
 
 Definition update (env:Env) (v:Var) (n:nat) : Env :=
-    fun (x:Var) => if beq_nat x v then n else env x.
+    fun (x:Var) => if Nat.eqb x v then n else env x.
 
 Inductive Exp : Set :=
 | EConst : nat -> Exp

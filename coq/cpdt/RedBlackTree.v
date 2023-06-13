@@ -4,6 +4,7 @@ Require Import Max.
 Require Import Plus.
 Require Import Mult.
 
+Import Nat.
 Require Import Utils.nat.
 
 Inductive Color : Set := Red | Black.
@@ -88,7 +89,7 @@ Theorem balanced : forall (c:Color) (n:nat) (t:RBTree c n),
 Proof.
     intros c n t. apply le_trans with (2 * n + 1).
     - apply depth_max.
-    - apply plus_le_compat_r, mult_le_compat_l, depth_min.
+    - apply add_le_mono_r, mul_le_mono_l, depth_min.
 Qed.
 
 

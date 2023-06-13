@@ -289,7 +289,7 @@ Proof.
     intros a t1. apply tree_nested_ind. intros x ts. destruct ts.
     - intros. simpl. apply plus_n_Sm.
     - intros [H1 H2]. simpl. rewrite H1. rewrite <- plus_n_Sm.
-      rewrite plus_assoc. reflexivity.
+      rewrite Nat.add_assoc. reflexivity.
 Qed.
 
 
