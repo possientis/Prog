@@ -6,5 +6,6 @@ cd ${DIR}
 
 mvn install
 mvn clean
+rm -rf simple-webapp/target
 
 echo '\ntest completed successfully\n'
