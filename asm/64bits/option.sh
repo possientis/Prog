@@ -6,9 +6,9 @@
 # In order for this script to work both on debian stretch and debian jessie,
 # we need to introduce a variable 'option' and set it to "-no-pie" for stretch
 
-version=$(uname -a | cut -d' ' -f 7 | cut -d '.' -f 1)
+version=$(uname -a | cut -d' ' -f 8 | cut -d '.' -f 1)
 
-if [ "$version" = "5" ]   # debian stretch 
+if [ "$version" = "6" ]   # debian stretch 
 then
   option="-no-pie"
 else
