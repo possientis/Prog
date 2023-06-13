@@ -2,6 +2,7 @@
 
 
 Require Import Le.
+Import Nat.
 
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Seq.

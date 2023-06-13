@@ -1,4 +1,5 @@
 Require Import Le.
+Import Nat.
 
 Require Import Logic.Class.Eq.
 Require Import Logic.Class.Ord.
@@ -31,5 +32,5 @@ Proof.
                     destruct (leqDec m n) as [H7|H7].
                     { assumption. }
                     { apply not_le_ge in H7. exfalso. apply H6.
-                      apply le_antisym; assumption. }}}
+                      apply le_antisymm; assumption. }}}
 Defined.

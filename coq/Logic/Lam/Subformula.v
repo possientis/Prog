@@ -1,5 +1,6 @@
 Require Import Le.
 Require Import List.
+Import Nat.
 
 Require Import Logic.Class.Eq.
 
@@ -41,9 +42,10 @@ Open Scope Lam_Subformula_scope.
 (* Being a 'sub-term of' is reflexive relation                                  *)
 Lemma Sub_refl : forall (v:Type) (t:T v), t <<= t.
 Proof.
-    intros v.
+    intros v t.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl; left; reflexivity.
 Qed.
+
 
 (* This lemma will allow us to get transitivity                                 *)
 Lemma Sub_incl : forall (v:Type) (t1 t2:T v),
@@ -145,7 +147,7 @@ Qed.
 Lemma Sub_fmap : forall (v w:Type) (f:v -> w) (t:T v),
     Sub (fmap f t) = map (fmap f) (Sub t).
 Proof.
-    intros v w f.
+    intros v w f t.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; simpl.
     - reflexivity.
     - rewrite IH1, IH2, map_app. reflexivity.
@@ -160,7 +162,7 @@ Qed.
 Lemma SubDecidable : forall (v:Type) (e:Eq v),
    forall (s t:T v), {s <<= t} + {~ s <<= t}.
 Proof.
-    intros v e s t. revert s. revert t. 
+    intros v e s t. revert s.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1].
     - destruct s as [y|s1 s2|y s1].
         + destruct (eqDec x y) as [E|E].
@@ -196,7 +198,7 @@ Qed.
 
 Lemma Sub_var : forall (v:Type) (s t:T v), s <<= t -> var s <= var t.
 Proof.
-    intros v s t. revert t s. 
+    intros v s t. revert t s. intros t.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros s [H|H].
     - subst. apply incl_refl.
     - inversion H.
@@ -214,7 +216,7 @@ Qed.
 
 Lemma Sub_bnd : forall (v:Type) (s t:T v), s <<= t -> bnd s <= bnd t.
 Proof.
-    intros v s t. revert t s. 
+    intros v s t. revert t s. intros t.
     induction t as [x|t1 IH1 t2 IH2|x t1 IH1]; intros s [H|H].
     - subst. apply incl_refl.
     - inversion H.
@@ -229,3 +231,4 @@ Proof.
     - subst. apply incl_refl.
     - apply incl_tl, IH1. assumption. 
 Qed.
+

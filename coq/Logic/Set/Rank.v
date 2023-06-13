@@ -3,6 +3,7 @@
 
 Require Import Le.
 Require Import List.
+Import Nat.
 
 Require Import Logic.Class.Eq.
 
@@ -92,7 +93,7 @@ Proof.
       rewrite H1 in H2. apply equalSym in H2. apply emptyIsNil in H2.
       rewrite H1, H2. reflexivity.
     - intros x y H E. apply doubleIncl in E. destruct E as [E1 E2].
-      apply le_antisym.
+      apply le_antisymm.
         + destruct (equal_dec x Nil) as [H1|H1].
             { apply emptyIsNil in H1. rewrite H1 in E1. rewrite H1 in E2.
               assert (y == Nil) as E. { apply doubleIncl. split; assumption. }

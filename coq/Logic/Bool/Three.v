@@ -20,7 +20,7 @@ Proof.
     - left. reflexivity.
 Qed.
 
-Instance EqThree : Eq Three := { eqDec := three_eq_dec }.
+Global Instance EqThree : Eq Three := { eqDec := three_eq_dec }.
 
 Lemma onlyThreeElements : forall (a b c d:Three),
     a <> b -> a <> c -> a <> d -> b <> c -> b <> d -> c <> d -> False.

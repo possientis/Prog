@@ -3,6 +3,7 @@
 Require Import Le.
 Require Import List.
 Require Import Plus.
+Import Nat.
 
 Require Import Logic.Nat.Max.
 
@@ -34,14 +35,14 @@ Proof.
         + split.
             { apply incl_n_incl with (max (order x) 0 + order xs).
                 { apply le_trans with (order x + order xs).
-                    { apply plus_le_compat_l. apply orderToList. assumption. }
-                    { apply plus_le_compat_r. apply n_le_max. }}
+                    { apply add_le_mono_l. apply orderToList. assumption. }
+                    { apply add_le_mono_r. apply n_le_max. }}
                 { assumption. }}
             { apply incl_n_incl with (max (order x) 0 + order xs).
-                { rewrite plus_comm.
+                { rewrite add_comm.
                   apply le_trans with (order x + order xs).
-                    { apply plus_le_compat_l. apply orderToList. assumption. }
-                    { apply plus_le_compat_r. apply n_le_max. }}
+                    { apply add_le_mono_l. apply orderToList. assumption. }
+                    { apply add_le_mono_r. apply n_le_max. }}
                 { assumption. }}
     - intros [y [H1 [H2 H3]]]. unfold elem. 
       apply incl_n_incl with (order {x} + order xs).
@@ -53,16 +54,16 @@ Proof.
                 { split.
                     { apply incl_incl_n.
                         { apply le_trans with (order x + order xs).
-                            { apply plus_le_compat_l. 
+                            { apply add_le_mono_l. 
                               apply orderToList. assumption. }
-                            { apply plus_le_compat_r. apply n_le_max. }}
+                            { apply add_le_mono_r. apply n_le_max. }}
                         { assumption. }} 
                     { apply incl_incl_n. 
-                        { rewrite plus_comm.
+                        { rewrite add_comm.
                           apply le_trans with (order x + order xs).
-                            { apply plus_le_compat_l. 
+                            { apply add_le_mono_l. 
                               apply orderToList. assumption. }
-                            { apply plus_le_compat_r. apply n_le_max. }}
+                            { apply add_le_mono_r. apply n_le_max. }}
                         { assumption. }}}}
 Qed.
 
@@ -87,27 +88,27 @@ Proof.
                     { apply incl_n_incl 
                       with (max (order z) (order xs) + (order ys)).
                         { apply le_trans with (order z + order ys).
-                            { apply plus_le_compat_l. apply orderToList.
+                            { apply add_le_mono_l. apply orderToList.
                               assumption. }
-                            { apply plus_le_compat_r. apply n_le_max. }}
+                            { apply add_le_mono_r. apply n_le_max. }}
                         { assumption. }}
                     { apply incl_n_incl 
                       with (max (order z) (order xs) + (order ys)).
-                        { rewrite plus_comm.
+                        { rewrite add_comm.
                             apply le_trans with (order z + order ys).
-                                { apply plus_le_compat_l. apply orderToList.
+                                { apply add_le_mono_l. apply orderToList.
                                   assumption. }
-                                { apply plus_le_compat_r. apply n_le_max. }}   
+                                { apply add_le_mono_r. apply n_le_max. }}   
                         { assumption. }}}}
             { apply IH.
                 { apply incl_n_incl 
                   with (max (order x) (order xs) + (order ys)).
-                    { apply plus_le_compat_r. apply m_le_max. }
+                    { apply add_le_mono_r. apply m_le_max. }
                     { assumption. }}
                 { assumption. }}
         + intros H. unfold incl. simpl. split.
             { apply incl_incl_n.
-                { apply plus_le_compat_r. apply m_le_max. }
+                { apply add_le_mono_r. apply m_le_max. }
                 { apply IH. intros z H'. apply H. right. assumption. }}
             { assert (x :: ys) as H'.
                 { apply H. left. reflexivity. }
@@ -117,15 +118,15 @@ Proof.
                     { split.
                         { apply incl_incl_n.
                             { apply le_trans with (order x + order ys).
-                                { apply plus_le_compat_l. apply orderToList.
+                                { apply add_le_mono_l. apply orderToList.
                                   assumption. }
-                                { apply plus_le_compat_r. apply n_le_max. }}   
+                                { apply add_le_mono_r. apply n_le_max. }}   
                             { assumption . }}
                         { apply incl_incl_n.
-                            { rewrite plus_comm.
+                            { rewrite add_comm.
                               apply le_trans with (order x + order ys).
-                                { apply plus_le_compat_l. apply orderToList.
+                                { apply add_le_mono_l. apply orderToList.
                                   assumption. }
-                                { apply plus_le_compat_r. apply n_le_max. }}
+                                { apply add_le_mono_r. apply n_le_max. }}
                             { assumption. }}}}}    
 Qed.

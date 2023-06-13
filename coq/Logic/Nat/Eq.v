@@ -10,6 +10,6 @@ Proof.
 Defined.
 
 (* TODO: issue already has an Eq instance from Ord                              *)
-Instance EqNat : Eq nat := { eqDec := eq_nat_dec }.
+Global Instance EqNat : Eq nat := { eqDec := eq_nat_dec }.
 
 

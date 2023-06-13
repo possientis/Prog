@@ -10,7 +10,7 @@ Proof.
     - left. reflexivity.
 Defined.
 
-Instance EqBool : Eq bool := { eqDec := bool_eq_dec }.
+Global Instance EqBool : Eq bool := { eqDec := bool_eq_dec }.
 
 Lemma onlyTwoElements : forall (a b c:bool),
     a <> b -> a <> c -> b <> c -> False.

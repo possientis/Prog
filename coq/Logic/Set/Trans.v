@@ -2,6 +2,7 @@
 
 Require Import Le.
 Require Import Plus.
+Import Nat.
 
 Require Import Logic.Nat.Max.
 Require Import Logic.Nat.Weaken.
@@ -39,7 +40,7 @@ Proof.
                 { apply incl_le_m_n with (S n).
                     { apply weaken_l with (max (order x) (order xs) + order ys).
                         { assumption. }
-                        { apply le_plus_r. }}
+                        { apply le_add_l. }}
                     { apply le_S, le_n. }
                     { assumption. }}}
             { apply incl_n_incl in H3. 
@@ -64,20 +65,20 @@ Proof.
                                 { assumption. }}
                             { apply le_trans with
                               (max (order x) (order xs) + order ys + order zs).
-                                { rewrite <- plus_assoc.
+                                { rewrite <- add_assoc.
                                   apply le_trans with (order ys + order zs).
                                     { apply le_trans with (order ys + order z).
-                                        { apply plus_le_compat_r.
+                                        { apply add_le_mono_r.
                                           apply orderToList. assumption. }
-                                        { apply plus_le_compat_l.
+                                        { apply add_le_mono_l.
                                           apply orderToList. assumption. }}
-                                    { apply le_plus_r. }}
+                                    { apply le_add_l. }}
                                 { assumption. }}}
                         { apply (incl_incl_n z y n) in H9.
                             { apply IH with y.
                                 { remember (order z + order y) as e eqn:E.
-                                  rewrite plus_comm. rewrite plus_comm in E.
-                                  rewrite E. rewrite plus_assoc.
+                                  rewrite add_comm. rewrite add_comm in E.
+                                  rewrite E. rewrite add_assoc.
                                   apply weaken_r with (order zs).  
                                     { apply weaken3_m with (order ys).
                                         { apply weaken3_l
@@ -88,21 +89,21 @@ Proof.
                                     { apply orderToList. assumption. }}
                                 { assumption. }
                                 { assumption. }}
-                            { rewrite plus_comm.
+                            { rewrite add_comm.
                               apply le_trans with
                               (max (order x) (order xs) + order ys + order zs).
-                                { rewrite <- plus_assoc.
+                                { rewrite <- add_assoc.
                                   apply le_trans with (order ys + order zs).
                                     { apply le_trans with (order ys + order z).
-                                        { apply plus_le_compat_r.
+                                        { apply add_le_mono_r.
                                           apply orderToList. assumption. }
-                                        { apply plus_le_compat_l.
+                                        { apply add_le_mono_l.
                                           apply orderToList. assumption. }}
-                                    { apply le_plus_r. }}
+                                    { apply le_add_l. }}
                                 { assumption. }}}}}
                 { apply le_S. apply le_trans
                   with (max (order x) (order xs) + order ys + order zs).
-                      { rewrite <- plus_assoc. apply le_plus_r. }
+                      { rewrite <- add_assoc. apply le_add_l. }
                       { assumption. }}}
 Qed.
 
@@ -114,15 +115,15 @@ Proof.
     intros x y z H1 H2.
     remember (order x + order y + order z) as n eqn:E.
     apply incl_n_incl with n.
-    - rewrite <- plus_assoc in E. rewrite E.
-      apply plus_le_compat_l. apply le_plus_r.  
+    - rewrite <- add_assoc in E. rewrite E.
+      apply add_le_mono_l. apply le_add_l.  
     - apply incl_n_trans with y.
         + rewrite E. apply le_n. 
         + apply incl_incl_n.
-            { rewrite E. apply le_plus_l. }
+            { rewrite E. apply le_add_r. }
             { assumption. }
         + apply incl_incl_n.
-            { rewrite <- plus_assoc in E. rewrite E.
-              apply le_plus_r. }
+            { rewrite <- add_assoc in E. rewrite E.
+              apply le_add_l. }
             { assumption. }
 Qed.

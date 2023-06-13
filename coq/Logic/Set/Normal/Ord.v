@@ -4,7 +4,7 @@ Require Import Logic.Class.Ord.
 
 Require Import Logic.Set.Normal.Leq.
 
-Instance ordSet : Ord set :=
+Global Instance ordSet : Ord set :=
     { leq      := leq
     ; leqDec   := leqDec
     ; leqRefl  := leqRefl

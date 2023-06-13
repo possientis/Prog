@@ -41,4 +41,4 @@ Defined.
 
 Arguments eqDecidable {v} {e}.
 
-Instance EqP (v:Type) (e:Eq v) : Eq (P v) := { eqDec := eqDecidable }.
+Global Instance EqP (v:Type) (e:Eq v) : Eq (P v) := { eqDec := eqDecidable }.

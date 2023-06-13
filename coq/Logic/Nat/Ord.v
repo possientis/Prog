@@ -1,8 +1,11 @@
 Require Import Le.
+Import Nat.
 
 Require Import Logic.Class.Ord.
 
 Require Import Logic.Nat.Leq.
+
+
 
 Lemma leqDec : forall (n m:nat), { n <= m } + { ~ n <= m}.
 Proof.
@@ -26,11 +29,11 @@ Proof.
             { right. apply le_n_S. assumption. }
 Defined.
 
-Instance OrdNat : Ord nat :=
+Global Instance OrdNat : Ord nat :=
     { leq       := le
     ; leqDec    := leqDec
     ; leqRefl   := le_refl
     ; leqTrans  := le_trans
-    ; leqAsym   := le_antisym
+    ; leqAsym   := le_antisymm
     ; leqTotal  := leqTotal
     }. 

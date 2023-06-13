@@ -1,6 +1,7 @@
 Require Import Le.
 Require Import Nat.
 Require Import List.
+Import Nat.
 
 Require        Logic.List.Normal.
 

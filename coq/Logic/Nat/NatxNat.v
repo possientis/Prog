@@ -1,6 +1,7 @@
 Require Import Coq.Arith.Le.
 Require Import Coq.Arith.Plus.
 Require Import Coq.Arith.Mult.
+Import Nat.
 
 Require Import Logic.Class.Ord.
 Require Import Logic.Axiom.Dec.
@@ -117,7 +118,7 @@ Proof.
     - destruct IH as [k H1]. exists (S k). unfold Elem, A1. simpl.
       rewrite <- plus_n_Sm. apply le_n_S. 
       apply le_trans with (f1 k); try assumption.
-      apply le_plus_l.
+      apply le_add_r.
 Defined.
 
 (* Returns the smallest k such that n <= f1 k                                   *)
@@ -222,8 +223,8 @@ Lemma checkf5 : forall (n:nat), 2 * f5 n = n * S n.
 Proof.
     induction n as [|n IH].
     - reflexivity.
-    - rewrite f5_S. rewrite mult_plus_distr_l, IH, <- mult_plus_distr_r.
-      rewrite mult_comm. assert (n + 2 = S (S n)) as H1.
+    - rewrite f5_S. rewrite mul_add_distr_l, IH, <- mul_add_distr_r.
+      rewrite mul_comm. assert (n + 2 = S (S n)) as H1.
         { rewrite <- plus_n_Sm, <- plus_n_Sm, <- plus_n_O. reflexivity. }
       rewrite H1. reflexivity.
 Qed.

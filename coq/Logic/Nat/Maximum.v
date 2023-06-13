@@ -1,5 +1,6 @@
 Require Import Le.
 Require Import List.
+Import Nat.
 
 Require Import Logic.Nat.Max.
 
@@ -13,7 +14,7 @@ Lemma maximum_lub : forall (ns:list nat) (N:nat),
     (forall (n:nat), In n ns -> n <= N) -> maximum ns <= N.
 Proof.
     intros ns N. induction ns as [|n ns IH].
-    - intros _. apply le_0_n.
+    - intros _. apply le_0_l.
     - intros H. simpl. apply max_lub.
         + apply H. left. reflexivity.
         + apply IH. intros m Hm. apply H. right. assumption.

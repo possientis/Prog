@@ -2,6 +2,7 @@
 
 Require Import Le.
 Require Import Plus.
+Import Nat.
 
 Require Import Logic.Set.Set.
 Require Import Logic.Set.Core.
@@ -71,5 +72,5 @@ Lemma inclRefl : forall (x:set), x <= x.
 Proof.
     intros x. apply incl_n_incl with (order x + order x).
     - apply le_n.
-    - apply incl_n_refl. apply le_plus_l.
+    - apply incl_n_refl. apply le_add_r.
 Qed.

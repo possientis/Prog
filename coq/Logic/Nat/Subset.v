@@ -1,4 +1,5 @@
 Require Import Le.
+Import Nat.
 
 Require Import Logic.Axiom.Wec.
 Require Import Logic.Axiom.Dec.
@@ -88,7 +89,7 @@ Proof.
           try assumption. exists k. destruct H5 as [H5 H6]. assumption.
         + exists m. split; try assumption. intros k H4.
           assert (k = S n) as H5. 
-            { apply le_antisym.
+            { apply le_antisymm.
                 { apply H1. assumption. }
                 { destruct (leqDec k n) as [H5|H5].
                     { exfalso. apply H3. exists k. split; assumption. }

@@ -2,6 +2,7 @@
 
 Require Import Le.
 Require Import List.
+Import Nat.
 
 Require Import Logic.Nat.Max.
 

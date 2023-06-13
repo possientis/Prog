@@ -26,5 +26,5 @@ Defined.
 Arguments eqDec {a} {o}.
 
 (* An instance of the Ord class can be made an instance of the Eq class         *)
-Instance eqOrd (a:Type) (o:Ord a) : Eq a := { eqDec := eqDec }.
+Global Instance eqOrd (a:Type) (o:Ord a) : Eq a := { eqDec := eqDec }.
 

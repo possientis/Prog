@@ -1,5 +1,6 @@
 Require Import Le.
 Require Import List.
+Import Nat.
 
 Require Import Logic.Class.Eq.
 

@@ -1,6 +1,7 @@
 Require Import Le.
 Require Import List.
 Require Import Compare_dec.
+Import Nat.
 
 Require Import Logic.List.In.
 

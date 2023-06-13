@@ -4,6 +4,7 @@ Require Import Le.
 Require Import List.
 Require Import Plus.
 Require Import Compare_dec.
+Import Nat.
 
 Require Import Logic.Nat.Max.
 Require Import Logic.Nat.Leq.
@@ -90,7 +91,7 @@ Proof.
                             { assumption. }
                         }
                         { apply IH.
-                            { rewrite plus_comm. rewrite E in H.
+                            { rewrite add_comm. rewrite E in H.
                               apply weaken_l' with (order (Cons x xs)).
                                 { apply weaken_r with (order ys).
                                     { assumption. }
@@ -128,7 +129,7 @@ Proof.
                             { assumption. }
                         }
                         { apply IH.
-                            { rewrite plus_comm. rewrite E in H.
+                            { rewrite add_comm. rewrite E in H.
                               apply weaken_l' with (order (Cons x xs)).
                                 { apply weaken_r with (order ys).
                                     { assumption. }
