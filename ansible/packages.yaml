@@ -262,6 +262,10 @@
     ansible.builtin.apt:
       name: cmake
 
+  - name: Build - Install ansible
+    ansible.builtin.apt:
+      name: ansible
+
   # Package Manager
 
   - name: Package Manager - Install pkg-config
