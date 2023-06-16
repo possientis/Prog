@@ -1,0 +1,15 @@
+[arm]
+berry 
+
+[arm:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[x86]
+router
+debian12
+hp
+
+[x86:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+
