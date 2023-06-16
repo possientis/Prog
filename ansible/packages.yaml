@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: x86
   become: true
   tasks:
 
@@ -23,9 +23,13 @@
     ansible.builtin.apt:
       name: ncdu
 
-  - name: General - Install htop        # 'htop' to monitor cpu usage
+  - name: General - Install htop
     ansible.builtin.apt:
       name: htop
+
+  - name: General - Install btop      
+    ansible.builtin.apt:
+      name: btop
 
   - name: General - Install lshw        # 'sudo lshw' to monitor hardware
     ansible.builtin.apt:
@@ -50,6 +54,14 @@
   - name: General - Install curl
     ansible.builtin.apt:
       name: curl
+
+  - name: General - Install tldr
+    ansible.builtin.apt:
+      name: tldr
+
+  - name: General - Install neofetch
+    ansible.builtin.apt:
+      name: neofetch
 
   # Network
 
