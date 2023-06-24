@@ -1,5 +1,6 @@
 ---
 - hosts: x86
+  remote_user: ansible
   become: true
   tasks:
 
