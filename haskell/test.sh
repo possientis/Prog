@@ -5,15 +5,19 @@ set -e
 DIR=${HOME}/Prog/haskell
 cd ${DIR}
 
-./song/test.sh
-./json/test.sh
-./Logic/test.sh
-./logic2/test.sh
-./types/test.sh
-./lisp/test.sh
-./Optics/test.sh
-./adi/test.sh
-./adh/test.sh
-./Set/test.sh
+make -j$(nproc --all)
+
+cat song.tmp
+cat json.tmp
+cat Logic.tmp
+cat logic2.tmp
+cat types.tmp
+cat lisp.tmp
+cat Optics.tmp
+cat adi.tmp
+cat adh.tmp
+cat Set.tmp
+
+./clean.sh
 
 echo '\nAll haskell tests completed successfully\n'
