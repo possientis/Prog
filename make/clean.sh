@@ -9,3 +9,7 @@ cd ${DIR}
 ./saturn/clean.sh
 ./test/clean.sh
 
+rm -f guile.tmp
+rm -f jupiter.tmp
+rm -f saturn.tmp
+rm -f mars.tmp

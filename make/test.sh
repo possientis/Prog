@@ -5,9 +5,11 @@ set -e
 DIR=${HOME}/Prog/make
 cd ${DIR}
 
-./guile/test.sh
-./jupiter/test.sh
-./saturn/test.sh
-./mars/test.sh
+make -j$(nproc --all)
+cat guile.tmp
+cat jupiter.tmp
+cat saturn.tmp
+cat mars.tmp
+./clean.sh
 
 echo '\nAll make tests completed successfully\n'
