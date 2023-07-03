@@ -7,17 +7,7 @@ rm -f *.hi
 rm -f *.o
 rm -f test
 rm -f a.out
-
-rm -f song.tmp
-rm -f json.tmp
-rm -f Logic.tmp
-rm -f logic2.tmp
-rm -f types.tmp
-rm -f lisp.tmp
-rm -f Optics.tmp
-rm -f adi.tmp
-rm -f adh.tmp
-rm -f Set.tmp
+rm -f *.tmp
 
 
 

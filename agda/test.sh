@@ -18,6 +18,7 @@ echo
 #echo
 
 make -j$(nproc --all)
+cat *.tmp
 ./clean.sh
 
 echo

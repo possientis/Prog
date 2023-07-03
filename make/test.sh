@@ -6,10 +6,7 @@ DIR=${HOME}/Prog/make
 cd ${DIR}
 
 make -j$(nproc --all)
-cat guile.tmp
-cat jupiter.tmp
-cat saturn.tmp
-cat mars.tmp
+cat *.tmp
 ./clean.sh
 
 echo '\nAll make tests completed successfully\n'
