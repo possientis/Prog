@@ -17,9 +17,8 @@ echo
 #echo "hello world test completed successfully"
 #echo
 
-./aop/test.sh
-./vfpa/test.sh
-./plfa/test.sh
+make -j$(nproc --all)
+./clean.sh
 
 echo
 echo 'All agda tests completed successfully'

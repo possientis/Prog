@@ -6,6 +6,7 @@ cd ${DIR}
 rm -f *.agdai
 rm -f *.agda~
 rm -f *.agda#
+rm -f *.tmp
 rm -f hello-world
 rm -rf MAlonzo
 

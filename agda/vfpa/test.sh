@@ -8,8 +8,7 @@ cd ${HOME1}
 echo
 echo "testing vfpa..."
 
-make
-
+make -j$(nproc --all)
 ./clean.sh
 
 cd ${DIR}

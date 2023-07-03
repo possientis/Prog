@@ -6,7 +6,7 @@ cd ${DIR}
 echo
 echo "testing plfa..."
 
-make
+make -j$(nproc --all)
 ./clean.sh
 
 echo
