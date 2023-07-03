@@ -150,7 +150,7 @@ disjoint.vo : disjoint.v list.vo In.vo
 test_disjoint.vo : test_disjoint.v list.vo In.vo disjoint.vo
 	coqc test_disjoint.v
 
-fold.vo : fold.v bool.vo nat.vo list.vo
+fold.vo : fold.v bool.vo nat.vo list.vo fmap.vo
 	coqc fold.v
 
 const.vo : const.v higher_order.vo
@@ -220,7 +220,7 @@ logic.vo : logic.v not.vo
 inductive_prop.vo : inductive_prop.v induction.vo nat.vo bool.vo not.vo
 	coqc inductive_prop.v
 
-test_inductive_prop.vo : test_inductive_prop.v nat.vo bool.vo induction.vo
+test_inductive_prop.vo : test_inductive_prop.v nat.vo bool.vo induction.vo inductive_prop.vo
 	coqc test_inductive_prop.v
 
 le.vo : le.v inductive_prop.vo induction.vo nat.vo bool.vo
@@ -238,7 +238,7 @@ palindrome.vo : palindrome.v list.vo nat.vo le.vo
 merge.vo : merge.v list.vo bool.vo In.vo higher_order.vo
 	coqc merge.v
 
-dictionary.vo : dictionary.v nat.vo bool.vo
+dictionary.vo : dictionary.v nat.vo bool.vo option.vo reflection.vo
 	coqc dictionary.v
 
 test_dictionary.vo : test_dictionary.v dictionary.vo bool.vo nat.vo
@@ -300,7 +300,7 @@ test_execute.vo : test_execute.v nat.vo list.vo dictionary.vo state.vo \
 test_compile.vo : test_compile.v nat.vo list.vo syntax.vo state.vo compile.vo
 	coqc test_compile.v
 
-equiv.vo : equiv.v bool.vo nat.vo syntax.vo eval.vo dictionary.vo state.vo
+equiv.vo : equiv.v bool.vo nat.vo syntax.vo eval.vo dictionary.vo state.vo test_eval.vo Imp_code.vo
 	coqc equiv.v
 
 test_equiv.vo : test_equiv.v bool.vo nat.vo dictionary.vo state.vo syntax.vo \
@@ -314,7 +314,7 @@ fold_constants.vo : fold_constants.v bool.vo nat.vo syntax.vo eval.vo state.vo \
 	dictionary.vo equiv.vo transform.vo
 	coqc fold_constants.v
 
-test_fold_constants.vo : test_fold_constants.v transform.vo nat.vo syntax.vo state.vo
+test_fold_constants.vo : test_fold_constants.v nat.vo syntax.vo state.vo fold_constants.vo
 	coqc test_fold_constants.v
 
 fold_constants_sound.vo : fold_constants_sound.v bool.vo nat.vo syntax.vo \

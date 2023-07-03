@@ -99,10 +99,11 @@ adpair.vo:		adpair.v \
 alpha.vo : 		alpha.v \
 				eq.vo identity.vo composition.vo injective.vo \
 				map.vo incl.vo term.vo var.vo inj_on_list.vo \
-				remove.vo free.vo vmap.vo
+				remove.vo free.vo vmap.vo utils.vo var.vo permute.vo \
+				inj_on_term.vo adpair.vo
 	coqc alpha.v
 
-alpha2.vo :	alpha2.v eq.vo term.vo vequal.vo
+alpha2.vo :	alpha2.v eq.vo term.vo vequal.vo alpha.vo index.vo
 	coqc alpha2.v
 
 

@@ -65,13 +65,13 @@ Axiom_PropEqual.vo : Axiom_PropEqual.v
 Axiom_Skolem.vo : Axiom_Skolem.v
 	coqc Axiom_Skolem.v
 
-Eq.vo : Eq.v
+Eq.vo : Eq.v Axiom_ProofIrrelevance.vo Axiom_Extensionality.vo Axiom_PropEqual.vo
 	coqc Eq.v
 
 EqProd.vo : EqProd.v Eq.vo
 	coqc EqProd.v
 
-Cast.vo : Cast.v
+Cast.vo : Cast.v Axiom_ProofIrrelevance.vo
 	coqc Cast.v
 
 JMEq.vo : JMEq.v Cast.vo
@@ -297,7 +297,7 @@ Func.vo :					Func.v \
 Func_Skolem.vo :			Func_Skolem.v \
 							Axiom_Extensionality.vo \
 							Axiom_Skolem.vo \
-							Axiom_ProofIrrelevance.vo
+							Func.vo
 	coqc Func_Skolem.v
 
 
@@ -314,10 +314,11 @@ Setoids.vo :				Setoids.v Eq.vo
 EqSetoids.vo :				EqSetoids.v Cast.vo Eq.vo Setoids.vo
 	coqc EqSetoids.v
 
-Functor.vo :				Functor.v Setoids.vo Category7.vo
+Functor.vo :				Functor.v Setoids.vo Category7.vo Eq_Category7.vo
 	coqc Functor.v
 
-Opposit.vo :				Opposit.v Setoids.vo Category7.vo
+Opposit.vo :				Opposit.v Setoids.vo Category7.vo Axiom_ProofIrrelevance.vo \
+	Eq_Category7.vo Cast.vo Eq.vo
 	coqc Opposit.v
 
 

@@ -29,7 +29,7 @@ lem.vo: lem.v Axiom_LEM.vo logic.vo
 set.vo: set.v
 	coqc set.v
 
-Axiom_Skolem.vo: Axiom_Skolem.v
+Axiom_Skolem.vo: Axiom_Skolem.v set.vo
 	coqc Axiom_Skolem.v
 
 belong.vo:	belong.v set.vo
@@ -50,7 +50,7 @@ subset.vo: subset.v belong.vo set.vo
 Axiom_Extensionality.vo: Axiom_Extensionality.v set.vo subset.vo
 	coqc Axiom_Extensionality.v
 
-Axiom_Power_Set.vo: Axiom_Power_Set.v set.vo belong.vo set.vo
+Axiom_Power_Set.vo: Axiom_Power_Set.v set.vo belong.vo subset.vo
 	coqc Axiom_Power_Set.v
 
 empty.vo: empty.v set.vo belong.vo subset.vo Axiom_Extensionality.vo \

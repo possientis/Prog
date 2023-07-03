@@ -6,6 +6,7 @@ cd ${DIR}
 echo
 echo "testing lambda calculus..."
 
-make; ./clean.sh
+make -j$(nproc --all)
+./clean.sh
 
 echo '\ntest completed successfully\n'

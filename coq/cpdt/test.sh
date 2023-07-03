@@ -8,7 +8,7 @@ echo "testing cpdt..."
 
 ghc Main.hs
 ./Main
-make 
+make -j$(nproc --all)
 ./clean.sh
 
 echo '\ntest completed successfully\n'

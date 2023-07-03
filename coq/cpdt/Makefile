@@ -1,4 +1,4 @@
-all:	Utils/nat.vo \
+all: Utils/nat.vo \
 		extensionality.vo \
 		irrelevance.vo \
 		untyped.vo \
@@ -32,7 +32,7 @@ all:	Utils/nat.vo \
 		Test/untyped_t.vo \
 		Test/typed_t.vo \
 		Test/option_t.vo
-	
+
 Utils/nat.vo : Utils/nat.v
 	coqc Utils/nat.v -R Utils Utils
 
@@ -45,7 +45,7 @@ irrelevance.vo : irrelevance.v
 untyped.vo : untyped.v
 	coqc untyped.v
 
-typed.vo : typed.v
+typed.vo : typed.v Utils/nat.vo
 	coqc typed.v -R Utils Utils
 
 chapt3.vo : chapt3.v

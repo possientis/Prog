@@ -8,7 +8,7 @@ echo
 echo "testing Logic Coq formalization..."
 echo
 
-make -j2
+make -j$(nproc --all)
 ./clean.sh
 
 echo
