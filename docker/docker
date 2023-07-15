@@ -1,0 +1,16 @@
+sudo apt install docker.io
+systemctl status docker
+sudo systemctl enable --now docker
+sudo usermod -aG docker <user>
+docker search <name>
+docker pull <image>
+docker images
+docker rmi <image id>
+docker run -it <image> <executable>
+docker run -dit <image> <executable>  # run a daemon
+docker run -dit -p hport:cport <image> <executable>  # with host -> container port fwd
+docker start <id>
+docker stop <id>
+docker attach <id>
+docker commit <id> <image name>
+
