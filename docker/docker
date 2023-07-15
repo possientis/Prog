@@ -12,5 +12,6 @@ docker run -dit -p hport:cport <image> <executable>  # with host -> container po
 docker start <id>
 docker stop <id>
 docker attach <id>
+Ctrl+p+q            # detach 
 docker commit <id> <image name>
 
