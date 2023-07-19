@@ -25,6 +25,7 @@ tmp/
 local.properties
 .settings/
 .loadpath
+test.log
 
 # External tool builders
 .externalToolBuilders/
