@@ -111,11 +111,10 @@ comp.vo : comp.v
 vec.vo : vec.v
 	coqc vec.v
 
-type.vo : type.v
+type.vo : type.v Utils/nat.vo
 	coqc type.v -R Utils Utils
 
-RedBlackTree.vo : 	RedBlackTree.v \
-   					Utils/nat.vo	
+RedBlackTree.vo : 	RedBlackTree.v Utils/nat.vo	
 	coqc RedBlackTree.v -R Utils Utils
 
 regex.vo : regex.v
@@ -130,7 +129,7 @@ Ltac/monoid.vo : Ltac/monoid.v
 Test/untyped_t.vo : Test/untyped_t.v untyped.vo
 	coqc Test/untyped_t.v 
 
-Test/typed_t.vo : Test/typed_t.v typed.vo
+Test/typed_t.vo : Test/typed_t.v typed.vo Utils/nat.vo
 	coqc Test/typed_t.v -R Utils Utils
 
 Test/option_t.vo : Test/option_t.v option.vo
