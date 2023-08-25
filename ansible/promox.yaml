@@ -10,10 +10,6 @@
     ansible.builtin.apt:
       name: libcanberra-gtk-module
 
-  - name: Setup - Install ufw
-    ansible.builtin.apt:
-      name: ufw
-
   # General utilities
 
   - name: General - Install lm-sensors  # 'sensors' to monitor internal temperature
@@ -65,14 +61,6 @@
       name: neofetch
 
   # Network
-
-  - name: Network - Install tor
-    ansible.builtin.apt:
-      name: tor
-
-  - name: Network - Install apt-transport-tor
-    ansible.builtin.apt:
-      name: apt-transport-tor
 
   - name: Network - Install bmon        # 'bmon' to monitor network
     ansible.builtin.apt:
@@ -598,5 +586,3 @@
   - name: Assembly - Install g++-multilib
     ansible.builtin.apt:
       name: g++-multilib
-
-
