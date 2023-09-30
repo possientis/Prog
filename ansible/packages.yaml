@@ -64,6 +64,10 @@
     ansible.builtin.apt:
       name: neofetch
 
+  - name: General - Install hashcat
+    ansible.builtin.apt:
+      name: hashcat 
+
   # Network
 
   - name: Network - Install tor
