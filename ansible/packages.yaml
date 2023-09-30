@@ -64,9 +64,15 @@
     ansible.builtin.apt:
       name: neofetch
 
-  - name: General - Install hashcat
+  # Benchmarking
+  
+  - name: Benchmarking - Install hashcat
     ansible.builtin.apt:
       name: hashcat 
+
+  - name: Benchmarking - Install sysbench
+    ansible.builtin.apt:
+      name: sysbench
 
   # Network
 
