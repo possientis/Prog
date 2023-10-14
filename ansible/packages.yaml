@@ -120,6 +120,10 @@
     ansible.builtin.apt:
       name: netplan.io
 
+  - name: Network - Install ethtool
+    ansible.builtin.apt:
+      name: ethtool
+
   # Virtualization
 
   - name: Virtualization - Install libvirt-clients
