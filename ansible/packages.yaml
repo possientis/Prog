@@ -124,6 +124,10 @@
     ansible.builtin.apt:
       name: ethtool
 
+  - name: Network - Install wakeonlan
+    ansible.builtin.apt:
+      name: wakeonlan
+
   # Virtualization
 
   - name: Virtualization - Install libvirt-clients
