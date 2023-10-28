@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 PROG=${HOME}/Prog
 POLY=${PROG}/poly
 PATTERNS=${POLY}/DesignPatterns
