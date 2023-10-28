@@ -1,6 +1,6 @@
 ---
 - hosts: x86
-  remote_user: john
+  remote_user: noel
   become: true
   tasks:
 
@@ -127,6 +127,14 @@
   - name: Network - Install wakeonlan
     ansible.builtin.apt:
       name: wakeonlan
+
+  - name: Network - Install cifs-utils
+    ansible.builtin.apt:
+      name: cifs-utils
+
+  - name: Network - Install smbclient
+    ansible.builtin.apt:
+      name: smbclient 
 
   # Virtualization
 
