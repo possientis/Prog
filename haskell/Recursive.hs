@@ -40,3 +40,5 @@ paraM algM t = join . fmap algM . fmap (fmap (t,)) . traverse (paraM algM) . pro
 apoM :: (Monad m, Traversable b, Corecursive t b) => (a -> m (b (Either t a))) -> a -> m t
 apoM coalgM = fmap embed . join . fmap (traverse (either return (apoM coalgM))) . coalgM
 
+hylo :: (Functor f) => (f b -> b) -> (a -> f a) -> a -> b
+hylo alg coalg = alg . fmap (hylo alg coalg) . coalg
