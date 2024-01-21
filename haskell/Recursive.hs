@@ -7,7 +7,7 @@ module Recursive
   (
   ) where
 
-import Control.Monad (join)
+import Control.Monad (join, liftM2)
 import Data.Tuple.Extra
 
 data Cofree f a = Cofree a (f (Cofree f a))
@@ -28,6 +28,9 @@ instance (Functor f) => Corecursive (Cofree f a) (CofreeF f a) where
 
 unfold :: (Functor f) => (b -> (a, f b)) -> b -> Cofree f a
 unfold = ana . (.) (uncurry CofreeF) 
+
+unfoldM :: (Monad m, Traversable f, Functor f) => (b -> m (a, f b)) -> b -> m (Cofree f a)
+unfoldM = anaM . (.) (fmap (uncurry CofreeF)) 
 
 class (Functor b) => Recursive t b | t -> b where
   project :: t -> b t
@@ -67,3 +70,7 @@ apoM coalgM = fmap embed . join . fmap (traverse (either return (apoM coalgM))) 
 
 histo :: (Recursive t b) => (b (Cofree b a) -> a) -> t -> a
 histo alg = alg . fmap (unfold (histo alg &&& project)) . project
+
+histoM :: (Monad m, Traversable b, Recursive t b) => (b (Cofree b a) -> m a) -> t -> m a
+histoM algM = join . fmap algM . traverse f . project where
+  f = unfoldM $ uncurry (liftM2 (,)) . (histoM algM &&& (return . project))
