@@ -42,3 +42,8 @@ apoM coalgM = fmap embed . join . fmap (traverse (either return (apoM coalgM))) 
 
 hylo :: (Functor f) => (f b -> b) -> (a -> f a) -> a -> b
 hylo alg coalg = alg . fmap (hylo alg coalg) . coalg
+
+hyloM :: (Monad m, Traversable f) => (f b -> m b) -> (a -> m (f a)) -> a -> m b
+hyloM algM coalgM = join . fmap (join.fmap algM.traverse (hyloM algM coalgM)) . coalgM
+
+
