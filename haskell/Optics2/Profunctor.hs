@@ -35,7 +35,7 @@ class Profunctor p where
 
 -- Def: We say that a Profunctor p is 'lawful' whenever equalities (1) and (2) are met
 -- for every transformation g and maps f,f',h,h'.
---
+
 -- Lemma: (->) is a Profunctor
 
 instance Profunctor (->) where
@@ -45,7 +45,7 @@ instance Profunctor (->) where
 -- of formal semantics, lack of formal equality between functions (extensional
 -- equality doesn't define equality when values can themselves be functions or have
 -- no Eq instance), lack of proof and the possibility of functions throwing errors,
--- We shall abstain from claiming anything here.
+-- We shall abstain from claiming anything here. 
 
 -- It is often convenient to 'pre-compose' a transformation with a map.
 lmap :: (Profunctor p) => (a -> b) -> p b c -> p a c
