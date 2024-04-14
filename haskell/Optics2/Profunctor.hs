@@ -36,16 +36,13 @@ class Profunctor p where
 -- Def: We say that a Profunctor p is 'lawful' whenever equalities (1) and (2) are met
 -- for every transformation g and maps f,f',h,h'.
 
+-- Remark : it is not meaningful to ask whether a profunctor is lawful unless
+-- we have an Eq instance defined in the type `p a b` for all types a and b.
+
 -- Lemma: (->) is a Profunctor
 
 instance Profunctor (->) where
   dimap f h g = h . g . f
-
--- Remark: it feels like the Profunctor (->) is lawful. However, given the lack
--- of formal semantics, lack of formal equality between functions (extensional
--- equality doesn't define equality when values can themselves be functions or have
--- no Eq instance), lack of proof and the possibility of functions throwing errors,
--- We shall abstain from claiming anything here. 
 
 -- It is often convenient to 'pre-compose' a transformation with a map.
 lmap :: (Profunctor p) => (a -> b) -> p b c -> p a c
