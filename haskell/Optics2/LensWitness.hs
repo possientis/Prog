@@ -2,6 +2,7 @@
 
 module LensWitness
   ( LensWitness (..)
+  , lensId
   ) where
 
 import Data.Tuple.Extra ((***))
@@ -34,3 +35,6 @@ instance Strong (LensWitness a b) where
     where
       k ((a,f),c) = (a, (,c) . f)
 
+-- Not that LensWitness a b a b has an obvious element:
+lensId :: LensWitness a b a b
+lensId = LensWitness (,id)
