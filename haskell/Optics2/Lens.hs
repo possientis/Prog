@@ -62,3 +62,15 @@ instance CloneLens (LensWitness a b s t) s t a b where
 -- Lemma: For all s t a b, ALens s t a b is lens clonable.
 instance CloneLens (ALens s t a b) s t a b where
   cloneLens wab = cloneLens (wab lensId)
+
+-- So we know that a Simple lens gives rise to a (profucntor) lens:
+_fromSimple :: Simple s t a b -> Lens s t a b
+_fromSimple = cloneLens 
+
+-- Conversely, a (profunctor lens) gives rise to a simple lens:
+_toSimple :: Lens s t a b -> Simple s t a b
+_toSimple l = Simple (fst . f) (flip $ snd . f)  where
+  f = unLensWitness . unLens l $ lensId
+
+-- Remark: the fact that these two mappings should be inverse of
+-- each other is far from obvious.
