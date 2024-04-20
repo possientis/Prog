@@ -9,7 +9,7 @@ module Lens
   , Lens
   , Lens'
   , cloneLens
-  , fromIso
+  , isoToLens
   , lens
   ) where
 
@@ -34,8 +34,8 @@ lens get set pab = dimap before after pab'  -- :: p s t
     after (b, s) = set b s                  -- :: t 
 
 -- It is possible to create a lens from an Iso
-fromIso :: Iso s t a b -> Lens s t a b
-fromIso i = i
+isoToLens :: Iso s t a b -> Lens s t a b
+isoToLens i = i
 
 -- Def: we say that a type w is 'lens clonable' (w.r. to s t a b) if there
 -- exists a cloning map between its elements and Lens s t a b. 
