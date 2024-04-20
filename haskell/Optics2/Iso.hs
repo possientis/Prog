@@ -5,7 +5,8 @@
 
 module Iso
   ( CloneIso
-  , Iso  (..)
+  , Iso 
+  , Iso'
   , cloneIso
   , iso
   ) where
@@ -14,7 +15,8 @@ import IsoWitness
 import Optic
 import Profunctor
 
-newtype Iso s t a b = Iso { unIso :: forall p . (Profunctor p) => p a b -> p s t }
+type Iso s t a b = forall p . (Profunctor p) => p a b -> p s t
+type Iso' s a = Iso s s a a 
 
 data Simple s t a b = Simple
   { _from :: s -> a
@@ -22,15 +24,12 @@ data Simple s t a b = Simple
   } 
 
 iso :: (s -> a) -> (b -> t) -> Iso s t a b
-iso from to = Iso (dimap from to)
+iso from to = dimap from to
 
 type AnIso s t a b = Optic (IsoWitness a b) s t a b
 
 class CloneIso w s t a b | w -> s t a b where
   cloneIso :: w -> Iso s t a b
-
-instance CloneIso (Iso s t a b) s t a b where
-  cloneIso = id
 
 instance CloneIso (Simple s t a b) s t a b where
   cloneIso (Simple from to) = iso from to
@@ -48,7 +47,7 @@ _fromSimple = cloneIso
 
 _toSimple :: Iso s t a b -> Simple s t a b
 _toSimple i = Simple (fst f) (snd f) where
-  f = unIsoWitness . unIso i $ isoId
+  f = unIsoWitness . i $ isoId
 
 
 

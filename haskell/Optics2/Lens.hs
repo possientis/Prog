@@ -5,8 +5,10 @@
 
 module Lens
   ( CloneLens
-  , Lens  (..)
+  , Lens
+  , Lens'
   , cloneLens
+  , fromIso
   , lens
   ) where
 
@@ -20,7 +22,8 @@ import Strong
 -- defined below. A lens is therefore essentially a polymorphic function which maps
 -- any transformation of type a ~> b to a transformation of type s ~> t, across
 -- all strong profunctors.
-newtype Lens s t a b = Lens { unLens :: forall p . (Strong p) => p a b -> p s t }
+type Lens s t a b = forall p . (Strong p) => p a b -> p s t
+type Lens' s a = Lens s s a a
 
 -- Consider a simple record type with a getter and a setter:
 data Simple s t a b = Simple
@@ -30,13 +33,14 @@ data Simple s t a b = Simple
 
 -- It is possible to create a lens from a 'get' and a 'set'
 lens :: (s -> a) -> (b -> s -> t) -> Lens s t a b
-lens get set = Lens f 
+lens get set pab = dimap before after pab'  -- :: p s t   
   where
-    f pab = dimap before after pab'   -- :: p s t   
-      where
-        pab'         = first pab      -- :: p (a, s) (b, s) 
-        before s     = (get s, s)     -- :: (a ,s) 
-        after (b, s) = set b s        -- :: t 
+    pab'         = first pab                -- :: p (a, s) (b, s) 
+    before s     = (get s, s)               -- :: (a ,s) 
+    after (b, s) = set b s                  -- :: t 
+
+fromIso :: Iso s t a b -> Lens s t a b
+fromIso i = i
 
 -- Consider the type of optics relative to the Strong Profunctor LensWitness a b:
 type ALens s t a b = Optic (LensWitness a b) s t a b 
@@ -45,12 +49,6 @@ type ALens s t a b = Optic (LensWitness a b) s t a b
 -- exists a cloning map between its elements and Lens s t a b. 
 class CloneLens w s t a b | w -> s t a b where
   cloneLens :: w -> Lens s t a b
-
-instance CloneLens (Lens s t a b) s t a b where
-  cloneLens = id
-
-instance CloneLens (Iso s t a b) s t a b where
-  cloneLens i = Lens (unIso i)  -- 'cloneLens = Lens . unIso' will fail 
 
 -- Lemma: For all s t a b, Simple s t a b is lens clonable.
 instance CloneLens (Simple s t a b) s t a b where
@@ -77,7 +75,7 @@ _fromSimple = cloneLens
 -- Conversely, a (profunctor lens) gives rise to a simple lens:
 _toSimple :: Lens s t a b -> Simple s t a b
 _toSimple l = Simple (fst . f) (flip $ snd . f)  where
-  f = unLensWitness . unLens l $ lensId
+  f = unLensWitness . l $ lensId
 
 -- Remark: the fact that these two mappings should be inverse of
 -- each other is far from obvious.
