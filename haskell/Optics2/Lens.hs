@@ -10,6 +10,7 @@ module Lens
   , lens
   ) where
 
+import Iso
 import LensWitness
 import Optic
 import Profunctor
@@ -44,6 +45,12 @@ type ALens s t a b = Optic (LensWitness a b) s t a b
 -- exists a cloning map between its elements and Lens s t a b. 
 class CloneLens w s t a b | w -> s t a b where
   cloneLens :: w -> Lens s t a b
+
+instance CloneLens (Lens s t a b) s t a b where
+  cloneLens = id
+
+instance CloneLens (Iso s t a b) s t a b where
+  cloneLens i = Lens (unIso i)  -- 'cloneLens = Lens . unIso' will fail 
 
 -- Lemma: For all s t a b, Simple s t a b is lens clonable.
 instance CloneLens (Simple s t a b) s t a b where
