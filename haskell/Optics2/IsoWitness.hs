@@ -1,4 +1,4 @@
-{-# LANGUAGE TupleSections  #-}
+{-# LANGUAGE RecordWildCards        #-}
 
 module IsoWitness
   ( IsoWitness (..)
@@ -8,11 +8,20 @@ module IsoWitness
 import Profunctor
 
 
-newtype IsoWitness a b s t = IsoWitness { unIsoWitness :: (s -> a, b -> t) }
+data IsoWitness a b s t = IsoWitness 
+  { from :: s -> a
+  , to   :: b -> t 
+  }
 
 isoId :: IsoWitness a b a b 
-isoId  = IsoWitness (id,id)
+isoId  = IsoWitness 
+  { from = id
+  , to   = id
+  }
 
--- Lemma :: For all a b, IsoWitness a b i sa Profunctor
+-- Lemma :: For all a b, IsoWitness a b is a Profunctor
 instance Profunctor (IsoWitness a b) where
-  dimap f h (IsoWitness g) = IsoWitness (fst g . f, h . snd g)
+  dimap f h IsoWitness {..} = IsoWitness
+    { from = from . f
+    , to   = h . to
+    }
