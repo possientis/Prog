@@ -9,6 +9,7 @@ import Data.Tuple.Extra ((***))
 import Profunctor
 import Strong
 
+
 -- This definition is important and is motivated below
 newtype LensWitness a b s t = LensWitness { unLensWitness :: s -> (a, b -> t) }
 
@@ -25,7 +26,7 @@ newtype LensWitness a b s t = LensWitness { unLensWitness :: s -> (a, b -> t) }
 -- (relative to LensWitness a b), given functions f :: s' -> s and h :: t -> t',
 -- we can create a transformation of type s' ~> t'. In other words:
 
--- Lemma: For all a b, LemsWitness a b is a Profunctor.
+-- Lemma: For all a b, LensWitness a b is a Profunctor.
 instance Profunctor (LensWitness a b) where
   dimap f h g = LensWitness $ (id *** (h .)) . unLensWitness g . f
 
