@@ -9,11 +9,14 @@ module Iso
   , Iso 
   , Iso'
   , cloneIso
+  , fromI
   , iso
+  , toI
   ) where
 
 import IsoWitness
 import Profunctor
+
 
 type Iso' s t a b = forall p . (Profunctor p) => p a b -> p s t
 type Iso s a = Iso' s s a a 
@@ -32,3 +35,9 @@ _fromWitness = cloneIso
 
 _toWitness :: Iso' s t a b -> IsoWitness a b s t
 _toWitness i = i isoId
+
+fromI :: Iso' s t a b -> s -> a
+fromI i = from . i $ isoId
+
+toI :: Iso' s t a b -> b -> t
+toI i = to . i $ isoId
