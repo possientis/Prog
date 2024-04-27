@@ -29,6 +29,7 @@ import Optic
 import Profunctor
 import Strong
 
+
 -- Def: Given s t a b, we call 'lens' (w.r. to s t a b) a value of the type Lens s t a b
 -- defined below. A lens is therefore essentially a polymorphic function which maps
 -- any transformation of type a ~> b to a transformation of type s ~> t, across
