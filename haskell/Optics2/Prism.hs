@@ -8,13 +8,19 @@ module Prism
   ( ClonePrism
   , Prism
   , Prism'
+  , buildP
   , clonePrism
   , isoToPrism
+  , matchP
+  , overP
   , prism
+  , _Left
+  , _Right
   ) where
 
 import Choice
 import Iso
+import Optic
 import PrismWitness
 import Profunctor
 
@@ -43,4 +49,19 @@ _fromWitness = clonePrism
 
 _toWitness :: Prism' s t a b -> PrismWitness a b s t
 _toWitness p = p prismId
+
+matchP :: Prism' s t a b -> s -> Either t a
+matchP p = match . p $ prismId 
+
+buildP :: Prism' s t a b -> b -> t 
+buildP p = build . p $ prismId
+
+overP :: Prism' s t a b -> (a -> b) -> s -> t
+overP p = over p
+
+_Left :: Prism (Either a b) a
+_Left = left
+
+_Right :: Prism (Either a b) b
+_Right = right
 
