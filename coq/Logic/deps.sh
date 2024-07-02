@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Creates dependendy files needed for inclusion in Makefile
+# Creates dependency files needed for inclusion in Makefile
 
 DIR=$(pwd)
 

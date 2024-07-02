@@ -22,7 +22,10 @@ Require Import Logic.Lam.Syntax.
 Require Import Logic.Lam.Functor.
 Require Import Logic.Lam.Variable.
 Require Import Logic.Lam.Congruence.
+Require Import Logic.Lam.Subformula.
 Require Import Logic.Lam.Admissible.
+
+Declare Scope Lam_Alpha_scope.
 
 (* Generator of alpha-equivalence.                                              *)
 (* We wish to formally define alpha-equivalence as the smallest congruence      *)
@@ -645,3 +648,82 @@ Proof.
       (* ... which is true by assumption *)
       apply H5.
 Qed.
+
+(* Two alpha-equivalent formulas have the same free variables.                  *)
+Lemma Alpha_free : forall (v:Type) (e:Eq v) (t s:T v), 
+    t ~ s -> Fr t = Fr s.
+Proof.
+  (* Let v be a Type with decidable equality e  *)
+  intros v e.  
+
+  (* Define r to be the relation 'Fr t = Fr s' *)
+  remember (fun (t s:T v) => Fr t = Fr s) as r eqn:E1.
+
+  apply incl_charac. rewrite <- E1.
+
+  (* We need to show that Alpha <= r  *)
+  assert (Alpha <= r) as A. 2: apply A.
+
+  (* We argue that Alpha is the smallest congruence containing Alpha1 *)
+  rewrite Alpha_admissible_gen. apply Cong_smallest.
+
+  (* So we need to show that r is a congruence ... *)
+  - assert (congruence r) as A. 2: apply A.
+
+    rewrite E1. apply free_congruence.
+
+  (* ... and we need to show that r contains Alpha1 *)
+  - assert (Alpha1 <= r) as A. 2: apply A.
+
+    (* So let t be a formula and f:v -> v admissible for t *)
+    apply incl_charac. intros t s H1. destruct H1 as [t f H1].
+    
+    (* We need to show that (t, fmap f t) lies in r *)
+    assert (r t (fmap f t)) as A. 2: apply A.
+
+    (* Given the way we have defined r ...  *)
+    rewrite E1.
+
+    (* ,,, we need to show that t and fmap f t have the same free variables *)
+    assert (Fr t = Fr (fmap f t)) as A. 2: apply A.
+
+    (* By transitivity ...  *)
+    apply eq_trans with (map f (Fr t)).
+
+    (* ... it is sufiicient to show firstly that Fr t = map f (Fr t) *)
+    + assert (Fr t = map f (Fr t)) as A. 2: apply A.
+
+      (* Again by transitivity ... *)
+      apply eq_trans with (map id (Fr t)).
+
+      (* ... it is sufficient to show firstly that Fr t = map id (Fr t) *)
+      * assert (Fr t = map id (Fr t)) as A. 2: apply A.
+
+        symmetry. apply map_id.
+
+      (* ... and secondly that map id (Fr t) = map f (Fr t) ... *)
+      * assert (map id (Fr t) = map f (Fr t)) as A. 2: apply A.
+
+        (* ... which is the case ... *)
+        apply coincide_map.
+
+        (* ... provided we show that id and f coincide on Fr t  *)
+        assert (coincide (Fr t) id f) as A. 2: apply A.
+
+        (* So let u be a free variable of t *)
+        intros u H2.
+
+        (* We need to show that id u = f u *)
+        assert (id u = f u) as A. 2: apply A.
+
+        destruct H1 as [H1 H3]. symmetry. apply H3, H2.
+
+    + assert (map f (Fr t) = Fr (fmap f t)) as A. 2: apply A.
+
+      symmetry. destruct H1 as [H1 H3]. 
+
+      apply (valid_free v v e e f t).
+        { apply H1. }
+        { apply Sub_refl. }
+Qed.
+

@@ -22,7 +22,10 @@ Require Import Logic.Fol.Syntax.
 Require Import Logic.Fol.Functor.
 Require Import Logic.Fol.Variable.
 Require Import Logic.Fol.Congruence.
+Require Import Logic.Fol.Subformula.
 Require Import Logic.Fol.Admissible.
+
+Declare Scope Fol_Alpha_scope.
 
 (* Generator of alpha-equivalence.                                              *)
 (* We wish to formally define alpha-equivalence as the smallest congruence      *)
@@ -657,7 +660,7 @@ Proof.
 Qed.
 
 
-(*
+
 (* Two alpha-equivalent formulas have the same free variables.                  *)
 Lemma Alpha_free : forall (v:Type) (e:Eq v) (p q:P v), 
     p ~ q -> Fr p = Fr q.
@@ -686,7 +689,7 @@ Proof.
 
     (* So let p be a formula and f:v -> v admissible for p *)
     apply incl_charac. intros p q H1. destruct H1 as [p f H1].
-
+    
     (* We need to show that (p, fmap f p) lies in r *)
     assert (r p (fmap f p)) as A. 2: apply A.
 
@@ -725,5 +728,14 @@ Proof.
         (* We need to show that id u = f u *)
         assert (id u = f u) as A. 2: apply A.
 
-Show.
-*)
+        destruct H1 as [H1 H3]. symmetry. apply H3, H2.
+
+    + assert (map f (Fr p) = Fr (fmap f p)) as A. 2: apply A.
+
+      symmetry. destruct H1 as [H1 H3]. 
+
+      apply (valid_free v v e e f p).
+        { apply H1. }
+        { apply Sub_refl. }
+Qed.
+
