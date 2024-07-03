@@ -659,8 +659,6 @@ Proof.
       apply H5. 
 Qed.
 
-
-
 (* Two alpha-equivalent formulas have the same free variables.                  *)
 Lemma Alpha_free : forall (v:Type) (e:Eq v) (p q:P v), 
     p ~ q -> Fr p = Fr q.
@@ -737,5 +735,73 @@ Proof.
       apply (valid_free v v e e f p).
         { apply H1. }
         { apply Sub_refl. }
+Qed.
+
+
+(* The binding variable does not matter when not free *) 
+Lemma Alpha_not_free_bind : forall (v:Type) (e:Eq v) (p1:P v) (x y:v),
+  ~ x :: Fr p1 -> ~ y :: Fr p1 -> All x p1 ~ All y p1. 
+Proof.
+  (* Let v be a Type with decidable equality e *)
+  intros v e.
+
+  (* Let p1 be a formula and x y be variables *)
+  intros p1 x y.
+
+  (* We assume that x and y are not free variables of p1 *)
+  intros Hx Hy.
+
+  (* We need to distinguish two cases *)
+  destruct (eqDec x y) as [H1|H1].
+
+  (* First we assume that x = y *)
+  - rewrite <- H1.
+
+    (* We need to show that All x p1 ~ All x p1 *)
+    assert (All x p1 ~ All x p1) as A. 2: apply A.
+
+    (* which is true by reflexivity *)
+    apply Cong_reflexive.
+  
+  (* Next we assume that x <> y *)
+  -
+    (* We need to show that All x p1 is alpha-equivalent to All y p1 *)
+    assert (All x p1 ~ All y p1) as A. 2: apply A.
+
+    (* By transitivity, it is sufficient to prove two equivalences *)
+    apply Cong_transitive with (All y (fmap (y <:> x) p1)).
+
+    (* First we need to show that All x p1 ~ All y (fmap (y <:> x) p1) *)
+    + assert (All x p1 ~ All y (fmap (y <:> x) p1)) as A. 2: apply A.
+
+      (* This is true by definition of alpha-equivalence *)
+      constructor. constructor.
+
+      (* since  we have x <> y *)
+      * assert (x <> y) as A. 2: apply A. apply H1.
+
+      (* and y is not free in p1 *)
+      * assert (~ y :: Fr p1) as A. 2: apply A. apply Hy.
+
+    (* Second we need to show that All y (fmap (y <:> x) p1) ~ All y p1 *)
+    + assert (All y (fmap (y <:> x) p1) ~ All y p1) as A. 2: apply A.
+
+      apply CongAll. apply Cong_symmetric.
+
+      (* So it is sufficient to show that fmap (y <:> x) p1 ~ p1 *)
+      assert (p1 ~ fmap (y <:> x) p1) as A. 2: apply A.
+  
+      (* Using lemma Alpha_admissible, it is sufficient to show *)
+      apply Alpha_admissible.
+
+      (* that (y <:> x) is admissible for p1 *) 
+      assert (admissible (y <:> x) p1) as A. 2: apply A.
+
+      (* which follows from lemma admissible_permute *)
+      apply admissible_permute.
+
+        (* and the hypothesis of x y not free in p1 *)
+        * assert (~ x :: Fr p1) as A. 2: apply A. apply Hx. 
+        * assert (~ y :: Fr p1) as A. 2: apply A. apply Hy.
 Qed.
 

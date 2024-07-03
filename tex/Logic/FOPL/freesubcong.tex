@@ -49,7 +49,7 @@ $x,y\not\in\free(\phi_{1})$ we have:
 
 \noindent
 \begin{proof}
-From $y\not\in\free(\phi_{1})$ and
+By reflexivity, we may assume that $x\neq y$. From $y\not\in\free(\phi_{1})$ and
 definition~(\ref{logic:def:sub:congruence}) we see that $\forall
 x\phi_{1}\sim\forall y\phi_{1}[y\!:\!x]$. So we need to show that
 $\forall y\phi_{1}[y\!:\!x]\sim\forall y\phi_{1}$. Hence it is
@@ -60,5 +60,5 @@ $\phi_{1}$. Being injective, from
 proposition~(\ref{logic:prop:FOPL:valid:injective}) it is a valid
 substitution for $\phi_{1}$. So it remains to show that
 $[y\!:\!x](u)=u$ for all $u\in\free(\phi_{1})$ which follows
-immediately from $x,y\not\in\free(\phi_{1})$.
+from $x,y\not\in\free(\phi_{1})$.
 \end{proof}

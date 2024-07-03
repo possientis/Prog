@@ -727,3 +727,70 @@ Proof.
         { apply Sub_refl. }
 Qed.
 
+(* The binding variable does not matter when not free *) 
+Lemma Alpha_not_free_bind : forall (v:Type) (e:Eq v) (t1:T v) (x y:v),
+  ~ x :: Fr t1 -> ~ y :: Fr t1 -> Lam x t1 ~ Lam y t1. 
+Proof.
+  (* Let v be a Type with decidable equality e *)
+  intros v e.
+
+  (* Let t1 be a term and x y be variables *)
+  intros t1 x y.
+
+  (* We assume that x and y are not free variables of t1 *)
+  intros Hx Hy.
+
+  (* We need to distinguish two cases *)
+  destruct (eqDec x y) as [H1|H1].
+
+  (* First we assume that x = y *)
+  - rewrite <- H1.
+
+    (* We need to show that Lam x t1 ~ All x t1 *)
+    assert (Lam x t1 ~ Lam x t1) as A. 2: apply A.
+
+    (* which is true by reflexivity *)
+    apply Cong_reflexive.
+  
+  (* Next we assume that x <> y *)
+  -
+    (* We need to show that Lam x t1 is alpha-equivalent to Lam y t1 *)
+    assert (Lam x t1 ~ Lam y t1) as A. 2: apply A.
+
+    (* By transitivity, it is sufficient to prove two equivalences *)
+    apply Cong_transitive with (Lam y (fmap (y <:> x) t1)).
+
+    (* First we need to show that Lam x t1 ~ Lam y (fmap (y <:> x) t1) *)
+    + assert (Lam x t1 ~ Lam y (fmap (y <:> x) t1)) as A. 2: apply A.
+
+      (* This is true by definition of alpha-equivalence *)
+      constructor. constructor.
+
+      (* since  we have x <> y *)
+      * assert (x <> y) as A. 2: apply A. apply H1.
+
+      (* and y is not free in t1 *)
+      * assert (~ y :: Fr t1) as A. 2: apply A. apply Hy.
+
+    (* Second we need to show that Lam y (fmap (y <:> x) t1) ~ Lam y t1 *)
+    + assert (Lam y (fmap (y <:> x) t1) ~ Lam y t1) as A. 2: apply A.
+
+      apply CongLam. apply Cong_symmetric.
+
+      (* So it is sufficient to show that fmap (y <:> x) t1 ~ t1 *)
+      assert (t1 ~ fmap (y <:> x) t1) as A. 2: apply A.
+  
+      (* Using lemma Alpha_admissible, it is sufficient to show *)
+      apply Alpha_admissible.
+
+      (* that (y <:> x) is admissible for t1 *) 
+      assert (admissible (y <:> x) t1) as A. 2: apply A.
+
+      (* which follows from lemma admissible_permute *)
+      apply admissible_permute.
+
+        (* and the hypothesis of x y not free in t1 *)
+        * assert (~ x :: Fr t1) as A. 2: apply A. apply Hx. 
+        * assert (~ y :: Fr t1) as A. 2: apply A. apply Hy.
+Qed.
+

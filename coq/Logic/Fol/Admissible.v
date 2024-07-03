@@ -1,5 +1,7 @@
 Require Import Logic.Class.Eq.
 
+Require Import Logic.Func.Permute.
+
 Require Import Logic.List.In.
 Require Import Logic.List.Append.
 
@@ -49,3 +51,12 @@ Proof.
       * apply H2. assumption.
       * apply H4. assumption. 
 Qed.
+
+Lemma admissible_permute: forall (v:Type) (e:Eq v) (x y:v) (p:P v),
+  ~ x :: Fr p -> ~ y :: Fr p -> admissible (y <:> x) p.
+Proof.
+  intros v e x y p Hx Hy. split.
+  - apply valid_permute.
+  - apply free_permute; assumption.
+Qed.
+

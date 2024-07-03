@@ -3,6 +3,7 @@ Require Import List.
 Require Import Logic.Class.Eq.
 
 Require Import Logic.Func.Replace.
+Require Import Logic.Func.Permute.
 Require Import Logic.Func.Composition.
 
 Require Import Logic.List.In.
@@ -364,4 +365,11 @@ Proof.
         + apply valid_elem.
         + apply valid_imp. split; assumption.
         + apply valid_all. split; assumption.
+Qed.
+
+Lemma valid_permute : forall (v:Type) (e:Eq v) (x y:v) (p:P v), 
+  valid (y <:> x) p.
+Proof.
+  intros v e x y p.
+  apply valid_inj, injective_injective_on,permute_injective.
 Qed.

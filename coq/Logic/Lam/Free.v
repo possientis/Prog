@@ -5,6 +5,7 @@ Require Import Logic.Class.Eq.
 Require Import Logic.Rel.Properties.
 
 Require Import Logic.Func.Replace.
+Require Import Logic.Func.Permute.
 Require Import Logic.Func.Composition.
 
 Require Import Logic.List.In.
@@ -324,4 +325,17 @@ Lemma free_coincide_subst :
 Proof.
     intros v e f g t. unfold subst. rewrite <- (diff_nil v e (Fr t)).
     apply free_coincide_subst_gen.
+Qed.
+
+Lemma free_permute : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
+  ~ x :: Fr t ->
+  ~ y :: Fr t -> 
+  forall (u:v), u :: Fr t -> (y <:> x) u = u.
+Proof.
+  intros v e x y t Hx Hy u Hu.
+  destruct (eqDec u x) as [H1|H1].
+  - subst. contradiction.
+  - destruct (eqDec u y) as [H2|H2].
+    + subst. contradiction.
+    + apply permute_app_diff; assumption.
 Qed.
