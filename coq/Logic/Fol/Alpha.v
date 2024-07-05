@@ -926,3 +926,71 @@ Proof.
       { apply HNeq. }
       { apply HFree. }
 Qed.
+
+(* Almost alpha-equivalence. Will be shown to be the same *)
+Inductive AlmostAlpha (v:Type) (e:Eq v) : P v -> P v -> Prop :=
+| ABot : AlmostAlpha v e Bot Bot
+| AElem : forall (x y:v), AlmostAlpha v e (Elem x y) (Elem x y)  
+| AImp : forall (p1 p2 q1 q2:P v),
+    p1 ~ q1 ->
+    p2 ~ q2 ->
+    AlmostAlpha v e (Imp p1 p2) (Imp q1 q2)
+|AAllx : forall (x:v) (p1 q1:P v),
+  p1 ~ q1 ->
+  AlmostAlpha v e (All x p1) (All x q1)
+| AAllxy : forall (x y:v) (p1 q1:P v),
+  x <> y                  ->
+  q1 ~ fmap (y <:> x) p1  ->
+  ~ y :: Fr p1            ->
+  AlmostAlpha v e (All x p1) (All y q1)
+.
+
+Arguments AlmostAlpha {v} {e}.
+
+Notation "p :~: q" := (AlmostAlpha p q)
+    (at level 60, no associativity) : Fol_Alpha_scope.
+
+Open Scope Fol_Alpha_scope.
+
+Lemma almostImpRev : forall (v:Type) (e:Eq v) (p1 p2 q:P v),
+  Imp p1 p2 :~: q -> exists (q1 q2: P v),
+    (p1 ~ q1) /\ (p2 ~ q2) /\ (q = Imp q1 q2).
+Proof.
+  (* Let v be a type with decidable equality e *)
+  intros v e.
+
+  (* Let p1 p2 q be formulas *)
+  intros p1 p2 q.
+
+  (* Define p = Imp p1 p2 *)
+  remember (Imp p1 p2) as p eqn:Ep.
+
+  (* We assume that p is almost alpha-equivalent to q *)
+  intro Haeq. assert (p :~: q) as A. apply Haeq. clear A.
+
+  (* So we want to show that for all p1 p2 such that p = Imp p1 p2 ... *)
+  revert p1 p2 Ep.
+
+  (* Case analysis on the assumption Haeq *)
+  destruct Haeq as [|x y|p1' p2' q1 q2 H1 H2|x p1' q1|x y p1' q1 H1 H2 H3];
+  intros p1 p2 Ep.  
+  
+  (* Case p = q = Bot: The assumptiom Bot = Imp p1 p2 is a contradiction *)
+  - inversion Ep.
+
+  (* Case p = q = Elem x y: Elem x y = Imp p1 p2 is also a contradiction *)
+  - inversion Ep.
+
+  (* Case p = Imp p1' p2' , q = Imp q1 q2 *)
+  - inversion Ep. subst. exists q1, q2. split.
+      { assert (p1 ~ q1) as A. 2: apply A. apply H1. }
+      { split.
+        { assert (p2 ~ q2) as A. 2: apply A. apply H2. }
+        { assert (Imp q1 q2 = Imp q1 q2) as A. 2: apply A. reflexivity. }
+      } 
+  (* Case p = All x p1' and q = All x q1: another contradiction *) 
+  - inversion Ep.
+      
+  (* Case p = All x p1' and q = All y q1: another contradiction *) 
+  - inversion Ep.
+Qed.

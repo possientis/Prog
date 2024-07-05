@@ -915,3 +915,67 @@ Proof.
       { apply HNeq. }
       { apply HFree. }
 Qed.
+
+(* Almost alpha-equivalence. Will be shown to be the same *)
+Inductive AlmostAlpha (v:Type) (e:Eq v) : T v -> T v -> Prop :=
+| AVar : forall (x:v), AlmostAlpha v e (Var x) (Var x)  
+| AApp : forall (t1 t2 s1 s2:T v),
+    t1 ~ s1 ->
+    t2 ~ s2 ->
+    AlmostAlpha v e (App t1 t2) (App s1 s2)
+|ALamx : forall (x:v) (t1 s1:T v),
+  t1 ~ s1 ->
+  AlmostAlpha v e (Lam x t1) (Lam x s1)
+| ALamxy : forall (x y:v) (t1 s1:T v),
+  x <> y                  ->
+  s1 ~ fmap (y <:> x) t1  ->
+  ~ y :: Fr t1            ->
+  AlmostAlpha v e (Lam x t1) (Lam y s1)
+.
+
+Arguments AlmostAlpha {v} {e}.
+
+Notation "t :~: s" := (AlmostAlpha t s)
+    (at level 60, no associativity) : Lam_Alpha_scope.
+
+Open Scope Lam_Alpha_scope.
+
+Lemma almostAppRev : forall (v:Type) (e:Eq v) (t1 t2 s:T v),
+  App t1 t2 :~: s -> exists (s1 s2: T v),
+    (t1 ~ s1) /\ (t2 ~ s2) /\ (s = App s1 s2).
+Proof.
+  (* Let v be a type with decidable equality e *)
+  intros v e.
+
+  (* Let t1 t2 s be formulas *)
+  intros t1 t2 s.
+
+  (* Define t = App t1 t2 *)
+  remember (App t1 t2) as t eqn:Et.
+
+  (* We assume that t is almost alpha-equivalent to s *)
+  intro Haeq. assert (t :~: s) as A. apply Haeq. clear A.
+
+  (* So we want to show that for all t1 t2 such that t = App t1 t2 ... *)
+  revert t1 t2 Et.
+
+  (* Case analysis on the assumption Haeq *)
+  destruct Haeq as [x|t1' t2' s1 s2 H1 H2|x t1' s1|x y t1' s1 H1 H2 H3];
+  intros t1 t2 Et.  
+  
+  (* Case t = s = Var x: Var x = App t1 t2 is a contradiction *)
+  - inversion Et.
+
+  (* Case t = App p1' p2' , s = App s1 s2 *)
+  - inversion Et. subst. exists s1, s2. split.
+      { assert (t1 ~ s1) as A. 2: apply A. apply H1. }
+      { split.
+        { assert (t2 ~ s2) as A. 2: apply A. apply H2. }
+        { assert (App s1 s2 = App s1 s2) as A. 2: apply A. reflexivity. }
+      } 
+  (* Case t = Lam x t1' and s = Lam x s1: another contradiction *) 
+  - inversion Et.
+      
+  (* Case t = Lam x t1' and s = Lam y s1: another contradiction *) 
+  - inversion Et.
+Qed.
