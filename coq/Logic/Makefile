@@ -14,6 +14,7 @@ SET   = Set
 NORM  = Normal
 LANG1 = Lang1
 STLC  = STLC
+PROP  = Prop
 
 # coqc command line option
 AXIOM_LIB = -Q ${AXIOM} Logic.${AXIOM} -Q ../Logic Logic
@@ -28,6 +29,7 @@ LAM_LIB   = -Q ${LAM}   Logic.${LAM}   -Q ../Logic Logic
 SET_LIB   = -Q ${SET}   Logic.${SET}   -Q ../Logic Logic
 LANG1_LIB = -Q ${LANG1} Logic.${LANG1} -Q ../Logic Logic
 STLC_LIB  = -Q ${STLC}  Logic.${STLC}  -Q ../Logic Logic
+PROP_LIB  = -Q ${PROP}  Logic.${PROP}  -Q ../Logic Logic
 NORM_LIB  = -Q ${SET}/${NORM}   Logic.${SET}.${NORM}   -Q ../Logic Logic
 
 # Object files
@@ -205,6 +207,8 @@ STLC_OBJ  = ${STLC}/Syntax.vo \
 			${STLC}/Typing.vo \
 			${STLC}/Typing2.vo
 
+PROP_OBJ = ${PROP}/Syntax.vo
+
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
 			${SET}/${NORM}/InListOf.vo \
@@ -228,6 +232,7 @@ all : 	${AXIOM_OBJ} \
 		${SET_OBJ} \
 		${LANG1_OBJ} \
 		${STLC_OBJ} \
+		${PROP_OBJ} \
 		${NORM_OBJ}
 
 # General rules
@@ -266,6 +271,9 @@ ${LANG1}/%.vo : ${LANG1}/%.v
 
 ${STLC}/%.vo  : ${STLC}/%.v
 	coqc $< 		${STLC_LIB}
+
+${PROP}/%.vo  : ${PROP}/%.v
+	coqc $< 		${PROP_LIB}
 
 ${SET}/${NORM}/%.vo   : ${SET}/${NORM}/%.v
 	coqc $< 	${NORM_LIB}
@@ -377,5 +385,3 @@ include deps
 
 clean :
 	bash rm.sh
-
-
