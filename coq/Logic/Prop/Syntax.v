@@ -39,6 +39,9 @@ Open Scope Prop_Syntax_scope.
 (* Extract: construct a proof of the sequent G;p :- p                           *)
 (* So that a formula p is provable from a context with p itself as its head     *)
 (*                                                                              *)
+(* Weaken: creates a proof of G;q :- p from a proof of G :- p                   *)
+(* So if p is provable under G, it is provable under the larger context G;q     *)
+(*                                                                              *)
 (* Deduct: given a proof of the sequent G;p :- q , provides a proof of the      *)
 (* sequent G :- p -> q. So p -> q is provable in context G if q is provable     *)
 (* in context G;p                                                               *)
@@ -51,9 +54,6 @@ Open Scope Prop_Syntax_scope.
 (* G :- p from a proof of the sequent G;¬p :- Bot                               *)
 (* So if bottom is provable from a context G, having assumed ¬p, then p is      *)
 (* provable from the context G                                                  *)
-(*                                                                              *)
-(* Weaken: creates a proof of G;q :- p from a proof of G :- p                   *)
-(* So if p is provable under G, it is provable under the larger context G;q     *)
 
 Inductive Seq (v:Type) : Ctx v -> P v -> Type :=
 | Extract:forall (G:Ctx v)(p:P v),    Seq v (G;p) p 
@@ -102,7 +102,7 @@ Definition or (v:Type) (p q: P v) : P v := ¬p :-> q.
 
 Arguments or {v}.
 
-Definition and (v:Type) (p q: P v) : P v := ¬(or ¬p ¬q).
+Definition and (v:Type) (p q: P v) : P v := ¬(p :-> ¬q).
 
 Arguments and {v}.
 
@@ -210,6 +210,26 @@ Definition either (v:Type)(G:Ctx v)(p q r:P v)
         (weaken (weaken (deduct e2)))).
 
 Arguments either {v} {G} {p} {q} {r}.
+ 
+(* Builds a proof in arbitrary context of the classical implication ¬¬p -> p    *)
+(* By extraction with have G;¬¬p;¬p :- ¬p                                       *)
+(* By extraction followed by weakening we have G;¬¬p;¬p :- ¬p -> bot            *)
+(* By modus ponens we obtain G;¬¬p;¬p :- bot                                    *)
+(* By reduction we obtain G;¬¬p :- p                                            *)
+(* By deduction we conclude G :- ¬¬p -> p                                       *)
+(* TODO: for some reason, our current coq notation settings for '¬' and ':->'   *)
+(* are such that we need to have brackets in '¬(¬p) :-> p' below, and we cannot *)
+(* simply write '¬¬p :-> p'                                                     *)
+Definition notnot (v:Type) (G:Ctx v) (p:P v) : G :- ¬(¬p) :-> p
+  := deduct (reduct (modus extract (weaken extract))).
+
+Arguments notnot {v} {G} {p}.
+
+(* Builds a proof of bottom when assuming bot ¬p and p                          *)
+Definition notpp (v:Type) (G:Ctx v) (p:P v) : G;¬p;p :- bot
+  := modus extract (weaken extract).
+
+Arguments notpp {v} {G} {p}.
 
 (* Left introduction rule for disjunction                                       *)
 (* Builds a proof of p \/ q from a proof of p                                   *)
@@ -245,3 +265,88 @@ Definition orElim (v:Type) (G:Ctx v) (p q r:P v)
   := modus e (deduct (either e1 e2)).
 
 Arguments orElim {v} {G} {p} {q} {r}.
+
+(* Builds a proof of or q p from a proof of or p q                              *)
+(* We start with e : G :- or p q                                                *)
+(* Using revdeduct we obtain G;¬p :- q                                          *)
+(* Using contra we obtain G;¬q :- ¬¬p                                           *)
+(* Using notnot we have G;¬q :- ¬¬p -> p                                        *)
+(* By modus ponens we obtain G;¬q :- p                                          *)
+(* We conclude by deduction that G :- ¬q :-> p as requested                     *)
+Definition orComm (v:Type) (G:Ctx v) (p q:P v) (e:G :- or p q) : G :- or q p
+  := deduct (modus (contra (revdeduct e)) notnot).
+
+Arguments orComm {v} {G} {p} {q}.
+
+(* Introduction rule for conjunction                                            *)
+(* Builds a proof of p/\q from proofs of p and q                                *)
+(* We start with e1 : G :- p and e2 : G :- q                                    *)
+(* After weakening we have G;p->¬q :- p and G;p->¬q :- q                        *)
+(* By extraction we have G;p->¬q :- p -> ¬q                                     *)
+(* So by modus ponens we obtain G;p->¬q :- q -> bot                             *)
+(* and using modus ponens once more we have G;p->¬q :- bot                      *)
+(* By deduction we conclude that G :- ¬(p -> ¬q) as requested                   *)
+Definition andIntro (v:Type)(G:Ctx v)(p q:P v)
+  (e1:G :- p) (e2:G :- q) : G :- and p q
+  := deduct 
+      (modus 
+        (weaken e2) 
+        (modus (weaken e1) extract)).
+
+Arguments andIntro {v} {G} {p} {q}.
+
+(* Left elimination rule for conjunction                                        *)
+(* Builds a proof of p from a proof of p/\q                                     *)
+(* We start with e : G :- (p -> ¬q) -> bot                                      *)
+(* By weakening we have G;¬p :- (p -> ¬q) -> bot                                *)
+(* However, using notpp we have G;¬p;p :- bot                                   *)
+(* Using exbot we obtain G;¬p;p :- ¬q                                           *)
+(* By deduction, we see that G;¬p :- p -> ¬q                                    *)
+(* Hence from modus ponens we obtain G;¬p :- bot                                *)
+(* By a final reduction we conclude that G :- p as requested                    *)
+Definition andElimL (v:Type) (G:Ctx v) (p q:P v) (e:G :- and p q) : G :- p
+  := reduct 
+      (modus 
+        (deduct (exbot notpp)) 
+        (weaken e)).
+
+Arguments andElimL {v} {G} {p} {q}.
+
+(* Right elimination rule for conjunction                                       *)
+(* We start with e : G :- (p -> ¬q) -> bot                                      *)
+(* By weakening we have G;¬q :- (p -> ¬q) -> bot                                *)
+(* However, by extraction followed by weakening we have G;¬q;p :- ¬q            *)
+(* So by deduction we have G;¬q :- p -> ¬q                                      *)
+(* Hence, using modus ponens we obtain G;¬q :- bot                              *)
+(* and by a final reduction we have G :- q                                      *)
+Definition andElimR (v:Type) (G:Ctx v) (p q:P v) (e:G :- and p q) : G :- q
+  := reduct 
+      (modus 
+        (deduct (weaken extract)) 
+        (weaken e)).
+
+Arguments andElimR {v} {G} {p} {q}.
+
+(* Builds a proof of q/\p from a proof of p/\q                                  *)
+(* We start with e : G :- (p -> ¬q) -> bot                                      *)
+(* We want G :- (q -> ¬p) -> bot, which modulo a deduction is G;q->¬p :- bot    *)
+(* However by weakening e we have G;q->¬p :- (p -> ¬q) -> bot                   *)
+(* So we can obtain what we want simply using modus ponens                      *)
+(* provided we obtain G;q->¬p :- p -> ¬q                                        *)
+(* So modulo two deductions we want G;q->¬p;p;q :- bot                          *)
+(* However from weakening and extraction we see that q -> ¬p , p and q can all  *)
+(* be proven from the context G;q->¬p,p,q. So we easily cam prove bot with two  *)
+(* application of modus ponens                                                  *)
+
+Definition andComm (v:Type)(G:Ctx v)(p q:P v)(e:G :- and p q): G :- and q p
+  := deduct 
+      (modus 
+        (deduct (deduct 
+          (modus 
+            (weaken extract) 
+            (modus 
+              extract 
+              (weaken (weaken extract)))))) 
+        (weaken e)).
+
+Arguments andComm {v} {G} {p} {q}.
