@@ -27,6 +27,16 @@ Definition bot (v:Type) : P v := Bot.
 
 Arguments bot {v}.
 
+Open Scope Prop_Syntax_scope.
+
+Definition or (v:Type) (p q: P v) : P v := ¬p :-> q.
+
+Arguments or {v}.
+
+Definition and (v:Type) (p q: P v) : P v := ¬(p :-> ¬q).
+
+Arguments and {v}.
+
 (* A context is a list of propositions. No need to create a 'snoc' version for  *)
 (* this, we simply need to remember new formulas are 'cons'-ed to the left      *)
 Definition Ctx (v: Type) : Type := list (P v).
@@ -34,7 +44,6 @@ Definition Ctx (v: Type) : Type := list (P v).
 Notation "G ; p" := (cons p G)
   (at level 50, left associativity) : Prop_Syntax_scope.
      
-Open Scope Prop_Syntax_scope.
 
 (* Extract: construct a proof of the sequent G;p :- p                           *)
 (* So that a formula p is provable from a context with p itself as its head     *)
@@ -97,14 +106,6 @@ Definition weaken (v:Type) (G:Ctx v) (p q:P v) : (G :- p) -> (G;q :- p)
   := Weaken G p q.
 
 Arguments weaken {v} {G} {p} {q}.
-
-Definition or (v:Type) (p q: P v) : P v := ¬p :-> q.
-
-Arguments or {v}.
-
-Definition and (v:Type) (p q: P v) : P v := ¬(p :-> ¬q).
-
-Arguments and {v}.
 
 (* Builds a proof of anything from a proof of bottom                            *)
 (* We start from e : G :- bot                                                   *)
