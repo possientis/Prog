@@ -210,7 +210,8 @@ STLC_OBJ  = ${STLC}/Syntax.vo \
 PROP_OBJ = ${PROP}/Syntax.vo \
 					 ${PROP}/Context.vo \
 					 ${PROP}/Proof.vo \
-					 ${PROP}/Lemma.vo
+					 ${PROP}/Lemma.vo \
+					 ${PROP}/Eq.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
@@ -332,6 +333,9 @@ ${FOL}/Eq.vo : ${FOL}/Eq.v
 
 ${LAM}/Eq.vo : ${LAM}/Eq.v
 	coqc $<			${LAM_LIB}
+
+${PROP}/Eq.vo : ${PROP}/Eq.v
+	coqc $<			${PROP_LIB}
 
 ${SET}/Set.vo : ${SET}/Set.v
 	coqc $<			${SET_LIB}

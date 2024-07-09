@@ -6,7 +6,7 @@ Require Import Logic.Fol.Syntax.
 Lemma eqDecidable : forall (v:Type) (e:Eq v),
     forall (s t:P v), {s = t} + {s <> t}.
 Proof.
-    intros v e s t. revert s t.
+    intros v e.
     induction s as [|x y|s1 IH1 s2 IH2|x s1 IH1];
     destruct t as [|x' y'|t1 t2|x' t1].
     - left. reflexivity.

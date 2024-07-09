@@ -6,7 +6,7 @@ Require Import Logic.Lam.Syntax.
 Lemma eqDecidable : forall (v:Type) (e:Eq v), 
     forall (s t:T v), {s = t} + {s <> t}.
 Proof.
-    intros v e s t. revert s t.
+    intros v e.
     induction s as [x|s1 IH1 s2 IH2|x s1 IH1];
     destruct t as [y|t1 t2|y t1].
     - destruct (eqDec x y) as [E|E].
