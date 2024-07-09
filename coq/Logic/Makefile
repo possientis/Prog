@@ -208,7 +208,9 @@ STLC_OBJ  = ${STLC}/Syntax.vo \
 			${STLC}/Typing2.vo
 
 PROP_OBJ = ${PROP}/Syntax.vo \
-			${PROP}/Lemma.vo	 
+					 ${PROP}/Context.vo \
+					 ${PROP}/Proof.vo \
+					 ${PROP}/Lemma.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \

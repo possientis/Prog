@@ -1,4 +1,6 @@
 Require Import Logic.Prop.Syntax.
+Require Import Logic.Prop.Context.
+Require Import Logic.Prop.Proof.
 
 Definition andComm (v:Type) (G:Ctx v) (p q:P v): 
   G :- and p q :-> and q p
