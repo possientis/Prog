@@ -2,6 +2,7 @@ Require Import Bool.
 
 Require Import Logic.Prop.Syntax.
 
+(* Predicate defining a valuation                                               *)
 Definition Valuation (v:Type) (f:P v -> bool) : Prop
   := f (Bot) = false
   /\ forall (p q:P v) , f (p :-> q) = negb (f p) || f q.
@@ -96,5 +97,3 @@ Proof.
     - apply Hg.
     - apply HVar.
 Qed.
-
-

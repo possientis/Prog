@@ -3,6 +3,8 @@ Require Import Logic.Prop.Context.
 
 Declare Scope Prop_Proof_scope.
 
+(* Proof system for classical propositional logic                               *)
+
 (* Extract: construct a proof of the sequent G;p :- p                           *)
 (* So that a formula p is provable from a context with p itself as its head     *)
 (*                                                                              *)
@@ -22,6 +24,7 @@ Declare Scope Prop_Proof_scope.
 (* So if bottom is provable from a context G, having assumed ¬p, then p is      *)
 (* provable from the context G                                                  *)
 
+(* Defines the type G :- p of all proofs that the sequent actually holds        *)
 Inductive Seq (v:Type) : Ctx v -> P v -> Type :=
 | Extract:forall (G:Ctx v)(p:P v),    Seq v (G;p) p 
 | Weaken: forall (G:Ctx v)(p q:P v),  Seq v G p -> Seq v (G;q) p

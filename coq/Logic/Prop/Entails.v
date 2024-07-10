@@ -7,6 +7,9 @@ Require Import Logic.Prop.Semantics.
 
 Declare Scope Prop_Entails_scope.
 
+(* Semantic entailment: G ::- p holds if and only if for all truth assignment   *)
+(* f: v -> bool, if every q in the context G is true (relative to f), then p is *)
+(* also true (relative to f)                                                    *)
 Definition Entails (v:Type)(G:Ctx v) (p:P v) : Prop := 
   forall (f:v -> bool), 
   (forall (q:P v), (q :: G) -> eval f q = true) -> eval f p = true.
@@ -18,18 +21,21 @@ Notation "G ::- p" := (Entails G p)
 
 Open Scope Prop_Entails_scope.
 
+(* Semantic extraction rule                                                     *)
 Lemma entExtract : forall (v:Type) (G:Ctx v) (p:P v), 
   G;p ::- p.
 Proof.
   intros v G p f H. apply H. left. reflexivity.
 Qed.
 
+(* Semantic weakening rule                                                      *)
 Lemma entWeaken : forall (v:Type) (G:Ctx v) (p q:P v), 
   G ::- p -> G;q ::- p.
 Proof.
   intros v G p q H1 f H2. apply H1. intros r H3. apply H2. right. apply H3.
 Qed.
 
+(* Semantic deduction rule                                                      *)
 Lemma entDeduct : forall (v:Type) (G:Ctx v) (p q:P v), 
   G;p ::- q -> G ::- p :-> q.
 Proof.
@@ -86,6 +92,7 @@ Proof.
     - simpl. apply orb_true_intro. left. rewrite <- E. reflexivity.
 Qed.
 
+(* Semantic modus ponens rule                                                   *)
 Lemma entModus : forall (v:Type) (G:Ctx v) (p q: P v),
   G ::- p -> G ::- (p :-> q) -> G ::- q.
 Proof.
@@ -131,6 +138,7 @@ Proof.
     - apply H.
 Qed.
 
+(* Semantic reductio ad absurdum rule                                           *)
 Lemma entReduct : forall (v:Type) (G:Ctx v) (p: P v),
   G;¬p ::- bot -> G ::- p.
 Proof.
