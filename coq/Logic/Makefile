@@ -213,7 +213,9 @@ PROP_OBJ = ${PROP}/Syntax.vo \
 					 ${PROP}/Lemma.vo \
 					 ${PROP}/Eq.vo \
 					 ${PROP}/Semantics.vo \
-					 ${PROP}/Entails.vo
+					 ${PROP}/Entails.vo \
+					 ${PROP}/Sound.vo \
+					 ${PROP}/Consistent.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
