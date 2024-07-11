@@ -215,7 +215,8 @@ PROP_OBJ = ${PROP}/Syntax.vo \
 					 ${PROP}/Semantics.vo \
 					 ${PROP}/Entails.vo \
 					 ${PROP}/Sound.vo \
-					 ${PROP}/Consistent.vo
+					 ${PROP}/Consistent.vo \
+					 ${PROP}/Monotone.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \

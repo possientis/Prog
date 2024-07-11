@@ -10,7 +10,7 @@ Require Import Logic.Prop.Entails.
 Require Import Logic.Prop.Sound.
 
 (* There is no proof of bottom from the empty context *)
-Lemma Consistent : forall (v:Type), ~ exists (e:nil :- @bot v), True.
+Lemma consistent : forall (v:Type), ~ exists (e:nil :- @bot v), True.
 Proof.
   (* Let v be a Type and e be a proof of bottom from the empty context *)
   intros v [e _].
@@ -19,7 +19,7 @@ Proof.
   assert False as A. 2: apply A.
 
   (* We have nil ::- bot from the soundness property *)
-  apply Soundness in e.
+  apply soundness in e.
 
   (* Consider an arbitrary truth assignment *)
   remember (fun (x:v) => true) as f eqn:F.
