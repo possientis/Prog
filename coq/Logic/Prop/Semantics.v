@@ -97,3 +97,19 @@ Proof.
     - apply Hg.
     - apply HVar.
 Qed.
+
+(* Restrict a map f:P v -> bool to its associated truth assignment              *)
+Definition restrict (v:Type) (f:P v -> bool) (x:v) : bool := f 'x.
+
+Arguments restrict {v}.
+
+(* A valuation is just the eval of its associated truth assignment              *)
+Lemma valIsEval : forall (v:Type) (f:P v -> bool),
+  Valuation f -> forall (p:P v), f p = eval (restrict f) p.
+Proof.
+  intros v f Hf p. apply coincideValuation.
+    - apply Hf.
+    - apply evalValuation.
+    - intros x. reflexivity.
+Qed.
+
