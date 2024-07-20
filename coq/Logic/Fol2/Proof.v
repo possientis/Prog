@@ -46,3 +46,41 @@ Notation "G :- p" := (Seq G p)
   (at level 90, no associativity) : Fol2_Proof_scope.
 
 Open Scope Fol2_Proof_scope.
+
+(* If a sequent has a proof, then its context is valid. In other words, it is   *)
+(* impossible to prove a proposition from an invalid context                    *)
+Lemma validContext : forall (v:Type) (e:Eq v) (G:Ctx v) (p:P v),
+  G :- p -> CtxVal G.
+Proof.
+  intros v e G p H.
+  induction H as
+    [G p HVal HIncl
+    |G x p HScope HSec IH 
+    |G p q HIncl  HSec IH
+    |G p q HSeq IH 
+    |G p q HSeq1 IH1 ISeq2 IH2 
+    |G p HSeq IH 
+    |G p HVal HAxi 
+    |G x p HSeq IH
+    |G x y p HVal HIncl HScope].
+    - constructor.
+      + apply HIncl.
+      + apply HVal.
+    - constructor.
+      + apply HScope.
+      + apply IH.
+    - constructor.
+      + apply HIncl.
+      + apply IH.
+    - apply validInvertP with p, IH.    
+    - apply IH1.
+    - apply validInvertP with ¬p, IH.
+    - apply HVal.
+    - apply validInvertV with x, IH.
+    - constructor.
+      + apply HScope.
+      + constructor.
+        * apply HIncl.
+        * apply HVal.
+Qed.
+
