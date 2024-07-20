@@ -33,12 +33,12 @@ Inductive Seq (v:Type) : Ctx v -> P v -> Type :=
 | Reduct: forall (G:Ctx v)(p:P v),    Seq v (G;¬p) bot -> Seq v G p
 .
 
-Arguments Seq {v}.
+Arguments Seq     {v}.
 Arguments Extract {v}.
-Arguments Deduct {v}.
-Arguments Modus {v}.
-Arguments Reduct {v}.
-Arguments Weaken {v}.
+Arguments Weaken  {v}.
+Arguments Deduct  {v}.
+Arguments Modus   {v}.
+Arguments Reduct  {v}.
 
 Notation "G :- p" := (Seq G p)
   (at level 90, no associativity) : Prop_Proof_scope.
@@ -49,6 +49,11 @@ Definition extract (v:Type) (G:Ctx v) (p:P v) : G;p :- p
   := Extract G p. 
 
 Arguments extract {v} {G} {p}.
+
+Definition weaken (v:Type) (G:Ctx v) (p q:P v) : (G :- p) -> (G;q :- p)
+  := Weaken G p q.
+
+Arguments weaken {v} {G} {p} {q}.
 
 Definition deduct (v:Type) (G:Ctx v) (p q:P v) : (G;p :- q) -> (G :- p :-> q)
   := Deduct G p q.
@@ -64,11 +69,6 @@ Definition reduct (v:Type) (G:Ctx v) (p:P v) : (G;¬p :- bot) -> (G :- p)
   := Reduct G p.
 
 Arguments reduct {v} {G} {p}.
-
-Definition weaken (v:Type) (G:Ctx v) (p q:P v) : (G :- p) -> (G;q :- p)
-  := Weaken G p q.
-
-Arguments weaken {v} {G} {p} {q}.
 
 (* Builds a proof of anything from a proof of bottom                            *)
 (* We start from e : G :- bot                                                   *)
