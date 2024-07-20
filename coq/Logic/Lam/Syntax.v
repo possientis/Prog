@@ -7,8 +7,8 @@ Inductive T (v:Type) : Type :=
 | Lam : v -> T v -> T v             (* lambda abstraction       *)
 .
 
-Arguments Var {v} _.
-Arguments App {v} _ _.
-Arguments Lam {v} _ _.
+Arguments Var {v}.
+Arguments App {v}.
+Arguments Lam {v}.
 
 
