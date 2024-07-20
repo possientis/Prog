@@ -1,0 +1,61 @@
+Require Import List.
+
+Require Import Logic.Class.Eq.
+
+Require Import Logic.List.In.
+Require Import Logic.List.Include.
+
+Require Import Logic.Fol.Syntax.
+Require Import Logic.Fol.Free.
+
+Declare Scope Fol2_Context_scope.
+
+(* A context entry is either a variable or a proposition                        *)
+Inductive CtxEntry (v:Type) : Type :=
+| Var : v   -> CtxEntry v
+| Prp : P v -> CtxEntry v
+.
+
+Arguments Var {v}.
+Arguments Prp {v}.
+
+(* A context is a list of context entries. No need to create a 'snoc' version   *)
+(* for this, we simply need to remember new entries are 'cons'-ed to the left   *)
+Definition Ctx (v: Type) : Type := list (CtxEntry v).
+
+(* Snoc-ing a new proposition to a context                                      *)
+Notation "G ; p" := (cons (Prp p) G)
+  (at level 50, left associativity) : Fol2_Context_scope.
+
+(* Snoc-ing a new variable to a context                                         *)
+Notation "G , x" := (cons (Var x) G)
+  (at level 50, left associativity) : Fol2_Context_scope.
+
+Open Scope Fol2_Context_scope.
+
+(* Free variables of a context: variables which are in scope                    *) 
+Fixpoint Fr' (v:Type) (e:Eq v) (G:Ctx v) : list v :=
+  match G with
+  | nil               => nil
+  | cons (Var x) G'   => cons x (Fr' v e G')
+  | cons (Prp p) G'   => Fr' v e G'
+end.
+
+Arguments Fr' {v} {e}.
+
+(* Predicate defining a valid context                                           *)
+(*                                                                              *)
+(* NilCtx : the empty context is valid                                          *)
+(*                                                                              *)
+(* ConsV: if G is a valid context and x is not already in scope in G then       *)
+(* G,x is itself a valid context                                                *)
+(*                                                                              *)
+(* ConsP: if G is a valid context and all free variables of p are in scope      *)
+(* in G, then G;p is itself a valid context                                     *)
+Inductive CtxVal (v:Type) (e:Eq v) : Ctx v -> Prop :=
+| NilCtx: CtxVal v e nil
+| ConsV : forall(G:Ctx v)(x:v)  ,~(x :: Fr' G) -> CtxVal v e G -> CtxVal v e (G,x)
+| ConsP : forall(G:Ctx v)(p:P v),Fr p <= Fr' G -> CtxVal v e G -> CtxVal v e (G;p)
+.
+
+Arguments CtxVal {v} {e}.

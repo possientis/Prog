@@ -9,6 +9,7 @@ NAT	  = Nat
 BOOL  = Bool
 LIST  = List
 FOL	  = Fol
+FOL2  = Fol2
 LAM   = Lam
 SET   = Set
 NORM  = Normal
@@ -25,6 +26,7 @@ NAT_LIB   = -Q ${NAT}   Logic.${NAT}   -Q ../Logic Logic
 BOOL_LIB  = -Q ${BOOL}  Logic.${BOOL}  -Q ../Logic Logic
 LIST_LIB  = -Q ${LIST}  Logic.${LIST}  -Q ../Logic Logic
 FOL_LIB   = -Q ${FOL}   Logic.${FOL}   -Q ../Logic Logic
+FOL2_LIB  = -Q ${FOL2}  Logic.${FOL2}  -Q ../Logic Logic
 LAM_LIB   = -Q ${LAM}   Logic.${LAM}   -Q ../Logic Logic
 SET_LIB   = -Q ${SET}   Logic.${SET}   -Q ../Logic Logic
 LANG1_LIB = -Q ${LANG1} Logic.${LANG1} -Q ../Logic Logic
@@ -128,6 +130,9 @@ FOL_OBJ   = ${FOL}/Syntax.vo \
 			${FOL}/Admissible.vo \
 			${FOL}/Alpha.vo
 
+FOL2_OBJ	= ${FOL2}/Context.vo \
+					  ${FOL2}/Axiom.vo \
+						${FOL2}/Proof.vo	
 
 LAM_OBJ   = ${LAM}/Syntax.vo \
 			${LAM}/Order.vo \
@@ -237,6 +242,7 @@ all : 	${AXIOM_OBJ} \
 		${BOOL_OBJ} \
 		${LIST_OBJ} \
 		${FOL_OBJ} \
+		${FOL2_OBJ} \
 		${LAM_OBJ} \
 		${SET_OBJ} \
 		${LANG1_OBJ} \
@@ -268,6 +274,9 @@ ${LIST}/%.vo  : ${LIST}/%.v
 
 ${FOL}/%.vo   : ${FOL}/%.v
 	coqc $< 		${FOL_LIB}
+
+${FOL2}/%.vo   : ${FOL2}/%.v
+	coqc $< 		${FOL2_LIB}
 
 ${LAM}/%.vo   : ${LAM}/%.v
 	coqc $< 		${LAM_LIB}
