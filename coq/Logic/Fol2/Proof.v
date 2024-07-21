@@ -208,7 +208,9 @@ Definition botElim (v:Type) (e:Eq v) (G:Ctx v) (p:P v) (pr:G :- bot)
 Proof.
 
   (* Leaving a hole for the proof that free vars are in scope *)
-  refine (fun (HScope : Fr p <= Fr' G) => reduct (weakenP _ pr)).
+  refine (fun (HScope : Fr p <= Fr' G) =>
+    reduct                      (* G    :- p              *)
+      (weakenP _ pr)).          (* G;¬p :- bot            *)
 
   (* It remains to show that the free variables of ¬p are in scope *)
   assert (Fr (¬p) <= Fr' G) as A. 2: apply A.
@@ -225,13 +227,61 @@ Proof.
 Defined.
 
 (* And introduction:                                                            *)
-
-(*
+(* Given proofs of G :- p and G :- q, builds a proof of G :- and p q            *)
+(* The proof goes as follows:                                                   *)
+(* G       :- p                    : (1) assumption                             *)
+(* G       :- q                    : (2) assumption                             *)
+(* G;p->¬q :- p                    : (3) weakening of (1)                       *)
+(* G;p->¬q :- q                    : (4) weakening of (2)                       *)
+(* G;p->¬q :- p -> ¬q              : (5) extraction                             *)
+(* G;p->¬q :- ¬q                   : (6) modus ponens (3) and (5)               *)
+(* G;p->¬q :- bot                  : (7) modus ponens (4) amd (6)               *)
+(* G       :- ¬(p -> ¬q)           : deduction                                  *)
+(* G       :- and p q              : and p q = ¬(p -> ¬q)                       *)
 Definition andIntro (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
   (pr1:G :- p) (pr2:G :- q) : G :- and p q.
 Proof.
-  (* Leaving holes for the various proofs that need to be provided *)
-  refine (deduct (modus (weakenP _ pr2) (modus (weakenP _ pr1) (extract _ _)))).
+  (* We shall need to prove that G is a valid context *)
+  assert (CtxVal G) as HVal.
+    (* Which follows from the fact the sequent G :- p as a proof pr1 *)
+    { apply validContext with p, pr1. }
 
-Show.
-*)
+  (* We shall also need to prove that all free vars of p -> ¬q are in scope *)
+  assert (Fr (p :-> ¬q) <= Fr' G) as HScope.
+    { (* Expanding the lhs and using the fact that Fr q ++ [] = Fr q *)
+      simpl. rewrite app_nil_r.
+
+      (* We simply need to show that all free vars of p and q are in scope *)
+      assert (Fr p ++ Fr q <= Fr' G) as A. 2: apply A.
+
+      (* It is sufficient to deal with p and q separately *)
+      apply incl_app.
+
+          (* First we need to show the free vars of p are in scope *)
+        - assert (Fr p <= Fr' G) as A. 2: apply A.
+
+          (* Which follows from the fact the sequent G :- p has a proof pr1 *)
+          apply freeVarsInScope, pr1.
+
+          (* Next we need to show the free vars of q are in scope *)
+        - assert (Fr q <= Fr' G) as A. 2: apply A.
+
+          (* Which follows from the fact the sequent G :- q has a proof pr2 *)
+          apply freeVarsInScope, pr2. }
+
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (deduct                     (* G       :- ¬(p -> ¬q)  *)
+      (modus                    (* G;p->¬q :- bot         *)
+        (weakenP _ pr2)         (* G;p->¬q :- q           *)
+        (modus                  (* G;p->¬q :- ¬q          *)
+          (weakenP _ pr1)       (* G;p->¬q :- p           *)
+          (extract _ _)))).     (* G;p->¬q :- p -> ¬q     *)
+
+  (* Filling the holes with the required proofs *)
+  - apply HScope.
+  - apply HScope.
+  - apply HVal.
+  - apply HScope.
+Defined.
+
