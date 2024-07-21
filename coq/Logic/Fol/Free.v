@@ -4,6 +4,7 @@ Require Import Logic.Class.Eq.
 
 Require Import Logic.Rel.Properties.
 
+Require Import Logic.Func.Injective.
 Require Import Logic.Func.Replace.
 Require Import Logic.Func.Permute.
 
@@ -151,6 +152,12 @@ Proof.
 Qed.
 
 Lemma free_permute : forall (v:Type) (e:Eq v) (x y:v) (p:P v),
+  Fr (fmap (y <:> x) p) = map (y <:> x) (Fr p).
+Proof.
+  intros v e x y p. apply free_inj, injective_injective_on, permute_injective.
+Qed.
+
+Lemma free_permute2 : forall (v:Type) (e:Eq v) (x y:v) (p:P v),
   ~ x :: Fr p ->
   ~ y :: Fr p -> 
   forall (u:v), u :: Fr p -> (y <:> x) u = u.
@@ -162,3 +169,10 @@ Proof.
     + subst. contradiction.
     + apply permute_app_diff; assumption.
 Qed.
+
+Lemma free_not : forall (v:Type) (e:Eq v) (p:P v), Fr (¬p) = Fr p.
+Proof.
+  intros v e p. simpl. apply app_nil_r.
+Qed.
+
+

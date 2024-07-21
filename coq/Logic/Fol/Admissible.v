@@ -57,6 +57,6 @@ Lemma admissible_permute: forall (v:Type) (e:Eq v) (x y:v) (p:P v),
 Proof.
   intros v e x y p Hx Hy. split.
   - apply valid_permute.
-  - apply free_permute; assumption.
+  - apply free_permute2; assumption.
 Qed.
 

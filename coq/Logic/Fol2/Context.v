@@ -82,6 +82,24 @@ Proof.
   - intros G x A. inversion A.
 Qed.
 
+Lemma validInScopeP : forall (v:Type) (e:Eq v) (G:Ctx v) (p: P v),
+  CtxVal (G;p) -> Fr p <= Fr' G.
+Proof.
+  intros v e G p HVal.
+  remember (G;p) as H eqn:E. revert G p E.
+  destruct HVal as [ |H x HScope HVal|H q HIncl HVal].
+  - intros G p A. inversion A.
+  - intros G p A. inversion A.
+  - intros G p A. inversion A. subst. apply HIncl.
+Qed.
 
-
-
+Lemma validInScopeV : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
+  CtxVal (G,x) -> ~ (x :: Fr' G).
+Proof.
+  intros v e G x HVal.
+  remember (G,x) as H eqn:E. revert G x E.
+  destruct HVal as [ |H y HScope HVal|H p HIncl HVal].
+  - intros G x A. inversion A.
+  - intros G x A. inversion A. subst. apply HScope.
+  - intros G x A. inversion A.
+Qed.

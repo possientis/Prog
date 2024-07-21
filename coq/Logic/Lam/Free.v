@@ -328,6 +328,12 @@ Proof.
 Qed.
 
 Lemma free_permute : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
+  Fr (fmap (y <:> x) t) = map (y <:> x) (Fr t).
+Proof.
+  intros v e x y t. apply free_inj, injective_injective_on, permute_injective.
+Qed.
+
+Lemma free_permute2 : forall (v:Type) (e:Eq v) (x y:v) (t:T v),
   ~ x :: Fr t ->
   ~ y :: Fr t -> 
   forall (u:v), u :: Fr t -> (y <:> x) u = u.
