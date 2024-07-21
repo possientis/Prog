@@ -38,3 +38,5 @@ au! Syntax idris source /usr/share/vim/vim90/syntax/idris.vim
 
 au BufRead,BufNewFile *.lean set filetype=lean
 au! Syntax lean source /usr/share/vim/vim90/syntax/lean.vim
+
+autocmd BufWritePre *.v %s/\s\+$//e

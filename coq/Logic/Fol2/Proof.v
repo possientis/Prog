@@ -19,6 +19,12 @@ Require Import Logic.Fol2.Axiom.
 
 Declare Scope Fol2_Proof_scope.
 
+(* Given a type v of variables and a decidable equality e on v, given a context *)
+(* G and proposition p, we define the type 'Seq v e G p', aka 'Seq G p' as the  *)
+(* type of all set theoretic proofs that the proposition p is true in context G *)
+(* In fact we denote 'Seq G p' as 'G :- p', so values of type 'G :- p' are all  *)
+(* possible proofs that the sequent G :- p holds.                               *)
+(* If the sequent G :- p does not hold, then the type 'G :- p' is void.         *)
 Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 | Extract:forall (G:Ctx v)(p:P v),      CtxVal G -> Fr p <= Fr' G -> Seq v e (G;p) p
 | WeakenV:forall (G:Ctx v)(x:v)(p:P v), ~(x :: Fr' G) -> Seq v e G p -> Seq v e (G,x) p
@@ -194,7 +200,7 @@ Definition special (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
 (* deduce just anything from the absurd, we cannot prove a proposition which is *)
 (* nonesensical, i.e. whose free variables are not in scope of the context G    *)
 (* The proof goes as follows:                                                   *)
-(* G    :- bot                     ; assumption                                 *)
+(* G    :- bot                     : assumption                                 *)
 (* G;¬p :- bot                     : weakening, ok if free vars in scope        *)
 (* G    :- p                       : reduction                                  *)
 Definition botElim (v:Type) (e:Eq v) (G:Ctx v) (p:P v) (pr:G :- bot)
@@ -217,3 +223,15 @@ Proof.
   apply HScope.
 
 Defined.
+
+(* And introduction:                                                            *)
+
+(*
+Definition andIntro (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
+  (pr1:G :- p) (pr2:G :- q) : G :- and p q.
+Proof.
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine (deduct (modus (weakenP _ pr2) (modus (weakenP _ pr1) (extract _ _)))).
+
+Show.
+*)

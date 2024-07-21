@@ -26,7 +26,7 @@ Declare Scope Prop_Proof_scope.
 
 (* Defines the type G :- p of all proofs that the sequent actually holds        *)
 Inductive Seq (v:Type) : Ctx v -> P v -> Type :=
-| Extract:forall (G:Ctx v)(p:P v),    Seq v (G;p) p 
+| Extract:forall (G:Ctx v)(p:P v),    Seq v (G;p) p
 | Weaken: forall (G:Ctx v)(p q:P v),  Seq v G p -> Seq v (G;q) p
 | Deduct: forall (G:Ctx v)(p q:P v),  Seq v (G;p) q -> Seq v G (p :-> q)
 | Modus:  forall (G:Ctx v)(p q:P v),  Seq v G p -> Seq v G (p :-> q) -> Seq v G q
@@ -45,8 +45,8 @@ Notation "G :- p" := (Seq G p)
 
 Open Scope Prop_Proof_scope.
 
-Definition extract (v:Type) (G:Ctx v) (p:P v) : G;p :- p 
-  := Extract G p. 
+Definition extract (v:Type) (G:Ctx v) (p:P v) : G;p :- p
+  := Extract G p.
 
 Arguments extract {v} {G} {p}.
 
@@ -74,7 +74,7 @@ Arguments reduct {v} {G} {p}.
 (* We start from e : G :- bot                                                   *)
 (* After weakening we obtain G;¬p :- bot                                        *)
 (* from which we obtain G :- p by reduction ad absurdum                         *)
-Definition botElim (v:Type) (G:Ctx v) (p:P v) (e:G :- bot) : G :- p 
+Definition botElim (v:Type) (G:Ctx v) (p:P v) (e:G :- bot) : G :- p
   := reduct (weaken e).
 
 Arguments botElim {v} {G} {p}.
@@ -87,11 +87,11 @@ Arguments botElim {v} {G} {p}.
 (* So by modus ponens we obtain G;p->¬q :- q -> bot                             *)
 (* and using modus ponens once more we have G;p->¬q :- bot                      *)
 (* By deduction we conclude that G :- ¬(p -> ¬q) as requested                   *)
-Definition andIntro (v:Type)(G:Ctx v)(p q:P v)
+Definition andIntro (v:Type) (G:Ctx v) (p q:P v)
   (e1:G :- p) (e2:G :- q) : G :- and p q
-  := deduct 
-      (modus 
-        (weaken e2) 
+  := deduct
+      (modus
+        (weaken e2)
         (modus (weaken e1) extract)).
 
 Arguments andIntro {v} {G} {p} {q}.
@@ -107,12 +107,12 @@ Arguments andIntro {v} {G} {p} {q}.
 (* However we have G;¬p;p :- p by extraction and G;¬p;p :- ¬p by extraction     *)
 (* followed by weakening. Hence we conclude by modus ponens                     *)
 Definition andElimL (v:Type) (G:Ctx v) (p q:P v) (e:G :- and p q) : G :- p
-  := reduct 
-      (modus 
-        (deduct (botElim 
-          (modus 
-            extract 
-            (weaken extract)))) 
+  := reduct
+      (modus
+        (deduct (botElim
+          (modus
+            extract
+            (weaken extract))))
         (weaken e)).
 
 Arguments andElimL {v} {G} {p} {q}.
@@ -125,9 +125,9 @@ Arguments andElimL {v} {G} {p} {q}.
 (* Hence, using modus ponens we obtain G;¬q :- bot                              *)
 (* and by a final reduction we have G :- q                                      *)
 Definition andElimR (v:Type) (G:Ctx v) (p q:P v) (e:G :- and p q) : G :- q
-  := reduct 
-      (modus 
-        (deduct (weaken extract)) 
+  := reduct
+      (modus
+        (deduct (weaken extract))
         (weaken e)).
 
 Arguments andElimR {v} {G} {p} {q}.
@@ -143,11 +143,11 @@ Arguments andElimR {v} {G} {p} {q}.
 (* Using modus ponens once more we obtain G;¬q;p :- bot                         *)
 (* We conclude from deduction that G;¬q :- ¬p                                   *)
 Definition contra (v:Type) (G:Ctx v) (p q:P v) (e:G;p :- q) : G;¬q :- ¬p
-  := deduct 
-      (modus 
-        (modus 
-          extract 
-          (weaken (weaken (deduct e)))) 
+  := deduct
+      (modus
+        (modus
+          extract
+          (weaken (weaken (deduct e))))
         (weaken extract)).
 
 Arguments contra {v} {G} {p} {q}.
@@ -162,11 +162,11 @@ Arguments contra {v} {G} {p} {q}.
 (* Using modus ponens once more, we have G;¬q :- bot                            *)
 (* It follows by reduction that G :- q                                          *)
 Definition caseof (v:Type)(G:Ctx v)(p q:P v)(e1:G;p :- q)(e2:G;¬p :- q) : G :- q
-  := reduct 
-      (modus 
-        (modus 
-          (contra e1) 
-          (weaken (deduct e2))) 
+  := reduct
+      (modus
+        (modus
+          (contra e1)
+          (weaken (deduct e2)))
         extract).
 
 Arguments caseof {v} {G} {p} {q}.
@@ -187,18 +187,18 @@ Arguments caseof {v} {G} {p} {q}.
 (* So 3. is obtained by virtue of modus ponens.                                 *)
 Definition either (v:Type)(G:Ctx v)(p q r:P v)
   (e1:G;p :- r) (e2:G;q :- r) : G;or p q :- r
-  := caseof 
-      (modus 
-        extract 
-        (weaken (weaken (deduct e1)))) 
-      (modus 
-        (modus 
-          extract 
-          (weaken extract)) 
+  := caseof
+      (modus
+        extract
+        (weaken (weaken (deduct e1))))
+      (modus
+        (modus
+          extract
+          (weaken extract))
         (weaken (weaken (deduct e2)))).
 
 Arguments either {v} {G} {p} {q} {r}.
- 
+
 (* Left introduction rule for disjunction                                       *)
 (* Builds a proof of p \/ q from a proof of p                                   *)
 (* We start from e : G :- p                                                     *)
@@ -228,7 +228,7 @@ Arguments orIntroR {v} {G} {p} {q}.
 (* Using either on e1 e2 we obtain G;p\/q :- r                                  *)
 (* Using deduction we therefore get G :- p\/q -> r                              *)
 (* Using modus ponens and e we finally obtain G :- r as desired                 *)
-Definition orElim (v:Type) (G:Ctx v) (p q r:P v) 
+Definition orElim (v:Type) (G:Ctx v) (p q r:P v)
   (e1:G;p :- r) (e2:G;q :- r) (e:G :- or p q) : G :- r
   := modus e (deduct (either e1 e2)).
 
