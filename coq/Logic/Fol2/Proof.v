@@ -20,18 +20,18 @@ Require Import Logic.Fol2.Axiom.
 Declare Scope Fol2_Proof_scope.
 
 Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
-| Extract:forall (G:Ctx v)(p:P v),      CtxVal G -> Fr p <= Fr' G -> Seq v e (G;p) p 
+| Extract:forall (G:Ctx v)(p:P v),      CtxVal G -> Fr p <= Fr' G -> Seq v e (G;p) p
 | WeakenV:forall (G:Ctx v)(x:v)(p:P v), ~(x :: Fr' G) -> Seq v e G p -> Seq v e (G,x) p
 | WeakenP:forall (G:Ctx v)(p q:P v),    Fr q <= Fr' G -> Seq v e G p -> Seq v e (G;q) p
 | Deduct :forall (G:Ctx v)(p q:P v),    Seq v e (G;p) q -> Seq v e G (p :-> q)
 | Modus  :forall (G:Ctx v)(p q: P v),   Seq v e G p -> Seq v e G (p :-> q) -> Seq v e G q
 | Reduct :forall (G:Ctx v)(p:P v),      Seq v e (G;¬p) bot -> Seq v e G p
-| AxiomP :forall (G:Ctx v)(p:P v),      CtxVal G -> IsAxiom p -> Seq v e G p 
-| General:forall (G:Ctx v)(x:v)(p:P v), Seq v e (G,x) p -> Seq v e G (All x p) 
+| AxiomP :forall (G:Ctx v)(p:P v),      CtxVal G -> IsAxiom p -> Seq v e G p
+| General:forall (G:Ctx v)(x:v)(p:P v), Seq v e (G,x) p -> Seq v e G (All x p)
 | Special:forall (G:Ctx v)(x y:v)(p:P v),
     CtxVal G              ->
     Fr (All x p) <= Fr' G ->
-    ~ (y :: Fr' G)        -> 
+    ~ (y :: Fr' G)        ->
     Seq v e (G;All x p,y) (fmap (y <:> x) p)
 .
 
@@ -59,12 +59,12 @@ Proof.
   intros v e G p HSeq.
   induction HSeq as
     [G p HVal HIncl
-    |G x p HScope HSec IH 
+    |G x p HScope HSec IH
     |G p q HIncl  HSec IH
-    |G p q HSeq IH 
-    |G p q HSeq1 IH1 ISeq2 IH2 
-    |G p HSeq IH 
-    |G p HVal HAxi 
+    |G p q HSeq IH
+    |G p q HSeq1 IH1 ISeq2 IH2
+    |G p HSeq IH
+    |G p HVal HAxi
     |G x p HSeq IH
     |G x y p HVal HIncl HScope].
     - constructor.
@@ -76,7 +76,7 @@ Proof.
     - constructor.
       + apply HIncl.
       + apply IH.
-    - apply validInvertP with p, IH.    
+    - apply validInvertP with p, IH.
     - apply IH1.
     - apply validInvertP with ¬p, IH.
     - apply HVal.
@@ -141,3 +141,79 @@ Proof.
           { apply HxNeq. }
 Qed.
 
+Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
+  : CtxVal G -> Fr p <= Fr' G -> G;p :- p := Extract G p.
+
+Arguments extract {v} {e} {G} {p}.
+
+Definition weakenV (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
+  : ~(x :: Fr' G) -> G :- p -> G,x :- p := WeakenV G x p.
+
+Arguments weakenV {v} {e} {G} {x} {p}.
+
+Definition weakenP (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
+  : Fr q <= Fr' G -> G :- p -> G;q :- p := WeakenP G p q.
+
+Arguments weakenP {v} {e} {G} {p} {q}.
+
+Definition deduct (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
+  : G;p :- q -> G :- p :-> q := Deduct G p q.
+
+Arguments deduct {v} {e} {G} {p} {q}.
+
+Definition modus (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
+  : G :- p -> G :- p :-> q -> G :- q := Modus G p q.
+
+Arguments modus {v} {e} {G} {p} {q}.
+
+Definition reduct (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
+  : G;¬p :- bot -> G :- p := Reduct G p.
+
+Arguments reduct {v} {e} {G} {p}.
+
+Definition axiomP (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
+  : CtxVal G -> IsAxiom p -> G :- p := AxiomP G p.
+
+Arguments axiomP {v} {e} {G} {p}.
+
+Definition general (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
+  : G,x :- p -> G :- (All x p) := General G x p.
+
+Arguments general {v} {e} {G} {x} {p}.
+
+Definition special (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
+  : CtxVal G              ->          (* context is valid                       *)
+    Fr (All x p) <= Fr' G ->          (* all free vars of 'All x p' in scope    *)
+    ~(y :: Fr' G)         ->          (* y not already in scope                 *)
+    G;All x p,y :- fmap (y <:> x) p
+  := Special G x y p.
+
+(* Bot elimination:                                                             *)
+(* Given a proof of the absurd, builds a proof of anything, provided the free   *)
+(* variables are in scope. Note that contrary to propositional logic, we cannot *)
+(* deduce just anything from the absurd, we cannot prove a proposition which is *)
+(* nonesensical, i.e. whose free variables are not in scope of the context G    *)
+(* The proof goes as follows:                                                   *)
+(* G    :- bot                     ; assumption                                 *)
+(* G;¬p :- bot                     : weakening, ok if free vars in scope        *)
+(* G    :- p                       : reduction                                  *)
+Definition botElim (v:Type) (e:Eq v) (G:Ctx v) (p:P v) (pr:G :- bot)
+  : Fr p <= Fr' G -> G :- p.
+Proof.
+
+  (* Leaving a hole for the proof that free vars are in scope *)
+  refine (fun (HScope : Fr p <= Fr' G) => reduct (weakenP _ pr)).
+
+  (* It remains to show that the free variables of ¬p are in scope *)
+  assert (Fr (¬p) <= Fr' G) as A. 2: apply A.
+
+  (* Since Fr (¬p) = Fr p ... *)
+  rewrite free_not.
+
+  (* Tt remains to show that the free variables of p are in scope *)
+  assert (Fr p <= Fr' G) as A. 2: apply A.
+
+  (* Which is true by our assumption HScope *)
+  apply HScope.
+
+Defined.
