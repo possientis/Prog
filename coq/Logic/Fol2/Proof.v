@@ -295,8 +295,8 @@ Arguments andIntro {v} {e} {G} {p} {q}.
 (* G;¬p;p :- bot                  : (7)  modus ponens of (5) and (6)            *)
 (* G;¬p;p :- ¬q                   : (8)  bot elimination in (7)                 *)
 (* G;¬p   :- p -> ¬q              : (9)  deduction from (8)                     *)
-(* G;¬p   :- bot                  : (10) modus ponens of (3) and (9)            *)
-(* G      :- p                    : (11) reduction                              *)
+(* G;¬p   :- bot                  : (10) modus ponens of (9) and (3)            *)
+(* G      :- p                    : (11) reduction from (10)                    *)
 Definition andElimL (v:Type) (e:Eq v) (G:Ctx v) (p q:P v) (pr:G :- and p q) : G :- p.
 Proof.
   (* We shall need to prove that G is a valid context *)
@@ -371,3 +371,78 @@ Defined.
 
 Arguments andElimL {v} {e} {G} {p} {q}.
 
+(* And right elimination:                                                       *)
+(* Given a proof of G :- and p q, builds a proof of G :- q                      *)
+(* The proof goes as follows:                                                   *)
+(* G      :- and p q              : (1) assumption                              *)
+(* G      :- (p -> ¬q) -> bot     : (2) and p q = ¬(p -> ¬q)                    *)
+(* G;¬q   :- (p -> ¬q) -> bot     : (3) weakening of (2)                        *)
+(* G;¬q   :- ¬q                   : (4) extraction                              *)
+(* G;¬q;p :- ¬q                   : (5) weakening of (4)                        *)
+(* G;¬q   :- p -> ¬q              : (6) deduction from (5)                      *)
+(* G;¬q   :- bot                  : (7) modus ponens of (6) and (3)             *)
+(* G      : q                     : (8) reduction from (7)                      *)
+Definition andElimR (v:Type) (e:Eq v) (G:Ctx v) (p q:P v) (pr:G :- and p q) : G :- q.
+Proof.
+  (* We shall need to prove that G is a valid context *)
+  assert (CtxVal G) as HVal. { apply validContext with (and p q), pr. }
+
+  (* We shall also need to prove that all free vars of p are in scope *)
+  assert (Fr p <= Fr' G) as HpScope. {
+
+    (* From the sequent G :- and p q, all free vars of and p q are in scope *)
+    assert (Fr (and p q) <= Fr' G) as Hpq. { apply freeVarsInScope, pr. }
+
+    (* Using transitivity of inclusion *)
+    apply incl_tran with (Fr (and p q)). 2: apply Hpq.
+
+    (* It is sufficient to prove that Fr p <= Fr (and p q) *)
+    assert (Fr p <= Fr (and p q)) as A. 2: apply A.
+
+    (* After simplification of the rhs *)
+    simpl. rewrite app_nil_r, app_nil_r.
+
+    (* We need to show that Fr p <= Fr p ++ Fr q *)
+    assert (Fr p <= Fr p ++ Fr q) as A. 2: apply A.
+
+    (* Which is clear *)
+    apply incl_appl, incl_refl.
+
+  }
+
+  (* And all free vars of q are in scope *)
+  assert (Fr q <= Fr' G) as HqScope. {
+
+    (* From the sequent G :- and p q, all free vars of and p q are in scope *)
+    assert (Fr (and p q) <= Fr' G) as Hpq. { apply freeVarsInScope, pr. }
+
+    (* Using transitivity of inclusion *)
+    apply incl_tran with (Fr (and p q)). 2: apply Hpq.
+
+    (* It is sufficient to prove that Fr q <= Fr (and p q) *)
+    assert (Fr q <= Fr (and p q)) as A. 2: apply A.
+
+    (* After simplification of the rhs *)
+    simpl. rewrite app_nil_r, app_nil_r.
+
+    (* We need to show that Fr q <= Fr p ++ Fr q *)
+    assert (Fr q <= Fr p ++ Fr q) as A. 2: apply A.
+
+    (* Which is clear *)
+    apply incl_appr, incl_refl.
+  }
+
+  (* Leaving holes for the various proofs that need to be provided      *)
+  refine (reduct                    (* G      :- q                      *)
+            (modus                  (* G;¬q   :- bot                    *)
+              (deduct               (* G;¬q   :- p -> ¬q                *)
+                (weakenP _          (* G;¬q;p :- ¬q                     *)
+                  (extract _ _)))   (* G;¬q   :- ¬q                     *)
+              (weakenP _ pr))).     (* G;¬q   :- (p -> ¬q) -> bot       *)
+
+  (* Filling the holes with the required proofs *)
+  - apply HpScope.
+  - apply HVal.
+  - rewrite free_not. apply HqScope.
+  - rewrite free_not. apply HqScope.
+Defined.
