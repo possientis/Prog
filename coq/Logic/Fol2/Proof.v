@@ -202,9 +202,9 @@ Definition botElim (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
 Proof.
 
   (* Leaving a hole for the proof that free vars are in scope *)
-  refine (
+  refine
     (reduct                         (* G    :- p              *)
-      (weakenP _ pr))).             (* G;¬p :- bot            *)
+      (weakenP _ pr)).              (* G;¬p :- bot            *)
 
   (* It remains to show that the free variables of ¬p are in scope *)
   assert (Fr (¬p) <= Fr' G) as A. 2: apply A.
@@ -347,16 +347,17 @@ Proof.
     apply incl_appr, incl_refl.
   }
 
-  (* Leaving holes for the various proofs that need to be provided      *)
-  refine (reduct                          (* G      :- p                *)
-            (modus                        (* G;¬p   :- bot              *)
-              (deduct                     (* G;¬p   :- p -> ¬q          *)
-                (botElim _                (* G;¬p;p :- ¬q               *)
-                  (modus                  (* G;¬p;p :- bot              *)
-                    (extract _ _)         (* G;¬p;p :- p                *)
-                    (weakenP _            (* G;¬p;p :- ¬p               *)
-                      (extract _ _)))))   (* G;¬p   :- ¬p               *)
-              (weakenP _ pr))).           (* G;¬p   :- (p -> ¬q) -> bot *)
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (reduct                         (* G      :- p                 *)
+      (modus                        (* G;¬p   :- bot               *)
+        (deduct                     (* G;¬p   :- p -> ¬q           *)
+          (botElim _                (* G;¬p;p :- ¬q                *)
+            (modus                  (* G;¬p;p :- bot               *)
+              (extract _ _)         (* G;¬p;p :- p                 *)
+              (weakenP _            (* G;¬p;p :- ¬p                *)
+                (extract _ _)))))   (* G;¬p   :- ¬p                *)
+        (weakenP _ pr))).           (* G;¬p   :- (p -> ¬q) -> bot  *)
 
   (* Filling the holes with the required proofs *)
   - rewrite free_not. apply HqScope.
@@ -432,13 +433,14 @@ Proof.
     apply incl_appr, incl_refl.
   }
 
-  (* Leaving holes for the various proofs that need to be provided      *)
-  refine (reduct                    (* G      :- q                      *)
-            (modus                  (* G;¬q   :- bot                    *)
-              (deduct               (* G;¬q   :- p -> ¬q                *)
-                (weakenP _          (* G;¬q;p :- ¬q                     *)
-                  (extract _ _)))   (* G;¬q   :- ¬q                     *)
-              (weakenP _ pr))).     (* G;¬q   :- (p -> ¬q) -> bot       *)
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (reduct                    (* G      :- q                      *)
+       (modus                  (* G;¬q   :- bot                    *)
+         (deduct               (* G;¬q   :- p -> ¬q                *)
+           (weakenP _          (* G;¬q;p :- ¬q                     *)
+             (extract _ _)))   (* G;¬q   :- ¬q                     *)
+         (weakenP _ pr))).     (* G;¬q   :- (p -> ¬q) -> bot       *)
 
   (* Filling the holes with the required proofs *)
   - apply HpScope.
@@ -500,16 +502,17 @@ Proof.
     apply freeVarsInScope, pr.
   }
 
-  (* Leaving holes for the various proofs that need to be provided        *)
-  refine (deduct                    (* G;¬q   :- ¬p                       *)
-            (modus                  (* G;¬q;p :- bot                      *)
-              (modus                (* G;¬q;p :- q                        *)
-                (extract _ _)       (* G;¬q;p :- p                        *)
-                (weakenP _          (* G;¬q;p :- p -> q                   *)
-                  (weakenP _        (* G;¬q   :- p -> q                   *)
-                    (deduct pr))))  (* G      :- p -> q                   *)
-              (weakenP _            (* G;¬q;p :- q -> bot                 *)
-                (extract _ _)))).   (* G;¬q   :- q -> bot                 *)
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (deduct                    (* G;¬q   :- ¬p                     *)
+       (modus                  (* G;¬q;p :- bot                    *)
+         (modus                (* G;¬q;p :- q                      *)
+           (extract _ _)       (* G;¬q;p :- p                      *)
+           (weakenP _          (* G;¬q;p :- p -> q                 *)
+             (weakenP _        (* G;¬q   :- p -> q                 *)
+               (deduct pr))))  (* G      :- p -> q                 *)
+         (weakenP _            (* G;¬q;p :- q -> bot               *)
+           (extract _ _)))).   (* G;¬q   :- q -> bot               *)
 
   (* Filling the holes with the required proofs *)
   - constructor. 2: apply HVal. rewrite free_not. apply HqScope.
@@ -520,3 +523,64 @@ Proof.
   - apply HVal.
   - rewrite free_not. apply HqScope.
 Defined.
+
+Arguments contra {v} {e} {G} {p} {q}.
+
+(* Given proofs of G;p :- q and G;¬p :- q, builds a proof of G :- q             *)
+(* This allows us to build proofs with a case analysis on p                     *)
+(* The proof goes as follows:                                                   *)
+(* G;p  :- q                      : (1) assumption                              *)
+(* G;¬p :- q                      : (2) assumption                              *)
+(* G;¬q :- q -> bot               : (3) extraction                              *)
+(* G;¬q :- ¬p                     : (4) 'contra' of (1)                         *)
+(* G    :- ¬p -> q                : (5) deduction from (2)                      *)
+(* G;¬q :- ¬p -> q                : (6) weakening of (5)                        *)
+(* G;¬q :- q                      : (7) modus ponens of (4) and (6)             *)
+(* G;¬q :- bot                    : (8) modus ponens of (7) and (3)             *)
+(* G    :- q                      : (9) reduction from (8)                      *)
+Definition caseof (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
+  (pr1:G;p :- q) (pr2:G;¬p :- q) : G :- q.
+Proof.
+  (* We shall need to prove that G is a valid context *)
+  assert (CtxVal G) as HVal. {
+
+    (* Using validInvertP *)
+    apply validInvertP with p.
+
+    (* It is sufficient to prove that the context (G;p) is valid *)
+    assert (CtxVal (G;p)) as A. 2: apply A.
+
+    (* Which follows from the fact that the sequent G;p :- q holds *)
+    apply validContext with q, pr1.
+  }
+
+  (* We shall also need to prove that all free vars of q are in scope *)
+  assert (Fr q <= Fr' G) as HqScope. {
+
+    (* Since Fr' G = Fr' (G;p) *)
+    assert (Fr' G = Fr' (G;p)) as E. reflexivity. rewrite E.
+
+    (* We simply need to show that Fr q <= Fr' (G;p) *)
+    assert (Fr q <= Fr' (G;p)) as A. 2: apply A.
+
+    (* Which follows immediately from freeVarsInScope and G;p :- q *)
+    apply freeVarsInScope, pr1.
+  }
+
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (reduct                       (* G    :- q                     *)
+      (modus                      (* G;¬q :- bot                   *)
+        (modus                    (* G;¬q :- q                     *)
+          (contra pr1)            (* G;¬q :- ¬p                    *)
+          (weakenP _              (* G;¬q :- ¬p -> q               *)
+            (deduct pr2)))        (* G    :- ¬p -> q               *)
+        (extract _ _))).          (* G;¬q :- q -> bot              *)
+
+  (* Filling the holes with the required proofs *)
+  - rewrite free_not. apply HqScope.
+  - apply HVal.
+  - rewrite free_not. apply HqScope.
+Defined.
+
+Arguments caseof {v} {e} {G} {p} {q}.
