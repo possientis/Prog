@@ -584,3 +584,103 @@ Proof.
 Defined.
 
 Arguments caseof {v} {e} {G} {p} {q}.
+
+(* Given proofs of G;p :- r and G;q :- r, builds a proof of G;or p q :- r       *)
+(* The proof goes as follows:                                                   *)
+(* G;p         :- r               : (1)  assumption                             *)
+(* G;q         :- r               : (2)  assumption                             *)
+(* G           :- p -> r          : (3)  deduction from (1)                     *)
+(* G           :- q -> r          : (4)  deduction from (2)                     *)
+(* G;or p q    :- p -> r          : (5)  weakening of (3)                       *)
+(* G;or p q;p  :- p -> r          : (6)  weakening of (5)                       *)
+(* G;or p q;p  :- p               : (7)  extraction                             *)
+(* G;or p q;p  :- r               : (8)  modus ponens of (7) and (6)            *)
+(* G;or p q    :- q -> r          : (9)  weakening of (4)                       *)
+(* G;or p q;¬p :- q -> r          : (10) weakening of (9)                       *)
+(* G;or p q    :- or p q          : (11) extraction                             *)
+(* G;or p q    :- ¬p -> q         : (12) or p q = ¬p -> q                       *)
+(* G;or p q;¬p :- ¬p -> q         : (13) weakening of (12)                      *)
+(* G;or p q;¬p :- ¬p              : (14) extraction                             *)
+(* G;or p q;¬p :- q               : (15) modus ponens of (14) and (13)          *)
+(* G;or p q;¬p :- r               : (16) modus ponens of (15) and (10)          *)
+(* G;or p q    :- r               : (17) 'caseof' of (8) and (16)               *)
+Definition either (v:Type) (e:Eq v) (G:Ctx v) (p q r:P v)
+  (pr1:G;p :- r) (pr2:G;q :- r) : G;or p q :- r.
+Proof.
+  (* We shall need to prove that G is a valid context *)
+  assert (CtxVal G) as HVal. {
+
+   (* Using validInvertP *)
+    apply validInvertP with p.
+
+    (* It is sufficient to prove that the context (G;p) is valid *)
+    assert (CtxVal (G;p)) as A. 2: apply A.
+
+    (* Which follows from the fact that the sequent G;p :- r holds *)
+    apply validContext with r, pr1.
+  }
+
+  (* We shall also need to prove that all free vars of p are in scope *)
+  assert (Fr p <= Fr' G) as HpScope. {
+
+  (* Using validInScopeP *)
+    apply validInScopeP.
+
+    (* It is sufficient to prove that the context (G;p) is valid *)
+    assert (CtxVal (G;p)) as A. 2: apply A.
+
+    (* Which follows from the fact that the sequent G;p :- r holds *)
+    apply validContext with r, pr1.
+  }
+
+  (* We shall also need to prove that all free vars of q are in scope *)
+  assert (Fr q <= Fr' G) as HqScope. {
+
+    (* Using validInScopeP *)
+    apply validInScopeP.
+
+    (* It is sufficient to prove that the context (G;q) is valid *)
+    assert (CtxVal (G;q)) as A. 2: apply A.
+
+    (* Which follows from the fact that the sequent G;q :- r holds *)
+    apply validContext with r, pr2.
+  }
+
+  (* Finally we shall need to prove that Fr p ++ Fr q <= Fr' G *)
+  assert (Fr p ++ Fr q <= Fr' G) as HpqScope. {
+
+    apply incl_app. {apply HpScope. } { apply HqScope. }
+  }
+
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (caseof                       (* G;or p q    :- r              *)
+      (modus                      (* G;or p q;p  :- r              *)
+        (extract _ _)             (* G;or p q;p  :- p              *)
+        (weakenP _                (* G;or p q;p  :- p -> r         *)
+          (weakenP _              (* G;or p q    :- p -> r         *)
+            (deduct pr1))))       (* G           :- p -> r         *)
+      (modus                      (* G;or p q;¬p :- r              *)
+        (modus                    (* G;or p q;¬p :- q              *)
+          (extract _ _)           (* G;or p q;¬p :- ¬p             *)
+          (weakenP _              (* G;or p q;¬p :- ¬p -> q        *)
+            (extract _ _)))       (* G;or p q    :- ¬p -> q        *)
+        (weakenP _                (* G;or p q;¬p :- q -> r         *)
+          (weakenP _              (* G;or p q    :- q -> r         *)
+            (deduct pr2))))).     (* G           :- q -> r         *)
+
+  (* Filling the holes with the required proofs *)
+  - constructor. 2: apply HVal. simpl. rewrite app_nil_r. apply HpqScope.
+  - apply HpScope.
+  - apply HpScope.
+  - simpl. rewrite app_nil_r. apply HpqScope.
+  - constructor. 2: apply HVal. simpl. rewrite app_nil_r. apply HpqScope.
+  - rewrite free_not. apply HpScope.
+  - rewrite free_not. apply HpScope.
+  - apply HVal.
+  - simpl. rewrite app_nil_r. apply HpqScope.
+  - rewrite free_not. apply HpScope.
+  - simpl. rewrite app_nil_r. apply HpqScope.
+Defined.
+
+Arguments either {v} {e} {G} {p} {q} {r}.
