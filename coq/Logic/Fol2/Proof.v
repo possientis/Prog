@@ -446,3 +446,77 @@ Proof.
   - rewrite free_not. apply HqScope.
   - rewrite free_not. apply HqScope.
 Defined.
+
+(* Given a proof of G;p :- q, builds a proof of G;¬q :- ¬p                      *)
+(* The proof goes as follows:                                                   *)
+(* G;p    :- q                    : (1)  assumption                             *)
+(* G;¬q;p :- p                    : (2)  extraction                             *)
+(* G      :- p -> q               : (3)  deduction from (1)                     *)
+(* G;¬q   :- p -> q               : (4)  weakening of (3)                       *)
+(* G;¬q;p :- p -> q               : (5)  weakening of (4)                       *)
+(* G;¬q;p :- q                    : (6)  modus ponens of (2) and (5)            *)
+(* G;¬q   :- q -> bot             : (7)  extraction                             *)
+(* G;¬q;p :- q -> bot             : (8)  weakening of (7)                       *)
+(* G;¬q;p :- bot                  : (9)  modus ponens of (6) and (8)            *)
+(* G;¬q   :- ¬p                   : (10) deduction from (9)                     *)
+Definition contra (v:Type) (e:Eq v) (G:Ctx v) (p q:P v) (pr:G;p :- q) : G;¬q :- ¬p.
+Proof.
+  (* We shall need to prove that G is a valid context *)
+  assert (CtxVal G) as HVal. {
+
+    (* Using validInvertP *)
+    apply validInvertP with p.
+
+    (* It is sufficient to prove that the context (G;p) is valid *)
+    assert (CtxVal (G;p)) as A. 2: apply A.
+
+    (* Which follows from the fact that the sequent G;p :- q holds *)
+    apply validContext with q, pr.
+  }
+
+  (* We shall also need to prove that all free vars of p are in scope *)
+  assert (Fr p <= Fr' G) as HpScope. {
+
+    (* Using validInScopeP *)
+    apply validInScopeP.
+
+    (* It is sufficient to prove that the context (G;p) is valid *)
+    assert (CtxVal (G;p)) as A. 2: apply A.
+
+    (* Which follows from the fact that the sequent G;p :- q holds *)
+    apply validContext with q, pr.
+  }
+
+  (* We shall also need to prove that all free vars of q are in scope *)
+  assert (Fr q <= Fr' G) as HqScope. {
+
+    (* Since Fr' G = Fr' (G;p) *)
+    assert (Fr' G = Fr' (G;p)) as E. reflexivity. rewrite E.
+
+    (* We simply need to show that Fr q <= Fr' (G;p) *)
+    assert (Fr q <= Fr' (G;p)) as A. 2: apply A.
+
+    (* Which follows immediately from freeVarsInScope and G;p :- q *)
+    apply freeVarsInScope, pr.
+  }
+
+  (* Leaving holes for the various proofs that need to be provided        *)
+  refine (deduct                    (* G;¬q   :- ¬p                       *)
+            (modus                  (* G;¬q;p :- bot                      *)
+              (modus                (* G;¬q;p :- q                        *)
+                (extract _ _)       (* G;¬q;p :- p                        *)
+                (weakenP _          (* G;¬q;p :- p -> q                   *)
+                  (weakenP _        (* G;¬q   :- p -> q                   *)
+                    (deduct pr))))  (* G      :- p -> q                   *)
+              (weakenP _            (* G;¬q;p :- q -> bot                 *)
+                (extract _ _)))).   (* G;¬q   :- q -> bot                 *)
+
+  (* Filling the holes with the required proofs *)
+  - constructor. 2: apply HVal. rewrite free_not. apply HqScope.
+  - apply HpScope.
+  - apply HpScope.
+  - rewrite free_not. apply HqScope.
+  - apply HpScope.
+  - apply HVal.
+  - rewrite free_not. apply HqScope.
+Defined.
