@@ -35,10 +35,7 @@ Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 | AxiomP :forall (G:Ctx v)(p:P v),      CtxVal G -> IsAxiom p -> Seq v e G p
 | General:forall (G:Ctx v)(x:v)(p:P v), Seq v e (G,x) p -> Seq v e G (All x p)
 | Special:forall (G:Ctx v)(x y:v)(p:P v),
-    CtxVal G              ->
-    Fr (All x p) <= Fr' G ->
-    ~ (y :: Fr' G)        ->
-    Seq v e (G;All x p,y) (fmap (y <:> x) p)
+    ~ (y :: Fr' G) -> Seq v e G (All x p) -> Seq v e (G,y) (fmap (y <:> x) p)
 .
 
 Arguments Seq     {v} {e}.
@@ -65,14 +62,15 @@ Proof.
   intros v e G p HSeq.
   induction HSeq as
     [G p HVal HIncl
-    |G x p HScope HSec IH
-    |G p q HIncl  HSec IH
+    |G x p HScope HSeq IH
+    |G p q HIncl  HSeq IH
     |G p q HSeq IH
     |G p q HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
     |G p HVal HAxi
     |G x p HSeq IH
-    |G x y p HVal HIncl HScope].
+    |G x y p HScope HSeq IH].
+
     - constructor.
       + apply HIncl.
       + apply HVal.
@@ -89,11 +87,8 @@ Proof.
     - apply validInvertV with x, IH.
     - constructor.
       + apply HScope.
-      + constructor.
-        * apply HIncl.
-        * apply HVal.
+      + apply IH.
 Qed.
-
 
 (* If a sequent has a proof, then all free variables of its conclusion are free *)
 (* variables of its context. In other words, it is impossible to prove a        *)
@@ -104,14 +99,14 @@ Proof.
   intros v e G p HSeq.
   induction HSeq as
     [G p HVal HIncl
-    |G x p HScope HSec IH
-    |G p q HIncl  HSec IH
+    |G x p HScope HSeq IH
+    |G p q HIncl  HSeq IH
     |G p q HSeq IH
     |G p q HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
     |G p HVal HAxi
     |G x p HSeq IH
-    |G x y p HVal HIncl HScope].
+    |G x y p HScope HSeq IH].
   - apply HIncl.
   - intros u HFree. right. apply IH, HFree.
   - apply IH.
@@ -133,18 +128,18 @@ Proof.
     intros u HFree. apply in_map_iff in HFree.
     destruct HFree as [u' [H1 H2]].
     destruct (eqDec u' x) as [HEq|HxNeq].
-    + subst. rewrite permute_app_right. left. reflexivity.
-    + destruct (eqDec u' y) as [HEq|HyNeq].
-      * subst. assert (y :: Fr' G). 2: contradiction.
-        apply HIncl. simpl. apply remove_charac. split.
-          { apply H2. }
-          { intros HxyEq. apply HxNeq. symmetry. apply HxyEq. }
-      * rewrite permute_app_diff in H1.
-          { subst. right. apply HIncl. simpl. apply remove_charac. split.
+      + subst. rewrite permute_app_right. left. reflexivity.
+      + destruct (eqDec u' y) as [HEq|HyNeq].
+        * subst. assert (y :: Fr' G). 2: contradiction.
+          apply IH. simpl. apply remove_charac. split.
             { apply H2. }
-            { intros HxuEq. apply HxNeq. symmetry. apply HxuEq. }}
-          { apply HyNeq. }
-          { apply HxNeq. }
+            { intros HxEq. symmetry in HxEq. contradiction. }
+        * rewrite permute_app_diff in H1.
+            { subst. right. apply IH. simpl. apply remove_charac. split.
+                { apply H2. }
+                { intros HxEq. symmetry in HxEq. contradiction. }}
+            { apply HyNeq. }
+            { apply HxNeq. }
 Qed.
 
 Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
@@ -188,10 +183,9 @@ Definition general (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
 Arguments general {v} {e} {G} {x} {p}.
 
 Definition special (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
-  : CtxVal G              ->          (* context is valid                       *)
-    Fr (All x p) <= Fr' G ->          (* all free vars of 'All x p' in scope    *)
-    ~(y :: Fr' G)         ->          (* y not already in scope                 *)
-    G;All x p,y :- fmap (y <:> x) p
+  : ~(y :: Fr' G)           ->        (* y not already in scope                 *)
+    G   :- All x p          ->
+    G,y :- fmap (y <:> x) p
   := Special G x y p.
 
 (* Bot elimination:                                                             *)
@@ -376,3 +370,4 @@ Proof.
 Defined.
 
 Arguments andElimL {v} {e} {G} {p} {q}.
+
