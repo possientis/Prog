@@ -54,6 +54,9 @@ Notation "G :- p" := (Seq G p)
 
 Open Scope Fol2_Proof_scope.
 
+Notation "G ;- p" := (exists (e:G :- p), True)
+  (at level 90, no associativity) : Fol2_Proof_scope.
+
 (* If a sequent has a proof, then its context is valid. In other words, it is   *)
 (* impossible to prove a proposition from an invalid context                    *)
 Lemma validContext : forall (v:Type) (e:Eq v) (G:Ctx v) (p:P v),
