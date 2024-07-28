@@ -10,7 +10,7 @@ Require Import Logic.Prop.Entails.
 Require Import Logic.Prop.Sound.
 
 (* There is no proof of bottom from the empty context *)
-Lemma consistent : forall (v:Type), ~ exists (e:nil :- @bot v), True.
+Lemma consistent : forall (v:Type), ~(nil ;- @bot v).
 Proof.
   (* Let v be a Type and e be a proof of bottom from the empty context *)
   intros v [e _].

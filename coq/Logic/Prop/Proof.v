@@ -45,6 +45,9 @@ Notation "G :- p" := (Seq G p)
 
 Open Scope Prop_Proof_scope.
 
+Notation "G ;- p" := (exists (e:G :- p), True)
+  (at level 90, no associativity) : Prop_Proof_scope.
+
 Definition extract (v:Type) (G:Ctx v) (p:P v) : G;p :- p
   := Extract G p.
 
