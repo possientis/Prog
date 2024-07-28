@@ -733,7 +733,6 @@ Arguments orIntroL {v} {e} {G} {p} {q}.
 Definition orIntroR (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
   (HpScope:Fr p <= Fr' G) (pr:G :- q) : G :- or p q.
 Proof.
-
   (* Leaving holes for the various proofs that need to be provided *)
   refine
     (deduct                       (* G    :- or p q                *)
@@ -742,3 +741,29 @@ Proof.
   (* Filling the holes with the required proofs *)
   - rewrite free_not. apply HpScope.
 Defined.
+
+Arguments orIntroR {v} {e} {G} {p} {q}.
+
+(* Or elimination:                                                              *)
+(* Given proofs of G;p :- r, G;q :- r and G :- or p q, builds a proof of G :- r *)
+(* The proof is as follows:                                                     *)
+(* G;p      :- r                  : (1) assumption                              *)
+(* G;q      :- r                  : (2) assumption                              *)
+(* G        :- or p q             : (3) assumption                              *)
+(* G;or p q :- r                  : (4) 'either' of (1) and (2)                 *)
+(* G        :- or p q -> r        : (5) deduction from (4)                      *)
+(* G        :- r                  : (6) modus ponens of (3) and (5)             *)
+Definition orElim (v:Type) (e:Eq v) (G:Ctx v) (p q r:P v)
+  (pr1:G;p :- r) (pr2:G;q :- r) (pr:G :- or p q) : G :- r.
+Proof.
+  refine
+    (modus                        (* G        :- r                 *)
+      pr                          (* G        :- or p q            *)
+      (deduct                     (* G        :- or p q -> r       *)
+        (either                   (* G;or p q :- r                 *)
+          pr1                     (* G;p      :- r                 *)
+          pr2))).                 (* G;q      :- r                 *)
+Defined.
+
+Arguments orElim {v} {e} {G} {p} {q} {r}.
+
