@@ -721,3 +721,24 @@ Proof.
 Defined.
 
 Arguments orIntroL {v} {e} {G} {p} {q}.
+
+(* Or right introduction:                                                       *)
+(* Given a proof of G :- q, builds a proof of G :- or p q                       *)
+(* Note that we require all free vars of p to be in scope                       *)
+(* The proof goes as follows:                                                   *)
+(* G    :- q                      : (1) assumption                              *)
+(* G;¬p :- q                      : (2) weakening of (1)                        *)
+(* G    :- ¬p -> q                ; (3) deduction from (2)                      *)
+(* G    :- or p q                 : (4) or p q = ¬p -> q                        *)
+Definition orIntroR (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
+  (HpScope:Fr p <= Fr' G) (pr:G :- q) : G :- or p q.
+Proof.
+
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (deduct                       (* G    :- or p q                *)
+      (weakenP _ pr)).            (* G;¬p :- q                     *)
+
+  (* Filling the holes with the required proofs *)
+  - rewrite free_not. apply HpScope.
+Defined.
