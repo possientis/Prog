@@ -194,9 +194,9 @@ Definition special (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
 (* deduce just anything from the absurd, we cannot prove a proposition which is *)
 (* nonesensical, i.e. whose free variables are not in scope of the context G    *)
 (* The proof goes as follows:                                                   *)
-(* G    :- bot                     : assumption                                 *)
-(* G;¬p :- bot                     : weakening, ok if free vars in scope        *)
-(* G    :- p                       : reduction                                  *)
+(* G    :- bot                     : (1) assumption                             *)
+(* G;¬p :- bot                     : (2) weakening of (1)                       *)
+(* G    :- p                       : (3) reduction from (2)                     *)
 Definition botElim (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
   (HScope:Fr p <= Fr' G) (pr:G :- bot) : G :- p.
 Proof.
@@ -230,10 +230,10 @@ Arguments botElim {v} {e} {G} {p}.
 (* G;p->¬q :- p                    : (3) weakening of (1)                       *)
 (* G;p->¬q :- q                    : (4) weakening of (2)                       *)
 (* G;p->¬q :- p -> ¬q              : (5) extraction                             *)
-(* G;p->¬q :- ¬q                   : (6) modus ponens (3) and (5)               *)
-(* G;p->¬q :- bot                  : (7) modus ponens (4) amd (6)               *)
-(* G       :- ¬(p -> ¬q)           : deduction                                  *)
-(* G       :- and p q              : and p q = ¬(p -> ¬q)                       *)
+(* G;p->¬q :- ¬q                   : (6) modus ponens of (3) and (5)            *)
+(* G;p->¬q :- bot                  : (7) modus ponens of (4) amd (6)            *)
+(* G       :- ¬(p -> ¬q)           : (8) deduction from (7)                     *)
+(* G       :- and p q              : (9) and p q = ¬(p -> ¬q)                   *)
 Definition andIntro (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
   (pr1:G :- p) (pr2:G :- q) : G :- and p q.
 Proof.
@@ -684,3 +684,40 @@ Proof.
 Defined.
 
 Arguments either {v} {e} {G} {p} {q} {r}.
+
+(* Or left introduction:                                                        *)
+(* Given a proof of G :- p, builds a proof of G :- or p q                       *)
+(* Note that we require all free vars of q to be in scope                       *)
+(* The proof goes as follows:                                                   *)
+(* G    :- p                      : (1) assumption                              *)
+(* G;¬p :- p                      : (2) weakening of (1)                        *)
+(* G;¬p :- p -> bot               : (3) extraction                              *)
+(* G;¬p :- bot                    : (4) modus ponens of (2) and (3)             *)
+(* G;¬p :- q                      : (5) 'botElim' of (4)                        *)
+(* G    :- ¬p -> q                : (6) deduction from (5)                      *)
+(* G    :- or p q                 : (7) or p q = ¬p -> q                        *)
+Definition orIntroL (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
+  (HqScope:Fr q <= Fr' G) (pr:G :- p) : G :- or p q.
+Proof.
+  (* We shall need to prove that G is a valid context *)
+  assert (CtxVal G) as HVal. { apply validContext with p, pr. }
+
+  (* We shall also need to prove that all free vars of p are in scope *)
+  assert (Fr p <= Fr' G) as HpScope. { apply freeVarsInScope, pr. }
+
+  (* Leaving holes for the various proofs that need to be provided *)
+  refine
+    (deduct                       (* G    :- or p q                *)
+      (botElim _                  (* G;¬p :- q                     *)
+        (modus                    (* G;¬p :- bot                   *)
+          (weakenP _ pr)          (* G;¬p :- p                     *)
+          (extract _ _)))).       (* G;¬p :- p -> bot              *)
+
+  (* Filling the holes with the required proofs *)
+  - apply HqScope.
+  - rewrite free_not. apply HpScope.
+  - apply HVal.
+  - rewrite free_not. apply HpScope.
+Defined.
+
+Arguments orIntroL {v} {e} {G} {p} {q}.
