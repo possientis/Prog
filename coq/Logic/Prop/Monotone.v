@@ -81,7 +81,7 @@ Proof.
       destruct K as [e' _]. exists (deduct e'). apply I.
     - destruct (IH1 H GH) as [e1' _]. destruct (IH2 H GH) as [e2' _].
       exists (modus e1' e2'). apply I.
-    - assert (exists (e':H;¬p :- bot), True) as K.
+    - assert (H;¬p ;- bot) as K.
         { apply IH. intros r Hr. destruct Hr as [Hr|Hr].
           - rewrite Hr. exists extract. apply I.
           - destruct (GH r Hr) as [e' _]. exists (weaken e'). apply I. }
