@@ -33,7 +33,7 @@ Notation "G , x" := (cons (Var x) G)
 
 Open Scope Fol2_Context_scope.
 
-(* Free variables of a context: variables which are in scope                    *) 
+(* Free variables of a context: variables which are in scope                    *)
 Fixpoint Fr' (v:Type) (e:Eq v) (G:Ctx v) : list v :=
   match G with
   | nil               => nil
@@ -63,7 +63,7 @@ Arguments CtxVal {v} {e}.
 Lemma validInvertP : forall (v:Type) (e:Eq v) (G:Ctx v) (p:P v),
   CtxVal (G;p) -> CtxVal G.
 Proof.
-  intros v e G p HVal. 
+  intros v e G p HVal.
   remember (G;p) as H eqn:E. revert G p E.
   destruct HVal as [ |H x HScope HVal|H q HIncl HVal].
   - intros G p A. inversion A.
@@ -74,7 +74,7 @@ Qed.
 Lemma validInvertV : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
   CtxVal (G,x) -> CtxVal G.
 Proof.
-  intros v e G x HVal. 
+  intros v e G x HVal.
   remember (G,x) as H eqn:E. revert G x E.
   destruct HVal as [ |H y HScope HVal|H p HIncl HVal].
   - intros G x A. inversion A.
@@ -102,4 +102,24 @@ Proof.
   - intros G x A. inversion A.
   - intros G x A. inversion A. subst. apply HScope.
   - intros G x A. inversion A.
+Qed.
+
+Lemma validSwitchVNeq : forall (v:Type) (e:Eq v) (G:Ctx v) (x y:v),
+  CtxVal (G,x,y) -> x <> y.
+Proof.
+  intros v e G x y HVal Heq. subst. apply validInScopeV in HVal.
+  apply HVal. left. reflexivity.
+Qed.
+
+Lemma validSwitchV : forall (v:Type) (e:Eq v) (G:Ctx v) (x y:v),
+  CtxVal (G,x,y) -> CtxVal (G,y,x).
+Proof.
+  intros v e G x y HVal.
+  constructor.
+  - intros Hx. destruct Hx as [Hx|Hx].
+    + symmetry in Hx. apply validSwitchVNeq in HVal. contradiction.
+    + apply validInvertV in HVal. apply validInScopeV in HVal. contradiction.
+  - constructor.
+    + intros Hy. apply validInScopeV in HVal. apply HVal. right. apply Hy.
+    + apply validInvertV in HVal. apply validInvertV in HVal. apply HVal.
 Qed.

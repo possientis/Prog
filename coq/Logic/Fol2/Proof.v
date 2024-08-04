@@ -26,19 +26,24 @@ Declare Scope Fol2_Proof_scope.
 (* possible proofs that the sequent G :- p holds.                               *)
 (* If the sequent G :- p does not hold, then the type 'G :- p' is void.         *)
 Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
-| Extract:forall (G:Ctx v)(p:P v),      CtxVal G -> Fr p <= Fr' G -> Seq v e (G;p) p
-| WeakenV:forall (G:Ctx v)(x:v)(p:P v), ~(x :: Fr' G) -> Seq v e G p -> Seq v e (G,x) p
-| WeakenP:forall (G:Ctx v)(p q:P v),    Fr q <= Fr' G -> Seq v e G p -> Seq v e (G;q) p
-| Deduct :forall (G:Ctx v)(p q:P v),    Seq v e (G;p) q -> Seq v e G (p :-> q)
-| Modus  :forall (G:Ctx v)(p q: P v),   Seq v e G p -> Seq v e G (p :-> q) -> Seq v e G q
-| Reduct :forall (G:Ctx v)(p:P v),      Seq v e (G;¬p) bot -> Seq v e G p
-| AxiomP :forall (G:Ctx v)(p:P v),      CtxVal G -> IsAxiom p -> Seq v e G p
-| General:forall (G:Ctx v)(x:v)(p:P v), Seq v e (G,x) p -> Seq v e G (All x p)
-| Special:forall (G:Ctx v)(x:v)(p:P v),
-    ~ (x :: Fr' G) -> Seq v e G (All x p) -> Seq v e (G,x) p
-| Alpha  :forall (G:Ctx v)(x y:v)(p:P v),
-  ~(x = y) -> ~(y :: Fr p) -> Seq v e G (All x p) -> Seq v e G (All y (fmap (y <:> x) p))
+| Extract:forall (G:Ctx v)(p:P v),       CtxVal G -> Fr p <= Fr' G -> Seq v e (G;p) p
+| WeakenV:forall (G:Ctx v)(x:v)(p:P v),  ~(x :: Fr' G) -> Seq v e G p -> Seq v e (G,x) p
+| WeakenP:forall (G:Ctx v)(p q:P v),     Fr q <= Fr' G -> Seq v e G p -> Seq v e (G;q) p
 | SwitchV:forall (G:Ctx v)(x y:v)(p:P v),Seq v e (G,x,y) p -> Seq v e (G,y,x) p
+| Deduct :forall (G:Ctx v)(p q:P v),     Seq v e (G;p) q -> Seq v e G (p :-> q)
+| Modus  :forall (G:Ctx v)(p q: P v),    Seq v e G p -> Seq v e G (p :-> q) -> Seq v e G q
+| Reduct :forall (G:Ctx v)(p:P v),       Seq v e (G;¬p) bot -> Seq v e G p
+| AxiomP :forall (G:Ctx v)(p:P v),       CtxVal G -> IsAxiom p -> Seq v e G p
+| General:forall (G:Ctx v)(x:v)(p:P v),  Seq v e (G,x) p -> Seq v e G (All x p)
+| Special:forall (G:Ctx v)(x:v)(p:P v),
+    ~ (x :: Fr' G)      ->
+    Seq v e G (All x p) ->
+    Seq v e (G,x) p
+| Alpha  :forall (G:Ctx v)(x y:v)(p:P v),
+    x <> y              ->
+    ~(y :: Fr p)        ->
+    Seq v e G (All x p) ->
+    Seq v e G (All y (fmap (y <:> x) p))
 .
 
 Arguments Seq     {v} {e}.
@@ -60,7 +65,6 @@ Open Scope Fol2_Proof_scope.
 Notation "G ;- p" := (exists (e:G :- p), True)
   (at level 90, no associativity) : Fol2_Proof_scope.
 
-(*
 (* If a sequent has a proof, then its context is valid. In other words, it is   *)
 (* impossible to prove a proposition from an invalid context                    *)
 Lemma validContext : forall (v:Type) (e:Eq v) (G:Ctx v) (p:P v),
@@ -71,12 +75,15 @@ Proof.
     [G p HVal HIncl
     |G x p HScope HSeq IH
     |G p q HIncl  HSeq IH
+    |G x y p HSeq IH
     |G p q HSeq IH
     |G p q HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
     |G p HVal HAxi
     |G x p HSeq IH
-    |G x y p HScope HSeq IH].
+    |G x p HScope HSeq IH
+    |G x y p HNeq HScope HSeq IH
+    ].
 
     - constructor.
       + apply HIncl.
@@ -87,6 +94,7 @@ Proof.
     - constructor.
       + apply HIncl.
       + apply IH.
+    - apply validSwitchV, IH.
     - apply validInvertP with p, IH.
     - apply IH1.
     - apply validInvertP with ¬p, IH.
@@ -95,8 +103,9 @@ Proof.
     - constructor.
       + apply HScope.
       + apply IH.
+    - apply IH.
 Qed.
-
+(*
 (* If a sequent has a proof, then all free variables of its conclusion are free *)
 (* variables of its context. In other words, it is impossible to prove a        *)
 (* proposition whose free variables are not in scope                            *)
@@ -108,15 +117,22 @@ Proof.
     [G p HVal HIncl
     |G x p HScope HSeq IH
     |G p q HIncl  HSeq IH
+    |G x y p HSeq IH
     |G p q HSeq IH
     |G p q HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
     |G p HVal HAxi
     |G x p HSeq IH
-    |G x y p HScope HSeq IH].
+    |G x p HScope HSeq IH
+    |G x y p HNeq HScope HSeq IH
+    ].
   - apply HIncl.
   - intros u HFree. right. apply IH, HFree.
   - apply IH.
+  - intros u Hu. apply IH in Hu. destruct Hu as [Hu|[Hu|Hu]].
+    + subst. right. left. reflexivity.
+    + subst. left. reflexivity.
+    + right. right. apply Hu.
   - simpl. apply incl_app.
     + assert (CtxVal (G;p)) as HVal. { apply validContext with q, HSeq. }
       apply validInScopeP, HVal.
@@ -131,6 +147,8 @@ Proof.
     simpl in IH. apply IH in HFree. destruct HFree as [Hu|Hu].
     + contradiction.
     + apply Hu.
+  -
+(*
   - rewrite free_permute.
     intros u HFree. apply in_map_iff in HFree.
     destruct HFree as [u' [H1 H2]].
@@ -147,8 +165,12 @@ Proof.
                 { intros HxEq. symmetry in HxEq. contradiction. }}
             { apply HyNeq. }
             { apply HxNeq. }
-Qed.
 
+  - admit.
+*)
+Show.
+*)
+(*
 Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
   : CtxVal G -> Fr p <= Fr' G -> G;p :- p := Extract G p.
 
