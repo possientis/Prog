@@ -34,8 +34,11 @@ Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 | Reduct :forall (G:Ctx v)(p:P v),      Seq v e (G;¬p) bot -> Seq v e G p
 | AxiomP :forall (G:Ctx v)(p:P v),      CtxVal G -> IsAxiom p -> Seq v e G p
 | General:forall (G:Ctx v)(x:v)(p:P v), Seq v e (G,x) p -> Seq v e G (All x p)
-| Special:forall (G:Ctx v)(x y:v)(p:P v),
-    ~ (y :: Fr' G) -> Seq v e G (All x p) -> Seq v e (G,y) (fmap (y <:> x) p)
+| Special:forall (G:Ctx v)(x:v)(p:P v),
+    ~ (x :: Fr' G) -> Seq v e G (All x p) -> Seq v e (G,x) p
+| Alpha  :forall (G:Ctx v)(x y:v)(p:P v),
+  ~(x = y) -> ~(y :: Fr p) -> Seq v e G (All x p) -> Seq v e G (All y (fmap (y <:> x) p))
+| SwitchV:forall (G:Ctx v)(x y:v)(p:P v),Seq v e (G,x,y) p -> Seq v e (G,y,x) p
 .
 
 Arguments Seq     {v} {e}.
@@ -57,6 +60,7 @@ Open Scope Fol2_Proof_scope.
 Notation "G ;- p" := (exists (e:G :- p), True)
   (at level 90, no associativity) : Fol2_Proof_scope.
 
+(*
 (* If a sequent has a proof, then its context is valid. In other words, it is   *)
 (* impossible to prove a proposition from an invalid context                    *)
 Lemma validContext : forall (v:Type) (e:Eq v) (G:Ctx v) (p:P v),
@@ -769,4 +773,4 @@ Proof.
 Defined.
 
 Arguments orElim {v} {e} {G} {p} {q} {r}.
-
+*)

@@ -14,6 +14,7 @@ Require Import Logic.Fol2.Axiom.
 Require Import Logic.Fol2.Context.
 Require Import Logic.Fol2.Proof.
 
+(*
 (* A proposition which belongs to a valid context is provable from that context *)
 (* Note that the assumption p :: G allows us to show the existence of a proof   *)
 (* for the sequent G :- p, i.e. we can show G ;- p. However, this assumption is *)
@@ -100,7 +101,7 @@ Proof.
             (* By weakening we obtain a proof of G';q :- p *)
             exists (weakenP HScope pr). apply I.
 Qed.
-
+*)
 (* Suppose G H are contexts where every proposition of G is provable under H.   *)
 (* Then any proposition provable under G is also provable under H.              *)
 (* This is not quite true as stated. We need the context H to be valid. We also *)
