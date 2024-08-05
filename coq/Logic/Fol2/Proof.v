@@ -39,7 +39,7 @@ Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
     ~ (x :: Fr' G)      ->
     Seq v e G (All x p) ->
     Seq v e (G,x) p
-| Alpha  :forall (G:Ctx v)(x y:v)(p:P v),
+| AlphaEq:forall (G:Ctx v)(x y:v)(p:P v),
     x <> y              ->
     ~(y :: Fr p)        ->
     Seq v e G (All x p) ->
@@ -50,12 +50,14 @@ Arguments Seq     {v} {e}.
 Arguments Extract {v} {e}.
 Arguments WeakenV {v} {e}.
 Arguments WeakenP {v} {e}.
+Arguments SwitchV {v} {e}.
 Arguments Deduct  {v} {e}.
 Arguments Modus   {v} {e}.
 Arguments Reduct  {v} {e}.
 Arguments AxiomP  {v} {e}.
 Arguments General {v} {e}.
 Arguments Special {v} {e}.
+Arguments AlphaEq {v} {e}.
 
 Notation "G :- p" := (Seq G p)
   (at level 90, no associativity) : Fol2_Proof_scope.
@@ -167,7 +169,6 @@ Proof.
         { apply HxNeq. }
 Qed.
 
-(*
 Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
   : CtxVal G -> Fr p <= Fr' G -> G;p :- p := Extract G p.
 
@@ -182,6 +183,11 @@ Definition weakenP (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
   : Fr q <= Fr' G -> G :- p -> G;q :- p := WeakenP G p q.
 
 Arguments weakenP {v} {e} {G} {p} {q}.
+
+Definition switchV (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
+  : (G,x,y) :- p -> (G,y,x) :- p := SwitchV G x y p.
+
+Arguments switchV {v} {e} {G} {x} {y} {p}.
 
 Definition deduct (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
   : G;p :- q -> G :- p :-> q := Deduct G p q.
@@ -208,11 +214,22 @@ Definition general (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
 
 Arguments general {v} {e} {G} {x} {p}.
 
-Definition special (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
-  : ~(y :: Fr' G)           ->        (* y not already in scope                 *)
+Definition special (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
+  : ~(x :: Fr' G)           ->        (* x not already in scope                 *)
     G   :- All x p          ->
-    G,y :- fmap (y <:> x) p
-  := Special G x y p.
+    G,x :- p
+  := Special G x p.
+
+Arguments special {v} {e} {G} {x} {p}.
+
+Definition alphaEq (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
+  : x <> y                  ->
+    ~(y :: Fr p)            ->
+    G :- All x p            ->
+    G :- All y (fmap (y <:> x) p)
+  := AlphaEq G x y p.
+
+Arguments alphaEq {v} {e} {G} {x} {y} {p}.
 
 (* Bot elimination:                                                             *)
 (* Given a proof of the absurd, builds a proof of anything, provided the free   *)
@@ -792,4 +809,4 @@ Proof.
 Defined.
 
 Arguments orElim {v} {e} {G} {p} {q} {r}.
-*)
+
