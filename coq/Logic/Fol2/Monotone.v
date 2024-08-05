@@ -14,7 +14,7 @@ Require Import Logic.Fol2.Axiom.
 Require Import Logic.Fol2.Context.
 Require Import Logic.Fol2.Proof.
 
-(*
+
 (* A proposition which belongs to a valid context is provable from that context *)
 (* Note that the assumption p :: G allows us to show the existence of a proof   *)
 (* for the sequent G :- p, i.e. we can show G ;- p. However, this assumption is *)
@@ -101,7 +101,8 @@ Proof.
             (* By weakening we obtain a proof of G';q :- p *)
             exists (weakenP HScope pr). apply I.
 Qed.
-*)
+
+(* TODO: restore what can be restored
 (* Suppose G H are contexts where every proposition of G is provable under H.   *)
 (* Then any proposition provable under G is also provable under H.              *)
 (* This is not quite true as stated. We need the context H to be valid. We also *)
@@ -109,7 +110,6 @@ Qed.
 (* Fr' G <= Fr' H. Consider the case when G=x and H=nil. Then G has no prop     *)
 (* and the proposition x <: x -> x <: x is provable under G but not under H.    *)
 (* Note that assuming G to be valid is not required.                            *)
-(* TODO: Find a way to prove this
 Lemma compose : forall (v:Type) (e:Eq v) (G H:Ctx v),
   CtxVal H                                 -> (* H is a valid context           *)
   Fr' G <= Fr' H                           -> (* x in scope G -> x in scope H   *)
@@ -141,6 +141,7 @@ Proof.
   (* Let us revert all assumptions which involve H *)
   revert H HValH HScope GH.
 
+
   (* Then we need to show that given a proof pr:G :- p, for all valid context   *)
   (* H whose scope contains that of G and which satifies property GH, p is      *)
   (* provable under H. We proceed by structural induction on the proof pr       *)
@@ -148,12 +149,15 @@ Proof.
     [G p HVal HIncl
     |G x p HScope' HSeq IH
     |G p q HIncl  HSeq IH
+    |G x y p HSeq IH
     |G p q HSeq IH
     |G p q HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
     |G p HVal HAxi
     |G x p HSeq IH
-    |G x y p HScope' HSeq IH]; intros H HValH HScope GH.
+    |G x p HScope' HSeq IH
+    |G x y p HNeq HScope' HSeq IH
+    ]; intros H HValH HScope GH.
 
   - apply GH. left. reflexivity.
 
@@ -166,6 +170,11 @@ Proof.
     + apply HValH.
     + apply HScope.
     + intros r Hr. apply GH. right. apply Hr.
+
+  -
+*)
+
+(*
 
   - assert (H;p ;- q) as K. {
       assert (Fr p <= Fr' G) as HpScope. {
