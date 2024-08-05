@@ -28,7 +28,7 @@ Notation "x <:> y" := (permute y x)
 
 Open Scope Permute_scope.
 
-Lemma permute_app_left : forall (v:Type) (e:Eq v) (x y:v), 
+Lemma permute_app_left : forall (v:Type) (e:Eq v) (x y:v),
   (x <:> y) x = y.
 Proof.
   intros v e x y. unfold permute.
@@ -64,9 +64,9 @@ Qed.
 Lemma permute_comp : forall (v w:Type) (e:Eq v) (e':Eq w) (x y:v) (f:v -> w),
     injective f -> f ; (y <:> x) = (f y <:> f x) ; f.
 Proof.
-    intros v w e e' x y f I. apply extensionality. 
+    intros v w e e' x y f I. apply extensionality.
     intros u. unfold permute, comp.
-    destruct    (eqDec u x) as [Hux|Hux], 
+    destruct    (eqDec u x) as [Hux|Hux],
                 (eqDec u y) as [Huy|Huy]; subst.
     - destruct (eqDec (f y) (f y)) as [Fyy|Fyy]; reflexivity.
     - destruct (eqDec (f x) (f x)) as [Fxx|Fxx].
@@ -88,7 +88,7 @@ Qed.
 
 Lemma permute_injective : forall (v:Type) (e:Eq v) (x y:v), injective (y <:> x).
 Proof.
-    intros v e x y u u'. unfold permute. intros H1. 
+    intros v e x y u u'. unfold permute. intros H1.
     destruct (eqDec u x) as [H2|H2].
     - destruct (eqDec u' x) as [H3|H3].
         + subst. reflexivity.

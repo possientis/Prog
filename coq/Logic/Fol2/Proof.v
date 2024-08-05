@@ -105,7 +105,7 @@ Proof.
       + apply IH.
     - apply IH.
 Qed.
-(*
+
 (* If a sequent has a proof, then all free variables of its conclusion are free *)
 (* variables of its context. In other words, it is impossible to prove a        *)
 (* proposition whose free variables are not in scope                            *)
@@ -147,29 +147,26 @@ Proof.
     simpl in IH. apply IH in HFree. destruct HFree as [Hu|Hu].
     + contradiction.
     + apply Hu.
-  -
-(*
-  - rewrite free_permute.
-    intros u HFree. apply in_map_iff in HFree.
-    destruct HFree as [u' [H1 H2]].
-    destruct (eqDec u' x) as [HEq|HxNeq].
-      + subst. rewrite permute_app_right. left. reflexivity.
-      + destruct (eqDec u' y) as [HEq|HyNeq].
-        * subst. assert (y :: Fr' G). 2: contradiction.
-          apply IH. simpl. apply remove_charac. split.
-            { apply H2. }
-            { intros HxEq. symmetry in HxEq. contradiction. }
-        * rewrite permute_app_diff in H1.
-            { subst. right. apply IH. simpl. apply remove_charac. split.
-                { apply H2. }
-                { intros HxEq. symmetry in HxEq. contradiction. }}
-            { apply HyNeq. }
-            { apply HxNeq. }
+  - intros u Hu. destruct (eqDec x u) as [HEq|HNeq].
+    + subst. left. reflexivity.
+    + right. apply IH. simpl. rewrite remove_charac. split.
+      * apply Hu.
+      * apply HNeq.
+  - intros u Hu. simpl in Hu. rewrite remove_charac in Hu. destruct Hu as [H1 H2].
+    rewrite free_permute in H1. rewrite in_map_iff in H1. destruct H1 as [z [H1 H3]].
+    destruct (eqDec z x) as [HxEq|HxNeq].
+    + subst. rewrite permute_app_right in H2. contradiction.
+    + destruct (eqDec z y) as [HyEq|HyNeq].
+      * subst. contradiction.
+      * rewrite permute_app_diff in H1.
+        { subst. apply IH. simpl. rewrite remove_charac. split.
+          - apply H3.
+          - intros H4. subst. contradiction.
+        }
+        { apply HyNeq. }
+        { apply HxNeq. }
+Qed.
 
-  - admit.
-*)
-Show.
-*)
 (*
 Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
   : CtxVal G -> Fr p <= Fr' G -> G;p :- p := Extract G p.
