@@ -1,5 +1,7 @@
 Require Import List.
 
+Require Import Logic.List.Equiv.
+
 Require Import Logic.Class.Eq.
 
 Require Import Logic.List.In.
@@ -122,4 +124,20 @@ Proof.
   - constructor.
     + intros Hy. apply validInScopeV in HVal. apply HVal. right. apply Hy.
     + apply validInvertV in HVal. apply validInvertV in HVal. apply HVal.
+Qed.
+
+Lemma inCtxPrp : forall (v:Type) (G:Ctx v) (x:v) (p:P v),
+  Prp p :: (G,x) -> Prp p :: G.
+Proof.
+  intros v G x p [HIn|HIn].
+  - inversion HIn.
+  - apply HIn.
+Qed.
+
+Lemma inCtxSwitchV : forall (v:Type) (G:Ctx v) (x y:v) (p:P v),
+  Prp p :: (G,x,y) -> Prp p :: (G,y,x).
+Proof.
+  intros v G x y p HIn.
+  apply inCtxPrp in HIn. apply inCtxPrp in HIn.
+  right. right. apply HIn.
 Qed.

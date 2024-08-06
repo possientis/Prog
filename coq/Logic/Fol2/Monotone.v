@@ -102,7 +102,7 @@ Proof.
             exists (weakenP HScope pr). apply I.
 Qed.
 
-(* TODO: restore what can be restored
+(* TODO: find a way to complete this proof
 (* Suppose G H are contexts where every proposition of G is provable under H.   *)
 (* Then any proposition provable under G is also provable under H.              *)
 (* This is not quite true as stated. We need the context H to be valid. We also *)
@@ -171,10 +171,13 @@ Proof.
     + apply HScope.
     + intros r Hr. apply GH. right. apply Hr.
 
-  -
-*)
-
-(*
+  - apply IH.
+    + apply HValH.
+    + intros u [Hu|[Hu|Hu]].
+      * subst. apply HScope. right. left. reflexivity.
+      * subst. apply HScope. left. reflexivity.
+      * apply HScope. right. right. apply Hu.
+    + intros q HIn. apply GH,inCtxSwitchV,HIn.
 
   - assert (H;p ;- q) as K. {
       assert (Fr p <= Fr' G) as HpScope. {
