@@ -1,4 +1,4 @@
-Require Import List.  
+Require Import List.
 Import ListNotations.
 
 Require Import Logic.Class.Eq.
@@ -11,12 +11,12 @@ Require Import Logic.List.Difference.
 Fixpoint remove (v:Type) (e:Eq v) (x:v) (xs:list v) : list v :=
     match xs with
     | []            => []
-    | (cons y ys)   => 
-        match (eqDec x y) with 
+    | (cons y ys)   =>
+        match (eqDec x y) with
         | left _    => remove v e x ys
         | right _   => cons y (remove v e x ys)
         end
-    end.  
+    end.
 
 Arguments remove {v} {e}.
 
@@ -25,14 +25,14 @@ Lemma remove_still : forall (v:Type) (e:Eq v) (x y:v) (xs:list v),
 Proof.
     intros v e x y. induction xs as [|a xs IH].
     - intros _ H. inversion H.
-    - intros Exy H. simpl. destruct (eqDec x a) eqn:Exa. 
+    - intros Exy H. simpl. destruct (eqDec x a) eqn:Exa.
         + apply IH.
             { assumption. }
-            { destruct H as [H1|H2]. 
+            { destruct H as [H1|H2].
                 { exfalso. apply Exy. rewrite <- H1. assumption. }
                 { assumption. }
             }
-        + destruct H.  
+        + destruct H.
             { left. assumption. }
             { right. apply IH; assumption. }
 Qed.
@@ -46,7 +46,7 @@ Proof.
     - destruct (eqDec x a) eqn:E.
         + apply IH. intros y Hy. apply H. right. assumption.
         + intros y Hy. destruct (eqDec y a) as [H1|H2].
-            { apply remove_still. 
+            { apply remove_still.
                 { rewrite H1. assumption. }
                 { apply H. left. symmetry. assumption. }
             }
@@ -104,15 +104,15 @@ Lemma remove_map : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
     (forall (y:v), x <> y -> y :: xs -> f x <> f y) ->
     remove (f x) (map f xs) = map f (remove x xs).
 Proof.
-   intros v w e e' f x xs H. 
-   induction xs as [|a xs IH]; simpl. 
+   intros v w e e' f x xs H.
+   induction xs as [|a xs IH]; simpl.
    - reflexivity.
    - destruct (eqDec (f x) (f a)) as [Hq|Hq].
         + subst. destruct (eqDec x a) as [Hp|Hp].
             { subst. apply IH. intros y H1 H2. apply H.
                 { assumption. }
                 { right. assumption. }}
-            { exfalso. apply H with a. 
+            { exfalso. apply H with a.
                 { assumption. }
                 { left. reflexivity. }
                 { assumption. }}
@@ -127,8 +127,8 @@ Qed.
 
 
 Lemma remove_inj : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
-    x :: xs -> 
-    injective_on xs f -> 
+    x :: xs ->
+    injective_on xs f ->
     remove (f x) (map f xs) = map f (remove x xs).
 Proof.
     intros v w e e' f x xs H1 H2. apply remove_map.
@@ -136,7 +136,7 @@ Proof.
 Qed.
 
 Lemma remove_inj2 : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
-    injective_on (x :: xs) f -> 
+    injective_on (x :: xs) f ->
     remove (f x) (map f xs) = map f (remove x xs).
 Proof.
     intros v w e e' f x xs H1. apply remove_map.
@@ -146,8 +146,8 @@ Proof.
     - assumption.
 Qed.
 
-Lemma remove_incl : forall (v:Type) (e:Eq v) (x:v) (xs:list v), 
-    remove x xs <= xs. 
+Lemma remove_incl : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
+    remove x xs <= xs.
 Proof.
     intros v e x xs. induction xs as [|a xs IH]; simpl.
     - apply incl_refl.
