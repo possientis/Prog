@@ -133,7 +133,8 @@ FOL_OBJ   = ${FOL}/Syntax.vo \
 FOL2_OBJ	= ${FOL2}/Context.vo \
 					  ${FOL2}/Axiom.vo \
 						${FOL2}/Proof.vo \
-						${FOL2}/Monotone.vo	
+						${FOL2}/Monotone.vo \
+						${FOL2}/Remove.vo	
 
 LAM_OBJ   = ${LAM}/Syntax.vo \
 			${LAM}/Order.vo \
