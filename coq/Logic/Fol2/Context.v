@@ -45,6 +45,20 @@ end.
 
 Arguments Fr' {v} {e}.
 
+Lemma scope_in_ctx : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
+  x :: Fr' G -> Var x :: G.
+Proof.
+  intros v e G x. induction G as [|ent G' IH]; intros HFree.
+  - inversion HFree.
+  - destruct ent as [y|p].
+    + destruct HFree as [HFree|HFree].
+      * subst. left. reflexivity.
+      * right. apply IH. apply HFree.
+    + right. apply IH, HFree.
+Qed.
+
+Arguments scope_in_ctx {v} {e}.
+
 (* Predicate defining a valid context                                           *)
 (*                                                                              *)
 (* NilCtx : the empty context is valid                                          *)

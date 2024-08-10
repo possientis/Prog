@@ -145,6 +145,28 @@ Proof.
         { apply IH, HIn. }
 Qed.
 
+
+Lemma removeFromScope_x_not_in : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
+  CtxVal G -> ~ Var x :: G -> removeFromScope x G = G.
+Proof.
+  intros v e G x. induction G as [|ent G' IH]; intros HVal HIn; simpl.
+  - reflexivity.
+  - destruct ent as [y|p].
+    + destruct (eqDec x y) as [HEq|HNeq].
+      * subst. exfalso. apply HIn. left. reflexivity.
+      * rewrite IH.
+        { reflexivity. }
+        { apply validInvertV with y, HVal. }
+        { intros HIn'. apply HIn. right. apply HIn'. }
+    + destruct (in_dec eqDec x (Fr p)) as [HFree|HFree].
+      * apply validInScopeP in HVal. exfalso. apply HIn. right.
+        apply scope_in_ctx. apply HVal, HFree.
+      * rewrite IH.
+        { reflexivity. }
+        { apply validInvertP with p, HVal. }
+        { intros HIn'. apply HIn. right. apply HIn'. }
+Qed.
+
 (*
 Lemma removeStillValid : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
   CtxVal G -> CtxVal (removeFromScope x G).
