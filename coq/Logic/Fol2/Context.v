@@ -45,16 +45,28 @@ end.
 
 Arguments Fr' {v} {e}.
 
+(* For a variable, being in scope (i.e. being a free variable of the context)   *)
+(* is the same thing as belonging to the context                                *)
 Lemma scope_in_ctx : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  x :: Fr' G -> Var x :: G.
+  x :: Fr' G <-> Var x :: G.
 Proof.
-  intros v e G x. induction G as [|ent G' IH]; intros HFree.
-  - inversion HFree.
+  intros v e G x. induction G as [|ent G' IH].
+  - split.
+    + intros H. inversion H.
+    + intros H. inversion H.
   - destruct ent as [y|p].
-    + destruct HFree as [HFree|HFree].
-      * subst. left. reflexivity.
-      * right. apply IH. apply HFree.
-    + right. apply IH, HFree.
+    + split.
+      * intros [HIn|HIn].
+        { subst. left. reflexivity. }
+        { right. apply IH, HIn. }
+      * intros [HIn|HIn].
+        { inversion HIn. subst. left. reflexivity. }
+        { right. apply IH, HIn. }
+    + split.
+      * intros HIn. right. apply IH, HIn.
+      * intros [HIn|HIn].
+        { inversion HIn. }
+        { apply IH, HIn. }
 Qed.
 
 Arguments scope_in_ctx {v} {e}.
@@ -155,3 +167,4 @@ Proof.
   apply inCtxPrp in HIn. apply inCtxPrp in HIn.
   right. right. apply HIn.
 Qed.
+

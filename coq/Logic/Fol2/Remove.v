@@ -296,16 +296,25 @@ Proof.
             + apply HIn.
             + apply HFree'. }
 Qed.
-(*
-Lemma removeStillValid : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
+
+Lemma removeValid : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
   CtxVal G -> CtxVal (removeFromScope x G).
 Proof.
   intros v e G x. induction G as [|ent G' IH]; intro HVal.
   - constructor.
-  - destruct ent as [y|p].
-    + destruct (eqDec x y) as [HEq|HNeq] eqn:E.
-      * subst. simpl. rewrite E. apply IH. apply validInvertV with y,HVal.
-      * simpl. rewrite E.
+  - destruct ent as [y|p]; simpl.
+    + destruct (eqDec x y) as [HEq|HNeq].
+      * subst. apply IH, validInvertV with y, HVal.
+      * constructor.
+        { intros HFree. apply validInScopeV in HVal. apply HVal.
+          apply scope_in_ctx, removeFromScope_incl with x, scope_in_ctx, HFree. }
+        { apply IH, validInvertV with y, HVal. }
+    + destruct (in_dec eqDec x (Fr p)) as [HFree|HFree].
+      * apply IH, validInvertP with p, HVal.
+      * constructor.
+        { intros u Hu. apply scope_in_ctx. apply remove_stillV.
+          - intros H. subst. contradiction.
+          - apply validInScopeP in HVal. apply scope_in_ctx, HVal, Hu. }
+        { apply IH, validInvertP with p, HVal. }
+Qed.
 
-Show.
-*)
