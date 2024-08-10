@@ -167,6 +167,24 @@ Proof.
         { intros HIn'. apply HIn. right. apply HIn'. }
 Qed.
 
+Lemma removeFromScope_incl : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
+  removeFromScope x G <= G.
+Proof.
+  intros v e G x. induction G as [|ent G' IH]; simpl.
+  - apply incl_refl.
+  - destruct ent as [y|p].
+    + destruct (eqDec x y) as [HEq|HNeq].
+      * subst. intros u Hu. right. apply IH, Hu.
+      * intros u [Hu|Hu].
+        { rewrite <- Hu. left. reflexivity. }
+        { right. apply IH, Hu. }
+    + destruct (in_dec eqDec x (Fr p)) as [HFree|HFree].
+      * intros u Hu. right. apply IH, Hu.
+      * intros u [Hu|Hu].
+        { rewrite <- Hu. left. reflexivity. }
+        { right. apply IH, Hu. }
+Qed.
+
 (*
 Lemma removeStillValid : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
   CtxVal G -> CtxVal (removeFromScope x G).
