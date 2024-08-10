@@ -3,6 +3,7 @@ Require Import List.
 Require Import Logic.Class.Eq.
 
 Require Import Logic.List.In.
+Require Import Logic.List.Include.
 
 Require Import Logic.Fol.Free.
 Require Import Logic.Fol.Syntax.
@@ -80,6 +81,32 @@ Proof.
         { right. apply IH.
           - apply HFree.
           - apply HIn. }
+Qed.
+
+Lemma removeFromScope_mon : forall (v:Type) (e:Eq v) (G H:Ctx v) (x:v),
+  G <= H -> (removeFromScope x G) <= (removeFromScope x H).
+Proof.
+  intros v e G H x. revert H. induction G as [|ent G' IH]; simpl; intros H HIncl.
+  - intros u Hu. inversion Hu.
+  - destruct ent as [y|p].
+    + destruct (eqDec x y) as [HEq|HNeq].
+      * subst. apply IH. intros u Hu. apply HIncl. right. apply Hu.
+      * intros ent Hent. destruct Hent as [Hent|Hent].
+        { rewrite <- Hent. apply remove_stillV.
+          - apply HNeq.
+          - apply HIncl. left. reflexivity. }
+        { apply IH. intros u Hu.
+          - apply HIncl. right. apply Hu.
+          - apply Hent. }
+    + destruct (in_dec eqDec x (Fr p)) as [HFree|HFree].
+      * apply IH. intros u Hu. apply HIncl. right. apply Hu.
+      * intros ent Hent. destruct Hent as [Hent|Hent].
+        { rewrite <- Hent. apply remove_stillP.
+          - apply HFree.
+          - apply HIncl. left. reflexivity. }
+        { apply IH.
+          - intros u Hu. apply HIncl. right. apply Hu.
+          - apply Hent. }
 Qed.
 
 (*

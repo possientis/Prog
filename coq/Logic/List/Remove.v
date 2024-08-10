@@ -37,7 +37,6 @@ Proof.
             { right. apply IH; assumption. }
 Qed.
 
-
 Lemma remove_mon : forall (v:Type) (e:Eq v) (x:v) (xs ys:list v),
     xs <= ys -> (remove x xs) <= (remove x ys).
 Proof.
@@ -125,7 +124,6 @@ Proof.
                     { right. assumption. }}}
 Qed.
 
-
 Lemma remove_inj : forall (v w:Type)(e:Eq v)(e':Eq w)(f:v -> w)(x:v)(xs:list v),
     x :: xs ->
     injective_on xs f ->
@@ -155,7 +153,6 @@ Proof.
         + apply incl_tl. assumption.
         + apply incl_cons_compat. assumption.
 Qed.
-
 
 Lemma remove_charac : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
     forall (z:v), z :: remove x xs <-> z :: xs /\ x <> z.
