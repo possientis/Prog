@@ -74,7 +74,7 @@ Proof.
                 { right. apply IH. assumption. }}
 Qed.
 
-Lemma remove_x_gone: forall (v:Type) (e:Eq v) (x:v) (xs:list v),
+Lemma remove_x_gone : forall (v:Type) (e:Eq v) (x:v) (xs:list v),
     ~ x :: remove x xs.
 Proof.
     intros v e x. induction xs as [|a xs IH]; simpl.

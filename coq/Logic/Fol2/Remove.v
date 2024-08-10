@@ -109,6 +109,42 @@ Proof.
           - apply Hent. }
 Qed.
 
+Lemma remove_goneV : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
+  ~ Var x :: removeFromScope x G.
+Proof.
+  intros v e G x. induction G as [|ent G' IH]; simpl.
+  - intros H. apply H.
+  - destruct ent as [y|p].
+    + destruct (eqDec x y) as [HEq|HNeq].
+      * apply IH.
+      * intros [HIn|HIn].
+        { inversion HIn. subst. contradiction. }
+        { apply IH, HIn. }
+    + destruct (in_dec eqDec x (Fr p)) as [HFree|HFree].
+      * apply IH.
+      * intros [HIn|HIn].
+        { inversion HIn. }
+        { apply IH, HIn. }
+Qed.
+
+Lemma remove_goneP : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v),
+  x :: Fr p -> ~ Prp p :: removeFromScope x G.
+Proof.
+  intros v e G x p HFree. induction G as [|ent G' IH]; simpl.
+  - intros H. apply H.
+  - destruct ent as [y|q].
+    + destruct (eqDec x y) as [HEq|HNeq].
+      * apply IH.
+      * intros [HIn|HIn].
+        { inversion HIn. }
+        { apply IH, HIn. }
+    + destruct (in_dec eqDec x (Fr q)) as [HFree'|HFree'].
+      * apply IH.
+      * intros [HIn|HIn].
+        { inversion HIn. subst. contradiction. }
+        { apply IH, HIn. }
+Qed.
+
 (*
 Lemma removeStillValid : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
   CtxVal G -> CtxVal (removeFromScope x G).
