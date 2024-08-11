@@ -4,6 +4,7 @@ Require Import List.
 
 Require Import Logic.Class.Eq.
 
+Require Import Logic.List.Append.
 Require Import Logic.List.In.
 Require Import Logic.List.Include.
 
@@ -11,6 +12,7 @@ Require Import Logic.Fol.Free.
 Require Import Logic.Fol.Syntax.
 
 Require Import Logic.Fol2.Context.
+Require Import Logic.Fol2.Proof.
 
 Fixpoint removeFromScope (v:Type) (e:Eq v) (x:v) (G:Ctx v) : Ctx v :=
   match G with
@@ -325,3 +327,80 @@ Proof.
         { apply IH, validInvertP with p, HVal. }
 Qed.
 
+Lemma removeConsV : forall (v:Type) (e:Eq v) (G:Ctx v) (x y:v),
+  x <> y -> (G,y)\x = G\x,y.
+Proof.
+  intros v e G x y HNeq. simpl.
+  destruct (eqDec x y) as [HEq|HNeq'].
+  - contradiction.
+  - reflexivity.
+Qed.
+
+Lemma removeConsP : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v),
+  ~ x :: Fr p -> (G;p)\x = G\x;p.
+Proof.
+  intros v e G x p HFree. simpl.
+  destruct (in_dec eqDec x (Fr p)) as [HFree'|HFree'].
+  - contradiction.
+  - reflexivity.
+Qed.
+
+(* TODO: This won't work unless we have some cut elimination result
+Definition toRemove (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v) :
+  ~ x :: Fr p -> G :- p -> G\x :- p.
+Proof.
+  intros HFree pr. revert HFree.
+  induction pr as
+    [G p HVal HIncl
+    |G y p HScope' HSeq IH
+    |G p q HIncl  HSeq IH
+    |G x' y' p HSeq IH
+    |G p q HSeq IH
+    |G p q HSeq1 IH1 ISeq2 IH2
+    |G p HSeq IH
+    |G p HVal HAxi
+    |G x' p HSeq IH
+    |G x' p HScope' HSeq IH
+    |G x' y' p HNeq HScope' HSeq IH
+    ]; intros HFree.
+
+  - rewrite removeConsP.
+    + refine (extract _ _).
+      * apply removeValid, HVal.
+      * intros u Hu. apply scope_in_ctx, remove_stillV.
+        { intros H. subst. contradiction. }
+        { apply scope_in_ctx, HIncl, Hu. }
+    + apply HFree.
+
+  - simpl. destruct (eqDec x y) as [HEq|HNeq].
+    + apply IH, HFree.
+    + refine (weakenV _ _).
+      * rewrite scope_in_ctx. intros HScope.
+        apply HScope', scope_in_ctx, removeFromScope_incl with x, HScope.
+      * apply IH, HFree.
+
+  - simpl. destruct (in_dec eqDec x (Fr q)) as [HIn|Hin].
+    + apply IH, HFree.
+    + refine (weakenP _ _).
+      * intros u Hu. apply scope_in_ctx, remove_stillV.
+        { intros H. subst. contradiction. }
+        { apply scope_in_ctx, HIncl, Hu. }
+      * apply IH, HFree.
+
+  - simpl. simpl in IH. destruct (eqDec x x') as [HEq|HNeq].
+    + destruct (eqDec x y') as [HEq'|HNeq].
+      * apply IH, HFree.
+      * apply IH, HFree.
+    + destruct (eqDec x y') as [HEq|HNeq'].
+      * apply IH, HFree.
+      * refine (switchV _). { apply IH, HFree. }
+
+  - refine (deduct _). simpl in HFree. rewrite <- removeConsP.
+    + apply IH. intros Hq. apply HFree, app_charac. right. apply Hq.
+    + intros Hp. apply HFree, app_charac. left. apply Hp.
+
+  - refine (modus _ _).
+    +
+
+Show.
+*)
