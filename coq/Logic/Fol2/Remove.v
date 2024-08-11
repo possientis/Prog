@@ -1,3 +1,5 @@
+Declare Scope Fol2_Remove_scope.
+
 Require Import List.
 
 Require Import Logic.Class.Eq.
@@ -27,8 +29,13 @@ Fixpoint removeFromScope (v:Type) (e:Eq v) (x:v) (G:Ctx v) : Ctx v :=
 
 Arguments removeFromScope {v} {e}.
 
+Notation "G \ x" := (removeFromScope x G)
+  (at level 1, no associativity) : Fol2_Remove_scope.
+
+Open Scope Fol2_Remove_scope.
+
 Lemma remove_stillV : forall (v:Type) (e:Eq v) (G:Ctx v) (x y:v),
-  x <> y -> Var y :: G -> Var y :: removeFromScope x G.
+  x <> y -> Var y :: G -> Var y :: G\x.
 Proof.
   intros v e G x y. induction G as [|ent G' IH].
   - intros _ HIn. inversion HIn.
@@ -54,7 +61,7 @@ Proof.
 Qed.
 
 Lemma remove_stillP : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v),
-  ~x :: Fr p -> Prp p :: G -> Prp p :: removeFromScope x G.
+  ~x :: Fr p -> Prp p :: G -> Prp p :: G\x.
 Proof.
   intros v e G x p. induction G as [|ent G' IH].
   - intros _ HIn. inversion HIn.
@@ -84,7 +91,7 @@ Proof.
 Qed.
 
 Lemma removeFromScope_mon : forall (v:Type) (e:Eq v) (G H:Ctx v) (x:v),
-  G <= H -> (removeFromScope x G) <= (removeFromScope x H).
+  G <= H -> G\x <= H\x.
 Proof.
   intros v e G H x. revert H. induction G as [|ent G' IH]; simpl; intros H HIncl.
   - intros u Hu. inversion Hu.
@@ -110,7 +117,7 @@ Proof.
 Qed.
 
 Lemma remove_goneV : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  ~ Var x :: removeFromScope x G.
+  ~ Var x :: G\x.
 Proof.
   intros v e G x. induction G as [|ent G' IH]; simpl.
   - intros H. apply H.
@@ -128,7 +135,7 @@ Proof.
 Qed.
 
 Lemma remove_goneP : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v),
-  x :: Fr p -> ~ Prp p :: removeFromScope x G.
+  x :: Fr p -> ~ Prp p :: G\x.
 Proof.
   intros v e G x p HFree. induction G as [|ent G' IH]; simpl.
   - intros H. apply H.
@@ -147,7 +154,7 @@ Qed.
 
 
 Lemma removeFromScope_x_not_in : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  CtxVal G -> ~ Var x :: G -> removeFromScope x G = G.
+  CtxVal G -> ~ Var x :: G -> G\x = G.
 Proof.
   intros v e G x. induction G as [|ent G' IH]; intros HVal HIn; simpl.
   - reflexivity.
@@ -168,7 +175,7 @@ Proof.
 Qed.
 
 Lemma removeFromScope_incl : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  removeFromScope x G <= G.
+  G\x <= G.
 Proof.
   intros v e G x. induction G as [|ent G' IH]; simpl.
   - apply incl_refl.
@@ -188,7 +195,7 @@ Qed.
 Arguments removeFromScope_incl {v} {e}.
 
 Lemma remove_characV : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  forall (y:v), Var y :: removeFromScope x G <-> Var y :: G /\ x <> y.
+  forall (y:v), Var y :: G\x <-> Var y :: G /\ x <> y.
 Proof.
   intros v e G x. induction G as [|ent G' IH]; simpl; intros y.
   - split.
@@ -244,7 +251,7 @@ Proof.
 Qed.
 
 Lemma remove_characP : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  forall (p:P v), Prp p :: removeFromScope x G <-> Prp p :: G /\ ~ x :: Fr p.
+  forall (p:P v), Prp p :: G\x <-> Prp p :: G /\ ~ x :: Fr p.
 Proof.
   intros v e G x. induction G as [|ent G' IH]; simpl; intros p.
   - split.
@@ -298,7 +305,7 @@ Proof.
 Qed.
 
 Lemma removeValid : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  CtxVal G -> CtxVal (removeFromScope x G).
+  CtxVal G -> CtxVal G\x.
 Proof.
   intros v e G x. induction G as [|ent G' IH]; intro HVal.
   - constructor.
