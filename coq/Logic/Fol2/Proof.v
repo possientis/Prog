@@ -27,7 +27,7 @@ Declare Scope Fol2_Proof_scope.
 (* If the sequent G :- p does not hold, then the type 'G :- p' is void.         *)
 Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 | Extract:forall (G:Ctx v)(p:P v),       CtxVal G -> Fr p <= Fr' G -> Seq v e (G;p) p
-| WeakenV:forall (G:Ctx v)(x:v)(p:P v),  ~(x :: Fr' G) -> Seq v e G p -> Seq v e (G,x) p
+| WeakenV:forall (G:Ctx v)(x:v)(p:P v),  ~ x :: Fr' G -> Seq v e G p -> Seq v e (G,x) p
 | WeakenP:forall (G:Ctx v)(p q:P v),     Fr q <= Fr' G -> Seq v e G p -> Seq v e (G;q) p
 | SwitchV:forall (G:Ctx v)(x y:v)(p:P v),Seq v e (G,x,y) p -> Seq v e (G,y,x) p
 | Deduct :forall (G:Ctx v)(p q:P v),     Seq v e (G;p) q -> Seq v e G (p :-> q)
@@ -36,12 +36,12 @@ Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 | AxiomP :forall (G:Ctx v)(p:P v),       CtxVal G -> IsAxiom p -> Seq v e G p
 | General:forall (G:Ctx v)(x:v)(p:P v),  Seq v e (G,x) p -> Seq v e G (All x p)
 | Special:forall (G:Ctx v)(x:v)(p:P v),
-    ~ (x :: Fr' G)      ->
+    ~ x :: Fr' G      ->
     Seq v e G (All x p) ->
     Seq v e (G,x) p
 | AlphaEq:forall (G:Ctx v)(x y:v)(p:P v),
     x <> y              ->
-    ~(y :: Fr p)        ->
+    ~ y :: Fr p         ->
     Seq v e G (All x p) ->
     Seq v e G (All y (fmap (y <:> x) p))
 .
@@ -175,7 +175,7 @@ Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
 Arguments extract {v} {e} {G} {p}.
 
 Definition weakenV (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
-  : ~(x :: Fr' G) -> G :- p -> G,x :- p := WeakenV G x p.
+  : ~ x :: Fr' G -> G :- p -> G,x :- p := WeakenV G x p.
 
 Arguments weakenV {v} {e} {G} {x} {p}.
 
@@ -215,8 +215,8 @@ Definition general (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
 Arguments general {v} {e} {G} {x} {p}.
 
 Definition special (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
-  : ~(x :: Fr' G)           ->        (* x not already in scope                 *)
-    G   :- All x p          ->
+  : ~ x :: Fr' G    ->        (* x not already in scope                         *)
+    G   :- All x p  ->
     G,x :- p
   := Special G x p.
 
@@ -224,7 +224,7 @@ Arguments special {v} {e} {G} {x} {p}.
 
 Definition alphaEq (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
   : x <> y                  ->
-    ~(y :: Fr p)            ->
+    ~ y :: Fr p             ->
     G :- All x p            ->
     G :- All y (fmap (y <:> x) p)
   := AlphaEq G x y p.
