@@ -151,6 +151,18 @@ Proof.
     + apply validInvertV in HVal. apply validInvertV in HVal. apply HVal.
 Qed.
 
+Lemma validSwitchP : forall (v:Type) (e:Eq v) (G:Ctx v) (p q:P v),
+  CtxVal (G;p;q) -> CtxVal (G;q;p).
+Proof.
+  intros v e G p q HVal.
+  constructor.
+  - simpl. apply validInScopeP, validInvertP with q, HVal.
+  - constructor.
+    + assert (Sp G = Sp (G;p)) as A. { reflexivity. }
+      rewrite A. clear A. apply validInScopeP, HVal.
+    + apply validInvertP with p, validInvertP with q, HVal.
+Qed.
+
 Lemma inCtxPrp : forall (v:Type) (G:Ctx v) (x:v) (p:P v),
   Prp p :: (G,x) -> Prp p :: G.
 Proof.

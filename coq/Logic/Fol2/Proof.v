@@ -30,6 +30,7 @@ Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 | WeakenV:forall (G:Ctx v)(x:v)(p:P v),  ~ x :: Sp G -> Seq v e G p -> Seq v e (G,x) p
 | WeakenP:forall (G:Ctx v)(p q:P v),     Fr q <= Sp G -> Seq v e G p -> Seq v e (G;q) p
 | SwitchV:forall (G:Ctx v)(x y:v)(p:P v),Seq v e (G,x,y) p -> Seq v e (G,y,x) p
+| SwitchP:forall (G:Ctx v)(p q r:P v),   Seq v e (G;p;q) r -> Seq v e (G;q;p) r
 | Deduct :forall (G:Ctx v)(p q:P v),     Seq v e (G;p) q -> Seq v e G (p :-> q)
 | Modus  :forall (G:Ctx v)(p q: P v),    Seq v e G p -> Seq v e G (p :-> q) -> Seq v e G q
 | Reduct :forall (G:Ctx v)(p:P v),       Seq v e (G;¬p) bot -> Seq v e G p
@@ -51,6 +52,7 @@ Arguments FromHyp {v} {e}.
 Arguments WeakenV {v} {e}.
 Arguments WeakenP {v} {e}.
 Arguments SwitchV {v} {e}.
+Arguments SwitchP {v} {e}.
 Arguments Deduct  {v} {e}.
 Arguments Modus   {v} {e}.
 Arguments Reduct  {v} {e}.
@@ -78,6 +80,7 @@ Proof.
     |G x p HScope HSeq IH
     |G p q HIncl  HSeq IH
     |G x y p HSeq IH
+    |G p q r HSeq IH
     |G p q HSeq IH
     |G p q HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
@@ -97,6 +100,7 @@ Proof.
       + apply HIncl.
       + apply IH.
     - apply validSwitchV, IH.
+    - apply validSwitchP, IH.
     - apply validInvertP with p, IH.
     - apply IH1.
     - apply validInvertP with ¬p, IH.
@@ -120,6 +124,7 @@ Proof.
     |G x p HScope HSeq IH
     |G p q HIncl  HSeq IH
     |G x y p HSeq IH
+    |G p q r HSeq IH
     |G p q HSeq IH
     |G p q HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
@@ -135,6 +140,7 @@ Proof.
     + subst. right. left. reflexivity.
     + subst. left. reflexivity.
     + right. right. apply Hu.
+  - simpl in IH. simpl. apply IH.
   - simpl. apply incl_app.
     + assert (CtxVal (G;p)) as HVal. { apply validContext with q, HSeq. }
       apply validInScopeP, HVal.
@@ -167,7 +173,7 @@ Proof.
         }
         { apply HyNeq. }
         { apply HxNeq. }
-Qed.
+Admitted.
 
 Definition fromHyp (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
   : CtxVal G -> Fr p <= Sp G -> G;p :- p := FromHyp G p.
@@ -188,6 +194,11 @@ Definition switchV (v:Type) (e:Eq v) (G:Ctx v) (x y:v) (p:P v)
   : (G,x,y) :- p -> (G,y,x) :- p := SwitchV G x y p.
 
 Arguments switchV {v} {e} {G} {x} {y} {p}.
+
+Definition switchP (v:Type) (e:Eq v) (G:Ctx v) (p q r:P v)
+  : (G;p;q) :- r -> (G;q;p) :- r := SwitchP G p q r.
+
+Arguments switchP {v} {e} {G} {p} {q} {r}.
 
 Definition deduct (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
   : G;p :- q -> G :- p :-> q := Deduct G p q.

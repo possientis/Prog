@@ -18,6 +18,7 @@ Proof.
     |G x p HScope HSeq IH
     |G p1 p2 HIncl  HSeq IH
     |G x y p HSeq IH
+    |G p1 p2 q HSeq IH
     |G p1 p2 HSeq IH
     |G p1 p2 HSeq1 IH1 ISeq2 IH2
     |G p HSeq IH
@@ -30,6 +31,7 @@ Proof.
   - inversion HEq. subst. apply HSeq.
   - inversion HEq.
   - inversion HEq. subst. clear HEq.
+
 
  Show.
 
