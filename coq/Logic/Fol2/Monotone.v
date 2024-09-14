@@ -93,7 +93,7 @@ Proof.
         destruct HIn as [HIn|HIn].
 
           (* First we assume that q = p *)
-          * inversion HIn. subst. exists (extract HVal' HScope). apply I.
+          * inversion HIn. subst. exists (fromHyp HVal' HScope). apply I.
 
           (* Next we assume that q <> p, let pr be a proof of G' :- p *)
           * destruct (IH HVal' HIn) as [pr _].
@@ -193,7 +193,7 @@ Proof.
             intros u Hu. apply HScope. apply validInScopeP with r.
             apply validContext with q, HSeq. apply Hu.
           } (* HrScope: Fr r <= Sp H *)
-          exists (extract HValH HrScope). apply I.
+          exists (fromHyp HValH HrScope). apply I.
         + destruct (GH r Hr) as [pr _].
           assert (Fr p <= Sp H) as HpScope'. {
             apply incl_tran with (Sp G).
@@ -226,7 +226,7 @@ Proof.
         } (* HpScope': Fr (¬p) <= Sp H *)
         destruct Hq as [Hq|Hq].
         + inversion Hq.
-         exists (extract HValH HpScope'). apply I.
+         exists (fromHyp HValH HpScope'). apply I.
         + destruct (GH q Hq) as [pr _]. exists (weakenP HpScope' pr). apply I.
     } (* K: H;¬p :- bot *)
     destruct K as [pr _]. exists (reduct pr). apply I.

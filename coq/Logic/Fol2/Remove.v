@@ -365,7 +365,7 @@ Proof.
     ]; intros HFree.
 
   - rewrite removeConsP.
-    + refine (extract _ _).
+    + refine (fromHyp _ _).
       * apply removeValid, HVal.
       * intros u Hu. apply scope_in_ctx, remove_stillV.
         { intros H. subst. contradiction. }

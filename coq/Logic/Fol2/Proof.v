@@ -26,7 +26,7 @@ Declare Scope Fol2_Proof_scope.
 (* possible proofs that the sequent G :- p holds.                               *)
 (* If the sequent G :- p does not hold, then the type 'G :- p' is void.         *)
 Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
-| Extract:forall (G:Ctx v)(p:P v),       CtxVal G -> Fr p <= Sp G -> Seq v e (G;p) p
+| FromHyp:forall (G:Ctx v)(p:P v),       CtxVal G -> Fr p <= Sp G -> Seq v e (G;p) p
 | WeakenV:forall (G:Ctx v)(x:v)(p:P v),  ~ x :: Sp G -> Seq v e G p -> Seq v e (G,x) p
 | WeakenP:forall (G:Ctx v)(p q:P v),     Fr q <= Sp G -> Seq v e G p -> Seq v e (G;q) p
 | SwitchV:forall (G:Ctx v)(x y:v)(p:P v),Seq v e (G,x,y) p -> Seq v e (G,y,x) p
@@ -47,7 +47,7 @@ Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 .
 
 Arguments Seq     {v} {e}.
-Arguments Extract {v} {e}.
+Arguments FromHyp {v} {e}.
 Arguments WeakenV {v} {e}.
 Arguments WeakenP {v} {e}.
 Arguments SwitchV {v} {e}.
@@ -169,10 +169,10 @@ Proof.
         { apply HxNeq. }
 Qed.
 
-Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
-  : CtxVal G -> Fr p <= Sp G -> G;p :- p := Extract G p.
+Definition fromHyp (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
+  : CtxVal G -> Fr p <= Sp G -> G;p :- p := FromHyp G p.
 
-Arguments extract {v} {e} {G} {p}.
+Arguments fromHyp {v} {e} {G} {p}.
 
 Definition weakenV (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
   : ~ x :: Sp G -> G :- p -> G,x :- p := WeakenV G x p.
@@ -272,7 +272,7 @@ Arguments botElim {v} {e} {G} {p}.
 (* G       :- q                    : (2) assumption                             *)
 (* G;p->¬q :- p                    : (3) weakening of (1)                       *)
 (* G;p->¬q :- q                    : (4) weakening of (2)                       *)
-(* G;p->¬q :- p -> ¬q              : (5) extraction                             *)
+(* G;p->¬q :- p -> ¬q              : (5) from hypothesis                        *)
 (* G;p->¬q :- ¬q                   : (6) modus ponens of (3) and (5)            *)
 (* G;p->¬q :- bot                  : (7) modus ponens of (4) amd (6)            *)
 (* G       :- ¬(p -> ¬q)           : (8) deduction from (7)                     *)
@@ -315,7 +315,7 @@ Proof.
         (weakenP _ pr2)                  (* G;p->¬q :- q           *)
         (modus                           (* G;p->¬q :- ¬q          *)
           (weakenP _ pr1)                (* G;p->¬q :- p           *)
-          (extract _ _)))).              (* G;p->¬q :- p -> ¬q     *)
+          (fromHyp _ _)))).              (* G;p->¬q :- p -> ¬q     *)
 
   (* Filling the holes with the required proofs *)
   - apply HScope.
@@ -332,8 +332,8 @@ Arguments andIntro {v} {e} {G} {p} {q}.
 (* G      :- and p q              : (1)  assumption                             *)
 (* G      :- (p -> ¬q) -> bot     : (2)  and p q = ¬(p -> ¬q)                   *)
 (* G;¬p   :- (p -> ¬q) -> bot     : (3)  weakening of (2)                       *)
-(* G;¬p   :- ¬p                   : (4)  extraction                             *)
-(* G;¬p;p :- p                    : (5)  extraction                             *)
+(* G;¬p   :- ¬p                   : (4)  from hypothesis                        *)
+(* G;¬p;p :- p                    : (5)  from hypothesis                        *)
 (* G;¬p;p :- ¬p                   : (6)  weakening of (4)                       *)
 (* G;¬p;p :- bot                  : (7)  modus ponens of (5) and (6)            *)
 (* G;¬p;p :- ¬q                   : (8)  bot elimination in (7)                 *)
@@ -397,9 +397,9 @@ Proof.
         (deduct                     (* G;¬p   :- p -> ¬q           *)
           (botElim _                (* G;¬p;p :- ¬q                *)
             (modus                  (* G;¬p;p :- bot               *)
-              (extract _ _)         (* G;¬p;p :- p                 *)
+              (fromHyp _ _)         (* G;¬p;p :- p                 *)
               (weakenP _            (* G;¬p;p :- ¬p                *)
-                (extract _ _)))))   (* G;¬p   :- ¬p                *)
+                (fromHyp _ _)))))   (* G;¬p   :- ¬p                *)
         (weakenP _ pr))).           (* G;¬p   :- (p -> ¬q) -> bot  *)
 
   (* Filling the holes with the required proofs *)
@@ -421,7 +421,7 @@ Arguments andElimL {v} {e} {G} {p} {q}.
 (* G      :- and p q              : (1) assumption                              *)
 (* G      :- (p -> ¬q) -> bot     : (2) and p q = ¬(p -> ¬q)                    *)
 (* G;¬q   :- (p -> ¬q) -> bot     : (3) weakening of (2)                        *)
-(* G;¬q   :- ¬q                   : (4) extraction                              *)
+(* G;¬q   :- ¬q                   : (4) from hypothesis                         *)
 (* G;¬q;p :- ¬q                   : (5) weakening of (4)                        *)
 (* G;¬q   :- p -> ¬q              : (6) deduction from (5)                      *)
 (* G;¬q   :- bot                  : (7) modus ponens of (6) and (3)             *)
@@ -482,7 +482,7 @@ Proof.
        (modus                  (* G;¬q   :- bot                    *)
          (deduct               (* G;¬q   :- p -> ¬q                *)
            (weakenP _          (* G;¬q;p :- ¬q                     *)
-             (extract _ _)))   (* G;¬q   :- ¬q                     *)
+             (fromHyp _ _)))   (* G;¬q   :- ¬q                     *)
          (weakenP _ pr))).     (* G;¬q   :- (p -> ¬q) -> bot       *)
 
   (* Filling the holes with the required proofs *)
@@ -495,12 +495,12 @@ Defined.
 (* Given a proof of G;p :- q, builds a proof of G;¬q :- ¬p                      *)
 (* The proof goes as follows:                                                   *)
 (* G;p    :- q                    : (1)  assumption                             *)
-(* G;¬q;p :- p                    : (2)  extraction                             *)
+(* G;¬q;p :- p                    : (2)  from hypothesis                        *)
 (* G      :- p -> q               : (3)  deduction from (1)                     *)
 (* G;¬q   :- p -> q               : (4)  weakening of (3)                       *)
 (* G;¬q;p :- p -> q               : (5)  weakening of (4)                       *)
 (* G;¬q;p :- q                    : (6)  modus ponens of (2) and (5)            *)
-(* G;¬q   :- q -> bot             : (7)  extraction                             *)
+(* G;¬q   :- q -> bot             : (7)  from hypothesis                        *)
 (* G;¬q;p :- q -> bot             : (8)  weakening of (7)                       *)
 (* G;¬q;p :- bot                  : (9)  modus ponens of (6) and (8)            *)
 (* G;¬q   :- ¬p                   : (10) deduction from (9)                     *)
@@ -550,12 +550,12 @@ Proof.
     (deduct                    (* G;¬q   :- ¬p                     *)
        (modus                  (* G;¬q;p :- bot                    *)
          (modus                (* G;¬q;p :- q                      *)
-           (extract _ _)       (* G;¬q;p :- p                      *)
+           (fromHyp _ _)       (* G;¬q;p :- p                      *)
            (weakenP _          (* G;¬q;p :- p -> q                 *)
              (weakenP _        (* G;¬q   :- p -> q                 *)
                (deduct pr))))  (* G      :- p -> q                 *)
          (weakenP _            (* G;¬q;p :- q -> bot               *)
-           (extract _ _)))).   (* G;¬q   :- q -> bot               *)
+           (fromHyp _ _)))).   (* G;¬q   :- q -> bot               *)
 
   (* Filling the holes with the required proofs *)
   - constructor. 2: apply HVal. rewrite free_not. apply HqScope.
@@ -574,7 +574,7 @@ Arguments contra {v} {e} {G} {p} {q}.
 (* The proof goes as follows:                                                   *)
 (* G;p  :- q                      : (1) assumption                              *)
 (* G;¬p :- q                      : (2) assumption                              *)
-(* G;¬q :- q -> bot               : (3) extraction                              *)
+(* G;¬q :- q -> bot               : (3) from hypothesis                         *)
 (* G;¬q :- ¬p                     : (4) 'contra' of (1)                         *)
 (* G    :- ¬p -> q                : (5) deduction from (2)                      *)
 (* G;¬q :- ¬p -> q                : (6) weakening of (5)                        *)
@@ -618,7 +618,7 @@ Proof.
           (contra pr1)            (* G;¬q :- ¬p                    *)
           (weakenP _              (* G;¬q :- ¬p -> q               *)
             (deduct pr2)))        (* G    :- ¬p -> q               *)
-        (extract _ _))).          (* G;¬q :- q -> bot              *)
+        (fromHyp _ _))).          (* G;¬q :- q -> bot              *)
 
   (* Filling the holes with the required proofs *)
   - rewrite free_not. apply HqScope.
@@ -636,14 +636,14 @@ Arguments caseof {v} {e} {G} {p} {q}.
 (* G           :- q -> r          : (4)  deduction from (2)                     *)
 (* G;or p q    :- p -> r          : (5)  weakening of (3)                       *)
 (* G;or p q;p  :- p -> r          : (6)  weakening of (5)                       *)
-(* G;or p q;p  :- p               : (7)  extraction                             *)
+(* G;or p q;p  :- p               : (7)  from hypothesis                        *)
 (* G;or p q;p  :- r               : (8)  modus ponens of (7) and (6)            *)
 (* G;or p q    :- q -> r          : (9)  weakening of (4)                       *)
 (* G;or p q;¬p :- q -> r          : (10) weakening of (9)                       *)
-(* G;or p q    :- or p q          : (11) extraction                             *)
+(* G;or p q    :- or p q          : (11) from hypothesis                        *)
 (* G;or p q    :- ¬p -> q         : (12) or p q = ¬p -> q                       *)
 (* G;or p q;¬p :- ¬p -> q         : (13) weakening of (12)                      *)
-(* G;or p q;¬p :- ¬p              : (14) extraction                             *)
+(* G;or p q;¬p :- ¬p              : (14) from hypothesis                        *)
 (* G;or p q;¬p :- q               : (15) modus ponens of (14) and (13)          *)
 (* G;or p q;¬p :- r               : (16) modus ponens of (15) and (10)          *)
 (* G;or p q    :- r               : (17) 'caseof' of (8) and (16)               *)
@@ -699,15 +699,15 @@ Proof.
   refine
     (caseof                       (* G;or p q    :- r              *)
       (modus                      (* G;or p q;p  :- r              *)
-        (extract _ _)             (* G;or p q;p  :- p              *)
+        (fromHyp _ _)             (* G;or p q;p  :- p              *)
         (weakenP _                (* G;or p q;p  :- p -> r         *)
           (weakenP _              (* G;or p q    :- p -> r         *)
             (deduct pr1))))       (* G           :- p -> r         *)
       (modus                      (* G;or p q;¬p :- r              *)
         (modus                    (* G;or p q;¬p :- q              *)
-          (extract _ _)           (* G;or p q;¬p :- ¬p             *)
+          (fromHyp _ _)           (* G;or p q;¬p :- ¬p             *)
           (weakenP _              (* G;or p q;¬p :- ¬p -> q        *)
-            (extract _ _)))       (* G;or p q    :- ¬p -> q        *)
+            (fromHyp _ _)))       (* G;or p q    :- ¬p -> q        *)
         (weakenP _                (* G;or p q;¬p :- q -> r         *)
           (weakenP _              (* G;or p q    :- q -> r         *)
             (deduct pr2))))).     (* G           :- q -> r         *)
@@ -734,7 +734,7 @@ Arguments either {v} {e} {G} {p} {q} {r}.
 (* The proof goes as follows:                                                   *)
 (* G    :- p                      : (1) assumption                              *)
 (* G;¬p :- p                      : (2) weakening of (1)                        *)
-(* G;¬p :- p -> bot               : (3) extraction                              *)
+(* G;¬p :- p -> bot               : (3) from hypothesis                         *)
 (* G;¬p :- bot                    : (4) modus ponens of (2) and (3)             *)
 (* G;¬p :- q                      : (5) 'botElim' of (4)                        *)
 (* G    :- ¬p -> q                : (6) deduction from (5)                      *)
@@ -754,7 +754,7 @@ Proof.
       (botElim _                  (* G;¬p :- q                     *)
         (modus                    (* G;¬p :- bot                   *)
           (weakenP _ pr)          (* G;¬p :- p                     *)
-          (extract _ _)))).       (* G;¬p :- p -> bot              *)
+          (fromHyp _ _)))).       (* G;¬p :- p -> bot              *)
 
   (* Filling the holes with the required proofs *)
   - apply HqScope.

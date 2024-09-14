@@ -52,7 +52,7 @@ Proof.
     ]; intros p q HEq pr.
   - (* We are using 'modus' here so failing to achieve cut elimination *)
     rewrite HEq in pr. rewrite HEq in HIncl. rewrite HEq. clear r HEq.
-    refine (modus pr (extract _ _)).
+    refine (modus pr (fromHyp _ _)).
     + apply HVal.
     + apply HIncl.
   - rewrite HEq in HSeq.
@@ -77,7 +77,7 @@ Proof.
     |G' x p' HScope HSeq IH
     |G' x y p' HNeq HScope HSeq IH
     ]; intros G p HEq.
-  - inversion HEq. subst. refine (extract _ _).
+  - inversion HEq. subst. refine (fromHyp _ _).
     + apply validInvertP with p, HVal.
     + apply HIncl.
   - inversion HEq.
