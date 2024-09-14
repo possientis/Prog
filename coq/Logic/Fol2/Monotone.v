@@ -70,7 +70,7 @@ Proof.
         destruct HSeq as [pr _].
 
         (* Note that x is not already in scope G' *)
-        assert (~ x :: Fr' G') as HScope. { apply validInScopeV, HVal. }
+        assert (~ x :: Sp G') as HScope. { apply validInScopeV, HVal. }
 
         (* Hence by weakening we obtain a proof of G',x :- p *)
         exists (weakenV HScope pr). apply I.
@@ -87,7 +87,7 @@ Proof.
         assert (CtxVal G') as HVal'. { apply validInvertP with q, HVal. }
 
         (* Note that all free vars of q are in scope *)
-        assert (Fr q <= Fr' G') as HScope. { apply validInScopeP, HVal. }
+        assert (Fr q <= Sp G') as HScope. { apply validInScopeP, HVal. }
 
         (* We shall distinguish two cases *)
         destruct HIn as [HIn|HIn].
@@ -107,12 +107,12 @@ Qed.
 (* Then any proposition provable under G is also provable under H.              *)
 (* This is not quite true as stated. We need the context H to be valid. We also *)
 (* need every variable which is in scope of G to be in scope of H, that is      *)
-(* Fr' G <= Fr' H. Consider the case when G=x and H=nil. Then G has no prop     *)
+(* Sp G <= Sp H. Consider the case when G=x and H=nil. Then G has no prop       *)
 (* and the proposition x <: x -> x <: x is provable under G but not under H.    *)
 (* Note that assuming G to be valid is not required.                            *)
 Lemma compose : forall (v:Type) (e:Eq v) (G H:Ctx v),
   CtxVal H                                 -> (* H is a valid context           *)
-  Fr' G <= Fr' H                           -> (* x in scope G -> x in scope H   *)
+  Sp G <= Sp H                             -> (* x in scope G -> x in scope H   *)
   (forall (p:P v), (Prp p) :: G -> H ;- p) -> (* Props in G are provable in H   *)
   forall (p:P v), G ;- p -> H ;- p.           (* G-provable -> H-provable       *)
 Proof.
@@ -123,7 +123,7 @@ Proof.
   intro HValH. assert (CtxVal H) as A. apply HValH. clear A.
 
   (* We assume that the scope of G is inside the scope of H *)
-  intro HScope. assert (Fr' G <= Fr' H) as A. apply HScope. clear A.
+  intro HScope. assert (Sp G <= Sp H) as A. apply HScope. clear A.
 
   (* We assume that any proposition of G is provable under H *)
   intros GH.
@@ -180,26 +180,26 @@ Proof.
     + intros q HIn. apply GH,inCtxSwitchV,HIn.
 
   - assert (H;p ;- q) as K. {
-      assert (Fr p <= Fr' G) as HpScope. {
+      assert (Fr p <= Sp G) as HpScope. {
         apply validInScopeP, validContext with q, HSeq.
-      } (* HpScope: Fr p <= Fr' G *)
+      } (* HpScope: Fr p <= Sp G *)
       apply IH.
       - constructor. 2: apply HValH. intros u Hu. apply HScope.
         apply HpScope, Hu.
       - apply HScope.
       - intros r Hr. destruct Hr as [Hr|Hr].
         + inversion Hr. subst.
-          assert (Fr r <= Fr' H) as HrScope. {
+          assert (Fr r <= Sp H) as HrScope. {
             intros u Hu. apply HScope. apply validInScopeP with r.
             apply validContext with q, HSeq. apply Hu.
-          } (* HrScope: Fr r <= Fr' H *)
+          } (* HrScope: Fr r <= Sp H *)
           exists (extract HValH HrScope). apply I.
         + destruct (GH r Hr) as [pr _].
-          assert (Fr p <= Fr' H) as HpScope'. {
-            apply incl_tran with (Fr' G).
+          assert (Fr p <= Sp H) as HpScope'. {
+            apply incl_tran with (Sp G).
             - apply HpScope.
             - apply HScope.
-          } (* HpScope': Fr p <= Fr' H *)
+          } (* HpScope': Fr p <= Sp H *)
           exists (weakenP HpScope' pr). apply I.
     } (* K: H;p ;- q *)
     destruct K as [pr _]. exists (deduct pr). apply I.
@@ -209,21 +209,21 @@ Proof.
     exists (modus pr1 pr2). apply I.
 
   - assert (H;¬p ;- bot) as K. {
-      assert (Fr p <= Fr' G) as HpScope. {
+      assert (Fr p <= Sp G) as HpScope. {
         rewrite <- free_not. apply validInScopeP, validContext with bot, HSeq.
-      } (* HpScope: Fr p <= Fr' G *)
+      } (* HpScope: Fr p <= Sp G *)
       apply IH.
       - constructor. 2: apply HValH. rewrite free_not.
-        apply incl_tran with (Fr' G).
+        apply incl_tran with (Sp G).
         + apply HpScope.
         + apply HScope.
       - apply HScope.
       - intros q Hq.
-        assert (Fr (¬p) <= Fr' H) as HpScope'. {
-          rewrite free_not. apply incl_tran with (Fr' G).
+        assert (Fr (¬p) <= Sp  H) as HpScope'. {
+          rewrite free_not. apply incl_tran with (Sp G).
           - apply HpScope.
           - apply HScope.
-        } (* HpScope': Fr (¬p) <= Fr' H *)
+        } (* HpScope': Fr (¬p) <= Sp H *)
         destruct Hq as [Hq|Hq].
         + inversion Hq.
          exists (extract HValH HpScope'). apply I.

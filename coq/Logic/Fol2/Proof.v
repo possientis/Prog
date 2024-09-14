@@ -26,9 +26,9 @@ Declare Scope Fol2_Proof_scope.
 (* possible proofs that the sequent G :- p holds.                               *)
 (* If the sequent G :- p does not hold, then the type 'G :- p' is void.         *)
 Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
-| Extract:forall (G:Ctx v)(p:P v),       CtxVal G -> Fr p <= Fr' G -> Seq v e (G;p) p
-| WeakenV:forall (G:Ctx v)(x:v)(p:P v),  ~ x :: Fr' G -> Seq v e G p -> Seq v e (G,x) p
-| WeakenP:forall (G:Ctx v)(p q:P v),     Fr q <= Fr' G -> Seq v e G p -> Seq v e (G;q) p
+| Extract:forall (G:Ctx v)(p:P v),       CtxVal G -> Fr p <= Sp G -> Seq v e (G;p) p
+| WeakenV:forall (G:Ctx v)(x:v)(p:P v),  ~ x :: Sp G -> Seq v e G p -> Seq v e (G,x) p
+| WeakenP:forall (G:Ctx v)(p q:P v),     Fr q <= Sp G -> Seq v e G p -> Seq v e (G;q) p
 | SwitchV:forall (G:Ctx v)(x y:v)(p:P v),Seq v e (G,x,y) p -> Seq v e (G,y,x) p
 | Deduct :forall (G:Ctx v)(p q:P v),     Seq v e (G;p) q -> Seq v e G (p :-> q)
 | Modus  :forall (G:Ctx v)(p q: P v),    Seq v e G p -> Seq v e G (p :-> q) -> Seq v e G q
@@ -36,7 +36,7 @@ Inductive Seq (v:Type) (e:Eq v) : Ctx v -> P v -> Type :=
 | AxiomP :forall (G:Ctx v)(p:P v),       CtxVal G -> IsAxiom p -> Seq v e G p
 | General:forall (G:Ctx v)(x:v)(p:P v),  Seq v e (G,x) p -> Seq v e G (All x p)
 | Special:forall (G:Ctx v)(x:v)(p:P v),
-    ~ x :: Fr' G      ->
+    ~ x :: Sp G         ->
     Seq v e G (All x p) ->
     Seq v e (G,x) p
 | AlphaEq:forall (G:Ctx v)(x y:v)(p:P v),
@@ -112,7 +112,7 @@ Qed.
 (* variables of its context. In other words, it is impossible to prove a        *)
 (* proposition whose free variables are not in scope                            *)
 Lemma freeVarsInScope : forall (v:Type) (e:Eq v) (G:Ctx v) (p:P v),
-  G :- p -> Fr p <= Fr' G.
+  G :- p -> Fr p <= Sp G.
 Proof.
   intros v e G p HSeq.
   induction HSeq as
@@ -170,17 +170,17 @@ Proof.
 Qed.
 
 Definition extract (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
-  : CtxVal G -> Fr p <= Fr' G -> G;p :- p := Extract G p.
+  : CtxVal G -> Fr p <= Sp G -> G;p :- p := Extract G p.
 
 Arguments extract {v} {e} {G} {p}.
 
 Definition weakenV (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
-  : ~ x :: Fr' G -> G :- p -> G,x :- p := WeakenV G x p.
+  : ~ x :: Sp G -> G :- p -> G,x :- p := WeakenV G x p.
 
 Arguments weakenV {v} {e} {G} {x} {p}.
 
 Definition weakenP (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
-  : Fr q <= Fr' G -> G :- p -> G;q :- p := WeakenP G p q.
+  : Fr q <= Sp G -> G :- p -> G;q :- p := WeakenP G p q.
 
 Arguments weakenP {v} {e} {G} {p} {q}.
 
@@ -215,8 +215,8 @@ Definition general (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
 Arguments general {v} {e} {G} {x} {p}.
 
 Definition special (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
-  : ~ x :: Fr' G    ->        (* x not already in scope                         *)
-    G   :- All x p  ->
+  : ~ x :: Sp G    ->        (* x not already in scope                          *)
+    G   :- All x p ->
     G,x :- p
   := Special G x p.
 
@@ -241,7 +241,7 @@ Arguments alphaEq {v} {e} {G} {x} {y} {p}.
 (* G;¬p :- bot                     : (2) weakening of (1)                       *)
 (* G    :- p                       : (3) reduction from (2)                     *)
 Definition botElim (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
-  (HScope:Fr p <= Fr' G) (pr:G :- bot) : G :- p.
+  (HScope:Fr p <= Sp G) (pr:G :- bot) : G :- p.
 Proof.
 
   (* Leaving a hole for the proof that free vars are in scope *)
@@ -250,13 +250,13 @@ Proof.
       (weakenP _ pr)).              (* G;¬p :- bot            *)
 
   (* It remains to show that the free variables of ¬p are in scope *)
-  assert (Fr (¬p) <= Fr' G) as A. 2: apply A.
+  assert (Fr (¬p) <= Sp G) as A. 2: apply A.
 
   (* Since Fr (¬p) = Fr p ... *)
   rewrite free_not.
 
   (* Tt remains to show that the free variables of p are in scope *)
-  assert (Fr p <= Fr' G) as A. 2: apply A.
+  assert (Fr p <= Sp G) as A. 2: apply A.
 
   (* Which is true by our assumption HScope *)
   apply HScope.
@@ -286,24 +286,24 @@ Proof.
     { apply validContext with p, pr1. }
 
   (* We shall also need to prove that all free vars of p -> ¬q are in scope *)
-  assert (Fr (p :-> ¬q) <= Fr' G) as HScope.
+  assert (Fr (p :-> ¬q) <= Sp G) as HScope.
     { (* Expanding the lhs and using the fact that Fr q ++ [] = Fr q *)
       simpl. rewrite app_nil_r.
 
       (* We simply need to show that all free vars of p and q are in scope *)
-      assert (Fr p ++ Fr q <= Fr' G) as A. 2: apply A.
+      assert (Fr p ++ Fr q <= Sp G) as A. 2: apply A.
 
       (* It is sufficient to deal with p and q separately *)
       apply incl_app.
 
           (* First we need to show the free vars of p are in scope *)
-        - assert (Fr p <= Fr' G) as A. 2: apply A.
+        - assert (Fr p <= Sp G) as A. 2: apply A.
 
           (* Which follows from the fact the sequent G :- p has a proof pr1 *)
           apply freeVarsInScope, pr1.
 
           (* Next we need to show the free vars of q are in scope *)
-        - assert (Fr q <= Fr' G) as A. 2: apply A.
+        - assert (Fr q <= Sp G) as A. 2: apply A.
 
           (* Which follows from the fact the sequent G :- q has a proof pr2 *)
           apply freeVarsInScope, pr2. }
@@ -346,10 +346,10 @@ Proof.
   assert (CtxVal G) as HVal. { apply validContext with (and p q), pr. }
 
   (* We shall also need to prove that all free vars of p are in scope *)
-  assert (Fr p <= Fr' G) as HpScope. {
+  assert (Fr p <= Sp G) as HpScope. {
 
     (* From the sequent G :- and p q, all free vars of and p q are in scope *)
-    assert (Fr (and p q) <= Fr' G) as Hpq. { apply freeVarsInScope, pr. }
+    assert (Fr (and p q) <= Sp G) as Hpq. { apply freeVarsInScope, pr. }
 
     (* Using transitivity of inclusion *)
     apply incl_tran with (Fr (and p q)). 2: apply Hpq.
@@ -369,10 +369,10 @@ Proof.
   }
 
   (* And all free vars of q are in scope *)
-  assert (Fr q <= Fr' G) as HqScope. {
+  assert (Fr q <= Sp G) as HqScope. {
 
     (* From the sequent G :- and p q, all free vars of and p q are in scope *)
-    assert (Fr (and p q) <= Fr' G) as Hpq. { apply freeVarsInScope, pr. }
+    assert (Fr (and p q) <= Sp G) as Hpq. { apply freeVarsInScope, pr. }
 
     (* Using transitivity of inclusion *)
     apply incl_tran with (Fr (and p q)). 2: apply Hpq.
@@ -432,10 +432,10 @@ Proof.
   assert (CtxVal G) as HVal. { apply validContext with (and p q), pr. }
 
   (* We shall also need to prove that all free vars of p are in scope *)
-  assert (Fr p <= Fr' G) as HpScope. {
+  assert (Fr p <= Sp G) as HpScope. {
 
     (* From the sequent G :- and p q, all free vars of and p q are in scope *)
-    assert (Fr (and p q) <= Fr' G) as Hpq. { apply freeVarsInScope, pr. }
+    assert (Fr (and p q) <= Sp G) as Hpq. { apply freeVarsInScope, pr. }
 
     (* Using transitivity of inclusion *)
     apply incl_tran with (Fr (and p q)). 2: apply Hpq.
@@ -455,10 +455,10 @@ Proof.
   }
 
   (* And all free vars of q are in scope *)
-  assert (Fr q <= Fr' G) as HqScope. {
+  assert (Fr q <= Sp G) as HqScope. {
 
     (* From the sequent G :- and p q, all free vars of and p q are in scope *)
-    assert (Fr (and p q) <= Fr' G) as Hpq. { apply freeVarsInScope, pr. }
+    assert (Fr (and p q) <= Sp G) as Hpq. { apply freeVarsInScope, pr. }
 
     (* Using transitivity of inclusion *)
     apply incl_tran with (Fr (and p q)). 2: apply Hpq.
@@ -520,7 +520,7 @@ Proof.
   }
 
   (* We shall also need to prove that all free vars of p are in scope *)
-  assert (Fr p <= Fr' G) as HpScope. {
+  assert (Fr p <= Sp G) as HpScope. {
 
     (* Using validInScopeP *)
     apply validInScopeP.
@@ -533,13 +533,13 @@ Proof.
   }
 
   (* We shall also need to prove that all free vars of q are in scope *)
-  assert (Fr q <= Fr' G) as HqScope. {
+  assert (Fr q <= Sp G) as HqScope. {
 
-    (* Since Fr' G = Fr' (G;p) *)
-    assert (Fr' G = Fr' (G;p)) as E. reflexivity. rewrite E.
+    (* Since Sp G = Sp (G;p) *)
+    assert (Sp G = Sp (G;p)) as E. reflexivity. rewrite E.
 
-    (* We simply need to show that Fr q <= Fr' (G;p) *)
-    assert (Fr q <= Fr' (G;p)) as A. 2: apply A.
+    (* We simply need to show that Fr q <= Sp (G;p) *)
+    assert (Fr q <= Sp (G;p)) as A. 2: apply A.
 
     (* Which follows immediately from freeVarsInScope and G;p :- q *)
     apply freeVarsInScope, pr.
@@ -598,13 +598,13 @@ Proof.
   }
 
   (* We shall also need to prove that all free vars of q are in scope *)
-  assert (Fr q <= Fr' G) as HqScope. {
+  assert (Fr q <= Sp G) as HqScope. {
 
-    (* Since Fr' G = Fr' (G;p) *)
-    assert (Fr' G = Fr' (G;p)) as E. reflexivity. rewrite E.
+    (* Since Sp G = Sp (G;p) *)
+    assert (Sp G = Sp (G;p)) as E. reflexivity. rewrite E.
 
-    (* We simply need to show that Fr q <= Fr' (G;p) *)
-    assert (Fr q <= Fr' (G;p)) as A. 2: apply A.
+    (* We simply need to show that Fr q <= Sp (G;p) *)
+    assert (Fr q <= Sp (G;p)) as A. 2: apply A.
 
     (* Which follows immediately from freeVarsInScope and G;p :- q *)
     apply freeVarsInScope, pr1.
@@ -664,7 +664,7 @@ Proof.
   }
 
   (* We shall also need to prove that all free vars of p are in scope *)
-  assert (Fr p <= Fr' G) as HpScope. {
+  assert (Fr p <= Sp G) as HpScope. {
 
   (* Using validInScopeP *)
     apply validInScopeP.
@@ -677,7 +677,7 @@ Proof.
   }
 
   (* We shall also need to prove that all free vars of q are in scope *)
-  assert (Fr q <= Fr' G) as HqScope. {
+  assert (Fr q <= Sp G) as HqScope. {
 
     (* Using validInScopeP *)
     apply validInScopeP.
@@ -689,8 +689,8 @@ Proof.
     apply validContext with r, pr2.
   }
 
-  (* Finally we shall need to prove that Fr p ++ Fr q <= Fr' G *)
-  assert (Fr p ++ Fr q <= Fr' G) as HpqScope. {
+  (* Finally we shall need to prove that Fr p ++ Fr q <= Sp G *)
+  assert (Fr p ++ Fr q <= Sp G) as HpqScope. {
 
     apply incl_app. {apply HpScope. } { apply HqScope. }
   }
@@ -740,13 +740,13 @@ Arguments either {v} {e} {G} {p} {q} {r}.
 (* G    :- ¬p -> q                : (6) deduction from (5)                      *)
 (* G    :- or p q                 : (7) or p q = ¬p -> q                        *)
 Definition orIntroL (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
-  (HqScope:Fr q <= Fr' G) (pr:G :- p) : G :- or p q.
+  (HqScope:Fr q <= Sp G) (pr:G :- p) : G :- or p q.
 Proof.
   (* We shall need to prove that G is a valid context *)
   assert (CtxVal G) as HVal. { apply validContext with p, pr. }
 
   (* We shall also need to prove that all free vars of p are in scope *)
-  assert (Fr p <= Fr' G) as HpScope. { apply freeVarsInScope, pr. }
+  assert (Fr p <= Sp G) as HpScope. { apply freeVarsInScope, pr. }
 
   (* Leaving holes for the various proofs that need to be provided *)
   refine
@@ -774,7 +774,7 @@ Arguments orIntroL {v} {e} {G} {p} {q}.
 (* G    :- ¬p -> q                ; (3) deduction from (2)                      *)
 (* G    :- or p q                 : (4) or p q = ¬p -> q                        *)
 Definition orIntroR (v:Type) (e:Eq v) (G:Ctx v) (p q:P v)
-  (HpScope:Fr p <= Fr' G) (pr:G :- q) : G :- or p q.
+  (HpScope:Fr p <= Sp G) (pr:G :- q) : G :- or p q.
 Proof.
   (* Leaving holes for the various proofs that need to be provided *)
   refine

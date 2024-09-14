@@ -35,20 +35,19 @@ Notation "G , x" := (cons (Var x) G)
 
 Open Scope Fol2_Context_scope.
 
-(* Free variables of a context: variables which are in scope                    *)
-Fixpoint Fr' (v:Type) (e:Eq v) (G:Ctx v) : list v :=
+(* Scope of a context: variables which are in scope                             *)
+Fixpoint Sp (v:Type) (e:Eq v) (G:Ctx v) : list v :=
   match G with
   | nil               => nil
-  | cons (Var x) G'   => cons x (Fr' v e G')
-  | cons (Prp p) G'   => Fr' v e G'
+  | cons (Var x) G'   => cons x (Sp v e G')
+  | cons (Prp p) G'   => Sp v e G'
 end.
 
-Arguments Fr' {v} {e}.
+Arguments Sp {v} {e}.
 
-(* For a variable, being in scope (i.e. being a free variable of the context)   *)
-(* is the same thing as belonging to the context                                *)
+(* A variable being in scope is the same thing as belonging to the context      *)
 Lemma scope_in_ctx : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  x :: Fr' G <-> Var x :: G.
+  x :: Sp G <-> Var x :: G.
 Proof.
   intros v e G x. induction G as [|ent G' IH].
   - split.
@@ -82,8 +81,8 @@ Arguments scope_in_ctx {v} {e}.
 (* in G, then G;p is itself a valid context                                     *)
 Inductive CtxVal (v:Type) (e:Eq v) : Ctx v -> Prop :=
 | NilCtx: CtxVal v e nil
-| ConsV : forall(G:Ctx v)(x:v)  ,~(x :: Fr' G) -> CtxVal v e G -> CtxVal v e (G,x)
-| ConsP : forall(G:Ctx v)(p:P v),Fr p <= Fr' G -> CtxVal v e G -> CtxVal v e (G;p)
+| ConsV : forall(G:Ctx v)(x:v)  ,~(x :: Sp G) -> CtxVal v e G -> CtxVal v e (G,x)
+| ConsP : forall(G:Ctx v)(p:P v),Fr p <= Sp G -> CtxVal v e G -> CtxVal v e (G;p)
 .
 
 Arguments CtxVal {v} {e}.
@@ -111,7 +110,7 @@ Proof.
 Qed.
 
 Lemma validInScopeP : forall (v:Type) (e:Eq v) (G:Ctx v) (p: P v),
-  CtxVal (G;p) -> Fr p <= Fr' G.
+  CtxVal (G;p) -> Fr p <= Sp G.
 Proof.
   intros v e G p HVal.
   remember (G;p) as H eqn:E. revert G p E.
@@ -122,7 +121,7 @@ Proof.
 Qed.
 
 Lemma validInScopeV : forall (v:Type) (e:Eq v) (G:Ctx v) (x:v),
-  CtxVal (G,x) -> ~ (x :: Fr' G).
+  CtxVal (G,x) -> ~ (x :: Sp G).
 Proof.
   intros v e G x HVal.
   remember (G,x) as H eqn:E. revert G x E.
