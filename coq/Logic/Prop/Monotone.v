@@ -36,8 +36,8 @@ Proof.
       (* We shall distinguish two cases *)
       destruct H as [H|H].
 
-        (* First we assume that q = p, then the proof exists by extraction *)
-        + rewrite H. exists extract. apply I.
+        (* First we assume that q = p, then the proof exists by hypothesis *)
+        + rewrite H. exists fromHyp. apply I.
 
         (* Next we assume that p lies in G', then use induction hypothesis *)
         + destruct (IH H) as [e _]. exists (weaken e). apply I.
@@ -76,14 +76,14 @@ Proof.
     - apply IH. intros r Hr. apply GH. right. apply Hr.
     - assert (H;p ;- q) as K.
         { apply IH. intros r Hr. destruct Hr as [Hr|Hr].
-            - rewrite Hr. exists extract. apply I.
+            - rewrite Hr. exists fromHyp. apply I.
             - destruct (GH r Hr) as [e' _]. exists (weaken e'). apply I. }
       destruct K as [e' _]. exists (deduct e'). apply I.
     - destruct (IH1 H GH) as [e1' _]. destruct (IH2 H GH) as [e2' _].
       exists (modus e1' e2'). apply I.
     - assert (H;¬p ;- bot) as K.
         { apply IH. intros r Hr. destruct Hr as [Hr|Hr].
-          - rewrite Hr. exists extract. apply I.
+          - rewrite Hr. exists fromHyp. apply I.
           - destruct (GH r Hr) as [e' _]. exists (weaken e'). apply I. }
       destruct K as [e' _]. exists (reduct e'). apply I.
 Qed.

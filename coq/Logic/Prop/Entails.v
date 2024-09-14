@@ -10,8 +10,8 @@ Declare Scope Prop_Entails_scope.
 (* Semantic entailment: G ::- p holds if and only if for all truth assignment   *)
 (* f: v -> bool, if every q in the context G is true (relative to f), then p is *)
 (* also true (relative to f)                                                    *)
-Definition Entails (v:Type)(G:Ctx v) (p:P v) : Prop := 
-  forall (f:v -> bool), 
+Definition Entails (v:Type)(G:Ctx v) (p:P v) : Prop :=
+  forall (f:v -> bool),
   (forall (q:P v), (q :: G) -> eval f q = true) -> eval f p = true.
 
 Arguments Entails {v}.
@@ -21,41 +21,41 @@ Notation "G ::- p" := (Entails G p)
 
 Open Scope Prop_Entails_scope.
 
-(* Semantic extraction rule                                                     *)
-Lemma entExtract : forall (v:Type) (G:Ctx v) (p:P v), 
+(* Semantic from hypothesis rule                                                *)
+Lemma entFromHyp : forall (v:Type) (G:Ctx v) (p:P v),
   G;p ::- p.
 Proof.
   intros v G p f H. apply H. left. reflexivity.
 Qed.
 
 (* Semantic weakening rule                                                      *)
-Lemma entWeaken : forall (v:Type) (G:Ctx v) (p q:P v), 
+Lemma entWeaken : forall (v:Type) (G:Ctx v) (p q:P v),
   G ::- p -> G;q ::- p.
 Proof.
   intros v G p q H1 f H2. apply H1. intros r H3. apply H2. right. apply H3.
 Qed.
 
 (* Semantic deduction rule                                                      *)
-Lemma entDeduct : forall (v:Type) (G:Ctx v) (p q:P v), 
+Lemma entDeduct : forall (v:Type) (G:Ctx v) (p q:P v),
   G;p ::- q -> G ::- p :-> q.
 Proof.
   (* Let v be a type and G be a context on v  *)
-  intros v G. 
-  
+  intros v G.
+
   (* Let p q be two formulas of propositional logic *)
   intros p q.
-    
+
   (* We assume that the semantic entailment G,p ::- q holds *)
   intros HEntails. assert (G;p ::- q) as A. apply HEntails. clear A.
 
   (* We need to show rhar G ::- p :-> q *)
   assert (G ::- p :-> q) as A. 2: apply A.
-  
+
   (* Let f:v -> bool be a truth assignment *)
   intro f.
 
   (* We assume every element of G is satisfied by the associated semantics *)
-  intros HSat. 
+  intros HSat.
   assert (forall (r:P v), r :: G -> eval f r = true) as A. apply HSat. clear A.
 
   (* We need to show that p :-> q is true under this semantics  *)
@@ -67,7 +67,7 @@ Proof.
   (* We distinguish two cases depending on whether x is true or not *)
   destruct x.
 
-    (* Case when eval f p = true *) 
+    (* Case when eval f p = true *)
     - simpl. apply orb_true_intro. right.
 
       (* We need to show that q is true *)
@@ -78,16 +78,16 @@ Proof.
 
       (* So we need to prove all propositions of G;p are true *)
       assert (forall (r:P v), r :: G;p -> eval f r = true) as A. 2: apply A.
-  
+
       (* So let r be a proposition of context G;p *)
       intros r [H1|H1].
-    
+
         (* We assume that r = p *)
         + rewrite <- H1, E. reflexivity.
 
         (* We assume that r is in G *)
         +  apply HSat, H1.
-    
+
     (* Case when eval f p = false *)
     - simpl. apply orb_true_intro. left. rewrite <- E. reflexivity.
 Qed.
@@ -115,8 +115,8 @@ Proof.
   intro f.
 
   (* for which every formula in G is true *)
-  intro HSat. 
-  assert (forall (r:P v), r :: G -> eval f r = true) as A. 
+  intro HSat.
+  assert (forall (r:P v), r :: G -> eval f r = true) as A.
   apply HSat. clear A.
 
   (* We need to to show that q is also true *)
@@ -147,7 +147,7 @@ Proof.
 
   (* Let p be a formula of propositional logic with atoms in v *)
   intro p.
-   
+
   (* We assume that G;¬p ::- bot holds *)
   intro HEntails. assert (G;¬p ::- bot) as A. apply HEntails. clear A.
 
@@ -174,7 +174,7 @@ Proof.
     (* First we assume that x = true, there os nothing to prove *)
     - reflexivity.
 
-    (* Next we assume that x = false, we need to obtain a contradiction *) 
+    (* Next we assume that x = false, we need to obtain a contradiction *)
     - exfalso.
 
       (* This will be our contradiction *)
@@ -199,14 +199,14 @@ Proof.
 
           (* We consider two cases *)
           destruct Hq as [Hq|Hq].
-            
-            (* First we assume that q = ¬p *) 
+
+            (* First we assume that q = ¬p *)
             - rewrite <- Hq. simpl. apply orb_true_intro. left.
               rewrite <- E. reflexivity.
 
             (* Next we assume that q lies in G *)
             - apply HSat, Hq. }
 
-      (* We now have a contradiction *)      
+      (* We now have a contradiction *)
       inversion C.
 Qed.
