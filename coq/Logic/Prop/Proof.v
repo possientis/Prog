@@ -10,6 +10,8 @@ Declare Scope Prop_Proof_scope.
 (*                                                                              *)
 (* Weaken: creates a proof of G;q :- p from a proof of G :- p                   *)
 (* So if p is provable under G, it is provable under the larger context G;q     *)
+
+(* Switch: creates a proof of G;q;p :- r from a proof of G;p;q :- r             *)
 (*                                                                              *)
 (* Deduct: given a proof of the sequent G;p :- q , provides a proof of the      *)
 (* sequent G :- p -> q. So p -> q is provable in context G if q is provable     *)
@@ -28,6 +30,7 @@ Declare Scope Prop_Proof_scope.
 Inductive Seq (v:Type) : Ctx v -> P v -> Type :=
 | FromHyp:forall (G:Ctx v)(p:P v),    Seq v (G;p) p
 | Weaken: forall (G:Ctx v)(p q:P v),  Seq v G p -> Seq v (G;q) p
+| Switch: forall (G:Ctx v)(p q r:P v),Seq v (G;p;q) r -> Seq v (G;q;p) r
 | Deduct: forall (G:Ctx v)(p q:P v),  Seq v (G;p) q -> Seq v G (p :-> q)
 | Modus:  forall (G:Ctx v)(p q:P v),  Seq v G p -> Seq v G (p :-> q) -> Seq v G q
 | Reduct: forall (G:Ctx v)(p:P v),    Seq v (G;¬p) bot -> Seq v G p
@@ -36,6 +39,7 @@ Inductive Seq (v:Type) : Ctx v -> P v -> Type :=
 Arguments Seq     {v}.
 Arguments FromHyp {v}.
 Arguments Weaken  {v}.
+Arguments Switch  {v}.
 Arguments Deduct  {v}.
 Arguments Modus   {v}.
 Arguments Reduct  {v}.
@@ -57,6 +61,11 @@ Definition weaken (v:Type) (G:Ctx v) (p q:P v) : (G :- p) -> (G;q :- p)
   := Weaken G p q.
 
 Arguments weaken {v} {G} {p} {q}.
+
+Definition switch (v:Type) (G:Ctx v) (p q r:P v) : (G;p;q :- r) -> (G;q;p :- r)
+  := Switch G p q r.
+
+Arguments switch {v} {G} {p} {q} {r}.
 
 Definition deduct (v:Type) (G:Ctx v) (p q:P v) : (G;p :- q) -> (G :- p :-> q)
   := Deduct G p q.

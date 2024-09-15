@@ -70,10 +70,14 @@ Proof.
   (* Then we need to show that given the proof e: G :-p, for all context H with *)
   (* property GH, p is provable under H. We proceed by induction e              *)
   induction e as
-    [G p|G p q e IH|G p q e IH|G p q e1 IH1 e2 IH2|G p e IH]; intros H GH.
+    [G p|G p q e IH|G p q r e IH|G p q e IH|G p q e1 IH1 e2 IH2|G p e IH]; intros H GH.
 
     - apply GH. left. reflexivity.
     - apply IH. intros r Hr. apply GH. right. apply Hr.
+    - apply IH. intros s Hs. apply GH. destruct Hs as [Hq|[Hp|HG]].
+      + subst. right. left. reflexivity.
+      + subst. left. reflexivity.
+      + right. right. apply HG.
     - assert (H;p ;- q) as K.
         { apply IH. intros r Hr. destruct Hr as [Hr|Hr].
             - rewrite Hr. exists fromHyp. apply I.
@@ -130,3 +134,4 @@ Proof.
   (* This follows immediately from the assumption G <= H *)
   apply HLeq, Hq.
 Qed.
+

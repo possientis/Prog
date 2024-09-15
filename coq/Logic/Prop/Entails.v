@@ -35,6 +35,17 @@ Proof.
   intros v G p q H1 f H2. apply H1. intros r H3. apply H2. right. apply H3.
 Qed.
 
+(* Semantic switch rule                                                         *)
+Lemma entSwitch : forall (v:Type) (G:Ctx v) (p q r:P v),
+    G;p;q ::- r -> G;q;p ::- r.
+Proof.
+  intros v G p q r H1 f H2. apply H1. intros s H3. apply H2.
+  destruct H3 as [Hq|[Hp|HG]].
+  - subst. right. left. reflexivity.
+  - subst. left. reflexivity.
+  - right. right. apply HG.
+Qed.
+
 (* Semantic deduction rule                                                      *)
 Lemma entDeduct : forall (v:Type) (G:Ctx v) (p q:P v),
   G;p ::- q -> G ::- p :-> q.
@@ -210,3 +221,4 @@ Proof.
       (* We now have a contradiction *)
       inversion C.
 Qed.
+
