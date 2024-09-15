@@ -17,6 +17,10 @@ Declare Scope Prop_Proof_scope.
 (* sequent G :- p -> q. So p -> q is provable in context G if q is provable     *)
 (* in context G;p                                                               *)
 (*                                                                              *)
+(* Apply: given a proof of the sequent G :- p -> q, provides a proof of the     *)
+(* sequent G;p :- q. So q is provable in context G;p is p -> q is provable      *)
+(* in context G                                                                 *)
+(*                                                                              *)
 (* Modus : aka modus ponens, combines a proof of the sequent G :- p and a       *)
 (* proof of the sequent G :- p -> q to create a proof of the sequent G :- q     *)
 (* So q is provable under G if both p and p -> q are                            *)
@@ -32,6 +36,7 @@ Inductive Seq (v:Type) : Ctx v -> P v -> Type :=
 | Weaken: forall (G:Ctx v)(p q:P v),  Seq v G p -> Seq v (G;q) p
 | Switch: forall (G:Ctx v)(p q r:P v),Seq v (G;p;q) r -> Seq v (G;q;p) r
 | Deduct: forall (G:Ctx v)(p q:P v),  Seq v (G;p) q -> Seq v G (p :-> q)
+| Apply : forall (G:Ctx v)(p q:P v),  Seq v G (p :-> q) -> Seq v (G;p) q
 | Modus:  forall (G:Ctx v)(p q:P v),  Seq v G p -> Seq v G (p :-> q) -> Seq v G q
 | Reduct: forall (G:Ctx v)(p:P v),    Seq v (G;¬p) bot -> Seq v G p
 .
@@ -41,6 +46,7 @@ Arguments FromHyp {v}.
 Arguments Weaken  {v}.
 Arguments Switch  {v}.
 Arguments Deduct  {v}.
+Arguments Apply   {v}.
 Arguments Modus   {v}.
 Arguments Reduct  {v}.
 
@@ -71,6 +77,11 @@ Definition deduct (v:Type) (G:Ctx v) (p q:P v) : (G;p :- q) -> (G :- p :-> q)
   := Deduct G p q.
 
 Arguments deduct {v} {G} {p} {q}.
+
+Definition apply (v:Type) (G:Ctx v) (p q:P v) : (G :- p :-> q) -> (G;p :- q)
+  := Apply G p q.
+
+Arguments apply {v} {G} {p} {q}.
 
 Definition modus (v:Type)(G:Ctx v)(p q:P v): (G :- p) -> (G :- p :-> q) -> G :- q
   := Modus G p q.

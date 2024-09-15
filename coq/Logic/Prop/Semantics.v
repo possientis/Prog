@@ -9,7 +9,7 @@ Definition Valuation (v:Type) (f:P v -> bool) : Prop
 
 Arguments Valuation {v}.
 
-Lemma valBot : forall (v:Type) (f:P v -> bool), 
+Lemma valBot : forall (v:Type) (f:P v -> bool),
   Valuation f -> f Bot = false.
 Proof.
   intros v f [HBot HImp]. exact HBot.
@@ -28,7 +28,7 @@ Arguments valImp {v} {f}.
 Lemma valNot : forall (v:Type) (f:P v -> bool),
   Valuation f -> forall (p:P v), f (¬p) = negb (f p).
 Proof.
-  intros v f HVal p. rewrite (valImp HVal), (valBot HVal). 
+  intros v f HVal p. rewrite (valImp HVal), (valBot HVal).
   destruct (f p); reflexivity.
 Qed.
 
@@ -37,7 +37,7 @@ Arguments valNot {v} {f}.
 Lemma valAnd : forall (v:Type) (f:P v -> bool),
   Valuation f -> forall (p q:P v), f (and p q) = f p && f q.
 Proof.
-  intros v f HVal p q. unfold and. 
+  intros v f HVal p q. unfold and.
   rewrite (valNot HVal), (valImp HVal), (valNot HVal).
   destruct (f p), (f q); reflexivity.
 Qed.
@@ -47,7 +47,7 @@ Arguments valAnd {v} {f}.
 Lemma valOr : forall (v:Type) (f:P v -> bool),
   Valuation f -> forall (p q:P v), f (or p q) = f p || f q.
 Proof.
-  intros v f HVal p q. unfold or. 
+  intros v f HVal p q. unfold or.
   rewrite (valImp HVal), (valNot HVal).
   destruct (f p), (f q); reflexivity.
 Qed.
@@ -61,7 +61,7 @@ Lemma coincideValuation : forall (v:Type) (f g:P v -> bool),
   (forall (x:v), f 'x = g 'x) ->
   forall (p:P v), f p = g p.
 Proof.
-  intros v f g Hf Hg HVar. 
+  intros v f g Hf Hg HVar.
   induction p as [|x|p IHp q IHq].
   - rewrite (valBot Hf), (valBot Hg). reflexivity.
   - apply HVar.
@@ -80,7 +80,7 @@ Arguments eval {v}.
 (* For every truth assignment f: v -> bool, eval f is indeed a valuation *)
 Lemma evalValuation : forall (v:Type) (f:v -> bool), Valuation (eval f).
 Proof.
-  intros v f. split. 
+  intros v f. split.
     - reflexivity.
     - intros p q. reflexivity.
 Qed.
@@ -112,4 +112,3 @@ Proof.
     - apply evalValuation.
     - intros x. reflexivity.
 Qed.
-

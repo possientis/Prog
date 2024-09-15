@@ -59,7 +59,7 @@ Proof.
   (* We assume that the semantic entailment G,p ::- q holds *)
   intros HEntails. assert (G;p ::- q) as A. apply HEntails. clear A.
 
-  (* We need to show rhar G ::- p :-> q *)
+  (* We need to show that G ::- p :-> q *)
   assert (G ::- p :-> q) as A. 2: apply A.
 
   (* Let f:v -> bool be a truth assignment *)
@@ -101,6 +101,46 @@ Proof.
 
     (* Case when eval f p = false *)
     - simpl. apply orb_true_intro. left. rewrite <- E. reflexivity.
+Qed.
+
+(* Semantic application rule *)
+Lemma entApply : forall (v:Type) (G:Ctx v) (p q:P v),
+  G ::- p :-> q -> G;p ::- q.
+Proof.
+  (* Let v be a type and G be a context on v  *)
+  intros v G.
+
+  (* Let p q be two formulas of propositional logic *)
+  intros p q.
+
+  (* We assume that the semantic entailment G ::- p :-> q holds *)
+  intros HEntails. assert (G ::- p :-> q) as A. apply HEntails. clear A.
+
+  (* We need to show that G;p ::- q *)
+  assert (G;p ::- q) as A. 2: apply A.
+
+  (* Let f:v -> bool be a truth assignment *)
+  intro f.
+
+  (* We assume every element of G;p is satisfied by the associated semantics *)
+  intros HSat.
+  assert (forall (r:P v), r :: G;p -> eval f r = true) as A. apply HSat. clear A.
+
+  (* We need to show that  q is true under this semantics  *)
+  assert (eval f q = true) as A. 2: apply A.
+
+  (* Note that eval f p = true *)
+  assert (eval f p = true) as Hp. {
+    apply HSat. left. reflexivity.
+  }
+
+  (* Note that eval f (p :-> q) = true *)
+  assert (eval f (p :-> q) = true) as Hpq. {
+    apply HEntails. intros r Hr. apply HSat. right. apply Hr.
+  }
+
+  simpl in Hpq. rewrite Hp in Hpq. unfold orb in Hpq. simpl in Hpq.
+  apply Hpq.
 Qed.
 
 (* Semantic modus ponens rule                                                   *)

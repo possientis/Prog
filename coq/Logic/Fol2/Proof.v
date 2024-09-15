@@ -173,7 +173,7 @@ Proof.
         }
         { apply HyNeq. }
         { apply HxNeq. }
-Admitted.
+Qed.
 
 Definition fromHyp (v:Type) (e:Eq v) (G:Ctx v) (p:P v)
   : CtxVal G -> Fr p <= Sp G -> G;p :- p := FromHyp G p.

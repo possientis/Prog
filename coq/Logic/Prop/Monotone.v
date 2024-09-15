@@ -70,7 +70,14 @@ Proof.
   (* Then we need to show that given the proof e: G :-p, for all context H with *)
   (* property GH, p is provable under H. We proceed by induction e              *)
   induction e as
-    [G p|G p q e IH|G p q r e IH|G p q e IH|G p q e1 IH1 e2 IH2|G p e IH]; intros H GH.
+    [G p
+    |G p q e IH
+    |G p q r e IH
+    |G p q e IH
+    |G p q e IH
+    |G p q e1 IH1 e2 IH2
+    |G p e IH
+    ]; intros H GH.
 
     - apply GH. left. reflexivity.
     - apply IH. intros r Hr. apply GH. right. apply Hr.
@@ -78,11 +85,20 @@ Proof.
       + subst. right. left. reflexivity.
       + subst. left. reflexivity.
       + right. right. apply HG.
-    - assert (H;p ;- q) as K.
-        { apply IH. intros r Hr. destruct Hr as [Hr|Hr].
-            - rewrite Hr. exists fromHyp. apply I.
-            - destruct (GH r Hr) as [e' _]. exists (weaken e'). apply I. }
+    - assert (H;p ;- q) as K. {
+        apply IH. intros r Hr. destruct Hr as [Hr|Hr].
+        - rewrite Hr. exists fromHyp. apply I.
+        - destruct (GH r Hr) as [e' _]. exists (weaken e'). apply I.
+      }
       destruct K as [e' _]. exists (deduct e'). apply I.
+    - assert (H ;- p :-> q) as Kpq. {
+      apply IH. intros r Hr. apply GH. right. apply Hr.
+      }
+      assert (H ;- p) as Kp. {
+        apply GH. left. reflexivity.
+      }
+      destruct Kpq as [epq _]. destruct Kp as [ep _].
+      exists (modus ep epq). apply I.
     - destruct (IH1 H GH) as [e1' _]. destruct (IH2 H GH) as [e2' _].
       exists (modus e1' e2'). apply I.
     - assert (H;¬p ;- bot) as K.
@@ -134,4 +150,3 @@ Proof.
   (* This follows immediately from the assumption G <= H *)
   apply HLeq, Hq.
 Qed.
-

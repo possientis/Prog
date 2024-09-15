@@ -11,11 +11,19 @@ Lemma soundness : forall (v:Type) (G:Ctx v) (p:P v) (e: G :- p), G ::- p.
 Proof.
   intros v G p e.
   induction e as
-    [G p|G p q e IH|G p q r e IH|G p q e IH|G p q e1 IH1 e2 IH2|G p e IH].
+    [G p
+    |G p q e IH
+    |G p q r e IH
+    |G p q e IH
+    |G p q e IH
+    |G p q e1 IH1 e2 IH2
+    |G p e IH
+    ].
   - apply entFromHyp.
   - apply entWeaken, IH.
   - apply entSwitch, IH.
   - apply entDeduct, IH.
+  - apply entApply, IH.
   - apply entModus with p.
       + apply IH1.
       + apply IH2.
