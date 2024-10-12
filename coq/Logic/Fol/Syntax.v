@@ -1,4 +1,5 @@
 Declare Scope Fol_Syntax_scope.
+Open Scope Fol_Syntax_scope.
 
 (* The type 'v' represents the set of variables symbols.        *)
 (* The type P v is the set of set theoretic first order         *)
@@ -29,8 +30,6 @@ Definition bot (v:Type) : P v := Bot.
 
 Arguments bot {v}.
 
-Open Scope Fol_Syntax_scope.
-
 Definition or (v:Type) (p q: P v) : P v := ¬p :-> q.
 
 Arguments or {v}.
@@ -38,3 +37,10 @@ Arguments or {v}.
 Definition and (v:Type) (p q: P v) : P v := ¬(p :-> ¬q).
 
 Arguments and {v}.
+
+Definition equiv (v:Type) (p q:P v) : P v := and (p :-> q) (q :-> p).
+
+Arguments equiv {v}.
+
+Notation "p :-: q" := (equiv p q)
+  (at level 20, right associativity)  : Fol_Syntax_scope.
