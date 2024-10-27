@@ -1,5 +1,5 @@
-Declare Scope ZF_Ordered_scope.
-Open    Scope ZF_Ordered_scope.
+Declare Scope ZF_OrdPair_scope.
+Open    Scope ZF_OrdPair_scope.
 
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Pairing.
@@ -11,16 +11,16 @@ Definition orderedPair (a b:U) : U := { [a] , {a,b} }.
 
 (* Unfortunately, we cannot use the notation '(a,b)'.                           *)
 Notation "(: a , b :)" := (orderedPair a b)
-  (at level 1, no associativity) : ZF_Ordered_scope.
+  (at level 1, no associativity) : ZF_OrdPair_scope.
 
 (* Characterisation of the elements of (:a,b:).                                 *)
-Lemma OrderedCharac : forall (a b:U),
+Lemma OrdPairCharac : forall (a b:U),
   forall x, x :< (:a,b:) <-> x = [a] \/ x = {a,b}.
 Proof.
   intros a b. unfold orderedPair. apply PairCharac.
 Qed.
 
-Lemma OrderedABC : forall a b c, [a] = {b,c} -> a = b /\ a = c.
+Lemma OrdPairABC : forall a b c, [a] = {b,c} -> a = b /\ a = c.
 Proof.
   intros a b c Habc. split.
   - symmetry. apply SingleInEqual. rewrite Habc. apply PairAIn.
@@ -28,22 +28,22 @@ Proof.
 Qed.
 
 (* If two ordered pairs are equal, then their components are equal.             *)
-Proposition OrderedEqual : forall (a b c d:U),
+Proposition OrdPairEqual : forall (a b c d:U),
   (:a,b:) = (:c,d:) -> a = c /\ b = d.
 Proof.
   intros a b c d H.
   assert (a = c) as H1.
     { assert ([a] :< (:c,d:)) as H2.
-        { rewrite <- H. apply OrderedCharac. left. reflexivity. }
-      apply OrderedCharac in H2. destruct H2 as [H2|H2].
+        { rewrite <- H. apply OrdPairCharac. left. reflexivity. }
+      apply OrdPairCharac in H2. destruct H2 as [H2|H2].
       + apply SingleEqualSingle, H2.
-      + apply OrderedABC in H2. destruct H2 as [H2 H3]. apply H2. }
+      + apply OrdPairABC in H2. destruct H2 as [H2 H3]. apply H2. }
   split.
   - apply H1.
   - rewrite <- H1 in H. clear c H1.
     assert ({a,b} :< (:a,d:)) as H1.
-      { rewrite <- H. apply OrderedCharac. right. reflexivity. }
-    apply OrderedCharac in H1. destruct H1 as [H1|H1].
+      { rewrite <- H. apply OrdPairCharac. right. reflexivity. }
+    apply OrdPairCharac in H1. destruct H1 as [H1|H1].
     + assert (b = a) as H2.
         { apply SingleInEqual. rewrite <- H1. apply PairBIn. }
       subst. clear H1.
@@ -52,23 +52,23 @@ Proof.
       unfold orderedPair in H1. apply PairCharac in H1.
       fold singleton in H1. destruct H1 as [H1|H1].
       * symmetry. apply SingleInEqual. rewrite <- H1. apply PairBIn.
-      * symmetry in H1. apply OrderedABC in H1. destruct H1 as [H1 H2]. apply H2.
+      * symmetry in H1. apply OrdPairABC in H1. destruct H1 as [H1 H2]. apply H2.
     + assert (b :< {a,d}) as H2.
         { rewrite <- H1. apply PairBIn. }
       apply PairCharac in H2. destruct H2 as [H2|H2].
-      * subst. apply OrderedABC in H1. destruct H1 as [H1 H2]. apply H2.
+      * subst. apply OrdPairABC in H1. destruct H1 as [H1 H2]. apply H2.
       * apply H2.
 Qed.
 
-Proposition OrderedEqualA : forall (a b c d:U),
+Proposition OrdPairEqualA : forall (a b c d:U),
   (:a,b:) = (:c,d:) -> a = c.
 Proof.
-  intros a b d c H. apply OrderedEqual in H. destruct H as [H1 H2]. apply H1.
+  intros a b d c H. apply OrdPairEqual in H. destruct H as [H1 H2]. apply H1.
 Qed.
 
-Proposition OrderedEqualB : forall (a b c d:U),
+Proposition OrdPairEqualB : forall (a b c d:U),
   (:a,b:) = (:c,d:) -> b = d.
 Proof.
-  intros a b d c H. apply OrderedEqual in H. destruct H as [H1 H2]. apply H2.
+  intros a b d c H. apply OrdPairEqual in H. destruct H as [H1 H2]. apply H2.
 Qed.
 

@@ -234,7 +234,7 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Russell.vo \
 				 ${ZF}/Pairing.vo \
 				 ${ZF}/Singleton.vo \
-				 ${ZF}/Ordered.vo
+				 ${ZF}/OrdPair.vo
 
 
 
