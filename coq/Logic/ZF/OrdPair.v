@@ -7,17 +7,17 @@ Require Import Logic.ZF.Singleton.
 
 (* The ordered pair (a,b) is defined as the pair { {a} , {a,b} }.               *)
 (* Recall that we use the notation '[a]' for the singleton set {a}.             *)
-Definition orderedPair (a b:U) : U := { [a] , {a,b} }.
+Definition ordPair (a b:U) : U := { [a] , {a,b} }.
 
 (* Unfortunately, we cannot use the notation '(a,b)'.                           *)
-Notation "(: a , b :)" := (orderedPair a b)
+Notation "(: a , b :)" := (ordPair a b)
   (at level 1, no associativity) : ZF_OrdPair_scope.
 
 (* Characterisation of the elements of (:a,b:).                                 *)
 Lemma OrdPairCharac : forall (a b:U),
   forall x, x :< (:a,b:) <-> x = [a] \/ x = {a,b}.
 Proof.
-  intros a b. unfold orderedPair. apply PairCharac.
+  intros a b. unfold ordPair. apply PairCharac.
 Qed.
 
 Lemma OrdPairABC : forall a b c, [a] = {b,c} -> a = b /\ a = c.
@@ -48,8 +48,8 @@ Proof.
         { apply SingleInEqual. rewrite <- H1. apply PairBIn. }
       subst. clear H1.
       assert ({a,d} :< (:a,a:)) as H1.
-        { rewrite H. unfold orderedPair. apply PairBIn. }
-      unfold orderedPair in H1. apply PairCharac in H1.
+        { rewrite H. unfold ordPair. apply PairBIn. }
+      unfold ordPair in H1. apply PairCharac in H1.
       fold singleton in H1. destruct H1 as [H1|H1].
       * symmetry. apply SingleInEqual. rewrite <- H1. apply PairBIn.
       * symmetry in H1. apply OrdPairABC in H1. destruct H1 as [H1 H2]. apply H2.
@@ -60,13 +60,13 @@ Proof.
       * apply H2.
 Qed.
 
-Proposition OrdPairEqualA : forall (a b c d:U),
+Proposition OrdPairEqual1 : forall (a b c d:U),
   (:a,b:) = (:c,d:) -> a = c.
 Proof.
   intros a b d c H. apply OrdPairEqual in H. destruct H as [H1 H2]. apply H1.
 Qed.
 
-Proposition OrdPairEqualB : forall (a b c d:U),
+Proposition OrdPairEqual2 : forall (a b c d:U),
   (:a,b:) = (:c,d:) -> b = d.
 Proof.
   intros a b d c H. apply OrdPairEqual in H. destruct H as [H1 H2]. apply H2.
