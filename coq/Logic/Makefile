@@ -233,7 +233,9 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Comprehension.vo \
 				 ${ZF}/Russell.vo \
 				 ${ZF}/Pairing.vo \
-				 ${ZF}/Singleton.vo
+				 ${ZF}/Singleton.vo \
+				 ${ZF}/Ordered.vo
+
 
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \

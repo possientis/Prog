@@ -4,6 +4,7 @@ Open    Scope ZF_Singleton_scope.
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Pairing.
 
+(* The singleton set {a} is defined as the pair {a,a}.                          *)
 Definition singleton (a:U) : U := {a,a}.
 
 (* Unfortunately, it appears we cannot use the notation '{a}' here.             *)
@@ -34,7 +35,13 @@ Proof.
 Qed.
 
 (* The set a is an element of the singleton set [a].                            *)
-Proposition SingleIn : forall (a:U), a :< [a].
+Proposition SingleIn : forall a, a :< [a].
 Proof.
   intros a. apply SingleEqualIn. reflexivity.
+Qed.
+
+Proposition SingleEqualSingle : forall a b, [a] = [b] -> a = b.
+Proof.
+  intros a b Hab. apply SingleInEqual. rewrite <- Hab.
+  apply SingleEqualIn. reflexivity.
 Qed.
