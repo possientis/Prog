@@ -17,7 +17,7 @@ Proof.
   assert (~ b :< b) as H1.
     { intro H2.
       assert (P b) as H3.
-        { apply CompP with a. rewrite <- E'. apply H2.
+        { apply CompInP with a. rewrite <- E'. apply H2.
         }
       rewrite E in H3.
       contradiction.
@@ -25,7 +25,7 @@ Proof.
 
   (* We claim that b does belong to itself *)
   assert (b :< b) as H2.
-    { rewrite E'. apply CompIn; rewrite <- E'.
+    { rewrite E'. apply CompInAPIn; rewrite <- E'.
       - apply Ha.
       - rewrite E. apply H1.
     }
