@@ -28,51 +28,51 @@ Qed.
 Definition PairSet (a b:U) : U
   := Define (PairPred a b) (PairExists a b) (PairUnique a b).
 
-Notation "{ a , b }" := (PairSet a b)
+Notation ":{ a , b }:" := (PairSet a b)
   (at level 1, no associativity) : ZF_Pairing_scope.
 
 (* The pair {a,b} satisfies the pairing predicate of a and b.                   *)
-Proposition PairSatisfy : forall (a b:U), PairPred a b {a,b}.
+Proposition PairSatisfy : forall (a b:U), PairPred a b :{a,b}:.
 Proof.
   intros a b. unfold PairSet. apply DefineSatisfy.
 Qed.
 
 (* Characterisation of the elements of {a,b}.                                   *)
 Proposition PairCharac : forall (a b:U),
-  forall x, x :< {a,b} <-> x = a \/ x = b.
+  forall x, x :< :{a,b}: <-> x = a \/ x = b.
 Proof.
   apply PairSatisfy.
 Qed.
 
 (* An element of {a,b} is either a or b.                                        *)
 Proposition PairInOr : forall (a b:U),
-  forall x, x :< {a,b} -> x = a \/ x = b.
+  forall x, x :< :{a,b}: -> x = a \/ x = b.
 Proof.
   intros a b x. apply PairCharac.
 Qed.
 
 (* If a set x is equal to the set a, then it belongs to the set {a,b}.          *)
 Proposition PairEqualAIn : forall (a b:U),
-  forall x, x = a -> x :< {a,b}.
+  forall x, x = a -> x :< :{a,b}:.
 Proof.
   intros a b x Hx. apply PairCharac. left. apply Hx.
 Qed.
 
 (* If a set x is equal to the set b, then it belongs to the set {a,b}.          *)
 Proposition PairEqualBIn : forall (a b:U),
-  forall x, x = b -> x :< {a,b}.
+  forall x, x = b -> x :< :{a,b}:.
 Proof.
   intros a b x Hx. apply PairCharac. right. apply Hx.
 Qed.
 
 (* The set a is an element of the set {a,b}.                                    *)
-Proposition PairAIn : forall (a b:U), a :< {a,b}.
+Proposition PairAIn : forall (a b:U), a :< :{a,b}:.
 Proof.
   intros a b. apply PairEqualAIn. reflexivity.
 Qed.
 
 (* The set b is an element of the set {a,b}.                                    *)
-Proposition PairBIn : forall (a b:U), b :< {a,b}.
+Proposition PairBIn : forall (a b:U), b :< :{a,b}:.
 Proof.
   intros a b. apply PairEqualBIn. reflexivity.
 Qed.
