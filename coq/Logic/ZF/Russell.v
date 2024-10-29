@@ -1,5 +1,6 @@
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Comprehension.
+Require Import Logic.ZF.Class.
 
 (* There exists no set containing all sets                                      *)
 Proposition Russell : ~ exists a, forall x, x :< a.
@@ -33,3 +34,15 @@ Proof.
   (* We have obtained a contradiction *)
   contradiction.
 Qed.
+
+(* Let us the define the class of all sets which do not belong to themselves.   *)
+Definition Ru : Class := fun x => ~x :< x.
+
+(*
+(* Then this is a strict class                                                  *)
+Proposition StrictRu : Strict Ru.
+Proof.
+  unfold Strict, Small, Ru. intros [a Ha].
+
+Show.
+*)
