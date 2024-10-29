@@ -32,27 +32,26 @@ Qed.
 Definition CompSet (P:U -> Prop) (a:U) : U
   := Define (CompPred P a) (CompExists P a) (CompUnique P a).
 
-(* We introduce the notation '{ a :| P }' as a proxy for '{x :< a | P x }'      *)
-Notation "{ a :| P }" := (CompSet P a)
+Notation ":{ a | P }:" := (CompSet P a)
   (at level 1, no associativity) : ZF_Comprehension_scope.
 
 (* The comprehension set of P and a satisfies its comprehension predicate.      *)
 Proposition CompSatisfy : forall (P:U -> Prop) (a:U),
-  CompPred P a {a :| P}.
+  CompPred P a :{a | P}:.
 Proof.
   intros P a. unfold CompSet. apply DefineSatisfy.
 Qed.
 
 (* Characterisation of the elements of {a :| P}.                                *)
 Proposition CompCharac : forall (P:U -> Prop) (a:U),
-  forall x, x :< {a :| P} <-> x :< a /\ P x.
+  forall x, x :< :{a | P}: <-> x :< a /\ P x.
 Proof.
   apply CompSatisfy.
 Qed.
 
 (* Every element of the comprehension set of P and a is an element of a.        *)
 Proposition CompInInA : forall (P:U -> Prop) (a:U),
-  forall x, x :< {a :| P} -> x :< a.
+  forall x, x :< :{a | P}: -> x :< a.
 Proof.
   intros P a x Hx.
   assert (CompPred P a (CompSet P a)) as H.
@@ -64,7 +63,7 @@ Qed.
 
 (* Every element of the comprehension set of P and a satisfies the predicate P. *)
 Proposition CompInP : forall (P:U -> Prop) (a:U),
-  forall x, x :< {a :| P} -> P x.
+  forall x, x :< :{a | P}: -> P x.
 Proof.
   intros P a x Hx.
   assert (CompPred P a (CompSet P a)) as H.
@@ -77,7 +76,7 @@ Qed.
 (* If a set belongs to a set a and satisfies the predicate P, then it belongs   *)
 (* to the comprehension set of P and a.                                         *)
 Proposition CompInAPIn: forall (P:U -> Prop) (a:U),
-  forall x, x :< a -> P x -> x :< {a :| P}.
+  forall x, x :< a -> P x -> x :< :{a | P}:.
 Proof.
   intros P a x H1 H2.
   assert (CompPred P a (CompSet P a)) as H.
