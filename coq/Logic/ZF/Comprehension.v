@@ -29,17 +29,17 @@ Proof.
 Qed.
 
 (* We consider the set defined by the comprehension predicate of P and a.       *)
-Definition CompSet (P:U -> Prop) (a:U) : U
+Definition compSet (P:U -> Prop) (a:U) : U
   := Define (CompPred P a) (CompExists P a) (CompUnique P a).
 
-Notation ":{ a | P }:" := (CompSet P a)
+Notation ":{ a | P }:" := (compSet P a)
   (at level 1, no associativity) : ZF_Comprehension_scope.
 
 (* The comprehension set of P and a satisfies its comprehension predicate.      *)
 Proposition CompSatisfy : forall (P:U -> Prop) (a:U),
   CompPred P a :{a | P}:.
 Proof.
-  intros P a. unfold CompSet. apply DefineSatisfy.
+  intros P a. unfold compSet. apply DefineSatisfy.
 Qed.
 
 (* Characterisation of the elements of {a :| P}.                                *)
@@ -54,7 +54,7 @@ Proposition CompInInA : forall (P:U -> Prop) (a:U),
   forall x, x :< :{a | P}: -> x :< a.
 Proof.
   intros P a x Hx.
-  assert (CompPred P a (CompSet P a)) as H.
+  assert (CompPred P a (compSet P a)) as H.
     { apply CompSatisfy. }
   unfold CompPred in H.
   apply H in Hx. destruct Hx as [H1 H2].
@@ -66,7 +66,7 @@ Proposition CompInP : forall (P:U -> Prop) (a:U),
   forall x, x :< :{a | P}: -> P x.
 Proof.
   intros P a x Hx.
-  assert (CompPred P a (CompSet P a)) as H.
+  assert (CompPred P a (compSet P a)) as H.
     { apply CompSatisfy. }
   unfold CompPred in H.
   apply H in Hx. destruct Hx as [H1 H2].
@@ -79,7 +79,7 @@ Proposition CompInAPIn: forall (P:U -> Prop) (a:U),
   forall x, x :< a -> P x -> x :< :{a | P}:.
 Proof.
   intros P a x H1 H2.
-  assert (CompPred P a (CompSet P a)) as H.
+  assert (CompPred P a (compSet P a)) as H.
     { apply CompSatisfy. }
   unfold CompPred in H. apply H.
   split.
