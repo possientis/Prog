@@ -30,7 +30,7 @@ Qed.
 
 (* If a class is small, we can define the set to which it corresponds .         *)
 Definition toSet (P :Class) (q:Small P) : U
-  := Define (ClassPred P) (ClassExists P q) (ClassUnique P).
+  := define (ClassPred P) (ClassExists P q) (ClassUnique P).
 
 (* The set associated with a small class satisfies its set predicate.           *)
 Proposition ClassSatisfy : forall (P:Class) (q:Small P),

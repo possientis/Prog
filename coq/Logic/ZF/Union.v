@@ -28,21 +28,21 @@ Proof.
 Qed.
 
 (* We consider the set defined by the union predicate of the set a.             *)
-Definition UnionSet (a:U) : U
-  := Define (UnionPred a) (UnionExists a) (UnionUnique a).
+Definition unionSet (a:U) : U
+  := define (UnionPred a) (UnionExists a) (UnionUnique a).
 
-Notation "a :\/: b" := (UnionSet :{a,b}: )
+Notation "a :\/: b" := (unionSet :{a,b}: )
   (at level 3, left associativity) : ZF_Union_scope.
 
 (* The union set of a satisfies the union predicate of a.                       *)
-Proposition UnionSatisfy : forall (a:U), UnionPred a (UnionSet a).
+Proposition UnionSatisfy : forall (a:U), UnionPred a (unionSet a).
 Proof.
-  intros a. unfold UnionSet. apply DefineSatisfy.
+  intros a. unfold unionSet. apply DefineSatisfy.
 Qed.
 
 (* Characterisation of the elements of the union set of a.                      *)
 Proposition UnionCharac : forall (a:U),
-  forall x, x :< (UnionSet a) <-> exists y, x :< y /\ y :< a.
+  forall x, x :< (unionSet a) <-> exists y, x :< y /\ y :< a.
 Proof.
   apply UnionSatisfy.
 Qed.

@@ -30,7 +30,7 @@ Qed.
 
 (* We consider the set defined by the comprehension predicate of P and a.       *)
 Definition compSet (P:U -> Prop) (a:U) : U
-  := Define (CompPred P a) (CompExists P a) (CompUnique P a).
+  := define (CompPred P a) (CompExists P a) (CompUnique P a).
 
 Notation ":{ a | P }:" := (compSet P a)
   (at level 1, no associativity) : ZF_Comprehension_scope.

@@ -25,16 +25,16 @@ Proof.
 Qed.
 
 (* We consider the set defined by the pairing predicate of a and b.             *)
-Definition PairSet (a b:U) : U
-  := Define (PairPred a b) (PairExists a b) (PairUnique a b).
+Definition pairSet (a b:U) : U
+  := define (PairPred a b) (PairExists a b) (PairUnique a b).
 
-Notation ":{ a , b }:" := (PairSet a b)
+Notation ":{ a , b }:" := (pairSet a b)
   (at level 1, no associativity) : ZF_Pairing_scope.
 
 (* The pair {a,b} satisfies the pairing predicate of a and b.                   *)
 Proposition PairSatisfy : forall (a b:U), PairPred a b :{a,b}:.
 Proof.
-  intros a b. unfold PairSet. apply DefineSatisfy.
+  intros a b. unfold pairSet. apply DefineSatisfy.
 Qed.
 
 (* Characterisation of the elements of {a,b}.                                   *)
