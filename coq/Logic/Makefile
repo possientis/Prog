@@ -237,7 +237,8 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/OrdPair.vo \
 				 ${ZF}/OrdTuple.vo \
 				 ${ZF}/Class.vo \
-				 ${ZF}/Union.vo 
+				 ${ZF}/Union.vo \
+				 ${ZF}/Tuple.vo
 
 
 
