@@ -64,8 +64,8 @@ Proof.
   - intros [H1|H1].
     + apply UnionCharac. exists a. split.
       * apply H1.
-      * apply PairAIn.
+      * apply PairIn1.
     + apply UnionCharac. exists b. split.
       * apply H1.
-      * apply PairBIn.
+      * apply PairIn2.
 Qed.
