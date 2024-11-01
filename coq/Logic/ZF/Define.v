@@ -33,3 +33,15 @@ Proposition DefineProof : forall (P:U -> Prop) (p p':Exists P) (q q':Unique P),
 Proof.
   intros P p p' q q'. apply DefineUnique, DefineSatisfy.
 Qed.
+
+(* Any proposition involving Define can be rewritten without it.                *)
+Proposition DefineElim : forall (P Q:U -> Prop) (p: Exists P) (q: Unique P),
+  Q(Define P p q) <-> forall x, P x -> Q x.
+Proof.
+  intros P Q p q. split.
+  - intros H1 x H2.
+    assert (x = Define P p q) as H3.
+      { apply DefineUnique, H2. }
+    rewrite H3. apply H1.
+  - intros H1. apply H1, DefineSatisfy.
+Qed.
