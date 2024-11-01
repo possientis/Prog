@@ -23,8 +23,8 @@ Qed.
 Lemma OrdPairABC : forall a b c, :{a}: = :{b,c}: -> a = b /\ a = c.
 Proof.
   intros a b c Habc. split.
-  - symmetry. apply SingleInEqual. rewrite Habc. apply PairAIn.
-  - symmetry. apply SingleInEqual. rewrite Habc. apply PairBIn.
+  - symmetry. apply SingleCharac. rewrite Habc. apply PairAIn.
+  - symmetry. apply SingleCharac. rewrite Habc. apply PairBIn.
 Qed.
 
 (* If two ordered pairs are equal, then their components are equal.             *)
@@ -45,13 +45,13 @@ Proof.
       { rewrite <- H. apply OrdPairCharac. right. reflexivity. }
     apply OrdPairCharac in H1. destruct H1 as [H1|H1].
     + assert (b = a) as H2.
-        { apply SingleInEqual. rewrite <- H1. apply PairBIn. }
+        { apply SingleCharac. rewrite <- H1. apply PairBIn. }
       subst. clear H1.
       assert (:{a,d}: :< :(a,a):) as H1.
         { rewrite H. unfold ordPair. apply PairBIn. }
       unfold ordPair in H1. apply PairCharac in H1.
       fold singleton in H1. destruct H1 as [H1|H1].
-      * symmetry. apply SingleInEqual. rewrite <- H1. apply PairBIn.
+      * symmetry. apply SingleCharac. rewrite <- H1. apply PairBIn.
       * symmetry in H1. apply OrdPairABC in H1. destruct H1 as [H1 H2]. apply H2.
     + assert (b :< :{a,d}:) as H2.
         { rewrite <- H1. apply PairBIn. }

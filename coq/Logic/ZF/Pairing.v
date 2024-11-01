@@ -44,13 +44,6 @@ Proof.
   apply PairSatisfy.
 Qed.
 
-(* An element of {a,b} is either a or b.                                        *)
-Proposition PairInOr : forall (a b:U),
-  forall x, x :< :{a,b}: -> x = a \/ x = b.
-Proof.
-  intros a b x. apply PairCharac.
-Qed.
-
 (* If a set x is equal to the set a, then it belongs to the set {a,b}.          *)
 Proposition PairEqualAIn : forall (a b:U),
   forall x, x = a -> x :< :{a,b}:.

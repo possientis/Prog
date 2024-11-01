@@ -19,28 +19,14 @@ Proof.
   - intros Hx. apply PairCharac. left. apply Hx.
 Qed.
 
-(* An element of [a] is equal to a                                              *)
-Proposition SingleInEqual : forall (a:U),
-  forall x, x :< :{a}: -> x = a.
-Proof.
-  intros a x. apply SingleCharac.
-Qed.
-
-(* If a set x is equal to the set a, then it belongs to the singleton [a].      *)
-Proposition SingleEqualIn : forall (a:U),
-  forall x, x = a -> x :< :{a}:.
-Proof.
-  intros a x Hx. apply SingleCharac, Hx.
-Qed.
-
 (* The set a is an element of the singleton set [a].                            *)
 Proposition SingleIn : forall a, a :< :{a}:.
 Proof.
-  intros a. apply SingleEqualIn. reflexivity.
+  intros a. apply SingleCharac. reflexivity.
 Qed.
 
 Proposition SingleEqualSingle : forall a b, :{a}: = :{b}: -> a = b.
 Proof.
-  intros a b Hab. apply SingleInEqual. rewrite <- Hab.
-  apply SingleEqualIn. reflexivity.
+  intros a b Hab. apply SingleCharac. rewrite <- Hab.
+  apply SingleCharac. reflexivity.
 Qed.

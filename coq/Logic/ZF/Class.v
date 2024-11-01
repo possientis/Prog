@@ -46,20 +46,6 @@ Proof.
   apply ClassSatisfy.
 Qed.
 
-(* Every element of the set associated with a small class satisfies the class.  *)
-Proposition ClassInP : forall (P:Class) (q:Small P),
-  forall x, x :< (toSet P q) -> P x.
-Proof.
-  apply ClassCharac.
-Qed.
-
-(* Every set which satisfies a small class is an element of its associated set. *)
-Proposition ClassPIn : forall (P:Class) (q:Small P),
-  forall x, P x -> x :< (toSet P q).
-Proof.
-  apply ClassCharac.
-Qed.
-
 (* The set defined by a small class does not depend on the proof being used.    *)
 Proposition ClassProof : forall (P:Class) (q q':Small P),
   toSet P q = toSet P q'.
