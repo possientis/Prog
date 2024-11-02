@@ -13,7 +13,7 @@ Definition PairPred (a b:U) : U -> Prop := fun x =>
   x = a \/ x = b.
 
 (* The pairing predicate of the sets a and b is small.                          *)
-Definition PairSmall : forall (a b:U),
+Proposition PairSmall : forall (a b:U),
   Small (PairPred a b).
 Proof.
   apply Pairing.
