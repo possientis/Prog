@@ -38,7 +38,7 @@ Notation "U( a )" := (unionSet a)
 Definition union (a b:U) : U := U( :{a,b}: ).
 
 Notation "a :\/: b" := (union a b)
-  (at level 3, left associativity) : ZF_Union_scope.
+  (at level 4, left associativity) : ZF_Union_scope.
 
 (* The union set of a satisfies the union predicate of a.                       *)
 Proposition UnionSatisfy : forall (a:U), UnionPred a U(a).

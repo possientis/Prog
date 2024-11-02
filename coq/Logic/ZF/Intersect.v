@@ -4,6 +4,7 @@ Open    Scope ZF_Intersect_scope.
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Comprehension.
 Require Import Logic.ZF.Extensionality.
+Require Import Logic.ZF.Union.
 
 (* The intersection of two sets a and b.                                        *)
 Definition intersect (a b:U) : U := :{ a | fun x => x :< b }:.
@@ -37,4 +38,41 @@ Proof.
   - apply IntersectCharac in H1. destruct H1 as [_ H1]. apply IntersectCharac. auto.
   - apply IntersectCharac in H2. destruct H2 as [H2 _]. apply IntersectCharac. auto.
   - apply IntersectCharac in H2. destruct H2 as [_ H2]. apply H2.
+Qed.
+
+(* The intersection is distributive over the union.                             *)
+Proposition IntersectDistOverUnion : forall (a b c:U),
+  a:/\:(b:\/:c) = (a:/\:b):\/:(a:/\:c).
+Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1.
+  - apply IntersectCharac in H1. destruct H1 as [H1 H2].
+    apply UnionCharac in H2. destruct H2 as [H2|H2]; apply UnionCharac.
+    + left.  apply IntersectCharac. auto.
+    + right. apply IntersectCharac. auto.
+  - apply UnionCharac in H1. destruct H1 as [H1|H1];
+    apply IntersectCharac; split; apply IntersectCharac in H1.
+    + destruct H1 as [H1 _]. apply H1.
+    + destruct H1 as [_ H1]. apply UnionCharac. left. apply H1.
+    + destruct H1 as [H1 _]. apply H1.
+    + destruct H1 as [_ H1]. apply UnionCharac. right. apply H1.
+Qed.
+
+(* The union is distributive over the intersection                              *)
+Proposition UnionDistOverIntersect : forall (a b c:U),
+  a:\/:(b:/\:c) = (a:\/:b):/\:(a:\/:c).
+Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1.
+  - apply UnionCharac in H1. destruct H1 as [H1|H1];
+    apply IntersectCharac; split; apply UnionCharac.
+    + left. apply H1.
+    + left. apply H1.
+    + right. apply IntersectCharac in H1. destruct H1 as [H1 _]. apply H1.
+    + right. apply IntersectCharac in H1. destruct H1 as [_ H1]. apply H1.
+  - apply IntersectCharac in H1. destruct H1 as [H1 H2]. apply UnionCharac.
+    apply UnionCharac in H1. apply UnionCharac in H2.
+    destruct H1 as [H1|H1]; destruct H2 as [H2|H2].
+    + left. apply H1.
+    + left. apply H1.
+    + left. apply H2.
+    + right. apply IntersectCharac. auto.
 Qed.
