@@ -241,7 +241,10 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Tuple.vo \
 				 ${ZF}/Intersect.vo \
 				 ${ZF}/Include.vo \
-				 ${ZF}/Power.vo
+				 ${ZF}/Power.vo \
+				 ${ZF}/ClassRel.vo \
+				 ${ZF}/Replacement.vo 
+
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
