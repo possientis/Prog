@@ -90,3 +90,49 @@ Proof.
   - left. apply H1, H2.
   - right. apply H2.
 Qed.
+
+Proposition InclEqualUnion : forall (a b:U),
+  a :<=: b <-> b = a :\/: b.
+Proof.
+  intros a b. split; intros H1.
+  - apply Extensionality. intros x. split; intros H2.
+    + apply UnionCharac. right. apply H2.
+    + apply UnionCharac in H2. destruct H2 as [H2|H2].
+      * apply H1, H2.
+      * apply H2.
+  - intros x H2. rewrite H1. apply UnionCharac. left. apply H2.
+Qed.
+
+Proposition InclEqualIntersect : forall (a b:U),
+  a :<=: b <-> a = a :/\: b.
+Proof.
+  intros a b. split; intros H1.
+  - apply Extensionality. intros x. split; intros H2.
+    + apply IntersectCharac. split.
+      * apply H2.
+      * apply H1, H2.
+    + apply IntersectCharac in H2. destruct H2 as [H2 _]. apply H2.
+  - intros x H2. rewrite H1 in H2. apply IntersectCharac in H2.
+    destruct H2 as [_ H2]. apply H2.
+Qed.
+
+Proposition InclUnion1 : forall (a b:U), a :<=: a:\/:b.
+Proof.
+  intros a b x H1. apply UnionCharac. left. apply H1.
+Qed.
+
+Proposition InclUnion2 : forall (a b:U), b :<=: a:\/:b.
+Proof.
+  intros a b x H1. apply UnionCharac. right. apply H1.
+Qed.
+
+Proposition InclIntersect1 : forall (a b:U), a:/\:b :<=: a.
+Proof.
+  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [H1 _]. apply H1.
+Qed.
+
+Proposition InclIntersect2 : forall (a b:U), a:/\:b :<=: b.
+Proof.
+  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [_ H1]. apply H1.
+Qed.
+
