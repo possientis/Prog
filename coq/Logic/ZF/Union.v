@@ -47,25 +47,25 @@ Proof.
 Qed.
 
 (* Characterisation of the elements of the union set of a.                      *)
-Proposition UnionCharac : forall (a:U),
+Proposition UnionSetCharac : forall (a:U),
   forall x, x :< U(a) <-> exists y, x :< y /\ y :< a.
 Proof.
   apply UnionSatisfy.
 Qed.
 
-Proposition UnionABCharac : forall (a b:U),
+Proposition UnionCharac : forall (a b:U),
   forall x, x :< (a:\/:b) <-> x :< a \/ x :< b.
 Proof.
   intros a b x. unfold union. split.
-  - intros H. apply UnionCharac in H. destruct H as [y [H1 H2]].
+  - intros H. apply UnionSetCharac in H. destruct H as [y [H1 H2]].
     apply PairCharac in H2. destruct H2 as [H2|H3]; subst.
     + left. apply H1.
     + right. apply H1.
   - intros [H1|H1].
-    + apply UnionCharac. exists a. split.
+    + apply UnionSetCharac. exists a. split.
       * apply H1.
       * apply PairIn1.
-    + apply UnionCharac. exists b. split.
+    + apply UnionSetCharac. exists b. split.
       * apply H1.
       * apply PairIn2.
 Qed.
