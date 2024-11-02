@@ -69,3 +69,10 @@ Proof.
       * apply H1.
       * apply PairIn2.
 Qed.
+
+Proposition UnionComm : forall (a b:U), a:\/:b = b:\/:a.
+Proof.
+  intros a b. apply Extensionality. intros x. split;
+  intros H1; apply UnionCharac; apply UnionCharac in H1;
+  destruct H1 as [H1|H1]; auto.
+Qed.
