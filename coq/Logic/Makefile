@@ -238,7 +238,8 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/OrdTuple.vo \
 				 ${ZF}/Class.vo \
 				 ${ZF}/Union.vo \
-				 ${ZF}/Tuple.vo
+				 ${ZF}/Tuple.vo \
+				 ${ZF}/Intersect.vo
 
 
 
