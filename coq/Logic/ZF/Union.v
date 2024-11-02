@@ -55,7 +55,7 @@ Qed.
 
 (* Characterisation of the elements of the union of two sets.                   *)
 Proposition UnionCharac : forall (a b:U),
-  forall x, x :< (a:\/:b) <-> x :< a \/ x :< b.
+  forall x, x :< a:\/:b <-> x :< a \/ x :< b.
 Proof.
   intros a b x. unfold union. split.
   - intros H. apply UnionSetCharac in H. destruct H as [y [H1 H2]].

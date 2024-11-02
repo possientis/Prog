@@ -14,7 +14,7 @@ Notation "a :/\: b" := (intersect a b)
 
 (* Characterisation of the elements of the intersection of two sets.            *)
 Proposition IntersectCharac : forall (a b:U),
- forall x, x :< (a:/\:b) <-> x :< a /\ x :< b.
+ forall x, x :< a:/\:b <-> x :< a /\ x :< b.
 Proof.
   intros a b x. unfold intersect. split.
   - intros H. apply CompCharac in H. apply H.
