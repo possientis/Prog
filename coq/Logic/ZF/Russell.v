@@ -24,7 +24,7 @@ Proof.
   remember (fun x => ~ x :< x) as P eqn:E.
 
   (* Consider the set b of all x in a which do not belong to themselves *)
-  remember (compSet P a) as b eqn:E'.
+  remember :{a|P}: as b eqn:E'.
 
   (* We claim that b does not belong to itself *)
   assert (~ b :< b) as H1.
