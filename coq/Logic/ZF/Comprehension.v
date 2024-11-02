@@ -15,7 +15,7 @@ Definition CompPred (P:U -> Prop) (a:U) : U -> Prop := fun x =>
   x :< a /\ P x.
 
 (* The comprehension predicate of a and P is small                              *)
-Proposition CompSmall: forall (P:U -> Prop) (a:U),
+Proposition CompSmall : forall (P:U -> Prop) (a:U),
     Small (CompPred P a).
 Proof.
   apply Comprehension.
