@@ -240,7 +240,8 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Union.vo \
 				 ${ZF}/Tuple.vo \
 				 ${ZF}/Intersect.vo \
-				 ${ZF}/Include.vo
+				 ${ZF}/Include.vo \
+				 ${ZF}/Power.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
