@@ -53,6 +53,7 @@ Proof.
   apply UnionSatisfy.
 Qed.
 
+(* Characterisation of the elements of the union of two sets.                   *)
 Proposition UnionCharac : forall (a b:U),
   forall x, x :< (a:\/:b) <-> x :< a \/ x :< b.
 Proof.
@@ -70,9 +71,25 @@ Proof.
       * apply PairIn2.
 Qed.
 
+(* The union of two sets is commutative.                                        *)
 Proposition UnionComm : forall (a b:U), a:\/:b = b:\/:a.
 Proof.
   intros a b. apply Extensionality. intros x. split;
   intros H1; apply UnionCharac; apply UnionCharac in H1;
   destruct H1 as [H1|H1]; auto.
+Qed.
+
+(* The union of two sets is associative.                                        *)
+Proposition UnionAssoc : forall (a b c:U), (a:\/:b):\/:c = a:\/:(b:\/:c).
+Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1;
+  apply UnionCharac in H1; apply UnionCharac; destruct H1 as [H1|H1].
+  - apply UnionCharac in H1. destruct H1 as [H1|H1].
+    + left. apply H1.
+    + right. apply UnionCharac. left. apply H1.
+  - right. apply UnionCharac. right. apply H1.
+  - left. apply UnionCharac. left. apply H1.
+  - apply UnionCharac in H1. destruct H1 as [H1|H1].
+    + left. apply UnionCharac. right. apply H1.
+    + right. apply H1.
 Qed.
