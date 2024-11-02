@@ -31,24 +31,24 @@ Qed.
 Definition unionSet (a:U) : U
   := define (UnionPred a) (UnionExists a) (UnionUnique a).
 
-Notation "U( a )" := (unionSet a)
+Notation ":U( a )" := (unionSet a)
   (at level 0, no associativity) : ZF_Union_scope.
 
 (* The union of two sets.                                                       *)
-Definition union (a b:U) : U := U( :{a,b}: ).
+Definition union (a b:U) : U := :U( :{a,b}: ).
 
 Notation "a :\/: b" := (union a b)
   (at level 4, left associativity) : ZF_Union_scope.
 
 (* The union set of a satisfies the union predicate of a.                       *)
-Proposition UnionSatisfy : forall (a:U), UnionPred a U(a).
+Proposition UnionSatisfy : forall (a:U), UnionPred a :U(a).
 Proof.
   intros a. unfold unionSet. apply DefineSatisfy.
 Qed.
 
 (* Characterisation of the elements of the union set of a.                      *)
 Proposition UnionSetCharac : forall (a:U),
-  forall x, x :< U(a) <-> exists y, x :< y /\ y :< a.
+  forall x, x :< :U(a) <-> exists y, x :< y /\ y :< a.
 Proof.
   apply UnionSatisfy.
 Qed.
