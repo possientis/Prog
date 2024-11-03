@@ -9,7 +9,7 @@ Definition ClassRel : Type := U -> U -> Prop.
 
 (* Predicate expressing the fact that a class relation is functional.           *)
 Definition Functional (F:ClassRel) : Prop :=
-  forall x, forall y, forall z, F x y /\ F x z -> y = z.
+  forall x, forall y, forall z, F x y -> F x z -> y = z.
 
 (* Direct image of a set a by a class relation R.                               *)
 Definition Image (R:ClassRel) (a:U) : Class := fun y =>
