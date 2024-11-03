@@ -82,4 +82,3 @@ Proof.
     + left. apply UnionCharac. right. apply H1.
     + right. apply H1.
 Qed.
-
