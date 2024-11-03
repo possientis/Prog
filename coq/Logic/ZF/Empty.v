@@ -7,7 +7,7 @@ Require Import Logic.ZF.Core.
 
 (* This axiom is not necessary as the axiom of infinity also asserts the        *)
 (* the existence of at least one set. However, it allows us to define the empty *)
-(* set now, allowing us to rewrite more concisely the axiom of infinity later.  *)
+(* set now and rewrite more concisely the axiom of infinity later.              *)
 Axiom NonEmptyUniverse : exists (x:U), True.
 
 (* The class which is satisfied by no set.                                      *)

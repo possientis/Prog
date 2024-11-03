@@ -4,7 +4,7 @@ Open    Scope ZF_Difference_scope.
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Comprehension.
 
-(* The set a - b is made of those elements of a which do not belong to b.       *)
+(* The set a \ b is made of those elements of a which do not belong to b.       *)
 Definition difference (a b:U) : U := :{a | fun x => ~ x :< b }:.
 
 Notation "a :\: b" := (difference a b)
