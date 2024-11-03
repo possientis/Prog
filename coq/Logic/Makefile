@@ -243,8 +243,8 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Include.vo \
 				 ${ZF}/Power.vo \
 				 ${ZF}/ClassRel.vo \
-				 ${ZF}/Replacement.vo 
-
+				 ${ZF}/Replacement.vo \
+				 ${ZF}/Difference.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
