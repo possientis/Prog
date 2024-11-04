@@ -246,7 +246,8 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Replacement.vo \
 				 ${ZF}/Difference.vo \
 				 ${ZF}/Infinity.vo \
-				 ${ZF}/Empty.vo
+				 ${ZF}/Empty.vo \
+				 ${ZF}/Classic.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \

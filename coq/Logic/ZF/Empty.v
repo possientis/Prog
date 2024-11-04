@@ -2,8 +2,10 @@ Declare Scope ZF_Empty_scope.
 Open    Scope ZF_Empty_scope.
 
 Require Import Logic.ZF.Class.
+Require Import Logic.ZF.Classic.
 Require Import Logic.ZF.Comprehension.
 Require Import Logic.ZF.Core.
+Require Import Logic.ZF.Extensionality.
 
 (* This axiom is not necessary as the axiom of infinity also asserts the        *)
 (* the existence of at least one set. However, it allows us to define the empty *)
@@ -64,3 +66,17 @@ Proposition EmptySetEmpty : forall x, ~ x :< :0:.
 Proof.
   intros x H1. apply EmptyCharac in H1. apply H1.
 Qed.
+
+(* If a set is not empty, then it has an element.                               *)
+Proposition NotEmptyHasElement : forall (a:U),
+  ~ a = :0: <-> exists x, x :< a.
+Proof.
+  intros a. split; intros H1.
+  - apply NotForAllNot. intros H2. apply H1, Extensionality.
+    intros x. split; intros H3.
+    + apply EmptyCharac, (H2 x), H3.
+    + apply EmptyCharac in H3. contradiction.
+  - destruct H1 as [x H1]. intros H2. rewrite H2 in H1.
+    apply EmptyCharac in H1. apply H1.
+Qed.
+
