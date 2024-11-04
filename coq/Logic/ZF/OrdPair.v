@@ -6,7 +6,6 @@ Require Import Logic.ZF.Pairing.
 Require Import Logic.ZF.Singleton.
 
 (* The ordered pair (a,b) is defined as the pair { {a} , {a,b} }.               *)
-(* Recall that we use the notation '[a]' for the singleton set {a}.             *)
 Definition ordPair (a b:U) : U := :{ :{a}: , :{a,b}: }:.
 
 (* Unfortunately, we cannot use the notation '(a,b)'.                           *)
