@@ -8,10 +8,35 @@ Definition Ru : Class := fun x => ~x :< x.
 (* Then this is a strict class                                                  *)
 Proposition StrictRu : Strict Ru.
 Proof.
-  unfold Strict, Small, Ru. intros [a Ha].
-  assert (~ a :< a) as H1.
-    { intros H2. apply (Ha a); apply H2. }
-  apply H1. apply Ha, H1.
+  unfold Strict, Small, Ru.
+
+  (* We need to show there is no set a with x :< a <-> ~ x :< x *)
+  assert (~ exists a, forall x, x :< a <-> ~ x :< x ) as A. 2: apply A.
+
+  (* We assume that such a set exists and need to obtain a contradiction  *)
+  intros [a Ha].
+
+  (* We claim that the set a is not an element of itself *)
+  assert (~ a :< a) as H1. {
+
+    (* Assume that a is an element of itself *)
+    intros H2.
+
+    (* Then from the assumption we have ~ a :< a which is a contradiction *)
+    apply (Ha a); apply H2.
+  }
+
+  (* To arrive at a contradiction it is sufficient to prove that a :< a *)
+  apply H1.
+
+  (* So we need to prove that a is an element of itself *)
+  assert (a :< a) as A. 2: apply A.
+
+  (* By assumption this is equivalent to proving ~ a :< a *)
+  apply Ha.
+
+  (* Which we have already done *)
+  apply H1.
 Qed.
 
 (* There exists no set containing all sets                                      *)
@@ -20,29 +45,35 @@ Proof.
   (* Let a be a set containing all sets *)
   intros [a Ha].
 
-  (* Consider the predicate P x = ~ x :< x *)
-  remember (fun x => ~ x :< x) as P eqn:E.
+  (* We arrive at a contradiction by showing the class Ru is small *)
+  apply StrictRu.
 
-  (* Consider the set b of all x in a which do not belong to themselves *)
-  remember :{a|P}: as b eqn:E'.
+  (* So we need to show that Ru is a small class *)
+  assert (Small Ru) as A. 2: apply A. unfold Small.
 
-  (* We claim that b does not belong to itself *)
-  assert (~ b :< b) as H1.
-    { intro H2.
-      assert (P b) as H3.
-        { apply CompInP with a. rewrite <- E'. apply H2.
-        }
-      rewrite E in H3.
-      contradiction.
-    }
+  (* i.e. We need to show the existence of b such that x :< b <-> Ru x *)
+  assert (exists b, forall x, x :< b <-> Ru x) as A. 2: apply A.
 
-  (* We claim that b does belong to itself *)
-  assert (b :< b) as H2.
-    { rewrite E'. apply CompInAPIn; rewrite <- E'.
-      - apply Ha.
-      - rewrite E. apply H1.
-    }
+  (* Consider the set b = {x :< a | Ru x } *)
+  remember :{a|Ru}: as b eqn:Eb.
 
-  (* We have obtained a contradiction *)
-  contradiction.
+  (* We claim that b has the desired property *)
+  exists b.
+
+  (* We need to show the equivalence x :< b <-> Ru x for all x *)
+  assert (forall x, x :< b <-> Ru x) as A. 2: apply A.
+
+  (* So let x be an arbitary set *)
+  intros x. split.
+
+  (* Proof of -> *)
+  - assert (x :< b -> Ru x) as A. 2: apply A.
+    intros H1. rewrite Eb in H1. apply CompInP with a. apply H1.
+
+  (* Proof of <- *)
+  - assert (Ru x -> x :< b) as A. 2: apply A.
+    intros H1. rewrite Eb. apply CompCharac. split.
+    + apply Ha.
+    + apply H1.
 Qed.
+
