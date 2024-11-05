@@ -5,10 +5,10 @@ Require Import Logic.ZF.Class.
 (* Let us the define the class of all sets which do not belong to themselves.   *)
 Definition Ru : Class := fun x => ~x :< x.
 
-(* Then this is a strict class                                                  *)
-Proposition StrictRu : Strict Ru.
+(* Then this is a proper class                                                  *)
+Proposition ProperRu : Proper Ru.
 Proof.
-  unfold Strict, Small, Ru.
+  unfold Proper, Small, Ru.
 
   (* We need to show there is no set a with x :< a <-> ~ x :< x *)
   assert (~ exists a, forall x, x :< a <-> ~ x :< x ) as A. 2: apply A.
@@ -46,7 +46,7 @@ Proof.
   intros [a Ha].
 
   (* We arrive at a contradiction by showing the class Ru is small *)
-  apply StrictRu.
+  apply ProperRu.
 
   (* So we need to show that Ru is a small class *)
   assert (Small Ru) as A. 2: apply A. unfold Small.

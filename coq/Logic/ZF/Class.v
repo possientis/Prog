@@ -8,8 +8,8 @@ Definition Class : Type := U -> Prop.
 (* Predicate on classes, determining whether a class is actually a set.         *)
 Definition Small (P:Class) : Prop := exists a, forall x, x :< a <-> P x.
 
-(* Predicate on classes, determining whether a class is strict.                 *)
-Definition Strict (P:Class) : Prop := ~Small P.
+(* Predicate on classes, determining whether a class is proper.                 *)
+Definition Proper (P:Class) : Prop := ~Small P.
 
 (* Let us consider the predicate of the set potentially defined by a class P.   *)
 Definition ClassPred (P:Class) : U -> Prop := fun a =>
