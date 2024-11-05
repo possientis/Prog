@@ -1,5 +1,5 @@
-Declare Scope ZF_Comprehension_scope.
-Open    Scope ZF_Comprehension_scope.
+Declare Scope ZF_Specification_scope.
+Open    Scope ZF_Specification_scope.
 
 Require Import Logic.ZF.Class.
 Require Import Logic.ZF.ClassRel.
@@ -9,7 +9,7 @@ Require Import Logic.ZF.Replacement.
 (* Given a set theoretic predicate P and a set a, there exists a set b whose    *)
 (* elements are the elements of the set a which satisfy P.                      *)
 (* This is a theorem and not an axiom as it can be derived from replacement.    *)
-Theorem Comprehension : forall (P:U -> Prop),
+Theorem Specification : forall (P:U -> Prop),
   forall a, exists b, forall x, x :< b <-> x :< a /\ P x.
 Proof.
   (* Let P be a predicate and a be a set. *)
@@ -56,50 +56,50 @@ Proof.
     intros H4. apply ReplaceCharac, H3. apply H4.
 Qed.
 
-(* It is useful to define the predicate underlying the comprehension axiom.     *)
-Definition CompPred (P:U -> Prop) (a:U) : U -> Prop := fun x =>
+(* It is useful to define the predicate underlying the specification axiom.     *)
+Definition SpecPred (P:U -> Prop) (a:U) : U -> Prop := fun x =>
   x :< a /\ P x.
 
-(* The comprehension predicate of a and P is small                              *)
-Proposition CompSmall : forall (P:U -> Prop) (a:U),
-    Small (CompPred P a).
+(* The specification predicate of a and P is small                              *)
+Proposition SpecSmall : forall (P:U -> Prop) (a:U),
+    Small (SpecPred P a).
 Proof.
-  apply Comprehension.
+  apply Specification.
 Qed.
 
-(* We consider the set defined by the comprehension predicate of P and a.       *)
-Definition compSet (P:U -> Prop) (a:U) : U
-  := toSet (CompPred P a) (CompSmall P a).
+(* We consider the set defined by the specification predicate of P and a.       *)
+Definition specSet (P:U -> Prop) (a:U) : U
+  := toSet (SpecPred P a) (SpecSmall P a).
 
-Notation ":{ a | P }:" := (compSet P a)
-  (at level 1, no associativity) : ZF_Comprehension_scope.
+Notation ":{ a | P }:" := (specSet P a)
+  (at level 1, no associativity) : ZF_Specification_scope.
 
 (* Characterisation of the elements of {a :| P}.                                *)
-Proposition CompCharac : forall (P:U -> Prop) (a:U),
+Proposition SpecCharac : forall (P:U -> Prop) (a:U),
   forall x, x :< :{a | P}: <-> x :< a /\ P x.
 Proof.
-  unfold compSet. intros P a. apply ClassCharac.
+  unfold specSet. intros P a. apply ClassCharac.
 Qed.
 
-(* Every element of the comprehension set of P and a is an element of a.        *)
-Proposition CompInInA : forall (P:U -> Prop) (a:U),
+(* Every element of the specification set of P and a is an element of a.        *)
+Proposition SpecInInA : forall (P:U -> Prop) (a:U),
   forall x, x :< :{a | P}: -> x :< a.
 Proof.
-  intros P a x H1. apply CompCharac in H1. destruct H1 as [H1 _]. apply H1.
+  intros P a x H1. apply SpecCharac in H1. destruct H1 as [H1 _]. apply H1.
 Qed.
 
-(* Every element of the comprehension set of P and a satisfies the predicate P. *)
-Proposition CompInP : forall (P:U -> Prop) (a:U),
+(* Every element of the specification set of P and a satisfies the predicate P. *)
+Proposition SpecInP : forall (P:U -> Prop) (a:U),
   forall x, x :< :{a | P}: -> P x.
 Proof.
-  intros P a x H1. apply CompCharac in H1. destruct H1 as [_ H1]. apply H1.
+  intros P a x H1. apply SpecCharac in H1. destruct H1 as [_ H1]. apply H1.
 Qed.
 
 (* If a set belongs to a set a and satisfies the predicate P, then it belongs   *)
-(* to the comprehension set of P and a.                                         *)
-Proposition CompInAPIn: forall (P:U -> Prop) (a:U),
+(* to the specification set of P and a.                                         *)
+Proposition SpecInAPIn: forall (P:U -> Prop) (a:U),
   forall x, x :< a -> P x -> x :< :{a | P}:.
 Proof.
-  intros P a x H1 H2. apply CompCharac. split; assumption.
+  intros P a x H1 H2. apply SpecCharac. split; assumption.
 Qed.
 

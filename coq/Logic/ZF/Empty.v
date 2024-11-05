@@ -3,9 +3,9 @@ Open    Scope ZF_Empty_scope.
 
 Require Import Logic.ZF.Class.
 Require Import Logic.ZF.Classic.
-Require Import Logic.ZF.Comprehension.
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Extensionality.
+Require Import Logic.ZF.Specification.
 
 (* This axiom is not necessary as the axiom of infinity also asserts the        *)
 (* the existence of at least one set. However, it allows us to define the empty *)
@@ -42,7 +42,7 @@ Proof.
   intros x. split.
 
   (* Proof of -> *)
-  - intros H3. rewrite H2 in H3. apply CompCharac in H3.
+  - intros H3. rewrite H2 in H3. apply SpecCharac in H3.
     destruct H3 as [H3 H4]. contradiction.
 
   (* Proof of <- *)

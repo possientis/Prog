@@ -230,7 +230,7 @@ PROP_OBJ = ${PROP}/Syntax.vo \
 ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Define.vo \
 				 ${ZF}/Extensionality.vo \
-				 ${ZF}/Comprehension.vo \
+				 ${ZF}/Specification.vo \
 				 ${ZF}/Russell.vo \
 				 ${ZF}/Pairing.vo \
 				 ${ZF}/Singleton.vo \

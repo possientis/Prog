@@ -1,6 +1,6 @@
 Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Comprehension.
 Require Import Logic.ZF.Class.
+Require Import Logic.ZF.Specification.
 
 (* Let us the define the class of all sets which do not belong to themselves.   *)
 Definition Ru : Class := fun x => ~x :< x.
@@ -68,11 +68,11 @@ Proof.
 
   (* Proof of -> *)
   - assert (x :< b -> Ru x) as A. 2: apply A.
-    intros H1. rewrite Eb in H1. apply CompInP with a. apply H1.
+    intros H1. rewrite Eb in H1. apply SpecInP with a. apply H1.
 
   (* Proof of <- *)
   - assert (Ru x -> x :< b) as A. 2: apply A.
-    intros H1. rewrite Eb. apply CompCharac. split.
+    intros H1. rewrite Eb. apply SpecCharac. split.
     + apply Ha.
     + apply H1.
 Qed.

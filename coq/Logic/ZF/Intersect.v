@@ -2,8 +2,8 @@ Declare Scope ZF_Intersect_scope.
 Open    Scope ZF_Intersect_scope.
 
 Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Comprehension.
 Require Import Logic.ZF.Extensionality.
+Require Import Logic.ZF.Specification.
 Require Import Logic.ZF.Union.
 
 (* The intersection of two sets a and b.                                        *)
@@ -17,8 +17,8 @@ Proposition IntersectCharac : forall (a b:U),
  forall x, x :< a:/\:b <-> x :< a /\ x :< b.
 Proof.
   intros a b x. unfold intersect. split.
-  - intros H. apply CompCharac in H. apply H.
-  - intros [H1 H2]. apply CompCharac. auto.
+  - intros H. apply SpecCharac in H. apply H.
+  - intros [H1 H2]. apply SpecCharac. auto.
 Qed.
 
 (* The interection of two sets is commutative.                                  *)
