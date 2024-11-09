@@ -36,10 +36,37 @@ Proof.
     + apply EmptyCharac in H2. contradiction.
 Qed.
 
-(*
 Proposition DiffUnionIntersect : forall (a b c:U),
   a :\: (b:\/:c) = a:\:b :/\: a:\:c.
 Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1.
+  - apply DiffCharac in H1. destruct H1 as [H1 H2]. apply IntersectCharac.
+    split; apply DiffCharac; split.
+    + apply H1.
+    + intros H3. apply H2. apply UnionCharac. left. apply H3.
+    + apply H1.
+    + intros H3. apply H2. apply UnionCharac. right. apply H3.
+  - apply IntersectCharac in H1. destruct H1 as [H1 H2].
+    apply DiffCharac in H1. destruct H1 as [H1 H3].
+    apply DiffCharac in H2. destruct H2 as [_  H2].
+    apply DiffCharac. split.
+    + apply H1.
+    + intros H4. apply UnionCharac in H4. destruct H4 as [H4|H4]; contradiction.
+Qed.
 
-Show.
-*)
+Proposition DiffIntersectUnion : forall (a b c:U),
+  a :\: (b:/\:c) = a:\:b :\/: a:\:c.
+Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1.
+  - apply DiffCharac in H1. destruct H1 as [H1 H2].
+    apply UnionCharac. apply NotInIntersect in H2. destruct H2 as [H2|H2].
+    + left.  apply DiffCharac. split; assumption.
+    + right. apply DiffCharac. split; assumption.
+  - apply UnionCharac in H1. destruct H1 as [H1|H1];
+    apply DiffCharac; split; apply DiffCharac in H1; destruct H1 as [H1 H2].
+    + apply H1.
+    + intros H3. apply IntersectCharac in H3. destruct H3 as [H3 _]. contradiction.
+    + apply H1.
+    + intros H3. apply IntersectCharac in H3. destruct H3 as [_ H3]. contradiction.
+Qed.
+

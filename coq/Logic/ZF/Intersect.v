@@ -1,6 +1,7 @@
 Declare Scope ZF_Intersect_scope.
 Open    Scope ZF_Intersect_scope.
 
+Require Import Logic.ZF.Classic.
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Extensionality.
 Require Import Logic.ZF.Specification.
@@ -76,3 +77,14 @@ Proof.
     + left. apply H2.
     + right. apply IntersectCharac. auto.
 Qed.
+
+Proposition NotInIntersect : forall (a b:U),
+  forall x, ~ x :< a:/\:b -> ~ x :< a \/ ~ x :< b.
+Proof.
+  intros a b x H1.
+  assert (x :< a \/ ~ x :< a) as H2. { apply LawExcludedMiddle. }
+  destruct H2 as [H2|H2].
+  - right. intros H3. apply H1. apply IntersectCharac. split; assumption.
+  - left. apply H2.
+Qed.
+
