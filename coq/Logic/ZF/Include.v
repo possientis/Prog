@@ -1,7 +1,10 @@
 Declare Scope ZF_Include_scope.
 Open    Scope ZF_Include_scope.
 
+Require Import Logic.ZF.Classic.
 Require Import Logic.ZF.Core.
+Require Import Logic.ZF.Difference.
+Require Import Logic.ZF.Empty.
 Require Import Logic.ZF.Extensionality.
 Require Import Logic.ZF.Intersect.
 Require Import Logic.ZF.Union.
@@ -134,5 +137,34 @@ Qed.
 Proposition InclIntersect2 : forall (a b:U), a:/\:b :<=: b.
 Proof.
   intros a b x H1. apply IntersectCharac in H1. destruct H1 as [_ H1]. apply H1.
+Qed.
+
+Proposition InclEmptyDiff : forall (a b:U),
+  a :\: b = :0: <-> a :<=: b.
+Proof.
+  intros a b. split; intros H1.
+  - intros x Ha. apply DoubleNegation. intros Hb.
+    assert (x :< :0:) as H2.
+      { rewrite <- H1. apply DiffCharac. split; assumption. }
+    apply EmptyCharac in H2. contradiction.
+  - apply Extensionality. intros x. split; intros H2.
+    + apply DiffCharac in H2. destruct H2 as [H2 H3].
+      apply H1 in H2. contradiction.
+    + apply EmptyCharac in H2. contradiction.
+Qed.
+
+Proposition InclDiff : forall (a b:U),
+  a :\: b :<=: a.
+Proof.
+  intros a b x H1. apply DiffCharac in H1. destruct H1 as [H1 _]. apply H1.
+Qed.
+
+Proposition InclDiffMonotoneL : forall (a b c:U),
+  a :<=: b -> c :\: b :<=: c :\: a.
+Proof.
+  intros a b c H1 x H2. apply DiffCharac in H2. destruct H2 as [H2 H3].
+  apply DiffCharac. split.
+  - apply H2.
+  - intros H4. apply H1 in H4. contradiction.
 Qed.
 
