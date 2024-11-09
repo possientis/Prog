@@ -3,6 +3,7 @@ Open    Scope ZF_Pairing_scope.
 
 Require Import Logic.ZF.Class.
 Require Import Logic.ZF.Core.
+Require Import Logic.ZF.Empty.
 Require Import Logic.ZF.Extensionality.
 
 (* Given two sets a and b, there exists a set c whose elements are a and b.     *)
@@ -59,3 +60,9 @@ Proof.
   intros a b. apply PairEqualIn2. reflexivity.
 Qed.
 
+(* A pair is never equal to the empty set.                                      *)
+Proposition PairNotEmpty : forall (a b:U), ~ :{a,b}: = :0:.
+Proof.
+  intros a b Hab. assert (a :< :0:) as H1. { rewrite <- Hab. apply PairIn1. }
+  apply EmptyCharac in H1. apply H1.
+Qed.

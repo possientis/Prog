@@ -2,6 +2,7 @@ Declare Scope ZF_Tuple_scope.
 Open    Scope ZF_Tuple_scope.
 
 Require Import Logic.ZF.Core.
+Require Import Logic.ZF.Empty.
 Require Import Logic.ZF.Pairing.
 Require Import Logic.ZF.Singleton.
 Require Import Logic.ZF.Union.
@@ -118,4 +119,16 @@ Qed.
 Proposition Tuple4In4 : forall (a1 a2 a3 a4:U), a4 :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4. apply Tuple4EqualIn4. reflexivity.
+Qed.
+
+Proposition Tuple3NotEmpty : forall (a1 a2 a3:U), ~ :{a1,a2,a3}: = :0:.
+Proof.
+  intros a1 a2 a3 H1. assert (a1 :< :0:) as H2. { rewrite <- H1. apply Tuple3In1. }
+  apply EmptyCharac in H2. apply H2.
+Qed.
+
+Proposition Tuple4NotEmpty : forall (a1 a2 a3 a4:U), ~ :{a1,a2,a3,a4}: = :0:.
+Proof.
+  intros a1 a2 a3 a4 H1. assert (a1 :< :0:) as H2. { rewrite <- H1. apply Tuple4In1. }
+  apply EmptyCharac in H2. apply H2.
 Qed.
