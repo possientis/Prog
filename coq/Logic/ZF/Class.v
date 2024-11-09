@@ -77,4 +77,3 @@ Proposition fromSetToSet : forall (P:Class) (q:Small P) (x:U),
 Proof.
   intros P q x. unfold fromSet. apply ClassCharac.
 Qed.
-

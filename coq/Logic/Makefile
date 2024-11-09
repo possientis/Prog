@@ -248,7 +248,8 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Infinity.vo \
 				 ${ZF}/Empty.vo \
 				 ${ZF}/Classic.vo \
-				 ${ZF}/Foundation.vo
+				 ${ZF}/Foundation.vo \
+				 ${ZF}/ClassUtils.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
@@ -332,6 +333,9 @@ ${AXIOM}/Extensionality.vo : ${AXIOM}/Extensionality.v
 	coqc $< 	${AXIOM_LIB}
 
 ${ZF}/Extensionality.vo : ${ZF}/Extensionality.v
+	coqc $< 	${ZF_LIB}
+
+${ZF}/Specification.vo : ${ZF}/Specification.v
 	coqc $< 	${ZF_LIB}
 
 ${ZF}/Comprehension.vo : ${ZF}/Comprehension.v

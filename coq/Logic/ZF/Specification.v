@@ -102,4 +102,3 @@ Proposition SpecInAPIn: forall (P:U -> Prop) (a:U),
 Proof.
   intros P a x H1 H2. apply SpecCharac. split; assumption.
 Qed.
-

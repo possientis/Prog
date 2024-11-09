@@ -80,3 +80,10 @@ Proof.
     apply EmptyCharac in H1. apply H1.
 Qed.
 
+Proposition IfEmptyThenEmpty : forall (a:U),
+  (forall x, ~ x :< a) -> a = :0:.
+Proof.
+  intros a Ha. apply Extensionality. intros x. split; intros H1.
+  - apply (Ha x) in H1. contradiction.
+  - apply EmptyCharac in H1. contradiction.
+Qed.
