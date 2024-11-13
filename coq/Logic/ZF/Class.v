@@ -5,7 +5,7 @@ Require Import Logic.ZF.Extensionality.
 (* A class is simply a predicate on sets.                                       *)
 Definition Class : Type := U -> Prop.
 
-(* Predicate on classes, determining whether a class is actually a set.         *)
+(* Predicate on classes, stating that a class is actually a set.                *)
 Definition Small (P:Class) : Prop := exists a, forall x, x :< a <-> P x.
 
 (* Predicate on classes, determining whether a class is proper.                 *)
