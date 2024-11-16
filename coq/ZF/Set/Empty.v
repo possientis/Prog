@@ -1,11 +1,11 @@
 Declare Scope ZF_Empty_scope.
 Open    Scope ZF_Empty_scope.
 
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.Classic.
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Extensionality.
-Require Import Logic.ZF.Specification.
+Require Import ZF.Axiom.Classic.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Axiom.Specification.
+Require Import ZF.Class.Class.
 
 (* This axiom is not necessary as the axiom of infinity also asserts the        *)
 (* the existence of at least one set. However, it allows us to define the empty *)

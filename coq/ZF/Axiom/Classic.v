@@ -1,4 +1,4 @@
-Require Import Logic.ZF.Core.
+Require Import ZF.Axiom.Core.
 
 (* If the proposition ~A leads to a contradiction, then A is true.              *)
 Axiom DoubleNegation : forall (A:Prop), ~~A -> A.

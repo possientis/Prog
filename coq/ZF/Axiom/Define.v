@@ -1,4 +1,4 @@
-Require Import Logic.ZF.Core.
+Require Import ZF.Axiom.Core.
 
 (* Predicate over set theoretic predicates, expressing the fact that the        *)
 (* predicate is satisfied by at least one set                                   *)

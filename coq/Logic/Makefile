@@ -16,7 +16,6 @@ NORM  = Normal
 LANG1 = Lang1
 STLC  = STLC
 PROP  = Prop
-ZF    = ZF
 
 # coqc command line option
 AXIOM_LIB = -Q ${AXIOM} Logic.${AXIOM} -Q ../Logic Logic
@@ -33,7 +32,6 @@ SET_LIB   = -Q ${SET}   Logic.${SET}   -Q ../Logic Logic
 LANG1_LIB = -Q ${LANG1} Logic.${LANG1} -Q ../Logic Logic
 STLC_LIB  = -Q ${STLC}  Logic.${STLC}  -Q ../Logic Logic
 PROP_LIB  = -Q ${PROP}  Logic.${PROP}  -Q ../Logic Logic
-ZF_LIB    = -Q ${ZF}    Logic.${ZF}    -Q ../Logic Logic
 NORM_LIB  = -Q ${SET}/${NORM}   Logic.${SET}.${NORM}   -Q ../Logic Logic
 
 # Object files
@@ -227,32 +225,6 @@ PROP_OBJ = ${PROP}/Syntax.vo \
 					 ${PROP}/Consistent.vo \
 					 ${PROP}/Monotone.vo
 
-ZF_OBJ = ${ZF}/Core.vo \
-				 ${ZF}/Define.vo \
-				 ${ZF}/Extensionality.vo \
-				 ${ZF}/Specification.vo \
-				 ${ZF}/Russell.vo \
-				 ${ZF}/Pairing.vo \
-				 ${ZF}/Singleton.vo \
-				 ${ZF}/OrdPair.vo \
-				 ${ZF}/OrdTuple.vo \
-				 ${ZF}/Class.vo \
-				 ${ZF}/Union.vo \
-				 ${ZF}/Tuple.vo \
-				 ${ZF}/Intersect.vo \
-				 ${ZF}/Include.vo \
-				 ${ZF}/Power.vo \
-				 ${ZF}/BinaryClass.vo \
-				 ${ZF}/Replacement.vo \
-				 ${ZF}/Difference.vo \
-				 ${ZF}/Infinity.vo \
-				 ${ZF}/Empty.vo \
-				 ${ZF}/Classic.vo \
-				 ${ZF}/Foundation.vo \
-				 ${ZF}/ClassUtils.vo \
-				 ${ZF}/Product.vo \
-				 ${ZF}/RelationClass.vo
-
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
 			${SET}/${NORM}/InListOf.vo \
@@ -278,7 +250,6 @@ all : 	${AXIOM_OBJ} \
 		${LANG1_OBJ} \
 		${STLC_OBJ} \
 		${PROP_OBJ} \
-		${ZF_OBJ} \
 		${NORM_OBJ}
 
 # General rules
@@ -324,24 +295,12 @@ ${STLC}/%.vo  : ${STLC}/%.v
 ${PROP}/%.vo  : ${PROP}/%.v
 	coqc $< 		${PROP_LIB}
 
-${ZF}/%.vo    : ${ZF}/%.v
-	coqc $< 		${ZF_LIB}
-
 ${SET}/${NORM}/%.vo   : ${SET}/${NORM}/%.v
 	coqc $< 	${NORM_LIB}
 
 # Exception rules (for better output alignment)
 ${AXIOM}/Extensionality.vo : ${AXIOM}/Extensionality.v
 	coqc $< 	${AXIOM_LIB}
-
-${ZF}/Extensionality.vo : ${ZF}/Extensionality.v
-	coqc $< 	${ZF_LIB}
-
-${ZF}/Specification.vo : ${ZF}/Specification.v
-	coqc $< 	${ZF_LIB}
-
-${ZF}/Comprehension.vo : ${ZF}/Comprehension.v
-	coqc $< 	${ZF_LIB}
 
 ${FUNC}/Composition.vo : ${FUNC}/Composition.v
 	coqc $< 	${FUNC_LIB}
@@ -393,9 +352,6 @@ ${LAM}/Eq.vo : ${LAM}/Eq.v
 
 ${PROP}/Eq.vo : ${PROP}/Eq.v
 	coqc $<			${PROP_LIB}
-
-${ZF}/Core.vo : ${ZF}/Core.v
-	coqc $<			${ZF_LIB}
 
 ${SET}/Set.vo : ${SET}/Set.v
 	coqc $<			${SET_LIB}

@@ -1,6 +1,6 @@
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Define.
-Require Import Logic.ZF.Extensionality.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Define.
+Require Import ZF.Axiom.Extensionality.
 
 (* A class is simply a predicate on sets.                                       *)
 Definition Class : Type := U -> Prop.

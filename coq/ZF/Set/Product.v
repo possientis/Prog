@@ -1,15 +1,15 @@
 Declare Scope ZF_Product_scope.
 Open    Scope ZF_Product_scope.
 
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.ClassUtils.
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Include.
-Require Import Logic.ZF.OrdPair.
-Require Import Logic.ZF.Pairing.
-Require Import Logic.ZF.Power.
-Require Import Logic.ZF.Singleton.
-Require Import Logic.ZF.Union.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Pairing.
+Require Import ZF.Axiom.Power.
+Require Import ZF.Axiom.Union.
+Require Import ZF.Class.Class.
+Require Import ZF.Class.Bounded.
+Require Import ZF.Set.Include.
+Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Singleton.
 
 (* It is useful to define the predicate underlying the product of two sets.     *)
 Definition ProdPred (a b:U) : U -> Prop := fun x =>

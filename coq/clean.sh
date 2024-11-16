@@ -12,6 +12,7 @@ rm -f lib/*.glob
 rm -f lib/*.vo
 
 ./Logic/clean.sh
+./ZF/clean.sh
 ./set2/clean.sh
 ./zf/clean.sh
 ./sf/clean.sh

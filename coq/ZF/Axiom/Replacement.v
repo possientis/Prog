@@ -1,6 +1,6 @@
-Require Import Logic.ZF.BinaryClass.
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.Core.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Class.Binary.
+Require Import ZF.Class.Class.
 
 (* Given a functional binary class F and a set a, there exist a set b whose     *)
 (* elements are the images of the elements of a by F.                           *)

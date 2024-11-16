@@ -10,4 +10,3 @@ Axiom Elem : U -> U -> Prop.
 Notation "x :< y" := (Elem x y)
   (at level 6, no associativity) : ZF_Core_scope.
 
-

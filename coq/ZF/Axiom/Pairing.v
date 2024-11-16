@@ -1,10 +1,10 @@
 Declare Scope ZF_Pairing_scope.
 Open    Scope ZF_Pairing_scope.
 
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Empty.
-Require Import Logic.ZF.Extensionality.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.Class.
+Require Import ZF.Set.Empty.
 
 (* Given two sets a and b, there exists a set c whose elements are a and b.     *)
 Axiom Pairing : forall a b, exists c, forall x, x :< c <-> x = a \/ x = b.

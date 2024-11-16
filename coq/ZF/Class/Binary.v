@@ -1,8 +1,8 @@
-Declare Scope ZF_BinaryClass_scope.
-Open    Scope ZF_BinaryClass_scope.
+Declare Scope ZF_Binary_scope.
+Open    Scope ZF_Binary_scope.
 
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.Core.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Class.Class.
 
 (* A binary class is simply a binary predicate on sets.                         *)
 Definition BinaryClass : Type := U -> U -> Prop.
@@ -16,4 +16,4 @@ Definition Image (R:BinaryClass) (a:U) : Class := fun y =>
   exists x, x :< a /\ R x y.
 
 Notation "R [ a ]" := (Image R a)
-  (at level 0, no associativity) : ZF_BinaryClass_scope.
+  (at level 0, no associativity) : ZF_Binary_scope.

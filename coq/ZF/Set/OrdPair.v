@@ -1,9 +1,9 @@
 Declare Scope ZF_OrdPair_scope.
 Open    Scope ZF_OrdPair_scope.
 
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Pairing.
-Require Import Logic.ZF.Singleton.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Pairing.
+Require Import ZF.Set.Singleton.
 
 (* The ordered pair (a,b) is defined as the pair { {a} , {a,b} }.               *)
 Definition ordPair (a b:U) : U := :{ :{a}: , :{a,b}: }:.

@@ -1,10 +1,10 @@
 Declare Scope ZF_Union_scope.
 Open    Scope ZF_Union_scope.
 
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Extensionality.
-Require Import Logic.ZF.Pairing.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Axiom.Pairing.
+Require Import ZF.Class.Class.
 
 (* Given a set a, there exists a set b whose elements are the elements of all   *)
 (* the elements of a. More formally:                                            *)

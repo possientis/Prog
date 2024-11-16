@@ -1,8 +1,8 @@
 Declare Scope ZF_OrdTuple_scope.
 Open    Scope ZF_OrdTuple_scope.
 
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.OrdPair.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Set.OrdPair.
 
 Definition ordTuple3 (a1 a2 a3:U) : U := :( :(a1,a2): , a3 ):.
 

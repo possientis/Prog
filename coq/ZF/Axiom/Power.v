@@ -1,10 +1,10 @@
 Declare Scope ZF_Power_scope.
 Open    Scope ZF_Power_scope.
 
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Extensionality.
-Require Import Logic.ZF.Include.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.Class.
+Require Import ZF.Set.Include.
 
 (* Given a set a, there exists a set b whose elements are the subsets of a.     *)
 Axiom Power : forall a, exists b,

@@ -1,10 +1,10 @@
 Declare Scope ZF_Specification_scope.
 Open    Scope ZF_Specification_scope.
 
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.BinaryClass.
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Replacement.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Replacement.
+Require Import ZF.Class.Class.
+Require Import ZF.Class.Binary.
 
 (* Given a set theoretic predicate P and a set a, there exists a set b whose    *)
 (* elements are the elements of the set a which satisfy P.                      *)

@@ -1,9 +1,9 @@
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Empty.
-Require Import Logic.ZF.Intersect.
-Require Import Logic.ZF.Pairing.
-Require Import Logic.ZF.Singleton.
-Require Import Logic.ZF.Tuple.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Pairing.
+Require Import ZF.Set.Empty.
+Require Import ZF.Set.Intersect.
+Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Tuple.
 
 (* Every non-empty set a has an element which does not contain any element of a.*)
 Axiom Foundation : forall (a:U),

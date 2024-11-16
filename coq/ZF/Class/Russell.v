@@ -1,6 +1,6 @@
-Require Import Logic.ZF.Core.
-Require Import Logic.ZF.Class.
-Require Import Logic.ZF.Specification.
+Require Import ZF.Axiom.Core.
+Require Import ZF.Axiom.Specification.
+Require Import ZF.Class.Class.
 
 (* Let us the define the class of all sets which do not belong to themselves.   *)
 Definition Ru : Class := fun x => ~x :< x.
