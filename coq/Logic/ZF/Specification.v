@@ -2,7 +2,7 @@ Declare Scope ZF_Specification_scope.
 Open    Scope ZF_Specification_scope.
 
 Require Import Logic.ZF.Class.
-Require Import Logic.ZF.ClassRel.
+Require Import Logic.ZF.BinaryClass.
 Require Import Logic.ZF.Core.
 Require Import Logic.ZF.Replacement.
 
@@ -15,10 +15,10 @@ Proof.
   (* Let P be a predicate and a be a set. *)
   intros P a.
 
-  (* Consider the class relation F x y := P x /\ x = y. *)
+  (* Consider the binary class F x y := P x /\ x = y. *)
   remember (fun x y => P x /\ x = y) as F eqn:H1.
 
-  (* We claim that this class relation is functional. *)
+  (* We claim that this binary class is functional. *)
   assert (Functional F) as H2.
     { intros x y z H3 H4. rewrite H1 in H3. rewrite H1 in H4.
       destruct H3 as [_ H3]. destruct H4 as [_ H4]. subst.

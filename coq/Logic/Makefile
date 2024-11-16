@@ -242,7 +242,7 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Intersect.vo \
 				 ${ZF}/Include.vo \
 				 ${ZF}/Power.vo \
-				 ${ZF}/ClassRel.vo \
+				 ${ZF}/BinaryClass.vo \
 				 ${ZF}/Replacement.vo \
 				 ${ZF}/Difference.vo \
 				 ${ZF}/Infinity.vo \
@@ -250,7 +250,8 @@ ZF_OBJ = ${ZF}/Core.vo \
 				 ${ZF}/Classic.vo \
 				 ${ZF}/Foundation.vo \
 				 ${ZF}/ClassUtils.vo \
-				 ${ZF}/Product.vo
+				 ${ZF}/Product.vo \
+				 ${ZF}/RelationClass.vo
 
 NORM_OBJ  = ${SET}/${NORM}/Leq.vo \
 			${SET}/${NORM}/Ord.vo \
