@@ -2,7 +2,6 @@ Declare Scope ZF_Pair_scope.
 Open    Scope ZF_Pair_scope.
 
 Require Import ZF.Axiom.Core.
-Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.Pairing.
 Require Import ZF.Class.Class.
 Require Import ZF.Set.Empty.

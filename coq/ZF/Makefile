@@ -38,6 +38,7 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Intersect.vo \
 	${SET}/Difference.vo \
 	${SET}/Include.vo \
+	${SET}/Power.vo \
 	${SET}/Product.vo
 
 # Overall target
