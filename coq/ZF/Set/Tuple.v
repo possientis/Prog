@@ -2,10 +2,10 @@ Declare Scope ZF_Tuple_scope.
 Open    Scope ZF_Tuple_scope.
 
 Require Import ZF.Axiom.Core.
-Require Import ZF.Axiom.Union.
-Require Import ZF.Set.Pair.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Union.
 
 Definition tuple3 (a1 a2 a3:U) : U := :{a1,a2}: :\/: :{a3}:.
 

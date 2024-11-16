@@ -34,6 +34,7 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Singleton.vo \
 	${SET}/OrdPair.vo \
 	${SET}/OrdTuple.vo \
+	${SET}/Union.vo \
 	${SET}/Tuple.vo \
 	${SET}/Intersect.vo \
 	${SET}/Difference.vo \

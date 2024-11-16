@@ -5,9 +5,9 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.Specification.
-Require Import ZF.Axiom.Union.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Intersect.
+Require Import ZF.Set.Union.
 
 (* The set a \ b is made of those elements of a which do not belong to b.       *)
 Definition difference (a b:U) : U := :{a | fun x => ~ x :< b }:.

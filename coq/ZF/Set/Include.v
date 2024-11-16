@@ -4,10 +4,10 @@ Open    Scope ZF_Include_scope.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Axiom.Union.
 Require Import ZF.Set.Difference.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Intersect.
+Require Import ZF.Set.Union.
 
 (* Inclusion predicate between two sets.                                        *)
 Definition Incl (a b:U) : Prop := forall x, x :< a -> x :< b.

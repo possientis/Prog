@@ -5,7 +5,7 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.Specification.
-Require Import ZF.Axiom.Union.
+Require Import ZF.Set.Union.
 
 (* The intersection of two sets a and b.                                        *)
 Definition intersect (a b:U) : U := :{ a | fun x => x :< b }:.
