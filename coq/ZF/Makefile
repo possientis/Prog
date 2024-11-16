@@ -20,6 +20,7 @@ AXIOM_OBJ = ${AXIOM}/Core.vo \
 	${AXIOM}/Pairing.vo \
 	${AXIOM}/Union.vo \
 	${AXIOM}/Power.vo \
+	${AXIOM}/NonEmpty.vo \
 	${AXIOM}/Foundation.vo \
 	${AXIOM}/Infinity.vo
 

@@ -4,13 +4,9 @@ Open    Scope ZF_Empty_scope.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Axiom.NonEmpty.
 Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.Class.
-
-(* This axiom is not necessary as the axiom of infinity also asserts the        *)
-(* the existence of at least one set. However, it allows us to define the empty *)
-(* set now and rewrite more concisely the axiom of infinity later.              *)
-Axiom NonEmptyUniverse : exists (x:U), True.
 
 (* The class which is satisfied by no set.                                      *)
 Definition Empty : Class := fun _ => False.

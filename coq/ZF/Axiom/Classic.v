@@ -13,6 +13,7 @@ Proof.
   - destruct H1 as [a H1]. intros H2. apply (H2 a), H1.
 Qed.
 
+(* A proposition is true or false                                               *)
 Proposition LawExcludedMiddle : forall (A:Prop), A \/ ~A.
 Proof.
   intros A. apply DoubleNegation. intros H1.
