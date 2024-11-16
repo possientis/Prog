@@ -57,14 +57,14 @@ Qed.
 Definition fromSet (a:U) : Class := fun x => x :< a.
 
 (* The class associated with a set is small                                     *)
-Proposition fromSetSmall : forall (a:U), Small (fromSet a).
+Proposition FromSetSmall : forall (a:U), Small (fromSet a).
 Proof.
   intros. unfold Small, fromSet. exists a. intros x. split; auto.
 Qed.
 
 (* The set associated with the class associated with a set is the set itself.   *)
-Proposition toSetFromSet : forall (a:U),
-  toSet (fromSet a) (fromSetSmall a) = a.
+Proposition ToSetFromSet : forall (a:U),
+  toSet (fromSet a) (FromSetSmall a) = a.
 Proof.
   intro a. apply SameCharacEqual with (fromSet a).
   - apply ClassCharac.
@@ -72,7 +72,7 @@ Proof.
 Qed.
 
 (* The class associated with the set associated with a small class is the class.*)
-Proposition fromSetToSet : forall (P:Class) (q:Small P) (x:U),
+Proposition FromSetToSet : forall (P:Class) (q:Small P) (x:U),
   fromSet (toSet P q) x <-> P x.
 Proof.
   intros P q x. unfold fromSet. apply ClassCharac.

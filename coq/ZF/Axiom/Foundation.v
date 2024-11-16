@@ -6,8 +6,7 @@ Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Tuple.
 
 (* Every non-empty set a has an element which does not contain any element of a.*)
-Axiom Foundation : forall (a:U),
-  ~ a = :0: -> exists x, x :< a /\ x :/\: a = :0:.
+Axiom Foundation : forall (a:U), ~ a = :0: -> exists x, x :< a /\ x :/\: a = :0:.
 
 (* No set belongs to itself.                                                    *)
 Proposition NoElemLoop1 : forall x, ~ x :< x.
