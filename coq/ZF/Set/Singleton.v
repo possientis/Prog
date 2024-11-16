@@ -2,8 +2,8 @@ Declare Scope ZF_Singleton_scope.
 Open    Scope ZF_Singleton_scope.
 
 Require Import ZF.Axiom.Core.
-Require Import ZF.Axiom.Pairing.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Pair.
 
 (* The singleton set {a} is defined as the pair {a,a}.                          *)
 Definition singleton (a:U) : U := :{a,a}:.

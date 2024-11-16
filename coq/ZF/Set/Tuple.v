@@ -3,7 +3,7 @@ Open    Scope ZF_Tuple_scope.
 
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Union.
-Require Import ZF.Axiom.Pairing.
+Require Import ZF.Set.Pair.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Singleton.
 

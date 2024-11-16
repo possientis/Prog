@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Core.
-Require Import ZF.Axiom.Pairing.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Intersect.
+Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Tuple.
 

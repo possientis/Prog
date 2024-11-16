@@ -2,13 +2,13 @@ Declare Scope ZF_Product_scope.
 Open    Scope ZF_Product_scope.
 
 Require Import ZF.Axiom.Core.
-Require Import ZF.Axiom.Pairing.
 Require Import ZF.Axiom.Power.
 Require Import ZF.Axiom.Union.
 Require Import ZF.Class.Class.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Set.Include.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
 
 (* It is useful to define the predicate underlying the product of two sets.     *)

@@ -30,6 +30,7 @@ CLASS_OBJ = ${CLASS}/Class.vo \
 	${CLASS}/Relation.vo 
 
 SET_OBJ = ${SET}/Empty.vo \
+	${SET}/Pair.vo \
 	${SET}/Singleton.vo \
 	${SET}/OrdPair.vo \
 	${SET}/OrdTuple.vo \

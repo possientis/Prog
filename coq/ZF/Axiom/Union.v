@@ -3,8 +3,8 @@ Open    Scope ZF_Union_scope.
 
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Axiom.Pairing.
 Require Import ZF.Class.Class.
+Require Import ZF.Set.Pair.
 
 (* Given a set a, there exists a set b whose elements are the elements of all   *)
 (* the elements of a. More formally:                                            *)
