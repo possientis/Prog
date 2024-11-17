@@ -88,14 +88,11 @@ Qed.
 
 (*
 (* If the class P is relation, then converse acting on P is idempotent.         *)
-Proposition ConverseIdempotent : forall (P:Class) (x:U),
-  Relation P -> converse (converse P) x <-> P x.
+Proposition ConverseIdempotent : forall (P:Class),
+  Relation P -> converse (converse P) == P.
 Proof.
-  intros P x H1. unfold converse.
-  remember (Binary.converse (toBinary P)) as F eqn:EF.
-  remember (toBinary (fromBinary F)) as G eqn:EG.
-  remember (fromBinary (Binary.converse G)) as Q eqn:HQ.
-  (* Not clear why 'proj1' was needed here *)
-  apply (proj1 (ClassEquivCharac Q P)).
+  intros P H1. unfold converse.
+  remember (Binary.converse (toBinary P)) as F eqn:Ef.
+
 Show.
 *)
