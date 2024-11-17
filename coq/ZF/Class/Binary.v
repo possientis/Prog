@@ -62,7 +62,7 @@ Notation "R [ a ]" := (Image R a)
 (* The converse of a binary class.                                              *)
 Definition converse (F:Binary) : Binary := fun x y => F y x.
 
-(* Take the converse is an indempotent operation.                               *)
+(* Taking the converse is an indempotent operation.                             *)
 (* Note that we have actual equality here, not just equivalence.                *)
 Proposition ConverseIdempotent : forall (F:Binary),
   converse (converse F) = F.

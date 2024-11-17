@@ -111,3 +111,10 @@ Proof.
     + apply FromToBinary, H1.
 Qed.
 
+(* The converse of a class is always a relation, even if the class is not.      *)
+Proposition ConverseIsRelation : forall (P:Class), Relation (converse P).
+Proof.
+  intros P x H1. apply (proj1 (ConverseCharac P x)) in H1.
+  destruct H1 as [y [z [H1 _]]]. exists y. exists z. apply H1.
+Qed.
+
