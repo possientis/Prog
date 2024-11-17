@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Core.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Class.
+Require Import ZF.Core.Equiv.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate on classes, expressing the fact that a class is a 'relation class' *)
@@ -84,12 +85,17 @@ Proof.
     + apply H1.
 Qed.
 
+
 (*
 (* If the class P is relation, then converse acting on P is idempotent.         *)
 Proposition ConverseIdempotent : forall (P:Class) (x:U),
   Relation P -> converse (converse P) x <-> P x.
 Proof.
   intros P x H1. unfold converse.
-
+  remember (Binary.converse (toBinary P)) as F eqn:EF.
+  remember (toBinary (fromBinary F)) as G eqn:EG.
+  remember (fromBinary (Binary.converse G)) as Q eqn:HQ.
+  (* Not clear why 'proj1' was needed here *)
+  apply (proj1 (ClassEquivCharac Q P)).
 Show.
 *)

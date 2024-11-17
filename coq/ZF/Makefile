@@ -4,11 +4,13 @@
 AXIOM = Axiom
 CLASS = Class
 SET   = Set
+CORE  = Core
 
 # coqc command line option
 AXIOM_LIB = -Q ${AXIOM} ZF.${AXIOM} -Q ../ZF ZF
 CLASS_LIB = -Q ${CLASS} ZF.${CLASS} -Q ../ZF ZF
 SET_LIB   = -Q ${SET} ZF.${SET} -Q ../ZF ZF
+CORE_LIB  = -Q ${CORE} ZF.${CORE} -Q ../ZF ZF
 
 # Object files
 AXIOM_OBJ = ${AXIOM}/Core.vo \
@@ -43,10 +45,13 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Power.vo \
 	${SET}/Product.vo
 
+CORE_OBJ = ${CORE}/Equiv.vo
+
 # Overall target
 all : ${AXIOM_OBJ} \
 	${CLASS_OBJ} \
-	${SET_OBJ}
+	${SET_OBJ} \
+	${CORE_OBJ}
 
 # General rules
 ${AXIOM}/%.vo : ${AXIOM}/%.v
@@ -57,6 +62,9 @@ ${CLASS}/%.vo : ${CLASS}/%.v
 
 ${SET}/%.vo : ${SET}/%.v
 	coqc $< ${SET_LIB}
+
+${CORE}/%.vo : ${CORE}/%.v
+	coqc $< ${CORE_LIB}
 
 deps :
 	./deps.sh

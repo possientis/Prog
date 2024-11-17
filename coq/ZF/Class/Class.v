@@ -1,9 +1,25 @@
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Define.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Core.Equiv.
 
 (* A class is simply a predicate on sets.                                       *)
 Definition Class : Type := U -> Prop.
+
+(* Natural equivalence between classes.                                         *)
+Definition classEquiv (P Q:Class) : Prop := forall x, P x <-> Q x.
+
+Global Instance ClassEquiv : Equiv Class := {
+  equiv := classEquiv
+}.
+
+Proposition ClassEquivCharac : forall (P Q:Class),
+  P == Q <-> forall x, P x <-> Q x.
+Proof.
+  intros P Q. split; intros H1.
+  - apply H1.
+  - unfold equiv, ClassEquiv, classEquiv. apply H1.
+Qed.
 
 (* Predicate on classes, stating that a class is actually a set.                *)
 Definition Small (P:Class) : Prop := exists a, forall x, x :< a <-> P x.
@@ -77,3 +93,4 @@ Proposition FromSetToSet : forall (P:Class) (q:Small P) (x:U),
 Proof.
   intros P q x. unfold fromSet. apply ClassCharac.
 Qed.
+
