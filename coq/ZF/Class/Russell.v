@@ -1,9 +1,9 @@
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Specification.
-Require Import ZF.Class.Class.
+Require Import ZF.Class.Small.
 
 (* Let us the define the class of all sets which do not belong to themselves.   *)
-Definition Ru : Class := fun x => ~x :< x.
+Definition Ru : U -> Prop := fun x => ~x :< x.
 
 (* Then this is a proper class                                                  *)
 Proposition ProperRu : Proper Ru.

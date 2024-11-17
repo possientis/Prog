@@ -3,7 +3,7 @@ Open    Scope ZF_Pair_scope.
 
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Pairing.
-Require Import ZF.Class.Class.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Empty.
 
 (* It is useful to define the predicate underlying the pairing axiom.           *)

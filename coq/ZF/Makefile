@@ -28,6 +28,7 @@ AXIOM_OBJ = ${AXIOM}/Core.vo \
 
 CLASS_OBJ = ${CLASS}/Class.vo \
 	${CLASS}/Binary.vo \
+	${CLASS}/Small.vo \
 	${CLASS}/Bounded.vo \
 	${CLASS}/Russell.vo \
 	${CLASS}/Relation.vo 

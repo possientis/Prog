@@ -2,8 +2,8 @@ Declare Scope ZF_Product_scope.
 Open    Scope ZF_Product_scope.
 
 Require Import ZF.Axiom.Core.
-Require Import ZF.Class.Class.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Include.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.

@@ -6,10 +6,10 @@ Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.NonEmpty.
 Require Import ZF.Axiom.Specification.
-Require Import ZF.Class.Class.
+Require Import ZF.Class.Small.
 
 (* The class which is satisfied by no set.                                      *)
-Definition Empty : Class := fun _ => False.
+Definition Empty : U -> Prop := fun _ => False.
 
 (* The empty class is small.                                                    *)
 Proposition EmptySmall : Small Empty.

@@ -48,4 +48,3 @@ Proposition ConverseEquivCompat : EquivCompat converse.
 Proof.
   intros F G H1 x y. unfold converse. apply H1.
 Qed.
-

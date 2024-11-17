@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.Class.
+Require Import ZF.Class.Small.
 
 (* Predicate on classes, stating that a class is smaller than a set.            *)
 Definition Bounded (P:Class) : Prop := exists a, forall x, P x -> x :< a.
