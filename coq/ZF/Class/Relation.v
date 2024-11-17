@@ -25,10 +25,10 @@ Qed.
 Definition toBinary (P:Class) : Binary := fun y z => P :(y,z):.
 
 (* The binary class of the relation class of a binary class F is F itself.      *)
-Proposition ToFromBinary : forall (F:Binary), forall (y z:U),
-  toBinary (fromBinary F) y z <-> F y z.
+Proposition ToFromBinary : forall (F:Binary), toBinary (fromBinary F) == F.
 Proof.
-  intros F y z. unfold toBinary, fromBinary. split; intros H1.
+  intros F. apply BinaryEquivCharac. intros y z.
+  unfold toBinary, fromBinary. split; intros H1.
   - destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
   - exists y. exists z. split.
@@ -37,10 +37,11 @@ Proof.
 Qed.
 
 (* The relation class of the binary class of a relation class P is P itself.    *)
-Proposition FromToBinary : forall (P:Class) (x:U),
-  Relation P -> fromBinary (toBinary P) x <-> P x.
+Proposition FromToBinary : forall (P:Class),
+  Relation P -> fromBinary (toBinary P) == P.
 Proof.
-  intros P x H1. unfold Relation in H1. unfold toBinary, fromBinary.
+  intros P H1. apply ClassEquivCharac. intros x.
+  unfold Relation in H1. unfold toBinary, fromBinary.
   split; intros H2.
   - destruct H2 as [y [z [H2 H3]]]. subst. apply H3.
   - destruct (H1 x H2) as [y [z H3]]. subst. exists y. exists z. split.
@@ -84,7 +85,6 @@ Proof.
     + reflexivity.
     + apply H1.
 Qed.
-
 
 (*
 (* If the class P is relation, then converse acting on P is idempotent.         *)
