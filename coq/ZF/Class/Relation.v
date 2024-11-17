@@ -13,6 +13,17 @@ Definition Relation (P:Class) : Prop :=
 Definition fromBinary (F:Binary) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ F y z.
 
+(* fromBinary is compatible with equivalences of classes and binary classes.    *)
+Proposition FromBinaryEquivCompat : EquivCompat fromBinary.
+Proof.
+  intros F G H1 x. unfold fromBinary. split; intros H2;
+  destruct H2 as [y [z [H2 H3]]]; exists y; exists z; split.
+  - apply H2.
+  - apply H1, H3.
+  - apply H2.
+  - apply H1, H3.
+Qed.
+
 (* The class associated with a binary class is indeed a class relation.         *)
 Proposition FromBinaryIsRelation : forall (F:Binary),
   Relation (fromBinary F).
@@ -86,13 +97,17 @@ Proof.
     + apply H1.
 Qed.
 
-(*
 (* If the class P is relation, then converse acting on P is idempotent.         *)
 Proposition ConverseIdempotent : forall (P:Class),
   Relation P -> converse (converse P) == P.
 Proof.
   intros P H1. unfold converse.
   remember (Binary.converse (toBinary P)) as F eqn:Ef.
+  apply EquivTran with (fromBinary (Binary.converse F)).
+  - apply FromBinaryEquivCompat, Binary.ConverseEquivCompat, ToFromBinary.
+  - rewrite Ef. clear Ef F. apply EquivTran with (fromBinary (toBinary P)).
+    + apply FromBinaryEquivCompat. rewrite Binary.ConverseIdempotent.
+      apply EquivRefl.
+    + apply FromToBinary, H1.
+Qed.
 
-Show.
-*)
