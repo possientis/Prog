@@ -17,3 +17,12 @@ Definition Image (F:Binary) (a:U) : Class := fun y =>
 
 Notation "R [ a ]" := (Image R a)
   (at level 0, no associativity) : ZF_Binary_scope.
+
+(* The converse of a binary class.                                              *)
+Definition converse (F:Binary) : Binary := fun x y => F y x.
+
+Proposition ConverseIdempotent : forall (F:Binary),
+  converse (converse F) = F.
+Proof.
+  intros F. unfold converse. reflexivity.
+Qed.
