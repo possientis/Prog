@@ -48,16 +48,37 @@ Proof.
   - unfold equiv, BinaryEquiv, binaryEquiv. apply H1.
 Qed.
 
+(* Domain of a binary class.                                                    *)
+Definition domain (F:Binary) : Class := fun x => exists y, F x y.
+
+(* Range of a binary class.                                                    *)
+Definition range (F:Binary) : Class := fun y => exists x, F x y.
+
 (* Predicate expressing the fact that a binary class is functional.             *)
 Definition Functional (F:Binary) : Prop :=
   forall x, forall y, forall z, F x y -> F x z -> y = z.
 
+(* Restricting a binary class F to a set a.                                     *)
+Definition restrict (F:Binary) (a:U) : Binary := fun x y =>
+  x :< a /\ F x y.
+
+Notation "F :|: a" := (restrict F a)
+  (at level 0, no associativity) : ZF_Class_Binary_scope.
+
 (* Direct image of a set a by a binary class F.                                 *)
-Definition Image (F:Binary) (a:U) : Class := fun y =>
+Definition image (F:Binary) (a:U) : Class := fun y =>
   exists x, x :< a /\ F x y.
 
-Notation "R [ a ]" := (Image R a)
+Notation "F :[ a ]:" := (image F a)
   (at level 0, no associativity) : ZF_Class_Binary_scope.
+
+(* Image is the range of the restriction.                                       *)
+(* This is an equal equality, not just equivalence.                             *)
+Proposition ImageIsRestriction : forall (F:Binary) (a:U),
+  F:[a]: = range (F:|:a).
+Proof.
+  intros F a. unfold image, range, restrict. reflexivity.
+Qed.
 
 (* The converse of a binary class.                                              *)
 Definition converse (F:Binary) : Binary := fun x y => F y x.
@@ -76,3 +97,9 @@ Proof.
   intros F G H1 x y. unfold converse. apply H1.
 Qed.
 
+(* Composition of two binary relation.                                          *)
+Definition compose (G F:Binary) : Binary := fun x y =>
+  exists z, F x z /\ G z y.
+
+Notation "G :.: F" := (compose G F)
+  (at level 10, left associativity) : ZF_Class_Binary_scope.

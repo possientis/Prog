@@ -27,8 +27,8 @@ Proof.
 
   (* We claim that the class F[a] (direct image of the set a by F) is the same  *)
   (* as the class fun x => x :< a /\ P x.                                       *)
-  assert (forall x, F[a] x <-> x :< a /\ P x) as H3.
-    { rewrite H1. unfold Image. intros x. split; intros H4.
+  assert (forall x, F:[a]: x <-> x :< a /\ P x) as H3.
+    { rewrite H1. unfold image. intros x. split; intros H4.
       - destruct H4 as [y [H5 [H6 H7]]]. subst. auto.
       - exists x. split.
         + destruct H4 as [H4 _]. apply H4.
