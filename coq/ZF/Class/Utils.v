@@ -75,3 +75,14 @@ Proof.
   intros P H1 x H2. unfold unionClass in H2. destruct H2 as [y [H2 H3]].
   apply H1 in H3. apply H3, H2.
 Qed.
+
+(* When two ordered pairs belong to a one-to-one class, equality between the    *)
+(* first coordinates is equivalent to equality between the second coordinates.  *)
+Proposition OneToOneCoordEquiv : forall (P:Class) (x1 x2 y1 y2:U),
+  OneToOne P -> P :(x1,y1): -> P :(x2,y2): -> x1 = x2 <-> y1 = y2.
+Proof.
+  intros P x1 x2 y1 y2 H3 H1 H2. split; intros H4.
+  - subst. apply OneToOneCharac1 with P x2; assumption.
+  - subst. apply OneToOneCharac2 with P y2; assumption.
+Qed.
+
