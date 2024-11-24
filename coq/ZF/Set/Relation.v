@@ -28,15 +28,15 @@ Qed.
 Definition converse (a:U) : U := replaceSet Converse a ConverseFunctional.
 
 Proposition ConverseCharac : forall (a:U),
-  forall x, x :< (converse a) <-> exists y z, x =:(y,z): /\ :(z,y): :< a.
+  forall x, x :< (converse a) <-> exists y z, x =:(z,y): /\ :(y,z): :< a.
 Proof.
   intros a x. unfold converse. split; intros H1.
   - apply ReplaceCharac in H1. unfold Converse, image in H1.
-    destruct H1 as [x' [H1 [y [z [H2 H3]]]]]. exists z. exists y. subst. split.
+    destruct H1 as [x' [H1 [y [z [H2 H3]]]]]. exists y. exists z. subst. split.
     + reflexivity.
     + apply H1.
   - destruct H1 as [y [z [H1 H2]]]. apply ReplaceCharac. unfold Converse, image.
-    exists :(z,y):. split.
+    exists :(y,z):. split.
     + apply H2.
-    + exists z. exists y. subst. split; reflexivity.
+    + exists y. exists z. subst. split; reflexivity.
 Qed.
