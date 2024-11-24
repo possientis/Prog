@@ -59,18 +59,3 @@ Proof.
 
     intros x H2. apply H1, H2.
 Qed.
-
-Proposition SmallIntersectSmall1 : forall (P Q:Class),
-  Small P -> Small (fun x => P x /\ Q x).
-Proof.
-  intros P Q [a Ha].
-  apply BoundedClassIsSmall. exists a.
-  intros x [H1 _]. apply Ha, H1.
-Qed.
-
-Proposition SmallIntersectSmall2 : forall (P Q:Class),
-  Small Q -> Small (fun x => P x /\ Q x).
-Proof.
-  intros P Q [a Ha]. apply BoundedClassIsSmall. exists a.
-  intros x [_ H1]. apply Ha, H1.
-Qed.

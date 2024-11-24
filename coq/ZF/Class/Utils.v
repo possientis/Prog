@@ -1,14 +1,30 @@
-
 Require Import ZF.Axiom.Core.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Class.
 Require Import ZF.Class.Include.
+Require Import ZF.Class.Intersect.
 Require Import ZF.Class.Product.
 Require Import ZF.Class.Relation.
+Require Import ZF.Class.Small.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Utils.
 
+Proposition SmallIntersectSmall1 : forall (P Q:Class),
+  Small P -> Small P:/\:Q.
+Proof.
+  intros P Q [a Ha].
+  apply BoundedClassIsSmall. exists a.
+  intros x [H1 _]. apply Ha, H1.
+Qed.
+
+Proposition SmallIntersectSmall2 : forall (P Q:Class),
+  Small Q -> Small P:/\:Q.
+Proof.
+  intros P Q [a Ha]. apply BoundedClassIsSmall. exists a.
+  intros x [_ H1]. apply Ha, H1.
+Qed.
 (* The converse of the converse is a subclass of the original class.            *)
 Proposition ConverseConverseIncl : forall (P:Class),
   converse (converse P) :<=: P.

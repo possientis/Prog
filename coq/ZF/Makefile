@@ -35,7 +35,9 @@ CLASS_OBJ = ${CLASS}/Class.vo \
 	${CLASS}/Include.vo \
 	${CLASS}/Utils.vo \
 	${CLASS}/Product.vo \
-	${CLASS}/V.vo
+	${CLASS}/V.vo \
+	${CLASS}/Union.vo \
+	${CLASS}/Intersect.vo
 
 SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Pair.vo \
