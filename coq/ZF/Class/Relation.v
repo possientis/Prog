@@ -78,14 +78,14 @@ Qed.
 Definition converse (P:Class) : Class := fromBinary (Binary.converse (toBinary P)).
 
 (* Characterisation of the converse of a class.                                 *)
-(* Only stating one side of the equivalence. This is straight unfolding anyway. *)
-(* Stating both side of the equivalence creates a problem when applying the     *)
-(* result, as both side can equally used and coq will fail to unfold, forcing   *)
-(* us to use 'proj1' to obtain the proper unfolding.                            *)
 Proposition ConverseCharac : forall (P:Class) (x:U),
-  converse P x -> exists y, exists z, x = :(y,z): /\ P :(z,y):.
+  converse P x <-> exists y, exists z, x = :(z,y): /\ P :(y,z):.
 Proof.
-  intros P x H1. apply H1.
+  intros P x. split; intros H1.
+  - unfold converse, Binary.converse, fromBinary, toBinary in H1.
+    destruct H1 as [z [y H1]]. exists y. exists z. apply H1.
+  - unfold converse, Binary.converse, fromBinary, toBinary.
+    destruct H1 as [y [z H1]]. exists z. exists y. apply H1.
 Qed.
 
 (* A more useful characterisation when already dealing with an ordered pair.    *)
@@ -96,7 +96,7 @@ Proof.
   - apply ConverseCharac in H1.
     destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
-  - apply ConverseCharac. exists y. exists z. split.
+  - apply ConverseCharac. exists z. exists y. split.
     + reflexivity.
     + apply H1.
 Qed.
@@ -105,7 +105,7 @@ Qed.
 Proposition ConverseIsRelation : forall (P:Class), Relation (converse P).
 Proof.
   intros P x H1. apply ConverseCharac in H1.
-  destruct H1 as [y [z [H1 _]]]. exists y. exists z. apply H1.
+  destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.
 Qed.
 
 (* If the class P is relation, then converse acting on P is idempotent.         *)
@@ -122,7 +122,7 @@ Proof.
         apply EquivRefl.
       * apply FromToBinary, H1.
   - intros x H2. apply H1 in H2. apply ConverseCharac in H2.
-    destruct H2 as [y [z [H2 H3]]]. exists y. exists z. apply H2.
+    destruct H2 as [y [z [H2 H3]]]. exists z. exists y. apply H2.
 Qed.
 
 (* A class is 'one-to-one' if both itself and its converse are functional.      *)
@@ -230,4 +230,3 @@ Proof.
   - apply RangeCharac in H1. destruct H1 as [x H1]. apply RestrictCharac2 in H1.
     destruct H1 as [H1 H2]. exists x. unfold toBinary. split; assumption.
 Qed.
-
