@@ -51,7 +51,8 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Include.vo \
 	${SET}/Power.vo \
 	${SET}/Product.vo \
-	${SET}/Utils.vo
+	${SET}/Utils.vo \
+	${SET}/Relation.vo
 
 
 CORE_OBJ = ${CORE}/Equiv.vo

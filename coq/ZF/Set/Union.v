@@ -1,5 +1,5 @@
-Declare Scope ZF_Union_scope.
-Open    Scope ZF_Union_scope.
+Declare Scope ZF_Set_Union_scope.
+Open    Scope ZF_Set_Union_scope.
 
 Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
@@ -23,13 +23,13 @@ Definition unionSet (a:U) : U
   := toSet (UnionPred a) (UnionSmall a).
 
 Notation ":U( a )" := (unionSet a)
-  (at level 0, no associativity) : ZF_Union_scope.
+  (at level 0, no associativity) : ZF_Set_Union_scope.
 
 (* The union of two sets.                                                       *)
 Definition union (a b:U) : U := :U( :{a,b}: ).
 
 Notation "a :\/: b" := (union a b)
-  (at level 5, left associativity) : ZF_Union_scope.
+  (at level 5, left associativity) : ZF_Set_Union_scope.
 
 (* Characterisation of the elements of the union set of a.                      *)
 Proposition UnionSetCharac : forall (a:U),
