@@ -1,5 +1,5 @@
-Declare Scope ZF_Product_scope.
-Open    Scope ZF_Product_scope.
+Declare Scope ZF_Set_Product_scope.
+Open    Scope ZF_Set_Product_scope.
 
 Require Import ZF.Axiom.Core.
 Require Import ZF.Class.Bounded.
@@ -94,7 +94,7 @@ Definition prodSet (a b:U) : U
   := toSet (ProdPred a b) (ProdSmall a b).
 
 Notation "a :x: b" := (prodSet a b)
-  (at level 4, left associativity) : ZF_Product_scope.
+  (at level 4, left associativity) : ZF_Set_Product_scope.
 
 (* Characterisation of the elements of the product axb *)
 Proposition ProdCharac : forall (a b:U),

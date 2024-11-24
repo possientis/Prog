@@ -31,7 +31,11 @@ CLASS_OBJ = ${CLASS}/Class.vo \
 	${CLASS}/Small.vo \
 	${CLASS}/Bounded.vo \
 	${CLASS}/Russell.vo \
-	${CLASS}/Relation.vo 
+	${CLASS}/Relation.vo \
+	${CLASS}/Include.vo \
+	${CLASS}/Utils.vo \
+	${CLASS}/Product.vo \
+	${CLASS}/V.vo
 
 SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Pair.vo \
@@ -44,7 +48,9 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Difference.vo \
 	${SET}/Include.vo \
 	${SET}/Power.vo \
-	${SET}/Product.vo
+	${SET}/Product.vo \
+	${SET}/Utils.vo
+
 
 CORE_OBJ = ${CORE}/Equiv.vo
 

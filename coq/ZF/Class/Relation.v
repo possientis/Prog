@@ -110,16 +110,19 @@ Qed.
 
 (* If the class P is relation, then converse acting on P is idempotent.         *)
 Proposition ConverseIdempotent : forall (P:Class),
-  Relation P -> converse (converse P) == P.
+  Relation P <-> converse (converse P) == P.
 Proof.
-  intros P H1. unfold converse.
-  remember (Binary.converse (toBinary P)) as F eqn:Ef.
-  apply EquivTran with (fromBinary (Binary.converse F)).
-  - apply FromBinaryEquivCompat, Binary.ConverseEquivCompat, ToFromBinary.
-  - rewrite Ef. clear Ef F. apply EquivTran with (fromBinary (toBinary P)).
-    + apply FromBinaryEquivCompat. rewrite Binary.ConverseIdempotent.
-      apply EquivRefl.
-    + apply FromToBinary, H1.
+  intros P. split; intros H1.
+  - unfold converse.
+    remember (Binary.converse (toBinary P)) as F eqn:Ef.
+    apply EquivTran with (fromBinary (Binary.converse F)).
+    + apply FromBinaryEquivCompat, Binary.ConverseEquivCompat, ToFromBinary.
+    + rewrite Ef. clear Ef F. apply EquivTran with (fromBinary (toBinary P)).
+      * apply FromBinaryEquivCompat. rewrite Binary.ConverseIdempotent.
+        apply EquivRefl.
+      * apply FromToBinary, H1.
+  - intros x H2. apply H1 in H2. apply ConverseCharac in H2.
+    destruct H2 as [y [z [H2 H3]]]. exists y. exists z. apply H2.
 Qed.
 
 (* A class is 'one-to-one' if both itself and its converse are functional.      *)
@@ -213,3 +216,4 @@ Proof.
   - apply RangeCharac in H1. destruct H1 as [x H1]. apply RestrictCharac2 in H1.
     destruct H1 as [H1 H2]. exists x. unfold toBinary. split; assumption.
 Qed.
+

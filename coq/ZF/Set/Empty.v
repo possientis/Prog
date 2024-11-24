@@ -1,5 +1,5 @@
-Declare Scope ZF_Empty_scope.
-Open    Scope ZF_Empty_scope.
+Declare Scope ZF_Set_Empty_scope.
+Open    Scope ZF_Set_Empty_scope.
 
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Core.
@@ -49,7 +49,7 @@ Qed.
 Definition emptySet : U := toSet Empty EmptySmall.
 
 Notation ":0:" := emptySet
-  (at level 0, no associativity) : ZF_Empty_scope.
+  (at level 0, no associativity) : ZF_Set_Empty_scope.
 
 (* Characterisation of the elements of the empty set.                           *)
 Proposition EmptyCharac : forall x, x :< :0: <-> False.
