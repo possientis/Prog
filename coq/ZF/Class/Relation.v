@@ -69,7 +69,7 @@ Definition Functional (P:Class) : Prop := Binary.Functional (toBinary P).
 
 (* Characterisation of a functional class (only one side for quick unfolding).  *)
 Proposition FunctionalCharac : forall (P:Class), Functional P ->
-  forall x, forall y, forall z, P :(x,y): -> P :(x,z): -> y = z.
+  forall x y z, P :(x,y): -> P :(x,z): -> y = z.
 Proof.
   intros P H1. apply H1.
 Qed.

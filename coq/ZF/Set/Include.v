@@ -168,3 +168,16 @@ Proof.
   - intros H4. apply H1 in H4. contradiction.
 Qed.
 
+Proposition InclStrictExists : forall (a b:U),
+  a :<: b <-> a :<=: b /\ exists x, x :< b /\ ~ x :< a.
+Proof.
+  intros a b. split; intros H1.
+  - unfold InclStrict in H1. destruct H1 as [H1 H2]. split.
+    + apply H1.
+    + apply NotForAllNot. intros H3. apply H2. apply DoubleInclusion. split.
+      * apply H1.
+      * intros x H4. apply DoubleNegation. intros H5. apply (H3 x). split; assumption.
+  - destruct H1 as [H1 [x [H2 H3]]]. unfold InclStrict. split.
+    + apply H1.
+    + intros H4. subst. contradiction.
+Qed.

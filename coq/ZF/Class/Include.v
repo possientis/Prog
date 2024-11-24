@@ -49,6 +49,7 @@ Proof.
   intros P Q R H1 H2 x H3. apply H2, H1, H3.
 Qed.
 
+(* A more convenient characterisation of strict inclusion between classes.      *)
 Proposition InclStrictExists : forall (P Q:Class),
   P :<: Q <-> P :<=: Q /\ exists x, Q x /\ ~ P x.
 Proof.
@@ -62,3 +63,4 @@ Proof.
     + apply H1.
     + intros H4. apply H3, H4, H2.
 Qed.
+

@@ -4,13 +4,13 @@ Require Import ZF.Class.Class.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Class.Product.
+Require Import ZF.Set.Relation.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Relation.
 Require Import ZF.Set.Utils.
 
 Definition CRelation := ZF.Class.Relation.Relation.
