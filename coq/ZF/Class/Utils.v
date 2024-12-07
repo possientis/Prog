@@ -86,3 +86,23 @@ Proof.
   - subst. apply OneToOneCharac2 with P y2; assumption.
 Qed.
 
+Proposition DomainMonotone : forall (P Q:Class),
+  P :<=: Q -> domain P :<=: domain Q.
+Proof.
+  intros P Q H1 x H2. apply (proj1 (DomainCharac P x)) in H2. destruct H2 as [y H2].
+  apply DomainCharac. exists y. apply H1, H2.
+Qed.
+
+Proposition RangeMonotone : forall (P Q:Class),
+  P :<=: Q -> range P :<=: range Q.
+Proof.
+  intros P Q H1 y H2. apply (proj1 (RangeCharac P y)) in H2. destruct H2 as [x H2].
+  apply RangeCharac. exists x. apply H1, H2.
+Qed.
+
+Proposition RestrictInclude : forall (P:Class) (a:U),
+  P:|:a :<=: P.
+Proof.
+  intros P a x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
+  rewrite H1. apply H2.
+Qed.

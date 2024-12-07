@@ -172,16 +172,20 @@ Definition range (P:Class) : Class := Binary.range (toBinary P).
 
 (* Quick unfolding.                                                             *)
 Proposition DomainCharac : forall (P:Class) (x:U),
-  domain P x -> exists y, P :(x,y):.
+  domain P x <-> exists y, P :(x,y):.
 Proof.
-  intros P x H1. apply H1.
+  intros P x. split; intros H1.
+  - apply H1.
+  - apply H1.
 Qed.
 
 (* Quick unfolding.                                                             *)
 Proposition RangeCharac : forall (P:Class) (y:U),
-  range P y -> exists x, P :(x,y):.
+  range P y <-> exists x, P :(x,y):.
 Proof.
-  intros P y H1. apply H1.
+  intros P y. split; intros H1.
+  - apply H1.
+  - apply H1.
 Qed.
 
 (* Restricting a class P to a set a.                                            *)
@@ -209,6 +213,25 @@ Proof.
     + apply H1.
 Qed.
 
+Proposition RestrictIsRelation : forall (P:Class) (a:U),
+  Relation P:|:a.
+Proof.
+  intros P a. apply FromBinaryIsRelation.
+Qed.
+
+Proposition DomainOfRestrict : forall (P:Class) (a:U),
+  forall x, domain (P:|:a) x <-> x :< a /\ domain P x.
+Proof.
+  intros P a x. split; intros H1.
+  - apply (proj1 (DomainCharac P:|:a x)) in H1. destruct H1 as [y H1].
+    apply RestrictCharac2 in H1. destruct H1 as [H1 H2]. split.
+    + apply H1.
+    + apply DomainCharac. exists y. apply H2.
+  - destruct H1 as [H1 H2]. apply (proj1 (DomainCharac P x)) in H2.
+    destruct H2 as [y H2]. apply DomainCharac. exists y. apply RestrictCharac2.
+    split; assumption.
+Qed.
+
 (* Direct image of a set by a class P.                                          *)
 Definition image (P:Class) (a:U) : Class := Binary.image (toBinary P) a.
 
@@ -230,3 +253,4 @@ Proof.
   - apply RangeCharac in H1. destruct H1 as [x H1]. apply RestrictCharac2 in H1.
     destruct H1 as [H1 H2]. exists x. unfold toBinary. split; assumption.
 Qed.
+

@@ -10,13 +10,13 @@ Require Import ZF.Class.Class.
 Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.
 
 Notation "P :<=: Q" := (Incl P Q)
-  (at level 10, no associativity) : ZF_Class_Include_scope.
+  (at level 20, no associativity) : ZF_Class_Include_scope.
 
 (* Strict inclusion predicate.                                                  *)
 Definition InclStrict (P Q:Class) : Prop := P :<=: Q /\ ~P == Q.
 
 Notation "P :<: Q" := (InclStrict P Q)
-  (at level 6, no associativity) : ZF_Class_Include_scope.
+  (at level 20, no associativity) : ZF_Class_Include_scope.
 
 (* Two classes are equivalent if and only if they are included in each other.   *)
 Proposition DoubleInclusion : forall (P Q:Class),
