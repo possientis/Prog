@@ -43,3 +43,6 @@ Proof.
   - apply H1.
   - unfold equiv, ClassEquiv, classEquiv. apply H1.
 Qed.
+
+(* A set can be viewed as a class.                                              *)
+Definition toClass (a:U) : Class := fun x => x :< a.

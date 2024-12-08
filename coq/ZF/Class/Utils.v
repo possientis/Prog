@@ -100,9 +100,9 @@ Proof.
   apply RangeCharac. exists x. apply H1, H2.
 Qed.
 
-Proposition RestrictInclude : forall (P:Class) (a:U),
-  P:|:a :<=: P.
+Proposition RestrictInclude : forall (P Q:Class),
+  P:|:Q :<=: P.
 Proof.
-  intros P a x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
+  intros P Q x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
   rewrite H1. apply H2.
 Qed.

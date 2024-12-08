@@ -3,6 +3,7 @@ Declare Scope ZF_Class_Relation_scope.
 Require Import ZF.Axiom.Core.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Class.
+Require Import ZF.Class.Intersect.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.OrdPair.
 
@@ -188,23 +189,23 @@ Proof.
   - apply H1.
 Qed.
 
-(* Restricting a class P to a set a.                                            *)
-Definition restrict (P:Class) (a:U) : Class
-  := fromBinary (Binary.restrict (toBinary P) a).
+(* Restricting a class P to a class Q.                                          *)
+Definition restrict (P Q:Class) : Class
+  := fromBinary (Binary.restrict (toBinary P) Q).
 
-Notation "P :|: a" := (restrict P a)
+Notation "P :|: Q" := (restrict P Q)
   (at level 0, no associativity) : ZF_Class_Relation_scope.
 
-Proposition RestrictCharac : forall (P:Class) (a x:U),
-  P:|:a x -> exists y, exists z, x = :(y,z): /\ y :< a /\ P :(y,z):.
+Proposition RestrictCharac : forall (P Q:Class) (x:U),
+  P:|:Q x -> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
 Proof.
-  intros P a x H1. apply H1.
+  intros P Q x H1. apply H1.
 Qed.
 
-Proposition RestrictCharac2 : forall (P:Class) (a y z:U),
-  P:|:a :(y,z): <-> y :< a /\ P :(y,z):.
+Proposition RestrictCharac2 : forall (P Q:Class) (y z:U),
+  P:|:Q :(y,z): <-> Q y /\ P :(y,z):.
 Proof.
-  intros P a y z. split; intros H1.
+  intros P Q y z. split; intros H1.
   - apply RestrictCharac in H1.
     destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
@@ -213,17 +214,17 @@ Proof.
     + apply H1.
 Qed.
 
-Proposition RestrictIsRelation : forall (P:Class) (a:U),
-  Relation P:|:a.
+Proposition RestrictIsRelation : forall (P Q:Class),
+  Relation P:|:Q.
 Proof.
-  intros P a. apply FromBinaryIsRelation.
+  intros P Q. apply FromBinaryIsRelation.
 Qed.
 
-Proposition DomainOfRestrict : forall (P:Class) (a:U),
-  forall x, domain (P:|:a) x <-> x :< a /\ domain P x.
+Proposition DomainOfRestrict : forall (P Q:Class),
+  domain (P:|:Q) == Q :/\: (domain P).
 Proof.
-  intros P a x. split; intros H1.
-  - apply (proj1 (DomainCharac P:|:a x)) in H1. destruct H1 as [y H1].
+  intros P Q x. split; intros H1.
+  - apply (proj1 (DomainCharac P:|:Q x)) in H1. destruct H1 as [y H1].
     apply RestrictCharac2 in H1. destruct H1 as [H1 H2]. split.
     + apply H1.
     + apply DomainCharac. exists y. apply H2.
@@ -245,7 +246,7 @@ Proof.
 Qed.
 
 Proposition ImageIsRestriction : forall (P:Class) (a:U),
-  P:[a]: == range (P:|:a).
+  P:[a]: == range (P:|:(toClass a)).
 Proof.
   intros P a y. split; intros H1.
   - apply ImageCharac in H1. destruct H1 as [x [H1 H2]].
