@@ -11,7 +11,7 @@ Require Import ZF.Set.Union.
 Definition intersect (a b:U) : U := :{ a | fun x => x :< b }:.
 
 Notation "a :/\: b" := (intersect a b)
-  (at level 4, left associativity) : ZF_Set_Intersect_scope.
+  (at level 11, right associativity) : ZF_Set_Intersect_scope.
 
 (* Characterisation of the elements of the intersection of two sets.            *)
 Proposition IntersectCharac : forall (a b:U),

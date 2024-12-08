@@ -194,7 +194,7 @@ Definition restrict (P Q:Class) : Class
   := fromBinary (Binary.restrict (toBinary P) Q).
 
 Notation "P :|: Q" := (restrict P Q)
-  (at level 0, no associativity) : ZF_Class_Relation_scope.
+  (at level 1, left associativity) : ZF_Class_Relation_scope.
 
 Proposition RestrictCharac : forall (P Q:Class) (x:U),
   P:|:Q x -> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
@@ -221,7 +221,7 @@ Proof.
 Qed.
 
 Proposition DomainOfRestrict : forall (P Q:Class),
-  domain (P:|:Q) == Q :/\: (domain P).
+  domain (P:|:Q) == Q :/\: domain P.
 Proof.
   intros P Q x. split; intros H1.
   - apply (proj1 (DomainCharac P:|:Q x)) in H1. destruct H1 as [y H1].

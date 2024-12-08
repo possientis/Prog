@@ -12,10 +12,10 @@ Definition prodClass (P Q:Class) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ P y /\ Q z.
 
 Notation "P :x: Q" := (prodClass P Q)
-  (at level 4, left associativity) : ZF_Class_Product_scope.
+  (at level 11, right associativity) : ZF_Class_Product_scope.
 
 Proposition ProdCharac2 : forall (P Q:Class),
-  forall y, forall z, P :x: Q :(y,z): <-> P y /\ Q z.
+  forall y, forall z, (P:x:Q) :(y,z): <-> P y /\ Q z.
 Proof.
   intros P Q y z. split; intros H1.
   - unfold prodClass in H1. destruct H1 as [y' [z' [H1 [H2 H3]]]].

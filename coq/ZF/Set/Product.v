@@ -95,7 +95,7 @@ Definition prodSet (a b:U) : U
   := toSet (ProdPred a b) (ProdSmall a b).
 
 Notation "a :x: b" := (prodSet a b)
-  (at level 4, left associativity) : ZF_Set_Product_scope.
+  (at level 11, right associativity) : ZF_Set_Product_scope.
 
 (* Characterisation of the elements of the product axb *)
 Proposition ProdCharac : forall (a b:U),

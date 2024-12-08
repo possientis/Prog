@@ -13,7 +13,7 @@ Require Import ZF.Set.Union.
 Definition difference (a b:U) : U := :{a | fun x => ~ x :< b }:.
 
 Notation "a :\: b" := (difference a b)
-  (at level 3, no associativity) : ZF_Difference_scope.
+  (at level 3, left associativity) : ZF_Difference_scope.
 
 Proposition DiffCharac : forall (a b:U),
   forall x, x :< a:\:b <-> x :< a /\ ~ x :< b.

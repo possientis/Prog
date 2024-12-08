@@ -17,7 +17,7 @@ Definition CRelation := ZF.Class.Relation.Relation.
 Definition SRelation := ZF.Set.Relation.Relation.
 
 Proposition SmallIntersectSmall1 : forall (P Q:Class),
-  Small P -> Small P:/\:Q.
+  Small P -> Small (P:/\:Q).
 Proof.
   intros P Q [a Ha].
   apply BoundedClassIsSmall. exists a.
@@ -25,7 +25,7 @@ Proof.
 Qed.
 
 Proposition SmallIntersectSmall2 : forall (P Q:Class),
-  Small Q -> Small P:/\:Q.
+  Small Q -> Small (P:/\:Q).
 Proof.
   intros P Q [a Ha]. apply BoundedClassIsSmall. exists a.
   intros x [_ H1]. apply Ha, H1.
@@ -61,7 +61,7 @@ Qed.
 
 (* The union of two relation class is a relation class.                         *)
 Proposition UnionRelIsRel : forall (P Q:Class),
-  CRelation P -> CRelation Q -> CRelation P:\/:Q.
+  CRelation P -> CRelation Q -> CRelation (P:\/:Q).
 Proof.
   intros P Q Hp Hq x H1. destruct H1 as [H1|H1].
   - apply Hp, H1.

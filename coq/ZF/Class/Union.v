@@ -15,4 +15,4 @@ Notation ":U( P )" := (unionClass P)
 Definition union (P Q:Class) : Class := fun x => P x \/ Q x.
 
 Notation "P :\/: Q" := (union P Q)
-  (at level 5, left associativity) : ZF_Class_Union_scope.
+  (at level 12, right associativity) : ZF_Class_Union_scope.
