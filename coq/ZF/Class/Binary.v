@@ -63,7 +63,7 @@ Definition restrict (F:Binary) (P:Class) : Binary := fun x y =>
   P x /\ F x y.
 
 Notation "F :|: P" := (restrict F P)
-  (at level 1, left associativity) : ZF_Class_Binary_scope.
+  (at level 13, left associativity) : ZF_Class_Binary_scope.
 
 (* Direct image of a set a by a binary class F.                                 *)
 Definition image (F:Binary) (a:U) : Class := fun y =>

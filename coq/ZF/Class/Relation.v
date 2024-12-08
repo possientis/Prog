@@ -194,16 +194,16 @@ Definition restrict (P Q:Class) : Class
   := fromBinary (Binary.restrict (toBinary P) Q).
 
 Notation "P :|: Q" := (restrict P Q)
-  (at level 1, left associativity) : ZF_Class_Relation_scope.
+  (at level 13, left associativity) : ZF_Class_Relation_scope.
 
 Proposition RestrictCharac : forall (P Q:Class) (x:U),
-  P:|:Q x -> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
+  (P:|:Q) x -> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
 Proof.
   intros P Q x H1. apply H1.
 Qed.
 
 Proposition RestrictCharac2 : forall (P Q:Class) (y z:U),
-  P:|:Q :(y,z): <-> Q y /\ P :(y,z):.
+  (P:|:Q) :(y,z): <-> Q y /\ P :(y,z):.
 Proof.
   intros P Q y z. split; intros H1.
   - apply RestrictCharac in H1.
@@ -215,7 +215,7 @@ Proof.
 Qed.
 
 Proposition RestrictIsRelation : forall (P Q:Class),
-  Relation P:|:Q.
+  Relation (P:|:Q).
 Proof.
   intros P Q. apply FromBinaryIsRelation.
 Qed.
@@ -224,7 +224,7 @@ Proposition DomainOfRestrict : forall (P Q:Class),
   domain (P:|:Q) == Q :/\: domain P.
 Proof.
   intros P Q x. split; intros H1.
-  - apply (proj1 (DomainCharac P:|:Q x)) in H1. destruct H1 as [y H1].
+  - apply (proj1 (DomainCharac (P:|:Q) x)) in H1. destruct H1 as [y H1].
     apply RestrictCharac2 in H1. destruct H1 as [H1 H2]. split.
     + apply H1.
     + apply DomainCharac. exists y. apply H2.

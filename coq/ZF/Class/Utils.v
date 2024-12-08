@@ -9,6 +9,7 @@ Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Class.V.
+Require Import ZF.Core.Equiv.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Utils.
@@ -106,3 +107,8 @@ Proof.
   intros P Q x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
   rewrite H1. apply H2.
 Qed.
+
+Proposition RestrictToDomain : forall (P:Class),
+  Relation P <-> P == P :|: domain P.
+Proof.
+Admitted.
