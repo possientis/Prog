@@ -8,13 +8,13 @@ DIR=$(pwd)
 # condition with the 'grep -r'
 
 # Processing 'Require Import'
-grep 'Require Import Logic\.' -r | cat - > /tmp/depsLogic
+grep 'Require Import Logic\.' -r > /tmp/depsLogic
 sed -i 's/\.v\:Require Import Logic\./.vo:/g' /tmp/depsLogic
 sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\/\2\/\3.vo/g' /tmp/depsLogic
 sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\/\2.vo/g' /tmp/depsLogic
 
 # Ssimilar process for dependencies without 'Import', just 'Require'
-grep 'Require[[:space:]]*Logic\.' -r | cat - > /tmp/depsLogic_
+grep 'Require[[:space:]]*Logic\.' -r > /tmp/depsLogic_
 sed -i 's/\.v\:Require[[:space:]]*Logic\./.vo:/g' /tmp/depsLogic_
 sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\/\2\/\3.vo/g' /tmp/depsLogic_
 sed -i 's/\.vo\:\([[:alnum:]]*\)\.\([[:alnum:]]*\)\./.vo : \1\/\2.vo/g' /tmp/depsLogic_
