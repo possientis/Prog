@@ -7,10 +7,10 @@ SET   = Set
 CORE  = Core
 
 # coqc command line option
-AXIOM_LIB = -Q ${AXIOM} ZF.${AXIOM} -Q ../ZF ZF
-CLASS_LIB = -Q ${CLASS} ZF.${CLASS} -Q ../ZF ZF
-SET_LIB   = -Q ${SET} ZF.${SET} -Q ../ZF ZF
-CORE_LIB  = -Q ${CORE} ZF.${CORE} -Q ../ZF ZF
+AXIOM_LIB = -Q ${AXIOM} ZF.${AXIOM} -Q . ZF
+CLASS_LIB = -Q ${CLASS} ZF.${CLASS} -Q . ZF
+SET_LIB   = -Q ${SET}   ZF.${SET}   -Q . ZF
+CORE_LIB  = -Q ${CORE}  ZF.${CORE}  -Q . ZF
 
 # Object files
 AXIOM_OBJ = ${AXIOM}/Core.vo \

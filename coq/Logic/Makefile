@@ -18,21 +18,21 @@ STLC  = STLC
 PROP  = Prop
 
 # coqc command line option
-AXIOM_LIB = -Q ${AXIOM} Logic.${AXIOM} -Q ../Logic Logic
-CLASS_LIB = -Q ${CLASS} Logic.${CLASS} -Q ../Logic Logic
-FUNC_LIB  = -Q ${FUNC}  Logic.${FUNC}  -Q ../Logic Logic
-REL_LIB   = -Q ${REL}   Logic.${REL}   -Q ../Logic Logic
-NAT_LIB   = -Q ${NAT}   Logic.${NAT}   -Q ../Logic Logic
-BOOL_LIB  = -Q ${BOOL}  Logic.${BOOL}  -Q ../Logic Logic
-LIST_LIB  = -Q ${LIST}  Logic.${LIST}  -Q ../Logic Logic
-FOL_LIB   = -Q ${FOL}   Logic.${FOL}   -Q ../Logic Logic
-FOL2_LIB  = -Q ${FOL2}  Logic.${FOL2}  -Q ../Logic Logic
-LAM_LIB   = -Q ${LAM}   Logic.${LAM}   -Q ../Logic Logic
-SET_LIB   = -Q ${SET}   Logic.${SET}   -Q ../Logic Logic
-LANG1_LIB = -Q ${LANG1} Logic.${LANG1} -Q ../Logic Logic
-STLC_LIB  = -Q ${STLC}  Logic.${STLC}  -Q ../Logic Logic
-PROP_LIB  = -Q ${PROP}  Logic.${PROP}  -Q ../Logic Logic
-NORM_LIB  = -Q ${SET}/${NORM}   Logic.${SET}.${NORM}   -Q ../Logic Logic
+AXIOM_LIB = -Q ${AXIOM} Logic.${AXIOM} -Q . Logic
+CLASS_LIB = -Q ${CLASS} Logic.${CLASS} -Q . Logic
+FUNC_LIB  = -Q ${FUNC}  Logic.${FUNC}  -Q . Logic
+REL_LIB   = -Q ${REL}   Logic.${REL}   -Q . Logic
+NAT_LIB   = -Q ${NAT}   Logic.${NAT}   -Q . Logic
+BOOL_LIB  = -Q ${BOOL}  Logic.${BOOL}  -Q . Logic
+LIST_LIB  = -Q ${LIST}  Logic.${LIST}  -Q . Logic
+FOL_LIB   = -Q ${FOL}   Logic.${FOL}   -Q . Logic
+FOL2_LIB  = -Q ${FOL2}  Logic.${FOL2}  -Q . Logic
+LAM_LIB   = -Q ${LAM}   Logic.${LAM}   -Q . Logic
+SET_LIB   = -Q ${SET}   Logic.${SET}   -Q . Logic
+LANG1_LIB = -Q ${LANG1} Logic.${LANG1} -Q . Logic
+STLC_LIB  = -Q ${STLC}  Logic.${STLC}  -Q . Logic
+PROP_LIB  = -Q ${PROP}  Logic.${PROP}  -Q . Logic
+NORM_LIB  = -Q ${SET}/${NORM}   Logic.${SET}.${NORM}   -Q . Logic
 
 # Object files
 AXIOM_OBJ = ${AXIOM}/Extensionality.vo \
