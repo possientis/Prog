@@ -2,7 +2,7 @@ Declare Scope ZF_Class_Binary_scope.
 Open    Scope ZF_Class_Binary_scope.
 
 Require Import ZF.Core.
-Require Import ZF.Class.Class.
+Require Import ZF.Class.
 Require Import ZF.Core.Equiv.
 
 (* A binary class is simply a binary predicate on sets.                         *)

@@ -2,7 +2,7 @@ Declare Scope ZF_Class_Product_scope.
 Open    Scope ZF_Class_Product_scope.
 
 Require Import ZF.Core.
-Require Import ZF.Class.Class.
+Require Import ZF.Class.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Core.Equiv.

@@ -1,6 +1,6 @@
 Require Import ZF.Core.
+Require Import ZF.Class.
 Require Import ZF.Axiom.Specification.
-Require Import ZF.Class.Class.
 Require Import ZF.Class.Small.
 
 (* Predicate on classes, stating that a class is smaller than a set.            *)

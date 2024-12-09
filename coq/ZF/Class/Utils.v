@@ -1,6 +1,6 @@
 Require Import ZF.Core.
+Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
-Require Import ZF.Class.Class.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Class.Product.

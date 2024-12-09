@@ -14,7 +14,8 @@ SET_LIB   = -Q ${SET}   ZF.${SET}   -Q . ZF
 CORE_LIB  = -Q ${CORE}  ZF.${CORE}  -Q . ZF
 
 # Object files
-TOP_OBJ = Core.vo
+TOP_OBJ = Core.vo \
+					Class.vo
 
 AXIOM_OBJ = ${AXIOM}/Define.vo \
 	${AXIOM}/Classic.vo \
@@ -28,8 +29,7 @@ AXIOM_OBJ = ${AXIOM}/Define.vo \
 	${AXIOM}/Foundation.vo \
 	${AXIOM}/Infinity.vo
 
-CLASS_OBJ = ${CLASS}/Class.vo \
-	${CLASS}/Binary.vo \
+CLASS_OBJ = ${CLASS}/Binary.vo \
 	${CLASS}/Small.vo \
 	${CLASS}/Bounded.vo \
 	${CLASS}/Russell.vo \
