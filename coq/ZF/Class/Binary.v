@@ -1,7 +1,7 @@
 Declare Scope ZF_Class_Binary_scope.
 Open    Scope ZF_Class_Binary_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Class.Class.
 Require Import ZF.Core.Equiv.
 

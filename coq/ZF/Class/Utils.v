@@ -1,4 +1,4 @@
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Class.
 Require Import ZF.Class.Include.

@@ -1,7 +1,7 @@
-Declare Scope ZF_Specification_scope.
-Open    Scope ZF_Specification_scope.
+Declare Scope ZF_Axiom_Specification_scope.
+Open    Scope ZF_Axiom_Specification_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Binary.
@@ -72,7 +72,7 @@ Definition specSet (P:U -> Prop) (a:U) : U
   := toSet (SpecPred P a) (SpecSmall P a).
 
 Notation ":{ a | P }:" := (specSet P a)
-  (at level 1, no associativity) : ZF_Specification_scope.
+  (at level 1, no associativity) : ZF_Axiom_Specification_scope.
 
 (* Characterisation of the elements of {a :| P}.                                *)
 Proposition SpecCharac : forall (P:U -> Prop) (a:U),

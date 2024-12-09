@@ -1,8 +1,8 @@
 Declare Scope ZF_Set_Empty_scope.
 Open    Scope ZF_Set_Empty_scope.
 
+Require Import ZF.Core.
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Axiom.Core.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.NonEmpty.
 Require Import ZF.Axiom.Specification.

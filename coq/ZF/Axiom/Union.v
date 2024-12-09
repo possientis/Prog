@@ -1,4 +1,4 @@
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 
 (* Given a set a, there exists a set b whose elements are the elements of all   *)
 (* the elements of a. More formally:                                            *)

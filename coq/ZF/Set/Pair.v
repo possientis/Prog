@@ -1,7 +1,7 @@
-Declare Scope ZF_Pair_scope.
-Open    Scope ZF_Pair_scope.
+Declare Scope ZF_Set_Pair_scope.
+Open    Scope ZF_Set_Pair_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Axiom.Pairing.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Empty.
@@ -22,7 +22,7 @@ Definition pairSet (a b:U) : U
   := toSet (PairPred a b) (PairSmall a b).
 
 Notation ":{ a , b }:" := (pairSet a b)
-  (at level 1, no associativity) : ZF_Pair_scope.
+  (at level 1, no associativity) : ZF_Set_Pair_scope.
 
 (* Characterisation of the elements of {a,b}.                                   *)
 Proposition PairCharac : forall (a b:U),

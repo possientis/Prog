@@ -1,8 +1,8 @@
 Declare Scope ZF_Class_Include_scope.
 Open    Scope ZF_Class_Include_scope.
 
+Require Import ZF.Core.
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Axiom.Core.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Class.Class.
 

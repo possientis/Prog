@@ -1,7 +1,7 @@
-Declare Scope ZF_Power_scope.
-Open    Scope ZF_Power_scope.
+Declare Scope ZF_Set_Power_scope.
+Open    Scope ZF_Set_Power_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Axiom.Power.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Include.
@@ -21,7 +21,7 @@ Definition powerSet (a:U) : U
   := toSet (PowerPred a) (PowerSmall a).
 
 Notation ":P( a )" := (powerSet a)
-  (at level 0, no associativity) : ZF_Power_scope.
+  (at level 0, no associativity) : ZF_Set_Power_scope.
 
 (* Characterisation of the elements of the power set of a.                      *)
 Proposition PowerCharac : forall (a:U),

@@ -1,7 +1,7 @@
 Declare Scope ZF_Set_Union_scope.
 Open    Scope ZF_Set_Union_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.Union.
 Require Import ZF.Class.Small.

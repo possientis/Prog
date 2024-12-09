@@ -1,7 +1,7 @@
-Declare Scope ZF_Tuple_scope.
-Open    Scope ZF_Tuple_scope.
+Declare Scope ZF_Set_Tuple_scope.
+Open    Scope ZF_Set_Tuple_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
@@ -10,12 +10,12 @@ Require Import ZF.Set.Union.
 Definition tuple3 (a1 a2 a3:U) : U := :{a1,a2}: :\/: :{a3}:.
 
 Notation ":{ a , b , c }:" := (tuple3 a b c)
-  (at level 1, no associativity) : ZF_Tuple_scope.
+  (at level 1, no associativity) : ZF_Set_Tuple_scope.
 
 Definition tuple4 (a1 a2 a3 a4:U) : U := :{a1,a2,a3}: :\/: :{a4}:.
 
 Notation ":{ a , b , c , d }:" := (tuple4 a b c d)
-  (at level 1, no associativity) : ZF_Tuple_scope.
+  (at level 1, no associativity) : ZF_Set_Tuple_scope.
 
 Proposition Tuple3Charac : forall (a1 a2 a3:U),
   forall x, x :< :{a1,a2,a3}: <-> x = a1 \/ x = a2 \/ x = a3.

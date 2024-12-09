@@ -7,14 +7,16 @@ SET   = Set
 CORE  = Core
 
 # coqc command line option
+TOP_LIB   = -Q . ZF
 AXIOM_LIB = -Q ${AXIOM} ZF.${AXIOM} -Q . ZF
 CLASS_LIB = -Q ${CLASS} ZF.${CLASS} -Q . ZF
 SET_LIB   = -Q ${SET}   ZF.${SET}   -Q . ZF
 CORE_LIB  = -Q ${CORE}  ZF.${CORE}  -Q . ZF
 
 # Object files
-AXIOM_OBJ = ${AXIOM}/Core.vo \
-	${AXIOM}/Define.vo \
+TOP_OBJ = Core.vo
+
+AXIOM_OBJ = ${AXIOM}/Define.vo \
 	${AXIOM}/Classic.vo \
 	${AXIOM}/Extensionality.vo \
 	${AXIOM}/Replacement.vo \
@@ -58,12 +60,16 @@ SET_OBJ = ${SET}/Empty.vo \
 CORE_OBJ = ${CORE}/Equiv.vo
 
 # Overall target
-all : ${AXIOM_OBJ} \
+all : ${TOP_OBJ} \
+	${AXIOM_OBJ} \
 	${CLASS_OBJ} \
 	${SET_OBJ} \
 	${CORE_OBJ}
 
 # General rules
+%.vo : %.v
+	coqc $< ${TOP_LIB}
+
 ${AXIOM}/%.vo : ${AXIOM}/%.v
 	coqc $< ${AXIOM_LIB}
 

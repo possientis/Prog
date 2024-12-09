@@ -1,18 +1,18 @@
-Declare Scope ZF_OrdTuple_scope.
-Open    Scope ZF_OrdTuple_scope.
+Declare Scope ZF_Set_OrdTuple_scope.
+Open    Scope ZF_Set_OrdTuple_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Set.OrdPair.
 
 Definition ordTuple3 (a1 a2 a3:U) : U := :( :(a1,a2): , a3 ):.
 
 Notation ":( a , b , c ):" := (ordTuple3 a b c)
-  (at level 1, no associativity) : ZF_OrdTuple_scope.
+  (at level 1, no associativity) : ZF_Set_OrdTuple_scope.
 
 Definition ordTuple4 (a1 a2 a3 a4:U) : U := :( :(a1,a2,a3): , a4 ):.
 
 Notation ":( a , b , c , d ):" := (ordTuple4 a b c d)
-  (at level 1, no associativity) : ZF_OrdTuple_scope.
+  (at level 1, no associativity) : ZF_Set_OrdTuple_scope.
 
 Proposition OrdTuple3Equal : forall (a1 a2 a3 b1 b2 b3:U),
   :(a1,a2,a3): = :(b1,b2,b3): -> a1 = b1 /\ a2 = b2 /\ a3 = b3.

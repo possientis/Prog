@@ -1,4 +1,4 @@
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.Small.
 

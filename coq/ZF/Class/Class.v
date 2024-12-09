@@ -1,4 +1,4 @@
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Core.Equiv.
 
 (* A class is simply a predicate on sets.                                       *)

@@ -1,7 +1,7 @@
-Declare Scope ZF_OrdPair_scope.
-Open    Scope ZF_OrdPair_scope.
+Declare Scope ZF_Set_OrdPair_scope.
+Open    Scope ZF_Set_OrdPair_scope.
 
-Require Import ZF.Axiom.Core.
+Require Import ZF.Core.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
 
@@ -10,7 +10,7 @@ Definition ordPair (a b:U) : U := :{ :{a}: , :{a,b}: }:.
 
 (* Unfortunately, we cannot use the notation '(a,b)'.                           *)
 Notation ":( a , b ):" := (ordPair a b)
-  (at level 1, no associativity) : ZF_OrdPair_scope.
+  (at level 1, no associativity) : ZF_Set_OrdPair_scope.
 
 (* Characterisation of the elements of (:a,b:).                                 *)
 Lemma OrdPairCharac : forall (a b:U),
