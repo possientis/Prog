@@ -1,17 +1,19 @@
 .PHONY : all clean
 
 # Folder names
-AXIOM = Axiom
-CLASS = Class
-SET   = Set
-CORE  = Core
+AXIOM  = Axiom
+BINARY = Binary
+CLASS  = Class
+CORE   = Core
+SET    = Set
 
 # coqc command line option
-TOP_LIB   = -Q . ZF
-AXIOM_LIB = -Q ${AXIOM} ZF.${AXIOM} -Q . ZF
-CLASS_LIB = -Q ${CLASS} ZF.${CLASS} -Q . ZF
-SET_LIB   = -Q ${SET}   ZF.${SET}   -Q . ZF
-CORE_LIB  = -Q ${CORE}  ZF.${CORE}  -Q . ZF
+TOP_LIB    = -Q . ZF
+AXIOM_LIB  = -Q ${AXIOM} ZF.${AXIOM} -Q . ZF
+BINARY_LIB = -Q ${BINARY} ZF.${BINARY} -Q . ZF
+CLASS_LIB  = -Q ${CLASS} ZF.${CLASS} -Q . ZF
+CORE_LIB   = -Q ${CORE}  ZF.${CORE}  -Q . ZF
+SET_LIB    = -Q ${SET}   ZF.${SET}   -Q . ZF
 
 # Object files
 TOP_OBJ = Set.vo \
@@ -30,6 +32,8 @@ AXIOM_OBJ = ${AXIOM}/Define.vo \
 	${AXIOM}/Foundation.vo \
 	${AXIOM}/Infinity.vo
 
+BINARY_OBJ = ${BINARY}/Domain.vo 
+
 CLASS_OBJ = ${CLASS}/Small.vo \
 	${CLASS}/Bounded.vo \
 	${CLASS}/Russell.vo \
@@ -40,6 +44,8 @@ CLASS_OBJ = ${CLASS}/Small.vo \
 	${CLASS}/V.vo \
 	${CLASS}/Union.vo \
 	${CLASS}/Intersect.vo
+
+CORE_OBJ = ${CORE}/Equiv.vo
 
 SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Pair.vo \
@@ -57,14 +63,14 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Relation.vo
 
 
-CORE_OBJ = ${CORE}/Equiv.vo
 
 # Overall target
 all : ${TOP_OBJ} \
 	${AXIOM_OBJ} \
+	${BINARY_OBJ} \
 	${CLASS_OBJ} \
-	${SET_OBJ} \
-	${CORE_OBJ}
+	${CORE_OBJ} \
+	${SET_OBJ}
 
 # General rules
 %.vo : %.v
@@ -73,14 +79,17 @@ all : ${TOP_OBJ} \
 ${AXIOM}/%.vo : ${AXIOM}/%.v
 	coqc $< ${AXIOM_LIB}
 
+${BINARY}/%.vo : ${BINARY}/%.v
+	coqc $< ${BINARY_LIB}
+
 ${CLASS}/%.vo : ${CLASS}/%.v
 	coqc $< ${CLASS_LIB}
 
-${SET}/%.vo : ${SET}/%.v
-	coqc $< ${SET_LIB}
-
 ${CORE}/%.vo : ${CORE}/%.v
 	coqc $< ${CORE_LIB}
+
+${SET}/%.vo : ${SET}/%.v
+	coqc $< ${SET_LIB}
 
 deps :
 	./deps.sh

@@ -3,6 +3,7 @@ Declare Scope ZF_Class_Relation_scope.
 Require Import ZF.Set.
 Require Import ZF.Class.
 Require Import ZF.Binary.
+Require Import ZF.Binary.Domain.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.OrdPair.
@@ -166,7 +167,7 @@ Proof.
 Qed.
 
 (* The domain of a class is the domain of its binary class.                     *)
-Definition domain (P:Class) : Class := Binary.domain (toBinary P).
+Definition domain (P:Class) : Class := Domain.domain (toBinary P).
 
 (* The range of a class is the range of its binary class.                       *)
 Definition range (P:Class) : Class := Binary.range (toBinary P).

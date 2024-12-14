@@ -1,5 +1,5 @@
-Declare Scope ZF_Class_Binary_scope.
-Open    Scope ZF_Class_Binary_scope.
+Declare Scope ZF_Binary_scope.
+Open    Scope ZF_Binary_scope.
 
 Require Import ZF.Set.
 Require Import ZF.Class.
@@ -48,8 +48,6 @@ Proof.
   - unfold equiv, BinaryEquiv, binaryEquiv. apply H1.
 Qed.
 
-(* Domain of a binary class.                                                    *)
-Definition domain (F:Binary) : Class := fun x => exists y, F x y.
 
 (* Range of a binary class.                                                    *)
 Definition range (F:Binary) : Class := fun y => exists x, F x y.
@@ -63,14 +61,14 @@ Definition restrict (F:Binary) (P:Class) : Binary := fun x y =>
   P x /\ F x y.
 
 Notation "F :|: P" := (restrict F P)
-  (at level 13, left associativity) : ZF_Class_Binary_scope.
+  (at level 13, left associativity) : ZF_Binary_scope.
 
 (* Direct image of a set a by a binary class F.                                 *)
 Definition image (F:Binary) (a:U) : Class := fun y =>
   exists x, x :< a /\ F x y.
 
 Notation "F :[ a ]:" := (image F a)
-  (at level 0, no associativity) : ZF_Class_Binary_scope.
+  (at level 0, no associativity) : ZF_Binary_scope.
 
 (* Image is the range of the restriction.                                       *)
 (* This is an equal equality, not just equivalence.                             *)
@@ -102,4 +100,4 @@ Definition compose (G F:Binary) : Binary := fun x y =>
   exists z, F x z /\ G z y.
 
 Notation "G :.: F" := (compose G F)
-  (at level 11, right associativity) : ZF_Class_Binary_scope.
+  (at level 11, right associativity) : ZF_Binary_scope.
