@@ -52,28 +52,25 @@ Proof.
   intros P q q'. unfold toSet. apply DefineProof.
 Qed.
 
-(* A set can be viewed as a class.                                              *)
-Definition fromSet (a:U) : Class := fun x => x :< a.
-
 (* The class associated with a set is small                                     *)
-Proposition FromSetSmall : forall (a:U), Small (fromSet a).
+Proposition ToClassSmall : forall (a:U), Small (toClass a).
 Proof.
-  intros. unfold Small, fromSet. exists a. intros x. split; auto.
+  intros. unfold Small, toClass. exists a. intros x. split; auto.
 Qed.
 
 (* The set associated with the class associated with a set is the set itself.   *)
-Proposition ToSetFromSet : forall (a:U),
-  toSet (fromSet a) (FromSetSmall a) = a.
+Proposition ToSetToClass : forall (a:U),
+  toSet (toClass a) (ToClassSmall a) = a.
 Proof.
-  intro a. apply SameCharacEqual with (fromSet a).
+  intro a. apply SameCharacEqual with (toClass a).
   - apply ClassCharac.
-  - unfold fromSet. intros x. split; auto.
+  - unfold toClass. intros x. split; auto.
 Qed.
 
 (* The class associated with the set associated with a small class is the class.*)
-Proposition FromSetToSet : forall (P:Class) (q:Small P),
-  fromSet (toSet P q) == P.
+Proposition ToClassToSet : forall (P:Class) (q:Small P),
+  toClass (toSet P q) == P.
 Proof.
-  intros P q. apply ClassEquivCharac. unfold fromSet. apply ClassCharac.
+  intros P q. apply ClassEquivCharac. unfold toClass. apply ClassCharac.
 Qed.
 
