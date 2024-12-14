@@ -1,4 +1,4 @@
-Require Import ZF.Core.
+Require Import ZF.Set.
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Binary.
 Require Import ZF.Set.OrdPair.

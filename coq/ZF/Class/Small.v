@@ -1,4 +1,4 @@
-Require Import ZF.Core.
+Require Import ZF.Set.
 Require Import ZF.Class.
 Require Import ZF.Axiom.Define.
 Require Import ZF.Axiom.Extensionality.

@@ -1,4 +1,4 @@
-Require Import ZF.Core.
+Require Import ZF.Set.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Small.
 

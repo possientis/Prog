@@ -14,7 +14,7 @@ SET_LIB   = -Q ${SET}   ZF.${SET}   -Q . ZF
 CORE_LIB  = -Q ${CORE}  ZF.${CORE}  -Q . ZF
 
 # Object files
-TOP_OBJ = Core.vo \
+TOP_OBJ = Set.vo \
 					Class.vo
 
 AXIOM_OBJ = ${AXIOM}/Define.vo \

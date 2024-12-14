@@ -1,4 +1,4 @@
-Require Import ZF.Core.
+Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Include.
 Require Import ZF.Set.OrdPair.

@@ -1,7 +1,7 @@
 Declare Scope ZF_Axiom_Specification_scope.
 Open    Scope ZF_Axiom_Specification_scope.
 
-Require Import ZF.Core.
+Require Import ZF.Set.
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Binary.

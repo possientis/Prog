@@ -1,7 +1,7 @@
 Declare Scope ZF_Set_Singleton_scope.
 Open    Scope ZF_Set_Singleton_scope.
 
-Require Import ZF.Core.
+Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Pair.
 

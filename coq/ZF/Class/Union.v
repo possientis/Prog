@@ -1,7 +1,7 @@
 Declare Scope ZF_Class_Union_scope.
 Open    Scope ZF_Class_Union_scope.
 
-Require Import ZF.Core.
+Require Import ZF.Set.
 Require Import ZF.Class.
 
 (* The union class of a class.                                                  *)
