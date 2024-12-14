@@ -3,10 +3,10 @@ Open    Scope ZF_Set_Difference_scope.
 
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Axiom.Specification.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Intersect.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
 (* The set a \ b is made of those elements of a which do not belong to b.       *)

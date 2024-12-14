@@ -1,7 +1,7 @@
-Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
+Require Import ZF.Set.Specify.
 
 (* Let us the define the class of all sets which do not belong to themselves.   *)
 Definition Ru : Class := fun x => ~x :< x.

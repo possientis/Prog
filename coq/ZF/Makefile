@@ -75,6 +75,7 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Utils.vo \
 	${SET}/Relation.vo \
 	${SET}/Replace.vo \
+	${SET}/Specify.vo
 
 
 # Overall target
