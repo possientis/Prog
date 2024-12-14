@@ -1,5 +1,5 @@
 Require Import ZF.Set.
-Require Import ZF.Class.Binary.
+Require Import ZF.Binary.
 Require Import ZF.Class.Small.
 
 (* Given a functional binary class F and a set a, there exist a set b whose     *)

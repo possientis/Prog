@@ -2,9 +2,9 @@ Declare Scope ZF_Axiom_Specification_scope.
 Open    Scope ZF_Axiom_Specification_scope.
 
 Require Import ZF.Set.
+Require Import ZF.Binary.
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Small.
-Require Import ZF.Class.Binary.
 
 (* Given a set theoretic predicate P and a set a, there exists a set b whose    *)
 (* elements are the elements of the set a which satisfy P.                      *)

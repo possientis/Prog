@@ -2,7 +2,7 @@ Declare Scope ZF_Class_Relation_scope.
 
 Require Import ZF.Set.
 Require Import ZF.Class.
-Require Import ZF.Class.Binary.
+Require Import ZF.Binary.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.OrdPair.

@@ -1,6 +1,6 @@
 Require Import ZF.Set.
+Require Import ZF.Binary.
 Require Import ZF.Axiom.Replacement.
-Require Import ZF.Class.Binary.
 Require Import ZF.Set.OrdPair.
 
 (* A relation is a set of ordered pairs.                                        *)
