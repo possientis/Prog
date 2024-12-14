@@ -73,7 +73,8 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Power.vo \
 	${SET}/Product.vo \
 	${SET}/Utils.vo \
-	${SET}/Relation.vo
+	${SET}/Relation.vo \
+	${SET}/Replace.vo \
 
 
 # Overall target

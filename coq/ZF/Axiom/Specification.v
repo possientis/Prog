@@ -7,6 +7,7 @@ Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
+Require Import ZF.Set.Replace.
 
 (* Given a set theoretic predicate P and a set a, there exists a set b whose    *)
 (* elements are the elements of the set a which satisfy P.                      *)
