@@ -1,6 +1,3 @@
-Declare Scope ZF_Binary_scope.
-Open    Scope ZF_Binary_scope.
-
 Require Import ZF.Set.
 Require Import ZF.Class.
 Require Import ZF.Core.Equiv.
@@ -64,10 +61,3 @@ Proposition ConverseEquivCompat : EquivCompat converse.
 Proof.
   intros F G H1 x y. unfold converse. apply H1.
 Qed.
-
-(* Composition of two binary relation.                                          *)
-Definition compose (G F:Binary) : Binary := fun x y =>
-  exists z, F x z /\ G z y.
-
-Notation "G :.: F" := (compose G F)
-  (at level 11, right associativity) : ZF_Binary_scope.

@@ -34,7 +34,8 @@ AXIOM_OBJ = ${AXIOM}/Define.vo \
 
 BINARY_OBJ = ${BINARY}/Domain.vo \
 	${BINARY}/Range.vo \
-	${BINARY}/Restrict.vo
+	${BINARY}/Restrict.vo \
+	${BINARY}/Compose.vo
 
 CLASS_OBJ = ${CLASS}/Small.vo \
 	${CLASS}/Bounded.vo \
