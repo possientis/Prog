@@ -8,12 +8,12 @@ CORE   = Core
 SET    = Set
 
 # coqc command line option
-TOP_LIB    = -Q . ZF
-AXIOM_LIB  = -Q ${AXIOM} ZF.${AXIOM} -Q . ZF
-BINARY_LIB = -Q ${BINARY} ZF.${BINARY} -Q . ZF
-CLASS_LIB  = -Q ${CLASS} ZF.${CLASS} -Q . ZF
-CORE_LIB   = -Q ${CORE}  ZF.${CORE}  -Q . ZF
-SET_LIB    = -Q ${SET}   ZF.${SET}   -Q . ZF
+TOP_LIB    		= -Q . ZF
+AXIOM_LIB  		= -Q ${AXIOM}  ZF.${AXIOM} -Q . ZF
+BINARY_LIB 		= -Q ${BINARY} ZF.${BINARY} -Q . ZF
+CLASS_LIB  		= -Q ${CLASS}  ZF.${CLASS} -Q . ZF
+CORE_LIB   		= -Q ${CORE}   ZF.${CORE}  -Q . ZF
+SET_LIB    		= -Q ${SET}    ZF.${SET}   -Q . ZF
 
 # Object files
 TOP_OBJ = Set.vo \
@@ -46,7 +46,17 @@ CLASS_OBJ = ${CLASS}/Small.vo \
 	${CLASS}/Product.vo \
 	${CLASS}/V.vo \
 	${CLASS}/Union.vo \
-	${CLASS}/Intersect.vo
+	${CLASS}/Intersect.vo \
+	${CLASS}/Functional.vo \
+	${CLASS}/OneToOne.vo \
+	${CLASS}/Converse.vo \
+	${CLASS}/Binary.vo \
+	${CLASS}/Function.vo \
+	${CLASS}/Bijection.vo \
+	${CLASS}/Domain.vo \
+	${CLASS}/Range.vo \
+	${CLASS}/Restrict.vo \
+	${CLASS}/Image.vo
 
 CORE_OBJ = ${CORE}/Equiv.vo
 
@@ -64,7 +74,6 @@ SET_OBJ = ${SET}/Empty.vo \
 	${SET}/Product.vo \
 	${SET}/Utils.vo \
 	${SET}/Relation.vo
-
 
 
 # Overall target

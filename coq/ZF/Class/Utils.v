@@ -31,14 +31,6 @@ Proof.
   intros P Q [a Ha]. apply BoundedClassIsSmall. exists a.
   intros x [_ H1]. apply Ha, H1.
 Qed.
-(* The converse of the converse is a subclass of the original class.            *)
-Proposition ConverseConverseIncl : forall (P:Class),
-  converse (converse P) :<=: P.
-Proof.
-  intros P x H1. apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
-  apply ConverseCharac in H2. destruct H2 as [z' [y' [H2 H3]]].
-  apply OrdPairEqual in H2. destruct H2 as [H2 H2']. subst. apply H3.
-Qed.
 
 (* The product of two classes is a subclass of V^2.                             *)
 Proposition ProdInclV2 : forall (P Q:Class),
@@ -76,39 +68,3 @@ Proof.
   intros P H1 x H2. unfold unionClass in H2. destruct H2 as [y [H2 H3]].
   apply H1 in H3. apply H3, H2.
 Qed.
-
-(* When two ordered pairs belong to a one-to-one class, equality between the    *)
-(* first coordinates is equivalent to equality between the second coordinates.  *)
-Proposition OneToOneCoordEquiv : forall (P:Class) (x1 x2 y1 y2:U),
-  OneToOne P -> P :(x1,y1): -> P :(x2,y2): -> x1 = x2 <-> y1 = y2.
-Proof.
-  intros P x1 x2 y1 y2 H3 H1 H2. split; intros H4.
-  - subst. apply OneToOneCharac1 with P x2; assumption.
-  - subst. apply OneToOneCharac2 with P y2; assumption.
-Qed.
-
-Proposition DomainMonotone : forall (P Q:Class),
-  P :<=: Q -> domain P :<=: domain Q.
-Proof.
-  intros P Q H1 x H2. apply (proj1 (DomainCharac P x)) in H2. destruct H2 as [y H2].
-  apply DomainCharac. exists y. apply H1, H2.
-Qed.
-
-Proposition RangeMonotone : forall (P Q:Class),
-  P :<=: Q -> range P :<=: range Q.
-Proof.
-  intros P Q H1 y H2. apply (proj1 (RangeCharac P y)) in H2. destruct H2 as [x H2].
-  apply RangeCharac. exists x. apply H1, H2.
-Qed.
-
-Proposition RestrictInclude : forall (P Q:Class),
-  P:|:Q :<=: P.
-Proof.
-  intros P Q x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
-  rewrite H1. apply H2.
-Qed.
-
-Proposition RestrictToDomain : forall (P:Class),
-  Relation P <-> P == P :|: domain P.
-Proof.
-Admitted.
