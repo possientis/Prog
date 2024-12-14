@@ -1,5 +1,7 @@
 Require Import ZF.Set.
 Require Import ZF.Binary.
+Require Import ZF.Binary.Functional.
+Require Import ZF.Binary.Image.
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Set.OrdPair.
 
@@ -16,7 +18,7 @@ Definition Converse : Binary := fun x x' =>
   exists y z, x = :(y,z): /\ x' = :(z,y):.
 
 (* This binary class is functional.                                             *)
-Proposition ConverseFunctional : Binary.Functional Converse.
+Proposition ConverseFunctional : Functional.Functional Converse.
 Proof.
   unfold Converse. intros x x1 x2 H1 H2.
   destruct H1 as [y [z [H1 H1']]]. destruct H2 as [y' [z' [H2 H2']]].

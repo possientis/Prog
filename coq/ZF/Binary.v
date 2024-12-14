@@ -48,36 +48,6 @@ Proof.
   - unfold equiv, BinaryEquiv, binaryEquiv. apply H1.
 Qed.
 
-
-(* Range of a binary class.                                                    *)
-Definition range (F:Binary) : Class := fun y => exists x, F x y.
-
-(* Predicate expressing the fact that a binary class is functional.             *)
-Definition Functional (F:Binary) : Prop :=
-  forall x, forall y, forall z, F x y -> F x z -> y = z.
-
-(* Restricting a binary class F to a class P.                                   *)
-Definition restrict (F:Binary) (P:Class) : Binary := fun x y =>
-  P x /\ F x y.
-
-Notation "F :|: P" := (restrict F P)
-  (at level 13, left associativity) : ZF_Binary_scope.
-
-(* Direct image of a set a by a binary class F.                                 *)
-Definition image (F:Binary) (a:U) : Class := fun y =>
-  exists x, x :< a /\ F x y.
-
-Notation "F :[ a ]:" := (image F a)
-  (at level 0, no associativity) : ZF_Binary_scope.
-
-(* Image is the range of the restriction.                                       *)
-(* This is an equal equality, not just equivalence.                             *)
-Proposition ImageIsRestriction : forall (F:Binary) (a:U),
-  F:[a]: = range (F:|: (toClass a)).
-Proof.
-  intros F a. unfold image, range, restrict. reflexivity.
-Qed.
-
 (* The converse of a binary class.                                              *)
 Definition converse (F:Binary) : Binary := fun x y => F y x.
 

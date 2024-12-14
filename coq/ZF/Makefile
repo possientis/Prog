@@ -32,7 +32,9 @@ AXIOM_OBJ = ${AXIOM}/Define.vo \
 	${AXIOM}/Foundation.vo \
 	${AXIOM}/Infinity.vo
 
-BINARY_OBJ = ${BINARY}/Domain.vo 
+BINARY_OBJ = ${BINARY}/Domain.vo \
+	${BINARY}/Range.vo \
+	${BINARY}/Restrict.vo
 
 CLASS_OBJ = ${CLASS}/Small.vo \
 	${CLASS}/Bounded.vo \

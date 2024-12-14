@@ -4,6 +4,8 @@ Require Import ZF.Set.
 Require Import ZF.Class.
 Require Import ZF.Binary.
 Require Import ZF.Binary.Domain.
+Require Import ZF.Binary.Range.
+Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.OrdPair.
@@ -67,7 +69,7 @@ Proof.
 Qed.
 
 (* A class is said to be functional if its associated binary class is           *)
-Definition Functional (P:Class) : Prop := Binary.Functional (toBinary P).
+Definition Functional (P:Class) : Prop := Functional.Functional (toBinary P).
 
 (* Characterisation of a functional class (only one side for quick unfolding).  *)
 Proposition FunctionalCharac : forall (P:Class), Functional P ->
@@ -170,7 +172,7 @@ Qed.
 Definition domain (P:Class) : Class := Domain.domain (toBinary P).
 
 (* The range of a class is the range of its binary class.                       *)
-Definition range (P:Class) : Class := Binary.range (toBinary P).
+Definition range (P:Class) : Class := Range.range (toBinary P).
 
 (* Quick unfolding.                                                             *)
 Proposition DomainCharac : forall (P:Class) (x:U),
@@ -192,7 +194,7 @@ Qed.
 
 (* Restricting a class P to a class Q.                                          *)
 Definition restrict (P Q:Class) : Class
-  := fromBinary (Binary.restrict (toBinary P) Q).
+  := fromBinary (Restrict.restrict (toBinary P) Q).
 
 Notation "P :|: Q" := (restrict P Q)
   (at level 13, left associativity) : ZF_Class_Relation_scope.
@@ -235,7 +237,7 @@ Proof.
 Qed.
 
 (* Direct image of a set by a class P.                                          *)
-Definition image (P:Class) (a:U) : Class := Binary.image (toBinary P) a.
+Definition image (P:Class) (a:U) : Class := Image.image (toBinary P) a.
 
 Notation "P :[ a ]:" := (image P a)
   (at level 0, no associativity) : ZF_Class_Relation_scope.
