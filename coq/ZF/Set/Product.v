@@ -1,9 +1,9 @@
 Declare Scope ZF_Set_Product_scope.
 Open    Scope ZF_Set_Product_scope.
 
-Require Import ZF.Set.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Small.
+Require Import ZF.Set.
 Require Import ZF.Set.Include.
 Require Import ZF.Set.Intersect.
 Require Import ZF.Set.OrdPair.

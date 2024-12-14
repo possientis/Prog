@@ -1,8 +1,8 @@
-Require Import ZF.Set.
-Require Import ZF.Class.
 Require Import ZF.Axiom.Define.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Set.
 
 (* Predicate on classes, stating that a class is actually a set.                *)
 Definition Small (P:Class) : Prop := exists a, forall x, x :< a <-> P x.

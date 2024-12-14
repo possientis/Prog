@@ -1,7 +1,7 @@
 Require Import ZF.Class.
-Require Import ZF.Set.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Functional.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 (* A class is 'one-to-one' if both itself and its converse are functional.      *)

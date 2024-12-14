@@ -1,10 +1,10 @@
 Declare Scope ZF_Set_Difference_scope.
 Open    Scope ZF_Set_Difference_scope.
 
-Require Import ZF.Set.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.Specification.
+Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Intersect.
 Require Import ZF.Set.Union.

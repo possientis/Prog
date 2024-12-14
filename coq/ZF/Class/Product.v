@@ -2,10 +2,10 @@ Declare Scope ZF_Class_Product_scope.
 Open    Scope ZF_Class_Product_scope.
 
 Require Import ZF.Class.
-Require Import ZF.Set.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 Definition prodClass (P Q:Class) : Class := fun x =>

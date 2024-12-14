@@ -1,8 +1,8 @@
+Require Import ZF.Binary.Domain.
 Require Import ZF.Class.
-Require Import ZF.Set.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Include.
-Require Import ZF.Binary.Domain.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 (* The domain of a class is the domain of its binary class.                     *)

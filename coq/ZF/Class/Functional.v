@@ -1,6 +1,6 @@
+Require Import ZF.Binary.Functional.
 Require Import ZF.Class.
 Require Import ZF.Class.Binary.
-Require Import ZF.Binary.Functional.
 Require Import ZF.Set.OrdPair.
 
 (* A class is said to be functional if its associated binary class is           *)

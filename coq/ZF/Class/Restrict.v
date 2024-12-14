@@ -1,8 +1,7 @@
 Declare Scope ZF_Class_Restrict_scope.
 
-Require Import ZF.Class.
-Require Import ZF.Set.
 Require Import ZF.Binary.Restrict.
+Require Import ZF.Class.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Image.
@@ -11,6 +10,7 @@ Require Import ZF.Class.Intersect.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 Open Scope    ZF_Class_Restrict_scope.
@@ -59,7 +59,7 @@ Proof.
     split; assumption.
 Qed.
 
-Proposition ImageIsRestrict : forall (P:Class) (a:U),
+Proposition ImageIsRangeOfRestrict : forall (P:Class) (a:U),
   P:[a]: == range (P:|:(toClass a)).
 Proof.
   intros P a y. split; intros H1.
@@ -69,7 +69,7 @@ Proof.
     destruct H1 as [H1 H2]. exists x. unfold toBinary. split; assumption.
 Qed.
 
-Proposition RestrictInclude : forall (P Q:Class),
+Proposition RestrictIsSubClass : forall (P Q:Class),
   P:|:Q :<=: P.
 Proof.
   intros P Q x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
@@ -77,6 +77,6 @@ Proof.
 Qed.
 
 Proposition RestrictToDomain : forall (P:Class),
-  Relation P <-> P == P :|: domain P.
+  Relation P <-> P :|: domain P == P.
 Proof.
 Admitted.

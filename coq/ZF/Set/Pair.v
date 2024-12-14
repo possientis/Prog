@@ -1,9 +1,9 @@
 Declare Scope ZF_Set_Pair_scope.
 Open    Scope ZF_Set_Pair_scope.
 
-Require Import ZF.Set.
 Require Import ZF.Axiom.Pairing.
 Require Import ZF.Class.Small.
+Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 
 (* It is useful to define the predicate underlying the pairing axiom.           *)

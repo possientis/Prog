@@ -54,5 +54,3 @@ Proof.
     + reflexivity.
     + apply H2.
 Qed.
-
-

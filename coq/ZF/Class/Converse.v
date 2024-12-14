@@ -1,10 +1,10 @@
-Require Import ZF.Class.
-Require Import ZF.Set.
 Require Import ZF.Binary.Converse.
+Require Import ZF.Class.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 (* The converse of a class is the relation of the converse of its binary class. *)
@@ -41,7 +41,7 @@ Proof.
   destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.
 Qed.
 
-(* If the class P is relation, then converse acting on P is idempotent.         *)
+(* If the class P is a relation, then converse acting on P is idempotent.       *)
 Proposition ConverseIdempotent : forall (P:Class),
   Relation P <-> converse (converse P) == P.
 Proof.

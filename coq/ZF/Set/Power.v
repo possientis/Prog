@@ -1,9 +1,9 @@
 Declare Scope ZF_Set_Power_scope.
 Open    Scope ZF_Set_Power_scope.
 
-Require Import ZF.Set.
 Require Import ZF.Axiom.Power.
 Require Import ZF.Class.Small.
+Require Import ZF.Set.
 Require Import ZF.Set.Include.
 
 (* It is useful to define the predicate underlying the power axiom.             *)

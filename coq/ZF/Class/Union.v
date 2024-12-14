@@ -1,8 +1,8 @@
 Declare Scope ZF_Class_Union_scope.
 Open    Scope ZF_Class_Union_scope.
 
-Require Import ZF.Set.
 Require Import ZF.Class.
+Require Import ZF.Set.
 
 (* The union class of a class.                                                  *)
 Definition unionClass (P:Class) : Class := fun x =>

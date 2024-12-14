@@ -2,10 +2,10 @@ Declare Scope ZF_Binary_Restrict_scope.
 Open    Scope ZF_Binary_Restrict_scope.
 
 Require Import ZF.Binary.
-Require Import ZF.Class.
-Require Import ZF.Set.
 Require Import ZF.Binary.Image.
 Require Import ZF.Binary.Range.
+Require Import ZF.Class.
+Require Import ZF.Set.
 
 (* Restricting a binary class F to a class P.                                   *)
 Definition restrict (F:Binary) (P:Class) : Binary := fun x y =>

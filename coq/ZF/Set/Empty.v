@@ -1,11 +1,11 @@
 Declare Scope ZF_Set_Empty_scope.
 Open    Scope ZF_Set_Empty_scope.
 
-Require Import ZF.Set.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.NonEmpty.
 Require Import ZF.Axiom.Specification.
+Require Import ZF.Set.
 Require Import ZF.Class.Small.
 
 (* The class which is satisfied by no set.                                      *)

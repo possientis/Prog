@@ -1,9 +1,9 @@
 Declare Scope ZF_Class_Image_scope.
 
-Require Import ZF.Class.
-Require Import ZF.Set.
 Require Import ZF.Binary.Image.
+Require Import ZF.Class.
 Require Import ZF.Class.Binary.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 Open Scope    ZF_Class_Image_scope.
