@@ -50,9 +50,9 @@ Proof.
   - unfold converse.
     remember (Binary.Converse.converse (toBinary P)) as F eqn:Ef.
     apply EquivTran with (fromBinary (Binary.Converse.converse F)).
-    + apply FromBinaryEquivCompat, ConverseEquivCompat, ToFromBinary.
+    + apply FromBinaryEqualCompat, ConverseEqualCompat, ToFromBinary.
     + rewrite Ef. clear Ef F. apply EquivTran with (fromBinary (toBinary P)).
-      * apply FromBinaryEquivCompat. rewrite ConverseIdempotent.
+      * apply FromBinaryEqualCompat. rewrite ConverseIdempotent.
         apply EquivRefl.
       * apply FromToBinary, H1.
   - intros x H2. apply H1 in H2. apply ConverseCharac in H2.

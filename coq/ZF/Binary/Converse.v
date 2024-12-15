@@ -1,5 +1,5 @@
 Require Import ZF.Binary.
-Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Equal.
 
 (* The converse of a binary class.                                              *)
 Definition converse (F:Binary) : Binary := fun x y => F y x.
@@ -13,7 +13,7 @@ Proof.
 Qed.
 
 (* The converse operation is compatible with equivalence.                       *)
-Proposition ConverseEquivCompat : EquivCompat converse.
+Proposition ConverseEqualCompat : EqualCompat converse.
 Proof.
   intros F G H1 x y. unfold converse. apply H1.
 Qed.
