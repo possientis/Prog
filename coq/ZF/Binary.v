@@ -1,4 +1,5 @@
 Require Import ZF.Set.
+Require Import ZF.Core.Equal.
 Require Import ZF.Core.Equiv.
 
 (* A binary class is simply a binary predicate on sets.                         *)
@@ -29,9 +30,12 @@ Proof.
   - apply H1, H2, H3.
 Qed.
 
-Global Instance BinaryEquiv : Equiv Binary
-  := { equiv     := binaryEquiv
-     ; EquivRefl := BinaryEquivRefl
+(* Notation "F == G" := (binaryEquiv F G)                                       *)
+Global Instance BinaryEqual : Equal Binary := { equal := binaryEquiv }.
+
+(* == is an equivalence relation                                                *)
+Global Instance BinaryEquiv : Equiv BinaryEqual
+  := { EquivRefl := BinaryEquivRefl
      ; EquivSym  := BinaryEquivSym
      ; EquivTran := BinaryEquivTran
      }.
@@ -41,5 +45,5 @@ Proposition BinaryEquivCharac : forall (F G:Binary),
 Proof.
   intros F G. split; intros H1.
   - apply H1.
-  - unfold equiv, BinaryEquiv, binaryEquiv. apply H1.
+  - unfold equal, BinaryEqual, binaryEquiv. apply H1.
 Qed.

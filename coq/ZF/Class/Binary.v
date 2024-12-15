@@ -1,6 +1,7 @@
 Require Import ZF.Binary.
 Require Import ZF.Class.
 Require Import ZF.Class.Relation.
+Require Import ZF.Core.Equal.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.

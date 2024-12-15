@@ -1,18 +1,17 @@
-Declare Scope ZF_Core_Equiv_scope.
-Open    Scope ZF_Core_Equiv_scope.
+Require Import ZF.Core.Equal.
 
-Class Equiv (v:Type)
-  := { equiv : v -> v -> Prop
-     ; EquivRefl : forall (x:v), equiv x x
-     ; EquivSym  : forall (x y:v), equiv x y -> equiv y x
-     ; EquivTran : forall (x y z:v), equiv x y -> equiv y z -> equiv x z
+(* Types with equivalent classes                                                *)
+Class Equiv (v:Type) (H:Equal v)
+  := { EquivRefl : forall (x:v), x == x
+     ; EquivSym  : forall (x y:v), x == y -> y == x
+     ; EquivTran : forall (x y z:v), x == y -> y == z -> x == z
      }.
 
-Notation "x == y" := (equiv x y)
-  (at level 50, no associativity) : ZF_Core_Equiv_scope.
+Arguments Equiv {v}.
 
 (* Predicate expressing the fact a function is compatible with equivalences.    *)
-Definition EquivCompat (v w:Type) (p:Equiv v) (q:Equiv w) (f:v -> w) : Prop :=
+Definition EquivCompat
+  (v w:Type) (e:Equal v)(e':Equal w) (p:Equiv e) (p':Equiv e') (f:v -> w) : Prop :=
   forall (x y:v), x == y -> f x == f y.
 
-Arguments EquivCompat {v} {w} {p} {q}.
+Arguments EquivCompat {v} {w} {e} {e'} {p} {p'}.

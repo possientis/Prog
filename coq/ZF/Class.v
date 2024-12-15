@@ -1,4 +1,5 @@
 Require Import ZF.Set.
+Require Import ZF.Core.Equal.
 Require Import ZF.Core.Equiv.
 
 (* A class is simply a predicate on sets.                                       *)
@@ -29,9 +30,12 @@ Proof.
   - apply H1, H2, H3.
 Qed.
 
-Global Instance ClassEquiv : Equiv Class
-  := { equiv     := classEquiv
-     ; EquivRefl := ClassEquivRefl
+(* Notation "P == Q" := (classEquiv P Q)                                        *)
+Global Instance ClassEqual : Equal Class := { equal := classEquiv }.
+
+(* == is an equivalence relation                                                *)
+Global Instance ClassEquiv : Equiv ClassEqual
+  := { EquivRefl := ClassEquivRefl
      ; EquivSym  := ClassEquivSym
      ; EquivTran := ClassEquivTran
      }.
@@ -41,8 +45,9 @@ Proposition ClassEquivCharac : forall (P Q:Class),
 Proof.
   intros P Q. split; intros H1.
   - apply H1.
-  - unfold equiv, ClassEquiv, classEquiv. apply H1.
+  - unfold equal, ClassEqual, classEquiv. apply H1.
 Qed.
 
 (* A set can be viewed as a class.                                              *)
 Definition toClass (a:U) : Class := fun x => x :< a.
+

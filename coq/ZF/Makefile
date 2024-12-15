@@ -63,6 +63,7 @@ CLASS_OBJ = \
 	${CLASS}/V.vo
 
 CORE_OBJ = \
+	${CORE}/Equal.vo \
 	${CORE}/Equiv.vo \
 	${CORE}/Product.vo \
 	${CORE}/Zero.vo

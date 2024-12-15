@@ -3,7 +3,7 @@ Open    Scope ZF_Class_Include_scope.
 
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
-Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Equal.
 Require Import ZF.Set.
 
 (* Inclusion predicate between two classes.                                     *)

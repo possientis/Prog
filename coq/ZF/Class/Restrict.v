@@ -9,7 +9,7 @@ Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
-Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Equal.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
