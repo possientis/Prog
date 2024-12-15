@@ -7,4 +7,4 @@ Class Equiv (v:Type) (H:Equal v)
      ; EquivTran : forall (x y z:v), x == y -> y == z -> x == z
      }.
 
-Arguments Equiv {v}.
+Arguments Equiv _ {H}.

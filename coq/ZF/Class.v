@@ -34,7 +34,7 @@ Qed.
 Global Instance ClassEqual : Equal Class := { equal := classEquiv }.
 
 (* == is an equivalence relation                                                *)
-Global Instance ClassEquiv : Equiv ClassEqual
+Global Instance ClassEquiv : Equiv Class
   := { EquivRefl := ClassEquivRefl
      ; EquivSym  := ClassEquivSym
      ; EquivTran := ClassEquivTran

@@ -34,7 +34,7 @@ Qed.
 Global Instance BinaryEqual : Equal Binary := { equal := binaryEquiv }.
 
 (* == is an equivalence relation                                                *)
-Global Instance BinaryEquiv : Equiv BinaryEqual
+Global Instance BinaryEquiv : Equiv Binary
   := { EquivRefl := BinaryEquivRefl
      ; EquivSym  := BinaryEquivSym
      ; EquivTran := BinaryEquivTran
