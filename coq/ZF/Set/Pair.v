@@ -3,6 +3,7 @@ Open    Scope ZF_Set_Pair_scope.
 
 Require Import ZF.Axiom.Pairing.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 

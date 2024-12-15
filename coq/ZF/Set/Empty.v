@@ -1,12 +1,10 @@
-Declare Scope ZF_Set_Empty_scope.
-Open    Scope ZF_Set_Empty_scope.
-
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.NonEmpty.
+Require Import ZF.Class.Small.
+Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Specify.
-Require Import ZF.Class.Small.
 
 (* The class which is satisfied by no set.                                      *)
 Definition Empty : U -> Prop := fun _ => False.
@@ -48,8 +46,8 @@ Qed.
 (* We consider the set defined by the small class Empty                         *)
 Definition emptySet : U := toSet Empty EmptySmall.
 
-Notation ":0:" := emptySet
-  (at level 0, no associativity) : ZF_Set_Empty_scope.
+(* Notation :0: for empty set                                                   *)
+Global Instance SetZero : Zero U := { zero := emptySet }.
 
 (* Characterisation of the elements of the empty set.                           *)
 Proposition EmptyCharac : forall x, x :< :0: <-> False.
