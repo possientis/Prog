@@ -45,6 +45,7 @@ CLASS_OBJ = \
 	${CLASS}/Binary.vo \
 	${CLASS}/Bounded.vo \
 	${CLASS}/Converse.vo \
+	${CLASS}/Diff.vo \
 	${CLASS}/Domain.vo \
 	${CLASS}/Function.vo \
 	${CLASS}/Functional.vo \
@@ -63,6 +64,7 @@ CLASS_OBJ = \
 	${CLASS}/V.vo
 
 CORE_OBJ = \
+	${CORE}/Diff.vo \
 	${CORE}/Equal.vo \
 	${CORE}/Equiv.vo \
 	${CORE}/Product.vo \
@@ -70,7 +72,7 @@ CORE_OBJ = \
 
 SET_OBJ = \
 	${SET}/Converse.vo \
-	${SET}/Difference.vo \
+	${SET}/Diff.vo \
 	${SET}/Empty.vo \
 	${SET}/Functional.vo \
 	${SET}/Include.vo \

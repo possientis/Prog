@@ -1,8 +1,6 @@
-Declare Scope ZF_Set_Difference_scope.
-Open    Scope ZF_Set_Difference_scope.
-
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Core.Diff.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Intersect.
@@ -12,8 +10,8 @@ Require Import ZF.Set.Union.
 (* The set a \ b is made of those elements of a which do not belong to b.       *)
 Definition difference (a b:U) : U := :{a | fun x => ~ x :< b }:.
 
-Notation "a :\: b" := (difference a b)
-  (at level 3, left associativity) : ZF_Set_Difference_scope.
+(* Notation "a :\: b" := (difference a b)                                       *)
+Global Instance SetDiff : Diff U := { diff := difference }.
 
 Proposition DiffCharac : forall (a b:U),
   forall x, x :< a:\:b <-> x :< a /\ ~ x :< b.
@@ -98,5 +96,3 @@ Proof.
     + apply H1.
     + apply DiffCharac. split; assumption.
 Qed.
-
-
