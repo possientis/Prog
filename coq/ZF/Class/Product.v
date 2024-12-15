@@ -1,18 +1,16 @@
-Declare Scope ZF_Class_Product_scope.
-Open    Scope ZF_Class_Product_scope.
-
 Require Import ZF.Class.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Product.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 Definition prodClass (P Q:Class) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ P y /\ Q z.
 
-Notation "P :x: Q" := (prodClass P Q)
-  (at level 11, right associativity) : ZF_Class_Product_scope.
+(* Notation "P :x: Q" := (prodClass P Q)                                        *)
+Global Instance ClassProduct : Product Class := { product := prodClass }.
 
 Proposition ProdCharac2 : forall (P Q:Class),
   forall y, forall z, (P:x:Q) :(y,z): <-> P y /\ Q z.

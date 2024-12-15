@@ -46,7 +46,7 @@ Qed.
 (* We consider the set defined by the small class Empty                         *)
 Definition emptySet : U := toSet Empty EmptySmall.
 
-(* Notation :0: for empty set                                                   *)
+(* Notation ":0:" := emptySet                                                   *)
 Global Instance SetZero : Zero U := { zero := emptySet }.
 
 (* Characterisation of the elements of the empty set.                           *)

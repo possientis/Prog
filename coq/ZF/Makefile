@@ -63,7 +63,9 @@ CLASS_OBJ = \
 	${CLASS}/V.vo
 
 CORE_OBJ = \
-	${CORE}/Equiv.vo
+	${CORE}/Equiv.vo \
+	${CORE}/Product.vo \
+	${CORE}/Zero.vo
 
 SET_OBJ = \
 	${SET}/Converse.vo \

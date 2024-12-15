@@ -1,8 +1,6 @@
-Declare Scope ZF_Set_Product_scope.
-Open    Scope ZF_Set_Product_scope.
-
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.Product.
 Require Import ZF.Set.
 Require Import ZF.Set.Include.
 Require Import ZF.Set.Intersect.
@@ -94,8 +92,9 @@ Qed.
 Definition prodSet (a b:U) : U
   := toSet (ProdPred a b) (ProdSmall a b).
 
-Notation "a :x: b" := (prodSet a b)
-  (at level 11, right associativity) : ZF_Set_Product_scope.
+
+(* Notation "a :x: b" := (prodSet a b)                                          *)
+Global Instance SetProduct : Product U := { product := prodSet }.
 
 (* Characterisation of the elements of the product axb *)
 Proposition ProdCharac : forall (a b:U),
