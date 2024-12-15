@@ -2,6 +2,7 @@ Require Import ZF.Binary.
 Require Import ZF.Class.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 (* A binary class can be viewed as a class.                                     *)
@@ -19,7 +20,8 @@ Qed.
 (* fromBinary is compatible with equivalences of classes and binary classes.    *)
 Proposition FromBinaryEquivCompat : EquivCompat fromBinary.
 Proof.
-  intros F G H1 x. unfold fromBinary. split; intros H2;
+  intros F G H1 x. unfold fromBinary.
+  split; intros H2;
   destruct H2 as [y [z [H2 H3]]]; exists y; exists z; split.
   - apply H2.
   - apply H1, H3.
@@ -29,6 +31,11 @@ Qed.
 
 (* A class can be viewed as a binary class.                                     *)
 Definition toBinary (P:Class) : Binary := fun y z => P :(y,z):.
+
+Proposition ToBinaryEquivCompat : EquivCompat toBinary.
+Proof.
+  intros P Q H1 x y. unfold toBinary. apply H1.
+Qed.
 
 (* The binary class of the class of a binary class F is F itself.               *)
 Proposition ToFromBinary : forall (F:Binary), toBinary (fromBinary F) == F.
@@ -54,3 +61,4 @@ Proof.
     + reflexivity.
     + apply H2.
 Qed.
+
