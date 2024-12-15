@@ -16,75 +16,84 @@ CORE_LIB   		= -Q ${CORE}   ZF.${CORE}  -Q . ZF
 SET_LIB    		= -Q ${SET}    ZF.${SET}   -Q . ZF
 
 # Object files
-TOP_OBJ = Set.vo \
-					Class.vo \
-					Binary.vo
+TOP_OBJ = \
+	Binary.vo \
+	Class.vo \
+	Set.vo
 
-AXIOM_OBJ = ${AXIOM}/Define.vo \
+AXIOM_OBJ = \
 	${AXIOM}/Classic.vo \
+	${AXIOM}/Define.vo \
 	${AXIOM}/Extensionality.vo \
+	${AXIOM}/Foundation.vo \
+	${AXIOM}/Infinity.vo \
+	${AXIOM}/NonEmpty.vo \
+	${AXIOM}/Pairing.vo \
+	${AXIOM}/Power.vo \
 	${AXIOM}/Replacement.vo \
 	${AXIOM}/Specification.vo \
-	${AXIOM}/Pairing.vo \
-	${AXIOM}/Union.vo \
-	${AXIOM}/Power.vo \
-	${AXIOM}/NonEmpty.vo \
-	${AXIOM}/Foundation.vo \
-	${AXIOM}/Infinity.vo
+	${AXIOM}/Union.vo
 
-BINARY_OBJ = ${BINARY}/Domain.vo \
+BINARY_OBJ = \
+	${BINARY}/Compose.vo \
+	${BINARY}/Domain.vo \
 	${BINARY}/Range.vo \
-	${BINARY}/Restrict.vo \
-	${BINARY}/Compose.vo
+	${BINARY}/Restrict.vo
 
-CLASS_OBJ = ${CLASS}/Small.vo \
-	${CLASS}/Bounded.vo \
-	${CLASS}/Russell.vo \
-	${CLASS}/Relation.vo \
-	${CLASS}/Include.vo \
-	${CLASS}/Utils.vo \
-	${CLASS}/Product.vo \
-	${CLASS}/V.vo \
-	${CLASS}/Union.vo \
-	${CLASS}/Intersect.vo \
-	${CLASS}/Functional.vo \
-	${CLASS}/OneToOne.vo \
-	${CLASS}/Converse.vo \
-	${CLASS}/Binary.vo \
-	${CLASS}/Function.vo \
+CLASS_OBJ = \
 	${CLASS}/Bijection.vo \
+	${CLASS}/Binary.vo \
+	${CLASS}/Bounded.vo \
+	${CLASS}/Converse.vo \
 	${CLASS}/Domain.vo \
+	${CLASS}/Function.vo \
+	${CLASS}/Functional.vo \
+	${CLASS}/Image.vo \
+	${CLASS}/Include.vo \
+	${CLASS}/Intersect.vo \
+	${CLASS}/OneToOne.vo \
+	${CLASS}/Product.vo \
 	${CLASS}/Range.vo \
+	${CLASS}/Relation.vo \
 	${CLASS}/Restrict.vo \
-	${CLASS}/Image.vo
+	${CLASS}/Russell.vo \
+	${CLASS}/Small.vo \
+	${CLASS}/Union.vo \
+	${CLASS}/Utils.vo \
+	${CLASS}/V.vo
 
-CORE_OBJ = ${CORE}/Equiv.vo
+CORE_OBJ = \
+	${CORE}/Equiv.vo
 
-SET_OBJ = ${SET}/Empty.vo \
-	${SET}/Pair.vo \
-	${SET}/Singleton.vo \
+SET_OBJ = \
+	${SET}/Converse.vo \
+	${SET}/Difference.vo \
+	${SET}/Empty.vo \
+	${SET}/Functional.vo \
+	${SET}/Include.vo \
+	${SET}/Intersect.vo \
 	${SET}/OrdPair.vo \
 	${SET}/OrdTuple.vo \
-	${SET}/Union.vo \
-	${SET}/Tuple.vo \
-	${SET}/Intersect.vo \
-	${SET}/Difference.vo \
-	${SET}/Include.vo \
+	${SET}/Pair.vo \
 	${SET}/Power.vo \
 	${SET}/Product.vo \
-	${SET}/Utils.vo \
 	${SET}/Relation.vo \
 	${SET}/Replace.vo \
-	${SET}/Specify.vo
+	${SET}/Singleton.vo \
+	${SET}/Specify.vo \
+	${SET}/Tuple.vo \
+	${SET}/Union.vo \
+	${SET}/Utils.vo
 
 
 # Overall target
-all : ${TOP_OBJ} \
+all : \
 	${AXIOM_OBJ} \
 	${BINARY_OBJ} \
 	${CLASS_OBJ} \
 	${CORE_OBJ} \
-	${SET_OBJ}
+	${SET_OBJ} \
+	${TOP_OBJ}
 
 # General rules
 %.vo : %.v
