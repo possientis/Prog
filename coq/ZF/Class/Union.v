@@ -2,6 +2,7 @@ Declare Scope ZF_Class_Union_scope.
 Open    Scope ZF_Class_Union_scope.
 
 Require Import ZF.Class.
+Require Import ZF.Core.Or.
 Require Import ZF.Set.
 
 (* The union class of a class.                                                  *)
@@ -14,5 +15,5 @@ Notation ":U( P )" := (unionClass P)
 (* The union of two classes.                                                    *)
 Definition union (P Q:Class) : Class := fun x => P x \/ Q x.
 
-Notation "P :\/: Q" := (union P Q)
-  (at level 12, right associativity) : ZF_Class_Union_scope.
+(* Notation "P :\/: P" := (union P Q)                                           *)
+Global Instance ClassOr : Or Class := { or := union }.

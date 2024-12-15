@@ -1,6 +1,7 @@
 Declare Scope ZF_Set_Tuple_scope.
 Open    Scope ZF_Set_Tuple_scope.
 
+Require Import ZF.Core.Or.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.

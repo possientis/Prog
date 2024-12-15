@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Core.And.
+Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.

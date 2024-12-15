@@ -4,6 +4,7 @@ Open    Scope ZF_Set_Union_scope.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.Union.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.Pair.
 
@@ -28,8 +29,8 @@ Notation ":U( a )" := (unionSet a)
 (* The union of two sets.                                                       *)
 Definition union (a b:U) : U := :U( :{a,b}: ).
 
-Notation "a :\/: b" := (union a b)
-  (at level 12, right associativity) : ZF_Set_Union_scope.
+(* Notation "a :\/: b" := (union a b)                                           *)
+Global Instance SetOr : Or U := { or := union }.
 
 (* Characterisation of the elements of the union set of a.                      *)
 Proposition UnionSetCharac : forall (a:U),

@@ -68,6 +68,7 @@ CORE_OBJ = \
 	${CORE}/Diff.vo \
 	${CORE}/Equal.vo \
 	${CORE}/Equiv.vo \
+	${CORE}/Or.vo \
 	${CORE}/Product.vo \
 	${CORE}/Zero.vo
 
