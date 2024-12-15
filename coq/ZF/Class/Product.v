@@ -1,6 +1,7 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
+Require Import ZF.Core.And.
 Require Import ZF.Core.Equal.
 Require Import ZF.Core.Product.
 Require Import ZF.Set.

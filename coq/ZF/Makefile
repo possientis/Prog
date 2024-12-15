@@ -64,6 +64,7 @@ CLASS_OBJ = \
 	${CLASS}/V.vo
 
 CORE_OBJ = \
+	${CORE}/And.vo \
 	${CORE}/Diff.vo \
 	${CORE}/Equal.vo \
 	${CORE}/Equiv.vo \

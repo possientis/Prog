@@ -1,8 +1,6 @@
-Declare Scope ZF_Set_Intersect_scope.
-Open    Scope ZF_Set_Intersect_scope.
-
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Core.And.
 Require Import ZF.Set.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
@@ -10,8 +8,8 @@ Require Import ZF.Set.Union.
 (* The intersection of two sets a and b.                                        *)
 Definition intersect (a b:U) : U := :{ a | fun x => x :< b }:.
 
-Notation "a :/\: b" := (intersect a b)
-  (at level 11, right associativity) : ZF_Set_Intersect_scope.
+(* Notation "a :/\: b" := (intersect a b)                                       *)
+Global Instance SetAnd : And U := { and := intersect }.
 
 (* Characterisation of the elements of the intersection of two sets.            *)
 Proposition IntersectCharac : forall (a b:U),

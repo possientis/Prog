@@ -3,6 +3,7 @@ Open    Scope ZF_Set_Include_scope.
 
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.

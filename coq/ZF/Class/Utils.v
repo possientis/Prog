@@ -7,6 +7,7 @@ Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Class.V.
+Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Product.
 Require Import ZF.Core.Zero.

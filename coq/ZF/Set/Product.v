@@ -1,5 +1,6 @@
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.And.
 Require Import ZF.Core.Product.
 Require Import ZF.Set.
 Require Import ZF.Set.Include.
