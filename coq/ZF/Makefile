@@ -71,6 +71,7 @@ CORE_OBJ = \
 	${CORE}/Leq.vo \
 	${CORE}/Lt.vo \
 	${CORE}/Or.vo \
+	${CORE}/Pipe.vo \
 	${CORE}/Product.vo \
 	${CORE}/Zero.vo
 

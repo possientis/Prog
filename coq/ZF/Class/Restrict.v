@@ -1,5 +1,3 @@
-Declare Scope ZF_Class_Restrict_scope.
-
 Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
 Require Import ZF.Class.Binary.
@@ -12,17 +10,16 @@ Require Import ZF.Class.Relation.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Equal.
 Require Import ZF.Core.Leq.
+Require Import ZF.Core.Pipe.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
-
-Open Scope    ZF_Class_Restrict_scope.
 
 (* Restricting a class P to a class Q.                                          *)
 Definition restrict (P Q:Class) : Class
   := fromBinary (Restrict.restrict (toBinary P) Q).
 
-Notation "P :|: Q" := (restrict P Q)
-  (at level 13, left associativity) : ZF_Class_Restrict_scope.
+(* Notation "P :|: Q" := (restrict P Q)                                         *)
+Global Instance ClassPipe : Pipe Class Class := { pipe := restrict }.
 
 Proposition RestrictCharac : forall (P Q:Class) (x:U),
   (P:|:Q) x -> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
