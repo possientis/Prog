@@ -1,22 +1,21 @@
-Declare Scope ZF_Class_Include_scope.
-Open    Scope ZF_Class_Include_scope.
-
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
 Require Import ZF.Core.Equal.
+Require Import ZF.Core.Leq.
+Require Import ZF.Core.Lt.
 Require Import ZF.Set.
 
 (* Inclusion predicate between two classes.                                     *)
 Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.
 
-Notation "P :<=: Q" := (Incl P Q)
-  (at level 20, no associativity) : ZF_Class_Include_scope.
+(* Notation "P :<=: Q" := (Incl P Q)                                            *)
+Global Instance ClassLeq : Leq Class := { leq := Incl }.
 
 (* Strict inclusion predicate.                                                  *)
 Definition InclStrict (P Q:Class) : Prop := P :<=: Q /\ ~P :~: Q.
 
-Notation "P :<: Q" := (InclStrict P Q)
-  (at level 20, no associativity) : ZF_Class_Include_scope.
+(* Notation "P :<: Q" := (InclStrict P Q)                                       *)
+Global Instance ClassLt : Lt Class := { lt := InclStrict }.
 
 (* Two classes are equivalent if and only if they are included in each other.   *)
 Proposition DoubleInclusion : forall (P Q:Class),

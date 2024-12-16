@@ -2,6 +2,7 @@ Require Import ZF.Binary.Range.
 Require Import ZF.Class.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Include.
+Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

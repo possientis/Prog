@@ -1,10 +1,9 @@
-Declare Scope ZF_Set_Include_scope.
-Open    Scope ZF_Set_Include_scope.
-
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
+Require Import ZF.Core.Leq.
+Require Import ZF.Core.Lt.
 Require Import ZF.Core.Or.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
@@ -16,14 +15,14 @@ Require Import ZF.Set.Union.
 (* Inclusion predicate between two sets.                                        *)
 Definition Incl (a b:U) : Prop := forall x, x :< a -> x :< b.
 
-Notation "a :<=: b" := (Incl a b)
-  (at level 20, no associativity) : ZF_Set_Include_scope.
+(* Notation "a :<=: b" := (Incl a b)                                            *)
+Global Instance SetLeq : Leq U := { leq := Incl }.
 
 (* Strict inclusion predicate.                                                  *)
 Definition InclStrict (a b:U) : Prop := a :<=: b /\ ~a = b.
 
-Notation "a :<: b" := (InclStrict a b)
-  (at level 20, no associativity) : ZF_Set_Include_scope.
+(* Notation "a :<: b" := (InclStrict a b)                                       *)
+Global Instance SetLt : Lt U := { lt := InclStrict }.
 
 (* Two sets are equal if and only if they are subsets of each other.            *)
 Proposition DoubleInclusion : forall (a b:U),
