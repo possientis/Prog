@@ -30,10 +30,10 @@ Proof.
   - apply H1, H2, H3.
 Qed.
 
-(* Notation "P == Q" := (classEquiv P Q)                                        *)
+(* Notation "P :~: Q" := (classEquiv P Q)                                       *)
 Global Instance ClassEqual : Equal Class := { equal := classEquiv }.
 
-(* == is an equivalence relation                                                *)
+(* :~: is an equivalence relation                                               *)
 Global Instance ClassEquiv : Equiv Class
   := { EquivRefl := ClassEquivRefl
      ; EquivSym  := ClassEquivSym
@@ -41,7 +41,7 @@ Global Instance ClassEquiv : Equiv Class
      }.
 
 Proposition ClassEquivCharac : forall (P Q:Class),
-  P == Q <-> forall x, P x <-> Q x.
+  P :~: Q <-> forall x, P x <-> Q x.
 Proof.
   intros P Q. split; intros H1.
   - apply H1.

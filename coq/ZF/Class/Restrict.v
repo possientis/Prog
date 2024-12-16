@@ -48,7 +48,7 @@ Proof.
 Qed.
 
 Proposition DomainOfRestrict : forall (P Q:Class),
-  domain (P:|:Q) == Q :/\: domain P.
+  domain (P:|:Q) :~: Q :/\: domain P.
 Proof.
   intros P Q x. split; intros H1.
   - apply (proj1 (DomainCharac (P:|:Q) x)) in H1. destruct H1 as [y H1].
@@ -61,7 +61,7 @@ Proof.
 Qed.
 
 Proposition ImageIsRangeOfRestrict : forall (P:Class) (a:U),
-  P:[a]: == range (P:|:(toClass a)).
+  P:[a]: :~: range (P:|:(toClass a)).
 Proof.
   intros P a y. split; intros H1.
   - apply ImageCharac in H1. destruct H1 as [x [H1 H2]].
@@ -78,6 +78,6 @@ Proof.
 Qed.
 
 Proposition RestrictToDomain : forall (P:Class),
-  Relation P <-> P :|: domain P == P.
+  Relation P <-> P :|: domain P :~: P.
 Proof.
 Admitted.

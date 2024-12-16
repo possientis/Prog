@@ -25,7 +25,7 @@ Proof.
 Qed.
 
 Proposition IntersectProdIsProdIntersect : forall (P1 P2 Q1 Q2:Class),
-  (P1:x:Q1) :/\: (P2:x:Q2) == (P1:/\:P2) :x: (Q1:/\:Q2).
+  (P1:x:Q1) :/\: (P2:x:Q2) :~: (P1:/\:P2) :x: (Q1:/\:Q2).
 Proof.
   intros P1 P2 Q1 Q2. apply DoubleInclusion. split; intros x H1.
   - destruct H1 as [H1 H2].

@@ -70,8 +70,7 @@ Qed.
 
 (* The class associated with the set associated with a small class is the class.*)
 Proposition ToClassToSet : forall (P:Class) (q:Small P),
-  toClass (toSet P q) == P.
+  toClass (toSet P q) :~: P.
 Proof.
   intros P q. apply ClassEquivCharac. unfold toClass. apply ClassCharac.
 Qed.
-

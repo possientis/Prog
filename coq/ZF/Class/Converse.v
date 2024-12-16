@@ -44,7 +44,7 @@ Qed.
 
 (* If the class P is a relation, then converse acting on P is idempotent.       *)
 Proposition ConverseIdempotent : forall (P:Class),
-  Relation P <-> converse (converse P) == P.
+  Relation P <-> converse (converse P) :~: P.
 Proof.
   intros P. split; intros H1.
   - unfold converse.

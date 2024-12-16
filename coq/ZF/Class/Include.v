@@ -13,14 +13,14 @@ Notation "P :<=: Q" := (Incl P Q)
   (at level 20, no associativity) : ZF_Class_Include_scope.
 
 (* Strict inclusion predicate.                                                  *)
-Definition InclStrict (P Q:Class) : Prop := P :<=: Q /\ ~P == Q.
+Definition InclStrict (P Q:Class) : Prop := P :<=: Q /\ ~P :~: Q.
 
 Notation "P :<: Q" := (InclStrict P Q)
   (at level 20, no associativity) : ZF_Class_Include_scope.
 
 (* Two classes are equivalent if and only if they are included in each other.   *)
 Proposition DoubleInclusion : forall (P Q:Class),
-  P == Q <-> P :<=: Q /\ Q :<=: P.
+  P :~: Q <-> P :<=: Q /\ Q :<=: P.
 Proof.
   intros P Q. split; intros H1.
   - split; intros x; apply H1.
@@ -37,7 +37,7 @@ Qed.
 
 (* The inclusion relation is 'anti-symmetric' (modulo equivalence).             *)
 Proposition InclAnti : forall (P Q:Class),
-  P :<=: Q -> Q :<=: P -> P == Q.
+  P :<=: Q -> Q :<=: P -> P :~: Q.
 Proof.
   intros P Q H1 H2. apply DoubleInclusion. split; assumption.
 Qed.
@@ -63,4 +63,3 @@ Proof.
     + apply H1.
     + intros H4. apply H3, H4, H2.
 Qed.
-

@@ -38,7 +38,7 @@ Proof.
 Qed.
 
 (* The binary class of the class of a binary class F is F itself.               *)
-Proposition ToFromBinary : forall (F:Binary), toBinary (fromBinary F) == F.
+Proposition ToFromBinary : forall (F:Binary), toBinary (fromBinary F) :~: F.
 Proof.
   intros F. apply BinaryEquivCharac. intros y z.
   unfold toBinary, fromBinary. split; intros H1.
@@ -51,7 +51,7 @@ Qed.
 
 (* The relation class of the binary class of a relation class P is P itself.    *)
 Proposition FromToBinary : forall (P:Class),
-  Relation P -> fromBinary (toBinary P) == P.
+  Relation P -> fromBinary (toBinary P) :~: P.
 Proof.
   intros P H1. apply ClassEquivCharac. intros x.
   unfold Relation in H1. unfold toBinary, fromBinary.

@@ -30,10 +30,10 @@ Proof.
   - apply H1, H2, H3.
 Qed.
 
-(* Notation "F == G" := (binaryEquiv F G)                                       *)
+(* Notation "F :~: G" := (binaryEquiv F G)                                      *)
 Global Instance BinaryEqual : Equal Binary := { equal := binaryEquiv }.
 
-(* == is an equivalence relation                                                *)
+(* :~: is an equivalence relation                                               *)
 Global Instance BinaryEquiv : Equiv Binary
   := { EquivRefl := BinaryEquivRefl
      ; EquivSym  := BinaryEquivSym
@@ -41,7 +41,7 @@ Global Instance BinaryEquiv : Equiv Binary
      }.
 
 Proposition BinaryEquivCharac : forall (F G:Binary),
-  F == G <-> forall x y, F x y <-> G x y.
+  F :~: G <-> forall x y, F x y <-> G x y.
 Proof.
   intros F G. split; intros H1.
   - apply H1.
