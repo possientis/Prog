@@ -1,10 +1,10 @@
+Require Import ZF.Binary.
 Require Import ZF.Binary.Converse.
 Require Import ZF.Class.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Equal.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -43,23 +43,6 @@ Proof.
   destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.
 Qed.
 
-(* If the class P is a relation, then converse acting on P is idempotent.       *)
-Proposition ConverseIdempotent : forall (P:Class),
-  Relation P <-> converse (converse P) :~: P.
-Proof.
-  intros P. split; intros H1.
-  - unfold converse.
-    remember (Binary.Converse.converse (toBinary P)) as F eqn:Ef.
-    apply EquivTran with (fromBinary (Binary.Converse.converse F)).
-    + apply FromBinaryEqualCompat, ConverseEqualCompat, ToFromBinary.
-    + rewrite Ef. clear Ef F. apply EquivTran with (fromBinary (toBinary P)).
-      * apply FromBinaryEqualCompat. rewrite ConverseIdempotent.
-        apply EquivRefl.
-      * apply FromToBinary, H1.
-  - intros x H2. apply H1 in H2. apply ConverseCharac in H2.
-    destruct H2 as [y [z [H2 H3]]]. exists z. exists y. apply H2.
-Qed.
-
 (* The converse of the converse is a subclass of the original class.            *)
 Proposition ConverseConverseIncl : forall (P:Class),
   converse (converse P) :<=: P.
@@ -67,4 +50,21 @@ Proof.
   intros P x H1. apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
   apply ConverseCharac in H2. destruct H2 as [z' [y' [H2 H3]]].
   apply OrdPairEqual in H2. destruct H2 as [H2 H2']. subst. apply H3.
+Qed.
+
+(* If the class P is a relation, then converse acting on P is idempotent.       *)
+Proposition ConverseIdempotent : forall (P:Class),
+  Relation P <-> converse (converse P) :~: P.
+Proof.
+  intros P. split; intros H1.
+  - unfold converse.
+    remember (Binary.Converse.converse (toBinary P)) as F eqn:Ef.
+    apply ClassEquivTran with (fromBinary (Binary.Converse.converse F)).
+    + apply FromBinaryEqualCompat, ConverseEqualCompat, ToFromBinary.
+    + rewrite Ef. clear Ef F. apply ClassEquivTran with (fromBinary (toBinary P)).
+      * apply FromBinaryEqualCompat. rewrite Binary.Converse.ConverseIdempotent.
+        apply BinaryEquivRefl.
+      * apply FromToBinary, H1.
+  - intros x H2. apply H1 in H2. apply ConverseCharac in H2.
+    destruct H2 as [y [z [H2 H3]]]. exists z. exists y. apply H2.
 Qed.

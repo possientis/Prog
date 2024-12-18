@@ -8,7 +8,6 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Class.V.
 Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Lt.
 Require Import ZF.Core.Or.

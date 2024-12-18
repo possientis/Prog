@@ -2,7 +2,6 @@ Require Import ZF.Axiom.Define.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.
 Require Import ZF.Core.Equal.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 
 (* Predicate on classes, stating that a class is actually a set.                *)

@@ -1,6 +1,5 @@
 Require Import ZF.Set.
 Require Import ZF.Core.Equal.
-Require Import ZF.Core.Equiv.
 
 (* A class is simply a predicate on sets.                                       *)
 Definition Class : Type := U -> Prop.
@@ -32,13 +31,6 @@ Qed.
 
 (* Notation "P :~: Q" := (classEquiv P Q)                                       *)
 Global Instance ClassEqual : Equal Class := { equal := classEquiv }.
-
-(* :~: is an equivalence relation                                               *)
-Global Instance ClassEquiv : Equiv Class
-  := { EquivRefl := ClassEquivRefl
-     ; EquivSym  := ClassEquivSym
-     ; EquivTran := ClassEquivTran
-     }.
 
 Proposition ClassEquivCharac : forall (P Q:Class),
   P :~: Q <-> forall x, P x <-> Q x.

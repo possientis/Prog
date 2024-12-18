@@ -67,7 +67,6 @@ CORE_OBJ = \
 	${CORE}/And.vo \
 	${CORE}/Diff.vo \
 	${CORE}/Equal.vo \
-	${CORE}/Equiv.vo \
 	${CORE}/Leq.vo \
 	${CORE}/Lt.vo \
 	${CORE}/Or.vo \
