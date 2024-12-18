@@ -100,3 +100,25 @@ Proof.
     apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 _]]].
     exists y. exists z. assumption.
 Qed.
+
+Proposition RestrictTowerProperty : forall (P Q R:Class),
+  Q :<=: R -> (P:|:R) :|: Q :~: P:|:Q.
+Proof.
+  intros P Q R H1 x. split; intros H2.
+  - apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
+    apply RestrictCharac2 in H4. destruct H4 as [H4 H5]. apply RestrictCharac.
+    exists y. exists z. split.
+    + assumption.
+    + split; assumption.
+  - apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
+    apply RestrictCharac. exists y. exists z. split.
+    + assumption.
+    + split.
+      * assumption.
+      * apply RestrictCharac2. split.
+        { apply H1. assumption. }
+        { assumption. }
+Qed.
+
+
+
