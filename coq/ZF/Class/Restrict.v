@@ -22,9 +22,16 @@ Definition restrict (P Q:Class) : Class
 Global Instance ClassPipe : Pipe Class Class := { pipe := restrict }.
 
 Proposition RestrictCharac : forall (P Q:Class) (x:U),
-  (P:|:Q) x -> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
+  (P:|:Q) x <-> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
 Proof.
-  intros P Q x H1. apply H1.
+  intros P Q x. split; intros H1.
+  - apply H1.
+  - destruct H1 as [y [z [H2 [H3 H4]]]].
+    unfold pipe, ClassPipe, restrict, fromBinary.
+    unfold Binary.Restrict.restrict, toBinary.
+    exists y. exists z. split.
+    + assumption.
+    + split; assumption.
 Qed.
 
 Proposition RestrictCharac2 : forall (P Q:Class) (y z:U),
@@ -78,4 +85,18 @@ Qed.
 Proposition RestrictToDomain : forall (P:Class),
   Relation P <-> P :|: domain P :~: P.
 Proof.
-Admitted.
+  intros P. split; intros H1.
+  - intros x. split; intros H2.
+    + apply RestrictCharac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
+      rewrite H3. apply H4.
+    + destruct (H1 x H2) as [y [z H3]]. apply RestrictCharac.
+      exists y. exists z. split.
+      * assumption.
+      * split.
+        { apply DomainCharac. exists z. subst. assumption. }
+        { subst. assumption. }
+  - intros x H2. apply DoubleInclusion in H1. destruct H1 as [_ H1].
+    remember (H1 x) as H3 eqn:E. clear E H1. apply H3 in H2. clear H3.
+    apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 _]]].
+    exists y. exists z. assumption.
+Qed.
