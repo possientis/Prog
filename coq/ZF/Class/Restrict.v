@@ -66,11 +66,11 @@ Proof.
     split; assumption.
 Qed.
 
-Proposition ImageIsRangeOfRestrict : forall (P:Class) (a:U),
-  P:[a]: :~: range (P:|:(toClass a)).
+Proposition ImageIsRangeOfRestrict : forall (P Q:Class),
+  P:[Q]: :~: range (P:|:Q).
 Proof.
-  intros P a y. split; intros H1.
-  - apply ImageCharac in H1. destruct H1 as [x [H1 H2]].
+  intros P Q y. split; intros H1.
+  - unfold image in H1. destruct H1 as [x [H1 H2]].
     exists x. unfold toBinary. apply RestrictCharac2. split; assumption.
   - apply RangeCharac in H1. destruct H1 as [x H1]. apply RestrictCharac2 in H1.
     destruct H1 as [H1 H2]. exists x. unfold toBinary. split; assumption.
