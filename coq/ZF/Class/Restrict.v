@@ -2,6 +2,7 @@ Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Domain.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
@@ -16,7 +17,7 @@ Require Import ZF.Set.OrdPair.
 
 (* Restricting a class P to a class Q.                                          *)
 Definition restrict (P Q:Class) : Class
-  := fromBinary (Restrict.restrict (toBinary P) Q).
+  := fromBinary (Binary.Restrict.restrict (toBinary P) Q).
 
 (* Notation "P :|: Q" := (restrict P Q)                                         *)
 Global Instance ClassPipe : Pipe Class Class := { pipe := restrict }.
@@ -120,5 +121,12 @@ Proof.
         { assumption. }
 Qed.
 
-
-
+Proposition RestrictFunctional : forall (P Q:Class),
+  Functional P -> Functional (P:|:Q).
+Proof.
+  intros P Q H1. apply FunctionalCharac.
+  intros x y z H2 H3. apply (proj1 (FunctionalCharac P)) with x.
+  - assumption.
+  - apply RestrictCharac2 in H2. destruct H2 as [_ H2]. assumption.
+  - apply RestrictCharac2 in H3. destruct H3 as [_ H3]. assumption.
+Qed.
