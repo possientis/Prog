@@ -5,7 +5,6 @@ Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Core.And.
-Require Import ZF.Core.Or.
 Require Import ZF.Set.Relation.
 
 Definition CRelation := ZF.Class.Relation.Relation.
@@ -24,15 +23,6 @@ Proposition SmallIntersectSmall2 : forall (P Q:Class),
 Proof.
   intros P Q [a Ha]. apply BoundedClassIsSmall. exists a.
   intros x [_ H1]. apply Ha, H1.
-Qed.
-
-(* The union of two relation class is a relation class.                         *)
-Proposition UnionRelIsRel : forall (P Q:Class),
-  CRelation P -> CRelation Q -> CRelation (P:\/:Q).
-Proof.
-  intros P Q Hp Hq x H1. destruct H1 as [H1|H1].
-  - apply Hp, H1.
-  - apply Hq, H1.
 Qed.
 
 (* The union of a class of relations is a relation class.                       *)
