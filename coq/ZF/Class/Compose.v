@@ -1,6 +1,7 @@
 Require Import ZF.Binary.Compose.
 Require Import ZF.Class.
 Require Import ZF.Class.Binary.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Dot.
 Require Import ZF.Set.
@@ -47,3 +48,11 @@ Proof.
   intros P Q u H1. apply ComposeCharac in H1.
   destruct H1 as [x [y [z [H1 [H2 H3]]]]]. exists x. exists z. assumption.
 Qed.
+
+(*
+Proposition ComposeIsFunctional : forall (P Q:Class),
+  Functional P -> Functional Q -> Functional (Q :.: P).
+Proof.
+  intros P Q Hp Hq.
+Show.
+*)

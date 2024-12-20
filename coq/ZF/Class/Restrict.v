@@ -124,8 +124,8 @@ Qed.
 Proposition RestrictFunctional : forall (P Q:Class),
   Functional P -> Functional (P:|:Q).
 Proof.
-  intros P Q H1. apply FunctionalCharac.
-  intros x y z H2 H3. apply (proj1 (FunctionalCharac P)) with x.
+  intros P Q H1. apply FunctionalCharac2.
+  intros x y z H2 H3. apply FunctionalCharac1 with P x.
   - assumption.
   - apply RestrictCharac2 in H2. destruct H2 as [_ H2]. assumption.
   - apply RestrictCharac2 in H3. destruct H3 as [_ H3]. assumption.
