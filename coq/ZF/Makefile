@@ -69,6 +69,7 @@ CLASS_OBJ = \
 CORE_OBJ = \
 	${CORE}/And.vo \
 	${CORE}/Diff.vo \
+	${CORE}/Dot.vo \
 	${CORE}/Equal.vo \
 	${CORE}/Leq.vo \
 	${CORE}/Lt.vo \
