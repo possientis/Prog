@@ -47,6 +47,7 @@ CLASS_OBJ = \
 	${CLASS}/Converse.vo \
 	${CLASS}/Diff.vo \
 	${CLASS}/Domain.vo \
+	${CLASS}/Fst.vo \
 	${CLASS}/Function.vo \
 	${CLASS}/Functional.vo \
 	${CLASS}/Image.vo \
