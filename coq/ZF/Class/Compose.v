@@ -1,6 +1,7 @@
 Require Import ZF.Binary.Compose.
 Require Import ZF.Class.
 Require Import ZF.Class.Binary.
+Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Dot.
@@ -62,3 +63,10 @@ Proof.
   subst. apply Gq with y2; assumption.
 Qed.
 
+Proposition ComposeIsFunction : forall (P Q:Class),
+  Functional P -> Functional Q -> Function (Q :.: P).
+Proof.
+  intros P Q Hp Hq. split.
+  - apply ComposeIsRelation.
+  - apply ComposeIsFunctional; assumption.
+Qed.
