@@ -15,5 +15,3 @@ Proof.
   - apply Hp, H1.
   - apply Hq, H1.
 Qed.
-
-
