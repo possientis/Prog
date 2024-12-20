@@ -60,6 +60,7 @@ CLASS_OBJ = \
 	${CLASS}/Restrict.vo \
 	${CLASS}/Russell.vo \
 	${CLASS}/Small.vo \
+	${CLASS}/Snd.vo \
 	${CLASS}/Switch.vo \
 	${CLASS}/Union.vo \
 	${CLASS}/Utils.vo \
