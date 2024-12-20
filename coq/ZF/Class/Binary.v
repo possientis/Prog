@@ -1,7 +1,7 @@
 Require Import ZF.Binary.
 Require Import ZF.Class.
 Require Import ZF.Class.Relation.
-Require Import ZF.Core.Equal.
+Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
@@ -18,7 +18,7 @@ Proof.
 Qed.
 
 (* fromBinary is compatible with equivalences of classes and binary classes.    *)
-Proposition FromBinaryEqualCompat : EqualCompat fromBinary.
+Proposition FromBinaryEquivCompat : EquivCompat fromBinary.
 Proof.
   intros F G H1 x. unfold fromBinary.
   split; intros H2;
@@ -32,7 +32,7 @@ Qed.
 (* A class can be viewed as a binary class.                                     *)
 Definition toBinary (P:Class) : Binary := fun y z => P :(y,z):.
 
-Proposition ToBinaryEqualCompat : EqualCompat toBinary.
+Proposition ToBinaryEquivCompat : EquivCompat toBinary.
 Proof.
   intros P Q H1 x y. unfold toBinary. apply H1.
 Qed.

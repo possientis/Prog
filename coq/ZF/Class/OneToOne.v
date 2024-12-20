@@ -1,6 +1,9 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Functional.
+Require Import ZF.Core.Dot.
+Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
@@ -33,4 +36,14 @@ Proof.
   - subst. apply OneToOneCharac2 with P y2; assumption.
 Qed.
 
+(*
+Proposition ComposeIsOneToOne : forall (P Q:Class),
+  OneToOne P -> OneToOne Q -> OneToOne (Q :.: P).
+Proof.
+  intros P Q [Hp Gp] [Hq Gq]. split.
+  - apply ComposeIsFunctional; assumption.
+  - apply FunctionalEqualCompat with (converse P :.: converse Q).
+    + apply ClassEquivSym.
+Show.
+*)
 

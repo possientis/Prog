@@ -3,6 +3,8 @@ Require Import ZF.Class.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Compose.
 Require Import ZF.Core.Dot.
+Require Import ZF.Core.Equiv.
+Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 (* A class is said to be functional if its associated binary class is           *)
@@ -21,6 +23,14 @@ Proof.
   unfold Functional, Binary.Functional.Functional, toBinary. assumption.
 Qed.
 
+Proposition FunctionalEqualCompat : forall (P Q:Class),
+  P :~: Q -> Functional P -> Functional Q.
+Proof.
+  intros P Q H1 H2. apply FunctionalCharac2.
+  intros x y z H3 H4. remember (FunctionalCharac1 P H2) as H5 eqn:E. clear E H2.
+  apply H5 with x; apply H1; assumption.
+Qed.
+
 Proposition ComposeIsFunctional : forall (P Q:Class),
   Functional P -> Functional Q -> Functional (Q :.: P).
 Proof.
@@ -33,5 +43,3 @@ Proof.
   assert (y1 = y2) as H3. { apply Gp with x; assumption. }
   subst. apply Gq with y2; assumption.
 Qed.
-
-

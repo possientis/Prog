@@ -6,7 +6,7 @@ Require Import ZF.Class.Compose.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Dot.
-Require Import ZF.Core.Equal.
+Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -63,9 +63,9 @@ Proof.
   - unfold converse.
     remember (Binary.Converse.converse (toBinary P)) as F eqn:Ef.
     apply ClassEquivTran with (fromBinary (Binary.Converse.converse F)).
-    + apply FromBinaryEqualCompat, ConverseEqualCompat, ToFromBinary.
+    + apply FromBinaryEquivCompat, ConverseEquivCompat, ToFromBinary.
     + rewrite Ef. clear Ef F. apply ClassEquivTran with (fromBinary (toBinary P)).
-      * apply FromBinaryEqualCompat. rewrite Binary.Converse.ConverseIdempotent.
+      * apply FromBinaryEquivCompat. rewrite Binary.Converse.ConverseIdempotent.
         apply BinaryEquivRefl.
       * apply FromToBinary, H1.
   - intros x H2. apply H1 in H2. apply ConverseCharac in H2.
