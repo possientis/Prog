@@ -2,6 +2,7 @@ Require Import ZF.Axiom.Replacement.
 Require Import ZF.Binary.
 Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.Image.
+Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Replace.
@@ -27,7 +28,7 @@ Proof.
 
   (* We claim that the class F[a] (direct image of the set a by F) is the same  *)
   (* as the class fun x => x :< a /\ P x.                                       *)
-  assert (forall x, F:[a]: x <-> x :< a /\ P x) as H3.
+  assert (forall x, F:[toClass a]: x <-> x :< a /\ P x) as H3.
     { rewrite H1. unfold image. intros x. split; intros H4.
       - destruct H4 as [y [H5 [H6 H7]]]. subst. auto.
       - exists x. split.

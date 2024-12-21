@@ -14,8 +14,8 @@ Global Instance BinaryPipe : Pipe Binary Class := { pipe := restrict }.
 
 (* Image is the range of the restriction.                                       *)
 (* This is an equal equality, not just equivalence.                             *)
-Proposition ImageIsRestriction : forall (F:Binary) (a:U),
-  F:[a]: = range (F:|: (toClass a)).
+Proposition ImageIsRestriction : forall (F:Binary) (P:Class),
+  F:[P]: = range (F:|:P).
 Proof.
-  intros F a. unfold image, range, restrict. reflexivity.
+  intros F P. unfold image, range, restrict. reflexivity.
 Qed.
