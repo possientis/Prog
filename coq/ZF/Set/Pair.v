@@ -6,6 +6,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.FromClass.
 
 (* It is useful to define the predicate underlying the pairing axiom.           *)
 Definition PairPred (a b:U) : U -> Prop := fun x =>
@@ -20,7 +21,7 @@ Qed.
 
 (* We consider the set defined by the pairing predicate of a and b.             *)
 Definition pairSet (a b:U) : U
-  := toSet (PairPred a b) (PairSmall a b).
+  := fromClass (PairPred a b) (PairSmall a b).
 
 Notation ":{ a , b }:" := (pairSet a b)
   (at level 1, no associativity) : ZF_Set_Pair_scope.
@@ -29,7 +30,7 @@ Notation ":{ a , b }:" := (pairSet a b)
 Proposition PairCharac : forall (a b:U),
   forall x, x :< :{a,b}: <-> x = a \/ x = b.
 Proof.
-  unfold pairSet. intros a b. apply ClassCharac.
+  unfold pairSet. intros a b. apply FromClassCharac.
 Qed.
 
 (* If a set x is equal to the set a, then it belongs to the set {a,b}.          *)

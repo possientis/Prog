@@ -2,8 +2,8 @@ Require Import ZF.Binary.
 Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.
-Require Import ZF.Class.Small.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Replace.
 
@@ -23,7 +23,7 @@ Qed.
 
 (* The converse of a set converse a = { (z,y) | (y,z) :< a }                    *)
 Definition converse (a:U) : U
-  := replaceSet Converse (toClass a) ConverseFunctional (SetIsSmall a).
+  := replaceSet Converse (toClass a) ConverseFunctional (ToClassIsSmall a).
 
 Proposition ConverseCharac : forall (a:U),
   forall x, x :< (converse a) <-> exists y z, x =:(z,y): /\ :(y,z): :< a.

@@ -4,6 +4,7 @@ Open    Scope ZF_Axiom_Specification_scope.
 Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 
 (* It is useful to define the predicate underlying the specification axiom.     *)
 Definition SpecPred (P:U -> Prop) (a:U) : U -> Prop := fun x =>
@@ -18,7 +19,7 @@ Qed.
 
 (* We consider the set defined by the specification predicate of P and a.       *)
 Definition specSet (P:U -> Prop) (a:U) : U
-  := toSet (SpecPred P a) (SpecSmall P a).
+  := fromClass (SpecPred P a) (SpecSmall P a).
 
 Notation ":{ a | P }:" := (specSet P a)
   (at level 1, no associativity) : ZF_Axiom_Specification_scope.
@@ -27,7 +28,7 @@ Notation ":{ a | P }:" := (specSet P a)
 Proposition SpecCharac : forall (P:U -> Prop) (a:U),
   forall x, x :< :{a | P}: <-> x :< a /\ P x.
 Proof.
-  unfold specSet. intros P a. apply ClassCharac.
+  unfold specSet. intros P a. apply FromClassCharac.
 Qed.
 
 (* Every element of the specification set of P and a is an element of a.        *)

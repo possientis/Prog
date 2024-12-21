@@ -6,6 +6,7 @@ Require Import ZF.Axiom.Union.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Or.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Pair.
 
 (* It is useful to define the predicate underlying the union axiom.             *)
@@ -21,7 +22,7 @@ Qed.
 
 (* We consider the set defined by the union predicate of the set a.             *)
 Definition unionSet (a:U) : U
-  := toSet (UnionPred a) (UnionSmall a).
+  := fromClass (UnionPred a) (UnionSmall a).
 
 Notation ":U( a )" := (unionSet a)
   (at level 0, no associativity) : ZF_Set_Union_scope.
@@ -36,7 +37,7 @@ Global Instance SetOr : Or U := { or := union }.
 Proposition UnionSetCharac : forall (a:U),
   forall x, x :< :U(a) <-> exists y, x :< y /\ y :< a.
 Proof.
-  unfold unionSet. intros a. apply ClassCharac.
+  unfold unionSet. intros a. apply FromClassCharac.
 Qed.
 
 (* Characterisation of the elements of the union of two sets.                   *)

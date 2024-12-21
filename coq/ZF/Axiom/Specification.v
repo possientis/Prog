@@ -6,6 +6,7 @@ Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Image.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Replace.
 
 (* Given a set theoretic predicate P and a set a, there exists a set b whose    *)
@@ -24,7 +25,7 @@ Proof.
   remember (toClass a) as A eqn:Ea.
 
   (* Note that the class A is small. *)
-  assert (Small A) as Ha. { rewrite Ea. apply SetIsSmall. }
+  assert (Small A) as Ha. { rewrite Ea. apply ToClassIsSmall. }
 
   (* We claim the binary class F is functional. *)
   assert (Functional F) as Hf.

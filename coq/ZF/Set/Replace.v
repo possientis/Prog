@@ -7,6 +7,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 
 (* It is useful to define the class underlying the replacement axiom.           *)
 Definition ReplacePred (F:Binary) (P:Class) : Class := fun y =>
@@ -39,11 +40,11 @@ Admitted.
 
 (* The set defined by the class F[P] when F is functional and P is small.       *)
 Definition replaceSet (F:Binary) (P:Class) (p:Functional F) (q:Small P) : U
-  := toSet F:[P]: (ReplaceSmall F P p q).
+  := fromClass F:[P]: (ReplaceSmall F P p q).
 
 (* Characterisation of the elements of the replace set of F P.                  *)
 Proposition ReplaceCharac : forall (F:Binary)(P:Class)(p:Functional F)(q:Small P),
   forall y, y :< (replaceSet F P p q) <-> F:[P]: y.
 Proof.
-  unfold replaceSet. intros F P p q. apply ClassCharac.
+  unfold replaceSet. intros F P p q. apply FromClassCharac.
 Qed.

@@ -5,6 +5,7 @@ Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
 Require Import ZF.Core.Product.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Include.
 Require Import ZF.Set.Intersect.
 Require Import ZF.Set.OrdPair.
@@ -93,7 +94,7 @@ Qed.
 
 (* We consider the set defined by the product predicate of the sets a and b     *)
 Definition prodSet (a b:U) : U
-  := toSet (ProdPred a b) (ProdSmall a b).
+  := fromClass (ProdPred a b) (ProdSmall a b).
 
 
 (* Notation "a :x: b" := (prodSet a b)                                          *)
@@ -103,7 +104,7 @@ Global Instance SetProduct : Product U := { product := prodSet }.
 Proposition ProdCharac : forall (a b:U),
   forall x, x :< a :x: b <-> exists y, exists z, y :< a /\ z :< b /\ x =:(y,z):.
 Proof.
-  unfold prodSet. intros a b. apply ClassCharac.
+  unfold prodSet. intros a b. apply FromClassCharac.
 Qed.
 
 Proposition ProdCharac2 : forall (a b:U),

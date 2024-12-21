@@ -4,6 +4,7 @@ Require Import ZF.Axiom.NonEmpty.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Specify.
 
 (* The class which is satisfied by no set.                                      *)
@@ -44,7 +45,7 @@ Proof.
 Qed.
 
 (* We consider the set defined by the small class Empty                         *)
-Definition emptySet : U := toSet Empty EmptySmall.
+Definition emptySet : U := fromClass Empty EmptySmall.
 
 (* Notation ":0:" := emptySet                                                   *)
 Global Instance SetZero : Zero U := { zero := emptySet }.
@@ -52,7 +53,7 @@ Global Instance SetZero : Zero U := { zero := emptySet }.
 (* Characterisation of the elements of the empty set.                           *)
 Proposition EmptyCharac : forall x, x :< :0: <-> False.
 Proof.
-  unfold emptySet. apply ClassCharac.
+  unfold emptySet. apply FromClassCharac.
 Qed.
 
 (* The empty set has no element.                                                *)

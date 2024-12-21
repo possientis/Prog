@@ -5,6 +5,7 @@ Require Import ZF.Axiom.Power.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Leq.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Include.
 
 (* It is useful to define the predicate underlying the power axiom.             *)
@@ -19,7 +20,7 @@ Qed.
 
 (* We consider the set defined by the power predicate of the set a.             *)
 Definition powerSet (a:U) : U
-  := toSet (PowerPred a) (PowerSmall a).
+  := fromClass (PowerPred a) (PowerSmall a).
 
 Notation ":P( a )" := (powerSet a)
   (at level 0, no associativity) : ZF_Set_Power_scope.
@@ -28,5 +29,5 @@ Notation ":P( a )" := (powerSet a)
 Proposition PowerCharac : forall (a:U),
   forall x, x :< :P(a) <-> x :<=: a.
 Proof.
-  unfold powerSet. intros a. apply ClassCharac.
+  unfold powerSet. intros a. apply FromClassCharac.
 Qed.
