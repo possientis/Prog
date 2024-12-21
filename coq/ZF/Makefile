@@ -42,12 +42,12 @@ BINARY_OBJ = \
 
 CLASS_OBJ = \
 	${CLASS}/Bijection.vo \
-	${CLASS}/Binary.vo \
 	${CLASS}/Bounded.vo \
 	${CLASS}/Compose.vo \
 	${CLASS}/Converse.vo \
 	${CLASS}/Diff.vo \
 	${CLASS}/Domain.vo \
+	${CLASS}/FromBinary.vo \
 	${CLASS}/Fst.vo \
 	${CLASS}/Function.vo \
 	${CLASS}/Functional.vo \

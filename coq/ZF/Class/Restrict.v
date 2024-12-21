@@ -1,7 +1,7 @@
 Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
-Require Import ZF.Class.Binary.
 Require Import ZF.Class.Domain.
+Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Include.

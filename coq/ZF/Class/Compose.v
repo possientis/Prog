@@ -1,6 +1,6 @@
 Require Import ZF.Binary.Compose.
 Require Import ZF.Class.
-Require Import ZF.Class.Binary.
+Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Dot.
 Require Import ZF.Set.
