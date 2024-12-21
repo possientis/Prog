@@ -4,10 +4,15 @@ Require Import ZF.Class.
 Require Import ZF.Class.Binary.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Include.
+Require Import ZF.Class.Intersect.
+Require Import ZF.Class.Product.
 Require Import ZF.Class.Relation.
+Require Import ZF.Class.V.
+Require Import ZF.Core.And.
 Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Leq.
+Require Import ZF.Core.Product.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
@@ -87,4 +92,19 @@ Proof.
     apply ConverseCharac. exists x. exists z. split.
     + assumption.
     + apply ComposeCharac2. exists y. split; assumption.
+Qed.
+
+(* Only keep ordered pairs of a class: you get the same converse.               *)
+Proposition ConverseKeepOrderedPairs : forall (P:Class),
+  converse P :~: converse (P :/\: V:x:V).
+Proof.
+  intros P x. split; intros H1.
+  - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
+    apply ConverseCharac. exists y. exists z. split.
+    + assumption.
+    + split.
+      * assumption.
+      * apply ProdCharac2. split; apply I.
+  - apply ConverseCharac in H1. destruct H1 as [y [z [H1 [H2 _]]]].
+    apply ConverseCharac. exists y. exists z. split; assumption.
 Qed.
