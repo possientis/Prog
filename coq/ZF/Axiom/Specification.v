@@ -4,6 +4,7 @@ Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.Image.
 Require Import ZF.Set.
 Require Import ZF.Set.Replace.
 

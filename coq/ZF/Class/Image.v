@@ -3,6 +3,7 @@ Open Scope    ZF_Class_Image_scope.
 
 Require Import ZF.Class.
 Require Import ZF.Class.Include.
+Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -12,8 +13,8 @@ Require Import ZF.Set.OrdPair.
 Definition image (P Q:Class) : Class := fun y =>
   exists x, Q x /\ P :(x,y):.
 
-Notation "P :[ Q ]:" := (image P Q)
-  (at level 0, no associativity) : ZF_Class_Image_scope.
+(* Notation "P :[ Q ]:" := (image P Q)                                          *)
+Global Instance ClassImage : Image Class Class := { image := image }.
 
 Proposition ImageMonotone : forall (P Q R S:Class),
   P :<=: Q -> R :<=: S -> P:[R]: :<=: Q:[S]:.

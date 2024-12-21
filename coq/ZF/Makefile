@@ -72,6 +72,7 @@ CORE_OBJ = \
 	${CORE}/Diff.vo \
 	${CORE}/Dot.vo \
 	${CORE}/Equiv.vo \
+	${CORE}/Image.vo \
 	${CORE}/Leq.vo \
 	${CORE}/Lt.vo \
 	${CORE}/Or.vo \

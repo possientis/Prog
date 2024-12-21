@@ -4,6 +4,7 @@ Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.Image.
 Require Import ZF.Set.
 
 (* It is useful to define the predicate underlying the replacement axiom.       *)
