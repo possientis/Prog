@@ -14,3 +14,10 @@ Proof.
   - apply ComposeIsRelation.
   - apply ComposeIsFunctional; assumption.
 Qed.
+
+(* Weaker result but convenient                                                 *)
+Proposition ComposeIsFunction2 : forall (P Q:Class),
+  Function P -> Function Q -> Function (Q :.: P).
+Proof.
+  intros P Q [_ Hp] [_ Hq]. apply ComposeIsFunction; assumption.
+Qed.

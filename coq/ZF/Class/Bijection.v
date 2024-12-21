@@ -23,10 +23,17 @@ Proof.
   - apply H3.
 Qed.
 
-Proposition ConposeIsBijection : forall (P Q:Class),
-  OneToOne P -> OneToOne Q -> Bijection (P :.: Q).
+Proposition ComposeIsBijection : forall (P Q:Class),
+  OneToOne P -> OneToOne Q -> Bijection (Q :.: P).
 Proof.
   intros P Q Hp Hq. split.
   - apply ComposeIsRelation.
   - apply ComposeIsOneToOne; assumption.
+Qed.
+
+(* Weaker result but convenient                                                 *)
+Proposition ComposeIsBijection2 : forall (P Q:Class),
+  Bijection P -> Bijection Q -> Bijection (Q :.: P).
+Proof.
+  intros P Q [_ Hp] [_ Hq]. apply ComposeIsBijection; assumption.
 Qed.
