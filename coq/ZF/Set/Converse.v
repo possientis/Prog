@@ -2,8 +2,8 @@ Require Import ZF.Binary.
 Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.
-Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Replace.
 

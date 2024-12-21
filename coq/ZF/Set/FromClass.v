@@ -47,14 +47,6 @@ Proof.
   intros P q q'. unfold fromClass. apply DefineProof.
 Qed.
 
-(* A set can be viewed as a class.                                              *)
-Definition toClass (a:U) : Class := fun x => x :< a.
-
-Proposition ToClassIsSmall : forall (a:U), Small (toClass a).
-Proof.
-  intros a. exists a. intro x. unfold toClass. split; auto.
-Qed.
-
 (* The set associated with the class associated with a set is the set itself.   *)
 Proposition fromClassToClass : forall (a:U),
   fromClass (toClass a) (ToClassIsSmall a) = a.
