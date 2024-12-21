@@ -73,3 +73,8 @@ Proposition ToClassToSet : forall (P:Class) (q:Small P),
 Proof.
   intros P q. apply ClassEquivCharac. unfold toClass. apply ClassCharac.
 Qed.
+
+Proposition SetIsSmall : forall (a:U), Small (toClass a).
+Proof.
+  intros a. exists a. intro x. unfold toClass. split; auto.
+Qed.

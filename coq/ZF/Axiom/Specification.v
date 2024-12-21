@@ -20,6 +20,12 @@ Proof.
   (* Consider the binary class F x y := P x /\ x = y. *)
   remember (fun x y => P x /\ x = y) as F eqn:H1.
 
+  (* Consider the class associated with the set a. *)
+  remember (toClass a) as Q eqn:Ea.
+
+  (* Note that the class associated with the set a is small. *)
+  assert (Small Q) as S. { rewrite Ea. apply SetIsSmall. }
+
   (* We claim that this binary class is functional. *)
   assert (Functional F) as H2.
     { intros x y z H3 H4. rewrite H1 in H3. rewrite H1 in H4.
@@ -42,18 +48,18 @@ Proof.
 
   (* Let us take b to be the direct image of a by the functional relation F     *)
   (* which is a small class and can be viewed as a set.                         *)
-  exists (replaceSet F a H2).
+  exists (replaceSet F Q H2 S).
 
   (* We need to show x :< b <-> x :< a /\ P x *)
-  assert (forall x, x :< (replaceSet F a H2) <-> x :< a /\ P x) as A. 2: apply A.
+  assert (forall x, x :< (replaceSet F Q H2 S) <-> x :< a /\ P x) as A. 2: apply A.
 
   intros x. split.
 
   (* Proof of -> *)
-  - assert (x :< (replaceSet F a H2) -> x :< a /\ P x) as A. 2: apply A.
-    intros H4. apply ReplaceCharac, H3 in H4. apply H4.
+  - assert (x :< (replaceSet F Q H2 S) -> x :< a /\ P x) as A. 2: apply A.
+    intros H4. apply ReplaceCharac in H4. rewrite Ea in H4. apply H3, H4.
 
   (* Proof of <- *)
-  - assert (x :< a /\ P x -> x :< (replaceSet F a H2)) as A. 2: apply A.
-    intros H4. apply ReplaceCharac, H3. apply H4.
+  - assert (x :< a /\ P x -> x :< (replaceSet F Q H2 S)) as A. 2: apply A.
+    intros H4. apply ReplaceCharac. rewrite Ea. apply H3, H4.
 Qed.
