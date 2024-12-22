@@ -1,15 +1,11 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Diff.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Lt.
 Require Import ZF.Core.Or.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
-Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Intersect.
 Require Import ZF.Set.Union.
 
 (* Inclusion predicate between two sets.                                        *)
@@ -57,26 +53,6 @@ Proof.
   intros a b c H1 H2 x H3. apply H2, H1, H3.
 Qed.
 
-(* The inclusion relation is left compatible with intersection.                 *)
-Proposition InclCompatIntersectL : forall (a b c:U),
-  a :<=: b -> c:/\:a :<=: c:/\:b.
-Proof.
-  intros a b c H1 x H2. apply IntersectCharac in H2. destruct H2 as [H2 H3].
-  apply IntersectCharac. split.
-  - apply H2.
-  - apply H1, H3.
-Qed.
-
-(* The inclusion relation is right compatible with intersection.                 *)
-Proposition InclCompatIntersectR : forall (a b c:U),
-  a :<=: b -> a:/\:c :<=: b:/\:c.
-Proof.
-  intros a b c H1 x H2. apply IntersectCharac in H2. destruct H2 as [H2 H3].
-  apply IntersectCharac. split.
-  - apply H1, H2.
-  - apply H3.
-Qed.
-
 (* The inclusion relation is left compatible with union.                        *)
 Proposition InclCompatUnionL : forall (a b c:U),
   a :<=: b -> c:\/:a :<=: c:\/:b.
@@ -109,19 +85,6 @@ Proof.
   - intros x H2. rewrite H1. apply UnionCharac. left. apply H2.
 Qed.
 
-Proposition InclEqualIntersect : forall (a b:U),
-  a :<=: b <-> a = a :/\: b.
-Proof.
-  intros a b. split; intros H1.
-  - apply Extensionality. intros x. split; intros H2.
-    + apply IntersectCharac. split.
-      * apply H2.
-      * apply H1, H2.
-    + apply IntersectCharac in H2. destruct H2 as [H2 _]. apply H2.
-  - intros x H2. rewrite H1 in H2. apply IntersectCharac in H2.
-    destruct H2 as [_ H2]. apply H2.
-Qed.
-
 Proposition InclUnion1 : forall (a b:U), a :<=: a:\/:b.
 Proof.
   intros a b x H1. apply UnionCharac. left. apply H1.
@@ -130,45 +93,6 @@ Qed.
 Proposition InclUnion2 : forall (a b:U), b :<=: a:\/:b.
 Proof.
   intros a b x H1. apply UnionCharac. right. apply H1.
-Qed.
-
-Proposition InclIntersect1 : forall (a b:U), a:/\:b :<=: a.
-Proof.
-  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [H1 _]. apply H1.
-Qed.
-
-Proposition InclIntersect2 : forall (a b:U), a:/\:b :<=: b.
-Proof.
-  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [_ H1]. apply H1.
-Qed.
-
-Proposition InclEmptyDiff : forall (a b:U),
-  a :\: b = :0: <-> a :<=: b.
-Proof.
-  intros a b. split; intros H1.
-  - intros x Ha. apply DoubleNegation. intros Hb.
-    assert (x :< :0:) as H2.
-      { rewrite <- H1. apply DiffCharac. split; assumption. }
-    apply EmptyCharac in H2. contradiction.
-  - apply Extensionality. intros x. split; intros H2.
-    + apply DiffCharac in H2. destruct H2 as [H2 H3].
-      apply H1 in H2. contradiction.
-    + apply EmptyCharac in H2. contradiction.
-Qed.
-
-Proposition InclDiff : forall (a b:U),
-  a :\: b :<=: a.
-Proof.
-  intros a b x H1. apply DiffCharac in H1. destruct H1 as [H1 _]. apply H1.
-Qed.
-
-Proposition InclDiffMonotoneL : forall (a b c:U),
-  a :<=: b -> c :\: b :<=: c :\: a.
-Proof.
-  intros a b c H1 x H2. apply DiffCharac in H2. destruct H2 as [H2 H3].
-  apply DiffCharac. split.
-  - apply H2.
-  - intros H4. apply H1 in H4. contradiction.
 Qed.
 
 Proposition InclStrictExists : forall (a b:U),

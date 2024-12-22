@@ -1,8 +1,10 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Core.And.
+Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
 Require Import ZF.Set.
+Require Import ZF.Set.Include.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
@@ -86,4 +88,48 @@ Proof.
   - right. intros H3. apply H1. apply IntersectCharac. split; assumption.
   - left. apply H2.
 Qed.
+
+(* The inclusion relation is left compatible with intersection.                 *)
+Proposition InclCompatIntersectL : forall (a b c:U),
+  a :<=: b -> c:/\:a :<=: c:/\:b.
+Proof.
+  intros a b c H1 x H2. apply IntersectCharac in H2. destruct H2 as [H2 H3].
+  apply IntersectCharac. split.
+  - apply H2.
+  - apply H1, H3.
+Qed.
+
+(* The inclusion relation is right compatible with intersection.                 *)
+Proposition InclCompatIntersectR : forall (a b c:U),
+  a :<=: b -> a:/\:c :<=: b:/\:c.
+Proof.
+  intros a b c H1 x H2. apply IntersectCharac in H2. destruct H2 as [H2 H3].
+  apply IntersectCharac. split.
+  - apply H1, H2.
+  - apply H3.
+Qed.
+
+Proposition InclEqualIntersect : forall (a b:U),
+  a :<=: b <-> a = a :/\: b.
+Proof.
+  intros a b. split; intros H1.
+  - apply Extensionality. intros x. split; intros H2.
+    + apply IntersectCharac. split.
+      * apply H2.
+      * apply H1, H2.
+    + apply IntersectCharac in H2. destruct H2 as [H2 _]. apply H2.
+  - intros x H2. rewrite H1 in H2. apply IntersectCharac in H2.
+    destruct H2 as [_ H2]. apply H2.
+Qed.
+
+Proposition InclIntersect1 : forall (a b:U), a:/\:b :<=: a.
+Proof.
+  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [H1 _]. apply H1.
+Qed.
+
+Proposition InclIntersect2 : forall (a b:U), a:/\:b :<=: b.
+Proof.
+  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [_ H1]. apply H1.
+Qed.
+
 
