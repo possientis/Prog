@@ -89,47 +89,55 @@ Proof.
   - left. apply H2.
 Qed.
 
-(* The inclusion relation is left compatible with intersection.                 *)
-Proposition InclCompatIntersectL : forall (a b c:U),
-  a :<=: b -> c:/\:a :<=: c:/\:b.
+(* Intersection is compatible with inclusion.                                   *)
+Proposition IntersectInclCompat : forall (a b c d:U),
+  a :<=: b -> c :<=: d -> a:/\:c :<=: b:/\:d.
 Proof.
-  intros a b c H1 x H2. apply IntersectCharac in H2. destruct H2 as [H2 H3].
-  apply IntersectCharac. split.
-  - apply H2.
-  - apply H1, H3.
+  intros a b c d H1 H2 x H3. apply IntersectCharac in H3.
+  destruct H3 as [H3 H4]. apply IntersectCharac. split.
+  - apply H1. assumption.
+  - apply H2. assumption.
 Qed.
 
-(* The inclusion relation is right compatible with intersection.                 *)
-Proposition InclCompatIntersectR : forall (a b c:U),
+(* Intersection is left-compatible with inclusion                               *)
+Proposition IntersectInclCompatL : forall (a b c:U),
   a :<=: b -> a:/\:c :<=: b:/\:c.
 Proof.
-  intros a b c H1 x H2. apply IntersectCharac in H2. destruct H2 as [H2 H3].
-  apply IntersectCharac. split.
-  - apply H1, H2.
-  - apply H3.
+  intros a b c H1. apply IntersectInclCompat.
+  - assumption.
+  - apply InclRefl.
 Qed.
 
-Proposition InclEqualIntersect : forall (a b:U),
-  a :<=: b <-> a = a :/\: b.
+(* Intersection is right-compatible with inclusion                              *)
+Proposition IntersectInclCompatR : forall (a b c:U),
+  a :<=: b -> c:/\:a :<=: c:/\:b.
+Proof.
+  intros a b c H1. apply IntersectInclCompat.
+  - apply InclRefl.
+  - assumption.
+Qed.
+
+Proposition IntersectInclL : forall (a b:U), a:/\:b :<=: a.
+Proof.
+  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [H1 _]. apply H1.
+Qed.
+
+Proposition IntersectInclR : forall (a b:U), a:/\:b :<=: b.
+Proof.
+  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [_ H1]. apply H1.
+Qed.
+
+Proposition IntersectEqualIncl : forall (a b:U),
+  a = a :/\: b <-> a :<=: b.
 Proof.
   intros a b. split; intros H1.
+  - intros x H2. rewrite H1 in H2. apply IntersectCharac in H2.
+    destruct H2 as [_ H2]. apply H2.
   - apply Extensionality. intros x. split; intros H2.
     + apply IntersectCharac. split.
       * apply H2.
       * apply H1, H2.
     + apply IntersectCharac in H2. destruct H2 as [H2 _]. apply H2.
-  - intros x H2. rewrite H1 in H2. apply IntersectCharac in H2.
-    destruct H2 as [_ H2]. apply H2.
-Qed.
-
-Proposition InclIntersect1 : forall (a b:U), a:/\:b :<=: a.
-Proof.
-  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [H1 _]. apply H1.
-Qed.
-
-Proposition InclIntersect2 : forall (a b:U), a:/\:b :<=: b.
-Proof.
-  intros a b x H1. apply IntersectCharac in H1. destruct H1 as [_ H1]. apply H1.
 Qed.
 
 
