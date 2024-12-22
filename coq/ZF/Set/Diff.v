@@ -102,7 +102,7 @@ Proof.
     + apply DiffCharac. split; assumption.
 Qed.
 
-Proposition InclEmptyDiff : forall (a b:U),
+Proposition DiffEmptyIncl : forall (a b:U),
   a :\: b = :0: <-> a :<=: b.
 Proof.
   intros a b. split; intros H1.
@@ -116,17 +116,36 @@ Proof.
     + apply EmptyCharac in H2. contradiction.
 Qed.
 
-Proposition InclDiff : forall (a b:U),
+Proposition DiffIncl : forall (a b:U),
   a :\: b :<=: a.
 Proof.
   intros a b x H1. apply DiffCharac in H1. destruct H1 as [H1 _]. apply H1.
 Qed.
 
-Proposition InclDiffMonotoneL : forall (a b c:U),
+(* Difference is 'compatible' with inclusion. Not quite of course.              *)
+Proposition DiffInclCompat : forall (a b c d:U),
+  a :<=: b -> c :<=: d -> a:\:d :<=: b:\:c.
+Proof.
+  intros a b c d H1 H2 x H3. apply DiffCharac in H3.
+  destruct H3 as [H3 H4]. apply DiffCharac. split.
+  - apply H1. assumption.
+  - intros H5. apply H4, H2. assumption.
+Qed.
+
+(* Difference is left-compatible with inclusion.                                *)
+Proposition DiffInclCompatL : forall (a b c:U),
+  a :<=: b -> a :\: c :<=: b :\: c.
+Proof.
+  intros a b c H1. apply DiffInclCompat.
+  - assumption.
+  - apply InclRefl.
+Qed.
+
+(* Difference is 'right-compatible' with inclusion. Not quite of course.        *)
+Proposition DiffInclCompatR : forall (a b c:U),
   a :<=: b -> c :\: b :<=: c :\: a.
 Proof.
-  intros a b c H1 x H2. apply DiffCharac in H2. destruct H2 as [H2 H3].
-  apply DiffCharac. split.
-  - apply H2.
-  - intros H4. apply H1 in H4. contradiction.
+  intros a b c H1. apply DiffInclCompat.
+  - apply InclRefl.
+  - assumption.
 Qed.
