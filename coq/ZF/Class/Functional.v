@@ -8,19 +8,30 @@ Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 (* A class is said to be functional if its associated binary class is           *)
-Definition Functional (P:Class) : Prop := Functional.Functional (toBinary P).
+Definition Functional (P:Class) : Prop
+  := Binary.Functional.Functional (toBinary P).
 
+(* Using FunctionalCharac below with '<->' does not always work as expected.    *)
 Proposition FunctionalCharac1 : forall (P:Class),
   Functional P -> (forall x y z, P :(x,y): -> P :(x,z): -> y = z).
 Proof.
   intros P H1. apply H1.
 Qed.
 
+(* Using FunctionalCharac below with '<->' does not always work as expected.    *)
 Proposition FunctionalCharac2 : forall (P:Class),
   (forall x y z, P :(x,y): -> P :(x,z): -> y = z) -> Functional P.
 Proof.
   intros P H1.
   unfold Functional, Binary.Functional.Functional, toBinary. assumption.
+Qed.
+
+Proposition FunctionalCharac : forall (P:Class),
+  Functional P <-> (forall x y z, P :(x,y): -> P :(x,z): -> y = z).
+Proof.
+  intros P. split.
+  - apply FunctionalCharac1.
+  - apply FunctionalCharac2.
 Qed.
 
 Proposition FunctionalEqualCompat : forall (P Q:Class),
@@ -43,3 +54,4 @@ Proof.
   assert (y1 = y2) as H3. { apply Gp with x; assumption. }
   subst. apply Gq with y2; assumption.
 Qed.
+
