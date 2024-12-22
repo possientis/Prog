@@ -52,7 +52,7 @@ Qed.
 Definition replaceSet (F:Binary) (P:Class) (p:Functional F) (q:Small P) : U
   := fromClass F:[P]: (ReplaceSmall F P p q).
 
-(* Characterisation of the elements of the replace set of F P.                  *)
+(* Characterisation of the elements of the set associated with the class F[P].  *)
 Proposition ReplaceCharac : forall (F:Binary)(P:Class)(p:Functional F)(q:Small P),
   forall y, y :< (replaceSet F P p q) <-> F:[P]: y.
 Proof.

@@ -94,6 +94,7 @@ SET_OBJ = \
 	${SET}/Product.vo \
 	${SET}/Relation.vo \
 	${SET}/Replace.vo \
+	${SET}/Replace2.vo \
 	${SET}/Singleton.vo \
 	${SET}/Specify.vo \
 	${SET}/Tuple.vo \
