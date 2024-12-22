@@ -3,9 +3,7 @@ Open    Scope ZF_Set_Pair_scope.
 
 Require Import ZF.Axiom.Pairing.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
-Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 
 (* It is useful to define the predicate underlying the pairing axiom.           *)
@@ -57,11 +55,4 @@ Qed.
 Proposition PairIn2 : forall (a b:U), b :< :{a,b}:.
 Proof.
   intros a b. apply PairEqualIn2. reflexivity.
-Qed.
-
-(* A pair is never equal to the empty set.                                      *)
-Proposition PairNotEmpty : forall (a b:U), ~ :{a,b}: = :0:.
-Proof.
-  intros a b Hab. assert (a :< :0:) as H1. { rewrite <- Hab. apply PairIn1. }
-  apply EmptyCharac in H1. apply H1.
 Qed.

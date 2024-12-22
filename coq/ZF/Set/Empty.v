@@ -2,9 +2,14 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.NonEmpty.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.Leq.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.Include.
+Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Pair.
+Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Specify.
 
 (* The class which is satisfied by no set.                                      *)
@@ -81,4 +86,23 @@ Proof.
   intros a Ha. apply Extensionality. intros x. split; intros H1.
   - apply (Ha x) in H1. contradiction.
   - apply EmptyCharac in H1. contradiction.
+Qed.
+
+(* A pair is never equal to the empty set.                                      *)
+Proposition PairNotEmpty : forall (a b:U), ~ :{a,b}: = :0:.
+Proof.
+  intros a b Hab. assert (a :< :0:) as H1. { rewrite <- Hab. apply PairIn1. }
+  apply EmptyCharac in H1. apply H1.
+Qed.
+
+(* The empty set is not an ordered pair                                         *)
+Proposition OrdPairNotEmpty : forall (x y:U), ~ :(x,y): = :0:.
+Proof.
+  intros x y H1. apply DoubleInclusion in H1. destruct H1 as [H1 _].
+  apply EmptySetEmpty with :{x}:. apply H1, PairIn1.
+Qed.
+
+Proposition SingletonNotEmpty : forall a, ~ :{a}: = :0:.
+Proof.
+  intros a. apply PairNotEmpty.
 Qed.

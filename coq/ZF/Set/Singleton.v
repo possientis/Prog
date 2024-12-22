@@ -1,9 +1,7 @@
 Declare Scope ZF_Set_Singleton_scope.
 Open    Scope ZF_Set_Singleton_scope.
 
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
-Require Import ZF.Set.Empty.
 Require Import ZF.Set.Pair.
 
 (* The singleton set {a} is defined as the pair {a,a}.                          *)
@@ -31,10 +29,4 @@ Proposition SingleEqualSingle : forall a b, :{a}: = :{b}: -> a = b.
 Proof.
   intros a b Hab. apply SingleCharac. rewrite <- Hab.
   apply SingleCharac. reflexivity.
-Qed.
-
-Proposition SingleNotEmpty : forall a, ~ :{a}: = :0:.
-Proof.
-  intros a Ha. assert (a :< :0:) as H1. { rewrite <- Ha. apply SingleIn. }
-  apply EmptyCharac in H1. apply H1.
 Qed.

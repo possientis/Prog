@@ -5,7 +5,8 @@ Require Import ZF.Core.Leq.
 Require Import ZF.Core.Lt.
 Require Import ZF.Core.Product.
 Require Import ZF.Core.Zero.
-Require Import ZF.Set.Utils.
+Require Import ZF.Set.Empty.
+Require Import ZF.Set.OrdPair.
 
 (* The class satisfied by all sets.                                             *)
 Definition V : Class := fun _ => True.
@@ -27,7 +28,6 @@ Proof.
   - intros x H1. apply I.
   - exists :0:. split.
     + apply I.
-    + intros [x [y [H1 _]]]. apply (EmptyNotOrdPair x y), H1.
+    + intros [x [y [H1 _]]]. apply (OrdPairNotEmpty x y).
+      symmetry. assumption.
 Qed.
-
-

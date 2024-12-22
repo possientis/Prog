@@ -98,8 +98,7 @@ SET_OBJ = \
 	${SET}/Singleton.vo \
 	${SET}/Specify.vo \
 	${SET}/Tuple.vo \
-	${SET}/Union.vo \
-	${SET}/Utils.vo
+	${SET}/Union.vo
 
 
 # Overall target
