@@ -83,44 +83,52 @@ Proof.
     + right. apply H1.
 Qed.
 
-(* The inclusion relation is left compatible with union.                        *)
-Proposition InclCompatUnionL : forall (a b c:U),
-  a :<=: b -> c:\/:a :<=: c:\/:b.
+(* Union is compatible with inclusion.                                          *)
+Proposition UnionInclCompat : forall (a b c d:U),
+  a :<=: b -> c :<=: d -> a:\/:c :<=: b:\/:d.
 Proof.
-  intros a b c H1 x H2. apply UnionCharac in H2. destruct H2 as [H2|H2];
-  apply UnionCharac.
-  - left. apply H2.
-  - right. apply H1, H2.
+  intros a b c d H1 H2 x H3. apply UnionCharac in H3.
+  destruct H3 as [H3|H3]; apply UnionCharac.
+  - left. apply H1. assumption.
+  - right. apply H2. assumption.
 Qed.
 
-(* The inclusion relation is right compatible with union.                       *)
-Proposition InclCompatUnionR : forall (a b c:U),
+(* Union is left-compatible with inclusion.                                     *)
+Proposition UnionInclCompatL : forall (a b c:U),
   a :<=: b -> a:\/:c :<=: b:\/:c.
 Proof.
-  intros a b c H1 x H2. apply UnionCharac in H2. destruct H2 as [H2|H2];
-  apply UnionCharac.
-  - left. apply H1, H2.
-  - right. apply H2.
+  intros a b c H1. apply UnionInclCompat.
+  - assumption.
+  - apply InclRefl.
 Qed.
 
-Proposition InclEqualUnion : forall (a b:U),
-  a :<=: b <-> b = a :\/: b.
+(* Union is right-compatible with inclusion.                                    *)
+Proposition UnionInclCompatR : forall (a b c:U),
+  a :<=: b -> c:\/:a :<=: c:\/:b.
+Proof.
+  intros a b c H1. apply UnionInclCompat.
+  - apply InclRefl.
+  - assumption.
+Qed.
+
+Proposition UnionEqualIncl : forall (a b:U),
+  b = a :\/: b <-> a :<=: b.
 Proof.
   intros a b. split; intros H1.
+  - intros x H2. rewrite H1. apply UnionCharac. left. apply H2.
   - apply Extensionality. intros x. split; intros H2.
     + apply UnionCharac. right. apply H2.
     + apply UnionCharac in H2. destruct H2 as [H2|H2].
       * apply H1, H2.
       * apply H2.
-  - intros x H2. rewrite H1. apply UnionCharac. left. apply H2.
 Qed.
 
-Proposition InclUnion1 : forall (a b:U), a :<=: a:\/:b.
+Proposition UnionInclL : forall (a b:U), a :<=: a:\/:b.
 Proof.
   intros a b x H1. apply UnionCharac. left. apply H1.
 Qed.
 
-Proposition InclUnion2 : forall (a b:U), b :<=: a:\/:b.
+Proposition UnionInclR : forall (a b:U), b :<=: a:\/:b.
 Proof.
   intros a b x H1. apply UnionCharac. right. apply H1.
 Qed.

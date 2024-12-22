@@ -99,7 +99,7 @@ Proof.
   - apply H2. assumption.
 Qed.
 
-(* Intersection is left-compatible with inclusion                               *)
+(* Intersection is left-compatible with inclusion.                              *)
 Proposition IntersectInclCompatL : forall (a b c:U),
   a :<=: b -> a:/\:c :<=: b:/\:c.
 Proof.
@@ -108,7 +108,7 @@ Proof.
   - apply InclRefl.
 Qed.
 
-(* Intersection is right-compatible with inclusion                              *)
+(* Intersection is right-compatible with inclusion.                             *)
 Proposition IntersectInclCompatR : forall (a b c:U),
   a :<=: b -> c:/\:a :<=: c:/\:b.
 Proof.
