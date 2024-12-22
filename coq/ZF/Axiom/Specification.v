@@ -25,7 +25,7 @@ Proof.
   remember (toClass a) as A eqn:Ea.
 
   (* Note that the class A is small. *)
-  assert (Small A) as Ha. { rewrite Ea. apply ToClassIsSmall. }
+  assert (Small A) as Ha. { rewrite Ea. apply SetIsSmall. }
 
   (* We claim the binary class F is functional. *)
   assert (Functional F) as Hf.

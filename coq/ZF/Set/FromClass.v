@@ -49,7 +49,7 @@ Qed.
 
 (* The set associated with the class associated with a set is the set itself.   *)
 Proposition fromClassToClass : forall (a:U),
-  fromClass (toClass a) (ToClassIsSmall a) = a.
+  fromClass (toClass a) (SetIsSmall a) = a.
 Proof.
   intro a. apply SameCharacEqual with (toClass a).
   - apply FromClassCharac.

@@ -12,13 +12,13 @@ Definition Proper (P:Class) : Prop := ~Small P.
 Definition toClass (a:U) : Class := fun x => x :< a.
 
 (* The class associated with a set is small.                                    *)
-Proposition ToClassIsSmall : forall (a:U), Small (toClass a).
+Proposition SetIsSmall : forall (a:U), Small (toClass a).
 Proof.
   intros a. exists a. intro x. unfold toClass. split; auto.
 Qed.
 
 (* A class is small if and only if it is equivalent to some set.                *)
-Proposition SmallIsSet : forall (P:Class),
+Proposition SmallIsSomeSet : forall (P:Class),
   Small P <-> exists a, toClass a :~: P.
 Proof.
   intros P. split; intros [a H1]; exists a.

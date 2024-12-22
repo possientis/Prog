@@ -1,40 +1,44 @@
-Require Import ZF.Binary.
-Require Import ZF.Binary.Functional.
-Require Import ZF.Binary.Image.
 Require Import ZF.Class.
+Require Import ZF.Class.Converse.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.Small.
+Require Import ZF.Class.Switch.
+Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Image.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Replace.
+Require Import ZF.Set.Replace2.
 
-
-(* Binary class needed to define the converse of a set.                         *)
-Definition Converse : Binary := fun x x' =>
-  exists y z, x = :(y,z): /\ x' = :(z,y):.
-
-(* This binary class is functional.                                             *)
-Proposition ConverseFunctional : Functional Converse.
+(* The converse of the class associated with a set is a small class.            *)
+Proposition ConverseSmall : forall (a:U),
+  Small (Class.Converse.converse (toClass a)).
 Proof.
-  unfold Converse. intros x x1 x2 H1 H2.
-  destruct H1 as [y [z [H1 H1']]]. destruct H2 as [y' [z' [H2 H2']]].
-  rewrite H1 in H2. apply OrdPairEqual in H2. destruct H2 as [H2 H3].
-  subst. reflexivity.
+  (* Let a be an arbitary set. *)
+  intros a.
+
+  (* We have the class equivalence Switch[a] ~ converse a. *)
+  apply SmallEquivCompat with Switch:[toClass a]:. 1: apply ImageBySwitch.
+
+  (* So it is sufficient to prove that Switch[a] is small. *)
+  assert (Small (Switch:[toClass a]:)) as A. 2: apply A.
+
+  (* This follows from the fact that Switch is functional and a is small. *)
+  apply ReplaceSmall.
+
+  - apply SwitchIsFunctional.
+
+  - apply SetIsSmall.
 Qed.
 
-(* The converse of a set converse a = { (z,y) | (y,z) :< a }                    *)
+(* The converse of a set.                                                       *)
 Definition converse (a:U) : U
-  := replaceSet Converse (toClass a) ConverseFunctional (ToClassIsSmall a).
+  := fromClass (Class.Converse.converse (toClass a)) (ConverseSmall a).
 
 Proposition ConverseCharac : forall (a:U),
   forall x, x :< (converse a) <-> exists y z, x =:(z,y): /\ :(y,z): :< a.
 Proof.
   intros a x. unfold converse. split; intros H1.
-  - apply ReplaceCharac in H1. unfold Converse, image in H1.
-    destruct H1 as [x' [H1 [y [z [H2 H3]]]]]. exists y. exists z. subst. split.
-    + reflexivity.
-    + apply H1.
-  - destruct H1 as [y [z [H1 H2]]]. apply ReplaceCharac. unfold Converse, image.
-    exists :(y,z):. split.
-    + apply H2.
-    + exists y. exists z. subst. split; reflexivity.
+  - apply FromClassCharac, Class.Converse.ConverseCharac in H1. apply H1.
+  - apply FromClassCharac, Class.Converse.ConverseCharac, H1.
 Qed.
