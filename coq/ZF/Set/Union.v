@@ -54,10 +54,10 @@ Proof.
   - intros [H1|H1].
     + apply UnionSetCharac. exists a. split.
       * apply H1.
-      * apply PairIn1.
+      * apply PairInL.
     + apply UnionSetCharac. exists b. split.
       * apply H1.
-      * apply PairIn2.
+      * apply PairInR.
 Qed.
 
 (* The union of two sets is commutative.                                        *)

@@ -91,7 +91,7 @@ Qed.
 (* A pair is never equal to the empty set.                                      *)
 Proposition PairNotEmpty : forall (a b:U), ~ :{a,b}: = :0:.
 Proof.
-  intros a b Hab. assert (a :< :0:) as H1. { rewrite <- Hab. apply PairIn1. }
+  intros a b Hab. assert (a :< :0:) as H1. { rewrite <- Hab. apply PairInL. }
   apply EmptyCharac in H1. apply H1.
 Qed.
 
@@ -99,7 +99,7 @@ Qed.
 Proposition OrdPairNotEmpty : forall (x y:U), ~ :(x,y): = :0:.
 Proof.
   intros x y H1. apply DoubleInclusion in H1. destruct H1 as [H1 _].
-  apply EmptySetEmpty with :{x}:. apply H1, PairIn1.
+  apply EmptySetEmpty with :{x}:. apply H1, PairInL.
 Qed.
 
 Proposition SingletonNotEmpty : forall a, ~ :{a}: = :0:.

@@ -78,7 +78,7 @@ Proof.
   - subst. assert (b :< :0:) as H5.
       { rewrite <- H3. apply IntersectCharac. split.
         - apply Hba.
-        - apply PairIn2.
+        - apply PairInR.
       }
     apply EmptyCharac in H5. contradiction.
 
@@ -86,7 +86,7 @@ Proof.
   - subst. assert (a :< :0:) as H5.
       { rewrite <- H3. apply IntersectCharac. split.
         - apply Hab.
-        - apply PairIn1.
+        - apply PairInL.
       }
     apply EmptyCharac in H5. contradiction.
 Qed.
