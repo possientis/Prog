@@ -43,6 +43,7 @@ BINARY_OBJ = \
 CLASS_OBJ = \
 	${CLASS}/Bijection.vo \
 	${CLASS}/Bounded.vo \
+	${CLASS}/Comp.vo \
 	${CLASS}/Compose.vo \
 	${CLASS}/Converse.vo \
 	${CLASS}/Diff.vo \
@@ -74,6 +75,7 @@ CORE_OBJ = \
 	${CORE}/Image.vo \
 	${CORE}/Leq.vo \
 	${CORE}/Lt.vo \
+	${CORE}/Not.vo \
 	${CORE}/Or.vo \
 	${CORE}/Pipe.vo \
 	${CORE}/Product.vo \

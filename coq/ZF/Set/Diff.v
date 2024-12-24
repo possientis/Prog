@@ -13,15 +13,15 @@ Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
 (* The set a \ b is made of those elements of a which do not belong to b.       *)
-Definition difference (a b:U) : U := :{a | fun x => ~ x :< b }:.
+Definition diff (a b:U) : U := :{a | fun x => ~ x :< b }:.
 
-(* Notation "a :\: b" := (difference a b)                                       *)
-Global Instance SetDiff : Diff U := { diff := difference }.
+(* Notation "a :\: b" := (diff a b)                                             *)
+Global Instance SetDiff : Diff U := { diff := diff }.
 
 Proposition DiffCharac : forall (a b:U),
   forall x, x :< a:\:b <-> x :< a /\ ~ x :< b.
 Proof.
-  intros a b x. unfold difference. apply SpecCharac.
+  intros a b x. unfold diff. apply SpecCharac.
 Qed.
 
 Proposition DiffUnionIntersect : forall (a b c:U),
@@ -122,7 +122,7 @@ Proof.
   intros a b x H1. apply DiffCharac in H1. destruct H1 as [H1 _]. apply H1.
 Qed.
 
-(* Difference is 'compatible' with inclusion. Not quite of course.              *)
+(* Diff is 'compatible' with inclusion. Not quite of course.                    *)
 Proposition DiffInclCompat : forall (a b c d:U),
   a :<=: b -> c :<=: d -> a:\:d :<=: b:\:c.
 Proof.
@@ -132,7 +132,7 @@ Proof.
   - intros H5. apply H4, H2. assumption.
 Qed.
 
-(* Difference is left-compatible with inclusion.                                *)
+(* Diff is left-compatible with inclusion.                                      *)
 Proposition DiffInclCompatL : forall (a b c:U),
   a :<=: b -> a :\: c :<=: b :\: c.
 Proof.
@@ -141,7 +141,7 @@ Proof.
   - apply InclRefl.
 Qed.
 
-(* Difference is 'right-compatible' with inclusion. Not quite of course.        *)
+(* Diff is 'right-compatible' with inclusion. Not quite of course.              *)
 Proposition DiffInclCompatR : forall (a b c:U),
   a :<=: b -> c :\: b :<=: c :\: a.
 Proof.
