@@ -4,7 +4,9 @@ Open Scope    ZF_Class_Image_scope.
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.Include.
+Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
@@ -21,6 +23,13 @@ Proposition ImageCharac : forall (P Q:Class) (y:U),
   P:[Q]: y <-> exists x, Q x /\ P :(x,y):.
 Proof.
   intros P Q y. apply Binary.Image.ImageCharac.
+Qed.
+
+(* If P is functional and Q is small, then P:[Q]: is small.                     *)
+Proposition ImageSmall : forall (P Q:Class),
+  Functional P -> Small Q -> Small P :[Q]:.
+Proof.
+  intros P Q. apply Binary.Image.ImageSmall.
 Qed.
 
 Proposition ImageEquivCompat : forall (P Q R S:Class),

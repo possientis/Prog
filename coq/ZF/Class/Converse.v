@@ -20,7 +20,6 @@ Require Import ZF.Core.Leq.
 Require Import ZF.Core.Product.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Replace2.
 
 (* The converse of a class is the relation of the converse of its binary class. *)
 Definition converse (P:Class) : Class
@@ -85,7 +84,7 @@ Proof.
   assert (Small (Switch:[P]:)) as A. 2: apply A.
 
   (* This follows from the fact that Switch is functional and P is small. *)
-  apply ReplaceSmall.
+  apply ImageSmall.
 
   - apply SwitchIsFunctional.
 
