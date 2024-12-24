@@ -14,6 +14,13 @@ Definition classEquiv (P Q:Class) : Prop := forall x, P x <-> Q x.
 (* Notation "P :~: Q" := (classEquiv P Q)                                       *)
 Global Instance ClassEquiv : Equiv Class := { equiv := classEquiv }.
 
+(* If two sets are characterised by the same class, then they are equal.        *)
+Proposition SameClassEqual : forall (a b:U),
+  toClass a :~: toClass b -> a = b.
+Proof.
+  intros a b H1. apply Extensionality. apply H1.
+Qed.
+
 (* The equivalence between classes is reflexive.                                *)
 Proposition ClassEquivRefl : forall (P:Class), P :~: P.
 Proof.
@@ -48,3 +55,4 @@ Proposition ClassEquivSetEqual : forall (a b:U),
 Proof.
   intros a b. apply Extensionality.
 Qed.
+

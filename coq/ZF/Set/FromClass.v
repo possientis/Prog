@@ -19,7 +19,10 @@ Qed.
 (* The set predicate of a class is always satisfied by at most one set.         *)
 Proposition FromClassUnique : forall (P:Class), Unique (FromClassPred P).
 Proof.
-  intros P. unfold Unique. apply SameCharacEqual.
+  intros P. unfold Unique, FromClassPred. intros a b Ha Hb.
+  apply SameClassEqual. apply ClassEquivTran with P.
+  - intros x. apply Ha.
+  - apply ClassEquivSym. intros x. apply Hb.
 Qed.
 
 (* If a class is small, we can define the set to which it corresponds .         *)
@@ -51,9 +54,7 @@ Qed.
 Proposition fromClassToClass : forall (a:U),
   fromClass (toClass a) (SetIsSmall a) = a.
 Proof.
-  intro a. apply SameCharacEqual with (toClass a).
-  - apply FromClassCharac.
-  - unfold toClass. intros x. split; auto.
+  intro a. apply SameClassEqual. intros x. apply FromClassCharac.
 Qed.
 
 (* The class associated with the set associated with a small class is the class.*)
