@@ -1,24 +1,21 @@
+Require Import ZF.Class.
 Require Import ZF.Set.
 
-(* Predicate over set theoretic predicates, expressing the fact that the        *)
-(* predicate is satisfied by at least one set                                   *)
-Definition Exists (P:U -> Prop) : Prop := exists x, P x.
+(* Predicate over classes: a class has at least one element.                    *)
+Definition Exists (P:Class) : Prop := exists x, P x.
 
-(* Predicate over set theoretic predicates, expressing the fact that the        *)
-(* predicate is satisfied by no more than one set                               *)
-Definition Unique (P:U -> Prop) : Prop := forall a b, P a -> P b -> a = b.
+(* Predicate over classes: a class has no more than one element.                *)
+Definition Unique (P:Class) : Prop := forall a b, P a -> P b -> a = b.
 
-(* When a set theoretic predicate is satisfied by a unique set, we can define   *)
-(* such a set                                                                   *)
-Axiom define : forall (P:U -> Prop), Exists P -> Unique P -> U.
+(* When a class has a unique element, we can define such a set.                 *)
+Axiom define : forall (P:Class), Exists P -> Unique P -> U.
 
-(* The set defined by a predicate which is uniquely satisfied, does satisfy the *)
-(* predicate in question                                                        *)
-Axiom DefineSatisfy: forall (P:U -> Prop) (p:Exists P) (q:Unique P),
+(* The set defined by a class with a unique element belongs to the class.       *)
+Axiom DefineSatisfy: forall (P:Class) (p:Exists P) (q:Unique P),
     P(define P p q).
 
-(* The set defined by a predicate which is uniquely satisfied is unique         *)
-Proposition DefineUnique : forall (P:U -> Prop) (p:Exists P) (q:Unique P),
+(* The set defined by a class with a unique element is unique.                  *)
+Proposition DefineUnique : forall (P:Class) (p:Exists P) (q:Unique P),
   forall x, P x -> x = define P p q.
 Proof.
   intros P p q x Hx. apply q.
@@ -26,16 +23,15 @@ Proof.
   - apply DefineSatisfy.
 Qed.
 
-(* The set defined by a predicate which is uniquely satisfied is the same       *)
-(* regardless of the proofs used to define it.                                  *)
-Proposition DefineProof : forall (P:U -> Prop) (p p':Exists P) (q q':Unique P),
+(* The set defined by a class with a unique element is proof-irrelevant.        *)
+Proposition DefineProof : forall (P:Class) (p p':Exists P) (q q':Unique P),
   define P p q = define P p' q'.
 Proof.
   intros P p p' q q'. apply DefineUnique, DefineSatisfy.
 Qed.
 
 (* Any proposition involving define can be rewritten without it.                *)
-Proposition DefineElim : forall (P Q:U -> Prop) (p: Exists P) (q: Unique P),
+Proposition DefineElim : forall (P Q:Class) (p: Exists P) (q: Unique P),
   Q(define P p q) <-> forall x, P x -> Q x.
 Proof.
   intros P Q p q. split.
