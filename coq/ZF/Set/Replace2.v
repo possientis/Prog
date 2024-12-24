@@ -1,3 +1,4 @@
+Require Import ZF.Binary.Image.
 Require Import ZF.Class.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
@@ -11,7 +12,7 @@ Require Import ZF.Set.Replace.
 Proposition ReplaceSmall : forall (P Q:Class),
   Functional P -> Small Q -> Small P :[Q]:.
 Proof.
-  intros P Q. apply Replace.ReplaceSmall.
+  intros P Q. apply ImageSmall.
 Qed.
 
 (* The set defined by the class P[Q] when P is functional and Q is small.       *)
