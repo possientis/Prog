@@ -4,5 +4,3 @@ Require Import ZF.Set.
 (* the existence of at least one set. However, it allows us to define the empty *)
 (* set early and rewrite more concisely the axiom of infinity later.            *)
 Axiom NonEmptyUniverse : exists (x:U), True.
-
-

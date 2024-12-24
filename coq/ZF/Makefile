@@ -85,6 +85,7 @@ SET_OBJ = \
 	${SET}/Converse.vo \
 	${SET}/Diff.vo \
 	${SET}/Empty.vo \
+	${SET}/Foundation.vo \
 	${SET}/Functional.vo \
 	${SET}/Incl.vo \
 	${SET}/Inter.vo \
