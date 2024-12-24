@@ -2,19 +2,25 @@ Require Import ZF.Binary.
 Require Import ZF.Binary.Converse.
 Require Import ZF.Class.
 Require Import ZF.Class.Compose.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.FromBinary.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Intersect.
 Require Import ZF.Class.Product.
 Require Import ZF.Class.Relation.
+Require Import ZF.Class.Small.
+Require Import ZF.Class.Switch.
 Require Import ZF.Class.V.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Product.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Replace2.
 
 (* The converse of a class is the relation of the converse of its binary class. *)
 Definition converse (P:Class) : Class
@@ -42,6 +48,48 @@ Proof.
   - apply ConverseCharac. exists z. exists y. split.
     + reflexivity.
     + apply H1.
+Qed.
+
+(* The direct image of a class P by Switch is the converse of P.                *)
+Proposition ImageBySwitch : forall (P:Class),
+  Switch :[P]: :~: converse P.
+Proof.
+  intros P x. split; intros H1.
+  - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply SwitchCharac2 in H2.
+    destruct H2 as [y [z [H2 H3]]]. apply ConverseCharac. exists y. exists z.
+    subst. split.
+    + reflexivity.
+    + assumption.
+  - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]]. subst.
+    unfold image. exists :(y,z):. split.
+    + assumption.
+    + apply SwitchCharac2. exists y. exists z. split; reflexivity.
+Qed.
+
+Proposition ConverseSmall : forall (P:Class),
+  Small P -> Small (converse P).
+Proof.
+  (* Let P be an arbitrary class. *)
+  intros P.
+
+  (* We assume that P is small. *)
+  intros H1. assert (Small P) as A. { apply H1. } clear A.
+
+  (* We need to show that converse(P) is small. *)
+  assert (Small (converse P)) as A. 2: apply A.
+
+  (* Using the equivalence Switch[P] ~ converse(P) ... *)
+  apply SmallEquivCompat with Switch:[P]:. 1: apply ImageBySwitch.
+
+  (* It is sufficient to show that Switch[P] is small. *)
+  assert (Small (Switch:[P]:)) as A. 2: apply A.
+
+  (* This follows from the fact that Switch is functional and P is small. *)
+  apply ReplaceSmall.
+
+  - apply SwitchIsFunctional.
+
+  - apply H1.
 Qed.
 
 (* The converse of a class is always a relation, even if the class is not.      *)
