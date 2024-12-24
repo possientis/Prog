@@ -8,7 +8,7 @@ Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Include.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Pair.
 
 (* It is useful to define the predicate underlying the union axiom.             *)

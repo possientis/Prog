@@ -1,5 +1,5 @@
 Require Import ZF.Class.
-Require Import ZF.Class.Include.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Lt.

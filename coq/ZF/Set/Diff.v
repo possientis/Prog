@@ -7,7 +7,7 @@ Require Import ZF.Core.Or.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Include.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.

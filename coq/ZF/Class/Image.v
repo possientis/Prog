@@ -5,7 +5,7 @@ Require Import ZF.Binary.Image.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
-Require Import ZF.Class.Include.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.

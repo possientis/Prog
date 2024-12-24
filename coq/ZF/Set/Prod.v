@@ -6,7 +6,7 @@ Require Import ZF.Core.Or.
 Require Import ZF.Core.Prod.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Include.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.

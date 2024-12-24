@@ -6,7 +6,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Include.
+Require Import ZF.Set.Incl.
 
 (* It is useful to define the predicate underlying the power axiom.             *)
 Definition PowerPred (a:U) : U -> Prop := fun x => x :<=: a.

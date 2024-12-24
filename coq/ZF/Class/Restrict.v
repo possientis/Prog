@@ -4,7 +4,7 @@ Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
-Require Import ZF.Class.Include.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
