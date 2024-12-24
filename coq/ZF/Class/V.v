@@ -1,9 +1,9 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Include.
-Require Import ZF.Class.Product.
+Require Import ZF.Class.Prod.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Lt.
-Require Import ZF.Core.Product.
+Require Import ZF.Core.Prod.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.

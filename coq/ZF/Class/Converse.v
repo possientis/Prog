@@ -7,7 +7,7 @@ Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Include.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.Product.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
@@ -17,7 +17,7 @@ Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
-Require Import ZF.Core.Product.
+Require Import ZF.Core.Prod.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

@@ -56,7 +56,7 @@ CLASS_OBJ = \
 	${CLASS}/Include.vo \
 	${CLASS}/Inter.vo \
 	${CLASS}/OneToOne.vo \
-	${CLASS}/Product.vo \
+	${CLASS}/Prod.vo \
 	${CLASS}/Range.vo \
 	${CLASS}/Relation.vo \
 	${CLASS}/Restrict.vo \
@@ -78,7 +78,7 @@ CORE_OBJ = \
 	${CORE}/Not.vo \
 	${CORE}/Or.vo \
 	${CORE}/Pipe.vo \
-	${CORE}/Product.vo \
+	${CORE}/Prod.vo \
 	${CORE}/Zero.vo
 
 SET_OBJ = \
@@ -92,7 +92,7 @@ SET_OBJ = \
 	${SET}/OrdTuple.vo \
 	${SET}/Pair.vo \
 	${SET}/Power.vo \
-	${SET}/Product.vo \
+	${SET}/Prod.vo \
 	${SET}/Relation.vo \
 	${SET}/Singleton.vo \
 	${SET}/Specify.vo \
