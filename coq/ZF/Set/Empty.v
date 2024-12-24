@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Axiom.NonEmpty.
+Require Import ZF.Axiom.NonEmptyUniverse.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Zero.

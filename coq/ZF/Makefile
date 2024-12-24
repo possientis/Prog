@@ -27,7 +27,7 @@ AXIOM_OBJ = \
 	${AXIOM}/Extensionality.vo \
 	${AXIOM}/Foundation.vo \
 	${AXIOM}/Infinity.vo \
-	${AXIOM}/NonEmpty.vo \
+	${AXIOM}/NonEmptyUniverse.vo \
 	${AXIOM}/Pairing.vo \
 	${AXIOM}/Power.vo \
 	${AXIOM}/Replacement.vo \
