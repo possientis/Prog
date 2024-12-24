@@ -8,7 +8,7 @@ Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Include.
-Require Import ZF.Set.Intersect.
+Require Import ZF.Set.Inter.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
@@ -24,17 +24,17 @@ Proof.
   intros a b x. unfold diff. apply SpecCharac.
 Qed.
 
-Proposition DiffUnionIntersect : forall (a b c:U),
+Proposition DiffUnionInter : forall (a b c:U),
   a :\: (b:\/:c) = a:\:b :/\: a:\:c.
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply DiffCharac in H1. destruct H1 as [H1 H2]. apply IntersectCharac.
+  - apply DiffCharac in H1. destruct H1 as [H1 H2]. apply InterCharac.
     split; apply DiffCharac; split.
     + apply H1.
     + intros H3. apply H2. apply UnionCharac. left. apply H3.
     + apply H1.
     + intros H3. apply H2. apply UnionCharac. right. apply H3.
-  - apply IntersectCharac in H1. destruct H1 as [H1 H2].
+  - apply InterCharac in H1. destruct H1 as [H1 H2].
     apply DiffCharac in H1. destruct H1 as [H1 H3].
     apply DiffCharac in H2. destruct H2 as [_  H2].
     apply DiffCharac. split.
@@ -42,20 +42,20 @@ Proof.
     + intros H4. apply UnionCharac in H4. destruct H4 as [H4|H4]; contradiction.
 Qed.
 
-Proposition DiffIntersectUnion : forall (a b c:U),
+Proposition DiffInterUnion : forall (a b c:U),
   a :\: (b:/\:c) = a:\:b :\/: a:\:c.
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply DiffCharac in H1. destruct H1 as [H1 H2].
-    apply UnionCharac. apply NotInIntersect in H2. destruct H2 as [H2|H2].
+    apply UnionCharac. apply NotInInter in H2. destruct H2 as [H2|H2].
     + left.  apply DiffCharac. split; assumption.
     + right. apply DiffCharac. split; assumption.
   - apply UnionCharac in H1. destruct H1 as [H1|H1];
     apply DiffCharac; split; apply DiffCharac in H1; destruct H1 as [H1 H2].
     + apply H1.
-    + intros H3. apply IntersectCharac in H3. destruct H3 as [H3 _]. contradiction.
+    + intros H3. apply InterCharac in H3. destruct H3 as [H3 _]. contradiction.
     + apply H1.
-    + intros H3. apply IntersectCharac in H3. destruct H3 as [_ H3]. contradiction.
+    + intros H3. apply InterCharac in H3. destruct H3 as [_ H3]. contradiction.
 Qed.
 
 Proposition DiffDiff : forall (a b:U),
@@ -68,36 +68,36 @@ Proof.
     + intros H2. apply DiffCharac in H2. destruct H2 as [_ H2]. contradiction.
 Qed.
 
-Proposition IntersectDistOverDiff : forall (a b c:U),
+Proposition InterDistOverDiff : forall (a b c:U),
   a :/\: (b :\: c) = (a:/\:b) :\: (a:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply IntersectCharac in H1. destruct H1 as [H1 H2].
+  - apply InterCharac in H1. destruct H1 as [H1 H2].
     apply DiffCharac in H2. destruct H2 as [H2 H3].
     apply DiffCharac. split.
-    + apply IntersectCharac. split; assumption.
-    + intros H4. apply IntersectCharac in H4. destruct H4 as [_ H4]. contradiction.
+    + apply InterCharac. split; assumption.
+    + intros H4. apply InterCharac in H4. destruct H4 as [_ H4]. contradiction.
   - apply DiffCharac in H1. destruct H1 as [H1 H2].
-    apply IntersectCharac in H1. destruct H1 as [H1 H3].
-    apply NotInIntersect in H2. destruct H2 as [H2|H2]; apply IntersectCharac; split.
+    apply InterCharac in H1. destruct H1 as [H1 H3].
+    apply NotInInter in H2. destruct H2 as [H2|H2]; apply InterCharac; split.
     + apply H1.
     + contradiction.
     + apply H1.
     + apply DiffCharac. split; assumption.
 Qed.
 
-Proposition IntersectDiffAssoc : forall (a b c:U),
+Proposition InterDiffAssoc : forall (a b c:U),
   a :/\: (b :\: c) = (a :/\: b) :\: c.
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply IntersectCharac in H1. destruct H1 as [H1 H2].
+  - apply InterCharac in H1. destruct H1 as [H1 H2].
     apply DiffCharac in H2. destruct H2 as [H2 H3].
     apply DiffCharac. split.
-    + apply IntersectCharac. split; assumption.
+    + apply InterCharac. split; assumption.
     + apply H3.
   - apply DiffCharac in H1. destruct H1 as [H1 H2].
-    apply IntersectCharac in H1. destruct H1 as [H1 H3].
-    apply IntersectCharac. split.
+    apply InterCharac in H1. destruct H1 as [H1 H3].
+    apply InterCharac. split.
     + apply H1.
     + apply DiffCharac. split; assumption.
 Qed.

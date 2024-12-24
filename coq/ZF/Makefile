@@ -54,7 +54,7 @@ CLASS_OBJ = \
 	${CLASS}/Functional.vo \
 	${CLASS}/Image.vo \
 	${CLASS}/Include.vo \
-	${CLASS}/Intersect.vo \
+	${CLASS}/Inter.vo \
 	${CLASS}/OneToOne.vo \
 	${CLASS}/Product.vo \
 	${CLASS}/Range.vo \
@@ -87,7 +87,7 @@ SET_OBJ = \
 	${SET}/Empty.vo \
 	${SET}/Functional.vo \
 	${SET}/Include.vo \
-	${SET}/Intersect.vo \
+	${SET}/Inter.vo \
 	${SET}/OrdPair.vo \
 	${SET}/OrdTuple.vo \
 	${SET}/Pair.vo \

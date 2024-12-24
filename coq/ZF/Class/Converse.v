@@ -6,7 +6,7 @@ Require Import ZF.Class.Functional.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Include.
-Require Import ZF.Class.Intersect.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Product.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.

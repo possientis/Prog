@@ -7,7 +7,7 @@ Require Import ZF.Core.Product.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Include.
-Require Import ZF.Set.Intersect.
+Require Import ZF.Set.Inter.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Power.
@@ -120,19 +120,19 @@ Proof.
       * reflexivity.
 Qed.
 
-Proposition IntersectProdIsProdIntersect: forall (a1 a2 b1 b2:U),
+Proposition InterProdIsProdInter: forall (a1 a2 b1 b2:U),
   (a1:x:b1) :/\: (a2:x:b2) = (a1:/\:a2) :x: (b1:/\:b2).
 Proof.
   intros a1 a2 b1 b2. apply DoubleInclusion. split; intros x H1.
-  - apply IntersectCharac in H1. destruct H1 as [H1 H2].
+  - apply InterCharac in H1. destruct H1 as [H1 H2].
     apply ProdCharac in H1. destruct H1 as [y1 [z1 [H1 [H1' G1]]]].
     apply ProdCharac in H2. destruct H2 as [y2 [z2 [H2 [H2' G2]]]].
     subst. apply OrdPairEqual in G2. destruct G2 as [G1 G2]. subst.
-    apply ProdCharac2. split; apply IntersectCharac; split; assumption.
+    apply ProdCharac2. split; apply InterCharac; split; assumption.
   - apply ProdCharac in H1. destruct H1 as [y [z [Ha [Hb H1]]]].
-    apply IntersectCharac in Ha. destruct Ha as [Ha Ha'].
-    apply IntersectCharac in Hb. destruct Hb as [Hb Hb'].
-    apply IntersectCharac. split; apply ProdCharac; exists y; exists z; split.
+    apply InterCharac in Ha. destruct Ha as [Ha Ha'].
+    apply InterCharac in Hb. destruct Hb as [Hb Hb'].
+    apply InterCharac. split; apply ProdCharac; exists y; exists z; split.
     + apply Ha.
     + split; assumption.
     + apply Ha'.

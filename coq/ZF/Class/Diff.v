@@ -1,6 +1,6 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Comp.
-Require Import ZF.Class.Intersect.
+Require Import ZF.Class.Inter.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
 Require Import ZF.Core.Not.

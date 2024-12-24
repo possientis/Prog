@@ -1,6 +1,6 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Include.
-Require Import ZF.Class.Intersect.
+Require Import ZF.Class.Inter.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Product.
@@ -24,7 +24,7 @@ Proof.
     + split; assumption.
 Qed.
 
-Proposition IntersectProdIsProdIntersect : forall (P1 P2 Q1 Q2:Class),
+Proposition InterProdIsProdInter: forall (P1 P2 Q1 Q2:Class),
   (P1:x:Q1) :/\: (P2:x:Q2) :~: (P1:/\:P2) :x: (Q1:/\:Q2).
 Proof.
   intros P1 P2 Q1 Q2. apply DoubleInclusion. split; intros x H1.
