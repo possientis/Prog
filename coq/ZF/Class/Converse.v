@@ -65,7 +65,7 @@ Proof.
     + apply SwitchCharac2. exists y. exists z. split; reflexivity.
 Qed.
 
-Proposition ConverseSmall : forall (P:Class),
+Proposition ConverseIsSmall : forall (P:Class),
   Small P -> Small (converse P).
 Proof.
   (* Let P be an arbitrary class. *)

@@ -8,7 +8,7 @@ Require Import ZF.Set.OrdPair.
 (* The converse of a set.                                                       *)
 Definition converse (a:U) : U := fromClass
   (Class.Converse.converse (toClass a))
-  (ConverseSmall (toClass a) (SetIsSmall a)).
+  (ConverseIsSmall (toClass a) (SetIsSmall a)).
 
 Proposition ConverseCharac : forall (a:U),
   forall x, x :< (converse a) <-> exists y z, x =:(z,y): /\ :(y,z): :< a.
