@@ -7,7 +7,7 @@ Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
-Require Import ZF.Class.Relation.
+Require Import ZF.Class.Rel.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
@@ -48,10 +48,9 @@ Proof.
     + apply H1.
 Qed.
 
-Proposition RestrictIsRelation : forall (P Q:Class),
-  Relation (P:|:Q).
+Proposition RestrictIsRel : forall (P Q:Class), Rel (P:|:Q).
 Proof.
-  intros P Q. apply FromBinaryIsRelation.
+  intros P Q. apply FromBinaryIsRel.
 Qed.
 
 Proposition DomainOfRestrict : forall (P Q:Class),
@@ -85,7 +84,7 @@ Proof.
 Qed.
 
 Proposition RestrictToDomain : forall (P:Class),
-  Relation P <-> P :|: domain P :~: P.
+  Rel P <-> P :|: domain P :~: P.
 Proof.
   intros P. split; intros H1.
   - intros x. split; intros H2.

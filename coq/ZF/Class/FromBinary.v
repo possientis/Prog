@@ -1,6 +1,6 @@
 Require Import ZF.Binary.
 Require Import ZF.Class.
-Require Import ZF.Class.Relation.
+Require Import ZF.Class.Rel.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -9,9 +9,8 @@ Require Import ZF.Set.OrdPair.
 Definition fromBinary (F:Binary) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ F y z.
 
-(* The class associated with a binary class is indeed a class relation.         *)
-Proposition FromBinaryIsRelation : forall (F:Binary),
-  Relation (fromBinary F).
+(* The class associated with a binary class is indeed a relation class.         *)
+Proposition FromBinaryIsRel : forall (F:Binary), Rel (fromBinary F).
 Proof.
   intros F x H1. unfold fromBinary in H1. destruct H1 as [y [z [H1 H2]]].
   exists y. exists z. apply H1.
@@ -51,10 +50,10 @@ Qed.
 
 (* The relation class of the binary class of a relation class P is P itself.    *)
 Proposition FromToBinary : forall (P:Class),
-  Relation P -> fromBinary (toBinary P) :~: P.
+  Rel P -> fromBinary (toBinary P) :~: P.
 Proof.
   intros P H1. apply ClassEquivCharac. intros x.
-  unfold Relation in H1. unfold toBinary, fromBinary.
+  unfold Rel in H1. unfold toBinary, fromBinary.
   split; intros H2.
   - destruct H2 as [y [z [H2 H3]]]. subst. apply H3.
   - destruct (H1 x H2) as [y [z H3]]. subst. exists y. exists z. split.

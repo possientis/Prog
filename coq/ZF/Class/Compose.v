@@ -1,7 +1,7 @@
 Require Import ZF.Binary.Compose.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
-Require Import ZF.Class.Relation.
+Require Import ZF.Class.Rel.
 Require Import ZF.Core.Dot.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -42,7 +42,7 @@ Proof.
 Qed.
 
 (* The composition of two classes is a relation.                                *)
-Proposition ComposeIsRelation : forall (P Q:Class), Relation (P :.: Q).
+Proposition ComposeIsRel : forall (P Q:Class), Rel (P :.: Q).
 Proof.
   intros P Q u H1. apply ComposeCharac in H1.
   destruct H1 as [x [y [z [H1 [H2 H3]]]]]. exists x. exists z. assumption.

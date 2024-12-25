@@ -58,7 +58,7 @@ CLASS_OBJ = \
 	${CLASS}/OneToOne.vo \
 	${CLASS}/Prod.vo \
 	${CLASS}/Range.vo \
-	${CLASS}/Relation.vo \
+	${CLASS}/Rel.vo \
 	${CLASS}/Restrict.vo \
 	${CLASS}/Russell.vo \
 	${CLASS}/Small.vo \
@@ -94,7 +94,7 @@ SET_OBJ = \
 	${SET}/Pair.vo \
 	${SET}/Power.vo \
 	${SET}/Prod.vo \
-	${SET}/Relation.vo \
+	${SET}/Rel.vo \
 	${SET}/Singleton.vo \
 	${SET}/Specify.vo \
 	${SET}/Tuple.vo \
