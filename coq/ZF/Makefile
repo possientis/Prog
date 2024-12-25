@@ -39,6 +39,7 @@ BINARY_OBJ = \
 	${BINARY}/Compose.vo \
 	${BINARY}/Converse.vo \
 	${BINARY}/Domain.vo \
+	${BINARY}/Function.vo \
 	${BINARY}/Functional.vo \
 	${BINARY}/OneToOne.vo \
 	${BINARY}/Range.vo \
