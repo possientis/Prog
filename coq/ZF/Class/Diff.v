@@ -1,5 +1,5 @@
 Require Import ZF.Class.
-Require Import ZF.Class.Comp.
+Require Import ZF.Class.Complement.
 Require Import ZF.Class.Inter.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
