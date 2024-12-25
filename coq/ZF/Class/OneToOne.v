@@ -7,7 +7,7 @@ Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-(* A class is 'one-to-one' if both itself and its converse are functional.      *)
+(* A class is one-to-one if both itself and its converse are functional.        *)
 Definition OneToOne (P:Class) : Prop := Functional P /\ Functional (converse P).
 
 Proposition OneToOneCharac1 : forall (P:Class), OneToOne P ->

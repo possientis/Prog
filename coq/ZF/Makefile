@@ -35,8 +35,12 @@ AXIOM_OBJ = \
 	${AXIOM}/Union.vo
 
 BINARY_OBJ = \
+	${BINARY}/Bijection.vo \
 	${BINARY}/Compose.vo \
+	${BINARY}/Converse.vo \
 	${BINARY}/Domain.vo \
+	${BINARY}/Functional.vo \
+	${BINARY}/OneToOne.vo \
 	${BINARY}/Range.vo \
 	${BINARY}/Restrict.vo
 
@@ -86,6 +90,7 @@ SET_OBJ = \
 	${SET}/Diff.vo \
 	${SET}/Empty.vo \
 	${SET}/Foundation.vo \
+	${SET}/FromClass.vo \
 	${SET}/Functional.vo \
 	${SET}/Incl.vo \
 	${SET}/Inter.vo \
