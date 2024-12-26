@@ -1,6 +1,11 @@
+Require Import ZF.Binary.
+Require Import ZF.Binary.Converse.
+Require Import ZF.Binary.Functional.
+Require Import ZF.Binary.OneToOne.
 Require Import ZF.Class.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
+Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
@@ -9,6 +14,23 @@ Require Import ZF.Set.OrdPair.
 
 (* A class is one-to-one if both itself and its converse are functional.        *)
 Definition OneToOne (P:Class) : Prop := Functional P /\ Functional (converse P).
+
+Proposition OneToOneFromBinary : forall (P:Class),
+  OneToOne P <-> Binary.OneToOne.OneToOne (toBinary P).
+Proof.
+  intros P. unfold Binary.OneToOne.OneToOne, OneToOne, Functional,converse.
+  split; intros [H1 H2].
+  - split.
+    + assumption.
+    + apply FunctionalEquivCompat with
+        (toBinary (fromBinary (Binary.Converse.converse (toBinary P)))). 2: apply H2.
+      apply ToFromBinary.
+  - split.
+    + assumption.
+    + apply FunctionalEquivCompat with
+        (Binary.Converse.converse (toBinary P)). 2: apply H2.
+      apply BinaryEquivSym, ToFromBinary.
+Qed.
 
 Proposition OneToOneCharac1 : forall (P:Class), OneToOne P ->
   forall x, forall y, forall z, P :(x,y): -> P :(x,z): -> y = z.
