@@ -12,7 +12,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Singleton.
-Require Import ZF.Set.Union.
+Require Import ZF.Set.Union2.
 
 (* It is useful to define the predicate underlying the product of two sets.     *)
 Definition ProdPred (a b:U) : U -> Prop := fun x =>

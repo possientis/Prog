@@ -2,7 +2,7 @@ Require Import ZF.Class.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
-Require Import ZF.Class.Union.
+Require Import ZF.Class.Union2.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
 Require Import ZF.Core.Equiv.

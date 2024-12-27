@@ -70,6 +70,7 @@ CLASS_OBJ = \
 	${CLASS}/Snd.vo \
 	${CLASS}/Switch.vo \
 	${CLASS}/Union.vo \
+	${CLASS}/Union2.vo \
 	${CLASS}/V.vo
 
 CORE_OBJ = \

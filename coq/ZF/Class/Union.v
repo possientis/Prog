@@ -2,7 +2,6 @@ Require Import ZF.Axiom.Union.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Or.
 Require Import ZF.Core.Union.
 Require Import ZF.Set.
 
@@ -67,16 +66,3 @@ Proof.
   (* Which follows from the union axiom. *)
     apply ZF.Axiom.Union.Union.
 Qed.
-
-(* The union of two classes.                                                    *)
-Definition union2 (P Q:Class) : Class := fun x => P x \/ Q x.
-
-(* Notation "P :\/: Q" := (union P Q)                                           *)
-Global Instance ClassOr : Or Class := { or := union2 }.
-
-Proposition Union2Charac : forall (P Q:Class) (x:U),
-  (P :\/: Q) x <-> P x \/ Q x.
-Proof.
-  intros P Q x. unfold or, ClassOr, union. split; auto.
-Qed.
-

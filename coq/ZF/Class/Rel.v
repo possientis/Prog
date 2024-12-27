@@ -1,5 +1,5 @@
 Require Import ZF.Class.
-Require Import ZF.Class.Union.
+Require Import ZF.Class.Union2.
 Require Import ZF.Core.Or.
 Require Import ZF.Set.OrdPair.
 

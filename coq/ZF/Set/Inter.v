@@ -9,7 +9,7 @@ Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Union.
+Require Import ZF.Set.Union2.
 
 (* The intersection of two sets a and b.                                        *)
 Definition inter (a b:U) : U := fromClass (toClass a :/\: toClass b)
