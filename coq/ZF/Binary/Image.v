@@ -57,7 +57,7 @@ Proof.
 Qed.
 
 (* If F is functional and P is small, then F:[P]: is small                      *)
-Proposition ImageSmall : forall (F:Binary) (P:Class),
+Proposition ImageIsSmall : forall (F:Binary) (P:Class),
   Functional F -> Small P -> Small F:[P]:.
 Proof.
 

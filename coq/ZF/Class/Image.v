@@ -26,10 +26,10 @@ Proof.
 Qed.
 
 (* If P is functional and Q is small, then P:[Q]: is small.                     *)
-Proposition ImageSmall : forall (P Q:Class),
+Proposition ImageIsSmall : forall (P Q:Class),
   Functional P -> Small Q -> Small P :[Q]:.
 Proof.
-  intros P Q. apply Binary.Image.ImageSmall.
+  intros P Q. apply Binary.Image.ImageIsSmall.
 Qed.
 
 Proposition ImageEquivCompat : forall (P Q R S:Class),

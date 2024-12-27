@@ -84,7 +84,7 @@ Proof.
   assert (Small (Switch:[P]:)) as A. 2: apply A.
 
   (* This follows from the fact that Switch is functional and P is small. *)
-  apply ImageSmall.
+  apply ImageIsSmall.
 
   - apply SwitchIsFunctional.
 

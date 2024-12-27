@@ -61,7 +61,7 @@ Proof.
   assert (Small F:[toClass a]:) as A. 2: apply A.
 
   (* Which we know is true since a set is small ... *)
-  apply ImageSmall. 2: apply SetIsSmall.
+  apply ImageIsSmall. 2: apply SetIsSmall.
 
   (* Provided we show that F is functional *)
   assert (Functional F) as A. 2: apply A.
