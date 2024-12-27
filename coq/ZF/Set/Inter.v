@@ -1,15 +1,19 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.
+Require Import ZF.Class.Inter.
+Require Import ZF.Class.Small.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Specify.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Union.
 
 (* The intersection of two sets a and b.                                        *)
-Definition inter (a b:U) : U := :{ a | fun x => x :< b }:.
+Definition inter (a b:U) : U := fromClass (toClass a :/\: toClass b)
+  (InterIsSmallL (toClass a) (toClass b) (SetIsSmall a)).
 
 (* Notation "a :/\: b" := (inter a b)                                           *)
 Global Instance SetAnd : And U := { and := inter }.
@@ -18,9 +22,10 @@ Global Instance SetAnd : And U := { and := inter }.
 Proposition InterCharac : forall (a b:U),
  forall x, x :< a:/\:b <-> x :< a /\ x :< b.
 Proof.
-  intros a b x. unfold inter. split.
-  - intros H. apply SpecCharac in H. apply H.
-  - intros [H1 H2]. apply SpecCharac. auto.
+  intros a b x. split; intros H1.
+  - apply FromClassCharac in H1.
+    apply (proj1 (InterCharac _ _ _)) in H1. apply H1.
+  - apply FromClassCharac, Class.Inter.InterCharac, H1.
 Qed.
 
 (* The intersection of two sets is commutative.                                 *)
@@ -139,5 +144,4 @@ Proof.
       * apply H1, H2.
     + apply InterCharac in H2. destruct H2 as [H2 _]. apply H2.
 Qed.
-
 
