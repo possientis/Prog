@@ -56,7 +56,7 @@ Proof.
   - assumption.
 Qed.
 
-(* If F is functional and P is small, then F:[P]: is small                      *)
+(* If F is functional and P is small, then F:[P]: is small.                     *)
 Proposition ImageIsSmall : forall (F:Binary) (P:Class),
   Functional F -> Small P -> Small F:[P]:.
 Proof.
@@ -87,7 +87,7 @@ Proof.
   - assert (F:[toClass a]: :~: F:[P]:) as A. 2: apply A.
 
   (* Which follows from the equivalence between a and P. *)
-  apply ImageEquivCompatR, H3.
+    apply ImageEquivCompatR, H3.
 
   (* We next need to show that F[a] is small. *)
   - assert (Small F:[toClass a]:) as A. 2: apply A.
