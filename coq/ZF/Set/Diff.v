@@ -1,5 +1,8 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.
+Require Import ZF.Class.Diff.
+Require Import ZF.Class.Small.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
 Require Import ZF.Core.Leq.
@@ -7,27 +10,30 @@ Require Import ZF.Core.Or.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
-Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
-(* The set a \ b is made of those elements of a which do not belong to b.       *)
-Definition diff (a b:U) : U := :{a | fun x => ~ x :< b }:.
+Definition diff (a b:U) : U := fromClass (toClass a :\: toClass b)
+  (DiffIsSmall (toClass a) (toClass b) (SetIsSmall a)).
 
 (* Notation "a :\: b" := (diff a b)                                             *)
 Global Instance SetDiff : Diff U := { diff := diff }.
 
+(* The set a \ b is made of those elements of a which do not belong to b.       *)
 Proposition DiffCharac : forall (a b:U),
   forall x, x :< a:\:b <-> x :< a /\ ~ x :< b.
 Proof.
-  intros a b x. unfold diff. apply SpecCharac.
+  intros a b x. split; intros H1.
+  - apply FromClassCharac in H1.
+    apply (proj1 (Class.Diff.DiffCharac _ _ _)) in H1. apply H1.
+  - apply FromClassCharac, Class.Diff.DiffCharac, H1.
 Qed.
 
-Proposition DiffUnionInter : forall (a b c:U),
-  a :\: (b:\/:c) = a:\:b :/\: a:\:c.
+Proposition DiffUnionInter : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.
 Proof.
-  intros a b c. apply Extensionality. intros x. split; intros H1.
+intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply DiffCharac in H1. destruct H1 as [H1 H2]. apply InterCharac.
     split; apply DiffCharac; split.
     + apply H1.
@@ -149,3 +155,4 @@ Proof.
   - apply InclRefl.
   - assumption.
 Qed.
+

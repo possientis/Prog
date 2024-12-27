@@ -16,7 +16,7 @@ Proof.
   intros P Q x. split; intros H1; apply H1.
 Qed.
 
-Proposition SmallInterSmallL : forall (P Q:Class),
+Proposition InterIsSmallL : forall (P Q:Class),
   Small P -> Small (P:/\:Q).
 Proof.
   intros P Q [a Ha].
@@ -24,10 +24,9 @@ Proof.
   intros x [H1 _]. apply Ha, H1.
 Qed.
 
-Proposition SmallInterSmallR : forall (P Q:Class),
+Proposition InterIsSmallR : forall (P Q:Class),
   Small Q -> Small (P:/\:Q).
 Proof.
   intros P Q [a Ha]. apply BoundedClassIsSmall. exists a.
   intros x [_ H1]. apply Ha, H1.
 Qed.
-

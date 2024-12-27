@@ -17,3 +17,9 @@ Definition union (P Q:Class) : Class := fun x => P x \/ Q x.
 
 (* Notation "P :\/: P" := (union P Q)                                           *)
 Global Instance ClassOr : Or Class := { or := union }.
+
+Proposition UnionCharac : forall (P Q:Class) (x:U),
+  (P :\/: Q) x <-> P x \/ Q x.
+Proof.
+  intros P Q x. unfold or, ClassOr, union. split; auto.
+Qed.
