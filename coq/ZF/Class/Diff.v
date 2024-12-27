@@ -34,9 +34,9 @@ Proof.
     apply (proj1 (ComplementCharac _ _)) in H2.
     split; apply DiffCharac; split.
     + assumption.
-    + intros H3. apply H2. apply UnionCharac. left. assumption.
+    + intros H3. apply H2. apply Union2Charac. left. assumption.
     + assumption.
-    + intros H3. apply H2. apply UnionCharac. right. assumption.
+    + intros H3. apply H2. apply Union2Charac. right. assumption.
   - apply InterCharac in H1. destruct H1 as [H1 H2].
     apply DiffCharac in H1. destruct H1 as [H1 H3].
     apply (proj1 (ComplementCharac _ _)) in H3.
@@ -44,6 +44,6 @@ Proof.
     apply (proj1 (ComplementCharac _ _)) in H2.
     apply DiffCharac. split.
     + assumption.
-    + intros H4. apply (proj1 (UnionCharac _ _ _)) in H4.
+    + intros H4. apply (proj1 (Union2Charac _ _ _)) in H4.
       destruct H4 as [H4|H4]; contradiction.
 Qed.

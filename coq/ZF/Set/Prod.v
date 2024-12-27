@@ -81,12 +81,12 @@ Proof.
 
   (* case u = {y} : we need to show that {y} <= a\/b, given that y :< a *)
   - assert (:{y}: :<=: a:\/:b) as A. 2: apply A.
-    intros v H3. apply SingleCharac in H3. apply UnionCharac.
+    intros v H3. apply SingleCharac in H3. apply Union2Charac.
     subst. left. apply Hya.
 
   (* case u = {y,z} : we need to show that {y,z} <= a\/b with y :< a and z :< b *)
   - assert (:{y,z}: :<=: a:\/:b) as A. 2: apply A.
-    intros v H3. apply PairCharac in H3. apply UnionCharac.
+    intros v H3. apply PairCharac in H3. apply Union2Charac.
     destruct H3 as [H3|H3]; subst.
     + left.  apply Hya.
     + right. apply Hzb.

@@ -23,10 +23,10 @@ Proposition Tuple3Charac : forall (a1 a2 a3:U),
   forall x, x :< :{a1,a2,a3}: <-> x = a1 \/ x = a2 \/ x = a3.
 Proof.
   intros a1 a2 a3 x. unfold tuple3. split.
-  - intros H1. apply UnionCharac in H1. destruct H1 as [H1|H1].
+  - intros H1. apply Union2Charac in H1. destruct H1 as [H1|H1].
     + apply PairCharac in H1. destruct H1 as [H1|H1]; auto.
     + apply SingleCharac in H1. auto.
-  - intros [H1|[H1|H1]]; apply UnionCharac.
+  - intros [H1|[H1|H1]]; apply Union2Charac.
     + left. apply PairEqualInL, H1.
     + left. apply PairEqualInR, H1.
     + right. apply SingleCharac, H1.
@@ -69,10 +69,10 @@ Proposition Tuple4Charac : forall (a1 a2 a3 a4:U),
   forall x, x :< :{a1,a2,a3,a4}: <-> x = a1 \/ x = a2 \/ x = a3 \/ x = a4.
 Proof.
   intros a1 a2 a3 a4 x. unfold tuple4. split.
-  - intros H1. apply UnionCharac in H1. destruct H1 as [H1|H1].
+  - intros H1. apply Union2Charac in H1. destruct H1 as [H1|H1].
     + apply Tuple3Charac in H1. destruct H1 as [H1|[H1|H1]]; auto.
     + apply SingleCharac in H1. auto.
-  - intros [H1|[H1|[H1|H1]]]; apply UnionCharac.
+  - intros [H1|[H1|[H1|H1]]]; apply Union2Charac.
     + left. apply Tuple3EqualIn1, H1.
     + left. apply Tuple3EqualIn2, H1.
     + left. apply Tuple3EqualIn3, H1.
