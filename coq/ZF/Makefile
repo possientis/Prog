@@ -84,6 +84,7 @@ CORE_OBJ = \
 	${CORE}/Or.vo \
 	${CORE}/Pipe.vo \
 	${CORE}/Prod.vo \
+	${CORE}/Union.vo \
 	${CORE}/Zero.vo
 
 SET_OBJ = \

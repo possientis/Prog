@@ -1,11 +1,9 @@
-Declare Scope ZF_Set_Union_scope.
-Open    Scope ZF_Set_Union_scope.
-
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Axiom.Union.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
+Require Import ZF.Core.Union.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
@@ -19,15 +17,15 @@ Definition UnionPred (a:U) : U -> Prop := fun x =>
 Proposition UnionSmall : forall (a:U),
   Small (UnionPred a).
 Proof.
-  apply Union.
+  apply ZF.Axiom.Union.Union.
 Qed.
 
 (* We consider the set defined by the union predicate of the set a.             *)
 Definition union (a:U) : U
   := fromClass (UnionPred a) (UnionSmall a).
 
-Notation ":U( a )" := (union a)
-  (at level 0, no associativity) : ZF_Set_Union_scope.
+(* Notation ":U( a )" := (union a)                                              *)
+Global Instance SetUnion : Union U := { union := union }.
 
 (* The union of two sets.                                                       *)
 Definition union2 (a b:U) : U := :U( :{a,b}: ).
@@ -132,3 +130,4 @@ Proposition UnionInclR : forall (a b:U), b :<=: a:\/:b.
 Proof.
   intros a b x H1. apply UnionCharac. right. apply H1.
 Qed.
+

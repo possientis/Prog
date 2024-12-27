@@ -1,6 +1,7 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Rel.
 Require Import ZF.Class.Union.
+Require Import ZF.Core.Union.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
