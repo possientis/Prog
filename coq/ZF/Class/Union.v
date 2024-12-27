@@ -6,17 +6,17 @@ Require Import ZF.Core.Or.
 Require Import ZF.Set.
 
 (* The union class of a class.                                                  *)
-Definition unionClass (P:Class) : Class := fun x =>
+Definition union (P:Class) : Class := fun x =>
   exists y, x :< y /\ P y.
 
-Notation ":U( P )" := (unionClass P)
+Notation ":U( P )" := (union P)
   (at level 0, no associativity) : ZF_Class_Union_scope.
 
 (* The union of two classes.                                                    *)
-Definition union (P Q:Class) : Class := fun x => P x \/ Q x.
+Definition union2 (P Q:Class) : Class := fun x => P x \/ Q x.
 
 (* Notation "P :\/: P" := (union P Q)                                           *)
-Global Instance ClassOr : Or Class := { or := union }.
+Global Instance ClassOr : Or Class := { or := union2 }.
 
 Proposition UnionCharac : forall (P Q:Class) (x:U),
   (P :\/: Q) x <-> P x \/ Q x.

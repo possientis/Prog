@@ -23,23 +23,23 @@ Proof.
 Qed.
 
 (* We consider the set defined by the union predicate of the set a.             *)
-Definition unionSet (a:U) : U
+Definition union (a:U) : U
   := fromClass (UnionPred a) (UnionSmall a).
 
-Notation ":U( a )" := (unionSet a)
+Notation ":U( a )" := (union a)
   (at level 0, no associativity) : ZF_Set_Union_scope.
 
 (* The union of two sets.                                                       *)
-Definition union (a b:U) : U := :U( :{a,b}: ).
+Definition union2 (a b:U) : U := :U( :{a,b}: ).
 
 (* Notation "a :\/: b" := (union a b)                                           *)
-Global Instance SetOr : Or U := { or := union }.
+Global Instance SetOr : Or U := { or := union2 }.
 
 (* Characterisation of the elements of the union set of a.                      *)
 Proposition UnionSetCharac : forall (a:U),
   forall x, x :< :U(a) <-> exists y, x :< y /\ y :< a.
 Proof.
-  unfold unionSet. intros a. apply FromClassCharac.
+  unfold union. intros a. apply FromClassCharac.
 Qed.
 
 (* Characterisation of the elements of the union of two sets.                   *)

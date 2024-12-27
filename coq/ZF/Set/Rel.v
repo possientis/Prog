@@ -17,6 +17,6 @@ Qed.
 Proposition UnionClassOfRelsIsRel : forall (P:Class),
   (forall x, P x -> Rel x) -> Class.Rel.Rel :U(P).
 Proof.
-  intros P H1 x H2. unfold unionClass in H2. destruct H2 as [y [H2 H3]].
+  intros P H1 x H2. unfold union in H2. destruct H2 as [y [H2 H3]].
   apply H1 in H3. apply H3, H2.
 Qed.
