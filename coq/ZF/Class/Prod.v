@@ -1,11 +1,19 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Small.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Leq.
+Require Import ZF.Core.Or.
 Require Import ZF.Core.Prod.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Pair.
+Require Import ZF.Set.Power.
+Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Union2.
 
 Definition prod (P Q:Class) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ P y /\ Q z.
@@ -13,8 +21,14 @@ Definition prod (P Q:Class) : Class := fun x =>
 (* Notation "P :x: Q" := (prod P Q)                                             *)
 Global Instance ClassProd : Prod Class := { prod := prod }.
 
-Proposition ProdCharac2 : forall (P Q:Class),
-  forall y, forall z, (P:x:Q) :(y,z): <-> P y /\ Q z.
+Proposition ProdCharac : forall (P Q:Class) (x:U),
+  (P :x: Q) x <->  exists y, exists z, x = :(y,z): /\ P y /\ Q z.
+Proof.
+  intros P Q x. unfold Core.Prod.prod, ClassProd, prod. split; auto.
+Qed.
+
+Proposition ProdCharac2 : forall (P Q:Class) (y z:U),
+  (P :x: Q) :(y,z): <-> P y /\ Q z.
 Proof.
   intros P Q y z. split; intros H1.
   - unfold prod in H1. destruct H1 as [y' [z' [H1 [H2 H3]]]].
@@ -22,6 +36,148 @@ Proof.
   - destruct H1 as [H1 H2]. exists y. exists z. split.
     + reflexivity.
     + split; assumption.
+Qed.
+
+Proposition ProdEquivCompat : forall (P Q R S:Class),
+  P :~: Q -> R :~: S -> P :x: R :~: Q :x: S.
+Proof.
+  intros P Q R S H1 H2 x. unfold Core.Prod.prod, ClassProd, prod.
+  split; intros H3; destruct H3 as [y [z [H3 [H4 H5]]]]; exists y; exists z; split.
+  - assumption.
+  - split. { apply H1. assumption. } { apply H2. assumption. }
+  - assumption.
+  - split.
+    + apply ClassEquivSym in H1. apply H1. assumption.
+    + apply ClassEquivSym in H2. apply H2. assumption.
+Qed.
+
+Proposition ProdEquivCompatL : forall (P Q R:Class),
+  P :~: Q -> P :x: R :~: Q :x: R.
+Proof.
+  intros P Q R H1. apply ProdEquivCompat.
+  - assumption.
+  - apply ClassEquivRefl.
+Qed.
+
+Proposition ProdEquivCompatR : forall (P Q R:Class),
+  P :~: Q -> R :x: P :~: R :x: Q.
+Proof.
+  intros P Q R H1. apply ProdEquivCompat.
+  - apply ClassEquivRefl.
+  - assumption.
+Qed.
+
+Proposition ProdIsSmall : forall (P Q:Class),
+  Small P -> Small Q -> Small (P :x: Q).
+Proof.
+  (* Let P and Q be arbitrary classes *)
+  intros P Q.
+
+  (* We assume that P is small *)
+  intros H1. assert (Small P) as A. { apply H1. } clear A.
+
+  (* Amd we assume that Q is small *)
+  intros H2. assert (Small Q) as A. { apply H2. } clear A.
+
+  (* P is equivalent to some set a. *)
+  assert (exists a, toClass a :~: P) as H3. { apply (proj1 (SmallIsSomeSet _)), H1. }
+
+  (* Q is equivalent to some set b. *)
+  assert (exists b, toClass b :~: Q) as H4. { apply (proj1 (SmallIsSomeSet _)), H2. }
+
+  (* So let a be a set equivalent to the class P. *)
+  destruct H3 as [a H3].
+
+  (* And let b be a set equivalent to the class Q. *)
+  destruct H4 as [b H4].
+
+  (* We need to show that the producr of P and Q is small. *)
+  assert (Small (P :x: Q)) as A. 2: apply A.
+
+  (* The property of being small being compatible with equivalences... *)
+  apply SmallEquivCompat with (toClass a :x: toClass b).
+
+  (* We first need to show the equivalence between P \/ Q and a \/ b. *)
+  - assert (toClass a :x: toClass b :~: P :x: Q) as A. 2: apply A.
+
+  (* Which follows from the equivalences of a and P and  of b and Q. *)
+    apply ProdEquivCompat; assumption.
+
+  (* We next need to show that a x b is small. *)
+  - assert (Small (toClass a :x: toClass b)) as A. 2: apply A.
+
+  (* It is sufficient to show that a x b is a bounded class. *)
+    apply BoundedClassIsSmall.
+
+  (* So we need to show that a x b is bounded. *)
+    assert (Bounded (toClass a :x: toClass b)) as A. 2: apply A.
+
+  (* In other words, we need to show the existence of a set c ... *)
+    assert (exists c, forall x, (toClass a :x: toClass b) x -> x :< c) as A.
+    2: apply A.
+
+  (* Consider the set c = P(P(a\/b)) *)
+    remember :P(:P(a:\/:b)) as c eqn:Ec.
+
+  (* We claim that c has the desired property *)
+    exists c.
+
+  (* We need to show that (a x b) x -> x :< c for all x *)
+    assert (forall x, (toClass a :x: toClass b) x -> x :< c) as A. 2: apply A.
+
+  (* So let x be an arbitrary set satisfying the predicate a x b *)
+    intros x H5.
+
+  (* Then we have some y and z such that y :< a, z :< b and x = (y,z) *)
+    destruct H5 as [y [z [H5 [H6 H7]]]].
+
+  (* So x is the ordered pair (y,z) *)
+    assert (x = :(y,z):) as A. { apply H5. } clear A.
+
+  (* And  we have y :< a *)
+    assert (y :< a) as A. { apply H6. } clear A.
+
+  (* And we have z :< b *)
+    assert (z :< b) as A. { apply H7. } clear A.
+
+  (* So we need to show thar x :< c *)
+    assert (x :< c) as A. 2: apply A.
+
+  (* In other words, we need to show that x :< P(P(a\/b)) *)
+    rewrite Ec.
+    assert (x :< :P(:P(a:\/:b))) as A. 2: apply A.
+
+  (* That is, we need to show that (y,z) <= P(a\/b) *)
+    apply PowerCharac. rewrite H5.
+    assert (:(y,z): :<=: :P(a:\/:b)) as A. 2: apply A.
+
+  (* So let u be an element of (y,z) *)
+    intros u H8. apply OrdPairCharac in H8.
+
+  (* Since (y,z) = {{y},{y,z}} we have u = {y} or u = {y,z} *)
+    assert (u = :{y}: \/ u = :{y,z}: ) as A. { apply H8. } clear A.
+
+  (* And we need to show that u is an element of P(a\/b) *)
+    assert (u :< :P(a:\/:b)) as A. 2: apply A.
+
+ (* That is, we need to show that u <= a\/b *)
+    apply PowerCharac.
+    assert (u :<=: a:\/:b) as A. 2: apply A.
+
+ (* We consider the cases u = {y} and u = {y,z} separately *)
+    destruct H8 as [H8|H8]; rewrite H8.
+
+ (* case u = {y} : we need to show that {y} <= a\/b, given that y :< a *)
+    + assert (:{y}: :<=: a:\/:b) as A. 2: apply A.
+      intros v H9. apply SingleCharac in H9. apply Union2Charac.
+      subst. left. apply H6.
+
+ (* case u = {y,z} : we need to show that {y,z} <= a\/b with y :< a and z :< b *)
+    + assert (:{y,z}: :<=: a:\/:b) as A. 2: apply A.
+      intros v H9. apply PairCharac in H9. apply Union2Charac.
+      destruct H9 as [H9|H9]; subst.
+      * left.  apply H6.
+      * right. apply H7.
 Qed.
 
 Proposition InterProdIsProdInter: forall (P1 P2 Q1 Q2:Class),
