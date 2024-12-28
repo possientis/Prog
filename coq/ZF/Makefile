@@ -53,6 +53,7 @@ CLASS_OBJ = \
 	${CLASS}/Converse.vo \
 	${CLASS}/Diff.vo \
 	${CLASS}/Domain.vo \
+	${CLASS}/Empty.vo \
 	${CLASS}/FromBinary.vo \
 	${CLASS}/Fst.vo \
 	${CLASS}/Function.vo \
