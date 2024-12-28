@@ -1,34 +1,23 @@
 Declare Scope ZF_Set_Pair_scope.
 Open    Scope ZF_Set_Pair_scope.
 
-Require Import ZF.Axiom.Pairing.
-Require Import ZF.Class.Small.
+Require Import ZF.Class.
+Require Import ZF.Class.Pair.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 
-(* It is useful to define the predicate underlying the pairing axiom.           *)
-Definition PairPred (a b:U) : U -> Prop := fun x =>
-  x = a \/ x = b.
-
-(* The pairing predicate of the sets a and b is small.                          *)
-Proposition PairSmall : forall (a b:U),
-  Small (PairPred a b).
-Proof.
-  apply Pairing.
-Qed.
-
 (* We consider the set defined by the pairing predicate of a and b.             *)
-Definition pairSet (a b:U) : U
-  := fromClass (PairPred a b) (PairSmall a b).
+Definition pair (a b:U) : U := fromClass (Class.Pair.pair a b)
+  (PairIsSmall a b).
 
-Notation ":{ a , b }:" := (pairSet a b)
+Notation ":{ a , b }:" := (pair a b)
   (at level 1, no associativity) : ZF_Set_Pair_scope.
 
 (* Characterisation of the elements of {a,b}.                                   *)
 Proposition PairCharac : forall (a b:U),
   forall x, x :< :{a,b}: <-> x = a \/ x = b.
 Proof.
-  unfold pairSet. intros a b. apply FromClassCharac.
+  intros a b. apply FromClassCharac.
 Qed.
 
 (* If a set x is equal to the set a, then it belongs to the set {a,b}.          *)

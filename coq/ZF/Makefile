@@ -62,6 +62,7 @@ CLASS_OBJ = \
 	${CLASS}/Incl.vo \
 	${CLASS}/Inter.vo \
 	${CLASS}/OneToOne.vo \
+	${CLASS}/Pair.vo \
 	${CLASS}/Prod.vo \
 	${CLASS}/Range.vo \
 	${CLASS}/Rel.vo \
