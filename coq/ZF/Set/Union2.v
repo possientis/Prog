@@ -1,14 +1,16 @@
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.
+Require Import ZF.Class.Small.
+Require Import ZF.Class.Union2.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
-Require Import ZF.Core.Union.
 Require Import ZF.Set.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Pair.
-Require Import ZF.Set.Union.
 
 (* The union of two sets.                                                       *)
-Definition union2 (a b:U) : U := :U( :{a,b}: ).
+Definition union2 (a b:U) : U := fromClass (toClass a :\/: toClass b)
+  (Union2IsSmall (toClass a) (toClass b) (SetIsSmall a) (SetIsSmall b)).
 
 (* Notation "a :\/: b" := (union a b)                                           *)
 Global Instance SetOr : Or U := { or := union2 }.
@@ -17,22 +19,14 @@ Global Instance SetOr : Or U := { or := union2 }.
 Proposition Union2Charac : forall (a b:U),
   forall x, x :< a:\/:b <-> x :< a \/ x :< b.
 Proof.
-  intros a b x. unfold union. split.
-  - intros H. apply UnionCharac in H. destruct H as [y [H1 H2]].
-    apply PairCharac in H2. destruct H2 as [H2|H3]; subst.
-    + left. apply H1.
-    + right. apply H1.
-  - intros [H1|H1].
-    + apply UnionCharac. exists a. split.
-      * apply H1.
-      * apply PairInL.
-    + apply UnionCharac. exists b. split.
-      * apply H1.
-      * apply PairInR.
+  intros a b x. unfold or, SetOr, union2. split; intros H1.
+  - apply FromClassCharac in H1.
+    apply (proj1 (Class.Union2.Union2Charac _ _ _)) in H1. apply H1.
+  - apply FromClassCharac, Class.Union2.Union2Charac, H1.
 Qed.
 
 (* The union of two sets is commutative.                                        *)
-Proposition UnionComm : forall (a b:U), a:\/:b = b:\/:a.
+Proposition Union2Comm : forall (a b:U), a:\/:b = b:\/:a.
 Proof.
   intros a b. apply Extensionality. intros x. split;
   intros H1; apply Union2Charac; apply Union2Charac in H1;
@@ -40,7 +34,7 @@ Proof.
 Qed.
 
 (* The union of two sets is associative.                                        *)
-Proposition UnionAssoc : forall (a b c:U), (a:\/:b):\/:c = a:\/:(b:\/:c).
+Proposition Union2Assoc : forall (a b c:U), (a:\/:b):\/:c = a:\/:(b:\/:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1;
   apply Union2Charac in H1; apply Union2Charac; destruct H1 as [H1|H1].
@@ -55,7 +49,7 @@ Proof.
 Qed.
 
 (* Union is compatible with inclusion.                                          *)
-Proposition UnionInclCompat : forall (a b c d:U),
+Proposition Union2InclCompat : forall (a b c d:U),
   a :<=: b -> c :<=: d -> a:\/:c :<=: b:\/:d.
 Proof.
   intros a b c d H1 H2 x H3. apply Union2Charac in H3.
@@ -65,24 +59,24 @@ Proof.
 Qed.
 
 (* Union is left-compatible with inclusion.                                     *)
-Proposition UnionInclCompatL : forall (a b c:U),
+Proposition Union2InclCompatL : forall (a b c:U),
   a :<=: b -> a:\/:c :<=: b:\/:c.
 Proof.
-  intros a b c H1. apply UnionInclCompat.
+  intros a b c H1. apply Union2InclCompat.
   - assumption.
   - apply InclRefl.
 Qed.
 
 (* Union is right-compatible with inclusion.                                    *)
-Proposition UnionInclCompatR : forall (a b c:U),
+Proposition Union2InclCompatR : forall (a b c:U),
   a :<=: b -> c:\/:a :<=: c:\/:b.
 Proof.
-  intros a b c H1. apply UnionInclCompat.
+  intros a b c H1. apply Union2InclCompat.
   - apply InclRefl.
   - assumption.
 Qed.
 
-Proposition UnionEqualIncl : forall (a b:U),
+Proposition Union2EqualIncl : forall (a b:U),
   b = a :\/: b <-> a :<=: b.
 Proof.
   intros a b. split; intros H1.
@@ -94,13 +88,12 @@ Proof.
       * apply H2.
 Qed.
 
-Proposition UnionInclL : forall (a b:U), a :<=: a:\/:b.
+Proposition Union2InclL : forall (a b:U), a :<=: a:\/:b.
 Proof.
   intros a b x H1. apply Union2Charac. left. apply H1.
 Qed.
 
-Proposition UnionInclR : forall (a b:U), b :<=: a:\/:b.
+Proposition Union2InclR : forall (a b:U), b :<=: a:\/:b.
 Proof.
   intros a b x H1. apply Union2Charac. right. apply H1.
 Qed.
-
