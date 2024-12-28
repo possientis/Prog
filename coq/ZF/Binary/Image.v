@@ -71,8 +71,7 @@ Proof.
   intros H2. assert (Small P) as A. { apply H2. } clear A.
 
   (* In particular P is equivalent to some set a. *)
-  assert (exists a, toClass a :~: P) as H3.
-    { apply (proj1 (SmallIsSomeSet _)), H2. }
+  assert (exists a, toClass a :~: P) as H3. { apply (proj1 (SmallIsSomeSet _)), H2. }
 
   (* So let a be a set equivalent to the class P. *)
   destruct H3 as [a H3].
@@ -95,5 +94,3 @@ Proof.
   (* Which follows from the replacement axiom and the fact F is functional. *)
     apply Replacement, H1.
 Qed.
-
-
