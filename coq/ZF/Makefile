@@ -65,6 +65,7 @@ CLASS_OBJ = \
 	${CLASS}/Pair.vo \
 	${CLASS}/Power.vo \
 	${CLASS}/Prod.vo \
+	${CLASS}/Proper.vo \
 	${CLASS}/Range.vo \
 	${CLASS}/Rel.vo \
 	${CLASS}/Restrict.vo \

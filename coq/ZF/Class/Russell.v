@@ -1,5 +1,6 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
+Require Import ZF.Class.Proper.
 Require Import ZF.Set.
 Require Import ZF.Set.Specify.
 
