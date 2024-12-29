@@ -106,6 +106,7 @@ SET_OBJ = \
 	${SET}/Pair.vo \
 	${SET}/Power.vo \
 	${SET}/Prod.vo \
+	${SET}/Range.vo \
 	${SET}/Rel.vo \
 	${SET}/Singleton.vo \
 	${SET}/Specify.vo \
