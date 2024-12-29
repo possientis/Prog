@@ -1,8 +1,12 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Domain.
+Require Import ZF.Class.Empty.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
 Require Import ZF.Core.And.
@@ -11,6 +15,7 @@ Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
 Require Import ZF.Core.Prod.
+Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
@@ -229,6 +234,91 @@ Proof.
   - apply SwitchIsFunctional.
 
   - apply H1.
+Qed.
+
+(* If P is a proper class and Q is not empty, then P x Q is a proper class.     *)
+Proposition ProdIsProper : forall (P Q:Class),
+  Proper P -> ~ Q :~: :0: -> Proper (P :x: Q).
+Proof.
+
+  (* Let P and Q be two arbitrary classes. *)
+  intros P Q.
+
+  (* We assume that P is a proper class. *)
+  intros H1. assert (Proper P) as A. { apply H1. } clear A.
+
+  (* We assume that Q is not empty. *)
+  intros H2. assert (~ Q :~: :0:) as A. { apply H2. } clear A.
+
+  (* So Q has an element. *)
+  assert (exists y, Q y) as H3. { apply NotEmptyHasElement, H2. }
+
+  (* So let y be a set belonging to the class Q. *)
+  destruct H3 as [y H3].
+
+  (* We need to show that P x Q is a proper class. *)
+  assert (Proper (P :x: Q)) as A. 2: apply A.
+
+  (* Let us assume to the contrary that P X Q is small. *)
+  intros H4. assert (Small (P :x: Q)) as A. { apply H4. } clear A.
+
+  (* We shall obtain a contradiction by showing that P is small *)
+  apply H1.
+
+  (* So we need to show that P is small. *)
+  assert (Small P) as A. 2: apply A.
+
+  (* Consider the class R = { ((x,y),x) | P x }. *)
+  remember ( fun z => exists x, z = :(:(x,y):,x): /\ P x) as R eqn:Er.
+
+  (* We claim that R is a functional class *)
+  assert (Functional R) as H5. {
+    apply FunctionalCharac2. intros x y1 y2. rewrite Er.
+    intros [x1 [T1 T2]] [x2 [T3 T4]].
+    apply OrdPairEqual in T1. destruct T1 as [T1 T1'].
+    apply OrdPairEqual in T3. destruct T3 as [T3 T3'].
+    subst. apply OrdPairEqual in T3. destruct T3 as [T3 _].
+    assumption.
+  }
+
+  (* We claim that domain R <= P X Q. *)
+  assert (domain R :<=: P :x: Q) as H6. {
+    intros x T1. apply (proj1 (DomainCharac _ _)) in T1.
+    destruct T1 as [y' T1]. rewrite Er in T1. destruct T1 as [x' [T1 T2]].
+    apply OrdPairEqual in T1. destruct T1 as [T1 _]. subst.
+    apply ProdCharac2. split; assumption.
+  }
+
+  (* Having assumed that P x Q is small, it follows that domain R is small. *)
+  assert (Small (domain R)) as H7. {
+    apply LesserThanSmallIsSmall with (P :x: Q); assumption.
+  }
+
+  (* However, we claim that P is the direct image of domain R by R. *)
+  assert (R:[domain R]: :~: P) as H8. {
+    intros x. split; intros T1.
+    - apply (proj1 (ImageCharac _ _ _)) in T1. destruct T1 as [x' [_ T1]].
+      rewrite Er in T1. destruct T1 as [x1 [T1 T2]].
+      apply OrdPairEqual in T1. destruct T1 as [_ T1]. subst. assumption.
+    - apply ImageCharac. exists :(x,y):. rewrite Er. split.
+      + apply DomainCharac. exists x. exists x. split.
+        * reflexivity.
+        * assumption.
+      + exists x. split.
+        * reflexivity.
+        * assumption.
+  }
+
+  (* Using this equivalence ... *)
+  apply SmallEquivCompat with R:[domain R]:. 1: apply H8.
+
+  (* It is sufficient to show that R[domain R] is small. *)
+  assert (Small R:[domain R]:) as A. 2: apply A.
+
+  (* Which follows from the fact that R is functional and domain R is small. *)
+  apply ImageIsSmall.
+    - apply H5.
+    - apply H7.
 Qed.
 
 Proposition InterProdIsProdInter: forall (P1 P2 Q1 Q2:Class),
