@@ -1,10 +1,13 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
+Require Import ZF.Class.Switch.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
 Require Import ZF.Core.Prod.
@@ -178,6 +181,54 @@ Proof.
       destruct H9 as [H9|H9]; subst.
       * left.  apply H6.
       * right. apply H7.
+Qed.
+
+(* The direct image of P x Q by Switch is Q x P.                                *)
+Lemma ImageBySwitch : forall (P Q:Class),
+  Switch :[P :x: Q]: :~: Q :x: P.
+Proof.
+  intros P Q x'. split; intros H1.
+  - apply (proj1 (ImageCharac _ _ _)) in H1. destruct H1 as [x [H1 H2]].
+    apply (proj1 (ProdCharac _ _ _)) in H1. destruct H1 as [y [z [H3 [H4 H5]]]].
+    apply SwitchCharac2 in H2. destruct H2 as [y' [z' [H6 H7]]]. subst.
+    apply OrdPairEqual in H6. destruct H6 as [H6 H8]. subst.
+    apply ProdCharac. exists z'. exists y'. split.
+    + reflexivity.
+    + split; assumption.
+  - apply (proj1 (ProdCharac _ _ _)) in H1. destruct H1 as [z [y [H1 [H2 H3]]]].
+    apply ImageCharac. exists :(y,z):. split.
+    + apply ProdCharac2. split; assumption.
+    + apply SwitchCharac2. exists y. exists z. split.
+      * reflexivity.
+      * assumption.
+Qed.
+
+(* If P x Q is a small class, then so is Q x P.                                 *)
+Proposition ProdIsSmallComm : forall (P Q:Class),
+  Small (P :x: Q) -> Small (Q :x: P).
+Proof.
+
+  (* Let P and Q be arbitrary classes. *)
+  intros P Q.
+
+  (* We assume that P x Q is small. *)
+  intros H1. assert (Small (P :x: Q)) as A. { apply H1. } clear A.
+
+  (* And we need to show that Q x P is small *)
+  assert (Small (Q :x: P)) as A. 2: apply A.
+
+  (* Using the equivalence Switch[P x Q] ~ Q x P ... *)
+  apply SmallEquivCompat with Switch:[P :x: Q]:. 1: apply ImageBySwitch.
+
+  (* It is sufficient to show that Switch[P x Q] is small. *)
+  assert (Small (Switch:[P :x: Q]:)) as A. 2: apply A.
+
+  (* This follows from the fact that Switch is functional and P x Q is small. *)
+  apply ImageIsSmall.
+
+  - apply SwitchIsFunctional.
+
+  - apply H1.
 Qed.
 
 Proposition InterProdIsProdInter: forall (P1 P2 Q1 Q2:Class),
