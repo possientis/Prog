@@ -38,10 +38,10 @@ Proof.
     intros x. split; intros H2.
 
     (* Proof of -> *)
-    + rewrite Hb in H2. apply SpecCharac in H2. destruct H2 as [_ H2]. apply H2.
+    + rewrite Hb in H2. apply SpecifyCharac in H2. destruct H2 as [_ H2]. apply H2.
 
     (* Proof of <- *)
-    + rewrite Hb. apply SpecCharac. split.
+    + rewrite Hb. apply SpecifyCharac. split.
       * apply H1, H2.
       * apply H2.
 
