@@ -2,8 +2,8 @@ Require Import ZF.Binary.Domain.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Fst.
-Require Import ZF.Class.Incl.
 Require Import ZF.Class.Image.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.

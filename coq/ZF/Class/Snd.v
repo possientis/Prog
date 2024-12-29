@@ -1,9 +1,5 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Functional.
-Require Import ZF.Class.Image.
-Require Import ZF.Class.Range.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
@@ -27,18 +23,4 @@ Proof.
   apply SndCharac2 in H1. apply SndCharac2 in H2.
   destruct H1 as [y1 [z1 [H1 G1]]]. destruct H2 as [y2 [z2 [H2 G2]]].
   subst. apply OrdPairEqual in H2. destruct H2 as [H1 H2]. subst. reflexivity.
-Qed.
-
-(* The direct image of a class P by Snd is the range of P.                      *)
-Proposition ImageBySnd : forall (P:Class),
-  Snd :[P]: :~: range P.
-Proof.
-  intros P x. split; intros H1.
-  - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply SndCharac2 in H2.
-    destruct H2 as [y [z [H2 H3]]]. apply RangeCharac. exists y.
-    subst. assumption.
-  - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [z H1].
-    unfold image. exists :(z,x):. split.
-    + assumption.
-    + apply SndCharac2. exists z. exists x. split; reflexivity.
 Qed.
