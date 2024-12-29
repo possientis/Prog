@@ -110,7 +110,7 @@ Proof.
   - assert (Small (toClass a :x: toClass b)) as A. 2: apply A.
 
   (* It is sufficient to show that a x b is a bounded class. *)
-    apply BoundedClassIsSmall.
+    apply BoundedIsSmall.
 
   (* So we need to show that a x b is bounded. *)
     assert (Bounded (toClass a :x: toClass b)) as A. 2: apply A.
