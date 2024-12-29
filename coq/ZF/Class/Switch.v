@@ -1,8 +1,6 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Functional.
-Require Import ZF.Class.Image.
 Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

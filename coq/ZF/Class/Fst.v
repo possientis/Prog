@@ -1,9 +1,6 @@
 Require Import ZF.Class.
-Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
-Require Import ZF.Class.Image.
 Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
@@ -27,18 +24,4 @@ Proof.
   apply FstCharac2 in H1. apply FstCharac2 in H2.
   destruct H1 as [y1 [z1 [H1 G1]]]. destruct H2 as [y2 [z2 [H2 G2]]].
   subst. apply OrdPairEqual in H2. destruct H2 as [H1 H2]. subst. reflexivity.
-Qed.
-
-(* The direct image of a class P by Fst is the domain of P.                     *)
-Proposition ImageByFst : forall (P:Class),
-  Fst :[P]: :~: domain P.
-Proof.
-  intros P x. split; intros H1.
-  - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply FstCharac2 in H2.
-    destruct H2 as [y [z [H2 H3]]]. apply DomainCharac. exists z.
-    subst. assumption.
-  - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
-    unfold image. exists :(x,y):. split.
-    + assumption.
-    + apply FstCharac2. exists x. exists y. split; reflexivity.
 Qed.

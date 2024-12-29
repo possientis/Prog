@@ -50,7 +50,7 @@ Proof.
 Qed.
 
 (* The direct image of a class P by Switch is the converse of P.                *)
-Proposition ImageBySwitch : forall (P:Class),
+Lemma ImageBySwitch : forall (P:Class),
   Switch :[P]: :~: converse P.
 Proof.
   intros P x. split; intros H1.
