@@ -94,6 +94,7 @@ CORE_OBJ = \
 SET_OBJ = \
 	${SET}/Converse.vo \
 	${SET}/Diff.vo \
+	${SET}/Domain.vo \
 	${SET}/Empty.vo \
 	${SET}/Foundation.vo \
 	${SET}/FromClass.vo \
