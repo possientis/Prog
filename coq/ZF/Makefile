@@ -57,6 +57,7 @@ CLASS_OBJ = \
 	${CLASS}/Eval.vo \
 	${CLASS}/FromBinary.vo \
 	${CLASS}/Fst.vo \
+	${CLASS}/Fun.vo \
 	${CLASS}/Function.vo \
 	${CLASS}/Functional.vo \
 	${CLASS}/Image.vo \
