@@ -6,10 +6,10 @@ Require Import ZF.Set.Eval.
 
 (* Defining the generalized union \/_{x in P} Q(x).                             *)
 Definition unionGen (P Q:Class) : Class
-  := :U( fun y => exists x, P x /\ y = eval Q x ).
+  := :U( fun y => exists x, P x /\ y = Q:(x): ).
 
 Proposition UnionGenCharac : forall (P Q:Class) (y:U),
-  unionGen P Q y <-> exists x, P x /\ y :< eval Q x.
+  unionGen P Q y <-> exists x, P x /\ y :< Q:(x):.
 Proof.
   intros P Q y. split; intros H1.
   - unfold unionGen in H1. apply (proj1 (UnionCharac _ _)) in H1.
