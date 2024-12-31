@@ -54,6 +54,7 @@ CLASS_OBJ = \
 	${CLASS}/Diff.vo \
 	${CLASS}/Domain.vo \
 	${CLASS}/Empty.vo \
+	${CLASS}/Eval.vo \
 	${CLASS}/FromBinary.vo \
 	${CLASS}/Fst.vo \
 	${CLASS}/Function.vo \
@@ -97,6 +98,7 @@ SET_OBJ = \
 	${SET}/Diff.vo \
 	${SET}/Domain.vo \
 	${SET}/Empty.vo \
+	${SET}/Eval.vo \
 	${SET}/Foundation.vo \
 	${SET}/FromClass.vo \
 	${SET}/Functional.vo \
