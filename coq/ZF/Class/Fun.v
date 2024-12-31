@@ -5,7 +5,7 @@ Require Import ZF.Class.
 Require Import ZF.Class.Bijection.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Function.
+Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Leq.

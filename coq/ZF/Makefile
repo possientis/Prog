@@ -60,6 +60,7 @@ CLASS_OBJ = \
 	${CLASS}/Fun.vo \
 	${CLASS}/Function.vo \
 	${CLASS}/Functional.vo \
+	${CLASS}/FunctionOn.vo \
 	${CLASS}/Image.vo \
 	${CLASS}/Incl.vo \
 	${CLASS}/Inter.vo \
