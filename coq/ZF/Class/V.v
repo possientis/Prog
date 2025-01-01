@@ -50,6 +50,11 @@ Proof.
 
 Qed.
 
+Proposition VSquareIsProper : Proper (V :x: V).
+Proof.
+  apply SquareIsProper, VIsProper.
+Qed.
+
 (* The product of two classes is a subclass of V^2.                             *)
 Proposition ProdInclV2 : forall (P Q:Class),
   P :x: Q :<=: V :x: V.
@@ -70,4 +75,3 @@ Proof.
     + intros [x [y [H1 _]]]. apply (OrdPairNotEmpty x y).
       symmetry. assumption.
 Qed.
-
