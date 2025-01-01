@@ -2,7 +2,7 @@ Declare Scope ZF_Class_Fun_scope.
 Open    Scope ZF_Class_Fun_scope.
 
 Require Import ZF.Class.
-Require Import ZF.Class.Bijection.
+Require Import ZF.Class.BijectionOn.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.FunctionOn.

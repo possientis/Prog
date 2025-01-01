@@ -47,6 +47,7 @@ BINARY_OBJ = \
 
 CLASS_OBJ = \
 	${CLASS}/Bijection.vo \
+	${CLASS}/BijectionOn.vo \
 	${CLASS}/Bounded.vo \
 	${CLASS}/Complement.vo \
 	${CLASS}/Compose.vo \
