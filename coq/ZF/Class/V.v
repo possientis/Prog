@@ -1,15 +1,54 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Proper.
+Require Import ZF.Class.Russell.
+Require Import ZF.Class.Small.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Lt.
 Require Import ZF.Core.Prod.
 Require Import ZF.Core.Zero.
+Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.
 
 (* The class satisfied by all sets.                                             *)
 Definition V : Class := fun _ => True.
+
+Proposition VIsProper : Proper V.
+Proof.
+
+  (* We need to show that the class of all sets is a proper class. *)
+  assert (Proper V) as A. 2: apply A.
+
+  (* Let us assume to the contrary that V is small. *)
+  intros H1. assert (Small V) as A. { apply H1. } clear A.
+
+  (* So there exists a set a such that x :< a <-> V x. *)
+  assert (exists a, forall x, x :< a <-> V x) as A. { apply H1. } clear A.
+
+  (* So let a be such a set. *)
+  destruct H1 as [a H1].
+
+  (* We obtain a contradiction by showing the set of all sets exists. *)
+  apply Russell.
+
+  (* So we need to show there is set of all sets. *)
+  assert (exists a, forall x, x :< a) as A. 2: apply A.
+
+  (* We claim that a is such a set. *)
+  exists a.
+
+  (* So given an arbitrary set x. *)
+  intros x.
+
+  (* We need to show that x belongs to a *)
+  assert (x :< a) as A. 2: apply A.
+
+  (* Which is clear. *)
+  apply (H1 x), I.
+
+Qed.
 
 (* The product of two classes is a subclass of V^2.                             *)
 Proposition ProdInclV2 : forall (P Q:Class),
@@ -31,3 +70,4 @@ Proof.
     + intros [x [y [H1 _]]]. apply (OrdPairNotEmpty x y).
       symmetry. assumption.
 Qed.
+
