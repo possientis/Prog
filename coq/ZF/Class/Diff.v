@@ -1,13 +1,18 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
 Require Import ZF.Class.Complement.
+Require Import ZF.Class.Empty.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Leq.
 Require Import ZF.Core.Or.
 Require Import ZF.Core.Not.
+Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 
 Definition diff (P Q:Class) : Class := P :/\: :¬:Q.
@@ -24,6 +29,13 @@ Qed.
 Proposition DiffIsSmall : forall (P Q:Class), Small P -> Small (P :\: Q).
 Proof.
   intros P Q. apply InterIsSmallL.
+Qed.
+
+Proposition DiffEmpty : forall (P Q:Class),
+  P :\: Q  :~: :0: -> P :<=: Q.
+Proof.
+  intros P Q H1 x H2. apply DoubleNegation. intros H3.
+  apply (proj1 (EmptyCharac x)), H1, DiffCharac. split; assumption.
 Qed.
 
 Proposition DiffUnionInter : forall (P Q R:Class),
