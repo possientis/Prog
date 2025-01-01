@@ -16,6 +16,13 @@ Require Import ZF.Core.Prod.
 (* Binary predicate on classes: F is a function defined on A.                   *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
+(* A function is always a function defined on its domain.                       *)
+Proposition FunctionIsFunctionOn : forall (F:Class),
+  Function F -> FunctionOn F (domain F).
+Proof.
+  intros F H1. split. { assumption. } { apply ClassEquivRefl. }
+Qed.
+
 (* If F is a function defined on A, then it is a subclass of A x F[A].          *)
 Proposition FunctionOnIncl : forall (F A:Class),
   FunctionOn F A -> F :<=: A :x: F:[A]:.
@@ -73,3 +80,4 @@ Proof.
     apply ImageIsSmall. { apply H2. } { apply H3. }
 
 Qed.
+

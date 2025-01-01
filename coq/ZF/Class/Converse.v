@@ -92,7 +92,7 @@ Proof.
 Qed.
 
 (* The converse of a class is always a relation, even if the class is not.      *)
-Proposition ConverseIsRel : forall (P:Class), Rel (converse P).
+Proposition ConverseIsRelation : forall (P:Class), Rel (converse P).
 Proof.
   intros P x H1. apply ConverseCharac in H1.
   destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.

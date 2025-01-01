@@ -19,7 +19,7 @@ Proposition BijectionConverseIsFunction : forall (F:Class),
   Bijection F -> Function (converse F).
 Proof.
   intros F [H1 [H2 H3]]. split.
-  - apply ConverseIsRel.
+  - apply ConverseIsRelation.
   - apply H3.
 Qed.
 
@@ -27,7 +27,7 @@ Proposition ComposeIsBijection : forall (F G:Class),
   OneToOne F -> OneToOne G -> Bijection (G :.: F).
 Proof.
   intros F G Hf Hg. split.
-  - apply ComposeIsRel.
+  - apply ComposeIsRelation.
   - apply ComposeIsOneToOne; assumption.
 Qed.
 

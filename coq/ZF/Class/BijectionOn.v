@@ -9,6 +9,13 @@ Require Import ZF.Core.Equiv.
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
 
+(* A bijection is always a bijection defined on its domain. *)
+Proposition BijectionIsBijectionOn : forall (F:Class),
+  Bijection F -> BijectionOn F (domain F).
+Proof.
+  intros F H1. split. { assumption. } { apply ClassEquivRefl. }
+Qed.
+
 (* A bijection defined on A is a function defined on A.                         *)
 Proposition BijectionOnIsFunctionOn : forall (F A:Class),
   BijectionOn F A -> FunctionOn F A.

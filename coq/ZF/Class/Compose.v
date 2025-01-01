@@ -42,7 +42,7 @@ Proof.
 Qed.
 
 (* The composition of two classes is a relation.                                *)
-Proposition ComposeIsRel : forall (P Q:Class), Rel (P :.: Q).
+Proposition ComposeIsRelation : forall (P Q:Class), Rel (P :.: Q).
 Proof.
   intros P Q u H1. apply ComposeCharac in H1.
   destruct H1 as [x [y [z [H1 [H2 H3]]]]]. exists x. exists z. assumption.

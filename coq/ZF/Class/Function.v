@@ -12,7 +12,7 @@ Proposition ComposeIsFunction : forall (F G:Class),
   Functional F -> Functional G -> Function (G :.: F).
 Proof.
   intros F G Hf Hg. split.
-  - apply ComposeIsRel.
+  - apply ComposeIsRelation.
   - apply ComposeIsFunctional; assumption.
 Qed.
 

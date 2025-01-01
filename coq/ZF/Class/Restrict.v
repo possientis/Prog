@@ -2,12 +2,15 @@ Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
+Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
+Require Import ZF.Class.Small.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
@@ -16,17 +19,17 @@ Require Import ZF.Core.Pipe.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-(* Restricting a class P to a class Q.                                          *)
-Definition restrict (P Q:Class) : Class
-  := fromBinary (Binary.Restrict.restrict (toBinary P) Q).
+(* Restricting a class F to a class A.                                          *)
+Definition restrict (F A:Class) : Class
+  := fromBinary (Binary.Restrict.restrict (toBinary F) A).
 
-(* Notation "P :|: Q" := (restrict P Q)                                         *)
+(* Notation "F :|: A" := (restrict F A)                                         *)
 Global Instance ClassPipe : Pipe Class Class := { pipe := restrict }.
 
-Proposition RestrictCharac : forall (P Q:Class) (x:U),
-  (P:|:Q) x <-> exists y, exists z, x = :(y,z): /\ Q y /\ P :(y,z):.
+Proposition RestrictCharac : forall (F A:Class) (x:U),
+  (F:|:A) x <-> exists y, exists z, x = :(y,z): /\ A y /\ F :(y,z):.
 Proof.
-  intros P Q x. split; intros H1.
+  intros F A x. split; intros H1.
   - apply H1.
   - destruct H1 as [y [z [H2 [H3 H4]]]].
     unfold pipe, ClassPipe, restrict, fromBinary.
@@ -36,10 +39,10 @@ Proof.
     + split; assumption.
 Qed.
 
-Proposition RestrictCharac2 : forall (P Q:Class) (y z:U),
-  (P:|:Q) :(y,z): <-> Q y /\ P :(y,z):.
+Proposition RestrictCharac2 : forall (F A:Class) (y z:U),
+  (F:|:A) :(y,z): <-> A y /\ F :(y,z):.
 Proof.
-  intros P Q y z. split; intros H1.
+  intros F A y z. split; intros H1.
   - apply RestrictCharac in H1.
     destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
@@ -48,45 +51,111 @@ Proof.
     + apply H1.
 Qed.
 
-Proposition RestrictIsRel : forall (P Q:Class), Rel (P:|:Q).
+(* The restriction is always a relation.                                        *)
+Proposition RestrictIsRelation : forall (F A:Class), Rel (F:|:A).
 Proof.
-  intros P Q. apply FromBinaryIsRel.
+  intros F A. apply FromBinaryIsRelation.
 Qed.
 
-Proposition DomainOfRestrict : forall (P Q:Class),
-  domain (P:|:Q) :~: Q :/\: domain P.
+(* The restriction of a functional class is always functional.                  *)
+Proposition RestrictIsFunctional : forall (F A:Class),
+  Functional F -> Functional (F:|:A).
 Proof.
-  intros P Q x. split; intros H1.
-  - apply (proj1 (DomainCharac (P:|:Q) x)) in H1. destruct H1 as [y H1].
+  intros F A H1. apply FunctionalCharac2.
+  intros x y z H2 H3. apply FunctionalCharac1 with F x.
+  - assumption.
+  - apply RestrictCharac2 in H2. destruct H2 as [_ H2]. assumption.
+  - apply RestrictCharac2 in H3. destruct H3 as [_ H3]. assumption.
+Qed.
+
+(* The domain of the restriction F|A is the intersection A/\domain F.           *)
+Proposition DomainOfRestrict : forall (F A:Class),
+  domain (F:|:A) :~: A :/\: domain F.
+Proof.
+  intros F A x. split; intros H1.
+  - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
     apply RestrictCharac2 in H1. destruct H1 as [H1 H2]. split.
     + apply H1.
     + apply DomainCharac. exists y. apply H2.
-  - destruct H1 as [H1 H2]. apply (proj1 (DomainCharac P x)) in H2.
+  - destruct H1 as [H1 H2]. apply (proj1 (DomainCharac F x)) in H2.
     destruct H2 as [y H2]. apply DomainCharac. exists y. apply RestrictCharac2.
     split; assumption.
 Qed.
 
-Proposition ImageIsRangeOfRestrict : forall (P Q:Class),
-  P:[Q]: :~: range (P:|:Q).
+(* The restriction of a functional class to a small class is small.             *)
+Proposition RestrictIsSmall : forall (F A:Class),
+  Functional F -> Small A -> Small (F:|:A).
 Proof.
-  intros P Q y. split; intros H1.
+
+  (* Let F and A be arbitrary classes. *)
+  intros F A.
+
+  (* We assume that F is functional. *)
+  intros H1. assert (Functional F) as A'. { apply H1. } clear A'.
+
+  (* We assume that A is small. *)
+  intros H2. assert (Small A) as A'. { apply H2. } clear A'.
+
+  (* And we need to show that the restriction F|A is small. *)
+  assert (Small (F:|:A)) as A'. 2: apply A'.
+
+  (* Using the fact that a function defined on a small class is small. *)
+  apply FunctionOnIsSmall with (domain (F:|:A)).
+
+  (* We first need to show that F|A is a function defined on its domain. *)
+  - assert (FunctionOn (F:|:A) (domain (F:|:A))) as A'. 2: apply A'.
+
+  (* Any function is always a function defined on its domain. *)
+    apply FunctionIsFunctionOn.
+
+  (* So we only need to show that F|A is a function. *)
+    assert (Function (F:|:A)) as A'. 2: apply A'. split.
+
+  (* Which follows from the fact that F|A is always a relation. *)
+    + apply RestrictIsRelation.
+
+  (* And the fact that F|A is functional since F is. *)
+    + apply RestrictIsFunctional, H1.
+
+  (* It remains to prove that the domain of F|A is small. *)
+  - assert (Small (domain (F:|:A))) as A'. 2: apply A'.
+
+  (* However, the domain of F|A is A /\ domain F. *)
+    apply SmallEquivCompat with (A:/\:domain F).
+      1: { apply ClassEquivSym, DomainOfRestrict. }
+
+  (* So we need to show that A/\domain F is small. *)
+    assert (Small (A:/\:domain F)) as A'. 2: apply A'.
+
+  (* which follows from the assumption that A is small. *)
+  apply InterIsSmallL, H2.
+
+Qed.
+
+(* The range of the restriction F|A is the direct image F[A].                   *)
+Proposition ImageIsRangeOfRestrict : forall (F A:Class),
+  F:[A]: :~: range (F:|:A).
+Proof.
+  intros F A y. split; intros H1.
   - unfold image in H1. destruct H1 as [x [H1 H2]].
     exists x. unfold toBinary. apply RestrictCharac2. split; assumption.
   - apply RangeCharac in H1. destruct H1 as [x H1]. apply RestrictCharac2 in H1.
     destruct H1 as [H1 H2]. exists x. unfold toBinary. split; assumption.
 Qed.
 
-Proposition RestrictIsSubClass : forall (P Q:Class),
-  P:|:Q :<=: P.
+(* A restriction is always a subclass of the original class.                    *)
+Proposition RestrictIsSubClass : forall (F A:Class),
+  F:|:A :<=: F.
 Proof.
-  intros P Q x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
+  intros F A x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
   rewrite H1. apply H2.
 Qed.
 
-Proposition RestrictToDomain : forall (P:Class),
-  Rel P <-> P :|: domain P :~: P.
+(* A class is a relation iff it equals the restriction to its domain.           *)
+Proposition RestrictToDomain : forall (F:Class),
+  Rel F <-> F :|: domain F :~: F.
 Proof.
-  intros P. split; intros H1.
+  intros F. split; intros H1.
   - intros x. split; intros H2.
     + apply RestrictCharac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
       rewrite H3. apply H4.
@@ -102,10 +171,10 @@ Proof.
     exists y. exists z. assumption.
 Qed.
 
-Proposition RestrictTowerProperty : forall (P Q R:Class),
-  Q :<=: R -> (P:|:R) :|: Q :~: P:|:Q.
+Proposition RestrictTowerProperty : forall (F A B:Class),
+  A :<=: B -> (F:|:B) :|: A :~: F:|:A.
 Proof.
-  intros P Q R H1 x. split; intros H2.
+  intros F A B H1 x. split; intros H2.
   - apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
     apply RestrictCharac2 in H4. destruct H4 as [H4 H5]. apply RestrictCharac.
     exists y. exists z. split.
@@ -119,14 +188,4 @@ Proof.
       * apply RestrictCharac2. split.
         { apply H1. assumption. }
         { assumption. }
-Qed.
-
-Proposition RestrictFunctional : forall (P Q:Class),
-  Functional P -> Functional (P:|:Q).
-Proof.
-  intros P Q H1. apply FunctionalCharac2.
-  intros x y z H2 H3. apply FunctionalCharac1 with P x.
-  - assumption.
-  - apply RestrictCharac2 in H2. destruct H2 as [_ H2]. assumption.
-  - apply RestrictCharac2 in H3. destruct H3 as [_ H3]. assumption.
 Qed.

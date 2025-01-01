@@ -10,7 +10,7 @@ Definition fromBinary (F:Binary) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ F y z.
 
 (* The class associated with a binary class is indeed a relation class.         *)
-Proposition FromBinaryIsRel : forall (F:Binary), Rel (fromBinary F).
+Proposition FromBinaryIsRelation : forall (F:Binary), Rel (fromBinary F).
 Proof.
   intros F x H1. unfold fromBinary in H1. destruct H1 as [y [z [H1 H2]]].
   exists y. exists z. apply H1.
