@@ -321,6 +321,43 @@ Proof.
     - apply H7.
 Qed.
 
+(* If P is a proper class, then so is PxP.                                      *)
+Proposition SquareIsProper : forall (P:Class),
+  Proper P -> Proper (P :x: P).
+Proof.
+
+  (* Let P be an arbitrary class. *)
+  intros P.
+
+  (* We assume that P is proper. *)
+  intros H1. assert (Proper P) as A. { apply H1. } clear A.
+
+  (* And we need to show that P^2 is proper. *)
+  assert (Proper (P :x: P)) as A. 2: apply A.
+
+  (* This follows immediately from the fact that P is proper. *)
+  apply ProdIsProper. 1: apply H1.
+
+  (* Provided we show P is not the empty class. *)
+  assert (~ P :~: :0:) as A. 2: apply A.
+
+  (* So let us assume that P is the empty class. *)
+  intros H2. assert (P :~: :0:) as A. { apply H2. } clear A.
+
+  (* We obtain a contradiction my showing that P is small. *)
+  apply H1. assert (Small P) as A. 2: apply A.
+
+  (* From the equivalence P ~ 0 *)
+  apply SmallEquivCompat with :0:. 1: { apply ClassEquivSym, H2. }
+
+  (* We need to show that 0 is small *)
+  assert (Small :0:) as A. 2: apply A.
+
+  (* Which we know is true. *)
+  apply EmptyIsSmall.
+
+Qed.
+
 Proposition InterProdIsProdInter: forall (P1 P2 Q1 Q2:Class),
   (P1:x:Q1) :/\: (P2:x:Q2) :~: (P1:/\:P2) :x: (Q1:/\:Q2).
 Proof.
@@ -337,3 +374,4 @@ Proof.
     + apply H1.
     + split; assumption.
 Qed.
+
