@@ -1,5 +1,6 @@
 Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Function.
@@ -189,3 +190,13 @@ Proof.
         { apply H1. assumption. }
         { assumption. }
 Qed.
+
+Proposition LesserThanRangeOfRestrictIsSmall : forall (F A B:Class),
+  Functional F -> Small B -> A :<=: range (F:|:B) -> Small A.
+Proof.
+  intros F A B H1 H2 H3.
+  apply LesserThanSmallIsSmall with (range (F:|:B)). 1: assumption.
+  apply SmallEquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
+  apply ImageIsSmall; assumption.
+Qed.
+
