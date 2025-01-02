@@ -12,6 +12,8 @@ Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Prod.
+Require Import ZF.Set.
+Require Import ZF.Set.Eval.
 
 (* Binary predicate on classes: F is a function defined on A.                   *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
@@ -81,3 +83,16 @@ Proof.
 
 Qed.
 
+Proposition FunctionOnEquivCharac : forall (F A G B:Class),
+  FunctionOn F A ->
+  FunctionOn G B ->
+  F :~: G       <->
+  A :~: B /\ forall x, A x -> F:(x): = G:(x):.
+Proof.
+  intros F A G B [[H1 H2] H3] [[H4 H5] H6]. split; intros H7.
+  - split.
+    + apply ClassEquivTran with (domain F). 1: { apply ClassEquivSym. assumption. }
+      apply ClassEquivTran with (domain G). 2: assumption.
+      apply DomainEquivCompat. assumption.
+    + intros x H8.
+Admitted.

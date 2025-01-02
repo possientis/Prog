@@ -41,6 +41,7 @@ BINARY_OBJ = \
 	${BINARY}/Domain.vo \
 	${BINARY}/Function.vo \
 	${BINARY}/Functional.vo \
+	${BINARY}/FunctionalAt.vo \
 	${BINARY}/OneToOne.vo \
 	${BINARY}/Range.vo \
 	${BINARY}/Restrict.vo
@@ -61,6 +62,7 @@ CLASS_OBJ = \
 	${CLASS}/Fun.vo \
 	${CLASS}/Function.vo \
 	${CLASS}/Functional.vo \
+	${CLASS}/FunctionalAt.vo \
 	${CLASS}/FunctionOn.vo \
 	${CLASS}/Image.vo \
 	${CLASS}/Incl.vo \

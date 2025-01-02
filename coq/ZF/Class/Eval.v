@@ -1,27 +1,48 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
+Require Import ZF.Class.Domain.
 Require Import ZF.Class.Empty.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-(* Predicate expressing the fact that class P has value y when evaluated at a.  *)
-Definition IsValueAt (P:Class) (a y:U) : Prop :=
-  P :(a,y): /\ (forall y1 y2, P :(a,y1): -> P :(a,y2): -> y1 = y2).
+(* Predicate expressing the fact that class F has value y when evaluated at a.  *)
+Definition IsValueAt (F:Class) (a:U) : Class := fun y =>
+  F :(a,y): /\ (forall y1 y2, F :(a,y1): -> F :(a,y2): -> y1 = y2).
 
-(* Predicate expressing the fact that class P has a value at a.                 *)
-Definition HasValueAt (P:Class) (a:U) : Prop := exists y, IsValueAt P a y.
+Proposition IsValueAtWhenFunctional : forall (F:Class) (a y:U),
+  Functional F -> IsValueAt F a y <-> F :(a,y):.
+Proof.
+  intros F a y H1. split; intros H2.
+  - destruct H2 as [H2 _]. assumption.
+  - split. 1: { assumption. } apply H1.
+Qed.
 
-Definition eval (P:Class) (a:U) : Class := fun x =>
-  exists y, x :< y /\ IsValueAt P a y.
+(* Predicate expressing the fact that class F has a value at a.                 *)
+Definition HasValueAt (F:Class) (a:U) : Prop := exists y, IsValueAt F a y.
+
+(* When F is functional, the classes HasValueAt F and domain F coincide.        *)
+Proposition HasValueAtIsDomain : forall (F:Class) (a:U),
+  Functional F -> HasValueAt F :~: domain F.
+Proof.
+  intros F a H1. split; intros H2.
+  - destruct H2 as [y H2]. apply DomainCharac. exists y.
+    apply (proj1 (IsValueAtWhenFunctional _ _ _ H1)). assumption.
+  - apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
+    exists y. apply IsValueAtWhenFunctional; assumption.
+Qed.
+
+Definition eval (F:Class) (a:U) : Class := fun x =>
+  exists y, x :< y /\ IsValueAt F a y.
 
 (* If P has a value at a and y corresponds to a, then eval P a = y.             *)
-Proposition WhenHasValue : forall (P:Class) (a y:U),
-  HasValueAt P a -> P :(a,y): -> eval P a :~: toClass y.
+Proposition WhenHasValue : forall (F:Class) (a y:U),
+  HasValueAt F a -> F :(a,y): -> eval F a :~: toClass y.
 Proof.
-  intros P a y H1 H2 x. split; intros H3.
+  intros F a y H1 H2 x. split; intros H3.
   - unfold eval in H3. destruct H3 as [y' [H3 H4]]. unfold IsValueAt in H4.
     destruct H4 as [H4 H5].
     assert (y = y') as H6. { apply H5; assumption. } subst. assumption.
@@ -92,3 +113,4 @@ Proof.
   (* Which we know is true. *)
     apply EmptyIsSmall.
 Qed.
+

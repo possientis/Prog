@@ -22,12 +22,12 @@ Proof.
   split; intros [H1 H2].
   - split.
     + assumption.
-    + apply FunctionalEquivCompat with
+    + apply Binary.Functional.FunctionalEquivCompat with
         (toBinary (fromBinary (Binary.Converse.converse (toBinary P)))). 2: apply H2.
       apply ToFromBinary.
   - split.
     + assumption.
-    + apply FunctionalEquivCompat with
+    + apply Binary.Functional.FunctionalEquivCompat with
         (Binary.Converse.converse (toBinary P)). 2: apply H2.
       apply BinaryEquivSym, ToFromBinary.
 Qed.
@@ -63,7 +63,7 @@ Proposition ComposeIsOneToOne : forall (P Q:Class),
 Proof.
   intros P Q [Hp Gp] [Hq Gq]. split.
   - apply ComposeIsFunctional; assumption.
-  - apply FunctionalEqualCompat with (converse P :.: converse Q).
+  - apply FunctionalEquivCompat with (converse P :.: converse Q).
     + apply ClassEquivSym. apply ConverseOfCompose.
     + apply ComposeIsFunctional; assumption.
 Qed.

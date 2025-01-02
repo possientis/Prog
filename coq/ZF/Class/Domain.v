@@ -21,6 +21,16 @@ Proof.
   intros P x. split; intros H1; assumption.
 Qed.
 
+Proposition DomainEquivCompat : forall (P Q:Class),
+  P :~: Q -> domain P :~: domain Q.
+Proof.
+  intros P Q H1 x. split; intros H2;
+  apply (proj1 (DomainCharac _ _)) in H2; destruct H2 as [y H2];
+  apply DomainCharac; exists y.
+  - apply H1. assumption.
+  - apply ClassEquivSym in H1. apply H1. assumption.
+Qed.
+
 Proposition DomainInclCompat : forall (P Q:Class),
   P :<=: Q -> domain P :<=: domain Q.
 Proof.

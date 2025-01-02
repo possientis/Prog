@@ -23,6 +23,16 @@ Proof.
   - apply H1.
 Qed.
 
+Proposition RangeEquivCompat : forall (P Q:Class),
+  P :~: Q -> range P :~: range Q.
+Proof.
+  intros P Q H1 y. split; intros H2;
+  apply (proj1 (RangeCharac _ _)) in H2; destruct H2 as [x H2];
+  apply RangeCharac; exists x.
+  - apply H1. assumption.
+  - apply ClassEquivSym in H1. apply H1. assumption.
+Qed.
+
 Proposition RangeInclCompat : forall (P Q:Class),
   P :<=: Q -> range P :<=: range Q.
 Proof.

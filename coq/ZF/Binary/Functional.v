@@ -6,7 +6,7 @@ Require Import ZF.Set.
 Definition Functional (F:Binary) : Prop :=
   forall x, forall y, forall z, F x y -> F x z -> y = z.
 
-Proposition FunctionalEquivCompat : forall (F G: Binary),
+Proposition FunctionalEquivCompat : forall (F G:Binary),
   F :~: G -> Functional F -> Functional G.
 Proof.
   unfold Functional. intros F G H1 H2 x y z H3 H4. apply BinaryEquivSym in H1.
