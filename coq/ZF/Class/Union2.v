@@ -27,8 +27,8 @@ Proof.
   destruct H3 as [H3|H3];apply Union2Charac.
   - left. apply H1. assumption.
   - right. apply H2. assumption.
-  - left. apply ClassEquivSym in H1. apply H1. assumption.
-  - right. apply ClassEquivSym in H2. apply H2. assumption.
+  - left. apply H1. assumption.
+  - right. apply H2. assumption.
 Qed.
 
 Proposition Union2EquivCompatL : forall (P Q R:Class),

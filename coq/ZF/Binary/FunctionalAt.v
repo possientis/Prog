@@ -19,5 +19,5 @@ Proposition FunctionalAtEquivCompat : forall (F G:Binary) (a:U),
   F :~: G -> FunctionalAt F a -> FunctionalAt G a.
 Proof.
   intros F G a H1. unfold FunctionalAt. intros H2 y z H3 H4.
-  apply BinaryEquivSym in H1. apply H2; apply H1; assumption.
+  apply H2; apply H1; assumption.
 Qed.

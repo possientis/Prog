@@ -33,7 +33,7 @@ Proof.
 
   (* We have P x -> x :< a for all x. *)
   assert (forall x, P x -> x :< a) as H4. {
-    intros x H. apply ClassEquivSym in H3. apply H3, H1, H.
+    intros x H. apply H3, H1, H.
   }
 
   (* We need to show the existence of a set b such that x :< b <-> P x. *)

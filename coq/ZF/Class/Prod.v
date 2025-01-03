@@ -55,8 +55,8 @@ Proof.
   - split. { apply H1. assumption. } { apply H2. assumption. }
   - assumption.
   - split.
-    + apply ClassEquivSym in H1. apply H1. assumption.
-    + apply ClassEquivSym in H2. apply H2. assumption.
+    + apply H1. assumption.
+    + apply H2. assumption.
 Qed.
 
 Proposition ProdEquivCompatL : forall (P Q R:Class),

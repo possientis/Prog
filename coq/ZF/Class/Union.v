@@ -27,7 +27,7 @@ Proof.
   - assumption.
   - apply H1. assumption.
   - assumption.
-  - apply ClassEquivSym in H1. apply H1. assumption.
+  - apply H1. assumption.
 Qed.
 
 (* If P is small then U(P) is small.                                            *)

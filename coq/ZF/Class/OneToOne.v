@@ -64,6 +64,6 @@ Proof.
   intros P Q [Hp Gp] [Hq Gq]. split.
   - apply ComposeIsFunctional; assumption.
   - apply FunctionalEquivCompat with (converse P :.: converse Q).
-    + apply ClassEquivSym. apply ConverseOfCompose.
+    + apply ClassEquivSym, ConverseOfCompose.
     + apply ComposeIsFunctional; assumption.
 Qed.
