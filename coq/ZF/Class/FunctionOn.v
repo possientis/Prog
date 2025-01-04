@@ -89,10 +89,18 @@ Proposition FunctionOnEquivCharac : forall (F A G B:Class),
   F :~: G       <->
   A :~: B /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A G B [[H1 H2] H3] [[H4 H5] H6]. split; intros H7.
-  - split.
+  intros F A G B [H1 H2] [H3 H4].
+  assert (F :~: G <->
+    domain F :~: domain G /\ forall x, domain F x -> F!x = G!x) as H5.
+    { apply FunctionEquivCharac; assumption. }
+  split; intros H6.
+  - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
     + apply ClassEquivTran with (domain F). 1: { apply ClassEquivSym. assumption. }
-      apply ClassEquivTran with (domain G). 2: assumption.
-      apply DomainEquivCompat. assumption.
-    + intros x H8.
-Admitted.
+      apply ClassEquivTran with (domain G); assumption.
+    + intros x H8. apply H7, H2. assumption.
+  - destruct H6 as [H6 H7]. apply H5. split.
+    + apply ClassEquivTran with A. 1: assumption.
+      apply ClassEquivTran with B. 1: assumption.
+      apply ClassEquivSym. assumption.
+    + intros x H8. apply H7, H2. assumption.
+Qed.
