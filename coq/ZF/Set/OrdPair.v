@@ -59,13 +59,13 @@ Proof.
       * apply H2.
 Qed.
 
-Proposition OrdPairEqual1 : forall (a b c d:U),
+Proposition OrdPairEqualL : forall (a b c d:U),
   :(a,b): = :(c,d): -> a = c.
 Proof.
   intros a b d c H. apply OrdPairEqual in H. destruct H as [H1 H2]. apply H1.
 Qed.
 
-Proposition OrdPairEqual2 : forall (a b c d:U),
+Proposition OrdPairEqualR : forall (a b c d:U),
   :(a,b): = :(c,d): -> b = d.
 Proof.
   intros a b d c H. apply OrdPairEqual in H. destruct H as [H1 H2]. apply H2.
