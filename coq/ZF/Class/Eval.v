@@ -25,10 +25,10 @@ Qed.
 Definition HasValueAt (F:Class) (a:U) : Prop := exists y, IsValueAt F a y.
 
 (* When F is functional, the classes HasValueAt F and domain F coincide.        *)
-Proposition HasValueAtIsDomain : forall (F:Class) (a:U),
+Proposition HasValueAtWhenFunctional : forall (F:Class),
   Functional F -> HasValueAt F :~: domain F.
 Proof.
-  intros F a H1. split; intros H2.
+  intros F H1. split; intros H2.
   - destruct H2 as [y H2]. apply DomainCharac. exists y.
     apply (proj1 (IsValueAtWhenFunctional _ _ _ H1)). assumption.
   - apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
@@ -39,7 +39,7 @@ Definition eval (F:Class) (a:U) : Class := fun x =>
   exists y, x :< y /\ IsValueAt F a y.
 
 (* If F has a value at a, then y corresponds to a iff eval F a = y.             *)
-Proposition WhenHasValueAt : forall (F:Class) (a y:U),
+Proposition EvalWhenHasValueAt : forall (F:Class) (a y:U),
   HasValueAt F a -> F :(a,y): <-> eval F a :~: toClass y.
 Proof.
   intros F a y H1. split; intros H2.
@@ -60,8 +60,15 @@ Proof.
       * exists y'. split. 1: assumption. unfold IsValueAt. split; assumption.
 Qed.
 
+Proposition EvalWhenFunctional : forall (F:Class) (a y:U),
+  Functional F -> domain F a -> F :(a,y): <-> eval F a :~: toClass y.
+Proof.
+  intros F a y H1 H2.
+  apply EvalWhenHasValueAt, HasValueAtWhenFunctional; assumption.
+Qed.
+
 (* If F has no value at a then eval F a is the empty class.                     *)
-Proposition WhenNotHasValueAt : forall (F:Class) (a:U),
+Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> eval F a :~: :0:.
 Proof.
   intros F a H1 x. split; intros H2.
@@ -96,7 +103,8 @@ Proof.
     assert (F :(a,y):) as A. { apply H2. } clear A.
 
   (* And it follows that eval F a = y. *)
-    assert (eval F a :~: toClass y) as H3. { apply WhenHasValueAt; assumption. }
+    assert (eval F a :~: toClass y) as H3.
+       { apply EvalWhenHasValueAt; assumption. }
 
   (* Using this equivalence ... *)
     apply SmallEquivCompat with (toClass y). 1: { apply ClassEquivSym, H3. }
@@ -111,7 +119,7 @@ Proof.
   - assert (~ HasValueAt F a) as A. { apply H1. } clear A.
 
   (* Then eval F a is the empty class. *)
-    assert (eval F a :~: :0:) as H2. { apply WhenNotHasValueAt, H1. }
+    assert (eval F a :~: :0:) as H2. { apply EvalWhenNotHasValueAt, H1. }
 
   (* Using this equivalence ... *)
     apply SmallEquivCompat with :0:. 1: { apply ClassEquivSym, H2. }
