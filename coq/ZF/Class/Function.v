@@ -27,7 +27,7 @@ Proof.
 Qed.
 
 Proposition FunctionEquivCharac : forall (F G:Class), F :~: G <->
-  domain F :~: domain G  /\ forall x, domain F x -> F:(x): = G:(x):.
+  domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
 Proof.
   intros F G. split; intros H1.
   - split.
