@@ -1,13 +1,16 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
@@ -104,3 +107,12 @@ Proof.
       apply ClassEquivSym. assumption.
     + intros x H8. apply H7, H2. assumption.
 Qed.
+
+Proposition FunctionOnCompose : forall (F A G B:Class),
+  FunctionOn F A ->
+  FunctionOn G B ->
+  range F :<=: B ->
+  FunctionOn (G :.: F) A.
+Proof.
+Admitted.
+
