@@ -6,6 +6,7 @@ Require Import ZF.Core.Dot.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
+
 (* Composition of two classes.                                                  *)
 Definition compose (Q P:Class) : Class
   := fromBinary (Binary.Compose.compose (toBinary Q) (toBinary P)).
