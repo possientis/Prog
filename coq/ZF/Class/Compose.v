@@ -147,6 +147,15 @@ Proof.
   apply DomainCharac. exists y. assumption.
 Qed.
 
+(* The range of the composition is a subclass of the second range.              *)
+Proposition ComposeRangeIsSmaller : forall (F G:Class),
+  range (G :.: F) :<=: range G.
+Proof.
+  intros F G z H1. apply (proj1 (RangeCharac _ _)) in H1.
+  destruct H1 as [x H1]. apply ComposeCharac2 in H1. destruct H1 as [y [H1 H2]].
+  apply RangeCharac. exists y. assumption.
+Qed.
+
 (* The domain of the composition is the same as the first domain if range ok.   *)
 Proposition ComposeDomainIsSame : forall (F G:Class),
   range F :<=: domain G -> domain (G :.: F) :~: domain F.
@@ -161,8 +170,8 @@ Proof.
 Qed.
 
 (* If first class is functional, same domains conversely implies range is ok.   *)
-Proposition ComposeDomainIsSame2 : forall (F G:Class),
-  Functional F -> range F :<=: domain G <-> domain (G :.: F) :~: domain F.
+Proposition ComposeDomainIsSame2 : forall (F G:Class), Functional F ->
+  range F :<=: domain G <-> domain (G :.: F) :~: domain F.
 Proof.
   intros F G H1. split.
   - apply ComposeDomainIsSame.
@@ -172,6 +181,35 @@ Proof.
     apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
     assert (y' = y) as H6. { apply FunctionalCharac1 with F x; assumption. }
     subst. apply DomainCharac. exists z. assumption.
+Qed.
+
+(* The range of the composition is the same as the second range if domain ok.   *)
+Proposition ComposeRangeIsSame : forall (F G:Class),
+  domain G :<=: range F -> range (G :.: F) :~: range G.
+Proof.
+  intros F G H1. apply DoubleInclusion. split.
+  - apply ComposeRangeIsSmaller.
+  - intros z H2. apply (proj1 (RangeCharac _ _)) in H2. destruct H2 as [y H2].
+    assert (range F y) as H3. { apply H1. apply DomainCharac. exists z. assumption. }
+    apply (proj1 (RangeCharac _ _)) in H3. destruct H3 as [x H3].
+    apply RangeCharac. exists x. apply ComposeCharac2. exists y.
+    split; assumption.
+Qed.
+
+Proposition ComposeRangeIsSame2 : forall (F G:Class), Functional (converse G) ->
+  domain G :<=: range F <-> range (G :.: F) :~: range G.
+Proof.
+  intros F G H1. split.
+  - apply ComposeRangeIsSame.
+  - intros H2 y H3. apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
+    assert (range (G :.: F) z) as H4. { apply H2, RangeCharac. exists y. assumption. }
+    apply (proj1 (RangeCharac _ _)) in H4. destruct H4 as [x H4].
+    apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
+    assert (y' = y) as H6. {
+      apply FunctionalCharac1 with (converse G) z. 1: assumption.
+      - apply ConverseCharac2. assumption.
+      - apply ConverseCharac2. assumption.
+    } subst. apply RangeCharac. exists x. assumption.
 Qed.
 
 (* Composition is a function class defined on A if first class is and range ok. *)
@@ -196,3 +234,4 @@ Proposition ComposeIsBijectionOn : forall (F A G B:Class),
   BijectionOn (G :.: F) A.
 Proof.
 Admitted.
+
