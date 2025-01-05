@@ -56,6 +56,7 @@ Proof.
   destruct H1 as [x [y [z [H1 [H2 H3]]]]]. exists x. exists z. assumption.
 Qed.
 
+(* The composition of two functional classes is functional.                     *)
 Proposition ComposeIsFunctional : forall (F G:Class),
   Functional F -> Functional G -> Functional (G :.: F).
 Proof.
@@ -69,6 +70,7 @@ Proof.
   subst. apply Gg with y2; assumption.
 Qed.
 
+(* The composition of two functional classes is a function class.               *)
 Proposition ComposeIsFunction : forall (F G:Class),
   Functional F -> Functional G -> Function (G :.: F).
 Proof.
@@ -77,13 +79,14 @@ Proof.
   - apply ComposeIsFunctional; assumption.
 Qed.
 
-(* Weaker result but convenient                                                 *)
+(* The composition of two function classes is a function class.                 *)
 Proposition ComposeIsFunction2 : forall (F G:Class),
   Function F -> Function G -> Function (G :.: F).
 Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction; assumption.
 Qed.
 
+(* The domain of the composition is a subclass of the first domain.             *)
 Proposition ComposeDomainIsSmaller : forall (F G:Class),
   domain (G :.: F) :<=: domain F.
 Proof.
@@ -92,6 +95,7 @@ Proof.
   apply DomainCharac. exists y. assumption.
 Qed.
 
+(* The domain of the composition is the same as the first domain if range ok.   *)
 Proposition ComposeDomainIsSame : forall (F G:Class),
   range F :<=: domain G -> domain (G :.: F) :~: domain F.
 Proof.
@@ -104,6 +108,21 @@ Proof.
     split; assumption.
 Qed.
 
+(* If first class is functional, same domains conversely implies range is ok.   *)
+Proposition ComposeDomainIsSame2 : forall (F G:Class),
+  Functional F -> range F :<=: domain G <-> domain (G :.: F) :~: domain F.
+Proof.
+  intros F G H1. split.
+  - apply ComposeDomainIsSame.
+  - intros H2 y H3. apply (proj1 (RangeCharac _ _)) in H3. destruct H3 as [x H3].
+    assert (domain (G :.: F) x) as H4. { apply H2, DomainCharac. exists y. assumption. }
+    apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [z H4].
+    apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
+    assert (y' = y) as H6. { apply FunctionalCharac1 with F x; assumption. }
+    subst. apply DomainCharac. exists z. assumption.
+Qed.
+
+(* Composition is a function class defined on A if fist class is and range ok.  *)
 Proposition ComposeIsFunctionOn : forall (F A G B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
@@ -111,6 +130,8 @@ Proposition ComposeIsFunctionOn : forall (F A G B:Class),
   FunctionOn (G :.: F) A.
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
-  -
-Admitted.
-
+  - apply ComposeIsFunction2; assumption.
+  - apply ClassEquivTran with (domain F). 2: assumption.
+    apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
+    apply ClassEquivSym. assumption.
+Qed.

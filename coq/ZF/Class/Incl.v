@@ -62,3 +62,25 @@ Proof.
     + apply H1.
     + intros H4. apply H3, H4, H2.
 Qed.
+
+Proposition InclEquivCompat : forall (P Q R S:Class),
+  P :~: Q -> R :~: S -> P :<=: R -> Q :<=: S.
+Proof.
+  intros P Q R S H1 H2 H3 x H4. apply H2, H3, H1, H4.
+Qed.
+
+Proposition InclEquivCompatL : forall (P Q R:Class),
+  P :~: Q -> P :<=: R -> Q :<=: R.
+Proof.
+  intros P Q R H1. apply InclEquivCompat.
+  - assumption.
+  - apply ClassEquivRefl.
+Qed.
+
+Proposition InclEquivCompatR : forall (P Q R:Class),
+  P :~: Q -> R :<=: P -> R :<=: Q.
+Proof.
+  intros P Q R H1. apply InclEquivCompat.
+  - apply ClassEquivRefl.
+  - assumption.
+Qed.
