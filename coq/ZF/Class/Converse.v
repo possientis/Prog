@@ -1,12 +1,14 @@
 Require Import ZF.Binary.
 Require Import ZF.Binary.Converse.
 Require Import ZF.Class.
+Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
@@ -20,14 +22,14 @@ Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
 (* The converse of a class is the relation of the converse of its binary class. *)
-Definition converse (P:Class) : Class
-  := fromBinary (Binary.Converse.converse (toBinary P)).
+Definition converse (F:Class) : Class
+  := fromBinary (Binary.Converse.converse (toBinary F)).
 
 (* Characterisation of the converse of a class.                                 *)
-Proposition ConverseCharac : forall (P:Class) (x:U),
-  converse P x <-> exists y, exists z, x = :(z,y): /\ P :(y,z):.
+Proposition ConverseCharac : forall (F:Class) (x:U),
+  converse F x <-> exists y, exists z, x = :(z,y): /\ F :(y,z):.
 Proof.
-  intros P x. split; intros H1.
+  intros F x. split; intros H1.
   - unfold converse, Binary.Converse.converse, fromBinary, toBinary in H1.
     destruct H1 as [z [y H1]]. exists y. exists z. apply H1.
   - unfold converse, Binary.Converse.converse, fromBinary, toBinary.
@@ -35,10 +37,10 @@ Proof.
 Qed.
 
 (* A more useful characterisation when already dealing with an ordered pair.    *)
-Proposition ConverseCharac2 : forall (P:Class) (y z:U),
-  converse P :(y,z): <-> P :(z,y):.
+Proposition ConverseCharac2 : forall (F:Class) (y z:U),
+  converse F :(y,z): <-> F :(z,y):.
 Proof.
-  intros P y z. split; intros H1.
+  intros F y z. split; intros H1.
   - apply ConverseCharac in H1.
     destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
@@ -47,41 +49,42 @@ Proof.
     + apply H1.
 Qed.
 
-(* The direct image of a class P by Switch is the converse of P.                *)
-Lemma ImageBySwitch : forall (P:Class),
-  Switch :[P]: :~: converse P.
+(* The converse is the direct image by Switch.                                  *)
+Lemma ConverseIsImageBySwitch : forall (F:Class),
+ converse F :~: Switch :[F]:.
 Proof.
-  intros P x. split; intros H1.
+  intros F x. split; intros H1.
+  - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]]. subst.
+    unfold image. exists :(y,z):. split.
+    + assumption.
+    + apply SwitchCharac2. exists y. exists z. split; reflexivity.
   - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply SwitchCharac2 in H2.
     destruct H2 as [y [z [H2 H3]]]. apply ConverseCharac. exists y. exists z.
     subst. split.
     + reflexivity.
     + assumption.
-  - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]]. subst.
-    unfold image. exists :(y,z):. split.
-    + assumption.
-    + apply SwitchCharac2. exists y. exists z. split; reflexivity.
 Qed.
 
-Proposition ConverseIsSmall : forall (P:Class),
-  Small P -> Small (converse P).
+Proposition ConverseIsSmall : forall (F:Class),
+  Small F -> Small (converse F).
 Proof.
-  (* Let P be an arbitrary class. *)
-  intros P.
+  (* Let F be an arbitrary class. *)
+  intros F.
 
-  (* We assume that P is small. *)
-  intros H1. assert (Small P) as A. { apply H1. } clear A.
+  (* We assume that F is small. *)
+  intros H1. assert (Small F) as A. { apply H1. } clear A.
 
-  (* We need to show that converse(P) is small. *)
-  assert (Small (converse P)) as A. 2: apply A.
+  (* We need to show that converse(F) is small. *)
+  assert (Small (converse F)) as A. 2: apply A.
 
-  (* Using the equivalence Switch[P] ~ converse(P) ... *)
-  apply SmallEquivCompat with Switch:[P]:. 1: apply ImageBySwitch.
+  (* Using the equivalence converse(F) ~ Switch[F] ... *)
+  apply SmallEquivCompat with Switch:[F]:.
+    1: { apply ClassEquivSym, ConverseIsImageBySwitch. }
 
-  (* It is sufficient to show that Switch[P] is small. *)
-  assert (Small (Switch:[P]:)) as A. 2: apply A.
+  (* It is sufficient to show that Switch[F] is small. *)
+  assert (Small (Switch:[F]:)) as A. 2: apply A.
 
-  (* This follows from the fact that Switch is functional and P is small. *)
+  (* This follows from the fact that Switch is functional and F is small. *)
   apply ImageIsSmall.
 
   - apply SwitchIsFunctional.
@@ -90,31 +93,31 @@ Proof.
 Qed.
 
 (* The converse of a class is always a relation, even if the class is not.      *)
-Proposition ConverseIsRelation : forall (P:Class), Rel (converse P).
+Proposition ConverseIsRelation : forall (F:Class), Rel (converse F).
 Proof.
-  intros P x H1. apply ConverseCharac in H1.
+  intros F x H1. apply ConverseCharac in H1.
   destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.
 Qed.
 
 (* The converse of the converse is a subclass of the original class.            *)
-Proposition ConverseConverseIncl : forall (P:Class),
-  converse (converse P) :<=: P.
+Proposition ConverseOfConverseIncl : forall (F:Class),
+  converse (converse F) :<=: F.
 Proof.
-  intros P x H1. apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
+  intros F x H1. apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
   apply ConverseCharac in H2. destruct H2 as [z' [y' [H2 H3]]].
   apply OrdPairEqual in H2. destruct H2 as [H2 H2']. subst. apply H3.
 Qed.
 
-(* If the class P is a relation, then converse acting on P is idempotent.       *)
-Proposition ConverseIsIdempotent : forall (P:Class),
-  Rel P <-> converse (converse P) :~: P.
+(* A class is a relation iff the converse acting on it is idempotent.           *)
+Proposition ConverseIsIdempotent : forall (F:Class),
+  Rel F <-> converse (converse F) :~: F.
 Proof.
-  intros P. split; intros H1.
+  intros F. split; intros H1.
   - unfold converse.
-    remember (Binary.Converse.converse (toBinary P)) as F eqn:Ef.
-    apply ClassEquivTran with (fromBinary (Binary.Converse.converse F)).
+    remember (Binary.Converse.converse (toBinary F)) as G eqn:E.
+    apply ClassEquivTran with (fromBinary (Binary.Converse.converse G)).
     + apply FromBinaryEquivCompat, ConverseEquivCompat, ToFromBinary.
-    + rewrite Ef. clear Ef F. apply ClassEquivTran with (fromBinary (toBinary P)).
+    + rewrite E. clear E G. apply ClassEquivTran with (fromBinary (toBinary F)).
       * apply FromBinaryEquivCompat. rewrite Binary.Converse.ConverseIdempotent.
         apply BinaryEquivRefl.
       * apply FromToBinary, H1.
@@ -122,11 +125,11 @@ Proof.
     destruct H2 as [y [z [H2 H3]]]. exists z. exists y. apply H2.
 Qed.
 
-(* Only keep ordered pairs of a class: you get the same converse.               *)
-Proposition ConverseKeepOrderedPairs : forall (P:Class),
-  converse P :~: converse (P :/\: V:x:V).
+(* The converse is the converse of the subclass of ordered pairs.               *)
+Proposition ConverseIsConverseOfOrderedPairs : forall (F:Class),
+  converse F :~: converse (F :/\: V:x:V).
 Proof.
-  intros P x. split; intros H1.
+  intros F x. split; intros H1.
   - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
     apply ConverseCharac. exists y. exists z. split.
     + assumption.

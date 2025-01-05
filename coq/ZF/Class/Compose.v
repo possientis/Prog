@@ -1,6 +1,7 @@
 Require Import ZF.Binary.Compose.
 Require Import ZF.Class.
 Require Import ZF.Class.Bijection.
+Require Import ZF.Class.BijectionOn.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
@@ -173,7 +174,7 @@ Proof.
     subst. apply DomainCharac. exists z. assumption.
 Qed.
 
-(* Composition is a function class defined on A if fist class is and range ok.  *)
+(* Composition is a function class defined on A if first class is and range ok. *)
 Proposition ComposeIsFunctionOn : forall (F A G B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
@@ -186,3 +187,12 @@ Proof.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
 Qed.
+
+(* Composition is a bijection class defined on A if first class is and range ok. *)
+Proposition ComposeIsBijectionOn : forall (F A G B:Class),
+  BijectionOn F A ->
+  BijectionOn G B ->
+  range F :~: B   ->
+  BijectionOn (G :.: F) A.
+Proof.
+Admitted.
