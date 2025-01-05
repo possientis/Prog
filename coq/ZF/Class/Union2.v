@@ -1,4 +1,5 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Rel.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Or.
@@ -110,4 +111,13 @@ Proof.
     + rewrite Ec. apply UnionCharac. destruct H5 as [H5|H5].
       * exists a. split. { assumption. } { apply PairInL. }
       * exists b. split. { assumption. } { apply PairInR. }
+Qed.
+
+(* The union of two relation class is a relation class.                         *)
+Proposition UnionOfRelsIsRel : forall (P Q:Class),
+  Rel P -> Rel Q -> Rel (P:\/:Q).
+Proof.
+  intros P Q Hp Hq x H1. destruct H1 as [H1|H1].
+  - apply Hp, H1.
+  - apply Hq, H1.
 Qed.
