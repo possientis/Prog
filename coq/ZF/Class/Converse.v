@@ -139,3 +139,25 @@ Proof.
   - apply ConverseCharac in H1. destruct H1 as [y [z [H1 [H2 _]]]].
     apply ConverseCharac. exists y. exists z. split; assumption.
 Qed.
+
+Proposition ConverseDomain : forall (F:Class),
+  domain (converse F) :~: range F.
+Proof.
+  intros F y. split; intros H1.
+  - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [x H1].
+    apply (proj1 (ConverseCharac2 _ _ _)) in H1.
+    apply RangeCharac. exists x. assumption.
+  - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
+    apply DomainCharac. exists x. apply ConverseCharac2. assumption.
+Qed.
+
+Proposition ConverseRange : forall (F:Class),
+  range (converse F) :~: domain F.
+Proof.
+  intros F x. split; intros H1.
+  - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [y H1].
+    apply (proj1 (ConverseCharac2 _ _ _)) in H1.
+    apply DomainCharac. exists y. assumption.
+  - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
+    apply RangeCharac. exists y. apply ConverseCharac2. assumption.
+Qed.
