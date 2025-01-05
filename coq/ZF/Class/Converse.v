@@ -1,7 +1,6 @@
 Require Import ZF.Binary.
 Require Import ZF.Binary.Converse.
 Require Import ZF.Class.
-Require Import ZF.Class.Compose.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Image.
@@ -13,7 +12,6 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
 Require Import ZF.Class.V.
 Require Import ZF.Core.And.
-Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
 Require Import ZF.Core.Leq.
@@ -122,23 +120,6 @@ Proof.
       * apply FromToBinary, H1.
   - intros x H2. apply H1 in H2. apply ConverseCharac in H2.
     destruct H2 as [y [z [H2 H3]]]. exists z. exists y. apply H2.
-Qed.
-
-Proposition ConverseOfCompose : forall (P Q:Class),
-  converse (Q :.: P) :~: converse P :.: converse Q.
-Proof.
-  intros P Q u. split; intros H1.
-  - apply ConverseCharac in H1. destruct H1 as [x [z [H1 H2]]].
-    apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
-    apply ComposeCharac. exists z. exists y. exists x. split.
-    + assumption.
-    + split; apply ConverseCharac2; assumption.
-  - apply ComposeCharac in H1. destruct H1 as [z [y [x [H1 [H2 H3]]]]].
-    apply (proj1 (ConverseCharac2 _ _ _)) in H2.
-    apply (proj1 (ConverseCharac2 _ _ _)) in H3.
-    apply ConverseCharac. exists x. exists z. split.
-    + assumption.
-    + apply ComposeCharac2. exists y. split; assumption.
 Qed.
 
 (* Only keep ordered pairs of a class: you get the same converse.               *)

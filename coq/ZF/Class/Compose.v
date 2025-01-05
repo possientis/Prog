@@ -1,11 +1,14 @@
 Require Import ZF.Binary.Compose.
 Require Import ZF.Class.
+Require Import ZF.Class.Bijection.
+Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
 Require Import ZF.Core.Dot.
@@ -86,6 +89,51 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction; assumption.
 Qed.
 
+(* The converse of the composition is (almost) the composition of the converse. *)
+Proposition ComposeConverse : forall (P Q:Class),
+  converse (Q :.: P) :~: converse P :.: converse Q.
+Proof.
+  intros P Q u. split; intros H1.
+  - apply ConverseCharac in H1. destruct H1 as [x [z [H1 H2]]].
+    apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
+    apply ComposeCharac. exists z. exists y. exists x. split.
+    + assumption.
+    + split; apply ConverseCharac2; assumption.
+  - apply ComposeCharac in H1. destruct H1 as [z [y [x [H1 [H2 H3]]]]].
+    apply (proj1 (ConverseCharac2 _ _ _)) in H2.
+    apply (proj1 (ConverseCharac2 _ _ _)) in H3.
+    apply ConverseCharac. exists x. exists z. split.
+    + assumption.
+    + apply ComposeCharac2. exists y. split; assumption.
+Qed.
+
+(* The composition of two one-to-one classes is one-to-one.                     *)
+Proposition ComposeIsOneToOne : forall (P Q:Class),
+  OneToOne P -> OneToOne Q -> OneToOne (Q :.: P).
+Proof.
+  intros P Q [Hp Gp] [Hq Gq]. split.
+  - apply ComposeIsFunctional; assumption.
+  - apply FunctionalEquivCompat with (converse P :.: converse Q).
+    + apply ClassEquivSym, ComposeConverse.
+    + apply ComposeIsFunctional; assumption.
+Qed.
+
+(* The composition of two one-to-one classes is a bijection class.              *)
+Proposition ComposeIsBijection : forall (F G:Class),
+  OneToOne F -> OneToOne G -> Bijection (G :.: F).
+Proof.
+  intros F G Hf Hg. split.
+  - apply ComposeIsRelation.
+  - apply ComposeIsOneToOne; assumption.
+Qed.
+
+(* The composition of two bijection classes is a bijection class.               *)
+Proposition ComposeIsBijection2 : forall (F G:Class),
+  Bijection F -> Bijection G -> Bijection (G :.: F).
+Proof.
+  intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection; assumption.
+Qed.
+
 (* The domain of the composition is a subclass of the first domain.             *)
 Proposition ComposeDomainIsSmaller : forall (F G:Class),
   domain (G :.: F) :<=: domain F.
@@ -135,3 +183,5 @@ Proof.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
 Qed.
+
+

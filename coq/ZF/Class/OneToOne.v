@@ -3,11 +3,9 @@ Require Import ZF.Binary.Converse.
 Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.OneToOne.
 Require Import ZF.Class.
-Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
-Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -56,14 +54,4 @@ Proof.
   intros P x1 x2 y1 y2 H3 H1 H2. split; intros H4.
   - subst. apply OneToOneCharac1 with P x2; assumption.
   - subst. apply OneToOneCharac2 with P y2; assumption.
-Qed.
-
-Proposition ComposeIsOneToOne : forall (P Q:Class),
-  OneToOne P -> OneToOne Q -> OneToOne (Q :.: P).
-Proof.
-  intros P Q [Hp Gp] [Hq Gq]. split.
-  - apply ComposeIsFunctional; assumption.
-  - apply FunctionalEquivCompat with (converse P :.: converse Q).
-    + apply ClassEquivSym, ConverseOfCompose.
-    + apply ComposeIsFunctional; assumption.
 Qed.
