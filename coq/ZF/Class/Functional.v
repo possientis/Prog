@@ -1,6 +1,5 @@
 Require Import ZF.Binary.Functional.
 Require Import ZF.Class.
-Require Import ZF.Class.Compose.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
@@ -41,17 +40,3 @@ Proof.
   intros x y z H3 H4. remember (FunctionalCharac1 F H2) as H5 eqn:E. clear E H2.
   apply H5 with x; apply H1; assumption.
 Qed.
-
-Proposition ComposeIsFunctional : forall (F G:Class),
-  Functional F -> Functional G -> Functional (G :.: F).
-Proof.
-  intros F G Hf Hg.
-  remember (FunctionalCharac1 F Hf) as Gf eqn:E. clear E Hf.
-  remember (FunctionalCharac1 G Hg) as Gg eqn:E. clear E Hg.
-  apply FunctionalCharac2. intros x z1 z2 H1 H2.
-  apply ComposeCharac2 in H1. destruct H1 as [y1 [H1 G1]].
-  apply ComposeCharac2 in H2. destruct H2 as [y2 [H2 G2]].
-  assert (y1 = y2) as H3. { apply Gf with x; assumption. }
-  subst. apply Gg with y2; assumption.
-Qed.
-
