@@ -27,12 +27,12 @@ Proof.
   intros F a y H1 H2. split; intros H3.
   - apply SameClassEqual. unfold eval.
     apply ClassEquivTran with (Class.Eval.eval F a).
-    + apply ToClassFromClass.
+    + apply ToFromClass.
     + apply Class.Eval.EvalWhenFunctional; assumption.
   - apply Class.Eval.EvalWhenFunctional.
     + assumption.
     + assumption.
-    + rewrite <- H3. unfold eval. apply ClassEquivSym, ToClassFromClass.
+    + rewrite <- H3. unfold eval. apply ClassEquivSym, ToFromClass.
 Qed.
 
 Proposition EvalCompose : forall (F G:Class) (a:U),
