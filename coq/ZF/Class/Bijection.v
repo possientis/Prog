@@ -1,6 +1,7 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Function.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Rel.
 
@@ -10,13 +11,15 @@ Definition Bijection (F:Class) : Prop := Rel F /\ OneToOne F.
 Proposition BijectionIsFunction : forall (F:Class),
   Bijection F -> Function F.
 Proof.
-  intros F [H1 [H2 H3]]. split; assumption.
+  intros F [H1 H2].
+  apply OneToOneIsFunctionalBothWays in H2. destruct H2 as [H2 _].
+  split; assumption.
 Qed.
 
 Proposition BijectionConverseIsFunction : forall (F:Class),
   Bijection F -> Function (converse F).
 Proof.
-  intros F [H1 [H2 H3]]. split.
-  - apply ConverseIsRelation.
-  - apply H3.
+  intros F [H1 H2].
+  apply OneToOneIsFunctionalBothWays in H2. destruct H2 as [_ H2].
+  split. 2: assumption. apply ConverseIsRelation.
 Qed.

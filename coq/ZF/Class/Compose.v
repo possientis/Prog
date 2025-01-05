@@ -90,10 +90,10 @@ Proof.
 Qed.
 
 (* The converse of the composition is (almost) the composition of the converse. *)
-Proposition ComposeConverse : forall (P Q:Class),
-  converse (Q :.: P) :~: converse P :.: converse Q.
+Proposition ComposeConverse : forall (F G:Class),
+  converse (G :.: F) :~: converse F :.: converse G.
 Proof.
-  intros P Q u. split; intros H1.
+  intros F G u. split; intros H1.
   - apply ConverseCharac in H1. destruct H1 as [x [z [H1 H2]]].
     apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
     apply ComposeCharac. exists z. exists y. exists x. split.
@@ -108,12 +108,15 @@ Proof.
 Qed.
 
 (* The composition of two one-to-one classes is one-to-one.                     *)
-Proposition ComposeIsOneToOne : forall (P Q:Class),
-  OneToOne P -> OneToOne Q -> OneToOne (Q :.: P).
+Proposition ComposeIsOneToOne : forall (F G:Class),
+  OneToOne F -> OneToOne G -> OneToOne (G :.: F).
 Proof.
-  intros P Q [Hp Gp] [Hq Gq]. split.
+  intros F G H1 H2.
+  apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [H1 H3].
+  apply OneToOneIsFunctionalBothWays in H2. destruct H2 as [H2 H4].
+  apply OneToOneIsFunctionalBothWays. split.
   - apply ComposeIsFunctional; assumption.
-  - apply FunctionalEquivCompat with (converse P :.: converse Q).
+  - apply FunctionalEquivCompat with (converse F :.: converse G).
     + apply ClassEquivSym, ComposeConverse.
     + apply ComposeIsFunctional; assumption.
 Qed.
@@ -183,5 +186,3 @@ Proof.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
 Qed.
-
-

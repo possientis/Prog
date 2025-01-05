@@ -6,52 +6,51 @@ Require Import ZF.Class.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-(* A class is one-to-one if both itself and its converse are functional.        *)
-Definition OneToOne (P:Class) : Prop := Functional P /\ Functional (converse P).
+Definition OneToOne (F:Class) : Prop := Binary.OneToOne.OneToOne (toBinary F).
 
-Proposition OneToOneFromBinary : forall (P:Class),
-  OneToOne P <-> Binary.OneToOne.OneToOne (toBinary P).
+(* A class is one-to-one iff it and its converse are functional.                *)
+Proposition OneToOneIsFunctionalBothWays : forall (F:Class),
+  OneToOne F <-> Functional F /\ Functional (converse F).
 Proof.
-  intros P. unfold Binary.OneToOne.OneToOne, OneToOne, Functional,converse.
-  split; intros [H1 H2].
-  - split.
-    + assumption.
-    + apply Binary.Functional.FunctionalEquivCompat with
-        (toBinary (fromBinary (Binary.Converse.converse (toBinary P)))). 2: apply H2.
-      apply ToFromBinary.
-  - split.
-    + assumption.
-    + apply Binary.Functional.FunctionalEquivCompat with
-        (Binary.Converse.converse (toBinary P)). 2: apply H2.
-      apply BinaryEquivSym, ToFromBinary.
+  unfold OneToOne, Binary.OneToOne.OneToOne. split; intros [H1 H2].
+  - split. 1: assumption. unfold converse, Functional.
+    apply Binary.Functional.FunctionalEquivCompat
+      with (Binary.Converse.converse (toBinary F)). 2: assumption.
+    apply BinaryEquivSym, ToFromBinary.
+  - split. 1: assumption. unfold converse, Functional in H2.
+    apply Binary.Functional.FunctionalEquivCompat
+      with (toBinary (fromBinary (Binary.Converse.converse (toBinary F)))).
+    2: assumption. apply ToFromBinary.
 Qed.
 
-Proposition OneToOneCharac1 : forall (P:Class), OneToOne P ->
-  forall x, forall y, forall z, P :(x,y): -> P :(x,z): -> y = z.
+(* Uniqueness of left coordinate when one-to-one.                               *)
+Proposition OneToOneCharacL : forall (F:Class), OneToOne F ->
+  forall x y z, F :(y,x): -> F :(z,x): -> y = z.
 Proof.
-  intros P H1. apply FunctionalCharac1, H1.
+  intros F H1. apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [_ H1].
+  intros x y z H2 H3. apply FunctionalCharac1 with (converse F) x.
+  - assumption.
+  - apply ConverseCharac2. assumption.
+  - apply ConverseCharac2. assumption.
 Qed.
 
-Proposition OneToOneCharac2 : forall (P:Class), OneToOne P ->
-  forall x, forall y, forall z, P :(y,x): -> P :(z,x): -> y = z.
+(* Uniqueness of right coordinate when one-to-one.                              *)
+Proposition OneToOneCharacR : forall (F:Class), OneToOne F ->
+  forall x y z, F :(x,y): -> F :(x,z): -> y = z.
 Proof.
-  intros P H1 x y z H3 H4. destruct H1 as [H1 H2].
-  apply FunctionalCharac1 with (converse P) x.
-  - apply H2.
-  - apply ConverseCharac2, H3.
-  - apply ConverseCharac2, H4.
+  intros F H1. apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [H1 _].
+  apply FunctionalCharac1. assumption.
 Qed.
 
 (* When two ordered pairs belong to a one-to-one class, equality between the    *)
 (* first coordinates is equivalent to equality between the second coordinates.  *)
-Proposition OneToOneCoordEquiv : forall (P:Class) (x1 x2 y1 y2:U),
-  OneToOne P -> P :(x1,y1): -> P :(x2,y2): -> x1 = x2 <-> y1 = y2.
+Proposition OneToOneCoordEquiv : forall (F:Class) (x1 x2 y1 y2:U),
+  OneToOne F -> F :(x1,y1): -> F :(x2,y2): -> x1 = x2 <-> y1 = y2.
 Proof.
-  intros P x1 x2 y1 y2 H3 H1 H2. split; intros H4.
-  - subst. apply OneToOneCharac1 with P x2; assumption.
-  - subst. apply OneToOneCharac2 with P y2; assumption.
+  intros F x1 x2 y1 y2 H3 H1 H2. split; intros H4.
+  - subst. apply OneToOneCharacR with F x2; assumption.
+  - subst. apply OneToOneCharacL with F y2; assumption.
 Qed.
