@@ -1,5 +1,6 @@
 Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
+Require Import ZF.Class.BijectionOn.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
@@ -50,6 +51,34 @@ Proof.
   - exists y. exists z. split.
     + reflexivity.
     + apply H1.
+Qed.
+
+Proposition RestrictEquivCompat : forall (F G A B:Class),
+  F :~: G -> A :~: B -> F:|:A :~: G:|:B.
+Proof.
+  intros F G A B H1 H2 x. split; intros H3;
+  apply (proj1 (RestrictCharac _ _ _)) in H3; destruct H3 as [y [z [H3 [H4 H5]]]];
+  subst; apply RestrictCharac2; split.
+  - apply H2. assumption.
+  - apply H1. assumption.
+  - apply H2. assumption.
+  - apply H1. assumption.
+Qed.
+
+Proposition RestrictEquivCompatL : forall (F G A:Class),
+  F :~: G -> F:|:A :~: G:|:A.
+Proof.
+  intros F G A H1. apply RestrictEquivCompat.
+  - assumption.
+  - apply ClassEquivRefl.
+Qed.
+
+Proposition RestrictEquivCompatR : forall (F A B:Class),
+  A :~: B -> F:|:A :~: F:|:B.
+Proof.
+  intros F A B H1. apply RestrictEquivCompat.
+  - apply ClassEquivRefl.
+  - assumption.
 Qed.
 
 (* The restriction is always a relation.                                        *)
@@ -153,23 +182,36 @@ Proof.
 Qed.
 
 (* A class is a relation iff it equals the restriction to its domain.           *)
-Proposition RestrictToDomain : forall (F:Class),
-  Rel F <-> F :|: domain F :~: F.
+Proposition RelationIsRestrict : forall (F:Class),
+  Rel F <-> F :~: F :|: domain F.
 Proof.
   intros F. split; intros H1.
   - intros x. split; intros H2.
-    + apply RestrictCharac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
-      rewrite H3. apply H4.
     + destruct (H1 x H2) as [y [z H3]]. apply RestrictCharac.
       exists y. exists z. split.
       * assumption.
       * split.
         { apply DomainCharac. exists z. subst. assumption. }
         { subst. assumption. }
-  - intros x H2. apply DoubleInclusion in H1. destruct H1 as [_ H1].
-    remember (H1 x) as H3 eqn:E. clear E H1. apply H3 in H2. clear H3.
+    + apply RestrictCharac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
+      rewrite H3. apply H4.
+  - intros x H2. apply H1 in H2.
     apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 _]]].
     exists y. exists z. assumption.
+Qed.
+
+Proposition FunctionOnIsRestrict : forall (F A:Class),
+  FunctionOn F A -> F :~: F:|:A.
+Proof.
+  intros F A [[H1 H2] H3]. apply ClassEquivTran with (F:|:domain F).
+  - apply RelationIsRestrict. assumption.
+  - apply RestrictEquivCompatR. assumption.
+Qed.
+
+Proposition BijectionOnIsRestrict : forall (F A:Class),
+  BijectionOn F A -> F :~: F:|:A.
+Proof.
+  intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
 Qed.
 
 Proposition RestrictTowerProperty : forall (F A B:Class),

@@ -16,10 +16,18 @@ Proof.
   split; assumption.
 Qed.
 
-Proposition BijectionConverseIsFunction : forall (F:Class),
+Proposition ConverseIsFunction : forall (F:Class),
   Bijection F -> Function (converse F).
 Proof.
   intros F [H1 H2].
   apply OneToOneIsFunctionalBothWays in H2. destruct H2 as [_ H2].
   split. 2: assumption. apply ConverseIsRelation.
+Qed.
+
+Proposition ConverseIsBijection : forall (F:Class),
+  Bijection F -> Bijection (converse F).
+Proof.
+  intros F [H1 H2]. split.
+  - apply ConverseIsRelation.
+  - apply ConverseIsOneToOne. assumption.
 Qed.

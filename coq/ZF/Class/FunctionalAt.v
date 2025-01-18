@@ -1,7 +1,6 @@
 Require Import ZF.Binary.FunctionalAt.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
-Require Import ZF.Class.Functional.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -33,13 +32,6 @@ Proof.
   - apply FunctionalAtCharac2.
 Qed.
 
-(* A functional class is functional at all points.                              *)
-Proposition FunctionalIsFunctionalAt : forall (F:Class) (a:U),
-  Functional F -> FunctionalAt F a.
-Proof.
-  intros F a H1. apply FunctionalAtCharac, H1.
-Qed.
-
 (* The property of being functional at a is compatible with equivalence.        *)
 Proposition FunctionalAtEquivCompat : forall (F G:Class) (a:U),
   F :~: G -> FunctionalAt F a -> FunctionalAt G a.
@@ -48,3 +40,5 @@ Proof.
   remember (FunctionalAtCharac1 F a H2) as H3 eqn:E. clear E H2.
   apply FunctionalAtCharac2. intros y z H4 H5. apply H3; apply H1; assumption.
 Qed.
+
+

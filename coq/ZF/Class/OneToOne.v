@@ -6,6 +6,8 @@ Require Import ZF.Class.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.Incl.
+Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
@@ -53,4 +55,13 @@ Proof.
   intros F x1 x2 y1 y2 H3 H1 H2. split; intros H4.
   - subst. apply OneToOneCharacR with F x2; assumption.
   - subst. apply OneToOneCharacL with F y2; assumption.
+Qed.
+
+Proposition ConverseIsOneToOne : forall (F:Class),
+  OneToOne F -> OneToOne (converse F).
+Proof.
+  intros F H1. apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [H1 H2].
+  apply OneToOneIsFunctionalBothWays. split. 1: assumption.
+  apply FunctionalInclCompat with F. 2: assumption.
+  apply ConverseOfConverseIncl.
 Qed.

@@ -1,8 +1,11 @@
 Require Import ZF.Binary.Functional.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
+Require Import ZF.Class.FunctionalAt.
+Require Import ZF.Class.Incl.
 Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
@@ -33,10 +36,31 @@ Proof.
   - apply FunctionalCharac2.
 Qed.
 
+(* Being functional is compatible with class equivalence.                       *)
 Proposition FunctionalEquivCompat : forall (F G:Class),
   F :~: G -> Functional F -> Functional G.
 Proof.
   intros F G H1 H2. apply FunctionalCharac2.
   intros x y z H3 H4. remember (FunctionalCharac1 F H2) as H5 eqn:E. clear E H2.
   apply H5 with x; apply H1; assumption.
+Qed.
+
+(* Being functional is compatible with class inclusion (not quite of course).   *)
+Proposition FunctionalInclCompat : forall (F G:Class),
+  F :<=: G -> Functional G -> Functional F.
+Proof.
+  intros F G H1 H2. apply FunctionalCharac2.
+  intros x y z H3 H4. apply FunctionalCharac1 with G x.
+  - assumption.
+  - apply H1. assumption.
+  - apply H1. assumption.
+Qed.
+
+(* A functional class is functional at all points.                              *)
+Proposition FunctionalIsFunctionalAt : forall (F:Class),
+  Functional F <-> forall a, FunctionalAt F a.
+Proof.
+  intros F. split; intros H1.
+  - intros a. apply FunctionalAtCharac2. intros y z. apply H1.
+  - apply FunctionalCharac2. intros a y z. apply H1.
 Qed.

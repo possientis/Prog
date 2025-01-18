@@ -1,8 +1,10 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bijection.
+Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.FunctionOn.
+Require Import ZF.Class.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
 
@@ -29,4 +31,12 @@ Proposition BijectionOnIsSmall : forall (F A:Class),
 Proof.
   intros F A H1 H2. apply FunctionOnIsSmall with A. 2: assumption.
   apply BijectionOnIsFunctionOn. assumption.
+Qed.
+
+Proposition ConverseIsBijectionOn : forall (F A B:Class),
+  BijectionOn F A -> range F :~: B -> BijectionOn (converse F) B.
+Proof.
+  intros F A B [H1 H2] H3. split.
+  - apply ConverseIsBijection. assumption.
+  - apply ClassEquivTran with (range F). 2: assumption. apply ConverseDomain.
 Qed.
