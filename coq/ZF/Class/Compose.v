@@ -196,6 +196,7 @@ Proof.
     split; assumption.
 Qed.
 
+(* If converse of second class is functional, then conversely ...               *)
 Proposition ComposeRangeIsSame2 : forall (F G:Class), Functional (converse G) ->
   domain G :<=: range F <-> range (G :.: F) :~: range G.
 Proof.
@@ -230,8 +231,12 @@ Qed.
 Proposition ComposeIsBijectionOn : forall (F A G B:Class),
   BijectionOn F A ->
   BijectionOn G B ->
-  range F :~: B   ->
+  range F :<=: B   ->
   BijectionOn (G :.: F) A.
 Proof.
-Admitted.
-
+  intros F A G B [H1 H2] [H3 H4] H5. split.
+  - apply ComposeIsBijection2; assumption.
+  - apply ClassEquivTran with (domain F). 2: assumption.
+    apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
+    apply ClassEquivSym. assumption.
+Qed.
