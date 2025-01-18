@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Binary.FunctionalAt.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
@@ -41,4 +42,25 @@ Proof.
   apply FunctionalAtCharac2. intros y z H4 H5. apply H3; apply H1; assumption.
 Qed.
 
+Proposition NotFunctionalAtCharac : forall (F:Class) (a:U),
+  ~ FunctionalAt F a <-> ~ forall y z, F :(a,y): -> F :(a,z): -> y = z.
+Proof.
+  intros F a. split; intros H1 H2; apply H1; apply FunctionalAtCharac; assumption.
+Qed.
+
+Proposition NotFunctionalAt : forall (F:Class) (a:U),
+  ~ FunctionalAt F a <-> exists y z, ~ y = z /\ F :(a,y): /\ F :(a,z):.
+Proof.
+  intros F a. split; intros H1.
+  - apply (proj1 (NotFunctionalAtCharac _ _)) in H1.
+    apply NotForAll in H1. destruct H1 as [y H1].
+    apply NotForAll in H1. destruct H1 as [z H1].
+    exists y. exists z. split.
+    + intros H2. apply H1. intros _ _. assumption.
+    + split.
+      * apply DoubleNegation. intros H2. apply H1. intros H3. contradiction.
+      * apply DoubleNegation. intros H2. apply H1. intros _ H3. contradiction.
+  - destruct H1 as [y [z [H1 [H2 H3]]]]. intros H4. apply H1.
+    apply FunctionalAtCharac1 with F a; assumption.
+Qed.
 

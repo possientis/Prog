@@ -3,7 +3,17 @@ Require Import ZF.Set.
 (* If the proposition ~A leads to a contradiction, then A is true.              *)
 Axiom DoubleNegation : forall (A:Prop), ~~A -> A.
 
-(* If a predicate being never satisfied is false then it is satisfied by some x.*)
+(* If a predicate is not always satisfied, then it is falsified by some x.      *)
+Proposition NotForAll : forall (P:U -> Prop),
+  ~ (forall x, P x) <-> exists x, ~ P x.
+Proof.
+  intros P. split; intros H1.
+  - apply DoubleNegation. intros H2. apply H1. intros x.
+    apply DoubleNegation. intros H3. apply H2. exists x. assumption.
+  - destruct H1 as [x H1]. intros H2. apply H1, H2.
+Qed.
+
+(* If a predicate is not always falsified, then it is satisfied by some x.      *)
 Proposition NotForAllNot : forall (P:U -> Prop),
   ~ (forall x, ~ P x) <-> exists x, P x.
 Proof.
