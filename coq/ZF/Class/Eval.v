@@ -4,37 +4,67 @@ Require Import ZF.Class.Domain.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
+Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-(* Predicate expressing the fact that class F has value y when evaluated at a.  *)
+(* Predicate expressing the fact that y is the value of F at a.                 *)
 Definition IsValueAt (F:Class) (a y:U) : Prop := F :(a,y): /\ FunctionalAt F a.
 
-Proposition IsValueAtWhenFunctional : forall (F:Class) (a y:U),
-  Functional F -> IsValueAt F a y <-> F :(a,y):.
+(* When F is functional at a, y being a value of F at a reduces to F (a,y).     *)
+Proposition IsValueAtWhenFunctionalAt : forall (F:Class) (a y:U),
+  FunctionalAt F a -> IsValueAt F a y <-> F :(a,y):.
 Proof.
   intros F a y H1. split; intros H2.
   - destruct H2 as [H2 _]. assumption.
-  - split . 1: { assumption. } apply FunctionalIsFunctionalAt. assumption.
+  - split; assumption.
 Qed.
 
-(* Predicate expressing the fact that class F has a value at a.                 *)
+(* Whem F is functional, y being a value of F at a reduces to F (a,y).          *)
+Proposition IsValueAtWhenFunctional : forall (F:Class) (a y:U),
+  Functional F -> IsValueAt F a y <-> F :(a,y):.
+Proof.
+  intros F a y H1. apply IsValueAtWhenFunctionalAt.
+  apply FunctionalIsFunctionalAt. assumption.
+Qed.
+
+(* Predicate expressing the fact that the class F has a value at a.             *)
 Definition HasValueAt (F:Class) (a:U) : Prop := exists y, IsValueAt F a y.
+
+(* The class HasValueAt F is an intersection.                                   *)
+Proposition HasValueAtAsInter : forall (F:Class),
+  HasValueAt F :~: FunctionalAt F :/\: domain F.
+Proof.
+  intros F a. split; intros H1.
+  - destruct H1 as [y [H1 H2]]. apply InterCharac. split. 1: assumption.
+    apply DomainCharac. exists y. assumption.
+  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [H1 H2].
+    apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
+    exists y. apply IsValueAtWhenFunctionalAt; assumption.
+Qed.
+
+Proposition HasValueAtWhenFunctionalAt : forall (F:Class) (a:U),
+  FunctionalAt F a -> HasValueAt F a <-> domain F a.
+Proof.
+  intros F a H1. split; intros H2.
+  - apply HasValueAtAsInter in H2. apply (proj1 (InterCharac _ _ _)) in H2.
+    destruct H2 as [_ H2]. assumption.
+  - apply HasValueAtAsInter, InterCharac. split; assumption.
+Qed.
 
 (* When F is functional, the classes HasValueAt F and domain F coincide.        *)
 Proposition HasValueAtWhenFunctional : forall (F:Class),
   Functional F -> HasValueAt F :~: domain F.
 Proof.
-  intros F H1. split; intros H2.
-  - destruct H2 as [y H2]. apply DomainCharac. exists y.
-    apply (proj1 (IsValueAtWhenFunctional _ _ _ H1)). assumption.
-  - apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
-    exists y. apply IsValueAtWhenFunctional; assumption.
+  intros F H1 a.
+  apply HasValueAtWhenFunctionalAt, FunctionalIsFunctionalAt. assumption.
 Qed.
 
+(* Evaluate the class F at a.                                                   *)
 Definition eval (F:Class) (a:U) : Class := fun x =>
   exists y, x :< y /\ IsValueAt F a y.
 
@@ -60,6 +90,14 @@ Proof.
       * exists y'. split. 1: assumption. unfold IsValueAt. split; assumption.
 Qed.
 
+
+Proposition EvalWhenFunctionalAt : forall (F:Class) (a y:U),
+  FunctionalAt F a -> domain F a -> F :(a,y): <-> eval F a :~: toClass y.
+Proof.
+  intros F a y H1 H2.
+  apply EvalWhenHasValueAt, HasValueAtWhenFunctionalAt; assumption.
+Qed.
+
 Proposition EvalWhenFunctional : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> eval F a :~: toClass y.
 Proof.
@@ -77,6 +115,23 @@ Proof.
   - apply EmptyCharac in H2. contradiction.
 Qed.
 
+(* If F is not functional at a then eval F a is the empty class.                *)
+Proposition EvalWhenNotFunctionalAt : forall (F:Class) (a:U),
+  ~ FunctionalAt F a -> eval F a :~: :0:.
+Proof.
+  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  apply HasValueAtAsInter. assumption.
+Qed.
+
+(* If a is not in domain of F then eval F a is the empty class.                 *)
+Proposition EvalWhenNotInDomain : forall (F:Class) (a:U),
+  ~ domain F a -> eval F a :~: :0:.
+Proof.
+  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  apply HasValueAtAsInter. assumption.
+Qed.
+
+(* The value of F at a is a always a small class.                               *)
 Proposition EvalIsSmall : forall (F:Class) (a:U), Small (eval F a).
 Proof.
   (* Let F be an arbitrary class. *)
