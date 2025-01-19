@@ -90,7 +90,7 @@ Proof.
       * exists y'. split. 1: assumption. unfold IsValueAt. split; assumption.
 Qed.
 
-
+(* If F is functional at a and a lies in domain then F (a,y) iff eval F a = y.  *)
 Proposition EvalWhenFunctionalAt : forall (F:Class) (a y:U),
   FunctionalAt F a -> domain F a -> F :(a,y): <-> eval F a :~: toClass y.
 Proof.
@@ -98,6 +98,7 @@ Proof.
   apply EvalWhenHasValueAt, HasValueAtWhenFunctionalAt; assumption.
 Qed.
 
+(* If F is functional and a lies in domain of F then F (a,y) iff eval F a = y.  *)
 Proposition EvalWhenFunctional : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> eval F a :~: toClass y.
 Proof.

@@ -240,3 +240,4 @@ Proof.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
 Qed.
+

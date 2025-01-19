@@ -20,12 +20,15 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 
+(* Evaluate the class F at a, returning a set.                                  *)
 Definition eval (F:Class) (a:U) : U := fromClass (Class.Eval.eval F a)
   (EvalIsSmall F a).
 
 Notation "F ! a" := (eval F a)
   (at level 0, no associativity) : ZF_Set_Eval_scope.
 
+
+(* If F has a value at a, then y corresponds to a iff F!a = y.                  *)
 Proposition EvalWhenHasValueAt : forall (F:Class) (a y:U),
   HasValueAt F a -> F :(a,y): <-> F!a = y.
 Proof.
@@ -38,6 +41,16 @@ Proof.
     unfold eval in H2. rewrite <- H2. apply ClassEquivSym, ToFromClass.
 Qed.
 
+(* If F has a value at a, then (a,F!a) satisfies the class F.                   *)
+Proposition EvalWhenHasValueAtSatisfies : forall (F:Class) (a:U),
+  HasValueAt F a -> F :(a,F!a):.
+Proof.
+  intros F a H1. apply EvalWhenHasValueAt.
+  - assumption.
+  - reflexivity.
+Qed.
+
+(* If F is functional at a and a lies in domain then F (a,y) iff F!a = y.       *)
 Proposition EvalWhenFunctionalAt : forall (F:Class) (a y:U),
   FunctionalAt F a -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
@@ -45,11 +58,30 @@ Proof.
   apply EvalWhenHasValueAt, HasValueAtWhenFunctionalAt; assumption.
 Qed.
 
+(* If F is functional at a and a lies in domain then (a,F!a) satisfies F.       *)
+Proposition EvalWhenFunctionalAtSatisfies : forall (F:Class) (a:U),
+  FunctionalAt F a -> domain F a -> F :(a,F!a):.
+Proof.
+  intros F a H1 H2. apply EvalWhenFunctionalAt.
+  - assumption.
+  - assumption.
+  - reflexivity.
+Qed.
+
+(* If F is functional and a lies in domain of F then F (a,y) iff F!a = y.       *)
 Proposition EvalWhenFunctional : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1 H2.
   apply EvalWhenHasValueAt, HasValueAtWhenFunctional; assumption.
+Qed.
+
+(* If F is functional and a lies in domain of F then (a,F!a) satisfies F.       *)
+Proposition EvalWhenFunctionalSatisfies : forall (F:Class) (a:U),
+  Functional F -> domain F a -> F :(a,F!a):.
+Proof.
+  intros F a H1 H2. apply EvalWhenFunctionalAtSatisfies. 2: assumption.
+  apply FunctionalIsFunctionalAt. assumption.
 Qed.
 
 (* If F has no value at a then F!a is the empty set.                            *)
@@ -79,21 +111,80 @@ Proof.
   apply HasValueAtAsInter. assumption.
 Qed.
 
+(* Characterisation of the domain of G.F in terms of the eval F!a.              *)
+Proposition ComposeDomainEvalCharac : forall (F G:Class) (a:U),
+  FunctionalAt F a -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
+Proof.
+  intros F G a H1. split; intros H2.
+  - split.
+    + apply ComposeDomainIsSmaller with G. assumption.
+    + apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [z H2].
+      apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
+      apply DomainCharac. exists z.
+      assert (F!a = y) as H4. {
+        apply EvalWhenFunctionalAt. 1: assumption. 2: assumption.
+        apply DomainCharac. exists y. assumption.
+      }
+      rewrite H4. assumption.
+  - destruct H2 as [H2 H3].
+    remember H2 as H4 eqn:E. clear E.
+    apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
+    apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
+    apply DomainCharac. exists z. apply ComposeCharac2. exists y.
+    split. 1: assumption.
+    assert (F!a = y) as H5. { apply EvalWhenFunctionalAt; assumption. }
+    rewrite <- H5. assumption.
+Qed.
+
+(* G.F is functional at a if F is, G is functional at F!a and a lies in domain. *)
+Proposition ComposeIsFunctionalAt : forall (F G:Class) (a:U),
+  FunctionalAt F a          ->
+  FunctionalAt G (F!a)      ->
+  domain F a                ->
+  FunctionalAt (G :.: F) a.
+Proof.
+  intros F G a H1 H2 H3. apply FunctionalAtCharac2. intros z1 z2 H4 H5.
+  apply ComposeCharac2 in H4. destruct H4 as [y1 [H4 H6]].
+  apply ComposeCharac2 in H5. destruct H5 as [y2 [H5 H7]].
+  assert (F!a = y1) as H8. { apply EvalWhenFunctionalAt; assumption. }
+  assert (F!a = y2) as H9. { apply EvalWhenFunctionalAt; assumption. }
+  subst. apply FunctionalAtCharac1 with G (F!a); assumption.
+Qed.
+
+(* Evaluating the composed class G.F at a, from evaluations of F and G.         *)
+Proposition EvalComposeAt : forall (F G:Class) (a:U),
+  FunctionalAt F a        ->
+  FunctionalAt G (F!a)    ->
+  domain (G :.: F) a      ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G a H1 H2 H3. remember H3 as H4 eqn:E. clear E.
+  apply ComposeDomainEvalCharac in H4. 2: assumption.
+  destruct H4 as [H4 H5].
+  remember H4 as H6 eqn:E. clear E.
+  remember H5 as H7 eqn:E. clear E.
+  apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [y H4].
+  apply (proj1 (DomainCharac _ _)) in H5. destruct H5 as [z H5].
+  assert (F!a = y) as H8.     { apply EvalWhenFunctionalAt; assumption. }
+  assert (G!(F!a) = z) as H9. { apply EvalWhenFunctionalAt; assumption. }
+  assert (FunctionalAt (G :.: F) a) as H10. { apply ComposeIsFunctionalAt; assumption. }
+  assert ((G :.: F) :(a,z):) as H11. {
+    apply ComposeCharac2. exists y. split. 1: assumption. rewrite <- H8. assumption.
+  }
+  apply EvalWhenFunctionalAt.
+  - assumption.
+  - assumption.
+  - rewrite H9. assumption.
+Qed.
+
+(* Evaluating the composed class G.F at a, from evaluations of F and G.         *)
 Proposition EvalCompose : forall (F G:Class) (a:U),
   Functional F -> Functional G -> domain (G :.: F) a -> (G :.: F)!a = G!(F!a).
 Proof.
-  intros F G a' H1 H2 H3. remember H3 as H3' eqn:E. clear E.
-  apply (proj1 (DomainCharac _ _)) in H3'.
-  destruct H3' as [z' H3']. remember H3' as H12 eqn:E. clear E.
-  apply ComposeCharac in H3'.
-  destruct H3' as [a [y [z [H3' [H4 H5]]]]]. apply OrdPairEqual in H3'.
-  destruct H3' as [H3' H6]. subst.
-  assert (Functional (G :.: F)) as H7. { apply ComposeIsFunctional; assumption. }
-  assert (domain F a) as H8. { apply DomainCharac. exists y. assumption. }
-  assert (domain G y) as H9. { apply DomainCharac. exists z. assumption. }
-  assert (F!a = y) as H10. { apply EvalWhenFunctional; assumption. } rewrite H10.
-  assert (G!y = z) as H11. { apply EvalWhenFunctional; assumption. } rewrite H11.
-  apply EvalWhenFunctional; assumption.
+  intros F G a H1 H2 H3. apply EvalComposeAt.
+  - apply FunctionalIsFunctionalAt. assumption.
+  - apply FunctionalIsFunctionalAt. assumption.
+  - assumption.
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
@@ -135,6 +226,7 @@ Proof.
       rewrite <- H5. apply H2. assumption.
 Qed.
 
+(* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition FunctionOnEquivCharac : forall (F A G B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
@@ -157,6 +249,7 @@ Proof.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
+(* Characterisation of the direct image F[A] in terms of evaluations of F.      *)
 Proposition ImageEvalCharac : forall (F A: Class), Functional F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.
@@ -170,4 +263,3 @@ Proof.
     apply ImageCharac. exists x. split. 1: assumption.
     apply EvalWhenFunctional; assumption.
 Qed.
-
