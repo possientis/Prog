@@ -47,6 +47,8 @@ BINARY_OBJ = \
 	${BINARY}/Restrict.vo
 
 CLASS_OBJ = \
+	${CLASS}/AntiSymmetric.vo \
+	${CLASS}/Bij.vo \
 	${CLASS}/Bijection.vo \
 	${CLASS}/BijectionOn.vo \
 	${CLASS}/Bounded.vo \
@@ -66,19 +68,28 @@ CLASS_OBJ = \
 	${CLASS}/FunctionOn.vo \
 	${CLASS}/Image.vo \
 	${CLASS}/Incl.vo \
+	${CLASS}/Inj.vo \
 	${CLASS}/Inter.vo \
+	${CLASS}/Irreflexive.vo \
 	${CLASS}/OneToOne.vo \
+	${CLASS}/Onto.vo \
 	${CLASS}/Pair.vo \
+	${CLASS}/PartialOrd.vo \
 	${CLASS}/Power.vo \
 	${CLASS}/Prod.vo \
 	${CLASS}/Proper.vo \
 	${CLASS}/Range.vo \
+	${CLASS}/Reflexive.vo \
 	${CLASS}/Rel.vo \
 	${CLASS}/Restrict.vo \
 	${CLASS}/Russell.vo \
 	${CLASS}/Small.vo \
 	${CLASS}/Snd.vo \
+	${CLASS}/StrictOrd.vo \
+	${CLASS}/StrictTotalOrd.vo \
 	${CLASS}/Switch.vo \
+	${CLASS}/Total.vo \
+	${CLASS}/Transitive.vo \
 	${CLASS}/Union.vo \
 	${CLASS}/UnionGen.vo \
 	${CLASS}/Union2.vo \
