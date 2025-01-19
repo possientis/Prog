@@ -7,13 +7,16 @@ Require Import ZF.Class.Domain.
 Require Import ZF.Class.Eval.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Rel.
 Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
+Require Import ZF.Core.Zero.
 Require Import ZF.Set.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 
@@ -23,18 +26,57 @@ Definition eval (F:Class) (a:U) : U := fromClass (Class.Eval.eval F a)
 Notation "F ! a" := (eval F a)
   (at level 0, no associativity) : ZF_Set_Eval_scope.
 
+Proposition EvalWhenHasValueAt : forall (F:Class) (a y:U),
+  HasValueAt F a -> F :(a,y): <-> F!a = y.
+Proof.
+  intros F a y H1. split; intros H2.
+  - unfold eval. apply ClassEquivSetEqual.
+    apply ClassEquivTran with (Class.Eval.eval F a).
+    + apply ToFromClass.
+    + apply Class.Eval.EvalWhenHasValueAt; assumption.
+  - apply Class.Eval.EvalWhenHasValueAt. 1: assumption.
+    unfold eval in H2. rewrite <- H2. apply ClassEquivSym, ToFromClass.
+Qed.
+
+Proposition EvalWhenFunctionalAt : forall (F:Class) (a y:U),
+  FunctionalAt F a -> domain F a -> F :(a,y): <-> F!a = y.
+Proof.
+  intros F a y H1 H2.
+  apply EvalWhenHasValueAt, HasValueAtWhenFunctionalAt; assumption.
+Qed.
+
 Proposition EvalWhenFunctional : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y H1 H2. split; intros H3.
-  - apply SameClassEqual. unfold eval.
-    apply ClassEquivTran with (Class.Eval.eval F a).
-    + apply ToFromClass.
-    + apply Class.Eval.EvalWhenFunctional; assumption.
-  - apply Class.Eval.EvalWhenFunctional.
-    + assumption.
-    + assumption.
-    + rewrite <- H3. unfold eval. apply ClassEquivSym, ToFromClass.
+  intros F a y H1 H2.
+  apply EvalWhenHasValueAt, HasValueAtWhenFunctional; assumption.
+Qed.
+
+(* If F has no value at a then F!a is the empty set.                            *)
+Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
+  ~ HasValueAt F a -> F!a = :0:.
+Proof.
+  intros F a H1. apply ClassEquivSetEqual. unfold eval, zero, SetZero, empty.
+  apply ClassEquivTran with (Class.Eval.eval F a). 1: apply ToFromClass.
+  apply ClassEquivTran with :0:.
+  - apply Class.Eval.EvalWhenNotHasValueAt. assumption.
+  - apply ClassEquivSym, ToFromClass.
+Qed.
+
+(* If F is not functional at a then F!a is the empty set.                       *)
+Proposition EvalWhenNotFunctionalAt : forall (F:Class) (a:U),
+  ~ FunctionalAt F a -> F!a = :0:.
+Proof.
+  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  apply HasValueAtAsInter. assumption.
+Qed.
+
+(* If a is not in domain of F then F!a is the empty set.                        *)
+Proposition EvalWhenNotInDomain : forall (F:Class) (a:U),
+  ~ domain F a -> F!a = :0:.
+Proof.
+  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  apply HasValueAtAsInter. assumption.
 Qed.
 
 Proposition EvalCompose : forall (F G:Class) (a:U),

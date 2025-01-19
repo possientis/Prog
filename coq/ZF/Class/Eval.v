@@ -185,4 +185,3 @@ Proof.
   (* Which we know is true. *)
     apply EmptyIsSmall.
 Qed.
-
