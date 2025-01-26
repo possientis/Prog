@@ -17,7 +17,8 @@ Proof.
 Qed.
 
 (* fromBinary is compatible with equivalences of classes and binary classes.    *)
-Proposition FromBinaryEquivCompat : EquivCompat fromBinary.
+Proposition FromBinaryEquivCompat : forall (F G:Binary),
+  F :~: G -> fromBinary F :~: fromBinary G.
 Proof.
   intros F G H1 x. unfold fromBinary.
   split; intros H2;
@@ -31,7 +32,9 @@ Qed.
 (* A class can be viewed as a binary class.                                     *)
 Definition toBinary (P:Class) : Binary := fun y z => P :(y,z):.
 
-Proposition ToBinaryEquivCompat : EquivCompat toBinary.
+(* toBinary is compatible with equivalences of classes and binary classes.      *)
+Proposition ToBinaryEquivCompat : forall (P Q:Class),
+  P :~: Q -> toBinary P :~: toBinary Q.
 Proof.
   intros P Q H1 x y. unfold toBinary. apply H1.
 Qed.

@@ -17,7 +17,8 @@ Proof.
 Qed.
 
 (* The converse operation is compatible with equivalence.                       *)
-Proposition ConverseEquivCompat : EquivCompat converse.
+Proposition ConverseEquivCompat : forall (F G:Binary),
+  F :~: G -> F^:-1: :~: G^:-1:.
 Proof.
   intros F G H1 x y. unfold converse. apply H1.
 Qed.
