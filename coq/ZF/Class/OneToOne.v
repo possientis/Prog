@@ -7,6 +7,7 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Incl.
+Require Import ZF.Core.Inverse.
 Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -15,7 +16,7 @@ Definition OneToOne (F:Class) : Prop := Binary.OneToOne.OneToOne (toBinary F).
 
 (* A class is one-to-one iff it and its converse are functional.                *)
 Proposition OneToOneIsFunctionalBothWays : forall (F:Class),
-  OneToOne F <-> Functional F /\ Functional (converse F).
+  OneToOne F <-> Functional F /\ Functional F^:-1:.
 Proof.
   unfold OneToOne, Binary.OneToOne.OneToOne. split; intros [H1 H2].
   - split. 1: assumption. unfold converse, Functional.
@@ -58,7 +59,7 @@ Proof.
 Qed.
 
 Proposition ConverseIsOneToOne : forall (F:Class),
-  OneToOne F -> OneToOne (converse F).
+  OneToOne F -> OneToOne F^:-1:.
 Proof.
   intros F H1. apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [H1 H2].
   apply OneToOneIsFunctionalBothWays. split. 1: assumption.
