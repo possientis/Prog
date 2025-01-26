@@ -16,6 +16,7 @@ Require Import ZF.Class.V.
 Require Import ZF.Core.And.
 Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
+Require Import ZF.Core.Inverse.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Prod.
 Require Import ZF.Set.
@@ -25,9 +26,12 @@ Require Import ZF.Set.OrdPair.
 Definition converse (F:Class) : Class
   := fromBinary (Binary.Converse.converse (toBinary F)).
 
+(* Notation "F ^:-1:" := (converse F)                                           *)
+Global Instance ClassInverse : Inverse Class := { inverse := converse }.
+
 (* Characterisation of the converse of a class.                                 *)
 Proposition ConverseCharac : forall (F:Class) (x:U),
-  converse F x <-> exists y, exists z, x = :(z,y): /\ F :(y,z):.
+  F^:-1: x <-> exists y, exists z, x = :(z,y): /\ F :(y,z):.
 Proof.
   intros F x. split; intros H1.
   - unfold converse, Binary.Converse.converse, fromBinary, toBinary in H1.
@@ -38,7 +42,7 @@ Qed.
 
 (* A more useful characterisation when already dealing with an ordered pair.    *)
 Proposition ConverseCharac2 : forall (F:Class) (y z:U),
-  converse F :(y,z): <-> F :(z,y):.
+  F^:-1: :(y,z): <-> F :(z,y):.
 Proof.
   intros F y z. split; intros H1.
   - apply ConverseCharac in H1.
@@ -51,7 +55,7 @@ Qed.
 
 (* The converse is the direct image by Switch.                                  *)
 Lemma ConverseIsImageBySwitch : forall (F:Class),
- converse F :~: Switch :[F]:.
+ F^:-1: :~: Switch :[F]:.
 Proof.
   intros F x. split; intros H1.
   - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]]. subst.
@@ -66,7 +70,7 @@ Proof.
 Qed.
 
 Proposition ConverseIsSmall : forall (F:Class),
-  Small F -> Small (converse F).
+  Small F -> Small F^:-1:.
 Proof.
   (* Let F be an arbitrary class. *)
   intros F.
@@ -75,7 +79,7 @@ Proof.
   intros H1. assert (Small F) as A. { apply H1. } clear A.
 
   (* We need to show that converse(F) is small. *)
-  assert (Small (converse F)) as A. 2: apply A.
+  assert (Small F^:-1:) as A. 2: apply A.
 
   (* Using the equivalence converse(F) ~ Switch[F] ... *)
   apply SmallEquivCompat with Switch:[F]:.
@@ -93,7 +97,7 @@ Proof.
 Qed.
 
 (* The converse of a class is always a relation, even if the class is not.      *)
-Proposition ConverseIsRelation : forall (F:Class), Rel (converse F).
+Proposition ConverseIsRelation : forall (F:Class), Rel F^:-1:.
 Proof.
   intros F x H1. apply ConverseCharac in H1.
   destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.
@@ -101,7 +105,7 @@ Qed.
 
 (* The converse of the converse is a subclass of the original class.            *)
 Proposition ConverseOfConverseIncl : forall (F:Class),
-  converse (converse F) :<=: F.
+  (F^:-1:)^:-1: :<=: F.
 Proof.
   intros F x H1. apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
   apply ConverseCharac in H2. destruct H2 as [z' [y' [H2 H3]]].
@@ -110,10 +114,10 @@ Qed.
 
 (* A class is a relation iff the converse acting on it is idempotent.           *)
 Proposition ConverseIsIdempotent : forall (F:Class),
-  Rel F <-> converse (converse F) :~: F.
+  Rel F <-> (F^:-1:)^:-1: :~: F.
 Proof.
   intros F. split; intros H1.
-  - unfold converse.
+  - unfold inverse, ClassInverse, converse.
     remember (Binary.Converse.converse (toBinary F)) as G eqn:E.
     apply ClassEquivTran with (fromBinary (Binary.Converse.converse G)).
     + apply FromBinaryEquivCompat, ConverseEquivCompat, ToFromBinary.
@@ -127,7 +131,7 @@ Qed.
 
 (* The converse is the converse of the subclass of ordered pairs.               *)
 Proposition ConverseIsConverseOfOrderedPairs : forall (F:Class),
-  converse F :~: converse (F :/\: V:x:V).
+  F^:-1: :~: (F :/\: V:x:V)^:-1:.
 Proof.
   intros F x. split; intros H1.
   - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
@@ -141,7 +145,7 @@ Proof.
 Qed.
 
 Proposition ConverseDomain : forall (F:Class),
-  domain (converse F) :~: range F.
+  domain F^:-1: :~: range F.
 Proof.
   intros F y. split; intros H1.
   - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [x H1].
@@ -152,7 +156,7 @@ Proof.
 Qed.
 
 Proposition ConverseRange : forall (F:Class),
-  range (converse F) :~: domain F.
+  range F^:-1: :~: domain F.
 Proof.
   intros F x. split; intros H1.
   - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [y H1].
