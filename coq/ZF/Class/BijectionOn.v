@@ -7,6 +7,7 @@ Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Inverse.
 
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
@@ -34,7 +35,7 @@ Proof.
 Qed.
 
 Proposition ConverseIsBijectionOn : forall (F A B:Class),
-  BijectionOn F A -> range F :~: B -> BijectionOn (converse F) B.
+  BijectionOn F A -> range F :~: B -> BijectionOn F^:-1: B.
 Proof.
   intros F A B [H1 H2] H3. split.
   - apply ConverseIsBijection. assumption.
