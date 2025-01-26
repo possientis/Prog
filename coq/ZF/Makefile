@@ -104,6 +104,7 @@ CORE_OBJ = \
 	${CORE}/Dot.vo \
 	${CORE}/Equiv.vo \
 	${CORE}/Image.vo \
+	${CORE}/Inverse.vo \
 	${CORE}/Leq.vo \
 	${CORE}/Lt.vo \
 	${CORE}/Not.vo \
