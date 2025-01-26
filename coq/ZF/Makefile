@@ -42,6 +42,8 @@ BINARY_OBJ = \
 	${BINARY}/Function.vo \
 	${BINARY}/Functional.vo \
 	${BINARY}/FunctionalAt.vo \
+	${BINARY}/Image.vo \
+	${BINARY}/InvImage.vo \
 	${BINARY}/OneToOne.vo \
 	${BINARY}/Range.vo \
 	${BINARY}/Restrict.vo

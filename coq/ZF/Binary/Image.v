@@ -1,6 +1,3 @@
-Declare Scope ZF_Binary_Image_scope.
-Open    Scope ZF_Binary_Image_scope.
-
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Binary.
 Require Import ZF.Binary.Functional.
