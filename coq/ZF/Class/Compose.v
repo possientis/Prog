@@ -14,6 +14,7 @@ Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
 Require Import ZF.Core.Dot.
 Require Import ZF.Core.Equiv.
+Require Import ZF.Core.Inverse.
 Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -92,7 +93,7 @@ Qed.
 
 (* The converse of the composition is (almost) the composition of the converse. *)
 Proposition ComposeConverse : forall (F G:Class),
-  converse (G :.: F) :~: converse F :.: converse G.
+  (G :.: F)^:-1: :~: F^:-1: :.: G^:-1:.
 Proof.
   intros F G u. split; intros H1.
   - apply ConverseCharac in H1. destruct H1 as [x [z [H1 H2]]].
@@ -197,7 +198,7 @@ Proof.
 Qed.
 
 (* If converse of second class is functional, then conversely ...               *)
-Proposition ComposeRangeIsSame2 : forall (F G:Class), Functional (converse G) ->
+Proposition ComposeRangeIsSame2 : forall (F G:Class), Functional G^:-1: ->
   domain G :<=: range F <-> range (G :.: F) :~: range G.
 Proof.
   intros F G H1. split.
