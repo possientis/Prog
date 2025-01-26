@@ -53,6 +53,14 @@ Proof.
     + apply H1.
 Qed.
 
+Proposition ConverseEquivCompat : forall (F G:Class),
+  F :~: G -> F^:-1: :~: G^:-1:.
+Proof.
+  intros F G H1. unfold inverse, ClassInverse, converse.
+  apply FromBinaryEquivCompat, Binary.Converse.ConverseEquivCompat.
+  apply ToBinaryEquivCompat. assumption.
+Qed.
+
 (* The converse is the direct image by Switch.                                  *)
 Lemma ConverseIsImageBySwitch : forall (F:Class),
  F^:-1: :~: Switch :[F]:.
@@ -120,7 +128,8 @@ Proof.
   - unfold inverse, ClassInverse, converse.
     remember (Binary.Converse.converse (toBinary F)) as G eqn:E.
     apply ClassEquivTran with (fromBinary (Binary.Converse.converse G)).
-    + apply FromBinaryEquivCompat, ConverseEquivCompat, ToFromBinary.
+    + apply FromBinaryEquivCompat, Binary.Converse.ConverseEquivCompat.
+      apply ToFromBinary.
     + rewrite E. clear E G. apply ClassEquivTran with (fromBinary (toBinary F)).
       * apply FromBinaryEquivCompat. rewrite Binary.Converse.ConverseIdempotent.
         apply BinaryEquivRefl.
@@ -165,3 +174,4 @@ Proof.
   - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
     apply RangeCharac. exists y. apply ConverseCharac2. assumption.
 Qed.
+

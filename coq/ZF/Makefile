@@ -72,6 +72,7 @@ CLASS_OBJ = \
 	${CLASS}/Incl.vo \
 	${CLASS}/Inj.vo \
 	${CLASS}/Inter.vo \
+	${CLASS}/InvImage.vo \
 	${CLASS}/Irreflexive.vo \
 	${CLASS}/OneToOne.vo \
 	${CLASS}/Onto.vo \
