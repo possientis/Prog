@@ -37,3 +37,10 @@ Proof.
       apply InitSegmentCharac in H3. apply (H1 x); assumption.
     + apply EmptyCharac in H2. contradiction.
 Qed.
+
+Proposition InitSegmentEmptyInter1 : forall (R A:Class) (a x:U),
+  A :/\: initSegment R a :~: :0: -> A x -> ~ R :(x,a):.
+Proof.
+  intros R A a x H1 H2. apply (proj1 (InitSegmentEmptyInter R A a)); assumption.
+Qed.
+

@@ -24,7 +24,7 @@ Proof.
   intros R A a [_ H2]. assumption.
 Qed.
 
-Proposition MinimalHasNoPredecessor : forall (R A:Class) (a x:U),
+Proposition MinimalHasNoPred : forall (R A:Class) (a x:U),
   Minimal R A a -> A x -> ~ R :(x,a):.
 Proof.
   intros R A a x H1 H2. apply MinimalEmptyInter in H1.

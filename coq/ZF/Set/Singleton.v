@@ -1,6 +1,9 @@
 Declare Scope ZF_Set_Singleton_scope.
 Open    Scope ZF_Set_Singleton_scope.
 
+Require Import ZF.Class.
+Require Import ZF.Class.Incl.
+Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.Pair.
 
@@ -29,4 +32,12 @@ Proposition SingleEqualSingle : forall a b, :{a}: = :{b}: -> a = b.
 Proof.
   intros a b Hab. apply SingleCharac. rewrite <- Hab.
   apply SingleCharac. reflexivity.
+Qed.
+
+Proposition SingleToClassIncl : forall (A:Class) (a:U),
+  A a <-> toClass :{a}: :<=: A.
+Proof.
+  intros A a. split; intros H1.
+  - intros x H2. apply SingleCharac in H2. subst. assumption.
+  - apply H1. apply SingleIn.
 Qed.
