@@ -70,6 +70,7 @@ CLASS_OBJ = \
 	${CLASS}/FunctionOn.vo \
 	${CLASS}/Image.vo \
 	${CLASS}/Incl.vo \
+	${CLASS}/InitSegment.vo \
 	${CLASS}/Inj.vo \
 	${CLASS}/Inter.vo \
 	${CLASS}/InvImage.vo \
