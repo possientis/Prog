@@ -61,6 +61,7 @@ CLASS_OBJ = \
 	${CLASS}/Domain.vo \
 	${CLASS}/Empty.vo \
 	${CLASS}/Eval.vo \
+	${CLASS}/Founded.vo \
 	${CLASS}/FromBinary.vo \
 	${CLASS}/Fst.vo \
 	${CLASS}/Fun.vo \
