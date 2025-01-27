@@ -59,6 +59,7 @@ CLASS_OBJ = \
 	${CLASS}/Converse.vo \
 	${CLASS}/Diff.vo \
 	${CLASS}/Domain.vo \
+	${CLASS}/E.vo \
 	${CLASS}/Empty.vo \
 	${CLASS}/Eval.vo \
 	${CLASS}/Founded.vo \

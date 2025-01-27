@@ -10,4 +10,4 @@ Require Import ZF.Set.
 (* We wish this predicate to be expressed in the language of set theory, so     *)
 (* while Coq allows us to quantify over all subclasses of A, we do not do so.   *)
 Definition Founded (R A:Class) : Prop :=
-  forall a, toClass a :<=: A /\ ~(a = :0:) -> exists x, Minimal R (toClass a) x.
+  forall a, toClass a :<=: A /\ a <> :0: -> exists x, Minimal R (toClass a) x.
