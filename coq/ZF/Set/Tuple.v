@@ -26,10 +26,10 @@ Proof.
   - intros H1. apply Union2Charac in H1. destruct H1 as [H1|H1].
     + apply PairCharac in H1. destruct H1 as [H1|H1]; auto.
     + apply SingleCharac in H1. auto.
-  - intros [H1|[H1|H1]]; apply Union2Charac.
-    + left. apply PairEqualInL, H1.
-    + left. apply PairEqualInR, H1.
-    + right. apply SingleCharac, H1.
+  - intros [H1|[H1|H1]]; apply Union2Charac; subst.
+    + left. apply PairInL.
+    + left. apply PairInR.
+    + right. apply SingleIn.
 Qed.
 
 Proposition Tuple3EqualIn1 : forall (a1 a2 a3:U),
