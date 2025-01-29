@@ -2,9 +2,6 @@ Require Import ZF.Binary.
 Require Import ZF.Binary.Converse.
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
-Require Import ZF.Core.Inverse.
 Require Import ZF.Set.
 
 (* Inverse image of P by F is the direct image of P by F^(-1).                  *)

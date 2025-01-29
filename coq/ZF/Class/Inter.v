@@ -2,8 +2,8 @@ Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
+Export ZF.Core.And.
 
 (* The intersection of two classes P and Q.                                     *)
 Definition inter (P Q:Class) : Class := fun x => P x /\ Q x.

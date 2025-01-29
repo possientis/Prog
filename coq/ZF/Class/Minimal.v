@@ -2,9 +2,6 @@ Require Import ZF.Class.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Inter.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

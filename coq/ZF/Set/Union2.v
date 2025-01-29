@@ -2,11 +2,10 @@ Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
+Export ZF.Core.Or.
 
 (* The union of two sets.                                                       *)
 Definition union2 (a b:U) : U := fromClass (toClass a :\/: toClass b)

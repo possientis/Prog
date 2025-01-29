@@ -2,7 +2,6 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Binary.FunctionalAt.
 Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

@@ -6,11 +6,6 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Diff.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Pipe.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 
 Proposition LesserThanRangeOfRestrict : forall (F A:Class),

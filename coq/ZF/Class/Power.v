@@ -1,7 +1,6 @@
 Require Import ZF.Axiom.Power.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.Incl.
 

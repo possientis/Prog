@@ -4,11 +4,6 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.InvImage.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
-Require Import ZF.Core.Inverse.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Singleton.
@@ -43,4 +38,3 @@ Proposition InitSegmentEmptyInter1 : forall (R A:Class) (a x:U),
 Proof.
   intros R A a x H1 H2. apply (proj1 (InitSegmentEmptyInter R A a)); assumption.
 Qed.
-

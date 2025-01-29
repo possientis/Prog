@@ -2,10 +2,10 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.NonEmptyUniverse.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Specify.
+Export ZF.Core.Zero.
 
 (* The class which is satisfied by no set.                                      *)
 Definition empty : Class := fun _ => False.

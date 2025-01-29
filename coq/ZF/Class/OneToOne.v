@@ -7,8 +7,6 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Incl.
-Require Import ZF.Core.Inverse.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

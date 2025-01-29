@@ -1,5 +1,4 @@
 Require Import ZF.Binary.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 
 (* Local property of being functional at point a.                               *)

@@ -1,9 +1,9 @@
 Require Import ZF.Axiom.Union.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Union.
 Require Import ZF.Set.
+Export ZF.Core.Union.
 
 (* The union class of a class.                                                  *)
 Definition union (P:Class) : Class := fun x =>

@@ -3,13 +3,11 @@ Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Union2.
+Export ZF.Core.And.
 
 (* The intersection of two sets a and b.                                        *)
 Definition inter (a b:U) : U := fromClass (toClass a :/\: toClass b)

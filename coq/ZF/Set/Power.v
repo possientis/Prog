@@ -2,7 +2,6 @@ Declare Scope ZF_Set_Power_scope.
 Open    Scope ZF_Set_Power_scope.
 
 Require Import ZF.Class.Power.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.

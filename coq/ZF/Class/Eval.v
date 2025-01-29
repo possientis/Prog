@@ -6,9 +6,6 @@ Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

@@ -4,7 +4,6 @@ Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Rel.
-Require Import ZF.Core.Inverse.
 
 (* A class is a bijection if it is a relation and it is one-to-one.             *)
 Definition Bijection (F:Class) : Prop := Rel F /\ OneToOne F.

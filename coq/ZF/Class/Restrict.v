@@ -13,13 +13,10 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
-Require Import ZF.Core.Leq.
 Require Import ZF.Core.Pipe.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+Export ZF.Core.Pipe.
 
 (* Restricting a class F to a class A.                                          *)
 Definition restrict (F A:Class) : Class

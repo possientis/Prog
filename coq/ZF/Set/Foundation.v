@@ -1,6 +1,4 @@
 Require Import ZF.Axiom.Foundation.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.

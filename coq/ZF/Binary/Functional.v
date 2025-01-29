@@ -1,6 +1,5 @@
 Require Import ZF.Binary.
 Require Import ZF.Binary.FunctionalAt.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 
 (* Predicate expressing the fact that a binary class is functional.             *)

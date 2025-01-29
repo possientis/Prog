@@ -6,14 +6,9 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
-Require Import ZF.Core.And.
 Require Import ZF.Core.Diff.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Or.
-Require Import ZF.Core.Not.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
+Export ZF.Core.Diff.
 
 Definition diff (P Q:Class) : Class := P :/\: :¬:Q.
 

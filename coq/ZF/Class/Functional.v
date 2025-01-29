@@ -3,9 +3,6 @@ Require Import ZF.Class.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Incl.
-Require Import ZF.Core.Dot.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

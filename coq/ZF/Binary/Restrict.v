@@ -2,9 +2,9 @@ Require Import ZF.Binary.
 Require Import ZF.Binary.Image.
 Require Import ZF.Binary.Range.
 Require Import ZF.Class.
-Require Import ZF.Core.Image.
 Require Import ZF.Core.Pipe.
 Require Import ZF.Set.
+Export ZF.Core.Pipe.
 
 (* Restricting a binary class F to a class P.                                   *)
 Definition restrict (F:Binary) (P:Class) : Binary := fun x y =>

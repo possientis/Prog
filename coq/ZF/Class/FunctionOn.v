@@ -9,10 +9,6 @@ Require Import ZF.Class.Prod.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Prod.
 
 (* Binary predicate on classes: F is a function defined on A.                   *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.

@@ -13,14 +13,10 @@ Require Import ZF.Class.Rel.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
 Require Import ZF.Class.V.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
 Require Import ZF.Core.Inverse.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Prod.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+Export ZF.Core.Inverse.
 
 (* The converse of a class is the relation of the converse of its binary class. *)
 Definition converse (F:Class) : Class

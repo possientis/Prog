@@ -2,9 +2,8 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Lt.
 Require Import ZF.Set.
+Export ZF.Core.Leq.
 
 (* Inclusion predicate between two sets.                                        *)
 Definition Incl (a b:U) : Prop := Class.Incl.Incl (toClass a) (toClass b).

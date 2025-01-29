@@ -1,14 +1,13 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.Empty.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
+Export ZF.Core.Zero.
 
 (* We consider the set defined by the small class Empty                         *)
 Definition empty : U := fromClass :0: EmptyIsSmall.

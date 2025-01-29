@@ -3,17 +3,13 @@ Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Diff.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Or.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Union2.
+Export ZF.Core.Diff.
 
 Definition diff (a b:U) : U := fromClass (toClass a :\: toClass b)
   (DiffIsSmall (toClass a) (toClass b) (SetIsSmall a)).

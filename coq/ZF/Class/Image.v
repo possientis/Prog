@@ -7,11 +7,9 @@ Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+Export ZF.Core.Image.
 
 (* Direct image of a class Q by a class P.                                      *)
 Definition image (P Q:Class) : Class := (toBinary P) :[Q]:.

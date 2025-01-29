@@ -1,6 +1,7 @@
 Require Import ZF.Class.
 Require Import ZF.Core.Not.
 Require Import ZF.Set.
+Export ZF.Core.Not.
 
 (* Complement of a class.                                                       *)
 Definition complement (P:Class) : Class := fun x => ~ (P x).

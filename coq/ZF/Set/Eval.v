@@ -12,11 +12,6 @@ Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Rel.
-Require Import ZF.Core.Dot.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
-Require Import ZF.Core.Inverse.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.

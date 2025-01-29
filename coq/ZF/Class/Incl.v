@@ -1,9 +1,10 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Leq.
 Require Import ZF.Core.Lt.
 Require Import ZF.Set.
+Export ZF.Core.Leq.
+Export ZF.Core.Lt.
 
 (* Inclusion predicate between two classes.                                     *)
 Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.

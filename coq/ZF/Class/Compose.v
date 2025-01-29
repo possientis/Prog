@@ -8,16 +8,15 @@ Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionOn.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Rel.
 Require Import ZF.Core.Dot.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Inverse.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+Export ZF.Core.Dot.
 
 (* Composition of two classes.                                                  *)
 Definition compose (G F:Class) : Class

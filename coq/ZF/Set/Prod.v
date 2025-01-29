@@ -1,13 +1,12 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Prod.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.OrdPair.
+Export ZF.Core.Prod.
 
 (* We consider the set defined by the product predicate of the sets a and b     *)
 Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)

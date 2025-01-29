@@ -6,8 +6,6 @@ Require Import ZF.Class.Function.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Inverse.
 
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.

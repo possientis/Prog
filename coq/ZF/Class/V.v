@@ -4,10 +4,6 @@ Require Import ZF.Class.Prod.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Russell.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Lt.
-Require Import ZF.Core.Prod.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.

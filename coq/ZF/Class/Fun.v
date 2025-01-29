@@ -5,7 +5,6 @@ Require Import ZF.Class.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
-Require Import ZF.Core.Leq.
 
 (* F is a function from A to B.                                                 *)
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.

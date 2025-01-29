@@ -2,7 +2,6 @@ Require Import ZF.Axiom.Define.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Set.
 
 (* Let us consider the predicate of the set potentially defined by a class P.   *)

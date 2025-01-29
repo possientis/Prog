@@ -4,9 +4,6 @@ Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Minimal.
 Require Import ZF.Class.V.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.

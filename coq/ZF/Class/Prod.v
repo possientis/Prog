@@ -9,19 +9,14 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
-Require Import ZF.Core.And.
-Require Import ZF.Core.Equiv.
-Require Import ZF.Core.Image.
-Require Import ZF.Core.Leq.
-Require Import ZF.Core.Or.
 Require Import ZF.Core.Prod.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Union2.
+Export ZF.Core.Prod.
 
 Definition prod (P Q:Class) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ P y /\ Q z.

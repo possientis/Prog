@@ -1,12 +1,11 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Rel.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Or.
-Require Import ZF.Core.Union.
 Require Import ZF.Set.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Union.
+Export ZF.Core.Or.
 
 (* The union of two classes.                                                    *)
 Definition union2 (P Q:Class) : Class := fun x => P x \/ Q x.

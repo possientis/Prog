@@ -1,9 +1,9 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
-Require Import ZF.Core.Union.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
+Export ZF.Core.Union.
 
 (* We consider the set defined by the union predicate of the set a.             *)
 Definition union (a:U) : U := fromClass :U(toClass a)

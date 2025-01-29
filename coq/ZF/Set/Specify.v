@@ -4,7 +4,6 @@ Open    Scope ZF_Axiom_Specify_scope.
 Require Import ZF.Class.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.And.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 

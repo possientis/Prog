@@ -3,9 +3,9 @@ Require Import ZF.Binary.
 Require Import ZF.Binary.Functional.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Image.
 Require Import ZF.Set.
+Export ZF.Core.Image.
 
 (* Direct image of a class P by a binary class F.                               *)
 Definition image (F:Binary) (P:Class) : Class := fun y =>

@@ -3,7 +3,6 @@ Open    Scope ZF_Set_Singleton_scope.
 
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.Pair.
 

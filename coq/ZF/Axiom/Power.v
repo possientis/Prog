@@ -1,4 +1,3 @@
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.Incl.
 

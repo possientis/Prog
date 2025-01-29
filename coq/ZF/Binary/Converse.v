@@ -1,6 +1,6 @@
 Require Import ZF.Binary.
-Require Import ZF.Core.Equiv.
 Require Import ZF.Core.Inverse.
+Export ZF.Core.Inverse.
 
 (* The converse of a binary class.                                              *)
 Definition converse (F:Binary) : Binary := fun x y => F y x.

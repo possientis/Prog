@@ -4,7 +4,6 @@ Open    Scope ZF_Set_Pair_scope.
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Pair.
-Require Import ZF.Core.Leq.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 
