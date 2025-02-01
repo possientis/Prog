@@ -1,12 +1,14 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Minimal.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Tuple.
 
 (* Predicate expressing the fact that R is a founded class on A.                *)
 (* R is founded on A iff every non-empty subset of A has an R-minimal element.  *)
@@ -48,4 +50,37 @@ Proposition FoundedNoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
   A a3 ->
   ~ (R :(a1,a2): /\ R :(a2,a3): /\ R :(a3,a1):).
 Proof.
-Admitted.
+  intros R A H1 a1 a2 a3 H2 H3 H4 [H5 [H6 H7]].
+  assert (exists x, Minimal R (toClass :{a1,a2,a3}:) x) as H8. {
+  apply H1. split.
+  - apply Tuple3ToClassIncl. split. 1: assumption. split; assumption.
+  - apply Tuple3NotEmpty.
+  } destruct H8 as [x [H8 H9]].
+  apply Tuple3Charac in H8. destruct H8 as [H8|[H8|H8]]; subst.
+  - apply (InitSegmentEmptyInter1 _ _ _ a3) in H9. 1: contradiction. apply Tuple3In3.
+  - apply (InitSegmentEmptyInter1 _ _ _ a1) in H9. 1: contradiction. apply Tuple3In1.
+  - apply (InitSegmentEmptyInter1 _ _ _ a2) in H9. 1: contradiction. apply Tuple3In2.
+Qed.
+
+Proposition FoundedNoLoop4 : forall (R A:Class), Founded R A -> forall a1 a2 a3 a4,
+  A a1 ->
+  A a2 ->
+  A a3 ->
+  A a4 ->
+  ~ (R :(a1,a2): /\ R :(a2,a3): /\ R :(a3,a4): /\ R :(a4,a1):).
+Proof.
+  intros R A H1 a1 a2 a3 a4 H2 H3 H4 H5 [H6 [H7 [H8 H9]]].
+  assert (exists x, Minimal R (toClass :{a1,a2,a3,a4}:) x) as H10. {
+  apply H1. split.
+  - apply Tuple4ToClassIncl.
+    split. 1: assumption.
+    split. 1: assumption.
+    split; assumption.
+  - apply Tuple4NotEmpty.
+  } destruct H10 as [x [H10 H11]].
+  apply Tuple4Charac in H10. destruct H10 as [H10|[H10|[H10|H10]]]; subst.
+  - apply (InitSegmentEmptyInter1 _ _ _ a4) in H11. 1: contradiction. apply Tuple4In4.
+  - apply (InitSegmentEmptyInter1 _ _ _ a1) in H11. 1: contradiction. apply Tuple4In1.
+  - apply (InitSegmentEmptyInter1 _ _ _ a2) in H11. 1: contradiction. apply Tuple4In2.
+  - apply (InitSegmentEmptyInter1 _ _ _ a3) in H11. 1: contradiction. apply Tuple4In3.
+Qed.

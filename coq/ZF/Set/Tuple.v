@@ -1,6 +1,8 @@
 Declare Scope ZF_Set_Tuple_scope.
 Open    Scope ZF_Set_Tuple_scope.
 
+Require Import ZF.Class.
+Require Import ZF.Class.Incl.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Pair.
@@ -121,14 +123,37 @@ Proof.
   intros a1 a2 a3 a4. apply Tuple4EqualIn4. reflexivity.
 Qed.
 
-Proposition Tuple3NotEmpty : forall (a1 a2 a3:U), ~ :{a1,a2,a3}: = :0:.
+Proposition Tuple3NotEmpty : forall (a1 a2 a3:U), :{a1,a2,a3}: <> :0:.
 Proof.
   intros a1 a2 a3 H1. assert (a1 :< :0:) as H2. { rewrite <- H1. apply Tuple3In1. }
   apply EmptyCharac in H2. apply H2.
 Qed.
 
-Proposition Tuple4NotEmpty : forall (a1 a2 a3 a4:U), ~ :{a1,a2,a3,a4}: = :0:.
+Proposition Tuple4NotEmpty : forall (a1 a2 a3 a4:U), :{a1,a2,a3,a4}: <> :0:.
 Proof.
   intros a1 a2 a3 a4 H1. assert (a1 :< :0:) as H2. { rewrite <- H1. apply Tuple4In1. }
   apply EmptyCharac in H2. apply H2.
+Qed.
+
+Proposition Tuple3ToClassIncl : forall (A:Class) (a1 a2 a3:U),
+  A a1 /\ A a2 /\ A a3 <-> toClass :{a1,a2,a3}: :<=: A.
+Proof.
+  intros A a1 a2 a3. split; intros H1.
+  - destruct H1 as [H1 [H2 H3]]. intros x H4. apply Tuple3Charac in H4.
+    destruct H4 as [H4|[H4|H4]]; subst; assumption.
+  - split. 1: apply H1, Tuple3In1.
+    split. 1: apply H1, Tuple3In2.
+    apply H1, Tuple3In3.
+Qed.
+
+Proposition Tuple4ToClassIncl : forall (A:Class) (a1 a2 a3 a4:U),
+  A a1 /\ A a2 /\ A a3 /\ A a4 <-> toClass :{a1,a2,a3,a4}: :<=: A.
+Proof.
+  intros A a1 a2 a3 a4. split; intros H1.
+  - destruct H1 as [H1 [H2 [H3 H4]]]. intros x H5. apply Tuple4Charac in H5.
+    destruct H5 as [H5|[H5|[H5|H5]]]; subst; assumption.
+  - split. 1: apply H1, Tuple4In1.
+    split. 1: apply H1, Tuple4In2.
+    split. 1: apply H1, Tuple4In3.
+    apply H1, Tuple4In4.
 Qed.
