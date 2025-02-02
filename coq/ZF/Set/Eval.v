@@ -123,8 +123,7 @@ Proof.
         apply DomainCharac. exists y. assumption.
       }
       rewrite H4. assumption.
-  - destruct H2 as [H2 H3].
-    remember H2 as H4 eqn:E. clear E.
+  - destruct H2 as [H2 H3]. assert (H4 := H2).
     apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
     apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
     apply DomainCharac. exists z. apply ComposeCharac2. exists y.
@@ -155,11 +154,9 @@ Proposition EvalComposeAt : forall (F G:Class) (a:U),
   domain (G :.: F) a      ->
   (G :.: F)!a = G!(F!a).
 Proof.
-  intros F G a H1 H2 H3. remember H3 as H4 eqn:E. clear E.
+  intros F G a H1 H2 H3. assert (H4 := H3).
   apply ComposeDomainEvalCharac in H4. 2: assumption.
-  destruct H4 as [H4 H5].
-  remember H4 as H6 eqn:E. clear E.
-  remember H5 as H7 eqn:E. clear E.
+  destruct H4 as [H4 H5]. assert (H6 := H4). assert (H7 := H5).
   apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [y H4].
   apply (proj1 (DomainCharac _ _)) in H5. destruct H5 as [z H5].
   assert (F!a = y) as H8.     { apply EvalWhenFunctionalAt; assumption. }
@@ -195,7 +192,7 @@ Proof.
   assert (domain F :~: domain G) as H2. { apply DomainEquivCompat. assumption. }
   - split. 1: assumption. intros x H3.
     assert (domain G x) as H4. { apply H2. assumption. }
-    remember H3 as H5 eqn:E. clear E. remember H4 as H6 eqn:E. clear E.
+    assert (H5 := H3). assert (H6 := H4).
     apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [y  H3].
     apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [y' H4].
     assert (y' = y) as H7. {
@@ -207,8 +204,7 @@ Proof.
     assert (F!x = y) as H8. { apply EvalWhenFunctional; assumption. }
     assert (G!x = y) as H9. { apply EvalWhenFunctional; assumption. }
     subst. symmetry. assumption.
-  - destruct H1 as [H1 H2]. intros u. split; intros H3;
-    remember H3 as H4 eqn:E;clear E.
+  - destruct H1 as [H1 H2]. intros u. split; intros H3; assert (H4 := H3).
     + apply Hf in H4. destruct H4 as [x [y H4]]. subst.
       assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
       assert (F!x = y) as H5. { apply EvalWhenFunctional; assumption. }

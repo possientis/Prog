@@ -148,7 +148,7 @@ Proof.
   - assert (HasValueAt F a) as A. { apply H1. } clear A.
 
   (* Let y be a value of F at a. *)
-    remember H1 as H2 eqn:E. clear E. destruct H2 as [y H2].
+    assert (H2 := H1). destruct H2 as [y H2].
     assert (IsValueAt F a y) as A. { apply H2. } clear A.
 
   (* In particular we have F (a,y) *)

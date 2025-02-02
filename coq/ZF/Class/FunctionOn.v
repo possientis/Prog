@@ -25,7 +25,7 @@ Proposition FunctionOnIncl : forall (F A:Class),
   FunctionOn F A -> F :<=: A :x: F:[A]:.
 Proof.
   intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Rel in H1.
-  remember (H1 x H2) as H5 eqn:E. clear E. destruct H5 as [y [z H5]].
+  assert (H5 := H1 x H2). destruct H5 as [y [z H5]].
   apply ProdCharac. exists y. exists z. split. 1: assumption. subst. split.
   - apply H4. apply DomainCharac. exists z. assumption.
   - apply ImageCharac. exists y. split.
@@ -45,7 +45,7 @@ Proof.
   intros H1. assert (FunctionOn F A) as A'. { apply H1. } clear A'.
 
   (* Note in particular that F is a functional class. *)
-  remember H1 as H2 eqn:E. clear E. destruct H2 as [[_ H2] _].
+  assert (H2 := H1). destruct H2 as [[_ H2] _].
   assert (Functional F) as A'. { apply H2. } clear A'.
 
   (* And we assume that A is small. *)
