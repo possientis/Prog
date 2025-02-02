@@ -8,33 +8,35 @@ Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Singleton.
 
-(* The inital segment is the inverse image of the singleton {a}.                *)
-Definition initSegment (R:Class) (a:U) : Class := R^:-1: :[ toClass :{a}: ]:.
+(* Inital segment of R on A at a.                                               *)
+Definition initSegment (R A:Class) (a:U) : Class
+  := A :/\: R^:-1: :[ toClass :{a}: ]:.
 
-Proposition InitSegmentCharac : forall (R:Class) (a x:U),
-  initSegment R a x <-> R :(x,a):.
+Proposition InitSegmentCharac : forall (R A:Class) (a x:U),
+  initSegment R A a x <-> A x /\ R :(x,a):.
 Proof.
-  intros R a x. split; intros H1.
-  - apply InvImageCharac in H1. destruct H1 as [y [H1 H2]].
-    apply SingleCharac in H1. subst. assumption.
-  - apply InvImageCharac. exists a. split. 2: assumption. apply SingleIn.
+  intros R A a x. split; intros [H1 H2].
+  - split. 1: assumption. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
+    apply SingleCharac in H2. subst. assumption.
+  - split. 1: assumption. apply InvImageCharac. exists a. split. 2: assumption.
+    apply SingleIn.
 Qed.
 
-Proposition InitSegmentEmptyInter : forall (R A:Class) (a:U),
-  A :/\: initSegment R a :~: :0: <-> forall x, A x -> ~ R :(x,a):.
+Proposition InitSegmentWhenEmpty : forall (R A:Class) (a:U),
+  initSegment R A a :~: :0: <-> forall x, A x -> ~ R :(x,a):.
 Proof.
   intros R A a. split; intros H1.
-  - intros x H2 H3. apply EmptyCharac with x. apply H1, InterCharac.
-    split. 1: assumption. apply InitSegmentCharac. assumption.
+  - intros x H2 H3. apply EmptyCharac with x. apply H1.
+    apply InitSegmentCharac. split; assumption.
   - intros x. split; intros H2.
-    + apply EmptyCharac.
-      apply (proj1 (InterCharac _ _ _)) in H2. destruct H2 as [H2 H3].
-      apply InitSegmentCharac in H3. apply (H1 x); assumption.
+    + apply InitSegmentCharac in H2. destruct H2 as [H2 H3].
+      apply EmptyCharac. assert (H4 := H1 x H2). contradiction.
     + apply EmptyCharac in H2. contradiction.
 Qed.
 
-Proposition InitSegmentEmptyInter1 : forall (R A:Class) (a x:U),
-  A x -> A :/\: initSegment R a :~: :0: -> ~ R :(x,a):.
+Proposition InitSegmentWhenEmpty1 : forall (R A:Class) (a x:U),
+  initSegment R A a :~: :0: -> A x -> ~ R :(x,a):.
 Proof.
-  intros R A a x H1 H2. apply (proj1 (InitSegmentEmptyInter R A a)); assumption.
+  intros R A a x H1 H2.
+  assert (H3 := proj1 (InitSegmentWhenEmpty R A a) H1 x H2). assumption.
 Qed.

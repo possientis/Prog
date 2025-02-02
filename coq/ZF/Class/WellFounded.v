@@ -9,5 +9,5 @@ Require Import ZF.Set.
 (* R is well-founded on A iff it is founded on A and all traces on A of initial *)
 (* segments are small.                                                          *)
 Definition WellFounded (R A:Class) : Prop :=
-  Founded R A /\ forall (a:U), A a -> Small (A :/\: initSegment R a).
+  Founded R A /\ forall (a:U), A a -> Small (initSegment R A a).
 
