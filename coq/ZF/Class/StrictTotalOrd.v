@@ -58,3 +58,21 @@ Proof.
     + contradiction.
     + apply H4. right. assumption.
 Qed.
+
+Proposition StrictTotalOrdSuffice : forall (R A:Class),
+  Transitive R A ->
+  (forall x y, A x -> A y -> R :(x,y): <-> ~ (x = y \/ R :(y,x):)) ->
+  StrictTotalOrd R A.
+Proof.
+  intros R A H1 H2. split.
+  - split. 2: assumption. intros x H3 H4.
+    apply (H2 _ _ H3 H3) in H4. apply H4. left. reflexivity.
+  - intros x y H3 H4. specialize (H2 _ _ H3 H4).
+    assert (x = y \/ x <> y) as H5. apply LawExcludedMiddle.
+    destruct H5 as [H5|H5]. 1: { left. assumption. }
+    assert (R :(y,x): \/ ~ R :(y,x):) as H6. apply LawExcludedMiddle.
+    destruct H6 as [H6|H6]. 1: { right. right. assumption. }
+    right. left. apply H2. intros [H7|H7].
+    + apply H5. assumption.
+    + apply H6. assumption.
+Qed.
