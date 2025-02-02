@@ -101,7 +101,9 @@ CLASS_OBJ = \
 	${CLASS}/UnionGen.vo \
 	${CLASS}/Union2.vo \
 	${CLASS}/Utils.vo \
-	${CLASS}/V.vo
+	${CLASS}/V.vo \
+	${CLASS}/WellFounded.vo \
+	${CLASS}/WellOrdering.vo
 
 CORE_OBJ = \
 	${CORE}/And.vo \
