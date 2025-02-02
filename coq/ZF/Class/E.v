@@ -2,12 +2,18 @@ Require Import ZF.Axiom.Foundation.
 Require Import ZF.Class.
 Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.InitSegment.
+Require Import ZF.Class.Inter.
+Require Import ZF.Class.InvImage.
 Require Import ZF.Class.Minimal.
+Require Import ZF.Class.Small.
 Require Import ZF.Class.V.
+Require Import ZF.Class.WellFounded.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Singleton.
 
 (* The class satisfied by all ordered pairs (x,y) with x :< y.                  *)
 Definition E : Class := fun x => exists y z, x = :(y,z): /\ y :< z.
@@ -75,3 +81,23 @@ Proof.
   (* Which follows easily. *)
     apply InterCharac. split. 2: assumption. apply ECharac2. assumption.
 Qed.
+
+Lemma InitSegmentEV : forall (a:U),
+  initSegment E V a :~: toClass a.
+Proof.
+  intros a x. split; intros H1.
+  - destruct H1 as [_ H1]. apply InvImageCharac in H1. destruct H1 as [b [H1 H2]].
+    apply SingleCharac in H1. subst. apply ECharac2 in H2. assumption.
+  - split. 1: apply I. apply InvImageCharac. exists a. split.
+    + apply SingleIn.
+    + apply ECharac2. assumption.
+Qed.
+
+Proposition EIsWellFoundedOnV : WellFounded E V.
+Proof.
+  split. 1: apply EIsFoundedOnV. intros a _.
+  apply SmallEquivCompat with (toClass a).
+  - apply ClassEquivSym, InitSegmentEV.
+  - apply SetIsSmall.
+Qed.
+

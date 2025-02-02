@@ -29,7 +29,7 @@ Qed.
 
 (* If a set is not empty, then it has an element.                               *)
 Proposition NotEmptyHasElement : forall (a:U),
-  ~ a = :0: <-> exists x, x :< a.
+  a <> :0: <-> exists x, x :< a.
 Proof.
   intros a. split; intros H1.
   - apply NotForAllNot. intros H2. apply H1, Extensionality.

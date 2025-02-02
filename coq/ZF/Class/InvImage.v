@@ -3,6 +3,8 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.Image.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+Export ZF.Core.Image.
+Export ZF.Core.Inverse.
 
 (* Inverse image of P by F is the direct image of P by F^(-1).                  *)
 Proposition InvImageCharac : forall (F:Class) (P:Class) (x:U),
