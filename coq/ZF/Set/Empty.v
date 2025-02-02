@@ -62,7 +62,7 @@ Proof.
   apply EmptySetEmpty with :{x}:. apply H1, PairInL.
 Qed.
 
-Proposition SingletonNotEmpty : forall a, :{a}: <> :0:.
+Proposition SingletonIsNotEmpty : forall a, :{a}: <> :0:.
 Proof.
   intros a. apply PairNotEmpty.
 Qed.

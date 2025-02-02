@@ -40,3 +40,12 @@ Proof.
   - intros x H2. apply SingleCharac in H2. subst. assumption.
   - apply H1. apply SingleIn.
 Qed.
+
+Proposition SingleIsNotPair : forall (a b c:U),
+  b <> c -> :{a}: <> :{b,c}:.
+Proof.
+  intros a b c H1 H2.
+  assert (b = a) as H3. { apply SingleCharac. rewrite H2. apply PairInL. }
+  assert (c = a) as H4. { apply SingleCharac. rewrite H2. apply PairInR. }
+  subst. contradiction.
+Qed.

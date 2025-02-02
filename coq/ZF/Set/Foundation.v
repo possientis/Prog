@@ -16,7 +16,7 @@ Proof.
   remember :{a}: as b eqn:Hb.
 
   (* Then b is an non-empty set. *)
-  assert (~ b = :0:) as H1. { rewrite Hb. apply SingletonNotEmpty. }
+  assert (~ b = :0:) as H1. { rewrite Hb. apply SingletonIsNotEmpty. }
 
   (* From the foundation axiom, b has an element x such that x /\ b = 0 *)
   remember (Foundation b H1) as H2 eqn:A. clear A. destruct H2 as [x [H2 H3]].

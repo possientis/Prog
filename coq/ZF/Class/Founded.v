@@ -24,7 +24,7 @@ Proof.
   assert (exists x, Minimal R (toClass :{a}:) x) as H4. {
     apply H1. split.
     - apply SingleToClassIncl. assumption.
-    - apply SingletonNotEmpty.
+    - apply SingletonIsNotEmpty.
   } destruct H4 as [x [H4 H5]].
   apply SingleCharac in H4. subst.
   apply (InitSegmentWhenEmpty1 _ _ _ a) in H5. 1: contradiction. apply SingleIn.

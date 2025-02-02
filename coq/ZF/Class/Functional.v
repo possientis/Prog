@@ -18,7 +18,7 @@ Proof.
 Qed.
 
 (* Using FunctionalCharac below with '<->' does not always work as expected.    *)
-Proposition FunctionalCharac2 : forall (F:Class),
+Proposition FunctionalSuffice : forall (F:Class),
   (forall x y z, F :(x,y): -> F :(x,z): -> y = z) -> Functional F.
 Proof.
   intros F H1.
@@ -30,14 +30,14 @@ Proposition FunctionalCharac : forall (F:Class),
 Proof.
   intros F. split.
   - apply FunctionalCharac1.
-  - apply FunctionalCharac2.
+  - apply FunctionalSuffice.
 Qed.
 
 (* Being functional is compatible with class equivalence.                       *)
 Proposition FunctionalEquivCompat : forall (F G:Class),
   F :~: G -> Functional F -> Functional G.
 Proof.
-  intros F G H1 H2. apply FunctionalCharac2.
+  intros F G H1 H2. apply FunctionalSuffice.
   intros x y z H3 H4. remember (FunctionalCharac1 F H2) as H5 eqn:E. clear E H2.
   apply H5 with x; apply H1; assumption.
 Qed.
@@ -46,7 +46,7 @@ Qed.
 Proposition FunctionalInclCompat : forall (F G:Class),
   F :<=: G -> Functional G -> Functional F.
 Proof.
-  intros F G H1 H2. apply FunctionalCharac2.
+  intros F G H1 H2. apply FunctionalSuffice.
   intros x y z H3 H4. apply FunctionalCharac1 with G x.
   - assumption.
   - apply H1. assumption.
@@ -59,5 +59,5 @@ Proposition FunctionalIsFunctionalAt : forall (F:Class),
 Proof.
   intros F. split; intros H1.
   - intros a. apply FunctionalAtCharac2. intros y z. apply H1.
-  - apply FunctionalCharac2. intros a y z. apply H1.
+  - apply FunctionalSuffice. intros a y z. apply H1.
 Qed.

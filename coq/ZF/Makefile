@@ -90,6 +90,7 @@ CLASS_OBJ = \
 	${CLASS}/Rel.vo \
 	${CLASS}/Restrict.vo \
 	${CLASS}/Russell.vo \
+	${CLASS}/Singleton.vo \
 	${CLASS}/Small.vo \
 	${CLASS}/Snd.vo \
 	${CLASS}/StrictOrd.vo \

@@ -88,7 +88,7 @@ Qed.
 Proposition RestrictIsFunctional : forall (F A:Class),
   Functional F -> Functional (F:|:A).
 Proof.
-  intros F A H1. apply FunctionalCharac2.
+  intros F A H1. apply FunctionalSuffice.
   intros x y z H2 H3. apply FunctionalCharac1 with F x.
   - assumption.
   - apply RestrictCharac2 in H2. destruct H2 as [_ H2]. assumption.
