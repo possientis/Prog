@@ -16,3 +16,9 @@ Proof.
   apply InitSegmentWhenEmpty. assumption.
 Qed.
 
+Proposition MinimalIn : forall (R A:Class) (a:U),
+  Minimal R A a -> A a.
+Proof.
+  intros R A a [H1 _]. assumption.
+Qed.
+
