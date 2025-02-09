@@ -104,6 +104,7 @@ CLASS_OBJ = \
 	${CLASS}/Utils.vo \
 	${CLASS}/V.vo \
 	${CLASS}/WellFounded.vo \
+	${CLASS}/WellFoundedWellOrd.vo \
 	${CLASS}/WellOrdering.vo
 
 CORE_OBJ = \

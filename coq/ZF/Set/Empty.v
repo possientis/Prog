@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.
 Require Import ZF.Class.Empty.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
@@ -40,6 +41,7 @@ Proof.
     apply EmptyCharac in H1. apply H1.
 Qed.
 
+(* If a has no element, it is the empty set.                                    *)
 Proposition IfEmptyThenEmpty : forall (a:U),
   (forall x, ~ x :< a) -> a = :0:.
 Proof.
@@ -48,21 +50,22 @@ Proof.
   - apply EmptyCharac in H1. contradiction.
 Qed.
 
-(* A pair is never equal to the empty set.                                      *)
+(* A pair is not empty.                                                         *)
 Proposition PairIsNotEmpty : forall (a b:U), :{a,b}: <> :0:.
 Proof.
   intros a b H1. assert (a :< :0:) as H2. { rewrite <- H1. apply PairInL. }
   apply EmptyCharac in H2. contradiction.
 Qed.
 
-(* The empty set is not an ordered pair                                         *)
+(* An ordered pair is not empty.                                                *)
 Proposition OrdPairIsNotEmpty : forall (x y:U), :(x,y): <> :0:.
 Proof.
   intros x y H1. apply DoubleInclusion in H1. destruct H1 as [H1 _].
   apply EmptySetEmpty with :{x}:. apply H1, PairInL.
 Qed.
 
-Proposition SingletonIsNotEmpty : forall a, :{a}: <> :0:.
+(* A singleton is not empty.                                                    *)
+Proposition SingletonIsNotEmpty : forall (a:U), :{a}: <> :0:.
 Proof.
   intros a. apply PairIsNotEmpty.
 Qed.
