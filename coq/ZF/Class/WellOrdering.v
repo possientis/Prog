@@ -11,11 +11,10 @@ Require Import ZF.Set.OrdPair.
 (* R is a well-ordering on A iff it is founded on A and total on A.             *)
 Definition WellOrdering (R A:Class) : Prop :=  Founded R A /\ Total R A.
 
-(* If R well-orders A the minimal element of a non-empty subset of A is unique. *)
+(* If R well-orders A the minimal element of a subset of A is unique.           *)
 Proposition WellOrderingHasUniqueMinimal : forall (R A:Class) (a x y:U),
   WellOrdering R A        ->
   toClass a :<=: A        ->
-  a <> :0:                ->
   Minimal R (toClass a) x ->
   Minimal R (toClass a) y ->
   x = y.
@@ -30,13 +29,10 @@ Proof.
   (* We assume that a is a subset of A. *)
   intros H2. assert (toClass a :<=: A) as X. apply H2. clear X.
 
-  (* We assume that a is not empty. *)
-  intros H3. assert (a <> :0:) as X. apply H3. clear X.
-
   (* We assume that x is R-minimal in a. *)
   intros H4. assert (Minimal R (toClass a) x) as X. apply H4. clear X.
 
-  (* Amd we assume that y is R-minimal in a. *)
+  (* And we assume that y is R-minimal in a. *)
   intros H5. assert (Minimal R (toClass a) y) as X. apply H5. clear X.
 
   (* We need to show that x = y. *)
@@ -66,4 +62,19 @@ Proof.
 
   (* We then consider the case x R y. *)
   - assert (R :(x,y):) as X. apply H6. clear X.
-Admitted.
+
+  (* This contradicts the minimality of y. *)
+    assert (~R :(x,y):) as H9. {
+      apply (MinimalHasNoLesser _ (toClass a)). 2: assumption.
+      apply (MinimalIn R). assumption.
+    } contradiction.
+
+  (* We finally consider the case y R x. *)
+  - assert (R :(y,x):) as X. apply H6. clear X.
+
+  (* This contradicts the minimality of x. *)
+    assert (~R :(y,x):) as H9. {
+      apply (MinimalHasNoLesser _ (toClass a)). 2: assumption.
+      apply (MinimalIn R). assumption.
+    } contradiction.
+Qed.

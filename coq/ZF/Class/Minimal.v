@@ -22,3 +22,15 @@ Proof.
   intros R A a [H1 _]. assumption.
 Qed.
 
+Proposition MinimalInitSegment : forall (R A:Class) (a:U),
+  Minimal R A a -> initSegment R A a :~: :0:.
+Proof.
+  intros R A a [_ H1]. assumption.
+Qed.
+
+Proposition MinimalHasNoLesser : forall (R A:Class) (a x:U),
+  A x -> Minimal R A a -> ~ R :(x,a):.
+Proof.
+  intros R A a x H1 H2. apply (InitSegmentWhenEmpty1 R A). 1: assumption.
+  apply MinimalInitSegment. assumption.
+Qed.

@@ -35,8 +35,8 @@ Proof.
 Qed.
 
 Proposition InitSegmentWhenEmpty1 : forall (R A:Class) (a x:U),
-  initSegment R A a :~: :0: -> A x -> ~ R :(x,a):.
+  A x -> initSegment R A a :~: :0: -> ~ R :(x,a):.
 Proof.
   intros R A a x H1 H2.
-  assert (H3 := proj1 (InitSegmentWhenEmpty R A a) H1 x H2). assumption.
+  assert (H3 := proj1 (InitSegmentWhenEmpty R A a) H2 x H1). assumption.
 Qed.
