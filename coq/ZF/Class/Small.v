@@ -1,4 +1,5 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Incl.
 Require Import ZF.Set.
 
 (* Predicate on classes, stating that a class is actually a set.                *)

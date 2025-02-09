@@ -30,6 +30,7 @@ Proof.
   intros P Q. apply Binary.Image.ImageIsSmall.
 Qed.
 
+(* The direct image is compatible with equivalences.                            *)
 Proposition ImageEquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P:[R]: :~: Q:[S]:.
 Proof.
@@ -42,6 +43,7 @@ Proof.
   - apply H1. assumption.
 Qed.
 
+(* The direct image is left-compatible with equivalences.                       *)
 Proposition ImageEquivCompatL : forall (P Q R:Class),
   P :~: Q -> P:[R]: :~: Q:[R]:.
 Proof.
@@ -50,6 +52,7 @@ Proof.
   - apply ClassEquivRefl.
 Qed.
 
+(* The direct image is right-compatible with equivalences.                      *)
 Proposition ImageEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R:[P]: :~: R:[Q]:.
 Proof.
@@ -58,6 +61,7 @@ Proof.
   - assumption.
 Qed.
 
+(* The direct image is compatible with inclusion.                               *)
 Proposition ImageInclCompat : forall (P Q R S:Class),
   P :<=: Q -> R :<=: S -> P:[R]: :<=: Q:[S]:.
 Proof.
@@ -67,6 +71,7 @@ Proof.
   - apply H1. assumption.
 Qed.
 
+(* The direct image is left-compatible with inclusion.                          *)
 Proposition ImageInclCompatL : forall (P Q R:Class),
   P :<=: Q -> P:[R]: :<=: Q:[R]:.
 Proof.
@@ -75,6 +80,7 @@ Proof.
   - apply InclRefl.
 Qed.
 
+(* The direct image is right-compatible with inclusion.                         *)
 Proposition ImageInclCompatR : forall (P Q R:Class),
   P :<=: Q -> R:[P]: :<=: R:[Q]:.
 Proof.

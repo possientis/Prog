@@ -57,6 +57,14 @@ Proof.
   apply ToBinaryEquivCompat. assumption.
 Qed.
 
+Proposition ConverseInclCompat : forall (F G:Class),
+  F :<=: G -> F^:-1: :<=: G^:-1:.
+Proof.
+  intros F G H1 x H2. apply ConverseCharac in H2.
+  destruct H2 as [y [z [H2 H3]]]. subst. apply ConverseCharac.
+  exists y. exists z. split. 1: reflexivity. apply H1. assumption.
+Qed.
+
 (* The converse is the direct image by Switch.                                  *)
 Lemma ConverseIsImageBySwitch : forall (F:Class),
  F^:-1: :~: Switch :[F]:.

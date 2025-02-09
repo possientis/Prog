@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.And.
 Require Import ZF.Set.
@@ -45,12 +46,50 @@ Proof.
   - assumption.
 Qed.
 
+Proposition InterInclCompat : forall (P Q R S:Class),
+  P :<=: Q -> R :<=: S -> P :/\: R :<=: Q :/\: S.
+Proof.
+  intros P Q R S H1 H2 x H3.
+  apply (proj1 (InterCharac _ _ _)) in H3; destruct H3 as [H3 H4];
+  apply InterCharac; split.
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.
+
+Proposition InterInclCompatL : forall (P Q R:Class),
+  P :<=: Q -> P :/\: R :<=: Q :/\: R.
+Proof.
+  intros P Q R H1. apply InterInclCompat.
+  - assumption.
+  - apply InclRefl.
+Qed.
+
+Proposition InterInclCompatR : forall (P Q R:Class),
+  P :<=: Q -> R :/\: P :<=: R :/\: Q.
+Proof.
+  intros P Q R H1. apply InterInclCompat.
+  - apply InclRefl.
+  - assumption.
+Qed.
+
 Proposition InterComm : forall (P Q:Class),
   P :/\: Q :~: Q :/\: P.
 Proof.
   intros P Q x. split; intros H1;
   apply (proj1 (InterCharac _ _ _)) in H1; destruct H1 as [H1 H2];
   apply InterCharac; split; assumption.
+Qed.
+
+Proposition InterInclL : forall (P Q:Class),
+  P :/\: Q :<=: P.
+Proof.
+  intros P Q x H1. apply (proj1 (InterCharac _ _ _)) in H1. apply H1.
+Qed.
+
+Proposition InterInclR : forall (P Q:Class),
+  P :/\: Q :<=: Q.
+Proof.
+  intros P Q x H1. apply (proj1 (InterCharac _ _ _)) in H1. apply H1.
 Qed.
 
 Proposition InterIsSmallL : forall (P Q:Class),
@@ -95,3 +134,4 @@ Proof.
   - apply InterComm.
   - apply InterIsSmallL. assumption.
 Qed.
+

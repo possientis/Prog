@@ -17,6 +17,14 @@ Require Import ZF.Set.Tuple.
 Definition Founded (R A:Class) : Prop :=
   forall a, toClass a :<=: A /\ a <> :0: -> exists x, Minimal R (toClass a) x.
 
+(* If R is founded on A superclass of B, then it is founded on B.               *)
+Proposition FoundedIncl : forall (R A B:Class),
+  Founded R A -> B :<=: A -> Founded R B.
+Proof.
+  intros R A B H1 H2 a [H3 H4]. apply H1. split. 2: assumption.
+  apply InclTran with B; assumption.
+Qed.
+
 Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->
   forall a, A a -> ~ R :(a,a):.
 Proof.
@@ -84,3 +92,4 @@ Proof.
   - apply (InitSegmentWhenEmpty1 _ _ _ a2) in H11. 1: contradiction. apply Tuple4In2.
   - apply (InitSegmentWhenEmpty1 _ _ _ a3) in H11. 1: contradiction. apply Tuple4In3.
 Qed.
+

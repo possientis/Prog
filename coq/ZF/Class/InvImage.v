@@ -1,13 +1,14 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Image.
+Require Import ZF.Class.Incl.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 Export ZF.Core.Image.
 Export ZF.Core.Inverse.
 
 (* Inverse image of P by F is the direct image of P by F^(-1).                  *)
-Proposition InvImageCharac : forall (F:Class) (P:Class) (x:U),
+Proposition InvImageCharac : forall (F P:Class) (x:U),
   F^:-1: :[P]: x <-> exists y, P y /\ F :(x,y):.
 Proof.
   intros F P x. split; intros H1.
@@ -20,7 +21,7 @@ Proof.
 Qed.
 
 (* The inverse image is compatible with equivalences.                           *)
-Proposition InvImageEquivCompat : forall (F G:Class) (P Q:Class),
+Proposition InvImageEquivCompat : forall (F G P Q:Class),
   F :~: G -> P :~: Q -> F^:-1: :[P]: :~: G^:-1: :[Q]:.
 Proof.
   intros F G P Q H1 H2. apply ImageEquivCompat. 2: assumption.
@@ -28,7 +29,7 @@ Proof.
 Qed.
 
 (* The inverse image is left-compatible with equivalences.                      *)
-Proposition InvImageEquivCompatL : forall (F G:Class) (P:Class),
+Proposition InvImageEquivCompatL : forall (F G P:Class),
   F :~: G -> F^:-1: :[P]: :~: G^:-1: :[P]:.
 Proof.
   intros F G P H1. apply InvImageEquivCompat.
@@ -37,10 +38,36 @@ Proof.
 Qed.
 
 (* The inverse image is right-compatible with equivalences.                     *)
-Proposition ImageEquivCompatR : forall (F:Class) (P Q:Class),
+Proposition InvImageEquivCompatR : forall (F P Q:Class),
   P :~: Q -> F^:-1: :[P]: :~: F^:-1: :[Q]:.
 Proof.
   intros F P Q H1. apply InvImageEquivCompat.
   - apply ClassEquivRefl.
+  - assumption.
+Qed.
+
+(* The inverse image is compatible with inclusion.                              *)
+Proposition InvImageInclCompat : forall (F G P Q:Class),
+  F :<=: G -> P :<=: Q -> F^:-1: :[P]: :<=: G^:-1: :[Q]:.
+Proof.
+  intros F G P Q H1 H2. apply ImageInclCompat. 2: assumption.
+  apply ConverseInclCompat. assumption.
+Qed.
+
+(* The inverse image is left-compatible with inclusion.                         *)
+Proposition InvImageInclCompatL : forall (F G P:Class),
+  F :<=: G -> F^:-1: :[P]: :<=: G^:-1: :[P]:.
+Proof.
+  intros F G P H1. apply InvImageInclCompat.
+  - assumption.
+  - apply InclRefl.
+Qed.
+
+(* The inverse image is right-compatible with inclusion.                        *)
+Proposition InvImageInclCompatR : forall (F P Q:Class),
+  P :<=: Q -> F^:-1: :[P]: :<=: F^:-1: :[Q]:.
+Proof.
+  intros F P Q H1. apply InvImageInclCompat.
+  - apply InclRefl.
   - assumption.
 Qed.

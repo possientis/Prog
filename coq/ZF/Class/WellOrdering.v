@@ -17,6 +17,14 @@ Require Import ZF.Set.Tuple.
 (* R is a well-ordering on A iff it is founded on A and total on A.             *)
 Definition WellOrdering (R A:Class) : Prop :=  Founded R A /\ Total R A.
 
+Proposition WellOrderingIncl : forall (R A B:Class),
+  WellOrdering R A -> B :<=: A -> WellOrdering R B.
+Proof.
+  intros R A B [H1 H2] H3. split.
+  - apply FoundedIncl with A; assumption.
+  - apply TotalIncl with A; assumption.
+Qed.
+
 Proposition WellOrderingIsIrreflexive : forall (R A:Class),
   WellOrdering R A -> Irreflexive R A.
 Proof.
@@ -74,6 +82,19 @@ Proof.
   intros R A H1. split.
   - apply WellOrderingIsStrictOrd. assumption.
   - apply H1.
+Qed.
+
+Proposition WellOrderingWhenLess : forall (R A:Class) (x y:U),
+  A x                ->
+  A y                ->
+  WellOrdering R A   ->
+  R :(x,y):         <->
+  ~ (x = y \/ R :(y,x): ).
+Proof.
+  intros R A x y H1 H2 H3. apply StrictTotalOrdWhenLess with A.
+  - assumption.
+  - assumption.
+  - apply WellOrderingIsStrictTotalOrd. assumption.
 Qed.
 
 (* If R well-orders A the minimal element of a subset of A is unique.           *)
@@ -143,3 +164,4 @@ Proof.
       apply (MinimalIn R). assumption.
     } contradiction.
 Qed.
+

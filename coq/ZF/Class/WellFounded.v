@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
@@ -17,6 +18,33 @@ Require Import ZF.Set.Singleton.
 (* founded on A iff it is founded on A and all initial segments are small.      *)
 Definition WellFounded (R A:Class) : Prop :=
   Founded R A /\ forall (a:U), A a -> Small (initSegment R A a).
+
+(* If R is founded on a small class A, then it is well-founded on A.            *)
+Proposition FoundedOnSmallIsWellFounded : forall (R A:Class),
+  Founded R A -> Small A -> WellFounded R A.
+Proof.
+  intros R A H1 H2. split. 1: assumption. intros a H3.
+  apply LesserThanSmallIsSmall with A. 2: assumption. apply InitSegmentIncl.
+Qed.
+
+(* If R is founded on a set a, then it is well-founded on a.                    *)
+Proposition FoundedOnSetIsWellFounded : forall (R:Class) (a:U),
+  Founded R (toClass a) -> WellFounded R (toClass a).
+Proof.
+  intros R a H1. apply FoundedOnSmallIsWellFounded. 1: assumption.
+  apply SetIsSmall.
+Qed.
+
+(* If R is well-founded on A superclass of B, then it is well-founded on B.     *)
+Proposition WellFoundedIncl : forall (R A B:Class),
+  WellFounded R A -> B :<=: A -> WellFounded R B.
+Proof.
+  intros R A B [H1 H2] H3. split.
+  - apply FoundedIncl with A; assumption.
+  - intros a H4. apply LesserThanSmallIsSmall with (initSegment R A a).
+    + apply InitSegmentInclCompatR. assumption.
+    + apply H2, H3. assumption.
+Qed.
 
 (* R can be founded for A, but not well-founded for A.                          *)
 Proposition FoundedButNotWellFounded : exists (R A:Class),
@@ -148,3 +176,4 @@ Proof.
     (* Which is a consequence of our well-foundedness assumption.               *)
     apply H1; assumption.
 Qed.
+
