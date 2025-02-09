@@ -49,14 +49,14 @@ Proof.
 Qed.
 
 (* A pair is never equal to the empty set.                                      *)
-Proposition PairNotEmpty : forall (a b:U), :{a,b}: <> :0:.
+Proposition PairIsNotEmpty : forall (a b:U), :{a,b}: <> :0:.
 Proof.
   intros a b H1. assert (a :< :0:) as H2. { rewrite <- H1. apply PairInL. }
   apply EmptyCharac in H2. contradiction.
 Qed.
 
 (* The empty set is not an ordered pair                                         *)
-Proposition OrdPairNotEmpty : forall (x y:U), :(x,y): <> :0:.
+Proposition OrdPairIsNotEmpty : forall (x y:U), :(x,y): <> :0:.
 Proof.
   intros x y H1. apply DoubleInclusion in H1. destruct H1 as [H1 _].
   apply EmptySetEmpty with :{x}:. apply H1, PairInL.
@@ -64,5 +64,5 @@ Qed.
 
 Proposition SingletonIsNotEmpty : forall a, :{a}: <> :0:.
 Proof.
-  intros a. apply PairNotEmpty.
+  intros a. apply PairIsNotEmpty.
 Qed.

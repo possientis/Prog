@@ -1,15 +1,80 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Irreflexive.
 Require Import ZF.Class.Minimal.
+Require Import ZF.Class.StrictOrd.
+Require Import ZF.Class.StrictTotalOrd.
 Require Import ZF.Class.Total.
+Require Import ZF.Class.Transitive.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Tuple.
 
 (* Predicate expressing the fact that R is a well-ordering class on A.          *)
 (* R is a well-ordering on A iff it is founded on A and total on A.             *)
 Definition WellOrdering (R A:Class) : Prop :=  Founded R A /\ Total R A.
+
+Proposition WellOrderingIsIrreflexive : forall (R A:Class),
+  WellOrdering R A -> Irreflexive R A.
+Proof.
+  intros R A [H1 H2] a H3.
+  assert (exists x, Minimal R (toClass :{a}:) x) as H4. {
+    apply H1. split.
+    - apply SingleToClassIncl. assumption.
+    - apply SingletonIsNotEmpty.
+  } destruct H4 as [x H4]. assert (H5 := H4). apply MinimalIn in H5.
+  apply SingleCharac in H5. subst.
+  apply MinimalHasNoLesser with (toClass :{a}:). 2: assumption. apply SingleIn.
+Qed.
+
+Proposition WellOrderingIsTransitive : forall (R A:Class),
+  WellOrdering R A -> Transitive R A.
+Proof.
+  intros R A [H1 H2] x y z H3 H4 H5 H6 H7.
+  specialize (H2 x z H3 H5). destruct H2 as [H2|[H2|H2]].
+  - subst. exfalso. assert (R :(y,z): /\ R :(z,y):) as H8. { split; assumption. }
+    revert H8. apply (FoundedNoLoop2 R A H1 y z); assumption.
+  - assumption.
+  - exfalso. assert (exists u, Minimal R (toClass :{x,y,z}:) u) as H8. {
+      apply H1. split.
+      - apply Tuple3ToClassIncl. split. 1: assumption. split; assumption.
+      - apply Tuple3IsNotEmpty.
+    } destruct H8 as [u H8]. assert (H9 := H8). apply MinimalIn in H9.
+    apply Tuple3Charac in H9. destruct H9 as [H9|[H9|H9]]; subst.
+    + assert (~R :(z,x):) as H9. {
+        apply MinimalHasNoLesser with (toClass :{x,y,z}:).
+        2: assumption. apply Tuple3In3.
+      } contradiction.
+
+    + assert (~R :(x,y):) as H9. {
+        apply MinimalHasNoLesser with (toClass :{x,y,z}:).
+        2: assumption. apply Tuple3In1.
+      } contradiction.
+
+    + assert (~R :(y,z):) as H9. {
+        apply MinimalHasNoLesser with (toClass :{x,y,z}:).
+        2: assumption. apply Tuple3In2.
+      } contradiction.
+Qed.
+
+Proposition WellOrderingIsStrictOrd : forall (R A:Class),
+  WellOrdering R A -> StrictOrd R A.
+Proof.
+  intros R A H1. split.
+  - apply WellOrderingIsIrreflexive. assumption.
+  - apply WellOrderingIsTransitive. assumption.
+Qed.
+
+Proposition WellOrderingIsStrictTotalOrd :  forall (R A:Class),
+  WellOrdering R A -> StrictTotalOrd R A.
+Proof.
+  intros R A H1. split.
+  - apply WellOrderingIsStrictOrd. assumption.
+  - apply H1.
+Qed.
 
 (* If R well-orders A the minimal element of a subset of A is unique.           *)
 Proposition WellOrderingHasUniqueMinimal : forall (R A:Class) (a x y:U),

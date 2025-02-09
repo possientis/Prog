@@ -53,7 +53,7 @@ Proof.
   remember :{a,b}: as c eqn:Hc.
 
   (* Then c is an non-empty set. *)
-  assert (~ c = :0:) as H1. { rewrite Hc. apply PairNotEmpty. }
+  assert (~ c = :0:) as H1. { rewrite Hc. apply PairIsNotEmpty. }
 
   (* From the foundation axiom, c has an element x such that x /\ c = 0 *)
   remember (Foundation c H1) as H2 eqn:A. clear A. destruct H2 as [x [H2 H3]].
@@ -96,7 +96,7 @@ Proof.
   remember :{a1,a2,a3}: as a eqn:Ha.
 
   (* Then a is an non-empty set. *)
-  assert (~ a = :0:) as H1. { rewrite Ha. apply Tuple3NotEmpty. }
+  assert (~ a = :0:) as H1. { rewrite Ha. apply Tuple3IsNotEmpty. }
 
   (* From the foundation axiom, a has an element x such that x /\ a = 0 *)
   remember (Foundation a H1) as H2 eqn:A. clear A. destruct H2 as [x [H2 H3]].
@@ -149,7 +149,7 @@ Proof.
   remember :{a1,a2,a3,a4}: as a eqn:Ha.
 
   (* Then a is an non-empty set. *)
-  assert (~ a = :0:) as H1. { rewrite Ha. apply Tuple4NotEmpty. }
+  assert (~ a = :0:) as H1. { rewrite Ha. apply Tuple4IsNotEmpty. }
 
   (* From the foundation axiom, a has an element x such that x /\ a = 0 *)
   remember (Foundation a H1) as H2 eqn:A. clear A. destruct H2 as [x [H2 H3]].

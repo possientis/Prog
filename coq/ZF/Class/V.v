@@ -68,6 +68,6 @@ Proof.
   - intros x H1. apply I.
   - exists :0:. split.
     + apply I.
-    + intros [x [y [H1 _]]]. apply (OrdPairNotEmpty x y).
+    + intros [x [y [H1 _]]]. apply (OrdPairIsNotEmpty x y).
       symmetry. assumption.
 Qed.

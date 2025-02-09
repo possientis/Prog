@@ -37,7 +37,7 @@ Proof.
   assert (exists x, Minimal R (toClass :{a,b}:) x) as H6. {
     apply H1. split.
     - apply PairToClassIncl. split; assumption.
-    - apply PairNotEmpty.
+    - apply PairIsNotEmpty.
   } destruct H6 as [x [H6 H7]].
   apply PairCharac in H6. destruct H6 as [H6|H6]; subst.
   - apply (InitSegmentWhenEmpty1 _ _ _ b) in H7. 1: contradiction. apply PairInR.
@@ -54,7 +54,7 @@ Proof.
   assert (exists x, Minimal R (toClass :{a1,a2,a3}:) x) as H8. {
   apply H1. split.
   - apply Tuple3ToClassIncl. split. 1: assumption. split; assumption.
-  - apply Tuple3NotEmpty.
+  - apply Tuple3IsNotEmpty.
   } destruct H8 as [x [H8 H9]].
   apply Tuple3Charac in H8. destruct H8 as [H8|[H8|H8]]; subst.
   - apply (InitSegmentWhenEmpty1 _ _ _ a3) in H9. 1: contradiction. apply Tuple3In3.
@@ -76,7 +76,7 @@ Proof.
     split. 1: assumption.
     split. 1: assumption.
     split; assumption.
-  - apply Tuple4NotEmpty.
+  - apply Tuple4IsNotEmpty.
   } destruct H10 as [x [H10 H11]].
   apply Tuple4Charac in H10. destruct H10 as [H10|[H10|[H10|H10]]]; subst.
   - apply (InitSegmentWhenEmpty1 _ _ _ a4) in H11. 1: contradiction. apply Tuple4In4.
