@@ -70,6 +70,7 @@ CLASS_OBJ = \
 	${CLASS}/Functional.vo \
 	${CLASS}/FunctionalAt.vo \
 	${CLASS}/FunctionOn.vo \
+	${CLASS}/I.vo \
 	${CLASS}/Image.vo \
 	${CLASS}/Incl.vo \
 	${CLASS}/InitSegment.vo \
@@ -77,6 +78,7 @@ CLASS_OBJ = \
 	${CLASS}/Inter.vo \
 	${CLASS}/InvImage.vo \
 	${CLASS}/Irreflexive.vo \
+	${CLASS}/Isom.vo \
 	${CLASS}/Minimal.vo \
 	${CLASS}/OneToOne.vo \
 	${CLASS}/Onto.vo \
