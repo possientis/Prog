@@ -26,11 +26,16 @@ Proof.
   intros P Q. apply InterIsSmallL.
 Qed.
 
-Proposition DiffEmpty : forall (P Q:Class),
-  P :\: Q  :~: :0: -> P :<=: Q.
+Proposition DiffWhenEmpty : forall (P Q:Class),
+  P :\: Q  :~: :0: <-> P :<=: Q.
 Proof.
-  intros P Q H1 x H2. apply DoubleNegation. intros H3.
-  apply (proj1 (EmptyCharac x)), H1, DiffCharac. split; assumption.
+  intros P Q. split; intros H1.
+  - intros x H2. apply DoubleNegation. intros H3.
+    apply (proj1 (EmptyCharac x)), H1, DiffCharac. split; assumption.
+  - intros x. split; intros H2.
+    + apply (proj1 (DiffCharac _ _ _)) in H2. destruct H2 as [H2 H3].
+      apply H1 in H2. contradiction.
+    + apply EmptyCharac in H2. contradiction.
 Qed.
 
 Proposition DiffUnionInter : forall (P Q R:Class),
@@ -54,3 +59,4 @@ Proof.
     + intros H4. apply (proj1 (Union2Charac _ _ _)) in H4.
       destruct H4 as [H4|H4]; contradiction.
 Qed.
+
