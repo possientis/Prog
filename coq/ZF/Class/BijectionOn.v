@@ -5,6 +5,7 @@ Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
+Require Import ZF.Class.Restrict.
 Require Import ZF.Class.Small.
 
 (* F is a bijection defined on A.                                               *)
@@ -39,3 +40,11 @@ Proof.
   - apply ConverseIsBijection. assumption.
   - apply ClassEquivTran with (range F). 2: assumption. apply ConverseDomain.
 Qed.
+
+Proposition BijectionOnIsRestrict : forall (F A:Class),
+  BijectionOn F A -> F :~: F:|:A.
+Proof.
+  intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
+Qed.
+
+

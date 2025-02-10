@@ -1,6 +1,5 @@
 Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
-Require Import ZF.Class.BijectionOn.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
@@ -205,12 +204,6 @@ Proof.
   - apply RestrictEquivCompatR. assumption.
 Qed.
 
-Proposition BijectionOnIsRestrict : forall (F A:Class),
-  BijectionOn F A -> F :~: F:|:A.
-Proof.
-  intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
-Qed.
-
 Proposition RestrictTowerProperty : forall (F A B:Class),
   A :<=: B -> (F:|:B) :|: A :~: F:|:A.
 Proof.
@@ -238,4 +231,3 @@ Proof.
   apply SmallEquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
   apply ImageIsSmall; assumption.
 Qed.
-
