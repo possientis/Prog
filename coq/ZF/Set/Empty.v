@@ -69,3 +69,25 @@ Proposition SingletonIsNotEmpty : forall (a:U), :{a}: <> :0:.
 Proof.
   intros a. apply PairIsNotEmpty.
 Qed.
+
+Proposition ToClassOfEmptySet : toClass :0: :~: :0:.
+Proof.
+  intros x. split; intros H1.
+  - apply EmptyCharac in H1. contradiction.
+  - apply Class.Empty.EmptyCharac in H1. contradiction.
+Qed.
+
+Proposition ToClassWhenEmpty : forall (a:U),
+  toClass a :~: :0: <-> a = :0:.
+Proof.
+  intros a. split; intros H1.
+  - apply ClassEquivSetEqual. apply ClassEquivTran with :0:. 1: assumption.
+    apply ClassEquivSym, ToClassOfEmptySet.
+  - rewrite H1. apply ToClassOfEmptySet.
+Qed.
+
+Proposition ToClassWhenNotEmpty : forall (a:U),
+  ~ toClass a :~: :0: <-> a <> :0:.
+Proof.
+  intros a. split; intros H1 H2; apply H1, ToClassWhenEmpty; assumption.
+Qed.

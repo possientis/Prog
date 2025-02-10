@@ -5,10 +5,13 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Minimal.
 Require Import ZF.Class.Small.
+Require Import ZF.Class.Transitive.
 Require Import ZF.Class.WellFounded.
 Require Import ZF.Class.WellOrdering.
 Require Import ZF.Set.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.OrdPair.
 
 (* Predicate expressing the fact that R is a well-founded well-ordering on A.   *)
 Definition WellFoundedWellOrd (R A:Class) : Prop :=
@@ -44,7 +47,7 @@ Proof.
   assert (exists x, Minimal R B x) as X. 2: apply X.
 
   (* Being non-empty, B has an element, *)
-  apply NotEmptyHasElement in H4.
+  apply Class.Empty.NotEmptyHasElement in H4.
 
   (* Let b be such an element of B. *)
   destruct H4 as [b H4]. assert (B b) as X. apply H4. clear X.
@@ -78,7 +81,9 @@ Proof.
   - assert (~ C :~: :0:) as X. apply H5. clear X.
 
   (* R being well-founded on A, it is well-founded on B. *)
-    assert (WellFounded R B) as H6. { apply WellFoundedIncl with A; assumption. }
+    assert (WellFounded R B) as H6. {
+      apply WellFoundedIncl with A; assumption.
+    }
 
   (* And furthermore C is a small class. *)
     assert (Small C) as H7. { rewrite EC. apply H6. assumption. }
@@ -90,5 +95,66 @@ Proof.
     assert (toClass c :~: C) as H8. { rewrite Ec. apply ToFromClass. }
 
   (* Furthermore, the set c is not empty. *)
-    assert (c <> :0:) as H9. { Admitted.
+    assert (c <> :0:) as H9. {
+      intros H9. apply H5. apply ClassEquivTran with (toClass c).
+      - apply ClassEquivSym. assumption.
+      - apply ToClassWhenEmpty. assumption.
+    }
 
+  (* So c is a non-empty subset of the class B. *)
+    assert (toClass c :<=: B) as H10. {
+      apply InclEquivCompatL with C.
+      - apply ClassEquivSym. assumption.
+      - rewrite EC. apply InitSegmentIncl.
+   }
+
+  (* R being well-founded on B, it follows that c has an R-minimal element. *)
+    assert (exists x, Minimal R (toClass c) x) as H11. {
+      apply H6. split; assumption.
+    }
+
+  (* So let x be such an R-minimal element in c. *)
+    destruct H11 as [x H11].
+    assert (Minimal R (toClass c) x) as X. apply H11. clear X.
+
+  (* We claim that x is our desired R-minimal element of B. *)
+    exists x.
+
+  (* So we need to prove that x is an R-minimal element in B. *)
+    assert (Minimal R B x) as X. 2: apply X. apply MinimalSuffice.
+
+  (* We first need to show that x lies in B. *)
+    + assert (B x) as X. 2: apply X.
+      apply H10. apply MinimalIn with R. assumption.
+
+  (* And furthermore than no y in B is 'less' than x. *)
+    + assert (forall y, B y -> ~ R :(y,x):) as X. 2: apply X.
+
+  (* So let y be an element of B. *)
+      intros y H12. assert (B y) as X. apply H12. clear X.
+
+  (* We need to show that y is not 'less' than x. *)
+      assert (~ R :(y,x):) as X. 2: apply X.
+
+  (* But if y is less than x, by transitivity it is less than b. *)
+      intros H13. assert (R :(y,b):) as H14. {
+        apply WellOrderingIsTransitive in H2. apply H2 with x.
+        - apply H3. assumption.
+        - apply H3, H10, MinimalIn with R. assumption.
+        - apply H3. assumption.
+        - assumption.
+        - apply InitSegmentLess with B.
+          assert (initSegment R B b x) as X. 2: apply X.
+          rewrite <- EC. apply H8, MinimalIn with R. assumption.
+      }
+
+  (* So y is actually part of the initial segment of R in B at b which is C. *)
+      assert (C y) as H15. {
+        rewrite EC. apply InitSegmentCharac. split; assumption.
+      }
+
+  (* This contradicts the R-minimality of x in c. *)
+      assert (~ R :(y,x):) as H16. 2: contradiction.
+      apply MinimalHasNoLesser with (toClass c). 2: assumption.
+      apply H8. assumption.
+Qed.

@@ -52,8 +52,9 @@ Proof.
 Qed.
 
 Proposition ClassEquivSetEqual : forall (a b:U),
-  toClass a :~: toClass b -> a = b.
+  toClass a :~: toClass b <-> a = b.
 Proof.
-  intros a b. apply Extensionality.
+  intros a b. split.
+  - apply Extensionality.
+  - intros H1. subst. apply ClassEquivRefl.
 Qed.
-
