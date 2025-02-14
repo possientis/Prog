@@ -46,5 +46,3 @@ Proposition BijectionOnIsRestrict : forall (F A:Class),
 Proof.
   intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
 Qed.
-
-

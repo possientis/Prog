@@ -231,3 +231,5 @@ Proof.
   apply SmallEquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
   apply ImageIsSmall; assumption.
 Qed.
+
+

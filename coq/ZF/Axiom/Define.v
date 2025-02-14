@@ -6,7 +6,7 @@ Definition Exists (P:U -> Prop) : Prop := exists x, P x.
 (* Predicate over classes: a class has no more than one element.                *)
 Definition Unique (P:U -> Prop) : Prop := forall a b, P a -> P b -> a = b.
 
-(* When a class has a unique element, we can define such a an element.          *)
+(* When a class has a unique element, we can define such an element.            *)
 Axiom define : forall (P:U -> Prop), Exists P -> Unique P -> U.
 
 (* The set defined by a class with a unique element belongs to the class.       *)

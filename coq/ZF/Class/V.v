@@ -1,5 +1,6 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Russell.
@@ -70,4 +71,24 @@ Proof.
     + apply I.
     + intros [x [y [H1 _]]]. apply (OrdPairIsNotEmpty x y).
       symmetry. assumption.
+Qed.
+
+Proposition InterVL : forall (P:Class),
+  V :/\: P :~: P.
+Proof.
+  intros P x. split; intros H1.
+  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [_ H1]. assumption.
+  - apply InterCharac. split.
+    + apply I.
+    + assumption.
+Qed.
+
+Proposition InterVR : forall (P:Class),
+  P :/\: V :~: P.
+Proof.
+  intros P x. split; intros H1.
+  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [H1 _]. assumption.
+  - apply InterCharac. split.
+    + assumption.
+    + apply I.
 Qed.
