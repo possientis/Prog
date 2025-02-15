@@ -71,6 +71,7 @@ CLASS_OBJ = \
 	${CLASS}/FunctionalAt.vo \
 	${CLASS}/FunctionOn.vo \
 	${CLASS}/I.vo \
+	${CLASS}/IA.vo \
 	${CLASS}/Image.vo \
 	${CLASS}/Incl.vo \
 	${CLASS}/InitSegment.vo \
