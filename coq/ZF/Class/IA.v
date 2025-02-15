@@ -4,23 +4,56 @@ Require Import ZF.Class.Bijection.
 Require Import ZF.Class.BijectionOn.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
+Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.I.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Isom.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
+Require Import ZF.Class.Relation.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Class.V.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Eval.
 
+(* I|A is the restriction of the identity class I to the class A.               *)
+Proposition IACharac : forall (A:Class) (x:U),
+  (I:|:A) x <-> exists y, A y /\ x = :(y,y):.
+Proof.
+  intros A x. split; intros H1.
+  - apply (proj1 (RestrictCharac _ _ _)) in H1.
+    destruct H1 as [y [z [H1 [H2 H3]]]]. apply ICharac2 in H3. subst.
+    exists z. split. 1: assumption. reflexivity.
+  - destruct H1 as [y [H1 H2]]. apply RestrictCharac. exists y. exists y.
+    split. 1: assumption. split. 1: assumption. apply ICharac2. reflexivity.
+Qed.
+
+Proposition IACharac2 : forall (A:Class) (y z:U),
+  (I:|:A) :(y,z): <-> A y /\ y = z.
+Proof.
+  intros A y z. split; intros H1.
+  - apply RestrictCharac2 in H1. destruct H1 as [H1 H2].
+    apply ICharac2 in H2. subst. split. 1: assumption. reflexivity.
+  - destruct H1 as [H1 H2]. subst. apply RestrictCharac2.
+    split. 1: assumption. apply ICharac2. reflexivity.
+Qed.
+
 (* I|A is a functional class.                                                   *)
-Proposition FunctionalIA : forall (A:Class), Functional (I:|:A).
+Proposition IAIsFunctional : forall (A:Class), Functional (I:|:A).
 Proof.
   intros A. apply RestrictIsFunctional, IIsFunctional.
 Qed.
+
+Proposition IAIsRelation : forall (A:Class), Relation (I:|:A).
+Proof.
+  intros A. apply RestrictIsRelation.
+Qed.
+
+Proposition IAIsFunction : forall (A:Class), Function (I:|:A).
+Proof.
+Admitted.
 
 (* The converse of I|A is I|A itself.                                           *)
 Proposition ConverseIA : forall (A:Class),
@@ -41,10 +74,10 @@ Qed.
 Proposition OneToOneIA : forall (A:Class), OneToOne (I:|:A).
 Proof.
   intros A. apply OneToOneCharac. split.
-  - apply FunctionalIA.
+  - apply IAIsFunctional.
   - apply FunctionalEquivCompat with (I:|:A).
     + apply ClassEquivSym, ConverseIA.
-    + apply FunctionalIA.
+    + apply IAIsFunctional.
 Qed.
 
 (* I|A is a bijection.                                                          *)
@@ -114,3 +147,4 @@ Proof.
     + rewrite H4, H5. assumption.
     + rewrite H4, H5 in H3. assumption.
 Qed.
+
