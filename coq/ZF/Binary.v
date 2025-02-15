@@ -32,11 +32,3 @@ Proof.
   - apply H2, H1, H3.
   - apply H1, H2, H3.
 Qed.
-
-Proposition BinaryEquivCharac : forall (F G:Binary),
-  F :~: G <-> forall x y, F x y <-> G x y.
-Proof.
-  intros F G. split; intros H1.
-  - apply H1.
-  - unfold equiv, BinaryEquiv, binaryEquiv. apply H1.
-Qed.

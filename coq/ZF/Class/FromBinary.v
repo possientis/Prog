@@ -41,8 +41,7 @@ Qed.
 (* The binary class of the class of a binary class F is F itself.               *)
 Proposition ToFromBinary : forall (F:Binary), toBinary (fromBinary F) :~: F.
 Proof.
-  intros F. apply BinaryEquivCharac. intros y z.
-  unfold toBinary, fromBinary. split; intros H1.
+  intros F y z. unfold toBinary, fromBinary. split; intros H1.
   - destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
   - exists y. exists z. split.
