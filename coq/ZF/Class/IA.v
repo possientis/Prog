@@ -19,7 +19,7 @@ Require Import ZF.Set.Eval.
 (* I|A is a functional class.                                                   *)
 Proposition FunctionalIA : forall (A:Class), Functional (I:|:A).
 Proof.
-  intros A. apply RestrictIsFunctional, FunctionalI.
+  intros A. apply RestrictIsFunctional, IIsFunctional.
 Qed.
 
 (* The converse of I|A is I|A itself.                                           *)
@@ -98,7 +98,7 @@ Proposition EvalIA : forall (A:Class) (x:U),
   A x -> (I:|:A)!x = x.
 Proof.
   intros A x H1. apply eq_trans with I!x.
-  - apply EvalRestrict. 2: assumption. apply FunctionalI.
+  - apply EvalRestrict. 2: assumption. apply IIsFunctional.
   - apply EvalI.
 Qed.
 
