@@ -1,6 +1,7 @@
 Declare Scope ZF_Set_Eval_scope.
 Open    Scope ZF_Set_Eval_scope.
 
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
@@ -11,7 +12,9 @@ Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Rel.
+Require Import ZF.Class.Restrict.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
@@ -273,4 +276,24 @@ Proof.
     apply ConverseCharac2. apply EvalWhenFunctionalSatisfies; assumption.
 Qed.
 
-
+Proposition EvalRestrict : forall (F A:Class) (x:U), Functional F -> A x ->
+  (F:|:A)!x = F!x.
+Proof.
+  intros F A x H1 H2.
+  assert (Functional (F:|:A)) as H3. { apply RestrictIsFunctional. assumption. }
+  assert (domain F x \/ ~ domain F x) as H4. { apply LawExcludedMiddle. }
+  remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
+  - assert (domain (F:|:A) x) as H5. {
+      apply DomainOfRestrict, InterCharac. split; assumption. }
+    apply EvalWhenFunctional.
+    + assumption.
+    + assumption.
+    + apply RestrictCharac2. split. 1: assumption. rewrite E.
+      apply EvalWhenFunctionalSatisfies; assumption.
+  - assert (~ domain (F:|:A) x) as H5. { intros H5.
+      apply (proj1 (DomainCharac _ _)) in H5. destruct H5 as [z H5].
+      apply RestrictCharac2 in H5. destruct H5 as [H5 H6]. apply H4.
+      apply DomainCharac. exists z. assumption. }
+    assert (y = :0:) as H6. { rewrite E. apply EvalWhenNotInDomain. assumption. }
+    rewrite H6. apply EvalWhenNotInDomain. assumption.
+Qed.

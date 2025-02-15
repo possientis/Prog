@@ -27,6 +27,14 @@ Proof.
   - subst. exists z. reflexivity.
 Qed.
 
+(* I is a functional class.                                                     *)
+Proposition FunctionalI : Functional I.
+Proof.
+  apply FunctionalSuffice. intros x y z H1 H2.
+  apply ICharac2 in H1. apply ICharac2 in H2. subst. reflexivity.
+Qed.
+
+(* The domain of I is the class of all sets.                                    *)
 Proposition DomainI : domain I :~: V.
 Proof.
   intros x. split; intros H1.
@@ -34,6 +42,7 @@ Proof.
   - apply DomainCharac. exists x. apply ICharac2. reflexivity.
 Qed.
 
+(* The range of I is the class of all sets.                                     *)
 Proposition RangeI : range I :~: V.
 Proof.
   intros y. split; intros H1.
@@ -41,6 +50,16 @@ Proof.
   - apply RangeCharac. exists y. apply ICharac2. reflexivity.
 Qed.
 
+(* The value of I at x is x.                                                    *)
+Proposition EvalI : forall (x:U), I!x = x.
+Proof.
+  intros x. apply EvalWhenFunctional.
+  - apply FunctionalI.
+  - apply DomainI, Logic.I.
+  - apply ICharac2. reflexivity.
+Qed.
+
+(* The domain of I|A is A.                                                      *)
 Proposition DomainIA : forall (A:Class), domain (I:|:A) :~: A.
 Proof.
   intros A.
@@ -50,6 +69,7 @@ Proof.
   - apply InterVR.
 Qed.
 
+(* The range of I|A is A.                                                       *)
 Proposition RangeIA : forall (A:Class), range (I:|:A) :~: A.
 Proof.
   intros A y. split; intros H1.
@@ -79,12 +99,16 @@ Qed.
 (* I|A is a functional class.                                                   *)
 Proposition FunctionalIA : forall (A:Class), Functional (I:|:A).
 Proof.
-  intros A. apply FunctionalSuffice. intros x y z H1 H2.
-  apply RestrictCharac2 in H1. destruct H1 as [_ [y1 H1]].
-  apply RestrictCharac2 in H2. destruct H2 as [_ [y2 H2]].
-  apply OrdPairEqual in H1. destruct H1 as [H1 H3].
-  apply OrdPairEqual in H2. destruct H2 as [H2 H4].
-  subst. reflexivity.
+  intros A. apply RestrictIsFunctional, FunctionalI.
+Qed.
+
+(* If x lies in A, then the value of I|A at x is x.                             *)
+Proposition EvalIA : forall (A:Class) (x:U),
+  A x -> (I:|:A)!x = x.
+Proof.
+  intros A x H1. apply eq_trans with I!x.
+  - apply EvalRestrict. 2: assumption. apply FunctionalI.
+  - apply EvalI.
 Qed.
 
 (* I|A is a one-to-one class.                                                   *)
@@ -121,12 +145,15 @@ Proof.
   - apply RangeIA.
 Qed.
 
-
 (* I|A is an isomorphism from A to A w.r to R.                                  *)
 Proposition IsomIA : forall (R A:Class), Isom (I:|:A) R R A A.
 Proof.
   intros R A. split.
   - apply BijIA.
   - intros x y H1 H2.
-Admitted.
-
+    assert ((I:|:A)!x = x) as H4. { apply EvalIA. assumption. }
+    assert ((I:|:A)!y = y) as H5. { apply EvalIA. assumption. }
+    split; intros H3.
+    + rewrite H4, H5. assumption.
+    + rewrite H4, H5 in H3. assumption.
+Qed.
