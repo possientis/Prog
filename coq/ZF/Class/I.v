@@ -6,6 +6,7 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Isom.
 Require Import ZF.Class.OneToOne.
@@ -60,7 +61,18 @@ Qed.
 
 Proposition IIsOneToOne : OneToOne I.
 Proof.
-Admitted.
+  apply OneToOneCharac. split.
+  - apply IIsFunctional.
+  - apply FunctionalEquivCompat with I. 2: apply IIsFunctional.
+    apply ClassEquivSym, IConverse.
+Qed.
+
+Proposition IIsBijection : Bijection I.
+Proof.
+  split.
+  - apply IIsRelation.
+  - apply IIsOneToOne.
+Qed.
 
 (* The domain of I is the class of all sets.                                    *)
 Proposition IDomain : domain I :~: V.
@@ -78,6 +90,30 @@ Proof.
   - apply RangeCharac. exists y. apply ICharac2. reflexivity.
 Qed.
 
+(* I is a function defined on the class of all sets.                            *)
+Proposition IIsFunctionOn : FunctionOn I V.
+Proof.
+  split.
+  - apply IIsFunction.
+  - apply IDomain.
+Qed.
+
+(* I is a bijection defined on the class of all sets.                           *)
+Proposition IIsBijectionOn : BijectionOn I V.
+Proof.
+  split.
+  - apply IIsBijection.
+  - apply IDomain.
+Qed.
+
+(* I is a bijection from the class of all sets onto itself.                     *)
+Proposition IIsBij : Bij I V V.
+Proof.
+  split.
+  - apply IIsBijectionOn.
+  - apply IRange.
+Qed.
+
 (* The value of I at x is x.                                                    *)
 Proposition IEval : forall (x:U), I!x = x.
 Proof.
@@ -87,3 +123,12 @@ Proof.
   - apply ICharac2. reflexivity.
 Qed.
 
+(* Given any class R, I is an isomorphism from V to V w.r. to R (and R).        *)
+Proposition IIsIsom : forall (R:Class), Isom I R R V V.
+Proof.
+  intros R. split.
+  - apply IIsBij.
+  - intros x y _ _. split; intros H1.
+    + rewrite (IEval x) , (IEval y). assumption.
+    + rewrite (IEval x) , (IEval y) in H1. assumption.
+Qed.
