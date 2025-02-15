@@ -60,5 +60,5 @@ Qed.
 Proposition ToFromClass : forall (P:Class) (q:Small P),
   toClass (fromClass P q) :~: P.
 Proof.
-  intros P q. apply ClassEquivCharac. unfold toClass. apply FromClassCharac.
+  intros P q x. apply FromClassCharac.
 Qed.

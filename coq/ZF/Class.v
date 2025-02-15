@@ -43,14 +43,6 @@ Proof.
   - apply H1, H2, H3.
 Qed.
 
-Proposition ClassEquivCharac : forall (P Q:Class),
-  P :~: Q <-> forall x, P x <-> Q x.
-Proof.
-  intros P Q. split; intros H1.
-  - apply H1.
-  - unfold equiv, ClassEquiv, classEquiv. apply H1.
-Qed.
-
 Proposition ClassEquivSetEqual : forall (a b:U),
   toClass a :~: toClass b <-> a = b.
 Proof.

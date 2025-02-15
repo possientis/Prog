@@ -54,7 +54,7 @@ Qed.
 Proposition FromToBinary : forall (P:Class),
   Relation P -> fromBinary (toBinary P) :~: P.
 Proof.
-  intros P H1. apply ClassEquivCharac. intros x.
+  intros P H1 x.
   unfold Relation in H1. unfold toBinary, fromBinary.
   split; intros H2.
   - destruct H2 as [y [z [H2 H3]]]. subst. apply H3.
