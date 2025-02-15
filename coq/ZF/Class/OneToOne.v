@@ -13,7 +13,7 @@ Require Import ZF.Set.OrdPair.
 Definition OneToOne (F:Class) : Prop := Binary.OneToOne.OneToOne (toBinary F).
 
 (* A class is one-to-one iff it and its converse are functional.                *)
-Proposition OneToOneIsFunctionalBothWays : forall (F:Class),
+Proposition OneToOneCharac : forall (F:Class),
   OneToOne F <-> Functional F /\ Functional F^:-1:.
 Proof.
   unfold OneToOne, Binary.OneToOne.OneToOne. split; intros [H1 H2].
@@ -31,7 +31,7 @@ Qed.
 Proposition OneToOneCharacL : forall (F:Class), OneToOne F ->
   forall x y z, F :(y,x): -> F :(z,x): -> y = z.
 Proof.
-  intros F H1. apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [_ H1].
+  intros F H1. apply OneToOneCharac in H1. destruct H1 as [_ H1].
   intros x y z H2 H3. apply FunctionalCharac1 with (converse F) x.
   - assumption.
   - apply ConverseCharac2. assumption.
@@ -42,7 +42,7 @@ Qed.
 Proposition OneToOneCharacR : forall (F:Class), OneToOne F ->
   forall x y z, F :(x,y): -> F :(x,z): -> y = z.
 Proof.
-  intros F H1. apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [H1 _].
+  intros F H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
   apply FunctionalCharac1. assumption.
 Qed.
 
@@ -59,8 +59,8 @@ Qed.
 Proposition ConverseIsOneToOne : forall (F:Class),
   OneToOne F -> OneToOne F^:-1:.
 Proof.
-  intros F H1. apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [H1 H2].
-  apply OneToOneIsFunctionalBothWays. split. 1: assumption.
+  intros F H1. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
+  apply OneToOneCharac. split. 1: assumption.
   apply FunctionalInclCompat with F. 2: assumption.
   apply ConverseOfConverseIncl.
 Qed.

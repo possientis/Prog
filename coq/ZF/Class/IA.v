@@ -40,7 +40,7 @@ Qed.
 (* I|A is a one-to-one class.                                                   *)
 Proposition OneToOneIA : forall (A:Class), OneToOne (I:|:A).
 Proof.
-  intros A. apply OneToOneIsFunctionalBothWays. split.
+  intros A. apply OneToOneCharac. split.
   - apply FunctionalIA.
   - apply FunctionalEquivCompat with (I:|:A).
     + apply ClassEquivSym, ConverseIA.
@@ -61,7 +61,7 @@ Proof.
   intros A.
   apply ClassEquivTran with (A :/\: domain I). 1: apply DomainOfRestrict.
   apply ClassEquivTran with (A :/\: V).
-  - apply InterEquivCompatR, DomainI.
+  - apply InterEquivCompatR, IDomain.
   - apply InterVR.
 Qed.
 
@@ -99,7 +99,7 @@ Proposition EvalIA : forall (A:Class) (x:U),
 Proof.
   intros A x H1. apply eq_trans with I!x.
   - apply EvalRestrict. 2: assumption. apply IIsFunctional.
-  - apply EvalI.
+  - apply IEval.
 Qed.
 
 (* I|A is an isomorphism from A to A w.r to R.                                  *)

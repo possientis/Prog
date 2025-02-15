@@ -4,6 +4,7 @@ Require Import ZF.Class.Bijection.
 Require Import ZF.Class.BijectionOn.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
+Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Isom.
@@ -37,10 +38,18 @@ Qed.
 
 Proposition IIsRelation : Relation I.
 Proof.
-Admitted.
+  intros x H1. destruct H1 as [y H1]. exists y. exists y. assumption.
+Qed.
+
+Proposition IIsFunction : Function I.
+Proof.
+  split.
+    - apply IIsRelation.
+    - apply IIsFunctional.
+Qed.
 
 (* The Conerse of I is I itself.                                                *)
-Proposition ConverseOfI : I^:-1: :~: I.
+Proposition IConverse : I^:-1: :~: I.
 Proof.
   intros x. split; intros H1.
   - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
@@ -49,8 +58,12 @@ Proof.
     split. 1: assumption. apply ICharac2. reflexivity.
 Qed.
 
+Proposition IIsOneToOne : OneToOne I.
+Proof.
+Admitted.
+
 (* The domain of I is the class of all sets.                                    *)
-Proposition DomainI : domain I :~: V.
+Proposition IDomain : domain I :~: V.
 Proof.
   intros x. split; intros H1.
   - apply Logic.I.
@@ -58,7 +71,7 @@ Proof.
 Qed.
 
 (* The range of I is the class of all sets.                                     *)
-Proposition RangeI : range I :~: V.
+Proposition IRange : range I :~: V.
 Proof.
   intros y. split; intros H1.
   - apply Logic.I.
@@ -66,11 +79,11 @@ Proof.
 Qed.
 
 (* The value of I at x is x.                                                    *)
-Proposition EvalI : forall (x:U), I!x = x.
+Proposition IEval : forall (x:U), I!x = x.
 Proof.
   intros x. apply EvalWhenFunctional.
   - apply IIsFunctional.
-  - apply DomainI, Logic.I.
+  - apply IDomain, Logic.I.
   - apply ICharac2. reflexivity.
 Qed.
 

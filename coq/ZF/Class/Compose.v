@@ -113,9 +113,9 @@ Proposition ComposeIsOneToOne : forall (F G:Class),
   OneToOne F -> OneToOne G -> OneToOne (G :.: F).
 Proof.
   intros F G H1 H2.
-  apply OneToOneIsFunctionalBothWays in H1. destruct H1 as [H1 H3].
-  apply OneToOneIsFunctionalBothWays in H2. destruct H2 as [H2 H4].
-  apply OneToOneIsFunctionalBothWays. split.
+  apply OneToOneCharac in H1. destruct H1 as [H1 H3].
+  apply OneToOneCharac in H2. destruct H2 as [H2 H4].
+  apply OneToOneCharac. split.
   - apply ComposeIsFunctional; assumption.
   - apply FunctionalEquivCompat with (converse F :.: converse G).
     + apply ClassEquivSym, ComposeConverse.
