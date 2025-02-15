@@ -10,7 +10,7 @@ Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
-Require Import ZF.Class.Rel.
+Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Core.Pipe.
 Require Import ZF.Set.
@@ -78,7 +78,7 @@ Proof.
 Qed.
 
 (* The restriction is always a relation.                                        *)
-Proposition RestrictIsRelation : forall (F A:Class), Rel (F:|:A).
+Proposition RestrictIsRelation : forall (F A:Class), Relation (F:|:A).
 Proof.
   intros F A. apply FromBinaryIsRelation.
 Qed.
@@ -179,7 +179,7 @@ Qed.
 
 (* A class is a relation iff it equals the restriction to its domain.           *)
 Proposition RelationIsRestrict : forall (F:Class),
-  Rel F <-> F :~: F :|: domain F.
+  Relation F <-> F :~: F :|: domain F.
 Proof.
   intros F. split; intros H1.
   - intros x. split; intros H2.

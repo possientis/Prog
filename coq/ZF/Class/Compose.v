@@ -12,7 +12,7 @@ Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
-Require Import ZF.Class.Rel.
+Require Import ZF.Class.Relation.
 Require Import ZF.Core.Dot.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
@@ -54,7 +54,7 @@ Proof.
 Qed.
 
 (* The composition of two classes is a relation.                                *)
-Proposition ComposeIsRelation : forall (F G:Class), Rel (G :.: F).
+Proposition ComposeIsRelation : forall (F G:Class), Relation (G :.: F).
 Proof.
   intros F G u H1. apply ComposeCharac in H1.
   destruct H1 as [x [y [z [H1 [H2 H3]]]]]. exists x. exists z. assumption.

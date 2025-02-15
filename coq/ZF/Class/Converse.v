@@ -9,7 +9,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Range.
-Require Import ZF.Class.Rel.
+Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
 Require Import ZF.Class.V.
@@ -109,7 +109,7 @@ Proof.
 Qed.
 
 (* The converse of a class is always a relation, even if the class is not.      *)
-Proposition ConverseIsRelation : forall (F:Class), Rel F^:-1:.
+Proposition ConverseIsRelation : forall (F:Class), Relation F^:-1:.
 Proof.
   intros F x H1. apply ConverseCharac in H1.
   destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.
@@ -126,7 +126,7 @@ Qed.
 
 (* A class is a relation iff the converse acting on it is idempotent.           *)
 Proposition ConverseIsIdempotent : forall (F:Class),
-  Rel F <-> (F^:-1:)^:-1: :~: F.
+  Relation F <-> (F^:-1:)^:-1: :~: F.
 Proof.
   intros F. split; intros H1.
   - unfold inverse, ClassInverse, converse.

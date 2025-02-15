@@ -90,7 +90,7 @@ CLASS_OBJ = \
 	${CLASS}/Proper.vo \
 	${CLASS}/Range.vo \
 	${CLASS}/Reflexive.vo \
-	${CLASS}/Rel.vo \
+	${CLASS}/Relation.vo \
 	${CLASS}/Restrict.vo \
 	${CLASS}/Russell.vo \
 	${CLASS}/Singleton.vo \
@@ -143,7 +143,7 @@ SET_OBJ = \
 	${SET}/Power.vo \
 	${SET}/Prod.vo \
 	${SET}/Range.vo \
-	${SET}/Rel.vo \
+	${SET}/Relation.vo \
 	${SET}/Singleton.vo \
 	${SET}/Specify.vo \
 	${SET}/Tuple.vo \

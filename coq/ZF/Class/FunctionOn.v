@@ -7,7 +7,7 @@ Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Range.
-Require Import ZF.Class.Rel.
+Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 
 (* Binary predicate on classes: F is a function defined on A.                   *)
@@ -24,7 +24,7 @@ Qed.
 Proposition FunctionOnIncl : forall (F A:Class),
   FunctionOn F A -> F :<=: A :x: F:[A]:.
 Proof.
-  intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Rel in H1.
+  intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Relation in H1.
   assert (H5 := H1 x H2). destruct H5 as [y [z H5]].
   apply ProdCharac. exists y. exists z. split. 1: assumption. subst. split.
   - apply H4. apply DomainCharac. exists z. assumption.

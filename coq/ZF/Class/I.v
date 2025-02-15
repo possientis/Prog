@@ -10,7 +10,7 @@ Require Import ZF.Class.Isom.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Range.
-Require Import ZF.Class.Rel.
+Require Import ZF.Class.Relation.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Class.V.
 Require Import ZF.Set.
@@ -35,7 +35,7 @@ Proof.
   apply ICharac2 in H1. apply ICharac2 in H2. subst. reflexivity.
 Qed.
 
-Proposition IIsRelation : Rel I.
+Proposition IIsRelation : Relation I.
 Proof.
 Admitted.
 

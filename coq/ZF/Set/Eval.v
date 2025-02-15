@@ -13,7 +13,7 @@ Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.Rel.
+Require Import ZF.Class.Relation.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
@@ -191,7 +191,7 @@ Proposition FunctionEquivCharac : forall (F G:Class),
   F :~: G <-> domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
 Proof.
   intros F G. intros [Hf Gf] [Hg Gg].
-  unfold Rel in Hf. unfold Rel in Hg. split; intros H1.
+  unfold Relation in Hf. unfold Relation in Hg. split; intros H1.
   assert (domain F :~: domain G) as H2. { apply DomainEquivCompat. assumption. }
   - split. 1: assumption. intros x H3.
     assert (domain G x) as H4. { apply H2. assumption. }
