@@ -53,6 +53,37 @@ Proof.
     + split; assumption.
 Qed.
 
+(* Composition is compatible with class equivalence.                            *)
+Proposition ComposeEquivCompat : forall (F F' G G':Class),
+  F :~: F' -> G :~: G' -> G :.: F :~: G' :.: F'.
+Proof.
+  intros F F' G G' H1 H2 u. split; intros H3;
+  apply ComposeCharac in H3; destruct H3 as [x [y [z [H3 [H4 H5]]]]]; subst;
+  apply ComposeCharac2; exists y; split.
+  - apply H1. assumption.
+  - apply H2. assumption.
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.
+
+(* Composition is left-compatible with class equivalence.                       *)
+Proposition ComposeEquivCompatL : forall (F G G':Class),
+  G :~: G' -> G :.: F :~: G' :.: F.
+Proof.
+  intros F G G' H1. apply ComposeEquivCompat.
+  - apply ClassEquivRefl.
+  - assumption.
+Qed.
+
+(* Composition is right-compatible with class equivalence.                      *)
+Proposition ComposeEquivCompatR : forall (F F' G:Class),
+  F :~: F' -> G :.: F :~: G :.: F'.
+Proof.
+  intros F F' G H1. apply ComposeEquivCompat.
+  - assumption.
+  - apply ClassEquivRefl.
+Qed.
+
 (* The composition of two classes is a relation.                                *)
 Proposition ComposeIsRelation : forall (F G:Class), Relation (G :.: F).
 Proof.
@@ -240,4 +271,3 @@ Proof.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
 Qed.
-

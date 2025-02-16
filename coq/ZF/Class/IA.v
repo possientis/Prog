@@ -2,6 +2,7 @@ Require Import ZF.Class.
 Require Import ZF.Class.Bij.
 Require Import ZF.Class.Bijection.
 Require Import ZF.Class.BijectionOn.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
@@ -130,7 +131,7 @@ Qed.
 
 
 (* I|A is a bijection class from A to A.                                        *)
-Proposition BijIA : forall (A:Class), Bij (I:|:A) A A.
+Proposition IAIsBij : forall (A:Class), Bij (I:|:A) A A.
 Proof.
   intros A. split.
   - apply IAIsBijectionOn.
@@ -148,10 +149,10 @@ Proof.
 Qed.
 
 (* I|A is an isomorphism class from A to A w.r to R (and R).                    *)
-Proposition IsomIA : forall (R A:Class), Isom (I:|:A) R R A A.
+Proposition IAIsIsom : forall (R A:Class), Isom (I:|:A) R R A A.
 Proof.
   intros R A. split.
-  - apply BijIA.
+  - apply IAIsBij.
   - intros x y H1 H2.
     assert ((I:|:A)!x = x) as H4. { apply IAEval. assumption. }
     assert ((I:|:A)!y = y) as H5. { apply IAEval. assumption. }
@@ -160,3 +161,27 @@ Proof.
     + rewrite H4, H5 in H3. assumption.
 Qed.
 
+Proposition IAIsConverseFF : forall (F A B:Class), Bij F A B ->
+  F^:-1: :.: F :~: (I:|:A).
+Proof.
+  intros F A B [[[H1 H2] H3] H4] u. split; intros H5.
+  - apply ComposeCharac in H5. destruct H5 as [x [y [z [H5 [H6 H7]]]]]. subst.
+    apply (proj1 (ConverseCharac2 _ _ _)) in H7.
+    assert (x = z) as H8. {
+      revert H7. revert H6. apply OneToOneCharacL. assumption. }
+    subst. apply IACharac2. split. 2: reflexivity. apply H3.
+    apply DomainCharac. exists y. assumption.
+  - apply IACharac in H5. destruct H5 as [x [H5 H6]]. subst.
+    apply ComposeCharac2. apply H3 in H5.
+    apply (proj1 (DomainCharac _ _)) in H5. destruct H5 as [y H5].
+    exists y. split. 1: assumption. apply ConverseCharac2. assumption.
+Qed.
+
+Proposition IBisFConverseF : forall (F A B:Class), Bij F A B ->
+  F :.: F^:-1: :~: (I:|:B).
+Proof.
+  intros F A B H1. assert (H2 := H1). destruct H2 as [[[H2 _] _] _].
+  apply ClassEquivTran with ((F^:-1:)^:-1: :.: F^:-1:).
+  - apply ComposeEquivCompatL, ClassEquivSym, ConverseIsIdempotent. assumption.
+  - apply IAIsConverseFF with A. apply ConverseIsBij. assumption.
+Qed.
