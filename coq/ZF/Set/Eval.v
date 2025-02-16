@@ -13,6 +13,8 @@ Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.OneToOne.
+Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Set.
@@ -296,4 +298,30 @@ Proof.
       apply DomainCharac. exists z. assumption. }
     assert (y = :0:) as H6. { rewrite E. apply EvalWhenNotInDomain. assumption. }
     rewrite H6. apply EvalWhenNotInDomain. assumption.
+Qed.
+
+Proposition EvalConverseFF : forall (F:Class) (x:U),
+  OneToOne F -> domain F x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F x H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
+  apply EvalWhenFunctional.
+  - assumption.
+  - apply ConverseDomain, RangeCharac. exists x.
+    apply EvalWhenFunctionalSatisfies; assumption.
+  - apply ConverseCharac2. apply EvalWhenFunctionalSatisfies; assumption.
+Qed.
+
+Proposition EvalFConverseF : forall (F:Class) (y:U),
+  OneToOne F -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F y H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
+  assert (H4 := H3). apply (proj1 (RangeCharac _ _)) in H4.  destruct H4 as [x H4].
+  assert (F^:-1:!y = x) as H5. { apply EvalWhenFunctional.
+    - assumption.
+    - apply ConverseDomain. assumption.
+    - apply ConverseCharac2. assumption. }
+  rewrite H5. apply EvalWhenFunctional.
+  - assumption.
+  - apply DomainCharac. exists y. assumption.
+  - assumption.
 Qed.
