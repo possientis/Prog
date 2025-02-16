@@ -1,4 +1,5 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
@@ -31,3 +32,21 @@ Proof.
   - apply ConverseIsRelation.
   - apply ConverseIsOneToOne. assumption.
 Qed.
+
+(* The composition of two one-to-one classes is a bijection class.              *)
+Proposition ComposeIsBijection : forall (F G:Class),
+  OneToOne F -> OneToOne G -> Bijection (G :.: F).
+Proof.
+  intros F G Hf Hg. split.
+  - apply ComposeIsRelation.
+  - apply ComposeIsOneToOne; assumption.
+Qed.
+
+
+(* The composition of two bijection classes is a bijection class.               *)
+Proposition ComposeIsBijection2 : forall (F G:Class),
+  Bijection F -> Bijection G -> Bijection (G :.: F).
+Proof.
+  intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection; assumption.
+Qed.
+

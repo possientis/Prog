@@ -1,6 +1,5 @@
 Require Import ZF.Binary.Compose.
 Require Import ZF.Class.
-Require Import ZF.Class.Bijection.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
@@ -151,22 +150,6 @@ Proof.
   - apply FunctionalEquivCompat with (converse F :.: converse G).
     + apply ClassEquivSym, ComposeConverse.
     + apply ComposeIsFunctional; assumption.
-Qed.
-
-(* The composition of two one-to-one classes is a bijection class.              *)
-Proposition ComposeIsBijection : forall (F G:Class),
-  OneToOne F -> OneToOne G -> Bijection (G :.: F).
-Proof.
-  intros F G Hf Hg. split.
-  - apply ComposeIsRelation.
-  - apply ComposeIsOneToOne; assumption.
-Qed.
-
-(* The composition of two bijection classes is a bijection class.               *)
-Proposition ComposeIsBijection2 : forall (F G:Class),
-  Bijection F -> Bijection G -> Bijection (G :.: F).
-Proof.
-  intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection; assumption.
 Qed.
 
 (* The domain of the composition is a subclass of the first domain.             *)
