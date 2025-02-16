@@ -7,7 +7,6 @@ Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
-Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.OneToOne.
@@ -245,22 +244,6 @@ Proof.
     } subst. apply RangeCharac. exists x. assumption.
 Qed.
 
-(* Composition is a function class defined on A if first class is and range ok. *)
-Proposition ComposeIsFunctionOn : forall (F A G B:Class),
-  FunctionOn F A ->
-  FunctionOn G B ->
-  range F :<=: B ->
-  FunctionOn (G :.: F) A.
-Proof.
-  intros F A G B [H1 H2] [H3 H4] H5. split.
-  - apply ComposeIsFunction2; assumption.
-  - apply ClassEquivTran with (domain F). 2: assumption.
-    apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
-    apply ClassEquivSym. assumption.
-Qed.
-
-(*
-*)
 (* Characterisation of the domain of G.F in terms of the eval F!a.              *)
 Proposition ComposeDomainEvalCharac : forall (F G:Class) (a:U),
   FunctionalAt F a -> domain (G :.: F) a <-> domain F a /\ domain G F!a.

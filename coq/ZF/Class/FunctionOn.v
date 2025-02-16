@@ -1,5 +1,6 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Domain.
@@ -99,4 +100,17 @@ Proof.
       apply ClassEquivTran with B. 1: assumption.
       apply ClassEquivSym. assumption.
     + intros x H8. apply H7, H2. assumption.
+Qed.
+
+Proposition ComposeIsFunctionOn : forall (F A G B:Class),
+  FunctionOn F A ->
+  FunctionOn G B ->
+  range F :<=: B ->
+  FunctionOn (G :.: F) A.
+Proof.
+  intros F A G B [H1 H2] [H3 H4] H5. split.
+  - apply ComposeIsFunction2; assumption.
+  - apply ClassEquivTran with (domain F). 2: assumption.
+    apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
+    apply ClassEquivSym. assumption.
 Qed.
