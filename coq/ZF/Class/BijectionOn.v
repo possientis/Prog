@@ -1,7 +1,9 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bijection.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
@@ -39,6 +41,19 @@ Proof.
   intros F A B [H1 H2] H3. split.
   - apply ConverseIsBijection. assumption.
   - apply ClassEquivTran with (range F). 2: assumption. apply ConverseDomain.
+Qed.
+
+Proposition ComposeIsBijectionOn : forall (F A G B:Class),
+  BijectionOn F A ->
+  BijectionOn G B ->
+  range F :<=: B   ->
+  BijectionOn (G :.: F) A.
+Proof.
+  intros F A G B [H1 H2] [H3 H4] H5. split.
+  - apply ComposeIsBijection2; assumption.
+  - apply ClassEquivTran with (domain F). 2: assumption.
+    apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
+    apply ClassEquivSym. assumption.
 Qed.
 
 Proposition BijectionOnIsRestrict : forall (F A:Class),
