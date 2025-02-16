@@ -144,7 +144,7 @@ Proposition IAEval : forall (A:Class) (x:U),
   A x -> (I:|:A)!x = x.
 Proof.
   intros A x H1. apply eq_trans with I!x.
-  - apply EvalRestrict. 2: assumption. apply IIsFunctional.
+  - apply RestrictEval. 2: assumption. apply IIsFunctional.
   - apply IEval.
 Qed.
 

@@ -15,5 +15,8 @@ Proposition ConverseIsIsom : forall (H R S A B:Class),
 Proof.
   intros H R S A B [H1 H2]. split.
   - apply ConverseIsBij. assumption.
-  -
+  - intros x y H3 H4. split; intros H5.
+    + apply H2.
+
+
 Admitted.

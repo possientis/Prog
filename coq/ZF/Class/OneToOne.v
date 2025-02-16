@@ -4,10 +4,13 @@ Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.OneToOne.
 Require Import ZF.Class.
 Require Import ZF.Class.Converse.
+Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Range.
 Require Import ZF.Set.
+Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
 Definition OneToOne (F:Class) : Prop := Binary.OneToOne.OneToOne (toBinary F).
@@ -64,3 +67,30 @@ Proof.
   apply FunctionalInclCompat with F. 2: assumption.
   apply ConverseOfConverseIncl.
 Qed.
+
+Proposition ConverseFFEval : forall (F:Class) (x:U),
+  OneToOne F -> domain F x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F x H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
+  apply EvalWhenFunctional.
+  - assumption.
+  - apply ConverseDomain, RangeCharac. exists x.
+    apply EvalWhenFunctionalSatisfies; assumption.
+  - apply ConverseCharac2. apply EvalWhenFunctionalSatisfies; assumption.
+Qed.
+
+Proposition FConverseFEval : forall (F:Class) (y:U),
+  OneToOne F -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F y H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
+  assert (H4 := H3). apply (proj1 (RangeCharac _ _)) in H4.  destruct H4 as [x H4].
+  assert (F^:-1:!y = x) as H5. { apply EvalWhenFunctional.
+    - assumption.
+    - apply ConverseDomain. assumption.
+    - apply ConverseCharac2. assumption. }
+  rewrite H5. apply EvalWhenFunctional.
+  - assumption.
+  - apply DomainCharac. exists y. assumption.
+  - assumption.
+Qed.
+

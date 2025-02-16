@@ -7,6 +7,7 @@ Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
@@ -15,6 +16,7 @@ Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Dot.
 Require Import ZF.Set.
+Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 Export ZF.Core.Dot.
 
@@ -271,3 +273,77 @@ Proof.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
 Qed.
+
+(* Characterisation of the domain of G.F in terms of the eval F!a.              *)
+Proposition ComposeDomainEvalCharac : forall (F G:Class) (a:U),
+  FunctionalAt F a -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
+Proof.
+  intros F G a H1. split; intros H2.
+  - split.
+    + apply ComposeDomainIsSmaller with G. assumption.
+    + apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [z H2].
+      apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
+      apply DomainCharac. exists z.
+      assert (F!a = y) as H4. {
+        apply EvalWhenFunctionalAt. 1: assumption. 2: assumption.
+        apply DomainCharac. exists y. assumption.
+      }
+      rewrite H4. assumption.
+  - destruct H2 as [H2 H3]. assert (H4 := H2).
+    apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
+    apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
+    apply DomainCharac. exists z. apply ComposeCharac2. exists y.
+    split. 1: assumption.
+    assert (F!a = y) as H5. { apply EvalWhenFunctionalAt; assumption. }
+    rewrite <- H5. assumption.
+Qed.
+
+(* G.F is functional at a if F is, G is functional at F!a and a lies in domain. *)
+Proposition ComposeIsFunctionalAt : forall (F G:Class) (a:U),
+  FunctionalAt F a          ->
+  FunctionalAt G (F!a)      ->
+  domain F a                ->
+  FunctionalAt (G :.: F) a.
+Proof.
+  intros F G a H1 H2 H3. apply FunctionalAtCharac2. intros z1 z2 H4 H5.
+  apply ComposeCharac2 in H4. destruct H4 as [y1 [H4 H6]].
+  apply ComposeCharac2 in H5. destruct H5 as [y2 [H5 H7]].
+  assert (F!a = y1) as H8. { apply EvalWhenFunctionalAt; assumption. }
+  assert (F!a = y2) as H9. { apply EvalWhenFunctionalAt; assumption. }
+  subst. apply FunctionalAtCharac1 with G (F!a); assumption.
+Qed.
+
+(* Evaluating the composed class G.F at a, from evaluations of F and G.         *)
+Proposition ComposeEvalAt : forall (F G:Class) (a:U),
+  FunctionalAt F a        ->
+  FunctionalAt G (F!a)    ->
+  domain (G :.: F) a      ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G a H1 H2 H3. assert (H4 := H3).
+  apply ComposeDomainEvalCharac in H4. 2: assumption.
+  destruct H4 as [H4 H5]. assert (H6 := H4). assert (H7 := H5).
+  apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [y H4].
+  apply (proj1 (DomainCharac _ _)) in H5. destruct H5 as [z H5].
+  assert (F!a = y) as H8.     { apply EvalWhenFunctionalAt; assumption. }
+  assert (G!(F!a) = z) as H9. { apply EvalWhenFunctionalAt; assumption. }
+  assert (FunctionalAt (G :.: F) a) as H10. { apply ComposeIsFunctionalAt; assumption. }
+  assert ((G :.: F) :(a,z):) as H11. {
+    apply ComposeCharac2. exists y. split. 1: assumption. rewrite <- H8. assumption.
+  }
+  apply EvalWhenFunctionalAt.
+  - assumption.
+  - assumption.
+  - rewrite H9. assumption.
+Qed.
+
+(* Evaluating the composed class G.F at a, from evaluations of F and G.         *)
+Proposition ComposeEval : forall (F G:Class) (a:U),
+  Functional F -> Functional G -> domain (G :.: F) a -> (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G a H1 H2 H3. apply ComposeEvalAt.
+  - apply FunctionalIsFunctionalAt. assumption.
+  - apply FunctionalIsFunctionalAt. assumption.
+  - assumption.
+Qed.
+
