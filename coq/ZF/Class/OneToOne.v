@@ -3,6 +3,7 @@ Require Import ZF.Binary.Converse.
 Require Import ZF.Binary.Functional.
 Require Import ZF.Binary.OneToOne.
 Require Import ZF.Class.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
@@ -66,6 +67,20 @@ Proof.
   apply OneToOneCharac. split. 1: assumption.
   apply FunctionalInclCompat with F. 2: assumption.
   apply ConverseOfConverseIncl.
+Qed.
+
+(* The composition of two one-to-one classes is one-to-one.                     *)
+Proposition ComposeIsOneToOne : forall (F G:Class),
+  OneToOne F -> OneToOne G -> OneToOne (G :.: F).
+Proof.
+  intros F G H1 H2.
+  apply OneToOneCharac in H1. destruct H1 as [H1 H3].
+  apply OneToOneCharac in H2. destruct H2 as [H2 H4].
+  apply OneToOneCharac. split.
+  - apply ComposeIsFunctional; assumption.
+  - apply FunctionalEquivCompat with (converse F :.: converse G).
+    + apply ClassEquivSym, ComposeConverse.
+    + apply ComposeIsFunctional; assumption.
 Qed.
 
 Proposition ConverseFFEval : forall (F:Class) (x:U),

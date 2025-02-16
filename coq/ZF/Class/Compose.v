@@ -7,7 +7,6 @@ Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Core.Dot.
@@ -119,20 +118,6 @@ Proof.
     apply ConverseCharac. exists x. exists z. split.
     + assumption.
     + apply ComposeCharac2. exists y. split; assumption.
-Qed.
-
-(* The composition of two one-to-one classes is one-to-one.                     *)
-Proposition ComposeIsOneToOne : forall (F G:Class),
-  OneToOne F -> OneToOne G -> OneToOne (G :.: F).
-Proof.
-  intros F G H1 H2.
-  apply OneToOneCharac in H1. destruct H1 as [H1 H3].
-  apply OneToOneCharac in H2. destruct H2 as [H2 H4].
-  apply OneToOneCharac. split.
-  - apply ComposeIsFunctional; assumption.
-  - apply FunctionalEquivCompat with (converse F :.: converse G).
-    + apply ClassEquivSym, ComposeConverse.
-    + apply ComposeIsFunctional; assumption.
 Qed.
 
 (* The domain of the composition is a subclass of the first domain.             *)
