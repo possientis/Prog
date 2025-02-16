@@ -2,8 +2,11 @@ Require Import ZF.Class.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
+Require Import ZF.Set.
 Require Import ZF.Set.Eval.
+Require Import ZF.Set.OrdPair.
 
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
@@ -62,3 +65,9 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction; assumption.
 Qed.
 
+Proposition FunctionEvalIsInRange : forall (F:Class) (x:U),
+  Function F -> domain F x -> range F (F!x).
+Proof.
+  intros F x [H1 H2] H3. apply RangeCharac. exists x.
+  apply EvalWhenFunctionalSatisfies; assumption.
+Qed.

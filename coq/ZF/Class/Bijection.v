@@ -1,10 +1,15 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
+Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.OneToOne.
+Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
+Require Import ZF.Set.
+Require Import ZF.Set.Eval.
+
 
 (* A class is a bijection if it is a relation and it is one-to-one.             *)
 Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
@@ -42,7 +47,6 @@ Proof.
   - apply ComposeIsOneToOne; assumption.
 Qed.
 
-
 (* The composition of two bijection classes is a bijection class.               *)
 Proposition ComposeIsBijection2 : forall (F G:Class),
   Bijection F -> Bijection G -> Bijection (G :.: F).
@@ -50,3 +54,17 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection; assumption.
 Qed.
 
+Proposition BijectionEvalIsInRange : forall (F:Class) (x:U),
+  Bijection F -> domain F x -> range F (F!x).
+Proof.
+  intros F x H1 H2. apply FunctionEvalIsInRange. 2: assumption.
+  apply BijectionIsFunction. assumption.
+Qed.
+
+Proposition BijectionConverseEvalIsInDomain : forall (F:Class) (y:U),
+  Bijection F -> range F y -> domain F (F^:-1:!y).
+Proof.
+  intros F y H1 H2. apply ConverseRange, BijectionEvalIsInRange.
+  - apply ConverseIsBijection. assumption.
+  - apply ConverseDomain. assumption.
+Qed.

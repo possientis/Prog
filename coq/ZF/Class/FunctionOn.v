@@ -10,6 +10,7 @@ Require Import ZF.Class.Prod.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
+Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 
 (* Binary predicate on classes: F is a function defined on A.                   *)
@@ -113,4 +114,11 @@ Proof.
   - apply ClassEquivTran with (domain F). 2: assumption.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
+Qed.
+
+Proposition FunctionOnEvalIsInRange : forall (F A:Class) (x:U),
+  FunctionOn F A -> A x -> range F (F!x).
+Proof.
+  intros F A x [H1 H2] H3. apply FunctionEvalIsInRange. 1: assumption.
+  apply H2. assumption.
 Qed.

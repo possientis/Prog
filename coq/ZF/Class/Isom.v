@@ -17,6 +17,7 @@ Proof.
   - apply ConverseIsBij. assumption.
   - intros x y H3 H4. split; intros H5.
     + apply H2.
-
-
+      * apply BijConverseEvalIsInDomain with B; assumption.
+      * apply BijConverseEvalIsInDomain with B; assumption.
+      *
 Admitted.

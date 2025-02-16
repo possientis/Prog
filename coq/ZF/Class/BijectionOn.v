@@ -9,6 +9,8 @@ Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Class.Small.
+Require Import ZF.Set.
+Require Import ZF.Set.Eval.
 
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
@@ -60,4 +62,18 @@ Proposition BijectionOnIsRestrict : forall (F A:Class),
   BijectionOn F A -> F :~: F:|:A.
 Proof.
   intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
+Qed.
+
+Proposition BijectionOnEvalIsInRange : forall (F A:Class) (x:U),
+  BijectionOn F A -> A x -> range F (F!x).
+Proof.
+  intros F A x [H1 H2] H3. apply BijectionEvalIsInRange. 1: assumption.
+  apply H2. assumption.
+Qed.
+
+Proposition BijectionOnConverseEvalIsInDomain : forall (F A:Class) (y:U),
+  BijectionOn F A -> range F y -> A (F^:-1:!y).
+Proof.
+  intros F A y [H1 H2] H3. apply H2.
+  apply BijectionConverseEvalIsInDomain; assumption.
 Qed.
