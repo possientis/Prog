@@ -3,7 +3,6 @@ Open    Scope ZF_Set_Eval_scope.
 
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
-Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Eval.
 Require Import ZF.Class.Functional.
@@ -119,19 +118,4 @@ Proof.
   - destruct H2 as [x [H2 [H3 H4]]].
     apply ImageCharac. exists x. split. 1: assumption.
     apply EvalWhenFunctional; assumption.
-Qed.
-
-(* Characterisation of the inverse image F^(-1)[A] in terms of evaluations of F.*)
-Proposition InvImageEvalCharac : forall (F B:Class), Functional F ->
-  forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
-Proof.
-  intros F B H1 x. split; intros H2.
-  - apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [y [H2 H3]].
-    apply (proj1 (ConverseCharac2 _ _ _)) in H3.
-    assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
-    split. 1: assumption.
-    assert (F!x = y) as H5. { apply EvalWhenFunctional; assumption. }
-    rewrite H5. assumption.
-  - destruct H2 as [H2 H3]. apply ImageCharac. exists (F!x). split. 1: assumption.
-    apply ConverseCharac2. apply EvalWhenFunctionalSatisfies; assumption.
 Qed.

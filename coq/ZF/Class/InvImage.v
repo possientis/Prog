@@ -1,8 +1,11 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Converse.
+Require Import ZF.Class.Domain.
+Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.
+Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 Export ZF.Core.Image.
 Export ZF.Core.Inverse.
@@ -70,4 +73,19 @@ Proof.
   intros F P Q H1. apply InvImageInclCompat.
   - apply InclRefl.
   - assumption.
+Qed.
+
+(* Characterisation of the inverse image F^(-1)[A] in terms of evaluations of F.*)
+Proposition InvImageEvalCharac : forall (F B:Class), Functional F ->
+  forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
+Proof.
+  intros F B H1 x. split; intros H2.
+  - apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [y [H2 H3]].
+    apply (proj1 (ConverseCharac2 _ _ _)) in H3.
+    assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
+    split. 1: assumption.
+    assert (F!x = y) as H5. { apply EvalWhenFunctional; assumption. }
+    rewrite H5. assumption.
+  - destruct H2 as [H2 H3]. apply ImageCharac. exists (F!x). split. 1: assumption.
+    apply ConverseCharac2. apply EvalWhenFunctionalSatisfies; assumption.
 Qed.
