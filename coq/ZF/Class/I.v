@@ -19,7 +19,7 @@ Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
-(* The class of all ordered pairs of the form (x,x). The identity class.        *)
+(* The class of all ordered pairs of the form (x,x), aka the 'identity' class.  *)
 Definition I : Class := fun x => exists y, x = :(y,y):.
 
 Proposition ICharac2 : forall (y z:U), I :(y,z): <-> y = z.
@@ -37,11 +37,13 @@ Proof.
   apply ICharac2 in H1. apply ICharac2 in H2. subst. reflexivity.
 Qed.
 
+(* I is a relation class.                                                       *)
 Proposition IIsRelation : Relation I.
 Proof.
   intros x H1. destruct H1 as [y H1]. exists y. exists y. assumption.
 Qed.
 
+(* I is a function class.                                                       *)
 Proposition IIsFunction : Function I.
 Proof.
   split.
@@ -49,7 +51,7 @@ Proof.
     - apply IIsFunctional.
 Qed.
 
-(* The Conerse of I is I itself.                                                *)
+(* The Converse of I is I itself.                                               *)
 Proposition IConverse : I^:-1: :~: I.
 Proof.
   intros x. split; intros H1.
@@ -59,6 +61,7 @@ Proof.
     split. 1: assumption. apply ICharac2. reflexivity.
 Qed.
 
+(* I is a one-to-one class.                                                     *)
 Proposition IIsOneToOne : OneToOne I.
 Proof.
   apply OneToOneCharac. split.
@@ -67,6 +70,7 @@ Proof.
     apply ClassEquivSym, IConverse.
 Qed.
 
+(* I is a bijection class.                                                      *)
 Proposition IIsBijection : Bijection I.
 Proof.
   split.
@@ -90,7 +94,7 @@ Proof.
   - apply RangeCharac. exists y. apply ICharac2. reflexivity.
 Qed.
 
-(* I is a function defined on the class of all sets.                            *)
+(* I is a function class defined on the class of all sets.                      *)
 Proposition IIsFunctionOn : FunctionOn I V.
 Proof.
   split.
@@ -98,7 +102,7 @@ Proof.
   - apply IDomain.
 Qed.
 
-(* I is a bijection defined on the class of all sets.                           *)
+(* I is a bijection class defined on the class of all sets.                     *)
 Proposition IIsBijectionOn : BijectionOn I V.
 Proof.
   split.
@@ -106,7 +110,7 @@ Proof.
   - apply IDomain.
 Qed.
 
-(* I is a bijection from the class of all sets onto itself.                     *)
+(* I is a bijection class from the class of all sets onto the class of all sets.*)
 Proposition IIsBij : Bij I V V.
 Proof.
   split.
@@ -123,7 +127,7 @@ Proof.
   - apply ICharac2. reflexivity.
 Qed.
 
-(* Given any class R, I is an isomorphism from V to V w.r. to R (and R).        *)
+(* Given any class R, I is an isomorphism class from V to V w.r. to R (and R).  *)
 Proposition IIsIsom : forall (R:Class), Isom I R R V V.
 Proof.
   intros R. split.

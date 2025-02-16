@@ -6,6 +6,7 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.I.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Isom.
@@ -46,50 +47,53 @@ Proof.
   intros A. apply RestrictIsFunctional, IIsFunctional.
 Qed.
 
+(* I|A is a relation class.                                                     *)
 Proposition IAIsRelation : forall (A:Class), Relation (I:|:A).
 Proof.
   intros A. apply RestrictIsRelation.
 Qed.
 
+(* I|A is a function class.                                                     *)
 Proposition IAIsFunction : forall (A:Class), Function (I:|:A).
 Proof.
-Admitted.
+  intros A. split.
+  - apply IAIsRelation.
+  - apply IAIsFunctional.
+Qed.
 
 (* The converse of I|A is I|A itself.                                           *)
-Proposition ConverseIA : forall (A:Class),
+Proposition IAConverse : forall (A:Class),
   (I:|:A)^:-1: :~: (I:|:A).
 Proof.
   intros A x. split; intros H1.
   - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
-    apply RestrictCharac2 in H2. destruct H2 as [H2 [u H3]].
-    apply OrdPairEqual in H3. destruct H3 as [H3 H4]. subst.
-    apply RestrictCharac2. split. 1: assumption. exists u. reflexivity.
-  - apply (proj1 (RestrictCharac _ _ _)) in H1.
-    destruct H1 as [y [z [H1 [H2 [u H3]]]]]. apply OrdPairEqual in H3.
-    destruct H3 as [H3 H4]. subst. apply ConverseCharac2, RestrictCharac2.
-    split. 1: assumption. exists u. reflexivity.
+    apply IACharac2 in H2. destruct H2 as [H2 H3]. subst.
+    apply IACharac2. split. 1: assumption. reflexivity.
+  - apply IACharac in H1. destruct H1 as [y [H1 H2]]. subst.
+    apply ConverseCharac2, IACharac2. split. 1: assumption. reflexivity.
 Qed.
 
 (* I|A is a one-to-one class.                                                   *)
-Proposition OneToOneIA : forall (A:Class), OneToOne (I:|:A).
+Proposition IAIsOneToOne : forall (A:Class), OneToOne (I:|:A).
 Proof.
   intros A. apply OneToOneCharac. split.
   - apply IAIsFunctional.
   - apply FunctionalEquivCompat with (I:|:A).
-    + apply ClassEquivSym, ConverseIA.
+    + apply ClassEquivSym, IAConverse.
     + apply IAIsFunctional.
 Qed.
 
-(* I|A is a bijection.                                                          *)
-Proposition BijectionIA : forall (A:Class), Bijection (I:|:A).
+(* I|A is a bijection class.                                                    *)
+Proposition IAIsBijection : forall (A:Class), Bijection (I:|:A).
 Proof.
   intros A. split.
   - apply RestrictIsRelation.
-  - apply OneToOneIA.
+  - apply IAIsOneToOne.
 Qed.
 
+
 (* The domain of I|A is A.                                                      *)
-Proposition DomainIA : forall (A:Class), domain (I:|:A) :~: A.
+Proposition IADomain : forall (A:Class), domain (I:|:A) :~: A.
 Proof.
   intros A.
   apply ClassEquivTran with (A :/\: domain I). 1: apply DomainOfRestrict.
@@ -99,35 +103,43 @@ Proof.
 Qed.
 
 (* The range of I|A is A.                                                       *)
-Proposition RangeIA : forall (A:Class), range (I:|:A) :~: A.
+Proposition IARange : forall (A:Class), range (I:|:A) :~: A.
 Proof.
   intros A y. split; intros H1.
   - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-    apply RestrictCharac2 in H1. destruct H1 as [H1 H2].
-    apply ICharac2 in H2. subst. assumption.
-  - apply RangeCharac. exists y. apply RestrictCharac2. split.
-    + assumption.
-    + apply ICharac2. reflexivity.
+    apply IACharac2 in H1. destruct H1 as [H1 H2]. subst. assumption.
+  - apply RangeCharac. exists y. apply IACharac2.
+    split. 1: assumption. reflexivity.
 Qed.
 
-(* I|A is a bijection on A.                                                     *)
-Proposition BijectionOnIA : forall (A:Class), BijectionOn (I:|:A) A.
+(* I|A is a function class defined on A.                                        *)
+Proposition IAIsFunctionOn : forall (A:Class), FunctionOn (I:|:A) A.
+Proof.
+  split.
+  - apply IAIsFunction.
+  - apply IADomain.
+Qed.
+
+(* I|A is a bijection class defined on A.                                       *)
+Proposition IAIsBijectionOn : forall (A:Class), BijectionOn (I:|:A) A.
 Proof.
   intros A. split.
-  - apply BijectionIA.
-  - apply DomainIA.
+  - apply IAIsBijection.
+  - apply IADomain.
 Qed.
 
-(* I|A is a bijection from A to A.                                              *)
+
+(* I|A is a bijection class from A to A.                                        *)
 Proposition BijIA : forall (A:Class), Bij (I:|:A) A A.
 Proof.
   intros A. split.
-  - apply BijectionOnIA.
-  - apply RangeIA.
+  - apply IAIsBijectionOn.
+  - apply IARange.
 Qed.
 
+
 (* If x lies in A, then the value of I|A at x is x.                             *)
-Proposition EvalIA : forall (A:Class) (x:U),
+Proposition IAEval : forall (A:Class) (x:U),
   A x -> (I:|:A)!x = x.
 Proof.
   intros A x H1. apply eq_trans with I!x.
@@ -135,14 +147,14 @@ Proof.
   - apply IEval.
 Qed.
 
-(* I|A is an isomorphism from A to A w.r to R.                                  *)
+(* I|A is an isomorphism class from A to A w.r to R (and R).                    *)
 Proposition IsomIA : forall (R A:Class), Isom (I:|:A) R R A A.
 Proof.
   intros R A. split.
   - apply BijIA.
   - intros x y H1 H2.
-    assert ((I:|:A)!x = x) as H4. { apply EvalIA. assumption. }
-    assert ((I:|:A)!y = y) as H5. { apply EvalIA. assumption. }
+    assert ((I:|:A)!x = x) as H4. { apply IAEval. assumption. }
+    assert ((I:|:A)!y = y) as H5. { apply IAEval. assumption. }
     split; intros H3.
     + rewrite H4, H5. assumption.
     + rewrite H4, H5 in H3. assumption.
