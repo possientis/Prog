@@ -3,7 +3,6 @@ Require Import ZF.Class.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
-Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Image.
@@ -102,22 +101,6 @@ Proof.
   apply ComposeCharac2 in H2. destruct H2 as [y2 [H2 G2]].
   assert (y1 = y2) as H3. { apply Gf with x; assumption. }
   subst. apply Gg with y2; assumption.
-Qed.
-
-(* The composition of two functional classes is a function class.               *)
-Proposition ComposeIsFunction : forall (F G:Class),
-  Functional F -> Functional G -> Function (G :.: F).
-Proof.
-  intros F G Hf Hg. split.
-  - apply ComposeIsRelation.
-  - apply ComposeIsFunctional; assumption.
-Qed.
-
-(* The composition of two function classes is a function class.                 *)
-Proposition ComposeIsFunction2 : forall (F G:Class),
-  Function F -> Function G -> Function (G :.: F).
-Proof.
-  intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction; assumption.
 Qed.
 
 (* The converse of the composition is (almost) the composition of the converse. *)

@@ -1,4 +1,5 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Relation.
@@ -44,3 +45,20 @@ Proof.
       apply EvalWhenFunctional. { assumption. } { assumption. }
       rewrite <- H5. apply H2. assumption.
 Qed.
+
+(* The composition of two functional classes is a function class.               *)
+Proposition ComposeIsFunction : forall (F G:Class),
+  Functional F -> Functional G -> Function (G :.: F).
+Proof.
+  intros F G Hf Hg. split.
+  - apply ComposeIsRelation.
+  - apply ComposeIsFunctional; assumption.
+Qed.
+
+(* The composition of two function classes is a function class.                 *)
+Proposition ComposeIsFunction2 : forall (F G:Class),
+  Function F -> Function G -> Function (G :.: F).
+Proof.
+  intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction; assumption.
+Qed.
+
