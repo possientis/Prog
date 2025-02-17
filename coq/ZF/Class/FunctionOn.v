@@ -116,9 +116,9 @@ Proof.
     apply ClassEquivSym. assumption.
 Qed.
 
-Proposition FunctionOnEvalIsInRange : forall (F A:Class) (x:U),
+Proposition FunctionOnFEvalIsInRange : forall (F A:Class) (x:U),
   FunctionOn F A -> A x -> range F (F!x).
 Proof.
-  intros F A x [H1 H2] H3. apply FunctionEvalIsInRange. 1: assumption.
+  intros F A x [H1 H2] H3. apply FunctionFEvalIsInRange. 1: assumption.
   apply H2. assumption.
 Qed.

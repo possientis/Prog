@@ -64,16 +64,29 @@ Proof.
   intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
 Qed.
 
-Proposition BijectionOnEvalIsInRange : forall (F A:Class) (x:U),
+Proposition BijectionOnFEvalIsInRange : forall (F A:Class) (x:U),
   BijectionOn F A -> A x -> range F (F!x).
 Proof.
-  intros F A x [H1 H2] H3. apply BijectionEvalIsInRange. 1: assumption.
+  intros F A x [H1 H2] H3. apply BijectionFEvalIsInRange. 1: assumption.
   apply H2. assumption.
 Qed.
 
-Proposition BijectionOnConverseEvalIsInDomain : forall (F A:Class) (y:U),
+Proposition BijectionOnF_EvalIsInDomain : forall (F A:Class) (y:U),
   BijectionOn F A -> range F y -> A (F^:-1:!y).
 Proof.
   intros F A y [H1 H2] H3. apply H2.
-  apply BijectionConverseEvalIsInDomain; assumption.
+  apply BijectionF_EvalIsInDomain; assumption.
+Qed.
+
+Proposition BijectionOnF_FEval : forall (F A:Class) (x:U),
+  BijectionOn F A -> A x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F A x [H1 H2] H3. apply BijectionF_FEval. 1: assumption.
+  apply H2. assumption.
+Qed.
+
+Proposition BijectionOnFF_Eval : forall (F A:Class) (y:U),
+  BijectionOn F A -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F A y [H1 H2]. apply BijectionFF_Eval. assumption.
 Qed.

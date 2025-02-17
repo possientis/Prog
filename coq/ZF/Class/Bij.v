@@ -21,16 +21,29 @@ Proof.
   - apply ClassEquivTran with (domain F). 2: assumption. apply ConverseRange.
 Qed.
 
-Proposition BijEvalIsInRange : forall (F A B:Class) (x:U),
+Proposition BijFEvalIsInRange : forall (F A B:Class) (x:U),
   Bij F A B -> A x -> B (F!x).
 Proof.
   intros F A B x [H1 H2] H3. apply H2.
-  apply BijectionOnEvalIsInRange with A; assumption.
+  apply BijectionOnFEvalIsInRange with A; assumption.
 Qed.
 
-Proposition BijConverseEvalIsInDomain : forall (F A B:Class) (y:U),
+Proposition BijF_EvalIsInDomain : forall (F A B:Class) (y:U),
   Bij F A B -> B y -> A (F^:-1:!y).
 Proof.
-  intros F A B y H1 H2. apply BijEvalIsInRange with B. 2: assumption.
+  intros F A B y H1 H2. apply BijFEvalIsInRange with B. 2: assumption.
   apply ConverseIsBij. assumption.
+Qed.
+
+Proposition BijF_FEval : forall (F A B:Class) (x:U),
+  Bij F A B -> A x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F A B x [H1 H2]. apply BijectionOnF_FEval. assumption.
+Qed.
+
+Proposition BijFF_Eval : forall (F A B:Class) (y:U),
+  Bij F A B -> B y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F A B y [H1 H2] H3. apply BijectionOnFF_Eval with A. 1: assumption.
+  apply H2. assumption.
 Qed.

@@ -14,9 +14,9 @@ Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 Notation "F :: A :-> B" := (Fun F A B)
   (at level 0, no associativity) : ZF_Class_Fun_scope.
 
-Proposition FunEvalIsInRange : forall (F A B:Class) (x:U),
+Proposition FunFEvalIsInRange : forall (F A B:Class) (x:U),
   (F :: A :-> B) -> A x -> B (F!x).
 Proof.
   intros F A B x [H1 H2] H3. apply H2.
-  apply FunctionOnEvalIsInRange with A; assumption.
+  apply FunctionOnFEvalIsInRange with A; assumption.
 Qed.

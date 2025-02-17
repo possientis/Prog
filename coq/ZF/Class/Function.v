@@ -65,9 +65,9 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction; assumption.
 Qed.
 
-Proposition FunctionEvalIsInRange : forall (F:Class) (x:U),
+Proposition FunctionFEvalIsInRange : forall (F:Class) (x:U),
   Function F -> domain F x -> range F (F!x).
 Proof.
-  intros F x [H1 H2] H3. apply RangeCharac. exists x.
+  intros F x [_ H1] H2. apply RangeCharac. exists x.
   apply EvalWhenFunctionalSatisfies; assumption.
 Qed.

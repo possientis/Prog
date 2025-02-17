@@ -83,7 +83,7 @@ Proof.
     + apply ComposeIsFunctional; assumption.
 Qed.
 
-Proposition ConverseFFEval : forall (F:Class) (x:U),
+Proposition OneToOneF_FEval : forall (F:Class) (x:U),
   OneToOne F -> domain F x -> F^:-1:!(F!x) = x.
 Proof.
   intros F x H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
@@ -94,7 +94,7 @@ Proof.
   - apply ConverseCharac2. apply EvalWhenFunctionalSatisfies; assumption.
 Qed.
 
-Proposition FConverseFEval : forall (F:Class) (y:U),
+Proposition OneToOneFF_Eval : forall (F:Class) (y:U),
   OneToOne F -> range F y -> F!(F^:-1:!y) = y.
 Proof.
   intros F y H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].

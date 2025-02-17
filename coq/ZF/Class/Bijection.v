@@ -54,17 +54,29 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection; assumption.
 Qed.
 
-Proposition BijectionEvalIsInRange : forall (F:Class) (x:U),
+Proposition BijectionFEvalIsInRange : forall (F:Class) (x:U),
   Bijection F -> domain F x -> range F (F!x).
 Proof.
-  intros F x H1 H2. apply FunctionEvalIsInRange. 2: assumption.
+  intros F x H1 H2. apply FunctionFEvalIsInRange. 2: assumption.
   apply BijectionIsFunction. assumption.
 Qed.
 
-Proposition BijectionConverseEvalIsInDomain : forall (F:Class) (y:U),
+Proposition BijectionF_EvalIsInDomain : forall (F:Class) (y:U),
   Bijection F -> range F y -> domain F (F^:-1:!y).
 Proof.
-  intros F y H1 H2. apply ConverseRange, BijectionEvalIsInRange.
+  intros F y H1 H2. apply ConverseRange, BijectionFEvalIsInRange.
   - apply ConverseIsBijection. assumption.
   - apply ConverseDomain. assumption.
+Qed.
+
+Proposition BijectionF_FEval : forall (F:Class) (x:U),
+  Bijection F -> domain F x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F x [_ H1]. apply OneToOneF_FEval. assumption.
+Qed.
+
+Proposition BijectionFF_Eval : forall (F:Class) (y:U),
+  Bijection F -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F y [_ H1]. apply OneToOneFF_Eval. assumption.
 Qed.
