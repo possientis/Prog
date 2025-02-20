@@ -3,6 +3,7 @@ Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
@@ -121,4 +122,32 @@ Proposition FunctionOnFEvalIsInRange : forall (F A:Class) (x:U),
 Proof.
   intros F A x [H1 H2] H3. apply FunctionFEvalIsInRange. 1: assumption.
   apply H2. assumption.
+Qed.
+
+Proposition FunctionOnComposeDomainCharac : forall (F G A B:Class) (a:U),
+  FunctionOn F A ->
+  FunctionOn G B ->
+  domain (G :.: F) a <-> A a /\ B (F!a).
+Proof.
+  intros F G A B a [H1 H2] [H3 H4]. split; intros H5.
+  - apply FunctionComposeDomainCharac in H5. destruct H5 as [H5 H6]. split.
+    + apply H2. assumption.
+    + apply H4. assumption.
+    + assumption.
+  - destruct H5 as [H5 H6]. apply FunctionComposeDomainCharac. 1: assumption. split.
+    + apply H2. assumption.
+    + apply H4. assumption.
+Qed.
+
+Proposition FunctionOnComposeEval : forall (F G A B:Class) (a:U),
+  FunctionOn F A ->
+  FunctionOn G B ->
+  A a            ->
+  B (F!a)        ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G A B a [H1 H2] [H3 H4] H5 H6.
+  apply FunctionComposeEval; try assumption.
+  - apply H2. assumption.
+  - apply H4. assumption.
 Qed.

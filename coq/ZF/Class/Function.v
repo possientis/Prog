@@ -71,3 +71,21 @@ Proof.
   intros F x [_ H1] H2. apply RangeCharac. exists x.
   apply EvalWhenFunctionalSatisfies; assumption.
 Qed.
+
+Proposition FunctionComposeDomainCharac : forall (F G:Class) (a:U),
+  Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
+Proof.
+  intros F G a [_ H1]. apply FunctionalComposeDomainCharac. assumption.
+Qed.
+
+Proposition FunctionComposeEval : forall (F G:Class) (a:U),
+  Function F     ->
+  Function G     ->
+  domain F a     ->
+  domain G (F!a) ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G a [H1 H2] [H3 H4]. apply FunctionalComposeEval; assumption.
+Qed.
+
+

@@ -36,6 +36,7 @@ Proposition ComposeIsIsom : forall (F G R S T A B C:Class),
 Proof.
   intros F G R S T A B C [H1 H2] [H3 H4]. split.
   - apply ComposeIsBij with B; assumption.
-  -
-
+  - intros x y H5 H6. split; intros H7.
+    + (* after FunComposeEval *)
 Admitted.
+
