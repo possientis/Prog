@@ -19,6 +19,9 @@ Proof.
     + apply H2.
       * apply BijF_EvalIsInDomain with B; assumption.
       * apply BijF_EvalIsInDomain with B; assumption.
-      *
-
-Admitted.
+      * rewrite (BijFF_Eval F A B x), (BijFF_Eval F A B y); assumption.
+    + rewrite <- (BijFF_Eval F A B x), <- (BijFF_Eval F A B y); try assumption.
+      apply H2. 3: assumption.
+      * apply BijF_EvalIsInDomain with B; assumption.
+      * apply BijF_EvalIsInDomain with B; assumption.
+Qed.
