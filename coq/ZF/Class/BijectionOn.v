@@ -52,7 +52,7 @@ Proposition ComposeIsBijectionOn : forall (F A G B:Class),
   BijectionOn (G :.: F) A.
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
-  - apply ComposeIsBijection2; assumption.
+  - apply ComposeIsBijection; assumption.
   - apply ClassEquivTran with (domain F). 2: assumption.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.

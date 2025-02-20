@@ -39,7 +39,7 @@ Proof.
 Qed.
 
 (* The composition of two one-to-one classes is a bijection class.              *)
-Proposition ComposeIsBijection : forall (F G:Class),
+Proposition ComposeIsBijection2 : forall (F G:Class),
   OneToOne F -> OneToOne G -> Bijection (G :.: F).
 Proof.
   intros F G Hf Hg. split.
@@ -48,10 +48,10 @@ Proof.
 Qed.
 
 (* The composition of two bijection classes is a bijection class.               *)
-Proposition ComposeIsBijection2 : forall (F G:Class),
+Proposition ComposeIsBijection : forall (F G:Class),
   Bijection F -> Bijection G -> Bijection (G :.: F).
 Proof.
-  intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection; assumption.
+  intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection2; assumption.
 Qed.
 
 Proposition BijectionFEvalIsInRange : forall (F:Class) (x:U),

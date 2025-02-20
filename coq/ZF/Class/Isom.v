@@ -1,15 +1,17 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bij.
+Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
-(* H is an isomorphism from A to B w.r. to R and S.                             *)
+(* F is an (R,S)-isomorphism from A to B.                                       *)
 Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y ->
   R :(x,y): <-> S :(F!x,F!y):.
 
+(* If F:A -> B is an (R,S)-isomorphism, F^-1 : B -> A is an (S,R)-isomorpshism. *)
 Proposition ConverseIsIsom : forall (F R S A B:Class),
   Isom F R S A B -> Isom F^:-1: S R B A.
 Proof.
@@ -25,3 +27,15 @@ Proof.
       * apply BijF_EvalIsInDomain with B; assumption.
       * apply BijF_EvalIsInDomain with B; assumption.
 Qed.
+
+(* The composition of two isomorpshims is an isomorphism.                       *)
+Proposition ComposeIsIsom : forall (F G R S T A B C:Class),
+  Isom F R S A B ->
+  Isom G S T B C ->
+  Isom (G :.: F) R T A C.
+Proof.
+  intros F G R S T A B C [H1 H2] [H3 H4]. split.
+  - apply ComposeIsBij with B; assumption.
+  -
+
+Admitted.
