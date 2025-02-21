@@ -11,6 +11,7 @@ Require Import ZF.Class.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
+Require Import ZF.Set.OrdPair.
 
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
@@ -64,18 +65,32 @@ Proof.
   intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
 Qed.
 
-Proposition BijectionOnFEvalIsInRange : forall (F A:Class) (x:U),
-  BijectionOn F A -> A x -> range F (F!x).
+Proposition BijectionOnEval : forall (F A:Class) (a y:U),
+  BijectionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A x [H1 H2] H3. apply BijectionFEvalIsInRange. 1: assumption.
-  apply H2. assumption.
+  intros F A a y H1. apply BijectionOnIsFunctionOn in H1.
+  apply FunctionOnEval. assumption.
 Qed.
 
-Proposition BijectionOnF_EvalIsInDomain : forall (F A:Class) (y:U),
-  BijectionOn F A -> range F y -> A (F^:-1:!y).
+Proposition BijectionOnEvalSatisfies : forall (F A:Class) (a:U),
+  BijectionOn F A -> A a -> F :(a,F!a):.
 Proof.
-  intros F A y [H1 H2] H3. apply H2.
-  apply BijectionF_EvalIsInDomain; assumption.
+  intros F A a H1. apply BijectionOnIsFunctionOn in H1.
+  apply FunctionOnEvalSatisfies. assumption.
+Qed.
+
+Proposition BijectionOnEvalIsInRange : forall (F A:Class) (a:U),
+  BijectionOn F A -> A a -> range F (F!a).
+Proof.
+  intros F A a H1. apply BijectionOnIsFunctionOn in H1.
+  apply FunctionOnEvalIsInRange. assumption.
+Qed.
+
+Proposition BijectionOnEvalIsInDomain : forall (F A:Class) (b:U),
+  BijectionOn F A -> range F b -> A (F^:-1:!b).
+Proof.
+  intros F A b [H1 H2] H3. apply H2.
+  apply BijectionEvalIsInDomain; assumption.
 Qed.
 
 Proposition BijectionOnF_FEval : forall (F A:Class) (x:U),
@@ -90,3 +105,26 @@ Proposition BijectionOnFF_Eval : forall (F A:Class) (y:U),
 Proof.
   intros F A y [H1 H2]. apply BijectionFF_Eval. assumption.
 Qed.
+
+Proposition BijectionOnComposeDomainCharac : forall (F G A B:Class) (a:U),
+  BijectionOn F A ->
+  BijectionOn G B ->
+  domain (G :.: F) a <-> A a /\ B (F!a).
+Proof.
+  intros F G A B a H1 H2.
+  apply BijectionOnIsFunctionOn in H1. apply BijectionOnIsFunctionOn in H2.
+  apply FunctionOnComposeDomainCharac; assumption.
+Qed.
+
+Proposition BijectionComposeEval : forall (F G A B:Class) (a:U),
+  BijectionOn F A ->
+  BijectionOn G B ->
+  A a             ->
+  B (F!a)         ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G A B a H1 H2.
+  apply BijectionOnIsFunctionOn in H1. apply BijectionOnIsFunctionOn in H2.
+  apply FunctionOnComposeEval; assumption.
+Qed.
+

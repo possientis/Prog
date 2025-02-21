@@ -9,6 +9,7 @@ Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
+Require Import ZF.Set.OrdPair.
 
 (* F is a function from A to B.                                                 *)
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
@@ -16,11 +17,23 @@ Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 Notation "F :: A :-> B" := (Fun F A B)
   (at level 0, no associativity) : ZF_Class_Fun_scope.
 
-Proposition FunFEvalIsInRange : forall (F A B:Class) (x:U),
-  (F :: A :-> B) -> A x -> B (F!x).
+Proposition FunEval : forall (F A B:Class) (a y:U),
+  F :: A :-> B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A B x [H1 H2] H3. apply H2.
-  apply FunctionOnFEvalIsInRange with A; assumption.
+  intros F A B a y [H1 _]. apply FunctionOnEval. assumption.
+Qed.
+
+Proposition FunEvalSatisfies : forall (F A B:Class) (a:U),
+  F :: A :-> B -> A a -> F :(a,F!a):.
+Proof.
+  intros F A B a [H1 _]. apply FunctionOnEvalSatisfies. assumption.
+Qed.
+
+Proposition FunEvalIsInRange : forall (F A B:Class) (a:U),
+  (F :: A :-> B) -> A a -> B (F!a).
+Proof.
+  intros F A B a [H1 H2] H3. apply H2.
+  apply FunctionOnEvalIsInRange with A; assumption.
 Qed.
 
 Proposition ComposeIsFun : forall (F G A B C: Class),
@@ -42,7 +55,7 @@ Proof.
   - apply (FunctionOnComposeDomainCharac F G A B a H1 H3) in H5.
     destruct H5 as [H5 H6]. assumption.
   - apply (FunctionOnComposeDomainCharac F G A B a); try assumption.
-    split. 1: assumption.  apply FunFEvalIsInRange with A.
+    split. 1: assumption.  apply FunEvalIsInRange with A.
     + split; assumption.
     + assumption.
 Qed.
@@ -55,7 +68,8 @@ Proposition FunComposeEval : forall (F G A B C:Class) (a:U),
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
   apply (FunctionOnComposeEval F G A B); try assumption.
-  apply FunFEvalIsInRange with A.
+  apply FunEvalIsInRange with A.
   - split; assumption.
   - assumption.
 Qed.
+

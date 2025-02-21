@@ -121,7 +121,7 @@ Qed.
 (* The value of I at x is x.                                                    *)
 Proposition IEval : forall (x:U), I!x = x.
 Proof.
-  intros x. apply EvalWhenFunctional.
+  intros x. apply FunctionalEval.
   - apply IIsFunctional.
   - apply IDomain, Logic.I.
   - apply ICharac2. reflexivity.

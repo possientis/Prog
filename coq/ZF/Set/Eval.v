@@ -9,6 +9,7 @@ Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Range.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
@@ -61,22 +62,6 @@ Proof.
   - reflexivity.
 Qed.
 
-(* If F is functional and a lies in domain of F then F (a,y) iff F!a = y.       *)
-Proposition EvalWhenFunctional : forall (F:Class) (a y:U),
-  Functional F -> domain F a -> F :(a,y): <-> F!a = y.
-Proof.
-  intros F a y H1 H2.
-  apply EvalWhenHasValueAt, HasValueAtWhenFunctional; assumption.
-Qed.
-
-(* If F is functional and a lies in domain of F then (a,F!a) satisfies F.       *)
-Proposition EvalWhenFunctionalSatisfies : forall (F:Class) (a:U),
-  Functional F -> domain F a -> F :(a,F!a):.
-Proof.
-  intros F a H1 H2. apply EvalWhenFunctionalAtSatisfies. 2: assumption.
-  apply FunctionalIsFunctionalAt. assumption.
-Qed.
-
 (* If F has no value at a then F!a is the empty set.                            *)
 Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> F!a = :0:.
@@ -104,6 +89,29 @@ Proof.
   apply HasValueAtAsInter. assumption.
 Qed.
 
+(* If F is functional and a lies in domain of F then F (a,y) iff F!a = y.       *)
+Proposition FunctionalEval : forall (F:Class) (a y:U),
+  Functional F -> domain F a -> F :(a,y): <-> F!a = y.
+Proof.
+  intros F a y H1 H2.
+  apply EvalWhenHasValueAt, HasValueAtWhenFunctional; assumption.
+Qed.
+
+(* If F is functional and a lies in domain of F then (a,F!a) satisfies F.       *)
+Proposition FunctionalEvalSatisfies : forall (F:Class) (a:U),
+  Functional F -> domain F a -> F :(a,F!a):.
+Proof.
+  intros F a H1 H2. apply EvalWhenFunctionalAtSatisfies. 2: assumption.
+  apply FunctionalIsFunctionalAt. assumption.
+Qed.
+
+Proposition FunctionalEvalIsInRange : forall (F:Class) (a:U),
+  Functional F -> domain F a -> range F (F!a).
+Proof.
+  intros F a H1 H2. apply RangeCharac. exists a.
+  apply FunctionalEvalSatisfies; assumption.
+
+Qed.
 
 (* Characterisation of the direct image F[A] in terms of evaluations of F.      *)
 Proposition ImageEvalCharac : forall (F A: Class), Functional F ->
@@ -114,8 +122,9 @@ Proof.
     exists x. split. 1: assumption.
     assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. } split.
     + assumption.
-    + apply EvalWhenFunctional; assumption.
+    + apply FunctionalEval; assumption.
   - destruct H2 as [x [H2 [H3 H4]]].
     apply ImageCharac. exists x. split. 1: assumption.
-    apply EvalWhenFunctional; assumption.
+    apply FunctionalEval; assumption.
 Qed.
+

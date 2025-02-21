@@ -9,6 +9,7 @@ Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
+Require Import ZF.Set.OrdPair.
 
 
 (* A class is a bijection if it is a relation and it is one-to-one.             *)
@@ -54,17 +55,28 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection2; assumption.
 Qed.
 
-Proposition BijectionFEvalIsInRange : forall (F:Class) (x:U),
-  Bijection F -> domain F x -> range F (F!x).
+Proposition BijectionEval : forall (F:Class) (a y:U),
+  Bijection F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F x H1 H2. apply FunctionFEvalIsInRange. 2: assumption.
-  apply BijectionIsFunction. assumption.
+  intros F a y [_ H1]. apply OneToOneEval. assumption.
 Qed.
 
-Proposition BijectionF_EvalIsInDomain : forall (F:Class) (y:U),
-  Bijection F -> range F y -> domain F (F^:-1:!y).
+Proposition BijectionEvalSatisfies : forall (F:Class) (a:U),
+  Bijection F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F y H1 H2. apply ConverseRange, BijectionFEvalIsInRange.
+  intros F a [_ H1]. apply OneToOneEvalSatisfies. assumption.
+Qed.
+
+Proposition BijectionEvalIsInRange : forall (F:Class) (a:U),
+  Bijection F -> domain F a -> range F (F!a).
+Proof.
+  intros F a [_ H1]. apply OneToOneEvalIsInRange. assumption.
+Qed.
+
+Proposition BijectionEvalIsInDomain : forall (F:Class) (b:U),
+  Bijection F -> range F b -> domain F (F^:-1:!b).
+Proof.
+  intros F y H1 H2. apply ConverseRange, BijectionEvalIsInRange.
   - apply ConverseIsBijection. assumption.
   - apply ConverseDomain. assumption.
 Qed.
@@ -80,3 +92,20 @@ Proposition BijectionFF_Eval : forall (F:Class) (y:U),
 Proof.
   intros F y [_ H1]. apply OneToOneFF_Eval. assumption.
 Qed.
+
+Proposition BijectionComposeDomainCharac : forall (F G:Class) (a:U),
+  Bijection F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
+Proof.
+  intros F G a [_ H1]. apply OneToOneComposeDomainCharac. assumption.
+Qed.
+
+Proposition BijectionComposeEval : forall (F G:Class) (a:U),
+  Bijection F     ->
+  Bijection G     ->
+  domain F a      ->
+  domain G (F!a)  ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G a [_ H1] [_ H2]. apply OneToOneComposeEval; assumption.
+Qed.
+

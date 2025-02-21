@@ -69,6 +69,35 @@ Proof.
   apply ConverseOfConverseIncl.
 Qed.
 
+Proposition OneToOneEval : forall (F:Class) (a y:U),
+  OneToOne F -> domain F a -> F :(a,y): <-> F!a = y.
+Proof.
+  intros F a y H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
+  apply FunctionalEval. assumption.
+Qed.
+
+Proposition OneToOneEvalSatisfies : forall (F:Class) (a:U),
+  OneToOne F -> domain F a -> F :(a,F!a):.
+Proof.
+  intros F a H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
+  apply FunctionalEvalSatisfies. assumption.
+Qed.
+
+Proposition OneToOneEvalIsInRange : forall (F:Class) (a:U),
+  OneToOne F -> domain F a -> range F (F!a).
+Proof.
+  intros F a H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
+  apply FunctionalEvalIsInRange. assumption.
+Qed.
+
+Proposition OneToOneEvalIsInDomain : forall (F:Class) (b:U),
+  OneToOne F -> range F b -> domain F (F^:-1:!b).
+Proof.
+  intros F b H1 H2. apply ConverseRange, OneToOneEvalIsInRange.
+  - apply ConverseIsOneToOne. assumption.
+  - apply ConverseDomain. assumption.
+Qed.
+
 (* The composition of two one-to-one classes is one-to-one.                     *)
 Proposition ComposeIsOneToOne : forall (F G:Class),
   OneToOne F -> OneToOne G -> OneToOne (G :.: F).
@@ -87,11 +116,11 @@ Proposition OneToOneF_FEval : forall (F:Class) (x:U),
   OneToOne F -> domain F x -> F^:-1:!(F!x) = x.
 Proof.
   intros F x H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
-  apply EvalWhenFunctional.
+  apply FunctionalEval.
   - assumption.
   - apply ConverseDomain, RangeCharac. exists x.
-    apply EvalWhenFunctionalSatisfies; assumption.
-  - apply ConverseCharac2. apply EvalWhenFunctionalSatisfies; assumption.
+    apply FunctionalEvalSatisfies; assumption.
+  - apply ConverseCharac2. apply FunctionalEvalSatisfies; assumption.
 Qed.
 
 Proposition OneToOneFF_Eval : forall (F:Class) (y:U),
@@ -99,13 +128,32 @@ Proposition OneToOneFF_Eval : forall (F:Class) (y:U),
 Proof.
   intros F y H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
   assert (H4 := H3). apply (proj1 (RangeCharac _ _)) in H4.  destruct H4 as [x H4].
-  assert (F^:-1:!y = x) as H5. { apply EvalWhenFunctional.
+  assert (F^:-1:!y = x) as H5. { apply FunctionalEval.
     - assumption.
     - apply ConverseDomain. assumption.
     - apply ConverseCharac2. assumption. }
-  rewrite H5. apply EvalWhenFunctional.
+  rewrite H5. apply FunctionalEval.
   - assumption.
   - apply DomainCharac. exists y. assumption.
   - assumption.
+Qed.
+
+Proposition OneToOneComposeDomainCharac : forall (F G:Class) (a:U),
+  OneToOne F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
+Proof.
+  intros F G a H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
+  apply FunctionalComposeDomainCharac. assumption.
+Qed.
+
+Proposition OneToOneComposeEval : forall (F G:Class) (a:U),
+  OneToOne F      ->
+  OneToOne G      ->
+  domain F a      ->
+  domain G (F!a)  ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G a H1 H2. apply OneToOneCharac in H1. apply OneToOneCharac in H2.
+  destruct H1 as [H1 _]. destruct H2 as [H2 _].
+  apply FunctionalComposeEval; assumption.
 Qed.
 

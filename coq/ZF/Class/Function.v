@@ -31,21 +31,21 @@ Proof.
       - apply H1. assumption.
       - assumption.
     } subst.
-    assert (F!x = y) as H8. { apply EvalWhenFunctional; assumption. }
-    assert (G!x = y) as H9. { apply EvalWhenFunctional; assumption. }
+    assert (F!x = y) as H8. { apply FunctionalEval; assumption. }
+    assert (G!x = y) as H9. { apply FunctionalEval; assumption. }
     subst. symmetry. assumption.
   - destruct H1 as [H1 H2]. intros u. split; intros H3; assert (H4 := H3).
     + apply Hf in H4. destruct H4 as [x [y H4]]. subst.
       assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
-      assert (F!x = y) as H5. { apply EvalWhenFunctional; assumption. }
+      assert (F!x = y) as H5. { apply FunctionalEval; assumption. }
       assert (domain G x) as H6. { apply H1. assumption. }
-      apply EvalWhenFunctional. { assumption. } { assumption. }
+      apply FunctionalEval. { assumption. } { assumption. }
       symmetry. rewrite <- H5. apply H2. assumption.
     + apply Hg in H4. destruct H4 as [x [y H4]]. subst.
       assert (domain G x) as H4. { apply DomainCharac. exists y. assumption. }
-      assert (G!x = y) as H5. { apply EvalWhenFunctional; assumption. }
+      assert (G!x = y) as H5. { apply FunctionalEval; assumption. }
       assert (domain F x) as H6. { apply H1. assumption. }
-      apply EvalWhenFunctional. { assumption. } { assumption. }
+      apply FunctionalEval. { assumption. } { assumption. }
       rewrite <- H5. apply H2. assumption.
 Qed.
 
@@ -65,11 +65,22 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction2; assumption.
 Qed.
 
-Proposition FunctionFEvalIsInRange : forall (F:Class) (x:U),
-  Function F -> domain F x -> range F (F!x).
+Proposition FunctionEval : forall (F:Class) (a y:U),
+  Function F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F x [_ H1] H2. apply RangeCharac. exists x.
-  apply EvalWhenFunctionalSatisfies; assumption.
+  intros F a y [_ H1]. apply FunctionalEval. assumption.
+Qed.
+
+Proposition FunctionEvalSatisfies : forall (F:Class) (a:U),
+  Function F -> domain F a -> F :(a,F!a):.
+Proof.
+  intros F a [_ H1]. apply FunctionalEvalSatisfies. assumption.
+Qed.
+
+Proposition FunctionEvalIsInRange : forall (F:Class) (a:U),
+  Function F -> domain F a -> range F (F!a).
+Proof.
+  intros F a [_ H1]. apply FunctionalEvalIsInRange. assumption.
 Qed.
 
 Proposition FunctionComposeDomainCharac : forall (F G:Class) (a:U),
@@ -87,5 +98,4 @@ Proposition FunctionComposeEval : forall (F G:Class) (a:U),
 Proof.
   intros F G a [H1 H2] [H3 H4]. apply FunctionalComposeEval; assumption.
 Qed.
-
 

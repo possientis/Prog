@@ -13,6 +13,7 @@ Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
+Require Import ZF.Set.OrdPair.
 
 (* Binary predicate on classes: F is a function defined on A.                   *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
@@ -117,10 +118,24 @@ Proof.
     apply ClassEquivSym. assumption.
 Qed.
 
-Proposition FunctionOnFEvalIsInRange : forall (F A:Class) (x:U),
-  FunctionOn F A -> A x -> range F (F!x).
+Proposition FunctionOnEval : forall (F A:Class) (a y:U),
+  FunctionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A x [H1 H2] H3. apply FunctionFEvalIsInRange. 1: assumption.
+  intros F A a y [H1 H2] H3. apply FunctionEval. 1: assumption.
+  apply H2. assumption.
+Qed.
+
+Proposition FunctionOnEvalSatisfies : forall (F A:Class) (a:U),
+  FunctionOn F A -> A a -> F :(a,F!a):.
+Proof.
+  intros F A a [H1 H2] H3. apply FunctionEvalSatisfies. 1: assumption.
+  apply H2. assumption.
+Qed.
+
+Proposition FunctionOnEvalIsInRange : forall (F A:Class) (a:U),
+  FunctionOn F A -> A a -> range F (F!a).
+Proof.
+  intros F A a [H1 H2] H3. apply FunctionEvalIsInRange. 1: assumption.
   apply H2. assumption.
 Qed.
 
@@ -151,3 +166,4 @@ Proof.
   - apply H2. assumption.
   - apply H4. assumption.
 Qed.
+
