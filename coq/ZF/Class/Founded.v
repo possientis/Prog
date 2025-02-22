@@ -21,14 +21,16 @@ Require Import ZF.Set.Tuple.
 (* R is founded on A iff every non-empty subset of A has an R-minimal element.  *)
 (* We wish this predicate to be expressed in the language of set theory, so     *)
 (* while Coq allows us to quantify over all subclasses of A, we do not do so.   *)
-Definition Founded (R A:Class) : Prop :=
-  forall a, toClass a :<=: A /\ a <> :0: -> exists x, Minimal R (toClass a) x.
+Definition Founded (R A:Class) : Prop := forall a,
+  toClass a :<=: A ->
+  a <> :0:          ->
+  exists x, Minimal R (toClass a) x.
 
 (* If R is founded on A superclass of B, then it is founded on B.               *)
 Proposition FoundedIncl : forall (R A B:Class),
   Founded R A -> B :<=: A -> Founded R B.
 Proof.
-  intros R A B H1 H2 a [H3 H4]. apply H1. split. 2: assumption.
+  intros R A B H1 H2 a H3 H4. apply H1. 2: assumption.
   apply InclTran with B; assumption.
 Qed.
 
@@ -36,7 +38,7 @@ Proposition FoundedIsom : forall (F R S A B:Class),
   Isom F R S A B -> Founded R A <-> Founded S B.
 Proof.
   intros F R S A B H1. split; intros H2.
-  - intros b [H3 H4]. remember (F^:-1::[toClass b]:) as C eqn:EC.
+  - intros b H3 H4. remember (F^:-1::[toClass b]:) as C eqn:EC.
     assert (Small C) as H5. { rewrite EC.
       apply BijInvImageIsSmall with A B.
       - apply IsomIsBij with R S. assumption.
@@ -53,7 +55,7 @@ Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->
 Proof.
   intros R A H1 a H2 H3.
   assert (exists x, Minimal R (toClass :{a}:) x) as H4. {
-    apply H1. split.
+    apply H1.
     - apply SingleToClassIncl. assumption.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x [H4 H5]].
@@ -66,7 +68,7 @@ Proposition FoundedNoLoop2 : forall (R A:Class), Founded R A ->
 Proof.
   intros R A H1 a b H2 H3 [H4 H5].
   assert (exists x, Minimal R (toClass :{a,b}:) x) as H6. {
-    apply H1. split.
+    apply H1.
     - apply PairToClassIncl. split; assumption.
     - apply PairIsNotEmpty.
   } destruct H6 as [x [H6 H7]].
@@ -83,7 +85,7 @@ Proposition FoundedNoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
 Proof.
   intros R A H1 a1 a2 a3 H2 H3 H4 [H5 [H6 H7]].
   assert (exists x, Minimal R (toClass :{a1,a2,a3}:) x) as H8. {
-  apply H1. split.
+  apply H1.
   - apply Tuple3ToClassIncl. split. 1: assumption. split; assumption.
   - apply Tuple3IsNotEmpty.
   } destruct H8 as [x [H8 H9]].
@@ -102,7 +104,7 @@ Proposition FoundedNoLoop4 : forall (R A:Class), Founded R A -> forall a1 a2 a3 
 Proof.
   intros R A H1 a1 a2 a3 a4 H2 H3 H4 H5 [H6 [H7 [H8 H9]]].
   assert (exists x, Minimal R (toClass :{a1,a2,a3,a4}:) x) as H10. {
-  apply H1. split.
+  apply H1.
   - apply Tuple4ToClassIncl.
     split. 1: assumption.
     split. 1: assumption.

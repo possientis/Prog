@@ -112,7 +112,7 @@ Proof.
 
   (* R being well-founded on B, it follows that c has an R-minimal element. *)
     assert (exists x, Minimal R (toClass c) x) as H11. {
-      apply H6. split; assumption.
+      apply H6; assumption.
     }
 
   (* So let x be such an R-minimal element in c. *)

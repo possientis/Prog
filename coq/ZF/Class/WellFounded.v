@@ -65,7 +65,7 @@ Proof.
   - assert (Founded R A) as X. 2: apply X.
 
     (* Let a be a non-empty set which is a subclass of A. *)
-    intros a [H1 H2].
+    intros a H1 H2.
 
     (* Then a is a subclass of A. *)
     assert (toClass a :<=: A) as X. apply H1. clear X.

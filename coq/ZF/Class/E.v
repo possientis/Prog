@@ -33,7 +33,7 @@ Proof.
   intros a.
 
   (* We assume that a is non-empty. *)
-  intros [_ H1]. assert (a <> :0:) as A. apply H1. clear A.
+  intros _ H1. assert (a <> :0:) as A. apply H1. clear A.
 
   (* We need to show that a has an E-minimal element. *)
   assert (exists x, Minimal E (toClass a) x) as A. 2: apply A.

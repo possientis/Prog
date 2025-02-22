@@ -30,7 +30,7 @@ Proposition WellOrderingIsIrreflexive : forall (R A:Class),
 Proof.
   intros R A [H1 H2] a H3.
   assert (exists x, Minimal R (toClass :{a}:) x) as H4. {
-    apply H1. split.
+    apply H1.
     - apply SingleToClassIncl. assumption.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x H4]. assert (H5 := H4). apply MinimalIn in H5.
@@ -47,7 +47,7 @@ Proof.
     revert H8. apply (FoundedNoLoop2 R A H1 y z); assumption.
   - assumption.
   - exfalso. assert (exists u, Minimal R (toClass :{x,y,z}:) u) as H8. {
-      apply H1. split.
+      apply H1.
       - apply Tuple3ToClassIncl. split. 1: assumption. split; assumption.
       - apply Tuple3IsNotEmpty.
     } destruct H8 as [u H8]. assert (H9 := H8). apply MinimalIn in H9.
