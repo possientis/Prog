@@ -25,7 +25,7 @@ Proof.
 Qed.
 
 (* If P is functional and Q is small, then P:[Q]: is small.                     *)
-Proposition ImageIsSmall : forall (P Q:Class),
+Proposition FunctionalImageIsSmall : forall (P Q:Class),
   Functional P -> Small Q -> Small P :[Q]:.
 Proof.
   intros P Q. apply Binary.Image.ImageIsSmall.

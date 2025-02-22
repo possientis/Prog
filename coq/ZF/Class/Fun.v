@@ -4,9 +4,11 @@ Open    Scope ZF_Class_Fun_scope.
 Require Import ZF.Class.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Domain.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
@@ -16,6 +18,12 @@ Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 
 Notation "F :: A :-> B" := (Fun F A B)
   (at level 0, no associativity) : ZF_Class_Fun_scope.
+
+Proposition FunImageIsSmall : forall (F A B C:Class),
+  F :: A :-> B -> Small C -> Small F:[C]:.
+Proof.
+  intros F A B C [H1 _]. apply FunctionOnImageIsSmall with A. assumption.
+Qed.
 
 Proposition FunEval : forall (F A B:Class) (a y:U),
   F :: A :-> B -> A a -> F :(a,y): <-> F!a = y.
@@ -72,4 +80,3 @@ Proof.
   - split; assumption.
   - assumption.
 Qed.
-

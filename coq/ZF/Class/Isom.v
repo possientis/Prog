@@ -14,6 +14,12 @@ Require Import ZF.Set.OrdPair.
 Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y ->
   R :(x,y): <-> S :(F!x,F!y):.
 
+Proposition IsomIsBij : forall (F R S A B:Class),
+  Isom F R S A B -> Bij F A B.
+Proof.
+  intros F R S A B [H1 _]. assumption.
+Qed.
+
 (* If F:A -> B is an (R,S)-isomorphism, F^-1 : B -> A is an (S,R)-isomorpshism. *)
 Proposition ConverseIsIsom : forall (F R S A B:Class),
   Isom F R S A B -> Isom F^:-1: S R B A.
@@ -57,7 +63,7 @@ Proposition IsomInitSegmentImage : forall (F R S A B C:Class) (a:U),
   Isom F R S A B    ->
   C :<=: A          ->
   A a               ->
-  F:[initSegment R C a]: :~: initSegment S F:[C]: F!a.
+  F:[initSegment R C a]: :~: initSegment S F:[C]: (F!a).
 Proof.
   intros F R S A B C a [H1 H2] H3 H4 y. split; intros H5.
   - apply (proj1 (ImageCharac _ _ _)) in H5. destruct H5 as [x [H5 H6]].
@@ -77,6 +83,16 @@ Proof.
     + rewrite H8. assumption.
 Qed.
 
+Proposition IsomFullInitSegmentImage : forall (F R S A B:Class) (a:U),
+  Isom F R S A B    ->
+  A a               ->
+  F:[initSegment R A a]: :~: initSegment S B (F!a).
+Proof.
+  intros F R S A B a H1 H2.
+  apply ClassEquivTran with (initSegment S F:[A]: F!a).
+  - apply IsomInitSegmentImage with A B; try assumption. apply InclRefl.
+  - apply InitSegmentEquivCompatR, BijDomainImage, IsomIsBij with R S. assumption.
+Qed.
 
 Proposition IsomEmptyInitSegment : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                    ->
@@ -87,8 +103,6 @@ Proposition IsomEmptyInitSegment : forall (F R S A B C:Class) (a:U),
 Proof.
   intros F R S A B C a H1 H2 H3 H4.
   apply ClassEquivTran with F:[initSegment R C a]:.
-  - apply ClassEquivSym, (IsomInitSegmentImage F R S A B); assumption.
+  - apply ClassEquivSym, IsomInitSegmentImage with A B; assumption.
   - apply ImageOfEmpty. assumption.
 Qed.
-
-

@@ -1,10 +1,17 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Bij.
+Require Import ZF.Class.Converse.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Isom.
 Require Import ZF.Class.Minimal.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Eval.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
@@ -24,6 +31,22 @@ Proof.
   intros R A B H1 H2 a [H3 H4]. apply H1. split. 2: assumption.
   apply InclTran with B; assumption.
 Qed.
+
+Proposition FoundedIsom : forall (F R S A B:Class),
+  Isom F R S A B -> Founded R A <-> Founded S B.
+Proof.
+  intros F R S A B H1. split; intros H2.
+  - intros b [H3 H4]. remember (F^:-1::[toClass b]:) as C eqn:EC.
+    assert (Small C) as H5. { rewrite EC.
+      apply BijInvImageIsSmall with A B.
+      - apply IsomIsBij with R S. assumption.
+      - apply SetIsSmall. }
+    remember (fromClass C H5) as a eqn:Ea. specialize (H2 a).
+    assert (toClass a :~: F^:-1::[toClass b]:) as H6. {
+      apply ClassEquivTran with C.
+      - rewrite Ea. apply ToFromClass.
+      - rewrite <- EC. apply ClassEquivRefl. }
+Admitted.
 
 Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->
   forall a, A a -> ~ R :(a,a):.

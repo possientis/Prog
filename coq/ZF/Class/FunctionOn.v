@@ -18,6 +18,12 @@ Require Import ZF.Set.OrdPair.
 (* Binary predicate on classes: F is a function defined on A.                   *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
+Proposition FunctionOnImageIsSmall : forall (F A B:Class),
+  FunctionOn F A -> Small B -> Small F:[B]:.
+Proof.
+  intros F A B [H1 _]. apply FunctionImageIsSmall. assumption.
+Qed.
+
 (* A function is always a function defined on its domain.                       *)
 Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
@@ -79,7 +85,7 @@ Proof.
   - assert (Small F:[A]:) as A'. 2: apply A'.
 
   (* Which follows from the fact that F is functional and A is small. *)
-    apply ImageIsSmall. { apply H2. } { apply H3. }
+    apply FunctionalImageIsSmall. { apply H2. } { apply H3. }
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)

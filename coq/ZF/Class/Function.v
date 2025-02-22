@@ -2,14 +2,22 @@ Require Import ZF.Class.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
+
+Proposition FunctionImageIsSmall : forall (F A:Class),
+  Function F -> Small A -> Small F:[A]:.
+Proof.
+  intros F A [_ H1]. apply FunctionalImageIsSmall. assumption.
+Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition FunctionEquivCharac : forall (F G:Class),

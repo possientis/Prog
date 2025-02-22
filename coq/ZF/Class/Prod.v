@@ -224,7 +224,7 @@ Proof.
   assert (Small (Switch:[P :x: Q]:)) as A. 2: apply A.
 
   (* This follows from the fact that Switch is functional and P x Q is small. *)
-  apply ImageIsSmall.
+  apply FunctionalImageIsSmall.
 
   - apply SwitchIsFunctional.
 
@@ -311,7 +311,7 @@ Proof.
   assert (Small R:[domain R]:) as A. 2: apply A.
 
   (* Which follows from the fact that R is functional and domain R is small. *)
-  apply ImageIsSmall.
+  apply FunctionalImageIsSmall.
     - apply H5.
     - apply H7.
 Qed.

@@ -24,18 +24,6 @@ Proof.
     apply SingleIn.
 Qed.
 
-Proposition InitSegmentIn : forall (R A:Class) (a x:U),
-  initSegment R A a x -> A x.
-Proof.
-  intros R A a x H1. apply InitSegmentCharac in H1. apply H1.
-Qed.
-
-Proposition InitSegmentLess : forall (R A:Class) (a x:U),
-  initSegment R A a x -> R :(x,a):.
-Proof.
-  intros R A a x H1. apply InitSegmentCharac in H1. apply H1.
-Qed.
-
 (* Initial segments are compatible with equivalences.                           *)
 Proposition InitSegmentEquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> initSegment R A a :~: initSegment S B a.
@@ -86,6 +74,18 @@ Proof.
   intros R A B a H1. apply InitSegmentInclCompat.
   - apply InclRefl.
   - assumption.
+Qed.
+
+Proposition InitSegmentIn : forall (R A:Class) (a x:U),
+  initSegment R A a x -> A x.
+Proof.
+  intros R A a x H1. apply InitSegmentCharac in H1. apply H1.
+Qed.
+
+Proposition InitSegmentLess : forall (R A:Class) (a x:U),
+  initSegment R A a x -> R :(x,a):.
+Proof.
+  intros R A a x H1. apply InitSegmentCharac in H1. apply H1.
 Qed.
 
 (* The initial segment is empty iff there is no x in A which is less than a.    *)

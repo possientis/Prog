@@ -3,6 +3,7 @@ Require Import ZF.Class.Bijection.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.FunctionOn.
@@ -15,6 +16,18 @@ Require Import ZF.Set.OrdPair.
 
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
+
+Proposition BijectionOnImageIsSmall : forall (F A B:Class),
+  BijectionOn F A -> Small B -> Small F:[B]:.
+Proof.
+  intros F A B [H1 _]. apply BijectionImageIsSmall. assumption.
+Qed.
+
+Proposition BijectionOnInvImageIsSmall : forall (F A B:Class),
+  BijectionOn F A -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F A B [H1 _]. apply BijectionInvImageIsSmall. assumption.
+Qed.
 
 (* A bijection is always a bijection defined on its domain. *)
 Proposition BijectionIsBijectionOn : forall (F:Class),
@@ -127,4 +140,3 @@ Proof.
   apply BijectionOnIsFunctionOn in H1. apply BijectionOnIsFunctionOn in H2.
   apply FunctionOnComposeEval; assumption.
 Qed.
-

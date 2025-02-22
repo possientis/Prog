@@ -8,8 +8,10 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Range.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
@@ -48,6 +50,20 @@ Proposition OneToOneCharacR : forall (F:Class), OneToOne F ->
 Proof.
   intros F H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
   apply FunctionalCharac1. assumption.
+Qed.
+
+Proposition OneToOneImageIsSmall : forall (F A:Class),
+  OneToOne F -> Small A -> Small F:[A]:.
+Proof.
+  intros F A H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
+  apply FunctionalImageIsSmall. assumption.
+Qed.
+
+Proposition OneToOneInvImageIsSmall : forall (F B:Class),
+  OneToOne F -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F B H1. apply OneToOneCharac in H1. destruct H1 as [_ H1].
+  apply FunctionalImageIsSmall. assumption.
 Qed.
 
 (* When two ordered pairs belong to a one-to-one class, equality between the    *)
@@ -156,4 +172,3 @@ Proof.
   destruct H1 as [H1 _]. destruct H2 as [H2 _].
   apply FunctionalComposeEval; assumption.
 Qed.
-

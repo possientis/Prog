@@ -66,7 +66,7 @@ Proof.
   assert (Small (Fst:[P]:)) as A. 2: apply A.
 
   (* This follows from the fact that Fst is functional and P is small. *)
-  apply ImageIsSmall.
+  apply FunctionalImageIsSmall.
 
   - apply FstIsFunctional.
 

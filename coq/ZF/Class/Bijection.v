@@ -4,9 +4,11 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
@@ -14,6 +16,18 @@ Require Import ZF.Set.OrdPair.
 
 (* A class is a bijection if it is a relation and it is one-to-one.             *)
 Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
+
+Proposition BijectionImageIsSmall : forall (F A:Class),
+  Bijection F -> Small A -> Small F:[A]:.
+Proof.
+  intros F A [_ H1]. apply OneToOneImageIsSmall. assumption.
+Qed.
+
+Proposition BijectionInvImageIsSmall : forall (F B:Class),
+  Bijection F -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F B [_ H1]. apply OneToOneInvImageIsSmall. assumption.
+Qed.
 
 Proposition BijectionIsFunction : forall (F:Class),
   Bijection F -> Function F.

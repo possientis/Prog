@@ -6,15 +6,29 @@ Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Fun.
 Require Import ZF.Class.FunctionOn.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Restrict.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
 (* F is a bijection from A to B.                                                *)
 Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
+
+Proposition BijImageIsSmall : forall (F A B C:Class),
+  Bij F A B -> Small C -> Small F:[C]:.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOnImageIsSmall with A. assumption.
+Qed.
+
+Proposition BijInvImageIsSmall : forall (F A B C:Class),
+  Bij F A B -> Small C -> Small F^:-1::[C]:.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOnInvImageIsSmall with A. assumption.
+Qed.
 
 Proposition BijIsFun : forall (F A B:Class),
   Bij F A B -> F :: A :-> B.
@@ -105,3 +119,17 @@ Proof.
   apply FunComposeEval with B C; assumption.
 Qed.
 
+Proposition BijDomainImage : forall (F A B:Class),
+  Bij F A B -> F:[A]: :~: B.
+Proof.
+  intros F A B [[H1 H2] H3]. apply ClassEquivTran with (F:[domain F]:).
+  - apply ImageEquivCompatR, ClassEquivSym. assumption.
+  - apply ClassEquivTran with (range F). 2: assumption.
+    apply RangeIsDomainImage.
+Qed.
+
+Proposition BijRangeInvImage : forall (F A B:Class),
+  Bij F A B -> F^:-1::[B]: :~: A.
+Proof.
+  intros F A B H1. apply BijDomainImage, ConverseIsBij. assumption.
+Qed.
