@@ -48,6 +48,10 @@ Proof.
       apply ClassEquivTran with C.
       - rewrite Ea. apply ToFromClass.
       - rewrite <- EC. apply ClassEquivRefl. }
+    clear EC Ea H5 C. assert (toClass a :<=: A) as H7. {
+      apply InclEquivCompatL with (F^:-1::[toClass b]:).
+      - apply ClassEquivSym. assumption.
+      -
 Admitted.
 
 Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->

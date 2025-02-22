@@ -4,6 +4,7 @@ Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Range.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
@@ -88,4 +89,43 @@ Proof.
     rewrite H5. assumption.
   - destruct H2 as [H2 H3]. apply ImageCharac. exists (F!x). split. 1: assumption.
     apply ConverseCharac2. apply FunctionalEvalSatisfies; assumption.
+Qed.
+
+Proposition InvImageOfImageIsLess : forall (F A:Class),
+  Functional F^:-1: -> F^:-1::[ F:[A]: ]: :<=: A.
+Proof.
+  intros F A H1 x H2. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
+  apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [x' [H2 H4]].
+  assert (x' = x) as H5. { apply FunctionalCharac1 with F^:-1: y. 1: assumption.
+    - apply ConverseCharac2. assumption.
+    - apply ConverseCharac2. assumption. }
+  subst. assumption.
+Qed.
+
+Proposition InvImageOfImageIsMore : forall (F A:Class),
+  A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
+Proof.
+  intros F A H1 x H2. specialize (H1 x H2).
+  apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
+  apply InvImageCharac. exists y. split. 2: assumption.
+  apply ImageCharac. exists x. split; assumption.
+Qed.
+
+Proposition ImageOfInvImageIsLess : forall (F B:Class),
+  Functional F -> F:[ F^:-1::[B]: ]: :<=: B.
+Proof.
+  intros F B H1 y H2.
+  apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [x [H2 H3]].
+  apply InvImageCharac in H2. destruct H2 as [y' [H2 H4]].
+  assert (y' = y) as H6. { apply FunctionalCharac1 with F x; assumption. }
+  subst. assumption.
+Qed.
+
+Proposition ImageOfInvImageIsMore : forall (F B:Class),
+  B :<=: range F -> B :<=: F:[ F^:-1::[B]: ]:.
+Proof.
+  intros F B H1 y H2. specialize (H1 y H2).
+  apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
+  apply ImageCharac. exists x. split. 2: assumption.
+  apply InvImageCharac. exists y. split; assumption.
 Qed.
