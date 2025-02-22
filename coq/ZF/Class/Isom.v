@@ -6,7 +6,6 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
-Require Import ZF.Class.Restrict.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
@@ -65,9 +64,20 @@ Proof.
     apply InitSegmentCharac in H5. destruct H5 as [H5 H7].
     apply InitSegmentCharac. assert (F!x = y) as H8. {
       apply (BijEval F A B); try assumption. apply H3. assumption. }
-Admitted.
+    split.
+    + apply ImageCharac. exists x. split; assumption.
+    + rewrite <- H8. apply H2; try assumption. apply H3. assumption.
+  - apply InitSegmentCharac in H5. destruct H5 as [H5 H6].
+    apply (proj1 (ImageCharac _ _ _)) in H5. destruct H5 as [x [H5 H7]].
+    assert (F!x = y) as H8. {
+      apply (BijEval F A B); try assumption. apply H3. assumption. }
+    apply ImageCharac. exists x. split. 2: assumption.
+    apply InitSegmentCharac. split. 1: assumption. apply H2. 2: assumption.
+    + apply H3. assumption.
+    + rewrite H8. assumption.
+Qed.
 
-(*
+
 Proposition IsomEmptyInitSegment : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                    ->
   C :<=: A                          ->
@@ -75,6 +85,10 @@ Proposition IsomEmptyInitSegment : forall (F R S A B C:Class) (a:U),
   initSegment R C a :~: :0:         ->
   initSegment S F:[C]: F!a :~: :0:.
 Proof.
-Admitted.
-*)
+  intros F R S A B C a H1 H2 H3 H4.
+  apply ClassEquivTran with F:[initSegment R C a]:.
+  - apply ClassEquivSym, (IsomInitSegmentImage F R S A B); assumption.
+  - apply ImageOfEmpty. assumption.
+Qed.
+
 

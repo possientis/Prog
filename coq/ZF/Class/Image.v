@@ -3,6 +3,7 @@ Open Scope    ZF_Class_Image_scope.
 
 Require Import ZF.Binary.Image.
 Require Import ZF.Class.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Incl.
@@ -87,4 +88,13 @@ Proof.
   intros P Q R H1. apply ImageInclCompat.
   - apply InclRefl.
   - assumption.
+Qed.
+
+Proposition ImageOfEmpty : forall (P Q:Class),
+  Q :~: :0: -> P:[Q]: :~: :0:.
+Proof.
+  intros P Q H1 y. split; intros H2.
+  - apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [x [H2 H3]].
+    apply H1 in H2. apply EmptyCharac in H2. contradiction.
+  - apply EmptyCharac in H2. contradiction.
 Qed.
