@@ -206,7 +206,7 @@ Proof.
       apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
       apply DomainCharac. exists z.
       assert (F!a = y) as H4. {
-        apply EvalWhenFunctionalAt. 1: assumption. 2: assumption.
+        apply FunctionalAtEvalCharac. 1: assumption. 2: assumption.
         apply DomainCharac. exists y. assumption.
       }
       rewrite H4. assumption.
@@ -215,7 +215,7 @@ Proof.
     apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
     apply DomainCharac. exists z. apply ComposeCharac2. exists y.
     split. 1: assumption.
-    assert (F!a = y) as H5. { apply EvalWhenFunctionalAt; assumption. }
+    assert (F!a = y) as H5. { apply FunctionalAtEvalCharac; assumption. }
     rewrite <- H5. assumption.
 Qed.
 
@@ -236,8 +236,8 @@ Proof.
   intros F G a H1 H2 H3. apply FunctionalAtCharac2. intros z1 z2 H4 H5.
   apply ComposeCharac2 in H4. destruct H4 as [y1 [H4 H6]].
   apply ComposeCharac2 in H5. destruct H5 as [y2 [H5 H7]].
-  assert (F!a = y1) as H8. { apply EvalWhenFunctionalAt; assumption. }
-  assert (F!a = y2) as H9. { apply EvalWhenFunctionalAt; assumption. }
+  assert (F!a = y1) as H8. { apply FunctionalAtEvalCharac; assumption. }
+  assert (F!a = y2) as H9. { apply FunctionalAtEvalCharac; assumption. }
   subst. apply FunctionalAtCharac1 with G (F!a); assumption.
 Qed.
 
@@ -252,13 +252,13 @@ Proof.
   intros F G a H1 H2 H3 H4. assert (H5 := H3). assert (H6 := H4).
   apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [y H3].
   apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [z H4].
-  assert (F!a = y) as H7. { apply EvalWhenFunctionalAt; assumption. }
-  assert (G!(F!a) = z) as H8. { apply EvalWhenFunctionalAt; assumption. }
+  assert (F!a = y) as H7. { apply FunctionalAtEvalCharac; assumption. }
+  assert (G!(F!a) = z) as H8. { apply FunctionalAtEvalCharac; assumption. }
   assert (FunctionalAt (G :.: F) a) as H9. {
     apply ComposeIsFunctionalAt; assumption. }
   assert ((G :.: F) :(a,z):) as H10. {
     apply ComposeCharac2. exists y. split. 1: assumption. rewrite <- H7. assumption. }
-  apply EvalWhenFunctionalAt. 1: assumption.
+  apply FunctionalAtEvalCharac. 1: assumption.
   - apply FunctionalAtComposeDomainCharac. 1: assumption. split; assumption.
   - rewrite H8. assumption.
 Qed.

@@ -23,7 +23,7 @@ Notation "F ! a" := (eval F a)
   (at level 0, no associativity) : ZF_Set_Eval_scope.
 
 (* If F has a value at a, then y corresponds to a iff F!a = y.                  *)
-Proposition EvalWhenHasValueAt : forall (F:Class) (a y:U),
+Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
   HasValueAt F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1. split; intros H2.
@@ -36,27 +36,27 @@ Proof.
 Qed.
 
 (* If F has a value at a, then (a,F!a) satisfies the class F.                   *)
-Proposition EvalWhenHasValueAtSatisfies : forall (F:Class) (a:U),
+Proposition HasValueAtEvalSatisfies : forall (F:Class) (a:U),
   HasValueAt F a -> F :(a,F!a):.
 Proof.
-  intros F a H1. apply EvalWhenHasValueAt.
+  intros F a H1. apply HasValueAtEvalCharac.
   - assumption.
   - reflexivity.
 Qed.
 
 (* If F is functional at a and a lies in domain then F (a,y) iff F!a = y.       *)
-Proposition EvalWhenFunctionalAt : forall (F:Class) (a y:U),
+Proposition FunctionalAtEvalCharac : forall (F:Class) (a y:U),
   FunctionalAt F a -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1 H2.
-  apply EvalWhenHasValueAt, HasValueAtWhenFunctionalAt; assumption.
+  apply HasValueAtEvalCharac, HasValueAtWhenFunctionalAt; assumption.
 Qed.
 
 (* If F is functional at a and a lies in domain then (a,F!a) satisfies F.       *)
-Proposition EvalWhenFunctionalAtSatisfies : forall (F:Class) (a:U),
+Proposition FunctionalAtEvalSatisfies : forall (F:Class) (a:U),
   FunctionalAt F a -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a H1 H2. apply EvalWhenFunctionalAt.
+  intros F a H1 H2. apply FunctionalAtEvalCharac.
   - assumption.
   - assumption.
   - reflexivity.
@@ -90,18 +90,18 @@ Proof.
 Qed.
 
 (* If F is functional and a lies in domain of F then F (a,y) iff F!a = y.       *)
-Proposition FunctionalEval : forall (F:Class) (a y:U),
+Proposition FunctionalEvalCharac : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1 H2.
-  apply EvalWhenHasValueAt, HasValueAtWhenFunctional; assumption.
+  apply HasValueAtEvalCharac, HasValueAtWhenFunctional; assumption.
 Qed.
 
 (* If F is functional and a lies in domain of F then (a,F!a) satisfies F.       *)
 Proposition FunctionalEvalSatisfies : forall (F:Class) (a:U),
   Functional F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a H1 H2. apply EvalWhenFunctionalAtSatisfies. 2: assumption.
+  intros F a H1 H2. apply FunctionalAtEvalSatisfies. 2: assumption.
   apply FunctionalIsFunctionalAt. assumption.
 Qed.
 
@@ -122,9 +122,9 @@ Proof.
     exists x. split. 1: assumption.
     assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. } split.
     + assumption.
-    + apply FunctionalEval; assumption.
+    + apply FunctionalEvalCharac; assumption.
   - destruct H2 as [x [H2 [H3 H4]]].
     apply ImageCharac. exists x. split. 1: assumption.
-    apply FunctionalEval; assumption.
+    apply FunctionalEvalCharac; assumption.
 Qed.
 

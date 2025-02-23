@@ -10,6 +10,7 @@ Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.InvImage.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
@@ -31,6 +32,52 @@ Proof.
     apply Binary.Functional.FunctionalEquivCompat
       with (toBinary (fromBinary (Binary.Converse.converse (toBinary F)))).
     2: assumption. apply ToFromBinary.
+Qed.
+
+Proposition OneToOneIsFunctional : forall (F:Class),
+  OneToOne F -> Functional F.
+Proof.
+  intros F H1. apply OneToOneCharac in H1. destruct H1 as [H1 _]. assumption.
+Qed.
+
+Proposition OneToOneConverseIsFunctional : forall (F:Class),
+  OneToOne F -> Functional F^:-1:.
+Proof.
+  intros F H1. apply OneToOneCharac in H1. destruct H1 as [_ H1]. assumption.
+Qed.
+
+Proposition OneToOneInvImageOfImageIsLess : forall (F A:Class),
+  OneToOne F -> F^:-1::[ F:[A]: ]: :<=: A.
+Proof.
+  intros F A H1. apply FunctionalInvImageOfImageIsLess.
+  apply OneToOneConverseIsFunctional. assumption.
+Qed.
+
+(* Same as the 'Functional' counterpart. Duplicated here for convenience.       *)
+Proposition OneToOneInvImageOfImageIsMore : forall (F A:Class),
+  A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
+Proof.
+  intros F A H1 x H2. specialize (H1 x H2).
+  apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
+  apply InvImageCharac. exists y. split. 2: assumption.
+  apply ImageCharac. exists x. split; assumption.
+Qed.
+
+Proposition OneToOneImageOfInvImageIsLess : forall (F B:Class),
+  OneToOne F -> F:[ F^:-1::[B]: ]: :<=: B.
+Proof.
+  intros F B H1. apply FunctionalImageOfInvImageIsLess.
+  apply OneToOneIsFunctional. assumption.
+Qed.
+
+(* Same as the 'Functional' counterpart. Duplicated here for convenience.       *)
+Proposition OneToOneImageOfInvImageIsMore : forall (F B:Class),
+  B :<=: range F -> B :<=: F:[ F^:-1::[B]: ]:.
+Proof.
+  intros F B H1 y H2. specialize (H1 y H2).
+  apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
+  apply ImageCharac. exists x. split. 2: assumption.
+  apply InvImageCharac. exists y. split; assumption.
 Qed.
 
 (* Uniqueness of left coordinate when one-to-one.                               *)
@@ -85,11 +132,11 @@ Proof.
   apply ConverseOfConverseIncl.
 Qed.
 
-Proposition OneToOneEval : forall (F:Class) (a y:U),
+Proposition OneToOneEvalCharac : forall (F:Class) (a y:U),
   OneToOne F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
-  apply FunctionalEval. assumption.
+  apply FunctionalEvalCharac. assumption.
 Qed.
 
 Proposition OneToOneEvalSatisfies : forall (F:Class) (a:U),
@@ -132,7 +179,7 @@ Proposition OneToOneF_FEval : forall (F:Class) (x:U),
   OneToOne F -> domain F x -> F^:-1:!(F!x) = x.
 Proof.
   intros F x H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
-  apply FunctionalEval.
+  apply FunctionalEvalCharac.
   - assumption.
   - apply ConverseDomain, RangeCharac. exists x.
     apply FunctionalEvalSatisfies; assumption.
@@ -144,11 +191,11 @@ Proposition OneToOneFF_Eval : forall (F:Class) (y:U),
 Proof.
   intros F y H1 H3. apply OneToOneCharac in H1. destruct H1 as [H1 H2].
   assert (H4 := H3). apply (proj1 (RangeCharac _ _)) in H4.  destruct H4 as [x H4].
-  assert (F^:-1:!y = x) as H5. { apply FunctionalEval.
+  assert (F^:-1:!y = x) as H5. { apply FunctionalEvalCharac.
     - assumption.
     - apply ConverseDomain. assumption.
     - apply ConverseCharac2. assumption. }
-  rewrite H5. apply FunctionalEval.
+  rewrite H5. apply FunctionalEvalCharac.
   - assumption.
   - apply DomainCharac. exists y. assumption.
   - assumption.
@@ -172,3 +219,4 @@ Proof.
   destruct H1 as [H1 _]. destruct H2 as [H2 _].
   apply FunctionalComposeEval; assumption.
 Qed.
+

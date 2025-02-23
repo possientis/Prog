@@ -244,7 +244,7 @@ Proof.
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
   - assert (domain (F:|:A) x) as H5. {
       apply DomainOfRestrict, InterCharac. split; assumption. }
-    apply FunctionalEval.
+    apply FunctionalEvalCharac.
     + assumption.
     + assumption.
     + apply RestrictCharac2. split. 1: assumption. rewrite E.

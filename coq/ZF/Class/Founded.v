@@ -23,7 +23,7 @@ Require Import ZF.Set.Tuple.
 (* while Coq allows us to quantify over all subclasses of A, we do not do so.   *)
 Definition Founded (R A:Class) : Prop := forall a,
   toClass a :<=: A ->
-  a <> :0:          ->
+  a <> :0:         ->
   exists x, Minimal R (toClass a) x.
 
 (* If R is founded on A superclass of B, then it is founded on B.               *)

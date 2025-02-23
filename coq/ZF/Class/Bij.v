@@ -42,7 +42,7 @@ Proposition ConverseIsBij : forall (F A B:Class),
 Proof.
   intros F A B [[H1 H2] H3]. split.
   - split.
-    + apply ConverseIsBijection. assumption.
+    + apply BijectionConverseIsBijection. assumption.
     + apply ClassEquivTran with (range F). 2: assumption. apply ConverseDomain.
   - apply ClassEquivTran with (domain F). 2: assumption. apply ConverseRange.
 Qed.

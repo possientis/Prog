@@ -39,21 +39,21 @@ Proof.
       - apply H1. assumption.
       - assumption.
     } subst.
-    assert (F!x = y) as H8. { apply FunctionalEval; assumption. }
-    assert (G!x = y) as H9. { apply FunctionalEval; assumption. }
+    assert (F!x = y) as H8. { apply FunctionalEvalCharac; assumption. }
+    assert (G!x = y) as H9. { apply FunctionalEvalCharac; assumption. }
     subst. symmetry. assumption.
   - destruct H1 as [H1 H2]. intros u. split; intros H3; assert (H4 := H3).
     + apply Hf in H4. destruct H4 as [x [y H4]]. subst.
       assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
-      assert (F!x = y) as H5. { apply FunctionalEval; assumption. }
+      assert (F!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
       assert (domain G x) as H6. { apply H1. assumption. }
-      apply FunctionalEval. { assumption. } { assumption. }
+      apply FunctionalEvalCharac. { assumption. } { assumption. }
       symmetry. rewrite <- H5. apply H2. assumption.
     + apply Hg in H4. destruct H4 as [x [y H4]]. subst.
       assert (domain G x) as H4. { apply DomainCharac. exists y. assumption. }
-      assert (G!x = y) as H5. { apply FunctionalEval; assumption. }
+      assert (G!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
       assert (domain F x) as H6. { apply H1. assumption. }
-      apply FunctionalEval. { assumption. } { assumption. }
+      apply FunctionalEvalCharac. { assumption. } { assumption. }
       rewrite <- H5. apply H2. assumption.
 Qed.
 
@@ -76,7 +76,7 @@ Qed.
 Proposition FunctionEval : forall (F:Class) (a y:U),
   Function F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y [_ H1]. apply FunctionalEval. assumption.
+  intros F a y [_ H1]. apply FunctionalEvalCharac. assumption.
 Qed.
 
 Proposition FunctionEvalSatisfies : forall (F:Class) (a:U),

@@ -37,7 +37,7 @@ Proof.
   split; assumption.
 Qed.
 
-Proposition ConverseIsFunction : forall (F:Class),
+Proposition BijectionConverseIsFunction : forall (F:Class),
   Bijection F -> Function F^:-1:.
 Proof.
   intros F [H1 H2].
@@ -45,7 +45,7 @@ Proof.
   split. 2: assumption. apply ConverseIsRelation.
 Qed.
 
-Proposition ConverseIsBijection : forall (F:Class),
+Proposition BijectionConverseIsBijection : forall (F:Class),
   Bijection F -> Bijection F^:-1:.
 Proof.
   intros F [H1 H2]. split.
@@ -54,7 +54,7 @@ Proof.
 Qed.
 
 (* The composition of two one-to-one classes is a bijection class.              *)
-Proposition ComposeIsBijection2 : forall (F G:Class),
+Proposition OneToOneComposeIsBijection : forall (F G:Class),
   OneToOne F -> OneToOne G -> Bijection (G :.: F).
 Proof.
   intros F G Hf Hg. split.
@@ -63,16 +63,16 @@ Proof.
 Qed.
 
 (* The composition of two bijection classes is a bijection class.               *)
-Proposition ComposeIsBijection : forall (F G:Class),
+Proposition BijectionComposeIsBijection : forall (F G:Class),
   Bijection F -> Bijection G -> Bijection (G :.: F).
 Proof.
-  intros F G [_ Hf] [_ Hg]. apply ComposeIsBijection2; assumption.
+  intros F G [_ Hf] [_ Hg]. apply OneToOneComposeIsBijection; assumption.
 Qed.
 
-Proposition BijectionEval : forall (F:Class) (a y:U),
+Proposition BijectionEvalCharac : forall (F:Class) (a y:U),
   Bijection F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y [_ H1]. apply OneToOneEval. assumption.
+  intros F a y [_ H1]. apply OneToOneEvalCharac. assumption.
 Qed.
 
 Proposition BijectionEvalSatisfies : forall (F:Class) (a:U),
@@ -91,7 +91,7 @@ Proposition BijectionEvalIsInDomain : forall (F:Class) (b:U),
   Bijection F -> range F b -> domain F (F^:-1:!b).
 Proof.
   intros F y H1 H2. apply ConverseRange, BijectionEvalIsInRange.
-  - apply ConverseIsBijection. assumption.
+  - apply BijectionConverseIsBijection. assumption.
   - apply ConverseDomain. assumption.
 Qed.
 

@@ -85,13 +85,13 @@ Proof.
     apply (proj1 (ConverseCharac2 _ _ _)) in H3.
     assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
     split. 1: assumption.
-    assert (F!x = y) as H5. { apply FunctionalEval; assumption. }
+    assert (F!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
     rewrite H5. assumption.
   - destruct H2 as [H2 H3]. apply ImageCharac. exists (F!x). split. 1: assumption.
     apply ConverseCharac2. apply FunctionalEvalSatisfies; assumption.
 Qed.
 
-Proposition InvImageOfImageIsLess : forall (F A:Class),
+Proposition FunctionalInvImageOfImageIsLess : forall (F A:Class),
   Functional F^:-1: -> F^:-1::[ F:[A]: ]: :<=: A.
 Proof.
   intros F A H1 x H2. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
@@ -102,7 +102,7 @@ Proof.
   subst. assumption.
 Qed.
 
-Proposition InvImageOfImageIsMore : forall (F A:Class),
+Proposition FunctionalInvImageOfImageIsMore : forall (F A:Class),
   A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
 Proof.
   intros F A H1 x H2. specialize (H1 x H2).
@@ -111,7 +111,7 @@ Proof.
   apply ImageCharac. exists x. split; assumption.
 Qed.
 
-Proposition ImageOfInvImageIsLess : forall (F B:Class),
+Proposition FunctionalImageOfInvImageIsLess : forall (F B:Class),
   Functional F -> F:[ F^:-1::[B]: ]: :<=: B.
 Proof.
   intros F B H1 y H2.
@@ -121,7 +121,7 @@ Proof.
   subst. assumption.
 Qed.
 
-Proposition ImageOfInvImageIsMore : forall (F B:Class),
+Proposition FunctionalImageOfInvImageIsMore : forall (F B:Class),
   B :<=: range F -> B :<=: F:[ F^:-1::[B]: ]:.
 Proof.
   intros F B H1 y H2. specialize (H1 y H2).

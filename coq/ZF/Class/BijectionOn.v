@@ -55,7 +55,7 @@ Proposition ConverseIsBijectionOn : forall (F A B:Class),
   BijectionOn F A -> range F :~: B -> BijectionOn F^:-1: B.
 Proof.
   intros F A B [H1 H2] H3. split.
-  - apply ConverseIsBijection. assumption.
+  - apply BijectionConverseIsBijection. assumption.
   - apply ClassEquivTran with (range F). 2: assumption. apply ConverseDomain.
 Qed.
 
@@ -66,7 +66,7 @@ Proposition ComposeIsBijectionOn : forall (F A G B:Class),
   BijectionOn (G :.: F) A.
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
-  - apply ComposeIsBijection; assumption.
+  - apply BijectionComposeIsBijection; assumption.
   - apply ClassEquivTran with (domain F). 2: assumption.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
     apply ClassEquivSym. assumption.
