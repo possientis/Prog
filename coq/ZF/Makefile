@@ -134,7 +134,6 @@ SET_OBJ = \
 	${SET}/Eval.vo \
 	${SET}/Foundation.vo \
 	${SET}/FromClass.vo \
-	${SET}/Functional.vo \
 	${SET}/Incl.vo \
 	${SET}/Inter.vo \
 	${SET}/OrdPair.vo \

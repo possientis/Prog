@@ -92,14 +92,11 @@ Qed.
 Proposition ComposeIsFunctional : forall (F G:Class),
   Functional F -> Functional G -> Functional (G :.: F).
 Proof.
-  intros F G Hf Hg.
-  remember (FunctionalCharac1 F Hf) as Gf eqn:E. clear E Hf.
-  remember (FunctionalCharac1 G Hg) as Gg eqn:E. clear E Hg.
-  apply FunctionalSuffice. intros x z1 z2 H1 H2.
-  apply ComposeCharac2 in H1. destruct H1 as [y1 [H1 G1]].
-  apply ComposeCharac2 in H2. destruct H2 as [y2 [H2 G2]].
-  assert (y1 = y2) as H3. { apply Gf with x; assumption. }
-  subst. apply Gg with y2; assumption.
+  intros F G H1 H2 x z1 z2 H3 H4.
+  apply ComposeCharac2 in H3. destruct H3 as [y1 [H3 H5]].
+  apply ComposeCharac2 in H4. destruct H4 as [y2 [H4 H6]].
+  assert (y1 = y2) as H7. { apply H1 with x; assumption. }
+  subst. apply H2 with y2; assumption.
 Qed.
 
 (* The converse of the composition is (almost) the composition of the converse. *)
@@ -161,7 +158,7 @@ Proof.
     assert (domain (G :.: F) x) as H4. { apply H2, DomainCharac. exists y. assumption. }
     apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [z H4].
     apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
-    assert (y' = y) as H6. { apply FunctionalCharac1 with F x; assumption. }
+    assert (y' = y) as H6. { apply H1 with x; assumption. }
     subst. apply DomainCharac. exists z. assumption.
 Qed.
 
@@ -188,11 +185,10 @@ Proof.
     assert (range (G :.: F) z) as H4. { apply H2, RangeCharac. exists y. assumption. }
     apply (proj1 (RangeCharac _ _)) in H4. destruct H4 as [x H4].
     apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
-    assert (y' = y) as H6. {
-      apply FunctionalCharac1 with (converse G) z. 1: assumption.
+    assert (y' = y) as H6. { apply H1 with z.
       - apply ConverseCharac2. assumption.
-      - apply ConverseCharac2. assumption.
-    } subst. apply RangeCharac. exists x. assumption.
+      - apply ConverseCharac2. assumption. }
+    subst. apply RangeCharac. exists x. assumption.
 Qed.
 
 (* Characterisation of the domain of G.F in terms of the eval F!a.              *)
@@ -233,12 +229,12 @@ Proposition ComposeIsFunctionalAt : forall (F G:Class) (a:U),
   domain F a                ->
   FunctionalAt (G :.: F) a.
 Proof.
-  intros F G a H1 H2 H3. apply FunctionalAtCharac2. intros z1 z2 H4 H5.
+  intros F G a H1 H2 H3 z1 z2 H4 H5.
   apply ComposeCharac2 in H4. destruct H4 as [y1 [H4 H6]].
   apply ComposeCharac2 in H5. destruct H5 as [y2 [H5 H7]].
   assert (F!a = y1) as H8. { apply FunctionalAtEvalCharac; assumption. }
   assert (F!a = y2) as H9. { apply FunctionalAtEvalCharac; assumption. }
-  subst. apply FunctionalAtCharac1 with G (F!a); assumption.
+  subst. apply H2; assumption.
 Qed.
 
 (* Evaluating the composed class G.F at a, from evaluations of F and G.         *)
@@ -275,3 +271,4 @@ Proof.
   - apply FunctionalIsFunctionalAt. assumption.
   - apply FunctionalIsFunctionalAt. assumption.
 Qed.
+

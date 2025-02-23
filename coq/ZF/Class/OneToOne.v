@@ -85,8 +85,7 @@ Proposition OneToOneCharacL : forall (F:Class), OneToOne F ->
   forall x y z, F :(y,x): -> F :(z,x): -> y = z.
 Proof.
   intros F H1. apply OneToOneCharac in H1. destruct H1 as [_ H1].
-  intros x y z H2 H3. apply FunctionalCharac1 with (converse F) x.
-  - assumption.
+  intros x y z H2 H3. apply H1 with x.
   - apply ConverseCharac2. assumption.
   - apply ConverseCharac2. assumption.
 Qed.
@@ -95,8 +94,7 @@ Qed.
 Proposition OneToOneCharacR : forall (F:Class), OneToOne F ->
   forall x y z, F :(x,y): -> F :(x,z): -> y = z.
 Proof.
-  intros F H1. apply OneToOneCharac in H1. destruct H1 as [H1 _].
-  apply FunctionalCharac1. assumption.
+  intros F H1. apply OneToOneCharac in H1. destruct H1 as [H1 _]. assumption.
 Qed.
 
 Proposition OneToOneImageIsSmall : forall (F A:Class),

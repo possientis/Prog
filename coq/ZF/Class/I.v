@@ -33,7 +33,7 @@ Qed.
 (* I is a functional class.                                                     *)
 Proposition IIsFunctional : Functional I.
 Proof.
-  apply FunctionalSuffice. intros x y z H1 H2.
+  intros x y z H1 H2.
   apply ICharac2 in H1. apply ICharac2 in H2. subst. reflexivity.
 Qed.
 

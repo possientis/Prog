@@ -23,7 +23,7 @@ Proof.
   remember (fun x => exists y, x = :(:{y}:,y):) as F eqn:EF.
 
   (* We claim that F is functional. *)
-  assert (Functional F) as H2. { apply FunctionalSuffice.
+  assert (Functional F) as H2. {
     intros x y z H2 H3. rewrite EF in H2. rewrite EF in H3.
     destruct H2 as [u H2]. destruct H3 as [v H3].
     apply OrdPairEqual in H2. destruct H2 as [H2 H4].

@@ -268,7 +268,7 @@ Proof.
 
   (* We claim that R is a functional class *)
   assert (Functional R) as H5. {
-    apply FunctionalSuffice. intros x y1 y2. rewrite Er.
+    intros x y1 y2. rewrite Er.
     intros [x1 [T1 T2]] [x2 [T3 T4]].
     apply OrdPairEqual in T1. destruct T1 as [T1 T1'].
     apply OrdPairEqual in T3. destruct T3 as [T3 T3'].

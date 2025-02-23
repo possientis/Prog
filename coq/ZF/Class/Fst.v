@@ -19,7 +19,7 @@ Qed.
 
 Proposition FstIsFunctional : Functional Fst.
 Proof.
-  apply FunctionalSuffice. intros x x1 x2 H1 H2.
+  intros x x1 x2 H1 H2.
   apply FstCharac2 in H1. apply FstCharac2 in H2.
   destruct H1 as [y1 [z1 [H1 G1]]]. destruct H2 as [y2 [z2 [H2 G2]]].
   subst. apply OrdPairEqual in H2. destruct H2 as [H1 H2]. subst. reflexivity.

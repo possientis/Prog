@@ -96,7 +96,7 @@ Proposition FunctionalInvImageOfImageIsLess : forall (F A:Class),
 Proof.
   intros F A H1 x H2. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
   apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [x' [H2 H4]].
-  assert (x' = x) as H5. { apply FunctionalCharac1 with F^:-1: y. 1: assumption.
+  assert (x' = x) as H5. { apply H1 with y.
     - apply ConverseCharac2. assumption.
     - apply ConverseCharac2. assumption. }
   subst. assumption.
@@ -117,7 +117,7 @@ Proof.
   intros F B H1 y H2.
   apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [x [H2 H3]].
   apply InvImageCharac in H2. destruct H2 as [y' [H2 H4]].
-  assert (y' = y) as H6. { apply FunctionalCharac1 with F x; assumption. }
+  assert (y' = y) as H6. { apply H1 with x; assumption. }
   subst. assumption.
 Qed.
 

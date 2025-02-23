@@ -33,12 +33,10 @@ Proof.
     assert (H5 := H3). assert (H6 := H4).
     apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [y  H3].
     apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [y' H4].
-    assert (y' = y) as H7. {
-      apply FunctionalCharac1 with F x.
-      - assumption.
+    assert (y' = y) as H7. { apply Gf with x.
       - apply H1. assumption.
-      - assumption.
-    } subst.
+      - assumption. }
+    subst.
     assert (F!x = y) as H8. { apply FunctionalEvalCharac; assumption. }
     assert (G!x = y) as H9. { apply FunctionalEvalCharac; assumption. }
     subst. symmetry. assumption.
