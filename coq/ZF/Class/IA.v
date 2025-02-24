@@ -170,10 +170,10 @@ Proof.
     assert (x = z) as H8. {
       revert H7. revert H6. apply OneToOneCharacL. assumption. }
     subst. apply IACharac2. split. 2: reflexivity. apply H3.
-    apply DomainCharac. exists y. assumption.
+    exists y. assumption.
   - apply IACharac in H5. destruct H5 as [x [H5 H6]]. subst.
     apply ComposeCharac2. apply H3 in H5.
-    apply (proj1 (DomainCharac _ _)) in H5. destruct H5 as [y H5].
+    destruct H5 as [y H5].
     exists y. split. 1: assumption. apply ConverseCharac2. assumption.
 Qed.
 

@@ -58,9 +58,8 @@ Proposition OneToOneInvImageOfImageIsMore : forall (F A:Class),
   A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
 Proof.
   intros F A H1 x H2. specialize (H1 x H2).
-  apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
-  apply InvImageCharac. exists y. split. 2: assumption.
-  exists x. split; assumption.
+  destruct H1 as [y H1]. apply InvImageCharac. exists y.
+  split. 2: assumption. exists x. split; assumption.
 Qed.
 
 Proposition OneToOneImageOfInvImageIsLess : forall (F B:Class),
@@ -193,10 +192,7 @@ Proof.
     - assumption.
     - apply ConverseDomain. assumption.
     - apply ConverseCharac2. assumption. }
-  rewrite H5. apply FunctionalEvalCharac.
-  - assumption.
-  - apply DomainCharac. exists y. assumption.
-  - assumption.
+  rewrite H5. apply FunctionalEvalCharac; try assumption. exists y. assumption.
 Qed.
 
 Proposition OneToOneComposeDomainCharac : forall (F G:Class) (a:U),

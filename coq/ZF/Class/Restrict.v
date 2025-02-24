@@ -100,13 +100,10 @@ Proposition DomainOfRestrict : forall (F A:Class),
   domain (F:|:A) :~: A :/\: domain F.
 Proof.
   intros F A x. split; intros H1.
-  - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
-    apply RestrictCharac2 in H1. destruct H1 as [H1 H2]. split.
-    + apply H1.
-    + apply DomainCharac. exists y. apply H2.
-  - destruct H1 as [H1 H2]. apply (proj1 (DomainCharac F x)) in H2.
-    destruct H2 as [y H2]. apply DomainCharac. exists y. apply RestrictCharac2.
-    split; assumption.
+  - destruct H1 as [y H1]. apply RestrictCharac2 in H1.
+    destruct H1 as [H1 H2]. split. 1: assumption. exists y. apply H2.
+  - destruct H1 as [H1 H2]. destruct H2 as [y H2]. exists y.
+    apply RestrictCharac2. split; assumption.
 Qed.
 
 (* The restriction of a functional class to a small class is small.             *)
@@ -188,7 +185,7 @@ Proof.
       exists y. exists z. split.
       * assumption.
       * split.
-        { apply DomainCharac. exists z. subst. assumption. }
+        { exists z. subst. assumption. }
         { subst. assumption. }
     + apply RestrictCharac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
       rewrite H3. apply H4.
@@ -248,9 +245,9 @@ Proof.
     + apply RestrictCharac2. split. 1: assumption. rewrite E.
       apply FunctionalEvalSatisfies; assumption.
   - assert (~ domain (F:|:A) x) as H5. { intros H5.
-      apply (proj1 (DomainCharac _ _)) in H5. destruct H5 as [z H5].
+      destruct H5 as [z H5].
       apply RestrictCharac2 in H5. destruct H5 as [H5 H6]. apply H4.
-      apply DomainCharac. exists z. assumption. }
+      exists z. assumption. }
     assert (y = :0:) as H6. { rewrite E. apply EvalWhenNotInDomain. assumption. }
     rewrite H6. apply EvalWhenNotInDomain. assumption.
 Qed.

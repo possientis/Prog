@@ -161,11 +161,10 @@ Proposition ConverseDomain : forall (F:Class),
   domain F^:-1: :~: range F.
 Proof.
   intros F y. split; intros H1.
-  - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [x H1].
-    apply (proj1 (ConverseCharac2 _ _ _)) in H1.
+  - destruct H1 as [x H1]. apply (proj1 (ConverseCharac2 _ _ _)) in H1.
     apply RangeCharac. exists x. assumption.
   - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-    apply DomainCharac. exists x. apply ConverseCharac2. assumption.
+    exists x. apply ConverseCharac2. assumption.
 Qed.
 
 Proposition ConverseRange : forall (F:Class),
@@ -173,9 +172,7 @@ Proposition ConverseRange : forall (F:Class),
 Proof.
   intros F x. split; intros H1.
   - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [y H1].
-    apply (proj1 (ConverseCharac2 _ _ _)) in H1.
-    apply DomainCharac. exists y. assumption.
-  - apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
-    apply RangeCharac. exists y. apply ConverseCharac2. assumption.
+    apply (proj1 (ConverseCharac2 _ _ _)) in H1. exists y. assumption.
+  - destruct H1 as [y H1]. apply RangeCharac. exists y. apply ConverseCharac2. assumption.
 Qed.
 

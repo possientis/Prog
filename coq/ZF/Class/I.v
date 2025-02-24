@@ -83,7 +83,7 @@ Proposition IDomain : domain I :~: V.
 Proof.
   intros x. split; intros H1.
   - apply Logic.I.
-  - apply DomainCharac. exists x. apply ICharac2. reflexivity.
+  - exists x. apply ICharac2. reflexivity.
 Qed.
 
 (* The range of I is the class of all sets.                                     *)

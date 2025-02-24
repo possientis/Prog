@@ -129,7 +129,6 @@ CORE_OBJ = \
 SET_OBJ = \
 	${SET}/Converse.vo \
 	${SET}/Diff.vo \
-	${SET}/Domain.vo \
 	${SET}/Empty.vo \
 	${SET}/Eval.vo \
 	${SET}/Foundation.vo \
@@ -141,7 +140,6 @@ SET_OBJ = \
 	${SET}/Pair.vo \
 	${SET}/Power.vo \
 	${SET}/Prod.vo \
-	${SET}/Range.vo \
 	${SET}/Relation.vo \
 	${SET}/Singleton.vo \
 	${SET}/Specify.vo \

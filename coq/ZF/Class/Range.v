@@ -82,5 +82,5 @@ Proof.
   intros F y. split; intros H1.
   - destruct H1 as [x [H1 H2]]. apply RangeCharac. exists x. assumption.
   - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-    exists x. split. 2: assumption. apply DomainCharac. exists y. assumption.
+    exists x. split. 2: assumption. exists y. assumption.
 Qed.

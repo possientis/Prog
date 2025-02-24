@@ -119,7 +119,7 @@ Proposition ImageEvalCharac : forall (F A: Class), Functional F ->
 Proof.
   intros F A H1 y. split; intros H2.
   - destruct H2 as [x [H2 H3]]. exists x. split. 1: assumption.
-    assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. } split.
+    assert (domain F x) as H4. { exists y. assumption. } split.
     + assumption.
     + apply FunctionalEvalCharac; assumption.
   - destruct H2 as [x [H2 [H3 H4]]]. exists x. split. 1: assumption.

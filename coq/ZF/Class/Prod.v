@@ -18,17 +18,12 @@ Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Union2.
 Export ZF.Core.Prod.
 
+(* The class of all ordered pairs (y,z) where y lies in P and z lies in Q.      *)
 Definition prod (P Q:Class) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ P y /\ Q z.
 
 (* Notation "P :x: Q" := (prod P Q)                                             *)
 Global Instance ClassProd : Prod Class := { prod := prod }.
-
-Proposition ProdCharac : forall (P Q:Class) (x:U),
-  (P :x: Q) x <->  exists y, exists z, x = :(y,z): /\ P y /\ Q z.
-Proof.
-  intros P Q x. unfold Core.Prod.prod, ClassProd, prod. split; auto.
-Qed.
 
 Proposition ProdCharac2 : forall (P Q:Class) (y z:U),
   (P :x: Q) :(y,z): <-> P y /\ Q z.
@@ -41,6 +36,7 @@ Proof.
     + split; assumption.
 Qed.
 
+(* The product of two classes is compatible with class equivalence.             *)
 Proposition ProdEquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :x: R :~: Q :x: S.
 Proof.
@@ -54,6 +50,7 @@ Proof.
     + apply H2. assumption.
 Qed.
 
+(* The product of two classes is left-compatible with class equivalence.        *)
 Proposition ProdEquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :x: R :~: Q :x: R.
 Proof.
@@ -62,6 +59,7 @@ Proof.
   - apply ClassEquivRefl.
 Qed.
 
+(* The product of two classes is right-compatible with class equivalence.       *)
 Proposition ProdEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :x: P :~: R :x: Q.
 Proof.
@@ -70,6 +68,7 @@ Proof.
   - assumption.
 Qed.
 
+(* The product of two small classes is a small class.                           *)
 Proposition ProdIsSmall : forall (P Q:Class),
   Small P -> Small Q -> Small (P :x: Q).
 Proof.
@@ -188,15 +187,11 @@ Lemma ImageBySwitch : forall (P Q:Class),
   Switch :[P :x: Q]: :~: Q :x: P.
 Proof.
   intros P Q x'. split; intros H1.
-  - destruct H1 as [x [H1 H2]].
-    apply (proj1 (ProdCharac _ _ _)) in H1. destruct H1 as [y [z [H3 [H4 H5]]]].
+  - destruct H1 as [x [H1 H2]]. destruct H1 as [y [z [H3 [H4 H5]]]].
     apply SwitchCharac2 in H2. destruct H2 as [y' [z' [H6 H7]]]. subst.
     apply OrdPairEqual in H6. destruct H6 as [H6 H8]. subst.
-    apply ProdCharac. exists z'. exists y'. split.
-    + reflexivity.
-    + split; assumption.
-  - apply (proj1 (ProdCharac _ _ _)) in H1. destruct H1 as [z [y [H1 [H2 H3]]]].
-    exists :(y,z):. split.
+    exists z'. exists y'. split. 1: reflexivity. split; assumption.
+  - destruct H1 as [z [y [H1 [H2 H3]]]]. exists :(y,z):. split.
     + apply ProdCharac2. split; assumption.
     + apply SwitchCharac2. exists y. exists z. split.
       * reflexivity.
@@ -278,10 +273,10 @@ Proof.
 
   (* We claim that domain R <= P X Q. *)
   assert (domain R :<=: P :x: Q) as H6. {
-    intros x T1. apply (proj1 (DomainCharac _ _)) in T1.
-    destruct T1 as [y' T1]. rewrite Er in T1. destruct T1 as [x' [T1 T2]].
-    apply OrdPairEqual in T1. destruct T1 as [T1 _]. subst.
-    apply ProdCharac2. split; assumption.
+    intros x T1.
+    destruct T1 as [y' T1]. rewrite Er in T1.
+    destruct T1 as [x' [T1 T2]]. apply OrdPairEqual in T1.
+    destruct T1 as [T1 _]. subst. apply ProdCharac2. split; assumption.
   }
 
   (* Having assumed that P x Q is small, it follows that domain R is small. *)
@@ -296,12 +291,8 @@ Proof.
       rewrite Er in T1. destruct T1 as [x1 [T1 T2]].
       apply OrdPairEqual in T1. destruct T1 as [_ T1]. subst. assumption.
     - exists :(x,y):. rewrite Er. split.
-      + apply DomainCharac. exists x. exists x. split.
-        * reflexivity.
-        * assumption.
-      + exists x. split.
-        * reflexivity.
-        * assumption.
+      + exists x. exists x. split. 1: reflexivity. assumption.
+      + exists x. split. 1: reflexivity. assumption.
   }
 
   (* Using this equivalence ... *)

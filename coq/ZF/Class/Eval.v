@@ -38,10 +38,10 @@ Proposition HasValueAtAsInter : forall (F:Class),
 Proof.
   intros F a. split; intros H1.
   - destruct H1 as [y [H1 H2]]. apply InterCharac. split. 1: assumption.
-    apply DomainCharac. exists y. assumption.
+    exists y. assumption.
   - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [H1 H2].
-    apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
-    exists y. apply IsValueAtWhenFunctionalAt; assumption.
+    destruct H2 as [y H2]. exists y.
+    apply IsValueAtWhenFunctionalAt; assumption.
 Qed.
 
 Proposition HasValueAtWhenFunctionalAt : forall (F:Class) (a:U),

@@ -121,9 +121,8 @@ Qed.
 Proposition ComposeDomainIsSmaller : forall (F G:Class),
   domain (G :.: F) :<=: domain F.
 Proof.
-  intros F G x H1. apply (proj1 (DomainCharac _ _)) in H1.
-  destruct H1 as [z H1]. apply ComposeCharac2 in H1. destruct H1 as [y [H1 H2]].
-  apply DomainCharac. exists y. assumption.
+  intros F G x H1. destruct H1 as [z H1]. apply ComposeCharac2 in H1.
+  destruct H1 as [y [H1 H2]]. exists y. assumption.
 Qed.
 
 (* The range of the composition is a subclass of the second range.              *)
@@ -141,10 +140,9 @@ Proposition ComposeDomainIsSame : forall (F G:Class),
 Proof.
   intros F G H1. apply DoubleInclusion. split.
   - apply ComposeDomainIsSmaller.
-  - intros x H2. apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
+  - intros x H2. destruct H2 as [y H2].
     assert (domain G y) as H3. { apply H1. apply RangeCharac. exists x. assumption. }
-    apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
-    apply DomainCharac. exists z. apply ComposeCharac2. exists y.
+    destruct H3 as [z H3]. exists z. apply ComposeCharac2. exists y.
     split; assumption.
 Qed.
 
@@ -155,11 +153,10 @@ Proof.
   intros F G H1. split.
   - apply ComposeDomainIsSame.
   - intros H2 y H3. apply (proj1 (RangeCharac _ _)) in H3. destruct H3 as [x H3].
-    assert (domain (G :.: F) x) as H4. { apply H2, DomainCharac. exists y. assumption. }
-    apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [z H4].
-    apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
+    assert (domain (G :.: F) x) as H4. { apply H2. exists y. assumption. }
+    destruct H4 as [z H4]. apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
     assert (y' = y) as H6. { apply H1 with x; assumption. }
-    subst. apply DomainCharac. exists z. assumption.
+    subst. exists z. assumption.
 Qed.
 
 (* The range of the composition is the same as the second range if domain ok.   *)
@@ -169,7 +166,7 @@ Proof.
   intros F G H1. apply DoubleInclusion. split.
   - apply ComposeRangeIsSmaller.
   - intros z H2. apply (proj1 (RangeCharac _ _)) in H2. destruct H2 as [y H2].
-    assert (range F y) as H3. { apply H1. apply DomainCharac. exists z. assumption. }
+    assert (range F y) as H3. { apply H1. exists z. assumption. }
     apply (proj1 (RangeCharac _ _)) in H3. destruct H3 as [x H3].
     apply RangeCharac. exists x. apply ComposeCharac2. exists y.
     split; assumption.
@@ -181,7 +178,7 @@ Proposition ComposeRangeIsSame2 : forall (F G:Class), Functional G^:-1: ->
 Proof.
   intros F G H1. split.
   - apply ComposeRangeIsSame.
-  - intros H2 y H3. apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
+  - intros H2 y H3. destruct H3 as [z H3].
     assert (range (G :.: F) z) as H4. { apply H2, RangeCharac. exists y. assumption. }
     apply (proj1 (RangeCharac _ _)) in H4. destruct H4 as [x H4].
     apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
@@ -198,18 +195,16 @@ Proof.
   intros F G a H1. split; intros H2.
   - split.
     + apply ComposeDomainIsSmaller with G. assumption.
-    + apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [z H2].
-      apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
-      apply DomainCharac. exists z.
+    + destruct H2 as [z H2]. apply ComposeCharac2 in H2.
+      destruct H2 as [y [H2 H3]]. exists z.
       assert (F!a = y) as H4. {
         apply FunctionalAtEvalCharac. 1: assumption. 2: assumption.
-        apply DomainCharac. exists y. assumption.
+        exists y. assumption.
       }
       rewrite H4. assumption.
   - destruct H2 as [H2 H3]. assert (H4 := H2).
-    apply (proj1 (DomainCharac _ _)) in H2. destruct H2 as [y H2].
-    apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [z H3].
-    apply DomainCharac. exists z. apply ComposeCharac2. exists y.
+    destruct H2 as [y H2]. destruct H3 as [z H3].
+    exists z. apply ComposeCharac2. exists y.
     split. 1: assumption.
     assert (F!a = y) as H5. { apply FunctionalAtEvalCharac; assumption. }
     rewrite <- H5. assumption.
@@ -246,8 +241,7 @@ Proposition FunctionalAtComposeEval : forall (F G:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a H1 H2 H3 H4. assert (H5 := H3). assert (H6 := H4).
-  apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [y H3].
-  apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [z H4].
+  destruct H3 as [y H3]. destruct H4 as [z H4].
   assert (F!a = y) as H7. { apply FunctionalAtEvalCharac; assumption. }
   assert (G!(F!a) = z) as H8. { apply FunctionalAtEvalCharac; assumption. }
   assert (FunctionalAt (G :.: F) a) as H9. {

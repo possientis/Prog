@@ -31,8 +31,7 @@ Proof.
   - split. 1: assumption. intros x H3.
     assert (domain G x) as H4. { apply H2. assumption. }
     assert (H5 := H3). assert (H6 := H4).
-    apply (proj1 (DomainCharac _ _)) in H3. destruct H3 as [y  H3].
-    apply (proj1 (DomainCharac _ _)) in H4. destruct H4 as [y' H4].
+    destruct H3 as [y  H3]. destruct H4 as [y' H4].
     assert (y' = y) as H7. { apply Gf with x.
       - apply H1. assumption.
       - assumption. }
@@ -42,13 +41,13 @@ Proof.
     subst. symmetry. assumption.
   - destruct H1 as [H1 H2]. intros u. split; intros H3; assert (H4 := H3).
     + apply Hf in H4. destruct H4 as [x [y H4]]. subst.
-      assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
+      assert (domain F x) as H4. { exists y. assumption. }
       assert (F!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
       assert (domain G x) as H6. { apply H1. assumption. }
       apply FunctionalEvalCharac. { assumption. } { assumption. }
       symmetry. rewrite <- H5. apply H2. assumption.
     + apply Hg in H4. destruct H4 as [x [y H4]]. subst.
-      assert (domain G x) as H4. { apply DomainCharac. exists y. assumption. }
+      assert (domain G x) as H4. { exists y. assumption. }
       assert (G!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
       assert (domain F x) as H6. { apply H1. assumption. }
       apply FunctionalEvalCharac. { assumption. } { assumption. }

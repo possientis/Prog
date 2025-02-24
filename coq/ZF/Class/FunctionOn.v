@@ -37,11 +37,9 @@ Proposition FunctionOnIncl : forall (F A:Class),
 Proof.
   intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Relation in H1.
   assert (H5 := H1 x H2). destruct H5 as [y [z H5]].
-  apply ProdCharac. exists y. exists z. split. 1: assumption. subst. split.
-  - apply H4. apply DomainCharac. exists z. assumption.
-  - exists y. split.
-    + apply H4, DomainCharac. exists z. assumption.
-    + assumption.
+  exists y. exists z. split. 1: assumption. subst. split.
+  - apply H4. exists z. assumption.
+  - exists y. split. 2: assumption. apply H4. exists z. assumption.
 Qed.
 
 (* A function defined on a small class is small.                                *)

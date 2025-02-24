@@ -80,7 +80,7 @@ Proposition InvImageEvalCharac : forall (F B:Class), Functional F ->
 Proof.
   intros F B H1 x. split; intros H2.
   - destruct H2 as [y [H2 H3]]. apply (proj1 (ConverseCharac2 _ _ _)) in H3.
-    assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
+    assert (domain F x) as H4. { exists y. assumption. }
     split. 1: assumption.
     assert (F!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
     rewrite H5. assumption.
@@ -102,9 +102,8 @@ Proposition FunctionalInvImageOfImageIsMore : forall (F A:Class),
   A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
 Proof.
   intros F A H1 x H2. specialize (H1 x H2).
-  apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
-  apply InvImageCharac. exists y. split. 2: assumption.
-  exists x. split; assumption.
+  destruct H1 as [y H1]. apply InvImageCharac. exists y.
+  split. 2: assumption. exists x. split; assumption.
 Qed.
 
 Proposition FunctionalImageOfInvImageIsLess : forall (F B:Class),
