@@ -7,7 +7,7 @@ Require Import ZF.Set.Pair.
 Require Import ZF.Set.Union.
 Export ZF.Core.Or.
 
-(* The union of two classes.                                                    *)
+(* The class of all sets x which belong to P or belong to Q.                    *)
 Definition union2 (P Q:Class) : Class := fun x => P x \/ Q x.
 
 (* Notation "P :\/: Q" := (union P Q)                                           *)
@@ -19,6 +19,7 @@ Proof.
   intros P Q x. unfold or, ClassOr, union2. split; auto.
 Qed.
 
+(* Pairwise union is compatible with class equivalence.                         *)
 Proposition Union2EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :\/: R :~: Q :\/: S.
 Proof.
@@ -31,6 +32,7 @@ Proof.
   - right. apply H2. assumption.
 Qed.
 
+(* Pairwise union is left-compatible with class equivalence.                    *)
 Proposition Union2EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :\/: R :~: Q :\/: R.
 Proof.
@@ -39,6 +41,7 @@ Proof.
   - apply ClassEquivRefl.
 Qed.
 
+(* Pairwise union is right-compatible with class equivalence.                   *)
 Proposition Union2EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :\/: P :~: R :\/: Q.
 Proof.
@@ -47,6 +50,7 @@ Proof.
   - assumption.
 Qed.
 
+(* Thw pairwise union of two small classes is a small class.                    *)
 Proposition Union2IsSmall : forall (P Q:Class),
   Small P -> Small Q -> Small (P :\/: Q).
 Proof.
@@ -112,7 +116,7 @@ Proof.
       * exists b. split. { assumption. } { apply PairInR. }
 Qed.
 
-(* The union of two relation class is a relation class.                         *)
+(* The pairwise union of two relation classes is a relation class.              *)
 Proposition UnionOfRelsIsRelation : forall (P Q:Class),
   Relation P -> Relation Q -> Relation (P:\/:Q).
 Proof.

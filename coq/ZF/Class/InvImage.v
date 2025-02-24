@@ -16,12 +16,10 @@ Proposition InvImageCharac : forall (F P:Class) (x:U),
   F^:-1: :[P]: x <-> exists y, P y /\ F :(x,y):.
 Proof.
   intros F P x. split; intros H1.
-  - apply (proj1 (ImageCharac _ _ _)) in H1. destruct H1 as [y [H1 H2]].
-    apply (proj1 (ConverseCharac2 _ _ _)) in H2.
+  - destruct H1 as [y [H1 H2]]. apply (proj1 (ConverseCharac2 _ _ _)) in H2.
     exists y. split; assumption.
-  - destruct H1 as [y [H1 H2]]. apply ImageCharac. exists y. split.
-    + assumption.
-    + apply ConverseCharac2. assumption.
+  - destruct H1 as [y [H1 H2]]. exists y. split. 1: assumption.
+    apply ConverseCharac2. assumption.
 Qed.
 
 (* The inverse image is compatible with equivalences.                           *)
@@ -81,13 +79,12 @@ Proposition InvImageEvalCharac : forall (F B:Class), Functional F ->
   forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
 Proof.
   intros F B H1 x. split; intros H2.
-  - apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [y [H2 H3]].
-    apply (proj1 (ConverseCharac2 _ _ _)) in H3.
+  - destruct H2 as [y [H2 H3]]. apply (proj1 (ConverseCharac2 _ _ _)) in H3.
     assert (domain F x) as H4. { apply DomainCharac. exists y. assumption. }
     split. 1: assumption.
     assert (F!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
     rewrite H5. assumption.
-  - destruct H2 as [H2 H3]. apply ImageCharac. exists (F!x). split. 1: assumption.
+  - destruct H2 as [H2 H3]. exists (F!x). split. 1: assumption.
     apply ConverseCharac2. apply FunctionalEvalSatisfies; assumption.
 Qed.
 
@@ -95,8 +92,7 @@ Proposition FunctionalInvImageOfImageIsLess : forall (F A:Class),
   Functional F^:-1: -> F^:-1::[ F:[A]: ]: :<=: A.
 Proof.
   intros F A H1 x H2. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
-  apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [x' [H2 H4]].
-  assert (x' = x) as H5. { apply H1 with y.
+  destruct H2 as [x' [H2 H4]]. assert (x' = x) as H5. { apply H1 with y.
     - apply ConverseCharac2. assumption.
     - apply ConverseCharac2. assumption. }
   subst. assumption.
@@ -108,14 +104,14 @@ Proof.
   intros F A H1 x H2. specialize (H1 x H2).
   apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
   apply InvImageCharac. exists y. split. 2: assumption.
-  apply ImageCharac. exists x. split; assumption.
+  exists x. split; assumption.
 Qed.
 
 Proposition FunctionalImageOfInvImageIsLess : forall (F B:Class),
   Functional F -> F:[ F^:-1::[B]: ]: :<=: B.
 Proof.
   intros F B H1 y H2.
-  apply (proj1 (ImageCharac _ _ _)) in H2. destruct H2 as [x [H2 H3]].
+  destruct H2 as [x [H2 H3]].
   apply InvImageCharac in H2. destruct H2 as [y' [H2 H4]].
   assert (y' = y) as H6. { apply H1 with x; assumption. }
   subst. assumption.
@@ -126,6 +122,6 @@ Proposition FunctionalImageOfInvImageIsMore : forall (F B:Class),
 Proof.
   intros F B H1 y H2. specialize (H1 y H2).
   apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-  apply ImageCharac. exists x. split. 2: assumption.
+  exists x. split. 2: assumption.
   apply InvImageCharac. exists y. split; assumption.
 Qed.

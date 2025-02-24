@@ -66,18 +66,18 @@ Proposition IsomInitSegmentImage : forall (F R S A B C:Class) (a:U),
   F:[initSegment R C a]: :~: initSegment S F:[C]: (F!a).
 Proof.
   intros F R S A B C a [H1 H2] H3 H4 y. split; intros H5.
-  - apply (proj1 (ImageCharac _ _ _)) in H5. destruct H5 as [x [H5 H6]].
+  - destruct H5 as [x [H5 H6]].
     apply InitSegmentCharac in H5. destruct H5 as [H5 H7].
     apply InitSegmentCharac. assert (F!x = y) as H8. {
       apply (BijEval F A B); try assumption. apply H3. assumption. }
     split.
-    + apply ImageCharac. exists x. split; assumption.
+    + exists x. split; assumption.
     + rewrite <- H8. apply H2; try assumption. apply H3. assumption.
   - apply InitSegmentCharac in H5. destruct H5 as [H5 H6].
-    apply (proj1 (ImageCharac _ _ _)) in H5. destruct H5 as [x [H5 H7]].
+    destruct H5 as [x [H5 H7]].
     assert (F!x = y) as H8. {
       apply (BijEval F A B); try assumption. apply H3. assumption. }
-    apply ImageCharac. exists x. split. 2: assumption.
+    exists x. split. 2: assumption.
     apply InitSegmentCharac. split. 1: assumption. apply H2. 2: assumption.
     + apply H3. assumption.
     + rewrite H8. assumption.

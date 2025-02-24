@@ -33,8 +33,7 @@ Proof.
 
   (* We claim that F[Singleton] = V. *)
   assert (F:[Singleton]: :~: V) as H3. {
-    intros x. split; intros H3. 1: apply I.
-    apply ImageCharac. exists :{x}:. split.
+    intros x. split; intros H3. 1: apply I. exists :{x}:. split.
     - exists x. reflexivity.
     - rewrite EF. exists x. reflexivity.
   }

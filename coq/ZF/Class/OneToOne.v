@@ -60,7 +60,7 @@ Proof.
   intros F A H1 x H2. specialize (H1 x H2).
   apply (proj1 (DomainCharac _ _)) in H1. destruct H1 as [y H1].
   apply InvImageCharac. exists y. split. 2: assumption.
-  apply ImageCharac. exists x. split; assumption.
+  exists x. split; assumption.
 Qed.
 
 Proposition OneToOneImageOfInvImageIsLess : forall (F B:Class),
@@ -76,7 +76,7 @@ Proposition OneToOneImageOfInvImageIsMore : forall (F B:Class),
 Proof.
   intros F B H1 y H2. specialize (H1 y H2).
   apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-  apply ImageCharac. exists x. split. 2: assumption.
+  exists x. split. 2: assumption.
   apply InvImageCharac. exists y. split; assumption.
 Qed.
 

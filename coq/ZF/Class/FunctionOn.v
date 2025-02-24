@@ -39,7 +39,7 @@ Proof.
   assert (H5 := H1 x H2). destruct H5 as [y [z H5]].
   apply ProdCharac. exists y. exists z. split. 1: assumption. subst. split.
   - apply H4. apply DomainCharac. exists z. assumption.
-  - apply ImageCharac. exists y. split.
+  - exists y. split.
     + apply H4, DomainCharac. exists z. assumption.
     + assumption.
 Qed.

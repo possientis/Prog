@@ -5,7 +5,7 @@ Require Import ZF.Core.Union.
 Require Import ZF.Set.
 Export ZF.Core.Union.
 
-(* The union class of a class.                                                  *)
+(* The class of all sets x which belongs to some element of P.                  *)
 Definition union (P:Class) : Class := fun x =>
   exists y, x :< y /\ P y.
 
@@ -18,6 +18,7 @@ Proof.
   intros P a. unfold Core.Union.union, ClassUnion, union. split; auto.
 Qed.
 
+(* The union is compatible with class equivalence.                              *)
 Proposition UnionEquivCompat : forall (P Q:Class),
   P :~: Q -> :U(P) :~: :U(Q).
 Proof.

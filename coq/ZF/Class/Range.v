@@ -80,9 +80,7 @@ Proposition RangeIsDomainImage : forall (F:Class),
   F:[domain F]: :~: range F.
 Proof.
   intros F y. split; intros H1.
-  - apply (proj1 (ImageCharac _ _ _)) in H1. destruct H1 as [x [H1 H2]].
-    apply RangeCharac. exists x. assumption.
+  - destruct H1 as [x [H1 H2]]. apply RangeCharac. exists x. assumption.
   - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-    apply ImageCharac. exists x. split. 2: assumption.
-    apply DomainCharac. exists y. assumption.
+    exists x. split. 2: assumption. apply DomainCharac. exists y. assumption.
 Qed.

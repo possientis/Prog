@@ -188,7 +188,7 @@ Lemma ImageBySwitch : forall (P Q:Class),
   Switch :[P :x: Q]: :~: Q :x: P.
 Proof.
   intros P Q x'. split; intros H1.
-  - apply (proj1 (ImageCharac _ _ _)) in H1. destruct H1 as [x [H1 H2]].
+  - destruct H1 as [x [H1 H2]].
     apply (proj1 (ProdCharac _ _ _)) in H1. destruct H1 as [y [z [H3 [H4 H5]]]].
     apply SwitchCharac2 in H2. destruct H2 as [y' [z' [H6 H7]]]. subst.
     apply OrdPairEqual in H6. destruct H6 as [H6 H8]. subst.
@@ -196,7 +196,7 @@ Proof.
     + reflexivity.
     + split; assumption.
   - apply (proj1 (ProdCharac _ _ _)) in H1. destruct H1 as [z [y [H1 [H2 H3]]]].
-    apply ImageCharac. exists :(y,z):. split.
+    exists :(y,z):. split.
     + apply ProdCharac2. split; assumption.
     + apply SwitchCharac2. exists y. exists z. split.
       * reflexivity.
@@ -292,10 +292,10 @@ Proof.
   (* However, we claim that P is the direct image of domain R by R. *)
   assert (R:[domain R]: :~: P) as H8. {
     intros x. split; intros T1.
-    - apply (proj1 (ImageCharac _ _ _)) in T1. destruct T1 as [x' [_ T1]].
+    - destruct T1 as [x' [_ T1]].
       rewrite Er in T1. destruct T1 as [x1 [T1 T2]].
       apply OrdPairEqual in T1. destruct T1 as [_ T1]. subst. assumption.
-    - apply ImageCharac. exists :(x,y):. rewrite Er. split.
+    - exists :(x,y):. rewrite Er. split.
       + apply DomainCharac. exists x. exists x. split.
         * reflexivity.
         * assumption.
