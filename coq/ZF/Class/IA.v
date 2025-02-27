@@ -67,7 +67,7 @@ Proposition IAConverse : forall (A:Class),
   (I:|:A)^:-1: :~: (I:|:A).
 Proof.
   intros A x. split; intros H1.
-  - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
+  - destruct H1 as [y [z [H1 H2]]].
     apply IACharac2 in H2. destruct H2 as [H2 H3]. subst.
     apply IACharac2. split. 1: assumption. reflexivity.
   - apply IACharac in H1. destruct H1 as [y [H1 H2]]. subst.
@@ -77,7 +77,7 @@ Qed.
 (* I|A is a one-to-one class.                                                   *)
 Proposition IAIsOneToOne : forall (A:Class), OneToOne (I:|:A).
 Proof.
-  intros A. apply OneToOneCharac. split.
+  intros A. split.
   - apply IAIsFunctional.
   - apply FunctionalEquivCompat with (I:|:A).
     + apply ClassEquivSym, IAConverse.
@@ -107,10 +107,9 @@ Qed.
 Proposition IARange : forall (A:Class), range (I:|:A) :~: A.
 Proof.
   intros A y. split; intros H1.
-  - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-    apply IACharac2 in H1. destruct H1 as [H1 H2]. subst. assumption.
-  - apply RangeCharac. exists y. apply IACharac2.
-    split. 1: assumption. reflexivity.
+  - destruct H1 as [x H1]. apply IACharac2 in H1.
+    destruct H1 as [H1 H2]. subst. assumption.
+  - exists y. apply IACharac2. split. 1: assumption. reflexivity.
 Qed.
 
 (* I|A is a function class defined on A.                                        *)

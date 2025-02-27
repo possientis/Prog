@@ -120,7 +120,6 @@ Proposition FunctionalImageOfInvImageIsMore : forall (F B:Class),
   B :<=: range F -> B :<=: F:[ F^:-1::[B]: ]:.
 Proof.
   intros F B H1 y H2. specialize (H1 y H2).
-  apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-  exists x. split. 2: assumption.
+  destruct H1 as [x H1]. exists x. split. 2: assumption.
   apply InvImageCharac. exists y. split; assumption.
 Qed.

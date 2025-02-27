@@ -104,7 +104,7 @@ Proposition ComposeConverse : forall (F G:Class),
   (G :.: F)^:-1: :~: F^:-1: :.: G^:-1:.
 Proof.
   intros F G u. split; intros H1.
-  - apply ConverseCharac in H1. destruct H1 as [x [z [H1 H2]]].
+  - destruct H1 as [x [z [H1 H2]]].
     apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
     apply ComposeCharac. exists z. exists y. exists x. split.
     + assumption.
@@ -112,9 +112,8 @@ Proof.
   - apply ComposeCharac in H1. destruct H1 as [z [y [x [H1 [H2 H3]]]]].
     apply (proj1 (ConverseCharac2 _ _ _)) in H2.
     apply (proj1 (ConverseCharac2 _ _ _)) in H3.
-    apply ConverseCharac. exists x. exists z. split.
-    + assumption.
-    + apply ComposeCharac2. exists y. split; assumption.
+    exists x. exists z. split. 1: assumption.
+    apply ComposeCharac2. exists y. split; assumption.
 Qed.
 
 (* The domain of the composition is a subclass of the first domain.             *)
@@ -129,9 +128,8 @@ Qed.
 Proposition ComposeRangeIsSmaller : forall (F G:Class),
   range (G :.: F) :<=: range G.
 Proof.
-  intros F G z H1. apply (proj1 (RangeCharac _ _)) in H1.
-  destruct H1 as [x H1]. apply ComposeCharac2 in H1. destruct H1 as [y [H1 H2]].
-  apply RangeCharac. exists y. assumption.
+  intros F G z H1. destruct H1 as [x H1]. apply ComposeCharac2 in H1.
+  destruct H1 as [y [H1 H2]]. exists y. assumption.
 Qed.
 
 (* The domain of the composition is the same as the first domain if range ok.   *)
@@ -141,7 +139,7 @@ Proof.
   intros F G H1. apply DoubleInclusion. split.
   - apply ComposeDomainIsSmaller.
   - intros x H2. destruct H2 as [y H2].
-    assert (domain G y) as H3. { apply H1. apply RangeCharac. exists x. assumption. }
+    assert (domain G y) as H3. { apply H1. exists x. assumption. }
     destruct H3 as [z H3]. exists z. apply ComposeCharac2. exists y.
     split; assumption.
 Qed.
@@ -152,7 +150,7 @@ Proposition ComposeDomainIsSame2 : forall (F G:Class), Functional F ->
 Proof.
   intros F G H1. split.
   - apply ComposeDomainIsSame.
-  - intros H2 y H3. apply (proj1 (RangeCharac _ _)) in H3. destruct H3 as [x H3].
+  - intros H2 y H3. destruct H3 as [x H3].
     assert (domain (G :.: F) x) as H4. { apply H2. exists y. assumption. }
     destruct H4 as [z H4]. apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
     assert (y' = y) as H6. { apply H1 with x; assumption. }
@@ -165,10 +163,9 @@ Proposition ComposeRangeIsSame : forall (F G:Class),
 Proof.
   intros F G H1. apply DoubleInclusion. split.
   - apply ComposeRangeIsSmaller.
-  - intros z H2. apply (proj1 (RangeCharac _ _)) in H2. destruct H2 as [y H2].
+  - intros z H2. destruct H2 as [y H2].
     assert (range F y) as H3. { apply H1. exists z. assumption. }
-    apply (proj1 (RangeCharac _ _)) in H3. destruct H3 as [x H3].
-    apply RangeCharac. exists x. apply ComposeCharac2. exists y.
+    destruct H3 as [x H3]. exists x. apply ComposeCharac2. exists y.
     split; assumption.
 Qed.
 
@@ -179,13 +176,11 @@ Proof.
   intros F G H1. split.
   - apply ComposeRangeIsSame.
   - intros H2 y H3. destruct H3 as [z H3].
-    assert (range (G :.: F) z) as H4. { apply H2, RangeCharac. exists y. assumption. }
-    apply (proj1 (RangeCharac _ _)) in H4. destruct H4 as [x H4].
-    apply ComposeCharac2 in H4. destruct H4 as [y' [H4 H5]].
-    assert (y' = y) as H6. { apply H1 with z.
-      - apply ConverseCharac2. assumption.
-      - apply ConverseCharac2. assumption. }
-    subst. apply RangeCharac. exists x. assumption.
+    assert (range (G :.: F) z) as H4. { apply H2. exists y. assumption. }
+    destruct H4 as [x H4]. apply ComposeCharac2 in H4.
+    destruct H4 as [y' [H4 H5]]. assert (y' = y) as H6. {
+      apply H1 with z; apply ConverseCharac2; assumption. }
+    subst. exists x. assumption.
 Qed.
 
 (* Characterisation of the domain of G.F in terms of the eval F!a.              *)

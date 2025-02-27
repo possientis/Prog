@@ -1,7 +1,5 @@
-Require Import ZF.Binary.Range.
 Require Import ZF.Class.
 Require Import ZF.Class.Domain.
-Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
@@ -9,66 +7,54 @@ Require Import ZF.Class.Snd.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-(* The range of a class is the range of its binary class.                       *)
-Definition range (P:Class) : Class := Range.range (toBinary P).
+(* The range of a class.                                                        *)
+Definition range (F:Class) : Class := fun y => exists x, F :(x,y):.
 
-(* Quick unfolding.                                                             *)
-Proposition RangeCharac : forall (P:Class) (y:U),
-  range P y <-> exists x, P :(x,y):.
+Proposition RangeEquivCompat : forall (F G:Class),
+  F :~: G -> range F :~: range G.
 Proof.
-  intros P y. split; intros H1.
-  - apply H1.
-  - apply H1.
+  intros F G H1 y. split; intros H2; destruct H2 as [x H2];
+  exists x; apply H1; assumption.
 Qed.
 
-Proposition RangeEquivCompat : forall (P Q:Class),
-  P :~: Q -> range P :~: range Q.
+Proposition RangeInclCompat : forall (F G:Class),
+  F :<=: G -> range F :<=: range G.
 Proof.
-  intros P Q H1 y. split; intros H2;
-  apply (proj1 (RangeCharac _ _)) in H2; destruct H2 as [x H2];
-  apply RangeCharac; exists x; apply H1; assumption.
-Qed.
-
-Proposition RangeInclCompat : forall (P Q:Class),
-  P :<=: Q -> range P :<=: range Q.
-Proof.
-  intros P Q H1 y H2. apply (proj1 (RangeCharac P y)) in H2. destruct H2 as [x H2].
-  apply RangeCharac. exists x. apply H1, H2.
+  intros F G H1 y H2. destruct H2 as [x H2]. exists x. apply H1, H2.
 Qed.
 
 (* The direct image of a class P by Snd is the range of P.                      *)
-Lemma ImageBySnd : forall (P:Class),
-  Snd :[P]: :~: range P.
+Lemma ImageBySnd : forall (F:Class),
+  Snd :[F]: :~: range F.
 Proof.
-  intros P x. split; intros H1.
+  intros F x. split; intros H1.
   - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply SndCharac2 in H2.
-    destruct H2 as [y [z [H2 H3]]]. apply RangeCharac. exists y.
+    destruct H2 as [y [z [H2 H3]]]. exists y.
     subst. assumption.
-  - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [z H1].
-    unfold image. exists :(z,x):. split.
+  - destruct H1 as [z H1]. unfold image. exists :(z,x):. split.
     + assumption.
     + apply SndCharac2. exists z. exists x. split; reflexivity.
 Qed.
 
-Proposition RangeIsSmall : forall (P:Class),
-  Small P -> Small (range P).
+Proposition RangeIsSmall : forall (F:Class),
+  Small F -> Small (range F).
 Proof.
-  (* Let P be an arbitrary class. *)
-  intros P.
+  (* Let F be an arbitrary class. *)
+  intros F.
 
-  (* We assume that P is small. *)
-  intros H1. assert (Small P) as A. { apply H1. } clear A.
+  (* We assume that F is small. *)
+  intros H1. assert (Small F) as A. { apply H1. } clear A.
 
-  (* We need to show that range(P) is small. *)
-  assert (Small (range P)) as A. 2: apply A.
+  (* We need to show that range(F) is small. *)
+  assert (Small (range F)) as A. 2: apply A.
 
-  (* Using the equivalence Snd[P] ~ range(P) ... *)
-  apply SmallEquivCompat with Snd:[P]:. 1: apply ImageBySnd.
+  (* Using the equivalence Snd[F] ~ range(F) ... *)
+  apply SmallEquivCompat with Snd:[F]:. 1: apply ImageBySnd.
 
-  (* It is sufficient to show that Snd[P] is small. *)
-  assert (Small (Snd:[P]:)) as A. 2: apply A.
+  (* It is sufficient to show that Snd[F] is small. *)
+  assert (Small (Snd:[F]:)) as A. 2: apply A.
 
-  (* This follows from the fact that Snd is functional and P is small. *)
+  (* This follows from the fact that Snd is functional and F is small. *)
   apply FunctionalImageIsSmall.
 
   - apply SndIsFunctional.
@@ -80,7 +66,7 @@ Proposition RangeIsDomainImage : forall (F:Class),
   F:[domain F]: :~: range F.
 Proof.
   intros F y. split; intros H1.
-  - destruct H1 as [x [H1 H2]]. apply RangeCharac. exists x. assumption.
-  - apply (proj1 (RangeCharac _ _)) in H1. destruct H1 as [x H1].
-    exists x. split. 2: assumption. exists y. assumption.
+  - destruct H1 as [x [H1 H2]]. exists x. assumption.
+  - destruct H1 as [x H1]. exists x. split. 2: assumption. exists y. assumption.
 Qed.
+

@@ -55,16 +55,16 @@ Qed.
 Proposition IConverse : I^:-1: :~: I.
 Proof.
   intros x. split; intros H1.
-  - apply ConverseCharac in H1. destruct H1 as [y [z [H1 H2]]].
+  - destruct H1 as [y [z [H1 H2]]].
     apply ICharac2 in H2. subst. apply ICharac2. reflexivity.
-  - destruct H1 as [y H1]. apply ConverseCharac. exists y. exists y.
+  - destruct H1 as [y H1]. exists y. exists y.
     split. 1: assumption. apply ICharac2. reflexivity.
 Qed.
 
 (* I is a one-to-one class.                                                     *)
 Proposition IIsOneToOne : OneToOne I.
 Proof.
-  apply OneToOneCharac. split.
+  split.
   - apply IIsFunctional.
   - apply FunctionalEquivCompat with I. 2: apply IIsFunctional.
     apply ClassEquivSym, IConverse.
@@ -91,7 +91,7 @@ Proposition IRange : range I :~: V.
 Proof.
   intros y. split; intros H1.
   - apply Logic.I.
-  - apply RangeCharac. exists y. apply ICharac2. reflexivity.
+  - exists y. apply ICharac2. reflexivity.
 Qed.
 
 (* I is a function class defined on the class of all sets.                      *)

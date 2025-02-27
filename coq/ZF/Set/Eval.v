@@ -108,7 +108,7 @@ Qed.
 Proposition FunctionalEvalIsInRange : forall (F:Class) (a:U),
   Functional F -> domain F a -> range F (F!a).
 Proof.
-  intros F a H1 H2. apply RangeCharac. exists a.
+  intros F a H1 H2. exists a.
   apply FunctionalEvalSatisfies; assumption.
 
 Qed.

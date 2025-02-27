@@ -127,7 +127,6 @@ CORE_OBJ = \
 	${CORE}/Zero.vo
 
 SET_OBJ = \
-	${SET}/Converse.vo \
 	${SET}/Diff.vo \
 	${SET}/Empty.vo \
 	${SET}/Eval.vo \
