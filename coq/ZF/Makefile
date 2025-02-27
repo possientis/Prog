@@ -35,18 +35,8 @@ AXIOM_OBJ = \
 	${AXIOM}/Union.vo
 
 BINARY_OBJ = \
-	${BINARY}/Bijection.vo \
-	${BINARY}/Compose.vo \
-	${BINARY}/Converse.vo \
-	${BINARY}/Domain.vo \
-	${BINARY}/Function.vo \
 	${BINARY}/Functional.vo \
-	${BINARY}/FunctionalAt.vo \
 	${BINARY}/Image.vo \
-	${BINARY}/InvImage.vo \
-	${BINARY}/OneToOne.vo \
-	${BINARY}/Range.vo \
-	${BINARY}/Restrict.vo
 
 CLASS_OBJ = \
 	${CLASS}/AntiSymmetric.vo \

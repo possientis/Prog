@@ -1,9 +1,7 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Binary.Restrict.
 Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Domain.
-Require Import ZF.Class.FromBinary.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionOn.
@@ -21,31 +19,17 @@ Require Import ZF.Set.OrdPair.
 Export ZF.Core.Pipe.
 
 (* Restricting a class F to a class A.                                          *)
-Definition restrict (F A:Class) : Class
-  := fromBinary (Binary.Restrict.restrict (toBinary F) A).
+Definition restrict (F A:Class) : Class := fun x =>
+  exists y z, x = :(y,z): /\ A y /\ F :(y,z):.
 
 (* Notation "F :|: A" := (restrict F A)                                         *)
 Global Instance ClassPipe : Pipe Class Class := { pipe := restrict }.
-
-Proposition RestrictCharac : forall (F A:Class) (x:U),
-  (F:|:A) x <-> exists y, exists z, x = :(y,z): /\ A y /\ F :(y,z):.
-Proof.
-  intros F A x. split; intros H1.
-  - apply H1.
-  - destruct H1 as [y [z [H2 [H3 H4]]]].
-    unfold pipe, ClassPipe, restrict, fromBinary.
-    unfold Binary.Restrict.restrict, toBinary.
-    exists y. exists z. split.
-    + assumption.
-    + split; assumption.
-Qed.
 
 Proposition RestrictCharac2 : forall (F A:Class) (y z:U),
   (F:|:A) :(y,z): <-> A y /\ F :(y,z):.
 Proof.
   intros F A y z. split; intros H1.
-  - apply RestrictCharac in H1.
-    destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
+  - destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
   - exists y. exists z. split.
     + reflexivity.
@@ -56,8 +40,7 @@ Proposition RestrictEquivCompat : forall (F G A B:Class),
   F :~: G -> A :~: B -> F:|:A :~: G:|:B.
 Proof.
   intros F G A B H1 H2 x. split; intros H3;
-  apply (proj1 (RestrictCharac _ _ _)) in H3; destruct H3 as [y [z [H3 [H4 H5]]]];
-  subst; apply RestrictCharac2; split.
+  destruct H3 as [y [z [H3 [H4 H5]]]]; subst; apply RestrictCharac2; split.
   - apply H2. assumption.
   - apply H1. assumption.
   - apply H2. assumption.
@@ -83,7 +66,8 @@ Qed.
 (* The restriction is always a relation.                                        *)
 Proposition RestrictIsRelation : forall (F A:Class), Relation (F:|:A).
 Proof.
-  intros F A. apply FromBinaryIsRelation.
+  intros F A x H1. destruct H1 as [y [z [H1 [H2 H3]]]].
+  exists y. exists z. assumption.
 Qed.
 
 (* The restriction of a functional class is always functional.                  *)
@@ -162,17 +146,16 @@ Proposition ImageIsRangeOfRestrict : forall (F A:Class),
 Proof.
   intros F A y. split; intros H1.
   - unfold image in H1. destruct H1 as [x [H1 H2]].
-    exists x. unfold toBinary. apply RestrictCharac2. split; assumption.
+    exists x. apply RestrictCharac2. split; assumption.
   - destruct H1 as [x H1]. apply RestrictCharac2 in H1.
-    destruct H1 as [H1 H2]. exists x. unfold toBinary. split; assumption.
+    destruct H1 as [H1 H2]. exists x. split; assumption.
 Qed.
 
 (* A restriction is always a subclass of the original class.                    *)
 Proposition RestrictIsSubClass : forall (F A:Class),
   F:|:A :<=: F.
 Proof.
-  intros F A x H1. apply RestrictCharac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
-  rewrite H1. apply H2.
+  intros F A x [y [z [H1 [_ H2]]]]. rewrite H1. apply H2.
 Qed.
 
 (* A class is a relation iff it equals the restriction to its domain.           *)
@@ -181,16 +164,13 @@ Proposition RelationIsRestrict : forall (F:Class),
 Proof.
   intros F. split; intros H1.
   - intros x. split; intros H2.
-    + destruct (H1 x H2) as [y [z H3]]. apply RestrictCharac.
-      exists y. exists z. split.
+    + destruct (H1 x H2) as [y [z H3]]. exists y. exists z. split.
       * assumption.
       * split.
         { exists z. subst. assumption. }
         { subst. assumption. }
-    + apply RestrictCharac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
-      rewrite H3. apply H4.
-  - intros x H2. apply H1 in H2.
-    apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 _]]].
+    + destruct H2 as [y [z [H3 [_ H4]]]]. rewrite H3. apply H4.
+  - intros x H2. apply H1 in H2. destruct H2 as [y [z [H2 _]]].
     exists y. exists z. assumption.
 Qed.
 
@@ -206,13 +186,11 @@ Proposition RestrictTowerProperty : forall (F A B:Class),
   A :<=: B -> (F:|:B) :|: A :~: F:|:A.
 Proof.
   intros F A B H1 x. split; intros H2.
-  - apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
-    apply RestrictCharac2 in H4. destruct H4 as [H4 H5]. apply RestrictCharac.
-    exists y. exists z. split.
+  - destruct H2 as [y [z [H2 [H3 H4]]]]. apply RestrictCharac2 in H4.
+    destruct H4 as [H4 H5]. exists y. exists z. split.
     + assumption.
     + split; assumption.
-  - apply (proj1 (RestrictCharac _ _ _)) in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
-    apply RestrictCharac. exists y. exists z. split.
+  - destruct H2 as [y [z [H2 [H3 H4]]]]. exists y. exists z. split.
     + assumption.
     + split.
       * assumption.
@@ -251,3 +229,4 @@ Proof.
     assert (y = :0:) as H6. { rewrite E. apply EvalWhenNotInDomain. assumption. }
     rewrite H6. apply EvalWhenNotInDomain. assumption.
 Qed.
+

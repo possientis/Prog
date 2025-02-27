@@ -25,10 +25,9 @@ Proposition IACharac : forall (A:Class) (x:U),
   (I:|:A) x <-> exists y, A y /\ x = :(y,y):.
 Proof.
   intros A x. split; intros H1.
-  - apply (proj1 (RestrictCharac _ _ _)) in H1.
-    destruct H1 as [y [z [H1 [H2 H3]]]]. apply ICharac2 in H3. subst.
+  - destruct H1 as [y [z [H1 [H2 H3]]]]. apply ICharac2 in H3. subst.
     exists z. split. 1: assumption. reflexivity.
-  - destruct H1 as [y [H1 H2]]. apply RestrictCharac. exists y. exists y.
+  - destruct H1 as [y [H1 H2]]. exists y. exists y.
     split. 1: assumption. split. 1: assumption. apply ICharac2. reflexivity.
 Qed.
 
