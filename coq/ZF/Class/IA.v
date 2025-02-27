@@ -164,7 +164,7 @@ Proposition IAIsConverseFF : forall (F A B:Class), Bij F A B ->
   F^:-1: :.: F :~: (I:|:A).
 Proof.
   intros F A B [[[H1 H2] H3] H4] u. split; intros H5.
-  - apply ComposeCharac in H5. destruct H5 as [x [y [z [H5 [H6 H7]]]]]. subst.
+  - destruct H5 as [x [y [z [H5 [H6 H7]]]]]. subst.
     apply (proj1 (ConverseCharac2 _ _ _)) in H7.
     assert (x = z) as H8. {
       revert H7. revert H6. apply OneToOneCharacL. assumption. }
