@@ -83,7 +83,7 @@ Proof.
   - assert (Small F:[A]:) as A'. 2: apply A'.
 
   (* Which follows from the fact that F is functional and A is small. *)
-    apply FunctionalImageIsSmall. { apply H2. } { apply H3. }
+    apply ImageIsSmall. { apply H2. } { apply H3. }
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)

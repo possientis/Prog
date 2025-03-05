@@ -104,5 +104,5 @@ Proof.
   intros F R S A B C a H1 H2 H3 H4.
   apply ClassEquivTran with F:[initSegment R C a]:.
   - apply ClassEquivSym, IsomInitSegmentImage with A B; assumption.
-  - apply ImageOfEmpty. assumption.
+  - apply EmptyImage. assumption.
 Qed.

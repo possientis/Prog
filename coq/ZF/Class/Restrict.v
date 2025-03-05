@@ -205,7 +205,7 @@ Proof.
   intros F A B H1 H2 H3.
   apply LesserThanSmallIsSmall with (range (F:|:B)). 1: assumption.
   apply SmallEquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
-  apply FunctionalImageIsSmall; assumption.
+  apply ImageIsSmall; assumption.
 Qed.
 
 Proposition RestrictEval : forall (F A:Class) (x:U), Functional F -> A x ->

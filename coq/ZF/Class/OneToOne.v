@@ -63,13 +63,13 @@ Qed.
 Proposition OneToOneImageIsSmall : forall (F A:Class),
   OneToOne F -> Small A -> Small F:[A]:.
 Proof.
-  intros F A [H1 _]. apply FunctionalImageIsSmall. assumption.
+  intros F A [H1 _]. apply ImageIsSmall. assumption.
 Qed.
 
 Proposition OneToOneInvImageIsSmall : forall (F B:Class),
   OneToOne F -> Small B -> Small F^:-1::[B]:.
 Proof.
-  intros F B [_ H1]. apply FunctionalImageIsSmall. assumption.
+  intros F B [_ H1]. apply ImageIsSmall. assumption.
 Qed.
 
 

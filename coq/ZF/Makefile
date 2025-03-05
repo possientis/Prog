@@ -2,7 +2,6 @@
 
 # Folder names
 AXIOM  = Axiom
-BINARY = Binary
 CLASS  = Class
 CORE   = Core
 SET    = Set
@@ -10,15 +9,12 @@ SET    = Set
 # coqc command line option
 TOP_LIB    		= -Q . ZF
 AXIOM_LIB  		= -Q ${AXIOM}  ZF.${AXIOM} -Q . ZF
-BINARY_LIB 		= -Q ${BINARY} ZF.${BINARY} -Q . ZF
 CLASS_LIB  		= -Q ${CLASS}  ZF.${CLASS} -Q . ZF
 CORE_LIB   		= -Q ${CORE}   ZF.${CORE}  -Q . ZF
 SET_LIB    		= -Q ${SET}    ZF.${SET}   -Q . ZF
 
 # Object files
 TOP_OBJ = \
-	Binary.vo \
-	Class.vo \
 	Set.vo
 
 AXIOM_OBJ = \
@@ -31,12 +27,7 @@ AXIOM_OBJ = \
 	${AXIOM}/Pairing.vo \
 	${AXIOM}/Power.vo \
 	${AXIOM}/Replacement.vo \
-	${AXIOM}/Specification.vo \
 	${AXIOM}/Union.vo
-
-BINARY_OBJ = \
-	${BINARY}/Functional.vo \
-	${BINARY}/Image.vo \
 
 CLASS_OBJ = \
 	${CLASS}/AntiSymmetric.vo \
@@ -53,7 +44,6 @@ CLASS_OBJ = \
 	${CLASS}/Empty.vo \
 	${CLASS}/Eval.vo \
 	${CLASS}/Founded.vo \
-	${CLASS}/FromBinary.vo \
 	${CLASS}/Fst.vo \
 	${CLASS}/Fun.vo \
 	${CLASS}/Function.vo \
@@ -81,11 +71,13 @@ CLASS_OBJ = \
 	${CLASS}/Range.vo \
 	${CLASS}/Reflexive.vo \
 	${CLASS}/Relation.vo \
+	${CLASS}/Replacement.vo \
 	${CLASS}/Restrict.vo \
 	${CLASS}/Russell.vo \
 	${CLASS}/Singleton.vo \
 	${CLASS}/Small.vo \
 	${CLASS}/Snd.vo \
+	${CLASS}/Specification.vo \
 	${CLASS}/StrictOrd.vo \
 	${CLASS}/StrictTotalOrd.vo \
 	${CLASS}/Switch.vo \
@@ -139,7 +131,6 @@ SET_OBJ = \
 # Overall target
 all : \
 	${AXIOM_OBJ} \
-	${BINARY_OBJ} \
 	${CLASS_OBJ} \
 	${CORE_OBJ} \
 	${SET_OBJ} \
@@ -151,9 +142,6 @@ all : \
 
 ${AXIOM}/%.vo : ${AXIOM}/%.v
 	coqc $< ${AXIOM_LIB}
-
-${BINARY}/%.vo : ${BINARY}/%.v
-	coqc $< ${BINARY_LIB}
 
 ${CLASS}/%.vo : ${CLASS}/%.v
 	coqc $< ${CLASS_LIB}

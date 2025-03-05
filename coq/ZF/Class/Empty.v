@@ -1,10 +1,12 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.NonEmptyUniverse.
 Require Import ZF.Class.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Zero.
 Require Import ZF.Set.
 Require Import ZF.Set.Specify.
+
+Require Import ZF.Core.Zero.
 Export ZF.Core.Zero.
 
 (* The class which is satisfied by no set.                                      *)
@@ -56,4 +58,12 @@ Proof.
     + apply EmptyCharac, (H2 x), H3.
     + apply EmptyCharac in H3. contradiction.
   - destruct H1 as [x H1]. intros H2. apply H2, EmptyCharac in H1. contradiction.
+Qed.
+
+Proposition EmptyImage : forall (P Q:Class),
+  Q :~: :0: -> P:[Q]: :~: :0:.
+Proof.
+  intros P Q H1 y. split; intros H2.
+  - destruct H2 as [x [H2 H3]]. apply H1 in H2. apply EmptyCharac in H2. contradiction.
+  - apply EmptyCharac in H2. contradiction.
 Qed.

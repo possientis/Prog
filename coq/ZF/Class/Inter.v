@@ -1,9 +1,10 @@
-Require Import ZF.Axiom.Specification.
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.And.
+Require Import ZF.Class.Specification.
 Require Import ZF.Set.
+
+Require Import ZF.Core.And.
 Export ZF.Core.And.
 
 (* The intersection of two classes P and Q.                                     *)
