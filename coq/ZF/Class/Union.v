@@ -1,8 +1,9 @@
 Require Import ZF.Axiom.Union.
 Require Import ZF.Class.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Union.
 Require Import ZF.Set.
+
+Require Import ZF.Core.Union.
 Export ZF.Core.Union.
 
 (* The class of all sets x which belongs to some element of P.                  *)

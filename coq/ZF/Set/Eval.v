@@ -114,7 +114,7 @@ Proof.
 Qed.
 
 (* Characterisation of the direct image F[A] in terms of evaluations of F.      *)
-Proposition ImageEvalCharac : forall (F A: Class), Functional F ->
+Proposition EvalImageCharac : forall (F A: Class), Functional F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.
   intros F A H1 y. split; intros H2.

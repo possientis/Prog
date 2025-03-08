@@ -7,10 +7,11 @@ Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
-Require Import ZF.Core.Dot.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
+
+Require Import ZF.Core.Dot.
 Export ZF.Core.Dot.
 
 (* Composition of two classes.                                                  *)

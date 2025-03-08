@@ -11,11 +11,12 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Pipe.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
+
+Require Import ZF.Core.Pipe.
 Export ZF.Core.Pipe.
 
 (* Restricting a class F to a class A.                                          *)

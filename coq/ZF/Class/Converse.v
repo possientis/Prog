@@ -10,9 +10,10 @@ Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
 Require Import ZF.Class.V.
-Require Import ZF.Core.Inverse.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
+
+Require Import ZF.Core.Inverse.
 Export ZF.Core.Inverse.
 
 (* The converse of a class is the relation of the converse of its binary class. *)

@@ -9,13 +9,14 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
-Require Import ZF.Core.Prod.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Union2.
+
+Require Import ZF.Core.Prod.
 Export ZF.Core.Prod.
 
 (* The class of all ordered pairs (y,z) where y lies in P and z lies in Q.      *)

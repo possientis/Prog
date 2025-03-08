@@ -1,10 +1,11 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
-Require Import ZF.Core.Or.
 Require Import ZF.Set.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Union.
+
+Require Import ZF.Core.Or.
 Export ZF.Core.Or.
 
 (* The class of all sets x which belong to P or belong to Q.                    *)

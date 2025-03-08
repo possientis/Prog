@@ -1,6 +1,7 @@
 Require Import ZF.Class.
-Require Import ZF.Core.Not.
 Require Import ZF.Set.
+
+Require Import ZF.Core.Not.
 Export ZF.Core.Not.
 
 (* Complement of a class.                                                       *)
