@@ -5,6 +5,7 @@ Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
@@ -119,3 +120,14 @@ Proof.
   intros F G a [_ H1] [_ H2]. apply OneToOneComposeEval; assumption.
 Qed.
 
+Proposition BijectionInvImageOfImage : forall (F A:Class),
+  Bijection F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
+Proof.
+  intros F A [_ H1]. apply OneToOneInvImageOfImage. assumption.
+Qed.
+
+Proposition BijectionImageOfInvImage : forall (F B:Class),
+  Bijection F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
+Proof.
+  intros F B [_ H1]. apply OneToOneImageOfInvImage. assumption.
+Qed.

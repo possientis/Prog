@@ -154,3 +154,16 @@ Proof.
   intros F A H1.
   apply FunctionOnInvImageOfRangeIsDomain, BijectionOnIsFunctionOn. assumption.
 Qed.
+
+Proposition BijectionOnInvImageOfImage : forall (F A B:Class),
+  BijectionOn F A -> B :<=: A -> F^:-1::[ F:[B]: ]: :~: B.
+Proof.
+  intros F A B [H1 H2] H3. apply BijectionInvImageOfImage. 1: assumption.
+  apply InclEquivCompatR with A. 2: assumption. apply ClassEquivSym. assumption.
+Qed.
+
+Proposition BijectionOnImageOfInvImage : forall (F A B:Class),
+  BijectionOn F A -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
+Proof.
+  intros F A B [H1 _]. apply BijectionImageOfInvImage. assumption.
+Qed.

@@ -132,3 +132,17 @@ Proof.
   intros F A B H1. apply BijRangeIsDomainImage, ConverseIsBij. assumption.
 Qed.
 
+Proposition BijInvImageOfImage : forall (F A B C:Class),
+  Bij F A B -> C :<=: A -> F^:-1::[ F:[C]: ]: :~: C.
+Proof.
+  intros F A B C [H1 H2] H3. apply BijectionOnInvImageOfImage with A; assumption.
+Qed.
+
+Proposition BijImageOfInvImage : forall (F A B C:Class),
+  Bij F A B -> C :<=: B -> F:[ F^:-1::[C]: ]: :~: C.
+Proof.
+  intros F A B C [H1 H2] H3. apply BijectionOnImageOfInvImage with A.
+  1: assumption. apply InclEquivCompatR with B. 2: assumption.
+  apply ClassEquivSym. assumption.
+Qed.
+

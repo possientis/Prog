@@ -131,3 +131,19 @@ Proposition OneToOneComposeEval : forall (F G:Class) (a:U),
 Proof.
   intros F G a [H1 _] [H2 _]. apply FunctionalComposeEval; assumption.
 Qed.
+
+Proposition OneToOneInvImageOfImage : forall (F A:Class),
+  OneToOne F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
+Proof.
+  intros F A [H1 H2] H3. apply DoubleInclusion. split.
+  - apply InvImageOfImageIsLess. assumption.
+  - apply InvImageOfImageIsMore. assumption.
+Qed.
+
+Proposition OneToOneImageOfInvImage : forall (F B:Class),
+  OneToOne F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
+Proof.
+  intros F B [H1 H2] H3. apply DoubleInclusion. split.
+  - apply ImageOfInvImageIsLess. assumption.
+  - apply ImageOfInvImageIsMore. assumption.
+Qed.
