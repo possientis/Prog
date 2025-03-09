@@ -5,6 +5,7 @@ Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Isom.
 Require Import ZF.Class.Minimal.
 Require Import ZF.Class.Singleton.
 Require Import ZF.Class.Small.
@@ -20,7 +21,7 @@ Definition WellFounded (R A:Class) : Prop :=
   Founded R A /\ forall (a:U), A a -> Small (initSegment R A a).
 
 (* If R is founded on a small class A, then it is well-founded on A.            *)
-Proposition FoundedOnSmallIsWellFounded : forall (R A:Class),
+Proposition WellFoundedWhenFoundedOnSmall : forall (R A:Class),
   Founded R A -> Small A -> WellFounded R A.
 Proof.
   intros R A H1 H2. split. 1: assumption. intros a H3.
@@ -28,10 +29,10 @@ Proof.
 Qed.
 
 (* If R is founded on a set a, then it is well-founded on a.                    *)
-Proposition FoundedOnSetIsWellFounded : forall (R:Class) (a:U),
+Proposition WellFoundedWhenFoundedOnSet : forall (R:Class) (a:U),
   Founded R (toClass a) -> WellFounded R (toClass a).
 Proof.
-  intros R a H1. apply FoundedOnSmallIsWellFounded. 1: assumption.
+  intros R a H1. apply WellFoundedWhenFoundedOnSmall. 1: assumption.
   apply SetIsSmall.
 Qed.
 
@@ -46,8 +47,13 @@ Proof.
     + apply H2, H3. assumption.
 Qed.
 
+Proposition WellFoundedIsom : forall (F R S A B: Class),
+  Isom F R S A B -> WellFounded R A <-> WellFounded S B.
+Proof.
+Admitted.
+
 (* R can be founded for A, but not well-founded for A.                          *)
-Proposition FoundedButNotWellFounded : exists (R A:Class),
+Proposition WellFoundedCanFailWhenFounded : exists (R A:Class),
   Founded R A /\ ~ WellFounded R A.
 Proof.
   (* Let A be the class of all singletons and pairs. *)
