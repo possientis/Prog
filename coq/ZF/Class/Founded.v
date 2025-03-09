@@ -37,8 +37,11 @@ Qed.
 Proposition FoundedIsom : forall (F R S A B:Class),
   Isom F R S A B -> Founded R A <-> Founded S B.
 Proof.
-  intros F R S A B H1. split; intros H2.
-  - intros b H3 H4. remember (F^:-1::[toClass b]:) as C eqn:EC.
+  (* It is sufficient to prove -> *)
+  assert (forall (F R S A B:Class),
+    Isom F R S A B -> Founded R A -> Founded S B) as L. {
+    intros F R S A B H1 H2 b H3 H4.
+    remember (F^:-1::[toClass b]:) as C eqn:EC.
     assert (Small C) as H5. { rewrite EC.
       apply BijInvImageIsSmall with A B.
       - apply IsomIsBij with R S. assumption.
@@ -48,11 +51,31 @@ Proof.
       apply ClassEquivTran with C.
       - rewrite Ea. apply ToFromClass.
       - rewrite <- EC. apply ClassEquivRefl. }
-    clear EC Ea H5 C. assert (toClass a :<=: A) as H7. {
+    clear EC Ea H5 C.
+    assert (toClass a :<=: A) as H7. {
       apply InclEquivCompatL with (F^:-1::[toClass b]:).
       - apply ClassEquivSym. assumption.
-      -
+      - apply InclTran with F^:-1::[B]:.
+        + apply ImageInclCompatR. assumption.
+        + apply InclEquivCompatL with A. 2: apply InclRefl.
+          apply ClassEquivSym, BijInvImageOfRangeIsDomain.
+          apply IsomIsBij with R S. assumption. }
+    assert (a <> :0:) as H8. { apply NotEmptyHasElement in H4.
+      destruct H4 as [y H4]. apply NotEmptyHasElement.
+      exists F^:-1:!y. apply H6. exists y. split. 1: assumption.
+      apply BijEvalSatisfies with B A.
+      - apply ConverseIsBij, IsomIsBij with R S. assumption.
+      - apply H3. assumption. }
+    specialize (H2 H7 H8). destruct H2 as [x H2].
 Admitted.
+(*
+
+  (* The proof of the equivalence follows. *)
+  intros F R S A B H1. split.
+  - apply L with F. assumption.
+  - apply L with F^:-1:, ConverseIsIsom. assumption.
+Qed.
+*)
 
 Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->
   forall a, A a -> ~ R :(a,a):.
