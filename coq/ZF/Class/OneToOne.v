@@ -14,36 +14,6 @@ Require Import ZF.Set.OrdPair.
 
 Definition OneToOne (F:Class) : Prop := Functional F /\ Functional F^:-1:.
 
-Proposition OneToOneInvImageOfImageIsLess : forall (F A:Class),
-  OneToOne F -> F^:-1::[ F:[A]: ]: :<=: A.
-Proof.
-  intros F A [_ H1]. apply FunctionalInvImageOfImageIsLess. assumption.
-Qed.
-
-(* Same as the 'Functional' counterpart. Duplicated here for convenience.       *)
-Proposition OneToOneInvImageOfImageIsMore : forall (F A:Class),
-  A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
-Proof.
-  intros F A H1 x H2. specialize (H1 x H2).
-  destruct H1 as [y H1]. apply InvImageCharac. exists y.
-  split. 2: assumption. exists x. split; assumption.
-Qed.
-
-Proposition OneToOneImageOfInvImageIsLess : forall (F B:Class),
-  OneToOne F -> F:[ F^:-1::[B]: ]: :<=: B.
-Proof.
-  intros F B [H1 _]. apply FunctionalImageOfInvImageIsLess. assumption.
-Qed.
-
-(* Same as the 'Functional' counterpart. Duplicated here for convenience.       *)
-Proposition OneToOneImageOfInvImageIsMore : forall (F B:Class),
-  B :<=: range F -> B :<=: F:[ F^:-1::[B]: ]:.
-Proof.
-  intros F B H1 y H2. specialize (H1 y H2).
-  destruct H1 as [x H1]. exists x. split. 2: assumption.
-  apply InvImageCharac. exists y. split; assumption.
-Qed.
-
 (* Uniqueness of left coordinate when one-to-one.                               *)
 Proposition OneToOneCharacL : forall (F:Class), OneToOne F ->
   forall x y z, F :(y,x): -> F :(z,x): -> y = z.
