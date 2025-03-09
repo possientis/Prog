@@ -119,17 +119,16 @@ Proof.
   apply FunComposeEval with B C; assumption.
 Qed.
 
-Proposition BijDomainImage : forall (F A B:Class),
+Proposition BijRangeIsDomainImage : forall (F A B:Class),
   Bij F A B -> F:[A]: :~: B.
 Proof.
-  intros F A B [[H1 H2] H3]. apply ClassEquivTran with (F:[domain F]:).
-  - apply ImageEquivCompatR, ClassEquivSym. assumption.
-  - apply ClassEquivTran with (range F). 2: assumption.
-    apply RangeIsDomainImage.
+  intros F A B [H1 H2]. apply ClassEquivTran with (range F).
+  2: assumption. apply BijectionOnRangeIsDomainImage. assumption.
 Qed.
 
-Proposition BijRangeInvImage : forall (F A B:Class),
+Proposition BijInvImageOfRangeIsDomain : forall (F A B:Class),
   Bij F A B -> F^:-1::[B]: :~: A.
 Proof.
-  intros F A B H1. apply BijDomainImage, ConverseIsBij. assumption.
+  intros F A B H1. apply BijRangeIsDomainImage, ConverseIsBij. assumption.
 Qed.
+

@@ -140,3 +140,17 @@ Proof.
   apply BijectionOnIsFunctionOn in H1. apply BijectionOnIsFunctionOn in H2.
   apply FunctionOnComposeEval; assumption.
 Qed.
+
+Proposition BijectionOnRangeIsDomainImage : forall (F A:Class),
+  BijectionOn F A -> F:[A]: :~: range F.
+Proof.
+  intros F A H1.
+  apply FunctionOnRangeIsDomainImage, BijectionOnIsFunctionOn. assumption.
+Qed.
+
+Proposition BijectionOnInvImageOfRangeIsDomain : forall (F A:Class),
+  BijectionOn F A -> F^:-1::[range F]: :~: A.
+Proof.
+  intros F A H1.
+  apply FunctionOnInvImageOfRangeIsDomain, BijectionOnIsFunctionOn. assumption.
+Qed.

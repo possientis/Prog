@@ -1,12 +1,14 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Compose.
+Require Import ZF.Class.Converse.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.InvImage.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
@@ -171,3 +173,17 @@ Proof.
   - apply H4. assumption.
 Qed.
 
+Proposition FunctionOnRangeIsDomainImage : forall (F A:Class),
+  FunctionOn F A -> F:[A]: :~: range F.
+Proof.
+  intros F A [H1 H2]. apply ClassEquivTran with F:[domain F]:.
+  - apply ImageEquivCompatR, ClassEquivSym. assumption.
+  - apply RangeIsDomainImage.
+Qed.
+
+Proposition FunctionOnInvImageOfRangeIsDomain : forall (F A:Class),
+  FunctionOn F A -> F^:-1::[range F]: :~: A.
+Proof.
+  intros F A [H1 H2]. apply ClassEquivTran with (domain F).
+  2: assumption. apply InvImageOfRangeIsDomain.
+Qed.

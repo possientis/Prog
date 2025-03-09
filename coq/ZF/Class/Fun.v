@@ -3,6 +3,7 @@ Open    Scope ZF_Class_Fun_scope.
 
 Require Import ZF.Class.
 Require Import ZF.Class.Compose.
+Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
@@ -79,4 +80,16 @@ Proof.
   apply FunEvalIsInRange with A.
   - split; assumption.
   - assumption.
+Qed.
+
+Proposition FunRangeIsDomainImage : forall (F A B:Class),
+  F :: A :-> B -> F:[A]: :~: range F.
+Proof.
+  intros F A B [H1 _]. apply FunctionOnRangeIsDomainImage. assumption.
+Qed.
+
+Proposition FunInvImageOfRangeIsDomain : forall (F A B:Class),
+  F :: A :-> B -> F^:-1::[range F]: :~: A.
+Proof.
+  intros F A B [H1 _]. apply FunctionOnInvImageOfRangeIsDomain. assumption.
 Qed.

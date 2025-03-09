@@ -74,6 +74,16 @@ Proof.
   - assumption.
 Qed.
 
+Proposition InvImageOfRangeIsDomain : forall (F:Class),
+  F^:-1::[range F]: :~: domain F.
+Proof.
+  intros F. apply ClassEquivTran with F^:-1::[domain F^:-1:]:.
+  - apply ImageEquivCompatR, ClassEquivSym, ConverseDomain.
+  - apply ClassEquivTran with (range F^:-1:).
+    + apply RangeIsDomainImage.
+    + apply ConverseRange.
+Qed.
+
 (* Characterisation of the inverse image F^(-1)[A] in terms of evaluations of F.*)
 Proposition InvImageEvalCharac : forall (F B:Class), Functional F ->
   forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
@@ -123,3 +133,4 @@ Proof.
   destruct H1 as [x H1]. exists x. split. 2: assumption.
   apply InvImageCharac. exists y. split; assumption.
 Qed.
+
