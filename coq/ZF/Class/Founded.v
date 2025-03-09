@@ -67,7 +67,12 @@ Proof.
       - apply ConverseIsBij, IsomIsBij with R S. assumption.
       - apply H3. assumption. }
     specialize (H2 H7 H8). destruct H2 as [x H2].
+    assert (F:[toClass a]: :~: toClass b) as H9. {
+      apply ClassEquivTran with F:[F^:-1::[toClass b]:]:.
+      - apply ImageEquivCompatR. assumption.
+      -
 Admitted.
+
 (*
 
   (* The proof of the equivalence follows. *)

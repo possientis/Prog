@@ -1,8 +1,13 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Bij.
 Require Import ZF.Class.Empty.
+Require Import ZF.Class.Image.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Isom.
 Require Import ZF.Set.
+Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate expressing the fact that a is an R-minimal element of A.           *)
@@ -35,3 +40,15 @@ Proof.
   apply MinimalInitSegment. assumption.
 Qed.
 
+Proposition MinimalIsomImage : forall (F R S A B C:Class) (a:U),
+  Isom F R S A B          ->
+  C :<=: A                ->
+  A a                     ->
+  Minimal R C a           ->
+  Minimal S F:[C]: (F!a).
+Proof.
+  intros F R S A B C a H1 H2 H3 [H4 H5]. split.
+  - exists a. split. 1: assumption. apply BijEvalSatisfies with A B.
+    2: assumption. apply IsomIsBij with R S. assumption.
+  - apply InitSegmentIsomWhenEmpty with R A B; assumption.
+Qed.
