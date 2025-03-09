@@ -34,3 +34,4 @@ Proof.
   intros R A a x H1 H2. apply (InitSegmentWhenEmpty1 R A). 1: assumption.
   apply MinimalInitSegment. assumption.
 Qed.
+
