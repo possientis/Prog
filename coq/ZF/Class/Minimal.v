@@ -14,6 +14,31 @@ Require Import ZF.Set.OrdPair.
 Definition Minimal (R A:Class) (a:U) : Prop
   := A a /\ initSegment R A a :~: :0:.
 
+Proposition MinimalEquivCompat : forall (R S A B:Class) (a:U),
+  R :~: S -> A :~: B -> Minimal R A a -> Minimal S B a.
+Proof.
+  intros R S A B a H1 H2 [H3 H4]; split.
+  - apply H2. assumption.
+  - apply ClassEquivTran with (initSegment R A a). 2: assumption.
+    apply ClassEquivSym, InitSegmentEquivCompat; assumption.
+Qed.
+
+Proposition MinimalEquivCompatL : forall (R S A:Class) (a:U),
+  R :~: S -> Minimal R A a -> Minimal S A a.
+Proof.
+  intros R S A a H1. apply MinimalEquivCompat.
+  - assumption.
+  - apply ClassEquivRefl.
+Qed.
+
+Proposition MinimalEquivCompatR : forall (R A B:Class) (a:U),
+  A :~: B -> Minimal R A a -> Minimal R B a.
+Proof.
+  intros R A B a H1. apply MinimalEquivCompat.
+  - apply ClassEquivRefl.
+  - assumption.
+Qed.
+
 Proposition MinimalSuffice : forall (R A:Class) (a:U),
   A a -> (forall x, A x -> ~ R :(x,a):) -> Minimal R A a.
 Proof.
@@ -52,3 +77,4 @@ Proof.
     2: assumption. apply IsomIsBij with R S. assumption.
   - apply InitSegmentIsomWhenEmpty with R A B; assumption.
 Qed.
+

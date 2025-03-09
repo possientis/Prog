@@ -70,17 +70,17 @@ Proof.
     assert (F:[toClass a]: :~: toClass b) as H9. {
       apply ClassEquivTran with F:[F^:-1::[toClass b]:]:.
       - apply ImageEquivCompatR. assumption.
-      -
-Admitted.
-
-(*
+      - apply BijImageOfInvImage with A B. 2: assumption.
+        apply IsomIsBij with R S. assumption. }
+        exists (F!x). apply MinimalEquivCompatR with F:[toClass a]:.
+        1: assumption. apply MinimalIsomImage with R A B; try assumption.
+        apply H7, MinimalIn with R. assumption. }
 
   (* The proof of the equivalence follows. *)
   intros F R S A B H1. split.
   - apply L with F. assumption.
   - apply L with F^:-1:, ConverseIsIsom. assumption.
 Qed.
-*)
 
 Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->
   forall a, A a -> ~ R :(a,a):.
