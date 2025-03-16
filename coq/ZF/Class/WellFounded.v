@@ -1,7 +1,10 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
+Require Import ZF.Class.Bij.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Converse.
 Require Import ZF.Class.Founded.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Inter.
@@ -11,6 +14,7 @@ Require Import ZF.Class.Singleton.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
@@ -50,7 +54,24 @@ Qed.
 Proposition WellFoundedIsom : forall (F R S A B: Class),
   Isom F R S A B -> WellFounded R A <-> WellFounded S B.
 Proof.
-Admitted.
+  (* It is sufficient to prove -> *)
+  assert (forall (F R S A B:Class),
+    Isom F R S A B -> WellFounded R A -> WellFounded S B) as L. {
+    intros F R S A B H1 [H2 H3]. assert (H4 := H1). destruct H4 as [H4 _]. split.
+    - apply (FoundedIsom F R S A B); assumption.
+    - intros b H5. remember (F^:-1:!b) as a eqn:H6.
+      assert (b = F!a) as H7. { rewrite H6. symmetry.
+        apply BijFF_Eval with A B; assumption. }
+      assert (A a) as H8. { rewrite H6. apply BijEvalIsInDomain with B; assumption. }
+      rewrite H7. apply SmallEquivCompat with F:[initSegment R A a]:.
+      + apply InitSegmentIsomFullImage; assumption.
+      + apply BijImageIsSmall with A B. 1: assumption. apply H3. assumption. }
+
+  (* The proof of the equivalence follows. *)
+  intros F R S A B H1. split.
+  - apply L with F. assumption.
+  - apply L with F^:-1:, ConverseIsIsom. assumption.
+Qed.
 
 (* R can be founded for A, but not well-founded for A.                          *)
 Proposition WellFoundedCanFailWhenFounded : exists (R A:Class),
