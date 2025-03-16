@@ -2,6 +2,7 @@ Require Import ZF.Class.
 Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Irreflexive.
+Require Import ZF.Class.Isom.
 Require Import ZF.Class.Minimal.
 Require Import ZF.Class.StrictOrd.
 Require Import ZF.Class.StrictTotalOrd.
@@ -82,6 +83,16 @@ Proof.
   intros R A H1. split.
   - apply WellOrderingIsStrictOrd. assumption.
   - apply H1.
+Qed.
+
+Proposition WellOrderingIsom : forall (F R S A B:Class),
+  Isom F R S A B -> WellOrdering R A <-> WellOrdering S B.
+Proof.
+  intros F R S A B H1. split; intros [H2 H3]; split.
+  - apply (FoundedIsom F R S A B); assumption.
+  - apply (TotalIsom F R S A B); assumption.
+  - apply (FoundedIsom F R S A B); assumption.
+  - apply (TotalIsom F R S A B); assumption.
 Qed.
 
 Proposition WellOrderingWhenLess : forall (R A:Class) (x y:U),
