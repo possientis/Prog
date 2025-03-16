@@ -164,4 +164,3 @@ Proof.
       apply (MinimalIn R). assumption.
     } contradiction.
 Qed.
-
