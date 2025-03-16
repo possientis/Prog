@@ -17,12 +17,14 @@ Require Import ZF.Set.OrdPair.
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
 
+(* The image of a small class by a bijection class defined on any A is small.   *)
 Proposition BijectionOnImageIsSmall : forall (F A B:Class),
   BijectionOn F A -> Small B -> Small F:[B]:.
 Proof.
   intros F A B [H1 _]. apply BijectionImageIsSmall. assumption.
 Qed.
 
+(* The inverse image of a small class by a bijection defined on any A is small. *)
 Proposition BijectionOnInvImageIsSmall : forall (F A B:Class),
   BijectionOn F A -> Small B -> Small F^:-1::[B]:.
 Proof.
