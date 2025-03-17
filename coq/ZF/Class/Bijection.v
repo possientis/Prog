@@ -131,3 +131,9 @@ Proposition BijectionImageOfInvImage : forall (F B:Class),
 Proof.
   intros F B [_ H1]. apply OneToOneImageOfInvImage. assumption.
 Qed.
+
+Proposition BijectionEvalInjective : forall (F:Class) (x y:U),
+  Bijection F -> domain F x -> domain F y -> F!x = F!y -> x = y.
+Proof.
+  intros F x y [_ H1]. apply OneToOneEvalInjective. assumption.
+Qed.

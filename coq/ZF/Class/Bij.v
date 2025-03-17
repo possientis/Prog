@@ -146,3 +146,8 @@ Proof.
   apply ClassEquivSym. assumption.
 Qed.
 
+Proposition BijEvalInjective : forall (F A B:Class) (x y:U),
+  Bij F A B -> A x -> A y -> F!x = F!y -> x = y.
+Proof.
+  intros F A B x y [H1 _]. apply BijectionOnEvalInjective. assumption.
+Qed.

@@ -147,3 +147,14 @@ Proof.
   - apply ImageOfInvImageIsLess. assumption.
   - apply ImageOfInvImageIsMore. assumption.
 Qed.
+
+Proposition OneToOneEvalInjective : forall (F:Class) (x y:U),
+  OneToOne F -> domain F x -> domain F y -> F!x = F!y -> x = y.
+Proof.
+  intros F x y H1 H2 H3 H4.
+  assert (F :(x,F!x):) as H5. { apply OneToOneEvalSatisfies; assumption. }
+  assert (F :(y,F!y):) as H6. { apply OneToOneEvalSatisfies; assumption. }
+  rewrite <- H4 in H6. revert H5 H6. apply OneToOneCharacL. assumption.
+Qed.
+
+

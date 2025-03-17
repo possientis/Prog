@@ -131,7 +131,7 @@ Proof.
   apply FunctionOnComposeDomainCharac; assumption.
 Qed.
 
-Proposition BijectionComposeEval : forall (F G A B:Class) (a:U),
+Proposition BijectionOnComposeEval : forall (F G A B:Class) (a:U),
   BijectionOn F A ->
   BijectionOn G B ->
   A a             ->
@@ -168,4 +168,11 @@ Proposition BijectionOnImageOfInvImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
   intros F A B [H1 _]. apply BijectionImageOfInvImage. assumption.
+Qed.
+
+Proposition BijectionOnEvalInjective : forall (F A:Class) (x y:U),
+  BijectionOn F A -> A x -> A y -> F!x = F!y -> x = y.
+Proof.
+  intros F A x y [H1 H2] H3 H4. apply BijectionEvalInjective; try assumption;
+  apply H2; assumption.
 Qed.

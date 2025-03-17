@@ -93,5 +93,71 @@ Proof.
   intros F A B a H1. apply FunEvalIsInRange, InjIsFun. assumption.
 Qed.
 
+Proposition InjEvalIsInDomain : forall (F A B:Class) (b:U),
+  Inj F A B -> range F b -> A (F^:-1:!b).
+Proof.
+  intros F A B b [H1 _]. apply BijectionOnEvalIsInDomain. assumption.
+Qed.
 
+Proposition InjF_FEval : forall (F A B:Class) (x:U),
+  Inj F A B -> A x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F A B x [H1 _]. apply BijectionOnF_FEval. assumption.
+Qed.
 
+Proposition InjFF_Eval : forall (F A B:Class) (y:U),
+  Inj F A B -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F A B y [H1 _]. apply BijectionOnFF_Eval with A. assumption.
+Qed.
+
+Proposition InjComposeDomainCharac : forall (F G A B C:Class) (a:U),
+  Inj F A B ->
+  Inj G B C ->
+  domain (G :.: F) a <-> A a.
+Proof.
+  intros F G A B C a H1 H2. assert (Inj (G :.: F) A C) as H3. {
+    apply ComposeIsInj with B; assumption. }
+  destruct H3 as [[_ H3] _]. apply H3.
+Qed.
+
+Proposition InjComposeEval : forall (F G A B C:Class) (a:U),
+  Inj F A B ->
+  Inj G B C ->
+  A a       ->
+  (G :.: F)!a = G!(F!a).
+Proof.
+  intros F G A B C a [H1 H2] [H3 H4] H5.
+  apply BijectionOnComposeEval with A B; try assumption.
+  apply InjEvalIsInRange with A. 2: assumption. split; assumption.
+Qed.
+
+Proposition InjRangeIsDomainImage : forall (F A B:Class),
+  Inj F A B -> F:[A]: :~: range F.
+Proof.
+  intros F A B [H1 _]. apply BijectionOnRangeIsDomainImage. assumption.
+Qed.
+
+Proposition InjInvImageOfRangeIsDomain : forall (F A B:Class),
+  Inj F A B -> F^:-1::[range F]: :~: A.
+Proof.
+  intros F A B [H1 _]. apply BijectionOnInvImageOfRangeIsDomain. assumption.
+Qed.
+
+Proposition InjInvImageOfImage : forall (F A B C:Class),
+  Inj F A B -> C :<=: A -> F^:-1::[ F:[C]: ]: :~: C.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOnInvImageOfImage. assumption.
+Qed.
+
+Proposition InjImageOfInvImage : forall (F A B C:Class),
+  Inj F A B -> C :<=: range F -> F:[ F^:-1::[C]: ]: :~: C.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOnImageOfInvImage with A. assumption.
+Qed.
+
+Proposition InjEvalInjective : forall (F A B:Class) (x y:U),
+  Inj F A B -> A x -> A y -> F!x = F!y -> x = y.
+Proof.
+  intros F A B x y [H1 _]. apply BijectionOnEvalInjective. assumption.
+Qed.
