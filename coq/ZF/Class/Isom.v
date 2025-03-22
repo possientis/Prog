@@ -14,7 +14,7 @@ Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y 
   R :(x,y): <-> S :(F!x,F!y):.
 
 (* An isomorphism is a bijection.                                               *)
-Proposition IsomIsBij : forall (F R S A B:Class),
+Proposition IsBij : forall (F R S A B:Class),
   Isom F R S A B -> Bij F A B.
 Proof.
   intros F R S A B [H1 _]. assumption.
@@ -79,7 +79,7 @@ Proof.
     1: reflexivity. split. 1: assumption. split; assumption.
 Qed.
 
-Proposition IsomFromTransport : forall (F R S A B:Class),
+Proposition FromTransport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Isom F R S A B.
 Proof.
   intros F R S A B H1 H2. split. 1: assumption.

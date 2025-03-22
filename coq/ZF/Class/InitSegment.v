@@ -152,7 +152,7 @@ Proof.
   intros F R S A B a H1 H2.
   apply ClassEquivTran with (initSegment S F:[A]: F!a).
   - apply InitSegmentIsomImage with A B; try assumption. apply InclRefl.
-  - apply InitSegmentEquivCompatR, Bij.ImageOfDomainIsRange, IsomIsBij with R S.
+  - apply InitSegmentEquivCompatR, Bij.ImageOfDomainIsRange, Isom.IsBij with R S.
     assumption.
 Qed.
 
