@@ -28,13 +28,14 @@ Proof.
   - apply ConverseIsBij. assumption.
   - intros x y H3 H4. split; intros H5.
     + apply H2.
-      * apply BijEvalIsInDomain with B; assumption.
-      * apply BijEvalIsInDomain with B; assumption.
-      * rewrite (BijFF_Eval F A B x), (BijFF_Eval F A B y); assumption.
-    + rewrite <- (BijFF_Eval F A B x), <- (BijFF_Eval F A B y); try assumption.
-      apply H2. 3: assumption.
-      * apply BijEvalIsInDomain with B; assumption.
-      * apply BijEvalIsInDomain with B; assumption.
+      * apply Bij.ConverseEvalIsInDomain with B; assumption.
+      * apply Bij.ConverseEvalIsInDomain with B; assumption.
+      * rewrite (Bij.EvalOfConverseEval F A B x), (Bij.EvalOfConverseEval F A B y);
+        assumption.
+    + rewrite <- (Bij.EvalOfConverseEval F A B x), <- (Bij.EvalOfConverseEval F A B y);
+      try assumption. apply H2. 3: assumption.
+      * apply Bij.ConverseEvalIsInDomain with B; assumption.
+      * apply Bij.ConverseEvalIsInDomain with B; assumption.
 Qed.
 
 (* The composition of two isomorpshims is an isomorphism.                       *)
@@ -46,16 +47,16 @@ Proof.
   intros F G R S T A B C [H1 H2] [H3 H4]. split.
   - apply ComposeIsBij with B; assumption.
   - intros x y H5 H6. split; intros H7.
-    + rewrite (BijComposeEval F G A B C x); try assumption.
-      rewrite (BijComposeEval F G A B C y); try assumption.
+    + rewrite (Bij.ComposeEval F G A B C x); try assumption.
+      rewrite (Bij.ComposeEval F G A B C y); try assumption.
       apply H4. 3: apply H2; try assumption.
-      * apply BijEvalIsInRange with A; assumption.
-      * apply BijEvalIsInRange with A; assumption.
+      * apply Bij.EvalIsInRange with A; assumption.
+      * apply Bij.EvalIsInRange with A; assumption.
     + apply H2; try assumption. apply H4.
-      * apply BijEvalIsInRange with A; assumption.
-      * apply BijEvalIsInRange with A; assumption.
-      * rewrite (BijComposeEval F G A B C x) in H7; try assumption.
-        rewrite (BijComposeEval F G A B C y) in H7; try assumption.
+      * apply Bij.EvalIsInRange with A; assumption.
+      * apply Bij.EvalIsInRange with A; assumption.
+      * rewrite (Bij.ComposeEval F G A B C x) in H7; try assumption.
+        rewrite (Bij.ComposeEval F G A B C y) in H7; try assumption.
 Qed.
 
 (* Transporting a 'relation R on A' by F.                                       *)
@@ -71,8 +72,8 @@ Proof.
   intros F R A B y z H1 H2 H3. split; intros H4.
   - destruct H4 as [y' [z' [H4 [H5 [H6 H7]]]]]. apply OrdPairEqual in H4.
     destruct H4 as [H4 H8].
-    assert (y = y') as H9.  { apply BijEvalInjective with F A B; assumption. }
-    assert (z = z') as H10. { apply BijEvalInjective with F A B; assumption. }
+    assert (y = y') as H9.  { apply Bij.EvalInjective with F A B; assumption. }
+    assert (z = z') as H10. { apply Bij.EvalInjective with F A B; assumption. }
     subst. split. 1: assumption. split; assumption.
   - destruct H4 as [H4 [H5 H6]]. exists y. exists z. split.
     1: reflexivity. split. 1: assumption. split; assumption.

@@ -73,7 +73,7 @@ Proposition MinimalIsomImage : forall (F R S A B C:Class) (a:U),
   Minimal S F:[C]: (F!a).
 Proof.
   intros F R S A B C a H1 H2 H3 [H4 H5]. split.
-  - exists a. split. 1: assumption. apply BijEvalSatisfies with A B.
+  - exists a. split. 1: assumption. apply Bij.EvalSatisfies with A B.
     2: assumption. apply IsomIsBij with R S. assumption.
   - apply InitSegmentIsomWhenEmpty with R A B; assumption.
 Qed.

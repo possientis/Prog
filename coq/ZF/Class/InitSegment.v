@@ -130,14 +130,14 @@ Proof.
   - destruct H5 as [x [H5 H6]].
     apply InitSegmentCharac in H5. destruct H5 as [H5 H7].
     apply InitSegmentCharac. assert (F!x = y) as H8. {
-      apply (BijEval F A B); try assumption. apply H3. assumption. }
+      apply (Bij.EvalCharac F A B); try assumption. apply H3. assumption. }
     split.
     + exists x. split; assumption.
     + rewrite <- H8. apply H2; try assumption. apply H3. assumption.
   - apply InitSegmentCharac in H5. destruct H5 as [H5 H6].
     destruct H5 as [x [H5 H7]].
     assert (F!x = y) as H8. {
-      apply (BijEval F A B); try assumption. apply H3. assumption. }
+      apply (Bij.EvalCharac F A B); try assumption. apply H3. assumption. }
     exists x. split. 2: assumption.
     apply InitSegmentCharac. split. 1: assumption. apply H2. 2: assumption.
     + apply H3. assumption.
@@ -152,7 +152,7 @@ Proof.
   intros F R S A B a H1 H2.
   apply ClassEquivTran with (initSegment S F:[A]: F!a).
   - apply InitSegmentIsomImage with A B; try assumption. apply InclRefl.
-  - apply InitSegmentEquivCompatR, BijRangeIsDomainImage, IsomIsBij with R S. assumption.
+  - apply InitSegmentEquivCompatR, Bij.RangeIsDomainImage, IsomIsBij with R S. assumption.
 Qed.
 
 Proposition InitSegmentIsomWhenEmpty : forall (F R S A B C:Class) (a:U),

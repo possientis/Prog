@@ -61,11 +61,11 @@ Proof.
     - apply (FoundedIsom F R S A B); assumption.
     - intros b H5. remember (F^:-1:!b) as a eqn:H6.
       assert (b = F!a) as H7. { rewrite H6. symmetry.
-        apply BijFF_Eval with A B; assumption. }
-      assert (A a) as H8. { rewrite H6. apply BijEvalIsInDomain with B; assumption. }
+        apply Bij.EvalOfConverseEval with A B; assumption. }
+      assert (A a) as H8. { rewrite H6. apply Bij.ConverseEvalIsInDomain with B; assumption. }
       rewrite H7. apply SmallEquivCompat with F:[initSegment R A a]:.
       + apply InitSegmentIsomFullImage; assumption.
-      + apply BijImageIsSmall with A B. 1: assumption. apply H3. assumption. }
+      + apply Bij.ImageIsSmall with A B. 1: assumption. apply H3. assumption. }
 
   (* The proof of the equivalence follows. *)
   intros F R S A B H1. split.

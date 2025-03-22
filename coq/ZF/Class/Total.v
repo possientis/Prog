@@ -26,12 +26,14 @@ Proof.
     Isom F R S A B -> Total R A -> Total S B) as L. {
     intros F R S A B H1 H2 y1 y2 H3 H4. assert (H5 := H1). destruct H5 as [H5 H6].
     remember (F^:-1:!y1) as x1 eqn:H7. remember (F^:-1:!y2) as x2 eqn:H8.
-    assert (A x1) as H9.  { rewrite H7. apply BijEvalIsInDomain with B; assumption. }
-    assert (A x2) as H10. { rewrite H8. apply BijEvalIsInDomain with B; assumption. }
+    assert (A x1) as H9.  { rewrite H7.
+      apply Bij.ConverseEvalIsInDomain with B; assumption. }
+    assert (A x2) as H10. { rewrite H8.
+      apply Bij.ConverseEvalIsInDomain with B; assumption. }
     assert (y1 = F!x1) as H11. { rewrite H7. symmetry.
-      apply BijFF_Eval with A B; assumption. }
+      apply Bij.EvalOfConverseEval with A B; assumption. }
     assert (y2 = F!x2) as H12. { rewrite H8. symmetry.
-      apply BijFF_Eval with A B; assumption. }
+      apply Bij.EvalOfConverseEval with A B; assumption. }
     specialize (H2 x1 x2 H9 H10).
     destruct H2 as [H2|[H2|H2]].
     - left. rewrite H11, H12, H2. reflexivity.
