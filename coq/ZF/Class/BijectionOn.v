@@ -177,7 +177,7 @@ Proof.
   apply H2; assumption.
 Qed.
 
-Proposition EvalInTmage : forall (F A B:Class) (a:U),
+Proposition EvalInImage : forall (F A B:Class) (a:U),
   BijectionOn F A -> A a -> F:[B]: (F!a) <-> B a.
 Proof.
   intros F A B a [H1 H2] H3. apply Bijection.EvalInImage. 1: assumption.

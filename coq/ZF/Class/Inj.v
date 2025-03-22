@@ -163,3 +163,10 @@ Proposition EvalInjective : forall (F A B:Class) (x y:U),
 Proof.
   intros F A B x y [H1 _]. apply BijectionOn.EvalInjective. assumption.
 Qed.
+
+Proposition EvalInImage : forall (F A B C:Class) (a:U),
+  Inj F A B -> A a -> F:[C]: (F!a) <-> C a.
+Proof.
+  intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
+Qed.
+
