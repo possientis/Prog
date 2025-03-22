@@ -152,7 +152,8 @@ Proof.
   intros F R S A B a H1 H2.
   apply ClassEquivTran with (initSegment S F:[A]: F!a).
   - apply InitSegmentIsomImage with A B; try assumption. apply InclRefl.
-  - apply InitSegmentEquivCompatR, Bij.RangeIsDomainImage, IsomIsBij with R S. assumption.
+  - apply InitSegmentEquivCompatR, Bij.ImageOfDomainIsRange, IsomIsBij with R S.
+    assumption.
 Qed.
 
 Proposition InitSegmentIsomWhenEmpty : forall (F R S A B C:Class) (a:U),

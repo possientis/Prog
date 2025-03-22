@@ -143,7 +143,7 @@ Proof.
   apply FunctionOnComposeEval; assumption.
 Qed.
 
-Proposition RangeIsDomainImage : forall (F A:Class),
+Proposition ImageOfDomainIsRange : forall (F A:Class),
   BijectionOn F A -> F:[A]: :~: range F.
 Proof.
   intros F A H1.

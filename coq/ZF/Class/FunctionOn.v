@@ -178,7 +178,7 @@ Proposition FunctionOnRangeIsDomainImage : forall (F A:Class),
 Proof.
   intros F A [H1 H2]. apply ClassEquivTran with F:[domain F]:.
   - apply ImageEquivCompatR, ClassEquivSym. assumption.
-  - apply RangeIsDomainImage.
+  - apply Range.ImageOfDomainIsRange.
 Qed.
 
 Proposition FunctionOnInvImageOfRangeIsDomain : forall (F A:Class),

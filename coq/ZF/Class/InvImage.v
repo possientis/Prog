@@ -80,7 +80,7 @@ Proof.
   intros F. apply ClassEquivTran with F^:-1::[domain F^:-1:]:.
   - apply ImageEquivCompatR, ClassEquivSym, ConverseDomain.
   - apply ClassEquivTran with (range F^:-1:).
-    + apply RangeIsDomainImage.
+    + apply Range.ImageOfDomainIsRange.
     + apply ConverseRange.
 Qed.
 
