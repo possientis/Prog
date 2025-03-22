@@ -18,28 +18,28 @@ Require Import ZF.Set.OrdPair.
 Definition Inj (F A B: Class) : Prop := BijectionOn F A /\ range F :<=: B.
 
 (* If F is an injection from A to B, then it is a function from A to B.         *)
-Proposition InjIsFun : forall (F A B:Class), Inj F A B -> F :: A :-> B.
+Proposition IsFun : forall (F A B:Class), Inj F A B -> F :: A :-> B.
 Proof.
   intros F A B [H1 H2]. split. 2: assumption.
   apply BijectionOn.IsFunctionOn. assumption.
 Qed.
 
 (* The image of a small class by an injection from any A to any B is small.     *)
-Proposition InjImageIsSmall : forall (F A B C:Class),
+Proposition ImageIsSmall : forall (F A B C:Class),
   Inj F A B -> Small C -> Small F:[C]:.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
 Qed.
 
 (* The inverse image of a small class by an injection from any A to B is small. *)
-Proposition InjInvImageIsSmall : forall (F A B C:Class),
+Proposition InvImageIsSmall : forall (F A B C:Class),
   Inj F A B -> Small C -> Small F^:-1::[C]:.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
 Qed.
 
 (* An injection defined on a small class is small.                              *)
-Proposition InjIsSmall : forall (F A B:Class),
+Proposition IsSmall : forall (F A B:Class),
   Inj F A B -> Small A -> Small F.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.IsSmall. assumption.
@@ -69,31 +69,31 @@ Proof.
 Qed.
 
 (* An injection from A to B is equal to its restriction to A.                   *)
-Proposition InjIsRestrict : forall (F A B:Class),
+Proposition IsRestrict : forall (F A B:Class),
   Inj F A B -> F :~: F:|:A.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.IsRestrict. assumption.
 Qed.
 
-Proposition InjEval : forall (F A B:Class) (a y:U),
+Proposition EvalCharac : forall (F A B:Class) (a y:U),
   Inj F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F A B a y [H1 _]. apply BijectionOn.EvalCharac. assumption.
 Qed.
 
-Proposition InjEvalSatisfies : forall (F A B:Class) (a:U),
+Proposition EvalSatisfies : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> F :(a,F!a):.
 Proof.
   intros F A B a [H1 _]. apply BijectionOn.EvalSatisfies. assumption.
 Qed.
 
-Proposition InjEvalIsInRange : forall (F A B:Class) (a:U),
+Proposition EvalIsInRange : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> B (F!a).
 Proof.
-  intros F A B a H1. apply FunEvalIsInRange, InjIsFun. assumption.
+  intros F A B a H1. apply FunEvalIsInRange, IsFun. assumption.
 Qed.
 
-Proposition InjEvalIsInDomain : forall (F A B:Class) (b:U),
+Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
   Inj F A B -> range F b -> A (F^:-1:!b).
 Proof.
   intros F A B b [H1 _]. apply BijectionOn.ConverseEvalIsInDomain. assumption.
@@ -131,34 +131,34 @@ Proposition InjComposeEval : forall (F G A B C:Class) (a:U),
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
   apply BijectionOn.ComposeEval with A B; try assumption.
-  apply InjEvalIsInRange with A. 2: assumption. split; assumption.
+  apply EvalIsInRange with A. 2: assumption. split; assumption.
 Qed.
 
-Proposition InjRangeIsDomainImage : forall (F A B:Class),
+Proposition RangeIsDomainImage : forall (F A B:Class),
   Inj F A B -> F:[A]: :~: range F.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.RangeIsDomainImage. assumption.
 Qed.
 
-Proposition InjInvImageOfRangeIsDomain : forall (F A B:Class),
+Proposition InvImageOfRangeIsDomain : forall (F A B:Class),
   Inj F A B -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.InvImageOfRangeIsDomain. assumption.
 Qed.
 
-Proposition InjInvImageOfImage : forall (F A B C:Class),
+Proposition InvImageOfImage : forall (F A B C:Class),
   Inj F A B -> C :<=: A -> F^:-1::[ F:[C]: ]: :~: C.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.InvImageOfImage. assumption.
 Qed.
 
-Proposition InjImageOfInvImage : forall (F A B C:Class),
+Proposition ImageOfInvImage : forall (F A B C:Class),
   Inj F A B -> C :<=: range F -> F:[ F^:-1::[C]: ]: :~: C.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.ImageOfInvImage with A. assumption.
 Qed.
 
-Proposition InjEvalInjective : forall (F A B:Class) (x y:U),
+Proposition EvalInjective : forall (F A B:Class) (x y:U),
   Inj F A B -> A x -> A y -> F!x = F!y -> x = y.
 Proof.
   intros F A B x y [H1 _]. apply BijectionOn.EvalInjective. assumption.
