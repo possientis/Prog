@@ -156,7 +156,7 @@ Proof.
   rewrite <- H4 in H6. revert H5 H6. apply CharacL. assumption.
 Qed.
 
-Proposition EvalInTmage : forall (F A:Class) (a:U),
+Proposition EvalInImage : forall (F A:Class) (a:U),
   OneToOne F -> domain F a -> F:[A]: (F!a) <-> A a.
 Proof.
   intros F A a H1 H2. split; intros H3.
