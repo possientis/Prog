@@ -8,13 +8,13 @@ Definition FunctionalAt (F:Class) (a:U) : Prop :=
   forall y z, F :(a,y): -> F :(a,z): -> y = z.
 
 (* The property of being functional at a is compatible with equivalence.        *)
-Proposition FunctionalAtEquivCompat : forall (F G:Class) (a:U),
+Proposition EquivCompat : forall (F G:Class) (a:U),
   F :~: G -> FunctionalAt F a -> FunctionalAt G a.
 Proof.
   intros F G a H1 H2 y z H3 H4. apply H2; apply H1; assumption.
 Qed.
 
-Proposition NotFunctionalAt : forall (F:Class) (a:U),
+Proposition WhenNotFunctionalAt : forall (F:Class) (a:U),
   ~ FunctionalAt F a <-> exists y z, ~ y = z /\ F :(a,y): /\ F :(a,z):.
 Proof.
   intros F a. split; intros H1.

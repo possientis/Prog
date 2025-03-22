@@ -23,7 +23,7 @@ Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 Proposition FunctionOnImageIsSmall : forall (F A B:Class),
   FunctionOn F A -> Small B -> Small F:[B]:.
 Proof.
-  intros F A B [H1 _]. apply FunctionImageIsSmall. assumption.
+  intros F A B [H1 _]. apply Function.ImageIsSmall. assumption.
 Qed.
 
 (* A function is always a function defined on its domain.                       *)
@@ -98,7 +98,7 @@ Proof.
   intros F A G B [H1 H2] [H3 H4].
   assert (F :~: G <->
     domain F :~: domain G /\ forall x, domain F x -> F!x = G!x) as H5.
-    { apply FunctionEquivCharac; assumption. }
+    { apply Function.EquivCharac; assumption. }
   split; intros H6.
   - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
     + apply ClassEquivTran with (domain F). 1: { apply ClassEquivSym. assumption. }
@@ -127,21 +127,21 @@ Qed.
 Proposition FunctionOnEval : forall (F A:Class) (a y:U),
   FunctionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A a y [H1 H2] H3. apply FunctionEval. 1: assumption.
+  intros F A a y [H1 H2] H3. apply Function.EvalCharac. 1: assumption.
   apply H2. assumption.
 Qed.
 
 Proposition FunctionOnEvalSatisfies : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> F :(a,F!a):.
 Proof.
-  intros F A a [H1 H2] H3. apply FunctionEvalSatisfies. 1: assumption.
+  intros F A a [H1 H2] H3. apply Function.EvalSatisfies. 1: assumption.
   apply H2. assumption.
 Qed.
 
 Proposition FunctionOnEvalIsInRange : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> range F (F!a).
 Proof.
-  intros F A a [H1 H2] H3. apply FunctionEvalIsInRange. 1: assumption.
+  intros F A a [H1 H2] H3. apply Function.EvalIsInRange. 1: assumption.
   apply H2. assumption.
 Qed.
 
@@ -151,11 +151,11 @@ Proposition FunctionOnComposeDomainCharac : forall (F G A B:Class) (a:U),
   domain (G :.: F) a <-> A a /\ B (F!a).
 Proof.
   intros F G A B a [H1 H2] [H3 H4]. split; intros H5.
-  - apply FunctionComposeDomainCharac in H5. destruct H5 as [H5 H6]. split.
+  - apply Function.DomainOfComposeCharac in H5. destruct H5 as [H5 H6]. split.
     + apply H2. assumption.
     + apply H4. assumption.
     + assumption.
-  - destruct H5 as [H5 H6]. apply FunctionComposeDomainCharac. 1: assumption. split.
+  - destruct H5 as [H5 H6]. apply Function.DomainOfComposeCharac. 1: assumption. split.
     + apply H2. assumption.
     + apply H4. assumption.
 Qed.
@@ -168,7 +168,7 @@ Proposition FunctionOnComposeEval : forall (F G A B:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B a [H1 H2] [H3 H4] H5 H6.
-  apply FunctionComposeEval; try assumption.
+  apply Function.ComposeEval; try assumption.
   - apply H2. assumption.
   - apply H4. assumption.
 Qed.

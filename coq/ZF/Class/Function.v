@@ -13,14 +13,14 @@ Require Import ZF.Set.OrdPair.
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
 
-Proposition FunctionImageIsSmall : forall (F A:Class),
+Proposition ImageIsSmall : forall (F A:Class),
   Function F -> Small A -> Small F:[A]:.
 Proof.
   intros F A [_ H1]. apply ImageIsSmall. assumption.
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition FunctionEquivCharac : forall (F G:Class),
+Proposition EquivCharac : forall (F G:Class),
   Function F ->
   Function G ->
   F :~: G <-> domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
@@ -55,7 +55,7 @@ Proof.
 Qed.
 
 (* The composition of two functional classes is a function class.               *)
-Proposition ComposeIsFunction2 : forall (F G:Class),
+Proposition FunctionalComposeIsFunction : forall (F G:Class),
   Functional F -> Functional G -> Function (G :.: F).
 Proof.
   intros F G Hf Hg. split.
@@ -67,34 +67,34 @@ Qed.
 Proposition ComposeIsFunction : forall (F G:Class),
   Function F -> Function G -> Function (G :.: F).
 Proof.
-  intros F G [_ Hf] [_ Hg]. apply ComposeIsFunction2; assumption.
+  intros F G [_ Hf] [_ Hg]. apply FunctionalComposeIsFunction; assumption.
 Qed.
 
-Proposition FunctionEval : forall (F:Class) (a y:U),
+Proposition EvalCharac : forall (F:Class) (a y:U),
   Function F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y [_ H1]. apply FunctionalEvalCharac. assumption.
 Qed.
 
-Proposition FunctionEvalSatisfies : forall (F:Class) (a:U),
+Proposition EvalSatisfies : forall (F:Class) (a:U),
   Function F -> domain F a -> F :(a,F!a):.
 Proof.
   intros F a [_ H1]. apply FunctionalEvalSatisfies. assumption.
 Qed.
 
-Proposition FunctionEvalIsInRange : forall (F:Class) (a:U),
+Proposition EvalIsInRange : forall (F:Class) (a:U),
   Function F -> domain F a -> range F (F!a).
 Proof.
   intros F a [_ H1]. apply FunctionalEvalIsInRange. assumption.
 Qed.
 
-Proposition FunctionComposeDomainCharac : forall (F G:Class) (a:U),
+Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),
   Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
   intros F G a [_ H1]. apply FunctionalComposeDomainCharac. assumption.
 Qed.
 
-Proposition FunctionComposeEval : forall (F G:Class) (a:U),
+Proposition ComposeEval : forall (F G:Class) (a:U),
   Function F     ->
   Function G     ->
   domain F a     ->
