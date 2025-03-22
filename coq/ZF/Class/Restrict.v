@@ -109,7 +109,7 @@ Proof.
   assert (Small (F:|:A)) as A'. 2: apply A'.
 
   (* Using the fact that a function defined on a small class is small. *)
-  apply FunctionOnIsSmall with (domain (F:|:A)).
+  apply FunctionOn.IsSmall with (domain (F:|:A)).
 
   (* We first need to show that F|A is a function defined on its domain. *)
   - assert (FunctionOn (F:|:A) (domain (F:|:A))) as A'. 2: apply A'.

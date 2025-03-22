@@ -51,20 +51,20 @@ Proposition EvalCharac : forall (F A B:Class) (a y:U),
   Bij F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F A B a y H1. apply IsFun in H1.
-  apply FunEval with B. assumption.
+  apply Fun.EvalCharac with B. assumption.
 Qed.
 
 Proposition EvalSatisfies : forall (F A B:Class) (a:U),
   Bij F A B -> A a -> F :(a,F!a):.
 Proof.
   intros F A B a H1. apply IsFun in H1.
-  apply FunEvalSatisfies with B. assumption.
+  apply Fun.EvalSatisfies with B. assumption.
 Qed.
 
 Proposition EvalIsInRange : forall (F A B:Class) (x:U),
   Bij F A B -> A x -> B (F!x).
 Proof.
-  intros F A B a H1. apply IsFun in H1. apply FunEvalIsInRange. assumption.
+  intros F A B a H1. apply IsFun in H1. apply Fun.EvalIsInRange. assumption.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
@@ -107,7 +107,7 @@ Proposition DomainOfComposeCharac : forall (F G A B C:Class) (a:U),
   domain (G :.: F) a <-> A a.
 Proof.
   intros F G A B C a H1 H2. apply IsFun in H1. apply IsFun in H2.
-  apply FunComposeDomainCharac with B C; assumption.
+  apply Fun.DomainOfComposeCharac with B C; assumption.
 Qed.
 
 Proposition ComposeEval : forall (F G A B C:Class) (a:U),
@@ -117,7 +117,7 @@ Proposition ComposeEval : forall (F G A B C:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B C a H1 H2. apply IsFun in H1. apply IsFun in H2.
-  apply FunComposeEval with B C; assumption.
+  apply Fun.ComposeEval with B C; assumption.
 Qed.
 
 Proposition ImageOfDomainIsRange : forall (F A B:Class),

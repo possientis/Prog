@@ -20,7 +20,7 @@ Require Import ZF.Set.OrdPair.
 (* Binary predicate on classes: F is a function defined on A.                   *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
-Proposition FunctionOnImageIsSmall : forall (F A B:Class),
+Proposition ImageIsSmall : forall (F A B:Class),
   FunctionOn F A -> Small B -> Small F:[B]:.
 Proof.
   intros F A B [H1 _]. apply Function.ImageIsSmall. assumption.
@@ -34,7 +34,7 @@ Proof.
 Qed.
 
 (* If F is a function defined on A, then it is a subclass of A x F[A].          *)
-Proposition FunctionOnIncl : forall (F A:Class),
+Proposition InclInProduct : forall (F A:Class),
   FunctionOn F A -> F :<=: A :x: F:[A]:.
 Proof.
   intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Relation in H1.
@@ -45,7 +45,7 @@ Proof.
 Qed.
 
 (* A function defined on a small class is small.                                *)
-Proposition FunctionOnIsSmall : forall (F A:Class),
+Proposition IsSmall : forall (F A:Class),
   FunctionOn F A -> Small A -> Small F.
 Proof.
 
@@ -66,7 +66,7 @@ Proof.
   assert (Small F) as A'. 2: apply A'.
 
   (* Being a function defined on A, we have F <= A x F[A]. *)
-  apply FunctionOnIncl in H1. assert (F :<=: A :x: F:[A]:) as A'.
+  apply InclInProduct in H1. assert (F :<=: A :x: F:[A]:) as A'.
     { apply H1. } clear A'.
 
   (* Thus, in order to prove that F is small ... *)
@@ -85,11 +85,11 @@ Proof.
   - assert (Small F:[A]:) as A'. 2: apply A'.
 
   (* Which follows from the fact that F is functional and A is small. *)
-    apply ImageIsSmall. { apply H2. } { apply H3. }
+    apply Image.ImageIsSmall. { apply H2. } { apply H3. }
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition FunctionOnEquivCharac : forall (F A G B:Class),
+Proposition EquivCharac : forall (F A G B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
   F :~: G       <->
@@ -124,28 +124,28 @@ Proof.
     apply ClassEquivSym. assumption.
 Qed.
 
-Proposition FunctionOnEval : forall (F A:Class) (a y:U),
+Proposition EvalCharac : forall (F A:Class) (a y:U),
   FunctionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F A a y [H1 H2] H3. apply Function.EvalCharac. 1: assumption.
   apply H2. assumption.
 Qed.
 
-Proposition FunctionOnEvalSatisfies : forall (F A:Class) (a:U),
+Proposition EvalSatisfies : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> F :(a,F!a):.
 Proof.
   intros F A a [H1 H2] H3. apply Function.EvalSatisfies. 1: assumption.
   apply H2. assumption.
 Qed.
 
-Proposition FunctionOnEvalIsInRange : forall (F A:Class) (a:U),
+Proposition EvalIsInRange : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> range F (F!a).
 Proof.
   intros F A a [H1 H2] H3. apply Function.EvalIsInRange. 1: assumption.
   apply H2. assumption.
 Qed.
 
-Proposition FunctionOnComposeDomainCharac : forall (F G A B:Class) (a:U),
+Proposition DomainOfComposeCharac : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
   FunctionOn G B ->
   domain (G :.: F) a <-> A a /\ B (F!a).
@@ -160,7 +160,7 @@ Proof.
     + apply H4. assumption.
 Qed.
 
-Proposition FunctionOnComposeEval : forall (F G A B:Class) (a:U),
+Proposition ComposeEval : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
   FunctionOn G B ->
   A a            ->
@@ -173,7 +173,7 @@ Proof.
   - apply H4. assumption.
 Qed.
 
-Proposition FunctionOnRangeIsDomainImage : forall (F A:Class),
+Proposition ImageOfDomainIsRange : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.
 Proof.
   intros F A [H1 H2]. apply ClassEquivTran with F:[domain F]:.
@@ -181,7 +181,7 @@ Proof.
   - apply Range.ImageOfDomainIsRange.
 Qed.
 
-Proposition FunctionOnInvImageOfRangeIsDomain : forall (F A:Class),
+Proposition InvImageOfRangeIsDomain : forall (F A:Class),
   FunctionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A [H1 H2]. apply ClassEquivTran with (domain F).

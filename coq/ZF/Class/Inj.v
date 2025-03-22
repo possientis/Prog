@@ -90,7 +90,7 @@ Qed.
 Proposition EvalIsInRange : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> B (F!a).
 Proof.
-  intros F A B a H1. apply FunEvalIsInRange, IsFun. assumption.
+  intros F A B a H1. apply Fun.EvalIsInRange, IsFun. assumption.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
