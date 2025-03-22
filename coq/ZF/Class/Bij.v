@@ -21,19 +21,19 @@ Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
 Proposition BijImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F:[C]:.
 Proof.
-  intros F A B C [H1 _]. apply BijectionOnImageIsSmall with A. assumption.
+  intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
 Qed.
 
 Proposition BijInvImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F^:-1::[C]:.
 Proof.
-  intros F A B C [H1 _]. apply BijectionOnInvImageIsSmall with A. assumption.
+  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
 Qed.
 
 Proposition BijIsFun : forall (F A B:Class),
   Bij F A B -> F :: A :-> B.
 Proof.
-  intros F A B [H1 H2]. apply BijectionOnIsFunctionOn in H1.
+  intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
   split. 1: assumption. apply DoubleInclusion, ClassEquivSym. assumption.
 Qed.
 
@@ -90,13 +90,14 @@ Qed.
 Proposition BijF_FEval : forall (F A B:Class) (x:U),
   Bij F A B -> A x -> F^:-1:!(F!x) = x.
 Proof.
-  intros F A B x [H1 H2]. apply BijectionOnF_FEval. assumption.
+  intros F A B x [H1 H2]. apply BijectionOn.ConverseEvalOfEval. assumption.
 Qed.
 
 Proposition BijFF_Eval : forall (F A B:Class) (y:U),
   Bij F A B -> B y -> F!(F^:-1:!y) = y.
 Proof.
-  intros F A B y [H1 H2] H3. apply BijectionOnFF_Eval with A. 1: assumption.
+  intros F A B y [H1 H2] H3.
+  apply BijectionOn.EvalOfConverseEval with A. 1: assumption.
   apply H2. assumption.
 Qed.
 
@@ -123,7 +124,7 @@ Proposition BijRangeIsDomainImage : forall (F A B:Class),
   Bij F A B -> F:[A]: :~: B.
 Proof.
   intros F A B [H1 H2]. apply ClassEquivTran with (range F).
-  2: assumption. apply BijectionOnRangeIsDomainImage. assumption.
+  2: assumption. apply BijectionOn.RangeIsDomainImage. assumption.
 Qed.
 
 Proposition BijInvImageOfRangeIsDomain : forall (F A B:Class),
@@ -135,13 +136,13 @@ Qed.
 Proposition BijInvImageOfImage : forall (F A B C:Class),
   Bij F A B -> C :<=: A -> F^:-1::[ F:[C]: ]: :~: C.
 Proof.
-  intros F A B C [H1 H2] H3. apply BijectionOnInvImageOfImage with A; assumption.
+  intros F A B C [H1 H2] H3. apply BijectionOn.InvImageOfImage with A; assumption.
 Qed.
 
 Proposition BijImageOfInvImage : forall (F A B C:Class),
   Bij F A B -> C :<=: B -> F:[ F^:-1::[C]: ]: :~: C.
 Proof.
-  intros F A B C [H1 H2] H3. apply BijectionOnImageOfInvImage with A.
+  intros F A B C [H1 H2] H3. apply BijectionOn.ImageOfInvImage with A.
   1: assumption. apply InclEquivCompatR with B. 2: assumption.
   apply ClassEquivSym. assumption.
 Qed.
@@ -149,5 +150,5 @@ Qed.
 Proposition BijEvalInjective : forall (F A B:Class) (x y:U),
   Bij F A B -> A x -> A y -> F!x = F!y -> x = y.
 Proof.
-  intros F A B x y [H1 _]. apply BijectionOnEvalInjective. assumption.
+  intros F A B x y [H1 _]. apply BijectionOn.EvalInjective. assumption.
 Qed.

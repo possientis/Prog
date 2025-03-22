@@ -18,14 +18,14 @@ Require Import ZF.Set.OrdPair.
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
 
 (* The image of a small class by a bijection class defined on any A is small.   *)
-Proposition BijectionOnImageIsSmall : forall (F A B:Class),
+Proposition ImageIsSmall : forall (F A B:Class),
   BijectionOn F A -> Small B -> Small F:[B]:.
 Proof.
   intros F A B [H1 _]. apply Bijection.ImageIsSmall. assumption.
 Qed.
 
 (* The inverse image of a small class by a bijection defined on any A is small. *)
-Proposition BijectionOnInvImageIsSmall : forall (F A B:Class),
+Proposition InvImageIsSmall : forall (F A B:Class),
   BijectionOn F A -> Small B -> Small F^:-1::[B]:.
 Proof.
   intros F A B [H1 _]. apply Bijection.InvImageIsSmall. assumption.
@@ -39,18 +39,18 @@ Proof.
 Qed.
 
 (* A bijection defined on A is a function defined on A.                         *)
-Proposition BijectionOnIsFunctionOn : forall (F A:Class),
+Proposition IsFunctionOn : forall (F A:Class),
   BijectionOn F A -> FunctionOn F A.
 Proof.
   intros F A [H1 H2]. apply Bijection.IsFunction in H1. split; assumption.
 Qed.
 
 (* A bijection defined on a small class is small.                               *)
-Proposition BijectionOnIsSmall : forall (F A:Class),
+Proposition IsSmall : forall (F A:Class),
   BijectionOn F A -> Small A -> Small F.
 Proof.
   intros F A H1 H2. apply FunctionOnIsSmall with A. 2: assumption.
-  apply BijectionOnIsFunctionOn. assumption.
+  apply IsFunctionOn. assumption.
 Qed.
 
 Proposition ConverseIsBijectionOn : forall (F A B:Class),
@@ -74,64 +74,64 @@ Proof.
     apply ClassEquivSym. assumption.
 Qed.
 
-Proposition BijectionOnIsRestrict : forall (F A:Class),
+Proposition IsRestrict : forall (F A:Class),
   BijectionOn F A -> F :~: F:|:A.
 Proof.
-  intros F A H1. apply FunctionOnIsRestrict, BijectionOnIsFunctionOn. assumption.
+  intros F A H1. apply FunctionOnIsRestrict, IsFunctionOn. assumption.
 Qed.
 
-Proposition BijectionOnEval : forall (F A:Class) (a y:U),
+Proposition EvalCharac : forall (F A:Class) (a y:U),
   BijectionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A a y H1. apply BijectionOnIsFunctionOn in H1.
+  intros F A a y H1. apply IsFunctionOn in H1.
   apply FunctionOnEval. assumption.
 Qed.
 
-Proposition BijectionOnEvalSatisfies : forall (F A:Class) (a:U),
+Proposition EvalSatisfies : forall (F A:Class) (a:U),
   BijectionOn F A -> A a -> F :(a,F!a):.
 Proof.
-  intros F A a H1. apply BijectionOnIsFunctionOn in H1.
+  intros F A a H1. apply IsFunctionOn in H1.
   apply FunctionOnEvalSatisfies. assumption.
 Qed.
 
-Proposition BijectionOnEvalIsInRange : forall (F A:Class) (a:U),
+Proposition EvalIsInRange : forall (F A:Class) (a:U),
   BijectionOn F A -> A a -> range F (F!a).
 Proof.
-  intros F A a H1. apply BijectionOnIsFunctionOn in H1.
+  intros F A a H1. apply IsFunctionOn in H1.
   apply FunctionOnEvalIsInRange. assumption.
 Qed.
 
-Proposition BijectionOnEvalIsInDomain : forall (F A:Class) (b:U),
+Proposition ConverseEvalIsInDomain : forall (F A:Class) (b:U),
   BijectionOn F A -> range F b -> A (F^:-1:!b).
 Proof.
   intros F A b [H1 H2] H3. apply H2.
   apply Bijection.ConverseEvalIsInDomain; assumption.
 Qed.
 
-Proposition BijectionOnF_FEval : forall (F A:Class) (x:U),
+Proposition ConverseEvalOfEval : forall (F A:Class) (x:U),
   BijectionOn F A -> A x -> F^:-1:!(F!x) = x.
 Proof.
   intros F A x [H1 H2] H3. apply Bijection.ConverseEvalOfEval. 1: assumption.
   apply H2. assumption.
 Qed.
 
-Proposition BijectionOnFF_Eval : forall (F A:Class) (y:U),
+Proposition EvalOfConverseEval : forall (F A:Class) (y:U),
   BijectionOn F A -> range F y -> F!(F^:-1:!y) = y.
 Proof.
   intros F A y [H1 H2]. apply Bijection.EvalOfConverseEval. assumption.
 Qed.
 
-Proposition BijectionOnComposeDomainCharac : forall (F G A B:Class) (a:U),
+Proposition DomainOfComposeCharac : forall (F G A B:Class) (a:U),
   BijectionOn F A ->
   BijectionOn G B ->
   domain (G :.: F) a <-> A a /\ B (F!a).
 Proof.
   intros F G A B a H1 H2.
-  apply BijectionOnIsFunctionOn in H1. apply BijectionOnIsFunctionOn in H2.
+  apply IsFunctionOn in H1. apply IsFunctionOn in H2.
   apply FunctionOnComposeDomainCharac; assumption.
 Qed.
 
-Proposition BijectionOnComposeEval : forall (F G A B:Class) (a:U),
+Proposition ComposeEval : forall (F G A B:Class) (a:U),
   BijectionOn F A ->
   BijectionOn G B ->
   A a             ->
@@ -139,38 +139,38 @@ Proposition BijectionOnComposeEval : forall (F G A B:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B a H1 H2.
-  apply BijectionOnIsFunctionOn in H1. apply BijectionOnIsFunctionOn in H2.
+  apply IsFunctionOn in H1. apply IsFunctionOn in H2.
   apply FunctionOnComposeEval; assumption.
 Qed.
 
-Proposition BijectionOnRangeIsDomainImage : forall (F A:Class),
+Proposition RangeIsDomainImage : forall (F A:Class),
   BijectionOn F A -> F:[A]: :~: range F.
 Proof.
   intros F A H1.
-  apply FunctionOnRangeIsDomainImage, BijectionOnIsFunctionOn. assumption.
+  apply FunctionOnRangeIsDomainImage, IsFunctionOn. assumption.
 Qed.
 
-Proposition BijectionOnInvImageOfRangeIsDomain : forall (F A:Class),
+Proposition InvImageOfRangeIsDomain : forall (F A:Class),
   BijectionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A H1.
-  apply FunctionOnInvImageOfRangeIsDomain, BijectionOnIsFunctionOn. assumption.
+  apply FunctionOnInvImageOfRangeIsDomain, IsFunctionOn. assumption.
 Qed.
 
-Proposition BijectionOnInvImageOfImage : forall (F A B:Class),
+Proposition InvImageOfImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: A -> F^:-1::[ F:[B]: ]: :~: B.
 Proof.
   intros F A B [H1 H2] H3. apply Bijection.InvImageOfImage. 1: assumption.
   apply InclEquivCompatR with A. 2: assumption. apply ClassEquivSym. assumption.
 Qed.
 
-Proposition BijectionOnImageOfInvImage : forall (F A B:Class),
+Proposition ImageOfInvImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
   intros F A B [H1 _]. apply Bijection.ImageOfInvImage. assumption.
 Qed.
 
-Proposition BijectionOnEvalInjective : forall (F A:Class) (x y:U),
+Proposition EvalInjective : forall (F A:Class) (x y:U),
   BijectionOn F A -> A x -> A y -> F!x = F!y -> x = y.
 Proof.
   intros F A x y [H1 H2] H3 H4. apply Bijection.EvalInjective; try assumption;
