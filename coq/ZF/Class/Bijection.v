@@ -138,10 +138,8 @@ Proof.
   intros F x y [_ H1]. apply OneToOne.EvalInjective. assumption.
 Qed.
 
-Proposition EvalInTmage : forall (F A:Class) (a:U),
+Proposition EvalInImage : forall (F A:Class) (a:U),
   Bijection F -> domain F a -> F:[A]: (F!a) <-> A a.
 Proof.
   intros F A a [_ H1]. apply OneToOne.EvalInImage. assumption.
 Qed.
-
-

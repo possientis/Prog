@@ -176,3 +176,10 @@ Proof.
   intros F A x y [H1 H2] H3 H4. apply Bijection.EvalInjective; try assumption;
   apply H2; assumption.
 Qed.
+
+Proposition EvalInTmage : forall (F A B:Class) (a:U),
+  BijectionOn F A -> A a -> F:[B]: (F!a) <-> B a.
+Proof.
+  intros F A B a [H1 H2] H3. apply Bijection.EvalInImage. 1: assumption.
+  apply H2. assumption.
+Qed.
