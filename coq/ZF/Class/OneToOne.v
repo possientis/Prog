@@ -55,7 +55,7 @@ Qed.
 Proposition ConverseIsOneToOne : forall (F:Class),
   OneToOne F -> OneToOne F^:-1:.
 Proof.
-  intros F [H1 H2]. split. 1: assumption. apply FunctionalInclCompat with F.
+  intros F [H1 H2]. split. 1: assumption. apply Functional.InclCompat with F.
   2: assumption. apply ConverseOfConverseIncl.
 Qed.
 
@@ -91,7 +91,7 @@ Proposition ComposeIsOneToOne : forall (F G:Class),
 Proof.
   intros F G [H1 H2] [H3 H4]. split.
   - apply ComposeIsFunctional; assumption.
-  - apply FunctionalEquivCompat with (converse F :.: converse G).
+  - apply Functional.EquivCompat with (converse F :.: converse G).
     + apply ClassEquivSym, ComposeConverse.
     + apply ComposeIsFunctional; assumption.
 Qed.

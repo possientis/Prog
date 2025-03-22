@@ -26,7 +26,7 @@ Proposition IsValueAtWhenFunctional : forall (F:Class) (a y:U),
   Functional F -> IsValueAt F a y <-> F :(a,y):.
 Proof.
   intros F a y H1. apply IsValueAtWhenFunctionalAt.
-  apply FunctionalIsFunctionalAt. assumption.
+  apply IsFunctionalAt. assumption.
 Qed.
 
 (* Predicate expressing the fact that the class F has a value at a.             *)
@@ -58,7 +58,7 @@ Proposition HasValueAtWhenFunctional : forall (F:Class),
   Functional F -> HasValueAt F :~: domain F.
 Proof.
   intros F H1 a.
-  apply HasValueAtWhenFunctionalAt, FunctionalIsFunctionalAt. assumption.
+  apply HasValueAtWhenFunctionalAt, IsFunctionalAt. assumption.
 Qed.
 
 (* Evaluate the class F at a.                                                   *)

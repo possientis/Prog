@@ -66,7 +66,7 @@ Proposition IIsOneToOne : OneToOne I.
 Proof.
   split.
   - apply IIsFunctional.
-  - apply FunctionalEquivCompat with I. 2: apply IIsFunctional.
+  - apply Functional.EquivCompat with I. 2: apply IIsFunctional.
     apply ClassEquivSym, IConverse.
 Qed.
 

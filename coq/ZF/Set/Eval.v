@@ -102,7 +102,7 @@ Proposition FunctionalEvalSatisfies : forall (F:Class) (a:U),
   Functional F -> domain F a -> F :(a,F!a):.
 Proof.
   intros F a H1 H2. apply FunctionalAtEvalSatisfies. 2: assumption.
-  apply FunctionalIsFunctionalAt. assumption.
+  apply IsFunctionalAt. assumption.
 Qed.
 
 Proposition FunctionalEvalIsInRange : forall (F:Class) (a:U),

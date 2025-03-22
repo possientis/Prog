@@ -78,7 +78,7 @@ Proposition IAIsOneToOne : forall (A:Class), OneToOne (I:|:A).
 Proof.
   intros A. split.
   - apply IAIsFunctional.
-  - apply FunctionalEquivCompat with (I:|:A).
+  - apply Functional.EquivCompat with (I:|:A).
     + apply ClassEquivSym, IAConverse.
     + apply IAIsFunctional.
 Qed.

@@ -192,7 +192,7 @@ Proposition FunctionalComposeDomainCharac : forall (F G:Class) (a:U),
   Functional F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
   intros F G a H1.
-  apply FunctionalAtComposeDomainCharac, FunctionalIsFunctionalAt. assumption.
+  apply FunctionalAtComposeDomainCharac, IsFunctionalAt. assumption.
 Qed.
 
 (* G.F is functional at a if F is, G is functional at F!a and a lies in domain. *)
@@ -240,6 +240,6 @@ Proposition FunctionalComposeEval : forall (F G:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a H1 H2. apply FunctionalAtComposeEval.
-  - apply FunctionalIsFunctionalAt. assumption.
-  - apply FunctionalIsFunctionalAt. assumption.
+  - apply IsFunctionalAt. assumption.
+  - apply IsFunctionalAt. assumption.
 Qed.
