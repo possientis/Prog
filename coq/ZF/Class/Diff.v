@@ -1,12 +1,16 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
 Require Import ZF.Class.Complement.
+Require Import ZF.Class.Converse.
 Require Import ZF.Class.Empty.
+Require Import ZF.Class.Functional.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Set.
+Require Import ZF.Set.OrdPair.
 
 Require Import ZF.Core.Diff.
 Export ZF.Core.Diff.
@@ -59,5 +63,20 @@ Proof.
     + assumption.
     + intros H4. apply (proj1 (Union2Charac _ _ _)) in H4.
       destruct H4 as [H4|H4]; contradiction.
+Qed.
+
+Proposition DiffImage : forall (F A B:Class),
+  Functional F^:-1: -> F:[B:\:A]: :~: F:[B]: :\: F:[A]:.
+Proof.
+  intros F A B H1 y. split; intros H2.
+  - destruct H2 as [x [H2 H3]]. apply (proj1 (DiffCharac _ _ _)) in H2.
+    destruct H2 as [H2 H4]. apply DiffCharac. split.
+    + exists x. split; assumption.
+    + intros [x' [H5 H6]]. assert (x' = x) as H7. {
+        apply ConverseWhenFunctional with F y; assumption. }
+      subst. contradiction.
+  - apply (proj1 (DiffCharac _ _ _)) in H2. destruct H2 as [[x [H2 H3]] H4].
+    exists x. split. 2: assumption. apply DiffCharac. split.
+    1: assumption. intros H5. apply H4. exists x. split; assumption.
 Qed.
 

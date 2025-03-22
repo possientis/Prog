@@ -20,7 +20,7 @@ Definition WellFoundedWellOrd (R A:Class) : Prop :=
   WellFounded R A /\ WellOrdering R A.
 
 (* If R is a wfwo on A, every non-empty subclass of A has an R-minimal element. *)
-Proposition WellFoundedWellOrdHasMinimal : forall (R A B:Class),
+Proposition HasMinimal : forall (R A B:Class),
   WellFoundedWellOrd R A ->
    B :<=: A              ->
   ~B :~: :0:             ->
@@ -140,7 +140,7 @@ Proof.
 
   (* But if y is less than x, by transitivity it is less than b. *)
       intros H13. assert (R :(y,b):) as H14. {
-        apply WellOrderingIsTransitive in H2. apply H2 with x.
+        apply WellOrdering.IsTransitive in H2. apply H2 with x.
         - apply H3. assumption.
         - apply H3, H10, MinimalIn with R. assumption.
         - apply H3. assumption.
@@ -161,7 +161,7 @@ Proof.
       apply H8. assumption.
 Qed.
 
-Proposition WellFoundedWellOrdInduction : forall (R A B:Class),
+Proposition Induction : forall (R A B:Class),
   WellFoundedWellOrd R A                      ->
   B :<=: A                                    ->
   (forall x, initSegment R A x :<=: B -> B x) ->
@@ -194,7 +194,7 @@ Proof.
 
   (* Then A\B has an R-minimal element. *)
   assert (exists a, Minimal R (A:\:B) a) as H6. {
-    apply WellFoundedWellOrdHasMinimal with A.
+    apply HasMinimal with A.
     - assumption.
     - apply InterInclL.
     - assumption.

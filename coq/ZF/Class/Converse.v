@@ -151,3 +151,10 @@ Proof.
     exists y. assumption.
   - destruct H1 as [y H1]. exists y. apply ConverseCharac2. assumption.
 Qed.
+
+Proposition ConverseWhenFunctional : forall (F:Class) (x y z:U),
+  Functional F^:-1: -> F :(x,z): -> F :(y,z): -> x = y.
+Proof.
+  intros F x y z H1 H2 H3. unfold Functional in H1. apply H1 with z;
+  apply ConverseCharac2; assumption.
+Qed.

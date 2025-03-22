@@ -1,6 +1,8 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Founded.
+Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Irreflexive.
 Require Import ZF.Class.Isom.
 Require Import ZF.Class.Minimal.
@@ -10,6 +12,7 @@ Require Import ZF.Class.Total.
 Require Import ZF.Class.Transitive.
 Require Import ZF.Set.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Tuple.
@@ -18,7 +21,7 @@ Require Import ZF.Set.Tuple.
 (* R is a well-ordering on A iff it is founded on A and total on A.             *)
 Definition WellOrdering (R A:Class) : Prop :=  Founded R A /\ Total R A.
 
-Proposition WellOrderingIncl : forall (R A B:Class),
+Proposition WhenIncl : forall (R A B:Class),
   WellOrdering R A -> B :<=: A -> WellOrdering R B.
 Proof.
   intros R A B [H1 H2] H3. split.
@@ -26,7 +29,7 @@ Proof.
   - apply TotalIncl with A; assumption.
 Qed.
 
-Proposition WellOrderingIsIrreflexive : forall (R A:Class),
+Proposition IsIrreflexive : forall (R A:Class),
   WellOrdering R A -> Irreflexive R A.
 Proof.
   intros R A [H1 H2] a H3.
@@ -39,7 +42,7 @@ Proof.
   apply MinimalHasNoLesser with (toClass :{a}:). 2: assumption. apply SingleIn.
 Qed.
 
-Proposition WellOrderingIsTransitive : forall (R A:Class),
+Proposition IsTransitive : forall (R A:Class),
   WellOrdering R A -> Transitive R A.
 Proof.
   intros R A [H1 H2] x y z H3 H4 H5 H6 H7.
@@ -69,33 +72,23 @@ Proof.
       } contradiction.
 Qed.
 
-Proposition WellOrderingIsStrictOrd : forall (R A:Class),
+Proposition IsStrictOrd : forall (R A:Class),
   WellOrdering R A -> StrictOrd R A.
 Proof.
   intros R A H1. split.
-  - apply WellOrderingIsIrreflexive. assumption.
-  - apply WellOrderingIsTransitive. assumption.
+  - apply IsIrreflexive. assumption.
+  - apply IsTransitive. assumption.
 Qed.
 
-Proposition WellOrderingIsStrictTotalOrd :  forall (R A:Class),
+Proposition IsStrictTotalOrd :  forall (R A:Class),
   WellOrdering R A -> StrictTotalOrd R A.
 Proof.
   intros R A H1. split.
-  - apply WellOrderingIsStrictOrd. assumption.
+  - apply IsStrictOrd. assumption.
   - apply H1.
 Qed.
 
-Proposition WellOrderingIsom : forall (F R S A B:Class),
-  Isom F R S A B -> WellOrdering R A <-> WellOrdering S B.
-Proof.
-  intros F R S A B H1. split; intros [H2 H3]; split.
-  - apply (FoundedIsom F R S A B); assumption.
-  - apply (TotalIsom F R S A B); assumption.
-  - apply (FoundedIsom F R S A B); assumption.
-  - apply (TotalIsom F R S A B); assumption.
-Qed.
-
-Proposition WellOrderingWhenLess : forall (R A:Class) (x y:U),
+Proposition WhenLess : forall (R A:Class) (x y:U),
   A x                ->
   A y                ->
   WellOrdering R A   ->
@@ -105,11 +98,38 @@ Proof.
   intros R A x y H1 H2 H3. apply StrictTotalOrdWhenLess with A.
   - assumption.
   - assumption.
-  - apply WellOrderingIsStrictTotalOrd. assumption.
+  - apply IsStrictTotalOrd. assumption.
 Qed.
 
+Proposition BoundIsNotInInitSegment : forall (R A:Class) (a:U),
+  WellOrdering R A -> ~ initSegment R A a a.
+Proof.
+  intros R A a H1 H2. assert (H3 := H2). apply InitSegmentLess in H2.
+  apply IsIrreflexive in H1. specialize (H1 a).
+  apply InitSegmentIn in H3. apply H1; assumption.
+Qed.
+
+Proposition WhenIsom : forall (F R S A B:Class),
+  Isom F R S A B -> WellOrdering R A <-> WellOrdering S B.
+Proof.
+  intros F R S A B H1. split; intros [H2 H3]; split.
+  - apply (FoundedIsom F R S A B); assumption.
+  - apply (TotalIsom F R S A B); assumption.
+  - apply (FoundedIsom F R S A B); assumption.
+  - apply (TotalIsom F R S A B); assumption.
+Qed.
+
+Proposition BoundEvalIsNotInInitSegmentImage : forall (F R S A B:Class) (a:U),
+  WellOrdering S B ->
+  Isom F R S A B   ->
+  ~ F:[initSegment R A a]: (F!a).
+Proof.
+  intros F R S A B a H1 H2 H3. apply (BoundIsNotInInitSegment R A a).
+  - apply (WhenIsom F R S A B); assumption.
+  - Admitted.
+
 (* If R well-orders A the minimal element of a subset of A is unique.           *)
-Proposition WellOrderingHasUniqueMinimal : forall (R A:Class) (a x y:U),
+Proposition UniqueMinimal : forall (R A:Class) (a x y:U),
   WellOrdering R A        ->
   toClass a :<=: A        ->
   Minimal R (toClass a) x ->
@@ -175,3 +195,4 @@ Proof.
       apply (MinimalIn R). assumption.
     } contradiction.
 Qed.
+
