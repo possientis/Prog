@@ -166,7 +166,7 @@ Proof.
   - destruct H5 as [x [y [z [H5 [H6 H7]]]]]. subst.
     apply (proj1 (ConverseCharac2 _ _ _)) in H7.
     assert (x = z) as H8. {
-      revert H7. revert H6. apply OneToOneCharacL. assumption. }
+      revert H7. revert H6. apply OneToOne.CharacL. assumption. }
     subst. apply IACharac2. split. 2: reflexivity. apply H3.
     exists y. assumption.
   - apply IACharac in H5. destruct H5 as [x [H5 H6]]. subst.

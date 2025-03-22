@@ -21,13 +21,13 @@ Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
 Proposition BijectionImageIsSmall : forall (F A:Class),
   Bijection F -> Small A -> Small F:[A]:.
 Proof.
-  intros F A [_ H1]. apply OneToOneImageIsSmall. assumption.
+  intros F A [_ H1]. apply OneToOne.ImageIsSmall. assumption.
 Qed.
 
 Proposition BijectionInvImageIsSmall : forall (F B:Class),
   Bijection F -> Small B -> Small F^:-1::[B]:.
 Proof.
-  intros F B [_ H1]. apply OneToOneInvImageIsSmall. assumption.
+  intros F B [_ H1]. apply OneToOne.InvImageIsSmall. assumption.
 Qed.
 
 Proposition BijectionIsFunction : forall (F:Class),
@@ -69,19 +69,19 @@ Qed.
 Proposition BijectionEvalCharac : forall (F:Class) (a y:U),
   Bijection F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y [_ H1]. apply OneToOneEvalCharac. assumption.
+  intros F a y [_ H1]. apply OneToOne.EvalCharac. assumption.
 Qed.
 
 Proposition BijectionEvalSatisfies : forall (F:Class) (a:U),
   Bijection F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a [_ H1]. apply OneToOneEvalSatisfies. assumption.
+  intros F a [_ H1]. apply OneToOne.EvalSatisfies. assumption.
 Qed.
 
 Proposition BijectionEvalIsInRange : forall (F:Class) (a:U),
   Bijection F -> domain F a -> range F (F!a).
 Proof.
-  intros F a [_ H1]. apply OneToOneEvalIsInRange. assumption.
+  intros F a [_ H1]. apply OneToOne.EvalIsInRange. assumption.
 Qed.
 
 Proposition BijectionEvalIsInDomain : forall (F:Class) (b:U),
@@ -95,19 +95,19 @@ Qed.
 Proposition BijectionF_FEval : forall (F:Class) (x:U),
   Bijection F -> domain F x -> F^:-1:!(F!x) = x.
 Proof.
-  intros F x [_ H1]. apply OneToOneF_FEval. assumption.
+  intros F x [_ H1]. apply OneToOne.ConverseEvalOfEval. assumption.
 Qed.
 
 Proposition BijectionFF_Eval : forall (F:Class) (y:U),
   Bijection F -> range F y -> F!(F^:-1:!y) = y.
 Proof.
-  intros F y [_ H1]. apply OneToOneFF_Eval. assumption.
+  intros F y [_ H1]. apply OneToOne.EvalOfConverseEval. assumption.
 Qed.
 
 Proposition BijectionComposeDomainCharac : forall (F G:Class) (a:U),
   Bijection F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
-  intros F G a [_ H1]. apply OneToOneComposeDomainCharac. assumption.
+  intros F G a [_ H1]. apply OneToOne.DomainOfComposeCharac. assumption.
 Qed.
 
 Proposition BijectionComposeEval : forall (F G:Class) (a:U),
@@ -117,23 +117,23 @@ Proposition BijectionComposeEval : forall (F G:Class) (a:U),
   domain G (F!a)  ->
   (G :.: F)!a = G!(F!a).
 Proof.
-  intros F G a [_ H1] [_ H2]. apply OneToOneComposeEval; assumption.
+  intros F G a [_ H1] [_ H2]. apply OneToOne.ComposeEval; assumption.
 Qed.
 
 Proposition BijectionInvImageOfImage : forall (F A:Class),
   Bijection F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
 Proof.
-  intros F A [_ H1]. apply OneToOneInvImageOfImage. assumption.
+  intros F A [_ H1]. apply OneToOne.InvImageOfImage. assumption.
 Qed.
 
 Proposition BijectionImageOfInvImage : forall (F B:Class),
   Bijection F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
-  intros F B [_ H1]. apply OneToOneImageOfInvImage. assumption.
+  intros F B [_ H1]. apply OneToOne.ImageOfInvImage. assumption.
 Qed.
 
 Proposition BijectionEvalInjective : forall (F:Class) (x y:U),
   Bijection F -> domain F x -> domain F y -> F!x = F!y -> x = y.
 Proof.
-  intros F x y [_ H1]. apply OneToOneEvalInjective. assumption.
+  intros F x y [_ H1]. apply OneToOne.EvalInjective. assumption.
 Qed.
