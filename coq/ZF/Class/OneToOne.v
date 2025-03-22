@@ -155,3 +155,15 @@ Proof.
   assert (F :(y,F!y):) as H6. { apply EvalSatisfies; assumption. }
   rewrite <- H4 in H6. revert H5 H6. apply CharacL. assumption.
 Qed.
+
+Proposition EvalInTmage : forall (F A:Class) (a:U),
+  OneToOne F -> domain F a -> F:[A]: (F!a) <-> A a.
+Proof.
+  intros F A a H1 H2. split; intros H3.
+  - destruct H3 as [x [H3 H4]]. assert (x = a) as H5. {
+      apply CharacL with F (F!a); try assumption.
+      apply EvalSatisfies; assumption. }
+    subst. assumption.
+  - exists a. split. 1: assumption. apply EvalSatisfies; assumption.
+Qed.
+
