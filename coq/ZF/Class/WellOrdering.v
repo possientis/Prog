@@ -1,4 +1,5 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Bij.
 Require Import ZF.Class.Founded.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
@@ -101,7 +102,7 @@ Proof.
   - apply IsStrictTotalOrd. assumption.
 Qed.
 
-Proposition BoundIsNotInInitSegment : forall (R A:Class) (a:U),
+Proposition BoundIsNotInSegment : forall (R A:Class) (a:U),
   WellOrdering R A -> ~ initSegment R A a a.
 Proof.
   intros R A a H1 H2. assert (H3 := H2). apply InitSegmentLess in H2.
@@ -119,14 +120,17 @@ Proof.
   - apply (TotalIsom F R S A B); assumption.
 Qed.
 
-Proposition BoundEvalIsNotInInitSegmentImage : forall (F R S A B:Class) (a:U),
+Proposition BoundEvalIsNotInSegmentImage : forall (F R S A B:Class) (a:U),
   WellOrdering S B ->
   Isom F R S A B   ->
+  A a              ->
   ~ F:[initSegment R A a]: (F!a).
 Proof.
-  intros F R S A B a H1 H2 H3. apply (BoundIsNotInInitSegment R A a).
+  intros F R S A B a H1 H2 H3 H4. apply (BoundIsNotInSegment R A a).
   - apply (WhenIsom F R S A B); assumption.
-  - Admitted.
+  - apply (Bij.EvalInImage F A B); try assumption.
+    apply Isom.IsBij with R S. assumption.
+Qed.
 
 (* If R well-orders A the minimal element of a subset of A is unique.           *)
 Proposition UniqueMinimal : forall (R A:Class) (a x y:U),
