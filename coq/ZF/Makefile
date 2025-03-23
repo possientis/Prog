@@ -63,6 +63,7 @@ CLASS_OBJ = \
 	${CLASS}/Minimal.vo \
 	${CLASS}/OneToOne.vo \
 	${CLASS}/Onto.vo \
+	${CLASS}/Ord.vo \
 	${CLASS}/Pair.vo \
 	${CLASS}/PartialOrd.vo \
 	${CLASS}/Power.vo \
@@ -82,6 +83,7 @@ CLASS_OBJ = \
 	${CLASS}/StrictTotalOrd.vo \
 	${CLASS}/Switch.vo \
 	${CLASS}/Total.vo \
+	${CLASS}/Tr.vo \
 	${CLASS}/Transitive.vo \
 	${CLASS}/Union.vo \
 	${CLASS}/UnionGen.vo \

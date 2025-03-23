@@ -22,8 +22,8 @@ Definition WellFoundedWellOrd (R A:Class) : Prop :=
 (* If R is a wfwo on A, every non-empty subclass of A has an R-minimal element. *)
 Proposition HasMinimal : forall (R A B:Class),
   WellFoundedWellOrd R A ->
-   B :<=: A              ->
-  ~B :~: :0:             ->
+  B :<=: A               ->
+  B :<>: :0:             ->
   exists x, Minimal R B x.
 Proof.
 

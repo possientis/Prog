@@ -26,6 +26,36 @@ Proof.
   - exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
 
+Lemma InitSegmentEA : forall (A:Class) (a:U),
+  initSegment E A a :~: A :/\: toClass a.
+Proof.
+  intros A a. split; intros [H1 H2].
+  - apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
+    apply SingleCharac in H2. apply ECharac2 in H3.
+    subst. split; assumption.
+  - split. 1: assumption. apply InvImageCharac. exists a. split.
+    + apply SingleIn.
+    + apply ECharac2. assumption.
+Qed.
+
+Lemma InitSegmentEV : forall (a:U),
+  initSegment E V a :~: toClass a.
+Proof.
+  intros a. apply ClassEquivTran with (V :/\: toClass a).
+  - apply InitSegmentEA.
+  - apply InterVL.
+Qed.
+
+Proposition MinimalEA : forall (A:Class) (a:U),
+  Minimal E A a <-> A a /\ A :/\: toClass a :~: :0:.
+Proof.
+  intros A a. split; intros [H1 H2].
+  - split. 1: assumption. apply ClassEquivTran with (initSegment E A a).
+    2: assumption. apply ClassEquivSym, InitSegmentEA.
+  - split. 1: assumption. apply ClassEquivTran with (A :/\: toClass a).
+    2: assumption. apply InitSegmentEA.
+Qed.
+
 (* The class E is founded on V, i.e. every subset of V has an E-minimal element.*)
 Proposition EIsFoundedOnV : Founded E V.
 Proof.
@@ -80,17 +110,6 @@ Proof.
 
   (* Which follows easily. *)
     apply InterCharac. split. 2: assumption. apply ECharac2. assumption.
-Qed.
-
-Lemma InitSegmentEV : forall (a:U),
-  initSegment E V a :~: toClass a.
-Proof.
-  intros a x. split; intros H1.
-  - destruct H1 as [_ H1]. apply InvImageCharac in H1. destruct H1 as [b [H1 H2]].
-    apply SingleCharac in H1. subst. apply ECharac2 in H2. assumption.
-  - split. 1: apply I. apply InvImageCharac. exists a. split.
-    + apply SingleIn.
-    + apply ECharac2. assumption.
 Qed.
 
 Proposition EIsWellFoundedOnV : WellFounded E V.

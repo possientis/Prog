@@ -12,6 +12,31 @@ Require Import ZF.Set.OrdPair.
 (* The class satisfied by all sets.                                             *)
 Definition V : Class := fun _ => True.
 
+Proposition VIsSuperClass : forall (A:Class), A :<=: V.
+Proof.
+  intros A x _. apply I.
+Qed.
+
+Proposition InterVL : forall (P:Class),
+  V :/\: P :~: P.
+Proof.
+  intros P x. split; intros H1.
+  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [_ H1]. assumption.
+  - apply InterCharac. split.
+    + apply I.
+    + assumption.
+Qed.
+
+Proposition InterVR : forall (P:Class),
+  P :/\: V :~: P.
+Proof.
+  intros P x. split; intros H1.
+  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [H1 _]. assumption.
+  - apply InterCharac. split.
+    + assumption.
+    + apply I.
+Qed.
+
 Proposition VIsProper : Proper V.
 Proof.
 
@@ -73,22 +98,4 @@ Proof.
       symmetry. assumption.
 Qed.
 
-Proposition InterVL : forall (P:Class),
-  V :/\: P :~: P.
-Proof.
-  intros P x. split; intros H1.
-  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [_ H1]. assumption.
-  - apply InterCharac. split.
-    + apply I.
-    + assumption.
-Qed.
 
-Proposition InterVR : forall (P:Class),
-  P :/\: V :~: P.
-Proof.
-  intros P x. split; intros H1.
-  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [H1 _]. assumption.
-  - apply InterCharac. split.
-    + assumption.
-    + apply I.
-Qed.
