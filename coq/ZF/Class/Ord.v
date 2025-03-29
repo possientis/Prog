@@ -12,6 +12,7 @@ Require Import ZF.Class.WellFounded.
 Require Import ZF.Class.WellFoundedWellOrd.
 Require Import ZF.Class.WellOrdering.
 Require Import ZF.Set.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate defining an ordinal class.                                         *)
@@ -54,3 +55,18 @@ Proof.
     - apply EWellOrdersOrdinals. assumption. }
   destruct H4 as [x H4]. exists x. apply MinimalEA. assumption.
 Qed.
+
+Proposition ElemIsOrdinal : forall (A:Class) (a:U),
+  Ord A -> A a -> Ord (toClass a).
+Proof.
+  intros A a [H1 H2] H3. split.
+  - intros x H4 y H5.
+    assert (A x) as H6. { apply (H1 a); assumption. }
+    assert (A y) as H7. { apply (H1 x); assumption. }
+    specialize (H2 a y H3 H7). destruct H2 as [H2|[H2|H2]].
+    + subst. exfalso. apply NoElemLoop2 with x y. split; assumption.
+    + exfalso. apply NoElemLoop3 with x a y. split. 1: assumption. split; assumption.
+    + assumption.
+  - intros x y H4 H5. apply H2; apply (H1 a); assumption.
+Qed.
+

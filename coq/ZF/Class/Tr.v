@@ -6,7 +6,6 @@ Require Import ZF.Set.Foundation.
 (* Predicate defining a transitive class.                                       *)
 Definition Tr (A:Class) : Prop := forall x, A x -> toClass x :<=: A.
 
-
 Proposition ElemIsStrictSubClass : forall (A:Class) (a:U),
   Tr A -> A a -> toClass a :<: A.
 Proof.
