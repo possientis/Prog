@@ -12,7 +12,7 @@ Require Import ZF.Set.Union2.
 Export ZF.Core.Diff.
 
 Definition diff (a b:U) : U := fromClass (toClass a :\: toClass b)
-  (DiffIsSmall (toClass a) (toClass b) (SetIsSmall a)).
+  (Diff.IsSmall (toClass a) (toClass b) (SetIsSmall a)).
 
 (* Notation "a :\: b" := (diff a b)                                             *)
 Global Instance SetDiff : Diff U := { diff := diff }.
@@ -23,8 +23,8 @@ Proposition DiffCharac : forall (a b:U),
 Proof.
   intros a b x. split; intros H1.
   - apply FromClassCharac in H1.
-    apply (proj1 (Class.Diff.DiffCharac _ _ _)) in H1. apply H1.
-  - apply FromClassCharac, Class.Diff.DiffCharac, H1.
+    apply (proj1 (Class.Diff.Charac _ _ _)) in H1. apply H1.
+  - apply FromClassCharac, Class.Diff.Charac, H1.
 Qed.
 
 Proposition DiffUnionInter : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.

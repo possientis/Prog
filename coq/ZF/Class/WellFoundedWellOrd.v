@@ -49,7 +49,7 @@ Proof.
   assert (exists x, Minimal R B x) as X. 2: apply X.
 
   (* Being non-empty, B has an element, *)
-  apply Class.Empty.NotEmptyHasElement in H4.
+  apply Class.Empty.NotEmptyHasElem in H4.
 
   (* Let b be such an element of B. *)
   destruct H4 as [b H4]. assert (B b) as X. apply H4. clear X.
@@ -187,7 +187,7 @@ Proof.
   apply DoubleInclusion. split. 2: assumption. assert (A :<=: B) as X. 2: apply X.
 
   (* Or equivalently that A\B = 0. *)
-  apply DiffWhenEmpty. assert (A:\:B :~: :0:) as X. 2: apply X.
+  apply Diff.WhenEmpty. assert (A:\:B :~: :0:) as X. 2: apply X.
 
   (* Suppose to the contrary that A\B <> 0. *)
   apply DoubleNegation. intros H5. assert (~ A:\:B :~: :0:) as X. apply H5. clear X.
@@ -208,13 +208,13 @@ Proof.
     intros x H7. apply InitSegmentCharac in H7. destruct H7 as [H7 H8].
     apply DoubleNegation. intros H9. revert H8.
     apply (MinimalHasNoLesser R (A:\:B)). 2: assumption.
-    apply DiffCharac. split; assumption.
+    apply Diff.Charac. split; assumption.
   }
 
   (* From the inductive property, it follows that a lies in B. *)
   assert (B a) as H8. { apply H3. assumption. }
 
   (* This contradicts the fact that a lies in A\B. *)
-  apply MinimalIn in H6. apply (proj1 (DiffCharac _ _ _)) in H6.
+  apply MinimalIn in H6. apply (proj1 (Diff.Charac _ _ _)) in H6.
   destruct H6 as [_ H6]. contradiction.
 Qed.

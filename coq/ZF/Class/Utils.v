@@ -13,7 +13,7 @@ Proposition LesserThanRangeOfRestrict : forall (F A:Class),
   (exists a, A :\: range (F:|:toClass a) :~: :0:) ->
   Small A.
 Proof.
-  intros F A H1 [a H2]. apply DiffWhenEmpty in H2.
+  intros F A H1 [a H2]. apply Diff.WhenEmpty in H2.
   apply LesserThanRangeOfRestrictIsSmall with F (toClass a).
   - assumption.
   - apply SetIsSmall.

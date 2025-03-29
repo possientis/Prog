@@ -242,7 +242,7 @@ Proof.
   intros H2. assert (~ Q :~: :0:) as A. { apply H2. } clear A.
 
   (* So Q has an element. *)
-  assert (exists y, Q y) as H3. { apply NotEmptyHasElement, H2. }
+  assert (exists y, Q y) as H3. { apply NotEmptyHasElem, H2. }
 
   (* So let y be a set belonging to the class Q. *)
   destruct H3 as [y H3].
@@ -341,7 +341,7 @@ Proof.
   assert (Small :0:) as A. 2: apply A.
 
   (* Which we know is true. *)
-  apply EmptyIsSmall.
+  apply Empty.IsSmall.
 
 Qed.
 

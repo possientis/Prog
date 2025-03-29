@@ -110,7 +110,7 @@ Proof.
   intros F a H1 x. split; intros H2.
   - apply H1. unfold eval in H2. destruct H2 as [y [H2 H3]].
     destruct H3 as [H3 H4]. exists y. split; assumption.
-  - apply EmptyCharac in H2. contradiction.
+  - apply Empty.Charac in H2. contradiction.
 Qed.
 
 (* If F is not functional at a then eval F a is the empty class.                *)
@@ -181,5 +181,5 @@ Proof.
     assert (Small :0:) as A. 2: apply A.
 
   (* Which we know is true. *)
-    apply EmptyIsSmall.
+    apply Empty.IsSmall.
 Qed.

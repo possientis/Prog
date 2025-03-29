@@ -1,4 +1,6 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
+Require Import ZF.Class.Diff.
 Require Import ZF.Class.E.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Founded.
@@ -13,6 +15,7 @@ Require Import ZF.Class.WellFoundedWellOrd.
 Require Import ZF.Class.WellOrdering.
 Require Import ZF.Set.
 Require Import ZF.Set.Foundation.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate defining an ordinal class.                                         *)
@@ -70,3 +73,28 @@ Proof.
   - intros x y H4 H5. apply H2; apply (H1 a); assumption.
 Qed.
 
+Proposition StrictInclIsElem : forall (A:Class) (a:U),
+  Ord A          ->
+  Tr (toClass a) ->
+  toClass a :<: A <-> A a.
+Proof.
+  intros A a H1 H2. split; intros H3.
+  - assert ( exists x,
+     (A :\: toClass a) x /\
+     (A :\: toClass a)  :/\: toClass x :~: :0:) as H4. {
+     apply HasEMinimal with A. 1: assumption.
+     - apply InterInclL.
+     - apply Diff.WhenStrictIncl. assumption. }
+    destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }
+    assert (x = a) as H7. 2: { subst. assumption. }
+    apply ZF.Set.Incl.DoubleInclusion. destruct H1 as [H1 H9]. split; intros u H7.
+    + apply DoubleNegation. intros H8. apply (proj1 (Empty.Charac u)), H5.
+      apply InterCharac. split. 2: assumption. apply Diff.Charac. split. 2: assumption.
+      apply (H1 x); assumption.
+    + assert (A u) as H8. { apply H3. assumption. }
+      specialize (H9 x u H6 H8). destruct H9 as [H9|[H9|H9]].
+      * subst. exfalso. apply H4. assumption.
+      * exfalso. apply H4. apply (H2 u); assumption.
+      * assumption.
+  - apply ElemIsStrictSubClass. 2: assumption. apply H1.
+Qed.

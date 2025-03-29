@@ -15,13 +15,13 @@ Definition empty : Class := fun _ => False.
 (* Notation ":0:" := empty                                                      *)
 Global Instance ClassZero : Zero Class := { zero := empty }.
 
-Proposition EmptyCharac : forall (x:U), :0: x <-> False.
+Proposition Charac : forall (x:U), :0: x <-> False.
 Proof.
   intros x. unfold zero, ClassZero, empty. split; auto.
 Qed.
 
 (* The empty class is small.                                                    *)
-Proposition EmptyIsSmall : Small :0:.
+Proposition IsSmall : Small :0:.
 Proof.
   (* We know there is at least one set in the universe *)
   remember NonEmptyUniverse as H1 eqn:A. clear A.
@@ -50,20 +50,20 @@ Proof.
   - intros H3. contradiction.
 Qed.
 
-Proposition NotEmptyHasElement : forall (P:Class),
-  ~ P :~: :0: <-> exists x, P x.
+Proposition NotEmptyHasElem : forall (P:Class),
+  P :<>: :0: <-> exists x, P x.
 Proof.
   intros P. split; intros H1.
   - apply NotForAllNot. intros H2. apply H1. intros x. split; intros H3.
-    + apply EmptyCharac, (H2 x), H3.
-    + apply EmptyCharac in H3. contradiction.
-  - destruct H1 as [x H1]. intros H2. apply H2, EmptyCharac in H1. contradiction.
+    + apply Charac, (H2 x), H3.
+    + apply Charac in H3. contradiction.
+  - destruct H1 as [x H1]. intros H2. apply H2, Charac in H1. contradiction.
 Qed.
 
 Proposition EmptyImage : forall (P Q:Class),
   Q :~: :0: -> P:[Q]: :~: :0:.
 Proof.
   intros P Q H1 y. split; intros H2.
-  - destruct H2 as [x [H2 H3]]. apply H1 in H2. apply EmptyCharac in H2. contradiction.
-  - apply EmptyCharac in H2. contradiction.
+  - destruct H2 as [x [H2 H3]]. apply H1 in H2. apply Charac in H2. contradiction.
+  - apply Charac in H2. contradiction.
 Qed.

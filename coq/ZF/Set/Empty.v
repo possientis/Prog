@@ -11,7 +11,7 @@ Require Import ZF.Set.Singleton.
 Export ZF.Core.Zero.
 
 (* We consider the set defined by the small class Empty                         *)
-Definition empty : U := fromClass :0: EmptyIsSmall.
+Definition empty : U := fromClass :0: Empty.IsSmall.
 
 (* Notation ":0:" := emptySet                                                   *)
 Global Instance SetZero : Zero U := { zero := empty }.
@@ -74,7 +74,7 @@ Proposition ToClassOfEmptySet : toClass :0: :~: :0:.
 Proof.
   intros x. split; intros H1.
   - apply EmptyCharac in H1. contradiction.
-  - apply Class.Empty.EmptyCharac in H1. contradiction.
+  - apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
 Proposition ToClassWhenEmpty : forall (a:U),
