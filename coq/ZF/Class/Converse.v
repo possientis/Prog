@@ -75,7 +75,7 @@ Proof.
 
   (* Using the equivalence converse(F) ~ Switch[F] ... *)
   apply SmallEquivCompat with Switch:[F]:.
-    1: { apply ClassEquivSym, ConverseIsImageBySwitch. }
+    1: { apply Class.EquivSym, ConverseIsImageBySwitch. }
 
   (* It is sufficient to show that Switch[F] is small. *)
   assert (Small (Switch:[F]:)) as A. 2: apply A.

@@ -41,7 +41,7 @@ Qed.
 Lemma InitSegmentEV : forall (a:U),
   initSegment E V a :~: toClass a.
 Proof.
-  intros a. apply ClassEquivTran with (V :/\: toClass a).
+  intros a. apply Class.EquivTran with (V :/\: toClass a).
   - apply InitSegmentEA.
   - apply InterVL.
 Qed.
@@ -50,9 +50,9 @@ Proposition MinimalEA : forall (A:Class) (a:U),
   Minimal E A a <-> A a /\ A :/\: toClass a :~: :0:.
 Proof.
   intros A a. split; intros [H1 H2].
-  - split. 1: assumption. apply ClassEquivTran with (initSegment E A a).
-    2: assumption. apply ClassEquivSym, InitSegmentEA.
-  - split. 1: assumption. apply ClassEquivTran with (A :/\: toClass a).
+  - split. 1: assumption. apply Class.EquivTran with (initSegment E A a).
+    2: assumption. apply Class.EquivSym, InitSegmentEA.
+  - split. 1: assumption. apply Class.EquivTran with (A :/\: toClass a).
     2: assumption. apply InitSegmentEA.
 Qed.
 
@@ -116,7 +116,7 @@ Proposition EIsWellFoundedOnV : WellFounded E V.
 Proof.
   split. 1: apply EIsFoundedOnV. intros a _.
   apply SmallEquivCompat with (toClass a).
-  - apply ClassEquivSym, InitSegmentEV.
+  - apply Class.EquivSym, InitSegmentEV.
   - apply SetIsSmall.
 Qed.
 

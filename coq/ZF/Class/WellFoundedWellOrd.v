@@ -98,15 +98,15 @@ Proof.
 
   (* Furthermore, the set c is not empty. *)
     assert (c <> :0:) as H9. {
-      intros H9. apply H5. apply ClassEquivTran with (toClass c).
-      - apply ClassEquivSym. assumption.
+      intros H9. apply H5. apply Class.EquivTran with (toClass c).
+      - apply Class.EquivSym. assumption.
       - apply ToClassWhenEmpty. assumption.
     }
 
   (* So c is a non-empty subset of the class B. *)
     assert (toClass c :<=: B) as H10. {
       apply InclEquivCompatL with C.
-      - apply ClassEquivSym. assumption.
+      - apply Class.EquivSym. assumption.
       - rewrite EC. apply InitSegmentIncl.
    }
 

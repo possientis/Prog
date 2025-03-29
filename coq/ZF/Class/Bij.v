@@ -34,7 +34,7 @@ Proposition IsFun : forall (F A B:Class),
   Bij F A B -> F :: A :-> B.
 Proof.
   intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
-  split. 1: assumption. apply DoubleInclusion, ClassEquivSym. assumption.
+  split. 1: assumption. apply DoubleInclusion, Class.EquivSym. assumption.
 Qed.
 
 Proposition ConverseIsBij : forall (F A B:Class),
@@ -43,8 +43,8 @@ Proof.
   intros F A B [[H1 H2] H3]. split.
   - split.
     + apply Bijection.ConverseIsBijection. assumption.
-    + apply ClassEquivTran with (range F). 2: assumption. apply ConverseDomain.
-  - apply ClassEquivTran with (domain F). 2: assumption. apply ConverseRange.
+    + apply Class.EquivTran with (range F). 2: assumption. apply ConverseDomain.
+  - apply Class.EquivTran with (domain F). 2: assumption. apply ConverseRange.
 Qed.
 
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
@@ -79,11 +79,11 @@ Proposition ComposeIsBij : forall (F G A B C:Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply ComposeIsBijectionOn with B; try assumption.
-    apply DoubleInclusion, ClassEquivSym. assumption.
-  - apply ClassEquivTran with (range G). 2: assumption.
+    apply DoubleInclusion, Class.EquivSym. assumption.
+  - apply Class.EquivTran with (range G). 2: assumption.
     apply ComposeRangeIsSame. destruct H3 as [H3 H5].
     apply InclTran with B.
-    + apply DoubleInclusion, ClassEquivSym. assumption.
+    + apply DoubleInclusion, Class.EquivSym. assumption.
     + apply DoubleInclusion. assumption.
 Qed.
 
@@ -123,7 +123,7 @@ Qed.
 Proposition ImageOfDomainIsRange : forall (F A B:Class),
   Bij F A B -> F:[A]: :~: B.
 Proof.
-  intros F A B [H1 H2]. apply ClassEquivTran with (range F).
+  intros F A B [H1 H2]. apply Class.EquivTran with (range F).
   2: assumption. apply BijectionOn.ImageOfDomainIsRange. assumption.
 Qed.
 
@@ -144,7 +144,7 @@ Proposition ImageOfInvImage : forall (F A B C:Class),
 Proof.
   intros F A B C [H1 H2] H3. apply BijectionOn.ImageOfInvImage with A.
   1: assumption. apply InclEquivCompatR with B. 2: assumption.
-  apply ClassEquivSym. assumption.
+  apply Class.EquivSym. assumption.
 Qed.
 
 Proposition EvalInjective : forall (F A B:Class) (x y:U),

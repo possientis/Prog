@@ -36,7 +36,7 @@ Proposition InvImageEquivCompatL : forall (F G P:Class),
 Proof.
   intros F G P H1. apply InvImageEquivCompat.
   - assumption.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
 Qed.
 
 (* The inverse image is right-compatible with equivalences.                     *)
@@ -44,7 +44,7 @@ Proposition InvImageEquivCompatR : forall (F P Q:Class),
   P :~: Q -> F^:-1: :[P]: :~: F^:-1: :[Q]:.
 Proof.
   intros F P Q H1. apply InvImageEquivCompat.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
   - assumption.
 Qed.
 
@@ -77,9 +77,9 @@ Qed.
 Proposition InvImageOfRangeIsDomain : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
-  intros F. apply ClassEquivTran with F^:-1::[domain F^:-1:]:.
-  - apply ImageEquivCompatR, ClassEquivSym, ConverseDomain.
-  - apply ClassEquivTran with (range F^:-1:).
+  intros F. apply Class.EquivTran with F^:-1::[domain F^:-1:]:.
+  - apply ImageEquivCompatR, Class.EquivSym, ConverseDomain.
+  - apply Class.EquivTran with (range F^:-1:).
     + apply Range.ImageOfDomainIsRange.
     + apply ConverseRange.
 Qed.

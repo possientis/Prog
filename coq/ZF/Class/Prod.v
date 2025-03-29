@@ -57,7 +57,7 @@ Proposition ProdEquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply ProdEquivCompat.
   - assumption.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
 Qed.
 
 (* The product of two classes is right-compatible with class equivalence.       *)
@@ -65,7 +65,7 @@ Proposition ProdEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :x: P :~: R :x: Q.
 Proof.
   intros P Q R H1. apply ProdEquivCompat.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
   - assumption.
 Qed.
 
@@ -335,7 +335,7 @@ Proof.
   apply H1. assert (Small P) as A. 2: apply A.
 
   (* From the equivalence P ~ 0 *)
-  apply SmallEquivCompat with :0:. 1: { apply ClassEquivSym, H2. }
+  apply SmallEquivCompat with :0:. 1: { apply Class.EquivSym, H2. }
 
   (* We need to show that 0 is small *)
   assert (Small :0:) as A. 2: apply A.

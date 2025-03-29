@@ -75,13 +75,13 @@ Proposition InclEquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply InclEquivCompat.
   - assumption.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
 Qed.
 
 Proposition InclEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<=: P -> R :<=: Q.
 Proof.
   intros P Q R H1. apply InclEquivCompat.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
   - assumption.
 Qed.

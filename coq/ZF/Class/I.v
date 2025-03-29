@@ -67,7 +67,7 @@ Proof.
   split.
   - apply IIsFunctional.
   - apply Functional.EquivCompat with I. 2: apply IIsFunctional.
-    apply ClassEquivSym, IConverse.
+    apply Class.EquivSym, IConverse.
 Qed.
 
 (* I is a bijection class.                                                      *)

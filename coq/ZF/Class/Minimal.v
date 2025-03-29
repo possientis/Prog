@@ -19,8 +19,8 @@ Proposition MinimalEquivCompat : forall (R S A B:Class) (a:U),
 Proof.
   intros R S A B a H1 H2 [H3 H4]; split.
   - apply H2. assumption.
-  - apply ClassEquivTran with (initSegment R A a). 2: assumption.
-    apply ClassEquivSym, InitSegmentEquivCompat; assumption.
+  - apply Class.EquivTran with (initSegment R A a). 2: assumption.
+    apply Class.EquivSym, InitSegmentEquivCompat; assumption.
 Qed.
 
 Proposition MinimalEquivCompatL : forall (R S A:Class) (a:U),
@@ -28,14 +28,14 @@ Proposition MinimalEquivCompatL : forall (R S A:Class) (a:U),
 Proof.
   intros R S A a H1. apply MinimalEquivCompat.
   - assumption.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
 Qed.
 
 Proposition MinimalEquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Minimal R A a -> Minimal R B a.
 Proof.
   intros R A B a H1. apply MinimalEquivCompat.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
   - assumption.
 Qed.
 

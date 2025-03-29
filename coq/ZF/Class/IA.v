@@ -79,7 +79,7 @@ Proof.
   intros A. split.
   - apply IAIsFunctional.
   - apply Functional.EquivCompat with (I:|:A).
-    + apply ClassEquivSym, IAConverse.
+    + apply Class.EquivSym, IAConverse.
     + apply IAIsFunctional.
 Qed.
 
@@ -96,8 +96,8 @@ Qed.
 Proposition IADomain : forall (A:Class), domain (I:|:A) :~: A.
 Proof.
   intros A.
-  apply ClassEquivTran with (A :/\: domain I). 1: apply DomainOfRestrict.
-  apply ClassEquivTran with (A :/\: V).
+  apply Class.EquivTran with (A :/\: domain I). 1: apply DomainOfRestrict.
+  apply Class.EquivTran with (A :/\: V).
   - apply Inter.EquivCompatR, IDomain.
   - apply InterVR.
 Qed.
@@ -179,7 +179,7 @@ Proposition IBisFConverseF : forall (F A B:Class), Bij F A B ->
   F :.: F^:-1: :~: (I:|:B).
 Proof.
   intros F A B H1. assert (H2 := H1). destruct H2 as [[[H2 _] _] _].
-  apply ClassEquivTran with ((F^:-1:)^:-1: :.: F^:-1:).
-  - apply ComposeEquivCompatL, ClassEquivSym, ConverseIsIdempotent. assumption.
+  apply Class.EquivTran with ((F^:-1:)^:-1: :.: F^:-1:).
+  - apply ComposeEquivCompatL, Class.EquivSym, ConverseIsIdempotent. assumption.
   - apply IAIsConverseFF with A. apply ConverseIsBij. assumption.
 Qed.

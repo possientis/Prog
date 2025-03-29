@@ -39,7 +39,7 @@ Proposition Union2EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply Union2EquivCompat.
   - assumption.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
 Qed.
 
 (* Pairwise union is right-compatible with class equivalence.                   *)
@@ -47,7 +47,7 @@ Proposition Union2EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :\/: P :~: R :\/: Q.
 Proof.
   intros P Q R H1. apply Union2EquivCompat.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
   - assumption.
 Qed.
 

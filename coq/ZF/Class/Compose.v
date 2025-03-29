@@ -52,7 +52,7 @@ Proposition ComposeEquivCompatL : forall (F G G':Class),
   G :~: G' -> G :.: F :~: G' :.: F.
 Proof.
   intros F G G' H1. apply ComposeEquivCompat.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
   - assumption.
 Qed.
 
@@ -62,7 +62,7 @@ Proposition ComposeEquivCompatR : forall (F F' G:Class),
 Proof.
   intros F F' G H1. apply ComposeEquivCompat.
   - assumption.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
 Qed.
 
 (* The composition of two classes is a relation.                                *)

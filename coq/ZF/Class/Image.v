@@ -34,7 +34,7 @@ Proposition ImageEquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply ImageEquivCompat.
   - assumption.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
 Qed.
 
 (* The direct image is right-compatible with equivalences.                      *)
@@ -42,7 +42,7 @@ Proposition ImageEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R:[P]: :~: R:[Q]:.
 Proof.
   intros P Q R H1. apply ImageEquivCompat.
-  - apply ClassEquivRefl.
+  - apply Class.EquivRefl.
   - assumption.
 Qed.
 

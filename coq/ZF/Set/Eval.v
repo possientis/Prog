@@ -27,12 +27,12 @@ Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
   HasValueAt F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1. split; intros H2.
-  - unfold eval. apply ClassEquivSetEqual.
-    apply ClassEquivTran with (Class.Eval.eval F a).
+  - unfold eval. apply EquivSetEqual.
+    apply Class.EquivTran with (Class.Eval.eval F a).
     + apply ToFromClass.
     + apply Class.Eval.EvalWhenHasValueAt; assumption.
   - apply Class.Eval.EvalWhenHasValueAt. 1: assumption.
-    unfold eval in H2. rewrite <- H2. apply ClassEquivSym, ToFromClass.
+    unfold eval in H2. rewrite <- H2. apply Class.EquivSym, ToFromClass.
 Qed.
 
 (* If F has a value at a, then (a,F!a) satisfies the class F.                   *)
@@ -66,11 +66,11 @@ Qed.
 Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> F!a = :0:.
 Proof.
-  intros F a H1. apply ClassEquivSetEqual. unfold eval, zero, SetZero, empty.
-  apply ClassEquivTran with (Class.Eval.eval F a). 1: apply ToFromClass.
-  apply ClassEquivTran with :0:.
+  intros F a H1. apply EquivSetEqual. unfold eval, zero, SetZero, empty.
+  apply Class.EquivTran with (Class.Eval.eval F a). 1: apply ToFromClass.
+  apply Class.EquivTran with :0:.
   - apply Class.Eval.EvalWhenNotHasValueAt. assumption.
-  - apply ClassEquivSym, ToFromClass.
+  - apply Class.EquivSym, ToFromClass.
 Qed.
 
 (* If F is not functional at a then F!a is the empty set.                       *)

@@ -81,8 +81,8 @@ Proposition ToClassWhenEmpty : forall (a:U),
   toClass a :~: :0: <-> a = :0:.
 Proof.
   intros a. split; intros H1.
-  - apply ClassEquivSetEqual. apply ClassEquivTran with :0:. 1: assumption.
-    apply ClassEquivSym, ToClassOfEmptySet.
+  - apply EquivSetEqual. apply Class.EquivTran with :0:. 1: assumption.
+    apply Class.EquivSym, ToClassOfEmptySet.
   - rewrite H1. apply ToClassOfEmptySet.
 Qed.
 

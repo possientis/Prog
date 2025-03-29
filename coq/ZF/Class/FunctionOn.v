@@ -30,7 +30,7 @@ Qed.
 Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
 Proof.
-  intros F H1. split. { assumption. } { apply ClassEquivRefl. }
+  intros F H1. split. { assumption. } { apply Class.EquivRefl. }
 Qed.
 
 (* If F is a function defined on A, then it is a subclass of A x F[A].          *)
@@ -101,13 +101,13 @@ Proof.
     { apply Function.EquivCharac; assumption. }
   split; intros H6.
   - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
-    + apply ClassEquivTran with (domain F). 1: { apply ClassEquivSym. assumption. }
-      apply ClassEquivTran with (domain G); assumption.
+    + apply Class.EquivTran with (domain F). 1: { apply Class.EquivSym. assumption. }
+      apply Class.EquivTran with (domain G); assumption.
     + intros x H8. apply H7, H2. assumption.
   - destruct H6 as [H6 H7]. apply H5. split.
-    + apply ClassEquivTran with A. 1: assumption.
-      apply ClassEquivTran with B. 1: assumption.
-      apply ClassEquivSym. assumption.
+    + apply Class.EquivTran with A. 1: assumption.
+      apply Class.EquivTran with B. 1: assumption.
+      apply Class.EquivSym. assumption.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
@@ -119,9 +119,9 @@ Proposition ComposeIsFunctionOn : forall (F A G B:Class),
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
   - apply ComposeIsFunction; assumption.
-  - apply ClassEquivTran with (domain F). 2: assumption.
+  - apply Class.EquivTran with (domain F). 2: assumption.
     apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
-    apply ClassEquivSym. assumption.
+    apply Class.EquivSym. assumption.
 Qed.
 
 Proposition EvalCharac : forall (F A:Class) (a y:U),
@@ -176,14 +176,14 @@ Qed.
 Proposition ImageOfDomainIsRange : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.
 Proof.
-  intros F A [H1 H2]. apply ClassEquivTran with F:[domain F]:.
-  - apply ImageEquivCompatR, ClassEquivSym. assumption.
+  intros F A [H1 H2]. apply Class.EquivTran with F:[domain F]:.
+  - apply ImageEquivCompatR, Class.EquivSym. assumption.
   - apply Range.ImageOfDomainIsRange.
 Qed.
 
 Proposition InvImageOfRangeIsDomain : forall (F A:Class),
   FunctionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
-  intros F A [H1 H2]. apply ClassEquivTran with (domain F).
+  intros F A [H1 H2]. apply Class.EquivTran with (domain F).
   2: assumption. apply InvImageOfRangeIsDomain.
 Qed.

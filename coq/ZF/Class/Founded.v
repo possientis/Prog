@@ -48,17 +48,17 @@ Proof.
       - apply SetIsSmall. }
     remember (fromClass C H5) as a eqn:Ea. specialize (H2 a).
     assert (toClass a :~: F^:-1::[toClass b]:) as H6. {
-      apply ClassEquivTran with C.
+      apply Class.EquivTran with C.
       - rewrite Ea. apply ToFromClass.
-      - rewrite <- EC. apply ClassEquivRefl. }
+      - rewrite <- EC. apply Class.EquivRefl. }
     clear EC Ea H5 C.
     assert (toClass a :<=: A) as H7. {
       apply InclEquivCompatL with (F^:-1::[toClass b]:).
-      - apply ClassEquivSym. assumption.
+      - apply Class.EquivSym. assumption.
       - apply InclTran with F^:-1::[B]:.
         + apply ImageInclCompatR. assumption.
         + apply InclEquivCompatL with A. 2: apply InclRefl.
-          apply ClassEquivSym, Bij.InvImageOfRangeIsDomain.
+          apply Class.EquivSym, Bij.InvImageOfRangeIsDomain.
           apply Isom.IsBij with R S. assumption. }
     assert (a <> :0:) as H8. { apply NotEmptyHasElement in H4.
       destruct H4 as [y H4]. apply NotEmptyHasElement.
@@ -68,7 +68,7 @@ Proof.
       - apply H3. assumption. }
     specialize (H2 H7 H8). destruct H2 as [x H2].
     assert (F:[toClass a]: :~: toClass b) as H9. {
-      apply ClassEquivTran with F:[F^:-1::[toClass b]:]:.
+      apply Class.EquivTran with F:[F^:-1::[toClass b]:]:.
       - apply ImageEquivCompatR. assumption.
       - apply Bij.ImageOfInvImage with A B. 2: assumption.
         apply Isom.IsBij with R S. assumption. }
