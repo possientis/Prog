@@ -1,5 +1,5 @@
-Declare Scope ZF_Set_scope.
-Open    Scope ZF_Set_scope.
+Require Import ZF.Core.Elem.
+Export ZF.Core.Elem.
 
 (* There is a universe of sets                                                  *)
 Axiom U : Type.
@@ -7,6 +7,6 @@ Axiom U : Type.
 (* There is a fundamental membership predicate between sets                     *)
 Axiom Elem : U -> U -> Prop.
 
-Notation "x :< y" := (Elem x y)
-  (at level 20, no associativity) : ZF_Set_scope.
+(* Notation "x :< y" := (Elem x y)                                              *)
+Global Instance SetElem : Core.Elem.Elem U U := { elem := Elem }.
 
