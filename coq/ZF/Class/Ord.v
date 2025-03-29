@@ -22,6 +22,15 @@ Require Import ZF.Set.OrdPair.
 Definition Ord (A:Class) : Prop := Tr A /\ forall x y,
   A x -> A y -> x = y \/ x :< y \/ y :< x.
 
+(* Being an ordinal class is compatible with class equivalence.                 *)
+Definition OrdEquivCompat : forall (A B:Class),
+  A :~: B -> Ord A -> Ord B.
+Proof.
+  intros A B H1 [H2 H3]. split.
+  - apply TrEquivCompat with A; assumption.
+  - intros x y H4 H5. apply H3; apply H1; assumption.
+Qed.
+
 (* E is a total order on every ordinal class.                                   *)
 Proposition EIsTotalOnOrdinals : forall (A:Class),
   Ord A -> Total E A.
@@ -59,6 +68,7 @@ Proof.
   destruct H4 as [x H4]. exists x. apply MinimalEA. assumption.
 Qed.
 
+(* An element of an ordinal class defines an ordinal class.                     *)
 Proposition ElemIsOrdinal : forall (A:Class) (a:U),
   Ord A -> A a -> Ord (toClass a).
 Proof.
@@ -73,7 +83,8 @@ Proof.
   - intros x y H4 H5. apply H2; apply (H1 a); assumption.
 Qed.
 
-Proposition StrictInclIsElem : forall (A:Class) (a:U),
+(* For a transitive set, belonging to an ordinal is being a strict subclass.    *)
+Proposition WhenTrStrictInclIsElem : forall (A:Class) (a:U),
   Ord A          ->
   Tr (toClass a) ->
   toClass a :<: A <-> A a.
@@ -97,4 +108,29 @@ Proof.
       * exfalso. apply H4. apply (H2 u); assumption.
       * assumption.
   - apply ElemIsStrictSubClass. 2: assumption. apply H1.
+Qed.
+
+(* For an ordinal set, belonging to an ordinal is being a strict subclass.      *)
+Proposition StrictInclIsElem : forall (A:Class) (a:U),
+  Ord A           ->
+  Ord (toClass a) ->
+  toClass a :<: A <-> A a.
+Proof.
+  intros A a H1 [H2 _]. apply WhenTrStrictInclIsElem; assumption.
+Qed.
+
+(* A set defining a transitive subclass of an ordinal class is an ordinal.      *)
+Proposition TrSubClassIsOrd : forall (A:Class) (a:U),
+  Ord A             ->
+  toClass a :<=: A  ->
+  Tr (toClass a)    ->
+  Ord (toClass a).
+Proof.
+  intros A a H1 H2 H3.
+  assert (A :~: toClass a \/ A :<>: toClass a) as H4. { apply LawExcludedMiddle. }
+  destruct H4 as [H4|H4].
+  - apply OrdEquivCompat with A; assumption.
+  - apply ElemIsOrdinal with A. 1: assumption. apply WhenTrStrictInclIsElem;
+    try assumption. split. 1: assumption. intros H5. apply H4.
+    apply ClassEquivSym. assumption.
 Qed.
