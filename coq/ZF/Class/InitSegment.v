@@ -31,7 +31,7 @@ Qed.
 Proposition InitSegmentEquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> initSegment R A a :~: initSegment S B a.
 Proof.
-  intros R S A B a H1 H2. apply InterEquivCompat. 1: assumption.
+  intros R S A B a H1 H2. apply Inter.EquivCompat. 1: assumption.
   apply InvImageEquivCompatL. assumption.
 Qed.
 
@@ -57,7 +57,7 @@ Qed.
 Proposition InitSegmentInclCompat : forall (R S A B:Class) (a:U),
   R :<=: S -> A :<=: B -> initSegment R A a :<=: initSegment S B a.
 Proof.
-  intros R S A B a H1 H2. apply InterInclCompat. 1: assumption.
+  intros R S A B a H1 H2. apply Inter.InclCompat. 1: assumption.
   apply InvImageInclCompatL. assumption.
 Qed.
 
@@ -116,7 +116,7 @@ Qed.
 Proposition InitSegmentIncl : forall (R A:Class) (a:U),
   initSegment R A a :<=: A.
 Proof.
-  intros R A a. apply InterInclL.
+  intros R A a. apply Inter.InclL.
 Qed.
 
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)

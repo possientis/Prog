@@ -21,8 +21,8 @@ Proposition InterVL : forall (P:Class),
   V :/\: P :~: P.
 Proof.
   intros P x. split; intros H1.
-  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [_ H1]. assumption.
-  - apply InterCharac. split.
+  - apply H1.
+  - split.
     + apply I.
     + assumption.
 Qed.
@@ -31,8 +31,8 @@ Proposition InterVR : forall (P:Class),
   P :/\: V :~: P.
 Proof.
   intros P x. split; intros H1.
-  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [H1 _]. assumption.
-  - apply InterCharac. split.
+  - apply H1.
+  - split.
     + assumption.
     + apply I.
 Qed.

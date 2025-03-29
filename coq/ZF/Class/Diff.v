@@ -20,15 +20,9 @@ Definition diff (P Q:Class) : Class := P :/\: :¬:Q.
 (* Notation "P :\: Q" := (diff P Q)                                             *)
 Global Instance ClassDiff : Diff Class := { diff := diff }.
 
-Proposition Charac : forall (P Q:Class) (x:U),
-  (P :\: Q) x <-> P x /\ ~ (Q x).
-Proof.
-  intros P Q x. split; intros H1; apply H1.
-Qed.
-
 Proposition IsSmall : forall (P Q:Class), Small P -> Small (P :\: Q).
 Proof.
-  intros P Q. apply InterIsSmallL.
+  intros P Q. apply Inter.IsSmallL.
 Qed.
 
 Proposition WhenEmpty : forall (P Q:Class),
@@ -36,9 +30,9 @@ Proposition WhenEmpty : forall (P Q:Class),
 Proof.
   intros P Q. split; intros H1.
   - intros x H2. apply DoubleNegation. intros H3.
-    apply (proj1 (Empty.Charac x)), H1, Charac. split; assumption.
+    apply (proj1 (Empty.Charac x)), H1. split; assumption.
   - intros x. split; intros H2.
-    + apply (proj1 (Charac _ _ _)) in H2. destruct H2 as [H2 H3].
+    + destruct H2 as [H2 H3].
       apply H1 in H2. contradiction.
     + apply Empty.Charac in H2. contradiction.
 Qed.
@@ -54,19 +48,17 @@ Proposition UnionInter : forall (P Q R:Class),
   P :\: (Q:\/:R) :~: (P:\:Q) :/\: P:\:R.
 Proof.
   intros P Q R x. split; intros H1.
-  - apply Charac in H1. destruct H1 as [H1 H2]. apply InterCharac.
-    apply (proj1 (ComplementCharac _ _)) in H2.
-    split; apply Charac; split.
+  - destruct H1 as [H1 H2]. apply (proj1 (ComplementCharac _ _)) in H2.
+    split; split.
     + assumption.
     + intros H3. apply H2. apply Union2Charac. left. assumption.
     + assumption.
     + intros H3. apply H2. apply Union2Charac. right. assumption.
-  - apply InterCharac in H1. destruct H1 as [H1 H2].
-    apply Charac in H1. destruct H1 as [H1 H3].
+  - destruct H1 as [H1 H2]. destruct H1 as [H1 H3].
     apply (proj1 (ComplementCharac _ _)) in H3.
-    apply Charac in H2. destruct H2 as [_ H2].
+    destruct H2 as [_ H2].
     apply (proj1 (ComplementCharac _ _)) in H2.
-    apply Charac. split.
+    split.
     + assumption.
     + intros H4. apply (proj1 (Union2Charac _ _ _)) in H4.
       destruct H4 as [H4|H4]; contradiction.
@@ -76,13 +68,12 @@ Proposition Image : forall (F A B:Class),
   Functional F^:-1: -> F:[B:\:A]: :~: F:[B]: :\: F:[A]:.
 Proof.
   intros F A B H1 y. split; intros H2.
-  - destruct H2 as [x [H2 H3]]. apply (proj1 (Charac _ _ _)) in H2.
-    destruct H2 as [H2 H4]. apply Charac. split.
+  - destruct H2 as [x [H2 H3]]. destruct H2 as [H2 H4]. split.
     + exists x. split; assumption.
     + intros [x' [H5 H6]]. assert (x' = x) as H7. {
         apply ConverseWhenFunctional with F y; assumption. }
       subst. contradiction.
-  - apply (proj1 (Charac _ _ _)) in H2. destruct H2 as [[x [H2 H3]] H4].
-    exists x. split. 2: assumption. apply Charac. split.
+  - destruct H2 as [[x [H2 H3]] H4].
+    exists x. split. 2: assumption. split.
     1: assumption. intros H5. apply H4. exists x. split; assumption.
 Qed.

@@ -98,7 +98,7 @@ Proof.
   intros A.
   apply ClassEquivTran with (A :/\: domain I). 1: apply DomainOfRestrict.
   apply ClassEquivTran with (A :/\: V).
-  - apply InterEquivCompatR, IDomain.
+  - apply Inter.EquivCompatR, IDomain.
   - apply InterVR.
 Qed.
 

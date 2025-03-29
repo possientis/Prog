@@ -37,10 +37,9 @@ Proposition HasValueAtAsInter : forall (F:Class),
   HasValueAt F :~: FunctionalAt F :/\: domain F.
 Proof.
   intros F a. split; intros H1.
-  - destruct H1 as [y [H1 H2]]. apply InterCharac. split. 1: assumption.
+  - destruct H1 as [y [H1 H2]]. split. 1: assumption.
     exists y. assumption.
-  - apply (proj1 (InterCharac _ _ _)) in H1. destruct H1 as [H1 H2].
-    destruct H2 as [y H2]. exists y.
+  - destruct H1 as [H1 H2]. destruct H2 as [y H2]. exists y.
     apply IsValueAtWhenFunctionalAt; assumption.
 Qed.
 
@@ -48,9 +47,8 @@ Proposition HasValueAtWhenFunctionalAt : forall (F:Class) (a:U),
   FunctionalAt F a -> HasValueAt F a <-> domain F a.
 Proof.
   intros F a H1. split; intros H2.
-  - apply HasValueAtAsInter in H2. apply (proj1 (InterCharac _ _ _)) in H2.
-    destruct H2 as [_ H2]. assumption.
-  - apply HasValueAtAsInter, InterCharac. split; assumption.
+  - apply HasValueAtAsInter in H2. apply H2.
+  - apply HasValueAtAsInter. split; assumption.
 Qed.
 
 (* When F is functional, the classes HasValueAt F and domain F coincide.        *)

@@ -13,87 +13,77 @@ Definition inter (P Q:Class) : Class := fun x => P x /\ Q x.
 (* Notation "P :/\: Q" := (inter P Q)                                           *)
 Global Instance ClassAnd : And Class := { and := inter }.
 
-Proposition InterCharac : forall (P Q:Class) (x:U),
-  (P:/\:Q) x <-> P x /\ Q x.
-Proof.
-  intros P Q x. split; intros H1; apply H1.
-Qed.
-
-Proposition InterEquivCompat : forall (P Q R S:Class),
+Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :/\: R :~: Q :/\: S.
 Proof.
-  intros P Q R S H1 H2 x. split; intros H3;
-  apply (proj1 (InterCharac _ _ _)) in H3; destruct H3 as [H3 H4];
-  apply InterCharac; split.
+  intros P Q R S H1 H2 x. split; intros H3; destruct H3 as [H3 H4]; split.
   - apply H1. assumption.
   - apply H2. assumption.
   - apply H1. assumption.
   - apply H2. assumption.
 Qed.
 
-Proposition InterEquivCompatL : forall (P Q R:Class),
+Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :/\: R :~: Q :/\: R.
 Proof.
-  intros P Q R H1. apply InterEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - assumption.
   - apply ClassEquivRefl.
 Qed.
 
-Proposition InterEquivCompatR : forall (P Q R:Class),
+Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :/\: P :~: R :/\: Q.
 Proof.
-  intros P Q R H1. apply InterEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - apply ClassEquivRefl.
   - assumption.
 Qed.
 
-Proposition InterInclCompat : forall (P Q R S:Class),
+Proposition InclCompat : forall (P Q R S:Class),
   P :<=: Q -> R :<=: S -> P :/\: R :<=: Q :/\: S.
 Proof.
   intros P Q R S H1 H2 x H3.
-  apply (proj1 (InterCharac _ _ _)) in H3; destruct H3 as [H3 H4];
-  apply InterCharac; split.
+  destruct H3 as [H3 H4]; split.
   - apply H1. assumption.
   - apply H2. assumption.
 Qed.
 
-Proposition InterInclCompatL : forall (P Q R:Class),
+Proposition InclCompatL : forall (P Q R:Class),
   P :<=: Q -> P :/\: R :<=: Q :/\: R.
 Proof.
-  intros P Q R H1. apply InterInclCompat.
+  intros P Q R H1. apply InclCompat.
   - assumption.
   - apply InclRefl.
 Qed.
 
-Proposition InterInclCompatR : forall (P Q R:Class),
+Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R :/\: P :<=: R :/\: Q.
 Proof.
-  intros P Q R H1. apply InterInclCompat.
+  intros P Q R H1. apply InclCompat.
   - apply InclRefl.
   - assumption.
 Qed.
 
-Proposition InterComm : forall (P Q:Class),
+Proposition Comm : forall (P Q:Class),
   P :/\: Q :~: Q :/\: P.
 Proof.
   intros P Q x. split; intros H1;
-  apply (proj1 (InterCharac _ _ _)) in H1; destruct H1 as [H1 H2];
-  apply InterCharac; split; assumption.
+  destruct H1 as [H1 H2]; split; assumption.
 Qed.
 
-Proposition InterInclL : forall (P Q:Class),
+Proposition InclL : forall (P Q:Class),
   P :/\: Q :<=: P.
 Proof.
-  intros P Q x H1. apply (proj1 (InterCharac _ _ _)) in H1. apply H1.
+  intros P Q x H1. apply H1.
 Qed.
 
-Proposition InterInclR : forall (P Q:Class),
+Proposition InclR : forall (P Q:Class),
   P :/\: Q :<=: Q.
 Proof.
-  intros P Q x H1. apply (proj1 (InterCharac _ _ _)) in H1. apply H1.
+  intros P Q x H1. apply H1.
 Qed.
 
-Proposition InterIsSmallL : forall (P Q:Class),
+Proposition IsSmallL : forall (P Q:Class),
   Small P -> Small (P:/\:Q).
 Proof.
 
@@ -119,7 +109,7 @@ Proof.
   - assert (toClass a :/\: Q :~: P :/\: Q) as A. 2: apply A.
 
   (* Which follows from the equivalence between a and P. *)
-    apply InterEquivCompatL, H2.
+    apply EquivCompatL, H2.
 
   (* We next need to show that a /\ Q is small. *)
   - assert (Small (toClass a :/\: Q)) as A. 2: apply A.
@@ -128,11 +118,11 @@ Proof.
     apply Specification.
 Qed.
 
-Proposition InterIsSmallR : forall (P Q:Class),
+Proposition IsSmallR : forall (P Q:Class),
   Small Q -> Small (P:/\:Q).
 Proof.
   intros P Q H1. apply SmallEquivCompat with (Q :/\: P).
-  - apply InterComm.
-  - apply InterIsSmallL. assumption.
+  - apply Comm.
+  - apply IsSmallL. assumption.
 Qed.
 

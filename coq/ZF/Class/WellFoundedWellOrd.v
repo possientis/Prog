@@ -196,7 +196,7 @@ Proof.
   assert (exists a, Minimal R (A:\:B) a) as H6. {
     apply HasMinimal with A.
     - assumption.
-    - apply InterInclL.
+    - apply Inter.InclL.
     - assumption.
   }
 
@@ -208,13 +208,12 @@ Proof.
     intros x H7. apply InitSegmentCharac in H7. destruct H7 as [H7 H8].
     apply DoubleNegation. intros H9. revert H8.
     apply (MinimalHasNoLesser R (A:\:B)). 2: assumption.
-    apply Diff.Charac. split; assumption.
+    split; assumption.
   }
 
   (* From the inductive property, it follows that a lies in B. *)
   assert (B a) as H8. { apply H3. assumption. }
 
   (* This contradicts the fact that a lies in A\B. *)
-  apply MinimalIn in H6. apply (proj1 (Diff.Charac _ _ _)) in H6.
-  destruct H6 as [_ H6]. contradiction.
+  apply MinimalIn in H6. destruct H6 as [_ H6]. contradiction.
 Qed.

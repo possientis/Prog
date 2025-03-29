@@ -11,7 +11,7 @@ Export ZF.Core.And.
 
 (* The intersection of two sets a and b.                                        *)
 Definition inter (a b:U) : U := fromClass (toClass a :/\: toClass b)
-  (InterIsSmallL (toClass a) (toClass b) (SetIsSmall a)).
+  (Inter.IsSmallL (toClass a) (toClass b) (SetIsSmall a)).
 
 (* Notation "a :/\: b" := (inter a b)                                           *)
 Global Instance SetAnd : And U := { and := inter }.
@@ -21,9 +21,8 @@ Proposition InterCharac : forall (a b:U),
  forall x, x :< a:/\:b <-> x :< a /\ x :< b.
 Proof.
   intros a b x. split; intros H1.
-  - apply FromClassCharac in H1.
-    apply (proj1 (InterCharac _ _ _)) in H1. apply H1.
-  - apply FromClassCharac, Class.Inter.InterCharac, H1.
+  - apply FromClassCharac in H1. apply H1.
+  - apply FromClassCharac, H1.
 Qed.
 
 (* The intersection of two sets is commutative.                                 *)

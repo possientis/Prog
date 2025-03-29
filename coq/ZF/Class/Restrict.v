@@ -137,7 +137,7 @@ Proof.
     assert (Small (A:/\:domain F)) as A'. 2: apply A'.
 
   (* which follows from the assumption that A is small. *)
-  apply InterIsSmallL, H2.
+  apply Inter.IsSmallL, H2.
 
 Qed.
 
@@ -217,7 +217,7 @@ Proof.
   assert (domain F x \/ ~ domain F x) as H4. { apply LawExcludedMiddle. }
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
   - assert (domain (F:|:A) x) as H5. {
-      apply DomainOfRestrict, InterCharac. split; assumption. }
+      apply DomainOfRestrict. split; assumption. }
     apply FunctionalEvalCharac.
     + assumption.
     + assumption.

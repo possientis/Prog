@@ -9,7 +9,7 @@ Require Import ZF.Set.FromClass.
 
 (* Set comprehension (specification)  {x :< a | P x }.                          *)
 Definition specify (P:Class) (a:U) : U := fromClass (toClass a :/\: P)
-  (InterIsSmallL (toClass a) P (SetIsSmall a)).
+  (Inter.IsSmallL (toClass a) P (SetIsSmall a)).
 
 Notation ":{ a | P }:" := (specify P a)
   (at level 1, no associativity) : ZF_Axiom_Specify_scope.

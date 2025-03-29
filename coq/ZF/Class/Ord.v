@@ -94,13 +94,13 @@ Proof.
      (A :\: toClass a) x /\
      (A :\: toClass a)  :/\: toClass x :~: :0:) as H4. {
      apply HasEMinimal with A. 1: assumption.
-     - apply InterInclL.
+     - apply Inter.InclL.
      - apply Diff.WhenStrictIncl. assumption. }
     destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }
     assert (x = a) as H7. 2: { subst. assumption. }
     apply ZF.Set.Incl.DoubleInclusion. destruct H1 as [H1 H9]. split; intros u H7.
     + apply DoubleNegation. intros H8. apply (proj1 (Empty.Charac u)), H5.
-      apply InterCharac. split. 2: assumption. apply Diff.Charac. split. 2: assumption.
+      split. 2: assumption. split. 2: assumption.
       apply (H1 x); assumption.
     + assert (A u) as H8. { apply H3. assumption. }
       specialize (H9 x u H6 H8). destruct H9 as [H9|[H9|H9]].
@@ -119,18 +119,17 @@ Proof.
   intros A a H1 [H2 _]. apply WhenTrStrictInclIsElem; assumption.
 Qed.
 
-(* A set defining a transitive subclass of an ordinal class is an ordinal.      *)
-Proposition TrSubClassIsOrd : forall (A:Class) (a:U),
-  Ord A             ->
-  toClass a :<=: A  ->
-  Tr (toClass a)    ->
-  Ord (toClass a).
+(* A transitive subclass of an ordinal class is an ordinal class.               *)
+Proposition TrSubClassIsOrd : forall (A B:Class),
+  Ord A -> Tr B -> B :<=: A -> Ord B.
 Proof.
-  intros A a H1 H2 H3.
-  assert (A :~: toClass a \/ A :<>: toClass a) as H4. { apply LawExcludedMiddle. }
-  destruct H4 as [H4|H4].
-  - apply OrdEquivCompat with A; assumption.
-  - apply ElemIsOrdinal with A. 1: assumption. apply WhenTrStrictInclIsElem;
-    try assumption. split. 1: assumption. intros H5. apply H4.
-    apply ClassEquivSym. assumption.
+  intros A B H1 H2 H3. split. 1: assumption.
+  intros x y H4 H5. apply H1; apply H3; assumption.
 Qed.
+
+Proposition InterIsOrd : forall (A B:Class),
+  Ord A -> Ord B -> Ord (A :/\: B).
+Proof.
+  intros A B H1 H2. apply TrSubClassIsOrd with A. 1: assumption.
+  2: apply Inter.InclL. intros a [H3 H4].
+Admitted.
