@@ -98,7 +98,6 @@ CORE_OBJ = \
 	${CORE}/And.vo \
 	${CORE}/Diff.vo \
 	${CORE}/Dot.vo \
-	${CORE}/Elem.vo \
 	${CORE}/Equiv.vo \
 	${CORE}/Image.vo \
 	${CORE}/Inverse.vo \
