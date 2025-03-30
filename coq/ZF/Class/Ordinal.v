@@ -7,8 +7,9 @@ Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Minimal.
+Require Import ZF.Class.Small.
 Require Import ZF.Class.Total.
-Require Import ZF.Class.Tr.
+Require Import ZF.Class.Transitive2.
 Require Import ZF.Class.V.
 Require Import ZF.Class.WellFounded.
 Require Import ZF.Class.WellFoundedWellOrd.
@@ -19,21 +20,21 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate defining an ordinal class.                                         *)
-Definition Ord (A:Class) : Prop := Tr A /\ forall x y,
+Definition Ordinal (A:Class) : Prop := Transitive A /\ forall x y,
   A x -> A y -> x = y \/ x :< y \/ y :< x.
 
 (* Being an ordinal class is compatible with class equivalence.                 *)
-Definition OrdEquivCompat : forall (A B:Class),
-  A :~: B -> Ord A -> Ord B.
+Definition EquivCompat : forall (A B:Class),
+  A :~: B -> Ordinal A -> Ordinal B.
 Proof.
   intros A B H1 [H2 H3]. split.
-  - apply TrEquivCompat with A; assumption.
+  - apply Transitive2.EquivCompat with A; assumption.
   - intros x y H4 H5. apply H3; apply H1; assumption.
 Qed.
 
 (* E is a total order on every ordinal class.                                   *)
 Proposition EIsTotalOnOrdinals : forall (A:Class),
-  Ord A -> Total E A.
+  Ordinal A -> Total E A.
 Proof.
   intros A [H1 H2] x y H3 H4. specialize (H2 x y H3 H4). destruct H2 as [H2|[H2|H2]].
   - subst. left. reflexivity.
@@ -43,7 +44,7 @@ Qed.
 
 (* E is a well-ordering on every ordinal class.                                 *)
 Proposition EWellOrdersOrdinals : forall (A:Class),
-  Ord A -> WellOrdering E A.
+  Ordinal A -> WellOrdering E A.
 Proof.
   intros A H1. split.
   - apply FoundedIncl with V.
@@ -54,7 +55,7 @@ Qed.
 
 (* Every non-empty sub-class of an ordinal class has an E-minimal element.      *)
 Proposition HasEMinimal : forall (A B:Class),
-  Ord A       ->
+  Ordinal A   ->
   B :<=: A    ->
   B :<>: :0:  ->
   exists x, B x /\ B :/\: toClass x :~: :0:.
@@ -70,7 +71,7 @@ Qed.
 
 (* An element of an ordinal class defines an ordinal class.                     *)
 Proposition ElemIsOrdinal : forall (A:Class) (a:U),
-  Ord A -> A a -> Ord (toClass a).
+  Ordinal A -> A a -> Ordinal (toClass a).
 Proof.
   intros A a [H1 H2] H3. split.
   - intros x H4 y H5.
@@ -83,10 +84,74 @@ Proof.
   - intros x y H4 H5. apply H2; apply (H1 a); assumption.
 Qed.
 
+(* A transitive strict subclass of an ordinal class is small.                   *)
+Proposition TransitiveStrictSubclassIsSmall : forall (A B:Class),
+  Ordinal A    ->
+  Transitive B ->
+  B :<: A      ->
+  Small B.
+Proof.
+  (* Let A and B be arbitrary classes. *)
+  intros A B.
+
+  (* We assume that A is an ordinal class. *)
+  intros H1. assert (Ordinal A) as X. apply H1. clear X.
+
+  (* We assume that B is a transitive class. *)
+  intros H2. assert (Transitive B) as X. apply H2. clear X.
+
+  (* We assume that B < A. *)
+  intros H3. assert (B :<: A) as X. apply H3. clear X.
+
+  (* We need to show that B is a small class. *)
+  assert (Small B) as X. 2: apply X.
+
+  (* In other words, we need to show the existence of a set b ... *)
+  assert (exists b, forall x, x :< b <-> B x) as X. 2: apply X.
+
+  (* We claim that the non-empty class A\B has an :<-minimal element. *)
+  assert (exists b, (A :\: B) b /\ (A :\: B) :/\: toClass b :~: :0:) as H4. {
+    apply HasEMinimal with A. 1: assumption.
+    - apply Inter.InclL.
+    - apply Diff.WhenStrictIncl. assumption. }
+
+  (* So let b be such a set.  *)
+  destruct H4 as [b [H4 H5]].
+
+  (* Then b lies in the class A\B. *)
+  assert ((A:\:B) b) as X. apply H4. clear X.
+
+  (* and (A\B) /\ b = 0. *)
+  assert ((A:\:B) :/\: toClass b :~: :0:) as X. apply H5. clear X.
+
+  (* We claim the set b has the desired property. *)
+  exists b.
+
+  (* So given a set x *)
+  intros x.
+
+  (* We need to show the equivalence x :< b <-> B x. *)
+  assert (x :< b <-> B x) as X. 2: apply X. split; intros H6.
+
+  (* Proof of ->. *)
+  - apply DoubleNegation. intros H7. apply (proj1 (Empty.Charac x)), H5.
+    split. 2: assumption. split. 2: assumption. destruct H1 as [H1 H8].
+    apply (H1 b). 2: assumption. apply H4.
+
+  (* Proof of <-. *)
+  - assert (A b) as H7. { apply H4. }
+    assert (A x) as H8. { apply H3. assumption. }
+    destruct H1 as [H1 H9]. specialize (H9 b x H7 H8).
+    destruct H9 as [H9|[H9|H9]].
+    + subst. exfalso. apply H4. assumption.
+    + exfalso. apply H4. apply (H2 x); assumption.
+    + assumption.
+Qed.
+
 (* For a transitive set, belonging to an ordinal is being a strict subclass.    *)
-Proposition WhenTrStrictInclIsElem : forall (A:Class) (a:U),
-  Ord A          ->
-  Tr (toClass a) ->
+Proposition WhenTransitiveStrictInclIsElem : forall (A:Class) (a:U),
+  Ordinal A               ->
+  Transitive (toClass a)  ->
   toClass a :<: A <-> A a.
 Proof.
   intros A a H1 H2. split; intros H3.
@@ -107,29 +172,33 @@ Proof.
       * subst. exfalso. apply H4. assumption.
       * exfalso. apply H4. apply (H2 u); assumption.
       * assumption.
-  - apply ElemIsStrictSubClass. 2: assumption. apply H1.
+  - apply ElemIsStrictSubclass. 2: assumption. apply H1.
 Qed.
 
 (* For an ordinal set, belonging to an ordinal is being a strict subclass.      *)
 Proposition StrictInclIsElem : forall (A:Class) (a:U),
-  Ord A           ->
-  Ord (toClass a) ->
+  Ordinal A               ->
+  Ordinal (toClass a)     ->
   toClass a :<: A <-> A a.
 Proof.
-  intros A a H1 [H2 _]. apply WhenTrStrictInclIsElem; assumption.
+  intros A a H1 [H2 _]. apply WhenTransitiveStrictInclIsElem; assumption.
 Qed.
 
 (* A transitive subclass of an ordinal class is an ordinal class.               *)
-Proposition TrSubClassIsOrd : forall (A B:Class),
-  Ord A -> Tr B -> B :<=: A -> Ord B.
+Proposition TransitiveSubclassIsOrdinal : forall (A B:Class),
+  Ordinal A    ->
+  Transitive B ->
+  B :<=: A     ->
+  Ordinal B.
 Proof.
   intros A B H1 H2 H3. split. 1: assumption.
   intros x y H4 H5. apply H1; apply H3; assumption.
 Qed.
 
-Proposition InterIsOrd : forall (A B:Class),
-  Ord A -> Ord B -> Ord (A :/\: B).
+Proposition InterIsOrdinal : forall (A B:Class),
+  Ordinal A -> Ordinal B -> Ordinal (A :/\: B).
 Proof.
-  intros A B H1 H2. apply TrSubClassIsOrd with A. 1: assumption.
+  intros A B H1 H2. apply TransitiveSubclassIsOrdinal with A. 1: assumption.
   2: apply Inter.InclL. intros a [H3 H4].
 Admitted.
+
