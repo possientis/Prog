@@ -212,12 +212,35 @@ Proposition OrdinalTotal : forall (A B:Class),
   Ordinal B ->
   A :~: B \/ A :<: B \/ B :<: A.
 Proof.
-  intros A B H1 H2. assert (~(A:/\:B :<: A /\ A:/\:B :<: B)) as H3. {
+  intros A B H1 H2.
+  assert (~(A:/\:B :<: A /\ A:/\:B :<: B)) as H3. {
     intros [H3 H4]. assert (Small (A:/\:B)) as H5. {
       apply TransitiveStrictSubclassIsSmall with A; try assumption.
       apply InterIsOrdinal; assumption. }
     apply (proj1 (SmallIsSomeSet _)) in H5. destruct H5 as [a H5].
-Admitted.
-
-
-
+    assert (Transitive (toClass a)) as H6. {
+      apply Transitive2.EquivCompat with (A:/\:B).
+      - apply EquivSym. assumption.
+      - apply InterIsOrdinal; assumption. }
+    assert (A a) as H7. {
+      apply WhenTransitiveStrictInclIsElem; try assumption.
+      apply StrictEquivCompatL with (A:/\:B). 2: assumption.
+      apply EquivSym. assumption. }
+    assert (B a) as H8. {
+      apply WhenTransitiveStrictInclIsElem; try assumption.
+      apply StrictEquivCompatL with (A:/\:B). 2: assumption.
+      apply EquivSym. assumption. }
+    apply NoElemLoop1 with a. apply H5. split; assumption. }
+  assert (A:/\:B :~: A \/ A:/\:B :~: B) as H4. {
+    apply DoubleNegation. intros H4. apply H3. split.
+    - split. 1: apply Inter.InclL. intros H5. apply H4. left. assumption.
+    - split. 1: apply Inter.InclR. intros H5. apply H4. right. assumption. }
+  assert (A :~: B \/ A :<>: B) as H5. { apply LawExcludedMiddle. }
+  destruct H5 as [H5|H5].
+  - left. assumption.
+  - right. destruct H4 as [H4|H4].
+    + left. split. 2: assumption. apply IsInterInclL, EquivSym. assumption.
+    + right. split.
+      * apply IsInterInclR, EquivSym. assumption.
+      * apply NotEquivSym. assumption.
+Qed.

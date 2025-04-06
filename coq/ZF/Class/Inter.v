@@ -133,3 +133,23 @@ Proof.
   - apply H1. assumption.
   - apply H2. assumption.
 Qed.
+
+Proposition IsInterInclL : forall (P Q:Class),
+  P :~: P :/\: Q <-> P :<=: Q.
+Proof.
+  intros P Q. split; intros H1.
+  - apply Incl.EquivCompatL with (P:/\:Q). 2: apply InclR. apply EquivSym. assumption.
+  - apply DoubleInclusion. split.
+    + apply InclInter. 2: assumption. apply InclRefl.
+    + apply InclL.
+Qed.
+
+Proposition IsInterInclR : forall (P Q:Class),
+  Q :~: P :/\: Q <-> Q :<=: P.
+Proof.
+  intros P Q. split; intros H1.
+  - apply Incl.EquivCompatL with (P:/\:Q). 2: apply InclL. apply EquivSym. assumption.
+  - apply DoubleInclusion. split.
+    + apply InclInter. 1: assumption. apply InclRefl.
+    + apply InclR.
+Qed.

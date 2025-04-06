@@ -85,3 +85,28 @@ Proof.
   - apply Class.EquivRefl.
   - assumption.
 Qed.
+
+Proposition StrictEquivCompat : forall (P Q R S:Class),
+  P :~: Q -> R :~: S -> P :<: R -> Q :<: S.
+Proof.
+  intros P Q R S H1 H2 [H3 H4]. split.
+  - apply EquivCompat with P R; assumption.
+  - intros H5. apply H4. apply EquivTran with Q. 1: assumption.
+    apply EquivTran with S. 1: assumption. apply EquivSym. assumption.
+Qed.
+
+Proposition StrictEquivCompatL : forall (P Q R:Class),
+  P :~: Q -> P :<: R -> Q :<: R.
+Proof.
+  intros P Q R H1. apply StrictEquivCompat.
+  - assumption.
+  - apply Class.EquivRefl.
+Qed.
+
+Proposition StrictEquivCompatR : forall (P Q R:Class),
+  P :~: Q -> R :<: P -> R :<: Q.
+Proof.
+  intros P Q R H1. apply StrictEquivCompat.
+  - apply Class.EquivRefl.
+  - assumption.
+Qed.

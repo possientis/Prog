@@ -44,3 +44,8 @@ Proof.
   - apply Extensionality.
   - intros H1. subst. apply EquivRefl.
 Qed.
+
+Proposition NotEquivSym : forall (P Q:Class), P :<>: Q -> Q :<>: P.
+Proof.
+  intros P Q H1 H2. apply H1, EquivSym. assumption.
+Qed.
